@@ -151,6 +151,11 @@ public class Vector4f extends Vector3f implements Vector
 		return this;
 	}
 
+	public Vector4f add(Vector4f v)
+	{
+		return this.add(this, v);
+	}
+	
 	/**
 	 * Sets the value of this vector to the sum of vectors v1 and v2.
 	 * 
@@ -189,6 +194,11 @@ public class Vector4f extends Vector3f implements Vector
 		return this;
 	}
 	
+	public Vector4f sub(Vector4f v)
+	{
+		return this.sub(this, v);
+	}
+	
 	/**
 	 * Sets the value of this vector to the difference of vectors v1 and v2
 	 * (this = v1 - v2).
@@ -220,6 +230,11 @@ public class Vector4f extends Vector3f implements Vector
 		return this.sub(this, (Vector4f)v);
 	}
 
+	public Vector4f multiply(Vector4f v)
+	{
+		return this.multiply(this, v);
+	}
+	
 	/**
 	 * Sets the value of this vector to the scalar multiplication of the scale
 	 * factor with this.
@@ -246,11 +261,6 @@ public class Vector4f extends Vector3f implements Vector
 
 		return this;
 	}
-	
-	public Vector4f multiply(Vector4f v)
-	{
-		return this.multiply(this, v);
-	}
 
 	public Vector4f divide(Vector4f v1, Vector4f v2)
 	{
@@ -261,7 +271,7 @@ public class Vector4f extends Vector3f implements Vector
 		return this;
 	}
 	
-	public Vector4f divideSelf(Vector4f v)
+	public Vector4f divide(Vector4f v)
 	{
 		return this.divide(this, v);
 	}

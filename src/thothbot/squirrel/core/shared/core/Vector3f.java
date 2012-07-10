@@ -120,6 +120,12 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	@Override
+	public Vector3f add(Vector v)
+	{
+		return this.add(this, v);
+	}
+	
+	@Override
 	public Vector3f add(Vector v1, Vector v2)
 	{
 		this.setX(((Vector3f)v1).getX() + ((Vector3f)v2).getX());
@@ -138,12 +144,24 @@ public class Vector3f extends Vector2f implements Vector
 	}
 	
 	@Override
+	public Vector3f sub(Vector v)
+	{
+		return this.sub(this, v);
+	}
+	
+	@Override
 	public Vector3f sub(Vector v1, Vector v2)
 	{
 		this.setX(((Vector3f)v1).getX() - ((Vector3f)v2).getX());
 		this.setY(((Vector3f)v1).getY() - ((Vector3f)v2).getY());
 		this.setZ(((Vector3f)v1).getZ() - ((Vector3f)v2).getZ());
 		return this;
+	}
+	
+	@Override
+	public Vector3f multiply(Vector v)
+	{
+		return this.multiply(this, v);
 	}
 	
 	@Override
@@ -162,6 +180,12 @@ public class Vector3f extends Vector2f implements Vector
 		this.y *= s;
 		this.z *= s;
 		return this;
+	}
+	
+	@Override
+	public Vector3f divide(Vector v)
+	{
+		return this.divide(this, v);
 	}
 	
 	@Override
