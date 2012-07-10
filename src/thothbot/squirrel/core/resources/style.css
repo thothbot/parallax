@@ -1,0 +1,19 @@
+.gwt-PopupPanel {
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border-width: 2px;
+  padding: 5px;
+}
+
+.debug-panel { 
+	padding-left:5px;
+	padding-right:5px;
+	background-color:#555555;
+	border: 1px solid #999999;
+	opacity:0.6;
+}
+
+.debug-panel .gwt-Label { 
+	color: white;
+	font-size:0.8em; 
+}

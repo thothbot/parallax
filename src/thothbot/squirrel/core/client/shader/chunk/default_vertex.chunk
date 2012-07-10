@@ -1,0 +1,5 @@
+#ifndef USE_MORPHTARGETS
+	#ifndef USE_SKINNING
+		gl_Position = projectionMatrix * mvPosition;
+	#endif
+#endif

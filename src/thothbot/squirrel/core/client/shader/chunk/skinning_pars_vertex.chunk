@@ -1,0 +1,3 @@
+#ifdef USE_SKINNING
+	uniform mat4 boneGlobalMatrices[ MAX_BONES ];
+#endif

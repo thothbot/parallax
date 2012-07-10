@@ -1,0 +1,3 @@
+#ifdef USE_MAP
+	vUv = uv * offsetRepeat.zw + offsetRepeat.xy;
+#endif

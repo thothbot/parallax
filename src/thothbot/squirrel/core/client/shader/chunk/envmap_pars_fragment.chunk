@@ -1,0 +1,10 @@
+#ifdef USE_ENVMAP
+
+	varying vec3 vReflect;
+
+	uniform float reflectivity;
+	uniform samplerCube envMap;
+	uniform float flipEnvMap;
+	uniform int combine;
+
+#endif

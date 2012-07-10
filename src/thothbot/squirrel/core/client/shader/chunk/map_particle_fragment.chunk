@@ -1,0 +1,3 @@
+#ifdef USE_MAP
+	gl_FragColor = gl_FragColor * texture2D( map, gl_PointCoord );
+#endif

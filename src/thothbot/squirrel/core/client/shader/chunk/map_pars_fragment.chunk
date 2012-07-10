@@ -1,0 +1,4 @@
+#ifdef USE_MAP
+	varying vec2 vUv;
+	uniform sampler2D map;
+#endif
