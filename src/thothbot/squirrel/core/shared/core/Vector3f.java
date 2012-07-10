@@ -22,43 +22,94 @@
 
 package thothbot.squirrel.core.shared.core;
 
-public class Vector3f implements Vector
+/**
+ * This class is realization of (X, Y, Z) vector. 
+ * Where:
+ * X - x coordinate of the vector.
+ * Y - y coordinate of the vector.
+ * Z - z coordinate of the vector.
+ * 
+ * @author thothbot
+ */
+public class Vector3f extends Vector2f implements Vector
 {
-	protected float x;
-	protected float y;
+	/**
+	 * The Z-coordinate
+	 */
 	protected float z;
 
+	/**
+	 * This default constructor will initialize vector (0, 0, 0); 
+	 */
 	public Vector3f() 
 	{
 		this(0, 0, 0);
 	}
 
 	/**
-	 * Constructs and initializes a Vector3f from the specified xyz coordinates.
+	 * This constructor will initialize vector (X, Y, Z) from the specified 
+	 * X, Y, Z coordinates.
 	 * 
-	 * @param x
-	 *            the x coordinate
-	 * @param y
-	 *            the y coordinate
-	 * @param z
-	 *            the z coordinate
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
+	 * @param z the Z coordinate
 	 */
 	public Vector3f(float x, float y, float z) 
 	{
-		this.x = x;
-		this.y = y;
+		super(x, y);
 		this.z = z;
 	}
 
 	/**
-	 * Sets the value of this vector to the specified xyz coordinates.
+	 * Getting Z coordinate from the vector
 	 * 
-	 * @param x
-	 *            the x coordinate
-	 * @param y
-	 *            the y coordinate
-	 * @param z
-	 *            the z coordinate
+	 * @return a Z coordinate
+	 */
+	public float getZ()
+	{
+		return this.z;
+	}
+	
+	/**
+	 * This method will add specified value to Z coordinate of the vector.
+	 * In another words: z += value.
+	 * 
+	 * @param z the Y coordinate
+	 */
+	public void addZ(float z)
+	{
+		this.z += z;
+	}
+	
+	/**
+	 * This method sets Z coordinate of the vector.
+	 * 
+	 * @param z the Z coordinate
+	 */
+	public void setZ(float z)
+	{
+		this.z = z;
+	}
+	
+	/**
+	 * Set value of the vector from another vector.
+	 * 
+	 * @param v the other vector
+	 * 
+	 * @return the current vector
+	 */
+	public Vector3f copy(Vector3f v)
+	{
+		this.set(v.getX(), v.getY(), v.getZ());
+		return this;
+	}
+	
+	/**
+	 * Set value of the vector to the specified (X, Y, Z) coordinates.
+	 * 
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
+	 * @param z the Z coordinate
 	 */
 	public Vector3f set(float x, float y, float z)
 	{
@@ -68,145 +119,42 @@ public class Vector3f implements Vector
 		return this;
 	}
 
-	public float getX()
-	{
-		return this.x;
-	}
-
-	public void addX(float x)
-	{
-		this.x += x;
-	}
-	
-	public void setX(float x)
-	{
-		this.x = x;
-	}
-	
-	public float getY()
-	{
-		return this.y;
-	}
-
-	public void addY(float y)
-	{
-		this.y += y;
-	}
-	
-	public void setY(float y)
-	{
-		this.y = y;
-	}
-	
-	public float getZ()
-	{
-		return this.z;
-	}
-
-	public void addZ(float z)
-	{
-		this.z += z;
-	}
-	
-	public void setZ(float z)
-	{
-		this.z = z;
-	}
-
-	public Vector3f copy(Vector3f v)
-	{
-		this.x = v.x;
-		this.y = v.y;
-		this.z = v.z;
-		return this;
-	}
-
-	/**
-	 * Sets the value of this vector to the vector sum of vectors t1 and t2.
-	 * 
-	 * @param v1
-	 *            the first vector
-	 * @param v2
-	 *            the second vector
-	 */
-	public Vector3f add(Vector3f v1, Vector3f v2)
-	{
-		this.x = v1.x + v2.x;
-		this.y = v1.y + v2.y;
-		this.z = v1.z + v2.z;
-		return this;
-	}
-
-	/**
-	 * Sets the value of this vector to the vector sum of itself and vector v1.
-	 * 
-	 * @param v1
-	 *            the other vector
-	 */
 	@Override
-	public Vector3f add(Vector v)
+	public Vector3f add(Vector v1, Vector v2)
 	{
-		return this.add(this, (Vector3f) v);
+		this.setX(((Vector3f)v1).getX() + ((Vector3f)v2).getX());
+		this.setY(((Vector3f)v1).getY() + ((Vector3f)v2).getY());
+		this.setZ(((Vector3f)v1).getZ() + ((Vector3f)v2).getZ());
+		return this;
 	}
 
+	@Override
 	public Vector3f add(float s)
 	{
-		this.x += s;
-		this.y += s;
-		this.z += s;
+		this.addX(s);
+		this.addY(s);
+		this.addZ(s);
 		return this;
 	}
-
-	/**
-	 * Sets the value of this vector to the vector difference of vectors v1 and
-	 * v2 (this = v1 - v2).
-	 * 
-	 * @param v1
-	 *            the first vector
-	 * @param v2
-	 *            the second vector
-	 */
-	public Vector3f sub(Vector3f v1, Vector3f v2)
-	{
-		this.x = v1.x - v2.x;
-		this.y = v1.y - v2.y;
-		this.z = v1.z - v2.z;
-		return this;
-	}
-
-	/**
-	 * Sets the value of this vector to the vector difference of itself and
-	 * vector v1 (this = this - v1) .
-	 * 
-	 * @param v1
-	 *            the other vector
-	 */
+	
 	@Override
-	public Vector3f sub(Vector v)
+	public Vector3f sub(Vector v1, Vector v2)
 	{
-		return this.sub(this, (Vector3f)v);
+		this.setX(((Vector3f)v1).getX() - ((Vector3f)v2).getX());
+		this.setY(((Vector3f)v1).getY() - ((Vector3f)v2).getY());
+		this.setZ(((Vector3f)v1).getZ() - ((Vector3f)v2).getZ());
+		return this;
 	}
-
-	public Vector3f multiply(Vector3f v1, Vector3f v2)
+	
+	@Override
+	public Vector3f multiply(Vector v1, Vector v2)
 	{
-		this.x = v1.x * v2.x;
-		this.y = v1.y * v2.y;
-		this.z = v1.z * v2.z;
+		this.setX(((Vector3f)v1).getX() * ((Vector3f)v2).getX());
+		this.setY(((Vector3f)v1).getY() * ((Vector3f)v2).getY());
+		this.setZ(((Vector3f)v1).getZ() * ((Vector3f)v2).getZ());
 		return this;
 	}
 
-	public Vector3f multiply(Vector3f v)
-	{
-		return this.multiply(this, v);
-	}
-
-	/**
-	 * Sets the value of this vector to the scalar multiplication of the scale
-	 * factor with this.
-	 * 
-	 * @param s
-	 *            the scalar value
-	 */
 	@Override
 	public Vector3f multiply(float s)
 	{
@@ -215,40 +163,39 @@ public class Vector3f implements Vector
 		this.z *= s;
 		return this;
 	}
-
-	public Vector3f divide(Vector3f v1, Vector3f v2)
+	
+	@Override
+	public Vector3f divide(Vector v1, Vector v2)
 	{
-		this.x = v1.x / v2.x;
-		this.y = v1.y / v2.y;
-		this.z = v1.z / v2.z;
+		this.setX(((Vector3f)v1).getX() / ((Vector3f)v2).getX());
+		this.setY(((Vector3f)v1).getY() / ((Vector3f)v2).getY());
+		this.setZ(((Vector3f)v1).getZ() / ((Vector3f)v2).getZ());
 		return this;
 	}
-	
-	public Vector3f divide(Vector3f v)
-	{
-		return this.divide(this, v);
-	}
 
+	@Override
 	public Vector3f divide(float s)
 	{
-		if (s != 0) {
+		if (s != 0) 
+		{
 			this.x /= s;
 			this.y /= s;
 			this.z /= s;
-		} else {
+		} 
+		else 
+		{
 			this.set(0, 0, 1);
 		}
+
 		return this;
 	}
 
-	/**
-	 * Negates the value of this vector in place.
-	 */
+	@Override
 	public Vector3f negate()
 	{
 		return this.multiply(-1);
 	}
-
+	
 	/**
 	 * Computes the dot product of this vector and vector v1.
 	 * 
@@ -341,18 +288,19 @@ public class Vector3f implements Vector
 		return this.cross(this, v);
 	}
 
-	public float distanceToSquared(Vector3f v1)
+	@Override
+	public float distanceToSquared(Vector v1)
 	{
-		float dx = this.x - v1.x;
-		float dy = this.y - v1.y;
-		float dz = this.z - v1.z;
+		float dx = this.getX() - ((Vector3f)v1).getX();
+		float dy = this.getY() - ((Vector3f)v1).getY();
+		float dz = this.getZ() - ((Vector3f)v1).getZ();
 		return (dx * dx + dy * dy + dz * dz);
 	}
 
 	@Override
 	public float distanceTo(Vector v1)
 	{
-		return (float) Math.sqrt(distanceToSquared((Vector3f)v1));
+		return (float) Math.sqrt(distanceToSquared(v1));
 	}
 
 	public void getPositionFromMatrix(Matrix4f m)

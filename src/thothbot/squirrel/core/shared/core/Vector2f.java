@@ -22,63 +22,127 @@
 
 package thothbot.squirrel.core.shared.core;
 
+/**
+ * This class is realization of (X, Y) vector. 
+ * Where:
+ * X - x coordinate of the vector.
+ * Y - y coordinate of the vector.
+ * 
+ * @author thothbot
+ */
 public class Vector2f implements Vector
 {
+	/**
+	 * The X-coordinate
+	 */
 	protected float x;
+	
+	/**
+	 * The Y-coordinate
+	 */
 	protected float y;
 
-	public Vector2f() {
+	/**
+	 * This default constructor will initialize vector (0, 0); 
+	 */
+	public Vector2f() 
+	{
+		this(0, 0);
 	}
 
 	/**
-	 * Constructs and initializes a Vector2f from the specified xy coordinates.
-	 * 
-	 * @param x
-	 *            the x coordinate
-	 * @param y
-	 *            the y coordinate
+	 * This constructor will initialize vector (X, Y) from the specified 
+	 * X, Y coordinates.
+	 *  
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
 	 */
-	public Vector2f(float x, float y) {
+	public Vector2f(float x, float y) 
+	{
 		this.x = x;
 		this.y = y;
 	}
 
-	public void addX(float x)
-	{
-		this.x += x;
-	}
-
-	public void setX(float x)
-	{
-		this.x = x;
-	}
-
+	/**
+	 * Getting X coordinate from the vector
+	 * 
+	 * @return a X coordinate
+	 */
 	public float getX()
 	{
 		return x;
 	}
-
+	
+	/**
+	 * Getting Y coordinate from the vector
+	 * 
+	 * @return a Y coordinate
+	 */
+	public float getY()
+	{
+		return y;
+	}
+		
+	/**
+	 * This method will add specified value to X coordinate of the vector.
+	 * In another words: x += value.
+	 * 
+	 * @param x the X coordinate
+	 */
+	public void addX(float x)
+	{
+		this.x += x;
+	}
+	
+	/**
+	 * This method will add specified value to Y coordinate of the vector.
+	 * In another words: y += value.
+	 * 
+	 * @param y the Y coordinate
+	 */
 	public void addY(float y)
 	{
 		this.y += y;
 	}
 
+	/**
+	 * This method sets X coordinate of the vector.
+	 * 
+	 * @param x the X coordinate
+	 */
+	public void setX(float x)
+	{
+		this.x = x;
+	}
+
+	/**
+	 * This method sets Y coordinate of the vector.
+	 * 
+	 * @param y the Y coordinate
+	 */
 	public void setY(float y)
 	{
 		this.y = y;
 	}
 
-	public float getY()
-	{
-		return y;
-	}
-
 	/**
-	 * Sets the value of this vector from the 2 values x and y.
+	 * Set value of the vector from another vector.
 	 * 
-	 * @param x
-	 * @param y
+	 * @param v the other vector
 	 * 
+	 * @return the current vector
+	 */
+	public Vector2f copy(Vector2f v)
+	{
+		this.set(v.getX(), v.getY());
+		return this;
+	}
+	
+	/**
+	 * Set value of the vector to the specified (X, Y, Z) coordinates.
+	 * 
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
 	 */
 	public void set(float x, float y)
 	{
@@ -86,83 +150,84 @@ public class Vector2f implements Vector
 		this.y = y;
 	}
 
-	public Vector2f copy(Vector2f v)
-	{
-		this.x = v.x;
-		this.y = v.y;
-		return this;
-	}
-
-	/**
-	 * Sets the value of this vector to the vector sum of vectors v1 and v2.
-	 * 
-	 * @param v1
-	 *            the first vector
-	 * @param v2
-	 *            the second vector
-	 */
-	public Vector2f add(Vector2f v1, Vector2f v2)
-	{
-		this.x = v1.x + v2.x;
-		this.y = v1.y + v2.y;
-		return this;
-	}
-
-	/**
-	 * Sets the value of this vector to the vector sum of itself and vector v1.
-	 * 
-	 * @param v1
-	 *            the other vector
-	 */
 	@Override
 	public Vector2f add(Vector v)
 	{
-		return this.add(this, (Vector2f) v);
+		return this.add(this, v);
 	}
-
-	/**
-	 * Sets the value of this vector to the vector difference of vectors v1 and
-	 * v2 (this = v1 - v2).
-	 * 
-	 * @param v1
-	 *            the first vector
-	 * @param v2
-	 *            the second vector
-	 */
-	public Vector2f sub(Vector2f v1, Vector2f v2)
+	
+	@Override
+	public Vector2f add(Vector v1, Vector v2)
 	{
-		this.x = v1.x - v2.x;
-		this.y = v1.y - v2.y;
+		this.setX(((Vector3f)v1).getX() + ((Vector3f)v2).getX());
+		this.setY(((Vector3f)v1).getY() + ((Vector3f)v2).getY());
+		return this;
+	}
+	
+	@Override
+	public Vector2f add(float s)
+	{
+		this.addX(s);
+		this.addY(s);
+		
 		return this;
 	}
 
-	/**
-	 * Sets the value of this vector to the vector difference of itself and
-	 * vector v1 (this = this - v1).
-	 * 
-	 * @param v1
-	 *            the other vector
-	 */
 	@Override
 	public Vector2f sub(Vector v)
 	{
-		return this.sub(this, (Vector2f)v);
+		return this.sub(this, v);
+	}
+	
+	@Override
+	public Vector2f sub(Vector v1, Vector v2)
+	{
+		this.setX(((Vector3f)v1).getX() - ((Vector3f)v2).getX());
+		this.setY(((Vector3f)v1).getY() - ((Vector3f)v2).getY());
+		
+		return this;
 	}
 
-	/**
-	 * Sets the value of this vector to the scalar multiplication of itself.
-	 * 
-	 * @param s
-	 *            the scalar value
-	 */
+	@Override
+	public Vector2f multiply(Vector v)
+	{
+		return this.multiply(this, v);
+	}
+	
+	@Override
+	public Vector2f multiply(Vector v1, Vector v2)
+	{
+		this.setX(((Vector3f)v1).getX() * ((Vector3f)v2).getX());
+		this.setY(((Vector3f)v1).getY() * ((Vector3f)v2).getY());
+
+		return this;
+	}
+
 	@Override
 	public Vector2f multiply(float s)
 	{
 		this.x *= s;
 		this.y *= s;
+
 		return this;
 	}
 
+	@Override
+	public Vector2f divide(Vector v)
+	{
+		return this.divide(this, v);
+	}
+	
+	@Override
+	public Vector2f divide(Vector v1, Vector v2)
+	{
+		this.setX(((Vector3f)v1).getX() / ((Vector3f)v2).getX());
+		this.setY(((Vector3f)v1).getY() / ((Vector3f)v2).getY());
+
+		return this;
+	}
+	
+	@Override
 	public Vector2f divide(float s)
 	{
 		if (s != 0) {
@@ -228,17 +293,26 @@ public class Vector2f implements Vector
 		return this;
 	}
 
-	public float distanceToSquared(Vector2f v)
+	/*
+	 * (non-Javadoc)
+	 * @see thothbot.squirrel.core.shared.core.Vector#distanceToSquared(thothbot.squirrel.core.shared.core.Vector)
+	 */
+	@Override
+	public float distanceToSquared(Vector v)
 	{
-		float dx = this.x - v.x;
-		float dy = this.y - v.y;
+		float dx = this.getX() - ((Vector2f) v).getX();
+		float dy = this.getY() - ((Vector2f) v).getY();
 		return (dx * dx + dy * dy);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see thothbot.squirrel.core.shared.core.Vector#distanceTo(thothbot.squirrel.core.shared.core.Vector)
+	 */
 	@Override
 	public float distanceTo(Vector v1)
 	{
-		return (float) Math.sqrt(distanceToSquared((Vector2f)v1));
+		return (float) Math.sqrt(distanceToSquared(v1));
 	}
 
 	public void setLength(float l)
@@ -257,7 +331,7 @@ public class Vector2f implements Vector
 	{
 		return (this.lengthSq() < 0.0001f /* almostZero */);
 	}
-
+	
 	@Override
 	public Vector2f clone()
 	{
@@ -268,7 +342,7 @@ public class Vector2f implements Vector
 	 * Returns true if all of the data members of Tuple2f t1 are equal to the
 	 * corresponding data members in this Tuple2f.
 	 * 
-	 * @param t1
+	 * @param v1
 	 *            the vector with which the comparison is made
 	 * @return true or false
 	 */

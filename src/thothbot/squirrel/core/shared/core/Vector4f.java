@@ -22,107 +22,112 @@
 
 package thothbot.squirrel.core.shared.core;
 
-public class Vector4f implements Vector
+/**
+ * This class is realization of (X, Y, Z, W) vector. 
+ * Where:
+ * X - x coordinate of the vector.
+ * Y - y coordinate of the vector.
+ * Z - z coordinate of the vector.
+ * W - w coordinate of the vector.
+ * 
+ * @author thothbot
+ */
+public class Vector4f extends Vector3f implements Vector
 {
-	protected float x;
-	protected float y;
-	protected float z;
+	/**
+	 * The W-coordinate
+	 */
 	protected float w;
 
+	/**
+	 * This default constructor will initialize vector (0, 0, 0, 1); 
+	 */
 	public Vector4f() 
 	{
-		this(0,0,0,1);
+		this(0, 0, 0, 1.0f);
 	}
 
 	/**
-	 * Constructs and initializes a Vector4f from the specified xyz coordinates.
+	 * This constructor will initialize vector (X, Y, Z, 1) from the specified 
+	 * X, Y, Z coordinates.
 	 * 
-	 * @param x
-	 *            the x coordinate
-	 * @param y
-	 *            the y coordinate
-	 * @param z
-	 *            the z coordinate
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
+	 * @param z the Z coordinate
 	 */
 	public Vector4f(float x, float y, float z) 
 	{
-		this(x, y, z, 1);
+		this(x, y, z, 1.0f);
 	}
 
 	/**
-	 * Constructs and initializes a Vector4f from the specified xyzw
-	 * coordinates.
+	 * This constructor will initialize vector (X, Y, Z, W) from the specified 
+	 * X, Y, Z, W coordinates.
 	 * 
-	 * @param x
-	 *            the x coordinate
-	 * @param y
-	 *            the y coordinate
-	 * @param z
-	 *            the z coordinate
-	 * @param w
-	 *            the w coordinate
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
+	 * @param z the Z coordinate
+	 * @param w the W coordinate
 	 */
 	public Vector4f(float x, float y, float z, float w) 
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		super(x, y, z);
 		this.w = w;
 	}
 
-	public float getX()
+	/**
+	 * Getting W coordinate from the vector
+	 * 
+	 * @return a W coordinate
+	 */
+	public float getW() 
 	{
-		return this.x;
-	}
-
-	public void addX(float x)
-	{
-		this.x += x;
-	}
-	
-	public void setX(float x)
-	{
-		this.x = x;
+		return w;
 	}
 	
-	public float getY()
+	/**
+	 * This method will add specified value to W coordinate of the vector.
+	 * In another words: w += value.
+	 * 
+	 * @param w the W coordinate
+	 */
+	public void addW(float w)
 	{
-		return this.y;
-	}
-
-	public void addY(float y)
-	{
-		this.y += y;
-	}
-	
-	public void setY(float y)
-	{
-		this.y = y;
+		this.w += w;
 	}
 	
-	public float getZ()
-	{
-		return this.z;
-	}
-
-	public void addZ(float z)
-	{
-		this.z += z;
-	}
-	
-	public void setZ(float z)
-	{
-		this.z = z;
-	}
-	
+	/**
+	 * This method sets W coordinate of the vector.
+	 * 
+	 * @param w the W coordinate
+	 */
 	public void setW(float w) 
 	{
 		this.w = w;
 	}
 
-	public float getW() 
+	/**
+	 * Set value of the vector from another vector.
+	 * 
+	 * @param v the other vector
+	 * 
+	 * @return the current vector
+	 */
+	public Vector4f copy(Vector4f v)
 	{
-		return w;
+		return this.set(v.getX(), v.getY(), v.getZ(), 1.0f);
+	}
+	
+	/**
+	 * Set value of the vector from another vector.
+	 * 
+	 * @param v the other vector
+	 * 
+	 * @return the current vector
+	 */
+	public Vector4f copy(Vector3f v)
+	{
+		return this.set(v.getX(), v.getY(), v.getZ(), 1.0f);
 	}
 	
 	/**
@@ -146,15 +151,6 @@ public class Vector4f implements Vector
 		return this;
 	}
 
-	public Vector4f copy(Vector4f v)
-	{
-		return this.set(v.x, v.y, v.z, 1);
-	}
-	
-	public Vector4f copy(Vector3f v){
-		return this.set(v.x, v.y, v.z, 1);
-	}
-
 	/**
 	 * Sets the value of this vector to the sum of vectors v1 and v2.
 	 * 
@@ -175,7 +171,7 @@ public class Vector4f implements Vector
 	/**
 	 * Sets the value of this vector to the sum of itself and v1.
 	 * 
-	 * @param v1
+	 * @param v
 	 *            the other vector
 	 */
 	@Override
@@ -213,9 +209,9 @@ public class Vector4f implements Vector
 
 	/**
 	 * Sets the value of this vector to the difference of itself and v1 (this =
-	 * this - v1).
+	 * this - v).
 	 * 
-	 * @param v1
+	 * @param v
 	 *            the other vector
 	 */
 	@Override
@@ -338,10 +334,21 @@ public class Vector4f implements Vector
 		return this;
 	}
 
+	/**
+	 * This method is not implemented yet.
+	 */
+	@Override
+	public float distanceToSquared(Vector v1)
+	{
+		return 0;
+	}
+
+	/**
+	 * This method is not implemented yet.
+	 */
 	@Override
 	public float distanceTo(Vector v)
 	{
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
