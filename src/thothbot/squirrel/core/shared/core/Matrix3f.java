@@ -40,14 +40,30 @@ import thothbot.squirrel.core.shared.Log;
  */
 public class Matrix3f
 {
-	public Float32Array elements;
+	private Float32Array elements;
 
 	/**
 	 * Default constructor will make empty three-dimensional matrix.
 	 */
 	public Matrix3f() 
 	{
-		elements = Float32Array.create(9);
+		this.elements = Float32Array.create(9);
+	}
+	
+
+	/**
+	 * Getting the current Matrix which is represented 
+	 * by Array[9] which the following indexes:
+	 * 
+	 * 0 3 6
+	 * 1 4 7
+	 * 2 5 8
+	 * 
+	 * @return the Array
+	 */
+	public Float32Array getArray() 
+	{
+		return elements;
 	}
 
 	/**
@@ -81,15 +97,15 @@ public class Matrix3f
 
 		float idet = 1.0f / det;
 
-		this.elements.set(0, idet * a11);
-		this.elements.set(1, idet * a21);
-		this.elements.set(2, idet * a31);
-		this.elements.set(3, idet * a12);
-		this.elements.set(4, idet * a22);
-		this.elements.set(5, idet * a32);
-		this.elements.set(6, idet * a13);
-		this.elements.set(7, idet * a23);
-		this.elements.set(8, idet * a33);
+		this.getArray().set(0, idet * a11);
+		this.getArray().set(1, idet * a21);
+		this.getArray().set(2, idet * a31);
+		this.getArray().set(3, idet * a12);
+		this.getArray().set(4, idet * a22);
+		this.getArray().set(5, idet * a32);
+		this.getArray().set(6, idet * a13);
+		this.getArray().set(7, idet * a23);
+		this.getArray().set(8, idet * a33);
 	}
 
 	/**
@@ -99,7 +115,7 @@ public class Matrix3f
 	public void transpose()
 	{
 		float tmp;
-		Float32Array m = this.elements;
+		Float32Array m = this.getArray();
 
 		tmp = m.get(1);
 		m.set(1, m.get(3));
@@ -123,7 +139,7 @@ public class Matrix3f
 	public Float32Array transposeIntoArray()
 	{
 		Float32Array r = Float32Array.create(9);
-		Float32Array m = this.elements;
+		Float32Array m = this.getArray();
 
 		r.set(0, m.get(0));
 		r.set(1, m.get(3));
@@ -146,8 +162,8 @@ public class Matrix3f
 	{
 		String retval = "[";
 		
-		for(int i = 0; i < this.elements.getLength(); i++)
-			retval += this.elements.get(i) + ", ";
+		for(int i = 0; i < this.getArray().getLength(); i++)
+			retval += this.getArray().get(i) + ", ";
 		
 		return retval + "]";
 	}

@@ -1928,7 +1928,7 @@ Log.error("?????????????");
 		getGL().uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, objectImpl._modelViewMatrix.elements );
 
 		if ( uniforms.containsKey("normalMatrix") )
-			getGL().uniformMatrix3fv( uniforms.get("normalMatrix"), false, objectImpl._normalMatrix.elements );
+			getGL().uniformMatrix3fv( uniforms.get("normalMatrix"), false, objectImpl._normalMatrix.getArray() );
 	}
 
 	public void loadUniformsGeneric( Program program, Map<String, Uniform> materialUniforms ) 

@@ -31,12 +31,12 @@ public class Matrix4f
 {
 	public Float32Array elements;
 
-	public static Vector3f __v1 = new Vector3f(); // x
-	public static Vector3f __v2 = new Vector3f(); // y
-	public static Vector3f __v3 = new Vector3f(); // z
+	private static Vector3f __v1 = new Vector3f(); // x
+	private static Vector3f __v2 = new Vector3f(); // y
+	private static Vector3f __v3 = new Vector3f(); // z
 
-	public static Matrix4f __m1 = new Matrix4f();
-	public static Matrix4f __m2 = new Matrix4f();
+	private static Matrix4f __m1 = new Matrix4f();
+	private static Matrix4f __m2 = new Matrix4f();
 
 	public Matrix4f() 
 	{
