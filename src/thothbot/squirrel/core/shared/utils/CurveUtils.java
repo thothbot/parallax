@@ -22,15 +22,49 @@
 
 package thothbot.squirrel.core.shared.utils;
 
+/**
+ * This class implements some helpers methods for Curve instances
+ * 
+ * This class based on js-code written by zz85
+ * http://www.lab4games.net/zz85/blog
+ * 
+ * @author thothbot
+ *
+ */
 public class CurveUtils
 {
+	/**
+	 * This method calculates tangent of Quadratic Bezier Curve.
+	 * 
+	 * @param t  the value in range <0.0, 1.0>. The t in the 
+	 * 			function for a linear Bezier curve can be 
+	 * 			thought of as describing how far B(t) is from p0 to p2.
+	 * @param p0 the p0 Quadratic Bezier Curve point.
+	 * @param p1 the p1 Quadratic Bezier Curve point.
+	 * @param p2 the p2 Quadratic Bezier Curve point.
+	 * 
+	 * @return the tangent of Quadratic Bezier Curve
+	 */
 	public static float tangentQuadraticBezier(float t, float p0, float p1, float p2)
 	{
 		return 2.0f * (1.0f - t) * (p1 - p0) + 2.0f * t * (p2 - p1);
 	}
 
-	/*
+	/**
+	 * This method calculates tangent of Cubic Bezier Curve.
+	 * 
 	 * Puay Bing, thanks for helping with this derivative!
+	 * 
+	 * @param t  the value in range <0.0, 1.0>. The t in the 
+	 * 			function for a linear Bezier curve can be 
+	 * 			thought of as describing how far B(t) is from p0 to p3.
+	 * 
+	 * @param p0 the p0 Cubic Bezier Curve point.
+	 * @param p1 the p1 Cubic Bezier Curve point.
+	 * @param p2 the p2 Cubic Bezier Curve point.
+	 * @param p3 the p3 Cubic Bezier Curve point.
+	 * 
+	 * @return the tangent of Cubic Bezier Curve
 	 */
 	public static float tangentCubicBezier(float t, float p0, float p1, float p2, float p3)
 	{
@@ -41,6 +75,19 @@ public class CurveUtils
 				- 3.0f * t  * t * p2 + 3.0f * t * t * p3;
 	}
 
+	/**
+	 * This method calculates tangent of Spline Curve.
+	 * 
+	 * @param t  the value in range <0.0, 1.0>. The t in the 
+	 * 			function for a linear Bezier curve can be 
+	 * 			thought of as describing how far B(t) is from p0 to p3.
+	 * @param p0 the p0 Spline point.
+	 * @param p1 the p1 Spline point.
+	 * @param p2 the p2 Spline point.
+	 * @param p3 the p3 Spline point.
+	 * 
+	 * @return the tangent of Spline Curve
+	 */
 	public static float tangentSpline(float t, float p0, float p1, float p2, float p3)
 	{
 		// To check if my formulas are correct
@@ -52,8 +99,18 @@ public class CurveUtils
 		return h00 + h10 + h01 + h11;
 	}
 
-	/*
-	 * Catmull-Rom
+	/**
+	 * Interpolation of Catmull-Rom Spline
+	 * 
+	 * @param p0 the p0 Spline point.
+	 * @param p1 the p1 Spline point.
+	 * @param p2 the p2 Spline point.
+	 * @param p3 the p3 Spline point.
+	 * @param t the value in range <0.0, 1.0>. The t in the 
+	 * 			function for a linear Bezier curve can be 
+	 * 			thought of as describing how far B(t) is from p0 to p3.
+	 * 
+	 * @return the interpolated value. 
 	 */
 	public static float interpolate(float p0, float p1, float p2, float p3, float t)
 	{
