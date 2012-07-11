@@ -1742,7 +1742,7 @@ public class WebGLRenderer
 		loadUniformsMatrices( p_uniforms, object );
 
 		if ( p_uniforms.get("objectMatrix") != null )
-			getGL().uniformMatrix4fv( p_uniforms.get("objectMatrix"), false, object.getMatrixWorld().elements );
+			getGL().uniformMatrix4fv( p_uniforms.get("objectMatrix"), false, object.getMatrixWorld().getArray() );
 
 		return program;
 	}
@@ -1925,7 +1925,7 @@ Log.error("?????????????");
 	public void loadUniformsMatrices ( Map<String, WebGLUniformLocation> uniforms, GeometryObject object ) 
 	{
 		GeometryObject objectImpl = (GeometryObject) object;
-		getGL().uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, objectImpl._modelViewMatrix.elements );
+		getGL().uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, objectImpl._modelViewMatrix.getArray() );
 
 		if ( uniforms.containsKey("normalMatrix") )
 			getGL().uniformMatrix3fv( uniforms.get("normalMatrix"), false, objectImpl._normalMatrix.getArray() );

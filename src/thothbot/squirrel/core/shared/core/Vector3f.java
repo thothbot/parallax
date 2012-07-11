@@ -329,9 +329,9 @@ public class Vector3f extends Vector2f implements Vector
 
 	public void getPositionFromMatrix(Matrix4f m)
 	{
-		this.x = m.elements.get(12);
-		this.y = m.elements.get(13);
-		this.z = m.elements.get(14);
+		this.x = m.getArray().get(12);
+		this.y = m.getArray().get(13);
+		this.z = m.getArray().get(14);
 	}
 
 	public Vector3f getRotationFromMatrix(Matrix4f m)
@@ -345,11 +345,11 @@ public class Vector3f extends Vector2f implements Vector
 		float sy = scale.y;
 		float sz = scale.z;
 
-		float m11 = m.elements.get(0) / sx, m12 = m.elements.get(4) / sy, m13 = m.elements.get(8)
+		float m11 = m.getArray().get(0) / sx, m12 = m.getArray().get(4) / sy, m13 = m.getArray().get(8)
 				/ sz;
-		float m21 = m.elements.get(1) / sx, m22 = m.elements.get(5) / sy, m23 = m.elements.get(9)
+		float m21 = m.getArray().get(1) / sx, m22 = m.getArray().get(5) / sy, m23 = m.getArray().get(9)
 				/ sz;
-		float m33 = m.elements.get(10) / sz;
+		float m33 = m.getArray().get(10) / sz;
 
 		this.y = (float) Math.asin(m13);
 
@@ -372,13 +372,13 @@ public class Vector3f extends Vector2f implements Vector
 	public void getScaleFromMatrix(Matrix4f m)
 	{
 		Vector3f tmp = new Vector3f();
-		tmp.set(m.elements.get(0), m.elements.get(1), m.elements.get(2));
+		tmp.set(m.getArray().get(0), m.getArray().get(1), m.getArray().get(2));
 		float sx = tmp.length();
 
-		tmp.set(m.elements.get(4), m.elements.get(5), m.elements.get(6));
+		tmp.set(m.getArray().get(4), m.getArray().get(5), m.getArray().get(6));
 		float sy = tmp.length();
 
-		tmp.set(m.elements.get(8), m.elements.get(9), m.elements.get(10));
+		tmp.set(m.getArray().get(8), m.getArray().get(9), m.getArray().get(10));
 		float sz = tmp.length();
 
 		this.x = sx;

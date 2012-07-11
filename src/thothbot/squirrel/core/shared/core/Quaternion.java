@@ -137,17 +137,17 @@ public class Quaternion
 
 		float absQ = (float) Math.pow(m.determinant(), 1.0f / 3.0f);
 
-		this.w = (float) Math.sqrt(Math.max(0, absQ + m.elements.get(0) + m.elements.get(5)
-				+ m.elements.get(10))) / 2f;
-		this.x = (float) Math.sqrt(Math.max(0, absQ + m.elements.get(0) - m.elements.get(5)
-				- m.elements.get(10))) / 2f;
-		this.y = (float) Math.sqrt(Math.max(0, absQ - m.elements.get(0) + m.elements.get(5)
-				- m.elements.get(10))) / 2f;
-		this.z = (float) Math.sqrt(Math.max(0, absQ - m.elements.get(0) - m.elements.get(5)
-				+ m.elements.get(10))) / 2f;
-		this.x = copySign(this.x, (m.elements.get(6) - m.elements.get(9)));
-		this.y = copySign(this.y, (m.elements.get(8) - m.elements.get(2)));
-		this.z = copySign(this.z, (m.elements.get(1) - m.elements.get(4)));
+		this.w = (float) Math.sqrt(Math.max(0, absQ + m.getArray().get(0) + m.getArray().get(5)
+				+ m.getArray().get(10))) / 2f;
+		this.x = (float) Math.sqrt(Math.max(0, absQ + m.getArray().get(0) - m.getArray().get(5)
+				- m.getArray().get(10))) / 2f;
+		this.y = (float) Math.sqrt(Math.max(0, absQ - m.getArray().get(0) + m.getArray().get(5)
+				- m.getArray().get(10))) / 2f;
+		this.z = (float) Math.sqrt(Math.max(0, absQ - m.getArray().get(0) - m.getArray().get(5)
+				+ m.getArray().get(10))) / 2f;
+		this.x = copySign(this.x, (m.getArray().get(6) - m.getArray().get(9)));
+		this.y = copySign(this.y, (m.getArray().get(8) - m.getArray().get(2)));
+		this.z = copySign(this.z, (m.getArray().get(1) - m.getArray().get(4)));
 		this.normalize();
 	}
 

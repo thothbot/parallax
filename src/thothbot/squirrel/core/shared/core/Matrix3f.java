@@ -26,7 +26,7 @@ import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 import thothbot.squirrel.core.shared.Log;
 
 /**
- * This class implements three-dimensional matrix. MxM, where m=3
+ * This class implements three-dimensional matrix. MxM, where M=3.
  * 
  * This matrix actually is array which is represented the following 
  * indexes:
@@ -68,15 +68,15 @@ public class Matrix3f
 
 	/**
 	 * Sets the value of this matrix to the matrix inverse of the passed matrix
-	 * m1.
+	 * m.
 	 * 
-	 * @param m1v the matrix to be inverted
+	 * @param m the matrix to be inverted
 	 */
-	public void getInverse(Matrix4f m1)
+	public void getInverse(Matrix4f m)
 	{
 		// input: THREE.Matrix4
 		// ( based on http://code.google.com/p/webgl-mjs/ )
-		Float32Array me = m1.elements;
+		Float32Array me = m.getArray();
 
 		float a11 = me.get(10) * me.get(5) - me.get(6) * me.get(9);
 		float a21 = -me.get(10) * me.get(1) + me.get(2) * me.get(9);

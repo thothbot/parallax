@@ -59,7 +59,7 @@ public class Frustum
 	 */
 	public void setFromMatrix(Matrix4f m)
 	{
-		Float32Array me = m.elements;
+		Float32Array me = m.getArray();
 		float me0 = me.get(0), me1 = me.get(1), me2 = me.get(2), me3 = me.get(3);
 		float me4 = me.get(4), me5 = me.get(5), me6 = me.get(6), me7 = me.get(7);
 		float me8 = me.get(8), me9 = me.get(9), me10 = me.get(10), me11 = me.get(11);
@@ -90,7 +90,7 @@ public class Frustum
 	{
 		float distance;
 		Matrix4f matrix = object.matrixWorld;
-		Float32Array me = matrix.elements;
+		Float32Array me = matrix.getArray();
 		//float radius = -object.geometry.boundingSphere.radius * matrix.getMaxScaleOnAxis();
 
 		for (int i = 0; i < 6; i++) {

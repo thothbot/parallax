@@ -68,10 +68,10 @@ public class LOD extends Object3D
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
 
 		Matrix4f inverse  = camera.getMatrixWorldInverse();
-		float distance = -( inverse.elements.get(2) 
-				* this.matrixWorld.elements.get(12) + inverse.elements.get(6) 
-				* this.matrixWorld.elements.get(13) + inverse.elements.get(10) 
-				* this.matrixWorld.elements.get(14) + inverse.elements.get(14) );
+		float distance = -( inverse.getArray().get(2) 
+				* this.matrixWorld.getArray().get(12) + inverse.getArray().get(6) 
+				* this.matrixWorld.getArray().get(13) + inverse.getArray().get(10) 
+				* this.matrixWorld.getArray().get(14) + inverse.getArray().get(14) );
 
 			this.LODs.get(0).object3D.setVisible(true);
 

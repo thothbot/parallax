@@ -23,33 +23,73 @@
 package thothbot.squirrel.core.shared.core;
 
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
-import thothbot.squirrel.core.shared.Log;
 
-import com.google.gwt.core.client.GWT;
-
+/**
+ * This class implements three-dimensional matrix. NxN, where N=4.
+ * 
+ * This matrix actually is array which is represented the following 
+ * indexes:
+ * 
+ * 0 4  8 12
+ * 1 5  9 13
+ * 2 6 10 14
+ * 3 7 11 15
+ * 
+ * @author thothbot
+ *
+ */
 public class Matrix4f
 {
-	public Float32Array elements;
+	private Float32Array elements;
 
-	private static Vector3f __v1 = new Vector3f(); // x
-	private static Vector3f __v2 = new Vector3f(); // y
-	private static Vector3f __v3 = new Vector3f(); // z
+	/**
+	 * The first matrix column
+	 */
+	private static Vector3f __v1 = new Vector3f();
+	
+	/**
+	 * The second matrix column
+	 */
+	private static Vector3f __v2 = new Vector3f();
+	
+	/**
+	 * The third matrix column
+	 */
+	private static Vector3f __v3 = new Vector3f();
 
 	private static Matrix4f __m1 = new Matrix4f();
 	private static Matrix4f __m2 = new Matrix4f();
 
+	/**
+	 * Default constructor will make identity four-dimensional matrix.
+	 * 
+	 * 1 0 0 0
+	 * 0 1 0 0
+	 * 0 0 1 0
+	 * 0 0 0 1
+	 */
 	public Matrix4f() 
 	{
-		elements = Float32Array.create(16);
+		this.elements = Float32Array.create(16);
 		identity();
 	}
 
+	/**
+	 * This constructor will create four-dimensional matrix. 
+	 * This matrix uses input values n11-n44 and represented as 
+	 * the following:
+	 * 
+	 * n11 n12 n13 n14
+	 * n21 n22 n23 n24
+	 * n31 n32 n33 n34
+	 * n41 n42 n43 n44
+	 */
 	public Matrix4f(float n11, float n12, float n13, float n14, 
 			float n21, float n22, float n23, float n24, 
 			float n31, float n32, float n33, float n34, 
 			float n41, float n42, float n43, float n44) 
 	{
-		elements = Float32Array.create(16);
+		this.elements = Float32Array.create(16);
 		set(
 			n11, n12, n13, n14,
 			n21, n22, n23, n24,
@@ -57,36 +97,102 @@ public class Matrix4f
 			n41, n42, n43, n44
 		);
 	}
+	
 
+	/**
+	 * Getting the current Matrix which is represented 
+	 * by Array[16] which the following indexes:
+	 * 
+     * 0 4  8 12
+     * 1 5  9 13
+     * 2 6 10 14
+     * 3 7 11 15
+	 * 
+	 * @return the Array
+	 */
+	public Float32Array getArray() 
+	{
+		return elements;
+	}
+	
+	/**
+	 * Returns the vector of the first matrix column. 
+	 * 
+	 * @return the vector
+	 */
+	public Vector3f getColumnX()
+	{
+		return Matrix4f.__v1.set(this.getArray().get(0), this.getArray().get(1), this.getArray().get(2));
+	}
+
+	/**
+	 * Returns the vector of the second matrix column. 
+	 * 
+	 * @return the vector
+	 */
+	public Vector3f getColumnY()
+	{
+		return Matrix4f.__v1.set(this.getArray().get(4), this.getArray().get(5), this.getArray().get(6));
+	}
+
+	/**
+	 * Returns the vector of the third matrix column. 
+	 * 
+	 * @return the vector
+	 */
+	public Vector3f getColumnZ()
+	{
+		return Matrix4f.__v1.set(this.getArray().get(8), this.getArray().get(9), this.getArray().get(10));
+	}
+
+	/**
+	 * Setting input values n11-n44 to the current matrix.
+	 * This matrix will be represented as the following:
+	 * 
+	 * n11 n12 n13 n14
+	 * n21 n22 n23 n24
+	 * n31 n32 n33 n34
+	 * n41 n42 n43 n44
+	 * 
+	 * @return the current matrix.
+	 */
 	public Matrix4f set(
 			float n11, float n12, float n13, float n14, 
 			float n21, float n22, float n23, float n24, 
 			float n31, float n32, float n33, float n34, 
 			float n41, float n42, float n43, float n44)
 	{
-		this.elements.set(0, n11);
-		this.elements.set(1, n21);
-		this.elements.set(2, n31);
-		this.elements.set(3, n41);
+		this.getArray().set(0, n11);
+		this.getArray().set(1, n21);
+		this.getArray().set(2, n31);
+		this.getArray().set(3, n41);
 		
-		this.elements.set(4, n12);
-		this.elements.set(5, n22);
-		this.elements.set(6, n32);
-		this.elements.set(7, n42);
+		this.getArray().set(4, n12);
+		this.getArray().set(5, n22);
+		this.getArray().set(6, n32);
+		this.getArray().set(7, n42);
 		
-		this.elements.set(8, n13);
-		this.elements.set(9, n23);
-		this.elements.set(10, n33);
-		this.elements.set(11, n43);
+		this.getArray().set(8, n13);
+		this.getArray().set(9, n23);
+		this.getArray().set(10, n33);
+		this.getArray().set(11, n43);
 		
-		this.elements.set(12, n14);
-		this.elements.set(13, n24);
-		this.elements.set(14, n34);
-		this.elements.set(15, n44);
+		this.getArray().set(12, n14);
+		this.getArray().set(13, n24);
+		this.getArray().set(14, n34);
+		this.getArray().set(15, n44);
 		
 		return this;
 	}
 
+	/**
+	 * Make  make identity four-dimensional matrix.
+	 * 
+	 * 1 0 0 0
+	 * 0 1 0 0
+	 * 0 0 1 0
+	 * 0 0 0 1
+	 */
 	public void identity()
 	{
 		set(
@@ -97,9 +203,16 @@ public class Matrix4f
 		);
 	}
 
+	/**
+	 * Sets the value of this matrix to the values of input matrix.
+	 *  
+	 * @param m the matrix values which we wat to copy
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f copy(Matrix4f m)
 	{
-		Float32Array me = m.elements;
+		Float32Array me = m.getArray();
 		return set(
 			me.get(0), me.get(4), me.get(8),  me.get(12), 
 			me.get(1), me.get(5), me.get(9),  me.get(13), 
@@ -107,10 +220,182 @@ public class Matrix4f
 			me.get(3), me.get(7), me.get(11), me.get(15)
 		);
 	}
+	
+	/**
+	 * Sets the value of this matrix to the matrix multiplication of m1 and
+	 * vector m2.
+	 * 
+	 * @param m1 the first matrix
+	 * @param m2 the second matrix
+	 * 
+	 * @return the current matrix
+	 */
+	public Matrix4f multiply(Matrix4f m1, Matrix4f m2)
+	{
+		Float32Array ae = m1.getArray();
+		Float32Array be = m2.getArray();
 
+		float a11 = ae.get(0), a12 = ae.get(4), a13 = ae.get(8), a14 = ae.get(12);
+		float a21 = ae.get(1), a22 = ae.get(5), a23 = ae.get(9), a24 = ae.get(13);
+		float a31 = ae.get(2), a32 = ae.get(6), a33 = ae.get(10), a34 = ae.get(14);
+		float a41 = ae.get(3), a42 = ae.get(7), a43 = ae.get(11), a44 = ae.get(15);
+
+		float b11 = be.get(0), b12 = be.get(4), b13 = be.get(8), b14 = be.get(12);
+		float b21 = be.get(1), b22 = be.get(5), b23 = be.get(9), b24 = be.get(13);
+		float b31 = be.get(2), b32 = be.get(6), b33 = be.get(10), b34 = be.get(14);
+		float b41 = be.get(3), b42 = be.get(7), b43 = be.get(11), b44 = be.get(15);
+
+		this.getArray().set(0, (a11 * b11 + a12 * b21 + a13 * b31 + a14 * b41));
+		this.getArray().set(4, (a11 * b12 + a12 * b22 + a13 * b32 + a14 * b42));
+		this.getArray().set(8, (a11 * b13 + a12 * b23 + a13 * b33 + a14 * b43));
+		this.getArray().set(12, (a11 * b14 + a12 * b24 + a13 * b34 + a14 * b44));
+
+		this.getArray().set(1, (a21 * b11 + a22 * b21 + a23 * b31 + a24 * b41));
+		this.getArray().set(5, (a21 * b12 + a22 * b22 + a23 * b32 + a24 * b42));
+		this.getArray().set(9, (a21 * b13 + a22 * b23 + a23 * b33 + a24 * b43));
+		this.getArray().set(13, (a21 * b14 + a22 * b24 + a23 * b34 + a24 * b44));
+
+		this.getArray().set(2, (a31 * b11 + a32 * b21 + a33 * b31 + a34 * b41));
+		this.getArray().set(6, (a31 * b12 + a32 * b22 + a33 * b32 + a34 * b42));
+		this.getArray().set(10, (a31 * b13 + a32 * b23 + a33 * b33 + a34 * b43));
+		this.getArray().set(14, (a31 * b14 + a32 * b24 + a33 * b34 + a34 * b44));
+
+		this.getArray().set(3, (a41 * b11 + a42 * b21 + a43 * b31 + a44 * b41));
+		this.getArray().set(7, (a41 * b12 + a42 * b22 + a43 * b32 + a44 * b42));
+		this.getArray().set(11, (a41 * b13 + a42 * b23 + a43 * b33 + a44 * b43));
+		this.getArray().set(15, (a41 * b14 + a42 * b24 + a43 * b34 + a44 * b44));
+		
+		return this;
+	}
+
+	/**
+	 * Sets the value of this matrix to the matrix multiplication of itself and
+	 * matrix m.
+	 * (this = this * m)
+	 * 
+	 * @param m the other matrix
+	 * 
+	 * @return the current matrix
+	 */
+	public Matrix4f multiply(Matrix4f m)
+	{
+		return multiply(this, m);
+	}
+
+	/**
+	 * Sets the value of this matrix to the scalar multiplication of the scale
+	 * factor with this.
+	 * 
+	 * @param s the scalar value
+	 * 
+	 * @return the current matrix
+	 */
+	public Matrix4f multiply(float s)
+	{
+		this.getArray().set(0, (this.getArray().get(0) * s));
+		this.getArray().set(4, (this.getArray().get(4) * s));
+		this.getArray().set(8, (this.getArray().get(8) * s));
+		this.getArray().set(12, (this.getArray().get(12) * s));
+		this.getArray().set(1, (this.getArray().get(1) * s));
+		this.getArray().set(5, (this.getArray().get(5) * s));
+		this.getArray().set(9, (this.getArray().get(9) * s));
+		this.getArray().set(13, (this.getArray().get(13) * s));
+		this.getArray().set(2, (this.getArray().get(2) * s));
+		this.getArray().set(6, (this.getArray().get(6) * s));
+		this.getArray().set(10, (this.getArray().get(10) * s));
+		this.getArray().set(14, (this.getArray().get(14) * s));
+		this.getArray().set(3, (this.getArray().get(3) * s));
+		this.getArray().set(7, (this.getArray().get(7) * s));
+		this.getArray().set(11, (this.getArray().get(11) * s));
+		this.getArray().set(15, (this.getArray().get(15) * s));
+		
+		return this;
+	}
+	
+	/**
+	 * Sets the value of input vector to the matrix-vector multiplication of itself and
+	 * vector v.
+	 * (this = this * v)
+	 * 
+	 * @param m the input vector
+	 * 
+	 * @return the multiplication input vector
+	 */
+	public Vector4f multiplyVector3(Vector4f v)
+	{
+		Float32Array te = this.getArray();
+
+		float vx = v.getX();
+		float vy = v.getY();
+		float vz = v.getZ();
+		float d = 1.0f / ( te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) );
+
+		v.setX( ( te.get(0) * vx + te.get(4) * vy + te.get(8)  * vz + te.get(12) ) * d );
+		v.setY( ( te.get(1) * vx + te.get(5) * vy + te.get(9)  * vz + te.get(13) ) * d );
+		v.setZ( ( te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) ) * d );
+
+		return v;
+	}
+	
+	/**
+	 * Sets the value of input vector to the matrix-vector multiplication of itself and
+	 * vector v.
+	 * (this = this * v)
+	 * 
+	 * @param m the input vector
+	 * 
+	 * @return the multiplication input vector
+	 */
+	public Vector3f multiplyVector3(Vector3f v)
+	{
+		Float32Array te = this.getArray();
+	
+		float vx = v.getX();
+		float vy = v.getY();
+		float vz = v.getZ();
+		float d = 1.0f / ( te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) );
+
+		v.setX( ( te.get(0) * vx + te.get(4) * vy + te.get(8)  * vz + te.get(12) ) * d );
+		v.setY( ( te.get(1) * vx + te.get(5) * vy + te.get(9)  * vz + te.get(13) ) * d );
+		v.setZ( ( te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) ) * d );
+
+		return v;
+	}
+
+	/**
+	 * Sets the value of input vector to the matrix-vector multiplication of itself and
+	 * vector v.
+	 * (this = this * v)
+	 * 
+	 * @param m the input vector
+	 * 
+	 * @return the multiplication input vector
+	 */
+	public Vector4f multiplyVector4(Vector4f v)
+	{
+		Float32Array te = this.getArray();
+		float vx = v.x, vy = v.y, vz = v.z, vw = v.w;
+
+		v.x = te.get(0) * vx + te.get(4) * vy + te.get(8) * vz + te.get(12) * vw;
+		v.y = te.get(1) * vx + te.get(5) * vy + te.get(9) * vz + te.get(13) * vw;
+		v.z = te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) * vw;
+		v.w = te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) * vw;
+
+		return v;
+	}
+
+	/**
+	 * Modifies the current matrix by looking at target on defined eye.
+	 * 
+	 * @param eye the Eye vector
+	 * @param target the Target vector
+	 * @param up the Up vector
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f lookAt(Vector3f eye, Vector3f target, Vector3f up)
 	{
-		Float32Array te = this.elements;
+		Float32Array te = this.getArray();
 
 		Vector3f x = Matrix4f.__v1;
 		Vector3f y = Matrix4f.__v2;
@@ -123,7 +408,8 @@ public class Matrix4f
 
 		x.cross( up, z ).normalize();
 
-		if ( x.length() == 0 ) {
+		if ( x.length() == 0 ) 
+		{
 			z.addX(0.0001f);
 			x.cross( up, z ).normalize();
 		}
@@ -138,131 +424,35 @@ public class Matrix4f
 		return this;
 	}
 
-	public Matrix4f multiply(Matrix4f m1, Matrix4f m2)
-	{
-		Float32Array ae = m1.elements;
-		Float32Array be = m2.elements;
-
-		float a11 = ae.get(0), a12 = ae.get(4), a13 = ae.get(8), a14 = ae.get(12);
-		float a21 = ae.get(1), a22 = ae.get(5), a23 = ae.get(9), a24 = ae.get(13);
-		float a31 = ae.get(2), a32 = ae.get(6), a33 = ae.get(10), a34 = ae.get(14);
-		float a41 = ae.get(3), a42 = ae.get(7), a43 = ae.get(11), a44 = ae.get(15);
-
-		float b11 = be.get(0), b12 = be.get(4), b13 = be.get(8), b14 = be.get(12);
-		float b21 = be.get(1), b22 = be.get(5), b23 = be.get(9), b24 = be.get(13);
-		float b31 = be.get(2), b32 = be.get(6), b33 = be.get(10), b34 = be.get(14);
-		float b41 = be.get(3), b42 = be.get(7), b43 = be.get(11), b44 = be.get(15);
-
-		this.elements.set(0, (a11 * b11 + a12 * b21 + a13 * b31 + a14 * b41));
-		this.elements.set(4, (a11 * b12 + a12 * b22 + a13 * b32 + a14 * b42));
-		this.elements.set(8, (a11 * b13 + a12 * b23 + a13 * b33 + a14 * b43));
-		this.elements.set(12, (a11 * b14 + a12 * b24 + a13 * b34 + a14 * b44));
-
-		this.elements.set(1, (a21 * b11 + a22 * b21 + a23 * b31 + a24 * b41));
-		this.elements.set(5, (a21 * b12 + a22 * b22 + a23 * b32 + a24 * b42));
-		this.elements.set(9, (a21 * b13 + a22 * b23 + a23 * b33 + a24 * b43));
-		this.elements.set(13, (a21 * b14 + a22 * b24 + a23 * b34 + a24 * b44));
-
-		this.elements.set(2, (a31 * b11 + a32 * b21 + a33 * b31 + a34 * b41));
-		this.elements.set(6, (a31 * b12 + a32 * b22 + a33 * b32 + a34 * b42));
-		this.elements.set(10, (a31 * b13 + a32 * b23 + a33 * b33 + a34 * b43));
-		this.elements.set(14, (a31 * b14 + a32 * b24 + a33 * b34 + a34 * b44));
-
-		this.elements.set(3, (a41 * b11 + a42 * b21 + a43 * b31 + a44 * b41));
-		this.elements.set(7, (a41 * b12 + a42 * b22 + a43 * b32 + a44 * b42));
-		this.elements.set(11, (a41 * b13 + a42 * b23 + a43 * b33 + a44 * b43));
-		this.elements.set(15, (a41 * b14 + a42 * b24 + a43 * b34 + a44 * b44));
-		
-		return this;
-	}
-
-	public Matrix4f multiply(Matrix4f m1)
-	{
-		return multiply(this, m1);
-	}
-
-	public Matrix4f multiply(float s)
-	{
-		this.elements.set(0, (this.elements.get(0) * s));
-		this.elements.set(4, (this.elements.get(4) * s));
-		this.elements.set(8, (this.elements.get(8) * s));
-		this.elements.set(12, (this.elements.get(12) * s));
-		this.elements.set(1, (this.elements.get(1) * s));
-		this.elements.set(5, (this.elements.get(5) * s));
-		this.elements.set(9, (this.elements.get(9) * s));
-		this.elements.set(13, (this.elements.get(13) * s));
-		this.elements.set(2, (this.elements.get(2) * s));
-		this.elements.set(6, (this.elements.get(6) * s));
-		this.elements.set(10, (this.elements.get(10) * s));
-		this.elements.set(14, (this.elements.get(14) * s));
-		this.elements.set(3, (this.elements.get(3) * s));
-		this.elements.set(7, (this.elements.get(7) * s));
-		this.elements.set(11, (this.elements.get(11) * s));
-		this.elements.set(15, (this.elements.get(15) * s));
-		
-		return this;
-	}
-	
-	public Vector4f multiplyVector3(Vector4f v)
-	{
-		Float32Array te = this.elements;
-
-		float vx = v.getX();
-		float vy = v.getY();
-		float vz = v.getZ();
-		float d = 1.0f / ( te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) );
-
-		v.setX( ( te.get(0) * vx + te.get(4) * vy + te.get(8)  * vz + te.get(12) ) * d );
-		v.setY( ( te.get(1) * vx + te.get(5) * vy + te.get(9)  * vz + te.get(13) ) * d );
-		v.setZ( ( te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) ) * d );
-
-		return v;
-	}
-	
-	public Vector3f multiplyVector3(Vector3f v)
-	{
-		Float32Array te = this.elements;
-	
-		float vx = v.getX();
-		float vy = v.getY();
-		float vz = v.getZ();
-		float d = 1.0f / ( te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) );
-
-		v.setX( ( te.get(0) * vx + te.get(4) * vy + te.get(8)  * vz + te.get(12) ) * d );
-		v.setY( ( te.get(1) * vx + te.get(5) * vy + te.get(9)  * vz + te.get(13) ) * d );
-		v.setZ( ( te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) ) * d );
-
-		return v;
-	}
-
-	public Vector4f multiplyVector4(Vector4f v)
-	{
-		Float32Array te = this.elements;
-		float vx = v.x, vy = v.y, vz = v.z, vw = v.w;
-
-		v.x = te.get(0) * vx + te.get(4) * vy + te.get(8) * vz + te.get(12) * vw;
-		v.y = te.get(1) * vx + te.get(5) * vy + te.get(9) * vz + te.get(13) * vw;
-		v.z = te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) * vw;
-		v.w = te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) * vw;
-
-		return v;
-	}
-
+	/**
+	 * Getting input vector and rotate it by the current matrix.
+	 *  
+	 * @param v the input vector
+	 * 
+	 * @return the rotated vector
+	 */
 	public Vector3f rotateAxis(Vector3f v)
 	{
-		float vx = v.x, vy = v.y, vz = v.z;
+		float vx = v.getX(), vy = v.getY(), vz = v.getZ();
 
-		v.setX(this.elements.get(0) * vx + this.elements.get(4) * vy + this.elements.get(8) * vz);
-		v.setY(this.elements.get(1) * vx + this.elements.get(5) * vy + this.elements.get(9) * vz);
-		v.setZ(this.elements.get(2) * vx + this.elements.get(6) * vy + this.elements.get(10) * vz);
+		v.setX(this.getArray().get(0) * vx + this.getArray().get(4) * vy + this.getArray().get(8) * vz);
+		v.setY(this.getArray().get(1) * vx + this.getArray().get(5) * vy + this.getArray().get(9) * vz);
+		v.setZ(this.getArray().get(2) * vx + this.getArray().get(6) * vy + this.getArray().get(10) * vz);
 
 		v.normalize();
 		return v;
 	}
 
+	/**
+	 * The cross product of vectors a and he current matrix
+	 * 
+	 * @param a the vector
+	 * 
+	 * @return the modified vector
+	 */
 	public Vector4f crossVector(Vector4f a)
 	{
-		Float32Array te = this.elements;
+		Float32Array te = this.getArray();
 		Vector4f v = new Vector4f();
 
 		v.x = te.get(0) * a.x + te.get(4) * a.y + te.get(8) * a.z + te.get(12) * a.w;
@@ -274,12 +464,17 @@ public class Matrix4f
 		return v;
 	}
 
+	/**
+	 * Getting the current matrix determinant.
+	 * 
+	 * @return the matrix determinant
+	 */
 	public double determinant()
 	{
-		double n11 = this.elements.get(0), n12 = this.elements.get(4), n13 = this.elements.get(8),  n14 = this.elements.get(12);
-		double n21 = this.elements.get(1), n22 = this.elements.get(5), n23 = this.elements.get(9),  n24 = this.elements.get(13);
-		double n31 = this.elements.get(2), n32 = this.elements.get(6), n33 = this.elements.get(10), n34 = this.elements.get(14);
-		double n41 = this.elements.get(3), n42 = this.elements.get(7), n43 = this.elements.get(11), n44 = this.elements.get(15);
+		double n11 = this.getArray().get(0), n12 = this.getArray().get(4), n13 = this.getArray().get(8),  n14 = this.getArray().get(12);
+		double n21 = this.getArray().get(1), n22 = this.getArray().get(5), n23 = this.getArray().get(9),  n24 = this.getArray().get(13);
+		double n31 = this.getArray().get(2), n32 = this.getArray().get(6), n33 = this.getArray().get(10), n34 = this.getArray().get(14);
+		double n41 = this.getArray().get(3), n42 = this.getArray().get(7), n43 = this.getArray().get(11), n44 = this.getArray().get(15);
 
 		double det;
 
@@ -318,9 +513,15 @@ public class Matrix4f
 		);
 	}
 
+	/**
+	 * Transpose the current matrix where its rows will be the 
+	 * columns or its columns are the rows of the current matrix.
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f transpose()
 	{
-		Float32Array te = this.elements;
+		Float32Array te = this.getArray();
 		float tmp;
 
 		tmp = te.get(1); te.set(1, te.get(4)); te.set(4, tmp);
@@ -334,72 +535,103 @@ public class Matrix4f
 		return this;
 	}
 
+	/**
+	 * Sets the value of input array to the values of the current matrix.
+	 * The indexes in the array will be the following:
+	 * 
+	 * 0 4  8 12
+     * 1 5  9 13
+     * 2 6 10 14
+     * 3 7 11 15
+     * 
+	 * @param flat the array for storing matrix values
+	 * 
+	 * @return the modified input vector
+	 */
 	public Float32Array flattenToArray(Float32Array flat)
 	{
 		return flattenToArray(flat, 0);
 	}
 
+	/**
+	 * Sets the value of input array to the values of the current matrix.
+	 * The indexes in the array will be the following:
+	 * 
+	 * 0 4  8 12
+     * 1 5  9 13
+     * 2 6 10 14
+     * 3 7 11 15
+     * 
+	 * @param flat the array for storing matrix values
+	 * @param offset the offset value
+	 * 
+	 * @return the modified input vector
+	 */
 	public Float32Array flattenToArray(Float32Array flat, int offset)
 	{
-		flat.set(offset, this.elements.get(0));
-		flat.set(offset + 1, this.elements.get(1));
-		flat.set(offset + 2, this.elements.get(2));
-		flat.set(offset + 3, this.elements.get(3));
+		flat.set(offset, this.getArray().get(0));
+		flat.set(offset + 1, this.getArray().get(1));
+		flat.set(offset + 2, this.getArray().get(2));
+		flat.set(offset + 3, this.getArray().get(3));
 
-		flat.set(offset + 4, this.elements.get(4));
-		flat.set(offset + 5, this.elements.get(5));
-		flat.set(offset + 6, this.elements.get(6));
-		flat.set(offset + 7, this.elements.get(7));
+		flat.set(offset + 4, this.getArray().get(4));
+		flat.set(offset + 5, this.getArray().get(5));
+		flat.set(offset + 6, this.getArray().get(6));
+		flat.set(offset + 7, this.getArray().get(7));
 
-		flat.set(offset + 8, this.elements.get(8));
-		flat.set(offset + 9, this.elements.get(9));
-		flat.set(offset + 10, this.elements.get(10));
-		flat.set(offset + 11, this.elements.get(11));
+		flat.set(offset + 8, this.getArray().get(8));
+		flat.set(offset + 9, this.getArray().get(9));
+		flat.set(offset + 10, this.getArray().get(10));
+		flat.set(offset + 11, this.getArray().get(11));
 
-		flat.set(offset + 12, this.elements.get(12));
-		flat.set(offset + 13, this.elements.get(13));
-		flat.set(offset + 14, this.elements.get(14));
-		flat.set(offset + 15, this.elements.get(15));
+		flat.set(offset + 12, this.getArray().get(12));
+		flat.set(offset + 13, this.getArray().get(13));
+		flat.set(offset + 14, this.getArray().get(14));
+		flat.set(offset + 15, this.getArray().get(15));
 
 		return flat;
 	}
 
+	/**
+	 * Getting position vector from the current matrix.
+	 * 
+	 * @return the position vector 
+	 */
 	public Vector3f getPosition()
 	{
-		return Matrix4f.__v1.set(this.elements.get(12), this.elements.get(13), this.elements.get(14));
+		return Matrix4f.__v1.set(this.getArray().get(12), this.getArray().get(13), this.getArray().get(14));
 	}
 
+	/**
+	 * Setting position values of the current matrix to the values of
+	 * input vector.
+	 * 
+	 * @param v the input vector
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f setPosition(Vector3f v)
 	{
-		this.elements.set(12, v.getX());
-		this.elements.set(13, v.getY());
-		this.elements.set(14, v.getZ());
+		this.getArray().set(12, v.getX());
+		this.getArray().set(13, v.getY());
+		this.getArray().set(14, v.getZ());
 
 		return this;
 	}
 
-	public Vector3f getColumnX()
-	{
-		return Matrix4f.__v1.set(this.elements.get(0), this.elements.get(1), this.elements.get(2));
-	}
-
-	public Vector3f getColumnY()
-	{
-		return Matrix4f.__v1.set(this.elements.get(4), this.elements.get(5), this.elements.get(6));
-	}
-
-	public Vector3f getColumnZ()
-	{
-		return Matrix4f.__v1.set(this.elements.get(8), this.elements.get(9), this.elements.get(10));
-	}
-
+	/**
+	 * Sets the value of this matrix to the matrix inverse of the passed matrix
+	 * m.
+	 * 
+	 * Based on:
+	 * {@linkplain http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm}
+	 * 
+	 * @param m the matrix to be inverted
+	 */
 	public Matrix4f getInverse(Matrix4f m)
 	{
-
-		// based on
-		// http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
-		Float32Array te = this.elements;
-		Float32Array me = m.elements;
+		Float32Array te = this.getArray();
+		Float32Array me = m.getArray();
 
 		float n11 = me.get(0), n12 = me.get(4), n13 = me.get(8),  n14 = me.get(12);
 		float n21 = me.get(1), n22 = me.get(5), n23 = me.get(9),  n24 = me.get(13);
@@ -435,7 +667,7 @@ public class Matrix4f
 	public void setRotationFromEuler(Vector3f v, Euler order)
 	{
 
-		float x = v.x, y = v.y, z = v.z;
+		float x = v.getX(), y = v.getY(), z = v.getZ();
 		float a = (float) Math.cos(x), b = (float) Math.sin(x);
 		float c = (float) Math.cos(y), d = (float) Math.sin(y);
 		float e = (float) Math.cos(z), f = (float) Math.sin(z);
@@ -452,17 +684,17 @@ public class Matrix4f
 			de = d * e;
 			df = d * f;
 
-			this.elements.set(0, ce + df * b);
-			this.elements.set(4, de * b - cf);
-			this.elements.set(8, a * d);
+			this.getArray().set(0, ce + df * b);
+			this.getArray().set(4, de * b - cf);
+			this.getArray().set(8, a * d);
 
-			this.elements.set(1, a * f);
-			this.elements.set(5, a * e);
-			this.elements.set(9, -b);
+			this.getArray().set(1, a * f);
+			this.getArray().set(5, a * e);
+			this.getArray().set(9, -b);
 
-			this.elements.set(2, cf * b - de);
-			this.elements.set(6, df + ce * b);
-			this.elements.set(10, a * c);
+			this.getArray().set(2, cf * b - de);
+			this.getArray().set(6, df + ce * b);
+			this.getArray().set(10, a * c);
 			break;
 
 		case ZXY:
@@ -472,17 +704,17 @@ public class Matrix4f
 			de = d * e;
 			df = d * f;
 
-			this.elements.set(0, ce - df * b);
-			this.elements.set(4, -a * f);
-			this.elements.set(8, de + cf * b);
+			this.getArray().set(0, ce - df * b);
+			this.getArray().set(4, -a * f);
+			this.getArray().set(8, de + cf * b);
 
-			this.elements.set(1, cf + de * b);
-			this.elements.set(5, a * e);
-			this.elements.set(9, df - ce * b);
+			this.getArray().set(1, cf + de * b);
+			this.getArray().set(5, a * e);
+			this.getArray().set(9, df - ce * b);
 
-			this.elements.set(2, -a * d);
-			this.elements.set(6, b);
-			this.elements.set(10, a * c);
+			this.getArray().set(2, -a * d);
+			this.getArray().set(6, b);
+			this.getArray().set(10, a * c);
 			break;
 
 		case ZYX:
@@ -492,17 +724,17 @@ public class Matrix4f
 			be = b * e;
 			bf = b * f;
 
-			this.elements.set(0, c * e);
-			this.elements.set(4, be * d - af);
-			this.elements.set(8, ae * d + bf);
+			this.getArray().set(0, c * e);
+			this.getArray().set(4, be * d - af);
+			this.getArray().set(8, ae * d + bf);
 
-			this.elements.set(1, c * f);
-			this.elements.set(5, bf * d + ae);
-			this.elements.set(9, af * d - be);
+			this.getArray().set(1, c * f);
+			this.getArray().set(5, bf * d + ae);
+			this.getArray().set(9, af * d - be);
 
-			this.elements.set(2, -d);
-			this.elements.set(6, b * c);
-			this.elements.set(10, a * c);
+			this.getArray().set(2, -d);
+			this.getArray().set(6, b * c);
+			this.getArray().set(10, a * c);
 			break;
 
 		case YZX:
@@ -512,17 +744,17 @@ public class Matrix4f
 			bc = b * c;
 			bd = b * d;
 
-			this.elements.set(0, c * e);
-			this.elements.set(4, bd - ac * f);
-			this.elements.set(8, bc * f + ad);
+			this.getArray().set(0, c * e);
+			this.getArray().set(4, bd - ac * f);
+			this.getArray().set(8, bc * f + ad);
 
-			this.elements.set(1, f);
-			this.elements.set(5, a * e);
-			this.elements.set(9, -b * e);
+			this.getArray().set(1, f);
+			this.getArray().set(5, a * e);
+			this.getArray().set(9, -b * e);
 
-			this.elements.set(2, -d * e);
-			this.elements.set(6, ad * f + bc);
-			this.elements.set(10, ac - bd * f);
+			this.getArray().set(2, -d * e);
+			this.getArray().set(6, ad * f + bc);
+			this.getArray().set(10, ac - bd * f);
 			break;
 
 		case XZY:
@@ -532,17 +764,17 @@ public class Matrix4f
 			bc = b * c;
 			bd = b * d;
 
-			this.elements.set(0, c * e);
-			this.elements.set(4, -f);
-			this.elements.set(8, d * e);
+			this.getArray().set(0, c * e);
+			this.getArray().set(4, -f);
+			this.getArray().set(8, d * e);
 
-			this.elements.set(1, ac * f + bd);
-			this.elements.set(5, a * e);
-			this.elements.set(9, ad * f - bc);
+			this.getArray().set(1, ac * f + bd);
+			this.getArray().set(5, a * e);
+			this.getArray().set(9, ad * f - bc);
 
-			this.elements.set(2, bc * f - ad);
-			this.elements.set(6, b * e);
-			this.elements.set(10, bd * f + ac);
+			this.getArray().set(2, bc * f - ad);
+			this.getArray().set(6, b * e);
+			this.getArray().set(10, bd * f + ac);
 			break;
 
 		default: // 'XYZ'
@@ -552,17 +784,17 @@ public class Matrix4f
 			be = b * e;
 			bf = b * f;
 
-			this.elements.set(0, c * e);
-			this.elements.set(4, -c * f);
-			this.elements.set(8, d);
+			this.getArray().set(0, c * e);
+			this.getArray().set(4, -c * f);
+			this.getArray().set(8, d);
 
-			this.elements.set(1, af + be * d);
-			this.elements.set(5, ae - bf * d);
-			this.elements.set(9, -b * c);
+			this.getArray().set(1, af + be * d);
+			this.getArray().set(5, ae - bf * d);
+			this.getArray().set(9, -b * c);
 
-			this.elements.set(2, bf - ae * d);
-			this.elements.set(6, be + af * d);
-			this.elements.set(10, a * c);
+			this.getArray().set(2, bf - ae * d);
+			this.getArray().set(6, be + af * d);
+			this.getArray().set(10, a * c);
 			break;
 
 		}
@@ -577,17 +809,17 @@ public class Matrix4f
 		float yy = y * y2, yz = y * z2, zz = z * z2;
 		float wx = w * x2, wy = w * y2, wz = w * z2;
 
-		this.elements.set(0, 1 - (yy + zz));
-		this.elements.set(4, xy - wz);
-		this.elements.set(8, xz + wy);
+		this.getArray().set(0, 1 - (yy + zz));
+		this.getArray().set(4, xy - wz);
+		this.getArray().set(8, xz + wy);
 
-		this.elements.set(1, xy + wz);
-		this.elements.set(5, 1 - (xx + zz));
-		this.elements.set(9, yz - wx);
+		this.getArray().set(1, xy + wz);
+		this.getArray().set(5, 1 - (xx + zz));
+		this.getArray().set(9, yz - wx);
 
-		this.elements.set(2, xz - wy);
-		this.elements.set(6, yz + wx);
-		this.elements.set(10, 1 - (xx + yy));
+		this.getArray().set(2, xz - wy);
+		this.getArray().set(6, yz + wx);
+		this.getArray().set(10, 1 - (xx + yy));
 	}
 
 	public void compose(Vector3f translation, Quaternion rotation, Vector3f scale)
@@ -602,9 +834,9 @@ public class Matrix4f
 
 		this.multiply(mRotation, mScale);
 
-		this.elements.set(12, translation.x);
-		this.elements.set(13, translation.y);
-		this.elements.set(14, translation.z);
+		this.getArray().set(12, translation.x);
+		this.getArray().set(13, translation.y);
+		this.getArray().set(14, translation.z);
 	}
 
 	public void decompose()
@@ -619,17 +851,17 @@ public class Matrix4f
 		Vector3f y = __v2;
 		Vector3f z = __v3;
 
-		x.set(this.elements.get(0), this.elements.get(1), this.elements.get(2));
-		y.set(this.elements.get(4), this.elements.get(5), this.elements.get(6));
-		z.set(this.elements.get(8), this.elements.get(9), this.elements.get(10));
+		x.set(this.getArray().get(0), this.getArray().get(1), this.getArray().get(2));
+		y.set(this.getArray().get(4), this.getArray().get(5), this.getArray().get(6));
+		z.set(this.getArray().get(8), this.getArray().get(9), this.getArray().get(10));
 
 		scale.x = x.length();
 		scale.y = y.length();
 		scale.z = z.length();
 
-		translation.x = this.elements.get(12);
-		translation.y = this.elements.get(13);
-		translation.z = this.elements.get(14);
+		translation.x = this.getArray().get(12);
+		translation.y = this.getArray().get(13);
+		translation.z = this.getArray().get(14);
 
 		// scale the rotation part
 
@@ -637,55 +869,67 @@ public class Matrix4f
 
 		matrix.copy(this);
 
-		matrix.elements.set(0, matrix.elements.get(0) / scale.x);
-		matrix.elements.set(1, matrix.elements.get(1) / scale.x);
-		matrix.elements.set(2, matrix.elements.get(2) / scale.x);
+		matrix.getArray().set(0, matrix.getArray().get(0) / scale.x);
+		matrix.getArray().set(1, matrix.getArray().get(1) / scale.x);
+		matrix.getArray().set(2, matrix.getArray().get(2) / scale.x);
 
-		matrix.elements.set(4, matrix.elements.get(4) / scale.y);
-		matrix.elements.set(5, matrix.elements.get(5) / scale.y);
-		matrix.elements.set(6, matrix.elements.get(6) / scale.y);
+		matrix.getArray().set(4, matrix.getArray().get(4) / scale.y);
+		matrix.getArray().set(5, matrix.getArray().get(5) / scale.y);
+		matrix.getArray().set(6, matrix.getArray().get(6) / scale.y);
 
-		matrix.elements.set(8, matrix.elements.get(8) / scale.z);
-		matrix.elements.set(9, matrix.elements.get(9) / scale.z);
-		matrix.elements.set(10, matrix.elements.get(10) / scale.z);
+		matrix.getArray().set(8, matrix.getArray().get(8) / scale.z);
+		matrix.getArray().set(9, matrix.getArray().get(9) / scale.z);
+		matrix.getArray().set(10, matrix.getArray().get(10) / scale.z);
 
 		rotation.setFromRotationMatrix(matrix);
 
 		// return [ translation, rotation, scale ];
 	}
 
+	/**
+	 * Setting position value to the position value of the input matrix.
+	 * 
+	 * @param m the input vector
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f extractPosition(Matrix4f m)
 	{
-		Float32Array me = m.elements;
+		Float32Array me = m.getArray();
 
-		this.elements.set(12, me.get(12));
-		this.elements.set(13, me.get(13));
-		this.elements.set(14, me.get(14));
+		this.getArray().set(12, me.get(12));
+		this.getArray().set(13, me.get(13));
+		this.getArray().set(14, me.get(14));
 		
 		return this;
 	}
 
-	// todo check if needed
+	@Deprecated
 	public void extractRotation(Matrix4f m, Vector3f s)
 	{
-		float scaleX = 1 / s.x, scaleY = 1 / s.y, scaleZ = 1 / s.z;
+		float scaleX = 1.0f / s.getX(), scaleY = 1.0f / s.getY(), scaleZ = 1.0f / s.getZ();
 		
-		this.elements.set(0, this.elements.get(0) * scaleX);
-		this.elements.set(1, this.elements.get(1) * scaleX);
-		this.elements.set(2, this.elements.get(2) * scaleX);
+		this.getArray().set(0, this.getArray().get(0) * scaleX);
+		this.getArray().set(1, this.getArray().get(1) * scaleX);
+		this.getArray().set(2, this.getArray().get(2) * scaleX);
 
-		this.elements.set(4, this.elements.get(4) * scaleY);
-		this.elements.set(5, this.elements.get(5) * scaleY);
-		this.elements.set(6, this.elements.get(6) * scaleY);
+		this.getArray().set(4, this.getArray().get(4) * scaleY);
+		this.getArray().set(5, this.getArray().get(5) * scaleY);
+		this.getArray().set(6, this.getArray().get(6) * scaleY);
 
-		this.elements.set(8, this.elements.get(8) * scaleZ);
-		this.elements.set(9, this.elements.get(9) * scaleZ);
-		this.elements.set(10, this.elements.get(10) * scaleZ);
+		this.getArray().set(8, this.getArray().get(8) * scaleZ);
+		this.getArray().set(9, this.getArray().get(9) * scaleZ);
+		this.getArray().set(10, this.getArray().get(10) * scaleZ);
 	}
 	
+	/**
+	 * Setting rotation values to the rotation values of the input matrix.
+	 * 
+	 * @param m the input matrix
+	 */
 	public void extractRotation(Matrix4f m)
 	{
-		Float32Array me = m.elements;
+		Float32Array me = m.getArray();
 
 		Vector3f vector = Matrix4f.__v1;
 
@@ -693,126 +937,152 @@ public class Matrix4f
 		float scaleY = 1.0f / vector.set(me.get(4), me.get(5), me.get(6)).length();
 		float scaleZ = 1.0f / vector.set(me.get(8), me.get(9), me.get(10)).length();
 
-		this.elements.set(0, me.get(0) * scaleX);
-		this.elements.set(1, me.get(1) * scaleX);
-		this.elements.set(2, me.get(2) * scaleX);
+		this.getArray().set(0, me.get(0) * scaleX);
+		this.getArray().set(1, me.get(1) * scaleX);
+		this.getArray().set(2, me.get(2) * scaleX);
 
-		this.elements.set(4, me.get(4) * scaleY);
-		this.elements.set(5, me.get(5) * scaleY);
-		this.elements.set(6, me.get(6) * scaleY);
+		this.getArray().set(4, me.get(4) * scaleY);
+		this.getArray().set(5, me.get(5) * scaleY);
+		this.getArray().set(6, me.get(6) * scaleY);
 
-		this.elements.set(8, me.get(8) * scaleZ);
-		this.elements.set(9, me.get(9) * scaleZ);
-		this.elements.set(10, me.get(10) * scaleZ);
+		this.getArray().set(8, me.get(8) * scaleZ);
+		this.getArray().set(9, me.get(9) * scaleZ);
+		this.getArray().set(10, me.get(10) * scaleZ);
 	}
 
+	/**
+	 * Matrix translation: moves every point a constant distance 
+	 * in a specified direction.
+	 * 
+	 * @param v the vector which define direction
+	 */
 	public void translate(Vector3f v)
 	{
 		float x = v.x, y = v.y, z = v.z;
 
-		this.elements.set(12, this.elements.get(0) * x + this.elements.get(4) * y + this.elements.get(8) * z + this.elements.get(12));
-		this.elements.set(13, this.elements.get(1) * x + this.elements.get(5) * y + this.elements.get(9) * z + this.elements.get(13));
-		this.elements.set(14, this.elements.get(2) * x + this.elements.get(6) * y + this.elements.get(10) * z + this.elements.get(14));
-		this.elements.set(15, this.elements.get(3) * x + this.elements.get(7) * y + this.elements.get(11) * z + this.elements.get(15));
+		this.getArray().set(12, this.getArray().get(0) * x + this.getArray().get(4) * y + this.getArray().get(8) * z + this.getArray().get(12));
+		this.getArray().set(13, this.getArray().get(1) * x + this.getArray().get(5) * y + this.getArray().get(9) * z + this.getArray().get(13));
+		this.getArray().set(14, this.getArray().get(2) * x + this.getArray().get(6) * y + this.getArray().get(10) * z + this.getArray().get(14));
+		this.getArray().set(15, this.getArray().get(3) * x + this.getArray().get(7) * y + this.getArray().get(11) * z + this.getArray().get(15));
 	}
 
+	/**
+	 * Rotate the current matrix on X axis by defined angle.
+	 * 
+	 * @param angle the angle value
+	 */
 	public void rotateX(float angle)
 	{
-		float m12 = this.elements.get(4);
-		float m22 = this.elements.get(5);
-		float m32 = this.elements.get(6);
-		float m42 = this.elements.get(7);
-		float m13 = this.elements.get(8);
-		float m23 = this.elements.get(9);
-		float m33 = this.elements.get(10);
-		float m43 = this.elements.get(11);
+		float m12 = this.getArray().get(4);
+		float m22 = this.getArray().get(5);
+		float m32 = this.getArray().get(6);
+		float m42 = this.getArray().get(7);
+		float m13 = this.getArray().get(8);
+		float m23 = this.getArray().get(9);
+		float m33 = this.getArray().get(10);
+		float m43 = this.getArray().get(11);
 
 		float c = (float) Math.cos(angle);
 		float s = (float) Math.sin(angle);
 
-		this.elements.set(4, c * m12 + s * m13);
-		this.elements.set(5, c * m22 + s * m23);
-		this.elements.set(6, c * m32 + s * m33);
-		this.elements.set(7, c * m42 + s * m43);
+		this.getArray().set(4, c * m12 + s * m13);
+		this.getArray().set(5, c * m22 + s * m23);
+		this.getArray().set(6, c * m32 + s * m33);
+		this.getArray().set(7, c * m42 + s * m43);
 
-		this.elements.set(8, c * m13 - s * m12);
-		this.elements.set(9, c * m23 - s * m22);
-		this.elements.set(10, c * m33 - s * m32);
-		this.elements.set(11, c * m43 - s * m42);
+		this.getArray().set(8, c * m13 - s * m12);
+		this.getArray().set(9, c * m23 - s * m22);
+		this.getArray().set(10, c * m33 - s * m32);
+		this.getArray().set(11, c * m43 - s * m42);
 	}
 
+	/**
+	 * Rotate the current matrix on Y axis by defined angle.
+	 * 
+	 * @param angle the angle value
+	 */
 	public void rotateY(float angle)
 	{
-		float m11 = this.elements.get(0);
-		float m21 = this.elements.get(1);
-		float m31 = this.elements.get(2);
-		float m41 = this.elements.get(3);
-		float m13 = this.elements.get(8);
-		float m23 = this.elements.get(9);
-		float m33 = this.elements.get(10);
-		float m43 = this.elements.get(11);
+		float m11 = this.getArray().get(0);
+		float m21 = this.getArray().get(1);
+		float m31 = this.getArray().get(2);
+		float m41 = this.getArray().get(3);
+		float m13 = this.getArray().get(8);
+		float m23 = this.getArray().get(9);
+		float m33 = this.getArray().get(10);
+		float m43 = this.getArray().get(11);
 
 		float c = (float) Math.cos(angle);
 		float s = (float) Math.sin(angle);
 
-		this.elements.set(0, c * m11 + s * m13);
-		this.elements.set(1, c * m21 + s * m23);
-		this.elements.set(2, c * m31 + s * m33);
-		this.elements.set(3, c * m41 + s * m43);
+		this.getArray().set(0, c * m11 + s * m13);
+		this.getArray().set(1, c * m21 + s * m23);
+		this.getArray().set(2, c * m31 + s * m33);
+		this.getArray().set(3, c * m41 + s * m43);
 
-		this.elements.set(8, c * m13 - s * m11);
-		this.elements.set(9, c * m23 - s * m21);
-		this.elements.set(10, c * m33 - s * m31);
-		this.elements.set(11, c * m43 - s * m41);
+		this.getArray().set(8, c * m13 - s * m11);
+		this.getArray().set(9, c * m23 - s * m21);
+		this.getArray().set(10, c * m33 - s * m31);
+		this.getArray().set(11, c * m43 - s * m41);
 	}
 
+	/**
+	 * Rotate the current matrix on Z axis by defined angle.
+	 * 
+	 * @param angle the angle value
+	 */
 	public void rotateZ(float angle)
 	{
-		float m11 = this.elements.get(0);
-		float m21 = this.elements.get(1);
-		float m31 = this.elements.get(2);
-		float m41 = this.elements.get(3);
-		float m12 = this.elements.get(4);
-		float m22 = this.elements.get(5);
-		float m32 = this.elements.get(6);
-		float m42 = this.elements.get(7);
+		float m11 = this.getArray().get(0);
+		float m21 = this.getArray().get(1);
+		float m31 = this.getArray().get(2);
+		float m41 = this.getArray().get(3);
+		float m12 = this.getArray().get(4);
+		float m22 = this.getArray().get(5);
+		float m32 = this.getArray().get(6);
+		float m42 = this.getArray().get(7);
 
 		float c = (float) Math.cos(angle);
 		float s = (float) Math.sin(angle);
 
-		this.elements.set(0, c * m11 + s * m12);
-		this.elements.set(1, c * m21 + s * m22);
-		this.elements.set(2, c * m31 + s * m32);
-		this.elements.set(3, c * m41 + s * m42);
+		this.getArray().set(0, c * m11 + s * m12);
+		this.getArray().set(1, c * m21 + s * m22);
+		this.getArray().set(2, c * m31 + s * m32);
+		this.getArray().set(3, c * m41 + s * m42);
 
-		this.elements.set(4, c * m12 - s * m11);
-		this.elements.set(5, c * m22 - s * m21);
-		this.elements.set(6, c * m32 - s * m31);
-		this.elements.set(7, c * m42 - s * m41);
+		this.getArray().set(4, c * m12 - s * m11);
+		this.getArray().set(5, c * m22 - s * m21);
+		this.getArray().set(6, c * m32 - s * m31);
+		this.getArray().set(7, c * m42 - s * m41);
 	}
 
+	/**
+	 * Rotate the current matrix on axis by defined angle.
+	 * 
+	 * @param axis the axis on which rotate the matrix
+	 * @param angle the angle value
+	 */
 	public void rotateByAxis(Vector3f axis, float angle)
 	{
+		float x = axis.getX(), y = axis.getY(), z = axis.getZ();
 
 		// optimize by checking axis
-
-		if (axis.x == 1 && axis.y == 0 && axis.z == 0) {
-
+		if (x == 1 && y == 0 && z == 0) 
+		{
 			this.rotateX(angle);
 			return;
-
-		} else if (axis.x == 0 && axis.y == 1 && axis.z == 0) {
-
+		} 
+		else if (x == 0 && y == 1 && z == 0) 
+		{
 			this.rotateY(angle);
 			return;
-
-		} else if (axis.x == 0 && axis.y == 0 && axis.z == 1) {
-
+		} 
+		else if (x == 0 && y == 0 && z == 1) 
+		{
 			this.rotateZ(angle);
 			return;
 		}
 
-		float x = axis.x, y = axis.y, z = axis.z;
 		float n = (float) Math.sqrt(x * x + y * y + z * z);
 
 		x /= n;
@@ -840,55 +1110,69 @@ public class Matrix4f
 		float r23 = yz - xs;
 		float r33 = zz + (1 - zz) * c;
 
-		float m11 = this.elements.get(0), m21 = this.elements.get(1), m31 = this.elements.get(2), m41 = this.elements.get(3);
-		float m12 = this.elements.get(4), m22 = this.elements.get(5), m32 = this.elements.get(6), m42 = this.elements.get(7);
-		float m13 = this.elements.get(8), m23 = this.elements.get(9), m33 = this.elements.get(10), m43 = this.elements.get(11);
+		float m11 = this.getArray().get(0), m21 = this.getArray().get(1), m31 = this.getArray().get(2), m41 = this.getArray().get(3);
+		float m12 = this.getArray().get(4), m22 = this.getArray().get(5), m32 = this.getArray().get(6), m42 = this.getArray().get(7);
+		float m13 = this.getArray().get(8), m23 = this.getArray().get(9), m33 = this.getArray().get(10), m43 = this.getArray().get(11);
 
-		this.elements.set(0, r11 * m11 + r21 * m12 + r31 * m13);
-		this.elements.set(1, r11 * m21 + r21 * m22 + r31 * m23);
-		this.elements.set(2, r11 * m31 + r21 * m32 + r31 * m33);
-		this.elements.set(3, r11 * m41 + r21 * m42 + r31 * m43);
+		this.getArray().set(0, r11 * m11 + r21 * m12 + r31 * m13);
+		this.getArray().set(1, r11 * m21 + r21 * m22 + r31 * m23);
+		this.getArray().set(2, r11 * m31 + r21 * m32 + r31 * m33);
+		this.getArray().set(3, r11 * m41 + r21 * m42 + r31 * m43);
 
-		this.elements.set(4, r12 * m11 + r22 * m12 + r32 * m13);
-		this.elements.set(5, r12 * m21 + r22 * m22 + r32 * m23);
-		this.elements.set(6, r12 * m31 + r22 * m32 + r32 * m33);
-		this.elements.set(7, r12 * m41 + r22 * m42 + r32 * m43);
+		this.getArray().set(4, r12 * m11 + r22 * m12 + r32 * m13);
+		this.getArray().set(5, r12 * m21 + r22 * m22 + r32 * m23);
+		this.getArray().set(6, r12 * m31 + r22 * m32 + r32 * m33);
+		this.getArray().set(7, r12 * m41 + r22 * m42 + r32 * m43);
 
-		this.elements.set(8, r13 * m11 + r23 * m12 + r33 * m13);
-		this.elements.set(9, r13 * m21 + r23 * m22 + r33 * m23);
-		this.elements.set(10, r13 * m31 + r23 * m32 + r33 * m33);
-		this.elements.set(11, r13 * m41 + r23 * m42 + r33 * m43);
+		this.getArray().set(8, r13 * m11 + r23 * m12 + r33 * m13);
+		this.getArray().set(9, r13 * m21 + r23 * m22 + r33 * m23);
+		this.getArray().set(10, r13 * m31 + r23 * m32 + r33 * m33);
+		this.getArray().set(11, r13 * m41 + r23 * m42 + r33 * m43);
 	}
 
+	/**
+	 * Scale the current matrix.
+	 * 
+	 * @param v the vector to scale the current matrix
+	 */
 	public void scale(Vector3f v)
 	{
 		float x = v.x, y = v.y, z = v.z;
 
-		this.elements.set(0,  (this.elements.get(0)  * x));
-		this.elements.set(1,  (this.elements.get(1)  * x));
-		this.elements.set(2,  (this.elements.get(2)  * x));
-		this.elements.set(3,  (this.elements.get(3)  * x));
+		this.getArray().set(0,  (this.getArray().get(0)  * x));
+		this.getArray().set(1,  (this.getArray().get(1)  * x));
+		this.getArray().set(2,  (this.getArray().get(2)  * x));
+		this.getArray().set(3,  (this.getArray().get(3)  * x));
 		
-		this.elements.set(4,  (this.elements.get(4)  * y));
-		this.elements.set(5,  (this.elements.get(5)  * y));
-		this.elements.set(6,  (this.elements.get(6)  * y));
-		this.elements.set(7,  (this.elements.get(7)  * y));
+		this.getArray().set(4,  (this.getArray().get(4)  * y));
+		this.getArray().set(5,  (this.getArray().get(5)  * y));
+		this.getArray().set(6,  (this.getArray().get(6)  * y));
+		this.getArray().set(7,  (this.getArray().get(7)  * y));
 		
-		this.elements.set(8,  (this.elements.get(8)  * z));
-		this.elements.set(9,  (this.elements.get(9)  * z));
-		this.elements.set(10, (this.elements.get(10) * z));
-		this.elements.set(11, (this.elements.get(11) * z));
+		this.getArray().set(8,  (this.getArray().get(8)  * z));
+		this.getArray().set(9,  (this.getArray().get(9)  * z));
+		this.getArray().set(10, (this.getArray().get(10) * z));
+		this.getArray().set(11, (this.getArray().get(11) * z));
 	}
 
 	public float getMaxScaleOnAxis()
 	{
-		float scaleXSq = this.elements.get(0) * this.elements.get(0) + this.elements.get(1) * this.elements.get(1) + this.elements.get(2) * this.elements.get(2);
-		float scaleYSq = this.elements.get(4) * this.elements.get(4) + this.elements.get(5) * this.elements.get(5) + this.elements.get(6) * this.elements.get(6);
-		float scaleZSq = this.elements.get(8) * this.elements.get(8) + this.elements.get(9)	* this.elements.get(9) + this.elements.get(10) * this.elements.get(10);
+		float scaleXSq = this.getArray().get(0) * this.getArray().get(0) + this.getArray().get(1) * this.getArray().get(1) + this.getArray().get(2) * this.getArray().get(2);
+		float scaleYSq = this.getArray().get(4) * this.getArray().get(4) + this.getArray().get(5) * this.getArray().get(5) + this.getArray().get(6) * this.getArray().get(6);
+		float scaleZSq = this.getArray().get(8) * this.getArray().get(8) + this.getArray().get(9)	* this.getArray().get(9) + this.getArray().get(10) * this.getArray().get(10);
 
 		return (float) Math.sqrt(Math.max(scaleXSq, Math.max(scaleYSq, scaleZSq)));
 	}
 
+	/**
+	 * This method will make translation matrix using X, Y,Z coordinates 
+	 * 
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
+	 * @param z the Z coordinate
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f makeTranslation(float x, float y, float z)
 	{
 		this.set(
@@ -901,6 +1185,13 @@ public class Matrix4f
 		return this;
 	}
 
+	/**
+	 * The method will make rotation matrix on X-axis using defining angle theta.
+	 * 
+	 * @param theta the angle to make rotation matrix
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f makeRotationX(float theta)
 	{
 		float c = (float) Math.cos(theta), s = (float) Math.sin(theta);
@@ -915,6 +1206,13 @@ public class Matrix4f
 		return this;
 	}
 
+	/**
+	 * The method will make rotation matrix on Y-axis using defining angle theta.
+	 * 
+	 * @param theta the angle to make rotation matrix
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f makeRotationY(float theta)
 	{
 		float c = (float) Math.cos(theta), s = (float) Math.sin(theta);
@@ -929,6 +1227,13 @@ public class Matrix4f
 		return this;
 	}
 
+	/**
+	 * The method will make rotation matrix on Z-axis using defining angle theta.
+	 * 
+	 * @param theta the angle to make rotation matrix
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f makeRotationZ(float theta)
 	{
 		float c = (float) Math.cos(theta), s = (float) Math.sin(theta);
@@ -943,6 +1248,14 @@ public class Matrix4f
 		return this;
 	}
 
+	/**
+	 * The method will make rotation matrix on XYZ-axis using defining angle theta.
+	 * 
+	 * @param axis  the axis on which rotate the matrix
+	 * @param theta the angle to make rotation matrix
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f makeRotationAxis(Vector3f axis, float angle)
 	{
 		// Based on http://www.gamedev.net/reference/articles/article1199.asp
@@ -963,6 +1276,15 @@ public class Matrix4f
 		return this;
 	}
 
+	/**
+	 * Make a scaled matrix on the X, Y, Z coordinates.
+	 * 
+	 * @param x the X-coordinate
+	 * @param y the Y-coordinate
+	 * @param z the Z-coordinate
+	 * 
+	 * @return the current matrix
+	 */
 	public Matrix4f makeScale(float x, float y, float z)
 	{
 		return this.set(
@@ -975,7 +1297,7 @@ public class Matrix4f
 
 	public Matrix4f makeFrustum(float left, float right, float bottom, float top, float near, float far)
 	{
-		Float32Array te = this.elements;
+		Float32Array te = this.getArray();
 		float x = 2.0f * near / ( right - left );
 		float y = 2.0f * near / ( top - bottom );
 
@@ -1022,10 +1344,15 @@ public class Matrix4f
 		);
 	}
 
+	/**
+	 * Clone the current matrix.
+	 * matrix.clone() != matrix
+	 * 
+	 * @return the new instance of matrix
+	 */
 	public Matrix4f clone()
 	{
-
-		Float32Array te = this.elements;
+		Float32Array te = this.getArray();
 
 		return new Matrix4f(
 			te.get(0), te.get(4), te.get(8), te.get(12), 
@@ -1036,11 +1363,15 @@ public class Matrix4f
 
 	}
 	
-	public String toString() {
+	/**
+	 * Getting matrix information by printing list of matrix's elements.
+	 */
+	public String toString() 
+	{
 		String retval = "[";
 		
-		for(int i = 0; i < this.elements.getLength(); i++)
-			retval += this.elements.get(i) + ", ";
+		for(int i = 0; i < this.getArray().getLength(); i++)
+			retval += this.getArray().get(i) + ", ";
 		
 		return retval + "]";
 	}
