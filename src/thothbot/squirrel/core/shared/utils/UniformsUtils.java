@@ -27,8 +27,22 @@ import java.util.Map;
 
 import thothbot.squirrel.core.client.shader.Uniform;
 
+/**
+ * The class implements some Uniform related helper methods 
+ * 
+ * @author thothbot
+ *
+ */
 public class UniformsUtils
 {
+	/**
+	 * Merge two uniforms into one new result uniform.
+	 * 
+	 * @param uniforms1 the map of first uniforms
+	 * @param uniforms2 the map of second uniforms
+	 * 
+	 * @return new instance of Uniform Map
+	 */
 	public static Map<String, Uniform> merge( Map<String, Uniform> uniforms1, Map<String, Uniform> uniforms2 ) 
 	{
 		Map<String, Uniform> result = new HashMap<String, Uniform>();
@@ -39,6 +53,13 @@ public class UniformsUtils
 		return result;
 	}
 
+	/**
+	 * Clone uniforms and create new instance of uniforms.
+	 *  
+	 * @param uniforms the uniforms to clone
+	 * 
+	 * @return the new instance of Uniform map
+	 */
 	public static Map<String, Uniform> clone ( Map<String, Uniform> uniforms ) 
 	{
 		Map<String, Uniform> result = new HashMap<String, Uniform>();

@@ -31,23 +31,27 @@ import java.util.Map;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.core.Vector2f;
 
+
+/**
+ * The class implements some 3D Shape related helper methods
+ * 
+ * The code is based on js-code written by zz85 
+ * 
+ * @author thothbot
+ *
+ */
 public class ShapeUtils
 {
 	public static float shortest = Float.POSITIVE_INFINITY;
 	
-	/*
-	 * Remove holes
+	/**
+	 * Remove holes from the Shape
 	 * 
-	 * @param contour 
-	 * 		list of {@link Vector2f} for contour
-	 * @param holes
-	 * 		list of list of {@link Vector2f}
-	 * @param shape
-	 * 		List of {@link Vector2f}, there will be created shape with no holes
-	 * @param allpoints
-	 *		List of {@link Vector2f}
-	 * @param verts
-	 * 		there will be created isolated faces
+	 * @param contour the list of contour
+	 * @param holes   the list of holes
+	 * @param shape   the list of shapes, where will be created shape without holes
+	 * @param allpoints 
+	 * @param verts   the list of vertices, where will be created isolated faces
      */
 	public static void removeHoles( List<Vector2f> contour, List<List<Vector2f>> holes, 
 			List<Vector2f> shape, List<Vector2f> allpoints, List<List<Vector2f>> verts ) 
@@ -205,6 +209,7 @@ public class ShapeUtils
 	/*
 	 * @param contour List of {@link Vector2f}
 	 * @param holes
+	 * 
 	 * @return List<List<Integer>>
 	 */
 	public static List<List<Integer>> triangulateShape ( List<Vector2f> contour, List<List<Vector2f>> holes ) 
