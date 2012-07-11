@@ -183,9 +183,9 @@ public final class Color3f
 	 * 
 	 * This method based on MochiKit implementation by Bob Ippolito
 	 * 
-	 * @param h the H-component of color
-	 * @param s the S-component of color
-	 * @param v the V-component of color
+	 * @param h the hue
+	 * @param s the saturation
+	 * @param v the value
 	 * 
 	 * @return a current color
 	 */

@@ -25,8 +25,20 @@ package thothbot.squirrel.core.shared.utils;
 import thothbot.squirrel.core.shared.core.Color3f;
 import thothbot.squirrel.core.shared.core.Mathematics;
 
+/**
+ * This class implements some color related helpers methods.
+ * 
+ * This class based on js-code written by alteredq 
+ * http://alteredqualia.com/
+ * 
+ * @author thothbot
+ *
+ */
 public class ColorUtils
 {
+	/**
+	 * HSV presentation of color
+	 */
 	public static class HSV 
 	{
 		float hue;
@@ -41,6 +53,14 @@ public class ColorUtils
 		}
 	}
 	
+	/**
+	 * This method adjusts color by defined values of H, S, V
+	 * 
+	 * @param color the Color instance
+	 * @param h the hue
+	 * @param s the saturation
+	 * @param v the value
+	 */
 	public static void adjustHSV(Color3f color, float h, float s, float v ) 
 	{
 		ColorUtils.HSV hsv = ColorUtils.rgbToHsv(color);
@@ -52,8 +72,15 @@ public class ColorUtils
 		color.setHSV( hsv.hue, hsv.saturation, hsv.value );
 	}
 	
-	/*
-	 * based on MochiKit implementation by Bob Ippolito
+	/**
+	 * This method will make new HSV instance and sets color value from
+	 * color instance
+	 * 
+	 * Based on: 
+	 * MochiKit implementation by Bob Ippolito
+	 * 
+	 * @param color the color instance
+	 * @return the new HSV instance
 	 */
 	public static ColorUtils.HSV rgbToHsv(Color3f color) 
 	{
