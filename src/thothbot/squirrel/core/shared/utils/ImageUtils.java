@@ -32,16 +32,31 @@ import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Image;
 
+/**
+ * This class implements some Image-related helper methods.
+ * 
+ * @author thothbot
+ *
+ */
 public final class ImageUtils 
 {
-	public static interface Callback {
+	/**
+	 * This callback will be called when the image has been loaded.
+	 */
+	public static interface Callback 
+	{
 		void run(Image image);
 	}
-
-	public ImageUtils(){
-		// Required for overlay types
-	}
 	
+	/**
+	 * Loading of texture.
+	 * 
+	 * @param path     the string path to the image
+	 * @param mapping  the mapping mode {@link Texture.MAPPING_MODE}. Not necessary.
+	 * @param callback the {@link ImageUtils.Callback}. Not necessary.
+	 * 
+	 * @return the new instance of {@link Texture}
+	 */
 	public static Texture loadTexture(String path, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
 		Image image = new Image();
@@ -50,6 +65,15 @@ public final class ImageUtils
 		return ImageUtils.loadTexture(image, mapping, callback);
 	}
 	
+	/**
+	 * Loading of texture.
+	 * 
+	 * @param imageResource  the {@link ImageResource} instance
+	 * @param mapping        the mapping mode {@link Texture.MAPPING_MODE}. Not necessary.
+	 * @param callback       the {@link ImageUtils.Callback}. Not necessary.
+	 * 
+	 * @return the new instance of {@link Texture}
+	 */
 	public static Texture loadTexture(ImageResource imageResource, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
 		Image image = new Image();
@@ -57,7 +81,15 @@ public final class ImageUtils
 		return ImageUtils.loadTexture(image, mapping, callback);
 	}
 
-	// Methods
+	/**
+	 * Loading of texture.
+	 * 
+	 * @param image    the instance of {@link Image}
+	 * @param mapping  the mapping mode {@link Texture.MAPPING_MODE}. Not necessary.
+	 * @param callback the {@link ImageUtils.Callback}. Not necessary.
+	 * 
+	 * @return the new instance of {@link Texture}
+	 */
 	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
 		final Texture texture = new Texture(image, mapping);
