@@ -151,7 +151,7 @@ public interface Vector
 	public Vector negate();
 	
 	/**
-	 * Getting distance between two vectors.
+	 * get distance between two vectors.
 	 * 
 	 * @param v1 
 	 * 			second vector
@@ -160,7 +160,7 @@ public interface Vector
 	public float distanceTo(Vector v1);
 	
 	/**
-	 * Getting squared distance between two vectors.
+	 * get squared distance between two vectors.
 	 * 
 	 * @param v 
 	 * 			second vector

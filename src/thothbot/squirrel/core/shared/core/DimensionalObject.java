@@ -32,110 +32,144 @@ import thothbot.squirrel.core.shared.cameras.Camera;
 public interface DimensionalObject
 {
 	/**
-	 * Getting object ID.
+	 * Get object ID.
 	 * 
 	 * @return the object ID
 	 */
 	public int getId();
-
-	public DimensionalObject getParent();
-
-	public void setParent(DimensionalObject parent);
-
-	public List<DimensionalObject> getChildren();
-
-	public void setChildren(Collection<? extends DimensionalObject> children);
-
-	public Vector3f getPosition();
-
-	public void setPosition(Vector3f position);
-
-	public Vector3f getRotation();
-
-	public void setRotation(Vector3f rotation);
-
-	public void setDynamic(Boolean dynamic);
-
-	public Boolean getDynamic();
-
-	public void setRotationAutoUpdate(Boolean rotationAutoUpdate);
-
-	public Boolean getRotationAutoUpdate();
-
-	public void setName(String name);
-
+	
+	/**
+	 * Get name of the current object.
+	 * 
+	 * @return the name of the object
+	 */
 	public String getName();
 
-	public Vector3f getScale();
+	/**
+	 * Adding child object to the current object
+	 * 
+	 * @param child the Child DimensionalObject 
+	 */
+	public <E extends DimensionalObject> void addChild(E child);
+	
+	/**
+	 * Remove child DimensionalObject from the current object
+	 * 
+	 * @param child the Child DimensionalObject
+	 */
+	public <E extends DimensionalObject> void removeChild(E child);
 
-	public void setScale(Vector3f scale);
+	/**
+	 * Get list of children DimensionalObject asictiated with the
+	 * current object.
+	 * 
+	 * @return the list of children DimensionalObject
+	 */
+	public List<DimensionalObject> getChildren();
+	
+	/**
+	 * Get child DimensionalObject associated with the current
+	 * object by its name.
+	 * 
+	 * @param name      the name of child DimensionalObject
+	 * @param recursive flag to search in children objects
+	 * 
+	 * @return the child DimensionalObject
+	 */
+	public DimensionalObject getChildByName(String name, boolean recursive);
+	
+	/**
+	 * Get parent DimensionalObject in which this object is included.
+	 * 
+	 * @return the parent DimensionalObject
+	 */
+	public DimensionalObject getParent();
 
-	public Vector3f getUp();
+	public boolean isDynamic();
 
-	public void setUp(Vector3f up);
+	public boolean isMatrixAutoUpdate();
+	
+	public boolean isMatrixWorldNeedsUpdate();
+	
+	public boolean isRotationAutoUpdate();
+	
+	public boolean isUseQuaternion();
 
-	public Matrix4f getMatrix();
-
-	public void setMatrix(Matrix4f matrix);
-
-	public Matrix4f getMatrixWorld();
-
-	public void setMatrixWorld(Matrix4f matrixWorld);
-
-	public Matrix4f getMatrixRotationWorld();
-
-	public void setMatrixRotationWorld(Matrix4f rotation);
-
-	public Boolean getMatrixWorldNeedsUpdate();
-
-	public void setMatrixWorldNeedsUpdate(Boolean needsUpdate);
-
-	public Boolean getMatrixAutoUpdate();
-
-	public void setMatrixAutoUpdate(Boolean autoUpdate);
-
-	public Quaternion getQuaternion();
-
-	public void setQuaternion(Quaternion quaternion);
-
-	public Boolean getUseQuaternion();
-
-	public void setUseQuaternion(Boolean use);
-
+	public boolean isVisible();
+	
 	public double getBoundRadius();
-
-	public void setBoundRadius(float boundRadius);
 
 	public double getBoundRadiusScale();
 
+	public Matrix4f getMatrix();
+
+	public Matrix4f getMatrixRotationWorld();
+
+	public Matrix4f getMatrixWorld();
+
+	public Vector3f getPosition();
+
+	public Quaternion getQuaternion();
+
+	public Vector3f getRotation();
+
+	public Vector3f getScale();
+
+	public Vector3f getUp();
+
+	public void lookAt(Vector3f vector);
+
+	public void setBoundRadius(float boundRadius);
+
 	public void setBoundRadiusScale(float scale);
 
-	public Boolean getVisible();
+	public void setChildren(Collection<? extends DimensionalObject> children);
 
-	public void setVisible(Boolean visible);
+	public void setDynamic(boolean dynamic);
 
-	// Methods
+	public void setMatrix(Matrix4f matrix);
+
+	public void setMatrixAutoUpdate(boolean autoUpdate);
+
+	public void setMatrixRotationWorld(Matrix4f rotation);
+
+	public void setMatrixWorld(Matrix4f matrixWorld);
+
+	public void setMatrixWorldNeedsUpdate(boolean needsUpdate);
+
+	public void setName(String name);
+
+	public void setParent(DimensionalObject parent);
+
+	public void setPosition(Vector3f position);
+
+	public void setQuaternion(Quaternion quaternion);
+
+	public void setRotation(Vector3f rotation);
+
+	public void setRotationAutoUpdate(boolean rotationAutoUpdate);
+
+	public void setScale(Vector3f scale);
+
+	public void setUp(Vector3f up);
+
+	public void setUseQuaternion(boolean use);
+
+	public void setVisible(boolean visible);
+	
+	public void applyMatrix(Matrix4f matrix);
+
 	public void translate(float distance, Vector3f axis);
 
 	public void translateX(float distance);
-
+	
 	public void translateY(float distance);
 
 	public void translateZ(float distance);
 
-	public void lookAt(Vector3f vector);
-
-	public <E extends DimensionalObject> void addChild(E child);
-
-	public <E extends DimensionalObject> void removeChild(E child);
+	public void update(Matrix4f parentMatrixWorld, boolean forceUpdate, Camera camera);
 	
-	public DimensionalObject getChildByName(String name, boolean recursive);
-
 	public void updateMatrix();
-
-	public void update(Matrix4f parentMatrixWorld, Boolean forceUpdate, Camera camera);
 	
 	public void updateMatrixWorld(boolean force);
-	
-	public void applyMatrix(Matrix4f matrix);
 }

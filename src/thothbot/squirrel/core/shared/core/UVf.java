@@ -76,7 +76,7 @@ public class UVf
 	}
 
 	/**
-	 * Getting Horizontal coordinate.
+	 * get Horizontal coordinate.
 	 * 
 	 * @return the Horizontal coordinate.
 	 */
@@ -86,7 +86,7 @@ public class UVf
 	}
 
 	/**
-	 * Getting Vertical coordinate.
+	 * get Vertical coordinate.
 	 * 
 	 * @return the Vertical coordinate.
 	 */

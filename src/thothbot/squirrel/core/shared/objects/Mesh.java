@@ -109,32 +109,32 @@ public class Mesh extends SidesObject
 		this(geometry, new MeshBasicMaterial(defaultMaterialOptions));
 	}
 
-	public Boolean getFlipSided()
+	public boolean getFlipSided()
 	{
 		return this.flipSided;
 	}
 
-	public void setFlipSided(Boolean flipSided)
+	public void setFlipSided(boolean flipSided)
 	{
 		this.flipSided = flipSided;
 	}
 
-	public Boolean getDoubleSided()
+	public boolean getDoubleSided()
 	{
 		return this.doubleSided;
 	}
 
-	public void setDoubleSided(Boolean doubleSided)
+	public void setDoubleSided(boolean doubleSided)
 	{
 		this.doubleSided = doubleSided;
 	}
 
-	public Boolean getOverdraw()
+	public boolean getOverdraw()
 	{
 		return this.overdraw;
 	}
 
-	public void setOverdraw(Boolean overdraw)
+	public void setOverdraw(boolean overdraw)
 	{
 		this.overdraw = overdraw;
 	}

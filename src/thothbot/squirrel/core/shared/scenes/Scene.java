@@ -97,7 +97,7 @@ public final class Scene extends Object3D
 	}
 	
 	/**
-	 * Getting DimensionalObject associated with the Scene.
+	 * get DimensionalObject associated with the Scene.
 	 * 
 	 * @return the list of DimensionalObject
 	 */
@@ -107,7 +107,7 @@ public final class Scene extends Object3D
 	}
 	
 	/**
-	 * Getting list of lights associated with the Scene.
+	 * get list of lights associated with the Scene.
 	 * 
 	 * @return the list of lights.
 	 */
@@ -117,7 +117,7 @@ public final class Scene extends Object3D
 	}
 	
 	/**
-	 * Getting fog associated with the Scene.
+	 * get fog associated with the Scene.
 	 * 
 	 * @return the fog
 	 */

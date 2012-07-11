@@ -100,7 +100,7 @@ public class Matrix4f
 	
 
 	/**
-	 * Getting the current Matrix which is represented 
+	 * get the current Matrix which is represented 
 	 * by Array[16] which the following indexes:
 	 * 
      * 0 4  8 12
@@ -425,7 +425,7 @@ public class Matrix4f
 	}
 
 	/**
-	 * Getting input vector and rotate it by the current matrix.
+	 * get input vector and rotate it by the current matrix.
 	 *  
 	 * @param v the input vector
 	 * 
@@ -465,7 +465,7 @@ public class Matrix4f
 	}
 
 	/**
-	 * Getting the current matrix determinant.
+	 * get the current matrix determinant.
 	 * 
 	 * @return the matrix determinant
 	 */
@@ -593,7 +593,7 @@ public class Matrix4f
 	}
 
 	/**
-	 * Getting position vector from the current matrix.
+	 * get position vector from the current matrix.
 	 * 
 	 * @return the position vector 
 	 */
@@ -1364,7 +1364,7 @@ public class Matrix4f
 	}
 	
 	/**
-	 * Getting matrix information by printing list of matrix's elements.
+	 * get matrix information by printing list of matrix's elements.
 	 */
 	public String toString() 
 	{

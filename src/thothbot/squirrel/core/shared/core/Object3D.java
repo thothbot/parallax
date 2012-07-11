@@ -47,9 +47,9 @@ public class Object3D implements DimensionalObject
 
 	protected Vector3f rotation;
 
-	protected Boolean dynamic;
+	protected boolean dynamic;
 
-	protected Boolean rotationAutoUpdate;
+	protected boolean rotationAutoUpdate;
 
 	protected String name;
 
@@ -63,19 +63,19 @@ public class Object3D implements DimensionalObject
 
 	protected Matrix4f matrixRotationWorld;
 
-	protected Boolean matrixWorldNeedsUpdate;
+	protected boolean matrixWorldNeedsUpdate;
 
-	protected Boolean matrixAutoUpdate;
+	protected boolean matrixAutoUpdate;
 
 	protected Quaternion quaternion;
 
-	protected Boolean useQuaternion;
+	protected boolean useQuaternion;
 
 	protected float boundRadius;
 
 	protected float boundRadiusScale;
 
-	protected Boolean visible;
+	protected boolean visible;
 
 	private Vector3f vector;
 
@@ -243,7 +243,7 @@ public class Object3D implements DimensionalObject
 	 * .lang.Boolean)
 	 */
 	@Override
-	public void setDynamic(Boolean dynamic)
+	public void setDynamic(boolean dynamic)
 	{
 		this.dynamic = dynamic;
 	}
@@ -254,7 +254,7 @@ public class Object3D implements DimensionalObject
 	 * @see com.alexusachev.lib.core.DimentionObject#getDynamic()
 	 */
 	@Override
-	public Boolean getDynamic()
+	public boolean isDynamic()
 	{
 		return dynamic;
 	}
@@ -263,10 +263,10 @@ public class Object3D implements DimensionalObject
 	 * (non-Javadoc)
 	 * 
 	 * @see com.alexusachev.lib.core.DimentionObject#setRotationAutoUpdate
-	 * (java.lang.Boolean)
+	 * (java.lang.boolean)
 	 */
 	@Override
-	public void setRotationAutoUpdate(Boolean rotationAutoUpdate)
+	public void setRotationAutoUpdate(boolean rotationAutoUpdate)
 	{
 		this.rotationAutoUpdate = rotationAutoUpdate;
 
@@ -278,7 +278,7 @@ public class Object3D implements DimensionalObject
 	 * @see com.alexusachev.lib.core.DimentionObject#getRotationAutoUpdate ()
 	 */
 	@Override
-	public Boolean getRotationAutoUpdate()
+	public boolean isRotationAutoUpdate()
 	{
 		return rotationAutoUpdate;
 	}
@@ -427,7 +427,7 @@ public class Object3D implements DimensionalObject
 	 * getMatrixWorldNeedsUpdate()
 	 */
 	@Override
-	public Boolean getMatrixWorldNeedsUpdate()
+	public boolean isMatrixWorldNeedsUpdate()
 	{
 		return this.matrixWorldNeedsUpdate;
 	}
@@ -436,10 +436,10 @@ public class Object3D implements DimensionalObject
 	 * (non-Javadoc)
 	 * 
 	 * @see com.alexusachev.lib.core.DimentionObject#
-	 * setMatrixWorldNeedsUpdate(java.lang.Boolean)
+	 * setMatrixWorldNeedsUpdate(java.lang.boolean)
 	 */
 	@Override
-	public void setMatrixWorldNeedsUpdate(Boolean needsUpdate)
+	public void setMatrixWorldNeedsUpdate(boolean needsUpdate)
 	{
 		this.matrixWorldNeedsUpdate = needsUpdate;
 	}
@@ -450,7 +450,7 @@ public class Object3D implements DimensionalObject
 	 * @see com.alexusachev.lib.core.DimentionObject#getMatrixAutoUpdate ()
 	 */
 	@Override
-	public Boolean getMatrixAutoUpdate()
+	public boolean isMatrixAutoUpdate()
 	{
 		return this.matrixAutoUpdate;
 	}
@@ -459,10 +459,10 @@ public class Object3D implements DimensionalObject
 	 * (non-Javadoc)
 	 * 
 	 * @see com.alexusachev.lib.core.DimentionObject#setMatrixAutoUpdate
-	 * (java.lang.Boolean)
+	 * (java.lang.boolean)
 	 */
 	@Override
-	public void setMatrixAutoUpdate(Boolean autoUpdate)
+	public void setMatrixAutoUpdate(boolean autoUpdate)
 	{
 		this.matrixAutoUpdate = autoUpdate;
 	}
@@ -496,7 +496,7 @@ public class Object3D implements DimensionalObject
 	 * @see com.alexusachev.lib.core.DimentionObject#getUseQuaternion ()
 	 */
 	@Override
-	public Boolean getUseQuaternion()
+	public boolean isUseQuaternion()
 	{
 		return this.useQuaternion;
 	}
@@ -505,10 +505,10 @@ public class Object3D implements DimensionalObject
 	 * (non-Javadoc)
 	 * 
 	 * @see com.alexusachev.lib.core.DimentionObject#setUseQuaternion
-	 * (java.lang.Boolean)
+	 * (java.lang.boolean)
 	 */
 	@Override
-	public void setUseQuaternion(Boolean use)
+	public void setUseQuaternion(boolean use)
 	{
 		this.useQuaternion = use;
 	}
@@ -564,7 +564,7 @@ public class Object3D implements DimensionalObject
 	 * @see com.alexusachev.lib.core.DimentionObject#getVisible()
 	 */
 	@Override
-	public Boolean getVisible()
+	public boolean isVisible()
 	{
 		return this.visible;
 	}
@@ -573,10 +573,10 @@ public class Object3D implements DimensionalObject
 	 * (non-Javadoc)
 	 * 
 	 * @see com.alexusachev.lib.core.DimentionObject#setVisible(java
-	 * .lang.Boolean)
+	 * .lang.boolean)
 	 */
 	@Override
-	public void setVisible(Boolean visible)
+	public void setVisible(boolean visible)
 	{
 		this.visible = visible;
 	}
@@ -678,7 +678,7 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public void update(Matrix4f parentMatrixWorld, Boolean forceUpdate, Camera camera)
+	public void update(Matrix4f parentMatrixWorld, boolean forceUpdate, Camera camera)
 	{
 		if (this.matrixAutoUpdate){
 			this.updateMatrix();

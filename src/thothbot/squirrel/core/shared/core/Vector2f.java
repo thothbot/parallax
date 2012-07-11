@@ -64,7 +64,7 @@ public class Vector2f implements Vector
 	}
 
 	/**
-	 * Getting X coordinate from the vector
+	 * get X coordinate from the vector
 	 * 
 	 * @return a X coordinate
 	 */
@@ -74,7 +74,7 @@ public class Vector2f implements Vector
 	}
 	
 	/**
-	 * Getting Y coordinate from the vector
+	 * get Y coordinate from the vector
 	 * 
 	 * @return a Y coordinate
 	 */

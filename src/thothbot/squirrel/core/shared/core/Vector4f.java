@@ -76,7 +76,7 @@ public class Vector4f extends Vector3f implements Vector
 	}
 
 	/**
-	 * Getting W coordinate from the vector
+	 * get W coordinate from the vector
 	 * 
 	 * @return a W coordinate
 	 */

@@ -38,7 +38,7 @@ public abstract class RenderingScene extends Rendering
 	private RenderingSceneCallback renderingSceneCallback;
 
 	/*
-	 * Getting {@link WebGLRenderer} object
+	 * get {@link WebGLRenderer} object
 	 */
 	protected WebGLRenderer getRenderer() 
 	{
@@ -65,7 +65,7 @@ public abstract class RenderingScene extends Rendering
 	}
 	
 	/*
-	 * Getting {@link Scene} object
+	 * get {@link Scene} object
 	 */
 	public Scene getScene() 
 	{
@@ -89,7 +89,7 @@ public abstract class RenderingScene extends Rendering
 	}
 
 	/*
-	 * Getting {@link Camera} object
+	 * get {@link Camera} object
 	 */
 	public Camera getCamera() 
 	{

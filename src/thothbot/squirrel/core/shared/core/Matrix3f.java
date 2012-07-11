@@ -52,7 +52,7 @@ public class Matrix3f
 	
 
 	/**
-	 * Getting the current Matrix which is represented 
+	 * get the current Matrix which is represented 
 	 * by Array[9] which the following indexes:
 	 * 
 	 * 0 3 6
@@ -155,7 +155,7 @@ public class Matrix3f
 	}
 	
 	/**
-	 * Getting information of the current Matrix 
+	 * get information of the current Matrix 
 	 * which is represented as list of it values.
 	 */
 	public String toString() 

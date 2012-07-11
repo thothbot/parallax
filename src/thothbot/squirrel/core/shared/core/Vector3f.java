@@ -61,7 +61,7 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	/**
-	 * Getting Z coordinate from the vector
+	 * get Z coordinate from the vector
 	 * 
 	 * @return a Z coordinate
 	 */

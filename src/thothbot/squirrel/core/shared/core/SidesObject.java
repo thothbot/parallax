@@ -24,11 +24,11 @@ package thothbot.squirrel.core.shared.core;
 
 public abstract class SidesObject extends GeometryObject
 {
-	public abstract Boolean getFlipSided();
+	public abstract boolean getFlipSided();
 
-	public abstract void setFlipSided(Boolean flipSided);
+	public abstract void setFlipSided(boolean flipSided);
 
-	public abstract Boolean getDoubleSided();
+	public abstract boolean getDoubleSided();
 
-	public abstract void setDoubleSided(Boolean doubleSided);
+	public abstract void setDoubleSided(boolean doubleSided);
 }

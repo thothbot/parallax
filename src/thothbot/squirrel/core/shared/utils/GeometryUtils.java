@@ -55,7 +55,7 @@ public class GeometryUtils
 	 */
 	public static void merge( Geometry geometry1, Mesh object )
 	{
-		if(object.getMatrixAutoUpdate())
+		if(object.isMatrixAutoUpdate())
 			object.updateMatrix();
 
 		Matrix4f matrix = object.getMatrix();

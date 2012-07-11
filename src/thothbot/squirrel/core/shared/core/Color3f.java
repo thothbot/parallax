@@ -75,7 +75,7 @@ public final class Color3f
 	}
 
 	/**
-	 * Getting R-component of the color. 
+	 * get R-component of the color. 
 	 * 
 	 * @return a value in range <0.0, 1.0> 
 	 */
@@ -85,7 +85,7 @@ public final class Color3f
 	}
 
 	/**
-	 * Getting G-component of the color. 
+	 * get G-component of the color. 
 	 * 
 	 * @return a value in range <0.0, 1.0> 
 	 */
@@ -95,7 +95,7 @@ public final class Color3f
 	}
 	
 	/**
-	 * Getting B-component of the color. 
+	 * get B-component of the color. 
 	 * 
 	 * @return a value in range <0.0, 1.0> 
 	 */
@@ -135,7 +135,7 @@ public final class Color3f
 	}
 	
 	/**
-	 * Getting color in HEX. For example 0xFFFFFF, which
+	 * get color in HEX. For example 0xFFFFFF, which
 	 * means completely white. 
 	 * 
 	 * @return a color in HEX
@@ -317,7 +317,7 @@ public final class Color3f
 	}
 	
 	/**
-	 * Getting Color class description by multiplying each value by 255. 
+	 * get Color class description by multiplying each value by 255. 
 	 * Please not this is not real used values. This is just for readability. 
 	 */
 	public String toString()

@@ -100,7 +100,7 @@ public class Quaternion
 	}
 
 	/**
-	 * Getting X coordinate from the Quaternion
+	 * get X coordinate from the Quaternion
 	 * 
 	 * @return a X coordinate
 	 */
@@ -110,7 +110,7 @@ public class Quaternion
 	}
 	
 	/**
-	 * Getting Y coordinate from the Quaternion
+	 * get Y coordinate from the Quaternion
 	 * 
 	 * @return a Y coordinate
 	 */
@@ -120,7 +120,7 @@ public class Quaternion
 	}
 	
 	/**
-	 * Getting Z coordinate from the Quaternion
+	 * get Z coordinate from the Quaternion
 	 * 
 	 * @return a Z coordinate
 	 */
@@ -130,7 +130,7 @@ public class Quaternion
 	}
 	
 	/**
-	 * Getting W coordinate from the Quaternion
+	 * get W coordinate from the Quaternion
 	 * 
 	 * @return a W coordinate
 	 */

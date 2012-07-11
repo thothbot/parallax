@@ -743,7 +743,7 @@ public class WebGLRenderer
 			Object3D object = (Object3D) webglObject.object;
 			webglObject.render = false;
 
-			if ( object.getVisible() ) 
+			if ( object.isVisible() ) 
 			{
 				if ( ! ( object.getClass() == Mesh.class || object.getClass() == ParticleSystem.class ) || ! ( object.frustumCulled ) || _frustum.contains( object ) )
 				{
@@ -780,7 +780,7 @@ public class WebGLRenderer
 		{
 			GeometryObject object = webglObject.object;
 
-			if ( object.getVisible() ) {
+			if ( object.isVisible() ) {
 				Log.debug("render(): set matrices for immediate objects");
 				/*
 				if ( object.matrixAutoUpdate )
@@ -911,7 +911,7 @@ public class WebGLRenderer
 			WebGLObject webglObject = renderList.get( i );
 			GeometryObject object = webglObject.object;
 
-			if ( object.getVisible()) 
+			if ( object.isVisible()) 
 			{
 
 				Material material = null;
