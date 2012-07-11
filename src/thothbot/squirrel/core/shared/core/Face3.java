@@ -25,9 +25,6 @@ package thothbot.squirrel.core.shared.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.squirrel.core.shared.materials.Material;
-
-
 public class Face3
 {
 	protected int a;
@@ -42,35 +39,6 @@ public class Face3
 	protected int materialIndex;
 	protected List<Vector4f> vertexTangents;
 	protected Vector3f centroid;
-
-	// public Face3(int a, int b, int c, List<Vector3f> normals, List<Color3f>
-	// colors, List<Material> materials){
-	// this(a,b,c);
-	//
-	// this.setNormal(new Vector3f());
-	// this.setVertexNormals(normals);
-	//
-	// this.setColor(new Color3f(0x000000));
-	// this.setVertexColors(new ArrayList<Color3f>());
-	//
-	// if (materials != null){
-	// this.materials = materials;
-	// }
-	// }
-	//
-	// public Face3(int a, int b, int c, Vector3f normal, Color3f color,
-	// Material material){
-	// this(a,b,c);
-	// this.setNormal(normal instanceof Vector3f ? normal : new Vector3f());
-	// this.setVertexNormals(new ArrayList<Vector3f>());
-	//
-	// this.setColor(color);
-	// this.setVertexColors(new ArrayList<Color3f>());
-	//
-	// if (material != null){
-	// this.materials.add(material);
-	// }
-	// }
 
 	public Face3(int a, int b, int c, List<Vector3f> normals)
 	{
@@ -239,7 +207,6 @@ public class Face3
 		this.materialIndex = index;
 	}
 
-	// TODO: Material
 	public Face3 clone()
 	{
 		Face3 face = new Face3(this.a, this.b, this.c);

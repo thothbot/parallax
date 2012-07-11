@@ -55,7 +55,7 @@ public class Mathematics
 	 * 
 	 * @param x the scalar value for clamping
 	 * @param a the start value of the range
-	 * @param a the end value of the range
+	 * @param b the end value of the range
 	 * 
 	 * @return a clamped scalar by range <a, b>
 	 */

@@ -33,17 +33,6 @@ public class Face4 extends Face3
 		super(a, b, c);
 		this.setD(d);
 	}
-
-//	public Face4(int a, int b, int c, int d, List<Vector3f> normals, List<Color3f> colors,
-//			List<Material> materials) {
-//		super(a, b, c, normals, colors, materials);
-//		this.setD(d);
-//	}
-
-//	public Face4(int a, int b, int c, int d, Vector3f normal, Color3f color, Material material) {
-//		super(a, b, c, normal, color, material);
-//		this.setD(d);
-//	}
 	
 	public Face4(int a, int b, int c, int d, List<Vector3f> normals) 
 	{

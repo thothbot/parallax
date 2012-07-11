@@ -117,7 +117,7 @@ public final class Color3f
 	/**
 	 * Setting G-component of the color.
 	 * 
-	 * @param r the value in range <0.0, 1.0> 
+	 * @param g the value in range <0.0, 1.0> 
 	 */
 	public void setG(float g)
 	{
@@ -127,7 +127,7 @@ public final class Color3f
 	/**
 	 * Setting B-component of the color.
 	 * 
-	 * @param r the value in range <0.0, 1.0> 
+	 * @param b the value in range <0.0, 1.0> 
 	 */
 	public void setB(float b)
 	{
@@ -226,8 +226,6 @@ public final class Color3f
 	 * Set value of the color from another color.
 	 * 
 	 * @param color the other color
-	 * 
-	 * @return the current color
 	 */
 	public void copy(Color3f color)
 	{

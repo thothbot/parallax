@@ -23,26 +23,42 @@
 package thothbot.squirrel.core.shared.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 
-
+/**
+ * This class implements three-dimensional region which is visible on the screen.
+ * It is the field of view of the notional camera which is implemented as frustum 
+ * of a rectangular pyramid with 6 planes. 
+ * 
+ * @author krs
+ */
 public class Frustum
 {
-
+	/**
+	 * Panes of the Frustum of a rectangular pyramid
+	 */
 	public List<Vector4f> planes;
 
-	public Frustum() {
+	/**
+	 * Default constructor will make Frustum of a rectangular pyramid 
+	 * with 6 planes. 
+	 */
+	public Frustum() 
+	{
 		this.planes = new ArrayList<Vector4f>();
 		for(int i = 0; i < 6; i++)
 			this.planes.add(new Vector4f());
 	}
 
+	/**
+	 * Setting planes of the Frustum from the projection matrix
+	 * 
+	 * @param m the projection matrix
+	 */
 	public void setFromMatrix(Matrix4f m)
 	{
-
 		Float32Array me = m.elements;
 		float me0 = me.get(0), me1 = me.get(1), me2 = me.get(2), me3 = me.get(3);
 		float me4 = me.get(4), me5 = me.get(5), me6 = me.get(6), me7 = me.get(7);
@@ -56,14 +72,20 @@ public class Frustum
 		planes.get(4).set(me3 - me2, me7 - me6, me11 - me10, me15 - me14);
 		planes.get(5).set(me3 + me2, me7 + me6, me11 + me10, me15 + me14);
 
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) 
+		{
 			Vector4f plane = planes.get(i);
 			plane.divide((float) Math.sqrt(plane.x * plane.x + plane.y * plane.y + plane.z
 					* plane.z));
 		}
 	}
 
-	// TODO: FIX!
+	/**
+	 * Checking if the 3D object located inside Frustum.
+	 * TODO: Bounding sphere is needed to be fixed.
+	 * 
+	 * @param object any of 3D object
+	 */
 	public boolean contains(Object3D object)
 	{
 		float distance;
