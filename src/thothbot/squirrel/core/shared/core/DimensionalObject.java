@@ -25,17 +25,17 @@ import java.util.List;
 import thothbot.squirrel.core.shared.cameras.Camera;
 
 
-public interface DimentionObject
+public interface DimensionalObject
 {
 	public abstract int getId();
 
-	public abstract DimentionObject getParent();
+	public abstract DimensionalObject getParent();
 
-	public abstract void setParent(DimentionObject parent);
+	public abstract void setParent(DimensionalObject parent);
 
-	public abstract List<DimentionObject> getChildren();
+	public abstract List<DimensionalObject> getChildren();
 
-	public abstract void setChildren(Collection<? extends DimentionObject> children);
+	public abstract void setChildren(Collection<? extends DimensionalObject> children);
 
 	public abstract Vector3f getPosition();
 
@@ -116,11 +116,11 @@ public interface DimentionObject
 
 	public abstract void lookAt(Vector3f vector);
 
-	public abstract <E extends DimentionObject> void addChild(E child);
+	public abstract <E extends DimensionalObject> void addChild(E child);
 
-	public abstract <E extends DimentionObject> void removeChild(E child);
+	public abstract <E extends DimensionalObject> void removeChild(E child);
 	
-	public abstract DimentionObject getChildByName(String name, boolean recursive);
+	public abstract DimensionalObject getChildByName(String name, boolean recursive);
 
 	public abstract void updateMatrix();
 

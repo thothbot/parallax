@@ -1348,8 +1348,11 @@ public class WebGLRenderer
 		}
 	}
 
-	// Objects refresh
-
+	/**
+	 * Refresh Scene's objects
+	 * 
+	 * @param scene the Scene with child objects
+	 */
 	public void initWebGLObjects(Scene scene ) 
 	{
 		if ( scene.__webglObjects == null ) 
@@ -1360,24 +1363,26 @@ public class WebGLRenderer
 			scene.__webglFlares = new ArrayList<LensFlare>();
 		}
 
-		Log.debug("initWebGLObjects() objectsAdded=" + scene.objectsAdded.size() + ", objectsRemoved=" + scene.objectsRemoved.size());
-		while ( scene.objectsAdded.size() > 0 ) 
+		Log.debug("initWebGLObjects() objectsAdded=" + scene.getObjectsAdded().size() 
+				+ ", objectsRemoved=" + scene.getObjectsRemoved().size());
+		
+		while ( scene.getObjectsAdded().size() > 0 ) 
 		{
-			if(scene.objectsAdded.get( 0 ) instanceof GeometryObject)
-				addObject( (GeometryObject) scene.objectsAdded.get( 0 ), scene );
-			scene.objectsAdded.remove(0);
+			if(scene.getObjectsAdded().get( 0 ) instanceof GeometryObject)
+				addObject( (GeometryObject) scene.getObjectsAdded().get( 0 ), scene );
+			scene.getObjectsAdded().remove(0);
 		}
 
-		while ( scene.objectsRemoved.size() > 0 ) 
+		while ( scene.getObjectsRemoved().size() > 0 ) 
 		{
-			removeObject( (GeometryObject) scene.objectsRemoved.get( 0 ), scene );
-			scene.objectsRemoved.remove(0);
+			removeObject( (GeometryObject) scene.getObjectsRemoved().get( 0 ), scene );
+			scene.getObjectsRemoved().remove(0);
 		}
 
 		// update must be called after objects adding / removal
 		for(WebGLObject object: scene.__webglObjects)
 		{
-			object.object.setBuffer(this);	
+			object.object.setBuffer(this);
 		}			
 	}
 

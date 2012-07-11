@@ -35,7 +35,7 @@ import thothbot.squirrel.core.client.renderers.WebGLRenderInfo;
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.core.Color3f;
-import thothbot.squirrel.core.shared.core.DimentionObject;
+import thothbot.squirrel.core.shared.core.DimensionalObject;
 import thothbot.squirrel.core.shared.core.Face3;
 import thothbot.squirrel.core.shared.core.Face4;
 import thothbot.squirrel.core.shared.core.Geometry;
@@ -89,7 +89,7 @@ public class Mesh extends SidesObject
 				this.morphTargetInfluences = new ArrayList<Integer>();
 				this.morphTargetDictionary = new HashMap<String, Integer>();
 
-				List<DimentionObject> morphTargets = this.geometry.getMorphTargets();
+				List<DimensionalObject> morphTargets = this.geometry.getMorphTargets();
 				for (int m = 0; m < morphTargets.size(); m++) 
 				{
 					this.morphTargetInfluences.add(0);
@@ -511,7 +511,7 @@ public class Mesh extends SidesObject
 		 List<Vector4f> obj_skinIndices = geometry.skinIndices;
 		 List<Vector4f> obj_skinWeights = geometry.skinWeights;
 		
-		 List<DimentionObject> morphTargets = geometry.getMorphTargets();
+		 List<DimensionalObject> morphTargets = geometry.getMorphTargets();
 		 List<MorphNormal> morphNormals = geometry.getMorphNormals();
 
 		 if ( dirtyVertices ) 

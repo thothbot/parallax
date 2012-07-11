@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.squirrel.core.shared.cameras.Camera;
-import thothbot.squirrel.core.shared.core.DimentionObject;
+import thothbot.squirrel.core.shared.core.DimensionalObject;
 import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.WebGLObject;
 import thothbot.squirrel.core.shared.lights.LensFlare;
@@ -35,18 +35,45 @@ import thothbot.squirrel.core.shared.materials.Material;
 import thothbot.squirrel.core.shared.objects.Bone;
 import thothbot.squirrel.core.shared.objects.Sprite;
 
+/**
+ * 3D Scene. The basic class for rendering.
+ * To use this Object in rendering you should add at least one {@link DimensionalObject} 
+ * and {@link Camera}.
+ * Also you may want to add Lights and fog to the Scene Object. 
+ * 
+ * @author krs
+ *
+ */
 public final class Scene extends Object3D
 {
+	/**
+	 * Here are stored cameras, geometries and other DimensionalObject
+	 */
+	private ArrayList<DimensionalObject> objects;
 	
-	protected ArrayList<DimentionObject> objects;
-	protected ArrayList<Light> lights;
-	protected Fog fog;
-	public boolean matrixAutoUpdate = false;
-
-
-	// TODO: This should be private
-	public ArrayList<DimentionObject> objectsAdded;
-	public ArrayList<DimentionObject> objectsRemoved;
+	/**
+	 * Here are stored lights associated with the Scene
+	 */
+	private ArrayList<Light> lights;
+	
+	/**
+	 * Here is stored fog
+	 */
+	private Fog fog;
+	
+	/**
+	 * History list of added DimensionalObject to the Scene.
+	 * This list needed to recalculate buffers from 
+	 * the renderer
+	 */
+	private ArrayList<DimensionalObject> objectsAdded;
+	
+	/**
+	 * History list of removed DimensionalObject from the Scene.
+	 * This list needed to recalculate buffers from 
+	 * the renderer
+	 */
+	private ArrayList<DimensionalObject> objectsRemoved;
 
 	/////////////////////////////////////////////
 	// TODO: Check
@@ -56,44 +83,85 @@ public final class Scene extends Object3D
 	public List<WebGLObject> __webglObjectsImmediate;
 	public List<WebGLObject> __webglObjects;
 	
+	/**
+	 * This default constructor will create new Scene instance.
+	 */
 	public Scene()
 	{
 		super();
 		this.fog = null;
-		this.objects = new ArrayList<DimentionObject>();
+		this.objects = new ArrayList<DimensionalObject>();
 		this.lights = new ArrayList<Light>();
-		this.objectsAdded = new ArrayList<DimentionObject>();
-		this.objectsRemoved = new ArrayList<DimentionObject>();
+		this.objectsAdded = new ArrayList<DimensionalObject>();
+		this.objectsRemoved = new ArrayList<DimensionalObject>();
 	}
 	
+	/**
+	 * Getting DimensionalObject associated with the Scene.
+	 * 
+	 * @return the list of DimensionalObject
+	 */
+	public ArrayList<DimensionalObject> getObjects()
+	{
+		return this.objects;
+	}
+	
+	/**
+	 * Getting list of lights associated with the Scene.
+	 * 
+	 * @return the list of lights.
+	 */
 	public ArrayList<Light> getLights()
 	{
 		return this.lights;
 	}
 	
+	/**
+	 * Getting fog associated with the Scene.
+	 * 
+	 * @return the fog
+	 */
 	public Fog getFog()
 	{
 		return this.fog;
 	}
 	
+	/**
+	 * Return the history list of Dimensional objects added to the list.
+	 * 
+	 * @return the list of DimensionalObject
+	 */
+	public ArrayList<DimensionalObject> getObjectsAdded()
+	{
+		return this.objectsAdded;
+	}
+	
+	/**
+	 * Return the history list of Dimensional objects removed to the list.
+	 * 
+	 * @return the list of DimensionalObject
+	 */
+	public ArrayList<DimensionalObject> getObjectsRemoved()
+	{
+		return this.objectsRemoved;
+	}
+	
+	/**
+	 * Set the fog to the Scene.
+	 * 
+	 * @param fog the Fog
+	 */
 	public void setFog(Fog fog)
 	{
 		this.fog = fog;
 	}
-
-	public ArrayList<DimentionObject> getObjects(){
-		return this.objects;
-	}
-
-//	@Override
-//	public <E extends DimentionObject> void addChild(E child)
-//	{
-//		super.addChild(child);
-//		this.addSceneItem(child);
-//	}
 	
-	
-	public <E extends DimentionObject> void addSceneItem(E child)
+	/** 
+	 * Adding child DimensionalObject to the Scene
+	 * 
+	 * @param child the DimensionalObject
+	 */
+	public <E extends DimensionalObject> void addSceneItem(E child)
 	{
 		if (child instanceof Light)
 		{
@@ -109,18 +177,16 @@ public final class Scene extends Object3D
 			}
 		}
 
-		for (DimentionObject item : child.getChildren())
+		for (DimensionalObject item : child.getChildren())
 			this.addSceneItem(item);
 	}
 	
-//	@Override
-//	public <E extends DimentionObject> void removeChild(E child)
-//	{
-//		super.removeChild(child);
-//		this.removeSceneItem(child);
-//	};
-	
-	public <E extends DimentionObject> void removeSceneItem(E child)
+	/** 
+	 * Removing child DimensionalObject from the Scene
+	 * 
+	 * @param child the DimensionalObject
+	 */
+	public <E extends DimensionalObject> void removeSceneItem(E child)
 	{
 		if (child instanceof Light)
 		{
@@ -136,7 +202,7 @@ public final class Scene extends Object3D
 			}
 		}
 		
-		for (DimentionObject item : child.getChildren())
+		for (DimensionalObject item : child.getChildren())
 			this.removeSceneItem(item);
 	}
 }

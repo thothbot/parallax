@@ -46,7 +46,7 @@ public class Geometry extends GeometryBuffer
 	// Array of morph targets. Each morph target is JS object:
 	//  		{ name: "targetName", vertices: [ new Vector3f(), ... ] }
 	// Morph vertices match number and order of primary vertices.
-	protected List<DimentionObject> morphTargets;
+	protected List<DimensionalObject> morphTargets;
 
 	// Array of vertices.
 	protected List<Vector3f> vertices;
@@ -129,7 +129,7 @@ public class Geometry extends GeometryBuffer
 		ArrayList<List<UVf>> firstChild = new ArrayList<List<UVf>>();
 		this.faceVertexUvs.add(firstChild);
 
-		this.morphTargets = new ArrayList<DimentionObject>();
+		this.morphTargets = new ArrayList<DimensionalObject>();
 		this.morphNormals = new ArrayList<MorphNormal>();
 		this.morphColors = new ArrayList<MorphColor>();
 
@@ -207,11 +207,11 @@ public class Geometry extends GeometryBuffer
 		return boundingBox;
 	}
 
-	public void setMorphTargets(List<DimentionObject> morphTargets) {
+	public void setMorphTargets(List<DimensionalObject> morphTargets) {
 		this.morphTargets = morphTargets;
 	}
 
-	public List<DimentionObject> getMorphTargets() {
+	public List<DimensionalObject> getMorphTargets() {
 		return morphTargets;
 	}
 	

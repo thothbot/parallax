@@ -33,15 +33,15 @@ import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.objects.Line;
 import thothbot.squirrel.core.shared.scenes.Scene;
 
-public class Object3D implements DimentionObject
+public class Object3D implements DimensionalObject
 {
 	private static int Object3DCount = 0;
 
 	protected int id = 0;
 
-	protected DimentionObject parent;
+	protected DimensionalObject parent;
 
-	protected ArrayList<DimentionObject> children;
+	protected ArrayList<DimensionalObject> children;
 
 	protected Vector3f position;
 
@@ -119,7 +119,7 @@ public class Object3D implements DimentionObject
 		this.rotation = new Vector3f();
 
 		this.parent = null;
-		this.children = new ArrayList<DimentionObject>();
+		this.children = new ArrayList<DimensionalObject>();
 		this.scale = new Vector3f(1, 1, 1);
 		
 		this.dynamic = false;
@@ -149,7 +149,7 @@ public class Object3D implements DimentionObject
 	 * @see com.alexusachev.lib.core.DimentionObject#getParent()
 	 */
 	@Override
-	public DimentionObject getParent()
+	public DimensionalObject getParent()
 	{
 		return this.parent;
 	}
@@ -161,7 +161,7 @@ public class Object3D implements DimentionObject
 	 * .google.code.gwt.threejs.client.core.Object3D)
 	 */
 	@Override
-	public void setParent(DimentionObject parent)
+	public void setParent(DimensionalObject parent)
 	{
 		this.parent = parent;
 	}
@@ -172,7 +172,7 @@ public class Object3D implements DimentionObject
 	 * @see com.alexusachev.lib.core.DimentionObject#getChildren()
 	 */
 	@Override
-	public List<DimentionObject> getChildren()
+	public List<DimensionalObject> getChildren()
 	{
 		return this.children;
 	}
@@ -184,9 +184,9 @@ public class Object3D implements DimentionObject
 	 * .util.Collection)
 	 */
 	@Override
-	public void setChildren(Collection<? extends DimentionObject> children)
+	public void setChildren(Collection<? extends DimensionalObject> children)
 	{
-		this.children = new ArrayList<DimentionObject>(children);
+		this.children = new ArrayList<DimensionalObject>(children);
 	}
 
 	/*
@@ -621,7 +621,7 @@ public class Object3D implements DimentionObject
 	}
 	
 	@Override
-	public <E extends DimentionObject> void addChild(E child)
+	public <E extends DimensionalObject> void addChild(E child)
 	{
 		Log.info("Adding for ID " + this.getId() + " = " + this.getClass().getName() 
 				+ " child ID " + child.getId() + " = " + child.getClass().getName());
@@ -636,7 +636,7 @@ public class Object3D implements DimentionObject
 
 			// add to scene
 
-			DimentionObject scene = this;
+			DimensionalObject scene = this;
 
 			while (scene.getParent() != null)
 				scene = scene.getParent();
@@ -647,7 +647,7 @@ public class Object3D implements DimentionObject
 	}
 
 	@Override
-	public <E extends DimentionObject> void removeChild(E child)
+	public <E extends DimensionalObject> void removeChild(E child)
 	{
 		int index = this.children.indexOf(child);
 		if (index != -1) {
@@ -706,11 +706,11 @@ public class Object3D implements DimentionObject
 	}
 
 	@Override
-	public DimentionObject getChildByName(String name, boolean recursive)
+	public DimensionalObject getChildByName(String name, boolean recursive)
 	{
 		for (int c = 0, cl = this.children.size(); c < cl; c++) {
 
-			DimentionObject child = this.children.get(c);
+			DimensionalObject child = this.children.get(c);
 
 			if (child.getName().equals(name)) {
 				return child;

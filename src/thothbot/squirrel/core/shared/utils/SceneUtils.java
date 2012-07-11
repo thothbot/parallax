@@ -24,7 +24,7 @@ package thothbot.squirrel.core.shared.utils;
 
 import java.util.List;
 
-import thothbot.squirrel.core.shared.core.DimentionObject;
+import thothbot.squirrel.core.shared.core.DimensionalObject;
 import thothbot.squirrel.core.shared.core.Geometry;
 import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.materials.Material;
@@ -49,11 +49,11 @@ public class SceneUtils
 	 * @param geometry  the input geometry.
 	 * @param materials the list of materials.
 	 * 
-	 * @return the new instance of {@link DimentionObject}
+	 * @return the new instance of {@link DimensionalObject}
 	 */
-	public static DimentionObject createMultiMaterialObject( Geometry geometry, List<Material> materials ) 
+	public static DimensionalObject createMultiMaterialObject( Geometry geometry, List<Material> materials ) 
 	{
-		DimentionObject group = new Object3D();
+		DimensionalObject group = new Object3D();
 
 		for ( int i = 0; i < materials.size(); i ++ ) 
 		{

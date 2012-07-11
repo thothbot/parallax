@@ -31,7 +31,7 @@ import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.materials.Material;
 
 
-public abstract class GeometryObject extends Object3D implements DimentionObject
+public abstract class GeometryObject extends Object3D implements DimensionalObject
 {
 	protected Geometry geometry;
 	protected Material material;

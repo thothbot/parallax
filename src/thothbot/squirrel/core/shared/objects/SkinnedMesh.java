@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
-import thothbot.squirrel.core.shared.core.DimentionObject;
+import thothbot.squirrel.core.shared.core.DimensionalObject;
 import thothbot.squirrel.core.shared.core.Geometry;
 import thothbot.squirrel.core.shared.core.Matrix4f;
 import thothbot.squirrel.core.shared.core.Vector3f;
@@ -135,7 +135,7 @@ public class SkinnedMesh extends Mesh
 		}
 
 		// update children
-		for(DimentionObject child: this.getChildren()) {
+		for(DimensionalObject child: this.getChildren()) {
 			SkinnedMesh mesh = (SkinnedMesh) child;
 			mesh.update( this.identityMatrix, false );
 		}
