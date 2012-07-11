@@ -37,10 +37,23 @@ import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.materials.Material;
 import thothbot.squirrel.core.shared.objects.Mesh;
 
+/**
+ * This class implements some helpers methods for geometry.
+ * 
+ * This class based on js-code written by mrdoob and alteredq.
+ * 
+ * @author thothbot
+ *
+ */
 public class GeometryUtils
 {
-	
-	public static void merge( Geometry geometry1, Mesh object /* mesh | geometry */ )
+	/**
+	 * Merge geometric object and geometry from Mesh object into geometry object.
+	 * 
+	 * @param geometry1 the geometry object
+	 * @param object    the Mesh object
+	 */
+	public static void merge( Geometry geometry1, Mesh object )
 	{
 		if(object.getMatrixAutoUpdate())
 			object.updateMatrix();
@@ -52,12 +65,24 @@ public class GeometryUtils
 		GeometryUtils.merge(geometry1, object.getGeometry(), matrix, matrixRotation);
 	}
 	
+	/**
+	 * Merge two geometric object: first and second into the first geometry object.
+	 * 
+	 * @param geometry1 the first geometry object
+	 * @param geometry2 the second geometry object
+	 */
 	public static void merge( Geometry geometry1, Geometry geometry2)
 	{
 		GeometryUtils.merge(geometry1, geometry2, null, null);
 	}
-	/*
-	 * Merge two geometries or geometry and geometry from object (using object's transform)
+	
+	/**
+	 * Merge two geometric object: first and second into the first geometry object.
+	 * 
+	 * @param geometry1 the first geometry object
+	 * @param geometry2 the second geometry object
+	 * @param matrix    
+	 * @param matrixRotation
 	 */
 	private static void merge( Geometry geometry1, Geometry geometry2, Matrix4f matrix, Matrix4f matrixRotation ) 
 	{
