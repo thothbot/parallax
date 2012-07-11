@@ -30,9 +30,27 @@ import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.materials.Material;
 import thothbot.squirrel.core.shared.objects.Mesh;
 
-
+/**
+ * The class implements some 3D Scene related helper methods
+ * 
+ * The code is based on js-code written by alteredq 
+ * http://alteredqualia.com/
+ * 
+ * @author thothbot
+ *
+ */
 public class SceneUtils
 {
+	/**
+	 * This method creates multi-material 3D object which contains Mesh objects
+	 * in amount of the materials list size. Here are every Mesh object will use
+	 * one of material of materials list.
+	 * 
+	 * @param geometry  the input geometry.
+	 * @param materials the list of materials.
+	 * 
+	 * @return the new instance of {@link DimentionObject}
+	 */
 	public static DimentionObject createMultiMaterialObject( Geometry geometry, List<Material> materials ) 
 	{
 		DimentionObject group = new Object3D();

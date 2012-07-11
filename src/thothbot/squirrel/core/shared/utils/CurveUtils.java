@@ -25,7 +25,7 @@ package thothbot.squirrel.core.shared.utils;
 /**
  * This class implements some helpers methods for Curve instances
  * 
- * This class based on js-code written by zz85
+ * This code is based on js-code written by zz85
  * http://www.lab4games.net/zz85/blog
  * 
  * @author thothbot

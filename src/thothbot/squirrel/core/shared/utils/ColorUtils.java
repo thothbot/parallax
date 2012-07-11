@@ -28,7 +28,7 @@ import thothbot.squirrel.core.shared.core.Mathematics;
 /**
  * This class implements some color related helpers methods.
  * 
- * This class based on js-code written by alteredq 
+ * This code is based on js-code written by alteredq 
  * http://alteredqualia.com/
  * 
  * @author thothbot

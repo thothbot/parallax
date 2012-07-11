@@ -40,7 +40,7 @@ import thothbot.squirrel.core.shared.objects.Mesh;
 /**
  * This class implements some helpers methods for geometry.
  * 
- * This class based on js-code written by mrdoob and alteredq.
+ * This code is based on js-code written by mrdoob and alteredq.
  * 
  * @author thothbot
  *
