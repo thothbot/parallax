@@ -25,27 +25,36 @@ package thothbot.squirrel.core.shared.core;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 import thothbot.squirrel.core.shared.Log;
 
-import com.google.gwt.core.client.GWT;
-
+/**
+ * This class implements three-dimensional matrix. MxM, where m=3
+ * 
+ * This matrix actually is array which is represented the following 
+ * indexes:
+ * 
+ * 0 3 6
+ * 1 4 7
+ * 2 5 8
+ * 
+ * @author thothbot
+ *
+ */
 public class Matrix3f
 {
 	public Float32Array elements;
 
-	public Matrix3f() {
-		elements = Float32Array.create(9);
-	}
-
-	public void invert(Matrix3f m1)
+	/**
+	 * Default constructor will make empty three-dimensional matrix.
+	 */
+	public Matrix3f() 
 	{
-		
+		elements = Float32Array.create(9);
 	}
 
 	/**
 	 * Sets the value of this matrix to the matrix inverse of the passed matrix
 	 * m1.
 	 * 
-	 * @param m1
-	 *            the matrix to be inverted
+	 * @param m1v the matrix to be inverted
 	 */
 	public void getInverse(Matrix4f m1)
 	{
@@ -83,6 +92,10 @@ public class Matrix3f
 		this.elements.set(8, idet * a33);
 	}
 
+	/**
+	 * Transpose the current matrix where its rows will be the 
+	 * columns or its columns are the rows of the current matrix.
+	 */
 	public void transpose()
 	{
 		float tmp;
@@ -101,6 +114,12 @@ public class Matrix3f
 		m.set(7, tmp);
 	}
 
+	/**
+	 * Transpose the current matrix into new Matrix which is represented 
+	 * by Array[9] 
+	 * 
+	 * @return an array of new transposed matrix.
+	 */
 	public Float32Array transposeIntoArray()
 	{
 		Float32Array r = Float32Array.create(9);
@@ -119,7 +138,12 @@ public class Matrix3f
 		return r;
 	}
 	
-	public String toString() {
+	/**
+	 * Getting information of the current Matrix 
+	 * which is represented as list of it values.
+	 */
+	public String toString() 
+	{
 		String retval = "[";
 		
 		for(int i = 0; i < this.elements.getLength(); i++)
