@@ -22,48 +22,84 @@
 
 package thothbot.squirrel.core.shared.core;
 
-// A texture coordinate.
+import java.lang.reflect.Constructor;
+
+/**
+ * Class implements UV texture mapping.
+ * 
+ * UV texturing permits polygons that make up a 3D object to be 
+ * painted with color from an image.
+ * 
+ * Here are:
+ * U - Horizontal coordinate.
+ * V - Vertical coordinate.
+ * 
+ * UV coordinates should be applied per face. not per vertex. This means 
+ * a shared vertex can have different UV coordinates in each of its 
+ * triangles, so adjacent triangles can be cut apart and positioned 
+ * on different areas of the texture map.
+ * 
+ * @author thothbot
+ *
+ */
 public class UVf
 {
 	/**
 	 * Horizontal coordinate.
 	 */
-	private float u = 0.0f;
+	private float u;
 
 	/**
 	 * Vertical coordinate.
 	 */
-	private float v = 0.0f;
+	private float v;
 
-	public UVf() {
+	/**
+	 * This default Constructor will make UV object (0.0, 0.0) 
+	 */
+	public UVf() 
+	{
+		this.u = 0.0f;
+		this.v = 0.0f;
 	}
 
 	/**
-	 * Constructs and initializes a UV
+	 * This constructor will initializes (U, V) texture mapping.
 	 * 
-	 * @param u
-	 * @param v
+	 * @param u the Horizontal coordinate.
+	 * @param v the Vertical coordinate.
 	 */
-	public UVf(float u, float v) {
+	public UVf(float u, float v) 
+	{
 		this.u = u;
 		this.v = v;
 	}
 
+	/**
+	 * Getting Horizontal coordinate.
+	 * 
+	 * @return the Horizontal coordinate.
+	 */
 	public float getU()
 	{
 		return this.u;
 	}
 
+	/**
+	 * Getting Vertical coordinate.
+	 * 
+	 * @return the Vertical coordinate.
+	 */
 	public float getV()
 	{
 		return this.v;
 	}
 
 	/**
-	 * Sets the value of this UV from the 2 values u and v.
+	 * Sets the value of this UV from the two coordinates (U, V).
 	 * 
-	 * @param u
-	 * @param v
+	 * @param u the Horizontal coordinate.
+	 * @param v the Vertical coordinate.
 	 * 
 	 */
 	public UVf set(float u, float v)
@@ -73,11 +109,28 @@ public class UVf
 		return this;
 	}
 
+	/**
+	 * Copy values of UV mapping object to the values of the current
+	 * UV mapping object.
+	 * 
+	 * @param uv the UV mapping object
+	 * 
+	 * @return the current UV mapping object
+	 */
 	public UVf copy(UVf uv)
 	{
 		return this.set(uv.u, uv.v);
 	}
 
+	/**
+	 * Linearly interpolates between the current UV object
+	 * and input UV object.
+	 * 
+	 * @param uv the input UV object
+	 * @param alpha the alpha value in range <0.0, 1.0>
+	 * 
+	 * @return the current UV object
+	 */
 	public UVf lerp(UVf uv, float alpha)
 	{
 		this.u += (uv.u - this.u) * alpha;
@@ -85,13 +138,23 @@ public class UVf
 		return this;
 	}
 	
+	/**
+	 * Clone the current UV mapping object.
+	 * uv.clone() != uv
+	 * 
+	 * @return the new instance of UV mapping object
+	 */
 	public UVf clone() 
 	{
 		return new UVf( this.u, this.v );
 	}
 	
+	/**
+	 * Return information about this UV mapping object as list
+	 * of Horizontal and Vertical coordinates.
+	 */
 	public String toString() 
 	{
-		return "{" + this.u + ", " + this.v + "}";
+		return "(" + this.u + ", " + this.v + ")";
 	}
 }
