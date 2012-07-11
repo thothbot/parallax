@@ -24,110 +24,118 @@ import java.util.List;
 
 import thothbot.squirrel.core.shared.cameras.Camera;
 
-
+/**
+ * Abstract Dimensional Object
+ * 
+ * @author thothbot
+ */
 public interface DimensionalObject
 {
-	public abstract int getId();
+	/**
+	 * Getting object ID.
+	 * 
+	 * @return the object ID
+	 */
+	public int getId();
 
-	public abstract DimensionalObject getParent();
+	public DimensionalObject getParent();
 
-	public abstract void setParent(DimensionalObject parent);
+	public void setParent(DimensionalObject parent);
 
-	public abstract List<DimensionalObject> getChildren();
+	public List<DimensionalObject> getChildren();
 
-	public abstract void setChildren(Collection<? extends DimensionalObject> children);
+	public void setChildren(Collection<? extends DimensionalObject> children);
 
-	public abstract Vector3f getPosition();
+	public Vector3f getPosition();
 
-	public abstract void setPosition(Vector3f position);
+	public void setPosition(Vector3f position);
 
-	public abstract Vector3f getRotation();
+	public Vector3f getRotation();
 
-	public abstract void setRotation(Vector3f rotation);
+	public void setRotation(Vector3f rotation);
 
-	public abstract void setDynamic(Boolean dynamic);
+	public void setDynamic(Boolean dynamic);
 
-	public abstract Boolean getDynamic();
+	public Boolean getDynamic();
 
-	public abstract void setRotationAutoUpdate(Boolean rotationAutoUpdate);
+	public void setRotationAutoUpdate(Boolean rotationAutoUpdate);
 
-	public abstract Boolean getRotationAutoUpdate();
+	public Boolean getRotationAutoUpdate();
 
-	public abstract void setName(String name);
+	public void setName(String name);
 
-	public abstract String getName();
+	public String getName();
 
-	public abstract Vector3f getScale();
+	public Vector3f getScale();
 
-	public abstract void setScale(Vector3f scale);
+	public void setScale(Vector3f scale);
 
-	public abstract Vector3f getUp();
+	public Vector3f getUp();
 
-	public abstract void setUp(Vector3f up);
+	public void setUp(Vector3f up);
 
-	public abstract Matrix4f getMatrix();
+	public Matrix4f getMatrix();
 
-	public abstract void setMatrix(Matrix4f matrix);
+	public void setMatrix(Matrix4f matrix);
 
-	public abstract Matrix4f getMatrixWorld();
+	public Matrix4f getMatrixWorld();
 
-	public abstract void setMatrixWorld(Matrix4f matrixWorld);
+	public void setMatrixWorld(Matrix4f matrixWorld);
 
-	public abstract Matrix4f getMatrixRotationWorld();
+	public Matrix4f getMatrixRotationWorld();
 
-	public abstract void setMatrixRotationWorld(Matrix4f rotation);
+	public void setMatrixRotationWorld(Matrix4f rotation);
 
-	public abstract Boolean getMatrixWorldNeedsUpdate();
+	public Boolean getMatrixWorldNeedsUpdate();
 
-	public abstract void setMatrixWorldNeedsUpdate(Boolean needsUpdate);
+	public void setMatrixWorldNeedsUpdate(Boolean needsUpdate);
 
-	public abstract Boolean getMatrixAutoUpdate();
+	public Boolean getMatrixAutoUpdate();
 
-	public abstract void setMatrixAutoUpdate(Boolean autoUpdate);
+	public void setMatrixAutoUpdate(Boolean autoUpdate);
 
-	public abstract Quaternion getQuaternion();
+	public Quaternion getQuaternion();
 
-	public abstract void setQuaternion(Quaternion quaternion);
+	public void setQuaternion(Quaternion quaternion);
 
-	public abstract Boolean getUseQuaternion();
+	public Boolean getUseQuaternion();
 
-	public abstract void setUseQuaternion(Boolean use);
+	public void setUseQuaternion(Boolean use);
 
-	public abstract double getBoundRadius();
+	public double getBoundRadius();
 
-	public abstract void setBoundRadius(float boundRadius);
+	public void setBoundRadius(float boundRadius);
 
-	public abstract double getBoundRadiusScale();
+	public double getBoundRadiusScale();
 
-	public abstract void setBoundRadiusScale(float scale);
+	public void setBoundRadiusScale(float scale);
 
-	public abstract Boolean getVisible();
+	public Boolean getVisible();
 
-	public abstract void setVisible(Boolean visible);
+	public void setVisible(Boolean visible);
 
 	// Methods
-	public abstract void translate(float distance, Vector3f axis);
+	public void translate(float distance, Vector3f axis);
 
-	public abstract void translateX(float distance);
+	public void translateX(float distance);
 
-	public abstract void translateY(float distance);
+	public void translateY(float distance);
 
-	public abstract void translateZ(float distance);
+	public void translateZ(float distance);
 
-	public abstract void lookAt(Vector3f vector);
+	public void lookAt(Vector3f vector);
 
-	public abstract <E extends DimensionalObject> void addChild(E child);
+	public <E extends DimensionalObject> void addChild(E child);
 
-	public abstract <E extends DimensionalObject> void removeChild(E child);
+	public <E extends DimensionalObject> void removeChild(E child);
 	
-	public abstract DimensionalObject getChildByName(String name, boolean recursive);
+	public DimensionalObject getChildByName(String name, boolean recursive);
 
-	public abstract void updateMatrix();
+	public void updateMatrix();
 
-	public abstract void update(Matrix4f parentMatrixWorld, Boolean forceUpdate, Camera camera);
+	public void update(Matrix4f parentMatrixWorld, Boolean forceUpdate, Camera camera);
 	
-	public abstract void updateMatrixWorld(boolean force);
+	public void updateMatrixWorld(boolean force);
 	
-	public abstract void applyMatrix(Matrix4f matrix);
-
+	public void applyMatrix(Matrix4f matrix);
 }

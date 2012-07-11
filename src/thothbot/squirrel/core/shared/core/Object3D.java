@@ -110,7 +110,8 @@ public class Object3D implements DimensionalObject
 	public List<Integer> morphTargetInfluences;
 	public List<Integer> __webglMorphTargetInfluences;
 
-	public Object3D() {
+	public Object3D() 
+	{
 		this.id = Object3D.Object3DCount++;
 
 		this.up = new Vector3f(0, 1, 0);
