@@ -35,6 +35,7 @@ public abstract class AbstractMapMaterial extends Material
 		public Texture lightMap = null;
 		public float reflectivity = 1f;
 		public float refractionRatio = 0.98f;
+		public boolean fog = true;
 	}
 
 	protected Color3f color;
@@ -55,6 +56,7 @@ public abstract class AbstractMapMaterial extends Material
 		this.lightMap = options.lightMap;
 		this.reflectivity = options.reflectivity;
 		this.refractionRatio = options.refractionRatio;
+		this.fog = options.fog;
 	}
 
 	public Color3f getColor(){

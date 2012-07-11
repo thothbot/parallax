@@ -40,7 +40,6 @@ public class ShaderMaterial extends Material
 		public Map<String, Uniform> uniforms = new HashMap<String, Uniform>();
 		public Map<String, WebGLCustomAttribute> attributes = new HashMap<String, WebGLCustomAttribute>();
 		public Material.SHADING shading = Material.SHADING.SMOOTH;
-		public boolean fog = false;
 		public List<Light> lights;
 		
 		public boolean skinning = false;
@@ -59,7 +58,6 @@ public class ShaderMaterial extends Material
 		this.attributes = parameters.attributes;
 		
 		this.shading = parameters.shading;
-		this.fog = parameters.fog;
 		
 		this.lights = parameters.lights;
 		

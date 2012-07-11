@@ -25,6 +25,7 @@ package thothbot.squirrel.core.shared.scenes;
 import java.util.Map;
 
 import thothbot.squirrel.core.client.shader.Uniform;
+import thothbot.squirrel.core.shared.Log;
 
 /**
  * This class implements fog with defined density.
@@ -74,9 +75,9 @@ public final class FogExp2 extends Fog
 	 * 
 	 * @return the density value
 	 */
-	public double getDensity()
+	public float getDensity()
 	{
-		return density;
+		return this.density;
 	}
 	
 	@Override

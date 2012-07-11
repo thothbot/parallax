@@ -185,6 +185,7 @@ public class Material
 		public boolean wireframe = false;
 		public int wireframeLinewidth = 1;
 		public Material.COLORS vertexColors = Material.COLORS.NO;
+		public boolean fog = false;
 	}
 
 	public Material(MaterialOptions parameters)
@@ -208,6 +209,8 @@ public class Material
 		this.wireframe = parameters.wireframe;
 		this.wireframeLinewidth = parameters.wireframeLinewidth;
 		this.vertexColors = parameters.vertexColors;
+		
+		this.fog = parameters.fog;
 	}
 	
 	public int getId()

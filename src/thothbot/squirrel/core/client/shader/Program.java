@@ -307,6 +307,7 @@ public class Program
 		String retval = "";
 		for(String opt: options)
 			retval += opt + "\n";
+
 		return retval;
 	}
 

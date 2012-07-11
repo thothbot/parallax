@@ -1929,7 +1929,7 @@ Log.error("?????????????");
 
 			Uniform.TYPE type = uniform.type;
 			Object value = uniform.value;
-			
+			Log.error("====" + u + ", " + uniform);
 			switch ( type ) {
 
 				case I: // single integer

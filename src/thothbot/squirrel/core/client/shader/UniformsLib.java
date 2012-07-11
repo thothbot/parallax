@@ -57,8 +57,7 @@ public class UniformsLib
 	
 	public static final Map<String, Uniform> fog = new HashMap<String, Uniform>() {
 		{
-			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.0002f ));
-			//put("fogDensity", new UniformPrototype(UniformPrototype.TYPE.F,  0.00025f ));
+			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025f ));
 			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0f ));
 			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0f ));
 			put("fogColor", new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff )));
@@ -94,8 +93,7 @@ public class UniformsLib
 			put("scale", new Uniform(Uniform.TYPE.F,  1.0f ));
 			put("map", new Uniform(Uniform.TYPE.T,  0 ));
 			
-			//put("fogDensity", new UniformPrototype(UniformPrototype.TYPE.F,  0.00025f ));
-			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.0002f ));
+			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025f ));
 			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0f ));
 			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0f ));
 			put("fogColor", new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff )));

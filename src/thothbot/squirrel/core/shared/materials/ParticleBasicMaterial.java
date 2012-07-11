@@ -34,6 +34,7 @@ public final class ParticleBasicMaterial extends Material {
 		public Texture map = null;
 		public float size = 1.0f;
 		public boolean sizeAttenuation = true;
+		public boolean fog = true;
 	}
 	
 	private Color3f color;
@@ -47,6 +48,7 @@ public final class ParticleBasicMaterial extends Material {
 		this.map = options.map;
 		this.size = options.size;
 		this.sizeAttenuation = options.sizeAttenuation;
+		this.fog = true;
 	}
 
 	public Color3f getColor(){

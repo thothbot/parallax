@@ -38,6 +38,7 @@ public final class LineBasicMaterial extends Material
 		public int linewidth = 1;
 		public LineCap linecap = LineCap.ROUND;
 		public LineJoin linejoin = LineJoin.ROUND;
+		public boolean fog = true;
 	}
 	
 	private Color3f color;
@@ -51,6 +52,7 @@ public final class LineBasicMaterial extends Material
 		this.linewidth = options.linewidth;
 		this.linecap = options.linecap;
 		this.linejoin = options.linejoin;
+		this.fog = options.fog;
 	}
 
 	public void setColor(Color3f color) 
