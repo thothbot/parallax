@@ -267,7 +267,6 @@ public class Program
 		if (parameters.useFog)
 			options.add(Program.SHADER_DEFINE.USE_FOG.getValue());
 
-		// parameters.fog instanceof THREE.FogExp2
 		if (parameters.useFog2)
 			options.add(Program.SHADER_DEFINE.FOG_EXP2.getValue());
 

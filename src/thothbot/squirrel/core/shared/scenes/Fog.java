@@ -22,51 +22,60 @@
 
 package thothbot.squirrel.core.shared.scenes;
 
+import java.util.Map;
+
+import thothbot.squirrel.core.client.shader.Uniform;
 import thothbot.squirrel.core.shared.core.Color3f;
 
-public final class Fog
+/**
+ * Abstract realization of Fog. This class implements color
+ * property only.
+ * 
+ * @author thothbot
+ *
+ */
+public abstract class Fog
 {
 	private Color3f color;
-	private float near;
-	private float far;
-
-	public Fog(int hex) {
-		this(hex, 1f, 1000f);
-	}
-
-	public Fog(int hex, float near, float far) {
+	
+	/**
+	 * This default constructor will make abstract Fog with
+	 * defined color
+	 *  
+	 * @param hex the color in HEX format
+	 */
+	public Fog(int hex)
+	{
 		this.color = new Color3f(hex);
-		this.near = near;
-		this.far = far;
 	}
 
+	/**
+	 * Set color of this Fog
+	 * 
+	 * @param color the color instance
+	 */
 	public void setColor(Color3f color)
 	{
 		this.color = color;
 	}
 
+	/**
+	 * Get color of this Fog
+	 * 
+	 * @return the color instance
+	 */
 	public Color3f getColor()
 	{
 		return color;
 	}
-
-	public void setNear(float near)
+	
+	/**
+	 * The method refreshes uniforms for the fog
+	 * 
+	 * @param uniforms the map of uniforms
+	 */
+	public void refreshUniforms(Map<String, Uniform> uniforms) 
 	{
-		this.near = near;
-	}
-
-	public double getNear()
-	{
-		return near;
-	}
-
-	public void setFar(float far)
-	{
-		this.far = far;
-	}
-
-	public double getFar()
-	{
-		return far;
+		uniforms.get("fogColor").value = getColor();
 	}
 }

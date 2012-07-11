@@ -22,39 +22,67 @@
 
 package thothbot.squirrel.core.shared.scenes;
 
-import thothbot.squirrel.core.shared.core.Color3f;
+import java.util.Map;
 
-public final class FogExp2
+import thothbot.squirrel.core.client.shader.Uniform;
+
+/**
+ * This class implements fog with defined density.
+ * 
+ * @author thothbot
+ *
+ */
+public final class FogExp2 extends Fog
 {
-	private Color3f color;
 	private float density;
 
-	public FogExp2(int hex) {
+	/**
+	 * This default constructor will make fog with 
+	 * density parameter 0.00025.
+	 * 
+	 * @param hex the color in HEX format
+	 */
+	public FogExp2(int hex) 
+	{
 		this(hex, 0.00025f);
 	}
 
-	public FogExp2(int hex, float density) {
-		this.color = new Color3f(hex);
+	/**
+	 * This constructor will make fog with defined density.
+	 * 
+	 * @param hex     the color in HEX format
+	 * @param density the density value in range <0.0, 1.0>
+	 */
+	public FogExp2(int hex, float density) 
+	{
+		super(hex);
 		this.density = density;
 	}
 
-	public void setColor(Color3f color)
-	{
-		this.color = color;
-	}
-
-	public Color3f getColor()
-	{
-		return color;
-	}
-
+	/**
+	 * Set density parameter
+	 * 
+	 * @param density the density value in range <0.0, 1.0>
+	 */
 	public void setDensity(float density)
 	{
 		this.density = density;
 	}
 
+	/**
+	 * Get density parameter
+	 * 
+	 * @return the density value
+	 */
 	public double getDensity()
 	{
 		return density;
+	}
+	
+	@Override
+	public void refreshUniforms(Map<String, Uniform> uniforms) 
+	{
+		super.refreshUniforms(uniforms);
+		uniforms.get("fogDensity").value = getDensity();
 	}
 }

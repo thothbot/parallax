@@ -80,11 +80,11 @@ import thothbot.squirrel.core.shared.objects.ParticleSystem;
 import thothbot.squirrel.core.shared.objects.Ribbon;
 import thothbot.squirrel.core.shared.objects.Sprite;
 import thothbot.squirrel.core.shared.scenes.Fog;
+import thothbot.squirrel.core.shared.scenes.FogExp2;
 import thothbot.squirrel.core.shared.scenes.Scene;
 import thothbot.squirrel.core.shared.textures.DataTexture;
 import thothbot.squirrel.core.shared.textures.Texture;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
 
@@ -1532,8 +1532,7 @@ public class WebGLRenderer
 		parameters.vertexColors = (material.vertexColors != Material.COLORS.NO);
 
 		parameters.useFog = (fog != null);
-		// TODO Fix fogExp2
-//		 parameters.useFog2 = (fog != null && fog instanceof FogExp2);
+		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
 
 		parameters.sizeAttenuation = material.sizeAttenuation;
 
@@ -1542,8 +1541,7 @@ public class WebGLRenderer
 		parameters.morphTargets = material.morphTargets;
 		parameters.morphNormals = material.morphNormals;
 
-		//TODO: Fix this
-//		 parameters.shadowMapEnabled = this.shadowMapEnabled && object.receiveShadow;
+		parameters.shadowMapEnabled = this.shadowMapEnabled && object.receiveShadow;
 		parameters.shadowMapSoft = this.shadowMapSoft;
 		parameters.shadowMapDebug = this.shadowMapDebug;
 		parameters.shadowMapCascade = this.shadowMapCascade;
@@ -1665,7 +1663,7 @@ public class WebGLRenderer
 			// refresh uniforms common to several materials
 
 			if ( fog != null && material.fog)
-				refreshUniformsFog( m_uniforms, fog );
+				fog.refreshUniforms( m_uniforms );
 
 			if ( material.getClass() == MeshPhongMaterial.class ||
 				 material.getClass() == MeshLambertMaterial.class ||
@@ -1804,22 +1802,6 @@ public class WebGLRenderer
 		uniforms.get("scale").value = getCanvas().getHeight() / 2.0f;
 
 		uniforms.get("map").texture = material.getMap();
-	}
-
-	public void refreshUniformsFog ( Map<String, Uniform> uniforms, Fog fog ) {
-
-		uniforms.get("fogColor").value = fog.getColor();
-
-		if ( fog.getClass() == Fog.class ) {
-
-			uniforms.get("fogNear").value = fog.getNear();
-			uniforms.get("fogFar").value = fog.getFar();
-
-			// TODO: make common fog interface or abstract class
-//		} else if ( fog.getClass() == FogExp2.class ) {
-//			FogExp2 fogExp2 = (FogExp2) fog;
-//			uniforms.get("fogDensity").value = fogExp2.getDensity();
-		}
 	}
 
 	public void refreshUniformsPhong ( Map<String, Uniform> uniforms, MeshPhongMaterial material ) {
