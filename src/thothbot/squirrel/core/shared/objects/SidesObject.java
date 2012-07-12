@@ -20,7 +20,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.squirrel.core.shared.core;
+package thothbot.squirrel.core.shared.objects;
 
 public abstract class SidesObject extends GeometryObject
 {

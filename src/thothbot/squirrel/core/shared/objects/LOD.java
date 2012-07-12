@@ -27,7 +27,6 @@ import java.util.List;
 
 import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.core.Matrix4f;
-import thothbot.squirrel.core.shared.core.Object3D;
 
 
 public class LOD extends Object3D 

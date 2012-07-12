@@ -20,8 +20,9 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.squirrel.core.shared.core;
+package thothbot.squirrel.core.shared.objects;
 
+import thothbot.squirrel.core.shared.core.GeometryBuffer;
 import thothbot.squirrel.core.shared.materials.Material;
 
 public class WebGLObject implements Comparable<WebGLObject>

@@ -22,7 +22,6 @@
 
 package thothbot.squirrel.core.shared.objects;
 
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.materials.Material;
 
 public class Particle  extends Object3D

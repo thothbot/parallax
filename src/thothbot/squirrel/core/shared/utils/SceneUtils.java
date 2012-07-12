@@ -24,11 +24,11 @@ package thothbot.squirrel.core.shared.utils;
 
 import java.util.List;
 
-import thothbot.squirrel.core.shared.core.DimensionalObject;
 import thothbot.squirrel.core.shared.core.Geometry;
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.materials.Material;
+import thothbot.squirrel.core.shared.objects.DimensionalObject;
 import thothbot.squirrel.core.shared.objects.Mesh;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 /**
  * The class implements some 3D Scene related helper methods

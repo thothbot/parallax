@@ -28,12 +28,12 @@ import java.util.List;
 
 import thothbot.squirrel.core.shared.core.Face4;
 import thothbot.squirrel.core.shared.core.Geometry;
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.UVf;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.curves.CurvePath;
 import thothbot.squirrel.core.shared.curves.FrenetFrames;
 import thothbot.squirrel.core.shared.helpers.ArrowHelper;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 /**
  * @author WestLangley / https://github.com/WestLangley

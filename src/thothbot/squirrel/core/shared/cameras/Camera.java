@@ -24,8 +24,8 @@ package thothbot.squirrel.core.shared.cameras;
 
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 import thothbot.squirrel.core.shared.core.Matrix4f;
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.Vector3f;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 public class Camera extends Object3D
 {

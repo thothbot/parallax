@@ -30,12 +30,12 @@ import java.util.Map;
 import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.core.Color3f;
 import thothbot.squirrel.core.shared.core.Geometry;
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.Projector;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.materials.LineBasicMaterial;
 import thothbot.squirrel.core.shared.materials.Material;
 import thothbot.squirrel.core.shared.objects.Line;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 
 public class CameraHelper extends Object3D

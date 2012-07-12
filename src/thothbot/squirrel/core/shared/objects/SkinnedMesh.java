@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
-import thothbot.squirrel.core.shared.core.DimensionalObject;
 import thothbot.squirrel.core.shared.core.Geometry;
 import thothbot.squirrel.core.shared.core.Matrix4f;
 import thothbot.squirrel.core.shared.core.Vector3f;

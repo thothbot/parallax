@@ -20,7 +20,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.squirrel.core.shared.core;
+package thothbot.squirrel.core.shared.objects;
 
 import java.util.ArrayList;
 
@@ -28,6 +28,10 @@ import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.Log;
+import thothbot.squirrel.core.shared.core.Geometry;
+import thothbot.squirrel.core.shared.core.GeometryBuffer;
+import thothbot.squirrel.core.shared.core.WebGLCustomAttribute;
+import thothbot.squirrel.core.shared.core.WebGLCustomAttribute.TYPE;
 import thothbot.squirrel.core.shared.materials.Material;
 
 

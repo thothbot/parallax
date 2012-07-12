@@ -25,7 +25,6 @@ package thothbot.squirrel.core.shared.objects;
 import java.util.Map;
 
 import thothbot.squirrel.core.shared.core.Color3f;
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.Vector2f;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.materials.Material;

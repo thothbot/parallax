@@ -22,8 +22,8 @@
 
 package thothbot.squirrel.core.shared.lights;
 
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.Vector3f;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 public class DirectionalLight extends Light
 {

@@ -17,12 +17,15 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.squirrel.core.shared.core;
+package thothbot.squirrel.core.shared.objects;
 
 import java.util.Collection;
 import java.util.List;
 
 import thothbot.squirrel.core.shared.cameras.Camera;
+import thothbot.squirrel.core.shared.core.Matrix4f;
+import thothbot.squirrel.core.shared.core.Quaternion;
+import thothbot.squirrel.core.shared.core.Vector3f;
 
 /**
  * Abstract Dimensional Object

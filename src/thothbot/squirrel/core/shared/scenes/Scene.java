@@ -26,14 +26,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.squirrel.core.shared.cameras.Camera;
-import thothbot.squirrel.core.shared.core.DimensionalObject;
-import thothbot.squirrel.core.shared.core.Object3D;
-import thothbot.squirrel.core.shared.core.WebGLObject;
 import thothbot.squirrel.core.shared.lights.LensFlare;
 import thothbot.squirrel.core.shared.lights.Light;
 import thothbot.squirrel.core.shared.materials.Material;
 import thothbot.squirrel.core.shared.objects.Bone;
+import thothbot.squirrel.core.shared.objects.DimensionalObject;
+import thothbot.squirrel.core.shared.objects.Object3D;
 import thothbot.squirrel.core.shared.objects.Sprite;
+import thothbot.squirrel.core.shared.objects.WebGLObject;
 
 /**
  * 3D Scene. The basic class for rendering.

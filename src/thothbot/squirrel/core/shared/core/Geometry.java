@@ -31,6 +31,7 @@ import java.util.Map;
 import thothbot.squirrel.core.client.gl2.WebGLBuffer;
 import thothbot.squirrel.core.shared.materials.Material;
 import thothbot.squirrel.core.shared.objects.Bone;
+import thothbot.squirrel.core.shared.objects.DimensionalObject;
 
 
 public class Geometry extends GeometryBuffer

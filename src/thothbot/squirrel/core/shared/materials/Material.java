@@ -32,9 +32,9 @@ import thothbot.squirrel.core.client.shader.Shader;
 import thothbot.squirrel.core.client.shader.Uniform;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.core.GeometryGroup;
-import thothbot.squirrel.core.shared.core.GeometryObject;
 import thothbot.squirrel.core.shared.core.WebGLCustomAttribute;
 import thothbot.squirrel.core.shared.lights.Light;
+import thothbot.squirrel.core.shared.objects.GeometryObject;
 
 public class Material
 {

@@ -20,7 +20,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.squirrel.core.shared.core;
+package thothbot.squirrel.core.shared.objects;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +30,11 @@ import thothbot.squirrel.core.client.gl2.WebGLBuffer;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.cameras.Camera;
-import thothbot.squirrel.core.shared.objects.Line;
+import thothbot.squirrel.core.shared.core.Euler;
+import thothbot.squirrel.core.shared.core.Matrix3f;
+import thothbot.squirrel.core.shared.core.Matrix4f;
+import thothbot.squirrel.core.shared.core.Quaternion;
+import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.scenes.Scene;
 
 /**
@@ -467,11 +471,11 @@ public class Object3D implements DimensionalObject
 		else
 			getMatrix().setRotationFromEuler(getRotation());
 
-		if ( this.scale.x != 1 || this.scale.y != 1 || this.scale.z != 1) 
+		if ( getScale().getX() != 1 || getScale().getY() != 1 || getScale().getZ() != 1) 
 		{
 
 			getMatrix().scale(this.scale);
-			this.boundRadiusScale = Math.max(this.scale.x, Math.max( this.scale.y, this.scale.z));
+			this.boundRadiusScale = Math.max(getScale().getX(), Math.max( getScale().getY(), getScale().getZ()));
 		}
 
 		this.matrixWorldNeedsUpdate = true;

@@ -24,13 +24,13 @@ package thothbot.squirrel.core.shared.helpers;
 
 import thothbot.squirrel.core.shared.core.Color3f;
 import thothbot.squirrel.core.shared.core.Geometry;
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.geometries.Cylinder;
 import thothbot.squirrel.core.shared.materials.LineBasicMaterial;
 import thothbot.squirrel.core.shared.materials.MeshBasicMaterial;
 import thothbot.squirrel.core.shared.objects.Line;
 import thothbot.squirrel.core.shared.objects.Mesh;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 public class AxisHelper extends Object3D
 {

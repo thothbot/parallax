@@ -19,7 +19,7 @@
 
 package thothbot.squirrel.core.client.controls;
 
-import thothbot.squirrel.core.shared.core.Object3D;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;

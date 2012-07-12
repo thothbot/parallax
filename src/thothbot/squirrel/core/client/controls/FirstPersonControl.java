@@ -23,8 +23,8 @@
 package thothbot.squirrel.core.client.controls;
 
 import thothbot.squirrel.core.shared.core.Mathematics;
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.Vector3f;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;

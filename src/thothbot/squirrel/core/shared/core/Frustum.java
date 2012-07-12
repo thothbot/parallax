@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 /**
  * This class implements three-dimensional region which is visible on the screen.
@@ -89,7 +90,7 @@ public class Frustum
 	public boolean contains(Object3D object)
 	{
 		float distance;
-		Matrix4f matrix = object.matrixWorld;
+		Matrix4f matrix = object.getMatrixWorld();
 		Float32Array me = matrix.getArray();
 		//float radius = -object.geometry.boundingSphere.radius * matrix.getMaxScaleOnAxis();
 

@@ -23,7 +23,7 @@
 package thothbot.squirrel.core.shared.lights;
 
 import thothbot.squirrel.core.shared.core.Color3f;
-import thothbot.squirrel.core.shared.core.Object3D;
+import thothbot.squirrel.core.shared.objects.Object3D;
 
 public class Light extends Object3D
 {

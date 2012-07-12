@@ -22,9 +22,7 @@
 
 package thothbot.squirrel.core.shared.objects;
 
-import thothbot.squirrel.core.shared.core.DimensionalObject;
 import thothbot.squirrel.core.shared.core.Matrix4f;
-import thothbot.squirrel.core.shared.core.Object3D;
 
 public class Bone extends Object3D
 {

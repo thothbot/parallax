@@ -25,9 +25,9 @@ package thothbot.squirrel.core.shared.lights;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.squirrel.core.shared.core.Object3D;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.materials.Material;
+import thothbot.squirrel.core.shared.objects.Object3D;
 import thothbot.squirrel.core.shared.textures.Texture;
 
 

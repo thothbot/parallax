@@ -35,7 +35,6 @@ import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.core.Color3f;
 import thothbot.squirrel.core.shared.core.Geometry;
 import thothbot.squirrel.core.shared.core.GeometryBuffer;
-import thothbot.squirrel.core.shared.core.GeometryObject;
 import thothbot.squirrel.core.shared.core.Vector2f;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.core.Vector4f;
