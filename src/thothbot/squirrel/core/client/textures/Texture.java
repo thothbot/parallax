@@ -24,6 +24,12 @@ package thothbot.squirrel.core.client.textures;
 
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.WebGLTexture;
+import thothbot.squirrel.core.client.gl2.enums.DataType;
+import thothbot.squirrel.core.client.gl2.enums.GLenum;
+import thothbot.squirrel.core.client.gl2.enums.PixelFormat;
+import thothbot.squirrel.core.client.gl2.enums.TextureMagFilter;
+import thothbot.squirrel.core.client.gl2.enums.TextureMinFilter;
+import thothbot.squirrel.core.client.gl2.enums.TextureWrapMode;
 import thothbot.squirrel.core.shared.core.Vector2f;
 
 import com.google.gwt.user.client.ui.Image;
@@ -52,58 +58,58 @@ public class Texture
 		SPHERICAL_REFRACTION // SphericalRefractionMapping = function () {};
 	};
 
-	// Wrapping modes
-	public static enum WRAPPING_MODE {
-		REPEAT(WebGLRenderingContext.REPEAT), // RepeatWrapping = 0;
-		CLAMP_TO_EDGE(WebGLRenderingContext.CLAMP_TO_EDGE), // ClampToEdgeWrapping = 1;
-		MIRRORED_REPEAT(WebGLRenderingContext.MIRRORED_REPEAT); // MirroredRepeatWrapping = 2;
-		
-		private final int value;
-		private WRAPPING_MODE(int value) { this.value = value; }
-		public int getValue() { return value; }
-	};
-
-	// Filters
-	public static enum FILTER {
-		NEAREST(WebGLRenderingContext.NEAREST), // NearestFilter = 3;
-		NEAREST_MIP_MAP_NEAREST(WebGLRenderingContext.NEAREST_MIPMAP_NEAREST), // NearestMipMapNearestFilter = 4;
-		NEAREST_MIP_MAP_LINEAR(WebGLRenderingContext.NEAREST_MIPMAP_LINEAR), // NearestMipMapLinearFilter = 5;
-		LINEAR(WebGLRenderingContext.LINEAR), // LinearFilter = 6;
-		LINEAR_MIP_MAP_NEAREST(WebGLRenderingContext.LINEAR_MIPMAP_NEAREST), // LinearMipMapNearestFilter = 7;
-		LINEAR_MIP_MAP_LINEAR(WebGLRenderingContext.LINEAR_MIPMAP_LINEAR); // LinearMipMapLinearFilter = 8;
-		
-		private final int value;
-		private FILTER(int value) { this.value = value; }
-		public int getValue() { return value; }
-	};
-
-	// Types
-	public static enum TYPE {
-		BYTE(WebGLRenderingContext.BYTE), // ByteType = 9;
-		UNSIGNED_BYTE(WebGLRenderingContext.UNSIGNED_BYTE), // UnsignedByteType = 10;
-		SHORT(WebGLRenderingContext.SHORT), // ShortType = 11;
-		UNSIGNED_SHORT(WebGLRenderingContext.UNSIGNED_SHORT), // UnsignedShortType = 12;
-		INT(WebGLRenderingContext.INT), // IntType = 13;
-		UNSIGNED_INT(WebGLRenderingContext.UNSIGNED_INT), // UnsignedIntType = 14;
-		FLOAT(WebGLRenderingContext.FLOAT); // FloatType = 15;
-		
-		private final int value;
-		private TYPE(int value) { this.value = value; }
-		public int getValue() { return value; }
-	};
-
-	// Formats
-	public static enum FORMAT {
-		ALPHA(WebGLRenderingContext.ALPHA), // THREE.AlphaFormat = 16;
-		RGB(WebGLRenderingContext.RGB), // RGBFormat = 17;
-		RGBA(WebGLRenderingContext.RGBA), // RGBAFormat = 18;
-		LUMINANCE(WebGLRenderingContext.LUMINANCE), // LuminanceFormat = 19;
-		LUMINANCE_ALPHA(WebGLRenderingContext.LUMINANCE_ALPHA); // LuminanceAlphaFormat = 20;
-		
-		private final int value;
-		private FORMAT(int value) { this.value = value; }
-		public int getValue() { return value; }
-	};
+//	// Wrapping modes
+//	public static enum WRAPPING_MODE {
+//		REPEAT(WebGLRenderingContext.REPEAT), // RepeatWrapping = 0;
+//		CLAMP_TO_EDGE(WebGLRenderingContext.CLAMP_TO_EDGE), // ClampToEdgeWrapping = 1;
+//		MIRRORED_REPEAT(WebGLRenderingContext.MIRRORED_REPEAT); // MirroredRepeatWrapping = 2;
+//		
+//		private final int value;
+//		private WRAPPING_MODE(int value) { this.value = value; }
+//		public int getValue() { return value; }
+//	};
+//
+//	// Filters
+//	public static enum FILTER {
+//		NEAREST(WebGLRenderingContext.NEAREST), // NearestFilter = 3;
+//		NEAREST_MIP_MAP_NEAREST(WebGLRenderingContext.NEAREST_MIPMAP_NEAREST), // NearestMipMapNearestFilter = 4;
+//		NEAREST_MIP_MAP_LINEAR(WebGLRenderingContext.NEAREST_MIPMAP_LINEAR), // NearestMipMapLinearFilter = 5;
+//		LINEAR(WebGLRenderingContext.LINEAR), // LinearFilter = 6;
+//		LINEAR_MIP_MAP_NEAREST(WebGLRenderingContext.LINEAR_MIPMAP_NEAREST), // LinearMipMapNearestFilter = 7;
+//		LINEAR_MIP_MAP_LINEAR(WebGLRenderingContext.LINEAR_MIPMAP_LINEAR); // LinearMipMapLinearFilter = 8;
+//		
+//		private final int value;
+//		private FILTER(int value) { this.value = value; }
+//		public int getValue() { return value; }
+//	};
+//
+//	// Types
+//	public static enum TYPE {
+//		BYTE(WebGLRenderingContext.BYTE), // ByteType = 9;
+//		UNSIGNED_BYTE(WebGLRenderingContext.UNSIGNED_BYTE), // UnsignedByteType = 10;
+//		SHORT(WebGLRenderingContext.SHORT), // ShortType = 11;
+//		UNSIGNED_SHORT(WebGLRenderingContext.UNSIGNED_SHORT), // UnsignedShortType = 12;
+//		INT(WebGLRenderingContext.INT), // IntType = 13;
+//		UNSIGNED_INT(WebGLRenderingContext.UNSIGNED_INT), // UnsignedIntType = 14;
+//		FLOAT(WebGLRenderingContext.FLOAT); // FloatType = 15;
+//		
+//		private final int value;
+//		private TYPE(int value) { this.value = value; }
+//		public int getValue() { return value; }
+//	};
+//
+//	// Formats
+//	public static enum FORMAT {
+//		ALPHA(WebGLRenderingContext.ALPHA), // THREE.AlphaFormat = 16;
+//		RGB(WebGLRenderingContext.RGB), // RGBFormat = 17;
+//		RGBA(WebGLRenderingContext.RGBA), // RGBAFormat = 18;
+//		LUMINANCE(WebGLRenderingContext.LUMINANCE), // LuminanceFormat = 19;
+//		LUMINANCE_ALPHA(WebGLRenderingContext.LUMINANCE_ALPHA); // LuminanceAlphaFormat = 20;
+//		
+//		private final int value;
+//		private FORMAT(int value) { this.value = value; }
+//		public int getValue() { return value; }
+//	};
 
 	public int id;
 
@@ -114,14 +120,14 @@ public class Texture
 
 	private Texture.MAPPING_MODE mapping = Texture.MAPPING_MODE.UV;
 
-	private Texture.WRAPPING_MODE wrapS = Texture.WRAPPING_MODE.CLAMP_TO_EDGE;
-	private Texture.WRAPPING_MODE wrapT = Texture.WRAPPING_MODE.CLAMP_TO_EDGE;
+	private TextureWrapMode wrapS = TextureWrapMode.CLAMP_TO_EDGE;
+	private TextureWrapMode wrapT = TextureWrapMode.CLAMP_TO_EDGE;
 
-	private Texture.FILTER magFilter = Texture.FILTER.LINEAR;
-	private Texture.FILTER minFilter = Texture.FILTER.LINEAR_MIP_MAP_LINEAR;
+	private TextureMagFilter magFilter = TextureMagFilter.LINEAR;
+	private TextureMinFilter minFilter = TextureMinFilter.LINEAR_MIPMAP_LINEAR;
 
-	public Texture.FORMAT format = Texture.FORMAT.RGBA;
-	public Texture.TYPE type = Texture.TYPE.UNSIGNED_BYTE;
+	public PixelFormat format = PixelFormat.RGBA;
+	public DataType type = DataType.UNSIGNED_BYTE;
 
 	public boolean generateMipmaps = true;
 	public boolean premultiplyAlpha = false;
@@ -150,9 +156,9 @@ public class Texture
 		this.mapping = mapping;
 	}
 
-	public Texture(Image image, Texture.MAPPING_MODE mapping, Texture.WRAPPING_MODE wrapS,
-			Texture.WRAPPING_MODE wrapT, Texture.FILTER magFilter, Texture.FILTER minFilter,
-			Texture.FORMAT format, Texture.TYPE type) 
+	public Texture(Image image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
+			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
+			PixelFormat format, DataType type) 
 	{	
 		this(image, mapping);
 
@@ -172,32 +178,32 @@ public class Texture
 		return this.mapping;
 	}
 
-	public void setWrapS(Texture.WRAPPING_MODE wrapS)
+	public void setWrapS(TextureWrapMode wrapS)
 	{
 		this.wrapS = wrapS;
 	}
 
-	public Texture.WRAPPING_MODE getWrapS()
+	public TextureWrapMode getWrapS()
 	{
 		return this.wrapS;
 	}
 
-	public void setWrapT(Texture.WRAPPING_MODE wrapT)
+	public void setWrapT(TextureWrapMode wrapT)
 	{
 		this.wrapT = wrapT;
 	}
 	
-	public Texture.WRAPPING_MODE getWrapT()
+	public TextureWrapMode getWrapT()
 	{
 		return this.wrapT;
 	}
 
-	public Texture.FILTER getMagFilter()
+	public TextureMagFilter getMagFilter()
 	{
 		return this.magFilter;
 	}
 
-	public Texture.FILTER getMinFilter()
+	public TextureMinFilter getMinFilter()
 	{
 		return this.minFilter;
 	}
@@ -230,25 +236,25 @@ public class Texture
 
 	public void setCubeTextureDynamic(WebGLRenderingContext gl, int slot) 
 	{
-		gl.activeTexture( WebGLRenderingContext.TEXTURE0 + slot );
-		gl.bindTexture( WebGLRenderingContext.TEXTURE_CUBE_MAP, this.__webglTexture );
+		gl.activeTexture( GLenum.TEXTURE0.getValue() + slot );
+		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.__webglTexture );
 	}
 
 	public void setTextureParameters (WebGLRenderingContext gl, int textureType, boolean isImagePowerOfTwo ) 
 	{	
 		if ( isImagePowerOfTwo ) 
 		{
-			gl.texParameteri( textureType, WebGLRenderingContext.TEXTURE_WRAP_S, this.wrapS.getValue() );
-			gl.texParameteri( textureType, WebGLRenderingContext.TEXTURE_WRAP_T, this.wrapT.getValue() );
-			gl.texParameteri( textureType, WebGLRenderingContext.TEXTURE_MAG_FILTER, this.magFilter.getValue() );
-			gl.texParameteri( textureType, WebGLRenderingContext.TEXTURE_MIN_FILTER, this.minFilter.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue() );
 		} 
 		else 
 		{
-			gl.texParameteri( textureType, WebGLRenderingContext.TEXTURE_WRAP_S, WebGLRenderingContext.CLAMP_TO_EDGE );
-			gl.texParameteri( textureType, WebGLRenderingContext.TEXTURE_WRAP_T, WebGLRenderingContext.CLAMP_TO_EDGE );
-			gl.texParameteri( textureType, WebGLRenderingContext.TEXTURE_MAG_FILTER, this.magFilter.getValue() );
-			gl.texParameteri( textureType, WebGLRenderingContext.TEXTURE_MIN_FILTER, this.minFilter.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_S.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_T.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue() );
 		}
 	}
 }

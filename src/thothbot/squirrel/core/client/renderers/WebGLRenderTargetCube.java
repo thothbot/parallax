@@ -28,6 +28,7 @@ import java.util.List;
 import thothbot.squirrel.core.client.gl2.WebGLFramebuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderbuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
+import thothbot.squirrel.core.client.gl2.enums.GLenum;
 import thothbot.squirrel.core.shared.core.Mathematics;
 
 
@@ -86,34 +87,34 @@ public class WebGLRenderTargetCube extends WebGLRenderTarget
 		this.__webglFramebuffer = new ArrayList<WebGLFramebuffer>();
 		this.__webglRenderbuffer = new ArrayList<WebGLRenderbuffer>();
 
-		gl.bindTexture( WebGLRenderingContext.TEXTURE_CUBE_MAP, this.__webglTexture );
+		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.__webglTexture );
 		//TODO: FIX setTextureParameters
-		//setTextureParameters( _gl, WebGLRenderingContext.TEXTURE_CUBE_MAP, renderTarget.__webglTexture, isTargetPowerOfTwo );
+		//setTextureParameters( _gl, GLenum.TEXTURE_CUBE_MAP, renderTarget.__webglTexture, isTargetPowerOfTwo );
 
 		for ( int i = 0; i < 6; i ++ ) 
 		{
 			this.__webglFramebuffer.set( i, gl.createFramebuffer());
 			this.__webglRenderbuffer.set( i, gl.createRenderbuffer());
 
-			gl.texImage2D( WebGLRenderingContext.TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, glFormat, this.width, this.height, 0, glFormat, glType, null );
+			gl.texImage2D( GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, glFormat, this.width, this.height, 0, glFormat, glType, null );
 
-			this.setupFrameBuffer(gl, this.__webglFramebuffer.get( i ), WebGLRenderingContext.TEXTURE_CUBE_MAP_POSITIVE_X + i);
+			this.setupFrameBuffer(gl, this.__webglFramebuffer.get( i ), GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i);
 			this.setupRenderBuffer(gl, this.__webglRenderbuffer.get( i ));
 		}
 
-		if ( isTargetPowerOfTwo ) gl.generateMipmap( WebGLRenderingContext.TEXTURE_CUBE_MAP );
+		if ( isTargetPowerOfTwo ) gl.generateMipmap( GLenum.TEXTURE_CUBE_MAP.getValue() );
 
 		// Release everything
-		gl.bindTexture( WebGLRenderingContext.TEXTURE_CUBE_MAP, null );
-		gl.bindRenderbuffer(WebGLRenderingContext.RENDERBUFFER, null);
-		gl.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), null );
+		gl.bindRenderbuffer(GLenum.RENDERBUFFER.getValue(), null);
+		gl.bindFramebuffer(GLenum.FRAMEBUFFER.getValue(), null);
 	}
 	
 	@Override
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl) 
 	{	
-		gl.bindTexture( WebGLRenderingContext.TEXTURE_CUBE_MAP, this.__webglTexture );
-		gl.generateMipmap( WebGLRenderingContext.TEXTURE_CUBE_MAP );
-		gl.bindTexture( WebGLRenderingContext.TEXTURE_CUBE_MAP, null );
+		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.__webglTexture );
+		gl.generateMipmap( GLenum.TEXTURE_CUBE_MAP.getValue() );
+		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), null );
 	}
 }

@@ -32,6 +32,7 @@ import thothbot.squirrel.core.client.gl2.WebGLProgram;
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.WebGLShader;
 import thothbot.squirrel.core.client.gl2.WebGLUniformLocation;
+import thothbot.squirrel.core.client.gl2.enums.GLenum;
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.core.WebGLCustomAttribute;
@@ -190,7 +191,7 @@ public class Program
 
 		this._gl.linkProgram(this.program);
 
-		if (!this._gl.getProgramParameterb(this.program, WebGLRenderingContext.LINK_STATUS))
+		if (!this._gl.getProgramParameterb(this.program, GLenum.LINK_STATUS.getValue()))
 			Log.error("Could not initialise shader\n" + "VALIDATE_STATUS: "
 					+ ", gl error [" + this._gl.getProgramInfoLog(program) + "]"
 			);
@@ -206,14 +207,15 @@ public class Program
 		WebGLShader shader = null;
 
 		if (type == ChunksFragmentShader.class)
-			shader = this._gl.createShader(WebGLRenderingContext.FRAGMENT_SHADER);
+			shader = this._gl.createShader(GLenum.FRAGMENT_SHADER.getValue());
 		else if (type == ChunksVertexShader.class)
-			shader = this._gl.createShader(WebGLRenderingContext.VERTEX_SHADER);
+			shader = this._gl.createShader(GLenum.VERTEX_SHADER.getValue());
 
 		this._gl.shaderSource(shader, string);
 		this._gl.compileShader(shader);
 
-		if (!this._gl.getShaderParameterb(shader, WebGLRenderingContext.COMPILE_STATUS)) {
+		if (!this._gl.getShaderParameterb(shader, GLenum.COMPILE_STATUS.getValue())) 
+		{
 			Log.error(this._gl.getShaderInfoLog(shader));
 			return null;
 		}

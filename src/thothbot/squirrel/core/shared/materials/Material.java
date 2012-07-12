@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
+import thothbot.squirrel.core.client.gl2.enums.BlendEquationMode;
+import thothbot.squirrel.core.client.gl2.enums.BlendingFactorDest;
+import thothbot.squirrel.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.squirrel.core.client.shader.Program;
 import thothbot.squirrel.core.client.shader.Shader;
 import thothbot.squirrel.core.client.shader.Uniform;
@@ -71,45 +74,45 @@ public class Material
 		CUSTOM // CustomBlending = 6;
 	};
 
-	/*
-	 * custom blending equations (numbers start from 100 not to clash with other
-	 * mappings to OpenGL constants defined in Texture.js)
-	 */
-
-	public static enum BLENDING_EQUATION {
-		ADD(WebGLRenderingContext.FUNC_ADD), // AddEquation = 100;
-		SUBSTRACT(WebGLRenderingContext.FUNC_SUBTRACT), // SubtractEquation = 101;
-		REVERSE_SUBSTRACT(WebGLRenderingContext.FUNC_REVERSE_SUBTRACT); // ReverseSubtractEquation = 102;
-		
-		private final int value;
-		private BLENDING_EQUATION(int value) { this.value = value; }
-		public int getValue() { return value; }
-	};
-
-	/*
-	 * custom blending destination factors
-	 */
-	public static enum BLENDING_FACTORS {
-		ZERO(WebGLRenderingContext.ZERO), // ZeroFactor = 200;
-		ONE(WebGLRenderingContext.ONE), // OneFactor = 201;
-		SRC_COLOR(WebGLRenderingContext.SRC_COLOR), // SrcColorFactor = 202;
-		ONE_MINUS_SRC_COLOR(WebGLRenderingContext.ONE_MINUS_SRC_COLOR), // OneMinusSrcColorFactor = 203;
-		SRC_ALPHA(WebGLRenderingContext.SRC_ALPHA), // SrcAlphaFactor = 204;
-		ONE_MINUS_SRC_ALPHA(WebGLRenderingContext.ONE_MINUS_SRC_ALPHA), // OneMinusSrcAlphaFactor = 205;
-		DST_ALPHA(WebGLRenderingContext.DST_ALPHA), // DstAlphaFactor = 206;
-		ONE_MINUS_DST_ALPHA(WebGLRenderingContext.ONE_MINUS_DST_ALPHA), // OneMinusDstAlphaFactor = 207;
-
-		/*
-		 * custom blending source factors
-		 */
-		DST_COLOR(WebGLRenderingContext.DST_COLOR), // DstColorFactor = 208;
-		ONE_MINUS_DST_COLOR(WebGLRenderingContext.ONE_MINUS_DST_COLOR), // OneMinusDstColorFactor = 209;
-		SRC_APLPHA_SATURATE(WebGLRenderingContext.SRC_ALPHA_SATURATE); // SrcAlphaSaturateFactor = 210;
-		
-		private final int value;
-		private BLENDING_FACTORS(int value) { this.value = value; }
-		public int getValue() { return value; }
-	}
+//	/*
+//	 * custom blending equations (numbers start from 100 not to clash with other
+//	 * mappings to OpenGL constants defined in Texture.js)
+//	 */
+//
+//	public static enum BLENDING_EQUATION {
+//		ADD(WebGLRenderingContext.FUNC_ADD), // AddEquation = 100;
+//		SUBSTRACT(WebGLRenderingContext.FUNC_SUBTRACT), // SubtractEquation = 101;
+//		REVERSE_SUBSTRACT(WebGLRenderingContext.FUNC_REVERSE_SUBTRACT); // ReverseSubtractEquation = 102;
+//		
+//		private final int value;
+//		private BLENDING_EQUATION(int value) { this.value = value; }
+//		public int getValue() { return value; }
+//	};
+//
+//	/*
+//	 * custom blending destination factors
+//	 */
+//	public static enum BLENDING_FACTORS {
+//		ZERO(WebGLRenderingContext.ZERO), // ZeroFactor = 200;
+//		ONE(WebGLRenderingContext.ONE), // OneFactor = 201;
+//		SRC_COLOR(WebGLRenderingContext.SRC_COLOR), // SrcColorFactor = 202;
+//		ONE_MINUS_SRC_COLOR(WebGLRenderingContext.ONE_MINUS_SRC_COLOR), // OneMinusSrcColorFactor = 203;
+//		SRC_ALPHA(WebGLRenderingContext.SRC_ALPHA), // SrcAlphaFactor = 204;
+//		ONE_MINUS_SRC_ALPHA(WebGLRenderingContext.ONE_MINUS_SRC_ALPHA), // OneMinusSrcAlphaFactor = 205;
+//		DST_ALPHA(WebGLRenderingContext.DST_ALPHA), // DstAlphaFactor = 206;
+//		ONE_MINUS_DST_ALPHA(WebGLRenderingContext.ONE_MINUS_DST_ALPHA), // OneMinusDstAlphaFactor = 207;
+//
+//		/*
+//		 * custom blending source factors
+//		 */
+//		DST_COLOR(WebGLRenderingContext.DST_COLOR), // DstColorFactor = 208;
+//		ONE_MINUS_DST_COLOR(WebGLRenderingContext.ONE_MINUS_DST_COLOR), // OneMinusDstColorFactor = 209;
+//		SRC_APLPHA_SATURATE(WebGLRenderingContext.SRC_ALPHA_SATURATE); // SrcAlphaSaturateFactor = 210;
+//		
+//		private final int value;
+//		private BLENDING_FACTORS(int value) { this.value = value; }
+//		public int getValue() { return value; }
+//	}
 
 	private int id;
 	
@@ -122,9 +125,9 @@ public class Material
 	public Material.COLORS vertexColors;
 	private Material.BLENDING blending;
 	protected Material.SHADING shading;
-	private Material.BLENDING_FACTORS blendSrc;
-	private Material.BLENDING_FACTORS blendDst;
-	private Material.BLENDING_EQUATION blendEquation;
+	private BlendingFactorSrc blendSrc;
+	private BlendingFactorDest blendDst;
+	private BlendEquationMode blendEquation;
 
 	private boolean depthWrite;
 
@@ -172,9 +175,9 @@ public class Material
 		public float opacity = 1.0f;
 		public boolean transparent = false;
 		public Material.BLENDING blending = Material.BLENDING.NORMAL;
-		public Material.BLENDING_FACTORS blendSrc = Material.BLENDING_FACTORS.SRC_ALPHA;
-		public Material.BLENDING_FACTORS blendDst = Material.BLENDING_FACTORS.ONE_MINUS_SRC_ALPHA;
-		public Material.BLENDING_EQUATION blendEquation = Material.BLENDING_EQUATION.ADD;
+		public BlendingFactorSrc blendSrc = BlendingFactorSrc.SRC_ALPHA;
+		public BlendingFactorDest blendDst = BlendingFactorDest.ONE_MINUS_SRC_ALPHA;
+		public BlendEquationMode blendEquation = BlendEquationMode.FUNC_ADD;
 		public boolean depthTest = true;
 		public boolean depthWrite = true;
 		public boolean polygonOffset = false;
@@ -258,32 +261,32 @@ public class Material
 		this.blending = blending;
 	}
 
-	public Material.BLENDING_FACTORS getBlendSrc()
+	public BlendingFactorSrc getBlendSrc()
 	{
 		return blendSrc;
 	}
 
-	public void setBlendSrc(Material.BLENDING_FACTORS blendSrc)
+	public void setBlendSrc(BlendingFactorSrc blendSrc)
 	{
 		this.blendSrc = blendSrc;
 	}
 
-	public Material.BLENDING_FACTORS getBlendDst()
+	public BlendingFactorDest getBlendDst()
 	{
 		return blendDst;
 	}
 
-	public void setBlendDst(Material.BLENDING_FACTORS blendDst)
+	public void setBlendDst(BlendingFactorDest blendDst)
 	{
 		this.blendDst = blendDst;
 	}
 
-	public Material.BLENDING_EQUATION getBlendEquation()
+	public BlendEquationMode getBlendEquation()
 	{
 		return blendEquation;
 	}
 
-	public void setBlendEquation(Material.BLENDING_EQUATION blendEquation)
+	public void setBlendEquation(BlendEquationMode blendEquation)
 	{
 		this.blendEquation = blendEquation;
 	}

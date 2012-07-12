@@ -24,14 +24,15 @@ package thothbot.squirrel.core.shared.objects;
 
 import java.util.Map;
 
+import thothbot.squirrel.core.client.gl2.enums.BlendEquationMode;
+import thothbot.squirrel.core.client.gl2.enums.BlendingFactorDest;
+import thothbot.squirrel.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.core.Color3f;
 import thothbot.squirrel.core.shared.core.Vector2f;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.materials.Material;
 import thothbot.squirrel.core.shared.materials.Material.BLENDING;
-import thothbot.squirrel.core.shared.materials.Material.BLENDING_EQUATION;
-import thothbot.squirrel.core.shared.materials.Material.BLENDING_FACTORS;
 
 public class Sprite extends Object3D
 {
@@ -65,10 +66,10 @@ public class Sprite extends Object3D
 	public Vector3f rotation3d;
 	public Texture map;
 	public Material.BLENDING blending = Material.BLENDING.NORMAL;
-	public Material.BLENDING_FACTORS blendSrc = Material.BLENDING_FACTORS.SRC_ALPHA;
+	public BlendingFactorSrc blendSrc = BlendingFactorSrc.SRC_ALPHA;
 	
-	public Material.BLENDING_FACTORS  blendDst = Material.BLENDING_FACTORS.ONE_MINUS_SRC_ALPHA; 
-	public Material.BLENDING_EQUATION blendEquation = Material.BLENDING_EQUATION.ADD;
+	public BlendingFactorDest  blendDst = BlendingFactorDest.ONE_MINUS_SRC_ALPHA; 
+	public BlendEquationMode blendEquation = BlendEquationMode.FUNC_ADD;
 	
 	public boolean useScreenCoordinates = true;
 	public boolean mergeWith3D;
@@ -99,11 +100,11 @@ public class Sprite extends Object3D
 			this.blending = (BLENDING) parameters.get("blending");
 
 		if(parameters.containsKey("blendSrc"))
-			this.blendSrc = (BLENDING_FACTORS) parameters.get("blendSrc");
+			this.blendSrc = (BlendingFactorSrc) parameters.get("blendSrc");
 		if(parameters.containsKey("blendDst"))
-			this.blendDst = (BLENDING_FACTORS) parameters.get("blendDst");
+			this.blendDst = (BlendingFactorDest) parameters.get("blendDst");
 		if(parameters.containsKey("blendEquation"))
-			this.blendEquation = (BLENDING_EQUATION) parameters.get("blendEquation");
+			this.blendEquation = (BlendEquationMode) parameters.get("blendEquation");
 
 		if(parameters.containsKey("useScreenCoordinates"))
 			this.useScreenCoordinates = (Boolean) parameters.get("useScreenCoordinates");

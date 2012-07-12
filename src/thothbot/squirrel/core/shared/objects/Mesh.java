@@ -31,6 +31,7 @@ import thothbot.squirrel.core.client.gl2.WebGLBuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 import thothbot.squirrel.core.client.gl2.arrays.Uint16Array;
+import thothbot.squirrel.core.client.gl2.enums.GLenum;
 import thothbot.squirrel.core.client.renderers.WebGLRenderInfo;
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.Log;
@@ -167,17 +168,17 @@ public class Mesh extends SidesObject
 			setLineWidth( gl, material.wireframeLinewidth );
 
 			if ( updateBuffers ) 
-				gl.bindBuffer( WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, geometryBuffer.__webglLineBuffer );
+				gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryBuffer.__webglLineBuffer );
 			
-			gl.drawElements( WebGLRenderingContext.LINES, geometryBuffer.__webglLineCount, WebGLRenderingContext.UNSIGNED_SHORT, 0 );
+			gl.drawElements( GLenum.LINES.getValue(), geometryBuffer.__webglLineCount, GLenum.UNSIGNED_SHORT.getValue(), 0 );
 
 			// triangles
 
 		} else {
 			if ( updateBuffers ) 
-				gl.bindBuffer( WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, geometryBuffer.__webglFaceBuffer );
+				gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryBuffer.__webglFaceBuffer );
 			
-			gl.drawElements( WebGLRenderingContext.TRIANGLES, geometryBuffer.__webglFaceCount, WebGLRenderingContext.UNSIGNED_SHORT, 0 );
+			gl.drawElements( GLenum.TRIANGLES.getValue(), geometryBuffer.__webglFaceCount, GLenum.UNSIGNED_SHORT.getValue(), 0 );
 		}
 
 		info.getRender().calls ++;
@@ -415,7 +416,7 @@ public class Mesh extends SidesObject
 					 geometry.uvsNeedUpdate || geometry.normalsNeedUpdate ||
 					 geometry.colorsNeedUpdate || geometry.tangetsNeedUpdate || customAttributesDirty ) {
 
-					setBuffers(gl, geometryGroup, WebGLRenderingContext.DYNAMIC_DRAW, !geometry.dynamic, material );
+					setBuffers(gl, geometryGroup, GLenum.DYNAMIC_DRAW.getValue(), !geometry.dynamic, material );
 				}
 			}
 
@@ -565,8 +566,8 @@ public class Mesh extends SidesObject
 				 offset += 12;
 			 }
 
-			 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglVertexBuffer);
-			 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, vertexArray, hint );
+			 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglVertexBuffer);
+			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), vertexArray, hint );
 		 }
 
 		 // TODO: work on this
@@ -724,12 +725,12 @@ public class Mesh extends SidesObject
 
 				 }
 
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglMorphTargetsBuffers.get( vk ) );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, morphTargetsArrays.get( vk ), hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( vk ) );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), morphTargetsArrays.get( vk ), hint );
 
 				 if ( material.morphNormals ) {
-					 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglMorphNormalsBuffers.get( vk ) );
-					 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, morphNormalsArrays.get( vk ), hint );
+					 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get( vk ) );
+					 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), morphNormalsArrays.get( vk ), hint );
 				 }
 			 }
 		 }
@@ -946,17 +947,17 @@ public class Mesh extends SidesObject
 
 			 if ( offset_skin > 0 ) 
 			 {
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglSkinVertexABuffer );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, skinVertexAArray, hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinVertexABuffer );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), skinVertexAArray, hint );
 
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglSkinVertexBBuffer );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, skinVertexBArray, hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinVertexBBuffer );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), skinVertexBArray, hint );
 
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglSkinIndicesBuffer );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, skinIndexArray, hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinIndicesBuffer );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), skinIndexArray, hint );
 
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglSkinWeightsBuffer );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, skinWeightArray, hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinWeightsBuffer );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), skinWeightArray, hint );
 			 }
 		 }
 
@@ -1041,8 +1042,8 @@ public class Mesh extends SidesObject
 
 			 if ( offset_color > 0 ) 
 			 {
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglColorBuffer );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, colorArray, hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglColorBuffer );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), colorArray, hint );
 			 }
 		 }
 
@@ -1112,8 +1113,8 @@ public class Mesh extends SidesObject
 
 			 }
 
-			 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglTangentBuffer );
-			 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, tangentArray, hint );
+			 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglTangentBuffer );
+			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), tangentArray, hint );
 
 		 }
 
@@ -1185,8 +1186,8 @@ public class Mesh extends SidesObject
 				 }
 			 }
 
-			 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglNormalBuffer);
-			 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, normalArray, hint );
+			 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglNormalBuffer);
+			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), normalArray, hint );
 
 		 }
 
@@ -1236,8 +1237,8 @@ public class Mesh extends SidesObject
 
 			 if ( offset_uv > 0 ) 
 			 {
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglUVBuffer );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, uvArray, hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglUVBuffer );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), uvArray, hint );
 			 }
 		 }
 
@@ -1285,8 +1286,8 @@ public class Mesh extends SidesObject
 
 			 if ( offset_uv2 > 0 ) {
 
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglUV2Buffer );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, uv2Array, hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglUV2Buffer );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), uv2Array, hint );
 
 			 }
 
@@ -1352,11 +1353,11 @@ public class Mesh extends SidesObject
 
 			 }
 
-			 gl.bindBuffer( WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglFaceBuffer );
-			 gl.bufferData( WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, faceArray, hint );
+			 gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer );
+			 gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), faceArray, hint );
 
-			 gl.bindBuffer( WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglLineBuffer );
-			 gl.bufferData( WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, lineArray, hint );
+			 gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer );
+			 gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), lineArray, hint );
 
 		 }
 
@@ -1857,8 +1858,8 @@ public class Mesh extends SidesObject
 					 }
 				 }
 
-				 gl.bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, customAttribute.buffer );
-				 gl.bufferData( WebGLRenderingContext.ARRAY_BUFFER, customAttribute.array, hint );
+				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), customAttribute.buffer );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), customAttribute.array, hint );
 
 			 }
 

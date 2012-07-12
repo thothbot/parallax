@@ -26,6 +26,7 @@ import java.util.List;
 
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
+import thothbot.squirrel.core.client.gl2.enums.GLenum;
 import thothbot.squirrel.core.client.renderers.WebGLRenderInfo;
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.core.Color3f;
@@ -46,7 +47,7 @@ public class Ribbon extends GeometryObject
 	public void setBuffer(WebGLRenderer renderer)
 	{
 		if ( this.getGeometry().verticesNeedUpdate || this.getGeometry().colorsNeedUpdate )
-			this.setBuffers( renderer, geometry, WebGLRenderingContext.DYNAMIC_DRAW );
+			this.setBuffers( renderer, geometry, GLenum.DYNAMIC_DRAW.getValue() );
 
 		this.getGeometry().verticesNeedUpdate = false;
 		this.getGeometry().colorsNeedUpdate = false;
@@ -58,7 +59,7 @@ public class Ribbon extends GeometryObject
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGLRenderInfo info = renderer.getInfo();
 		
-		gl.drawArrays( WebGLRenderingContext.TRIANGLE_STRIP, 0, geometryBuffer.__webglVertexCount );
+		gl.drawArrays( GLenum.TRIANGLE_STRIP.getValue(), 0, geometryBuffer.__webglVertexCount );
 
 		info.getRender().calls ++;
 	}
@@ -125,8 +126,8 @@ public class Ribbon extends GeometryObject
 				vertexArray.set(offset + 2, vertex.getZ());
 			}
 
-			gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, geometry.__webglVertexBuffer);
-			gl.bufferData(WebGLRenderingContext.ARRAY_BUFFER, vertexArray, hint);
+			gl.bindBuffer(GLenum.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+			gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), vertexArray, hint);
 		}
 
 		if (dirtyColors) 
@@ -144,8 +145,8 @@ public class Ribbon extends GeometryObject
 
 			}
 
-			gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, geometry.__webglColorBuffer);
-			gl.bufferData(WebGLRenderingContext.ARRAY_BUFFER, colorArray, hint);
+			gl.bindBuffer(GLenum.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
+			gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), colorArray, hint);
 		}
 	}
 }

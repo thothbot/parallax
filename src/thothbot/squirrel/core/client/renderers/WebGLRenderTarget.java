@@ -26,6 +26,12 @@ import thothbot.squirrel.core.client.gl2.WebGLFramebuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderbuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.WebGLTexture;
+import thothbot.squirrel.core.client.gl2.enums.DataType;
+import thothbot.squirrel.core.client.gl2.enums.GLenum;
+import thothbot.squirrel.core.client.gl2.enums.PixelFormat;
+import thothbot.squirrel.core.client.gl2.enums.TextureMagFilter;
+import thothbot.squirrel.core.client.gl2.enums.TextureMinFilter;
+import thothbot.squirrel.core.client.gl2.enums.TextureWrapMode;
 import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.core.Mathematics;
 import thothbot.squirrel.core.shared.core.Vector2f;
@@ -42,14 +48,14 @@ public class WebGLRenderTarget
 	
 	public int activeCubeFace;
 
-	public Texture.WRAPPING_MODE wrapS;
-	public Texture.WRAPPING_MODE wrapT;
+	public TextureWrapMode wrapS;
+	public TextureWrapMode wrapT;
 
-	public Texture.FILTER magFilter;
-	public Texture.FILTER minFilter;
+	public TextureMagFilter magFilter;
+	public TextureMinFilter minFilter;
 
-	public Texture.FORMAT format;
-	public Texture.TYPE type;
+	public PixelFormat format;
+	public DataType type;
 
 	public boolean depthBuffer;
 	public boolean stencilBuffer;
@@ -60,14 +66,14 @@ public class WebGLRenderTarget
 	
 	public static class WebGLRenderTargetOptions
 	{
-		public Texture.WRAPPING_MODE wrapS = Texture.WRAPPING_MODE.CLAMP_TO_EDGE;
-		public Texture.WRAPPING_MODE wrapT = Texture.WRAPPING_MODE.CLAMP_TO_EDGE;
+		public TextureWrapMode wrapS = TextureWrapMode.CLAMP_TO_EDGE;
+		public TextureWrapMode wrapT = TextureWrapMode.CLAMP_TO_EDGE;
 		
-		public Texture.FILTER magFilter = Texture.FILTER.LINEAR;
-		public Texture.FILTER minFilter = Texture.FILTER.LINEAR_MIP_MAP_LINEAR;
+		public TextureMagFilter magFilter = TextureMagFilter.LINEAR;
+		public TextureMinFilter minFilter = TextureMinFilter.LINEAR_MIPMAP_LINEAR;
 		
-		public Texture.FORMAT format = Texture.FORMAT.RGBA;
-		public Texture.TYPE type = Texture.TYPE.UNSIGNED_BYTE;
+		public PixelFormat format = PixelFormat.RGBA;
+		public DataType type = DataType.UNSIGNED_BYTE;
 		
 		public boolean depthBuffer = true;
 		public boolean stencilBuffer = true;
@@ -152,70 +158,70 @@ public class WebGLRenderTarget
 		this.__webglFramebuffer = gl.createFramebuffer();
 		this.__webglRenderbuffer = gl.createRenderbuffer();
 
-		gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, this.__webglTexture);
+		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.__webglTexture);
 		// TODO: FIX setTextureParameters
-		//Texture.setTextureParameters(_gl, WebGLRenderingContext.TEXTURE_2D, renderTarget, isTargetPowerOfTwo);
+		//Texture.setTextureParameters(_gl, GLenum.TEXTURE_2D, renderTarget, isTargetPowerOfTwo);
 
-		gl.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0, glFormat, this.width, this.height, 0,
+		gl.texImage2D(GLenum.TEXTURE_2D.getValue(), 0, glFormat, this.width, this.height, 0,
 				glFormat, glType, null);
 
-		setupFrameBuffer(gl, this.__webglFramebuffer, WebGLRenderingContext.TEXTURE_2D);
+		setupFrameBuffer(gl, this.__webglFramebuffer, GLenum.TEXTURE_2D.getValue());
 		setupRenderBuffer(gl, this.__webglRenderbuffer);
 
 		if (isTargetPowerOfTwo)
-			gl.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
+			gl.generateMipmap(GLenum.TEXTURE_2D.getValue());
 
 		// Release everything
-		gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
-		gl.bindRenderbuffer(WebGLRenderingContext.RENDERBUFFER, null);
-		gl.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), null);
+		gl.bindRenderbuffer(GLenum.RENDERBUFFER.getValue(), null);
+		gl.bindFramebuffer(GLenum.FRAMEBUFFER.getValue(), null);
 	}
 
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl)
 	{	
-		gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, this.__webglTexture);
-		gl.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
-		gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
+		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.__webglTexture);
+		gl.generateMipmap(GLenum.TEXTURE_2D.getValue());
+		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), null);
 	}
 
 	public void setupFrameBuffer(WebGLRenderingContext gl, WebGLFramebuffer framebuffer, int textureTarget)
 	{	
-		gl.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, framebuffer);
-		gl.framebufferTexture2D(WebGLRenderingContext.FRAMEBUFFER, WebGLRenderingContext.COLOR_ATTACHMENT0, textureTarget, this.__webglTexture, 0);
+		gl.bindFramebuffer(GLenum.FRAMEBUFFER.getValue(), framebuffer);
+		gl.framebufferTexture2D(GLenum.FRAMEBUFFER.getValue(), GLenum.COLOR_ATTACHMENT0.getValue(), textureTarget, this.__webglTexture, 0);
 	}
 
 	public void setupRenderBuffer(WebGLRenderingContext gl, WebGLRenderbuffer renderbuffer)
 	{	
-		gl.bindRenderbuffer(WebGLRenderingContext.RENDERBUFFER, renderbuffer);
+		gl.bindRenderbuffer(GLenum.RENDERBUFFER.getValue(), renderbuffer);
 
 		if (this.depthBuffer && !this.stencilBuffer) 
 		{
-			gl.renderbufferStorage(WebGLRenderingContext.RENDERBUFFER, WebGLRenderingContext.DEPTH_COMPONENT16, this.width, this.height);
-			gl.framebufferRenderbuffer(WebGLRenderingContext.FRAMEBUFFER, WebGLRenderingContext.DEPTH_ATTACHMENT, WebGLRenderingContext.RENDERBUFFER, renderbuffer);
+			gl.renderbufferStorage(GLenum.RENDERBUFFER.getValue(), GLenum.DEPTH_COMPONENT16.getValue(), this.width, this.height);
+			gl.framebufferRenderbuffer(GLenum.FRAMEBUFFER.getValue(), GLenum.DEPTH_ATTACHMENT.getValue(), GLenum.RENDERBUFFER.getValue(), renderbuffer);
 
 			/*
 			 * For some reason this is not working. Defaulting to RGBA4. } else
 			 * if( ! this.depthBuffer && this.stencilBuffer ) {
 			 * 
-			 * _gl.renderbufferStorage( WebGLRenderingContext.RENDERBUFFER,
-			 * WebGLRenderingContext.STENCIL_INDEX8, this.width, this.height );
-			 * _gl.framebufferRenderbuffer( WebGLRenderingContext.FRAMEBUFFER,
-			 * WebGLRenderingContext.STENCIL_ATTACHMENT,
-			 * WebGLRenderingContext.RENDERBUFFER, renderbuffer );
+			 * _gl.renderbufferStorage( GLenum.RENDERBUFFER,
+			 * GLenum.STENCIL_INDEX8, this.width, this.height );
+			 * _gl.framebufferRenderbuffer( GLenum.FRAMEBUFFER,
+			 * GLenum.STENCIL_ATTACHMENT,
+			 * GLenum.RENDERBUFFER, renderbuffer );
 			 */
 		} 
 		else if (this.depthBuffer && this.stencilBuffer) 
 		{
-			gl.renderbufferStorage(WebGLRenderingContext.RENDERBUFFER,
-					WebGLRenderingContext.DEPTH_STENCIL, this.width, this.height);
-			gl.framebufferRenderbuffer(WebGLRenderingContext.FRAMEBUFFER,
-					WebGLRenderingContext.DEPTH_STENCIL_ATTACHMENT,
-					WebGLRenderingContext.RENDERBUFFER, renderbuffer);
+			gl.renderbufferStorage(GLenum.RENDERBUFFER.getValue(),
+					GLenum.DEPTH_STENCIL.getValue(), this.width, this.height);
+			gl.framebufferRenderbuffer(GLenum.FRAMEBUFFER.getValue(),
+					GLenum.DEPTH_STENCIL_ATTACHMENT.getValue(),
+					GLenum.RENDERBUFFER.getValue(), renderbuffer);
 		} 
 		else 
 		{
-			gl.renderbufferStorage(WebGLRenderingContext.RENDERBUFFER,
-					WebGLRenderingContext.RGBA4, this.width, this.height);
+			gl.renderbufferStorage(GLenum.RENDERBUFFER.getValue(),
+					GLenum.RGBA4.getValue(), this.width, this.height);
 		}
 	}
 }

@@ -35,6 +35,11 @@ import thothbot.squirrel.core.client.gl2.WebGLFramebuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.WebGLUniformLocation;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
+import thothbot.squirrel.core.client.gl2.enums.BlendEquationMode;
+import thothbot.squirrel.core.client.gl2.enums.BlendingFactorDest;
+import thothbot.squirrel.core.client.gl2.enums.BlendingFactorSrc;
+import thothbot.squirrel.core.client.gl2.enums.GLenum;
+import thothbot.squirrel.core.client.gl2.enums.TextureMinFilter;
 import thothbot.squirrel.core.client.shader.Program;
 import thothbot.squirrel.core.client.shader.ProgramParameters;
 import thothbot.squirrel.core.client.shader.Shader;
@@ -197,10 +202,10 @@ public class WebGLRenderer
 	public boolean _oldFlipSided;
 
 	public Material.BLENDING _oldBlending;
-	public Material.BLENDING_EQUATION _oldBlendEquation;
+	public BlendEquationMode _oldBlendEquation;
 
-	public Material.BLENDING_FACTORS _oldBlendSrc;
-	public Material.BLENDING_FACTORS _oldBlendDst;
+	public BlendingFactorSrc _oldBlendSrc;
+	public BlendingFactorDest _oldBlendDst;
 
 	public boolean _oldDepthTest;
 	public boolean _oldDepthWrite;
@@ -257,9 +262,9 @@ public class WebGLRenderer
 		this._lights             = new WebGLRenderLights();
 		this._programs           = new HashMap<String, Program>();
 		
-		this._maxVertexTextures = getGL().getParameteri(WebGLRenderingContext.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-		this._maxTextureSize    = getGL().getParameteri(WebGLRenderingContext.MAX_TEXTURE_SIZE);
-		this._maxCubemapSize    = getGL().getParameteri(WebGLRenderingContext.MAX_CUBE_MAP_TEXTURE_SIZE);
+		this._maxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
+		this._maxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
+		this._maxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
 
 		setViewport(0, 0, getCanvas().getWidth(), getCanvas().getHeight());
 		setDefaultGLState();
@@ -302,16 +307,16 @@ public class WebGLRenderer
 		getGL().clearDepth( 1 );
 		getGL().clearStencil( 0 );
 
-		getGL().enable( WebGLRenderingContext.DEPTH_TEST );
-		getGL().depthFunc( WebGLRenderingContext.LEQUAL );
+		getGL().enable( GLenum.DEPTH_TEST.getValue() );
+		getGL().depthFunc( GLenum.LEQUAL.getValue() );
 
-		getGL().frontFace( WebGLRenderingContext.CCW );
-		getGL().cullFace( WebGLRenderingContext.BACK );
-		getGL().enable( WebGLRenderingContext.CULL_FACE );
+		getGL().frontFace( GLenum.CCW.getValue() );
+		getGL().cullFace( GLenum.BACK.getValue() );
+		getGL().enable( GLenum.CULL_FACE.getValue() );
 
-		getGL().enable( WebGLRenderingContext.BLEND );
-		getGL().blendEquation( WebGLRenderingContext.FUNC_ADD );
-		getGL().blendFunc( WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE_MINUS_SRC_ALPHA );
+		getGL().enable( GLenum.BLEND.getValue() );
+		getGL().blendEquation( GLenum.FUNC_ADD.getValue() );
+		getGL().blendFunc( GLenum.SRC_ALPHA.getValue(), GLenum.ONE_MINUS_SRC_ALPHA.getValue() );
 	}
 
 	/*
@@ -356,9 +361,9 @@ public class WebGLRenderer
 	public void enableScissorTest(boolean enable)
 	{
 		if (enable)
-			getGL().enable(WebGLRenderingContext.SCISSOR_TEST);
+			getGL().enable(GLenum.SCISSOR_TEST.getValue());
 		else
-			getGL().disable(WebGLRenderingContext.SCISSOR_TEST);
+			getGL().disable(GLenum.SCISSOR_TEST.getValue());
 	}
 	
 	public void setPrecision(WebGLRenderer.PRECISION precision) 
@@ -417,9 +422,9 @@ public class WebGLRenderer
 	{
 		int bits = 0;
 
-		if ( color ) bits |= WebGLRenderingContext.COLOR_BUFFER_BIT;
-		if ( depth ) bits |= WebGLRenderingContext.DEPTH_BUFFER_BIT;
-		if ( stencil ) bits |= WebGLRenderingContext.STENCIL_BUFFER_BIT;
+		if ( color ) bits |= GLenum.COLOR_BUFFER_BIT.getValue();
+		if ( depth ) bits |= GLenum.DEPTH_BUFFER_BIT.getValue();
+		if ( stencil ) bits |= GLenum.STENCIL_BUFFER_BIT.getValue();
 
 		getGL().clear( bits );
 	}
@@ -589,12 +594,12 @@ public class WebGLRenderer
 
 		if ( object.morphTargetBase != - 1 ) 
 		{
-			getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglMorphTargetsBuffers.get( object.morphTargetBase ) );
-			getGL().vertexAttribPointer( attributes.get("position"), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( object.morphTargetBase ) );
+			getGL().vertexAttribPointer( attributes.get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 
 		} else if ( attributes.get("position") >= 0 ) {
-			getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglVertexBuffer );
-			getGL().vertexAttribPointer( attributes.get("position"), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglVertexBuffer );
+			getGL().vertexAttribPointer( attributes.get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 		}
 
 		if ( object.morphTargetForcedOrder.size() > 0 ) 
@@ -607,12 +612,12 @@ public class WebGLRenderer
 
 			while ( m < material.numSupportedMorphTargets && m < order.size() ) 
 			{
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglMorphTargetsBuffers.get( order.get( m ) ) );
-				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( order.get( m ) ) );
+				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 
 				if ( material.morphNormals ) {
-					getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglMorphNormalsBuffers.get( order.get( m ) ) );
-					getGL().vertexAttribPointer( attributes.get("morphNormal" + m ), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+					getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get( order.get( m ) ) );
+					getGL().vertexAttribPointer( attributes.get("morphNormal" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 				}
 
 				object.__webglMorphTargetInfluences.set( m , influences.get( order.get( m ) ));
@@ -643,12 +648,12 @@ public class WebGLRenderer
 					}
 				}
 
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglMorphTargetsBuffers.get( candidate ) );
-				getGL().vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( candidate ) );
+				getGL().vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 
 				if ( material.morphNormals ) {
-					getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.__webglMorphNormalsBuffers.get( candidate ) );
-					getGL().vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+					getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get( candidate ) );
+					getGL().vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 				}
 
 				object.__webglMorphTargetInfluences.set( m, candidateInfluence);
@@ -829,7 +834,7 @@ public class WebGLRenderer
 
 		// Generate mipmap if we're using any kind of mipmap filtering
 
-		if ( renderTarget != null && renderTarget.generateMipmaps && renderTarget.minFilter != Texture.FILTER.NEAREST && renderTarget.minFilter != Texture.FILTER.LINEAR)
+		if ( renderTarget != null && renderTarget.generateMipmaps && renderTarget.minFilter != TextureMinFilter.NEAREST && renderTarget.minFilter != TextureMinFilter.LINEAR)
 			renderTarget.updateRenderTargetMipmap(getGL());
 
 		// Ensure depth buffer writing is enabled so it can be cleared on next render
@@ -1044,8 +1049,8 @@ public class WebGLRenderer
 		{
 			if ( updateBuffers ) 
 			{
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglVertexBuffer );
-				getGL().vertexAttribPointer( attributes.get("position"), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglVertexBuffer );
+				getGL().vertexAttribPointer( attributes.get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 			}
 
 		} 
@@ -1062,14 +1067,16 @@ public class WebGLRenderer
 
 			// Use the per-geometryGroup custom attribute arrays which are setup in initMeshBuffers
 
-			if ( geometryBuffer.__webglCustomAttributesList != null ) {
-
-				for ( int i = 0; i < geometryBuffer.__webglCustomAttributesList.size(); i ++ ) {
+			if ( geometryBuffer.__webglCustomAttributesList != null ) 
+			{
+				for ( int i = 0; i < geometryBuffer.__webglCustomAttributesList.size(); i ++ ) 
+				{
 					WebGLCustomAttribute attribute = geometryBuffer.__webglCustomAttributesList.get( i );
 
-					if( attributes.get( attribute.belongsToAttribute ) >= 0 ) {
-						getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, attribute.buffer );
-						getGL().vertexAttribPointer( attributes.get( attribute.belongsToAttribute ), attribute.size, WebGLRenderingContext.FLOAT, false, 0, 0 );
+					if( attributes.get( attribute.belongsToAttribute ) >= 0 ) 
+					{
+						getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), attribute.buffer );
+						getGL().vertexAttribPointer( attributes.get( attribute.belongsToAttribute ), attribute.size, GLenum.FLOAT.getValue(), false, 0, 0 );
 					}
 				}
 			}
@@ -1077,22 +1084,22 @@ public class WebGLRenderer
 			// colors
 			if ( attributes.get("color") >= 0 ) 
 			{
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglColorBuffer );
-				getGL().vertexAttribPointer( attributes.get("color"), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglColorBuffer );
+				getGL().vertexAttribPointer( attributes.get("color"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 			}
 
 			// normals
 			if ( attributes.get("normal") >= 0 ) 
 			{
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglNormalBuffer );
-				getGL().vertexAttribPointer( attributes.get("normal"), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglNormalBuffer );
+				getGL().vertexAttribPointer( attributes.get("normal"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 			}
 
 			// tangents
 			if ( attributes.get("tangent") >= 0 ) 
 			{
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglTangentBuffer );
-				getGL().vertexAttribPointer( attributes.get("tangent"), 4, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglTangentBuffer );
+				getGL().vertexAttribPointer( attributes.get("tangent"), 4, GLenum.FLOAT.getValue(), false, 0, 0 );
 			}
 
 			// uvs
@@ -1100,8 +1107,8 @@ public class WebGLRenderer
 			{
 				if ( geometryBuffer.__webglUVBuffer != null) 
 				{
-					getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglUVBuffer );
-					getGL().vertexAttribPointer( attributes.get("uv"), 2, WebGLRenderingContext.FLOAT, false, 0, 0 );
+					getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglUVBuffer );
+					getGL().vertexAttribPointer( attributes.get("uv"), 2, GLenum.FLOAT.getValue(), false, 0, 0 );
 
 					getGL().enableVertexAttribArray( attributes.get("uv") );
 
@@ -1114,8 +1121,8 @@ public class WebGLRenderer
 			{
 				if ( geometryBuffer.__webglUV2Buffer != null) 
 				{
-					getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglUV2Buffer );
-					getGL().vertexAttribPointer( attributes.get("uv2"), 2, WebGLRenderingContext.FLOAT, false, 0, 0 );
+					getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglUV2Buffer );
+					getGL().vertexAttribPointer( attributes.get("uv2"), 2, GLenum.FLOAT.getValue(), false, 0, 0 );
 
 					getGL().enableVertexAttribArray( attributes.get("uv2") );
 
@@ -1129,17 +1136,17 @@ public class WebGLRenderer
 				 attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 ) 
 			{
 
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglSkinVertexABuffer );
-				getGL().vertexAttribPointer( attributes.get("skinVertexA"), 4, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinVertexABuffer );
+				getGL().vertexAttribPointer( attributes.get("skinVertexA"), 4, GLenum.FLOAT.getValue(), false, 0, 0 );
 
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglSkinVertexBBuffer );
-				getGL().vertexAttribPointer( attributes.get("skinVertexB"), 4, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinVertexBBuffer );
+				getGL().vertexAttribPointer( attributes.get("skinVertexB"), 4, GLenum.FLOAT.getValue(), false, 0, 0 );
 
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglSkinIndicesBuffer );
-				getGL().vertexAttribPointer( attributes.get("skinIndex"), 4, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinIndicesBuffer );
+				getGL().vertexAttribPointer( attributes.get("skinIndex"), 4, GLenum.FLOAT.getValue(), false, 0, 0 );
 
-				getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryBuffer.__webglSkinWeightsBuffer );
-				getGL().vertexAttribPointer( attributes.get("skinWeight"), 4, WebGLRenderingContext.FLOAT, false, 0, 0 );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinWeightsBuffer );
+				getGL().vertexAttribPointer( attributes.get("skinWeight"), 4, GLenum.FLOAT.getValue(), false, 0, 0 );
 			}
 		}
 
@@ -1158,15 +1165,15 @@ public class WebGLRenderer
 			object.__webglNormalBuffer = getGL().createBuffer();
 
 		if ( object.hasPos ) {
-			getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, object.__webglVertexBuffer );
-			getGL().bufferData( WebGLRenderingContext.ARRAY_BUFFER, object.positionArray, WebGLRenderingContext.DYNAMIC_DRAW );
+			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), object.__webglVertexBuffer );
+			getGL().bufferData( GLenum.ARRAY_BUFFER.getValue(), object.positionArray, GLenum.DYNAMIC_DRAW.getValue() );
 			getGL().enableVertexAttribArray( program.attributes.get("position") );
-			getGL().vertexAttribPointer( program.attributes.get("position"), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+			getGL().vertexAttribPointer( program.attributes.get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 		}
 
 		if ( object.hasNormal ) 
 		{
-			getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, object.__webglNormalBuffer );
+			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), object.__webglNormalBuffer );
 
 			if ( shading == Material.SHADING.FLAT ) 
 			{
@@ -1204,12 +1211,12 @@ public class WebGLRenderer
 				}
 			}
 
-			getGL().bufferData( WebGLRenderingContext.ARRAY_BUFFER, object.normalArray, WebGLRenderingContext.DYNAMIC_DRAW );
+			getGL().bufferData( GLenum.ARRAY_BUFFER.getValue(), object.normalArray, GLenum.DYNAMIC_DRAW.getValue() );
 			getGL().enableVertexAttribArray( program.attributes.get("normal") );
-			getGL().vertexAttribPointer( program.attributes.get("normal"), 3, WebGLRenderingContext.FLOAT, false, 0, 0 );
+			getGL().vertexAttribPointer( program.attributes.get("normal"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 		}
 
-		getGL().drawArrays( WebGLRenderingContext.TRIANGLES, 0, object.count );
+		getGL().drawArrays( GLenum.TRIANGLES.getValue(), 0, object.count );
 		object.count = 0;
 	}
 	
@@ -1239,18 +1246,18 @@ public class WebGLRenderer
 //
 //					// vertices
 //
-//					getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.vertexPositionBuffer );
+//					getGL().bindBuffer( GLenum.ARRAY_BUFFER, geometryGroup.vertexPositionBuffer );
 //					getGL().vertexAttribPointer( attributes.get("position"), 
 //							geometryGroup.vertexPositionBuffer.itemSize, 
-//							WebGLRenderingContext.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
+//							GLenum.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
 //
 //					// normals
 //
 //					if ( attributes.get("normal") >= 0 && geometryGroup.vertexNormalBuffer != null) {
-//						getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.vertexNormalBuffer );
+//						getGL().bindBuffer( GLenum.ARRAY_BUFFER, geometryGroup.vertexNormalBuffer );
 //						getGL().vertexAttribPointer( attributes.get("normal"), 
 //								geometryGroup.vertexNormalBuffer.itemSize, 
-//								WebGLRenderingContext.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
+//								GLenum.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
 //					}
 //
 //					// uvs
@@ -1258,10 +1265,10 @@ public class WebGLRenderer
 //					if ( attributes.uv >= 0 && geometryGroup.vertexUvBuffer != null ) {
 //
 //						if ( geometryGroup.vertexUvBuffer != null) {
-//							getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.vertexUvBuffer );
+//							getGL().bindBuffer( GLenum.ARRAY_BUFFER, geometryGroup.vertexUvBuffer );
 //							getGL().vertexAttribPointer(  attributes.get("uv"), 
 //									geometryGroup.vertexUvBuffer.itemSize, 
-//									WebGLRenderingContext.FLOAT, false, 0, offsets.get( i ).index * 4 * 2 );
+//									GLenum.FLOAT, false, 0, offsets.get( i ).index * 4 * 2 );
 //							getGL().enableVertexAttribArray( attributes.uv );
 //						} else {
 //							getGL().disableVertexAttribArray( attributes.uv );
@@ -1272,17 +1279,17 @@ public class WebGLRenderer
 //					// colors
 //
 //					if ( attributes.color >= 0 && geometryGroup.vertexColorBuffer != null ) {
-//						getGL().bindBuffer( WebGLRenderingContext.ARRAY_BUFFER, geometryGroup.vertexColorBuffer );
+//						getGL().bindBuffer( GLenum.ARRAY_BUFFER, geometryGroup.vertexColorBuffer );
 //						getGL().vertexAttribPointer( attributes.get("color"), 
 //								geometryGroup.vertexColorBuffer.itemSize, 
-//								WebGLRenderingContext.FLOAT, false, 0, offsets.get( i ).index * 4 * 4 );
+//								GLenum.FLOAT, false, 0, offsets.get( i ).index * 4 * 4 );
 //					}
 //
-//					getGL().bindBuffer( WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, geometryGroup.vertexIndexBuffer );
+//					getGL().bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER, geometryGroup.vertexIndexBuffer );
 //				}
 //
 //				// render indexed triangles
-//				getGL().drawElements( WebGLRenderingContext.TRIANGLES, offsets.get( i ).count, WebGLRenderingContext.UNSIGNED_SHORT, offsets.get( i ).start * 2 ); // 2 = Uint16
+//				getGL().drawElements( GLenum.TRIANGLES, offsets.get( i ).count, GLenum.UNSIGNED_SHORT, offsets.get( i ).start * 2 ); // 2 = Uint16
 //
 //				this.info.render.calls ++;
 //				// not really true, here vertices can be shared
@@ -2273,44 +2280,44 @@ Log.error("?????????????");
 	
 	public void setFaceCulling(String frontFace ) 
 	{
-		getGL().disable( WebGLRenderingContext.CULL_FACE );
+		getGL().disable( GLenum.CULL_FACE.getValue() );
 	}
 
 	public void setFaceCulling(String cullFace, String frontFace) 
 	{
 		if ( frontFace == null || frontFace.equals("ccw") )
-			getGL().frontFace( WebGLRenderingContext.CCW );
+			getGL().frontFace( GLenum.CCW.getValue() );
 		else
-			getGL().frontFace( WebGLRenderingContext.CW );
+			getGL().frontFace( GLenum.CW.getValue() );
 
 		if( cullFace.equals("back") )
-			getGL().cullFace( WebGLRenderingContext.BACK );
+			getGL().cullFace( GLenum.BACK.getValue() );
 			
 		else if( cullFace.equals("front") )
-			getGL().cullFace( WebGLRenderingContext.FRONT );
+			getGL().cullFace( GLenum.FRONT.getValue() );
 			
 		else
-			getGL().cullFace( WebGLRenderingContext.FRONT_AND_BACK );
+			getGL().cullFace( GLenum.FRONT_AND_BACK.getValue() );
 
-		getGL().enable( WebGLRenderingContext.CULL_FACE );
+		getGL().enable( GLenum.CULL_FACE.getValue() );
 	}
 
 	public void setObjectFaces( SidesObject object ) 
 	{
 		//if ( this._oldDoubleSided != object.getDoubleSided() ) {
 			if ( object.getDoubleSided() )
-				getGL().disable( WebGLRenderingContext.CULL_FACE );
+				getGL().disable( GLenum.CULL_FACE.getValue() );
 			else
-				getGL().enable( WebGLRenderingContext.CULL_FACE );
+				getGL().enable( GLenum.CULL_FACE.getValue() );
 
 			this._oldDoubleSided = object.getDoubleSided();
 		//}
 
 		//if ( this._oldFlipSided != object.getFlipSided() ) {
 			if ( object.getFlipSided() )
-				getGL().frontFace( WebGLRenderingContext.CW );
+				getGL().frontFace( GLenum.CW.getValue() );
 			else
-				getGL().frontFace( WebGLRenderingContext.CCW );
+				getGL().frontFace( GLenum.CCW.getValue() );
 
 			this._oldFlipSided = object.getFlipSided();
 		//}
@@ -2321,9 +2328,9 @@ Log.error("?????????????");
 		//if ( this._oldDepthTest != depthTest ) {
 
 			if ( depthTest )
-				getGL().enable( WebGLRenderingContext.DEPTH_TEST );
+				getGL().enable( GLenum.DEPTH_TEST.getValue() );
 			else 
-				getGL().disable( WebGLRenderingContext.DEPTH_TEST );
+				getGL().disable( GLenum.DEPTH_TEST.getValue() );
 
 			this._oldDepthTest = depthTest;
 		//}
@@ -2341,9 +2348,9 @@ Log.error("?????????????");
 	{
 		//if ( this._oldPolygonOffset != polygonoffset ) {
 			if ( polygonoffset ) {
-				getGL().enable( WebGLRenderingContext.POLYGON_OFFSET_FILL );
+				getGL().enable( GLenum.POLYGON_OFFSET_FILL.getValue() );
 			} else {
-				getGL().disable( WebGLRenderingContext.POLYGON_OFFSET_FILL );
+				getGL().disable( GLenum.POLYGON_OFFSET_FILL.getValue() );
 			}
 
 			_oldPolygonOffset = polygonoffset;
@@ -2362,33 +2369,33 @@ Log.error("?????????????");
 		if ( blending != this._oldBlending ) {
 
 			if( blending == Material.BLENDING.NO) {
-				getGL().disable( WebGLRenderingContext.BLEND );
+				getGL().disable( GLenum.BLEND.getValue() );
 				
 			} else if( blending == Material.BLENDING.ADDITIVE) {
-				getGL().enable( WebGLRenderingContext.BLEND );
-				getGL().blendEquation( WebGLRenderingContext.FUNC_ADD );
-				getGL().blendFunc( WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE );
+				getGL().enable( GLenum.BLEND.getValue() );
+				getGL().blendEquation( GLenum.FUNC_ADD.getValue() );
+				getGL().blendFunc( GLenum.SRC_ALPHA.getValue(), GLenum.ONE.getValue() );
 				
 			// TODO: Find blendFuncSeparate() combination
 			} else if( blending == Material.BLENDING.SUBTRACTIVE) {
-				getGL().enable( WebGLRenderingContext.BLEND );
-				getGL().blendEquation( WebGLRenderingContext.FUNC_ADD );
-				getGL().blendFunc( WebGLRenderingContext.ZERO, WebGLRenderingContext.ONE_MINUS_SRC_COLOR );
+				getGL().enable( GLenum.BLEND.getValue() );
+				getGL().blendEquation( GLenum.FUNC_ADD.getValue() );
+				getGL().blendFunc( GLenum.ZERO.getValue(), GLenum.ONE_MINUS_SRC_COLOR.getValue() );
 
 			// TODO: Find blendFuncSeparate() combination
 			} else if( blending == Material.BLENDING.MULTIPLY) {
-				getGL().enable( WebGLRenderingContext.BLEND );
-				getGL().blendEquation( WebGLRenderingContext.FUNC_ADD );
-				getGL().blendFunc( WebGLRenderingContext.ZERO, WebGLRenderingContext.SRC_COLOR );
+				getGL().enable( GLenum.BLEND.getValue() );
+				getGL().blendEquation( GLenum.FUNC_ADD.getValue() );
+				getGL().blendFunc( GLenum.ZERO.getValue(), GLenum.SRC_COLOR.getValue() );
 
 			} else if( blending == Material.BLENDING.CUSTOM) {
-				getGL().enable( WebGLRenderingContext.BLEND );
+				getGL().enable( GLenum.BLEND.getValue() );
 
 			} else {
 
-				getGL().enable( WebGLRenderingContext.BLEND );
-				getGL().blendEquationSeparate( WebGLRenderingContext.FUNC_ADD, WebGLRenderingContext.FUNC_ADD );
-				getGL().blendFuncSeparate( WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE_MINUS_SRC_ALPHA, WebGLRenderingContext.ONE, WebGLRenderingContext.ONE_MINUS_SRC_ALPHA );
+				getGL().enable( GLenum.BLEND.getValue() );
+				getGL().blendEquationSeparate( GLenum.FUNC_ADD.getValue(), GLenum.FUNC_ADD.getValue() );
+				getGL().blendFuncSeparate( GLenum.SRC_ALPHA.getValue(), GLenum.ONE_MINUS_SRC_ALPHA.getValue(), GLenum.ONE.getValue(), GLenum.ONE_MINUS_SRC_ALPHA.getValue() );
 			}
 
 			this._oldBlending = blending;
@@ -2399,7 +2406,7 @@ Log.error("?????????????");
 		this._oldBlendDst = null;
 	}
 
-	private void setBlending( Material.BLENDING blending, Material.BLENDING_EQUATION blendEquation, Material.BLENDING_FACTORS blendSrc, Material.BLENDING_FACTORS blendDst ) 
+	private void setBlending( Material.BLENDING blending, BlendEquationMode blendEquation, BlendingFactorSrc blendSrc, BlendingFactorDest blendDst ) 
 	{
 		setBlending(blending);
 
@@ -2453,26 +2460,26 @@ Log.error("?????????????");
 				this.getInfo().getMemory().textures ++;
 			}
 
-			getGL().activeTexture( WebGLRenderingContext.TEXTURE0 + slot );
-			getGL().bindTexture( WebGLRenderingContext.TEXTURE_2D, texture.__webglTexture );
+			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
+			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.__webglTexture );
 
-			getGL().pixelStorei( WebGLRenderingContext.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha ? -1 : 1 );
+			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.premultiplyAlpha ? -1 : 1 );
 
 			Image image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getHeight() );
 
-			texture.setTextureParameters( getGL(), WebGLRenderingContext.TEXTURE_2D, isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), GLenum.TEXTURE_2D.getValue(), isImagePowerOfTwo );
 
 			if ( texture instanceof DataTexture ) {
-//				getGL().texImage2D( WebGLRenderingContext.TEXTURE_2D, 0, glFormat, image.getWidth(), image.getHeight(), 0, glFormat, glType, image.getdata );
+//				getGL().texImage2D( GLenum.TEXTURE_2D, 0, glFormat, image.getWidth(), image.getHeight(), 0, glFormat, glType, image.getdata );
 			} else {
-				getGL().texImage2D( WebGLRenderingContext.TEXTURE_2D, 0, texture.format.getValue(), 
+				getGL().texImage2D( GLenum.TEXTURE_2D.getValue(), 0, texture.format.getValue(), 
 						texture.format.getValue(), texture.type.getValue(), ImageElement.as(texture.getImage().getElement()));
 			}
 
 			if ( texture.generateMipmaps && isImagePowerOfTwo ) 
-				getGL().generateMipmap( WebGLRenderingContext.TEXTURE_2D );
+				getGL().generateMipmap( GLenum.TEXTURE_2D.getValue() );
 
 			texture.setNeedsUpdate(false);
 
@@ -2481,8 +2488,8 @@ Log.error("?????????????");
 
 		} else {
 
-			getGL().activeTexture( WebGLRenderingContext.TEXTURE0 + slot );
-			getGL().bindTexture( WebGLRenderingContext.TEXTURE_2D, texture.__webglTexture );
+			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
+			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.__webglTexture );
 
 		}
 
@@ -2595,7 +2602,7 @@ Log.error("?????????????");
 		}
 
 		if ( framebuffer != this._currentFramebuffer ) {
-			getGL().bindFramebuffer( WebGLRenderingContext.FRAMEBUFFER, framebuffer );
+			getGL().bindFramebuffer( GLenum.FRAMEBUFFER.getValue(), framebuffer );
 			getGL().viewport( 0, 0, this._currentWidth, this._currentHeight );
 
 			this._currentFramebuffer = framebuffer;
@@ -2604,23 +2611,23 @@ Log.error("?????????????");
 
 	// Fallback filters for non-power-of-2 textures
 
-	public int filterFallback ( Texture.FILTER f ) {
-
-		switch ( f ) {
-
-		case NEAREST:
-		case NEAREST_MIP_MAP_NEAREST:
-		case NEAREST_MIP_MAP_LINEAR: 
-			return WebGLRenderingContext.NEAREST;
-
-		case LINEAR:
-		case LINEAR_MIP_MAP_NEAREST:
-		case LINEAR_MIP_MAP_LINEAR:
-		default:
-			return WebGLRenderingContext.LINEAR;
-
-		}
-	}
+//	public int filterFallback ( Texture.FILTER f ) 
+//	{
+//		switch ( f ) {
+//
+//		case NEAREST:
+//		case NEAREST_MIP_MAP_NEAREST:
+//		case NEAREST_MIP_MAP_LINEAR: 
+//			return GLenum.NEAREST.getValue();
+//
+//		case LINEAR:
+//		case LINEAR_MIP_MAP_NEAREST:
+//		case LINEAR_MIP_MAP_LINEAR:
+//		default:
+//			return GLenum.LINEAR.getValue();
+//
+//		}
+//	}
 
 	// Allocations
 
