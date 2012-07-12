@@ -114,6 +114,7 @@ public abstract class RenderingScene extends Rendering
 	{
 		this.renderer.getInfo().getTimer().render = new Duration();
 		this.renderer.render(getScene(), getCamera());
+		
 		renderingSceneCallback.onUpdate();
 	}
 }

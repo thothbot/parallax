@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.enums.BlendEquationMode;
 import thothbot.squirrel.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.squirrel.core.client.gl2.enums.BlendingFactorSrc;

@@ -6,11 +6,17 @@
 }
 
 .debug-panel { 
-	padding-left:5px;
-	padding-right:5px;
+	display: table; 
+  	width: 100%; 
+	padding-right:3px;
 	background-color:#555555;
 	border: 1px solid #999999;
-	opacity:0.6;
+	opacity: 0.6;
+}
+
+.debug-panel-element {
+	display: table-cell; 
+	padding-left: 3px;
 }
 
 .debug-panel .gwt-Label { 

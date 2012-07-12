@@ -27,6 +27,7 @@ import thothbot.squirrel.core.client.context.Canvas3dAttributes;
 import thothbot.squirrel.core.client.context.Canvas3dException;
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.client.widget.BadCanvasPanel;
+import thothbot.squirrel.core.client.widget.Debugger;
 import thothbot.squirrel.core.client.widget.LoadingPanel;
 import thothbot.squirrel.core.resources.CoreResources;
 import thothbot.squirrel.core.shared.Log;

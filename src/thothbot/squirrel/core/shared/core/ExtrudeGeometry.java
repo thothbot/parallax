@@ -186,7 +186,7 @@ public class ExtrudeGeometry extends Geometry
 		}
 
 		localFaces = ShapeUtils.triangulateShape ( vertices, holes );
-		Log.info("===========" + localFaces);
+		Log.error("===========" + localFaces);
 		// Would it be better to move points after triangulation?
 		// shapePoints = shape.extractAllPointsWithBend( curveSegments, bendPath );
 		// 	vertices = shapePoints.shape;
