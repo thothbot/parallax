@@ -143,7 +143,6 @@ public class CameraHelper extends Object3D
 		// world matrix must be identity
 
 		CameraHelper.__c.getProjectionMatrix().copy( this.camera.getProjectionMatrix() );
-		Log.error("-----------------" + CameraHelper.__c.getProjectionMatrix() + ", " +  camera.getProjectionMatrix());
 
 		// center / target
 

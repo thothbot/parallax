@@ -1363,7 +1363,7 @@ public class Matrix4f
 	 * 
 	 * @return the current Projection Matrix
 	 */
-	public Matrix4f makeOrthographic(float left, float right, float bottom, float top, float near, float far)
+	public Matrix4f makeOrthographic(float left, float right, float top, float bottom, float near, float far)
 	{
 		Float32Array te = this.elements;
 		float w = right - left;
