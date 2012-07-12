@@ -22,8 +22,8 @@
 
 package thothbot.squirrel.core.shared.materials;
 
+import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.core.Color3f;
-import thothbot.squirrel.core.shared.textures.Texture;
 
 public abstract class AbstractMapMaterial extends Material 
 {

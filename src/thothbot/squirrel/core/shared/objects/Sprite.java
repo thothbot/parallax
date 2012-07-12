@@ -24,6 +24,7 @@ package thothbot.squirrel.core.shared.objects;
 
 import java.util.Map;
 
+import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.core.Color3f;
 import thothbot.squirrel.core.shared.core.Vector2f;
 import thothbot.squirrel.core.shared.core.Vector3f;
@@ -31,7 +32,6 @@ import thothbot.squirrel.core.shared.materials.Material;
 import thothbot.squirrel.core.shared.materials.Material.BLENDING;
 import thothbot.squirrel.core.shared.materials.Material.BLENDING_EQUATION;
 import thothbot.squirrel.core.shared.materials.Material.BLENDING_FACTORS;
-import thothbot.squirrel.core.shared.textures.Texture;
 
 public class Sprite extends Object3D
 {

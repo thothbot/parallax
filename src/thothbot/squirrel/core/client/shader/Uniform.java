@@ -24,7 +24,7 @@ package thothbot.squirrel.core.client.shader;
 
 import thothbot.squirrel.core.client.gl2.WebGLUniformLocation;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
-import thothbot.squirrel.core.shared.textures.Texture;
+import thothbot.squirrel.core.client.textures.Texture;
 
 public class Uniform
 {

@@ -26,9 +26,9 @@ import thothbot.squirrel.core.client.gl2.WebGLFramebuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderbuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.WebGLTexture;
+import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.core.Mathematics;
 import thothbot.squirrel.core.shared.core.Vector2f;
-import thothbot.squirrel.core.shared.textures.Texture;
 
 public class WebGLRenderTarget
 {

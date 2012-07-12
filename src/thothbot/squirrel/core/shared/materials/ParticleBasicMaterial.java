@@ -24,8 +24,8 @@ package thothbot.squirrel.core.shared.materials;
 
 import thothbot.squirrel.core.client.shader.Shader;
 import thothbot.squirrel.core.client.shader.ShaderParticleBasic;
+import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.core.Color3f;
-import thothbot.squirrel.core.shared.textures.Texture;
 
 public final class ParticleBasicMaterial extends Material {
 	

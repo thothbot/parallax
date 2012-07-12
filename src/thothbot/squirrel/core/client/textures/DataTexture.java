@@ -17,7 +17,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.squirrel.core.shared.textures;
+package thothbot.squirrel.core.client.textures;
 
 public class DataTexture extends Texture
 {

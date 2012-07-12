@@ -24,7 +24,7 @@ package thothbot.squirrel.core.shared.materials;
 
 import thothbot.squirrel.core.client.shader.Shader;
 import thothbot.squirrel.core.client.shader.ShaderBasic;
-import thothbot.squirrel.core.shared.textures.Texture;
+import thothbot.squirrel.core.client.textures.Texture;
 
 import com.google.gwt.canvas.dom.client.Context2d.LineCap;
 import com.google.gwt.canvas.dom.client.Context2d.LineJoin;

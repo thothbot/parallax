@@ -22,8 +22,8 @@
 
 package thothbot.squirrel.core.shared.utils;
 
+import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.Log;
-import thothbot.squirrel.core.shared.textures.Texture;
 
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;

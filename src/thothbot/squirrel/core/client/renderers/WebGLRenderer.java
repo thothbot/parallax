@@ -39,6 +39,8 @@ import thothbot.squirrel.core.client.shader.Program;
 import thothbot.squirrel.core.client.shader.ProgramParameters;
 import thothbot.squirrel.core.client.shader.Shader;
 import thothbot.squirrel.core.client.shader.Uniform;
+import thothbot.squirrel.core.client.textures.DataTexture;
+import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.cameras.OrthographicCamera;
@@ -82,8 +84,6 @@ import thothbot.squirrel.core.shared.objects.WebGLObject;
 import thothbot.squirrel.core.shared.scenes.Fog;
 import thothbot.squirrel.core.shared.scenes.FogExp2;
 import thothbot.squirrel.core.shared.scenes.Scene;
-import thothbot.squirrel.core.shared.textures.DataTexture;
-import thothbot.squirrel.core.shared.textures.Texture;
 
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
