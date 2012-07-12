@@ -203,16 +203,6 @@ public interface DimensionalObject {
 	public void translateZ(float distance);
 
 	/**
-	 * Update matrices of this object and all chilndren objects.
-	 *  
-	 * @param parentMatrixWorld
-	 * @param forceUpdate
-	 * @param camera
-	 */
-	public void update(Matrix4f parentMatrixWorld, boolean forceUpdate,
-			Camera camera);
-
-	/**
 	 * Do update of the object's matrix
 	 */
 	public void updateMatrix();

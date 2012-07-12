@@ -482,35 +482,6 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public void update(Matrix4f parentMatrixWorld, boolean forceUpdate, Camera camera)
-	{
-		if (this.matrixAutoUpdate){
-			this.updateMatrix();
-		}
-		
-		// update matrixWorld
-		
-		if (this.matrixWorldNeedsUpdate || forceUpdate) {
-
-			if (parentMatrixWorld != null)
-				this.matrixWorld.multiply(parentMatrixWorld, this.matrix);
-			else
-				this.matrixWorld.copy(this.matrix);
-
-			this.matrixRotationWorld.extractRotation( this.matrixWorld, this.scale );
-			this.matrixWorldNeedsUpdate = false;
-			forceUpdate = true;
-		}
-
-		// update children
-
-		for (int i = 0, l = this.children.size(); i < l; i++) {
-			this.children.get(i).update(this.matrixWorld, forceUpdate, camera);
-
-		}
-	}
-
-	@Override
 	public DimensionalObject getChildByName(String name, boolean recursive)
 	{
 		for (int c = 0, cl = this.children.size(); c < cl; c++) {
@@ -548,13 +519,12 @@ public class Object3D implements DimensionalObject
 			this.updateMatrix();
 
 		// update matrixWorld
-		if (this.matrixWorldNeedsUpdate || force) {
-
-			if (this.parent != null) {
+		if (this.matrixWorldNeedsUpdate || force) 
+		{
+			if (this.parent != null) 
 				this.matrixWorld.multiply(this.parent.getMatrixWorld(), this.matrix);
-			} else {
+			else
 				this.matrixWorld.copy(this.matrix);
-			}
 
 			this.matrixWorldNeedsUpdate = false;
 

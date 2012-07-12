@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
+import thothbot.squirrel.core.shared.objects.GeometryObject;
 import thothbot.squirrel.core.shared.objects.Object3D;
 
 /**
@@ -83,23 +84,26 @@ public class Frustum
 
 	/**
 	 * Checking if the 3D object located inside Frustum.
-	 * TODO: Bounding sphere is needed to be fixed.
 	 * 
 	 * @param object any of 3D object
 	 */
-	public boolean contains(Object3D object)
+	public boolean contains(GeometryObject object)
 	{
 		float distance;
 		Matrix4f matrix = object.getMatrixWorld();
 		Float32Array me = matrix.getArray();
-		//float radius = -object.geometry.boundingSphere.radius * matrix.getMaxScaleOnAxis();
+		float radius = -object.getGeometry().boundingSphere.radius * matrix.getMaxScaleOnAxis();
 
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) 
+		{
 			Vector4f plane = planes.get(i);
-			distance = plane.x * me.get(12) + plane.y * me.get(13) + plane.z
-					* me.get(14) + plane.w;
-			//if (distance <= radius)
-				//return false;
+			distance = plane.getX() * me.get(12) 
+					+ plane.getY()  * me.get(13) 
+					+ plane.getZ()	* me.get(14) 
+					+ plane.getW();
+			
+			if (distance <= radius)
+				return false;
 		}
 
 		return true;

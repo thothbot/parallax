@@ -28,7 +28,8 @@ import thothbot.squirrel.core.client.shader.ShaderNormal;
 import com.google.gwt.canvas.dom.client.Context2d.LineCap;
 import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
 
-public final class MeshNormalMaterial extends Material {
+public final class MeshNormalMaterial extends Material 
+{
 	
 	public static class MeshNormalMaterialOptions extends Material.MaterialOptions 
 	{
@@ -41,26 +42,31 @@ public final class MeshNormalMaterial extends Material {
 	private LineJoin wireframeLinejoin;
 
 
-	public MeshNormalMaterial(MeshNormalMaterialOptions options){
+	public MeshNormalMaterial(MeshNormalMaterialOptions options)
+	{
 		super(options);
 		this.shading = options.shading;
 		this.wireframeLinecap = options.wireframeLinecap;
 		this.wireframeLinejoin = options.wireframeLinejoin;
 	}
 
-	public void setWireframeLinecap(LineCap wireframeLinecap) {
+	public void setWireframeLinecap(LineCap wireframeLinecap) 
+	{
 		this.wireframeLinecap = wireframeLinecap;
 	}
 
-	public LineCap getWireframeLinecap() {
+	public LineCap getWireframeLinecap() 
+	{
 		return wireframeLinecap;
 	}
 
-	public void setWireframeLinejoin(LineJoin wireframeLinejoin) {
+	public void setWireframeLinejoin(LineJoin wireframeLinejoin) 
+	{
 		this.wireframeLinejoin = wireframeLinejoin;
 	}
 
-	public LineJoin getWireframeLinejoin() {
+	public LineJoin getWireframeLinejoin() 
+	{
 		return wireframeLinejoin;
 	}
 

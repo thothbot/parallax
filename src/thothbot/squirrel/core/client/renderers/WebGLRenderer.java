@@ -192,7 +192,7 @@ public class WebGLRenderer
 	public Program _currentProgram;
 	public Object _currentFramebuffer;
 	public int _currentMaterialId = -1;
-	public int _currentGeometryGroupHash;
+	public int _currentGeometryGroupHash = -1;
 	public Camera _currentCamera;
 	
 	// GL state cache
@@ -744,15 +744,13 @@ public class WebGLRenderer
 
 		for(WebGLObject webglObject: renderList) 
 		{
-			Object3D object = (Object3D) webglObject.object;
+			GeometryObject object = webglObject.object;
 			webglObject.render = false;
 
 			if ( object.isVisible() ) 
 			{
 				if ( ! ( object.getClass() == Mesh.class || object.getClass() == ParticleSystem.class ) || ! ( object.frustumCulled ) || _frustum.contains( object ) )
 				{
-//					object.getMatrixWorld().flattenToArray( object._objectMatrixArray );
-
 					setupMatrices( (Object3D) object, camera );
 					unrollBufferMaterial( webglObject );
 					webglObject.render = true;
@@ -951,16 +949,21 @@ public class WebGLRenderer
 
 	public void renderObjects ( List<WebGLObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
 	{
+		Log.debug("Called renderObjects() render list contains = " + renderList.size());
+		
 		int start = 0;
 		int end = 0;
 		int delta = 0;
 			
-		if ( reverse ) {
+		if ( reverse ) 
+		{
 			start = renderList.size() - 1;
 			end = -1;
 			delta = -1;
 
-		} else {
+		} 
+		else 
+		{
 			start = 0;
 			end = renderList.size();
 			delta = 1;
@@ -978,20 +981,20 @@ public class WebGLRenderer
 				GeometryObject object = webglObject.object;
 				GeometryBuffer buffer = webglObject.buffer;
 
-				Log.debug("renderObjects() ID " + object.getId() + " = " + object.getClass().getName());
-
-				if ( overrideMaterial != null ) {
+				if ( overrideMaterial != null ) 
+				{
 					material = overrideMaterial;
 
-				} else {
-
+				} 
+				else 
+				{
 					if(materialType == "opaque")
 						material = webglObject.opaque;
 					else if(materialType == "transparent")
 						material = webglObject.transparent;
 
 					if ( material == null ) continue;
-					
+
 					if ( useBlending ) 
 						setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst());
 
@@ -1023,7 +1026,6 @@ public class WebGLRenderer
 
 		Map<String, Integer> attributes = program.attributes;
 
-		// TODO: 
 		boolean updateBuffers = false;
 		int wireframeBit = material.wireframe ? 1 : 0;
 
@@ -1038,10 +1040,11 @@ public class WebGLRenderer
 //				+ ", object.id=" + object.getId()
 //				+ ", wireframeBit=" + wireframeBit);
 
-		//		if ( geometryGroupHash != this._currentGeometryGroupHash ) {
-		this._currentGeometryGroupHash = geometryGroupHash;
-		updateBuffers = true;
-		//		}
+		if ( geometryGroupHash != this._currentGeometryGroupHash ) 
+		{
+			this._currentGeometryGroupHash = geometryGroupHash;
+			updateBuffers = true;
+		}
 
 		// vertices
 		if ( !material.morphTargets && attributes.get("position") >= 0 ) 
