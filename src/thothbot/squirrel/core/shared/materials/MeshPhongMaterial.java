@@ -58,7 +58,6 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 
 	public MeshPhongMaterial(MeshPhongMaterialOptions options){
 		super(options);
-		this.color = options.color;
 		this.ambient = options.ambient;
 		this.specular = options.specular;
 		this.shininess = options.shininess;

@@ -22,6 +22,12 @@
 
 package thothbot.squirrel.core.shared.cameras;
 
+/**
+ * Implementation of Perspective Camera.
+ * 
+ * @author thothbot
+ *
+ */
 public class PerspectiveCamera extends Camera
 {
 	protected float fieldOfView;
@@ -49,7 +55,7 @@ public class PerspectiveCamera extends Camera
 		this.near = near;
 		this.far = far;
 
-		this.updateProjectionMatrix();
+		updateProjectionMatrix();
 	}
 
 	public float getFieldOfView()
@@ -177,14 +183,16 @@ public class PerspectiveCamera extends Camera
 	 * For example, if you have 3x2 monitors and each monitor is 1920x1080 and
 	 * the monitors are in grid like this
 	 *
+	 *<pre>
 	 *   +---+---+---+
 	 *   | A | B | C |
 	 *   +---+---+---+
 	 *   | D | E | F |
 	 *   +---+---+---+
-	 *
+	 *</pre>
 	 * then for each monitor you would call it like this
 	 *
+	 *<pre>
 	 *   var w = 1920;
 	 *   var h = 1080;
 	 *   var fullWidth = w * 3;
@@ -202,6 +210,7 @@ public class PerspectiveCamera extends Camera
 	 *   camera.setOffset( fullWidth, fullHeight, w * 1, h * 1, w, h );
 	 *   --F--
 	 *   camera.setOffset( fullWidth, fullHeight, w * 2, h * 1, w, h );
+	 *</pre>
 	 *
 	 *   Note there is no reason monitors have to be the same size or in a grid.
 	 */

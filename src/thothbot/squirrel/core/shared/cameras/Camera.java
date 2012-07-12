@@ -27,9 +27,14 @@ import thothbot.squirrel.core.shared.core.Matrix4f;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.objects.Object3D;
 
+/**
+ * Simple camera
+ * 
+ * @author thothbot
+ *
+ */
 public class Camera extends Object3D
 {
-
 	protected Matrix4f matrixWorldInverse;
 	protected Matrix4f projectionMatrix;
 	protected Matrix4f projectionMatrixInverse;
@@ -37,7 +42,8 @@ public class Camera extends Object3D
 	public Float32Array _viewMatrixArray;
 	public Float32Array _projectionMatrixArray;
 
-	public Camera() {
+	public Camera() 
+	{
 		super();
 		this.matrixWorldInverse = new Matrix4f();
 		this.projectionMatrix = new Matrix4f();

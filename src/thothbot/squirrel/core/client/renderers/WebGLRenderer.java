@@ -1690,27 +1690,35 @@ public class WebGLRenderer
 
 			// refresh single material specific uniforms
 
-			if ( material.getClass() == LineBasicMaterial.class ) {
+			if ( material.getClass() == LineBasicMaterial.class ) 
+			{
 				refreshUniformsLine( m_uniforms, (LineBasicMaterial) material );
-
-			} else if ( material.getClass() == ParticleBasicMaterial.class ) {
+			} 
+			else if ( material.getClass() == ParticleBasicMaterial.class ) 
+			{
 				refreshUniformsParticle( m_uniforms, (ParticleBasicMaterial) material );
-
-			} else if ( material.getClass() == MeshPhongMaterial.class ) {
+			} 
+			else if ( material.getClass() == MeshPhongMaterial.class ) 
+			{
 				refreshUniformsPhong( m_uniforms, (MeshPhongMaterial) material );
-
-			} else if ( material.getClass() == MeshLambertMaterial.class ) {
+			} 
+			else if ( material.getClass() == MeshLambertMaterial.class ) 
+			{
 				refreshUniformsLambert( m_uniforms,  (MeshLambertMaterial) material );
-
-			} else if ( material.getClass() == MeshDepthMaterial.class ) {
-				if(camera.getClass() == OrthographicCamera.class) {
+			}
+			else if ( material.getClass() == MeshDepthMaterial.class ) 
+			{
+				if(camera.getClass() == OrthographicCamera.class) 
+				{
 					OrthographicCamera orthographicCamera = (OrthographicCamera) camera;
 					m_uniforms.get("mNear").value = orthographicCamera.getNear();
 					m_uniforms.get("mFar").value = orthographicCamera.getFar();
 				}
+				
 				m_uniforms.get("opacity").value = material.getOpacity();
-
-			} else if ( material.getClass() == MeshNormalMaterial.class ) {
+			} 
+			else if ( material.getClass() == MeshNormalMaterial.class ) 
+			{
 				m_uniforms.get("opacity").value = material.getOpacity();
 			}
 
@@ -1729,7 +1737,8 @@ public class WebGLRenderer
 				 material.getClass() == MeshPhongMaterial.class ||
 				 material instanceof AbstractMapMaterial ) {
 
-				if ( p_uniforms.get("cameraPosition") != null ) {
+				if ( p_uniforms.get("cameraPosition") != null ) 
+				{
 					Vector3f position = camera.getMatrixWorld().getPosition();
 					getGL().uniform3f( p_uniforms.get("cameraPosition"), position.getX(), position.getY(), position.getZ() );
 				}
@@ -1763,16 +1772,21 @@ public class WebGLRenderer
 	{
 		uniforms.get("opacity").value = material.getOpacity();
 
-		if ( this.gammaInput ) {
+		if ( this.gammaInput ) 
+		{
 			Color3f color = (Color3f) uniforms.get("diffuse").value;
 			color.copyGammaToLinear( material.getColor() );
 
-		} else
+		} 
+		else
+		{
 			uniforms.get("diffuse").value = material.getColor();
+		}
 
 		uniforms.get("map").texture = material.getMap();
 
-		if ( material.getMap() != null) {
+		if ( material.getMap() != null) 
+		{
 			Vector4f vector4 = (Vector4f)uniforms.get("offsetRepeat").value;
 			vector4.set( material.getMap().offset.getX(), material.getMap().offset.getY(), material.getMap().repeat.getX(), material.getMap().repeat.getY() );
 		}
@@ -1782,13 +1796,16 @@ public class WebGLRenderer
 		uniforms.get("envMap").texture = material.getEnvMap();
 		//uniforms.get("flipEnvMap").value = ( material.getEnvMap().getClass() == WebGLRenderTargetCube.class ) ? 1 : -1;
 
-		if ( this.gammaInput ) {
+		if ( this.gammaInput ) 
+		{
 			//uniforms.reflectivity.value = material.reflectivity * material.reflectivity;
 			uniforms.get("reflectivity").value = material.getReflectivity();
 
-		} else
+		} 
+		else
+		{
 			uniforms.get("reflectivity").value = material.getReflectivity();
-
+		}
 
 		uniforms.get("refractionRatio").value = material.getRefractionRatio();
 		uniforms.get("combine").value = material.getCombine().getValue();

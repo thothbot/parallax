@@ -22,6 +22,12 @@
 
 package thothbot.squirrel.core.shared.cameras;
 
+/**
+ * Implementation of Orthographic Camera.
+ * 
+ * @author thothbot
+ *
+ */
 public class OrthographicCamera extends Camera
 {
 
@@ -33,13 +39,13 @@ public class OrthographicCamera extends Camera
 	protected float near;
 	protected float far;
 
-	public OrthographicCamera(float left, float right, float top, float bottom) {
+	public OrthographicCamera(float left, float right, float top, float bottom) 
+	{
 		this(left, right, top, bottom, 0.1f, 2000f);
 	}
 
-	public OrthographicCamera(float left, float right, float top, float bottom, float near,
-			float far) {
-
+	public OrthographicCamera(float left, float right, float top, float bottom, float near,	float far) 
+	{
 		super();
 		this.left = left;
 		this.right = right;
@@ -114,6 +120,6 @@ public class OrthographicCamera extends Camera
 	
 	public void updateProjectionMatrix()
 	{
-		this.projectionMatrix.makeOrthographic( this.left, this.right, this.top, this.bottom, this.near, this.far );
+		this.projectionMatrix.makeOrthographic( getLeft(), getRight(), getTop(), getBottom(), getNear(), getFar() );
 	}
 }

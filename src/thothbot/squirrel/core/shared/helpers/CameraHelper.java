@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.core.Color3f;
 import thothbot.squirrel.core.shared.core.Geometry;
@@ -142,6 +143,7 @@ public class CameraHelper extends Object3D
 		// world matrix must be identity
 
 		CameraHelper.__c.getProjectionMatrix().copy( this.camera.getProjectionMatrix() );
+		Log.error("-----------------" + CameraHelper.__c.getProjectionMatrix() + ", " +  camera.getProjectionMatrix());
 
 		// center / target
 

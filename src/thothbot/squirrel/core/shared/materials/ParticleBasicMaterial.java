@@ -27,9 +27,11 @@ import thothbot.squirrel.core.client.shader.ShaderParticleBasic;
 import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.core.Color3f;
 
-public final class ParticleBasicMaterial extends Material {
+public final class ParticleBasicMaterial extends Material 
+{
 	
-	public static class ParticleBasicMaterialOptions extends Material.MaterialOptions {
+	public static class ParticleBasicMaterialOptions extends Material.MaterialOptions 
+	{
 		public Color3f color = new Color3f(0xffffff);
 		public Texture map = null;
 		public float size = 1.0f;
@@ -42,7 +44,8 @@ public final class ParticleBasicMaterial extends Material {
 	private float size;
 	private boolean sizeAttenuation;
 
-	public ParticleBasicMaterial(ParticleBasicMaterialOptions options){
+	public ParticleBasicMaterial(ParticleBasicMaterialOptions options)
+	{
 		super(options);
 		this.color = options.color;
 		this.map = options.map;
@@ -51,19 +54,23 @@ public final class ParticleBasicMaterial extends Material {
 		this.fog = true;
 	}
 
-	public Color3f getColor(){
+	public Color3f getColor()
+	{
 		return this.color;
 	}
 	
-	public Texture getMap(){
+	public Texture getMap()
+	{
 		return this.map;
 	}
 
-	public float getSize() {
+	public float getSize() 
+	{
 		return size;
 	}
 
-	public boolean isSizeAttenuation() {
+	public boolean isSizeAttenuation() 
+	{
 		return sizeAttenuation;
 	}
 	

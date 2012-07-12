@@ -30,10 +30,12 @@ import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
  * This matrix actually is array which is represented the following 
  * indexes:
  * 
+ * <pre>
  * 0 4  8 12
  * 1 5  9 13
  * 2 6 10 14
  * 3 7 11 15
+ * </pre>
  * 
  * @author thothbot
  *
@@ -63,10 +65,12 @@ public class Matrix4f
 	/**
 	 * Default constructor will make identity four-dimensional matrix.
 	 * 
+	 * <pre>
 	 * 1 0 0 0
 	 * 0 1 0 0
 	 * 0 0 1 0
 	 * 0 0 0 1
+	 * </pre>
 	 */
 	public Matrix4f() 
 	{
@@ -79,10 +83,12 @@ public class Matrix4f
 	 * This matrix uses input values n11-n44 and represented as 
 	 * the following:
 	 * 
+	 * <pre>
 	 * n11 n12 n13 n14
 	 * n21 n22 n23 n24
 	 * n31 n32 n33 n34
 	 * n41 n42 n43 n44
+	 * </pre>
 	 */
 	public Matrix4f(float n11, float n12, float n13, float n14, 
 			float n21, float n22, float n23, float n24, 
@@ -103,10 +109,12 @@ public class Matrix4f
 	 * get the current Matrix which is represented 
 	 * by Array[16] which the following indexes:
 	 * 
+	 * <pre>
      * 0 4  8 12
      * 1 5  9 13
      * 2 6 10 14
      * 3 7 11 15
+     * </pre>
 	 * 
 	 * @return the Array
 	 */
@@ -149,10 +157,12 @@ public class Matrix4f
 	 * Setting input values n11-n44 to the current matrix.
 	 * This matrix will be represented as the following:
 	 * 
+	 * <pre>
 	 * n11 n12 n13 n14
 	 * n21 n22 n23 n24
 	 * n31 n32 n33 n34
 	 * n41 n42 n43 n44
+	 * </pre>
 	 * 
 	 * @return the current matrix.
 	 */
@@ -188,10 +198,12 @@ public class Matrix4f
 	/**
 	 * Make  make identity four-dimensional matrix.
 	 * 
+	 * <pre>
 	 * 1 0 0 0
 	 * 0 1 0 0
 	 * 0 0 1 0
 	 * 0 0 0 1
+	 * </pre>
 	 */
 	public void identity()
 	{
@@ -539,10 +551,12 @@ public class Matrix4f
 	 * Sets the value of input array to the values of the current matrix.
 	 * The indexes in the array will be the following:
 	 * 
+	 * <pre>
 	 * 0 4  8 12
      * 1 5  9 13
      * 2 6 10 14
      * 3 7 11 15
+     * </pre>
      * 
 	 * @param flat the array for storing matrix values
 	 * 
@@ -557,10 +571,12 @@ public class Matrix4f
 	 * Sets the value of input array to the values of the current matrix.
 	 * The indexes in the array will be the following:
 	 * 
+	 * <pre>
 	 * 0 4  8 12
      * 1 5  9 13
      * 2 6 10 14
      * 3 7 11 15
+     * </pre>
      * 
 	 * @param flat the array for storing matrix values
 	 * @param offset the offset value
@@ -1314,6 +1330,16 @@ public class Matrix4f
 		return this;
 	}
 
+	/**
+	 * Making Perspective Projection Matrix
+	 * 
+	 * @param fov    the field Of View
+	 * @param aspect the aspect ration
+	 * @param near   the near value
+	 * @param far    the far value
+	 * 
+	 * @return the current Projection Matrix
+	 */
 	public Matrix4f makePerspective(float fov, float aspect, float near, float far)
 	{
 
@@ -1325,23 +1351,35 @@ public class Matrix4f
 		return this.makeFrustum( xmin, xmax, ymin, ymax, near, far );
 	}
 
-	public void makeOrthographic(float left, float right, float bottom, float top, float near,
-			float far)
+	/**
+	 * Making Orthographic Projection Matrix
+	 * 
+	 * @param left
+	 * @param right
+	 * @param bottom
+	 * @param top
+	 * @param near
+	 * @param far
+	 * 
+	 * @return the current Projection Matrix
+	 */
+	public Matrix4f makeOrthographic(float left, float right, float bottom, float top, float near, float far)
 	{
+		Float32Array te = this.elements;
 		float w = right - left;
 		float h = top - bottom;
 		float p = far - near;
 
-		float x = (right + left) / w;
-		float y = (top + bottom) / h;
-		float z = (far + near) / p;
+		float x = ( right + left ) / w;
+		float y = ( top + bottom ) / h;
+		float z = ( far + near )   / p;
 
-		set(
-			(2.0f / w), 0f, 0f, 0f, 
-			0f, (2.0f / h), 0f, 0f, 
-			0f, 0f, (-2.0f / p), 0f, 
-			-x, -y, -z, 1f
-		);
+		te.set(0, 2.0f / w); te.set(4, 0.0f);     te.set(8, 0.0f);       te.set(12, -x);
+		te.set(1, 0.0f);     te.set(5, 2.0f / h); te.set(9, 0.0f);       te.set(13, -y);
+		te.set(2, 0.0f);     te.set(6, 0.0f);     te.set(10, -2.0f / p); te.set(14, -z);
+		te.set(3, 0.0f);     te.set(7, 0.0f);     te.set(11, 0.0f);      te.set(15, 1.0f);
+
+		return this;
 	}
 
 	/**

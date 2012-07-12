@@ -45,7 +45,8 @@ public final class ParticleCanvasMaterial extends Material
 		};
 	}
 
-	public ParticleCanvasMaterial(ParticleCanvasMaterialOptions options) {
+	public ParticleCanvasMaterial(ParticleCanvasMaterialOptions options) 
+	{
 		super(options);
 		this.color = options.color;
 		this.program = options.program;

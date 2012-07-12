@@ -191,7 +191,8 @@ public class ParticleSystem extends GeometryObject
 
 			}
 
-			for ( int c = 0; c < colors.size(); c ++ ) {
+			for ( int c = 0; c < colors.size(); c ++ ) 
+			{
 				int offset = c * 3;
 
 				Color3f color = colors.get( sortArray.get(c).get(1) );
