@@ -50,7 +50,7 @@ public abstract class Fog
 	}
 
 	/**
-	 * Set color of this Fog
+	 * Set color for the Fog
 	 * 
 	 * @param color the color instance
 	 */
@@ -60,7 +60,7 @@ public abstract class Fog
 	}
 
 	/**
-	 * Get color of this Fog
+	 * Get color of the Fog
 	 * 
 	 * @return the color instance
 	 */

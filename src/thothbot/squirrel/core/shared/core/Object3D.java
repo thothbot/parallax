@@ -33,11 +33,19 @@ import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.objects.Line;
 import thothbot.squirrel.core.shared.scenes.Scene;
 
+/**
+ * Implementation of DimensionalObject
+ * 
+ * @author thothbot
+ *
+ */
 public class Object3D implements DimensionalObject
 {
 	private static int Object3DCount = 0;
 
 	protected int id = 0;
+	
+	protected String name;
 
 	protected DimensionalObject parent;
 
@@ -46,38 +54,36 @@ public class Object3D implements DimensionalObject
 	protected Vector3f position;
 
 	protected Vector3f rotation;
-
-	protected boolean dynamic;
-
-	protected boolean rotationAutoUpdate;
-
-	protected String name;
-
+	
 	protected Vector3f scale;
 
 	protected Vector3f up;
-
+	
+	private Vector3f vector;
+	
 	protected Matrix4f matrix;
 
 	protected Matrix4f matrixWorld;
 
 	protected Matrix4f matrixRotationWorld;
 
+	protected Quaternion quaternion;
+
+	protected boolean dynamic;
+
+	protected boolean rotationAutoUpdate;
+	
 	protected boolean matrixWorldNeedsUpdate;
 
 	protected boolean matrixAutoUpdate;
-
-	protected Quaternion quaternion;
-
+	
 	protected boolean useQuaternion;
+	
+	protected boolean visible;
 
 	protected float boundRadius;
 
 	protected float boundRadiusScale;
-
-	protected boolean visible;
-
-	private Vector3f vector;
 
 	// ///////////////////////////////////////////////////////////////////////////////
 	// TODO: Check
@@ -139,132 +145,72 @@ public class Object3D implements DimensionalObject
 		this.name = "";
 	}
 
+	@Override
 	public int getId()
 	{
 		return this.id;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getParent()
-	 */
 	@Override
 	public DimensionalObject getParent()
 	{
 		return this.parent;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setParent(com
-	 * .google.code.gwt.threejs.client.core.Object3D)
-	 */
 	@Override
 	public void setParent(DimensionalObject parent)
 	{
 		this.parent = parent;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getChildren()
-	 */
 	@Override
 	public List<DimensionalObject> getChildren()
 	{
 		return this.children;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setChildren(java
-	 * .util.Collection)
-	 */
 	@Override
 	public void setChildren(Collection<? extends DimensionalObject> children)
 	{
 		this.children = new ArrayList<DimensionalObject>(children);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getPosition()
-	 */
 	@Override
 	public Vector3f getPosition()
 	{
 		return this.position;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setPosition(com
-	 * .google.code.gwt.threejs.client.core.Vector3)
-	 */
 	@Override
 	public void setPosition(Vector3f position)
 	{
 		this.position = position;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getRotation()
-	 */
 	@Override
 	public Vector3f getRotation()
 	{
 		return this.rotation;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setRotation(com
-	 * .google.code.gwt.threejs.client.core.Vector3)
-	 */
 	@Override
 	public void setRotation(Vector3f rotation)
 	{
 		this.rotation = rotation;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setDynamic(java
-	 * .lang.Boolean)
-	 */
 	@Override
 	public void setDynamic(boolean dynamic)
 	{
 		this.dynamic = dynamic;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getDynamic()
-	 */
 	@Override
 	public boolean isDynamic()
 	{
 		return dynamic;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setRotationAutoUpdate
-	 * (java.lang.boolean)
-	 */
 	@Override
 	public void setRotationAutoUpdate(boolean rotationAutoUpdate)
 	{
@@ -272,309 +218,162 @@ public class Object3D implements DimensionalObject
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getRotationAutoUpdate ()
-	 */
 	@Override
 	public boolean isRotationAutoUpdate()
 	{
 		return rotationAutoUpdate;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setName(java. lang.String)
-	 */
 	@Override
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getName()
-	 */
 	@Override
 	public String getName()
 	{
 		return name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getScale()
-	 */
 	@Override
 	public Vector3f getScale()
 	{
 		return this.scale;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setScale(com.
-	 * google.code.gwt.threejs.client.core.Vector3)
-	 */
 	@Override
 	public void setScale(Vector3f scale)
 	{
 		this.scale = scale;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getUp()
-	 */
 	@Override
 	public Vector3f getUp()
 	{
 		return this.up;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setUp(com.google
-	 * .code.gwt.threejs.client.core.Vector3)
-	 */
 	@Override
 	public void setUp(Vector3f up)
 	{
 		this.up = up;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getMatrix()
-	 */
 	@Override
 	public Matrix4f getMatrix()
 	{
 		return this.matrix;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setMatrix(com
-	 * .google.code.gwt.threejs.client.core.Matrix4)
-	 */
 	@Override
 	public void setMatrix(Matrix4f matrix)
 	{
 		this.matrix = matrix;
 	};
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getMatrixWorld()
-	 */
 	@Override
 	public Matrix4f getMatrixWorld()
 	{
 		return this.matrixWorld;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setMatrixWorld
-	 * (com.google.code.gwt.threejs.client.core.Matrix4)
-	 */
 	@Override
 	public void setMatrixWorld(Matrix4f matrixWorld)
 	{
 		this.matrixWorld = matrixWorld;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject# getMatrixRotationWorld()
-	 */
 	@Override
 	public Matrix4f getMatrixRotationWorld()
 	{
 		return this.matrixRotationWorld;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#
-	 * setMatrixRotationWorld(com.google.code.gwt.threejs.client.core.Matrix4)
-	 */
 	@Override
 	public void setMatrixRotationWorld(Matrix4f rotation)
 	{
 		this.matrixRotationWorld = rotation;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#
-	 * getMatrixWorldNeedsUpdate()
-	 */
 	@Override
 	public boolean isMatrixWorldNeedsUpdate()
 	{
 		return this.matrixWorldNeedsUpdate;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#
-	 * setMatrixWorldNeedsUpdate(java.lang.boolean)
-	 */
 	@Override
 	public void setMatrixWorldNeedsUpdate(boolean needsUpdate)
 	{
 		this.matrixWorldNeedsUpdate = needsUpdate;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getMatrixAutoUpdate ()
-	 */
 	@Override
 	public boolean isMatrixAutoUpdate()
 	{
 		return this.matrixAutoUpdate;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setMatrixAutoUpdate
-	 * (java.lang.boolean)
-	 */
 	@Override
 	public void setMatrixAutoUpdate(boolean autoUpdate)
 	{
 		this.matrixAutoUpdate = autoUpdate;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getQuaternion()
-	 */
 	@Override
 	public Quaternion getQuaternion()
 	{
 		return this.quaternion;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setQuaternion
-	 * (com.google.code.gwt.threejs.client.core.Quaternion)
-	 */
 	@Override
 	public void setQuaternion(Quaternion quaternion)
 	{
 		this.quaternion = quaternion;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getUseQuaternion ()
-	 */
 	@Override
 	public boolean isUseQuaternion()
 	{
 		return this.useQuaternion;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setUseQuaternion
-	 * (java.lang.boolean)
-	 */
 	@Override
 	public void setUseQuaternion(boolean use)
 	{
 		this.useQuaternion = use;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getBoundRadius()
-	 */
 	@Override
 	public double getBoundRadius()
 	{
 		return this.boundRadius;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setBoundRadius (float)
-	 */
 	@Override
 	public void setBoundRadius(float boundRadius)
 	{
 		this.boundRadius = boundRadius;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getBoundRadiusScale ()
-	 */
 	@Override
 	public double getBoundRadiusScale()
 	{
 		return this.boundRadiusScale;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setBoundRadiusScale
-	 * (float)
-	 */
 	@Override
 	public void setBoundRadiusScale(float scale)
 	{
 		this.boundRadiusScale = scale;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#getVisible()
-	 */
 	@Override
 	public boolean isVisible()
 	{
 		return this.visible;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.alexusachev.lib.core.DimentionObject#setVisible(java
-	 * .lang.boolean)
-	 */
 	@Override
 	public void setVisible(boolean visible)
 	{
@@ -651,7 +450,8 @@ public class Object3D implements DimensionalObject
 	public <E extends DimensionalObject> void removeChild(E child)
 	{
 		int index = this.children.indexOf(child);
-		if (index != -1) {
+		if (index != -1) 
+		{
 			child.setParent(null);
 			this.children.remove(index);
 		}
@@ -660,17 +460,17 @@ public class Object3D implements DimensionalObject
 	@Override
 	public void updateMatrix()
 	{
-		this.matrix.setPosition(this.position);
+		getMatrix().setPosition(this.position);
 
-		if (this.useQuaternion)  {
-			this.matrix.setRotationFromQuaternion(this.quaternion);
-		} else {
-			this.matrix.setRotationFromEuler(this.rotation);
-		}
+		if (isUseQuaternion())
+			getMatrix().setRotationFromQuaternion(getQuaternion());
+		else
+			getMatrix().setRotationFromEuler(getRotation());
 
-		if ( this.scale.x != 1 || this.scale.y != 1 || this.scale.z != 1) {
+		if ( this.scale.x != 1 || this.scale.y != 1 || this.scale.z != 1) 
+		{
 
-			this.matrix.scale(this.scale);
+			getMatrix().scale(this.scale);
 			this.boundRadiusScale = Math.max(this.scale.x, Math.max( this.scale.y, this.scale.z));
 		}
 
@@ -688,11 +488,11 @@ public class Object3D implements DimensionalObject
 		
 		if (this.matrixWorldNeedsUpdate || forceUpdate) {
 
-			if (parentMatrixWorld != null) {
+			if (parentMatrixWorld != null)
 				this.matrixWorld.multiply(parentMatrixWorld, this.matrix);
-			} else {
+			else
 				this.matrixWorld.copy(this.matrix);
-			}
+
 			this.matrixRotationWorld.extractRotation( this.matrixWorld, this.scale );
 			this.matrixWorldNeedsUpdate = false;
 			forceUpdate = true;
@@ -728,9 +528,6 @@ public class Object3D implements DimensionalObject
 
 		return null;
 	}
-
-	//////////////////////////////////////////////////////////////////
-	// TODO: Check
 
 	public void applyMatrix(Matrix4f matrix)
 	{

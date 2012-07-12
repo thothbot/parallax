@@ -29,15 +29,14 @@ import thothbot.squirrel.core.shared.cameras.Camera;
  * 
  * @author thothbot
  */
-public interface DimensionalObject
-{
+public interface DimensionalObject {
 	/**
 	 * Get object ID.
 	 * 
 	 * @return the object ID
 	 */
 	public int getId();
-	
+
 	/**
 	 * Get name of the current object.
 	 * 
@@ -48,36 +47,40 @@ public interface DimensionalObject
 	/**
 	 * Adding child object to the current object
 	 * 
-	 * @param child the Child DimensionalObject 
+	 * @param child
+	 *            the Child DimensionalObject
 	 */
 	public <E extends DimensionalObject> void addChild(E child);
-	
+
 	/**
 	 * Remove child DimensionalObject from the current object
 	 * 
-	 * @param child the Child DimensionalObject
+	 * @param child
+	 *            the Child DimensionalObject
 	 */
 	public <E extends DimensionalObject> void removeChild(E child);
 
 	/**
-	 * Get list of children DimensionalObject asictiated with the
-	 * current object.
+	 * Get list of children DimensionalObject asictiated with the current
+	 * object.
 	 * 
 	 * @return the list of children DimensionalObject
 	 */
 	public List<DimensionalObject> getChildren();
-	
+
 	/**
-	 * Get child DimensionalObject associated with the current
-	 * object by its name.
+	 * Get child DimensionalObject associated with the current object by its
+	 * name.
 	 * 
-	 * @param name      the name of child DimensionalObject
-	 * @param recursive flag to search in children objects
+	 * @param name
+	 *            the name of child DimensionalObject
+	 * @param recursive
+	 *            flag to search in children objects
 	 * 
 	 * @return the child DimensionalObject
 	 */
 	public DimensionalObject getChildByName(String name, boolean recursive);
-	
+
 	/**
 	 * Get parent DimensionalObject in which this object is included.
 	 * 
@@ -88,15 +91,33 @@ public interface DimensionalObject
 	public boolean isDynamic();
 
 	public boolean isMatrixAutoUpdate();
+
+	public void setMatrixAutoUpdate(boolean autoUpdate);
 	
 	public boolean isMatrixWorldNeedsUpdate();
+
+	public void setMatrixWorldNeedsUpdate(boolean needsUpdate);
 	
 	public boolean isRotationAutoUpdate();
+
+	public void setRotationAutoUpdate(boolean rotationAutoUpdate);
 	
 	public boolean isUseQuaternion();
 
+	public void setUseQuaternion(boolean use);
+
+	/**
+	 * Chick if the DimensionalObject visible or not
+	 */
 	public boolean isVisible();
 	
+	/**
+	 * Set object visibility.
+	 * 
+	 * @param visible the visibility: true of false
+	 */
+	public void setVisible(boolean visible);
+
 	public double getBoundRadius();
 
 	public double getBoundRadiusScale();
@@ -129,14 +150,10 @@ public interface DimensionalObject
 
 	public void setMatrix(Matrix4f matrix);
 
-	public void setMatrixAutoUpdate(boolean autoUpdate);
-
 	public void setMatrixRotationWorld(Matrix4f rotation);
 
 	public void setMatrixWorld(Matrix4f matrixWorld);
-
-	public void setMatrixWorldNeedsUpdate(boolean needsUpdate);
-
+	
 	public void setName(String name);
 
 	public void setParent(DimensionalObject parent);
@@ -147,29 +164,55 @@ public interface DimensionalObject
 
 	public void setRotation(Vector3f rotation);
 
-	public void setRotationAutoUpdate(boolean rotationAutoUpdate);
-
 	public void setScale(Vector3f scale);
 
 	public void setUp(Vector3f up);
 
-	public void setUseQuaternion(boolean use);
-
-	public void setVisible(boolean visible);
-	
 	public void applyMatrix(Matrix4f matrix);
 
+	/**
+	 * Move object on XYZ-axis by defined distance.
+	 * 
+	 * @param distance the moving distance
+	 * @param axis     the axis
+	 */
 	public void translate(float distance, Vector3f axis);
 
+	/**
+	 * Move object on X-axis by defined distance.
+	 * 
+	 * @param distance the moving distance
+	 */
 	public void translateX(float distance);
-	
+
+	/**
+	 * Move object on Y-axis by defined distance.
+	 * 
+	 * @param distance the moving distance
+	 */
 	public void translateY(float distance);
 
+	/**
+	 * Move object on Z-axis by defined distance.
+	 * 
+	 * @param distance the moving distance
+	 */
 	public void translateZ(float distance);
 
-	public void update(Matrix4f parentMatrixWorld, boolean forceUpdate, Camera camera);
-	
+	/**
+	 * Update matrices of this object and all chilndren objects.
+	 *  
+	 * @param parentMatrixWorld
+	 * @param forceUpdate
+	 * @param camera
+	 */
+	public void update(Matrix4f parentMatrixWorld, boolean forceUpdate,
+			Camera camera);
+
+	/**
+	 * Do update of the object's matrix
+	 */
 	public void updateMatrix();
-	
+
 	public void updateMatrixWorld(boolean force);
 }

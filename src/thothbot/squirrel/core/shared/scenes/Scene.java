@@ -39,9 +39,9 @@ import thothbot.squirrel.core.shared.objects.Sprite;
  * 3D Scene. The basic class for rendering.
  * To use this Object in rendering you should add at least one {@link DimensionalObject} 
  * and {@link Camera}.
- * Also you may want to add Lights and fog to the Scene Object. 
+ * Also you may want to add Lights and {@link Fog} to the Scene Object. 
  * 
- * @author krs
+ * @author thothbot
  *
  */
 public final class Scene extends Object3D
@@ -97,7 +97,7 @@ public final class Scene extends Object3D
 	}
 	
 	/**
-	 * get DimensionalObject associated with the Scene.
+	 * Get DimensionalObject associated with the Scene.
 	 * 
 	 * @return the list of DimensionalObject
 	 */
@@ -107,7 +107,7 @@ public final class Scene extends Object3D
 	}
 	
 	/**
-	 * get list of lights associated with the Scene.
+	 * Get list of lights associated with the Scene.
 	 * 
 	 * @return the list of lights.
 	 */
@@ -117,7 +117,7 @@ public final class Scene extends Object3D
 	}
 	
 	/**
-	 * get fog associated with the Scene.
+	 * Get fog associated with the Scene.
 	 * 
 	 * @return the fog
 	 */

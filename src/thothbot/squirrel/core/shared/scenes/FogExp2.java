@@ -28,7 +28,7 @@ import thothbot.squirrel.core.client.shader.Uniform;
 import thothbot.squirrel.core.shared.Log;
 
 /**
- * This class implements fog with defined density.
+ * This class implements fog with density.
  * 
  * @author thothbot
  *
