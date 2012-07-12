@@ -21,6 +21,7 @@ package thothbot.squirrel.core.client;
 
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.cameras.Camera;
+import thothbot.squirrel.core.shared.cameras.PerspectiveCamera;
 import thothbot.squirrel.core.shared.scenes.Scene;
 
 import com.google.gwt.core.client.Duration;
@@ -37,65 +38,70 @@ public abstract class RenderingScene extends Rendering
 	private Camera camera;
 	private RenderingSceneCallback renderingSceneCallback;
 
-	/*
-	 * get {@link WebGLRenderer} object
-	 */
 	protected WebGLRenderer getRenderer() 
 	{
 		return this.renderer;
 	}
 	
-	/*
-	 * Load default {@link Scene} for this Rendering Scene
+	/**
+	 * Define the main {@link Scene} for the Rendering. 
 	 */
 	protected void loadScene()
 	{
 		setScene(new Scene());
 	}
 
-	/*
-	 * Set {@link Scene}
+	/**
+	 * Sets the main {@link Scene} object.
 	 * 
-	 * @param scene
-	 * 			{@link Scene} object
+	 * @param scene the Scene instance.
 	 */
 	protected void setScene(Scene scene)
 	{
 		this.scene = scene;
 	}
 	
-	/*
-	 * get {@link Scene} object
+	/**
+	 * Gets the main {@link Scene} object.
+	 * 
+	 * @return the Scene object.
 	 */
 	public Scene getScene() 
 	{
 		return this.scene;
 	}
 
-	/*
-	 * Load default {@link Camera} for this Rendering Scene
+	/**
+	 * There should be defined default camera for the current {@link Scene},
 	 */
 	protected abstract void loadCamera();
-	
-	/*
-	 * Set {@link Camera}
+
+	/**
+	 * Sets default {@link Camera} to the current {@Scene}
 	 * 
-	 * @param camera
-	 * 			{@link Camera} object
+	 * @param camera the Camera instance.
 	 */
 	protected void setCamera(Camera camera)
 	{
 		this.camera = camera;
 	}
 
-	/*
-	 * get {@link Camera} object
+	/**
+	 * Gets default {@link Camera} object associated with the current {@link Scene}.
+	 * 
+	 * @return the Camera instance
 	 */
 	public Camera getCamera() 
 	{
 		return this.camera;
 	}
 	
+	/**
+	 * Initialize the scene.
+	 * 
+	 * @param renderer the renderer instance
+	 * @param renderingSceneCallback this parameter used for updating debug info. Can be null.
+	 */
 	public void init(WebGLRenderer renderer, RenderingSceneCallback renderingSceneCallback)
 	{
 		if(this.renderer != null)
@@ -116,5 +122,18 @@ public abstract class RenderingScene extends Rendering
 		this.renderer.render(getScene(), getCamera());
 		
 		renderingSceneCallback.onUpdate();
+	}
+	
+	/**
+	 * Called when size has been changed on Canvas element. 
+	 * This method basically used for updating aspect ratio for {@link PerspectiveCamera}.
+	 */
+	protected void onResize()
+	{
+		if(getCamera() != null && getCamera().getClass() == PerspectiveCamera.class )
+		{
+			((PerspectiveCamera)getCamera()).setAspectRatio(
+					getRenderer().getCanvas().getAspectRation());			
+		}
 	}
 }

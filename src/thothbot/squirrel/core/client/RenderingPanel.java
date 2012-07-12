@@ -259,11 +259,8 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 			{
 				setSize(RenderingPanel.this.getOffsetWidth(), RenderingPanel.this.getOffsetHeight());
 
-				if(renderingScene != null && renderingScene.getCamera() != null && renderingScene.getCamera() instanceof PerspectiveCamera )
-				{
-					PerspectiveCamera pCamera = (PerspectiveCamera)renderingScene.getCamera();
-					pCamera.setAspectRatio(renderingScene.getRenderer().getCanvas().getAspectRation());
-				}
+				if(renderingScene != null)
+					renderingScene.onResize();
 			}
 		});
 	}
