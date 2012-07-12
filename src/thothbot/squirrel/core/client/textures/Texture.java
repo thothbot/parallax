@@ -58,59 +58,6 @@ public class Texture
 		SPHERICAL_REFRACTION // SphericalRefractionMapping = function () {};
 	};
 
-//	// Wrapping modes
-//	public static enum WRAPPING_MODE {
-//		REPEAT(WebGLRenderingContext.REPEAT), // RepeatWrapping = 0;
-//		CLAMP_TO_EDGE(WebGLRenderingContext.CLAMP_TO_EDGE), // ClampToEdgeWrapping = 1;
-//		MIRRORED_REPEAT(WebGLRenderingContext.MIRRORED_REPEAT); // MirroredRepeatWrapping = 2;
-//		
-//		private final int value;
-//		private WRAPPING_MODE(int value) { this.value = value; }
-//		public int getValue() { return value; }
-//	};
-//
-//	// Filters
-//	public static enum FILTER {
-//		NEAREST(WebGLRenderingContext.NEAREST), // NearestFilter = 3;
-//		NEAREST_MIP_MAP_NEAREST(WebGLRenderingContext.NEAREST_MIPMAP_NEAREST), // NearestMipMapNearestFilter = 4;
-//		NEAREST_MIP_MAP_LINEAR(WebGLRenderingContext.NEAREST_MIPMAP_LINEAR), // NearestMipMapLinearFilter = 5;
-//		LINEAR(WebGLRenderingContext.LINEAR), // LinearFilter = 6;
-//		LINEAR_MIP_MAP_NEAREST(WebGLRenderingContext.LINEAR_MIPMAP_NEAREST), // LinearMipMapNearestFilter = 7;
-//		LINEAR_MIP_MAP_LINEAR(WebGLRenderingContext.LINEAR_MIPMAP_LINEAR); // LinearMipMapLinearFilter = 8;
-//		
-//		private final int value;
-//		private FILTER(int value) { this.value = value; }
-//		public int getValue() { return value; }
-//	};
-//
-//	// Types
-//	public static enum TYPE {
-//		BYTE(WebGLRenderingContext.BYTE), // ByteType = 9;
-//		UNSIGNED_BYTE(WebGLRenderingContext.UNSIGNED_BYTE), // UnsignedByteType = 10;
-//		SHORT(WebGLRenderingContext.SHORT), // ShortType = 11;
-//		UNSIGNED_SHORT(WebGLRenderingContext.UNSIGNED_SHORT), // UnsignedShortType = 12;
-//		INT(WebGLRenderingContext.INT), // IntType = 13;
-//		UNSIGNED_INT(WebGLRenderingContext.UNSIGNED_INT), // UnsignedIntType = 14;
-//		FLOAT(WebGLRenderingContext.FLOAT); // FloatType = 15;
-//		
-//		private final int value;
-//		private TYPE(int value) { this.value = value; }
-//		public int getValue() { return value; }
-//	};
-//
-//	// Formats
-//	public static enum FORMAT {
-//		ALPHA(WebGLRenderingContext.ALPHA), // THREE.AlphaFormat = 16;
-//		RGB(WebGLRenderingContext.RGB), // RGBFormat = 17;
-//		RGBA(WebGLRenderingContext.RGBA), // RGBAFormat = 18;
-//		LUMINANCE(WebGLRenderingContext.LUMINANCE), // LuminanceFormat = 19;
-//		LUMINANCE_ALPHA(WebGLRenderingContext.LUMINANCE_ALPHA); // LuminanceAlphaFormat = 20;
-//		
-//		private final int value;
-//		private FORMAT(int value) { this.value = value; }
-//		public int getValue() { return value; }
-//	};
-
 	public int id;
 
 	private Image image;

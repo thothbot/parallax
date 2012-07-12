@@ -43,8 +43,8 @@ public class Material
 {
 	public static int MaterialCount;
 
-	/*
-	 * shading
+	/**
+	 * Shading
 	 */
 	public static enum SHADING {
 		NO, // NoShading = 0;
@@ -52,8 +52,8 @@ public class Material
 		SMOOTH // SmoothShading = 2;
 	};
 
-	/*
-	 * colors
+	/**
+	 * Colors
 	 */
 	public static enum COLORS {
 		NO, // NoColors = 0;
@@ -61,8 +61,8 @@ public class Material
 		VERTEX // VertexColors = 2;
 	};
 
-	/*
-	 * blending modes
+	/**
+	 * Blending modes
 	 */
 	public static enum BLENDING {
 		NO, // NoBlending = 0;
@@ -73,46 +73,6 @@ public class Material
 		ADDITIVE_ALPHA, // AdditiveAlphaBlending = 5;
 		CUSTOM // CustomBlending = 6;
 	};
-
-//	/*
-//	 * custom blending equations (numbers start from 100 not to clash with other
-//	 * mappings to OpenGL constants defined in Texture.js)
-//	 */
-//
-//	public static enum BLENDING_EQUATION {
-//		ADD(WebGLRenderingContext.FUNC_ADD), // AddEquation = 100;
-//		SUBSTRACT(WebGLRenderingContext.FUNC_SUBTRACT), // SubtractEquation = 101;
-//		REVERSE_SUBSTRACT(WebGLRenderingContext.FUNC_REVERSE_SUBTRACT); // ReverseSubtractEquation = 102;
-//		
-//		private final int value;
-//		private BLENDING_EQUATION(int value) { this.value = value; }
-//		public int getValue() { return value; }
-//	};
-//
-//	/*
-//	 * custom blending destination factors
-//	 */
-//	public static enum BLENDING_FACTORS {
-//		ZERO(WebGLRenderingContext.ZERO), // ZeroFactor = 200;
-//		ONE(WebGLRenderingContext.ONE), // OneFactor = 201;
-//		SRC_COLOR(WebGLRenderingContext.SRC_COLOR), // SrcColorFactor = 202;
-//		ONE_MINUS_SRC_COLOR(WebGLRenderingContext.ONE_MINUS_SRC_COLOR), // OneMinusSrcColorFactor = 203;
-//		SRC_ALPHA(WebGLRenderingContext.SRC_ALPHA), // SrcAlphaFactor = 204;
-//		ONE_MINUS_SRC_ALPHA(WebGLRenderingContext.ONE_MINUS_SRC_ALPHA), // OneMinusSrcAlphaFactor = 205;
-//		DST_ALPHA(WebGLRenderingContext.DST_ALPHA), // DstAlphaFactor = 206;
-//		ONE_MINUS_DST_ALPHA(WebGLRenderingContext.ONE_MINUS_DST_ALPHA), // OneMinusDstAlphaFactor = 207;
-//
-//		/*
-//		 * custom blending source factors
-//		 */
-//		DST_COLOR(WebGLRenderingContext.DST_COLOR), // DstColorFactor = 208;
-//		ONE_MINUS_DST_COLOR(WebGLRenderingContext.ONE_MINUS_DST_COLOR), // OneMinusDstColorFactor = 209;
-//		SRC_APLPHA_SATURATE(WebGLRenderingContext.SRC_ALPHA_SATURATE); // SrcAlphaSaturateFactor = 210;
-//		
-//		private final int value;
-//		private BLENDING_FACTORS(int value) { this.value = value; }
-//		public int getValue() { return value; }
-//	}
 
 	private int id;
 	
