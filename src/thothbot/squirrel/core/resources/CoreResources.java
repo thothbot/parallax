@@ -27,12 +27,6 @@ import com.google.gwt.resources.client.ImageResource;
 public interface CoreResources extends ClientBundle
 {
 	CoreResources INSTANCE = GWT.create(CoreResources.class);
-
-	@Source("images/loading_white.gif")
-	ImageResource loading_white();
-	
-	@Source("images/loading_black.gif")
-	ImageResource loading_black();
 	
 	@Source("style.css")
 	@CssResource.NotStrict
