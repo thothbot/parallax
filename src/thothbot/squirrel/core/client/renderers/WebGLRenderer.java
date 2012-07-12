@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.squirrel.core.client.context.Canvas3d;
-import thothbot.squirrel.core.client.context.Canvas3dAttributes;
-import thothbot.squirrel.core.client.context.Canvas3dException;
 import thothbot.squirrel.core.client.gl2.WebGLFramebuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
 import thothbot.squirrel.core.client.gl2.WebGLUniformLocation;
@@ -98,7 +96,8 @@ import com.google.gwt.user.client.ui.Image;
  */
 public class WebGLRenderer
 {
-	public static enum PRECISION {
+	public static enum PRECISION 
+	{
 		HIGHP,
 		MEDIUMP,
 		LOWP
@@ -1645,7 +1644,8 @@ public class WebGLRenderer
 		Map<String, WebGLUniformLocation> p_uniforms = program.uniforms;
 		Map<String, Uniform> m_uniforms = material.uniforms;
 
-		if ( program != _currentProgram ) {
+		if ( program != _currentProgram ) 
+		{
 			getGL().useProgram( program.getProgram() );
 			this._currentProgram = program;
 
@@ -1665,8 +1665,8 @@ public class WebGLRenderer
 				this._currentCamera = camera;
 		}
 
-		if ( refreshMaterial ) {
-
+		if ( refreshMaterial ) 
+		{
 			// refresh uniforms common to several materials
 
 			if ( fog != null && material.fog)
@@ -1822,10 +1822,10 @@ public class WebGLRenderer
 	{
 		uniforms.get("psColor").value = material.getColor();
 		uniforms.get("opacity").value = material.getOpacity();
-		uniforms.get("size").value = material.getSize();
-		uniforms.get("scale").value = getCanvas().getHeight() / 2.0f;
+		uniforms.get("size").value    = material.getSize();
+		uniforms.get("scale").value   = getCanvas().getHeight() / 2.0f;
 
-		uniforms.get("map").texture = material.getMap();
+		uniforms.get("map").texture   = material.getMap();
 	}
 
 	public void refreshUniformsPhong ( Map<String, Uniform> uniforms, MeshPhongMaterial material ) {
@@ -2449,7 +2449,7 @@ Log.error("?????????????");
 			int _maxVertexTextures, String fragmentShader, String vertexShader,
 			Map<String, Uniform> uniforms, Map<String, WebGLCustomAttribute> attributes, ProgramParameters parameters ) 
 	{
-		String cashKey = parameters.toString();
+		String cashKey = fragmentShader + vertexShader + parameters.toString();
 		if(this._programs.containsKey(cashKey))
 			return this._programs.get(cashKey);
 

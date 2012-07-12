@@ -40,22 +40,22 @@ import thothbot.squirrel.core.shared.core.Vector2f;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.core.Vector4f;
 import thothbot.squirrel.core.shared.core.WebGLCustomAttribute;
-import thothbot.squirrel.core.shared.materials.LineBasicMaterial;
 import thothbot.squirrel.core.shared.materials.Material;
+import thothbot.squirrel.core.shared.materials.ParticleBasicMaterial;
 
 public class ParticleSystem extends GeometryObject
 {
 	public boolean sortParticles = false;
 	public boolean frustumCulled = false;
-	
-	private static LineBasicMaterial.LineBasicMaterialOptions defaultMaterialOptions = new LineBasicMaterial.LineBasicMaterialOptions();
+
+	private static ParticleBasicMaterial.ParticleBasicMaterialOptions defaultMaterialOptions = new ParticleBasicMaterial.ParticleBasicMaterialOptions();
 	static {
 		defaultMaterialOptions.color = new Color3f((int)Math.random() * 0xffffff);
 	};
 	
 	public ParticleSystem(Geometry geometry) 
 	{
-		this(geometry, new LineBasicMaterial(defaultMaterialOptions));
+		this(geometry, new ParticleBasicMaterial(defaultMaterialOptions));
 	}
 
 	public ParticleSystem(Geometry geometry, Material material) 

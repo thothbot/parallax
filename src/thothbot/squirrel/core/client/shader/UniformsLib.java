@@ -69,19 +69,19 @@ public class UniformsLib
 			put("ambientLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 			
 			put("directionalLightDirection", new Uniform(Uniform.TYPE.FV, Float32Array.createArray() ));
-			put("directionalLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+			put("directionalLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 			
-			put("pointLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+			put("pointLightColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 			put("pointLightPosition", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 			
 			put("pointLightDistance", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 			
-			put("spotLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			put("spotLightPosition", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+			put("spotLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+			put("spotLightPosition",  new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 			put("spotLightDirection", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			put("spotLightDistance", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-			put("spotLightAngle", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-			put("spotLightExponent", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+			put("spotLightDistance",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+			put("spotLightAngle",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+			put("spotLightExponent",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		}
 	};
 	
@@ -89,22 +89,22 @@ public class UniformsLib
 		{
 			put("psColor", new Uniform(Uniform.TYPE.C, new Color3f( 0xeeeeee )));
 			put("opacity", new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("size", new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("scale", new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("map", new Uniform(Uniform.TYPE.T,  0 ));
+			put("size",    new Uniform(Uniform.TYPE.F,  1.0f ));
+			put("scale",   new Uniform(Uniform.TYPE.F,  1.0f ));
+			put("map",     new Uniform(Uniform.TYPE.T,  0 ));
 			
 			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025f ));
-			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0f ));
-			put("fogColor", new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff )));
+			put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0f ));
+			put("fogFar",     new Uniform(Uniform.TYPE.F,  2000.0f ));
+			put("fogColor",   new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff )));
 		}
 	};
 	
 	public static final Map<String, Uniform> shadowmap = new HashMap<String, Uniform>() {
 		{
-			put("shadowMap", new Uniform(Uniform.TYPE.TV, 6 ));
-			put("shadowMapSize", new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2f>() ));
-			put("shadowBias", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+			put("shadowMap",      new Uniform(Uniform.TYPE.TV, 6 ));
+			put("shadowMapSize",  new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2f>() ));
+			put("shadowBias",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 			put("shadowDarkness", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 			
 			put("shadowDarkness", new Uniform(Uniform.TYPE.M4V,  new ArrayList<Matrix4f>() ));
