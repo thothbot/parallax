@@ -189,11 +189,11 @@ public class WebGLRenderer
 
 	// internal state cache
 
-	public Program _currentProgram;
-	public Object _currentFramebuffer;
-	public int _currentMaterialId = -1;
-	public int _currentGeometryGroupHash = -1;
-	public Camera _currentCamera;
+	public Program cacheCurrentProgram;
+	public WebGLFramebuffer cacheCurrentFramebuffer;
+	public int cacheCurrentMaterialId = -1;
+	public int cacheCurrentGeometryGroupHash = -1;
+	public Camera cacheCurrentCamera;
 	
 	// GL state cache
 
@@ -505,12 +505,12 @@ public class WebGLRenderer
 	 */
 	public void updateShadowMap( Scene scene, Camera camera ) 
 	{
-		this._currentProgram = null;
+		this.cacheCurrentProgram = null;
 		this._oldBlending = null;
 		this._oldDepthTest = false;
 		this._oldDepthWrite = false;
-		this._currentGeometryGroupHash = -1;
-		this._currentMaterialId = -1;
+		this.cacheCurrentGeometryGroupHash = -1;
+		this.cacheCurrentMaterialId = -1;
 		this._lightsNeedUpdate = true;
 		this._oldDoubleSided = false;
 		this._oldFlipSided = false;
@@ -690,7 +690,7 @@ public class WebGLRenderer
 
 		// reset caching for this frame
 
-		this._currentMaterialId = -1;
+		this.cacheCurrentMaterialId = -1;
 		this._lightsNeedUpdate = true;
 
 		// update scene graph
@@ -889,7 +889,7 @@ public class WebGLRenderer
 	{
 		Program program = setProgram( camera, lights, fog, material, object );
 
-		this._currentGeometryGroupHash = -1;
+		this.cacheCurrentGeometryGroupHash = -1;
 
 		setObjectFaces( (SidesObject) object );
 
@@ -1040,9 +1040,9 @@ public class WebGLRenderer
 //				+ ", object.id=" + object.getId()
 //				+ ", wireframeBit=" + wireframeBit);
 
-		if ( geometryGroupHash != this._currentGeometryGroupHash ) 
+		if ( geometryGroupHash != this.cacheCurrentGeometryGroupHash ) 
 		{
-			this._currentGeometryGroupHash = geometryGroupHash;
+			this.cacheCurrentGeometryGroupHash = geometryGroupHash;
 			updateBuffers = true;
 		}
 
@@ -1647,25 +1647,26 @@ public class WebGLRenderer
 		Map<String, WebGLUniformLocation> p_uniforms = program.uniforms;
 		Map<String, Uniform> m_uniforms = material.uniforms;
 
-		if ( program != _currentProgram ) 
+		if ( program != cacheCurrentProgram ) 
 		{
 			getGL().useProgram( program.getProgram() );
-			this._currentProgram = program;
+			this.cacheCurrentProgram = program;
 
 			refreshMaterial = true;
 		}
 
-		//if ( material.getId() != this._currentMaterialId ) {
-			this._currentMaterialId = material.getId();
+		if ( material.getId() != this.cacheCurrentMaterialId ) 
+		{
+			this.cacheCurrentMaterialId = material.getId();
 			refreshMaterial = true;
-		//}
+		}
 
-		if ( refreshMaterial || camera != this._currentCamera ) 
+		if ( refreshMaterial || camera != this.cacheCurrentCamera ) 
 		{
 			getGL().uniformMatrix4fv( p_uniforms.get("projectionMatrix"), false, camera._projectionMatrixArray );
 
-			if ( camera != this._currentCamera ) 
-				this._currentCamera = camera;
+			if ( camera != this.cacheCurrentCamera ) 
+				this.cacheCurrentCamera = camera;
 		}
 
 		if ( refreshMaterial ) 
@@ -2621,11 +2622,12 @@ Log.error("?????????????");
 			this._currentHeight = this.viewportHeight;
 		}
 
-		if ( framebuffer != this._currentFramebuffer ) {
+		if ( framebuffer != this.cacheCurrentFramebuffer ) 
+		{
 			getGL().bindFramebuffer( GLenum.FRAMEBUFFER.getValue(), framebuffer );
 			getGL().viewport( 0, 0, this._currentWidth, this._currentHeight );
 
-			this._currentFramebuffer = framebuffer;
+			this.cacheCurrentFramebuffer = framebuffer;
 		}
 	}
 
