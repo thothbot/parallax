@@ -5,13 +5,21 @@
   padding: 5px;
 }
 
-.debug-panel { 
-	display: table; 
-  	width: 100%; 
-	padding-right:3px;
+.common-panel {
+	width: 10%;
+	height: 5%;
+	color: white;
 	background-color:#555555;
 	border: 1px solid #999999;
 	opacity: 0.6;
+	margin: auto;
+	padding: 5px;
+}
+
+.debug-panel {
+	padding: 2px;
+	display: table; 
+  	width: 100%; 
 }
 
 .debug-panel-element {
@@ -20,6 +28,5 @@
 }
 
 .debug-panel .gwt-Label { 
-	color: white;
 	font-size:0.8em; 
 }

@@ -153,8 +153,8 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 			Log.debug("RenderingPanel: initDebuger()");
 			this.debugger = new Debugger(getRenderer().getInfo());
 			this.add(this.debugger);
-			this.setWidgetRightWidth(this.debugger, 1, Unit.PX, 15, Unit.EM);
-			this.setWidgetTopHeight(this.debugger, 1, Unit.PX, 2.3, Unit.EM);			
+			this.setWidgetRightWidth(this.debugger, 1, Unit.PX, 16, Unit.EM);
+			this.setWidgetTopHeight(this.debugger, 1, Unit.PX, 2.4, Unit.EM);			
 		}
 	}
 

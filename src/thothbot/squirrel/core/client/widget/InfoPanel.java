@@ -19,31 +19,34 @@
 
 package thothbot.squirrel.core.client.widget;
 
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class InfoPanel extends VerticalPanel
+public abstract class InfoPanel extends LayoutPanel
 {
-	PopupPanel popupPanel;
+	AbsolutePanel popupPanel;
 
 	public abstract Widget getContent();
 
 	public InfoPanel()
 	{   
-		this.popupPanel = new PopupPanel();
-		popupPanel.add(getContent());
-		add(popupPanel);
+		this.popupPanel = new AbsolutePanel();
+
+		this.popupPanel.setStyleName("common-panel", true);
+		
+		this.add(this.popupPanel);
+		
+		this.popupPanel.add(getContent());
 	}
 
 	public void show()
 	{
-		popupPanel.center();
-		popupPanel.show();
+		this.popupPanel.setVisible(true);
 	}
 	
 	public void hide()
 	{
-		this.popupPanel.hide();
+		this.popupPanel.setVisible(false);
 	}
 }

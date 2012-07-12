@@ -44,7 +44,8 @@ public class Debugger extends FlowPanel
 	public Debugger(WebGLRenderInfo info)
 	{
 		super();
-		this.setStyleName("debug-panel");
+		this.setStyleName("common-panel", true);
+		this.setStyleName("debug-panel", true);
 		this.info = info;
 		
 		this.frameRate = new FlowPanel();
