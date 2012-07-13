@@ -1956,7 +1956,7 @@ Log.error("?????????????");
 
 			Uniform.TYPE type = uniform.type;
 			Object value = uniform.value;
-
+Log.error("=======" + u + ", " + uniform);
 			switch ( type ) {
 
 				case I: // single integer
@@ -1964,7 +1964,7 @@ Log.error("?????????????");
 					break;
 
 				case F: // single float
-					getGL().uniform1f( location, (Float) value);
+					getGL().uniform1f( location, (Float) value );
 					break;
 
 				case V2: // single THREE.Vector2
@@ -2507,8 +2507,8 @@ Log.error("?????????????");
 			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.premultiplyAlpha ? -1 : 1 );
 
 			Element image = texture.getImage();
-			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( ImageElement.as(image).getWidth() ) 
-					&& Mathematics.isPowerOfTwo( ImageElement.as(image).getHeight() );
+			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
+					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
 			texture.setTextureParameters( getGL(), GLenum.TEXTURE_2D.getValue(), isImagePowerOfTwo );
 

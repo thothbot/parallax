@@ -38,7 +38,7 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 		public Color3f ambient = new Color3f(0x050505);
 		public Color3f specular = new Color3f(0x111111);
 		public Color3f emissive = new Color3f( 0x000000 );
-		public int shininess = 30;
+		public float shininess = 30.0f;
 		public Texture.OPERATIONS combine = Texture.OPERATIONS.MULTIPLY;
 		public Material.SHADING shading = Material.SHADING.SMOOTH;
 		public LineCap wireframeLinecap = LineCap.ROUND;
@@ -51,7 +51,7 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 	private Color3f emissive;
 	private Vector3f wrapRGB;
 	private Color3f specular;
-	private int shininess;
+	private float shininess;
 	private LineCap wireframeLinecap;
 	private LineJoin wireframeLinejoin;
 	private boolean skinning;
@@ -117,7 +117,7 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 		return specular;
 	}
 
-	public int getShininess() 
+	public float getShininess() 
 	{
 		return shininess;
 	}
