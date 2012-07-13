@@ -60,7 +60,7 @@ public final class MeshLambertMaterial extends AbstractMapMaterial
 		this.ambient = parameters.ambient;
 		this.emissive = parameters.emissive;
 		this.combine = parameters.combine;
-		this.shading = parameters.shading;
+		setShading(parameters.shading);
 		this.wireframeLinecap = parameters.wireframeLinecap;
 		this.wireframeLinejoin = parameters.wireframeLinejoin;
 		this.skinning = parameters.skinning;

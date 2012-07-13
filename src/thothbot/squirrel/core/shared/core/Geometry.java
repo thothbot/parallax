@@ -180,19 +180,28 @@ public class Geometry extends GeometryBuffer
 		return faces;
 	}
 	
-	public List<Material> getMaterials() {
+	public List<Material> getMaterials() 
+	{
 		return this.materials;
 	}
-
-	public void setVertices(List<Vector3f> vertices) {
+	
+	public void setMaterials(List<Material> materials) 
+	{
+		this.materials = materials;
+	}
+	
+	public void setVertices(List<Vector3f> vertices) 
+	{
 		this.vertices = vertices;
 	}
 
-	public List<Vector3f> getVertices() {
+	public List<Vector3f> getVertices() 
+	{
 		return vertices;
 	}
 
-	public void setBoundingSphere(BoundingSphere boundingSphere) {
+	public void setBoundingSphere(BoundingSphere boundingSphere) 
+	{
 		this.boundingSphere = boundingSphere;
 	}
 

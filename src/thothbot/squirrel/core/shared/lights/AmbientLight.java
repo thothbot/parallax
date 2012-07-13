@@ -25,7 +25,8 @@ package thothbot.squirrel.core.shared.lights;
 public final class AmbientLight extends Light
 {
 
-	public AmbientLight(int hex) {
+	public AmbientLight(int hex) 
+	{
 		super(hex);
 	}
 

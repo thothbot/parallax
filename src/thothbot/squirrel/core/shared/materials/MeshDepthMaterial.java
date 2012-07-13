@@ -27,7 +27,7 @@ import thothbot.squirrel.core.client.shader.ShaderDepth;
 
 public class MeshDepthMaterial extends Material
 {
-	static class MeshDepthMaterialOptions extends Material.MaterialOptions 
+	public static class MeshDepthMaterialOptions extends Material.MaterialOptions 
 	{
 		public Material.SHADING shading = Material.SHADING.SMOOTH;
 	}
@@ -35,7 +35,7 @@ public class MeshDepthMaterial extends Material
 	public MeshDepthMaterial(MeshDepthMaterialOptions options)
 	{
 		super(options);
-		this.shading = options.shading;
+		setShading(options.shading);
 	}
 		
 	public Material.SHADING bufferGuessNormalType () 

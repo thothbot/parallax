@@ -45,7 +45,8 @@ public class Material
 	/**
 	 * Shading
 	 */
-	public static enum SHADING {
+	public static enum SHADING 
+	{
 		NO, // NoShading = 0;
 		FLAT, // FlatShading = 1;
 		SMOOTH // SmoothShading = 2;
@@ -54,7 +55,8 @@ public class Material
 	/**
 	 * Colors
 	 */
-	public static enum COLORS {
+	public static enum COLORS 
+	{
 		NO, // NoColors = 0;
 		FACE, // FaceColors = 1;
 		VERTEX // VertexColors = 2;
@@ -63,7 +65,8 @@ public class Material
 	/**
 	 * Blending modes
 	 */
-	public static enum BLENDING {
+	public static enum BLENDING 
+	{
 		NO, // NoBlending = 0;
 		NORMAL, // NormalBlending = 1;
 		ADDITIVE, // AdditiveBlending = 2;
@@ -83,7 +86,7 @@ public class Material
 
 	public Material.COLORS vertexColors;
 	private Material.BLENDING blending;
-	protected Material.SHADING shading;
+	private Material.SHADING shading;
 	private BlendingFactorSrc blendSrc;
 	private BlendingFactorDest blendDst;
 	private BlendEquationMode blendEquation;
@@ -314,6 +317,16 @@ public class Material
 	public Material.COLORS getVertexColors() 
 	{
 		return vertexColors;
+	}
+	
+	public void setShading(Material.SHADING shading) 
+	{
+		this.shading = shading;
+	}
+
+	public Material.SHADING getShading() 
+	{
+		return this.shading;
 	}
 
 	public void setOverdraw(boolean overdraw)

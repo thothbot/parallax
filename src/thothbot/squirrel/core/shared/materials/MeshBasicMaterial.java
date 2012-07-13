@@ -46,10 +46,11 @@ public class MeshBasicMaterial extends AbstractMapMaterial
 	private boolean skinning;
 	private boolean morphTargets;
 
-	public MeshBasicMaterial(MeshBasicMaterialOptions options){
+	public MeshBasicMaterial(MeshBasicMaterialOptions options)
+	{
 		super(options);
 		this.combine = options.combine;
-		this.shading = options.shading;
+		setShading(options.shading);
 		this.wireframeLinecap = options.wireframeLinecap;
 		this.wireframeLinejoin = options.wireframeLinejoin;
 		this.skinning = options.skinning;

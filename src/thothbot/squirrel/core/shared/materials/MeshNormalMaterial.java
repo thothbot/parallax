@@ -45,7 +45,7 @@ public final class MeshNormalMaterial extends Material
 	public MeshNormalMaterial(MeshNormalMaterialOptions options)
 	{
 		super(options);
-		this.shading = options.shading;
+		setShading( options.shading );
 		this.wireframeLinecap = options.wireframeLinecap;
 		this.wireframeLinejoin = options.wireframeLinejoin;
 	}

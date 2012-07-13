@@ -57,7 +57,7 @@ public class ShaderMaterial extends Material
 		this.uniforms = parameters.uniforms;
 		this.attributes = parameters.attributes;
 		
-		this.shading = parameters.shading;
+		setShading( parameters.shading );
 		
 		this.lights = parameters.lights;
 		

@@ -88,6 +88,7 @@ import thothbot.squirrel.core.shared.scenes.Fog;
 import thothbot.squirrel.core.shared.scenes.FogExp2;
 import thothbot.squirrel.core.shared.scenes.Scene;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
 
@@ -2505,17 +2506,20 @@ Log.error("?????????????");
 
 			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.premultiplyAlpha ? -1 : 1 );
 
-			Image image = texture.getImage();
-			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() ) 
-					&& Mathematics.isPowerOfTwo( image.getHeight() );
+			Element image = texture.getImage();
+			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( ImageElement.as(image).getWidth() ) 
+					&& Mathematics.isPowerOfTwo( ImageElement.as(image).getHeight() );
 
 			texture.setTextureParameters( getGL(), GLenum.TEXTURE_2D.getValue(), isImagePowerOfTwo );
 
-			if ( texture instanceof DataTexture ) {
+			if ( texture instanceof DataTexture ) 
+			{
 //				getGL().texImage2D( GLenum.TEXTURE_2D, 0, glFormat, image.getWidth(), image.getHeight(), 0, glFormat, glType, image.getdata );
-			} else {
+			} 
+			else 
+			{
 				getGL().texImage2D( GLenum.TEXTURE_2D.getValue(), 0, texture.format.getValue(), 
-						texture.format.getValue(), texture.type.getValue(), ImageElement.as(texture.getImage().getElement()));
+						texture.format.getValue(), texture.type.getValue(), image);
 			}
 
 			if ( texture.generateMipmaps && isImagePowerOfTwo ) 

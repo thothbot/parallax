@@ -33,10 +33,11 @@ import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
 
 public final class MeshPhongMaterial extends AbstractMapMaterial 
 {
-	static class MeshPhongMaterialOptions extends AbstractMapMaterial.AbstractMapMaterialOptions 
+	public static class MeshPhongMaterialOptions extends AbstractMapMaterial.AbstractMapMaterialOptions 
 	{
 		public Color3f ambient = new Color3f(0x050505);
 		public Color3f specular = new Color3f(0x111111);
+		public Color3f emissive = new Color3f( 0x000000 );
 		public int shininess = 30;
 		public Texture.OPERATIONS combine = Texture.OPERATIONS.MULTIPLY;
 		public Material.SHADING shading = Material.SHADING.SMOOTH;
@@ -56,9 +57,11 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 	private boolean skinning;
 	private boolean morphTargets;
 
-	public MeshPhongMaterial(MeshPhongMaterialOptions options){
+	public MeshPhongMaterial(MeshPhongMaterialOptions options)
+	{
 		super(options);
 		this.ambient = options.ambient;
+		this.emissive = options.emissive;
 		this.specular = options.specular;
 		this.shininess = options.shininess;
 		this.map = options.map;
@@ -67,30 +70,35 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 		this.combine = options.combine;
 		this.reflectivity = options.reflectivity;
 		this.refractionRatio = options.refractionRatio;
-		this.shading = options.shading;
+		setShading( options.shading );
 		this.wireframeLinecap = options.wireframeLinecap;
 		this.wireframeLinejoin = options.wireframeLinejoin;
 		this.skinning = options.skinning;
 		this.morphTargets = options.morphTargets;
 	}
 
-	public Boolean getSkinning(){
+	public Boolean getSkinning()
+	{
 		return this.skinning;
 	}
 
-	public boolean isMorphTargets() {
+	public boolean isMorphTargets() 
+	{
 		return morphTargets;
 	}
 
-	public LineCap getWireframeLinecap() {
+	public LineCap getWireframeLinecap() 
+	{
 		return wireframeLinecap;
 	}
 
-	public LineJoin getWireframeLinejoin() {
+	public LineJoin getWireframeLinejoin() 
+	{
 		return wireframeLinejoin;
 	}
 
-	public Color3f getAmbient() {
+	public Color3f getAmbient() 
+	{
 		return ambient;
 	}
 	
@@ -104,11 +112,13 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 		return this.wrapRGB;
 	}
 
-	public Color3f getSpecular() {
+	public Color3f getSpecular() 
+	{
 		return specular;
 	}
 
-	public int getShininess() {
+	public int getShininess() 
+	{
 		return shininess;
 	}
 

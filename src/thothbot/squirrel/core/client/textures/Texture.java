@@ -32,6 +32,7 @@ import thothbot.squirrel.core.client.gl2.enums.TextureMinFilter;
 import thothbot.squirrel.core.client.gl2.enums.TextureWrapMode;
 import thothbot.squirrel.core.shared.core.Vector2f;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Image;
 
 public class Texture
@@ -60,7 +61,7 @@ public class Texture
 
 	public int id;
 
-	private Image image;
+	private Element image;
 
 	public Vector2f offset;
 	public Vector2f repeat;
@@ -91,19 +92,19 @@ public class Texture
 		this.repeat = new Vector2f(1, 1);
 	}
 
-	public Texture(Image image) 
+	public Texture(Element image) 
 	{
 		this();
 		this.image = image;
 	}
 
-	public Texture(Image image, Texture.MAPPING_MODE mapping)
+	public Texture(Element image, Texture.MAPPING_MODE mapping)
 	{
 		this(image);
 		this.mapping = mapping;
 	}
 
-	public Texture(Image image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
+	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
 			PixelFormat format, DataType type) 
 	{	
@@ -165,7 +166,7 @@ public class Texture
 		this.needsUpdate = needsUpdate;
 	}
 	
-	public Image getImage()
+	public Element getImage()
 	{
 		return this.image;
 	}

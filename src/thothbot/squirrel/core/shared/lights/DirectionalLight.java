@@ -73,10 +73,16 @@ public class DirectionalLight extends Light
 	public Object shadowCamera;
 	public Object shadowMatrix;
 
-	public DirectionalLight(int hex) {
-		this(hex, 1f, 0f);
+	public DirectionalLight(int hex) 
+	{
+		this(hex, 1f);
 	}
 
+	public DirectionalLight(int hex, float intensity)
+	{
+		this(hex, intensity, 0f);
+	}
+	
 	public DirectionalLight(int hex, float intensity, float distance) 
 	{
 		super(hex);

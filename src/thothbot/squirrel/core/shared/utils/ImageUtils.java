@@ -92,7 +92,7 @@ public final class ImageUtils
 	 */
 	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
-		final Texture texture = new Texture(image, mapping);
+		final Texture texture = new Texture(image.getElement(), mapping);
 		texture.setNeedsUpdate(true);
 
 	    // Hook up an error handler, so that we can be informed if the image fails
