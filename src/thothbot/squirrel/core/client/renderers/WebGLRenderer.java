@@ -42,6 +42,7 @@ import thothbot.squirrel.core.client.shader.Program;
 import thothbot.squirrel.core.client.shader.ProgramParameters;
 import thothbot.squirrel.core.client.shader.Shader;
 import thothbot.squirrel.core.client.shader.Uniform;
+import thothbot.squirrel.core.client.textures.CubeTexture;
 import thothbot.squirrel.core.client.textures.DataTexture;
 import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.Log;
@@ -88,6 +89,9 @@ import thothbot.squirrel.core.shared.scenes.Fog;
 import thothbot.squirrel.core.shared.scenes.FogExp2;
 import thothbot.squirrel.core.shared.scenes.Scene;
 
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
@@ -2084,13 +2088,13 @@ Log.error("?????????????");
 
 					if ( texture == null ) continue;
 
-//					if ( texture.getImage() instanceof Array && texture.image.length == 6 )
-//						setCubeTexture( texture, value );
+					if ( texture.getClass() == CubeTexture.class )
+						setCubeTexture( (CubeTexture) texture, (Integer)value );
 //
 //					else if ( texture instanceof THREE.WebGLRenderTargetCube )
 //						setCubeTextureDynamic( texture, value );
 //
-//					else
+					else
 						setTexture( texture, (Integer)value );
 
 					break;
@@ -2549,92 +2553,90 @@ Log.error("?????????????");
 
 	}
 
-//	function clampToMaxSize ( image, maxSize ) {
-//
-//		if ( image.width <= maxSize && image.height <= maxSize ) {
-//
-//			return image;
-//
-//		}
-//
-//		// Warning: Scaling through the canvas will only work with images that use
-//		// premultiplied alpha.
-//
-//		var maxDimension = Math.max( image.width, image.height );
-//		var newWidth = Math.floor( image.width * maxSize / maxDimension );
-//		var newHeight = Math.floor( image.height * maxSize / maxDimension );
-//
-//		var canvas = document.createElement( 'canvas' );
-//		canvas.width = newWidth;
-//		canvas.height = newHeight;
-//
-//		var ctx = canvas.getContext( "2d" );
-//		ctx.drawImage( image, 0, 0, image.width, image.height, 0, 0, newWidth, newHeight );
-//
-//		return canvas;
-//
-//	}
-//
-//	function setCubeTexture ( texture, slot ) {
-//
-//		if ( texture.image.length === 6 ) {
-//
-//			if ( texture.needsUpdate ) {
-//
-//				if ( ! texture.image.__webglTextureCube ) {
-//
-//					texture.image.__webglTextureCube = getGL().createTexture();
-//
-//				}
-//
-//				getGL().activeTexture( getGL().TEXTURE0 + slot );
-//				getGL().bindTexture( getGL().TEXTURE_CUBE_MAP, texture.image.__webglTextureCube );
-//
-//				var cubeImage = [];
-//
-//				for ( var i = 0; i < 6; i ++ ) {
-//
-//					if ( _this.autoScaleCubemaps ) {
-//
-//						cubeImage[ i ] = clampToMaxSize( texture.image[ i ], _maxCubemapSize );
-//
-//					} else {
-//
-//						cubeImage[ i ] = texture.image[ i ];
-//
-//					}
-//
-//				}
-//
-//				var image = cubeImage[ 0 ],
-//				isImagePowerOfTwo = isPowerOfTwo( image.width ) && isPowerOfTwo( image.height ),
-//				glFormat = paramThreeToGL( texture.format ),
-//				glType = paramThreeToGL( texture.type );
-//
-//				setTextureParameters( getGL().TEXTURE_CUBE_MAP, texture, isImagePowerOfTwo );
-//
-//				for ( var i = 0; i < 6; i ++ ) {
-//
-//					getGL().texImage2D( getGL().TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, glFormat, glFormat, glType, cubeImage[ i ] );
-//
-//				}
-//
-//				if ( texture.generateMipmaps && isImagePowerOfTwo )	getGL().generateMipmap( getGL().TEXTURE_CUBE_MAP );
-//
-//				texture.needsUpdate = false;
-//
-//				if ( texture.onUpdate ) texture.onUpdate();
-//
-//			} else {
-//
-//				getGL().activeTexture( getGL().TEXTURE0 + slot );
-//				getGL().bindTexture( getGL().TEXTURE_CUBE_MAP, texture.image.__webglTextureCube );
-//
-//			}
-//
-//		}
-//
-//	};
+	/**
+	 * Warning: Scaling through the canvas will only work with images that use
+	 * premultiplied alpha.
+	 * 
+	 * @param image    the image element
+	 * @param maxSize  the max size of width or height
+	 * 
+	 * @return the image element (Canvas or Image)
+	 */
+	private Element clampToMaxSize ( Element image, int maxSize ) 
+	{
+		int imgWidth = image.getOffsetWidth();
+		int imgHeight = image.getOffsetHeight();
+		if ( imgWidth <= maxSize && imgHeight <= maxSize )
+			return image;
+
+		int maxDimension = Math.max( imgWidth, imgHeight );
+		int newWidth = (int) Math.floor( imgWidth * maxSize / maxDimension );
+		int newHeight = (int) Math.floor( imgHeight * maxSize / maxDimension );
+
+		CanvasElement canvas = Document.get().createElement("canvas").cast();
+		canvas.setWidth(newWidth);
+		canvas.setHeight(newHeight);
+		
+		Context2d context = canvas.getContext2d();
+		context.drawImage((CanvasElement) image, 0, 0, imgWidth, imgHeight, 0, 0, newWidth, newHeight );
+
+		return canvas;
+
+	}
+
+	private void setCubeTexture ( CubeTexture texture, int slot ) 
+	{
+		if ( !texture.isValid() )
+			return;
+
+		if ( texture.getNeedsUpdate() ) 
+		{
+			if ( texture.__webglTexture == null )
+				texture.__webglTexture = getGL().createTexture();
+
+			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
+			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.__webglTexture );
+
+			List<Element> cubeImage = new ArrayList<Element>();
+
+			for ( int i = 0; i < 6; i ++ ) 
+			{
+				if ( this.autoScaleCubemaps )
+					cubeImage.add(clampToMaxSize( texture.getImage( i ), this.maxCubemapSize ));
+
+				else
+					cubeImage.add(texture.getImage( i ));
+
+			}
+
+			Element image = cubeImage.get( 0 );
+			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
+					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
+
+			texture.setTextureParameters( getGL(), GLenum.TEXTURE_CUBE_MAP.getValue(), isImagePowerOfTwo );
+
+			for ( int i = 0; i < 6; i ++ )
+				getGL().texImage2D( GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, 
+						texture.format.getValue(), texture.format.getValue(), texture.type.getValue(), cubeImage.get( i ) );
+
+			if ( texture.generateMipmaps && isImagePowerOfTwo )	
+				getGL().generateMipmap( GLenum.TEXTURE_CUBE_MAP.getValue() );
+
+			texture.setNeedsUpdate(false);
+
+//			if ( texture.onUpdate ) 
+//				texture.onUpdate();
+
+		} 
+		else 
+		{
+
+			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
+			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.__webglTexture );
+
+		}
+
+	}
 
 	// Render targets
 

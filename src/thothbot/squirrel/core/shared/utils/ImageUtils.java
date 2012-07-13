@@ -22,9 +22,14 @@
 
 package thothbot.squirrel.core.shared.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import thothbot.squirrel.core.client.textures.CubeTexture;
 import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.Log;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
@@ -92,7 +97,7 @@ public final class ImageUtils
 	 */
 	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
-		final Texture texture = new Texture(image.getElement(), mapping);
+		Texture texture = new Texture(image.getElement(), mapping);
 		texture.setNeedsUpdate(true);
 
 	    // Hook up an error handler, so that we can be informed if the image fails
@@ -121,33 +126,36 @@ public final class ImageUtils
 		return texture;
 	}
 	
-//	public static Texture loadTextureCube(List<String> paths, Texture.MAPPING_MODE mapping, final Callback callback)
-//	{
-//		List<Image> images = new ArrayList<Image>();
-//		final Texture texture = new Texture(images, mapping);
-//		
-//		LoadHandler loadHandler = new LoadHandler() {
-//			int loaded = 0;
-//			@Override
-//			public void onLoad(LoadEvent event) {
-//				loaded++;
-//				if (loaded == 6){
-//					texture.setNeedsUpdate(true);
-//				}
-//				if (callback != null){
-//					callback.run((Image)event.getSource());
-//				}
-//			}
-//		};
-//		
-//		for(String path : paths)
-//		{
-//			Image img = new Image(); 
-//			images.add(img);
-//			img.addLoadHandler(loadHandler);
-//			img.setUrl(path);
-//		}
-//		
-//		return texture;
-//	}
+	public static CubeTexture loadTextureCube(List<ImageResource> imageResources, Texture.MAPPING_MODE mapping, final Callback callback)
+	{
+		List<Element> images = new ArrayList<Element>();
+		for(ImageResource ir: imageResources)
+		{
+			Image image = new Image();
+			image.setUrl(ir.getSafeUri());
+			image.addErrorHandler(new ErrorHandler() {
+				
+				@Override
+				public void onError(ErrorEvent event)
+				{
+					Log.error("An error occurred while loading image.");
+				}
+			});
+			image.addLoadHandler(new LoadHandler() {
+				@Override
+				public void onLoad(LoadEvent event) 
+				{
+					if (callback != null){
+						callback.run((Image)event.getSource());
+					}
+				}
+			});
+			images.add(image.getElement());
+		}
+		
+		CubeTexture texture = new CubeTexture(images, mapping);
+		texture.setNeedsUpdate(true);
+				
+		return texture;
+	}
 }

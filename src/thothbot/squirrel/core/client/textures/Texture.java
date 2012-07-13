@@ -39,7 +39,8 @@ public class Texture
 {
 	public static int TextureCount = 0;
 	
-	public static enum OPERATIONS {
+	public static enum OPERATIONS 
+	{
 		MULTIPLY(0), // MultiplyOperation
 		MIX(1); // MixOperation
 
@@ -66,7 +67,7 @@ public class Texture
 	public Vector2f offset;
 	public Vector2f repeat;
 
-	private Texture.MAPPING_MODE mapping = Texture.MAPPING_MODE.UV;
+	protected Texture.MAPPING_MODE mapping = Texture.MAPPING_MODE.UV;
 
 	private TextureWrapMode wrapS = TextureWrapMode.CLAMP_TO_EDGE;
 	private TextureWrapMode wrapT = TextureWrapMode.CLAMP_TO_EDGE;
