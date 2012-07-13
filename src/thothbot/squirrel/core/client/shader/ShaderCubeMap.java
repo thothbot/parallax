@@ -30,7 +30,7 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public final class CubeMapShader extends Shader 
+public final class ShaderCubeMap extends Shader 
 {
 	interface Resources extends DefaultResources
 	{
@@ -43,7 +43,7 @@ public final class CubeMapShader extends Shader
 		TextResource getFragmentShader();
 	}
 
-	public CubeMapShader() 
+	public ShaderCubeMap() 
 	{
 		super(Resources.INSTANCE);
 	}

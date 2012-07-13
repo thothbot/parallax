@@ -349,7 +349,7 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public double getBoundRadius()
+	public float getBoundRadius()
 	{
 		return this.boundRadius;
 	}
@@ -361,7 +361,7 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public double getBoundRadiusScale()
+	public float getBoundRadiusScale()
 	{
 		return this.boundRadiusScale;
 	}
@@ -521,8 +521,10 @@ public class Object3D implements DimensionalObject
 		// update matrixWorld
 		if (this.matrixWorldNeedsUpdate || force) 
 		{
-			if (this.parent != null) 
+			
+			if (this.parent != null)
 				this.matrixWorld.multiply(this.parent.getMatrixWorld(), this.matrix);
+			
 			else
 				this.matrixWorld.copy(this.matrix);
 

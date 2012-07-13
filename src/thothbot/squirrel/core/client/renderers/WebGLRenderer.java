@@ -1826,7 +1826,7 @@ public class WebGLRenderer
 
 		uniforms.get("refractionRatio").value = material.getRefractionRatio();
 		uniforms.get("combine").value = material.getCombine().getValue();
-		//uniforms.get("useRefract").value = material.getEnvMap() != null && material.getEnvMap().mapping.getClass == CubeRefractionMapping.class;
+//		uniforms.get("useRefract").value = material.getEnvMap() != null && material.getEnvMap().mapping.getClass == CubeRefractionMapping.class;
 	};
 
 	public void refreshUniformsLine ( Map<String, Uniform> uniforms, LineBasicMaterial material ) 
@@ -1970,7 +1970,9 @@ Log.error("?????????????");
 
 			Uniform.TYPE type = uniform.type;
 			Object value = uniform.value;
-
+			
+			Log.debug("loadUniformsGeneric() u=" + u + ", " + uniform);
+			
 			switch ( type ) {
 
 				case I: // single integer

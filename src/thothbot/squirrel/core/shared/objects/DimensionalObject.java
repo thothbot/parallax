@@ -121,9 +121,9 @@ public interface DimensionalObject {
 	 */
 	public void setVisible(boolean visible);
 
-	public double getBoundRadius();
+	public float getBoundRadius();
 
-	public double getBoundRadiusScale();
+	public float getBoundRadiusScale();
 
 	public Matrix4f getMatrix();
 

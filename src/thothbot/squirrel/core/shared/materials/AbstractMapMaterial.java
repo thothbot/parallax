@@ -33,7 +33,7 @@ public abstract class AbstractMapMaterial extends Material
 		public Texture map = null;
 		public Texture envMap = null;
 		public Texture lightMap = null;
-		public float reflectivity = 1f;
+		public float reflectivity = 1.0f;
 		public float refractionRatio = 0.98f;
 		public boolean fog = true;
 	}
@@ -101,7 +101,7 @@ public abstract class AbstractMapMaterial extends Material
 		this.reflectivity = reflectivity;
 	}
 
-	public double getReflectivity()
+	public float getReflectivity()
 	{
 		return reflectivity;
 	}
