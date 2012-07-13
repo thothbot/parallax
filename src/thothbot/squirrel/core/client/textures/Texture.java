@@ -50,7 +50,8 @@ public class Texture
 	};
 
 	// Mapping modes
-	public static enum MAPPING_MODE {
+	public static enum MAPPING_MODE 
+	{
 		UV, // UVMapping = function () {};
 
 		CUBE_REFLECTION, // CubeReflectionMapping = function () {};

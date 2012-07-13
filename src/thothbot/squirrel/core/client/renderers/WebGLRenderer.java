@@ -1811,13 +1811,12 @@ public class WebGLRenderer
 		uniforms.get("lightMap").texture = material.getLightMap();
 
 		uniforms.get("envMap").texture = material.getEnvMap();
-		//uniforms.get("flipEnvMap").value = ( material.getEnvMap().getClass() == WebGLRenderTargetCube.class ) ? 1 : -1;
+		uniforms.get("flipEnvMap").value = -1.0f; //( material.getEnvMap() == WebGLRenderTargetCube.class ) ? 1 : -1;
 
 		if ( this.gammaInput ) 
 		{
-			//uniforms.reflectivity.value = material.reflectivity * material.reflectivity;
+//			uniforms.reflectivity.value = material.reflectivity * material.reflectivity;
 			uniforms.get("reflectivity").value = material.getReflectivity();
-
 		} 
 		else
 		{
@@ -1826,7 +1825,8 @@ public class WebGLRenderer
 
 		uniforms.get("refractionRatio").value = material.getRefractionRatio();
 		uniforms.get("combine").value = material.getCombine().getValue();
-//		uniforms.get("useRefract").value = material.getEnvMap() != null && material.getEnvMap().mapping.getClass == CubeRefractionMapping.class;
+		uniforms.get("useRefract").value = ( material.getEnvMap() != null 
+				&& material.getEnvMap().getMapping() == Texture.MAPPING_MODE.CUBE_REFRACTION ) ? 1 : 0;
 	};
 
 	public void refreshUniformsLine ( Map<String, Uniform> uniforms, LineBasicMaterial material ) 

@@ -64,12 +64,8 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 		this.emissive = options.emissive;
 		this.specular = options.specular;
 		this.shininess = options.shininess;
-		this.map = options.map;
 		this.lightMap = options.lightMap;
-		this.envMap = options.envMap;
 		this.combine = options.combine;
-		this.reflectivity = options.reflectivity;
-		this.refractionRatio = options.refractionRatio;
 		setShading( options.shading );
 		this.wireframeLinecap = options.wireframeLinecap;
 		this.wireframeLinejoin = options.wireframeLinejoin;
