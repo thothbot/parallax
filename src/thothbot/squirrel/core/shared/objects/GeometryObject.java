@@ -39,6 +39,8 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 {
 	protected Geometry geometry;
 	protected Material material;
+	
+	private int cache_oldLineWidth = -1;
 
 	public Geometry getGeometry()
 	{
@@ -68,10 +70,11 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 	
 	protected void setLineWidth (WebGLRenderingContext gl, int width ) 
 	{
-		//if ( width != _oldLineWidth ) {
+		if ( width != this.cache_oldLineWidth ) 
+		{
 			gl.lineWidth( width );
-//			this._oldLineWidth = width;
-		//}
+			this.cache_oldLineWidth = width;
+		}
 	}
 	
 	protected void initCustomAttributes (WebGLRenderingContext gl, Geometry geometry ) 

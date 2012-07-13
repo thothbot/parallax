@@ -182,38 +182,36 @@ public class WebGLRenderer
 	// custom render plugins
 
 	// An array with render plugins to be applied before rendering.
-	public List<Object> renderPluginsPre;
+	private List<Object> renderPluginsPre;
 	
 	//An array with render plugins to be applied after rendering.
-	public List<Object> renderPluginsPost;
+	private List<Object> renderPluginsPost;
 
 	// internal state cache
 
-	public Program cacheCurrentProgram;
-	public WebGLFramebuffer cacheCurrentFramebuffer;
-	public int cacheCurrentMaterialId = -1;
-	public int cacheCurrentGeometryGroupHash = -1;
-	public Camera cacheCurrentCamera;
+	private Program cache_currentProgram = null;
+	private WebGLFramebuffer cache_currentFramebuffer = null;
+	private int cache_currentMaterialId = -1;
+	private int cache_currentGeometryGroupHash = -1;
+	private Camera cache_currentCamera = null;
 	
 	// GL state cache
 
-	public boolean _oldDoubleSided;
-	public boolean _oldFlipSided;
+	private Boolean cache_oldDoubleSided = null;
+	private Boolean cache_oldFlipSided = null;
 
-	public Material.BLENDING _oldBlending;
-	public BlendEquationMode _oldBlendEquation;
+	private Material.BLENDING cache_oldBlending = null;
+	private BlendEquationMode cache_oldBlendEquation = null;
 
-	public BlendingFactorSrc _oldBlendSrc;
-	public BlendingFactorDest _oldBlendDst;
+	private BlendingFactorSrc cache_oldBlendSrc = null;
+	private BlendingFactorDest cache_oldBlendDst = null;
 
-	public boolean _oldDepthTest;
-	public boolean _oldDepthWrite;
+	private Boolean cache_oldDepthTest = null;
+	private Boolean cache_oldDepthWrite = null;
 
-	public boolean _oldPolygonOffset;
-	public float _oldPolygonOffsetFactor;
-	public float _oldPolygonOffsetUnits;
-
-	public int _oldLineWidth;
+	private Boolean cache_oldPolygonOffset = null;
+	private Float cache_oldPolygonOffsetFactor = null;
+	private Float cache_oldPolygonOffsetUnits = null;
 			
 	private int viewportX = 0;
 	private int viewportY = 0;
@@ -224,7 +222,7 @@ public class WebGLRenderer
 	
 	// frustum
 
-	public Frustum _frustum;
+	private Frustum frustum;
 
 	 // camera matrices cache
 
@@ -235,16 +233,16 @@ public class WebGLRenderer
 
 	// light arrays cache
 
-	public Vector3f _direction;
+	private Vector3f direction;
 
-	public boolean _lightsNeedUpdate = true;
+	private boolean lightsNeedUpdate = true;
 
-	public WebGLRenderLights _lights;
+	private WebGLRenderLights lights;
 
 	// GPU capabilities
-	private int _maxVertexTextures;
-	private int _maxTextureSize;
-	private int _maxCubemapSize;
+	private int maxVertexTextures;
+	private int maxTextureSize;
+	private int maxCubemapSize;
 	
 	public WebGLRenderer(Canvas3d canvas)
 	{
@@ -252,18 +250,18 @@ public class WebGLRenderer
 
 		this.setInfo(new WebGLRenderInfo());
 		
-		this._frustum = new Frustum();
+		this.frustum = new Frustum();
 		
 		this._projScreenMatrix   = new Matrix4f();
 		this._projScreenMatrixPS = new Matrix4f();
 		this._vector3            = new Vector4f();
-		this._direction          = new Vector3f();
-		this._lights             = new WebGLRenderLights();
+		this.direction          = new Vector3f();
+		this.lights             = new WebGLRenderLights();
 		this._programs           = new HashMap<String, Program>();
 		
-		this._maxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
-		this._maxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
-		this._maxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
+		this.maxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
+		this.maxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
+		this.maxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
 
 		setViewport(0, 0, getCanvas().getWidth(), getCanvas().getHeight());
 		setDefaultGLState();
@@ -323,7 +321,7 @@ public class WebGLRenderer
 	 */
 	public boolean supportsVertexTextures()
 	{
-		return this._maxVertexTextures > 0;
+		return this.maxVertexTextures > 0;
 	}
 
 	public void setSize(int width, int height)
@@ -505,15 +503,15 @@ public class WebGLRenderer
 	 */
 	public void updateShadowMap( Scene scene, Camera camera ) 
 	{
-		this.cacheCurrentProgram = null;
-		this._oldBlending = null;
-		this._oldDepthTest = false;
-		this._oldDepthWrite = false;
-		this.cacheCurrentGeometryGroupHash = -1;
-		this.cacheCurrentMaterialId = -1;
-		this._lightsNeedUpdate = true;
-		this._oldDoubleSided = false;
-		this._oldFlipSided = false;
+		this.cache_currentProgram = null;
+		this.cache_oldBlending = null;
+		this.cache_oldDepthTest = null;
+		this.cache_oldDepthWrite = null;
+		this.cache_currentGeometryGroupHash = -1;
+		this.cache_currentMaterialId = -1;
+		this.lightsNeedUpdate = true;
+		this.cache_oldDoubleSided = null;
+		this.cache_oldFlipSided = null;
 
 		//TODO: this is extras 
 		//shadowMapPlugin.update( scene, camera );
@@ -690,8 +688,8 @@ public class WebGLRenderer
 
 		// reset caching for this frame
 
-		this.cacheCurrentMaterialId = -1;
-		this._lightsNeedUpdate = true;
+		this.cache_currentMaterialId = -1;
+		this.lightsNeedUpdate = true;
 
 		// update scene graph
 
@@ -718,7 +716,7 @@ public class WebGLRenderer
 		camera.getProjectionMatrix().flattenToArray( camera._projectionMatrixArray );
 
 		this._projScreenMatrix.multiply( camera.getProjectionMatrix(), camera.getMatrixWorldInverse() );
-		this._frustum.setFromMatrix( _projScreenMatrix );
+		this.frustum.setFromMatrix( _projScreenMatrix );
 
 		// update WebGL objects
 		if ( this.autoUpdateObjects ) 
@@ -749,7 +747,7 @@ public class WebGLRenderer
 
 			if ( object.isVisible() ) 
 			{
-				if ( ! ( object.getClass() == Mesh.class || object.getClass() == ParticleSystem.class ) || ! ( object.frustumCulled ) || _frustum.contains( object ) )
+				if ( ! ( object.getClass() == Mesh.class || object.getClass() == ParticleSystem.class ) || ! ( object.frustumCulled ) || frustum.contains( object ) )
 				{
 					setupMatrices( (Object3D) object, camera );
 					unrollBufferMaterial( webglObject );
@@ -889,7 +887,7 @@ public class WebGLRenderer
 	{
 		Program program = setProgram( camera, lights, fog, material, object );
 
-		this.cacheCurrentGeometryGroupHash = -1;
+		this.cache_currentGeometryGroupHash = -1;
 
 		setObjectFaces( (SidesObject) object );
 
@@ -1040,9 +1038,9 @@ public class WebGLRenderer
 //				+ ", object.id=" + object.getId()
 //				+ ", wireframeBit=" + wireframeBit);
 
-		if ( geometryGroupHash != this.cacheCurrentGeometryGroupHash ) 
+		if ( geometryGroupHash != this.cache_currentGeometryGroupHash ) 
 		{
-			this.cacheCurrentGeometryGroupHash = geometryGroupHash;
+			this.cache_currentGeometryGroupHash = geometryGroupHash;
 			updateBuffers = true;
 		}
 
@@ -1564,7 +1562,7 @@ public class WebGLRenderer
 
 		Log.debug("initMaterial() called new Program");
 
-		material.program = buildProgram(this.precision, this._maxVertexTextures, 
+		material.program = buildProgram(this.precision, this.maxVertexTextures, 
 				material.fragmentShader, material.vertexShader, material.uniforms, material.attributes, parameters );
 
 		Map<String, Integer> attributes = material.program.attributes;
@@ -1647,26 +1645,26 @@ public class WebGLRenderer
 		Map<String, WebGLUniformLocation> p_uniforms = program.uniforms;
 		Map<String, Uniform> m_uniforms = material.uniforms;
 
-		if ( program != cacheCurrentProgram ) 
+		if ( program != cache_currentProgram ) 
 		{
 			getGL().useProgram( program.getProgram() );
-			this.cacheCurrentProgram = program;
+			this.cache_currentProgram = program;
 
 			refreshMaterial = true;
 		}
 
-		if ( material.getId() != this.cacheCurrentMaterialId ) 
+		if ( material.getId() != this.cache_currentMaterialId ) 
 		{
-			this.cacheCurrentMaterialId = material.getId();
+			this.cache_currentMaterialId = material.getId();
 			refreshMaterial = true;
 		}
 
-		if ( refreshMaterial || camera != this.cacheCurrentCamera ) 
+		if ( refreshMaterial || camera != this.cache_currentCamera ) 
 		{
 			getGL().uniformMatrix4fv( p_uniforms.get("projectionMatrix"), false, camera._projectionMatrixArray );
 
-			if ( camera != this.cacheCurrentCamera ) 
-				this.cacheCurrentCamera = camera;
+			if ( camera != this.cache_currentCamera ) 
+				this.cache_currentCamera = camera;
 		}
 
 		if ( refreshMaterial ) 
@@ -1680,12 +1678,12 @@ public class WebGLRenderer
 				 material.getClass() == MeshLambertMaterial.class ||
 				 material.lights != null ) {
 
-				if (this._lightsNeedUpdate ) {
+				if (this.lightsNeedUpdate ) {
 					setupLights( program, lights );
-					this._lightsNeedUpdate = false;
+					this.lightsNeedUpdate = false;
 				}
 
-				refreshUniformsLights( m_uniforms, this._lights );
+				refreshUniformsLights( m_uniforms, this.lights );
 			}
 
 			// HasMaterialMap
@@ -2129,7 +2127,7 @@ Log.error("?????????????");
 	{
 		Log.debug("Called setupLights()");
 
-		WebGLRenderLights zlights = this._lights; 
+		WebGLRenderLights zlights = this.lights; 
 
 		Float32Array dcolors = zlights.directional.colors;
 		Float32Array dpositions = zlights.directional.positions;
@@ -2196,13 +2194,13 @@ Log.error("?????????????");
 
 				}
 
-				this._direction.copy( directionalLight.getMatrixWorld().getPosition() );
-				this._direction.sub( directionalLight.target.getMatrixWorld().getPosition() );
-				this._direction.normalize();
+				this.direction.copy( directionalLight.getMatrixWorld().getPosition() );
+				this.direction.sub( directionalLight.target.getMatrixWorld().getPosition() );
+				this.direction.normalize();
 
-				dpositions.set( doffset, this._direction.getX());
-				dpositions.set( doffset + 1, this._direction.getY());
-				dpositions.set( doffset + 2, this._direction.getZ());
+				dpositions.set( doffset, this.direction.getX());
+				dpositions.set( doffset + 1, this.direction.getY());
+				dpositions.set( doffset + 2, this.direction.getZ());
 
 				dlength += 1;
 
@@ -2265,13 +2263,13 @@ Log.error("?????????????");
 
 				sdistances.set(slength, distance);
 
-				this._direction.copy( position );
-				this._direction.sub( spotLight.target.getMatrixWorld().getPosition() );
-				this._direction.normalize();
+				this.direction.copy( position );
+				this.direction.sub( spotLight.target.getMatrixWorld().getPosition() );
+				this.direction.normalize();
 
-				sdirections.set(soffset, this._direction.getX());
-				sdirections.set(soffset + 1, this._direction.getY());
-				sdirections.set(soffset + 2, this._direction.getZ());
+				sdirections.set(soffset, this.direction.getX());
+				sdirections.set(soffset + 1, this.direction.getY());
+				sdirections.set(soffset + 2, this.direction.getZ());
 
 				sangles.set(slength, (float)Math.cos( spotLight.angle ));
 				sexponents.set( slength, spotLight.exponent);
@@ -2325,106 +2323,125 @@ Log.error("?????????????");
 
 	public void setObjectFaces( SidesObject object ) 
 	{
-		//if ( this._oldDoubleSided != object.getDoubleSided() ) {
+		if ( this.cache_oldDoubleSided == null || this.cache_oldDoubleSided != object.getDoubleSided() ) 
+		{
 			if ( object.getDoubleSided() )
 				getGL().disable( GLenum.CULL_FACE.getValue() );
 			else
 				getGL().enable( GLenum.CULL_FACE.getValue() );
 
-			this._oldDoubleSided = object.getDoubleSided();
-		//}
+			this.cache_oldDoubleSided = object.getDoubleSided();
+		}
 
-		//if ( this._oldFlipSided != object.getFlipSided() ) {
+		if ( this.cache_oldFlipSided == null || this.cache_oldFlipSided != object.getFlipSided() ) 
+		{
 			if ( object.getFlipSided() )
 				getGL().frontFace( GLenum.CW.getValue() );
 			else
 				getGL().frontFace( GLenum.CCW.getValue() );
 
-			this._oldFlipSided = object.getFlipSided();
-		//}
+			this.cache_oldFlipSided = object.getFlipSided();
+		}
 	}
 
 	public void setDepthTest( boolean depthTest ) 
 	{
-		//if ( this._oldDepthTest != depthTest ) {
-
+		if ( this.cache_oldDepthTest == null || this.cache_oldDepthTest != depthTest ) 
+		{
 			if ( depthTest )
 				getGL().enable( GLenum.DEPTH_TEST.getValue() );
 			else 
 				getGL().disable( GLenum.DEPTH_TEST.getValue() );
 
-			this._oldDepthTest = depthTest;
-		//}
+			this.cache_oldDepthTest = depthTest;
+		}
 	}
 
 	public void setDepthWrite(boolean depthWrite ) 
 	{
-		//if ( this._oldDepthWrite != depthWrite ) {
+		if ( this.cache_oldDepthWrite == null || this.cache_oldDepthWrite != depthWrite ) 
+		{
 			getGL().depthMask( depthWrite );
-			_oldDepthWrite = depthWrite;
-		//}
+			cache_oldDepthWrite = depthWrite;
+		}
 	}
 
 	public void setPolygonOffset( boolean polygonoffset, float factor, float units ) 
 	{
-		//if ( this._oldPolygonOffset != polygonoffset ) {
+		if ( this.cache_oldPolygonOffset == null || this.cache_oldPolygonOffset != polygonoffset ) 
+		{
 			if ( polygonoffset ) {
 				getGL().enable( GLenum.POLYGON_OFFSET_FILL.getValue() );
 			} else {
 				getGL().disable( GLenum.POLYGON_OFFSET_FILL.getValue() );
 			}
 
-			_oldPolygonOffset = polygonoffset;
-		//}
+			this.cache_oldPolygonOffset = polygonoffset;
+		}
 
-		if ( polygonoffset) { // && ( _oldPolygonOffsetFactor != factor || _oldPolygonOffsetUnits != units ) ) {
+		if ( polygonoffset && ( cache_oldPolygonOffsetFactor == null || 
+				cache_oldPolygonOffsetUnits == null || 
+				cache_oldPolygonOffsetFactor != factor || 
+				cache_oldPolygonOffsetUnits != units ) 
+		) {
 			getGL().polygonOffset( factor, units );
 
-			this._oldPolygonOffsetFactor = factor;
-			this._oldPolygonOffsetUnits = units;
+			this.cache_oldPolygonOffsetFactor = factor;
+			this.cache_oldPolygonOffsetUnits = units;
 		}
 	}
 
 	private void setBlending( Material.BLENDING blending) 
 	{
-		if ( blending != this._oldBlending ) {
-
-			if( blending == Material.BLENDING.NO) {
+		if ( blending != this.cache_oldBlending ) 
+		{
+			if( blending == Material.BLENDING.NO) 
+			{
 				getGL().disable( GLenum.BLEND.getValue() );
 				
-			} else if( blending == Material.BLENDING.ADDITIVE) {
+			} 
+			else if( blending == Material.BLENDING.ADDITIVE) 
+			{
 				getGL().enable( GLenum.BLEND.getValue() );
 				getGL().blendEquation( GLenum.FUNC_ADD.getValue() );
 				getGL().blendFunc( GLenum.SRC_ALPHA.getValue(), GLenum.ONE.getValue() );
 				
 			// TODO: Find blendFuncSeparate() combination
-			} else if( blending == Material.BLENDING.SUBTRACTIVE) {
+			} 
+			else if( blending == Material.BLENDING.SUBTRACTIVE) 
+			{
 				getGL().enable( GLenum.BLEND.getValue() );
 				getGL().blendEquation( GLenum.FUNC_ADD.getValue() );
 				getGL().blendFunc( GLenum.ZERO.getValue(), GLenum.ONE_MINUS_SRC_COLOR.getValue() );
 
 			// TODO: Find blendFuncSeparate() combination
-			} else if( blending == Material.BLENDING.MULTIPLY) {
+			} 
+			else if( blending == Material.BLENDING.MULTIPLY) 
+			{
 				getGL().enable( GLenum.BLEND.getValue() );
 				getGL().blendEquation( GLenum.FUNC_ADD.getValue() );
 				getGL().blendFunc( GLenum.ZERO.getValue(), GLenum.SRC_COLOR.getValue() );
 
-			} else if( blending == Material.BLENDING.CUSTOM) {
+			} 
+			else if( blending == Material.BLENDING.CUSTOM) 
+			{
 				getGL().enable( GLenum.BLEND.getValue() );
 
-			} else {
+			} 
+			else 
+			{
 
 				getGL().enable( GLenum.BLEND.getValue() );
 				getGL().blendEquationSeparate( GLenum.FUNC_ADD.getValue(), GLenum.FUNC_ADD.getValue() );
 				getGL().blendFuncSeparate( GLenum.SRC_ALPHA.getValue(), GLenum.ONE_MINUS_SRC_ALPHA.getValue(), GLenum.ONE.getValue(), GLenum.ONE_MINUS_SRC_ALPHA.getValue() );
 			}
 
-			this._oldBlending = blending;
+			this.cache_oldBlending = blending;
 		}
 		
-		this._oldBlendEquation = null;
-		this._oldBlendSrc = null;
-		this._oldBlendDst = null;
+		this.cache_oldBlendEquation = null;
+		this.cache_oldBlendSrc = null;
+		this.cache_oldBlendDst = null;
 	}
 
 	private void setBlending( Material.BLENDING blending, BlendEquationMode blendEquation, BlendingFactorSrc blendSrc, BlendingFactorDest blendDst ) 
@@ -2433,16 +2450,18 @@ Log.error("?????????????");
 
 		if ( blending == Material.BLENDING.CUSTOM ) 
 		{
-			if ( blendEquation != this._oldBlendEquation ) {
+			if ( blendEquation != this.cache_oldBlendEquation ) 
+			{
 				getGL().blendEquation( blendEquation.getValue() );
-				this._oldBlendEquation = blendEquation;
+				this.cache_oldBlendEquation = blendEquation;
 			}
 
-			if ( blendSrc != _oldBlendSrc || blendDst != _oldBlendDst ) {
+			if ( blendSrc != cache_oldBlendSrc || blendDst != cache_oldBlendDst ) 
+			{
 				getGL().blendFunc( blendSrc.getValue(), blendDst.getValue());
 
-				this._oldBlendSrc = blendSrc;
-				this._oldBlendDst = blendDst;
+				this.cache_oldBlendSrc = blendSrc;
+				this.cache_oldBlendDst = blendDst;
 			}
 		}
 	}
@@ -2457,7 +2476,7 @@ Log.error("?????????????");
 		if(this._programs.containsKey(cashKey))
 			return this._programs.get(cashKey);
 
-		Program program = new Program(getGL(), this.precision, this._maxVertexTextures, fragmentShader, vertexShader, uniforms, attributes, parameters);
+		Program program = new Program(getGL(), this.precision, this.maxVertexTextures, fragmentShader, vertexShader, uniforms, attributes, parameters);
 
 		program.setId(_programs.size());
 		this._programs.put(cashKey, program);
@@ -2622,12 +2641,12 @@ Log.error("?????????????");
 			this._currentHeight = this.viewportHeight;
 		}
 
-		if ( framebuffer != this.cacheCurrentFramebuffer ) 
+		if ( framebuffer != this.cache_currentFramebuffer ) 
 		{
 			getGL().bindFramebuffer( GLenum.FRAMEBUFFER.getValue(), framebuffer );
 			getGL().viewport( 0, 0, this._currentWidth, this._currentHeight );
 
-			this.cacheCurrentFramebuffer = framebuffer;
+			this.cache_currentFramebuffer = framebuffer;
 		}
 	}
 
