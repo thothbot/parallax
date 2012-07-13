@@ -1321,7 +1321,8 @@ public class WebGLRenderer
 
 		Material meshMaterial = object.getMaterial();
 
-		if ( meshMaterial instanceof MeshFaceMaterial ) {
+		if ( meshMaterial instanceof MeshFaceMaterial ) 
+		{
 			GeometryGroup buffer = (GeometryGroup) globject.buffer;
 			int materialIndex = buffer.materialIndex;
 
@@ -1329,26 +1330,35 @@ public class WebGLRenderer
 			{
 				Material material = object.getGeometry().getMaterials().get( materialIndex );
 
-				if ( material.isTransparent() ) {
+				if ( material.isTransparent() ) 
+				{
 					globject.transparent = material;
 					globject.opaque = null;
 					
-				} else {
+				} 
+				else 
+				{
 					globject.opaque = material;
 					globject.transparent = null;
 				}
 			}
 
-		} else {
+		} 
+		else 
+		{
 
 			Material material = meshMaterial;
 
-			if ( material != null) {
-				if ( material.isTransparent() ) {
+			if ( material != null) 
+			{
+				if ( material.isTransparent() ) 
+				{
 					globject.transparent = material;
 					globject.opaque = null;
 
-				} else {
+				} 
+				else 
+				{
 					globject.opaque = material;
 					globject.transparent = null;
 				}
@@ -1956,7 +1966,7 @@ Log.error("?????????????");
 
 			Uniform.TYPE type = uniform.type;
 			Object value = uniform.value;
-Log.error("=======" + u + ", " + uniform);
+
 			switch ( type ) {
 
 				case I: // single integer

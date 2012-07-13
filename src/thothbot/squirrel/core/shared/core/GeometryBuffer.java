@@ -33,9 +33,11 @@ public abstract class GeometryBuffer
 	public static int Counter = 0;
 	private int id = 0;
 
-	public Float32Array __colorArray;
-	public Float32Array __vertexArray;
-
+	private boolean isArrayInitialized;
+	
+	private Float32Array webGlColorArray;
+	private Float32Array webGlVertexArray;
+	
 	public WebGLBuffer __webglVertexBuffer;
 	public WebGLBuffer __webglNormalBuffer;
 	public WebGLBuffer __webglTangentBuffer;
@@ -68,7 +70,7 @@ public abstract class GeometryBuffer
 	{
 		this.id = GeometryBuffer.Counter++;
 	}
-	
+		
 	public void setId(int id) 
 	{
 		this.id = id;
@@ -77,5 +79,46 @@ public abstract class GeometryBuffer
 	public int getId() 
 	{
 		return id;
+	}
+	
+	/**
+	 * Check if WebGl arrays initialized
+	 */
+	public boolean isArrayInitialized() 
+	{
+		return isArrayInitialized;
+	}
+
+	public void setArrayInitialized(boolean isArrayInitialized) 
+	{
+		this.isArrayInitialized = isArrayInitialized;
+	}
+
+	public Float32Array getWebGlColorArray()
+	{
+		return this.webGlColorArray;
+	}
+	
+	public Float32Array getWebGlVertexArray()
+	{
+		return this.webGlVertexArray;
+	}
+
+	public void setWebGlColorArray(Float32Array a)
+	{
+		this.webGlColorArray = a;
+	}
+	
+	public void setWebGlVertexArray(Float32Array a)
+	{
+		this.webGlVertexArray = a;
+	}
+	
+	protected void dispose() 
+	{
+		setArrayInitialized(false);
+		
+		setWebGlColorArray ( null );
+		setWebGlVertexArray( null );
 	}
 }

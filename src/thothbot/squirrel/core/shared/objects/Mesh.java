@@ -62,6 +62,17 @@ public class Mesh extends SidesObject
 	
 	private static int _geometryGroupCounter = 0;
 
+	private static MeshBasicMaterial.MeshBasicMaterialOptions defaultMaterialOptions = new MeshBasicMaterial.MeshBasicMaterialOptions();
+	static {
+		defaultMaterialOptions.color = new Color3f((int) Math.random() * 0xffffff);
+		defaultMaterialOptions.wireframe = true;
+	};
+
+	public Mesh(Geometry geometry) 
+	{
+		this(geometry, new MeshBasicMaterial(defaultMaterialOptions));
+	}
+	
 	public Mesh(Geometry geometry, Material material) 
 	{
 		super();
@@ -73,7 +84,8 @@ public class Mesh extends SidesObject
 		this.doubleSided = false;
 		this.overdraw = false;
 
-		if (this.geometry != null) {
+		if (this.geometry != null) 
+		{
 			// calc bound radius
 			if (this.geometry.getBoundingSphere() == null)
 				this.geometry.computeBoundingSphere();
@@ -96,16 +108,6 @@ public class Mesh extends SidesObject
 				}
 			}
 		}
-	}
-
-	private static MeshBasicMaterial.MeshBasicMaterialOptions defaultMaterialOptions = new MeshBasicMaterial.MeshBasicMaterialOptions();
-	static {
-		defaultMaterialOptions.color = new Color3f((int) Math.random() * 0xffffff);
-		defaultMaterialOptions.wireframe = true;
-	};
-
-	public Mesh(Geometry geometry) {
-		this(geometry, new MeshBasicMaterial(defaultMaterialOptions));
 	}
 
 	public boolean getFlipSided()
@@ -143,9 +145,9 @@ public class Mesh extends SidesObject
 	 */
 	public int getMorphTargetIndexByName(String name)
 	{
-		if (this.morphTargetDictionary.containsKey(name)) {
+		if (this.morphTargetDictionary.containsKey(name))
 			return this.morphTargetDictionary.get(name);
-		}
+
 		Log.debug("Mesh.getMorphTargetIndexByName: morph target " + name
 				+ " does not exist. Returning 0.");
 		return 0;
@@ -174,7 +176,9 @@ public class Mesh extends SidesObject
 
 			// triangles
 
-		} else {
+		}
+		else 
+		{
 			if ( updateBuffers ) 
 				gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryBuffer.__webglFaceBuffer );
 			
@@ -207,8 +211,8 @@ public class Mesh extends SidesObject
 			for ( GeometryGroup geometryGroup : geometry.geometryGroups.values() ) 
 			{
 				// initialise VBO on the first access
-				if ( geometryGroup.__webglVertexBuffer == null ) {
-
+				if ( geometryGroup.__webglVertexBuffer == null ) 
+				{
 					createBuffers(renderer, geometryGroup );
 					initBuffers(renderer.getGL(), geometryGroup );
 					info.getMemory().geometries++;
@@ -243,44 +247,47 @@ public class Mesh extends SidesObject
 		Material.SHADING normalType = material.bufferGuessNormalType();
 		Material.COLORS vertexColorType = material.bufferGuessVertexColorType();
 
-		geometryGroup.__vertexArray = Float32Array.create(nvertices * 3);
+		geometryGroup.setWebGlVertexArray( Float32Array.create(nvertices * 3) );
 
 		if (normalType != null)
-			geometryGroup.__normalArray = Float32Array.create(nvertices * 3);
+			geometryGroup.setWebGlNormalArray( Float32Array.create(nvertices * 3) );
 
 		if (geometry.getHasTangents())
-			geometryGroup.__tangentArray = Float32Array.create(nvertices * 4);
+			geometryGroup.setWebGlTangentArray( Float32Array.create(nvertices * 4) );
 
 		if (vertexColorType != null)
-			geometryGroup.__colorArray = Float32Array.create(nvertices * 3);
+			geometryGroup.setWebGlColorArray( Float32Array.create(nvertices * 3) );
 
-		if (uvType) {
-
+		if (uvType) 
+		{
 			if (geometry.getFaceUvs().size() > 0 || geometry.getFaceVertexUvs().size() > 0)
-				geometryGroup.__uvArray = Float32Array.create(nvertices * 2);
+				geometryGroup.setWebGlUvArray( Float32Array.create(nvertices * 2) );
 
 			if (geometry.getFaceUvs().size() > 1 || geometry.getFaceVertexUvs().size() > 1)
-				geometryGroup.__uv2Array = Float32Array.create(nvertices * 2);
+				geometryGroup.setWebGlUv2Array( Float32Array.create(nvertices * 2) );
 		}
 
-		if (this.geometry.skinWeights.size() > 0 && this.geometry.skinIndices.size() > 0) {
-			geometryGroup.__skinVertexAArray = Float32Array.create(nvertices * 4);
-			geometryGroup.__skinVertexBArray = Float32Array.create(nvertices * 4);
-			geometryGroup.__skinIndexArray = Float32Array.create(nvertices * 4);
-			geometryGroup.__skinWeightArray = Float32Array.create(nvertices * 4);
+		if (this.geometry.skinWeights.size() > 0 && this.geometry.skinIndices.size() > 0) 
+		{
+			geometryGroup.setWebGlSkinVertexAArray( Float32Array.create(nvertices * 4) );
+			geometryGroup.setWebGlSkinVertexBArray( Float32Array.create(nvertices * 4) );
+			geometryGroup.setWebGlSkinIndexArray  ( Float32Array.create(nvertices * 4) );
+			geometryGroup.setWebGlSkinWeightArray ( Float32Array.create(nvertices * 4) );
 		}
 
-		geometryGroup.__faceArray = Uint16Array.create(ntris * 3);
-		geometryGroup.__lineArray = Uint16Array.create(nlines * 2);
+		geometryGroup.setWebGlFaceArray( Uint16Array.create(ntris * 3) );
+		geometryGroup.setWebGlLineArray( Uint16Array.create(nlines * 2) );
 
-		if (geometryGroup.numMorphTargets > 0) {
+		if (geometryGroup.numMorphTargets > 0) 
+		{
 			geometryGroup.__morphTargetsArrays = new ArrayList<Float32Array>();
 
 			for (int m = 0; m < geometryGroup.numMorphTargets; m++)
 				geometryGroup.__morphTargetsArrays.add(Float32Array.create(nvertices * 3));
 		}
 
-		if (geometryGroup.numMorphNormals > 0) {
+		if (geometryGroup.numMorphNormals > 0) 
+		{
 			geometryGroup.__morphNormalsArrays = new ArrayList<Float32Array>();
 
 			for (int m = 0; m < geometryGroup.numMorphNormals; m++)
@@ -307,8 +314,8 @@ public class Mesh extends SidesObject
 				// setMeshBuffers function
 				WebGLCustomAttribute attribute = originalAttribute.clone();
 
-				if (!attribute.__webglInitialized || attribute.createUniqueBuffers) {
-
+				if (!attribute.__webglInitialized || attribute.createUniqueBuffers) 
+				{
 					attribute.__webglInitialized = true;
 
 					int size = 1; // "f" and "i"
@@ -338,7 +345,7 @@ public class Mesh extends SidesObject
 
 		}
 
-		geometryGroup.__inittedArrays = true;
+		geometryGroup.setArrayInitialized(true);
 	}
 
 	// createMeshBuffers
@@ -405,7 +412,8 @@ public class Mesh extends SidesObject
 //		} else {
 
 			// check all geometry groups
-			for( int i = 0, il = geometry.geometryGroupsList.size(); i < il; i ++ ) {
+			for( int i = 0, il = geometry.geometryGroupsList.size(); i < il; i ++ ) 
+			{
 
 				GeometryGroup geometryGroup = geometry.geometryGroupsList.get( i );
 				material = Material.getBufferMaterial( this, geometryGroup );
@@ -413,9 +421,9 @@ public class Mesh extends SidesObject
 				boolean customAttributesDirty = (material.attributes != null); // && areCustomAttributesDirty( material );
 
 				if ( geometry.verticesNeedUpdate || geometry.morphTargetsNeedUpdate || geometry.elementsNeedUpdate ||
-					 geometry.uvsNeedUpdate || geometry.normalsNeedUpdate ||
-					 geometry.colorsNeedUpdate || geometry.tangetsNeedUpdate || customAttributesDirty ) {
-
+					 geometry.uvsNeedUpdate      || geometry.normalsNeedUpdate      ||
+					 geometry.colorsNeedUpdate   || geometry.tangetsNeedUpdate      || customAttributesDirty ) 
+				{
 					setBuffers(gl, geometryGroup, GLenum.DYNAMIC_DRAW.getValue(), !geometry.dynamic, material );
 				}
 			}
@@ -436,92 +444,41 @@ public class Mesh extends SidesObject
 	// setMeshBuffers
 	private void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, int hint, boolean dispose, Material material)
 	{
-		Log.info("Called Mesh.setBuffers() - geometryGroup.__inittedArrays=" + geometryGroup.__inittedArrays);
+		Log.debug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
 
-		if ( ! geometryGroup.__inittedArrays )
+		if ( ! geometryGroup.isArrayInitialized() )
 			 return;
 				
 		 Material.SHADING normalType = material.bufferGuessNormalType();
 		 Material.COLORS vertexColorType = material.bufferGuessVertexColorType();
 		 boolean uvType = material.bufferGuessUVType();
 		
-		 boolean needsSmoothNormals = ( normalType == Material.SHADING.SMOOTH);
-		
-		 int vertexIndex = 0;
-		
-		 int offset = 0;
-		 int offset_uv = 0;
-		 int offset_uv2 = 0;
-		 int offset_face = 0;
-		 int offset_normal = 0;
-		 int offset_tangent = 0;
-		 int offset_line = 0;
-		 int offset_color = 0;
-		 int offset_skin = 0;
-		 int offset_morphTarget = 0;
-		 int offset_custom = 0;
-		 int offset_customSrc = 0;
-
-		 Float32Array vertexArray = geometryGroup.__vertexArray;
-		 Float32Array uvArray = geometryGroup.__uvArray;
-		 Float32Array uv2Array = geometryGroup.__uv2Array;
-		 Float32Array normalArray = geometryGroup.__normalArray;
-		 Float32Array tangentArray = geometryGroup.__tangentArray;
-		 Float32Array colorArray = geometryGroup.__colorArray;
-	
-		 Float32Array skinVertexAArray = geometryGroup.__skinVertexAArray;
-		 Float32Array skinVertexBArray = geometryGroup.__skinVertexBArray;
-		 Float32Array skinIndexArray = geometryGroup.__skinIndexArray;
-		 Float32Array skinWeightArray = geometryGroup.__skinWeightArray;
-		
-		 List<Float32Array> morphTargetsArrays = geometryGroup.__morphTargetsArrays;
-		 List<Float32Array> morphNormalsArrays = geometryGroup.__morphNormalsArrays;
-		
-		 List<WebGLCustomAttribute> customAttributes = geometryGroup.__webglCustomAttributesList;
-		
-		 Uint16Array faceArray = geometryGroup.__faceArray;
-		 Uint16Array lineArray = geometryGroup.__lineArray;
-		
-		 // this is shared for all chunks
-		 Geometry geometry = this.geometry;
-
-		 boolean dirtyVertices = geometry.verticesNeedUpdate;
-		 boolean dirtyElements = geometry.elementsNeedUpdate;
-		 boolean dirtyUvs = geometry.uvsNeedUpdate;
-		 boolean dirtyNormals = geometry.normalsNeedUpdate;
-		 boolean dirtyTangents = geometry.tangetsNeedUpdate;
-		 boolean dirtyColors = geometry.colorsNeedUpdate;
-		 boolean dirtyMorphTargets = geometry.morphTargetsNeedUpdate;
-		
-		 List<Vector3f> vertices = geometry.getVertices();
+		 boolean needsSmoothNormals = ( normalType == Material.SHADING.SMOOTH );
+										 
 		 List<Integer> chunk_faces3 = geometryGroup.faces3;
 		 List<Integer> chunk_faces4 = geometryGroup.faces4;
-		 List<Face3> obj_faces = geometry.getFaces();
+		 List<Face3> obj_faces = getGeometry().getFaces();
 
-		 List<List<UVf>> obj_uvs = (geometry.getFaceVertexUvs().size() > 0) 
-				 ? geometry.getFaceVertexUvs().get(0) : null;
-		 List<List<UVf>> obj_uvs2 = (geometry.getFaceVertexUvs().size() > 1) 
-				 ? geometry.getFaceVertexUvs().get(1) : null;
-		
-		 List<Color3f> obj_colors = geometry.getColors();
-		
-		 List<Vector3f> obj_skinVerticesA = geometry.skinVerticesA;
-		 List<Vector3f> obj_skinVerticesB = geometry.skinVerticesB;
-		 List<Vector4f> obj_skinIndices = geometry.skinIndices;
-		 List<Vector4f> obj_skinWeights = geometry.skinWeights;
-		
-		 List<DimensionalObject> morphTargets = geometry.getMorphTargets();
-		 List<MorphNormal> morphNormals = geometry.getMorphNormals();
+		 List<List<UVf>> obj_uvs = (getGeometry().getFaceVertexUvs().size() > 0) 
+				 ? getGeometry().getFaceVertexUvs().get(0) : null;
 
-		 if ( dirtyVertices ) 
+		 List<List<UVf>> obj_uvs2 = (getGeometry().getFaceVertexUvs().size() > 1) 
+				 ? getGeometry().getFaceVertexUvs().get(1) : null;
+						
+		 List<MorphNormal> morphNormals = getGeometry().getMorphNormals();
+		 
+		 if ( getGeometry().verticesNeedUpdate ) 
 		 {
+			 Float32Array vertexArray = geometryGroup.getWebGlVertexArray();
+			 int offset = 0;
+			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
 				 Face3 face = obj_faces.get( chunk_faces3.get( f ) );
 				 
-				 Vector3f v1 = vertices.get( face.getA() );
-				 Vector3f v2 = vertices.get( face.getB() );
-				 Vector3f v3 = vertices.get( face.getC() );
+				 Vector3f v1 = getGeometry().getVertices().get( face.getA() );
+				 Vector3f v2 = getGeometry().getVertices().get( face.getB() );
+				 Vector3f v3 = getGeometry().getVertices().get( face.getC() );
 
 				 vertexArray.set(offset,  v1.getX());
 				 vertexArray.set(offset + 1, v1.getY());
@@ -542,10 +499,10 @@ public class Mesh extends SidesObject
 			 {
 				 Face4 face = (Face4) obj_faces.get( chunk_faces4.get( f ));
 
-				 Vector3f v1 = vertices.get( face.getA() );
-				 Vector3f v2 = vertices.get( face.getB() );
-				 Vector3f v3 = vertices.get( face.getC() );
-				 Vector3f v4 = vertices.get( face.getD() );
+				 Vector3f v1 = getGeometry().getVertices().get( face.getA() );
+				 Vector3f v2 = getGeometry().getVertices().get( face.getB() );
+				 Vector3f v3 = getGeometry().getVertices().get( face.getC() );
+				 Vector3f v4 = getGeometry().getVertices().get( face.getD() );
 
 				 vertexArray.set(offset, v1.getX());
 				 vertexArray.set(offset + 1, v1.getY());
@@ -569,13 +526,14 @@ public class Mesh extends SidesObject
 			 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglVertexBuffer);
 			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), vertexArray, hint );
 		 }
-
+		 
 		 // TODO: work on this
-		 if ( dirtyMorphTargets ) {
-
-			 for ( int vk = 0, vkl = morphTargets.size(); vk < vkl; vk ++ ) 
+		 if ( getGeometry().morphTargetsNeedUpdate ) 
+		 {
+			 
+			 for ( int vk = 0, vkl = getGeometry().getMorphTargets().size(); vk < vkl; vk ++ ) 
 			 {
-				 offset_morphTarget = 0;
+				 int offset_morphTarget = 0;
 
 				 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 				 {
@@ -726,26 +684,34 @@ public class Mesh extends SidesObject
 				 }
 
 				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( vk ) );
-				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), morphTargetsArrays.get( vk ), hint );
+				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__morphTargetsArrays.get( vk ), hint );
 
-				 if ( material.morphNormals ) {
+				 if ( material.morphNormals ) 
+				 {
 					 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get( vk ) );
-					 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), morphNormalsArrays.get( vk ), hint );
+					 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__morphNormalsArrays.get( vk ), hint );
 				 }
 			 }
 		 }
 
-		 if ( obj_skinWeights.size() > 0 ) 
+		 if ( getGeometry().skinWeights.size() > 0 ) 
 		 {
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
+			 int offset_skin = 0;
+			 Float32Array skinVertexAArray = geometryGroup.getWebGlSkinVertexAArray();
+			 Float32Array skinVertexBArray = geometryGroup.getWebGlSkinVertexBArray();
 
+			 Float32Array skinIndexArray = geometryGroup.getWebGlSkinIndexArray();
+			 Float32Array skinWeightArray = geometryGroup.getWebGlSkinWeightArray();
+			 
+			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+			 {
 				 Face3 face = obj_faces.get( chunk_faces3.get( f ) );
 
 				 // weights
 
-				 Vector4f sw1 = obj_skinWeights.get( face.getA() );
-				 Vector4f sw2 = obj_skinWeights.get( face.getB() );
-				 Vector4f sw3 = obj_skinWeights.get( face.getC() );
+				 Vector4f sw1 = getGeometry().skinWeights.get( face.getA() );
+				 Vector4f sw2 = getGeometry().skinWeights.get( face.getB() );
+				 Vector4f sw3 = getGeometry().skinWeights.get( face.getC() );
 
 				 skinWeightArray.set(offset_skin, sw1.getX());
 				 skinWeightArray.set(offset_skin + 1, sw1.getY());
@@ -764,9 +730,9 @@ public class Mesh extends SidesObject
 
 				 // indices
 
-				 Vector4f si1 = (Vector4f) obj_skinIndices.get(face.getA());
-				 Vector4f si2 = (Vector4f) obj_skinIndices.get(face.getB());
-				 Vector4f si3 = (Vector4f) obj_skinIndices.get(face.getC());
+				 Vector4f si1 = (Vector4f) getGeometry().skinIndices.get(face.getA());
+				 Vector4f si2 = (Vector4f) getGeometry().skinIndices.get(face.getB());
+				 Vector4f si3 = (Vector4f) getGeometry().skinIndices.get(face.getC());
 
 				 skinIndexArray.set(offset_skin, si1.getX());
 				 skinIndexArray.set(offset_skin + 1, si1.getY());
@@ -785,9 +751,9 @@ public class Mesh extends SidesObject
 
 				 // vertices A
 
-				 Vector3f sa1 = obj_skinVerticesA.get(face.getA());
-				 Vector3f sa2 = obj_skinVerticesA.get(face.getB());
-				 Vector3f sa3 = obj_skinVerticesA.get(face.getC());
+				 Vector3f sa1 = getGeometry().skinVerticesA.get(face.getA());
+				 Vector3f sa2 = getGeometry().skinVerticesA.get(face.getB());
+				 Vector3f sa3 = getGeometry().skinVerticesA.get(face.getC());
 
 				 skinVertexAArray.set(offset_skin, sa1.getX());
 				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
@@ -806,9 +772,9 @@ public class Mesh extends SidesObject
 
 				 // vertices B
 
-				 Vector3f sb1 = obj_skinVerticesB.get(face.getA());
-				 Vector3f sb2 = obj_skinVerticesB.get(face.getB());
-				 Vector3f sb3 = obj_skinVerticesB.get(face.getC());
+				 Vector3f sb1 = getGeometry().skinVerticesB.get(face.getA());
+				 Vector3f sb2 = getGeometry().skinVerticesB.get(face.getB());
+				 Vector3f sb3 = getGeometry().skinVerticesB.get(face.getC());
 
 				 skinVertexBArray.set(offset_skin, sb1.getX());
 				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
@@ -829,16 +795,17 @@ public class Mesh extends SidesObject
 
 			 }
 
-			 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
+			 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
+			 {
 
 				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
 				 // weights
 
-				 Vector4f sw1 = obj_skinWeights.get(face.getA());
-				 Vector4f sw2 = obj_skinWeights.get(face.getB());
-				 Vector4f sw3 = obj_skinWeights.get(face.getC());
-				 Vector4f sw4 = obj_skinWeights.get(face.getD());
+				 Vector4f sw1 = getGeometry().skinWeights.get(face.getA());
+				 Vector4f sw2 = getGeometry().skinWeights.get(face.getB());
+				 Vector4f sw3 = getGeometry().skinWeights.get(face.getC());
+				 Vector4f sw4 = getGeometry().skinWeights.get(face.getD());
 
 				 skinWeightArray.set(offset_skin, sw1.getX());
 				 skinWeightArray.set(offset_skin + 1, sw1.getY());
@@ -862,10 +829,10 @@ public class Mesh extends SidesObject
 
 				 // indices
 
-				 Vector4f si1 = obj_skinIndices.get(face.getA());
-				 Vector4f si2 = obj_skinIndices.get(face.getB());
-				 Vector4f si3 = obj_skinIndices.get(face.getC());
-				 Vector4f si4 = obj_skinIndices.get(face.getD());
+				 Vector4f si1 = getGeometry().skinIndices.get(face.getA());
+				 Vector4f si2 = getGeometry().skinIndices.get(face.getB());
+				 Vector4f si3 = getGeometry().skinIndices.get(face.getC());
+				 Vector4f si4 = getGeometry().skinIndices.get(face.getD());
 
 				 skinIndexArray.set(offset_skin, si1.getX());
 				 skinIndexArray.set(offset_skin + 1, si1.getY());
@@ -889,10 +856,10 @@ public class Mesh extends SidesObject
 
 				 // vertices A
 
-				 Vector3f sa1 = obj_skinVerticesA.get(face.getA());
-				 Vector3f sa2 = obj_skinVerticesA.get(face.getB());
-				 Vector3f sa3 = obj_skinVerticesA.get(face.getC());
-				 Vector3f sa4 = obj_skinVerticesA.get(face.getD());
+				 Vector3f sa1 = getGeometry().skinVerticesA.get(face.getA());
+				 Vector3f sa2 = getGeometry().skinVerticesA.get(face.getB());
+				 Vector3f sa3 = getGeometry().skinVerticesA.get(face.getC());
+				 Vector3f sa4 = getGeometry().skinVerticesA.get(face.getD());
 
 				 skinVertexAArray.set(offset_skin, sa1.getX());
 				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
@@ -916,10 +883,10 @@ public class Mesh extends SidesObject
 
 				 // vertices B
 
-				 Vector3f sb1 = obj_skinVerticesB.get(face.getA());
-				 Vector3f sb2 = obj_skinVerticesB.get(face.getB());
-				 Vector3f sb3 = obj_skinVerticesB.get(face.getC());
-				 Vector3f sb4 = obj_skinVerticesB.get(face.getD());
+				 Vector3f sb1 = getGeometry().skinVerticesB.get(face.getA());
+				 Vector3f sb2 = getGeometry().skinVerticesB.get(face.getB());
+				 Vector3f sb3 = getGeometry().skinVerticesB.get(face.getC());
+				 Vector3f sb4 = getGeometry().skinVerticesB.get(face.getD());
 
 				 skinVertexBArray.set(offset_skin, sb1.getX());
 				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
@@ -961,9 +928,13 @@ public class Mesh extends SidesObject
 			 }
 		 }
 
-		 if ( dirtyColors && (vertexColorType != null )) 
+		 if ( getGeometry().colorsNeedUpdate && (vertexColorType != null )) 
 		 {
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
+			 Float32Array colorArray = geometryGroup.getWebGlColorArray();
+			 int offset_color = 0;
+			 
+			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+			 {
 
 				 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
@@ -971,11 +942,14 @@ public class Mesh extends SidesObject
 				 Color3f faceColor = face.getColor();
 				 Color3f c1, c2, c3;
 
-				 if ( vertexColors.size() == 3 && vertexColorType == Material.COLORS.VERTEX) {
+				 if ( vertexColors.size() == 3 && vertexColorType == Material.COLORS.VERTEX) 
+				 {
 					 c1 = vertexColors.get(0);
 					 c2 = vertexColors.get(1);
 					 c3 = vertexColors.get(2);
-				 } else {
+				 }
+				 else 
+				 {
 					 c1 = faceColor;
 					 c2 = faceColor;
 					 c3 = faceColor;
@@ -1047,9 +1021,13 @@ public class Mesh extends SidesObject
 			 }
 		 }
 
-		 if ( dirtyTangents && geometry.getHasTangents()) 
+		 if ( getGeometry().tangetsNeedUpdate && geometry.getHasTangents()) 
 		 {
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
+			 Float32Array tangentArray = geometryGroup.getWebGlTangentArray();
+			 int offset_tangent = 0;
+			 
+			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+			 {
 
 				 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
@@ -1118,9 +1096,12 @@ public class Mesh extends SidesObject
 
 		 }
 
-		 if ( dirtyNormals && (normalType != null )) 
+		 if ( getGeometry().normalsNeedUpdate && (normalType != null )) 
 		 {
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
+			 int offset_normal = 0;
+			 
+			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+			 {
 
 				 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
@@ -1129,31 +1110,36 @@ public class Mesh extends SidesObject
 
 				 if ( vertexNormals.size() == 3 && needsSmoothNormals ) 
 				 {
-					 for ( int i = 0; i < 3; i ++ ) {
+					 for ( int i = 0; i < 3; i ++ ) 
+					 {
 
 						 Vector3f vn = vertexNormals.get(i);
 
-						 normalArray.set(offset_normal, vn.getX());
-						 normalArray.set(offset_normal + 1, vn.getY());
-						 normalArray.set(offset_normal + 2, vn.getZ());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal, vn.getX());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal + 1, vn.getY());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal + 2, vn.getZ());
 
 						 offset_normal += 3;
 					 }
 
-				 } else {
+				 } 
+				 else 
+				 {
 
-					 for ( int i = 0; i < 3; i ++ ) {
+					 for ( int i = 0; i < 3; i ++ ) 
+					 {
 
-						 normalArray.set(offset_normal, faceNormal.getX());
-						 normalArray.set(offset_normal + 1, faceNormal.getY());
-						 normalArray.set(offset_normal + 2, faceNormal.getZ());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal, faceNormal.getX());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal + 1, faceNormal.getY());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal + 2, faceNormal.getZ());
 
 						 offset_normal += 3;
 					 }
 				 }
 			 }
 
-			 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
+			 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
+			 {
 
 				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
@@ -1162,24 +1148,28 @@ public class Mesh extends SidesObject
 
 				 if ( vertexNormals.size() == 4 && needsSmoothNormals ) 
 				 {
-					 for ( int i = 0; i < 4; i ++ ) {
+					 for ( int i = 0; i < 4; i ++ ) 
+					 {
 
 						 Vector3f vn = vertexNormals.get(i);
 
-						 normalArray.set(offset_normal, vn.getX());
-						 normalArray.set(offset_normal + 1, vn.getY());
-						 normalArray.set(offset_normal + 2, vn.getZ());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal, vn.getX());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal + 1, vn.getY());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal + 2, vn.getZ());
 
 						 offset_normal += 3;
 					 }
 
-				 } else {
+				 } 
+				 else 
+				 {
 
-					 for ( int i = 0; i < 4; i ++ ) {
+					 for ( int i = 0; i < 4; i ++ ) 
+					 {
 
-						 normalArray.set(offset_normal, faceNormal.getX());
-						 normalArray.set(offset_normal + 1, faceNormal.getY());
-						 normalArray.set(offset_normal + 2, faceNormal.getZ());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal, faceNormal.getX());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal + 1, faceNormal.getY());
+						 geometryGroup.getWebGlNormalArray().set(offset_normal + 2, faceNormal.getZ());
 
 						 offset_normal += 3;
 					 }
@@ -1187,12 +1177,15 @@ public class Mesh extends SidesObject
 			 }
 
 			 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglNormalBuffer);
-			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), normalArray, hint );
+			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.getWebGlNormalArray(), hint );
 
 		 }
 
-		 if ( dirtyUvs && (obj_uvs != null) && uvType ) 
+		 if ( getGeometry().uvsNeedUpdate && (obj_uvs != null) && uvType ) 
 		 {
+			 Float32Array uvArray = geometryGroup.getWebGlUvArray();
+			 int offset_uv = 0;
+			 
 			 for (int  f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
 
@@ -1242,8 +1235,11 @@ public class Mesh extends SidesObject
 			 }
 		 }
 
-		 if ( dirtyUvs && (obj_uvs2 != null) && uvType ) 
+		 if ( getGeometry().uvsNeedUpdate && (obj_uvs2 != null) && uvType ) 
 		 {
+			 Float32Array uv2Array = geometryGroup.getWebGlUv2Array();
+			 int offset_uv2 = 0;
+			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
 				 int fi = chunk_faces3.get(f);
@@ -1284,7 +1280,8 @@ public class Mesh extends SidesObject
 				 }
 			 }
 
-			 if ( offset_uv2 > 0 ) {
+			 if ( offset_uv2 > 0 ) 
+			 {
 
 				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglUV2Buffer );
 				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), uv2Array, hint );
@@ -1293,26 +1290,31 @@ public class Mesh extends SidesObject
 
 		 }
 
-		 if ( dirtyElements ) 
+		 if (  getGeometry().elementsNeedUpdate ) 
 		 {
+			 
+			 int offset_line = 0;
+			 int offset_face = 0;
+			 int vertexIndex = 0;
+			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
 				 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-				 faceArray.set(offset_face, vertexIndex);
-				 faceArray.set(offset_face + 1, vertexIndex + 1);
-				 faceArray.set(offset_face + 2, vertexIndex + 2);
+				 geometryGroup.getWebGlFaceArray().set(offset_face, vertexIndex);
+				 geometryGroup.getWebGlFaceArray().set(offset_face + 1, vertexIndex + 1);
+				 geometryGroup.getWebGlFaceArray().set(offset_face + 2, vertexIndex + 2);
 
 				 offset_face += 3;
 
-				 lineArray.set(offset_line, vertexIndex);
-				 lineArray.set(offset_line + 1, vertexIndex + 1);
+				 geometryGroup.getWebGlLineArray().set(offset_line, vertexIndex);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 1, vertexIndex + 1);
 
-				 lineArray.set(offset_line + 2, vertexIndex);
-				 lineArray.set(offset_line + 3, vertexIndex + 2);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 2, vertexIndex);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 3, vertexIndex + 2);
 
-				 lineArray.set(offset_line + 4, vertexIndex + 1);
-				 lineArray.set(offset_line + 5, vertexIndex + 2);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 4, vertexIndex + 1);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 5, vertexIndex + 2);
 
 				 offset_line += 6;
 
@@ -1325,58 +1327,61 @@ public class Mesh extends SidesObject
 
 				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-				 faceArray.set(offset_face, vertexIndex);
-				 faceArray.set(offset_face + 1, vertexIndex + 1);
-				 faceArray.set(offset_face + 2, vertexIndex + 3);
+				 geometryGroup.getWebGlFaceArray().set(offset_face, vertexIndex);
+				 geometryGroup.getWebGlFaceArray().set(offset_face + 1, vertexIndex + 1);
+				 geometryGroup.getWebGlFaceArray().set(offset_face + 2, vertexIndex + 3);
 
-				 faceArray.set(offset_face + 3, vertexIndex + 1);
-				 faceArray.set(offset_face + 4, vertexIndex + 2);
-				 faceArray.set(offset_face + 5, vertexIndex + 3);
+				 geometryGroup.getWebGlFaceArray().set(offset_face + 3, vertexIndex + 1);
+				 geometryGroup.getWebGlFaceArray().set(offset_face + 4, vertexIndex + 2);
+				 geometryGroup.getWebGlFaceArray().set(offset_face + 5, vertexIndex + 3);
 
 				 offset_face += 6;
 
-				 lineArray.set(offset_line, vertexIndex);
-				 lineArray.set(offset_line + 1, vertexIndex + 1);
+				 geometryGroup.getWebGlLineArray().set(offset_line, vertexIndex);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 1, vertexIndex + 1);
 
-				 lineArray.set(offset_line + 2, vertexIndex);
-				 lineArray.set(offset_line + 3, vertexIndex + 3);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 2, vertexIndex);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 3, vertexIndex + 3);
 
-				 lineArray.set(offset_line + 4, vertexIndex + 1);
-				 lineArray.set(offset_line + 5, vertexIndex + 2);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 4, vertexIndex + 1);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 5, vertexIndex + 2);
 
-				 lineArray.set(offset_line + 6, vertexIndex + 2);
-				 lineArray.set(offset_line + 7, vertexIndex + 3);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 6, vertexIndex + 2);
+				 geometryGroup.getWebGlLineArray().set(offset_line + 7, vertexIndex + 3);
 
 				 offset_line += 8;
 
 				 vertexIndex += 4;
 
 			 }
-
+			 
 			 gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer );
-			 gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), faceArray, hint );
+			 gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.getWebGlFaceArray(), hint );
 
 			 gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer );
-			 gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), lineArray, hint );
+			 gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.getWebGlLineArray(), hint );
 
 		 }
 
-		 if ( customAttributes != null ) 
+		 if ( geometryGroup.__webglCustomAttributesList != null ) 
 		 {
-			 for ( int i = 0, il = customAttributes.size(); i < il; i ++ ) 
+			 for ( int i = 0, il = geometryGroup.__webglCustomAttributesList.size(); i < il; i ++ ) 
 			 {
-				 WebGLCustomAttribute customAttribute = customAttributes.get(i);
+				 WebGLCustomAttribute customAttribute = geometryGroup.__webglCustomAttributesList.get(i);
 
 				 if ( ! customAttribute.__original.needsUpdate ) continue;
 
-				 offset_custom = 0;
-				 offset_customSrc = 0;
+				 int offset_custom = 0;
+				 int offset_customSrc = 0;
 
-				 if ( customAttribute.size == 1 ) {
+				 if ( customAttribute.size == 1 ) 
+				 {
 
-					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) {
+					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
+					 {
 
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
+						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+						 {
 
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
@@ -1387,7 +1392,8 @@ public class Mesh extends SidesObject
 							 offset_custom += 3;
 						 }
 
-						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
+						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
+						 {
 
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
@@ -1730,7 +1736,9 @@ public class Mesh extends SidesObject
 
 					 }
 
-				 } else if ( customAttribute.size == 4 ) {
+				 } 
+				 else if ( customAttribute.size == 4 ) 
+				 {
 
 					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
 					 {
@@ -1857,7 +1865,7 @@ public class Mesh extends SidesObject
 						 }
 					 }
 				 }
-
+				 
 				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), customAttribute.buffer );
 				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), customAttribute.array, hint );
 
@@ -1866,22 +1874,7 @@ public class Mesh extends SidesObject
 		 }
 
 		 if ( dispose ) 
-		 {
-			 Log.debug("Mesh.setBuffers() \"dispose\"");
-			 geometryGroup.__inittedArrays = false;
-			 geometryGroup.__colorArray = null;
-			 geometryGroup.__normalArray = null;
-			 geometryGroup.__tangentArray = null;
-			 geometryGroup.__uvArray = null;
-			 geometryGroup.__uv2Array = null;
-			 geometryGroup.__faceArray = null;
-			 geometryGroup.__vertexArray = null;
-			 geometryGroup.__lineArray = null;
-			 geometryGroup.__skinVertexAArray = null;
-			 geometryGroup.__skinVertexBArray = null;
-			 geometryGroup.__skinIndexArray = null;
-			 geometryGroup.__skinWeightArray = null;
-		 }
+			 geometryGroup.dispose();
 	}
 
 	private void sortFacesByMaterial ( Geometry geometry ) 
@@ -1897,7 +1890,8 @@ public class Mesh extends SidesObject
 
 		Log.debug("sortFacesByMaterial() geometry faces count: " + geometry.getFaces().size());
 
-		for ( int f = 0, fl = geometry.getFaces().size(); f < fl; f ++ ) {
+		for ( int f = 0, fl = geometry.getFaces().size(); f < fl; f ++ ) 
+		{
 			Face3 face = geometry.getFaces().get(f);
 
 			int materialIndex = face.getMaterialIndex();
@@ -1914,8 +1908,8 @@ public class Mesh extends SidesObject
 
 			int vertices = face.getClass() == Face3.class ? 3 : 4;
 
-			if ( geometry.geometryGroups.get(groupHash).vertices + vertices > 65535 ) {
-
+			if ( geometry.geometryGroups.get(groupHash).vertices + vertices > 65535 ) 
+			{
 				hash_map.put(materialHash, hash_map.get(materialHash) + 1);
 				groupHash = materialHash + '_' + hash_map.get( materialHash );
 

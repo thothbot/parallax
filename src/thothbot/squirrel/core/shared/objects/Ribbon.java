@@ -93,8 +93,8 @@ public class Ribbon extends GeometryObject
 	{
 		int nvertices = geometry.getVertices().size();
 
-		geometry.__vertexArray = Float32Array.create( nvertices * 3 );
-		geometry.__colorArray = Float32Array.create( nvertices * 3 );
+		geometry.setWebGlVertexArray( Float32Array.create( nvertices * 3 ) );
+		geometry.setWebGlVertexArray( Float32Array.create( nvertices * 3 ) );
 
 		geometry.__webglVertexCount = nvertices;
 	}
@@ -107,9 +107,6 @@ public class Ribbon extends GeometryObject
 		List<Vector3f> vertices = geometry.getVertices();
 		List<Color3f> colors = geometry.getColors();
 
-		Float32Array vertexArray = geometry.__vertexArray;
-		Float32Array colorArray = geometry.__colorArray;
-
 		boolean dirtyVertices = geometry.verticesNeedUpdate;
 		boolean dirtyColors = geometry.colorsNeedUpdate;
 
@@ -121,13 +118,13 @@ public class Ribbon extends GeometryObject
 
 				int offset = v * 3;
 
-				vertexArray.set(offset, vertex.getX());
-				vertexArray.set(offset + 1, vertex.getY());
-				vertexArray.set(offset + 2, vertex.getZ());
+				geometry.getWebGlVertexArray().set(offset, vertex.getX());
+				geometry.getWebGlVertexArray().set(offset + 1, vertex.getY());
+				geometry.getWebGlVertexArray().set(offset + 2, vertex.getZ());
 			}
 
 			gl.bindBuffer(GLenum.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
-			gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), vertexArray, hint);
+			gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint);
 		}
 
 		if (dirtyColors) 
@@ -139,14 +136,14 @@ public class Ribbon extends GeometryObject
 
 				int offset = c * 3;
 
-				colorArray.set(offset, color.getR());
-				colorArray.set(offset + 1, color.getG());
-				colorArray.set(offset + 2, color.getB());
+				geometry.getWebGlColorArray().set(offset, color.getR());
+				geometry.getWebGlColorArray().set(offset + 1, color.getG());
+				geometry.getWebGlColorArray().set(offset + 2, color.getB());
 
 			}
 
 			gl.bindBuffer(GLenum.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-			gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), colorArray, hint);
+			gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint);
 		}
 	}
 }

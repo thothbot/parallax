@@ -352,7 +352,7 @@ public class Material
 	}
 	
 
-	private boolean materialNeedsSmoothNormals () 
+	private boolean materialNeedsSmoothNormals() 
 	{
 		return this.shading != null && this.shading == Material.SHADING.SMOOTH;
 	}

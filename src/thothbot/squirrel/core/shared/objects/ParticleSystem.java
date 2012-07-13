@@ -113,8 +113,8 @@ public class ParticleSystem extends GeometryObject
 	{
 		int nvertices = geometry.getVertices().size();
 
-		geometry.__vertexArray = Float32Array.create( nvertices * 3 );
-		geometry.__colorArray = Float32Array.create( nvertices * 3 );
+		geometry.setWebGlVertexArray( Float32Array.create( nvertices * 3 ) );
+		geometry.setWebGlColorArray( Float32Array.create( nvertices * 3 ) );
 
 		geometry.__sortArray = new ArrayList<List<Integer>>();
 		geometry.__webglParticleCount = nvertices;
@@ -145,9 +145,6 @@ public class ParticleSystem extends GeometryObject
 		List<Vector3f> vertices = geometry.getVertices();
 
 		List<Color3f> colors = geometry.getColors();
-
-		Float32Array vertexArray = geometry.__vertexArray;
-		Float32Array colorArray  = geometry.__colorArray;
 
 		List<List<Integer>> sortArray = geometry.__sortArray;
 
@@ -185,9 +182,9 @@ public class ParticleSystem extends GeometryObject
 				Vector3f vertex = vertices.get(sortArray.get(v).get(1) );
 				int offset = v * 3;
 
-				vertexArray.set( offset , vertex.getX());
-				vertexArray.set( offset + 1, vertex.getY());
-				vertexArray.set( offset + 2, vertex.getZ());
+				geometry.getWebGlVertexArray().set( offset , vertex.getX());
+				geometry.getWebGlVertexArray().set( offset + 1, vertex.getY());
+				geometry.getWebGlVertexArray().set( offset + 2, vertex.getZ());
 
 			}
 
@@ -197,9 +194,9 @@ public class ParticleSystem extends GeometryObject
 
 				Color3f color = colors.get( sortArray.get(c).get(1) );
 
-				colorArray.set( offset, color.getR());
-				colorArray.set( offset + 1, color.getG());
-				colorArray.set( offset + 2, color.getB());
+				geometry.getWebGlColorArray().set( offset, color.getR());
+				geometry.getWebGlColorArray().set( offset + 1, color.getG());
+				geometry.getWebGlColorArray().set( offset + 2, color.getB());
 			}
 
 			if ( customAttributes != null ) {
@@ -294,9 +291,9 @@ public class ParticleSystem extends GeometryObject
 
 					int offset = v * 3;
 
-					vertexArray.set( offset, vertex.getX());
-					vertexArray.set( offset + 1,  vertex.getY());
-					vertexArray.set( offset + 2, vertex.getZ());
+					geometry.getWebGlVertexArray().set( offset, vertex.getX());
+					geometry.getWebGlVertexArray().set( offset + 1,  vertex.getY());
+					geometry.getWebGlVertexArray().set( offset + 2, vertex.getZ());
 				}
 			}
 
@@ -309,9 +306,9 @@ public class ParticleSystem extends GeometryObject
 
 					int offset = c * 3;
 
-					colorArray.set(offset, color.getR());
-					colorArray.set(offset + 1, color.getG());
-					colorArray.set(offset + 2,  color.getB());
+					geometry.getWebGlColorArray().set(offset, color.getR());
+					geometry.getWebGlColorArray().set(offset + 1, color.getG());
+					geometry.getWebGlColorArray().set(offset + 2,  color.getB());
 				}
 			}
 
@@ -403,13 +400,13 @@ public class ParticleSystem extends GeometryObject
 		if ( dirtyVertices || this.sortParticles ) 
 		{
 			gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer );
-			gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), vertexArray, hint );
+			gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint );
 		}
 
 		if ( dirtyColors || this.sortParticles ) 
 		{
 			gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer );
-			gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), colorArray, hint );
+			gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint );
 		}
 
 		if ( customAttributes != null ) 

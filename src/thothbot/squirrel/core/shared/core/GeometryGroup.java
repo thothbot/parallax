@@ -28,6 +28,7 @@ import java.util.List;
 import thothbot.squirrel.core.client.gl2.WebGLBuffer;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 import thothbot.squirrel.core.client.gl2.arrays.Uint16Array;
+import thothbot.squirrel.core.shared.Log;
 
 
 public class GeometryGroup extends GeometryBuffer
@@ -35,35 +36,33 @@ public class GeometryGroup extends GeometryBuffer
 	public List<Integer> faces3;
 	public List<Integer> faces4;
 	
-	public int materialIndex;
+	public int materialIndex = -1;
 
 	public List<Integer> offsets;
 	public int vertices;
+	
+	public List<Float32Array> __morphTargetsArrays;	
+	public List<Float32Array> __morphNormalsArrays;
 	
 	public WebGLBuffer vertexPositionBuffer;
 	public WebGLBuffer vertexNormalBuffer;
 	public WebGLBuffer vertexUvBuffer;
 	public WebGLBuffer vertexColorBuffer;
 	public WebGLBuffer vertexIndexBuffer;
-	
-	public Float32Array __normalArray;
-	public Float32Array __tangentArray;
-	public Float32Array __uvArray;
-	public Float32Array __uv2Array;
-	
-	public Float32Array __skinVertexAArray;
-	public Float32Array __skinVertexBArray;
-	public Float32Array __skinIndexArray;
-	public Float32Array __skinWeightArray;
-	
-	public Uint16Array __faceArray;
-	public Uint16Array __lineArray;
-	
-	public List<Float32Array> __morphTargetsArrays;	
-	public List<Float32Array> __morphNormalsArrays;
-	
-	public boolean __inittedArrays;
 		
+	private Float32Array webGlNormalArray;
+	private Float32Array webGlTangentArray;
+	private Float32Array webGlUvArray;
+	private Float32Array webGlUv2Array;
+	
+	private Uint16Array webGlFaceArray;
+	private Uint16Array webGlLineArray;
+
+	private Float32Array webGlSkinVertexAArray;
+	private Float32Array webGlSkinVertexBArray;
+	private Float32Array webGlSkinIndexArray;
+	private Float32Array webGlSkinWeightArray;
+					
 	public GeometryGroup(int materialIndex, int numMorphTargets, int numMorphNormals) 
 	{
 		super();
@@ -75,5 +74,123 @@ public class GeometryGroup extends GeometryBuffer
 		this.numMorphTargets = numMorphTargets;
 		this.numMorphNormals = numMorphNormals;
 	}
+		
+	public Float32Array getWebGlNormalArray() 
+	{
+		return webGlNormalArray;
+	}
 
+	public Float32Array getWebGlTangentArray() 
+	{
+		return webGlTangentArray;
+	}
+
+	public Float32Array getWebGlUvArray() 
+	{
+		return webGlUvArray;
+	}
+
+	public Float32Array getWebGlUv2Array() 
+	{
+		return webGlUv2Array;
+	}
+
+	public Uint16Array getWebGlFaceArray() 
+	{
+		return webGlFaceArray;
+	}
+
+	public Uint16Array getWebGlLineArray() 
+	{
+		return webGlLineArray;
+	}
+
+	public Float32Array getWebGlSkinVertexAArray() 
+	{
+		return webGlSkinVertexAArray;
+	}
+
+	public Float32Array getWebGlSkinVertexBArray() 
+	{
+		return webGlSkinVertexBArray;
+	}
+
+	public Float32Array getWebGlSkinIndexArray() 
+	{
+		return webGlSkinIndexArray;
+	}
+
+	public Float32Array getWebGlSkinWeightArray() 
+	{
+		return webGlSkinWeightArray;
+	}
+
+	public void setWebGlNormalArray(Float32Array a)
+	{
+		this.webGlNormalArray = a;
+	}
+	
+	public void setWebGlTangentArray(Float32Array a)
+	{
+		this.webGlTangentArray = a;
+	}
+	
+	public void setWebGlUvArray(Float32Array a)
+	{
+		this.webGlUvArray = a;
+	}
+	
+	public void setWebGlUv2Array(Float32Array a)
+	{
+		this.webGlUv2Array = a;
+	}
+	
+	public void setWebGlFaceArray(Uint16Array a)
+	{
+		this.webGlFaceArray = a;
+	}
+	
+	public void setWebGlLineArray(Uint16Array a)
+	{
+		this.webGlLineArray = a;
+	}
+	
+	public void setWebGlSkinVertexAArray(Float32Array a)
+	{
+		this.webGlSkinVertexAArray = a;
+	}
+	
+	public void setWebGlSkinVertexBArray(Float32Array a)
+	{
+		this.webGlSkinVertexBArray = a;
+	}
+	
+	public void setWebGlSkinIndexArray(Float32Array a)
+	{
+		this.webGlSkinIndexArray = a;
+	}
+	
+	public void setWebGlSkinWeightArray(Float32Array a)
+	{
+		this.webGlSkinWeightArray = a;
+	}
+	
+	@Override
+	public void dispose() 
+	{
+		super.dispose();
+		
+		setWebGlNormalArray( null );
+		setWebGlTangentArray( null );
+		setWebGlUvArray( null );
+		setWebGlUv2Array( null );
+		
+		setWebGlFaceArray( null );
+		setWebGlLineArray( null );
+		
+		setWebGlSkinVertexAArray( null );
+		setWebGlSkinVertexBArray( null );
+		setWebGlSkinIndexArray( null );
+		setWebGlSkinWeightArray( null );
+	}
 }
