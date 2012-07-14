@@ -24,6 +24,7 @@ package thothbot.squirrel.core.shared.geometries;
 
 import java.util.Arrays;
 
+import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.core.Face4;
 import thothbot.squirrel.core.shared.core.Geometry;
 import thothbot.squirrel.core.shared.core.UVf;
@@ -56,16 +57,15 @@ public final class TorusKnot extends Geometry
 
 		for ( int i = 0; i < segmentsR; ++ i )  	
 		{
-
 			grid[ i ] = new int[segmentsT];
 
 			for ( int j = 0; j < segmentsT; ++ j ) 
 			{
+				double u = i / (double)segmentsR * 2.0 * p * Math.PI;
+				double v = j / (double)segmentsT * 2.0 * Math.PI;
 
-				double u = ((double)i / segmentsR * 2.0f * p * Math.PI);
-				double v = ((double)j / segmentsT * 2.0f * Math.PI);
-				Vector3f p1 = getPos( u, v, q, p, radius, heightScale );
-				Vector3f p2 = getPos( u + 0.01f, v, q, p, radius, heightScale );
+				Vector3f p1 = getPos( u,        v, q, p, radius, heightScale );
+				Vector3f p2 = getPos( u + 0.01, v, q, p, radius, heightScale );
 				
 				tang.sub( p2, p1 );
 				n.add( p2, p1 );
@@ -83,14 +83,13 @@ public final class TorusKnot extends Geometry
 				p1.addZ(cx * n.getZ() + cy * bitan.getZ());
 
 				grid[ i ][ j ] = vert( p1.getX(), p1.getY(), p1.getZ() );
-
 			}
 		}
 		
-		for ( int i = 0; i < segmentsR; ++ i ) {
-
-			for ( int j = 0; j < segmentsT; ++ j ) {
-
+		for ( int i = 0; i < segmentsR; ++ i ) 
+		{
+			for ( int j = 0; j < segmentsT; ++ j ) 
+			{
 				int ip = ( i + 1 ) % segmentsR;
 				int jp = ( j + 1 ) % segmentsT;
 
@@ -99,14 +98,13 @@ public final class TorusKnot extends Geometry
 				int c = grid[ ip ][ jp ];
 				int d = grid[ i ][ jp ];
 
-				UVf uva = new UVf( (float)i / segmentsR, (float)j / segmentsT );
-				UVf uvb = new UVf( (float)( i + 1.0f ) / segmentsR, (float)j / segmentsT );
-				UVf uvc = new UVf( (float)( i + 1.0f ) / segmentsR, (float)( j + 1.0f ) / segmentsT );
-				UVf uvd = new UVf( (float)i / segmentsR, (float)( j + 1.0f ) / segmentsT );
+				UVf uva = new UVf(            i / (float)segmentsR,            j / (float)segmentsT );
+				UVf uvb = new UVf( ( i + 1.0f ) / (float)segmentsR,            j / (float)segmentsT );
+				UVf uvc = new UVf( ( i + 1.0f ) / (float)segmentsR, ( j + 1.0f ) / (float)segmentsT );
+				UVf uvd = new UVf(            i / (float)segmentsR, ( j + 1.0f ) / (float)segmentsT );
 
 				this.faces.add( new Face4( a, b, c, d ) );
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList( uva,uvb,uvc, uvd ) );
-
+				this.faceVertexUvs.get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
 			}
 		}
 
@@ -121,18 +119,18 @@ public final class TorusKnot extends Geometry
 		return this.vertices.size() - 1;
 	}
 
-	private Vector3f getPos( double u, double v, double in_q, double in_p, double radius, double heightScale ) 
+	private Vector3f getPos( double u, double v, int in_q, int in_p, int radius, int heightScale ) 
 	{
 		double cu = Math.cos( u );
 		double cv = Math.cos( v );
 		double su = Math.sin( u );
-		double quOverP = (in_q / in_p * u);
+		double quOverP = (in_q / (double)in_p * u);
 		double cs = Math.cos( quOverP );
 
-		double tx = radius * ( 2.0f + cs ) * 0.5f * cu;
-		double ty = radius * ( 2.0f + cs ) * su * 0.5f;
-		double tz = heightScale * radius * Math.sin( quOverP ) * 0.5f;
-
-		return new Vector3f( (float)tx, (float)ty, (float)tz );
+		return new Vector3f( 
+			(float)(radius * ( 2.0f + cs ) * cu * 0.5f),
+			(float)(radius * ( 2.0f + cs ) * su * 0.5f),
+			(float)(heightScale * radius * Math.sin( quOverP ) * 0.5f)
+		);
 	}
 }
