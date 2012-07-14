@@ -33,7 +33,6 @@ import thothbot.squirrel.core.client.gl2.enums.TextureWrapMode;
 import thothbot.squirrel.core.shared.core.Vector2f;
 
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.ui.Image;
 
 public class Texture
 {

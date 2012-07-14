@@ -681,7 +681,12 @@ public class WebGLRenderer
 	// Rendering
 	public void render( Scene scene, Camera camera)
 	{
-		render(scene, camera, null, false);
+		render(scene, camera, null);
+	}
+	
+	public void render( Scene scene, Camera camera, WebGLRenderTarget renderTarget)
+	{
+		render(scene, camera, renderTarget, false);
 	}
 
 	public void render( Scene scene, Camera camera, WebGLRenderTarget renderTarget, boolean forceClear ) 
