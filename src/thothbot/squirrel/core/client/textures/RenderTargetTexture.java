@@ -20,89 +20,75 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.squirrel.core.client.renderers;
+package thothbot.squirrel.core.client.textures;
 
 import thothbot.squirrel.core.client.gl2.WebGLFramebuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderbuffer;
 import thothbot.squirrel.core.client.gl2.WebGLRenderingContext;
-import thothbot.squirrel.core.client.gl2.WebGLTexture;
 import thothbot.squirrel.core.client.gl2.enums.DataType;
 import thothbot.squirrel.core.client.gl2.enums.GLenum;
 import thothbot.squirrel.core.client.gl2.enums.PixelFormat;
 import thothbot.squirrel.core.client.gl2.enums.TextureMagFilter;
 import thothbot.squirrel.core.client.gl2.enums.TextureMinFilter;
 import thothbot.squirrel.core.client.gl2.enums.TextureWrapMode;
-import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.core.Mathematics;
 import thothbot.squirrel.core.shared.core.Vector2f;
 
-public class WebGLRenderTarget
+public class RenderTargetTexture extends Texture
 {
-	public int width;
-	public int height;
+	private int width;
+	private int height;
 
-	public Vector2f offset;
-	public Vector2f repeat;
-
-	public boolean generateMipmaps = true;
-	
 	public int activeCubeFace;
 
-	public TextureWrapMode wrapS;
-	public TextureWrapMode wrapT;
+	public boolean depthBuffer = true;
+	public boolean stencilBuffer = true;
 
-	public TextureMagFilter magFilter;
-	public TextureMinFilter minFilter;
-
-	public PixelFormat format;
-	public DataType type;
-
-	public boolean depthBuffer;
-	public boolean stencilBuffer;
-
-	public WebGLTexture __webglTexture;
 	public WebGLFramebuffer __webglFramebuffer;
 	public WebGLRenderbuffer __webglRenderbuffer;
-	
-	public static class WebGLRenderTargetOptions
+
+	public RenderTargetTexture(int width, int height) 
 	{
-		public TextureWrapMode wrapS = TextureWrapMode.CLAMP_TO_EDGE;
-		public TextureWrapMode wrapT = TextureWrapMode.CLAMP_TO_EDGE;
-		
-		public TextureMagFilter magFilter = TextureMagFilter.LINEAR;
-		public TextureMinFilter minFilter = TextureMinFilter.LINEAR_MIPMAP_LINEAR;
-		
-		public PixelFormat format = PixelFormat.RGBA;
-		public DataType type = DataType.UNSIGNED_BYTE;
-		
-		public boolean depthBuffer = true;
-		public boolean stencilBuffer = true;
+		this(width, height, 
+				TextureWrapMode.CLAMP_TO_EDGE, TextureWrapMode.CLAMP_TO_EDGE, 
+				TextureMagFilter.LINEAR,       TextureMinFilter.LINEAR_MIPMAP_LINEAR,
+				PixelFormat.RGBA,              DataType.UNSIGNED_BYTE);
 	}
 
-	public WebGLRenderTarget(int width, int height) {
-
-		this(width, height, new WebGLRenderTarget.WebGLRenderTargetOptions());
-	}
-
-	public WebGLRenderTarget(int width, int height, WebGLRenderTarget.WebGLRenderTargetOptions options) 
+	public RenderTargetTexture(int width, int height, 
+			TextureWrapMode wrapS,      TextureWrapMode wrapT, 
+			TextureMagFilter magFilter, TextureMinFilter minFilter,
+			PixelFormat format,         DataType type) 
 	{
+		super(); // call super Texture
+
 		this.width = width;
 		this.height = height;
+
+		setWrapS( wrapS );
+		setWrapT( wrapT );
 		
-		this.offset = new Vector2f(0, 0);
-		this.repeat = new Vector2f(1, 1);
+		setMagFilter( magFilter );
+		setMinFilter( minFilter );
 		
-		this.wrapS = options.wrapS;
-		this.wrapT = options.wrapT;
-		
-		this.magFilter = options.magFilter;
-		this.minFilter = options.minFilter;
-		
-		this.format = options.format;
-		this.type = options.type;
-		
-		this.depthBuffer = options.depthBuffer;
-		this.stencilBuffer = options.stencilBuffer;
+		setFormat( format );
+		setType( type );
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	public WebGLFramebuffer getWebGLFramebuffer() {
@@ -119,21 +105,21 @@ public class WebGLRenderTarget
 		gl.deleteRenderbuffer(this.__webglRenderbuffer);
 	}
 
-	public WebGLRenderTarget clone()
+	public RenderTargetTexture clone()
 	{
-		WebGLRenderTarget tmp = new WebGLRenderTarget(this.width, this.height);
+		RenderTargetTexture tmp = new RenderTargetTexture(this.width, this.height);
 
-		tmp.wrapS = this.wrapS;
-		tmp.wrapT = this.wrapT;
+		tmp.setWrapS( getWrapS() );
+		tmp.setWrapT( getWrapT() );
 
-		tmp.magFilter = this.magFilter;
-		tmp.minFilter = this.minFilter;
+		tmp.setMagFilter( getMagFilter() );
+		tmp.setMinFilter( getMinFilter() );
 
-		tmp.offset.copy(this.offset);
-		tmp.repeat.copy(this.repeat);
+		tmp.getOffset().copy(getOffset());
+		tmp.getRepeat().copy(getRepeat());
 
-		tmp.format = this.format;
-		tmp.type = this.type;
+		tmp.setFormat( getFormat() );
+		tmp.setType( getType() );
 
 		tmp.depthBuffer = this.depthBuffer;
 		tmp.stencilBuffer = this.stencilBuffer;
@@ -152,8 +138,6 @@ public class WebGLRenderTarget
 
 		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(this.width)
 				&& Mathematics.isPowerOfTwo(this.height);
-		int glFormat = this.format.getValue();
-		int glType = this.type.getValue();
 
 		this.__webglFramebuffer = gl.createFramebuffer();
 		this.__webglRenderbuffer = gl.createRenderbuffer();
@@ -162,8 +146,8 @@ public class WebGLRenderTarget
 		// TODO: FIX setTextureParameters
 		//Texture.setTextureParameters(_gl, GLenum.TEXTURE_2D, renderTarget, isTargetPowerOfTwo);
 
-		gl.texImage2D(GLenum.TEXTURE_2D.getValue(), 0, glFormat, this.width, this.height, 0,
-				glFormat, glType, null);
+		gl.texImage2D(GLenum.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,
+				getFormat().getValue(), getType().getValue(), null);
 
 		setupFrameBuffer(gl, this.__webglFramebuffer, GLenum.TEXTURE_2D.getValue());
 		setupRenderBuffer(gl, this.__webglRenderbuffer);

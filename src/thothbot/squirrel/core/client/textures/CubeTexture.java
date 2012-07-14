@@ -36,7 +36,7 @@ public class CubeTexture extends Texture
 	public CubeTexture(List<Element> images, Texture.MAPPING_MODE mapping)
 	{
 		this.images = images;
-		this.mapping = mapping;
+		setMapping( mapping );
 	}
 
 	/**

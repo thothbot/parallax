@@ -25,9 +25,9 @@ package thothbot.squirrel.core.shared.cameras;
 import thothbot.squirrel.core.client.gl2.enums.PixelFormat;
 import thothbot.squirrel.core.client.gl2.enums.TextureMagFilter;
 import thothbot.squirrel.core.client.gl2.enums.TextureMinFilter;
-import thothbot.squirrel.core.client.renderers.WebGLRenderTarget;
-import thothbot.squirrel.core.client.renderers.WebGLRenderTargetCube;
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
+import thothbot.squirrel.core.client.textures.RenderTargetTexture;
+import thothbot.squirrel.core.client.textures.RenderTargetCubeTexture;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.objects.Object3D;
 import thothbot.squirrel.core.shared.scenes.Scene;
@@ -58,7 +58,7 @@ public final class CubeCamera extends Object3D
 	PerspectiveCamera cameraPZ;
 	PerspectiveCamera cameraNZ;
 	
-	WebGLRenderTarget renderTarget;
+	RenderTargetTexture renderTarget;
 	
 	public CubeCamera(float near, float far, int cubeResolution)
 	{
@@ -92,24 +92,23 @@ public final class CubeCamera extends Object3D
 		cameraNZ.lookAt( new Vector3f( 0.0f, 0.0f, -1.0f ) );
 		this.addChild( cameraNZ );
 
-		WebGLRenderTarget.WebGLRenderTargetOptions rtOpt = new WebGLRenderTarget.WebGLRenderTargetOptions();
-		rtOpt.format = PixelFormat.RGB;
-		rtOpt.magFilter = TextureMagFilter.LINEAR;
-		rtOpt.minFilter = TextureMinFilter.LINEAR;
-		this.renderTarget = new WebGLRenderTargetCube( cubeResolution, cubeResolution, rtOpt );
+		this.renderTarget = new RenderTargetCubeTexture( cubeResolution, cubeResolution );
+		this.renderTarget.setFormat(PixelFormat.RGB);
+		this.renderTarget.setMagFilter(TextureMagFilter.LINEAR);
+		this.renderTarget.setMinFilter(TextureMinFilter.LINEAR);
 	}
 	
-	public WebGLRenderTarget getRenderTarget()
+	public RenderTargetTexture getRenderTarget()
 	{
 		return this.renderTarget;
 	}
 	
 	public void updateCubeMap( WebGLRenderer renderer, Scene scene ) 
 	{
-		WebGLRenderTarget renderTarget = this.renderTarget;
-		boolean generateMipmaps = renderTarget.generateMipmaps;
+		RenderTargetTexture renderTarget = this.renderTarget;
+		boolean generateMipmaps = renderTarget.isGenerateMipmaps();
 
-		renderTarget.generateMipmaps = false;
+		renderTarget.setGenerateMipmaps( false );
 
 		renderTarget.activeCubeFace = 0;
 		renderer.render( scene, cameraPX, renderTarget );
@@ -126,7 +125,7 @@ public final class CubeCamera extends Object3D
 		renderTarget.activeCubeFace = 4;
 		renderer.render( scene, cameraPZ, renderTarget );
 
-		renderTarget.generateMipmaps = generateMipmaps;
+		renderTarget.setGenerateMipmaps( generateMipmaps );
 
 		renderTarget.activeCubeFace = 5;
 		renderer.render( scene, cameraNZ, renderTarget );

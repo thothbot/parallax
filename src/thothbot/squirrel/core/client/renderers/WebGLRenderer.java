@@ -45,6 +45,7 @@ import thothbot.squirrel.core.client.shader.Uniform;
 import thothbot.squirrel.core.client.textures.CubeTexture;
 import thothbot.squirrel.core.client.textures.DataTexture;
 import thothbot.squirrel.core.client.textures.Texture;
+import thothbot.squirrel.core.client.textures.RenderTargetTexture;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.cameras.OrthographicCamera;
@@ -431,7 +432,7 @@ public class WebGLRenderer
 		getGL().clear( bits );
 	}
 
-	public void clearTarget( WebGLRenderTarget renderTarget, boolean color, boolean depth, boolean stencil ) 
+	public void clearTarget( RenderTargetTexture renderTarget, boolean color, boolean depth, boolean stencil ) 
 	{
 		setRenderTarget( renderTarget );
 		clear( color, depth, stencil );
@@ -492,7 +493,7 @@ public class WebGLRenderer
 	 * @parameter
 	 * 		renderTarget — an instance of WebGLRenderTarget
 	 */
-	public void deallocateRenderTarget ( WebGLRenderTarget renderTarget ) 
+	public void deallocateRenderTarget ( RenderTargetTexture renderTarget ) 
 	{
 		renderTarget.deallocate(getGL());
 	}
@@ -684,12 +685,12 @@ public class WebGLRenderer
 		render(scene, camera, null);
 	}
 	
-	public void render( Scene scene, Camera camera, WebGLRenderTarget renderTarget)
+	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget)
 	{
 		render(scene, camera, renderTarget, false);
 	}
 
-	public void render( Scene scene, Camera camera, WebGLRenderTarget renderTarget, boolean forceClear ) 
+	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
 	{
 		Log.debug("Called render()");
 
@@ -838,9 +839,12 @@ public class WebGLRenderer
 
 
 		// Generate mipmap if we're using any kind of mipmap filtering
-
-		if ( renderTarget != null && renderTarget.generateMipmaps && renderTarget.minFilter != TextureMinFilter.NEAREST && renderTarget.minFilter != TextureMinFilter.LINEAR)
+		if ( renderTarget != null && renderTarget.isGenerateMipmaps() 
+				&& renderTarget.getMinFilter() != TextureMinFilter.NEAREST 
+				&& renderTarget.getMinFilter() != TextureMinFilter.LINEAR)
+		{
 			renderTarget.updateRenderTargetMipmap(getGL());
+		}
 
 		// Ensure depth buffer writing is enabled so it can be cleared on next render
 
@@ -1810,7 +1814,11 @@ public class WebGLRenderer
 		if ( material.getMap() != null) 
 		{
 			Vector4f vector4 = (Vector4f)uniforms.get("offsetRepeat").value;
-			vector4.set( material.getMap().offset.getX(), material.getMap().offset.getY(), material.getMap().repeat.getX(), material.getMap().repeat.getY() );
+			vector4.set( 
+					material.getMap().getOffset().getX(), 
+					material.getMap().getOffset().getY(), 
+					material.getMap().getRepeat().getX(), 
+					material.getMap().getRepeat().getY() );
 		}
 
 		uniforms.get("lightMap").texture = material.getLightMap();
@@ -2512,7 +2520,7 @@ Log.error("?????????????");
 
 	private void setTexture( Texture texture, int slot ) 
 	{
-		if ( texture.getNeedsUpdate()) 
+		if ( texture.isNeedsUpdate()) 
 		{
 			if ( ! texture.__webglInit ) 
 			{
@@ -2525,7 +2533,7 @@ Log.error("?????????????");
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.__webglTexture );
 
-			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.premultiplyAlpha ? -1 : 1 );
+			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? -1 : 1 );
 
 			Element image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
@@ -2539,11 +2547,11 @@ Log.error("?????????????");
 			} 
 			else 
 			{
-				getGL().texImage2D( GLenum.TEXTURE_2D.getValue(), 0, texture.format.getValue(), 
-						texture.format.getValue(), texture.type.getValue(), image);
+				getGL().texImage2D( GLenum.TEXTURE_2D.getValue(), 0, texture.getFormat().getValue(), 
+						texture.getFormat().getValue(), texture.getType().getValue(), image);
 			}
 
-			if ( texture.generateMipmaps && isImagePowerOfTwo ) 
+			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo ) 
 				getGL().generateMipmap( GLenum.TEXTURE_2D.getValue() );
 
 			texture.setNeedsUpdate(false);
@@ -2596,7 +2604,7 @@ Log.error("?????????????");
 		if ( !texture.isValid() )
 			return;
 
-		if ( texture.getNeedsUpdate() ) 
+		if ( texture.isNeedsUpdate() ) 
 		{
 			if ( texture.__webglTexture == null )
 				texture.__webglTexture = getGL().createTexture();
@@ -2624,9 +2632,9 @@ Log.error("?????????????");
 
 			for ( int i = 0; i < 6; i ++ )
 				getGL().texImage2D( GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, 
-						texture.format.getValue(), texture.format.getValue(), texture.type.getValue(), cubeImage.get( i ) );
+						texture.getFormat().getValue(), texture.getFormat().getValue(), texture.getType().getValue(), cubeImage.get( i ) );
 
-			if ( texture.generateMipmaps && isImagePowerOfTwo )	
+			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )	
 				getGL().generateMipmap( GLenum.TEXTURE_CUBE_MAP.getValue() );
 
 			texture.setNeedsUpdate(false);
@@ -2647,19 +2655,22 @@ Log.error("?????????????");
 
 	// Render targets
 
-	private void setRenderTarget( WebGLRenderTarget renderTarget ) 
+	private void setRenderTarget( RenderTargetTexture renderTarget ) 
 	{
 		Log.debug("Called setRenderTarget(params)");
 		WebGLFramebuffer framebuffer = null;
 		
-		if(renderTarget != null) {
+		if(renderTarget != null) 
+		{
 			renderTarget.setRenderTarget(getGL());
 		    framebuffer = renderTarget.getWebGLFramebuffer();
 
-			this._currentWidth = renderTarget.width;
-			this._currentHeight = renderTarget.height;
+			this._currentWidth = renderTarget.getWidth();
+			this._currentHeight = renderTarget.getHeight();
 
-		} else {
+		} 
+		else 
+		{
 			this._currentWidth = this.viewportWidth;
 			this._currentHeight = this.viewportHeight;
 		}

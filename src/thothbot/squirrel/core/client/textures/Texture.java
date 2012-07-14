@@ -36,7 +36,7 @@ import com.google.gwt.dom.client.Element;
 
 public class Texture
 {
-	public static int TextureCount = 0;
+	private static int TextureCount = 0;
 	
 	public static enum OPERATIONS 
 	{
@@ -60,14 +60,14 @@ public class Texture
 		SPHERICAL_REFRACTION // SphericalRefractionMapping = function () {};
 	};
 
-	public int id;
+	private int id;
 
 	private Element image;
 
-	public Vector2f offset;
-	public Vector2f repeat;
+	private Vector2f offset;
+	private Vector2f repeat;
 
-	protected Texture.MAPPING_MODE mapping = Texture.MAPPING_MODE.UV;
+	private Texture.MAPPING_MODE mapping = Texture.MAPPING_MODE.UV;
 
 	private TextureWrapMode wrapS = TextureWrapMode.CLAMP_TO_EDGE;
 	private TextureWrapMode wrapT = TextureWrapMode.CLAMP_TO_EDGE;
@@ -75,13 +75,13 @@ public class Texture
 	private TextureMagFilter magFilter = TextureMagFilter.LINEAR;
 	private TextureMinFilter minFilter = TextureMinFilter.LINEAR_MIPMAP_LINEAR;
 
-	public PixelFormat format = PixelFormat.RGBA;
-	public DataType type = DataType.UNSIGNED_BYTE;
+	private PixelFormat format = PixelFormat.RGBA;
+	private DataType type = DataType.UNSIGNED_BYTE;
 
-	public boolean generateMipmaps = true;
-	public boolean premultiplyAlpha = false;
+	private boolean isGenerateMipmaps = true;
+	private boolean isPremultiplyAlpha = false;
 
-	private boolean needsUpdate = false;
+	private boolean isNeedsUpdate = false;
 	
 	public boolean __webglInit;
 	public WebGLTexture __webglTexture;
@@ -121,55 +121,112 @@ public class Texture
 		this.type = type;
 	}
 	
-	
-	public Texture.MAPPING_MODE getMapping()
-	{
+	public int getId() {
+		return id;
+	}
+
+	public Texture.MAPPING_MODE getMapping() {
 		return this.mapping;
 	}
 
-	public void setWrapS(TextureWrapMode wrapS)
-	{
+	public void setWrapS(TextureWrapMode wrapS)	{
 		this.wrapS = wrapS;
 	}
 
-	public TextureWrapMode getWrapS()
-	{
+	public TextureWrapMode getWrapS(){
 		return this.wrapS;
 	}
 
-	public void setWrapT(TextureWrapMode wrapT)
-	{
+	public void setWrapT(TextureWrapMode wrapT) {
 		this.wrapT = wrapT;
 	}
 	
-	public TextureWrapMode getWrapT()
-	{
+	public TextureWrapMode getWrapT() {
 		return this.wrapT;
 	}
 
-	public TextureMagFilter getMagFilter()
-	{
+	public TextureMagFilter getMagFilter() {
 		return this.magFilter;
 	}
 
-	public TextureMinFilter getMinFilter()
-	{
+	public TextureMinFilter getMinFilter() {
 		return this.minFilter;
 	}
 	
-	public Boolean getNeedsUpdate()
-	{
-		return this.needsUpdate;
+	public Boolean isNeedsUpdate()	{
+		return this.isNeedsUpdate;
 	}
 	
-	public void setNeedsUpdate(Boolean needsUpdate)
-	{
-		this.needsUpdate = needsUpdate;
+	public void setNeedsUpdate(Boolean needsUpdate) {
+		this.isNeedsUpdate = needsUpdate;
 	}
 	
-	public Element getImage()
-	{
+	public Element getImage() {
 		return this.image;
+	}
+
+	public Vector2f getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Vector2f offset) {
+		this.offset = offset;
+	}
+
+	public Vector2f getRepeat() {
+		return repeat;
+	}
+
+	public void setRepeat(Vector2f repeat) {
+		this.repeat = repeat;
+	}
+
+	public PixelFormat getFormat() {
+		return format;
+	}
+
+	public void setFormat(PixelFormat format) {
+		this.format = format;
+	}
+
+	public DataType getType() {
+		return type;
+	}
+
+	public void setType(DataType type) {
+		this.type = type;
+	}
+
+	public boolean isGenerateMipmaps() {
+		return isGenerateMipmaps;
+	}
+
+	public void setGenerateMipmaps(boolean generateMipmaps) {
+		this.isGenerateMipmaps = generateMipmaps;
+	}
+
+	public boolean isPremultiplyAlpha() {
+		return isPremultiplyAlpha;
+	}
+
+	public void setPremultiplyAlpha(boolean premultiplyAlpha) {
+		this.isPremultiplyAlpha = premultiplyAlpha;
+	}
+
+	public void setMapping(Texture.MAPPING_MODE mapping) {
+		this.mapping = mapping;
+	}
+
+	public void setMagFilter(TextureMagFilter magFilter) {
+		this.magFilter = magFilter;
+	}
+
+	public void setMinFilter(TextureMinFilter minFilter) {
+		this.minFilter = minFilter;
+	}
+
+	public void setNeedsUpdate(boolean needsUpdate) {
+		this.isNeedsUpdate = needsUpdate;
 	}
 
 	public Texture clone()

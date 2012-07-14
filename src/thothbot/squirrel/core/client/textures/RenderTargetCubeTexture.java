@@ -20,7 +20,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.squirrel.core.client.renderers;
+package thothbot.squirrel.core.client.textures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +32,16 @@ import thothbot.squirrel.core.client.gl2.enums.GLenum;
 import thothbot.squirrel.core.shared.core.Mathematics;
 
 
-public class WebGLRenderTargetCube extends WebGLRenderTarget
+public class RenderTargetCubeTexture extends RenderTargetTexture
 {
 	public int activeCubeFace = 0;
 
 	public List<WebGLFramebuffer> __webglFramebuffer;
 	public List<WebGLRenderbuffer> __webglRenderbuffer;
 
-	public WebGLRenderTargetCube(int width, int height, WebGLRenderTarget.WebGLRenderTargetOptions options) 
+	public RenderTargetCubeTexture(int width, int height ) 
 	{
-		super(width, height, options);
+		super(width, height);
 	}
 
 	@Override
@@ -79,10 +79,8 @@ public class WebGLRenderTargetCube extends WebGLRenderTarget
 
 		// Setup texture, create render and frame buffers
 
-		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(this.width)
-				&& Mathematics.isPowerOfTwo(this.height);
-		int glFormat = this.format.getValue();
-		int glType = this.type.getValue();
+		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(getWidth())
+				&& Mathematics.isPowerOfTwo(getHeight());
 
 		this.__webglFramebuffer = new ArrayList<WebGLFramebuffer>();
 		this.__webglRenderbuffer = new ArrayList<WebGLRenderbuffer>();
@@ -96,7 +94,8 @@ public class WebGLRenderTargetCube extends WebGLRenderTarget
 			this.__webglFramebuffer.set( i, gl.createFramebuffer());
 			this.__webglRenderbuffer.set( i, gl.createRenderbuffer());
 
-			gl.texImage2D( GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, glFormat, this.width, this.height, 0, glFormat, glType, null );
+			gl.texImage2D( GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, getFormat().getValue(), getWidth(), getHeight(), 0, 
+					getFormat().getValue(), getType().getValue(), null );
 
 			this.setupFrameBuffer(gl, this.__webglFramebuffer.get( i ), GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i);
 			this.setupRenderBuffer(gl, this.__webglRenderbuffer.get( i ));
