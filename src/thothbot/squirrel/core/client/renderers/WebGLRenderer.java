@@ -1828,7 +1828,7 @@ public class WebGLRenderer
 		uniforms.get("lightMap").texture = material.getLightMap();
 
 		uniforms.get("envMap").texture = material.getEnvMap();
-		uniforms.get("flipEnvMap").value = ( material.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0f : -1.0f;
+		uniforms.get("flipEnvMap").value = ( material.getEnvMap() != null && material.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0f : -1.0f;
 
 		if ( this.gammaInput ) 
 		{
