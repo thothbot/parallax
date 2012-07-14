@@ -2035,7 +2035,8 @@ Log.error("?????????????");
 					if ( uniform._array == null )
 						uniform._array = Float32Array.create( 2 * listVector2f.size() );
 
-					for ( int i = 0, il = listVector2f.size(); i < il; i ++ ) {
+					for ( int i = 0, il = listVector2f.size(); i < il; i ++ ) 
+					{
 						int offset = i * 2;
 
 						uniform._array.set(offset, listVector2f.get(i).getX());
@@ -2050,7 +2051,8 @@ Log.error("?????????????");
 					if ( uniform._array == null )
 						uniform._array = Float32Array.create( 3 * listVector3f.size() );
 
-					for ( int i = 0, il = listVector3f.size(); i < il; i ++ ) {
+					for ( int i = 0, il = listVector3f.size(); i < il; i ++ ) 
+					{
 						int offset = i * 3;
 
 						uniform._array.set(offset, listVector3f.get( i ).getX());
@@ -2067,7 +2069,8 @@ Log.error("?????????????");
 						uniform._array = Float32Array.create( 4 * listVector4f.size() );
 
 
-					for ( int i = 0, il = listVector4f.size(); i < il; i ++ ) {
+					for ( int i = 0, il = listVector4f.size(); i < il; i ++ ) 
+					{
 						int offset = i * 4;
 
 						uniform._array.set(offset, listVector4f.get( i ).getX());
@@ -2093,9 +2096,8 @@ Log.error("?????????????");
 					if ( uniform._array == null )
 						uniform._array = Float32Array.create( 16 * listMatrix4f.size() );
 
-					for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ ) {
+					for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
 						listMatrix4f.get( i ).flattenToArray( uniform._array, i * 16 );
-					}
 
 					getGL().uniformMatrix4fv( location, false, uniform._array );
 					break;
@@ -2119,17 +2121,13 @@ Log.error("?????????????");
 					break;
 
 				case TV: // array of THREE.Texture (2d)
-					Log.error("WebGLRenderer: Todo: fix this");
-//					if ( ! uniform._array ) {
+					Log.error("WebGL Render: Fix this");
+//					if ( uniform._array == null ) 
+//					{
+//						uniform._array = (Float32Array) Float32Array.createArray();
 //
-//						uniform._array = [];
-//
-//						for( i = 0, il = uniform.texture.length; i < il; i ++ ) {
-//
-//							uniform._array[ i ] = value + i;
-//
-//						}
-//
+//						for( int i = 0, il = uniform.texture.length; i < il; i ++ )
+//							uniform._array.set( i, (Integer)value + i);
 //					}
 //
 //					getGL().uniform1iv( name, uniform._array );
@@ -2196,12 +2194,14 @@ Log.error("?????????????");
 
 			if ( light.getClass() == AmbientLight.class ) 
 			{
-				if ( this.gammaInput ) {
+				if ( this.gammaInput ) 
+				{
 					r += color.getR() * color.getR();
 					g += color.getG() * color.getG();
 					b += color.getB() * color.getB();
-
-				} else {
+				} 
+				else 
+				{
 					r += color.getR();
 					g += color.getG();
 					b += color.getB();
@@ -2216,18 +2216,17 @@ Log.error("?????????????");
 
 				doffset = dlength * 3;
 
-				if ( this.gammaInput ) {
-
+				if ( this.gammaInput ) 
+				{
 					dcolors.set( doffset, color.getR() * color.getR() * intensity * intensity);
 					dcolors.set( doffset + 1, color.getG() * color.getG() * intensity * intensity);
 					dcolors.set( doffset + 2, color.getB() * color.getB() * intensity * intensity);
-
-				} else {
-
+				} 
+				else 
+				{
 					dcolors.set( doffset, color.getR() * intensity);
 					dcolors.set( doffset + 1, color.getG() * intensity);
 					dcolors.set( doffset + 2, color.getB() * intensity);
-
 				}
 
 				this.direction.copy( directionalLight.getMatrixWorld().getPosition() );
@@ -2249,18 +2248,17 @@ Log.error("?????????????");
 				float distance = pointLight.getDistance();
 				poffset = plength * 3;
 
-				if ( this.gammaInput ) {
-
+				if ( this.gammaInput ) 
+				{
 					pcolors.set(  poffset, color.getR() * color.getR() * intensity * intensity);
 					pcolors.set(  poffset + 1, color.getG() * color.getG() * intensity * intensity);
 					pcolors.set(  poffset + 2, color.getB() * color.getB() * intensity * intensity);
-
-				} else {
-
+				} 
+				else 
+				{
 					pcolors.set(  poffset, color.getR() * intensity);
 					pcolors.set(  poffset + 1, color.getG() * intensity);
 					pcolors.set(  poffset + 2, color.getB() * intensity);
-
 				}
 
 				Vector3f position = pointLight.getMatrixWorld().getPosition();
@@ -2276,20 +2274,20 @@ Log.error("?????????????");
 			} 
 			else if( light.getClass() == SpotLight.class ) 
 			{
-
 				SpotLight spotLight = (SpotLight) light;
 				float intensity = spotLight.intensity;
 				float distance = spotLight.distance;
 
 				soffset = slength * 3;
 
-				if ( this.gammaInput ) {
-
+				if ( this.gammaInput ) 
+				{
 					scolors.set(soffset, color.getR() * color.getR() * intensity * intensity);
 					scolors.set(soffset + 1, color.getG() * color.getG() * intensity * intensity);
 					scolors.set(soffset + 2, color.getB() * color.getB() * intensity * intensity);
-
-				} else {
+				} 
+				else 
+				{
 					scolors.set(soffset, color.getR() * intensity);
 					scolors.set(soffset + 1, color.getG() * intensity);
 					scolors.set(soffset + 2, color.getB() * intensity);
@@ -2410,11 +2408,10 @@ Log.error("?????????????");
 	{
 		if ( this.cache_oldPolygonOffset == null || this.cache_oldPolygonOffset != polygonoffset ) 
 		{
-			if ( polygonoffset ) {
+			if ( polygonoffset )
 				getGL().enable( GLenum.POLYGON_OFFSET_FILL.getValue() );
-			} else {
+			else
 				getGL().disable( GLenum.POLYGON_OFFSET_FILL.getValue() );
-			}
 
 			this.cache_oldPolygonOffset = polygonoffset;
 		}
@@ -2576,14 +2573,12 @@ Log.error("?????????????");
 
 //			if ( texture.onUpdate ) 
 //				texture.onUpdate();
-
-		} else {
-
+		} 
+		else 
+		{
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.__webglTexture );
-
 		}
-
 	}
 
 	/**
@@ -2614,7 +2609,6 @@ Log.error("?????????????");
 		context.drawImage((CanvasElement) image, 0, 0, imgWidth, imgHeight, 0, 0, newWidth, newHeight );
 
 		return canvas;
-
 	}
 
 	private void setCubeTexture ( CubeTexture texture, int slot ) 
@@ -2662,20 +2656,20 @@ Log.error("?????????????");
 
 //			if ( texture.onUpdate ) 
 //				texture.onUpdate();
-
 		} 
 		else 
 		{
-
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.__webglTexture );
-
 		}
 
 	}
 
-	// Render targets
-
+	/**
+	 * Setup render target
+	 * 
+	 * @param renderTarget the render target
+	 */
 	private void setRenderTarget( RenderTargetTexture renderTarget ) 
 	{
 		Log.debug("Called setRenderTarget(params)");

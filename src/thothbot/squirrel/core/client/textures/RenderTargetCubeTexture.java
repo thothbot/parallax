@@ -100,7 +100,8 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			this.setupRenderBuffer(gl, this.__webglRenderbuffer.get( i ));
 		}
 
-		if ( isTargetPowerOfTwo ) gl.generateMipmap( GLenum.TEXTURE_CUBE_MAP.getValue() );
+		if ( isTargetPowerOfTwo ) 
+			gl.generateMipmap( GLenum.TEXTURE_CUBE_MAP.getValue() );
 
 		// Release everything
 		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), null );
