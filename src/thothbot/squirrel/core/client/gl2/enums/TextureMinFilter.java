@@ -27,24 +27,30 @@ package thothbot.squirrel.core.client.gl2.enums;
  */
 public enum TextureMinFilter 
 {
-	  NEAREST(GLenum.NEAREST),
-	  LINEAR(GLenum.LINEAR),
-	  NEAREST_MIPMAP_NEAREST(GLenum.NEAREST_MIPMAP_NEAREST),
-	  LINEAR_MIPMAP_NEAREST(GLenum.LINEAR_MIPMAP_NEAREST),
-	  NEAREST_MIPMAP_LINEAR(GLenum.NEAREST_MIPMAP_LINEAR),
-	  LINEAR_MIPMAP_LINEAR(GLenum.LINEAR_MIPMAP_LINEAR);
+	NEAREST(GLenum.NEAREST),
+	LINEAR(GLenum.LINEAR),
+	NEAREST_MIPMAP_NEAREST(GLenum.NEAREST_MIPMAP_NEAREST),
+	LINEAR_MIPMAP_NEAREST(GLenum.LINEAR_MIPMAP_NEAREST),
+	NEAREST_MIPMAP_LINEAR(GLenum.NEAREST_MIPMAP_LINEAR),
+	LINEAR_MIPMAP_LINEAR(GLenum.LINEAR_MIPMAP_LINEAR);
 
-	  private final int value;
+	private final GLenum value;
 
-	  private TextureMinFilter(GLenum GLenum) 
-	  {
-	    this.value = GLenum.getValue();
-	  }
-	  /**
-	   * Gets the enum's numerical value.
-	   */
-	  public int getValue() 
-	  {
-	    return value;
-	  }
+	private TextureMinFilter(GLenum GLenum) 
+	{
+		this.value = GLenum;
+	}
+	
+	public GLenum getEnum()
+	{
+		return this.value;
+	}
+
+	/**
+	 * Gets the enum's numerical value.
+	 */
+	public int getValue() 
+	{
+		return value.getValue();
+	}
 }

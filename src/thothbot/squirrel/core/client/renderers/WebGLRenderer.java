@@ -44,8 +44,9 @@ import thothbot.squirrel.core.client.shader.Shader;
 import thothbot.squirrel.core.client.shader.Uniform;
 import thothbot.squirrel.core.client.textures.CubeTexture;
 import thothbot.squirrel.core.client.textures.DataTexture;
-import thothbot.squirrel.core.client.textures.Texture;
+import thothbot.squirrel.core.client.textures.RenderTargetCubeTexture;
 import thothbot.squirrel.core.client.textures.RenderTargetTexture;
+import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.cameras.OrthographicCamera;
@@ -84,6 +85,7 @@ import thothbot.squirrel.core.shared.objects.Object3D;
 import thothbot.squirrel.core.shared.objects.ParticleSystem;
 import thothbot.squirrel.core.shared.objects.Ribbon;
 import thothbot.squirrel.core.shared.objects.SidesObject;
+import thothbot.squirrel.core.shared.objects.SkinnedMesh;
 import thothbot.squirrel.core.shared.objects.Sprite;
 import thothbot.squirrel.core.shared.objects.WebGLObject;
 import thothbot.squirrel.core.shared.scenes.Fog;
@@ -94,8 +96,6 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.user.client.ui.Image;
 
 /*
  * The WebGL renderer displays your beautifully crafted scenes using WebGL, if your device supports it.
@@ -1792,9 +1792,13 @@ public class WebGLRenderer
 		return program;
 	}
 
-	// Uniforms (refresh uniforms objects)
-
-	public void refreshUniformsCommon ( Map<String, Uniform> uniforms, AbstractMapMaterial material ) 
+	/**
+	 * Refresh uniforms objects.
+	 * 
+	 * @param uniforms
+	 * @param material
+	 */
+	private void refreshUniformsCommon ( Map<String, Uniform> uniforms, AbstractMapMaterial material ) 
 	{
 		uniforms.get("opacity").value = material.getOpacity();
 
@@ -1824,7 +1828,7 @@ public class WebGLRenderer
 		uniforms.get("lightMap").texture = material.getLightMap();
 
 		uniforms.get("envMap").texture = material.getEnvMap();
-		uniforms.get("flipEnvMap").value = -1.0f; //( material.getEnvMap() == WebGLRenderTargetCube.class ) ? 1 : -1;
+		uniforms.get("flipEnvMap").value = ( material.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0f : -1.0f;
 
 		if ( this.gammaInput ) 
 		{
@@ -1842,13 +1846,13 @@ public class WebGLRenderer
 				&& material.getEnvMap().getMapping() == Texture.MAPPING_MODE.CUBE_REFRACTION ) ? 1 : 0;
 	};
 
-	public void refreshUniformsLine ( Map<String, Uniform> uniforms, LineBasicMaterial material ) 
+	private void refreshUniformsLine ( Map<String, Uniform> uniforms, LineBasicMaterial material ) 
 	{
 		uniforms.get("diffuse").value = material.getColor();
 		uniforms.get("opacity").value = material.getOpacity();
 	}
 
-	public void refreshUniformsParticle ( Map<String, Uniform> uniforms, ParticleBasicMaterial material ) 
+	private void refreshUniformsParticle ( Map<String, Uniform> uniforms, ParticleBasicMaterial material ) 
 	{
 		uniforms.get("psColor").value = material.getColor();
 		uniforms.get("opacity").value = material.getOpacity();
@@ -1858,7 +1862,7 @@ public class WebGLRenderer
 		uniforms.get("map").texture   = material.getMap();
 	}
 
-	public void refreshUniformsPhong ( Map<String, Uniform> uniforms, MeshPhongMaterial material ) {
+	private void refreshUniformsPhong ( Map<String, Uniform> uniforms, MeshPhongMaterial material ) {
 
 		uniforms.get("shininess").value = material.getShininess();
 
@@ -1889,7 +1893,7 @@ public class WebGLRenderer
 		}
 	}
 
-	public void refreshUniformsLambert ( Map<String, Uniform> uniforms, MeshLambertMaterial material ) 
+	private void refreshUniformsLambert ( Map<String, Uniform> uniforms, MeshLambertMaterial material ) 
 	{
 		if ( this.gammaInput ) 
 		{
@@ -1913,7 +1917,7 @@ public class WebGLRenderer
 		}
 	}
 
-	public void refreshUniformsLights ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
+	private void refreshUniformsLights ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
 	{
 		uniforms.get("ambientLightColor").value = lights.ambient;
 
@@ -1932,7 +1936,7 @@ public class WebGLRenderer
 		uniforms.get("spotLightExponent").value = lights.spot.exponents;
 	}
 
-	public void refreshUniformsShadow ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
+	private void refreshUniformsShadow ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
 	{
 		if ( uniforms.containsKey("shadowMatrix") ) 
 		{
@@ -1963,7 +1967,7 @@ Log.error("?????????????");
 
 	// Uniforms (load to GPU)
 
-	public void loadUniformsMatrices ( Map<String, WebGLUniformLocation> uniforms, GeometryObject object ) 
+	private void loadUniformsMatrices ( Map<String, WebGLUniformLocation> uniforms, GeometryObject object ) 
 	{
 		GeometryObject objectImpl = (GeometryObject) object;
 		getGL().uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, objectImpl._modelViewMatrix.getArray() );
@@ -1972,7 +1976,7 @@ Log.error("?????????????");
 			getGL().uniformMatrix3fv( uniforms.get("normalMatrix"), false, objectImpl._normalMatrix.getArray() );
 	}
 
-	public void loadUniformsGeneric( Program program, Map<String, Uniform> materialUniforms ) 
+	private void loadUniformsGeneric( Program program, Map<String, Uniform> materialUniforms ) 
 	{
 		for ( String u : materialUniforms.keySet() ) 
 		{
@@ -2105,17 +2109,17 @@ Log.error("?????????????");
 
 					if ( texture.getClass() == CubeTexture.class )
 						setCubeTexture( (CubeTexture) texture, (Integer)value );
-//
-//					else if ( texture instanceof THREE.WebGLRenderTargetCube )
-//						setCubeTextureDynamic( texture, value );
-//
+
+					else if ( texture.getClass() == RenderTargetCubeTexture.class )
+						setCubeTextureDynamic( (RenderTargetCubeTexture)texture, (Integer)value );
+
 					else
 						setTexture( texture, (Integer)value );
 
 					break;
 
 				case TV: // array of THREE.Texture (2d)
-
+					Log.error("WebGLRenderer: Todo: fix this");
 //					if ( ! uniform._array ) {
 //
 //						uniform._array = [];
@@ -2145,7 +2149,7 @@ Log.error("?????????????");
 		}
 	}
 
-	public void setupMatrices ( Object3D object, Camera camera ) 
+	private void setupMatrices ( Object3D object, Camera camera ) 
 	{
 		object._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), object.getMatrixWorld());
 
@@ -2153,7 +2157,7 @@ Log.error("?????????????");
 		object._normalMatrix.transpose();
 	}
 
-	public void setupLights ( Program program, List<Light> lights ) 
+	private void setupLights ( Program program, List<Light> lights ) 
 	{
 		Log.debug("Called setupLights()");
 
@@ -2203,7 +2207,9 @@ Log.error("?????????????");
 					b += color.getB();
 				}
 
-			} else if ( light.getClass() == DirectionalLight.class ) {
+			} 
+			else if ( light.getClass() == DirectionalLight.class ) 
+			{
 
 				DirectionalLight directionalLight = (DirectionalLight) light;
 				float intensity = directionalLight.intensity;
@@ -2234,7 +2240,9 @@ Log.error("?????????????");
 
 				dlength += 1;
 
-			} else if( light.getClass() == PointLight.class ) {
+			} 
+			else if( light.getClass() == PointLight.class ) 
+			{
 
 				PointLight pointLight = (PointLight) light;
 				float intensity = pointLight.getIntensity();
@@ -2265,7 +2273,9 @@ Log.error("?????????????");
 
 				plength += 1;
 
-			} else if( light.getClass() == SpotLight.class ) {
+			} 
+			else if( light.getClass() == SpotLight.class ) 
+			{
 
 				SpotLight spotLight = (SpotLight) light;
 				float intensity = spotLight.intensity;
@@ -2327,12 +2337,12 @@ Log.error("?????????????");
 
 	// GL state setting
 	
-	public void setFaceCulling(String frontFace ) 
+	private void setFaceCulling(String frontFace ) 
 	{
 		getGL().disable( GLenum.CULL_FACE.getValue() );
 	}
 
-	public void setFaceCulling(String cullFace, String frontFace) 
+	private void setFaceCulling(String cullFace, String frontFace) 
 	{
 		if ( frontFace == null || frontFace.equals("ccw") )
 			getGL().frontFace( GLenum.CCW.getValue() );
@@ -2351,7 +2361,7 @@ Log.error("?????????????");
 		getGL().enable( GLenum.CULL_FACE.getValue() );
 	}
 
-	public void setObjectFaces( SidesObject object ) 
+	private void setObjectFaces( SidesObject object ) 
 	{
 		if ( this.cache_oldDoubleSided == null || this.cache_oldDoubleSided != object.getDoubleSided() ) 
 		{
@@ -2374,7 +2384,7 @@ Log.error("?????????????");
 		}
 	}
 
-	public void setDepthTest( boolean depthTest ) 
+	private void setDepthTest( boolean depthTest ) 
 	{
 		if ( this.cache_oldDepthTest == null || this.cache_oldDepthTest != depthTest ) 
 		{
@@ -2387,7 +2397,7 @@ Log.error("?????????????");
 		}
 	}
 
-	public void setDepthWrite(boolean depthWrite ) 
+	private void setDepthWrite(boolean depthWrite ) 
 	{
 		if ( this.cache_oldDepthWrite == null || this.cache_oldDepthWrite != depthWrite ) 
 		{
@@ -2396,7 +2406,7 @@ Log.error("?????????????");
 		}
 	}
 
-	public void setPolygonOffset( boolean polygonoffset, float factor, float units ) 
+	private void setPolygonOffset( boolean polygonoffset, float factor, float units ) 
 	{
 		if ( this.cache_oldPolygonOffset == null || this.cache_oldPolygonOffset != polygonoffset ) 
 		{
@@ -2517,6 +2527,12 @@ Log.error("?????????????");
 	}
 
 	// Textures
+	
+	private void setCubeTextureDynamic(RenderTargetCubeTexture texture, int slot) 
+	{
+		getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
+		getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.__webglTexture );
+	}
 
 	private void setTexture( Texture texture, int slot ) 
 	{
@@ -2543,7 +2559,9 @@ Log.error("?????????????");
 
 			if ( texture instanceof DataTexture ) 
 			{
-//				getGL().texImage2D( GLenum.TEXTURE_2D, 0, glFormat, image.getWidth(), image.getHeight(), 0, glFormat, glType, image.getdata );
+				Log.error("WebGLRenderer. Todo: fix DataTexture");
+//				getGL().texImage2D( GLenum.TEXTURE_2D, 0, texture.getFormat().getValue(), 
+//						image.getWidth(), image.getHeight(), 0, texture.getFormat().getValue(), texture.getType().getValue(), image.getdata );
 			} 
 			else 
 			{
@@ -2607,7 +2625,10 @@ Log.error("?????????????");
 		if ( texture.isNeedsUpdate() ) 
 		{
 			if ( texture.__webglTexture == null )
+			{
 				texture.__webglTexture = getGL().createTexture();
+				this.getInfo().getMemory().textures += 6;
+			}
 
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.__webglTexture );
@@ -2684,49 +2705,27 @@ Log.error("?????????????");
 		}
 	}
 
-	// Fallback filters for non-power-of-2 textures
-
-//	public int filterFallback ( Texture.FILTER f ) 
-//	{
-//		switch ( f ) {
-//
-//		case NEAREST:
-//		case NEAREST_MIP_MAP_NEAREST:
-//		case NEAREST_MIP_MAP_LINEAR: 
-//			return GLenum.NEAREST.getValue();
-//
-//		case LINEAR:
-//		case LINEAR_MIP_MAP_NEAREST:
-//		case LINEAR_MIP_MAP_LINEAR:
-//		default:
-//			return GLenum.LINEAR.getValue();
-//
-//		}
-//	}
-
-	// Allocations
-
-	
-	public int allocateBones (GeometryObject object ) 
+	/**
+	 * Default for when object is not specified
+	 * ( for example when prebuilding shader to be used with multiple objects )
+	 * 
+	 * - leave some extra space for other uniforms
+	 * - limit here is ANGLE's 254 max uniform vectors (up to 54 should be safe)
+	 * 
+	 * @param object
+	 * @return
+	 */
+	private int allocateBones (GeometryObject object ) 
 	{
-		// default for when object is not specified
-		// ( for example when prebuilding shader
-		//   to be used with multiple objects )
-		//
-		// 	- leave some extra space for other uniforms
-		//  - limit here is ANGLE's 254 max uniform vectors
-		//    (up to 54 should be safe)
-
 		int maxBones = 50;
 
-		// TODO: fix this
-//		if ( object !=null && object instanceof SkinnedMesh )
-//			maxBones = object.bones.size();
+		if ( object !=null && object instanceof SkinnedMesh )
+			maxBones = ((SkinnedMesh)object).bones.size();
 
 		return maxBones;
 	}
 
-	public Map<String, Integer> allocateLights ( List<Light> lights ) 
+	private Map<String, Integer> allocateLights ( List<Light> lights ) 
 	{
 		int dirLights = 0;
 		int pointLights = 0;
@@ -2736,7 +2735,8 @@ Log.error("?????????????");
 		int maxPointLights;
 		int maxSpotLights;
 		
-		for(Light light: lights) {
+		for(Light light: lights) 
+		{
 			if ( light.onlyShadow ) continue;
 
 			if ( light instanceof DirectionalLight ) dirLights ++;
@@ -2744,12 +2744,15 @@ Log.error("?????????????");
 			if ( light instanceof SpotLight ) spotLights ++;
 		}
 
-		if ( ( pointLights + spotLights + dirLights ) <= this.maxLights ) {
+		if ( ( pointLights + spotLights + dirLights ) <= this.maxLights ) 
+		{
 			maxDirLights = dirLights;
 			maxPointLights = pointLights;
 			maxSpotLights = spotLights;
 
-		} else {
+		} 
+		else 
+		{
 			maxDirLights = (int) Math.ceil( this.maxLights * dirLights / ( pointLights + dirLights ) );
 			maxPointLights = this.maxLights - maxDirLights;
 			maxSpotLights = maxPointLights; // this is not really correct
@@ -2763,7 +2766,7 @@ Log.error("?????????????");
 		return retval;
 	}
 
-	public int allocateShadows ( List<Light> lights ) 
+	private int allocateShadows ( List<Light> lights ) 
 	{
 		int maxShadows = 0;
 
@@ -2773,9 +2776,9 @@ Log.error("?????????????");
 
 		return maxShadows;
 	}
-//
-//	// default plugins (order is important)
-//
+
+	// default plugins (order is important)
+
 //	this.shadowMapPlugin = new THREE.ShadowMapPlugin();
 //	this.addPrePlugin( this.shadowMapPlugin );
 //

@@ -240,12 +240,6 @@ public class Texture
 		return clonedTexture;
 	}
 
-	public void setCubeTextureDynamic(WebGLRenderingContext gl, int slot) 
-	{
-		gl.activeTexture( GLenum.TEXTURE0.getValue() + slot );
-		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.__webglTexture );
-	}
-
 	public void setTextureParameters (WebGLRenderingContext gl, int textureType, boolean isImagePowerOfTwo ) 
 	{	
 		if ( isImagePowerOfTwo ) 
@@ -259,8 +253,32 @@ public class Texture
 		{
 			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_S.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
 			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_T.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
-			gl.texParameteri( textureType, GLenum.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
-			gl.texParameteri( textureType, GLenum.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue() );
+			gl.texParameteri( textureType, GLenum.TEXTURE_MAG_FILTER.getValue(), filterFallback( this.magFilter.getEnum() ) );
+			gl.texParameteri( textureType, GLenum.TEXTURE_MIN_FILTER.getValue(), filterFallback( this.minFilter.getEnum() ) );
+		}
+	}
+	
+	/**
+	 * Fallback filters for non-power-of-2 textures.
+	 * 
+	 * @param f
+	 * @return
+	 */
+	private int filterFallback ( GLenum f ) 
+	{
+		switch ( f ) {
+
+		case NEAREST:
+		case NEAREST_MIPMAP_NEAREST:
+		case NEAREST_MIPMAP_LINEAR: 
+			return GLenum.NEAREST.getValue();
+
+		case LINEAR:
+		case LINEAR_MIPMAP_NEAREST:
+		case LINEAR_MIPMAP_LINEAR:
+		default:
+			return GLenum.LINEAR.getValue();
+
 		}
 	}
 }

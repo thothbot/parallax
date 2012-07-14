@@ -32,7 +32,6 @@ import thothbot.squirrel.core.client.gl2.enums.TextureMagFilter;
 import thothbot.squirrel.core.client.gl2.enums.TextureMinFilter;
 import thothbot.squirrel.core.client.gl2.enums.TextureWrapMode;
 import thothbot.squirrel.core.shared.core.Mathematics;
-import thothbot.squirrel.core.shared.core.Vector2f;
 
 public class RenderTargetTexture extends Texture
 {
@@ -143,8 +142,8 @@ public class RenderTargetTexture extends Texture
 		this.__webglRenderbuffer = gl.createRenderbuffer();
 
 		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.__webglTexture);
-		// TODO: FIX setTextureParameters
-		//Texture.setTextureParameters(_gl, GLenum.TEXTURE_2D, renderTarget, isTargetPowerOfTwo);
+
+		setTextureParameters(gl, GLenum.TEXTURE_2D.getValue(), isTargetPowerOfTwo);
 
 		gl.texImage2D(GLenum.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,
 				getFormat().getValue(), getType().getValue(), null);

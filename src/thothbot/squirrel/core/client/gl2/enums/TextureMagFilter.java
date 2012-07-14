@@ -30,18 +30,23 @@ public enum TextureMagFilter
 	NEAREST(GLenum.NEAREST),
 	LINEAR(GLenum.LINEAR);
 
-	private final int value;
+	private final GLenum value;
 
 	private TextureMagFilter(GLenum GLenum) 
 	{
-		this.value = GLenum.getValue();
+		this.value = GLenum;
 	}
 	
+	public GLenum getEnum()
+	{
+		return this.value;
+	}
+
 	/**
 	 * Gets the enum's numerical value.
 	 */
 	public int getValue() 
 	{
-		return value;
+		return value.getValue();
 	}
 }

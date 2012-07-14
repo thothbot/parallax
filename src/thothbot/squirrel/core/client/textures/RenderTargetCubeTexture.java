@@ -78,7 +78,6 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		this.__webglTexture = gl.createTexture();
 
 		// Setup texture, create render and frame buffers
-
 		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(getWidth())
 				&& Mathematics.isPowerOfTwo(getHeight());
 
@@ -86,13 +85,13 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		this.__webglRenderbuffer = new ArrayList<WebGLRenderbuffer>();
 
 		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.__webglTexture );
-		//TODO: FIX setTextureParameters
-		//setTextureParameters( _gl, GLenum.TEXTURE_CUBE_MAP, renderTarget.__webglTexture, isTargetPowerOfTwo );
+
+		setTextureParameters( gl, GLenum.TEXTURE_CUBE_MAP.getValue(), isTargetPowerOfTwo );
 
 		for ( int i = 0; i < 6; i ++ ) 
 		{
-			this.__webglFramebuffer.set( i, gl.createFramebuffer());
-			this.__webglRenderbuffer.set( i, gl.createRenderbuffer());
+			this.__webglFramebuffer.add( gl.createFramebuffer() );
+			this.__webglRenderbuffer.add( gl.createRenderbuffer() );
 
 			gl.texImage2D( GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, getFormat().getValue(), getWidth(), getHeight(), 0, 
 					getFormat().getValue(), getType().getValue(), null );
