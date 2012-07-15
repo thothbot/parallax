@@ -1,10 +1,5 @@
-.gwt
-
+.settings
+.classpath
+/.gwt
 /.project
-/.settings
 /war
-/.classpath
-/.settings
-/war
-/.classpath
-/.project

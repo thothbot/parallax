@@ -270,8 +270,8 @@ public class Quaternion
 	 * 
 	 * Based on <a href="http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm">http://www.euclideanspace.com</a>
 	 * 
-	 * @param v1 the first Quaternion
-	 * @param v2 the second Quaternion
+	 * @param a the first Quaternion
+	 * @param b the second Quaternion
 	 * 
 	 */
 	public void multiply(Quaternion a, Quaternion b)

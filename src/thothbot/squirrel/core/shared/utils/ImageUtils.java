@@ -69,10 +69,10 @@ public final class ImageUtils
 	 * Loading of texture.
 	 * 
 	 * @param path     the string path to the image
-	 * @param mapping  the mapping mode {@link Texture.MAPPING_MODE}. Not necessary.
+	 * @param mapping  the mapping mode {@link thothbot.squirrel.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
 	 * @param callback the {@link ImageUtils.Callback}. Not necessary.
 	 * 
-	 * @return the new instance of {@link Texture}
+	 * @return the new instance of {@link thothbot.squirrel.core.client.textures.Texture}
 	 */
 	public static Texture loadTexture(String path, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
@@ -102,10 +102,10 @@ public final class ImageUtils
 	 * Loading of texture.
 	 * 
 	 * @param image    the instance of {@link Image}
-	 * @param mapping  the mapping mode {@link Texture.MAPPING_MODE}. Not necessary.
+	 * @param mapping  the mapping mode {@link thothbot.squirrel.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
 	 * @param callback the {@link ImageUtils.Callback}. Not necessary.
 	 * 
-	 * @return the new instance of {@link Texture}
+	 * @return the new instance of {@link thothbot.squirrel.core.client.textures.Texture}
 	 */
 	public static Texture loadTexture(final Image image, Texture.MAPPING_MODE mapping, final Callback callback)
 	{

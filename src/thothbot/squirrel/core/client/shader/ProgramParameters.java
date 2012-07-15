@@ -56,10 +56,9 @@ public class ProgramParameters
 	
 	public int maxMorphTargets;
 	public int maxMorphNormals;
+	
 	/**
 	 * Creates a new instance of the {@link ProgramParameters}.
-	 * 
-	 * @return the created instance.
 	 */
 	public ProgramParameters(int maxDirLights, int maxPointLights, int maxSpotLights, int maxShadows, int maxBones, int maxMorphTargets, int maxMorphNormals)
 	{
