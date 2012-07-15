@@ -698,12 +698,10 @@ public class WebGLRenderer
 		Fog fog = scene.getFog();
 
 		// reset caching for this frame
-
 		this.cache_currentMaterialId = -1;
 		this.lightsNeedUpdate = true;
 
 		// update scene graph
-
 		if ( camera.getParent() == null ) 
 		{
 			Log.warn("DEPRECATED: Camera hasn\'t been added to a Scene. Adding it...");
@@ -747,7 +745,6 @@ public class WebGLRenderer
 			clear( this.autoClearColor, this.autoClearDepth, this.autoClearStencil );
 
 		// set matrices for regular objects (frustum culled)
-
 		List<WebGLObject> renderList = scene.__webglObjects;
 		Log.debug("render(): Render list size is: " + renderList.size());
 
@@ -758,18 +755,24 @@ public class WebGLRenderer
 
 			if ( object.isVisible() ) 
 			{
-				if ( ! ( object.getClass() == Mesh.class || object.getClass() == ParticleSystem.class ) || ! ( object.frustumCulled ) || frustum.contains( object ) )
+				if ( ! ( object.getClass() == Mesh.class 
+						|| object.getClass() == ParticleSystem.class ) 
+						|| ! ( object.frustumCulled ) 
+						|| frustum.contains( object ) )
 				{
 					setupMatrices( (Object3D) object, camera );
 					unrollBufferMaterial( webglObject );
 					webglObject.render = true;
 
-					if ( this.sortObjects ) {
+					if ( this.sortObjects ) 
+					{
 
-						if ( object.renderDepth > 0 ) {
+						if ( object.renderDepth > 0 ) 
+						{
 							webglObject.z = object.renderDepth;
-
-						} else {
+						} 
+						else 
+						{
 							this._vector3.copy( object.getMatrixWorld().getPosition() );
 							this._projScreenMatrix.multiplyVector3( _vector3 );
 
@@ -791,12 +794,9 @@ public class WebGLRenderer
 		{
 			GeometryObject object = webglObject.object;
 
-			if ( object.isVisible() ) {
+			if ( object.isVisible() ) 
+			{
 				Log.debug("render(): set matrices for immediate objects");
-				/*
-				if ( object.matrixAutoUpdate )
-					object.matrixWorld.flattenToArray( object._objectMatrixArray );
-				*/
 
 				setupMatrices( (Object3D) object, camera );
 
@@ -819,7 +819,9 @@ public class WebGLRenderer
 //			renderObjects( scene.__webglObjects, false, "", camera, lights, fog, true, material );
 //			renderObjectsImmediate( scene.__webglObjectsImmediate, "", camera, lights, fog, false, material );
 
-		} else {
+		} 
+		else 
+		{
 			Log.debug("render(): NON override material");
 			// opaque pass (front-to-back order)
 
@@ -929,11 +931,13 @@ public class WebGLRenderer
 			{
 
 				Material material = null;
-				if ( overrideMaterial != null) {
+				if ( overrideMaterial != null)
+				{
 					material = overrideMaterial;
 
-				} else {
-
+				} 
+				else 
+				{
 					if(materialType == "opaque")
 						material = webglObject.opaque;
 					else if(materialType == "transparent")
@@ -1700,9 +1704,11 @@ public class WebGLRenderer
 
 			if ( material.getClass() == MeshPhongMaterial.class ||
 				 material.getClass() == MeshLambertMaterial.class ||
-				 material.lights != null ) {
+				 material.lights != null) 
+			{
 
-				if (this.lightsNeedUpdate ) {
+				if (this.lightsNeedUpdate ) 
+				{
 					setupLights( program, lights );
 					this.lightsNeedUpdate = false;
 				}

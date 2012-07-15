@@ -38,7 +38,7 @@ public abstract class RenderingScene extends Rendering
 	private Camera camera;
 	private RenderingSceneCallback renderingSceneCallback;
 
-	protected WebGLRenderer getRenderer() 
+	public WebGLRenderer getRenderer() 
 	{
 		return this.renderer;
 	}

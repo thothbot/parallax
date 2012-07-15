@@ -104,7 +104,7 @@ public abstract class Rendering
 	
 	/**
 	 * Immediately cancel this animation. If the animation is running or is
-	 * scheduled to run, {@link #onCancel()} will be called.
+	 * scheduled to run, {@link #onStop()} will be called.
 	 */
 	public void stop()
 	{
@@ -128,22 +128,13 @@ public abstract class Rendering
 	}
 
 	/**
-	 * Run this animation at the given startTime. If the startTime has already
-	 * passed, the animation will run synchronously as if it started at the
-	 * specified start time. If the animation is already running, it will be
+	 * Run this rendering. If the rendering is already running, it will be
 	 * canceled first.
 	 * <p>
 	 * If the element is not <code>null</code>, the {@link #onUpdate(double)}
 	 * method might be called only if the element may be visible (generally left
 	 * at the appreciation of the browser). Otherwise, it will be called
 	 * unconditionally.
-	 * 
-	 * @param duration
-	 *            the duration of the animation in milliseconds
-	 * @param startTime
-	 *            the synchronized start time in milliseconds
-	 * @param element
-	 *            the element that visually bounds the entire animation
 	 */
 	public void run()
 	{

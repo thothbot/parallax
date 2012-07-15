@@ -45,8 +45,7 @@ public class Canvas3dAttributes {
 	}
 	
 	/**
-	 * Gets the  JavaScriptObject for the 
-	 * @return
+	 * Gets the JavaScriptObject for the 
 	 */
 	public JavaScriptObject getGLContextAttributesImpl() {
 		return impl;		

@@ -329,7 +329,7 @@ public class Matrix4f
 	 * vector v.
 	 * (this = this * v)
 	 * 
-	 * @param m the input vector
+	 * @param v the input vector
 	 * 
 	 * @return the multiplication input vector
 	 */
@@ -354,7 +354,7 @@ public class Matrix4f
 	 * vector v.
 	 * (this = this * v)
 	 * 
-	 * @param m the input vector
+	 * @param v the input vector
 	 * 
 	 * @return the multiplication input vector
 	 */
@@ -379,7 +379,7 @@ public class Matrix4f
 	 * vector v.
 	 * (this = this * v)
 	 * 
-	 * @param m the input vector
+	 * @param v the input vector
 	 * 
 	 * @return the multiplication input vector
 	 */
@@ -639,8 +639,7 @@ public class Matrix4f
 	 * Sets the value of this matrix to the matrix inverse of the passed matrix
 	 * m.
 	 * 
-	 * Based on:
-	 * {@linkplain http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm}
+	 * Based on <a href="http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm">http://www.euclideanspace.com</a>
 	 * 
 	 * @param m the matrix to be inverted
 	 */
@@ -1268,7 +1267,7 @@ public class Matrix4f
 	 * The method will make rotation matrix on XYZ-axis using defining angle theta.
 	 * 
 	 * @param axis  the axis on which rotate the matrix
-	 * @param theta the angle to make rotation matrix
+	 * @param angle the angle to make rotation matrix
 	 * 
 	 * @return the current matrix
 	 */

@@ -58,7 +58,7 @@ public final class CubeCamera extends Object3D
 	PerspectiveCamera cameraPZ;
 	PerspectiveCamera cameraNZ;
 	
-	RenderTargetTexture renderTarget;
+	RenderTargetCubeTexture renderTarget;
 	
 	public CubeCamera(float near, float far, int cubeResolution)
 	{

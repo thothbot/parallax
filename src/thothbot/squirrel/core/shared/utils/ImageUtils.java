@@ -29,12 +29,14 @@ import thothbot.squirrel.core.client.textures.CubeTexture;
 import thothbot.squirrel.core.client.textures.Texture;
 import thothbot.squirrel.core.shared.Log;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Image;
 
 /**
@@ -45,6 +47,16 @@ import com.google.gwt.user.client.ui.Image;
  */
 public final class ImageUtils 
 {
+	private static Element loadingArea = DOM.createDiv();
+	static {
+		loadingArea.getStyle().setProperty("visibility", "hidden");
+        loadingArea.getStyle().setProperty("position", "absolute");
+        loadingArea.getStyle().setProperty("width", "1px");
+        loadingArea.getStyle().setProperty("height", "1px");
+        loadingArea.getStyle().setProperty("overflow", "hidden");
+		Document.get().getBody().appendChild(loadingArea);
+	}
+	
 	/**
 	 * This callback will be called when the image has been loaded.
 	 */
@@ -95,8 +107,9 @@ public final class ImageUtils
 	 * 
 	 * @return the new instance of {@link Texture}
 	 */
-	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, final Callback callback)
+	public static Texture loadTexture(final Image image, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
+		loadingArea.appendChild(image.getElement());
 		Texture texture = new Texture(image.getElement(), mapping);
 		texture.setNeedsUpdate(true);
 
@@ -114,14 +127,11 @@ public final class ImageUtils
 		image.addLoadHandler(new LoadHandler() {
 			@Override
 			public void onLoad(LoadEvent event) 
-			{
-				if (callback != null){
+			{			
+				if (callback != null)
 					callback.run((Image)event.getSource());
-				}
 			}
 		});
-
-//		RootPanel.get().add(image);
 
 		return texture;
 	}
@@ -131,7 +141,9 @@ public final class ImageUtils
 		List<Element> images = new ArrayList<Element>();
 		for(ImageResource ir: imageResources)
 		{
-			Image image = new Image();
+			final Image image = new Image();
+			loadingArea.appendChild(image.getElement());
+
 			image.setUrl(ir.getSafeUri());
 			image.addErrorHandler(new ErrorHandler() {
 				
@@ -141,15 +153,16 @@ public final class ImageUtils
 					Log.error("An error occurred while loading image.");
 				}
 			});
+			
 			image.addLoadHandler(new LoadHandler() {
 				@Override
 				public void onLoad(LoadEvent event) 
-				{
-					if (callback != null){
+				{		
+					if (callback != null)
 						callback.run((Image)event.getSource());
-					}
 				}
 			});
+			
 			images.add(image.getElement());
 		}
 		

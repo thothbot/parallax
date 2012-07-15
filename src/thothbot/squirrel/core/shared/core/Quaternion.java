@@ -268,8 +268,7 @@ public class Quaternion
 	 * Sets the value of this Quaternion to the vector multiplication of Quaternion a and
 	 * Quaternion v2.
 	 * 
-	 * Based on:
-	 * {@linkplain http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm}
+	 * Based on <a href="http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm">http://www.euclideanspace.com</a>
 	 * 
 	 * @param v1 the first Quaternion
 	 * @param v2 the second Quaternion
@@ -309,9 +308,9 @@ public class Quaternion
 	 * 
 	 * @return the modified input vector
 	 */
-	public void multiply(Vector3f vector)
+	public Vector3f multiply(Vector3f vector)
 	{
-		multiply(vector, vector);
+		return multiply(vector, vector);
 	}
 
 	/**
@@ -345,8 +344,7 @@ public class Quaternion
 	/**
 	 * Quaternion Interpolation
 	 * 
-	 * Based on:
-	 * {@linkplain http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/}
+	 * Based on <a href="http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/">http://www.euclideanspace.com</a>
 	 * 
 	 * @param qa  the quaternion a (first quaternion to be interpolated between)
 	 * @param qb  the quaternion b (second quaternion to be interpolated between)
