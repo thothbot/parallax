@@ -24,6 +24,13 @@ import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationHandle;
 import com.google.gwt.core.client.Duration;
 
+/**
+ * An {@link Rendering} is a continuous event that updates progressively over
+ * time at a non-fixed frame rate.
+ * 
+ * @author thothbot
+ *
+ */
 public abstract class Rendering
 {
 	private final AnimationCallback callback = new AnimationCallback() 
@@ -103,7 +110,7 @@ public abstract class Rendering
 	}
 	
 	/**
-	 * Immediately cancel this animation. If the animation is running or is
+	 * Stops this rendering. If the rendering is running or is
 	 * scheduled to run, {@link #onStop()} will be called.
 	 */
 	public void stop()
@@ -152,19 +159,19 @@ public abstract class Rendering
 	}
 
 	/**
-	 * Called immediately after the animation is stopped. The default
+	 * Called immediately after the rendering is stopped. The default
 	 * implementation of this method calls {@link #onStop()} only if the
 	 * animation has actually started running.
 	 */
 	protected abstract void onStop();
 
 	/**
-	 * Called immediately before the animation starts.
+	 * Called immediately before the rendering starts.
 	 */
 	protected abstract void onStart();
 
 	/**
-	 * Called when the animation should be updated.
+	 * Called when the rendering should be updated.
 	 *  
 	 * @param duration
 	 *            The duration of the {@link Rendering} in milliseconds.

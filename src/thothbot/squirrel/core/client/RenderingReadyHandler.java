@@ -21,7 +21,18 @@ package thothbot.squirrel.core.client;
 
 import com.google.gwt.event.shared.EventHandler;
 
+/**
+ * Handler for the {@link RenderingReadyEvent}.
+ * 
+ * @author thothbot
+ *
+ */
 public interface RenderingReadyHandler extends EventHandler
 {
+	/**
+	 * Called when {@link RenderingScene} is ready.
+	 * 
+	 * @param event
+	 */
 	public void onAnimationReady(RenderingReadyEvent event);
 }

@@ -19,6 +19,7 @@
 
 package thothbot.squirrel.core.client;
 
+import thothbot.squirrel.core.client.context.Canvas3d;
 import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.cameras.PerspectiveCamera;
@@ -26,10 +27,26 @@ import thothbot.squirrel.core.shared.scenes.Scene;
 
 import com.google.gwt.core.client.Duration;
 
+/**
+ * The class to set up {@link Scene} for the {@link WebGLRenderer} 
+ * in the {@link Canvas3d} context.
+ * 
+ * @author thothbot
+ *
+ */
 public abstract class RenderingScene extends Rendering
 {
+	/**
+	 * Basically use for the debugger. Check if needed.
+	 * 
+	 * @author thothbot
+	 *
+	 */
 	public static interface RenderingSceneCallback
 	{
+		/**
+		 * Called when {@link #onUpdate()} called.
+		 */
 		public void onUpdate();
 	}
 
@@ -38,13 +55,18 @@ public abstract class RenderingScene extends Rendering
 	private Camera camera;
 	private RenderingSceneCallback renderingSceneCallback;
 
+	/**
+	 * Gets {@link WebGLRenderer} associated with the RenderingScene.
+	 * 
+	 * @return the {@link WebGLRenderer} instance.
+	 */
 	public WebGLRenderer getRenderer() 
 	{
 		return this.renderer;
 	}
 	
 	/**
-	 * Define the main {@link Scene} for the Rendering. 
+	 * Loads the main {@link Scene} for the Rendering. 
 	 */
 	protected void loadScene()
 	{
@@ -72,7 +94,7 @@ public abstract class RenderingScene extends Rendering
 	}
 
 	/**
-	 * There should be defined default camera for the current {@link Scene},
+	 * Loads default camera for the current {@link Scene},
 	 */
 	protected abstract void loadCamera();
 
@@ -99,7 +121,7 @@ public abstract class RenderingScene extends Rendering
 	/**
 	 * Initialize the scene.
 	 * 
-	 * @param renderer the renderer instance
+	 * @param renderer the {@link WebGLRenderer} instance.
 	 * @param renderingSceneCallback this parameter used for updating debug info. Can be null.
 	 */
 	public void init(WebGLRenderer renderer, RenderingSceneCallback renderingSceneCallback)
@@ -125,7 +147,7 @@ public abstract class RenderingScene extends Rendering
 	}
 	
 	/**
-	 * Called when size has been changed on Canvas element. 
+	 * Called when size has been changed on {@link Canvas3d} element. 
 	 * This method basically used for updating aspect ratio for {@link PerspectiveCamera}.
 	 */
 	protected void onResize()

@@ -21,6 +21,13 @@ package thothbot.squirrel.core.client;
 
 import com.google.gwt.event.shared.GwtEvent;
 
+/**
+ * The event is called when the {@link RenderingPanel} is fully initialized and 
+ * {@link RenderingScene} is ready for the rendering.
+ * 
+ * @author thothbot
+ *
+ */
 public class RenderingReadyEvent extends GwtEvent<RenderingReadyHandler>
 {
 	public static Type<RenderingReadyHandler> TYPE = new Type<RenderingReadyHandler>();

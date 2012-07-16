@@ -20,7 +20,6 @@
 package thothbot.squirrel.core.client;
 
 import java.beans.Beans;
-import java.util.Iterator;
 
 import thothbot.squirrel.core.client.context.Canvas3d;
 import thothbot.squirrel.core.client.context.Canvas3dAttributes;
@@ -31,7 +30,7 @@ import thothbot.squirrel.core.client.widget.Debugger;
 import thothbot.squirrel.core.client.widget.LoadingPanel;
 import thothbot.squirrel.core.resources.CoreResources;
 import thothbot.squirrel.core.shared.Log;
-import thothbot.squirrel.core.shared.cameras.PerspectiveCamera;
+import thothbot.squirrel.core.shared.scenes.Scene;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Position;
@@ -43,25 +42,68 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
+/**
+ * A widget where {@ RenderingScene} will be rendered. 
+ * This is complex widget which used for display {@ LoadingPanel} and {@ Debugger}.
+ * 
+ * @author thothbot
+ * 
+ */
 public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets, HasHandlers
 {	
+	/**
+	 * Parameters for the {@link RenderingPanel}.
+	 * @author thothbot
+	 *
+	 */
 	public static class RenderPanelAttributes 
 	{
-		// Canvas3d attributes
+		/**
+		 * Sets the Alpha flag for the {@link Canvas3d}. Default: true.
+		 */
 		public boolean isAlphaEnabled                 = true;
+		/**
+		 * Sets the Depth flag for the {@link Canvas3d}. Default: true.
+		 */
 		public boolean isDepthEnabled                 = true;
+		/**
+		 * Sets the PremultipliedAlpha flag for the {@link Canvas3d}. Default: true.
+		 */
 		public boolean isPremultipliedAlphaEnabled    = true;
+		/**
+		 * Sets the Antialias flag for the {@link Canvas3d}. Default: true.
+		 */
 		public boolean isAntialiasEnabled             = true;
+		/**
+		 * Sets the Stencil flag for the {@link Canvas3d}. Default: true.
+		 */
 		public boolean isStencilEnabled               = true;
+		/**
+		 * Sets the PreserveDrawingBuffer  flag for the {@link Canvas3d}. Default: false.
+		 */
 		public boolean isPreserveDrawingBufferEnabled = false;
 		
-		// Rendering panel attributes
+		/**
+		 * Show debugger in the {@link RenderingPanel}. Default: false
+		 */
 		public boolean isDebugEnabled                 = false;
 	
 		// Renderer attributes
+		/**
+		 * Sets the Shaders {@link WebGLRenderer.PRECISION} value. Default: highp.
+		 */
 		public WebGLRenderer.PRECISION precision      = WebGLRenderer.PRECISION.HIGHP;
-		public int clearColor                         = 0x000000; 
+		/**
+		 * Sets the background color for the {@link Canvas3d}. Default: black (#000000).
+		 */
+		public int clearColor                         = 0x000000;
+		/**
+		 * Sets the background alpha value for the {@link Canvas3d}. Default: opaque (1.0).
+		 */
 		public float clearAlpha                       = 1.0f;
+		/**
+		 * Sets the max {@link Scene} lights. Default: 4.
+		 */
 		public int maxLights                          = 4;
 	}
 	
@@ -78,11 +120,20 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 
 	private WebGLRenderer renderer;
 
+	/**
+	 * Default constructor will create new instance of the widget with 
+	 * default {@link RenderingPanel.RenderPanelAttributes}. 
+	 */
 	public RenderingPanel()
 	{
 		this(new RenderingPanel.RenderPanelAttributes());
 	}
 	
+	/**
+	 * This constructor will create new instance of the widget.
+	 * 
+	 * @param attributes the attributes of the widget.
+	 */
 	public RenderingPanel(RenderPanelAttributes attributes) 
 	{
 		this.attributes = attributes;
@@ -100,7 +151,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		add(this.loadingPanal);
 	}
 
-	/*
+	/**
 	 * Load renderer
 	 */
 	private void loadRenderer() throws Canvas3dException
@@ -119,7 +170,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		}
 	}
 	
-	/*
+	/**
 	 * Load canvas widget
 	 * 
 	 * @throws Canvas3dException
@@ -142,7 +193,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		return canvas;
 	}
 	
-	/*
+	/**
 	 * Load Debuger
 	 */
 	private void loadDebuger()
@@ -158,20 +209,28 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		}
 	}
 
+	/**
+	 * Gets {@link RenderingScene} instance associated with the widget.
+	 * @return
+	 */
 	public RenderingScene getRenderingScene()
 	{
 		return this.renderingScene;
 	}
 	
+	/**
+	 * Sets the {@link RenderingScene} to the widget.
+	 * @param renderingScene
+	 */
 	public void setRenderingScene(RenderingScene renderingScene)
 	{
 		this.renderingScene = renderingScene;
 	}
 
 
-	/*
+	/**
 	 * This method is called when a widget is attached to the browser's document. 
-	 * Canvas3d should be initialized here.
+	 * {@link Canvas3d} should be initialized here.
 	 */
 	@Override
 	public void onLoad()
@@ -201,8 +260,12 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		});
 	}
 	
+	/**
+	 * This method is called when a widget is detached from the browser's document.
+	 * Here is called {@link Rendering#stop()} method.
+	 */
 	@Override
-	protected void onUnload()
+	public void onUnload()
 	{
 		if(getRenderingScene() != null)
 			getRenderingScene().stop();
@@ -210,7 +273,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		super.onUnload();
 	}
 	
-	/*
+	/**
 	 * This method is called when a widget is fully initialized.
 	 */
 	public void onLoaded()
@@ -245,7 +308,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		}
 	}
 
-	/*
+	/**
 	 * This method is called when the implementor's size has been modified.
 	 */
 	@Override
@@ -265,29 +328,31 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		});
 	}
 	
-	public HandlerRegistration addAnimationReadyEventHandler(RenderingReadyHandler handler) 
+	protected HandlerRegistration addAnimationReadyEventHandler(RenderingReadyHandler handler) 
 	{
 		Log.debug("RenderingPanel: Registered event for class " + handler.getClass().getName());
 
 		return handlerManager.addHandler(RenderingReadyEvent.TYPE, handler);
 	}
 
-	/* 
-	 * Get {@link WebGLRenderer}
+	/**
+	 * Gets {@link WebGLRenderer}. Use {@link RenderingScene#getRenderer()} instead. 
+	 *  
 	 * @return {@link WebGLRenderer}
 	 */
+	@Deprecated
 	public WebGLRenderer getRenderer()
 	{
 		return this.renderer;
 	}
 
-	/*
-	 * Resizes the canvas and renderer viewport to (width, height), and also sets the viewport
-	 * to fit that size, starting in (0, 0).
-	 * @param width
-	 * 			the new width of the panel.
-	 * @param height 
-	 * 			the new height of the panel.
+	/**
+	 * Resizes the {@link Canvas3d} and {@link WebGLRenderer} viewport 
+	 * to (width, height), and also sets the viewport to fit that size, 
+	 * starting in (0, 0).
+	 * 
+	 * @param width  the new width of the {@link Canvas3d}.
+	 * @param height the new height of the {@link Canvas3d}.
 	 */
 	public void setSize(int width, int height) 
 	{

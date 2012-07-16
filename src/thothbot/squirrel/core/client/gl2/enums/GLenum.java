@@ -20,7 +20,7 @@
 package thothbot.squirrel.core.client.gl2.enums;
 
 /**
- * All GL2 Flags
+ * All GL2 flags
  * 
  * @author thothbot
  */
