@@ -28,6 +28,14 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
+/**
+ * Basic shader.
+ * <p>
+ * Based on the three.js code. 
+ * 
+ * @author thothbot
+ *
+ */
 public final class ShaderBasic extends Shader
 {
 

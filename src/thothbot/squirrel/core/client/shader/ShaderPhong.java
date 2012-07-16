@@ -31,6 +31,15 @@ import thothbot.squirrel.core.shared.core.Vector3f;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
+/**
+ * Phong shading - lighting model three-dimensional objects, 
+ * including models and polygonal primitives.
+ * <p>
+ * Based on three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class ShaderPhong extends Shader
 {
 

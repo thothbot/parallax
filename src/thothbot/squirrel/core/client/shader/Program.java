@@ -37,6 +37,12 @@ import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.core.WebGLCustomAttribute;
 
+/**
+ * The class used to create WebGl Program.
+ * 
+ * @author thothbot
+ *
+ */
 public class Program
 {
 	public static enum SHADER_DEFINE {
@@ -76,17 +82,14 @@ public class Program
 	public Map<String, Integer> attributes = new HashMap<String, Integer>();
 
 	private WebGLProgram program;
-//	private WebGLShader vertexShader, fragmentShader;
 
 	private WebGLRenderer.PRECISION _precision;
 	private int _maxVertexTextures;
 
 	protected WebGLRenderingContext _gl;
 
-	/*
-	 * buildProgram(...) Creates a new instance of the {@link Program}.
-	 * 
-	 * @return the created instance.
+	/**
+	 * Creates a new instance of the {@link Program}.
 	 */
 	public Program(WebGLRenderingContext _gl, WebGLRenderer.PRECISION _precision,
 			int _maxVertexTextures, String fragmentShader, String vertexShader,
@@ -129,23 +132,25 @@ public class Program
 		cacheAttributeLocations(attributesIds);
 	}
 
+	/**
+	 * Gets program ID
+	 * 
+	 * @return ID
+	 */
 	public int getId()
 	{
 		return this.id;
 	}
-
+	
+	/**
+	 * Sets the current program ID.
+	 * 
+	 * @param id the ID
+	 */
 	public void setId(int id)
 	{
 		this.id = id;
 	}
-
-	/**
-	 * Gets the fragment shader.
-	 */
-//	public WebGLShader getFragmentShader()
-//	{
-//		return this.fragmentShader;
-//	}
 
 	/**
 	 * Gets the shader program.
@@ -156,22 +161,12 @@ public class Program
 	}
 
 	/**
-	 * Gets the vertex shader.
-	 */
-//	public WebGLShader getVertexShader()
-//	{
-//		return this.vertexShader;
-//	}
-
-	/**
 	 * Initializes this shader with the given vertex shader source and fragment
 	 * shader source. This should be called within {@link #init(GL2)} to ensure
 	 * that the shader is correctly initialized.
 	 * 
-	 * @param vertexSource
-	 *            vertex shader source code
-	 * @param fragmentSource
-	 *            fragment shader source code
+	 * @param vertexSource   the vertex shader source code
+	 * @param fragmentSource the fragment shader source code
 	 */
 	protected final void initProgram(String vertexSource, String fragmentSource,
 			ProgramParameters parameters)
@@ -198,7 +193,9 @@ public class Program
 			Log.info("initProgram(): shaders has been initialised");
 	}
 
-	// TODO: fix
+	/**
+	 * Gets the shader.
+	 */
 	private WebGLShader getShader(Class<?> type, String string)
 	{
 		Log.debug("Called Program.getShader() for type " + type.getName() + " and source is: \n" + string);

@@ -26,7 +26,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Fresnel shader
+ * Fresnel shader.
+ * <p>
  * based on Nvidia Cg tutorial and three.js code
  * 
  * @author thothbot

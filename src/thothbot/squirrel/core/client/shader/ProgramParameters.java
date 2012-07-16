@@ -19,6 +19,12 @@
 
 package thothbot.squirrel.core.client.shader;
 
+/**
+ * Parameters for the WebGl Program.
+ * 
+ * @author thothbot
+ *
+ */
 public class ProgramParameters
 {
 	public boolean gammaInput;

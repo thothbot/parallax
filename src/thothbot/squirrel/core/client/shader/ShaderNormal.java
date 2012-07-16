@@ -25,6 +25,14 @@ package thothbot.squirrel.core.client.shader;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
+/**
+ * Normal shader.
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class ShaderNormal extends Shader
 {
 	interface Resources extends DefaultResources

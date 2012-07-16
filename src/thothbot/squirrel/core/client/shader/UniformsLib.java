@@ -32,6 +32,12 @@ import thothbot.squirrel.core.shared.core.Matrix4f;
 import thothbot.squirrel.core.shared.core.Vector2f;
 import thothbot.squirrel.core.shared.core.Vector4f;
 
+/**
+ * Some common uniforms used by shaders.
+ * 
+ * @author thothbot
+ *
+ */
 public class UniformsLib
 {
 	public static final Map<String, Uniform> common = new HashMap<String, Uniform>() {

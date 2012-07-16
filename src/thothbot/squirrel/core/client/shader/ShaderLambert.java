@@ -31,6 +31,17 @@ import thothbot.squirrel.core.shared.core.Vector3f;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
+/**
+ * Lambert shader. This is the simplest model of light - a pure diffuse lighting. 
+ * It is believed that the incident light  is scattered in all direction. 
+ * Thus, the illumination is determined by the light density at the surface 
+ * only and it depends linearly on the cosine of the angle of incidence.
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class ShaderLambert extends Shader
 {
 

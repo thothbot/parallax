@@ -26,6 +26,12 @@ import thothbot.squirrel.core.client.gl2.WebGLUniformLocation;
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
 import thothbot.squirrel.core.client.textures.Texture;
 
+/**
+ * Shader's uniforms.
+ * 
+ * @author thothbot
+ *
+ */
 public class Uniform
 {
 	public static enum TYPE {

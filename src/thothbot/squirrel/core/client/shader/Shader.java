@@ -29,8 +29,11 @@ import thothbot.squirrel.core.shared.core.Mathematics;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
 
-/*
- * Simple shader
+/**
+ * Basic abstract shader.
+ * 
+ * @author thothbot
+ * 
  */
 public abstract class Shader
 {
@@ -48,6 +51,11 @@ public abstract class Shader
 	private String vertexShaderSource;
 	private String fragmentShaderSource;
 
+	/**
+	 * This constructor will create new Shader instance. 
+	 * 
+	 * @param resource the {@link Shader.DefaultResources} instance.
+	 */
 	public Shader(DefaultResources resource)
 	{
 		this.resource = resource;
@@ -55,12 +63,16 @@ public abstract class Shader
 		initUniforms();
 	}
 
-	// Shaders
 	protected void setVertexSource(String src)
 	{
 		this.vertexShaderSource = "\n" + src;		
 	}
 
+	/**
+	 * Gets source of the Vertex shader.
+	 * 
+	 * @return the string with Vertex shader code.
+	 */
 	public String getVertexSource()
 	{
 		if(this.vertexShaderSource == null)
@@ -74,6 +86,11 @@ public abstract class Shader
 		this.fragmentShaderSource = "\n" + src;		
 	}
 	
+	/**
+	 * Gets source of the Fragment shader.
+	 * 
+	 * @return the string with Fragment shader code.
+	 */
 	public String getFragmentSource()
 	{
 		if(this.fragmentShaderSource == null)
@@ -95,6 +112,11 @@ public abstract class Shader
 		this.uniforms.put(id, uniform);
 	}
 	
+	/**
+	 * Gets shader's uniforms.
+	 * 
+	 * @return the map of name-uniform 
+	 */
 	public Map<String, Uniform> getUniforms()
 	{
 		return this.uniforms;
@@ -102,7 +124,7 @@ public abstract class Shader
 	
 	// Methods
 	private static String SHADER_REPLACE_ARG = "//[*]";
-	public static String updateShaderSource(String src, List<String> ... allMods)
+	protected static String updateShaderSource(String src, List<String> ... allMods)
 	{
 		StringBuffer result = new StringBuffer();
 		int s = 0;

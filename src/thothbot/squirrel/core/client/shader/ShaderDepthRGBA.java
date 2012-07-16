@@ -28,15 +28,14 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
-/*
- * Depth encoding into RGBA texture
- *    based on SpiderGL shadow map example
- *    http://spidergl.org/example.php?id=6
- *    
- *    originally from
- *        http://www.gamedev.net/topic/442138-packing-a-float-into-a-a8r8g8b8-texture-shader/page__whichpage__1%25EF%25BF%25BD
- *    see also here:
- *        http://aras-p.info/blog/2009/07/30/encoding-floats-to-rgba-the-final/
+/**
+ * Depth encoding into RGBA texture.
+ * <p>
+ * Based on SpiderGL shadow map example @see <a href="http://spidergl.org/example.php?id=6">http://spidergl.org</a><br>
+ * Originally from @see <a href="http://www.gamedev.net/topic/442138-packing-a-float-into-a-a8r8g8b8-texture-shader/page__whichpage__1%25EF%25BF%25BD">http://www.gamedev.net</a><br>
+ * See also here @see <a href="http://aras-p.info/blog/2009/07/30/encoding-floats-to-rgba-the-final/">http://aras-p.info</a>
+ * 
+ * @author thothbot
  */
 public final class ShaderDepthRGBA extends Shader
 {

@@ -30,11 +30,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Normal map shader
- * - Blinn-Phong
- * - normal + diffuse + specular + AO + displacement + reflection + shadow maps
+ * Normal map shader<br>
+ * - Blinn-Phong<br>
+ * - normal + diffuse + specular + AO + displacement + reflection + shadow maps<br>
  * - point and directional lights (use with "lights: true" material option)
- * 
+ * <p>
  * Based on three.js code.
  * 
  * @author thothbot
