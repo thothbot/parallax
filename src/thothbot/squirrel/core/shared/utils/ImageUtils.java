@@ -86,7 +86,7 @@ public final class ImageUtils
 	 * Loading of texture.
 	 * 
 	 * @param imageResource  the {@link ImageResource} instance
-	 * @param mapping        the mapping mode {@link Texture.MAPPING_MODE}. Not necessary.
+	 * @param mapping        the mapping mode {@link thothbot.squirrel.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
 	 * @param callback       the {@link ImageUtils.Callback}. Not necessary.
 	 * 
 	 * @return the new instance of {@link Texture}

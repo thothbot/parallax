@@ -43,8 +43,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 /**
- * A widget where {@ RenderingScene} will be rendered. 
- * This is complex widget which used for display {@ LoadingPanel} and {@ Debugger}.
+ * A widget where {@link RenderingScene} will be rendered. 
+ * This is complex widget which used for display {@link LoadingPanel} and {@link Debugger}.
  * 
  * @author thothbot
  * 
@@ -90,7 +90,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	
 		// Renderer attributes
 		/**
-		 * Sets the Shaders {@link WebGLRenderer.PRECISION} value. Default: highp.
+		 * Sets the Shaders {@link thothbot.squirrel.core.client.renderers.WebGLRenderer.PRECISION} value. Default: highp.
 		 */
 		public WebGLRenderer.PRECISION precision      = WebGLRenderer.PRECISION.HIGHP;
 		/**
@@ -211,7 +211,8 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 
 	/**
 	 * Gets {@link RenderingScene} instance associated with the widget.
-	 * @return
+	 * 
+	 * @return the {@link RenderingScene}
 	 */
 	public RenderingScene getRenderingScene()
 	{
