@@ -36,6 +36,7 @@ import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.core.Color3f;
 import thothbot.squirrel.core.shared.core.Geometry;
 import thothbot.squirrel.core.shared.core.GeometryBuffer;
+import thothbot.squirrel.core.shared.core.Matrix4f;
 import thothbot.squirrel.core.shared.core.Vector2f;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.core.Vector4f;
@@ -47,6 +48,9 @@ public class ParticleSystem extends GeometryObject
 {
 	public boolean sortParticles = false;
 	public boolean frustumCulled = false;
+	
+	// camera matrices cache
+	private Matrix4f projScreenMatrixPS;
 
 	private static ParticleBasicMaterial.ParticleBasicMaterialOptions defaultMaterialOptions = new ParticleBasicMaterial.ParticleBasicMaterialOptions();
 	static {
@@ -62,6 +66,8 @@ public class ParticleSystem extends GeometryObject
 	{
 		this.geometry = geometry;
 		this.material = material;
+		
+		this.projScreenMatrixPS = new Matrix4f();
 
 		if ( this.geometry != null ) 
 		{
@@ -156,16 +162,16 @@ public class ParticleSystem extends GeometryObject
 		
 		if ( this.sortParticles ) 
 		{
-			renderer._projScreenMatrixPS.copy( renderer._projScreenMatrix );
-			renderer._projScreenMatrixPS.multiply( this.getMatrixWorld() );
+			this.projScreenMatrixPS.copy( renderer.getCache_projScreenMatrix() );
+			this.projScreenMatrixPS.multiply( this.getMatrixWorld() );
 
 			for ( int v = 0; v < vertices.size(); v ++ ) {
 				Vector3f vertex = vertices.get( v );
 
-				renderer._vector3.copy( vertex );
-				renderer._projScreenMatrixPS.multiplyVector3( renderer._vector3 );
+				renderer.getCache_vector3().copy( vertex );
+				this.projScreenMatrixPS.multiplyVector3( renderer.getCache_vector3() );
 				 
-				sortArray.add(v, new ArrayList<Integer>(Arrays.asList((int)renderer._vector3.getZ(), v)));
+				sortArray.add(v, new ArrayList<Integer>(Arrays.asList((int)renderer.getCache_vector3().getZ(), v)));
 			}
 
 			Collections.sort(sortArray, new Comparator<List<Integer>>() {

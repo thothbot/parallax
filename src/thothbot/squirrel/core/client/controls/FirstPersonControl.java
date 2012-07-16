@@ -22,6 +22,8 @@
 
 package thothbot.squirrel.core.client.controls;
 
+import thothbot.squirrel.core.client.Rendering;
+import thothbot.squirrel.core.client.RenderingScene;
 import thothbot.squirrel.core.shared.core.Mathematics;
 import thothbot.squirrel.core.shared.core.Vector3f;
 import thothbot.squirrel.core.shared.objects.Object3D;
@@ -42,6 +44,29 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * The control implements control from a first person.
+ * There are disabled the context menu for the {@link #getWidget()} 
+ * and implemented the following controls:
+ * <p>
+ * Mouse move - rotate the {@link #getObject()}.
+ * <p>
+ * Mouse down - translate the {@link #getObject()} forward.
+ * <p>
+ * Mouse up - translate the  {@link #getObject()} backward.
+ * <p>
+ * Keyboard: <br>
+ * [W or *up*] - translate the  {@link #getObject()} forward.<br>
+ * [S or *down*] - translate the  {@link #getObject()} backward.<br>
+ * [A or *left*] - translate the {@link #getObject()} to the left.<br>
+ * [D or *right*] - translate the {@link #getObject()} to the right.<br>
+ * [R] - translate the {@link #getObject()} up.<br>
+ * [F] - translate the {@link #getObject()} down.<br>
+ * [Q] - freez the {@link #getObject()}.<br>
+ * 
+ * @author thothbot
+ *
+ */
 public class FirstPersonControl extends Control 
 		implements MouseMoveHandler, MouseDownHandler, MouseUpHandler, 
 		KeyDownHandler, KeyUpHandler, ContextMenuHandler
@@ -89,6 +114,9 @@ public class FirstPersonControl extends Control
 	private int viewHalfX;
 	private int viewHalfY;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public FirstPersonControl(Object3D object, Widget widget)
 	{
 		super(object, widget);
@@ -110,16 +138,31 @@ public class FirstPersonControl extends Control
 		RootPanel.get().addDomHandler(this, KeyUpEvent.getType());		
 	}
 	
+	/**
+	 * Sets the movement speed. Default 1.0
+	 * 
+	 * @param movementSpeed the movement speed.
+	 */
 	public void setMovementSpeed(float movementSpeed)
 	{
 		this.movementSpeed = movementSpeed;
 	}
 	
+	/**
+	 * Sets look speed. Default 0.005.
+	 * 
+	 * @param lookSpeed the look speed.
+	 */
 	public void setLookSpeed(float lookSpeed)
 	{
 		this.lookSpeed = lookSpeed;
 	}
 		
+	/**
+	 * The method must be called in the {@link RenderingScene}} onUpdate method.
+	 * 
+	 * @param delta the time in milliseconds needed to render one frame. 
+	 */
 	public void update( float delta ) 
 	{
 		float actualMoveSpeed = 0;
@@ -212,6 +255,7 @@ public class FirstPersonControl extends Control
 		this.getObject().lookAt( targetPosition );
 	}
 	
+	@Override
 	public void onMouseMove(MouseMoveEvent event)
 	{
 		if ( getWidget().getClass() == RootPanel.class ) 

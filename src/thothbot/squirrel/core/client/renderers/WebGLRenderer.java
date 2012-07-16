@@ -97,11 +97,14 @@ import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 
-/*
- * The WebGL renderer displays your beautifully crafted scenes using WebGL, if your device supports it.
+/**
+ * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
 public class WebGLRenderer
 {
+	/**
+	 * Sets the Shaders precision value.
+	 */
 	public static enum PRECISION 
 	{
 		HIGHP,
@@ -133,57 +136,36 @@ public class WebGLRenderer
 	// Integer, default is 4
 	private int maxLights = 4;
 	
-	//////////////////////////////////////////////////////////////
-	// public properties
-
-	// clearing
-
-	// Defines whether the renderer should automatically clear its output before rendering.
-	public boolean autoClear = true;
-	
-	// If autoClear is true, defines whether the renderer should clear the color buffer. Default is true.
-	public boolean autoClearColor = true;
-	
-	// If autoClear is true, defines whether the renderer should clear the depth buffer. Default is true.
-	public boolean autoClearDepth = true;
-	
-	// If autoClear is true, defines whether the renderer should clear the stencil buffer. Default is true.
-	public boolean autoClearStencil = true;
+	// Properties
+	private boolean isAutoClear = true;
+	private boolean isAutoClearColor = true;
+	private boolean isAutoClearDepth = true;
+	private boolean isAutoClearStencil = true;
 
 	// scene graph
-
-	// Defines whether the renderer should sort objects. Default is true.
-	public boolean sortObjects = true;
-
-	// Defines whether the renderer should auto update objects. Default is true.
-	public boolean autoUpdateObjects = true;
-	
-	// Defines whether the renderer should auto update the scene. Default is true.
-	public boolean autoUpdateScene = true;
+	private boolean isSortObjects = true;
+	private boolean isAutoUpdateObjects = true;
+	private boolean isAutoUpdateScene = true;
 
 	// physically based shading
-
-	public boolean gammaInput = false;
-	public boolean gammaOutput = false;
-	public boolean physicallyBasedShading = false;
+	private boolean isGammaInput = false;
+	private boolean isGammaOutput = false;
+	private boolean isPhysicallyBasedShading = false;
 
 	// shadow map
-
-	public boolean shadowMapEnabled = false;
-	public boolean shadowMapAutoUpdate = true;
-	public boolean shadowMapSoft = true;
-	public boolean shadowMapCullFrontFaces = true;
-	public boolean shadowMapDebug = false;
-	public boolean shadowMapCascade = false;
+	private boolean isShadowMapEnabled = false;
+	private boolean isShadowMapAutoUpdate = true;
+	private boolean isShadowMapSoft = true;
+	private boolean isShadowMapCullFrontFaces = true;
+	private boolean isShadowMapDebug = false;
+	private boolean isShadowMapCascade = false;
 
 	// morphs
-
-	public int maxMorphTargets = 8;
-	public int maxMorphNormals = 4;
+	private int maxMorphTargets = 8;
+	private int maxMorphNormals = 4;
 
 	// flags
-
-	public boolean autoScaleCubemaps = true;
+	private boolean isAutoScaleCubemaps = true;
 
 	// custom render plugins
 
@@ -231,24 +213,18 @@ public class WebGLRenderer
 	private Frustum frustum;
 
 	 // camera matrices cache
-
-	public Matrix4f _projScreenMatrix;
-	public Matrix4f _projScreenMatrixPS;
-
-	public Vector4f _vector3;
+	private Matrix4f cache_projScreenMatrix;
+	private Vector4f cache_vector3;
 
 	// light arrays cache
-
-	private Vector3f direction;
-
-	private boolean lightsNeedUpdate = true;
-
+	private Vector3f cache_direction;
+	private boolean isLightsNeedUpdate = true;
 	private WebGLRenderLights lights;
 
 	// GPU capabilities
-	private int maxVertexTextures;
-	private int maxTextureSize;
-	private int maxCubemapSize;
+	private int GPUmaxVertexTextures;
+	private int GPUmaxTextureSize;
+	private int GPUmaxCubemapSize;
 	
 	public WebGLRenderer(Canvas3d canvas)
 	{
@@ -258,21 +234,145 @@ public class WebGLRenderer
 		
 		this.frustum = new Frustum();
 		
-		this._projScreenMatrix   = new Matrix4f();
-		this._projScreenMatrixPS = new Matrix4f();
-		this._vector3            = new Vector4f();
-		this.direction          = new Vector3f();
-		this.lights             = new WebGLRenderLights();
+		this.cache_projScreenMatrix   = new Matrix4f();
+		this.cache_vector3             = new Vector4f();
+		this.cache_direction           = new Vector3f();
+		this.lights              = new WebGLRenderLights();
 		this._programs           = new HashMap<String, Program>();
 		
-		this.maxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
-		this.maxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
-		this.maxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
+		this.GPUmaxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
+		this.GPUmaxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
+		this.GPUmaxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
 
 		setViewport(0, 0, getCanvas().getWidth(), getCanvas().getHeight());
 		setDefaultGLState();
 	}
 	
+	/**
+	 * Gets {@link #setAutoClear(boolean)} flag.
+	 */
+	public boolean isAutoClear() {
+		return isAutoClear;
+	}
+
+	/**
+	 * Defines whether the renderer should automatically clear its output before rendering.
+	 * Default is true.
+	 * 
+	 * @param isAutoClear false or true
+	 */
+	public void setAutoClear(boolean isAutoClear) {
+		this.isAutoClear = isAutoClear;
+	}
+
+	/**
+	 * Gets {@link #setAutoClearColor(boolean)} flag.
+	 */
+	public boolean isAutoClearColor() {
+		return isAutoClearColor;
+	}
+
+	/**
+	 * Defines whether the renderer should clear the color buffer. 
+	 * Default is true.
+	 * 
+	 * @param isAutoClearColor false or true
+	 */
+	public void setAutoClearColor(boolean isAutoClearColor) {
+		this.isAutoClearColor = isAutoClearColor;
+	}
+
+
+	/**
+	 * Gets {@link #setAutoClearDepth(boolean)} flag.
+	 * @return
+	 */
+	public boolean isAutoClearDepth() {
+		return isAutoClearDepth;
+	}
+
+	/**
+	 * Defines whether the renderer should clear the depth buffer. 
+	 * Default is true.
+	 * 
+	 * @param isAutoClearDepth false or true
+	 */
+	public void setAutoClearDepth(boolean isAutoClearDepth) {
+		this.isAutoClearDepth = isAutoClearDepth;
+	}
+
+	/**
+	 * Gets {@link #setAutoClearStencil(boolean)} flag.
+	 * @return
+	 */
+	public boolean isAutoClearStencil() {
+		return isAutoClearStencil;
+	}
+
+	/**
+	 * Defines whether the renderer should clear the stencil buffer. 
+	 * Default is true.
+	 * 
+	 * @param isAutoClearStencil false or true
+	 */
+	public void setAutoClearStencil(boolean isAutoClearStencil) {
+		this.isAutoClearStencil = isAutoClearStencil;
+	}
+
+	/**
+	 * Gets {@link #setSortObjects(boolean)} flag.
+	 * @return
+	 */
+	public boolean isSortObjects() {
+		return isSortObjects;
+	}
+
+	/**
+	 * Defines whether the renderer should sort objects. 
+	 * Default is true.
+	 * 
+	 * @param isSortObjects false or true
+	 */
+	public void setSortObjects(boolean isSortObjects) {
+		this.isSortObjects = isSortObjects;
+	}
+
+	/**
+	 * Gets {@link #setAutoUpdateObjects(boolean)} flag.
+	 * @return
+	 */
+	public boolean isAutoUpdateObjects() {
+		return isAutoUpdateObjects;
+	}
+
+	/**
+	 * Defines whether the renderer should auto update objects. 
+	 * Default is true.
+	 * 
+	 * @param isAutoUpdateObjects false or true
+	 */
+	public void setAutoUpdateObjects(boolean isAutoUpdateObjects) {
+		this.isAutoUpdateObjects = isAutoUpdateObjects;
+	}
+
+	/**
+	 * Gets {@link #setAutoUpdateScene(boolean)} flag.
+	 * @return
+	 */
+	public boolean isAutoUpdateScene() {
+		return isAutoUpdateScene;
+	}
+
+	/**
+	 * Defines whether the renderer should auto update the scene.
+	 * Default is true.
+	 * 
+	 * @param isAutoUpdateScene false or true
+	 */
+	public void setAutoUpdateScene(boolean isAutoUpdateScene) {
+		this.isAutoUpdateScene = isAutoUpdateScene;
+	}
+
 	public WebGLRenderInfo getInfo()
 	{
 		return info;
@@ -327,7 +427,7 @@ public class WebGLRenderer
 	 */
 	public boolean supportsVertexTextures()
 	{
-		return this.maxVertexTextures > 0;
+		return this.GPUmaxVertexTextures > 0;
 	}
 
 	public void setSize(int width, int height)
@@ -515,7 +615,7 @@ public class WebGLRenderer
 		this.cache_oldDepthWrite = null;
 		this.cache_currentGeometryGroupHash = -1;
 		this.cache_currentMaterialId = -1;
-		this.lightsNeedUpdate = true;
+		this.isLightsNeedUpdate = true;
 		this.cache_oldDoubleSided = null;
 		this.cache_oldFlipSided = null;
 
@@ -699,7 +799,7 @@ public class WebGLRenderer
 
 		// reset caching for this frame
 		this.cache_currentMaterialId = -1;
-		this.lightsNeedUpdate = true;
+		this.isLightsNeedUpdate = true;
 
 		// update scene graph
 		if ( camera.getParent() == null ) 
@@ -708,8 +808,8 @@ public class WebGLRenderer
 			scene.addChild( camera );
 		}
 
-		Log.debug("render() this.autoUpdateScene=" + this.autoUpdateScene);
-		if ( this.autoUpdateScene ) 
+		Log.debug("render() this.autoUpdateScene=" + this.isAutoUpdateScene());
+		if ( this.isAutoUpdateScene() ) 
 				scene.updateMatrixWorld(false);
 
 		// update camera matrices and frustum
@@ -724,11 +824,11 @@ public class WebGLRenderer
 		camera.getMatrixWorldInverse().flattenToArray( camera._viewMatrixArray );
 		camera.getProjectionMatrix().flattenToArray( camera._projectionMatrixArray );
 
-		this._projScreenMatrix.multiply( camera.getProjectionMatrix(), camera.getMatrixWorldInverse() );
-		this.frustum.setFromMatrix( _projScreenMatrix );
+		this.cache_projScreenMatrix.multiply( camera.getProjectionMatrix(), camera.getMatrixWorldInverse() );
+		this.frustum.setFromMatrix( cache_projScreenMatrix );
 
 		// update WebGL objects
-		if ( this.autoUpdateObjects ) 
+		if ( this.isAutoUpdateObjects() ) 
 			initWebGLObjects( scene );
 
 		// custom render plugins (pre pass)
@@ -741,8 +841,8 @@ public class WebGLRenderer
 
 		setRenderTarget( renderTarget );
 
-		if ( this.autoClear || forceClear )
-			clear( this.autoClearColor, this.autoClearDepth, this.autoClearStencil );
+		if ( this.isAutoClear() || forceClear )
+			clear( this.isAutoClearColor(), this.isAutoClearDepth(), this.isAutoClearStencil() );
 
 		// set matrices for regular objects (frustum culled)
 		List<WebGLObject> renderList = scene.__webglObjects;
@@ -764,26 +864,25 @@ public class WebGLRenderer
 					unrollBufferMaterial( webglObject );
 					webglObject.render = true;
 
-					if ( this.sortObjects ) 
+					if ( this.isSortObjects() ) 
 					{
-
 						if ( object.renderDepth > 0 ) 
 						{
 							webglObject.z = object.renderDepth;
 						} 
 						else 
 						{
-							this._vector3.copy( object.getMatrixWorld().getPosition() );
-							this._projScreenMatrix.multiplyVector3( _vector3 );
+							this.cache_vector3.copy( object.getMatrixWorld().getPosition() );
+							this.cache_projScreenMatrix.multiplyVector3( cache_vector3 );
 
-							webglObject.z = _vector3.getZ();
+							webglObject.z = cache_vector3.getZ();
 						}
 					}
 				}
 			}
 		}
 
-		if ( this.sortObjects )
+		if ( this.isSortObjects() )
 			Collections.sort(renderList);
 
 		// set matrices for immediate objects
@@ -1576,10 +1675,10 @@ public class WebGLRenderer
 		parameters.morphTargets = material.morphTargets;
 		parameters.morphNormals = material.morphNormals;
 
-		parameters.shadowMapEnabled = this.shadowMapEnabled && object.receiveShadow;
-		parameters.shadowMapSoft = this.shadowMapSoft;
-		parameters.shadowMapDebug = this.shadowMapDebug;
-		parameters.shadowMapCascade = this.shadowMapCascade;
+		parameters.shadowMapEnabled = this.isShadowMapEnabled && object.receiveShadow;
+		parameters.shadowMapSoft = this.isShadowMapSoft;
+		parameters.shadowMapDebug = this.isShadowMapDebug;
+		parameters.shadowMapCascade = this.isShadowMapCascade;
 
 		parameters.alphaTest = material.getAlphaTest();
 		parameters.metal = material.metal;
@@ -1590,7 +1689,7 @@ public class WebGLRenderer
 
 		Log.debug("initMaterial() called new Program");
 
-		material.program = buildProgram(this.precision, this.maxVertexTextures, 
+		material.program = buildProgram(this.precision, this.GPUmaxVertexTextures, 
 				material.fragmentShader, material.vertexShader, material.uniforms, material.attributes, parameters );
 
 		Map<String, Integer> attributes = material.program.attributes;
@@ -1707,10 +1806,10 @@ public class WebGLRenderer
 				 material.lights != null) 
 			{
 
-				if (this.lightsNeedUpdate ) 
+				if (this.isLightsNeedUpdate ) 
 				{
 					setupLights( program, lights );
-					this.lightsNeedUpdate = false;
+					this.isLightsNeedUpdate = false;
 				}
 
 				refreshUniformsLights( m_uniforms, this.lights );
@@ -1808,7 +1907,7 @@ public class WebGLRenderer
 	{
 		uniforms.get("opacity").value = material.getOpacity();
 
-		if ( this.gammaInput ) 
+		if ( this.isGammaInput ) 
 		{
 			Color3f color = (Color3f) uniforms.get("diffuse").value;
 			color.copyGammaToLinear( material.getColor() );
@@ -1836,7 +1935,7 @@ public class WebGLRenderer
 		uniforms.get("envMap").texture = material.getEnvMap();
 		uniforms.get("flipEnvMap").value = ( material.getEnvMap() != null && material.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0f : -1.0f;
 
-		if ( this.gammaInput ) 
+		if ( this.isGammaInput ) 
 		{
 //			uniforms.reflectivity.value = material.reflectivity * material.reflectivity;
 			uniforms.get("reflectivity").value = material.getReflectivity();
@@ -1872,7 +1971,7 @@ public class WebGLRenderer
 
 		uniforms.get("shininess").value = material.getShininess();
 
-		if ( this.gammaInput ) {
+		if ( this.isGammaInput ) {
 
 			Color3f ambient = (Color3f) uniforms.get("ambient").value;
 			ambient.copyGammaToLinear(material.getAmbient());
@@ -1901,7 +2000,7 @@ public class WebGLRenderer
 
 	private void refreshUniformsLambert ( Map<String, Uniform> uniforms, MeshLambertMaterial material ) 
 	{
-		if ( this.gammaInput ) 
+		if ( this.isGammaInput ) 
 		{
 			Color3f ambient = (Color3f) uniforms.get("ambient").value;
 			ambient.copyGammaToLinear(material.getAmbient());
@@ -2200,7 +2299,7 @@ Log.error("?????????????");
 
 			if ( light.getClass() == AmbientLight.class ) 
 			{
-				if ( this.gammaInput ) 
+				if ( this.isGammaInput ) 
 				{
 					r += color.getR() * color.getR();
 					g += color.getG() * color.getG();
@@ -2222,7 +2321,7 @@ Log.error("?????????????");
 
 				doffset = dlength * 3;
 
-				if ( this.gammaInput ) 
+				if ( this.isGammaInput ) 
 				{
 					dcolors.set( doffset, color.getR() * color.getR() * intensity * intensity);
 					dcolors.set( doffset + 1, color.getG() * color.getG() * intensity * intensity);
@@ -2235,13 +2334,13 @@ Log.error("?????????????");
 					dcolors.set( doffset + 2, color.getB() * intensity);
 				}
 
-				this.direction.copy( directionalLight.getMatrixWorld().getPosition() );
-				this.direction.sub( directionalLight.target.getMatrixWorld().getPosition() );
-				this.direction.normalize();
+				this.cache_direction.copy( directionalLight.getMatrixWorld().getPosition() );
+				this.cache_direction.sub( directionalLight.target.getMatrixWorld().getPosition() );
+				this.cache_direction.normalize();
 
-				dpositions.set( doffset, this.direction.getX());
-				dpositions.set( doffset + 1, this.direction.getY());
-				dpositions.set( doffset + 2, this.direction.getZ());
+				dpositions.set( doffset, this.cache_direction.getX());
+				dpositions.set( doffset + 1, this.cache_direction.getY());
+				dpositions.set( doffset + 2, this.cache_direction.getZ());
 
 				dlength += 1;
 
@@ -2254,7 +2353,7 @@ Log.error("?????????????");
 				float distance = pointLight.getDistance();
 				poffset = plength * 3;
 
-				if ( this.gammaInput ) 
+				if ( this.isGammaInput ) 
 				{
 					pcolors.set(  poffset, color.getR() * color.getR() * intensity * intensity);
 					pcolors.set(  poffset + 1, color.getG() * color.getG() * intensity * intensity);
@@ -2286,7 +2385,7 @@ Log.error("?????????????");
 
 				soffset = slength * 3;
 
-				if ( this.gammaInput ) 
+				if ( this.isGammaInput ) 
 				{
 					scolors.set(soffset, color.getR() * color.getR() * intensity * intensity);
 					scolors.set(soffset + 1, color.getG() * color.getG() * intensity * intensity);
@@ -2307,13 +2406,13 @@ Log.error("?????????????");
 
 				sdistances.set(slength, distance);
 
-				this.direction.copy( position );
-				this.direction.sub( spotLight.target.getMatrixWorld().getPosition() );
-				this.direction.normalize();
+				this.cache_direction.copy( position );
+				this.cache_direction.sub( spotLight.target.getMatrixWorld().getPosition() );
+				this.cache_direction.normalize();
 
-				sdirections.set(soffset, this.direction.getX());
-				sdirections.set(soffset + 1, this.direction.getY());
-				sdirections.set(soffset + 2, this.direction.getZ());
+				sdirections.set(soffset, this.cache_direction.getX());
+				sdirections.set(soffset + 1, this.cache_direction.getY());
+				sdirections.set(soffset + 2, this.cache_direction.getZ());
 
 				sangles.set(slength, (float)Math.cos( spotLight.angle ));
 				sexponents.set( slength, spotLight.exponent);
@@ -2519,7 +2618,7 @@ Log.error("?????????????");
 		if(this._programs.containsKey(cashKey))
 			return this._programs.get(cashKey);
 
-		Program program = new Program(getGL(), this.precision, this.maxVertexTextures, fragmentShader, vertexShader, uniforms, attributes, parameters);
+		Program program = new Program(getGL(), this.precision, this.GPUmaxVertexTextures, fragmentShader, vertexShader, uniforms, attributes, parameters);
 
 		program.setId(_programs.size());
 		this._programs.put(cashKey, program);
@@ -2637,8 +2736,8 @@ Log.error("?????????????");
 
 			for ( int i = 0; i < 6; i ++ ) 
 			{
-				if ( this.autoScaleCubemaps )
-					cubeImage.add(clampToMaxSize( texture.getImage( i ), this.maxCubemapSize ));
+				if ( this.isAutoScaleCubemaps )
+					cubeImage.add(clampToMaxSize( texture.getImage( i ), this.GPUmaxCubemapSize ));
 
 				else
 					cubeImage.add(texture.getImage( i ));
@@ -2777,6 +2876,16 @@ Log.error("?????????????");
 		return maxShadows;
 	}
 
+	@Deprecated
+	public Matrix4f getCache_projScreenMatrix() {
+		return cache_projScreenMatrix;
+	}
+
+	@Deprecated
+	public Vector4f getCache_vector3() {
+		return cache_vector3;
+	}
+	
 	// default plugins (order is important)
 
 //	this.shadowMapPlugin = new THREE.ShadowMapPlugin();

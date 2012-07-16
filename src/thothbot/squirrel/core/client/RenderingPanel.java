@@ -329,7 +329,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		});
 	}
 	
-	protected HandlerRegistration addAnimationReadyEventHandler(RenderingReadyHandler handler) 
+	public HandlerRegistration addAnimationReadyEventHandler(RenderingReadyHandler handler) 
 	{
 		Log.debug("RenderingPanel: Registered event for class " + handler.getClass().getName());
 

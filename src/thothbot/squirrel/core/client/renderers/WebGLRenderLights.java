@@ -20,7 +20,14 @@
 package thothbot.squirrel.core.client.renderers;
 
 import thothbot.squirrel.core.client.gl2.arrays.Float32Array;
+import thothbot.squirrel.core.shared.scenes.Scene;
 
+/**
+ * Lights used in the {@link Scene}.
+ * 
+ * @author thothbot
+ *
+ */
 public class WebGLRenderLights
 {
 

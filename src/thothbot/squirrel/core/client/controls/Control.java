@@ -19,27 +19,52 @@
 
 package thothbot.squirrel.core.client.controls;
 
+import thothbot.squirrel.core.client.context.Canvas3d;
+import thothbot.squirrel.core.shared.cameras.Camera;
 import thothbot.squirrel.core.shared.objects.Object3D;
 
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * The abstract control implementation.
+ * 
+ * @author thothbot
+ *
+ */
 public abstract class Control
 {
 	private Object3D object;
 	private Widget widget;
 	
+	/**
+	 * The constructor will create a {@link Control} instance.
+	 * 
+	 * @param object the {@link Object3D} which will be controlled. 
+	 * 				For example {@link Camera} object.
+	 * @param widget the Widget where to listen control commands. 
+	 * 				Basically {@link Canvas3d} widget.
+	 */
 	public Control(Object3D object, Widget widget)
 	{
 		this.object = object;
 		this.widget = widget;
 	}
 	
+	/**
+	 * Gets controlled instance.
+	 * 
+	 * @return the {@link Object3D}.
+	 */
 	public Object3D getObject()
 	{
 		return this.object;
 	}
 	
+	/**
+	 * Gets widget.
+	 * 
+	 * @return the Widget.
+	 */
 	public Widget getWidget()
 	{
 		return this.widget;
