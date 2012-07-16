@@ -37,8 +37,6 @@ import thothbot.squirrel.core.client.renderers.WebGLRenderer;
 import thothbot.squirrel.core.shared.Log;
 import thothbot.squirrel.core.shared.core.WebGLCustomAttribute;
 
-import com.google.gwt.core.client.GWT;
-
 public class Program
 {
 	public static enum SHADER_DEFINE {

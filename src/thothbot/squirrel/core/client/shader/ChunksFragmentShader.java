@@ -19,6 +19,11 @@
 
 package thothbot.squirrel.core.client.shader;
 
+/**
+ * Chunks used in Fragment Shader
+ * @author thothbot
+ *
+ */
 public class ChunksFragmentShader
 {
 	public static String ALPHA_TEST = Chunks.INSTANCE.getAlphatestFragment().getText();

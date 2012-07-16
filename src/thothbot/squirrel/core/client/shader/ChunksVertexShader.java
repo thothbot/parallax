@@ -19,6 +19,11 @@
 
 package thothbot.squirrel.core.client.shader;
 
+/**
+ * Chunks used in Vertex Shader
+ * @author thothbot
+ *
+ */
 public class ChunksVertexShader
 {
 	public static String COLOR_PARS = Chunks.INSTANCE.getColorParsVertex().getText();
