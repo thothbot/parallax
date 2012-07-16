@@ -115,7 +115,7 @@ public class FirstPersonControl extends Control
 	private int viewHalfY;
 	
 	/**
-	 * {@inheritDoc}
+	 * @see Control#Control(Object3D, Widget).
 	 */
 	public FirstPersonControl(Object3D object, Widget widget)
 	{

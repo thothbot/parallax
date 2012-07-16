@@ -284,7 +284,6 @@ public class WebGLRenderer
 
 	/**
 	 * Gets {@link #setAutoClearDepth(boolean)} flag.
-	 * @return
 	 */
 	public boolean isAutoClearDepth() {
 		return isAutoClearDepth;
@@ -302,7 +301,6 @@ public class WebGLRenderer
 
 	/**
 	 * Gets {@link #setAutoClearStencil(boolean)} flag.
-	 * @return
 	 */
 	public boolean isAutoClearStencil() {
 		return isAutoClearStencil;
@@ -320,7 +318,6 @@ public class WebGLRenderer
 
 	/**
 	 * Gets {@link #setSortObjects(boolean)} flag.
-	 * @return
 	 */
 	public boolean isSortObjects() {
 		return isSortObjects;
@@ -338,7 +335,6 @@ public class WebGLRenderer
 
 	/**
 	 * Gets {@link #setAutoUpdateObjects(boolean)} flag.
-	 * @return
 	 */
 	public boolean isAutoUpdateObjects() {
 		return isAutoUpdateObjects;
@@ -356,7 +352,6 @@ public class WebGLRenderer
 
 	/**
 	 * Gets {@link #setAutoUpdateScene(boolean)} flag.
-	 * @return
 	 */
 	public boolean isAutoUpdateScene() {
 		return isAutoUpdateScene;
@@ -523,7 +518,7 @@ public class WebGLRenderer
 	/**
 	 * Sets the clear color, using {@link Color3f} for the color and alpha for the opacity.
 	 * 
-	 * @see {@link #setClearColorHex(int, float)}. 
+	 * @see #setClearColorHex(int, float). 
 	 * 
 	 * @param color the {@link Color3f} instance.
 	 * @param alpha the alpha value.
@@ -577,7 +572,7 @@ public class WebGLRenderer
 
 	/**
 	 * Clear {@link RenderTargetTexture} and GL buffers.
-	 * @see {@link #clear(boolean, boolean, boolean)}.
+	 * @see #clear(boolean, boolean, boolean).
 	 */
 	public void clearTarget( RenderTargetTexture renderTarget, boolean color, boolean depth, boolean stencil ) 
 	{
@@ -635,7 +630,7 @@ public class WebGLRenderer
 	/**
 	 * Releases a render target from the GL context.
 	 * 
-	 * @parameter renderTarget the instance of {@link RenderTargetTexture}
+	 * @param renderTarget the instance of {@link RenderTargetTexture}
 	 */
 	public void deallocateRenderTarget ( RenderTargetTexture renderTarget ) 
 	{
@@ -817,7 +812,7 @@ public class WebGLRenderer
 
 	/**
 	 * Rendering. 
-	 * @see {@link #render(Scene, Camera, RenderTargetTexture, boolean)}.
+	 * @see #render(Scene, Camera, RenderTargetTexture, boolean).
 	 */
 	public void render( Scene scene, Camera camera)
 	{
@@ -826,7 +821,7 @@ public class WebGLRenderer
 
 	/**
 	 * Rendering. 
-	 * @see {@link #render(Scene, Camera, RenderTargetTexture, boolean)}.
+	 * @see #render(Scene, Camera, RenderTargetTexture, boolean).
 	 */
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget)
 	{
