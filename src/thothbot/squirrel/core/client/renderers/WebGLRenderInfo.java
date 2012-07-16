@@ -24,7 +24,8 @@ import thothbot.squirrel.core.client.widget.Debugger;
 import com.google.gwt.core.client.Duration;
 
 /**
- * Class contains some information used in {@link Debugger} about rendering.
+ * Th class with a series of statistical information about the graphics board memory and 
+ * the rendering process. Used id {@link Debugger}.
  *  
  * @author thothbot
  *

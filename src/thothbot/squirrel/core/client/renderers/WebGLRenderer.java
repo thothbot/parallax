@@ -114,16 +114,8 @@ public class WebGLRenderer
 
 	// The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
 	private Canvas3d canvas;
-	
-	private Map<String, Program> _programs;
-	
-	// An object with a series of statistical information about the graphics board memory and 
-	// the rendering process. Useful for debugging or just for the sake of curiosity.
 	private WebGLRenderInfo info;
 
-	//////////////////////////////////////////////////////////////
-	// parameters
-	
 	// shader precision. Can be "highp", "mediump" or "lowp".
 	private WebGLRenderer.PRECISION precision = WebGLRenderer.PRECISION.HIGHP;
 				
@@ -219,13 +211,20 @@ public class WebGLRenderer
 	// light arrays cache
 	private Vector3f cache_direction;
 	private boolean isLightsNeedUpdate = true;
-	private WebGLRenderLights lights;
+	private WebGLRenderLights cache_lights;
+	
+	private Map<String, Program> cache_programs;
 
 	// GPU capabilities
 	private int GPUmaxVertexTextures;
 	private int GPUmaxTextureSize;
 	private int GPUmaxCubemapSize;
 	
+	/**
+	 * The constructor will create renderer for the {@link Canvas3d} widget.
+	 * 
+	 * @param canvas the {@link Canvas3d} widget
+	 */
 	public WebGLRenderer(Canvas3d canvas)
 	{
 		setCanvas(canvas);
@@ -234,11 +233,11 @@ public class WebGLRenderer
 		
 		this.frustum = new Frustum();
 		
-		this.cache_projScreenMatrix   = new Matrix4f();
-		this.cache_vector3             = new Vector4f();
-		this.cache_direction           = new Vector3f();
-		this.lights              = new WebGLRenderLights();
-		this._programs           = new HashMap<String, Program>();
+		this.cache_projScreenMatrix = new Matrix4f();
+		this.cache_vector3          = new Vector4f();
+		this.cache_direction        = new Vector3f();
+		this.cache_lights           = new WebGLRenderLights();
+		this.cache_programs         = new HashMap<String, Program>();
 		
 		this.GPUmaxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
 		this.GPUmaxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
@@ -373,31 +372,37 @@ public class WebGLRenderer
 		this.isAutoUpdateScene = isAutoUpdateScene;
 	}
 
-	public WebGLRenderInfo getInfo()
-	{
+	/**
+	 * Gets {@link WebGLRenderInfo} instance with debug information.
+	 * 
+	 * @return the {@link WebGLRenderInfo} instance
+	 */
+	public WebGLRenderInfo getInfo() {
 		return info;
 	}
 	
-	private void setInfo(WebGLRenderInfo info)
-	{
+	private void setInfo(WebGLRenderInfo info) {
 		this.info = info;
 	}
 	
-	public Canvas3d getCanvas()
-	{
+	/**
+	 * Gets {@link Canvas3d} widget with whom the renderer is associated.
+	 * 
+	 * @return the {@link Canvas3d} widget.
+	 */
+	public Canvas3d getCanvas() {
 		return this.canvas;
 	}
 	
-	private void setCanvas(Canvas3d canvas)
-	{
+	private void setCanvas(Canvas3d canvas) {
 		this.canvas = canvas;
 	}
 	
 	/**
-	 * Gets the WebGL context.
+	 * Gets the WebGL context from the {@link Canvas3d} widget.
 	 * 
 	 * @return the underlying context implementation for drawing onto the
-	 *         canvas, or null if no context implementation is available.
+	 *         {@link Canvas3d}.
 	 */
 	public WebGLRenderingContext getGL()
 	{
@@ -422,7 +427,7 @@ public class WebGLRenderer
 		getGL().blendFunc( GLenum.SRC_ALPHA.getValue(), GLenum.ONE_MINUS_SRC_ALPHA.getValue() );
 	}
 
-	/*
+	/**
 	 * Return a Boolean true if the context supports vertex textures.
 	 */
 	public boolean supportsVertexTextures()
@@ -430,14 +435,21 @@ public class WebGLRenderer
 		return this.GPUmaxVertexTextures > 0;
 	}
 
+	/**
+	 * Sets the {@link Canvas3d} and also sets {@link #setViewport(int, int, int, int)} size.
+	 * 
+	 * @param width the {@link Canvas3d} width.
+	 * @param height the {@link Canvas3d} height.
+	 */
 	public void setSize(int width, int height)
 	{
 		getCanvas().setSize(width, height);
 		setViewport(0, 0, width, height);
 	}
 
-	/*
-	 * Sets the viewport to render from (x, y) to (x + width, y + height).
+	/**
+	 * Sets the viewport to render from (X, Y) to (X + width, Y + height).
+	 * By default X and Y = 0.
 	 */
 	public void setViewport(int x, int y, int width, int height)
 	{
@@ -450,7 +462,7 @@ public class WebGLRenderer
 		getGL().viewport(this.viewportX, this.viewportY, this.viewportWidth, this.viewportHeight);
 	}
 
-	/*
+	/**
 	 * Sets the scissor area from (x, y) to (x + width, y + height).
 	 */
 	public void setScissor(int x, int y, int width, int height)
@@ -458,8 +470,10 @@ public class WebGLRenderer
 		getGL().scissor(x, y, width, height);
 	}
 
-	/*
-	 * Enable the scissor test. When this is enabled, only the pixels within the defined scissor area will be affected by further renderer actions.
+	/**
+	 * Enable the scissor test. When this is enabled, only the pixels 
+	 * within the defined scissor area will be affected by further 
+	 * renderer actions.
 	 */
 	public void enableScissorTest(boolean enable)
 	{
@@ -469,18 +483,33 @@ public class WebGLRenderer
 			getGL().disable(GLenum.SCISSOR_TEST.getValue());
 	}
 	
+	/**
+	 * Sets the Shader precision value.
+	 * 
+	 * @param precision the {@link WebGLRenderer.PRECISION} value.
+	 */
 	public void setPrecision(WebGLRenderer.PRECISION precision) 
 	{
 		this.precision = precision; 
 	}
 	
+	/**
+	 * Sets {@link Scene} maximum lights. By default there are 4.
+	 * 
+	 * @param maxLights
+	 */
 	public void setMaxLights(int maxLights) 
 	{
 		this.maxLights = maxLights;
 	}
-	
-	/*
-	 * Sets the clear color, using hex for the color and alpha for the opacity.
+
+	/**
+	 * Sets the clear color, using hex for the color and alpha for the opacity.<br>
+	 * Default clear clolor is 0x000000 - black.<br>
+	 * Default clear alpha is 1.0 - opaque.<br>
+	 * 
+	 * @param hex   the clear color value.
+	 * @param alpha the clear alpha value.
 	 */
 	public void setClearColorHex( int hex, float alpha ) 
 	{
@@ -490,8 +519,14 @@ public class WebGLRenderer
 		getGL().clearColor( this.clearColor.getR(), this.clearColor.getG(), this.clearColor.getB(), this.clearAlpha );
 	}
 	
-	/*
-	 * Sets the clear color, using color for the color and alpha for the opacity.
+
+	/**
+	 * Sets the clear color, using {@link Color3f} for the color and alpha for the opacity.
+	 * 
+	 * @see {@link #setClearColorHex(int, float)}. 
+	 * 
+	 * @param color the {@link Color3f} instance.
+	 * @param alpha the alpha value.
 	 */
 	public void setClearColor( Color3f color, float alpha ) 
 	{
@@ -501,25 +536,33 @@ public class WebGLRenderer
 		getGL().clearColor( this.clearColor.getR(), this.clearColor.getG(), this.clearColor.getB(), this.clearAlpha );
 	}
 
-	/*
-	 * Returns a Color3f instance with the current clear color.
+	/**
+	 * Returns the current clear color.
+	 * 
+	 * @return the {@link Color3f} instance. 
 	 */
 	public Color3f getClearColor() 
 	{
 		return this.clearColor;
 	}
 
-	/*
-	 * Returns a float with the current clear alpha. Ranges from 0 to 1.
+	/**
+	 * Returns the current clear alpha.
+	 * 
+	 * @return the value in range <0,1>.
 	 */
 	public float getClearAlpha() 
 	{
 		return this.clearAlpha;
 	}
 
-	/*
+	/**
 	 * Tells the renderer to clear its color, depth or stencil drawing buffer(s).
 	 * If no parameters are passed, no buffer will be cleared.
+	 * 
+	 * @param color   is it should clear color
+	 * @param depth   is it should clear depth
+	 * @param stencil is it should clear stencil
 	 */
 	public void clear( boolean color, boolean depth, boolean stencil ) 
 	{
@@ -532,22 +575,23 @@ public class WebGLRenderer
 		getGL().clear( bits );
 	}
 
+	/**
+	 * Clear {@link RenderTargetTexture} and GL buffers.
+	 * @see {@link #clear(boolean, boolean, boolean)}.
+	 */
 	public void clearTarget( RenderTargetTexture renderTarget, boolean color, boolean depth, boolean stencil ) 
 	{
 		setRenderTarget( renderTarget );
 		clear( color, depth, stencil );
 	}
 	
-	/**************************************
-	 * Deallocation
-	 **************************************/
-	/*
+	/**
 	 * object — an instance of Object3D
 	 * Removes an object from the GL context and releases all the data (geometry, matrices...) 
 	 * that the GL context keeps about the object, but it doesn't release textures or affect any 
 	 * JavaScript data.
 	 */
-	public void deallocateObject( GeometryObject object ) 
+	private void deallocateObject( GeometryObject object ) 
 	{
 		if ( ! object.__webglInit ) return;
 
@@ -574,7 +618,7 @@ public class WebGLRenderer
 			deleteParticleBuffers( object.getGeometry() );
 	}
 
-	/*
+	/**
 	 * Releases a texture from the GL context.
 	 * texture — an instance of Texture
 	 */
@@ -588,26 +632,20 @@ public class WebGLRenderer
 		this.getInfo().getMemory().textures--;
 	}
 
-	/*
+	/**
 	 * Releases a render target from the GL context.
-	 * @parameter
-	 * 		renderTarget — an instance of WebGLRenderTarget
+	 * 
+	 * @parameter renderTarget the instance of {@link RenderTargetTexture}
 	 */
 	public void deallocateRenderTarget ( RenderTargetTexture renderTarget ) 
 	{
 		renderTarget.deallocate(getGL());
 	}
 
-	
-	/**************************************
-	 * Rendering
-	 **************************************/
-	/*
-	 * scene — an instance of Scene
-	 * camera — an instance of Camera
+	/**
 	 * Tells the shadow map plugin to update using the passed scene and camera parameters.
 	 */
-	public void updateShadowMap( Scene scene, Camera camera ) 
+	private void updateShadowMap( Scene scene, Camera camera ) 
 	{
 		this.cache_currentProgram = null;
 		this.cache_oldBlending = null;
@@ -623,11 +661,6 @@ public class WebGLRenderer
 		//shadowMapPlugin.update( scene, camera );
 	}
 	
-	/**************************************
-	 * Internal functions
-	 **************************************/
-	// Buffer deallocation
-
 	private void deleteParticleBuffers ( Geometry geometry ) 
 	{
 		getGL().deleteBuffer( geometry.__webglVertexBuffer );
@@ -690,6 +723,9 @@ public class WebGLRenderer
 	
 	// Buffer initialization
 	
+	/**
+	 * Morph Targets Buffer initialization
+	 */
 	public void setupMorphTargets ( Material material, GeometryGroup geometryGroup, Object3D object ) 
 	{
 		// set base
@@ -779,17 +815,32 @@ public class WebGLRenderer
 		}
 	}
 
-	// Rendering
+	/**
+	 * Rendering. 
+	 * @see {@link #render(Scene, Camera, RenderTargetTexture, boolean)}.
+	 */
 	public void render( Scene scene, Camera camera)
 	{
 		render(scene, camera, null);
 	}
-	
+
+	/**
+	 * Rendering. 
+	 * @see {@link #render(Scene, Camera, RenderTargetTexture, boolean)}.
+	 */
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget)
 	{
 		render(scene, camera, renderTarget, false);
 	}
 
+	/**
+	 * Rendering.
+	 * 
+	 * @param scene        the {@link Scene} object.
+	 * @param camera       the {@link Camera} object
+	 * @param renderTarget optional
+	 * @param forceClear   optional
+	 */
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
 	{
 		Log.debug("Called render()");
@@ -998,7 +1049,7 @@ public class WebGLRenderer
 ////	};
 
 	// TODO: CHECK callback
-	public void renderImmediateObject( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
+	private void renderImmediateObject( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
 	{
 		Program program = setProgram( camera, lights, fog, material, object );
 
@@ -1013,12 +1064,12 @@ public class WebGLRenderer
 //			object.render( function( object ) { _this.renderBufferImmediate( object, program, material.shading ); } );
 	}
 	
-	public void renderObjectsImmediate ( List<WebGLObject> renderList, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending) 
+	private void renderObjectsImmediate ( List<WebGLObject> renderList, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending) 
 	{
 		renderObjectsImmediate ( renderList, materialType, camera, lights, fog,  useBlending, null);
 	}
 
-	public void renderObjectsImmediate ( List<WebGLObject> renderList, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjectsImmediate ( List<WebGLObject> renderList, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
 	{
 		for ( int i = 0; i < renderList.size(); i ++ ) 
 		{
@@ -1057,12 +1108,12 @@ public class WebGLRenderer
 		}
 	}
 
-	public void renderObjects ( List<WebGLObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending) 
+	private void renderObjects ( List<WebGLObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending) 
 	{
 		renderObjects ( renderList, reverse, materialType, camera, lights, fog, useBlending, null);
 	}
 
-	public void renderObjects ( List<WebGLObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjects ( List<WebGLObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
 	{
 		Log.debug("Called renderObjects() render list contains = " + renderList.size());
 		
@@ -1130,9 +1181,12 @@ public class WebGLRenderer
 		}
 	}
 
-	// Buffer rendering
-	// Render GeometryObject vis material
-	public void renderBuffer( Camera camera, List<Light> lights, Fog fog, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
+	
+	/**
+	 * Buffer rendering.
+	 * Render GeometryObject with material.
+	 */
+	private void renderBuffer( Camera camera, List<Light> lights, Fog fog, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
 	{
 		if ( material.visible == false ) 
 			return;
@@ -1273,7 +1327,7 @@ public class WebGLRenderer
 		object.renderBuffer(this, geometryBuffer, updateBuffers);
 	}
 
-	public void renderBufferImmediate( Object3D object, Program program, Material.SHADING shading ) 
+	private void renderBufferImmediate( Object3D object, Program program, Material.SHADING shading ) 
 	{
 		if ( object.__webglVertexBuffer == null ) 
 			object.__webglVertexBuffer = getGL().createBuffer();
@@ -1416,7 +1470,7 @@ public class WebGLRenderer
 //		}
 //	}
 
-	public void unrollImmediateBufferMaterial ( WebGLObject globject ) 
+	private void unrollImmediateBufferMaterial ( WebGLObject globject ) 
 	{
 		GeometryObject object = globject.object;
 		Material material = object.getMaterial();
@@ -1431,7 +1485,7 @@ public class WebGLRenderer
 		}
 	}
 
-	public void unrollBufferMaterial (  WebGLObject globject ) 
+	private void unrollBufferMaterial (  WebGLObject globject ) 
 	{
 		GeometryObject object = globject.object;
 
@@ -1520,8 +1574,11 @@ public class WebGLRenderer
 		}			
 	}
 
-	// Objects adding
-	public void addObject ( GeometryObject object, Scene scene )
+	/**
+	 * Objects adding
+	 * 
+	 */
+	private void addObject ( GeometryObject object, Scene scene )
 	{
 		Log.debug("addObject() object=" + object.getClass().getName());
 
@@ -1545,7 +1602,7 @@ public class WebGLRenderer
 		}
 	}
 	
-	public void addObjectAddBuffer(GeometryObject object, Scene scene)
+	private void addObjectAddBuffer(GeometryObject object, Scene scene)
 	{
 		if ( object instanceof Mesh ) 
 		{
@@ -1581,7 +1638,7 @@ public class WebGLRenderer
 		}
 	}
 
-	public void addBuffer ( List<WebGLObject> objlist, GeometryBuffer buffer, GeometryObject object ) 
+	private void addBuffer ( List<WebGLObject> objlist, GeometryBuffer buffer, GeometryObject object ) 
 	{
 		objlist.add(new WebGLObject(buffer, object, null, null));
 	}
@@ -1600,7 +1657,7 @@ public class WebGLRenderer
 	/*
 	 * Objects removal
 	 */
-	public static void removeObject ( GeometryObject object, Scene scene ) 
+	private static void removeObject ( GeometryObject object, Scene scene ) 
 	{
 		if ( object instanceof GeometryObject) 
 		{
@@ -1620,14 +1677,14 @@ public class WebGLRenderer
 		object.__webglActive = false;
 	}
 
-	public static void removeInstances ( List<WebGLObject> objlist, Object3D object ) 
+	private static void removeInstances ( List<WebGLObject> objlist, Object3D object ) 
 	{
 		for ( int o = objlist.size() - 1; o >= 0; o -- )
 			if ( objlist.get( o ).object == object )
 				objlist.remove(o);
 	}
 
-	public static void removeInstancesDirect ( List<WebGLObject> objlist, Object3D object ) 
+	private static void removeInstancesDirect ( List<WebGLObject> objlist, Object3D object ) 
 	{
 		for ( int o = objlist.size() - 1; o >= 0; o -- )
 			if ( objlist.get( o ).object == object )
@@ -1636,7 +1693,7 @@ public class WebGLRenderer
 
 	// Materials
 
-	public void initMaterial ( Material material, List<Light> lights, Fog fog, GeometryObject object ) 
+	private void initMaterial ( Material material, List<Light> lights, Fog fog, GeometryObject object ) 
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
 
@@ -1747,7 +1804,7 @@ public class WebGLRenderer
 		}
 	}
 
-	public Program setProgram( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
+	private Program setProgram( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
 	{
 		if ( material.program == null || material.needsUpdate ) 
 		{
@@ -1812,7 +1869,7 @@ public class WebGLRenderer
 					this.isLightsNeedUpdate = false;
 				}
 
-				refreshUniformsLights( m_uniforms, this.lights );
+				refreshUniformsLights( m_uniforms, this.cache_lights );
 			}
 
 			// HasMaterialMap
@@ -2264,7 +2321,7 @@ Log.error("?????????????");
 	{
 		Log.debug("Called setupLights()");
 
-		WebGLRenderLights zlights = this.lights; 
+		WebGLRenderLights zlights = this.cache_lights; 
 
 		Float32Array dcolors = zlights.directional.colors;
 		Float32Array dpositions = zlights.directional.positions;
@@ -2610,20 +2667,20 @@ Log.error("?????????????");
 
 	// Shaders
 
-	public Program buildProgram (WebGLRenderer.PRECISION _precision,
+	private Program buildProgram (WebGLRenderer.PRECISION _precision,
 			int _maxVertexTextures, String fragmentShader, String vertexShader,
 			Map<String, Uniform> uniforms, Map<String, WebGLCustomAttribute> attributes, ProgramParameters parameters ) 
 	{
 		String cashKey = fragmentShader + vertexShader + parameters.toString();
-		if(this._programs.containsKey(cashKey))
-			return this._programs.get(cashKey);
+		if(this.cache_programs.containsKey(cashKey))
+			return this.cache_programs.get(cashKey);
 
 		Program program = new Program(getGL(), this.precision, this.GPUmaxVertexTextures, fragmentShader, vertexShader, uniforms, attributes, parameters);
 
-		program.setId(_programs.size());
-		this._programs.put(cashKey, program);
+		program.setId(cache_programs.size());
+		this.cache_programs.put(cashKey, program);
 
-		this.getInfo().getMemory().programs = _programs.size();
+		this.getInfo().getMemory().programs = cache_programs.size();
 
 		return program;
 	}

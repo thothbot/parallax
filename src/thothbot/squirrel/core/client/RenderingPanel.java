@@ -61,23 +61,23 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		/**
 		 * Sets the Alpha flag for the {@link Canvas3d}. Default: true.
 		 */
-		public boolean isAlphaEnabled                 = true;
+		public boolean isAlphaEnabled = true;
 		/**
 		 * Sets the Depth flag for the {@link Canvas3d}. Default: true.
 		 */
-		public boolean isDepthEnabled                 = true;
+		public boolean isDepthEnabled  = true;
 		/**
 		 * Sets the PremultipliedAlpha flag for the {@link Canvas3d}. Default: true.
 		 */
-		public boolean isPremultipliedAlphaEnabled    = true;
+		public boolean isPremultipliedAlphaEnabled = true;
 		/**
 		 * Sets the Antialias flag for the {@link Canvas3d}. Default: true.
 		 */
-		public boolean isAntialiasEnabled             = true;
+		public boolean isAntialiasEnabled = true;
 		/**
 		 * Sets the Stencil flag for the {@link Canvas3d}. Default: true.
 		 */
-		public boolean isStencilEnabled               = true;
+		public boolean isStencilEnabled = true;
 		/**
 		 * Sets the PreserveDrawingBuffer  flag for the {@link Canvas3d}. Default: false.
 		 */
@@ -86,25 +86,25 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		/**
 		 * Show debugger in the {@link RenderingPanel}. Default: false
 		 */
-		public boolean isDebugEnabled                 = false;
+		public boolean isDebugEnabled = false;
 	
 		// Renderer attributes
 		/**
 		 * Sets the Shaders {@link thothbot.squirrel.core.client.renderers.WebGLRenderer.PRECISION} value. Default: highp.
 		 */
-		public WebGLRenderer.PRECISION precision      = WebGLRenderer.PRECISION.HIGHP;
+		public WebGLRenderer.PRECISION precision  = WebGLRenderer.PRECISION.HIGHP;
 		/**
 		 * Sets the background color for the {@link Canvas3d}. Default: black (#000000).
 		 */
-		public int clearColor                         = 0x000000;
+		public int clearColor = 0x000000;
 		/**
 		 * Sets the background alpha value for the {@link Canvas3d}. Default: opaque (1.0).
 		 */
-		public float clearAlpha                       = 1.0f;
+		public float clearAlpha = 1.0f;
 		/**
 		 * Sets the max {@link Scene} lights. Default: 4.
 		 */
-		public int maxLights                          = 4;
+		public int maxLights = 4;
 	}
 	
 	private RenderingScene renderingScene;
