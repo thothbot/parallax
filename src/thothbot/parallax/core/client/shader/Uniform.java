@@ -81,7 +81,7 @@ public class Uniform
 	{
 		Uniform result = new Uniform(this.type, this.value, this.texture);
 		result.location = this.location;
-		result._array = Float32Array.create(this._array);
+		result._array = this._array;
 
 		return result;
 	}

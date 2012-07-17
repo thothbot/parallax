@@ -422,7 +422,7 @@ public class Geometry extends GeometryBuffer
 				float test = tmp2.dot(tan2.get(vertexIndex));
 				float w = (test < 0.0f) ? -1.0f : 1.0f;
 				
-				face.getVertexTangents().set(i, new Vector4f(tmp.x,tmp.y,tmp.z,w));
+				face.getVertexTangents().add(i, new Vector4f(tmp.x,tmp.y,tmp.z,w));
 			}
 		}
 

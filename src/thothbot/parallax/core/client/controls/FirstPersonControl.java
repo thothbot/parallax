@@ -22,7 +22,6 @@
 
 package thothbot.parallax.core.client.controls;
 
-import thothbot.parallax.core.client.Rendering;
 import thothbot.parallax.core.client.RenderingScene;
 import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.core.Vector3f;

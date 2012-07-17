@@ -1854,7 +1854,7 @@ public class WebGLRenderer
 
 			if ( material.getClass() == MeshPhongMaterial.class ||
 				 material.getClass() == MeshLambertMaterial.class ||
-				 material.lights != null) 
+				 material.lights) 
 			{
 
 				if (this.isLightsNeedUpdate ) 

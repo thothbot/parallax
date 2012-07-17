@@ -23,7 +23,6 @@
 package thothbot.parallax.core.shared.materials;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
@@ -35,7 +34,6 @@ import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
-import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 
 public class Material
@@ -113,7 +111,7 @@ public class Material
 	public String vertexShader;
 	public String fragmentShader;
 	
-	public List<Light> lights;
+	public boolean lights;
 	public boolean fog;
 
 	public boolean sizeAttenuation;
@@ -151,6 +149,7 @@ public class Material
 		public int wireframeLinewidth = 1;
 		public Material.COLORS vertexColors = Material.COLORS.NO;
 		public boolean fog = false;
+		public boolean lights = false;
 	}
 
 	public Material(MaterialOptions parameters)
@@ -176,6 +175,7 @@ public class Material
 		this.vertexColors = parameters.vertexColors;
 		
 		this.fog = parameters.fog;
+		this.lights = parameters.lights;
 	}
 	
 	public int getId()

@@ -89,10 +89,6 @@ public class Object3D implements DimensionalObject
 
 	protected float boundRadiusScale;
 
-	// ///////////////////////////////////////////////////////////////////////////////
-	// TODO: Check
-	public Euler eulerOrder = Euler.XYZ;
-
 	//public Material material;
 	public boolean hasPos;
 	public boolean hasNormal;

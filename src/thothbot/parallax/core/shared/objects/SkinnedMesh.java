@@ -37,7 +37,8 @@ public class SkinnedMesh extends Mesh
 	public List<Bone> bones;
 	public Float32Array boneMatrices;
 	
-	public SkinnedMesh(Geometry geometry, Material material) {
+	public SkinnedMesh(Geometry geometry, Material material) 
+	{
 		super(geometry, material);
 
 		// init bones
