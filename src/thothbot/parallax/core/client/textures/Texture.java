@@ -224,8 +224,6 @@ public class Texture
 	
 	/**
 	 * Sets the texture magnification function.
-	 * 
-	 * @return the texture magnification function.
 	 */
 	public void setMagFilter(TextureMagFilter magFilter) {
 		this.magFilter = magFilter;
@@ -242,8 +240,6 @@ public class Texture
 	
 	/**
 	 * Sets the texture minifying function.
-	 * 
-	 * @return the texture minifying function.
 	 */
 	public void setMinFilter(TextureMinFilter minFilter) {
 		this.minFilter = minFilter;

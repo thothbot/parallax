@@ -35,7 +35,7 @@ import thothbot.parallax.core.shared.core.Vector3f;
 /**
  * The Cylinder geometry
  * <p>
- * <img src="http://http://thothbot.github.com/parallax/static/docs/cylinder.gif" />
+ * <img src="http://thothbot.github.com/parallax/static/docs/cylinder.gif" />
  * <p>
  * Based on the three.js code.
  * 

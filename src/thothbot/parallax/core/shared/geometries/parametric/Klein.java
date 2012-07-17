@@ -25,6 +25,16 @@ package thothbot.parallax.core.shared.geometries.parametric;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.geometries.Parametric;
 
+/**
+ * The Klein bottle geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/klein_bottle.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public class Klein extends Parametric
 {
 	public Klein(int slices, int stacks) 

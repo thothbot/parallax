@@ -25,9 +25,15 @@ package thothbot.parallax.core.shared.geometries.parametric;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.geometries.Parametric;
 
-/*
- * flat mobius strip
- * http://www.wolframalpha.com/input/?i=M%C3%B6bius+strip+parametric+equations&lk=1&a=ClashPrefs_*Surface.MoebiusStrip.SurfaceProperty.ParametricEquations-
+/**
+ * The flat Mobius strip geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/mobius_strip.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
  */
 public class Mobius extends Parametric
 {
