@@ -21,8 +21,15 @@ package thothbot.parallax.core.client.widget;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.RenderablePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/** 
+ * Common information panel used in the {@link RenderablePanel} widget.
+ * 
+ * @author thothbot
+ *
+ */
 public abstract class InfoPanel extends LayoutPanel
 {
 	AbsolutePanel popupPanel;
@@ -40,11 +47,17 @@ public abstract class InfoPanel extends LayoutPanel
 		this.popupPanel.add(getContent());
 	}
 
+	/**
+	 * Show the panel.
+	 */
 	public void show()
 	{
 		this.popupPanel.setVisible(true);
 	}
 	
+	/**
+	 * Hide the panel.
+	 */
 	public void hide()
 	{
 		this.popupPanel.setVisible(false);

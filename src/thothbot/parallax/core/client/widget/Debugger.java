@@ -19,15 +19,19 @@
 
 package thothbot.parallax.core.client.widget;
 
+import thothbot.parallax.core.client.RenderingPanel;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
+/**
+ * Debugger widget which is shown in the {@link RenderingPanel} widget.
+ * 
+ * @author thothbot
+ *
+ */
 public class Debugger extends FlowPanel
 {
 	private WebGLRenderInfo info;
@@ -69,6 +73,9 @@ public class Debugger extends FlowPanel
 		this.renderingInfo.add(this.string2);
 	}
 	
+	/**
+	 * This method will refresh debugger information.
+	 */
 	public void update()
 	{
 		long elapsedTime = this.info.getTimer().render.elapsedMillis();

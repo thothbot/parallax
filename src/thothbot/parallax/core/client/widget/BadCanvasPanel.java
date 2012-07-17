@@ -22,6 +22,13 @@ package thothbot.parallax.core.client.widget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * Widget is used when the user's browser can not initialize 
+ * a canvas in 3D context.
+ * 
+ * @author thothbot
+ *
+ */
 public class BadCanvasPanel extends InfoPanel
 {
 	private String msg;

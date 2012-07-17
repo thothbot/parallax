@@ -22,6 +22,12 @@ package thothbot.parallax.core.client.widget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * Simple loading widget. 
+ * 
+ * @author thothbot
+ *
+ */
 public class LoadingPanel extends InfoPanel
 {
 	@Override
