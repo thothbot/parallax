@@ -34,6 +34,14 @@ import thothbot.parallax.core.shared.core.Vector2f;
 
 import com.google.gwt.dom.client.Element;
 
+/**
+ * Basic implementation of texture.
+ * <p>
+ * This code based on three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public class Texture
 {
 	private static int TextureCount = 0;
@@ -48,7 +56,9 @@ public class Texture
 		public int getValue() { return value; }
 	};
 
-	// Mapping modes
+	/**
+	 * Mapping modes
+	 */
 	public static enum MAPPING_MODE 
 	{
 		UV, // UVMapping = function () {};
@@ -86,6 +96,9 @@ public class Texture
 	public boolean __webglInit;
 	public WebGLTexture __webglTexture;
 
+	/**
+	 * Default constructor will create new instance of texture.
+	 */
 	public Texture() 
 	{
 		this.id = Texture.TextureCount++;
@@ -93,18 +106,41 @@ public class Texture
 		this.repeat = new Vector2f(1, 1);
 	}
 
+	/**
+	 * Constructor will create a texture instance.
+	 *  
+	 * @param image the media element.
+	 */
 	public Texture(Element image) 
 	{
 		this();
 		this.image = image;
 	}
 
+	/**
+	 * Constructor will create a texture instance.
+	 * 
+	 * @param image    the media element
+	 * @param mapping  the @{link Texture.MAPPING_MODE} value
+	 */
 	public Texture(Element image, Texture.MAPPING_MODE mapping)
 	{
 		this(image);
 		this.mapping = mapping;
 	}
 
+	/**
+	 * Constructor will create a texture instance.
+	 * 
+	 * @param image     the media element
+	 * @param mapping   the @{link Texture.MAPPING_MODE} value
+	 * @param wrapS     the wrap parameter for texture coordinate S. @see {@link TextureWrapMode}.
+	 * @param wrapT     the wrap parameter for texture coordinate T. @see {@link TextureWrapMode}.
+	 * @param magFilter the texture magnification function. @see {@link TextureMagFilter}.
+	 * @param minFilter the texture minifying function. @see {@link TextureMinFilter}.
+	 * @param format    the {@link PixelFormat} value.
+	 * @param type      the {@link DataType} value.
+	 */
 	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
 			PixelFormat format, DataType type) 
@@ -121,114 +157,227 @@ public class Texture
 		this.type = type;
 	}
 	
+	/**
+	 * Gets texture ID.
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Get the @{link Texture.MAPPING_MODE} value.
+	 */
 	public Texture.MAPPING_MODE getMapping() {
 		return this.mapping;
 	}
-
-	public void setWrapS(TextureWrapMode wrapS)	{
-		this.wrapS = wrapS;
-	}
-
-	public TextureWrapMode getWrapS(){
-		return this.wrapS;
-	}
-
-	public void setWrapT(TextureWrapMode wrapT) {
-		this.wrapT = wrapT;
-	}
 	
-	public TextureWrapMode getWrapT() {
-		return this.wrapT;
-	}
-
-	public TextureMagFilter getMagFilter() {
-		return this.magFilter;
-	}
-
-	public TextureMinFilter getMinFilter() {
-		return this.minFilter;
-	}
-	
-	public Boolean isNeedsUpdate()	{
-		return this.isNeedsUpdate;
-	}
-	
-	public void setNeedsUpdate(Boolean needsUpdate) {
-		this.isNeedsUpdate = needsUpdate;
-	}
-	
-	public Element getImage() {
-		return this.image;
-	}
-
-	public Vector2f getOffset() {
-		return offset;
-	}
-
-	public void setOffset(Vector2f offset) {
-		this.offset = offset;
-	}
-
-	public Vector2f getRepeat() {
-		return repeat;
-	}
-
-	public void setRepeat(Vector2f repeat) {
-		this.repeat = repeat;
-	}
-
-	public PixelFormat getFormat() {
-		return format;
-	}
-
-	public void setFormat(PixelFormat format) {
-		this.format = format;
-	}
-
-	public DataType getType() {
-		return type;
-	}
-
-	public void setType(DataType type) {
-		this.type = type;
-	}
-
-	public boolean isGenerateMipmaps() {
-		return isGenerateMipmaps;
-	}
-
-	public void setGenerateMipmaps(boolean generateMipmaps) {
-		this.isGenerateMipmaps = generateMipmaps;
-	}
-
-	public boolean isPremultiplyAlpha() {
-		return isPremultiplyAlpha;
-	}
-
-	public void setPremultiplyAlpha(boolean premultiplyAlpha) {
-		this.isPremultiplyAlpha = premultiplyAlpha;
-	}
-
+	/**
+	 * Sets the @{link Texture.MAPPING_MODE} value.
+	 */
 	public void setMapping(Texture.MAPPING_MODE mapping) {
 		this.mapping = mapping;
 	}
 
+	/**
+	 * Sets the wrap parameter for texture coordinate S.
+	 * 
+	 * @param wrapS the wrap parameter 
+	 */
+	public void setWrapS(TextureWrapMode wrapS)	{
+		this.wrapS = wrapS;
+	}
+
+	/**
+	 * Gets the wrap parameter for texture coordinate S.
+	 * 
+	 * @return the wrap parameter. 
+	 */
+	public TextureWrapMode getWrapS(){
+		return this.wrapS;
+	}
+
+	/**
+	 * Sets the wrap parameter for texture coordinate T.
+	 * 
+	 * @param wrapT the wrap parameter 
+	 */
+	public void setWrapT(TextureWrapMode wrapT) {
+		this.wrapT = wrapT;
+	}
+	
+	/**
+	 * Gets the wrap parameter for texture coordinate T.
+	 * 
+	 * @return the wrap parameter. 
+	 */
+	public TextureWrapMode getWrapT() {
+		return this.wrapT;
+	}
+
+	/**
+	 * Gets the texture magnification function.
+	 * 
+	 * @return the texture magnification function.
+	 */
+	public TextureMagFilter getMagFilter() {
+		return this.magFilter;
+	}
+	
+	/**
+	 * Sets the texture magnification function.
+	 * 
+	 * @return the texture magnification function.
+	 */
 	public void setMagFilter(TextureMagFilter magFilter) {
 		this.magFilter = magFilter;
 	}
 
+	/**
+	 * Gets the texture minifying function.
+	 * 
+	 * @return the texture minifying function.
+	 */
+	public TextureMinFilter getMinFilter() {
+		return this.minFilter;
+	}
+	
+	/**
+	 * Sets the texture minifying function.
+	 * 
+	 * @return the texture minifying function.
+	 */
 	public void setMinFilter(TextureMinFilter minFilter) {
 		this.minFilter = minFilter;
 	}
-
-	public void setNeedsUpdate(boolean needsUpdate) {
+	
+	/**
+	 * Checks if the texture needs to be updated.
+	 */
+	public Boolean isNeedsUpdate()	{
+		return this.isNeedsUpdate;
+	}
+		
+	/**
+	 * Sets flag to updated the texture.
+	 */
+	public void setNeedsUpdate(Boolean needsUpdate) {
 		this.isNeedsUpdate = needsUpdate;
 	}
+	
+	/**
+	 * Gets texture media element.
+	 * 
+	 * @return the media element: image or canvas.
+	 */
+	public Element getImage() {
+		return this.image;
+	}
 
+	/**
+	 * Gets texture offset.
+	 * 
+	 * @return the offset vector.
+	 */
+	public Vector2f getOffset() {
+		return offset;
+	}
+
+	/**
+	 * Set texture offset vector.
+	 * 
+	 * @param offset the offset vector.
+	 */
+	public void setOffset(Vector2f offset) {
+		this.offset = offset;
+	}
+
+	/**
+	 * Gets repeat vector.
+	 * 
+	 * @return the repeat vector.
+	 */
+	public Vector2f getRepeat() {
+		return repeat;
+	}
+
+	/**
+	 * Sets the repeat vector.
+	 * 
+	 * @param repeat the repeat vector.
+	 */
+	public void setRepeat(Vector2f repeat) {
+		this.repeat = repeat;
+	}
+
+	/**
+	 * Gets the {@link PixelFormat} value.
+	 * 
+	 * @return the {@link PixelFormat} value.
+	 */
+	public PixelFormat getFormat() {
+		return format;
+	}
+
+	/**
+	 * Sets the {@link PixelFormat} value.
+	 * 
+	 * @param format the {@link PixelFormat} value.
+	 */
+	public void setFormat(PixelFormat format) {
+		this.format = format;
+	}
+
+	/**
+	 * Sets the {@link DataType} value.
+	 * 
+	 * @return the {@link DataType} value.
+	 */
+	public DataType getType() {
+		return type;
+	}
+
+	/**
+	 * Sets the {@link DataType} value.
+	 * 
+	 * @param type the {@link DataType} value.
+	 */
+	public void setType(DataType type) {
+		this.type = type;
+	}
+
+	/**
+	 * Checks if needed to generate Mipmaps.
+	 */
+	public boolean isGenerateMipmaps() {
+		return isGenerateMipmaps;
+	}
+
+	/**
+	 * Sets generate Mipmaps flag.
+	 */
+	public void setGenerateMipmaps(boolean generateMipmaps) {
+		this.isGenerateMipmaps = generateMipmaps;
+	}
+
+	/**
+	 * Gets premultiply alpha flag.
+	 */
+	public boolean isPremultiplyAlpha() {
+		return isPremultiplyAlpha;
+	}
+
+	/**
+	 * Sets premultiply alpha flag.
+	 */
+	public void setPremultiplyAlpha(boolean premultiplyAlpha) {
+		this.isPremultiplyAlpha = premultiplyAlpha;
+	}
+
+	/**
+	 * Clone the texture, where
+	 * {@code this.clone() != this}
+	 */
+	@Override
 	public Texture clone()
 	{
 		Texture clonedTexture = new Texture(this.image, this.mapping, this.wrapS, this.wrapT,
@@ -260,9 +409,6 @@ public class Texture
 	
 	/**
 	 * Fallback filters for non-power-of-2 textures.
-	 * 
-	 * @param f
-	 * @return
 	 */
 	private int filterFallback ( GLenum f ) 
 	{

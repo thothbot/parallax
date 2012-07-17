@@ -20,14 +20,26 @@
 package thothbot.parallax.core.client.gl2.enums;
 
 /**
- * GL2 Texture WrapMode flags.
+ * Implements the wrap parameter for texture coordinate.
+ * It is useful for preventing wrapping artifacts when mapping 
+ * a single image onto an object.
  * 
  * @author thothbot
  *
  */
 public enum TextureWrapMode 
 {
+	/**
+	 *  This causes the integer part of the s coordinate to be ignored; 
+	 *  the GL uses only the fractional part, thereby creating a 
+	 *  repeating pattern. 
+	 */
 	REPEAT(GLenum.REPEAT),
+	/**
+	 * This causes s or t coordinates to be clamped to the range [0, 1] 
+	 * and is useful for preventing wrapping artifacts when mapping a 
+	 * single image onto an object.
+	 */
 	CLAMP_TO_EDGE(GLenum.CLAMP_TO_EDGE),
 	MIRRORED_REPEAT(GLenum.MIRRORED_REPEAT);
 

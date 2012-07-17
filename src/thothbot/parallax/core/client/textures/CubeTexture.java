@@ -24,7 +24,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Element;
 
 /**
- * Implementation of cubic texture
+ * Implementation of cubic texture.
  * 
  * @author thothbot
  *

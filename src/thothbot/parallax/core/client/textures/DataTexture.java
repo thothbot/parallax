@@ -19,6 +19,12 @@
 
 package thothbot.parallax.core.client.textures;
 
+/**
+ * Implementation of data texture.
+ * 
+ * @author thothbot
+ *
+ */
 public class DataTexture extends Texture
 {
 

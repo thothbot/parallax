@@ -20,14 +20,24 @@
 package thothbot.parallax.core.client.gl2.enums;
 
 /**
- * GL2 Texture MagFilter flags.
+ * The texture magnification function is used when the pixel being 
+ * textured maps to an area less than or equal to one texture element.
  * 
  * @author thothbot
  *
  */
 public enum TextureMagFilter 
 {
+	/**
+	 * Returns the value of the texture element that is nearest 
+	 * (in Manhattan distance) to the center of the pixel being textured.
+	 */
 	NEAREST(GLenum.NEAREST),
+	
+	/**
+	 * Returns the weighted average of the four texture elements that 
+	 * are closest to the center of the pixel being textured.
+	 */
 	LINEAR(GLenum.LINEAR);
 
 	private final GLenum value;
