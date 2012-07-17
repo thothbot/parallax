@@ -34,7 +34,7 @@ import thothbot.parallax.core.shared.objects.Object3D;
  * It is the field of view of the notional camera which is implemented as frustum 
  * of a rectangular pyramid with 6 planes. 
  * 
- * @author krs
+ * @author thothbot
  */
 public class Frustum
 {

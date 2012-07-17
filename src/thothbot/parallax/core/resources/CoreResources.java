@@ -22,8 +22,13 @@ package thothbot.parallax.core.resources;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.resources.client.ImageResource;
 
+/**
+ * Some static resources which used on the client side.
+ * 
+ * @author thothbot
+ *
+ */
 public interface CoreResources extends ClientBundle
 {
 	CoreResources INSTANCE = GWT.create(CoreResources.class);

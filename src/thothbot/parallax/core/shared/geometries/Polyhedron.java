@@ -34,8 +34,6 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 
-import com.google.gwt.core.client.GWT;
-
 public class Polyhedron extends Geometry
 {
 	private Map<Integer, Map<Integer, ContainerOfVector>> midpoints;

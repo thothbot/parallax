@@ -22,6 +22,18 @@
 
 package thothbot.parallax.core.shared.cameras;
 
+/**
+ * A general perpose camera, for setting FOV, Lens Focal Length,  
+ * and switching between perspective and orthographic views easily.
+ * <p>
+ * Use this only if you do not wish to manage 
+ * both an Orthographic and Perspective Camera
+ * <p>
+ * The code based on three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public class CombinedCamera extends Camera
 {
 
@@ -76,7 +88,7 @@ public class CombinedCamera extends Camera
 		this.inOrthographicMode = false;
 	}
 
-	/*
+	/**
 	 * Switches to the Orthographic camera estimating viewport from Perspective
 	 */
 	public void toOrthographic()
@@ -141,7 +153,7 @@ public class CombinedCamera extends Camera
 		}
 	}
 
-	/*
+	/**
 	 * For mantaining similar API with PerspectiveCamera
 	 */
 	public void updateProjectionMatrix()
@@ -154,10 +166,10 @@ public class CombinedCamera extends Camera
 		}
 	}
 
-	/*
+	/**
 	 * Uses Focal Length (in mm) to estimate and set FOV 35mm (fullframe) camera
 	 * is used if frame size is not specified; Formula based on
-	 * http://www.bobatkins.com/photography/technical/field_of_view.html
+	 * <a href="http://www.bobatkins.com/photography/technical/field_of_view.html">http://www.bobatkins.com</a>
 	 */
 	public void setLens(int focalLength)
 	{

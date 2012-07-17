@@ -25,6 +25,12 @@ package thothbot.parallax.core.shared.core;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Face3 represent the triangular sides (A, B, C) of the geometric object.
+ * 
+ * @author thothbot
+ *
+ */
 public class Face3
 {
 	protected int a;

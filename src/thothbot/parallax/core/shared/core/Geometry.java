@@ -28,20 +28,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thothbot.parallax.core.client.gl2.WebGLBuffer;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.DimensionalObject;
 
-
+/**
+ * Represents geometric object geometry.
+ * 
+ * @author thothbot
+ *
+ */
 public class Geometry extends GeometryBuffer
 {
-	// Bounding box.
-	// 		{ min: new Vector3f(), max: new Vector3f() }		
+	// Bounding box.		
 	protected BoundingBox boundingBox = null;
 
 	// Bounding sphere.
-	// 		{ radius: float }
 	protected BoundingSphere boundingSphere = null;
 	
 	// Array of morph targets. Each morph target is JS object:
@@ -550,6 +553,7 @@ public class Geometry extends GeometryBuffer
 
 	// TODO: FIX ALL
 	public void computeMorphNormals() {
+		Log.error("Geometry: fix this");
 		// save original normals
 		// - create temp variables on first access
 		//   otherwise just copy (for faster repeated calls)

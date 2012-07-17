@@ -22,6 +22,16 @@
 
 package thothbot.parallax.core.shared.geometries;
 
+/**
+ * The Icosahedron geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/icosahedron.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class Icosahedron extends Polyhedron
 {
 	public Icosahedron( int radius, int detail ) 

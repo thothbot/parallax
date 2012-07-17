@@ -29,6 +29,16 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 
+/**
+ * The Plane geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/plane.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class Plane extends Geometry
 {
 	public Plane(int width, int height) {

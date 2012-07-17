@@ -31,7 +31,16 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 
-
+/**
+ * The Torus geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/torus.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class Torus extends Geometry
 {
 

@@ -22,6 +22,25 @@ package thothbot.parallax.core.shared;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * A Logger object is used to log messages for a specific
+ * system or application component. 
+ * <p>
+ * Logger should be configured in GWT configuration file. For example:
+ * 
+ * <pre>{@code
+ * <inherits name="com.google.gwt.logging.Logging"/>
+ * <set-property name="gwt.logging.enabled" value="TRUE"/> 
+ * <set-property name="gwt.logging.logLevel" value="ALL"/>
+ * 
+ * <set-property name="gwt.logging.consoleHandler" value="DISABLED" />
+ * <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+ * }</pre>
+ * 
+ * 
+ * @author thothbot
+ *
+ */
 public class Log
 {
 	public final static Logger logger = Logger.getLogger("");

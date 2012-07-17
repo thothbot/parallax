@@ -36,16 +36,14 @@ import thothbot.parallax.core.shared.helpers.ArrowHelper;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 /**
- * @author WestLangley / https://github.com/WestLangley
- * @author zz85 / https://github.com/zz85
- * @author miningold / https://github.com/miningold
- *
- * Modified from the TorusKnotGeometry by @oosmoxiecode
- *
- * Creates a tube which extrudes along a 3d spline
- *
- * Uses parallel transport frames as described in
- * http://www.cs.indiana.edu/pub/techreports/TR425.pdf
+ * Creates a tube which extrudes along a 3d spline.
+ * <p>
+ * Uses parallel transport frames as described in 
+ * <a href="http://www.cs.indiana.edu/pub/techreports/TR425.pdf">http://www.cs.indiana.edu</a>
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
  */
 public final class Tube extends Geometry
 {

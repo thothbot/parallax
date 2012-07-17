@@ -31,15 +31,14 @@ import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.curves.CurvePath;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
-import thothbot.parallax.core.shared.curves.Path;
 import thothbot.parallax.core.shared.curves.Shape;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
 
 
-/*
- * @author zz85 / http://www.lab4games.net/zz85/blog
- *
+/**
  * Creates extruded geometry from a path shape.
+ * <p>
+ * Based on the three.js code.
  */
 public class ExtrudeGeometry extends Geometry
 {

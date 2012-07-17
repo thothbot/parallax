@@ -24,6 +24,12 @@ package thothbot.parallax.core.shared.core;
 
 import java.util.List;
 
+/**
+ * Face4 represent the rectangular sides (A, B, C, D) of the geometric object.
+ * 
+ * @author thothbot
+ *
+ */
 public class Face4 extends Face3
 {
 	protected int d;

@@ -22,6 +22,16 @@
 
 package thothbot.parallax.core.shared.geometries;
 
+/**
+ * The Tetrahedron geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/tetrahedron.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public class Tetrahedron extends Polyhedron
 {
 	public Tetrahedron( int radius, int detail ) 

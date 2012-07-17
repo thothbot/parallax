@@ -22,6 +22,16 @@
 
 package thothbot.parallax.core.shared.geometries;
 
+/**
+ * The Octahedron geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/octahedron.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class Octahedron extends Polyhedron
 {
 	public Octahedron( int radius, int detail ) 

@@ -19,6 +19,13 @@
 
 package thothbot.parallax.core.shared.core;
 
+/**
+ * Bounding Box is a container which used for quickly and easily 
+ * determination of the location of an object in space.
+ * 
+ * @author thothbot
+ *
+ */
 public class BoundingBox
 {
 	public Vector3f min;

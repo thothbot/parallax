@@ -32,7 +32,16 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 
-
+/**
+ * The Cylinder geometry
+ * <p>
+ * <img src="http://http://thothbot.github.com/parallax/static/docs/cylinder.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class Cylinder extends Geometry
 {
 

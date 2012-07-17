@@ -25,7 +25,7 @@ package thothbot.parallax.core.shared.core;
 /**
  * The Color class is used encapsulate colors in the default RGB color space.
  * This class doesn't work with alpha value. 
- * Each RGB value stored as values in range <0.0-1.0>. Where value of 1.0 is 255 means 
+ * Each RGB value stored as values in range [0.0-1.0]. Where value of 1.0 is 255 means 
  * that the color is completely shown and an color value of 0 or 0.0 means that 
  * the color is completely hidden. 
  * 

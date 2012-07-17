@@ -24,13 +24,10 @@ package thothbot.parallax.core.shared.geometries;
 
 import java.util.Arrays;
 
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
-
-import com.google.gwt.core.client.GWT;
 
 public final class TorusKnot extends Geometry
 {

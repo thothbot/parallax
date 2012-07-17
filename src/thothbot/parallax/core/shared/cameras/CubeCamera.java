@@ -35,7 +35,7 @@ import thothbot.parallax.core.shared.scenes.Scene;
 /**
  * Camera for rendering cube maps
  * - renders scene into axis-aligned cube
- * 
+ * <p>
  * Based on three.js code.
  * 
  * @author thothbot

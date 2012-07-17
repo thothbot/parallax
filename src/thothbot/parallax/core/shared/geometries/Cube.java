@@ -33,9 +33,19 @@ import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.materials.Material;
 
+/**
+ * The Cube geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/cube.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public final class Cube extends Geometry 
 {
-	public Sides sides;
+	private Sides sides;
 	
 	private int segmentsWidth;
 	private int segmentsHeight;
