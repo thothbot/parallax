@@ -96,10 +96,10 @@ public class RenderTargetTexture extends Texture
 
 	public void deallocate(WebGLRenderingContext gl)
 	{
-		if (this.__webglTexture == null)
+		if (this.getWebGlTexture() == null)
 			return;
 
-		gl.deleteTexture(this.__webglTexture);
+		gl.deleteTexture(this.getWebGlTexture());
 		gl.deleteFramebuffer(this.__webglFramebuffer);
 		gl.deleteRenderbuffer(this.__webglRenderbuffer);
 	}
@@ -131,7 +131,7 @@ public class RenderTargetTexture extends Texture
 		if (this.__webglFramebuffer != null)
 			return;
 
-		this.__webglTexture = gl.createTexture();
+		this.setWebGlTexture(gl.createTexture());
 
 		// Setup texture, create render and frame buffers
 
@@ -141,7 +141,7 @@ public class RenderTargetTexture extends Texture
 		this.__webglFramebuffer = gl.createFramebuffer();
 		this.__webglRenderbuffer = gl.createRenderbuffer();
 
-		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.__webglTexture);
+		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.getWebGlTexture());
 
 		setTextureParameters(gl, GLenum.TEXTURE_2D.getValue(), isTargetPowerOfTwo);
 
@@ -162,7 +162,7 @@ public class RenderTargetTexture extends Texture
 
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl)
 	{	
-		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.__webglTexture);
+		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.getWebGlTexture());
 		gl.generateMipmap(GLenum.TEXTURE_2D.getValue());
 		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), null);
 	}
@@ -170,7 +170,7 @@ public class RenderTargetTexture extends Texture
 	public void setupFrameBuffer(WebGLRenderingContext gl, WebGLFramebuffer framebuffer, int textureTarget)
 	{	
 		gl.bindFramebuffer(GLenum.FRAMEBUFFER.getValue(), framebuffer);
-		gl.framebufferTexture2D(GLenum.FRAMEBUFFER.getValue(), GLenum.COLOR_ATTACHMENT0.getValue(), textureTarget, this.__webglTexture, 0);
+		gl.framebufferTexture2D(GLenum.FRAMEBUFFER.getValue(), GLenum.COLOR_ATTACHMENT0.getValue(), textureTarget, this.getWebGlTexture(), 0);
 	}
 
 	public void setupRenderBuffer(WebGLRenderingContext gl, WebGLRenderbuffer renderbuffer)

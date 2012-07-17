@@ -619,10 +619,9 @@ public class WebGLRenderer
 	 */
 	public void deallocateTexture( Texture texture ) 
 	{
-		if ( ! texture.__webglInit ) return;
+		if ( texture.getWebGlTexture() == null ) return;
 
-		texture.__webglInit = false;
-		getGL().deleteTexture( texture.__webglTexture );
+		getGL().deleteTexture( texture.getWebGlTexture() );
 
 		this.getInfo().getMemory().textures--;
 	}
@@ -2685,23 +2684,22 @@ Log.error("?????????????");
 	private void setCubeTextureDynamic(RenderTargetCubeTexture texture, int slot) 
 	{
 		getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
-		getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.__webglTexture );
+		getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
 	}
 
 	private void setTexture( Texture texture, int slot ) 
 	{
 		if ( texture.isNeedsUpdate()) 
 		{
-			if ( ! texture.__webglInit ) 
+			if ( texture.getWebGlTexture() == null ) 
 			{
-				texture.__webglInit = true;
-				texture.__webglTexture = getGL().createTexture();
+				texture.setWebGlTexture(getGL().createTexture());
 
 				this.getInfo().getMemory().textures ++;
 			}
 
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
-			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.__webglTexture );
+			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
 
 			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? -1 : 1 );
 
@@ -2734,7 +2732,7 @@ Log.error("?????????????");
 		else 
 		{
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
-			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.__webglTexture );
+			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
 		}
 	}
 
@@ -2775,14 +2773,14 @@ Log.error("?????????????");
 
 		if ( texture.isNeedsUpdate() ) 
 		{
-			if ( texture.__webglTexture == null )
+			if ( texture.getWebGlTexture() == null )
 			{
-				texture.__webglTexture = getGL().createTexture();
+				texture.setWebGlTexture(getGL().createTexture());
 				this.getInfo().getMemory().textures += 6;
 			}
 
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
-			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.__webglTexture );
+			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
 
 			List<Element> cubeImage = new ArrayList<Element>();
 
@@ -2817,7 +2815,7 @@ Log.error("?????????????");
 		else 
 		{
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
-			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.__webglTexture );
+			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
 		}
 
 	}

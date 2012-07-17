@@ -93,8 +93,7 @@ public class Texture
 
 	private boolean isNeedsUpdate = false;
 	
-	public boolean __webglInit;
-	public WebGLTexture __webglTexture;
+	private WebGLTexture webglTexture;
 
 	/**
 	 * Default constructor will create new instance of texture.
@@ -373,11 +372,18 @@ public class Texture
 		this.isPremultiplyAlpha = premultiplyAlpha;
 	}
 
+	public WebGLTexture getWebGlTexture() {
+		return webglTexture;
+	}
+
+	public void setWebGlTexture(WebGLTexture webglTexture) {
+		this.webglTexture = webglTexture;
+	}
+
 	/**
 	 * Clone the texture, where
 	 * {@code this.clone() != this}
 	 */
-	@Override
 	public Texture clone()
 	{
 		Texture clonedTexture = new Texture(this.image, this.mapping, this.wrapS, this.wrapT,

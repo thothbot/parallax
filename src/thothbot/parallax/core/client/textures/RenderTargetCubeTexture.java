@@ -47,10 +47,10 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	@Override
 	public void deallocate(WebGLRenderingContext gl)
 	{
-		if (this.__webglTexture == null)
+		if (this.getWebGlTexture() == null)
 			return;
 	
-		gl.deleteTexture(this.__webglTexture);
+		gl.deleteTexture(this.getWebGlTexture());
 		for (int i = 0; i < 6; i++) 
 		{
 			gl.deleteFramebuffer(this.__webglFramebuffer.get(i));
@@ -75,7 +75,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		if (this.stencilBuffer)
 			this.stencilBuffer = true;
 
-		this.__webglTexture = gl.createTexture();
+		this.setWebGlTexture(gl.createTexture());
 
 		// Setup texture, create render and frame buffers
 		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(getWidth())
@@ -84,7 +84,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		this.__webglFramebuffer = new ArrayList<WebGLFramebuffer>();
 		this.__webglRenderbuffer = new ArrayList<WebGLRenderbuffer>();
 
-		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.__webglTexture );
+		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.getWebGlTexture() );
 
 		setTextureParameters( gl, GLenum.TEXTURE_CUBE_MAP.getValue(), isTargetPowerOfTwo );
 
@@ -112,7 +112,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	@Override
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl) 
 	{	
-		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.__webglTexture );
+		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.getWebGlTexture() );
 		gl.generateMipmap( GLenum.TEXTURE_CUBE_MAP.getValue() );
 		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), null );
 	}
