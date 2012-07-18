@@ -92,7 +92,7 @@ public final class ShaderNormalMap extends Shader
 		this.addUniform("uReflectivity", new Uniform(Uniform.TYPE.F, 0.5f ));
 		
 		this.addUniform("uOffset", new Uniform(Uniform.TYPE.V2, new Vector2f( 0.0f, 0.0f ) ));
-		this.addUniform("uRepeat", new Uniform(Uniform.TYPE.V3, new Vector2f( 1.0f, 1.0f ) ));
+		this.addUniform("uRepeat", new Uniform(Uniform.TYPE.V2, new Vector2f( 1.0f, 1.0f ) ));
 		
 		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3f( 1.0f, 1.0f, 1.0f ) ));
 	}
