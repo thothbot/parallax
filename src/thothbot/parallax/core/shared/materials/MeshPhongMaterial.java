@@ -45,6 +45,8 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 		public LineJoin wireframeLinejoin = LineJoin.ROUND;
 		public boolean skinning = false;
 		public boolean morphTargets = false;
+		public boolean perPixel = false;
+		public Vector3f wrapRGB = new Vector3f( 1f, 1f, 1f );
 	}
 	
 	private Color3f ambient;
@@ -54,8 +56,9 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 	private float shininess;
 	private LineCap wireframeLinecap;
 	private LineJoin wireframeLinejoin;
-	private boolean skinning;
-	private boolean morphTargets;
+	private boolean isSkinning;
+	private boolean isMorphTargets;
+	private boolean isPerPixel;
 
 	public MeshPhongMaterial(MeshPhongMaterialOptions options)
 	{
@@ -69,18 +72,25 @@ public final class MeshPhongMaterial extends AbstractMapMaterial
 		setShading( options.shading );
 		this.wireframeLinecap = options.wireframeLinecap;
 		this.wireframeLinejoin = options.wireframeLinejoin;
-		this.skinning = options.skinning;
-		this.morphTargets = options.morphTargets;
+		this.isSkinning = options.skinning;
+		this.isMorphTargets = options.morphTargets;
+		this.wrapRGB = options.wrapRGB;
+		this.isPerPixel = options.perPixel;
 	}
 
-	public Boolean getSkinning()
+	public Boolean isSkinning()
 	{
-		return this.skinning;
+		return this.isSkinning;
 	}
 
 	public boolean isMorphTargets() 
 	{
-		return morphTargets;
+		return isMorphTargets;
+	}
+
+	public boolean isPerPixel()
+	{
+		return isPerPixel;
 	}
 
 	public LineCap getWireframeLinecap() 

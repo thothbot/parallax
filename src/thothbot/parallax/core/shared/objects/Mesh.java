@@ -110,7 +110,7 @@ public class Mesh extends SidesObject
 		}
 	}
 
-	public boolean getFlipSided()
+	public boolean isFlipSided()
 	{
 		return this.flipSided;
 	}
@@ -120,7 +120,7 @@ public class Mesh extends SidesObject
 		this.flipSided = flipSided;
 	}
 
-	public boolean getDoubleSided()
+	public boolean isDoubleSided()
 	{
 		return this.doubleSided;
 	}

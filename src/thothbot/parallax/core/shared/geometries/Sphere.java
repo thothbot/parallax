@@ -52,7 +52,12 @@ public final class Sphere extends Geometry
 
 	public Sphere(int radius, int segmentsWidth, int segmentsHeight) 
 	{
-		this(radius, segmentsWidth, segmentsHeight, 0.0f, (float) (Math.PI * 2.0f), 0.0f, (float) Math.PI);
+		this(radius, segmentsWidth, segmentsHeight, 0.0f, (float) (Math.PI * 2.0f) );
+	}
+	
+	public Sphere(int radius, int segmentsWidth, int segmentsHeight, float phiStart, float phiLength)
+	{
+		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0f, (float) Math.PI);
 	}
 
 	public Sphere(int radius, int segmentsWidth, int segmentsHeight, float phiStart, float phiLength, float thetaStart, float thetaLength) 

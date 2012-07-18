@@ -44,6 +44,7 @@ public final class MeshLambertMaterial extends AbstractMapMaterial
 		public LineJoin wireframeLinejoin = LineJoin.ROUND;
 		public boolean skinning = false;
 		public boolean morphTargets = false;
+		public Vector3f wrapRGB = new Vector3f( 1f, 1f, 1f );
 	}
 
 	private Color3f ambient;
@@ -65,6 +66,7 @@ public final class MeshLambertMaterial extends AbstractMapMaterial
 		this.wireframeLinejoin = parameters.wireframeLinejoin;
 		this.skinning = parameters.skinning;
 		this.morphTargets = parameters.morphTargets;
+		this.wrapRGB = parameters.wrapRGB;
 	}
 
 	public Color3f getAmbient() 

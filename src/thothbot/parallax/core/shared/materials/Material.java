@@ -124,7 +124,6 @@ public class Material
 	public int numSupportedMorphNormals;
 	
 	public boolean metal;
-	public boolean perPixel;
 	public boolean wrapAround;
 	public boolean wireframe;
 	public int wireframeLinewidth;

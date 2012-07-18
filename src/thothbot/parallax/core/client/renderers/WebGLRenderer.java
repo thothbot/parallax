@@ -1733,10 +1733,10 @@ public class WebGLRenderer
 
 		parameters.alphaTest = material.getAlphaTest();
 		parameters.metal = material.metal;
-		parameters.perPixel = material.perPixel;
+		parameters.perPixel = (material.getClass() == MeshPhongMaterial.class) ? ((MeshPhongMaterial)material).isPerPixel() : false; 
 		parameters.wrapAround = material.wrapAround;
 		// TODO: Fix this
-//		parameters.doubleSided = object != null && object.doubleSided;
+		parameters.doubleSided = object instanceof SidesObject && ((SidesObject)object).isDoubleSided();
 
 		Log.debug("initMaterial() called new Program");
 
@@ -2517,24 +2517,24 @@ Log.error("?????????????");
 
 	private void setObjectFaces( SidesObject object ) 
 	{
-		if ( this.cache_oldDoubleSided == null || this.cache_oldDoubleSided != object.getDoubleSided() ) 
+		if ( this.cache_oldDoubleSided == null || this.cache_oldDoubleSided != object.isDoubleSided() ) 
 		{
-			if ( object.getDoubleSided() )
+			if ( object.isDoubleSided() )
 				getGL().disable( GLenum.CULL_FACE.getValue() );
 			else
 				getGL().enable( GLenum.CULL_FACE.getValue() );
 
-			this.cache_oldDoubleSided = object.getDoubleSided();
+			this.cache_oldDoubleSided = object.isDoubleSided();
 		}
 
-		if ( this.cache_oldFlipSided == null || this.cache_oldFlipSided != object.getFlipSided() ) 
+		if ( this.cache_oldFlipSided == null || this.cache_oldFlipSided != object.isFlipSided() ) 
 		{
-			if ( object.getFlipSided() )
+			if ( object.isFlipSided() )
 				getGL().frontFace( GLenum.CW.getValue() );
 			else
 				getGL().frontFace( GLenum.CCW.getValue() );
 
-			this.cache_oldFlipSided = object.getFlipSided();
+			this.cache_oldFlipSided = object.isFlipSided();
 		}
 	}
 

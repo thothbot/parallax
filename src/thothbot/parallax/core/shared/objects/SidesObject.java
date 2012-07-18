@@ -24,11 +24,11 @@ package thothbot.parallax.core.shared.objects;
 
 public abstract class SidesObject extends GeometryObject
 {
-	public abstract boolean getFlipSided();
+	public abstract boolean isFlipSided();
 
 	public abstract void setFlipSided(boolean flipSided);
 
-	public abstract boolean getDoubleSided();
+	public abstract boolean isDoubleSided();
 
 	public abstract void setDoubleSided(boolean doubleSided);
 }
