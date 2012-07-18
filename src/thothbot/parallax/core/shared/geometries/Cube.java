@@ -28,7 +28,6 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Sides;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.materials.Material;
@@ -45,8 +44,18 @@ import thothbot.parallax.core.shared.materials.Material;
  */
 public final class Cube extends Geometry 
 {
-	private Sides sides;
+	public class Sides
+	{
+		public boolean px = true;
+		public boolean nx = true;
+		public boolean py = true;
+		public boolean ny = true;
+		public boolean pz = true;
+		public boolean nz = true;
+	}
 	
+	private Sides sides;
+
 	private int segmentsWidth;
 	private int segmentsHeight;
 	private int segmentsDepth;
@@ -94,10 +103,10 @@ public final class Cube extends Geometry
 			mpx = 0; mnx = 1; mpy = 2; mny = 3; mpz = 4; mnz = 5;
 		}
 
-		this.sides = new Sides();
-
 		if ( sides != null )
 			this.sides = sides;
+		else
+			this.sides = new Sides();
 
 		if(this.sides.px) 
 			buildPlane( "z", "y", - 1, - 1, depth, height, width_half, mpx );
