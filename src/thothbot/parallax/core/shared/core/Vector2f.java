@@ -159,8 +159,8 @@ public class Vector2f implements Vector
 	@Override
 	public Vector2f add(Vector v1, Vector v2)
 	{
-		this.setX(((Vector3f)v1).getX() + ((Vector3f)v2).getX());
-		this.setY(((Vector3f)v1).getY() + ((Vector3f)v2).getY());
+		this.setX(((Vector2f)v1).getX() + ((Vector2f)v2).getX());
+		this.setY(((Vector2f)v1).getY() + ((Vector2f)v2).getY());
 		return this;
 	}
 	
@@ -182,8 +182,8 @@ public class Vector2f implements Vector
 	@Override
 	public Vector2f sub(Vector v1, Vector v2)
 	{
-		this.setX(((Vector3f)v1).getX() - ((Vector3f)v2).getX());
-		this.setY(((Vector3f)v1).getY() - ((Vector3f)v2).getY());
+		this.setX(((Vector2f)v1).getX() - ((Vector2f)v2).getX());
+		this.setY(((Vector2f)v1).getY() - ((Vector2f)v2).getY());
 		
 		return this;
 	}
@@ -197,8 +197,8 @@ public class Vector2f implements Vector
 	@Override
 	public Vector2f multiply(Vector v1, Vector v2)
 	{
-		this.setX(((Vector3f)v1).getX() * ((Vector3f)v2).getX());
-		this.setY(((Vector3f)v1).getY() * ((Vector3f)v2).getY());
+		this.setX(((Vector2f)v1).getX() * ((Vector2f)v2).getX());
+		this.setY(((Vector2f)v1).getY() * ((Vector2f)v2).getY());
 
 		return this;
 	}
@@ -221,8 +221,8 @@ public class Vector2f implements Vector
 	@Override
 	public Vector2f divide(Vector v1, Vector v2)
 	{
-		this.setX(((Vector3f)v1).getX() / ((Vector3f)v2).getX());
-		this.setY(((Vector3f)v1).getY() / ((Vector3f)v2).getY());
+		this.setX(((Vector2f)v1).getX() / ((Vector2f)v2).getX());
+		this.setY(((Vector2f)v1).getY() / ((Vector2f)v2).getY());
 
 		return this;
 	}

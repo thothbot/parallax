@@ -313,12 +313,12 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 				rotateStart = rotateEnd = getMouseProjectionOnBall( event.getX(), event.getY() );
 				state = STATE.ROTATE;
 			} 
-			else if ( event.getNativeButton() == NativeEvent.BUTTON_RIGHT && this.isZoom ) 
+			else if ( event.getNativeButton() == NativeEvent.BUTTON_MIDDLE && this.isZoom ) 
 			{
 				zoomStart = zoomEnd = getMouseOnScreen( event.getX(), event.getY() );
 				state = STATE.ZOOM;
 			} 
-			else if ( this.isPan ) 
+			else if ( event.getNativeButton() == NativeEvent.BUTTON_RIGHT && this.isPan ) 
 			{
 				panStart = panEnd = getMouseOnScreen( event.getX(), event.getY() );
 			}
