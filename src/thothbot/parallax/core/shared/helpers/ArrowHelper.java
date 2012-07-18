@@ -57,16 +57,16 @@ public class ArrowHelper extends Object3D
 		lineGeometry.getVertices().add( new Vector3f( 0, 0, 0 ) );
 		lineGeometry.getVertices().add( new Vector3f( 0, 1, 0 ) );
 
-		LineBasicMaterial.LineBasicMaterialOptions lOptions = new LineBasicMaterial.LineBasicMaterialOptions();
-		lOptions.color = new Color3f(hex);
-		this.line = new Line( lineGeometry, new LineBasicMaterial( lOptions ) );
+		LineBasicMaterial lbm = new LineBasicMaterial();
+		lbm.setColor(new Color3f(hex));
+		this.line = new Line( lineGeometry, lbm );
 		this.addChild( this.line );
 
 		Cylinder coneGeometry = new Cylinder( 0f, 0.05f, 0.25f, 5, 1 );
 
-		MeshBasicMaterial.MeshBasicMaterialOptions mOptions = new MeshBasicMaterial.MeshBasicMaterialOptions();
-		mOptions.color = new Color3f(hex);
-		this.cone = new Mesh( coneGeometry, new MeshBasicMaterial( mOptions ) );
+		MeshBasicMaterial mbm = new MeshBasicMaterial();
+		mbm.setColor(new Color3f(hex));
+		this.cone = new Mesh( coneGeometry, mbm );
 		this.cone.getPosition().set( 0, 1, 0 );
 		this.addChild( this.cone );
 

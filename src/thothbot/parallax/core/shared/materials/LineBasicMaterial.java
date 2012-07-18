@@ -26,77 +26,70 @@ import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderBasic;
 import thothbot.parallax.core.shared.core.Color3f;
 
-import com.google.gwt.canvas.dom.client.Context2d.LineCap;
-import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
-
 public final class LineBasicMaterial extends Material 
+	implements HasFog, HasColor, HasVertexColors
 {
 
-	public static class LineBasicMaterialOptions extends Material.MaterialOptions 
-	{
-		public Color3f color = new Color3f(0xffffff);
-		public int linewidth = 1;
-		public LineCap linecap = LineCap.ROUND;
-		public LineJoin linejoin = LineJoin.ROUND;
-		public boolean fog = true;
-	}
+	private boolean isFog;
 	
 	private Color3f color;
-	private LineCap linecap;
-	private LineJoin linejoin;
 	
-	public LineBasicMaterial(LineBasicMaterialOptions options)
-	{
-		super(options);
-		this.color = options.color;
-		this.linewidth = options.linewidth;
-		this.linecap = options.linecap;
-		this.linejoin = options.linejoin;
-		this.fog = options.fog;
-	}
-
-	public void setColor(Color3f color) 
-	{
-		this.color = color;
-	}
-
-	public Color3f getColor() 
-	{
-		return color;
-	}
-
-	public void setLinewidth(int linewidth) 
-	{
-		this.linewidth = linewidth;
-	}
-
-	public int getLinewidth() 
-	{
-		return linewidth;
-	}
-
-	public void setLinecap(LineCap linecap) 
-	{
-		this.linecap = linecap;
-	}
-
-	public LineCap getLinecap() 
-	{
-		return linecap;
-	}
-
-	public void setLinejoin(LineJoin linejoin) 
-	{
-		this.linejoin = linejoin;
-	}
-
-	public LineJoin getLinejoin() 
-	{
-		return linejoin;
+	private Material.COLORS vertexColors;
+	
+	private float linewidth;
+	
+	public LineBasicMaterial()
+	{	
+		setFog(true);
+		
+		setColor(new Color3f(0xffffff));
+		
+		setLinewidth(1.0f);
+		
+		setVertexColors(Material.COLORS.NO);
 	}
 	
+	@Override
 	public Shader getShaderId()
 	{
 		return new ShaderBasic();
+	}
+
+	public float getLinewidth() {
+		return this.linewidth;
+	}
+	
+	public void setLinewidth(float linewidth) {
+		this.linewidth = linewidth;
+	}
+
+	@Override
+	public boolean isFog() {
+		return this.isFog;
+	}
+
+	@Override
+	public void setFog(boolean fog) {
+		this.isFog = fog;
+	}
+	
+	@Override
+	public Color3f getColor() {
+		return color;
+	}
+	
+	@Override
+	public void setColor(Color3f color) {
+		this.color = color;
+	}
+	
+	@Override
+	public Material.COLORS isVertexColors() {
+		return this.vertexColors;
+	}
+
+	@Override
+	public void setVertexColors(Material.COLORS vertexColors) {
+		this.vertexColors = vertexColors;
 	}
 }

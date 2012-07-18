@@ -46,40 +46,47 @@ public class AxisHelper extends Object3D
 		Cylinder coneGeometry = new Cylinder( 0f, 5f, 25f, 5, 1 );
 
 		// x
-		LineBasicMaterial.LineBasicMaterialOptions lOptions = new LineBasicMaterial.LineBasicMaterialOptions();
-		lOptions.color = new Color3f(0xff0000);
+		LineBasicMaterial lbmX = new LineBasicMaterial();
+		lbmX.setColor(new Color3f(0xff0000));
 
-		MeshBasicMaterial.MeshBasicMaterialOptions mOptions = new MeshBasicMaterial.MeshBasicMaterialOptions();
-		mOptions.color = new Color3f(0xff0000);
+		MeshBasicMaterial mbmX = new MeshBasicMaterial();
+		mbmX.setColor( new Color3f(0xff0000) );
 		
-		Line line1 = new Line( lineGeometry, new LineBasicMaterial( lOptions ) );
+		Line line1 = new Line( lineGeometry, lbmX );
 		line1.getRotation().setZ( (float) (- Math.PI / 2f));
 		this.addChild(line1 );
 		
-		Mesh cone1 = new Mesh( coneGeometry, new MeshBasicMaterial( mOptions ) );
+		Mesh cone1 = new Mesh( coneGeometry, mbmX );
 		cone1.getPosition().setX(100);
 		cone1.getRotation().setZ((float) (- Math.PI / 2f));
 		this.addChild( cone1 );
 
 		// y
+		LineBasicMaterial lbmY = new LineBasicMaterial();
+		lbmX.setColor(new Color3f(0x00ff00));
 
-		lOptions.color = new Color3f(0x00ff00);
-		Line line2 = new Line( lineGeometry, new LineBasicMaterial( lOptions ) );
+		MeshBasicMaterial mbmY = new MeshBasicMaterial();
+		mbmX.setColor( new Color3f(0x00ff00) );
+
+		Line line2 = new Line( lineGeometry, lbmY );
 		this.addChild( line2 );
 
-		mOptions.color = new Color3f(0x00ff00);
-		Mesh cone2 = new Mesh( coneGeometry, new MeshBasicMaterial( mOptions ) );
+		Mesh cone2 = new Mesh( coneGeometry, mbmY );
 		cone2.getPosition().setY(100);
 		this.addChild( cone2 );
 
 		// z
-		lOptions.color = new Color3f(0x0000ff);
-		Line line3 = new Line( lineGeometry, new LineBasicMaterial( lOptions ) );
+		LineBasicMaterial lbmZ = new LineBasicMaterial();
+		lbmX.setColor(new Color3f(0x0000ff));
+
+		MeshBasicMaterial mbmZ = new MeshBasicMaterial();
+		mbmX.setColor( new Color3f(0x0000ff) );
+
+		Line line3 = new Line( lineGeometry, lbmZ );
 		line3.getRotation().setX((float) (Math.PI / 2f));
 		this.addChild( line3 );
 
-		mOptions.color = new Color3f(0x0000ff);
-		Mesh cone3 = new Mesh( coneGeometry, new MeshBasicMaterial( mOptions ) );
+		Mesh cone3 = new Mesh( coneGeometry, mbmZ );
 		cone3.getPosition().setZ(100);
 		cone3.getRotation().setX((float) (Math.PI / 2f));
 		this.addChild( cone3 );

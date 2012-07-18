@@ -28,55 +28,92 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.core.Color3f;
 
 public final class ParticleBasicMaterial extends Material 
+	implements HasFog, HasColor, HasMap, HasVertexColors
 {
-	
-	public static class ParticleBasicMaterialOptions extends Material.MaterialOptions 
-	{
-		public Color3f color = new Color3f(0xffffff);
-		public Texture map = null;
-		public float size = 1.0f;
-		public boolean sizeAttenuation = true;
-		public boolean fog = true;
-	}
+	private boolean isFog;
 	
 	private Color3f color;
+	
 	private Texture map;
+	
+	private Material.COLORS vertexColors;
+	
 	private float size;
+	
 	private boolean sizeAttenuation;
 
-	public ParticleBasicMaterial(ParticleBasicMaterialOptions options)
+	public ParticleBasicMaterial()
 	{
-		super(options);
-		this.color = options.color;
-		this.map = options.map;
-		this.size = options.size;
-		this.sizeAttenuation = options.sizeAttenuation;
-		this.fog = true;
+		
+		setFog(true);
+		
+		setColor(new Color3f(0xffffff));
+		
+		setSize(1.0f);
+		setSizeAttenuation(true);
+		
+		setVertexColors(Material.COLORS.NO);
+		
 	}
 
-	public Color3f getColor()
-	{
-		return this.color;
+	public float getSize() {
+		return this.size;
 	}
 	
-	public Texture getMap()
-	{
-		return this.map;
+	public void setSize(float size) {
+		this.size = size;;
 	}
 
-	public float getSize() 
-	{
-		return size;
-	}
-
-	public boolean isSizeAttenuation() 
-	{
+	public boolean isSizeAttenuation() {
 		return sizeAttenuation;
+	}
+	
+	public void setSizeAttenuation(boolean sizeAttenuation) {
+		this.sizeAttenuation = sizeAttenuation;
 	}
 	
 	public Shader getShaderId() 
 	{
 		return new ShaderParticleBasic();
 	}
+	
+	@Override
+	public boolean isFog() {
+		return this.isFog;
+	}
 
+	@Override
+	public void setFog(boolean fog) {
+		this.isFog = fog;
+	}
+	
+	@Override
+	public Color3f getColor() {
+		return color;
+	}
+	
+	@Override
+	public void setColor(Color3f color) {
+		this.color = color;
+	}
+	
+	@Override
+	public Texture getMap() {
+		return this.map;
+	}
+
+	@Override
+	public void setMap(Texture map) {
+		this.map = map;
+	}
+
+	@Override
+	public Material.COLORS isVertexColors() {
+		return this.vertexColors;
+	}
+
+	@Override
+	public void setVertexColors(Material.COLORS vertexColors) {
+		this.vertexColors = vertexColors;
+	}
 }

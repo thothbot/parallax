@@ -36,7 +36,7 @@ import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 
-public class Material
+public abstract class Material
 {
 	public static int MaterialCount;
 
@@ -76,268 +76,260 @@ public class Material
 
 	private int id;
 	
+	private String name;
+	
 	private float opacity;
 	private boolean transparent;
-	private boolean depthTest;
-
-	public String name;
-
-	public Material.COLORS vertexColors;
-	private Material.BLENDING blending;
+	
 	private Material.SHADING shading;
+	
+	private Material.BLENDING blending;
 	private BlendingFactorSrc blendSrc;
 	private BlendingFactorDest blendDst;
 	private BlendEquationMode blendEquation;
 
+	private boolean depthTest;
 	private boolean depthWrite;
-
+	
 	private boolean polygonOffset;
 	private float polygonOffsetFactor;
 	private float polygonOffsetUnits;
-
+	
 	private int alphaTest;
-
+	
 	// Boolean for fixing antialiasing gaps in CanvasRenderer
 	private boolean overdraw;
 
-	public boolean visible = true;
-
-	public boolean needsUpdate = true;
+	private boolean visible = true;
+	private boolean needsUpdate = true;
 	
-	public Map<String, Uniform> uniforms;
-	public Program program;
-	public Map<String, WebGLCustomAttribute> attributes;
-
-	public String vertexShader;
-	public String fragmentShader;
+	// 
 	
-	public boolean lights;
-	public boolean fog;
-
-	public boolean sizeAttenuation;
-
-	public boolean skinning;
-
-	public boolean morphTargets;
-	public int numSupportedMorphTargets;
-	public boolean morphNormals;
-	public int numSupportedMorphNormals;
+	private Map<String, Uniform> uniforms;
+	private Program program;
+	private Map<String, WebGLCustomAttribute> attributes;
+	private String vertexShader;
+	private String fragmentShader;
 	
-	public boolean metal;
-	public boolean wrapAround;
-	public boolean wireframe;
-	public int wireframeLinewidth;
-	public int linewidth;
+	// TODO: Move to HasSkinning
+	private int numSupportedMorphTargets;
+	private int numSupportedMorphNormals;
 
-	static class MaterialOptions 
-	{
-		public float opacity = 1.0f;
-		public boolean transparent = false;
-		public Material.BLENDING blending = Material.BLENDING.NORMAL;
-		public BlendingFactorSrc blendSrc = BlendingFactorSrc.SRC_ALPHA;
-		public BlendingFactorDest blendDst = BlendingFactorDest.ONE_MINUS_SRC_ALPHA;
-		public BlendEquationMode blendEquation = BlendEquationMode.FUNC_ADD;
-		public boolean depthTest = true;
-		public boolean depthWrite = true;
-		public boolean polygonOffset = false;
-		public float polygonOffsetFactor = 0f;
-		public float polygonOffsetUnits = 0f;
-		public int alphaTest = 0;
-		public boolean overdraw = false;
-		public boolean wireframe = false;
-		public int wireframeLinewidth = 1;
-		public Material.COLORS vertexColors = Material.COLORS.NO;
-		public boolean fog = false;
-		public boolean lights = false;
-	}
-
-	public Material(MaterialOptions parameters)
+	public Material()
 	{
 		this.id = Material.MaterialCount++;
-
-		this.opacity = parameters.opacity;
-		this.transparent = parameters.transparent;
-		this.blending = parameters.blending;
-		this.blendSrc = parameters.blendSrc;
-		this.blendDst = parameters.blendDst;
-		this.blendEquation = parameters.blendEquation;
-				
-		this.depthTest = parameters.depthTest;
-		this.depthWrite = parameters.depthWrite;
-		this.polygonOffset = parameters.polygonOffset;
-		this.polygonOffsetFactor = parameters.polygonOffsetFactor;
-		this.polygonOffsetUnits = parameters.polygonOffsetUnits;
-		this.alphaTest = parameters.alphaTest;
-		this.overdraw = parameters.overdraw;
-		this.wireframe = parameters.wireframe;
-		this.wireframeLinewidth = parameters.wireframeLinewidth;
-		this.vertexColors = parameters.vertexColors;
 		
-		this.fog = parameters.fog;
-		this.lights = parameters.lights;
+		setOpacity(1.0f);
+		setTransparent(false);
+		
+		setShading(Material.SHADING.SMOOTH);
+		
+		setBlending( Material.BLENDING.NORMAL );
+		setBlendSrc(BlendingFactorSrc.SRC_ALPHA);
+		setBlendDst(BlendingFactorDest.ONE_MINUS_SRC_ALPHA);
+		setBlendEquation(BlendEquationMode.FUNC_ADD);
+		
+		setDepthTest(true);
+		setDepthWrite(true);
+		
+		setPolygonOffset(false);
+		setPolygonOffsetFactor(0.0f);
+		setPolygonOffsetUnits(0.0f);
+		
+		setAlphaTest(0);
+		setOverdraw(false);
 	}
 	
-	public int getId()
-	{
+	public int getId() {
 		return id;
 	}
+	
+	public boolean isVisible() {
+		return this.visible;
+	}
+	
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+	
+	public boolean isNeedsUpdate() {
+		return this.needsUpdate;
+	}
+	
+	public void setNeedsUpdate(boolean visible) {
+		this.needsUpdate = visible;
+	}
+	
+	public Program getProgram() {
+		return this.program;
+	}
+	
+	public void setProgram(Program program) {
+		this.program = program;
+	}
+	
+	public Map<String, Uniform> getUniforms() {
+		return this.uniforms;
+	}
+	
+	public void setUniforms(Map<String, Uniform> uniforms) {
+		this.uniforms = uniforms;
+	}
+	
+	public Map<String, WebGLCustomAttribute> getAttributes() {
+		return this.attributes;
+	}
+	
+	public void setAttributes(Map<String, WebGLCustomAttribute> attributes) {
+		this.attributes = attributes;
+	}
+	
+	public String getVertexShaderSource() {
+		return this.vertexShader;
+	}
+	
+	public void setVertexShaderSource(String str) {
+		this.vertexShader = str;
+	}
+	
+	public String getFragmentShaderSource() {
+		return this.fragmentShader;
+	}
+	
+	public void setFragmentShaderSource(String str) {
+		this.fragmentShader = str;
+	}
+	
+	public int getNumSupportedMorphTargets() {
+		return this.numSupportedMorphTargets;
+	}
+	
+	public void setNumSupportedMorphTargets(int num) {
+		this.numSupportedMorphTargets = num;
+	}
+	
+	public int getNumSupportedMorphNormals() {
+		return this.numSupportedMorphNormals;
+	}
+	
+	public void setNumSupportedMorphNormals(int num) {
+		this.numSupportedMorphNormals = num;
+	}
 
-	public float getOpacity()
-	{
+	public float getOpacity() {
 		return opacity;
 	}
 
-	public void setOpacity(float opacity)
-	{
+	public void setOpacity(float opacity) {
 		this.opacity = opacity;
 	}
 
-	public boolean isTransparent()
-	{
+	public boolean isTransparent() {
 		return transparent;
 	}
 
-	public void setTransparent(boolean transparent)
-	{
+	public void setTransparent(boolean transparent) {
 		this.transparent = transparent;
 	}
 
-	public boolean isDepthTest()
-	{
-		return depthTest;
-	}
-
-	public void setDepthTest(boolean depthTest)
-	{
-		this.depthTest = depthTest;
-	}
-
-	public Material.BLENDING getBlending()
-	{
+	public Material.BLENDING getBlending() {
 		return blending;
 	}
 
-	public void setBlending(Material.BLENDING blending)
-	{
+	public void setBlending(Material.BLENDING blending) {
 		this.blending = blending;
 	}
-
-	public BlendingFactorSrc getBlendSrc()
-	{
+	
+	public BlendingFactorSrc getBlendSrc() {
 		return blendSrc;
 	}
 
-	public void setBlendSrc(BlendingFactorSrc blendSrc)
-	{
+	public void setBlendSrc(BlendingFactorSrc blendSrc) {
 		this.blendSrc = blendSrc;
 	}
 
-	public BlendingFactorDest getBlendDst()
-	{
+	public BlendingFactorDest getBlendDst() {
 		return blendDst;
 	}
 
-	public void setBlendDst(BlendingFactorDest blendDst)
-	{
+	public void setBlendDst(BlendingFactorDest blendDst) {
 		this.blendDst = blendDst;
 	}
 
-	public BlendEquationMode getBlendEquation()
-	{
+	public BlendEquationMode getBlendEquation() {
 		return blendEquation;
 	}
 
-	public void setBlendEquation(BlendEquationMode blendEquation)
-	{
+	public void setBlendEquation(BlendEquationMode blendEquation) {
 		this.blendEquation = blendEquation;
 	}
+	
+	public boolean isDepthTest() {
+		return depthTest;
+	}
 
-	public boolean isDepthWrite()
-	{
+	public void setDepthTest(boolean depthTest) {
+		this.depthTest = depthTest;
+	}
+
+	public boolean isDepthWrite() {
 		return depthWrite;
 	}
 
-	public void setDepthWrite(boolean depthWrite)
-	{
+	public void setDepthWrite(boolean depthWrite) {
 		this.depthWrite = depthWrite;
 	}
 
-	public boolean isPolygonOffset()
-	{
+	public boolean isPolygonOffset() {
 		return polygonOffset;
 	}
 
-	public void setPolygonOffset(boolean polygonOffset)
-	{
+	public void setPolygonOffset(boolean polygonOffset) {
 		this.polygonOffset = polygonOffset;
 	}
 
-	public float getPolygonOffsetFactor()
-	{
+	public float getPolygonOffsetFactor() {
 		return polygonOffsetFactor;
 	}
 
-	public void setPolygonOffsetFactor(float polygonOffsetFactor)
-	{
+	public void setPolygonOffsetFactor(float polygonOffsetFactor) {
 		this.polygonOffsetFactor = polygonOffsetFactor;
 	}
 
-	public float getPolygonOffsetUnits()
-	{
+	public float getPolygonOffsetUnits() {
 		return polygonOffsetUnits;
 	}
 
-	public void setPolygonOffsetUnits(float polygonOffsetUnits)
-	{
+	public void setPolygonOffsetUnits(float polygonOffsetUnits) {
 		this.polygonOffsetUnits = polygonOffsetUnits;
 	}
 
-	public int getAlphaTest()
-	{
+	public int getAlphaTest() {
 		return alphaTest;
 	}
 
-	public void setAlphaTest(int alphaTest)
-	{
+	public void setAlphaTest(int alphaTest) {
 		this.alphaTest = alphaTest;
 	}
-
-	public boolean isOverdraw()
-	{
+	
+	public boolean isOverdraw() {
 		return overdraw;
 	}
 	
-
-	public void setVertexColors(Material.COLORS vertexColors) 
-	{
-		this.vertexColors = vertexColors;
-	}
-
-	public Material.COLORS getVertexColors() 
-	{
-		return vertexColors;
-	}
-	
-	public void setShading(Material.SHADING shading) 
-	{
-		this.shading = shading;
-	}
-
-	public Material.SHADING getShading() 
-	{
-		return this.shading;
-	}
-
-	public void setOverdraw(boolean overdraw)
-	{
+	public void setOverdraw(boolean overdraw) {
 		this.overdraw = overdraw;
 	}
 
-	// TODO: check what is this
-	// Must be overwriten
-	public Shader getShaderId() {
-		return null;
+	public Material.SHADING getShading() {
+		return this.shading;
 	}
+	
+	public void setShading(Material.SHADING shading) {
+		this.shading = shading;
+	}
+
+	// Must be overwriten
+	public abstract Shader getShaderId();
 
 	public void setMaterialShaders( Shader shader) 
 	{
@@ -367,14 +359,20 @@ public class Material
 	
 	public Material.COLORS bufferGuessVertexColorType () 
 	{
-		if ( this.vertexColors != Material.COLORS.NO )
-			return this.vertexColors;
+		if(this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO)
+			return ((HasVertexColors)this).isVertexColors();
 
 		return null;
 	}
 	
 	public boolean bufferGuessUVType () 
 	{
+		if(this instanceof HasMap && ((HasMap)this).getMap() != null)
+			return true;
+		
+		if(this instanceof HasLightMap && ((HasLightMap)this).getLightMap() != null)
+			return true;
+		
 		return false;
 	}
 

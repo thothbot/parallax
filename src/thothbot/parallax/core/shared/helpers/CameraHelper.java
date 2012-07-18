@@ -60,11 +60,11 @@ public class CameraHelper extends Object3D
 		
 		this.lineGeometry = new Geometry();
 		
-		LineBasicMaterial.LineBasicMaterialOptions lopt = new LineBasicMaterial.LineBasicMaterialOptions();
-		lopt.color = new Color3f(0xffffff);
-		lopt.vertexColors = Material.COLORS.FACE;
+		LineBasicMaterial lbm = new LineBasicMaterial();
+		lbm.setColor( new Color3f(0xffffff) );
+		lbm.setVertexColors( Material.COLORS.FACE );
 
-		this.lineMaterial = new LineBasicMaterial( lopt );
+		this.lineMaterial = lbm;
 
 		this.pointMap = new HashMap<String, List<Integer>>();
 

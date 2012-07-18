@@ -40,7 +40,7 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 	protected Geometry geometry;
 	protected Material material;
 	
-	private int cache_oldLineWidth = -1;
+	private float cache_oldLineWidth = -1;
 
 	public Geometry getGeometry()
 	{
@@ -68,7 +68,7 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 	
 	public abstract void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers);
 	
-	protected void setLineWidth (WebGLRenderingContext gl, int width ) 
+	protected void setLineWidth (WebGLRenderingContext gl, float width ) 
 	{
 		if ( width != this.cache_oldLineWidth ) 
 		{
@@ -82,14 +82,14 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 		int nvertices = geometry.getVertices().size();
 		Material material = this.getMaterial();
 
-		if ( material.attributes != null) 
+		if ( material.getAttributes() != null) 
 		{
 			if ( geometry.__webglCustomAttributesList == null ) 
 				geometry.__webglCustomAttributesList = new ArrayList<WebGLCustomAttribute>();
 
-			for ( String a : material.attributes.keySet() ) 
+			for ( String a : material.getAttributes().keySet() ) 
 			{
-				WebGLCustomAttribute attribute = material.attributes.get( a );
+				WebGLCustomAttribute attribute = material.getAttributes().get( a );
 				if( ! attribute.__webglInitialized || attribute.createUniqueBuffers ) 
 				{
 					attribute.__webglInitialized = true;

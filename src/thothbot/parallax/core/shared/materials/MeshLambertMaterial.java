@@ -25,107 +25,245 @@ package thothbot.parallax.core.shared.materials;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderLambert;
 import thothbot.parallax.core.client.textures.Texture;
+import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.Vector3f;
 
-import com.google.gwt.canvas.dom.client.Context2d.LineCap;
-import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
-
-public final class MeshLambertMaterial extends AbstractMapMaterial
+public final class MeshLambertMaterial extends Material 
+	implements HasMaterialMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
+	HasSkinning, HasAmbientEmissiveColor
 {
-
-	public static class MeshLambertMaterialOptions extends AbstractMapMaterial.AbstractMapMaterialOptions
-	{
-		public Color3f ambient = new Color3f( 0xffffff );
-		public Color3f emissive = new Color3f( 0x000000 );
-		public Texture.OPERATIONS combine = Texture.OPERATIONS.MULTIPLY;
-		public Material.SHADING shading = Material.SHADING.SMOOTH;
-		public LineCap wireframeLinecap = LineCap.ROUND;
-		public LineJoin wireframeLinejoin = LineJoin.ROUND;
-		public boolean skinning = false;
-		public boolean morphTargets = false;
-		public Vector3f wrapRGB = new Vector3f( 1f, 1f, 1f );
-	}
-
+	private boolean isWrapAround;
+	private Vector3f wrapRGB;
+	
+	private boolean isWireframe;
+	private int wireframeLineWidth;
+	
+	private Texture envMap;
+	private Texture.OPERATIONS combine;
+	private float reflectivity;
+	private float refractionRatio;
+	
+	private Texture lightMap;
+	
+	private boolean isFog;
+	
+	private Color3f color;
 	private Color3f ambient;
 	private Color3f emissive;
-	private Vector3f wrapRGB;
-	private LineCap wireframeLinecap;
-	private LineJoin wireframeLinejoin;
-	private boolean skinning;
-	private boolean morphTargets;
-
-	public MeshLambertMaterial(MeshLambertMaterialOptions parameters) 
-	{
-		super(parameters);
-		this.ambient = parameters.ambient;
-		this.emissive = parameters.emissive;
-		this.combine = parameters.combine;
-		setShading(parameters.shading);
-		this.wireframeLinecap = parameters.wireframeLinecap;
-		this.wireframeLinejoin = parameters.wireframeLinejoin;
-		this.skinning = parameters.skinning;
-		this.morphTargets = parameters.morphTargets;
-		this.wrapRGB = parameters.wrapRGB;
-	}
-
-	public Color3f getAmbient() 
-	{
-		return ambient;
-	}
 	
-	public Color3f getEmissive() 
-	{
-		return this.emissive;
-	}
+	private Texture map;
 	
-	public Vector3f getWrapRGB() 
+	private Material.COLORS vertexColors;
+	
+	private boolean isSkinning;
+	private boolean isMorphTargets;
+	private boolean isMorphNormals;
+	
+	public MeshLambertMaterial() 
 	{
-		return this.wrapRGB;
+		setWrapRGB(new Vector3f( 1f, 1f, 1f ));
+		setWrapAround(false);
+		
+		setWireframe(false);
+		setWireframeLineWidth(1);
+		
+		setCombine(OPERATIONS.MULTIPLY);
+		setReflectivity(1.0f);
+		setRefractionRatio(0.98f);
+		
+		setFog(true);
+		
+		setColor(new Color3f(0xffffff));
+		setAmbient(new Color3f(0xffffff));
+		setEmissive(new Color3f( 0x000000 ));
+		
+		setVertexColors(Material.COLORS.NO);
 	}
 
-	public void setWireframeLinecap(LineCap wireframeLinecap)
-	{
-		this.wireframeLinecap = wireframeLinecap;
-	}
-
-	public LineCap getWireframeLinecap()
-	{
-		return wireframeLinecap;
-	}
-
-	public void setWireframeLinejoin(LineJoin wireframeLinejoin)
-	{
-		this.wireframeLinejoin = wireframeLinejoin;
-	}
-
-	public LineJoin getWireframeLinejoin()
-	{
-		return wireframeLinejoin;
-	}
-
-	public void setSkinning(boolean skinning)
-	{
-		this.skinning = skinning;
-	}
-
-	public boolean isSkinning()
-	{
-		return skinning;
-	}
-
-	public void setMorphTargets(boolean morphTargets)
-	{
-		this.morphTargets = morphTargets;
-	}
-
-	public boolean isMorphTargets()
-	{
-		return morphTargets;
-	}
-
+	@Override
 	public Shader getShaderId()
 	{
 		return new ShaderLambert();
+	}
+
+	@Override
+	public boolean isWrapAround() {
+		return this.isWrapAround;
+	}
+
+	@Override
+	public void setWrapAround(boolean wrapAround) {
+		this.isWrapAround = wrapAround;
+	}
+
+	@Override
+	public Vector3f getWrapRGB() {
+		return this.wrapRGB;
+	}
+	
+	@Override
+	public void setWrapRGB(Vector3f wrapRGB) {
+		this.wrapRGB = wrapRGB;
+	}
+	
+	@Override
+	public boolean isWireframe() {
+		return this.isWireframe;
+	}
+
+	@Override
+	public void setWireframe(boolean wireframe) {
+		this.isWireframe = wireframe;
+	}
+
+	@Override
+	public int getWireframeLineWidth() {
+		return this.wireframeLineWidth;
+	}
+
+	@Override
+	public void setWireframeLineWidth(int wireframeLineWidth) {
+		this.wireframeLineWidth = wireframeLineWidth;
+	}
+	
+	@Override
+	public Texture getEnvMap() {
+		return this.envMap;
+	}
+
+	@Override
+	public void setEnvMap(Texture envMap) {
+		this.envMap = envMap;
+	}
+
+	@Override
+	public OPERATIONS getCombine() {
+		return this.combine;
+	}
+
+	@Override
+	public void setCombine(OPERATIONS combine) {
+		this.combine = combine;
+	}
+
+	@Override
+	public float getReflectivity() {
+		return this.reflectivity;
+	}
+
+	@Override
+	public void setReflectivity(float reflectivity) {
+		this.reflectivity = reflectivity;
+	}
+
+	@Override
+	public float getRefractionRatio() {
+		return this.refractionRatio;
+	}
+
+	@Override
+	public void setRefractionRatio(float refractionRatio) {
+		this.refractionRatio = refractionRatio;
+	}
+	
+	@Override
+	public Texture getLightMap() {
+		return this.lightMap;
+	}
+
+	@Override
+	public void setLightMap(Texture lightMap) {
+		this.lightMap = lightMap;
+	}
+	
+	@Override
+	public boolean isFog() {
+		return this.isFog;
+	}
+
+	@Override
+	public void setFog(boolean fog) {
+		this.isFog = fog;
+	}
+	
+	@Override
+	public Color3f getColor() {
+		return color;
+	}
+	
+	@Override
+	public void setColor(Color3f color) {
+		this.color = color;
+	}
+	
+	@Override
+	public Texture getMap() {
+		return this.map;
+	}
+
+	@Override
+	public void setMap(Texture map) {
+		this.map = map;
+	}
+	
+	@Override
+	public Material.COLORS isVertexColors() {
+		return this.vertexColors;
+	}
+
+	@Override
+	public void setVertexColors(Material.COLORS vertexColors) {
+		this.vertexColors = vertexColors;
+	}
+	
+	@Override
+	public boolean isSkinning() {
+		return this.isSkinning;
+	}
+
+	@Override
+	public void setSkinning(boolean isSkinning) {
+		this.isSkinning = isSkinning;
+	}
+
+	@Override
+	public boolean isMorphTargets() {
+		return this.isMorphTargets;
+	}
+
+	@Override
+	public void setMorphTargets(boolean isMorphTargets) {
+		this.isMorphTargets = isMorphTargets;
+	}
+
+	@Override
+	public boolean isMorphNormals() {
+		return this.isMorphNormals;
+	}
+
+	@Override
+	public void setMorphNormals(boolean isMorphNormals) {
+		this.isMorphNormals = isMorphNormals;
+	}
+	
+	@Override
+	public Color3f getAmbient() {
+		return this.ambient;
+	}
+
+	@Override
+	public void setAmbient(Color3f ambient) {
+		this.ambient = ambient;
+	}
+
+	@Override
+	public Color3f getEmissive() {
+		return this.emissive;
+	}
+
+	@Override
+	public void setEmissive(Color3f emissive) {
+		this.emissive = emissive;
 	}
 }

@@ -22,9 +22,18 @@
 
 package thothbot.parallax.core.shared.materials;
 
-public final class MeshFaceMaterial extends Material {
+import thothbot.parallax.core.client.shader.Shader;
 
-	public MeshFaceMaterial() {
-		super(new Material.MaterialOptions());
+public final class MeshFaceMaterial extends Material 
+{
+	public MeshFaceMaterial() 
+	{
+
+	}
+
+	@Override
+	public Shader getShaderId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

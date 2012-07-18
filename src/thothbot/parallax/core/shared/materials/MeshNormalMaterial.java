@@ -25,53 +25,41 @@ package thothbot.parallax.core.shared.materials;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderNormal;
 
-import com.google.gwt.canvas.dom.client.Context2d.LineCap;
-import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
-
-public final class MeshNormalMaterial extends Material 
+public final class MeshNormalMaterial extends Material implements HasWireframe
 {
+	private boolean isWireframe;
+	private int wireframeLineWidth;
 	
-	public static class MeshNormalMaterialOptions extends Material.MaterialOptions 
+	public MeshNormalMaterial()
 	{
-		public Material.SHADING shading = Material.SHADING.SMOOTH;
-		public LineCap wireframeLinecap = LineCap.ROUND;
-		public LineJoin wireframeLinejoin = LineJoin.ROUND;
-	}
-	
-	private LineCap wireframeLinecap;
-	private LineJoin wireframeLinejoin;
-
-
-	public MeshNormalMaterial(MeshNormalMaterialOptions options)
-	{
-		super(options);
-		setShading( options.shading );
-		this.wireframeLinecap = options.wireframeLinecap;
-		this.wireframeLinejoin = options.wireframeLinejoin;
-	}
-
-	public void setWireframeLinecap(LineCap wireframeLinecap) 
-	{
-		this.wireframeLinecap = wireframeLinecap;
-	}
-
-	public LineCap getWireframeLinecap() 
-	{
-		return wireframeLinecap;
-	}
-
-	public void setWireframeLinejoin(LineJoin wireframeLinejoin) 
-	{
-		this.wireframeLinejoin = wireframeLinejoin;
-	}
-
-	public LineJoin getWireframeLinejoin() 
-	{
-		return wireframeLinejoin;
+		setWireframe(false);
+		setWireframeLineWidth(1);
+		
+		setShading(Material.SHADING.FLAT);
 	}
 
 	public Shader getShaderId()
 	{
 		return new ShaderNormal();
+	}
+	
+	@Override
+	public boolean isWireframe() {
+		return this.isWireframe;
+	}
+
+	@Override
+	public void setWireframe(boolean wireframe) {
+		this.isWireframe = wireframe;
+	}
+
+	@Override
+	public int getWireframeLineWidth() {
+		return this.wireframeLineWidth;
+	}
+
+	@Override
+	public void setWireframeLineWidth(int wireframeLineWidth) {
+		this.wireframeLineWidth = wireframeLineWidth;
 	}
 }

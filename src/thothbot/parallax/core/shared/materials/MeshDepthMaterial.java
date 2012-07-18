@@ -25,17 +25,15 @@ package thothbot.parallax.core.shared.materials;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderDepth;
 
-public class MeshDepthMaterial extends Material
+public class MeshDepthMaterial extends Material implements HasWireframe
 {
-	public static class MeshDepthMaterialOptions extends Material.MaterialOptions 
-	{
-		public Material.SHADING shading = Material.SHADING.SMOOTH;
-	}
-	
-	public MeshDepthMaterial(MeshDepthMaterialOptions options)
-	{
-		super(options);
-		setShading(options.shading);
+	private boolean isWireframe;
+	private int wireframeLineWidth;
+
+	public MeshDepthMaterial()
+	{	
+		setWireframe(false);
+		setWireframeLineWidth(1);
 	}
 		
 	public Material.SHADING bufferGuessNormalType () 
@@ -48,5 +46,25 @@ public class MeshDepthMaterial extends Material
 	public Shader getShaderId()
 	{
 		return new ShaderDepth();
+	}
+	
+	@Override
+	public boolean isWireframe() {
+		return this.isWireframe;
+	}
+
+	@Override
+	public void setWireframe(boolean wireframe) {
+		this.isWireframe = wireframe;
+	}
+
+	@Override
+	public int getWireframeLineWidth() {
+		return this.wireframeLineWidth;
+	}
+
+	@Override
+	public void setWireframeLineWidth(int wireframeLineWidth) {
+		this.wireframeLineWidth = wireframeLineWidth;
 	}
 }

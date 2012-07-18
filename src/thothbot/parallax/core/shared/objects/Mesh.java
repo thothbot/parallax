@@ -46,6 +46,8 @@ import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.core.Vector4f;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
+import thothbot.parallax.core.shared.materials.HasSkinning;
+import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 
@@ -62,15 +64,15 @@ public class Mesh extends SidesObject
 	
 	private static int _geometryGroupCounter = 0;
 
-	private static MeshBasicMaterial.MeshBasicMaterialOptions defaultMaterialOptions = new MeshBasicMaterial.MeshBasicMaterialOptions();
+	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {
-		defaultMaterialOptions.color = new Color3f((int) Math.random() * 0xffffff);
-		defaultMaterialOptions.wireframe = true;
+		defaultMaterial.setColor( new Color3f((int) Math.random() * 0xffffff) );
+		defaultMaterial.setWireframe( true );
 	};
 
 	public Mesh(Geometry geometry) 
 	{
-		this(geometry, new MeshBasicMaterial(defaultMaterialOptions));
+		this(geometry, Mesh.defaultMaterial);
 	}
 	
 	public Mesh(Geometry geometry, Material material) 
@@ -165,9 +167,9 @@ public class Mesh extends SidesObject
 		WebGLRenderInfo info = renderer.getInfo();
 
 		// wireframe
-		if ( this.getMaterial().wireframe ) 
+		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() ) 
 		{
-			setLineWidth( gl, material.wireframeLinewidth );
+			setLineWidth( gl, ((HasWireframe)getMaterial()).getWireframeLineWidth() );
 
 			if ( updateBuffers ) 
 				gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), geometryBuffer.__webglLineBuffer );
@@ -299,14 +301,14 @@ public class Mesh extends SidesObject
 
 		// custom attributes
 
-		if (material.attributes != null) 
+		if (material.getAttributes() != null) 
 		{
 			if (geometryGroup.__webglCustomAttributesList == null)
 				geometryGroup.__webglCustomAttributesList = new ArrayList<WebGLCustomAttribute>();
 
-			for (String a : material.attributes.keySet()) 
+			for (String a : material.getAttributes().keySet()) 
 			{
-				WebGLCustomAttribute originalAttribute = material.attributes.get(a);
+				WebGLCustomAttribute originalAttribute = material.getAttributes().get(a);
 
 				// Do a shallow copy of the attribute object so different
 				// geometryGroup chunks use different
@@ -418,7 +420,7 @@ public class Mesh extends SidesObject
 				GeometryGroup geometryGroup = geometry.geometryGroupsList.get( i );
 				material = Material.getBufferMaterial( this, geometryGroup );
 
-				boolean customAttributesDirty = (material.attributes != null); // && areCustomAttributesDirty( material );
+				boolean customAttributesDirty = (material.getAttributes() != null); // && areCustomAttributesDirty( material );
 
 				if ( geometry.verticesNeedUpdate || geometry.morphTargetsNeedUpdate || geometry.elementsNeedUpdate ||
 					 geometry.uvsNeedUpdate      || geometry.normalsNeedUpdate      ||
@@ -686,7 +688,7 @@ public class Mesh extends SidesObject
 				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( vk ) );
 				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__morphTargetsArrays.get( vk ), hint );
 
-				 if ( material.morphNormals ) 
+				 if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
 				 {
 					 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get( vk ) );
 					 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__morphNormalsArrays.get( vk ), hint );

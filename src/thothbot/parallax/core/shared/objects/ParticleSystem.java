@@ -52,14 +52,14 @@ public class ParticleSystem extends GeometryObject
 	// camera matrices cache
 	private Matrix4f projScreenMatrixPS;
 
-	private static ParticleBasicMaterial.ParticleBasicMaterialOptions defaultMaterialOptions = new ParticleBasicMaterial.ParticleBasicMaterialOptions();
+	private static ParticleBasicMaterial defaultMaterial = new ParticleBasicMaterial();
 	static {
-		defaultMaterialOptions.color = new Color3f((int)Math.random() * 0xffffff);
+		defaultMaterial.setColor( new Color3f((int)Math.random() * 0xffffff) );
 	};
 	
 	public ParticleSystem(Geometry geometry) 
 	{
-		this(geometry, new ParticleBasicMaterial(defaultMaterialOptions));
+		this(geometry, defaultMaterial);
 	}
 
 	public ParticleSystem(Geometry geometry, Material material) 
@@ -133,7 +133,7 @@ public class ParticleSystem extends GeometryObject
 	{		
 		this.material = Material.getBufferMaterial( this, null );
 
-		boolean customAttributesDirty = ((this.material.attributes != null) && this.material.areCustomAttributesDirty());
+		boolean customAttributesDirty = ((this.material.getAttributes() != null) && this.material.areCustomAttributesDirty());
 
 		if ( this.geometry.verticesNeedUpdate || this.geometry.colorsNeedUpdate || this.sortParticles || customAttributesDirty )
 			this.setBuffers( renderer, this.geometry, GLenum.DYNAMIC_DRAW.getValue());

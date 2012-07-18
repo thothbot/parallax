@@ -46,13 +46,23 @@ public class Line extends GeometryObject
 	};
 
 	private TYPE type;
+	
+	private static LineBasicMaterial defaultMaterial = new LineBasicMaterial();
+	static {
+		defaultMaterial.setColor( new Color3f((int)Math.random() * 0xffffff) );
+	};
 
-	public Line(Geometry geometry, Material material) 
+	public Line(Geometry geometry) 
+	{
+		this(geometry, Line.defaultMaterial, Line.TYPE.STRIPS);
+	}
+
+	public Line(Geometry geometry, LineBasicMaterial material) 
 	{
 		this(geometry, material, Line.TYPE.STRIPS);
 	}
 
-	public Line(Geometry geometry, Material material, Line.TYPE type) 
+	public Line(Geometry geometry, LineBasicMaterial material, Line.TYPE type) 
 	{
 		super();
 		this.geometry = geometry;
@@ -62,16 +72,6 @@ public class Line extends GeometryObject
 		if (this.geometry != null)
 			if (this.geometry.getBoundingSphere() != null)
 				this.geometry.computeBoundingSphere();
-	}
-
-	private static LineBasicMaterial.LineBasicMaterialOptions defaultMaterialOptions = new LineBasicMaterial.LineBasicMaterialOptions();
-	static {
-		defaultMaterialOptions.color = new Color3f((int)Math.random() * 0xffffff);
-	};
-
-	public Line(Geometry geometry) 
-	{
-		this(geometry, new LineBasicMaterial(defaultMaterialOptions), Line.TYPE.STRIPS);
 	}
 
 	public void setType(Line.TYPE type)
@@ -94,7 +94,7 @@ public class Line extends GeometryObject
 				? GLenum.LINE_STRIP.getValue() 
 				: GLenum.LINES.getValue();
 
-		setLineWidth( gl, material.linewidth );
+		setLineWidth( gl, ((LineBasicMaterial)material).getLinewidth() );
 
 		gl.drawArrays( primitives, 0, geometryBuffer.__webglLineCount );
 
@@ -146,7 +146,7 @@ public class Line extends GeometryObject
 
 		this.material = Material.getBufferMaterial( this, null );
 
-		boolean customAttributesDirty = ((this.material.attributes != null) && this.material.areCustomAttributesDirty());
+		boolean customAttributesDirty = ((this.material.getAttributes() != null) && this.material.areCustomAttributesDirty());
 
 		if ( this.geometry.verticesNeedUpdate ||  this.geometry.colorsNeedUpdate || customAttributesDirty )
 			this.setBuffers( gl, geometry, GLenum.DYNAMIC_DRAW.getValue() );
