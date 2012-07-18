@@ -61,7 +61,9 @@ import com.google.gwt.user.client.ui.Widget;
  * [D or *right*] - translate the {@link #getObject()} to the right.<br>
  * [R] - translate the {@link #getObject()} up.<br>
  * [F] - translate the {@link #getObject()} down.<br>
- * [Q] - freez the {@link #getObject()}.<br>
+ * [Q] - freez the {@link #getObject()}.
+ * <p>
+ * Based on the three.js code.
  * 
  * @author thothbot
  *

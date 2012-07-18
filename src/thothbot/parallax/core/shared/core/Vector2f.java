@@ -315,10 +315,10 @@ public class Vector2f implements Vector
 		return (float) Math.sqrt(distanceToSquared(v1));
 	}
 
-	public void setLength(float l)
+	public Vector2f setLength(float l)
 	{
 		normalize();
-		multiply(l);
+		return multiply(l);
 	}
 
 	public void lerp(Vector2f v1, float alpha)

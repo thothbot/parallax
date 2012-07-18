@@ -278,10 +278,10 @@ public class Vector3f extends Vector2f implements Vector
 		return this;
 	}
 
-	public void setLength(float l)
+	public Vector3f setLength(float l)
 	{
-		this.normalize();
-		multiply(l);
+		normalize();
+		return multiply(l);
 	}
 
 	public void lerp(Vector3f v1, float alpha)
