@@ -93,7 +93,7 @@ import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.ParticleSystem;
 import thothbot.parallax.core.shared.objects.Ribbon;
-import thothbot.parallax.core.shared.objects.SidesObject;
+import thothbot.parallax.core.shared.objects.HasSides;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.objects.Sprite;
 import thothbot.parallax.core.shared.objects.WebGLObject;
@@ -1063,7 +1063,7 @@ public class WebGLRenderer
 
 		this.cache_currentGeometryGroupHash = -1;
 
-		setObjectFaces( (SidesObject) object );
+		setObjectFaces( (HasSides) object );
 
 //		if ( object.immediateRenderCallback )
 //			object.immediateRenderCallback( program, this._gl, this._frustum );
@@ -1177,8 +1177,8 @@ public class WebGLRenderer
 					setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits());
 				}
 
-				if(object instanceof SidesObject)
-					setObjectFaces( (SidesObject) object );
+				if(object instanceof HasSides)
+					setObjectFaces( (HasSides) object );
 
 				// TODO: Extras
 //				if ( buffer instanceof THREE.BufferGeometry )
@@ -1751,7 +1751,7 @@ public class WebGLRenderer
 		
 		parameters.wrapAround = material instanceof HasWrap && ((HasWrap)material).isWrapAround();
 
-		parameters.doubleSided = object instanceof SidesObject && ((SidesObject)object).isDoubleSided();
+		parameters.doubleSided = object instanceof HasSides && ((HasSides)object).isDoubleSided();
 
 		Log.debug("initMaterial() called new Program");
 
@@ -2561,7 +2561,7 @@ Log.error("?????????????");
 		getGL().enable( GLenum.CULL_FACE.getValue() );
 	}
 
-	private void setObjectFaces( SidesObject object ) 
+	private void setObjectFaces( HasSides object ) 
 	{
 		if ( this.cache_oldDoubleSided == null || this.cache_oldDoubleSided != object.isDoubleSided() ) 
 		{

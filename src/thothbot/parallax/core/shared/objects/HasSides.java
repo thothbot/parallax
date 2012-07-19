@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.objects;
 
-public abstract class SidesObject extends GeometryObject
+public interface HasSides
 {
 	public abstract boolean isFlipSided();
 

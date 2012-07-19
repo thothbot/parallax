@@ -51,7 +51,7 @@ import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 
-public class Mesh extends SidesObject
+public class Mesh  extends GeometryObject implements HasSides
 {
 	private Boolean flipSided;
 	private Boolean doubleSided;

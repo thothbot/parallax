@@ -38,7 +38,7 @@ import thothbot.parallax.core.shared.objects.GeometryObject;
 
 public abstract class Material
 {
-	public static int MaterialCount;
+	private static int MaterialCount;
 
 	/**
 	 * Shading
