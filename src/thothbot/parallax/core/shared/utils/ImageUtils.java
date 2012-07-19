@@ -29,18 +29,15 @@ import thothbot.parallax.core.client.textures.CubeTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * This class implements some Image-related helper methods.
@@ -57,7 +54,7 @@ public final class ImageUtils
         loadingArea.getElement().getStyle().setProperty("width", "1px");
         loadingArea.getElement().getStyle().setProperty("height", "1px");
         loadingArea.getElement().getStyle().setProperty("overflow", "hidden");
-        RootLayoutPanel.get().add(loadingArea);
+        RootPanel.get().add(loadingArea);
 	}
 	
 	/**
@@ -65,56 +62,41 @@ public final class ImageUtils
 	 */
 	public static interface Callback 
 	{
-		void run(Image image);
+		void run(Texture texture);
+	}
+
+	public static Texture loadTexture(ImageResource imageResource)
+	{
+		return ImageUtils.loadTexture(imageResource, Texture.MAPPING_MODE.UV);
+	}
+	
+	public static Texture loadTexture(ImageResource imageResource, Texture.MAPPING_MODE mapping)
+	{
+		return ImageUtils.loadTexture(imageResource, mapping, new Callback() {
+			
+			@Override
+			public void run(Texture texture) {
+				texture.setNeedsUpdate(true);
+			}
+		});
 	}
 	
 	/**
 	 * Loading of texture.
 	 * 
-	 * @param path     the string path to the image
+	 * @param imageResource    the {@link ImageResource} instance
 	 * @param mapping  the mapping mode {@link thothbot.parallax.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
 	 * @param callback the {@link ImageUtils.Callback}. Not necessary.
 	 * 
 	 * @return the new instance of {@link thothbot.parallax.core.client.textures.Texture}
-	 */
-	public static Texture loadTexture(String path, Texture.MAPPING_MODE mapping, final Callback callback)
-	{
-		Image image = new Image();
-		image.setUrl(path);
-
-		return ImageUtils.loadTexture(image, mapping, callback);
-	}
-	
-	/**
-	 * Loading of texture.
-	 * 
-	 * @param imageResource  the {@link ImageResource} instance
-	 * @param mapping        the mapping mode {@link thothbot.parallax.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
-	 * @param callback       the {@link ImageUtils.Callback}. Not necessary.
-	 * 
-	 * @return the new instance of {@link Texture}
 	 */
 	public static Texture loadTexture(ImageResource imageResource, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
 		Image image = new Image();
 		image.setUrl(imageResource.getSafeUri());
-		return ImageUtils.loadTexture(image, mapping, callback);
-	}
-
-	/**
-	 * Loading of texture.
-	 * 
-	 * @param image    the instance of {@link Image}
-	 * @param mapping  the mapping mode {@link thothbot.parallax.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
-	 * @param callback the {@link ImageUtils.Callback}. Not necessary.
-	 * 
-	 * @return the new instance of {@link thothbot.parallax.core.client.textures.Texture}
-	 */
-	public static Texture loadTexture(final Image image, Texture.MAPPING_MODE mapping, final Callback callback)
-	{
+		
 		loadingArea.add(image);
-		Texture texture = new Texture(image.getElement(), mapping);
-		texture.setNeedsUpdate(true);
+		final Texture texture = new Texture(image.getElement(), mapping);
 
 	    // Hook up an error handler, so that we can be informed if the image fails
 	    // to load.
@@ -132,19 +114,37 @@ public final class ImageUtils
 			public void onLoad(LoadEvent event) 
 			{			
 				if (callback != null)
-					callback.run((Image)event.getSource());
+					callback.run(texture);
 			}
 		});
 
 		return texture;
 	}
 	
+	public static CubeTexture loadTextureCube(List<ImageResource> imageResources)
+	{
+		return ImageUtils.loadTextureCube(imageResources, Texture.MAPPING_MODE.UV);
+	}
+	
+	public static CubeTexture loadTextureCube(List<ImageResource> imageResources, Texture.MAPPING_MODE mapping)
+	{
+		return ImageUtils.loadTextureCube(imageResources, mapping, new Callback() {
+			
+			@Override
+			public void run(Texture texture) {
+				texture.setNeedsUpdate(true);
+			}
+		});
+	}
+			
 	public static CubeTexture loadTextureCube(List<ImageResource> imageResources, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
 		List<Element> images = new ArrayList<Element>();
+		final CubeTexture texture = new CubeTexture(images, mapping);
+		
 		for(ImageResource ir: imageResources)
 		{
-			final Image image = new Image();
+			Image image = new Image();
 			loadingArea.add(image);
 
 			image.setUrl(ir.getSafeUri());
@@ -162,16 +162,13 @@ public final class ImageUtils
 				public void onLoad(LoadEvent event) 
 				{		
 					if (callback != null)
-						callback.run((Image)event.getSource());
+						callback.run(texture);
 				}
 			});
 			
 			images.add(image.getElement());
 		}
 		
-		CubeTexture texture = new CubeTexture(images, mapping);
-		texture.setNeedsUpdate(true);
-				
 		return texture;
 	}
 }
