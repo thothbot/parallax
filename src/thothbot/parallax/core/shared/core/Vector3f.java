@@ -118,6 +118,19 @@ public class Vector3f extends Vector2f implements Vector
 		this.z = z;
 		return this;
 	}
+	
+	/**
+	 * Set value of the vector to the specified (A, A, A) coordinates.
+	 * 
+	 * @param a the X, Y and Z coordinate
+	 */
+	public Vector3f set(float a)
+	{
+		this.x = a;
+		this.y = a;
+		this.z = a;
+		return this;
+	}
 
 	@Override
 	public Vector3f add(Vector v)

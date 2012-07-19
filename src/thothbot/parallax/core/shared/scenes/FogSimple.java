@@ -74,7 +74,7 @@ public final class FogSimple extends Fog
 	 * 
 	 * @return the near fog parameter
 	 */
-	public double getNear()
+	public float getNear()
 	{
 		return near;
 	}
@@ -94,7 +94,7 @@ public final class FogSimple extends Fog
 	 * 
 	 * @return the far fog parameter
 	 */
-	public double getFar()
+	public float getFar()
 	{
 		return far;
 	}

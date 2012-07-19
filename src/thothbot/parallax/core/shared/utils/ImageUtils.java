@@ -37,7 +37,10 @@ import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class implements some Image-related helper methods.
@@ -47,14 +50,14 @@ import com.google.gwt.user.client.ui.Image;
  */
 public final class ImageUtils 
 {
-	private static Element loadingArea = DOM.createDiv();
+	private static FlowPanel loadingArea = new FlowPanel();
 	static {
-		loadingArea.getStyle().setProperty("visibility", "hidden");
-        loadingArea.getStyle().setProperty("position", "absolute");
-        loadingArea.getStyle().setProperty("width", "1px");
-        loadingArea.getStyle().setProperty("height", "1px");
-        loadingArea.getStyle().setProperty("overflow", "hidden");
-		Document.get().getBody().appendChild(loadingArea);
+		loadingArea.getElement().getStyle().setProperty("visibility", "hidden");
+        loadingArea.getElement().getStyle().setProperty("position", "absolute");
+        loadingArea.getElement().getStyle().setProperty("width", "1px");
+        loadingArea.getElement().getStyle().setProperty("height", "1px");
+        loadingArea.getElement().getStyle().setProperty("overflow", "hidden");
+        RootLayoutPanel.get().add(loadingArea);
 	}
 	
 	/**
@@ -109,7 +112,7 @@ public final class ImageUtils
 	 */
 	public static Texture loadTexture(final Image image, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
-		loadingArea.appendChild(image.getElement());
+		loadingArea.add(image);
 		Texture texture = new Texture(image.getElement(), mapping);
 		texture.setNeedsUpdate(true);
 
@@ -142,7 +145,7 @@ public final class ImageUtils
 		for(ImageResource ir: imageResources)
 		{
 			final Image image = new Image();
-			loadingArea.appendChild(image.getElement());
+			loadingArea.add(image);
 
 			image.setUrl(ir.getSafeUri());
 			image.addErrorHandler(new ErrorHandler() {

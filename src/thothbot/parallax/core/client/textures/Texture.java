@@ -77,16 +77,16 @@ public class Texture
 	private Vector2f offset;
 	private Vector2f repeat;
 
-	private Texture.MAPPING_MODE mapping = Texture.MAPPING_MODE.UV;
+	private Texture.MAPPING_MODE mapping;
 
-	private TextureWrapMode wrapS = TextureWrapMode.CLAMP_TO_EDGE;
-	private TextureWrapMode wrapT = TextureWrapMode.CLAMP_TO_EDGE;
+	private TextureWrapMode wrapS;
+	private TextureWrapMode wrapT;
 
-	private TextureMagFilter magFilter = TextureMagFilter.LINEAR;
-	private TextureMinFilter minFilter = TextureMinFilter.LINEAR_MIPMAP_LINEAR;
+	private TextureMagFilter magFilter;
+	private TextureMinFilter minFilter;
 
-	private PixelFormat format = PixelFormat.RGBA;
-	private DataType type = DataType.UNSIGNED_BYTE;
+	private PixelFormat format;
+	private DataType type;
 
 	private boolean isGenerateMipmaps = true;
 	private boolean isPremultiplyAlpha = false;
@@ -100,9 +100,7 @@ public class Texture
 	 */
 	public Texture() 
 	{
-		this.id = Texture.TextureCount++;
-		this.offset = new Vector2f(0, 0);
-		this.repeat = new Vector2f(1, 1);
+		this(null);
 	}
 
 	/**
@@ -112,8 +110,7 @@ public class Texture
 	 */
 	public Texture(Element image) 
 	{
-		this();
-		this.image = image;
+		this(image, Texture.MAPPING_MODE.UV);
 	}
 
 	/**
@@ -124,10 +121,22 @@ public class Texture
 	 */
 	public Texture(Element image, Texture.MAPPING_MODE mapping)
 	{
-		this(image);
-		this.mapping = mapping;
+		this(image, mapping, TextureWrapMode.CLAMP_TO_EDGE, TextureWrapMode.CLAMP_TO_EDGE);
+	}
+	
+	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
+			TextureWrapMode wrapT)
+	{
+		this(image, mapping, wrapS, wrapT, TextureMagFilter.LINEAR, 
+				TextureMinFilter.LINEAR_MIPMAP_LINEAR);
 	}
 
+	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
+			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter)
+	{
+		this(image, mapping, wrapS, wrapT, magFilter, minFilter, PixelFormat.RGBA, DataType.UNSIGNED_BYTE);
+	}
+	
 	/**
 	 * Constructor will create a texture instance.
 	 * 
@@ -144,8 +153,9 @@ public class Texture
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
 			PixelFormat format, DataType type) 
 	{	
-		this(image, mapping);
-
+		this.image = image;		
+		this.mapping = mapping;
+		
 		this.wrapS = wrapS;
 		this.wrapT = wrapT;
 
@@ -154,6 +164,10 @@ public class Texture
 
 		this.format = format;
 		this.type = type;
+		
+		this.id = Texture.TextureCount++;
+		this.offset = new Vector2f(0, 0);
+		this.repeat = new Vector2f(1, 1);
 	}
 	
 	/**
@@ -266,6 +280,13 @@ public class Texture
 	 */
 	public Element getImage() {
 		return this.image;
+	}
+	
+	/**
+	 * Sets texture media element.
+	 */
+	public void setImage(Element image) {
+		this.image = image;
 	}
 
 	/**
