@@ -508,6 +508,16 @@ public class WebGLRenderer
 	}
 
 	/**
+	 * Sets the clear color, using hex for the color.<br>
+	 * 
+	 * @param hex the clear color value.
+	 */
+	public void setClearColorHex( int hex )
+	{
+		setClearColorHex(hex, 1.0f);
+	}
+
+	/**
 	 * Sets the clear color, using hex for the color and alpha for the opacity.<br>
 	 * Default clear clolor is 0x000000 - black.<br>
 	 * Default clear alpha is 1.0 - opaque.<br>

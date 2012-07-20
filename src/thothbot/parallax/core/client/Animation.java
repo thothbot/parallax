@@ -110,7 +110,7 @@ public abstract class Animation
 	}
 	
 	/**
-	 * Stops this rendering. If the rendering is running or is
+	 * Stops this animation. If the animation is running or is
 	 * scheduled to run, {@link #onStop()} will be called.
 	 */
 	public void stop()
@@ -135,7 +135,7 @@ public abstract class Animation
 	}
 
 	/**
-	 * Run this rendering. If the rendering is already running, it will be
+	 * Run this animation. If the animation is already running, it will be
 	 * canceled first.
 	 * <p>
 	 * If the element is not <code>null</code>, the {@link #onUpdate(double)}
@@ -159,19 +159,19 @@ public abstract class Animation
 	}
 
 	/**
-	 * Called immediately after the rendering is stopped. The default
+	 * Called immediately after the animation is stopped. The default
 	 * implementation of this method calls {@link #onStop()} only if the
 	 * animation has actually started running.
 	 */
 	protected abstract void onStop();
 
 	/**
-	 * Called immediately before the rendering starts.
+	 * Called immediately before the animation starts.
 	 */
 	protected abstract void onStart();
 
 	/**
-	 * Called when the rendering should be updated.
+	 * Called when the animation should be updated.
 	 *  
 	 * @param duration
 	 *            The duration of the {@link Animation} in milliseconds.
@@ -225,7 +225,7 @@ public abstract class Animation
 		}
 		else if (isStarted) 
 		{
-			// Rendering is in progress.
+			// Animation is in progress.
 			onUpdate(curTime - this.startTime - stoppingDelta);
 
 			// Check if this run was canceled.

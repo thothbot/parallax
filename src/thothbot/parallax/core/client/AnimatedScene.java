@@ -66,7 +66,7 @@ public abstract class AnimatedScene extends Animation
 	}
 	
 	/**
-	 * Loads the main {@link Scene} for the Rendering. 
+	 * Loads the main {@link Scene} for the {@link WebGLRenderer}. 
 	 */
 	protected void loadScene()
 	{

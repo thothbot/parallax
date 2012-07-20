@@ -30,7 +30,6 @@ import thothbot.parallax.core.client.widget.Debugger;
 import thothbot.parallax.core.client.widget.LoadingPanel;
 import thothbot.parallax.core.resources.CoreResources;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Position;
@@ -51,68 +50,20 @@ import com.google.gwt.user.client.ui.LayoutPanel;
  */
 public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets, HasHandlers
 {	
-	/**
-	 * Parameters for the {@link RenderingPanel}.
-	 * @author thothbot
-	 *
-	 */
-	public static class RenderPanelAttributes 
-	{
-		/**
-		 * Sets the Alpha flag for the {@link Canvas3d}. Default: true.
-		 */
-		public boolean isAlphaEnabled = true;
-		/**
-		 * Sets the Depth flag for the {@link Canvas3d}. Default: true.
-		 */
-		public boolean isDepthEnabled  = true;
-		/**
-		 * Sets the PremultipliedAlpha flag for the {@link Canvas3d}. Default: true.
-		 */
-		public boolean isPremultipliedAlphaEnabled = true;
-		/**
-		 * Sets the Antialias flag for the {@link Canvas3d}. Default: true.
-		 */
-		public boolean isAntialiasEnabled = true;
-		/**
-		 * Sets the Stencil flag for the {@link Canvas3d}. Default: true.
-		 */
-		public boolean isStencilEnabled = true;
-		/**
-		 * Sets the PreserveDrawingBuffer  flag for the {@link Canvas3d}. Default: false.
-		 */
-		public boolean isPreserveDrawingBufferEnabled = false;
-		
-		/**
-		 * Show debugger in the {@link RenderingPanel}. Default: false
-		 */
-		public boolean isDebugEnabled = false;
+    // Sets the background color for the {@link Canvas3d}. Default: black (#000000).
+	private int clearColor = 0x000000;
+
+	// Sets the background alpha value for the {@link Canvas3d}. Default: opaque (1.0).
+	private float clearAlpha = 1.0f;
 	
-		// Renderer attributes
-		/**
-		 * Sets the Shaders {@link thothbot.parallax.core.client.renderers.WebGLRenderer.PRECISION} value. Default: highp.
-		 */
-		public WebGLRenderer.PRECISION precision  = WebGLRenderer.PRECISION.HIGHP;
-		/**
-		 * Sets the background color for the {@link Canvas3d}. Default: black (#000000).
-		 */
-		public int clearColor = 0x000000;
-		/**
-		 * Sets the background alpha value for the {@link Canvas3d}. Default: opaque (1.0).
-		 */
-		public float clearAlpha = 1.0f;
-		/**
-		 * Sets the max {@link Scene} lights. Default: 4.
-		 */
-		public int maxLights = 4;
-	}
+	private Canvas3dAttributes canvas3dAttributes;
 	
 	private AnimatedScene animatedScene;
-	private RenderPanelAttributes attributes;
 	private HandlerManager handlerManager;
 	private boolean isLoaded = false;
 		
 	// Debug panel
+	private boolean isDebugEnabled;
 	private Debugger debugger;
 	
 	// Loading info panel
@@ -121,27 +72,25 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	private WebGLRenderer renderer;
 
 	/**
-	 * Default constructor will create new instance of the widget with 
-	 * default {@link RenderingPanel.RenderPanelAttributes}. 
-	 */
-	public RenderingPanel()
-	{
-		this(new RenderingPanel.RenderPanelAttributes());
-	}
-	
-	/**
 	 * This constructor will create new instance of the widget.
 	 * 
 	 * @param attributes the attributes of the widget.
 	 */
-	public RenderingPanel(RenderPanelAttributes attributes) 
+	public RenderingPanel() 
 	{
-		this.attributes = attributes;
-
 		this.handlerManager = new HandlerManager(this);
 		
+		this.ensureDebugId("renderingPanel");
 		this.getElement().getStyle().setPosition(Position.RELATIVE);
-		this.getElement().getStyle().setBackgroundColor("#" + Integer.toHexString(attributes.clearColor));
+		this.canvas3dAttributes = new Canvas3dAttributes();
+//		this.canvas3dAttributes.setAlphaEnable(true);
+//		this.canvas3dAttributes.setDepthEnable(true);
+		this.canvas3dAttributes.setStencilEnable(true);
+//		this.canvas3dAttributes.setAntialiasEnable(true);
+//		this.canvas3dAttributes.setPremultipliedAlphaEnable(true);
+//		this.canvas3dAttributes.setPreserveDrawingBufferEnable(false);
+
+		updateBackground();
 
 		// Loading specific styles
 		CoreResources.INSTANCE.css().ensureInjected();
@@ -150,7 +99,59 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		this.loadingPanal = new LoadingPanel();
 		add(this.loadingPanal);
 	}
+	
+	/**
+	 * Gets {@link WebGLRenderer}. Use {@link AnimatedScene#getRenderer()} instead. 
+	 *  
+	 * @return {@link WebGLRenderer}
+	 */
+	public WebGLRenderer getRenderer()
+	{
+		return this.renderer;
+	}
 
+	/**
+	 * Gets {@link AnimatedScene} instance associated with the widget.
+	 * 
+	 * @return the {@link AnimatedScene}
+	 */
+	public AnimatedScene getAnimatedScene()
+	{
+		return this.animatedScene;
+	}
+	
+	/**
+	 * Sets the {@link AnimatedScene} to the widget.
+	 * @param animatedScene
+	 */
+	public void setAnimatedScene(AnimatedScene animatedScene)
+	{
+		this.animatedScene = animatedScene;
+	}
+	
+	public void enableDebug(boolean enabled)
+	{
+		this.isDebugEnabled = enabled;
+	}
+	
+	public void setBackground(int color)
+	{
+		setBackground(color, this.clearAlpha);
+	}
+	
+	public void setBackground(int color, float alpha)
+	{
+		this.clearColor = color;
+		this.clearAlpha = alpha;
+		
+		updateBackground();
+	}
+	
+	public Canvas3dAttributes getCanvas3dAttributes() 
+	{
+		return this.canvas3dAttributes;
+	}
+		
 	/**
 	 * Load renderer
 	 */
@@ -164,9 +165,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 			Log.debug("RenderingPanel: initRenderer()");
 
 			this.renderer = new WebGLRenderer(loadCanvas());
-			this.renderer.setClearColorHex(this.attributes.clearColor, this.attributes.clearAlpha);
-			this.renderer.setPrecision(this.attributes.precision);
-			this.renderer.setMaxLights(this.attributes.maxLights);
+			this.renderer.setClearColorHex(this.clearColor, this.clearAlpha);
 		}
 	}
 	
@@ -179,15 +178,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	{
 		Log.debug("RenderingPanel: loadCanvas()");
 		
-		Canvas3dAttributes context3dAttributes = new Canvas3dAttributes();
-		context3dAttributes.setAlphaEnable(this.attributes.isAlphaEnabled);
-		context3dAttributes.setDepthEnable(this.attributes.isDepthEnabled);
-		context3dAttributes.setStencilEnable(this.attributes.isStencilEnabled);
-		context3dAttributes.setAntialiasEnable(this.attributes.isAntialiasEnabled);
-		context3dAttributes.setPremultipliedAlphaEnable(this.attributes.isPremultipliedAlphaEnabled);
-		context3dAttributes.setPreserveDrawingBufferEnable(this.attributes.isPreserveDrawingBufferEnabled);
-
-		Canvas3d canvas = new Canvas3d(context3dAttributes); 
+		Canvas3d canvas = new Canvas3d(this.canvas3dAttributes); 
 		this.add(canvas);
 
 		return canvas;
@@ -199,35 +190,14 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	private void loadDebuger()
 	{
 		// also init debugger
-		if(this.attributes.isDebugEnabled && this.debugger == null)
+		if(this.isDebugEnabled && this.debugger == null)
 		{
-			Log.debug("RenderingPanel: initDebuger()");
 			this.debugger = new Debugger(getRenderer().getInfo());
 			this.add(this.debugger);
 			this.setWidgetRightWidth(this.debugger, 1, Unit.PX, 17, Unit.EM);
 			this.setWidgetTopHeight(this.debugger, 1, Unit.PX, 2.4, Unit.EM);			
 		}
 	}
-
-	/**
-	 * Gets {@link AnimatedScene} instance associated with the widget.
-	 * 
-	 * @return the {@link AnimatedScene}
-	 */
-	public AnimatedScene getRenderingScene()
-	{
-		return this.animatedScene;
-	}
-	
-	/**
-	 * Sets the {@link AnimatedScene} to the widget.
-	 * @param animatedScene
-	 */
-	public void setRenderingScene(AnimatedScene animatedScene)
-	{
-		this.animatedScene = animatedScene;
-	}
-
 
 	/**
 	 * This method is called when a widget is attached to the browser's document. 
@@ -268,8 +238,9 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	@Override
 	public void onUnload()
 	{
-		if(getRenderingScene() != null)
-			getRenderingScene().stop();
+		if(getAnimatedScene() != null)
+			getAnimatedScene().stop();
+		
 		isLoaded = false;
 		super.onUnload();
 	}
@@ -287,25 +258,26 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 
 		setSize(this.getOffsetWidth(), this.getOffsetHeight());
 				
-		if(getRenderingScene() != null)
+		if(getAnimatedScene() != null)
 		{
 			this.animatedScene.init(getRenderer(), new AnimatedScene.AnimatedSceneCallback() {
 				
 				@Override
 				public void onUpdate()
 				{
+					// Remove loading panel
+					loadingPanal.hide();
+
+					loadDebuger();
+					
+					// Update debugger
 					if(debugger != null)
 						debugger.update();
 				}
 			});
 			handlerManager.fireEvent(new AnimationReadyEvent());
 
-			loadDebuger();
-
-			getRenderingScene().run();
-			
-			// Remove loading panel
-			this.loadingPanal.hide();
+			getAnimatedScene().run();
 		}
 	}
 
@@ -337,17 +309,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	}
 
 	/**
-	 * Gets {@link WebGLRenderer}. Use {@link AnimatedScene#getRenderer()} instead. 
-	 *  
-	 * @return {@link WebGLRenderer}
-	 */
-	@Deprecated
-	public WebGLRenderer getRenderer()
-	{
-		return this.renderer;
-	}
-
-	/**
 	 * Resizes the {@link Canvas3d} and {@link WebGLRenderer} viewport 
 	 * to (width, height), and also sets the viewport to fit that size, 
 	 * starting in (0, 0).
@@ -355,12 +316,32 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	 * @param width  the new width of the {@link Canvas3d}.
 	 * @param height the new height of the {@link Canvas3d}.
 	 */
-	public void setSize(int width, int height) 
+	private void setSize(int width, int height) 
 	{
 		Log.debug("RenderingPanel: set size: W=" + width + ", H=" + height); 
-		getRenderer().setSize(width, height);
 
 		if(this.animatedScene != null && animatedScene.getRenderer() != null)
 			animatedScene.getRenderer().setSize(width, height);
+	}
+	
+	private void updateBackground()
+	{
+		this.getElement().getStyle().setBackgroundColor(cssColor(this.clearColor));
+		if(this.clearAlpha < 1.0f)
+			this.getElement().getStyle().setOpacity(this.clearAlpha);	
+		
+		if(this.renderer != null)
+			this.renderer.setClearColorHex(this.clearColor, this.clearAlpha);
+	}
+	
+	private static String cssColor(int color)
+	{
+		String retval = "#";
+		if(color == 0)
+			retval += "000000";
+		else
+			retval += Integer.toHexString(color);
+		
+		return retval;
 	}
 }

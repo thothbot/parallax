@@ -19,11 +19,13 @@
 
 package thothbot.parallax.core.client;
 
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
+
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
  * The event is called when the {@link RenderingPanel} is fully initialized and 
- * {@link AnimatedScene} is ready for the rendering.
+ * {@link AnimatedScene} is ready for the {@link WebGLRenderer}.
  * 
  * @author thothbot
  *

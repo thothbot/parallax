@@ -198,7 +198,7 @@ public class Program
 	 */
 	private WebGLShader getShader(Class<?> type, String string)
 	{
-		Log.debug("Called Program.getShader() for type " + type.getName() + " and source is: \n" + string);
+		Log.debug("Called Program.getShader() for type " + type.getName());
 		WebGLShader shader = null;
 
 		if (type == ChunksFragmentShader.class)

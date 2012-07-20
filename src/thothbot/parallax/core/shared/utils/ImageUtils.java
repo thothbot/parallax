@@ -72,13 +72,7 @@ public final class ImageUtils
 	
 	public static Texture loadTexture(ImageResource imageResource, Texture.MAPPING_MODE mapping)
 	{
-		return ImageUtils.loadTexture(imageResource, mapping, new Callback() {
-			
-			@Override
-			public void run(Texture texture) {
-				texture.setNeedsUpdate(true);
-			}
-		});
+		return ImageUtils.loadTexture(imageResource, mapping, null);
 	}
 	
 	/**
@@ -113,6 +107,7 @@ public final class ImageUtils
 			@Override
 			public void onLoad(LoadEvent event) 
 			{			
+				texture.setNeedsUpdate(true);
 				if (callback != null)
 					callback.run(texture);
 			}
@@ -128,13 +123,7 @@ public final class ImageUtils
 	
 	public static CubeTexture loadTextureCube(List<ImageResource> imageResources, Texture.MAPPING_MODE mapping)
 	{
-		return ImageUtils.loadTextureCube(imageResources, mapping, new Callback() {
-			
-			@Override
-			public void run(Texture texture) {
-				texture.setNeedsUpdate(true);
-			}
-		});
+		return ImageUtils.loadTextureCube(imageResources, mapping, null);
 	}
 			
 	public static CubeTexture loadTextureCube(List<ImageResource> imageResources, Texture.MAPPING_MODE mapping, final Callback callback)
@@ -161,6 +150,7 @@ public final class ImageUtils
 				@Override
 				public void onLoad(LoadEvent event) 
 				{		
+					texture.setNeedsUpdate(true);
 					if (callback != null)
 						callback.run(texture);
 				}
@@ -168,7 +158,7 @@ public final class ImageUtils
 			
 			images.add(image.getElement());
 		}
-		
+
 		return texture;
 	}
 }

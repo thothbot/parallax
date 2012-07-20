@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class InfoPanel extends LayoutPanel
 {
 	AbsolutePanel popupPanel;
+	boolean isVisible;
 
 	public abstract Widget getContent();
 
@@ -52,7 +53,10 @@ public abstract class InfoPanel extends LayoutPanel
 	 */
 	public void show()
 	{
+		if(isVisible) return;
+
 		this.popupPanel.setVisible(true);
+		isVisible = true;
 	}
 	
 	/**
@@ -60,6 +64,9 @@ public abstract class InfoPanel extends LayoutPanel
 	 */
 	public void hide()
 	{
+		if(!isVisible) return;
+		
 		this.popupPanel.setVisible(false);
+		isVisible = false;
 	}
 }
