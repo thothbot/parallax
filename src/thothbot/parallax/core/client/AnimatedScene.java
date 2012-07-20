@@ -122,7 +122,7 @@ public abstract class AnimatedScene extends Animation
 	 * Initialize the scene.
 	 * 
 	 * @param renderer the {@link WebGLRenderer} instance.
-	 * @param renderingSceneCallback this parameter used for updating debug info. Can be null.
+	 * @param animatedSceneCallback this parameter used for updating debug info. Can be null.
 	 */
 	public void init(WebGLRenderer renderer, AnimatedSceneCallback animatedSceneCallback)
 	{

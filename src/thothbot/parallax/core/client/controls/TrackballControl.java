@@ -1,24 +1,25 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * This file is part of Squirrel project.
+ * This file is part of Parallax project.
  * 
- * Squirrel is free software: you can redistribute it and/or modify it 
+ * Parallax is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by the 
  * Free Software Foundation, either version 3 of the License, or (at your 
  * option) any later version.
  * 
- * Squirrel is distributed in the hope that it will be useful, but 
+ * Parallax is distributed in the hope that it will be useful, but 
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License 
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Squirrel. If not, see http://www.gnu.org/licenses/.
+ * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
 package thothbot.parallax.core.client.controls;
 
+import thothbot.parallax.core.client.AnimatedScene;
 import thothbot.parallax.core.shared.core.Quaternion;
 import thothbot.parallax.core.shared.core.Vector2f;
 import thothbot.parallax.core.shared.core.Vector3f;
@@ -219,7 +220,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	}
 
 	/**
-	 * The method must be called in the {@link RenderingScene}} onUpdate method.
+	 * The method must be called in the {@link AnimatedScene}} onUpdate method.
 	 */
 	public void update() 
 	{

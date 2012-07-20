@@ -73,8 +73,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 
 	/**
 	 * This constructor will create new instance of the widget.
-	 * 
-	 * @param attributes the attributes of the widget.
 	 */
 	public RenderingPanel() 
 	{
