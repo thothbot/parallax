@@ -34,7 +34,7 @@ import com.google.gwt.core.client.Duration;
  * @author thothbot
  *
  */
-public abstract class RenderingScene extends Rendering
+public abstract class AnimatedScene extends Animation
 {
 	/**
 	 * Basically use for the debugger. Check if needed.
@@ -42,7 +42,7 @@ public abstract class RenderingScene extends Rendering
 	 * @author thothbot
 	 *
 	 */
-	public static interface RenderingSceneCallback
+	public static interface AnimatedSceneCallback
 	{
 		/**
 		 * Called when {@link #onUpdate()} called.
@@ -53,10 +53,10 @@ public abstract class RenderingScene extends Rendering
 	private WebGLRenderer renderer;
 	private Scene scene;
 	private Camera camera;
-	private RenderingSceneCallback renderingSceneCallback;
+	private AnimatedSceneCallback animatedSceneCallback;
 
 	/**
-	 * Gets {@link WebGLRenderer} associated with the RenderingScene.
+	 * Gets {@link WebGLRenderer} associated with the AnimatedScene.
 	 * 
 	 * @return the {@link WebGLRenderer} instance.
 	 */
@@ -124,7 +124,7 @@ public abstract class RenderingScene extends Rendering
 	 * @param renderer the {@link WebGLRenderer} instance.
 	 * @param renderingSceneCallback this parameter used for updating debug info. Can be null.
 	 */
-	public void init(WebGLRenderer renderer, RenderingSceneCallback renderingSceneCallback)
+	public void init(WebGLRenderer renderer, AnimatedSceneCallback animatedSceneCallback)
 	{
 		if(this.renderer != null)
 			return;
@@ -134,7 +134,7 @@ public abstract class RenderingScene extends Rendering
 		loadScene();
 		loadCamera();
 
-		this.renderingSceneCallback = renderingSceneCallback;		
+		this.animatedSceneCallback = animatedSceneCallback;		
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public abstract class RenderingScene extends Rendering
 		this.renderer.getInfo().getTimer().render = new Duration();
 		this.renderer.render(getScene(), getCamera());
 		
-		renderingSceneCallback.onUpdate();
+		animatedSceneCallback.onUpdate();
 	}
 	
 	/**

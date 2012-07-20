@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.client.controls;
 
-import thothbot.parallax.core.client.RenderingScene;
+import thothbot.parallax.core.client.AnimatedScene;
 import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.objects.Object3D;
@@ -160,7 +160,7 @@ public class FirstPersonControl extends Control
 	}
 		
 	/**
-	 * The method must be called in the {@link RenderingScene}} onUpdate method.
+	 * The method must be called in the {@link AnimatedScene}} onUpdate method.
 	 * 
 	 * @param delta the time in milliseconds needed to render one frame. 
 	 */

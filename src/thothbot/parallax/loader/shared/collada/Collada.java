@@ -19,33 +19,65 @@
 
 package thothbot.parallax.loader.shared.collada;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.loader.shared.collada.dae.DaeDocument;
 
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.XMLParser;
+import com.mouchel.gwt.xpath.client.XPath;
 
 public class Collada 
 {
+	public interface Callback 
+	{
+		public void onReady();
+	}
+
 	private DaeDocument daeDocument;
 	private Document document;
-	
-	public Collada() 
+
+	public Element getSourceElementById(String id) 
 	{
-		document = null;
+		return (Element) XPath.evaluateSingle(document, "//source[@id='"+id+"']");
 	}
-	
-	public Document getDocument() {
-		return document;
+
+	public void load(String url, final Callback callback) throws RequestException 
+	{
+		RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, url);
+		rb.sendRequest(null, new RequestCallback() {
+
+			@Override
+			public void onResponseReceived(Request request, Response response) 
+			{
+				document = parseXML(response.getText());
+				callback.onReady();
+			}
+
+			@Override
+			public void onError(Request request, Throwable exception) 
+			{
+				Log.error("Error while loading COLLADA file.");
+			}
+		});
 	}
-	
+
 	public Document parseXML(String xmlString) 
 	{
 		document = XMLParser.parse(xmlString);
 
 		daeDocument = new DaeDocument(document);
-
 		daeDocument.readScene();
 
+		return document;
+	}
+
+	public Document getDocument() {
 		return document;
 	}
 }

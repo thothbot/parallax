@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 /**
- * A widget where {@link RenderingScene} will be rendered. 
+ * A widget where {@link AnimatedScene} will be rendered. 
  * This is complex widget which used for display {@link LoadingPanel} and {@link Debugger}.
  * 
  * @author thothbot
@@ -107,7 +107,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		public int maxLights = 4;
 	}
 	
-	private RenderingScene renderingScene;
+	private AnimatedScene animatedScene;
 	private RenderPanelAttributes attributes;
 	private HandlerManager handlerManager;
 	private boolean isLoaded = false;
@@ -210,22 +210,22 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	}
 
 	/**
-	 * Gets {@link RenderingScene} instance associated with the widget.
+	 * Gets {@link AnimatedScene} instance associated with the widget.
 	 * 
-	 * @return the {@link RenderingScene}
+	 * @return the {@link AnimatedScene}
 	 */
-	public RenderingScene getRenderingScene()
+	public AnimatedScene getRenderingScene()
 	{
-		return this.renderingScene;
+		return this.animatedScene;
 	}
 	
 	/**
-	 * Sets the {@link RenderingScene} to the widget.
-	 * @param renderingScene
+	 * Sets the {@link AnimatedScene} to the widget.
+	 * @param animatedScene
 	 */
-	public void setRenderingScene(RenderingScene renderingScene)
+	public void setRenderingScene(AnimatedScene animatedScene)
 	{
-		this.renderingScene = renderingScene;
+		this.animatedScene = animatedScene;
 	}
 
 
@@ -263,7 +263,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	
 	/**
 	 * This method is called when a widget is detached from the browser's document.
-	 * Here is called {@link Rendering#stop()} method.
+	 * Here is called {@link Animation#stop()} method.
 	 */
 	@Override
 	public void onUnload()
@@ -289,7 +289,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				
 		if(getRenderingScene() != null)
 		{
-			this.renderingScene.init(getRenderer(), new RenderingScene.RenderingSceneCallback() {
+			this.animatedScene.init(getRenderer(), new AnimatedScene.AnimatedSceneCallback() {
 				
 				@Override
 				public void onUpdate()
@@ -298,7 +298,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 						debugger.update();
 				}
 			});
-			handlerManager.fireEvent(new RenderingReadyEvent());
+			handlerManager.fireEvent(new AnimationReadyEvent());
 
 			loadDebuger();
 
@@ -323,21 +323,21 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 			{
 				setSize(RenderingPanel.this.getOffsetWidth(), RenderingPanel.this.getOffsetHeight());
 
-				if(renderingScene != null)
-					renderingScene.onResize();
+				if(animatedScene != null)
+					animatedScene.onResize();
 			}
 		});
 	}
 	
-	public HandlerRegistration addAnimationReadyEventHandler(RenderingReadyHandler handler) 
+	public HandlerRegistration addAnimationReadyEventHandler(AnimationReadyHandler handler) 
 	{
 		Log.debug("RenderingPanel: Registered event for class " + handler.getClass().getName());
 
-		return handlerManager.addHandler(RenderingReadyEvent.TYPE, handler);
+		return handlerManager.addHandler(AnimationReadyEvent.TYPE, handler);
 	}
 
 	/**
-	 * Gets {@link WebGLRenderer}. Use {@link RenderingScene#getRenderer()} instead. 
+	 * Gets {@link WebGLRenderer}. Use {@link AnimatedScene#getRenderer()} instead. 
 	 *  
 	 * @return {@link WebGLRenderer}
 	 */
@@ -360,7 +360,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		Log.debug("RenderingPanel: set size: W=" + width + ", H=" + height); 
 		getRenderer().setSize(width, height);
 
-		if(this.renderingScene != null && renderingScene.getRenderer() != null)
-			renderingScene.getRenderer().setSize(width, height);
+		if(this.animatedScene != null && animatedScene.getRenderer() != null)
+			animatedScene.getRenderer().setSize(width, height);
 	}
 }

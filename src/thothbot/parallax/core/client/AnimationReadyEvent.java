@@ -23,27 +23,27 @@ import com.google.gwt.event.shared.GwtEvent;
 
 /**
  * The event is called when the {@link RenderingPanel} is fully initialized and 
- * {@link RenderingScene} is ready for the rendering.
+ * {@link AnimatedScene} is ready for the rendering.
  * 
  * @author thothbot
  *
  */
-public class RenderingReadyEvent extends GwtEvent<RenderingReadyHandler>
+public class AnimationReadyEvent extends GwtEvent<AnimationReadyHandler>
 {
-	public static Type<RenderingReadyHandler> TYPE = new Type<RenderingReadyHandler>();
+	public static Type<AnimationReadyHandler> TYPE = new Type<AnimationReadyHandler>();
 
-    public RenderingReadyEvent() 
+    public AnimationReadyEvent() 
     {
     }
 
     @Override
-    public Type<RenderingReadyHandler> getAssociatedType() 
+    public Type<AnimationReadyHandler> getAssociatedType() 
     {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(RenderingReadyHandler handler) 
+    protected void dispatch(AnimationReadyHandler handler) 
     {
         handler.onAnimationReady(this);
     }

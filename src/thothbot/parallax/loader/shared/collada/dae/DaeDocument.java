@@ -111,7 +111,7 @@ public class DaeDocument  {
 
 	public void readScene() 
 	{
-		Node node = XPath.evaluateSingle(document, "//scene[1]/instance_visual_scene[1]/@url");
+		Node node = XPath.evaluateSingle(document, ".//dae:scene/dae:instance_visual_scene/@url");
 
 		if (node != null) 
 		{

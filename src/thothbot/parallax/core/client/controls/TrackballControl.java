@@ -19,7 +19,6 @@
 
 package thothbot.parallax.core.client.controls;
 
-import thothbot.parallax.core.client.RenderingScene;
 import thothbot.parallax.core.shared.core.Quaternion;
 import thothbot.parallax.core.shared.core.Vector2f;
 import thothbot.parallax.core.shared.core.Vector3f;

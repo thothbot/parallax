@@ -22,17 +22,17 @@ package thothbot.parallax.core.client;
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * Handler for the {@link RenderingReadyEvent}.
+ * Handler for the {@link AnimationReadyEvent}.
  * 
  * @author thothbot
  *
  */
-public interface RenderingReadyHandler extends EventHandler
+public interface AnimationReadyHandler extends EventHandler
 {
 	/**
-	 * Called when {@link RenderingScene} is ready.
+	 * Called when {@link AnimatedScene} is ready.
 	 * 
 	 * @param event
 	 */
-	public void onAnimationReady(RenderingReadyEvent event);
+	public void onAnimationReady(AnimationReadyEvent event);
 }

@@ -25,13 +25,13 @@ import com.google.gwt.animation.client.AnimationScheduler.AnimationHandle;
 import com.google.gwt.core.client.Duration;
 
 /**
- * An {@link Rendering} is a continuous event that updates progressively over
+ * An {@link Animation} is a continuous event that updates progressively over
  * time at a non-fixed frame rate.
  * 
  * @author thothbot
  *
  */
-public abstract class Rendering
+public abstract class Animation
 {
 	private final AnimationCallback callback = new AnimationCallback() 
 	{
@@ -52,7 +52,7 @@ public abstract class Rendering
 	private boolean isRunning = false;
 
 	/**
-	 * Has the {@link Rendering} actually started.
+	 * Has the {@link Animation} actually started.
 	 */
 	private boolean isStarted = false;
 	
@@ -75,12 +75,12 @@ public abstract class Rendering
 	private final AnimationScheduler scheduler;
 
 	/**
-	 * The start time of the {@link Rendering}.
+	 * The start time of the {@link Animation}.
 	 */
 	private double startTime = -1;
 	
 	/**
-	 * The stop time of the {@link Rendering}.
+	 * The stop time of the {@link Animation}.
 	 */
 	private double stopTime = 0;
 	
@@ -90,9 +90,9 @@ public abstract class Rendering
 	private double stoppingDelta = 0;
 	
 	/**
-	 * Construct a new {@link Rendering}.
+	 * Construct a new {@link Animation}.
 	 */
-	public Rendering() 
+	public Animation() 
 	{
 		this(AnimationScheduler.get());
 	}
@@ -104,7 +104,7 @@ public abstract class Rendering
 	 * @param scheduler
 	 *            an {@link AnimationScheduler} instance
 	 */
-	protected Rendering(AnimationScheduler scheduler) 
+	protected Animation(AnimationScheduler scheduler) 
 	{
 		this.scheduler = scheduler;
 	}
@@ -174,7 +174,7 @@ public abstract class Rendering
 	 * Called when the rendering should be updated.
 	 *  
 	 * @param duration
-	 *            The duration of the {@link Rendering} in milliseconds.
+	 *            The duration of the {@link Animation} in milliseconds.
 	 */
 	protected abstract void onUpdate(double duration);
 
@@ -191,7 +191,7 @@ public abstract class Rendering
 	}
 
 	/**
-	 * Update the {@link Rendering}.
+	 * Update the {@link Animation}.
 	 * 
 	 * @param curTime
 	 *            the current time
