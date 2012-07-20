@@ -17,35 +17,45 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada;
+package thothbot.parallax.loader.shared.collada.dae;
 
-import thothbot.parallax.loader.shared.collada.dae.DaeDocument;
+import com.google.gwt.xml.client.Node;
 
-import com.google.gwt.xml.client.Document;
-import com.google.gwt.xml.client.XMLParser;
-
-public class Collada 
+public class DaeLambert extends DaeConstant 
 {
-	private DaeDocument daeDocument;
-	private Document document;
-	
-	public Collada() 
+
+	private DaeColorOrTexture ambient;
+	private DaeColorOrTexture diffuse;
+
+	public DaeLambert(DaeDocument document) 
 	{
-		document = null;
+		super(document);
 	}
-	
-	public Document getDocument() {
-		return document;
-	}
-	
-	public Document parseXML(String xmlString) 
+
+	public DaeLambert(DaeDocument document, Node node) 
 	{
-		document = XMLParser.parse(xmlString);
+		super(document, node);
+	}
 
-		daeDocument = new DaeDocument(document);
+	@Override
+	public void read(Node node) 
+	{
+		super.read(node);
+	}
 
-		daeDocument.readScene();
+	public DaeColorOrTexture getAmbient() {
+		return ambient;
+	}
 
-		return document;
+	public DaeColorOrTexture getDiffuse() {
+		return diffuse;
+	}
+
+	public void setAmbient(DaeColorOrTexture value) {
+		ambient = value;
+	}
+
+	public void setDiffuse(DaeColorOrTexture value) {
+		diffuse = value;
 	}
 }

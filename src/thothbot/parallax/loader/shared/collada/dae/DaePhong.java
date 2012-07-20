@@ -17,35 +17,45 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada;
+package thothbot.parallax.loader.shared.collada.dae;
 
-import thothbot.parallax.loader.shared.collada.dae.DaeDocument;
+import com.google.gwt.xml.client.Node;
 
-import com.google.gwt.xml.client.Document;
-import com.google.gwt.xml.client.XMLParser;
-
-public class Collada 
+public class DaePhong extends DaeLambert 
 {
-	private DaeDocument daeDocument;
-	private Document document;
-	
-	public Collada() 
+
+	private DaeColorOrTexture specular;
+	private float shininess = 0.0f;
+
+	public DaePhong(DaeDocument document) 
 	{
-		document = null;
+		super(document);
 	}
-	
-	public Document getDocument() {
-		return document;
-	}
-	
-	public Document parseXML(String xmlString) 
+
+	public DaePhong(DaeDocument document,  Node node) 
 	{
-		document = XMLParser.parse(xmlString);
+		super(document, node);
+	}
 
-		daeDocument = new DaeDocument(document);
+	@Override
+	public void read(Node node) 
+	{
+		super.read(node);
+	}
 
-		daeDocument.readScene();
+	public DaeColorOrTexture getSpecular() {
+		return specular;
+	}
 
-		return document;
+	public float getShininess() {
+		return shininess;
+	}
+
+	public void setSpecular(DaeColorOrTexture value) {
+		specular = value;
+	}
+
+	public void setShininess(float value) {
+		shininess = value;
 	}
 }

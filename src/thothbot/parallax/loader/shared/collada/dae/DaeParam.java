@@ -17,35 +17,26 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada;
+package thothbot.parallax.loader.shared.collada.dae;
 
-import thothbot.parallax.loader.shared.collada.dae.DaeDocument;
-
-import com.google.gwt.xml.client.Document;
-import com.google.gwt.xml.client.XMLParser;
-
-public class Collada 
+public class DaeParam 
 {
-	private DaeDocument daeDocument;
-	private Document document;
-	
-	public Collada() 
-	{
-		document = null;
+	private String name;
+	private String type;
+
+	public String getName() {
+		return name;
 	}
-	
-	public Document getDocument() {
-		return document;
+
+	public String getType() {
+		return type;
 	}
-	
-	public Document parseXML(String xmlString) 
-	{
-		document = XMLParser.parse(xmlString);
 
-		daeDocument = new DaeDocument(document);
+	public void setName(String value) {
+		name = value;
+	}
 
-		daeDocument.readScene();
-
-		return document;
+	public void setType(String value) {
+		type = value;
 	}
 }
