@@ -137,10 +137,13 @@ public abstract class AnimatedScene extends Animation
 		this.animatedSceneCallback = animatedSceneCallback;		
 	}
 
+	protected abstract void onUpdate(double duration);
+	
 	@Override
-	protected void onUpdate(double duration)
+	protected void onRefresh(double duration)
 	{
 		this.renderer.getInfo().getTimer().render = new Duration();
+		onUpdate(duration);
 		this.renderer.render(getScene(), getCamera());
 		
 		animatedSceneCallback.onUpdate();

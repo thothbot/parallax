@@ -186,7 +186,7 @@ public class Mesh  extends GeometryObject implements HasSides
 			
 			gl.drawElements( GLenum.TRIANGLES.getValue(), geometryBuffer.__webglFaceCount, GLenum.UNSIGNED_SHORT.getValue(), 0 );
 		}
-
+		
 		info.getRender().calls ++;
 		info.getRender().vertices += geometryBuffer.__webglFaceCount;
 		info.getRender().faces += geometryBuffer.__webglFaceCount / 3;

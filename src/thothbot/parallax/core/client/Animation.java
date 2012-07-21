@@ -39,7 +39,7 @@ public abstract class Animation
 		public void execute(double timestamp)
 		{
 			// Schedule the next animation frame.
-			if (update(timestamp))
+			if (refresh(timestamp))
 				requestHandle = scheduler.requestAnimationFrame(callback);
 			else
 				requestHandle = null;
@@ -176,7 +176,7 @@ public abstract class Animation
 	 * @param duration
 	 *            The duration of the {@link Animation} in milliseconds.
 	 */
-	protected abstract void onUpdate(double duration);
+	protected abstract void onRefresh(double duration);
 
 	/**
 	 * Check if the specified run ID is still being run.
@@ -191,13 +191,13 @@ public abstract class Animation
 	}
 
 	/**
-	 * Update the {@link Animation}.
+	 * Refresh the {@link Animation}.
 	 * 
 	 * @param curTime
 	 *            the current time
 	 * @return true if the animation should run again, false if it is complete
 	 */
-	private boolean update(double curTime)
+	private boolean refresh(double curTime)
 	{
 		/*
 		 * Save the run id. If the runId is incremented during this execution
@@ -226,7 +226,7 @@ public abstract class Animation
 		else if (isStarted) 
 		{
 			// Animation is in progress.
-			onUpdate(curTime - this.startTime - stoppingDelta);
+			onRefresh(curTime - this.startTime - stoppingDelta);
 
 			// Check if this run was canceled.
 			return isRunning(curRunId); 
