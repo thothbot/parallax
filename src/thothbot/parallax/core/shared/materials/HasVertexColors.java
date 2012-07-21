@@ -19,6 +19,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+/**
+ * Material has vertex color
+ * 
+ * @author thothbot
+ *
+ */
 public interface HasVertexColors 
 {
 	public Material.COLORS isVertexColors();

@@ -42,6 +42,9 @@ public class ShaderMaterial extends Material
 	private boolean isMorphTargets;
 	private boolean isMorphNormals;
 	
+	private int numSupportedMorphTargets;
+	private int numSupportedMorphNormals;
+	
 	private boolean isLights;
 	
 	public ShaderMaterial() 
@@ -156,5 +159,25 @@ public class ShaderMaterial extends Material
 	@Override
 	public void setMorphNormals(boolean isMorphNormals) {
 		this.isMorphNormals = isMorphNormals;
+	}
+	
+	@Override
+	public int getNumSupportedMorphTargets() {
+		return this.numSupportedMorphTargets;
+	}
+	
+	@Override
+	public void setNumSupportedMorphTargets(int num) {
+		this.numSupportedMorphTargets = num;
+	}
+	
+	@Override
+	public int getNumSupportedMorphNormals() {
+		return this.numSupportedMorphNormals;
+	}
+	
+	@Override
+	public void setNumSupportedMorphNormals(int num) {
+		this.numSupportedMorphNormals = num;
 	}
 }

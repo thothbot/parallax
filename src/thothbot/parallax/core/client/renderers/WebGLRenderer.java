@@ -607,9 +607,9 @@ public class WebGLRenderer
 	 */
 	private void deallocateObject( GeometryObject object ) 
 	{
-		if ( ! object.__webglInit ) return;
+		if ( ! object.isWebglInit ) return;
 
-		object.__webglInit = false;
+		object.isWebglInit = false;
 
 		object._modelViewMatrix = null;
 		object._normalMatrix = null;
@@ -762,7 +762,9 @@ public class WebGLRenderer
 			List<Integer> order = object.morphTargetForcedOrder;
 			List<Integer> influences = object.morphTargetInfluences;
 
-			while ( m < material.getNumSupportedMorphTargets() && m < order.size() ) 
+			while ( material instanceof HasSkinning 
+					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() 
+					&& m < order.size() ) 
 			{
 				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( order.get( m ) ) );
 				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
@@ -791,7 +793,8 @@ public class WebGLRenderer
 				used.set( object.morphTargetBase, true);
 
 			int m = 0;
-			while ( m < material.getNumSupportedMorphTargets() ) 
+			while ( material instanceof HasSkinning 
+					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() ) 
 			{
 				for ( int i = 0; i < influences.size(); i ++ ) 
 				{
@@ -822,11 +825,11 @@ public class WebGLRenderer
 		// load updated influences uniform
 		if( material.getProgram().uniforms.get("morphTargetInfluences") != null ) 
 		{
-			List<Integer> vals = object.__webglMorphTargetInfluences;
-			float[] val2 = new float[vals.size()];
-			for (int i = 0; i < vals.size(); i++) 
+			Float32Array vals = object.__webglMorphTargetInfluences;
+			float[] val2 = new float[vals.getLength()];
+			for (int i = 0; i < vals.getLength(); i++) 
 			{
-			    Integer f = vals.get(i);
+			    Float f = vals.get(i);
 			    val2[i] = (f != null ? f : Float.NaN); // Or whatever default you want.
 			}
 			getGL().uniform1fv( material.getProgram().uniforms.get("morphTargetInfluences"), val2 );
@@ -926,7 +929,7 @@ public class WebGLRenderer
 			{
 				if ( ! ( object.getClass() == Mesh.class 
 						|| object.getClass() == ParticleSystem.class ) 
-						|| ! ( object.frustumCulled ) 
+						|| ! ( object.isFrustumCulled ) 
 						|| frustum.contains( object ) )
 				{
 					setupMatrices( (Object3D) object, camera );
@@ -1592,16 +1595,15 @@ public class WebGLRenderer
 	}
 
 	/**
-	 * Objects adding
-	 * 
+	 * Adds objects
 	 */
 	private void addObject ( GeometryObject object, Scene scene )
 	{
 		Log.debug("addObject() object=" + object.getClass().getName());
 
-		if ( ! object.__webglInit ) 
+		if ( ! object.isWebglInit ) 
 		{
-			object.__webglInit = true;
+			object.isWebglInit = true;
 
 			object._modelViewMatrix = new Matrix4f();
 			object._normalMatrix = new Matrix3f();
@@ -1610,9 +1612,9 @@ public class WebGLRenderer
 			object.initBuffer(this);
 		}
 
-		if ( ! object.__webglActive ) 
+		if ( ! object.isWebglActive ) 
 		{
-			object.__webglActive = true;
+			object.isWebglActive = true;
 
 			Log.debug("addObject() addObjectAddBuffer()");
 			addObjectAddBuffer(object, scene);
@@ -1691,7 +1693,7 @@ public class WebGLRenderer
 //			removeInstances( scene.__webglObjectsImmediate, object );
 		}
 
-		object.__webglActive = false;
+		object.isWebglActive = false;
 	}
 
 	private static void removeInstances ( List<WebGLObject> objlist, Object3D object ) 
@@ -1708,8 +1710,6 @@ public class WebGLRenderer
 				objlist.remove(o);
 	}
 
-	// Materials
-
 	private void initMaterial ( Material material, List<Light> lights, Fog fog, GeometryObject object ) 
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
@@ -1721,7 +1721,6 @@ public class WebGLRenderer
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
-
 		Map<String, Integer> maxLightCount = allocateLights( lights );
 		int maxShadows = allocateShadows( lights );
 		int maxBones = allocateBones( object );
@@ -1729,27 +1728,27 @@ public class WebGLRenderer
 		ProgramParameters parameters = new ProgramParameters(maxLightCount.get("directional"), 
 				maxLightCount.get("point"), maxLightCount.get("spot"), maxShadows, maxBones, this.maxMorphTargets, this.maxMorphNormals);
 
-		parameters.map = (material instanceof HasMap && ((HasMap)material).getMap() != null);
-		parameters.envMap = (material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null);
+		parameters.map      = (material instanceof HasMap && ((HasMap)material).getMap() != null);
+		parameters.envMap   = (material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null);
 		parameters.lightMap = (material instanceof HasLightMap &&  ((HasLightMap)material).getLightMap() != null);
 
 		parameters.vertexColors = (material instanceof HasVertexColors && ((HasVertexColors)material).isVertexColors() != Material.COLORS.NO);
 
-		parameters.useFog = (fog != null);
+		parameters.useFog  = (fog != null);
 		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
 
 		parameters.sizeAttenuation = material instanceof ParticleBasicMaterial && ((ParticleBasicMaterial)material).isSizeAttenuation();
 
 		if(material instanceof HasSkinning)
 		{
-			parameters.skinning = ((HasSkinning)material).isSkinning();
+			parameters.skinning     = ((HasSkinning)material).isSkinning();
 			parameters.morphTargets = ((HasSkinning)material).isMorphTargets();
 			parameters.morphNormals = ((HasSkinning)material).isMorphNormals();
 		}
 
-		parameters.shadowMapEnabled = this.isShadowMapEnabled && object.receiveShadow;
-		parameters.shadowMapSoft = this.isShadowMapSoft;
-		parameters.shadowMapDebug = this.isShadowMapDebug;
+		parameters.shadowMapEnabled = this.isShadowMapEnabled && object.isReceiveShadow;
+		parameters.shadowMapSoft    = this.isShadowMapSoft;
+		parameters.shadowMapDebug   = this.isShadowMapDebug;
 		parameters.shadowMapCascade = this.isShadowMapCascade;
 
 		parameters.alphaTest = material.getAlphaTest();
@@ -1816,22 +1815,24 @@ public class WebGLRenderer
 					}
 				}
 				
-				material.setNumSupportedMorphTargets(numSupportedMorphTargets);
+				((HasSkinning)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
 			}
 
 			if ( ((HasSkinning)material).isMorphNormals() ) 
 			{
 				int numSupportedMorphNormals = 0;
-				for ( int i = 0; i < this.maxMorphNormals; i ++ ) {
+				for ( int i = 0; i < this.maxMorphNormals; i ++ ) 
+				{
 					String id = "morphNormal" + i;
 
-					if ( attributes.get( id ) >= 0 ) {
+					if ( attributes.get( id ) >= 0 ) 
+					{
 						getGL().enableVertexAttribArray( attributes.get( id ) );
 						numSupportedMorphNormals ++;
 					}
 				}
 				
-				material.setNumSupportedMorphNormals(numSupportedMorphNormals);
+				((HasSkinning)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
 			}
 		}
 	}
@@ -1844,15 +1845,15 @@ public class WebGLRenderer
 			material.setNeedsUpdate(false);
 		}
 
-		// TODO: update
 		if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphTargets() ) 
 		{
-//			if ( ! object.__webglMorphTargetInfluences ) {
-//				object.__webglMorphTargetInfluences = new Float32Array( _this.maxMorphTargets );
-//
-//				for ( var i = 0, il = _this.maxMorphTargets; i < il; i ++ )
-//					object.__webglMorphTargetInfluences[ i ] = 0;
-//			}
+			if ( object.__webglMorphTargetInfluences == null ) 
+			{
+				object.__webglMorphTargetInfluences = Float32Array.create( this.maxMorphTargets );
+
+				for ( int i = 0, il = this.maxMorphTargets; i < il; i ++ )
+					object.__webglMorphTargetInfluences.set( i, 0 );
+			}
 		}
 
 		boolean refreshMaterial = false;
@@ -1886,7 +1887,6 @@ public class WebGLRenderer
 		if ( refreshMaterial ) 
 		{
 			// refresh uniforms common to several materials
-
 			if ( fog != null && material instanceof HasFog && ((HasFog)material).isFog())
 				fog.refreshUniforms( m_uniforms );
 
@@ -1909,7 +1909,6 @@ public class WebGLRenderer
 				refreshUniformsCommon( m_uniforms, material );
 
 			// refresh single material specific uniforms
-
 			if ( material.getClass() == LineBasicMaterial.class ) 
 			{
 				refreshUniformsLine( m_uniforms, (LineBasicMaterial) material );
@@ -1947,12 +1946,10 @@ public class WebGLRenderer
 //				refreshUniformsShadow( m_uniforms, lights );
 
 			// load common uniforms
-			
 			loadUniformsGeneric( program, material.getUniforms() );
 
 			// load material specific uniforms
 			// (shader material also gets them for the sake of genericity)
-
 			if ( material.getClass() == ShaderMaterial.class ||
 				 material.getClass() == MeshPhongMaterial.class ||
 				 material instanceof HasEnvMap 

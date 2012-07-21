@@ -60,6 +60,9 @@ public final class MeshLambertMaterial extends Material
 	private boolean isMorphTargets;
 	private boolean isMorphNormals;
 	
+	private int numSupportedMorphTargets;
+	private int numSupportedMorphNormals;
+	
 	public MeshLambertMaterial() 
 	{
 		setWrapRGB(new Vector3f( 1f, 1f, 1f ));
@@ -265,5 +268,25 @@ public final class MeshLambertMaterial extends Material
 	@Override
 	public void setEmissive(Color3f emissive) {
 		this.emissive = emissive;
+	}
+	
+	@Override
+	public int getNumSupportedMorphTargets() {
+		return this.numSupportedMorphTargets;
+	}
+	
+	@Override
+	public void setNumSupportedMorphTargets(int num) {
+		this.numSupportedMorphTargets = num;
+	}
+	
+	@Override
+	public int getNumSupportedMorphNormals() {
+		return this.numSupportedMorphNormals;
+	}
+	
+	@Override
+	public void setNumSupportedMorphNormals(int num) {
+		this.numSupportedMorphNormals = num;
 	}
 }

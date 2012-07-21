@@ -29,4 +29,11 @@ public interface HasSkinning
 	
 	public boolean isMorphNormals();
 	public void setMorphNormals(boolean isMorphNormals);
+	
+	
+	public int getNumSupportedMorphTargets();
+	public void setNumSupportedMorphTargets(int num);
+	
+	public int getNumSupportedMorphNormals();
+	public void setNumSupportedMorphNormals(int num);
 }

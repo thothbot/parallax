@@ -19,6 +19,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+/**
+ * Material has wireframe
+ * 
+ * @author thothbot
+ *
+ */
 public interface HasWireframe 
 {
 	public boolean isWireframe();

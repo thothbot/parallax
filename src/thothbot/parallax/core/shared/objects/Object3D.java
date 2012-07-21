@@ -29,8 +29,6 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Euler;
 import thothbot.parallax.core.shared.core.Matrix3f;
 import thothbot.parallax.core.shared.core.Matrix4f;
 import thothbot.parallax.core.shared.core.Quaternion;
@@ -89,32 +87,30 @@ public class Object3D implements DimensionalObject
 
 	protected float boundRadiusScale;
 
-	//public Material material;
 	public boolean hasPos;
 	public boolean hasNormal;
 	public float renderDepth;
 	public Matrix4f identityMatrix;
-	public boolean castShadow = false;
-	public boolean receiveShadow = false;
-	public boolean frustumCulled = true;
-	public boolean immediateRenderCallback;
+	public boolean isCastShadow = false;
+	public boolean isReceiveShadow = false;
+	public boolean isFrustumCulled = true;
+	public boolean hasImmediateRenderCallback;
 	public Float32Array positionArray;
 	public Float32Array normalArray;
 	public WebGLBuffer __webglVertexBuffer;
 	public WebGLBuffer __webglNormalBuffer;
-	public boolean __webglActive;
+	public boolean isWebglActive;
+	public boolean isWebglInit;
 	public Float32Array _objectMatrixArray;
 	public Object _modelViewMatrixArray;
 	public Object _normalMatrixArray;
 	public Matrix3f _normalMatrix;
 	public Matrix4f _modelViewMatrix;
-	public boolean __webglInit;
 	public int count;
 	public int morphTargetBase;
-	public Line.TYPE type;
 	public List<Integer> morphTargetForcedOrder;
 	public List<Integer> morphTargetInfluences;
-	public List<Integer> __webglMorphTargetInfluences;
+	public Float32Array __webglMorphTargetInfluences;
 
 	public Object3D() 
 	{

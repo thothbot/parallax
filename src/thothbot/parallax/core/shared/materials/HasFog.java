@@ -19,6 +19,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+/**
+ * Material has fog
+ * 
+ * @author thothbot
+ *
+ */
 public interface HasFog 
 {
 	public boolean isFog();

@@ -27,13 +27,10 @@ import java.util.ArrayList;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
-import thothbot.parallax.core.shared.core.WebGLCustomAttribute.TYPE;
 import thothbot.parallax.core.shared.materials.Material;
-
 
 public abstract class GeometryObject extends Object3D implements DimensionalObject
 {

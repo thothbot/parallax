@@ -22,7 +22,6 @@ package thothbot.parallax.core.shared.objects;
 import java.util.Collection;
 import java.util.List;
 
-import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Matrix4f;
 import thothbot.parallax.core.shared.core.Quaternion;
 import thothbot.parallax.core.shared.core.Vector3f;

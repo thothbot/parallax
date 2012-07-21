@@ -63,10 +63,10 @@ public class AxisHelper extends Object3D
 
 		// y
 		LineBasicMaterial lbmY = new LineBasicMaterial();
-		lbmX.setColor(new Color3f(0x00ff00));
+		lbmY.setColor(new Color3f(0x00ff00));
 
 		MeshBasicMaterial mbmY = new MeshBasicMaterial();
-		mbmX.setColor( new Color3f(0x00ff00) );
+		mbmY.setColor( new Color3f(0x00ff00) );
 
 		Line line2 = new Line( lineGeometry, lbmY );
 		this.addChild( line2 );
@@ -77,10 +77,10 @@ public class AxisHelper extends Object3D
 
 		// z
 		LineBasicMaterial lbmZ = new LineBasicMaterial();
-		lbmX.setColor(new Color3f(0x0000ff));
+		lbmZ.setColor(new Color3f(0x0000ff));
 
 		MeshBasicMaterial mbmZ = new MeshBasicMaterial();
-		mbmX.setColor( new Color3f(0x0000ff) );
+		mbmZ.setColor( new Color3f(0x0000ff) );
 
 		Line line3 = new Line( lineGeometry, lbmZ );
 		line3.getRotation().setX((float) (Math.PI / 2f));

@@ -111,10 +111,6 @@ public abstract class Material
 	private String vertexShader;
 	private String fragmentShader;
 	
-	// TODO: Move to HasSkinning
-	private int numSupportedMorphTargets;
-	private int numSupportedMorphNormals;
-
 	public Material()
 	{
 		this.id = Material.MaterialCount++;
@@ -198,22 +194,6 @@ public abstract class Material
 	
 	public void setFragmentShaderSource(String str) {
 		this.fragmentShader = str;
-	}
-	
-	public int getNumSupportedMorphTargets() {
-		return this.numSupportedMorphTargets;
-	}
-	
-	public void setNumSupportedMorphTargets(int num) {
-		this.numSupportedMorphTargets = num;
-	}
-	
-	public int getNumSupportedMorphNormals() {
-		return this.numSupportedMorphNormals;
-	}
-	
-	public void setNumSupportedMorphNormals(int num) {
-		this.numSupportedMorphNormals = num;
 	}
 
 	public float getOpacity() {

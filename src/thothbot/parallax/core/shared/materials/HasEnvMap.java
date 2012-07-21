@@ -21,17 +21,52 @@ package thothbot.parallax.core.shared.materials;
 
 import thothbot.parallax.core.client.textures.Texture;
 
+/**
+ * Material has environmental texture.
+ * 
+ * @author thothbot
+ *
+ */
 public interface HasEnvMap 
 {
+	/**
+	 * Gets environmental texture
+	 * 
+	 * @return the texture
+	 */
 	public Texture getEnvMap();
+	
+	/**
+	 * Sets environmental texture
+	 * 
+	 * @param envMap the texture
+	 */
 	public void setEnvMap(Texture envMap);
 	
 	public Texture.OPERATIONS getCombine();
 	public void setCombine(Texture.OPERATIONS combine);
 	
+	/**
+	 * Gets reflectivity
+	 * 
+	 * @return the reflectivity value
+	 */
 	public float getReflectivity();
+	
+	/**
+	 * Sets reflectivity
+	 * 
+	 * @param reflectivity the reflectivity value
+	 */
 	public void setReflectivity(float reflectivity);
 	
+	/**
+	 * Gets Refraction Ratio
+	 */
 	public float getRefractionRatio();
+	
+	/**
+	 * Sets Refraction Ratio
+	 */
 	public void setRefractionRatio(float refractionRatio);
 }

@@ -157,7 +157,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	{
 		// Do not create WebGLRenderer instance while design UI (in Eclipse)
 		// otherwise you'll see exception in UI builder
-		// Also Load renderer when needed
+		// Also loads renderer when needed
 		if (!Beans.isDesignTime() && this.renderer == null) 
 		{
 			Log.debug("RenderingPanel: initRenderer()");
@@ -183,11 +183,10 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	}
 	
 	/**
-	 * Load Debuger
+	 * Load Debugger
 	 */
 	private void loadDebuger()
 	{
-		// also init debugger
 		if(this.isDebugEnabled && this.debugger == null)
 		{
 			this.debugger = new Debugger(getRenderer().getInfo());

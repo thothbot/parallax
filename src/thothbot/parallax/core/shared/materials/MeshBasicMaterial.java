@@ -28,9 +28,6 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.core.Color3f;
 
-import com.google.gwt.canvas.dom.client.Context2d.LineCap;
-import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
-
 public class MeshBasicMaterial extends Material
 	implements HasMaterialMap, HasWireframe, HasFog, HasVertexColors, HasSkinning
 {
@@ -55,6 +52,9 @@ public class MeshBasicMaterial extends Material
 	private boolean isSkinning;
 	private boolean isMorphTargets;
 	private boolean isMorphNormals;
+	
+	private int numSupportedMorphTargets;
+	private int numSupportedMorphNormals;
 	
 	public MeshBasicMaterial()
 	{	
@@ -215,6 +215,26 @@ public class MeshBasicMaterial extends Material
 	@Override
 	public void setMorphNormals(boolean isMorphNormals) {
 		this.isMorphNormals = isMorphNormals;
+	}
+	
+	@Override
+	public int getNumSupportedMorphTargets() {
+		return this.numSupportedMorphTargets;
+	}
+	
+	@Override
+	public void setNumSupportedMorphTargets(int num) {
+		this.numSupportedMorphTargets = num;
+	}
+	
+	@Override
+	public int getNumSupportedMorphNormals() {
+		return this.numSupportedMorphNormals;
+	}
+	
+	@Override
+	public void setNumSupportedMorphNormals(int num) {
+		this.numSupportedMorphNormals = num;
 	}
 
 	@Override

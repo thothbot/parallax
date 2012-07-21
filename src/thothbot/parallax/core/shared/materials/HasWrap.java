@@ -21,6 +21,12 @@ package thothbot.parallax.core.shared.materials;
 
 import thothbot.parallax.core.shared.core.Vector3f;
 
+/**
+ * Material has wrap.
+ * 
+ * @author thothbot
+ *
+ */
 public interface HasWrap 
 {
 	public boolean isWrapAround();

@@ -21,6 +21,12 @@ package thothbot.parallax.core.shared.materials;
 
 import thothbot.parallax.core.client.textures.Texture;
 
+/**
+ * Material has light texture 
+ * 
+ * @author thothbot
+ *
+ */
 public interface HasLightMap 
 {
 	public Texture getLightMap();

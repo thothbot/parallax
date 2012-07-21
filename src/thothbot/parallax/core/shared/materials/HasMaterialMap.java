@@ -19,6 +19,11 @@
 
 package thothbot.parallax.core.shared.materials;
 
+/**
+ * Material has different textures.
+ * 
+ * @author thothbot
+ */
 public interface HasMaterialMap extends HasColor, HasMap, HasLightMap,
 		HasEnvMap 
 {
