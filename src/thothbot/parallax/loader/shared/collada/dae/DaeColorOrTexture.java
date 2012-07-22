@@ -30,22 +30,17 @@ public class DaeColorOrTexture extends DaeElement
 	private boolean _isTexture;
 	private float[] color;
 
-	public DaeColorOrTexture(DaeDocument document) 
+	public DaeColorOrTexture(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeColorOrTexture(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
@@ -53,11 +48,11 @@ public class DaeColorOrTexture extends DaeElement
 
 			if (nodeName.compareTo("color") == 0) 
 			{
-				Log.info(node.getNodeName() + " color: " + readFloatArray(child));
+				Log.info(getNode().getNodeName() + " color: " + readFloatArray(child));
 			} 
 			else if (nodeName.compareTo("float") == 0) 
 			{
-				Log.info(node.getNodeName() +" float: " + readFloatArray(child)[0]);
+				Log.info(getNode().getNodeName() +" float: " + readFloatArray(child)[0]);
 			}
 		}
 	}

@@ -32,22 +32,17 @@ public class DaeConstant extends DaeElement
 	private float transparency = 0.0f;
 	private float index_of_refraction = 0.0f;
 
-	public DaeConstant(DaeDocument document) 
+	public DaeConstant(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeConstant(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node)
+	public void read()
 	{
-		super.read(node);
+		super.read();
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
@@ -55,27 +50,27 @@ public class DaeConstant extends DaeElement
 
 			if (nodeName.compareTo("emission") == 0) 
 			{
-				emission = new DaeColorOrTexture(getDocument(), child);
+				emission = new DaeColorOrTexture(child);
 			} 
 			else if (nodeName.compareTo("reflective") == 0) 
 			{
-				reflective = new DaeColorOrTexture(getDocument(), child);
+				reflective = new DaeColorOrTexture(child);
 			} 
 			else if (nodeName.compareTo("transparent") == 0) 
 			{
-				transparent = new DaeColorOrTexture(getDocument(), child);
+				transparent = new DaeColorOrTexture(child);
 			} 
 			else if (nodeName.compareTo("reflectivity") == 0) 
 			{
-				DaeColorOrTexture cotr = new DaeColorOrTexture(getDocument(), child);
+				DaeColorOrTexture cotr = new DaeColorOrTexture(child);
 			} 
 			else if (nodeName.compareTo("transparency") == 0) 
 			{
-				DaeColorOrTexture cott = new DaeColorOrTexture(getDocument(), child);
+				DaeColorOrTexture cott = new DaeColorOrTexture(child);
 			}
 			else if (nodeName.compareTo("index_of_refraction") == 0) 
 			{
-				DaeColorOrTexture coti = new DaeColorOrTexture(getDocument(), child);
+				DaeColorOrTexture coti = new DaeColorOrTexture(child);
 			}  
 		}
 	}

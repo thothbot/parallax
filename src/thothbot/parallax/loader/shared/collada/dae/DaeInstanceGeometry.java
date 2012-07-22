@@ -31,33 +31,28 @@ public class DaeInstanceGeometry extends DaeElement {
 	private DaeGeometry geometry;
 	private List<DaeBindMaterial> boundMaterials;
 
-	public DaeInstanceGeometry(DaeDocument document) 
+	public DaeInstanceGeometry(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeInstanceGeometry(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
-		url = readAttribute(node, "url", true);
+		url = readAttribute(getNode(), "url", true);
 
 		boundMaterials = new ArrayList<DaeBindMaterial>();
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
 			if (nodeName.compareTo("bind_material") == 0) 
 			{
-				boundMaterials.add(new DaeBindMaterial(getDocument(), child));
+				boundMaterials.add(new DaeBindMaterial(child));
 			}
 		}
 	}

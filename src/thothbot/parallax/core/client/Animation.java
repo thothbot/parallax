@@ -138,7 +138,7 @@ public abstract class Animation
 	 * Run this animation. If the animation is already running, it will be
 	 * canceled first.
 	 * <p>
-	 * If the element is not <code>null</code>, the {@link #onUpdate(double)}
+	 * If the element is not <code>null</code>, the {@link #onRefresh(double)}
 	 * method might be called only if the element may be visible (generally left
 	 * at the appreciation of the browser). Otherwise, it will be called
 	 * unconditionally.

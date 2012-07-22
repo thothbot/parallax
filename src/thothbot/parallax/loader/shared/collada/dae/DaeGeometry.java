@@ -19,6 +19,11 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -26,14 +31,9 @@ public class DaeGeometry extends DaeElement
 {
 	private DaeMesh mesh;
 
-	public DaeGeometry(DaeDocument document) 
-	{
-		super(document);
-	}
-
 	public DaeGeometry(DaeDocument document, Node node) 
 	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
@@ -47,15 +47,33 @@ public class DaeGeometry extends DaeElement
 			mesh = null;
 		}
 	}
+	
+	public static Map<String, DaeGeometry> parse(DaeDocument document)
+	{
+		Map<String, DaeGeometry> retval = new HashMap<String, DaeGeometry>();
+		
+		NodeList list = document.getDocument().getElementsByTagName("geometry");
+		for (int i = 0; i < list.getLength(); i++) 
+		{
+			DaeGeometry geometry = new DaeGeometry(document, list.item(i));
+			if (geometry.getID() != null) 
+			{
+				retval.put(geometry.getID(), geometry);
+				Log.debug("DaeGeometry() " + geometry.toString()); 
+			}
+		}
+		
+		return retval;
+	}
 
 	@Override
-	public void read(Node node)
+	public void read()
 	{
-		super.read(node);
+		super.read();
 
 		mesh = null;
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
@@ -63,7 +81,7 @@ public class DaeGeometry extends DaeElement
 
 			if (nodeName.compareTo("mesh") == 0) 
 			{
-				mesh = new DaeMesh(getDocument(), child);
+				mesh = new DaeMesh(child);
 			}
 		}
 	}

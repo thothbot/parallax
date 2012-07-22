@@ -26,22 +26,17 @@ public class DaeInstanceMaterial extends DaeElement
 	private String symbol;
 	private String target;
 
-	public DaeInstanceMaterial(DaeDocument document) 
+	public DaeInstanceMaterial(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeInstanceMaterial(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
-		symbol = readAttribute(node, "symbol", true);
-		target = readAttribute(node, "target", true);
+		super.read();
+		symbol = readAttribute(getNode(), "symbol", true);
+		target = readAttribute(getNode(), "target", true);
 	}
 
 	public String getSymbol() {

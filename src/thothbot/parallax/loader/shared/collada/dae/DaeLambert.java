@@ -27,20 +27,15 @@ public class DaeLambert extends DaeConstant
 	private DaeColorOrTexture ambient;
 	private DaeColorOrTexture diffuse;
 
-	public DaeLambert(DaeDocument document) 
+	public DaeLambert(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeLambert(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 	}
 
 	public DaeColorOrTexture getAmbient() {

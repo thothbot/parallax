@@ -30,22 +30,21 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.XMLParser;
-import com.mouchel.gwt.xpath.client.XPath;
 
 public class Collada 
 {
 	public interface Callback 
 	{
-		public void onReady();
+		public void onLoaded();
 	}
 
 	private DaeDocument daeDocument;
 	private Document document;
 
-	public Element getSourceElementById(String id) 
-	{
-		return (Element) XPath.evaluateSingle(document, "//source[@id='"+id+"']");
-	}
+//	public Element getSourceElementById(String id) 
+//	{
+//		return (Element) XPath.evaluateSingle(document, "//source[@id='"+id+"']");
+//	}
 
 	public void load(String url, final Callback callback) throws RequestException 
 	{
@@ -56,7 +55,7 @@ public class Collada
 			public void onResponseReceived(Request request, Response response) 
 			{
 				document = parseXML(response.getText());
-				callback.onReady();
+				callback.onLoaded();
 			}
 
 			@Override
@@ -72,7 +71,6 @@ public class Collada
 		document = XMLParser.parse(xmlString);
 
 		daeDocument = new DaeDocument(document);
-		daeDocument.readScene();
 
 		return document;
 	}

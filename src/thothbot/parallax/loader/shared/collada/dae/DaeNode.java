@@ -32,19 +32,14 @@ public class DaeNode extends DaeElement
 	private List<DaeInstanceGeometry> geometries;
 	private List<DaeTransform> transforms;
 
-	public DaeNode(DaeDocument document) 
+	public DaeNode(Element element) 
 	{
-		super(document);
-	}
-
-	public DaeNode(DaeDocument document, Element element) 
-	{
-		super(document, element);
+		super(element);
 	}
 
 	public DaeNode(DaeDocument document, Node node) 
 	{
-		super(document, node);
+		super(node);
 	}
 
 	public DaeInstanceGeometry getGeometryByID(String id) 
@@ -80,15 +75,15 @@ public class DaeNode extends DaeElement
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
 		nodes = new ArrayList<DaeNode>();
 		geometries = new ArrayList<DaeInstanceGeometry>();
 		transforms = new ArrayList<DaeTransform>();
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
@@ -96,7 +91,7 @@ public class DaeNode extends DaeElement
 
 			if (nodeName.compareTo("node") == 0) 
 			{
-				DaeNode n = new DaeNode(getDocument(), child);
+				DaeNode n = new DaeNode((Element) child);
 				if (n.getID() != null) 
 				{
 					nodes.add(n);
@@ -116,13 +111,13 @@ public class DaeNode extends DaeElement
 				String geomId = readAttribute(child, "url", true);
 				if (geomId != null) 
 				{
-					DaeGeometry geometry = getDocument().getGeometryByID(geomId);
-					if (geometry != null && geometry.getID() != null) 
-					{
-						DaeInstanceGeometry instanceGeometry = new DaeInstanceGeometry(getDocument(), child);
-						instanceGeometry.setGeometry(geometry);
-						geometries.add(instanceGeometry);
-					}
+//					DaeGeometry geometry = getDocument().getGeometryByID(geomId);
+//					if (geometry != null && geometry.getID() != null) 
+//					{
+//						DaeInstanceGeometry instanceGeometry = new DaeInstanceGeometry(child);
+//						instanceGeometry.setGeometry(geometry);
+//						geometries.add(instanceGeometry);
+//					}
 				}
 			}
 		}
@@ -130,7 +125,7 @@ public class DaeNode extends DaeElement
 
 	private void readTransform(Node node) 
 	{
-		DaeTransform transform = new DaeTransform(getDocument(), node);
+		DaeTransform transform = new DaeTransform(node);
 		if (transform.getData() != null && transform.getData().length > 0) 
 		{
 			transforms.add(transform);

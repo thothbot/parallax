@@ -30,23 +30,18 @@ public class DaeBindMaterial extends DaeElement
 
 	List<DaeInstanceMaterial> materials;
 
-	public DaeBindMaterial(DaeDocument document) 
+	public DaeBindMaterial(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeBindMaterial(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node)
+	public void read()
 	{
-		super.read(node);
+		super.read();
 
 		materials = new ArrayList<DaeInstanceMaterial>();
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
@@ -67,7 +62,7 @@ public class DaeBindMaterial extends DaeElement
 			String nodeName = child.getNodeName();
 			if (nodeName.compareTo("instance_material") == 0) 
 			{
-				DaeInstanceMaterial material = new DaeInstanceMaterial(getDocument(), child);
+				DaeInstanceMaterial material = new DaeInstanceMaterial(child);
 				materials.add(material);
 			}
 		}

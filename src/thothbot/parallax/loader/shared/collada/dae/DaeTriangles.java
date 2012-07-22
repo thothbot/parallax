@@ -22,6 +22,8 @@ package thothbot.parallax.loader.shared.collada.dae;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -29,14 +31,9 @@ public class DaeTriangles extends DaePrimitive
 {
 	private int[] p;
 
-	public DaeTriangles(DaeDocument document, DaeMesh mesh) 
+	public DaeTriangles(Node node, DaeMesh mesh) 
 	{
-		super(document, mesh);
-	}
-
-	public DaeTriangles(DaeDocument document, Node node, DaeMesh mesh) 
-	{
-		super(document, node, mesh);
+		super(node, mesh);
 	}
 
 	@Override
@@ -48,14 +45,14 @@ public class DaeTriangles extends DaePrimitive
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
 		p = null;
 
 		List<DaeInput> inputs = new ArrayList<DaeInput>();
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
@@ -63,7 +60,7 @@ public class DaeTriangles extends DaePrimitive
 			String nodeName = child.getNodeName();
 			if (nodeName.compareTo("input") == 0) 
 			{
-				DaeInput input = new DaeInput(getDocument(), child);
+				DaeInput input = new DaeInput(child);
 				if (getMesh().getVerticesID().compareTo(input.getSource()) == 0) 
 				{
 					input.setSource(getMesh().getVertices().getID());
@@ -97,7 +94,7 @@ public class DaeTriangles extends DaePrimitive
 			for (int i = 0; i < inputs.size(); i++) 
 			{
 				DaeInput input = inputs.get(i);
-				DaeSource source = getDocument().getSourceByID(input.getSource());
+				DaeSource source = DaeDocument.getSourceByID(getNode().getParentNode(), input.getSource());
 				int index = p[current + input.getOffset()];
 
 				addIndex(input, index, source.getAccessor().getParams().size());

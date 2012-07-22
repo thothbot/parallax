@@ -26,25 +26,21 @@ public class DaeTransform extends DaeElement
 	private String type;
 	private float[] data;
 
-	public DaeTransform(DaeDocument document) 
+	public DaeTransform(Node node) 
 	{
-		super(document);
-	}
-	public DaeTransform(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
-		type = node.getNodeName();
+		type = getNode().getNodeName();
 
-		if (node.getChildNodes().getLength() == 1 && node.getChildNodes().item(0).getNodeType() == Node.TEXT_NODE) 
+		if (getNode().getChildNodes().getLength() == 1 && getNode().getChildNodes().item(0).getNodeType() == Node.TEXT_NODE) 
 		{
-			String raw = node.getChildNodes().item(0).getNodeValue();
+			String raw = getNode().getChildNodes().item(0).getNodeValue();
 			String[] parts = raw.trim().split("\\s");
 
 			data = new float[parts.length];

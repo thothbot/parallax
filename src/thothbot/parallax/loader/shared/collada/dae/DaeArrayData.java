@@ -23,14 +23,8 @@ import com.google.gwt.xml.client.Node;
 
 public class DaeArrayData extends DaeElement 
 {
-
-	public DaeArrayData(DaeDocument document) 
+	public DaeArrayData(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeArrayData(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 }

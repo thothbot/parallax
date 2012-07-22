@@ -2,7 +2,6 @@
 <module>
   <inherits name="com.google.gwt.core.Core"/>
   <inherits name='com.google.gwt.xml.XML' />
-  <inherits name="com.mouchel.gwt.xpath.xpath" />
   
   <source path='shared'/>
 

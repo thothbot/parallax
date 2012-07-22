@@ -27,20 +27,9 @@ public class DaePhong extends DaeLambert
 	private DaeColorOrTexture specular;
 	private float shininess = 0.0f;
 
-	public DaePhong(DaeDocument document) 
+	public DaePhong(Node node) 
 	{
-		super(document);
-	}
-
-	public DaePhong(DaeDocument document,  Node node) 
-	{
-		super(document, node);
-	}
-
-	@Override
-	public void read(Node node) 
-	{
-		super.read(node);
+		super(node);
 	}
 
 	public DaeColorOrTexture getSpecular() {

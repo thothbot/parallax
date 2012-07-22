@@ -25,22 +25,17 @@ public class DaeArrayFloat extends DaeArrayData
 {
 	private float[] data;
 
-	public DaeArrayFloat(DaeDocument document) 
+	public DaeArrayFloat(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeArrayFloat(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
-		data = readFloatArray(node);
+		data = readFloatArray(getNode());
 	}
 
 	public float[] getData() 

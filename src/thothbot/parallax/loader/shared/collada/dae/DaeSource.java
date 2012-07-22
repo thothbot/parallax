@@ -38,23 +38,19 @@ public class DaeSource extends DaeElement
 	private Type type;
 	private DaeArrayData data;
 
-	public DaeSource(DaeDocument document) 
+	public DaeSource(Node node) 
 	{
-		super(document);
-	}
-	public DaeSource(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
 		this.type = Type.INVALID;
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
@@ -64,7 +60,7 @@ public class DaeSource extends DaeElement
 			if (nodeName.compareTo("float_array") == 0) 
 			{
 				this.type = Type.FLOAT;
-				data = new DaeArrayFloat(getDocument(), child);
+				data = new DaeArrayFloat(child);
 			} 
 			else if (nodeName.compareTo("technique_common") == 0) 
 			{
@@ -122,7 +118,7 @@ public class DaeSource extends DaeElement
 			String nodeName = child.getNodeName();
 			if (nodeName.compareTo("accessor") == 0) 
 			{
-				accessor = new DaeAccessor(getDocument(), child);
+				accessor = new DaeAccessor(child);
 			}
 		}
 	}

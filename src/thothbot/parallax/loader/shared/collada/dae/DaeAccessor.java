@@ -29,24 +29,19 @@ public class DaeAccessor extends DaeElement
 {
 	private List<DaeParam> params;
 
-	public DaeAccessor(DaeDocument document) 
+	public DaeAccessor(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeAccessor(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
 		params = new ArrayList<DaeParam>();
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);

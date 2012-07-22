@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -33,14 +35,9 @@ public class DaeMesh extends DaeElement
 	private Vector<DaePrimitive> primitives;
 	private String verticesID;
 
-	public DaeMesh(DaeDocument document) 
+	public DaeMesh(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeMesh(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
@@ -69,20 +66,21 @@ public class DaeMesh extends DaeElement
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
 		sources = new HashMap<String, DaeSource>();
 		primitives = new Vector<DaePrimitive>();
 		vertices = null;
 		verticesID = null;
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
+
 			if (nodeName.compareTo("source") == 0) 
 			{
 				readSource(readAttribute(child, "id"));
@@ -93,7 +91,7 @@ public class DaeMesh extends DaeElement
 			}
 			else if (nodeName.compareTo("triangles") == 0) 
 			{
-				primitives.add(new DaeTriangles(getDocument(), child, this));
+				primitives.add(new DaeTriangles(child, this));
 			}
 		}
 	}
@@ -102,7 +100,7 @@ public class DaeMesh extends DaeElement
 	{
 		if (id != null) 
 		{
-			DaeSource source = getDocument().getSourceByID(id);
+			DaeSource source = DaeDocument.getSourceByID(getNode(), id);
 			if (source != null && source.getID() != null) 
 			{
 				if (sources.get(id) == null) 
@@ -122,9 +120,10 @@ public class DaeMesh extends DaeElement
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
+
 			if (nodeName.compareTo("input") == 0) 
 			{
-				DaeInput input = new DaeInput(getDocument(), child);
+				DaeInput input = new DaeInput(child);
 				if (input.getSemantic().compareTo("POSITION") == 0) 
 				{
 					vertices = readSource(input.getSource());

@@ -20,35 +20,39 @@
 package thothbot.parallax.loader.shared.collada.dae;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
-import com.mouchel.gwt.xpath.client.XPath;
+import com.google.gwt.xml.client.NodeList;
 
-public class DaeDocument  {
-
+public class DaeDocument  
+{
 	private Document document;
 	private DaeNode rootNode;
+	private DaeAsset asset;
+	
 	private Map<String, DaeGeometry> geometries;
-	private Map<String, DaeSource> sources;
-
-	public DaeDocument() 
-	{
-		this.document = null;
-		geometries = new HashMap<String, DaeGeometry>();
-		sources = new HashMap<String, DaeSource>();
-	}
 
 	public DaeDocument(Document document) 
 	{
-		this();
 		this.document = document;
+		
+		this.asset = DaeAsset.parse(this);
+		this.geometries = DaeGeometry.parse(this);	
+	}
+	
+	public Document getDocument() {
+		return document;
 	}
 
+	public DaeNode getRootNode() {
+		return rootNode;
+	}
+	
 	/**
 	 * Gets a geometry by its ID.
 	 * 
@@ -62,16 +66,16 @@ public class DaeDocument  {
 		} 
 		else 
 		{
-			Node node = XPath.evaluateSingle(document, "//geometry[@id='"+id+"']");
-			if (node != null) 
-			{
-				DaeGeometry geometry = new DaeGeometry(this, node);
-				if (geometry.getID() != null) 
-				{
-					geometries.put(geometry.getID(), geometry);
-					return geometry;
-				}
-			}
+//			Node node = XPath.evaluateSingle(document, "//geometry[@id='"+id+"']");
+//			if (node != null) 
+//			{
+//				DaeGeometry geometry = new DaeGeometry(this, node);
+//				if (geometry.getID() != null) 
+//				{
+//					geometries.put(geometry.getID(), geometry);
+//					return geometry;
+//				}
+//			}
 		}
 		return null;
 	}
@@ -81,71 +85,53 @@ public class DaeDocument  {
 	 * 
 	 * @param id
 	 */
-	public DaeSource getSourceByID(String id) 
+	public static DaeSource getSourceByID(Node node, String id) 
 	{
-		if (sources.containsKey(id)) 
+		NodeList list = ((Element)node).getElementsByTagName("source");
+		for (int i = 0; i < list.getLength(); i++) 
 		{
-			return sources.get(id);
-		} 
-		else 
-		{
-			Node node = XPath.evaluateSingle(document, "//source[@id='"+id+"']");
-			if (node != null) 
+			if(((Element)list.item(i)).getAttribute("id").compareTo(id) == 0)
 			{
-				DaeSource source = new DaeSource(this, node);
-				if (source.getID() != null) 
-				{
-					sources.put(source.getID(), source);
-					return source;
-				}
-			} 
-			else 
-			{
-				Log.error("Could not find source with id=" + id + " !");
+				return new DaeSource(list.item(i));
 			}
 		}
+		
+		Log.error("Could not find source with id=" + id + " !");
+
 		return null;
 	}
 
-	public void readScene() 
-	{
-		Node node = XPath.evaluateSingle(document, ".//dae:scene/dae:instance_visual_scene/@url");
+//	public void readScene() 
+//	{
+////		Node node = XPath.evaluateSingle(document, ".//scene/instance_visual_scene/@url");
+////
+////		if (node != null) 
+////		{
+////			readVisualScene(node.getNodeValue());
+////		} 
+////		else 
+////		{
+////			Log.warn("Could not find a scene!");
+////		}
+//
+////		List<Node> list = XPath.evaluate(document, "//effect");
+////		for (Node effectNode: list) 
+////		{
+////			DaeEffect effect = new DaeEffect(this, effectNode);
+////		}
+//	}
 
-		if (node != null) 
-		{
-			readVisualScene(node.getNodeValue());
-		} 
-		else 
-		{
-			Log.warn("Could not find a scene!");
-		}
-
-		List<Node> list = XPath.evaluate(document, "//effect");
-		for (Node effectNode: list) 
-		{
-			DaeEffect effect = new DaeEffect(this, effectNode);
-		}
-	}
-
-	public void readVisualScene(String url) 
-	{
-		if (url.startsWith("#")) 
-		{
-			url = url.substring(1);
-		}
-		Node node = XPath.evaluateSingle(document, "//visual_scene[@id='"+ url +"']");
-
-		if (node != null) 
-		{
-			rootNode = new DaeNode(this, node);
-		}
-	}
-
-	public Document getDocument() {
-		return document;
-	}
-
-	public DaeNode getRootNode() {
-		return rootNode;
-	}
+//	public void readVisualScene(String url) 
+//	{
+////		if (url.startsWith("#")) 
+////		{
+////			url = url.substring(1);
+////		}
+////		Node node = XPath.evaluateSingle(document, "//visual_scene[@id='"+ url +"']");
+////
+////		if (node != null) 
+////		{
+////			rootNode = new DaeNode(this, node);
+////		}
+//	}
 }

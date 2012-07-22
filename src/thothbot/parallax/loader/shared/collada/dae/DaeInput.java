@@ -28,25 +28,20 @@ public class DaeInput extends DaeElement
 	private String semantic;
 	private String source;
 
-	public DaeInput(DaeDocument document) 
+	public DaeInput(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeInput(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
-		semantic = readAttribute(node, "semantic");
-		source = readAttribute(node, "source", true);
-		offset = readIntAttribute(node, "offset", 0);
-		set = readIntAttribute(node, "set", 0);
+		semantic = readAttribute(getNode(), "semantic");
+		source = readAttribute(getNode(), "source", true);
+		offset = readIntAttribute(getNode(), "offset", 0);
+		set = readIntAttribute(getNode(), "set", 0);
 	}
 
 	public String getSemantic() {

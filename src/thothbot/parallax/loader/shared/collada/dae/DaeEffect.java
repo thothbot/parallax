@@ -27,22 +27,17 @@ import com.google.gwt.xml.client.NodeList;
 public class DaeEffect extends DaeElement 
 {
 
-	public DaeEffect(DaeDocument document) 
+	public DaeEffect(Node node) 
 	{
-		super(document);
-	}
-
-	public DaeEffect(DaeDocument document, Node node) 
-	{
-		super(document, node);
+		super(node);
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
-		NodeList list = node.getChildNodes();
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
@@ -82,7 +77,7 @@ public class DaeEffect extends DaeElement
 			{
 				Log.debug(child.getNodeName());
 
-				new DaePhong(getDocument(), child);
+				new DaePhong(child);
 			}
 		}
 	}

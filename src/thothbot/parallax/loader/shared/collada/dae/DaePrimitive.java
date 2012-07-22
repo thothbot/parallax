@@ -36,22 +36,14 @@ public class DaePrimitive extends DaeElement
 	protected Map<String, Map<Integer, int[]>> indices;
 	protected Map<String, Map<Integer, Integer>> indexCounts;
 
-	public DaePrimitive(DaeDocument document, DaeMesh mesh) 
+	public DaePrimitive(Node node, DaeMesh mesh) 
 	{
-		super(document);
 		this.mesh = mesh;
 		this.sourceMaps = new HashMap<String, Map<Integer,String>>();
 		this.indices = new HashMap<String, Map<Integer, int[]>>();
 		this.indexCounts = new HashMap<String, Map<Integer,Integer>>();
-	}
 
-	public DaePrimitive(DaeDocument document, Node node, DaeMesh mesh) 
-	{
-		this(document, mesh);
-		this.mesh = mesh;
-		if (node != null) {
-			read(node);
-		}
+		setNode(node);
 	}
 
 	public void addIndex(DaeInput input, int index, int maxItems) 
@@ -94,7 +86,7 @@ public class DaePrimitive extends DaeElement
 
 		if (!sourceMaps.containsKey(semantic)) 
 		{
-			Log.debug("putting sourcemaps " + semantic);
+			Log.debug("DaePrimitive() putting sourcemaps " + semantic);
 			sourceMaps.put(semantic, new HashMap<Integer, String>());
 		}
 
@@ -102,7 +94,7 @@ public class DaePrimitive extends DaeElement
 
 		if (!sourceMap.containsKey(set)) 
 		{
-			Log.debug("putting sourcemap set " + set + " input source: " + input.getSource());
+			Log.debug("DaePrimitive() putting sourcemap set " + set + " input source: " + input.getSource());
 			sourceMap.put(set, input.getSource());
 		}
 	}
@@ -111,7 +103,7 @@ public class DaePrimitive extends DaeElement
 	{
 		int[] vIndices = getIndices("VERTEX", 0);
 		int[] nIndices = getIndices("NORMAL", 0);
-		DaeSource normalSource = getDocument().getSourceByID(getSource("NORMAL", 0));
+		DaeSource normalSource = DaeDocument.getSourceByID(getNode(), getSource("NORMAL", 0));
 
 		float[] ret = null;
 
@@ -184,12 +176,12 @@ public class DaePrimitive extends DaeElement
 	}
 
 	@Override
-	public void read(Node node) 
+	public void read() 
 	{
-		super.read(node);
+		super.read();
 
-		this.material = readAttribute(node, "material");
-		this.count = readIntAttribute(node, "count", 0);
+		this.material = readAttribute(getNode(), "material");
+		this.count = readIntAttribute(getNode(), "count", 0);
 	}
 
 	private Integer getLowestSet(String semantic) 
