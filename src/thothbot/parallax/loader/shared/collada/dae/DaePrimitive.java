@@ -38,13 +38,12 @@ public class DaePrimitive extends DaeElement
 
 	public DaePrimitive(Node node, DaeMesh mesh)
 	{
+		super(node);
 		this.mesh = mesh;
 		this.sourceMaps  = new HashMap<String, Map<Integer,String>>();
 		this.indices     = new HashMap<String, Map<Integer, int[]>>();
 		this.indexCounts = new HashMap<String, Map<Integer,Integer>>();
-
-		setNode(node);
-		
+	
 		Log.debug("DaePrimitive() " + toString()); 
 	}
 		

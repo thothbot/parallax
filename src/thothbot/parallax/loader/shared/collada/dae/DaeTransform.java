@@ -26,7 +26,6 @@ import com.google.gwt.xml.client.Node;
 public abstract class DaeTransform extends DaeElement 
 {
 	private String sid;
-	private String type;
 	private float[] data;
 	
 	public DaeTransform(Node node) 
@@ -39,8 +38,7 @@ public abstract class DaeTransform extends DaeElement
 	@Override
 	public void read() 
 	{
-		sid = readAttribute("sid" );
-		type = getNode().getNodeName();
+		sid = readAttribute("sid");
 		data = readFloatArray();
 	}
 
@@ -48,16 +46,11 @@ public abstract class DaeTransform extends DaeElement
 	{
 		return data;
 	}
-
-	public String getType() 
-	{
-		return type;
-	}
 	
 	public abstract Object getObject();
 	
 	public String toString()
 	{
-		return "{type=" + this.type + ", sid=" + this.sid + "}"; 
+		return "{type=" + getNode().getNodeName() + ", sid=" + this.sid + "}"; 
 	}
 }

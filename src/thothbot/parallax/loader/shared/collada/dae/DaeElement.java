@@ -29,10 +29,7 @@ public abstract class DaeElement
 	
 	private Node node;
 
-	public DaeElement()
-	{
-		
-	}
+
 	
 	public DaeElement(Node node) 
 	{
@@ -140,6 +137,4 @@ public abstract class DaeElement
 		}
 		return null;
 	}
-	
-	public abstract String toString();
 }

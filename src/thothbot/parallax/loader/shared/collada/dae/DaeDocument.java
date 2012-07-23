@@ -19,7 +19,9 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
@@ -34,8 +36,10 @@ public class DaeDocument
 	private Document document;
 	private DaeAsset asset;
 	
+	private List<String> scenes;
+	
 	private Map<String, DaeGeometry> geometries;
-	private Map<String, DaeVisualScene> visualScene;
+	private Map<String, DaeVisualScene> visualScenes;
 
 	public DaeDocument(Document document) 
 	{
@@ -43,10 +47,28 @@ public class DaeDocument
 		
 		this.asset       = DaeAsset.parse(this);
 		this.geometries  = DaeGeometry.parse(this);
-		this.visualScene = DaeVisualScene.parse(this);
+		this.visualScenes = DaeVisualScene.parse(this);
+		
+		parseScene();
 	}
 	
 	public Document getDocument() {
 		return document;
 	}	
+	
+	private void parseScene()
+	{
+		scenes = new ArrayList<String>();
+		
+		NodeList list = document.getElementsByTagName("instance_visual_scene");
+		for (int i = 0; i < list.getLength(); i++) 
+		{
+			DaeElement scene = new DaeElement(list.item(i)) {		
+				@Override
+				public void read() {}
+			};
+			scenes.add(scene.readAttribute("url", true));
+			Log.debug("DaeDocument() scenes" + scenes);
+		}
+	}
 }
