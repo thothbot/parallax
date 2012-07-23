@@ -25,6 +25,8 @@ import com.google.gwt.xml.client.Node;
 
 public abstract class DaeElement 
 {
+	public static final float TO_RADIANS = (float) (Math.PI / 180.0f);
+	
 	private Node node;
 
 	public DaeElement()
@@ -67,7 +69,7 @@ public abstract class DaeElement
 
 		return attr;
 	}
-
+	
 	public int readIntAttribute(String name, int defaultValue) 
 	{
 		String attr = readAttribute(name);
@@ -79,6 +81,64 @@ public abstract class DaeElement
 		{
 			return defaultValue;
 		}
+	}
+	
+	public float[] readFloatArray() 
+	{
+		String[] parts = readStringArray();
+		if (parts != null && parts.length > 0) 
+		{
+			Log.debug("DaeArrayFloat() [Float]-> " + parts.length);
+			
+			float[] data = new float[parts.length];
+			for (int i = 0; i < parts.length; i++) 
+			{
+				data[i] = Float.parseFloat(parts[i]);
+			}
+			return data;
+		}
+		return null;
+	}
+	
+	public int[] readIntArray() 
+	{
+		String[] parts = readStringArray();
+		if (parts != null && parts.length > 0) 
+		{
+			Log.debug("DaeArrayData() [Int]-> " + parts.length);
+			
+			int[] data = new int[parts.length];
+			for (int i = 0; i < parts.length; i++) 
+			{
+				data[i] = Integer.parseInt(parts[i], 10);
+			}
+			return data;
+		}
+		return null;
+	}
+
+	public String[] readStringArray() 
+	{
+		if (getNode().getChildNodes().getLength() > 0) 
+		{
+			String raw = "";
+			for (int i = 0; i < getNode().getChildNodes().getLength(); i++) 
+			{
+				Node child = getNode().getChildNodes().item(i);
+				if (child.getNodeType() == Node.TEXT_NODE) 
+				{
+					raw += child.getNodeValue();
+				}
+			}
+
+			String[] parts = raw.trim().split("\\s+");
+			return parts;
+		} 
+		else 
+		{
+			Log.error("readStringArray failed! " + getNode().toString());
+		}
+		return null;
 	}
 	
 	public abstract String toString();

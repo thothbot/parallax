@@ -19,6 +19,7 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,8 @@ public class DaeVisualScene extends DaeIdElement
 	{
 		super.read();
 
+		this.nodes = new ArrayList<DaeNode>();
+		
 		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{

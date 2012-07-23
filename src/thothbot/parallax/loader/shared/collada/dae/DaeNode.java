@@ -31,12 +31,14 @@ import com.google.gwt.xml.client.NodeList;
 public class DaeNode extends DaeIdElement 
 {
 	private List<DaeNode> nodes;
-//	private List<DaeInstanceGeometry> geometries;
-//	private List<DaeTransform> transforms;
+	private List<DaeTransform> transforms;
+	//	private List<DaeInstanceGeometry> geometries;
 
 	public DaeNode(Node node) 
 	{
 		super(node);
+		
+		Log.debug("DaeNode() " + toString()); 
 	}
 	
 	public List<DaeNode> getNodes() {
@@ -49,8 +51,8 @@ public class DaeNode extends DaeIdElement
 		super.read();
 
 		nodes = new ArrayList<DaeNode>();
+		transforms = new ArrayList<DaeTransform>();
 //		geometries = new ArrayList<DaeInstanceGeometry>();
-//		transforms = new ArrayList<DaeTransform>();
 
 		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
@@ -66,15 +68,24 @@ public class DaeNode extends DaeIdElement
 					nodes.add(n);
 				}
 			} 
-			else if (nodeName.compareTo("matrix") == 0 || 
-					   nodeName.compareTo("rotate") == 0 || 
-					   nodeName.compareTo("translate") == 0 ||
-					   nodeName.compareTo("skew") == 0 ||
-					   nodeName.compareTo("lookat") == 0 ||
-					   nodeName.compareTo("scale") == 0) 
+			else if (nodeName.compareTo("matrix") == 0)
 			{
-//				readTransform(child);
-			} 
+				transforms.add(new DaeTransformMatrix(child));
+			}
+			else if (nodeName.compareTo("rotate") == 0)
+			{
+				transforms.add(new DaeTransformRotate(child));
+			}
+			else if (nodeName.compareTo("translate") == 0 ||
+					nodeName.compareTo("scale") == 0)
+			{
+				transforms.add(new DaeTransformVector(child));
+			}
+			else if(nodeName.compareTo("skew") == 0 ||
+					nodeName.compareTo("lookat") == 0)
+			{
+				Log.error("Can not convert Transform of type " + nodeName );
+			}
 //			else if (nodeName.compareTo("instance_geometry") == 0) 
 //			{
 //				String geomId = readAttribute(child, "url", true);

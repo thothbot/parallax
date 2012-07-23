@@ -19,48 +19,18 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
-import thothbot.parallax.core.shared.Log;
-
 import com.google.gwt.xml.client.Node;
 
-public class DaeIdElement extends DaeElement 
+public class DaeTransformRotate extends DaeTransform 
 {
-	private String id;
-	private String name;
-	private String sid;
-	
-	public DaeIdElement(Node node) 
-	{
-		super( node );
-	}
-	
-	public void destroy() 
-	{
-		super.destroy();
-		id = name = sid = null;
-	}
-	
-	public String getID() {
-		return id;
+	public DaeTransformRotate(Node node) {
+		super(node);
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getSID() {
-		return sid;
-	}
-	
-	public void read() 
+	@Override
+	public Float getObject() 
 	{
-		id   = readAttribute("id"  );
-		sid  = readAttribute("sid" );
-		name = readAttribute("name");
-	}
-
-	public String toString()
-	{
-		return "{id=" + this.id + ", name=" + this.name + ", sid=" + this.sid + "}";
+		float[] data = getData(); 
+		return data[3] * TO_RADIANS;
 	}
 }

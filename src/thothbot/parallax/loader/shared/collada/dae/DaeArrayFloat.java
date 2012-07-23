@@ -44,21 +44,4 @@ public class DaeArrayFloat extends DaeArrayData
 	{
 		return data;
 	}
-	
-	public float[] readFloatArray() 
-	{
-		String[] parts = readStringArray();
-		if (parts != null && parts.length > 0) 
-		{
-			Log.debug("DaeArrayFloat() [Float]-> " + parts.length);
-			
-			float[] data = new float[parts.length];
-			for (int i = 0; i < parts.length; i++) 
-			{
-				data[i] = Float.parseFloat(parts[i]);
-			}
-			return data;
-		}
-		return null;
-	}
 }

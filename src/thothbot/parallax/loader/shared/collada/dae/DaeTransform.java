@@ -14,7 +14,7 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Squirrel. If not, see http://www.gnu.org/licenses/.
+ * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
 package thothbot.parallax.loader.shared.collada.dae;
@@ -23,44 +23,41 @@ import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeIdElement extends DaeElement 
+public abstract class DaeTransform extends DaeElement 
 {
-	private String id;
-	private String name;
 	private String sid;
+	private String type;
+	private float[] data;
 	
-	public DaeIdElement(Node node) 
+	public DaeTransform(Node node) 
 	{
-		super( node );
-	}
-	
-	public void destroy() 
-	{
-		super.destroy();
-		id = name = sid = null;
-	}
-	
-	public String getID() {
-		return id;
+		super(node);
+		
+		Log.debug("DaeTransform() " + toString());
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getSID() {
-		return sid;
-	}
-	
+	@Override
 	public void read() 
 	{
-		id   = readAttribute("id"  );
-		sid  = readAttribute("sid" );
-		name = readAttribute("name");
+		sid = readAttribute("sid" );
+		type = getNode().getNodeName();
+		data = readFloatArray();
 	}
 
+	public float[] getData() 
+	{
+		return data;
+	}
+
+	public String getType() 
+	{
+		return type;
+	}
+	
+	public abstract Object getObject();
+	
 	public String toString()
 	{
-		return "{id=" + this.id + ", name=" + this.name + ", sid=" + this.sid + "}";
+		return "{type=" + this.type + ", sid=" + this.sid + "}"; 
 	}
 }
