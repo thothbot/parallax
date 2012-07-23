@@ -23,6 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
+import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
+import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -30,8 +34,9 @@ import com.google.gwt.xml.client.NodeList;
 
 public class DaeEffect extends DaeIdElement 
 {
-
 	private DaeShader shader;
+	
+	private Material material;
 	
 	public DaeEffect(Node node) 
 	{
@@ -42,6 +47,50 @@ public class DaeEffect extends DaeIdElement
 	
 	public DaeShader getShader() {
 		return this.shader;
+	}
+	
+	public Material getMaterial()
+	{
+		if(this.material == null)
+		{
+			Map<String, DaeColorOrTexture> colorOrTeture = this.shader.getColorOrTeture();
+			
+			String type = this.shader.getType();
+			if(type.compareTo("constant") == 0)
+			{
+				this.material = new MeshBasicMaterial();
+				if(colorOrTeture.containsKey("emission") && !colorOrTeture.get("emission").isTexture())
+				{
+					((MeshBasicMaterial)this.material)
+						.setColor(colorOrTeture.get("emission").getColor());
+				}
+			}
+			else if(type.compareTo("phong") == 0
+					|| type.compareTo("blinn") == 0
+			) {
+				this.material = new MeshPhongMaterial();
+				if(colorOrTeture.containsKey("diffuse") && !colorOrTeture.get("diffuse").isTexture())
+				{
+					((MeshPhongMaterial)this.material)
+						.setColor(colorOrTeture.get("diffuse").getColor());
+				}
+			}
+			else
+			{
+				this.material = new MeshLambertMaterial();
+				if(colorOrTeture.containsKey("diffuse") && !colorOrTeture.get("diffuse").isTexture())
+				{
+					((MeshLambertMaterial)this.material)
+						.setColor(colorOrTeture.get("diffuse").getColor());
+					((MeshLambertMaterial)this.material)
+						.setEmissive(colorOrTeture.get("emission").getColor());
+				}
+			}
+			
+			this.material.setShading(Material.SHADING.SMOOTH);
+		}
+
+		return this.material;
 	}
 	
 	public static Map<String, DaeEffect> parse(DaeDocument document)

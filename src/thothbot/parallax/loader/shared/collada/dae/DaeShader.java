@@ -30,7 +30,8 @@ import com.google.gwt.xml.client.NodeList;
 
 public class DaeShader extends DaeElement 
 {
-	Map<String, DaeColorOrTexture> colorOrTeture;
+	private String type;
+	private Map<String, DaeColorOrTexture> colorOrTeture;
 	private float shininess;
 	private float reflectivity;
 	private float transparency;
@@ -41,10 +42,32 @@ public class DaeShader extends DaeElement
 		
 		Log.debug("DaeShader()" + toString());
 	}
+	
+	public String getType() {
+		return this.type;
+	}
+	
+	public float getShininess() {
+		return this.shininess;
+	}
+	
+	public float getReflectivity() {
+		return this.reflectivity;
+	}
+	
+	public float getTransparency() {
+		return this.transparency;
+	}
+	
+	public Map<String, DaeColorOrTexture> getColorOrTeture() {
+		return this.colorOrTeture;
+	}
 
 	@Override
 	public void read() 
 	{
+		this.type = getNode().getNodeName();
+		
 		colorOrTeture = new HashMap<String, DaeColorOrTexture>();
 		
 		NodeList list = getNode().getChildNodes();
@@ -77,10 +100,10 @@ public class DaeShader extends DaeElement
 			}
 		}
 	}
-	
+		
 	public String toString()
 	{
-		return "{shininess=" + this.shininess + ", reflectivity=" + this.reflectivity + ", transparency=" + this.transparency + "}";
+		return "{type=" + this.type + ", shininess=" + this.shininess + ", reflectivity=" + this.reflectivity + ", transparency=" + this.transparency + "}";
 	}
 
 }

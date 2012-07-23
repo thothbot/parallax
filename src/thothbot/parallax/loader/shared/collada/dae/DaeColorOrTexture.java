@@ -32,7 +32,6 @@ import com.google.gwt.xml.client.NodeList;
 public class DaeColorOrTexture extends DaeElement 
 {
 
-	private boolean isTexture;
 	private String texture;
 	private String texcoord;
 	private Map<String, Float> technique;
@@ -44,6 +43,10 @@ public class DaeColorOrTexture extends DaeElement
 		super(node);
 		
 		Log.debug("DaeColorOrTexture() " + toString()); 
+	}
+	
+	public Color3f getColor() {
+		return this.color;
 	}
 
 	@Override
@@ -66,9 +69,7 @@ public class DaeColorOrTexture extends DaeElement
 			} 
 			else if (nodeName.compareTo("texture") == 0) 
 			{
-				this.isTexture = true;
 				readTexture(child);
-				
 			}
 		}
 	}
@@ -97,7 +98,7 @@ public class DaeColorOrTexture extends DaeElement
 	}
 
 	public boolean isTexture() {
-		return isTexture;
+		return texture != null;
 	}
 	
 	public String toString()
