@@ -80,66 +80,6 @@ public abstract class DaeElement
 			return defaultValue;
 		}
 	}
-
-	public float[] readFloatArray() 
-	{
-		String[] parts = readStringArray();
-		Log.debug("DaeElement() readFloatArray: " + parts);
-		if (parts != null && parts.length > 0) 
-		{
-			Log.debug(" [Float]-> " + parts.length);
-			
-			float[] data = new float[parts.length];
-			for (int i = 0; i < parts.length; i++) 
-			{
-				data[i] = Float.parseFloat(parts[i]);
-			}
-			return data;
-		}
-		return null;
-	}
-
-	public int[] readIntArray() 
-	{
-		String[] parts = readStringArray();
-		Log.debug("DaeElement() readIntArray: " + parts);
-		if (parts != null && parts.length > 0) 
-		{
-			Log.debug(" [Int]-> " + parts.length);
-			
-			int[] data = new int[parts.length];
-			for (int i = 0; i < parts.length; i++) 
-			{
-				data[i] = Integer.parseInt(parts[i], 10);
-			}
-			return data;
-		}
-		return null;
-	}
-
-	public String[] readStringArray() 
-	{
-		if (node.getChildNodes().getLength() > 0) 
-		{
-			String raw = "";
-			for (int i = 0; i < node.getChildNodes().getLength(); i++) 
-			{
-				Node child = node.getChildNodes().item(i);
-				if (child.getNodeType() == Node.TEXT_NODE) 
-				{
-					raw += child.getNodeValue();
-				}
-			}
-
-			String[] parts = raw.trim().split("\\s+");
-			return parts;
-		} 
-		else 
-		{
-			Log.error("readStringArray failed! " + node.toString());
-		}
-		return null;
-	}
 	
 	public abstract String toString();
 }

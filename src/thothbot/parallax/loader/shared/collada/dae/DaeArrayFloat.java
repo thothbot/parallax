@@ -19,6 +19,8 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.xml.client.Node;
 
 public class DaeArrayFloat extends DaeArrayData 
@@ -41,5 +43,22 @@ public class DaeArrayFloat extends DaeArrayData
 	public float[] getData() 
 	{
 		return data;
+	}
+	
+	public float[] readFloatArray() 
+	{
+		String[] parts = readStringArray();
+		if (parts != null && parts.length > 0) 
+		{
+			Log.debug("DaeArrayFloat() [Float]-> " + parts.length);
+			
+			float[] data = new float[parts.length];
+			for (int i = 0; i < parts.length; i++) 
+			{
+				data[i] = Float.parseFloat(parts[i]);
+			}
+			return data;
+		}
+		return null;
 	}
 }

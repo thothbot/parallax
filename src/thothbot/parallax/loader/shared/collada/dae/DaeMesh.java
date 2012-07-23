@@ -139,14 +139,14 @@ public class DaeMesh extends DaeElement
 		return primitives;
 	}
 
-//	public Map<String, DaeSource> getSources() {
-//		return sources;
-//	}
-//
-//	public DaeSource getVertices() {
-//		return vertices;
-//	}
-//
+	public Map<String, DaeSource> getSources() {
+		return sources;
+	}
+
+	public DaeVertices getVertices() {
+		return vertices;
+	}
+
 //	public String getVerticesID() {
 //		return verticesID;
 //	}

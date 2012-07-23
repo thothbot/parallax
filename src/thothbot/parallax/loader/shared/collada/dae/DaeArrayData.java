@@ -42,6 +42,48 @@ public class DaeArrayData extends DaeIdElement
 		count = readIntAttribute("count", 0);
 	}
 	
+
+	public int[] readIntArray() 
+	{
+		String[] parts = readStringArray();
+		if (parts != null && parts.length > 0) 
+		{
+			Log.debug("DaeArrayData() [Int]-> " + parts.length);
+			
+			int[] data = new int[parts.length];
+			for (int i = 0; i < parts.length; i++) 
+			{
+				data[i] = Integer.parseInt(parts[i], 10);
+			}
+			return data;
+		}
+		return null;
+	}
+
+	public String[] readStringArray() 
+	{
+		if (getNode().getChildNodes().getLength() > 0) 
+		{
+			String raw = "";
+			for (int i = 0; i < getNode().getChildNodes().getLength(); i++) 
+			{
+				Node child = getNode().getChildNodes().item(i);
+				if (child.getNodeType() == Node.TEXT_NODE) 
+				{
+					raw += child.getNodeValue();
+				}
+			}
+
+			String[] parts = raw.trim().split("\\s+");
+			return parts;
+		} 
+		else 
+		{
+			Log.error("readStringArray failed! " + getNode().toString());
+		}
+		return null;
+	}
+	
 	public String toString()
 	{
 		return "{id=" + getID() + ", count=" + this.count + "}";
