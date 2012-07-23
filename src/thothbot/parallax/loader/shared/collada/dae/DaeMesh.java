@@ -32,8 +32,8 @@ import com.google.gwt.xml.client.NodeList;
 
 public class DaeMesh extends DaeElement 
 {
-//	private Map<String, DaeSource> sources;
-//	private DaeSource vertices;
+	private Map<String, DaeSource> sources;
+	private DaeVertices vertices;
 	private List<DaePrimitive> primitives;
 //	private String verticesID;
 
@@ -48,12 +48,12 @@ public class DaeMesh extends DaeElement
 	public void destroy() 
 	{
 		super.destroy();
-//
-//		if (sources != null) 
-//		{
-//			sources.clear();
-//			sources = null;
-//		}
+
+		if (sources != null) 
+		{
+			sources.clear();
+			sources = null;
+		}
 
 		if (primitives != null) 
 		{
@@ -64,16 +64,16 @@ public class DaeMesh extends DaeElement
 			primitives = null;
 		}
 
-//		vertices = null;
+		vertices = null;
 //		verticesID = null;
 	}
 
 	@Override
 	public void read() 
 	{
-//		sources = new HashMap<String, DaeSource>();
+		sources = new HashMap<String, DaeSource>();
 		primitives = new ArrayList<DaePrimitive>();
-//		vertices = null;
+		vertices = null;
 //		verticesID = null;
 
 		NodeList list = getNode().getChildNodes();
@@ -82,16 +82,16 @@ public class DaeMesh extends DaeElement
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
 
-//			if (nodeName.compareTo("source") == 0) 
-//			{
-//				readSource(readAttribute(child, "id"));
-//			} 
-//			else if (nodeName.compareTo("vertices") == 0) 
-//			{
-//				readVertices(child);
-//			}
-//			else 
-				if (nodeName.compareTo("triangles") == 0) 
+			if (nodeName.compareTo("source") == 0) 
+			{
+				DaeSource source = new DaeSource(child);
+				sources.put(source.getID(), source);
+			} 
+			else if (nodeName.compareTo("vertices") == 0) 
+			{
+				vertices = new DaeVertices(child);
+			}
+			else if (nodeName.compareTo("triangles") == 0) 
 			{
 				primitives.add(new DaeTriangles(child, this));
 			}
