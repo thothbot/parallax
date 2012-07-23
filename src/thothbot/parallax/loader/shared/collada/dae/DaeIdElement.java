@@ -61,6 +61,6 @@ public class DaeIdElement extends DaeElement
 
 	public String toString()
 	{
-		return "{id=" + this.id + ", name=" + this.name + ", sid=" + this.sid + "}";
+		return "id=" + this.id + ", name=" + this.name + ", sid=" + this.sid;
 	}
 }
