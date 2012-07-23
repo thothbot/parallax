@@ -19,9 +19,13 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Color3f;
 
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -29,8 +33,12 @@ public class DaeColorOrTexture extends DaeElement
 {
 
 	private boolean isTexture;
+	private String texture;
+	private String texcoord;
+	private Map<String, Float> technique;
+	
 	private Color3f color;
-
+	
 	public DaeColorOrTexture(Node node) 
 	{
 		super(node);
@@ -59,6 +67,31 @@ public class DaeColorOrTexture extends DaeElement
 			else if (nodeName.compareTo("texture") == 0) 
 			{
 				this.isTexture = true;
+				readTexture(child);
+				
+			}
+		}
+	}
+	
+	private void readTexture(Node node)
+	{
+		DaeElement textureElement = new DaeDummyElement(node);
+		texture   = textureElement.readAttribute("texture");
+		texcoord  = textureElement.readAttribute("texcoord");
+		
+		technique = new HashMap<String, Float>();
+		
+		NodeList list = ((Element)node).getElementsByTagName("technique");
+		for (int i = 0; i < list.getLength(); i++) 
+		{
+			NodeList childList = list.item(i).getChildNodes();
+			for (int j = 0; j < childList.getLength(); j++) 
+			{
+				Node child = childList.item(j);
+				String nodeName = child.getNodeName();
+				if(nodeName.charAt(0) == '#')
+					continue;
+				technique.put(nodeName, Float.parseFloat(child.getFirstChild().getNodeValue()));
 			}
 		}
 	}
@@ -70,7 +103,7 @@ public class DaeColorOrTexture extends DaeElement
 	public String toString()
 	{
 		if(isTexture())
-			return "texture";
+			return "texture: texture=" + this.texture + ", texcoord=" + this.texcoord + ", technique=" + technique;
 		else
 			return "color: " + this.color;
 	}

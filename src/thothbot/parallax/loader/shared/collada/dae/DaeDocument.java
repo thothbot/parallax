@@ -70,11 +70,7 @@ public class DaeDocument
 		NodeList list = document.getElementsByTagName("instance_visual_scene");
 		for (int i = 0; i < list.getLength(); i++) 
 		{
-			DaeElement scene = new DaeElement(list.item(i)) {		
-				@Override
-				public void read() {}
-			};
-
+			DaeDummyElement scene = new DaeDummyElement(list.item(i));
 			String sceneName = scene.readAttribute("url", true);
 			Log.debug("DaeDocument() adding scene: " + sceneName);
 			scenes.add(visualScenes.get(sceneName));

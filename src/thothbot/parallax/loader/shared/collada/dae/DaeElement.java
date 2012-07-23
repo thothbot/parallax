@@ -28,8 +28,6 @@ public abstract class DaeElement
 	public static final float TO_RADIANS = (float) (Math.PI / 180.0f);
 	
 	private Node node;
-
-
 	
 	public DaeElement(Node node) 
 	{
