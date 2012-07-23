@@ -36,14 +36,45 @@ public class DaePrimitive extends DaeElement
 	protected Map<String, Map<Integer, int[]>> indices;
 	protected Map<String, Map<Integer, Integer>> indexCounts;
 
-	public DaePrimitive(Node node, DaeMesh mesh) 
+	public DaePrimitive(Node node, DaeMesh mesh)
 	{
 		this.mesh = mesh;
-		this.sourceMaps = new HashMap<String, Map<Integer,String>>();
-		this.indices = new HashMap<String, Map<Integer, int[]>>();
+		this.sourceMaps  = new HashMap<String, Map<Integer,String>>();
+		this.indices     = new HashMap<String, Map<Integer, int[]>>();
 		this.indexCounts = new HashMap<String, Map<Integer,Integer>>();
 
 		setNode(node);
+		
+		Log.debug("DaePrimitive() " + toString()); 
+	}
+		
+	@Override
+	public void destroy() 
+	{
+		super.destroy();
+		indices.clear();
+		sourceMaps.clear();
+		indices = null;
+		sourceMaps = null;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public String getMaterial() {
+		return material;
+	}
+	
+	public DaeMesh getMesh() {
+		return mesh;
+	}
+	
+	@Override
+	public void read() 
+	{
+		this.material = readAttribute("material");
+		this.count = readIntAttribute("count", 0);
 	}
 
 	public void addIndex(DaeInput input, int index, int maxItems) 
@@ -99,53 +130,35 @@ public class DaePrimitive extends DaeElement
 		}
 	}
 
-	public float[] getNormals() 
-	{
-		int[] vIndices = getIndices("VERTEX", 0);
-		int[] nIndices = getIndices("NORMAL", 0);
-		DaeSource normalSource = DaeDocument.getSourceByID(getNode(), getSource("NORMAL", 0));
-
-		float[] ret = null;
-
-		if (normalSource != null && normalSource.getFloats() != null &&
-			vIndices != null && nIndices != null && vIndices.length == nIndices.length) 
-		{
-
-			float[] data = normalSource.getFloats();
-
-			ret = new float[data.length];
-
-			for (int i = 0; i < vIndices.length; i++) 
-			{
-				int v = vIndices[i] * 3;
-				int n = nIndices[i] * 3;
-
-				ret[v] = data[n];
-				ret[v+1] = data[n+1];
-				ret[v+2] = data[n+2];
-			}
-		}
-
-		return ret;
-	}
-
-	@Override
-	public void destroy() 
-	{
-		super.destroy();
-		indices.clear();
-		sourceMaps.clear();
-		indices = null;
-		sourceMaps = null;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public String getMaterial() {
-		return material;
-	}
+//	public float[] getNormals() 
+//	{
+//		int[] vIndices = getIndices("VERTEX", 0);
+//		int[] nIndices = getIndices("NORMAL", 0);
+//		DaeSource normalSource = DaeDocument.getSourceByID(getNode(), getSource("NORMAL", 0));
+//
+//		float[] ret = null;
+//
+//		if (normalSource != null && normalSource.getFloats() != null &&
+//			vIndices != null && nIndices != null && vIndices.length == nIndices.length) 
+//		{
+//
+//			float[] data = normalSource.getFloats();
+//
+//			ret = new float[data.length];
+//
+//			for (int i = 0; i < vIndices.length; i++) 
+//			{
+//				int v = vIndices[i] * 3;
+//				int n = nIndices[i] * 3;
+//
+//				ret[v] = data[n];
+//				ret[v+1] = data[n+1];
+//				ret[v+2] = data[n+2];
+//			}
+//		}
+//
+//		return ret;
+//	}
 
 	public int[] getIndices(String semantic, Integer set) 
 	{
@@ -171,19 +184,6 @@ public class DaePrimitive extends DaeElement
 		return null;
 	}
 
-	public DaeMesh getMesh() {
-		return mesh;
-	}
-
-	@Override
-	public void read() 
-	{
-		super.read();
-
-		this.material = readAttribute(getNode(), "material");
-		this.count = readIntAttribute(getNode(), "count", 0);
-	}
-
 	private Integer getLowestSet(String semantic) 
 	{
 		if (indices.containsKey(semantic)) 
@@ -201,5 +201,10 @@ public class DaePrimitive extends DaeElement
 			}
 		}
 		return null;
+	}
+	
+	public String toString()
+	{
+		return "{material=" + this.material + ", count=" + this.count + "}";
 	}
 }

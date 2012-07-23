@@ -14,49 +14,51 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Parallax. If not, see http://www.gnu.org/licenses/.
+ * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
 package thothbot.parallax.loader.shared.collada.dae;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
 
-public class DaeAccessor extends DaeElement 
+public class DaeIdElement extends DaeElement 
 {
-	private List<DaeParam> params;
-
-	public DaeAccessor(Node node) 
+	private String id;
+	private String name;
+	private String sid;
+	
+	public DaeIdElement(Node node) 
 	{
-		super(node);
+		super( node );
+	}
+	
+	public void destroy() 
+	{
+		super.destroy();
+		id = name = sid = null;
+	}
+	
+	public String getID() {
+		return id;
 	}
 
-	@Override
+	public String getName() {
+		return name;
+	}
+
+	public String getSID() {
+		return sid;
+	}
+	
 	public void read() 
 	{
-		super.read();
-
-		params = new ArrayList<DaeParam>();
-
-		NodeList list = getNode().getChildNodes();
-		for (int i = 0; i < list.getLength(); i++) 
-		{
-			Node child = list.item(i);
-			String nodeName = child.getNodeName();
-			if (nodeName.compareTo("param") == 0) 
-			{
-				DaeParam param = new DaeParam();
-				param.setName(readAttribute(child, "name"));
-				param.setType(readAttribute(child, "type"));
-				params.add(param);
-			}
-		}
+		id   = readAttribute("id"  );
+		sid  = readAttribute("sid" );
+		name = readAttribute("name");
 	}
 
-	public List<DaeParam> getParams( ){
-		return params;
+	public String toString()
+	{
+		return "{id=" + this.id + ", name=" + this.name + ", sid=" + this.sid + "}";
 	}
 }

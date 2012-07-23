@@ -25,7 +25,7 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeAsset 
+public class DaeAsset extends DaeElement
 {
 	public enum AXIS {
 		X,
@@ -36,33 +36,39 @@ public class DaeAsset
 	private float unit = 1.0f;
 	private AXIS upAxis = AXIS.Z;
 	
+	public DaeAsset(Node node)
+	{
+		super(node);
+
+		Log.debug("DaeAsset(): " + toString());
+	}
+	
 	public static DaeAsset parse(DaeDocument document)
 	{
-		DaeAsset asset = new DaeAsset();
-		
-		Node node = document.getDocument().getElementsByTagName("asset").item(0);
+		return new DaeAsset(document.getDocument().getElementsByTagName("asset").item(0));
+	}
 
-		NodeList list = node.getChildNodes();
+	@Override
+	public void read()
+	{
+		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			if (child.getNodeName().compareTo("unit") == 0) 
 			{
-				asset.unit = Float.parseFloat( ((Element)child).getAttribute("meter") );
+				this.unit = Float.parseFloat( ((Element)child).getAttribute("meter") );
 			}
 			else if (child.getNodeName().compareTo("up_axis") == 0) 
 			{ 
 				switch(child.getFirstChild().getNodeValue().charAt(0))
 				{
-				case 'X': asset.upAxis = AXIS.X; break;
-				case 'Y': asset.upAxis = AXIS.Y; break;
-				case 'Z': asset.upAxis = AXIS.Z; break;
+				case 'X': this.upAxis = AXIS.X; break;
+				case 'Y': this.upAxis = AXIS.Y; break;
+				case 'Z': this.upAxis = AXIS.Z; break;
 				}
 			}
 		}
-		
-		Log.debug("DaeAsset(): " + asset.toString());
-		return asset;
 	}
 	
 	public float getUnit() {

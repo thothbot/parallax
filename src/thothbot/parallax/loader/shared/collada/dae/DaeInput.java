@@ -19,6 +19,8 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.xml.client.Node;
 
 public class DaeInput extends DaeElement 
@@ -31,17 +33,17 @@ public class DaeInput extends DaeElement
 	public DaeInput(Node node) 
 	{
 		super(node);
+		
+		Log.debug("DaeInput() " + toString());
 	}
 
 	@Override
 	public void read() 
 	{
-		super.read();
-
-		semantic = readAttribute(getNode(), "semantic");
-		source = readAttribute(getNode(), "source", true);
-		offset = readIntAttribute(getNode(), "offset", 0);
-		set = readIntAttribute(getNode(), "set", 0);
+		semantic = readAttribute("semantic");
+		source = readAttribute("source", true);
+		offset = readIntAttribute("offset", 0);
+		set = readIntAttribute("set", 0);
 	}
 
 	public String getSemantic() {
@@ -62,5 +64,10 @@ public class DaeInput extends DaeElement
 
 	public void setSource(String value) {
 		source = value;
+	}
+	
+	public String toString()
+	{
+		return "{semantic=" +this.semantic + ", offset="+ this.offset + ", set="+ this.set + "}";
 	}
 }

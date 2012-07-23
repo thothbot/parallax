@@ -58,19 +58,20 @@ public class DaeTriangles extends DaePrimitive
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
+
 			if (nodeName.compareTo("input") == 0) 
 			{
 				DaeInput input = new DaeInput(child);
-				if (getMesh().getVerticesID().compareTo(input.getSource()) == 0) 
-				{
-					input.setSource(getMesh().getVertices().getID());
-				}
-				inputs.add(input);
+//				if (getMesh().getVerticesID().compareTo(input.getSource()) == 0) 
+//				{
+//					input.setSource(getMesh().getVertices().getID());
+//				}
+//				inputs.add(input);
 			} 
-			else if (nodeName.compareTo("p") == 0) 
-			{
-				p = readIntArray(child);
-			}
+//			else if (nodeName.compareTo("p") == 0) 
+//			{
+//				p = readIntArray(child);
+//			}
 		}
 
 		if (p != null && p.length > 0 && inputs.size() > 0) 
@@ -94,10 +95,10 @@ public class DaeTriangles extends DaePrimitive
 			for (int i = 0; i < inputs.size(); i++) 
 			{
 				DaeInput input = inputs.get(i);
-				DaeSource source = DaeDocument.getSourceByID(getNode().getParentNode(), input.getSource());
-				int index = p[current + input.getOffset()];
+//				DaeSource source = DaeDocument.getSourceByID(getNode(), input.getSource());
+//				int index = p[current + input.getOffset()];
 
-				addIndex(input, index, source.getAccessor().getParams().size());
+//				addIndex(input, index, source.getAccessor().getParams().size());
 			}
 			current += (maxOffset + 1);
 		}

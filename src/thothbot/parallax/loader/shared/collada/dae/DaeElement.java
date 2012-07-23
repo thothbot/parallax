@@ -19,25 +19,19 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeElement 
+public abstract class DaeElement 
 {
 	private Node node;
-	private String id;
-	private String name;
-	private String sid;
 
 	public DaeElement()
 	{
 		
 	}
-
+	
 	public DaeElement(Node node) 
 	{
 		setNode( node );
@@ -45,58 +39,38 @@ public class DaeElement
 
 	public void destroy() 
 	{
-		id = name = sid = null;
 		node = null;
 	}
 	
-	public Node getNode() 
-	{
+	public Node getNode() {
 		return node;
 	}
 	
-	public void setNode(Node node)
-	{
+	public void setNode(Node node) {
 		this.node = node;
 		read();
 	}
 
-	public String getID() {
-		return id;
-	}
+	public abstract void read(); 
 
-	public String getName() {
-		return name;
-	}
-
-	public String getSID() {
-		return sid;
-	}
-
-	public void read() 
-	{
-		id = readAttribute(getNode(), "id");
-		sid = readAttribute(getNode(), "sid");
-		name = readAttribute(getNode(), "name");
-	}
-
-	public String readAttribute(Node node, String name) 
+	public String readAttribute(String name) 
 	{
 		return (node.getAttributes().getNamedItem(name) != null ? 
 				node.getAttributes().getNamedItem(name).getNodeValue() : null);
 	}
 
-	public String readAttribute(Node node, String name, Boolean stripHash) 
+	public String readAttribute(String name, Boolean stripHash) 
 	{
-		String attr = readAttribute(node, name);
+		String attr = readAttribute(name);
 		if (stripHash && attr.startsWith("#"))
 			attr = attr.substring(1);
 
 		return attr;
 	}
 
-	public int readIntAttribute(Node node, String name, int defaultValue) 
+	public int readIntAttribute(String name, int defaultValue) 
 	{
-		String attr = readAttribute(node, name);
+		String attr = readAttribute(name);
 		if (attr != null) 
 		{
 			return Integer.parseInt(attr, 10);
@@ -107,9 +81,9 @@ public class DaeElement
 		}
 	}
 
-	public float[] readFloatArray(Node node) 
+	public float[] readFloatArray() 
 	{
-		String[] parts = readStringArray(node);
+		String[] parts = readStringArray();
 		Log.debug("DaeElement() readFloatArray: " + parts);
 		if (parts != null && parts.length > 0) 
 		{
@@ -125,9 +99,9 @@ public class DaeElement
 		return null;
 	}
 
-	public int[] readIntArray(Node node) 
+	public int[] readIntArray() 
 	{
-		String[] parts = readStringArray(node);
+		String[] parts = readStringArray();
 		Log.debug("DaeElement() readIntArray: " + parts);
 		if (parts != null && parts.length > 0) 
 		{
@@ -143,7 +117,7 @@ public class DaeElement
 		return null;
 	}
 
-	public String[] readStringArray(Node node) 
+	public String[] readStringArray() 
 	{
 		if (node.getChildNodes().getLength() > 0) 
 		{
@@ -162,17 +136,10 @@ public class DaeElement
 		} 
 		else 
 		{
-			Log.error("readStringArray failed! " + getNode());
+			Log.error("readStringArray failed! " + node.toString());
 		}
 		return null;
 	}
-
-	public void write() {
-
-	}
 	
-	public String toString()
-	{
-		return "{id=" + this.id + ", name=" + this.name + ", sid=" + this.sid + "}";
-	}
+	public abstract String toString();
 }
