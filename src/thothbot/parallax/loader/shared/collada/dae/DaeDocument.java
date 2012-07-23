@@ -35,13 +35,15 @@ public class DaeDocument
 	private DaeAsset asset;
 	
 	private Map<String, DaeGeometry> geometries;
+	private Map<String, DaeVisualScene> visualScene;
 
 	public DaeDocument(Document document) 
 	{
 		this.document = document;
 		
-		this.asset      = DaeAsset.parse(this);
-		this.geometries = DaeGeometry.parse(this);
+		this.asset       = DaeAsset.parse(this);
+		this.geometries  = DaeGeometry.parse(this);
+		this.visualScene = DaeVisualScene.parse(this);
 	}
 	
 	public Document getDocument() {

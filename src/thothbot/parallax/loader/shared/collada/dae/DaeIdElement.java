@@ -19,6 +19,8 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.xml.client.Node;
 
 public class DaeIdElement extends DaeElement 
@@ -30,6 +32,8 @@ public class DaeIdElement extends DaeElement
 	public DaeIdElement(Node node) 
 	{
 		super( node );
+		
+		Log.debug("DaeIdElement() " + toString()); 
 	}
 	
 	public void destroy() 
