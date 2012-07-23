@@ -20,15 +20,13 @@
 package thothbot.parallax.loader.shared.collada.dae;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.xml.client.Document;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 public class DaeDocument
@@ -36,8 +34,11 @@ public class DaeDocument
 	private Document document;
 	private DaeAsset asset;
 	
-	private List<String> scenes;
+	private List<DaeVisualScene> scenes;
+	private Object3D scene;
 	
+	// Libraries
+	private Map<String, DaeImage> images;
 	private Map<String, DaeGeometry> geometries;
 	private Map<String, DaeVisualScene> visualScenes;
 
@@ -45,8 +46,10 @@ public class DaeDocument
 	{
 		this.document = document;
 		
-		this.asset       = DaeAsset.parse(this);
-		this.geometries  = DaeGeometry.parse(this);
+		this.asset        = DaeAsset.parse(this);
+		
+		this.images       = DaeImage.parse(this);
+		this.geometries   = DaeGeometry.parse(this);
 		this.visualScenes = DaeVisualScene.parse(this);
 		
 		parseScene();
@@ -58,7 +61,7 @@ public class DaeDocument
 	
 	private void parseScene()
 	{
-		scenes = new ArrayList<String>();
+		scenes = new ArrayList<DaeVisualScene>();
 		
 		NodeList list = document.getElementsByTagName("instance_visual_scene");
 		for (int i = 0; i < list.getLength(); i++) 
@@ -67,8 +70,10 @@ public class DaeDocument
 				@Override
 				public void read() {}
 			};
-			scenes.add(scene.readAttribute("url", true));
-			Log.debug("DaeDocument() scenes" + scenes);
+
+			String sceneName = scene.readAttribute("url", true);
+			Log.debug("DaeDocument() adding scene: " + sceneName);
+			scenes.add(visualScenes.get(sceneName));
 		}
 	}
 }

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
 
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -42,7 +43,8 @@ public class DaeGeometry extends DaeIdElement
 	{
 		Map<String, DaeGeometry> retval = new HashMap<String, DaeGeometry>();
 		
-		NodeList list = document.getDocument().getElementsByTagName("geometry");
+		Node lib = document.getDocument().getElementsByTagName("library_geometries").item(0);
+		NodeList list = ((Element)lib).getElementsByTagName("geometry"); 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			DaeGeometry geometry = new DaeGeometry(list.item(i));

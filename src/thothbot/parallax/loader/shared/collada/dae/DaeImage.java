@@ -19,9 +19,7 @@
 
 package thothbot.parallax.loader.shared.collada.dae;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
@@ -30,58 +28,60 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeVisualScene extends DaeIdElement 
+public class DaeImage extends DaeIdElement 
 {
-
-	List<DaeNode> nodes;
+	private String initFrom;
 	
-	public DaeVisualScene(Node node) 
+	public DaeImage(Node node) 
 	{
 		super(node);
 		
-		Log.debug("DaeVisualScene() " + toString()); 
+		Log.debug("DaeImage() " + toString());
 	}
 	
-	public static Map<String, DaeVisualScene> parse(DaeDocument document)
+	public String getInitFrom() {
+		return this.initFrom;
+	}
+	
+	public static Map<String, DaeImage> parse(DaeDocument document)
 	{
-		Map<String, DaeVisualScene> retval = new HashMap<String, DaeVisualScene>();
+		Map<String, DaeImage> retval = new HashMap<String, DaeImage>();
 		
-		Node lib = document.getDocument().getElementsByTagName("library_visual_scenes").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("visual_scene"); 
+		Node lib = document.getDocument().getElementsByTagName("library_images").item(0);
+		NodeList list = ((Element)lib).getElementsByTagName("image"); 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
-			DaeVisualScene visualScene = new DaeVisualScene(list.item(i));
-			if (visualScene.getID() != null) 
+			Node child = list.item(i);
+
+			DaeImage image = new DaeImage(child);
+			if (image.getID() != null) 
 			{
-				retval.put(visualScene.getID(), visualScene);
+				retval.put(image.getID(), image);
 			}
 		}
-		
+
 		return retval;
 	}
-	
+
 	@Override
 	public void read()
 	{
 		super.read();
-
-		this.nodes = new ArrayList<DaeNode>();
 		
 		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
-			if (nodeName.compareTo("node") == 0) 
+			if (nodeName.compareTo("init_from") == 0) 
 			{
-				this.nodes.add( new DaeNode(child) );
+				this.initFrom = child.getFirstChild().getNodeValue();
 			}
 		}
 	}
 	
-	public List<DaeNode> getNodes()
+	public String toString()
 	{
-		return this.nodes;
+		return "{" + this.initFrom + "}";
 	}
-
 }
