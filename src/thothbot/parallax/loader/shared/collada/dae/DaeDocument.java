@@ -40,6 +40,7 @@ public class DaeDocument
 	// Libraries
 	private Map<String, DaeImage> images;
 	private Map<String, DaeMaterial> materials;
+	private Map<String, DaeEffect> effects;
 	private Map<String, DaeGeometry> geometries;
 	private Map<String, DaeVisualScene> visualScenes;
 
@@ -51,6 +52,7 @@ public class DaeDocument
 		
 		this.images       = DaeImage.parse(this);
 		this.materials    = DaeMaterial.parse(this);
+		this.effects      = DaeEffect.parse(this);
 		this.geometries   = DaeGeometry.parse(this);
 		this.visualScenes = DaeVisualScene.parse(this);
 		
