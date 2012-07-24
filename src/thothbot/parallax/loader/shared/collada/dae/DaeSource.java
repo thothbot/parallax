@@ -34,7 +34,7 @@ public class DaeSource extends DaeIdElement
 
 	private DaeAccessor accessor;
 	private Type type;
-	private DaeArrayData data;
+	private DaeArrayFloat data;
 
 	public DaeSource(Node node) 
 	{
@@ -45,7 +45,7 @@ public class DaeSource extends DaeIdElement
 		return accessor;
 	}
 	
-	public DaeArrayData getData() {
+	public DaeArrayFloat getData() {
 		return data;
 	}
 

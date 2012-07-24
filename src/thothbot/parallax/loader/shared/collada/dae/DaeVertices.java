@@ -27,9 +27,15 @@ import com.google.gwt.xml.client.NodeList;
 
 public class DaeVertices extends DaeIdElement 
 {
+	DaeInput input;
+	
 	public DaeVertices(Node node) 
 	{
 		super(node);
+	}
+	
+	public DaeInput getInput() {
+		return this.input;
 	}
 
 	@Override
@@ -47,7 +53,7 @@ public class DaeVertices extends DaeIdElement
 
 			if (nodeName.compareTo("input") == 0) 
 			{
-				DaeInput input = new DaeInput(child);
+				input = new DaeInput(child);
 //				if (getMesh().getVerticesID().compareTo(input.getSource()) == 0) 
 //				{
 //					input.setSource(getMesh().getVertices().getID());

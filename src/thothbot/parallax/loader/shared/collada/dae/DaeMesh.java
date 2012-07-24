@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.objects.Mesh;
 
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -35,13 +37,15 @@ public class DaeMesh extends DaeElement
 	private Map<String, DaeSource> sources;
 	private DaeVertices vertices;
 	private List<DaePrimitive> primitives;
-//	private String verticesID;
+	private Geometry geometry;
+	//	private String verticesID;
 
 	public DaeMesh(Node node) 
 	{
 		super(node);
 		
 		Log.debug("DaeMesh() " + toString());
+		getGeometry();
 	}
 
 	@Override
@@ -96,6 +100,47 @@ public class DaeMesh extends DaeElement
 				primitives.add(new DaeTriangles(child, this));
 			}
 		}
+	}
+	
+	public Geometry getGeometry()
+	{
+		if(this.geometry == null)
+		{
+			this.geometry = new Geometry();
+			DaeInput input = this.vertices.getInput();
+			if(input.getSemantic().compareTo("POSITION") == 0)
+			{
+				float[] vertexData = sources.get(input.getSource()).getData().getData();
+				for ( int i = 0; i < vertexData.length; i += 3 ) 
+				{
+					this.geometry.getVertices().add( new Vector3f(
+							vertexData[ i ], vertexData[ 1 + i ], vertexData[ 2 + i ]) );
+				}
+			}
+		}
+		
+		for ( int i = 0; i < this.primitives.size(); i ++ ) 
+		{
+			DaePrimitive primitive = this.primitives.get( i );
+//			primitive.setVertices( this.vertices );
+			handlePrimitive( primitive);
+
+		}
+
+		this.geometry.computeCentroids();
+		this.geometry.computeFaceNormals(false);
+		
+//		if ( this.geometry.calcNormals )
+//			this.geometry.computeVertexNormals();		
+		
+		this.geometry.computeBoundingBox();
+		
+		return this.geometry;
+	}
+	
+	private void handlePrimitive(DaePrimitive primitive)
+	{
+		
 	}
 
 //	private DaeSource readSource(String id) 
