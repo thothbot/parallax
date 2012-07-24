@@ -21,6 +21,7 @@ package thothbot.parallax.loader.shared.collada.dae;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
@@ -31,8 +32,14 @@ import com.google.gwt.xml.client.NodeList;
 
 public class DaeSkin extends DaeElement 
 {
+	private String source;
+	
 	private Map<String, DaeSource> sources;
+	
 	private Matrix4f bindShapeMatrix;
+//	this.invBindMatrices = [];
+//	this.joints = [];
+//	this.weights = [];
 	
 	public DaeSkin(Node node) 
 	{
@@ -44,6 +51,7 @@ public class DaeSkin extends DaeElement
 	@Override
 	public void read() 
 	{
+		source = readAttribute("source", true);
 		sources = new HashMap<String, DaeSource>();
 
 		NodeList list = getNode().getChildNodes();
@@ -70,18 +78,40 @@ public class DaeSkin extends DaeElement
 			}
 			else if (nodeName.compareTo("joints") == 0) 
 			{
-//				primitives.add(new DaeTriangles(child, this));
+				readJoints(child);
 			}
 			else if (nodeName.compareTo("vertex_weights") == 0) 
 			{
-//				primitives.add(new DaeTriangles(child, this));
+				reaWeights(child);
 			}
 		}
 	}
 	
+	private void readJoints(Node node)
+	{
+		NodeList list = node.getChildNodes();
+		List<DaeInput> input = new ArrayList<DaeInput>();
+		
+		for (int i = 0; i < list.getLength(); i++) 
+		{
+			Node child = list.item(i);
+			String nodeName = child.getNodeName();
+
+			if (nodeName.compareTo("input") == 0) 
+			{
+				input.add(new DaeInput(child));
+			}
+		}
+	}
+	
+	private void reaWeights(Node node)
+	{
+		
+	}
+	
 	public String toString()
 	{
-		return "bind_shape_matrix=" + this.bindShapeMatrix;
+		return "source=" + this.source + ", bind_shape_matrix=" + this.bindShapeMatrix;
 	}
 
 }
