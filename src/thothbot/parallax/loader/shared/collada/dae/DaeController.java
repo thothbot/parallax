@@ -14,7 +14,7 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Parallax. If not, see http://www.gnu.org/licenses/.
+ * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
 package thothbot.parallax.loader.shared.collada.dae;
@@ -28,54 +28,53 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeGeometry extends DaeIdElement
+public class DaeController extends DaeIdElement 
 {
-	DaeMesh mesh;
-	
-	public DaeGeometry(Node node)
+	private DaeSkin skin;
+
+	public DaeController(Node node) 
 	{
 		super(node);
 		
-		Log.debug("DaeGeometry() " + toString()); 
+		Log.debug("DaeController() " + toString());
 	}
 	
-	public DaeMesh getMesh()
-	{
-		return this.mesh;
+	public DaeSkin getSkin() {
+		return this.skin;
 	}
 
-	public static Map<String, DaeGeometry> parse(DaeDocument document)
+	public static Map<String, DaeController> parse(DaeDocument document)
 	{
-		Map<String, DaeGeometry> retval = new HashMap<String, DaeGeometry>();
+		Map<String, DaeController> retval = new HashMap<String, DaeController>();
 		
-		Node lib = document.getDocument().getElementsByTagName("library_geometries").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("geometry"); 
+		Node lib = document.getDocument().getElementsByTagName("library_controllers").item(0);
+		NodeList list = ((Element)lib).getElementsByTagName("controller"); 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
-			DaeGeometry geometry = new DaeGeometry(list.item(i));
-			if (geometry.getID() != null) 
+			DaeController controller = new DaeController(list.item(i));
+			if (controller.getID() != null) 
 			{
-				retval.put(geometry.getID(), geometry);
+				retval.put(controller.getID(), controller);
 			}
 		}
 		
 		return retval;
 	}
-
+	
 	@Override
-	public void read()
+	public void read() 
 	{
 		super.read();
-
+		
 		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
 
-			if (nodeName.compareTo("mesh") == 0) 
+			if (nodeName.compareTo("skin") == 0) 
 			{
-				mesh = new DaeMesh(child);
+				skin = new DaeSkin(child);
 			}
 		}
 	}

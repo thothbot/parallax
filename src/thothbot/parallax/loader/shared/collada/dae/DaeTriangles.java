@@ -29,6 +29,7 @@ import com.google.gwt.xml.client.NodeList;
 
 public class DaeTriangles extends DaePrimitive 
 {
+	List<DaeInput> input;
 	private int[] p;
 
 	public DaeTriangles(Node node, DaeMesh mesh) 
@@ -43,6 +44,10 @@ public class DaeTriangles extends DaePrimitive
 
 		p = null;
 	}
+	
+	public List<DaeInput> getInput() {
+		return this.input;
+	}
 
 	@Override
 	public void read() 
@@ -51,7 +56,7 @@ public class DaeTriangles extends DaePrimitive
 
 		p = null;
 
-		List<DaeInput> inputs = new ArrayList<DaeInput>();
+		input = new ArrayList<DaeInput>();
 		NodeList list = getNode().getChildNodes();
 
 		for (int i = 0; i < list.getLength(); i++) 
@@ -61,7 +66,7 @@ public class DaeTriangles extends DaePrimitive
 
 			if (nodeName.compareTo("input") == 0) 
 			{
-				DaeInput input = new DaeInput(child);
+				input.add(new DaeInput(child));
 //				if (getMesh().getVerticesID().compareTo(input.getSource()) == 0) 
 //				{
 //					input.setSource(getMesh().getVertices().getID());
@@ -74,33 +79,33 @@ public class DaeTriangles extends DaePrimitive
 //			}
 		}
 
-		if (p != null && p.length > 0 && inputs.size() > 0) 
-		{
-			readTriangles(p, inputs);
-		}
+//		if (p != null && p.length > 0 && inputs.size() > 0) 
+//		{
+//			readTriangles(p, inputs);
+//		}
 	}
 
-	private void readTriangles(int[] p, List<DaeInput> inputs) 
-	{
-		int current = 0;
-		int maxOffset = 0;
-
-		for (DaeInput input: inputs)
-		{
-			maxOffset = Math.max(maxOffset, input.getOffset());
-		}
-
-		while (current < p.length) 
-		{
-			for (int i = 0; i < inputs.size(); i++) 
-			{
-				DaeInput input = inputs.get(i);
-//				DaeSource source = DaeDocument.getSourceByID(getNode(), input.getSource());
-//				int index = p[current + input.getOffset()];
-
-//				addIndex(input, index, source.getAccessor().getParams().size());
-			}
-			current += (maxOffset + 1);
-		}
-	}
+//	private void readTriangles(int[] p, List<DaeInput> inputs) 
+//	{
+//		int current = 0;
+//		int maxOffset = 0;
+//
+//		for (DaeInput input: inputs)
+//		{
+//			maxOffset = Math.max(maxOffset, input.getOffset());
+//		}
+//
+//		while (current < p.length) 
+//		{
+//			for (int i = 0; i < inputs.size(); i++) 
+//			{
+//				DaeInput input = inputs.get(i);
+////				DaeSource source = DaeDocument.getSourceByID(getNode(), input.getSource());
+////				int index = p[current + input.getOffset()];
+//
+////				addIndex(input, index, source.getAccessor().getParams().size());
+//			}
+//			current += (maxOffset + 1);
+//		}
+//	}
 }

@@ -42,6 +42,7 @@ public class DaeDocument
 	private Map<String, DaeMaterial> materials;
 	private Map<String, DaeEffect> effects;
 	private Map<String, DaeGeometry> geometries;
+	private Map<String, DaeController> controllers;
 	private Map<String, DaeVisualScene> visualScenes;
 
 	public DaeDocument(Document document) 
@@ -54,14 +55,36 @@ public class DaeDocument
 		this.materials    = DaeMaterial.parse(this);
 		this.effects      = DaeEffect.parse(this);
 		this.geometries   = DaeGeometry.parse(this);
+		this.controllers  = DaeController.parse(this);
 		this.visualScenes = DaeVisualScene.parse(this);
 		
 		parseScene();
 	}
 	
 	public Document getDocument() {
-		return document;
-	}	
+		return this.document;
+	}
+	
+	public Object3D getScene() 
+	{
+		if(this.scene == null)
+		{
+			this.scene = new Object3D();
+			for ( int i = 0; i < scenes.size(); i ++ ) 
+			{
+				scene.addChild( getSceneObject( scenes.get(i) ) );
+			}
+		}
+		
+		return this.scene;
+	}
+	
+	private Object3D getSceneObject(DaeVisualScene visualScene)
+	{
+		Object3D object = new Object3D();
+		
+		return object;
+	}
 	
 	private void parseScene()
 	{
