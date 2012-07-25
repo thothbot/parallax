@@ -14,32 +14,17 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Parallax. If not, see http://www.gnu.org/licenses/.
+ * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
 package thothbot.parallax.loader.shared;
 
-import thothbot.parallax.loader.shared.dae.DaeDocument;
-
-import com.google.gwt.xml.client.Document;
-import com.google.gwt.xml.client.XMLParser;
-
-public class Collada extends Loader
+public class Json extends Loader 
 {
-	private DaeDocument daeDocument;
-	private Document document;
 
-	public void parse(String xmlString) 
+	@Override
+	public void parse(String string) 
 	{
-		document = XMLParser.parse(xmlString);
-		daeDocument = new DaeDocument(document);
-	}
-
-	public DaeDocument getDaeDocument() {
-		return daeDocument;
-	}
-
-	public Document getDocument() {
-		return document;
+	
 	}
 }
