@@ -124,6 +124,7 @@ public class Json extends Loader
 		
 		JSONArray materials = json.get("materials").isArray();
 		
+		this.materials= new ArrayList<Material>(); 
 		for ( int i = 0; i < materials.size(); ++ i )
 			this.materials.add( createMaterial( materials.get(i).isObject()) );
 	}

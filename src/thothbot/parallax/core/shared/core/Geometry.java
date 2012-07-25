@@ -152,8 +152,7 @@ public class Geometry extends GeometryBuffer
 
 		this.faceUvs = new ArrayList<List<UVf>>();
 		this.faceVertexUvs = new ArrayList<List<List<UVf>>>();
-		ArrayList<List<UVf>> firstChild = new ArrayList<List<UVf>>();
-		this.faceVertexUvs.add(firstChild);
+		this.faceVertexUvs.add(new ArrayList<List<UVf>>());
 
 		this.morphTargets = new ArrayList<MorphTarget>();
 		this.morphNormals = new ArrayList<MorphNormal>();
@@ -290,16 +289,8 @@ public class Geometry extends GeometryBuffer
 		return boundingBox;
 	}
 
-	public void setMorphTargets(List<MorphTarget> morphTargets) {
-		this.morphTargets = morphTargets;
-	}
-
 	public List<MorphTarget> getMorphTargets() {
 		return morphTargets;
-	}
-	
-	public void setMorphNormals(List<MorphNormal> morphNormals) {
-		this.morphNormals = morphNormals;
 	}
 
 	public List<MorphNormal> getMorphNormals() {
@@ -314,18 +305,22 @@ public class Geometry extends GeometryBuffer
 		return this.faceVertexUvs;
 	}
 
-	public void computeCentroids(){
+	public void computeCentroids()
+	{
 		for (Face3 face: this.faces) {
 			face.getCentroid().set(0,0,0);
 
-			if (face.getClass() == Face3.class) {
+			if (face.getClass() == Face3.class) 
+			{
 				Face3 face3 = (Face3)face;
 				face3.getCentroid().add(this.vertices.get(face3.getA()));
 				face3.getCentroid().add(this.vertices.get(face3.getB()));
 				face3.getCentroid().add(this.vertices.get(face3.getC()));
 				face3.getCentroid().divide(3);
 
-			} else if (face.getClass() == Face4.class) {
+			} 
+			else if (face.getClass() == Face4.class) 
+			{
 				Face4 face4 = (Face4)face;
 				face4.getCentroid().add(this.vertices.get(face4.getA()));
 				face4.getCentroid().add(this.vertices.get(face4.getB()));
@@ -337,27 +332,33 @@ public class Geometry extends GeometryBuffer
 		}
 	}
 
-	public void computeVertexNormals(){
+	public void computeVertexNormals()
+	{
 		// create internal buffers for reuse when calling this method repeatedly
 		// (otherwise memory allocation / deallocation every frame is big resource hog)
 
-		if (this.tempVerticles == null) {
+		if (this.tempVerticles == null) 
+		{
 
 			this.tempVerticles = new ArrayList<Vector3f>(this.vertices.size());
 
-			for (int v = 0, vl = this.vertices.size(); v < vl; v++){
+			for (int v = 0, vl = this.vertices.size(); v < vl; v++)
 				this.tempVerticles.add(v, new Vector3f());
-			}
 
-			for (Face3 face : this.faces) {
 
-				if (face.getClass() == Face3.class){
+			for (Face3 face : this.faces) 
+			{
+
+				if (face.getClass() == Face3.class)
+				{
 					List<Vector3f> normals = face.getVertexNormals();
 					normals.clear();
 					normals.add(new Vector3f());
 					normals.add(new Vector3f());
 					normals.add(new Vector3f());
-				} else if (face.getClass() == Face4.class) {
+				} 
+				else if (face.getClass() == Face4.class) 
+				{
 					List<Vector3f> normals = face.getVertexNormals();
 					normals.clear();
 					normals.add(new Vector3f());
@@ -366,20 +367,25 @@ public class Geometry extends GeometryBuffer
 					normals.add(new Vector3f());
 				}
 			}
-		} else {
-			for (int v = 0, vl = this.vertices.size(); v < vl; v++) {
+		} 
+		else 
+		{
+			for (int v = 0, vl = this.vertices.size(); v < vl; v++)
 				this.tempVerticles.get(v).set(0,0,0);
-			}
 		}
 
-		for (Face3 face : this.faces) {
-			if (face.getClass() == Face3.class) {
+		for (Face3 face : this.faces) 
+		{
+			if (face.getClass() == Face3.class) 
+			{
 				Face3 face3 = face;
 				this.tempVerticles.get(face3.getA()).add(face3.getNormal());
 				this.tempVerticles.get(face3.getB()).add(face3.getNormal());
 				this.tempVerticles.get(face3.getC()).add(face3.getNormal());
 
-			} else if (face.getClass() == Face4.class) {
+			}
+			else if (face.getClass() == Face4.class) 
+			{
 				Face4 face4 = (Face4)face;
 				this.tempVerticles.get(face4.getA()).add(face4.getNormal());
 				this.tempVerticles.get(face4.getB()).add(face4.getNormal());
@@ -388,18 +394,21 @@ public class Geometry extends GeometryBuffer
 			}
 		}
 
-		for (int v = 0, vl = this.vertices.size(); v < vl; v ++ ) {
+		for (int v = 0, vl = this.vertices.size(); v < vl; v ++ )
 			this.tempVerticles.get(v).normalize();
-		}
 
-		for (Face3 face : this.faces) {
-			if (face.getClass() == Face3.class) {
+		for (Face3 face : this.faces) 
+		{
+			if (face.getClass() == Face3.class) 
+			{
 				Face3 face3 = face;
 				face3.getVertexNormals().get(0).copy(this.tempVerticles.get(face3.getA()));
 				face3.getVertexNormals().get(1).copy(this.tempVerticles.get(face3.getB()));
 				face3.getVertexNormals().get(2).copy(this.tempVerticles.get(face3.getC()));
 
-			} else if (face.getClass() == Face4.class) {
+			} 
+			else if (face.getClass() == Face4.class) 
+			{
 				Face4 face4 = (Face4)face;
 				face4.getVertexNormals().get(0).copy(this.tempVerticles.get(face4.getA()));
 				face4.getVertexNormals().get(1).copy(this.tempVerticles.get(face4.getB()));
@@ -414,8 +423,10 @@ public class Geometry extends GeometryBuffer
 	{
 		Vector3f cb = new Vector3f(), ab = new Vector3f();
 
-		for (Face3 face: this.faces) {
-			if (useVertexNormals && face.getVertexNormals().size() > 0) {
+		for (Face3 face: this.faces) 
+		{
+			if (useVertexNormals && face.getVertexNormals().size() > 0) 
+			{
 				cb.set(0,0,0);
 				for(Vector3f vertexNormal: face.getVertexNormals())
 					cb.add(vertexNormal);
@@ -425,7 +436,9 @@ public class Geometry extends GeometryBuffer
 					cb.normalize();
 
 				face.getNormal().copy(cb);
-			} else {
+			} 
+			else 
+			{
 				Vector3f vA = this.vertices.get(face.getA());
 				Vector3f vB = this.vertices.get(face.getB());
 				Vector3f vC = this.vertices.get(face.getC());
@@ -467,14 +480,11 @@ public class Geometry extends GeometryBuffer
 		for (int j = 0; j < this.morphTargets.size(); j++) 
 		{
 			// Create on first access
-			if ( this.morphNormals.get( j ) == null ) 
+			if ( this.morphNormals.size() == j ) 
 			{
-				this.morphNormals.set( j ,  new MorphNormal());
-				this.morphNormals.get( j ).faceNormals = new ArrayList<Vector3f>();
-				this.morphNormals.get( j ).vertexNormals = new ArrayList<VertextNormal>();
-
-				List<Vector3f> dstNormalsFace   = this.morphNormals.get( j ).faceNormals;
-				List<VertextNormal> dstNormalsVertex = this.morphNormals.get( j ).vertexNormals;
+				MorphNormal morphNormal = new MorphNormal();
+				morphNormal.faceNormals = new ArrayList<Vector3f>();
+				morphNormal.vertexNormals = new ArrayList<VertextNormal>();
 
 				for (Face3 face: getFaces()) 
 				{		
@@ -493,9 +503,11 @@ public class Geometry extends GeometryBuffer
 						vertexNormals.c = new Vector3f();
 					}
 
-					dstNormalsFace.add( new Vector3f() );
-					dstNormalsVertex.add( vertexNormals );
+					morphNormal.faceNormals.add( new Vector3f() );
+					morphNormal.vertexNormals.add( vertexNormals );
 				}
+				
+				this.morphNormals.add( morphNormal );
 			}
 
 			MorphNormal morphNormals = this.morphNormals.get( j );

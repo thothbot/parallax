@@ -470,6 +470,7 @@ public class Mesh  extends GeometryObject implements HasSides
 				 ? getGeometry().getFaceVertexUvs().get(1) : null;
 						
 		 List<Geometry.MorphNormal> morphNormals = getGeometry().getMorphNormals();
+		 List<Geometry.MorphTarget> morphTargets = getGeometry().getMorphTargets();
 		 
 		 if ( getGeometry().verticesNeedUpdate ) 
 		 {
@@ -531,7 +532,6 @@ public class Mesh  extends GeometryObject implements HasSides
 			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), vertexArray, hint );
 		 }
 		 
-		 // TODO: work on this
 		 if ( getGeometry().morphTargetsNeedUpdate ) 
 		 {
 			 
@@ -543,64 +543,62 @@ public class Mesh  extends GeometryObject implements HasSides
 				 {
 					 int chf = chunk_faces3.get( f );
 					 Face3 face = obj_faces.get( chf );
-					 Log.error("1 - ????????????????");
+
 					 // morph positions
 
-//					 Mesh d1 = (Mesh) morphTargets.get( vk ); 
-//					 Vector3f v1 = d1.vertices.get( face.getA() );
-//					 Vector3f v2 = morphTargets.get( vk ).vertices.get( face.getB() );
-//					 Vector3f v3 = morphTargets.get( vk ).vertices.get( face.getC() );
-//
-//					 Float32Array vka = morphTargetsArrays.get( vk );
-//
-//					 vka.set(offset_morphTarget, v1.getX());
-//					 vka.set(offset_morphTarget + 1, v1.getY());
-//					 vka.set(offset_morphTarget + 2, v1.getZ());
-//
-//					 vka.set(offset_morphTarget + 3, v2.getX());
-//					 vka.set(offset_morphTarget + 4, v2.getY());
-//					 vka.set(offset_morphTarget + 5, v2.getZ());
-//
-//					 vka.set(offset_morphTarget + 6, v3.getX());
-//					 vka.set(offset_morphTarget + 7, v3.getY());
-//					 vka.set(offset_morphTarget + 8, v3.getZ());
-//
-//					 // morph normals
-//
-//					 if ( material.morphNormals ) 
-//					 {
-//						 Vector3f n1, n2, n3;
-//						 if ( needsSmoothNormals ) {
-//
-//							 Face3 faceVertexNormals = morphNormals.get( vk ).vertexNormals.get( chf );
-//
-//							 n1 = faceVertexNormals.getA();
-//							 n2 = faceVertexNormals.getB();
-//							 n3 = faceVertexNormals.getC();
-//
-//						 } else {
-//
-//							 n1 = morphNormals.get( vk ).faceNormals.get( chf );
-//							 n2 = n1;
-//							 n3 = n1;
-//
-//						 }
-//
-//						 Float32Array nka = morphNormalsArrays.get( vk );
-//
-//						 nka.set(offset_morphTarget, n1.getX());
-//						 nka.set(offset_morphTarget + 1, n1.getY());
-//						 nka.set(offset_morphTarget + 2, n1.getZ());
-//
-//						 nka.set(offset_morphTarget + 3, n2.getX());
-//						 nka.set(offset_morphTarget + 4, n2.getY());
-//						 nka.set(offset_morphTarget + 5, n2.getZ());
-//
-//						 nka.set(offset_morphTarget + 6, n3.getX());
-//						 nka.set(offset_morphTarget + 7, n3.getY());
-//						 nka.set(offset_morphTarget + 8, n3.getZ());
-//
-//					 }
+					 Geometry.MorphTarget d1 = morphTargets.get( vk ); 
+					 Vector3f v1 = d1.vertices.get( face.getA() );
+					 Vector3f v2 = morphTargets.get( vk ).vertices.get( face.getB() );
+					 Vector3f v3 = morphTargets.get( vk ).vertices.get( face.getC() );
+
+					 Float32Array vka = geometryGroup.__morphTargetsArrays.get(vk);
+
+					 vka.set(offset_morphTarget, v1.getX());
+					 vka.set(offset_morphTarget + 1, v1.getY());
+					 vka.set(offset_morphTarget + 2, v1.getZ());
+
+					 vka.set(offset_morphTarget + 3, v2.getX());
+					 vka.set(offset_morphTarget + 4, v2.getY());
+					 vka.set(offset_morphTarget + 5, v2.getZ());
+
+					 vka.set(offset_morphTarget + 6, v3.getX());
+					 vka.set(offset_morphTarget + 7, v3.getY());
+					 vka.set(offset_morphTarget + 8, v3.getZ());
+
+					 // morph normals
+
+					 if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
+					 {
+						 Vector3f n1, n2, n3;
+						 if ( needsSmoothNormals ) 
+						 {
+							 Geometry.VertextNormal faceVertexNormals = morphNormals.get( vk ).vertexNormals.get( chf );
+
+							 n1 = faceVertexNormals.a;
+							 n2 = faceVertexNormals.b;
+							 n3 = faceVertexNormals.c;
+						 } 
+						 else 
+						 {
+							 n1 = morphNormals.get( vk ).faceNormals.get( chf );
+							 n2 = n1;
+							 n3 = n1;
+						 }
+
+						 Float32Array nka = geometryGroup.__morphNormalsArrays.get( vk );
+
+						 nka.set(offset_morphTarget, n1.getX());
+						 nka.set(offset_morphTarget + 1, n1.getY());
+						 nka.set(offset_morphTarget + 2, n1.getZ());
+
+						 nka.set(offset_morphTarget + 3, n2.getX());
+						 nka.set(offset_morphTarget + 4, n2.getY());
+						 nka.set(offset_morphTarget + 5, n2.getZ());
+
+						 nka.set(offset_morphTarget + 6, n3.getX());
+						 nka.set(offset_morphTarget + 7, n3.getY());
+						 nka.set(offset_morphTarget + 8, n3.getZ());
+					 }
 
 					 //
 
@@ -608,78 +606,80 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 }
 
-				 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
-
+				 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
+				 {
 					 int chf = chunk_faces4.get(f);
 					 Face4 face = (Face4) obj_faces.get(chf);
-					 Log.error("2 - ????????????????");
-//					 // morph positions
-//
-//					 Vector3f v1 = morphTargets.get(vk).vertices.get(face.getA());
-//					 Vector3f v2 = morphTargets.get(vk).vertices.get(face.getB());
-//					 Vector3f v3 = morphTargets.get(vk).vertices.get(face.getC());
-//					 Vector3f v4 = morphTargets.get(vk).vertices.get(face.getD());
-//
-//					 Float32Array vka = morphTargetsArrays.get( vk );
-//
-//					 vka.set(offset_morphTarget, v1.getX());
-//					 vka.set(offset_morphTarget + 1, v1.getY());
-//					 vka.set(offset_morphTarget + 2, v1.getZ());
-//
-//					 vka.set(offset_morphTarget + 3, v2.getX());
-//					 vka.set(offset_morphTarget + 4, v2.getY());
-//					 vka.set(offset_morphTarget + 5, v2.getZ());
-//
-//					 vka.set(offset_morphTarget + 6, v3.getX());
-//					 vka.set(offset_morphTarget + 7, v3.getY());
-//					 vka.set(offset_morphTarget + 8, v3.getZ());
-//
-//					 vka.set(offset_morphTarget + 9, v4.getX());
-//					 vka.set(offset_morphTarget + 10, v4.getY());
-//					 vka.set(offset_morphTarget + 11, v4.getZ());
-//
-//					 // morph normals
-//
-//					 if ( material.morphNormals ) {
-//
-//						 Vector3f n1, n2, n3, n4;
-//						 if ( needsSmoothNormals ) {
-//
-//							 Face4 faceVertexNormals = morphNormals.get( vk ).vertexNormals.get( chf );
-//
-//							 n1 = faceVertexNormals.getA();
-//							 n2 = faceVertexNormals.getB();
-//							 n3 = faceVertexNormals.getC();
-//							 n4 = faceVertexNormals.getD();
-//
-//						 } else {
-//
-//							 n1 = morphNormals.get(vk).faceNormals.get(chf);
-//							 n2 = n1;
-//							 n3 = n1;
-//							 n4 = n1;
-//
-//						 }
-//
-//						 Float32Array nka = morphNormalsArrays.get( vk );
-//
-//						 nka.set(offset_morphTarget, n1.getX());
-//						 nka.set(offset_morphTarget + 1, n1.getY());
-//						 nka.set(offset_morphTarget + 2, n1.getZ());
-//
-//						 nka.set(offset_morphTarget + 3, n2.getX());
-//						 nka.set(offset_morphTarget + 4, n2.getY());
-//						 nka.set(offset_morphTarget + 5, n2.getZ());
-//
-//						 nka.set(offset_morphTarget + 6, n3.getX());
-//						 nka.set(offset_morphTarget + 7, n3.getY());
-//						 nka.set(offset_morphTarget + 8, n3.getZ());
-//
-//						 nka.set(offset_morphTarget + 9, n4.getX());
-//						 nka.set(offset_morphTarget + 10, n4.getY());
-//						 nka.set(offset_morphTarget + 11, n4.getZ());
-//
-//					 }
+
+					 // morph positions
+
+					 Vector3f v1 = morphTargets.get(vk).vertices.get(face.getA());
+					 Vector3f v2 = morphTargets.get(vk).vertices.get(face.getB());
+					 Vector3f v3 = morphTargets.get(vk).vertices.get(face.getC());
+					 Vector3f v4 = morphTargets.get(vk).vertices.get(face.getD());
+
+					 Float32Array vka = geometryGroup.__morphTargetsArrays.get(vk);
+
+					 vka.set(offset_morphTarget, v1.getX());
+					 vka.set(offset_morphTarget + 1, v1.getY());
+					 vka.set(offset_morphTarget + 2, v1.getZ());
+
+					 vka.set(offset_morphTarget + 3, v2.getX());
+					 vka.set(offset_morphTarget + 4, v2.getY());
+					 vka.set(offset_morphTarget + 5, v2.getZ());
+
+					 vka.set(offset_morphTarget + 6, v3.getX());
+					 vka.set(offset_morphTarget + 7, v3.getY());
+					 vka.set(offset_morphTarget + 8, v3.getZ());
+
+					 vka.set(offset_morphTarget + 9, v4.getX());
+					 vka.set(offset_morphTarget + 10, v4.getY());
+					 vka.set(offset_morphTarget + 11, v4.getZ());
+
+					 // morph normals
+
+					 if (  material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
+					 {
+						 Vector3f n1, n2, n3, n4;
+						 if ( needsSmoothNormals ) 
+						 {
+
+							 Geometry.VertextNormal faceVertexNormals = morphNormals.get( vk ).vertexNormals.get( chf );
+
+							 n1 = faceVertexNormals.a;
+							 n2 = faceVertexNormals.b;
+							 n3 = faceVertexNormals.c;
+							 n4 = faceVertexNormals.d;
+
+						 } 
+						 else 
+						 {
+							 n1 = morphNormals.get(vk).faceNormals.get(chf);
+							 n2 = n1;
+							 n3 = n1;
+							 n4 = n1;
+
+						 }
+
+						 Float32Array nka = geometryGroup.__morphNormalsArrays.get( vk );
+
+						 nka.set(offset_morphTarget, n1.getX());
+						 nka.set(offset_morphTarget + 1, n1.getY());
+						 nka.set(offset_morphTarget + 2, n1.getZ());
+
+						 nka.set(offset_morphTarget + 3, n2.getX());
+						 nka.set(offset_morphTarget + 4, n2.getY());
+						 nka.set(offset_morphTarget + 5, n2.getZ());
+
+						 nka.set(offset_morphTarget + 6, n3.getX());
+						 nka.set(offset_morphTarget + 7, n3.getY());
+						 nka.set(offset_morphTarget + 8, n3.getZ());
+
+						 nka.set(offset_morphTarget + 9, n4.getX());
+						 nka.set(offset_morphTarget + 10, n4.getY());
+						 nka.set(offset_morphTarget + 11, n4.getZ());
+
+					 }
 
 					 //
 
