@@ -130,8 +130,8 @@ public final class Tube extends Geometry
 				UVf uvc = new UVf( ( i + 1 ) / (float)segments, ( j + 1 ) / (float)segmentsRadius );
 				UVf uvd = new UVf( i / (float)segments,         ( j + 1 ) / (float)segmentsRadius );
 
-				this.faces.add( new Face4( a, b, c, d ) );
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
+				getFaces().add( new Face4( a, b, c, d ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
 
 			}
 		}

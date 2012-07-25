@@ -82,13 +82,13 @@ public class Parametric extends Geometry
 					this.getFaces().add( new Face3( a, b, c ) );
 					this.getFaces().add( new Face3( b, d, c ) );
 
-					this.faceVertexUvs.get( 0 ).add( Arrays.asList( uva, uvb, uvc ) );
-					this.faceVertexUvs.get( 0 ).add( Arrays.asList( uvb, uvd, uvc ) );
+					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc ) );
+					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvb, uvd, uvc ) );
 
 				} else {
 
 					this.getFaces().add( new Face4( a, b, d, c ) );
-					this.faceVertexUvs.get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
+					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
 
 				}
 

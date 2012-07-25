@@ -41,7 +41,6 @@ import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.GeometryGroup;
-import thothbot.parallax.core.shared.core.MorphNormal;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.core.Vector4f;
@@ -102,11 +101,11 @@ public class Mesh  extends GeometryObject implements HasSides
 				this.morphTargetInfluences = new ArrayList<Integer>();
 				this.morphTargetDictionary = new HashMap<String, Integer>();
 
-				List<DimensionalObject> morphTargets = this.geometry.getMorphTargets();
+				List<Geometry.MorphTarget> morphTargets = this.geometry.getMorphTargets();
 				for (int m = 0; m < morphTargets.size(); m++) 
 				{
 					this.morphTargetInfluences.add(0);
-					this.morphTargetDictionary.put(morphTargets.get(m).getName(), m);
+					this.morphTargetDictionary.put(morphTargets.get(m).name, m);
 				}
 			}
 		}
@@ -205,12 +204,12 @@ public class Mesh  extends GeometryObject implements HasSides
 
 		if(geometry instanceof Geometry) 
 		{
-			Log.debug("addObject() geometry.geometryGroups is null: " + ( this.getGeometry().geometryGroups == null ));
-			if ( geometry.geometryGroups == null )
+			Log.debug("addObject() geometry.geometryGroups is null: " + ( this.getGeometry().getGeometryGroups() == null ));
+			if ( geometry.getGeometryGroups() == null )
 				sortFacesByMaterial( this.getGeometry() );
 
 			// create separate VBOs per geometry chunk
-			for ( GeometryGroup geometryGroup : geometry.geometryGroups.values() ) 
+			for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values() ) 
 			{
 				// initialise VBO on the first access
 				if ( geometryGroup.__webglVertexBuffer == null ) 
@@ -269,7 +268,7 @@ public class Mesh  extends GeometryObject implements HasSides
 				geometryGroup.setWebGlUv2Array( Float32Array.create(nvertices * 2) );
 		}
 
-		if (this.geometry.skinWeights.size() > 0 && this.geometry.skinIndices.size() > 0) 
+		if (this.geometry.getSkinWeights().size() > 0 && this.geometry.getSkinIndices().size() > 0) 
 		{
 			geometryGroup.setWebGlSkinVertexAArray( Float32Array.create(nvertices * 4) );
 			geometryGroup.setWebGlSkinVertexBArray( Float32Array.create(nvertices * 4) );
@@ -414,10 +413,10 @@ public class Mesh  extends GeometryObject implements HasSides
 //		} else {
 
 			// check all geometry groups
-			for( int i = 0, il = geometry.geometryGroupsList.size(); i < il; i ++ ) 
+			for( int i = 0, il = geometry.getGeometryGroupsList().size(); i < il; i ++ ) 
 			{
 
-				GeometryGroup geometryGroup = geometry.geometryGroupsList.get( i );
+				GeometryGroup geometryGroup = geometry.getGeometryGroupsList().get( i );
 				material = Material.getBufferMaterial( this, geometryGroup );
 
 				boolean customAttributesDirty = (material.getAttributes() != null); // && areCustomAttributesDirty( material );
@@ -426,7 +425,7 @@ public class Mesh  extends GeometryObject implements HasSides
 					 geometry.uvsNeedUpdate      || geometry.normalsNeedUpdate      ||
 					 geometry.colorsNeedUpdate   || geometry.tangetsNeedUpdate      || customAttributesDirty ) 
 				{
-					setBuffers(gl, geometryGroup, GLenum.DYNAMIC_DRAW.getValue(), !geometry.dynamic, material );
+					setBuffers(gl, geometryGroup, GLenum.DYNAMIC_DRAW.getValue(), !geometry.isDynamic(), material );
 				}
 			}
 
@@ -467,7 +466,7 @@ public class Mesh  extends GeometryObject implements HasSides
 		 List<List<UVf>> obj_uvs2 = (getGeometry().getFaceVertexUvs().size() > 1) 
 				 ? getGeometry().getFaceVertexUvs().get(1) : null;
 						
-		 List<MorphNormal> morphNormals = getGeometry().getMorphNormals();
+		 List<Geometry.MorphNormal> morphNormals = getGeometry().getMorphNormals();
 		 
 		 if ( getGeometry().verticesNeedUpdate ) 
 		 {
@@ -696,7 +695,7 @@ public class Mesh  extends GeometryObject implements HasSides
 			 }
 		 }
 
-		 if ( getGeometry().skinWeights.size() > 0 ) 
+		 if ( getGeometry().getSkinWeights().size() > 0 ) 
 		 {
 			 int offset_skin = 0;
 			 Float32Array skinVertexAArray = geometryGroup.getWebGlSkinVertexAArray();
@@ -711,9 +710,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // weights
 
-				 Vector4f sw1 = getGeometry().skinWeights.get( face.getA() );
-				 Vector4f sw2 = getGeometry().skinWeights.get( face.getB() );
-				 Vector4f sw3 = getGeometry().skinWeights.get( face.getC() );
+				 Vector4f sw1 = getGeometry().getSkinWeights().get( face.getA() );
+				 Vector4f sw2 = getGeometry().getSkinWeights().get( face.getB() );
+				 Vector4f sw3 = getGeometry().getSkinWeights().get( face.getC() );
 
 				 skinWeightArray.set(offset_skin, sw1.getX());
 				 skinWeightArray.set(offset_skin + 1, sw1.getY());
@@ -732,9 +731,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // indices
 
-				 Vector4f si1 = (Vector4f) getGeometry().skinIndices.get(face.getA());
-				 Vector4f si2 = (Vector4f) getGeometry().skinIndices.get(face.getB());
-				 Vector4f si3 = (Vector4f) getGeometry().skinIndices.get(face.getC());
+				 Vector4f si1 = (Vector4f) getGeometry().getSkinIndices().get(face.getA());
+				 Vector4f si2 = (Vector4f) getGeometry().getSkinIndices().get(face.getB());
+				 Vector4f si3 = (Vector4f) getGeometry().getSkinIndices().get(face.getC());
 
 				 skinIndexArray.set(offset_skin, si1.getX());
 				 skinIndexArray.set(offset_skin + 1, si1.getY());
@@ -753,9 +752,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // vertices A
 
-				 Vector3f sa1 = getGeometry().skinVerticesA.get(face.getA());
-				 Vector3f sa2 = getGeometry().skinVerticesA.get(face.getB());
-				 Vector3f sa3 = getGeometry().skinVerticesA.get(face.getC());
+				 Vector3f sa1 = getGeometry().getSkinVerticesA().get(face.getA());
+				 Vector3f sa2 = getGeometry().getSkinVerticesA().get(face.getB());
+				 Vector3f sa3 = getGeometry().getSkinVerticesA().get(face.getC());
 
 				 skinVertexAArray.set(offset_skin, sa1.getX());
 				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
@@ -774,9 +773,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // vertices B
 
-				 Vector3f sb1 = getGeometry().skinVerticesB.get(face.getA());
-				 Vector3f sb2 = getGeometry().skinVerticesB.get(face.getB());
-				 Vector3f sb3 = getGeometry().skinVerticesB.get(face.getC());
+				 Vector3f sb1 = getGeometry().getSkinVerticesB().get(face.getA());
+				 Vector3f sb2 = getGeometry().getSkinVerticesB().get(face.getB());
+				 Vector3f sb3 = getGeometry().getSkinVerticesB().get(face.getC());
 
 				 skinVertexBArray.set(offset_skin, sb1.getX());
 				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
@@ -804,10 +803,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // weights
 
-				 Vector4f sw1 = getGeometry().skinWeights.get(face.getA());
-				 Vector4f sw2 = getGeometry().skinWeights.get(face.getB());
-				 Vector4f sw3 = getGeometry().skinWeights.get(face.getC());
-				 Vector4f sw4 = getGeometry().skinWeights.get(face.getD());
+				 Vector4f sw1 = getGeometry().getSkinWeights().get(face.getA());
+				 Vector4f sw2 = getGeometry().getSkinWeights().get(face.getB());
+				 Vector4f sw3 = getGeometry().getSkinWeights().get(face.getC());
+				 Vector4f sw4 = getGeometry().getSkinWeights().get(face.getD());
 
 				 skinWeightArray.set(offset_skin, sw1.getX());
 				 skinWeightArray.set(offset_skin + 1, sw1.getY());
@@ -831,10 +830,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // indices
 
-				 Vector4f si1 = getGeometry().skinIndices.get(face.getA());
-				 Vector4f si2 = getGeometry().skinIndices.get(face.getB());
-				 Vector4f si3 = getGeometry().skinIndices.get(face.getC());
-				 Vector4f si4 = getGeometry().skinIndices.get(face.getD());
+				 Vector4f si1 = getGeometry().getSkinIndices().get(face.getA());
+				 Vector4f si2 = getGeometry().getSkinIndices().get(face.getB());
+				 Vector4f si3 = getGeometry().getSkinIndices().get(face.getC());
+				 Vector4f si4 = getGeometry().getSkinIndices().get(face.getD());
 
 				 skinIndexArray.set(offset_skin, si1.getX());
 				 skinIndexArray.set(offset_skin + 1, si1.getY());
@@ -858,10 +857,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // vertices A
 
-				 Vector3f sa1 = getGeometry().skinVerticesA.get(face.getA());
-				 Vector3f sa2 = getGeometry().skinVerticesA.get(face.getB());
-				 Vector3f sa3 = getGeometry().skinVerticesA.get(face.getC());
-				 Vector3f sa4 = getGeometry().skinVerticesA.get(face.getD());
+				 Vector3f sa1 = getGeometry().getSkinVerticesA().get(face.getA());
+				 Vector3f sa2 = getGeometry().getSkinVerticesA().get(face.getB());
+				 Vector3f sa3 = getGeometry().getSkinVerticesA().get(face.getC());
+				 Vector3f sa4 = getGeometry().getSkinVerticesA().get(face.getD());
 
 				 skinVertexAArray.set(offset_skin, sa1.getX());
 				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
@@ -885,10 +884,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // vertices B
 
-				 Vector3f sb1 = getGeometry().skinVerticesB.get(face.getA());
-				 Vector3f sb2 = getGeometry().skinVerticesB.get(face.getB());
-				 Vector3f sb3 = getGeometry().skinVerticesB.get(face.getC());
-				 Vector3f sb4 = getGeometry().skinVerticesB.get(face.getD());
+				 Vector3f sb1 = getGeometry().getSkinVerticesB().get(face.getA());
+				 Vector3f sb2 = getGeometry().getSkinVerticesB().get(face.getB());
+				 Vector3f sb3 = getGeometry().getSkinVerticesB().get(face.getC());
+				 Vector3f sb4 = getGeometry().getSkinVerticesB().get(face.getD());
 
 				 skinVertexBArray.set(offset_skin, sb1.getX());
 				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
@@ -1886,7 +1885,7 @@ public class Mesh  extends GeometryObject implements HasSides
 		int numMorphTargets = geometry.getMorphTargets().size();
 		int numMorphNormals = geometry.getMorphNormals().size();
 
-		geometry.geometryGroups = new HashMap<String, GeometryGroup>();
+		geometry.setGeometryGroups( new HashMap<String, GeometryGroup>() );
 
 		Map<String, Integer> hash_map = new HashMap<String, Integer>();
 
@@ -1905,35 +1904,35 @@ public class Mesh  extends GeometryObject implements HasSides
 
 			String groupHash = materialHash + '_' + hash_map.get(materialHash);
 			
-			if(!geometry.geometryGroups.containsKey(groupHash))
-				geometry.geometryGroups.put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
+			if(!geometry.getGeometryGroups().containsKey(groupHash))
+				geometry.getGeometryGroups().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
 
 			int vertices = face.getClass() == Face3.class ? 3 : 4;
 
-			if ( geometry.geometryGroups.get(groupHash).vertices + vertices > 65535 ) 
+			if ( geometry.getGeometryGroups().get(groupHash).vertices + vertices > 65535 ) 
 			{
 				hash_map.put(materialHash, hash_map.get(materialHash) + 1);
 				groupHash = materialHash + '_' + hash_map.get( materialHash );
 
-				if (!geometry.geometryGroups.containsKey(groupHash))
-					geometry.geometryGroups.put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
+				if (!geometry.getGeometryGroups().containsKey(groupHash))
+					geometry.getGeometryGroups().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
 			}
 
 			if ( face.getClass() == Face3.class )
-				geometry.geometryGroups.get(groupHash).faces3.add( f );
+				geometry.getGeometryGroups().get(groupHash).faces3.add( f );
 
 			else
-				geometry.geometryGroups.get(groupHash).faces4.add( f );
+				geometry.getGeometryGroups().get(groupHash).faces4.add( f );
 
-			geometry.geometryGroups.get(groupHash).vertices += vertices;
+			geometry.getGeometryGroups().get(groupHash).vertices += vertices;
 		}
 
-		geometry.geometryGroupsList = new ArrayList<GeometryGroup>();
+		geometry.setGeometryGroupsList( new ArrayList<GeometryGroup>() );
 
-		for ( GeometryGroup g : geometry.geometryGroups.values() ) 
+		for ( GeometryGroup g : geometry.getGeometryGroups().values() ) 
 		{
 			g.setId(Mesh._geometryGroupCounter ++);
-			geometry.geometryGroupsList.add( g );
+			geometry.getGeometryGroupsList().add( g );
 		}
 	}
 }

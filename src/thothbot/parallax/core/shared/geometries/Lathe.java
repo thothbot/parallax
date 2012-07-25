@@ -55,7 +55,7 @@ public final class Lathe extends Geometry
 		for ( int j = 0; j < points.size(); j ++ ) 
 		{
 			newV.add( j , points.get( j ).clone());
-			this.vertices.add( newV.get( j ) );
+			getVertices().add( newV.get( j ) );
 		}
 
 		for ( int i = 0; i <= steps; i ++ ) 
@@ -63,7 +63,7 @@ public final class Lathe extends Geometry
 			for ( int j = 0; j < newV.size(); j ++ ) 
 			{
 				newV.set( j , (Vector3f) matrix.multiplyVector3( newV.get( j ).clone() ));
-				this.vertices.add( newV.get( j ) );
+				getVertices().add( newV.get( j ) );
 			}
 		}
 
@@ -76,10 +76,10 @@ public final class Lathe extends Geometry
 				int c = ( ( i + 1 ) % (steps + 1) ) * kl + ( k + 1 ) % kl;
 				int d = i * kl + ( k + 1 ) % kl;
 
-				this.faces.add( new Face4( a, b, c, d ) );
+				getFaces().add( new Face4( a, b, c, d ) );
 
 				float stepsf = (float)steps / 1.0f;
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList(
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 
 					new UVf( (1.0f - i / stepsf),          ((float)k / kl ) ),
 					new UVf( (1.0f - ( i + 1.0f ) / stepsf), ((float)k / kl ) ),

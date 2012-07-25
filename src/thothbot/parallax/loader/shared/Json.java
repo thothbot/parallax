@@ -135,9 +135,9 @@ public class Json extends Loader
 			boolean hasFaceColor	    = isBitSet( type, 6 );
 			boolean hasFaceVertexColor  = isBitSet( type, 7 );
 
-			Log.debug("parseFaces() type " + type + ", bits={" 
-					+ isQuad + ", " + hasMaterial + ", " + hasFaceUv + ", " + hasFaceVertexUv + ", " 
-					+ hasFaceNormal + ", " + hasFaceVertexNormal + ", " + hasFaceColor + ", " + hasFaceVertexColor + "}");
+//			Log.debug("parseFaces() type " + type + ", bits={" 
+//					+ isQuad + ", " + hasMaterial + ", " + hasFaceUv + ", " + hasFaceVertexUv + ", " 
+//					+ hasFaceNormal + ", " + hasFaceVertexNormal + ", " + hasFaceColor + ", " + hasFaceVertexColor + "}");
 
 			Face3 face;
 			int nVertices;

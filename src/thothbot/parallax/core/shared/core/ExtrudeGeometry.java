@@ -157,7 +157,7 @@ public class ExtrudeGeometry extends Geometry
 			options.bevelSize = 0;
 		}
 
-		int shapesOffset = this.vertices.size();
+		int shapesOffset = getVertices().size();
 
 		if ( options.bendPath != null )
 			shape.addWrapPath( options.bendPath );
@@ -200,17 +200,17 @@ public class ExtrudeGeometry extends Geometry
 		// Find directions for point movement
 		//
 		List<Vector2f> contourMovements = new ArrayList<Vector2f>();
-		for ( int i = 0, il = this.vertices.size(), j = il - 1, k = i + 1; i < il; i ++, j ++, k ++ ) 
+		for ( int i = 0, il = getVertices().size(), j = il - 1, k = i + 1; i < il; i ++, j ++, k ++ ) 
 		{
 			if ( j == il ) j = 0;
 			if ( k == il ) k = 0;
 
-			Vector3f pt_i = this.vertices.get( i );
-			Vector3f pt_j = this.vertices.get( j );
-			Vector3f pt_k = this.vertices.get( k );
+			Vector3f pt_i = getVertices().get( i );
+			Vector3f pt_j = getVertices().get( j );
+			Vector3f pt_k = getVertices().get( k );
 
 			contourMovements.add(
-					getBevelVec( this.vertices.get( i ), this.vertices.get( j ), this.vertices.get( k ) ));
+					getBevelVec( getVertices().get( i ), getVertices().get( j ), getVertices().get( k ) ));
 		}
 
 		List<List<Vector2f>> holesMovements = new ArrayList<List<Vector2f>>();
@@ -246,9 +246,9 @@ public class ExtrudeGeometry extends Geometry
 
 			// contract shape
 
-			for ( int i = 0, il = this.vertices.size(); i < il; i ++ ) 
+			for ( int i = 0, il = getVertices().size(); i < il; i ++ ) 
 			{
-				Vector2f vert = scalePt2( this.vertices.get( i ), contourMovements.get( i ), bs );
+				Vector2f vert = scalePt2( getVertices().get( i ), contourMovements.get( i ), bs );
 				//vert = scalePt( contour[ i ], contourCentroid, bs, false );
 				v( vert.getX(), vert.getY(),  - z );
 			}
@@ -272,7 +272,7 @@ public class ExtrudeGeometry extends Geometry
 
 		// Back facing vertices
 
-		for ( int i = 0; i < this.vertices.size(); i ++ ) 
+		for ( int i = 0; i < getVertices().size(); i ++ ) 
 		{
 			Vector2f vert = options.bevelEnabled 
 					? scalePt2( vertices.get( i ), verticesMovements.get( i ), options.bevelSize ) 
@@ -300,7 +300,7 @@ public class ExtrudeGeometry extends Geometry
 
 		for ( int s = 1; s <= options.steps; s ++ ) 
 		{
-			for ( int i = 0; i < this.vertices.size(); i ++ ) 
+			for ( int i = 0; i < getVertices().size(); i ++ ) 
 			{
 				Vector2f vert = options.bevelEnabled 
 						? scalePt2( vertices.get( i ), verticesMovements.get( i ), options.bevelSize ) 
@@ -334,9 +334,9 @@ public class ExtrudeGeometry extends Geometry
 			float bs = (float) (options.bevelSize * Math.sin ( t * Math.PI/2.0 )) ;
 
 			// contract shape
-			for ( int i = 0, il = this.vertices.size(); i < il; i ++ ) 
+			for ( int i = 0, il = getVertices().size(); i < il; i ++ ) 
 			{
-				Vector2f vert = scalePt2( this.vertices.get( i ), contourMovements.get( i ), bs );
+				Vector2f vert = scalePt2( getVertices().get( i ), contourMovements.get( i ), bs );
 				v( vert.getX(), vert.getY(),  options.amount + z );
 			}
 
@@ -563,38 +563,38 @@ public class ExtrudeGeometry extends Geometry
 
 	private void v( float x, float y, float z ) 
 	{
-		this.vertices.add( new Vector3f( x, y, z ) );
+		getVertices().add( new Vector3f( x, y, z ) );
 	}
 
 	private void f3( int a, int b, int c, boolean isBottom ) 
 	{
-		int size = this.vertices.size();
+		int size = getVertices().size();
 		a += size;
 		b += size;
 		c += size;
 
 		// normal, color, material
-		this.faces.add( new Face3( a, b, c, this.options.material ) );
+		getFaces().add( new Face3( a, b, c, this.options.material ) );
 
 		List<UVf> uvs = isBottom 
 				? WorldUVGenerator.generateBottomUV( this, a, b, c)
 		        : WorldUVGenerator.generateTopUV( this, a, b, c);
 
- 		this.faceVertexUvs.get( 0 ).add(uvs);
+ 		getFaceVertexUvs().get( 0 ).add(uvs);
 	}
 
 	private void f4( int a, int b, int c, int d) 
 	{
-		int size = this.vertices.size();
+		int size = getVertices().size();
 		a += size;
 		b += size;
 		c += size;
 		d += size;
 
- 		this.faces.add( new Face4( a, b, c, d, null, null, this.options.extrudeMaterial ) );
+ 		getFaces().add( new Face4( a, b, c, d, null, null, this.options.extrudeMaterial ) );
  
  		List<UVf> uvs = WorldUVGenerator.generateSideWallUV(this, a, b, c, d);
- 		this.faceVertexUvs.get( 0 ).add(uvs);
+ 		getFaceVertexUvs().get( 0 ).add(uvs);
 	}
 	
 	public static class WorldUVGenerator

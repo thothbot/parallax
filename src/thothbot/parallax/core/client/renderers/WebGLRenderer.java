@@ -619,7 +619,7 @@ public class WebGLRenderer
 		object._objectMatrixArray = null;
 
 		if ( object.getClass() == Mesh.class )
-			for ( GeometryGroup g : object.getGeometry().geometryGroups.values() )
+			for ( GeometryGroup g : object.getGeometry().getGeometryGroups().values() )
 				deleteMeshBuffers( g );
 					
 		else if ( object.getClass() == Ribbon.class )
@@ -1633,7 +1633,7 @@ public class WebGLRenderer
 //				addBuffer( scene.__webglObjects, geometry, object );
 //			}
 //			else {				
-				for ( GeometryGroup geometryGroup : geometry.geometryGroups.values())
+				for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values())
 					addBuffer( scene.__webglObjects, geometryGroup, object );
 //			}
 

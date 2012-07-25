@@ -166,35 +166,35 @@ public class SkinnedMesh extends Mesh
 		}
 
 		// project vertices to local
-		if ( this.geometry.skinVerticesA == null ) 
+		if ( this.geometry.getSkinVerticesA() == null ) 
 		{
-			this.geometry.skinVerticesA = new ArrayList<Vector3f>();
-			this.geometry.skinVerticesB = new ArrayList<Vector3f>();
+			this.geometry.setSkinVerticesA( new ArrayList<Vector3f>() );
+			this.geometry.setSkinVerticesB( new ArrayList<Vector3f>() );
 
-			for ( int i = 0; i < this.geometry.skinIndices.size(); i ++ ) {
+			for ( int i = 0; i < this.geometry.getSkinIndices().size(); i ++ ) {
 
 				Vector3f orgVertex = this.geometry.getVertices().get( i );
 
-				int indexA = (int) this.geometry.skinIndices.get( i ).getX();
-				int indexB = (int) this.geometry.skinIndices.get( i ).getY();
+				int indexA = (int) this.geometry.getSkinIndices().get( i ).getX();
+				int indexB = (int) this.geometry.getSkinIndices().get( i ).getY();
 
 				Vector3f vertex = new Vector3f( orgVertex.getX(), orgVertex.getY(), orgVertex.getZ() );
-				this.geometry.skinVerticesA.add( (Vector3f) boneInverses.get( indexA ).multiplyVector3( vertex ) );
+				this.geometry.getSkinVerticesA().add( (Vector3f) boneInverses.get( indexA ).multiplyVector3( vertex ) );
 
 				Vector3f vertex2 = new Vector3f( orgVertex.getX(), orgVertex.getY(), orgVertex.getZ() );
-				this.geometry.skinVerticesB.add( (Vector3f) boneInverses.get( indexB ).multiplyVector3( vertex2 ) );
+				this.geometry.getSkinVerticesB().add( (Vector3f) boneInverses.get( indexB ).multiplyVector3( vertex2 ) );
 
 				// todo: add more influences
 
 				// normalize weights
 
-				if ( this.geometry.skinWeights.get( i ).getX() + this.geometry.skinWeights.get( i ).getY() != 1 ) 
+				if ( this.geometry.getSkinWeights().get( i ).getX() + this.geometry.getSkinWeights().get( i ).getY() != 1 ) 
 				{
-					float len = ( 1.0f - ( this.geometry.skinWeights.get( i ).getX() + this.geometry.skinWeights.get( i ).getY() ) ) * 0.5f;
-					this.geometry.skinWeights.get( i ).setX(this.geometry.skinWeights.get( i ).getX() + len);
-					this.geometry.skinWeights.get( i ).setY(this.geometry.skinWeights.get( i ).getY() + len);
+					float len = ( 1.0f - ( this.geometry.getSkinWeights().get( i ).getX() 
+							+ this.geometry.getSkinWeights().get( i ).getY() ) ) * 0.5f;
+					this.geometry.getSkinWeights().get( i ).setX(this.geometry.getSkinWeights().get( i ).getX() + len);
+					this.geometry.getSkinWeights().get( i ).setY(this.geometry.getSkinWeights().get( i ).getY() + len);
 				}
-
 			}
 		}
 	}

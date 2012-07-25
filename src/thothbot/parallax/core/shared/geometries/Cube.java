@@ -95,11 +95,11 @@ public final class Cube extends Geometry
 		int mny = 0;
 		int mnz = 0;
 
-		this.materials = new ArrayList<Material>();
+		setMaterials( new ArrayList<Material>() );
 		
 		if ( materials != null ) 
 		{
-			this.materials = materials;
+			setMaterials( materials );
 			mpx = 0; mnx = 1; mpy = 2; mny = 3; mpz = 4; mnz = 5;
 		}
 
@@ -132,7 +132,7 @@ public final class Cube extends Geometry
 		float width_half = width / 2.0f;
 		float height_half = height / 2.0f;
 		
-		int offset = this.vertices.size();
+		int offset = getVertices().size();
 
 		String w = "";
 
@@ -195,7 +195,7 @@ public final class Cube extends Geometry
 				else if(w.equals("z"))
 					vector.setZ(depth);	
 
-				this.vertices.add( vector );
+				getVertices().add( vector );
 			}
 		}
 
@@ -213,8 +213,8 @@ public final class Cube extends Geometry
 				face.setVertexNormals(Arrays.asList(normal.clone(), normal.clone(), normal.clone(), normal.clone()));
 				face.setMaterialIndex(material);
 
-				this.faces.add( face );
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList(
+				getFaces().add( face );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 					new UVf( ((float)ix / gridX), ((float)iy / gridY) ),
 					new UVf( ((float)ix / gridX), ((float)( iy + 1 ) / gridY) ),
 					new UVf( ((float)( ix + 1 ) / gridX), ((float)( iy + 1 ) / gridY) ),

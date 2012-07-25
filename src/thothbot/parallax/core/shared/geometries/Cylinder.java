@@ -86,9 +86,9 @@ public final class Cylinder extends Geometry
 				vertex.setY(- v * height + heightHalf);
 				vertex.setZ((float) (radius * Math.cos( u * Math.PI * 2 )));
 
-				this.vertices.add( vertex );
+				getVertices().add( vertex );
 
-				verticesRow.add( this.vertices.size() - 1 );
+				verticesRow.add( getVertices().size() - 1 );
 				uvsRow.add( new UVf( u, v ) );
 
 			}
@@ -105,13 +105,13 @@ public final class Cylinder extends Geometry
 
 			if ( radiusTop != 0 ) {
 
-				na = this.vertices.get( vertices.get( 0 ).get( x ) ).clone();
-				nb = this.vertices.get( vertices.get( 0 ).get( x + 1 ) ).clone();
+				na = getVertices().get( vertices.get( 0 ).get( x ) ).clone();
+				nb = getVertices().get( vertices.get( 0 ).get( x + 1 ) ).clone();
 
 			} else {
 
-				na = this.vertices.get( vertices.get( 1 ).get( x ) ).clone();
-				nb = this.vertices.get( vertices.get( 1 ).get( x + 1 ) ).clone();
+				na = getVertices().get( vertices.get( 1 ).get( x ) ).clone();
+				nb = getVertices().get( vertices.get( 1 ).get( x + 1 ) ).clone();
 
 			}
 
@@ -137,8 +137,8 @@ public final class Cylinder extends Geometry
 				UVf uv3 = uvs.get( y + 1 ).get( x + 1 ).clone();
 				UVf uv4 = uvs.get( y ).get( x + 1 ).clone();
 
-				this.faces.add( new Face4( v1, v2, v3, v4, Arrays.asList( n1, n2, n3, n4 ) ) );
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList( uv1, uv2, uv3, uv4 ) );
+				getFaces().add( new Face4( v1, v2, v3, v4, Arrays.asList( n1, n2, n3, n4 ) ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3, uv4 ) );
 
 			}
 		}
@@ -147,13 +147,13 @@ public final class Cylinder extends Geometry
 
 		if ( !openEnded && radiusTop > 0 ) {
 
-			this.vertices.add( new Vector3f( 0.0f, heightHalf, 0.0f ) );
+			getVertices().add( new Vector3f( 0.0f, heightHalf, 0.0f ) );
 
 			for ( x = 0; x < segmentsX; x ++ ) {
 
 				int v1 = vertices.get( 0 ).get( x );
 				int v2 = vertices.get( 0 ).get( x + 1 );
-				int v3 = this.vertices.size() - 1;
+				int v3 = getVertices().size() - 1;
 
 				Vector3f n1 = new Vector3f( 0, 1, 0 );
 				Vector3f n2 = new Vector3f( 0, 1, 0 );
@@ -163,8 +163,8 @@ public final class Cylinder extends Geometry
 				UVf uv2 = uvs.get( 0 ).get( x + 1 ).clone();
 				UVf uv3 = new UVf( uv2.getU(), 0 );
 
-				this.faces.add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
+				getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
 
 			}
 
@@ -174,13 +174,13 @@ public final class Cylinder extends Geometry
 
 		if ( !openEnded && radiusBottom > 0 ) {
 
-			this.vertices.add( new Vector3f( 0, - heightHalf, 0 ) );
+			getVertices().add( new Vector3f( 0, - heightHalf, 0 ) );
 
 			for ( x = 0; x < segmentsX; x ++ ) {
 
 				int v1 = vertices.get( y ).get( x + 1 );
 				int v2 = vertices.get( y ).get( x );
-				int v3 = this.vertices.size() - 1;
+				int v3 = getVertices().size() - 1;
 
 				Vector3f n1 = new Vector3f( 0.0f, - 1.0f, 0.0f );
 				Vector3f n2 = new Vector3f( 0.0f, - 1.0f, 0.0f );
@@ -190,8 +190,8 @@ public final class Cylinder extends Geometry
 				UVf uv2 = uvs.get( y ).get( x ).clone();
 				UVf uv3 = new UVf( uv2.getU(), 1 );
 
-				this.faces.add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
+				getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
 
 			}
 

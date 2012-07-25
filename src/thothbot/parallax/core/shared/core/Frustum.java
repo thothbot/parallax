@@ -92,7 +92,7 @@ public class Frustum
 		float distance;
 		Matrix4f matrix = object.getMatrixWorld();
 		Float32Array me = matrix.getArray();
-		float radius = -object.getGeometry().boundingSphere.radius * matrix.getMaxScaleOnAxis();
+		float radius = -object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
 
 		for (int i = 0; i < 6; i++) 
 		{

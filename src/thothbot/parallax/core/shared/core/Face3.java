@@ -45,6 +45,9 @@ public class Face3
 	protected int materialIndex;
 	protected List<Vector4f> vertexTangents;
 	protected Vector3f centroid;
+	
+	protected Vector3f originalNormal;
+	protected List<Vector3f> originalVertexNormals;
 
 	public Face3(int a, int b, int c, List<Vector3f> normals)
 	{
@@ -98,6 +101,9 @@ public class Face3
 		this.materialIndex = -1;
 		this.vertexColors = new ArrayList<Color3f>();
 		// this.materials = new ArrayList<Material>();
+		
+		this.originalNormal = new Vector3f();
+		this.originalVertexNormals = new ArrayList<Vector3f>();
 	}
 
 	public void setA(int a)
@@ -157,6 +163,14 @@ public class Face3
 	public List<Vector3f> getVertexNormals()
 	{
 		return vertexNormals;
+	}
+	
+	public Vector3f getOriginalNormal() {
+		return this.originalNormal;
+	}
+	
+	public List<Vector3f> getOriginalVertexNormals() {
+		return this.originalVertexNormals;
 	}
 
 	public void setColor(Color3f color)

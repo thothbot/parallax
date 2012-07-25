@@ -67,7 +67,7 @@ public final class Plane extends Geometry
 				float x = (float)(ix * segment_width - width_half);
 				float z = (float)(iz * segment_depth - depth_half);
 
-				this.vertices.add( new Vector3f( x, 0, z ) );
+				getVertices().add( new Vector3f( x, 0, z ) );
 
 			}
 
@@ -86,8 +86,8 @@ public final class Plane extends Geometry
 				face.getNormal().copy( normal );
 				face.getVertexNormals().addAll( Arrays.asList(normal.clone(), normal.clone(), normal.clone(), normal.clone()) );
 
-				this.faces.add( face );
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList(
+				getFaces().add( face );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 					new UVf( ix / (float)gridX,         iz / (float)gridZ ),
 					new UVf( ix / (float)gridX,         ( iz + 1 ) / (float)gridZ ),
 					new UVf( ( ix + 1 ) / (float)gridX, ( iz + 1 ) / (float)gridZ ),

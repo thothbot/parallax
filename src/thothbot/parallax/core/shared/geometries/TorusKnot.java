@@ -100,8 +100,8 @@ public final class TorusKnot extends Geometry
 				UVf uvc = new UVf( ( i + 1.0f ) / (float)segmentsR, ( j + 1.0f ) / (float)segmentsT );
 				UVf uvd = new UVf(            i / (float)segmentsR, ( j + 1.0f ) / (float)segmentsT );
 
-				this.faces.add( new Face4( a, b, c, d ) );
-				this.faceVertexUvs.get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
+				getFaces().add( new Face4( a, b, c, d ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
 			}
 		}
 
@@ -112,8 +112,8 @@ public final class TorusKnot extends Geometry
 	
 	private int vert( float x, float y, float z ) 
 	{
-		this.vertices.add( new Vector3f( x, y, z ) );
-		return this.vertices.size() - 1;
+		getVertices().add( new Vector3f( x, y, z ) );
+		return getVertices().size() - 1;
 	}
 
 	private Vector3f getPos( double u, double v, int in_q, int in_p, int radius, int heightScale ) 

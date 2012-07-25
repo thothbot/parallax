@@ -85,9 +85,9 @@ public final class Sphere extends Geometry
 				vertex.setY((float) (radius * Math.cos( thetaStart + v * thetaLength )));
 				vertex.setZ((float) (radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength )));
 				
-				this.vertices.add( vertex );
+				getVertices().add( vertex );
 
-				verticesRow.add( this.vertices.size() - 1 );
+				verticesRow.add( getVertices().size() - 1 );
 				uvsRow.add( new UVf( u, v ) );
 			}
 			
@@ -104,13 +104,13 @@ public final class Sphere extends Geometry
 				int v3 = vertices.get( y + 1 ).get( x );
 				int v4 = vertices.get( y + 1 ).get( x + 1 );
 
-				Vector3f n1 = this.vertices.get( v1 ).clone();
+				Vector3f n1 = getVertices().get( v1 ).clone();
 				n1.normalize();
-				Vector3f n2 = this.vertices.get( v2 ).clone();
+				Vector3f n2 = getVertices().get( v2 ).clone();
 				n2.normalize();
-				Vector3f n3 = this.vertices.get( v3 ).clone();
+				Vector3f n3 = getVertices().get( v3 ).clone();
 				n3.normalize();
-				Vector3f n4 = this.vertices.get( v4 ).clone();
+				Vector3f n4 = getVertices().get( v4 ).clone();
 				n4.normalize();
 
 				UVf uv1 = uvs.get( y ).get( x + 1 ).clone();
@@ -118,29 +118,27 @@ public final class Sphere extends Geometry
 				UVf uv3 = uvs.get( y + 1 ).get( x ).clone();
 				UVf uv4 = uvs.get( y + 1 ).get( x + 1 ).clone();
 
-				if ( Math.abs( this.vertices.get( v1 ).getY() ) == radius ) 
+				if ( Math.abs( getVertices().get( v1 ).getY() ) == radius ) 
 				{
-					this.faces.add( new Face3( v1, v3, v4, Arrays.asList( n1, n3, n4 ) ) );
-					this.faceVertexUvs.get( 0 ).add( Arrays.asList( uv1, uv3, uv4 ) );
-
-				} else if ( Math.abs( this.vertices.get( v3 ).getY() ) ==  radius ) {
-
-					this.faces.add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
-					this.faceVertexUvs.get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
-
-				} else {
-					this.faces.add( new Face4( v1, v2, v3, v4, Arrays.asList( n1, n2, n3, n4 ) ) );
-					this.faceVertexUvs.get( 0 ).add( Arrays.asList( uv1, uv2, uv3, uv4 ) );
-
+					getFaces().add( new Face3( v1, v3, v4, Arrays.asList( n1, n3, n4 ) ) );
+					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv3, uv4 ) );
+				} 
+				else if ( Math.abs( getVertices().get( v3 ).getY() ) ==  radius ) 
+				{
+					getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
+					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
+				} 
+				else 
+				{
+					getFaces().add( new Face4( v1, v2, v3, v4, Arrays.asList( n1, n2, n3, n4 ) ) );
+					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3, uv4 ) );
 				}
-
 			}
-
 		}
 
 		this.computeCentroids();
 		this.computeFaceNormals(false);
 
-		this.boundingSphere = new BoundingSphere(radius);
+		setBoundingSphere( new BoundingSphere(radius) );
 	}
 }

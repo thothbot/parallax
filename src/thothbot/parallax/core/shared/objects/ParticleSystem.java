@@ -122,7 +122,7 @@ public class ParticleSystem extends GeometryObject
 		geometry.setWebGlVertexArray( Float32Array.create( nvertices * 3 ) );
 		geometry.setWebGlColorArray( Float32Array.create( nvertices * 3 ) );
 
-		geometry.__sortArray = new ArrayList<List<Integer>>();
+		geometry.sortArray = new ArrayList<List<Integer>>();
 		geometry.__webglParticleCount = nvertices;
 
 		initCustomAttributes ( gl, geometry );
@@ -152,7 +152,7 @@ public class ParticleSystem extends GeometryObject
 
 		List<Color3f> colors = geometry.getColors();
 
-		List<List<Integer>> sortArray = geometry.__sortArray;
+		List<List<Integer>> sortArray = geometry.sortArray;
 
 		boolean dirtyVertices = geometry.verticesNeedUpdate;
 		boolean dirtyElements = geometry.elementsNeedUpdate;

@@ -74,12 +74,12 @@ public class Polyhedron extends Geometry
 
 		// Apply radius
 
-		for ( int i = 0, l = this.vertices.size(); i < l; i ++ )
-			this.vertices.get( i ).multiply( radius );
+		for ( int i = 0, l = getVertices().size(); i < l; i ++ )
+			getVertices().get( i ).multiply( radius );
 		
 		this.computeCentroids();
 
-		this.boundingSphere = new BoundingSphere(radius); 
+		setBoundingSphere(new BoundingSphere(radius)); 
 	}
 	
 	/**
@@ -87,10 +87,10 @@ public class Polyhedron extends Geometry
 	 */
 	protected ContainerOfVector prepare( ContainerOfVector container ) 
 	{
-		this.vertices.add( container.vector.normalize().clone() );
+		getVertices().add( container.vector.normalize().clone() );
 		this.containers.add( container );
 
-		container.index = this.vertices.size() - 1;
+		container.index = getVertices().size() - 1;
 
 		// Texture coords are equivalent to map coords, calculate angle and convert to fraction of a circle.
 		float u = (float) (azimuth( container.vector ) / 2f / Math.PI + 0.5f);
@@ -112,10 +112,10 @@ public class Polyhedron extends Geometry
 			face.getCentroid().add( c1.vector ).add( c2.vector ).add( c3.vector ).divide( 3 );
 			face.setNormal(face.getCentroid().clone().normalize());
 			
-			this.faces.add( face );
+			getFaces().add( face );
 
 			double azi = azimuth( face.getCentroid() );
-			this.faceVertexUvs.get( 0 ).add( Arrays.asList( 
+			getFaceVertexUvs().get( 0 ).add( Arrays.asList( 
 				correctUV( c1.uv, c1.vector, azi ),
 				correctUV( c2.uv, c2.vector, azi ),
 				correctUV( c3.uv, c3.vector, azi )

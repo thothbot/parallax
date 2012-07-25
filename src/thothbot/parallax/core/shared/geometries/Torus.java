@@ -76,7 +76,7 @@ public final class Torus extends Geometry
 				vertex.setY((float) (( radius + tube * Math.cos( v ) ) * Math.sin( u )));
 				vertex.setZ((float) (tube * Math.sin( v )));
 
-				this.vertices.add( vertex );
+				getVertices().add( vertex );
 
 				uvs.add( new UVf( (float)i / segmentsT, 1.0f - (float)j / segmentsR ) );
 				normals.add( vertex.clone().sub( center ).normalize() );
@@ -101,8 +101,8 @@ public final class Torus extends Geometry
 				face.getNormal().add( normals.get( d ) );
 				face.getNormal().normalize();
 
-				this.faces.add( face );
-				this.faceVertexUvs.get( 0 ).add( 
+				getFaces().add( face );
+				getFaceVertexUvs().get( 0 ).add( 
 						Arrays.asList(uvs.get( a ).clone(), uvs.get( b ).clone(), uvs.get( c ).clone(), uvs.get( d ).clone() ) );
 			}
 

@@ -46,15 +46,8 @@ public abstract class Loader
 			@Override
 			public void onResponseReceived(Request request, Response response) 
 			{
-				if (200 == response.getStatusCode()) 
-				{
-					parse(response.getText());
-					callback.onLoaded();
-				} 
-				else 
-				{
-					Log.error("Couldn't retrieve JSON (" + response.getStatusText() + ")");
-				}
+				parse(response.getText());
+				callback.onLoaded();
 			}
 
 			@Override
