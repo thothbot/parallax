@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.shared.objects;
+package thothbot.parallax.loader.shared;
 
 import java.util.Map;
 
@@ -29,8 +29,9 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphTarget;
 import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.objects.Mesh;
 
-public class MorphAnimMesh extends Mesh
+public class MorphAnimation
 {
 	public class Animation {
 		public int start;
@@ -53,14 +54,22 @@ public class MorphAnimMesh extends Mesh
 	private int currentKeyframe = 0;
 	
 	private Map<String, Animation> animations;
-
-	public MorphAnimMesh(Geometry geometry, Material material) 
-	{
-		super(geometry, material);
-		
+	
+	private Geometry geometry;
+	private Mesh mesh;
+	
+	public MorphAnimation() 
+	{			
 		setDuration(1000);
+	}
+	
+	public void init(Mesh mesh, Geometry geometry)
+	{
+		this.mesh = mesh;
+		this.geometry = geometry;
+
 		// internals
-		this.setFrameRange( 0, this.geometry.getMorphTargets().size() - 1 );
+		this.setFrameRange( 0, geometry.getMorphTargets().size() - 1 );
 	}
 
 	/**
@@ -147,6 +156,9 @@ public class MorphAnimMesh extends Mesh
 
 	public void updateAnimation( float delta ) 
 	{
+		if(this.mesh == null || this.geometry == null)
+			return;
+
 		float frameTime = this.duration / this.length;
 
 		this.time += this.direction * delta;
@@ -185,10 +197,10 @@ public class MorphAnimMesh extends Mesh
 
 		if ( keyframe != this.currentKeyframe ) 
 		{
-			this.getMorphTargetInfluences().set( this.lastKeyframe, 0);
-			this.getMorphTargetInfluences().set( this.currentKeyframe, 1);
+			mesh.getMorphTargetInfluences().set( this.lastKeyframe, 0);
+			mesh.getMorphTargetInfluences().set( this.currentKeyframe, 1);
 
-			this.getMorphTargetInfluences().set( keyframe, 0 );
+			mesh.getMorphTargetInfluences().set( keyframe, 0 );
 
 			this.lastKeyframe = this.currentKeyframe;
 			this.currentKeyframe = keyframe;
@@ -199,8 +211,8 @@ public class MorphAnimMesh extends Mesh
 		if ( this.directionBackwards )
 			mix = 1 - mix;
 
-		this.getMorphTargetInfluences().set( this.currentKeyframe, mix);
-		this.getMorphTargetInfluences().set( this.lastKeyframe, 1 - mix);
+		mesh.getMorphTargetInfluences().set( this.currentKeyframe, mix);
+		mesh.getMorphTargetInfluences().set( this.lastKeyframe, 1 - mix);
 
 	}
 	

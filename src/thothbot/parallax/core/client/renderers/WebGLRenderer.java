@@ -739,39 +739,41 @@ public class WebGLRenderer
 	/**
 	 * Morph Targets Buffer initialization
 	 */
-	public void setupMorphTargets ( Material material, GeometryGroup geometryGroup, Object3D object ) 
+	private void setupMorphTargets ( Material material, GeometryBuffer geometrybuffer, Mesh object ) 
 	{
 		// set base
 		Map<String, Integer> attributes = material.getProgram().attributes;
 
-		if ( object.morphTargetBase != - 1 ) 
+		if ( object.getMorphTargetBase() != - 1 ) 
 		{
-			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( object.morphTargetBase ) );
+			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get( object.getMorphTargetBase() ) );
 			getGL().vertexAttribPointer( attributes.get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 
-		} else if ( attributes.get("position") >= 0 ) {
-			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglVertexBuffer );
+		} 
+		else if ( attributes.get("position") >= 0 ) 
+		{
+			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglVertexBuffer );
 			getGL().vertexAttribPointer( attributes.get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 		}
 
-		if ( object.morphTargetForcedOrder.size() > 0 ) 
+		if ( object.getMorphTargetForcedOrder().size() > 0 ) 
 		{
 			// set forced order
 
 			int m = 0;
-			List<Integer> order = object.morphTargetForcedOrder;
-			List<Integer> influences = object.morphTargetInfluences;
+			List<Integer> order = object.getMorphTargetForcedOrder();
+			List<Integer> influences = object.getMorphTargetInfluences();
 
 			while ( material instanceof HasSkinning 
 					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() 
 					&& m < order.size() ) 
 			{
-				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( order.get( m ) ) );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get( order.get( m ) ) );
 				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 
 				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals()) 
 				{
-					getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get( order.get( m ) ) );
+					getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get( order.get( m ) ) );
 					getGL().vertexAttribPointer( attributes.get("morphNormal" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 				}
 
@@ -780,17 +782,19 @@ public class WebGLRenderer
 				m ++;
 			}
 
-		} else {
+		}
+		else 
+		{
 
 			// find most influencing
 
 			List<Boolean> used = new ArrayList<Boolean>();
 			int candidateInfluence = - 1;
 			int candidate = 0;
-			List<Integer> influences = object.morphTargetInfluences;			
+			List<Integer> influences = object.getMorphTargetInfluences();			
 
-			if ( object.morphTargetBase != - 1 )
-				used.set( object.morphTargetBase, true);
+			if ( object.getMorphTargetBase() != - 1 )
+				used.set( object.getMorphTargetBase(), true);
 
 			int m = 0;
 			while ( material instanceof HasSkinning 
@@ -805,12 +809,12 @@ public class WebGLRenderer
 					}
 				}
 
-				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get( candidate ) );
+				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get( candidate ) );
 				getGL().vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 
 				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
 				{
-					getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get( candidate ) );
+					getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get( candidate ) );
 					getGL().vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 				}
 
@@ -1245,10 +1249,9 @@ public class WebGLRenderer
 			}
 
 		} 
-		else if ( object.morphTargetBase > 0 ) 
+		else if ( object instanceof Mesh && ((Mesh)object).getMorphTargetBase() > 0 ) 
 		{
-				Log.error("????????? object.morphTargetBase=" + object.morphTargetBase);
-//				setupMorphTargets( material, geometryGroup, object );
+				setupMorphTargets( material, geometryBuffer, (Mesh)object );
 		}
 
 		
@@ -1847,12 +1850,12 @@ public class WebGLRenderer
 
 		if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphTargets() ) 
 		{
-			if ( object.__webglMorphTargetInfluences == null ) 
+			if ( object instanceof Mesh && ((Mesh)object).__webglMorphTargetInfluences == null ) 
 			{
-				object.__webglMorphTargetInfluences = Float32Array.create( this.maxMorphTargets );
+				((Mesh)object).__webglMorphTargetInfluences = Float32Array.create( this.maxMorphTargets );
 
 				for ( int i = 0, il = this.maxMorphTargets; i < il; i ++ )
-					object.__webglMorphTargetInfluences.set( i, 0 );
+					((Mesh)object).__webglMorphTargetInfluences.set( i, 0 );
 			}
 		}
 

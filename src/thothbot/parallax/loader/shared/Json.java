@@ -49,8 +49,10 @@ public class Json extends Loader
 	private Geometry geometry;
 	private Mesh mesh;
 	private Material material;
+	private MorphAnimation animation;
 	
 	private List<Material> materials;
+	private boolean isParsed = false;
 	
 	@Override
 	public void parse(String string) 
@@ -73,8 +75,22 @@ public class Json extends Loader
 
 		if ( hasNormals() ) 
 			geometry.computeTangents();
+		
+		geometry.computeMorphNormals();
+		
+		getAnimation().init(getMesh(), getGeometry());
 	}
 
+	public MorphAnimation getAnimation()
+	{
+		if(this.animation == null)
+		{
+			this.animation = new MorphAnimation();
+		}
+		
+		return this.animation;
+	}
+	
 	public Geometry getGeometry() 
 	{
 		return this.geometry;
@@ -82,6 +98,26 @@ public class Json extends Loader
 	
 	public Material getMaterial() 
 	{
+		if(this.material == null)
+		{
+//			MeshLambertMaterial material = new MeshLambertMaterial();
+//			material.setColor(new Color3f(0xffffff));
+//			material.setWireframe(true);
+////			material.setMorphTargets(true);
+////			material.setMorphNormals(true);
+//			material.setVertexColors(Material.COLORS.FACE);
+//			material.setShading(Material.SHADING.FLAT);
+			MeshBasicMaterial material = new MeshBasicMaterial();
+			material.setColor( new Color3f(0xFF0000) );
+			material.setWireframe( true );
+			material.setMorphTargets( true );
+			material.setMorphNormals( true );
+//			material.setVertexColors(Material.COLORS.FACE);
+			material.setShading(Material.SHADING.FLAT);
+			
+			setMaterial(material);
+		}
+		
 		return this.material;
 	}
 	

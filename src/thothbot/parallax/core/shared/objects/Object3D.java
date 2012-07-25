@@ -107,10 +107,6 @@ public class Object3D implements DimensionalObject
 	public Matrix3f _normalMatrix;
 	public Matrix4f _modelViewMatrix;
 	public int count;
-	public int morphTargetBase;
-	public List<Integer> morphTargetForcedOrder;
-	public List<Integer> morphTargetInfluences;
-	public Float32Array __webglMorphTargetInfluences;
 
 	public Object3D() 
 	{
