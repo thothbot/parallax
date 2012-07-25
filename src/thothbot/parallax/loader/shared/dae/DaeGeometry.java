@@ -14,10 +14,10 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Squirrel. If not, see http://www.gnu.org/licenses/.
+ * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
+package thothbot.parallax.loader.shared.dae;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,38 +28,37 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeImage extends DaeIdElement 
+public class DaeGeometry extends DaeIdElement
 {
-	private String initFrom;
+	DaeMesh mesh;
 	
-	public DaeImage(Node node) 
+	public DaeGeometry(Node node)
 	{
 		super(node);
 		
-		Log.debug("DaeImage() " + toString());
+		Log.debug("DaeGeometry() " + toString()); 
 	}
 	
-	public String getInitFrom() {
-		return this.initFrom;
-	}
-	
-	public static Map<String, DaeImage> parse(DaeDocument document)
+	public DaeMesh getMesh()
 	{
-		Map<String, DaeImage> retval = new HashMap<String, DaeImage>();
+		return this.mesh;
+	}
+
+	public static Map<String, DaeGeometry> parse(DaeDocument document)
+	{
+		Map<String, DaeGeometry> retval = new HashMap<String, DaeGeometry>();
 		
-		Node lib = document.getDocument().getElementsByTagName("library_images").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("image"); 
+		Node lib = document.getDocument().getElementsByTagName("library_geometries").item(0);
+		NodeList list = ((Element)lib).getElementsByTagName("geometry"); 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
-			Node child = list.item(i);
-
-			DaeImage image = new DaeImage(child);
-			if (image.getID() != null) 
+			DaeGeometry geometry = new DaeGeometry(list.item(i));
+			if (geometry.getID() != null) 
 			{
-				retval.put(image.getID(), image);
+				retval.put(geometry.getID(), geometry);
 			}
 		}
-
+		
 		return retval;
 	}
 
@@ -67,21 +66,17 @@ public class DaeImage extends DaeIdElement
 	public void read()
 	{
 		super.read();
-		
+
 		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
-			if (nodeName.compareTo("init_from") == 0) 
+
+			if (nodeName.compareTo("mesh") == 0) 
 			{
-				this.initFrom = child.getFirstChild().getNodeValue();
+				mesh = new DaeMesh(child);
 			}
 		}
-	}
-	
-	public String toString()
-	{
-		return super.toString() + ", initFrom=" + this.initFrom;
 	}
 }

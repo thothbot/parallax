@@ -14,43 +14,28 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Parallax. If not, see http://www.gnu.org/licenses/.
+ * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
+package thothbot.parallax.loader.shared.dae;
 
-import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.Matrix4f;
 
 import com.google.gwt.xml.client.Node;
 
-public abstract class DaeTransform extends DaeElement 
+public class DaeTransformMatrix extends DaeTransform 
 {
-	private String sid;
-	private float[] data;
-	
-	public DaeTransform(Node node) 
-	{
+	public DaeTransformMatrix(Node node) {
 		super(node);
-		
-		Log.debug("DaeTransform() " + toString());
 	}
 
-	@Override
-	public void read() 
-	{
-		sid = readAttribute("sid");
-		data = readFloatArray();
-	}
-
-	public float[] getData() 
-	{
-		return data;
-	}
-	
-	public abstract Object getObject();
-	
-	public String toString()
-	{
-		return "{type=" + getNode().getNodeName() + ", sid=" + this.sid + "}"; 
+	public Matrix4f getObject() {
+		float[] data = getData();
+		return new Matrix4f(
+			data[0], data[1], data[2], data[3],
+			data[4], data[5], data[6], data[7],
+			data[8], data[9], data[10], data[11],
+			data[12], data[13], data[14], data[15]
+		);
 	}
 }

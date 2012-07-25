@@ -14,52 +14,73 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Squirrel. If not, see http://www.gnu.org/licenses/.
+ * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
+package thothbot.parallax.loader.shared.dae;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeVertices extends DaeIdElement 
+public class DaeAccessor extends DaeElement 
 {
-	DaeInput input;
+	private String source;
+	private int count;
+	private int stride;
 	
-	public DaeVertices(Node node) 
+	private List<DaeParam> params;
+
+	public DaeAccessor(Node node) 
 	{
 		super(node);
-	}
-	
-	public DaeInput getInput() {
-		return this.input;
+		
+		Log.debug("DaeAccessor() " + toString()); 
 	}
 
 	@Override
 	public void read() 
 	{
-		super.read();
+		params = new ArrayList<DaeParam>();
+		source = readAttribute("source", true);
+		count = readIntAttribute("count", 0);
+		stride = readIntAttribute("stride", 0);
 
-		List<DaeInput> inputs = new ArrayList<DaeInput>();
 		NodeList list = getNode().getChildNodes();
-
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
-
-			if (nodeName.compareTo("input") == 0) 
+			if (nodeName.compareTo("param") == 0)
 			{
-				input = new DaeInput(child);
-//				if (getMesh().getVerticesID().compareTo(input.getSource()) == 0) 
-//				{
-//					input.setSource(getMesh().getVertices().getID());
-//				}
-//				inputs.add(input);
-			} 
+				params.add(new DaeParam(child));
+			}
 		}
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public int getStride() {
+		return stride;
+	}
+	
+	public List<DaeParam> getParams( ) {
+		return params;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "{source=" + this.source + ", count=" + this.count + ", stride=" + this.stride + "}";
 	}
 }

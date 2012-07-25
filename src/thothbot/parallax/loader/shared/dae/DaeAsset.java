@@ -14,13 +14,10 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Parallax. If not, see http://www.gnu.org/licenses/.
+ * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
-
-import java.util.HashMap;
-import java.util.Map;
+package thothbot.parallax.loader.shared.dae;
 
 import thothbot.parallax.core.shared.Log;
 
@@ -28,55 +25,62 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeGeometry extends DaeIdElement
+public class DaeAsset extends DaeElement
 {
-	DaeMesh mesh;
+	public enum AXIS {
+		X,
+		Y,
+		Z
+	};
 	
-	public DaeGeometry(Node node)
+	private float unit = 1.0f;
+	private AXIS upAxis = AXIS.Z;
+	
+	public DaeAsset(Node node)
 	{
 		super(node);
-		
-		Log.debug("DaeGeometry() " + toString()); 
+
+		Log.debug("DaeAsset(): " + toString());
 	}
 	
-	public DaeMesh getMesh()
+	public static DaeAsset parse(DaeDocument document)
 	{
-		return this.mesh;
-	}
-
-	public static Map<String, DaeGeometry> parse(DaeDocument document)
-	{
-		Map<String, DaeGeometry> retval = new HashMap<String, DaeGeometry>();
-		
-		Node lib = document.getDocument().getElementsByTagName("library_geometries").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("geometry"); 
-		for (int i = 0; i < list.getLength(); i++) 
-		{
-			DaeGeometry geometry = new DaeGeometry(list.item(i));
-			if (geometry.getID() != null) 
-			{
-				retval.put(geometry.getID(), geometry);
-			}
-		}
-		
-		return retval;
+		return new DaeAsset(document.getDocument().getElementsByTagName("asset").item(0));
 	}
 
 	@Override
 	public void read()
 	{
-		super.read();
-
 		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
-			String nodeName = child.getNodeName();
-
-			if (nodeName.compareTo("mesh") == 0) 
+			if (child.getNodeName().compareTo("unit") == 0) 
 			{
-				mesh = new DaeMesh(child);
+				this.unit = Float.parseFloat( ((Element)child).getAttribute("meter") );
+			}
+			else if (child.getNodeName().compareTo("up_axis") == 0) 
+			{ 
+				switch(child.getFirstChild().getNodeValue().charAt(0))
+				{
+				case 'X': this.upAxis = AXIS.X; break;
+				case 'Y': this.upAxis = AXIS.Y; break;
+				case 'Z': this.upAxis = AXIS.Z; break;
+				}
 			}
 		}
+	}
+	
+	public float getUnit() {
+		return this.unit;
+	}
+	
+	public AXIS getUpAxis() {
+		return this.upAxis;
+	}
+	
+	public String toString()
+	{
+		return "{unit="+ this.unit + ", up="+ this.upAxis +"}";
 	}
 }

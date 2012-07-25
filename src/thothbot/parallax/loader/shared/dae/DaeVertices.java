@@ -17,71 +17,49 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
+package thothbot.parallax.loader.shared.dae;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import thothbot.parallax.core.shared.Log;
-
-import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeVisualScene extends DaeIdElement 
+public class DaeVertices extends DaeIdElement 
 {
-
-	List<DaeNode> nodes;
+	DaeInput input;
 	
-	public DaeVisualScene(Node node) 
+	public DaeVertices(Node node) 
 	{
 		super(node);
-		
-		Log.debug("DaeVisualScene() " + toString()); 
 	}
 	
-	public static Map<String, DaeVisualScene> parse(DaeDocument document)
-	{
-		Map<String, DaeVisualScene> retval = new HashMap<String, DaeVisualScene>();
-		
-		Node lib = document.getDocument().getElementsByTagName("library_visual_scenes").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("visual_scene"); 
-		for (int i = 0; i < list.getLength(); i++) 
-		{
-			DaeVisualScene visualScene = new DaeVisualScene(list.item(i));
-			if (visualScene.getID() != null) 
-			{
-				retval.put(visualScene.getID(), visualScene);
-			}
-		}
-		
-		return retval;
+	public DaeInput getInput() {
+		return this.input;
 	}
-	
+
 	@Override
-	public void read()
+	public void read() 
 	{
 		super.read();
 
-		this.nodes = new ArrayList<DaeNode>();
-		
+		List<DaeInput> inputs = new ArrayList<DaeInput>();
 		NodeList list = getNode().getChildNodes();
+
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
-			if (nodeName.compareTo("node") == 0) 
+
+			if (nodeName.compareTo("input") == 0) 
 			{
-				this.nodes.add( new DaeNode(child) );
-			}
+				input = new DaeInput(child);
+//				if (getMesh().getVerticesID().compareTo(input.getSource()) == 0) 
+//				{
+//					input.setSource(getMesh().getVertices().getID());
+//				}
+//				inputs.add(input);
+			} 
 		}
 	}
-	
-	public List<DaeNode> getNodes()
-	{
-		return this.nodes;
-	}
-
 }

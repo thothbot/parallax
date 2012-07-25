@@ -17,10 +17,10 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada;
+package thothbot.parallax.loader.shared;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.loader.shared.collada.dae.DaeDocument;
+import thothbot.parallax.loader.shared.dae.DaeDocument;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;

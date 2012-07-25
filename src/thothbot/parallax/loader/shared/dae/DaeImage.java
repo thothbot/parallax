@@ -17,7 +17,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
+package thothbot.parallax.loader.shared.dae;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,43 +28,44 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeMaterial extends DaeIdElement 
+public class DaeImage extends DaeIdElement 
 {
-
-	private String instanceEffect;
+	private String initFrom;
 	
-	public DaeMaterial(Node node) {
+	public DaeImage(Node node) 
+	{
 		super(node);
 		
-		Log.debug("DaeMaterial() " + toString());
+		Log.debug("DaeImage() " + toString());
 	}
 	
-	public String getInstanceEffect() {
-		return this.instanceEffect;
+	public String getInitFrom() {
+		return this.initFrom;
 	}
 	
-	public static Map<String, DaeMaterial> parse(DaeDocument document)
+	public static Map<String, DaeImage> parse(DaeDocument document)
 	{
-		Map<String, DaeMaterial> retval = new HashMap<String, DaeMaterial>();
+		Map<String, DaeImage> retval = new HashMap<String, DaeImage>();
 		
-		Node lib = document.getDocument().getElementsByTagName("library_materials").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("material"); 
+		Node lib = document.getDocument().getElementsByTagName("library_images").item(0);
+		NodeList list = ((Element)lib).getElementsByTagName("image"); 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 
-			DaeMaterial material = new DaeMaterial(child);
-			if (material.getID() != null) 
+			DaeImage image = new DaeImage(child);
+			if (image.getID() != null) 
 			{
-				retval.put(material.getID(), material);
+				retval.put(image.getID(), image);
 			}
 		}
 
 		return retval;
 	}
-	
+
 	@Override
-	public void read() {
+	public void read()
+	{
 		super.read();
 		
 		NodeList list = getNode().getChildNodes();
@@ -72,19 +73,15 @@ public class DaeMaterial extends DaeIdElement
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
-			if (nodeName.compareTo("instance_effect") == 0) 
+			if (nodeName.compareTo("init_from") == 0) 
 			{
-				DaeElement effect = new DaeElement(child) {		
-					@Override
-					public void read() {}
-				};
-				this.instanceEffect = effect.readAttribute("url", true);
+				this.initFrom = child.getFirstChild().getNodeValue();
 			}
 		}
 	}
-
+	
 	public String toString()
 	{
-		return super.toString() + ", instanceEffect=" + this.instanceEffect;
+		return super.toString() + ", initFrom=" + this.initFrom;
 	}
 }

@@ -14,44 +14,21 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Parallax. If not, see http://www.gnu.org/licenses/.
+ * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
-
-import thothbot.parallax.core.shared.Log;
+package thothbot.parallax.loader.shared.dae;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeParam extends DaeElement
-{
-	private String name;
-	private String type;
-	
-	public DaeParam(Node node)
-	{
+public class DaeDummyElement extends DaeElement {
+
+	public DaeDummyElement(Node node) {
 		super(node);
-		Log.debug("DaeParam() " + toString());
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getType() {
-		return type;
 	}
 
 	@Override
-	public void read() 
-	{
-		name = readAttribute("name");
-		type = readAttribute("type");
-	}
-	
-	@Override
-	public String toString() 
-	{
-		return "{name=" + this.name + ", type=" + this.type + "}";
+	public void read() {
+
 	}
 }

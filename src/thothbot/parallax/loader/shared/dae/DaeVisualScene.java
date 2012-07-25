@@ -17,7 +17,12 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
+package thothbot.parallax.loader.shared.dae;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
 
@@ -25,62 +30,58 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeAsset extends DaeElement
+public class DaeVisualScene extends DaeIdElement 
 {
-	public enum AXIS {
-		X,
-		Y,
-		Z
-	};
+
+	List<DaeNode> nodes;
 	
-	private float unit = 1.0f;
-	private AXIS upAxis = AXIS.Z;
-	
-	public DaeAsset(Node node)
+	public DaeVisualScene(Node node) 
 	{
 		super(node);
-
-		Log.debug("DaeAsset(): " + toString());
+		
+		Log.debug("DaeVisualScene() " + toString()); 
 	}
 	
-	public static DaeAsset parse(DaeDocument document)
+	public static Map<String, DaeVisualScene> parse(DaeDocument document)
 	{
-		return new DaeAsset(document.getDocument().getElementsByTagName("asset").item(0));
+		Map<String, DaeVisualScene> retval = new HashMap<String, DaeVisualScene>();
+		
+		Node lib = document.getDocument().getElementsByTagName("library_visual_scenes").item(0);
+		NodeList list = ((Element)lib).getElementsByTagName("visual_scene"); 
+		for (int i = 0; i < list.getLength(); i++) 
+		{
+			DaeVisualScene visualScene = new DaeVisualScene(list.item(i));
+			if (visualScene.getID() != null) 
+			{
+				retval.put(visualScene.getID(), visualScene);
+			}
+		}
+		
+		return retval;
 	}
-
+	
 	@Override
 	public void read()
 	{
+		super.read();
+
+		this.nodes = new ArrayList<DaeNode>();
+		
 		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
-			if (child.getNodeName().compareTo("unit") == 0) 
+			String nodeName = child.getNodeName();
+			if (nodeName.compareTo("node") == 0) 
 			{
-				this.unit = Float.parseFloat( ((Element)child).getAttribute("meter") );
-			}
-			else if (child.getNodeName().compareTo("up_axis") == 0) 
-			{ 
-				switch(child.getFirstChild().getNodeValue().charAt(0))
-				{
-				case 'X': this.upAxis = AXIS.X; break;
-				case 'Y': this.upAxis = AXIS.Y; break;
-				case 'Z': this.upAxis = AXIS.Z; break;
-				}
+				this.nodes.add( new DaeNode(child) );
 			}
 		}
 	}
 	
-	public float getUnit() {
-		return this.unit;
-	}
-	
-	public AXIS getUpAxis() {
-		return this.upAxis;
-	}
-	
-	public String toString()
+	public List<DaeNode> getNodes()
 	{
-		return "{unit="+ this.unit + ", up="+ this.upAxis +"}";
+		return this.nodes;
 	}
+
 }

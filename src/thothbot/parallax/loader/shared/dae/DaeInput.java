@@ -17,70 +17,57 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.collada.dae;
-
-import java.util.ArrayList;
-import java.util.List;
+package thothbot.parallax.loader.shared.dae;
 
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
 
-public class DaeAccessor extends DaeElement 
+public class DaeInput extends DaeElement 
 {
+	private int set;
+	private int offset;
+	private String semantic;
 	private String source;
-	private int count;
-	private int stride;
-	
-	private List<DaeParam> params;
 
-	public DaeAccessor(Node node) 
+	public DaeInput(Node node) 
 	{
 		super(node);
 		
-		Log.debug("DaeAccessor() " + toString()); 
+		Log.debug("DaeInput() " + toString());
 	}
 
 	@Override
 	public void read() 
 	{
-		params = new ArrayList<DaeParam>();
+		semantic = readAttribute("semantic");
 		source = readAttribute("source", true);
-		count = readIntAttribute("count", 0);
-		stride = readIntAttribute("stride", 0);
+		offset = readIntAttribute("offset", 0);
+		set = readIntAttribute("set", 0);
+	}
 
-		NodeList list = getNode().getChildNodes();
-		for (int i = 0; i < list.getLength(); i++) 
-		{
-			Node child = list.item(i);
-			String nodeName = child.getNodeName();
-			if (nodeName.compareTo("param") == 0)
-			{
-				params.add(new DaeParam(child));
-			}
-		}
+	public String getSemantic() {
+		return semantic;
 	}
 
 	public String getSource() {
 		return source;
 	}
 
-	public int getCount() {
-		return count;
+	public int getOffset() {
+		return offset;
 	}
 
-	public int getStride() {
-		return stride;
+	public int getSet() {
+		return set;
+	}
+
+	public void setSource(String value) {
+		source = value;
 	}
 	
-	public List<DaeParam> getParams( ) {
-		return params;
-	}
-	
-	@Override
 	public String toString()
 	{
-		return "{source=" + this.source + ", count=" + this.count + ", stride=" + this.stride + "}";
+		return "{semantic=" +this.semantic + ", offset="+ this.offset + ", set="+ this.set + "}";
 	}
 }
