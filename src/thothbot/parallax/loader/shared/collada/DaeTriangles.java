@@ -14,27 +14,38 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Squirrel. If not, see http://www.gnu.org/licenses/.
+ * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
+package thothbot.parallax.loader.shared.collada;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeVertices extends DaeIdElement 
+public class DaeTriangles extends DaePrimitive 
 {
-	DaeInput input;
-	
-	public DaeVertices(Node node) 
+	List<DaeInput> input;
+	private int[] p;
+
+	public DaeTriangles(Node node, DaeMesh mesh) 
 	{
-		super(node);
+		super(node, mesh);
+	}
+
+	@Override
+	public void destroy() 
+	{
+		super.destroy();
+
+		p = null;
 	}
 	
-	public DaeInput getInput() {
+	public List<DaeInput> getInput() {
 		return this.input;
 	}
 
@@ -43,7 +54,9 @@ public class DaeVertices extends DaeIdElement
 	{
 		super.read();
 
-		List<DaeInput> inputs = new ArrayList<DaeInput>();
+		p = null;
+
+		input = new ArrayList<DaeInput>();
 		NodeList list = getNode().getChildNodes();
 
 		for (int i = 0; i < list.getLength(); i++) 
@@ -53,13 +66,46 @@ public class DaeVertices extends DaeIdElement
 
 			if (nodeName.compareTo("input") == 0) 
 			{
-				input = new DaeInput(child);
+				input.add(new DaeInput(child));
 //				if (getMesh().getVerticesID().compareTo(input.getSource()) == 0) 
 //				{
 //					input.setSource(getMesh().getVertices().getID());
 //				}
 //				inputs.add(input);
 			} 
+//			else if (nodeName.compareTo("p") == 0) 
+//			{
+//				p = readIntArray(child);
+//			}
 		}
+
+//		if (p != null && p.length > 0 && inputs.size() > 0) 
+//		{
+//			readTriangles(p, inputs);
+//		}
 	}
+
+//	private void readTriangles(int[] p, List<DaeInput> inputs) 
+//	{
+//		int current = 0;
+//		int maxOffset = 0;
+//
+//		for (DaeInput input: inputs)
+//		{
+//			maxOffset = Math.max(maxOffset, input.getOffset());
+//		}
+//
+//		while (current < p.length) 
+//		{
+//			for (int i = 0; i < inputs.size(); i++) 
+//			{
+//				DaeInput input = inputs.get(i);
+////				DaeSource source = DaeDocument.getSourceByID(getNode(), input.getSource());
+////				int index = p[current + input.getOffset()];
+//
+////				addIndex(input, index, source.getAccessor().getParams().size());
+//			}
+//			current += (maxOffset + 1);
+//		}
+//	}
 }

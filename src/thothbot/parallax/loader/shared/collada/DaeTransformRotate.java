@@ -17,21 +17,20 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
-
-import thothbot.parallax.core.shared.core.Vector3f;
+package thothbot.parallax.loader.shared.collada;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeTransformVector extends DaeTransform 
+public class DaeTransformRotate extends DaeTransform 
 {
-	public DaeTransformVector(Node node) {
+	public DaeTransformRotate(Node node) {
 		super(node);
 	}
 
-	public Vector3f getObject() 
+	@Override
+	public Float getObject() 
 	{
-		float[] data = getData();
-		return new Vector3f( data[ 0 ], data[ 1 ], data[ 2 ] );
+		float[] data = getData(); 
+		return data[3] * TO_RADIANS;
 	}
 }

@@ -34,16 +34,27 @@ public abstract class Loader
 		public void onLoaded();
 	}
 	
+	private String texturePath;
+	
 	public void load(final String url, final Callback callback) throws RequestException 
 	{
+		texturePath = extractUrlBase(url);
+		
 		RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, url);
 		rb.sendRequest(null, new RequestCallback() {
 
 			@Override
 			public void onResponseReceived(Request request, Response response) 
 			{
-				parse(response.getText());
-				callback.onLoaded();
+				if (200 == response.getStatusCode()) 
+				{
+					parse(response.getText());
+					callback.onLoaded();
+				} 
+				else 
+				{
+					Log.error("Couldn't retrieve JSON (" + response.getStatusText() + ")");
+				}
 			}
 
 			@Override
@@ -55,4 +66,14 @@ public abstract class Loader
 	}
 	
 	public abstract void parse(String string); 
+	
+	public String getTexturePath() {
+		return this.texturePath;
+	}
+	
+	private String extractUrlBase( String url ) 
+	{
+		String part = url.substring(0, url.lastIndexOf('/'));
+		return ( part.length() < 1 ? "." : part ) + '/';
+	}
 }

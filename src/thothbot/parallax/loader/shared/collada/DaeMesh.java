@@ -17,7 +17,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
+package thothbot.parallax.loader.shared.collada;
 
 import java.util.ArrayList;
 import java.util.HashMap;

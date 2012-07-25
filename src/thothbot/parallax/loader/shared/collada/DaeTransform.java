@@ -17,31 +17,40 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
+package thothbot.parallax.loader.shared.collada;
 
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeArrayFloat extends DaeArrayData 
+public abstract class DaeTransform extends DaeElement 
 {
+	private String sid;
 	private float[] data;
-
-	public DaeArrayFloat(Node node) 
+	
+	public DaeTransform(Node node) 
 	{
 		super(node);
+		
+		Log.debug("DaeTransform() " + toString());
 	}
 
 	@Override
 	public void read() 
 	{
-		super.read();
-
+		sid = readAttribute("sid");
 		data = readFloatArray();
 	}
 
 	public float[] getData() 
 	{
 		return data;
+	}
+	
+	public abstract Object getObject();
+	
+	public String toString()
+	{
+		return "{type=" + getNode().getNodeName() + ", sid=" + this.sid + "}"; 
 	}
 }

@@ -14,36 +14,53 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Parallax. If not, see http://www.gnu.org/licenses/.
+ * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
+package thothbot.parallax.loader.shared.collada;
 
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeArrayData extends DaeIdElement 
+public class DaeIdElement extends DaeElement 
 {
-	private int count;
+	private String id;
+	private String name;
+	private String sid;
 	
-	public DaeArrayData(Node node) 
+	public DaeIdElement(Node node) 
 	{
-		super(node);
-		
-		Log.debug("DaeArrayData() " + toString());
+		super( node );
 	}
 	
-	@Override
+	public void destroy() 
+	{
+		super.destroy();
+		id = name = sid = null;
+	}
+	
+	public String getID() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getSID() {
+		return sid;
+	}
+	
 	public void read() 
 	{
-		super.read();
-		
-		count = readIntAttribute("count", 0);
+		id   = readAttribute("id"  );
+		sid  = readAttribute("sid" );
+		name = readAttribute("name");
 	}
-		
+
 	public String toString()
 	{
-		return "{id=" + getID() + ", count=" + this.count + "}";
+		return "id=" + this.id + ", name=" + this.name + ", sid=" + this.sid;
 	}
 }

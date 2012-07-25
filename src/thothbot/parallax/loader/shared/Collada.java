@@ -19,7 +19,7 @@
 
 package thothbot.parallax.loader.shared;
 
-import thothbot.parallax.loader.shared.dae.DaeDocument;
+import thothbot.parallax.loader.shared.collada.DaeDocument;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;

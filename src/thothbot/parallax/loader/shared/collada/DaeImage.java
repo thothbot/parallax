@@ -17,7 +17,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
+package thothbot.parallax.loader.shared.collada;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,41 +28,43 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeController extends DaeIdElement 
+public class DaeImage extends DaeIdElement 
 {
-	private DaeSkin skin;
-
-	public DaeController(Node node) 
+	private String initFrom;
+	
+	public DaeImage(Node node) 
 	{
 		super(node);
 		
-		Log.debug("DaeController() " + toString());
+		Log.debug("DaeImage() " + toString());
 	}
 	
-	public DaeSkin getSkin() {
-		return this.skin;
+	public String getInitFrom() {
+		return this.initFrom;
 	}
-
-	public static Map<String, DaeController> parse(DaeDocument document)
+	
+	public static Map<String, DaeImage> parse(DaeDocument document)
 	{
-		Map<String, DaeController> retval = new HashMap<String, DaeController>();
+		Map<String, DaeImage> retval = new HashMap<String, DaeImage>();
 		
-		Node lib = document.getDocument().getElementsByTagName("library_controllers").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("controller"); 
+		Node lib = document.getDocument().getElementsByTagName("library_images").item(0);
+		NodeList list = ((Element)lib).getElementsByTagName("image"); 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
-			DaeController controller = new DaeController(list.item(i));
-			if (controller.getID() != null) 
+			Node child = list.item(i);
+
+			DaeImage image = new DaeImage(child);
+			if (image.getID() != null) 
 			{
-				retval.put(controller.getID(), controller);
+				retval.put(image.getID(), image);
 			}
 		}
-		
+
 		return retval;
 	}
-	
+
 	@Override
-	public void read() 
+	public void read()
 	{
 		super.read();
 		
@@ -71,11 +73,15 @@ public class DaeController extends DaeIdElement
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
-
-			if (nodeName.compareTo("skin") == 0) 
+			if (nodeName.compareTo("init_from") == 0) 
 			{
-				skin = new DaeSkin(child);
+				this.initFrom = child.getFirstChild().getNodeValue();
 			}
 		}
+	}
+	
+	public String toString()
+	{
+		return super.toString() + ", initFrom=" + this.initFrom;
 	}
 }

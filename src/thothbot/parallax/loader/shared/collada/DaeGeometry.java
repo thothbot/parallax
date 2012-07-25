@@ -14,14 +14,12 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Squirrel. If not, see http://www.gnu.org/licenses/.
+ * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
+package thothbot.parallax.loader.shared.collada;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
@@ -30,58 +28,55 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class DaeVisualScene extends DaeIdElement 
+public class DaeGeometry extends DaeIdElement
 {
-
-	List<DaeNode> nodes;
+	DaeMesh mesh;
 	
-	public DaeVisualScene(Node node) 
+	public DaeGeometry(Node node)
 	{
 		super(node);
 		
-		Log.debug("DaeVisualScene() " + toString()); 
+		Log.debug("DaeGeometry() " + toString()); 
 	}
 	
-	public static Map<String, DaeVisualScene> parse(DaeDocument document)
+	public DaeMesh getMesh()
 	{
-		Map<String, DaeVisualScene> retval = new HashMap<String, DaeVisualScene>();
+		return this.mesh;
+	}
+
+	public static Map<String, DaeGeometry> parse(DaeDocument document)
+	{
+		Map<String, DaeGeometry> retval = new HashMap<String, DaeGeometry>();
 		
-		Node lib = document.getDocument().getElementsByTagName("library_visual_scenes").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("visual_scene"); 
+		Node lib = document.getDocument().getElementsByTagName("library_geometries").item(0);
+		NodeList list = ((Element)lib).getElementsByTagName("geometry"); 
 		for (int i = 0; i < list.getLength(); i++) 
 		{
-			DaeVisualScene visualScene = new DaeVisualScene(list.item(i));
-			if (visualScene.getID() != null) 
+			DaeGeometry geometry = new DaeGeometry(list.item(i));
+			if (geometry.getID() != null) 
 			{
-				retval.put(visualScene.getID(), visualScene);
+				retval.put(geometry.getID(), geometry);
 			}
 		}
 		
 		return retval;
 	}
-	
+
 	@Override
 	public void read()
 	{
 		super.read();
 
-		this.nodes = new ArrayList<DaeNode>();
-		
 		NodeList list = getNode().getChildNodes();
 		for (int i = 0; i < list.getLength(); i++) 
 		{
 			Node child = list.item(i);
 			String nodeName = child.getNodeName();
-			if (nodeName.compareTo("node") == 0) 
+
+			if (nodeName.compareTo("mesh") == 0) 
 			{
-				this.nodes.add( new DaeNode(child) );
+				mesh = new DaeMesh(child);
 			}
 		}
 	}
-	
-	public List<DaeNode> getNodes()
-	{
-		return this.nodes;
-	}
-
 }

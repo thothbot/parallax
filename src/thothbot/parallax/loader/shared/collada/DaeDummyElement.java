@@ -17,25 +17,18 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
-
-import thothbot.parallax.core.shared.core.Matrix4f;
+package thothbot.parallax.loader.shared.collada;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeTransformMatrix extends DaeTransform 
-{
-	public DaeTransformMatrix(Node node) {
+public class DaeDummyElement extends DaeElement {
+
+	public DaeDummyElement(Node node) {
 		super(node);
 	}
 
-	public Matrix4f getObject() {
-		float[] data = getData();
-		return new Matrix4f(
-			data[0], data[1], data[2], data[3],
-			data[4], data[5], data[6], data[7],
-			data[8], data[9], data[10], data[11],
-			data[12], data[13], data[14], data[15]
-		);
+	@Override
+	public void read() {
+
 	}
 }

@@ -14,44 +14,24 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Parallax. If not, see http://www.gnu.org/licenses/.
+ * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
+package thothbot.parallax.loader.shared.collada;
 
-import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.Vector3f;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeParam extends DaeElement
+public class DaeTransformVector extends DaeTransform 
 {
-	private String name;
-	private String type;
-	
-	public DaeParam(Node node)
-	{
+	public DaeTransformVector(Node node) {
 		super(node);
-		Log.debug("DaeParam() " + toString());
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	@Override
-	public void read() 
+	public Vector3f getObject() 
 	{
-		name = readAttribute("name");
-		type = readAttribute("type");
-	}
-	
-	@Override
-	public String toString() 
-	{
-		return "{name=" + this.name + ", type=" + this.type + "}";
+		float[] data = getData();
+		return new Vector3f( data[ 0 ], data[ 1 ], data[ 2 ] );
 	}
 }

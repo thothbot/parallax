@@ -14,23 +14,36 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Squirrel. If not, see http://www.gnu.org/licenses/.
+ * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared.dae;
+package thothbot.parallax.loader.shared.collada;
+
+import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;
 
-public class DaeTransformRotate extends DaeTransform 
+public class DaeArrayData extends DaeIdElement 
 {
-	public DaeTransformRotate(Node node) {
-		super(node);
-	}
-
-	@Override
-	public Float getObject() 
+	private int count;
+	
+	public DaeArrayData(Node node) 
 	{
-		float[] data = getData(); 
-		return data[3] * TO_RADIANS;
+		super(node);
+		
+		Log.debug("DaeArrayData() " + toString());
+	}
+	
+	@Override
+	public void read() 
+	{
+		super.read();
+		
+		count = readIntAttribute("count", 0);
+	}
+		
+	public String toString()
+	{
+		return "{id=" + getID() + ", count=" + this.count + "}";
 	}
 }
