@@ -63,7 +63,6 @@ public class Geometry extends GeometryBuffer
 	{
 		public String name;
 		public List<Vector3f> vertices;
-		
 	}
 	
 	// Bounding box.		
@@ -305,6 +304,10 @@ public class Geometry extends GeometryBuffer
 
 	public List<MorphNormal> getMorphNormals() {
 		return morphNormals;
+	}
+	
+	public List<MorphColor> getMorphColors() {
+		return this.morphColors;
 	}
 	
 	public List<List<List<UVf>>> getFaceVertexUvs(){

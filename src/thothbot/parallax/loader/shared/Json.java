@@ -29,6 +29,13 @@ import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector4f;
+import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
+import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
+import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
+import thothbot.parallax.core.shared.materials.ShaderMaterial;
+import thothbot.parallax.core.shared.objects.Mesh;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONException;
@@ -40,6 +47,10 @@ public class Json extends Loader
 
 	private JSONObject json;
 	private Geometry geometry;
+	private Mesh mesh;
+	private Material material;
+	
+	private List<Material> materials;
 	
 	@Override
 	public void parse(String string) 
@@ -47,14 +58,46 @@ public class Json extends Loader
 		if(!isThisJsonStringValid(string))
 			return;
 		
+		Log.debug("JSON parse()");
+		
 		geometry = new Geometry();
 		
+		parseMaterials();
 		parseVertices();
 		parseFaces();
+		parseSkin();
+		parseMorphing();
+
+		geometry.computeCentroids();
+		geometry.computeFaceNormals(false);
+
+		if ( hasNormals() ) 
+			geometry.computeTangents();
+	}
+
+	public Geometry getGeometry() 
+	{
+		return this.geometry;
 	}
 	
-	public Geometry getGeometry() {
-		return this.geometry;
+	public Material getMaterial() 
+	{
+		return this.material;
+	}
+	
+	public void setMaterial(Material material)
+	{
+		this.material = material;
+	}
+	
+	public Mesh getMesh() 
+	{
+		if(this.mesh == null)
+		{
+			this.mesh = new Mesh(getGeometry(), getMaterial());
+		}
+		
+		return this.mesh;
 	}
 	
 	private boolean isThisJsonStringValid(String iJSonString) 
@@ -72,10 +115,214 @@ public class Json extends Loader
 		return true;
 	}
 		
+	private void parseMaterials()
+	{
+		if(! json.containsKey("materials")) 
+			return;
+		
+		Log.debug("JSON parseMaterials()");
+		
+		JSONArray materials = json.get("materials").isArray();
+		
+		for ( int i = 0; i < materials.size(); ++ i )
+			this.materials.add( createMaterial( materials.get(i).isObject()) );
+	}
+	
+	private Material createMaterial(JSONObject jsonMaterial)
+	{
+		// defaults
+		Material material = new MeshLambertMaterial();
+		material.setOpacity(1.0f);
+		((MeshLambertMaterial)material).setColor(new Color3f(0xeeeeee));
+		if(jsonMaterial.containsKey("wireframe"))
+			((MeshLambertMaterial)material).setWireframe(true);
+		
+		if(jsonMaterial.containsKey("shading"))
+		{
+			if(jsonMaterial.get("shading").isString().stringValue().compareToIgnoreCase("phong") == 0)
+			{
+				material = new MeshPhongMaterial();
+			}
+			else if(jsonMaterial.get("shading").isString().stringValue().compareToIgnoreCase("basic") == 0)
+			{
+				material = new MeshBasicMaterial();
+			}
+		}
+		
+		// parameters from model file
+
+//		if ( m.blending !== undefined && THREE[ m.blending ] !== undefined ) {
+//
+//			mpars.blending = THREE[ m.blending ];
+//
+//		}
+//
+//		if ( m.transparent !== undefined || m.opacity < 1.0 ) {
+//
+//			mpars.transparent = m.transparent;
+//
+//		}
+//
+//		if ( m.depthTest !== undefined ) {
+//
+//			mpars.depthTest = m.depthTest;
+//
+//		}
+//
+//		if ( m.depthWrite !== undefined ) {
+//
+//			mpars.depthWrite = m.depthWrite;
+//
+//		}
+//
+//		if ( m.vertexColors !== undefined ) {
+//
+//			if ( m.vertexColors == "face" ) {
+//
+//				mpars.vertexColors = THREE.FaceColors;
+//
+//			} else if ( m.vertexColors ) {
+//
+//				mpars.vertexColors = THREE.VertexColors;
+//
+//			}
+//
+//		}
+//
+//		// colors
+//
+//		if ( m.colorDiffuse ) {
+//
+//			mpars.color = rgb2hex( m.colorDiffuse );
+//
+//		} else if ( m.DbgColor ) {
+//
+//			mpars.color = m.DbgColor;
+//
+//		}
+//
+//		if ( m.colorSpecular ) {
+//
+//			mpars.specular = rgb2hex( m.colorSpecular );
+//
+//		}
+//
+//		if ( m.colorAmbient ) {
+//
+//			mpars.ambient = rgb2hex( m.colorAmbient );
+//
+//		}
+//
+//		// modifiers
+//
+//		if ( m.transparency ) {
+//
+//			mpars.opacity = m.transparency;
+//
+//		}
+//
+//		if ( m.specularCoef ) {
+//
+//			mpars.shininess = m.specularCoef;
+//
+//		}
+//
+//		// textures
+//
+//		if ( m.mapDiffuse && texturePath ) {
+//
+//			create_texture( mpars, "map", m.mapDiffuse, m.mapDiffuseRepeat, m.mapDiffuseOffset, m.mapDiffuseWrap );
+//
+//		}
+//
+//		if ( m.mapLight && texturePath ) {
+//
+//			create_texture( mpars, "lightMap", m.mapLight, m.mapLightRepeat, m.mapLightOffset, m.mapLightWrap );
+//
+//		}
+//
+//		if ( m.mapNormal && texturePath ) {
+//
+//			create_texture( mpars, "normalMap", m.mapNormal, m.mapNormalRepeat, m.mapNormalOffset, m.mapNormalWrap );
+//
+//		}
+//
+//		if ( m.mapSpecular && texturePath ) {
+//
+//			create_texture( mpars, "specularMap", m.mapSpecular, m.mapSpecularRepeat, m.mapSpecularOffset, m.mapSpecularWrap );
+//
+//		}
+//
+//		// special case for normal mapped material
+//
+//		if ( m.mapNormal ) {
+//
+//			var shader = THREE.ShaderUtils.lib[ "normal" ];
+//			var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+//
+//			uniforms[ "tNormal" ].texture = mpars.normalMap;
+//
+//			if ( m.mapNormalFactor ) {
+//
+//				uniforms[ "uNormalScale" ].value = m.mapNormalFactor;
+//
+//			}
+//
+//			if ( mpars.map ) {
+//
+//				uniforms[ "tDiffuse" ].texture = mpars.map;
+//				uniforms[ "enableDiffuse" ].value = true;
+//
+//			}
+//
+//			if ( mpars.specularMap ) {
+//
+//				uniforms[ "tSpecular" ].texture = mpars.specularMap;
+//				uniforms[ "enableSpecular" ].value = true;
+//
+//			}
+//
+//			if ( mpars.lightMap ) {
+//
+//				uniforms[ "tAO" ].texture = mpars.lightMap;
+//				uniforms[ "enableAO" ].value = true;
+//
+//			}
+//
+//			// for the moment don't handle displacement texture
+//
+//			uniforms[ "uDiffuseColor" ].value.setHex( mpars.color );
+//			uniforms[ "uSpecularColor" ].value.setHex( mpars.specular );
+//			uniforms[ "uAmbientColor" ].value.setHex( mpars.ambient );
+//
+//			uniforms[ "uShininess" ].value = mpars.shininess;
+//
+//			if ( mpars.opacity !== undefined ) {
+//
+//				uniforms[ "uOpacity" ].value = mpars.opacity;
+//
+//			}
+//
+//			var parameters = { fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true, fog: true };
+//			var material = new THREE.ShaderMaterial( parameters );
+//
+//		} else {
+//
+//			var material = new THREE[ mtype ]( mpars );
+//
+//		}
+//
+//		if ( m.DbgName != undefined ) material.name = m.DbgName;
+
+		return material;
+	}
+
 	private void parseVertices()
 	{
 		if(! json.containsKey("vertices")) 
 			return;
+		
+		Log.debug("JSON parseVertices()");
 		
 		JSONArray vertices = json.get("vertices").isArray();
 		
@@ -100,6 +347,8 @@ public class Json extends Loader
 		if(! json.containsKey("faces")) 
 			return;
 		
+		Log.debug("JSON parseFaces()");
+		
 		JSONArray faces = json.get("faces").isArray();
 
 		JSONArray uvs = json.get("uvs").isArray();
@@ -108,17 +357,10 @@ public class Json extends Loader
 		// disregard empty arrays
 		for ( int i = 0; i < uvs.size(); i++ )
 			if ( uvs.get( i ).isArray().size() > 0) nUvLayers ++;
-
-//		for ( int i = 0; i < nUvLayers; i++ ) 
-//		{
-//			this.geometry.getFaceUvs().add(i, new ArrayList<UVf>());
-//			this.geometry.getFaceVertexUvs().add(i, new ArrayList<List<UVf>>());
-//		}
 		
 		JSONArray normals = json.get("normals").isArray();
 		JSONArray colors = json.get("colors").isArray();
 				
-		double scale = getScale();
 		int offset = 0;
 		int zLength = faces.size();
 
@@ -249,6 +491,93 @@ public class Json extends Loader
 		}
 	}
 	
+	private void parseSkin() 
+	{
+		Log.debug("JSON parseSkin()");
+		
+		if ( json.containsKey("skinWeights") ) 
+		{
+			JSONArray skinWeights = json.get("skinWeights").isArray();
+			for ( int i = 0, l = skinWeights.size(); i < l; i += 2 ) 
+			{
+				geometry.getSkinWeights().add( new Vector4f( 
+						(float)value( skinWeights, i ),
+						(float)value( skinWeights, i + 1 ), 
+						0, 0 ) );
+			}
+
+		}
+
+		if ( json.containsKey("skinIndices") ) 
+		{
+			JSONArray skinIndices = json.get("skinIndices").isArray();
+			for ( int i = 0, l = skinIndices.size(); i < l; i += 2 ) 
+			{
+				geometry.getSkinIndices().add( new Vector4f(
+						(float)value( skinIndices, i ),
+						(float)value( skinIndices, i + 1 ), 
+						0, 0) );
+			}
+		}
+
+//		geometry.bones = json.bones;
+//		geometry.animation = json.animation;
+	}
+
+	private void parseMorphing() 
+	{
+		Log.debug("JSON parseMorphing()");
+		
+		double scale = getScale();
+		
+		if ( json.containsKey("morphTargets")) 
+		{
+			JSONArray morphTargets = json.get("morphTargets").isArray();
+			for ( int i = 0, l = morphTargets.size(); i < l; i ++ ) 
+			{
+				Geometry.MorphTarget morphTarget = geometry.new MorphTarget();
+				morphTarget.name = morphTargets.get(i).isObject().get("name").isString().stringValue();
+				morphTarget.vertices = new ArrayList<Vector3f>();
+				
+				JSONArray srcVertices = morphTargets.get(i).isObject().get("vertices").isArray();
+				for( int v = 0, vl = srcVertices.size(); v < vl; v += 3 ) 
+				{
+					morphTarget.vertices.add( new Vector3f(
+						(float)(value( srcVertices, v ) * scale),
+						(float)(value( srcVertices, v + 1 ) * scale),
+						(float)(value( srcVertices, v + 2 ) * scale)
+					) );
+				}
+				
+				geometry.getMorphTargets().add(morphTarget);
+			}
+		}
+
+		if ( json.containsKey("morphColors") ) 
+		{
+			JSONArray morphColors = json.get("morphColors").isArray();
+			for ( int i = 0, l = morphColors.size(); i < l; i++ ) 
+			{
+				Geometry.MorphColor morphColor = geometry.new MorphColor();
+				morphColor.name = morphColors.get(i).isObject().get("name").isString().stringValue();
+				morphColor.colors = new ArrayList<Color3f>();
+								
+				JSONArray srcColors = morphColors.get(i).isObject().get("colors").isArray();
+				for ( int c = 0, cl = srcColors.size(); c < cl; c += 3 ) 
+				{
+					Color3f color = new Color3f( 0xffaa00 );
+					color.setRGB( 
+						(float)value(srcColors, c ), 
+						(float)value(srcColors, c + 1 ), 
+						(float)value(srcColors, c + 2 ) );
+					morphColor.colors.add(color);
+				}
+				
+				geometry.getMorphColors().add(morphColor);
+			}
+		}
+	}
+	
 	private double getScale()
 	{
 		return ( json.containsKey("scale") ) 
@@ -263,5 +592,91 @@ public class Json extends Loader
 	private double value(JSONArray array, int offset) 
 	{
 		return array.get( offset ).isNumber().doubleValue();
+	}
+	
+	private boolean is_pow2( int n ) 
+	{
+		double l = Math.log( n ) / Math.log(2);
+		return Math.floor( l ) == l;
+	}
+
+	private int nearest_pow2( int n ) 
+	{
+		double l = Math.log( n ) / Math.log(2);
+		return (int) Math.pow( 2, Math.round(  l ) );
+	}
+
+//	private void load_image( where, url ) 
+//	{
+//		var image = new Image();
+//		image.onload = function () {
+//
+//			if ( !is_pow2( this.width ) || !is_pow2( this.height ) ) {
+//
+//				var width = nearest_pow2( this.width );
+//				var height = nearest_pow2( this.height );
+//
+//				where.image.width = width;
+//				where.image.height = height;
+//				where.image.getContext( '2d' ).drawImage( this, 0, 0, width, height );
+//
+//			} else {
+//
+//				where.image = this;
+//
+//			}
+//
+//			where.needsUpdate = true;
+//
+//		}
+//
+//		image.crossOrigin = _this.crossOrigin;
+//		image.src = url;
+//	}
+//	
+//	function create_texture( where, name, sourceFile, repeat, offset, wrap ) {
+//
+//		var texture = document.createElement( 'canvas' );
+//
+//		where[ name ] = new THREE.Texture( texture );
+//		where[ name ].sourceFile = sourceFile;
+//
+//		if( repeat ) {
+//
+//			where[ name ].repeat.set( repeat[ 0 ], repeat[ 1 ] );
+//
+//			if ( repeat[ 0 ] != 1 ) where[ name ].wrapS = THREE.RepeatWrapping;
+//			if ( repeat[ 1 ] != 1 ) where[ name ].wrapT = THREE.RepeatWrapping;
+//
+//		}
+//
+//		if ( offset ) {
+//
+//			where[ name ].offset.set( offset[ 0 ], offset[ 1 ] );
+//
+//		}
+//
+//		if ( wrap ) {
+//
+//			var wrapMap = {
+//				"repeat": THREE.RepeatWrapping,
+//				"mirror": THREE.MirroredRepeatWrapping
+//			}
+//
+//			if ( wrapMap[ wrap[ 0 ] ] !== undefined ) where[ name ].wrapS = wrapMap[ wrap[ 0 ] ];
+//			if ( wrapMap[ wrap[ 1 ] ] !== undefined ) where[ name ].wrapT = wrapMap[ wrap[ 1 ] ];
+//
+//		}
+//
+//		load_image( where[ name ], texturePath + "/" + sourceFile );
+//	}
+	
+	private boolean hasNormals() 
+	{
+		for( int i = 0; i < this.materials.size(); i ++ ) 
+			if (  this.materials.get(i) instanceof ShaderMaterial ) 
+				return true;
+
+		return false;
 	}
 }

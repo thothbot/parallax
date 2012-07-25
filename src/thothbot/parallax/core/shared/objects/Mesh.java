@@ -154,9 +154,12 @@ public class Mesh  extends GeometryObject implements HasSides
 		return 0;
 	}
 
-	public Integer getMorphTargetBase()
-	{
+	public Integer getMorphTargetBase() {
 		return morphTargetBase;
+	}
+	
+	public List<Integer> getMorphTargetInfluences() {
+		return this.morphTargetInfluences;
 	}
 
 	@Override

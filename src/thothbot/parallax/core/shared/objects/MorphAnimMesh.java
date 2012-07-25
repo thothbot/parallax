@@ -22,42 +22,56 @@
 
 package thothbot.parallax.core.shared.objects;
 
+import java.util.Map;
+
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.Geometry.MorphTarget;
+import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.materials.Material;
 
 public class MorphAnimMesh extends Mesh
 {
-
-	public int startKeyframe;
-	public int endKeyframe;
-	public int length;
+	public class Animation {
+		public int start;
+		public int end;
+	}
 	
-	public int direction = 1;
-	public boolean directionBackwards = false;
+	private int startKeyframe;
+	private int endKeyframe;
+	private int length;
+	
+	private int direction = 1;
+	private boolean directionBackwards = false;
 	
 	
-	public int duration = 1000; // milliseconds
-	public boolean mirroredLoop = false;
-	public int time = 0;
+	private int duration; // milliseconds
+	private boolean mirroredLoop = false;
+	private int time = 0;
 
 	private int lastKeyframe = 0;
 	private int currentKeyframe = 0;
+	
+	private Map<String, Animation> animations;
 
-	public MorphAnimMesh(Geometry geometry, Material material) {
+	public MorphAnimMesh(Geometry geometry, Material material) 
+	{
 		super(geometry, material);
 		
+		setDuration(1000);
 		// internals
 		this.setFrameRange( 0, this.geometry.getMorphTargets().size() - 1 );
 	}
 
-	public void setFrameRange(int start, int end ) 
-	{
-		this.startKeyframe = start;
-		this.endKeyframe = end;
-
-		this.length = this.endKeyframe - this.startKeyframe + 1;
+	/**
+	 * Sets animation duration. Default: 1000ms.
+	 * 
+	 * @param duration the millisecond value.
+	 */
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
-	
+		
 	public void setDirectionForward() 
 	{
 		this.direction = 1;
@@ -70,29 +84,30 @@ public class MorphAnimMesh extends Mesh
 		this.directionBackwards = true;
 	}
 	
-	// TODO: Fix
-	public void parseAnimations() 
-	{
-
+//	public void parseAnimations() 
+//	{
 //		Geometry geometry = this.geometry;
 //
-//		if ( ! geometry.animations ) geometry.animations = {};
+//		if ( ! animations == null) 
+//			geometry.animations = {};
 //
-//		var firstAnimation, animations = geometry.animations;
+//		var firstAnimation;
+//		animations = geometry.animations;
 //
 //		var pattern = /([a-z]+)(\d+)/;
 //
-//		for ( var i = 0, il = geometry.morphTargets.length; i < il; i ++ ) {
-//
-//			var morph = geometry.morphTargets[ i ];
+//		for ( int i = 0, il = geometry.getMorphTargets().size(); i < il; i ++ ) 
+//		{
+//			MorphTarget morph = geometry.getMorphTargets().get(i);
 //			var parts = morph.name.match( pattern );
 //
-//			if ( parts && parts.length > 1 ) {
-//
+//			if ( parts && parts.length > 1 ) 
+//			{
 //				var label = parts[ 1 ];
 //				var num = parts[ 2 ];
 //
-//				if ( ! animations[ label ] ) animations[ label ] = { start: Infinity, end: -Infinity };
+//				if ( ! animations[ label ] ) 
+//					animations[ label ] = { start: Infinity, end: -Infinity };
 //
 //				var animation = animations[ label ];
 //
@@ -100,101 +115,100 @@ public class MorphAnimMesh extends Mesh
 //				if ( i > animation.end ) animation.end = i;
 //
 //				if ( ! firstAnimation ) firstAnimation = label;
-//
 //			}
-//
 //		}
 //
 //		geometry.firstAnimation = firstAnimation;
-
-	}
-	
-//	THREE.MorphAnimMesh.prototype.setAnimationLabel = function ( label, start, end ) {
-//
+//	}
+//	
+//	public void setAnimationLabel( String label, int start, int end ) 
+//	{
 //		if ( ! this.geometry.animations ) this.geometry.animations = {};
 //
 //		this.geometry.animations[ label ] = { start: start, end: end };
+//	}
 //
-//	};
-//
-//	THREE.MorphAnimMesh.prototype.playAnimation = function ( label, fps ) {
-//
+//	public void playAnimation( String label, int fps ) 
+//	{
 //		var animation = this.geometry.animations[ label ];
 //
-//		if ( animation ) {
-//
+//		if ( animation ) 
+//		{
 //			this.setFrameRange( animation.start, animation.end );
 //			this.duration = 1000 * ( ( animation.end - animation.start ) / fps );
 //			this.time = 0;
 //
-//		} else {
-//
-//			console.warn( "animation[" + label + "] undefined" );
-//
+//		} 
+//		else 
+//		{
+//			Log.error( "animation[" + label + "] undefined" );
 //		}
-//
-//	};
-//
-//	THREE.MorphAnimMesh.prototype.updateAnimation = function ( delta ) {
-//
-//		var frameTime = this.duration / this.length;
-//
-//		this.time += this.direction * delta;
-//
-//		if ( this.mirroredLoop ) {
-//
-//			if ( this.time > this.duration || this.time < 0 ) {
-//
-//				this.direction *= -1;
-//
-//				if ( this.time > this.duration ) {
-//
-//					this.time = this.duration;
-//					this.directionBackwards = true;
-//
-//				}
-//
-//				if ( this.time < 0 ) {
-//
-//					this.time = 0;
-//					this.directionBackwards = false;
-//
-//				}
-//
-//			}
-//
-//		} else {
-//
-//			this.time = this.time % this.duration;
-//
-//			if ( this.time < 0 ) this.time += this.duration;
-//
-//		}
-//
-//		var keyframe = this.startKeyframe + THREE.Math.clamp( Math.floor( this.time / frameTime ), 0, this.length - 1 );
-//
-//		if ( keyframe !== this.currentKeyframe ) {
-//
-//			this.morphTargetInfluences[ this.lastKeyframe ] = 0;
-//			this.morphTargetInfluences[ this.currentKeyframe ] = 1;
-//
-//			this.morphTargetInfluences[ keyframe ] = 0;
-//
-//			this.lastKeyframe = this.currentKeyframe;
-//			this.currentKeyframe = keyframe;
-//
-//		}
-//
-//		var mix = ( this.time % frameTime ) / frameTime;
-//
-//		if ( this.directionBackwards ) {
-//
-//			mix = 1 - mix;
-//
-//		}
-//
-//		this.morphTargetInfluences[ this.currentKeyframe ] = mix;
-//		this.morphTargetInfluences[ this.lastKeyframe ] = 1 - mix;
-//
 //	}
+
+	public void updateAnimation( float delta ) 
+	{
+		float frameTime = this.duration / this.length;
+
+		this.time += this.direction * delta;
+
+		if ( this.mirroredLoop ) 
+		{
+			if ( this.time > this.duration || this.time < 0 ) 
+			{
+
+				this.direction *= -1;
+
+				if ( this.time > this.duration ) 
+				{
+					this.time = this.duration;
+					this.directionBackwards = true;
+				}
+
+				if ( this.time < 0 ) 
+				{
+					this.time = 0;
+					this.directionBackwards = false;
+				}
+			}
+
+		} 
+		else 
+		{
+			this.time = this.time % this.duration;
+
+			if ( this.time < 0 ) 
+				this.time += this.duration;
+		}
+
+		int keyframe = this.startKeyframe + (int)Mathematics.clamp( 
+				(float)Math.floor( this.time / frameTime ), 0f, this.length - 1f );
+
+		if ( keyframe != this.currentKeyframe ) 
+		{
+			this.getMorphTargetInfluences().set( this.lastKeyframe, 0);
+			this.getMorphTargetInfluences().set( this.currentKeyframe, 1);
+
+			this.getMorphTargetInfluences().set( keyframe, 0 );
+
+			this.lastKeyframe = this.currentKeyframe;
+			this.currentKeyframe = keyframe;
+		}
+
+		int mix = (int) (( this.time % frameTime ) / frameTime);
+
+		if ( this.directionBackwards )
+			mix = 1 - mix;
+
+		this.getMorphTargetInfluences().set( this.currentKeyframe, mix);
+		this.getMorphTargetInfluences().set( this.lastKeyframe, 1 - mix);
+
+	}
+	
+	private void setFrameRange(int start, int end ) 
+	{
+		this.startKeyframe = start;
+		this.endKeyframe = end;
+
+		this.length = this.endKeyframe - this.startKeyframe + 1;
+	}
 }
