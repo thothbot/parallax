@@ -762,12 +762,12 @@ public class WebGLRenderer
 
 			int m = 0;
 			List<Integer> order = object.getMorphTargetForcedOrder();
-			List<Integer> influences = object.getMorphTargetInfluences();
+			List<Float> influences = object.getMorphTargetInfluences();
 
 			while ( material instanceof HasSkinning 
 					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() 
-					&& m < order.size() ) 
-			{
+					&& m < order.size() 
+			) {
 				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get( order.get( m ) ) );
 				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 
@@ -781,17 +781,15 @@ public class WebGLRenderer
 
 				m ++;
 			}
-
 		}
 		else 
 		{
-
 			// find most influencing
 
 			List<Boolean> used = new ArrayList<Boolean>();
-			int candidateInfluence = - 1;
+			float candidateInfluence = - 1;
 			int candidate = 0;
-			List<Integer> influences = object.getMorphTargetInfluences();			
+			List<Float> influences = object.getMorphTargetInfluences();			
 
 			if ( object.getMorphTargetBase() != - 1 )
 				used.set( object.getMorphTargetBase(), true);
@@ -1249,7 +1247,7 @@ public class WebGLRenderer
 			}
 
 		} 
-		else //if ( object instanceof Mesh && ((Mesh)object).getMorphTargetBase() > 0 ) 
+		else if ( object instanceof Mesh/* && ((Mesh)object).getMorphTargetBase() */ ) 
 		{
 				setupMorphTargets( material, geometryBuffer, (Mesh)object );
 		}
@@ -1730,7 +1728,12 @@ public class WebGLRenderer
 		int maxBones = allocateBones( object );
 		
 		ProgramParameters parameters = new ProgramParameters(maxLightCount.get("directional"), 
-				maxLightCount.get("point"), maxLightCount.get("spot"), maxShadows, maxBones, this.maxMorphTargets, this.maxMorphNormals);
+				maxLightCount.get("point"), 
+				maxLightCount.get("spot"),
+				maxShadows, 
+				maxBones, 
+				this.maxMorphTargets,
+				this.maxMorphNormals);
 
 		parameters.map      = (material instanceof HasMap && ((HasMap)material).getMap() != null);
 		parameters.envMap   = (material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null);
@@ -1774,7 +1777,7 @@ public class WebGLRenderer
 						material.getUniforms(), material.getAttributes(), parameters ));
 
 		Map<String, Integer> attributes = material.getProgram().attributes;
-		Log.error("====" + attributes);
+
 		if ( attributes.get("position") >= 0 ) 
 			getGL().enableVertexAttribArray( attributes.get("position") );
 
@@ -1814,7 +1817,6 @@ public class WebGLRenderer
 
 					if ( attributes.get( id ) >= 0 ) 
 					{
-						Log.error("====1=" + numSupportedMorphTargets + ", " + attributes.get( id ));
 						getGL().enableVertexAttribArray( attributes.get( id ) );
 						numSupportedMorphTargets ++;
 					}
@@ -1832,12 +1834,11 @@ public class WebGLRenderer
 
 					if ( attributes.get( id ) >= 0 ) 
 					{
-						Log.error("====2=" + numSupportedMorphNormals + ", " + attributes.get( id ));
 						getGL().enableVertexAttribArray( attributes.get( id ) );
 						numSupportedMorphNormals ++;
 					}
 				}
-				
+
 				((HasSkinning)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
 			}
 		}

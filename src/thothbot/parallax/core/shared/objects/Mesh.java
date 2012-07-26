@@ -56,7 +56,7 @@ public class Mesh  extends GeometryObject implements HasSides
 	private Boolean doubleSided;
 	private Boolean overdraw;
 	private Integer morphTargetBase = null;
-	private List<Integer> morphTargetInfluences;
+	private List<Float> morphTargetInfluences;
 	private List<Integer> morphTargetForcedOrder;
 	private HashMap<String, Integer> morphTargetDictionary;
 	public Float32Array __webglMorphTargetInfluences;
@@ -97,13 +97,13 @@ public class Mesh  extends GeometryObject implements HasSides
 			{
 				this.morphTargetBase = -1;
 				this.morphTargetForcedOrder = new ArrayList<Integer>();
-				this.morphTargetInfluences = new ArrayList<Integer>();
+				this.morphTargetInfluences = new ArrayList<Float>();
 				this.morphTargetDictionary = new HashMap<String, Integer>();
 
 				List<Geometry.MorphTarget> morphTargets = this.geometry.getMorphTargets();
 				for (int m = 0; m < morphTargets.size(); m++) 
 				{
-					this.morphTargetInfluences.add(0);
+					this.morphTargetInfluences.add(0f);
 					this.morphTargetDictionary.put(morphTargets.get(m).name, m);
 				}
 			}
@@ -157,7 +157,7 @@ public class Mesh  extends GeometryObject implements HasSides
 		return morphTargetBase;
 	}
 	
-	public List<Integer> getMorphTargetInfluences() {
+	public List<Float> getMorphTargetInfluences() {
 		return this.morphTargetInfluences;
 	}
 	

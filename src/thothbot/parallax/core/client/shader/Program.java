@@ -177,10 +177,9 @@ public class Program
 
 		String prefix_vertex = getPrefixVertex(parameters);
 		String prefix_fragment = getPrefixFragment(parameters);
-		
-		this._gl.attachShader(this.program,
-				getShader(ChunksFragmentShader.class, prefix_fragment + fragmentSource));
+
 		this._gl.attachShader(this.program, getShader(ChunksVertexShader.class, prefix_vertex + vertexSource));
+		this._gl.attachShader(this.program, getShader(ChunksFragmentShader.class, prefix_fragment + fragmentSource));
 
 		this._gl.linkProgram(this.program);
 
@@ -203,6 +202,7 @@ public class Program
 
 		if (type == ChunksFragmentShader.class)
 			shader = this._gl.createShader(GLenum.FRAGMENT_SHADER.getValue());
+
 		else if (type == ChunksVertexShader.class)
 			shader = this._gl.createShader(GLenum.VERTEX_SHADER.getValue());
 
@@ -237,6 +237,80 @@ public class Program
 		return "precision " + precision + " float;";
 	}
 
+	private String getPrefixVertex(ProgramParameters parameters)
+	{
+		Log.debug("Called getPrefixVertex()");
+		List<String> options = new ArrayList<String>();
+		options.add(getPrecision());
+
+		if (this._maxVertexTextures > 0)
+			options.add(Program.SHADER_DEFINE.VERTEX_TEXTURES.getValue());
+
+		if (parameters.gammaInput)
+			options.add(Program.SHADER_DEFINE.GAMMA_INPUT.getValue());
+
+		if (parameters.gammaOutput)
+			options.add(Program.SHADER_DEFINE.GAMMA_OUTPUT.getValue());
+
+		if (parameters.physicallyBasedShading)
+			options.add(Program.SHADER_DEFINE.PHYSICALLY_BASED_SHADING.getValue());
+
+		options.add(Program.SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
+		options.add(Program.SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
+		options.add(Program.SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
+
+		options.add(Program.SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
+
+		options.add(Program.SHADER_DEFINE.MAX_BONES.getValue(parameters.maxBones));
+
+		if (parameters.map)
+			options.add(Program.SHADER_DEFINE.USE_MAP.getValue());
+
+		if (parameters.envMap)
+			options.add(Program.SHADER_DEFINE.USE_ENVMAP.getValue());
+
+		if (parameters.lightMap)
+			options.add(Program.SHADER_DEFINE.USE_LIGHTMAP.getValue());
+
+		if (parameters.vertexColors)
+			options.add(Program.SHADER_DEFINE.USE_COLOR.getValue());
+
+		if (parameters.skinning)
+			options.add(Program.SHADER_DEFINE.USE_SKINNING.getValue());
+
+		if (parameters.morphTargets)
+			options.add(Program.SHADER_DEFINE.USE_MORPHTARGETS.getValue());
+		if (parameters.morphNormals)
+			options.add(Program.SHADER_DEFINE.USE_MORPHNORMALS.getValue());
+		
+		if (parameters.perPixel)
+			options.add(Program.SHADER_DEFINE.PHONG_PER_PIXEL.getValue());
+		if (parameters.wrapAround)
+			options.add(Program.SHADER_DEFINE.WRAP_AROUND.getValue());
+		if (parameters.doubleSided)
+			options.add(Program.SHADER_DEFINE.DOUBLE_SIDED.getValue());
+
+		if (parameters.shadowMapEnabled)
+			options.add(Program.SHADER_DEFINE.USE_SHADOWMAP.getValue());
+		if (parameters.shadowMapSoft)
+			options.add(Program.SHADER_DEFINE.SHADOWMAP_SOFT.getValue());
+		if (parameters.shadowMapDebug)
+			options.add(Program.SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
+		if (parameters.shadowMapCascade)
+			options.add(Program.SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
+
+		if (parameters.sizeAttenuation)
+			options.add(Program.SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
+
+		options.add(ChunksVertexShader.DEFAULT_PARS);
+		options.add("");
+
+		String retval = "";
+		for(String opt: options)
+			retval += opt + "\n";
+		return retval;
+	}
+	
 	private String getPrefixFragment(ProgramParameters parameters)
 	{
 		Log.debug("Called getPrefixFragment()");
@@ -305,80 +379,6 @@ public class Program
 		for(String opt: options)
 			retval += opt + "\n";
 
-		return retval;
-	}
-
-	private String getPrefixVertex(ProgramParameters parameters)
-	{
-		Log.debug("Called getPrefixVertex()");
-		List<String> options = new ArrayList<String>();
-		options.add(getPrecision());
-
-		if (this._maxVertexTextures > 0)
-			options.add(Program.SHADER_DEFINE.VERTEX_TEXTURES.getValue());
-
-		if (parameters.gammaInput)
-			options.add(Program.SHADER_DEFINE.GAMMA_INPUT.getValue());
-
-		if (parameters.gammaOutput)
-			options.add(Program.SHADER_DEFINE.GAMMA_OUTPUT.getValue());
-
-		if (parameters.physicallyBasedShading)
-			options.add(Program.SHADER_DEFINE.PHYSICALLY_BASED_SHADING.getValue());
-
-		options.add(Program.SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
-		options.add(Program.SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
-		options.add(Program.SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
-
-		options.add(Program.SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
-
-		options.add(Program.SHADER_DEFINE.MAX_BONES.getValue(parameters.maxBones));
-
-		if (parameters.map)
-			options.add(Program.SHADER_DEFINE.USE_MAP.getValue());
-
-		if (parameters.envMap)
-			options.add(Program.SHADER_DEFINE.USE_ENVMAP.getValue());
-
-		if (parameters.lightMap)
-			options.add(Program.SHADER_DEFINE.USE_LIGHTMAP.getValue());
-
-		if (parameters.vertexColors)
-			options.add(Program.SHADER_DEFINE.USE_COLOR.getValue());
-
-		if (parameters.skinning)
-			options.add(Program.SHADER_DEFINE.USE_SKINNING.getValue());
-
-		if (parameters.morphTargets)
-			options.add(Program.SHADER_DEFINE.USE_MORPHTARGETS.getValue());
-
-		if (parameters.morphNormals)
-			options.add(Program.SHADER_DEFINE.USE_MORPHNORMALS.getValue());
-		if (parameters.perPixel)
-			options.add(Program.SHADER_DEFINE.PHONG_PER_PIXEL.getValue());
-		if (parameters.wrapAround)
-			options.add(Program.SHADER_DEFINE.WRAP_AROUND.getValue());
-		if (parameters.doubleSided)
-			options.add(Program.SHADER_DEFINE.DOUBLE_SIDED.getValue());
-
-		if (parameters.shadowMapEnabled)
-			options.add(Program.SHADER_DEFINE.USE_SHADOWMAP.getValue());
-		if (parameters.shadowMapSoft)
-			options.add(Program.SHADER_DEFINE.SHADOWMAP_SOFT.getValue());
-		if (parameters.shadowMapDebug)
-			options.add(Program.SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
-		if (parameters.shadowMapCascade)
-			options.add(Program.SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
-
-		if (parameters.sizeAttenuation)
-			options.add(Program.SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
-
-		options.add(ChunksVertexShader.DEFAULT_PARS);
-		options.add("");
-
-		String retval = "";
-		for(String opt: options)
-			retval += opt + "\n";
 		return retval;
 	}
 }

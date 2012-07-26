@@ -154,10 +154,12 @@ public class MorphAnimation
 //		}
 //	}
 
-	public void updateAnimation( float delta ) 
+	public void updateAnimation( int delta ) 
 	{
 		if(this.mesh == null || this.geometry == null)
 			return;
+		
+		delta = 17;
 
 		float frameTime = this.duration / this.length;
 
@@ -193,26 +195,26 @@ public class MorphAnimation
 		}
 
 		int keyframe = this.startKeyframe + (int)Mathematics.clamp( 
-				(float)Math.floor( this.time / frameTime ), 0f, this.length - 1f );
+				(int)Math.floor( this.time / frameTime ), 0, this.length - 1 );
 
 		if ( keyframe != this.currentKeyframe ) 
 		{
-			mesh.getMorphTargetInfluences().set( this.lastKeyframe, 0);
-			mesh.getMorphTargetInfluences().set( this.currentKeyframe, 1);
+			mesh.getMorphTargetInfluences().set( this.lastKeyframe, 0f);
+			mesh.getMorphTargetInfluences().set( this.currentKeyframe, 1f);
 
-			mesh.getMorphTargetInfluences().set( keyframe, 0 );
+			mesh.getMorphTargetInfluences().set( keyframe, 0f );
 
 			this.lastKeyframe = this.currentKeyframe;
 			this.currentKeyframe = keyframe;
 		}
 
-		int mix = (int) (( this.time % frameTime ) / frameTime);
+		float mix = ( this.time % frameTime ) / frameTime;
 
 		if ( this.directionBackwards )
 			mix = 1 - mix;
 
 		mesh.getMorphTargetInfluences().set( this.currentKeyframe, mix);
-		mesh.getMorphTargetInfluences().set( this.lastKeyframe, 1 - mix);
+		mesh.getMorphTargetInfluences().set( this.lastKeyframe, 1f - mix);
 
 	}
 	

@@ -80,12 +80,12 @@ public class ProgramParameters
 	
 	public String toString() {
 		String retval = "";
-		retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading 
-				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights
-				+ maxShadows + ", " + maxBones 
-				+ map + ", " + envMap + ", " + lightMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets
-				+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided
-				+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation
+		retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading + "-1-"
+				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + "-2-"
+				+ maxShadows + ", " + maxBones + "-2-"
+				+ map + ", " + envMap + ", " + lightMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
+				+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + "-5-"
+				+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-6-"
 				+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals;
 		return retval;
 	}

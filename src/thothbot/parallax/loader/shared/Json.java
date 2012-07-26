@@ -111,7 +111,7 @@ public class Json extends Loader
 			material.setColor( new Color3f(0xFF0000) );
 			material.setWireframe( true );
 			material.setMorphTargets( true );
-			material.setMorphNormals( true );
+//			material.setMorphNormals( true );
 //			material.setVertexColors(Material.COLORS.FACE);
 			material.setShading(Material.SHADING.FLAT);
 			
@@ -585,7 +585,7 @@ public class Json extends Loader
 						(float)(value( srcVertices, v + 2 ) * scale)
 					) );
 				}
-				
+
 				geometry.getMorphTargets().add(morphTarget);
 			}
 		}
