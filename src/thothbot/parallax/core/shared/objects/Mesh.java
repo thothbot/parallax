@@ -347,9 +347,7 @@ public class Mesh  extends GeometryObject implements HasSides
 				}
 
 				geometryGroup.__webglCustomAttributesList.add(attribute);
-
 			}
-
 		}
 
 		geometryGroup.setArrayInitialized(true);
@@ -1289,17 +1287,13 @@ public class Mesh  extends GeometryObject implements HasSides
 
 			 if ( offset_uv2 > 0 ) 
 			 {
-
 				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglUV2Buffer );
 				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), uv2Array, hint );
-
 			 }
-
 		 }
 
 		 if (  getGeometry().elementsNeedUpdate ) 
 		 {
-			 
 			 int offset_line = 0;
 			 int offset_face = 0;
 			 int vertexIndex = 0;
@@ -1326,12 +1320,10 @@ public class Mesh  extends GeometryObject implements HasSides
 				 offset_line += 6;
 
 				 vertexIndex += 3;
-
 			 }
 
 			 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
 			 {
-
 				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
 				 geometryGroup.getWebGlFaceArray().set(offset_face, vertexIndex);
@@ -1383,13 +1375,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 if ( customAttribute.size == 1 ) 
 				 {
-
 					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
 					 {
-
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 						 {
-
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
 							 customAttribute.array.set(offset_custom, (Float)customAttribute.getValue().get(face.getA()));
@@ -1401,7 +1390,6 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
 						 {
-
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
 							 customAttribute.array.set(offset_custom, (Float)customAttribute.getValue().get(face.getA()));
@@ -1410,13 +1398,12 @@ public class Mesh  extends GeometryObject implements HasSides
 							 customAttribute.array.set(offset_custom + 3, (Float)customAttribute.getValue().get(face.getD()));
 
 							 offset_custom += 4;
-
 						 }
-
-					 } else if ( customAttribute.boundTo == "faces" ) {
-
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
-
+					 }
+					 else if ( customAttribute.boundTo == "faces" ) 
+					 {
+						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+						 {
 							 float value = (Float) customAttribute.getValue().get(chunk_faces3.get(f));
 
 							 customAttribute.array.set(offset_custom, value);
@@ -1427,8 +1414,8 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 }
 
-						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
-
+						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
+						 {
 							 float value = (Float) customAttribute.getValue().get(chunk_faces4.get(f));
 
 							 customAttribute.array.set(offset_custom, value);
@@ -1437,17 +1424,15 @@ public class Mesh  extends GeometryObject implements HasSides
 							 customAttribute.array.set(offset_custom + 3, value);
 
 							 offset_custom += 4;
-
 						 }
-
 					 }
-
-				 } else if ( customAttribute.size == 2 ) {
-
+				 } 
+				 else if ( customAttribute.size == 2 ) 
+				 {
 					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
 					 {
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
-
+						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+						 {
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
 							 Vector3f v1 = (Vector3f) customAttribute.getValue().get(face.getA());
@@ -1467,8 +1452,8 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 }
 
-						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
-
+						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
+						 {
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
 							 Vector3f v1 = (Vector3f) customAttribute.getValue().get(face.getA());
@@ -1489,13 +1474,12 @@ public class Mesh  extends GeometryObject implements HasSides
 							 customAttribute.array.set(offset_custom + 7, v4.getY());
 
 							 offset_custom += 8;
-
 						 }
-
-					 } else if ( customAttribute.boundTo == "faces" ) {
-
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
-
+					 } 
+					 else if ( customAttribute.boundTo == "faces" ) 
+					 {
+						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+						 {
 							 Vector3f value = (Vector3f) customAttribute.getValue().get(chunk_faces3.get(f));
 
 							 Vector3f v1 = value;
@@ -1515,8 +1499,8 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 }
 
-						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
-
+						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
+						 {
 							 Vector3f value = (Vector3f) customAttribute.getValue().get(chunk_faces4.get(f));
 
 							 Vector3f v1 = value;
@@ -1542,8 +1526,11 @@ public class Mesh  extends GeometryObject implements HasSides
 
 					 }
 
-				 } else if ( customAttribute.size == 3 ) {
-					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) {
+				 } 
+				 else if ( customAttribute.size == 3 ) 
+				 {
+					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
+					 {
 
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
 
@@ -1872,12 +1859,10 @@ public class Mesh  extends GeometryObject implements HasSides
 						 }
 					 }
 				 }
-				 
+
 				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), customAttribute.buffer );
 				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), customAttribute.array, hint );
-
 			 }
-
 		 }
 
 		 if ( dispose ) 

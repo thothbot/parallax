@@ -802,7 +802,7 @@ public class WebGLRenderer
 			{
 				for ( int i = 0; i < influences.size(); i ++ ) 
 				{
-					if ( !used.get( i ) && influences.get(i) > candidateInfluence ) 
+					if ( used.size() == i && influences.get( i ) > candidateInfluence ) 
 					{
 						candidate = i;
 						candidateInfluence = influences.get( candidate );
@@ -820,7 +820,7 @@ public class WebGLRenderer
 
 				object.__webglMorphTargetInfluences.set( m, candidateInfluence);
 
-				used.set( candidate, true);
+				used.add( candidate, true);
 				candidateInfluence = -1;
 				m ++;
 			}
@@ -1249,7 +1249,7 @@ public class WebGLRenderer
 			}
 
 		} 
-		else if ( object instanceof Mesh && ((Mesh)object).getMorphTargetBase() > 0 ) 
+		else //if ( object instanceof Mesh && ((Mesh)object).getMorphTargetBase() > 0 ) 
 		{
 				setupMorphTargets( material, geometryBuffer, (Mesh)object );
 		}
@@ -1358,7 +1358,8 @@ public class WebGLRenderer
 		if ( object.__webglNormalBuffer == null ) 
 			object.__webglNormalBuffer = getGL().createBuffer();
 
-		if ( object.hasPos ) {
+		if ( object.hasPos ) 
+		{
 			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), object.__webglVertexBuffer );
 			getGL().bufferData( GLenum.ARRAY_BUFFER.getValue(), object.positionArray, GLenum.DYNAMIC_DRAW.getValue() );
 			getGL().enableVertexAttribArray( program.attributes.get("position") );
@@ -1773,7 +1774,7 @@ public class WebGLRenderer
 						material.getUniforms(), material.getAttributes(), parameters ));
 
 		Map<String, Integer> attributes = material.getProgram().attributes;
-		
+		Log.error("====" + attributes);
 		if ( attributes.get("position") >= 0 ) 
 			getGL().enableVertexAttribArray( attributes.get("position") );
 
@@ -1813,6 +1814,7 @@ public class WebGLRenderer
 
 					if ( attributes.get( id ) >= 0 ) 
 					{
+						Log.error("====1=" + numSupportedMorphTargets + ", " + attributes.get( id ));
 						getGL().enableVertexAttribArray( attributes.get( id ) );
 						numSupportedMorphTargets ++;
 					}
@@ -1830,6 +1832,7 @@ public class WebGLRenderer
 
 					if ( attributes.get( id ) >= 0 ) 
 					{
+						Log.error("====2=" + numSupportedMorphNormals + ", " + attributes.get( id ));
 						getGL().enableVertexAttribArray( attributes.get( id ) );
 						numSupportedMorphNormals ++;
 					}
@@ -1855,7 +1858,7 @@ public class WebGLRenderer
 				((Mesh)object).__webglMorphTargetInfluences = Float32Array.create( this.maxMorphTargets );
 
 				for ( int i = 0, il = this.maxMorphTargets; i < il; i ++ )
-					((Mesh)object).__webglMorphTargetInfluences.set( i, 0 );
+					((Mesh)object).__webglMorphTargetInfluences.set(i, 0);
 			}
 		}
 
