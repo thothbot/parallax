@@ -27,6 +27,7 @@ import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.Geometry.MorphColor;
 import thothbot.parallax.core.shared.core.UVf;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.core.Vector4f;
@@ -36,6 +37,7 @@ import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.Mesh;
+import thothbot.parallax.core.shared.utils.ColorUtils;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONException;
@@ -100,22 +102,19 @@ public class Json extends Loader
 	{
 		if(this.material == null)
 		{
-//			MeshLambertMaterial material = new MeshLambertMaterial();
-//			material.setColor(new Color3f(0xffffff));
-//			material.setWireframe(true);
-////			material.setMorphTargets(true);
-////			material.setMorphNormals(true);
-//			material.setVertexColors(Material.COLORS.FACE);
-//			material.setShading(Material.SHADING.FLAT);
-			MeshBasicMaterial material = new MeshBasicMaterial();
-			material.setColor( new Color3f(0xFF0000) );
-			material.setWireframe( true );
+			
+			MeshPhongMaterial material = new MeshPhongMaterial();
+			material.setColor( new Color3f(0xffffff) );
+			material.setSpecular( new Color3f(0xffffff) );
+			material.setShininess(20);
+			material.setPerPixel(false);
 			material.setMorphTargets( true );
 //			material.setMorphNormals( true );
-//			material.setVertexColors(Material.COLORS.FACE);
-			material.setShading(Material.SHADING.FLAT);
-			
+			material.setVertexColors(Material.COLORS.FACE);
+			material.setShading(Material.SHADING.SMOOTH);
 			setMaterial(material);
+			
+			morphColorsToFaceColors();
 		}
 		
 		return this.material;
@@ -144,7 +143,7 @@ public class Json extends Loader
 		} 
 		catch ( JSONException e) 
 		{
-			Log.error("Couldbot parser JSON data");
+			Log.error("Could not parser JSON data");
 			return false;
 		}  
 
@@ -715,5 +714,19 @@ public class Json extends Loader
 				return true;
 
 		return false;
+	}
+	
+	private void morphColorsToFaceColors() 
+	{
+		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
+		{
+			MorphColor colorMap = geometry.getMorphColors().get( 0 );
+
+			for ( int i = 0; i < colorMap.colors.size(); i ++ ) 
+			{
+				geometry.getFaces().get(i).setColor( colorMap.colors.get(i) );
+				ColorUtils.adjustHSV( geometry.getFaces().get(i).getColor(), 0f, 0.125f, 0f );
+			}
+		}
 	}
 }

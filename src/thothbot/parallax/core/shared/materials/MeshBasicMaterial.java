@@ -207,9 +207,10 @@ public class MeshBasicMaterial extends Material
 		this.isMorphTargets = isMorphTargets;
 	}
 
+	// Should be false
 	@Override
 	public boolean isMorphNormals() {
-		return this.isMorphNormals;
+		return false;
 	}
 
 	@Override
