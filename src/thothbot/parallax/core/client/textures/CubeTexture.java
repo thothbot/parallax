@@ -44,7 +44,7 @@ public class CubeTexture extends Texture
 	 */
 	public boolean isValid()
 	{
-		return (images.size() == 6);
+		return (images != null && images.size() == 6);
 	}
 	
 	/**

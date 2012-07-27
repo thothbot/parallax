@@ -81,12 +81,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		this.ensureDebugId("renderingPanel");
 		this.getElement().getStyle().setPosition(Position.RELATIVE);
 		this.canvas3dAttributes = new Canvas3dAttributes();
-//		this.canvas3dAttributes.setAlphaEnable(true);
-//		this.canvas3dAttributes.setDepthEnable(true);
 		this.canvas3dAttributes.setStencilEnable(true);
-//		this.canvas3dAttributes.setAntialiasEnable(true);
-//		this.canvas3dAttributes.setPremultipliedAlphaEnable(true);
-//		this.canvas3dAttributes.setPreserveDrawingBufferEnable(false);
 
 		updateBackground();
 

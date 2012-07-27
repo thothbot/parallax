@@ -65,6 +65,12 @@ public final class ImageUtils
 		void run(Texture texture);
 	}
 	
+	private static int loadedCount;
+	private static interface Loader 
+	{
+		void onLoad();
+	}
+	
 	public static Texture loadTexture(ImageResource imageResource)
 	{
 		return ImageUtils.loadTexture(imageResource.getSafeUri().asString());
@@ -102,11 +108,20 @@ public final class ImageUtils
 	 * 
 	 * @return the new instance of {@link thothbot.parallax.core.client.textures.Texture}
 	 */
-	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, Callback callback)
+	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, final Callback callback)
 	{	
-		Texture texture = new Texture(image.getElement(), mapping);
+		final Texture texture = new Texture(image.getElement(), mapping);
 
-		loadImage(image, texture, callback);
+		loadImage(image, texture, new Loader() {
+			
+			@Override
+			public void onLoad() {
+				
+				texture.setNeedsUpdate(true);
+				if (callback != null)
+					callback.run(texture);
+			}
+		});
 
 		return texture;
 	}
@@ -138,22 +153,34 @@ public final class ImageUtils
 
 		return ImageUtils.loadTextureCube(images, mapping, callback);
 	}
-			
-	public static CubeTexture loadTextureCube(List<Image> images, Texture.MAPPING_MODE mapping, Callback callback)
+	
+	public static CubeTexture loadTextureCube(List<Image> images, Texture.MAPPING_MODE mapping, final Callback callback)
 	{
 		List<Element> elements = new ArrayList<Element>();
-		CubeTexture texture = new CubeTexture(elements, mapping);
-		
+		final CubeTexture texture = new CubeTexture(elements, mapping);
+	
+		loadedCount = 0;
 		for(Image image: images)
 		{
-			loadImage(image, texture, callback);
+			loadImage(image, texture, new Loader() {
+				
+				@Override
+				public void onLoad() {
+					if(++loadedCount == 6)
+					{
+						texture.setNeedsUpdate(true);
+						if (callback != null)
+							callback.run(texture);
+					}
+				}
+			});
 			elements.add(image.getElement());
 		}
 
 		return texture;
 	}
 	
-	private static void loadImage(final Image image, final Texture texture, final Callback callback)
+	private static void loadImage(final Image image, final Texture texture, final Loader loader)
 	{
 		loadingArea.add(image);
 		
@@ -169,12 +196,11 @@ public final class ImageUtils
 		});
 
 		image.addLoadHandler(new LoadHandler() {
+
 			@Override
 			public void onLoad(LoadEvent event) 
 			{			
-				texture.setNeedsUpdate(true);
-				if (callback != null)
-					callback.run(texture);
+				loader.onLoad();
 			}
 		});
 	}

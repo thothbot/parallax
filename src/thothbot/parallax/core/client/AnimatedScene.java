@@ -158,7 +158,7 @@ public abstract class AnimatedScene extends Animation
 		if(getCamera() != null && getCamera().getClass() == PerspectiveCamera.class )
 		{
 			((PerspectiveCamera)getCamera()).setAspectRatio(
-					getRenderer().getCanvas().getAspectRation());			
+					getRenderer().getCanvas().getAspectRation());		
 		}
 	}
 }

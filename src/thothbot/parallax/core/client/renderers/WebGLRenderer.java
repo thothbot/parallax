@@ -1597,7 +1597,8 @@ public class WebGLRenderer
 		}
 
 		Log.debug("initWebGLObjects() objectsAdded=" + scene.getObjectsAdded().size() 
-				+ ", objectsRemoved=" + scene.getObjectsRemoved().size());
+				+ ", objectsRemoved=" + scene.getObjectsRemoved().size() 
+				+ ", update=" + scene.__webglObjects.size());
 		
 		while ( scene.getObjectsAdded().size() > 0 ) 
 		{
@@ -1824,13 +1825,12 @@ public class WebGLRenderer
 
 		if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() &&
 			 attributes.get("skinVertexA") >=0 && attributes.get("skinVertexB") >= 0 &&
-			 attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 ) {
-
+			 attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 
+		) {
 			getGL().enableVertexAttribArray( attributes.get("skinVertexA") );
 			getGL().enableVertexAttribArray( attributes.get("skinVertexB") );
 			getGL().enableVertexAttribArray( attributes.get("skinIndex") );
 			getGL().enableVertexAttribArray( attributes.get("skinWeight") );
-
 		}
 
 		if ( material.getAttributes() != null )
@@ -2812,9 +2812,6 @@ Log.error("?????????????");
 				getGL().generateMipmap( GLenum.TEXTURE_2D.getValue() );
 
 			texture.setNeedsUpdate(false);
-
-//			if ( texture.onUpdate ) 
-//				texture.onUpdate();
 		} 
 		else 
 		{
@@ -2836,6 +2833,7 @@ Log.error("?????????????");
 	{
 		int imgWidth = image.getOffsetWidth();
 		int imgHeight = image.getOffsetHeight();
+
 		if ( imgWidth <= maxSize && imgHeight <= maxSize )
 			return image;
 
@@ -2878,7 +2876,6 @@ Log.error("?????????????");
 
 				else
 					cubeImage.add(texture.getImage( i ));
-
 			}
 
 			Element image = cubeImage.get( 0 );
@@ -2887,17 +2884,16 @@ Log.error("?????????????");
 
 			texture.setTextureParameters( getGL(), GLenum.TEXTURE_CUBE_MAP.getValue(), isImagePowerOfTwo );
 
-			for ( int i = 0; i < 6; i ++ )
+			for ( int i = 0; i < 6; i ++ ) 
+			{
 				getGL().texImage2D( GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, 
 						texture.getFormat().getValue(), texture.getFormat().getValue(), texture.getType().getValue(), cubeImage.get( i ) );
+			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )	
 				getGL().generateMipmap( GLenum.TEXTURE_CUBE_MAP.getValue() );
 
 			texture.setNeedsUpdate(false);
-
-//			if ( texture.onUpdate ) 
-//				texture.onUpdate();
 		} 
 		else 
 		{

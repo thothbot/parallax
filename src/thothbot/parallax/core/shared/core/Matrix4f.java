@@ -23,6 +23,7 @@
 package thothbot.parallax.core.shared.core;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.shared.Log;
 
 /**
  * This class implements three-dimensional matrix. NxN, where N=4.
@@ -1341,7 +1342,6 @@ public class Matrix4f
 	 */
 	public Matrix4f makePerspective(float fov, float aspect, float near, float far)
 	{
-
 		float ymax = (float) (near * Math.tan( fov * Math.PI / 360.0 ));
 		float ymin = - ymax;
 		float xmin = ymin * aspect;
