@@ -105,7 +105,6 @@ public class Json extends Loader
 			MeshPhongMaterial material = new MeshPhongMaterial();
 			material.setColor( new Color3f(0xffffff) );
 			material.setSpecular( new Color3f(0xffffff) );
-			material.setEmissive( new Color3f(0xffffff) );
 			material.setShininess(20);
 			material.setMorphTargets( true );
 			material.setMorphNormals( true );
