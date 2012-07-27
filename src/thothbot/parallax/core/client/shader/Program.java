@@ -45,6 +45,60 @@ import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
  */
 public class Program
 {
+	/**
+	 * Parameters used by the WebGl Program.
+	 */
+	public static class ProgramParameters
+	{
+		public boolean gammaInput;
+		public boolean gammaOutput;
+		public boolean physicallyBasedShading;
+		
+		public int maxDirLights;
+		public int maxPointLights;
+		public int maxSpotLights;
+		
+		public int maxShadows;
+		public int maxBones;
+		
+		public boolean map;
+		public boolean envMap;
+		public boolean lightMap;
+		public boolean vertexColors;
+		public boolean skinning;
+		public boolean morphTargets;
+		public boolean morphNormals;
+		public boolean perPixel;
+		public boolean wrapAround;
+		public boolean doubleSided;
+		
+		public boolean shadowMapEnabled;
+		public boolean shadowMapSoft;
+		public boolean shadowMapDebug;
+		public boolean shadowMapCascade;
+		public boolean sizeAttenuation;
+		
+		public int alphaTest;
+		public boolean useFog;
+		public boolean useFog2;
+		public boolean metal;
+		
+		public int maxMorphTargets;
+		public int maxMorphNormals;
+		
+		public String toString() {
+			String retval = "";
+			retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading + "-1-"
+					+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + "-2-"
+					+ maxShadows + ", " + maxBones + "-2-"
+					+ map + ", " + envMap + ", " + lightMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
+					+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + "-5-"
+					+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-6-"
+					+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals;
+			return retval;
+		}
+	}
+	
 	public static enum SHADER_DEFINE {
 		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT, PHYSICALLY_BASED_SHADING,
 
@@ -93,7 +147,7 @@ public class Program
 	 */
 	public Program(WebGLRenderingContext _gl, WebGLRenderer.PRECISION _precision,
 			int _maxVertexTextures, String fragmentShader, String vertexShader,
-			Map<String, Uniform> uniforms, Map<String, WebGLCustomAttribute> attributes, ProgramParameters parameters)
+			Map<String, Uniform> uniforms, Map<String, WebGLCustomAttribute> attributes, Program.ProgramParameters parameters)
 	{
 		this._gl = _gl;
 		this._precision = _precision;

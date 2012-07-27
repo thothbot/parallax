@@ -159,9 +159,9 @@ public class MorphAnimation
 		if(this.mesh == null || this.geometry == null)
 			return;
 		
-		delta = 17;
+		delta = 8;
 
-		float frameTime = this.duration / this.length;
+		float frameTime = (float)this.duration / this.length;
 
 		this.time += this.direction * delta;
 
@@ -209,13 +209,12 @@ public class MorphAnimation
 		}
 
 		float mix = ( this.time % frameTime ) / frameTime;
-
+		
 		if ( this.directionBackwards )
 			mix = 1 - mix;
 
 		mesh.getMorphTargetInfluences().set( this.currentKeyframe, mix);
 		mesh.getMorphTargetInfluences().set( this.lastKeyframe, 1f - mix);
-
 	}
 	
 	private void setFrameRange(int start, int end ) 

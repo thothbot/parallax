@@ -91,7 +91,7 @@ public class DirectionalLight extends Light
 		this.distance = distance;
 
 		this.position = new Vector3f(0f, 1f, 0f);
-		this.target = new Object3D();
+		this.target   = new Object3D();
 		this.shadowCascadeOffset = new Vector3f(0f, 0f, -1000f);
 
 		this.onlyShadow = false;

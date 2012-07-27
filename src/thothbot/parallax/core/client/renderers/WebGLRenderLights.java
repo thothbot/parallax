@@ -36,46 +36,52 @@ public class WebGLRenderLights
 	public WebGLRenderLightsPoint point;
 	public WebGLRenderLightsSpot spot;
 	
-	
-	public WebGLRenderLights() {
+	public WebGLRenderLights() 
+	{
 		this.ambient = (Float32Array) Float32Array.createArray();
 		for(int i = 0; i < 3; i++)
 			this.ambient.set(i,0.0f);
 		
 		this.directional = new WebGLRenderLightsDirectional();
-		this.point = new WebGLRenderLightsPoint();
-		this.spot = new WebGLRenderLightsSpot();
+		this.point       = new WebGLRenderLightsPoint();
+		this.spot        = new WebGLRenderLightsSpot();
 	}
 	
-	public class WebGLRenderLightsSpot extends WebGLRenderLightsPoint {
+	public class WebGLRenderLightsSpot extends WebGLRenderLightsPoint 
+	{
 		public Float32Array directions;
 		public Float32Array angles;
 		public Float32Array exponents;
 		
-		public WebGLRenderLightsSpot() {
+		public WebGLRenderLightsSpot() 
+		{
 			super();
 			this.directions = (Float32Array) Float32Array.createArray();
-			this.angles = (Float32Array) Float32Array.createArray();
-			this.exponents = (Float32Array) Float32Array.createArray();
+			this.angles     = (Float32Array) Float32Array.createArray();
+			this.exponents  = (Float32Array) Float32Array.createArray();
 		}
 	}
 	
-	public class WebGLRenderLightsPoint extends WebGLRenderLightsDirectional {
+	public class WebGLRenderLightsPoint extends WebGLRenderLightsDirectional 
+	{
 		public Float32Array distances;
 		
-		public WebGLRenderLightsPoint() {
+		public WebGLRenderLightsPoint() 
+		{
 			super();
 			this.distances = (Float32Array) Float32Array.createArray();
 		}
 	}
 
-	public class WebGLRenderLightsDirectional {
+	public class WebGLRenderLightsDirectional 
+	{
 		public int length = 0;
 		public Float32Array colors;
 		public Float32Array positions;
 		
-		public WebGLRenderLightsDirectional() {
-			this.colors = (Float32Array) Float32Array.createArray();
+		public WebGLRenderLightsDirectional() 
+		{
+			this.colors    = (Float32Array) Float32Array.createArray();
 			this.positions = (Float32Array) Float32Array.createArray();
 		}
 	}

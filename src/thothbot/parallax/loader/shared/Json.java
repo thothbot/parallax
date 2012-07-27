@@ -102,16 +102,16 @@ public class Json extends Loader
 	{
 		if(this.material == null)
 		{
-			
 			MeshPhongMaterial material = new MeshPhongMaterial();
 			material.setColor( new Color3f(0xffffff) );
 			material.setSpecular( new Color3f(0xffffff) );
+			material.setEmissive( new Color3f(0xffffff) );
 			material.setShininess(20);
-			material.setPerPixel(false);
 			material.setMorphTargets( true );
-//			material.setMorphNormals( true );
+			material.setMorphNormals( true );
 			material.setVertexColors(Material.COLORS.FACE);
-			material.setShading(Material.SHADING.SMOOTH);
+			material.setShading(Material.SHADING.SMOOTH); 
+			material.setPerPixel(false);
 			setMaterial(material);
 			
 			morphColorsToFaceColors();

@@ -39,7 +39,6 @@ import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.shader.Program;
-import thothbot.parallax.core.client.shader.ProgramParameters;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.CubeTexture;
@@ -364,6 +363,30 @@ public class WebGLRenderer
 	 */
 	public boolean isAutoUpdateScene() {
 		return isAutoUpdateScene;
+	}
+	
+	public boolean isGammaInput() {
+		return this.isGammaInput;
+	}
+	
+	public void setGammaInput(boolean isGammaInput) {
+		this.isGammaInput = isGammaInput;
+	}
+	
+	public boolean isGammaOutput() {
+		return this.isGammaOutput;
+	}
+	
+	public void setGammaOutput(boolean isGammaOutput) {
+		this.isGammaOutput = isGammaOutput;
+	}
+
+	public boolean isPhysicallyBasedShading() {
+		return this.isPhysicallyBasedShading;
+	}
+	
+	public void setPhysicallyBasedShading(boolean isPhysicallyBasedShading) {
+		this.isPhysicallyBasedShading = isPhysicallyBasedShading;
 	}
 
 	/**
@@ -786,13 +809,13 @@ public class WebGLRenderer
 		{
 			// find most influencing
 
-			List<Boolean> used = new ArrayList<Boolean>();
+			Map<Integer, Boolean> used = new HashMap<Integer, Boolean>();
 			float candidateInfluence = - 1;
 			int candidate = 0;
 			List<Float> influences = object.getMorphTargetInfluences();			
 
 			if ( object.getMorphTargetBase() != - 1 )
-				used.set( object.getMorphTargetBase(), true);
+				used.put( object.getMorphTargetBase(), true);
 
 			int m = 0;
 			while ( material instanceof HasSkinning 
@@ -800,7 +823,7 @@ public class WebGLRenderer
 			{
 				for ( int i = 0; i < influences.size(); i ++ ) 
 				{
-					if ( used.size() == i && influences.get( i ) > candidateInfluence ) 
+					if ( !used.containsKey(i) && influences.get( i ) > candidateInfluence ) 
 					{
 						candidate = i;
 						candidateInfluence = influences.get( candidate );
@@ -818,7 +841,7 @@ public class WebGLRenderer
 
 				object.__webglMorphTargetInfluences.set( m, candidateInfluence);
 
-				used.add( candidate, true);
+				used.put( candidate, true);
 				candidateInfluence = -1;
 				m ++;
 			}
@@ -1725,16 +1748,14 @@ public class WebGLRenderer
 		// (not to blow over maxLights budget)
 		Map<String, Integer> maxLightCount = allocateLights( lights );
 		int maxShadows = allocateShadows( lights );
-		int maxBones = allocateBones( object );
+		int maxBones   = allocateBones( object );
 		
-		ProgramParameters parameters = new ProgramParameters(maxLightCount.get("directional"), 
-				maxLightCount.get("point"), 
-				maxLightCount.get("spot"),
-				maxShadows, 
-				maxBones, 
-				this.maxMorphTargets,
-				this.maxMorphNormals);
-
+		Program.ProgramParameters parameters = new Program.ProgramParameters();
+		
+		parameters.gammaInput  = isGammaInput();
+		parameters.gammaOutput = isGammaOutput();
+		parameters.physicallyBasedShading = isPhysicallyBasedShading();
+		
 		parameters.map      = (material instanceof HasMap && ((HasMap)material).getMap() != null);
 		parameters.envMap   = (material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null);
 		parameters.lightMap = (material instanceof HasLightMap &&  ((HasLightMap)material).getLightMap() != null);
@@ -1753,6 +1774,17 @@ public class WebGLRenderer
 			parameters.morphNormals = ((HasSkinning)material).isMorphNormals();
 		}
 
+		parameters.maxBones = maxBones;
+		
+		parameters.maxMorphTargets = this.maxMorphTargets;
+		parameters.maxMorphNormals = this.maxMorphNormals;
+
+		parameters.maxDirLights   = maxLightCount.get("directional");
+		parameters.maxPointLights = maxLightCount.get("point");
+		parameters.maxSpotLights  = maxLightCount.get("spot");
+		
+		parameters.maxShadows = maxShadows;
+		
 		parameters.shadowMapEnabled = this.isShadowMapEnabled && object.isReceiveShadow;
 		parameters.shadowMapSoft    = this.isShadowMapSoft;
 		parameters.shadowMapDebug   = this.isShadowMapDebug;
@@ -2078,12 +2110,12 @@ public class WebGLRenderer
 		uniforms.get("map").texture   = material.getMap();
 	}
 
-	private void refreshUniformsPhong ( Map<String, Uniform> uniforms, MeshPhongMaterial material ) {
-
+	private void refreshUniformsPhong ( Map<String, Uniform> uniforms, MeshPhongMaterial material ) 
+	{
 		uniforms.get("shininess").value = material.getShininess();
 
-		if ( this.isGammaInput ) {
-
+		if ( this.isGammaInput ) 
+		{
 			Color3f ambient = (Color3f) uniforms.get("ambient").value;
 			ambient.copyGammaToLinear(material.getAmbient());
 			
@@ -2092,14 +2124,12 @@ public class WebGLRenderer
 
 			Color3f specular = (Color3f) uniforms.get("specular").value;
 			specular.copyGammaToLinear( material.getSpecular() );
-
-		} else {
-
+		} 
+		else
+		{
 			uniforms.get("ambient").value = material.getAmbient();
-			if(material.getEmissive() != null)
-				uniforms.get("emissive").value = material.getEmissive();
+			uniforms.get("emissive").value = material.getEmissive();
 			uniforms.get("specular").value = material.getSpecular();
-
 		}
 
 		if ( material.isWrapAround() ) 
@@ -2122,8 +2152,7 @@ public class WebGLRenderer
 		else 
 		{
 			uniforms.get("ambient").value = material.getAmbient();
-			if(material.getEmissive() != null)
-				uniforms.get("emissive").value = material.getEmissive();
+			uniforms.get("emissive").value = material.getEmissive();
 		}
 
 		if ( material.isWrapAround() ) 
@@ -2137,19 +2166,19 @@ public class WebGLRenderer
 	{
 		uniforms.get("ambientLightColor").value = lights.ambient;
 
-		uniforms.get("directionalLightColor").value = lights.directional.colors;
+		uniforms.get("directionalLightColor").value     = lights.directional.colors;
 		uniforms.get("directionalLightDirection").value = lights.directional.positions;
 
-		uniforms.get("pointLightColor").value = lights.point.colors;
+		uniforms.get("pointLightColor").value    = lights.point.colors;
 		uniforms.get("pointLightPosition").value = lights.point.positions;
 		uniforms.get("pointLightDistance").value = lights.point.distances;
 
-		uniforms.get("spotLightColor").value = lights.spot.colors;
-		uniforms.get("spotLightPosition").value = lights.spot.positions;
-		uniforms.get("spotLightDistance").value = lights.spot.distances;
+		uniforms.get("spotLightColor").value     = lights.spot.colors;
+		uniforms.get("spotLightPosition").value  = lights.spot.positions;
+		uniforms.get("spotLightDistance").value  = lights.spot.distances;
 		uniforms.get("spotLightDirection").value = lights.spot.directions;
-		uniforms.get("spotLightAngle").value = lights.spot.angles;
-		uniforms.get("spotLightExponent").value = lights.spot.exponents;
+		uniforms.get("spotLightAngle").value     = lights.spot.angles;
+		uniforms.get("spotLightExponent").value  = lights.spot.exponents;
 	}
 
 	private void refreshUniformsShadow ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
@@ -2377,19 +2406,19 @@ Log.error("?????????????");
 
 		WebGLRenderLights zlights = this.cache_lights; 
 
-		Float32Array dcolors = zlights.directional.colors;
-		Float32Array dpositions = zlights.directional.positions;
+		Float32Array dcolors     = zlights.directional.colors;
+		Float32Array dpositions  = zlights.directional.positions;
 
-		Float32Array pcolors = zlights.point.colors;
-		Float32Array ppositions = zlights.point.positions;
-		Float32Array pdistances = zlights.point.distances;
+		Float32Array pcolors     = zlights.point.colors;
+		Float32Array ppositions  = zlights.point.positions;
+		Float32Array pdistances  = zlights.point.distances;
 
-		Float32Array scolors = zlights.spot.colors;
-		Float32Array spositions = zlights.spot.positions;
-		Float32Array sdistances = zlights.spot.distances;
+		Float32Array scolors     = zlights.spot.colors;
+		Float32Array spositions  = zlights.spot.positions;
+		Float32Array sdistances  = zlights.spot.distances;
 		Float32Array sdirections = zlights.spot.directions;
-		Float32Array sangles = zlights.spot.angles;
-		Float32Array sexponents = zlights.spot.exponents;
+		Float32Array sangles     = zlights.spot.angles;
+		Float32Array sexponents  = zlights.spot.exponents;
 
 		int dlength = 0;
 		int plength = 0;
@@ -2534,19 +2563,17 @@ Log.error("?????????????");
 
 		// null eventual remains from removed lights
 		// (this is to avoid if in shader)
-
-		for ( int l = dlength * 3, ll = dcolors.getLength(); l < ll; l ++ ) dcolors.set( l, 0.0f);
-		for ( int l = plength * 3, ll = pcolors.getLength(); l < ll; l ++ ) pcolors.set( l, 0.0f);
-		for ( int l = slength * 3, ll = scolors.getLength(); l < ll; l ++ ) scolors.set( l, 0.0f);
+		for ( int l = dlength * 3, ll = dcolors.getLength(); l < ll; l ++ ) dcolors.set( l, 0.0f );
+		for ( int l = plength * 3, ll = pcolors.getLength(); l < ll; l ++ ) pcolors.set( l, 0.0f );
+		for ( int l = slength * 3, ll = scolors.getLength(); l < ll; l ++ ) scolors.set( l, 0.0f );
 
 		zlights.directional.length = dlength;
 		zlights.point.length = plength;
 		zlights.spot.length = slength;
 
-		zlights.ambient.set( 0, r);
-		zlights.ambient.set( 1, g);
-		zlights.ambient.set( 2, b);
-
+		zlights.ambient.set( 0, r );
+		zlights.ambient.set( 1, g );
+		zlights.ambient.set( 2, b );
 	}
 
 	// GL state setting
@@ -2723,7 +2750,7 @@ Log.error("?????????????");
 
 	private Program buildProgram (WebGLRenderer.PRECISION _precision,
 			int _maxVertexTextures, String fragmentShader, String vertexShader,
-			Map<String, Uniform> uniforms, Map<String, WebGLCustomAttribute> attributes, ProgramParameters parameters ) 
+			Map<String, Uniform> uniforms, Map<String, WebGLCustomAttribute> attributes, Program.ProgramParameters parameters ) 
 	{
 		String cashKey = fragmentShader + vertexShader + parameters.toString();
 		if(this.cache_programs.containsKey(cashKey))

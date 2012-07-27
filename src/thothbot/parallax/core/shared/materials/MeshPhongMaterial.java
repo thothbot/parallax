@@ -84,12 +84,12 @@ public final class MeshPhongMaterial extends Material
 		setFog(true);
 		
 		setColor(new Color3f(0xffffff));
-		setAmbient(new Color3f(0x050505));
-		setEmissive(new Color3f( 0x000000 ));
+		setAmbient(new Color3f(0xffffff));
+		setEmissive(new Color3f(0x000000));
+		setSpecular(new Color3f(0x111111));
 		
 		setVertexColors(Material.COLORS.NO);
 		
-		setSpecular(new Color3f(0x111111));
 		setShininess(30f);
 	}
 

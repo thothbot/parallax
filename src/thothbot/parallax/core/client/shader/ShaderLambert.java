@@ -25,6 +25,7 @@ package thothbot.parallax.core.client.shader;
 import java.util.Arrays;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.Vector3f;
 
@@ -102,7 +103,7 @@ public final class ShaderLambert extends Shader
 			ChunksVertexShader.DEFAULT,
 			ChunksVertexShader.SHADOWMAP
 		);
-		
+
 		super.setVertexSource(Shader.updateShaderSource(src, vars, main, main2));
 	}
 	

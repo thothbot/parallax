@@ -79,7 +79,7 @@ public abstract class Material
 	private String name;
 	
 	private float opacity;
-	private boolean transparent;
+	private boolean isTransparent;
 	
 	private Material.SHADING shading;
 	
@@ -88,20 +88,20 @@ public abstract class Material
 	private BlendingFactorDest blendDst;
 	private BlendEquationMode blendEquation;
 
-	private boolean depthTest;
-	private boolean depthWrite;
+	private boolean isDepthTest;
+	private boolean isDepthWrite;
 	
-	private boolean polygonOffset;
+	private boolean isPolygonOffset;
 	private float polygonOffsetFactor;
 	private float polygonOffsetUnits;
 	
 	private int alphaTest;
 	
 	// Boolean for fixing antialiasing gaps in CanvasRenderer
-	private boolean overdraw;
+	private boolean isOverdraw;
 
-	private boolean visible = true;
-	private boolean needsUpdate = true;
+	private boolean isVisible = true;
+	private boolean isNeedsUpdate = true;
 	
 	// 
 	
@@ -121,9 +121,9 @@ public abstract class Material
 		setShading(Material.SHADING.SMOOTH);
 		
 		setBlending( Material.BLENDING.NORMAL );
-		setBlendSrc(BlendingFactorSrc.SRC_ALPHA);
-		setBlendDst(BlendingFactorDest.ONE_MINUS_SRC_ALPHA);
-		setBlendEquation(BlendEquationMode.FUNC_ADD);
+		setBlendSrc( BlendingFactorSrc.SRC_ALPHA );
+		setBlendDst( BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
+		setBlendEquation( BlendEquationMode.FUNC_ADD );
 		
 		setDepthTest(true);
 		setDepthWrite(true);
@@ -141,19 +141,19 @@ public abstract class Material
 	}
 	
 	public boolean isVisible() {
-		return this.visible;
+		return this.isVisible;
 	}
 	
 	public void setVisible(boolean visible) {
-		this.visible = visible;
+		this.isVisible = visible;
 	}
 	
 	public boolean isNeedsUpdate() {
-		return this.needsUpdate;
+		return this.isNeedsUpdate;
 	}
 	
 	public void setNeedsUpdate(boolean visible) {
-		this.needsUpdate = visible;
+		this.isNeedsUpdate = visible;
 	}
 	
 	public Program getProgram() {
@@ -205,11 +205,11 @@ public abstract class Material
 	}
 
 	public boolean isTransparent() {
-		return transparent;
+		return isTransparent;
 	}
 
 	public void setTransparent(boolean transparent) {
-		this.transparent = transparent;
+		this.isTransparent = transparent;
 	}
 
 	public Material.BLENDING getBlending() {
@@ -245,27 +245,27 @@ public abstract class Material
 	}
 	
 	public boolean isDepthTest() {
-		return depthTest;
+		return isDepthTest;
 	}
 
 	public void setDepthTest(boolean depthTest) {
-		this.depthTest = depthTest;
+		this.isDepthTest = depthTest;
 	}
 
 	public boolean isDepthWrite() {
-		return depthWrite;
+		return isDepthWrite;
 	}
 
 	public void setDepthWrite(boolean depthWrite) {
-		this.depthWrite = depthWrite;
+		this.isDepthWrite = depthWrite;
 	}
 
 	public boolean isPolygonOffset() {
-		return polygonOffset;
+		return isPolygonOffset;
 	}
 
 	public void setPolygonOffset(boolean polygonOffset) {
-		this.polygonOffset = polygonOffset;
+		this.isPolygonOffset = polygonOffset;
 	}
 
 	public float getPolygonOffsetFactor() {
@@ -293,11 +293,11 @@ public abstract class Material
 	}
 	
 	public boolean isOverdraw() {
-		return overdraw;
+		return isOverdraw;
 	}
 	
 	public void setOverdraw(boolean overdraw) {
-		this.overdraw = overdraw;
+		this.isOverdraw = overdraw;
 	}
 
 	public Material.SHADING getShading() {
