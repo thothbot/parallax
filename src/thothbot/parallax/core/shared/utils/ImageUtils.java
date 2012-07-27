@@ -64,34 +64,99 @@ public final class ImageUtils
 	{
 		void run(Texture texture);
 	}
-
+	
 	public static Texture loadTexture(ImageResource imageResource)
 	{
-		return ImageUtils.loadTexture(imageResource, Texture.MAPPING_MODE.UV);
+		return ImageUtils.loadTexture(imageResource.getSafeUri().asString());
 	}
 	
 	public static Texture loadTexture(ImageResource imageResource, Texture.MAPPING_MODE mapping)
 	{
-		return ImageUtils.loadTexture(imageResource, mapping, null);
+		return ImageUtils.loadTexture(imageResource.getSafeUri().asString(), mapping);
+	}
+	
+	public static Texture loadTexture(String url)
+	{
+		return ImageUtils.loadTexture(url, Texture.MAPPING_MODE.UV);
+	}
+	
+	public static Texture loadTexture(String url, Texture.MAPPING_MODE mapping)
+	{
+		return ImageUtils.loadTexture(url, mapping, null);
+	}
+
+	public static Texture loadTexture(String url, Texture.MAPPING_MODE mapping, Callback callback)
+	{
+		Image image = new Image();
+		image.setUrl(url);
+
+		return ImageUtils.loadTexture(image, mapping, callback);
 	}
 	
 	/**
 	 * Loading of texture.
 	 * 
-	 * @param imageResource    the {@link ImageResource} instance
-	 * @param mapping  the mapping mode {@link thothbot.parallax.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
-	 * @param callback the {@link ImageUtils.Callback}. Not necessary.
+	 * @param imageResource  the {@link ImageResource} instance
+	 * @param mapping        the mapping mode {@link thothbot.parallax.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
+	 * @param callback       the {@link ImageUtils.Callback}. Not necessary.
 	 * 
 	 * @return the new instance of {@link thothbot.parallax.core.client.textures.Texture}
 	 */
-	public static Texture loadTexture(ImageResource imageResource, Texture.MAPPING_MODE mapping, final Callback callback)
-	{
-		Image image = new Image();
-		image.setUrl(imageResource.getSafeUri());
-		
-		loadingArea.add(image);
-		final Texture texture = new Texture(image.getElement(), mapping);
+	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, Callback callback)
+	{	
+		Texture texture = new Texture(image.getElement(), mapping);
 
+		loadImage(image, texture, callback);
+
+		return texture;
+	}
+	
+	public static CubeTexture loadTextureCube(String url)
+	{
+		return ImageUtils.loadTextureCube(url, Texture.MAPPING_MODE.UV);
+	}
+	
+	public static CubeTexture loadTextureCube(String url, Texture.MAPPING_MODE mapping)
+	{
+		return ImageUtils.loadTextureCube(url, mapping, null);
+	}
+
+	public static CubeTexture loadTextureCube(String url, Texture.MAPPING_MODE mapping, Callback callback)
+	{
+		List<Image> images = new ArrayList<Image>();
+		
+		String[] parts = {"px", "nx", "py", "ny", "pz", "nz"};
+		String urlStart = url.substring(0, url.indexOf("*"));
+		String urlEnd = url.substring(url.indexOf("*") + 1, url.length());
+		
+		for(String part: parts)
+		{
+			Image image = new Image();
+			image.setUrl(urlStart + part + urlEnd);
+			images.add(image);
+		}
+
+		return ImageUtils.loadTextureCube(images, mapping, callback);
+	}
+			
+	public static CubeTexture loadTextureCube(List<Image> images, Texture.MAPPING_MODE mapping, Callback callback)
+	{
+		List<Element> elements = new ArrayList<Element>();
+		CubeTexture texture = new CubeTexture(elements, mapping);
+		
+		for(Image image: images)
+		{
+			loadImage(image, texture, callback);
+			elements.add(image.getElement());
+		}
+
+		return texture;
+	}
+	
+	private static void loadImage(final Image image, final Texture texture, final Callback callback)
+	{
+		loadingArea.add(image);
+		
 	    // Hook up an error handler, so that we can be informed if the image fails
 	    // to load.
 		image.addErrorHandler(new ErrorHandler() {
@@ -99,7 +164,7 @@ public final class ImageUtils
 			@Override
 			public void onError(ErrorEvent event)
 			{
-				Log.error("An error occurred while loading image.");
+				Log.error("An error occurred while loading image: " + image.getUrl());
 			}
 		});
 
@@ -112,53 +177,5 @@ public final class ImageUtils
 					callback.run(texture);
 			}
 		});
-
-		return texture;
-	}
-	
-	public static CubeTexture loadTextureCube(List<ImageResource> imageResources)
-	{
-		return ImageUtils.loadTextureCube(imageResources, Texture.MAPPING_MODE.UV);
-	}
-	
-	public static CubeTexture loadTextureCube(List<ImageResource> imageResources, Texture.MAPPING_MODE mapping)
-	{
-		return ImageUtils.loadTextureCube(imageResources, mapping, null);
-	}
-			
-	public static CubeTexture loadTextureCube(List<ImageResource> imageResources, Texture.MAPPING_MODE mapping, final Callback callback)
-	{
-		List<Element> images = new ArrayList<Element>();
-		final CubeTexture texture = new CubeTexture(images, mapping);
-		
-		for(ImageResource ir: imageResources)
-		{
-			Image image = new Image();
-			loadingArea.add(image);
-
-			image.setUrl(ir.getSafeUri());
-			image.addErrorHandler(new ErrorHandler() {
-				
-				@Override
-				public void onError(ErrorEvent event)
-				{
-					Log.error("An error occurred while loading image.");
-				}
-			});
-			
-			image.addLoadHandler(new LoadHandler() {
-				@Override
-				public void onLoad(LoadEvent event) 
-				{		
-					texture.setNeedsUpdate(true);
-					if (callback != null)
-						callback.run(texture);
-				}
-			});
-			
-			images.add(image.getElement());
-		}
-
-		return texture;
 	}
 }
