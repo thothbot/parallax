@@ -102,7 +102,7 @@ public final class ImageUtils
 	/**
 	 * Loading of texture.
 	 * 
-	 * @param imageResource  the {@link ImageResource} instance
+	 * @param image          the Image
 	 * @param mapping        the mapping mode {@link thothbot.parallax.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
 	 * @param callback       the {@link ImageUtils.Callback}. Not necessary.
 	 * 
