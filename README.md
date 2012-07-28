@@ -1,9 +1,7 @@
 Parallax - 3D for web
 =============
 
-#### 3D WebGL GWT library ####
-
-<table border="0" cellspacing="0" cellpadding="4">
+<table border="0">
    <tr>
       <td>
 
@@ -21,6 +19,26 @@ Parallax supports and will support WebGL-canvas render only.
    </tr>
 </table>
 
-[Demo](http://thothbot.github.com/parallax/demo/) | [API Reference](http://thothbot.github.com/parallax/docs/) | [Wiki](https://github.com/thothbot/parallax/wiki) | [Bugs](https://github.com/thothbot/parallax/issues)
+#### Download ####
 
+Stable version: 1.0.
+
+[Download JAR](http://github.com/thothbot/parallax/downloads)
+
+#### Examples ####
+
+![Demo](http://thothbot.github.com/parallax/static/examples_banner.jpg)
+
+[Latest demo](http://thothbot.github.com/parallax/demo/) | [Dev demo](http://thothbot.github.com/parallax/demo/dev/)
+
+
+#### Documentation ####
+
+Stable version [API Reference](http://thothbot.github.com/parallax/docs/) 
+
+Dev version [API Reference](http://thothbot.github.com/parallax/docs/dev/) 
+
+
+[Wiki](https://github.com/thothbot/parallax/wiki) 
+| [Bugs](https://github.com/thothbot/parallax/issues)
 
