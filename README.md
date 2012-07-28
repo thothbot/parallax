@@ -19,25 +19,23 @@ Parallax supports and will support WebGL-canvas render only.
    </tr>
 </table>
 
-#### Download ####
+### Download ###
 
 Stable version: 1.0.
 
 [Download JAR](http://github.com/thothbot/parallax/downloads)
 
-#### Examples ####
+### Examples ###
 
 ![Demo](http://thothbot.github.com/parallax/static/examples_banner.jpg)
 
 [Latest demo](http://thothbot.github.com/parallax/demo/) | [Dev demo](http://thothbot.github.com/parallax/demo/dev/)
 
 
-#### Documentation ####
+### Documentation ###
 
 Stable version [API Reference](http://thothbot.github.com/parallax/docs/) 
-
-Dev version [API Reference](http://thothbot.github.com/parallax/docs/dev/) 
-
+| Dev [API Reference](http://thothbot.github.com/parallax/docs/dev/) 
 
 [Wiki](https://github.com/thothbot/parallax/wiki) 
 | [Bugs](https://github.com/thothbot/parallax/issues)
