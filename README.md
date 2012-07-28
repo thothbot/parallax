@@ -3,11 +3,11 @@ Parallax - 3D for web
 
 #### 3D WebGL GWT library ####
 
-<table>
+<table border="0" cellspacing="0" cellpadding="4">
    <tr>
       <td>
 
-![Parallax](http://thothbot.github.com/parallax/static/logo.png)
+<img src="http://thothbot.github.com/parallax/static/logo.png" alt="Parallax"/>
 
       </td>
       <td>
