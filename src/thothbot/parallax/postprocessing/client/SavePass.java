@@ -45,28 +45,20 @@ public class SavePass extends Pass
 	private boolean clear = false;
 	
 	private static RenderTargetTexture defaultRenderTargetTexture = new RenderTargetTexture(
-			Pass.getRenderer().getCanvas().getWidth(),
-			Pass.getRenderer().getCanvas().getHeight()
-			);
+		Pass.getRenderer().getCanvas().getWidth(),
+		Pass.getRenderer().getCanvas().getHeight()
+	);
 	
 	static {
 		defaultRenderTargetTexture.setMinFilter(TextureMinFilter.LINEAR);
 		defaultRenderTargetTexture.setMagFilter(TextureMagFilter.LINEAR);
 		defaultRenderTargetTexture.setFormat(PixelFormat.RGB);
-		defaultRenderTargetTexture.
-		defaultRenderTargetOptions.minFilter =  Texture.FILTER.LINEAR;
-		defaultRenderTargetOptions.magFilter =  Texture.FILTER.LINEAR;
-		defaultRenderTargetOptions.format =  Texture.FORMAT.RGB;
-		defaultRenderTargetOptions.stencilBuffer =  false;
+		defaultRenderTargetTexture.setStencilBuffer(true);
 	}
 
 	public SavePass()
 	{
-		this(new RenderTargetTexture(
-				Pass.getRenderer().getCanvas().getWidth(), 
-				Pass.getRenderer().getCanvas().getHeight(), 
-				SavePass.defaultRenderTargetOptions
-		));
+		this(defaultRenderTargetTexture);
 	}
 
 	public SavePass( RenderTargetTexture renderTarget ) 

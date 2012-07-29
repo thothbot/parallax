@@ -24,8 +24,10 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
+import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
@@ -33,7 +35,6 @@ import thothbot.parallax.core.shared.core.Vector2f;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
-
 import thothbot.parallax.postprocessing.client.shader.ShaderConvolution;
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
@@ -63,14 +64,15 @@ public class BloomPass extends Pass
 		super();
 
 		// render targets
-
-		RenderTargetTexture.WebGLRenderTargetOptions pars = new RenderTargetTexture.WebGLRenderTargetOptions();
-		pars.minFilter = Texture.FILTER.LINEAR;
-		pars.magFilter = Texture.FILTER.LINEAR;
-		pars.format = Texture.FORMAT.RGB;
-
-		this.renderTargetX = new RenderTargetTexture( resolution, resolution, pars );
-		this.renderTargetY = new RenderTargetTexture( resolution, resolution, pars );
+		this.renderTargetX = new RenderTargetTexture( resolution, resolution );
+		this.renderTargetX.setMinFilter(TextureMinFilter.LINEAR);
+		this.renderTargetX.setMagFilter(TextureMagFilter.LINEAR);
+		this.renderTargetX.setFormat(PixelFormat.RGB);
+		
+		this.renderTargetY = new RenderTargetTexture( resolution, resolution );
+		this.renderTargetY.setMinFilter(TextureMinFilter.LINEAR);
+		this.renderTargetY.setMagFilter(TextureMagFilter.LINEAR);
+		this.renderTargetY.setFormat(PixelFormat.RGB);
 
 		// screen material
 
@@ -80,14 +82,12 @@ public class BloomPass extends Pass
 
 		this.screenUniforms.get("opacity").value = strength;
 		
-		ShaderMaterial.ShaderMaterialOptions shaderMaterialopt = new ShaderMaterial.ShaderMaterialOptions();
-		shaderMaterialopt.uniforms =this.screenUniforms;
-		shaderMaterialopt.vertexShader =screenShader.getVertexSource();
-		shaderMaterialopt.fragmentShader =screenShader.getFragmentSource();
-		shaderMaterialopt.blending = Material.BLENDING.ADDITIVE;
-		shaderMaterialopt.transparent = true;
-
-		this.materialScreen = new ShaderMaterial(shaderMaterialopt);
+		this.materialScreen = new ShaderMaterial();
+		this.materialScreen.setUniforms(this.screenUniforms);
+		this.materialScreen.setVertexShaderSource(screenShader.getVertexSource());
+		this.materialScreen.setFragmentShaderSource(screenShader.getFragmentSource());
+		this.materialScreen.setBlending(Material.BLENDING.ADDITIVE);
+		this.materialScreen.setTransparent(true);
 
 		// convolution material
 
@@ -98,19 +98,19 @@ public class BloomPass extends Pass
 		this.convolutionUniforms.get("uImageIncrement").value = BloomPass.blurX;
 		this.convolutionUniforms.get("cKernel").value = Shader.buildKernel( sigma );
 
-		ShaderMaterial.ShaderMaterialOptions shaderMaterialopt2 = new ShaderMaterial.ShaderMaterialOptions();
-		shaderMaterialopt2.uniforms =this.convolutionUniforms;
-		shaderMaterialopt2.vertexShader = "#define KERNEL_SIZE " + kernelSize + ".0\n" + convolutionShader.getVertexSource(); 
-		shaderMaterialopt2.fragmentShader = "#define KERNEL_SIZE " + kernelSize + "\n"   + convolutionShader.getFragmentSource();
-		
-		this.materialConvolution = new ShaderMaterial(shaderMaterialopt2);
+		this.materialConvolution = new ShaderMaterial();
+		this.materialConvolution.setUniforms(this.convolutionUniforms);
+		this.materialConvolution.setVertexShaderSource(
+				"#define KERNEL_SIZE " + kernelSize + ".0\n" + convolutionShader.getVertexSource());
+		this.materialConvolution.setFragmentShaderSource(
+				"#define KERNEL_SIZE " + kernelSize + "\n"   + convolutionShader.getFragmentSource());
 	}
 
 	@Override
 	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive)
 	{
 		if ( maskActive ) 
-			getRenderer().getGL().disable( WebGLRenderingContext.STENCIL_TEST );
+			getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );
 
 		// Render quad with blured scene into texture (convolution pass 1)
 
@@ -136,7 +136,7 @@ public class BloomPass extends Pass
 		this.screenUniforms.get("tDiffuse").texture = this.renderTargetY;
 
 		if ( maskActive ) 
-			getRenderer().getGL().enable( WebGLRenderingContext.STENCIL_TEST );
+			getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );
 
 		getRenderer().render( EffectComposer.scene, EffectComposer.camera, readBuffer, this.clear );
 	}

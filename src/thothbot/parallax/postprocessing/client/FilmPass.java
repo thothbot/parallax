@@ -44,12 +44,10 @@ public class FilmPass extends Pass
 
 		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
 
-		ShaderMaterial.ShaderMaterialOptions shaderMaterialopt = new ShaderMaterial.ShaderMaterialOptions();
-		shaderMaterialopt.uniforms = this.uniforms;
-		shaderMaterialopt.vertexShader = shader.getVertexSource();
-		shaderMaterialopt.fragmentShader = shader.getFragmentSource();
-		
-		this.material = new ShaderMaterial(shaderMaterialopt);
+		this.material = new ShaderMaterial();
+		this.material.setUniforms(this.uniforms);
+		this.material.setVertexShaderSource(shader.getVertexSource());
+		this.material.setFragmentShaderSource(shader.getFragmentSource());
 
 		this.uniforms.get("grayscale").value = grayscale;
 		this.uniforms.get("nIntensity").value = noiseIntensity;

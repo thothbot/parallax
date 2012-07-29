@@ -24,14 +24,13 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.core.Vector2f;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
-
 import thothbot.parallax.postprocessing.client.shader.ShaderDotscreen;
 
 public class DotScreenPass extends Pass
@@ -51,12 +50,10 @@ public class DotScreenPass extends Pass
 		this.uniforms.get("angle").value = angle;
 		this.uniforms.get("scale").value = scale;
 
-		ShaderMaterial.ShaderMaterialOptions shaderMaterialopt = new ShaderMaterial.ShaderMaterialOptions();
-		shaderMaterialopt.uniforms = this.uniforms;
-		shaderMaterialopt.vertexShader = shader.getVertexSource();
-		shaderMaterialopt.fragmentShader = shader.getFragmentSource();
-		
-		this.material = new ShaderMaterial(shaderMaterialopt);
+		this.material = new ShaderMaterial();
+		this.material.setUniforms(this.uniforms);
+		this.material.setVertexShaderSource(shader.getVertexSource());
+		this.material.setFragmentShaderSource(shader.getFragmentSource());
 
 		this.setEnabled(true);
 		this.setNeedsSwap(true);
@@ -68,7 +65,7 @@ public class DotScreenPass extends Pass
 	{
 		this.uniforms.get("tDiffuse").texture = readBuffer;
 		Vector2f tSize = (Vector2f) this.uniforms.get("tSize").value; 
-		tSize.set( readBuffer.width, readBuffer.height );
+		tSize.set( readBuffer.getWidth(), readBuffer.getHeight() );
 
 		EffectComposer.quad.setMaterial(this.material);
 

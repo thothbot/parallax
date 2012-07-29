@@ -22,7 +22,7 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
+import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -65,9 +65,9 @@ public class MaskPass extends Pass
 			clearValue = 0;
 		}
 
-		getRenderer().getGL().enable( WebGLRenderingContext.STENCIL_TEST );
-		getRenderer().getGL().stencilOp( WebGLRenderingContext.REPLACE, WebGLRenderingContext.REPLACE, WebGLRenderingContext.REPLACE );
-		getRenderer().getGL().stencilFunc( WebGLRenderingContext.ALWAYS, writeValue, 0xffffffff );
+		getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );
+		getRenderer().getGL().stencilOp( GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue() );
+		getRenderer().getGL().stencilFunc( GLenum.ALWAYS.getValue(), writeValue, 0xffffffff );
 		getRenderer().getGL().clearStencil( clearValue );
 
 		// draw into the stencil buffer
@@ -82,8 +82,8 @@ public class MaskPass extends Pass
 
 		// only render where stencil is set to 1
 
-		getRenderer().getGL().stencilFunc( WebGLRenderingContext.EQUAL, 1, 0xffffffff );  // draw if == 1
-		getRenderer().getGL().stencilOp( WebGLRenderingContext.KEEP, WebGLRenderingContext.KEEP, WebGLRenderingContext.KEEP );
+		getRenderer().getGL().stencilFunc( GLenum.EQUAL.getValue(), 1, 0xffffffff );  // draw if == 1
+		getRenderer().getGL().stencilOp( GLenum.KEEP.getValue(), GLenum.KEEP.getValue(), GLenum.KEEP.getValue() );
 	}
 	
 	@Override
