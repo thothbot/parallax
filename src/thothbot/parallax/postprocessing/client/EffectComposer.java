@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.context.Canvas3d;
-import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
@@ -38,7 +37,6 @@ import thothbot.parallax.core.shared.core.Matrix4f;
 import thothbot.parallax.core.shared.geometries.Plane;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
-
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class EffectComposer
@@ -55,11 +53,9 @@ public class EffectComposer
 	private ShaderPass copyPass;
 	
 	// shared ortho camera
-
 	public static OrthographicCamera camera;
 	
 	// shared fullscreen quad scene
-
 	public static Plane geometry;
 	public static Mesh quad;
 	public static Scene scene;
@@ -112,19 +108,12 @@ public class EffectComposer
 		scene.addChild( camera );
 	}
 	
-	private void swapBuffers() 
-	{
-		RenderTargetTexture tmp = this.readBuffer;
-		this.readBuffer = this.writeBuffer;
-		this.writeBuffer = tmp;
-	}
-	
-	private void addPass( Pass pass ) 
+	public void addPass( Pass pass ) 
 	{
 		this.passes.add( pass );
 	}
 	
-	private void render( WebGLRenderer renderer, float delta ) 
+	public void render( WebGLRenderer renderer, float delta ) 
 	{
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
@@ -188,5 +177,12 @@ public class EffectComposer
 		this.camera.setBottom(canvas.getHeight() / -2f);
 
 		this.camera.updateProjectionMatrix();
+	}
+	
+	private void swapBuffers() 
+	{
+		RenderTargetTexture tmp = this.readBuffer;
+		this.readBuffer = this.writeBuffer;
+		this.writeBuffer = tmp;
 	}
 }

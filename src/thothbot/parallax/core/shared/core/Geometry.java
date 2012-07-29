@@ -233,7 +233,7 @@ public class Geometry extends GeometryBuffer
 		return faceUvs;
 	}
 
-	public void setColors(ArrayList<Color3f> colors) {
+	public void setColors(List<Color3f> colors) {
 		this.colors = colors;
 	}
 
@@ -241,7 +241,7 @@ public class Geometry extends GeometryBuffer
 		return colors;
 	}
 
-	public void setFaces(ArrayList<Face3> faces) {
+	public void setFaces(List<Face3> faces) {
 		this.faces = faces;
 	}
 

@@ -37,9 +37,9 @@ public class ShaderPass extends Pass
 	private Map<String, Uniform> uniforms;
 	private ShaderMaterial material;
 	
-	private boolean renderToScreen = false;
+	private boolean isRenderToScreen = false;
 
-	private boolean clear = false;
+	private boolean isClear = false;
 	
 	public ShaderPass( Shader shader) 
 	{
@@ -59,6 +59,18 @@ public class ShaderPass extends Pass
 		this.material.setFragmentShaderSource(shader.getFragmentSource());
 	}
 	
+	public Map<String, Uniform> getUniforms() {
+		return this.uniforms;
+	}
+	
+	public boolean isRenderToScreen() {
+		return this.isRenderToScreen;
+	}
+	
+	public void setRenderToScreen(boolean isRenderToScreen) {
+		this.isRenderToScreen = isRenderToScreen;
+	}
+	
 	@Override
 	public void render( WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
 	{
@@ -67,9 +79,9 @@ public class ShaderPass extends Pass
 
 		EffectComposer.quad.setMaterial(this.material);
 
-		if ( this.renderToScreen )
+		if ( this.isRenderToScreen )
 			renderer.render( EffectComposer.scene, EffectComposer.camera );
 		else
-			renderer.render( EffectComposer.scene, EffectComposer.camera, writeBuffer, this.clear );
+			renderer.render( EffectComposer.scene, EffectComposer.camera, writeBuffer, this.isClear );
 	}
 }

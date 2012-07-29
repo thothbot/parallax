@@ -43,6 +43,11 @@ public class RenderPass extends Pass
 	
 	private boolean clear = true;
 	
+	public RenderPass ( Scene scene, Camera camera )
+	{
+		this(scene, camera, null, null);
+	}
+
 	public RenderPass ( Scene scene, Camera camera, Material overrideMaterial, Color3f clearColor )
 	{
 		this(scene, camera, overrideMaterial, clearColor, 1.0f);
