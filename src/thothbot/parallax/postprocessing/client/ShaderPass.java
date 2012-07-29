@@ -24,10 +24,10 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
 
@@ -53,16 +53,14 @@ public class ShaderPass extends Pass
 
 		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
 
-		ShaderMaterial.ShaderMaterialOptions opt = new ShaderMaterial.ShaderMaterialOptions();
-		opt.uniforms = this.uniforms;
-		opt.vertexShader = shader.getVertexSource();
-		opt.fragmentShader = shader.getFragmentSource();
-
-		this.material = new ShaderMaterial(opt);
+		this.material = new ShaderMaterial();
+		this.material.setUniforms(this.uniforms);
+		this.material.setVertexShaderSource(shader.getVertexSource());
+		this.material.setFragmentShaderSource(shader.getFragmentSource());
 	}
 	
 	@Override
-	public void render( WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta, boolean maskActive) 
+	public void render( RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
 	{
 		WebGLRenderer renderer = WebGLRenderer.getInstance();
 		if ( this.uniforms.containsKey(this.textureID))

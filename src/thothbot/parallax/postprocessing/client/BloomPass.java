@@ -25,15 +25,13 @@ package thothbot.parallax.postprocessing.client;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.core.Vector2f;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.textures.Texture;
-import thothbot.parallax.core.shared.textures.Texture.MAPPING_MODE;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
 
 import thothbot.parallax.postprocessing.client.shader.ShaderConvolution;
@@ -44,8 +42,8 @@ public class BloomPass extends Pass
 	private static Vector2f blurX = new Vector2f( 0.001953125f, 0.0f );
 	private static Vector2f blurY = new Vector2f( 0.0f, 0.001953125f );
 	
-	private WebGLRenderTarget renderTargetX;
-	private WebGLRenderTarget renderTargetY;
+	private RenderTargetTexture renderTargetX;
+	private RenderTargetTexture renderTargetY;
 	
 	private Map<String, Uniform> screenUniforms;
 	private Map<String, Uniform> convolutionUniforms;
@@ -66,13 +64,13 @@ public class BloomPass extends Pass
 
 		// render targets
 
-		WebGLRenderTarget.WebGLRenderTargetOptions pars = new WebGLRenderTarget.WebGLRenderTargetOptions();
+		RenderTargetTexture.WebGLRenderTargetOptions pars = new RenderTargetTexture.WebGLRenderTargetOptions();
 		pars.minFilter = Texture.FILTER.LINEAR;
 		pars.magFilter = Texture.FILTER.LINEAR;
 		pars.format = Texture.FORMAT.RGB;
 
-		this.renderTargetX = new WebGLRenderTarget( resolution, resolution, pars );
-		this.renderTargetY = new WebGLRenderTarget( resolution, resolution, pars );
+		this.renderTargetX = new RenderTargetTexture( resolution, resolution, pars );
+		this.renderTargetY = new RenderTargetTexture( resolution, resolution, pars );
 
 		// screen material
 
@@ -109,7 +107,7 @@ public class BloomPass extends Pass
 	}
 
 	@Override
-	public void render(WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta, boolean maskActive)
+	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive)
 	{
 		if ( maskActive ) 
 			getRenderer().getGL().disable( WebGLRenderingContext.STENCIL_TEST );

@@ -38,13 +38,11 @@ public class RenderTargetTexture extends Texture
 	private int width;
 	private int height;
 
-	public int activeCubeFace;
+	private boolean isDepthBuffer = true;
+	private boolean isStencilBuffer = true;
 
-	public boolean depthBuffer = true;
-	public boolean stencilBuffer = true;
-
-	public WebGLFramebuffer __webglFramebuffer;
-	public WebGLRenderbuffer __webglRenderbuffer;
+	private WebGLFramebuffer webglFramebuffer;
+	private WebGLRenderbuffer webglRenderbuffer;
 
 	public RenderTargetTexture(int width, int height) 
 	{
@@ -90,8 +88,24 @@ public class RenderTargetTexture extends Texture
 		this.height = height;
 	}
 
+	public boolean getDepthBuffer() {
+		return this.isDepthBuffer;
+	}
+	
+	public void setDepthBuffer(boolean depthBuffer) {
+		this.isDepthBuffer = depthBuffer;
+	}
+	
+	public boolean getStencilBuffer() {
+		return this.isStencilBuffer;
+	}
+	
+	public void setStencilBuffer(boolean stencilBuffer) {
+		this.isStencilBuffer = stencilBuffer;
+	}
+	
 	public WebGLFramebuffer getWebGLFramebuffer() {
-		return this.__webglFramebuffer;
+		return this.webglFramebuffer;
 	}
 
 	public void deallocate(WebGLRenderingContext gl)
@@ -100,8 +114,8 @@ public class RenderTargetTexture extends Texture
 			return;
 
 		gl.deleteTexture(this.getWebGlTexture());
-		gl.deleteFramebuffer(this.__webglFramebuffer);
-		gl.deleteRenderbuffer(this.__webglRenderbuffer);
+		gl.deleteFramebuffer(this.webglFramebuffer);
+		gl.deleteRenderbuffer(this.webglRenderbuffer);
 	}
 
 	public RenderTargetTexture clone()
@@ -120,15 +134,15 @@ public class RenderTargetTexture extends Texture
 		tmp.setFormat( getFormat() );
 		tmp.setType( getType() );
 
-		tmp.depthBuffer = this.depthBuffer;
-		tmp.stencilBuffer = this.stencilBuffer;
+		tmp.isDepthBuffer = this.isDepthBuffer;
+		tmp.isStencilBuffer = this.isStencilBuffer;
 
 		return tmp;
 	}
 	
 	public void setRenderTarget(WebGLRenderingContext gl)
 	{
-		if (this.__webglFramebuffer != null)
+		if (this.webglFramebuffer != null)
 			return;
 
 		this.setWebGlTexture(gl.createTexture());
@@ -138,8 +152,8 @@ public class RenderTargetTexture extends Texture
 		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(this.width)
 				&& Mathematics.isPowerOfTwo(this.height);
 
-		this.__webglFramebuffer = gl.createFramebuffer();
-		this.__webglRenderbuffer = gl.createRenderbuffer();
+		this.webglFramebuffer = gl.createFramebuffer();
+		this.webglRenderbuffer = gl.createRenderbuffer();
 
 		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.getWebGlTexture());
 
@@ -148,8 +162,8 @@ public class RenderTargetTexture extends Texture
 		gl.texImage2D(GLenum.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,
 				getFormat().getValue(), getType().getValue(), null);
 
-		setupFrameBuffer(gl, this.__webglFramebuffer, GLenum.TEXTURE_2D.getValue());
-		setupRenderBuffer(gl, this.__webglRenderbuffer);
+		setupFrameBuffer(gl, this.webglFramebuffer, GLenum.TEXTURE_2D.getValue());
+		setupRenderBuffer(gl, this.webglRenderbuffer);
 
 		if (isTargetPowerOfTwo)
 			gl.generateMipmap(GLenum.TEXTURE_2D.getValue());
@@ -177,7 +191,7 @@ public class RenderTargetTexture extends Texture
 	{	
 		gl.bindRenderbuffer(GLenum.RENDERBUFFER.getValue(), renderbuffer);
 
-		if (this.depthBuffer && !this.stencilBuffer) 
+		if (this.isDepthBuffer && !this.isStencilBuffer) 
 		{
 			gl.renderbufferStorage(GLenum.RENDERBUFFER.getValue(), GLenum.DEPTH_COMPONENT16.getValue(), this.width, this.height);
 			gl.framebufferRenderbuffer(GLenum.FRAMEBUFFER.getValue(), GLenum.DEPTH_ATTACHMENT.getValue(), GLenum.RENDERBUFFER.getValue(), renderbuffer);
@@ -193,7 +207,7 @@ public class RenderTargetTexture extends Texture
 			 * GLenum.RENDERBUFFER, renderbuffer );
 			 */
 		} 
-		else if (this.depthBuffer && this.stencilBuffer) 
+		else if (this.isDepthBuffer && this.isStencilBuffer) 
 		{
 			gl.renderbufferStorage(GLenum.RENDERBUFFER.getValue(),
 					GLenum.DEPTH_STENCIL.getValue(), this.width, this.height);

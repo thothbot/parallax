@@ -98,36 +98,36 @@ public final class CubeCamera extends Object3D
 		this.renderTarget.setMinFilter(TextureMinFilter.LINEAR);
 	}
 	
-	public RenderTargetTexture getRenderTarget()
+	public RenderTargetCubeTexture getRenderTarget()
 	{
 		return this.renderTarget;
 	}
 	
 	public void updateCubeMap( WebGLRenderer renderer, Scene scene ) 
 	{
-		RenderTargetTexture renderTarget = this.renderTarget;
+		RenderTargetCubeTexture renderTarget = this.renderTarget;
 		boolean generateMipmaps = renderTarget.isGenerateMipmaps();
 
 		renderTarget.setGenerateMipmaps( false );
 
-		renderTarget.activeCubeFace = 0;
+		renderTarget.setActiveCubeFace(0);
 		renderer.render( scene, cameraPX, renderTarget );
 
-		renderTarget.activeCubeFace = 1;
+		renderTarget.setActiveCubeFace(1);
 		renderer.render( scene, cameraNX, renderTarget );
 
-		renderTarget.activeCubeFace = 2;
+		renderTarget.setActiveCubeFace(2);
 		renderer.render( scene, cameraPY, renderTarget );
 
-		renderTarget.activeCubeFace = 3;
+		renderTarget.setActiveCubeFace(3);
 		renderer.render( scene, cameraNY, renderTarget );
 
-		renderTarget.activeCubeFace = 4;
+		renderTarget.setActiveCubeFace(4);
 		renderer.render( scene, cameraPZ, renderTarget );
 
 		renderTarget.setGenerateMipmaps( generateMipmaps );
 
-		renderTarget.activeCubeFace = 5;
+		renderTarget.setActiveCubeFace(5);
 		renderer.render( scene, cameraNZ, renderTarget );
 	}
 }

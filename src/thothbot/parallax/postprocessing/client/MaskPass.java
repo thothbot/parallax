@@ -23,7 +23,7 @@
 package thothbot.parallax.postprocessing.client;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -43,7 +43,7 @@ public class MaskPass extends Pass
 	}
 		
 	@Override
-	public void render (WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta, boolean maskActive) 
+	public void render (RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
 	{
 		// don't update color or depth
 

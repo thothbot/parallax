@@ -24,11 +24,11 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
+import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.textures.Texture;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
 
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
@@ -53,19 +53,17 @@ public class TexturePass extends Pass
 		this.uniforms.get("opacity").value = opacity;
 		this.uniforms.get("tDiffuse").texture = texture;
 
-		ShaderMaterial.ShaderMaterialOptions shaderMaterialopt = new ShaderMaterial.ShaderMaterialOptions();
-		shaderMaterialopt.uniforms = this.uniforms;
-		shaderMaterialopt.vertexShader = shader.getVertexSource();
-		shaderMaterialopt.fragmentShader = shader.getFragmentSource();
-		
-		this.material = new ShaderMaterial(shaderMaterialopt);
+		this.material = new ShaderMaterial();
+		this.material.setUniforms(this.uniforms);
+		this.material.setVertexShaderSource(shader.getVertexSource());
+		this.material.setFragmentShaderSource(shader.getFragmentSource());
 		
 		this.setEnabled(true);
 		this.setNeedsSwap(false);
-
 	}
+
 	@Override
-	public void render(WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta,
+	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		EffectComposer.quad.setMaterial(this.material);

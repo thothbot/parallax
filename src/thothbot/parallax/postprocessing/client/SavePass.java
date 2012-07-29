@@ -24,26 +24,36 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
+import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
+import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.textures.Texture;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
 
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class SavePass extends Pass
 {
-	private WebGLRenderTarget renderTarget;
+	private RenderTargetTexture renderTarget;
 	private String textureID = "tDiffuse";
 	private Map<String, Uniform> uniforms;
 	private ShaderMaterial material;
 	
 	private boolean clear = false;
 	
-	private static WebGLRenderTarget.WebGLRenderTargetOptions defaultRenderTargetOptions = new WebGLRenderTarget.WebGLRenderTargetOptions();
+	private static RenderTargetTexture defaultRenderTargetTexture = new RenderTargetTexture(
+			Pass.getRenderer().getCanvas().getWidth(),
+			Pass.getRenderer().getCanvas().getHeight()
+			);
+	
 	static {
+		defaultRenderTargetTexture.setMinFilter(TextureMinFilter.LINEAR);
+		defaultRenderTargetTexture.setMagFilter(TextureMagFilter.LINEAR);
+		defaultRenderTargetTexture.setFormat(PixelFormat.RGB);
+		defaultRenderTargetTexture.
 		defaultRenderTargetOptions.minFilter =  Texture.FILTER.LINEAR;
 		defaultRenderTargetOptions.magFilter =  Texture.FILTER.LINEAR;
 		defaultRenderTargetOptions.format =  Texture.FORMAT.RGB;
@@ -52,14 +62,14 @@ public class SavePass extends Pass
 
 	public SavePass()
 	{
-		this(new WebGLRenderTarget(
+		this(new RenderTargetTexture(
 				Pass.getRenderer().getCanvas().getWidth(), 
 				Pass.getRenderer().getCanvas().getHeight(), 
 				SavePass.defaultRenderTargetOptions
 		));
 	}
 
-	public SavePass( WebGLRenderTarget renderTarget ) 
+	public SavePass( RenderTargetTexture renderTarget ) 
 	{
 		Shader shader = new ShaderScreen();
 
@@ -67,12 +77,10 @@ public class SavePass extends Pass
 
 		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
 
-		ShaderMaterial.ShaderMaterialOptions shaderMaterialopt = new ShaderMaterial.ShaderMaterialOptions();
-		shaderMaterialopt.uniforms = this.uniforms;
-		shaderMaterialopt.vertexShader = shader.getVertexSource();
-		shaderMaterialopt.fragmentShader = shader.getFragmentSource();
-		
-		this.material = new ShaderMaterial(shaderMaterialopt);
+		this.material = new ShaderMaterial();
+		this.material.setUniforms(this.uniforms);
+		this.material.setVertexShaderSource(shader.getVertexSource());
+		this.material.setFragmentShaderSource(shader.getFragmentSource());
 		
 		this.renderTarget = renderTarget;
 
@@ -80,7 +88,7 @@ public class SavePass extends Pass
 		this.setNeedsSwap(false);
 	}
 	@Override
-	public void render(WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta,
+	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		if ( this.uniforms.containsKey(this.textureID))

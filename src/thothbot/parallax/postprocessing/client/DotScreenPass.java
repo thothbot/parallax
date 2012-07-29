@@ -63,7 +63,7 @@ public class DotScreenPass extends Pass
 	}
 	
 	@Override
-	public void render(WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta,
+	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		this.uniforms.get("tDiffuse").texture = readBuffer;

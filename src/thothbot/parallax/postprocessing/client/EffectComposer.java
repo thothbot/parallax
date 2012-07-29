@@ -26,24 +26,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.core.Matrix4f;
 import thothbot.parallax.core.shared.geometries.Plane;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.core.shared.textures.Texture;
 
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class EffectComposer
 {
-	private WebGLRenderTarget renderTarget1;
-	private WebGLRenderTarget renderTarget2;
+	private RenderTargetTexture renderTarget1;
+	private RenderTargetTexture renderTarget2;
 	
-	private WebGLRenderTarget writeBuffer;
-	private WebGLRenderTarget readBuffer;
+	private RenderTargetTexture writeBuffer;
+	private RenderTargetTexture readBuffer;
 	
 	private List<Pass> passes;
 	private ShaderPass copyPass;
@@ -64,7 +63,7 @@ public class EffectComposer
 	public static Mesh quad = new Mesh( EffectComposer.geometry, null );
 	public static Scene scene = new Scene();
 
-	private static WebGLRenderTarget.WebGLRenderTargetOptions defaultRenderTargetOptions = new WebGLRenderTarget.WebGLRenderTargetOptions();
+	private static RenderTargetTexture.WebGLRenderTargetOptions defaultRenderTargetOptions = new RenderTargetTexture.WebGLRenderTargetOptions();
 	
 	static {
 		defaultRenderTargetOptions.minFilter =  Texture.FILTER.LINEAR;
@@ -83,10 +82,10 @@ public class EffectComposer
 
 	public EffectComposer( int width, int height )
 	{
-		this(new WebGLRenderTarget(width, height, EffectComposer.defaultRenderTargetOptions));
+		this(new RenderTargetTexture(width, height, EffectComposer.defaultRenderTargetOptions));
 	}
 
-	public EffectComposer( WebGLRenderTarget renderTarget ) 
+	public EffectComposer( RenderTargetTexture renderTarget ) 
 	{
 		this.renderTarget1 = renderTarget;
 
@@ -102,7 +101,7 @@ public class EffectComposer
 	
 	private void swapBuffers() 
 	{
-		WebGLRenderTarget tmp = this.readBuffer;
+		RenderTargetTexture tmp = this.readBuffer;
 		this.readBuffer = this.writeBuffer;
 		this.writeBuffer = tmp;
 	}
@@ -146,12 +145,12 @@ public class EffectComposer
 		}
 	}
 
-	private void reset( WebGLRenderTarget renderTarget ) 
+	private void reset( RenderTargetTexture renderTarget ) 
 	{
 		this.renderTarget1 = renderTarget;
 
 		if ( this.renderTarget1 == null )
-			this.renderTarget1 = new WebGLRenderTarget( 
+			this.renderTarget1 = new RenderTargetTexture( 
 					Pass.getRenderer().getCanvas().getWidth(), 
 					Pass.getRenderer().getCanvas().getHeight(), 
 					EffectComposer.defaultRenderTargetOptions 

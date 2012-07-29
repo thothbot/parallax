@@ -34,7 +34,7 @@ public class ClearMaskPass extends Pass
 	}
 
 	@Override
-	public void render( WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta, boolean maskActive ) 
+	public void render( RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive ) 
 	{
 		getRenderer().getGL().disable( WebGLRenderingContext.STENCIL_TEST );
 	}

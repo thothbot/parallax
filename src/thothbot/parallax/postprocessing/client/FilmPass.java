@@ -24,9 +24,9 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
 
@@ -61,7 +61,7 @@ public class FilmPass extends Pass
 	}
 	
 	@Override
-	public void render(WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta,
+	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		this.uniforms.get("tDiffuse").texture = readBuffer;

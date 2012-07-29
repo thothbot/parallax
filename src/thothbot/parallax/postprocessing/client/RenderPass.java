@@ -22,7 +22,7 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.materials.Material;
@@ -65,7 +65,7 @@ public class RenderPass extends Pass
 	}
 
 	@Override
-	public void render(WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta,
+	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		this.scene.overrideMaterial = this.overrideMaterial;

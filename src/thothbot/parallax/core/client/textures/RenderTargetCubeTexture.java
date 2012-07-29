@@ -34,14 +34,22 @@ import thothbot.parallax.core.shared.core.Mathematics;
 
 public class RenderTargetCubeTexture extends RenderTargetTexture
 {
-	public int activeCubeFace = 0;
+	private int activeCubeFace = 0;
 
-	public List<WebGLFramebuffer> __webglFramebuffer;
-	public List<WebGLRenderbuffer> __webglRenderbuffer;
+	private List<WebGLFramebuffer> webglFramebuffer;
+	private List<WebGLRenderbuffer> webglRenderbuffer;
 
 	public RenderTargetCubeTexture(int width, int height ) 
 	{
 		super(width, height);
+	}
+	
+	public int getActiveCubeFace() {
+		return this.activeCubeFace;
+	}
+	
+	public void setActiveCubeFace(int activeCubeFace) {
+		this.activeCubeFace = activeCubeFace;
 	}
 
 	@Override
@@ -53,27 +61,22 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		gl.deleteTexture(this.getWebGlTexture());
 		for (int i = 0; i < 6; i++) 
 		{
-			gl.deleteFramebuffer(this.__webglFramebuffer.get(i));
-			gl.deleteRenderbuffer(this.__webglRenderbuffer.get(i));
+			gl.deleteFramebuffer(this.webglFramebuffer.get(i));
+			gl.deleteRenderbuffer(this.webglRenderbuffer.get(i));
 		}
 	}
 	
 	@Override
 	public WebGLFramebuffer getWebGLFramebuffer() 
 	{
-		return this.__webglFramebuffer.get( this.activeCubeFace );
+		return this.webglFramebuffer.get( getActiveCubeFace() );
 	}
 	
 	@Override
 	public void setRenderTarget(WebGLRenderingContext gl)
 	{
-		if (this.__webglFramebuffer != null)
+		if (this.webglFramebuffer != null)
 			return;
-	
-		if (this.depthBuffer)
-			this.depthBuffer = true;
-		if (this.stencilBuffer)
-			this.stencilBuffer = true;
 
 		this.setWebGlTexture(gl.createTexture());
 
@@ -81,8 +84,8 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(getWidth())
 				&& Mathematics.isPowerOfTwo(getHeight());
 
-		this.__webglFramebuffer = new ArrayList<WebGLFramebuffer>();
-		this.__webglRenderbuffer = new ArrayList<WebGLRenderbuffer>();
+		this.webglFramebuffer = new ArrayList<WebGLFramebuffer>();
+		this.webglRenderbuffer = new ArrayList<WebGLRenderbuffer>();
 
 		gl.bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), this.getWebGlTexture() );
 
@@ -90,14 +93,14 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 
 		for ( int i = 0; i < 6; i ++ ) 
 		{
-			this.__webglFramebuffer.add( gl.createFramebuffer() );
-			this.__webglRenderbuffer.add( gl.createRenderbuffer() );
+			this.webglFramebuffer.add( gl.createFramebuffer() );
+			this.webglRenderbuffer.add( gl.createRenderbuffer() );
 
 			gl.texImage2D( GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, getFormat().getValue(), getWidth(), getHeight(), 0, 
 					getFormat().getValue(), getType().getValue(), null );
 
-			this.setupFrameBuffer(gl, this.__webglFramebuffer.get( i ), GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i);
-			this.setupRenderBuffer(gl, this.__webglRenderbuffer.get( i ));
+			this.setupFrameBuffer(gl, this.webglFramebuffer.get( i ), GLenum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i);
+			this.setupRenderBuffer(gl, this.webglRenderbuffer.get( i ));
 		}
 
 		if ( isTargetPowerOfTwo ) 

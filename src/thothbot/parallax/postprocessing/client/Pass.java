@@ -22,8 +22,8 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderTarget;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 
 public abstract class Pass
 {
@@ -32,7 +32,7 @@ public abstract class Pass
 
 	public Pass(){}
 		
-	public abstract void render( WebGLRenderTarget writeBuffer, WebGLRenderTarget readBuffer, float delta, boolean maskActive );
+	public abstract void render( RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive );
 		
 	public static WebGLRenderer getRenderer()
 	{
