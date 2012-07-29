@@ -24,6 +24,7 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
@@ -60,7 +61,7 @@ public class DotScreenPass extends Pass
 	}
 	
 	@Override
-	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
+	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		this.uniforms.get("tDiffuse").texture = readBuffer;
@@ -70,10 +71,10 @@ public class DotScreenPass extends Pass
 		EffectComposer.quad.setMaterial(this.material);
 
 		if ( this.renderToScreen )
-			getRenderer().render( EffectComposer.scene, EffectComposer.camera );
+			renderer.render( EffectComposer.scene, EffectComposer.camera );
 
 		else
-			getRenderer().render( EffectComposer.scene, EffectComposer.camera, writeBuffer, false );
+			renderer.render( EffectComposer.scene, EffectComposer.camera, writeBuffer, false );
 
 	}
 

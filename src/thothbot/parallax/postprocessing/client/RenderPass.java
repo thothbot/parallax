@@ -22,6 +22,7 @@
 
 package thothbot.parallax.postprocessing.client;
 
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color3f;
@@ -65,7 +66,7 @@ public class RenderPass extends Pass
 	}
 
 	@Override
-	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
+	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		this.scene.overrideMaterial = this.overrideMaterial;
@@ -73,17 +74,17 @@ public class RenderPass extends Pass
 		if ( this.clearColor != null ) 
 		{
 
-			this.oldClearColor.copy( getRenderer().getClearColor() );
-			this.oldClearAlpha = getRenderer().getClearAlpha();
+			this.oldClearColor.copy( renderer.getClearColor() );
+			this.oldClearAlpha = renderer.getClearAlpha();
 
-			getRenderer().setClearColor( this.clearColor, this.clearAlpha );
+			renderer.setClearColor( this.clearColor, this.clearAlpha );
 
 		}
 
-		getRenderer().render( this.scene, this.camera, readBuffer, this.clear );
+		renderer.render( this.scene, this.camera, readBuffer, this.clear );
 
 		if ( this.clearColor != null)
-			getRenderer().setClearColor( this.oldClearColor, this.oldClearAlpha );
+			renderer.setClearColor( this.oldClearColor, this.oldClearAlpha );
 
 		this.scene.overrideMaterial = null;
 	}

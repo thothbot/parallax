@@ -60,9 +60,8 @@ public class ShaderPass extends Pass
 	}
 	
 	@Override
-	public void render( RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
+	public void render( WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
 	{
-		WebGLRenderer renderer = WebGLRenderer.getInstance();
 		if ( this.uniforms.containsKey(this.textureID))
 			this.uniforms.get( this.textureID ).texture = readBuffer;
 

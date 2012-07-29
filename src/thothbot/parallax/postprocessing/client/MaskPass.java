@@ -23,6 +23,7 @@
 package thothbot.parallax.postprocessing.client;
 
 import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -43,12 +44,11 @@ public class MaskPass extends Pass
 	}
 		
 	@Override
-	public void render (RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
+	public void render (WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
 	{
 		// don't update color or depth
-
-		getRenderer().getGL().colorMask( false, false, false, false );
-		getRenderer().getGL().depthMask( false );
+		renderer.getGL().colorMask( false, false, false, false );
+		renderer.getGL().depthMask( false );
 
 		// set up stencil
 
@@ -65,25 +65,22 @@ public class MaskPass extends Pass
 			clearValue = 0;
 		}
 
-		getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );
-		getRenderer().getGL().stencilOp( GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue() );
-		getRenderer().getGL().stencilFunc( GLenum.ALWAYS.getValue(), writeValue, 0xffffffff );
-		getRenderer().getGL().clearStencil( clearValue );
+		renderer.getGL().enable( GLenum.STENCIL_TEST.getValue() );
+		renderer.getGL().stencilOp( GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue() );
+		renderer.getGL().stencilFunc( GLenum.ALWAYS.getValue(), writeValue, 0xffffffff );
+		renderer.getGL().clearStencil( clearValue );
 
 		// draw into the stencil buffer
-
-		getRenderer().render( this.scene, this.camera, readBuffer, this.clear );
-		getRenderer().render( this.scene, this.camera, writeBuffer, this.clear );
+		renderer.render( this.scene, this.camera, readBuffer, this.clear );
+		renderer.render( this.scene, this.camera, writeBuffer, this.clear );
 
 		// re-enable update of color and depth
-
-		getRenderer().getGL().colorMask( true, true, true, true );
-		getRenderer().getGL().depthMask( true );
+		renderer.getGL().colorMask( true, true, true, true );
+		renderer.getGL().depthMask( true );
 
 		// only render where stencil is set to 1
-
-		getRenderer().getGL().stencilFunc( GLenum.EQUAL.getValue(), 1, 0xffffffff );  // draw if == 1
-		getRenderer().getGL().stencilOp( GLenum.KEEP.getValue(), GLenum.KEEP.getValue(), GLenum.KEEP.getValue() );
+		renderer.getGL().stencilFunc( GLenum.EQUAL.getValue(), 1, 0xffffffff );  // draw if == 1
+		renderer.getGL().stencilOp( GLenum.KEEP.getValue(), GLenum.KEEP.getValue(), GLenum.KEEP.getValue() );
 	}
 	
 	@Override

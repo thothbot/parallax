@@ -24,6 +24,7 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
@@ -63,12 +64,12 @@ public class TexturePass extends Pass
 	}
 
 	@Override
-	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
+	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		EffectComposer.quad.setMaterial(this.material);
 
-		getRenderer().render( EffectComposer.scene, EffectComposer.camera, readBuffer, false );
+		renderer.render( EffectComposer.scene, EffectComposer.camera, readBuffer, false );
 	}
 
 }

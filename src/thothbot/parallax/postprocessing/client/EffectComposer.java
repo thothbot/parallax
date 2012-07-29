@@ -25,7 +25,12 @@ package thothbot.parallax.postprocessing.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
+import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
+import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
@@ -38,6 +43,8 @@ import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class EffectComposer
 {
+	private WebGLRenderer renderer;
+	
 	private RenderTargetTexture renderTarget1;
 	private RenderTargetTexture renderTarget2;
 	
@@ -49,46 +56,33 @@ public class EffectComposer
 	
 	// shared ortho camera
 
-	public static OrthographicCamera camera = new OrthographicCamera( 
-			Pass.getRenderer().getCanvas().getWidth() / -2f, 
-			Pass.getRenderer().getCanvas().getWidth() / 2f, 
-			Pass.getRenderer().getCanvas().getHeight() / 2f, 
-			Pass.getRenderer().getCanvas().getHeight() / -2f, 
-			-10000f, 10000f
-		);
+	public static OrthographicCamera camera;
 	
 	// shared fullscreen quad scene
 
-	public static Plane geometry = new Plane( 1, 1 );
-	public static Mesh quad = new Mesh( EffectComposer.geometry, null );
-	public static Scene scene = new Scene();
+	public static Plane geometry;
+	public static Mesh quad;
+	public static Scene scene;
 
-	private static RenderTargetTexture.WebGLRenderTargetOptions defaultRenderTargetOptions = new RenderTargetTexture.WebGLRenderTargetOptions();
+	public EffectComposer( WebGLRenderer renderer )
+	{
+		this(renderer, new RenderTargetTexture(
+				renderer.getCanvas().getWidth(), 
+				renderer.getCanvas().getHeight()));
+		
+		this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
+		this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
+		this.renderTarget1.setFormat(PixelFormat.RGB);
+		this.renderTarget1.setStencilBuffer(true);
+		
+		this.renderTarget2 = this.renderTarget1.clone();
+	}
 	
-	static {
-		defaultRenderTargetOptions.minFilter =  Texture.FILTER.LINEAR;
-		defaultRenderTargetOptions.magFilter =  Texture.FILTER.LINEAR;
-		defaultRenderTargetOptions.format =  Texture.FORMAT.RGB;
-		defaultRenderTargetOptions.stencilBuffer =  false;
-		
-		geometry.applyMatrix( new Matrix4f().makeRotationX( (float) (Math.PI / 2.0) ) );
-		
-		quad.getPosition().setZ(-100);
-		quad.getScale().set( Pass.getRenderer().getCanvas().getWidth(), Pass.getRenderer().getCanvas().getHeight(), 1 );
-
-		scene.addChild( quad );
-		scene.addChild( camera );
-	}
-
-	public EffectComposer( int width, int height )
+	public EffectComposer( WebGLRenderer renderer, RenderTargetTexture renderTarget ) 
 	{
-		this(new RenderTargetTexture(width, height, EffectComposer.defaultRenderTargetOptions));
-	}
-
-	public EffectComposer( RenderTargetTexture renderTarget ) 
-	{
+		this.renderer = renderer;
+		
 		this.renderTarget1 = renderTarget;
-
 		this.renderTarget2 = this.renderTarget1.clone();
 
 		this.writeBuffer = this.renderTarget1;
@@ -97,6 +91,25 @@ public class EffectComposer
 		this.passes = new ArrayList<Pass>();
 
 		this.copyPass = new ShaderPass( new ShaderScreen() );
+		
+		Canvas3d canvas = renderer.getCanvas();
+		this.camera = new OrthographicCamera( 
+			canvas.getWidth() / -2f, canvas.getWidth() / 2f, 
+			canvas.getHeight() / 2f, canvas.getHeight() / -2f, 
+			-10000f, 10000f
+		);
+		
+		this.geometry = new Plane( 1, 1 );
+		this.quad = new Mesh( geometry, null );
+		this.scene = new Scene();
+		
+		geometry.applyMatrix( new Matrix4f().makeRotationX( (float) (Math.PI / 2.0) ) );
+		
+		quad.getPosition().setZ(-100);
+		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
+
+		scene.addChild( quad );
+		scene.addChild( camera );
 	}
 	
 	private void swapBuffers() 
@@ -111,7 +124,7 @@ public class EffectComposer
 		this.passes.add( pass );
 	}
 	
-	private void render( float delta ) 
+	private void render( WebGLRenderer renderer, float delta ) 
 	{
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
@@ -124,17 +137,17 @@ public class EffectComposer
 
 			if ( !pass.isEnabled() ) continue;
 
-			pass.render( this.writeBuffer, this.readBuffer, delta, maskActive );
+			pass.render( renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
 
 			if ( pass.isNeedsSwap() ) 
 			{
 				if ( maskActive ) 
 				{
-					WebGLRenderer.getInstance().getGL().stencilFunc( WebGLRenderingContext.NOTEQUAL, 1, 0xffffffff );
+					renderer.getGL().stencilFunc( GLenum.NOTEQUAL.getValue(), 1, 0xffffffff );
 
-					this.copyPass.render( this.writeBuffer, this.readBuffer, delta, true );
+					this.copyPass.render( renderer, this.writeBuffer, this.readBuffer, delta, true );
 
-					WebGLRenderer.getInstance().getGL().stencilFunc( WebGLRenderingContext.EQUAL, 1, 0xffffffff );
+					renderer.getGL().stencilFunc( GLenum.EQUAL.getValue(), 1, 0xffffffff );
 				}
 
 				this.swapBuffers();
@@ -150,25 +163,30 @@ public class EffectComposer
 		this.renderTarget1 = renderTarget;
 
 		if ( this.renderTarget1 == null )
-			this.renderTarget1 = new RenderTargetTexture( 
-					Pass.getRenderer().getCanvas().getWidth(), 
-					Pass.getRenderer().getCanvas().getHeight(), 
-					EffectComposer.defaultRenderTargetOptions 
-			);
+		{
+			this.renderTarget1 = new RenderTargetTexture(
+					renderer.getCanvas().getWidth(), 
+					renderer.getCanvas().getHeight());
+			
+			this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
+			this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
+			this.renderTarget1.setFormat(PixelFormat.RGB);
+			this.renderTarget1.setStencilBuffer(true);
+		}
 
 		this.renderTarget2 = this.renderTarget1.clone();
 
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
 
-		EffectComposer.quad.getScale().set( Pass.getRenderer().getCanvas().getWidth(), Pass.getRenderer().getCanvas().getHeight(), 1 );
+		Canvas3d canvas = this.renderer.getCanvas();
+		this.quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
 
-		EffectComposer.camera.setLeft(Pass.getRenderer().getCanvas().getWidth() / -2f);
-		EffectComposer.camera.setRight(Pass.getRenderer().getCanvas().getWidth() / 2f);
-		EffectComposer.camera.setTop(Pass.getRenderer().getCanvas().getHeight() / 2f);
-		EffectComposer.camera.setBottom(Pass.getRenderer().getCanvas().getHeight() / -2f);
+		this.camera.setLeft(canvas.getWidth() / -2f);
+		this.camera.setRight(canvas.getWidth() / 2f);
+		this.camera.setTop(canvas.getHeight() / 2f);
+		this.camera.setBottom(canvas.getHeight() / -2f);
 
-		EffectComposer.camera.updateProjectionMatrix();
-
+		this.camera.updateProjectionMatrix();
 	}
 }

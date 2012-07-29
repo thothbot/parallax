@@ -23,6 +23,7 @@
 package thothbot.parallax.postprocessing.client;
 
 import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 
 public class ClearMaskPass extends Pass 
@@ -34,8 +35,8 @@ public class ClearMaskPass extends Pass
 	}
 
 	@Override
-	public void render( RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive ) 
+	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive ) 
 	{
-		getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );
+		renderer.getGL().disable( GLenum.STENCIL_TEST.getValue() );
 	}
 }

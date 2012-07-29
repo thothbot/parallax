@@ -28,6 +28,7 @@ import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
@@ -75,7 +76,6 @@ public class BloomPass extends Pass
 		this.renderTargetY.setFormat(PixelFormat.RGB);
 
 		// screen material
-
 		Shader screenShader = new ShaderScreen();
 
 		this.screenUniforms = UniformsUtils.clone( screenShader.getUniforms() );
@@ -90,7 +90,6 @@ public class BloomPass extends Pass
 		this.materialScreen.setTransparent(true);
 
 		// convolution material
-
 		Shader convolutionShader = new ShaderConvolution();
 
 		this.convolutionUniforms = UniformsUtils.clone( convolutionShader.getUniforms() );
@@ -107,38 +106,35 @@ public class BloomPass extends Pass
 	}
 
 	@Override
-	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive)
+	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive)
 	{
 		if ( maskActive ) 
-			getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );
+			renderer.getGL().disable( GLenum.STENCIL_TEST.getValue() );
 
 		// Render quad with blured scene into texture (convolution pass 1)
-
 		EffectComposer.quad.setMaterial(this.materialConvolution);
 
 		this.convolutionUniforms.get("tDiffuse" ).texture = readBuffer;
 		this.convolutionUniforms.get("uImageIncrement").value = BloomPass.blurX;
 
-		getRenderer().render( EffectComposer.scene, EffectComposer.camera, this.renderTargetX, true );
+		renderer.render( EffectComposer.scene, EffectComposer.camera, this.renderTargetX, true );
 
 
 		// Render quad with blured scene into texture (convolution pass 2)
-
 		this.convolutionUniforms.get("tDiffuse").texture = this.renderTargetX;
 		this.convolutionUniforms.get("uImageIncrement").value = BloomPass.blurY;
 
-		getRenderer().render( EffectComposer.scene, EffectComposer.camera, this.renderTargetY, true );
+		renderer.render( EffectComposer.scene, EffectComposer.camera, this.renderTargetY, true );
 
 		// Render original scene with superimposed blur to texture
-
 		EffectComposer.quad.setMaterial(this.materialScreen);
 
 		this.screenUniforms.get("tDiffuse").texture = this.renderTargetY;
 
 		if ( maskActive ) 
-			getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );
+			renderer.getGL().enable( GLenum.STENCIL_TEST.getValue() );
 
-		getRenderer().render( EffectComposer.scene, EffectComposer.camera, readBuffer, this.clear );
+		renderer.render( EffectComposer.scene, EffectComposer.camera, readBuffer, this.clear );
 	}
 
 }

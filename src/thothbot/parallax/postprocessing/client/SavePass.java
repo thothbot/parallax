@@ -27,6 +27,7 @@ import java.util.Map;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
@@ -43,26 +44,21 @@ public class SavePass extends Pass
 	private ShaderMaterial material;
 	
 	private boolean clear = false;
-	
-	private static RenderTargetTexture defaultRenderTargetTexture = new RenderTargetTexture(
-		Pass.getRenderer().getCanvas().getWidth(),
-		Pass.getRenderer().getCanvas().getHeight()
-	);
-	
-	static {
-		defaultRenderTargetTexture.setMinFilter(TextureMinFilter.LINEAR);
-		defaultRenderTargetTexture.setMagFilter(TextureMagFilter.LINEAR);
-		defaultRenderTargetTexture.setFormat(PixelFormat.RGB);
-		defaultRenderTargetTexture.setStencilBuffer(true);
-	}
 
-	public SavePass()
+	public SavePass(int width, int height)
 	{
-		this(defaultRenderTargetTexture);
+		this(new RenderTargetTexture( width, height ));
+		
+		renderTarget.setMinFilter(TextureMinFilter.LINEAR);
+		renderTarget.setMagFilter(TextureMagFilter.LINEAR);
+		renderTarget.setFormat(PixelFormat.RGB);
+		renderTarget.setStencilBuffer(true);
 	}
 
 	public SavePass( RenderTargetTexture renderTarget ) 
 	{
+		this.renderTarget = renderTarget;	
+		
 		Shader shader = new ShaderScreen();
 
 		this.textureID = "tDiffuse";
@@ -74,13 +70,11 @@ public class SavePass extends Pass
 		this.material.setVertexShaderSource(shader.getVertexSource());
 		this.material.setFragmentShaderSource(shader.getFragmentSource());
 		
-		this.renderTarget = renderTarget;
-
 		this.setEnabled(true);
 		this.setNeedsSwap(false);
 	}
 	@Override
-	public void render(RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
+	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
 			boolean maskActive)
 	{
 		if ( this.uniforms.containsKey(this.textureID))
@@ -88,7 +82,7 @@ public class SavePass extends Pass
 
 		EffectComposer.quad.setMaterial(this.material);
 
-		getRenderer().render( EffectComposer.scene, EffectComposer.camera, this.renderTarget, this.clear );
+		renderer.render( EffectComposer.scene, EffectComposer.camera, this.renderTarget, this.clear );
 
 	}
 
