@@ -521,7 +521,8 @@ public class WebGLRenderer
 	}
 	
 	/**
-	 * Sets {@link Scene} maximum lights. By default there are 4.
+	 * Specifies how many total lights are allowed in the scene 
+	 * (divided evenly between point & directional lights) By default there are 4.
 	 * 
 	 * @param maxLights
 	 */
@@ -531,7 +532,7 @@ public class WebGLRenderer
 	}
 
 	/**
-	 * Sets the clear color, using hex for the color.<br>
+	 * Sets the the background color, using hex for the color.<br>
 	 * 
 	 * @param hex the clear color value.
 	 */
@@ -541,12 +542,12 @@ public class WebGLRenderer
 	}
 
 	/**
-	 * Sets the clear color, using hex for the color and alpha for the opacity.<br>
+	 * Sets the the background color, using hex for the color and alpha for the opacity.<br>
 	 * Default clear clolor is 0x000000 - black.<br>
 	 * Default clear alpha is 1.0 - opaque.<br>
 	 * 
 	 * @param hex   the clear color value.
-	 * @param alpha the clear alpha value.
+	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
 	 */
 	public void setClearColorHex( int hex, float alpha ) 
 	{
@@ -558,12 +559,12 @@ public class WebGLRenderer
 	
 
 	/**
-	 * Sets the clear color, using {@link Color3f} for the color and alpha for the opacity.
+	 * Sets the the background color, using {@link Color3f} for the color and alpha for the opacity.
 	 * 
 	 * @see #setClearColorHex(int, float). 
 	 * 
 	 * @param color the {@link Color3f} instance.
-	 * @param alpha the alpha value.
+	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
 	 */
 	public void setClearColor( Color3f color, float alpha ) 
 	{
@@ -574,7 +575,7 @@ public class WebGLRenderer
 	}
 
 	/**
-	 * Returns the current clear color.
+	 * Returns the background color.
 	 * 
 	 * @return the {@link Color3f} instance. 
 	 */
@@ -584,7 +585,7 @@ public class WebGLRenderer
 	}
 
 	/**
-	 * Returns the current clear alpha.
+	 * Returns the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque)
 	 * 
 	 * @return the value in range <0,1>.
 	 */
