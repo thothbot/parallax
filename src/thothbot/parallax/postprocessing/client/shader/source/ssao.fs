@@ -17,7 +17,7 @@ uniform sampler2D tDepth;
 
 varying vec2 vUv;
 
-//"#define PI 3.14159265
+//#define PI 3.14159265
 #define DL 2.399963229728653 // PI * ( 3.0 - sqrt( 5.0 ) )
 #define EULER 2.718281828459045
 
@@ -42,7 +42,7 @@ const float diffArea = 0.4; 		// self-shadowing reduction
 const float gDisplace = 0.4; 	// gauss bell center
 
 const vec3 onlyAOColor = vec3( 1.0, 0.7, 0.5 );
-			//"const vec3 onlyAOColor = vec3( 1.0, 1.0, 1.0 );
+			//const vec3 onlyAOColor = vec3( 1.0, 1.0, 1.0 );
 
 
 			// RGBA depth
@@ -92,7 +92,7 @@ float doFog() {
 
 float readDepth( const in vec2 coord ) {
 
-	//"return ( 2.0 * cameraNear ) / ( cameraFar + cameraNear - unpackDepth( texture2D( tDepth, coord ) ) * ( cameraFar - cameraNear ) );
+	//return ( 2.0 * cameraNear ) / ( cameraFar + cameraNear - unpackDepth( texture2D( tDepth, coord ) ) * ( cameraFar - cameraNear ) );
 	return cameraCoef / ( cameraFarPlusNear - unpackDepth( texture2D( tDepth, coord ) ) * cameraFarMinusNear );
 }
 

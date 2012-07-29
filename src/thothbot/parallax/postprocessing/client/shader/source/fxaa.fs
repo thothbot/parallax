@@ -35,7 +35,7 @@ void main() {
 
 	float rcpDirMin = 1.0 / ( min( abs( dir.x ), abs( dir.y ) ) + dirReduce );
 	dir = min( vec2( FXAA_SPAN_MAX,  FXAA_SPAN_MAX),
-					  "max( vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX),
+					  max( vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX),
 				dir * rcpDirMin)) * resolution;
 
 	vec3 rgbA = 0.5 * (

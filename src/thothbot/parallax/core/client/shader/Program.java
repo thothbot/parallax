@@ -238,8 +238,10 @@ public class Program
 		this._gl.linkProgram(this.program);
 
 		if (!this._gl.getProgramParameterb(this.program, GLenum.LINK_STATUS.getValue()))
-			Log.error("Could not initialise shader\n" + "VALIDATE_STATUS: "
-					+ ", gl error [" + this._gl.getProgramInfoLog(program) + "]"
+			Log.error("Could not initialise shader\n"
+					+ "GL error: " + this._gl.getProgramInfoLog(program)
+					+ "\n-----\nVERTEX:\n" + prefix_vertex + vertexSource
+					+ "\n-----\nFRAGMENT:\n" + prefix_fragment + fragmentSource
 			);
 
 		else
