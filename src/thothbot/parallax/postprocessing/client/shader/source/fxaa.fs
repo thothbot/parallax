@@ -13,7 +13,7 @@ void main() {
 	vec3 rgbNE = texture2D( tDiffuse, ( gl_FragCoord.xy + vec2( 1.0, -1.0 ) ) * resolution ).xyz;
 	vec3 rgbSW = texture2D( tDiffuse, ( gl_FragCoord.xy + vec2( -1.0, 1.0 ) ) * resolution ).xyz;
 	vec3 rgbSE = texture2D( tDiffuse, ( gl_FragCoord.xy + vec2( 1.0, 1.0 ) ) * resolution ).xyz;
-	vec4 rgbaM  = texture2D( tDiffuse,  gl_FragCoord.xy  * resolution );
+	vec4 rgbaM = texture2D( tDiffuse,  gl_FragCoord.xy  * resolution );
 	vec3 rgbM  = rgbaM.xyz;
 	float opacity  = rgbaM.w;
 
@@ -57,5 +57,4 @@ void main() {
 		gl_FragColor = vec4( rgbB, opacity );
 
 	}
-
 }

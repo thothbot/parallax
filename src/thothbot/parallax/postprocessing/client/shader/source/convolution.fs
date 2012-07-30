@@ -13,9 +13,9 @@ void main() {
 	for( int i = 0; i < KERNEL_SIZE; i ++ ) {
 
 		sum += texture2D( tDiffuse, imageCoord ) * cKernel[ i ];
-		imageCoord += uImageIncrement;",
+		imageCoord += uImageIncrement;
 
-		}
+	}
 
 	gl_FragColor = sum;
 

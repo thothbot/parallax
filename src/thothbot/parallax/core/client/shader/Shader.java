@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.core.Mathematics;
 
 import com.google.gwt.resources.client.ClientBundle;
@@ -153,7 +154,7 @@ public abstract class Shader
 		return result.toString();
 	}
 
-	public static List<Double> buildKernel( double sigma ) 
+	public static Float32Array buildKernel( double sigma ) 
 	{ 
 		int kMaxKernelSize = 25; 
 		int kernelSize = (int) (2 * Math.ceil( sigma * 3 ) + 1);
@@ -163,18 +164,17 @@ public abstract class Shader
 		
 		double halfWidth = ( kernelSize - 1.0 ) * 0.5;
 
-		List<Double> values = new ArrayList<Double>(kernelSize);
+		Float32Array values = Float32Array.create(kernelSize);
 
-		double sum = 0.0;
+		float sum = 0.0f;
 		for ( int i = 0; i < kernelSize; ++i ) 
 		{
-			double result = Mathematics.gauss( i - halfWidth, sigma ); 
-			values.add(result);
+			float result = (float) Mathematics.gauss( i - halfWidth, sigma ); 
+			values.set(i, result);
 			sum += result;
 		}
 
 		// normalize the kernel
-
 		for ( int i = 0; i < kernelSize; ++i ) 
 			values.set( i, values.get(i) / sum);
 

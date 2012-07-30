@@ -84,7 +84,6 @@ public class BloomPass extends Pass
 		Shader screenShader = new ShaderScreen();
 
 		this.screenUniforms = UniformsUtils.clone( screenShader.getUniforms() );
-
 		this.screenUniforms.get("opacity").value = strength;
 		
 		this.materialScreen = new ShaderMaterial();
@@ -98,7 +97,6 @@ public class BloomPass extends Pass
 		Shader convolutionShader = new ShaderConvolution();
 
 		this.convolutionUniforms = UniformsUtils.clone( convolutionShader.getUniforms() );
-
 		this.convolutionUniforms.get("uImageIncrement").value = BloomPass.blurX;
 		this.convolutionUniforms.get("cKernel").value = Shader.buildKernel( sigma );
 
