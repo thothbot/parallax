@@ -215,6 +215,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				catch (Canvas3dException ex)
 				{
 					Log.error(ex.getMessage(), ex.fillInStackTrace());
+					loadingPanal.hide();
 					add(new BadCanvasPanel(ex.getMessage()));
 				}
 

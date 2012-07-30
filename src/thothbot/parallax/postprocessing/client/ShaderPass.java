@@ -72,16 +72,18 @@ public class ShaderPass extends Pass
 	}
 	
 	@Override
-	public void render( WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
+	public void render( EffectComposer effectComposer, float delta, boolean maskActive) 
 	{
 		if ( this.uniforms.containsKey(this.textureID))
-			this.uniforms.get( this.textureID ).texture = readBuffer;
+			this.uniforms.get( this.textureID ).texture = effectComposer.getReadBuffer();
 
-		EffectComposer.quad.setMaterial(this.material);
+		effectComposer.getQuad().setMaterial(this.material);
 
 		if ( this.isRenderToScreen )
-			renderer.render( EffectComposer.scene, EffectComposer.camera );
+			effectComposer.getRenderer().render( 
+				effectComposer.getScene(), effectComposer.getCamera() );
 		else
-			renderer.render( EffectComposer.scene, EffectComposer.camera, writeBuffer, this.isClear );
+			effectComposer.getRenderer().render( 
+				effectComposer.getScene(), effectComposer.getCamera(), effectComposer.getWriteBuffer(), this.isClear );
 	}
 }

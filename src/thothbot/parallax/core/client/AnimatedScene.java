@@ -144,7 +144,7 @@ public abstract class AnimatedScene extends Animation
 	{
 		this.renderer.getInfo().getTimer().render = new Duration();
 		onUpdate(duration);
-//		this.renderer.render(getScene(), getCamera());
+		this.renderer.render(getScene(), getCamera());
 		
 		animatedSceneCallback.onUpdate();
 	}

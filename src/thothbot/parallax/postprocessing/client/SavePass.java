@@ -27,7 +27,6 @@ import java.util.Map;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
@@ -74,15 +73,15 @@ public class SavePass extends Pass
 		this.setNeedsSwap(false);
 	}
 	@Override
-	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
-			boolean maskActive)
+	public void render(EffectComposer effectComposer, float delta, boolean maskActive)
 	{
 		if ( this.uniforms.containsKey(this.textureID))
-			this.uniforms.get("this.textureID").texture = readBuffer;
+			this.uniforms.get("this.textureID").texture = effectComposer.getReadBuffer();
 
-		EffectComposer.quad.setMaterial(this.material);
+		effectComposer.getQuad().setMaterial(this.material);
 
-		renderer.render( EffectComposer.scene, EffectComposer.camera, this.renderTarget, this.clear );
+		effectComposer.getRenderer().render( 
+				effectComposer.getScene(), effectComposer.getCamera(), this.renderTarget, this.clear );
 
 	}
 

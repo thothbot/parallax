@@ -22,9 +22,6 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.textures.RenderTargetTexture;
-
 public abstract class Pass
 {
 	private boolean enabled = true;
@@ -32,7 +29,7 @@ public abstract class Pass
 
 	public Pass(){}
 		
-	public abstract void render( WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive );
+	public abstract void render( EffectComposer effectComposer, float delta, boolean maskActive );
 		
 	public boolean isEnabled()
 	{

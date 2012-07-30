@@ -64,12 +64,11 @@ public class TexturePass extends Pass
 	}
 
 	@Override
-	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
-			boolean maskActive)
+	public void render(EffectComposer effectComposer, float delta, boolean maskActive)
 	{
-		EffectComposer.quad.setMaterial(this.material);
+		effectComposer.getQuad().setMaterial(this.material);
 
-		renderer.render( EffectComposer.scene, EffectComposer.camera, readBuffer, false );
+		effectComposer.getRenderer().render( 
+				effectComposer.getScene(), effectComposer.getCamera(), effectComposer.getReadBuffer(), false );
 	}
-
 }

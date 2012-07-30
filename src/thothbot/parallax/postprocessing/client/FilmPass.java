@@ -24,13 +24,10 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
-
 import thothbot.parallax.postprocessing.client.shader.ShaderFilm;
 
 public class FilmPass extends Pass
@@ -60,19 +57,20 @@ public class FilmPass extends Pass
 	}
 	
 	@Override
-	public void render(WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta,
-			boolean maskActive)
+	public void render(EffectComposer effectCocmposer, float delta, boolean maskActive)
 	{
-		this.uniforms.get("tDiffuse").texture = readBuffer;
+		this.uniforms.get("tDiffuse").texture = effectCocmposer.getReadBuffer();
 		this.uniforms.get( "time" ).value = (Float)this.uniforms.get( "time" ).value + delta;
 
-		EffectComposer.quad.setMaterial(this.material);
+		effectCocmposer.getQuad().setMaterial(this.material);
 
 		if ( this.renderToScreen )
-			renderer.render( EffectComposer.scene, EffectComposer.camera );
+			effectCocmposer.getRenderer().render( 
+					effectCocmposer.getScene(), effectCocmposer.getCamera() );
 
 		else
-			renderer.render( EffectComposer.scene, EffectComposer.camera, writeBuffer, false );
+			effectCocmposer.getRenderer().render( 
+					effectCocmposer.getScene(), effectCocmposer.getCamera(), effectCocmposer.getWriteBuffer(), false );
 
 	}
 }

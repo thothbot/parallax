@@ -23,8 +23,6 @@
 package thothbot.parallax.postprocessing.client;
 
 import thothbot.parallax.core.client.gl2.enums.GLenum;
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -44,11 +42,11 @@ public class MaskPass extends Pass
 	}
 		
 	@Override
-	public void render (WebGLRenderer renderer, RenderTargetTexture writeBuffer, RenderTargetTexture readBuffer, float delta, boolean maskActive) 
+	public void render (EffectComposer ecffectComposer, float delta, boolean maskActive) 
 	{
 		// don't update color or depth
-		renderer.getGL().colorMask( false, false, false, false );
-		renderer.getGL().depthMask( false );
+		ecffectComposer.getRenderer().getGL().colorMask( false, false, false, false );
+		ecffectComposer.getRenderer().getGL().depthMask( false );
 
 		// set up stencil
 
@@ -65,22 +63,22 @@ public class MaskPass extends Pass
 			clearValue = 0;
 		}
 
-		renderer.getGL().enable( GLenum.STENCIL_TEST.getValue() );
-		renderer.getGL().stencilOp( GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue() );
-		renderer.getGL().stencilFunc( GLenum.ALWAYS.getValue(), writeValue, 0xffffffff );
-		renderer.getGL().clearStencil( clearValue );
+		ecffectComposer.getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );
+		ecffectComposer.getRenderer().getGL().stencilOp( GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue() );
+		ecffectComposer.getRenderer().getGL().stencilFunc( GLenum.ALWAYS.getValue(), writeValue, 0xffffffff );
+		ecffectComposer.getRenderer().getGL().clearStencil( clearValue );
 
 		// draw into the stencil buffer
-		renderer.render( this.scene, this.camera, readBuffer, this.clear );
-		renderer.render( this.scene, this.camera, writeBuffer, this.clear );
+		ecffectComposer.getRenderer().render( this.scene, this.camera, ecffectComposer.getReadBuffer(), this.clear );
+		ecffectComposer.getRenderer().render( this.scene, this.camera, ecffectComposer.getWriteBuffer(), this.clear );
 
 		// re-enable update of color and depth
-		renderer.getGL().colorMask( true, true, true, true );
-		renderer.getGL().depthMask( true );
+		ecffectComposer.getRenderer().getGL().colorMask( true, true, true, true );
+		ecffectComposer.getRenderer().getGL().depthMask( true );
 
 		// only render where stencil is set to 1
-		renderer.getGL().stencilFunc( GLenum.EQUAL.getValue(), 1, 0xffffffff );  // draw if == 1
-		renderer.getGL().stencilOp( GLenum.KEEP.getValue(), GLenum.KEEP.getValue(), GLenum.KEEP.getValue() );
+		ecffectComposer.getRenderer().getGL().stencilFunc( GLenum.EQUAL.getValue(), 1, 0xffffffff );  // draw if == 1
+		ecffectComposer.getRenderer().getGL().stencilOp( GLenum.KEEP.getValue(), GLenum.KEEP.getValue(), GLenum.KEEP.getValue() );
 	}
 	
 	@Override

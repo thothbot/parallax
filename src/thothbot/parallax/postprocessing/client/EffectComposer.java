@@ -32,6 +32,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.core.Matrix4f;
 import thothbot.parallax.core.shared.geometries.Plane;
@@ -41,31 +42,32 @@ import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class EffectComposer
 {
-	private WebGLRenderer renderer;
 	
 	private RenderTargetTexture renderTarget1;
 	private RenderTargetTexture renderTarget2;
 	
-	private RenderTargetTexture writeBuffer;
-	private RenderTargetTexture readBuffer;
-	
 	private List<Pass> passes;
 	private ShaderPass copyPass;
+
+	private WebGLRenderer renderer;
 	
+	private RenderTargetTexture writeBuffer;
+	private RenderTargetTexture readBuffer;
+
 	// shared ortho camera
-	public static OrthographicCamera camera;
+	private OrthographicCamera camera;
 	
 	// shared fullscreen quad scene
-	public static Plane geometry;
-	public static Mesh quad;
-	public static Scene scene;
+	private Scene scene;
+	private Plane geometry;
+	private Mesh quad;
 
 	public EffectComposer( WebGLRenderer renderer )
 	{
 		this(renderer, new RenderTargetTexture(
 				renderer.getCanvas().getWidth(), 
 				renderer.getCanvas().getHeight()));
-		
+			
 		this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 		this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
 		this.renderTarget1.setFormat(PixelFormat.RGB);
@@ -89,6 +91,7 @@ public class EffectComposer
 		this.copyPass = new ShaderPass( new ShaderScreen() );
 		
 		Canvas3d canvas = renderer.getCanvas();
+
 		this.camera = new OrthographicCamera( 
 			canvas.getWidth() / -2f, canvas.getWidth() / 2f, 
 			canvas.getHeight() / 2f, canvas.getHeight() / -2f, 
@@ -108,17 +111,77 @@ public class EffectComposer
 		scene.addChild( camera );
 	}
 	
+	private void updateSizes() 
+	{
+		Canvas3d canvas = renderer.getCanvas();
+
+		float oldWidth = this.renderTarget1.getWidth();
+		float oldHeight = this.renderTarget1.getHeight();
+		
+		if(oldWidth == canvas.getWidth() && oldHeight == canvas.getWidth())
+			return;
+		
+		this.camera.setLeft(canvas.getWidth() / -2f);
+		this.camera.setRight(canvas.getWidth() / 2f);
+		this.camera.setTop(canvas.getHeight() / 2f);
+		this.camera.setBottom(canvas.getHeight() / -2f); 
+		this.camera.updateProjectionMatrix();
+		
+		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
+		
+		this.renderTarget1.setWidth(canvas.getWidth());
+		this.renderTarget1.setHeight(canvas.getHeight());
+		
+		this.renderTarget2.setWidth(canvas.getWidth());
+		this.renderTarget2.setHeight(canvas.getHeight());
+	}
+	
+	public WebGLRenderer getRenderer() {
+		return this.renderer;
+	}
+	
+	public OrthographicCamera getCamera() {
+		return this.camera;
+	}
+	
+	public Scene getScene() {
+		return this.scene;
+	}
+	
+	public Plane getGeometry() {
+		return this.geometry;
+	}
+	
+	public Mesh getQuad() {
+		return this.quad;
+	}
+
+	public RenderTargetTexture getWriteBuffer() {
+		return this.writeBuffer;
+	}
+	
+	public RenderTargetTexture getReadBuffer() {
+		return this.readBuffer;
+	}
+	
 	public void addPass( Pass pass ) 
 	{
 		this.passes.add( pass );
 	}
 	
-	public void render( WebGLRenderer renderer, float delta ) 
+	public void render()
+	{
+		render(0);
+	}
+
+	public void render( float delta ) 
 	{
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
 
 		boolean maskActive = false;
+		
+		updateSizes();
 
 		for ( int i = 0; i < this.passes.size(); i ++ ) 
 		{
@@ -126,7 +189,7 @@ public class EffectComposer
 
 			if ( !pass.isEnabled() ) continue;
 
-			pass.render( renderer, this.writeBuffer, this.readBuffer, delta, maskActive );
+			pass.render( this, delta, maskActive );
 
 			if ( pass.isNeedsSwap() ) 
 			{
@@ -134,7 +197,7 @@ public class EffectComposer
 				{
 					renderer.getGL().stencilFunc( GLenum.NOTEQUAL.getValue(), 1, 0xffffffff );
 
-					this.copyPass.render( renderer, this.writeBuffer, this.readBuffer, delta, true );
+					this.copyPass.render( this, delta, true );
 
 					renderer.getGL().stencilFunc( GLenum.EQUAL.getValue(), 1, 0xffffffff );
 				}
