@@ -466,8 +466,9 @@ public class Geometry extends GeometryBuffer
 
 			for (int i = 0; i < face.getVertexNormals().size(); i++) 
 			{
-				if ( face.getOriginalVertexNormals().get( i ) == null)
-					face.getOriginalVertexNormals().set( i, face.getVertexNormals().get( i ).clone());
+				if ( face.getOriginalVertexNormals().size() <= i 
+						|| face.getOriginalVertexNormals().get( i ) == null)
+					face.getOriginalVertexNormals().add( i, face.getVertexNormals().get( i ).clone());
 				else
 					face.getOriginalVertexNormals().get( i ).copy( face.getVertexNormals().get( i ) );
 			}
