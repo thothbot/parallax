@@ -22,8 +22,11 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderDepth;
+import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 
 public class MeshDepthMaterial extends Material implements HasWireframe
 {
@@ -66,5 +69,19 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	@Override
 	public void setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+	}
+	
+	@Override
+	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput)
+	{
+		super.refreshUniforms(canvas, camera, isGammaInput);
+		
+		if(camera.getClass() == OrthographicCamera.class) 
+		{
+			getUniforms().get("mNear").setValue( ((OrthographicCamera) camera).getNear() );
+			getUniforms().get("mFar").setValue( ((OrthographicCamera) camera).getFar() );
+		}
+		
+		getUniforms().get("opacity").setValue( getOpacity() );
 	}
 }

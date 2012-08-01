@@ -22,9 +22,11 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderParticleBasic;
 import thothbot.parallax.core.client.textures.Texture;
+import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color3f;
 
 public final class ParticleBasicMaterial extends Material 
@@ -115,5 +117,18 @@ public final class ParticleBasicMaterial extends Material
 	@Override
 	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
+	}
+	
+	@Override
+	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
+	{
+		super.refreshUniforms(canvas, camera, isGammaInput);
+		
+		getUniforms().get("psColor").setValue( getColor() );
+		getUniforms().get("opacity").setValue( getOpacity() );
+		getUniforms().get("size").setValue( getSize() );
+		getUniforms().get("scale").setValue( canvas.getHeight() / 2.0f );
+
+		getUniforms().get("map").setTexture( getMap() );
 	}
 }

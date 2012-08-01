@@ -22,10 +22,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderPhong;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
+import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.Vector3f;
 
@@ -330,5 +332,29 @@ public final class MeshPhongMaterial extends Material
 	@Override
 	public void setEmissive(Color3f emissive) {
 		this.emissive = emissive;
+	}
+	
+	@Override
+	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
+	{
+		super.refreshUniforms(canvas, camera, isGammaInput);
+		
+		getUniforms().get("shininess").setValue( getShininess() );
+
+		if ( isGammaInput ) 
+		{
+			((Color3f) getUniforms().get("ambient").getValue()).copyGammaToLinear( getAmbient() );
+			((Color3f) getUniforms().get("emissive").getValue()).copyGammaToLinear( getEmissive() );
+			((Color3f) getUniforms().get("specular").getValue()).copyGammaToLinear( getSpecular() );
+		} 
+		else
+		{
+			getUniforms().get("ambient").setValue( getAmbient() );
+			getUniforms().get("emissive").setValue( getEmissive() );
+			getUniforms().get("specular").setValue( getSpecular() );
+		}
+
+		if ( isWrapAround() ) 
+			((Vector3f) getUniforms().get("wrapRGB").getValue()).copy( getWrapRGB() );
 	}
 }

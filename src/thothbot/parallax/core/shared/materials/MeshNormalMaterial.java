@@ -22,8 +22,10 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderNormal;
+import thothbot.parallax.core.shared.cameras.Camera;
 
 public final class MeshNormalMaterial extends Material implements HasWireframe
 {
@@ -61,5 +63,13 @@ public final class MeshNormalMaterial extends Material implements HasWireframe
 	@Override
 	public void setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+	}
+	
+	@Override
+	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
+	{
+		super.refreshUniforms(canvas, camera, isGammaInput);
+		
+		getUniforms().get("opacity").setValue( getOpacity() );
 	}
 }

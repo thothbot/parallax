@@ -54,7 +54,6 @@ public class Uniform
 
 	private Uniform.TYPE type;
 	private Object value;
-	private WebGLUniformLocation location;
 	private Texture texture;
 	private Float32Array cache_array;
 	
@@ -104,14 +103,11 @@ public class Uniform
 		return "{type=" + type.name() + ", value=" + value + ", texture=" + texture + "}";
 	}
 	
-	// TODO: check if needed to clone value and Location
 	public Uniform clone()
 	{
 		Uniform result = new Uniform(this.type, this.value, this.texture);
-		result.location = this.location;
 		result.cache_array = this.cache_array;
 
 		return result;
 	}
-
 }

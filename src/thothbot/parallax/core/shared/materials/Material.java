@@ -25,14 +25,20 @@ package thothbot.parallax.core.shared.materials;
 import java.util.HashMap;
 import java.util.Map;
 
+import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.shader.Program;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
+import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.GeometryGroup;
+import thothbot.parallax.core.shared.core.Vector4f;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 
@@ -310,6 +316,60 @@ public abstract class Material
 
 	// Must be overwriten
 	public abstract Shader getShaderId();
+	
+	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
+	{
+		if ( ! (this instanceof HasMaterialMap) )
+			return;
+		
+		uniforms.get("opacity").setValue( getOpacity() );
+
+		if(this instanceof HasColor)
+		{
+			if ( isGammaInput ) 
+				((Color3f) uniforms.get("diffuse").getValue()).copyGammaToLinear( ((HasColor)this).getColor() );
+ 
+			else
+				uniforms.get("diffuse").setValue( ((HasColor)this).getColor() );
+		}
+
+		if(this instanceof HasMap)
+		{
+			uniforms.get("map").setTexture( ((HasMap) this).getMap() );
+
+			if ( ((HasMap) this).getMap() != null) 
+			{
+				((Vector4f)uniforms.get("offsetRepeat").getValue()).set( 
+						((HasMap) this).getMap().getOffset().getX(), 
+						((HasMap) this).getMap().getOffset().getY(), 
+						((HasMap) this).getMap().getRepeat().getX(), 
+						((HasMap) this).getMap().getRepeat().getY() );
+			}
+		}
+
+		if(this instanceof HasLightMap)
+			uniforms.get("lightMap").setTexture( ((HasLightMap)this).getLightMap() );	
+		
+		if(this instanceof HasEnvMap)
+		{
+			HasEnvMap envMapMaterial = (HasEnvMap)this;
+
+			uniforms.get("envMap").setTexture( envMapMaterial.getEnvMap() );
+			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null 
+					&& envMapMaterial.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0f : -1.0f );
+
+			if ( isGammaInput ) 
+				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
+ 
+			else
+				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
+			
+			uniforms.get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
+			uniforms.get("combine").setValue( envMapMaterial.getCombine().getValue() );
+			uniforms.get("useRefract").setValue( ( envMapMaterial.getEnvMap() != null 
+					&& envMapMaterial.getEnvMap().getMapping() == Texture.MAPPING_MODE.CUBE_REFRACTION ) ? 1 : 0 );
+		}
+	}
 
 	public void setMaterialShaders( Shader shader) 
 	{
