@@ -766,7 +766,7 @@ public class WebGLRenderer
 	private void setupMorphTargets ( Material material, GeometryBuffer geometrybuffer, Mesh object ) 
 	{
 		// set base
-		Map<String, Integer> attributes = material.getProgram().attributes;
+		Map<String, Integer> attributes = material.getProgram().getAttributes();
 
 		if ( object.getMorphTargetBase() != - 1 ) 
 		{
@@ -849,7 +849,7 @@ public class WebGLRenderer
 		}
 
 		// load updated influences uniform
-		if( material.getProgram().uniforms.get("morphTargetInfluences") != null ) 
+		if( material.getProgram().getUniforms().get("morphTargetInfluences") != null ) 
 		{
 			Float32Array vals = object.__webglMorphTargetInfluences;
 			float[] val2 = new float[vals.getLength()];
@@ -858,7 +858,7 @@ public class WebGLRenderer
 			    Float f = vals.get(i);
 			    val2[i] = (f != null ? f : Float.NaN); // Or whatever default you want.
 			}
-			getGL().uniform1fv( material.getProgram().uniforms.get("morphTargetInfluences"), val2 );
+			getGL().uniform1fv( material.getProgram().getUniforms().get("morphTargetInfluences"), val2 );
 		}
 	}
 
@@ -1240,12 +1240,12 @@ public class WebGLRenderer
 
 		Program program = setProgram( camera, lights, fog, material, object );
 
-		Map<String, Integer> attributes = program.attributes;
+		Map<String, Integer> attributes = program.getAttributes();
 
 		boolean updateBuffers = false;
 		int wireframeBit = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? 1 : 0;
 
-		int geometryGroupHash = ( geometryBuffer.getId() * 0xffffff ) + ( program.id * 2 ) + wireframeBit;
+		int geometryGroupHash = ( geometryBuffer.getId() * 0xffffff ) + ( program.getId() * 2 ) + wireframeBit;
 
 //		GWT.log("--- renderBuffer() geometryGroupHash=" + geometryGroupHash 
 //				+ ", _currentGeometryGroupHash=" +  this._currentGeometryGroupHash
@@ -1384,8 +1384,8 @@ public class WebGLRenderer
 		{
 			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), object.__webglVertexBuffer );
 			getGL().bufferData( GLenum.ARRAY_BUFFER.getValue(), object.positionArray, GLenum.DYNAMIC_DRAW.getValue() );
-			getGL().enableVertexAttribArray( program.attributes.get("position") );
-			getGL().vertexAttribPointer( program.attributes.get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
+			getGL().enableVertexAttribArray( program.getAttributes().get("position") );
+			getGL().vertexAttribPointer( program.getAttributes().get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 		}
 
 		if ( object.hasNormal ) 
@@ -1429,8 +1429,8 @@ public class WebGLRenderer
 			}
 
 			getGL().bufferData( GLenum.ARRAY_BUFFER.getValue(), object.normalArray, GLenum.DYNAMIC_DRAW.getValue() );
-			getGL().enableVertexAttribArray( program.attributes.get("normal") );
-			getGL().vertexAttribPointer( program.attributes.get("normal"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
+			getGL().enableVertexAttribArray( program.getAttributes().get("normal") );
+			getGL().vertexAttribPointer( program.getAttributes().get("normal"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 		}
 
 		getGL().drawArrays( GLenum.TRIANGLES.getValue(), 0, object.count );
@@ -1810,7 +1810,7 @@ public class WebGLRenderer
 						material.getFragmentShaderSource(), material.getVertexShaderSource(), 
 						material.getUniforms(), material.getAttributes(), parameters ));
 
-		Map<String, Integer> attributes = material.getProgram().attributes;
+		Map<String, Integer> attributes = material.getProgram().getAttributes();
 
 		if ( attributes.get("position") >= 0 ) 
 			getGL().enableVertexAttribArray( attributes.get("position") );
@@ -1899,7 +1899,7 @@ public class WebGLRenderer
 		boolean refreshMaterial = false;
 
 		Program program = material.getProgram();
-		Map<String, WebGLUniformLocation> p_uniforms = program.uniforms;
+		Map<String, WebGLUniformLocation> p_uniforms = program.getUniforms();
 		Map<String, Uniform> m_uniforms = material.getUniforms();
 
 		if ( program != cache_currentProgram ) 
@@ -2226,7 +2226,7 @@ Log.error("?????????????");
 	{
 		for ( String u : materialUniforms.keySet() ) 
 		{
-			WebGLUniformLocation location = program.uniforms.get( u );
+			WebGLUniformLocation location = program.getUniforms().get( u );
 			if ( location == null ) continue;
 
 			Uniform uniform = (Uniform) materialUniforms.get(u);

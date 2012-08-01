@@ -99,7 +99,7 @@ public class Program
 		}
 	}
 	
-	public static enum SHADER_DEFINE {
+	private static enum SHADER_DEFINE {
 		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT, PHYSICALLY_BASED_SHADING,
 
 		MAX_DIR_LIGHTS, // param
@@ -131,16 +131,16 @@ public class Program
 		}
 	};
 
-	public int id;
-	public Map<String, WebGLUniformLocation> uniforms = new HashMap<String, WebGLUniformLocation>();
-	public Map<String, Integer> attributes = new HashMap<String, Integer>();
+	private int id;
+	private Map<String, WebGLUniformLocation> uniforms = new HashMap<String, WebGLUniformLocation>();
+	private Map<String, Integer> attributes = new HashMap<String, Integer>();
 
 	private WebGLProgram program;
 
 	private WebGLRenderer.PRECISION _precision;
 	private int _maxVertexTextures;
 
-	protected WebGLRenderingContext _gl;
+	private WebGLRenderingContext _gl;
 
 	/**
 	 * Creates a new instance of the {@link Program}.
@@ -204,6 +204,14 @@ public class Program
 	public void setId(int id)
 	{
 		this.id = id;
+	}
+
+	public Map<String, WebGLUniformLocation> getUniforms() {
+		return this.uniforms;
+	}
+
+	public Map<String, Integer> getAttributes() {
+		return this.attributes;
 	}
 
 	/**
