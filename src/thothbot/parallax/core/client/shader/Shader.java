@@ -19,7 +19,6 @@
 
 package thothbot.parallax.core.client.shader;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +48,7 @@ public abstract class Shader
 	
 	private DefaultResources resource;
 	private Map<String, Uniform> uniforms;
+
 	private String vertexShaderSource;
 	private String fragmentShaderSource;
 
