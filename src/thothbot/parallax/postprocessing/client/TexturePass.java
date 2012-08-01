@@ -24,14 +24,11 @@ package thothbot.parallax.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
-
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class TexturePass extends Pass
@@ -51,8 +48,8 @@ public class TexturePass extends Pass
 
 		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
 
-		this.uniforms.get("opacity").value = opacity;
-		this.uniforms.get("tDiffuse").texture = texture;
+		this.uniforms.get("opacity").setValue( opacity );
+		this.uniforms.get("tDiffuse").setTexture( texture );
 
 		this.material = new ShaderMaterial();
 		this.material.setUniforms(this.uniforms);

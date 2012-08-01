@@ -104,7 +104,7 @@ public final class FogSimple extends Fog
 	{
 		super.refreshUniforms(uniforms);
 		
-		uniforms.get("fogNear").value = getNear();
-		uniforms.get("fogFar").value = getFar();
+		uniforms.get("fogNear").setValue( getNear() );
+		uniforms.get("fogFar").setValue( getFar() );
 	}
 }

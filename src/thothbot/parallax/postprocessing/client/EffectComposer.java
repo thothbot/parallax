@@ -209,7 +209,7 @@ public class EffectComposer
 		}
 	}
 
-	private void reset( RenderTargetTexture renderTarget ) 
+	public void reset( RenderTargetTexture renderTarget ) 
 	{
 		this.renderTarget1 = renderTarget;
 

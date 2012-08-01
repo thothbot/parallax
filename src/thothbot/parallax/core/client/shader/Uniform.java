@@ -52,11 +52,11 @@ public class Uniform
 		TV // array of Texture (2d)
 	};
 
-	public Uniform.TYPE type;
-	public Object value;
-	public WebGLUniformLocation location;
-	public Texture texture;
-	public Float32Array _array;
+	private Uniform.TYPE type;
+	private Object value;
+	private WebGLUniformLocation location;
+	private Texture texture;
+	private Float32Array cache_array;
 	
 	public Uniform(Uniform.TYPE type, Object value) 
 	{
@@ -71,6 +71,34 @@ public class Uniform
 		this.texture = texture;
 	}
 	
+	public Uniform.TYPE getType() {
+		return this.type;
+	}
+	
+	public Object getValue() {
+		return this.value;
+	}
+	
+	public void setValue(Object value) {
+		this.value = value;
+	}
+	
+	public Texture getTexture() {
+		return this.texture;
+	}
+	
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+	
+	public Float32Array getCacheArray() {
+		return this.cache_array;
+	}
+	
+	public void setCacheArray(Float32Array array) {
+		this.cache_array = array;
+	}
+	
 	public String toString()
 	{
 		return "{type=" + type.name() + ", value=" + value + ", texture=" + texture + "}";
@@ -81,7 +109,7 @@ public class Uniform
 	{
 		Uniform result = new Uniform(this.type, this.value, this.texture);
 		result.location = this.location;
-		result._array = this._array;
+		result.cache_array = this.cache_array;
 
 		return result;
 	}

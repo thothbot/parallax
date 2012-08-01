@@ -1970,15 +1970,15 @@ public class WebGLRenderer
 				if(camera.getClass() == OrthographicCamera.class) 
 				{
 					OrthographicCamera orthographicCamera = (OrthographicCamera) camera;
-					m_uniforms.get("mNear").value = orthographicCamera.getNear();
-					m_uniforms.get("mFar").value = orthographicCamera.getFar();
+					m_uniforms.get("mNear").setValue( orthographicCamera.getNear() );
+					m_uniforms.get("mFar").setValue( orthographicCamera.getFar() );
 				}
 				
-				m_uniforms.get("opacity").value = material.getOpacity();
+				m_uniforms.get("opacity").setValue( material.getOpacity() );
 			} 
 			else if ( material.getClass() == MeshNormalMaterial.class ) 
 			{
-				m_uniforms.get("opacity").value = material.getOpacity();
+				m_uniforms.get("opacity").setValue( material.getOpacity() );
 			}
 
 			// TODO: fix this
@@ -2033,31 +2033,26 @@ public class WebGLRenderer
 	 */
 	private void refreshUniformsCommon ( Map<String, Uniform> uniforms, Material material ) 
 	{
-		uniforms.get("opacity").value = material.getOpacity();
+		uniforms.get("opacity").setValue( material.getOpacity() );
 
 		if(material instanceof HasColor)
 		{
 			HasColor colorMaterial = (HasColor)material;
 			if ( this.isGammaInput ) 
-			{
-				Color3f color = (Color3f) uniforms.get("diffuse").value;
-				color.copyGammaToLinear( colorMaterial.getColor() );
-			} 
+				((Color3f) uniforms.get("diffuse").getValue()).copyGammaToLinear( colorMaterial.getColor() );
+ 
 			else
-			{
-				uniforms.get("diffuse").value = colorMaterial.getColor();
-			}
+				uniforms.get("diffuse").setValue( colorMaterial.getColor() );
 		}
 
 		if(material instanceof HasMap)
 		{
 			HasMap mapMaterial = (HasMap)material;
-			uniforms.get("map").texture = mapMaterial.getMap();
+			uniforms.get("map").setTexture( mapMaterial.getMap() );
 
 			if ( mapMaterial.getMap() != null) 
 			{
-				Vector4f vector4 = (Vector4f)uniforms.get("offsetRepeat").value;
-				vector4.set( 
+				((Vector4f)uniforms.get("offsetRepeat").getValue()).set( 
 						mapMaterial.getMap().getOffset().getX(), 
 						mapMaterial.getMap().getOffset().getY(), 
 						mapMaterial.getMap().getRepeat().getX(), 
@@ -2066,120 +2061,102 @@ public class WebGLRenderer
 		}
 
 		if(material instanceof HasLightMap)
-		{
-			uniforms.get("lightMap").texture = ((HasLightMap)material).getLightMap();	
-		}
+			uniforms.get("lightMap").setTexture( ((HasLightMap)material).getLightMap() );	
 		
 		if(material instanceof HasEnvMap)
 		{
 			HasEnvMap envMapMaterial = (HasEnvMap)material;
 
-			uniforms.get("envMap").texture = envMapMaterial.getEnvMap();
-			uniforms.get("flipEnvMap").value = ( envMapMaterial.getEnvMap() != null 
-					&& envMapMaterial.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0f : -1.0f;
+			uniforms.get("envMap").setTexture( envMapMaterial.getEnvMap() );
+			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null 
+					&& envMapMaterial.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0f : -1.0f );
 
 			if ( this.isGammaInput ) 
-			{
-				//				uniforms.reflectivity.value = material.reflectivity * material.reflectivity;
-				uniforms.get("reflectivity").value = envMapMaterial.getReflectivity();
-			} 
+				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
+ 
 			else
-			{
-				uniforms.get("reflectivity").value = envMapMaterial.getReflectivity();
-			}
+				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
 			
-			uniforms.get("refractionRatio").value = envMapMaterial.getRefractionRatio();
-			uniforms.get("combine").value = envMapMaterial.getCombine().getValue();
-			uniforms.get("useRefract").value = ( envMapMaterial.getEnvMap() != null 
-					&& envMapMaterial.getEnvMap().getMapping() == Texture.MAPPING_MODE.CUBE_REFRACTION ) ? 1 : 0;
+			uniforms.get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
+			uniforms.get("combine").setValue( envMapMaterial.getCombine().getValue() );
+			uniforms.get("useRefract").setValue( ( envMapMaterial.getEnvMap() != null 
+					&& envMapMaterial.getEnvMap().getMapping() == Texture.MAPPING_MODE.CUBE_REFRACTION ) ? 1 : 0 );
 		}
 	}
 
 	private void refreshUniformsLine ( Map<String, Uniform> uniforms, LineBasicMaterial material ) 
 	{
-		uniforms.get("diffuse").value = material.getColor();
-		uniforms.get("opacity").value = material.getOpacity();
+		uniforms.get("diffuse").setValue( material.getColor() );
+		uniforms.get("opacity").setValue( material.getOpacity() );
 	}
 
 	private void refreshUniformsParticle ( Map<String, Uniform> uniforms, ParticleBasicMaterial material ) 
 	{
-		uniforms.get("psColor").value = material.getColor();
-		uniforms.get("opacity").value = material.getOpacity();
-		uniforms.get("size").value    = material.getSize();
-		uniforms.get("scale").value   = getCanvas().getHeight() / 2.0f;
+		uniforms.get("psColor").setValue( material.getColor() );
+		uniforms.get("opacity").setValue( material.getOpacity() );
+		uniforms.get("size").setValue( material.getSize() );
+		uniforms.get("scale").setValue( getCanvas().getHeight() / 2.0f );
 
-		uniforms.get("map").texture   = material.getMap();
+		uniforms.get("map").setTexture( material.getMap() );
 	}
 
 	private void refreshUniformsPhong ( Map<String, Uniform> uniforms, MeshPhongMaterial material ) 
 	{
-		uniforms.get("shininess").value = material.getShininess();
+		uniforms.get("shininess").setValue( material.getShininess() );
 
 		if ( this.isGammaInput ) 
 		{
-			Color3f ambient = (Color3f) uniforms.get("ambient").value;
-			ambient.copyGammaToLinear(material.getAmbient());
-			
-			Color3f emissive = (Color3f) uniforms.get("emissive").value;
-			emissive.copyGammaToLinear(material.getEmissive());
-
-			Color3f specular = (Color3f) uniforms.get("specular").value;
-			specular.copyGammaToLinear( material.getSpecular() );
+			((Color3f) uniforms.get("ambient").getValue()).copyGammaToLinear(material.getAmbient());
+			((Color3f) uniforms.get("emissive").getValue()).copyGammaToLinear(material.getEmissive());
+			((Color3f) uniforms.get("specular").getValue()).copyGammaToLinear( material.getSpecular() );
 		} 
 		else
 		{
-			uniforms.get("ambient").value = material.getAmbient();
-			uniforms.get("emissive").value = material.getEmissive();
-			uniforms.get("specular").value = material.getSpecular();
+			uniforms.get("ambient").setValue( material.getAmbient() );
+			uniforms.get("emissive").setValue( material.getEmissive() );
+			uniforms.get("specular").setValue( material.getSpecular() );
 		}
 
 		if ( material.isWrapAround() ) 
-		{
-			Vector3f wrapRGB = (Vector3f) uniforms.get("wrapRGB").value;
-			wrapRGB.copy(material.getWrapRGB());
-		}
+			((Vector3f) uniforms.get("wrapRGB").getValue()).copy(material.getWrapRGB());
 	}
 
 	private void refreshUniformsLambert ( Map<String, Uniform> uniforms, MeshLambertMaterial material ) 
 	{
 		if ( this.isGammaInput ) 
 		{
-			Color3f ambient = (Color3f) uniforms.get("ambient").value;
-			ambient.copyGammaToLinear(material.getAmbient());
-			
-			Color3f emissive = (Color3f) uniforms.get("emissive").value;
-			emissive.copyGammaToLinear(material.getEmissive());
+			((Color3f) uniforms.get("ambient").getValue()).copyGammaToLinear(material.getAmbient());
+			((Color3f) uniforms.get("emissive").getValue()).copyGammaToLinear(material.getEmissive());
 		} 
 		else 
 		{
-			uniforms.get("ambient").value = material.getAmbient();
-			uniforms.get("emissive").value = material.getEmissive();
+			uniforms.get("ambient").setValue( material.getAmbient() );
+			uniforms.get("emissive").setValue( material.getEmissive() );
 		}
 
 		if ( material.isWrapAround() ) 
 		{
-			Vector3f wrapRGB = (Vector3f) uniforms.get("wrapRGB").value;
-			wrapRGB.copy(material.getWrapRGB());
+			((Vector3f) uniforms.get("wrapRGB").getValue()).copy(material.getWrapRGB());
 		}
 	}
 
 	private void refreshUniformsLights ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
 	{
-		uniforms.get("ambientLightColor").value = lights.ambient;
+		uniforms.get("ambientLightColor").setValue( lights.ambient );
 
-		uniforms.get("directionalLightColor").value     = lights.directional.colors;
-		uniforms.get("directionalLightDirection").value = lights.directional.positions;
+		uniforms.get("directionalLightColor").setValue( lights.directional.colors );
+		uniforms.get("directionalLightDirection").setValue( lights.directional.positions );
 
-		uniforms.get("pointLightColor").value    = lights.point.colors;
-		uniforms.get("pointLightPosition").value = lights.point.positions;
-		uniforms.get("pointLightDistance").value = lights.point.distances;
+		uniforms.get("pointLightColor").setValue( lights.point.colors );
+		uniforms.get("pointLightPosition").setValue( lights.point.positions );
+		uniforms.get("pointLightDistance").setValue( lights.point.distances );
 
-		uniforms.get("spotLightColor").value     = lights.spot.colors;
-		uniforms.get("spotLightPosition").value  = lights.spot.positions;
-		uniforms.get("spotLightDistance").value  = lights.spot.distances;
-		uniforms.get("spotLightDirection").value = lights.spot.directions;
-		uniforms.get("spotLightAngle").value     = lights.spot.angles;
-		uniforms.get("spotLightExponent").value  = lights.spot.exponents;
+		uniforms.get("spotLightColor").setValue( lights.spot.colors );
+		uniforms.get("spotLightPosition").setValue( lights.spot.positions );
+		uniforms.get("spotLightDistance").setValue( lights.spot.distances );
+		uniforms.get("spotLightDirection").setValue( lights.spot.directions );
+		uniforms.get("spotLightAngle").setValue( lights.spot.angles );
+		uniforms.get("spotLightExponent").setValue( lights.spot.exponents );
 	}
 
 	private void refreshUniformsShadow ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
@@ -2231,8 +2208,8 @@ Log.error("?????????????");
 
 			Uniform uniform = (Uniform) materialUniforms.get(u);
 
-			Uniform.TYPE type = uniform.type;
-			Object value = uniform.value;
+			Uniform.TYPE type = uniform.getType();
+			Object value = uniform.getValue();
 			
 			Log.debug("loadUniformsGeneric() u=" + u + ", " + uniform);
 			
@@ -2278,80 +2255,80 @@ Log.error("?????????????");
 
 				case V2V: // array of THREE.Vector2
 					List<Vector2f> listVector2f = (List<Vector2f>) value;
-					if ( uniform._array == null )
-						uniform._array = Float32Array.create( 2 * listVector2f.size() );
+					if ( uniform.getCacheArray() == null )
+						uniform.setCacheArray( Float32Array.create( 2 * listVector2f.size() ) );
 
 					for ( int i = 0, il = listVector2f.size(); i < il; i ++ ) 
 					{
 						int offset = i * 2;
 
-						uniform._array.set(offset, listVector2f.get(i).getX());
-						uniform._array.set(offset + 1, listVector2f.get(i).getY());
+						uniform.getCacheArray().set(offset, listVector2f.get(i).getX());
+						uniform.getCacheArray().set(offset + 1, listVector2f.get(i).getY());
 					}
 
-					getGL().uniform2fv( location, uniform._array );
+					getGL().uniform2fv( location, uniform.getCacheArray() );
 					break;
 
 				case V3V: // array of THREE.Vector3
 					List<Vector3f> listVector3f = (List<Vector3f>) value;
-					if ( uniform._array == null )
-						uniform._array = Float32Array.create( 3 * listVector3f.size() );
+					if ( uniform.getCacheArray() == null )
+						uniform.setCacheArray( Float32Array.create( 3 * listVector3f.size() ) );
 
 					for ( int i = 0, il = listVector3f.size(); i < il; i ++ ) 
 					{
 						int offset = i * 3;
 
-						uniform._array.set(offset, listVector3f.get( i ).getX());
-						uniform._array.set(offset + 1, listVector3f.get( i ).getY());
-						uniform._array.set(offset + 2 , listVector3f.get( i ).getZ());
+						uniform.getCacheArray().set(offset, listVector3f.get( i ).getX());
+						uniform.getCacheArray().set(offset + 1, listVector3f.get( i ).getY());
+						uniform.getCacheArray().set(offset + 2 , listVector3f.get( i ).getZ());
 					}
 
-					getGL().uniform3fv( location, uniform._array );
+					getGL().uniform3fv( location, uniform.getCacheArray() );
 					break;
 
 				case V4V: // array of THREE.Vector4
 					List<Vector4f> listVector4f = (List<Vector4f>) value;
-					if ( uniform._array == null)
-						uniform._array = Float32Array.create( 4 * listVector4f.size() );
+					if ( uniform.getCacheArray() == null)
+						uniform.setCacheArray( Float32Array.create( 4 * listVector4f.size() ) );
 
 
 					for ( int i = 0, il = listVector4f.size(); i < il; i ++ ) 
 					{
 						int offset = i * 4;
 
-						uniform._array.set(offset, listVector4f.get( i ).getX());
-						uniform._array.set(offset + 1, listVector4f.get( i ).getY());
-						uniform._array.set(offset + 2, listVector4f.get( i ).getZ());
-						uniform._array.set(offset + 3, listVector4f.get( i ).getW());
+						uniform.getCacheArray().set(offset, listVector4f.get( i ).getX());
+						uniform.getCacheArray().set(offset + 1, listVector4f.get( i ).getY());
+						uniform.getCacheArray().set(offset + 2, listVector4f.get( i ).getZ());
+						uniform.getCacheArray().set(offset + 3, listVector4f.get( i ).getW());
 					}
 
-					getGL().uniform4fv( location, uniform._array );
+					getGL().uniform4fv( location, uniform.getCacheArray() );
 					break;
 
 				case M4: // single THREE.Matrix4
 					Matrix4f matrix4f = (Matrix4f) value;
-					if ( uniform._array == null )
-						uniform._array = Float32Array.create( 16 );
+					if ( uniform.getCacheArray() == null )
+						uniform.setCacheArray( Float32Array.create( 16 ) );
 
-					matrix4f.flattenToArray( uniform._array );
-					getGL().uniformMatrix4fv( location, false, uniform._array );
+					matrix4f.flattenToArray( uniform.getCacheArray() );
+					getGL().uniformMatrix4fv( location, false, uniform.getCacheArray() );
 					break;
 
 				case M4V: // array of THREE.Matrix4
 					List<Matrix4f> listMatrix4f = (List<Matrix4f>) value;
-					if ( uniform._array == null )
-						uniform._array = Float32Array.create( 16 * listMatrix4f.size() );
+					if ( uniform.getCacheArray() == null )
+						uniform.setCacheArray( Float32Array.create( 16 * listMatrix4f.size() ) );
 
 					for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
-						listMatrix4f.get( i ).flattenToArray( uniform._array, i * 16 );
+						listMatrix4f.get( i ).flattenToArray( uniform.getCacheArray(), i * 16 );
 
-					getGL().uniformMatrix4fv( location, false, uniform._array );
+					getGL().uniformMatrix4fv( location, false, uniform.getCacheArray() );
 					break;
 
 				case T: // single THREE.Texture (2d or cube)
 					getGL().uniform1i( location, (Integer)value );
 
-					Texture texture = uniform.texture;
+					Texture texture = uniform.getTexture();
 
 					if ( texture == null ) continue;
 

@@ -44,10 +44,9 @@ public class DotScreenPass extends Pass
 
 		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
 
-		Vector3f centerv = (Vector3f) this.uniforms.get("center").value; 
-		centerv.copy( center );
-		this.uniforms.get("angle").value = angle;
-		this.uniforms.get("scale").value = scale;
+		((Vector3f) this.uniforms.get("center").getValue()).copy( center );
+		this.uniforms.get("angle").setValue( angle );
+		this.uniforms.get("scale").setValue( scale );
 
 		this.material = new ShaderMaterial();
 		this.material.setUniforms(this.uniforms);
@@ -61,8 +60,8 @@ public class DotScreenPass extends Pass
 	@Override
 	public void render(EffectComposer effectCocmposer, float delta, boolean maskActive)
 	{
-		this.uniforms.get("tDiffuse").texture = effectCocmposer.getReadBuffer();
-		((Vector2f) this.uniforms.get("tSize").value).set( 
+		this.uniforms.get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
+		((Vector2f) this.uniforms.get("tSize").getValue()).set( 
 				effectCocmposer.getReadBuffer().getWidth(), effectCocmposer.getReadBuffer().getHeight() );
 
 		effectCocmposer.getQuad().setMaterial(this.material);

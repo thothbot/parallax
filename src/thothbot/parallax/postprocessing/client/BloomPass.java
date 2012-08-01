@@ -83,7 +83,7 @@ public class BloomPass extends Pass
 		Shader screenShader = new ShaderScreen();
 
 		this.screenUniforms = UniformsUtils.clone( screenShader.getUniforms() );
-		this.screenUniforms.get("opacity").value = strength;
+		this.screenUniforms.get("opacity").setValue( strength );
 		
 		this.materialScreen = new ShaderMaterial();
 		this.materialScreen.setUniforms(this.screenUniforms);
@@ -96,8 +96,8 @@ public class BloomPass extends Pass
 		Shader convolutionShader = new ShaderConvolution();
 
 		this.convolutionUniforms = UniformsUtils.clone( convolutionShader.getUniforms() );
-		this.convolutionUniforms.get("uImageIncrement").value = BloomPass.blurX;
-		this.convolutionUniforms.get("cKernel").value = Shader.buildKernel( sigma );
+		this.convolutionUniforms.get("uImageIncrement").setValue( BloomPass.blurX );
+		this.convolutionUniforms.get("cKernel").setValue( Shader.buildKernel( sigma ) );
 
 		this.materialConvolution = new ShaderMaterial();
 		this.materialConvolution.setUniforms(this.convolutionUniforms);
@@ -116,16 +116,16 @@ public class BloomPass extends Pass
 		// Render quad with blured scene into texture (convolution pass 1)
 		effectComposer.getQuad().setMaterial(this.materialConvolution);
 
-		this.convolutionUniforms.get("tDiffuse" ).texture = effectComposer.getReadBuffer();
-		this.convolutionUniforms.get("uImageIncrement").value = BloomPass.blurX;
+		this.convolutionUniforms.get("tDiffuse" ).setTexture( effectComposer.getReadBuffer() );
+		this.convolutionUniforms.get("uImageIncrement").setValue( BloomPass.blurX );
 
 		effectComposer.getRenderer().render( 
 				effectComposer.getScene(), effectComposer.getCamera(), this.renderTargetX, true );
 
 
 		// Render quad with blured scene into texture (convolution pass 2)
-		this.convolutionUniforms.get("tDiffuse").texture = this.renderTargetX;
-		this.convolutionUniforms.get("uImageIncrement").value = BloomPass.blurY;
+		this.convolutionUniforms.get("tDiffuse").setTexture( this.renderTargetX );
+		this.convolutionUniforms.get("uImageIncrement").setValue( BloomPass.blurY );
 
 		effectComposer.getRenderer().render( 
 				effectComposer.getScene(), effectComposer.getCamera(), this.renderTargetY, true );
@@ -133,7 +133,7 @@ public class BloomPass extends Pass
 		// Render original scene with superimposed blur to texture
 		effectComposer.getQuad().setMaterial(this.materialScreen);
 
-		this.screenUniforms.get("tDiffuse").texture = this.renderTargetY;
+		this.screenUniforms.get("tDiffuse").setTexture( this.renderTargetY );
 
 		if ( maskActive ) 
 			effectComposer.getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );

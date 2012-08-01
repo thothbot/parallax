@@ -76,6 +76,6 @@ public abstract class Fog
 	 */
 	public void refreshUniforms(Map<String, Uniform> uniforms) 
 	{
-		uniforms.get("fogColor").value = getColor();
+		uniforms.get("fogColor").setValue( getColor() );
 	}
 }

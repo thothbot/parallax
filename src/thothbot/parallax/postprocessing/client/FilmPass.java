@@ -47,10 +47,10 @@ public class FilmPass extends Pass
 		this.material.setVertexShaderSource(shader.getVertexSource());
 		this.material.setFragmentShaderSource(shader.getFragmentSource());
 
-		this.uniforms.get("grayscale").value = grayscale;
-		this.uniforms.get("nIntensity").value = noiseIntensity;
-		this.uniforms.get("sIntensity").value = scanlinesIntensity;
-		this.uniforms.get("sCount").value = scanlinesCount;
+		this.uniforms.get("grayscale").setValue( grayscale );
+		this.uniforms.get("nIntensity").setValue( noiseIntensity );
+		this.uniforms.get("sIntensity").setValue( scanlinesIntensity );
+		this.uniforms.get("sCount").setValue( scanlinesCount );
 
 		this.setEnabled(true);
 		this.setNeedsSwap(true);
@@ -59,8 +59,8 @@ public class FilmPass extends Pass
 	@Override
 	public void render(EffectComposer effectCocmposer, float delta, boolean maskActive)
 	{
-		this.uniforms.get("tDiffuse").texture = effectCocmposer.getReadBuffer();
-		this.uniforms.get( "time" ).value = (Float)this.uniforms.get( "time" ).value + delta;
+		this.uniforms.get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
+		this.uniforms.get( "time" ).setValue( (Float)this.uniforms.get( "time" ).getValue() + delta );
 
 		effectCocmposer.getQuad().setMaterial(this.material);
 

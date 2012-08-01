@@ -76,7 +76,7 @@ public class SavePass extends Pass
 	public void render(EffectComposer effectComposer, float delta, boolean maskActive)
 	{
 		if ( this.uniforms.containsKey(this.textureID))
-			this.uniforms.get("this.textureID").texture = effectComposer.getReadBuffer();
+			this.uniforms.get("this.textureID").setTexture( effectComposer.getReadBuffer() );
 
 		effectComposer.getQuad().setMaterial(this.material);
 

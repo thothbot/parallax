@@ -83,6 +83,6 @@ public final class FogExp2 extends Fog
 	public void refreshUniforms(Map<String, Uniform> uniforms) 
 	{
 		super.refreshUniforms(uniforms);
-		uniforms.get("fogDensity").value = getDensity();
+		uniforms.get("fogDensity").setValue( getDensity() );
 	}
 }
