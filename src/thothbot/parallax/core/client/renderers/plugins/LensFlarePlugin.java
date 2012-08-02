@@ -350,6 +350,16 @@ public final class LensFlarePlugin extends Plugin
 		gl.attachShader( program, vertexShader );
 
 		gl.linkProgram( program );
+		
+		if (!gl.getProgramParameterb(program, GLenum.LINK_STATUS.getValue()))
+			Log.error("Could not initialise shader\n"
+					+ "GL error: " + gl.getProgramInfoLog(program)
+					+ "\n-----\nVERTEX:\n" + shader.getVertexSource()
+					+ "\n-----\nFRAGMENT:\n" + shader.getFragmentSource()
+			);
+
+		else
+			Log.info("initProgram(): shaders has been initialised");
 
 		return program;
 	}

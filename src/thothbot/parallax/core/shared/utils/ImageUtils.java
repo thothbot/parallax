@@ -200,6 +200,7 @@ public final class ImageUtils
 			@Override
 			public void onLoad(LoadEvent event) 
 			{			
+				Log.info("Loaded image: " + image.getUrl());
 				loader.onLoad();
 			}
 		});

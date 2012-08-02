@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.textures.Texture;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.materials.Material;
@@ -124,6 +125,8 @@ public final class LensFlare extends Object3D
 	
 	public void add(Texture texture, Integer size, Float distance, Material.BLENDING blending, Color3f color, Float opacity)
 	{
+		Log.debug("LensFlare: add new LensSprite");
+
 		if( size == null ) size = -1;
 		if( distance == null ) distance = 0f;
 		if( opacity == null ) opacity = 1f;

@@ -30,9 +30,9 @@ void main() {
 									  texture2D( occlusionMap, vec2( 0.5, 0.5 ) );
 
 		vVisibility = (       visibility.r / 9.0 ) *
-								  "( 1.0 - visibility.g / 9.0 ) *
-								  "(       visibility.b / 9.0 ) *
-								  "( 1.0 - visibility.a / 9.0 );
+					  ( 1.0 - visibility.g / 9.0 ) *
+					  (       visibility.b / 9.0 ) *
+					  ( 1.0 - visibility.a / 9.0 );
 
 		pos.x = cos( rotation ) * position.x - sin( rotation ) * position.y;
 		pos.y = sin( rotation ) * position.x + cos( rotation ) * position.y;

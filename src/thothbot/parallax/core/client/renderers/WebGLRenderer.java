@@ -2560,7 +2560,6 @@ Log.error("?????????????");
 			} 
 			else 
 			{
-
 				getGL().enable( GLenum.BLEND.getValue() );
 				getGL().blendEquationSeparate( GLenum.FUNC_ADD.getValue(), GLenum.FUNC_ADD.getValue() );
 				getGL().blendFuncSeparate( GLenum.SRC_ALPHA.getValue(), GLenum.ONE_MINUS_SRC_ALPHA.getValue(), GLenum.ONE.getValue(), GLenum.ONE_MINUS_SRC_ALPHA.getValue() );
