@@ -110,7 +110,22 @@ public final class FlyControls extends Control implements
 		RootPanel.get().addDomHandler(this, KeyUpEvent.getType());		
 	}
 	
+	public void setMovementSpeed(float speed) {
+		this.movementSpeed = speed;
+	}
 	
+	public void setRollSpeed(float speed) {
+		this.rollSpeed = speed;
+	}
+	
+	public void setDragToLook(boolean isDragToLook) {
+		this.isDragToLook = isDragToLook;
+	}
+	
+	public void setAutoForward(boolean isAutoForward) {
+		this.isAutoForward = isAutoForward;
+	}
+
 	public void update( float delta ) 
 	{
 		float moveMult = delta * this.movementSpeed;
