@@ -38,6 +38,8 @@ import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.renderers.plugins.LensFlarePlugin;
+import thothbot.parallax.core.client.renderers.plugins.Plugin;
 import thothbot.parallax.core.client.shader.Program;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
@@ -164,10 +166,10 @@ public class WebGLRenderer
 	// custom render plugins
 
 	// An array with render plugins to be applied before rendering.
-	private List<Object> renderPluginsPre;
+	private List<Plugin> renderPluginsPre;
 	
 	//An array with render plugins to be applied after rendering.
-	private List<Object> renderPluginsPost;
+	private List<Plugin> renderPluginsPost;
 
 	// internal state cache
 
@@ -247,8 +249,30 @@ public class WebGLRenderer
 
 		setViewport(0, 0, getCanvas().getWidth(), getCanvas().getHeight());
 		setDefaultGLState();
+		
+		// default plugins (order is important)
+		this.renderPluginsPre = new ArrayList<Plugin>();
+		this.renderPluginsPost = new ArrayList<Plugin>();
+		
+//		this.shadowMapPlugin = new THREE.ShadowMapPlugin();
+//		this.addPrePlugin( this.shadowMapPlugin );
+	
+//		this.addPostPlugin( new THREE.SpritePlugin() );
+		addPostPlugin( new LensFlarePlugin() );
 	}
 	
+	public void addPostPlugin( Plugin plugin ) 
+	{
+		plugin.init( this );
+		this.renderPluginsPost.add( plugin );
+	}
+
+	public void addPrePlugin( Plugin plugin ) 
+	{
+		plugin.init( this );
+		this.renderPluginsPre.add( plugin );
+	}
+
 	/**
 	 * Gets {@link #setAutoClear(boolean)} flag.
 	 */
@@ -924,7 +948,7 @@ public class WebGLRenderer
 			initWebGLObjects( scene );
 
 		// custom render plugins (pre pass)
-		// renderPlugins( this.renderPluginsPre, scene, camera );
+		renderPlugins( this.renderPluginsPre, scene, camera );
 
 		this.getInfo().getRender().calls = 0;
 		this.getInfo().getRender().vertices = 0;
@@ -1028,7 +1052,7 @@ public class WebGLRenderer
 		}
 
 		// custom render plugins (post pass)
-		// renderPlugins( this.renderPluginsPost, scene, camera );
+		renderPlugins( this.renderPluginsPost, scene, camera );
 
 
 		// Generate mipmap if we're using any kind of mipmap filtering
@@ -1047,48 +1071,47 @@ public class WebGLRenderer
 //		 getGL().finish();
 	}
 
-////	function renderPlugins( plugins, scene, camera ) {
-////
-////		if ( ! plugins.length ) return;
-////
-////		for ( var i = 0, il = plugins.length; i < il; i ++ ) {
-////
-////			// reset state for plugin (to start from clean slate)
-////
-////			_currentProgram = null;
-////			_currentCamera = null;
-////
-////			_oldBlending = -1;
-////			_oldDepthTest = -1;
-////			_oldDepthWrite = -1;
-////			_oldDoubleSided = -1;
-////			_oldFlipSided = -1;
-////			_currentGeometryGroupHash = -1;
-////			_currentMaterialId = -1;
-////
-////			_lightsNeedUpdate = true;
-////
-////			plugins[ i ].render( scene, camera, _currentWidth, _currentHeight );
-////
-////			// reset state after plugin (anything could have changed)
-////
-////			_currentProgram = null;
-////			_currentCamera = null;
-////
-////			_oldBlending = -1;
-////			_oldDepthTest = -1;
-////			_oldDepthWrite = -1;
-////			_oldDoubleSided = -1;
-////			_oldFlipSided = -1;
-////			_currentGeometryGroupHash = -1;
-////			_currentMaterialId = -1;
-////
-////			_lightsNeedUpdate = true;
-////
-////		}
-////
-////	};
+	private void renderPlugins( List<Plugin> plugins, Scene scene, Camera camera ) 
+	{
+		if ( plugins.size() == 0 ) return;
 
+		for ( int i = 0, il = plugins.size(); i < il; i ++ ) 
+		{
+			// reset state for plugin (to start from clean slate)
+			this.cache_currentProgram = null;
+			this.cache_currentCamera = null;
+
+			this.cache_oldBlending = null;
+			this.cache_oldDepthTest = null;
+			this.cache_oldDepthWrite = null;
+			this.cache_oldDoubleSided = null;
+			this.cache_oldFlipSided = null;
+
+			this.cache_currentGeometryGroupHash = -1;
+			this.cache_currentMaterialId = -1;
+
+			this.isLightsNeedUpdate = true;
+
+			plugins.get( i ).render( scene, camera, _currentWidth, _currentHeight );
+
+			// reset state after plugin (anything could have changed)
+
+			this.cache_currentProgram = null;
+			this.cache_currentCamera = null;
+
+			this.cache_oldBlending = null;
+			this.cache_oldDepthTest = null;
+			this.cache_oldDepthWrite = null;
+			this.cache_oldDoubleSided = null;
+			this.cache_oldFlipSided = null;
+
+			this.cache_currentGeometryGroupHash = -1;
+			this.cache_currentMaterialId = -1;
+
+			this.isLightsNeedUpdate = true;
+		}
+	}
+	
 	// TODO: CHECK callback
 	private void renderImmediateObject( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
 	{
@@ -2495,7 +2518,7 @@ Log.error("?????????????");
 		}
 	}
 
-	private void setBlending( Material.BLENDING blending) 
+	public void setBlending( Material.BLENDING blending) 
 	{
 		if ( blending != this.cache_oldBlending ) 
 		{
@@ -2598,7 +2621,7 @@ Log.error("?????????????");
 		getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
 	}
 
-	private void setTexture( Texture texture, int slot ) 
+	public void setTexture( Texture texture, int slot ) 
 	{
 		if ( texture.isNeedsUpdate()) 
 		{
@@ -2842,12 +2865,4 @@ Log.error("?????????????");
 	public Vector4f getCache_vector3() {
 		return cache_vector3;
 	}
-	
-	// default plugins (order is important)
-
-//	this.shadowMapPlugin = new THREE.ShadowMapPlugin();
-//	this.addPrePlugin( this.shadowMapPlugin );
-//
-//	this.addPostPlugin( new THREE.SpritePlugin() );
-//	this.addPostPlugin( new THREE.LensFlarePlugin() );
 }

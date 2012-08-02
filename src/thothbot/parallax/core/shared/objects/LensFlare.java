@@ -33,7 +33,7 @@ import thothbot.parallax.core.shared.materials.Material;
 
 public final class LensFlare extends Object3D
 {
-	final class Light
+	public class LensSprite
 	{
 		// Texture
 		public Texture texture;
@@ -57,7 +57,7 @@ public final class LensFlare extends Object3D
 		
 		private float wantedRotation;
 
-		public Light(Texture texture, Integer size, Float distance, float x,
+		public LensSprite(Texture texture, Integer size, Float distance, float x,
 				float y, float z, float scale, float rotation, float opacity, Color3f color, Material.BLENDING blending
 		) {
 			this.texture = texture;
@@ -74,13 +74,13 @@ public final class LensFlare extends Object3D
 	}
 
 	private Vector3f positionScreen;
-	private List<Light> lensFlares;
+	private List<LensSprite> lensFlares;
 	private Object customUpdateCallback;
 
 	public LensFlare(Texture texture, Integer size, Float distance, Material.BLENDING blending, Color3f color) 
 	{
 		this.positionScreen = new Vector3f();
-		this.lensFlares = new ArrayList<LensFlare.Light>();
+		this.lensFlares = new ArrayList<LensFlare.LensSprite>();
 		this.customUpdateCallback = null;
 
 		if (texture != null)
@@ -102,7 +102,7 @@ public final class LensFlare extends Object3D
 
 		distance = Math.min( distance, Math.max( 0, distance ) );
 		
-		this.lensFlares.add(new Light(
+		this.lensFlares.add(new LensSprite(
 				texture,
                 size,
                 distance,
@@ -128,7 +128,7 @@ public final class LensFlare extends Object3D
 		for( int f = 0; f < this.lensFlares.size(); f ++ ) 
 		{
 
-			Light flare = this.lensFlares.get( f );
+			LensSprite flare = this.lensFlares.get( f );
 
 			flare.x = this.positionScreen.getX() + vecX * flare.distance;
 			flare.y = this.positionScreen.getY() + vecY * flare.distance;
@@ -138,8 +138,15 @@ public final class LensFlare extends Object3D
 		}
 	}
 
-	public Object getCustomUpdateCallback()
-	{
+	public List<LensSprite> getLensFlares() {
+		return this.lensFlares;
+	}
+	
+	public Vector3f getPositionScreen() {
+		return this.positionScreen;
+	}
+	
+	public Object getCustomUpdateCallback() {
 		return customUpdateCallback;
 	}
 }
