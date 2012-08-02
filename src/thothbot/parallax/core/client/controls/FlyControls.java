@@ -97,6 +97,7 @@ public final class FlyControls extends Control implements
 		this.tmpQuaternion = new Quaternion();
 
 		this.mouseStatus = 0;
+		this.moveState = new MoveState();
 
 		this.moveVector = new Vector3f( 0, 0, 0 );
 		this.rotationVector = new Vector3f( 0, 0, 0 );

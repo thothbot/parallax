@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.textures.Texture;
+import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.materials.Material;
 
@@ -34,19 +35,30 @@ public final class LensFlare extends Object3D
 {
 	final class Light
 	{
+		// Texture
 		public Texture texture;
+		// size in pixels (-1 = use texture.width)
 		public int size;
+		// distance (0-1) from light source (0=at light source)
 		public float distance;
 
+		// blending
 		public Material.BLENDING blending;
-		public int x, y, z;
-		public int scale;
+		// screen position (-1 => 1) z = 0 is ontop z = 1 is back
+		public float x, y, z;
+		// scale
+		public float scale;
+		// rotation
 		public float rotation;
-		public float wantedRotation;
+		// opacity
 		public float opacity;
+		// color
+		public Color3f color;
+		
+		private float wantedRotation;
 
-		public Light(Texture texture, int size, int distance, Material.BLENDING blending, int x,
-				int y, int z, int scale, float rotation, float opacity
+		public Light(Texture texture, Integer size, Float distance, float x,
+				float y, float z, float scale, float rotation, float opacity, Color3f color, Material.BLENDING blending
 		) {
 			this.texture = texture;
 			this.size = size;
@@ -57,6 +69,7 @@ public final class LensFlare extends Object3D
 			this.z = z;
 			this.rotation = rotation;
 			this.opacity = opacity;
+			this.color = color;
 		}
 	}
 
@@ -64,29 +77,42 @@ public final class LensFlare extends Object3D
 	private List<Light> lensFlares;
 	private Object customUpdateCallback;
 
-	public LensFlare() 
+	public LensFlare(Texture texture, Integer size, Float distance, Material.BLENDING blending, Color3f color) 
 	{
 		this.positionScreen = new Vector3f();
 		this.lensFlares = new ArrayList<LensFlare.Light>();
 		this.customUpdateCallback = null;
-	}
 
-	public LensFlare(Texture texture, Integer size, Float distance, Material.BLENDING blending) 
-	{
-		this();
 		if (texture != null)
-			this.add(texture, size, distance, blending);
+			this.add(texture, size, distance, blending, color, null);
 	}
 
 	public void add(Texture texture, Integer size, Float distance, Material.BLENDING blending)
 	{
-		int s = size == null ? -1 : size.intValue();
-		int d = distance == null ? 0 : distance.intValue();
+		add(texture, size, distance, blending, null, null);
+	}
+	
+	public void add(Texture texture, Integer size, Float distance, Material.BLENDING blending, Color3f color, Float opacity)
+	{
+		if( size == null ) size = -1;
+		if( distance == null ) distance = 0f;
+		if( opacity == null ) opacity = 1f;
+		if( color == null ) color = new Color3f( 0xffffff );
+		if( blending == null ) blending = Material.BLENDING.NORMAL;
 
-		Material.BLENDING b = blending == null ? Material.BLENDING.NORMAL : blending;
-
-		d = Math.min(d, Math.max(0, d));
-		this.lensFlares.add(new Light(texture, s, d, b, 0, 0, 0, 1, 1, 1));
+		distance = Math.min( distance, Math.max( 0, distance ) );
+		
+		this.lensFlares.add(new Light(
+				texture,
+                size,
+                distance,
+                0, 0, 0, // XYZ
+                1f, // Scale
+                1f, // Rotation
+                opacity,
+				color,
+                blending
+				));
 	}
 
 	/*
@@ -96,16 +122,19 @@ public final class LensFlare extends Object3D
 	 */
 	public void updateLensFlares()
 	{
-		float vecX = -this.positionScreen.getX() * 2;
-		float vecY = -this.positionScreen.getY() * 2;
+		float vecX = -this.positionScreen.getX() * 2f;
+		float vecY = -this.positionScreen.getY() * 2f;
 
-		for (Light flare : this.lensFlares) 
+		for( int f = 0; f < this.lensFlares.size(); f ++ ) 
 		{
-			flare.x = (int) (this.positionScreen.getX() + vecX * flare.distance);
-			flare.y = (int) (this.positionScreen.getY() + vecY * flare.distance);
 
-			flare.wantedRotation = (float) (flare.x * Math.PI * 0.25f);
-			flare.rotation += (flare.wantedRotation - flare.rotation) * 0.25f;
+			Light flare = this.lensFlares.get( f );
+
+			flare.x = this.positionScreen.getX() + vecX * flare.distance;
+			flare.y = this.positionScreen.getY() + vecY * flare.distance;
+
+			flare.wantedRotation = (float) (flare.x * Math.PI * 0.25);
+			flare.rotation += ( flare.wantedRotation - flare.rotation ) * 0.25f;
 		}
 	}
 
