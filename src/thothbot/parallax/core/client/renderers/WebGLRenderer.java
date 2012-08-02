@@ -1077,6 +1077,9 @@ public class WebGLRenderer
 
 		for ( int i = 0, il = plugins.size(); i < il; i ++ ) 
 		{
+			Plugin plugin = plugins.get( i );
+			Log.debug("Called renderPlugins(): " + plugin.getClass().getName());
+
 			// reset state for plugin (to start from clean slate)
 			this.cache_currentProgram = null;
 			this.cache_currentCamera = null;
@@ -1092,7 +1095,7 @@ public class WebGLRenderer
 
 			this.isLightsNeedUpdate = true;
 
-			plugins.get( i ).render( scene, camera, _currentWidth, _currentHeight );
+			plugin.render( scene, camera, _currentWidth, _currentHeight );
 
 			// reset state after plugin (anything could have changed)
 

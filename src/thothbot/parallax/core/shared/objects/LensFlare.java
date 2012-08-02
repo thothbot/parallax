@@ -73,13 +73,14 @@ public final class LensFlare extends Object3D
 			this.texture = texture;
 			this.size = size;
 			this.distance = distance;
-			this.blending = blending;
 			this.x = x;
 			this.y = y;
 			this.z = z;
+			this.scale = scale;
 			this.rotation = rotation;
 			this.opacity = opacity;
 			this.color = color;
+			this.blending = blending;
 		}
 	}
 

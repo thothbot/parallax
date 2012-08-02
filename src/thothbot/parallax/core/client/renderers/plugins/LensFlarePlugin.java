@@ -36,6 +36,7 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderLensFlare;
 import thothbot.parallax.core.client.shader.ShaderLensFlareVertexTexture;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Vector2f;
 import thothbot.parallax.core.shared.core.Vector3f;
