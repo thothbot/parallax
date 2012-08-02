@@ -69,7 +69,7 @@ public final class LensFlarePlugin extends Plugin
 	@Override
 	public void init(WebGLRenderer webGLRenderer) 
 	{
-		this.renderer = renderer;
+		this.renderer = webGLRenderer;
 		this.lensFlare = new LensFlareGeometry();
 		
 		WebGLRenderingContext gl = this.renderer.getGL();
@@ -246,14 +246,13 @@ public final class LensFlarePlugin extends Plugin
 					screenPositionPixels.getX() < viewportWidth &&
 					screenPositionPixels.getY() > 0 &&
 					screenPositionPixels.getY() < viewportHeight ) 
-					) {
+			) {
 
 				// save current RGB to temp texture
 
 				gl.activeTexture( GLenum.TEXTURE1.getValue() );
 				gl.bindTexture( GLenum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
 				gl.copyTexImage2D( GLenum.TEXTURE_2D.getValue(), 0, GLenum.RGB.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
-
 
 				// render pink quad
 
@@ -266,13 +265,11 @@ public final class LensFlarePlugin extends Plugin
 
 				gl.drawElements( GLenum.TRIANGLES.getValue(), 6, GLenum.UNSIGNED_SHORT.getValue(), 0 );
 
-
 				// copy result to occlusionMap
 
 				gl.activeTexture( GLenum.TEXTURE0.getValue() );
 				gl.bindTexture( GLenum.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
 				gl.copyTexImage2D( GLenum.TEXTURE_2D.getValue(), 0, GLenum.RGBA.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
-
 
 				// restore graphics
 
@@ -287,11 +284,7 @@ public final class LensFlarePlugin extends Plugin
 
 				flare.getPositionScreen().copy( screenPosition );
 
-//				if ( flare.customUpdateCallback )
-//					flare.customUpdateCallback( flare );
-//
-//				else
-					flare.updateLensFlares();
+				flare.getUpdateCallback().update();
 
 				// render flares
 

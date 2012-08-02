@@ -33,6 +33,16 @@ import thothbot.parallax.core.shared.materials.Material;
 
 public final class LensFlare extends Object3D
 {
+	public interface Callback
+	{
+		/*
+		 * Update lens flares update positions on all flares based on the screen
+		 * position Set myLensFlare.customUpdateCallback to alter the flares in your
+		 * project specific way.
+		 */
+		public void update();
+	}
+
 	public class LensSprite
 	{
 		// Texture
@@ -75,13 +85,32 @@ public final class LensFlare extends Object3D
 
 	private Vector3f positionScreen;
 	private List<LensSprite> lensFlares;
-	private Object customUpdateCallback;
+	private Callback updateCallback;
 
 	public LensFlare(Texture texture, Integer size, Float distance, Material.BLENDING blending, Color3f color) 
 	{
 		this.positionScreen = new Vector3f();
 		this.lensFlares = new ArrayList<LensFlare.LensSprite>();
-		this.customUpdateCallback = null;
+
+		setUpdateCallback(new Callback() {
+			
+			@Override
+			public void update() {
+				float vecX = -LensFlare.this.positionScreen.getX() * 2f;
+				float vecY = -LensFlare.this.positionScreen.getY() * 2f;
+
+				for( int f = 0; f < LensFlare.this.lensFlares.size(); f ++ ) 
+				{
+					LensSprite flare = LensFlare.this.lensFlares.get( f );
+
+					flare.x = LensFlare.this.positionScreen.getX() + vecX * flare.distance;
+					flare.y = LensFlare.this.positionScreen.getY() + vecY * flare.distance;
+
+					flare.wantedRotation = (float) (flare.x * Math.PI * 0.25);
+					flare.rotation += ( flare.wantedRotation - flare.rotation ) * 0.25f;
+				}
+			}
+		});
 
 		if (texture != null)
 			this.add(texture, size, distance, blending, color, null);
@@ -104,38 +133,15 @@ public final class LensFlare extends Object3D
 		
 		this.lensFlares.add(new LensSprite(
 				texture,
-                size,
-                distance,
-                0, 0, 0, // XYZ
-                1f, // Scale
-                1f, // Rotation
-                opacity,
+				size,
+				distance,
+				0, 0, 0, // XYZ
+				1f, // Scale
+				1f, // Rotation
+				opacity,
 				color,
-                blending
+				blending
 				));
-	}
-
-	/*
-	 * Update lens flares update positions on all flares based on the screen
-	 * position Set myLensFlare.customUpdateCallback to alter the flares in your
-	 * project specific way.
-	 */
-	public void updateLensFlares()
-	{
-		float vecX = -this.positionScreen.getX() * 2f;
-		float vecY = -this.positionScreen.getY() * 2f;
-
-		for( int f = 0; f < this.lensFlares.size(); f ++ ) 
-		{
-
-			LensSprite flare = this.lensFlares.get( f );
-
-			flare.x = this.positionScreen.getX() + vecX * flare.distance;
-			flare.y = this.positionScreen.getY() + vecY * flare.distance;
-
-			flare.wantedRotation = (float) (flare.x * Math.PI * 0.25);
-			flare.rotation += ( flare.wantedRotation - flare.rotation ) * 0.25f;
-		}
 	}
 
 	public List<LensSprite> getLensFlares() {
@@ -146,7 +152,11 @@ public final class LensFlare extends Object3D
 		return this.positionScreen;
 	}
 	
-	public Object getCustomUpdateCallback() {
-		return customUpdateCallback;
+	public LensFlare.Callback getUpdateCallback() {
+		return this.updateCallback;
+	}
+
+	public void setUpdateCallback(LensFlare.Callback callback) {
+		this.updateCallback = callback;
 	}
 }
