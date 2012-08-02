@@ -26,11 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.lights.LensFlare;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.DimensionalObject;
+import thothbot.parallax.core.shared.objects.LensFlare;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.Sprite;
 import thothbot.parallax.core.shared.objects.WebGLObject;

@@ -48,7 +48,6 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.Frustum;
 import thothbot.parallax.core.shared.core.Geometry;
@@ -63,36 +62,31 @@ import thothbot.parallax.core.shared.core.Vector4f;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
-import thothbot.parallax.core.shared.lights.LensFlare;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.lights.PointLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
-import thothbot.parallax.core.shared.materials.HasColor;
 import thothbot.parallax.core.shared.materials.HasEnvMap;
 import thothbot.parallax.core.shared.materials.HasFog;
 import thothbot.parallax.core.shared.materials.HasLightMap;
 import thothbot.parallax.core.shared.materials.HasMap;
-import thothbot.parallax.core.shared.materials.HasMaterialMap;
 import thothbot.parallax.core.shared.materials.HasSkinning;
 import thothbot.parallax.core.shared.materials.HasVertexColors;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.HasWrap;
-import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.materials.MeshDepthMaterial;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
-import thothbot.parallax.core.shared.materials.MeshNormalMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ParticleBasicMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.GeometryObject;
+import thothbot.parallax.core.shared.objects.HasSides;
+import thothbot.parallax.core.shared.objects.LensFlare;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.ParticleSystem;
 import thothbot.parallax.core.shared.objects.Ribbon;
-import thothbot.parallax.core.shared.objects.HasSides;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.objects.Sprite;
 import thothbot.parallax.core.shared.objects.WebGLObject;
@@ -1603,8 +1597,7 @@ public class WebGLRenderer
 		
 		while ( scene.getObjectsAdded().size() > 0 ) 
 		{
-			if(scene.getObjectsAdded().get( 0 ) instanceof GeometryObject)
-				addObject( (GeometryObject) scene.getObjectsAdded().get( 0 ), scene );
+			addObject( (Object3D) scene.getObjectsAdded().get( 0 ), scene );
 			scene.getObjectsAdded().remove(0);
 		}
 
@@ -1624,11 +1617,11 @@ public class WebGLRenderer
 	/**
 	 * Adds objects
 	 */
-	private void addObject ( GeometryObject object, Scene scene )
+	private void addObject ( Object3D object, Scene scene )
 	{
 		Log.debug("addObject() object=" + object.getClass().getName());
 
-		if ( ! object.isWebglInit ) 
+		if ( object instanceof GeometryObject && ! object.isWebglInit ) 
 		{
 			object.isWebglInit = true;
 
@@ -1636,7 +1629,7 @@ public class WebGLRenderer
 			object._normalMatrix = new Matrix3f();
 
 			Log.debug("addObject() initBuffer()");
-			object.initBuffer(this);
+			((GeometryObject)object).initBuffer(this);
 		}
 
 		if ( ! object.isWebglActive ) 
@@ -1648,39 +1641,47 @@ public class WebGLRenderer
 		}
 	}
 	
-	private void addObjectAddBuffer(GeometryObject object, Scene scene)
+	private void addObjectAddBuffer(Object3D object, Scene scene)
 	{
-		if ( object instanceof Mesh ) 
+		if(object instanceof GeometryObject)
 		{
-			Mesh mesh = (Mesh)object;
-			Geometry geometry = mesh.getGeometry();
-			Log.debug("addObject() add Mesh buffer");
-//			if(geometry instanceof BufferGeometry) 
-//			{
-//				addBuffer( scene.__webglObjects, geometry, object );
-//			}
-//			else {				
+			if ( object instanceof Mesh ) 
+			{
+				Mesh mesh = (Mesh)object;
+				Geometry geometry = mesh.getGeometry();
+				Log.debug("addObject() add Mesh buffer");
+				//			if(geometry instanceof BufferGeometry) 
+				//			{
+				//				addBuffer( scene.__webglObjects, geometry, object );
+				//			}
+				//			else {				
 				for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values())
-					addBuffer( scene.__webglObjects, geometryGroup, object );
-//			}
+					addBuffer( scene.__webglObjects, geometryGroup, (GeometryObject)object );
+				//			}
 
-		} else if ( object.getClass() == Ribbon.class ||
+			} 
+			else if ( object.getClass() == Ribbon.class ||
 					object.getClass() == Line.class ||
 					object.getClass() == ParticleSystem.class ) {
 
-			Geometry geometry = object.getGeometry();
-			addBuffer( scene.__webglObjects, geometry, object );
+				Geometry geometry = ((GeometryObject)object).getGeometry();
+				addBuffer( scene.__webglObjects, geometry, (GeometryObject)object );
+			}
 
-			// TODO: fix this
+			
 //		} else if ( object.getClass() instanceof THREE.ImmediateRenderObject || object.immediateRenderCallback ) {
 //
 //			addBufferImmediate( scene.__webglObjectsImmediate, object );
 //
-//		} else if ( object.getClass() == Sprite.class ) {
-//			scene.__webglSprites.add( (Sprite) object );
-//
-//		} else if ( object.getClass() == LensFlare.class ) {
-//			scene.__webglFlares.add( (LensFlare) object );
+		} 
+		else if ( object.getClass() == Sprite.class ) 
+		{
+			scene.__webglSprites.add( (Sprite) object );
+
+		} 
+		else if ( object.getClass() == LensFlare.class ) 
+		{
+			scene.__webglFlares.add( (LensFlare) object );
 		}
 	}
 
@@ -1703,38 +1704,33 @@ public class WebGLRenderer
 	/*
 	 * Objects removal
 	 */
-	private static void removeObject ( GeometryObject object, Scene scene ) 
+	private static void removeObject ( Object3D object, Scene scene ) 
 	{
 		if ( object instanceof GeometryObject) 
 		{
-			removeInstances( scene.__webglObjects, object );
+			for ( int o = scene.__webglObjects.size() - 1; o >= 0; o -- )
+				if ( scene.__webglObjects.get( o ).object == object )
+					scene.__webglObjects.remove(o);
 
-			// TODO: fix this
-//		} else if ( object.getClass() == Sprite.class ) {
-//			removeInstancesDirect( scene.__webglSprites, object );
-//
-//		} else if ( object.getClass() == LensFlare.class ) {
-//			removeInstancesDirect( scene.__webglFlares, object );
+		} 
+		else if ( object.getClass() == Sprite.class ) 
+		{
+			for ( int o = scene.__webglSprites.size() - 1; o >= 0; o -- )
+				if ( scene.__webglSprites.get( o ) == object )
+					scene.__webglSprites.remove(o);
+
+		} 
+		else if ( object.getClass() == LensFlare.class ) 
+		{
+			for ( int o = scene.__webglFlares.size() - 1; o >= 0; o -- )
+				if ( scene.__webglFlares.get( o ) == object )
+					scene.__webglFlares.remove(o);
 
 //		} else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
 //			removeInstances( scene.__webglObjectsImmediate, object );
 		}
 
 		object.isWebglActive = false;
-	}
-
-	private static void removeInstances ( List<WebGLObject> objlist, Object3D object ) 
-	{
-		for ( int o = objlist.size() - 1; o >= 0; o -- )
-			if ( objlist.get( o ).object == object )
-				objlist.remove(o);
-	}
-
-	private static void removeInstancesDirect ( List<WebGLObject> objlist, Object3D object ) 
-	{
-		for ( int o = objlist.size() - 1; o >= 0; o -- )
-			if ( objlist.get( o ).object == object )
-				objlist.remove(o);
 	}
 
 	private void initMaterial ( Material material, List<Light> lights, Fog fog, GeometryObject object ) 

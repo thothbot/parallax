@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.shared.lights;
+package thothbot.parallax.core.shared.objects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ import java.util.List;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 
 public final class LensFlare extends Object3D
