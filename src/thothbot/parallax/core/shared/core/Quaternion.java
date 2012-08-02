@@ -151,6 +151,15 @@ public class Quaternion
 		this.z = c1.z;
 		this.w = c1.w;
 	}
+	
+	public Quaternion set(float x, float y, float z, float w)
+	{
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
+		return this;
+	}
 
 	public void setFromEuler(Vector3f vector)
 	{

@@ -28,14 +28,14 @@ public class PointLight extends Light
 {
 
 	private Vector3f position;
-	private int intensity;
+	private float intensity;
 	private int distance;
 	
 	public PointLight(int hex) {
 		this(hex, 1, 0);
 	}
 	
-	public PointLight(int hex, int intensity, int distance ) {
+	public PointLight(int hex, float intensity, int distance ) {
 		super(hex);
 		this.intensity = intensity;
 		this.distance = distance;
@@ -46,11 +46,11 @@ public class PointLight extends Light
 		return this.position;
 	}
 	
-	public int getIntensity() {
+	public float getIntensity() {
 		return this.intensity;
 	}
 
-	public void setIntensity(int intensity) {
+	public void setIntensity(float intensity) {
 		this.intensity = intensity;
 	}
 

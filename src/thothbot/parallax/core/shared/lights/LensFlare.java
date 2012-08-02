@@ -37,7 +37,8 @@ public final class LensFlare extends Object3D
 	{
 		public Texture texture;
 		public int size;
-		public int distance;
+		public float distance;
+
 		public Material.BLENDING blending;
 		public int x, y, z;
 		public int scale;
@@ -46,7 +47,8 @@ public final class LensFlare extends Object3D
 		public float opacity;
 
 		public Light(Texture texture, int size, int distance, Material.BLENDING blending, int x,
-				int y, int z, int scale, float rotation, float opacity) {
+				int y, int z, int scale, float rotation, float opacity
+		) {
 			this.texture = texture;
 			this.size = size;
 			this.distance = distance;
@@ -63,23 +65,25 @@ public final class LensFlare extends Object3D
 	private List<Light> lensFlares;
 	private Object customUpdateCallback;
 
-	public LensFlare() {
+	public LensFlare() 
+	{
 		this.positionScreen = new Vector3f();
 		this.lensFlares = new ArrayList<LensFlare.Light>();
 		this.customUpdateCallback = null;
 	}
 
-	public LensFlare(Texture texture, Integer size, Integer distance, Material.BLENDING blending) {
+	public LensFlare(Texture texture, Integer size, Float distance, Material.BLENDING blending) 
+	{
 		this();
-		if (texture != null) {
+		if (texture != null)
 			this.add(texture, size, distance, blending);
-		}
 	}
 
-	public void add(Texture texture, Integer size, Integer distance, Material.BLENDING blending)
+	public void add(Texture texture, Integer size, Float distance, Material.BLENDING blending)
 	{
 		int s = size == null ? -1 : size.intValue();
 		int d = distance == null ? 0 : distance.intValue();
+
 		Material.BLENDING b = blending == null ? Material.BLENDING.NORMAL : blending;
 
 		d = Math.min(d, Math.max(0, d));
@@ -96,7 +100,8 @@ public final class LensFlare extends Object3D
 		float vecX = -this.positionScreen.getX() * 2;
 		float vecY = -this.positionScreen.getY() * 2;
 
-		for (Light flare : this.lensFlares) {
+		for (Light flare : this.lensFlares) 
+		{
 			flare.x = (int) (this.positionScreen.getX() + vecX * flare.distance);
 			flare.y = (int) (this.positionScreen.getY() + vecY * flare.distance);
 
