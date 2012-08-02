@@ -27,13 +27,11 @@ import thothbot.parallax.core.shared.objects.Object3D;
 
 public class Light extends Object3D
 {
-
-	protected Color3f color;
-	public Object3D target;
-
-	public boolean onlyShadow = false;
+	private Color3f color;
+	private boolean isOnlyShadow = false;
 	
-	public Light(int hex) {
+	public Light(int hex) 
+	{
 		super();
 		this.color = new Color3f(hex);
 	}
@@ -41,8 +39,13 @@ public class Light extends Object3D
 	public void setColor(Color3f color) {
 		this.color = color;
 	}
+
 	public Color3f getColor() {
 		return color;
+	}
+	
+	public boolean isOnlyShadow() {
+		return this.isOnlyShadow;
 	}
 	
 	// TODO check

@@ -2261,7 +2261,7 @@ Log.error("?????????????");
 		{
 			Light light = lights.get( l );
 
-			if ( light.onlyShadow ) continue;
+			if ( light.isOnlyShadow() ) continue;
 
 			Color3f color = light.getColor();
 
@@ -2285,7 +2285,7 @@ Log.error("?????????????");
 			{
 
 				DirectionalLight directionalLight = (DirectionalLight) light;
-				float intensity = directionalLight.intensity;
+				float intensity = directionalLight.getIntensity();
 
 				doffset = dlength * 3;
 
@@ -2303,7 +2303,7 @@ Log.error("?????????????");
 				}
 
 				this.cache_direction.copy( directionalLight.getMatrixWorld().getPosition() );
-				this.cache_direction.sub( directionalLight.target.getMatrixWorld().getPosition() );
+				this.cache_direction.sub( directionalLight.getTarget().getMatrixWorld().getPosition() );
 				this.cache_direction.normalize();
 
 				dpositions.set( doffset, this.cache_direction.getX());
@@ -2797,7 +2797,7 @@ Log.error("?????????????");
 		
 		for(Light light: lights) 
 		{
-			if ( light.onlyShadow ) continue;
+			if ( light.isOnlyShadow() ) continue;
 
 			if ( light instanceof DirectionalLight ) dirLights ++;
 			if ( light instanceof PointLight ) pointLights ++;

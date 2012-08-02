@@ -27,7 +27,7 @@ import thothbot.parallax.core.shared.core.Vector3f;
 public class PointLight extends Light
 {
 
-	public Vector3f position;
+	private Vector3f position;
 	private int intensity;
 	private int distance;
 	
@@ -42,10 +42,15 @@ public class PointLight extends Light
 		this.position = new Vector3f(0f, 0f, 0f);
 	}
 	
-	public int getIntensity(){
+	public Vector3f getPosition() {
+		return this.position;
+	}
+	
+	public int getIntensity() {
 		return this.intensity;
 	}
-	public void setIntensity(int intensity){
+
+	public void setIntensity(int intensity) {
 		this.intensity = intensity;
 	}
 

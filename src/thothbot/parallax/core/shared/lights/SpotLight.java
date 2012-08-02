@@ -27,8 +27,9 @@ import thothbot.parallax.core.shared.objects.Object3D;
 
 public class SpotLight extends Light
 {
-	public Vector3f position;
 	public Object3D target;
+	
+	public Vector3f position;
 
 	public float intensity;
 	public float distance;
@@ -68,8 +69,6 @@ public class SpotLight extends Light
 		
 		this.position = new Vector3f( 0f, 1f, 0f );
 		this.target = new Object3D();
-
-		this.onlyShadow = false;
 	}
 	
 	public boolean isAllocateShadows() {

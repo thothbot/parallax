@@ -27,8 +27,10 @@ import thothbot.parallax.core.shared.objects.Object3D;
 
 public class DirectionalLight extends Light
 {
-	public float intensity;
-	public float distance;
+	private Object3D target;
+	
+	private float intensity;
+	private float distance;
 
 	private boolean castShadow = false;
 
@@ -93,8 +95,30 @@ public class DirectionalLight extends Light
 		this.position = new Vector3f(0f, 1f, 0f);
 		this.target   = new Object3D();
 		this.shadowCascadeOffset = new Vector3f(0f, 0f, -1000f);
-
-		this.onlyShadow = false;
+	}
+	
+	public Object3D getTarget() {
+		return this.target;
+	}
+	
+	public void setTarget(Object3D target) {
+		this.target = target;
+	}
+	
+	public float getIntensity() {
+		return this.intensity;
+	}
+	
+	public void setIntensity(float intensity) {
+		this.intensity = intensity;
+	}
+	
+	public float getDistance() {
+		return this.distance;
+	}
+	
+	public void setDistance(float distance) {
+		this.distance = distance;
 	}
 
 	public void setCastShadow(Boolean castShadow)
