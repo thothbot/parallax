@@ -39,6 +39,7 @@ import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.plugins.LensFlarePlugin;
+import thothbot.parallax.core.client.renderers.plugins.SpritePlugin;
 import thothbot.parallax.core.client.shader.Program;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
@@ -256,7 +257,7 @@ public class WebGLRenderer
 //		this.shadowMapPlugin = new THREE.ShadowMapPlugin();
 //		this.addPrePlugin( this.shadowMapPlugin );
 	
-//		this.addPostPlugin( new THREE.SpritePlugin() );
+		addPostPlugin( new SpritePlugin() );
 		addPostPlugin( new LensFlarePlugin() );
 	}
 	
