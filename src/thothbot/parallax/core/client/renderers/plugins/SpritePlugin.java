@@ -35,6 +35,7 @@ import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.ShaderSprite;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.objects.Sprite;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -225,7 +226,7 @@ public final class SpritePlugin extends Plugin
 					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, sprite._modelViewMatrix.getArray());
 				}
 
-				float size = sprite.getMap().getImage().getOffsetWidth() / ( sprite.isScaleByViewport() ? viewportHeight : 1 );
+				float size = (float)sprite.getMap().getImage().getOffsetWidth() / ( sprite.isScaleByViewport() ? viewportHeight : 1 );
 
 				float[] scale = { 
 						size * invAspect * sprite.getScale().getX(),

@@ -135,6 +135,9 @@ public class Object3D implements DimensionalObject
 		this.visible = true;
 		this.vector = new Vector3f();
 		this.name = "";
+		
+		this._modelViewMatrix = new Matrix4f();
+		this._normalMatrix = new Matrix3f();
 	}
 
 	@Override

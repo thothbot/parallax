@@ -1651,9 +1651,6 @@ public class WebGLRenderer
 		{
 			object.isWebglInit = true;
 
-			object._modelViewMatrix = new Matrix4f();
-			object._normalMatrix = new Matrix3f();
-
 			Log.debug("addObject() initBuffer()");
 			((GeometryObject)object).initBuffer(this);
 		}
