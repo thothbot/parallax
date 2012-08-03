@@ -17,9 +17,8 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.renderers.plugins;
+package thothbot.parallax.core.client.renderers;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
 
