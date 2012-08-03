@@ -39,8 +39,8 @@ public class Sprite extends Object3D
 	/*
 	 * Alignment
 	 */
-	public static enum ALIGNMENT {
-		
+	public static enum ALIGNMENT 
+	{
 		TOP_LEFT(1, -1),
 		TOP_CENTER(0, -1),
 		TOP_RIGHT(-1, -1),
@@ -60,7 +60,7 @@ public class Sprite extends Object3D
 		public Vector2f get() {
 			return new Vector2f(this.x, this.y);
 		}
-	};
+	}
 	
 	public Color3f color;
 	public Vector3f rotation3d;
@@ -85,7 +85,10 @@ public class Sprite extends Object3D
 	
 	public int rotation;
 	
-	public Sprite(Map<String, Object> parameters) {
+	public float z;
+	
+	public Sprite(Map<String, Object> parameters) 
+	{
 		if(parameters.containsKey("color"))
 			this.color = new Color3f( (Integer) parameters.get("color") );
 		else
@@ -127,7 +130,6 @@ public class Sprite extends Object3D
 		if(parameters.containsKey("alignment"))
 			this.alignment = (Sprite.ALIGNMENT) parameters.get("alignment");
 
-		//TODO: ?
 		//this.rotation3d = this.rotation;
 		this.rotation = 0;
 
@@ -145,7 +147,8 @@ public class Sprite extends Object3D
 		this.rotation3d.set( 0f, 0f, this.rotation );
 		this.matrix.setRotationFromEuler( this.rotation3d );
 
-		if ( this.scale.getX() != 1 || this.scale.getY() != 1 ) {
+		if ( this.scale.getX() != 1 || this.scale.getY() != 1 ) 
+		{
 			this.matrix.scale( this.scale );
 			this.boundRadiusScale = Math.max( this.scale.getX(), this.scale.getY() );
 		}
