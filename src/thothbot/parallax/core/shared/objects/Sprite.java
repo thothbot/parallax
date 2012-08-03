@@ -22,8 +22,6 @@
 
 package thothbot.parallax.core.shared.objects;
 
-import java.util.Map;
-
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
@@ -32,7 +30,6 @@ import thothbot.parallax.core.shared.core.Color3f;
 import thothbot.parallax.core.shared.core.Vector2f;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.materials.Material.BLENDING;
 
 public class Sprite extends Object3D
 {
@@ -62,80 +59,176 @@ public class Sprite extends Object3D
 		}
 	}
 	
-	public Color3f color;
-	public Vector3f rotation3d;
-	public Texture map;
-	public Material.BLENDING blending = Material.BLENDING.NORMAL;
-	public BlendingFactorSrc blendSrc = BlendingFactorSrc.SRC_ALPHA;
+	private Color3f color;
+	private Vector3f rotation3d;
+	private Texture map;
 	
-	public BlendingFactorDest  blendDst = BlendingFactorDest.ONE_MINUS_SRC_ALPHA; 
-	public BlendEquationMode blendEquation = BlendEquationMode.FUNC_ADD;
+	private Material.BLENDING blending = Material.BLENDING.NORMAL;
+	private BlendingFactorSrc blendSrc = BlendingFactorSrc.SRC_ALPHA;
+	private BlendingFactorDest  blendDst = BlendingFactorDest.ONE_MINUS_SRC_ALPHA; 
+	private BlendEquationMode blendEquation = BlendEquationMode.FUNC_ADD;
 	
-	public boolean useScreenCoordinates = true;
-	public boolean mergeWith3D;
-	public boolean affectedByDistance;
-	public boolean scaleByViewport;
+	private boolean useScreenCoordinates = true;
+	private boolean mergeWith3D;
+	private boolean affectedByDistance;
+	private boolean scaleByViewport;
 	
-	public Sprite.ALIGNMENT alignment = Sprite.ALIGNMENT.CENTER;
+	private Sprite.ALIGNMENT alignment = Sprite.ALIGNMENT.CENTER;
 	
-	public Vector2f uvOffset;
-	public Vector2f uvScale;
+	private Vector2f uvOffset;
+	private Vector2f uvScale;
 	
-	public float opacity = 1.0f;
+	private float opacity = 1.0f;
 	
-	public int rotation;
+	private float rotationFactor;
 	
-	public float z;
+	private float z;
 	
-	public Sprite(Map<String, Object> parameters) 
+	public Sprite() 
 	{
-		if(parameters.containsKey("color"))
-			this.color = new Color3f( (Integer) parameters.get("color") );
-		else
-			this.color = new Color3f( 0xffffff );
-		
-		if(parameters.containsKey("map"))
-			this.map = (Texture) parameters.get("map");
-		else
-			this.map = new Texture();
-	
-		if(parameters.containsKey("blending"))
-			this.blending = (BLENDING) parameters.get("blending");
+		this.color = new Color3f( 0xffffff );
+		this.map = new Texture();
 
-		if(parameters.containsKey("blendSrc"))
-			this.blendSrc = (BlendingFactorSrc) parameters.get("blendSrc");
-		if(parameters.containsKey("blendDst"))
-			this.blendDst = (BlendingFactorDest) parameters.get("blendDst");
-		if(parameters.containsKey("blendEquation"))
-			this.blendEquation = (BlendEquationMode) parameters.get("blendEquation");
+		this.mergeWith3D = !this.useScreenCoordinates;
+		this.affectedByDistance = !this.useScreenCoordinates;
+		this.scaleByViewport = !this.affectedByDistance;
 
-		if(parameters.containsKey("useScreenCoordinates"))
-			this.useScreenCoordinates = (Boolean) parameters.get("useScreenCoordinates");
-		
-		if(parameters.containsKey("mergeWith3D"))
-			this.mergeWith3D = (Boolean) parameters.get("mergeWith3D");
-		else 
-			this.mergeWith3D = !this.useScreenCoordinates;
-		
-		if(parameters.containsKey("affectedByDistance"))
-			this.affectedByDistance = (Boolean) parameters.get("affectedByDistance");
-		else 
-			this.affectedByDistance = !this.useScreenCoordinates;
-		
-		if(parameters.containsKey("scaleByViewport"))
-			this.scaleByViewport = (Boolean) parameters.get("scaleByViewport");
-		else 
-			this.scaleByViewport = !this.affectedByDistance;
-		
-		if(parameters.containsKey("alignment"))
-			this.alignment = (Sprite.ALIGNMENT) parameters.get("alignment");
-
-		//this.rotation3d = this.rotation;
-		this.rotation = 0;
+		this.rotation3d = this.rotation;
+		this.rotationFactor = 0;
 
 		this.uvOffset = new Vector2f( 0, 0 );
 		this.uvScale  = new Vector2f( 1, 1 );
 	}
+	
+	public Color3f getColor() {
+		return color;
+	}
+
+	public void setColor(Color3f color) {
+		this.color = color;
+	}
+
+	public Texture getMap() {
+		return map;
+	}
+
+	public void setMap(Texture map) {
+		this.map = map;
+	}
+
+	public Material.BLENDING getBlending() {
+		return blending;
+	}
+
+	public void setBlending(Material.BLENDING blending) {
+		this.blending = blending;
+	}
+
+	public BlendingFactorSrc getBlendSrc() {
+		return blendSrc;
+	}
+
+	public void setBlendSrc(BlendingFactorSrc blendSrc) {
+		this.blendSrc = blendSrc;
+	}
+
+	public BlendingFactorDest getBlendDst() {
+		return blendDst;
+	}
+
+	public void setBlendDst(BlendingFactorDest blendDst) {
+		this.blendDst = blendDst;
+	}
+
+	public BlendEquationMode getBlendEquation() {
+		return blendEquation;
+	}
+
+	public void setBlendEquation(BlendEquationMode blendEquation) {
+		this.blendEquation = blendEquation;
+	}
+
+	public Sprite.ALIGNMENT getAlignment() {
+		return alignment;
+	}
+
+	public void setAlignment(Sprite.ALIGNMENT alignment) {
+		this.alignment = alignment;
+	}
+
+	public Vector2f getUvOffset() {
+		return uvOffset;
+	}
+
+	public void setUvOffset(Vector2f uvOffset) {
+		this.uvOffset = uvOffset;
+	}
+
+	public Vector2f getUvScale() {
+		return uvScale;
+	}
+
+	public void setUvScale(Vector2f uvScale) {
+		this.uvScale = uvScale;
+	}
+
+	public float getOpacity() {
+		return opacity;
+	}
+
+	public void setOpacity(float opacity) {
+		this.opacity = opacity;
+	}
+
+	public float getRotationFactor() {
+		return rotationFactor;
+	}
+
+	public void setRotationFactor(float rotation) {
+		this.rotationFactor = rotation;
+	}
+	
+	public boolean isUseScreenCoordinates() {
+		return useScreenCoordinates;
+	}
+
+	public void setUseScreenCoordinates(boolean useScreenCoordinates) {
+		this.useScreenCoordinates = useScreenCoordinates;
+	}
+
+	public boolean isMergeWith3D() {
+		return mergeWith3D;
+	}
+
+	public void setMergeWith3D(boolean mergeWith3D) {
+		this.mergeWith3D = mergeWith3D;
+	}
+	
+	public boolean isAffectedByDistance() {
+		return affectedByDistance;
+	}
+
+	public void setAffectedByDistance(boolean affectedByDistance) {
+		this.affectedByDistance = affectedByDistance;
+	}
+
+	public boolean isScaleByViewport() {
+		return scaleByViewport;
+	}
+
+	public void setScaleByViewport(boolean scaleByViewport) {
+		this.scaleByViewport = scaleByViewport;
+	}
+
+	public float getZ() {
+		return z;
+	}
+
+	public void setZ(float z) {
+		this.z = z;
+	}
+
+
 
 	/*
 	 * Custom update matrix
@@ -144,7 +237,7 @@ public class Sprite extends Object3D
 	{
 		this.matrix.setPosition( this.position );
 
-		this.rotation3d.set( 0f, 0f, this.rotation );
+		this.rotation3d.set( 0f, 0f, this.rotationFactor );
 		this.matrix.setRotationFromEuler( this.rotation3d );
 
 		if ( this.scale.getX() != 1 || this.scale.getY() != 1 ) 

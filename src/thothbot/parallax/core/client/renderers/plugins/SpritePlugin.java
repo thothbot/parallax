@@ -34,7 +34,6 @@ import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.renderers.plugins.LensFlarePlugin.LensFlareGeometry;
 import thothbot.parallax.core.client.shader.ShaderSprite;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.objects.Sprite;
@@ -179,16 +178,16 @@ public final class SpritePlugin extends Plugin
 		{
 			Sprite sprite = sprites.get( i );
 
-			if ( ! sprite.isVisible() || sprite.opacity == 0 ) continue;
+			if ( ! sprite.isVisible() || sprite.getOpacity() == 0 ) continue;
 
-			if( ! sprite.useScreenCoordinates ) 
+			if( ! sprite.isUseScreenCoordinates() ) 
 			{
 				sprite._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), sprite.getMatrixWorld());
-				sprite.z = - sprite._modelViewMatrix.getArray().get(14);
+				sprite.setZ( - sprite._modelViewMatrix.getArray().get(14) );
 			} 
 			else 
 			{
-				sprite.z = - sprite.getPosition().getZ();
+				sprite.setZ( - sprite.getPosition().getZ() );
 			}
 		}
 
@@ -197,7 +196,7 @@ public final class SpritePlugin extends Plugin
 			@Override
 			public int compare(Sprite o1, Sprite o2)
 			{
-				return (int)o1.z - (int)o2.z;
+				return (int)o1.getZ() - (int)o2.getZ();
 			}
 		});
 
@@ -207,12 +206,12 @@ public final class SpritePlugin extends Plugin
 		{
 			Sprite sprite = sprites.get( i );
 
-			if ( ! sprite.isVisible() || sprite.opacity == 0 ) continue;
+			if ( ! sprite.isVisible() || sprite.getOpacity() == 0 ) continue;
 
-			if ( sprite.map != null && sprite.map.getImage() != null && sprite.map.getImage().getOffsetWidth() > 0 ) 
+			if ( sprite.getMap() != null && sprite.getMap().getImage() != null && sprite.getMap().getImage().getOffsetWidth() > 0 ) 
 			{
 
-				if ( sprite.useScreenCoordinates ) 
+				if ( sprite.isUseScreenCoordinates() ) 
 				{
 					gl.uniform1i( uniforms.get("useScreenCoordinates"), 1 );
 					gl.uniform3f( uniforms.get("screenPosition"), ( sprite.getPosition().getX() - halfViewportWidth  ) / halfViewportWidth,
@@ -222,40 +221,40 @@ public final class SpritePlugin extends Plugin
 				else 
 				{
 					gl.uniform1i( uniforms.get("useScreenCoordinates"), 0 );
-					gl.uniform1i( uniforms.get("affectedByDistance"), sprite.affectedByDistance ? 1 : 0 );
+					gl.uniform1i( uniforms.get("affectedByDistance"), sprite.isAffectedByDistance() ? 1 : 0 );
 					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, sprite._modelViewMatrix.getArray());
 				}
 
-				float size = sprite.map.getImage().getOffsetWidth() / ( sprite.scaleByViewport ? viewportHeight : 1 );
+				float size = sprite.getMap().getImage().getOffsetWidth() / ( sprite.isScaleByViewport() ? viewportHeight : 1 );
 
 				float[] scale = { 
 						size * invAspect * sprite.getScale().getX(),
 						size * sprite.getScale().getY() };
 
-				gl.uniform2f( uniforms.get("uvScale"), sprite.uvScale.getX(), sprite.uvScale.getY() );
-				gl.uniform2f( uniforms.get("uvOffset"), sprite.uvOffset.getX(), sprite.uvOffset.getY() );
-				gl.uniform2f( uniforms.get("alignment"), sprite.alignment.get().getX(), sprite.alignment.get().getY() );
+				gl.uniform2f( uniforms.get("uvScale"), sprite.getUvScale().getX(), sprite.getUvScale().getY() );
+				gl.uniform2f( uniforms.get("uvOffset"), sprite.getUvOffset().getX(), sprite.getUvOffset().getY() );
+				gl.uniform2f( uniforms.get("alignment"), sprite.getAlignment().get().getX(), sprite.getAlignment().get().getY() );
 
-				gl.uniform1f( uniforms.get("opacity"), sprite.opacity );
-				gl.uniform3f( uniforms.get("color"), sprite.color.getR(), sprite.color.getG(), sprite.color.getB() );
+				gl.uniform1f( uniforms.get("opacity"), sprite.getOpacity() );
+				gl.uniform3f( uniforms.get("color"), sprite.getColor().getR(), sprite.getColor().getG(), sprite.getColor().getB() );
 
-				gl.uniform1f( uniforms.get("rotation"), sprite.rotation );
+				gl.uniform1f( uniforms.get("rotation"), sprite.getRotationFactor() );
 				gl.uniform2fv( uniforms.get("scale"), scale );
 
-				if ( sprite.mergeWith3D && !mergeWith3D ) 
+				if ( sprite.isMergeWith3D() && !mergeWith3D ) 
 				{
 					gl.enable( GLenum.DEPTH_TEST.getValue() );
 					mergeWith3D = true;
 				} 
-				else if ( ! sprite.mergeWith3D && mergeWith3D ) 
+				else if ( ! sprite.isMergeWith3D() && mergeWith3D ) 
 				{
 					gl.disable( GLenum.DEPTH_TEST.getValue() );
 					mergeWith3D = false;
 				}
 
 				//	renderer.setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
-				renderer.setBlending( sprite.blending );
-				renderer.setTexture( sprite.map, 0 );
+				renderer.setBlending( sprite.getBlending() );
+				renderer.setTexture( sprite.getMap(), 0 );
 
 				gl.drawElements( GLenum.TRIANGLES.getValue(), 6, GLenum.UNSIGNED_SHORT.getValue(), 0 );
 			}
