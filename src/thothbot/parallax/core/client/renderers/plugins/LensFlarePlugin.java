@@ -176,7 +176,7 @@ public final class LensFlarePlugin extends Plugin
 
 		Vector3 tempPosition = new Vector3();
 
-		double invAspect = viewportHeight / viewportWidth * 1.0;
+		double invAspect = (double)viewportHeight / viewportWidth;
 		double halfViewportWidth = viewportWidth * 0.5;
 		double halfViewportHeight = viewportHeight * 0.5;
 

@@ -136,17 +136,17 @@ public final class Cube extends Geometry
 
 		String w = "";
 
-		if ( ( u.equals("x") && v.equals("y") ) || ( u.equals("y") && v.equals("x") ) ) {
-
+		if ( ( u.equals("x") && v.equals("y") ) || ( u.equals("y") && v.equals("x") ) ) 
+		{
 			w = "z";
-
-		} else if ( ( u.equals("x") && v.equals("z") ) || ( u.equals("z") && v.equals("x") ) ) {
-
+		} 
+		else if ( ( u.equals("x") && v.equals("z") ) || ( u.equals("z") && v.equals("x") ) ) 
+		{
 			w = "y";
 			gridY = this.segmentsDepth;
-
-		} else if ( ( u.equals("z") && v.equals("y") ) || ( u.equals("y") && v.equals("z") ) ) {
-
+		} 
+		else if ( ( u.equals("z") && v.equals("y") ) || ( u.equals("y") && v.equals("z") ) ) 
+		{
 			w = "x";
 			gridX = this.segmentsDepth;
 
@@ -154,8 +154,8 @@ public final class Cube extends Geometry
 
 		int gridX1 = gridX + 1;
 		int gridY1 = gridY + 1;
-		double segment_width = width / gridX * 1.0;
-		double segment_height = height / gridY * 1.0;
+		double segment_width = width / (double)gridX;
+		double segment_height = height / (double)gridY;
 		Vector3 normal = new Vector3();
 
 		int normalValue = (depth > 0) ? 1 : - 1;
@@ -172,7 +172,7 @@ public final class Cube extends Geometry
 			{
 				Vector3 vector = new Vector3();
 				
-				double u1 = ( ix * segment_width - width_half ) * udir * 1.0;
+				double u1 = (double)( ix * segment_width - width_half ) * udir;
 				if(u.equals("x"))
 					vector.setX(u1);
 				else if(u.equals("y"))
@@ -180,7 +180,7 @@ public final class Cube extends Geometry
 				else if(u.equals("z"))
 					vector.setZ(u1);
 
-				double v1 = ( iy * segment_height - height_half ) * vdir * 1.0;
+				double v1 = (double)( iy * segment_height - height_half ) * vdir;
 				if(v.equals("x"))
 					vector.setX(v1);
 				else if(v.equals("y"))
@@ -215,10 +215,10 @@ public final class Cube extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UV( ix / gridX * 1.0,                 iy / gridY * 1.0 ),
-					new UV( ix / gridX * 1.0,         ( iy + 1 ) / gridY * 1.0 ),
-					new UV( ( ix + 1 ) / gridX * 1.0, ( iy + 1 ) / gridY * 1.0 ),
-					new UV( ( ix + 1 ) / gridX * 1.0,         iy / gridY * 1.0 )
+					new UV( ix / (double)gridX,                 iy / (double)gridY ),
+					new UV( ix / (double)gridX,         ( iy + 1 ) / (double)gridY ),
+					new UV( ( ix + 1 ) / (double)gridX, ( iy + 1 ) / (double)gridY ),
+					new UV( ( ix + 1 ) / (double)gridX,         iy / (double)gridY )
 				) );
 			}
 		}

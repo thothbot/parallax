@@ -56,8 +56,8 @@ public final class Plane extends Geometry
 		int gridZ = segmentsDepth;
 		int gridX1 = gridX + 1;
 		int gridZ1 = gridZ + 1;
-		double segment_width = width / gridX;
-		double segment_depth = depth / gridZ;
+		double segment_width = width / (double)gridX;
+		double segment_depth = depth / (double)gridZ;
 
 		Vector3 normal = new Vector3( 0, 1, 0 );
 
@@ -87,10 +87,10 @@ public final class Plane extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UV( ix / gridX * 1.0,                     iz / gridZ * 1.0 ),
-					new UV( ix / gridX * 1.0,           ( iz + 1.0 ) / gridZ * 1.0 ),
-					new UV( ( ix + 1.0 ) / gridX * 1.0, ( iz + 1.0 ) / gridZ * 1.0 ),
-					new UV( ( ix + 1.0 ) / gridX * 1.0,           iz / gridZ * 1.0 )
+					new UV( ix / (double)gridX,                     iz / (double)gridZ ),
+					new UV( ix / (double)gridX,           ( iz + 1.0 ) / (double)gridZ ),
+					new UV( ( ix + 1.0 ) / (double)gridX, ( iz + 1.0 ) / (double)gridZ ),
+					new UV( ( ix + 1.0 ) / (double)gridX,           iz / (double)gridZ )
 				) );
 			}
 		}

@@ -51,11 +51,11 @@ public class Parametric extends Geometry
 		
 		for ( int i = 0; i <= stacks; i ++ ) 
 		{
-			double v = i / stacks * 1.0;
+			double v = i / (double)stacks;
 
 			for ( int j = 0; j <= slices; j ++ ) 
 			{
-				double u = j / slices * 1.0;
+				double u = j / (double)slices;
 
 				Vector3 p = function.run( u, v );
 				this.getVertices().add( p );
@@ -72,10 +72,10 @@ public class Parametric extends Geometry
 				int c = (i + 1) * sliceCount + j;
 				int d = (i + 1) * sliceCount + j + 1;
 
-				UV uva = new UV( i / slices * 1.0,                      j / stacks * 1.0 );
-				UV uvb = new UV( i / slices * 1.0,            ( j + 1.0 ) / stacks * 1.0 );
-				UV uvc = new UV( ( i + 1.0 ) / slices * 1.0,            j / stacks * 1.0 );
-				UV uvd = new UV( ( i + 1.0 ) / slices * 1.0,  ( j + 1.0 ) / stacks * 1.0 );
+				UV uva = new UV( i / (double)slices,                      j / (double)stacks );
+				UV uvb = new UV( i / (double)slices,            ( j + 1.0 ) / (double)stacks );
+				UV uvc = new UV( ( i + 1.0 ) / (double)slices,            j / (double)stacks );
+				UV uvd = new UV( ( i + 1.0 ) / (double)slices,  ( j + 1.0 ) / (double)stacks );
 
 				if ( useTris ) 
 				{

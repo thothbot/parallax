@@ -81,10 +81,10 @@ public final class Lathe extends Geometry
 				double stepsf = steps / 1.0;
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 
-					new UV( (1.0 - i / stepsf),          k / kl * 1.0  ),
-					new UV( (1.0 - ( i + 1.0 ) / stepsf), k / kl * 1.0  ),
-					new UV( (1.0 - ( i + 1.0 ) / stepsf), ( k + 1.0 ) / kl * 1.0 ),
-					new UV( (1.0 - i / stepsf),          ( k + 1.0 ) / kl * 1.0 )
+					new UV( (1.0 - i / (double)stepsf),                     k / (double)kl ),
+					new UV( (1.0 - ( i + 1.0 ) / (double)stepsf),           k / (double)kl ),
+					new UV( (1.0 - ( i + 1.0 ) / (double)stepsf), ( k + 1.0 ) / (double)kl ),
+					new UV( (1.0 - i / (double)stepsf),           ( k + 1.0 ) / (double)kl )
 					
 				) );
 			}

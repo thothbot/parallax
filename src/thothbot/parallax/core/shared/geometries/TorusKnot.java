@@ -95,10 +95,10 @@ public final class TorusKnot extends Geometry
 				int c = grid[ ip ][ jp ];
 				int d = grid[ i ][ jp ];
 
-				UV uva = new UV(           i / segmentsR * 1.0,           j / segmentsT * 1.0 );
-				UV uvb = new UV( ( i + 1.0 ) / segmentsR * 1.0,           j / segmentsT * 1.0 );
-				UV uvc = new UV( ( i + 1.0 ) / segmentsR * 1.0, ( j + 1.0 ) / segmentsT * 1.0 );
-				UV uvd = new UV(           i / segmentsR * 1.0, ( j + 1.0 ) / segmentsT * 1.0 );
+				UV uva = new UV(           i / (double)segmentsR,           j / (double)segmentsT );
+				UV uvb = new UV( ( i + 1.0 ) / (double)segmentsR,           j / (double)segmentsT );
+				UV uvc = new UV( ( i + 1.0 ) / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
+				UV uvd = new UV(           i / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
 
 				getFaces().add( new Face4( a, b, c, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );

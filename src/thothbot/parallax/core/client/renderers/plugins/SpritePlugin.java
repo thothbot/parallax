@@ -139,7 +139,7 @@ public final class SpritePlugin extends Plugin
 		Map<String, WebGLUniformLocation> uniforms = this.sprite.uniforms;
 		Map<String, Integer> attributes = this.sprite.attributes;
 
-		double invAspect = viewportHeight / viewportWidth * 1.0;
+		double invAspect = (double)viewportHeight / viewportWidth;
 
 		double halfViewportWidth = viewportWidth * 0.5;
 		double halfViewportHeight = viewportHeight * 0.5;

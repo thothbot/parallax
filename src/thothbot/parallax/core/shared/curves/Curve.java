@@ -63,7 +63,7 @@ public abstract class Curve
 
 		List<Vector> pts = new ArrayList<Vector>();
 		for (int d = 0; d <= divisions; d++)
-			pts.add(this.getPoint(d / divisions * 1.0));
+			pts.add(this.getPoint(d / (double)divisions));
 
 		return pts;
 	}
@@ -81,7 +81,7 @@ public abstract class Curve
 		List<Vector> pts = new ArrayList<Vector>();
 
 		for (int d = 0; d <= divisions; d++)
-			pts.add(this.getPointAt(d / divisions * 1.0));
+			pts.add(this.getPointAt(d / (double)divisions));
 
 		return pts;
 	}
@@ -124,7 +124,7 @@ public abstract class Curve
 		double sum = 0;
 		for (int p = 1; p <= divisions; p++) 
 		{
-			Vector current = getPoint(p / divisions * 1.0);
+			Vector current = getPoint(p / (double)divisions);
 			sum += current.distanceTo(last);
 
 			last = current;

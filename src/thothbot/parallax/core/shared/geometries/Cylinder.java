@@ -73,12 +73,12 @@ public final class Cylinder extends Geometry
 			List<Integer> verticesRow = new ArrayList<Integer>();
 			List<UV> uvsRow = new ArrayList<UV>();
 
-			double v = y / segmentsY * 1.0;
+			double v = y / (double)segmentsY;
 			double radius = v * ( radiusBottom - radiusTop ) + radiusTop;
 
 			for ( x = 0; x <= segmentsX; x ++ ) 
 			{
-				double u = x / segmentsX * 1.0;
+				double u = x / (double)segmentsX;
 
 				Vector3 vertex = new Vector3();
 				

@@ -125,14 +125,13 @@ public final class Tube extends Geometry
 				int c = this.grid.get( ip ).get( jp );
 				int d = this.grid.get( i ).get( jp );
 
-				UV uva = new UV( i / segments * 1.0,                     j / segmentsRadius * 1.0 );
-				UV uvb = new UV( ( i + 1.0 ) / segments * 1.0,           j / segmentsRadius * 1.0 );
-				UV uvc = new UV( ( i + 1.0 ) / segments * 1.0, ( j + 1.0 ) / segmentsRadius * 1.0 );
-				UV uvd = new UV( i / segments * 1.0,           ( j + 1.0 ) / segmentsRadius * 1.0 );
+				UV uva = new UV( i / (double)segments,                     j / (double)segmentsRadius );
+				UV uvb = new UV( ( i + 1.0 ) / (double)segments,           j / (double)segmentsRadius );
+				UV uvc = new UV( ( i + 1.0 ) / (double)segments, ( j + 1.0 ) / (double)segmentsRadius );
+				UV uvd = new UV( i / (double)segments,           ( j + 1.0 ) / (double)segmentsRadius );
 
 				getFaces().add( new Face4( a, b, c, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
-
 			}
 		}
 

@@ -161,7 +161,7 @@ public class MorphAnimation
 		
 		delta = 8;
 
-		double frameTime = 1.0 * this.duration / this.length;
+		double frameTime = (double)this.duration / this.length;
 
 		this.time += this.direction * delta;
 

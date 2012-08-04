@@ -97,7 +97,7 @@ public class Canvas3d extends FocusWidget
 	
 	public double getAspectRation()
 	{
-		return (double)(getWidth() / getHeight());
+		return (double)getWidth() / getHeight();
 	}
 	
 	/**

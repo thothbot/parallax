@@ -77,8 +77,8 @@ public final class Sphere extends Geometry
 			for (int x = 0; x <= segmentsX; x++) 
 			{
 
-				double u = x / segmentsX * 1.0;
-				double v = y / segmentsY * 1.0;
+				double u = x / (double)segmentsX;
+				double v = y / (double)segmentsY;
 
 				Vector3 vertex = new Vector3();
 				vertex.setX(- radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));

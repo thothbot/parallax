@@ -286,7 +286,7 @@ public class Path extends CurvePath
 
 				for ( int j = 1; j <= divisions; j ++ ) 
 				{
-					double t = j / divisions * 1.0;
+					double t = j / (double)divisions;
 
 					double tx = ShapeUtils.b2( t, cpx0, cpx1, cpx );
 					double ty = ShapeUtils.b2( t, cpy0, cpy1, cpy );
@@ -327,7 +327,7 @@ public class Path extends CurvePath
 
 				for ( int j = 1; j <= divisions; j ++ ) 
 				{
-					double t = j / divisions * 1.0;
+					double t = j / (double)divisions;
 
 					double tx = ShapeUtils.b3( t, cpx0, cpx1, cpx2, cpx );
 					double ty = ShapeUtils.b3( t, cpy0, cpy1, cpy2, cpy );

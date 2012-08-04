@@ -136,7 +136,7 @@ public class CombinedCamera extends Camera
 
 	public void setSize(int width, int height)
 	{
-		this.cameraP.setAspectRatio(width / height * 1.0);
+		this.cameraP.setAspectRatio((double)width / height);
 		this.left = -width / 2.0;
 		this.right = width / 2.0;
 		this.top = height / 2.0;
