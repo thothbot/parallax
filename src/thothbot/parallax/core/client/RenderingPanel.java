@@ -320,7 +320,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	private void updateBackground()
 	{
 		this.getElement().getStyle().setBackgroundColor(cssColor(this.clearColor));
-		if(this.clearAlpha < 1.0f)
+		if(this.clearAlpha < 1.0)
 			this.getElement().getStyle().setOpacity(this.clearAlpha);	
 		
 		if(this.renderer != null)

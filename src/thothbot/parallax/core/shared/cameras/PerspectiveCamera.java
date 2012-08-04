@@ -22,6 +22,8 @@
 
 package thothbot.parallax.core.shared.cameras;
 
+import thothbot.parallax.core.shared.Log;
+
 /**
  * Implementation of Perspective Camera.
  * 
@@ -252,6 +254,6 @@ public class PerspectiveCamera extends Camera
 		{
 			this.projectionMatrix.makePerspective( getFieldOfView(), getAspectRation(), getNear(), getFar() );
 		}
-
+Log.error("====" + this.projectionMatrix);
 	}
 }

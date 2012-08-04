@@ -39,7 +39,6 @@ public class Canvas3d extends FocusWidget
 
 	private WebGLRenderingContext gl;	
 	private final CanvasElement canvas;
-	private int width, height;
 	
 	/**
 	 * Initialize a canvas3d of the given size. 
@@ -85,7 +84,7 @@ public class Canvas3d extends FocusWidget
 	 */
 	public int getWidth() 
 	{
-		return width;
+		return canvas.getWidth();
 	}
 	
 	/**
@@ -93,12 +92,12 @@ public class Canvas3d extends FocusWidget
 	 */
 	public int getHeight() 
 	{
-		return height;
+		return canvas.getHeight();
 	}
 	
 	public double getAspectRation()
 	{
-		return getWidth() / getHeight() * 1.0;
+		return (double)(getWidth() / getHeight());
 	}
 	
 	/**
@@ -119,7 +118,6 @@ public class Canvas3d extends FocusWidget
 	 */
 	public void setWidth(int width) 
 	{
-		this.width = width;
 		canvas.setWidth(width);
 	}
 	
@@ -129,7 +127,6 @@ public class Canvas3d extends FocusWidget
 	 */
 	public void setHeight(int height) 
 	{
-		this.height = height;
 		canvas.setHeight(height);
 	}
 

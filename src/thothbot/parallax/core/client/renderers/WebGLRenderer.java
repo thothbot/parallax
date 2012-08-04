@@ -750,24 +750,27 @@ public class WebGLRenderer
 		getGL().deleteBuffer( geometryGroup.__webglFaceBuffer );
 		getGL().deleteBuffer( geometryGroup.__webglLineBuffer );
 
-		if ( geometryGroup.numMorphTargets != 0) {
-
-			for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) {
+		if ( geometryGroup.numMorphTargets != 0) 
+		{
+			for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) 
+			{
 				getGL().deleteBuffer( geometryGroup.__webglMorphTargetsBuffers.get( m ) );
 			}
 		}
 
-		if ( geometryGroup.numMorphNormals != 0 ) {
-
-			for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) {
+		if ( geometryGroup.numMorphNormals != 0 ) 
+		{
+			for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) 
+			{
 				getGL().deleteBuffer( geometryGroup.__webglMorphNormalsBuffers.get( m ) );
 			}
 		}
 
 
-		if ( geometryGroup.__webglCustomAttributesList != null) {
-
-			for ( WebGLCustomAttribute att : geometryGroup.__webglCustomAttributesList ) {
+		if ( geometryGroup.__webglCustomAttributesList != null) 
+		{
+			for ( WebGLCustomAttribute att : geometryGroup.__webglCustomAttributesList ) 
+			{
 				getGL().deleteBuffer( att.buffer );
 			}
 		}
@@ -1540,11 +1543,14 @@ public class WebGLRenderer
 		GeometryObject object = globject.object;
 		Material material = object.getMaterial();
 
-		if ( material.isTransparent()) {
+		if ( material.isTransparent()) 
+		{
 			globject.transparent = material;
 			globject.opaque = null;
 
-		} else {
+		} 
+		else 
+		{
 			globject.opaque = material;
 			globject.transparent = null;
 		}
@@ -1684,7 +1690,8 @@ public class WebGLRenderer
 			} 
 			else if ( object.getClass() == Ribbon.class ||
 					object.getClass() == Line.class ||
-					object.getClass() == ParticleSystem.class ) {
+					object.getClass() == ParticleSystem.class 
+			) {
 
 				Geometry geometry = ((GeometryObject)object).getGeometry();
 				addBuffer( scene.__webglObjects, geometry, (GeometryObject)object );
