@@ -58,8 +58,8 @@ public final class TorusKnot extends Geometry
 
 			for ( int j = 0; j < segmentsT; ++ j ) 
 			{
-				double u = i / segmentsR * 2.0 * p * Math.PI;
-				double v = j / segmentsT * 2.0 * Math.PI;
+				double u = i / (double)segmentsR * 2.0 * p * Math.PI;
+				double v = j / (double)segmentsT * 2.0 * Math.PI;
 
 				Vector3 p1 = getPos( u,        v, q, p, radius, heightScale );
 				Vector3 p2 = getPos( u + 0.01, v, q, p, radius, heightScale );
@@ -121,7 +121,7 @@ public final class TorusKnot extends Geometry
 		double cu = Math.cos( u );
 		double cv = Math.cos( v );
 		double su = Math.sin( u );
-		double quOverP = in_q / in_p * u;
+		double quOverP = in_q / (double)in_p * u;
 		double cs = Math.cos( quOverP );
 
 		return new Vector3( 

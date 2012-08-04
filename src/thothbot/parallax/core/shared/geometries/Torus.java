@@ -66,8 +66,8 @@ public final class Torus extends Geometry
 		{
 			for ( int i = 0; i <= segmentsT; i ++ ) 
 			{
-				double u = i / segmentsT * arc;
-				double v = j / segmentsR * Math.PI * 2.0;
+				double u = i / (double)segmentsT * arc;
+				double v = j / (double)segmentsR * Math.PI * 2.0;
 
 				center.setX(radius * Math.cos( u ));
 				center.setY(radius * Math.sin( u ));
@@ -81,7 +81,6 @@ public final class Torus extends Geometry
 
 				uvs.add( new UV( i / (double)segmentsT, 1.0 - j / (double)segmentsR * 1.8 ) );
 				normals.add( vertex.clone().sub( center ).normalize() );
-
 			}
 		}
 
