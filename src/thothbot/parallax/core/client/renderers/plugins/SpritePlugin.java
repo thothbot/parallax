@@ -197,7 +197,9 @@ public final class SpritePlugin extends Plugin
 			@Override
 			public int compare(Sprite o1, Sprite o2)
 			{
-				return (int)o1.getZ() - (int)o2.getZ();
+				float result = o2.getZ() - o1.getZ(); 
+				return (result == 0) ? 0 
+						: (result > 0) ? 1 : -1;
 			}
 		});
 
