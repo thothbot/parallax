@@ -61,7 +61,7 @@ public class BloomPass extends Pass
 	
 	public BloomPass( double strength )
 	{
-		this(strength, 25, 4.0f, 256);
+		this(strength, 25, 4.0, 256);
 	}
 
 	public BloomPass( double strength, int kernelSize, double sigma, int resolution ) 

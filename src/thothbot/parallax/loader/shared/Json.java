@@ -167,7 +167,7 @@ public class Json extends Loader
 	{
 		// defaults
 		Material material = new MeshLambertMaterial();
-		material.setOpacity(1.0f);
+		material.setOpacity(1.0);
 		((MeshLambertMaterial)material).setColor(new Color3(0xeeeeee));
 		if(jsonMaterial.containsKey("wireframe"))
 			((MeshLambertMaterial)material).setWireframe(true);
@@ -724,7 +724,7 @@ public class Json extends Loader
 			for ( int i = 0; i < colorMap.colors.size(); i ++ ) 
 			{
 				geometry.getFaces().get(i).setColor( colorMap.colors.get(i) );
-				ColorUtils.adjustHSV( geometry.getFaces().get(i).getColor(), 0f, 0.125f, 0f );
+				ColorUtils.adjustHSV( geometry.getFaces().get(i).getColor(), 0.0, 0.125, 0.0 );
 			}
 		}
 	}

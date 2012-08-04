@@ -640,7 +640,7 @@ public class ExtrudeGeometry extends Geometry
 			double dy = geometry.getVertices().get( indexD ).getY();
 			double dz = geometry.getVertices().get( indexD ).getZ();
 			
-			if ( Math.abs( ay - by ) < 0.01f ) 
+			if ( Math.abs( ay - by ) < 0.01 ) 
 			{
 				return Arrays.asList(
 					new UV( ax, az ),

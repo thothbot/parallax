@@ -42,7 +42,7 @@ public final class FogSimple extends Fog
 	 */
 	public FogSimple(int hex) 
 	{
-		this(hex, 1f, 1000f);
+		this(hex, 1, 1000);
 	}
 
 	/**

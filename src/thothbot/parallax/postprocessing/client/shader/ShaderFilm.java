@@ -66,10 +66,10 @@ public final class ShaderFilm extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("time", new Uniform(Uniform.TYPE.F, 0.0f));
-		this.addUniform("nIntensity", new Uniform(Uniform.TYPE.F, 0.5f));
-		this.addUniform("sIntensity", new Uniform(Uniform.TYPE.F, 0.05f));
-		this.addUniform("sCount", new Uniform(Uniform.TYPE.F, 4096f));
+		this.addUniform("time", new Uniform(Uniform.TYPE.F, 0.0));
+		this.addUniform("nIntensity", new Uniform(Uniform.TYPE.F, 0.5));
+		this.addUniform("sIntensity", new Uniform(Uniform.TYPE.F, 0.05));
+		this.addUniform("sCount", new Uniform(Uniform.TYPE.F, 4096));
 		this.addUniform("grayscale", new Uniform(Uniform.TYPE.I, 1));
 	}
 }

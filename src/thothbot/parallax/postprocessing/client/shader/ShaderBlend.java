@@ -60,8 +60,8 @@ public final class ShaderBlend extends Shader
 	{
 		this.addUniform("tDiffuse1", new Uniform(Uniform.TYPE.T, 0));
 		this.addUniform("tDiffuse2", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("mixRatio", new Uniform(Uniform.TYPE.F, 0.5f));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0f));
+		this.addUniform("mixRatio", new Uniform(Uniform.TYPE.F, 0.5));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
 
 }

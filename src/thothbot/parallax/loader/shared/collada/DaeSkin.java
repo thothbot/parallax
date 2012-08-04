@@ -68,7 +68,7 @@ public class DaeSkin extends DaeElement
 			else if (nodeName.compareTo("bind_shape_matrix") == 0) 
 			{
 				DaeDummyElement bind_shape_matrix = new DaeDummyElement(child);
-				float[] data = bind_shape_matrix.readFloatArray();
+				double[] data = bind_shape_matrix.readFloatArray();
 				bindShapeMatrix = new Matrix4(
 						data[0], data[1], data[2], data[3],
 						data[4], data[5], data[6], data[7],

@@ -47,9 +47,9 @@ public class ColorUtils
 		
 		public HSV() 
 		{
-			this.hue = 0f;
-			this.saturation = 0f;
-			this.value = 0f;
+			this.hue = 0.0;
+			this.saturation = 0.0;
+			this.value = 0.0;
 		}
 	}
 	

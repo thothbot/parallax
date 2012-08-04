@@ -33,7 +33,7 @@ public class DaeAsset extends DaeElement
 		Z
 	};
 	
-	private float unit = 1.0f;
+	private double unit = 1.0;
 	private AXIS upAxis = AXIS.Z;
 	
 	public DaeAsset(Node node)
@@ -71,7 +71,7 @@ public class DaeAsset extends DaeElement
 		}
 	}
 	
-	public float getUnit() {
+	public double getUnit() {
 		return this.unit;
 	}
 	

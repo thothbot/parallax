@@ -62,6 +62,6 @@ public final class ShaderHorizontalBlur extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("h", new Uniform(Uniform.TYPE.F, 1.0f/512f));
+		this.addUniform("h", new Uniform(Uniform.TYPE.F, 1.0/512.0));
 	}
 }

@@ -209,10 +209,10 @@ public class Matrix4
 	public void identity()
 	{
 		set(
-			1f, 0f, 0f, 0f, 
-			0f,	1f, 0f, 0f,
-			0f, 0f, 1f, 0f, 
-			0f, 0f, 0f, 1f
+			1, 0, 0, 0, 
+			0, 1, 0, 0,
+			0, 0, 1, 0, 
+			0, 0, 0, 1
 		);
 	}
 
@@ -423,12 +423,11 @@ public class Matrix4
 
 		if ( x.length() == 0 ) 
 		{
-			z.addX(0.0001f);
+			z.addX(0.0001);
 			x.cross( up, z ).normalize();
 		}
 
 		y.cross( z, x );
-
 
 		te.set(0, x.getX()); te.set(4, y.getX()); te.set(8, z.getX());
 		te.set(1, x.getY()); te.set(5, y.getY()); te.set(9, z.getY());

@@ -64,7 +64,7 @@ public class DaeColorOrTexture extends DaeElement
 			if (nodeName.compareTo("color") == 0) 
 			{
 				DaeElement color = new DaeDummyElement(child);
-				float[] rgba = color.readFloatArray();
+				double[] rgba = color.readFloatArray();
 				this.color.setRGB( rgba[0], rgba[1], rgba[2] );
 			} 
 			else if (nodeName.compareTo("texture") == 0) 

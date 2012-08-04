@@ -60,10 +60,10 @@ public final class ShaderDotscreen extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tSize", new Uniform(Uniform.TYPE.V2, new Vector2( 256f, 256f )));
-		this.addUniform("center", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5f, 0.5f )));
-		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 1.57f));
-		this.addUniform("scale", new Uniform(Uniform.TYPE.F, 1.0f));
+		this.addUniform("tSize", new Uniform(Uniform.TYPE.V2, new Vector2( 256, 256 )));
+		this.addUniform("center", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 1.57));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.F, 1.0));
 
 	}
 

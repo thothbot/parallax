@@ -31,7 +31,7 @@ public class DaeTransformVector extends DaeTransform
 
 	public Vector3 getObject() 
 	{
-		float[] data = getData();
+		double[] data = getData();
 		return new Vector3( data[ 0 ], data[ 1 ], data[ 2 ] );
 	}
 }

@@ -59,9 +59,9 @@ public final class ShaderFocus extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("screenWidth", new Uniform(Uniform.TYPE.F, 1024f));
-		this.addUniform("screenHeight", new Uniform(Uniform.TYPE.F, 1024f));
-		this.addUniform("sampleDistance", new Uniform(Uniform.TYPE.F, 0.94f));
-		this.addUniform("waveFactor", new Uniform(Uniform.TYPE.F, 0.00125f));
+		this.addUniform("screenWidth", new Uniform(Uniform.TYPE.F, 1024));
+		this.addUniform("screenHeight", new Uniform(Uniform.TYPE.F, 1024));
+		this.addUniform("sampleDistance", new Uniform(Uniform.TYPE.F, 0.94));
+		this.addUniform("waveFactor", new Uniform(Uniform.TYPE.F, 0.00125));
 	}
 }

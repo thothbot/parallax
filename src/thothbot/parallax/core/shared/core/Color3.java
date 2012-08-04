@@ -195,15 +195,15 @@ public final class Color3
 
 		if (v == 0.0) 
 		{
-			r = g = b = 0.0f;
+			r = g = b = 0.0;
 		} 
 		else 
 		{
-			int i = (int) Math.floor(h * 6.0f);
-			f = (h * 6.0f) - i;
-			p = v * (1.0f - s);
-			q = v * (1.0f - (s * f));
-			t = v * (1.0f - (s * (1.0f - f)));
+			int i = (int) Math.floor(h * 6.0);
+			f = (h * 6.0) - i;
+			p = v * (1.0 - s);
+			q = v * (1.0 - (s * f));
+			t = v * (1.0 - (s * (1.0 - f)));
 
 			switch (i) {
 

@@ -46,7 +46,7 @@ public final class LineBasicMaterial extends Material
 		
 		setColor(new Color3(0xffffff));
 		
-		setLinewidth(1.0f);
+		setLinewidth(1.0);
 		
 		setVertexColors(Material.COLORS.NO);
 	}

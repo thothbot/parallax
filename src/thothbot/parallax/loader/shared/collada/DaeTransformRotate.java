@@ -28,9 +28,9 @@ public class DaeTransformRotate extends DaeTransform
 	}
 
 	@Override
-	public Float getObject() 
+	public Double getObject() 
 	{
-		float[] data = getData(); 
+		double[] data = getData(); 
 		return data[3] * TO_RADIANS;
 	}
 }

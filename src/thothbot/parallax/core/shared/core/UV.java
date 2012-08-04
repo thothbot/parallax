@@ -57,8 +57,8 @@ public class UV
 	 */
 	public UV() 
 	{
-		this.u = 0.0f;
-		this.v = 0.0f;
+		this.u = 0.0;
+		this.v = 0.0;
 	}
 
 	/**

@@ -121,7 +121,7 @@ public abstract class Material
 	{
 		this.id = Material.MaterialCount++;
 		
-		setOpacity(1.0f);
+		setOpacity(1.0);
 		setTransparent(false);
 		
 		setShading(Material.SHADING.SMOOTH);
@@ -135,8 +135,8 @@ public abstract class Material
 		setDepthWrite(true);
 		
 		setPolygonOffset(false);
-		setPolygonOffsetFactor(0.0f);
-		setPolygonOffsetUnits(0.0f);
+		setPolygonOffsetFactor(0.0);
+		setPolygonOffsetUnits(0.0);
 		
 		setAlphaTest(0);
 		setOverdraw(false);
@@ -356,7 +356,7 @@ public abstract class Material
 
 			uniforms.get("envMap").setTexture( envMapMaterial.getEnvMap() );
 			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null 
-					&& envMapMaterial.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0f : -1.0f );
+					&& envMapMaterial.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0 : -1.0 );
 
 			if ( isGammaInput ) 
 				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );

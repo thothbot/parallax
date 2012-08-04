@@ -60,10 +60,10 @@ public final class ShaderBokeh extends Shader
 	{
 		this.addUniform("tColor", new Uniform(Uniform.TYPE.T, 0));
 		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0f));
-		this.addUniform("aspect", new Uniform(Uniform.TYPE.F, 1.0f));
-		this.addUniform("aperture", new Uniform(Uniform.TYPE.F, 0.025f));
-		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0f));
+		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("aspect", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("aperture", new Uniform(Uniform.TYPE.F, 0.025));
+		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
 	}
 
 }

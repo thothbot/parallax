@@ -33,7 +33,7 @@ import thothbot.parallax.core.shared.core.Vector3;
  */
 public class FrenetFrames
 {
-	private static double epsilon = 0.0001f;
+	private static double epsilon = 0.0001;
 
 	// expose internals
 	private List<Vector3> tangents;

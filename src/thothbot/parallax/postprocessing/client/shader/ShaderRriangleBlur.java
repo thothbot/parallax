@@ -65,7 +65,7 @@ public final class ShaderRriangleBlur extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("texture", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0f, 1.0f )));
+		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 )));
 	}
 
 }

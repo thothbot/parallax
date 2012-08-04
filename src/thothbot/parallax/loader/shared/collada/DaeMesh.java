@@ -109,7 +109,7 @@ public class DaeMesh extends DaeElement
 			DaeInput input = this.vertices.getInput();
 			if(input.getSemantic().compareTo("POSITION") == 0)
 			{
-				float[] vertexData = sources.get(input.getSource()).getData().getData();
+				double[] vertexData = sources.get(input.getSource()).getData().getData();
 				for ( int i = 0; i < vertexData.length; i += 3 ) 
 				{
 					this.geometry.getVertices().add( new Vector3(

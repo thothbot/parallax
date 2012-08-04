@@ -50,9 +50,9 @@ public class Mobius extends Parametric
 
 				double a = 2.0;
 	
-				float x = (float) (Math.cos(v) * (a + u * Math.cos(v/2.0)));
-				float y = (float) (Math.sin(v) * (a + u * Math.cos(v/2.0)));
-				float z = (float) (u * Math.sin(v/2.0));
+				double x = Math.cos(v) * (a + u * Math.cos(v/2.0));
+				double y = Math.sin(v) * (a + u * Math.cos(v/2.0));
+				double z = u * Math.sin(v/2.0);
 				return new Vector3(x, y, z);
 			}
 		}, 

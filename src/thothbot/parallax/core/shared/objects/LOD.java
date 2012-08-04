@@ -43,7 +43,7 @@ public class LOD extends Object3D
 	
 	public void addLevel ( Object3D object3D) 
 	{
-		addLevel(object3D, 0f);
+		addLevel(object3D, 0);
 	}
 
 	// TODO: What is this?

@@ -130,8 +130,8 @@ public class Object3D implements DimensionalObject
 		this.matrixWorldNeedsUpdate = true;
 		this.quaternion = new Quaternion();
 		this.useQuaternion = false;
-		this.boundRadius = 0.0f;
-		this.boundRadiusScale = 1.0f;
+		this.boundRadius = 0.0;
+		this.boundRadiusScale = 1.0;
 		this.visible = true;
 		this.vector = new Vector3();
 		this.name = "";

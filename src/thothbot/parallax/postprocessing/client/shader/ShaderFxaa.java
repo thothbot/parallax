@@ -60,7 +60,7 @@ public final class ShaderFxaa extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0f / 1024f, 1.0f / 512f )));
+		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0 / 1024.0, 1.0 / 512.0 )));
 	}
 
 }

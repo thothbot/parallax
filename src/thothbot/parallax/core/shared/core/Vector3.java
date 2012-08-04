@@ -349,7 +349,7 @@ public class Vector3 extends Vector2 implements Vector
 
 	public Vector3 getRotationFromMatrix(Matrix4 m)
 	{
-		return getRotationFromMatrix(m, new Vector3(1f, 1f, 1f));
+		return getRotationFromMatrix(m, new Vector3(1, 1, 1));
 	}
 
 	public Vector3 getRotationFromMatrix(Matrix4 m, Vector3 scale)

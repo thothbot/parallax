@@ -42,10 +42,10 @@ public class Mobius3d extends Parametric
 				double phi = u / 2.0;
 				double  major = 2.25, a = 0.125, b = 0.65;
 
-				float x = (float) (a * Math.cos(t) * Math.cos(phi) - b * Math.sin(t) * Math.sin(phi));
-				float z = (float) (a * Math.cos(t) * Math.sin(phi) + b * Math.sin(t) * Math.cos(phi));
-				float y = (float) ((major + x) * Math.sin(u));
-				x = (float) ((major + x) * Math.cos(u));
+				double x = a * Math.cos(t) * Math.cos(phi) - b * Math.sin(t) * Math.sin(phi);
+				double z = a * Math.cos(t) * Math.sin(phi) + b * Math.sin(t) * Math.cos(phi);
+				double y = (major + x) * Math.sin(u);
+				x = (major + x) * Math.cos(u);
 				return new Vector3(x, y, z);
 			}
 		}, slices, stacks);

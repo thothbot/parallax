@@ -61,8 +61,8 @@ public final class ShaderNormalmap extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("heightMap", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 512f, 512f )));
-		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1f, 1f )));
-		this.addUniform("height", new Uniform(Uniform.TYPE.F, 0.05f));
+		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 )));
+		this.addUniform("height", new Uniform(Uniform.TYPE.F, 0.05));
 	}
 }

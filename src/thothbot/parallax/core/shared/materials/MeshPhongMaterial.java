@@ -73,15 +73,15 @@ public final class MeshPhongMaterial extends Material
 	
 	public MeshPhongMaterial()
 	{	
-		setWrapRGB(new Vector3( 1f, 1f, 1f ));
+		setWrapRGB(new Vector3( 1, 1, 1 ));
 		setWrapAround(false);
 		
 		setWireframe(false);
 		setWireframeLineWidth(1);
 		
 		setCombine(OPERATIONS.MULTIPLY);
-		setReflectivity(1.0f);
-		setRefractionRatio(0.98f);
+		setReflectivity(1.0);
+		setRefractionRatio(0.98);
 		
 		setFog(true);
 		
@@ -92,7 +92,7 @@ public final class MeshPhongMaterial extends Material
 		
 		setVertexColors(Material.COLORS.NO);
 		
-		setShininess(30f);
+		setShininess(30);
 	}
 
 	@Override

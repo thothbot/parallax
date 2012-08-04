@@ -51,7 +51,7 @@ public final class ParticleBasicMaterial extends Material
 		
 		setColor(new Color3(0xffffff));
 		
-		setSize(1.0f);
+		setSize(1.0);
 		setSizeAttenuation(true);
 		
 		setVertexColors(Material.COLORS.NO);
@@ -127,7 +127,7 @@ public final class ParticleBasicMaterial extends Material
 		getUniforms().get("psColor").setValue( getColor() );
 		getUniforms().get("opacity").setValue( getOpacity() );
 		getUniforms().get("size").setValue( getSize() );
-		getUniforms().get("scale").setValue( canvas.getHeight() / 2.0f );
+		getUniforms().get("scale").setValue( canvas.getHeight() / 2.0 );
 
 		getUniforms().get("map").setTexture( getMap() );
 	}

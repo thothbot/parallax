@@ -58,10 +58,10 @@ public class Quaternion
 	 */
 	public Quaternion() 
 	{
-		this.x = 0.0f;
-		this.y = 0.0f;
-		this.z = 0.0f;
-		this.w = 1.0f;
+		this.x = 0.0;
+		this.y = 0.0;
+		this.z = 0.0;
+		this.w = 1.0;
 	}
 
 	/**
@@ -246,23 +246,19 @@ public class Quaternion
 
 		if (l == 0) 
 		{
-
 			this.x = 0;
 			this.y = 0;
 			this.z = 0;
 			this.w = 0;
-
 		} 
 		else 
 		{
-
-			l = 1f / l;
+			l = 1.0 / l;
 
 			this.x = this.x * l;
 			this.y = this.y * l;
 			this.z = this.z * l;
 			this.w = this.w * l;
-
 		}
 	}
 
@@ -386,10 +382,10 @@ public class Quaternion
 
 		if (Math.abs(sinHalfTheta) < 0.001) 
 		{
-			qm.w = 0.5f * (qa.w + qb.w);
-			qm.x = 0.5f * (qa.x + qb.x);
-			qm.y = 0.5f * (qa.y + qb.y);
-			qm.z = 0.5f * (qa.z + qb.z);
+			qm.w = 0.5 * (qa.w + qb.w);
+			qm.x = 0.5 * (qa.x + qb.x);
+			qm.y = 0.5 * (qa.y + qb.y);
+			qm.z = 0.5 * (qa.z + qb.z);
 
 			return qm;
 		}

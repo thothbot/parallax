@@ -62,8 +62,8 @@ public class MeshBasicMaterial extends Material
 		setWireframeLineWidth(1);
 		
 		setCombine(OPERATIONS.MULTIPLY);
-		setReflectivity(1.0f);
-		setRefractionRatio(0.98f);
+		setReflectivity(1.0);
+		setRefractionRatio(0.98);
 		
 		setFog(true);
 		

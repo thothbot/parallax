@@ -115,7 +115,7 @@ public class Vector4 extends Vector3 implements Vector
 	 */
 	public Vector4 copy(Vector4 v)
 	{
-		return this.set(v.getX(), v.getY(), v.getZ(), 1.0f);
+		return this.set(v.getX(), v.getY(), v.getZ(), 1.0);
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public class Vector4 extends Vector3 implements Vector
 	 */
 	public Vector4 copy(Vector3 v)
 	{
-		return this.set(v.getX(), v.getY(), v.getZ(), 1.0f);
+		return this.set(v.getX(), v.getY(), v.getZ(), 1.0);
 	}
 	
 	/**

@@ -58,8 +58,8 @@ public final class ShaderVerticalTiltShift extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0f/512f));
-		this.addUniform("r", new Uniform(Uniform.TYPE.F, 0.35f));
+		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("r", new Uniform(Uniform.TYPE.F, 0.35));
 	}
 
 }

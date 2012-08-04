@@ -59,7 +59,7 @@ public final class ShaderSepia extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("amount", new Uniform(Uniform.TYPE.F, 1.0f));
+		this.addUniform("amount", new Uniform(Uniform.TYPE.F, 1.0));
 
 	}
 

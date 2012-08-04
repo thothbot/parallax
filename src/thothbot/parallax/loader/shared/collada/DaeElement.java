@@ -25,7 +25,7 @@ import com.google.gwt.xml.client.Node;
 
 public abstract class DaeElement 
 {
-	public static final float TO_RADIANS = (float) (Math.PI / 180.0f);
+	public static final double TO_RADIANS = Math.PI / 180.0;
 	
 	private Node node;
 	
@@ -78,17 +78,17 @@ public abstract class DaeElement
 		}
 	}
 	
-	public float[] readFloatArray() 
+	public double[] readFloatArray() 
 	{
 		String[] parts = readStringArray();
 		if (parts != null && parts.length > 0) 
 		{
 			Log.debug("DaeArrayFloat() [Float]-> " + parts.length);
 			
-			float[] data = new float[parts.length];
+			double[] data = new double[parts.length];
 			for (int i = 0; i < parts.length; i++) 
 			{
-				data[i] = Float.parseFloat(parts[i]);
+				data[i] = Double.parseDouble(parts[i]);
 			}
 			return data;
 		}

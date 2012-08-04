@@ -218,7 +218,7 @@ public final class LensFlarePlugin extends Plugin
 
 		for ( int i = 0; i < nFlares; i ++ ) 
 		{
-			size = 16f / viewportHeight;
+			size = 16.0 / viewportHeight;
 			scale.set( size * invAspect, size );
 
 			// calc object screen position

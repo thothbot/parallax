@@ -59,7 +59,7 @@ public final class ShaderColorCorrection extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("powRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 2f, 2f, 2f )));
-		this.addUniform("mulRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1f, 1f, 1f )));
+		this.addUniform("powRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 2, 2, 2 )));
+		this.addUniform("mulRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1, 1, 1 )));
 	}
 }

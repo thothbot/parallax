@@ -58,8 +58,8 @@ public final class ShaderVignette extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0f));
-		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0f));
+		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
 
 	}
 

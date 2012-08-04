@@ -67,14 +67,14 @@ public final class ShaderSsao extends Shader
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
 		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("size", new Uniform(Uniform.TYPE.V2, new Vector2( 512f, 512f )));
-		this.addUniform("cameraNear", new Uniform(Uniform.TYPE.F, 1.0f));
-		this.addUniform("cameraFar", new Uniform(Uniform.TYPE.F, 100f));
-		this.addUniform("fogNear", new Uniform(Uniform.TYPE.F, 5.0f));
-		this.addUniform("fogFar", new Uniform(Uniform.TYPE.F, 100f));
+		this.addUniform("size", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
+		this.addUniform("cameraNear", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("cameraFar", new Uniform(Uniform.TYPE.F, 100));
+		this.addUniform("fogNear", new Uniform(Uniform.TYPE.F, 5.0));
+		this.addUniform("fogFar", new Uniform(Uniform.TYPE.F, 100));
 		this.addUniform("fogEnabled", new Uniform(Uniform.TYPE.I, 0));
 		this.addUniform("onlyAO", new Uniform(Uniform.TYPE.I, 0));
-		this.addUniform("aoClamp", new Uniform(Uniform.TYPE.F, 0.3f));
-		this.addUniform("lumInfluence", new Uniform(Uniform.TYPE.F,0.9f));
+		this.addUniform("aoClamp", new Uniform(Uniform.TYPE.F, 0.3));
+		this.addUniform("lumInfluence", new Uniform(Uniform.TYPE.F,0.9));
 	}
 }

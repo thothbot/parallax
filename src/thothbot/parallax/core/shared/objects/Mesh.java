@@ -763,17 +763,17 @@ public class Mesh  extends GeometryObject implements HasSides
 				 skinVertexAArray.set(offset_skin, sa1.getX());
 				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
 				 skinVertexAArray.set(offset_skin + 2, sa1.getZ());
-				 skinVertexAArray.set(offset_skin + 3, 1.0f); // pad for faster vertex shader
+				 skinVertexAArray.set(offset_skin + 3, 1.0); // pad for faster vertex shader
 
 				 skinVertexAArray.set(offset_skin + 4, sa2.getX());
 				 skinVertexAArray.set(offset_skin + 5, sa2.getY());
 				 skinVertexAArray.set(offset_skin + 6, sa2.getZ());
-				 skinVertexAArray.set(offset_skin + 7, 1.0f);
+				 skinVertexAArray.set(offset_skin + 7, 1.0);
 
 				 skinVertexAArray.set(offset_skin + 8, sa3.getX());
 				 skinVertexAArray.set(offset_skin + 9, sa3.getY());
 				 skinVertexAArray.set(offset_skin + 10, sa3.getZ());
-				 skinVertexAArray.set(offset_skin + 11, 1.0f);
+				 skinVertexAArray.set(offset_skin + 11, 1.0);
 
 				 // vertices B
 
@@ -784,17 +784,17 @@ public class Mesh  extends GeometryObject implements HasSides
 				 skinVertexBArray.set(offset_skin, sb1.getX());
 				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
 				 skinVertexBArray.set(offset_skin + 2, sb1.getZ());
-				 skinVertexBArray.set(offset_skin + 3, 1.0f); // pad for faster vertex shader
+				 skinVertexBArray.set(offset_skin + 3, 1.0); // pad for faster vertex shader
 
 				 skinVertexBArray.set(offset_skin + 4, sb2.getX());
 				 skinVertexBArray.set(offset_skin + 5, sb2.getY());
 				 skinVertexBArray.set(offset_skin + 6, sb2.getZ());
-				 skinVertexBArray.set(offset_skin + 7, 1.0f);
+				 skinVertexBArray.set(offset_skin + 7, 1.0);
 
 				 skinVertexBArray.set(offset_skin + 8, sb3.getX());
 				 skinVertexBArray.set(offset_skin + 9, sb3.getY());
 				 skinVertexBArray.set(offset_skin + 10, sb3.getZ());
-				 skinVertexBArray.set(offset_skin + 11, 1.0f);
+				 skinVertexBArray.set(offset_skin + 11, 1.0);
 
 				 offset_skin += 12;
 
@@ -869,22 +869,22 @@ public class Mesh  extends GeometryObject implements HasSides
 				 skinVertexAArray.set(offset_skin, sa1.getX());
 				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
 				 skinVertexAArray.set(offset_skin + 2, sa1.getZ());
-				 skinVertexAArray.set(offset_skin + 3, 1.0f); // pad for faster vertex shader
+				 skinVertexAArray.set(offset_skin + 3, 1.0); // pad for faster vertex shader
 
 				 skinVertexAArray.set(offset_skin + 4, sa2.getX());
 				 skinVertexAArray.set(offset_skin + 5, sa2.getY());
 				 skinVertexAArray.set(offset_skin + 6, sa2.getZ());
-				 skinVertexAArray.set(offset_skin + 7, 1.0f);
+				 skinVertexAArray.set(offset_skin + 7, 1.0);
 
 				 skinVertexAArray.set(offset_skin + 8, sa3.getX());
 				 skinVertexAArray.set(offset_skin + 9, sa3.getY());
 				 skinVertexAArray.set(offset_skin + 10, sa3.getZ());
-				 skinVertexAArray.set(offset_skin + 11, 1.0f);
+				 skinVertexAArray.set(offset_skin + 11, 1.0);
 
 				 skinVertexAArray.set(offset_skin + 12, sa4.getX());
 				 skinVertexAArray.set(offset_skin + 13, sa4.getY());
 				 skinVertexAArray.set(offset_skin + 14, sa4.getZ());
-				 skinVertexAArray.set(offset_skin + 15, 1.0f);
+				 skinVertexAArray.set(offset_skin + 15, 1.0);
 
 				 // vertices B
 
@@ -896,22 +896,22 @@ public class Mesh  extends GeometryObject implements HasSides
 				 skinVertexBArray.set(offset_skin, sb1.getX());
 				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
 				 skinVertexBArray.set(offset_skin + 2, sb1.getZ());
-				 skinVertexBArray.set(offset_skin + 3, 1.0f); // pad for faster vertex shader
+				 skinVertexBArray.set(offset_skin + 3, 1.0); // pad for faster vertex shader
 
 				 skinVertexBArray.set(offset_skin + 4, sb2.getX());
 				 skinVertexBArray.set(offset_skin + 5, sb2.getY());
 				 skinVertexBArray.set(offset_skin + 6, sb2.getZ());
-				 skinVertexBArray.set(offset_skin + 7, 1.0f);
+				 skinVertexBArray.set(offset_skin + 7, 1.0);
 
 				 skinVertexBArray.set(offset_skin + 8, sb3.getX());
 				 skinVertexBArray.set(offset_skin + 9, sb3.getY());
 				 skinVertexBArray.set(offset_skin + 10, sb3.getZ());
-				 skinVertexBArray.set(offset_skin + 11, 1.0f);
+				 skinVertexBArray.set(offset_skin + 11, 1.0);
 
 				 skinVertexBArray.set(offset_skin + 12, sb4.getX());
 				 skinVertexBArray.set(offset_skin + 13, sb4.getY());
 				 skinVertexBArray.set(offset_skin + 14, sb4.getZ());
-				 skinVertexBArray.set(offset_skin + 15, 1.0f);
+				 skinVertexBArray.set(offset_skin + 15, 1.0);
 
 				 offset_skin += 16;
 

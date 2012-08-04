@@ -44,7 +44,7 @@ public final class FogExp2 extends Fog
 	 */
 	public FogExp2(int hex) 
 	{
-		this(hex, 0.00025f);
+		this(hex, 0.00025);
 	}
 
 	/**

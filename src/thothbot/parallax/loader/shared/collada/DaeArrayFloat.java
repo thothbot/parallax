@@ -19,13 +19,11 @@
 
 package thothbot.parallax.loader.shared.collada;
 
-import thothbot.parallax.core.shared.Log;
-
 import com.google.gwt.xml.client.Node;
 
 public class DaeArrayFloat extends DaeArrayData 
 {
-	private float[] data;
+	private double[] data;
 
 	public DaeArrayFloat(Node node) 
 	{
@@ -40,7 +38,7 @@ public class DaeArrayFloat extends DaeArrayData
 		data = readFloatArray();
 	}
 
-	public float[] getData() 
+	public double[] getData() 
 	{
 		return data;
 	}

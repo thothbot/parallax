@@ -35,9 +35,9 @@ public class Plane extends Parametric
 			@Override
 			public Vector3 run(double u, double v)
 			{
-				float x = (float) (u * width);
-				float y = 0.0f;
-				float z = (float) (v * height);
+				double x = u * (double)width;
+				double y = 0.0;
+				double z = v * (double)height;
 
 				return new Vector3(x, y, z);
 			}

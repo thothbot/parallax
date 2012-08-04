@@ -40,7 +40,7 @@ public class WebGLRenderLights
 	{
 		this.ambient = (Float32Array) Float32Array.createArray();
 		for(int i = 0; i < 3; i++)
-			this.ambient.set(i,0.0f);
+			this.ambient.set(i, 0.0);
 		
 		this.directional = new WebGLRenderLightsDirectional();
 		this.point       = new WebGLRenderLightsPoint();
