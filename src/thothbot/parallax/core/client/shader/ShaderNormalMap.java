@@ -86,7 +86,7 @@ public final class ShaderNormalMap extends Shader
 		this.addUniform("uDiffuseColor",  new Uniform(Uniform.TYPE.C, new Color3( 0xffffff ) ));
 		this.addUniform("uSpecularColor", new Uniform(Uniform.TYPE.C, new Color3( 0x111111 ) ));
 		this.addUniform("uAmbientColor",  new Uniform(Uniform.TYPE.C, new Color3( 0xffffff ) ));
-		this.addUniform("uShininess",     new Uniform(Uniform.TYPE.F, 30  ));
+		this.addUniform("uShininess",     new Uniform(Uniform.TYPE.F, 30.0  ));
 		this.addUniform("uOpacity",       new Uniform(Uniform.TYPE.F, 1.0 ));
 		
 		this.addUniform("uReflectivity", new Uniform(Uniform.TYPE.F, 0.5 ));

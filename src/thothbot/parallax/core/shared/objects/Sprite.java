@@ -31,7 +31,7 @@ import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 
-public class Sprite extends Object3D
+public class Sprite extends Object3D implements Comparable<Sprite>
 {
 	/*
 	 * Alignment
@@ -245,5 +245,13 @@ public class Sprite extends Object3D
 		}
 
 		this.matrixWorldNeedsUpdate = true;
+	}
+	
+	@Override
+	public int compareTo(Sprite o)
+	{
+		double result = this.z - o.z;
+		return (result == 0) ? 0 
+				: (result > 0) ? 1 : -1;
 	}
 }

@@ -35,7 +35,6 @@ import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.ShaderSprite;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.objects.Sprite;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -192,16 +191,7 @@ public final class SpritePlugin extends Plugin
 			}
 		}
 
-		Collections.sort(sprites, new Comparator<Sprite>() {
-
-			@Override
-			public int compare(Sprite o1, Sprite o2)
-			{
-				double result = o2.getZ() - o1.getZ(); 
-				return (result == 0) ? 0 
-						: (result > 0) ? 1 : -1;
-			}
-		});
+		Collections.sort(sprites);
 
 		// render all sprites
 
