@@ -161,7 +161,7 @@ public class Quaternion
 		return this;
 	}
 
-	public void setFromEuler(Vector3f vector)
+	public void setFromEuler(Vector3 vector)
 	{
 
 		double c = Math.PI / 360.0, // 0.5 * Math.PI / 360, // 0.5 is an
@@ -184,7 +184,7 @@ public class Quaternion
 		this.z = c1 * s2 * c3 - s1 * c2 * s3;
 	}
 
-	public void setFromAxisAngle(Vector3f axis, double angle)
+	public void setFromAxisAngle(Vector3 axis, double angle)
 	{
 
 		// from
@@ -200,7 +200,7 @@ public class Quaternion
 		this.w = Math.cos(halfAngle);
 	}
 
-	public void setFromRotationMatrix(Matrix4f m)
+	public void setFromRotationMatrix(Matrix4 m)
 	{
 		// Adapted from:
 		// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
@@ -310,7 +310,7 @@ public class Quaternion
 	 * 
 	 * @return the modified input vector
 	 */
-	public Vector3f multiply(Vector3f vector)
+	public Vector3 multiply(Vector3 vector)
 	{
 		return multiply(vector, vector);
 	}
@@ -324,7 +324,7 @@ public class Quaternion
 	 * 
 	 * @return the modified destination vector
 	 */
-	public Vector3f multiply(Vector3f vector, Vector3f dest)
+	public Vector3 multiply(Vector3 vector, Vector3 dest)
 	{
 		double x = vector.getX(), y = vector.getY(), z = vector.getZ();
 		double qx = this.getX(), qy = this.getY(), qz = this.getZ(), qw = this.getW();

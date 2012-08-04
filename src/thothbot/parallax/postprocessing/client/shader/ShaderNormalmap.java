@@ -24,7 +24,7 @@ package thothbot.parallax.postprocessing.client.shader;
 
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
@@ -61,8 +61,8 @@ public final class ShaderNormalmap extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("heightMap", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2f( 512f, 512f )));
-		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2f( 1f, 1f )));
+		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 512f, 512f )));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1f, 1f )));
 		this.addUniform("height", new Uniform(Uniform.TYPE.F, 0.05f));
 	}
 }

@@ -29,8 +29,8 @@ import java.util.List;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 
 /**
  * The Cylinder geometry
@@ -66,12 +66,12 @@ public final class Cylinder extends Geometry
 		int x = 0, y = 0; 
 		
 		List<List<Integer>> vertices = new ArrayList<List<Integer>>();
-		List<List<UVf>> uvs = new ArrayList<List<UVf>>();
+		List<List<UV>> uvs = new ArrayList<List<UV>>();
 
 		for ( y = 0; y <= segmentsY; y ++ ) 
 		{
 			List<Integer> verticesRow = new ArrayList<Integer>();
-			List<UVf> uvsRow = new ArrayList<UVf>();
+			List<UV> uvsRow = new ArrayList<UV>();
 
 			double v = y / segmentsY * 1.0;
 			double radius = v * ( radiusBottom - radiusTop ) + radiusTop;
@@ -80,7 +80,7 @@ public final class Cylinder extends Geometry
 			{
 				double u = x / segmentsX * 1.0;
 
-				Vector3f vertex = new Vector3f();
+				Vector3 vertex = new Vector3();
 				
 				vertex.setX(radius * Math.sin( u * Math.PI * 2.0 ));
 				vertex.setY(- v * height + heightHalf);
@@ -89,7 +89,7 @@ public final class Cylinder extends Geometry
 				getVertices().add( vertex );
 
 				verticesRow.add( getVertices().size() - 1 );
-				uvsRow.add( new UVf( u, v ) );
+				uvsRow.add( new UV( u, v ) );
 
 			}
 
@@ -98,7 +98,7 @@ public final class Cylinder extends Geometry
 		}
 
 		double tanTheta = ( radiusBottom - radiusTop ) / height;
-		Vector3f na, nb;
+		Vector3 na, nb;
 
 		for ( x = 0; x < segmentsX; x ++ ) 
 		{
@@ -125,15 +125,15 @@ public final class Cylinder extends Geometry
 				int v3 = vertices.get( y + 1 ).get( x + 1 );
 				int v4 = vertices.get( y ).get( x + 1 );
 
-				Vector3f n1 = na.clone();
-				Vector3f n2 = na.clone();
-				Vector3f n3 = nb.clone();
-				Vector3f n4 = nb.clone();
+				Vector3 n1 = na.clone();
+				Vector3 n2 = na.clone();
+				Vector3 n3 = nb.clone();
+				Vector3 n4 = nb.clone();
 
-				UVf uv1 = uvs.get( y ).get( x ).clone();
-				UVf uv2 = uvs.get( y + 1 ).get( x ).clone();
-				UVf uv3 = uvs.get( y + 1 ).get( x + 1 ).clone();
-				UVf uv4 = uvs.get( y ).get( x + 1 ).clone();
+				UV uv1 = uvs.get( y ).get( x ).clone();
+				UV uv2 = uvs.get( y + 1 ).get( x ).clone();
+				UV uv3 = uvs.get( y + 1 ).get( x + 1 ).clone();
+				UV uv4 = uvs.get( y ).get( x + 1 ).clone();
 
 				getFaces().add( new Face4( v1, v2, v3, v4, Arrays.asList( n1, n2, n3, n4 ) ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3, uv4 ) );
@@ -145,7 +145,7 @@ public final class Cylinder extends Geometry
 
 		if ( !openEnded && radiusTop > 0 ) 
 		{
-			getVertices().add( new Vector3f( 0.0, heightHalf, 0.0 ) );
+			getVertices().add( new Vector3( 0.0, heightHalf, 0.0 ) );
 
 			for ( x = 0; x < segmentsX; x ++ ) 
 			{
@@ -153,13 +153,13 @@ public final class Cylinder extends Geometry
 				int v2 = vertices.get( 0 ).get( x + 1 );
 				int v3 = getVertices().size() - 1;
 
-				Vector3f n1 = new Vector3f( 0, 1, 0 );
-				Vector3f n2 = new Vector3f( 0, 1, 0 );
-				Vector3f n3 = new Vector3f( 0, 1, 0 );
+				Vector3 n1 = new Vector3( 0, 1, 0 );
+				Vector3 n2 = new Vector3( 0, 1, 0 );
+				Vector3 n3 = new Vector3( 0, 1, 0 );
 
-				UVf uv1 = uvs.get( 0 ).get( x ).clone();
-				UVf uv2 = uvs.get( 0 ).get( x + 1 ).clone();
-				UVf uv3 = new UVf( uv2.getU(), 0 );
+				UV uv1 = uvs.get( 0 ).get( x ).clone();
+				UV uv2 = uvs.get( 0 ).get( x + 1 ).clone();
+				UV uv3 = new UV( uv2.getU(), 0 );
 
 				getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
@@ -170,7 +170,7 @@ public final class Cylinder extends Geometry
 
 		if ( !openEnded && radiusBottom > 0 ) 
 		{
-			getVertices().add( new Vector3f( 0, - heightHalf, 0 ) );
+			getVertices().add( new Vector3( 0, - heightHalf, 0 ) );
 
 			for ( x = 0; x < segmentsX; x ++ ) 
 			{
@@ -178,13 +178,13 @@ public final class Cylinder extends Geometry
 				int v2 = vertices.get( y ).get( x );
 				int v3 = getVertices().size() - 1;
 
-				Vector3f n1 = new Vector3f( 0.0, - 1.0, 0.0 );
-				Vector3f n2 = new Vector3f( 0.0, - 1.0, 0.0 );
-				Vector3f n3 = new Vector3f( 0.0, - 1.0, 0.0 );
+				Vector3 n1 = new Vector3( 0.0, - 1.0, 0.0 );
+				Vector3 n2 = new Vector3( 0.0, - 1.0, 0.0 );
+				Vector3 n3 = new Vector3( 0.0, - 1.0, 0.0 );
 
-				UVf uv1 = uvs.get( y ).get( x + 1 ).clone();
-				UVf uv2 = uvs.get( y ).get( x ).clone();
-				UVf uv3 = new UVf( uv2.getU(), 1 );
+				UV uv1 = uvs.get( y ).get( x + 1 ).clone();
+				UV uv2 = uvs.get( y ).get( x ).clone();
+				UV uv3 = new UV( uv2.getU(), 1 );
 
 				getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );

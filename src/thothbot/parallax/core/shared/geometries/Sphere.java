@@ -30,8 +30,8 @@ import thothbot.parallax.core.shared.core.BoundingSphere;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 
 /**
  * The Sphere geometry
@@ -67,12 +67,12 @@ public final class Sphere extends Geometry
 		int segmentsY = Math.max( 2, segmentsHeight );
 		
 		List<List<Integer>> vertices = new ArrayList<List<Integer>>();
-		List<List<UVf>> uvs = new ArrayList<List<UVf>>();
+		List<List<UV>> uvs = new ArrayList<List<UV>>();
 		
 		for (int y = 0; y <= segmentsY; y++) 
 		{
 			List<Integer> verticesRow = new ArrayList<Integer>();
-			List<UVf> uvsRow = new ArrayList<UVf>();
+			List<UV> uvsRow = new ArrayList<UV>();
 			
 			for (int x = 0; x <= segmentsX; x++) 
 			{
@@ -80,7 +80,7 @@ public final class Sphere extends Geometry
 				double u = x / segmentsX * 1.0;
 				double v = y / segmentsY * 1.0;
 
-				Vector3f vertex = new Vector3f();
+				Vector3 vertex = new Vector3();
 				vertex.setX(- radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
 				vertex.setY(radius * Math.cos( thetaStart + v * thetaLength ));
 				vertex.setZ(radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
@@ -88,7 +88,7 @@ public final class Sphere extends Geometry
 				getVertices().add( vertex );
 
 				verticesRow.add( getVertices().size() - 1 );
-				uvsRow.add( new UVf( u, v ) );
+				uvsRow.add( new UV( u, v ) );
 			}
 			
 			vertices.add( verticesRow );
@@ -104,19 +104,19 @@ public final class Sphere extends Geometry
 				int v3 = vertices.get( y + 1 ).get( x );
 				int v4 = vertices.get( y + 1 ).get( x + 1 );
 
-				Vector3f n1 = getVertices().get( v1 ).clone();
+				Vector3 n1 = getVertices().get( v1 ).clone();
 				n1.normalize();
-				Vector3f n2 = getVertices().get( v2 ).clone();
+				Vector3 n2 = getVertices().get( v2 ).clone();
 				n2.normalize();
-				Vector3f n3 = getVertices().get( v3 ).clone();
+				Vector3 n3 = getVertices().get( v3 ).clone();
 				n3.normalize();
-				Vector3f n4 = getVertices().get( v4 ).clone();
+				Vector3 n4 = getVertices().get( v4 ).clone();
 				n4.normalize();
 
-				UVf uv1 = uvs.get( y ).get( x + 1 ).clone();
-				UVf uv2 = uvs.get( y ).get( x ).clone();
-				UVf uv3 = uvs.get( y + 1 ).get( x ).clone();
-				UVf uv4 = uvs.get( y + 1 ).get( x + 1 ).clone();
+				UV uv1 = uvs.get( y ).get( x + 1 ).clone();
+				UV uv2 = uvs.get( y ).get( x ).clone();
+				UV uv3 = uvs.get( y + 1 ).get( x ).clone();
+				UV uv4 = uvs.get( y + 1 ).get( x + 1 ).clone();
 
 				if ( Math.abs( getVertices().get( v1 ).getY() ) == radius ) 
 				{

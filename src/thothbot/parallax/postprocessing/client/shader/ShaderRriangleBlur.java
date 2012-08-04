@@ -24,7 +24,7 @@ package thothbot.parallax.postprocessing.client.shader;
 
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
@@ -65,7 +65,7 @@ public final class ShaderRriangleBlur extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("texture", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2f( 1.0f, 1.0f )));
+		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0f, 1.0f )));
 	}
 
 }

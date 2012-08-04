@@ -40,14 +40,14 @@ import thothbot.parallax.core.shared.Log;
  * @author thothbot
  *
  */
-public class Matrix3f
+public class Matrix3
 {
 	private Float32Array elements;
 
 	/**
 	 * Default constructor will make empty three-dimensional matrix.
 	 */
-	public Matrix3f() 
+	public Matrix3() 
 	{
 		this.elements = Float32Array.create(9);
 	}
@@ -76,7 +76,7 @@ public class Matrix3f
 	 * 
 	 * @param m the matrix to be inverted
 	 */
-	public void getInverse(Matrix4f m)
+	public void getInverse(Matrix4 m)
 	{
 		// input: THREE.Matrix4
 		// ( based on http://code.google.com/p/webgl-mjs/ )
@@ -97,7 +97,7 @@ public class Matrix3f
 		// no inverse
 
 		if (det == 0)
-			Log.error("Matrix3f.invert(): determinant == 0");
+			Log.error("Matrix3.invert(): determinant == 0");
 
 		double idet = 1.0 / det;
 

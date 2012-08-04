@@ -19,7 +19,7 @@
 
 package thothbot.parallax.loader.shared.collada;
 
-import thothbot.parallax.core.shared.core.Matrix4f;
+import thothbot.parallax.core.shared.core.Matrix4;
 
 import com.google.gwt.xml.client.Node;
 
@@ -29,9 +29,9 @@ public class DaeTransformMatrix extends DaeTransform
 		super(node);
 	}
 
-	public Matrix4f getObject() {
+	public Matrix4 getObject() {
 		float[] data = getData();
-		return new Matrix4f(
+		return new Matrix4(
 			data[0], data[1], data[2], data[3],
 			data[4], data[5], data[6], data[7],
 			data[8], data[9], data[10], data[11],

@@ -42,27 +42,27 @@ public class Geometry extends GeometryBuffer
 	public class MorphColor
 	{
 		public String name;
-		public List<Color3f> colors;
+		public List<Color3> colors;
 	}
 	
 	public class MorphNormal
 	{
-		public List<Vector3f> faceNormals;
+		public List<Vector3> faceNormals;
 		public List<VertextNormal> vertexNormals;
 	}
 	
 	public class VertextNormal
 	{
-		public Vector3f a;
-		public Vector3f b;
-		public Vector3f c;
-		public Vector3f d;
+		public Vector3 a;
+		public Vector3 b;
+		public Vector3 c;
+		public Vector3 d;
 	}
 	
 	public class MorphTarget
 	{
 		public String name;
-		public List<Vector3f> vertices;
+		public List<Vector3> vertices;
 	}
 	
 	// Bounding box.		
@@ -72,19 +72,19 @@ public class Geometry extends GeometryBuffer
 	private BoundingSphere boundingSphere = null;
 	
 	// Array of morph targets. Each morph target is JS object:
-	//  		{ name: "targetName", vertices: [ new Vector3f(), ... ] }
+	//  		{ name: "targetName", vertices: [ new Vector3(), ... ] }
 	// Morph vertices match number and order of primary vertices.
 	private List<MorphTarget> morphTargets;
 
 	// Array of vertices.
-	private List<Vector3f> vertices;
+	private List<Vector3> vertices;
 	
-	private ArrayList<Vector3f> tempVerticles;
+	private ArrayList<Vector3> tempVerticles;
 
 	// Array of vertex colors, matching number and order of vertices.
 	// Used in ParticleSystem, Line and Ribbon.
 	// Meshes use per-face-use-of-vertex colors embedded directly in faces.
-	private List<Color3f> colors; // one-to-one vertex colors, used in
+	private List<Color3> colors; // one-to-one vertex colors, used in
 								// ParticleSystem, Line and Ribbon
 
 	// Array of triangles or/and quads.
@@ -92,11 +92,11 @@ public class Geometry extends GeometryBuffer
 
 	// Array of face UV layers.
 	// Each UV layer is an array of UV matching order and number of vertices in faces.
-	private List<List<UVf>> faceUvs;
+	private List<List<UV>> faceUvs;
 	
 	// Array of face UV layers.
 	// Each UV layer is an array of UV matching order and number of vertices in faces.
-	private List<List<List<UVf>>> faceVertexUvs;
+	private List<List<List<UV>>> faceVertexUvs;
 	
 	// True if geometry has tangents. Set in Geometry.computeTangents.
 	private Boolean hasTangents = false;
@@ -106,21 +106,21 @@ public class Geometry extends GeometryBuffer
 
 
 	// Array of morph colors. Morph colors have similar structure as morph targets, each color set is JS object:
-	//		morphColor = { name: "colorName", colors: [ new Color3f(), ... ] }
+	//		morphColor = { name: "colorName", colors: [ new Color3(), ... ] }
 	// Morph colors can match either number and order of faces (face colors) or number of vertices (vertex colors).
 	private List<MorphColor> morphColors;
 
-	// 		morphNormals = { faceNormals: [ new Vector3f(), ... ],  vertexNormals: [ new Vector3f(), ... ]}
+	// 		morphNormals = { faceNormals: [ new Vector3(), ... ],  vertexNormals: [ new Vector3(), ... ]}
 	private List<MorphNormal> morphNormals;
 
 	// Array of skinning weights, matching number and order of vertices.
-	private List<Vector4f> skinWeights;
+	private List<Vector4> skinWeights;
 
 	// Array of skinning indices, matching number and order of vertices.
-	private List<Vector4f> skinIndices;
+	private List<Vector4> skinIndices;
 	
-	private List<Vector3f> skinVerticesA;
-	private List<Vector3f> skinVerticesB;
+	private List<Vector3> skinVerticesA;
+	private List<Vector3> skinVerticesB;
 
 	private List<Bone> bones;
 
@@ -145,21 +145,21 @@ public class Geometry extends GeometryBuffer
 	public Geometry() {
 		super();
 
-		this.vertices = new ArrayList<Vector3f>();
-		this.colors = new ArrayList<Color3f>(); // one-to-one vertex colors, used in ParticleSystem, Line and Ribbon
+		this.vertices = new ArrayList<Vector3>();
+		this.colors = new ArrayList<Color3>(); // one-to-one vertex colors, used in ParticleSystem, Line and Ribbon
 
 		this.faces = new ArrayList<Face3>();
 
-		this.faceUvs = new ArrayList<List<UVf>>();
-		this.faceVertexUvs = new ArrayList<List<List<UVf>>>();
-		this.faceVertexUvs.add(new ArrayList<List<UVf>>());
+		this.faceUvs = new ArrayList<List<UV>>();
+		this.faceVertexUvs = new ArrayList<List<List<UV>>>();
+		this.faceVertexUvs.add(new ArrayList<List<UV>>());
 
 		this.morphTargets = new ArrayList<MorphTarget>();
 		this.morphNormals = new ArrayList<MorphNormal>();
 		this.morphColors = new ArrayList<MorphColor>();
 
-		this.skinWeights = new ArrayList<Vector4f>();
-		this.skinIndices = new ArrayList<Vector4f>();
+		this.skinWeights = new ArrayList<Vector4>();
+		this.skinIndices = new ArrayList<Vector4>();
 
 		this.boundingBox = null;
 		this.boundingSphere = null;
@@ -185,27 +185,27 @@ public class Geometry extends GeometryBuffer
 		this.geometryGroupsList = geometryGroupsList;
 	}
 	
-	public List<Vector4f> getSkinWeights() {
+	public List<Vector4> getSkinWeights() {
 		return this.skinWeights;
 	}
 	
-	public List<Vector4f> getSkinIndices() {
+	public List<Vector4> getSkinIndices() {
 		return this.skinIndices;
 	}
 	
-	public List<Vector3f> getSkinVerticesA() {
+	public List<Vector3> getSkinVerticesA() {
 		return this.skinVerticesA;
 	}
 	
-	public void setSkinVerticesA(List<Vector3f> skinVerticesA) {
+	public void setSkinVerticesA(List<Vector3> skinVerticesA) {
 		this.skinVerticesA = skinVerticesA;
 	}
 	
-	public List<Vector3f> getSkinVerticesB() {
+	public List<Vector3> getSkinVerticesB() {
 		return this.skinVerticesB;
 	}
 	
-	public void setSkinVerticesB(List<Vector3f>  skinVerticesB) {
+	public void setSkinVerticesB(List<Vector3>  skinVerticesB) {
 		this.skinVerticesB = skinVerticesB;
 	}
 
@@ -225,19 +225,19 @@ public class Geometry extends GeometryBuffer
 		return hasTangents;
 	}
 
-	public void setFaceUvs(List<List<UVf>> faceUvs) {
+	public void setFaceUvs(List<List<UV>> faceUvs) {
 		this.faceUvs = faceUvs;
 	}
 
-	public List<List<UVf>> getFaceUvs() {
+	public List<List<UV>> getFaceUvs() {
 		return faceUvs;
 	}
 
-	public void setColors(List<Color3f> colors) {
+	public void setColors(List<Color3> colors) {
 		this.colors = colors;
 	}
 
-	public List<Color3f> getColors() {
+	public List<Color3> getColors() {
 		return colors;
 	}
 
@@ -262,12 +262,12 @@ public class Geometry extends GeometryBuffer
 		this.materials = materials;
 	}
 	
-	public void setVertices(List<Vector3f> vertices) 
+	public void setVertices(List<Vector3> vertices) 
 	{
 		this.vertices = vertices;
 	}
 
-	public List<Vector3f> getVertices() 
+	public List<Vector3> getVertices() 
 	{
 		return vertices;
 	}
@@ -301,7 +301,7 @@ public class Geometry extends GeometryBuffer
 		return this.morphColors;
 	}
 	
-	public List<List<List<UVf>>> getFaceVertexUvs(){
+	public List<List<List<UV>>> getFaceVertexUvs(){
 		return this.faceVertexUvs;
 	}
 
@@ -340,10 +340,10 @@ public class Geometry extends GeometryBuffer
 		if (this.tempVerticles == null) 
 		{
 
-			this.tempVerticles = new ArrayList<Vector3f>(this.vertices.size());
+			this.tempVerticles = new ArrayList<Vector3>(this.vertices.size());
 
 			for (int v = 0, vl = this.vertices.size(); v < vl; v++)
-				this.tempVerticles.add(v, new Vector3f());
+				this.tempVerticles.add(v, new Vector3());
 
 
 			for (Face3 face : this.faces) 
@@ -351,20 +351,20 @@ public class Geometry extends GeometryBuffer
 
 				if (face.getClass() == Face3.class)
 				{
-					List<Vector3f> normals = face.getVertexNormals();
+					List<Vector3> normals = face.getVertexNormals();
 					normals.clear();
-					normals.add(new Vector3f());
-					normals.add(new Vector3f());
-					normals.add(new Vector3f());
+					normals.add(new Vector3());
+					normals.add(new Vector3());
+					normals.add(new Vector3());
 				} 
 				else if (face.getClass() == Face4.class) 
 				{
-					List<Vector3f> normals = face.getVertexNormals();
+					List<Vector3> normals = face.getVertexNormals();
 					normals.clear();
-					normals.add(new Vector3f());
-					normals.add(new Vector3f());
-					normals.add(new Vector3f());
-					normals.add(new Vector3f());
+					normals.add(new Vector3());
+					normals.add(new Vector3());
+					normals.add(new Vector3());
+					normals.add(new Vector3());
 				}
 			}
 		} 
@@ -421,14 +421,14 @@ public class Geometry extends GeometryBuffer
 	
 	public void computeFaceNormals(Boolean useVertexNormals)
 	{
-		Vector3f cb = new Vector3f(), ab = new Vector3f();
+		Vector3 cb = new Vector3(), ab = new Vector3();
 
 		for (Face3 face: this.faces) 
 		{
 			if (useVertexNormals && face.getVertexNormals().size() > 0) 
 			{
 				cb.set(0,0,0);
-				for(Vector3f vertexNormal: face.getVertexNormals())
+				for(Vector3 vertexNormal: face.getVertexNormals())
 					cb.add(vertexNormal);
 
 				cb.divide(3);
@@ -439,9 +439,9 @@ public class Geometry extends GeometryBuffer
 			} 
 			else 
 			{
-				Vector3f vA = this.vertices.get(face.getA());
-				Vector3f vB = this.vertices.get(face.getB());
-				Vector3f vC = this.vertices.get(face.getC());
+				Vector3 vA = this.vertices.get(face.getA());
+				Vector3 vB = this.vertices.get(face.getB());
+				Vector3 vC = this.vertices.get(face.getC());
 
 				cb.sub(vC, vB);
 				ab.sub(vA, vB);
@@ -484,7 +484,7 @@ public class Geometry extends GeometryBuffer
 			if ( this.morphNormals.size() == j ) 
 			{
 				MorphNormal morphNormal = new MorphNormal();
-				morphNormal.faceNormals = new ArrayList<Vector3f>();
+				morphNormal.faceNormals = new ArrayList<Vector3>();
 				morphNormal.vertexNormals = new ArrayList<VertextNormal>();
 
 				for (Face3 face: getFaces()) 
@@ -492,19 +492,19 @@ public class Geometry extends GeometryBuffer
 					VertextNormal vertexNormals = new VertextNormal();
 					if ( face instanceof Face3 )
 					{
-						vertexNormals.a = new Vector3f();
-						vertexNormals.b = new Vector3f();
-						vertexNormals.c = new Vector3f();
+						vertexNormals.a = new Vector3();
+						vertexNormals.b = new Vector3();
+						vertexNormals.c = new Vector3();
 					}
 					else
 					{
-						vertexNormals.a = new Vector3f();
-						vertexNormals.b = new Vector3f();
-						vertexNormals.c = new Vector3f();
-						vertexNormals.c = new Vector3f();
+						vertexNormals.a = new Vector3();
+						vertexNormals.b = new Vector3();
+						vertexNormals.c = new Vector3();
+						vertexNormals.c = new Vector3();
 					}
 
-					morphNormal.faceNormals.add( new Vector3f() );
+					morphNormal.faceNormals.add( new Vector3() );
 					morphNormal.vertexNormals.add( vertexNormals );
 				}
 				
@@ -525,7 +525,7 @@ public class Geometry extends GeometryBuffer
 			{
 				Face3 face = getFaces().get(f);
 
-				Vector3f faceNormal = morphNormals.faceNormals.get(f);
+				Vector3 faceNormal = morphNormals.faceNormals.get(f);
 				VertextNormal vertexNormals = morphNormals.vertexNormals.get(f);
 
 				faceNormal.copy( face.getNormal() );
@@ -558,16 +558,16 @@ public class Geometry extends GeometryBuffer
 	public void computeTangents()
 	{
 		Face3 face;
-		UVf[] uv = new UVf[0];
+		UV[] uv = new UV[0];
 		int v, vl, f, fl, i, vertexIndex;
-		List<Vector3f> tan1 = new ArrayList<Vector3f>(), 
-				tan2 = new ArrayList<Vector3f>();
-		Vector3f tmp = new Vector3f(), tmp2 = new Vector3f();
+		List<Vector3> tan1 = new ArrayList<Vector3>(), 
+				tan2 = new ArrayList<Vector3>();
+		Vector3 tmp = new Vector3(), tmp2 = new Vector3();
 
 		for (v = 0,vl = this.vertices.size(); v<vl; v++) 
 		{
-			tan1.add(v, new Vector3f());
-			tan2.add(v, new Vector3f());
+			tan1.add(v, new Vector3());
+			tan2.add(v, new Vector3());
 		}
 		
 		for (f = 0, fl = this.faces.size(); f < fl; f++) 
@@ -594,12 +594,12 @@ public class Geometry extends GeometryBuffer
 
 			for (i = 0; i < face.getVertexNormals().size(); i++) {
 
-				Vector3f n = new Vector3f();
+				Vector3 n = new Vector3();
 				n.copy(face.getVertexNormals().get(i));
 
 				vertexIndex = face.getFlat()[i];
 
-				Vector3f t = tan1.get(vertexIndex);
+				Vector3 t = tan1.get(vertexIndex);
 
 				// Gram-Schmidt orthogonalize
 
@@ -614,7 +614,7 @@ public class Geometry extends GeometryBuffer
 				double test = tmp2.dot(tan2.get(vertexIndex));
 				double w = (test < 0.0) ? -1.0 : 1.0;
 				
-				face.getVertexTangents().add(i, new Vector4f(tmp.x,tmp.y,tmp.z,w));
+				face.getVertexTangents().add(i, new Vector4(tmp.x,tmp.y,tmp.z,w));
 			}
 		}
 
@@ -634,15 +634,15 @@ public class Geometry extends GeometryBuffer
 			return;
 		}
 		
-			Vector3f firstPosition = this.vertices.get( 0 );
+			Vector3 firstPosition = this.vertices.get( 0 );
 
 			this.boundingBox.min.copy( firstPosition );
 			this.boundingBox.max.copy( firstPosition );
 
-			Vector3f min = this.boundingBox.min;
-			Vector3f max = this.boundingBox.max;
+			Vector3 min = this.boundingBox.min;
+			Vector3 max = this.boundingBox.max;
 
-			for(Vector3f position: this.vertices) {
+			for(Vector3 position: this.vertices) {
 				if ( position.x < min.x ) {
 					min.x = position.x;
 
@@ -681,15 +681,15 @@ public class Geometry extends GeometryBuffer
 		return Math.min(a, b) + "_" + Math.max(a, b);
 	}
 	
-	private void handleTriangle(int a, int b, int c, int ua, int ub, int uc, UVf[] uv, List<Vector3f> tan1, List<Vector3f> tan2)
+	private void handleTriangle(int a, int b, int c, int ua, int ub, int uc, UV[] uv, List<Vector3> tan1, List<Vector3> tan2)
 	{
-		Vector3f vA = this.vertices.get(a);
-		Vector3f vB = this.vertices.get(b);
-		Vector3f vC = this.vertices.get(c);
+		Vector3 vA = this.vertices.get(a);
+		Vector3 vB = this.vertices.get(b);
+		Vector3 vC = this.vertices.get(c);
 		
-		UVf uvA = uv[ua];
-		UVf uvB = uv[ub];
-		UVf uvC = uv[uc];
+		UV uvA = uv[ua];
+		UV uvB = uv[ub];
+		UV uvC = uv[uc];
 		
 		double x1 = vB.x - vA.x;
 		double x2 = vC.x - vA.x;
@@ -705,12 +705,12 @@ public class Geometry extends GeometryBuffer
 		
 		double r = 1.0 / (s1 * t2 - s2 * t1);
 		
-		Vector3f sdir = new Vector3f();
+		Vector3 sdir = new Vector3();
 		sdir.set((t2*x1-t1*x2)*r,
 				  (t2*y1-t1*y2)*r,
 				  (t2*z1-t1*z2)*r);
 		
-		Vector3f tdir = new Vector3f();
+		Vector3 tdir = new Vector3();
 		tdir.set((s1*x2 - s2*x1)*r,
 				  (s1*y2 - s2*y1)*r,
 				  (s1*z2 - s2*z1)*r);
@@ -728,17 +728,17 @@ public class Geometry extends GeometryBuffer
 	/////////////////////////////////////////////////////
 	// TODO: Check methods
 	
-	public void applyMatrix(Matrix4f matrix)
+	public void applyMatrix(Matrix4 matrix)
 	{
-		Matrix4f matrixRotation = new Matrix4f();
+		Matrix4 matrixRotation = new Matrix4();
 		matrixRotation.extractRotation(matrix);
 
-		for(Vector3f verticle: this.vertices)
+		for(Vector3 verticle: this.vertices)
 			matrix.multiplyVector3(verticle);
 
 		for(Face3 face: this.faces) {
 			matrixRotation.multiplyVector3(face.normal);
-			for(Vector3f vertexNormal: face.vertexNormals)
+			for(Vector3 vertexNormal: face.vertexNormals)
 				matrixRotation.multiplyVector3(vertexNormal);
 			
 			matrix.multiplyVector3(face.centroid);
@@ -754,7 +754,7 @@ public class Geometry extends GeometryBuffer
 	{
 		// Hashmap for looking up vertice by position coordinates (and making sure they are unique)
 		Map<String, Integer> verticesMap = new HashMap<String, Integer>();
-		List<Vector3f> unique = new ArrayList<Vector3f>();
+		List<Vector3> unique = new ArrayList<Vector3>();
 		List<Integer> changes = new ArrayList<Integer>();
 
 		// number of decimal points, eg. 4 for epsilon of 0.0001
@@ -763,7 +763,7 @@ public class Geometry extends GeometryBuffer
 
 		for ( int i = 0; i < this.vertices.size(); i ++ ) 
 		{
-			Vector3f v = this.vertices.get( i );
+			Vector3 v = this.vertices.get( i );
 			String key = Math.round( v.x * precision ) + "_" + Math.round( v.y * precision ) + "_"  + Math.round( v.z * precision );
 
 			if ( !verticesMap.containsKey(key)) 
@@ -817,7 +817,7 @@ public class Geometry extends GeometryBuffer
 						
 						for (int j=0,jl = this.faceVertexUvs.size(); j<jl; j++) 
 						{
-							List<UVf> u = this.faceVertexUvs.get(j).get(i);
+							List<UV> u = this.faceVertexUvs.get(j).get(i);
 							if (u != null) 
 								u.remove(k);
 						}

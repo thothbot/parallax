@@ -29,10 +29,10 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 
 public class Ribbon extends GeometryObject
@@ -104,8 +104,8 @@ public class Ribbon extends GeometryObject
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		
-		List<Vector3f> vertices = geometry.getVertices();
-		List<Color3f> colors = geometry.getColors();
+		List<Vector3> vertices = geometry.getVertices();
+		List<Color3> colors = geometry.getColors();
 
 		boolean dirtyVertices = geometry.verticesNeedUpdate;
 		boolean dirtyColors = geometry.colorsNeedUpdate;
@@ -114,7 +114,7 @@ public class Ribbon extends GeometryObject
 		{
 			for (int v = 0; v < vertices.size(); v++) 
 			{
-				Vector3f vertex = vertices.get(v);
+				Vector3 vertex = vertices.get(v);
 
 				int offset = v * 3;
 
@@ -132,7 +132,7 @@ public class Ribbon extends GeometryObject
 			for (int c = 0; c < colors.size(); c++) 
 			{
 
-				Color3f color = colors.get(c);
+				Color3 color = colors.get(c);
 
 				int offset = c * 3;
 

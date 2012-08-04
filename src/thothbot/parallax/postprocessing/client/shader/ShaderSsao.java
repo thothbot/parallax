@@ -24,7 +24,7 @@ package thothbot.parallax.postprocessing.client.shader;
 
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
@@ -67,7 +67,7 @@ public final class ShaderSsao extends Shader
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
 		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("size", new Uniform(Uniform.TYPE.V2, new Vector2f( 512f, 512f )));
+		this.addUniform("size", new Uniform(Uniform.TYPE.V2, new Vector2( 512f, 512f )));
 		this.addUniform("cameraNear", new Uniform(Uniform.TYPE.F, 1.0f));
 		this.addUniform("cameraFar", new Uniform(Uniform.TYPE.F, 100f));
 		this.addUniform("fogNear", new Uniform(Uniform.TYPE.F, 5.0f));

@@ -26,7 +26,7 @@ import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderBasic;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 
 public class MeshBasicMaterial extends Material
 	implements HasMaterialMap, HasWireframe, HasFog, HasVertexColors, HasSkinning
@@ -43,7 +43,7 @@ public class MeshBasicMaterial extends Material
 	
 	private boolean isFog;
 	
-	private Color3f color;
+	private Color3 color;
 	
 	private Texture map;
 	
@@ -67,7 +67,7 @@ public class MeshBasicMaterial extends Material
 		
 		setFog(true);
 		
-		setColor(new Color3f(0xffffff));
+		setColor(new Color3(0xffffff));
 		
 		setVertexColors(Material.COLORS.NO);
 	}
@@ -168,12 +168,12 @@ public class MeshBasicMaterial extends Material
 	}
 	
 	@Override
-	public Color3f getColor() {
+	public Color3 getColor() {
 		return color;
 	}
 	
 	@Override
-	public void setColor(Color3f color) {
+	public void setColor(Color3 color) {
 		this.color = color;
 	}
 

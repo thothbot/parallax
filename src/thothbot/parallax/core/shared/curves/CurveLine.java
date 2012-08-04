@@ -22,24 +22,24 @@
 
 package thothbot.parallax.core.shared.curves;
 
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 public class CurveLine extends Curve
 {
 
-	private Vector2f v1;
-	private Vector2f v2;
+	private Vector2 v1;
+	private Vector2 v2;
 
-	public CurveLine(Vector2f v1, Vector2f v2) 
+	public CurveLine(Vector2 v1, Vector2 v2) 
 	{
 		this.v1 = v1;
 		this.v2 = v2;
 	}
 
 	@Override
-	public Vector2f getPoint(double t)
+	public Vector2 getPoint(double t)
 	{
-		Vector2f point = this.v2.clone();
+		Vector2 point = this.v2.clone();
 		point.sub(this.v1);
 		point.multiply(t);
 		point.add(this.v1);
@@ -51,15 +51,15 @@ public class CurveLine extends Curve
 	 * Line curve is linear, so we can overwrite default getPointAt
 	 */
 	@Override
-	public Vector2f getPointAt(double u)
+	public Vector2 getPointAt(double u)
 	{
 		return this.getPoint(u);
 	}
 
 	@Override
-	public Vector2f getTangent(double t)
+	public Vector2 getTangent(double t)
 	{
-		Vector2f tangent = this.v2.clone();
+		Vector2 tangent = this.v2.clone();
 		tangent.sub(this.v1);
 		tangent.normalize();
 		return tangent;

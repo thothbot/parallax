@@ -24,7 +24,7 @@ package thothbot.parallax.postprocessing.client.shader;
 
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
@@ -59,7 +59,7 @@ public final class ShaderColorCorrection extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("powRGB", new Uniform(Uniform.TYPE.V3, new Vector3f( 2f, 2f, 2f )));
-		this.addUniform("mulRGB", new Uniform(Uniform.TYPE.V3, new Vector3f( 1f, 1f, 1f )));
+		this.addUniform("powRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 2f, 2f, 2f )));
+		this.addUniform("mulRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1f, 1f, 1f )));
 	}
 }

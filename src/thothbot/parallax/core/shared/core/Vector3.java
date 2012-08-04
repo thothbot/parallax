@@ -31,7 +31,7 @@ package thothbot.parallax.core.shared.core;
  * 
  * @author thothbot
  */
-public class Vector3f extends Vector2f implements Vector
+public class Vector3 extends Vector2 implements Vector
 {
 	/**
 	 * The Z-coordinate
@@ -41,7 +41,7 @@ public class Vector3f extends Vector2f implements Vector
 	/**
 	 * This default constructor will initialize vector (0, 0, 0); 
 	 */
-	public Vector3f() 
+	public Vector3() 
 	{
 		this(0, 0, 0);
 	}
@@ -54,7 +54,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector3f(double x, double y, double z) 
+	public Vector3(double x, double y, double z) 
 	{
 		super(x, y);
 		this.z = z;
@@ -98,7 +98,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * 
 	 * @return the current vector
 	 */
-	public Vector3f copy(Vector3f v)
+	public Vector3 copy(Vector3 v)
 	{
 		this.set(v.getX(), v.getY(), v.getZ());
 		return this;
@@ -111,7 +111,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector3f set(double x, double y, double z)
+	public Vector3 set(double x, double y, double z)
 	{
 		this.x = x;
 		this.y = y;
@@ -124,7 +124,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * 
 	 * @param a the X, Y and Z coordinate
 	 */
-	public Vector3f set(double a)
+	public Vector3 set(double a)
 	{
 		this.x = a;
 		this.y = a;
@@ -133,22 +133,22 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	@Override
-	public Vector3f add(Vector v)
+	public Vector3 add(Vector v)
 	{
 		return this.add(this, v);
 	}
 	
 	@Override
-	public Vector3f add(Vector v1, Vector v2)
+	public Vector3 add(Vector v1, Vector v2)
 	{
-		this.setX(((Vector3f)v1).getX() + ((Vector3f)v2).getX());
-		this.setY(((Vector3f)v1).getY() + ((Vector3f)v2).getY());
-		this.setZ(((Vector3f)v1).getZ() + ((Vector3f)v2).getZ());
+		this.setX(((Vector3)v1).getX() + ((Vector3)v2).getX());
+		this.setY(((Vector3)v1).getY() + ((Vector3)v2).getY());
+		this.setZ(((Vector3)v1).getZ() + ((Vector3)v2).getZ());
 		return this;
 	}
 
 	@Override
-	public Vector3f add(double s)
+	public Vector3 add(double s)
 	{
 		this.addX(s);
 		this.addY(s);
@@ -157,37 +157,37 @@ public class Vector3f extends Vector2f implements Vector
 	}
 	
 	@Override
-	public Vector3f sub(Vector v)
+	public Vector3 sub(Vector v)
 	{
 		return this.sub(this, v);
 	}
 	
 	@Override
-	public Vector3f sub(Vector v1, Vector v2)
+	public Vector3 sub(Vector v1, Vector v2)
 	{
-		this.setX(((Vector3f)v1).getX() - ((Vector3f)v2).getX());
-		this.setY(((Vector3f)v1).getY() - ((Vector3f)v2).getY());
-		this.setZ(((Vector3f)v1).getZ() - ((Vector3f)v2).getZ());
+		this.setX(((Vector3)v1).getX() - ((Vector3)v2).getX());
+		this.setY(((Vector3)v1).getY() - ((Vector3)v2).getY());
+		this.setZ(((Vector3)v1).getZ() - ((Vector3)v2).getZ());
 		return this;
 	}
 	
 	@Override
-	public Vector3f multiply(Vector v)
+	public Vector3 multiply(Vector v)
 	{
 		return this.multiply(this, v);
 	}
 	
 	@Override
-	public Vector3f multiply(Vector v1, Vector v2)
+	public Vector3 multiply(Vector v1, Vector v2)
 	{
-		this.setX(((Vector3f)v1).getX() * ((Vector3f)v2).getX());
-		this.setY(((Vector3f)v1).getY() * ((Vector3f)v2).getY());
-		this.setZ(((Vector3f)v1).getZ() * ((Vector3f)v2).getZ());
+		this.setX(((Vector3)v1).getX() * ((Vector3)v2).getX());
+		this.setY(((Vector3)v1).getY() * ((Vector3)v2).getY());
+		this.setZ(((Vector3)v1).getZ() * ((Vector3)v2).getZ());
 		return this;
 	}
 
 	@Override
-	public Vector3f multiply(double s)
+	public Vector3 multiply(double s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -196,22 +196,22 @@ public class Vector3f extends Vector2f implements Vector
 	}
 	
 	@Override
-	public Vector3f divide(Vector v)
+	public Vector3 divide(Vector v)
 	{
 		return this.divide(this, v);
 	}
 	
 	@Override
-	public Vector3f divide(Vector v1, Vector v2)
+	public Vector3 divide(Vector v1, Vector v2)
 	{
-		this.setX(((Vector3f)v1).getX() / ((Vector3f)v2).getX());
-		this.setY(((Vector3f)v1).getY() / ((Vector3f)v2).getY());
-		this.setZ(((Vector3f)v1).getZ() / ((Vector3f)v2).getZ());
+		this.setX(((Vector3)v1).getX() / ((Vector3)v2).getX());
+		this.setY(((Vector3)v1).getY() / ((Vector3)v2).getY());
+		this.setZ(((Vector3)v1).getZ() / ((Vector3)v2).getZ());
 		return this;
 	}
 
 	@Override
-	public Vector3f divide(double s)
+	public Vector3 divide(double s)
 	{
 		if (s != 0) 
 		{
@@ -228,7 +228,7 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	@Override
-	public Vector3f negate()
+	public Vector3 negate()
 	{
 		return this.multiply(-1);
 	}
@@ -240,7 +240,7 @@ public class Vector3f extends Vector2f implements Vector
 	 *            the other vector
 	 * @return the dot product of this vector and v1
 	 */
-	public double dot(Vector3f v1)
+	public double dot(Vector3 v1)
 	{
 		return (this.x * v1.x + this.y * v1.y + this.z * v1.z);
 	}
@@ -274,7 +274,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * Normalizes this vector in place.
 	 */
 	@Override
-	public Vector3f normalize()
+	public Vector3 normalize()
 	{
 		double len = this.length();
 		if (len > 0)
@@ -291,13 +291,13 @@ public class Vector3f extends Vector2f implements Vector
 		return this;
 	}
 
-	public Vector3f setLength(double l)
+	public Vector3 setLength(double l)
 	{
 		normalize();
 		return multiply(l);
 	}
 
-	public void lerp(Vector3f v1, double alpha)
+	public void lerp(Vector3 v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
@@ -312,7 +312,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * @param v2
 	 *            the second vector
 	 */
-	public Vector3f cross(Vector3f v1, Vector3f v2)
+	public Vector3 cross(Vector3 v1, Vector3 v2)
 	{
 		this.setX( v1.y * v2.z - v1.z * v2.y);
 		this.setY( v1.z * v2.x - v1.x * v2.z);
@@ -320,7 +320,7 @@ public class Vector3f extends Vector2f implements Vector
 		return this;
 	}
 
-	public Vector3f cross(Vector3f v)
+	public Vector3 cross(Vector3 v)
 	{
 		return this.cross(this, v);
 	}
@@ -328,9 +328,9 @@ public class Vector3f extends Vector2f implements Vector
 	@Override
 	public double distanceToSquared(Vector v1)
 	{
-		double dx = this.getX() - ((Vector3f)v1).getX();
-		double dy = this.getY() - ((Vector3f)v1).getY();
-		double dz = this.getZ() - ((Vector3f)v1).getZ();
+		double dx = this.getX() - ((Vector3)v1).getX();
+		double dy = this.getY() - ((Vector3)v1).getY();
+		double dz = this.getZ() - ((Vector3)v1).getZ();
 		return (dx * dx + dy * dy + dz * dz);
 	}
 
@@ -340,19 +340,19 @@ public class Vector3f extends Vector2f implements Vector
 		return Math.sqrt(distanceToSquared(v1));
 	}
 
-	public void getPositionFromMatrix(Matrix4f m)
+	public void getPositionFromMatrix(Matrix4 m)
 	{
 		this.x = m.getArray().get(12);
 		this.y = m.getArray().get(13);
 		this.z = m.getArray().get(14);
 	}
 
-	public Vector3f getRotationFromMatrix(Matrix4f m)
+	public Vector3 getRotationFromMatrix(Matrix4 m)
 	{
-		return getRotationFromMatrix(m, new Vector3f(1f, 1f, 1f));
+		return getRotationFromMatrix(m, new Vector3(1f, 1f, 1f));
 	}
 
-	public Vector3f getRotationFromMatrix(Matrix4f m, Vector3f scale)
+	public Vector3 getRotationFromMatrix(Matrix4 m, Vector3 scale)
 	{
 		double sx = scale.x;
 		double sy = scale.y;
@@ -384,9 +384,9 @@ public class Vector3f extends Vector2f implements Vector
 		return this;
 	}
 
-	public void getScaleFromMatrix(Matrix4f m)
+	public void getScaleFromMatrix(Matrix4 m)
 	{
-		Vector3f tmp = new Vector3f();
+		Vector3 tmp = new Vector3();
 		tmp.set(m.getArray().get(0), m.getArray().get(1), m.getArray().get(2));
 		double sx = tmp.length();
 
@@ -403,13 +403,13 @@ public class Vector3f extends Vector2f implements Vector
 
 	/**
 	 * Returns true if all of the data members of v1 are equal to the
-	 * corresponding data members in this Vector3f.
+	 * corresponding data members in this Vector3.
 	 * 
 	 * @param v1
 	 *            the vector with which the comparison is made
 	 * @return true or false
 	 */
-	public boolean equals(Vector3f v1)
+	public boolean equals(Vector3 v1)
 	{
 		try {
 			return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
@@ -424,9 +424,9 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	@Override
-	public Vector3f clone()
+	public Vector3 clone()
 	{
-		return new Vector3f(this.getX(), this.getY(), this.getZ());
+		return new Vector3(this.getX(), this.getY(), this.getZ());
 	}
 	
 	@Override

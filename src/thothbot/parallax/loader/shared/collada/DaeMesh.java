@@ -26,7 +26,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Mesh;
 
 import com.google.gwt.xml.client.Node;
@@ -112,7 +112,7 @@ public class DaeMesh extends DaeElement
 				float[] vertexData = sources.get(input.getSource()).getData().getData();
 				for ( int i = 0; i < vertexData.length; i += 3 ) 
 				{
-					this.geometry.getVertices().add( new Vector3f(
+					this.geometry.getVertices().add( new Vector3(
 							vertexData[ i ], vertexData[ 1 + i ], vertexData[ 2 + i ]) );
 				}
 			}

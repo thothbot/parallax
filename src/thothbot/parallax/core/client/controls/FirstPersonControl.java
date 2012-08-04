@@ -24,7 +24,7 @@ package thothbot.parallax.core.client.controls;
 
 import thothbot.parallax.core.client.AnimatedScene;
 import thothbot.parallax.core.shared.core.Mathematics;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -72,7 +72,7 @@ public class FirstPersonControl extends Control
 		implements MouseMoveHandler, MouseDownHandler, MouseUpHandler, 
 		KeyDownHandler, KeyUpHandler, ContextMenuHandler
 {
-	private Vector3f target;
+	private Vector3 target;
 	private double movementSpeed = 1.0;
 	private double lookSpeed = 0.005;
 
@@ -128,7 +128,7 @@ public class FirstPersonControl extends Control
 		if(getWidget().getClass() != RootPanel.class)
 			getWidget().getElement().setAttribute( "tabindex", "-1" );
 		
-		this.target = new Vector3f();
+		this.target = new Vector3();
 		
 		getWidget().addDomHandler(this, ContextMenuEvent.getType());
 
@@ -220,8 +220,8 @@ public class FirstPersonControl extends Control
 			this.phi = ( 90.0 - this.lat ) * Math.PI / 180.0;
 			this.theta = this.lon * Math.PI / 180.0;
 
-			Vector3f targetPosition = this.target;
-			Vector3f position = getObject().getPosition();
+			Vector3 targetPosition = this.target;
+			Vector3 position = getObject().getPosition();
 
 			targetPosition.setX(position.getX() + 100.0 * Math.sin( this.phi ) * Math.cos( this.theta ));
 			targetPosition.setY(position.getY() + 100.0 * Math.cos( this.phi ));
@@ -245,8 +245,8 @@ public class FirstPersonControl extends Control
 		if ( this.constrainVertical )
 			this.phi = Mathematics.mapLinear( this.phi, 0.0, Math.PI, this.verticalMin, this.verticalMax );
 
-		Vector3f targetPosition = this.target;
-		Vector3f position = getObject().getPosition();
+		Vector3 targetPosition = this.target;
+		Vector3 position = getObject().getPosition();
 
 		targetPosition.setX(position.getX() + 100.0 * Math.sin( this.phi ) * Math.cos( this.theta ));
 		targetPosition.setY(position.getY() + 100.0 * Math.cos( this.phi ));

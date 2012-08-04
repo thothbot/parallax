@@ -26,8 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color3f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
@@ -69,9 +69,9 @@ public final class ShaderLambert extends Shader
 		this.addUniform(UniformsLib.fog);
 		this.addUniform(UniformsLib.lights);
 		this.addUniform(UniformsLib.shadowmap);
-		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff ) ));
-		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color3f( 0x000000 ) ));
-		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3f( 1, 1, 1 ) ));
+		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color3( 0xffffff ) ));
+		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color3( 0x000000 ) ));
+		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1, 1, 1 ) ));
 	}
 	
 	@Override

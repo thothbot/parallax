@@ -32,7 +32,7 @@ package thothbot.parallax.core.shared.core;
  * 
  * @author thothbot
  */
-public class Vector4f extends Vector3f implements Vector
+public class Vector4 extends Vector3 implements Vector
 {
 	/**
 	 * The W-coordinate
@@ -42,7 +42,7 @@ public class Vector4f extends Vector3f implements Vector
 	/**
 	 * This default constructor will initialize vector (0, 0, 0, 1); 
 	 */
-	public Vector4f() 
+	public Vector4() 
 	{
 		this(0, 0, 0, 1.0);
 	}
@@ -55,7 +55,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector4f(double x, double y, double z) 
+	public Vector4(double x, double y, double z) 
 	{
 		this(x, y, z, 1.0);
 	}
@@ -69,7 +69,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * @param z the Z coordinate
 	 * @param w the W coordinate
 	 */
-	public Vector4f(double x, double y, double z, double w) 
+	public Vector4(double x, double y, double z, double w) 
 	{
 		super(x, y, z);
 		this.w = w;
@@ -113,7 +113,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * 
 	 * @return the current vector
 	 */
-	public Vector4f copy(Vector4f v)
+	public Vector4 copy(Vector4 v)
 	{
 		return this.set(v.getX(), v.getY(), v.getZ(), 1.0f);
 	}
@@ -125,7 +125,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * 
 	 * @return the current vector
 	 */
-	public Vector4f copy(Vector3f v)
+	public Vector4 copy(Vector3 v)
 	{
 		return this.set(v.getX(), v.getY(), v.getZ(), 1.0f);
 	}
@@ -142,7 +142,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * @param w
 	 *            the w coordinate
 	 */
-	public Vector4f set(double x, double y, double z, double w)
+	public Vector4 set(double x, double y, double z, double w)
 	{
 		this.x = x;
 		this.y = y;
@@ -151,7 +151,7 @@ public class Vector4f extends Vector3f implements Vector
 		return this;
 	}
 
-	public Vector4f add(Vector4f v)
+	public Vector4 add(Vector4 v)
 	{
 		return this.add(this, v);
 	}
@@ -164,7 +164,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * @param v2
 	 *            the second vector
 	 */
-	public Vector4f add(Vector4f v1, Vector4f v2)
+	public Vector4 add(Vector4 v1, Vector4 v2)
 	{
 		this.x = v1.x + v2.x;
 		this.y = v1.y + v2.y;
@@ -180,12 +180,12 @@ public class Vector4f extends Vector3f implements Vector
 	 *            the other vector
 	 */
 	@Override
-	public Vector4f add(Vector v)
+	public Vector4 add(Vector v)
 	{
-		return this.add(this, (Vector4f) v);
+		return this.add(this, (Vector4) v);
 	}
 
-	public Vector4f addScalar(double s)
+	public Vector4 addScalar(double s)
 	{
 		this.x += s;
 		this.y += s;
@@ -194,7 +194,7 @@ public class Vector4f extends Vector3f implements Vector
 		return this;
 	}
 	
-	public Vector4f sub(Vector4f v)
+	public Vector4 sub(Vector4 v)
 	{
 		return this.sub(this, v);
 	}
@@ -208,7 +208,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * @param v2
 	 *            the second vector
 	 */
-	public Vector4f sub(Vector4f v1, Vector4f v2)
+	public Vector4 sub(Vector4 v1, Vector4 v2)
 	{
 		this.x = v1.x - v2.x;
 		this.y = v1.y - v2.y;
@@ -225,12 +225,12 @@ public class Vector4f extends Vector3f implements Vector
 	 *            the other vector
 	 */
 	@Override
-	public Vector4f sub(Vector v)
+	public Vector4 sub(Vector v)
 	{
-		return this.sub(this, (Vector4f)v);
+		return this.sub(this, (Vector4)v);
 	}
 
-	public Vector4f multiply(Vector4f v)
+	public Vector4 multiply(Vector4 v)
 	{
 		return this.multiply(this, v);
 	}
@@ -243,7 +243,7 @@ public class Vector4f extends Vector3f implements Vector
 	 *            the scalar value
 	 */
 	@Override
-	public Vector4f multiply(double s)
+	public Vector4 multiply(double s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -252,7 +252,7 @@ public class Vector4f extends Vector3f implements Vector
 		return this;
 	}
 	
-	public Vector4f multiply(Vector4f v1, Vector4f v2)
+	public Vector4 multiply(Vector4 v1, Vector4 v2)
 	{
 		this.x = v1.x * v2.x;
 		this.y = v1.y * v2.y;
@@ -262,7 +262,7 @@ public class Vector4f extends Vector3f implements Vector
 		return this;
 	}
 
-	public Vector4f divide(Vector4f v1, Vector4f v2)
+	public Vector4 divide(Vector4 v1, Vector4 v2)
 	{
 		this.x = v1.x / v2.x;
 		this.y = v1.y / v2.y;
@@ -271,12 +271,12 @@ public class Vector4f extends Vector3f implements Vector
 		return this;
 	}
 	
-	public Vector4f divide(Vector4f v)
+	public Vector4 divide(Vector4 v)
 	{
 		return this.divide(this, v);
 	}
 	
-	public Vector4f divide(double s)
+	public Vector4 divide(double s)
 	{
 		if (s != 0) 
 		{
@@ -297,7 +297,7 @@ public class Vector4f extends Vector3f implements Vector
 	/**
 	 * Negates the value of this vector in place.
 	 */
-	public Vector4f negate()
+	public Vector4 negate()
 	{
 		return this.multiply(-1);
 	}
@@ -309,7 +309,7 @@ public class Vector4f extends Vector3f implements Vector
 	 *            the other vector
 	 * @return the dot product of this vector and v1
 	 */
-	public double dot(Vector4f v1)
+	public double dot(Vector4 v1)
 	{
 		return (this.x * v1.x + this.y * v1.y + this.z * v1.z + this.w * v1.w);
 	}
@@ -338,7 +338,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * Normalizes this vector in place.
 	 */
 	@Override
-	public Vector4f normalize()
+	public Vector4 normalize()
 	{
 		divide(length());
 		return this;
@@ -362,13 +362,13 @@ public class Vector4f extends Vector3f implements Vector
 		return 0;
 	}
 
-	public Vector4f setLength(double l)
+	public Vector4 setLength(double l)
 	{
 		this.normalize();
 		return multiply(l);
 	}
 
-	public void lerp(Vector4f v1, double alpha)
+	public void lerp(Vector4 v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
@@ -377,9 +377,9 @@ public class Vector4f extends Vector3f implements Vector
 	}
 	
 	@Override
-	public Vector4f clone() 
+	public Vector4 clone() 
 	{
-		return new Vector4f(this.x, this.y, this.z, this.w);
+		return new Vector4(this.x, this.y, this.z, this.w);
 	}
 	
 	@Override

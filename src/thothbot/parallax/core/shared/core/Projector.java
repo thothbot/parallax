@@ -26,14 +26,14 @@ import thothbot.parallax.core.shared.cameras.Camera;
 
 public class Projector
 {
-	private Matrix4f _projScreenMatrix;
+	private Matrix4 _projScreenMatrix;
 			
 	public Projector()
 	{
-		this._projScreenMatrix = new Matrix4f();
+		this._projScreenMatrix = new Matrix4();
 	}
 	
-	public Vector3f unprojectVector ( Vector3f vector, Camera camera ) 
+	public Vector3 unprojectVector ( Vector3 vector, Camera camera ) 
 	{
 		camera.getProjectionMatrixInverse().getInverse( camera.getProjectionMatrix() );
 

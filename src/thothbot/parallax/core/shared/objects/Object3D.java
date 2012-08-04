@@ -29,10 +29,10 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Matrix3f;
-import thothbot.parallax.core.shared.core.Matrix4f;
+import thothbot.parallax.core.shared.core.Matrix3;
+import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Quaternion;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 /**
@@ -53,21 +53,21 @@ public class Object3D implements DimensionalObject
 
 	protected ArrayList<DimensionalObject> children;
 
-	protected Vector3f position;
+	protected Vector3 position;
 
-	protected Vector3f rotation;
+	protected Vector3 rotation;
 	
-	protected Vector3f scale;
+	protected Vector3 scale;
 
-	protected Vector3f up;
+	protected Vector3 up;
 	
-	private Vector3f vector;
+	private Vector3 vector;
 	
-	protected Matrix4f matrix;
+	protected Matrix4 matrix;
 
-	protected Matrix4f matrixWorld;
+	protected Matrix4 matrixWorld;
 
-	protected Matrix4f matrixRotationWorld;
+	protected Matrix4 matrixRotationWorld;
 
 	protected Quaternion quaternion;
 
@@ -90,7 +90,7 @@ public class Object3D implements DimensionalObject
 	public boolean hasPos;
 	public boolean hasNormal;
 	public double renderDepth;
-	public Matrix4f identityMatrix;
+	public Matrix4 identityMatrix;
 	public boolean isCastShadow = false;
 	public boolean isReceiveShadow = false;
 	public boolean isFrustumCulled = true;
@@ -104,28 +104,28 @@ public class Object3D implements DimensionalObject
 	public Float32Array _objectMatrixArray;
 	public Object _modelViewMatrixArray;
 	public Object _normalMatrixArray;
-	public Matrix3f _normalMatrix;
-	public Matrix4f _modelViewMatrix;
+	public Matrix3 _normalMatrix;
+	public Matrix4 _modelViewMatrix;
 	public int count;
 
 	public Object3D() 
 	{
 		this.id = Object3D.Object3DCount++;
 
-		this.up = new Vector3f(0, 1, 0);
+		this.up = new Vector3(0, 1, 0);
 
-		this.position = new Vector3f();
-		this.rotation = new Vector3f();
+		this.position = new Vector3();
+		this.rotation = new Vector3();
 
 		this.parent = null;
 		this.children = new ArrayList<DimensionalObject>();
-		this.scale = new Vector3f(1, 1, 1);
+		this.scale = new Vector3(1, 1, 1);
 		
 		this.dynamic = false;
 		this.rotationAutoUpdate = true;
-		this.matrix = new Matrix4f();
-		this.matrixWorld = new Matrix4f();
-		this.matrixRotationWorld = new Matrix4f();
+		this.matrix = new Matrix4();
+		this.matrixWorld = new Matrix4();
+		this.matrixRotationWorld = new Matrix4();
 		this.matrixAutoUpdate = true;
 		this.matrixWorldNeedsUpdate = true;
 		this.quaternion = new Quaternion();
@@ -133,11 +133,11 @@ public class Object3D implements DimensionalObject
 		this.boundRadius = 0.0f;
 		this.boundRadiusScale = 1.0f;
 		this.visible = true;
-		this.vector = new Vector3f();
+		this.vector = new Vector3();
 		this.name = "";
 		
-		this._modelViewMatrix = new Matrix4f();
-		this._normalMatrix = new Matrix3f();
+		this._modelViewMatrix = new Matrix4();
+		this._normalMatrix = new Matrix3();
 	}
 
 	@Override
@@ -171,25 +171,25 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public Vector3f getPosition()
+	public Vector3 getPosition()
 	{
 		return this.position;
 	}
 
 	@Override
-	public void setPosition(Vector3f position)
+	public void setPosition(Vector3 position)
 	{
 		this.position = position;
 	}
 
 	@Override
-	public Vector3f getRotation()
+	public Vector3 getRotation()
 	{
 		return this.rotation;
 	}
 
 	@Override
-	public void setRotation(Vector3f rotation)
+	public void setRotation(Vector3 rotation)
 	{
 		this.rotation = rotation;
 	}
@@ -232,61 +232,61 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public Vector3f getScale()
+	public Vector3 getScale()
 	{
 		return this.scale;
 	}
 
 	@Override
-	public void setScale(Vector3f scale)
+	public void setScale(Vector3 scale)
 	{
 		this.scale = scale;
 	}
 
 	@Override
-	public Vector3f getUp()
+	public Vector3 getUp()
 	{
 		return this.up;
 	}
 
 	@Override
-	public void setUp(Vector3f up)
+	public void setUp(Vector3 up)
 	{
 		this.up = up;
 	}
 
 	@Override
-	public Matrix4f getMatrix()
+	public Matrix4 getMatrix()
 	{
 		return this.matrix;
 	}
 
 	@Override
-	public void setMatrix(Matrix4f matrix)
+	public void setMatrix(Matrix4 matrix)
 	{
 		this.matrix = matrix;
 	};
 
 	@Override
-	public Matrix4f getMatrixWorld()
+	public Matrix4 getMatrixWorld()
 	{
 		return this.matrixWorld;
 	}
 
 	@Override
-	public void setMatrixWorld(Matrix4f matrixWorld)
+	public void setMatrixWorld(Matrix4 matrixWorld)
 	{
 		this.matrixWorld = matrixWorld;
 	}
 
 	@Override
-	public Matrix4f getMatrixRotationWorld()
+	public Matrix4 getMatrixRotationWorld()
 	{
 		return this.matrixRotationWorld;
 	}
 
 	@Override
-	public void setMatrixRotationWorld(Matrix4f rotation)
+	public void setMatrixRotationWorld(Matrix4 rotation)
 	{
 		this.matrixRotationWorld = rotation;
 	}
@@ -376,7 +376,7 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public void translate(double distance, Vector3f axis)
+	public void translate(double distance, Vector3 axis)
 	{
 		this.matrix.rotateAxis(axis);
 		axis.multiply(distance);
@@ -405,7 +405,7 @@ public class Object3D implements DimensionalObject
 	}
 	
 	@Override
-	public void lookAt(Vector3f vector)
+	public void lookAt(Vector3 vector)
 	{
 		// TODO: Add hierarchy support.
 		this.matrix.lookAt(vector, this.position, this.up);
@@ -499,7 +499,7 @@ public class Object3D implements DimensionalObject
 		return null;
 	}
 
-	public void applyMatrix(Matrix4f matrix)
+	public void applyMatrix(Matrix4 matrix)
 	{
 		this.matrix.multiply(matrix, this.matrix);
 

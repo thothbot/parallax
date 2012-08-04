@@ -27,7 +27,7 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.ExtrudeGeometry;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 /**
  * @author zz85 / http://www.lab4games.net/zz85/blog
@@ -48,7 +48,7 @@ public class Shape extends Path
 		super();
 	}
 	
-	public Shape(List<Vector2f> points) 
+	public Shape(List<Vector2> points) 
 	{
 		super(points);		
 	}
@@ -69,15 +69,15 @@ public class Shape extends Path
 	/*
 	 * Get points of holes
 	 */
-	public List<List<Vector2f>> getPointsHoles()
+	public List<List<Vector2>> getPointsHoles()
 	{
 		return getPointsHoles(false);
 	}
 
-	public List<List<Vector2f>> getPointsHoles(  boolean closedPath ) 
+	public List<List<Vector2>> getPointsHoles(  boolean closedPath ) 
 	{
 		int il = this.holes.size();
-		List<List<Vector2f>> holesPts = new ArrayList<List<Vector2f>>();
+		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
 
 //		for ( int i = 0; i < il; i ++ )
 //			holesPts.add(this.holes.get( i ).getTransformedPoints( closedPath, getBends() ));
@@ -88,10 +88,10 @@ public class Shape extends Path
 	/*
 	 * Get points of holes (spaced by regular distance)
 	 */
-	public List<List<Vector2f>> getSpacedPointsHoles( boolean closedPath ) 
+	public List<List<Vector2>> getSpacedPointsHoles( boolean closedPath ) 
 	{
 		int il = this.holes.size();
-		List<List<Vector2f>> holesPts = new ArrayList<List<Vector2f>>();
+		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
 
 //		for ( int i = 0; i < il; i ++ )
 //			holesPts.add(this.holes.get( i ).getTransformedSpacedPoints( closedPath, getBends() ));
@@ -99,19 +99,19 @@ public class Shape extends Path
 		return holesPts;
 	}
 	
-	public List<Vector2f> getTransformedPoints() 
+	public List<Vector2> getTransformedPoints() 
 	{
 		return getTransformedPoints(false, getBends());
 	}
 	
-	public List<Vector2f> getTransformedPoints( boolean closedPath ) 
+	public List<Vector2> getTransformedPoints( boolean closedPath ) 
 	{
 		return getTransformedPoints(closedPath, getBends());
 	}
 
-	public List<Vector2f> getTransformedPoints( boolean closedPath, List<CurvePath> bends ) 
+	public List<Vector2> getTransformedPoints( boolean closedPath, List<CurvePath> bends ) 
 	{
-		List<Vector2f> oldPts = this.getPoints( closedPath ); // getPoints getSpacedPoints
+		List<Vector2> oldPts = this.getPoints( closedPath ); // getPoints getSpacedPoints
 Log.info(".............." + this.getClass().getName()  + ", " + bends);
 		for ( int i = 0; i < bends.size(); i ++ )
 			oldPts = this.getWrapPoints( oldPts, bends.get( i ) );

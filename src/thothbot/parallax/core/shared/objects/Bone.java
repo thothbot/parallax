@@ -22,18 +22,18 @@
 
 package thothbot.parallax.core.shared.objects;
 
-import thothbot.parallax.core.shared.core.Matrix4f;
+import thothbot.parallax.core.shared.core.Matrix4;
 
 public class Bone extends Object3D
 {
 
 	public int skin;
-	public Matrix4f skinMatrix;
-	public Matrix4f identityMatrix;
+	public Matrix4 skinMatrix;
+	public Matrix4 identityMatrix;
 
 	public Bone() 
 	{
-		this.skinMatrix = new Matrix4f();
+		this.skinMatrix = new Matrix4();
 	}
 
 	public Bone(int belongsToSkin) 
@@ -42,7 +42,7 @@ public class Bone extends Object3D
 		this.skin = belongsToSkin;		
 	}
 
-	public void update( Matrix4f parentSkinMatrix, boolean forceUpdate ) 
+	public void update( Matrix4 parentSkinMatrix, boolean forceUpdate ) 
 	{
 		// update local
 		if ( this.matrixAutoUpdate )

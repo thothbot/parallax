@@ -22,9 +22,9 @@ package thothbot.parallax.core.shared.objects;
 import java.util.Collection;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Matrix4f;
+import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Quaternion;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 
 /**
  * Abstract Dimensional Object
@@ -125,23 +125,23 @@ public interface DimensionalObject
 
 	public double getBoundRadiusScale();
 
-	public Matrix4f getMatrix();
+	public Matrix4 getMatrix();
 
-	public Matrix4f getMatrixRotationWorld();
+	public Matrix4 getMatrixRotationWorld();
 
-	public Matrix4f getMatrixWorld();
+	public Matrix4 getMatrixWorld();
 
-	public Vector3f getPosition();
+	public Vector3 getPosition();
 
 	public Quaternion getQuaternion();
 
-	public Vector3f getRotation();
+	public Vector3 getRotation();
 
-	public Vector3f getScale();
+	public Vector3 getScale();
 
-	public Vector3f getUp();
+	public Vector3 getUp();
 
-	public void lookAt(Vector3f vector);
+	public void lookAt(Vector3 vector);
 
 	public void setBoundRadius(double boundRadius);
 
@@ -151,27 +151,27 @@ public interface DimensionalObject
 
 	public void setDynamic(boolean dynamic);
 
-	public void setMatrix(Matrix4f matrix);
+	public void setMatrix(Matrix4 matrix);
 
-	public void setMatrixRotationWorld(Matrix4f rotation);
+	public void setMatrixRotationWorld(Matrix4 rotation);
 
-	public void setMatrixWorld(Matrix4f matrixWorld);
+	public void setMatrixWorld(Matrix4 matrixWorld);
 	
 	public void setName(String name);
 
 	public void setParent(DimensionalObject parent);
 
-	public void setPosition(Vector3f position);
+	public void setPosition(Vector3 position);
 
 	public void setQuaternion(Quaternion quaternion);
 
-	public void setRotation(Vector3f rotation);
+	public void setRotation(Vector3 rotation);
 
-	public void setScale(Vector3f scale);
+	public void setScale(Vector3 scale);
 
-	public void setUp(Vector3f up);
+	public void setUp(Vector3 up);
 
-	public void applyMatrix(Matrix4f matrix);
+	public void applyMatrix(Matrix4 matrix);
 
 	/**
 	 * Move object on XYZ-axis by defined distance.
@@ -179,7 +179,7 @@ public interface DimensionalObject
 	 * @param distance the moving distance
 	 * @param axis     the axis
 	 */
-	public void translate(double distance, Vector3f axis);
+	public void translate(double distance, Vector3 axis);
 
 	/**
 	 * Move object on X-axis by defined distance.

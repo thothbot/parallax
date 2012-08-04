@@ -22,14 +22,14 @@
 
 package thothbot.parallax.core.shared.lights;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 public class SpotLight extends Light
 {
 	public Object3D target;
 	
-	public Vector3f position;
+	public Vector3 position;
 
 	public double intensity;
 	public double distance;
@@ -68,7 +68,7 @@ public class SpotLight extends Light
 		this.angle = angle;
 		this.exponent = exponent;
 		
-		this.position = new Vector3f( 0, 1, 0 );
+		this.position = new Vector3( 0, 1, 0 );
 		this.target = new Object3D();
 	}
 	

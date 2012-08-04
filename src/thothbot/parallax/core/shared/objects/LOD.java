@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Matrix4f;
+import thothbot.parallax.core.shared.core.Matrix4;
 
 
 public class LOD extends Object3D 
@@ -69,7 +69,7 @@ public class LOD extends Object3D
 
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
 
-		Matrix4f inverse  = camera.getMatrixWorldInverse();
+		Matrix4 inverse  = camera.getMatrixWorldInverse();
 		double distance = -( inverse.getArray().get(2) 
 				* this.matrixWorld.getArray().get(12) + inverse.getArray().get(6) 
 				* this.matrixWorld.getArray().get(13) + inverse.getArray().get(10) 

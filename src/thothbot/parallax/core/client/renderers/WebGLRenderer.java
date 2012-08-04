@@ -50,16 +50,16 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.Frustum;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Mathematics;
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector3f;
-import thothbot.parallax.core.shared.core.Vector4f;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
@@ -122,8 +122,8 @@ public class WebGLRenderer
 	// shader precision. Can be "highp", "mediump" or "lowp".
 	private WebGLRenderer.PRECISION precision = WebGLRenderer.PRECISION.HIGHP;
 				
-	// Integer, default is Color3f(0x000000).
-	private Color3f clearColor = new Color3f(0x000000);
+	// Integer, default is Color3(0x000000).
+	private Color3 clearColor = new Color3(0x000000);
 
 	// double, default is 0
 	private double clearAlpha = 1.0;
@@ -208,11 +208,11 @@ public class WebGLRenderer
 	private Frustum frustum;
 
 	 // camera matrices cache
-	private Matrix4f cache_projScreenMatrix;
-	private Vector4f cache_vector3;
+	private Matrix4 cache_projScreenMatrix;
+	private Vector4 cache_vector3;
 
 	// light arrays cache
-	private Vector3f cache_direction;
+	private Vector3 cache_direction;
 	private boolean isLightsNeedUpdate = true;
 	private WebGLRenderLights cache_lights;
 	
@@ -236,9 +236,9 @@ public class WebGLRenderer
 		
 		this.frustum = new Frustum();
 		
-		this.cache_projScreenMatrix = new Matrix4f();
-		this.cache_vector3          = new Vector4f();
-		this.cache_direction        = new Vector3f();
+		this.cache_projScreenMatrix = new Matrix4();
+		this.cache_vector3          = new Vector4();
+		this.cache_direction        = new Vector3();
 		this.cache_lights           = new WebGLRenderLights();
 		this.cache_programs         = new HashMap<String, Program>();
 		
@@ -576,14 +576,14 @@ public class WebGLRenderer
 	
 
 	/**
-	 * Sets the the background color, using {@link Color3f} for the color and alpha for the opacity.
+	 * Sets the the background color, using {@link Color3} for the color and alpha for the opacity.
 	 * 
 	 * @see #setClearColorHex(int, double). 
 	 * 
-	 * @param color the {@link Color3f} instance.
+	 * @param color the {@link Color3} instance.
 	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
 	 */
-	public void setClearColor( Color3f color, double alpha ) 
+	public void setClearColor( Color3 color, double alpha ) 
 	{
 		this.clearColor.copy(color);
 		this.clearAlpha = alpha;
@@ -594,9 +594,9 @@ public class WebGLRenderer
 	/**
 	 * Returns the background color.
 	 * 
-	 * @return the {@link Color3f} instance. 
+	 * @return the {@link Color3} instance. 
 	 */
-	public Color3f getClearColor() 
+	public Color3 getClearColor() 
 	{
 		return this.clearColor;
 	}
@@ -1980,7 +1980,7 @@ public class WebGLRenderer
 
 				if ( p_uniforms.get("cameraPosition") != null ) 
 				{
-					Vector3f position = camera.getMatrixWorld().getPosition();
+					Vector3 position = camera.getMatrixWorld().getPosition();
 					getGL().uniform3f( p_uniforms.get("cameraPosition"), position.getX(), position.getY(), position.getZ() );
 				}
 			}
@@ -2092,22 +2092,22 @@ Log.error("?????????????");
 					break;
 
 				case V2: // single THREE.Vector2
-					Vector2f vector2f = (Vector2f) value;
-					getGL().uniform2f( location, vector2f.getX(), vector2f.getX() );
+					Vector2 vector2 = (Vector2) value;
+					getGL().uniform2f( location, vector2.getX(), vector2.getX() );
 					break;
 
 				case V3: // single THREE.Vector3
-					Vector3f vector3f = (Vector3f) value;
-					getGL().uniform3f( location, vector3f.getX(), vector3f.getY(), vector3f.getZ() );
+					Vector3 vector3 = (Vector3) value;
+					getGL().uniform3f( location, vector3.getX(), vector3.getY(), vector3.getZ() );
 					break;
 
 				case V4: // single THREE.Vector4
-					Vector4f vector4f = (Vector4f) value;
-					getGL().uniform4f( location, vector4f.getX(), vector4f.getY(), vector4f.getZ(), vector4f.getW() );
+					Vector4 vector4 = (Vector4) value;
+					getGL().uniform4f( location, vector4.getX(), vector4.getY(), vector4.getZ(), vector4.getW() );
 					break;
 
 				case C: // single THREE.Color
-					Color3f color = (Color3f) value;
+					Color3 color = (Color3) value;
 					getGL().uniform3f( location, color.getR(), color.getG(), color.getB() );
 					break;
 
@@ -2122,7 +2122,7 @@ Log.error("?????????????");
 					break;
 
 				case V2V: // array of THREE.Vector2
-					List<Vector2f> listVector2f = (List<Vector2f>) value;
+					List<Vector2> listVector2f = (List<Vector2>) value;
 					if ( uniform.getCacheArray() == null )
 						uniform.setCacheArray( Float32Array.create( 2 * listVector2f.size() ) );
 
@@ -2138,7 +2138,7 @@ Log.error("?????????????");
 					break;
 
 				case V3V: // array of THREE.Vector3
-					List<Vector3f> listVector3f = (List<Vector3f>) value;
+					List<Vector3> listVector3f = (List<Vector3>) value;
 					if ( uniform.getCacheArray() == null )
 						uniform.setCacheArray( Float32Array.create( 3 * listVector3f.size() ) );
 
@@ -2155,7 +2155,7 @@ Log.error("?????????????");
 					break;
 
 				case V4V: // array of THREE.Vector4
-					List<Vector4f> listVector4f = (List<Vector4f>) value;
+					List<Vector4> listVector4f = (List<Vector4>) value;
 					if ( uniform.getCacheArray() == null)
 						uniform.setCacheArray( Float32Array.create( 4 * listVector4f.size() ) );
 
@@ -2174,16 +2174,16 @@ Log.error("?????????????");
 					break;
 
 				case M4: // single THREE.Matrix4
-					Matrix4f matrix4f = (Matrix4f) value;
+					Matrix4 matrix4 = (Matrix4) value;
 					if ( uniform.getCacheArray() == null )
 						uniform.setCacheArray( Float32Array.create( 16 ) );
 
-					matrix4f.flattenToArray( uniform.getCacheArray() );
+					matrix4.flattenToArray( uniform.getCacheArray() );
 					getGL().uniformMatrix4fv( location, false, uniform.getCacheArray() );
 					break;
 
 				case M4V: // array of THREE.Matrix4
-					List<Matrix4f> listMatrix4f = (List<Matrix4f>) value;
+					List<Matrix4> listMatrix4f = (List<Matrix4>) value;
 					if ( uniform.getCacheArray() == null )
 						uniform.setCacheArray( Float32Array.create( 16 * listMatrix4f.size() ) );
 
@@ -2281,7 +2281,7 @@ Log.error("?????????????");
 
 			if ( light.isOnlyShadow() ) continue;
 
-			Color3f color = light.getColor();
+			Color3 color = light.getColor();
 
 			if ( light.getClass() == AmbientLight.class ) 
 			{
@@ -2352,7 +2352,7 @@ Log.error("?????????????");
 					pcolors.set(  poffset + 2, color.getB() * intensity);
 				}
 
-				Vector3f position = pointLight.getMatrixWorld().getPosition();
+				Vector3 position = pointLight.getMatrixWorld().getPosition();
 
 				ppositions.set(  poffset, position.getX());
 				ppositions.set(  poffset + 1, position.getY());
@@ -2384,7 +2384,7 @@ Log.error("?????????????");
 					scolors.set(soffset + 2, color.getB() * intensity);
 				}
 
-				Vector3f position = spotLight.getMatrixWorld().getPosition();
+				Vector3 position = spotLight.getMatrixWorld().getPosition();
 
 				spositions.set(soffset, position.getX());
 				spositions.set(soffset + 1, position.getY());
@@ -2855,12 +2855,12 @@ Log.error("?????????????");
 	}
 
 	@Deprecated
-	public Matrix4f getCache_projScreenMatrix() {
+	public Matrix4 getCache_projScreenMatrix() {
 		return cache_projScreenMatrix;
 	}
 
 	@Deprecated
-	public Vector4f getCache_vector3() {
+	public Vector4 getCache_vector3() {
 		return cache_vector3;
 	}
 }

@@ -27,14 +27,14 @@ import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderParticleBasic;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 
 public final class ParticleBasicMaterial extends Material 
 	implements HasFog, HasColor, HasMap, HasVertexColors
 {
 	private boolean isFog;
 	
-	private Color3f color;
+	private Color3 color;
 	
 	private Texture map;
 	
@@ -49,7 +49,7 @@ public final class ParticleBasicMaterial extends Material
 		
 		setFog(true);
 		
-		setColor(new Color3f(0xffffff));
+		setColor(new Color3(0xffffff));
 		
 		setSize(1.0f);
 		setSizeAttenuation(true);
@@ -90,12 +90,12 @@ public final class ParticleBasicMaterial extends Material
 	}
 	
 	@Override
-	public Color3f getColor() {
+	public Color3 getColor() {
 		return color;
 	}
 	
 	@Override
-	public void setColor(Color3f color) {
+	public void setColor(Color3 color) {
 		this.color = color;
 	}
 	

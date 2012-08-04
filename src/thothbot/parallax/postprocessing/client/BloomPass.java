@@ -31,7 +31,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
@@ -40,8 +40,8 @@ import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class BloomPass extends Pass
 {
-	private static Vector2f blurX = new Vector2f( 0.001953125, 0.0 );
-	private static Vector2f blurY = new Vector2f( 0.0, 0.001953125 );
+	private static Vector2 blurX = new Vector2( 0.001953125, 0.0 );
+	private static Vector2 blurY = new Vector2( 0.0, 0.001953125 );
 	
 	private RenderTargetTexture renderTargetX;
 	private RenderTargetTexture renderTargetY;

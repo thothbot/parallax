@@ -28,8 +28,8 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.curves.CurvePath;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
 import thothbot.parallax.core.shared.helpers.ArrowHelper;
@@ -47,9 +47,9 @@ import thothbot.parallax.core.shared.objects.Object3D;
  */
 public final class Tube extends Geometry
 {
-	private List<Vector3f> tangents;
-	private List<Vector3f> normals;
-	private List<Vector3f> binormals;
+	private List<Vector3> tangents;
+	private List<Vector3> normals;
+	private List<Vector3> binormals;
 	
 	private List<List<Integer>> grid;
 	
@@ -83,7 +83,7 @@ public final class Tube extends Geometry
 
 			double u = i / ( numpoints - 1.0 );
 
-			Vector3f pos = (Vector3f) path.getPointAt( u );
+			Vector3 pos = (Vector3) path.getPointAt( u );
 
 			if ( debug ) 
 			{
@@ -100,7 +100,7 @@ public final class Tube extends Geometry
 				double cx = - radius * Math.cos( v ); 
 				double cy = radius * Math.sin( v );
 
-				Vector3f pos2 = new Vector3f();
+				Vector3 pos2 = new Vector3();
 	            pos2.copy( pos );
 	            pos2.addX(cx * normals.get(i).getX() + cy * binormals.get(i).getX());
 	            pos2.addY(cx * normals.get(i).getY() + cy * binormals.get(i).getY());
@@ -125,10 +125,10 @@ public final class Tube extends Geometry
 				int c = this.grid.get( ip ).get( jp );
 				int d = this.grid.get( i ).get( jp );
 
-				UVf uva = new UVf( i / segments * 1.0,                     j / segmentsRadius * 1.0 );
-				UVf uvb = new UVf( ( i + 1.0 ) / segments * 1.0,           j / segmentsRadius * 1.0 );
-				UVf uvc = new UVf( ( i + 1.0 ) / segments * 1.0, ( j + 1.0 ) / segmentsRadius * 1.0 );
-				UVf uvd = new UVf( i / segments * 1.0,           ( j + 1.0 ) / segmentsRadius * 1.0 );
+				UV uva = new UV( i / segments * 1.0,                     j / segmentsRadius * 1.0 );
+				UV uvb = new UV( ( i + 1.0 ) / segments * 1.0,           j / segmentsRadius * 1.0 );
+				UV uvc = new UV( ( i + 1.0 ) / segments * 1.0, ( j + 1.0 ) / segmentsRadius * 1.0 );
+				UV uvd = new UV( i / segments * 1.0,           ( j + 1.0 ) / segmentsRadius * 1.0 );
 
 				getFaces().add( new Face4( a, b, c, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
@@ -143,7 +143,7 @@ public final class Tube extends Geometry
 	
 	private int vert( double x, double y, double z ) 
 	{
-		this.getVertices().add( new Vector3f( x, y, z ) );
+		this.getVertices().add( new Vector3( x, y, z ) );
 		
 		return  this.getVertices().size() - 1;
 	}

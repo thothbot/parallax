@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Matrix4f;
+import thothbot.parallax.core.shared.core.Matrix4;
 
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -36,7 +36,7 @@ public class DaeSkin extends DaeElement
 	
 	private Map<String, DaeSource> sources;
 	
-	private Matrix4f bindShapeMatrix;
+	private Matrix4 bindShapeMatrix;
 //	this.invBindMatrices = [];
 //	this.joints = [];
 //	this.weights = [];
@@ -69,7 +69,7 @@ public class DaeSkin extends DaeElement
 			{
 				DaeDummyElement bind_shape_matrix = new DaeDummyElement(child);
 				float[] data = bind_shape_matrix.readFloatArray();
-				bindShapeMatrix = new Matrix4f(
+				bindShapeMatrix = new Matrix4(
 						data[0], data[1], data[2], data[3],
 						data[4], data[5], data[6], data[7],
 						data[8], data[9], data[10], data[11],

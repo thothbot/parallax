@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.lights;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 public class DirectionalLight extends Light
@@ -56,7 +56,7 @@ public class DirectionalLight extends Light
 
 	public boolean shadowCascade = false;
 
-	public Vector3f shadowCascadeOffset;
+	public Vector3 shadowCascadeOffset;
 	public int shadowCascadeCount = 2;
 
 	public double[] shadowCascadeBias = { 0.0, 0.0, 0.0};
@@ -92,9 +92,9 @@ public class DirectionalLight extends Light
 		this.intensity = intensity;
 		this.distance = distance;
 
-		this.position = new Vector3f(0, 1, 0);
+		this.position = new Vector3(0, 1, 0);
 		this.target   = new Object3D();
-		this.shadowCascadeOffset = new Vector3f(0, 0, -1000);
+		this.shadowCascadeOffset = new Vector3(0, 0, -1000);
 	}
 	
 	public Object3D getTarget() {

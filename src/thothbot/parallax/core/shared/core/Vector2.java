@@ -30,7 +30,7 @@ package thothbot.parallax.core.shared.core;
  * 
  * @author thothbot
  */
-public class Vector2f implements Vector
+public class Vector2 implements Vector
 {
 	/**
 	 * The X-coordinate
@@ -45,7 +45,7 @@ public class Vector2f implements Vector
 	/**
 	 * This default constructor will initialize vector (0, 0); 
 	 */
-	public Vector2f() 
+	public Vector2() 
 	{
 		this(0, 0);
 	}
@@ -57,7 +57,7 @@ public class Vector2f implements Vector
 	 * @param x the X coordinate
 	 * @param y the Y coordinate
 	 */
-	public Vector2f(double x, double y) 
+	public Vector2(double x, double y) 
 	{
 		this.x = x;
 		this.y = y;
@@ -132,7 +132,7 @@ public class Vector2f implements Vector
 	 * 
 	 * @return the current vector
 	 */
-	public Vector2f copy(Vector2f v)
+	public Vector2 copy(Vector2 v)
 	{
 		this.set(v.getX(), v.getY());
 		return this;
@@ -151,21 +151,21 @@ public class Vector2f implements Vector
 	}
 
 	@Override
-	public Vector2f add(Vector v)
+	public Vector2 add(Vector v)
 	{
 		return this.add(this, v);
 	}
 	
 	@Override
-	public Vector2f add(Vector v1, Vector v2)
+	public Vector2 add(Vector v1, Vector v2)
 	{
-		this.setX(((Vector2f)v1).getX() + ((Vector2f)v2).getX());
-		this.setY(((Vector2f)v1).getY() + ((Vector2f)v2).getY());
+		this.setX(((Vector2)v1).getX() + ((Vector2)v2).getX());
+		this.setY(((Vector2)v1).getY() + ((Vector2)v2).getY());
 		return this;
 	}
 	
 	@Override
-	public Vector2f add(double s)
+	public Vector2 add(double s)
 	{
 		this.addX(s);
 		this.addY(s);
@@ -174,37 +174,37 @@ public class Vector2f implements Vector
 	}
 
 	@Override
-	public Vector2f sub(Vector v)
+	public Vector2 sub(Vector v)
 	{
 		return this.sub(this, v);
 	}
 	
 	@Override
-	public Vector2f sub(Vector v1, Vector v2)
+	public Vector2 sub(Vector v1, Vector v2)
 	{
-		this.setX(((Vector2f)v1).getX() - ((Vector2f)v2).getX());
-		this.setY(((Vector2f)v1).getY() - ((Vector2f)v2).getY());
+		this.setX(((Vector2)v1).getX() - ((Vector2)v2).getX());
+		this.setY(((Vector2)v1).getY() - ((Vector2)v2).getY());
 		
 		return this;
 	}
 
 	@Override
-	public Vector2f multiply(Vector v)
+	public Vector2 multiply(Vector v)
 	{
 		return this.multiply(this, v);
 	}
 	
 	@Override
-	public Vector2f multiply(Vector v1, Vector v2)
+	public Vector2 multiply(Vector v1, Vector v2)
 	{
-		this.setX(((Vector2f)v1).getX() * ((Vector2f)v2).getX());
-		this.setY(((Vector2f)v1).getY() * ((Vector2f)v2).getY());
+		this.setX(((Vector2)v1).getX() * ((Vector2)v2).getX());
+		this.setY(((Vector2)v1).getY() * ((Vector2)v2).getY());
 
 		return this;
 	}
 
 	@Override
-	public Vector2f multiply(double s)
+	public Vector2 multiply(double s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -213,22 +213,22 @@ public class Vector2f implements Vector
 	}
 
 	@Override
-	public Vector2f divide(Vector v)
+	public Vector2 divide(Vector v)
 	{
 		return this.divide(this, v);
 	}
 	
 	@Override
-	public Vector2f divide(Vector v1, Vector v2)
+	public Vector2 divide(Vector v1, Vector v2)
 	{
-		this.setX(((Vector2f)v1).getX() / ((Vector2f)v2).getX());
-		this.setY(((Vector2f)v1).getY() / ((Vector2f)v2).getY());
+		this.setX(((Vector2)v1).getX() / ((Vector2)v2).getX());
+		this.setY(((Vector2)v1).getY() / ((Vector2)v2).getY());
 
 		return this;
 	}
 	
 	@Override
-	public Vector2f divide(double s)
+	public Vector2 divide(double s)
 	{
 		if (s != 0) {
 
@@ -247,7 +247,7 @@ public class Vector2f implements Vector
 	/**
 	 * Negates the value of this vector in place.
 	 */
-	public Vector2f negate()
+	public Vector2 negate()
 	{
 		return this.multiply(-1);
 	}
@@ -258,7 +258,7 @@ public class Vector2f implements Vector
 	 * @param v1
 	 *            the other vector
 	 */
-	public double dot(Vector2f v1)
+	public double dot(Vector2 v1)
 	{
 		return (this.x * v1.x + this.y * v1.y);
 	}
@@ -287,7 +287,7 @@ public class Vector2f implements Vector
 	 * Normalizes this vector in place.
 	 */
 	@Override
-	public Vector2f normalize()
+	public Vector2 normalize()
 	{
 		this.divide(length());
 		return this;
@@ -300,8 +300,8 @@ public class Vector2f implements Vector
 	@Override
 	public double distanceToSquared(Vector v)
 	{
-		double dx = this.getX() - ((Vector2f) v).getX();
-		double dy = this.getY() - ((Vector2f) v).getY();
+		double dx = this.getX() - ((Vector2) v).getX();
+		double dy = this.getY() - ((Vector2) v).getY();
 		return (dx * dx + dy * dy);
 	}
 
@@ -315,13 +315,13 @@ public class Vector2f implements Vector
 		return Math.sqrt(distanceToSquared(v1));
 	}
 
-	public Vector2f setLength(double l)
+	public Vector2 setLength(double l)
 	{
 		normalize();
 		return multiply(l);
 	}
 
-	public void lerp(Vector2f v1, double alpha)
+	public void lerp(Vector2 v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
@@ -333,9 +333,9 @@ public class Vector2f implements Vector
 	}
 	
 	@Override
-	public Vector2f clone()
+	public Vector2 clone()
 	{
-		return new Vector2f(this.x, this.y);
+		return new Vector2(this.x, this.y);
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class Vector2f implements Vector
 	 *            the vector with which the comparison is made
 	 * @return true or false
 	 */
-	public boolean equals(Vector2f v1)
+	public boolean equals(Vector2 v1)
 	{
 		try {
 			return (this.x == v1.x && this.y == v1.y);

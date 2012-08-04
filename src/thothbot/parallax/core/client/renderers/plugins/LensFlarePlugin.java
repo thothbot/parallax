@@ -39,8 +39,8 @@ import thothbot.parallax.core.client.shader.ShaderLensFlare;
 import thothbot.parallax.core.client.shader.ShaderLensFlareVertexTexture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.LensFlare;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -174,17 +174,17 @@ public final class LensFlarePlugin extends Plugin
 
 		WebGLRenderingContext gl = this.renderer.getGL();
 
-		Vector3f tempPosition = new Vector3f();
+		Vector3 tempPosition = new Vector3();
 
 		double invAspect = viewportHeight / viewportWidth * 1.0;
 		double halfViewportWidth = viewportWidth * 0.5;
 		double halfViewportHeight = viewportHeight * 0.5;
 
 		double size = 16.0 / viewportHeight;
-		Vector2f scale = new Vector2f( size * invAspect, size );
+		Vector2 scale = new Vector2( size * invAspect, size );
 
-		Vector3f screenPosition = new Vector3f( 1, 1, 0 );
-		Vector2f screenPositionPixels = new Vector2f( 1, 1 );
+		Vector3 screenPosition = new Vector3( 1, 1, 0 );
+		Vector2 screenPositionPixels = new Vector2( 1, 1 );
 
 		Map<String, WebGLUniformLocation> uniforms = this.lensFlare.uniforms;
 		Map<String, Integer> attributes = this.lensFlare.attributes;

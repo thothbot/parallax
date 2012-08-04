@@ -23,14 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphColor;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
-import thothbot.parallax.core.shared.core.Vector4f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
@@ -103,8 +103,8 @@ public class Json extends Loader
 		if(this.material == null)
 		{
 			MeshPhongMaterial material = new MeshPhongMaterial();
-			material.setColor( new Color3f(0xffffff) );
-			material.setSpecular( new Color3f(0xffffff) );
+			material.setColor( new Color3(0xffffff) );
+			material.setSpecular( new Color3(0xffffff) );
 			material.setShininess(20);
 			material.setMorphTargets( true );
 			material.setMorphNormals( true );
@@ -168,7 +168,7 @@ public class Json extends Loader
 		// defaults
 		Material material = new MeshLambertMaterial();
 		material.setOpacity(1.0f);
-		((MeshLambertMaterial)material).setColor(new Color3f(0xeeeeee));
+		((MeshLambertMaterial)material).setColor(new Color3(0xeeeeee));
 		if(jsonMaterial.containsKey("wireframe"))
 			((MeshLambertMaterial)material).setWireframe(true);
 		
@@ -367,7 +367,7 @@ public class Json extends Loader
 
 		while ( offset < zLength ) 
 		{
-			Vector3f vertex = new Vector3f();
+			Vector3 vertex = new Vector3();
 
 			vertex.setX( (float) ( value( vertices, offset ++ ) * scale) );
 			vertex.setY( (float) ( value( vertices, offset ++ ) * scale) );
@@ -450,11 +450,11 @@ public class Json extends Loader
 
 					int uvIndex = (int)value( faces, offset ++ );
 
-					UVf UVf = new UVf( 
+					UV UV = new UV( 
 						(float) value( uvLayer, uvIndex * 2), 
 						(float) value( uvLayer, uvIndex * 2 + 1));
 
-					this.geometry.getFaceUvs().get(i).add(UVf);
+					this.geometry.getFaceUvs().get(i).add(UV);
 				}
 			}
 
@@ -464,12 +464,12 @@ public class Json extends Loader
 				{
 					JSONArray uvLayer = uvs.get(i).isArray();
 
-					List<UVf> UVs = new ArrayList<UVf>();
+					List<UV> UVs = new ArrayList<UV>();
 
 					for ( int j = 0; j < nVertices; j ++ ) 
 					{
 						int uvIndex = (int)value( faces, offset ++ );
-						UVs.add( new UVf( 
+						UVs.add( new UV( 
 							(float) value( uvLayer, uvIndex * 2), 
 							(float) value( uvLayer, uvIndex * 2 + 1)));
 					}
@@ -482,7 +482,7 @@ public class Json extends Loader
 			{
 				int normalIndex = (int)value( faces, offset ++ ) * 3;
 
-				Vector3f normal = new Vector3f();
+				Vector3 normal = new Vector3();
 
 				normal.setX( (float) value( normals, normalIndex ++ ) );
 				normal.setY( (float) value( normals, normalIndex ++ ) );
@@ -496,7 +496,7 @@ public class Json extends Loader
 				for ( int i = 0; i < nVertices; i++ ) 
 				{
 					int normalIndex = (int)value( faces, offset ++ ) * 3;
-					Vector3f normal = new Vector3f();
+					Vector3 normal = new Vector3();
 					
 					normal.setX( (float) value( normals, normalIndex ++ ) );
 					normal.setY( (float) value( normals, normalIndex ++ ) );
@@ -510,7 +510,7 @@ public class Json extends Loader
 			if ( hasFaceColor ) 
 			{
 				int colorIndex = (int)value( faces, offset ++ );
-				face.setColor(new Color3f((int)value(colors, colorIndex)));
+				face.setColor(new Color3((int)value(colors, colorIndex)));
 			}
 
 			if ( hasFaceVertexColor ) 
@@ -518,7 +518,7 @@ public class Json extends Loader
 				for ( int i = 0; i < nVertices; i++ ) 
 				{
 					int colorIndex = (int)value( faces, offset ++ );
-					face.getVertexColors().add( new Color3f((int)value(colors, colorIndex) ));
+					face.getVertexColors().add( new Color3((int)value(colors, colorIndex) ));
 				}
 			}
 
@@ -535,7 +535,7 @@ public class Json extends Loader
 			JSONArray skinWeights = json.get("skinWeights").isArray();
 			for ( int i = 0, l = skinWeights.size(); i < l; i += 2 ) 
 			{
-				geometry.getSkinWeights().add( new Vector4f( 
+				geometry.getSkinWeights().add( new Vector4( 
 						(float)value( skinWeights, i ),
 						(float)value( skinWeights, i + 1 ), 
 						0, 0 ) );
@@ -548,7 +548,7 @@ public class Json extends Loader
 			JSONArray skinIndices = json.get("skinIndices").isArray();
 			for ( int i = 0, l = skinIndices.size(); i < l; i += 2 ) 
 			{
-				geometry.getSkinIndices().add( new Vector4f(
+				geometry.getSkinIndices().add( new Vector4(
 						(float)value( skinIndices, i ),
 						(float)value( skinIndices, i + 1 ), 
 						0, 0) );
@@ -572,12 +572,12 @@ public class Json extends Loader
 			{
 				Geometry.MorphTarget morphTarget = geometry.new MorphTarget();
 				morphTarget.name = morphTargets.get(i).isObject().get("name").isString().stringValue();
-				morphTarget.vertices = new ArrayList<Vector3f>();
+				morphTarget.vertices = new ArrayList<Vector3>();
 				
 				JSONArray srcVertices = morphTargets.get(i).isObject().get("vertices").isArray();
 				for( int v = 0, vl = srcVertices.size(); v < vl; v += 3 ) 
 				{
-					morphTarget.vertices.add( new Vector3f(
+					morphTarget.vertices.add( new Vector3(
 						(float)(value( srcVertices, v ) * scale),
 						(float)(value( srcVertices, v + 1 ) * scale),
 						(float)(value( srcVertices, v + 2 ) * scale)
@@ -595,12 +595,12 @@ public class Json extends Loader
 			{
 				Geometry.MorphColor morphColor = geometry.new MorphColor();
 				morphColor.name = morphColors.get(i).isObject().get("name").isString().stringValue();
-				morphColor.colors = new ArrayList<Color3f>();
+				morphColor.colors = new ArrayList<Color3>();
 								
 				JSONArray srcColors = morphColors.get(i).isObject().get("colors").isArray();
 				for ( int c = 0, cl = srcColors.size(); c < cl; c += 3 ) 
 				{
-					Color3f color = new Color3f( 0xffaa00 );
+					Color3 color = new Color3( 0xffaa00 );
 					color.setRGB( 
 						(float)value(srcColors, c ), 
 						(float)value(srcColors, c + 1 ), 

@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.curves;
 
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 public class CurveArc extends Curve
 {
@@ -49,7 +49,7 @@ public class CurveArc extends Curve
 	}
 
 	@Override
-	public Vector2f getPoint(double t)
+	public Vector2 getPoint(double t)
 	{
 		double deltaAngle = this.aEndAngle - this.aStartAngle;
 
@@ -61,7 +61,7 @@ public class CurveArc extends Curve
 		double tx = this.aX + this.aRadius * Math.cos( angle );
 		double ty = this.aY + this.aRadius * Math.sin( angle );
 
-		return new Vector2f( tx, ty );
+		return new Vector2( tx, ty );
 	}
 
 }

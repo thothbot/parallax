@@ -28,15 +28,15 @@ import thothbot.parallax.core.client.shader.ShaderPhong;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Vector3;
 
 public final class MeshPhongMaterial extends Material 
 	implements HasMaterialMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
 	HasSkinning, HasAmbientEmissiveColor
 {
 	private boolean isWrapAround;
-	private Vector3f wrapRGB;
+	private Vector3 wrapRGB;
 	
 	private boolean isWireframe;
 	private int wireframeLineWidth;
@@ -50,10 +50,10 @@ public final class MeshPhongMaterial extends Material
 	
 	private boolean isFog;
 	
-	private Color3f color;
-	private Color3f ambient;
-	private Color3f emissive;
-	private Color3f specular;	
+	private Color3 color;
+	private Color3 ambient;
+	private Color3 emissive;
+	private Color3 specular;	
 
 	private double shininess;
 	
@@ -73,7 +73,7 @@ public final class MeshPhongMaterial extends Material
 	
 	public MeshPhongMaterial()
 	{	
-		setWrapRGB(new Vector3f( 1f, 1f, 1f ));
+		setWrapRGB(new Vector3( 1f, 1f, 1f ));
 		setWrapAround(false);
 		
 		setWireframe(false);
@@ -85,10 +85,10 @@ public final class MeshPhongMaterial extends Material
 		
 		setFog(true);
 		
-		setColor(new Color3f(0xffffff));
-		setAmbient(new Color3f(0xffffff));
-		setEmissive(new Color3f(0x000000));
-		setSpecular(new Color3f(0x111111));
+		setColor(new Color3(0xffffff));
+		setAmbient(new Color3(0xffffff));
+		setEmissive(new Color3(0x000000));
+		setSpecular(new Color3(0x111111));
 		
 		setVertexColors(Material.COLORS.NO);
 		
@@ -102,11 +102,11 @@ public final class MeshPhongMaterial extends Material
 	}
 	
 	
-	public Color3f getSpecular() {
+	public Color3 getSpecular() {
 		return specular;
 	}
 
-	public void setSpecular(Color3f specular) {
+	public void setSpecular(Color3 specular) {
 		this.specular = specular;
 	}
 	
@@ -145,12 +145,12 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public Vector3f getWrapRGB() {
+	public Vector3 getWrapRGB() {
 		return this.wrapRGB;
 	}
 	
 	@Override
-	public void setWrapRGB(Vector3f wrapRGB) {
+	public void setWrapRGB(Vector3 wrapRGB) {
 		this.wrapRGB = wrapRGB;
 	}
 	
@@ -235,12 +235,12 @@ public final class MeshPhongMaterial extends Material
 	}
 	
 	@Override
-	public Color3f getColor() {
+	public Color3 getColor() {
 		return color;
 	}
 	
 	@Override
-	public void setColor(Color3f color) {
+	public void setColor(Color3 color) {
 		this.color = color;
 	}
 	
@@ -315,22 +315,22 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public Color3f getAmbient() {
+	public Color3 getAmbient() {
 		return this.ambient;
 	}
 
 	@Override
-	public void setAmbient(Color3f ambient) {
+	public void setAmbient(Color3 ambient) {
 		this.ambient = ambient;
 	}
 
 	@Override
-	public Color3f getEmissive() {
+	public Color3 getEmissive() {
 		return this.emissive;
 	}
 
 	@Override
-	public void setEmissive(Color3f emissive) {
+	public void setEmissive(Color3 emissive) {
 		this.emissive = emissive;
 	}
 	
@@ -343,9 +343,9 @@ public final class MeshPhongMaterial extends Material
 
 		if ( isGammaInput ) 
 		{
-			((Color3f) getUniforms().get("ambient").getValue()).copyGammaToLinear( getAmbient() );
-			((Color3f) getUniforms().get("emissive").getValue()).copyGammaToLinear( getEmissive() );
-			((Color3f) getUniforms().get("specular").getValue()).copyGammaToLinear( getSpecular() );
+			((Color3) getUniforms().get("ambient").getValue()).copyGammaToLinear( getAmbient() );
+			((Color3) getUniforms().get("emissive").getValue()).copyGammaToLinear( getEmissive() );
+			((Color3) getUniforms().get("specular").getValue()).copyGammaToLinear( getSpecular() );
 		} 
 		else
 		{
@@ -355,6 +355,6 @@ public final class MeshPhongMaterial extends Material
 		}
 
 		if ( isWrapAround() ) 
-			((Vector3f) getUniforms().get("wrapRGB").getValue()).copy( getWrapRGB() );
+			((Vector3) getUniforms().get("wrapRGB").getValue()).copy( getWrapRGB() );
 	}
 }

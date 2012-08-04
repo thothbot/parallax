@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 
 public class FontUtils
@@ -37,11 +37,11 @@ public class FontUtils
 	/*
 	 * @param contour
 	 * @param result 
-	 * 			There will be generated List of List of {@link Vector2f}
+	 * 			There will be generated List of List of {@link Vector2}
 	 * @param vertIndices 
 	 * 			There will be generated List of List of integer
 	 */
-	public static void triangulate( List<Vector2f> contour, List<List<Vector2f>> result, List<List<Integer>> vertIndices ) 
+	public static void triangulate( List<Vector2> contour, List<List<Vector2>> result, List<List<Integer>> vertIndices ) 
 	{
 		int n = contour.size();
 
@@ -129,7 +129,7 @@ public class FontUtils
 	/*
 	 * calculate area of the contour polygon
 	 */
-	public static double TriangulateArea(List<Vector2f> contour)
+	public static double TriangulateArea(List<Vector2> contour)
 	{
 		int n = contour.size();
 		double a = 0.0;
@@ -143,7 +143,7 @@ public class FontUtils
 	/*
 	 * Calculate area of the contour polygon
 	 */
-	private static double area( List<Vector2f> contour ) 
+	private static double area( List<Vector2> contour ) 
 	{
 
 		int n = contour.size();
@@ -155,7 +155,7 @@ public class FontUtils
 		return a * 0.5;
 	}
 	
-	private static boolean snip( List<Vector2f> contour, int u, int v, int w, int n, List<Integer> verts ) 
+	private static boolean snip( List<Vector2> contour, int u, int v, int w, int n, List<Integer> verts ) 
 	{
 		double ax = contour.get( verts.get( u ) ).getX();
 		double ay = contour.get( verts.get( u ) ).getY();

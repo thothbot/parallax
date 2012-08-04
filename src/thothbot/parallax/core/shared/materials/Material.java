@@ -36,9 +36,9 @@ import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.GeometryGroup;
-import thothbot.parallax.core.shared.core.Vector4f;
+import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 
@@ -327,7 +327,7 @@ public abstract class Material
 		if(this instanceof HasColor)
 		{
 			if ( isGammaInput ) 
-				((Color3f) uniforms.get("diffuse").getValue()).copyGammaToLinear( ((HasColor)this).getColor() );
+				((Color3) uniforms.get("diffuse").getValue()).copyGammaToLinear( ((HasColor)this).getColor() );
  
 			else
 				uniforms.get("diffuse").setValue( ((HasColor)this).getColor() );
@@ -339,7 +339,7 @@ public abstract class Material
 
 			if ( ((HasMap) this).getMap() != null) 
 			{
-				((Vector4f)uniforms.get("offsetRepeat").getValue()).set( 
+				((Vector4)uniforms.get("offsetRepeat").getValue()).set( 
 						((HasMap) this).getMap().getOffset().getX(), 
 						((HasMap) this).getMap().getOffset().getY(), 
 						((HasMap) this).getMap().getRepeat().getX(), 

@@ -22,9 +22,9 @@ package thothbot.parallax.core.client.shader;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Color3f;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
@@ -83,18 +83,18 @@ public final class ShaderNormalMap extends Shader
 		this.addUniform("uDisplacementBias",  new Uniform(Uniform.TYPE.F, 0.0 ));
 		this.addUniform("uDisplacementScale", new Uniform(Uniform.TYPE.F, 1.0 ));
 		
-		this.addUniform("uDiffuseColor",  new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff ) ));
-		this.addUniform("uSpecularColor", new Uniform(Uniform.TYPE.C, new Color3f( 0x111111 ) ));
-		this.addUniform("uAmbientColor",  new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff ) ));
+		this.addUniform("uDiffuseColor",  new Uniform(Uniform.TYPE.C, new Color3( 0xffffff ) ));
+		this.addUniform("uSpecularColor", new Uniform(Uniform.TYPE.C, new Color3( 0x111111 ) ));
+		this.addUniform("uAmbientColor",  new Uniform(Uniform.TYPE.C, new Color3( 0xffffff ) ));
 		this.addUniform("uShininess",     new Uniform(Uniform.TYPE.F, 30  ));
 		this.addUniform("uOpacity",       new Uniform(Uniform.TYPE.F, 1.0 ));
 		
 		this.addUniform("uReflectivity", new Uniform(Uniform.TYPE.F, 0.5 ));
 		
-		this.addUniform("uOffset", new Uniform(Uniform.TYPE.V2, new Vector2f( 0.0, 0.0 ) ));
-		this.addUniform("uRepeat", new Uniform(Uniform.TYPE.V2, new Vector2f( 1.0, 1.0 ) ));
+		this.addUniform("uOffset", new Uniform(Uniform.TYPE.V2, new Vector2( 0.0, 0.0 ) ));
+		this.addUniform("uRepeat", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 ) ));
 		
-		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3f( 1.0, 1.0, 1.0 ) ));
+		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0, 1.0, 1.0 ) ));
 	}
 	
 	@Override

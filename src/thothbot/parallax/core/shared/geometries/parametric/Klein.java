@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.geometries.parametric;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.Parametric;
 
 /**
@@ -42,7 +42,7 @@ public class Klein extends Parametric
 		super(new Parametric.ParametricFunction() 
 		{	
 			@Override
-			public Vector3f run(double u, double v)
+			public Vector3 run(double u, double v)
 			{
 				u *= Math.PI;
 				v *= 2.0 * Math.PI;
@@ -63,7 +63,7 @@ public class Klein extends Parametric
 
 				y = (float) (-2.0 * (1.0 - Math.cos(u) / 2.0) * Math.sin(v));
 				
-				return new Vector3f(x, y, z);
+				return new Vector3(x, y, z);
 			}
 		}, slices, stacks);
 	}

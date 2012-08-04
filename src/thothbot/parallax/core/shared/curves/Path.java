@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
 
 public class Path extends CurvePath
@@ -67,7 +67,7 @@ public class Path extends CurvePath
 		this.actions = new ArrayList<Path.Action>();
 	}
 	
-	public Path( List<Vector2f> points ) 
+	public Path( List<Vector2> points ) 
 	{
 		this();
 		this.fromPoints( points );
@@ -81,7 +81,7 @@ public class Path extends CurvePath
 	// Create path using straight lines to connect all points
 	// - vectors: array of Vector2
 
-	public void fromPoints( List<Vector2f> vectors ) 
+	public void fromPoints( List<Vector2> vectors ) 
 	{
 		moveTo( vectors.get( 0 ).getX(), vectors.get( 0 ).getY() );
 
@@ -101,7 +101,7 @@ public class Path extends CurvePath
 		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
 		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
-		CurveLine curve = new CurveLine( new Vector2f( x0, y0 ), new Vector2f( x, y ) );
+		CurveLine curve = new CurveLine( new Vector2( x0, y0 ), new Vector2( x, y ) );
 		add(curve);
 
 		this.actions.add( new Action( PATH_ACTIONS.LINE_TO, x, y ) );
@@ -115,9 +115,9 @@ public class Path extends CurvePath
 		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
 		CurveQuadraticBezier curve = new CurveQuadraticBezier( 
-				new Vector2f( x0, y0 ),
-				new Vector2f( aCPx, aCPy ),
-				new Vector2f( aX, aY ) );
+				new Vector2( x0, y0 ),
+				new Vector2( aCPx, aCPy ),
+				new Vector2( aX, aY ) );
 		add(curve);
 
 		this.actions.add( new Action( PATH_ACTIONS.QUADRATIC_CURVE_TO, aCPx, aCPy, aX, aY ) );
@@ -131,10 +131,10 @@ public class Path extends CurvePath
 		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
 		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
-		CurveCubicBezier curve = new CurveCubicBezier( new Vector2f( x0, y0 ),
-				new Vector2f( aCP1x, aCP1y ),
-				new Vector2f( aCP2x, aCP2y ),
-				new Vector2f( aX, aY ) );
+		CurveCubicBezier curve = new CurveCubicBezier( new Vector2( x0, y0 ),
+				new Vector2( aCP1x, aCP1y ),
+				new Vector2( aCP2x, aCP2y ),
+				new Vector2( aX, aY ) );
 		add( curve );
 
 		this.actions.add( new Action( PATH_ACTIONS.BEZIER_CURVE_TO, aCP1x, aCP1y, aCP2x, aCP2y, aX, aY ) );
@@ -142,9 +142,9 @@ public class Path extends CurvePath
 	
 	/*
 	 * @param pts
-	 * 		List<{@link Vector2f}>
+	 * 		List<{@link Vector2}>
 	 */
-	public void splineThru( List<Vector2f> pts) 
+	public void splineThru( List<Vector2> pts) 
 	{	
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 
@@ -152,7 +152,7 @@ public class Path extends CurvePath
 		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 		
 		//---
-		List<Vector2f> npts = Arrays.asList( new Vector2f( x0, y0 ) );
+		List<Vector2> npts = Arrays.asList( new Vector2( x0, y0 ) );
 		npts.addAll(pts);
 	
 		CurveSpline curve = new CurveSpline( npts );
@@ -175,7 +175,7 @@ public class Path extends CurvePath
 
 		// All of the other actions look to the last two elements in the list to
 		// find the ending point, so we need to append them.
-		Vector2f lastPoint = curve.getPoint(aClockwise ? 1 : 0);
+		Vector2 lastPoint = curve.getPoint(aClockwise ? 1 : 0);
 
 		this.actions.add( new Action(PATH_ACTIONS.ARC, aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise, lastPoint.getX(), lastPoint.getY() ) );
 	}
@@ -188,20 +188,20 @@ public class Path extends CurvePath
 
 			// All of the other actions look to the last two elements in the list to
 			// find the ending point, so we need to append them.
-			Vector2f lastPoint = curve.getPoint(aClockwise ? 1 : 0);
+			Vector2 lastPoint = curve.getPoint(aClockwise ? 1 : 0);
 
 			this.actions.add( new Action(PATH_ACTIONS.ARC, aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise, lastPoint.getX(), lastPoint.getY() ) );
 	}
 	
-	public List<Vector2f> getSpacedPoints( boolean closedPath )
+	public List<Vector2> getSpacedPoints( boolean closedPath )
 	{
 		return getSpacedPoints(40, closedPath);
 	}
 
-	public List<Vector2f> getSpacedPoints( int divisions, boolean closedPath ) 
+	public List<Vector2> getSpacedPoints( int divisions, boolean closedPath ) 
 	{
 
-		List<Vector2f> points = new ArrayList<Vector2f>();
+		List<Vector2> points = new ArrayList<Vector2>();
 
 		for ( int i = 0; i < divisions; i ++ )
 			points.add( this.getPoint( i / divisions ) );
@@ -216,21 +216,21 @@ public class Path extends CurvePath
 	}
 	
 	/* 
-	 * @return an List of {@link Vector2f} based on contour of the path
+	 * @return an List of {@link Vector2} based on contour of the path
 	 */
-	public List<Vector2f> getPoints( boolean closedPath ) 
+	public List<Vector2> getPoints( boolean closedPath ) 
 	{
 		return getPoints(12, closedPath);
 	}
 
-	public List<Vector2f> getPoints( int divisions, boolean closedPath ) 
+	public List<Vector2> getPoints( int divisions, boolean closedPath ) 
 	{
 		Log.debug("Called Path:getPoins()");
 
 		if (this.useSpacedPoints)
 			return this.getSpacedPoints( divisions, closedPath );
 
-		List<Vector2f> points = new ArrayList<Vector2f>();
+		List<Vector2> points = new ArrayList<Vector2>();
 
 		double cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0;
 		
@@ -251,12 +251,12 @@ public class Path extends CurvePath
 
 			case MOVE_TO:
 
-				points.add( new Vector2f( (Double)args.get( 0 ), (Double)args.get( 1 ) ) );
+				points.add( new Vector2( (Double)args.get( 0 ), (Double)args.get( 1 ) ) );
 				break;
 
 			case LINE_TO:
 
-				points.add( new Vector2f( (Double)args.get( 0 ), (Double)args.get( 1 ) ) );
+				points.add( new Vector2( (Double)args.get( 0 ), (Double)args.get( 1 ) ) );
 				break;
 
 			case QUADRATIC_CURVE_TO:
@@ -269,7 +269,7 @@ public class Path extends CurvePath
 
 				if ( points.size() > 0 ) 
 				{
-					Vector2f laste = points.get( points.size() - 1 );
+					Vector2 laste = points.get( points.size() - 1 );
 
 					cpx0 = laste.getX();
 					cpy0 = laste.getY();
@@ -291,7 +291,7 @@ public class Path extends CurvePath
 					double tx = ShapeUtils.b2( t, cpx0, cpx1, cpx );
 					double ty = ShapeUtils.b2( t, cpy0, cpy1, cpy );
 
-					points.add( new Vector2f( tx, ty ) );
+					points.add( new Vector2( tx, ty ) );
 
 			  	}
 
@@ -310,7 +310,7 @@ public class Path extends CurvePath
 
 				if ( points.size() > 0 ) 
 				{
-					Vector2f laste = points.get( points.size() - 1 );
+					Vector2 laste = points.get( points.size() - 1 );
 
 					cpx0 = laste.getX();
 					cpy0 = laste.getY();
@@ -332,7 +332,7 @@ public class Path extends CurvePath
 					double tx = ShapeUtils.b3( t, cpx0, cpx1, cpx2, cpx );
 					double ty = ShapeUtils.b3( t, cpy0, cpy1, cpy2, cpy );
 
-					points.add( new Vector2f( tx, ty ) );
+					points.add( new Vector2( tx, ty ) );
 				}
 
 				break;
@@ -341,10 +341,10 @@ public class Path extends CurvePath
 
 				List<Object> laste = this.actions.get( i - 1 ).args;
 
-				Vector2f last = new Vector2f( (Double)laste.get( laste.size() - 2 ), (Double)laste.get( laste.size() - 1 ) );
-				List<Vector2f> spts = Arrays.asList(last);
+				Vector2 last = new Vector2( (Double)laste.get( laste.size() - 2 ), (Double)laste.get( laste.size() - 1 ) );
+				List<Vector2> spts = Arrays.asList(last);
 
-				Vector2f v = (Vector2f) args.get( 0 );
+				Vector2 v = (Vector2) args.get( 0 );
 				double n = divisions * v.length();
 
 				spts.add(v);
@@ -352,7 +352,7 @@ public class Path extends CurvePath
 				CurveSpline spline = new CurveSpline( spts );
 
 				for ( int j = 1; j <= n; j ++ )
-					points.add( (Vector2f) spline.getPointAt( j / n ) ) ;
+					points.add( (Vector2) spline.getPointAt( j / n ) ) ;
 
 				break;
 
@@ -403,7 +403,7 @@ public class Path extends CurvePath
 
 
 		// Normalize to remove the closing point by default.
-		Vector2f lastPoint = points.get( points.size() - 1);
+		Vector2 lastPoint = points.get( points.size() - 1);
 		double EPSILON = 0.0000000001;
 		if ( Math.abs(lastPoint.getX() - points.get( 0 ).getX()) < EPSILON &&
 	             Math.abs(lastPoint.getY() - points.get( 0 ).getY()) < EPSILON)
@@ -425,13 +425,13 @@ public class Path extends CurvePath
 	 * @param e climb
 	 * @param f Y-offset
 	 */
-//	public List<Vector2f> nltransform( double a, double b, double c, double d, double e, double f ) 
+//	public List<Vector2> nltransform( double a, double b, double c, double d, double e, double f ) 
 //	{
-//		List<Vector2f> oldPts = this.getPoints();
+//		List<Vector2> oldPts = this.getPoints();
 //
 //		for ( i = 0, il = oldPts.length; i < il; i ++ ) 
 //		{
-//			Vector2f p = oldPts.get(i);
+//			Vector2 p = oldPts.get(i);
 //
 //			double oldX = p.getX();
 //			double oldY = p.getY();
@@ -558,14 +558,14 @@ public class Path extends CurvePath
 //		return shapes;
 //	}
 	
-	public List<Vector2f> getTransformedSpacedPoints( boolean closedPath ) 
+	public List<Vector2> getTransformedSpacedPoints( boolean closedPath ) 
 	{
 		return getTransformedSpacedPoints(closedPath, getBends());
 	}
 
-	public List<Vector2f>  getTransformedSpacedPoints( boolean closedPath, List<CurvePath> bends ) 
+	public List<Vector2>  getTransformedSpacedPoints( boolean closedPath, List<CurvePath> bends ) 
 	{
-		List<Vector2f> oldPts = this.getSpacedPoints( closedPath );
+		List<Vector2> oldPts = this.getSpacedPoints( closedPath );
 
 		for ( int i = 0; i < bends.size(); i ++ )
 			oldPts = getWrapPoints( oldPts, bends.get( i ) );

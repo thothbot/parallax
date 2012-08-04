@@ -27,8 +27,8 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 
 public class SkinnedMesh extends Mesh
@@ -42,7 +42,7 @@ public class SkinnedMesh extends Mesh
 		super(geometry, material);
 
 		// init bones
-		this.identityMatrix = new Matrix4f();
+		this.identityMatrix = new Matrix4();
 
 		this.bones = new ArrayList<Bone>();
 		this.boneMatrices = (Float32Array) Float32Array.createArray();
@@ -111,7 +111,7 @@ public class SkinnedMesh extends Mesh
 		this.bones.add( bone );
 	}
 	
-	public void update( Matrix4f parentSkinMatrix, boolean forceUpdate ) {
+	public void update( Matrix4 parentSkinMatrix, boolean forceUpdate ) {
 		updateMatrixWorld( true );
 	}
 
@@ -151,13 +151,13 @@ public class SkinnedMesh extends Mesh
 	{
 		updateMatrixWorld( true );
 		
-		List<Matrix4f> boneInverses = null;
+		List<Matrix4> boneInverses = null;
 
 		for (int b = 0; b < this.bones.size(); b ++ ) 
 		{
 			Bone bone = this.bones.get(b);
 
-			Matrix4f inverseMatrix = new Matrix4f();
+			Matrix4 inverseMatrix = new Matrix4();
 			inverseMatrix.getInverse( bone.skinMatrix );
 
 			boneInverses.add( inverseMatrix );
@@ -168,21 +168,21 @@ public class SkinnedMesh extends Mesh
 		// project vertices to local
 		if ( this.geometry.getSkinVerticesA() == null ) 
 		{
-			this.geometry.setSkinVerticesA( new ArrayList<Vector3f>() );
-			this.geometry.setSkinVerticesB( new ArrayList<Vector3f>() );
+			this.geometry.setSkinVerticesA( new ArrayList<Vector3>() );
+			this.geometry.setSkinVerticesB( new ArrayList<Vector3>() );
 
 			for ( int i = 0; i < this.geometry.getSkinIndices().size(); i ++ ) {
 
-				Vector3f orgVertex = this.geometry.getVertices().get( i );
+				Vector3 orgVertex = this.geometry.getVertices().get( i );
 
 				int indexA = (int) this.geometry.getSkinIndices().get( i ).getX();
 				int indexB = (int) this.geometry.getSkinIndices().get( i ).getY();
 
-				Vector3f vertex = new Vector3f( orgVertex.getX(), orgVertex.getY(), orgVertex.getZ() );
-				this.geometry.getSkinVerticesA().add( (Vector3f) boneInverses.get( indexA ).multiplyVector3( vertex ) );
+				Vector3 vertex = new Vector3( orgVertex.getX(), orgVertex.getY(), orgVertex.getZ() );
+				this.geometry.getSkinVerticesA().add( (Vector3) boneInverses.get( indexA ).multiplyVector3( vertex ) );
 
-				Vector3f vertex2 = new Vector3f( orgVertex.getX(), orgVertex.getY(), orgVertex.getZ() );
-				this.geometry.getSkinVerticesB().add( (Vector3f) boneInverses.get( indexB ).multiplyVector3( vertex2 ) );
+				Vector3 vertex2 = new Vector3( orgVertex.getX(), orgVertex.getY(), orgVertex.getZ() );
+				this.geometry.getSkinVerticesB().add( (Vector3) boneInverses.get( indexB ).multiplyVector3( vertex2 ) );
 
 				// todo: add more influences
 

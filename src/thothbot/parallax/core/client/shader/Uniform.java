@@ -37,17 +37,17 @@ public class Uniform
 	public static enum TYPE {
 		I,  // single integer
 		F,  // single double
-		V2, // single Vector2f
-		V3, // single Vector3f
-		V4, // single Vector4f
-		C,  // single Color3f
+		V2, // single Vector2
+		V3, // single Vector3
+		V4, // single Vector4
+		C,  // single Color3
 		FV1,// flat array of floats (JS or typed array)
 		FV, // flat array of floats with 3 x N size (JS or typed array)
-		V2V,// array of Vector2f
-		V3V,// array of Vector3f
-		V4V,// array of Vector4f
-		M4, // single Matrix4f
-		M4V,// array of Matrix4f
+		V2V,// array of Vector2
+		V3V,// array of Vector3
+		V4V,// array of Vector4
+		M4, // single Matrix4
+		M4V,// array of Matrix4
 		T,  // single Texture (2d or cube)
 		TV // array of Texture (2d)
 	};

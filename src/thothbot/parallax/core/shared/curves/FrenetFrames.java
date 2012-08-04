@@ -25,8 +25,8 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.Vector3;
 
 /*
  * For computing of Frenet frames, exposing the tangents, normals and binormals the spline
@@ -36,9 +36,9 @@ public class FrenetFrames
 	private static double epsilon = 0.0001f;
 
 	// expose internals
-	private List<Vector3f> tangents;
-	private List<Vector3f> normals;
-	private List<Vector3f> binormals;
+	private List<Vector3> tangents;
+	private List<Vector3> normals;
+	private List<Vector3> binormals;
 
 	private Curve path;
 
@@ -46,11 +46,11 @@ public class FrenetFrames
 	{
 		this.path = path;
 
-		this.tangents = new ArrayList<Vector3f>();
-		this.normals = new ArrayList<Vector3f>();
-		this.binormals =new ArrayList<Vector3f>();
+		this.tangents = new ArrayList<Vector3>();
+		this.normals = new ArrayList<Vector3>();
+		this.binormals =new ArrayList<Vector3>();
 
-		Matrix4f mat = new Matrix4f();
+		Matrix4 mat = new Matrix4();
 
 		int numpoints = segments + 1;
 
@@ -59,14 +59,14 @@ public class FrenetFrames
 		{
 			double u = i / ( numpoints - 1.0 );
 
-			Vector3f vec = (Vector3f) path.getTangentAt( u ); 
+			Vector3 vec = (Vector3) path.getTangentAt( u ); 
 			tangents.add(vec.normalize());
 		}
 
 
 		initialNormal3();
 
-		Vector3f vec = new Vector3f();
+		Vector3 vec = new Vector3();
 
 		// compute the slowly-varying normal and binormal vectors for each segment on the path
 		for ( int i = 1; i < numpoints; i++ ) 
@@ -107,31 +107,31 @@ public class FrenetFrames
 		}
 	}
 
-	public List<Vector3f> getTangents()
+	public List<Vector3> getTangents()
 	{
 		return tangents;
 	}
 
-	public List<Vector3f> getNormals()
+	public List<Vector3> getNormals()
 	{
 		return normals;
 	}
 
-	public List<Vector3f> getBinormals()
+	public List<Vector3> getBinormals()
 	{
 		return binormals;
 	}
 
 	private void initialNormal1()
 	{
-		initialNormal1(new Vector3f( 0, 0, 1 ));
+		initialNormal1(new Vector3( 0, 0, 1 ));
 	}
 
-	private void initialNormal1(Vector3f lastBinormal) 
+	private void initialNormal1(Vector3 lastBinormal) 
 	{
 		// fixed start binormal. Has dangers of 0 vectors
-		normals.add( 0, new Vector3f());
-		binormals.add( 0, new Vector3f());
+		normals.add( 0, new Vector3());
+		binormals.add( 0, new Vector3());
 
 		normals.get( 0 ).cross( lastBinormal, tangents.get( 0 ) ).normalize();
 		binormals.get( 0 ).cross( tangents.get( 0 ), normals.get( 0 ) ).normalize();
@@ -140,10 +140,10 @@ public class FrenetFrames
 	private void initialNormal2() 
 	{
 		// This uses the Frenet-Serret formula for deriving binormal
-		Vector3f t2 = (Vector3f) path.getTangentAt( epsilon );
+		Vector3 t2 = (Vector3) path.getTangentAt( epsilon );
 
-		normals.add( 0, new Vector3f().sub( t2, tangents.get( 0 ) ).normalize() );
-		binormals.add( 0, new Vector3f().cross( tangents.get( 0 ), normals.get( 0 ) ) );
+		normals.add( 0, new Vector3().sub( t2, tangents.get( 0 ) ).normalize() );
+		binormals.add( 0, new Vector3().cross( tangents.get( 0 ), normals.get( 0 ) ) );
 
 		normals.get( 0 ).cross( binormals.get( 0 ), tangents.get( 0 ) ).normalize(); // last binormal x tangent
 		binormals.get( 0 ).cross( tangents.get( 0 ), normals.get( 0 ) ).normalize();
@@ -156,15 +156,15 @@ public class FrenetFrames
 	 */
 	private void initialNormal3() 
 	{
-		normals.add( 0, new Vector3f());
-		binormals.add( 0, new Vector3f());
+		normals.add( 0, new Vector3());
+		binormals.add( 0, new Vector3());
 		double smallest = Double.MAX_VALUE;
 
 		double tx = Math.abs( tangents.get( 0 ).getX() );
 		double ty = Math.abs( tangents.get( 0 ).getY() );
 		double tz = Math.abs( tangents.get( 0 ).getZ() );
 
-		Vector3f normal = new Vector3f();
+		Vector3 normal = new Vector3();
 		if ( tx <= smallest ) 
 		{
 			smallest = tx;
@@ -180,7 +180,7 @@ public class FrenetFrames
 			normal.set( 0, 0, 1 );
 		}
 
-		Vector3f vec = new Vector3f();
+		Vector3 vec = new Vector3();
 		vec.cross( tangents.get( 0 ), normal ).normalize();
 
 		normals.get( 0 ).cross( tangents.get( 0 ), vec );

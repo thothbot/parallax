@@ -22,10 +22,10 @@
 
 package thothbot.parallax.core.shared.helpers;
 
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.Cylinder;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
@@ -39,50 +39,50 @@ public class ArrowHelper extends Object3D
 	public Line line;
 	public Mesh cone;
 	
-	public ArrowHelper ( Vector3f dir, Vector3f origin)
+	public ArrowHelper ( Vector3 dir, Vector3 origin)
 	{
 		this(dir, origin, 20);
 	}
 	
-	public ArrowHelper ( Vector3f dir, Vector3f origin, double length)
+	public ArrowHelper ( Vector3 dir, Vector3 origin, double length)
 	{
 		this(dir, origin, length, 0xffff00);
 	}
 
-	public ArrowHelper ( Vector3f dir, Vector3f origin, double length, int hex ) 
+	public ArrowHelper ( Vector3 dir, Vector3 origin, double length, int hex ) 
 	{
 		super();
 
 		Geometry lineGeometry = new Geometry();
-		lineGeometry.getVertices().add( new Vector3f( 0, 0, 0 ) );
-		lineGeometry.getVertices().add( new Vector3f( 0, 1, 0 ) );
+		lineGeometry.getVertices().add( new Vector3( 0, 0, 0 ) );
+		lineGeometry.getVertices().add( new Vector3( 0, 1, 0 ) );
 
 		LineBasicMaterial lbm = new LineBasicMaterial();
-		lbm.setColor(new Color3f(hex));
+		lbm.setColor(new Color3(hex));
 		this.line = new Line( lineGeometry, lbm );
 		this.addChild( this.line );
 
 		Cylinder coneGeometry = new Cylinder( 0, 0.05, 0.25, 5, 1 );
 
 		MeshBasicMaterial mbm = new MeshBasicMaterial();
-		mbm.setColor(new Color3f(hex));
+		mbm.setColor(new Color3(hex));
 		this.cone = new Mesh( coneGeometry, mbm );
 		this.cone.getPosition().set( 0, 1, 0 );
 		this.addChild( this.cone );
 
-		if ( origin instanceof Vector3f ) this.position = origin;
+		if ( origin instanceof Vector3 ) this.position = origin;
 
 		setDirection( dir );
 		setLength( length );
 	}
 	
-	public void setDirection( Vector3f dir ) 
+	public void setDirection( Vector3 dir ) 
 	{
-		Vector3f axis = new Vector3f( 0, 1, 0 ).cross( dir );
+		Vector3 axis = new Vector3( 0, 1, 0 ).cross( dir );
 
-		double radians = Math.acos( new Vector3f( 0, 1, 0 ).dot( dir.clone().normalize() ) );
+		double radians = Math.acos( new Vector3( 0, 1, 0 ).dot( dir.clone().normalize() ) );
 
-		this.matrix = new Matrix4f().makeRotationAxis( axis.normalize(), radians );
+		this.matrix = new Matrix4().makeRotationAxis( axis.normalize(), radians );
 
 		this.rotation.getRotationFromMatrix( this.matrix, this.scale );
 

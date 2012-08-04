@@ -27,14 +27,14 @@ import java.util.Arrays;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 
 public class Parametric extends Geometry
 {
 	public static interface ParametricFunction 
 	{
-		Vector3f run(double u, double v);
+		Vector3 run(double u, double v);
 	}
 
 	public Parametric(final ParametricFunction function, int slices, int stacks)
@@ -57,7 +57,7 @@ public class Parametric extends Geometry
 			{
 				double u = j / slices * 1.0;
 
-				Vector3f p = function.run( u, v );
+				Vector3 p = function.run( u, v );
 				this.getVertices().add( p );
 
 			}
@@ -72,10 +72,10 @@ public class Parametric extends Geometry
 				int c = (i + 1) * sliceCount + j;
 				int d = (i + 1) * sliceCount + j + 1;
 
-				UVf uva = new UVf( i / slices * 1.0,                      j / stacks * 1.0 );
-				UVf uvb = new UVf( i / slices * 1.0,            ( j + 1.0 ) / stacks * 1.0 );
-				UVf uvc = new UVf( ( i + 1.0 ) / slices * 1.0,            j / stacks * 1.0 );
-				UVf uvd = new UVf( ( i + 1.0 ) / slices * 1.0,  ( j + 1.0 ) / stacks * 1.0 );
+				UV uva = new UV( i / slices * 1.0,                      j / stacks * 1.0 );
+				UV uvb = new UV( i / slices * 1.0,            ( j + 1.0 ) / stacks * 1.0 );
+				UV uvc = new UV( ( i + 1.0 ) / slices * 1.0,            j / stacks * 1.0 );
+				UV uvd = new UV( ( i + 1.0 ) / slices * 1.0,  ( j + 1.0 ) / stacks * 1.0 );
 
 				if ( useTris ) 
 				{

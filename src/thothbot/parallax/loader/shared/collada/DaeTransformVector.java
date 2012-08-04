@@ -19,7 +19,7 @@
 
 package thothbot.parallax.loader.shared.collada;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.xml.client.Node;
 
@@ -29,9 +29,9 @@ public class DaeTransformVector extends DaeTransform
 		super(node);
 	}
 
-	public Vector3f getObject() 
+	public Vector3 getObject() 
 	{
 		float[] data = getData();
-		return new Vector3f( data[ 0 ], data[ 1 ], data[ 2 ] );
+		return new Vector3( data[ 0 ], data[ 1 ], data[ 2 ] );
 	}
 }

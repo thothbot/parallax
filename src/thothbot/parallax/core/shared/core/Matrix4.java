@@ -41,27 +41,27 @@ import thothbot.parallax.core.shared.Log;
  * @author thothbot
  *
  */
-public class Matrix4f
+public class Matrix4
 {
 	private Float32Array elements;
 
 	/**
 	 * The first matrix column
 	 */
-	private static Vector3f __v1 = new Vector3f();
+	private static Vector3 __v1 = new Vector3();
 	
 	/**
 	 * The second matrix column
 	 */
-	private static Vector3f __v2 = new Vector3f();
+	private static Vector3 __v2 = new Vector3();
 	
 	/**
 	 * The third matrix column
 	 */
-	private static Vector3f __v3 = new Vector3f();
+	private static Vector3 __v3 = new Vector3();
 
-	private static Matrix4f __m1 = new Matrix4f();
-	private static Matrix4f __m2 = new Matrix4f();
+	private static Matrix4 __m1 = new Matrix4();
+	private static Matrix4 __m2 = new Matrix4();
 
 	/**
 	 * Default constructor will make identity four-dimensional matrix.
@@ -73,7 +73,7 @@ public class Matrix4f
 	 * 0 0 0 1
 	 * }</pre>
 	 */
-	public Matrix4f() 
+	public Matrix4() 
 	{
 		this.elements = Float32Array.create(16);
 		identity();
@@ -91,7 +91,7 @@ public class Matrix4f
 	 * n41 n42 n43 n44
 	 * }</pre>
 	 */
-	public Matrix4f(double n11, double n12, double n13, double n14, 
+	public Matrix4(double n11, double n12, double n13, double n14, 
 			double n21, double n22, double n23, double n24, 
 			double n31, double n32, double n33, double n34, 
 			double n41, double n42, double n43, double n44) 
@@ -129,9 +129,9 @@ public class Matrix4f
 	 * 
 	 * @return the vector
 	 */
-	public Vector3f getColumnX()
+	public Vector3 getColumnX()
 	{
-		return Matrix4f.__v1.set(this.getArray().get(0), this.getArray().get(1), this.getArray().get(2));
+		return Matrix4.__v1.set(this.getArray().get(0), this.getArray().get(1), this.getArray().get(2));
 	}
 
 	/**
@@ -139,9 +139,9 @@ public class Matrix4f
 	 * 
 	 * @return the vector
 	 */
-	public Vector3f getColumnY()
+	public Vector3 getColumnY()
 	{
-		return Matrix4f.__v1.set(this.getArray().get(4), this.getArray().get(5), this.getArray().get(6));
+		return Matrix4.__v1.set(this.getArray().get(4), this.getArray().get(5), this.getArray().get(6));
 	}
 
 	/**
@@ -149,9 +149,9 @@ public class Matrix4f
 	 * 
 	 * @return the vector
 	 */
-	public Vector3f getColumnZ()
+	public Vector3 getColumnZ()
 	{
-		return Matrix4f.__v1.set(this.getArray().get(8), this.getArray().get(9), this.getArray().get(10));
+		return Matrix4.__v1.set(this.getArray().get(8), this.getArray().get(9), this.getArray().get(10));
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix.
 	 */
-	public Matrix4f set(
+	public Matrix4 set(
 			double n11, double n12, double n13, double n14, 
 			double n21, double n22, double n23, double n24, 
 			double n31, double n32, double n33, double n34, 
@@ -223,7 +223,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f copy(Matrix4f m)
+	public Matrix4 copy(Matrix4 m)
 	{
 		Float32Array me = m.getArray();
 		return set(
@@ -243,7 +243,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f multiply(Matrix4f m1, Matrix4f m2)
+	public Matrix4 multiply(Matrix4 m1, Matrix4 m2)
 	{
 		Float32Array ae = m1.getArray();
 		Float32Array be = m2.getArray();
@@ -290,7 +290,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f multiply(Matrix4f m)
+	public Matrix4 multiply(Matrix4 m)
 	{
 		return multiply(this, m);
 	}
@@ -303,7 +303,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f multiply(double s)
+	public Matrix4 multiply(double s)
 	{
 		this.getArray().set(0, (this.getArray().get(0) * s));
 		this.getArray().set(4, (this.getArray().get(4) * s));
@@ -334,7 +334,7 @@ public class Matrix4f
 	 * 
 	 * @return the multiplication input vector
 	 */
-	public Vector4f multiplyVector3(Vector4f v)
+	public Vector4 multiplyVector3(Vector4 v)
 	{
 		Float32Array te = this.getArray();
 
@@ -359,7 +359,7 @@ public class Matrix4f
 	 * 
 	 * @return the multiplication input vector
 	 */
-	public Vector3f multiplyVector3(Vector3f v)
+	public Vector3 multiplyVector3(Vector3 v)
 	{
 		Float32Array te = this.getArray();
 	
@@ -384,7 +384,7 @@ public class Matrix4f
 	 * 
 	 * @return the multiplication input vector
 	 */
-	public Vector4f multiplyVector4(Vector4f v)
+	public Vector4 multiplyVector4(Vector4 v)
 	{
 		Float32Array te = this.getArray();
 		double vx = v.x, vy = v.y, vz = v.z, vw = v.w;
@@ -406,13 +406,13 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f lookAt(Vector3f eye, Vector3f target, Vector3f up)
+	public Matrix4 lookAt(Vector3 eye, Vector3 target, Vector3 up)
 	{
 		Float32Array te = this.getArray();
 
-		Vector3f x = Matrix4f.__v1;
-		Vector3f y = Matrix4f.__v2;
-		Vector3f z = Matrix4f.__v3;
+		Vector3 x = Matrix4.__v1;
+		Vector3 y = Matrix4.__v2;
+		Vector3 z = Matrix4.__v3;
 
 		z.sub( eye, target ).normalize();
 
@@ -444,7 +444,7 @@ public class Matrix4f
 	 * 
 	 * @return the rotated vector
 	 */
-	public Vector3f rotateAxis(Vector3f v)
+	public Vector3 rotateAxis(Vector3 v)
 	{
 		double vx = v.getX(), vy = v.getY(), vz = v.getZ();
 
@@ -463,10 +463,10 @@ public class Matrix4f
 	 * 
 	 * @return the modified vector
 	 */
-	public Vector4f crossVector(Vector4f a)
+	public Vector4 crossVector(Vector4 a)
 	{
 		Float32Array te = this.getArray();
-		Vector4f v = new Vector4f();
+		Vector4 v = new Vector4();
 
 		v.x = te.get(0) * a.x + te.get(4) * a.y + te.get(8) * a.z + te.get(12) * a.w;
 		v.y = te.get(1) * a.x + te.get(5) * a.y + te.get(9) * a.z + te.get(13) * a.w;
@@ -530,7 +530,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f transpose()
+	public Matrix4 transpose()
 	{
 		Float32Array te = this.getArray();
 		double tmp;
@@ -612,9 +612,9 @@ public class Matrix4f
 	 * 
 	 * @return the position vector 
 	 */
-	public Vector3f getPosition()
+	public Vector3 getPosition()
 	{
-		return Matrix4f.__v1.set(this.getArray().get(12), this.getArray().get(13), this.getArray().get(14));
+		return Matrix4.__v1.set(this.getArray().get(12), this.getArray().get(13), this.getArray().get(14));
 	}
 
 	/**
@@ -625,7 +625,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f setPosition(Vector3f v)
+	public Matrix4 setPosition(Vector3 v)
 	{
 		this.getArray().set(12, v.getX());
 		this.getArray().set(13, v.getY());
@@ -642,7 +642,7 @@ public class Matrix4f
 	 * 
 	 * @param m the matrix to be inverted
 	 */
-	public Matrix4f getInverse(Matrix4f m)
+	public Matrix4 getInverse(Matrix4 m)
 	{
 		Float32Array te = this.getArray();
 		Float32Array me = m.getArray();
@@ -673,12 +673,12 @@ public class Matrix4f
 		return this;
 	}
 
-	public void setRotationFromEuler(Vector3f v)
+	public void setRotationFromEuler(Vector3 v)
 	{
 		setRotationFromEuler(v, Euler.XYZ);
 	}
 
-	public void setRotationFromEuler(Vector3f v, Euler order)
+	public void setRotationFromEuler(Vector3 v, Euler order)
 	{
 
 		double x = v.getX(), y = v.getY(), z = v.getZ();
@@ -836,10 +836,10 @@ public class Matrix4f
 		this.getArray().set(10, 1 - (xx + yy));
 	}
 
-	public void compose(Vector3f translation, Quaternion rotation, Vector3f scale)
+	public void compose(Vector3 translation, Quaternion rotation, Vector3 scale)
 	{
-		Matrix4f mRotation = __m1;
-		Matrix4f mScale = __m2;
+		Matrix4 mRotation = __m1;
+		Matrix4 mScale = __m2;
 
 		mRotation.identity();
 		mRotation.setRotationFromQuaternion(rotation);
@@ -855,15 +855,15 @@ public class Matrix4f
 
 	public void decompose()
 	{
-		decompose(new Vector3f(), new Quaternion(), new Vector3f());
+		decompose(new Vector3(), new Quaternion(), new Vector3());
 	}
 
-	public void decompose(Vector3f translation, Quaternion rotation, Vector3f scale)
+	public void decompose(Vector3 translation, Quaternion rotation, Vector3 scale)
 	{
 		// grab the axis vectors
-		Vector3f x = __v1;
-		Vector3f y = __v2;
-		Vector3f z = __v3;
+		Vector3 x = __v1;
+		Vector3 y = __v2;
+		Vector3 z = __v3;
 
 		x.set(this.getArray().get(0), this.getArray().get(1), this.getArray().get(2));
 		y.set(this.getArray().get(4), this.getArray().get(5), this.getArray().get(6));
@@ -879,7 +879,7 @@ public class Matrix4f
 
 		// scale the rotation part
 
-		Matrix4f matrix = __m1;
+		Matrix4 matrix = __m1;
 
 		matrix.copy(this);
 
@@ -907,7 +907,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f extractPosition(Matrix4f m)
+	public Matrix4 extractPosition(Matrix4 m)
 	{
 		Float32Array me = m.getArray();
 
@@ -919,7 +919,7 @@ public class Matrix4f
 	}
 
 	@Deprecated
-	public void extractRotation(Matrix4f m, Vector3f s)
+	public void extractRotation(Matrix4 m, Vector3 s)
 	{
 		double scaleX = 1.0 / s.getX(), scaleY = 1.0 / s.getY(), scaleZ = 1.0 / s.getZ();
 		
@@ -941,11 +941,11 @@ public class Matrix4f
 	 * 
 	 * @param m the input matrix
 	 */
-	public void extractRotation(Matrix4f m)
+	public void extractRotation(Matrix4 m)
 	{
 		Float32Array me = m.getArray();
 
-		Vector3f vector = Matrix4f.__v1;
+		Vector3 vector = Matrix4.__v1;
 
 		double scaleX = 1.0 / vector.set(me.get(0), me.get(1), me.get(2)).length();
 		double scaleY = 1.0 / vector.set(me.get(4), me.get(5), me.get(6)).length();
@@ -970,7 +970,7 @@ public class Matrix4f
 	 * 
 	 * @param v the vector which define direction
 	 */
-	public void translate(Vector3f v)
+	public void translate(Vector3 v)
 	{
 		double x = v.x, y = v.y, z = v.z;
 
@@ -1076,7 +1076,7 @@ public class Matrix4f
 	 * @param axis the axis on which rotate the matrix
 	 * @param angle the angle value
 	 */
-	public void rotateByAxis(Vector3f axis, double angle)
+	public void rotateByAxis(Vector3 axis, double angle)
 	{
 		double x = axis.getX(), y = axis.getY(), z = axis.getZ();
 
@@ -1149,7 +1149,7 @@ public class Matrix4f
 	 * 
 	 * @param v the vector to scale the current matrix
 	 */
-	public void scale(Vector3f v)
+	public void scale(Vector3 v)
 	{
 		double x = v.x, y = v.y, z = v.z;
 
@@ -1187,7 +1187,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f makeTranslation(double x, double y, double z)
+	public Matrix4 makeTranslation(double x, double y, double z)
 	{
 		this.set(
 			1, 0, 0, x, 
@@ -1206,7 +1206,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f makeRotationX(double theta)
+	public Matrix4 makeRotationX(double theta)
 	{
 		double c = Math.cos(theta), s = Math.sin(theta);
 
@@ -1227,7 +1227,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f makeRotationY(double theta)
+	public Matrix4 makeRotationY(double theta)
 	{
 		double c = Math.cos(theta), s = Math.sin(theta);
 
@@ -1248,7 +1248,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f makeRotationZ(double theta)
+	public Matrix4 makeRotationZ(double theta)
 	{
 		double c = Math.cos(theta), s = Math.sin(theta);
 
@@ -1270,7 +1270,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f makeRotationAxis(Vector3f axis, double angle)
+	public Matrix4 makeRotationAxis(Vector3 axis, double angle)
 	{
 		// Based on http://www.gamedev.net/reference/articles/article1199.asp
 
@@ -1299,7 +1299,7 @@ public class Matrix4f
 	 * 
 	 * @return the current matrix
 	 */
-	public Matrix4f makeScale(double x, double y, double z)
+	public Matrix4 makeScale(double x, double y, double z)
 	{
 		return this.set(
 			x, 0, 0, 0, 
@@ -1309,7 +1309,7 @@ public class Matrix4f
 		);
 	}
 
-	public Matrix4f makeFrustum(double left, double right, double bottom, double top, double near, double far)
+	public Matrix4 makeFrustum(double left, double right, double bottom, double top, double near, double far)
 	{
 		Float32Array te = this.getArray();
 		double x = 2.0 * near / ( right - left );
@@ -1338,7 +1338,7 @@ public class Matrix4f
 	 * 
 	 * @return the current Projection Matrix
 	 */
-	public Matrix4f makePerspective(double fov, double aspect, double near, double far)
+	public Matrix4 makePerspective(double fov, double aspect, double near, double far)
 	{
 		double ymax = near * Math.tan( fov * Math.PI / 360.0 );
 		double ymin = - ymax;
@@ -1353,7 +1353,7 @@ public class Matrix4f
 	 * 
 	 * @return the current Projection Matrix
 	 */
-	public Matrix4f makeOrthographic(double left, double right, double top, double bottom, double near, double far)
+	public Matrix4 makeOrthographic(double left, double right, double top, double bottom, double near, double far)
 	{
 		Float32Array te = this.elements;
 		double w = right - left;
@@ -1378,11 +1378,11 @@ public class Matrix4f
 	 * 
 	 * @return the new instance of matrix
 	 */
-	public Matrix4f clone()
+	public Matrix4 clone()
 	{
 		Float32Array te = this.getArray();
 
-		return new Matrix4f(
+		return new Matrix4(
 			te.get(0), te.get(4), te.get(8), te.get(12), 
 			te.get(1), te.get(5), te.get(9), te.get(13), 
 			te.get(2), te.get(6), te.get(10), te.get(14), 

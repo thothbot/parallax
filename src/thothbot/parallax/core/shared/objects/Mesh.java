@@ -35,15 +35,15 @@ import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.GeometryGroup;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
-import thothbot.parallax.core.shared.core.Vector4f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.materials.HasSkinning;
 import thothbot.parallax.core.shared.materials.HasWireframe;
@@ -65,7 +65,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {
-		defaultMaterial.setColor( new Color3f((int) Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color3((int) Math.random() * 0xffffff) );
 		defaultMaterial.setWireframe( true );
 	};
 
@@ -464,10 +464,10 @@ public class Mesh  extends GeometryObject implements HasSides
 		 List<Integer> chunk_faces4 = geometryGroup.faces4;
 		 List<Face3> obj_faces = getGeometry().getFaces();
 
-		 List<List<UVf>> obj_uvs = (getGeometry().getFaceVertexUvs().size() > 0) 
+		 List<List<UV>> obj_uvs = (getGeometry().getFaceVertexUvs().size() > 0) 
 				 ? getGeometry().getFaceVertexUvs().get(0) : null;
 
-		 List<List<UVf>> obj_uvs2 = (getGeometry().getFaceVertexUvs().size() > 1) 
+		 List<List<UV>> obj_uvs2 = (getGeometry().getFaceVertexUvs().size() > 1) 
 				 ? getGeometry().getFaceVertexUvs().get(1) : null;
 						
 		 List<Geometry.MorphNormal> morphNormals = getGeometry().getMorphNormals();
@@ -482,9 +482,9 @@ public class Mesh  extends GeometryObject implements HasSides
 			 {
 				 Face3 face = obj_faces.get( chunk_faces3.get( f ) );
 				 
-				 Vector3f v1 = getGeometry().getVertices().get( face.getA() );
-				 Vector3f v2 = getGeometry().getVertices().get( face.getB() );
-				 Vector3f v3 = getGeometry().getVertices().get( face.getC() );
+				 Vector3 v1 = getGeometry().getVertices().get( face.getA() );
+				 Vector3 v2 = getGeometry().getVertices().get( face.getB() );
+				 Vector3 v3 = getGeometry().getVertices().get( face.getC() );
 
 				 vertexArray.set(offset,  v1.getX());
 				 vertexArray.set(offset + 1, v1.getY());
@@ -505,10 +505,10 @@ public class Mesh  extends GeometryObject implements HasSides
 			 {
 				 Face4 face = (Face4) obj_faces.get( chunk_faces4.get( f ));
 
-				 Vector3f v1 = getGeometry().getVertices().get( face.getA() );
-				 Vector3f v2 = getGeometry().getVertices().get( face.getB() );
-				 Vector3f v3 = getGeometry().getVertices().get( face.getC() );
-				 Vector3f v4 = getGeometry().getVertices().get( face.getD() );
+				 Vector3 v1 = getGeometry().getVertices().get( face.getA() );
+				 Vector3 v2 = getGeometry().getVertices().get( face.getB() );
+				 Vector3 v3 = getGeometry().getVertices().get( face.getC() );
+				 Vector3 v4 = getGeometry().getVertices().get( face.getD() );
 
 				 vertexArray.set(offset, v1.getX());
 				 vertexArray.set(offset + 1, v1.getY());
@@ -548,9 +548,9 @@ public class Mesh  extends GeometryObject implements HasSides
 					 // morph positions
 
 					 Geometry.MorphTarget d1 = morphTargets.get( vk ); 
-					 Vector3f v1 = d1.vertices.get( face.getA() );
-					 Vector3f v2 = morphTargets.get( vk ).vertices.get( face.getB() );
-					 Vector3f v3 = morphTargets.get( vk ).vertices.get( face.getC() );
+					 Vector3 v1 = d1.vertices.get( face.getA() );
+					 Vector3 v2 = morphTargets.get( vk ).vertices.get( face.getB() );
+					 Vector3 v3 = morphTargets.get( vk ).vertices.get( face.getC() );
 
 					 Float32Array vka = geometryGroup.__morphTargetsArrays.get(vk);
 
@@ -570,7 +570,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 					 if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
 					 {
-						 Vector3f n1, n2, n3;
+						 Vector3 n1, n2, n3;
 						 if ( needsSmoothNormals ) 
 						 {
 							 Geometry.VertextNormal faceVertexNormals = morphNormals.get( vk ).vertexNormals.get( chf );
@@ -614,10 +614,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 					 // morph positions
 
-					 Vector3f v1 = morphTargets.get(vk).vertices.get(face.getA());
-					 Vector3f v2 = morphTargets.get(vk).vertices.get(face.getB());
-					 Vector3f v3 = morphTargets.get(vk).vertices.get(face.getC());
-					 Vector3f v4 = morphTargets.get(vk).vertices.get(face.getD());
+					 Vector3 v1 = morphTargets.get(vk).vertices.get(face.getA());
+					 Vector3 v2 = morphTargets.get(vk).vertices.get(face.getB());
+					 Vector3 v3 = morphTargets.get(vk).vertices.get(face.getC());
+					 Vector3 v4 = morphTargets.get(vk).vertices.get(face.getD());
 
 					 Float32Array vka = geometryGroup.__morphTargetsArrays.get(vk);
 
@@ -641,7 +641,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 					 if (  material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
 					 {
-						 Vector3f n1, n2, n3, n4;
+						 Vector3 n1, n2, n3, n4;
 						 if ( needsSmoothNormals ) 
 						 {
 
@@ -714,9 +714,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // weights
 
-				 Vector4f sw1 = getGeometry().getSkinWeights().get( face.getA() );
-				 Vector4f sw2 = getGeometry().getSkinWeights().get( face.getB() );
-				 Vector4f sw3 = getGeometry().getSkinWeights().get( face.getC() );
+				 Vector4 sw1 = getGeometry().getSkinWeights().get( face.getA() );
+				 Vector4 sw2 = getGeometry().getSkinWeights().get( face.getB() );
+				 Vector4 sw3 = getGeometry().getSkinWeights().get( face.getC() );
 
 				 skinWeightArray.set(offset_skin, sw1.getX());
 				 skinWeightArray.set(offset_skin + 1, sw1.getY());
@@ -735,9 +735,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // indices
 
-				 Vector4f si1 = (Vector4f) getGeometry().getSkinIndices().get(face.getA());
-				 Vector4f si2 = (Vector4f) getGeometry().getSkinIndices().get(face.getB());
-				 Vector4f si3 = (Vector4f) getGeometry().getSkinIndices().get(face.getC());
+				 Vector4 si1 = (Vector4) getGeometry().getSkinIndices().get(face.getA());
+				 Vector4 si2 = (Vector4) getGeometry().getSkinIndices().get(face.getB());
+				 Vector4 si3 = (Vector4) getGeometry().getSkinIndices().get(face.getC());
 
 				 skinIndexArray.set(offset_skin, si1.getX());
 				 skinIndexArray.set(offset_skin + 1, si1.getY());
@@ -756,9 +756,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // vertices A
 
-				 Vector3f sa1 = getGeometry().getSkinVerticesA().get(face.getA());
-				 Vector3f sa2 = getGeometry().getSkinVerticesA().get(face.getB());
-				 Vector3f sa3 = getGeometry().getSkinVerticesA().get(face.getC());
+				 Vector3 sa1 = getGeometry().getSkinVerticesA().get(face.getA());
+				 Vector3 sa2 = getGeometry().getSkinVerticesA().get(face.getB());
+				 Vector3 sa3 = getGeometry().getSkinVerticesA().get(face.getC());
 
 				 skinVertexAArray.set(offset_skin, sa1.getX());
 				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
@@ -777,9 +777,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // vertices B
 
-				 Vector3f sb1 = getGeometry().getSkinVerticesB().get(face.getA());
-				 Vector3f sb2 = getGeometry().getSkinVerticesB().get(face.getB());
-				 Vector3f sb3 = getGeometry().getSkinVerticesB().get(face.getC());
+				 Vector3 sb1 = getGeometry().getSkinVerticesB().get(face.getA());
+				 Vector3 sb2 = getGeometry().getSkinVerticesB().get(face.getB());
+				 Vector3 sb3 = getGeometry().getSkinVerticesB().get(face.getC());
 
 				 skinVertexBArray.set(offset_skin, sb1.getX());
 				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
@@ -807,10 +807,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // weights
 
-				 Vector4f sw1 = getGeometry().getSkinWeights().get(face.getA());
-				 Vector4f sw2 = getGeometry().getSkinWeights().get(face.getB());
-				 Vector4f sw3 = getGeometry().getSkinWeights().get(face.getC());
-				 Vector4f sw4 = getGeometry().getSkinWeights().get(face.getD());
+				 Vector4 sw1 = getGeometry().getSkinWeights().get(face.getA());
+				 Vector4 sw2 = getGeometry().getSkinWeights().get(face.getB());
+				 Vector4 sw3 = getGeometry().getSkinWeights().get(face.getC());
+				 Vector4 sw4 = getGeometry().getSkinWeights().get(face.getD());
 
 				 skinWeightArray.set(offset_skin, sw1.getX());
 				 skinWeightArray.set(offset_skin + 1, sw1.getY());
@@ -834,10 +834,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // indices
 
-				 Vector4f si1 = getGeometry().getSkinIndices().get(face.getA());
-				 Vector4f si2 = getGeometry().getSkinIndices().get(face.getB());
-				 Vector4f si3 = getGeometry().getSkinIndices().get(face.getC());
-				 Vector4f si4 = getGeometry().getSkinIndices().get(face.getD());
+				 Vector4 si1 = getGeometry().getSkinIndices().get(face.getA());
+				 Vector4 si2 = getGeometry().getSkinIndices().get(face.getB());
+				 Vector4 si3 = getGeometry().getSkinIndices().get(face.getC());
+				 Vector4 si4 = getGeometry().getSkinIndices().get(face.getD());
 
 				 skinIndexArray.set(offset_skin, si1.getX());
 				 skinIndexArray.set(offset_skin + 1, si1.getY());
@@ -861,10 +861,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // vertices A
 
-				 Vector3f sa1 = getGeometry().getSkinVerticesA().get(face.getA());
-				 Vector3f sa2 = getGeometry().getSkinVerticesA().get(face.getB());
-				 Vector3f sa3 = getGeometry().getSkinVerticesA().get(face.getC());
-				 Vector3f sa4 = getGeometry().getSkinVerticesA().get(face.getD());
+				 Vector3 sa1 = getGeometry().getSkinVerticesA().get(face.getA());
+				 Vector3 sa2 = getGeometry().getSkinVerticesA().get(face.getB());
+				 Vector3 sa3 = getGeometry().getSkinVerticesA().get(face.getC());
+				 Vector3 sa4 = getGeometry().getSkinVerticesA().get(face.getD());
 
 				 skinVertexAArray.set(offset_skin, sa1.getX());
 				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
@@ -888,10 +888,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 // vertices B
 
-				 Vector3f sb1 = getGeometry().getSkinVerticesB().get(face.getA());
-				 Vector3f sb2 = getGeometry().getSkinVerticesB().get(face.getB());
-				 Vector3f sb3 = getGeometry().getSkinVerticesB().get(face.getC());
-				 Vector3f sb4 = getGeometry().getSkinVerticesB().get(face.getD());
+				 Vector3 sb1 = getGeometry().getSkinVerticesB().get(face.getA());
+				 Vector3 sb2 = getGeometry().getSkinVerticesB().get(face.getB());
+				 Vector3 sb3 = getGeometry().getSkinVerticesB().get(face.getC());
+				 Vector3 sb4 = getGeometry().getSkinVerticesB().get(face.getD());
 
 				 skinVertexBArray.set(offset_skin, sb1.getX());
 				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
@@ -943,9 +943,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-				 List<Color3f> vertexColors = face.getVertexColors();
-				 Color3f faceColor = face.getColor();
-				 Color3f c1, c2, c3;
+				 List<Color3> vertexColors = face.getVertexColors();
+				 Color3 faceColor = face.getColor();
+				 Color3 c1, c2, c3;
 
 				 if ( vertexColors.size() == 3 && vertexColorType == Material.COLORS.VERTEX) 
 				 {
@@ -980,9 +980,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-				 List<Color3f> vertexColors = face.getVertexColors();
-				 Color3f faceColor = face.getColor();
-				 Color3f c1, c2, c3, c4;
+				 List<Color3> vertexColors = face.getVertexColors();
+				 Color3 faceColor = face.getColor();
+				 Color3 c1, c2, c3, c4;
 
 				 if ( vertexColors.size() == 4 && vertexColorType == Material.COLORS.VERTEX) 
 				 {
@@ -1036,11 +1036,11 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-				 List<Vector4f> vertexTangents = face.getVertexTangents();
+				 List<Vector4> vertexTangents = face.getVertexTangents();
 
-				 Vector4f t1 = vertexTangents.get(0);
-				 Vector4f t2 = vertexTangents.get(1);
-				 Vector4f t3 = vertexTangents.get(2);
+				 Vector4 t1 = vertexTangents.get(0);
+				 Vector4 t2 = vertexTangents.get(1);
+				 Vector4 t3 = vertexTangents.get(2);
 
 				 tangentArray.set(offset_tangent, t1.getX());
 				 tangentArray.set(offset_tangent + 1, t1.getY());
@@ -1065,12 +1065,12 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-				 List<Vector4f> vertexTangents = face.getVertexTangents();
+				 List<Vector4> vertexTangents = face.getVertexTangents();
 
-				 Vector4f t1 = vertexTangents.get(0);
-				 Vector4f t2 = vertexTangents.get(1);
-				 Vector4f t3 = vertexTangents.get(2);
-				 Vector4f t4 = vertexTangents.get(3);
+				 Vector4 t1 = vertexTangents.get(0);
+				 Vector4 t2 = vertexTangents.get(1);
+				 Vector4 t3 = vertexTangents.get(2);
+				 Vector4 t4 = vertexTangents.get(3);
 
 				 tangentArray.set(offset_tangent, t1.getX());
 				 tangentArray.set(offset_tangent + 1, t1.getY());
@@ -1110,15 +1110,15 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-				 List<Vector3f> vertexNormals = face.getVertexNormals();
-				 Vector3f faceNormal = face.getNormal();
+				 List<Vector3> vertexNormals = face.getVertexNormals();
+				 Vector3 faceNormal = face.getNormal();
 
 				 if ( vertexNormals.size() == 3 && needsSmoothNormals ) 
 				 {
 					 for ( int i = 0; i < 3; i ++ ) 
 					 {
 
-						 Vector3f vn = vertexNormals.get(i);
+						 Vector3 vn = vertexNormals.get(i);
 
 						 geometryGroup.getWebGlNormalArray().set(offset_normal, vn.getX());
 						 geometryGroup.getWebGlNormalArray().set(offset_normal + 1, vn.getY());
@@ -1148,15 +1148,15 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-				 List<Vector3f> vertexNormals = face.getVertexNormals();
-				 Vector3f faceNormal = face.getNormal();
+				 List<Vector3> vertexNormals = face.getVertexNormals();
+				 Vector3 faceNormal = face.getNormal();
 
 				 if ( vertexNormals.size() == 4 && needsSmoothNormals ) 
 				 {
 					 for ( int i = 0; i < 4; i ++ ) 
 					 {
 
-						 Vector3f vn = vertexNormals.get(i);
+						 Vector3 vn = vertexNormals.get(i);
 
 						 geometryGroup.getWebGlNormalArray().set(offset_normal, vn.getX());
 						 geometryGroup.getWebGlNormalArray().set(offset_normal + 1, vn.getY());
@@ -1197,13 +1197,13 @@ public class Mesh  extends GeometryObject implements HasSides
 				 int fi = chunk_faces3.get(f);
 
 				 Face3 face = obj_faces.get(fi);
-				 List<UVf> uv = obj_uvs.get(fi);
+				 List<UV> uv = obj_uvs.get(fi);
 
 				 if ( uv == null ) continue;
 
 				 for ( int i = 0; i < 3; i ++ ) {
 
-					 UVf uvi = uv.get(i);
+					 UV uvi = uv.get(i);
 
 					 uvArray.set(offset_uv, uvi.getU());
 					 uvArray.set(offset_uv + 1, uvi.getV());
@@ -1217,14 +1217,14 @@ public class Mesh  extends GeometryObject implements HasSides
 				 int fi = chunk_faces4.get(f);
 
 				 Face4 face = (Face4) obj_faces.get(fi);
-				 List<UVf>uv = obj_uvs.get(fi);
+				 List<UV>uv = obj_uvs.get(fi);
 
 				 if ( uv == null ) continue;
 
 				 for ( int i = 0; i < 4; i ++ ) 
 				 {
 
-					 UVf uvi = uv.get(i);
+					 UV uvi = uv.get(i);
 
 					 uvArray.set(offset_uv, uvi.getU());
 					 uvArray.set(offset_uv + 1, uvi.getV());
@@ -1250,13 +1250,13 @@ public class Mesh  extends GeometryObject implements HasSides
 				 int fi = chunk_faces3.get(f);
 
 				 Face3 face = obj_faces.get(fi);
-				 List<UVf> uv2 = obj_uvs2.get(fi);
+				 List<UV> uv2 = obj_uvs2.get(fi);
 
 				 if ( uv2 == null ) continue;
 
 				 for ( int i = 0; i < 3; i ++ ) 
 				 {
-					 UVf uv2i = uv2.get(i);
+					 UV uv2i = uv2.get(i);
 
 					 uv2Array.set(offset_uv2, uv2i.getU());
 					 uv2Array.set(offset_uv2 + 1, uv2i.getV());
@@ -1270,13 +1270,13 @@ public class Mesh  extends GeometryObject implements HasSides
 				 int fi = chunk_faces4.get(f);
 
 				 Face4 face = (Face4) obj_faces.get(fi);
-				 List<UVf> uv2 = obj_uvs2.get(fi);
+				 List<UV> uv2 = obj_uvs2.get(fi);
 
 				 if ( uv2 == null ) continue;
 
 				 for ( int i = 0; i < 4; i ++ ) 
 				 {
-					 UVf uv2i = uv2.get(i);
+					 UV uv2i = uv2.get(i);
 
 					 uv2Array.set(offset_uv2, uv2i.getU());
 					 uv2Array.set(offset_uv2 + 1, uv2i.getV());
@@ -1435,9 +1435,9 @@ public class Mesh  extends GeometryObject implements HasSides
 						 {
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-							 Vector3f v1 = (Vector3f) customAttribute.getValue().get(face.getA());
-							 Vector3f v2 = (Vector3f) customAttribute.getValue().get(face.getB());
-							 Vector3f v3 = (Vector3f) customAttribute.getValue().get(face.getC());
+							 Vector3 v1 = (Vector3) customAttribute.getValue().get(face.getA());
+							 Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
+							 Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
 
 							 customAttribute.array.set(offset_custom, v1.getX());
 							 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1456,10 +1456,10 @@ public class Mesh  extends GeometryObject implements HasSides
 						 {
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-							 Vector3f v1 = (Vector3f) customAttribute.getValue().get(face.getA());
-							 Vector3f v2 = (Vector3f) customAttribute.getValue().get(face.getB());
-							 Vector3f v3 = (Vector3f) customAttribute.getValue().get(face.getC());
-							 Vector3f v4 = (Vector3f) customAttribute.getValue().get(face.getD());
+							 Vector3 v1 = (Vector3) customAttribute.getValue().get(face.getA());
+							 Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
+							 Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
+							 Vector3 v4 = (Vector3) customAttribute.getValue().get(face.getD());
 
 							 customAttribute.array.set(offset_custom, v1.getX());
 							 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1480,11 +1480,11 @@ public class Mesh  extends GeometryObject implements HasSides
 					 {
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 						 {
-							 Vector3f value = (Vector3f) customAttribute.getValue().get(chunk_faces3.get(f));
+							 Vector3 value = (Vector3) customAttribute.getValue().get(chunk_faces3.get(f));
 
-							 Vector3f v1 = value;
-							 Vector3f v2 = value;
-							 Vector3f v3 = value;
+							 Vector3 v1 = value;
+							 Vector3 v2 = value;
+							 Vector3 v3 = value;
 
 							 customAttribute.array.set(offset_custom, v1.getX());
 							 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1501,12 +1501,12 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
 						 {
-							 Vector3f value = (Vector3f) customAttribute.getValue().get(chunk_faces4.get(f));
+							 Vector3 value = (Vector3) customAttribute.getValue().get(chunk_faces4.get(f));
 
-							 Vector3f v1 = value;
-							 Vector3f v2 = value;
-							 Vector3f v3 = value;
-							 Vector3f v4 = value;
+							 Vector3 v1 = value;
+							 Vector3 v2 = value;
+							 Vector3 v3 = value;
+							 Vector3 v4 = value;
 
 							 customAttribute.array.set(offset_custom, v1.getX());
 							 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1537,9 +1537,9 @@ public class Mesh  extends GeometryObject implements HasSides
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
 							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-								 Color3f v1 = (Color3f) customAttribute.getValue().get(face.getA());
-								 Color3f v2 = (Color3f) customAttribute.getValue().get(face.getB());
-								 Color3f v3 = (Color3f) customAttribute.getValue().get(face.getC());
+								 Color3 v1 = (Color3) customAttribute.getValue().get(face.getA());
+								 Color3 v2 = (Color3) customAttribute.getValue().get(face.getB());
+								 Color3 v3 = (Color3) customAttribute.getValue().get(face.getC());
 
 								 customAttribute.array.set(offset_custom, v1.getR());
 								 customAttribute.array.set(offset_custom + 1, v1.getG());
@@ -1555,9 +1555,9 @@ public class Mesh  extends GeometryObject implements HasSides
 							 }
 							 else
 							 {
-								 Vector3f v1 = (Vector3f) customAttribute.getValue().get(face.getA());
-								 Vector3f v2 = (Vector3f) customAttribute.getValue().get(face.getB());
-								 Vector3f v3 = (Vector3f) customAttribute.getValue().get(face.getC());
+								 Vector3 v1 = (Vector3) customAttribute.getValue().get(face.getA());
+								 Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
+								 Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
 
 								 customAttribute.array.set(offset_custom, v1.getX());
 								 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1581,10 +1581,10 @@ public class Mesh  extends GeometryObject implements HasSides
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
 							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-								 Color3f v1 = (Color3f) customAttribute.getValue().get(face.getA());
-								 Color3f v2 = (Color3f) customAttribute.getValue().get(face.getB());
-								 Color3f v3 = (Color3f) customAttribute.getValue().get(face.getC());
-								 Color3f v4 = (Color3f) customAttribute.getValue().get(face.getD());
+								 Color3 v1 = (Color3) customAttribute.getValue().get(face.getA());
+								 Color3 v2 = (Color3) customAttribute.getValue().get(face.getB());
+								 Color3 v3 = (Color3) customAttribute.getValue().get(face.getC());
+								 Color3 v4 = (Color3) customAttribute.getValue().get(face.getD());
 
 								 customAttribute.array.set(offset_custom, v1.getR());
 								 customAttribute.array.set(offset_custom + 1, v1.getG());
@@ -1604,10 +1604,10 @@ public class Mesh  extends GeometryObject implements HasSides
 							 }
 							 else
 							 {
-								 Vector3f v1 = (Vector3f) customAttribute.getValue().get(face.getA());
-								 Vector3f v2 = (Vector3f) customAttribute.getValue().get(face.getB());
-								 Vector3f v3 = (Vector3f) customAttribute.getValue().get(face.getC());
-								 Vector3f v4 = (Vector3f) customAttribute.getValue().get(face.getD());
+								 Vector3 v1 = (Vector3) customAttribute.getValue().get(face.getA());
+								 Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
+								 Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
+								 Vector3 v4 = (Vector3) customAttribute.getValue().get(face.getD());
 
 								 customAttribute.array.set(offset_custom, v1.getX());
 								 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1633,10 +1633,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
 							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-								 Color3f value = (Color3f) customAttribute.getValue().get(chunk_faces3.get(f));
-								 Color3f v1 = value;
-								 Color3f v2 = value;
-								 Color3f v3 = value;
+								 Color3 value = (Color3) customAttribute.getValue().get(chunk_faces3.get(f));
+								 Color3 v1 = value;
+								 Color3 v2 = value;
+								 Color3 v3 = value;
 
 								 customAttribute.array.set(offset_custom, v1.getR());
 								 customAttribute.array.set(offset_custom + 1, v1.getG());
@@ -1652,10 +1652,10 @@ public class Mesh  extends GeometryObject implements HasSides
 							 }
 							 else
 							 {
-								 Vector3f value = (Vector3f) customAttribute.getValue().get(chunk_faces3.get(f));
-								 Vector3f v1 = value;
-								 Vector3f v2 = value;
-								 Vector3f v3 = value;
+								 Vector3 value = (Vector3) customAttribute.getValue().get(chunk_faces3.get(f));
+								 Vector3 v1 = value;
+								 Vector3 v2 = value;
+								 Vector3 v3 = value;
 
 								 customAttribute.array.set(offset_custom, v1.getX());
 								 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1677,11 +1677,11 @@ public class Mesh  extends GeometryObject implements HasSides
 						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
 
 							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-								 Color3f value = (Color3f) customAttribute.getValue().get(chunk_faces4.get(f));
-								 Color3f v1 = value;
-								 Color3f v2 = value;
-								 Color3f v3 = value;
-								 Color3f v4 = value;
+								 Color3 value = (Color3) customAttribute.getValue().get(chunk_faces4.get(f));
+								 Color3 v1 = value;
+								 Color3 v2 = value;
+								 Color3 v3 = value;
+								 Color3 v4 = value;
 
 								 customAttribute.array.set(offset_custom, v1.getR());
 								 customAttribute.array.set(offset_custom + 1, v1.getG());
@@ -1701,11 +1701,11 @@ public class Mesh  extends GeometryObject implements HasSides
 							 }
 							 else
 							 {
-								 Vector3f value = (Vector3f) customAttribute.getValue().get(chunk_faces4.get(f));
-								 Vector3f v1 = value;
-								 Vector3f v2 = value;
-								 Vector3f v3 = value;
-								 Vector3f v4 = value;
+								 Vector3 value = (Vector3) customAttribute.getValue().get(chunk_faces4.get(f));
+								 Vector3 v1 = value;
+								 Vector3 v2 = value;
+								 Vector3 v3 = value;
+								 Vector3 v4 = value;
 
 								 customAttribute.array.set(offset_custom, v1.getX());
 								 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1741,9 +1741,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-							 Vector4f v1 = (Vector4f) customAttribute.getValue().get(face.getA());
-							 Vector4f v2 = (Vector4f) customAttribute.getValue().get(face.getB());
-							 Vector4f v3 = (Vector4f) customAttribute.getValue().get(face.getC());
+							 Vector4 v1 = (Vector4) customAttribute.getValue().get(face.getA());
+							 Vector4 v2 = (Vector4) customAttribute.getValue().get(face.getB());
+							 Vector4 v3 = (Vector4) customAttribute.getValue().get(face.getC());
 
 							 customAttribute.array.set(offset_custom, v1.getX());
 							 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1768,10 +1768,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-							 Vector4f v1 = (Vector4f) customAttribute.getValue().get(face.getA());
-							 Vector4f v2 = (Vector4f) customAttribute.getValue().get(face.getB());
-							 Vector4f v3 = (Vector4f) customAttribute.getValue().get(face.getC());
-							 Vector4f v4 = (Vector4f) customAttribute.getValue().get(face.getD());
+							 Vector4 v1 = (Vector4) customAttribute.getValue().get(face.getA());
+							 Vector4 v2 = (Vector4) customAttribute.getValue().get(face.getB());
+							 Vector4 v3 = (Vector4) customAttribute.getValue().get(face.getC());
+							 Vector4 v4 = (Vector4) customAttribute.getValue().get(face.getD());
 
 							 customAttribute.array.set(offset_custom, v1.getX());
 							 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1800,11 +1800,11 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
 
-							 Vector4f value = (Vector4f) customAttribute.getValue().get(chunk_faces3.get(f));
+							 Vector4 value = (Vector4) customAttribute.getValue().get(chunk_faces3.get(f));
 
-							 Vector4f v1 = value;
-							 Vector4f v2 = value;
-							 Vector4f v3 = value;
+							 Vector4 v1 = value;
+							 Vector4 v2 = value;
+							 Vector4 v3 = value;
 
 							 customAttribute.array.set(offset_custom, v1.getX());
 							 customAttribute.array.set(offset_custom + 1, v1.getY());
@@ -1827,12 +1827,12 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
 
-							 Vector4f value = (Vector4f) customAttribute.getValue().get(chunk_faces4.get(f));
+							 Vector4 value = (Vector4) customAttribute.getValue().get(chunk_faces4.get(f));
 
-							 Vector4f v1 = value;
-							 Vector4f v2 = value;
-							 Vector4f v3 = value;
-							 Vector4f v4 = value;
+							 Vector4 v1 = value;
+							 Vector4 v2 = value;
+							 Vector4 v3 = value;
+							 Vector4 v4 = value;
 
 							 customAttribute.array.set(offset_custom, v1.getX());
 							 customAttribute.array.set(offset_custom + 1, v1.getY());

@@ -23,8 +23,8 @@
 package thothbot.parallax.core.shared.cameras;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 /**
@@ -35,9 +35,9 @@ import thothbot.parallax.core.shared.objects.Object3D;
  */
 public class Camera extends Object3D
 {
-	protected Matrix4f matrixWorldInverse;
-	protected Matrix4f projectionMatrix;
-	protected Matrix4f projectionMatrixInverse;
+	protected Matrix4 matrixWorldInverse;
+	protected Matrix4 projectionMatrix;
+	protected Matrix4 projectionMatrixInverse;
 
 	public Float32Array _viewMatrixArray;
 	public Float32Array _projectionMatrixArray;
@@ -45,45 +45,45 @@ public class Camera extends Object3D
 	public Camera() 
 	{
 		super();
-		this.matrixWorldInverse = new Matrix4f();
-		this.projectionMatrix = new Matrix4f();
-		this.projectionMatrixInverse = new Matrix4f();
+		this.matrixWorldInverse = new Matrix4();
+		this.projectionMatrix = new Matrix4();
+		this.projectionMatrixInverse = new Matrix4();
 
 	}
 
-	public Matrix4f getMatrixWorldInverse()
+	public Matrix4 getMatrixWorldInverse()
 	{
 		return this.matrixWorldInverse;
 	}
 
-	public void setMatrixWorldInverse(Matrix4f matrixWorldInverse)
+	public void setMatrixWorldInverse(Matrix4 matrixWorldInverse)
 	{
 		this.matrixWorldInverse = matrixWorldInverse;
 	}
 
-	public Matrix4f getProjectionMatrix()
+	public Matrix4 getProjectionMatrix()
 	{
 		return this.projectionMatrix;
 	}
 
-	public void setProjectionMatrix(Matrix4f projectionMatrix)
+	public void setProjectionMatrix(Matrix4 projectionMatrix)
 	{
 		this.projectionMatrix = projectionMatrix;
 	}
 
-	public Matrix4f getProjectionMatrixInverse()
+	public Matrix4 getProjectionMatrixInverse()
 	{
 		return this.projectionMatrixInverse;
 	}
 
-	public void setProjectionMatrixInverse(Matrix4f projectionMatrix)
+	public void setProjectionMatrixInverse(Matrix4 projectionMatrix)
 	{
 		this.projectionMatrixInverse = projectionMatrix;
 	}
 
 	// TODO: Add hierarchy support.
 	@Override
-	public void lookAt(Vector3f vector)
+	public void lookAt(Vector3 vector)
 	{
 		this.matrix.lookAt(this.position, vector, this.up);
 

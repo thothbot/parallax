@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.geometries.parametric;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.Parametric;
 
 public class Mobius3d extends Parametric
@@ -32,7 +32,7 @@ public class Mobius3d extends Parametric
 		super(new ParametricFunction() {
 			
 			@Override
-			public Vector3f run(double u, double t)
+			public Vector3 run(double u, double t)
 			{
 				// volumetric mobius strip
 				u *= Math.PI;
@@ -46,7 +46,7 @@ public class Mobius3d extends Parametric
 				float z = (float) (a * Math.cos(t) * Math.sin(phi) + b * Math.sin(t) * Math.cos(phi));
 				float y = (float) ((major + x) * Math.sin(u));
 				x = (float) ((major + x) * Math.cos(u));
-				return new Vector3f(x, y, z);
+				return new Vector3(x, y, z);
 			}
 		}, slices, stacks);
 		// TODO Auto-generated constructor stub

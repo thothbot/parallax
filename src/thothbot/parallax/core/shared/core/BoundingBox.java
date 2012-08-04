@@ -28,14 +28,14 @@ package thothbot.parallax.core.shared.core;
  */
 public class BoundingBox
 {
-	public Vector3f min;
-	public Vector3f max;
-	public Vector3f centroid;
+	public Vector3 min;
+	public Vector3 max;
+	public Vector3 centroid;
 	
 	public BoundingBox() 
 	{
-		this.min = new Vector3f();
-		this.max = new Vector3f();
-		this.centroid = new Vector3f();
+		this.min = new Vector3();
+		this.max = new Vector3();
+		this.centroid = new Vector3();
 	}
 }

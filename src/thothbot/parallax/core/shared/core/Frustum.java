@@ -41,7 +41,7 @@ public class Frustum
 	/**
 	 * Panes of the Frustum of a rectangular pyramid
 	 */
-	public List<Vector4f> planes;
+	public List<Vector4> planes;
 
 	/**
 	 * Default constructor will make Frustum of a rectangular pyramid 
@@ -49,9 +49,9 @@ public class Frustum
 	 */
 	public Frustum() 
 	{
-		this.planes = new ArrayList<Vector4f>();
+		this.planes = new ArrayList<Vector4>();
 		for(int i = 0; i < 6; i++)
-			this.planes.add(new Vector4f());
+			this.planes.add(new Vector4());
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class Frustum
 	 * 
 	 * @param m the projection matrix
 	 */
-	public void setFromMatrix(Matrix4f m)
+	public void setFromMatrix(Matrix4 m)
 	{
 		Float32Array me = m.getArray();
 		double me0 = me.get(0), me1 = me.get(1), me2 = me.get(2), me3 = me.get(3);
@@ -76,7 +76,7 @@ public class Frustum
 
 		for (int i = 0; i < 6; i++) 
 		{
-			Vector4f plane = planes.get(i);
+			Vector4 plane = planes.get(i);
 			plane.divide(Math.sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z));
 		}
 	}
@@ -89,13 +89,13 @@ public class Frustum
 	public boolean contains(GeometryObject object)
 	{
 		double distance;
-		Matrix4f matrix = object.getMatrixWorld();
+		Matrix4 matrix = object.getMatrixWorld();
 		Float32Array me = matrix.getArray();
 		double radius = -object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
 
 		for (int i = 0; i < 6; i++) 
 		{
-			Vector4f plane = planes.get(i);
+			Vector4 plane = planes.get(i);
 			distance = plane.getX() * me.get(12) 
 					+ plane.getY()  * me.get(13) 
 					+ plane.getZ()	* me.get(14) 

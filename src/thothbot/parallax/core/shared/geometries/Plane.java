@@ -26,8 +26,8 @@ import java.util.Arrays;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 
 /**
  * The Plane geometry
@@ -59,7 +59,7 @@ public final class Plane extends Geometry
 		double segment_width = width / gridX;
 		double segment_depth = depth / gridZ;
 
-		Vector3f normal = new Vector3f( 0, 1, 0 );
+		Vector3 normal = new Vector3( 0, 1, 0 );
 
 		for ( int iz = 0; iz < gridZ1; iz ++ ) 
 		{
@@ -68,7 +68,7 @@ public final class Plane extends Geometry
 				double x = ix * segment_width - width_half;
 				double z =  iz * segment_depth - depth_half;
 
-				getVertices().add( new Vector3f( x, 0, z ) );
+				getVertices().add( new Vector3( x, 0, z ) );
 			}
 		}
 
@@ -87,10 +87,10 @@ public final class Plane extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UVf( ix / gridX * 1.0,                     iz / gridZ * 1.0 ),
-					new UVf( ix / gridX * 1.0,           ( iz + 1.0 ) / gridZ * 1.0 ),
-					new UVf( ( ix + 1.0 ) / gridX * 1.0, ( iz + 1.0 ) / gridZ * 1.0 ),
-					new UVf( ( ix + 1.0 ) / gridX * 1.0,           iz / gridZ * 1.0 )
+					new UV( ix / gridX * 1.0,                     iz / gridZ * 1.0 ),
+					new UV( ix / gridX * 1.0,           ( iz + 1.0 ) / gridZ * 1.0 ),
+					new UV( ( ix + 1.0 ) / gridX * 1.0, ( iz + 1.0 ) / gridZ * 1.0 ),
+					new UV( ( ix + 1.0 ) / gridX * 1.0,           iz / gridZ * 1.0 )
 				) );
 			}
 		}

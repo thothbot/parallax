@@ -26,9 +26,9 @@ import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.textures.Texture;
-import thothbot.parallax.core.shared.core.Color3f;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 
 public class Sprite extends Object3D
@@ -54,13 +54,13 @@ public class Sprite extends Object3D
 			this.y = y;
 		}
 		
-		public Vector2f get() {
-			return new Vector2f(this.x, this.y);
+		public Vector2 get() {
+			return new Vector2(this.x, this.y);
 		}
 	}
 	
-	private Color3f color;
-	private Vector3f rotation3d;
+	private Color3 color;
+	private Vector3 rotation3d;
 	private Texture map;
 	
 	private Material.BLENDING blending = Material.BLENDING.NORMAL;
@@ -75,8 +75,8 @@ public class Sprite extends Object3D
 	
 	private Sprite.ALIGNMENT alignment = Sprite.ALIGNMENT.CENTER;
 	
-	private Vector2f uvOffset;
-	private Vector2f uvScale;
+	private Vector2 uvOffset;
+	private Vector2 uvScale;
 	
 	private double opacity = 1.0;
 	
@@ -86,7 +86,7 @@ public class Sprite extends Object3D
 	
 	public Sprite() 
 	{
-		this.color = new Color3f( 0xffffff );
+		this.color = new Color3( 0xffffff );
 		this.map = new Texture();
 
 		this.mergeWith3D = !this.useScreenCoordinates;
@@ -96,15 +96,15 @@ public class Sprite extends Object3D
 		this.rotation3d = this.rotation;
 		this.rotationFactor = 0;
 
-		this.uvOffset = new Vector2f( 0, 0 );
-		this.uvScale  = new Vector2f( 1, 1 );
+		this.uvOffset = new Vector2( 0, 0 );
+		this.uvScale  = new Vector2( 1, 1 );
 	}
 	
-	public Color3f getColor() {
+	public Color3 getColor() {
 		return color;
 	}
 
-	public void setColor(Color3f color) {
+	public void setColor(Color3 color) {
 		this.color = color;
 	}
 
@@ -156,19 +156,19 @@ public class Sprite extends Object3D
 		this.alignment = alignment;
 	}
 
-	public Vector2f getUvOffset() {
+	public Vector2 getUvOffset() {
 		return uvOffset;
 	}
 
-	public void setUvOffset(Vector2f uvOffset) {
+	public void setUvOffset(Vector2 uvOffset) {
 		this.uvOffset = uvOffset;
 	}
 
-	public Vector2f getUvScale() {
+	public Vector2 getUvScale() {
 		return uvScale;
 	}
 
-	public void setUvScale(Vector2f uvScale) {
+	public void setUvScale(Vector2 uvScale) {
 		this.uvScale = uvScale;
 	}
 

@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.utils;
 
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.Mathematics;
 
 /**
@@ -61,7 +61,7 @@ public class ColorUtils
 	 * @param s the saturation
 	 * @param v the value
 	 */
-	public static void adjustHSV(Color3f color, double h, double s, double v ) 
+	public static void adjustHSV(Color3 color, double h, double s, double v ) 
 	{
 		ColorUtils.HSV hsv = ColorUtils.rgbToHsv(color);
 		
@@ -82,7 +82,7 @@ public class ColorUtils
 	 * @param color the color instance
 	 * @return the new HSV instance
 	 */
-	public static ColorUtils.HSV rgbToHsv(Color3f color) 
+	public static ColorUtils.HSV rgbToHsv(Color3 color) 
 	{
 		double r = color.getR();
 		double g = color.getG();

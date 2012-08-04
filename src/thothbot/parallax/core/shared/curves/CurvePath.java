@@ -27,8 +27,8 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.BoundingBox;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 
 
 /*
@@ -81,8 +81,8 @@ public class CurvePath extends Curve
 		// TODO Test
 		// and verify for vector3 (needs to implement equals)
 		// Add a line curve if start and end of lines are not connected
-		Vector2f startPoint = (Vector2f) getCurves().get(0).getPoint(0);
-		Vector2f endPoint = (Vector2f) getCurves().get(this.curves.size() - 1 ).getPoint(1);
+		Vector2 startPoint = (Vector2) getCurves().get(0).getPoint(0);
+		Vector2 endPoint = (Vector2) getCurves().get(this.curves.size() - 1 ).getPoint(1);
 		
 		if (!startPoint.equals(endPoint))
 			this.curves.add( new CurveLine(endPoint, startPoint) );
@@ -100,7 +100,7 @@ public class CurvePath extends Curve
 	 * 4. Return curve.getPointAt(t')
 	 */
 	@Override
-	public Vector2f getPoint(double t)
+	public Vector2 getPoint(double t)
 	{
 		double d = t * this.getLength();
 		List<Double> curveLengths = this.getCurveLengths();
@@ -117,7 +117,7 @@ public class CurvePath extends Curve
 
 				double u = 1.0 - diff / curve.getLength();
 
-				return (Vector2f) curve.getPointAt( u );
+				return (Vector2) curve.getPointAt( u );
 			}
 
 			i ++;
@@ -167,7 +167,7 @@ public class CurvePath extends Curve
 	 */
 	public BoundingBox getBoundingBox() 
 	{
-		List<Vector2f> points = (ArrayList)this.getPoints();
+		List<Vector2> points = (ArrayList)this.getPoints();
 
 		double maxX, maxY;
 		double minX, minY;
@@ -175,12 +175,12 @@ public class CurvePath extends Curve
 		maxX = maxY = Double.NEGATIVE_INFINITY;
 		minX = minY = Double.POSITIVE_INFINITY;
 
-		Vector2f sum = new Vector2f();
+		Vector2 sum = new Vector2();
 		int il = points.size();
 
 		for ( int i = 0; i < il; i ++ ) 
 		{
-			Vector2f p = points.get( i );
+			Vector2 p = points.get( i );
 
 			if ( p.getX() > maxX ) 
 				maxX = p.getX();
@@ -198,7 +198,7 @@ public class CurvePath extends Curve
 		BoundingBox boundingBox = new BoundingBox();
 		boundingBox.min.set(minX, minY, 0);
 		boundingBox.max.set(maxX, maxY, 0);
-		Vector2f centroid = sum.divide( il );
+		Vector2 centroid = sum.divide( il );
 		boundingBox.centroid.set(centroid.getX(), centroid.getY(), 0);
 		
 		return boundingBox;
@@ -224,12 +224,12 @@ public class CurvePath extends Curve
 		return CurvePath.createGeometry( (ArrayList)getSpacedPoints( divisions ) );
 	}
 
-	private static Geometry createGeometry(List<Vector2f> points) 
+	private static Geometry createGeometry(List<Vector2> points) 
 	{
 		Geometry geometry = new Geometry();
 
 		for ( int i = 0; i < points.size(); i ++ )
-			geometry.getVertices().add( new Vector3f( points.get( i ).getX(), points.get( i ).getY(), 0 ) );
+			geometry.getVertices().add( new Vector3( points.get( i ).getX(), points.get( i ).getY(), 0 ) );
 
 		return geometry;
 	}
@@ -250,13 +250,13 @@ public class CurvePath extends Curve
 	 * This returns getPoints() bend/wrapped around the contour of a path.
 	 * Read http://www.planetclegg.com/projects/WarpingTextToSplines.html
 	 */
-	protected List<Vector2f> getWrapPoints(  List<Vector2f> oldPts, CurvePath path ) 
+	protected List<Vector2> getWrapPoints(  List<Vector2> oldPts, CurvePath path ) 
 	{
 		BoundingBox bounds = this.getBoundingBox();
 
 		for ( int i = 0, il = oldPts.size(); i < il; i ++ ) 
 		{
-			Vector2f p = oldPts.get( i );
+			Vector2 p = oldPts.get( i );
 
 			double oldX = p.getX();
 			double oldY = p.getY();
@@ -270,8 +270,8 @@ public class CurvePath extends Curve
 
 			// check for out of bounds?
 
-			Vector2f pathPt = path.getPoint( xNorm );
-			Vector2f normal = path.getNormalVector( xNorm ).multiply( oldY );
+			Vector2 pathPt = path.getPoint( xNorm );
+			Vector2 normal = path.getNormalVector( xNorm ).multiply( oldY );
 
 			p.setX(pathPt.getX() + normal.getY());
 			p.setY(pathPt.getX() + normal.getY());

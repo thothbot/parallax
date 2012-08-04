@@ -28,8 +28,8 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 
 /**
  * The Torus geometry
@@ -58,9 +58,9 @@ public final class Torus extends Geometry
 	{
 		super();
 		
-		Vector3f center = new Vector3f();
-		List<UVf> uvs = new ArrayList<UVf>();
-		List<Vector3f> normals = new ArrayList<Vector3f>();
+		Vector3 center = new Vector3();
+		List<UV> uvs = new ArrayList<UV>();
+		List<Vector3> normals = new ArrayList<Vector3>();
 		
 		for ( int j = 0; j <= segmentsR; j ++ ) 
 		{
@@ -72,14 +72,14 @@ public final class Torus extends Geometry
 				center.setX(radius * Math.cos( u ));
 				center.setY(radius * Math.sin( u ));
 
-				Vector3f vertex = new Vector3f();
+				Vector3 vertex = new Vector3();
 				vertex.setX(( radius + tube * Math.cos( v ) ) * Math.cos( u ));
 				vertex.setY(( radius + tube * Math.cos( v ) ) * Math.sin( u ));
 				vertex.setZ(tube * Math.sin( v ));
 
 				getVertices().add( vertex );
 
-				uvs.add( new UVf( i / segmentsT * 1.0, 1.0 - j / segmentsR * 1.8 ) );
+				uvs.add( new UV( i / segmentsT * 1.0, 1.0 - j / segmentsR * 1.8 ) );
 				normals.add( vertex.clone().sub( center ).normalize() );
 
 			}

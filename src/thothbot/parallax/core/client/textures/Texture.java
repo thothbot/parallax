@@ -30,7 +30,7 @@ import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureWrapMode;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.dom.client.Element;
 
@@ -74,8 +74,8 @@ public class Texture
 
 	private Element image;
 
-	private Vector2f offset;
-	private Vector2f repeat;
+	private Vector2 offset;
+	private Vector2 repeat;
 
 	private Texture.MAPPING_MODE mapping;
 
@@ -166,8 +166,8 @@ public class Texture
 		this.type = type;
 		
 		this.id = Texture.TextureCount++;
-		this.offset = new Vector2f(0, 0);
-		this.repeat = new Vector2f(1, 1);
+		this.offset = new Vector2(0, 0);
+		this.repeat = new Vector2(1, 1);
 	}
 	
 	/**
@@ -294,7 +294,7 @@ public class Texture
 	 * 
 	 * @return the offset vector.
 	 */
-	public Vector2f getOffset() {
+	public Vector2 getOffset() {
 		return offset;
 	}
 
@@ -303,7 +303,7 @@ public class Texture
 	 * 
 	 * @param offset the offset vector.
 	 */
-	public void setOffset(Vector2f offset) {
+	public void setOffset(Vector2 offset) {
 		this.offset = offset;
 	}
 
@@ -312,7 +312,7 @@ public class Texture
 	 * 
 	 * @return the repeat vector.
 	 */
-	public Vector2f getRepeat() {
+	public Vector2 getRepeat() {
 		return repeat;
 	}
 
@@ -321,7 +321,7 @@ public class Texture
 	 * 
 	 * @param repeat the repeat vector.
 	 */
-	public void setRepeat(Vector2f repeat) {
+	public void setRepeat(Vector2 repeat) {
 		this.repeat = repeat;
 	}
 

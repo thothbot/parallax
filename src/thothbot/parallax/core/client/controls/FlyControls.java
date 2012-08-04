@@ -20,7 +20,7 @@
 package thothbot.parallax.core.client.controls;
 
 import thothbot.parallax.core.shared.core.Quaternion;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -71,8 +71,8 @@ public final class FlyControls extends Control implements
 	
 	private MoveState moveState;
 	private Quaternion tmpQuaternion;
-	private Vector3f moveVector;
-	private Vector3f rotationVector;
+	private Vector3 moveVector;
+	private Vector3 rotationVector;
 	
 	private int viewHalfX;
 	private int viewHalfY;
@@ -99,8 +99,8 @@ public final class FlyControls extends Control implements
 		this.mouseStatus = 0;
 		this.moveState = new MoveState();
 
-		this.moveVector = new Vector3f( 0, 0, 0 );
-		this.rotationVector = new Vector3f( 0, 0, 0 );
+		this.moveVector = new Vector3( 0, 0, 0 );
+		this.rotationVector = new Vector3( 0, 0, 0 );
 		
 		getWidget().addDomHandler(this, ContextMenuEvent.getType());
 

@@ -26,8 +26,8 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
 import thothbot.parallax.postprocessing.client.shader.ShaderDotscreen;
@@ -38,13 +38,13 @@ public class DotScreenPass extends Pass
 	private ShaderMaterial material;
 	private boolean renderToScreen = false;
 	
-	public DotScreenPass( Vector3f center, double angle, double scale ) 
+	public DotScreenPass( Vector3 center, double angle, double scale ) 
 	{
 		Shader shader = new ShaderDotscreen();
 
 		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
 
-		((Vector3f) this.uniforms.get("center").getValue()).copy( center );
+		((Vector3) this.uniforms.get("center").getValue()).copy( center );
 		this.uniforms.get("angle").setValue( angle );
 		this.uniforms.get("scale").setValue( scale );
 
@@ -61,7 +61,7 @@ public class DotScreenPass extends Pass
 	public void render(EffectComposer effectCocmposer, double delta, boolean maskActive)
 	{
 		this.uniforms.get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
-		((Vector2f) this.uniforms.get("tSize").getValue()).set( 
+		((Vector2) this.uniforms.get("tSize").getValue()).set( 
 				effectCocmposer.getReadBuffer().getWidth(), effectCocmposer.getReadBuffer().getHeight() );
 
 		effectCocmposer.getQuad().setMaterial(this.material);

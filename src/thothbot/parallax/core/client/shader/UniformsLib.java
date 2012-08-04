@@ -27,10 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.shared.core.Color3f;
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector4f;
+import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector4;
 
 /**
  * Some common uniforms used by shaders.
@@ -42,11 +42,11 @@ public class UniformsLib
 {
 	public static final Map<String, Uniform> common = new HashMap<String, Uniform>() {
 		{
-			put("diffuse", new Uniform(Uniform.TYPE.C, new Color3f( 0xeeeeee )));
+			put("diffuse", new Uniform(Uniform.TYPE.C, new Color3( 0xeeeeee )));
 			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
 			put("map", new Uniform(Uniform.TYPE.T,  0 ));
-			put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4f( 0, 0, 1, 1 ) ));
+			put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4( 0, 0, 1, 1 ) ));
 			
 			put("lightMap", new Uniform(Uniform.TYPE.T,  2 ));
 			
@@ -66,7 +66,7 @@ public class UniformsLib
 			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
 			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0 ));
-			put("fogColor", new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff )));
+			put("fogColor", new Uniform(Uniform.TYPE.C, new Color3( 0xffffff )));
 		}
 	};
 	
@@ -93,7 +93,7 @@ public class UniformsLib
 	
 	public static final Map<String, Uniform> particle = new HashMap<String, Uniform>() {
 		{
-			put("psColor", new Uniform(Uniform.TYPE.C, new Color3f( 0xeeeeee )));
+			put("psColor", new Uniform(Uniform.TYPE.C, new Color3( 0xeeeeee )));
 			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
@@ -102,18 +102,18 @@ public class UniformsLib
 			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
 			put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("fogFar",     new Uniform(Uniform.TYPE.F,  2000.0 ));
-			put("fogColor",   new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff )));
+			put("fogColor",   new Uniform(Uniform.TYPE.C, new Color3( 0xffffff )));
 		}
 	};
 	
 	public static final Map<String, Uniform> shadowmap = new HashMap<String, Uniform>() {
 		{
 			put("shadowMap",      new Uniform(Uniform.TYPE.TV, 6 ));
-			put("shadowMapSize",  new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2f>() ));
+			put("shadowMapSize",  new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2>() ));
 			put("shadowBias",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 			put("shadowDarkness", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 			
-			put("shadowDarkness", new Uniform(Uniform.TYPE.M4V,  new ArrayList<Matrix4f>() ));
+			put("shadowDarkness", new Uniform(Uniform.TYPE.M4V,  new ArrayList<Matrix4>() ));
 		}
 	};	
 }

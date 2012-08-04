@@ -22,12 +22,12 @@
 
 package thothbot.parallax.core.shared.lights;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 
 public class PointLight extends Light
 {
 
-	private Vector3f position;
+	private Vector3 position;
 	private double intensity;
 	private int distance;
 	
@@ -41,10 +41,10 @@ public class PointLight extends Light
 		super(hex);
 		this.intensity = intensity;
 		this.distance = distance;
-		this.position = new Vector3f(0, 0, 0);
+		this.position = new Vector3(0, 0, 0);
 	}
 	
-	public Vector3f getPosition() {
+	public Vector3 getPosition() {
 		return this.position;
 	}
 	

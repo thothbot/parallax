@@ -21,8 +21,8 @@ package thothbot.parallax.core.client.controls;
 
 import thothbot.parallax.core.client.AnimatedScene;
 import thothbot.parallax.core.shared.core.Quaternion;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -81,23 +81,23 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 		 PAN
 	};
 
-	private Vector3f target;
+	private Vector3 target;
 
-	private Vector3f lastPosition;
+	private Vector3 lastPosition;
 
 	private boolean isKeyPressed = false;
 	private STATE state = STATE.NONE;
 
-	private Vector3f eye;
+	private Vector3 eye;
 
-	private Vector3f rotateStart;
-	private Vector3f rotateEnd;
+	private Vector3 rotateStart;
+	private Vector3 rotateEnd;
 
-	private Vector2f zoomStart;
-	private Vector2f zoomEnd;
+	private Vector2 zoomStart;
+	private Vector2 zoomEnd;
 
-	private Vector2f panStart;
-	private Vector2f panEnd;
+	private Vector2 panStart;
+	private Vector2 panEnd;
 	
 	public TrackballControl(Object3D object, Widget widget) 
 	{
@@ -108,15 +108,15 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 		if(getWidget().getClass() != RootPanel.class)
 			getWidget().getElement().setAttribute( "tabindex", "-1" );
 		
-		this.target = new Vector3f();
-		lastPosition = new Vector3f();
-		eye = new Vector3f();
-		rotateStart = new Vector3f();
-		rotateEnd = new Vector3f();
-		zoomStart = new Vector2f();
-		zoomEnd = new Vector2f();
-		panStart = new Vector2f();
-		panEnd = new Vector2f();
+		this.target = new Vector3();
+		lastPosition = new Vector3();
+		eye = new Vector3();
+		rotateStart = new Vector3();
+		rotateEnd = new Vector3();
+		zoomStart = new Vector2();
+		zoomEnd = new Vector2();
+		panStart = new Vector2();
+		panEnd = new Vector2();
 		
 		getWidget().addDomHandler(this, ContextMenuEvent.getType());
 
@@ -357,17 +357,17 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 		}
 	}
 	
-	private Vector2f getMouseOnScreen( int clientX, int clientY ) 
+	private Vector2 getMouseOnScreen( int clientX, int clientY ) 
 	{
-		return new Vector2f(
+		return new Vector2(
 			( clientX - getWidget().getAbsoluteLeft() ) / this.radius * 0.5,
 			( clientY - getWidget().getAbsoluteTop() ) / this.radius * 0.5
 		);
 	}
 
-	private Vector3f getMouseProjectionOnBall ( int clientX, int clientY ) 
+	private Vector3 getMouseProjectionOnBall ( int clientX, int clientY ) 
 	{
-		Vector3f mouseOnBall = new Vector3f(
+		Vector3 mouseOnBall = new Vector3(
 			( clientX - getWidget().getOffsetWidth() * 0.5 - getWidget().getAbsoluteLeft() ) / this.radius,
 			( getWidget().getOffsetHeight() * 0.5 + getWidget().getAbsoluteTop() - clientY ) / this.radius,
 			0.0
@@ -383,7 +383,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 
 		eye.copy( getObject().getPosition() ).sub( this.target );
 
-		Vector3f projection = getObject().getUp().clone().setLength( mouseOnBall.getY() );
+		Vector3 projection = getObject().getUp().clone().setLength( mouseOnBall.getY() );
 		projection.add( getObject().getUp().clone().cross( eye ).setLength( mouseOnBall.getX() ) );
 		projection.add( eye.setLength( mouseOnBall.getZ() ) );
 
@@ -405,13 +405,13 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	private void panCamera() 
 	{
 
-		Vector2f mouseChange = panEnd.clone().sub( panStart );
+		Vector2 mouseChange = panEnd.clone().sub( panStart );
 
 		if ( mouseChange.lengthSq() > 0 ) 
 		{
 			mouseChange.multiply( eye.length() * this.panSpeed );
 
-			Vector3f pan = eye.clone().cross( getObject().getUp() ).setLength( mouseChange.getX() );
+			Vector3 pan = eye.clone().cross( getObject().getUp() ).setLength( mouseChange.getX() );
 			pan.add( getObject().getUp().clone().setLength( mouseChange.getY() ) );
 
 			getObject().getPosition().add( pan );
@@ -448,7 +448,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 
 		if ( angle > 0 ) 
 		{
-			Vector3f axis = ( new Vector3f() ).cross( rotateStart, rotateEnd ).normalize();
+			Vector3 axis = ( new Vector3() ).cross( rotateStart, rotateEnd ).normalize();
 			Quaternion quaternion = new Quaternion();
 
 			angle *= this.rotateSpeed;

@@ -40,7 +40,7 @@ package thothbot.parallax.core.shared.core;
  * @author thothbot
  *
  */
-public class UVf
+public class UV
 {
 	/**
 	 * Horizontal coordinate.
@@ -55,7 +55,7 @@ public class UVf
 	/**
 	 * This default Constructor will make UV object (0.0, 0.0) 
 	 */
-	public UVf() 
+	public UV() 
 	{
 		this.u = 0.0f;
 		this.v = 0.0f;
@@ -67,7 +67,7 @@ public class UVf
 	 * @param u the Horizontal coordinate.
 	 * @param v the Vertical coordinate.
 	 */
-	public UVf(double u, double v) 
+	public UV(double u, double v) 
 	{
 		this.u = u;
 		this.v = v;
@@ -100,7 +100,7 @@ public class UVf
 	 * @param v the Vertical coordinate.
 	 * 
 	 */
-	public UVf set(double u, double v)
+	public UV set(double u, double v)
 	{
 		this.u = u;
 		this.v = v;
@@ -115,7 +115,7 @@ public class UVf
 	 * 
 	 * @return the current UV mapping object
 	 */
-	public UVf copy(UVf uv)
+	public UV copy(UV uv)
 	{
 		return this.set(uv.u, uv.v);
 	}
@@ -129,7 +129,7 @@ public class UVf
 	 * 
 	 * @return the current UV object
 	 */
-	public UVf lerp(UVf uv, double alpha)
+	public UV lerp(UV uv, double alpha)
 	{
 		this.u += (uv.u - this.u) * alpha;
 		this.v += (uv.v - this.v) * alpha;
@@ -142,9 +142,9 @@ public class UVf
 	 * 
 	 * @return the new instance of UV mapping object
 	 */
-	public UVf clone() 
+	public UV clone() 
 	{
-		return new UVf( this.u, this.v );
+		return new UV( this.u, this.v );
 	}
 	
 	/**

@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.geometries.parametric;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.Parametric;
 
 /**
@@ -43,7 +43,7 @@ public class Mobius extends Parametric
 		super(new Parametric.ParametricFunction() {
 			
 			@Override
-			public Vector3f run(double u, double t)
+			public Vector3 run(double u, double t)
 			{
 				u = u - 0.5;
 				double v = 2.0 * Math.PI * t;
@@ -53,7 +53,7 @@ public class Mobius extends Parametric
 				float x = (float) (Math.cos(v) * (a + u * Math.cos(v/2.0)));
 				float y = (float) (Math.sin(v) * (a + u * Math.cos(v/2.0)));
 				float z = (float) (u * Math.sin(v/2.0));
-				return new Vector3f(x, y, z);
+				return new Vector3(x, y, z);
 			}
 		}, 
 		slices, stacks);

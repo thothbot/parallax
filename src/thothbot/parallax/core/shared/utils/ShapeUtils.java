@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 
 /**
@@ -53,15 +53,15 @@ public class ShapeUtils
 	 * @param allpoints 
 	 * @param verts   the list of vertices, where will be created isolated faces
      */
-	public static void removeHoles( List<Vector2f> contour, List<List<Vector2f>> holes, 
-			List<Vector2f> shape, List<Vector2f> allpoints, List<List<Vector2f>> verts ) 
+	public static void removeHoles( List<Vector2> contour, List<List<Vector2>> holes, 
+			List<Vector2> shape, List<Vector2> allpoints, List<List<Vector2>> verts ) 
 	{
 		/* For each isolated shape, find the closest points and break to the hole to allow triangulation */
 		int holeIndex = -1;
 		int shapeIndex = -1;
 		for ( int h = 0; h < holes.size(); h ++ ) 
 		{
-			List<Vector2f> hole = holes.get( h );
+			List<Vector2> hole = holes.get( h );
 			allpoints.addAll(hole);
 
 			// Find the shortest pair of pts between shape and hole
@@ -71,12 +71,12 @@ public class ShapeUtils
 
 			for ( int h2 = 0; h2 < hole.size(); h2 ++ ) 
 			{
-				Vector2f pts1 = hole.get( h2 );
+				Vector2 pts1 = hole.get( h2 );
 				List<Double> dist = new ArrayList<Double>();
 
 				for ( int p = 0; p < contour.size(); p++ ) 
 				{
-					Vector2f pts2 = contour.get( p );
+					Vector2 pts2 = contour.get( p );
 					double d = pts1.distanceToSquared( pts2 );
 					dist.add( d );
 
@@ -96,7 +96,7 @@ public class ShapeUtils
 					? holeIndex - 1 
 							: hole.size() - 1;
 
-			List<Vector2f> areaapts = Arrays.asList(
+			List<Vector2> areaapts = Arrays.asList(
 				hole.get( holeIndex ),
 				contour.get( shapeIndex ),
 				contour.get( prevShapeVert )
@@ -104,7 +104,7 @@ public class ShapeUtils
 
 			double areaa = FontUtils.TriangulateArea( areaapts );
 
-			List<Vector2f> areabpts = Arrays.asList(
+			List<Vector2> areabpts = Arrays.asList(
 				hole.get( holeIndex ),
 				hole.get( prevHoleVert ),
 				contour.get( shapeIndex )
@@ -176,21 +176,21 @@ public class ShapeUtils
 				Log.error("ShapeUtils: removeHoles() ERROR");
 			}
 
-			List<Vector2f> tmpShape1 = contour.subList(0, shapeIndex);
-			List<Vector2f> tmpShape2 = contour.subList(shapeIndex, contour.size() - 1);
+			List<Vector2> tmpShape1 = contour.subList(0, shapeIndex);
+			List<Vector2> tmpShape2 = contour.subList(shapeIndex, contour.size() - 1);
 
-			List<Vector2f> tmpHole1 = hole.subList(holeIndex, hole.size() - 1);
-			List<Vector2f> tmpHole2 = hole.subList(0, holeIndex);
+			List<Vector2> tmpHole1 = hole.subList(holeIndex, hole.size() - 1);
+			List<Vector2> tmpHole2 = hole.subList(0, holeIndex);
 
 			// Should check orders here again?
 
-			List<Vector2f> trianglea = Arrays.asList(
+			List<Vector2> trianglea = Arrays.asList(
 				hole.get( holeIndex ),
 				contour.get( shapeIndex ),
 				contour.get( prevShapeVert )
 			);
 
-			List<Vector2f> triangleb = Arrays.asList(
+			List<Vector2> triangleb = Arrays.asList(
 				hole.get( holeIndex ),
 				hole.get( prevHoleVert ),
 				contour.get( shapeIndex )
@@ -198,7 +198,7 @@ public class ShapeUtils
 
 			verts = Arrays.asList(trianglea, triangleb);
 
-			shape = new ArrayList<Vector2f>();
+			shape = new ArrayList<Vector2>();
 			shape.addAll(tmpShape1);
 			shape.addAll(tmpHole1);
 			shape.addAll(tmpHole2);
@@ -207,21 +207,21 @@ public class ShapeUtils
 	}
 
 	/*
-	 * @param contour List of {@link Vector2f}
+	 * @param contour List of {@link Vector2}
 	 * @param holes
 	 * 
 	 * @return List<List<Integer>>
 	 */
-	public static List<List<Integer>> triangulateShape ( List<Vector2f> contour, List<List<Vector2f>> holes ) 
+	public static List<List<Integer>> triangulateShape ( List<Vector2> contour, List<List<Vector2>> holes ) 
 	{
-		List<Vector2f> shape = new ArrayList<Vector2f>();  
-		List<Vector2f> allpoints = new ArrayList<Vector2f>();
-		List<List<Vector2f>> isolatedPts = new ArrayList<List<Vector2f>>();
+		List<Vector2> shape = new ArrayList<Vector2>();  
+		List<Vector2> allpoints = new ArrayList<Vector2>();
+		List<List<Vector2>> isolatedPts = new ArrayList<List<Vector2>>();
 		
 		ShapeUtils.removeHoles( contour, holes, shape, allpoints, isolatedPts);
 Log.info("........" + shape + ", " + allpoints + ", " + isolatedPts);
 		 // True returns indices for points of spooled shape
-		List<List<Vector2f>> triangles = new ArrayList<List<Vector2f>>();
+		List<List<Vector2>> triangles = new ArrayList<List<Vector2>>();
 		List<List<Integer>> vertIndices = new ArrayList<List<Integer>>();
 		FontUtils.triangulate( shape, triangles, vertIndices);
 
@@ -245,7 +245,7 @@ Log.info("........" + shape + ", " + allpoints + ", " + isolatedPts);
 		// check all face vertices against all points map
 		for ( int i = 0, il = triangles.size(); i < il; i ++ ) 
 		{
-			List<Vector2f> face = triangles.get( i );
+			List<Vector2> face = triangles.get( i );
 
 			for ( int f = 0; f < 3; f ++ ) 
 			{
@@ -259,7 +259,7 @@ Log.info("........" + shape + ", " + allpoints + ", " + isolatedPts);
 		// check isolated points vertices against all points map
 		for ( int i = 0, il = isolatedPts.size(); i < il; i ++ ) 
 		{
-			List<Vector2f> face = isolatedPts.get( i );
+			List<Vector2> face = isolatedPts.get( i );
 
 			for ( int f = 0; f < 3; f ++ ) 
 			{
@@ -275,7 +275,7 @@ Log.info("........" + shape + ", " + allpoints + ", " + isolatedPts);
 	}
 
 
-	public static boolean isClockWise( List<Vector2f> pts ) 
+	public static boolean isClockWise( List<Vector2> pts ) 
 	{
 		return FontUtils.TriangulateArea( pts ) < 0;
 	}

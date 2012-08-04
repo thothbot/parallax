@@ -22,18 +22,18 @@
 
 package thothbot.parallax.core.shared.curves;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
 
 public class CurveCubicBezier3D extends Curve
 {
 
-	private Vector3f v0;
-	private Vector3f v1;
-	private Vector3f v2;
-	private Vector3f v3;
+	private Vector3 v0;
+	private Vector3 v1;
+	private Vector3 v2;
+	private Vector3 v3;
 
-	public CurveCubicBezier3D(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3) 
+	public CurveCubicBezier3D(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3) 
 	{
 		this.v0 = v0;
 		this.v1 = v1;
@@ -42,13 +42,13 @@ public class CurveCubicBezier3D extends Curve
 	}
 
 	@Override
-	public Vector3f getPoint(double t)
+	public Vector3 getPoint(double t)
 	{
 		double tx = ShapeUtils.b3(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
 		double ty = ShapeUtils.b3(t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY());
 		double tz = ShapeUtils.b3(t, this.v0.getZ(), this.v1.getZ(), this.v2.getZ(), this.v3.getZ());
 
-		return new Vector3f(tx, ty, tz);
+		return new Vector3(tx, ty, tz);
 	}
 
 }

@@ -25,27 +25,27 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.utils.CurveUtils;
 
 public class CurveSplineClosed3D extends Curve
 {
-	public List<Vector3f> points;
+	public List<Vector3> points;
 	
 	public CurveSplineClosed3D() 
 	{
-		this.points = new ArrayList<Vector3f>();
+		this.points = new ArrayList<Vector3>();
 	}
 
-	public CurveSplineClosed3D(List<Vector3f> points) 
+	public CurveSplineClosed3D(List<Vector3> points) 
 	{
 		this.points = points;
 	}
 
 	@Override
-	public Vector3f getPoint(double t)
+	public Vector3 getPoint(double t)
 	{
-		Vector3f v = new Vector3f();
+		Vector3 v = new Vector3();
 		
 		 // This needs to be from 0-length +1
 		double point = ( points.size() - 0.0 ) * t;

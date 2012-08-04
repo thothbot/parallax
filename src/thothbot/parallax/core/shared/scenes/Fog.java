@@ -25,7 +25,7 @@ package thothbot.parallax.core.shared.scenes;
 import java.util.Map;
 
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 
 /**
  * Abstract realization of Fog. This class implements color
@@ -36,7 +36,7 @@ import thothbot.parallax.core.shared.core.Color3f;
  */
 public abstract class Fog
 {
-	private Color3f color;
+	private Color3 color;
 	
 	/**
 	 * This default constructor will make abstract Fog with
@@ -46,7 +46,7 @@ public abstract class Fog
 	 */
 	public Fog(int hex)
 	{
-		this.color = new Color3f(hex);
+		this.color = new Color3(hex);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public abstract class Fog
 	 * 
 	 * @param color the color instance
 	 */
-	public void setColor(Color3f color)
+	public void setColor(Color3 color)
 	{
 		this.color = color;
 	}
@@ -64,7 +64,7 @@ public abstract class Fog
 	 * 
 	 * @return the color instance
 	 */
-	public Color3f getColor()
+	public Color3 getColor()
 	{
 		return color;
 	}

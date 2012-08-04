@@ -28,8 +28,8 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 
 /**
@@ -156,7 +156,7 @@ public final class Cube extends Geometry
 		int gridY1 = gridY + 1;
 		double segment_width = width / gridX * 1.0;
 		double segment_height = height / gridY * 1.0;
-		Vector3f normal = new Vector3f();
+		Vector3 normal = new Vector3();
 
 		int normalValue = (depth > 0) ? 1 : - 1;
 		if(w.equals("x"))
@@ -170,7 +170,7 @@ public final class Cube extends Geometry
 		{
 			for ( int ix = 0; ix < gridX1; ix ++ ) 
 			{
-				Vector3f vector = new Vector3f();
+				Vector3 vector = new Vector3();
 				
 				double u1 = ( ix * segment_width - width_half ) * udir * 1.0;
 				if(u.equals("x"))
@@ -215,10 +215,10 @@ public final class Cube extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UVf( ix / gridX * 1.0,                 iy / gridY * 1.0 ),
-					new UVf( ix / gridX * 1.0,         ( iy + 1 ) / gridY * 1.0 ),
-					new UVf( ( ix + 1 ) / gridX * 1.0, ( iy + 1 ) / gridY * 1.0 ),
-					new UVf( ( ix + 1 ) / gridX * 1.0,         iy / gridY * 1.0 )
+					new UV( ix / gridX * 1.0,                 iy / gridY * 1.0 ),
+					new UV( ix / gridX * 1.0,         ( iy + 1 ) / gridY * 1.0 ),
+					new UV( ( ix + 1 ) / gridX * 1.0, ( iy + 1 ) / gridY * 1.0 ),
+					new UV( ( ix + 1 ) / gridX * 1.0,         iy / gridY * 1.0 )
 				) );
 			}
 		}

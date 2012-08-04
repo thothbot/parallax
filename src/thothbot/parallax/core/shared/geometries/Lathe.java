@@ -28,30 +28,30 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 
 public final class Lathe extends Geometry
 {
 	
-	public Lathe ( List<Vector3f> points) 
+	public Lathe ( List<Vector3> points) 
 	{
 		this(points, 12);
 	}
 	
-	public Lathe ( List<Vector3f> points, int steps)
+	public Lathe ( List<Vector3> points, int steps)
 	{
 		this(points, steps, 2.0 * Math.PI);
 	}
 
-	public Lathe ( List<Vector3f> points, int steps, double angle ) 
+	public Lathe ( List<Vector3> points, int steps, double angle ) 
 	{
 		super();
 
-		List<Vector3f> newV = new ArrayList<Vector3f>();
+		List<Vector3> newV = new ArrayList<Vector3>();
 
-		Matrix4f matrix = new Matrix4f().makeRotationZ( angle / steps );
+		Matrix4 matrix = new Matrix4().makeRotationZ( angle / steps );
 		for ( int j = 0; j < points.size(); j ++ ) 
 		{
 			newV.add( j , points.get( j ).clone());
@@ -62,7 +62,7 @@ public final class Lathe extends Geometry
 		{
 			for ( int j = 0; j < newV.size(); j ++ ) 
 			{
-				newV.set( j , (Vector3f) matrix.multiplyVector3( newV.get( j ).clone() ));
+				newV.set( j , (Vector3) matrix.multiplyVector3( newV.get( j ).clone() ));
 				getVertices().add( newV.get( j ) );
 			}
 		}
@@ -81,10 +81,10 @@ public final class Lathe extends Geometry
 				double stepsf = steps / 1.0;
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 
-					new UVf( (1.0 - i / stepsf),          k / kl * 1.0  ),
-					new UVf( (1.0 - ( i + 1.0 ) / stepsf), k / kl * 1.0  ),
-					new UVf( (1.0 - ( i + 1.0 ) / stepsf), ( k + 1.0 ) / kl * 1.0 ),
-					new UVf( (1.0 - i / stepsf),          ( k + 1.0 ) / kl * 1.0 )
+					new UV( (1.0 - i / stepsf),          k / kl * 1.0  ),
+					new UV( (1.0 - ( i + 1.0 ) / stepsf), k / kl * 1.0  ),
+					new UV( (1.0 - ( i + 1.0 ) / stepsf), ( k + 1.0 ) / kl * 1.0 ),
+					new UV( (1.0 - i / stepsf),          ( k + 1.0 ) / kl * 1.0 )
 					
 				) );
 			}

@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -64,32 +64,32 @@ public final class CubeCamera extends Object3D
 	{
 		this.cameraPX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraPX.getUp().set( 0.0, -1.0, 0.0 );
-		cameraPX.lookAt( new Vector3f( 1.0, 0.0, 0.0 ) );
+		cameraPX.lookAt( new Vector3( 1.0, 0.0, 0.0 ) );
 		this.addChild( cameraPX );
 
 		this.cameraNX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraNX.getUp().set( 0.0, -1.0, 0.0 );
-		cameraNX.lookAt( new Vector3f( -1.0, 0.0, 0.0 ) );
+		cameraNX.lookAt( new Vector3( -1.0, 0.0, 0.0 ) );
 		this.addChild( cameraNX );
 
 		this.cameraPY = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraPY.getUp().set( 0.0, 0.0, 1.0 );
-		cameraPY.lookAt( new Vector3f( 0.0, 1.0, 0.0 ) );
+		cameraPY.lookAt( new Vector3( 0.0, 1.0, 0.0 ) );
 		this.addChild( cameraPY );
 
 		this.cameraNY = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraNY.getUp().set( 0.0, 0.0, -1.0 );
-		cameraNY.lookAt( new Vector3f( 0.0, -1.0, 0.0 ) );
+		cameraNY.lookAt( new Vector3( 0.0, -1.0, 0.0 ) );
 		this.addChild( cameraNY );
 
 		this.cameraPZ = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraPZ.getUp().set( 0.0, -1.0, 0.0 );
-		cameraPZ.lookAt( new Vector3f( 0.0, 0.0, 1.0 ) );
+		cameraPZ.lookAt( new Vector3( 0.0, 0.0, 1.0 ) );
 		this.addChild( cameraPZ );
 
 		this.cameraNZ = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraNZ.getUp().set( 0.0, -1.0, 0.0 );
-		cameraNZ.lookAt( new Vector3f( 0.0, 0.0, -1.0 ) );
+		cameraNZ.lookAt( new Vector3( 0.0, 0.0, -1.0 ) );
 		this.addChild( cameraNZ );
 
 		this.renderTarget = new RenderTargetCubeTexture( cubeResolution, cubeResolution );

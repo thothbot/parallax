@@ -31,8 +31,8 @@ import java.util.Map;
 import thothbot.parallax.core.shared.core.BoundingSphere;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 
 public class Polyhedron extends Geometry
 {
@@ -41,13 +41,13 @@ public class Polyhedron extends Geometry
 	
 	public class ContainerOfVector
 	{
-		public Vector3f vector;
+		public Vector3 vector;
 		public int index;
-		public UVf uv;
+		public UV uv;
 		
 		public ContainerOfVector(double x, double y, double z)
 		{
-			this.vector = new Vector3f(x, y, z);
+			this.vector = new Vector3(x, y, z);
 		}
 	}
 
@@ -95,7 +95,7 @@ public class Polyhedron extends Geometry
 		// Texture coords are equivalent to map coords, calculate angle and convert to fraction of a circle.
 		double u = azimuth( container.vector ) / 2.0 / Math.PI + 0.5;
 		double v = inclination( container.vector ) / Math.PI + 0.5;
-		container.uv = new UVf( u, v );
+		container.uv = new UV( u, v );
 
 		return container;
 	}
@@ -163,7 +163,7 @@ public class Polyhedron extends Geometry
 	/**
 	 * Angle around the Y axis, counter-clockwise when looking from above.
 	 */
-	protected double azimuth( Vector3f vector ) 
+	protected double azimuth( Vector3 vector ) 
 	{
 		return Math.atan2( vector.getZ(), -vector.getX() );
 	}
@@ -171,7 +171,7 @@ public class Polyhedron extends Geometry
 	/**
 	 * Angle above the XZ plane.
 	 */
-	protected double inclination( Vector3f vector ) 
+	protected double inclination( Vector3 vector ) 
 	{
 		return Math.atan2( -vector.getY(), Math.sqrt( ( vector.getX() * vector.getX() ) + ( vector.getZ() * vector.getZ() ) ) );
 	}
@@ -179,13 +179,13 @@ public class Polyhedron extends Geometry
 	/**
 	 * Texture fixing helper. Spheres have some odd behaviours.
 	 */
-	protected UVf correctUV( UVf uv, Vector3f vector, double azimuth ) 
+	protected UV correctUV( UV uv, Vector3 vector, double azimuth ) 
 	{
 		if ( (azimuth < 0) && (uv.getU() == 1) ) 
-			uv = new UVf( uv.getU() - 1.0, uv.getV() );
+			uv = new UV( uv.getU() - 1.0, uv.getV() );
 		
 		if ( (vector.getX() == 0) && (vector.getZ() == 0) ) 
-			uv = new UVf( azimuth / 2.0 / Math.PI + 0.5, uv.getV() );
+			uv = new UV( azimuth / 2.0 / Math.PI + 0.5, uv.getV() );
 		
 		return uv;
 	}

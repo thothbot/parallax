@@ -25,29 +25,29 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.utils.CurveUtils;
 
 
 public class CurveSpline extends Curve
 {
 
-	public List<Vector2f> points;
+	public List<Vector2> points;
 	
 	public CurveSpline() 
 	{
-		this.points = new ArrayList<Vector2f>();
+		this.points = new ArrayList<Vector2>();
 	}
 
-	public CurveSpline(List<Vector2f> points) 
+	public CurveSpline(List<Vector2> points) 
 	{
 		this.points = points;
 	}
 
 	@Override
-	public Vector2f getPoint(double t)
+	public Vector2 getPoint(double t)
 	{
-		Vector2f v = new Vector2f();
+		Vector2 v = new Vector2();
 		
 		double point = ( points.size() - 1.0 ) * t;
 		int intPoint = (int) Math.floor( point );

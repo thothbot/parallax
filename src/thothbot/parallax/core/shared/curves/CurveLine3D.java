@@ -22,24 +22,24 @@
 
 package thothbot.parallax.core.shared.curves;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 
 public class CurveLine3D extends Curve
 {
 
-	public Vector3f v1;
-	public Vector3f v2;
+	public Vector3 v1;
+	public Vector3 v2;
 
-	public CurveLine3D(Vector3f v1, Vector3f v2) 
+	public CurveLine3D(Vector3 v1, Vector3 v2) 
 	{
 		this.v1 = v1;
 		this.v2 = v2;
 	}
 
 	@Override
-	public Vector3f getPoint(double t)
+	public Vector3 getPoint(double t)
 	{
-		Vector3f point = this.v2.clone();
+		Vector3 point = this.v2.clone();
 		point.sub(this.v1);
 		point.multiply(t);
 		point.add(this.v1);

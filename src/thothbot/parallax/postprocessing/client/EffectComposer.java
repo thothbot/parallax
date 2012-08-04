@@ -33,7 +33,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
-import thothbot.parallax.core.shared.core.Matrix4f;
+import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.geometries.Plane;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -101,7 +101,7 @@ public class EffectComposer
 		this.quad = new Mesh( geometry, null );
 		this.scene = new Scene();
 		
-		geometry.applyMatrix( new Matrix4f().makeRotationX( Math.PI / 2.0) );
+		geometry.applyMatrix( new Matrix4().makeRotationX( Math.PI / 2.0) );
 		
 		quad.getPosition().setZ(-100);
 		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );

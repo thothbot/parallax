@@ -33,13 +33,13 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.Vector2f;
-import thothbot.parallax.core.shared.core.Vector3f;
-import thothbot.parallax.core.shared.core.Vector4f;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ParticleBasicMaterial;
@@ -50,11 +50,11 @@ public class ParticleSystem extends GeometryObject
 	public boolean frustumCulled = false;
 	
 	// camera matrices cache
-	private Matrix4f projScreenMatrixPS;
+	private Matrix4 projScreenMatrixPS;
 
 	private static ParticleBasicMaterial defaultMaterial = new ParticleBasicMaterial();
 	static {
-		defaultMaterial.setColor( new Color3f((int)Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color3((int)Math.random() * 0xffffff) );
 	};
 	
 	public ParticleSystem(Geometry geometry) 
@@ -67,7 +67,7 @@ public class ParticleSystem extends GeometryObject
 		this.geometry = geometry;
 		this.material = material;
 		
-		this.projScreenMatrixPS = new Matrix4f();
+		this.projScreenMatrixPS = new Matrix4();
 
 		if ( this.geometry != null ) 
 		{
@@ -148,9 +148,9 @@ public class ParticleSystem extends GeometryObject
 	public void setBuffers (WebGLRenderer renderer, Geometry geometry, int hint) 
 	{
 		WebGLRenderingContext gl = renderer.getGL();
-		List<Vector3f> vertices = geometry.getVertices();
+		List<Vector3> vertices = geometry.getVertices();
 
-		List<Color3f> colors = geometry.getColors();
+		List<Color3> colors = geometry.getColors();
 
 		List<List<Integer>> sortArray = geometry.sortArray;
 
@@ -166,7 +166,7 @@ public class ParticleSystem extends GeometryObject
 			this.projScreenMatrixPS.multiply( this.getMatrixWorld() );
 
 			for ( int v = 0; v < vertices.size(); v ++ ) {
-				Vector3f vertex = vertices.get( v );
+				Vector3 vertex = vertices.get( v );
 
 				renderer.getCache_vector3().copy( vertex );
 				this.projScreenMatrixPS.multiplyVector3( renderer.getCache_vector3() );
@@ -185,7 +185,7 @@ public class ParticleSystem extends GeometryObject
 
 			for ( int v = 0; v < geometry.getVertices().size(); v ++ ) 
 			{
-				Vector3f vertex = vertices.get(sortArray.get(v).get(1) );
+				Vector3 vertex = vertices.get(sortArray.get(v).get(1) );
 				int offset = v * 3;
 
 				geometry.getWebGlVertexArray().set( offset , vertex.getX());
@@ -198,7 +198,7 @@ public class ParticleSystem extends GeometryObject
 			{
 				int offset = c * 3;
 
-				Color3f color = colors.get( sortArray.get(c).get(1) );
+				Color3 color = colors.get( sortArray.get(c).get(1) );
 
 				geometry.getWebGlColorArray().set( offset, color.getR());
 				geometry.getWebGlColorArray().set( offset + 1, color.getG());
@@ -229,7 +229,7 @@ public class ParticleSystem extends GeometryObject
 						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 						{
 							int index = sortArray.get( ca ).get( 1 );
-							Vector2f value = (Vector2f) customAttribute.getValue().get(index);
+							Vector2 value = (Vector2) customAttribute.getValue().get(index);
 
 							customAttribute.array.set(offset, value.getX());
 							customAttribute.array.set(offset + 1, value.getY());
@@ -244,7 +244,7 @@ public class ParticleSystem extends GeometryObject
 							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 							{
 								int index = sortArray.get( ca ).get( 1 );
-								Color3f value = (Color3f) customAttribute.getValue().get(index);
+								Color3 value = (Color3) customAttribute.getValue().get(index);
 
 								customAttribute.array.set(offset, value.getR());
 								customAttribute.array.set(offset + 1, value.getG());
@@ -258,7 +258,7 @@ public class ParticleSystem extends GeometryObject
 							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 							{
 								int index = sortArray.get( ca ).get( 1 );
-								Vector3f value = (Vector3f) customAttribute.getValue().get(index);
+								Vector3 value = (Vector3) customAttribute.getValue().get(index);
 
 								customAttribute.array.set(offset, value.getX());
 								customAttribute.array.set(offset + 1, value.getY());
@@ -273,7 +273,7 @@ public class ParticleSystem extends GeometryObject
 						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 						{
 							int index = sortArray.get( ca ).get( 1 );
-							Vector4f value = (Vector4f) customAttribute.getValue().get(index);
+							Vector4 value = (Vector4) customAttribute.getValue().get(index);
 
 							customAttribute.array.set(offset, value.getX());
 							customAttribute.array.set(offset + 1, value.getY());
@@ -293,7 +293,7 @@ public class ParticleSystem extends GeometryObject
 			{
 				for ( int v = 0; v < vertices.size(); v ++ ) 
 				{
-					Vector3f vertex = vertices.get( v );
+					Vector3 vertex = vertices.get( v );
 
 					int offset = v * 3;
 
@@ -308,7 +308,7 @@ public class ParticleSystem extends GeometryObject
 				for ( int c = 0; c < colors.size(); c ++ ) 
 				{
 
-					Color3f color = colors.get( c );
+					Color3 color = colors.get( c );
 
 					int offset = c * 3;
 
@@ -342,7 +342,7 @@ public class ParticleSystem extends GeometryObject
 							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 							{
 
-								Vector2f value = (Vector2f) customAttribute.getValue().get(ca);
+								Vector2 value = (Vector2) customAttribute.getValue().get(ca);
 
 								customAttribute.array.set(offset, value.getX());
 								customAttribute.array.set(offset + 1, value.getY());
@@ -359,7 +359,7 @@ public class ParticleSystem extends GeometryObject
 								for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 								{
 
-									Color3f value = (Color3f) customAttribute.getValue().get(ca);
+									Color3 value = (Color3) customAttribute.getValue().get(ca);
 
 									customAttribute.array.set(offset, value.getR());
 									customAttribute.array.set(offset + 1, value.getG());
@@ -373,7 +373,7 @@ public class ParticleSystem extends GeometryObject
 							{
 								for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 								{
-									Vector3f value = (Vector3f) customAttribute.getValue().get(ca);
+									Vector3 value = (Vector3) customAttribute.getValue().get(ca);
 
 									customAttribute.array.set(offset, value.getX());
 									customAttribute.array.set(offset + 1, value.getY());
@@ -388,7 +388,7 @@ public class ParticleSystem extends GeometryObject
 						{
 							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 							{
-								Vector4f value = (Vector4f) customAttribute.getValue().get(ca);
+								Vector4 value = (Vector4) customAttribute.getValue().get(ca);
 
 								customAttribute.array.set(offset, value.getX());
 								customAttribute.array.set(offset + 1, value.getY());

@@ -19,7 +19,7 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Vector3;
 
 /**
  * Material has wrap.
@@ -32,6 +32,6 @@ public interface HasWrap
 	public boolean isWrapAround();
 	public void setWrapAround(boolean wrapAround);
 	
-	public Vector3f getWrapRGB();
-	public void setWrapRGB(Vector3f wrapRGB);
+	public Vector3 getWrapRGB();
+	public void setWrapRGB(Vector3 wrapRGB);
 }

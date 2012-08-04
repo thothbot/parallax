@@ -27,13 +27,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thothbot.parallax.core.shared.core.Color3f;
+import thothbot.parallax.core.shared.core.Color3;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Matrix4f;
-import thothbot.parallax.core.shared.core.UVf;
-import thothbot.parallax.core.shared.core.Vector3f;
+import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.UV;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Mesh;
 
@@ -58,8 +58,8 @@ public class GeometryUtils
 		if(object.isMatrixAutoUpdate())
 			object.updateMatrix();
 
-		Matrix4f matrix = object.getMatrix();
-		Matrix4f matrixRotation = new Matrix4f();
+		Matrix4 matrix = object.getMatrix();
+		Matrix4 matrixRotation = new Matrix4();
 		matrixRotation.extractRotation( matrix, object.getScale() );
 		
 		GeometryUtils.merge(geometry1, object.getGeometry(), matrix, matrixRotation);
@@ -84,17 +84,17 @@ public class GeometryUtils
 	 * @param matrix    
 	 * @param matrixRotation
 	 */
-	private static void merge( Geometry geometry1, Geometry geometry2, Matrix4f matrix, Matrix4f matrixRotation ) 
+	private static void merge( Geometry geometry1, Geometry geometry2, Matrix4 matrix, Matrix4 matrixRotation ) 
 	{
 			int vertexOffset = geometry1.getVertices().size();
 			int uvPosition = geometry1.getFaceVertexUvs().get( 0 ).size();
 			
-			List<Vector3f> vertices1 = geometry1.getVertices();
-			List<Vector3f> vertices2 = geometry2.getVertices();
+			List<Vector3> vertices1 = geometry1.getVertices();
+			List<Vector3> vertices2 = geometry2.getVertices();
 			List<Face3> faces1 = geometry1.getFaces();
 			List<Face3> faces2 = geometry2.getFaces();
-			List<List<UVf>> uvs1 = geometry1.getFaceVertexUvs().get( 0 );
-			List<List<UVf>> uvs2 = geometry2.getFaceVertexUvs().get( 0 );
+			List<List<UV>> uvs1 = geometry1.getFaceVertexUvs().get( 0 );
+			List<List<UV>> uvs2 = geometry2.getFaceVertexUvs().get( 0 );
 
 			Map<Integer, Integer> geo1MaterialsMap = new HashMap<Integer, Integer>();
 
@@ -112,9 +112,9 @@ public class GeometryUtils
 
 			for ( int i = 0, il = vertices2.size(); i < il; i ++ ) 
 			{
-				Vector3f vertex = vertices2.get( i );
+				Vector3 vertex = vertices2.get( i );
 
-				Vector3f vertexCopy = vertex.clone();
+				Vector3 vertexCopy = vertex.clone();
 
 				if ( matrix != null ) 
 					matrix.multiplyVector3( vertexCopy );
@@ -128,8 +128,8 @@ public class GeometryUtils
 			{
 				Face3 face = faces2.get( i );//, faceCopy, normal, color,
 				Face3 faceCopy = null;
-				List<Vector3f> faceVertexNormals = face.getVertexNormals();
-				List<Color3f> faceVertexColors = face.getVertexColors();
+				List<Vector3> faceVertexNormals = face.getVertexNormals();
+				List<Color3> faceVertexColors = face.getVertexColors();
 
 				if ( face instanceof Face3 ) 
 				{
@@ -148,7 +148,7 @@ public class GeometryUtils
 
 				for ( int j = 0, jl = faceVertexNormals.size(); j < jl; j ++ ) 
 				{
-					Vector3f normal = faceVertexNormals.get( j ).clone();
+					Vector3 normal = faceVertexNormals.get( j ).clone();
 
 					if ( matrixRotation != null ) 
 						matrixRotation.multiplyVector3( normal );
@@ -160,7 +160,7 @@ public class GeometryUtils
 
 				for ( int j = 0, jl = faceVertexColors.size(); j < jl; j ++ ) 
 				{
-					Color3f color = faceVertexColors.get( j );
+					Color3 color = faceVertexColors.get( j );
 					faceCopy.getVertexColors().add( color.clone() );
 				}
 
@@ -195,11 +195,11 @@ public class GeometryUtils
 
 			for ( int i = 0, il = uvs2.size(); i < il; i ++ ) 
 			{
-				List<UVf> uv = uvs2.get( i );
-				List<UVf> uvCopy = new ArrayList<UVf>();
+				List<UV> uv = uvs2.get( i );
+				List<UV> uvCopy = new ArrayList<UV>();
 
 				for ( int j = 0, jl = uv.size(); j < jl; j ++ ) 
-					uvCopy.add( new UVf( uv.get( j ).getU(), uv.get( j ).getV() ) );
+					uvCopy.add( new UV( uv.get( j ).getU(), uv.get( j ).getV() ) );
 
 				uvs1.add( uvCopy );
 

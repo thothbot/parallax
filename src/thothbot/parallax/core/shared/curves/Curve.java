@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.shared.core.Vector;
-import thothbot.parallax.core.shared.core.Vector2f;
+import thothbot.parallax.core.shared.core.Vector2;
 
 // Abstract Curve base class
 public abstract class Curve
@@ -216,10 +216,10 @@ public abstract class Curve
 	 * and in 3D space, infinte
 	 * TODO this should be depreciated.
 	 */
-	public Vector2f getNormalVector( double t ) 
+	public Vector2 getNormalVector( double t ) 
 	{
-		Vector2f vec = (Vector2f) this.getTangent( t );
-		return new Vector2f( -vec.getY() , vec.getX() );
+		Vector2 vec = (Vector2) this.getTangent( t );
+		return new Vector2( -vec.getY() , vec.getX() );
 	}
 
 	
