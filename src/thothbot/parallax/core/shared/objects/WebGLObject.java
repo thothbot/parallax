@@ -47,7 +47,7 @@ public class WebGLObject implements Comparable<WebGLObject>
 	@Override
 	public int compareTo(WebGLObject o)
 	{
-		double result = this.z - o.z; 
+		double result = o.z - this.z; 
 		return (result == 0) ? 0 
 				: (result > 0) ? 1 : -1;
 	}

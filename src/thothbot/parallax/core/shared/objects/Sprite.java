@@ -250,7 +250,7 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 	@Override
 	public int compareTo(Sprite o)
 	{
-		double result = this.z - o.z;
+		double result = o.z - this.z;
 		return (result == 0) ? 0 
 				: (result > 0) ? 1 : -1;
 	}
