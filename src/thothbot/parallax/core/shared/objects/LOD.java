@@ -33,19 +33,22 @@ public class LOD extends Object3D
 {
 
 	public List<LOD> LODs;
-	public float visibleAtDistance;
+	public double visibleAtDistance;
 	public Object3D  object3D;
 	
-	public LOD() {
+	public LOD() 
+	{
 		this.LODs = new ArrayList<LOD>();
 	}
 	
-	public void addLevel ( Object3D object3D) {
+	public void addLevel ( Object3D object3D) 
+	{
 		addLevel(object3D, 0f);
 	}
 
 	// TODO: What is this?
-	public void addLevel ( Object3D object3D, float visibleAtDistance ) {
+	public void addLevel ( Object3D object3D, double visibleAtDistance ) 
+	{
 		visibleAtDistance = Math.abs( visibleAtDistance );
 
 		for(LOD lod: this.LODs)
@@ -67,18 +70,22 @@ public class LOD extends Object3D
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
 
 		Matrix4f inverse  = camera.getMatrixWorldInverse();
-		float distance = -( inverse.getArray().get(2) 
+		double distance = -( inverse.getArray().get(2) 
 				* this.matrixWorld.getArray().get(12) + inverse.getArray().get(6) 
 				* this.matrixWorld.getArray().get(13) + inverse.getArray().get(10) 
 				* this.matrixWorld.getArray().get(14) + inverse.getArray().get(14) );
 
 			this.LODs.get(0).object3D.setVisible(true);
 
-			for ( int l = 1; l < this.LODs.size(); l ++ ) {
-				if( distance >= this.LODs.get( l ).visibleAtDistance ) {
+			for ( int l = 1; l < this.LODs.size(); l ++ ) 
+			{
+				if( distance >= this.LODs.get( l ).visibleAtDistance ) 
+				{
 					this.LODs.get( l - 1 ).object3D.setVisible(false);
 					this.LODs.get( l     ).object3D.setVisible(true);
-				} else {
+				} 
+				else 
+				{
 					break;
 				}
 			}

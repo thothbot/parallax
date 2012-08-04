@@ -40,7 +40,7 @@ public final class ParticleBasicMaterial extends Material
 	
 	private Material.COLORS vertexColors;
 	
-	private float size;
+	private double size;
 	
 	private boolean sizeAttenuation;
 
@@ -58,11 +58,11 @@ public final class ParticleBasicMaterial extends Material
 		
 	}
 
-	public float getSize() {
+	public double getSize() {
 		return this.size;
 	}
 	
-	public void setSize(float size) {
+	public void setSize(double size) {
 		this.size = size;;
 	}
 

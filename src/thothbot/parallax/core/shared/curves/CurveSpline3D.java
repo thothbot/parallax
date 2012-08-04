@@ -44,14 +44,14 @@ public class CurveSpline3D extends Curve
 	}
 
 	@Override
-	public Vector3f getPoint(float t)
+	public Vector3f getPoint(double t)
 	{
 		Vector3f v = new Vector3f();
 		
-		float point = ( points.size() - 1 ) * t;
+		double point = ( points.size() - 1.0 ) * t;
 		int intPoint = (int) Math.floor( point );
 		
-		float weight = point - intPoint;
+		double weight = point - intPoint;
 
 		int c0 = intPoint == 0 ? intPoint : intPoint - 1;
 		int c1 = intPoint;

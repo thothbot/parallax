@@ -37,7 +37,7 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 	protected Geometry geometry;
 	protected Material material;
 	
-	private float cache_oldLineWidth = -1;
+	private double cache_oldLineWidth = -1;
 
 	public Geometry getGeometry()
 	{
@@ -65,7 +65,7 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 	
 	public abstract void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers);
 	
-	protected void setLineWidth (WebGLRenderingContext gl, float width ) 
+	protected void setLineWidth (WebGLRenderingContext gl, double width ) 
 	{
 		if ( width != this.cache_oldLineWidth ) 
 		{

@@ -38,10 +38,10 @@ public class JsArrayUtil
 	 *            the Java array to convert from.
 	 * @return the equivalent JavaScript array.
 	 */
-	public static JsArrayNumber toJsArrayNumber(float... array)
+	public static JsArrayNumber toJsArrayNumber(double... array)
 	{
 		JsArrayNumber jsArray = JsArrayNumber.createArray().cast();
-		for (float v : array) {
+		for (double v : array) {
 			jsArray.push(v);
 		}
 		return jsArray;
@@ -175,25 +175,6 @@ public class JsArrayUtil
 	}
 
 	/**
-	 * Wraps a Java float Array to a JsArrayNumber.
-	 * 
-	 * @param srcArray
-	 *            the array to wrap
-	 * @return the wrapped array
-	 */
-	public static JsArrayNumber wrapArray(float[] srcArray)
-	{
-		if (GWT.isScript()) {
-			return arrayAsJsArrayForProdMode(srcArray);
-		}
-		JsArrayNumber result = JavaScriptObject.createArray().cast();
-		for (int i = 0; i < srcArray.length; i++) {
-			result.set(i, srcArray[i]);
-		}
-		return result;
-	}
-
-	/**
 	 * Wraps a Java int Array to a JsArrayInteger.
 	 * 
 	 * @param srcArray
@@ -302,19 +283,6 @@ public class JsArrayUtil
 	 * @return an equivalent JsArray
 	 */
 	private static native JsArrayNumber arrayAsJsArrayForProdMode(double[] array) /*-{
-		return array;
-	}-*/;
-
-	/**
-	 * Does the trick for production mode. In production mode, a JavaScript
-	 * array is used for Java arrays. So we can directly use the array as
-	 * JsArray. MUST NOT be called in dev mode.
-	 * 
-	 * @param array
-	 *            the array to get the JsArray for
-	 * @return an equivalent JsArray
-	 */
-	private static native JsArrayNumber arrayAsJsArrayForProdMode(float[] array) /*-{
 		return array;
 	}-*/;
 

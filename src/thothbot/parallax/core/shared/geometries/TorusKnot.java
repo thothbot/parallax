@@ -58,8 +58,8 @@ public final class TorusKnot extends Geometry
 
 			for ( int j = 0; j < segmentsT; ++ j ) 
 			{
-				double u = i / (double)segmentsR * 2.0 * p * Math.PI;
-				double v = j / (double)segmentsT * 2.0 * Math.PI;
+				double u = i / segmentsR * 2.0 * p * Math.PI;
+				double v = j / segmentsT * 2.0 * Math.PI;
 
 				Vector3f p1 = getPos( u,        v, q, p, radius, heightScale );
 				Vector3f p2 = getPos( u + 0.01, v, q, p, radius, heightScale );
@@ -72,8 +72,8 @@ public final class TorusKnot extends Geometry
 				bitan.normalize();
 				n.normalize();
 
-				float cx = (float) -(tube * Math.cos( v )); // TODO: Hack: Negating it so it faces outside.
-				float cy = (float) (tube * Math.sin( v ));
+				double cx = -tube * Math.cos( v ); // TODO: Hack: Negating it so it faces outside.
+				double cy = tube * Math.sin( v );
 
 				p1.addX(cx * n.getX() + cy * bitan.getX());
 				p1.addY(cx * n.getY() + cy * bitan.getY());
@@ -95,10 +95,10 @@ public final class TorusKnot extends Geometry
 				int c = grid[ ip ][ jp ];
 				int d = grid[ i ][ jp ];
 
-				UVf uva = new UVf(            i / (float)segmentsR,            j / (float)segmentsT );
-				UVf uvb = new UVf( ( i + 1.0f ) / (float)segmentsR,            j / (float)segmentsT );
-				UVf uvc = new UVf( ( i + 1.0f ) / (float)segmentsR, ( j + 1.0f ) / (float)segmentsT );
-				UVf uvd = new UVf(            i / (float)segmentsR, ( j + 1.0f ) / (float)segmentsT );
+				UVf uva = new UVf(           i / segmentsR * 1.0,           j / segmentsT * 1.0 );
+				UVf uvb = new UVf( ( i + 1.0 ) / segmentsR * 1.0,           j / segmentsT * 1.0 );
+				UVf uvc = new UVf( ( i + 1.0 ) / segmentsR * 1.0, ( j + 1.0 ) / segmentsT * 1.0 );
+				UVf uvd = new UVf(           i / segmentsR * 1.0, ( j + 1.0 ) / segmentsT * 1.0 );
 
 				getFaces().add( new Face4( a, b, c, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
@@ -110,7 +110,7 @@ public final class TorusKnot extends Geometry
 		this.computeVertexNormals();
 	}
 	
-	private int vert( float x, float y, float z ) 
+	private int vert( double x, double y, double z ) 
 	{
 		getVertices().add( new Vector3f( x, y, z ) );
 		return getVertices().size() - 1;
@@ -121,13 +121,13 @@ public final class TorusKnot extends Geometry
 		double cu = Math.cos( u );
 		double cv = Math.cos( v );
 		double su = Math.sin( u );
-		double quOverP = (in_q / (double)in_p * u);
+		double quOverP = in_q / in_p * u;
 		double cs = Math.cos( quOverP );
 
 		return new Vector3f( 
-			(float)(radius * ( 2.0f + cs ) * cu * 0.5f),
-			(float)(radius * ( 2.0f + cs ) * su * 0.5f),
-			(float)(heightScale * radius * Math.sin( quOverP ) * 0.5f)
+			radius * ( 2.0 + cs ) * cu * 0.5,
+			radius * ( 2.0 + cs ) * su * 0.5,
+			heightScale * radius * Math.sin( quOverP ) * 0.5
 		);
 	}
 }

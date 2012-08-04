@@ -157,14 +157,14 @@ public class FontUtils
 	
 	private static boolean snip( List<Vector2f> contour, int u, int v, int w, int n, List<Integer> verts ) 
 	{
-		float ax = contour.get( verts.get( u ) ).getX();
-		float ay = contour.get( verts.get( u ) ).getY();
+		double ax = contour.get( verts.get( u ) ).getX();
+		double ay = contour.get( verts.get( u ) ).getY();
 
-		float bx = contour.get( verts.get( v ) ).getX();
-		float by = contour.get( verts.get( v ) ).getY();
+		double bx = contour.get( verts.get( v ) ).getX();
+		double by = contour.get( verts.get( v ) ).getY();
 
-		float cx = contour.get( verts.get( w ) ).getX();
-		float cy = contour.get( verts.get( w ) ).getY();
+		double cx = contour.get( verts.get( w ) ).getX();
+		double cy = contour.get( verts.get( w ) ).getY();
 
 		if ( EPSILON > (((bx - ax) * (cy - ay)) - ((by - ay) * (cx - ax))) ) 
 			return false;
@@ -174,8 +174,8 @@ public class FontUtils
 				if( (p == u) || (p == v) || (p == w) ) 
 					continue;
 
-				float px = contour.get( verts.get( p ) ).getX();
-				float py = contour.get( verts.get( p ) ).getY();
+				double px = contour.get( verts.get( p ) ).getX();
+				double py = contour.get( verts.get( p ) ).getY();
 
 				if ( insideTriangle( ax, ay, bx, by, cx, cy, px, py ) ) 
 					return false;
@@ -186,22 +186,22 @@ public class FontUtils
 	/*
 	 * see if p is inside triangle abc
 	 */
-	public static boolean insideTriangle( float ax, float ay,
-			float bx, float by,
-			float cx, float cy,
-			float px, float py 
+	public static boolean insideTriangle( double ax, double ay,
+			double bx, double by,
+			double cx, double cy,
+			double px, double py 
 	) {
-		  float aX = cx - bx;  float aY = cy - by;
-		  float bX = ax - cx;  float bY = ay - cy;
-		  float cX = bx - ax;  float cY = by - ay;
-		  float apx= px  -ax;  float apy= py - ay;
-		  float bpx= px - bx;  float bpy= py - by;
-		  float cpx= px - cx;  float cpy= py - cy;
+		  double aX = cx - bx;  double aY = cy - by;
+		  double bX = ax - cx;  double bY = ay - cy;
+		  double cX = bx - ax;  double cY = by - ay;
+		  double apx= px  -ax;  double apy= py - ay;
+		  double bpx= px - bx;  double bpy= py - by;
+		  double cpx= px - cx;  double cpy= py - cy;
 
-		  float aCROSSbp = aX*bpy - aY*bpx;
-		  float cCROSSap = cX*apy - cY*apx;
-		  float bCROSScp = bX*cpy - bY*cpx;
+		  double aCROSSbp = aX*bpy - aY*bpx;
+		  double cCROSSap = cX*apy - cY*apx;
+		  double bCROSScp = bX*cpy - bY*cpx;
 
-		  return ( (aCROSSbp >= 0.0f) && (bCROSScp >= 0.0f) && (cCROSSap >= 0.0f) );
+		  return ( (aCROSSbp >= 0.0) && (bCROSScp >= 0.0) && (cCROSSap >= 0.0) );
 	}
 }

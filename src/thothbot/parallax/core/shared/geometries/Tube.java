@@ -55,10 +55,10 @@ public final class Tube extends Geometry
 	
 	public Tube( CurvePath path )
 	{
-		this(path, 64, 1.0f, 8, false, true);
+		this(path, 64, 1.0, 8, false, true);
 	}
 	
-	public Tube( CurvePath path, int segments, float radius, int segmentsRadius, boolean closed, boolean debug ) 
+	public Tube( CurvePath path, int segments, double radius, int segmentsRadius, boolean closed, boolean debug ) 
 	{
 		super();
 		
@@ -81,7 +81,7 @@ public final class Tube extends Geometry
 		{
 			this.grid.add( i, new ArrayList<Integer>());
 
-			float u = (float)i / ( numpoints - 1 );
+			double u = i / ( numpoints - 1.0 );
 
 			Vector3f pos = (Vector3f) path.getPointAt( u );
 
@@ -97,8 +97,8 @@ public final class Tube extends Geometry
 				double v = j / segmentsRadius * 2.0 * Math.PI;
 
 				// TODO: Hack: Negating it so it faces outside.
-				float cx = (float) ( - radius * Math.cos( v ) ); 
-				float cy = (float) ( radius * Math.sin( v ) );
+				double cx = - radius * Math.cos( v ); 
+				double cy = radius * Math.sin( v );
 
 				Vector3f pos2 = new Vector3f();
 	            pos2.copy( pos );
@@ -125,10 +125,10 @@ public final class Tube extends Geometry
 				int c = this.grid.get( ip ).get( jp );
 				int d = this.grid.get( i ).get( jp );
 
-				UVf uva = new UVf( i / (float)segments,         j / (float)segmentsRadius );
-				UVf uvb = new UVf( ( i + 1 ) / (float)segments, j / (float)segmentsRadius );
-				UVf uvc = new UVf( ( i + 1 ) / (float)segments, ( j + 1 ) / (float)segmentsRadius );
-				UVf uvd = new UVf( i / (float)segments,         ( j + 1 ) / (float)segmentsRadius );
+				UVf uva = new UVf( i / segments * 1.0,                     j / segmentsRadius * 1.0 );
+				UVf uvb = new UVf( ( i + 1.0 ) / segments * 1.0,           j / segmentsRadius * 1.0 );
+				UVf uvc = new UVf( ( i + 1.0 ) / segments * 1.0, ( j + 1.0 ) / segmentsRadius * 1.0 );
+				UVf uvd = new UVf( i / segments * 1.0,           ( j + 1.0 ) / segmentsRadius * 1.0 );
 
 				getFaces().add( new Face4( a, b, c, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
@@ -141,7 +141,7 @@ public final class Tube extends Geometry
 		this.computeVertexNormals();
 	}
 	
-	private int vert( float x, float y, float z ) 
+	private int vert( double x, double y, double z ) 
 	{
 		this.getVertices().add( new Vector3f( x, y, z ) );
 		

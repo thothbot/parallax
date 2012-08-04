@@ -41,21 +41,23 @@ import thothbot.parallax.core.shared.core.Vector3f;
  */
 public final class Plane extends Geometry
 {
-	public Plane(int width, int height) {
+	public Plane(int width, int height) 
+	{
 		this(width, height, 1, 1);
 	}
 
-	public Plane(int width, int depth, int segmentsWidth, int segmentsDepth) {
+	public Plane(int width, int depth, int segmentsWidth, int segmentsDepth) 
+	{
 		super();
 
-		float width_half = (float)width / 2f;
-		float depth_half = (float)depth / 2f;
+		double width_half = width / 2.0;
+		double depth_half = depth / 2.0;
 		int gridX = segmentsWidth;
 		int gridZ = segmentsDepth;
 		int gridX1 = gridX + 1;
 		int gridZ1 = gridZ + 1;
-		float segment_width = width / gridX;
-		float segment_depth = depth / gridZ;
+		double segment_width = width / gridX;
+		double segment_depth = depth / gridZ;
 
 		Vector3f normal = new Vector3f( 0, 1, 0 );
 
@@ -63,14 +65,11 @@ public final class Plane extends Geometry
 		{
 			for ( int ix = 0; ix < gridX1; ix ++ ) 
 			{
-
-				float x = (float)(ix * segment_width - width_half);
-				float z = (float)(iz * segment_depth - depth_half);
+				double x = ix * segment_width - width_half;
+				double z =  iz * segment_depth - depth_half;
 
 				getVertices().add( new Vector3f( x, 0, z ) );
-
 			}
-
 		}
 
 		for ( int iz = 0; iz < gridZ; iz ++ ) 
@@ -88,14 +87,12 @@ public final class Plane extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UVf( ix / (float)gridX,         iz / (float)gridZ ),
-					new UVf( ix / (float)gridX,         ( iz + 1 ) / (float)gridZ ),
-					new UVf( ( ix + 1 ) / (float)gridX, ( iz + 1 ) / (float)gridZ ),
-					new UVf( ( ix + 1 ) / (float)gridX, iz / (float)gridZ )
+					new UVf( ix / gridX * 1.0,                     iz / gridZ * 1.0 ),
+					new UVf( ix / gridX * 1.0,           ( iz + 1.0 ) / gridZ * 1.0 ),
+					new UVf( ( ix + 1.0 ) / gridX * 1.0, ( iz + 1.0 ) / gridZ * 1.0 ),
+					new UVf( ( ix + 1.0 ) / gridX * 1.0,           iz / gridZ * 1.0 )
 				) );
-
 			}
-
 		}
 
 		this.computeCentroids();

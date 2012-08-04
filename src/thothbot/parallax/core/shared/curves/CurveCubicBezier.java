@@ -41,19 +41,19 @@ public class CurveCubicBezier extends Curve
 		this.v3 = v3;
 	}
 
-	public Vector2f getPoint(float t)
+	public Vector2f getPoint(double t)
 	{
-		float tx = ShapeUtils.b3(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
-		float ty = ShapeUtils.b3(t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY());
+		double tx = ShapeUtils.b3(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
+		double ty = ShapeUtils.b3(t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY());
 
 		return new Vector2f(tx, ty);
 	}
 	
 	@Override
-	public Vector2f getTangent( float t ) 
+	public Vector2f getTangent( double t ) 
 	{
-		float tx = CurveUtils.tangentCubicBezier( t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX() );
-		float ty = CurveUtils.tangentCubicBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY() );
+		double tx = CurveUtils.tangentCubicBezier( t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX() );
+		double ty = CurveUtils.tangentCubicBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY() );
 
 		// returns unit vector
 		Vector2f tangent = new Vector2f( tx, ty );

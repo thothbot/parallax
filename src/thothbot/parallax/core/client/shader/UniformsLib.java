@@ -43,7 +43,7 @@ public class UniformsLib
 	public static final Map<String, Uniform> common = new HashMap<String, Uniform>() {
 		{
 			put("diffuse", new Uniform(Uniform.TYPE.C, new Color3f( 0xeeeeee )));
-			put("opacity", new Uniform(Uniform.TYPE.F,  1.0f ));
+			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
 			put("map", new Uniform(Uniform.TYPE.T,  0 ));
 			put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4f( 0, 0, 1, 1 ) ));
@@ -51,21 +51,21 @@ public class UniformsLib
 			put("lightMap", new Uniform(Uniform.TYPE.T,  2 ));
 			
 			put("envMap", new Uniform(Uniform.TYPE.T,  1 ));
-			put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0f ));
+			put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
 			put("useRefract", new Uniform(Uniform.TYPE.I,  1 ));
-			put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98f ));
+			put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98 ));
 			put("combine", new Uniform(Uniform.TYPE.I,  0 ));
 			
-			put("morphTargetInfluences", new Uniform(Uniform.TYPE.F,  0.0f ));
+			put("morphTargetInfluences", new Uniform(Uniform.TYPE.F,  0.0 ));
 		}
 	};
 	
 	public static final Map<String, Uniform> fog = new HashMap<String, Uniform>() {
 		{
-			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025f ));
-			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0f ));
+			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
+			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0 ));
 			put("fogColor", new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff )));
 		}
 	};
@@ -94,14 +94,14 @@ public class UniformsLib
 	public static final Map<String, Uniform> particle = new HashMap<String, Uniform>() {
 		{
 			put("psColor", new Uniform(Uniform.TYPE.C, new Color3f( 0xeeeeee )));
-			put("opacity", new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("size",    new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("scale",   new Uniform(Uniform.TYPE.F,  1.0f ));
+			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("map",     new Uniform(Uniform.TYPE.T,  0 ));
 			
-			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025f ));
-			put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0f ));
-			put("fogFar",     new Uniform(Uniform.TYPE.F,  2000.0f ));
+			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
+			put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("fogFar",     new Uniform(Uniform.TYPE.F,  2000.0 ));
 			put("fogColor",   new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff )));
 		}
 	};

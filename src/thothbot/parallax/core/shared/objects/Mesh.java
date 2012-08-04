@@ -56,7 +56,7 @@ public class Mesh  extends GeometryObject implements HasSides
 	private Boolean doubleSided;
 	private Boolean overdraw;
 	private Integer morphTargetBase = null;
-	private List<Float> morphTargetInfluences;
+	private List<Double> morphTargetInfluences;
 	private List<Integer> morphTargetForcedOrder;
 	private HashMap<String, Integer> morphTargetDictionary;
 	public Float32Array __webglMorphTargetInfluences;
@@ -97,13 +97,13 @@ public class Mesh  extends GeometryObject implements HasSides
 			{
 				this.morphTargetBase = -1;
 				this.morphTargetForcedOrder = new ArrayList<Integer>();
-				this.morphTargetInfluences = new ArrayList<Float>();
+				this.morphTargetInfluences = new ArrayList<Double>();
 				this.morphTargetDictionary = new HashMap<String, Integer>();
 
 				List<Geometry.MorphTarget> morphTargets = this.geometry.getMorphTargets();
 				for (int m = 0; m < morphTargets.size(); m++) 
 				{
-					this.morphTargetInfluences.add(0f);
+					this.morphTargetInfluences.add(0.0);
 					this.morphTargetDictionary.put(morphTargets.get(m).name, m);
 				}
 			}
@@ -157,7 +157,7 @@ public class Mesh  extends GeometryObject implements HasSides
 		return morphTargetBase;
 	}
 	
-	public List<Float> getMorphTargetInfluences() {
+	public List<Double> getMorphTargetInfluences() {
 		return this.morphTargetInfluences;
 	}
 	
@@ -1381,9 +1381,9 @@ public class Mesh  extends GeometryObject implements HasSides
 						 {
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-							 customAttribute.array.set(offset_custom, (Float)customAttribute.getValue().get(face.getA()));
-							 customAttribute.array.set(offset_custom + 1, (Float)customAttribute.getValue().get(face.getB()));
-							 customAttribute.array.set(offset_custom + 2, (Float)customAttribute.getValue().get(face.getC()));
+							 customAttribute.array.set(offset_custom, (Double)customAttribute.getValue().get(face.getA()));
+							 customAttribute.array.set(offset_custom + 1, (Double)customAttribute.getValue().get(face.getB()));
+							 customAttribute.array.set(offset_custom + 2, (Double)customAttribute.getValue().get(face.getC()));
 
 							 offset_custom += 3;
 						 }
@@ -1392,10 +1392,10 @@ public class Mesh  extends GeometryObject implements HasSides
 						 {
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-							 customAttribute.array.set(offset_custom, (Float)customAttribute.getValue().get(face.getA()));
-							 customAttribute.array.set(offset_custom + 1, (Float)customAttribute.getValue().get(face.getB()));
-							 customAttribute.array.set(offset_custom + 2, (Float)customAttribute.getValue().get(face.getC()));
-							 customAttribute.array.set(offset_custom + 3, (Float)customAttribute.getValue().get(face.getD()));
+							 customAttribute.array.set(offset_custom, (Double)customAttribute.getValue().get(face.getA()));
+							 customAttribute.array.set(offset_custom + 1, (Double)customAttribute.getValue().get(face.getB()));
+							 customAttribute.array.set(offset_custom + 2, (Double)customAttribute.getValue().get(face.getC()));
+							 customAttribute.array.set(offset_custom + 3, (Double)customAttribute.getValue().get(face.getD()));
 
 							 offset_custom += 4;
 						 }
@@ -1404,7 +1404,7 @@ public class Mesh  extends GeometryObject implements HasSides
 					 {
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 						 {
-							 float value = (Float) customAttribute.getValue().get(chunk_faces3.get(f));
+							 double value = (Double) customAttribute.getValue().get(chunk_faces3.get(f));
 
 							 customAttribute.array.set(offset_custom, value);
 							 customAttribute.array.set(offset_custom + 1, value);
@@ -1416,7 +1416,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
 						 {
-							 float value = (Float) customAttribute.getValue().get(chunk_faces4.get(f));
+							 double value = (Double) customAttribute.getValue().get(chunk_faces4.get(f));
 
 							 customAttribute.array.set(offset_custom, value);
 							 customAttribute.array.set(offset_custom + 1, value);

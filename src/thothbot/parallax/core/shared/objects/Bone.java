@@ -31,23 +31,26 @@ public class Bone extends Object3D
 	public Matrix4f skinMatrix;
 	public Matrix4f identityMatrix;
 
-	public Bone() {
+	public Bone() 
+	{
 		this.skinMatrix = new Matrix4f();
 	}
 
-	public Bone(int belongsToSkin) {
+	public Bone(int belongsToSkin) 
+	{
 		this();
 		this.skin = belongsToSkin;		
 	}
 
-	public void update( Matrix4f parentSkinMatrix, boolean forceUpdate ) {
-
+	public void update( Matrix4f parentSkinMatrix, boolean forceUpdate ) 
+	{
 		// update local
 		if ( this.matrixAutoUpdate )
 			this.updateMatrix();
 
 		// update skin matrix
-		if ( forceUpdate || this.matrixWorldNeedsUpdate ) {
+		if ( forceUpdate || this.matrixWorldNeedsUpdate ) 
+		{
 
 			if( parentSkinMatrix != null )
 				this.skinMatrix.multiply( parentSkinMatrix, this.matrix );
@@ -59,7 +62,8 @@ public class Bone extends Object3D
 		}
 
 		// update children 
-		for ( DimensionalObject children : this.getChildren()) {
+		for ( DimensionalObject children : this.getChildren()) 
+		{
 			Bone bone = (Bone) children;
 			bone.update( this.skinMatrix, forceUpdate );
 		}

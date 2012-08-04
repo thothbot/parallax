@@ -40,19 +40,19 @@ public class CurveQuadraticBezier extends Curve
 	}
 
 	@Override
-	public Vector2f getPoint(float t)
+	public Vector2f getPoint(double t)
 	{
-		float tx = ShapeUtils.b2( t, this.v0.getX(), this.v1.getX(), this.v2.getX() );
-		float ty = ShapeUtils.b2( t, this.v0.getY(), this.v1.getY(), this.v2.getY() );
+		double tx = ShapeUtils.b2( t, this.v0.getX(), this.v1.getX(), this.v2.getX() );
+		double ty = ShapeUtils.b2( t, this.v0.getY(), this.v1.getY(), this.v2.getY() );
 
 		return new Vector2f( tx, ty );
 	}
 
 	@Override
-	public Vector2f getTangent( float t ) 
+	public Vector2f getTangent( double t ) 
 	{
-		float tx = CurveUtils.tangentQuadraticBezier( t, this.v0.getX(), this.v1.getX(), this.v2.getX() );
-		float ty = CurveUtils.tangentQuadraticBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY() );
+		double tx = CurveUtils.tangentQuadraticBezier( t, this.v0.getX(), this.v1.getX(), this.v2.getX() );
+		double ty = CurveUtils.tangentQuadraticBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY() );
 
 		// returns unit vector
 		Vector2f tangent = new Vector2f( tx, ty );

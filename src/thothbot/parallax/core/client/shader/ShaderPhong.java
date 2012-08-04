@@ -69,7 +69,7 @@ public final class ShaderPhong extends Shader
 		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color3f( 0xffffff ) ));
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color3f( 0x000000 ) ));
 		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color3f( 0x111111 ) ));
-		this.addUniform("shininess", new Uniform(Uniform.TYPE.F, 30.0f ));
+		this.addUniform("shininess", new Uniform(Uniform.TYPE.F, 30.0 ));
 		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3f( 1, 1, 1 ) ));
 	}
 	

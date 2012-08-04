@@ -34,10 +34,10 @@ public class RenderPass extends Pass
 	private Material overrideMaterial;
 	
 	private Color3f clearColor;
-	private float clearAlpha;
+	private double clearAlpha;
 	
 	private Color3f oldClearColor;
-	private float oldClearAlpha;
+	private double oldClearAlpha;
 	
 	private boolean clear = true;
 	
@@ -48,10 +48,10 @@ public class RenderPass extends Pass
 
 	public RenderPass ( Scene scene, Camera camera, Material overrideMaterial, Color3f clearColor )
 	{
-		this(scene, camera, overrideMaterial, clearColor, 1.0f);
+		this(scene, camera, overrideMaterial, clearColor, 1.0);
 	}
 	
-	public RenderPass ( Scene scene, Camera camera, Material overrideMaterial, Color3f clearColor, float clearAlpha ) 
+	public RenderPass ( Scene scene, Camera camera, Material overrideMaterial, Color3f clearColor, double clearAlpha ) 
 	{
 		this.scene = scene;
 		this.camera = camera;
@@ -62,14 +62,14 @@ public class RenderPass extends Pass
 		this.clearAlpha = clearAlpha;
 
 		this.oldClearColor = new Color3f();
-		this.oldClearAlpha = 1.0f;
+		this.oldClearAlpha = 1.0;
 
 		this.setEnabled(true);
 		this.setNeedsSwap(false);
 	}
 
 	@Override
-	public void render(EffectComposer effectComposer, float delta, boolean maskActive)
+	public void render(EffectComposer effectComposer, double delta, boolean maskActive)
 	{
 		this.scene.overrideMaterial = this.overrideMaterial;
 

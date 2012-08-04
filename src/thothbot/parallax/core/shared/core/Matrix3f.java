@@ -82,24 +82,24 @@ public class Matrix3f
 		// ( based on http://code.google.com/p/webgl-mjs/ )
 		Float32Array me = m.getArray();
 
-		float a11 = me.get(10) * me.get(5) - me.get(6) * me.get(9);
-		float a21 = -me.get(10) * me.get(1) + me.get(2) * me.get(9);
-		float a31 = me.get(6) * me.get(1) - me.get(2) * me.get(5);
-		float a12 = -me.get(10) * me.get(4) + me.get(6) * me.get(8);
-		float a22 = me.get(10) * me.get(0) - me.get(2) * me.get(8);
-		float a32 = -me.get(6) * me.get(0) + me.get(2) * me.get(4);
-		float a13 = me.get(9) * me.get(4) - me.get(5) * me.get(8);
-		float a23 = -me.get(9) * me.get(0) + me.get(1) * me.get(8);
-		float a33 = me.get(5) * me.get(0) - me.get(1) * me.get(4);
+		double a11 = me.get(10) * me.get(5) - me.get(6) * me.get(9);
+		double a21 = -me.get(10) * me.get(1) + me.get(2) * me.get(9);
+		double a31 = me.get(6) * me.get(1) - me.get(2) * me.get(5);
+		double a12 = -me.get(10) * me.get(4) + me.get(6) * me.get(8);
+		double a22 = me.get(10) * me.get(0) - me.get(2) * me.get(8);
+		double a32 = -me.get(6) * me.get(0) + me.get(2) * me.get(4);
+		double a13 = me.get(9) * me.get(4) - me.get(5) * me.get(8);
+		double a23 = -me.get(9) * me.get(0) + me.get(1) * me.get(8);
+		double a33 = me.get(5) * me.get(0) - me.get(1) * me.get(4);
 
-		float det = me.get(0) * a11 + me.get(1) * a12 + me.get(2) * a13;
+		double det = me.get(0) * a11 + me.get(1) * a12 + me.get(2) * a13;
 
 		// no inverse
 
 		if (det == 0)
 			Log.error("Matrix3f.invert(): determinant == 0");
 
-		float idet = 1.0f / det;
+		double idet = 1.0 / det;
 
 		this.getArray().set(0, idet * a11);
 		this.getArray().set(1, idet * a21);
@@ -118,7 +118,7 @@ public class Matrix3f
 	 */
 	public void transpose()
 	{
-		float tmp;
+		double tmp;
 		Float32Array m = this.getArray();
 
 		tmp = m.get(1);

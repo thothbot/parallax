@@ -54,7 +54,7 @@ public interface Vector
 	 * 
 	 * @return the current vector
 	 */
-	public Vector add(float s);
+	public Vector add(double s);
 	
 	/**
 	 * Sets the value of this vector to the vector difference of itself and
@@ -108,7 +108,7 @@ public interface Vector
 	 * 
 	 * @return the current vector
 	 */
-	public Vector multiply(float s);
+	public Vector multiply(double s);
 		
 	/**
 	 * Sets the value of this vector to the vector division of itself and
@@ -130,7 +130,7 @@ public interface Vector
 	 * 
 	 * @return the current vector
 	 */
-	public Vector divide(float s);
+	public Vector divide(double s);
 	
 	/**
 	 * Sets the value of this vector to the vector division of v1 and
@@ -157,7 +157,7 @@ public interface Vector
 	 * 			second vector
 	 * @return a distance between two vectors
 	 */
-	public float distanceTo(Vector v1);
+	public double distanceTo(Vector v1);
 	
 	/**
 	 * get squared distance between two vectors.
@@ -166,7 +166,7 @@ public interface Vector
 	 * 			second vector
 	 * @return a squared distance between two vectors.
 	 */
-	public float distanceToSquared(Vector v);
+	public double distanceToSquared(Vector v);
 	
 	
 	public Vector normalize();

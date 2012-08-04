@@ -89,17 +89,17 @@ public class Path extends CurvePath
 			lineTo( vectors.get( v ).getX(), vectors.get( v ).getY() );
 	}
 	
-	public void moveTo( float x, float y ) 
+	public void moveTo( double x, double y ) 
 	{
 		this.actions.add( new Action(PATH_ACTIONS.MOVE_TO, x, y));
 	}
 	
-	public void lineTo( float x, float y ) 
+	public void lineTo( double x, double y ) 
 	{	
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 
-		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
-		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
+		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
+		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
 		CurveLine curve = new CurveLine( new Vector2f( x0, y0 ), new Vector2f( x, y ) );
 		add(curve);
@@ -107,12 +107,12 @@ public class Path extends CurvePath
 		this.actions.add( new Action( PATH_ACTIONS.LINE_TO, x, y ) );
 	}
 	
-	public void quadraticCurveTo(float aCPx, float aCPy, float aX, float aY ) 
+	public void quadraticCurveTo(double aCPx, double aCPy, double aX, double aY ) 
 	{		
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 				
-		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
-		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
+		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
+		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
 		CurveQuadraticBezier curve = new CurveQuadraticBezier( 
 				new Vector2f( x0, y0 ),
@@ -123,13 +123,13 @@ public class Path extends CurvePath
 		this.actions.add( new Action( PATH_ACTIONS.QUADRATIC_CURVE_TO, aCPx, aCPy, aX, aY ) );
 	}
 	
-	public void bezierCurveTo( float aCP1x, float aCP1y, float aCP2x, float aCP2y, float aX, float aY ) 
+	public void bezierCurveTo( double aCP1x, double aCP1y, double aCP2x, double aCP2y, double aX, double aY ) 
 	{
-	
+
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 
-		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
-		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
+		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
+		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
 		CurveCubicBezier curve = new CurveCubicBezier( new Vector2f( x0, y0 ),
 				new Vector2f( aCP1x, aCP1y ),
@@ -148,8 +148,8 @@ public class Path extends CurvePath
 	{	
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 
-		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
-		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
+		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
+		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 		
 		//---
 		List<Vector2f> npts = Arrays.asList( new Vector2f( x0, y0 ) );
@@ -165,11 +165,11 @@ public class Path extends CurvePath
 	 * FUTURE: Change the API or follow canvas API?
 	 * TODO ARC ( x, y, x - radius, y - radius, startAngle, endAngle )
 	 */
-	public void arc( float aX, float aY, float aRadius, float aStartAngle, float aEndAngle, boolean aClockwise ) 
+	public void arc( double aX, double aY, double aRadius, double aStartAngle, double aEndAngle, boolean aClockwise ) 
 	{
 		List<Object> laste = this.actions.get( this.actions.size() - 1 ).args;
 		
-		CurveArc curve = new CurveArc( (Float)laste.get(0) + aX, (Float)laste.get(1) + aY, aRadius,
+		CurveArc curve = new CurveArc( (Double)laste.get(0) + aX, (Double)laste.get(1) + aY, aRadius,
 				aStartAngle, aEndAngle, aClockwise );
 		add( curve );
 
@@ -180,7 +180,7 @@ public class Path extends CurvePath
 		this.actions.add( new Action(PATH_ACTIONS.ARC, aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise, lastPoint.getX(), lastPoint.getY() ) );
 	}
 
-	public void absarc( float aX, float aY, float aRadius, float aStartAngle, float aEndAngle, boolean aClockwise ) 
+	public void absarc( double aX, double aY, double aRadius, double aStartAngle, double aEndAngle, boolean aClockwise ) 
 	{		
 			CurveArc curve = new CurveArc( aX, aY, aRadius,
 					aStartAngle, aEndAngle, aClockwise );
@@ -232,7 +232,7 @@ public class Path extends CurvePath
 
 		List<Vector2f> points = new ArrayList<Vector2f>();
 
-		float cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0;
+		double cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0;
 		
 //		var i, il, item, action, args;
 //		var cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0,
@@ -251,21 +251,21 @@ public class Path extends CurvePath
 
 			case MOVE_TO:
 
-				points.add( new Vector2f( (Float)args.get( 0 ), (Float)args.get( 1 ) ) );
+				points.add( new Vector2f( (Double)args.get( 0 ), (Double)args.get( 1 ) ) );
 				break;
 
 			case LINE_TO:
 
-				points.add( new Vector2f( (Float)args.get( 0 ), (Float)args.get( 1 ) ) );
+				points.add( new Vector2f( (Double)args.get( 0 ), (Double)args.get( 1 ) ) );
 				break;
 
 			case QUADRATIC_CURVE_TO:
 
-				cpx  = (Float)args.get( 2 );
-				cpy  = (Float)args.get( 3 );
+				cpx  = (Double)args.get( 2 );
+				cpy  = (Double)args.get( 3 );
 
-				cpx1 = (Float)args.get( 0 );
-				cpy1 = (Float)args.get( 1 );
+				cpx1 = (Double)args.get( 0 );
+				cpy1 = (Double)args.get( 1 );
 
 				if ( points.size() > 0 ) 
 				{
@@ -279,17 +279,17 @@ public class Path extends CurvePath
 
 					List<Object> laste = this.actions.get( i - 1 ).args;
 
-					cpx0 = (Float) laste.get( laste.size() - 2 );
-					cpy0 = (Float) laste.get( laste.size() - 1 );
+					cpx0 = (Double) laste.get( laste.size() - 2 );
+					cpy0 = (Double) laste.get( laste.size() - 1 );
 
 				}
 
 				for ( int j = 1; j <= divisions; j ++ ) 
 				{
-					float t = (float)j / divisions;
+					double t = j / divisions * 1.0;
 
-					float tx = ShapeUtils.b2( t, cpx0, cpx1, cpx );
-					float ty = ShapeUtils.b2( t, cpy0, cpy1, cpy );
+					double tx = ShapeUtils.b2( t, cpx0, cpx1, cpx );
+					double ty = ShapeUtils.b2( t, cpy0, cpy1, cpy );
 
 					points.add( new Vector2f( tx, ty ) );
 
@@ -299,14 +299,14 @@ public class Path extends CurvePath
 
 			case BEZIER_CURVE_TO:
 
-				cpx  = (Float)args.get( 4 );
-				cpy  = (Float)args.get( 5 );
+				cpx  = (Double)args.get( 4 );
+				cpy  = (Double)args.get( 5 );
 
-				cpx1 = (Float)args.get( 0 );
-				cpy1 = (Float)args.get( 1 );
+				cpx1 = (Double)args.get( 0 );
+				cpy1 = (Double)args.get( 1 );
 
-				cpx2 = (Float)args.get( 2 );
-				cpy2 = (Float)args.get( 3 );
+				cpx2 = (Double)args.get( 2 );
+				cpy2 = (Double)args.get( 3 );
 
 				if ( points.size() > 0 ) 
 				{
@@ -320,17 +320,17 @@ public class Path extends CurvePath
 
 					List<Object> laste = this.actions.get( i - 1 ).args;
 
-					cpx0 = (Float) laste.get( laste.size() - 2 );
-					cpy0 = (Float) laste.get( laste.size() - 1 );
+					cpx0 = (Double) laste.get( laste.size() - 2 );
+					cpy0 = (Double) laste.get( laste.size() - 1 );
 				}
 
 
 				for ( int j = 1; j <= divisions; j ++ ) 
 				{
-					float t = (float)j / divisions;
+					double t = j / divisions * 1.0;
 
-					float tx = ShapeUtils.b3( t, cpx0, cpx1, cpx2, cpx );
-					float ty = ShapeUtils.b3( t, cpy0, cpy1, cpy2, cpy );
+					double tx = ShapeUtils.b3( t, cpx0, cpx1, cpx2, cpx );
+					double ty = ShapeUtils.b3( t, cpy0, cpy1, cpy2, cpy );
 
 					points.add( new Vector2f( tx, ty ) );
 				}
@@ -341,11 +341,11 @@ public class Path extends CurvePath
 
 				List<Object> laste = this.actions.get( i - 1 ).args;
 
-				Vector2f last = new Vector2f( (Float)laste.get( laste.size() - 2 ), (Float)laste.get( laste.size() - 1 ) );
+				Vector2f last = new Vector2f( (Double)laste.get( laste.size() - 2 ), (Double)laste.get( laste.size() - 1 ) );
 				List<Vector2f> spts = Arrays.asList(last);
 
 				Vector2f v = (Vector2f) args.get( 0 );
-				float n = divisions * v.length();
+				double n = divisions * v.length();
 
 				spts.add(v);
 
@@ -425,7 +425,7 @@ public class Path extends CurvePath
 	 * @param e climb
 	 * @param f Y-offset
 	 */
-//	public List<Vector2f> nltransform( float a, float b, float c, float d, float e, float f ) 
+//	public List<Vector2f> nltransform( double a, double b, double c, double d, double e, double f ) 
 //	{
 //		List<Vector2f> oldPts = this.getPoints();
 //
@@ -433,8 +433,8 @@ public class Path extends CurvePath
 //		{
 //			Vector2f p = oldPts.get(i);
 //
-//			float oldX = p.getX();
-//			float oldY = p.getY();
+//			double oldX = p.getX();
+//			double oldY = p.getY();
 //
 //			p.setX( a * oldX + b * oldY + c);
 //			p.setY( d * oldY + e * oldX + f);

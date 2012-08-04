@@ -52,6 +52,6 @@ public final class ShaderCubeMap extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tCube", new Uniform(Uniform.TYPE.T, 1 ));
-		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0f ));
+		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0 ));
 	}
 }

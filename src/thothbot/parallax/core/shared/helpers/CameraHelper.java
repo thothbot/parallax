@@ -136,8 +136,8 @@ public class CameraHelper extends Object3D
 	
 	public void update() 
 	{
-		float w = 1.0f;
-		float h = 1.0f;
+		double w = 1.0;
+		double h = 1.0;
 
 		// we need just camera projection matrix
 		// world matrix must be identity
@@ -202,7 +202,7 @@ public class CameraHelper extends Object3D
 		this.pointMap.get( id ).add( this.lineGeometry.getVertices().size() - 1 );
 	}
 	
-	private void setPoint( String point, float x, float y, float z ) 
+	private void setPoint( String point, double x, double y, double z ) 
 	{
 		CameraHelper.__v.set( x, y, z );
 		CameraHelper.__projector.unprojectVector( CameraHelper.__v, CameraHelper.__c );
@@ -216,8 +216,6 @@ public class CameraHelper extends Object3D
 				int j = points.get( i );
 				this.lineGeometry.getVertices().get( j ).copy( CameraHelper.__v );
 			}
-
 		}
-
 	}	
 }

@@ -33,7 +33,7 @@ import thothbot.parallax.core.shared.core.Vector3f;
  */
 public class FrenetFrames
 {
-	private static float epsilon = 0.0001f;
+	private static double epsilon = 0.0001f;
 
 	// expose internals
 	private List<Vector3f> tangents;
@@ -57,7 +57,7 @@ public class FrenetFrames
 		// compute the tangent vectors for each segment on the path
 		for ( int i = 0; i < numpoints; i++ ) 
 		{
-			float u = i / (float)( numpoints - 1.0f );
+			double u = i / ( numpoints - 1.0 );
 
 			Vector3f vec = (Vector3f) path.getTangentAt( u ); 
 			tangents.add(vec.normalize());
@@ -79,8 +79,8 @@ public class FrenetFrames
 			if ( vec.length() > epsilon ) 
 			{
 				vec.normalize();
-				float aCos =  tangents.get( i - 1 ).dot( tangents.get( i ) );
-				float theta = (float)Math.acos( aCos > 1 ? 1 : aCos );
+				double aCos =  tangents.get( i - 1 ).dot( tangents.get( i ) );
+				double theta = Math.acos( aCos > 1 ? 1.0 : aCos );
 			
 				mat.makeRotationAxis( vec, theta ).multiplyVector3( normals.get( i ) );
 			}
@@ -92,8 +92,8 @@ public class FrenetFrames
 		// if the curve is closed, postprocess the vectors so the first and last normal vectors are the same
 		if ( closed ) 
 		{
-			float theta = (float) Math.acos( normals.get( 0 ).dot( normals.get( numpoints - 1 ) ) );
-			theta /= (float)( numpoints - 1 );
+			double theta = Math.acos( normals.get( 0 ).dot( normals.get( numpoints - 1 ) ) );
+			theta /= ( numpoints - 1.0 );
 
 			if ( tangents.get( 0 ).dot( vec.cross( normals.get( 0 ), normals.get( numpoints - 1 ) ) ) > 0 )
 				theta = -theta;
@@ -158,11 +158,11 @@ public class FrenetFrames
 	{
 		normals.add( 0, new Vector3f());
 		binormals.add( 0, new Vector3f());
-		float smallest = Float.MAX_VALUE;
+		double smallest = Double.MAX_VALUE;
 
-		float tx = Math.abs( tangents.get( 0 ).getX() );
-		float ty = Math.abs( tangents.get( 0 ).getY() );
-		float tz = Math.abs( tangents.get( 0 ).getZ() );
+		double tx = Math.abs( tangents.get( 0 ).getX() );
+		double ty = Math.abs( tangents.get( 0 ).getY() );
+		double tz = Math.abs( tangents.get( 0 ).getZ() );
 
 		Vector3f normal = new Vector3f();
 		if ( tx <= smallest ) 

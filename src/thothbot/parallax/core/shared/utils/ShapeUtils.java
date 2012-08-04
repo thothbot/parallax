@@ -42,7 +42,7 @@ import thothbot.parallax.core.shared.core.Vector2f;
  */
 public class ShapeUtils
 {
-	public static float shortest = Float.POSITIVE_INFINITY;
+	public static double shortest = Double.POSITIVE_INFINITY;
 	
 	/**
 	 * Remove holes from the Shape
@@ -72,12 +72,12 @@ public class ShapeUtils
 			for ( int h2 = 0; h2 < hole.size(); h2 ++ ) 
 			{
 				Vector2f pts1 = hole.get( h2 );
-				List<Float> dist = new ArrayList<Float>();
+				List<Double> dist = new ArrayList<Double>();
 
 				for ( int p = 0; p < contour.size(); p++ ) 
 				{
 					Vector2f pts2 = contour.get( p );
-					float d = pts1.distanceToSquared( pts2 );
+					double d = pts1.distanceToSquared( pts2 );
 					dist.add( d );
 
 					if ( d < shortest ) 
@@ -286,27 +286,25 @@ Log.info("........" + shape + ", " + allpoints + ", " + isolatedPts);
 	 * Bezier Curves formulas obtained from
 	 * http://en.wikipedia.org/wiki/B%C3%A9zier_curve 
 	 */
-	public static float b2( float t, float p0, float p1, float p2 ) 
+	public static double b2( double t, double p0, double p1, double p2 ) 
 	{
 		return b2p0( t, p0 ) + b2p1( t, p1 ) + b2p2( t, p2 );
 	}
 
-	private static float b2p0( float t, float p ) 
+	private static double b2p0( double t, double p ) 
 	{
-
-		float k = 1.0f - t;
+		double k = 1.0 - t;
 		return k * k * p;
-
 	}
 
-	private static float b2p1( float t, float p ) 
+	private static double b2p1( double t, double p ) 
 	{
 
-		return 2.0f * ( 1.0f - t ) * t * p;
+		return 2.0 * ( 1.0 - t ) * t * p;
 
 	}
 
-	private static float b2p2( float t, float p  ) 
+	private static double b2p2( double t, double p  ) 
 	{
 		return t * t * p;
 	}
@@ -323,32 +321,30 @@ Log.info("........" + shape + ", " + allpoints + ", " + isolatedPts);
 	 * @param p3
 	 * 		X or Y coordinate of vector 4
 	 */
-	public static float  b3( float t, float p0, float p1, float p2, float p3 ) 
+	public static double  b3( double t, double p0, double p1, double p2, double p3 ) 
 	{
 		return b3p0( t, p0 ) + b3p1( t, p1 ) + b3p2( t, p2 ) +  b3p3( t, p3 );
 	}
 
-	private static float b3p0( float t, float p ) 
+	private static double b3p0( double t, double p ) 
 	{
-		float k = 1.0f - t;
+		double k = 1.0 - t;
 		return k * k * k * p;
 	}
 
-	private static float b3p1( float t, float p )
+	private static double b3p1( double t, double p )
 	{
-
-		float k = 1.0f - t;
-		return 3.0f * k * k * t * p;
-
+		double k = 1.0 - t;
+		return 3.0 * k * k * t * p;
 	}
 
-	private static Float b3p2( float t, float p ) 
+	private static double b3p2( double t, double p ) 
 	{
-		float k = 1.0f - t;
-		return 3.0f * k * t * t * p;
+		double k = 1.0 - t;
+		return 3.0 * k * t * t * p;
 	}
 
-	private static float b3p3( float t, float p ) 
+	private static double b3p3( double t, double p ) 
 	{
 		return t * t * t * p;
 	}

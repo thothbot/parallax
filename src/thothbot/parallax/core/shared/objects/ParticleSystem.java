@@ -221,7 +221,7 @@ public class ParticleSystem extends GeometryObject
 						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 						{
 							int index = sortArray.get( ca ).get( 1 );
-							customAttribute.array.set(ca, (Float) customAttribute.getValue().get(index));
+							customAttribute.array.set(ca, (Double) customAttribute.getValue().get(index));
 						}
 					} 
 					else if ( customAttribute.size == 2 ) 
@@ -334,7 +334,7 @@ public class ParticleSystem extends GeometryObject
 						if ( customAttribute.size == 1 ) 
 						{
 							for (int ca = 0; ca < customAttribute.getValue().size(); ca++)
-								customAttribute.array.set(ca, (Float) customAttribute.getValue().get(ca));
+								customAttribute.array.set(ca, (Double) customAttribute.getValue().get(ca));
 
 						} 
 						else if ( customAttribute.size == 2 ) 

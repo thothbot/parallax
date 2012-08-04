@@ -92,16 +92,16 @@ public class EffectComposer
 		Canvas3d canvas = renderer.getCanvas();
 
 		this.camera = new OrthographicCamera( 
-			canvas.getWidth() / -2f, canvas.getWidth() / 2f, 
-			canvas.getHeight() / 2f, canvas.getHeight() / -2f, 
-			-10000f, 10000f
+			canvas.getWidth() / -2.0, canvas.getWidth() / 2.0, 
+			canvas.getHeight() / 2.0, canvas.getHeight() / -2.0, 
+			-10000, 10000
 		);
 		
 		this.geometry = new Plane( 1, 1 );
 		this.quad = new Mesh( geometry, null );
 		this.scene = new Scene();
 		
-		geometry.applyMatrix( new Matrix4f().makeRotationX( (float) (Math.PI / 2.0) ) );
+		geometry.applyMatrix( new Matrix4f().makeRotationX( Math.PI / 2.0) );
 		
 		quad.getPosition().setZ(-100);
 		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
@@ -114,16 +114,16 @@ public class EffectComposer
 	{
 		Canvas3d canvas = renderer.getCanvas();
 
-		float oldWidth = this.renderTarget1.getWidth();
-		float oldHeight = this.renderTarget1.getHeight();
+		double oldWidth = this.renderTarget1.getWidth();
+		double oldHeight = this.renderTarget1.getHeight();
 		
 		if(oldWidth == canvas.getWidth() && oldHeight == canvas.getWidth())
 			return;
 		
-		this.camera.setLeft(canvas.getWidth() / -2f);
-		this.camera.setRight(canvas.getWidth() / 2f);
-		this.camera.setTop(canvas.getHeight() / 2f);
-		this.camera.setBottom(canvas.getHeight() / -2f); 
+		this.camera.setLeft(canvas.getWidth() / -2.0);
+		this.camera.setRight(canvas.getWidth() / 2.0);
+		this.camera.setTop(canvas.getHeight() / 2.0);
+		this.camera.setBottom(canvas.getHeight() / -2.0); 
 		this.camera.updateProjectionMatrix();
 		
 		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
@@ -173,7 +173,7 @@ public class EffectComposer
 		render(0);
 	}
 
-	public void render( float delta ) 
+	public void render( double delta ) 
 	{
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
@@ -233,10 +233,10 @@ public class EffectComposer
 		Canvas3d canvas = this.renderer.getCanvas();
 		this.quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
 
-		this.camera.setLeft(canvas.getWidth() / -2f);
-		this.camera.setRight(canvas.getWidth() / 2f);
-		this.camera.setTop(canvas.getHeight() / 2f);
-		this.camera.setBottom(canvas.getHeight() / -2f);
+		this.camera.setLeft(canvas.getWidth() / -2.0);
+		this.camera.setRight(canvas.getWidth() / 2.0);
+		this.camera.setTop(canvas.getHeight() / 2.0);
+		this.camera.setBottom(canvas.getHeight() / -2.0);
 
 		this.camera.updateProjectionMatrix();
 	}

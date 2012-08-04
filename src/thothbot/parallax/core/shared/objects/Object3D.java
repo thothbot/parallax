@@ -83,13 +83,13 @@ public class Object3D implements DimensionalObject
 	
 	protected boolean visible;
 
-	protected float boundRadius;
+	protected double boundRadius;
 
-	protected float boundRadiusScale;
+	protected double boundRadiusScale;
 
 	public boolean hasPos;
 	public boolean hasNormal;
-	public float renderDepth;
+	public double renderDepth;
 	public Matrix4f identityMatrix;
 	public boolean isCastShadow = false;
 	public boolean isReceiveShadow = false;
@@ -340,25 +340,25 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public float getBoundRadius()
+	public double getBoundRadius()
 	{
 		return this.boundRadius;
 	}
 
 	@Override
-	public void setBoundRadius(float boundRadius)
+	public void setBoundRadius(double boundRadius)
 	{
 		this.boundRadius = boundRadius;
 	}
 
 	@Override
-	public float getBoundRadiusScale()
+	public double getBoundRadiusScale()
 	{
 		return this.boundRadiusScale;
 	}
 
 	@Override
-	public void setBoundRadiusScale(float scale)
+	public void setBoundRadiusScale(double scale)
 	{
 		this.boundRadiusScale = scale;
 	}
@@ -376,7 +376,7 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public void translate(float distance, Vector3f axis)
+	public void translate(double distance, Vector3f axis)
 	{
 		this.matrix.rotateAxis(axis);
 		axis.multiply(distance);
@@ -384,23 +384,23 @@ public class Object3D implements DimensionalObject
 	}
 	
 	@Override
-	public void translateX(float distance)
+	public void translateX(double distance)
 	{
-		this.vector.set(1,0,0);
+		this.vector.set(1, 0, 0);
 		this.translate(distance, this.vector);
 	}
 	
 	@Override
-	public void translateY(float distance)
+	public void translateY(double distance)
 	{
 		this.vector.set(0, 1, 0);
 		this.translate(distance, this.vector);
 	}
 	
 	@Override
-	public void translateZ(float distance)
+	public void translateZ(double distance)
 	{
-		this.vector.set(0,0,1);
+		this.vector.set(0, 0, 1);
 		this.translate(distance, this.vector);
 	}
 	
@@ -475,17 +475,21 @@ public class Object3D implements DimensionalObject
 	@Override
 	public DimensionalObject getChildByName(String name, boolean recursive)
 	{
-		for (int c = 0, cl = this.children.size(); c < cl; c++) {
+		for (int c = 0, cl = this.children.size(); c < cl; c++) 
+		{
 
 			DimensionalObject child = this.children.get(c);
 
-			if (child.getName().equals(name)) {
+			if (child.getName().equals(name)) 
+			{
 				return child;
 			}
 
-			if (recursive) {
+			if (recursive) 
+			{
 				child = child.getChildByName(name, recursive);
-				if (child != null) {
+				if (child != null) 
+				{
 					return child;
 				}
 

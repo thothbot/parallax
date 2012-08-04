@@ -161,7 +161,7 @@ public class MorphAnimation
 		
 		delta = 8;
 
-		float frameTime = (float)this.duration / this.length;
+		double frameTime = 1.0 * this.duration / this.length;
 
 		this.time += this.direction * delta;
 
@@ -199,22 +199,22 @@ public class MorphAnimation
 
 		if ( keyframe != this.currentKeyframe ) 
 		{
-			mesh.getMorphTargetInfluences().set( this.lastKeyframe, 0f);
-			mesh.getMorphTargetInfluences().set( this.currentKeyframe, 1f);
+			mesh.getMorphTargetInfluences().set( this.lastKeyframe, 0.0);
+			mesh.getMorphTargetInfluences().set( this.currentKeyframe, 1.0);
 
-			mesh.getMorphTargetInfluences().set( keyframe, 0f );
+			mesh.getMorphTargetInfluences().set( keyframe, 0.0 );
 
 			this.lastKeyframe = this.currentKeyframe;
 			this.currentKeyframe = keyframe;
 		}
 
-		float mix = ( this.time % frameTime ) / frameTime;
+		double mix = ( this.time % frameTime ) / frameTime;
 		
 		if ( this.directionBackwards )
 			mix = 1 - mix;
 
 		mesh.getMorphTargetInfluences().set( this.currentKeyframe, mix);
-		mesh.getMorphTargetInfluences().set( this.lastKeyframe, 1f - mix);
+		mesh.getMorphTargetInfluences().set( this.lastKeyframe, 1.0 - mix);
 	}
 	
 	private void setFrameRange(int start, int end ) 

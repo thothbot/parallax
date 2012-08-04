@@ -36,7 +36,7 @@ public class Uniform
 {
 	public static enum TYPE {
 		I,  // single integer
-		F,  // single float
+		F,  // single double
 		V2, // single Vector2f
 		V3, // single Vector3f
 		V4, // single Vector4f

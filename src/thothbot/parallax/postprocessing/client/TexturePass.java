@@ -39,10 +39,10 @@ public class TexturePass extends Pass
 	
 	public TexturePass ( Texture texture )
 	{
-		this(texture, 1.0f);
+		this(texture, 1.0);
 	}
 	
-	public TexturePass ( Texture texture, float opacity ) 
+	public TexturePass ( Texture texture, double opacity ) 
 	{
 		Shader shader = new ShaderScreen();
 
@@ -61,7 +61,7 @@ public class TexturePass extends Pass
 	}
 
 	@Override
-	public void render(EffectComposer effectComposer, float delta, boolean maskActive)
+	public void render(EffectComposer effectComposer, double delta, boolean maskActive)
 	{
 		effectComposer.getQuad().setMaterial(this.material);
 

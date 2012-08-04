@@ -153,8 +153,8 @@ public class SkinnedMesh extends Mesh
 		
 		List<Matrix4f> boneInverses = null;
 
-		for (int b = 0; b < this.bones.size(); b ++ ) {
-
+		for (int b = 0; b < this.bones.size(); b ++ ) 
+		{
 			Bone bone = this.bones.get(b);
 
 			Matrix4f inverseMatrix = new Matrix4f();
@@ -190,8 +190,8 @@ public class SkinnedMesh extends Mesh
 
 				if ( this.geometry.getSkinWeights().get( i ).getX() + this.geometry.getSkinWeights().get( i ).getY() != 1 ) 
 				{
-					float len = ( 1.0f - ( this.geometry.getSkinWeights().get( i ).getX() 
-							+ this.geometry.getSkinWeights().get( i ).getY() ) ) * 0.5f;
+					double len = ( 1.0 - ( this.geometry.getSkinWeights().get( i ).getX() 
+							+ this.geometry.getSkinWeights().get( i ).getY() ) ) * 0.5;
 					this.geometry.getSkinWeights().get( i ).setX(this.geometry.getSkinWeights().get( i ).getX() + len);
 					this.geometry.getSkinWeights().get( i ).setY(this.geometry.getSkinWeights().get( i ).getY() + len);
 				}

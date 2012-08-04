@@ -52,10 +52,10 @@ public class Tetrahedron extends Polyhedron
 		return faces;
 	}
 
-	private static Float[][] getDefaultVertices()
+	private static Double[][] getDefaultVertices()
 	{
-		Float[][] vertices = {
-			{ 1f,  1f,  1f }, { -1f, -1f, 1f }, { -1f, 1f, -1f }, { 1f, -1f, -1f }
+		Double[][] vertices = {
+			{ 1.0,  1.0,  1.0 }, { -1.0, -1.0, 1.0 }, { -1.0, 1.0, -1.0 }, { 1.0, -1.0, -1.0 }
 		};
 		
 		return vertices;

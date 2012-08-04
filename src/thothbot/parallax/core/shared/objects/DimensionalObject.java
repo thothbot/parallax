@@ -31,7 +31,8 @@ import thothbot.parallax.core.shared.core.Vector3f;
  * 
  * @author thothbot
  */
-public interface DimensionalObject {
+public interface DimensionalObject 
+{
 	/**
 	 * Get object ID.
 	 * 
@@ -120,9 +121,9 @@ public interface DimensionalObject {
 	 */
 	public void setVisible(boolean visible);
 
-	public float getBoundRadius();
+	public double getBoundRadius();
 
-	public float getBoundRadiusScale();
+	public double getBoundRadiusScale();
 
 	public Matrix4f getMatrix();
 
@@ -142,9 +143,9 @@ public interface DimensionalObject {
 
 	public void lookAt(Vector3f vector);
 
-	public void setBoundRadius(float boundRadius);
+	public void setBoundRadius(double boundRadius);
 
-	public void setBoundRadiusScale(float scale);
+	public void setBoundRadiusScale(double scale);
 
 	public void setChildren(Collection<? extends DimensionalObject> children);
 
@@ -178,28 +179,28 @@ public interface DimensionalObject {
 	 * @param distance the moving distance
 	 * @param axis     the axis
 	 */
-	public void translate(float distance, Vector3f axis);
+	public void translate(double distance, Vector3f axis);
 
 	/**
 	 * Move object on X-axis by defined distance.
 	 * 
 	 * @param distance the moving distance
 	 */
-	public void translateX(float distance);
+	public void translateX(double distance);
 
 	/**
 	 * Move object on Y-axis by defined distance.
 	 * 
 	 * @param distance the moving distance
 	 */
-	public void translateY(float distance);
+	public void translateY(double distance);
 
 	/**
 	 * Move object on Z-axis by defined distance.
 	 * 
 	 * @param distance the moving distance
 	 */
-	public void translateZ(float distance);
+	public void translateZ(double distance);
 
 	/**
 	 * Do update of the object's matrix

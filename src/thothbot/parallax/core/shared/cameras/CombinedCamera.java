@@ -37,17 +37,17 @@ package thothbot.parallax.core.shared.cameras;
 public class CombinedCamera extends Camera
 {
 
-	public float fov;
+	public double fov;
 
-	public float left;
-	public float right;
-	public float top;
-	public float bottom;
+	public double left;
+	public double right;
+	public double top;
+	public double bottom;
 
-	public float near;
-	public float far;
+	public double near;
+	public double far;
 
-	public float zoom = 1f;
+	public double zoom = 1.0;
 
 	private OrthographicCamera cameraO;
 	private PerspectiveCamera cameraP;
@@ -55,18 +55,19 @@ public class CombinedCamera extends Camera
 	public boolean inPersepectiveMode = true;
 	public boolean inOrthographicMode = false;
 
-	public CombinedCamera(int width, int height, float fov, float near, float far, float orthonear,
-			float orthofar) {
+	public CombinedCamera(int width, int height, double fov, double near, double far, double orthonear,
+			double orthofar) 
+	{
 		this.fov = fov;
 
-		this.left = -width / 2f;
-		this.right = width / 2f;
-		this.top = height / 2f;
-		this.bottom = -height / 2f;
+		this.left = -width / 2.0;
+		this.right = width / 2.0;
+		this.top = height / 2.0;
+		this.bottom = -height / 2.0;
 
 		// We could also handle the projectionMatrix internally, but just wanted
 		// to test nested camera objects
-		this.cameraO = new OrthographicCamera(width / -2, width / 2, height / 2, height / -2,
+		this.cameraO = new OrthographicCamera(width / -2.0, width / 2.0, height / 2.0, height / -2.0,
 				orthonear, orthofar);
 		this.cameraP = new PerspectiveCamera(fov, width / height, near, far);
 
@@ -93,17 +94,17 @@ public class CombinedCamera extends Camera
 	 */
 	public void toOrthographic()
 	{
-		float aspect = this.cameraP.getAspectRation();
-		float near = this.cameraP.near;
-		float far = this.cameraP.far;
+		double aspect = this.cameraP.getAspectRation();
+		double near = this.cameraP.near;
+		double far = this.cameraP.far;
 
 		// The size that we set is the mid plane of the viewing frustum
-		float hyperfocus = (near + far) / 2;
+		double hyperfocus = (near + far) / 2.0;
 
-		float halfHeight = (float) (Math.tan(this.fov / 2) * hyperfocus);
-		float planeHeight = 2 * halfHeight;
-		float planeWidth = planeHeight * aspect;
-		float halfWidth = planeWidth / 2;
+		double halfHeight = Math.tan(this.fov / 2.0) * hyperfocus;
+		double planeHeight = 2.0 * halfHeight;
+		double planeWidth = planeHeight * aspect;
+		double halfWidth = planeWidth / 2.0;
 
 		halfHeight /= this.zoom;
 		halfWidth /= this.zoom;
@@ -135,20 +136,23 @@ public class CombinedCamera extends Camera
 
 	public void setSize(int width, int height)
 	{
-		this.cameraP.setAspectRatio((float)width / height);
-		this.left = -width / 2f;
-		this.right = width / 2f;
-		this.top = height / 2f;
-		this.bottom = -height / 2f;
+		this.cameraP.setAspectRatio(width / height * 1.0);
+		this.left = -width / 2.0;
+		this.right = width / 2.0;
+		this.top = height / 2.0;
+		this.bottom = -height / 2.0;
 	}
 
-	public void setFov(float fov)
+	public void setFov(double fov)
 	{
 		this.fov = fov;
 
-		if (this.inPersepectiveMode) {
+		if (this.inPersepectiveMode) 
+		{
 			this.toPerspective();
-		} else {
+		} 
+		else 
+		{
 			this.toOrthographic();
 		}
 	}
@@ -158,9 +162,12 @@ public class CombinedCamera extends Camera
 	 */
 	public void updateProjectionMatrix()
 	{
-		if (this.inPersepectiveMode) {
+		if (this.inPersepectiveMode) 
+		{
 			this.toPerspective();
-		} else {
+		} 
+		else 
+		{
 			this.toPerspective();
 			this.toOrthographic();
 		}
@@ -178,19 +185,22 @@ public class CombinedCamera extends Camera
 
 	public void setLens(int focalLength, int frameHeight)
 	{
-		float fov = (float) (2f * Math.atan(frameHeight / (focalLength * 2f)) * (180f / Math.PI));
+		double fov = 2.0 * Math.atan(frameHeight / (focalLength * 2.0)) * (180.0 / Math.PI);
 
 		this.setFov(fov);
 	};
 
-	public void setZoom(float zoom)
+	public void setZoom(double zoom)
 	{
 
 		this.zoom = zoom;
 
-		if (this.inPersepectiveMode) {
+		if (this.inPersepectiveMode) 
+		{
 			this.toPerspective();
-		} else {
+		} 
+		else 
+		{
 			this.toOrthographic();
 		}
 	}
@@ -203,34 +213,34 @@ public class CombinedCamera extends Camera
 
 	public void toBackView() {
 		this.rotation.setX(0);
-		this.rotation.setY((float) Math.PI);
+		this.rotation.setY(Math.PI);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;
 	}
 		
 	public void toLeftView() {
 		this.rotation.setX(0);
-		this.rotation.setY((float) (- Math.PI / 2.0));
+		this.rotation.setY(- Math.PI / 2.0);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;
 	}
 
 	public void toRightView() {
 		this.rotation.setX(0);
-		this.rotation.setY((float) (Math.PI / 2.0));
+		this.rotation.setY(Math.PI / 2.0);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;
 	}
 
 	public void toTopView() {
-		this.rotation.setX((float) (- Math.PI / 2.0));
+		this.rotation.setX(- Math.PI / 2.0);
 		this.rotation.setY(0);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;
 	}
 
 	public void toBottomView() {
-		this.rotation.setX((float) (Math.PI / 2.0));
+		this.rotation.setX(Math.PI / 2.0);
 		this.rotation.setY(0);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;

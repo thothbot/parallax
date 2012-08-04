@@ -61,14 +61,14 @@ public final class Float32Array extends TypeArray {
 	 * 
 	 * @param array
 	 */
-	public static Float32Array create(float... array) {
+	public static Float32Array create(double... array) {
 		if (GWT.isScript()) {
 			return createCompiled(array);
 		}
 		return create(JsArrayUtil.toJsArrayNumber(array));
 	}
 	
-	private static native Float32Array createCompiled(float[] array) /*-{
+	private static native Float32Array createCompiled(double[] array) /*-{
 		return new $wnd.Float32Array(array);
 	}-*/;
 	
@@ -144,7 +144,7 @@ public final class Float32Array extends TypeArray {
 	 * 
 	 * @param index
 	 */
-  public native float get(int index) /*-{
+  public native double get(int index) /*-{
   	return this[index];
   }-*/;
   
@@ -154,7 +154,7 @@ public final class Float32Array extends TypeArray {
    * @param index
    * @param value
    */
-  public native void set(int index, float value) /*-{
+  public native void set(int index, double value) /*-{
   	 this[index] = value;
   }-*/;
   

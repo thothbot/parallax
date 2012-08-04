@@ -36,7 +36,7 @@ public class Vector3f extends Vector2f implements Vector
 	/**
 	 * The Z-coordinate
 	 */
-	protected float z;
+	protected double z;
 
 	/**
 	 * This default constructor will initialize vector (0, 0, 0); 
@@ -54,7 +54,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector3f(float x, float y, float z) 
+	public Vector3f(double x, double y, double z) 
 	{
 		super(x, y);
 		this.z = z;
@@ -65,7 +65,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * 
 	 * @return a Z coordinate
 	 */
-	public float getZ()
+	public double getZ()
 	{
 		return this.z;
 	}
@@ -76,7 +76,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * 
 	 * @param z the Y coordinate
 	 */
-	public void addZ(float z)
+	public void addZ(double z)
 	{
 		this.z += z;
 	}
@@ -86,7 +86,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * 
 	 * @param z the Z coordinate
 	 */
-	public void setZ(float z)
+	public void setZ(double z)
 	{
 		this.z = z;
 	}
@@ -111,7 +111,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector3f set(float x, float y, float z)
+	public Vector3f set(double x, double y, double z)
 	{
 		this.x = x;
 		this.y = y;
@@ -124,7 +124,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * 
 	 * @param a the X, Y and Z coordinate
 	 */
-	public Vector3f set(float a)
+	public Vector3f set(double a)
 	{
 		this.x = a;
 		this.y = a;
@@ -148,7 +148,7 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	@Override
-	public Vector3f add(float s)
+	public Vector3f add(double s)
 	{
 		this.addX(s);
 		this.addY(s);
@@ -187,7 +187,7 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	@Override
-	public Vector3f multiply(float s)
+	public Vector3f multiply(double s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -211,7 +211,7 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	@Override
-	public Vector3f divide(float s)
+	public Vector3f divide(double s)
 	{
 		if (s != 0) 
 		{
@@ -240,7 +240,7 @@ public class Vector3f extends Vector2f implements Vector
 	 *            the other vector
 	 * @return the dot product of this vector and v1
 	 */
-	public float dot(Vector3f v1)
+	public double dot(Vector3f v1)
 	{
 		return (this.x * v1.x + this.y * v1.y + this.z * v1.z);
 	}
@@ -250,7 +250,7 @@ public class Vector3f extends Vector2f implements Vector
 	 * 
 	 * @return the squared length of this vector
 	 */
-	public float lengthSq()
+	public double lengthSq()
 	{
 		return dot(this);
 	}
@@ -260,14 +260,14 @@ public class Vector3f extends Vector2f implements Vector
 	 * 
 	 * @return the length of this vector
 	 */
-	public float length()
+	public double length()
 	{
-		return (float) Math.sqrt(lengthSq());
+		return Math.sqrt(lengthSq());
 	}
 
-	public float lengthManhattan()
+	public double lengthManhattan()
 	{
-		return (float) (Math.abs(this.x) + Math.abs(this.y) + Math.abs(this.z));
+		return Math.abs(this.x) + Math.abs(this.y) + Math.abs(this.z);
 	}
 
 	/**
@@ -276,10 +276,10 @@ public class Vector3f extends Vector2f implements Vector
 	@Override
 	public Vector3f normalize()
 	{
-		float len = this.length();
+		double len = this.length();
 		if (len > 0)
 		{
-			this.multiply(1.0f / len);
+			this.multiply(1.0 / len);
 		} 
 		else 
 		{
@@ -291,13 +291,13 @@ public class Vector3f extends Vector2f implements Vector
 		return this;
 	}
 
-	public Vector3f setLength(float l)
+	public Vector3f setLength(double l)
 	{
 		normalize();
 		return multiply(l);
 	}
 
-	public void lerp(Vector3f v1, float alpha)
+	public void lerp(Vector3f v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
@@ -326,18 +326,18 @@ public class Vector3f extends Vector2f implements Vector
 	}
 
 	@Override
-	public float distanceToSquared(Vector v1)
+	public double distanceToSquared(Vector v1)
 	{
-		float dx = this.getX() - ((Vector3f)v1).getX();
-		float dy = this.getY() - ((Vector3f)v1).getY();
-		float dz = this.getZ() - ((Vector3f)v1).getZ();
+		double dx = this.getX() - ((Vector3f)v1).getX();
+		double dy = this.getY() - ((Vector3f)v1).getY();
+		double dz = this.getZ() - ((Vector3f)v1).getZ();
 		return (dx * dx + dy * dy + dz * dz);
 	}
 
 	@Override
-	public float distanceTo(Vector v1)
+	public double distanceTo(Vector v1)
 	{
-		return (float) Math.sqrt(distanceToSquared(v1));
+		return Math.sqrt(distanceToSquared(v1));
 	}
 
 	public void getPositionFromMatrix(Matrix4f m)
@@ -354,29 +354,31 @@ public class Vector3f extends Vector2f implements Vector
 
 	public Vector3f getRotationFromMatrix(Matrix4f m, Vector3f scale)
 	{
-		float sx = scale.x;
-		float sy = scale.y;
-		float sz = scale.z;
+		double sx = scale.x;
+		double sy = scale.y;
+		double sz = scale.z;
 
-		float m11 = m.getArray().get(0) / sx, m12 = m.getArray().get(4) / sy, m13 = m.getArray().get(8)
-				/ sz;
-		float m21 = m.getArray().get(1) / sx, m22 = m.getArray().get(5) / sy, m23 = m.getArray().get(9)
-				/ sz;
-		float m33 = m.getArray().get(10) / sz;
+		double m11 = m.getArray().get(0) / sx, 
+				m12 = m.getArray().get(4) / sy,
+				m13 = m.getArray().get(8) / sz;
+		double m21 = m.getArray().get(1) / sx, 
+				m22 = m.getArray().get(5) / sy, 
+				m23 = m.getArray().get(9) / sz;
+		double m33 = m.getArray().get(10) / sz;
 
-		this.y = (float) Math.asin(m13);
+		this.y = Math.asin(m13);
 
-		float cosY = (float) Math.cos(this.y);
+		double cosY = Math.cos(this.y);
 
-		if (Math.abs(cosY) > 0.00001) {
-
-			this.x = (float) Math.atan2(-m23 / cosY, m33 / cosY);
-			this.z = (float) Math.atan2(-m12 / cosY, m11 / cosY);
-
-		} else {
-
-			this.x = 0f;
-			this.z = (float) Math.atan2(m21, m22);
+		if (Math.abs(cosY) > 0.00001) 
+		{
+			this.x = Math.atan2(-m23 / cosY, m33 / cosY);
+			this.z = Math.atan2(-m12 / cosY, m11 / cosY);
+		} 
+		else 
+		{
+			this.x = 0.0;
+			this.z = Math.atan2(m21, m22);
 		}
 
 		return this;
@@ -386,13 +388,13 @@ public class Vector3f extends Vector2f implements Vector
 	{
 		Vector3f tmp = new Vector3f();
 		tmp.set(m.getArray().get(0), m.getArray().get(1), m.getArray().get(2));
-		float sx = tmp.length();
+		double sx = tmp.length();
 
 		tmp.set(m.getArray().get(4), m.getArray().get(5), m.getArray().get(6));
-		float sy = tmp.length();
+		double sy = tmp.length();
 
 		tmp.set(m.getArray().get(8), m.getArray().get(9), m.getArray().get(10));
-		float sz = tmp.length();
+		double sz = tmp.length();
 
 		this.x = sx;
 		this.y = sy;

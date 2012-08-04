@@ -51,11 +51,11 @@ public class Parametric extends Geometry
 		
 		for ( int i = 0; i <= stacks; i ++ ) 
 		{
-			float v = (float)i / stacks;
+			double v = i / stacks * 1.0;
 
 			for ( int j = 0; j <= slices; j ++ ) 
 			{
-				float u = (float)j / slices;
+				double u = j / slices * 1.0;
 
 				Vector3f p = function.run( u, v );
 				this.getVertices().add( p );
@@ -72,10 +72,10 @@ public class Parametric extends Geometry
 				int c = (i + 1) * sliceCount + j;
 				int d = (i + 1) * sliceCount + j + 1;
 
-				UVf uva = new UVf( i / (float)slices,            j / (float) stacks );
-				UVf uvb = new UVf( i / (float)slices,            ( j + 1.0f ) /(float) stacks );
-				UVf uvc = new UVf( ( i + 1.0f ) / (float)slices, j / (float) stacks );
-				UVf uvd = new UVf( ( i + 1.0f ) / (float)slices, ( j + 1.0f ) / (float)stacks );
+				UVf uva = new UVf( i / slices * 1.0,                      j / stacks * 1.0 );
+				UVf uvb = new UVf( i / slices * 1.0,            ( j + 1.0 ) / stacks * 1.0 );
+				UVf uvc = new UVf( ( i + 1.0 ) / slices * 1.0,            j / stacks * 1.0 );
+				UVf uvd = new UVf( ( i + 1.0 ) / slices * 1.0,  ( j + 1.0 ) / stacks * 1.0 );
 
 				if ( useTris ) 
 				{
@@ -85,15 +85,13 @@ public class Parametric extends Geometry
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc ) );
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvb, uvd, uvc ) );
 
-				} else {
-
+				} 
+				else 
+				{
 					this.getFaces().add( new Face4( a, b, d, c ) );
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
-
 				}
-
 			}
-			
 		}
 		
 		this.computeCentroids();

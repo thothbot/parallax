@@ -51,25 +51,25 @@ public final class LensFlare extends Object3D
 		// size in pixels (-1 = use texture.width)
 		public int size;
 		// distance (0-1) from light source (0=at light source)
-		public float distance;
+		public double distance;
 
 		// blending
 		public Material.BLENDING blending;
 		// screen position (-1 => 1) z = 0 is ontop z = 1 is back
-		public float x, y, z;
+		public double x, y, z;
 		// scale
-		public float scale;
+		public double scale;
 		// rotation
-		public float rotation;
+		public double rotation;
 		// opacity
-		public float opacity;
+		public double opacity;
 		// color
 		public Color3f color;
 		
-		private float wantedRotation;
+		private double wantedRotation;
 
-		public LensSprite(Texture texture, Integer size, Float distance, float x,
-				float y, float z, float scale, float rotation, float opacity, Color3f color, Material.BLENDING blending
+		public LensSprite(Texture texture, Integer size, double distance, double x,
+				double y, double z, double scale, double rotation, double opacity, Color3f color, Material.BLENDING blending
 		) {
 			this.texture = texture;
 			this.size = size;
@@ -89,7 +89,7 @@ public final class LensFlare extends Object3D
 	private List<LensSprite> lensFlares;
 	private Callback updateCallback;
 
-	public LensFlare(Texture texture, Integer size, Float distance, Material.BLENDING blending, Color3f color) 
+	public LensFlare(Texture texture, Integer size, double distance, Material.BLENDING blending, Color3f color) 
 	{
 		this.positionScreen = new Vector3f();
 		this.lensFlares = new ArrayList<LensFlare.LensSprite>();
@@ -98,8 +98,8 @@ public final class LensFlare extends Object3D
 			
 			@Override
 			public void update() {
-				float vecX = -LensFlare.this.positionScreen.getX() * 2f;
-				float vecY = -LensFlare.this.positionScreen.getY() * 2f;
+				double vecX = -LensFlare.this.positionScreen.getX() * 2.0;
+				double vecY = -LensFlare.this.positionScreen.getY() * 2.0;
 
 				for( int f = 0; f < LensFlare.this.lensFlares.size(); f ++ ) 
 				{
@@ -108,8 +108,8 @@ public final class LensFlare extends Object3D
 					flare.x = LensFlare.this.positionScreen.getX() + vecX * flare.distance;
 					flare.y = LensFlare.this.positionScreen.getY() + vecY * flare.distance;
 
-					flare.wantedRotation = (float) (flare.x * Math.PI * 0.25);
-					flare.rotation += ( flare.wantedRotation - flare.rotation ) * 0.25f;
+					flare.wantedRotation = flare.x * Math.PI * 0.25;
+					flare.rotation += ( flare.wantedRotation - flare.rotation ) * 0.25;
 				}
 			}
 		});
@@ -118,18 +118,18 @@ public final class LensFlare extends Object3D
 			this.add(texture, size, distance, blending, color, null);
 	}
 
-	public void add(Texture texture, Integer size, Float distance, Material.BLENDING blending)
+	public void add(Texture texture, Integer size, Double distance, Material.BLENDING blending)
 	{
 		add(texture, size, distance, blending, null, null);
 	}
 	
-	public void add(Texture texture, Integer size, Float distance, Material.BLENDING blending, Color3f color, Float opacity)
+	public void add(Texture texture, Integer size, Double distance, Material.BLENDING blending, Color3f color, Double opacity)
 	{
 		Log.debug("LensFlare: add new LensSprite");
 
 		if( size == null ) size = -1;
-		if( distance == null ) distance = 0f;
-		if( opacity == null ) opacity = 1f;
+		if( distance == null ) distance = 0.0;
+		if( opacity == null ) opacity = 1.0;
 		if( color == null ) color = new Color3f( 0xffffff );
 		if( blending == null ) blending = Material.BLENDING.NORMAL;
 
@@ -140,8 +140,8 @@ public final class LensFlare extends Object3D
 				size,
 				distance,
 				0, 0, 0, // XYZ
-				1f, // Scale
-				1f, // Rotation
+				1.0, // Scale
+				1.0, // Rotation
 				opacity,
 				color,
 				blending

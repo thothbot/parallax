@@ -28,9 +28,9 @@ package thothbot.parallax.core.shared.core;
  */
 public class BoundingSphere
 {
-	public float radius;
+	public double radius;
 
-	public BoundingSphere(float radius)
+	public BoundingSphere(double radius)
 	{
 		this.radius = radius;
 	}

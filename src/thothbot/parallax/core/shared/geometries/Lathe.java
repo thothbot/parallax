@@ -42,10 +42,10 @@ public final class Lathe extends Geometry
 	
 	public Lathe ( List<Vector3f> points, int steps)
 	{
-		this(points, steps, (float) (2f * Math.PI));
+		this(points, steps, 2.0 * Math.PI);
 	}
 
-	public Lathe ( List<Vector3f> points, int steps, float angle ) 
+	public Lathe ( List<Vector3f> points, int steps, double angle ) 
 	{
 		super();
 
@@ -78,13 +78,13 @@ public final class Lathe extends Geometry
 
 				getFaces().add( new Face4( a, b, c, d ) );
 
-				float stepsf = (float)steps / 1.0f;
+				double stepsf = steps / 1.0;
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 
-					new UVf( (1.0f - i / stepsf),          ((float)k / kl ) ),
-					new UVf( (1.0f - ( i + 1.0f ) / stepsf), ((float)k / kl ) ),
-					new UVf( (1.0f - ( i + 1.0f ) / stepsf), ((float)( k + 1.0f ) / kl ) ),
-					new UVf( (1.0f - i / stepsf),          ((float)( k + 1.0f ) / kl ) )
+					new UVf( (1.0 - i / stepsf),          k / kl * 1.0  ),
+					new UVf( (1.0 - ( i + 1.0 ) / stepsf), k / kl * 1.0  ),
+					new UVf( (1.0 - ( i + 1.0 ) / stepsf), ( k + 1.0 ) / kl * 1.0 ),
+					new UVf( (1.0 - i / stepsf),          ( k + 1.0 ) / kl * 1.0 )
 					
 				) );
 			}

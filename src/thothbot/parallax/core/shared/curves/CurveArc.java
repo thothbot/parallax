@@ -27,17 +27,17 @@ import thothbot.parallax.core.shared.core.Vector2f;
 public class CurveArc extends Curve
 {
 	
-	public float aX;
-	public float aY;
+	public double aX;
+	public double aY;
 
-	public float aRadius;
+	public double aRadius;
 
-	public float aStartAngle;
-	public float aEndAngle;
+	public double aStartAngle;
+	public double aEndAngle;
 
 	public boolean aClockwise;
 
-	public CurveArc(float aX, float aY, float aRadius, float aStartAngle, float aEndAngle,
+	public CurveArc(double aX, double aY, double aRadius, double aStartAngle, double aEndAngle,
 			boolean aClockwise) 
 	{
 		this.aX = aX;
@@ -49,17 +49,17 @@ public class CurveArc extends Curve
 	}
 
 	@Override
-	public Vector2f getPoint(float t)
+	public Vector2f getPoint(double t)
 	{
-		float deltaAngle = this.aEndAngle - this.aStartAngle;
+		double deltaAngle = this.aEndAngle - this.aStartAngle;
 
 		if ( !this.aClockwise )
 			t = 1 - t;
 		
-		float angle = this.aStartAngle + t * deltaAngle;
+		double angle = this.aStartAngle + t * deltaAngle;
 
-		float tx = (float) (this.aX + this.aRadius * Math.cos( angle ));
-		float ty = (float) (this.aY + this.aRadius * Math.sin( angle ));
+		double tx = this.aX + this.aRadius * Math.cos( angle );
+		double ty = this.aY + this.aRadius * Math.sin( angle );
 
 		return new Vector2f( tx, ty );
 	}

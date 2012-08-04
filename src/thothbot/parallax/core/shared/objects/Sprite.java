@@ -48,8 +48,8 @@ public class Sprite extends Object3D
 		BOTTOM_CENTER(0, 1),
 		BOTTOM_RIGHT(-1, 1);
 
-		float x, y;
-		ALIGNMENT(float x, float y) {
+		double x, y;
+		ALIGNMENT(double x, double y) {
 			this.x = x;
 			this.y = y;
 		}
@@ -78,11 +78,11 @@ public class Sprite extends Object3D
 	private Vector2f uvOffset;
 	private Vector2f uvScale;
 	
-	private float opacity = 1.0f;
+	private double opacity = 1.0;
 	
-	private float rotationFactor;
+	private double rotationFactor;
 	
-	private float z;
+	private double z;
 	
 	public Sprite() 
 	{
@@ -172,19 +172,19 @@ public class Sprite extends Object3D
 		this.uvScale = uvScale;
 	}
 
-	public float getOpacity() {
+	public double getOpacity() {
 		return opacity;
 	}
 
-	public void setOpacity(float opacity) {
+	public void setOpacity(double opacity) {
 		this.opacity = opacity;
 	}
 
-	public float getRotationFactor() {
+	public double getRotationFactor() {
 		return rotationFactor;
 	}
 
-	public void setRotationFactor(float rotation) {
+	public void setRotationFactor(double rotation) {
 		this.rotationFactor = rotation;
 	}
 	
@@ -220,15 +220,13 @@ public class Sprite extends Object3D
 		this.scaleByViewport = scaleByViewport;
 	}
 
-	public float getZ() {
+	public double getZ() {
 		return z;
 	}
 
-	public void setZ(float z) {
+	public void setZ(double z) {
 		this.z = z;
 	}
-
-
 
 	/*
 	 * Custom update matrix
@@ -237,7 +235,7 @@ public class Sprite extends Object3D
 	{
 		this.matrix.setPosition( this.position );
 
-		this.rotation3d.set( 0f, 0f, this.rotationFactor );
+		this.rotation3d.set( 0, 0, this.rotationFactor );
 		this.matrix.setRotationFromEuler( this.rotation3d );
 
 		if ( this.scale.getX() != 1 || this.scale.getY() != 1 ) 

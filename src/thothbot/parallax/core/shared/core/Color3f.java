@@ -41,17 +41,17 @@ public final class Color3f
 	/**
 	 * The R-component of the color.
 	 */
-	private float r;
+	private double r;
 
 	/**
 	 * The G-component of the color.
 	 */
-	private float g;
+	private double g;
 
 	/**
 	 * The B-component of the color.
 	 */
-	private float b;
+	private double b;
 
 	/**
 	 * This default constructor will create color where R=1.0, G=1.0, B=1.0
@@ -79,7 +79,7 @@ public final class Color3f
 	 * 
 	 * @return a value in range <0.0, 1.0> 
 	 */
-	public float getR()
+	public double getR()
 	{
 		return r;
 	}
@@ -89,7 +89,7 @@ public final class Color3f
 	 * 
 	 * @return a value in range <0.0, 1.0> 
 	 */
-	public float getG()
+	public double getG()
 	{
 		return g;
 	}
@@ -99,7 +99,7 @@ public final class Color3f
 	 * 
 	 * @return a value in range <0.0, 1.0> 
 	 */
-	public float getB()
+	public double getB()
 	{
 		return b;
 	}
@@ -109,7 +109,7 @@ public final class Color3f
 	 * 
 	 * @param r the value in range <0.0, 1.0> 
 	 */
-	public void setR(float r)
+	public void setR(double r)
 	{
 		this.r = r;
 	}
@@ -119,7 +119,7 @@ public final class Color3f
 	 * 
 	 * @param g the value in range <0.0, 1.0> 
 	 */
-	public void setG(float g)
+	public void setG(double g)
 	{
 		this.g = g;
 	}
@@ -129,7 +129,7 @@ public final class Color3f
 	 * 
 	 * @param b the value in range <0.0, 1.0> 
 	 */
-	public void setB(float b)
+	public void setB(double b)
 	{
 		this.b = b;
 	}
@@ -167,7 +167,7 @@ public final class Color3f
 	 * 
 	 * @return a current color
 	 */
-	public Color3f setRGB(float r, float g, float b)
+	public Color3f setRGB(double r, double g, double b)
 	{
 		this.setR(r);
 		this.setG(g);
@@ -189,9 +189,9 @@ public final class Color3f
 	 * 
 	 * @return a current color
 	 */
-	public Color3f setHSV(float h, float s, float v)
+	public Color3f setHSV(double h, double s, double v)
 	{
-		float r = 0, g = 0, b = 0, f, p, q, t;
+		double r = 0, g = 0, b = 0, f, p, q, t;
 
 		if (v == 0.0) 
 		{
@@ -258,9 +258,9 @@ public final class Color3f
 	public Color3f copyLinearToGamma(Color3f color)
 	{
 
-		this.setR((int) Math.sqrt(color.getR()));
-		this.setG((int) Math.sqrt(color.getG()));
-		this.setB((int) Math.sqrt(color.getB()));
+		this.setR(Math.sqrt(color.getR()));
+		this.setG(Math.sqrt(color.getG()));
+		this.setB(Math.sqrt(color.getB()));
 		return this;
 	}
 
@@ -285,9 +285,9 @@ public final class Color3f
 	 */
 	public Color3f convertLinearToGamma()
 	{
-		this.setR((int) Math.sqrt(this.getR()));
-		this.setG((int) Math.sqrt(this.getG()));
-		this.setB((int) Math.sqrt(this.getB()));
+		this.setR(Math.sqrt(this.getR()));
+		this.setG(Math.sqrt(this.getG()));
+		this.setB(Math.sqrt(this.getB()));
 
 		return this;
 	}
@@ -298,11 +298,11 @@ public final class Color3f
 	 * @param color the input color
 	 * @param alpha the alpha value in range <0.0, 1.0>
 	 */
-	public void lerp(Color3f color, float alpha)
+	public void lerp(Color3f color, double alpha)
 	{
-		this.setR((int) (this.getR() + (color.getR() - this.getR()) * alpha));
-		this.setG((int) (this.getG() + (color.getG() - this.getG()) * alpha));
-		this.setB((int) (this.getB() + (color.getB() - this.getB()) * alpha));
+		this.setR(this.getR() + (color.getR() - this.getR()) * alpha);
+		this.setG(this.getG() + (color.getG() - this.getG()) * alpha);
+		this.setB(this.getB() + (color.getB() - this.getB()) * alpha);
 	}
 
 	/**
@@ -340,8 +340,8 @@ public final class Color3f
 	 */
 	private void updateRGB()
 	{
-		this.setR(((float)(this.hex >> 16 & 255) / 255));
-		this.setG(((float)(this.hex >> 8 & 255) / 255));
-		this.setB(((float)(this.hex & 255) / 255));
+		this.setR((this.hex >> 16 & 255) / 255.0);
+		this.setG((this.hex >> 8 & 255) / 255.0);
+		this.setB((this.hex & 255) / 255.0);
 	}
 }

@@ -41,7 +41,7 @@ public class CurvePath extends Curve
 	private List<Curve> curves;
 	private List<CurvePath> bends;
 	
-	private List<Float> cacheLengths;
+	private List<Double> cacheLengths;
 	
 	// Automatically closes the path
 	public boolean autoClose = false; 
@@ -100,10 +100,10 @@ public class CurvePath extends Curve
 	 * 4. Return curve.getPointAt(t')
 	 */
 	@Override
-	public Vector2f getPoint(float t)
+	public Vector2f getPoint(double t)
 	{
-		float d = t * this.getLength();
-		List<Float> curveLengths = this.getCurveLengths();
+		double d = t * this.getLength();
+		List<Double> curveLengths = this.getCurveLengths();
 		int i = 0;
 
 		// To think about boundaries points.
@@ -112,10 +112,10 @@ public class CurvePath extends Curve
 		{
 			if ( curveLengths.get( i ) >= d ) 
 			{
-				float diff = curveLengths.get( i ) - d;
+				double diff = curveLengths.get( i ) - d;
 				Curve curve = getCurves().get( i );
 
-				float u = 1.0f - diff / curve.getLength();
+				double u = 1.0 - diff / curve.getLength();
 
 				return (Vector2f) curve.getPointAt( u );
 			}
@@ -133,9 +133,9 @@ public class CurvePath extends Curve
 	 * Curve, getLength() depends on getPoint() but in THREE.CurvePath
 	 * getPoint() depends on getLength
 	 */
-	public float getLength() 
+	public double getLength() 
 	{
-		List<Float> lens = this.getCurveLengths();
+		List<Double> lens = this.getCurveLengths();
 		return lens.get( lens.size() - 1 );
 	}
 
@@ -143,7 +143,7 @@ public class CurvePath extends Curve
 	 * Compute lengths and cache them
 	 * We cannot overwrite getLengths() because UtoT mapping uses it.
 	 */
-	public List<Float> getCurveLengths() 
+	public List<Double> getCurveLengths() 
 	{
 		// We use cache values if curves and cache array are same length
 		if ( this.cacheLengths != null && this.cacheLengths.size() == this.curves.size() )
@@ -151,8 +151,8 @@ public class CurvePath extends Curve
 
 		// Get length of subsurve
 		// Push sums into cached array
-		this.cacheLengths = new ArrayList<Float>();
-		float sums = 0f;
+		this.cacheLengths = new ArrayList<Double>();
+		double sums = 0.0;
 		for ( int i = 0; i < this.curves.size(); i ++ ) 
 		{
 			sums += this.curves.get( i ).getLength();
@@ -169,11 +169,11 @@ public class CurvePath extends Curve
 	{
 		List<Vector2f> points = (ArrayList)this.getPoints();
 
-		float maxX, maxY;
-		float minX, minY;
+		double maxX, maxY;
+		double minX, minY;
 
-		maxX = maxY = Float.NEGATIVE_INFINITY;
-		minX = minY = Float.POSITIVE_INFINITY;
+		maxX = maxY = Double.NEGATIVE_INFINITY;
+		minX = minY = Double.POSITIVE_INFINITY;
 
 		Vector2f sum = new Vector2f();
 		int il = points.size();
@@ -258,10 +258,10 @@ public class CurvePath extends Curve
 		{
 			Vector2f p = oldPts.get( i );
 
-			float oldX = p.getX();
-			float oldY = p.getY();
+			double oldX = p.getX();
+			double oldY = p.getY();
 
-			float xNorm = oldX / bounds.max.getX();
+			double xNorm = oldX / bounds.max.getX();
 
 			// If using actual distance, for length > path, requires line extrusions
 			//xNorm = path.getUtoTmapping(xNorm, oldX); // 3 styles. 1) wrap stretched. 2) wrap stretch by arc length 3) warp by actual distance

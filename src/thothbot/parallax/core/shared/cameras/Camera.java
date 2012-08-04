@@ -23,7 +23,6 @@
 package thothbot.parallax.core.shared.cameras;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Matrix4f;
 import thothbot.parallax.core.shared.core.Vector3f;
 import thothbot.parallax.core.shared.objects.Object3D;

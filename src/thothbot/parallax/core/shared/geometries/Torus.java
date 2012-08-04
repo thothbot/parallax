@@ -43,17 +43,18 @@ import thothbot.parallax.core.shared.core.Vector3f;
  */
 public final class Torus extends Geometry
 {
-
-	public Torus() {
+	
+	public Torus() 
+	{
 		this(100, 40, 8, 6);
 	}
 	
 	public Torus(int radius, int tube, int segmentsR, int segmentsT) 
 	{
-		this(radius, tube, segmentsR, segmentsT, (float) Math.PI * 2.0f);
+		this(radius, tube, segmentsR, segmentsT, Math.PI * 2.0);
 	}
 	
-	public Torus(int radius, int tube, int segmentsR, int segmentsT, float arc) 
+	public Torus(int radius, int tube, int segmentsR, int segmentsT, double arc) 
 	{
 		super();
 		
@@ -61,34 +62,33 @@ public final class Torus extends Geometry
 		List<UVf> uvs = new ArrayList<UVf>();
 		List<Vector3f> normals = new ArrayList<Vector3f>();
 		
-		for ( int j = 0; j <= segmentsR; j ++ ) {
+		for ( int j = 0; j <= segmentsR; j ++ ) 
+		{
+			for ( int i = 0; i <= segmentsT; i ++ ) 
+			{
+				double u = i / segmentsT * arc;
+				double v = j / segmentsR * Math.PI * 2.0;
 
-			for ( int i = 0; i <= segmentsT; i ++ ) {
-
-				float u = (float) i / segmentsT * arc;
-				float v = (float) ((float) j / segmentsR * Math.PI * 2.0f);
-
-				center.setX((float)(radius * Math.cos( u )));
-				center.setY((float)(radius * Math.sin( u )));
+				center.setX(radius * Math.cos( u ));
+				center.setY(radius * Math.sin( u ));
 
 				Vector3f vertex = new Vector3f();
-				vertex.setX((float) (( radius + tube * Math.cos( v ) ) * Math.cos( u )));
-				vertex.setY((float) (( radius + tube * Math.cos( v ) ) * Math.sin( u )));
-				vertex.setZ((float) (tube * Math.sin( v )));
+				vertex.setX(( radius + tube * Math.cos( v ) ) * Math.cos( u ));
+				vertex.setY(( radius + tube * Math.cos( v ) ) * Math.sin( u ));
+				vertex.setZ(tube * Math.sin( v ));
 
 				getVertices().add( vertex );
 
-				uvs.add( new UVf( (float)i / segmentsT, 1.0f - (float)j / segmentsR ) );
+				uvs.add( new UVf( i / segmentsT * 1.0, 1.0 - j / segmentsR * 1.8 ) );
 				normals.add( vertex.clone().sub( center ).normalize() );
 
 			}
 		}
 
-
-		for ( int j = 1; j <= segmentsR; j ++ ) {
-
-			for ( int i = 1; i <= segmentsT; i ++ ) {
-
+		for ( int j = 1; j <= segmentsR; j ++ ) 
+		{
+			for ( int i = 1; i <= segmentsT; i ++ ) 
+			{
 				int a = ( segmentsT + 1 ) * j + i - 1;
 				int b = ( segmentsT + 1 ) * ( j - 1 ) + i - 1;
 				int c = ( segmentsT + 1 ) * ( j - 1 ) + i;

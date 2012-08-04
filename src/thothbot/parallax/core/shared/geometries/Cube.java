@@ -62,20 +62,20 @@ public final class Cube extends Geometry
 	
 	public Cube() 
 	{
-		this(100f, 100f, 100f, 1, 1, 1);
+		this(100, 100, 100, 1, 1, 1);
 	}
 
-	public Cube( float width, float height, float depth) 
+	public Cube( double width, double height, double depth) 
 	{
 		this(width, height, depth, 1, 1, 1);
 	}
 	
-	public Cube( float width, float height, float depth, int segmentsWidth, int segmentsHeight, int segmentsDepth)
+	public Cube( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth)
 	{
 		this(width, height, depth, segmentsWidth, segmentsHeight, segmentsDepth, null, null);
 	}
 
-	public Cube( float width, float height, float depth, int segmentsWidth, int segmentsHeight, int segmentsDepth, 
+	public Cube( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth, 
 			List<Material> materials, Sides sides) 
 	{
 		super();
@@ -84,9 +84,9 @@ public final class Cube extends Geometry
 		this.segmentsHeight = segmentsHeight;
 		this.segmentsDepth = segmentsDepth;
 
-		float width_half = width / 2.0f;
-		float height_half = height / 2.0f;
-		float depth_half = depth / 2.0f;
+		double width_half = width / 2.0;
+		double height_half = height / 2.0;
+		double depth_half = depth / 2.0;
 
 		int mpx = 0;
 		int mpy = 0;
@@ -125,12 +125,12 @@ public final class Cube extends Geometry
 		this.mergeVertices();
 	}
 	
-	private void buildPlane( String u, String v, int udir, int vdir, float width, float height, float depth, int material ) 
+	private void buildPlane( String u, String v, int udir, int vdir, double width, double height, double depth, int material ) 
 	{
 		int gridX = this.segmentsWidth;
 		int gridY = this.segmentsHeight;
-		float width_half = width / 2.0f;
-		float height_half = height / 2.0f;
+		double width_half = width / 2.0;
+		double height_half = height / 2.0;
 		
 		int offset = getVertices().size();
 
@@ -154,8 +154,8 @@ public final class Cube extends Geometry
 
 		int gridX1 = gridX + 1;
 		int gridY1 = gridY + 1;
-		float segment_width = width / (float)gridX;
-		float segment_height = height / (float)gridY;
+		double segment_width = width / gridX * 1.0;
+		double segment_height = height / gridY * 1.0;
 		Vector3f normal = new Vector3f();
 
 		int normalValue = (depth > 0) ? 1 : - 1;
@@ -172,7 +172,7 @@ public final class Cube extends Geometry
 			{
 				Vector3f vector = new Vector3f();
 				
-				float u1 = ((float)( ix * segment_width - width_half ) * udir);
+				double u1 = ( ix * segment_width - width_half ) * udir * 1.0;
 				if(u.equals("x"))
 					vector.setX(u1);
 				else if(u.equals("y"))
@@ -180,7 +180,7 @@ public final class Cube extends Geometry
 				else if(u.equals("z"))
 					vector.setZ(u1);
 
-				float v1 = ((float)( iy * segment_height - height_half ) * vdir);
+				double v1 = ( iy * segment_height - height_half ) * vdir * 1.0;
 				if(v.equals("x"))
 					vector.setX(v1);
 				else if(v.equals("y"))
@@ -215,10 +215,10 @@ public final class Cube extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UVf( ((float)ix / gridX), ((float)iy / gridY) ),
-					new UVf( ((float)ix / gridX), ((float)( iy + 1 ) / gridY) ),
-					new UVf( ((float)( ix + 1 ) / gridX), ((float)( iy + 1 ) / gridY) ),
-					new UVf( ((float)( ix + 1 ) / gridX), ((float)iy / gridY) )
+					new UVf( ix / gridX * 1.0,                 iy / gridY * 1.0 ),
+					new UVf( ix / gridX * 1.0,         ( iy + 1 ) / gridY * 1.0 ),
+					new UVf( ( ix + 1 ) / gridX * 1.0, ( iy + 1 ) / gridY * 1.0 ),
+					new UVf( ( ix + 1 ) / gridX * 1.0,         iy / gridY * 1.0 )
 				) );
 			}
 		}

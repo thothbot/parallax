@@ -43,16 +43,16 @@ public class CurveSplineClosed3D extends Curve
 	}
 
 	@Override
-	public Vector3f getPoint(float t)
+	public Vector3f getPoint(double t)
 	{
 		Vector3f v = new Vector3f();
 		
 		 // This needs to be from 0-length +1
-		float point = ( points.size() - 0 ) * t;
+		double point = ( points.size() - 0.0 ) * t;
 		int intPoint = (int) Math.floor( point );
 		
-		float weight = point - intPoint;
-		intPoint += intPoint > 0 ? 0 : ( Math.floor( Math.abs( intPoint ) / points.size() ) + 1 ) * points.size();
+		double weight = point - intPoint;
+		intPoint += intPoint > 0 ? 0 : ( Math.floor( Math.abs( intPoint ) / points.size() ) + 1.0 ) * points.size();
 		
 		int c0 = ( intPoint - 1 ) % points.size();
 		int c1 = ( intPoint ) % points.size();

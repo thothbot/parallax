@@ -54,7 +54,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	private int clearColor = 0x000000;
 
 	// Sets the background alpha value for the {@link Canvas3d}. Default: opaque (1.0).
-	private float clearAlpha = 1.0f;
+	private double clearAlpha = 1.0;
 	
 	private Canvas3dAttributes canvas3dAttributes;
 	
@@ -132,7 +132,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		setBackground(color, this.clearAlpha);
 	}
 	
-	public void setBackground(int color, float alpha)
+	public void setBackground(int color, double alpha)
 	{
 		this.clearColor = color;
 		this.clearAlpha = alpha;

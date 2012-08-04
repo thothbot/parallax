@@ -41,9 +41,9 @@ public class ColorUtils
 	 */
 	public static class HSV 
 	{
-		float hue;
-		float saturation;
-		float value;
+		double hue;
+		double saturation;
+		double value;
 		
 		public HSV() 
 		{
@@ -61,7 +61,7 @@ public class ColorUtils
 	 * @param s the saturation
 	 * @param v the value
 	 */
-	public static void adjustHSV(Color3f color, float h, float s, float v ) 
+	public static void adjustHSV(Color3f color, double h, double s, double v ) 
 	{
 		ColorUtils.HSV hsv = ColorUtils.rgbToHsv(color);
 		
@@ -84,16 +84,16 @@ public class ColorUtils
 	 */
 	public static ColorUtils.HSV rgbToHsv(Color3f color) 
 	{
-		float r = color.getR();
-		float g = color.getG();
-		float b = color.getB();
+		double r = color.getR();
+		double g = color.getG();
+		double b = color.getB();
 
-		float max = Math.max( Math.max( r, g ), b );
-		float min = Math.min( Math.min( r, g ), b );
+		double max = Math.max( Math.max( r, g ), b );
+		double min = Math.min( Math.min( r, g ), b );
 
-		float hue;
-		float saturation;
-		float value = max;
+		double hue;
+		double saturation;
+		double value = max;
 
 		if ( min == max )	
 		{
@@ -103,7 +103,7 @@ public class ColorUtils
 		} 
 		else 
 		{
-			float delta = ( max - min );
+			double delta = ( max - min );
 			saturation = delta / max;
 
 			if ( r == max )

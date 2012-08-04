@@ -34,9 +34,10 @@ public class WebGLObject implements Comparable<WebGLObject>
 	public Material opaque;
 	public Material transparent;
 	// render depth
-	public float z;
+	public double z;
 
-	public WebGLObject(GeometryBuffer buffer, GeometryObject object, Material opaque, Material transparent) {
+	public WebGLObject(GeometryBuffer buffer, GeometryObject object, Material opaque, Material transparent) 
+	{
 		this.buffer = buffer;
 		this.object = object;
 		this.opaque = opaque;

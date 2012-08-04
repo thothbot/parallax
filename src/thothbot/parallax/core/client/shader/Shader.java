@@ -166,10 +166,10 @@ public abstract class Shader
 
 		Float32Array values = Float32Array.create(kernelSize);
 
-		float sum = 0.0f;
+		double sum = 0.0;
 		for ( int i = 0; i < kernelSize; ++i ) 
 		{
-			float result = (float) Mathematics.gauss( i - halfWidth, sigma ); 
+			double result = Mathematics.gauss( i - halfWidth, sigma ); 
 			values.set(i, result);
 			sum += result;
 		}

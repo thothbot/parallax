@@ -212,12 +212,16 @@ public class Line extends GeometryObject
 
 					int offset = 0;
 
-					if (customAttribute.size == 1) {
+					if (customAttribute.size == 1) 
+					{
 						for (int ca = 0; ca < customAttribute.getValue().size(); ca++)
-							customAttribute.array.set(ca, (Float) customAttribute.getValue().get(ca));
+							customAttribute.array.set(ca, (Double)customAttribute.getValue().get(ca));
 
-					} else if (customAttribute.size == 2) {
-						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) {
+					}
+					else if (customAttribute.size == 2) 
+					{
+						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
+						{
 
 							Vector2f value = (Vector2f) customAttribute.getValue().get(ca);
 
@@ -227,11 +231,13 @@ public class Line extends GeometryObject
 							offset += 2;
 						}
 
-					} else if (customAttribute.size == 3) {
-
-						if (customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-
-							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) {
+					} 
+					else if (customAttribute.size == 3) 
+					{
+						if (customAttribute.type == WebGLCustomAttribute.TYPE.C) 
+						{
+							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
+							{
 
 								Color3f value = (Color3f) customAttribute.getValue().get(ca);
 
@@ -242,9 +248,11 @@ public class Line extends GeometryObject
 								offset += 3;
 							}
 
-						} else {
-
-							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) {
+						} 
+						else 
+						{
+							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
+							{
 								Vector3f value = (Vector3f) customAttribute.getValue().get(ca);
 
 								customAttribute.array.set(offset, value.getX());
@@ -255,9 +263,11 @@ public class Line extends GeometryObject
 							}
 						}
 
-					} else if (customAttribute.size == 4) {
-
-						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) {
+					} 
+					else if (customAttribute.size == 4) 
+					{
+						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
+						{
 							Vector4f value = (Vector4f) customAttribute.getValue().get(ca);
 
 							customAttribute.array.set(offset, value.getX());

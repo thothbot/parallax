@@ -52,15 +52,15 @@ public final class Sphere extends Geometry
 
 	public Sphere(int radius, int segmentsWidth, int segmentsHeight) 
 	{
-		this(radius, segmentsWidth, segmentsHeight, 0.0f, (float) (Math.PI * 2.0f) );
+		this(radius, segmentsWidth, segmentsHeight, 0.0, Math.PI * 2.0 );
 	}
 	
-	public Sphere(int radius, int segmentsWidth, int segmentsHeight, float phiStart, float phiLength)
+	public Sphere(int radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength)
 	{
-		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0f, (float) Math.PI);
+		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0, Math.PI);
 	}
 
-	public Sphere(int radius, int segmentsWidth, int segmentsHeight, float phiStart, float phiLength, float thetaStart, float thetaLength) 
+	public Sphere(int radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength, double thetaStart, double thetaLength) 
 	{
 		super();
 		int segmentsX = Math.max( 3, segmentsWidth );
@@ -77,13 +77,13 @@ public final class Sphere extends Geometry
 			for (int x = 0; x <= segmentsX; x++) 
 			{
 
-				float u = (float) x / segmentsX;
-				float v = (float) y / segmentsY;
+				double u = x / segmentsX * 1.0;
+				double v = y / segmentsY * 1.0;
 
 				Vector3f vertex = new Vector3f();
-				vertex.setX((float) (- radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength )));
-				vertex.setY((float) (radius * Math.cos( thetaStart + v * thetaLength )));
-				vertex.setZ((float) (radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength )));
+				vertex.setX(- radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
+				vertex.setY(radius * Math.cos( thetaStart + v * thetaLength ));
+				vertex.setZ(radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
 				
 				getVertices().add( vertex );
 
@@ -95,10 +95,10 @@ public final class Sphere extends Geometry
 			uvs.add( uvsRow );
 		}
 
-		for ( int y = 0; y < segmentsY; y ++ ) {
-
-			for ( int x = 0; x < segmentsX; x ++ ) {
-
+		for ( int y = 0; y < segmentsY; y ++ ) 
+		{
+			for ( int x = 0; x < segmentsX; x ++ ) 
+			{
 				int v1 = vertices.get( y ).get( x + 1 );
 				int v2 = vertices.get( y ).get( x );
 				int v3 = vertices.get( y + 1 ).get( x );

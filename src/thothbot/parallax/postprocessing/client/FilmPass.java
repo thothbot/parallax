@@ -36,7 +36,7 @@ public class FilmPass extends Pass
 	private ShaderMaterial material;
 	private boolean renderToScreen = false;
 
-	public FilmPass( int noiseIntensity, int scanlinesIntensity, int scanlinesCount, float grayscale ) 
+	public FilmPass( int noiseIntensity, int scanlinesIntensity, int scanlinesCount, double grayscale ) 
 	{
 		Shader shader = new ShaderFilm();
 
@@ -57,10 +57,10 @@ public class FilmPass extends Pass
 	}
 	
 	@Override
-	public void render(EffectComposer effectCocmposer, float delta, boolean maskActive)
+	public void render(EffectComposer effectCocmposer, double delta, boolean maskActive)
 	{
 		this.uniforms.get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
-		this.uniforms.get( "time" ).setValue( (Float)this.uniforms.get( "time" ).getValue() + delta );
+		this.uniforms.get( "time" ).setValue( (Double)this.uniforms.get( "time" ).getValue() + delta );
 
 		effectCocmposer.getQuad().setMaterial(this.material);
 

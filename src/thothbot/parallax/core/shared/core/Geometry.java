@@ -611,8 +611,8 @@ public class Geometry extends GeometryBuffer
 				// Calculate handedness
 
 				tmp2.cross(face.getVertexNormals().get(i), t);
-				float test = tmp2.dot(tan2.get(vertexIndex));
-				float w = (test < 0.0f) ? -1.0f : 1.0f;
+				double test = tmp2.dot(tan2.get(vertexIndex));
+				double w = (test < 0.0) ? -1.0 : 1.0;
 				
 				face.getVertexTangents().add(i, new Vector4f(tmp.x,tmp.y,tmp.z,w));
 			}
@@ -668,7 +668,7 @@ public class Geometry extends GeometryBuffer
 
 	public void computeBoundingSphere()
 	{
-		float radius = this.boundingSphere == null ? 0 : this.boundingSphere.radius;
+		double radius = this.boundingSphere == null ? 0 : this.boundingSphere.radius;
 		for (int v = 0, vl = this.vertices.size(); v < vl; v++) 
 		{
 			radius = Math.max(radius, this.vertices.get(v).length());
@@ -691,19 +691,19 @@ public class Geometry extends GeometryBuffer
 		UVf uvB = uv[ub];
 		UVf uvC = uv[uc];
 		
-		float x1 = vB.x - vA.x;
-		float x2 = vC.x - vA.x;
-		float y1 = vB.y - vA.y;
-		float y2 = vC.y - vA.y;
-		float z1 = vB.z - vA.z;
-		float z2 = vC.z - vA.z;
+		double x1 = vB.x - vA.x;
+		double x2 = vC.x - vA.x;
+		double y1 = vB.y - vA.y;
+		double y2 = vC.y - vA.y;
+		double z1 = vB.z - vA.z;
+		double z2 = vC.z - vA.z;
 		
-		float s1 = uvB.getU() - uvA.getU();
-		float s2 = uvC.getU() - uvA.getU();
-		float t1 = uvB.getV() - uvA.getV();
-		float t2 = uvC.getV() - uvA.getV();
+		double s1 = uvB.getU() - uvA.getU();
+		double s2 = uvC.getU() - uvA.getU();
+		double t1 = uvB.getV() - uvA.getV();
+		double t2 = uvC.getV() - uvA.getV();
 		
-		float r = 1.0f/(s1*t2-s2*t1);
+		double r = 1.0 / (s1 * t2 - s2 * t1);
 		
 		Vector3f sdir = new Vector3f();
 		sdir.set((t2*x1-t1*x2)*r,
@@ -758,19 +758,23 @@ public class Geometry extends GeometryBuffer
 		List<Integer> changes = new ArrayList<Integer>();
 
 		// number of decimal points, eg. 4 for epsilon of 0.0001
-		float precisionPoints = 4f; 
-		float precision = (float) Math.pow( 10, precisionPoints );
+		double precisionPoints = 4; 
+		double precision = Math.pow( 10, precisionPoints );
 
-		for ( int i = 0; i < this.vertices.size(); i ++ ) {
+		for ( int i = 0; i < this.vertices.size(); i ++ ) 
+		{
 			Vector3f v = this.vertices.get( i );
 			String key = Math.round( v.x * precision ) + "_" + Math.round( v.y * precision ) + "_"  + Math.round( v.z * precision );
 
-			if ( !verticesMap.containsKey(key)) {
+			if ( !verticesMap.containsKey(key)) 
+			{
 				verticesMap.put(key, i);
 				unique.add(v);
 				changes.add( i , unique.size() - 1);
 
-			} else {
+			} 
+			else 
+			{
 				//console.log('Duplicate vertex found. ', i, ' could be using ', verticesMap[key]);
 				changes.add( i , changes.get( verticesMap.get( key ) ));
 			}
@@ -778,7 +782,8 @@ public class Geometry extends GeometryBuffer
 
 
 		// Start to patch face indices
-		for ( int i = 0; i < this.faces.size(); i ++ ) {
+		for ( int i = 0; i < this.faces.size(); i ++ ) 
+		{
 			Face3 face = this.faces.get( i );
 
 			if ( face.getClass() == Face3.class ) 
@@ -788,7 +793,8 @@ public class Geometry extends GeometryBuffer
 				face3.setB(changes.get( face3.getB() ));
 				face3.setC(changes.get( face3.getC() ));
 
-			} else if ( face.getClass() == Face4.class ) 
+			} 
+			else if ( face.getClass() == Face4.class ) 
 			{
 				Face4 face4 = (Face4)face;
 

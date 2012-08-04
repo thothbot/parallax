@@ -22,8 +22,6 @@
 
 package thothbot.parallax.core.shared.core;
 
-import java.lang.reflect.Constructor;
-
 /**
  * Class implements UV texture mapping.
  * 
@@ -47,12 +45,12 @@ public class UVf
 	/**
 	 * Horizontal coordinate.
 	 */
-	private float u;
+	private double u;
 
 	/**
 	 * Vertical coordinate.
 	 */
-	private float v;
+	private double v;
 
 	/**
 	 * This default Constructor will make UV object (0.0, 0.0) 
@@ -69,7 +67,7 @@ public class UVf
 	 * @param u the Horizontal coordinate.
 	 * @param v the Vertical coordinate.
 	 */
-	public UVf(float u, float v) 
+	public UVf(double u, double v) 
 	{
 		this.u = u;
 		this.v = v;
@@ -80,7 +78,7 @@ public class UVf
 	 * 
 	 * @return the Horizontal coordinate.
 	 */
-	public float getU()
+	public double getU()
 	{
 		return this.u;
 	}
@@ -90,7 +88,7 @@ public class UVf
 	 * 
 	 * @return the Vertical coordinate.
 	 */
-	public float getV()
+	public double getV()
 	{
 		return this.v;
 	}
@@ -102,7 +100,7 @@ public class UVf
 	 * @param v the Vertical coordinate.
 	 * 
 	 */
-	public UVf set(float u, float v)
+	public UVf set(double u, double v)
 	{
 		this.u = u;
 		this.v = v;
@@ -131,7 +129,7 @@ public class UVf
 	 * 
 	 * @return the current UV object
 	 */
-	public UVf lerp(UVf uv, float alpha)
+	public UVf lerp(UVf uv, double alpha)
 	{
 		this.u += (uv.u - this.u) * alpha;
 		this.v += (uv.v - this.v) * alpha;

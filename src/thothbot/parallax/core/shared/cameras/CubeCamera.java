@@ -43,11 +43,11 @@ import thothbot.parallax.core.shared.scenes.Scene;
  */
 public final class CubeCamera extends Object3D 
 {
-	protected float fieldOfView = 90.0f;
-	protected float aspectRatio = 1.0f;
+	protected double fieldOfView = 90.0;
+	protected double aspectRatio = 1.0;
 	
-	protected float near;
-	protected float far;
+	protected double near;
+	protected double far;
 	
 	PerspectiveCamera cameraPX;
 	PerspectiveCamera cameraNX;
@@ -60,36 +60,36 @@ public final class CubeCamera extends Object3D
 	
 	RenderTargetCubeTexture renderTarget;
 	
-	public CubeCamera(float near, float far, int cubeResolution)
+	public CubeCamera(double near, double far, int cubeResolution)
 	{
 		this.cameraPX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
-		cameraPX.getUp().set( 0.0f, -1.0f, 0.0f );
-		cameraPX.lookAt( new Vector3f( 1.0f, 0.0f, 0.0f ) );
+		cameraPX.getUp().set( 0.0, -1.0, 0.0 );
+		cameraPX.lookAt( new Vector3f( 1.0, 0.0, 0.0 ) );
 		this.addChild( cameraPX );
 
 		this.cameraNX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
-		cameraNX.getUp().set( 0.0f, -1.0f, 0.0f );
-		cameraNX.lookAt( new Vector3f( -1.0f, 0.0f, 0.0f ) );
+		cameraNX.getUp().set( 0.0, -1.0, 0.0 );
+		cameraNX.lookAt( new Vector3f( -1.0, 0.0, 0.0 ) );
 		this.addChild( cameraNX );
 
 		this.cameraPY = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
-		cameraPY.getUp().set( 0.0f, 0.0f, 1.0f );
-		cameraPY.lookAt( new Vector3f( 0.0f, 1.0f, 0.0f ) );
+		cameraPY.getUp().set( 0.0, 0.0, 1.0 );
+		cameraPY.lookAt( new Vector3f( 0.0, 1.0, 0.0 ) );
 		this.addChild( cameraPY );
 
 		this.cameraNY = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
-		cameraNY.getUp().set( 0.0f, 0.0f, -1.0f );
-		cameraNY.lookAt( new Vector3f( 0.0f, -1.0f, 0.0f ) );
+		cameraNY.getUp().set( 0.0, 0.0, -1.0 );
+		cameraNY.lookAt( new Vector3f( 0.0, -1.0, 0.0 ) );
 		this.addChild( cameraNY );
 
 		this.cameraPZ = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
-		cameraPZ.getUp().set( 0.0f, -1.0f, 0.0f );
-		cameraPZ.lookAt( new Vector3f( 0.0f, 0.0f, 1.0f ) );
+		cameraPZ.getUp().set( 0.0, -1.0, 0.0 );
+		cameraPZ.lookAt( new Vector3f( 0.0, 0.0, 1.0 ) );
 		this.addChild( cameraPZ );
 
 		this.cameraNZ = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
-		cameraNZ.getUp().set( 0.0f, -1.0f, 0.0f );
-		cameraNZ.lookAt( new Vector3f( 0.0f, 0.0f, -1.0f ) );
+		cameraNZ.getUp().set( 0.0, -1.0, 0.0 );
+		cameraNZ.lookAt( new Vector3f( 0.0, 0.0, -1.0 ) );
 		this.addChild( cameraNZ );
 
 		this.renderTarget = new RenderTargetCubeTexture( cubeResolution, cubeResolution );

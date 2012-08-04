@@ -38,7 +38,7 @@ public class DotScreenPass extends Pass
 	private ShaderMaterial material;
 	private boolean renderToScreen = false;
 	
-	public DotScreenPass( Vector3f center, float angle, float scale ) 
+	public DotScreenPass( Vector3f center, double angle, double scale ) 
 	{
 		Shader shader = new ShaderDotscreen();
 
@@ -58,7 +58,7 @@ public class DotScreenPass extends Pass
 	}
 	
 	@Override
-	public void render(EffectComposer effectCocmposer, float delta, boolean maskActive)
+	public void render(EffectComposer effectCocmposer, double delta, boolean maskActive)
 	{
 		this.uniforms.get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
 		((Vector2f) this.uniforms.get("tSize").getValue()).set( 

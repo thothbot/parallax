@@ -28,8 +28,6 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.shared.Log;
-
 
 public class GeometryGroup extends GeometryBuffer
 {

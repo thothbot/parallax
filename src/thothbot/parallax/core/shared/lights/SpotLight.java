@@ -31,11 +31,11 @@ public class SpotLight extends Light
 	
 	public Vector3f position;
 
-	public float intensity;
-	public float distance;
+	public double intensity;
+	public double distance;
 	
-	public float angle;
-	public float exponent;
+	public double angle;
+	public double exponent;
 	
 	public boolean castShadow = false;
 	
@@ -45,8 +45,8 @@ public class SpotLight extends Light
 	
 	public boolean shadowCameraVisible = false;
 	
-	public float shadowBias = 0f;
-	public float shadowDarkness = 0.5f;
+	public double shadowBias = 0;
+	public double shadowDarkness = 0.5;
 	
 	public int shadowMapWidth = 512;
 	public int shadowMapHeight = 512;
@@ -57,17 +57,18 @@ public class SpotLight extends Light
 	public Object shadowMatrix;
 	
 	public SpotLight(int hex) {
-		this(hex, 1f, 0f, (float) (Math.PI / 2), 10f);
+		this(hex, 1, 0, Math.PI / 2.0, 10);
 	}
 
-	public SpotLight(int hex, float intensity, float distance, float angle, float exponent) {
+	public SpotLight(int hex, double intensity, double distance, double angle, double exponent) 
+	{
 		super(hex);
 		this.intensity = intensity;
 		this.distance = distance;
 		this.angle = angle;
 		this.exponent = exponent;
 		
-		this.position = new Vector3f( 0f, 1f, 0f );
+		this.position = new Vector3f( 0, 1, 0 );
 		this.target = new Object3D();
 	}
 	

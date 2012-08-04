@@ -31,20 +31,20 @@ package thothbot.parallax.core.shared.cameras;
 public class OrthographicCamera extends Camera
 {
 
-	protected float left;
-	protected float right;
-	protected float top;
-	protected float bottom;
+	protected double left;
+	protected double right;
+	protected double top;
+	protected double bottom;
 
-	protected float near;
-	protected float far;
+	protected double near;
+	protected double far;
 
-	public OrthographicCamera(float left, float right, float top, float bottom) 
+	public OrthographicCamera(double left, double right, double top, double bottom) 
 	{
-		this(left, right, top, bottom, 0.1f, 2000f);
+		this(left, right, top, bottom, 0.1, 2000);
 	}
 
-	public OrthographicCamera(float left, float right, float top, float bottom, float near,	float far) 
+	public OrthographicCamera(double left, double right, double top, double bottom, double near, double far) 
 	{
 		super();
 		this.left = left;
@@ -58,62 +58,62 @@ public class OrthographicCamera extends Camera
 		updateProjectionMatrix();
 	}
 
-	public float getLeft()
+	public double getLeft()
 	{
 		return left;
 	}
 
-	public void setLeft(float left)
+	public void setLeft(double left)
 	{
 		this.left = left;
 	}
 
-	public float getRight()
+	public double getRight()
 	{
 		return right;
 	}
 
-	public void setRight(float right)
+	public void setRight(double right)
 	{
 		this.right = right;
 	}
 
-	public float getTop()
+	public double getTop()
 	{
 		return top;
 	}
 
-	public void setTop(float top)
+	public void setTop(double top)
 	{
 		this.top = top;
 	}
 
-	public float getBottom()
+	public double getBottom()
 	{
 		return bottom;
 	}
 
-	public void setBottom(float bottom)
+	public void setBottom(double bottom)
 	{
 		this.bottom = bottom;
 	}
 
-	public float getNear()
+	public double getNear()
 	{
 		return near;
 	}
 
-	public void setNear(float near)
+	public void setNear(double near)
 	{
 		this.near = near;
 	}
 
-	public float getFar()
+	public double getFar()
 	{
 		return far;
 	}
 
-	public void setFar(float far)
+	public void setFar(double far)
 	{
 		this.far = far;
 	}

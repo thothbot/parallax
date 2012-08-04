@@ -49,12 +49,11 @@ public final class ShaderNormal extends Shader
 	public ShaderNormal() 
 	{
 		super(Resources.INSTANCE);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0f ));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
 	}
 }

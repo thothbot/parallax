@@ -176,11 +176,11 @@ public final class LensFlarePlugin extends Plugin
 
 		Vector3f tempPosition = new Vector3f();
 
-		float invAspect = (float)viewportHeight / viewportWidth;
-		float halfViewportWidth = viewportWidth * 0.5f;
-		float halfViewportHeight = viewportHeight * 0.5f;
+		double invAspect = viewportHeight / viewportWidth * 1.0;
+		double halfViewportWidth = viewportWidth * 0.5;
+		double halfViewportHeight = viewportHeight * 0.5;
 
-		float size = 16f / viewportHeight;
+		double size = 16.0 / viewportHeight;
 		Vector2f scale = new Vector2f( size * invAspect, size );
 
 		Vector3f screenPosition = new Vector3f( 1, 1, 0 );

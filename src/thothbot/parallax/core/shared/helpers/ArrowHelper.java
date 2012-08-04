@@ -41,15 +41,15 @@ public class ArrowHelper extends Object3D
 	
 	public ArrowHelper ( Vector3f dir, Vector3f origin)
 	{
-		this(dir, origin, 20f);
+		this(dir, origin, 20);
 	}
 	
-	public ArrowHelper ( Vector3f dir, Vector3f origin, float length)
+	public ArrowHelper ( Vector3f dir, Vector3f origin, double length)
 	{
 		this(dir, origin, length, 0xffff00);
 	}
 
-	public ArrowHelper ( Vector3f dir, Vector3f origin, float length, int hex ) 
+	public ArrowHelper ( Vector3f dir, Vector3f origin, double length, int hex ) 
 	{
 		super();
 
@@ -62,7 +62,7 @@ public class ArrowHelper extends Object3D
 		this.line = new Line( lineGeometry, lbm );
 		this.addChild( this.line );
 
-		Cylinder coneGeometry = new Cylinder( 0f, 0.05f, 0.25f, 5, 1 );
+		Cylinder coneGeometry = new Cylinder( 0, 0.05, 0.25, 5, 1 );
 
 		MeshBasicMaterial mbm = new MeshBasicMaterial();
 		mbm.setColor(new Color3f(hex));
@@ -80,7 +80,7 @@ public class ArrowHelper extends Object3D
 	{
 		Vector3f axis = new Vector3f( 0, 1, 0 ).cross( dir );
 
-		float radians = (float) Math.acos( new Vector3f( 0, 1, 0 ).dot( dir.clone().normalize() ) );
+		double radians = Math.acos( new Vector3f( 0, 1, 0 ).dot( dir.clone().normalize() ) );
 
 		this.matrix = new Matrix4f().makeRotationAxis( axis.normalize(), radians );
 
@@ -88,7 +88,7 @@ public class ArrowHelper extends Object3D
 
 	}
 
-	public void setLength( float length ) 
+	public void setLength( double length ) 
 	{
 		this.scale.set( length, length, length );
 	}

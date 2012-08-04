@@ -62,10 +62,10 @@ public class Frustum
 	public void setFromMatrix(Matrix4f m)
 	{
 		Float32Array me = m.getArray();
-		float me0 = me.get(0), me1 = me.get(1), me2 = me.get(2), me3 = me.get(3);
-		float me4 = me.get(4), me5 = me.get(5), me6 = me.get(6), me7 = me.get(7);
-		float me8 = me.get(8), me9 = me.get(9), me10 = me.get(10), me11 = me.get(11);
-		float me12 = me.get(12), me13 = me.get(13), me14 = me.get(14), me15 = me.get(15);
+		double me0 = me.get(0), me1 = me.get(1), me2 = me.get(2), me3 = me.get(3);
+		double me4 = me.get(4), me5 = me.get(5), me6 = me.get(6), me7 = me.get(7);
+		double me8 = me.get(8), me9 = me.get(9), me10 = me.get(10), me11 = me.get(11);
+		double me12 = me.get(12), me13 = me.get(13), me14 = me.get(14), me15 = me.get(15);
 
 		planes.get(0).set(me3 - me0, me7 - me4, me11 - me8, me15 - me12);
 		planes.get(1).set(me3 + me0, me7 + me4, me11 + me8, me15 + me12);
@@ -77,8 +77,7 @@ public class Frustum
 		for (int i = 0; i < 6; i++) 
 		{
 			Vector4f plane = planes.get(i);
-			plane.divide((float) Math.sqrt(plane.x * plane.x + plane.y * plane.y + plane.z
-					* plane.z));
+			plane.divide(Math.sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z));
 		}
 	}
 
@@ -89,10 +88,10 @@ public class Frustum
 	 */
 	public boolean contains(GeometryObject object)
 	{
-		float distance;
+		double distance;
 		Matrix4f matrix = object.getMatrixWorld();
 		Float32Array me = matrix.getArray();
-		float radius = -object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
+		double radius = -object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
 
 		for (int i = 0; i < 6; i++) 
 		{

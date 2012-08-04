@@ -44,8 +44,8 @@ public final class FlyControls extends Control implements
 	KeyDownHandler, KeyUpHandler, ContextMenuHandler
 {
 	
-	private float movementSpeed = 1.0f;
-	private float rollSpeed = 0.005f;
+	private double movementSpeed = 1.0;
+	private double rollSpeed = 0.005;
 	
 	private boolean isDragToLook = false;
 	private boolean isAutoForward = false;
@@ -111,11 +111,11 @@ public final class FlyControls extends Control implements
 		RootPanel.get().addDomHandler(this, KeyUpEvent.getType());		
 	}
 	
-	public void setMovementSpeed(float speed) {
+	public void setMovementSpeed(double speed) {
 		this.movementSpeed = speed;
 	}
 	
-	public void setRollSpeed(float speed) {
+	public void setRollSpeed(double speed) {
 		this.rollSpeed = speed;
 	}
 	
@@ -127,10 +127,10 @@ public final class FlyControls extends Control implements
 		this.isAutoForward = isAutoForward;
 	}
 
-	public void update( float delta ) 
+	public void update( double delta ) 
 	{
-		float moveMult = delta * this.movementSpeed;
-		float rotMult = delta * this.rollSpeed;
+		double moveMult = delta * this.movementSpeed;
+		double rotMult = delta * this.rollSpeed;
 
 		getObject().translateX( this.moveVector.getX() * moveMult );
 		getObject().translateY( this.moveVector.getY() * moveMult );
@@ -140,7 +140,7 @@ public final class FlyControls extends Control implements
 				this.rotationVector.getX() * rotMult, 
 				this.rotationVector.getY() * rotMult, 
 				this.rotationVector.getZ() * rotMult, 
-				1.0f).normalize();
+				1.0).normalize();
 
 		getObject().getQuaternion().multiply( this.tmpQuaternion );
 

@@ -84,7 +84,7 @@ public abstract class Material
 	
 	private String name;
 	
-	private float opacity;
+	private double opacity;
 	private boolean isTransparent;
 	
 	private Material.SHADING shading;
@@ -98,8 +98,8 @@ public abstract class Material
 	private boolean isDepthWrite;
 	
 	private boolean isPolygonOffset;
-	private float polygonOffsetFactor;
-	private float polygonOffsetUnits;
+	private double polygonOffsetFactor;
+	private double polygonOffsetUnits;
 	
 	private int alphaTest;
 	
@@ -202,11 +202,11 @@ public abstract class Material
 		this.fragmentShader = str;
 	}
 
-	public float getOpacity() {
+	public double getOpacity() {
 		return opacity;
 	}
 
-	public void setOpacity(float opacity) {
+	public void setOpacity(double opacity) {
 		this.opacity = opacity;
 	}
 
@@ -274,19 +274,19 @@ public abstract class Material
 		this.isPolygonOffset = polygonOffset;
 	}
 
-	public float getPolygonOffsetFactor() {
+	public double getPolygonOffsetFactor() {
 		return polygonOffsetFactor;
 	}
 
-	public void setPolygonOffsetFactor(float polygonOffsetFactor) {
+	public void setPolygonOffsetFactor(double polygonOffsetFactor) {
 		this.polygonOffsetFactor = polygonOffsetFactor;
 	}
 
-	public float getPolygonOffsetUnits() {
+	public double getPolygonOffsetUnits() {
 		return polygonOffsetUnits;
 	}
 
-	public void setPolygonOffsetUnits(float polygonOffsetUnits) {
+	public void setPolygonOffsetUnits(double polygonOffsetUnits) {
 		this.polygonOffsetUnits = polygonOffsetUnits;
 	}
 

@@ -77,7 +77,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.bindTexture(target, texture);
   }-*/;
 
-  public native void blendColor(float red, float green, float blue, float alpha) /*-{
+  public native void blendColor(double red, double green, double blue, double alpha) /*-{
 		this.blendColor(red, green, blue, alpha);
   }-*/;
 
@@ -125,11 +125,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.clear(mask);
   }-*/;
 
-  public native void clearColor(float red, float green, float blue, float alpha) /*-{
+  public native void clearColor(double red, double green, double blue, double alpha) /*-{
 		this.clearColor(red, green, blue, alpha);
   }-*/;
 
-  public native void clearDepth(float depth) /*-{
+  public native void clearDepth(double depth) /*-{
 		this.clearDepth(depth);
   }-*/;
 
@@ -217,7 +217,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.depthMask(flag);
   }-*/;
 
-  public native void depthRange(float nearVal, float farVal) /*-{
+  public native void depthRange(double nearVal, double farVal) /*-{
 		this.depthRange(nearVal, farVal);
   }-*/;
 
@@ -347,7 +347,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		return this.getParameter(pname);
   }-*/;
 
-  public native float getParameterf(int pname) /*-{
+  public native double getParameterf(int pname) /*-{
 		return this.getParameter(pname);
   }-*/;
 
@@ -418,7 +418,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		return this.getUniform(program, location);
   }-*/;
 
-  public native float getUniformf(WebGLProgram program, WebGLUniformLocation location) /*-{
+  public native double getUniformf(WebGLProgram program, WebGLUniformLocation location) /*-{
 		return this.getUniform(program, location);
   }-*/;
 
@@ -470,7 +470,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		return this.isTexture(texture);
   }-*/;
 
-  public native void lineWidth(float width) /*-{
+  public native void lineWidth(double width) /*-{
 		this.lineWidth(width);
   }-*/;
 
@@ -482,7 +482,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.pixelStorei(pname, param);
   }-*/;
 
-  public native void polygonOffset(float factor, float units) /*-{
+  public native void polygonOffset(double factor, double units) /*-{
 		this.polygonOffset(factor, units);
   }-*/;
 
@@ -495,7 +495,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.renderbufferStorage(target, format, width, height);
   }-*/;
 
-  public native void sampleCoverage(float value, boolean invert) /*-{
+  public native void sampleCoverage(double value, boolean invert) /*-{
 		this.sampleCoverage(value, invert);
   }-*/;
 
@@ -542,7 +542,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.texImage2D(target, level, internalformat, format, type, data);
   }-*/;
 
-  public native void texParameterf(int target, int pname, float value) /*-{
+  public native void texParameterf(int target, int pname, double value) /*-{
 		this.texParameterf(target, pname, value);
   }-*/;
 
@@ -572,11 +572,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 				asPremultipliedAlpha);
   }-*/;
 
-  public native void uniform1f(WebGLUniformLocation location, float v0) /*-{
+  public native void uniform1f(WebGLUniformLocation location, double v0) /*-{
 		this.uniform1f(location, v0);
   }-*/;
 
-  public void uniform1fv(WebGLUniformLocation location, float[] values) {
+  public void uniform1fv(WebGLUniformLocation location, double[] values) {
     uniform1fv(location, JsArrayUtil.wrapArray(values));
   }
 
@@ -604,11 +604,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.uniform1iv(location, values);
   }-*/;
 
-  public native void uniform2f(WebGLUniformLocation location, float v0, float v1) /*-{
+  public native void uniform2f(WebGLUniformLocation location, double v0, double v1) /*-{
 		this.uniform2f(location, v0, v1);
   }-*/;
 
-  public void uniform2fv(WebGLUniformLocation location, float[] values) {
+  public void uniform2fv(WebGLUniformLocation location, double[] values) {
     uniform2fv(location, JsArrayUtil.wrapArray(values));
   }
 
@@ -636,11 +636,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.uniform2iv(location, values);
   }-*/;
 
-  public native void uniform3f(WebGLUniformLocation location, float v0, float v1, float v2) /*-{
+  public native void uniform3f(WebGLUniformLocation location, double v0, double v1, double v2) /*-{
 		this.uniform3f(location, v0, v1, v2);
   }-*/;
 
-  public void uniform3fv(WebGLUniformLocation location, float[] values) {
+  public void uniform3fv(WebGLUniformLocation location, double[] values) {
     uniform3fv(location, JsArrayUtil.wrapArray(values));
   }
 
@@ -668,11 +668,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.uniform3iv(location, v);
   }-*/;
 
-  public native void uniform4f(WebGLUniformLocation location, float v0, float v1, float v2, float v3) /*-{
+  public native void uniform4f(WebGLUniformLocation location, double v0, double v1, double v2, double v3) /*-{
 		this.uniform4f(location, v0, v1, v2, v3);
   }-*/;
 
-  public void uniform4fv(WebGLUniformLocation location, float[] values) {
+  public void uniform4fv(WebGLUniformLocation location, double[] values) {
     uniform4fv(location, JsArrayUtil.wrapArray(values));
   }
 
@@ -700,7 +700,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.uniform4iv(location, values);
   }-*/;
 
-  public void uniformMatrix2fv(WebGLUniformLocation location, boolean transpose, float[] value) {
+  public void uniformMatrix2fv(WebGLUniformLocation location, boolean transpose, double[] value) {
     uniformMatrix2fv(location, transpose, JsArrayUtil.wrapArray(value));
   }
 
@@ -714,7 +714,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.uniformMatrix2fv(location, transpose, value);
   }-*/;
 
-  public void uniformMatrix3fv(WebGLUniformLocation location, boolean transpose, float[] value) {
+  public void uniformMatrix3fv(WebGLUniformLocation location, boolean transpose, double[] value) {
     uniformMatrix3fv(location, transpose, JsArrayUtil.wrapArray(value));
   }
 
@@ -728,7 +728,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.uniformMatrix3fv(location, transpose, value);
   }-*/;
 
-  public void uniformMatrix4fv(WebGLUniformLocation location, boolean transpose, float[] value) {
+  public void uniformMatrix4fv(WebGLUniformLocation location, boolean transpose, double[] value) {
     uniformMatrix4fv(location, transpose, JsArrayUtil.wrapArray(value));
   }
 
@@ -750,11 +750,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.validateProgram(program);
   }-*/;
 
-  public native void vertexAttrib1f(int index, float x) /*-{
+  public native void vertexAttrib1f(int index, double x) /*-{
 		this.vertexAttrib1f(index, x);
   }-*/;
 
-  public void vertexAttrib1fv(int index, float[] values) {
+  public void vertexAttrib1fv(int index, double[] values) {
     vertexAttrib1fv(index, JsArrayUtil.wrapArray(values));
   }
 
@@ -766,11 +766,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.vertexAttrib1fv(index, values);
   }-*/;
 
-  public native void vertexAttrib2f(int index, float x, float y) /*-{
+  public native void vertexAttrib2f(int index, double x, double y) /*-{
 		this.vertexAttrib2f(index, x, y);
   }-*/;
 
-  public void vertexAttrib2fv(int index, float[] values) {
+  public void vertexAttrib2fv(int index, double[] values) {
     vertexAttrib2fv(index, JsArrayUtil.wrapArray(values));
   }
 
@@ -782,11 +782,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.vertexAttrib2fv(index, values);
   }-*/;
 
-  public native void vertexAttrib3f(int index, float x, float y, float z) /*-{
+  public native void vertexAttrib3f(int index, double x, double y, double z) /*-{
 		this.vertexAttrib3f(index, x, y, z);
   }-*/;
 
-  public void vertexAttrib3fv(int index, float[] values) {
+  public void vertexAttrib3fv(int index, double[] values) {
     vertexAttrib3fv(index, JsArrayUtil.wrapArray(values));
   }
 
@@ -798,11 +798,11 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.vertexAttrib3fv(index, values);
   }-*/;
 
-  public native void vertexAttrib4f(int index, float x, float y, float z, float w) /*-{
+  public native void vertexAttrib4f(int index, double x, double y, double z, double w) /*-{
 		this.vertexAttrib4f(index, x, y, z, w);
   }-*/;
 
-  public void vertexAttrib4fv(int index, float[] values) {
+  public void vertexAttrib4fv(int index, double[] values) {
     vertexAttrib4fv(index, JsArrayUtil.wrapArray(values));
   }
 

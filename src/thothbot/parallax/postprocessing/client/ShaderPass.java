@@ -70,7 +70,7 @@ public class ShaderPass extends Pass
 	}
 	
 	@Override
-	public void render( EffectComposer effectComposer, float delta, boolean maskActive) 
+	public void render( EffectComposer effectComposer, double delta, boolean maskActive) 
 	{
 		if ( this.uniforms.containsKey(this.textureID))
 			this.uniforms.get( this.textureID ).setTexture( effectComposer.getReadBuffer() );

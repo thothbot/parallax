@@ -37,14 +37,14 @@ public class Vector4f extends Vector3f implements Vector
 	/**
 	 * The W-coordinate
 	 */
-	protected float w;
+	protected double w;
 
 	/**
 	 * This default constructor will initialize vector (0, 0, 0, 1); 
 	 */
 	public Vector4f() 
 	{
-		this(0, 0, 0, 1.0f);
+		this(0, 0, 0, 1.0);
 	}
 
 	/**
@@ -55,9 +55,9 @@ public class Vector4f extends Vector3f implements Vector
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector4f(float x, float y, float z) 
+	public Vector4f(double x, double y, double z) 
 	{
-		this(x, y, z, 1.0f);
+		this(x, y, z, 1.0);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * @param z the Z coordinate
 	 * @param w the W coordinate
 	 */
-	public Vector4f(float x, float y, float z, float w) 
+	public Vector4f(double x, double y, double z, double w) 
 	{
 		super(x, y, z);
 		this.w = w;
@@ -80,7 +80,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * 
 	 * @return a W coordinate
 	 */
-	public float getW() 
+	public double getW() 
 	{
 		return w;
 	}
@@ -91,7 +91,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * 
 	 * @param w the W coordinate
 	 */
-	public void addW(float w)
+	public void addW(double w)
 	{
 		this.w += w;
 	}
@@ -101,7 +101,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * 
 	 * @param w the W coordinate
 	 */
-	public void setW(float w) 
+	public void setW(double w) 
 	{
 		this.w = w;
 	}
@@ -142,7 +142,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * @param w
 	 *            the w coordinate
 	 */
-	public Vector4f set(float x, float y, float z, float w)
+	public Vector4f set(double x, double y, double z, double w)
 	{
 		this.x = x;
 		this.y = y;
@@ -185,7 +185,7 @@ public class Vector4f extends Vector3f implements Vector
 		return this.add(this, (Vector4f) v);
 	}
 
-	public Vector4f addScalar(float s)
+	public Vector4f addScalar(double s)
 	{
 		this.x += s;
 		this.y += s;
@@ -243,7 +243,7 @@ public class Vector4f extends Vector3f implements Vector
 	 *            the scalar value
 	 */
 	@Override
-	public Vector4f multiply(float s)
+	public Vector4f multiply(double s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -276,7 +276,7 @@ public class Vector4f extends Vector3f implements Vector
 		return this.divide(this, v);
 	}
 	
-	public Vector4f divide(float s)
+	public Vector4f divide(double s)
 	{
 		if (s != 0) 
 		{
@@ -309,7 +309,7 @@ public class Vector4f extends Vector3f implements Vector
 	 *            the other vector
 	 * @return the dot product of this vector and v1
 	 */
-	public float dot(Vector4f v1)
+	public double dot(Vector4f v1)
 	{
 		return (this.x * v1.x + this.y * v1.y + this.z * v1.z + this.w * v1.w);
 	}
@@ -317,19 +317,19 @@ public class Vector4f extends Vector3f implements Vector
 	/**
 	 * Returns the length of this vector.
 	 * 
-	 * @return the length of this vector as a float
+	 * @return the length of this vector as a double
 	 */
-	public float length()
+	public double length()
 	{
-		return (float) Math.sqrt(lengthSq());
+		return Math.sqrt(lengthSq());
 	}
 
 	/**
 	 * Returns the squared length of this vector
 	 * 
-	 * @return the squared length of this vector as a float
+	 * @return the squared length of this vector as a double
 	 */
-	public float lengthSq()
+	public double lengthSq()
 	{
 		return dot(this);
 	}
@@ -348,7 +348,7 @@ public class Vector4f extends Vector3f implements Vector
 	 * This method is not implemented yet.
 	 */
 	@Override
-	public float distanceToSquared(Vector v1)
+	public double distanceToSquared(Vector v1)
 	{
 		return 0;
 	}
@@ -357,18 +357,18 @@ public class Vector4f extends Vector3f implements Vector
 	 * This method is not implemented yet.
 	 */
 	@Override
-	public float distanceTo(Vector v)
+	public double distanceTo(Vector v)
 	{
 		return 0;
 	}
 
-	public Vector4f setLength(float l)
+	public Vector4f setLength(double l)
 	{
 		this.normalize();
 		return multiply(l);
 	}
 
-	public void lerp(Vector4f v1, float alpha)
+	public void lerp(Vector4f v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;

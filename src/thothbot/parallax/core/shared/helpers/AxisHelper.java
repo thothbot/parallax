@@ -43,7 +43,7 @@ public class AxisHelper extends Object3D
 		lineGeometry.getVertices().add( new Vector3f() );
 		lineGeometry.getVertices().add( new Vector3f( 0, 100, 0 ) );
 
-		Cylinder coneGeometry = new Cylinder( 0f, 5f, 25f, 5, 1 );
+		Cylinder coneGeometry = new Cylinder( 0, 5, 25, 5, 1 );
 
 		// x
 		LineBasicMaterial lbmX = new LineBasicMaterial();
@@ -53,12 +53,12 @@ public class AxisHelper extends Object3D
 		mbmX.setColor( new Color3f(0xff0000) );
 		
 		Line line1 = new Line( lineGeometry, lbmX );
-		line1.getRotation().setZ( (float) (- Math.PI / 2f));
+		line1.getRotation().setZ( - Math.PI / 2.0 );
 		this.addChild(line1 );
 		
 		Mesh cone1 = new Mesh( coneGeometry, mbmX );
 		cone1.getPosition().setX(100);
-		cone1.getRotation().setZ((float) (- Math.PI / 2f));
+		cone1.getRotation().setZ(- Math.PI / 2.0 );
 		this.addChild( cone1 );
 
 		// y
@@ -83,12 +83,12 @@ public class AxisHelper extends Object3D
 		mbmZ.setColor( new Color3f(0x0000ff) );
 
 		Line line3 = new Line( lineGeometry, lbmZ );
-		line3.getRotation().setX((float) (Math.PI / 2f));
+		line3.getRotation().setX( Math.PI / 2.0 );
 		this.addChild( line3 );
 
 		Mesh cone3 = new Mesh( coneGeometry, mbmZ );
 		cone3.getPosition().setZ(100);
-		cone3.getRotation().setX((float) (Math.PI / 2f));
+		cone3.getRotation().setX( Math.PI / 2.0 );
 		this.addChild( cone3 );
 	}
 }

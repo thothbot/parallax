@@ -45,9 +45,9 @@ public class ExtrudeGeometry extends Geometry
 	public static class ExtrudeGeometryParameters
 	{
 		// size of the text
-		public float size;
+		public double size;
 		// thickness to extrude text
-		public float height;
+		public double height;
 		// number of points on the curves
 		public int curveSegments = 12;
 		// number of points for z-side extrusions / used for subdividing segements of extrude spline too
@@ -58,9 +58,9 @@ public class ExtrudeGeometry extends Geometry
 		// turn on bevel
 		public boolean bevelEnabled = true;
 		// how deep into text bevel goes
-		public float bevelThickness = 6;
+		public double bevelThickness = 6;
 		// how far from text outline is bevel
-		public float bevelSize = bevelThickness - 2;
+		public double bevelSize = bevelThickness - 2;
 		// number of bevel layers
 		public int bevelSegments = 3;
 
@@ -238,10 +238,10 @@ public class ExtrudeGeometry extends Geometry
 		// Loop bevelSegments, 1 for the front, 1 for the back
 		for ( int b = 0; b < options.bevelSegments; b ++ ) 
 		{
-			float t = (float)b / options.bevelSegments;
-			float z = options.bevelThickness * ( 1 - t );
+			double t = (double)b / options.bevelSegments;
+			double z = options.bevelThickness * ( 1 - t );
 
-			float bs = (float) (options.bevelSize * ( Math.sin ( t * Math.PI/2 ) )) ; // curved
+			double bs = options.bevelSize * ( Math.sin ( t * Math.PI/2 ) ) ; // curved
 			//bs = bevelSize * t ; // linear
 
 			// contract shape
@@ -308,7 +308,7 @@ public class ExtrudeGeometry extends Geometry
 
 				if ( !extrudeByPath ) 
 				{
-					v( vert.getX(), vert.getY(), (float)options.amount / options.steps * s );
+					v( vert.getX(), vert.getY(), (double)options.amount / options.steps * s );
 				} 
 				else 
 				{
@@ -328,10 +328,10 @@ public class ExtrudeGeometry extends Geometry
 		// Add bevel segments planes
 		for ( int b = options.bevelSegments - 1; b >= 0; b -- ) 
 		{
-			float t = (float)b / options.bevelSegments;
-			float z = options.bevelThickness * ( 1 - t );
+			double t = (double)b / options.bevelSegments;
+			double z = options.bevelThickness * ( 1 - t );
 
-			float bs = (float) (options.bevelSize * Math.sin ( t * Math.PI/2.0 )) ;
+			double bs = options.bevelSize * Math.sin ( t * Math.PI/2.0 ) ;
 
 			// contract shape
 			for ( int i = 0, il = getVertices().size(); i < il; i ++ ) 
@@ -388,13 +388,13 @@ public class ExtrudeGeometry extends Geometry
 
 		double anglec = ( anglea + angleb ) / 2.0;
 
-		float x = (float) - Math.cos( anglec );
-		float y = (float) - Math.sin( anglec );
+		double x = - Math.cos( anglec );
+		double y = - Math.sin( anglec );
 
 		return new Vector2f( x, y ); //.normalize();
 	}
 	
-	private Vector2f scalePt2 ( Vector pt, Vector vec, float size ) 
+	private Vector2f scalePt2 ( Vector pt, Vector vec, double size ) 
 	{
 		return (Vector2f) vec.clone().multiply( size ).add( pt );
 	}
@@ -436,8 +436,8 @@ public class ExtrudeGeometry extends Geometry
 		p.copy( pt_j ).add( v_hat );
 		q.copy( pt_k ).add( w_hat );
 
-		float v_dot_w_hat = v.dot( w_hat );
-		float q_sub_p_dot_w_hat = q.sub( p ).dot( w_hat );
+		double v_dot_w_hat = v.dot( w_hat );
+		double q_sub_p_dot_w_hat = q.sub( p ).dot( w_hat );
 
 		// We should not reach these conditions
 
@@ -452,7 +452,7 @@ public class ExtrudeGeometry extends Geometry
 				Log.error( "getBevelVec2() Too bad, no solutions." );
 		}
 
-		float s = q_sub_p_dot_w_hat / v_dot_w_hat;
+		double s = q_sub_p_dot_w_hat / v_dot_w_hat;
 
 		// in case of emergecy, revert to algorithm 1.
 		if ( s < 0 )
@@ -561,7 +561,7 @@ public class ExtrudeGeometry extends Geometry
 	}
 
 
-	private void v( float x, float y, float z ) 
+	private void v( double x, double y, double z ) 
 	{
 		getVertices().add( new Vector3f( x, y, z ) );
 	}
@@ -601,14 +601,14 @@ public class ExtrudeGeometry extends Geometry
 	{
 		public static List<UVf> generateTopUV( Geometry geometry, int indexA, int indexB, int indexC ) 
 		{
-			float ax = geometry.getVertices().get( indexA ).getX();
-			float ay = geometry.getVertices().get( indexA ).getY();
+			double ax = geometry.getVertices().get( indexA ).getX();
+			double ay = geometry.getVertices().get( indexA ).getY();
 
-			float bx = geometry.getVertices().get( indexB ).getX();
-			float by = geometry.getVertices().get( indexB ).getY();
+			double bx = geometry.getVertices().get( indexB ).getX();
+			double by = geometry.getVertices().get( indexB ).getY();
 
-			float cx = geometry.getVertices().get( indexC ).getX();
-			float cy = geometry.getVertices().get( indexC ).getY();
+			double cx = geometry.getVertices().get( indexC ).getX();
+			double cy = geometry.getVertices().get( indexC ).getY();
 				
 			return Arrays.asList(
 				new UVf( ax, 1 - ay ),
@@ -624,21 +624,21 @@ public class ExtrudeGeometry extends Geometry
 
 		public static List<UVf> generateSideWallUV( Geometry geometry, int indexA, int indexB, int indexC, int indexD)
 		{
-			float ax = geometry.getVertices().get( indexA ).getX();
-			float ay = geometry.getVertices().get( indexA ).getY();
-			float az = geometry.getVertices().get( indexA ).getZ();
+			double ax = geometry.getVertices().get( indexA ).getX();
+			double ay = geometry.getVertices().get( indexA ).getY();
+			double az = geometry.getVertices().get( indexA ).getZ();
 
-			float bx = geometry.getVertices().get( indexB ).getX();
-			float by = geometry.getVertices().get( indexB ).getY();
-			float bz = geometry.getVertices().get( indexB ).getZ();
+			double bx = geometry.getVertices().get( indexB ).getX();
+			double by = geometry.getVertices().get( indexB ).getY();
+			double bz = geometry.getVertices().get( indexB ).getZ();
 
-			float cx = geometry.getVertices().get( indexC ).getX();
-			float cy = geometry.getVertices().get( indexC ).getY();
-			float cz = geometry.getVertices().get( indexC ).getZ();
+			double cx = geometry.getVertices().get( indexC ).getX();
+			double cy = geometry.getVertices().get( indexC ).getY();
+			double cz = geometry.getVertices().get( indexC ).getZ();
 
-			float dx = geometry.getVertices().get( indexD ).getX();
-			float dy = geometry.getVertices().get( indexD ).getY();
-			float dz = geometry.getVertices().get( indexD ).getZ();
+			double dx = geometry.getVertices().get( indexD ).getX();
+			double dy = geometry.getVertices().get( indexD ).getY();
+			double dz = geometry.getVertices().get( indexD ).getZ();
 			
 			if ( Math.abs( ay - by ) < 0.01f ) 
 			{

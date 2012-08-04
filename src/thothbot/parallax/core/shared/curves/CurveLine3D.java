@@ -37,7 +37,7 @@ public class CurveLine3D extends Curve
 	}
 
 	@Override
-	public Vector3f getPoint(float t)
+	public Vector3f getPoint(double t)
 	{
 		Vector3f point = this.v2.clone();
 		point.sub(this.v1);

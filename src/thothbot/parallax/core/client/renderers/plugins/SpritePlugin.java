@@ -139,10 +139,10 @@ public final class SpritePlugin extends Plugin
 		Map<String, WebGLUniformLocation> uniforms = this.sprite.uniforms;
 		Map<String, Integer> attributes = this.sprite.attributes;
 
-		float invAspect = (float)viewportHeight / viewportWidth;
+		double invAspect = viewportHeight / viewportWidth * 1.0;
 
-		float halfViewportWidth = viewportWidth * 0.5f;
-		float halfViewportHeight = viewportHeight * 0.5f;
+		double halfViewportWidth = viewportWidth * 0.5;
+		double halfViewportHeight = viewportHeight * 0.5;
 
 		boolean mergeWith3D = true;
 
@@ -197,7 +197,7 @@ public final class SpritePlugin extends Plugin
 			@Override
 			public int compare(Sprite o1, Sprite o2)
 			{
-				float result = o2.getZ() - o1.getZ(); 
+				double result = o2.getZ() - o1.getZ(); 
 				return (result == 0) ? 0 
 						: (result > 0) ? 1 : -1;
 			}
@@ -228,9 +228,9 @@ public final class SpritePlugin extends Plugin
 					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, sprite._modelViewMatrix.getArray());
 				}
 
-				float size = (float)sprite.getMap().getImage().getOffsetWidth() / ( sprite.isScaleByViewport() ? viewportHeight : 1 );
+				double size = sprite.getMap().getImage().getOffsetWidth() / ( sprite.isScaleByViewport() ? viewportHeight : 1.0 );
 
-				float[] scale = { 
+				double[] scale = { 
 						size * invAspect * sprite.getScale().getX(),
 						size * sprite.getScale().getY() };
 

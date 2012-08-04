@@ -35,12 +35,12 @@ public class Vector2f implements Vector
 	/**
 	 * The X-coordinate
 	 */
-	protected float x;
+	protected double x;
 	
 	/**
 	 * The Y-coordinate
 	 */
-	protected float y;
+	protected double y;
 
 	/**
 	 * This default constructor will initialize vector (0, 0); 
@@ -57,7 +57,7 @@ public class Vector2f implements Vector
 	 * @param x the X coordinate
 	 * @param y the Y coordinate
 	 */
-	public Vector2f(float x, float y) 
+	public Vector2f(double x, double y) 
 	{
 		this.x = x;
 		this.y = y;
@@ -68,7 +68,7 @@ public class Vector2f implements Vector
 	 * 
 	 * @return a X coordinate
 	 */
-	public float getX()
+	public double getX()
 	{
 		return x;
 	}
@@ -78,7 +78,7 @@ public class Vector2f implements Vector
 	 * 
 	 * @return a Y coordinate
 	 */
-	public float getY()
+	public double getY()
 	{
 		return y;
 	}
@@ -89,7 +89,7 @@ public class Vector2f implements Vector
 	 * 
 	 * @param x the X coordinate
 	 */
-	public void addX(float x)
+	public void addX(double x)
 	{
 		this.x += x;
 	}
@@ -100,7 +100,7 @@ public class Vector2f implements Vector
 	 * 
 	 * @param y the Y coordinate
 	 */
-	public void addY(float y)
+	public void addY(double y)
 	{
 		this.y += y;
 	}
@@ -110,7 +110,7 @@ public class Vector2f implements Vector
 	 * 
 	 * @param x the X coordinate
 	 */
-	public void setX(float x)
+	public void setX(double x)
 	{
 		this.x = x;
 	}
@@ -120,7 +120,7 @@ public class Vector2f implements Vector
 	 * 
 	 * @param y the Y coordinate
 	 */
-	public void setY(float y)
+	public void setY(double y)
 	{
 		this.y = y;
 	}
@@ -144,7 +144,7 @@ public class Vector2f implements Vector
 	 * @param x the X coordinate
 	 * @param y the Y coordinate
 	 */
-	public void set(float x, float y)
+	public void set(double x, double y)
 	{
 		this.x = x;
 		this.y = y;
@@ -165,7 +165,7 @@ public class Vector2f implements Vector
 	}
 	
 	@Override
-	public Vector2f add(float s)
+	public Vector2f add(double s)
 	{
 		this.addX(s);
 		this.addY(s);
@@ -204,7 +204,7 @@ public class Vector2f implements Vector
 	}
 
 	@Override
-	public Vector2f multiply(float s)
+	public Vector2f multiply(double s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -228,7 +228,7 @@ public class Vector2f implements Vector
 	}
 	
 	@Override
-	public Vector2f divide(float s)
+	public Vector2f divide(double s)
 	{
 		if (s != 0) {
 
@@ -258,7 +258,7 @@ public class Vector2f implements Vector
 	 * @param v1
 	 *            the other vector
 	 */
-	public float dot(Vector2f v1)
+	public double dot(Vector2f v1)
 	{
 		return (this.x * v1.x + this.y * v1.y);
 	}
@@ -268,7 +268,7 @@ public class Vector2f implements Vector
 	 * 
 	 * @return the squared length of this vector
 	 */
-	public float lengthSq()
+	public double lengthSq()
 	{
 		return dot(this);
 	}
@@ -278,9 +278,9 @@ public class Vector2f implements Vector
 	 * 
 	 * @return the length of this vector
 	 */
-	public float length()
+	public double length()
 	{
-		return (float) Math.sqrt(lengthSq());
+		return Math.sqrt(lengthSq());
 	}
 
 	/**
@@ -298,10 +298,10 @@ public class Vector2f implements Vector
 	 * @see thothbot.parallax.core.shared.core.Vector#distanceToSquared(thothbot.parallax.core.shared.core.Vector)
 	 */
 	@Override
-	public float distanceToSquared(Vector v)
+	public double distanceToSquared(Vector v)
 	{
-		float dx = this.getX() - ((Vector2f) v).getX();
-		float dy = this.getY() - ((Vector2f) v).getY();
+		double dx = this.getX() - ((Vector2f) v).getX();
+		double dy = this.getY() - ((Vector2f) v).getY();
 		return (dx * dx + dy * dy);
 	}
 
@@ -310,18 +310,18 @@ public class Vector2f implements Vector
 	 * @see thothbot.parallax.core.shared.core.Vector#distanceTo(thothbot.parallax.core.shared.core.Vector)
 	 */
 	@Override
-	public float distanceTo(Vector v1)
+	public double distanceTo(Vector v1)
 	{
-		return (float) Math.sqrt(distanceToSquared(v1));
+		return Math.sqrt(distanceToSquared(v1));
 	}
 
-	public Vector2f setLength(float l)
+	public Vector2f setLength(double l)
 	{
 		normalize();
 		return multiply(l);
 	}
 
-	public void lerp(Vector2f v1, float alpha)
+	public void lerp(Vector2f v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
@@ -329,7 +329,7 @@ public class Vector2f implements Vector
 
 	public boolean isZero()
 	{
-		return (this.lengthSq() < 0.0001f /* almostZero */);
+		return (this.lengthSq() < 0.0001 /* almostZero */);
 	}
 	
 	@Override

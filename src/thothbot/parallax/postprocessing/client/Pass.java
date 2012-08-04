@@ -29,7 +29,7 @@ public abstract class Pass
 
 	public Pass(){}
 		
-	public abstract void render( EffectComposer effectComposer, float delta, boolean maskActive );
+	public abstract void render( EffectComposer effectComposer, double delta, boolean maskActive );
 		
 	public boolean isEnabled()
 	{

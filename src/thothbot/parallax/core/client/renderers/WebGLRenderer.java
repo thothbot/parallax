@@ -56,7 +56,6 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Mathematics;
-import thothbot.parallax.core.shared.core.Matrix3f;
 import thothbot.parallax.core.shared.core.Matrix4f;
 import thothbot.parallax.core.shared.core.Vector2f;
 import thothbot.parallax.core.shared.core.Vector3f;
@@ -126,8 +125,8 @@ public class WebGLRenderer
 	// Integer, default is Color3f(0x000000).
 	private Color3f clearColor = new Color3f(0x000000);
 
-	// Float, default is 0
-	private float clearAlpha = 1.0f;
+	// double, default is 0
+	private double clearAlpha = 1.0;
 	
 	// Integer, default is 4
 	private int maxLights = 4;
@@ -194,8 +193,8 @@ public class WebGLRenderer
 	private Boolean cache_oldDepthWrite = null;
 
 	private Boolean cache_oldPolygonOffset = null;
-	private Float cache_oldPolygonOffsetFactor = null;
-	private Float cache_oldPolygonOffsetUnits = null;
+	private Double cache_oldPolygonOffsetFactor = null;
+	private Double cache_oldPolygonOffsetUnits = null;
 			
 	private int viewportX = 0;
 	private int viewportY = 0;
@@ -456,7 +455,7 @@ public class WebGLRenderer
 
 	private void setDefaultGLState () 
 	{
-		getGL().clearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+		getGL().clearColor( 0.0, 0.0, 0.0, 1.0 );
 		getGL().clearDepth( 1 );
 		getGL().clearStencil( 0 );
 
@@ -556,7 +555,7 @@ public class WebGLRenderer
 	 */
 	public void setClearColorHex( int hex )
 	{
-		setClearColorHex(hex, 1.0f);
+		setClearColorHex(hex, 1.0);
 	}
 
 	/**
@@ -567,7 +566,7 @@ public class WebGLRenderer
 	 * @param hex   the clear color value.
 	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
 	 */
-	public void setClearColorHex( int hex, float alpha ) 
+	public void setClearColorHex( int hex, double alpha ) 
 	{
 		this.clearColor.setHex( hex );
 		this.clearAlpha = alpha;
@@ -579,12 +578,12 @@ public class WebGLRenderer
 	/**
 	 * Sets the the background color, using {@link Color3f} for the color and alpha for the opacity.
 	 * 
-	 * @see #setClearColorHex(int, float). 
+	 * @see #setClearColorHex(int, double). 
 	 * 
 	 * @param color the {@link Color3f} instance.
 	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
 	 */
-	public void setClearColor( Color3f color, float alpha ) 
+	public void setClearColor( Color3f color, double alpha ) 
 	{
 		this.clearColor.copy(color);
 		this.clearAlpha = alpha;
@@ -607,7 +606,7 @@ public class WebGLRenderer
 	 * 
 	 * @return the value in range <0,1>.
 	 */
-	public float getClearAlpha() 
+	public double getClearAlpha() 
 	{
 		return this.clearAlpha;
 	}
@@ -804,7 +803,7 @@ public class WebGLRenderer
 
 			int m = 0;
 			List<Integer> order = object.getMorphTargetForcedOrder();
-			List<Float> influences = object.getMorphTargetInfluences();
+			List<Double> influences = object.getMorphTargetInfluences();
 
 			while ( material instanceof HasSkinning 
 					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() 
@@ -829,9 +828,9 @@ public class WebGLRenderer
 			// find most influencing
 
 			Map<Integer, Boolean> used = new HashMap<Integer, Boolean>();
-			float candidateInfluence = - 1;
+			double candidateInfluence = - 1;
 			int candidate = 0;
-			List<Float> influences = object.getMorphTargetInfluences();			
+			List<Double> influences = object.getMorphTargetInfluences();			
 
 			if ( object.getMorphTargetBase() != - 1 )
 				used.put( object.getMorphTargetBase(), true);
@@ -870,11 +869,11 @@ public class WebGLRenderer
 		if( material.getProgram().getUniforms().get("morphTargetInfluences") != null ) 
 		{
 			Float32Array vals = object.__webglMorphTargetInfluences;
-			float[] val2 = new float[vals.getLength()];
+			double[] val2 = new double[vals.getLength()];
 			for (int i = 0; i < vals.getLength(); i++) 
 			{
-			    Float f = vals.get(i);
-			    val2[i] = (f != null ? f : Float.NaN); // Or whatever default you want.
+			    Double f = vals.get(i);
+			    val2[i] = (f != null ? f : Double.NaN); // Or whatever default you want.
 			}
 			getGL().uniform1fv( material.getProgram().getUniforms().get("morphTargetInfluences"), val2 );
 		}
@@ -1418,21 +1417,21 @@ public class WebGLRenderer
 				{
 					Float32Array normalArray = object.normalArray;
 
-					float nax  = normalArray.get( i );
-					float nay  = normalArray.get( i + 1 );
-					float naz  = normalArray.get( i + 2 );
+					double nax  = normalArray.get( i );
+					double nay  = normalArray.get( i + 1 );
+					double naz  = normalArray.get( i + 2 );
 
-					float nbx  = normalArray.get( i + 3 );
-					float nby  = normalArray.get( i + 4 );
-					float nbz  = normalArray.get( i + 5 );
+					double nbx  = normalArray.get( i + 3 );
+					double nby  = normalArray.get( i + 4 );
+					double nbz  = normalArray.get( i + 5 );
 
-					float ncx  = normalArray.get( i + 6 );
-					float ncy  = normalArray.get( i + 7 );
-					float ncz  = normalArray.get( i + 8 );
+					double ncx  = normalArray.get( i + 6 );
+					double ncy  = normalArray.get( i + 7 );
+					double ncz  = normalArray.get( i + 8 );
 
-					float nx = ( nax + nbx + ncx ) / 3f;
-					float ny = ( nay + nby + ncy ) / 3f;
-					float nz = ( naz + nbz + ncz ) / 3f;
+					double nx = ( nax + nbx + ncx ) / 3.0;
+					double ny = ( nay + nby + ncy ) / 3.0;
+					double nz = ( naz + nbz + ncz ) / 3.0;
 
 					normalArray.set(i, nx);
 					normalArray.set( i + 1, ny);
@@ -2088,8 +2087,8 @@ Log.error("?????????????");
 					getGL().uniform1i( location, (Integer) value );
 					break;
 
-				case F: // single float
-					getGL().uniform1f( location, (Float) value );
+				case F: // single double
+					getGL().uniform1f( location, (Double) value );
 					break;
 
 				case V2: // single THREE.Vector2
@@ -2274,7 +2273,7 @@ Log.error("?????????????");
 		int doffset = 0;
 		int poffset = 0;
 		int soffset = 0;
-		float r = 0, g = 0, b = 0;
+		double r = 0, g = 0, b = 0;
 
 		for ( int l = 0, ll = lights.size(); l < ll; l ++ ) 
 		{
@@ -2304,7 +2303,7 @@ Log.error("?????????????");
 			{
 
 				DirectionalLight directionalLight = (DirectionalLight) light;
-				float intensity = directionalLight.getIntensity();
+				double intensity = directionalLight.getIntensity();
 
 				doffset = dlength * 3;
 
@@ -2336,8 +2335,8 @@ Log.error("?????????????");
 			{
 
 				PointLight pointLight = (PointLight) light;
-				float intensity = pointLight.getIntensity();
-				float distance = pointLight.getDistance();
+				double intensity = pointLight.getIntensity();
+				double distance = pointLight.getDistance();
 				poffset = plength * 3;
 
 				if ( this.isGammaInput ) 
@@ -2367,8 +2366,8 @@ Log.error("?????????????");
 			else if( light.getClass() == SpotLight.class ) 
 			{
 				SpotLight spotLight = (SpotLight) light;
-				float intensity = spotLight.intensity;
-				float distance = spotLight.distance;
+				double intensity = spotLight.intensity;
+				double distance = spotLight.distance;
 
 				soffset = slength * 3;
 
@@ -2401,7 +2400,7 @@ Log.error("?????????????");
 				sdirections.set(soffset + 1, this.cache_direction.getY());
 				sdirections.set(soffset + 2, this.cache_direction.getZ());
 
-				sangles.set(slength, (float)Math.cos( spotLight.angle ));
+				sangles.set(slength, Math.cos( spotLight.angle ));
 				sexponents.set( slength, spotLight.exponent);
 
 				slength += 1;
@@ -2410,9 +2409,9 @@ Log.error("?????????????");
 
 		// null eventual remains from removed lights
 		// (this is to avoid if in shader)
-		for ( int l = dlength * 3, ll = dcolors.getLength(); l < ll; l ++ ) dcolors.set( l, 0.0f );
-		for ( int l = plength * 3, ll = pcolors.getLength(); l < ll; l ++ ) pcolors.set( l, 0.0f );
-		for ( int l = slength * 3, ll = scolors.getLength(); l < ll; l ++ ) scolors.set( l, 0.0f );
+		for ( int l = dlength * 3, ll = dcolors.getLength(); l < ll; l ++ ) dcolors.set( l, 0.0 );
+		for ( int l = plength * 3, ll = pcolors.getLength(); l < ll; l ++ ) pcolors.set( l, 0.0 );
+		for ( int l = slength * 3, ll = scolors.getLength(); l < ll; l ++ ) scolors.set( l, 0.0 );
 
 		zlights.directional.length = dlength;
 		zlights.point.length = plength;
@@ -2494,7 +2493,7 @@ Log.error("?????????????");
 		}
 	}
 
-	private void setPolygonOffset( boolean polygonoffset, float factor, float units ) 
+	private void setPolygonOffset( boolean polygonoffset, double factor, double units ) 
 	{
 		if ( this.cache_oldPolygonOffset == null || this.cache_oldPolygonOffset != polygonoffset ) 
 		{

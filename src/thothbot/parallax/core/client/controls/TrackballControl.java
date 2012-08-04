@@ -54,25 +54,25 @@ public final class TrackballControl extends Control implements MouseMoveHandler,
 KeyDownHandler, KeyUpHandler, ContextMenuHandler
 {
 	private boolean isEnabled = true;
-	private float rotateSpeed = 1.0f;
-	private float zoomSpeed = 1.2f;
-	private float panSpeed = 0.3f;
+	private double rotateSpeed = 1.0;
+	private double zoomSpeed = 1.2;
+	private double panSpeed = 0.3;
 
 	private boolean isRotate = true;
 	private boolean isZoom = true;
 	private boolean isPan = true;
 
 	private boolean isStaticMoving = false;
-	private float dynamicDampingFactor = 0.2f;
+	private double dynamicDampingFactor = 0.2;
 
-	private float minDistance = 0f;
-	private float maxDistance = Float.MAX_VALUE;
+	private double minDistance = 0.0;
+	private double maxDistance = Double.MAX_VALUE;
 	
 	private int keyRotate = 65; // A
 	private int keyZoom = 83; // S
 	private int keyPan = 68; // D
 		
-	private float radius;
+	private double radius;
 	
 	private enum STATE {
 		 NONE,
@@ -103,7 +103,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	{
 		super(object, widget);
 		
-		this.radius =  ( widget.getOffsetWidth() + widget.getOffsetHeight() ) / 4.0f;
+		this.radius =  ( widget.getOffsetWidth() + widget.getOffsetHeight() ) / 4.0;
 		
 		if(getWidget().getClass() != RootPanel.class)
 			getWidget().getElement().setAttribute( "tabindex", "-1" );
@@ -137,21 +137,21 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	/**
 	 * Sets rotation speed. Default 1.0
 	 */
-	public void setRotateSpeed(float rotateSpeed) {
+	public void setRotateSpeed(double rotateSpeed) {
 		this.rotateSpeed = rotateSpeed;
 	}
 
 	/**
 	 * Sets zoom speed. Default 1.2
 	 */
-	public void setZoomSpeed(float zoomSpeed) {
+	public void setZoomSpeed(double zoomSpeed) {
 		this.zoomSpeed = zoomSpeed;
 	}
 
 	/**
 	 * Sets pan speed. Default 0.3 
 	 */
-	public void setPanSpeed(float panSpeed) {
+	public void setPanSpeed(double panSpeed) {
 		this.panSpeed = panSpeed;
 	}
 
@@ -180,21 +180,21 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	/**
 	 * Sets dynamic damping factor. Default 0.2
 	 */
-	public void setDynamicDampingFactor(float dynamicDampingFactor) {
+	public void setDynamicDampingFactor(double dynamicDampingFactor) {
 		this.dynamicDampingFactor = dynamicDampingFactor;
 	}
 
 	/**
 	 * Sets minimum distance to the object. Default 0
 	 */
-	public void setMinDistance(float minDistance) {
+	public void setMinDistance(double minDistance) {
 		this.minDistance = minDistance;
 	}
 
 	/**
 	 * Sets maximum distance to the object. Default Infinity.
 	 */
-	public void setMaxDistance(float maxDistance) {
+	public void setMaxDistance(double maxDistance) {
 		this.maxDistance = maxDistance;
 	}
 
@@ -360,26 +360,26 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	private Vector2f getMouseOnScreen( int clientX, int clientY ) 
 	{
 		return new Vector2f(
-			( clientX - getWidget().getAbsoluteLeft() ) / this.radius * 0.5f,
-			( clientY - getWidget().getAbsoluteTop() ) / this.radius * 0.5f
+			( clientX - getWidget().getAbsoluteLeft() ) / this.radius * 0.5,
+			( clientY - getWidget().getAbsoluteTop() ) / this.radius * 0.5
 		);
 	}
 
 	private Vector3f getMouseProjectionOnBall ( int clientX, int clientY ) 
 	{
 		Vector3f mouseOnBall = new Vector3f(
-			( clientX - getWidget().getOffsetWidth() * 0.5f - getWidget().getAbsoluteLeft() ) / this.radius,
-			( getWidget().getOffsetHeight() * 0.5f + getWidget().getAbsoluteTop() - clientY ) / this.radius,
-			0.0f
+			( clientX - getWidget().getOffsetWidth() * 0.5 - getWidget().getAbsoluteLeft() ) / this.radius,
+			( getWidget().getOffsetHeight() * 0.5 + getWidget().getAbsoluteTop() - clientY ) / this.radius,
+			0.0
 		);
 
-		float length = mouseOnBall.length();
+		double length = mouseOnBall.length();
 
-		if ( length > 1.0f )
+		if ( length > 1.0 )
 			mouseOnBall.normalize();
 
 		else
-			mouseOnBall.setZ( (float) Math.sqrt( 1.0 - length * length ) );
+			mouseOnBall.setZ( Math.sqrt( 1.0 - length * length ) );
 
 		eye.copy( getObject().getPosition() ).sub( this.target );
 
@@ -428,9 +428,9 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	
 	private void zoomCamera() 
 	{
-		float factor = 1.0f + ( zoomEnd.getY() - zoomStart.getY() ) * this.zoomSpeed;
+		double factor = 1.0 + ( zoomEnd.getY() - zoomStart.getY() ) * this.zoomSpeed;
 
-		if ( factor != 1.0f && factor > 0.0f ) 
+		if ( factor != 1.0 && factor > 0.0 ) 
 		{
 			eye.multiply( factor );
 
@@ -444,7 +444,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	
 	private void rotateCamera() 
 	{
-		float angle = (float) Math.acos( rotateStart.dot( rotateEnd ) / rotateStart.length() / rotateEnd.length() );
+		double angle = Math.acos( rotateStart.dot( rotateEnd ) / rotateStart.length() / rotateEnd.length() );
 
 		if ( angle > 0 ) 
 		{
@@ -466,7 +466,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 			} 
 			else 
 			{
-				quaternion.setFromAxisAngle( axis, angle * ( this.dynamicDampingFactor - 1.0f ) );
+				quaternion.setFromAxisAngle( axis, angle * ( this.dynamicDampingFactor - 1.0 ) );
 				quaternion.multiply( rotateStart );
 			}
 		}

@@ -55,13 +55,13 @@ public final class Icosahedron extends Polyhedron
 		return faces;
 	}
 
-	private static Float[][] getDefaultVertices()
+	private static Double[][] getDefaultVertices()
 	{
-		float t = (float) (( 1f + Math.sqrt( 5 ) ) / 2f);
-		Float[][] vertices = {
-			{ -1f,  t,  0f }, {  1f, t, 0f }, { -1f, -t,  0f }, {  1f, -t,  0f },
-			{  0f, -1f,  t }, {  0f, 1f, t }, {  0f, -1f, -t }, {  0f,  1f, -t },
-			{  t,  0f, -1f }, {  t, 0f, 1f }, { -t,  0f, -1f }, { -t,  0f,  1f }
+		double t = ( 1.0 + Math.sqrt( 5 ) ) / 2.0;
+		Double[][] vertices = {
+			{ -1.0,  t,  0.0 }, {  1.0, t, 0.0 }, { -1.0, -t,  0.0 }, {  1.0, -t,  0.0 },
+			{  0.0, -1.0,  t }, {  0.0, 1.0, t }, {  0.0, -1.0, -t }, {  0.0,  1.0, -t },
+			{  t,  0.0, -1.0 }, {  t, 0.0, 1.0 }, { -t,  0.0, -1.0 }, { -t,  0.0,  1.0 }
 		};
 		
 		return vertices;

@@ -33,20 +33,20 @@ public abstract class Curve
 {
 
 	public int __arcLengthDivisions = 0;
-	public List<Float> cacheArcLengths;
+	public List<Double> cacheArcLengths;
 	public boolean needsUpdate;
 
 	/*
 	 * Virtual base class method to overwrite and implement in subclasses - t [0 .. 1]
 	 */
-	public abstract Vector getPoint(float t);
+	public abstract Vector getPoint(double t);
 
 	/*
 	 * Get point at relative position in curve according to arc length - u [0 .. 1]
 	 */
-	public Vector getPointAt(float u)
+	public Vector getPointAt(double u)
 	{
-		float t = getUtoTmapping(u);
+		double t = getUtoTmapping(u);
 		return getPoint(t);
 	}
 
@@ -63,7 +63,7 @@ public abstract class Curve
 
 		List<Vector> pts = new ArrayList<Vector>();
 		for (int d = 0; d <= divisions; d++)
-			pts.add(this.getPoint((float)d / divisions));
+			pts.add(this.getPoint(d / divisions * 1.0));
 
 		return pts;
 	}
@@ -81,7 +81,7 @@ public abstract class Curve
 		List<Vector> pts = new ArrayList<Vector>();
 
 		for (int d = 0; d <= divisions; d++)
-			pts.add(this.getPointAt((float)d / divisions));
+			pts.add(this.getPointAt(d / divisions * 1.0));
 
 		return pts;
 	}
@@ -89,13 +89,13 @@ public abstract class Curve
 	/*
 	 * Get total curve arc length
 	 */
-	public float getLength()
+	public double getLength()
 	{
-		List<Float> lengths = this.getLengths();
+		List<Double> lengths = this.getLengths();
 		return lengths.get(lengths.size() - 1);
 	}
 
-	public List<Float> getLengths()
+	public List<Double> getLengths()
 	{
 		if (this.__arcLengthDivisions > 0)
 			return getLengths(this.__arcLengthDivisions);
@@ -106,7 +106,7 @@ public abstract class Curve
 	/*
 	 * Get list of cumulative segment lengths
 	 */
-	public List<Float> getLengths(int divisions)
+	public List<Double> getLengths(int divisions)
 	{
 		if (this.cacheArcLengths != null 
 				&& (this.cacheArcLengths.size() == (divisions + 1))
@@ -117,14 +117,14 @@ public abstract class Curve
 
 		this.needsUpdate = false;
 
-		List<Float> cache = new ArrayList<Float>(); 
-		cache.add(0.0f);
+		List<Double> cache = new ArrayList<Double>(); 
+		cache.add(0.0);
 
-		Vector last = this.getPoint(0.0f);
-		float sum = 0;
+		Vector last = this.getPoint(0.0);
+		double sum = 0;
 		for (int p = 1; p <= divisions; p++) 
 		{
-			Vector current = getPoint((float)p / divisions);
+			Vector current = getPoint(p / divisions * 1.0);
 			sum += current.distanceTo(last);
 
 			last = current;
@@ -145,25 +145,25 @@ public abstract class Curve
 	 * Given u ( 0 .. 1 ), get a t to find p. This gives you points which are
 	 * equi distance
 	 */
-	public float getUtoTmapping(float u)
+	public double getUtoTmapping(double u)
 	{
-		List<Float> arcLengths = this.getLengths();
+		List<Double> arcLengths = this.getLengths();
 		return getUtoTmapping(u, u * arcLengths.get(arcLengths.size() - 1));
 	}
 
-	public float getUtoTmapping(float u, float distance)
+	public double getUtoTmapping(double u, double distance)
 	{
 
-		List<Float> arcLengths = this.getLengths();
+		List<Double> arcLengths = this.getLengths();
 
 		// The targeted u distance value to get
-		float targetArcLength = distance;
+		double targetArcLength = distance;
 
 		// binary search for the index with largest value smaller than target u
 		// distance
 		int low = 0;
 		int high = arcLengths.size() - 1;
-		float comparison;
+		double comparison;
 
 		while (low <= high) 
 		{
@@ -195,20 +195,20 @@ public abstract class Curve
 		}
 
 		if (arcLengths.get(high) == targetArcLength)
-			return (float)high / (arcLengths.size() - 1.0f);
+			return high / arcLengths.size() - 1.0;
 
 		// we could get finer grain at lengths, or use simple interpolatation
 		// between two points
-		float lengthBefore = arcLengths.get(high);
-		float lengthAfter = arcLengths.get(high + 1);
+		double lengthBefore = arcLengths.get(high);
+		double lengthAfter = arcLengths.get(high + 1);
 
-		float segmentLength = lengthAfter - lengthBefore;
+		double segmentLength = lengthAfter - lengthBefore;
 
 		// determine where we are between the 'before' and 'after' points
-		float segmentFraction = (targetArcLength - lengthBefore) / segmentLength;
+		double segmentFraction = (targetArcLength - lengthBefore) / segmentLength;
 
 		// add that fractional amount to t
-		return ((float)high + segmentFraction) / (arcLengths.size() - 1.0f);
+		return (high + segmentFraction) / (arcLengths.size() - 1.0);
 	}
 
 	/*
@@ -216,7 +216,7 @@ public abstract class Curve
 	 * and in 3D space, infinte
 	 * TODO this should be depreciated.
 	 */
-	public Vector2f getNormalVector( float t ) 
+	public Vector2f getNormalVector( double t ) 
 	{
 		Vector2f vec = (Vector2f) this.getTangent( t );
 		return new Vector2f( -vec.getY() , vec.getX() );
@@ -229,11 +229,11 @@ public abstract class Curve
 	 * delta and find a gradient of the 2 points which seems to make a
 	 * reasonable approximation
 	 */
-	public Vector getTangent(float t)
+	public Vector getTangent(double t)
 	{
-		float delta = 0.0001f;
-		float t1 = t - delta;
-		float t2 = t + delta;
+		double delta = 0.0001;
+		double t1 = t - delta;
+		double t2 = t + delta;
 
 		// Capping in case of danger
 		if (t1 < 0)
@@ -250,7 +250,7 @@ public abstract class Curve
 		return vec;
 	}
 
-	public Vector getTangentAt(float u)
+	public Vector getTangentAt(double u)
 	{
 		return this.getTangent(this.getUtoTmapping(u));
 	}

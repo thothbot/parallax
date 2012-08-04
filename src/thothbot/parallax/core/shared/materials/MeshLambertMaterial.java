@@ -43,8 +43,8 @@ public final class MeshLambertMaterial extends Material
 	
 	private Texture envMap;
 	private Texture.OPERATIONS combine;
-	private float reflectivity;
-	private float refractionRatio;
+	private double reflectivity;
+	private double refractionRatio;
 	
 	private Texture lightMap;
 	
@@ -153,22 +153,22 @@ public final class MeshLambertMaterial extends Material
 	}
 
 	@Override
-	public float getReflectivity() {
+	public double getReflectivity() {
 		return this.reflectivity;
 	}
 
 	@Override
-	public void setReflectivity(float reflectivity) {
+	public void setReflectivity(double reflectivity) {
 		this.reflectivity = reflectivity;
 	}
 
 	@Override
-	public float getRefractionRatio() {
+	public double getRefractionRatio() {
 		return this.refractionRatio;
 	}
 
 	@Override
-	public void setRefractionRatio(float refractionRatio) {
+	public void setRefractionRatio(double refractionRatio) {
 		this.refractionRatio = refractionRatio;
 	}
 	

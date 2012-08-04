@@ -45,14 +45,14 @@ public class CurveSpline extends Curve
 	}
 
 	@Override
-	public Vector2f getPoint(float t)
+	public Vector2f getPoint(double t)
 	{
 		Vector2f v = new Vector2f();
 		
-		float point = ( points.size() - 1 ) * t;
+		double point = ( points.size() - 1.0 ) * t;
 		int intPoint = (int) Math.floor( point );
 		
-		float weight = point - intPoint;
+		double weight = point - intPoint;
 
 		int c0 = intPoint == 0 ? intPoint : intPoint - 1;
 		int c1 = intPoint;

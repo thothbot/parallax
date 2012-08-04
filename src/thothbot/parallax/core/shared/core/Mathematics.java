@@ -59,7 +59,7 @@ public class Mathematics
 	 * 
 	 * @return a clamped scalar by range <a, b>
 	 */
-	public static float clamp(float x, float a, float b)
+	public static double clamp(double x, double a, double b)
 	{
 		return (x < a) ? a : ((x > b) ? b : x);
 	}
@@ -72,7 +72,7 @@ public class Mathematics
 	 * 
 	 * @return a clamped scalar by range <a, inf).
 	 */
-	public static float clampBottom(float x, float a)
+	public static double clampBottom(double x, double a)
 	{
 		return x < a ? a : x;
 	}
@@ -88,22 +88,22 @@ public class Mathematics
 	 * 
 	 * @return a mapped value
 	 */
-	public static float mapLinear(float x, float a1, float a2, float b1, float b2)
+	public static double mapLinear(double x, double a1, double a2, double b1, double b2)
 	{
 		return b1 + (x - a1) * (b2 - b1) / (a2 - a1);
 	}
 
 	/**
-	 * The method generates random float value in the range <0, 1> with 
+	 * The method generates random double value in the range <0, 1> with 
 	 * 16 bits of randomness (standard Math.random() creates repetitive 
 	 * patterns when applied over larger space).
 	 * 
 	 * @return a random Float value.
 	 */
-	public static float random16()
+	public static double random16()
 	{
 
-		return (float) (65280 * Math.random() + 255 * Math.random()) / 65535;
+		return (65280.0 * Math.random() + 255.0 * Math.random()) / 65535.0;
 	}
 
 	/**
@@ -120,29 +120,29 @@ public class Mathematics
 	}
 
 	/**
-	 * The method generates random float value in the range <low, high>.
+	 * The method generates random double value in the range <low, high>.
 	 * 
 	 * @param low  the start value of the range.
 	 * @param high the end value of the range
 	 * 
 	 * @return a random Float value.
 	 */
-	public static float randFloat(float low, float high)
+	public static double randFloat(double low, double high)
 	{
-		return (float) (low + Math.random() * (high - low));
+		return low + Math.random() * (high - low);
 	}
 
 	/**
-	 * The method generates random float value in the interval 
+	 * The method generates random double value in the interval 
 	 * <-range/2, range/2>.
 	 * 
 	 * @param range the value used to build the interval
 	 * 
 	 * @return a random Float value.
 	 */
-	public static float randFloatSpread(float range)
+	public static double randFloatSpread(double range)
 	{
-		return (float) (range * (0.5f - Math.random()));
+		return range * (0.5 - Math.random());
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class Mathematics
 	 * 
 	 * @return 1 or -1
 	 */
-	public static int sign(float x)
+	public static int sign(double x)
 	{
 		return (x < 0) ? -1 : ((x > 0) ? 1 : 0);
 	}

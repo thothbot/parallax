@@ -38,7 +38,7 @@ public final class LineBasicMaterial extends Material
 	
 	private Material.COLORS vertexColors;
 	
-	private float linewidth;
+	private double linewidth;
 	
 	public LineBasicMaterial()
 	{	
@@ -57,11 +57,11 @@ public final class LineBasicMaterial extends Material
 		return new ShaderBasic();
 	}
 
-	public float getLinewidth() {
+	public double getLinewidth() {
 		return this.linewidth;
 	}
 	
-	public void setLinewidth(float linewidth) {
+	public void setLinewidth(double linewidth) {
 		this.linewidth = linewidth;
 	}
 

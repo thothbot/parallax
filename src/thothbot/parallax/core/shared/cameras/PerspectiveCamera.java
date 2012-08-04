@@ -30,24 +30,24 @@ package thothbot.parallax.core.shared.cameras;
  */
 public class PerspectiveCamera extends Camera
 {
-	protected float fieldOfView;
-	protected float aspectRatio;
-	protected float near;
-	protected float far;
+	protected double fieldOfView;
+	protected double aspectRatio;
+	protected double near;
+	protected double far;
 	
 	protected int fullWidth;
 	protected int fullHeight;
-	protected float x;
-	protected float y;
+	protected double x;
+	protected double y;
 	protected int width;
 	protected int height;
 
 	public PerspectiveCamera() 
 	{
-		this(50f, 1f, 0.1f, 2000f);
+		this(50, 1, 0.1, 2000);
 	}
 
-	public PerspectiveCamera(float fieldOfView, float aspectRatio, float near, float far) 
+	public PerspectiveCamera(double fieldOfView, double aspectRatio, double near, double far) 
 	{
 		super();
 		this.fieldOfView = fieldOfView;
@@ -58,43 +58,43 @@ public class PerspectiveCamera extends Camera
 		updateProjectionMatrix();
 	}
 
-	public float getFieldOfView()
+	public double getFieldOfView()
 	{
 		return fieldOfView;
 	}
 
-	public void setFieldOfView(float fov)
+	public void setFieldOfView(double fov)
 	{
 		this.fieldOfView = fov;
 	}
 
-	public float getAspectRation()
+	public double getAspectRation()
 	{
 		return aspectRatio;
 	}
 
-	public void setAspectRatio(float aspect)
+	public void setAspectRatio(double aspect)
 	{
 		this.aspectRatio = aspect;
 		this.updateProjectionMatrix();
 	}
 
-	public float getNear()
+	public double getNear()
 	{
 		return near;
 	}
 
-	public void setNear(float near)
+	public void setNear(double near)
 	{
 		this.near = near;
 	}
 
-	public float getFar()
+	public double getFar()
 	{
 		return far;
 	}
 
-	public void setFar(float far)
+	public void setFar(double far)
 	{
 		this.far = far;
 	}
@@ -119,22 +119,22 @@ public class PerspectiveCamera extends Camera
 		this.fullHeight = fullHeight;
 	}
 
-	public float getX()
+	public double getX()
 	{
 		return x;
 	}
 
-	public void setX(float x)
+	public void setX(double x)
 	{
 		this.x = x;
 	}
 
-	public float getY()
+	public double getY()
 	{
 		return y;
 	}
 
-	public void setY(float y)
+	public void setY(double y)
 	{
 		this.y = y;
 	}
@@ -172,7 +172,7 @@ public class PerspectiveCamera extends Camera
 
 	public void setLens(int focalLength, int frameHeight)
 	{
-		this.fieldOfView = (float) (2.0f * Math.atan( frameHeight / ( focalLength * 2.0f ) ) * ( 180.0f / Math.PI ));
+		this.fieldOfView = 2.0 * Math.atan( frameHeight / ( focalLength * 2.0 ) ) * ( 180.0 / Math.PI );
 		this.updateProjectionMatrix();
 	}
 	
@@ -214,7 +214,7 @@ public class PerspectiveCamera extends Camera
 	 *
 	 *   Note there is no reason monitors have to be the same size or in a grid.
 	 */
-	public void setViewOffset( int fullWidth, int fullHeight, float x, float y, int width, int height ) 
+	public void setViewOffset( int fullWidth, int fullHeight, double x, double y, int width, int height ) 
 	{
 		this.fullWidth = fullWidth;
 		this.fullHeight = fullHeight;
@@ -230,20 +230,20 @@ public class PerspectiveCamera extends Camera
 	{
 		if ( this.fullWidth != 0) 
 		{
-			float aspect = this.fullWidth / (float)this.fullHeight;
-			float top = (float) (Math.tan( this.fieldOfView * Math.PI / 360.0 ) * this.near);
-			float bottom = -top;
-			float left = aspect * bottom;
-			float right = aspect * top;
-			float width = Math.abs( right - left );
-			float height = Math.abs( top - bottom );
+			double aspect = this.fullWidth / (double)this.fullHeight;
+			double top = Math.tan( this.fieldOfView * Math.PI / 360.0 ) * this.near;
+			double bottom = -top;
+			double left = aspect * bottom;
+			double right = aspect * top;
+			double width = Math.abs( right - left );
+			double height = Math.abs( top - bottom );
 
 			this.projectionMatrix.makeFrustum
 			(
-				left + this.x * width / (float)this.fullWidth,
-				left + ( this.x + this.width ) * width / (float)this.fullWidth,
-				top - ( this.y + this.height ) * height / (float)this.fullHeight,
-				top - this.y * height / (float)this.fullHeight,
+				left + this.x * width / this.fullWidth * 1.0,
+				left + ( this.x + this.width ) * width / this.fullWidth * 1.0,
+				top - ( this.y + this.height ) * height / this.fullHeight * 1.0,
+				top - this.y * height / this.fullHeight * 1.0,
 				getNear(),
 				getFar()
 			);

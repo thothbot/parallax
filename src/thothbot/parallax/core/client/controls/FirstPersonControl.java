@@ -73,8 +73,8 @@ public class FirstPersonControl extends Control
 		KeyDownHandler, KeyUpHandler, ContextMenuHandler
 {
 	private Vector3f target;
-	private float movementSpeed = 1.0f;
-	private float lookSpeed = 0.005f;
+	private double movementSpeed = 1.0;
+	private double lookSpeed = 0.005;
 
 	private boolean noFly = false;
 	private boolean lookVertical = true;
@@ -83,24 +83,24 @@ public class FirstPersonControl extends Control
 	private boolean activeLook = true;
 
 	private boolean heightSpeed = false;
-	private float heightCoef = 1.0f;
-	private float heightMin = 0.0f;
+	private double heightCoef = 1.0;
+	private double heightMin = 0.0;
 	// TODO: Check
-	private float heightMax = 0.0f;
+	private double heightMax = 0.0;
 
 	private boolean constrainVertical = false;
-	private float verticalMin = 0f;
-	private float verticalMax = (float)Math.PI;
+	private double verticalMin = 0.0;
+	private double verticalMax = Math.PI;
 
-	private float autoSpeedFactor = 0.0f;
+	private double autoSpeedFactor = 0.0;
 
 	private int mouseX = 0;
 	private int mouseY = 0;
 
-	private float lat = 0f;
-	private float lon = 0f;
-	private float phi = 0f;
-	private float theta = 0f;
+	private double lat = 0.0;
+	private double lon = 0.0;
+	private double phi = 0.0;
+	private double theta = 0.0;
 
 	private boolean moveForward = false;
 	private boolean moveBackward = false;
@@ -144,7 +144,7 @@ public class FirstPersonControl extends Control
 	 * 
 	 * @param movementSpeed the movement speed.
 	 */
-	public void setMovementSpeed(float movementSpeed)
+	public void setMovementSpeed(double movementSpeed)
 	{
 		this.movementSpeed = movementSpeed;
 	}
@@ -154,7 +154,7 @@ public class FirstPersonControl extends Control
 	 * 
 	 * @param lookSpeed the look speed.
 	 */
-	public void setLookSpeed(float lookSpeed)
+	public void setLookSpeed(double lookSpeed)
 	{
 		this.lookSpeed = lookSpeed;
 	}
@@ -164,10 +164,10 @@ public class FirstPersonControl extends Control
 	 * 
 	 * @param delta the time in milliseconds needed to render one frame. 
 	 */
-	public void update( float delta ) 
+	public void update( double delta ) 
 	{
-		float actualMoveSpeed = 0;
-		float actualLookSpeed;
+		double actualMoveSpeed = 0;
+		double actualLookSpeed;
 		
 		if ( this.freeze ) 
 		{	
@@ -177,15 +177,14 @@ public class FirstPersonControl extends Control
 		{
 			if ( this.heightSpeed ) 
 			{
-				float y = Mathematics.clamp( getObject().getPosition().getY(), this.heightMin, this.heightMax );
-				float heightDelta = y - this.heightMin;
+				double y = Mathematics.clamp( getObject().getPosition().getY(), this.heightMin, this.heightMax );
+				double heightDelta = y - this.heightMin;
 
 				this.autoSpeedFactor = delta * ( heightDelta * this.heightCoef );
-
 			} 
 			else 
 			{
-				this.autoSpeedFactor = 0.0f;
+				this.autoSpeedFactor = 0.0;
 			}
 
 			actualMoveSpeed = delta * this.movementSpeed;
@@ -211,47 +210,47 @@ public class FirstPersonControl extends Control
 			actualLookSpeed = delta * this.lookSpeed;
 
 			if ( !this.activeLook )
-				actualLookSpeed = 0.0f;
+				actualLookSpeed = 0.0;
 
 			this.lon += this.mouseX * actualLookSpeed;
 			if( this.lookVertical ) 
 				this.lat -= this.mouseY * actualLookSpeed; // * this.invertVertical?-1:1;
 
-			this.lat = Math.max( - 85f, Math.min( 85f, this.lat ) );
-			this.phi = (float) (( 90.0 - this.lat ) * Math.PI / 180.0);
-			this.theta = (float) (this.lon * Math.PI / 180.0);
+			this.lat = Math.max( - 85.0, Math.min( 85.0, this.lat ) );
+			this.phi = ( 90.0 - this.lat ) * Math.PI / 180.0;
+			this.theta = this.lon * Math.PI / 180.0;
 
 			Vector3f targetPosition = this.target;
 			Vector3f position = getObject().getPosition();
 
-			targetPosition.setX((float) (position.getX() + 100.0 * Math.sin( this.phi ) * Math.cos( this.theta )));
-			targetPosition.setY((float) (position.getY() + 100.0 * Math.cos( this.phi )));
-			targetPosition.setZ((float) (position.getZ() + 100.0 * Math.sin( this.phi ) * Math.sin( this.theta )));
+			targetPosition.setX(position.getX() + 100.0 * Math.sin( this.phi ) * Math.cos( this.theta ));
+			targetPosition.setY(position.getY() + 100.0 * Math.cos( this.phi ));
+			targetPosition.setZ(position.getZ() + 100.0 * Math.sin( this.phi ) * Math.sin( this.theta ));
 
 		}
 
-		float verticalLookRatio = 1.0f;
+		double verticalLookRatio = 1.0;
 
 		if ( this.constrainVertical )
-			verticalLookRatio = (float) (Math.PI / ( this.verticalMax - this.verticalMin ));
+			verticalLookRatio = Math.PI / ( this.verticalMax - this.verticalMin );
 
 		this.lon += this.mouseX * actualLookSpeed;
 		if( this.lookVertical ) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
 
-		this.lat = Math.max( - 85f, Math.min( 85f, this.lat ) );
-		this.phi = (float) (( 90.0 - this.lat ) * Math.PI / 180.0);
+		this.lat = Math.max( - 85.0, Math.min( 85.0, this.lat ) );
+		this.phi = ( 90.0 - this.lat ) * Math.PI / 180.0;
 
-		this.theta = (float) (this.lon * Math.PI / 180.0);
+		this.theta = this.lon * Math.PI / 180.0;
 
 		if ( this.constrainVertical )
-			this.phi = Mathematics.mapLinear( this.phi, 0.0f, (float)Math.PI, this.verticalMin, this.verticalMax );
+			this.phi = Mathematics.mapLinear( this.phi, 0.0, Math.PI, this.verticalMin, this.verticalMax );
 
 		Vector3f targetPosition = this.target;
 		Vector3f position = getObject().getPosition();
 
-		targetPosition.setX((float) (position.getX() + 100.0 * Math.sin( this.phi ) * Math.cos( this.theta )));
-		targetPosition.setY((float) (position.getY() + 100.0 * Math.cos( this.phi )));
-		targetPosition.setZ((float) (position.getZ() + 100.0 * Math.sin( this.phi ) * Math.sin( this.theta )));
+		targetPosition.setX(position.getX() + 100.0 * Math.sin( this.phi ) * Math.cos( this.theta ));
+		targetPosition.setY(position.getY() + 100.0 * Math.cos( this.phi ));
+		targetPosition.setZ(position.getZ() + 100.0 * Math.sin( this.phi ) * Math.sin( this.theta ));
 		
 		this.getObject().lookAt( targetPosition );
 	}

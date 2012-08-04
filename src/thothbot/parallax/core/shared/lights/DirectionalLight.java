@@ -29,8 +29,8 @@ public class DirectionalLight extends Light
 {
 	private Object3D target;
 	
-	private float intensity;
-	private float distance;
+	private double intensity;
+	private double distance;
 
 	private boolean castShadow = false;
 
@@ -46,8 +46,8 @@ public class DirectionalLight extends Light
 
 	public boolean shadowCameraVisible = false;
 
-	public float shadowBias = 0f;
-	public float shadowDarkness = 0.5f;
+	public double shadowBias = 0.0;
+	public double shadowDarkness = 0.5;
 
 	public int shadowMapWidth = 512;
 	public int shadowMapHeight = 512;
@@ -59,12 +59,12 @@ public class DirectionalLight extends Light
 	public Vector3f shadowCascadeOffset;
 	public int shadowCascadeCount = 2;
 
-	public float[] shadowCascadeBias = { 0f, 0f, 0f};
+	public double[] shadowCascadeBias = { 0.0, 0.0, 0.0};
 	public int[] shadowCascadeWidth = { 512, 512, 512 };
 	public int[] shadowCascadeHeight = { 512, 512, 512 };
 
-	public float[] shadowCascadeNearZ = { -1.000f, 0.990f, 0.998f };
-	public float[] shadowCascadeFarZ = { 0.990f, 0.998f, 1.000f };
+	public double[] shadowCascadeNearZ = { -1.000, 0.990, 0.998 };
+	public double[] shadowCascadeFarZ = { 0.990, 0.998, 1.000 };
 
 	public Object[] shadowCascadeArray;
 
@@ -77,24 +77,24 @@ public class DirectionalLight extends Light
 
 	public DirectionalLight(int hex) 
 	{
-		this(hex, 1f);
+		this(hex, 1);
 	}
 
-	public DirectionalLight(int hex, float intensity)
+	public DirectionalLight(int hex, double intensity)
 	{
-		this(hex, intensity, 0f);
+		this(hex, intensity, 0);
 	}
 	
-	public DirectionalLight(int hex, float intensity, float distance) 
+	public DirectionalLight(int hex, double intensity, double distance) 
 	{
 		super(hex);
 
 		this.intensity = intensity;
 		this.distance = distance;
 
-		this.position = new Vector3f(0f, 1f, 0f);
+		this.position = new Vector3f(0, 1, 0);
 		this.target   = new Object3D();
-		this.shadowCascadeOffset = new Vector3f(0f, 0f, -1000f);
+		this.shadowCascadeOffset = new Vector3f(0, 0, -1000);
 	}
 	
 	public Object3D getTarget() {
@@ -105,19 +105,19 @@ public class DirectionalLight extends Light
 		this.target = target;
 	}
 	
-	public float getIntensity() {
+	public double getIntensity() {
 		return this.intensity;
 	}
 	
-	public void setIntensity(float intensity) {
+	public void setIntensity(double intensity) {
 		this.intensity = intensity;
 	}
 	
-	public float getDistance() {
+	public double getDistance() {
 		return this.distance;
 	}
 	
-	public void setDistance(float distance) {
+	public void setDistance(double distance) {
 		this.distance = distance;
 	}
 

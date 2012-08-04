@@ -45,18 +45,18 @@ public class Polyhedron extends Geometry
 		public int index;
 		public UVf uv;
 		
-		public ContainerOfVector(float x, float y, float z)
+		public ContainerOfVector(double x, double y, double z)
 		{
 			this.vector = new Vector3f(x, y, z);
 		}
 	}
 
-	public Polyhedron(Float[][] vertices, Integer[][] faces) 
+	public Polyhedron(Double[][] vertices, Integer[][] faces) 
 	{
 		this(vertices, faces, 1, 0);
 	}
 	
-	public Polyhedron(Float[][] vertices, Integer[][] faces, int radius, int detail) 
+	public Polyhedron(Double[][] vertices, Integer[][] faces, int radius, int detail) 
 	{
 		super();
 		this.containers = new ArrayList<ContainerOfVector>();
@@ -93,8 +93,8 @@ public class Polyhedron extends Geometry
 		container.index = getVertices().size() - 1;
 
 		// Texture coords are equivalent to map coords, calculate angle and convert to fraction of a circle.
-		float u = (float) (azimuth( container.vector ) / 2f / Math.PI + 0.5f);
-		float v = (float) (inclination( container.vector ) / Math.PI + 0.5f);
+		double u = azimuth( container.vector ) / 2.0 / Math.PI + 0.5;
+		double v = inclination( container.vector ) / Math.PI + 0.5;
 		container.uv = new UVf( u, v );
 
 		return container;
@@ -121,8 +121,8 @@ public class Polyhedron extends Geometry
 				correctUV( c3.uv, c3.vector, azi )
 			) );
 		}
-		else {
-
+		else 
+		{
 			detail -= 1;
 			// split triangle into 4 smaller triangles
 			make( c1, midpoint( c1, c2 ), midpoint( c1, c3 ), detail ); // top quadrant
@@ -136,11 +136,13 @@ public class Polyhedron extends Geometry
 
 	protected ContainerOfVector midpoint( ContainerOfVector c1, ContainerOfVector c2 ) 
 	{
-		if ( !midpoints.containsKey(c1.index )) {
+		if ( !midpoints.containsKey(c1.index )) 
+		{
 			midpoints.put( c1.index, new HashMap<Integer, ContainerOfVector>());
 		}
 
-		if ( !midpoints.containsKey(c2.index )) {
+		if ( !midpoints.containsKey(c2.index )) 
+		{
 			midpoints.put( c2.index, new HashMap<Integer, ContainerOfVector>());
 		}
 
@@ -148,7 +150,7 @@ public class Polyhedron extends Geometry
 		if ( mid == null ) 
 		{
 			// generate mean point and project to surface with prepare()
-			ContainerOfVector con = new ContainerOfVector(0,0,0);
+			ContainerOfVector con = new ContainerOfVector(0, 0, 0);
 			con.vector.add( c1.vector, c2.vector ).divide( 2 );
 		
 			mid = prepare(con);
@@ -180,10 +182,10 @@ public class Polyhedron extends Geometry
 	protected UVf correctUV( UVf uv, Vector3f vector, double azimuth ) 
 	{
 		if ( (azimuth < 0) && (uv.getU() == 1) ) 
-			uv = new UVf( uv.getU() - 1.0f, uv.getV() );
+			uv = new UVf( uv.getU() - 1.0, uv.getV() );
 		
 		if ( (vector.getX() == 0) && (vector.getZ() == 0) ) 
-			uv = new UVf( (float) (azimuth / 2f / Math.PI + 0.5), uv.getV() );
+			uv = new UVf( azimuth / 2.0 / Math.PI + 0.5, uv.getV() );
 		
 		return uv;
 	}

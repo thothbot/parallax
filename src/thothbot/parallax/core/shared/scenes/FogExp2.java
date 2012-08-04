@@ -34,7 +34,7 @@ import thothbot.parallax.core.client.shader.Uniform;
  */
 public final class FogExp2 extends Fog
 {
-	private float density;
+	private double density;
 
 	/**
 	 * This default constructor will make fog with 
@@ -53,7 +53,7 @@ public final class FogExp2 extends Fog
 	 * @param hex     the color in HEX format
 	 * @param density the density value in range <0.0, 1.0>
 	 */
-	public FogExp2(int hex, float density) 
+	public FogExp2(int hex, double density) 
 	{
 		super(hex);
 		this.density = density;
@@ -64,7 +64,7 @@ public final class FogExp2 extends Fog
 	 * 
 	 * @param density the density value in range <0.0, 1.0>
 	 */
-	public void setDensity(float density)
+	public void setDensity(double density)
 	{
 		this.density = density;
 	}
@@ -74,7 +74,7 @@ public final class FogExp2 extends Fog
 	 * 
 	 * @return the density value
 	 */
-	public float getDensity()
+	public double getDensity()
 	{
 		return this.density;
 	}

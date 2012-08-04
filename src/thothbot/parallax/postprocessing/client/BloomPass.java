@@ -40,8 +40,8 @@ import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class BloomPass extends Pass
 {
-	private static Vector2f blurX = new Vector2f( 0.001953125f, 0.0f );
-	private static Vector2f blurY = new Vector2f( 0.0f, 0.001953125f );
+	private static Vector2f blurX = new Vector2f( 0.001953125, 0.0 );
+	private static Vector2f blurY = new Vector2f( 0.0, 0.001953125 );
 	
 	private RenderTargetTexture renderTargetX;
 	private RenderTargetTexture renderTargetY;
@@ -59,12 +59,12 @@ public class BloomPass extends Pass
 		this(1);
 	}
 	
-	public BloomPass( float strength )
+	public BloomPass( double strength )
 	{
 		this(strength, 25, 4.0f, 256);
 	}
 
-	public BloomPass( float strength, int kernelSize, float sigma, int resolution ) 
+	public BloomPass( double strength, int kernelSize, double sigma, int resolution ) 
 	{
 		super();
 
@@ -108,7 +108,7 @@ public class BloomPass extends Pass
 	}
 
 	@Override
-	public void render(EffectComposer effectComposer, float delta, boolean maskActive)
+	public void render(EffectComposer effectComposer, double delta, boolean maskActive)
 	{
 		if ( maskActive ) 
 			effectComposer.getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );

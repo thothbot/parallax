@@ -31,8 +31,8 @@ import thothbot.parallax.core.client.shader.Uniform;
  */
 public final class FogSimple extends Fog 
 {
-	private float near;
-	private float far;
+	private double near;
+	private double far;
 
 	/**
 	 * This default constructor will make simple fog with 
@@ -52,7 +52,7 @@ public final class FogSimple extends Fog
 	 * @param near the near scalar value
 	 * @param far  the far scala value
 	 */
-	public FogSimple(int hex, float near, float far) 
+	public FogSimple(int hex, double near, double far) 
 	{
 		super(hex);
 		this.near = near;
@@ -64,7 +64,7 @@ public final class FogSimple extends Fog
 	 * 
 	 * @param near the near scalar value
 	 */
-	public void setNear(float near)
+	public void setNear(double near)
 	{
 		this.near = near;
 	}
@@ -74,7 +74,7 @@ public final class FogSimple extends Fog
 	 * 
 	 * @return the near fog parameter
 	 */
-	public float getNear()
+	public double getNear()
 	{
 		return near;
 	}
@@ -84,7 +84,7 @@ public final class FogSimple extends Fog
 	 * 
 	 * @param far the far fog parameter
 	 */
-	public void setFar(float far)
+	public void setFar(double far)
 	{
 		this.far = far;
 	}
@@ -94,7 +94,7 @@ public final class FogSimple extends Fog
 	 * 
 	 * @return the far fog parameter
 	 */
-	public float getFar()
+	public double getFar()
 	{
 		return far;
 	}
