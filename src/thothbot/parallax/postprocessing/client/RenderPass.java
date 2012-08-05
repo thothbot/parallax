@@ -23,7 +23,7 @@
 package thothbot.parallax.postprocessing.client;
 
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -33,10 +33,10 @@ public class RenderPass extends Pass
 	private Camera camera;
 	private Material overrideMaterial;
 	
-	private Color3 clearColor;
+	private Color clearColor;
 	private double clearAlpha;
 	
-	private Color3 oldClearColor;
+	private Color oldClearColor;
 	private double oldClearAlpha;
 	
 	private boolean clear = true;
@@ -46,12 +46,12 @@ public class RenderPass extends Pass
 		this(scene, camera, null, null);
 	}
 
-	public RenderPass ( Scene scene, Camera camera, Material overrideMaterial, Color3 clearColor )
+	public RenderPass ( Scene scene, Camera camera, Material overrideMaterial, Color clearColor )
 	{
 		this(scene, camera, overrideMaterial, clearColor, 1.0);
 	}
 	
-	public RenderPass ( Scene scene, Camera camera, Material overrideMaterial, Color3 clearColor, double clearAlpha ) 
+	public RenderPass ( Scene scene, Camera camera, Material overrideMaterial, Color clearColor, double clearAlpha ) 
 	{
 		this.scene = scene;
 		this.camera = camera;
@@ -61,7 +61,7 @@ public class RenderPass extends Pass
 		this.clearColor = clearColor;
 		this.clearAlpha = clearAlpha;
 
-		this.oldClearColor = new Color3();
+		this.oldClearColor = new Color();
 		this.oldClearAlpha = 1.0;
 
 		this.setEnabled(true);

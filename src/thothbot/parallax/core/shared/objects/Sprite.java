@@ -26,7 +26,7 @@ import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.textures.Texture;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
@@ -59,7 +59,7 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 		}
 	}
 	
-	private Color3 color;
+	private Color color;
 	private Vector3 rotation3d;
 	private Texture map;
 	
@@ -86,7 +86,7 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 	
 	public Sprite() 
 	{
-		this.color = new Color3( 0xffffff );
+		this.color = new Color( 0xffffff );
 		this.map = new Texture();
 
 		this.mergeWith3D = !this.useScreenCoordinates;
@@ -100,11 +100,11 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 		this.uvScale  = new Vector2( 1, 1 );
 	}
 	
-	public Color3 getColor() {
+	public Color getColor() {
 		return color;
 	}
 
-	public void setColor(Color3 color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 

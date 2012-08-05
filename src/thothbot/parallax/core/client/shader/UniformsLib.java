@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector4;
@@ -42,7 +42,7 @@ public class UniformsLib
 {
 	public static final Map<String, Uniform> common = new HashMap<String, Uniform>() {
 		{
-			put("diffuse", new Uniform(Uniform.TYPE.C, new Color3( 0xeeeeee )));
+			put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
 			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
 			put("map", new Uniform(Uniform.TYPE.T,  0 ));
@@ -66,7 +66,7 @@ public class UniformsLib
 			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
 			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0 ));
-			put("fogColor", new Uniform(Uniform.TYPE.C, new Color3( 0xffffff )));
+			put("fogColor", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 		}
 	};
 	
@@ -93,7 +93,7 @@ public class UniformsLib
 	
 	public static final Map<String, Uniform> particle = new HashMap<String, Uniform>() {
 		{
-			put("psColor", new Uniform(Uniform.TYPE.C, new Color3( 0xeeeeee )));
+			put("psColor", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
 			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
@@ -102,7 +102,7 @@ public class UniformsLib
 			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
 			put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0 ));
 			put("fogFar",     new Uniform(Uniform.TYPE.F,  2000.0 ));
-			put("fogColor",   new Uniform(Uniform.TYPE.C, new Color3( 0xffffff )));
+			put("fogColor",   new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 		}
 	};
 	

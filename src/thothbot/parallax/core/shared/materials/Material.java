@@ -36,7 +36,7 @@ import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
@@ -327,7 +327,7 @@ public abstract class Material
 		if(this instanceof HasColor)
 		{
 			if ( isGammaInput ) 
-				((Color3) uniforms.get("diffuse").getValue()).copyGammaToLinear( ((HasColor)this).getColor() );
+				((Color) uniforms.get("diffuse").getValue()).copyGammaToLinear( ((HasColor)this).getColor() );
  
 			else
 				uniforms.get("diffuse").setValue( ((HasColor)this).getColor() );

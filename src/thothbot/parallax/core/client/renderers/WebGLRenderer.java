@@ -50,7 +50,7 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Frustum;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
@@ -122,8 +122,8 @@ public class WebGLRenderer
 	// shader precision. Can be "highp", "mediump" or "lowp".
 	private WebGLRenderer.PRECISION precision = WebGLRenderer.PRECISION.HIGHP;
 				
-	// Integer, default is Color3(0x000000).
-	private Color3 clearColor = new Color3(0x000000);
+	// Integer, default is Color(0x000000).
+	private Color clearColor = new Color(0x000000);
 
 	// double, default is 0
 	private double clearAlpha = 1.0;
@@ -576,14 +576,14 @@ public class WebGLRenderer
 	
 
 	/**
-	 * Sets the the background color, using {@link Color3} for the color and alpha for the opacity.
+	 * Sets the the background color, using {@link Color} for the color and alpha for the opacity.
 	 * 
 	 * @see #setClearColorHex(int, double). 
 	 * 
-	 * @param color the {@link Color3} instance.
+	 * @param color the {@link Color} instance.
 	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
 	 */
-	public void setClearColor( Color3 color, double alpha ) 
+	public void setClearColor( Color color, double alpha ) 
 	{
 		this.clearColor.copy(color);
 		this.clearAlpha = alpha;
@@ -594,9 +594,9 @@ public class WebGLRenderer
 	/**
 	 * Returns the background color.
 	 * 
-	 * @return the {@link Color3} instance. 
+	 * @return the {@link Color} instance. 
 	 */
-	public Color3 getClearColor() 
+	public Color getClearColor() 
 	{
 		return this.clearColor;
 	}
@@ -2114,7 +2114,7 @@ Log.error("?????????????");
 					break;
 
 				case C: // single THREE.Color
-					Color3 color = (Color3) value;
+					Color color = (Color) value;
 					getGL().uniform3f( location, color.getR(), color.getG(), color.getB() );
 					break;
 
@@ -2288,7 +2288,7 @@ Log.error("?????????????");
 
 			if ( light.isOnlyShadow() ) continue;
 
-			Color3 color = light.getColor();
+			Color color = light.getColor();
 
 			if ( light.getClass() == AmbientLight.class ) 
 			{

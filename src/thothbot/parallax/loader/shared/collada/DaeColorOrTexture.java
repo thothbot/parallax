@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -36,7 +36,7 @@ public class DaeColorOrTexture extends DaeElement
 	private String texcoord;
 	private Map<String, Float> technique;
 	
-	private Color3 color;
+	private Color color;
 	
 	public DaeColorOrTexture(Node node) 
 	{
@@ -45,14 +45,14 @@ public class DaeColorOrTexture extends DaeElement
 		Log.debug("DaeColorOrTexture() " + toString()); 
 	}
 	
-	public Color3 getColor() {
+	public Color getColor() {
 		return this.color;
 	}
 
 	@Override
 	public void read() 
 	{
-		this.color = new Color3();
+		this.color = new Color();
 		this.color.setRGB( (float)Math.random(), (float)Math.random(), (float)Math.random() );
 
 		NodeList list = getNode().getChildNodes();

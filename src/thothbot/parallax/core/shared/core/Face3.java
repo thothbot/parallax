@@ -39,8 +39,8 @@ public class Face3
 
 	protected Vector3 normal;
 	protected List<Vector3> vertexNormals;
-	protected Color3 color;
-	protected List<Color3> vertexColors;
+	protected Color color;
+	protected List<Color> vertexColors;
 	// protected List<Material> materials;
 	protected int materialIndex;
 	protected List<Vector4> vertexTangents;
@@ -63,17 +63,17 @@ public class Face3
 		this.materialIndex = materialIndex;
 	}
 	
-	public Face3(int a, int b, int c, List<Vector3> normals, List<Color3> colors,	int materialIndex) 
+	public Face3(int a, int b, int c, List<Vector3> normals, List<Color> colors,	int materialIndex) 
 	{
 		this(a, b, c);
 		
 		this.setVertexNormals(normals);
-		this.setVertexColors(new ArrayList<Color3>());
+		this.setVertexColors(new ArrayList<Color>());
 
 		this.materialIndex = materialIndex;
 	}
 
-	public Face3(int a, int b, int c, Vector3 normal, Color3 color, int materialIndex) 
+	public Face3(int a, int b, int c, Vector3 normal, Color color, int materialIndex) 
 	{
 		this(a, b, c);
 		
@@ -81,7 +81,7 @@ public class Face3
 		this.setVertexNormals(new ArrayList<Vector3>());
 
 		this.setColor(color);
-		this.setVertexColors(new ArrayList<Color3>());
+		this.setVertexColors(new ArrayList<Color>());
 
 		this.materialIndex = materialIndex;
 	}
@@ -95,11 +95,11 @@ public class Face3
 		this.setVertexTangents(new ArrayList<Vector4>());
 		this.setVertexNormals(new ArrayList<Vector3>());
 		this.setCentroid(new Vector3());
-		this.setColor(new Color3(0x000000));
-		this.setVertexColors(new ArrayList<Color3>());
+		this.setColor(new Color(0x000000));
+		this.setVertexColors(new ArrayList<Color>());
 
 		this.materialIndex = -1;
-		this.vertexColors = new ArrayList<Color3>();
+		this.vertexColors = new ArrayList<Color>();
 		// this.materials = new ArrayList<Material>();
 		
 		this.originalNormal = new Vector3();
@@ -173,22 +173,22 @@ public class Face3
 		return this.originalVertexNormals;
 	}
 
-	public void setColor(Color3 color)
+	public void setColor(Color color)
 	{
 		this.color = color;
 	}
 
-	public Color3 getColor()
+	public Color getColor()
 	{
 		return color;
 	}
 
-	public void setVertexColors(List<Color3> vertexColors)
+	public void setVertexColors(List<Color> vertexColors)
 	{
 		this.vertexColors = vertexColors;
 	}
 
-	public List<Color3> getVertexColors()
+	public List<Color> getVertexColors()
 	{
 		return vertexColors;
 	}

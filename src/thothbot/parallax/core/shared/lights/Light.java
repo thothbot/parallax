@@ -22,25 +22,25 @@
 
 package thothbot.parallax.core.shared.lights;
 
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 public class Light extends Object3D
 {
-	private Color3 color;
+	private Color color;
 	private boolean isOnlyShadow = false;
 	
 	public Light(int hex) 
 	{
 		super();
-		this.color = new Color3(hex);
+		this.color = new Color(hex);
 	}
 	
-	public void setColor(Color3 color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 
-	public Color3 getColor() {
+	public Color getColor() {
 		return color;
 	}
 	

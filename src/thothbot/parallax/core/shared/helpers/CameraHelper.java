@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Projector;
 import thothbot.parallax.core.shared.core.Vector3;
@@ -59,7 +59,7 @@ public class CameraHelper extends Object3D
 		this.lineGeometry = new Geometry();
 		
 		LineBasicMaterial lbm = new LineBasicMaterial();
-		lbm.setColor( new Color3(0xffffff) );
+		lbm.setColor( new Color(0xffffff) );
 		lbm.setVertexColors( Material.COLORS.FACE );
 
 		this.lineMaterial = lbm;
@@ -192,7 +192,7 @@ public class CameraHelper extends Object3D
 	private void addPoint( String id, int hex ) 
 	{
 		this.lineGeometry.getVertices().add( new Vector3() );
-		this.lineGeometry.getColors().add( new Color3( hex ) );
+		this.lineGeometry.getColors().add( new Color( hex ) );
 
 		if ( !this.pointMap.containsKey(id) ) 
 			this.pointMap.put( id, new ArrayList<Integer>() );

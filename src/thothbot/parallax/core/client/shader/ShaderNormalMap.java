@@ -22,7 +22,7 @@ package thothbot.parallax.core.client.shader;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 
@@ -83,9 +83,9 @@ public final class ShaderNormalMap extends Shader
 		this.addUniform("uDisplacementBias",  new Uniform(Uniform.TYPE.F, 0.0 ));
 		this.addUniform("uDisplacementScale", new Uniform(Uniform.TYPE.F, 1.0 ));
 		
-		this.addUniform("uDiffuseColor",  new Uniform(Uniform.TYPE.C, new Color3( 0xffffff ) ));
-		this.addUniform("uSpecularColor", new Uniform(Uniform.TYPE.C, new Color3( 0x111111 ) ));
-		this.addUniform("uAmbientColor",  new Uniform(Uniform.TYPE.C, new Color3( 0xffffff ) ));
+		this.addUniform("uDiffuseColor",  new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
+		this.addUniform("uSpecularColor", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
+		this.addUniform("uAmbientColor",  new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("uShininess",     new Uniform(Uniform.TYPE.F, 30.0  ));
 		this.addUniform("uOpacity",       new Uniform(Uniform.TYPE.F, 1.0 ));
 		

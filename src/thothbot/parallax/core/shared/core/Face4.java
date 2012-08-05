@@ -46,7 +46,7 @@ public class Face4 extends Face3
 		this.setD(d);
 	}
 	
-	public Face4(int a, int b, int c, int d, Vector3 normal, Color3 color, int materialIndex) 
+	public Face4(int a, int b, int c, int d, Vector3 normal, Color color, int materialIndex) 
 	{
 		super(a, b, c, normal, color, materialIndex);
 		this.setD(d);

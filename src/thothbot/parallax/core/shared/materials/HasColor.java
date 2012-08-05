@@ -19,7 +19,7 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 
 /**
  * Material has a color.
@@ -34,12 +34,12 @@ public interface HasColor
 	 * 
 	 * @return the color
 	 */
-	public Color3 getColor();
+	public Color getColor();
 	
 	/**
 	 * Sets material color
 	 * 
 	 * @param color the color
 	 */
-	public void setColor(Color3 color);
+	public void setColor(Color color);
 }

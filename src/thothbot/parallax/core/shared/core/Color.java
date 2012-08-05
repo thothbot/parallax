@@ -31,7 +31,7 @@ package thothbot.parallax.core.shared.core;
  * 
  * @author thothbot
  */
-public final class Color3
+public final class Color
 {
 	/**
 	 * The Color in HEX.
@@ -57,7 +57,7 @@ public final class Color3
 	 * This default constructor will create color where R=1.0, G=1.0, B=1.0
 	 * ie (255, 255, 255) or 0xFFFFFF in HEX.
 	 */
-	public Color3() 
+	public Color() 
 	{		
 		setHex(0xFFFFFF);
 	}
@@ -69,7 +69,7 @@ public final class Color3
 	 * 
 	 * @param hex Color in HEX format
 	 */
-	public Color3(int hex) 
+	public Color(int hex) 
 	{
 		setHex(hex);
 	}
@@ -167,7 +167,7 @@ public final class Color3
 	 * 
 	 * @return a current color
 	 */
-	public Color3 setRGB(double r, double g, double b)
+	public Color setRGB(double r, double g, double b)
 	{
 		this.setR(r);
 		this.setG(g);
@@ -189,7 +189,7 @@ public final class Color3
 	 * 
 	 * @return a current color
 	 */
-	public Color3 setHSV(double h, double s, double v)
+	public Color setHSV(double h, double s, double v)
 	{
 		double r = 0, g = 0, b = 0, f, p, q, t;
 
@@ -227,7 +227,7 @@ public final class Color3
 	 * 
 	 * @param color the other color
 	 */
-	public void copy(Color3 color)
+	public void copy(Color color)
 	{
 		this.setRGB(color.getR(), color.getG(), color.getB());
 	}
@@ -239,7 +239,7 @@ public final class Color3
 	 * 
 	 * @return the current color
 	 */
-	public Color3 copyGammaToLinear(Color3 color)
+	public Color copyGammaToLinear(Color color)
 	{
 		this.setR(color.getR() * color.getR());
 		this.setG(color.getG() * color.getG());
@@ -255,7 +255,7 @@ public final class Color3
 	 * 
 	 * @return a gamma
 	 */
-	public Color3 copyLinearToGamma(Color3 color)
+	public Color copyLinearToGamma(Color color)
 	{
 
 		this.setR(Math.sqrt(color.getR()));
@@ -269,7 +269,7 @@ public final class Color3
 	 * 
 	 * @return a current color
 	 */
-	public Color3 convertGammaToLinear()
+	public Color convertGammaToLinear()
 	{
 		this.setR(this.getR() * this.getR());
 		this.setG(this.getG() * this.getG());
@@ -283,7 +283,7 @@ public final class Color3
 	 * 
 	 * @return a current gamma
 	 */
-	public Color3 convertLinearToGamma()
+	public Color convertLinearToGamma()
 	{
 		this.setR(Math.sqrt(this.getR()));
 		this.setG(Math.sqrt(this.getG()));
@@ -298,7 +298,7 @@ public final class Color3
 	 * @param color the input color
 	 * @param alpha the alpha value in range <0.0, 1.0>
 	 */
-	public void lerp(Color3 color, double alpha)
+	public void lerp(Color color, double alpha)
 	{
 		this.setR(this.getR() + (color.getR() - this.getR()) * alpha);
 		this.setG(this.getG() + (color.getG() - this.getG()) * alpha);
@@ -311,9 +311,9 @@ public final class Color3
 	 * 
 	 * @return a new color instance, based on the current color class
 	 */
-	public Color3 clone()
+	public Color clone()
 	{
-		return new Color3(this.hex);
+		return new Color(this.hex);
 	}
 	
 	/**

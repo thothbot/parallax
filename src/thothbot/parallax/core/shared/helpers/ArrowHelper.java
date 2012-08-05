@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.helpers;
 
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
@@ -58,14 +58,14 @@ public class ArrowHelper extends Object3D
 		lineGeometry.getVertices().add( new Vector3( 0, 1, 0 ) );
 
 		LineBasicMaterial lbm = new LineBasicMaterial();
-		lbm.setColor(new Color3(hex));
+		lbm.setColor(new Color(hex));
 		this.line = new Line( lineGeometry, lbm );
 		this.addChild( this.line );
 
 		Cylinder coneGeometry = new Cylinder( 0, 0.05, 0.25, 5, 1 );
 
 		MeshBasicMaterial mbm = new MeshBasicMaterial();
-		mbm.setColor(new Color3(hex));
+		mbm.setColor(new Color(hex));
 		this.cone = new Mesh( coneGeometry, mbm );
 		this.cone.getPosition().set( 0, 1, 0 );
 		this.addChild( this.cone );

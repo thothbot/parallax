@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
@@ -129,7 +129,7 @@ public class GeometryUtils
 				Face3 face = faces2.get( i );//, faceCopy, normal, color,
 				Face3 faceCopy = null;
 				List<Vector3> faceVertexNormals = face.getVertexNormals();
-				List<Color3> faceVertexColors = face.getVertexColors();
+				List<Color> faceVertexColors = face.getVertexColors();
 
 				if ( face instanceof Face3 ) 
 				{
@@ -160,7 +160,7 @@ public class GeometryUtils
 
 				for ( int j = 0, jl = faceVertexColors.size(); j < jl; j ++ ) 
 				{
-					Color3 color = faceVertexColors.get( j );
+					Color color = faceVertexColors.get( j );
 					faceCopy.getVertexColors().add( color.clone() );
 				}
 

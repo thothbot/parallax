@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.shader.ShaderLambert;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector3;
 
 public final class MeshLambertMaterial extends Material 
@@ -50,9 +50,9 @@ public final class MeshLambertMaterial extends Material
 	
 	private boolean isFog;
 	
-	private Color3 color;
-	private Color3 ambient;
-	private Color3 emissive;
+	private Color color;
+	private Color ambient;
+	private Color emissive;
 	
 	private Texture map;
 	
@@ -79,9 +79,9 @@ public final class MeshLambertMaterial extends Material
 		
 		setFog(true);
 		
-		setColor(new Color3(0xffffff));
-		setAmbient(new Color3(0xffffff));
-		setEmissive(new Color3( 0x000000 ));
+		setColor(new Color(0xffffff));
+		setAmbient(new Color(0xffffff));
+		setEmissive(new Color( 0x000000 ));
 		
 		setVertexColors(Material.COLORS.NO);
 	}
@@ -193,12 +193,12 @@ public final class MeshLambertMaterial extends Material
 	}
 	
 	@Override
-	public Color3 getColor() {
+	public Color getColor() {
 		return color;
 	}
 	
 	@Override
-	public void setColor(Color3 color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 	
@@ -253,22 +253,22 @@ public final class MeshLambertMaterial extends Material
 	}
 	
 	@Override
-	public Color3 getAmbient() {
+	public Color getAmbient() {
 		return this.ambient;
 	}
 
 	@Override
-	public void setAmbient(Color3 ambient) {
+	public void setAmbient(Color ambient) {
 		this.ambient = ambient;
 	}
 
 	@Override
-	public Color3 getEmissive() {
+	public Color getEmissive() {
 		return this.emissive;
 	}
 
 	@Override
-	public void setEmissive(Color3 emissive) {
+	public void setEmissive(Color emissive) {
 		this.emissive = emissive;
 	}
 	
@@ -299,8 +299,8 @@ public final class MeshLambertMaterial extends Material
 		
 		if ( isGammaInput ) 
 		{
-			((Color3) getUniforms().get("ambient").getValue()).copyGammaToLinear( getAmbient() );
-			((Color3) getUniforms().get("emissive").getValue()).copyGammaToLinear( getEmissive() );
+			((Color) getUniforms().get("ambient").getValue()).copyGammaToLinear( getAmbient() );
+			((Color) getUniforms().get("emissive").getValue()).copyGammaToLinear( getEmissive() );
 		} 
 		else 
 		{

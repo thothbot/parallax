@@ -19,7 +19,7 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 
 /**
  * The Material has both an Ambient and Emissive colors.
@@ -34,26 +34,26 @@ public interface HasAmbientEmissiveColor
 	 * 
 	 * @return the color
 	 */
-	public Color3 getAmbient();
+	public Color getAmbient();
 	
 	/**
 	 * Sets Ambient color
 	 * 
 	 * @param ambient the color.
 	 */
-	public void setAmbient(Color3 ambient);
+	public void setAmbient(Color ambient);
 	
 	/**
 	 * Gets Emissive color
 	 * 
 	 * @return the color
 	 */
-	public Color3 getEmissive();
+	public Color getEmissive();
 	
 	/**
 	 * Sets Emissive color
 	 * 
 	 * @param emissive the color
 	 */
-	public void setEmissive(Color3 emissive);
+	public void setEmissive(Color emissive);
 }

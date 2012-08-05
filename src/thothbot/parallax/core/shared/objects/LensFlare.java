@@ -27,7 +27,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 
@@ -64,12 +64,12 @@ public final class LensFlare extends Object3D
 		// opacity
 		public double opacity;
 		// color
-		public Color3 color;
+		public Color color;
 		
 		private double wantedRotation;
 
 		public LensSprite(Texture texture, Integer size, double distance, double x,
-				double y, double z, double scale, double rotation, double opacity, Color3 color, Material.BLENDING blending
+				double y, double z, double scale, double rotation, double opacity, Color color, Material.BLENDING blending
 		) {
 			this.texture = texture;
 			this.size = size;
@@ -89,7 +89,7 @@ public final class LensFlare extends Object3D
 	private List<LensSprite> lensFlares;
 	private Callback updateCallback;
 
-	public LensFlare(Texture texture, Integer size, double distance, Material.BLENDING blending, Color3 color) 
+	public LensFlare(Texture texture, Integer size, double distance, Material.BLENDING blending, Color color) 
 	{
 		this.positionScreen = new Vector3();
 		this.lensFlares = new ArrayList<LensFlare.LensSprite>();
@@ -123,14 +123,14 @@ public final class LensFlare extends Object3D
 		add(texture, size, distance, blending, null, null);
 	}
 	
-	public void add(Texture texture, Integer size, Double distance, Material.BLENDING blending, Color3 color, Double opacity)
+	public void add(Texture texture, Integer size, Double distance, Material.BLENDING blending, Color color, Double opacity)
 	{
 		Log.debug("LensFlare: add new LensSprite");
 
 		if( size == null ) size = -1;
 		if( distance == null ) distance = 0.0;
 		if( opacity == null ) opacity = 1.0;
-		if( color == null ) color = new Color3( 0xffffff );
+		if( color == null ) color = new Color( 0xffffff );
 		if( blending == null ) blending = Material.BLENDING.NORMAL;
 
 		distance = Math.min( distance, Math.max( 0, distance ) );

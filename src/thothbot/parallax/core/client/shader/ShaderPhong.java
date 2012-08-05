@@ -25,7 +25,7 @@ package thothbot.parallax.core.client.shader;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.core.client.GWT;
@@ -66,9 +66,9 @@ public final class ShaderPhong extends Shader
 		this.addUniform(UniformsLib.fog);
 		this.addUniform(UniformsLib.lights);
 		this.addUniform(UniformsLib.shadowmap);
-		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color3( 0xffffff ) ));
-		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color3( 0x000000 ) ));
-		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color3( 0x111111 ) ));
+		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
+		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
+		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
 		this.addUniform("shininess", new Uniform(Uniform.TYPE.F, 30.0 ));
 		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1, 1, 1 ) ));
 	}

@@ -29,7 +29,7 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.Vector2;
@@ -49,7 +49,7 @@ public class Line extends GeometryObject
 	
 	private static LineBasicMaterial defaultMaterial = new LineBasicMaterial();
 	static {
-		defaultMaterial.setColor( new Color3((int)Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color((int)Math.random() * 0xffffff) );
 	};
 
 	public Line(Geometry geometry) 
@@ -162,7 +162,7 @@ public class Line extends GeometryObject
 	public void setBuffers(WebGLRenderingContext gl, Geometry geometry, int hint)
 	{		
 		List<Vector3> vertices = geometry.getVertices();
-		List<Color3> colors = geometry.getColors();
+		List<Color> colors = geometry.getColors();
 
 		boolean dirtyVertices = geometry.verticesNeedUpdate;
 		boolean dirtyColors = geometry.colorsNeedUpdate;
@@ -188,7 +188,7 @@ public class Line extends GeometryObject
 		{
 			for (int c = 0; c < colors.size(); c++) 
 			{
-				Color3 color = colors.get(c);
+				Color color = colors.get(c);
 				int offset = c * 3;
 
 				geometry.getWebGlColorArray().set(offset, color.getR());
@@ -239,7 +239,7 @@ public class Line extends GeometryObject
 							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 							{
 
-								Color3 value = (Color3) customAttribute.getValue().get(ca);
+								Color value = (Color) customAttribute.getValue().get(ca);
 
 								customAttribute.array.set(offset, value.getR());
 								customAttribute.array.set(offset + 1, value.getG());

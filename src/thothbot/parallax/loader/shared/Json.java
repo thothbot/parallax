@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
@@ -103,8 +103,8 @@ public class Json extends Loader
 		if(this.material == null)
 		{
 			MeshPhongMaterial material = new MeshPhongMaterial();
-			material.setColor( new Color3(0xffffff) );
-			material.setSpecular( new Color3(0xffffff) );
+			material.setColor( new Color(0xffffff) );
+			material.setSpecular( new Color(0xffffff) );
 			material.setShininess(20);
 			material.setMorphTargets( true );
 			material.setMorphNormals( true );
@@ -168,7 +168,7 @@ public class Json extends Loader
 		// defaults
 		Material material = new MeshLambertMaterial();
 		material.setOpacity(1.0);
-		((MeshLambertMaterial)material).setColor(new Color3(0xeeeeee));
+		((MeshLambertMaterial)material).setColor(new Color(0xeeeeee));
 		if(jsonMaterial.containsKey("wireframe"))
 			((MeshLambertMaterial)material).setWireframe(true);
 		
@@ -510,7 +510,7 @@ public class Json extends Loader
 			if ( hasFaceColor ) 
 			{
 				int colorIndex = (int)value( faces, offset ++ );
-				face.setColor(new Color3((int)value(colors, colorIndex)));
+				face.setColor(new Color((int)value(colors, colorIndex)));
 			}
 
 			if ( hasFaceVertexColor ) 
@@ -518,7 +518,7 @@ public class Json extends Loader
 				for ( int i = 0; i < nVertices; i++ ) 
 				{
 					int colorIndex = (int)value( faces, offset ++ );
-					face.getVertexColors().add( new Color3((int)value(colors, colorIndex) ));
+					face.getVertexColors().add( new Color((int)value(colors, colorIndex) ));
 				}
 			}
 
@@ -595,12 +595,12 @@ public class Json extends Loader
 			{
 				Geometry.MorphColor morphColor = geometry.new MorphColor();
 				morphColor.name = morphColors.get(i).isObject().get("name").isString().stringValue();
-				morphColor.colors = new ArrayList<Color3>();
+				morphColor.colors = new ArrayList<Color>();
 								
 				JSONArray srcColors = morphColors.get(i).isObject().get("colors").isArray();
 				for ( int c = 0, cl = srcColors.size(); c < cl; c += 3 ) 
 				{
-					Color3 color = new Color3( 0xffaa00 );
+					Color color = new Color( 0xffaa00 );
 					color.setRGB( 
 						(float)value(srcColors, c ), 
 						(float)value(srcColors, c + 1 ), 

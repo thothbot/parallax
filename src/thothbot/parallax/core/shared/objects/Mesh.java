@@ -35,7 +35,7 @@ import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
@@ -65,7 +65,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {
-		defaultMaterial.setColor( new Color3((int) Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color((int) Math.random() * 0xffffff) );
 		defaultMaterial.setWireframe( true );
 	};
 
@@ -943,9 +943,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-				 List<Color3> vertexColors = face.getVertexColors();
-				 Color3 faceColor = face.getColor();
-				 Color3 c1, c2, c3;
+				 List<Color> vertexColors = face.getVertexColors();
+				 Color faceColor = face.getColor();
+				 Color c1, c2, c3;
 
 				 if ( vertexColors.size() == 3 && vertexColorType == Material.COLORS.VERTEX) 
 				 {
@@ -980,9 +980,9 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-				 List<Color3> vertexColors = face.getVertexColors();
-				 Color3 faceColor = face.getColor();
-				 Color3 c1, c2, c3, c4;
+				 List<Color> vertexColors = face.getVertexColors();
+				 Color faceColor = face.getColor();
+				 Color c1, c2, c3, c4;
 
 				 if ( vertexColors.size() == 4 && vertexColorType == Material.COLORS.VERTEX) 
 				 {
@@ -1537,9 +1537,9 @@ public class Mesh  extends GeometryObject implements HasSides
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
 							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-								 Color3 v1 = (Color3) customAttribute.getValue().get(face.getA());
-								 Color3 v2 = (Color3) customAttribute.getValue().get(face.getB());
-								 Color3 v3 = (Color3) customAttribute.getValue().get(face.getC());
+								 Color v1 = (Color) customAttribute.getValue().get(face.getA());
+								 Color v2 = (Color) customAttribute.getValue().get(face.getB());
+								 Color v3 = (Color) customAttribute.getValue().get(face.getC());
 
 								 customAttribute.array.set(offset_custom, v1.getR());
 								 customAttribute.array.set(offset_custom + 1, v1.getG());
@@ -1581,10 +1581,10 @@ public class Mesh  extends GeometryObject implements HasSides
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
 							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-								 Color3 v1 = (Color3) customAttribute.getValue().get(face.getA());
-								 Color3 v2 = (Color3) customAttribute.getValue().get(face.getB());
-								 Color3 v3 = (Color3) customAttribute.getValue().get(face.getC());
-								 Color3 v4 = (Color3) customAttribute.getValue().get(face.getD());
+								 Color v1 = (Color) customAttribute.getValue().get(face.getA());
+								 Color v2 = (Color) customAttribute.getValue().get(face.getB());
+								 Color v3 = (Color) customAttribute.getValue().get(face.getC());
+								 Color v4 = (Color) customAttribute.getValue().get(face.getD());
 
 								 customAttribute.array.set(offset_custom, v1.getR());
 								 customAttribute.array.set(offset_custom + 1, v1.getG());
@@ -1633,10 +1633,10 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
 							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-								 Color3 value = (Color3) customAttribute.getValue().get(chunk_faces3.get(f));
-								 Color3 v1 = value;
-								 Color3 v2 = value;
-								 Color3 v3 = value;
+								 Color value = (Color) customAttribute.getValue().get(chunk_faces3.get(f));
+								 Color v1 = value;
+								 Color v2 = value;
+								 Color v3 = value;
 
 								 customAttribute.array.set(offset_custom, v1.getR());
 								 customAttribute.array.set(offset_custom + 1, v1.getG());
@@ -1677,11 +1677,11 @@ public class Mesh  extends GeometryObject implements HasSides
 						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
 
 							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
-								 Color3 value = (Color3) customAttribute.getValue().get(chunk_faces4.get(f));
-								 Color3 v1 = value;
-								 Color3 v2 = value;
-								 Color3 v3 = value;
-								 Color3 v4 = value;
+								 Color value = (Color) customAttribute.getValue().get(chunk_faces4.get(f));
+								 Color v1 = value;
+								 Color v2 = value;
+								 Color v3 = value;
+								 Color v4 = value;
 
 								 customAttribute.array.set(offset_custom, v1.getR());
 								 customAttribute.array.set(offset_custom + 1, v1.getG());

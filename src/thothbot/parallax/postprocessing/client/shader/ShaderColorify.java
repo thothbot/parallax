@@ -24,7 +24,7 @@ package thothbot.parallax.postprocessing.client.shader;
 
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
@@ -59,6 +59,6 @@ public final class ShaderColorify extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color3( 0xffffff )));
+		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 	}
 }

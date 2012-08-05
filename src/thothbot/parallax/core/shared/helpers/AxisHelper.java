@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.helpers;
 
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.Cylinder;
@@ -47,10 +47,10 @@ public class AxisHelper extends Object3D
 
 		// x
 		LineBasicMaterial lbmX = new LineBasicMaterial();
-		lbmX.setColor(new Color3(0xff0000));
+		lbmX.setColor(new Color(0xff0000));
 
 		MeshBasicMaterial mbmX = new MeshBasicMaterial();
-		mbmX.setColor( new Color3(0xff0000) );
+		mbmX.setColor( new Color(0xff0000) );
 		
 		Line line1 = new Line( lineGeometry, lbmX );
 		line1.getRotation().setZ( - Math.PI / 2.0 );
@@ -63,10 +63,10 @@ public class AxisHelper extends Object3D
 
 		// y
 		LineBasicMaterial lbmY = new LineBasicMaterial();
-		lbmY.setColor(new Color3(0x00ff00));
+		lbmY.setColor(new Color(0x00ff00));
 
 		MeshBasicMaterial mbmY = new MeshBasicMaterial();
-		mbmY.setColor( new Color3(0x00ff00) );
+		mbmY.setColor( new Color(0x00ff00) );
 
 		Line line2 = new Line( lineGeometry, lbmY );
 		this.addChild( line2 );
@@ -77,10 +77,10 @@ public class AxisHelper extends Object3D
 
 		// z
 		LineBasicMaterial lbmZ = new LineBasicMaterial();
-		lbmZ.setColor(new Color3(0x0000ff));
+		lbmZ.setColor(new Color(0x0000ff));
 
 		MeshBasicMaterial mbmZ = new MeshBasicMaterial();
-		mbmZ.setColor( new Color3(0x0000ff) );
+		mbmZ.setColor( new Color(0x0000ff) );
 
 		Line line3 = new Line( lineGeometry, lbmZ );
 		line3.getRotation().setX( Math.PI / 2.0 );

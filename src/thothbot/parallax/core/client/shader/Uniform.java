@@ -40,7 +40,7 @@ public class Uniform
 		V2, // single Vector2
 		V3, // single Vector3
 		V4, // single Vector4
-		C,  // single Color3
+		C,  // single Color
 		FV1,// flat array of floats (JS or typed array)
 		FV, // flat array of floats with 3 x N size (JS or typed array)
 		V2V,// array of Vector2

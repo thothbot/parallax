@@ -42,7 +42,7 @@ public class Geometry extends GeometryBuffer
 	public class MorphColor
 	{
 		public String name;
-		public List<Color3> colors;
+		public List<Color> colors;
 	}
 	
 	public class MorphNormal
@@ -84,7 +84,7 @@ public class Geometry extends GeometryBuffer
 	// Array of vertex colors, matching number and order of vertices.
 	// Used in ParticleSystem, Line and Ribbon.
 	// Meshes use per-face-use-of-vertex colors embedded directly in faces.
-	private List<Color3> colors; // one-to-one vertex colors, used in
+	private List<Color> colors; // one-to-one vertex colors, used in
 								// ParticleSystem, Line and Ribbon
 
 	// Array of triangles or/and quads.
@@ -106,7 +106,7 @@ public class Geometry extends GeometryBuffer
 
 
 	// Array of morph colors. Morph colors have similar structure as morph targets, each color set is JS object:
-	//		morphColor = { name: "colorName", colors: [ new Color3(), ... ] }
+	//		morphColor = { name: "colorName", colors: [ new Color(), ... ] }
 	// Morph colors can match either number and order of faces (face colors) or number of vertices (vertex colors).
 	private List<MorphColor> morphColors;
 
@@ -146,7 +146,7 @@ public class Geometry extends GeometryBuffer
 		super();
 
 		this.vertices = new ArrayList<Vector3>();
-		this.colors = new ArrayList<Color3>(); // one-to-one vertex colors, used in ParticleSystem, Line and Ribbon
+		this.colors = new ArrayList<Color>(); // one-to-one vertex colors, used in ParticleSystem, Line and Ribbon
 
 		this.faces = new ArrayList<Face3>();
 
@@ -233,11 +233,11 @@ public class Geometry extends GeometryBuffer
 		return faceUvs;
 	}
 
-	public void setColors(List<Color3> colors) {
+	public void setColors(List<Color> colors) {
 		this.colors = colors;
 	}
 
-	public List<Color3> getColors() {
+	public List<Color> getColors() {
 		return colors;
 	}
 

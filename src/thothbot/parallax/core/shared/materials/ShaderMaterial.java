@@ -23,7 +23,7 @@
 package thothbot.parallax.core.shared.materials;
 
 import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 
 public class ShaderMaterial extends Material 
 	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning
@@ -34,7 +34,7 @@ public class ShaderMaterial extends Material
 	
 	private boolean isFog;
 	
-	private Color3 color;
+	private Color color;
 	
 	private Material.COLORS vertexColors;
 	
@@ -54,7 +54,7 @@ public class ShaderMaterial extends Material
 		
 		setFog(true);
 		
-		setColor(new Color3(0xffffff));
+		setColor(new Color(0xffffff));
 		
 		setVertexColors(Material.COLORS.NO);
 	}
@@ -112,12 +112,12 @@ public class ShaderMaterial extends Material
 	}
 	
 	@Override
-	public Color3 getColor() {
+	public Color getColor() {
 		return color;
 	}
 	
 	@Override
-	public void setColor(Color3 color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 	

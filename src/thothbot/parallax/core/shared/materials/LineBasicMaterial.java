@@ -26,7 +26,7 @@ import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderBasic;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color3;
+import thothbot.parallax.core.shared.core.Color;
 
 public final class LineBasicMaterial extends Material 
 	implements HasFog, HasColor, HasVertexColors
@@ -34,7 +34,7 @@ public final class LineBasicMaterial extends Material
 
 	private boolean isFog;
 	
-	private Color3 color;
+	private Color color;
 	
 	private Material.COLORS vertexColors;
 	
@@ -44,7 +44,7 @@ public final class LineBasicMaterial extends Material
 	{	
 		setFog(true);
 		
-		setColor(new Color3(0xffffff));
+		setColor(new Color(0xffffff));
 		
 		setLinewidth(1.0);
 		
@@ -76,12 +76,12 @@ public final class LineBasicMaterial extends Material
 	}
 	
 	@Override
-	public Color3 getColor() {
+	public Color getColor() {
 		return color;
 	}
 	
 	@Override
-	public void setColor(Color3 color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 	
