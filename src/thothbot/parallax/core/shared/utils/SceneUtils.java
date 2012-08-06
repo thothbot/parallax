@@ -47,17 +47,17 @@ public class SceneUtils
 	 * one of material of materials list.
 	 * 
 	 * @param geometry  the input geometry.
-	 * @param materials the list of materials.
+	 * @param list the list of materials.
 	 * 
 	 * @return the new instance of {@link DimensionalObject}
 	 */
-	public static DimensionalObject createMultiMaterialObject( Geometry geometry, List<Material> materials ) 
+	public static DimensionalObject createMultiMaterialObject( Geometry geometry, List<? extends Material> list ) 
 	{
 		DimensionalObject group = new Object3D();
 
-		for ( int i = 0; i < materials.size(); i ++ ) 
+		for ( int i = 0; i < list.size(); i ++ ) 
 		{
-			Mesh object = new Mesh( geometry, materials.get( i ) );
+			Mesh object = new Mesh( geometry, list.get( i ) );
 			group.addChild( object );
 		}
 

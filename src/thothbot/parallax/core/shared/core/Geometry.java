@@ -833,5 +833,56 @@ public class Geometry extends GeometryBuffer
 		this.vertices = unique;
 		return diff;
 	}
+	
+	public Geometry clone() 
+	{
+		Geometry cloneGeo = new Geometry();
+
+		List<Vector3> vertices = getVertices();
+		List<Face3> faces = getFaces();
+		List<List<UV>> uvs = getFaceVertexUvs().get(0);
+
+		// materials
+
+		if ( getMaterials() != null ) 
+		{
+			cloneGeo.setMaterials(new ArrayList<Material>(getMaterials()));
+		}
+
+		// vertices
+
+		for ( int i = 0, il = vertices.size(); i < il; i ++ ) 
+		{
+			Vector3 vertex = vertices.get(i);
+
+			cloneGeo.getVertices().add( vertex.clone() );
+		}
+
+		// faces
+
+		for ( int i = 0, il = faces.size(); i < il; i ++ ) 
+		{
+			Face3 face = faces.get(i);
+
+			cloneGeo.getFaces().add( (face instanceof Face3) ? face.clone() : ((Face4)face).clone() );
+		}
+
+		// uvs
+
+		for ( int i = 0, il = uvs.size(); i < il; i ++ ) 
+		{
+			List<UV> uv = uvs.get( i );
+			List<UV> uvCopy = new ArrayList<UV>();
+
+			for ( int j = 0, jl = uv.size(); j < jl; j ++ ) 
+			{
+				uvCopy.add( new UV( uv.get( j ).getU(), uv.get( j ).getV() ) );
+			}
+
+			cloneGeo.getFaceVertexUvs().get(0).add( uvCopy );
+		}
+
+		return cloneGeo;
+	}
 
 }
