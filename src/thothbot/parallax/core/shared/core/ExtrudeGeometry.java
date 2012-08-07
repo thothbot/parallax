@@ -189,7 +189,7 @@ public class ExtrudeGeometry extends Geometry
 
 		localFaces = ShapeUtils.triangulateShape ( vertices, holes );
 		verticesCount = vertices.size();
-		Log.error("..........." + localFaces + ", "  + vertices + ", " + holes);
+
 		// Would it be better to move points after triangulation?
 		// shapePoints = shape.extractAllPointsWithBend( curveSegments, bendPath );
 		// 	vertices = shapePoints.shape;
@@ -483,7 +483,7 @@ public class ExtrudeGeometry extends Geometry
 
 			layer = this.options.steps + this.options.bevelSegments * 2;
 			offset = verticesCount * layer;
-			Log.error("B1", verticesCount, layer, offset);
+
 			// Top faces
 
 			for ( int i = 0; i < flen; i ++ ) 
@@ -534,7 +534,6 @@ public class ExtrudeGeometry extends Geometry
 
 	private void sidewalls( List<Vector2> contour, int layeroffset ) 
 	{
-		Log.error("_________________");
 		int i = this.verticesCount;
 
 		while ( --i >= 0 ) 
@@ -554,7 +553,7 @@ public class ExtrudeGeometry extends Geometry
 				int b = layeroffset + k + slen1;
 				int c = layeroffset + k + slen2;
 				int d = layeroffset + j + slen2;
-Log.error("^^^^^^^^^", layeroffset, this.verticesCount, s, slen1, slen2, i, j, k, a, b, c, d);
+
 				f4( a, b, c, d);
 			}
 		}
@@ -568,7 +567,6 @@ Log.error("^^^^^^^^^", layeroffset, this.verticesCount, s, slen1, slen2, i, j, k
 
 	private void f3( int a, int b, int c, boolean isBottom ) 
 	{
-		Log.error(".......", a, b, c, shapesOffset, isBottom);
 		a += this.shapesOffset;
 		b += this.shapesOffset;
 		c += this.shapesOffset;
@@ -600,7 +598,6 @@ Log.error("^^^^^^^^^", layeroffset, this.verticesCount, s, slen1, slen2, i, j, k
 	{
 		public static List<UV> generateTopUV( Geometry geometry, int indexA, int indexB, int indexC ) 
 		{
-			Log.error("****", indexA, indexB, indexC);
 			double ax = geometry.getVertices().get( indexA ).getX();
 			double ay = geometry.getVertices().get( indexA ).getY();
 
@@ -624,7 +621,6 @@ Log.error("^^^^^^^^^", layeroffset, this.verticesCount, s, slen1, slen2, i, j, k
 
 		public static List<UV> generateSideWallUV( Geometry geometry, int indexA, int indexB, int indexC, int indexD)
 		{
-			Log.error("++++++++++++++++++++++++", indexA, indexB, indexC);
 			double ax = geometry.getVertices().get( indexA ).getX();
 			double ay = geometry.getVertices().get( indexA ).getY();
 			double az = geometry.getVertices().get( indexA ).getZ();
