@@ -109,7 +109,6 @@ public class CurvePath extends Curve
 		int i = 0;
 
 		// To think about boundaries points.
-
 		while ( i < curveLengths.size() ) 
 		{
 			if ( curveLengths.get( i ) >= d ) 
@@ -205,11 +204,6 @@ public class CurvePath extends Curve
 		
 		return boundingBox;
 	}
-	
-	/**************************************************************
-	 *	Create Geometries Helpers
-	 **************************************************************/
-
 	
 	/**************************************************************
 	 *	Bend / Wrap Helper Methods

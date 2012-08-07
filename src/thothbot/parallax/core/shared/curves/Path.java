@@ -203,17 +203,13 @@ public class Path extends CurvePath
 
 	public List<Vector> getSpacedPoints( int divisions, boolean closedPath ) 
 	{
-
 		List<Vector> points = new ArrayList<Vector>();
 
 		for ( int i = 0; i < divisions; i ++ )
-			points.add( this.getPoint( i / divisions ) );
+			points.add( this.getPoint( i / (double)divisions ) );
 
-		// if ( closedPath ) {
-		//
-		// 	points.push( points[ 0 ] );
-		//
-		// }
+		if ( closedPath )
+			points.add( points.get(0) );
 
 		return points;
 	}
@@ -228,8 +224,6 @@ public class Path extends CurvePath
 
 	public List<Vector> getPoints( int divisions, boolean closedPath ) 
 	{
-		Log.debug("Called Path:getPoins()");
-
 		if (this.useSpacedPoints)
 			return this.getSpacedPoints( divisions, closedPath );
 
@@ -599,7 +593,6 @@ public class Path extends CurvePath
 
 		for ( int i = 0; i < points.size(); i ++ ) 
 		{
-			Log.error("----------" + points.get(i));
 			geometry.getVertices().add( new Vector3(
 					((Vector2)points.get( i )).getX(), 
 					((Vector2)points.get( i )).getY(), 0 ) );
