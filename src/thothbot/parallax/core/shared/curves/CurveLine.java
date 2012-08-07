@@ -22,6 +22,7 @@
 
 package thothbot.parallax.core.shared.curves;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Vector2;
 
 public class CurveLine extends Curve

@@ -99,7 +99,6 @@ public class Line extends GeometryObject
 		gl.drawArrays( primitives, 0, geometryBuffer.__webglLineCount );
 
 		info.getRender().calls ++;
-		info.getRender().vertices += geometryBuffer.__webglLineCount * 2;
 	}
 	
 	@Override

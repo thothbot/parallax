@@ -25,8 +25,10 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.BoundingBox;
 import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.Vector;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 
@@ -208,31 +210,6 @@ public class CurvePath extends Curve
 	 *	Create Geometries Helpers
 	 **************************************************************/
 
-	/*
-	 * Generate geometry from path points (for Line or ParticleSystem objects)
-	 */
-	private Geometry createPointsGeometry( int divisions ) 
-	{
-		return CurvePath.createGeometry( (ArrayList)getPoints( divisions ) );
-	}
-	
-	/*
-	 * Generate geometry from equidistance sampling along the path
-	 */
-	private Geometry createSpacedPointsGeometry( int divisions ) 
-	{
-		return CurvePath.createGeometry( (ArrayList)getSpacedPoints( divisions ) );
-	}
-
-	private static Geometry createGeometry(List<Vector2> points) 
-	{
-		Geometry geometry = new Geometry();
-
-		for ( int i = 0; i < points.size(); i ++ )
-			geometry.getVertices().add( new Vector3( points.get( i ).getX(), points.get( i ).getY(), 0 ) );
-
-		return geometry;
-	}
 	
 	/**************************************************************
 	 *	Bend / Wrap Helper Methods

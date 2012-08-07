@@ -27,6 +27,7 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.ExtrudeGeometry;
+import thothbot.parallax.core.shared.core.Vector;
 import thothbot.parallax.core.shared.core.Vector2;
 
 /**
@@ -74,7 +75,7 @@ public class Shape extends Path
 		return getPointsHoles(false);
 	}
 
-	public List<List<Vector2>> getPointsHoles(  boolean closedPath ) 
+	public List<List<Vector2>> getPointsHoles( boolean closedPath ) 
 	{
 		int il = this.holes.size();
 		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
@@ -111,10 +112,10 @@ public class Shape extends Path
 
 	public List<Vector2> getTransformedPoints( boolean closedPath, List<CurvePath> bends ) 
 	{
-		List<Vector2> oldPts = this.getPoints( closedPath ); // getPoints getSpacedPoints
-Log.info(".............." + this.getClass().getName()  + ", " + bends);
-		for ( int i = 0; i < bends.size(); i ++ )
-			oldPts = this.getWrapPoints( oldPts, bends.get( i ) );
+		List<Vector2> oldPts = (List<Vector2>)(List<?>)this.getPoints( closedPath ); // getPoints getSpacedPoints
+
+//		for ( int i = 0; i < bends.size(); i ++ )
+//			oldPts = this.getWrapPoints( oldPts, bends.get( i ) );
 
 		return oldPts;
 	}

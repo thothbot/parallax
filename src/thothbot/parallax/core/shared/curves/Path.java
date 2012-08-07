@@ -27,7 +27,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.Vector;
 import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
 
 public class Path extends CurvePath
@@ -193,15 +196,15 @@ public class Path extends CurvePath
 			this.actions.add( new Action(PATH_ACTIONS.ARC, aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise, lastPoint.getX(), lastPoint.getY() ) );
 	}
 	
-	public List<Vector2> getSpacedPoints( boolean closedPath )
+	public List<Vector> getSpacedPoints( boolean closedPath )
 	{
 		return getSpacedPoints(40, closedPath);
 	}
 
-	public List<Vector2> getSpacedPoints( int divisions, boolean closedPath ) 
+	public List<Vector> getSpacedPoints( int divisions, boolean closedPath ) 
 	{
 
-		List<Vector2> points = new ArrayList<Vector2>();
+		List<Vector> points = new ArrayList<Vector>();
 
 		for ( int i = 0; i < divisions; i ++ )
 			points.add( this.getPoint( i / divisions ) );
@@ -218,26 +221,21 @@ public class Path extends CurvePath
 	/* 
 	 * @return an List of {@link Vector2} based on contour of the path
 	 */
-	public List<Vector2> getPoints( boolean closedPath ) 
+	public List<Vector> getPoints( boolean closedPath ) 
 	{
 		return getPoints(12, closedPath);
 	}
 
-	public List<Vector2> getPoints( int divisions, boolean closedPath ) 
+	public List<Vector> getPoints( int divisions, boolean closedPath ) 
 	{
 		Log.debug("Called Path:getPoins()");
 
 		if (this.useSpacedPoints)
 			return this.getSpacedPoints( divisions, closedPath );
 
-		List<Vector2> points = new ArrayList<Vector2>();
+		List<Vector> points = new ArrayList<Vector>();
 
 		double cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0;
-		
-//		var i, il, item, action, args;
-//		var cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0,
-//			laste, j,
-//			t, tx, ty;
 
 		for ( int i = 0, il = this.actions.size(); i < il; i ++ ) 
 		{
@@ -269,19 +267,17 @@ public class Path extends CurvePath
 
 				if ( points.size() > 0 ) 
 				{
-					Vector2 laste = points.get( points.size() - 1 );
+					Vector laste = points.get( points.size() - 1 );
 
-					cpx0 = laste.getX();
-					cpy0 = laste.getY();
+					cpx0 = ((Vector2)laste).getX();
+					cpy0 = ((Vector2)laste).getY();
 				} 
 				else 
 				{
-
 					List<Object> laste = this.actions.get( i - 1 ).args;
 
 					cpx0 = (Double) laste.get( laste.size() - 2 );
 					cpy0 = (Double) laste.get( laste.size() - 1 );
-
 				}
 
 				for ( int j = 1; j <= divisions; j ++ ) 
@@ -292,7 +288,6 @@ public class Path extends CurvePath
 					double ty = ShapeUtils.b2( t, cpy0, cpy1, cpy );
 
 					points.add( new Vector2( tx, ty ) );
-
 			  	}
 
 				break;
@@ -310,14 +305,13 @@ public class Path extends CurvePath
 
 				if ( points.size() > 0 ) 
 				{
-					Vector2 laste = points.get( points.size() - 1 );
+					Vector laste = points.get( points.size() - 1 );
 
-					cpx0 = laste.getX();
-					cpy0 = laste.getY();
+					cpx0 = ((Vector2)laste).getX();
+					cpy0 = ((Vector2)laste).getY();
 				} 
 				else 
 				{
-
 					List<Object> laste = this.actions.get( i - 1 ).args;
 
 					cpx0 = (Double) laste.get( laste.size() - 2 );
@@ -403,10 +397,10 @@ public class Path extends CurvePath
 
 
 		// Normalize to remove the closing point by default.
-		Vector2 lastPoint = points.get( points.size() - 1);
+		Vector2 lastPoint = (Vector2) points.get( points.size() - 1);
 		double EPSILON = 0.0000000001;
-		if ( Math.abs(lastPoint.getX() - points.get( 0 ).getX()) < EPSILON &&
-	             Math.abs(lastPoint.getY() - points.get( 0 ).getY()) < EPSILON)
+		if ( Math.abs(lastPoint.getX() - ((Vector2)points.get( 0 )).getX()) < EPSILON &&
+	             Math.abs(lastPoint.getY() - ((Vector2)points.get( 0 )).getY()) < EPSILON)
 			points.remove( points.size() - 1);
 		
 		if ( closedPath )
@@ -558,18 +552,59 @@ public class Path extends CurvePath
 //		return shapes;
 //	}
 	
-	public List<Vector2> getTransformedSpacedPoints( boolean closedPath ) 
+	public List<Vector> getTransformedSpacedPoints( boolean closedPath ) 
 	{
 		return getTransformedSpacedPoints(closedPath, getBends());
 	}
 
-	public List<Vector2>  getTransformedSpacedPoints( boolean closedPath, List<CurvePath> bends ) 
+	public List<Vector>  getTransformedSpacedPoints( boolean closedPath, List<CurvePath> bends ) 
 	{
-		List<Vector2> oldPts = this.getSpacedPoints( closedPath );
+		List<Vector> oldPts = this.getSpacedPoints( closedPath );
 
-		for ( int i = 0; i < bends.size(); i ++ )
-			oldPts = getWrapPoints( oldPts, bends.get( i ) );
+//		for ( int i = 0; i < bends.size(); i ++ )
+//			oldPts = getWrapPoints( oldPts, bends.get( i ) );
 
 		return oldPts;
+	}
+
+	/*
+	 * Generate geometry from path points (for Line or ParticleSystem objects)
+	 */
+	public Geometry createPointsGeometry()
+	{
+		return createGeometry( getPoints(true) );
+	}
+	
+	public Geometry createPointsGeometry( int divisions )
+	{
+		return createGeometry( getPoints( divisions, true ) );
+	}
+	
+	/*
+	 * Generate geometry from equidistance sampling along the path
+	 */
+	public Geometry createSpacedPointsGeometry()
+	{
+		return createGeometry( getSpacedPoints(true) );
+	}
+	
+	public Geometry createSpacedPointsGeometry( int divisions )
+	{
+		return createGeometry( getSpacedPoints( divisions, true ) );
+	}
+
+	private Geometry createGeometry(List<Vector> points)
+	{
+		Geometry geometry = new Geometry();
+
+		for ( int i = 0; i < points.size(); i ++ ) 
+		{
+			Log.error("----------" + points.get(i));
+			geometry.getVertices().add( new Vector3(
+					((Vector2)points.get( i )).getX(), 
+					((Vector2)points.get( i )).getY(), 0 ) );
+		}
+
+		return geometry;
 	}
 }
