@@ -56,6 +56,12 @@ public class ShapeUtils
 	public static void removeHoles( List<Vector2> contour, List<List<Vector2>> holes, 
 			List<Vector2> shape, List<Vector2> allpoints, List<List<Vector2>> verts ) 
 	{
+		for(Vector2 vector: contour)
+		{
+			shape.add(vector.clone());
+			allpoints.add(vector.clone());	
+		}
+		
 		/* For each isolated shape, find the closest points and break to the hole to allow triangulation */
 		int holeIndex = -1;
 		int shapeIndex = -1;
@@ -214,15 +220,16 @@ public class ShapeUtils
 	 */
 	public static List<List<Integer>> triangulateShape ( List<Vector2> contour, List<List<Vector2>> holes ) 
 	{
-		List<Vector2> shape = new ArrayList<Vector2>();  
-		List<Vector2> allpoints = new ArrayList<Vector2>();
+		List<Vector2> shape             = new ArrayList<Vector2>();  
+		List<Vector2> allpoints         = new ArrayList<Vector2>();
 		List<List<Vector2>> isolatedPts = new ArrayList<List<Vector2>>();
 		
 		ShapeUtils.removeHoles( contour, holes, shape, allpoints, isolatedPts);
-Log.info("........" + shape + ", " + allpoints + ", " + isolatedPts);
+
 		 // True returns indices for points of spooled shape
-		List<List<Vector2>> triangles = new ArrayList<List<Vector2>>();
+		List<List<Vector2>> triangles   = new ArrayList<List<Vector2>>();
 		List<List<Integer>> vertIndices = new ArrayList<List<Integer>>();
+
 		FontUtils.triangulate( shape, triangles, vertIndices);
 
 		// To maintain reference to old shape, one must match coordinates, 

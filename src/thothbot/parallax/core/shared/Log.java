@@ -19,6 +19,7 @@
 
 package thothbot.parallax.core.shared;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,6 +64,17 @@ public class Log
 	public static void error(String msg)
 	{
 		Log.logger.log(Level.SEVERE, msg);
+	}
+	
+	public static void error(Object ... all)
+	{
+		StringBuffer result = new StringBuffer();
+		for ( Object mods : all )
+		{
+			result.append(mods + " ");
+		}
+
+		Log.logger.log(Level.SEVERE, result.toString());
 	}
 	
 	public static void error(String msg, Throwable thrown)

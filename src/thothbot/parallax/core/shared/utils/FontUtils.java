@@ -89,8 +89,6 @@ public class FontUtils
 
 			if ( snip( contour, u, v, w, nv, verts ) ) 
 			{
-//				var a, b, c, s, t;
-
 				/* true names of the vertices */
 				int a = verts.get( u );
 				int b = verts.get( v );
