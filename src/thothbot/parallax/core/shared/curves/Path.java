@@ -344,46 +344,39 @@ public class Path extends CurvePath
 
 				break;
 
-				// TODO: Fix
-//			case ARC:
-//
-//				List<Objcet>laste = this.actions.get( i - 1 ).args;
-//
-//				var aX = args[ 0 ], aY = args[ 1 ],
-//					aRadius = args[ 2 ],
-//					aStartAngle = args[ 3 ], aEndAngle = args[ 4 ],
-//					aClockwise = !!args[ 5 ];
-//
-//
-//				var deltaAngle = aEndAngle - aStartAngle;
-//				var angle;
-//				var tdivisions = divisions * 2;
-//
-//				for ( j = 1; j <= tdivisions; j ++ ) {
-//
-//					t = j / tdivisions;
-//
-//					if ( ! aClockwise ) {
-//
-//						t = 1 - t;
-//
-//					}
-//
-//					angle = aStartAngle + t * deltaAngle;
-//
-//					tx = aX + aRadius * Math.cos( angle );
-//					ty = aY + aRadius * Math.sin( angle );
-//
-//					//console.log('t', t, 'angle', angle, 'tx', tx, 'ty', ty);
-//
-//					points.push( new THREE.Vector2( tx, ty ) );
-//
-//				}
-//
-//				//console.log(points);
-//
-//			  break;
-//
+			case ARC:
+
+				double aX = (Double)args.get( 0 );
+				double aY = (Double)args.get( 1 );
+				double aRadius = (Double)args.get( 2 );
+				double aStartAngle = (Double)args.get( 3 ); 
+				double aEndAngle = (Double)args.get( 4 );
+				boolean aClockwise = !!(Boolean)args.get( 5 );
+
+				double deltaAngle = aEndAngle - aStartAngle;
+				int tdivisions = divisions * 2;
+
+				for ( int j = 1; j <= tdivisions; j ++ ) 
+				{
+					double t = j / (double)tdivisions;
+
+					if ( !aClockwise ) 
+					{
+						t = 1.0 - t;
+					}
+
+					double angle = aStartAngle + t * deltaAngle;
+
+					double tx = aX + aRadius * Math.cos( angle );
+					double ty = aY + aRadius * Math.sin( angle );
+
+					points.add( new Vector2( tx, ty ) );
+				}
+
+				//console.log(points);
+
+			  break;
+
 			} // end switch
 
 		}
