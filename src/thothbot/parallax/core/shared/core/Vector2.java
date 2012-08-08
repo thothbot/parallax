@@ -230,15 +230,14 @@ public class Vector2 implements Vector
 	@Override
 	public Vector2 divide(double s)
 	{
-		if (s != 0) {
-
+		if (s != 0) 
+		{
 			this.x /= s;
 			this.y /= s;
-
-		} else {
-
+		} 
+		else
+		{
 			this.set(0, 0);
-
 		}
 		
 		return this;

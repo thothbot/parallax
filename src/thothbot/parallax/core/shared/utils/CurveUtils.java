@@ -119,6 +119,8 @@ public class CurveUtils
 		double t2 = t * t;
 		double t3 = t * t2;
 		
-		return (2.0 * p1 - 2.0 * p2 + v0 + v1) * t3 + (-3.0 * p1 + 3.0 * p2 - 2.0 * v0 - v1) * t2 + v0 * t + p1;
+		return ( 2.0 * p1 - 2.0 * p2 +       v0 + v1) * t3 
+			 + (-3.0 * p1 + 3.0 * p2 - 2.0 * v0 - v1) * t2 
+			 + v0 * t + p1;
 	}
 }

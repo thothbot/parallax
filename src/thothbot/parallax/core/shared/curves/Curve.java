@@ -25,6 +25,7 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Vector;
 import thothbot.parallax.core.shared.core.Vector2;
 
@@ -47,6 +48,7 @@ public abstract class Curve
 	public Vector getPointAt(double u)
 	{
 		double t = getUtoTmapping(u);
+
 		return getPoint(t);
 	}
 
@@ -152,7 +154,6 @@ public abstract class Curve
 
 	public double getUtoTmapping(double u, double distance)
 	{
-
 		List<Double> arcLengths = this.getLengths();
 
 		// The targeted u distance value to get
@@ -178,13 +179,11 @@ public abstract class Curve
 			{
 				low = i + 1;
 				continue;
-
 			} 
 			else if (comparison > 0) 
 			{
 				high = i - 1;
 				continue;
-
 			} 
 			else 
 			{
@@ -192,22 +191,24 @@ public abstract class Curve
 				break;
 			}
 		}
-
+	
 		if (arcLengths.get(high) == targetArcLength)
-			return high / arcLengths.size() - 1.0;
+		{
+			return high / (double)(arcLengths.size() - 1);
+		}
 
 		// we could get finer grain at lengths, or use simple interpolatation
 		// between two points
 		double lengthBefore = arcLengths.get(high);
-		double lengthAfter = arcLengths.get(high + 1);
+		double lengthAfter  = arcLengths.get(high + 1);
 
 		double segmentLength = lengthAfter - lengthBefore;
 
 		// determine where we are between the 'before' and 'after' points
-		double segmentFraction = (targetArcLength - lengthBefore) / segmentLength;
+		double segmentFraction = (targetArcLength - lengthBefore) / (double)segmentLength;
 
 		// add that fractional amount to t
-		return (high + segmentFraction) / (arcLengths.size() - 1.0);
+		return (high + segmentFraction) / ((double)arcLengths.size() - 1.0);
 	}
 
 	/*

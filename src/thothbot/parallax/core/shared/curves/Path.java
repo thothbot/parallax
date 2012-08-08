@@ -208,8 +208,8 @@ public class Path extends CurvePath
 		for ( int i = 0; i < divisions; i ++ )
 			points.add( this.getPoint( i / (double)divisions ) );
 
-		if ( closedPath )
-			points.add( points.get(0) );
+//		if ( closedPath )
+//			points.add( points.get(0) );
 
 		return points;
 	}
@@ -387,8 +387,6 @@ public class Path extends CurvePath
 			} // end switch
 
 		}
-
-
 
 		// Normalize to remove the closing point by default.
 		Vector2 lastPoint = (Vector2) points.get( points.size() - 1);
