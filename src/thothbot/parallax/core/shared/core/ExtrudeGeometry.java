@@ -75,7 +75,7 @@ public class ExtrudeGeometry extends Geometry
 		public int extrudeMaterial;
 	}
 	
-	private static double RAD_TO_DEGREES = 180.0 / Math.PI;
+	private static final double RAD_TO_DEGREES = 180.0 / Math.PI;
 	
 	private static Vector2 __v1 = new Vector2();
 	private static Vector2 __v2 = new Vector2();

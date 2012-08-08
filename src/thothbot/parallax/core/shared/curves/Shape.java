@@ -42,7 +42,7 @@ import thothbot.parallax.core.shared.core.Vector2;
  **/
 public class Shape extends Path
 {
-	private List<CurvePath> holes = new ArrayList<CurvePath>();
+	private List<Path> holes = new ArrayList<Path>();
 	
 	public Shape() 
 	{
@@ -54,7 +54,7 @@ public class Shape extends Path
 		super(points);		
 	}
 	
-	public List<CurvePath> getHoles()
+	public List<Path> getHoles()
 	{
 		return this.holes;
 	}
@@ -80,8 +80,8 @@ public class Shape extends Path
 		int il = this.holes.size();
 		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
 
-//		for ( int i = 0; i < il; i ++ )
-//			holesPts.add(this.holes.get( i ).getTransformedPoints( closedPath, getBends() ));
+		for ( int i = 0; i < il; i ++ )
+			holesPts.add(this.holes.get( i ).getTransformedPoints( closedPath, getBends() ));
 
 		return holesPts;
 	}
@@ -94,30 +94,10 @@ public class Shape extends Path
 		int il = this.holes.size();
 		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
 
-//		for ( int i = 0; i < il; i ++ )
-//			holesPts.add(this.holes.get( i ).getTransformedSpacedPoints( closedPath, getBends() ));
+		for ( int i = 0; i < il; i ++ )
+			holesPts.add(this.holes.get( i ).getTransformedSpacedPoints( closedPath, getBends() ));
 
 		return holesPts;
-	}
-	
-	public List<Vector2> getTransformedPoints() 
-	{
-		return getTransformedPoints(false, getBends());
-	}
-	
-	public List<Vector2> getTransformedPoints( boolean closedPath ) 
-	{
-		return getTransformedPoints(closedPath, getBends());
-	}
-
-	public List<Vector2> getTransformedPoints( boolean closedPath, List<CurvePath> bends ) 
-	{
-		List<Vector2> oldPts = (List<Vector2>)(List<?>)this.getPoints( closedPath ); // getPoints getSpacedPoints
-
-//		for ( int i = 0; i < bends.size(); i ++ )
-//			oldPts = this.getWrapPoints( oldPts, bends.get( i ) );
-
-		return oldPts;
 	}
 	
 	public String toString()

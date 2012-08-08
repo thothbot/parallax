@@ -537,17 +537,17 @@ public class Path extends CurvePath
 //		return shapes;
 //	}
 	
-	public List<Vector> getTransformedSpacedPoints( boolean closedPath ) 
+	public List<Vector2> getTransformedSpacedPoints( boolean closedPath ) 
 	{
 		return getTransformedSpacedPoints(closedPath, getBends());
 	}
 
-	public List<Vector>  getTransformedSpacedPoints( boolean closedPath, List<CurvePath> bends ) 
+	public List<Vector2>  getTransformedSpacedPoints( boolean closedPath, List<CurvePath> bends ) 
 	{
-		List<Vector> oldPts = this.getSpacedPoints( closedPath );
+		List<Vector2> oldPts = (List<Vector2>)(List<?>)this.getSpacedPoints( closedPath );
 
-//		for ( int i = 0; i < bends.size(); i ++ )
-//			oldPts = getWrapPoints( oldPts, bends.get( i ) );
+		for ( int i = 0; i < bends.size(); i ++ )
+			oldPts = getWrapPoints( oldPts, bends.get( i ) );
 
 		return oldPts;
 	}
@@ -590,5 +590,25 @@ public class Path extends CurvePath
 		}
 
 		return geometry;
+	}
+	
+	public List<Vector2> getTransformedPoints() 
+	{
+		return getTransformedPoints(false, getBends());
+	}
+	
+	public List<Vector2> getTransformedPoints( boolean closedPath ) 
+	{
+		return getTransformedPoints(closedPath, getBends());
+	}
+
+	public List<Vector2> getTransformedPoints( boolean closedPath, List<CurvePath> bends ) 
+	{
+		List<Vector2> oldPts = (List<Vector2>)(List<?>)this.getPoints( closedPath ); // getPoints getSpacedPoints
+
+		for ( int i = 0; i < bends.size(); i ++ )
+			oldPts = this.getWrapPoints( oldPts, bends.get( i ) );
+
+		return oldPts;
 	}
 }
