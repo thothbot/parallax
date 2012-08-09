@@ -175,7 +175,6 @@ public class ShapeUtils
 				prevHoleVert = ( holeIndex - 1 ) >= 0 
 						? holeIndex - 1 
 								: hole.size() - 1;
-
 			} 
 			else 
 			{
@@ -183,9 +182,9 @@ public class ShapeUtils
 			}
 
 			List<Vector2> tmpShape1 = contour.subList(0, shapeIndex);
-			List<Vector2> tmpShape2 = contour.subList(shapeIndex, contour.size() - 1);
+			List<Vector2> tmpShape2 = contour.subList(shapeIndex, contour.size() );
 
-			List<Vector2> tmpHole1 = hole.subList(holeIndex, hole.size() - 1);
+			List<Vector2> tmpHole1 = hole.subList(holeIndex, hole.size());
 			List<Vector2> tmpHole2 = hole.subList(0, holeIndex);
 
 			// Should check orders here again?
@@ -202,9 +201,10 @@ public class ShapeUtils
 				contour.get( shapeIndex )
 			);
 
-			verts = Arrays.asList(trianglea, triangleb);
+			verts.add(trianglea);
+			verts.add(triangleb);
 
-			shape = new ArrayList<Vector2>();
+			shape.removeAll(shape);
 			shape.addAll(tmpShape1);
 			shape.addAll(tmpHole1);
 			shape.addAll(tmpHole2);
@@ -231,7 +231,7 @@ public class ShapeUtils
 		List<List<Integer>> vertIndices = new ArrayList<List<Integer>>();
 
 		FontUtils.triangulate( shape, triangles, vertIndices);
-
+Log.error("----------" ,triangles.size(), vertIndices.size(), triangles, vertIndices);
 		// To maintain reference to old shape, one must match coordinates, 
 		// or offset the indices from original arrays. It's probably easier 
 		// to do the first.
@@ -278,6 +278,7 @@ public class ShapeUtils
 		}
 
 //		vertIndices.addAll( isolatedPts );
+		Log.error("__________", vertIndices, isolatedPts);
 		return vertIndices;
 	}
 

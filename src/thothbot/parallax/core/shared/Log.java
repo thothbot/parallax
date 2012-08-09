@@ -71,7 +71,7 @@ public class Log
 		StringBuffer result = new StringBuffer();
 		for ( Object mods : all )
 		{
-			result.append(mods + " ");
+			result.append(mods + "\n");
 		}
 
 		Log.logger.log(Level.SEVERE, result.toString());

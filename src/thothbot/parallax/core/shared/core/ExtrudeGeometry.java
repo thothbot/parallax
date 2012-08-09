@@ -165,7 +165,7 @@ public class ExtrudeGeometry extends Geometry
 		if ( options.bendPath != null )
 			shape.addWrapPath( options.bendPath );
 
-		List<Vector2> vertices =  shape.getTransformedPoints();
+		List<Vector2> vertices = shape.getTransformedPoints();
 		this.holes = shape.getPointsHoles();
 
 		boolean reverse = ! ShapeUtils.isClockWise( vertices ) ;

@@ -32,7 +32,7 @@ import thothbot.parallax.core.shared.core.Vector2;
 
 public class FontUtils
 {
-	public static double EPSILON = 0.0000000001;
+	public static final double EPSILON = 0.0000000001;
 
 	/*
 	 * @param contour
@@ -49,43 +49,42 @@ public class FontUtils
 			return;
 
 		List<Integer> verts = new ArrayList<Integer>();
-		
+
 		if ( area( contour ) > 0.0 )
+		{
 			for ( int v = 0; v < n; v++ ) 
 				verts.add(v);
-
+		}
 		else
+		{
 			for ( int v = 0; v < n; v++ ) 
 				verts.add(( n - 1 ) - v);
+		}
 
-		/*  remove nv - 2 vertices, creating 1 triangle every time */
-		int count = 2 * n;   /* error detection */
 		int nv = n;
-		for( int v = nv - 1; nv > 2; ) 
+		/*  remove nv-2 Vertices, creating 1 triangle every time */
+		int count = 2 * nv;   /* error detection */
+		
+		for( int v = nv-1; nv > 2; ) 
 		{
 			/* if we loop, it is probably a non-simple polygon */
-			if ( ( count-- ) <= 0 ) 
+			if ( 0 >= (count--) ) 
 			{
 				//** Triangulate: ERROR - probable bad polygon!
 
 				//throw ( "Warning, unable to triangulate polygon!" );
 				//return null;
 				// Sometimes warning is fine, especially polygons are triangulated in reverse.
-				Log.warn("FaontUtils: triangulate() - Warning, unable to triangulate polygon!" );
+				Log.warn("FontUtils: triangulate() - Warning, unable to triangulate polygon!" );
 
 				return;
 			}
 
 			/* three consecutive vertices in current polygon, <u,v,w> */
 
-			int u = v; 	 	
-			if ( nv <= u ) u = 0;     /* previous */
-			
-			v = u + 1;  
-			if ( nv <= v ) v = 0;     /* new v    */
-			
-			int w = v + 1;  
-			if ( nv <= w ) w = 0;     /* next     */
+			int u = v; 	   if ( nv <= u ) u = 0;     /* previous */
+			v = u + 1;     if ( nv <= v ) v = 0;     /* new v    */
+			int w = v + 1; if ( nv <= w ) w = 0;     /* next     */
 
 			if ( snip( contour, u, v, w, nv, verts ) ) 
 			{
@@ -96,11 +95,6 @@ public class FontUtils
 
 				/* output Triangle */
 
-				/*
-				result.push( contour[ a ] );
-				result.push( contour[ b ] );
-				result.push( contour[ c ] );
-				*/
 				result.add( Arrays.asList(
 					contour.get( a ),
 					contour.get( b ),
@@ -114,10 +108,9 @@ public class FontUtils
 				/* remove v from the remaining polygon */
 
 				for( int s = v, t = v + 1; t < nv; s++, t++ )
-					verts.add( s, verts.get( t ));
-
+					verts.set( s, verts.get( t ));
 				nv--;
-
+				
 				/* reset error detection counter */
 				count = 2 * nv;
 			}
@@ -167,18 +160,18 @@ public class FontUtils
 		if ( EPSILON > (((bx - ax) * (cy - ay)) - ((by - ay) * (cx - ax))) ) 
 			return false;
 
-			for ( int p = 0; p < n; p++ ) 
-			{
-				if( (p == u) || (p == v) || (p == w) ) 
-					continue;
+		for ( int p = 0; p < n; p++ ) 
+		{
+			if( (p == u) || (p == v) || (p == w) ) 
+				continue;
 
-				double px = contour.get( verts.get( p ) ).getX();
-				double py = contour.get( verts.get( p ) ).getY();
+			double px = contour.get( verts.get( p ) ).getX();
+			double py = contour.get( verts.get( p ) ).getY();
 
-				if ( insideTriangle( ax, ay, bx, by, cx, cy, px, py ) ) 
-					return false;
-		  }
-		  return true;
+			if ( insideTriangle( ax, ay, bx, by, cx, cy, px, py ) ) 
+				return false;
+		}
+		return true;
 	}
 	
 	/*
@@ -196,9 +189,9 @@ public class FontUtils
 		  double bpx= px - bx;  double bpy= py - by;
 		  double cpx= px - cx;  double cpy= py - cy;
 
-		  double aCROSSbp = aX*bpy - aY*bpx;
-		  double cCROSSap = cX*apy - cY*apx;
-		  double bCROSScp = bX*cpy - bY*cpx;
+		  double aCROSSbp = aX * bpy - aY * bpx;
+		  double cCROSSap = cX * apy - cY * apx;
+		  double bCROSScp = bX * cpy - bY * cpx;
 
 		  return ( (aCROSSbp >= 0.0) && (bCROSScp >= 0.0) && (cCROSSap >= 0.0) );
 	}
