@@ -231,7 +231,7 @@ public class ShapeUtils
 		List<List<Integer>> vertIndices = new ArrayList<List<Integer>>();
 
 		FontUtils.triangulate( shape, triangles, vertIndices);
-Log.error("----------" ,triangles.size(), vertIndices.size(), triangles, vertIndices);
+
 		// To maintain reference to old shape, one must match coordinates, 
 		// or offset the indices from original arrays. It's probably easier 
 		// to do the first.
@@ -250,38 +250,39 @@ Log.error("----------" ,triangles.size(), vertIndices.size(), triangles, vertInd
 		}
 
 		// check all face vertices against all points map
+		List<List<Integer>> trianglesIndixes = new ArrayList<List<Integer>>();
 		for ( int i = 0, il = triangles.size(); i < il; i ++ ) 
 		{
 			List<Vector2> face = triangles.get( i );
-
+			trianglesIndixes.add(new ArrayList<Integer>());
 			for ( int f = 0; f < 3; f ++ ) 
 			{
 				String key = face.get( f ).getX() + ":" + face.get( f ).getY();
 
-//				if ( allPointsMap.containsKey(key) )
-//					face.add( f, allPointsMap.get(key));
+				if ( allPointsMap.containsKey(key) )
+					trianglesIndixes.get(i).add( f, allPointsMap.get(key));
 			}
 		}
 
 		// check isolated points vertices against all points map
+		List<List<Integer>> isolatedPtsIndixes = new ArrayList<List<Integer>>();
 		for ( int i = 0, il = isolatedPts.size(); i < il; i ++ ) 
 		{
 			List<Vector2> face = isolatedPts.get( i );
+			isolatedPtsIndixes.add(new ArrayList<Integer>());
 
 			for ( int f = 0; f < 3; f ++ ) 
 			{
 				String key = face.get( f ).getX() + ":" + face.get( f ).getY();
 
-//				if ( allPointsMap.containsKey(key) )
-//					face.add( f, allPointsMap.get(key));
+				if ( allPointsMap.containsKey(key) )
+					isolatedPtsIndixes.get(i).add( f, allPointsMap.get(key));
 			}
 		}
 
-//		vertIndices.addAll( isolatedPts );
-		Log.error("__________", vertIndices, isolatedPts);
-		return vertIndices;
+		trianglesIndixes.addAll( isolatedPtsIndixes );
+		return trianglesIndixes;
 	}
-
 
 	public static boolean isClockWise( List<Vector2> pts ) 
 	{

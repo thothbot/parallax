@@ -90,7 +90,7 @@ public class ExtrudeGeometry extends Geometry
 	private ExtrudeGeometryParameters options;
 	
 	private int shapesOffset;
-	private int verticesCount;
+	private int facesCount;
 
 	public ExtrudeGeometry(ExtrudeGeometryParameters options)
 	{
@@ -166,6 +166,7 @@ public class ExtrudeGeometry extends Geometry
 			shape.addWrapPath( options.bendPath );
 
 		List<Vector2> vertices = shape.getTransformedPoints();
+
 		this.holes = shape.getPointsHoles();
 
 		boolean reverse = ! ShapeUtils.isClockWise( vertices ) ;
@@ -188,7 +189,7 @@ public class ExtrudeGeometry extends Geometry
 		}
 
 		localFaces = ShapeUtils.triangulateShape ( vertices, holes );
-		verticesCount = vertices.size();
+		facesCount = localFaces.size();
 
 		// Would it be better to move points after triangulation?
 		// shapePoints = shape.extractAllPointsWithBend( curveSegments, bendPath );
@@ -197,6 +198,10 @@ public class ExtrudeGeometry extends Geometry
 		////
 		///   Handle Vertices
 		////
+		
+		// vertices has all points but contour has only points of circumference
+		List<Vector2> contour = new ArrayList<Vector2>(vertices); 
+		
 		for ( int h = 0, hl = this.holes.size();  h < hl; h ++ )
 			vertices.addAll( this.holes.get( h ) );
 
@@ -204,13 +209,13 @@ public class ExtrudeGeometry extends Geometry
 		// Find directions for point movement
 		//
 		List<Vector2> contourMovements = new ArrayList<Vector2>();
-		for ( int i = 0, il = vertices.size(), j = il - 1, k = i + 1; i < il; i ++, j ++, k ++ ) 
+		for ( int i = 0, il = contour.size(), j = il - 1, k = i + 1; i < il; i ++, j ++, k ++ ) 
 		{
 			if ( j == il ) j = 0;
 			if ( k == il ) k = 0;
 
 			contourMovements.add(
-					getBevelVec( vertices.get( i ), vertices.get( j ), vertices.get( k ) ));
+					getBevelVec( contour.get( i ), contour.get( j ), contour.get( k ) ));
 		}
 
 		List<List<Vector2>> holesMovements = new ArrayList<List<Vector2>>();
@@ -247,9 +252,9 @@ public class ExtrudeGeometry extends Geometry
 
 			// contract shape
 
-			for ( int i = 0, il = vertices.size(); i < il; i ++ ) 
+			for ( int i = 0, il = contour.size(); i < il; i ++ ) 
 			{
-				Vector2 vert = scalePt2( vertices.get( i ), contourMovements.get( i ), bs );
+				Vector2 vert = scalePt2( contour.get( i ), contourMovements.get( i ), bs );
 				//vert = scalePt( contour[ i ], contourCentroid, bs, false );
 				v( vert.getX(), vert.getY(),  - z );
 			}
@@ -333,9 +338,9 @@ public class ExtrudeGeometry extends Geometry
 			double bs = options.bevelSize * Math.sin ( t * Math.PI/2.0 ) ;
 
 			// contract shape
-			for ( int i = 0, il = vertices.size(); i < il; i ++ ) 
+			for ( int i = 0, il = contour.size(); i < il; i ++ ) 
 			{
-				Vector2 vert = scalePt2( vertices.get( i ), contourMovements.get( i ), bs );
+				Vector2 vert = scalePt2( contour.get( i ), contourMovements.get( i ), bs );
 				v( vert.getX(), vert.getY(),  options.amount + z );
 			}
 
@@ -368,7 +373,7 @@ public class ExtrudeGeometry extends Geometry
 		buildLidFaces();
 
 		// Sides faces
-		buildSideFaces(vertices);
+		buildSideFaces(contour);
 	}
 	
 	private Vector2 getBevelVec( Vector pt_i, Vector pt_j, Vector pt_k ) 
@@ -474,7 +479,7 @@ public class ExtrudeGeometry extends Geometry
 			int offset = this.shapesOffset * layer;
 
 			// Bottom faces
-			
+
 			for ( int i = 0; i < flen; i ++ ) 
 			{
 				List<Integer> face = this.localFaces.get( i );
@@ -482,7 +487,7 @@ public class ExtrudeGeometry extends Geometry
 			}
 
 			layer = this.options.steps + this.options.bevelSegments * 2;
-			offset = verticesCount * layer;
+			offset = facesCount * layer;
 
 			// Top faces
 
@@ -524,8 +529,9 @@ public class ExtrudeGeometry extends Geometry
 
 		for ( int h = 0, hl = this.holes.size();  h < hl; h ++ ) 
 		{
-			List<?> ahole = this.holes.get( h );
-			sidewalls( (List<Vector2>) ahole, layeroffset );
+			List<Vector2> ahole = this.holes.get( h );
+
+			sidewalls( ahole, layeroffset );
 
 			//, true
 			layeroffset += ahole.size();
@@ -534,7 +540,7 @@ public class ExtrudeGeometry extends Geometry
 
 	private void sidewalls( List<Vector2> contour, int layeroffset ) 
 	{
-		int i = this.verticesCount;
+		int i = contour.size();
 
 		while ( --i >= 0 ) 
 		{
@@ -547,8 +553,8 @@ public class ExtrudeGeometry extends Geometry
 
 			for ( int s = 0; s < sl; s ++ ) 
 			{
-				int slen1 = this.verticesCount * s;
-				int slen2 = this.verticesCount * ( s + 1 );
+				int slen1 = this.facesCount * s;
+				int slen2 = this.facesCount * ( s + 1 );
 				int a = layeroffset + j + slen1;
 				int b = layeroffset + k + slen1;
 				int c = layeroffset + k + slen2;
