@@ -489,7 +489,7 @@ public class ExtrudeGeometry extends Geometry
 			offset = verticesCount * layer;
 
 			// Top faces
-Log.error("!!!!!!!!!", this.localFaces.size(), this.localFaces);
+
 			for ( int i = 0; i < flen; i ++ ) 
 			{
 				List<Integer> face = this.localFaces.get( i );
@@ -511,9 +511,9 @@ Log.error("!!!!!!!!!", this.localFaces.size(), this.localFaces);
 			for ( int i = 0; i < flen; i ++ ) 
 			{
 				List<Integer> face = localFaces.get( i );
-				f3( face.get(0) + this.getVertices().size() * this.options.steps, 
-					face.get(1) + this.getVertices().size() * this.options.steps, 
-					face.get(2) + this.getVertices().size() * this.options.steps, false );
+				f3( face.get(0) + verticesCount * this.options.steps, 
+					face.get(1) + verticesCount * this.options.steps, 
+					face.get(2) + verticesCount * this.options.steps, false );
 			}
 		}
 	}

@@ -155,7 +155,8 @@ public class Path extends CurvePath
 		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 		
 		//---
-		List<Vector2> npts = Arrays.asList( new Vector2( x0, y0 ) );
+		List<Vector2> npts = new ArrayList<Vector2>();
+		npts.add(new Vector3( x0, y0, 0 ));
 		npts.addAll(pts);
 	
 		CurveSpline curve = new CurveSpline( npts );
@@ -330,12 +331,13 @@ public class Path extends CurvePath
 				List<Object> laste = this.actions.get( i - 1 ).args;
 
 				Vector2 last = new Vector2( (Double)laste.get( laste.size() - 2 ), (Double)laste.get( laste.size() - 1 ) );
-				List<Vector2> spts = Arrays.asList(last);
+				List<Vector2> spts = new ArrayList<Vector2>();
+				spts.add(last);
 
-				Vector2 v = (Vector2) args.get( 0 );
-				double n = divisions * v.length();
+				List<Vector3> v = (List<Vector3>) args.get( 0 );
+				double n = divisions * v.size();
 
-				spts.add(v);
+				spts.addAll(v);
 
 				CurveSpline spline = new CurveSpline( spts );
 
