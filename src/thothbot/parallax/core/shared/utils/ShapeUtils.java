@@ -42,7 +42,6 @@ import thothbot.parallax.core.shared.core.Vector2;
  */
 public class ShapeUtils
 {
-	public static double shortest = Double.POSITIVE_INFINITY;
 	
 	/**
 	 * Remove holes from the Shape
@@ -65,10 +64,13 @@ public class ShapeUtils
 		/* For each isolated shape, find the closest points and break to the hole to allow triangulation */
 		int holeIndex = -1;
 		int shapeIndex = -1;
+
 		for ( int h = 0; h < holes.size(); h ++ ) 
 		{
 			List<Vector2> hole = holes.get( h );
 			allpoints.addAll(hole);
+			
+			double shortest = Double.POSITIVE_INFINITY;
 
 			// Find the shortest pair of pts between shape and hole
 			// Note: Actually, I'm not sure now if we could optimize this to be faster than O(m*n)
@@ -80,12 +82,12 @@ public class ShapeUtils
 				Vector2 pts1 = hole.get( h2 );
 				List<Double> dist = new ArrayList<Double>();
 
-				for ( int p = 0; p < contour.size(); p++ ) 
+				for ( int p = 0; p < shape.size(); p++ ) 
 				{
-					Vector2 pts2 = contour.get( p );
+					Vector2 pts2 = shape.get( p );
 					double d = pts1.distanceToSquared( pts2 );
 					dist.add( d );
-
+					
 					if ( d < shortest ) 
 					{
 						shortest = d;
@@ -97,15 +99,15 @@ public class ShapeUtils
 
 			int prevShapeVert = ( shapeIndex - 1 ) >= 0 
 					? shapeIndex - 1 
-							: contour.size() - 1;
+							: shape.size() - 1;
 			int prevHoleVert = ( holeIndex - 1 ) >= 0 
 					? holeIndex - 1 
 							: hole.size() - 1;
 
 			List<Vector2> areaapts = Arrays.asList(
 				hole.get( holeIndex ),
-				contour.get( shapeIndex ),
-				contour.get( prevShapeVert )
+				shape.get( shapeIndex ),
+				shape.get( prevShapeVert )
 			);
 
 			double areaa = FontUtils.TriangulateArea( areaapts );
@@ -113,7 +115,7 @@ public class ShapeUtils
 			List<Vector2> areabpts = Arrays.asList(
 				hole.get( holeIndex ),
 				hole.get( prevHoleVert ),
-				contour.get( shapeIndex )
+				shape.get( shapeIndex )
 			);
 
 			double areab = FontUtils.TriangulateArea( areabpts );
@@ -126,8 +128,8 @@ public class ShapeUtils
 			holeIndex += holeOffset;
 
 			if ( shapeIndex < 0 ) 
-				shapeIndex += contour.size();
-			shapeIndex %= contour.size();
+				shapeIndex += shape.size();
+			shapeIndex %= shape.size();
 
 			if ( holeIndex < 0 ) 
 				holeIndex += hole.size();
@@ -135,15 +137,15 @@ public class ShapeUtils
 
 			prevShapeVert = ( shapeIndex - 1 ) >= 0 
 					? shapeIndex - 1 
-							: contour.size() - 1;
+							: shape.size() - 1;
 			prevHoleVert = ( holeIndex - 1 ) >= 0 
 					? holeIndex - 1 
 							: hole.size() - 1;
 
 			areaapts = Arrays.asList(
 				hole.get( holeIndex ),
-				contour.get( shapeIndex ),
-				contour.get( prevShapeVert )
+				shape.get( shapeIndex ),
+				shape.get( prevShapeVert )
 			);
 
 			double areaa2 = FontUtils.TriangulateArea( areaapts );
@@ -151,7 +153,7 @@ public class ShapeUtils
 			areabpts = Arrays.asList(
 				hole.get( holeIndex ),
 				hole.get( prevHoleVert ),
-				contour.get( shapeIndex )
+				shape.get( shapeIndex )
 			);
 
 			double areab2 = FontUtils.TriangulateArea( areabpts );
@@ -162,8 +164,8 @@ public class ShapeUtils
 				holeIndex = oldHoleIndex ;
 
 				if ( shapeIndex < 0 ) 
-					shapeIndex += contour.size();
-				shapeIndex %= contour.size();
+					shapeIndex += shape.size();
+				shapeIndex %= shape.size();
 
 				if ( holeIndex < 0 ) 
 					holeIndex += hole.size();
@@ -171,7 +173,7 @@ public class ShapeUtils
 
 				prevShapeVert = ( shapeIndex - 1 ) >= 0 
 						? shapeIndex - 1 
-								: contour.size() - 1;
+								: shape.size() - 1;
 				prevHoleVert = ( holeIndex - 1 ) >= 0 
 						? holeIndex - 1 
 								: hole.size() - 1;
@@ -181,34 +183,37 @@ public class ShapeUtils
 				Log.error("ShapeUtils: removeHoles() ERROR");
 			}
 
-			List<Vector2> tmpShape1 = contour.subList(0, shapeIndex);
-			List<Vector2> tmpShape2 = contour.subList(shapeIndex, contour.size() );
+			List<Vector2> tmpShape1 = new ArrayList<Vector2>(shape.subList(0, shapeIndex));
+			List<Vector2> tmpShape2 = new ArrayList<Vector2>(shape.subList(shapeIndex, shape.size()));
 
-			List<Vector2> tmpHole1 = hole.subList(holeIndex, hole.size());
-			List<Vector2> tmpHole2 = hole.subList(0, holeIndex);
+			List<Vector2> tmpHole1 = new ArrayList<Vector2>(hole.subList(holeIndex, hole.size()));
+			List<Vector2> tmpHole2 = new ArrayList<Vector2>(hole.subList(0, holeIndex));
 
 			// Should check orders here again?
 
 			List<Vector2> trianglea = Arrays.asList(
 				hole.get( holeIndex ),
-				contour.get( shapeIndex ),
-				contour.get( prevShapeVert )
+				shape.get( shapeIndex ),
+				shape.get( prevShapeVert )
 			);
 
 			List<Vector2> triangleb = Arrays.asList(
 				hole.get( holeIndex ),
 				hole.get( prevHoleVert ),
-				contour.get( shapeIndex )
+				shape.get( shapeIndex )
 			);
 
 			verts.add(trianglea);
 			verts.add(triangleb);
 
 			shape.removeAll(shape);
+
 			shape.addAll(tmpShape1);
 			shape.addAll(tmpHole1);
 			shape.addAll(tmpHole2);
 			shape.addAll(tmpShape2);
+			
+			Log.error("!!!!!!!!!!!!!!!!!!!!", shape.size(), tmpHole1.size(), tmpHole2.size(), tmpShape1.size(), tmpShape2.size(), shapeIndex, shape.size());
 		}
 	}
 
@@ -238,7 +243,7 @@ public class ShapeUtils
 
 		// prepare all points map
 		Map<String, Integer> allPointsMap = new HashMap<String, Integer>();
-		
+		Log.error("**********", allpoints.size(), triangles.size(), isolatedPts.size());
 		for ( int i = 0, il = allpoints.size(); i < il; i ++ ) 
 		{
 			String key = allpoints.get( i ).getX() + ":" + allpoints.get( i ).getY();

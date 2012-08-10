@@ -90,7 +90,7 @@ public class ExtrudeGeometry extends Geometry
 	private ExtrudeGeometryParameters options;
 	
 	private int shapesOffset;
-	private int facesCount;
+	private int verticesCount;
 
 	public ExtrudeGeometry(ExtrudeGeometryParameters options)
 	{
@@ -189,7 +189,6 @@ public class ExtrudeGeometry extends Geometry
 		}
 
 		localFaces = ShapeUtils.triangulateShape ( vertices, holes );
-		facesCount = localFaces.size();
 
 		// Would it be better to move points after triangulation?
 		// shapePoints = shape.extractAllPointsWithBend( curveSegments, bendPath );
@@ -204,7 +203,7 @@ public class ExtrudeGeometry extends Geometry
 		
 		for ( int h = 0, hl = this.holes.size();  h < hl; h ++ )
 			vertices.addAll( this.holes.get( h ) );
-
+		verticesCount = vertices.size();
 		//
 		// Find directions for point movement
 		//
@@ -487,10 +486,10 @@ public class ExtrudeGeometry extends Geometry
 			}
 
 			layer = this.options.steps + this.options.bevelSegments * 2;
-			offset = facesCount * layer;
+			offset = verticesCount * layer;
 
 			// Top faces
-
+Log.error("!!!!!!!!!", this.localFaces.size(), this.localFaces);
 			for ( int i = 0; i < flen; i ++ ) 
 			{
 				List<Integer> face = this.localFaces.get( i );
@@ -530,7 +529,6 @@ public class ExtrudeGeometry extends Geometry
 		for ( int h = 0, hl = this.holes.size();  h < hl; h ++ ) 
 		{
 			List<Vector2> ahole = this.holes.get( h );
-
 			sidewalls( ahole, layeroffset );
 
 			//, true
@@ -553,8 +551,8 @@ public class ExtrudeGeometry extends Geometry
 
 			for ( int s = 0; s < sl; s ++ ) 
 			{
-				int slen1 = this.facesCount * s;
-				int slen2 = this.facesCount * ( s + 1 );
+				int slen1 = this.verticesCount * s;
+				int slen2 = this.verticesCount * ( s + 1 );
 				int a = layeroffset + j + slen1;
 				int b = layeroffset + k + slen1;
 				int c = layeroffset + k + slen2;

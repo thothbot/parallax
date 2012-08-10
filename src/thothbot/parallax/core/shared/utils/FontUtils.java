@@ -68,6 +68,7 @@ public class FontUtils
 		for( int v = nv-1; nv > 2; ) 
 		{
 			/* if we loop, it is probably a non-simple polygon */
+			
 			if ( 0 >= (count--) ) 
 			{
 				//** Triangulate: ERROR - probable bad polygon!
