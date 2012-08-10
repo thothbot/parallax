@@ -1942,7 +1942,7 @@ public class WebGLRenderer
 		}
 
 		if ( refreshMaterial || camera != this.cache_currentCamera ) 
-		{
+		{		
 			getGL().uniformMatrix4fv( p_uniforms.get("projectionMatrix"), false, camera._projectionMatrixArray );
 
 			if ( camera != this.cache_currentCamera ) 
@@ -2018,7 +2018,7 @@ public class WebGLRenderer
 	private void refreshUniformsLights ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
 	{
 		uniforms.get("ambientLightColor").setValue( lights.ambient );
-
+		
 		uniforms.get("directionalLightColor").setValue( lights.directional.colors );
 		uniforms.get("directionalLightDirection").setValue( lights.directional.positions );
 

@@ -410,7 +410,8 @@ public class Object3D implements DimensionalObject
 		// TODO: Add hierarchy support.
 		this.matrix.lookAt(vector, this.position, this.up);
 
-		if (this.rotationAutoUpdate){
+		if (this.rotationAutoUpdate)
+		{
 			this.rotation.getRotationFromMatrix(this.matrix);
 		}
 	}
@@ -518,10 +519,13 @@ public class Object3D implements DimensionalObject
 		{
 			
 			if (this.parent != null)
+			{
 				this.matrixWorld.multiply(this.parent.getMatrixWorld(), this.matrix);
-			
+			}
 			else
+			{
 				this.matrixWorld.copy(this.matrix);
+			}
 
 			this.matrixWorldNeedsUpdate = false;
 

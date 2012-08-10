@@ -27,6 +27,7 @@ import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderLambert;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector3;

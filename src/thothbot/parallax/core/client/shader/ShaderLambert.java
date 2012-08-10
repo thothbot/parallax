@@ -71,7 +71,7 @@ public final class ShaderLambert extends Shader
 		this.addUniform(UniformsLib.shadowmap);
 		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
-		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1, 1, 1 ) ));
+		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0, 1.0, 1.0 ) ));
 	}
 	
 	@Override

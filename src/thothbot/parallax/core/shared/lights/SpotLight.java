@@ -22,6 +22,7 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
@@ -54,9 +55,10 @@ public class SpotLight extends Light
 	public Object shadowMap;
 	public Object shadowMapSize;
 	public Object shadowCamera;
-	public Object shadowMatrix;
+	public Matrix4 shadowMatrix;
 	
-	public SpotLight(int hex) {
+	public SpotLight(int hex) 
+	{
 		this(hex, 1, 0, Math.PI / 2.0, 10);
 	}
 

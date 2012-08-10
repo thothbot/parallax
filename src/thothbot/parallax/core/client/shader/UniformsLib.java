@@ -113,7 +113,7 @@ public class UniformsLib
 			put("shadowBias",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 			put("shadowDarkness", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 			
-			put("shadowDarkness", new Uniform(Uniform.TYPE.M4V,  new ArrayList<Matrix4>() ));
+			put("shadowMatrix", new Uniform(Uniform.TYPE.M4V,  new ArrayList<Matrix4>() ));
 		}
 	};	
 }
