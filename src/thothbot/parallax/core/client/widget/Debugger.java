@@ -49,7 +49,7 @@ public class Debugger extends FlowPanel
 	{
 		super();
 		this.setStyleName("common-panel", true);
-		this.setStyleName("debug-panel", true);
+		this.setStyleName("corner-panel", true);
 		this.info = info;
 		
 		this.frameRate = new FlowPanel();
