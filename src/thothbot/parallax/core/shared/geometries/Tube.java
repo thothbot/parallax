@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
@@ -74,8 +75,8 @@ public final class Tube extends Geometry
 		FrenetFrames frames = new FrenetFrames(path, segments, closed);
 		
 		// proxy internals
-		this.tangents = frames.getTangents();
-		this.normals = frames.getNormals();
+		this.tangents  = frames.getTangents();
+		this.normals   = frames.getNormals();
 		this.binormals = frames.getBinormals();
 
 		// consruct the grid
@@ -97,7 +98,7 @@ public final class Tube extends Geometry
 
 			for ( int j = 0; j < segmentsRadius; j++ ) 
 			{
-				double v = j / segmentsRadius * 2.0 * Math.PI;
+				double v = j / (double)segmentsRadius * 2.0 * Math.PI;
 
 				// TODO: Hack: Negating it so it faces outside.
 				double cx = - radius * Math.cos( v ); 
