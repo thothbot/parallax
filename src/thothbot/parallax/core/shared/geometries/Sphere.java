@@ -47,9 +47,14 @@ public final class Sphere extends Geometry
 {
 	public Sphere() 
 	{
-		this(50, 8, 6);
+		this(50);
 	}
 
+	public Sphere(int radius) 
+	{
+		this(radius, 8, 6);
+	}
+	
 	public Sphere(int radius, int segmentsWidth, int segmentsHeight) 
 	{
 		this(radius, segmentsWidth, segmentsHeight, 0.0, Math.PI * 2.0 );

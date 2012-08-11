@@ -50,6 +50,7 @@ public final class Tube extends Geometry
 	private List<Vector3> tangents;
 	private List<Vector3> normals;
 	private List<Vector3> binormals;
+	private CurvePath path;
 	
 	private List<List<Integer>> grid;
 	
@@ -61,6 +62,8 @@ public final class Tube extends Geometry
 	public Tube( CurvePath path, int segments, double radius, int segmentsRadius, boolean closed, boolean debug ) 
 	{
 		super();
+		
+		this.path = path;
 		
 		Object3D debugObject = new Object3D();
 
@@ -140,6 +143,26 @@ public final class Tube extends Geometry
 		this.computeVertexNormals();
 	}
 	
+	public List<Vector3> getTangents()
+	{
+		return this.tangents;
+	}
+	
+	public List<Vector3> getNormals()
+	{
+		return this.normals;
+	}
+	
+	public List<Vector3> getBinormals()
+	{
+		return this.binormals;
+	}
+	
+	public CurvePath getPath()
+	{
+		return this.path;
+	}
+
 	private int vert( double x, double y, double z ) 
 	{
 		this.getVertices().add( new Vector3( x, y, z ) );
