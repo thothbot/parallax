@@ -446,10 +446,20 @@ public class Object3D implements DimensionalObject
 	public <E extends DimensionalObject> void removeChild(E child)
 	{
 		int index = this.children.indexOf(child);
+		Log.error("______", index);
 		if (index != -1) 
 		{
 			child.setParent(null);
 			this.children.remove(index);
+			
+			// remove from scene
+			DimensionalObject scene = this;
+
+			while ( scene.getParent() != null ) 
+				scene = scene.getParent();
+
+			if ( scene != null && scene.getClass() == Scene.class) 
+				((Scene)scene).removeSceneItem( child );
 		}
 	}
 	

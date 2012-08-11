@@ -30,7 +30,7 @@ import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.curves.CurvePath;
+import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
 import thothbot.parallax.core.shared.helpers.ArrowHelper;
 import thothbot.parallax.core.shared.objects.Object3D;
@@ -50,16 +50,16 @@ public final class Tube extends Geometry
 	private List<Vector3> tangents;
 	private List<Vector3> normals;
 	private List<Vector3> binormals;
-	private CurvePath path;
+	private Curve path;
 	
 	private List<List<Integer>> grid;
 	
-	public Tube( CurvePath path )
+	public Tube( Curve path )
 	{
 		this(path, 64, 1.0, 8, false, true);
 	}
 	
-	public Tube( CurvePath path, int segments, double radius, int segmentsRadius, boolean closed, boolean debug ) 
+	public Tube( Curve path, int segments, double radius, int segmentsRadius, boolean closed, boolean debug ) 
 	{
 		super();
 		
@@ -158,7 +158,7 @@ public final class Tube extends Geometry
 		return this.binormals;
 	}
 	
-	public CurvePath getPath()
+	public Curve getPath()
 	{
 		return this.path;
 	}

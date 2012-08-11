@@ -1634,7 +1634,7 @@ public class WebGLRenderer
 
 		while ( scene.getObjectsRemoved().size() > 0 ) 
 		{
-			removeObject( (GeometryObject) scene.getObjectsRemoved().get( 0 ), scene );
+			removeObject( (Object3D) scene.getObjectsRemoved().get( 0 ), scene );
 			scene.getObjectsRemoved().remove(0);
 		}
 
