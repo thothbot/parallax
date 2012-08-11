@@ -30,6 +30,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Bone;
+import thothbot.parallax.core.shared.objects.Object3D;
 
 /**
  * Represents geometric object geometry.
@@ -142,6 +143,8 @@ public class Geometry extends GeometryBuffer
 	private Map<String, GeometryGroup> geometryGroups;
 	private List<GeometryGroup> geometryGroupsList;
 	
+	private Object3D debug;
+	
 	public Geometry() {
 		super();
 
@@ -167,6 +170,12 @@ public class Geometry extends GeometryBuffer
 		this.hasTangents = false;
 		
 		this.dynamic = false; 
+		
+		this.debug = new Object3D();
+	}
+	
+	public Object3D getDebug() {
+		return this.debug;
 	}
 	
 	public Map<String, GeometryGroup> getGeometryGroups() {

@@ -66,8 +66,6 @@ public final class Tube extends Geometry
 		
 		this.path = path;
 		
-		Object3D debugObject = new Object3D();
-
 		this.grid = new ArrayList<List<Integer>>();
 
 		int numpoints = segments + 1;
@@ -91,9 +89,9 @@ public final class Tube extends Geometry
 
 			if ( debug ) 
 			{
-				debugObject.addChild(new ArrowHelper(tangents.get( i ), pos, radius, 0x0000ff));	
-				debugObject.addChild(new ArrowHelper(normals.get( i ), pos, radius, 0xff0000));
-				debugObject.addChild(new ArrowHelper(binormals.get( i ), pos, radius, 0x00ff00));
+				getDebug().addChild(new ArrowHelper(tangents.get( i ), pos, radius, 0x0000ff));	
+				getDebug().addChild(new ArrowHelper(normals.get( i ), pos, radius, 0xff0000));
+				getDebug().addChild(new ArrowHelper(binormals.get( i ), pos, radius, 0x00ff00));
 			}
 
 			for ( int j = 0; j < segmentsRadius; j++ ) 
