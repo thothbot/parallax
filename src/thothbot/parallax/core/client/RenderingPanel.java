@@ -148,7 +148,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	/**
 	 * Load renderer
 	 */
-	private void loadRenderer() throws Canvas3dException
+	private void loadRenderer() throws Exception
 	{
 		// Do not create WebGLRenderer instance while design UI (in Eclipse)
 		// otherwise you'll see exception in UI builder
@@ -167,7 +167,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	 * 
 	 * @throws Canvas3dException
 	 */
-	private Canvas3d loadCanvas() throws Canvas3dException
+	private Canvas3d loadCanvas() throws Exception
 	{
 		Log.debug("RenderingPanel: loadCanvas()");
 		
@@ -212,11 +212,12 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				{
 					loadRenderer();
 				}
-				catch (Canvas3dException ex)
+				catch (Exception ex)
 				{
 					Log.error(ex.getMessage(), ex.fillInStackTrace());
 					loadingPanal.hide();
 					add(new BadCanvasPanel(ex.getMessage()));
+					return;
 				}
 
 				onLoaded();

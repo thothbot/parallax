@@ -40,10 +40,10 @@ public final class CurveHeart extends Curve
 	@Override
 	public Vector3 getPoint(double t) 
 	{
-		t *= 2.0 * Math.PI;
+		t = 2.0 * Math.PI * t;
 
-		double tx = 16 * Math.pow(Math.sin(t), 3);
-		double ty = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+		double tx = 16.0 * Math.pow(Math.sin(t), 3.0);
+		double ty = 13.0 * Math.cos(t) - 5.0 * Math.cos(2.0 * t) - 2.0 * Math.cos(3.0 * t) - Math.cos(4.0 * t);
 
 		return new Vector3(tx, ty, 0).multiply(this.scale);
 	}

@@ -429,8 +429,8 @@ public class Matrix4
 
 		y.cross( z, x );
 
-		te.set(0, x.getX()); te.set(4, y.getX()); te.set(8, z.getX());
-		te.set(1, x.getY()); te.set(5, y.getY()); te.set(9, z.getY());
+		te.set(0, x.getX()); te.set(4, y.getX()); te.set(8,  z.getX());
+		te.set(1, x.getY()); te.set(5, y.getY()); te.set(9,  z.getY());
 		te.set(2, x.getZ()); te.set(6, y.getZ()); te.set(10, z.getZ());
 
 		return this;

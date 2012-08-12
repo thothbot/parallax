@@ -411,9 +411,12 @@ public class Vector3 extends Vector2 implements Vector
 	 */
 	public boolean equals(Vector3 v1)
 	{
-		try {
+		try 
+		{
 			return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
-		} catch (NullPointerException e2) {
+		} 
+		catch (NullPointerException e2) 
+		{
 			return false;
 		}
 	}

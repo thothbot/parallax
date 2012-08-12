@@ -57,7 +57,7 @@ public class FrenetFrames
 		// compute the tangent vectors for each segment on the path
 		for ( int i = 0; i < numpoints; i++ ) 
 		{
-			double u = i / ( numpoints - 1.0 );
+			double u = i / (double)( numpoints - 1 );
 
 			Vector3 vec = (Vector3) path.getTangentAt( u ); 
 			tangents.add(vec.normalize());
@@ -71,9 +71,9 @@ public class FrenetFrames
 		// compute the slowly-varying normal and binormal vectors for each segment on the path
 		for ( int i = 1; i < numpoints; i++ ) 
 		{
-			normals.add( i, normals.get( i - 1 ).clone());
+			normals.add( i, normals.get( i - 1 ).clone() );
 
-			binormals.add( i, binormals.get( i - 1 ).clone());
+			binormals.add( i, binormals.get( i - 1 ).clone() );
 			vec.cross( tangents.get( i - 1 ), tangents.get( i ) );
 
 			if ( vec.length() > epsilon ) 
@@ -93,7 +93,7 @@ public class FrenetFrames
 		if ( closed ) 
 		{
 			double theta = Math.acos( normals.get( 0 ).dot( normals.get( numpoints - 1 ) ) );
-			theta /= ( numpoints - 1.0 );
+			theta /= (double)( numpoints - 1 );
 
 			if ( tangents.get( 0 ).dot( vec.cross( normals.get( 0 ), normals.get( numpoints - 1 ) ) ) > 0 )
 				theta = -theta;
@@ -130,8 +130,8 @@ public class FrenetFrames
 	private void initialNormal1(Vector3 lastBinormal) 
 	{
 		// fixed start binormal. Has dangers of 0 vectors
-		normals.add( 0, new Vector3());
-		binormals.add( 0, new Vector3());
+		normals.add( 0, new Vector3() );
+		binormals.add( 0, new Vector3() );
 
 		normals.get( 0 ).cross( lastBinormal, tangents.get( 0 ) ).normalize();
 		binormals.get( 0 ).cross( tangents.get( 0 ), normals.get( 0 ) ).normalize();
@@ -156,8 +156,8 @@ public class FrenetFrames
 	 */
 	private void initialNormal3() 
 	{
-		normals.add( 0, new Vector3());
-		binormals.add( 0, new Vector3());
+		normals.add( 0, new Vector3() );
+		binormals.add( 0, new Vector3() );
 		double smallest = Double.MAX_VALUE;
 
 		double tx = Math.abs( tangents.get( 0 ).getX() );

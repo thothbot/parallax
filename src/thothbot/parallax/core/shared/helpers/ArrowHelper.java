@@ -22,6 +22,7 @@
 
 package thothbot.parallax.core.shared.helpers;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Matrix4;
@@ -70,8 +71,7 @@ public class ArrowHelper extends Object3D
 		this.cone.getPosition().set( 0, 1, 0 );
 		this.addChild( this.cone );
 
-		if ( origin instanceof Vector3 ) this.position = origin;
-
+		setPosition( origin );
 		setDirection( dir );
 		setLength( length );
 	}
@@ -85,12 +85,11 @@ public class ArrowHelper extends Object3D
 		this.matrix = new Matrix4().makeRotationAxis( axis.normalize(), radians );
 
 		this.rotation.getRotationFromMatrix( this.matrix, this.scale );
-
 	}
 
 	public void setLength( double length ) 
 	{
-		this.scale.set( length, length, length );
+		this.scale.set( length );
 	}
 
 	public void setColor( int hex ) 

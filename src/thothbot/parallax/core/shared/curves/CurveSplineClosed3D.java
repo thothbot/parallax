@@ -48,11 +48,11 @@ public class CurveSplineClosed3D extends Curve
 		Vector3 v = new Vector3();
 		
 		 // This needs to be from 0-length +1
-		double point = ( points.size() - 0.0 ) * t;
+		double point = points.size() * t;
 		int intPoint = (int) Math.floor( point );
 		
 		double weight = point - intPoint;
-		intPoint += intPoint > 0 ? 0 : ( Math.floor( Math.abs( intPoint ) / points.size() ) + 1.0 ) * points.size();
+		intPoint += intPoint > 0 ? 0 : ( Math.floor( Math.abs( intPoint ) / points.size() ) + 1 ) * points.size();
 		
 		int c0 = ( intPoint - 1 ) % points.size();
 		int c1 = ( intPoint ) % points.size();

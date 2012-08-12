@@ -83,15 +83,15 @@ public final class Tube extends Geometry
 		{
 			this.grid.add( i, new ArrayList<Integer>());
 
-			double u = i / ( numpoints - 1.0 );
+			double u = i / (double)( numpoints - 1 );
 
 			Vector3 pos = (Vector3) path.getPointAt( u );
 
 			if ( debug ) 
 			{
-				getDebug().addChild(new ArrowHelper(tangents.get( i ), pos, radius, 0x0000ff));	
-				getDebug().addChild(new ArrowHelper(normals.get( i ), pos, radius, 0xff0000));
-				getDebug().addChild(new ArrowHelper(binormals.get( i ), pos, radius, 0x00ff00));
+				getDebug().addChild( new ArrowHelper( tangents.get( i ),  pos, radius, 0x0000ff ) );	
+				getDebug().addChild( new ArrowHelper( normals.get( i ),   pos, radius, 0xff0000 ) );
+				getDebug().addChild( new ArrowHelper( binormals.get( i ), pos, radius, 0x00ff00 ) );
 			}
 
 			for ( int j = 0; j < segmentsRadius; j++ ) 
@@ -104,11 +104,11 @@ public final class Tube extends Geometry
 
 				Vector3 pos2 = new Vector3();
 	            pos2.copy( pos );
-	            pos2.addX(cx * normals.get(i).getX() + cy * binormals.get(i).getX());
-	            pos2.addY(cx * normals.get(i).getY() + cy * binormals.get(i).getY());
-	            pos2.addZ(cx * normals.get(i).getZ() + cy * binormals.get(i).getZ());
+	            pos2.addX( cx * normals.get(i).getX() + cy * binormals.get(i).getX() );
+	            pos2.addY( cx * normals.get(i).getY() + cy * binormals.get(i).getY() );
+	            pos2.addZ( cx * normals.get(i).getZ() + cy * binormals.get(i).getZ() );
 
-	            this.grid.get( i ).add( j, vert( pos2.getX(), pos2.getY(), pos2.getZ() ));
+	            this.grid.get( i ).add( j, vert( pos2.getX(), pos2.getY(), pos2.getZ() ) );
 			}
 		}
 

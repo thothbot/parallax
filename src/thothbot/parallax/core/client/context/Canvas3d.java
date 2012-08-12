@@ -25,6 +25,7 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -35,7 +36,7 @@ import com.google.gwt.user.client.ui.FocusWidget;
  */
 public class Canvas3d extends FocusWidget 
 {
-	private static final String[] CONTEXT_IDS = { "webgl", "experimental-webgl", "webkit-3d", "moz-webgl" };
+	private static final String[] CONTEXT_IDS = { "experimental-webgl", "webgl", "webkit-3d", "opera-3d", "moz-glweb20", "moz-webgl", "3d" };
 
 	private WebGLRenderingContext gl;	
 	private final CanvasElement canvas;
@@ -47,18 +48,26 @@ public class Canvas3d extends FocusWidget
 	 * 
 	 * @throws Canvas3dException 
 	 */
-	public Canvas3d(Canvas3dAttributes attribs) throws Canvas3dException 
+	public Canvas3d(Canvas3dAttributes attribs) throws Exception 
 	{
 		canvas = Document.get().createElement("canvas").cast();
 		setElement(canvas);
 
-		for (String contextId : CONTEXT_IDS) 
+		for (final String contextId : CONTEXT_IDS) 
 		{
-			if (attribs == null)
-				gl = (WebGLRenderingContext) canvas.getContext(contextId);
-			else
-				gl = getContext(canvas, contextId, attribs.getGLContextAttributesImpl());
-
+			try
+			{
+				Log.debug("Trying 3d context: " + contextId);
+				if (attribs == null)
+					gl = (WebGLRenderingContext) canvas.getContext(contextId);
+				else
+					gl = getContext(canvas, contextId, attribs.getGLContextAttributesImpl());
+			}
+			catch(Exception e)
+			{
+				gl = null;
+				Log.error("3d context: " + contextId + ", " + e.getMessage());
+			}
 
 			if (gl != null) 
 			{
@@ -71,7 +80,7 @@ public class Canvas3d extends FocusWidget
 		}
 		
 		if( gl == null )
-			throw new Canvas3dException("GL context can not be initialized.");
+			throw new Canvas3dException("GL context can not be initialized. ");
 	}
 	
 	private static native WebGLRenderingContext getContext(CanvasElement canvas, String contextId,
