@@ -32,6 +32,7 @@ import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.shader.Program;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
@@ -39,7 +40,6 @@ import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Vector4;
-import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 
 public abstract class Material
@@ -113,7 +113,7 @@ public abstract class Material
 	
 	private Map<String, Uniform> uniforms;
 	private Program program;
-	private Map<String, WebGLCustomAttribute> attributes;
+	private Map<String, Attribute> attributes;
 	private String vertexShader;
 	private String fragmentShader;
 	
@@ -178,11 +178,11 @@ public abstract class Material
 		this.uniforms = uniforms;
 	}
 	
-	public Map<String, WebGLCustomAttribute> getAttributes() {
+	public Map<String, Attribute> getAttributes() {
 		return this.attributes;
 	}
 	
-	public void setAttributes(Map<String, WebGLCustomAttribute> attributes) {
+	public void setAttributes(Map<String, Attribute> attributes) {
 		this.attributes = attributes;
 	}
 	

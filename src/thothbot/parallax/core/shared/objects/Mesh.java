@@ -34,6 +34,7 @@ import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Face3;
@@ -44,7 +45,6 @@ import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
-import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.materials.HasSkinning;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.Material;
@@ -309,17 +309,17 @@ public class Mesh  extends GeometryObject implements HasSides
 		if (material.getAttributes() != null) 
 		{
 			if (geometryGroup.__webglCustomAttributesList == null)
-				geometryGroup.__webglCustomAttributesList = new ArrayList<WebGLCustomAttribute>();
+				geometryGroup.__webglCustomAttributesList = new ArrayList<Attribute>();
 
 			for (String a : material.getAttributes().keySet()) 
 			{
-				WebGLCustomAttribute originalAttribute = material.getAttributes().get(a);
+				Attribute originalAttribute = material.getAttributes().get(a);
 
 				// Do a shallow copy of the attribute object so different
 				// geometryGroup chunks use different
 				// attribute buffers which are correctly indexed in the
 				// setMeshBuffers function
-				WebGLCustomAttribute attribute = originalAttribute.clone();
+				Attribute attribute = originalAttribute.clone();
 
 				if (!attribute.__webglInitialized || attribute.createUniqueBuffers) 
 				{
@@ -327,13 +327,13 @@ public class Mesh  extends GeometryObject implements HasSides
 
 					int size = 1; // "f" and "i"
 
-					if (attribute.type == WebGLCustomAttribute.TYPE.V2)
+					if (attribute.type == Attribute.TYPE.V2)
 						size = 2;
-					else if (attribute.type == WebGLCustomAttribute.TYPE.V3)
+					else if (attribute.type == Attribute.TYPE.V3)
 						size = 3;
-					else if (attribute.type == WebGLCustomAttribute.TYPE.V4)
+					else if (attribute.type == Attribute.TYPE.V4)
 						size = 4;
-					else if (attribute.type == WebGLCustomAttribute.TYPE.C)
+					else if (attribute.type == Attribute.TYPE.C)
 						size = 3;
 
 					attribute.size = size;
@@ -1366,7 +1366,7 @@ public class Mesh  extends GeometryObject implements HasSides
 		 {
 			 for ( int i = 0, il = geometryGroup.__webglCustomAttributesList.size(); i < il; i ++ ) 
 			 {
-				 WebGLCustomAttribute customAttribute = geometryGroup.__webglCustomAttributesList.get(i);
+				 Attribute customAttribute = geometryGroup.__webglCustomAttributesList.get(i);
 
 				 if ( ! customAttribute.__original.needsUpdate ) continue;
 
@@ -1536,7 +1536,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
+							 if(customAttribute.type == Attribute.TYPE.C) {
 								 Color v1 = (Color) customAttribute.getValue().get(face.getA());
 								 Color v2 = (Color) customAttribute.getValue().get(face.getB());
 								 Color v3 = (Color) customAttribute.getValue().get(face.getC());
@@ -1580,7 +1580,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
-							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
+							 if(customAttribute.type == Attribute.TYPE.C) {
 								 Color v1 = (Color) customAttribute.getValue().get(face.getA());
 								 Color v2 = (Color) customAttribute.getValue().get(face.getB());
 								 Color v3 = (Color) customAttribute.getValue().get(face.getC());
@@ -1632,7 +1632,7 @@ public class Mesh  extends GeometryObject implements HasSides
 					 } else if ( customAttribute.boundTo == "faces" ) {
 
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
-							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
+							 if(customAttribute.type == Attribute.TYPE.C) {
 								 Color value = (Color) customAttribute.getValue().get(chunk_faces3.get(f));
 								 Color v1 = value;
 								 Color v2 = value;
@@ -1676,7 +1676,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
 
-							 if(customAttribute.type == WebGLCustomAttribute.TYPE.C) {
+							 if(customAttribute.type == Attribute.TYPE.C) {
 								 Color value = (Color) customAttribute.getValue().get(chunk_faces4.get(f));
 								 Color v1 = value;
 								 Color v2 = value;

@@ -29,13 +29,13 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
-import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
 
@@ -166,7 +166,7 @@ public class Line extends GeometryObject
 		boolean dirtyVertices = geometry.verticesNeedUpdate;
 		boolean dirtyColors = geometry.colorsNeedUpdate;
 
-		List<WebGLCustomAttribute> customAttributes = geometry.__webglCustomAttributesList;
+		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
 
 		if (dirtyVertices) 
 		{
@@ -203,7 +203,7 @@ public class Line extends GeometryObject
 		{
 			for (int i = 0; i < customAttributes.size(); i++) 
 			{
-				WebGLCustomAttribute customAttribute = customAttributes.get(i);
+				Attribute customAttribute = customAttributes.get(i);
 
 				if (customAttribute.needsUpdate
 						&& (customAttribute.boundTo == null || customAttribute.boundTo
@@ -233,7 +233,7 @@ public class Line extends GeometryObject
 					} 
 					else if (customAttribute.size == 3) 
 					{
-						if (customAttribute.type == WebGLCustomAttribute.TYPE.C) 
+						if (customAttribute.type == Attribute.TYPE.C) 
 						{
 							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
 							{

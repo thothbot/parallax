@@ -26,6 +26,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.shader.Attribute;
 
 
 public abstract class GeometryBuffer
@@ -59,7 +60,7 @@ public abstract class GeometryBuffer
 	public int numMorphNormals;
 	public List<WebGLBuffer> __webglMorphNormalsBuffers;
 	
-	public List<WebGLCustomAttribute> __webglCustomAttributesList;
+	public List<Attribute> __webglCustomAttributesList;
 	
 	public int __webglParticleCount;
 	public int __webglLineCount;

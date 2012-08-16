@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
-import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.materials.Material;
 
 public abstract class GeometryObject extends Object3D implements DimensionalObject
@@ -82,21 +82,21 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 		if ( material.getAttributes() != null) 
 		{
 			if ( geometry.__webglCustomAttributesList == null ) 
-				geometry.__webglCustomAttributesList = new ArrayList<WebGLCustomAttribute>();
+				geometry.__webglCustomAttributesList = new ArrayList<Attribute>();
 
 			for ( String a : material.getAttributes().keySet() ) 
 			{
-				WebGLCustomAttribute attribute = material.getAttributes().get( a );
+				Attribute attribute = material.getAttributes().get( a );
 				if( ! attribute.__webglInitialized || attribute.createUniqueBuffers ) 
 				{
 					attribute.__webglInitialized = true;
 
 					int size = 1;		// "f" and "i"
 
-					if ( attribute.type == WebGLCustomAttribute.TYPE.V2 ) size = 2;
-					else if ( attribute.type == WebGLCustomAttribute.TYPE.V3 ) size = 3;
-					else if ( attribute.type == WebGLCustomAttribute.TYPE.V4 ) size = 4;
-					else if ( attribute.type == WebGLCustomAttribute.TYPE.C  ) size = 3;
+					if ( attribute.type == Attribute.TYPE.V2 ) size = 2;
+					else if ( attribute.type == Attribute.TYPE.V3 ) size = 3;
+					else if ( attribute.type == Attribute.TYPE.V4 ) size = 4;
+					else if ( attribute.type == Attribute.TYPE.C  ) size = 3;
 
 					attribute.size = size;
 

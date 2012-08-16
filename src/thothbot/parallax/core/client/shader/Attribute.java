@@ -20,14 +20,14 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.shared.core;
+package thothbot.parallax.core.client.shader;
 
 import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 
-public class WebGLCustomAttribute
+public class Attribute
 {
 	public static enum TYPE {
 		V2,
@@ -39,7 +39,7 @@ public class WebGLCustomAttribute
 
 	public WebGLBuffer buffer;
 	public boolean createUniqueBuffers;
-	public WebGLCustomAttribute.TYPE type;
+	public Attribute.TYPE type;
 	// TODO: remove = change to type (initCustomAttributes)
 	public int size;
 	private List<?> value;
@@ -49,23 +49,23 @@ public class WebGLCustomAttribute
 
 	public String boundTo;
 
-	public WebGLCustomAttribute __original;
+	public Attribute __original;
 
 	public boolean __webglInitialized;
 	
-	public WebGLCustomAttribute()
+	public Attribute()
 	{
 		//
 	}
 
-	public WebGLCustomAttribute(WebGLCustomAttribute.TYPE type, List<?> value)
+	public Attribute(Attribute.TYPE type, List<?> value)
 	{
 		this.type = type;
 		this.value = value;
 	}
 	
-	public WebGLCustomAttribute clone() {
-		WebGLCustomAttribute att = new WebGLCustomAttribute();
+	public Attribute clone() {
+		Attribute att = new Attribute();
 		att.buffer = this.buffer;
 		att.createUniqueBuffers = this.createUniqueBuffers;
 		att.type = this.type;

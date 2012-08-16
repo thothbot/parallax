@@ -35,7 +35,6 @@ import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 
 /**
  * The class used to create WebGl Program.
@@ -147,7 +146,7 @@ public class Program
 	 */
 	public Program(WebGLRenderingContext _gl, WebGLRenderer.PRECISION _precision,
 			int _maxVertexTextures, String fragmentShader, String vertexShader,
-			Map<String, Uniform> uniforms, Map<String, WebGLCustomAttribute> attributes, Program.ProgramParameters parameters)
+			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters)
 	{
 		this._gl = _gl;
 		this._precision = _precision;

@@ -43,6 +43,7 @@ import thothbot.parallax.core.client.renderers.plugins.SpritePlugin;
 import thothbot.parallax.core.client.shader.Program;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.client.textures.CubeTexture;
 import thothbot.parallax.core.client.textures.DataTexture;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
@@ -60,7 +61,6 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
-import thothbot.parallax.core.shared.core.WebGLCustomAttribute;
 import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.Light;
@@ -769,7 +769,7 @@ public class WebGLRenderer
 
 		if ( geometryGroup.__webglCustomAttributesList != null) 
 		{
-			for ( WebGLCustomAttribute att : geometryGroup.__webglCustomAttributesList ) 
+			for ( Attribute att : geometryGroup.__webglCustomAttributesList ) 
 			{
 				getGL().deleteBuffer( att.buffer );
 			}
@@ -1309,7 +1309,7 @@ public class WebGLRenderer
 			{
 				for ( int i = 0; i < geometryBuffer.__webglCustomAttributesList.size(); i ++ ) 
 				{
-					WebGLCustomAttribute attribute = geometryBuffer.__webglCustomAttributesList.get( i );
+					Attribute attribute = geometryBuffer.__webglCustomAttributesList.get( i );
 
 					if( attributes.get( attribute.belongsToAttribute ) >= 0 ) 
 					{
@@ -2602,7 +2602,7 @@ Log.error("?????????????");
 
 	private Program buildProgram (WebGLRenderer.PRECISION _precision,
 			int _maxVertexTextures, String fragmentShader, String vertexShader,
-			Map<String, Uniform> uniforms, Map<String, WebGLCustomAttribute> attributes, Program.ProgramParameters parameters ) 
+			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters ) 
 	{
 		String cashKey = fragmentShader + vertexShader + parameters.toString();
 		if(this.cache_programs.containsKey(cashKey))
