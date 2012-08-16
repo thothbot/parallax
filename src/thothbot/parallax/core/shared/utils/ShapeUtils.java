@@ -28,7 +28,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 
 
@@ -242,7 +245,8 @@ public class ShapeUtils
 		// to do the first.
 
 		// prepare all points map
-		Map<String, Integer> allPointsMap = new HashMap<String, Integer>();
+		Map<String, Integer> allPointsMap = GWT.isScript() ? 
+				new FastMap<Integer>() : new HashMap<String, Integer>();
 		Log.error("**********", allpoints.size(), triangles.size(), isolatedPts.size());
 		for ( int i = 0, il = allpoints.size(); i < il; i ++ ) 
 		{

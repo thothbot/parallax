@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Mathematics;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
 
@@ -60,7 +62,8 @@ public abstract class Shader
 	public Shader(DefaultResources resource)
 	{
 		this.resource = resource;
-		this.uniforms = new HashMap<String, Uniform>();
+		this.uniforms = GWT.isScript() ? 
+				new FastMap<Uniform>() : new HashMap<String, Uniform>();
 		initUniforms();
 	}
 

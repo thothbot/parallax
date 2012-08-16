@@ -25,7 +25,10 @@ package thothbot.parallax.core.shared.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.shared.core.FastMap;
 
 /**
  * The class implements some Uniform related helper methods 
@@ -45,7 +48,8 @@ public class UniformsUtils
 	 */
 	public static Map<String, Uniform> merge( Map<String, Uniform> uniforms1, Map<String, Uniform> uniforms2 ) 
 	{
-		Map<String, Uniform> result = new HashMap<String, Uniform>();
+		Map<String, Uniform> result = GWT.isScript() ? 
+				new FastMap<Uniform>() : new HashMap<String, Uniform>();
 		
 		result.putAll(uniforms1);
 		result.putAll(uniforms2);

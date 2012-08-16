@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLShader;
@@ -35,6 +37,7 @@ import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.FastMap;
 
 /**
  * The class used to create WebGl Program.
@@ -131,8 +134,10 @@ public class Program
 	};
 
 	private int id;
-	private Map<String, WebGLUniformLocation> uniforms = new HashMap<String, WebGLUniformLocation>();
-	private Map<String, Integer> attributes = new HashMap<String, Integer>();
+	private Map<String, WebGLUniformLocation> uniforms = GWT.isScript() ? 
+			new FastMap<WebGLUniformLocation>() : new HashMap<String, WebGLUniformLocation>();
+	private Map<String, Integer> attributes = GWT.isScript() ? 
+			new FastMap<Integer>() : new HashMap<String, Integer>();
 
 	private WebGLProgram program;
 

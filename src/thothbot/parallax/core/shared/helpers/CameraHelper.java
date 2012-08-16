@@ -27,8 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Projector;
 import thothbot.parallax.core.shared.core.Vector3;
@@ -64,7 +67,8 @@ public class CameraHelper extends Object3D
 
 		this.lineMaterial = lbm;
 
-		this.pointMap = new HashMap<String, List<Integer>>();
+		this.pointMap = GWT.isScript() ? 
+				new FastMap<List<Integer>>() : new HashMap<String, List<Integer>>();
 
 		// colors
 

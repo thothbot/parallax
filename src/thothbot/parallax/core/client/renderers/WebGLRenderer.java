@@ -52,6 +52,7 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Frustum;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
@@ -96,6 +97,7 @@ import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -240,7 +242,8 @@ public class WebGLRenderer
 		this.cache_vector3          = new Vector4();
 		this.cache_direction        = new Vector3();
 		this.cache_lights           = new WebGLRenderLights();
-		this.cache_programs         = new HashMap<String, Program>();
+		this.cache_programs         = GWT.isScript() ? 
+				new FastMap<Program>() : new HashMap<String, Program>();
 		
 		this.GPUmaxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
 		this.GPUmaxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
@@ -2842,7 +2845,8 @@ Log.error("?????????????");
 			maxSpotLights = maxPointLights; // this is not really correct
 		}
 
-		Map<String, Integer> retval = new HashMap<String, Integer>();
+		Map<String, Integer> retval = GWT.isScript() ? 
+				new FastMap<Integer>() : new HashMap<String, Integer>();
 		retval.put("directional", maxDirLights);
 		retval.put("point", maxPointLights);
 		retval.put("spot", maxSpotLights);

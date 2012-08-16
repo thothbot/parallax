@@ -39,6 +39,7 @@ import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.GeometryGroup;
@@ -50,6 +51,8 @@ import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 
+import com.google.gwt.core.client.GWT;
+
 public class Mesh  extends GeometryObject implements HasSides
 {
 	private Boolean flipSided;
@@ -58,7 +61,7 @@ public class Mesh  extends GeometryObject implements HasSides
 	private Integer morphTargetBase = null;
 	private List<Double> morphTargetInfluences;
 	private List<Integer> morphTargetForcedOrder;
-	private HashMap<String, Integer> morphTargetDictionary;
+	private Map<String, Integer> morphTargetDictionary;
 	public Float32Array __webglMorphTargetInfluences;
 	
 	private static int _geometryGroupCounter = 0;
@@ -98,7 +101,8 @@ public class Mesh  extends GeometryObject implements HasSides
 				this.morphTargetBase = -1;
 				this.morphTargetForcedOrder = new ArrayList<Integer>();
 				this.morphTargetInfluences = new ArrayList<Double>();
-				this.morphTargetDictionary = new HashMap<String, Integer>();
+				this.morphTargetDictionary = GWT.isScript() ? 
+						new FastMap<Integer>() : new HashMap<String, Integer>();
 
 				List<Geometry.MorphTarget> morphTargets = this.geometry.getMorphTargets();
 				for (int m = 0; m < morphTargets.size(); m++) 
@@ -1878,7 +1882,8 @@ public class Mesh  extends GeometryObject implements HasSides
 
 		geometry.setGeometryGroups( new HashMap<String, GeometryGroup>() );
 
-		Map<String, Integer> hash_map = new HashMap<String, Integer>();
+		Map<String, Integer> hash_map = GWT.isScript() ? 
+				new FastMap<Integer>() : new HashMap<String, Integer>();
 
 		Log.debug("sortFacesByMaterial() geometry faces count: " + geometry.getFaces().size());
 

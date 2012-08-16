@@ -26,7 +26,6 @@ import java.util.Map;
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-import thothbot.parallax.core.client.gl2.WebGLShader;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
@@ -34,15 +33,16 @@ import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderLensFlare;
 import thothbot.parallax.core.client.shader.ShaderLensFlareVertexTexture;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.LensFlare;
 import thothbot.parallax.core.shared.scenes.Scene;
+
+import com.google.gwt.core.client.GWT;
 
 public final class LensFlarePlugin extends Plugin
 {
@@ -137,8 +137,10 @@ public final class LensFlarePlugin extends Plugin
 			lensFlare.program = createProgram( new ShaderLensFlareVertexTexture() );
 		}
 
-		lensFlare.attributes = new HashMap<String, Integer>();
-		lensFlare.uniforms = new HashMap<String, WebGLUniformLocation>();
+		lensFlare.attributes = GWT.isScript() ? 
+				new FastMap<Integer>() : new HashMap<String, Integer>();
+		lensFlare.uniforms = GWT.isScript() ? 
+				new FastMap<WebGLUniformLocation>() : new HashMap<String, WebGLUniformLocation>();
 
 		lensFlare.attributes.put("vertex", gl.getAttribLocation ( lensFlare.program, "position" ) );
 		lensFlare.attributes.put("uv",     gl.getAttribLocation ( lensFlare.program, "uv" ) );

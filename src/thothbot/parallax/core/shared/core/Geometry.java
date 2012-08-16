@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+
+import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.Object3D;
@@ -762,7 +765,8 @@ public class Geometry extends GeometryBuffer
 	public int mergeVertices() 
 	{
 		// Hashmap for looking up vertice by position coordinates (and making sure they are unique)
-		Map<String, Integer> verticesMap = new HashMap<String, Integer>();
+		Map<String, Integer> verticesMap = GWT.isScript() ? 
+				new FastMap<Integer>() : new HashMap<String, Integer>();
 		List<Vector3> unique = new ArrayList<Vector3>();
 		List<Integer> changes = new ArrayList<Integer>();
 

@@ -20,7 +20,6 @@
 package thothbot.parallax.core.client.renderers.plugins;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +35,11 @@ import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.ShaderSprite;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.objects.Sprite;
 import thothbot.parallax.core.shared.scenes.Scene;
+
+import com.google.gwt.core.client.GWT;
 
 public final class SpritePlugin extends Plugin 
 {
@@ -99,8 +101,10 @@ public final class SpritePlugin extends Plugin
 
 		sprite.program = createProgram( new ShaderSprite() );
 
-		sprite.attributes = new HashMap<String, Integer>();
-		sprite.uniforms = new HashMap<String, WebGLUniformLocation>();
+		sprite.attributes = GWT.isScript() ? 
+				new FastMap<Integer>() : new HashMap<String, Integer>();
+		sprite.uniforms = GWT.isScript() ? 
+				new FastMap<WebGLUniformLocation>() : new HashMap<String, WebGLUniformLocation>();
 
 		sprite.attributes.put("position", gl.getAttribLocation ( sprite.program, "position" ));
 		sprite.attributes.put("uv", gl.getAttribLocation ( sprite.program, "uv" ));

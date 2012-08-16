@@ -23,7 +23,10 @@
 package thothbot.parallax.core.shared.materials;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.google.gwt.core.client.GWT;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
@@ -38,6 +41,7 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.objects.GeometryObject;
@@ -375,7 +379,8 @@ public abstract class Material
 	{
 		Log.debug("Called Material.setMaterialShaders()");
 
-		this.uniforms = new HashMap<String, Uniform>();
+		this.uniforms = GWT.isScript() ? 
+				new FastMap<Uniform>() : new HashMap<String, Uniform>();
 		this.uniforms.putAll(shader.getUniforms());
 
 		this.vertexShader = shader.getVertexSource();
