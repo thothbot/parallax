@@ -1782,9 +1782,12 @@ public class WebGLRenderer
 		
 		Program.ProgramParameters parameters = new Program.ProgramParameters();
 		
+		parameters.precision = this.precision;
+		
 		parameters.gammaInput  = isGammaInput();
 		parameters.gammaOutput = isGammaOutput();
 		parameters.physicallyBasedShading = isPhysicallyBasedShading();
+		parameters.maxVertexTextures = this.GPUmaxVertexTextures;
 		
 		parameters.map      = (material instanceof HasMap && ((HasMap)material).getMap() != null);
 		parameters.envMap   = (material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null);
@@ -1834,7 +1837,7 @@ public class WebGLRenderer
 		Log.debug("initMaterial() called new Program");
 
 		material.setProgram(
-				buildProgram(this.precision, this.GPUmaxVertexTextures, 
+				buildProgram( 
 						material.getFragmentShaderSource(), material.getVertexShaderSource(), 
 						material.getUniforms(), material.getAttributes(), parameters ));
 
@@ -2603,15 +2606,15 @@ Log.error("?????????????");
 
 	// Shaders
 
-	private Program buildProgram (WebGLRenderer.PRECISION _precision,
-			int _maxVertexTextures, String fragmentShader, String vertexShader,
+	private Program buildProgram (
+			String fragmentShader, String vertexShader,
 			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters ) 
 	{
 		String cashKey = fragmentShader + vertexShader + parameters.toString();
 		if(this.cache_programs.containsKey(cashKey))
 			return this.cache_programs.get(cashKey);
 
-		Program program = new Program(getGL(), this.precision, this.GPUmaxVertexTextures, fragmentShader, vertexShader, uniforms, attributes, parameters);
+		Program program = new Program(getGL(), fragmentShader, vertexShader, uniforms, attributes, parameters);
 
 		program.setId(cache_programs.size());
 		this.cache_programs.put(cashKey, program);

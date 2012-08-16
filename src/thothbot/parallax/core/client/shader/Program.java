@@ -52,6 +52,8 @@ public class Program
 	 */
 	public static class ProgramParameters
 	{
+		public WebGLRenderer.PRECISION precision;
+		
 		public boolean gammaInput;
 		public boolean gammaOutput;
 		public boolean physicallyBasedShading;
@@ -88,15 +90,17 @@ public class Program
 		public int maxMorphTargets;
 		public int maxMorphNormals;
 		
+		public int maxVertexTextures;
+		
 		public String toString() {
-			String retval = "";
+			String retval = "precision=" + precision.name() + ", ";
 			retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading + "-1-"
 					+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + "-2-"
 					+ maxShadows + ", " + maxBones + "-2-"
 					+ map + ", " + envMap + ", " + lightMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
 					+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + "-5-"
 					+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-6-"
-					+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals;
+					+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals + ", " + maxVertexTextures;
 			return retval;
 		}
 	}
@@ -141,21 +145,16 @@ public class Program
 
 	private WebGLProgram program;
 
-	private WebGLRenderer.PRECISION _precision;
-	private int _maxVertexTextures;
-
 	private WebGLRenderingContext _gl;
 
 	/**
 	 * Creates a new instance of the {@link Program}.
 	 */
-	public Program(WebGLRenderingContext _gl, WebGLRenderer.PRECISION _precision,
-			int _maxVertexTextures, String fragmentShader, String vertexShader,
+	public Program(WebGLRenderingContext _gl,
+			String fragmentShader, String vertexShader,
 			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters)
 	{
 		this._gl = _gl;
-		this._precision = _precision;
-		this._maxVertexTextures = _maxVertexTextures;
 
 		Log.debug("Building new program...");
 
@@ -299,9 +298,9 @@ public class Program
 			this.attributes.put(id, this._gl.getAttribLocation(this.program, id));
 	}
 
-	private String getPrecision()
+	private String getPrecision(ProgramParameters parameters)
 	{
-		String precision = this._precision.name().toLowerCase();
+		String precision = parameters.precision.name().toLowerCase();
 		return "precision " + precision + " float;";
 	}
 
@@ -309,9 +308,9 @@ public class Program
 	{
 		Log.debug("Called getPrefixVertex()");
 		List<String> options = new ArrayList<String>();
-		options.add(getPrecision());
+		options.add(getPrecision(parameters));
 
-		if (this._maxVertexTextures > 0)
+		if (parameters.maxVertexTextures > 0)
 			options.add(Program.SHADER_DEFINE.VERTEX_TEXTURES.getValue());
 
 		if (parameters.gammaInput)
@@ -383,7 +382,7 @@ public class Program
 	{
 		Log.debug("Called getPrefixFragment()");
 		List<String> options = new ArrayList<String>();
-		options.add(getPrecision());
+		options.add(getPrecision(parameters));
 
 		options.add(Program.SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
 		options.add(Program.SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
