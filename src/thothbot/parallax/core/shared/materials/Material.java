@@ -115,11 +115,11 @@ public abstract class Material
 	
 	// 
 	
-	private Map<String, Uniform> uniforms;
 	private Program program;
+	private Shader shader;
+
+//	private Map<String, Uniform> uniforms;
 	private Map<String, Attribute> attributes;
-	private String vertexShader;
-	private String fragmentShader;
 	
 	public Material()
 	{
@@ -144,6 +144,9 @@ public abstract class Material
 		
 		setAlphaTest(0);
 		setOverdraw(false);
+		
+//		this.uniforms = GWT.isScript() ? 
+//				new FastMap<Uniform>() : new HashMap<String, Uniform>();
 	}
 	
 	public int getId() {
@@ -175,11 +178,11 @@ public abstract class Material
 	}
 	
 	public Map<String, Uniform> getUniforms() {
-		return this.uniforms;
+		return this.getShader().getUniforms();
 	}
 	
 	public void setUniforms(Map<String, Uniform> uniforms) {
-		this.uniforms = uniforms;
+		this.getShader().setUniforms(uniforms);
 	}
 	
 	public Map<String, Attribute> getAttributes() {
@@ -188,22 +191,6 @@ public abstract class Material
 	
 	public void setAttributes(Map<String, Attribute> attributes) {
 		this.attributes = attributes;
-	}
-	
-	public String getVertexShaderSource() {
-		return this.vertexShader;
-	}
-	
-	public void setVertexShaderSource(String str) {
-		this.vertexShader = str;
-	}
-	
-	public String getFragmentShaderSource() {
-		return this.fragmentShader;
-	}
-	
-	public void setFragmentShaderSource(String str) {
-		this.fragmentShader = str;
 	}
 
 	public double getOpacity() {
@@ -317,33 +304,37 @@ public abstract class Material
 	public void setShading(Material.SHADING shading) {
 		this.shading = shading;
 	}
+	
+	public Shader getShader() {
+		return this.shader;
+	}
 
 	// Must be overwriten
-	public abstract Shader getShaderId();
+	protected abstract Shader getShaderId();
 	
 	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
 	{
 		if ( ! (this instanceof HasMaterialMap) )
 			return;
 		
-		uniforms.get("opacity").setValue( getOpacity() );
+		getUniforms().get("opacity").setValue( getOpacity() );
 
 		if(this instanceof HasColor)
 		{
 			if ( isGammaInput ) 
-				((Color) uniforms.get("diffuse").getValue()).copyGammaToLinear( ((HasColor)this).getColor() );
+				((Color) getUniforms().get("diffuse").getValue()).copyGammaToLinear( ((HasColor)this).getColor() );
  
 			else
-				uniforms.get("diffuse").setValue( ((HasColor)this).getColor() );
+				getUniforms().get("diffuse").setValue( ((HasColor)this).getColor() );
 		}
 
 		if(this instanceof HasMap)
 		{
-			uniforms.get("map").setTexture( ((HasMap) this).getMap() );
+			getUniforms().get("map").setTexture( ((HasMap) this).getMap() );
 
 			if ( ((HasMap) this).getMap() != null) 
 			{
-				((Vector4)uniforms.get("offsetRepeat").getValue()).set( 
+				((Vector4)getUniforms().get("offsetRepeat").getValue()).set( 
 						((HasMap) this).getMap().getOffset().getX(), 
 						((HasMap) this).getMap().getOffset().getY(), 
 						((HasMap) this).getMap().getRepeat().getX(), 
@@ -352,39 +343,40 @@ public abstract class Material
 		}
 
 		if(this instanceof HasLightMap)
-			uniforms.get("lightMap").setTexture( ((HasLightMap)this).getLightMap() );	
+			getUniforms().get("lightMap").setTexture( ((HasLightMap)this).getLightMap() );	
 		
 		if(this instanceof HasEnvMap)
 		{
 			HasEnvMap envMapMaterial = (HasEnvMap)this;
 
-			uniforms.get("envMap").setTexture( envMapMaterial.getEnvMap() );
-			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null 
+			getUniforms().get("envMap").setTexture( envMapMaterial.getEnvMap() );
+			getUniforms().get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null 
 					&& envMapMaterial.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0 : -1.0 );
 
 			if ( isGammaInput ) 
-				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
+				getUniforms().get("reflectivity").setValue( envMapMaterial.getReflectivity() );
  
 			else
-				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
+				getUniforms().get("reflectivity").setValue( envMapMaterial.getReflectivity() );
 			
-			uniforms.get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
-			uniforms.get("combine").setValue( envMapMaterial.getCombine().getValue() );
-			uniforms.get("useRefract").setValue( ( envMapMaterial.getEnvMap() != null 
+			getUniforms().get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
+			getUniforms().get("combine").setValue( envMapMaterial.getCombine().getValue() );
+			getUniforms().get("useRefract").setValue( ( envMapMaterial.getEnvMap() != null 
 					&& envMapMaterial.getEnvMap().getMapping() == Texture.MAPPING_MODE.CUBE_REFRACTION ) ? 1 : 0 );
 		}
 	}
 
-	public void setMaterialShaders( Shader shader) 
+	public void setMaterialShaders() 
 	{
 		Log.debug("Called Material.setMaterialShaders()");
 
-		this.uniforms = GWT.isScript() ? 
-				new FastMap<Uniform>() : new HashMap<String, Uniform>();
-		this.uniforms.putAll(shader.getUniforms());
+		Shader shader = getShaderId();
+		if(shader == null)
+				return;
 
-		this.vertexShader = shader.getVertexSource();
-		this.fragmentShader = shader.getFragmentSource();
+		this.shader = shader;
+
+		this.getUniforms().putAll(shader.getUniforms());
 	}
 	
 

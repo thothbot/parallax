@@ -1769,10 +1769,7 @@ public class WebGLRenderer
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
 
-		Shader shaderPrototype = material.getShaderId(); 
-
-		if ( shaderPrototype != null )
-			material.setMaterialShaders(shaderPrototype);
+		material.setMaterialShaders();
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
@@ -1837,9 +1834,7 @@ public class WebGLRenderer
 		Log.debug("initMaterial() called new Program");
 
 		material.setProgram(
-				buildProgram( 
-						material.getFragmentShaderSource(), material.getVertexShaderSource(), 
-						material.getUniforms(), material.getAttributes(), parameters ));
+				buildProgram( material, parameters ));
 
 		Map<String, Integer> attributes = material.getProgram().getAttributes();
 
@@ -2606,15 +2601,13 @@ Log.error("?????????????");
 
 	// Shaders
 
-	private Program buildProgram (
-			String fragmentShader, String vertexShader,
-			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters ) 
+	private Program buildProgram ( Material material, Program.ProgramParameters parameters ) 
 	{
-		String cashKey = fragmentShader + vertexShader + parameters.toString();
+		String cashKey = material.getShader().getFragmentSource() + material.getShader().getVertexSource() + parameters.toString();
 		if(this.cache_programs.containsKey(cashKey))
 			return this.cache_programs.get(cashKey);
 
-		Program program = new Program(getGL(), fragmentShader, vertexShader, uniforms, attributes, parameters);
+		Program program = new Program(getGL(), material.getShader(), material.getUniforms(), material.getAttributes(), parameters);
 
 		program.setId(cache_programs.size());
 		this.cache_programs.put(cashKey, program);

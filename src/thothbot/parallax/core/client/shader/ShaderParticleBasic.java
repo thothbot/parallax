@@ -59,8 +59,8 @@ public final class ShaderParticleBasic extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform(UniformsLib.particle);
-		this.addUniform(UniformsLib.shadowmap);
+		this.setUniforms(UniformsLib.particle);
+		this.setUniforms(UniformsLib.shadowmap);
 	}
 	
 	@Override

@@ -22,19 +22,15 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import java.util.Map;
-
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.utils.UniformsUtils;
 import thothbot.parallax.postprocessing.client.shader.ShaderConvolution;
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
@@ -46,9 +42,6 @@ public class BloomPass extends Pass
 	private RenderTargetTexture renderTargetX;
 	private RenderTargetTexture renderTargetY;
 	
-	private Map<String, Uniform> screenUniforms;
-	private Map<String, Uniform> convolutionUniforms;
-
 	private ShaderMaterial materialScreen;
 	private ShaderMaterial materialConvolution;
 	
@@ -80,31 +73,23 @@ public class BloomPass extends Pass
 		this.renderTargetY.setFormat(PixelFormat.RGB);
 
 		// screen material
-		Shader screenShader = new ShaderScreen();
 
-		this.screenUniforms = UniformsUtils.clone( screenShader.getUniforms() );
-		this.screenUniforms.get("opacity").setValue( strength );
 		
-		this.materialScreen = new ShaderMaterial();
-		this.materialScreen.setUniforms(this.screenUniforms);
-		this.materialScreen.setVertexShaderSource(screenShader.getVertexSource());
-		this.materialScreen.setFragmentShaderSource(screenShader.getFragmentSource());
+		this.materialScreen = new ShaderMaterial(new ShaderScreen());
+		this.materialScreen.getShader().getUniforms().get("opacity").setValue( strength );
 		this.materialScreen.setBlending(Material.BLENDING.ADDITIVE);
 		this.materialScreen.setTransparent(true);
 
 		// convolution material
 		Shader convolutionShader = new ShaderConvolution();
 
-		this.convolutionUniforms = UniformsUtils.clone( convolutionShader.getUniforms() );
-		this.convolutionUniforms.get("uImageIncrement").setValue( BloomPass.blurX );
-		this.convolutionUniforms.get("cKernel").setValue( Shader.buildKernel( sigma ) );
-
-		this.materialConvolution = new ShaderMaterial();
-		this.materialConvolution.setUniforms(this.convolutionUniforms);
-		this.materialConvolution.setVertexShaderSource(
-				"#define KERNEL_SIZE " + kernelSize + ".0\n" + convolutionShader.getVertexSource());
-		this.materialConvolution.setFragmentShaderSource(
-				"#define KERNEL_SIZE " + kernelSize + "\n"   + convolutionShader.getFragmentSource());
+		this.materialConvolution = new ShaderMaterial(
+				"#define KERNEL_SIZE " + kernelSize + ".0\n" + convolutionShader.getVertexSource(),
+				"#define KERNEL_SIZE " + kernelSize + "\n"   + convolutionShader.getFragmentSource()
+				);
+		this.materialConvolution.getShader().setUniforms(convolutionShader.getUniforms());
+		this.materialConvolution.getShader().getUniforms().get("uImageIncrement").setValue( BloomPass.blurX );
+		this.materialConvolution.getShader().getUniforms().get("cKernel").setValue( Shader.buildKernel( sigma ) );
 	}
 
 	@Override
@@ -116,16 +101,16 @@ public class BloomPass extends Pass
 		// Render quad with blured scene into texture (convolution pass 1)
 		effectComposer.getQuad().setMaterial(this.materialConvolution);
 
-		this.convolutionUniforms.get("tDiffuse" ).setTexture( effectComposer.getReadBuffer() );
-		this.convolutionUniforms.get("uImageIncrement").setValue( BloomPass.blurX );
+		this.materialConvolution.getShader().getUniforms().get("tDiffuse" ).setTexture( effectComposer.getReadBuffer() );
+		this.materialConvolution.getShader().getUniforms().get("uImageIncrement").setValue( BloomPass.blurX );
 
 		effectComposer.getRenderer().render( 
 				effectComposer.getScene(), effectComposer.getCamera(), this.renderTargetX, true );
 
 
 		// Render quad with blured scene into texture (convolution pass 2)
-		this.convolutionUniforms.get("tDiffuse").setTexture( this.renderTargetX );
-		this.convolutionUniforms.get("uImageIncrement").setValue( BloomPass.blurY );
+		this.materialConvolution.getShader().getUniforms().get("tDiffuse").setTexture( this.renderTargetX );
+		this.materialConvolution.getShader().getUniforms().get("uImageIncrement").setValue( BloomPass.blurY );
 
 		effectComposer.getRenderer().render( 
 				effectComposer.getScene(), effectComposer.getCamera(), this.renderTargetY, true );
@@ -133,7 +118,7 @@ public class BloomPass extends Pass
 		// Render original scene with superimposed blur to texture
 		effectComposer.getQuad().setMaterial(this.materialScreen);
 
-		this.screenUniforms.get("tDiffuse").setTexture( this.renderTargetY );
+		this.materialScreen.getShader().getUniforms().get("tDiffuse").setTexture( this.renderTargetY );
 
 		if ( maskActive ) 
 			effectComposer.getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );

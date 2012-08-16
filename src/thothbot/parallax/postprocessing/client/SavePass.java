@@ -22,24 +22,17 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import java.util.Map;
-
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.utils.UniformsUtils;
-
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class SavePass extends Pass
 {
 	private RenderTargetTexture renderTarget;
 	private String textureID = "tDiffuse";
-	private Map<String, Uniform> uniforms;
 	private ShaderMaterial material;
 	
 	private boolean clear = false;
@@ -58,16 +51,9 @@ public class SavePass extends Pass
 	{
 		this.renderTarget = renderTarget;	
 		
-		Shader shader = new ShaderScreen();
-
 		this.textureID = "tDiffuse";
-
-		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
-
-		this.material = new ShaderMaterial();
-		this.material.setUniforms(this.uniforms);
-		this.material.setVertexShaderSource(shader.getVertexSource());
-		this.material.setFragmentShaderSource(shader.getFragmentSource());
+		
+		this.material = new ShaderMaterial(new ShaderScreen());
 		
 		this.setEnabled(true);
 		this.setNeedsSwap(false);
@@ -75,8 +61,8 @@ public class SavePass extends Pass
 	@Override
 	public void render(EffectComposer effectComposer, double delta, boolean maskActive)
 	{
-		if ( this.uniforms.containsKey(this.textureID))
-			this.uniforms.get("this.textureID").setTexture( effectComposer.getReadBuffer() );
+		if ( this.material.getShader().getUniforms().containsKey(this.textureID))
+			this.material.getShader().getUniforms().get("this.textureID").setTexture( effectComposer.getReadBuffer() );
 
 		effectComposer.getQuad().setMaterial(this.material);
 

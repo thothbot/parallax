@@ -22,36 +22,22 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import java.util.Map;
-
-import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.utils.UniformsUtils;
 import thothbot.parallax.postprocessing.client.shader.ShaderDotscreen;
 
 public class DotScreenPass extends Pass
 {
-	private Map<String, Uniform> uniforms;
 	private ShaderMaterial material;
 	private boolean renderToScreen = false;
 	
 	public DotScreenPass( Vector3 center, double angle, double scale ) 
 	{
-		Shader shader = new ShaderDotscreen();
-
-		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
-
-		((Vector3) this.uniforms.get("center").getValue()).copy( center );
-		this.uniforms.get("angle").setValue( angle );
-		this.uniforms.get("scale").setValue( scale );
-
-		this.material = new ShaderMaterial();
-		this.material.setUniforms(this.uniforms);
-		this.material.setVertexShaderSource(shader.getVertexSource());
-		this.material.setFragmentShaderSource(shader.getFragmentSource());
+		this.material = new ShaderMaterial(new ShaderDotscreen());
+		((Vector3) this.material.getShader().getUniforms().get("center").getValue()).copy( center );
+		this.material.getShader().getUniforms().get("angle").setValue( angle );
+		this.material.getShader().getUniforms().get("scale").setValue( scale );
 
 		this.setEnabled(true);
 		this.setNeedsSwap(true);
@@ -60,8 +46,8 @@ public class DotScreenPass extends Pass
 	@Override
 	public void render(EffectComposer effectCocmposer, double delta, boolean maskActive)
 	{
-		this.uniforms.get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
-		((Vector2) this.uniforms.get("tSize").getValue()).set( 
+		this.material.getShader().getUniforms().get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
+		((Vector2) this.material.getShader().getUniforms().get("tSize").getValue()).set( 
 				effectCocmposer.getReadBuffer().getWidth(), effectCocmposer.getReadBuffer().getHeight() );
 
 		effectCocmposer.getQuad().setMaterial(this.material);

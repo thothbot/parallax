@@ -29,6 +29,21 @@ public class ShaderMaterial extends Material
 	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning
 { 
 	
+	class ShaderMaterialShader extends Shader
+	{
+
+		public ShaderMaterialShader(String vertexShader, String fragmentShader) 
+		{
+			super(vertexShader, fragmentShader);
+		}
+
+		@Override
+		protected void initUniforms() {
+
+		}
+		
+	}
+	
 	private boolean isWireframe;
 	private int wireframeLineWidth;
 	
@@ -47,7 +62,26 @@ public class ShaderMaterial extends Material
 	
 	private boolean isLights;
 	
-	public ShaderMaterial() 
+	private Shader shader;
+	
+	public ShaderMaterial(Shader.DefaultResources resource) 
+	{
+		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
+	}
+
+	public ShaderMaterial(String vertexShader, String fragmentShader) 
+	{		
+		this();
+		this.shader = new ShaderMaterialShader(vertexShader, fragmentShader);
+	}
+	
+	public ShaderMaterial(Shader shader)
+	{
+		this();
+		this.shader = shader;
+	}
+	
+	private ShaderMaterial()
 	{
 		setWireframe(false);
 		setWireframeLineWidth(1);
@@ -66,10 +100,9 @@ public class ShaderMaterial extends Material
 	
 	@Override
 	public Shader getShaderId() {
-		// TODO Auto-generated method stub
-		return null;
+		return shader;
 	}
-	
+		
 	public boolean isLights() {
 		return this.isLights;
 	}

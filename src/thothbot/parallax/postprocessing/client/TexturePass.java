@@ -22,19 +22,12 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import java.util.Map;
-
-import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.utils.UniformsUtils;
 import thothbot.parallax.postprocessing.client.shader.ShaderScreen;
 
 public class TexturePass extends Pass
 {
-
-	private Map<String, Uniform> uniforms;
 	private ShaderMaterial material;
 	
 	public TexturePass ( Texture texture )
@@ -44,17 +37,9 @@ public class TexturePass extends Pass
 	
 	public TexturePass ( Texture texture, double opacity ) 
 	{
-		Shader shader = new ShaderScreen();
-
-		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
-
-		this.uniforms.get("opacity").setValue( opacity );
-		this.uniforms.get("tDiffuse").setTexture( texture );
-
-		this.material = new ShaderMaterial();
-		this.material.setUniforms(this.uniforms);
-		this.material.setVertexShaderSource(shader.getVertexSource());
-		this.material.setFragmentShaderSource(shader.getFragmentSource());
+		this.material = new ShaderMaterial(new ShaderScreen());
+		this.material.getShader().getUniforms().get("opacity").setValue( opacity );
+		this.material.getShader().getUniforms().get("tDiffuse").setTexture( texture );
 		
 		this.setEnabled(true);
 		this.setNeedsSwap(false);

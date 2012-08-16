@@ -151,14 +151,14 @@ public class Program
 	 * Creates a new instance of the {@link Program}.
 	 */
 	public Program(WebGLRenderingContext _gl,
-			String fragmentShader, String vertexShader,
+			Shader shader,
 			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters)
 	{
 		this._gl = _gl;
 
 		Log.debug("Building new program...");
 
-		initProgram(vertexShader, fragmentShader, parameters);
+		initProgram(shader, parameters);
 
 		// cache uniforms locations
 		List<String> uniformIds = new ArrayList<String>(Arrays.asList("viewMatrix",
@@ -233,7 +233,7 @@ public class Program
 	 * @param vertexSource   the vertex shader source code
 	 * @param fragmentSource the fragment shader source code
 	 */
-	protected final void initProgram(String vertexSource, String fragmentSource,
+	protected final void initProgram(Shader shader,
 			ProgramParameters parameters)
 	{
 		Log.debug("Called initProgram()");
@@ -243,16 +243,16 @@ public class Program
 		String prefix_vertex = getPrefixVertex(parameters);
 		String prefix_fragment = getPrefixFragment(parameters);
 
-		this._gl.attachShader(this.program, getShader(ChunksVertexShader.class, prefix_vertex + vertexSource));
-		this._gl.attachShader(this.program, getShader(ChunksFragmentShader.class, prefix_fragment + fragmentSource));
+		this._gl.attachShader(this.program, getShader(ChunksVertexShader.class, prefix_vertex + shader.getVertexSource()));
+		this._gl.attachShader(this.program, getShader(ChunksFragmentShader.class, prefix_fragment + shader.getFragmentSource()));
 
 		this._gl.linkProgram(this.program);
 
 		if (!this._gl.getProgramParameterb(this.program, GLenum.LINK_STATUS.getValue()))
 			Log.error("Could not initialise shader\n"
 					+ "GL error: " + this._gl.getProgramInfoLog(program)
-					+ "\n-----\nVERTEX:\n" + prefix_vertex + vertexSource
-					+ "\n-----\nFRAGMENT:\n" + prefix_fragment + fragmentSource
+					+ "\n-----\nVERTEX:\n" + prefix_vertex + shader.getVertexSource()
+					+ "\n-----\nFRAGMENT:\n" + prefix_fragment + shader.getFragmentSource()
 			);
 
 		else

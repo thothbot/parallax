@@ -39,7 +39,7 @@ import com.google.gwt.resources.client.TextResource;
  */
 public abstract class Shader
 {
-	protected interface DefaultResources extends ClientBundle
+	public interface DefaultResources extends ClientBundle
 	{
 		@Source("source/default.vs")
 		TextResource getVertexShader();
@@ -48,12 +48,14 @@ public abstract class Shader
 		TextResource getFragmentShader();
 	}
 	
-	private DefaultResources resource;
 	private Map<String, Uniform> uniforms;
 
 	private String vertexShaderSource;
 	private String fragmentShaderSource;
 
+	private int id;
+	
+	private static int shaderCounter;
 	/**
 	 * This constructor will create new Shader instance. 
 	 * 
@@ -61,9 +63,19 @@ public abstract class Shader
 	 */
 	public Shader(DefaultResources resource)
 	{
-		this.resource = resource;
-		this.uniforms = GWT.isScript() ? 
-				new FastMap<Uniform>() : new HashMap<String, Uniform>();
+		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
+	}
+	
+	public Shader(String vertexShader, String fragmentShader)
+	{
+		this.id = shaderCounter++;
+
+		setVertexSource(vertexShader);
+		setFragmentSource(fragmentShader);
+
+		this.uniforms = GWT.isScript()
+				? new FastMap<Uniform>() : new HashMap<String, Uniform>();
+
 		initUniforms();
 	}
 
@@ -79,9 +91,6 @@ public abstract class Shader
 	 */
 	public String getVertexSource()
 	{
-		if(this.vertexShaderSource == null)
-			setVertexSource(resource.getVertexShader().getText());
-			
 		return this.vertexShaderSource;
 	}
 	
@@ -97,24 +106,11 @@ public abstract class Shader
 	 */
 	public String getFragmentSource()
 	{
-		if(this.fragmentShaderSource == null)
-			setFragmentSource(resource.getFragmentShader().getText());
-
 		return this.fragmentShaderSource;		
 	}
 
 	// Uniforms
 	protected abstract void initUniforms();
-	
-	protected void addUniform(Map<String, Uniform> uniforms)
-	{
-		this.uniforms.putAll(uniforms);
-	}
-
-	protected void addUniform(String id, Uniform uniform)
-	{
-		this.uniforms.put(id, uniform);
-	}
 	
 	/**
 	 * Gets shader's uniforms.
@@ -124,6 +120,16 @@ public abstract class Shader
 	public Map<String, Uniform> getUniforms()
 	{
 		return this.uniforms;
+	}
+	
+	public void setUniforms(Map<String, Uniform> uniforms)
+	{
+		this.uniforms.putAll(uniforms);
+	}
+
+	public void addUniform(String id, Uniform uniform)
+	{
+		this.uniforms.put(id, uniform);
 	}
 	
 	// Methods
@@ -182,5 +188,10 @@ public abstract class Shader
 			values.set( i, values.get(i) / sum);
 
 		return values;
+	}
+	
+	public String toString()
+	{
+		return "{id=" + this.id + ", class=" + getClass().getName() + ", uniforms=" + getUniforms() + "}";		
 	}
 }

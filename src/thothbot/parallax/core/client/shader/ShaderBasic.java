@@ -58,9 +58,9 @@ public final class ShaderBasic extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform(UniformsLib.common);
-		this.addUniform(UniformsLib.fog);
-		this.addUniform(UniformsLib.shadowmap);
+		this.setUniforms(UniformsLib.common);
+		this.setUniforms(UniformsLib.fog);
+		this.setUniforms(UniformsLib.shadowmap);
 	}
 	
 	@Override

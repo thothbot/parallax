@@ -65,10 +65,10 @@ public final class ShaderLambert extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform(UniformsLib.common);
-		this.addUniform(UniformsLib.fog);
-		this.addUniform(UniformsLib.lights);
-		this.addUniform(UniformsLib.shadowmap);
+		this.setUniforms(UniformsLib.common);
+		this.setUniforms(UniformsLib.fog);
+		this.setUniforms(UniformsLib.lights);
+		this.setUniforms(UniformsLib.shadowmap);
 		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
 		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0, 1.0, 1.0 ) ));

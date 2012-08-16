@@ -22,35 +22,22 @@
 
 package thothbot.parallax.postprocessing.client;
 
-import java.util.Map;
-
-import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.utils.UniformsUtils;
 import thothbot.parallax.postprocessing.client.shader.ShaderFilm;
 
 public class FilmPass extends Pass
 {
-	private Map<String, Uniform> uniforms;
 	private ShaderMaterial material;
 	private boolean renderToScreen = false;
 
 	public FilmPass( int noiseIntensity, int scanlinesIntensity, int scanlinesCount, double grayscale ) 
 	{
-		Shader shader = new ShaderFilm();
+		this.material = new ShaderMaterial(new ShaderFilm());
 
-		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
-
-		this.material = new ShaderMaterial();
-		this.material.setUniforms(this.uniforms);
-		this.material.setVertexShaderSource(shader.getVertexSource());
-		this.material.setFragmentShaderSource(shader.getFragmentSource());
-
-		this.uniforms.get("grayscale").setValue( grayscale );
-		this.uniforms.get("nIntensity").setValue( noiseIntensity );
-		this.uniforms.get("sIntensity").setValue( scanlinesIntensity );
-		this.uniforms.get("sCount").setValue( scanlinesCount );
+		this.material.getShader().getUniforms().get("grayscale").setValue( grayscale );
+		this.material.getShader().getUniforms().get("nIntensity").setValue( noiseIntensity );
+		this.material.getShader().getUniforms().get("sIntensity").setValue( scanlinesIntensity );
+		this.material.getShader().getUniforms().get("sCount").setValue( scanlinesCount );
 
 		this.setEnabled(true);
 		this.setNeedsSwap(true);
@@ -59,8 +46,8 @@ public class FilmPass extends Pass
 	@Override
 	public void render(EffectComposer effectCocmposer, double delta, boolean maskActive)
 	{
-		this.uniforms.get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
-		this.uniforms.get( "time" ).setValue( (Double)this.uniforms.get( "time" ).getValue() + delta );
+		this.material.getShader().getUniforms().get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
+		this.material.getShader().getUniforms().get( "time" ).setValue( (Double)this.material.getShader().getUniforms().get( "time" ).getValue() + delta );
 
 		effectCocmposer.getQuad().setMaterial(this.material);
 

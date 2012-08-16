@@ -32,7 +32,6 @@ import thothbot.parallax.core.shared.utils.UniformsUtils;
 public class ShaderPass extends Pass
 {
 	private String textureID;
-	private Map<String, Uniform> uniforms;
 	private ShaderMaterial material;
 	
 	private boolean isRenderToScreen = false;
@@ -48,19 +47,9 @@ public class ShaderPass extends Pass
 	{
 		this.setNeedsSwap(true);
 		this.textureID = textureID;
-
-		this.uniforms = UniformsUtils.clone( shader.getUniforms() );
-
-		this.material = new ShaderMaterial();
-		this.material.setUniforms(this.uniforms);
-		this.material.setVertexShaderSource(shader.getVertexSource());
-		this.material.setFragmentShaderSource(shader.getFragmentSource());
+		this.material = new ShaderMaterial(shader);
 	}
-	
-	public Map<String, Uniform> getUniforms() {
-		return this.uniforms;
-	}
-	
+
 	public boolean isRenderToScreen() {
 		return this.isRenderToScreen;
 	}
@@ -69,11 +58,15 @@ public class ShaderPass extends Pass
 		this.isRenderToScreen = isRenderToScreen;
 	}
 	
+	public Map<String, Uniform> getUniforms() {
+		return this.material.getShader().getUniforms();
+	}
+	
 	@Override
 	public void render( EffectComposer effectComposer, double delta, boolean maskActive) 
 	{
-		if ( this.uniforms.containsKey(this.textureID))
-			this.uniforms.get( this.textureID ).setTexture( effectComposer.getReadBuffer() );
+		if ( getUniforms().containsKey(this.textureID))
+			getUniforms().get( this.textureID ).setTexture( effectComposer.getReadBuffer() );
 
 		effectComposer.getQuad().setMaterial(this.material);
 
