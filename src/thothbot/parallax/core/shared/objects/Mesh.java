@@ -423,17 +423,21 @@ public class Mesh  extends GeometryObject implements HasSides
 			// check all geometry groups
 			for( int i = 0, il = geometry.getGeometryGroupsList().size(); i < il; i ++ ) 
 			{
-
 				GeometryGroup geometryGroup = geometry.getGeometryGroupsList().get( i );
 				material = Material.getBufferMaterial( this, geometryGroup );
 
-				boolean customAttributesDirty = (material.getAttributes() != null); // && areCustomAttributesDirty( material );
-
-				if ( geometry.verticesNeedUpdate || geometry.morphTargetsNeedUpdate || geometry.elementsNeedUpdate ||
-					 geometry.uvsNeedUpdate      || geometry.normalsNeedUpdate      ||
-					 geometry.colorsNeedUpdate   || geometry.tangetsNeedUpdate      || customAttributesDirty ) 
-				{
+				boolean areCustomAttributesDirty = material.areCustomAttributesDirty();
+				if ( geometry.verticesNeedUpdate 
+						|| geometry.morphTargetsNeedUpdate
+						|| geometry.elementsNeedUpdate 
+						|| geometry.uvsNeedUpdate      
+						|| geometry.normalsNeedUpdate      
+						|| geometry.colorsNeedUpdate   
+						|| geometry.tangetsNeedUpdate      
+						|| areCustomAttributesDirty
+				) {
 					setBuffers(gl, geometryGroup, GLenum.DYNAMIC_DRAW.getValue(), !geometry.isDynamic(), material );
+					material.clearCustomAttributes();
 				}
 			}
 
@@ -444,8 +448,6 @@ public class Mesh  extends GeometryObject implements HasSides
 			geometry.normalsNeedUpdate = false;
 			geometry.colorsNeedUpdate = false;
 			geometry.tangetsNeedUpdate = false;
-
-			material.clearCustomAttributes();
 //		}
 
 	}

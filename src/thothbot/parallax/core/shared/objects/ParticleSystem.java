@@ -133,15 +133,18 @@ public class ParticleSystem extends GeometryObject
 	{		
 		this.material = Material.getBufferMaterial( this, null );
 
-		boolean customAttributesDirty = ((this.material.getAttributes() != null) && this.material.areCustomAttributesDirty());
-
-		if ( this.geometry.verticesNeedUpdate || this.geometry.colorsNeedUpdate || this.sortParticles || customAttributesDirty )
+		boolean areCustomAttributesDirty = material.areCustomAttributesDirty();
+		if ( this.geometry.verticesNeedUpdate 
+				|| this.geometry.colorsNeedUpdate 
+				|| this.sortParticles 
+				|| areCustomAttributesDirty
+		) {
 			this.setBuffers( renderer, this.geometry, GLenum.DYNAMIC_DRAW.getValue());
+			this.material.clearCustomAttributes();
+		}
 
 		this.getGeometry().verticesNeedUpdate = false;
 		this.getGeometry().colorsNeedUpdate = false;
-
-		this.material.clearCustomAttributes();
 	}
 
 	// setParticleBuffers

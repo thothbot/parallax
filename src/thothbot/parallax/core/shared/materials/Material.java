@@ -401,19 +401,21 @@ public abstract class Material
 	
 	public boolean areCustomAttributesDirty() 
 	{
-		for ( String a : this.attributes.keySet())
-			if ( this.attributes.get( a ).needsUpdate ) return true;
+		if(getAttributes() == null)
+			return false;
+		
+		for ( Attribute attribute: this.attributes.values())
+			if ( attribute.needsUpdate ) return true;
 
 		return false;
 	}
 
-	// TODO: Check
 	public void clearCustomAttributes() 
 	{
-		if(this.attributes == null)
+		if(getAttributes() == null)
 			return;
 
-		for ( String a : this.attributes.keySet() )
-			this.attributes.get( a ).needsUpdate = false;
+		for ( Attribute attribute: this.attributes.values() )
+			attribute.needsUpdate = false;
 	}
 }
