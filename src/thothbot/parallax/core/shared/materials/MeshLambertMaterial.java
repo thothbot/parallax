@@ -22,9 +22,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import java.util.Map;
+
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderLambert;
+import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.Log;
@@ -297,21 +300,22 @@ public final class MeshLambertMaterial extends Material
 	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
 	{
 		super.refreshUniforms(canvas, camera, isGammaInput);
+		Map<String, Uniform> uniforms = getShader().getUniforms(); 
 		
 		if ( isGammaInput ) 
 		{
-			((Color) getUniforms().get("ambient").getValue()).copyGammaToLinear( getAmbient() );
-			((Color) getUniforms().get("emissive").getValue()).copyGammaToLinear( getEmissive() );
+			((Color) uniforms.get("ambient").getValue()).copyGammaToLinear( getAmbient() );
+			((Color) uniforms.get("emissive").getValue()).copyGammaToLinear( getEmissive() );
 		} 
 		else 
 		{
-			getUniforms().get("ambient").setValue( getAmbient() );
-			getUniforms().get("emissive").setValue( getEmissive() );
+			uniforms.get("ambient").setValue( getAmbient() );
+			uniforms.get("emissive").setValue( getEmissive() );
 		}
 
 		if ( isWrapAround() ) 
 		{
-			((Vector3) getUniforms().get("wrapRGB").getValue()).copy( getWrapRGB() );
+			((Vector3) uniforms.get("wrapRGB").getValue()).copy( getWrapRGB() );
 		}
 	}
 }

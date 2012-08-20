@@ -22,9 +22,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import java.util.Map;
+
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderPhong;
+import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.cameras.Camera;
@@ -339,22 +342,23 @@ public final class MeshPhongMaterial extends Material
 	{
 		super.refreshUniforms(canvas, camera, isGammaInput);
 		
-		getUniforms().get("shininess").setValue( getShininess() );
+		Map<String, Uniform> uniforms = getShader().getUniforms(); 
+		uniforms.get("shininess").setValue( getShininess() );
 
 		if ( isGammaInput ) 
 		{
-			((Color) getUniforms().get("ambient").getValue()).copyGammaToLinear( getAmbient() );
-			((Color) getUniforms().get("emissive").getValue()).copyGammaToLinear( getEmissive() );
-			((Color) getUniforms().get("specular").getValue()).copyGammaToLinear( getSpecular() );
+			((Color) uniforms.get("ambient").getValue()).copyGammaToLinear( getAmbient() );
+			((Color) uniforms.get("emissive").getValue()).copyGammaToLinear( getEmissive() );
+			((Color) uniforms.get("specular").getValue()).copyGammaToLinear( getSpecular() );
 		} 
 		else
 		{
-			getUniforms().get("ambient").setValue( getAmbient() );
-			getUniforms().get("emissive").setValue( getEmissive() );
-			getUniforms().get("specular").setValue( getSpecular() );
+			uniforms.get("ambient").setValue( getAmbient() );
+			uniforms.get("emissive").setValue( getEmissive() );
+			uniforms.get("specular").setValue( getSpecular() );
 		}
 
 		if ( isWrapAround() ) 
-			((Vector3) getUniforms().get("wrapRGB").getValue()).copy( getWrapRGB() );
+			((Vector3) uniforms.get("wrapRGB").getValue()).copy( getWrapRGB() );
 	}
 }

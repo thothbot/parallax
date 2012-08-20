@@ -1926,7 +1926,7 @@ public class WebGLRenderer
 
 		Program program = material.getProgram();
 		Map<String, WebGLUniformLocation> p_uniforms = program.getUniforms();
-		Map<String, Uniform> m_uniforms = material.getUniforms();
+		Map<String, Uniform> m_uniforms = material.getShader().getUniforms();
 
 		if ( program != cache_currentProgram ) 
 		{
@@ -1977,7 +1977,7 @@ public class WebGLRenderer
 //				refreshUniformsShadow( m_uniforms, lights );
 
 			// load common uniforms
-			loadUniformsGeneric( program, material.getUniforms() );
+			loadUniformsGeneric( program, material.getShader().getUniforms() );
 
 			// load material specific uniforms
 			// (shader material also gets them for the sake of genericity)
@@ -2607,7 +2607,7 @@ Log.error("?????????????");
 		if(this.cache_programs.containsKey(cashKey))
 			return this.cache_programs.get(cashKey);
 
-		Program program = new Program(getGL(), material.getShader(), material.getUniforms(), material.getAttributes(), parameters);
+		Program program = new Program(getGL(), material.getShader(), material.getShader().getUniforms(), material.getAttributes(), parameters);
 
 		program.setId(cache_programs.size());
 		this.cache_programs.put(cashKey, program);

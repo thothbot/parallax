@@ -22,9 +22,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import java.util.Map;
+
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderParticleBasic;
+import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
@@ -123,12 +126,13 @@ public final class ParticleBasicMaterial extends Material
 	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
 	{
 		super.refreshUniforms(canvas, camera, isGammaInput);
+		Map<String, Uniform> uniforms = getShader().getUniforms();
 		
-		getUniforms().get("psColor").setValue( getColor() );
-		getUniforms().get("opacity").setValue( getOpacity() );
-		getUniforms().get("size").setValue( getSize() );
-		getUniforms().get("scale").setValue( canvas.getHeight() / 2.0 );
+		uniforms.get("psColor").setValue( getColor() );
+		uniforms.get("opacity").setValue( getOpacity() );
+		uniforms.get("size").setValue( getSize() );
+		uniforms.get("scale").setValue( canvas.getHeight() / 2.0 );
 
-		getUniforms().get("map").setTexture( getMap() );
+		uniforms.get("map").setTexture( getMap() );
 	}
 }

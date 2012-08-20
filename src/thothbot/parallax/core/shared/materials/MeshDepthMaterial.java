@@ -22,9 +22,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import java.util.Map;
+
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderDepth;
+import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 
@@ -75,13 +78,14 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(canvas, camera, isGammaInput);
+		Map<String, Uniform> uniforms = getShader().getUniforms();
 		
 		if(camera.getClass() == OrthographicCamera.class) 
 		{
-			getUniforms().get("mNear").setValue( ((OrthographicCamera) camera).getNear() );
-			getUniforms().get("mFar").setValue( ((OrthographicCamera) camera).getFar() );
+			uniforms.get("mNear").setValue( ((OrthographicCamera) camera).getNear() );
+			uniforms.get("mFar").setValue( ((OrthographicCamera) camera).getFar() );
 		}
 		
-		getUniforms().get("opacity").setValue( getOpacity() );
+		uniforms.get("opacity").setValue( getOpacity() );
 	}
 }

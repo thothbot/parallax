@@ -22,9 +22,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import java.util.Map;
+
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.ShaderBasic;
+import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
 
@@ -99,8 +102,9 @@ public final class LineBasicMaterial extends Material
 	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
 	{
 		super.refreshUniforms(canvas, camera, isGammaInput);
+		Map<String, Uniform> uniforms = getShader().getUniforms();
 		
-		getUniforms().get("diffuse").setValue( getColor() );
-		getUniforms().get("opacity").setValue( getOpacity() );
+		uniforms.get("diffuse").setValue( getColor() );
+		uniforms.get("opacity").setValue( getOpacity() );
 	}
 }
