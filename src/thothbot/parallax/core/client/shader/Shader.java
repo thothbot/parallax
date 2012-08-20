@@ -48,6 +48,8 @@ public abstract class Shader
 		TextResource getFragmentShader();
 	}
 	
+	private Program program;
+
 	private Map<String, Uniform> uniforms;
 
 	private String vertexShaderSource;
@@ -77,6 +79,14 @@ public abstract class Shader
 				? new FastMap<Uniform>() : new HashMap<String, Uniform>();
 
 		initUniforms();
+	}
+	
+	public Program getProgram() {
+		return this.program;
+	}
+	
+	public void setProgram(Program program) {
+		this.program = program;
 	}
 
 	protected void setVertexSource(String src)

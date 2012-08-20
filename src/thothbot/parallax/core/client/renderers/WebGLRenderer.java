@@ -789,7 +789,7 @@ public class WebGLRenderer
 	private void setupMorphTargets ( Material material, GeometryBuffer geometrybuffer, Mesh object ) 
 	{
 		// set base
-		Map<String, Integer> attributes = material.getProgram().getAttributes();
+		Map<String, Integer> attributes = material.getShader().getProgram().getAttributes();
 
 		if ( object.getMorphTargetBase() != - 1 ) 
 		{
@@ -872,7 +872,7 @@ public class WebGLRenderer
 		}
 
 		// load updated influences uniform
-		if( material.getProgram().getUniforms().get("morphTargetInfluences") != null ) 
+		if( material.getShader().getProgram().getUniforms().get("morphTargetInfluences") != null ) 
 		{
 			Float32Array vals = object.__webglMorphTargetInfluences;
 			double[] val2 = new double[vals.getLength()];
@@ -881,7 +881,7 @@ public class WebGLRenderer
 			    Double f = vals.get(i);
 			    val2[i] = (f != null ? f : Double.NaN); // Or whatever default you want.
 			}
-			getGL().uniform1fv( material.getProgram().getUniforms().get("morphTargetInfluences"), val2 );
+			getGL().uniform1fv( material.getShader().getProgram().getUniforms().get("morphTargetInfluences"), val2 );
 		}
 	}
 
@@ -1833,10 +1833,10 @@ public class WebGLRenderer
 
 		Log.debug("initMaterial() called new Program");
 
-		material.setProgram(
+		material.getShader().setProgram(
 				buildProgram( material, parameters ));
 
-		Map<String, Integer> attributes = material.getProgram().getAttributes();
+		Map<String, Integer> attributes = material.getShader().getProgram().getAttributes();
 
 		if ( attributes.get("position") >= 0 ) 
 			getGL().enableVertexAttribArray( attributes.get("position") );
@@ -1905,7 +1905,7 @@ public class WebGLRenderer
 
 	private Program setProgram( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
 	{
-		if ( material.getProgram() == null || material.isNeedsUpdate() ) 
+		if ( material.getShader() == null || material.getShader().getProgram() == null || material.isNeedsUpdate() ) 
 		{
 			initMaterial( material, lights, fog, object );
 			material.setNeedsUpdate(false);
@@ -1924,7 +1924,7 @@ public class WebGLRenderer
 
 		boolean refreshMaterial = false;
 
-		Program program = material.getProgram();
+		Program program = material.getShader().getProgram();
 		Map<String, WebGLUniformLocation> p_uniforms = program.getUniforms();
 		Map<String, Uniform> m_uniforms = material.getShader().getUniforms();
 

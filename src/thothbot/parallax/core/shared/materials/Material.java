@@ -22,26 +22,21 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import com.google.gwt.core.client.GWT;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
+import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.client.shader.Program;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
-import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.objects.GeometryObject;
@@ -114,8 +109,7 @@ public abstract class Material
 	private boolean isNeedsUpdate = true;
 	
 	// 
-	
-	private Program program;
+
 	private Shader shader;
 
 	private Map<String, Attribute> attributes;
@@ -143,9 +137,6 @@ public abstract class Material
 		
 		setAlphaTest(0);
 		setOverdraw(false);
-		
-//		this.uniforms = GWT.isScript() ? 
-//				new FastMap<Uniform>() : new HashMap<String, Uniform>();
 	}
 	
 	public int getId() {
@@ -166,14 +157,6 @@ public abstract class Material
 	
 	public void setNeedsUpdate(boolean visible) {
 		this.isNeedsUpdate = visible;
-	}
-	
-	public Program getProgram() {
-		return this.program;
-	}
-	
-	public void setProgram(Program program) {
-		this.program = program;
 	}
 	
 	public Map<String, Attribute> getAttributes() {
