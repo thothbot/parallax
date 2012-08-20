@@ -2607,7 +2607,7 @@ Log.error("?????????????");
 		if(this.cache_programs.containsKey(cashKey))
 			return this.cache_programs.get(cashKey);
 
-		Shader shader = material.getShader().buildProgram(getGL(), material.getShader().getUniforms(), material.getAttributes(), parameters);
+		Shader shader = material.getShader().buildProgram(getGL(), material.getAttributes(), parameters);
 		Program program = shader.getProgram();
 
 		this.cache_programs.put(cashKey, program);

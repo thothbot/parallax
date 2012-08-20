@@ -100,10 +100,9 @@ public abstract class Shader
 		this.program = program;
 	}
 	
-	public Shader buildProgram(WebGLRenderingContext _gl,
-			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters) 
+	public Shader buildProgram(WebGLRenderingContext _gl, Map<String, Attribute> attributes, Program.ProgramParameters parameters) 
 	{
-		this.program = new Program(_gl, this, uniforms, attributes, parameters);
+		this.program = new Program(_gl, this, attributes, parameters);
 		return this;
 	}
 

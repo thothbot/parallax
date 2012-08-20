@@ -150,8 +150,7 @@ public class Program
 	 * Creates a new instance of the {@link Program}.
 	 */
 	public Program(WebGLRenderingContext _gl,
-			Shader shader,
-			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters)
+			Shader shader, Map<String, Attribute> attributes, Program.ProgramParameters parameters)
 	{
 		this._gl = _gl;
 
@@ -164,7 +163,7 @@ public class Program
 				"modelViewMatrix", "projectionMatrix", "normalMatrix", "objectMatrix",
 				"cameraPosition", "boneGlobalMatrices", "morphTargetInfluences"));
 
-		for (String u : uniforms.keySet())
+		for (String u : shader.getUniforms().keySet())
 			uniformIds.add(u);
 
 		this.cacheUniformLocations(uniformIds);
