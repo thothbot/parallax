@@ -1765,6 +1765,22 @@ public class WebGLRenderer
 		object.isWebglActive = false;
 	}
 
+	private Program buildProgram ( Material material, Program.ProgramParameters parameters ) 
+	{
+		String cashKey = material.getShader().getFragmentSource() + material.getShader().getVertexSource() + parameters.toString();
+		if(this.cache_programs.containsKey(cashKey))
+			return this.cache_programs.get(cashKey);
+
+		Shader shader = material.getShader().buildProgram(getGL(), material.getAttributes(), parameters);
+		Program program = shader.getProgram();
+
+		this.cache_programs.put(cashKey, program);
+
+		this.getInfo().getMemory().programs = cache_programs.size();
+
+		return program;
+	}
+	
 	private void initMaterial ( Material material, List<Light> lights, Fog fog, GeometryObject object ) 
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
@@ -2597,24 +2613,6 @@ Log.error("?????????????");
 				this.cache_oldBlendDst = blendDst;
 			}
 		}
-	}
-
-	// Shaders
-
-	private Program buildProgram ( Material material, Program.ProgramParameters parameters ) 
-	{
-		String cashKey = material.getShader().getFragmentSource() + material.getShader().getVertexSource() + parameters.toString();
-		if(this.cache_programs.containsKey(cashKey))
-			return this.cache_programs.get(cashKey);
-
-		Shader shader = material.getShader().buildProgram(getGL(), material.getAttributes(), parameters);
-		Program program = shader.getProgram();
-
-		this.cache_programs.put(cashKey, program);
-
-		this.getInfo().getMemory().programs = cache_programs.size();
-
-		return program;
 	}
 
 	// Textures
