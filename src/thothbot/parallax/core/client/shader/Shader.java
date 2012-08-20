@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Mathematics;
@@ -81,12 +82,29 @@ public abstract class Shader
 		initUniforms();
 	}
 	
+	/**
+	 * Gets program ID
+	 * 
+	 * @return ID
+	 */
+	public int getId()
+	{
+		return this.id;
+	}
+	
 	public Program getProgram() {
 		return this.program;
 	}
 	
 	public void setProgram(Program program) {
 		this.program = program;
+	}
+	
+	public Shader buildProgram(WebGLRenderingContext _gl,
+			Map<String, Uniform> uniforms, Map<String, Attribute> attributes, Program.ProgramParameters parameters) 
+	{
+		this.program = new Program(_gl, this, uniforms, attributes, parameters);
+		return this;
 	}
 
 	protected void setVertexSource(String src)

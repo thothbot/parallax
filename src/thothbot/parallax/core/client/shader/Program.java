@@ -137,7 +137,6 @@ public class Program
 		}
 	};
 
-	private int id;
 	private Map<String, WebGLUniformLocation> uniforms = GWT.isScript() ? 
 			new FastMap<WebGLUniformLocation>() : new HashMap<String, WebGLUniformLocation>();
 	private Map<String, Integer> attributes = GWT.isScript() ? 
@@ -187,26 +186,6 @@ public class Program
 				attributesIds.add(a);
 
 		cacheAttributeLocations(attributesIds);
-	}
-
-	/**
-	 * Gets program ID
-	 * 
-	 * @return ID
-	 */
-	public int getId()
-	{
-		return this.id;
-	}
-	
-	/**
-	 * Sets the current program ID.
-	 * 
-	 * @param id the ID
-	 */
-	public void setId(int id)
-	{
-		this.id = id;
 	}
 
 	public Map<String, WebGLUniformLocation> getUniforms() {

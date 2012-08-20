@@ -1270,7 +1270,7 @@ public class WebGLRenderer
 		boolean updateBuffers = false;
 		int wireframeBit = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? 1 : 0;
 
-		int geometryGroupHash = ( geometryBuffer.getId() * 0xffffff ) + ( program.getId() * 2 ) + wireframeBit;
+		int geometryGroupHash = ( geometryBuffer.getId() * 0xffffff ) + ( material.getShader().getId() * 2 ) + wireframeBit;
 
 //		GWT.log("--- renderBuffer() geometryGroupHash=" + geometryGroupHash 
 //				+ ", _currentGeometryGroupHash=" +  this._currentGeometryGroupHash
@@ -2607,9 +2607,9 @@ Log.error("?????????????");
 		if(this.cache_programs.containsKey(cashKey))
 			return this.cache_programs.get(cashKey);
 
-		Program program = new Program(getGL(), material.getShader(), material.getShader().getUniforms(), material.getAttributes(), parameters);
+		Shader shader = material.getShader().buildProgram(getGL(), material.getShader().getUniforms(), material.getAttributes(), parameters);
+		Program program = shader.getProgram();
 
-		program.setId(cache_programs.size());
 		this.cache_programs.put(cashKey, program);
 
 		this.getInfo().getMemory().programs = cache_programs.size();
