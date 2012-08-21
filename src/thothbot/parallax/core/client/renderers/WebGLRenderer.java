@@ -1957,7 +1957,7 @@ public class WebGLRenderer
 		}
 
 		if ( refreshMaterial || camera != this.cache_currentCamera ) 
-		{		
+		{
 			getGL().uniformMatrix4fv( m_uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
 
 			if ( camera != this.cache_currentCamera ) 

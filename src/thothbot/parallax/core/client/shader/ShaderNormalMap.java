@@ -62,9 +62,9 @@ public final class ShaderNormalMap extends Shader
 	@Override
 	protected void initUniforms() 
 	{
-		this.setUniforms(UniformsLib.fog);
-		this.setUniforms(UniformsLib.lights);
-		this.setUniforms(UniformsLib.shadowmap);
+		this.setUniforms(UniformsLib.getFog());
+		this.setUniforms(UniformsLib.getLights());
+		this.setUniforms(UniformsLib.getShadowmap());
 		
 		this.addUniform("enableAO",         new Uniform(Uniform.TYPE.I, 0 ));
 		this.addUniform("enableDiffuse",    new Uniform(Uniform.TYPE.I, 0 ));

@@ -62,10 +62,10 @@ public final class ShaderPhong extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.setUniforms(UniformsLib.common);
-		this.setUniforms(UniformsLib.fog);
-		this.setUniforms(UniformsLib.lights);
-		this.setUniforms(UniformsLib.shadowmap);
+		this.setUniforms(UniformsLib.getCommon());
+		this.setUniforms(UniformsLib.getFog());
+		this.setUniforms(UniformsLib.getLights());
+		this.setUniforms(UniformsLib.getShadowmap());
 		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
 		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));

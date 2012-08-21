@@ -40,80 +40,96 @@ import thothbot.parallax.core.shared.core.Vector4;
  */
 public class UniformsLib
 {
-	public static final Map<String, Uniform> common = new HashMap<String, Uniform>() {
-		{
-			put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
-			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+	public static Map<String, Uniform> getCommon ()
+	{
+		Map<String, Uniform> retval = new HashMap<String, Uniform>();
+		
+		retval.put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
+		retval.put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
-			put("map", new Uniform(Uniform.TYPE.T,  0 ));
-			put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4( 0, 0, 1, 1 ) ));
+		retval.put("map", new Uniform(Uniform.TYPE.T,  0 ));
+		retval.put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4( 0, 0, 1, 1 ) ));
 			
-			put("lightMap", new Uniform(Uniform.TYPE.T,  2 ));
+		retval.put("lightMap", new Uniform(Uniform.TYPE.T,  2 ));
 			
-			put("envMap", new Uniform(Uniform.TYPE.T,  1 ));
-			put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
-			put("useRefract", new Uniform(Uniform.TYPE.I,  1 ));
-			put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98 ));
-			put("combine", new Uniform(Uniform.TYPE.I,  0 ));
+		retval.put("envMap", new Uniform(Uniform.TYPE.T,  1 ));
+		retval.put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
+		retval.put("useRefract", new Uniform(Uniform.TYPE.I,  1 ));
+		retval.put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
+		retval.put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98 ));
+		retval.put("combine", new Uniform(Uniform.TYPE.I,  0 ));
 			
-			put("morphTargetInfluences", new Uniform(Uniform.TYPE.F,  0.0 ));
-		}
-	};
+		retval.put("morphTargetInfluences", new Uniform(Uniform.TYPE.F,  0.0 ));
+		
+		return retval;
+	}
 	
-	public static final Map<String, Uniform> fog = new HashMap<String, Uniform>() {
-		{
-			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
-			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0 ));
-			put("fogColor", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
-		}
-	};
+	public static Map<String, Uniform> getFog()
+	{
+		Map<String, Uniform> retval = new HashMap<String, Uniform>();
+		
+		retval.put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
+		retval.put("fogNear", new Uniform(Uniform.TYPE.F,  1.0 ));
+		retval.put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0 ));
+		retval.put("fogColor", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
+
+		return retval;
+	}
 	
-	public static final Map<String, Uniform> lights = new HashMap<String, Uniform>() {
-		{
-			put("ambientLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			
-			put("directionalLightDirection", new Uniform(Uniform.TYPE.FV, Float32Array.createArray() ));
-			put("directionalLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			
-			put("pointLightColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			put("pointLightPosition", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			
-			put("pointLightDistance", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-			
-			put("spotLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			put("spotLightPosition",  new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			put("spotLightDirection", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-			put("spotLightDistance",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-			put("spotLightAngle",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-			put("spotLightExponent",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-		}
-	};
+	public static Map<String, Uniform> getLights()
+	{
+		Map<String, Uniform> retval = new HashMap<String, Uniform>();
+
+		retval.put("ambientLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+
+		retval.put("directionalLightDirection", new Uniform(Uniform.TYPE.FV, Float32Array.createArray() ));
+		retval.put("directionalLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+
+		retval.put("pointLightColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		retval.put("pointLightPosition", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+
+		retval.put("pointLightDistance", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+
+		retval.put("spotLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		retval.put("spotLightPosition",  new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		retval.put("spotLightDirection", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		retval.put("spotLightDistance",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+		retval.put("spotLightAngle",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+		retval.put("spotLightExponent",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+
+		return retval;
+	}
 	
-	public static final Map<String, Uniform> particle = new HashMap<String, Uniform>() {
-		{
-			put("psColor", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
-			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("map",     new Uniform(Uniform.TYPE.T,  0 ));
+	public static Map<String, Uniform> getParticle() 
+	{
+		Map<String, Uniform> retval = new HashMap<String, Uniform>();
+
+		retval.put("psColor", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
+		retval.put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+		retval.put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
+		retval.put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
+		retval.put("map",     new Uniform(Uniform.TYPE.T,  0 ));
 			
-			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
-			put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("fogFar",     new Uniform(Uniform.TYPE.F,  2000.0 ));
-			put("fogColor",   new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
-		}
-	};
+		retval.put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
+		retval.put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0 ));
+		retval.put("fogFar",     new Uniform(Uniform.TYPE.F,  2000.0 ));
+		retval.put("fogColor",   new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
+
+		return retval;
+	}
 	
-	public static final Map<String, Uniform> shadowmap = new HashMap<String, Uniform>() {
-		{
-			put("shadowMap",      new Uniform(Uniform.TYPE.TV, 6 ));
-			put("shadowMapSize",  new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2>() ));
-			put("shadowBias",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-			put("shadowDarkness", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+	public static Map<String, Uniform> getShadowmap() 
+	{
+		
+		Map<String, Uniform> retval = new HashMap<String, Uniform>();	
+
+		retval.put("shadowMap",      new Uniform(Uniform.TYPE.TV, 6 ));
+		retval.put("shadowMapSize",  new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2>() ));
+		retval.put("shadowBias",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+		retval.put("shadowDarkness", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 			
-			put("shadowMatrix", new Uniform(Uniform.TYPE.M4V,  new ArrayList<Matrix4>() ));
-		}
-	};	
+		retval.put("shadowMatrix", new Uniform(Uniform.TYPE.M4V,  new ArrayList<Matrix4>() ));
+		
+		return retval;
+	}	
 }
