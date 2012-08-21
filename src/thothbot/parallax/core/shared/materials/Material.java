@@ -283,6 +283,10 @@ public abstract class Material
 		setMaterialShaders();
 		return this.shader;
 	}
+	
+	public void setShader(Shader shader) {
+		this.shader = shader;
+	}
 
 	// Must be overwriten
 	protected abstract Shader getShaderId();

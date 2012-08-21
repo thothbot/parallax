@@ -218,7 +218,7 @@ public class WebGLRenderer
 	private boolean isLightsNeedUpdate = true;
 	private WebGLRenderLights cache_lights;
 	
-	private Map<String, Program> cache_programs;
+	private Map<String, Shader> cache_programs;
 
 	// GPU capabilities
 	private int GPUmaxVertexTextures;
@@ -243,7 +243,7 @@ public class WebGLRenderer
 		this.cache_direction        = new Vector3();
 		this.cache_lights           = new WebGLRenderLights();
 		this.cache_programs         = GWT.isScript() ? 
-				new FastMap<Program>() : new HashMap<String, Program>();
+				new FastMap<Shader>() : new HashMap<String, Shader>();
 		
 		this.GPUmaxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
 		this.GPUmaxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
@@ -1766,20 +1766,19 @@ public class WebGLRenderer
 		object.isWebglActive = false;
 	}
 
-	private Program buildProgram ( Material material, Program.ProgramParameters parameters ) 
+	private Shader buildProgram ( Material material, Program.ProgramParameters parameters ) 
 	{
 		String cashKey = material.getShader().getFragmentSource() + material.getShader().getVertexSource() + parameters.toString();
 		if(this.cache_programs.containsKey(cashKey))
 			return this.cache_programs.get(cashKey);
 
 		Shader shader = material.getShader().buildProgram(getGL(), material.getAttributes(), parameters);
-		Program program = shader.getProgram();
 
-		this.cache_programs.put(cashKey, program);
+		this.cache_programs.put(cashKey, shader);
 
 		this.getInfo().getMemory().programs = cache_programs.size();
 
-		return program;
+		return shader;
 	}
 	
 	private void initMaterial ( Material material, List<Light> lights, Fog fog, GeometryObject object ) 
@@ -1848,7 +1847,7 @@ public class WebGLRenderer
 
 		Log.debug("initMaterial() called new Program");
 
-		material.getShader().setProgram( buildProgram( material, parameters ) );
+		material.setShader( buildProgram( material, parameters ) );
 
 		Map<String, Integer> attributes = material.getShader().getProgram().getAttributes();
 
@@ -1939,10 +1938,9 @@ public class WebGLRenderer
 		boolean refreshMaterial = false;
 
 		Program program = material.getShader().getProgram();
-//		Map<String, WebGLUniformLocation> p_uniforms = program.getUniforms();
 		Map<String, Uniform> m_uniforms = material.getShader().getUniforms();
 
-		if ( program != cache_currentProgram ) 
+		if ( program != cache_currentProgram )
 		{
 			getGL().useProgram( program.getProgram() );
 			this.cache_currentProgram = program;

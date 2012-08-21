@@ -167,9 +167,9 @@ public class Program
 		shader.addUniform("morphTargetInfluences", new Uniform(Uniform.TYPE.FV1, null));
 				
 		// Cache location
-		 Map<String, Uniform> uniforms = shader.getUniforms();
-				for (String id : uniforms.keySet())
-					uniforms.get(id).setLocation( _gl.getUniformLocation(this.program, id) );
+		Map<String, Uniform> uniforms = shader.getUniforms();
+			for (String id : uniforms.keySet())
+				uniforms.get(id).setLocation( _gl.getUniformLocation(this.program, id) );
 
 		// cache attributes locations
 		List<String> attributesIds = new ArrayList<String>(Arrays.asList("position", "normal",
