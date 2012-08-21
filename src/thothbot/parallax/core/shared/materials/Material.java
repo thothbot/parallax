@@ -137,8 +137,6 @@ public abstract class Material
 		
 		setAlphaTest(0);
 		setOverdraw(false);
-		
-		setMaterialShaders();
 	}
 	
 	public int getId() {
@@ -282,6 +280,7 @@ public abstract class Material
 	}
 	
 	public Shader getShader() {
+		setMaterialShaders();
 		return this.shader;
 	}
 
@@ -345,15 +344,15 @@ public abstract class Material
 
 	private void setMaterialShaders() 
 	{
-		Log.debug("Called Material.setMaterialShaders()");
-
-		Shader shader = getShaderId();
 		if(shader == null)
-				return;
+		{
+			Log.debug("Called Material.setMaterialShaders()");
 
-		this.shader = shader;
+			Shader shader = getShaderId();
+
+			this.shader = shader;
+		}
 	}
-	
 
 	private boolean materialNeedsSmoothNormals() 
 	{
