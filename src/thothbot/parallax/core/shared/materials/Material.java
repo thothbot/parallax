@@ -137,6 +137,8 @@ public abstract class Material
 		
 		setAlphaTest(0);
 		setOverdraw(false);
+		
+		setMaterialShaders();
 	}
 	
 	public int getId() {
@@ -341,7 +343,7 @@ public abstract class Material
 		}
 	}
 
-	public void setMaterialShaders() 
+	private void setMaterialShaders() 
 	{
 		Log.debug("Called Material.setMaterialShaders()");
 
@@ -350,8 +352,6 @@ public abstract class Material
 				return;
 
 		this.shader = shader;
-
-		getShader().getUniforms().putAll(shader.getUniforms());
 	}
 	
 

@@ -1786,8 +1786,6 @@ public class WebGLRenderer
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
 
-		material.setMaterialShaders();
-
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
 		Map<String, Integer> maxLightCount = allocateLights( lights );
@@ -1850,8 +1848,7 @@ public class WebGLRenderer
 
 		Log.debug("initMaterial() called new Program");
 
-		material.getShader().setProgram(
-				buildProgram( material, parameters ));
+		material.getShader().setProgram( buildProgram( material, parameters ) );
 
 		Map<String, Integer> attributes = material.getShader().getProgram().getAttributes();
 
