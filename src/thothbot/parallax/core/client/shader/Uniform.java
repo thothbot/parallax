@@ -56,6 +56,7 @@ public class Uniform
 	private Object value;
 	private Texture texture;
 	private Float32Array cache_array;
+	private WebGLUniformLocation location;
 	
 	public Uniform(Uniform.TYPE type, Object value) 
 	{
@@ -96,6 +97,14 @@ public class Uniform
 	
 	public void setCacheArray(Float32Array array) {
 		this.cache_array = array;
+	}
+	
+	public WebGLUniformLocation getLocation() {
+		return this.location;
+	}
+	
+	public void setLocation(WebGLUniformLocation location) {
+		this.location = location;
 	}
 	
 	public String toString()

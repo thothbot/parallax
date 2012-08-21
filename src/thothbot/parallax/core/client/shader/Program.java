@@ -137,8 +137,6 @@ public class Program
 		}
 	};
 
-	private Map<String, WebGLUniformLocation> uniforms = GWT.isScript() ? 
-			new FastMap<WebGLUniformLocation>() : new HashMap<String, WebGLUniformLocation>();
 	private Map<String, Integer> attributes = GWT.isScript() ? 
 			new FastMap<Integer>() : new HashMap<String, Integer>();
 
@@ -158,15 +156,20 @@ public class Program
 
 		initProgram(shader, parameters);
 
-		// cache uniforms locations
-		List<String> uniformIds = new ArrayList<String>(Arrays.asList("viewMatrix",
-				"modelViewMatrix", "projectionMatrix", "normalMatrix", "objectMatrix",
-				"cameraPosition", "boneGlobalMatrices", "morphTargetInfluences"));
-
-		for (String u : shader.getUniforms().keySet())
-			uniformIds.add(u);
-
-		this.cacheUniformLocations(uniformIds);
+		// Adds default uniforms
+		shader.addUniform("viewMatrix",            new Uniform(Uniform.TYPE.FV1, null));
+		shader.addUniform("modelViewMatrix",       new Uniform(Uniform.TYPE.FV1, null));
+		shader.addUniform("projectionMatrix",      new Uniform(Uniform.TYPE.FV1, null));
+		shader.addUniform("normalMatrix",          new Uniform(Uniform.TYPE.FV1, null));
+		shader.addUniform("objectMatrix",          new Uniform(Uniform.TYPE.FV1, null));
+		shader.addUniform("cameraPosition",        new Uniform(Uniform.TYPE.FV1, null));
+		shader.addUniform("boneGlobalMatrices",    new Uniform(Uniform.TYPE.FV1, null));
+		shader.addUniform("morphTargetInfluences", new Uniform(Uniform.TYPE.FV1, null));
+				
+		// Cache location
+		 Map<String, Uniform> uniforms = shader.getUniforms();
+				for (String id : uniforms.keySet())
+					uniforms.get(id).setLocation( _gl.getUniformLocation(this.program, id) );
 
 		// cache attributes locations
 		List<String> attributesIds = new ArrayList<String>(Arrays.asList("position", "normal",
@@ -185,10 +188,6 @@ public class Program
 				attributesIds.add(a);
 
 		cacheAttributeLocations(attributesIds);
-	}
-
-	public Map<String, WebGLUniformLocation> getUniforms() {
-		return this.uniforms;
 	}
 
 	public Map<String, Integer> getAttributes() {
@@ -261,13 +260,6 @@ public class Program
 		}
 
 		return shader;
-	}
-
-	// Shader parameters cache
-	private void cacheUniformLocations(List<String> identifiers)
-	{
-		for (String id : identifiers)
-			this.uniforms.put(id, this._gl.getUniformLocation(this.program, id));
 	}
 
 	private void cacheAttributeLocations(List<String> identifiers)

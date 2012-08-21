@@ -790,6 +790,7 @@ public class WebGLRenderer
 	{
 		// set base
 		Map<String, Integer> attributes = material.getShader().getProgram().getAttributes();
+		Map<String, Uniform> uniforms = material.getShader().getUniforms();
 
 		if ( object.getMorphTargetBase() != - 1 ) 
 		{
@@ -872,7 +873,7 @@ public class WebGLRenderer
 		}
 
 		// load updated influences uniform
-		if( material.getShader().getProgram().getUniforms().get("morphTargetInfluences") != null ) 
+		if( uniforms.get("morphTargetInfluences").getLocation() != null ) 
 		{
 			Float32Array vals = object.__webglMorphTargetInfluences;
 			double[] val2 = new double[vals.getLength()];
@@ -881,7 +882,7 @@ public class WebGLRenderer
 			    Double f = vals.get(i);
 			    val2[i] = (f != null ? f : Double.NaN); // Or whatever default you want.
 			}
-			getGL().uniform1fv( material.getShader().getProgram().getUniforms().get("morphTargetInfluences"), val2 );
+			getGL().uniform1fv( uniforms.get("morphTargetInfluences").getLocation(), val2 );
 		}
 	}
 
@@ -1941,7 +1942,7 @@ public class WebGLRenderer
 		boolean refreshMaterial = false;
 
 		Program program = material.getShader().getProgram();
-		Map<String, WebGLUniformLocation> p_uniforms = program.getUniforms();
+//		Map<String, WebGLUniformLocation> p_uniforms = program.getUniforms();
 		Map<String, Uniform> m_uniforms = material.getShader().getUniforms();
 
 		if ( program != cache_currentProgram ) 
@@ -1960,7 +1961,7 @@ public class WebGLRenderer
 
 		if ( refreshMaterial || camera != this.cache_currentCamera ) 
 		{		
-			getGL().uniformMatrix4fv( p_uniforms.get("projectionMatrix"), false, camera._projectionMatrixArray );
+			getGL().uniformMatrix4fv( m_uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
 
 			if ( camera != this.cache_currentCamera ) 
 				this.cache_currentCamera = camera;
@@ -1993,7 +1994,7 @@ public class WebGLRenderer
 //				refreshUniformsShadow( m_uniforms, lights );
 
 			// load common uniforms
-			loadUniformsGeneric( program, material.getShader().getUniforms() );
+			loadUniformsGeneric( m_uniforms );
 
 			// load material specific uniforms
 			// (shader material also gets them for the sake of genericity)
@@ -2002,10 +2003,10 @@ public class WebGLRenderer
 				 material instanceof HasEnvMap 
 			) {
 
-				if ( p_uniforms.get("cameraPosition") != null ) 
+				if ( m_uniforms.get("cameraPosition").getLocation() != null ) 
 				{
 					Vector3 position = camera.getMatrixWorld().getPosition();
-					getGL().uniform3f( p_uniforms.get("cameraPosition"), position.getX(), position.getY(), position.getZ() );
+					getGL().uniform3f( m_uniforms.get("cameraPosition").getLocation(), position.getX(), position.getY(), position.getZ() );
 				}
 			}
 
@@ -2015,8 +2016,8 @@ public class WebGLRenderer
 				 material instanceof HasSkinning && ((HasSkinning)material).isSkinning() 
 			) {
 
-				if ( p_uniforms.get("viewMatrix") != null ) 
-					getGL().uniformMatrix4fv( p_uniforms.get("viewMatrix"), false, camera._viewMatrixArray );
+				if ( m_uniforms.get("viewMatrix").getLocation() != null ) 
+					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera._viewMatrixArray );
 			}
 
 			// TODO: fix this
@@ -2024,10 +2025,10 @@ public class WebGLRenderer
 //				getGL().uniformMatrix4fv( p_uniforms.get("boneGlobalMatrices"), false, object.boneMatrices );
 		}
 
-		loadUniformsMatrices( p_uniforms, object );
+		loadUniformsMatrices( m_uniforms, object );
 
-		if ( p_uniforms.get("objectMatrix") != null )
-			getGL().uniformMatrix4fv( p_uniforms.get("objectMatrix"), false, object.getMatrixWorld().getArray() );
+		if ( m_uniforms.get("objectMatrix").getLocation() != null )
+			getGL().uniformMatrix4fv( m_uniforms.get("objectMatrix").getLocation(), false, object.getMatrixWorld().getArray() );
 
 		return program;
 	}
@@ -2082,28 +2083,30 @@ Log.error("?????????????");
 
 	// Uniforms (load to GPU)
 
-	private void loadUniformsMatrices ( Map<String, WebGLUniformLocation> uniforms, GeometryObject object ) 
+	private void loadUniformsMatrices ( Map<String, Uniform> uniforms, GeometryObject object ) 
 	{
 		GeometryObject objectImpl = (GeometryObject) object;
-		getGL().uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, objectImpl._modelViewMatrix.getArray() );
+		getGL().uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, objectImpl._modelViewMatrix.getArray() );
 
 		if ( uniforms.containsKey("normalMatrix") )
-			getGL().uniformMatrix3fv( uniforms.get("normalMatrix"), false, objectImpl._normalMatrix.getArray() );
+			getGL().uniformMatrix3fv( uniforms.get("normalMatrix").getLocation(), false, objectImpl._normalMatrix.getArray() );
 	}
 
-	private void loadUniformsGeneric( Program program, Map<String, Uniform> materialUniforms ) 
+	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
-		for ( String u : materialUniforms.keySet() ) 
+		for ( Uniform uniform : materialUniforms.values() ) 
 		{
-			WebGLUniformLocation location = program.getUniforms().get( u );
+			WebGLUniformLocation location = uniform.getLocation();
+		
 			if ( location == null ) continue;
 
-			Uniform uniform = (Uniform) materialUniforms.get(u);
-
-			Uniform.TYPE type = uniform.getType();
 			Object value = uniform.getValue();
 			
-			Log.debug("loadUniformsGeneric() u=" + u + ", " + uniform);
+			if ( value == null ) continue;
+
+			Uniform.TYPE type = uniform.getType();
+			
+			Log.debug("loadUniformsGeneric() " + uniform);
 			
 			switch ( type ) {
 
