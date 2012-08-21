@@ -25,6 +25,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Mathematics;
 
@@ -48,7 +49,7 @@ public abstract class Shader
 		@Source("source/default.fs")
 		TextResource getFragmentShader();
 	}
-	
+
 	private Program program;
 
 	private Map<String, Uniform> uniforms;
@@ -100,7 +101,7 @@ public abstract class Shader
 		this.program = program;
 	}
 	
-	public Shader buildProgram(WebGLRenderingContext _gl, Map<String, Attribute> attributes, Program.ProgramParameters parameters) 
+	public Shader buildProgram(WebGLRenderingContext _gl, Map<String, Attribute> attributes, ProgramParameters parameters) 
 	{
 		this.program = new Program(_gl, this, attributes, parameters);
 

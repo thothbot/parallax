@@ -41,6 +41,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.plugins.LensFlarePlugin;
 import thothbot.parallax.core.client.renderers.plugins.SpritePlugin;
 import thothbot.parallax.core.client.shader.Program;
+import thothbot.parallax.core.client.shader.ProgramParameters;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.shader.Attribute;
@@ -1766,7 +1767,7 @@ public class WebGLRenderer
 		object.isWebglActive = false;
 	}
 
-	private Shader buildProgram ( Material material, Program.ProgramParameters parameters ) 
+	private Shader buildProgram ( Material material, ProgramParameters parameters ) 
 	{
 		String cashKey = material.getShader().getFragmentSource() + material.getShader().getVertexSource() + parameters.toString();
 		if(this.cache_programs.containsKey(cashKey))
@@ -1791,7 +1792,7 @@ public class WebGLRenderer
 		int maxShadows = allocateShadows( lights );
 		int maxBones   = allocateBones( object );
 		
-		Program.ProgramParameters parameters = new Program.ProgramParameters();
+		ProgramParameters parameters = new ProgramParameters();
 		
 		parameters.precision = this.precision;
 		
