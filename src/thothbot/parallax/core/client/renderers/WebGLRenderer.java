@@ -1773,7 +1773,7 @@ public class WebGLRenderer
 		if(this.cache_programs.containsKey(cashKey))
 			return this.cache_programs.get(cashKey);
 
-		Shader shader = material.getShader().buildProgram(getGL(), material.getAttributes(), parameters);
+		Shader shader = material.getShader().buildProgram(getGL(), parameters);
 
 		this.cache_programs.put(cashKey, shader);
 
@@ -1874,10 +1874,10 @@ public class WebGLRenderer
 			getGL().enableVertexAttribArray( attributes.get("skinWeight") );
 		}
 
-		if ( material.getAttributes() != null )
-			for ( String a : material.getAttributes().keySet() )
-				if( attributes.get( a ) != null && attributes.get( a ) >= 0 ) 
-					getGL().enableVertexAttribArray( attributes.get( a ) );
+		if ( attributes != null )
+			for ( Integer a : attributes.values() )
+				if( a != null && a >= 0 ) 
+					getGL().enableVertexAttribArray( a );
 
 		if(material instanceof HasSkinning)
 		{

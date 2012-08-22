@@ -146,14 +146,14 @@ public class Line extends GeometryObject
 
 		this.material = Material.getBufferMaterial( this, null );
 
-		boolean areCustomAttributesDirty = material.areCustomAttributesDirty();
+		boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
 		if ( this.geometry.verticesNeedUpdate 
 				|| this.geometry.colorsNeedUpdate 
 				|| areCustomAttributesDirty 
 		) {
 			this.setBuffers( gl, geometry, GLenum.DYNAMIC_DRAW.getValue() );
 
-			this.material.clearCustomAttributes();
+			this.material.getShader().clearCustomAttributes();
 		}
 
 		this.geometry.verticesNeedUpdate = false;

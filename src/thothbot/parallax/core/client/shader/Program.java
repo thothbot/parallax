@@ -91,7 +91,7 @@ public class Program
 	 * Creates a new instance of the {@link Program}.
 	 */
 	public Program(WebGLRenderingContext _gl, 
-			Shader shader, Map<String, Attribute> attributes, ProgramParameters parameters)
+			Shader shader, ProgramParameters parameters)
 	{
 		this._gl = _gl;
 
@@ -111,8 +111,8 @@ public class Program
 				
 		// Cache location
 		Map<String, Uniform> uniforms = shader.getUniforms();
-			for (String id : uniforms.keySet())
-				uniforms.get(id).setLocation( _gl.getUniformLocation(this.program, id) );
+		for (String id : uniforms.keySet())
+			uniforms.get(id).setLocation( _gl.getUniformLocation(this.program, id) );
 
 		// cache attributes locations
 		List<String> attributesIds = new ArrayList<String>(Arrays.asList("position", "normal",
@@ -125,12 +125,13 @@ public class Program
 		for (int i = 0; i < parameters.maxMorphNormals; i++)
 			attributesIds.add("morphNormal" + i);
 
-		// TODO: check this
+		Map<String, Attribute> attributes = shader.getAttributes();
 		if(attributes != null)
 			for (String a : attributes.keySet())
 				attributesIds.add(a);
 
-		cacheAttributeLocations(attributesIds);
+		for (String id : attributesIds)
+			this.attributes.put(id, this._gl.getAttribLocation(this.program, id));
 	}
 
 	public Map<String, Integer> getAttributes() {
@@ -203,12 +204,6 @@ public class Program
 		}
 
 		return shader;
-	}
-
-	private void cacheAttributeLocations(List<String> identifiers)
-	{
-		for (String id : identifiers)
-			this.attributes.put(id, this._gl.getAttribLocation(this.program, id));
 	}
 
 	private String getPrecision(ProgramParameters parameters)

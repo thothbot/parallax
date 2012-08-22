@@ -53,13 +53,17 @@ public abstract class Shader
 	private Program program;
 
 	private Map<String, Uniform> uniforms;
+	private Map<String, Attribute> attributes;
 
 	private String vertexShaderSource;
 	private String fragmentShaderSource;
 
+	private boolean cache_areCustomAttributesDirty;
+
 	private int id;
-	
+
 	private static int shaderCounter;
+
 	/**
 	 * This constructor will create new Shader instance. 
 	 * 
@@ -101,9 +105,9 @@ public abstract class Shader
 		this.program = program;
 	}
 	
-	public Shader buildProgram(WebGLRenderingContext _gl, Map<String, Attribute> attributes, ProgramParameters parameters) 
+	public Shader buildProgram(WebGLRenderingContext _gl, ProgramParameters parameters) 
 	{
-		this.program = new Program(_gl, this, attributes, parameters);
+		this.program = new Program(_gl, this, parameters);
 
 		return this;
 	}
@@ -159,6 +163,54 @@ public abstract class Shader
 	public void addUniform(String id, Uniform uniform)
 	{
 		this.uniforms.put(id, uniform);
+	}
+	
+	public Map<String, Attribute> getAttributes() {
+		return this.attributes;
+	}
+	
+	public void setAttributes(Map<String, Attribute> attributes) {
+		this.attributes = attributes;
+	}
+	
+	public boolean areCustomAttributesDirty() 
+	{
+		if(this.cache_areCustomAttributesDirty)
+			return true;
+
+		if(getAttributes() == null)
+			return false;
+ 
+		for ( Attribute attribute: getAttributes().values() )
+		{
+			if ( attribute.needsUpdate )
+			{
+				this.cache_areCustomAttributesDirty = true;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void clearCustomAttributes() 
+	{
+		if(!this.cache_areCustomAttributesDirty)
+			return;
+
+		if(getAttributes() == null)
+			return;
+
+		for ( Attribute attribute: getAttributes().values() )
+		{
+			attribute.needsUpdate = false;
+			this.cache_areCustomAttributesDirty = false;
+		}
+	}
+	
+	public String toString()
+	{
+		return "{id=" + this.id + ", class=" + getClass().getName() + ", uniforms=" + getUniforms() + "}";		
 	}
 	
 	// Methods
@@ -217,10 +269,5 @@ public abstract class Shader
 			values.set( i, values.get(i) / sum);
 
 		return values;
-	}
-	
-	public String toString()
-	{
-		return "{id=" + this.id + ", class=" + getClass().getName() + ", uniforms=" + getUniforms() + "}";		
 	}
 }

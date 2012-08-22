@@ -309,15 +309,16 @@ public class Mesh  extends GeometryObject implements HasSides
 		geometryGroup.__webglLineCount = nlines * 2;
 
 		// custom attributes
-
-		if (material.getAttributes() != null) 
+		Map<String, Attribute> attributes = material.getShader().getAttributes();
+		
+		if (attributes != null) 
 		{
 			if (geometryGroup.__webglCustomAttributesList == null)
 				geometryGroup.__webglCustomAttributesList = new ArrayList<Attribute>();
 
-			for (String a : material.getAttributes().keySet()) 
+			for (String a : attributes.keySet()) 
 			{
-				Attribute originalAttribute = material.getAttributes().get(a);
+				Attribute originalAttribute = attributes.get(a);
 
 				// Do a shallow copy of the attribute object so different
 				// geometryGroup chunks use different
@@ -426,7 +427,7 @@ public class Mesh  extends GeometryObject implements HasSides
 				GeometryGroup geometryGroup = geometry.getGeometryGroupsList().get( i );
 				material = Material.getBufferMaterial( this, geometryGroup );
 
-				boolean areCustomAttributesDirty = material.areCustomAttributesDirty();
+				boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
 				if ( geometry.verticesNeedUpdate 
 						|| geometry.morphTargetsNeedUpdate
 						|| geometry.elementsNeedUpdate 
@@ -437,7 +438,7 @@ public class Mesh  extends GeometryObject implements HasSides
 						|| areCustomAttributesDirty
 				) {
 					setBuffers(gl, geometryGroup, GLenum.DYNAMIC_DRAW.getValue(), !geometry.isDynamic(), material );
-					material.clearCustomAttributes();
+					material.getShader().clearCustomAttributes();
 				}
 			}
 

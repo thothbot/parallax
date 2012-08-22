@@ -111,8 +111,6 @@ public abstract class Material
 	// 
 
 	private Shader shader;
-
-	private Map<String, Attribute> attributes;
 	
 	public Material()
 	{
@@ -157,14 +155,6 @@ public abstract class Material
 	
 	public void setNeedsUpdate(boolean visible) {
 		this.isNeedsUpdate = visible;
-	}
-	
-	public Map<String, Attribute> getAttributes() {
-		return this.attributes;
-	}
-	
-	public void setAttributes(Map<String, Attribute> attributes) {
-		this.attributes = attributes;
 	}
 
 	public double getOpacity() {
@@ -400,25 +390,5 @@ public abstract class Material
 			return object.getGeometry().getMaterials().get( geometryGroup.materialIndex );
 		
 		return null;
-	}
-	
-	public boolean areCustomAttributesDirty() 
-	{
-		if(getAttributes() == null)
-			return false;
-		
-		for ( Attribute attribute: this.attributes.values())
-			if ( attribute.needsUpdate ) return true;
-
-		return false;
-	}
-
-	public void clearCustomAttributes() 
-	{
-		if(getAttributes() == null)
-			return;
-
-		for ( Attribute attribute: this.attributes.values() )
-			attribute.needsUpdate = false;
 	}
 }

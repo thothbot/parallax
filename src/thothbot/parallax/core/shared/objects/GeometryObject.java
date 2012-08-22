@@ -23,6 +23,7 @@
 package thothbot.parallax.core.shared.objects;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
@@ -79,14 +80,16 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 		int nvertices = geometry.getVertices().size();
 		Material material = this.getMaterial();
 
-		if ( material.getAttributes() != null) 
+		Map<String, Attribute> attributes = material.getShader().getAttributes();
+		
+		if ( attributes != null) 
 		{
 			if ( geometry.__webglCustomAttributesList == null ) 
 				geometry.__webglCustomAttributesList = new ArrayList<Attribute>();
 
-			for ( String a : material.getAttributes().keySet() ) 
+			for ( String a : attributes.keySet() ) 
 			{
-				Attribute attribute = material.getAttributes().get( a );
+				Attribute attribute = attributes.get( a );
 				if( ! attribute.__webglInitialized || attribute.createUniqueBuffers ) 
 				{
 					attribute.__webglInitialized = true;
