@@ -24,7 +24,6 @@ package thothbot.parallax.core.client.shader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,9 +32,6 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLShader;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.FastMap;
-
-import com.google.gwt.core.client.GWT;
 
 /**
  * The class used to create WebGl Program.
@@ -77,9 +73,6 @@ public class Program
 			return "#define " + this.name() + " " + param;
 		}
 	};
-
-//	private Map<String, Integer> attributes = GWT.isScript() ? 
-//			new FastMap<Integer>() : new HashMap<String, Integer>();
 
 	private WebGLProgram program;
 
@@ -132,10 +125,6 @@ public class Program
 		for (String id : attributesIds)
 			attributesLocations.put(id, this._gl.getAttribLocation(this.program, id));
 	}
-
-//	public Map<String, Integer> getAttributes() {
-//		return this.attributes;
-//	}
 
 	/**
 	 * Gets the shader program.
