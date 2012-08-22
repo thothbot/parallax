@@ -25,7 +25,6 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Mathematics;
 

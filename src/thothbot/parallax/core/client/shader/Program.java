@@ -28,16 +28,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
-
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLShader;
-import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
+
+import com.google.gwt.core.client.GWT;
 
 /**
  * The class used to create WebGl Program.

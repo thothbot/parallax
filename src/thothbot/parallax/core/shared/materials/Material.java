@@ -28,8 +28,6 @@ import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
-import thothbot.parallax.core.client.shader.Attribute;
-import thothbot.parallax.core.client.shader.Program;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
