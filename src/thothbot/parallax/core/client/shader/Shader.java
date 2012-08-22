@@ -89,8 +89,11 @@ public abstract class Shader
 
 	private WebGLProgram program;
 
+	// Store uniforms and locations 
 	private Map<String, Uniform> uniforms;
+	// Should be null by default. Think how we can merge two maps.
 	private Map<String, Attribute> attributes;
+	// Store locations
 	private Map<String, Integer> attributesLocations;
 
 	private String vertexShaderSource;
@@ -121,8 +124,7 @@ public abstract class Shader
 
 		this.uniforms = GWT.isScript() ? 
 				new FastMap<Uniform>() : new HashMap<String, Uniform>();
-//		this.attributes = GWT.isScript()
-//				? new FastMap<Attribute>() : new HashMap<String, Attribute>();
+
 		this.attributesLocations = GWT.isScript() ? 
 				new FastMap<Integer>() : new HashMap<String, Integer>();
 
@@ -243,20 +245,20 @@ public abstract class Shader
 	{
 		this.uniforms.put(id, uniform);
 	}
-	
+
 	@Deprecated
 	public Map<String, Integer> getAttributesLocations() {
 		return this.attributesLocations;
 	}
-	
+
 	public Map<String, Attribute> getAttributes() {
 		return this.attributes;
 	}
-		
+
 	public void setAttributes(Map<String, Attribute> attributes) {
 		this.attributes = attributes;
 	}
-	
+
 	public boolean areCustomAttributesDirty() 
 	{
 		if(this.cache_areCustomAttributesDirty)
