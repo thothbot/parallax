@@ -30,6 +30,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
+import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
@@ -40,7 +41,6 @@ import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.plugins.LensFlarePlugin;
 import thothbot.parallax.core.client.renderers.plugins.SpritePlugin;
-import thothbot.parallax.core.client.shader.Program;
 import thothbot.parallax.core.client.shader.ProgramParameters;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
@@ -175,7 +175,7 @@ public class WebGLRenderer
 
 	// internal state cache
 
-	private Program cache_currentProgram = null;
+	private WebGLProgram cache_currentProgram = null;
 	private WebGLFramebuffer cache_currentFramebuffer = null;
 	private int cache_currentMaterialId = -1;
 	private int cache_currentGeometryGroupHash = -1;
@@ -1125,7 +1125,7 @@ public class WebGLRenderer
 	// TODO: CHECK callback
 	private void renderImmediateObject( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
 	{
-		Program program = setProgram( camera, lights, fog, material, object );
+		WebGLProgram program = setProgram( camera, lights, fog, material, object );
 
 		this.cache_currentGeometryGroupHash = -1;
 
@@ -1265,7 +1265,7 @@ public class WebGLRenderer
 		if ( ! material.isVisible()) 
 			return;
 
-		Program program = setProgram( camera, lights, fog, material, object );
+		WebGLProgram program = setProgram( camera, lights, fog, material, object );
 
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 
@@ -1918,7 +1918,7 @@ public class WebGLRenderer
 		}
 	}
 
-	private Program setProgram( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
+	private WebGLProgram setProgram( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
 	{
 		if ( material.getShader() == null || material.getShader().getProgram() == null || material.isNeedsUpdate() ) 
 		{
@@ -1939,12 +1939,12 @@ public class WebGLRenderer
 
 		boolean refreshMaterial = false;
 
-		Program program = material.getShader().getProgram();
+		WebGLProgram program = material.getShader().getProgram();
 		Map<String, Uniform> m_uniforms = material.getShader().getUniforms();
 
 		if ( program != cache_currentProgram )
 		{
-			getGL().useProgram( program.getProgram() );
+			getGL().useProgram( program );
 			this.cache_currentProgram = program;
 
 			refreshMaterial = true;
@@ -1977,7 +1977,7 @@ public class WebGLRenderer
 
 				if (this.isLightsNeedUpdate ) 
 				{
-					setupLights( program, lights );
+					setupLights( lights );
 					this.isLightsNeedUpdate = false;
 				}
 
@@ -2270,7 +2270,7 @@ Log.error("?????????????");
 		object._normalMatrix.transpose();
 	}
 
-	private void setupLights ( Program program, List<Light> lights ) 
+	private void setupLights ( List<Light> lights ) 
 	{
 		Log.debug("Called setupLights()");
 
