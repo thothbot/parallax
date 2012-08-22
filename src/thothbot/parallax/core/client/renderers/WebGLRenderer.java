@@ -790,7 +790,7 @@ public class WebGLRenderer
 	private void setupMorphTargets ( Material material, GeometryBuffer geometrybuffer, Mesh object ) 
 	{
 		// set base
-		Map<String, Integer> attributes = material.getShader().getProgram().getAttributes();
+		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		Map<String, Uniform> uniforms = material.getShader().getUniforms();
 
 		if ( object.getMorphTargetBase() != - 1 ) 
@@ -1267,7 +1267,7 @@ public class WebGLRenderer
 
 		Program program = setProgram( camera, lights, fog, material, object );
 
-		Map<String, Integer> attributes = program.getAttributes();
+		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 
 		boolean updateBuffers = false;
 		int wireframeBit = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? 1 : 0;
@@ -1399,7 +1399,7 @@ public class WebGLRenderer
 		object.renderBuffer(this, geometryBuffer, updateBuffers);
 	}
 
-	private void renderBufferImmediate( Object3D object, Program program, Material.SHADING shading ) 
+	private void renderBufferImmediate( Object3D object, Material material, Material.SHADING shading ) 
 	{
 		if ( object.__webglVertexBuffer == null ) 
 			object.__webglVertexBuffer = getGL().createBuffer();
@@ -1407,12 +1407,13 @@ public class WebGLRenderer
 		if ( object.__webglNormalBuffer == null ) 
 			object.__webglNormalBuffer = getGL().createBuffer();
 
+		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		if ( object.hasPos ) 
 		{
 			getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), object.__webglVertexBuffer );
 			getGL().bufferData( GLenum.ARRAY_BUFFER.getValue(), object.positionArray, GLenum.DYNAMIC_DRAW.getValue() );
-			getGL().enableVertexAttribArray( program.getAttributes().get("position") );
-			getGL().vertexAttribPointer( program.getAttributes().get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
+			getGL().enableVertexAttribArray( attributes.get("position") );
+			getGL().vertexAttribPointer( attributes.get("position"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 		}
 
 		if ( object.hasNormal ) 
@@ -1456,8 +1457,8 @@ public class WebGLRenderer
 			}
 
 			getGL().bufferData( GLenum.ARRAY_BUFFER.getValue(), object.normalArray, GLenum.DYNAMIC_DRAW.getValue() );
-			getGL().enableVertexAttribArray( program.getAttributes().get("normal") );
-			getGL().vertexAttribPointer( program.getAttributes().get("normal"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
+			getGL().enableVertexAttribArray( attributes.get("normal") );
+			getGL().vertexAttribPointer( attributes.get("normal"), 3, GLenum.FLOAT.getValue(), false, 0, 0 );
 		}
 
 		getGL().drawArrays( GLenum.TRIANGLES.getValue(), 0, object.count );
@@ -1850,7 +1851,7 @@ public class WebGLRenderer
 
 		material.setShader( buildProgram( material, parameters ) );
 
-		Map<String, Integer> attributes = material.getShader().getProgram().getAttributes();
+		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 
 		if ( attributes.get("position") >= 0 ) 
 			getGL().enableVertexAttribArray( attributes.get("position") );

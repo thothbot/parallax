@@ -53,6 +53,7 @@ public abstract class Shader
 
 	private Map<String, Uniform> uniforms;
 	private Map<String, Attribute> attributes;
+	private Map<String, Integer> attributesLocations;
 
 	private String vertexShaderSource;
 	private String fragmentShaderSource;
@@ -72,7 +73,7 @@ public abstract class Shader
 	{
 		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
 	}
-	
+
 	public Shader(String vertexShader, String fragmentShader)
 	{
 		this.id = shaderCounter++;
@@ -80,12 +81,16 @@ public abstract class Shader
 		setVertexSource(vertexShader);
 		setFragmentSource(fragmentShader);
 
-		this.uniforms = GWT.isScript()
-				? new FastMap<Uniform>() : new HashMap<String, Uniform>();
+		this.uniforms = GWT.isScript() ? 
+				new FastMap<Uniform>() : new HashMap<String, Uniform>();
+//		this.attributes = GWT.isScript()
+//				? new FastMap<Attribute>() : new HashMap<String, Attribute>();
+		this.attributesLocations = GWT.isScript() ? 
+				new FastMap<Integer>() : new HashMap<String, Integer>();
 
 		initUniforms();
 	}
-	
+
 	/**
 	 * Gets program ID
 	 * 
@@ -95,7 +100,7 @@ public abstract class Shader
 	{
 		return this.id;
 	}
-	
+
 	public Program getProgram() {
 		return this.program;
 	}
@@ -164,10 +169,15 @@ public abstract class Shader
 		this.uniforms.put(id, uniform);
 	}
 	
+	@Deprecated
+	public Map<String, Integer> getAttributesLocations() {
+		return this.attributesLocations;
+	}
+	
 	public Map<String, Attribute> getAttributes() {
 		return this.attributes;
 	}
-	
+		
 	public void setAttributes(Map<String, Attribute> attributes) {
 		this.attributes = attributes;
 	}

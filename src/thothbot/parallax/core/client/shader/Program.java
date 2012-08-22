@@ -78,8 +78,8 @@ public class Program
 		}
 	};
 
-	private Map<String, Integer> attributes = GWT.isScript() ? 
-			new FastMap<Integer>() : new HashMap<String, Integer>();
+//	private Map<String, Integer> attributes = GWT.isScript() ? 
+//			new FastMap<Integer>() : new HashMap<String, Integer>();
 
 	private WebGLProgram program;
 
@@ -128,13 +128,14 @@ public class Program
 			for (String a : attributes.keySet())
 				attributesIds.add(a);
 
+		Map<String, Integer> attributesLocations = shader.getAttributesLocations();
 		for (String id : attributesIds)
-			this.attributes.put(id, this._gl.getAttribLocation(this.program, id));
+			attributesLocations.put(id, this._gl.getAttribLocation(this.program, id));
 	}
 
-	public Map<String, Integer> getAttributes() {
-		return this.attributes;
-	}
+//	public Map<String, Integer> getAttributes() {
+//		return this.attributes;
+//	}
 
 	/**
 	 * Gets the shader program.
