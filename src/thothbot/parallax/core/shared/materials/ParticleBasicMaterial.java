@@ -77,7 +77,7 @@ public final class ParticleBasicMaterial extends Material
 		this.sizeAttenuation = sizeAttenuation;
 	}
 	
-	public Shader getShaderId() 
+	public Shader getAssociatedShader() 
 	{
 		return new ShaderParticleBasic();
 	}

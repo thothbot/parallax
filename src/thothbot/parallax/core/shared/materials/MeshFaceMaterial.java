@@ -32,7 +32,7 @@ public final class MeshFaceMaterial extends Material
 	}
 
 	@Override
-	public Shader getShaderId() {
+	public Shader getAssociatedShader() {
 		// TODO Auto-generated method stub
 		return null;
 	}

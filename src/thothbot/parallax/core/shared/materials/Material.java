@@ -108,6 +108,7 @@ public abstract class Material
 	
 	// 
 
+	// Store shader associated to the material
 	private Shader shader;
 	
 	public Material()
@@ -135,6 +136,9 @@ public abstract class Material
 		setOverdraw(false);
 	}
 	
+	// Must be overwriten
+	protected abstract Shader getAssociatedShader();
+
 	public int getId() {
 		return id;
 	}
@@ -267,17 +271,21 @@ public abstract class Material
 		this.shading = shading;
 	}
 	
-	public Shader getShader() {
-		setMaterialShaders();
+	public Shader getShader() 
+	{
+		if(shader == null)
+		{
+			Log.debug("Called Material.setMaterialShaders()");
+
+			this.shader = getAssociatedShader();
+		}
+
 		return this.shader;
 	}
 	
 	public void setShader(Shader shader) {
 		this.shader = shader;
 	}
-
-	// Must be overwriten
-	protected abstract Shader getShaderId();
 	
 	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
 	{
@@ -331,18 +339,6 @@ public abstract class Material
 			uniforms.get("combine").setValue( envMapMaterial.getCombine().getValue() );
 			uniforms.get("useRefract").setValue( ( envMapMaterial.getEnvMap() != null 
 					&& envMapMaterial.getEnvMap().getMapping() == Texture.MAPPING_MODE.CUBE_REFRACTION ) ? 1 : 0 );
-		}
-	}
-
-	private void setMaterialShaders() 
-	{
-		if(shader == null)
-		{
-			Log.debug("Called Material.setMaterialShaders()");
-
-			Shader shader = getShaderId();
-
-			this.shader = shader;
 		}
 	}
 

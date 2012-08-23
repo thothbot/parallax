@@ -49,7 +49,7 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	}
 	
 	@Override
-	public Shader getShaderId()
+	public Shader getAssociatedShader()
 	{
 		return new ShaderDepth();
 	}

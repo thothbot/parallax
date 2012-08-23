@@ -40,7 +40,7 @@ public final class MeshNormalMaterial extends Material implements HasWireframe
 		setShading(Material.SHADING.FLAT);
 	}
 
-	public Shader getShaderId()
+	public Shader getAssociatedShader()
 	{
 		return new ShaderNormal();
 	}

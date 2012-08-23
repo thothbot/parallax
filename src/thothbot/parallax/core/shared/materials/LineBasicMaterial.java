@@ -55,7 +55,7 @@ public final class LineBasicMaterial extends Material
 	}
 	
 	@Override
-	public Shader getShaderId()
+	public Shader getAssociatedShader()
 	{
 		return new ShaderBasic();
 	}
