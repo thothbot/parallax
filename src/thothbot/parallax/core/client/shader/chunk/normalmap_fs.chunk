@@ -42,7 +42,7 @@ uniform vec3 ambientLightColor;
 
 varying vec3 vViewPosition;
 
-//[*]
+[*]
 
 void main() {
 
@@ -243,6 +243,6 @@ void main() {
 
 	}
 
-//[*]
+[*]
 
 }

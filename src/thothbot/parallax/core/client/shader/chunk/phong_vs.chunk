@@ -1,12 +1,12 @@
 varying vec3 vViewPosition;
 varying vec3 vNormal;
 
-//[*]
+[*]
 			
 void main() {
 	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
 				
-//[*]
+[*]
 			
 #ifndef USE_ENVMAP
 	vec4 mPosition = objectMatrix * vec4( position, 1.0 );
@@ -14,10 +14,10 @@ void main() {
 
 vViewPosition = -mvPosition.xyz;
 			
-//[*]
+[*]
 			
 vNormal = transformedNormal;
 
-//[*]
+[*]
 
 }

@@ -4,12 +4,12 @@ varying vec3 vLightFront;
 	varying vec3 vLightBack;
 #endif
 
-//[*]
+[*]
 
 void main() {
 	gl_FragColor = vec4( vec3 ( 1.0 ), opacity );
 			
-//[*]
+[*]
 			
 #ifdef DOUBLE_SIDED
 
@@ -26,6 +26,6 @@ gl_FragColor.xyz *= vLightFront;
 
 #endif
 			
-//[*]
+[*]
 			
 }

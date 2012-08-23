@@ -311,65 +311,7 @@ public abstract class Shader
 	{
 		return "{id=" + this.id + ", class=" + getClass().getName() + ", uniforms=" + getUniforms() + "}";		
 	}
-	
-	// Methods
-	private static String SHADER_REPLACE_ARG = "//[*]";
-	protected static String updateShaderSource(String src, List<String> ... allMods)
-	{
-		StringBuffer result = new StringBuffer();
-		int s = 0;
-		int e = 0;
 		
-		if(src.indexOf(SHADER_REPLACE_ARG) >= 0)
-		{
-			for ( List<String> mods : allMods )
-			{
-				String replace = "";
-
-				for(String mod : mods)
-					replace += mod + "\n";
-
-				if((e = src.indexOf(SHADER_REPLACE_ARG, s)) >= 0)
-				{
-					result.append(src.substring(s, e));
-			        result.append(replace);
-			        s = e + SHADER_REPLACE_ARG.length();
-				}
-			}
-
-			result.append(src.substring(s));
-		}
-
-		return result.toString();
-	}
-
-	public static Float32Array buildKernel( double sigma ) 
-	{ 
-		int kMaxKernelSize = 25; 
-		int kernelSize = (int) (2 * Math.ceil( sigma * 3 ) + 1);
-
-		if ( kernelSize > kMaxKernelSize ) 
-			kernelSize = kMaxKernelSize;
-		
-		double halfWidth = ( kernelSize - 1.0 ) * 0.5;
-
-		Float32Array values = Float32Array.create(kernelSize);
-
-		double sum = 0.0;
-		for ( int i = 0; i < kernelSize; ++i ) 
-		{
-			double result = Mathematics.gauss( i - halfWidth, sigma ); 
-			values.set(i, result);
-			sum += result;
-		}
-
-		// normalize the kernel
-		for ( int i = 0; i < kernelSize; ++i ) 
-			values.set( i, values.get(i) / sum);
-
-		return values;
-	}
-	
 	public void setPrecision(Shader.PRECISION precision) {
 		this.precision = precision;
 	}
@@ -581,5 +523,63 @@ public abstract class Shader
 			retval += opt + "\n";
 
 		return retval;
+	}
+	
+	// Methods
+	private static String SHADER_REPLACE_ARG = "[*]";
+	protected static String updateShaderSource(String src, List<String> ... allMods)
+	{
+		StringBuffer result = new StringBuffer();
+		int s = 0;
+		int e = 0;
+		
+		if(src.indexOf(SHADER_REPLACE_ARG) >= 0)
+		{
+			for ( List<String> mods : allMods )
+			{
+				String replace = "";
+
+				for(String mod : mods)
+					replace += mod + "\n";
+
+				if((e = src.indexOf(SHADER_REPLACE_ARG, s)) >= 0)
+				{
+					result.append(src.substring(s, e));
+			        result.append(replace);
+			        s = e + SHADER_REPLACE_ARG.length();
+				}
+			}
+
+			result.append(src.substring(s));
+		}
+
+		return result.toString();
+	}
+
+	public static Float32Array buildKernel( double sigma ) 
+	{ 
+		int kMaxKernelSize = 25; 
+		int kernelSize = (int) (2 * Math.ceil( sigma * 3 ) + 1);
+
+		if ( kernelSize > kMaxKernelSize ) 
+			kernelSize = kMaxKernelSize;
+		
+		double halfWidth = ( kernelSize - 1.0 ) * 0.5;
+
+		Float32Array values = Float32Array.create(kernelSize);
+
+		double sum = 0.0;
+		for ( int i = 0; i < kernelSize; ++i ) 
+		{
+			double result = Mathematics.gauss( i - halfWidth, sigma ); 
+			values.set(i, result);
+			sum += result;
+		}
+
+		// normalize the kernel
+		for ( int i = 0; i < kernelSize; ++i ) 
+			values.set( i, values.get(i) / sum);
+
+		return values;
 	}
 }
