@@ -1751,7 +1751,7 @@ public class WebGLRenderer
 		if(this.cache_programs.containsKey(cashKey))
 			return this.cache_programs.get(cashKey);
 
-		Shader shader = material.getShader().buildProgram(getGL(), parameters);
+		Shader shader = material.buildShader(getGL(), parameters);
 
 		this.cache_programs.put(cashKey, shader);
 

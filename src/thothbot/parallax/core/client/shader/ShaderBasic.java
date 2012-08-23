@@ -64,7 +64,7 @@ public final class ShaderBasic extends Shader
 	}
 	
 	@Override
-	protected void setVertexSource(String src)
+	protected void updateVertexSource(String src)
 	{
 		List<String> vars = Arrays.asList(
 			ChunksVertexShader.MAP_PARS,
@@ -87,11 +87,11 @@ public final class ShaderBasic extends Shader
 			ChunksVertexShader.SHADOWMAP
 		);
 
-		super.setVertexSource(Shader.updateShaderSource(src, vars, main));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
 	}
 	
 	@Override
-	protected void setFragmentSource(String src)
+	protected void updateFragmentSource(String src)
 	{
 		List<String> vars = Arrays.asList(
 			ChunksFragmentShader.COLOR_PARS,
@@ -113,6 +113,6 @@ public final class ShaderBasic extends Shader
 			ChunksFragmentShader.FOG
 		);
 		
-		super.setFragmentSource(Shader.updateShaderSource(src, vars, main));		
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));		
 	}
 }

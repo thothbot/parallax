@@ -22,12 +22,18 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
+import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
+import thothbot.parallax.core.client.shader.ChunksFragmentShader;
+import thothbot.parallax.core.client.shader.ChunksVertexShader;
+import thothbot.parallax.core.client.shader.ProgramParameters;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
@@ -51,7 +57,7 @@ public abstract class Material
 		NO, // NoShading = 0;
 		FLAT, // FlatShading = 1;
 		SMOOTH // SmoothShading = 2;
-	};
+	}
 
 	/**
 	 * Colors
@@ -61,7 +67,7 @@ public abstract class Material
 		NO, // NoColors = 0;
 		FACE, // FaceColors = 1;
 		VERTEX // VertexColors = 2;
-	};
+	}
 
 	/**
 	 * Blending modes
@@ -75,7 +81,39 @@ public abstract class Material
 		MULTIPLY, // MultiplyBlending = 4;
 		ADDITIVE_ALPHA, // AdditiveAlphaBlending = 5;
 		CUSTOM // CustomBlending = 6;
-	};
+	}
+	
+	private static enum SHADER_DEFINE {
+		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT, PHYSICALLY_BASED_SHADING,
+
+		MAX_DIR_LIGHTS, // param
+		MAX_POINT_LIGHTS, // param
+		MAX_SPOT_LIGHTS, // param
+		MAX_SHADOWS, // param
+		MAX_BONES, // param
+
+		USE_MAP, USE_ENVMAP, USE_LIGHTMAP, USE_COLOR, USE_SKINNING, USE_MORPHTARGETS, USE_MORPHNORMALS,
+
+		PHONG_PER_PIXEL, WRAP_AROUND, DOUBLE_SIDED,
+
+		USE_SHADOWMAP, SHADOWMAP_SOFT, SHADOWMAP_DEBUG, SHADOWMAP_CASCADE,
+
+		USE_SIZEATTENUATION,
+
+		ALPHATEST,
+
+		USE_FOG, FOG_EXP2, METAL;
+
+		public String getValue()
+		{
+			return "#define " + this.name();
+		}
+
+		public String getValue(int param)
+		{
+			return "#define " + this.name() + " " + param;
+		}
+	}
 
 	private int id;
 	
@@ -266,11 +304,11 @@ public abstract class Material
 	public Material.SHADING getShading() {
 		return this.shading;
 	}
-	
+
 	public void setShading(Material.SHADING shading) {
 		this.shading = shading;
 	}
-	
+
 	public Shader getShader() 
 	{
 		if(shader == null)
@@ -282,11 +320,171 @@ public abstract class Material
 
 		return this.shader;
 	}
-	
+
+	public Shader buildShader(WebGLRenderingContext gl, ProgramParameters parameters)
+	{
+		Shader shader = getShader();
+
+		// Sets material prefixes
+		shader.setVertexSource(getPrefixVertex(parameters) + "\n" + shader.getVertexSource());
+		shader.setFragmentSource(getPrefixFragment(parameters) + "\n" + shader.getFragmentSource());
+
+		this.shader = shader.buildProgram(gl, parameters.maxMorphTargets, parameters.maxMorphNormals);
+
+		return this.shader;
+	}
+
+	private String getPrefixVertex(ProgramParameters parameters)
+	{
+		Log.debug("Called getPrefixVertex()");
+		List<String> options = new ArrayList<String>();
+
+		options.add("");
+		
+		if (parameters.maxVertexTextures > 0)
+			options.add(SHADER_DEFINE.VERTEX_TEXTURES.getValue());
+
+		if (parameters.gammaInput)
+			options.add(SHADER_DEFINE.GAMMA_INPUT.getValue());
+
+		if (parameters.gammaOutput)
+			options.add(SHADER_DEFINE.GAMMA_OUTPUT.getValue());
+
+		if (parameters.physicallyBasedShading)
+			options.add(SHADER_DEFINE.PHYSICALLY_BASED_SHADING.getValue());
+
+		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
+		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
+		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
+
+		options.add(SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
+
+		options.add(SHADER_DEFINE.MAX_BONES.getValue(parameters.maxBones));
+
+		if (parameters.map)
+			options.add(SHADER_DEFINE.USE_MAP.getValue());
+
+		if (parameters.envMap)
+			options.add(SHADER_DEFINE.USE_ENVMAP.getValue());
+
+		if (parameters.lightMap)
+			options.add(SHADER_DEFINE.USE_LIGHTMAP.getValue());
+
+		if (parameters.vertexColors)
+			options.add(SHADER_DEFINE.USE_COLOR.getValue());
+
+		if (parameters.skinning)
+			options.add(SHADER_DEFINE.USE_SKINNING.getValue());
+
+		if (parameters.morphTargets)
+			options.add(SHADER_DEFINE.USE_MORPHTARGETS.getValue());
+		if (parameters.morphNormals)
+			options.add(SHADER_DEFINE.USE_MORPHNORMALS.getValue());
+		
+		if (parameters.perPixel)
+			options.add(SHADER_DEFINE.PHONG_PER_PIXEL.getValue());
+		if (parameters.wrapAround)
+			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
+		if (parameters.doubleSided)
+			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
+
+		if (parameters.shadowMapEnabled)
+			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
+		if (parameters.shadowMapSoft)
+			options.add(SHADER_DEFINE.SHADOWMAP_SOFT.getValue());
+		if (parameters.shadowMapDebug)
+			options.add(SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
+		if (parameters.shadowMapCascade)
+			options.add(SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
+
+		if (parameters.sizeAttenuation)
+			options.add(SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
+
+		options.add(ChunksVertexShader.DEFAULT_PARS);
+		options.add("");
+
+		String retval = "";
+		for(String opt: options)
+			retval += opt + "\n";
+		return retval;
+	}
+
+	private String getPrefixFragment(ProgramParameters parameters)
+	{
+		Log.debug("Called getPrefixFragment()");
+		List<String> options = new ArrayList<String>();
+
+		options.add("");
+		
+		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
+		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
+		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
+
+		options.add(SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
+
+		if (parameters.alphaTest > 0)
+			options.add(SHADER_DEFINE.ALPHATEST.getValue(parameters.alphaTest));
+
+		if (parameters.gammaInput)
+			options.add(SHADER_DEFINE.GAMMA_INPUT.getValue());
+
+		if (parameters.gammaOutput)
+			options.add(SHADER_DEFINE.GAMMA_OUTPUT.getValue());
+
+		if (parameters.physicallyBasedShading)
+			options.add(SHADER_DEFINE.PHYSICALLY_BASED_SHADING.getValue());
+
+		if (parameters.useFog)
+			options.add(SHADER_DEFINE.USE_FOG.getValue());
+
+		if (parameters.useFog2)
+			options.add(SHADER_DEFINE.FOG_EXP2.getValue());
+
+		if (parameters.map)
+			options.add(SHADER_DEFINE.USE_MAP.getValue());
+
+		if (parameters.envMap)
+			options.add(SHADER_DEFINE.USE_ENVMAP.getValue());
+
+		if (parameters.lightMap)
+			options.add(SHADER_DEFINE.USE_LIGHTMAP.getValue());
+
+		if (parameters.vertexColors)
+			options.add(SHADER_DEFINE.USE_COLOR.getValue());
+
+		if (parameters.metal)
+			options.add(SHADER_DEFINE.METAL.getValue());
+
+		if (parameters.perPixel)
+			options.add(SHADER_DEFINE.PHONG_PER_PIXEL.getValue());
+		if (parameters.wrapAround)
+			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
+		if (parameters.doubleSided)
+			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
+
+		if (parameters.shadowMapEnabled)
+			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
+		if (parameters.shadowMapSoft)
+			options.add(SHADER_DEFINE.SHADOWMAP_SOFT.getValue());
+		if (parameters.shadowMapDebug)
+			options.add(SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
+		if (parameters.shadowMapCascade)
+			options.add(SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
+
+		options.add(ChunksFragmentShader.DEFAULT_PARS);
+
+		options.add("");
+		String retval = "";
+		for(String opt: options)
+			retval += opt + "\n";
+
+		return retval;
+	}
+
 	public void setShader(Shader shader) {
 		this.shader = shader;
 	}
-	
+
 	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
 	{
 		if ( ! (this instanceof HasMaterialMap) )
@@ -346,7 +544,7 @@ public abstract class Material
 	{
 		return this.shading != null && this.shading == Material.SHADING.SMOOTH;
 	}
-	
+
 	public Material.SHADING bufferGuessNormalType () 
 	{
 		// only MeshBasicMaterial and MeshDepthMaterial don't need normals

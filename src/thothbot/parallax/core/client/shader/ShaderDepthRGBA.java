@@ -61,7 +61,7 @@ public final class ShaderDepthRGBA extends Shader
 	}
 	
 	@Override
-	protected void setVertexSource(String src)
+	protected void updateVertexSource(String src)
 	{
 		List<String> vars = Arrays.asList(
 			ChunksVertexShader.MORPH_TARGET_PARS
@@ -72,7 +72,7 @@ public final class ShaderDepthRGBA extends Shader
 			ChunksVertexShader.DEFAULT
 		);
 
-		super.setVertexSource(Shader.updateShaderSource(src, vars, main));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
 	}
 
 }
