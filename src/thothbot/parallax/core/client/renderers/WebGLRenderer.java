@@ -1745,21 +1745,6 @@ public class WebGLRenderer
 		object.isWebglActive = false;
 	}
 
-	private Shader buildProgram ( Material material, ProgramParameters parameters ) 
-	{
-		String cashKey = material.getShader().getFragmentSource() + material.getShader().getVertexSource() + parameters.toString();
-		if(this.cache_programs.containsKey(cashKey))
-			return this.cache_programs.get(cashKey);
-
-		Shader shader = material.buildShader(getGL(), parameters);
-
-		this.cache_programs.put(cashKey, shader);
-
-		this.getInfo().getMemory().programs = cache_programs.size();
-
-		return shader;
-	}
-	
 	private void initMaterial ( Material material, List<Light> lights, Fog fog, GeometryObject object ) 
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
@@ -1800,8 +1785,20 @@ public class WebGLRenderer
 
 		Log.debug("initMaterial() called new Program");
 
-		material.setShader( buildProgram( material, parameters ) );
+		String cashKey = material.getShader().getFragmentSource() + material.getShader().getVertexSource() + parameters.toString();
+		if(this.cache_programs.containsKey(cashKey))
+		{
+			material.setShader( this.cache_programs.get(cashKey));
+		}
+		else
+		{
+			Shader shader = material.buildShader(getGL(), parameters);
 
+			this.cache_programs.put(cashKey, shader);
+
+			this.getInfo().getMemory().programs = cache_programs.size();
+		}
+		
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 
 		if ( attributes.get("position") >= 0 ) 
