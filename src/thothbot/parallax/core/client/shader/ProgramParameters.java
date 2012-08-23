@@ -19,12 +19,8 @@
 
 package thothbot.parallax.core.client.shader;
 
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
-
 public class ProgramParameters 
 {
-	public WebGLRenderer.PRECISION precision;
-	
 	public boolean gammaInput;
 	public boolean gammaOutput;
 	public boolean physicallyBasedShading;
@@ -64,7 +60,7 @@ public class ProgramParameters
 	public int maxVertexTextures;
 	
 	public String toString() {
-		String retval = "precision=" + precision.name() + ", ";
+		String retval = "";
 		retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading + "-1-"
 				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + "-2-"
 				+ maxShadows + ", " + maxBones + "-2-"

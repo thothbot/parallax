@@ -108,22 +108,9 @@ import com.google.gwt.dom.client.Element;
  */
 public class WebGLRenderer
 {
-	/**
-	 * Sets the Shaders precision value.
-	 */
-	public static enum PRECISION 
-	{
-		HIGHP,
-		MEDIUMP,
-		LOWP
-	};
-
 	// The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
 	private Canvas3d canvas;
 	private WebGLRenderInfo info;
-
-	// shader precision. Can be "highp", "mediump" or "lowp".
-	private WebGLRenderer.PRECISION precision = WebGLRenderer.PRECISION.HIGHP;
 				
 	// Integer, default is Color(0x000000).
 	private Color clearColor = new Color(0x000000);
@@ -529,16 +516,6 @@ public class WebGLRenderer
 			getGL().enable(GLenum.SCISSOR_TEST.getValue());
 		else
 			getGL().disable(GLenum.SCISSOR_TEST.getValue());
-	}
-	
-	/**
-	 * Sets the Shader precision value.
-	 * 
-	 * @param precision the {@link WebGLRenderer.PRECISION} value.
-	 */
-	public void setPrecision(WebGLRenderer.PRECISION precision) 
-	{
-		this.precision = precision; 
 	}
 	
 	/**
@@ -1794,8 +1771,6 @@ public class WebGLRenderer
 		int maxBones   = allocateBones( object );
 		
 		ProgramParameters parameters = new ProgramParameters();
-		
-		parameters.precision = this.precision;
 		
 		parameters.gammaInput  = isGammaInput();
 		parameters.gammaOutput = isGammaOutput();

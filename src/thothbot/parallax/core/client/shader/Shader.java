@@ -46,6 +46,16 @@ import com.google.gwt.resources.client.TextResource;
  */
 public abstract class Shader
 {
+	/**
+	 * Sets the Shaders precision value.
+	 */
+	public static enum PRECISION 
+	{
+		HIGHP,
+		MEDIUMP,
+		LOWP
+	}
+	
 	public interface DefaultResources extends ClientBundle
 	{
 		@Source("source/default.vs")
@@ -86,6 +96,9 @@ public abstract class Shader
 			return "#define " + this.name() + " " + param;
 		}
 	}
+
+	// shader precision. Can be "highp", "mediump" or "lowp".
+	private PRECISION precision = PRECISION.HIGHP;
 
 	private WebGLProgram program;
 
@@ -357,13 +370,14 @@ public abstract class Shader
 		return values;
 	}
 	
-
-	private String getPrecision(ProgramParameters parameters)
-	{
-		String precision = parameters.precision.name().toLowerCase();
-		return "precision " + precision + " float;";
+	public void setPrecision(Shader.PRECISION precision) {
+		this.precision = precision;
 	}
 
+	private String getShaderPrecisionDefinition()
+	{
+		return "precision " + precision.name().toLowerCase() + " float;";
+	}
 
 	/**
 	 * Initializes this shader with the given vertex shader source and fragment
@@ -428,7 +442,7 @@ public abstract class Shader
 	{
 		Log.debug("Called getPrefixVertex()");
 		List<String> options = new ArrayList<String>();
-		options.add(getPrecision(parameters));
+		options.add(getShaderPrecisionDefinition());
 
 		if (parameters.maxVertexTextures > 0)
 			options.add(SHADER_DEFINE.VERTEX_TEXTURES.getValue());
@@ -502,7 +516,7 @@ public abstract class Shader
 	{
 		Log.debug("Called getPrefixFragment()");
 		List<String> options = new ArrayList<String>();
-		options.add(getPrecision(parameters));
+		options.add(getShaderPrecisionDefinition());
 
 		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
 		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
