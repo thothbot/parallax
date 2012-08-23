@@ -323,6 +323,30 @@ public abstract class Material
 
 	public Shader buildShader(WebGLRenderingContext gl, ProgramParameters parameters)
 	{
+		parameters.map      = (this instanceof HasMap && ((HasMap)this).getMap() != null);
+		parameters.envMap   = (this instanceof HasEnvMap && ((HasEnvMap)this).getEnvMap() != null);
+		parameters.lightMap = (this instanceof HasLightMap &&  ((HasLightMap)this).getLightMap() != null);
+
+		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
+
+		parameters.sizeAttenuation = this instanceof ParticleBasicMaterial && ((ParticleBasicMaterial)this).isSizeAttenuation();
+
+		if(this instanceof HasSkinning)
+		{
+			parameters.skinning     = ((HasSkinning)this).isSkinning();
+			parameters.morphTargets = ((HasSkinning)this).isMorphTargets();
+			parameters.morphNormals = ((HasSkinning)this).isMorphNormals();
+		}
+
+		parameters.alphaTest = getAlphaTest();
+		if(this instanceof MeshPhongMaterial)
+		{
+			parameters.metal = ((MeshPhongMaterial)this).isMetal();
+			parameters.perPixel = ((MeshPhongMaterial)this).isPerPixel();
+		}
+
+		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
+		
 		Shader shader = getShader();
 
 		// Sets material prefixes

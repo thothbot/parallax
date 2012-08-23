@@ -1777,23 +1777,8 @@ public class WebGLRenderer
 		parameters.physicallyBasedShading = isPhysicallyBasedShading();
 		parameters.maxVertexTextures = this.GPUmaxVertexTextures;
 		
-		parameters.map      = (material instanceof HasMap && ((HasMap)material).getMap() != null);
-		parameters.envMap   = (material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null);
-		parameters.lightMap = (material instanceof HasLightMap &&  ((HasLightMap)material).getLightMap() != null);
-
-		parameters.vertexColors = (material instanceof HasVertexColors && ((HasVertexColors)material).isVertexColors() != Material.COLORS.NO);
-
 		parameters.useFog  = (fog != null);
 		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
-
-		parameters.sizeAttenuation = material instanceof ParticleBasicMaterial && ((ParticleBasicMaterial)material).isSizeAttenuation();
-
-		if(material instanceof HasSkinning)
-		{
-			parameters.skinning     = ((HasSkinning)material).isSkinning();
-			parameters.morphTargets = ((HasSkinning)material).isMorphTargets();
-			parameters.morphNormals = ((HasSkinning)material).isMorphNormals();
-		}
 
 		parameters.maxBones = maxBones;
 		
@@ -1810,15 +1795,6 @@ public class WebGLRenderer
 		parameters.shadowMapSoft    = this.isShadowMapSoft;
 		parameters.shadowMapDebug   = this.isShadowMapDebug;
 		parameters.shadowMapCascade = this.isShadowMapCascade;
-
-		parameters.alphaTest = material.getAlphaTest();
-		if(material instanceof MeshPhongMaterial)
-		{
-			parameters.metal = ((MeshPhongMaterial)material).isMetal();
-			parameters.perPixel = ((MeshPhongMaterial)material).isPerPixel();
-		}
-		
-		parameters.wrapAround = material instanceof HasWrap && ((HasWrap)material).isWrapAround();
 
 		parameters.doubleSided = object instanceof HasSides && ((HasSides)object).isDoubleSided();
 
