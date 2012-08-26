@@ -17,7 +17,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.renderers.plugins;
+package thothbot.parallax.plugin.sprite;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,7 +36,6 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.ShaderSprite;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.FastMap;
-import thothbot.parallax.core.shared.objects.Sprite;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.core.client.GWT;

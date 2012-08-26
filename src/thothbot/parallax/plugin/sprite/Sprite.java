@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.shared.objects;
+package thothbot.parallax.plugin.sprite;
 
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
@@ -30,6 +30,7 @@ import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.objects.Object3D;
 
 public class Sprite extends Object3D implements Comparable<Sprite>
 {

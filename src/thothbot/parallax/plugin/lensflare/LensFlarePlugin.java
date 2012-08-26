@@ -17,7 +17,7 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.renderers.plugins;
+package thothbot.parallax.plugin.lensflare;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +39,6 @@ import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.objects.LensFlare;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.core.client.GWT;
