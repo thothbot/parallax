@@ -20,25 +20,20 @@
 package thothbot.parallax.plugin.sprite;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
-import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.shader.ShaderSprite;
+import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.scenes.Scene;
-
-import com.google.gwt.core.client.GWT;
+import thothbot.parallax.plugin.sprite.shader.ShaderSprite;
 
 public final class SpritePlugin extends Plugin 
 {
@@ -50,9 +45,7 @@ public final class SpritePlugin extends Plugin
 		WebGLBuffer vertexBuffer;
 		WebGLBuffer elementBuffer;
 		
-		WebGLProgram program;
-		Map<String, Integer> attributes;
-		Map<String, WebGLUniformLocation> uniforms;
+		ShaderSprite shader;
 		
 		boolean attributesEnabled;
 	}
@@ -98,34 +91,8 @@ public final class SpritePlugin extends Plugin
 		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
 		gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.faces, GLenum.STATIC_DRAW.getValue() );
 
-		sprite.program = createProgram( new ShaderSprite() );
-
-		sprite.attributes = GWT.isScript() ? 
-				new FastMap<Integer>() : new HashMap<String, Integer>();
-		sprite.uniforms = GWT.isScript() ? 
-				new FastMap<WebGLUniformLocation>() : new HashMap<String, WebGLUniformLocation>();
-
-		sprite.attributes.put("position", gl.getAttribLocation ( sprite.program, "position" ));
-		sprite.attributes.put("uv", gl.getAttribLocation ( sprite.program, "uv" ));
-
-		sprite.uniforms.put("uvOffset", gl.getUniformLocation( sprite.program, "uvOffset" ));
-		sprite.uniforms.put("uvScale", gl.getUniformLocation( sprite.program, "uvScale" ));
-
-		sprite.uniforms.put("rotation", gl.getUniformLocation( sprite.program, "rotation" ));
-		sprite.uniforms.put("scale", gl.getUniformLocation( sprite.program, "scale" ));
-		sprite.uniforms.put("alignment", gl.getUniformLocation( sprite.program, "alignment" ));
-
-		sprite.uniforms.put("color", gl.getUniformLocation( sprite.program, "color" ));
-		sprite.uniforms.put("map", gl.getUniformLocation( sprite.program, "map" ));
-		sprite.uniforms.put("opacity", gl.getUniformLocation( sprite.program, "opacity" ));
-
-		sprite.uniforms.put("useScreenCoordinates", gl.getUniformLocation( sprite.program, "useScreenCoordinates" ));
-		sprite.uniforms.put("affectedByDistance", gl.getUniformLocation( sprite.program, "affectedByDistance" ));
-		sprite.uniforms.put("screenPosition", gl.getUniformLocation( sprite.program, "screenPosition" ));
-		sprite.uniforms.put("modelViewMatrix", gl.getUniformLocation( sprite.program, "modelViewMatrix" ));
-		sprite.uniforms.put("projectionMatrix", gl.getUniformLocation( sprite.program, "projectionMatrix" ));
-
-		sprite.attributesEnabled = false;
+		sprite.shader = new ShaderSprite();
+		sprite.shader.buildProgram(gl);
 	}
 
 	@Override
@@ -138,8 +105,8 @@ public final class SpritePlugin extends Plugin
 
 		WebGLRenderingContext gl = this.renderer.getGL();
 
-		Map<String, WebGLUniformLocation> uniforms = this.sprite.uniforms;
-		Map<String, Integer> attributes = this.sprite.attributes;
+		Map<String, Uniform> uniforms = this.sprite.shader.getUniforms();
+		Map<String, Integer> attributesLocations = this.sprite.shader.getAttributesLocations();
 
 		double invAspect = (double)viewportHeight / viewportWidth;
 
@@ -150,12 +117,12 @@ public final class SpritePlugin extends Plugin
 
 		// setup gl
 
-		gl.useProgram( sprite.program );
+		gl.useProgram( this.sprite.shader.getProgram() );
 
 		if ( ! sprite.attributesEnabled ) 
 		{
-			gl.enableVertexAttribArray( sprite.attributes.get("position") );
-			gl.enableVertexAttribArray( sprite.attributes.get("uv") );
+			gl.enableVertexAttribArray( attributesLocations.get("position") );
+			gl.enableVertexAttribArray( attributesLocations.get("uv") );
 
 			sprite.attributesEnabled = true;
 		}
@@ -165,15 +132,15 @@ public final class SpritePlugin extends Plugin
 		gl.depthMask( true );
 
 		gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), sprite.vertexBuffer );
-		gl.vertexAttribPointer( attributes.get("position"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 0 );
-		gl.vertexAttribPointer( attributes.get("uv"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 8 );
+		gl.vertexAttribPointer( attributesLocations.get("position"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 0 );
+		gl.vertexAttribPointer( attributesLocations.get("uv"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 8 );
 
 		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
 
-		gl.uniformMatrix4fv( uniforms.get("projectionMatrix"), false, camera._projectionMatrixArray );
+		gl.uniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
 
 		gl.activeTexture( GLenum.TEXTURE0.getValue() );
-		gl.uniform1i( uniforms.get("map"), 0 );
+		gl.uniform1i( uniforms.get("map").getLocation(), 0 );
 
 		// update positions and sort
 
@@ -209,16 +176,16 @@ public final class SpritePlugin extends Plugin
 
 				if ( sprite.isUseScreenCoordinates() ) 
 				{
-					gl.uniform1i( uniforms.get("useScreenCoordinates"), 1 );
-					gl.uniform3f( uniforms.get("screenPosition"), ( sprite.getPosition().getX() - halfViewportWidth  ) / halfViewportWidth,
+					gl.uniform1i( uniforms.get("useScreenCoordinates").getLocation(), 1 );
+					gl.uniform3f( uniforms.get("screenPosition").getLocation(), ( sprite.getPosition().getX() - halfViewportWidth  ) / halfViewportWidth,
 							( halfViewportHeight - sprite.getPosition().getY() ) / halfViewportHeight,
 							Math.max( 0, Math.min( 1, sprite.getPosition().getZ() ) ) );
 				} 
 				else 
 				{
-					gl.uniform1i( uniforms.get("useScreenCoordinates"), 0 );
-					gl.uniform1i( uniforms.get("affectedByDistance"), sprite.isAffectedByDistance() ? 1 : 0 );
-					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix"), false, sprite._modelViewMatrix.getArray());
+					gl.uniform1i( uniforms.get("useScreenCoordinates").getLocation(), 0 );
+					gl.uniform1i( uniforms.get("affectedByDistance").getLocation(), sprite.isAffectedByDistance() ? 1 : 0 );
+					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, sprite._modelViewMatrix.getArray());
 				}
 
 				double size = sprite.getMap().getImage().getOffsetWidth() / ( sprite.isScaleByViewport() ? viewportHeight : 1.0 );
@@ -227,15 +194,15 @@ public final class SpritePlugin extends Plugin
 						size * invAspect * sprite.getScale().getX(),
 						size * sprite.getScale().getY() };
 
-				gl.uniform2f( uniforms.get("uvScale"), sprite.getUvScale().getX(), sprite.getUvScale().getY() );
-				gl.uniform2f( uniforms.get("uvOffset"), sprite.getUvOffset().getX(), sprite.getUvOffset().getY() );
-				gl.uniform2f( uniforms.get("alignment"), sprite.getAlignment().get().getX(), sprite.getAlignment().get().getY() );
+				gl.uniform2f( uniforms.get("uvScale").getLocation(), sprite.getUvScale().getX(), sprite.getUvScale().getY() );
+				gl.uniform2f( uniforms.get("uvOffset").getLocation(), sprite.getUvOffset().getX(), sprite.getUvOffset().getY() );
+				gl.uniform2f( uniforms.get("alignment").getLocation(), sprite.getAlignment().get().getX(), sprite.getAlignment().get().getY() );
 
-				gl.uniform1f( uniforms.get("opacity"), sprite.getOpacity() );
-				gl.uniform3f( uniforms.get("color"), sprite.getColor().getR(), sprite.getColor().getG(), sprite.getColor().getB() );
+				gl.uniform1f( uniforms.get("opacity").getLocation(), sprite.getOpacity() );
+				gl.uniform3f( uniforms.get("color").getLocation(), sprite.getColor().getR(), sprite.getColor().getG(), sprite.getColor().getB() );
 
-				gl.uniform1f( uniforms.get("rotation"), sprite.getRotationFactor() );
-				gl.uniform2fv( uniforms.get("scale"), scale );
+				gl.uniform1f( uniforms.get("rotation").getLocation(), sprite.getRotationFactor() );
+				gl.uniform2fv( uniforms.get("scale").getLocation(), scale );
 
 				if ( sprite.isMergeWith3D() && !mergeWith3D ) 
 				{

@@ -17,12 +17,12 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.shader;
+package thothbot.parallax.plugin.lensflare.shader;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
-public final class ShaderLensFlareVertexTexture extends Shader 
+public final class ShaderLensFlareVertexTexture extends ShaderLensFlare 
 {
 	interface Resources extends DefaultResources
 	{

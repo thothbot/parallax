@@ -19,29 +19,24 @@
 
 package thothbot.parallax.plugin.lensflare;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
-import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
-import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.shader.ShaderLensFlare;
-import thothbot.parallax.core.client.shader.ShaderLensFlareVertexTexture;
+import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.scenes.Scene;
-
-import com.google.gwt.core.client.GWT;
+import thothbot.parallax.plugin.lensflare.shader.ShaderLensFlare;
+import thothbot.parallax.plugin.lensflare.shader.ShaderLensFlareVertexTexture;
 
 public final class LensFlarePlugin extends Plugin
 {
@@ -56,9 +51,10 @@ public final class LensFlarePlugin extends Plugin
 		WebGLTexture tempTexture;
 		WebGLTexture occlusionTexture;
 		
-		WebGLProgram program;
-		Map<String, Integer> attributes;
-		Map<String, WebGLUniformLocation> uniforms;
+		ShaderLensFlare shader;
+//		WebGLProgram program;
+//		Map<String, Integer> attributes;
+//		Map<String, WebGLUniformLocation> uniforms;
 		
 		boolean hasVertexTexture;
 		boolean attributesEnabled;
@@ -128,30 +124,13 @@ public final class LensFlarePlugin extends Plugin
 		if ( gl.getParameteri( GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue() ) <= 0 ) 
 		{
 			lensFlare.hasVertexTexture = false;
-			lensFlare.program = createProgram( new ShaderLensFlare() );
+			lensFlare.shader = new ShaderLensFlare();
 		} 
 		else 
 		{
 			lensFlare.hasVertexTexture = true;
-			lensFlare.program = createProgram( new ShaderLensFlareVertexTexture() );
+			lensFlare.shader = new ShaderLensFlareVertexTexture();
 		}
-
-		lensFlare.attributes = GWT.isScript() ? 
-				new FastMap<Integer>() : new HashMap<String, Integer>();
-		lensFlare.uniforms = GWT.isScript() ? 
-				new FastMap<WebGLUniformLocation>() : new HashMap<String, WebGLUniformLocation>();
-
-		lensFlare.attributes.put("vertex", gl.getAttribLocation ( lensFlare.program, "position" ) );
-		lensFlare.attributes.put("uv",     gl.getAttribLocation ( lensFlare.program, "uv" ) );
-
-		lensFlare.uniforms.put("renderType", gl.getUniformLocation( lensFlare.program, "renderType" ) );
-		lensFlare.uniforms.put("map",        gl.getUniformLocation( lensFlare.program, "map" ) );
-		lensFlare.uniforms.put("occlusionMap", gl.getUniformLocation( lensFlare.program, "occlusionMap" ) );
-		lensFlare.uniforms.put("opacity",    gl.getUniformLocation( lensFlare.program, "opacity" ) );
-		lensFlare.uniforms.put("color",      gl.getUniformLocation( lensFlare.program, "color" ) );
-		lensFlare.uniforms.put("scale",      gl.getUniformLocation( lensFlare.program, "scale" ) );
-		lensFlare.uniforms.put("rotation",   gl.getUniformLocation( lensFlare.program, "rotation" ) );
-		lensFlare.uniforms.put("screenPosition", gl.getUniformLocation( lensFlare.program, "screenPosition" ) );
 
 		lensFlare.attributesEnabled = false;
 	}
@@ -187,17 +166,17 @@ public final class LensFlarePlugin extends Plugin
 		Vector3 screenPosition = new Vector3( 1, 1, 0 );
 		Vector2 screenPositionPixels = new Vector2( 1, 1 );
 
-		Map<String, WebGLUniformLocation> uniforms = this.lensFlare.uniforms;
-		Map<String, Integer> attributes = this.lensFlare.attributes;
+		Map<String, Uniform> uniforms = this.lensFlare.shader.getUniforms();
+		Map<String, Integer> attributesLocation = this.lensFlare.shader.getAttributesLocations();
 
 		// set _lensFlare program and reset blending
 
-		gl.useProgram( lensFlare.program );
+		gl.useProgram( lensFlare.shader.getProgram() );
 
 		if ( ! lensFlare.attributesEnabled ) 
 		{
-			gl.enableVertexAttribArray( lensFlare.attributes.get("vertex") );
-			gl.enableVertexAttribArray( lensFlare.attributes.get("uv") );
+			gl.enableVertexAttribArray( attributesLocation.get("vertex") );
+			gl.enableVertexAttribArray( attributesLocation.get("uv") );
 
 			lensFlare.attributesEnabled = true;
 		}
@@ -205,12 +184,12 @@ public final class LensFlarePlugin extends Plugin
 		// loop through all lens flares to update their occlusion and positions
 		// setup gl and common used attribs/unforms
 
-		gl.uniform1i( uniforms.get("occlusionMap"), 0 );
-		gl.uniform1i( uniforms.get("map"), 1 );
+		gl.uniform1i( uniforms.get("occlusionMap").getLocation(), 0 );
+		gl.uniform1i( uniforms.get("map").getLocation(), 1 );
 
 		gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), lensFlare.vertexBuffer );
-		gl.vertexAttribPointer( attributes.get("vertex"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 0 );
-		gl.vertexAttribPointer( attributes.get("uv"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 8 );
+		gl.vertexAttribPointer( attributesLocation.get("vertex"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 0 );
+		gl.vertexAttribPointer( attributesLocation.get("uv"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 8 );
 
 		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
 
@@ -258,9 +237,9 @@ public final class LensFlarePlugin extends Plugin
 
 				// render pink quad
 
-				gl.uniform1i( uniforms.get("renderType"), 0 );
-				gl.uniform2f( uniforms.get("scale"), scale.getX(), scale.getY() );
-				gl.uniform3f( uniforms.get("screenPosition"), screenPosition.getX(), screenPosition.getY(), screenPosition.getZ() );
+				gl.uniform1i( uniforms.get("renderType").getLocation(), 0 );
+				gl.uniform2f( uniforms.get("scale").getLocation(), scale.getX(), scale.getY() );
+				gl.uniform3f( uniforms.get("screenPosition").getLocation(), screenPosition.getX(), screenPosition.getY(), screenPosition.getZ() );
 
 				gl.disable( GLenum.BLEND.getValue() );
 				gl.enable( GLenum.DEPTH_TEST.getValue() );
@@ -275,7 +254,7 @@ public final class LensFlarePlugin extends Plugin
 
 				// restore graphics
 
-				gl.uniform1i( uniforms.get("renderType"), 1 );
+				gl.uniform1i( uniforms.get("renderType").getLocation(), 1 );
 				gl.disable( GLenum.DEPTH_TEST.getValue() );
 
 				gl.activeTexture( GLenum.TEXTURE1.getValue() );
@@ -290,7 +269,7 @@ public final class LensFlarePlugin extends Plugin
 
 				// render flares
 
-				gl.uniform1i( uniforms.get("renderType"), 2 );
+				gl.uniform1i( uniforms.get("renderType").getLocation(), 2 );
 				gl.enable( GLenum.BLEND.getValue() );
 
 				for ( int j = 0, jl = flare.getLensFlares().size(); j < jl; j ++ ) 
@@ -308,12 +287,12 @@ public final class LensFlarePlugin extends Plugin
 						scale.setX( size * invAspect );
 						scale.setY( size );
 
-						gl.uniform3f( uniforms.get("screenPosition"), screenPosition.getX(), screenPosition.getY(), screenPosition.getZ() );
-						gl.uniform2f( uniforms.get("scale"), scale.getX(), scale.getY() );
-						gl.uniform1f( uniforms.get("rotation"), sprite.rotation );
+						gl.uniform3f( uniforms.get("screenPosition").getLocation(), screenPosition.getX(), screenPosition.getY(), screenPosition.getZ() );
+						gl.uniform2f( uniforms.get("scale").getLocation(), scale.getX(), scale.getY() );
+						gl.uniform1f( uniforms.get("rotation").getLocation(), sprite.rotation );
 
-						gl.uniform1f( uniforms.get("opacity"), sprite.opacity );
-						gl.uniform3f( uniforms.get("color"), sprite.color.getR(), sprite.color.getG(), sprite.color.getB() );
+						gl.uniform1f( uniforms.get("opacity").getLocation(), sprite.opacity );
+						gl.uniform3f( uniforms.get("color").getLocation(), sprite.color.getR(), sprite.color.getG(), sprite.color.getB() );
 
 //						renderer.setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
 						renderer.setBlending( sprite.blending );

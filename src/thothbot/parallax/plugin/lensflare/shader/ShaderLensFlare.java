@@ -17,12 +17,18 @@
  * Squirrel. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.shader;
+package thothbot.parallax.plugin.lensflare.shader;
+
+import thothbot.parallax.core.client.shader.Shader;
+import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
-public final class ShaderLensFlare extends Shader 
+public class ShaderLensFlare extends Shader 
 {
 	interface Resources extends DefaultResources
 	{
@@ -37,11 +43,25 @@ public final class ShaderLensFlare extends Shader
 
 	public ShaderLensFlare() 
 	{
-		super(Resources.INSTANCE);
+		this(Resources.INSTANCE);
+	}
+	
+	public ShaderLensFlare(DefaultResources resource) 
+	{
+		super(resource);
 	}
 
 	@Override
 	protected void initUniforms()
 	{
+		this.addUniform("renderType", new Uniform(Uniform.TYPE.I,  1 ));
+		this.addUniform("map", new Uniform(Uniform.TYPE.T,  0 ) );
+		this.addUniform("occlusionMap", new Uniform(Uniform.TYPE.T,  1 ) );
+		
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 ) ));
+		this.addUniform("rotation", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("screenPosition", new Uniform(Uniform.TYPE.V3,  new Vector3( 0.0, 0.0, 0.0 ) ));
 	}
 }

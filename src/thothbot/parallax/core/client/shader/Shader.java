@@ -130,6 +130,11 @@ public abstract class Shader
 		return this.program;
 	}
 	
+	public Shader buildProgram(WebGLRenderingContext gl) 
+	{
+		return buildProgram(gl, 0, 0);
+	}
+	
 	public Shader buildProgram(WebGLRenderingContext gl, int maxMorphTargets, int maxMorphNormals) 
 	{
 		Log.debug("Building new program...");
