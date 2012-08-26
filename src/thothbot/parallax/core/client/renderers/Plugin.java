@@ -19,14 +19,41 @@
 
 package thothbot.parallax.core.client.renderers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.objects.DimensionalObject;
+import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 public abstract class Plugin 
 {
+	public enum TYPE {
+		PRE_RENDER,
+		POST_RENDER,
+	};
+
 	protected WebGLRenderer renderer;
+	protected Scene scene;
+	protected List<? extends DimensionalObject> objects;
+
+	public Plugin(WebGLRenderer renderer, Scene scene) 
+	{
+		this.renderer = renderer;
+		this.scene = scene;
+		renderer.addPlugin(this);
+	}
+
+	public Scene getScene() {
+		return this.scene;
+	}
+
+	public abstract Plugin.TYPE getType();
 
 	public abstract void init(WebGLRenderer webGLRenderer);
+
+	public abstract List<? extends Object3D> getObjects();
 
 	public abstract void render( Scene scene, Camera camera, int currentWidth, int currentHeight );
 }

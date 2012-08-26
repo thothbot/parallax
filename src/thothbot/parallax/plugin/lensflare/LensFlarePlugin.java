@@ -19,13 +19,10 @@
 
 package thothbot.parallax.plugin.lensflare;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.thirdparty.streamhtmlparser.HtmlParser.ATTR_TYPE;
-import com.google.gwt.thirdparty.streamhtmlparser.HtmlParserFactory.AttributeOptions;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -37,17 +34,21 @@ import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.objects.DimensionalObject;
+import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugin.lensflare.shader.ShaderLensFlare;
 import thothbot.parallax.plugin.lensflare.shader.ShaderLensFlareVertexTexture;
 
+import com.google.gwt.core.client.GWT;
+
 public final class LensFlarePlugin extends Plugin
 {
+
 	public class LensFlareGeometry 
 	{
 		Float32Array vertices;
@@ -60,16 +61,35 @@ public final class LensFlarePlugin extends Plugin
 		WebGLTexture occlusionTexture;
 		
 		ShaderLensFlare shader;
-//		WebGLProgram program;
-//		Map<String, Integer> attributes;
-//		Map<String, WebGLUniformLocation> uniforms;
 		
 		boolean hasVertexTexture;
 		boolean attributesEnabled;
 	}
-	
+
 	private LensFlareGeometry lensFlare;
 	
+	public LensFlarePlugin(WebGLRenderer renderer, Scene scene) 
+	{
+		super(renderer, scene);
+	}
+	
+	@Override
+	public Plugin.TYPE getType()
+	{
+		return Plugin.TYPE.POST_RENDER;
+	}
+
+	@Override
+	public List<LensFlare> getObjects() 
+	{
+		if(this.objects == null)
+		{
+			this.objects = getScene().getChildrenByClass(LensFlare.class, true);
+		}
+		
+		return (List<LensFlare>)(ArrayList)this.objects;
+	}
+
 	@Override
 	public void init(WebGLRenderer webGLRenderer) 
 	{
@@ -77,7 +97,6 @@ public final class LensFlarePlugin extends Plugin
 		this.lensFlare = new LensFlareGeometry();
 		
 		WebGLRenderingContext gl = this.renderer.getGL();
-		
 
 		lensFlare.vertices = Float32Array.create( 8 + 8 );
 		lensFlare.faces = Uint16Array.create( 6 );
@@ -159,7 +178,7 @@ public final class LensFlarePlugin extends Plugin
 	@Override
 	public void render(Scene scene, Camera camera, int viewportWidth, int viewportHeight) 
 	{
-		List<LensFlare> flares = scene.__webglFlares;
+		List<LensFlare> flares = getObjects();
 		int nFlares = flares.size();
 
 		if ( nFlares == 0 ) return;

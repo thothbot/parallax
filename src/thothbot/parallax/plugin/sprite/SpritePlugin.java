@@ -19,6 +19,7 @@
 
 package thothbot.parallax.plugin.sprite;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,10 @@ import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.objects.DimensionalObject;
+import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
+import thothbot.parallax.plugin.lensflare.LensFlare;
 import thothbot.parallax.plugin.sprite.shader.ShaderSprite;
 
 public final class SpritePlugin extends Plugin 
@@ -52,6 +56,28 @@ public final class SpritePlugin extends Plugin
 	
 	private SpriteGeometry sprite;
 	
+	public SpritePlugin(WebGLRenderer renderer, Scene scene) 
+	{
+		super(renderer, scene);
+	}
+	
+	@Override
+	public Plugin.TYPE getType()
+	{
+		return Plugin.TYPE.POST_RENDER;
+	}
+	
+	@Override
+	public List<Sprite> getObjects() 
+	{
+		if(this.objects == null)
+		{
+			this.objects = getScene().getChildrenByClass(Sprite.class, true);
+		}
+		
+		return (List<Sprite>)(ArrayList)this.objects;
+	}
+
 	@Override
 	public void init(WebGLRenderer webGLRenderer) 
 	{
@@ -98,7 +124,7 @@ public final class SpritePlugin extends Plugin
 	@Override
 	public void render(Scene scene, Camera camera, int viewportWidth, int viewportHeight) 
 	{
-		List<Sprite> sprites = scene.__webglSprites;
+		List<Sprite> sprites = getObjects();
 		int nSprites = sprites.size();
 
 		if ( nSprites == 0 ) return;
@@ -161,7 +187,7 @@ public final class SpritePlugin extends Plugin
 			}
 		}
 
-		Collections.sort(sprites);
+		Collections.sort((List<Sprite>)(ArrayList)sprites);
 
 		// render all sprites
 
@@ -171,7 +197,9 @@ public final class SpritePlugin extends Plugin
 
 			if ( ! sprite.isVisible() || sprite.getOpacity() == 0 ) continue;
 
-			if ( sprite.getMap() != null && sprite.getMap().getImage() != null && sprite.getMap().getImage().getOffsetWidth() > 0 ) 
+			if ( sprite.getMap() != null 
+					&& sprite.getMap().getImage() != null 
+					&& sprite.getMap().getImage().getOffsetWidth() > 0 ) 
 			{
 
 				if ( sprite.isUseScreenCoordinates() ) 
@@ -188,7 +216,8 @@ public final class SpritePlugin extends Plugin
 					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, sprite._modelViewMatrix.getArray());
 				}
 
-				double size = sprite.getMap().getImage().getOffsetWidth() / ( sprite.isScaleByViewport() ? viewportHeight : 1.0 );
+				double size = sprite.getMap().getImage().getOffsetWidth() 
+						/ ( sprite.isScaleByViewport() ? viewportHeight : 1.0 );
 
 				double[] scale = { 
 						size * invAspect * sprite.getScale().getX(),
@@ -199,7 +228,10 @@ public final class SpritePlugin extends Plugin
 				gl.uniform2f( uniforms.get("alignment").getLocation(), sprite.getAlignment().get().getX(), sprite.getAlignment().get().getY() );
 
 				gl.uniform1f( uniforms.get("opacity").getLocation(), sprite.getOpacity() );
-				gl.uniform3f( uniforms.get("color").getLocation(), sprite.getColor().getR(), sprite.getColor().getG(), sprite.getColor().getB() );
+				gl.uniform3f( uniforms.get("color").getLocation(), 
+						sprite.getColor().getR(), 
+						sprite.getColor().getG(), 
+						sprite.getColor().getB() );
 
 				gl.uniform1f( uniforms.get("rotation").getLocation(), sprite.getRotationFactor() );
 				gl.uniform2fv( uniforms.get("scale").getLocation(), scale );

@@ -39,10 +39,10 @@ import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.client.shader.ProgramParameters;
 import thothbot.parallax.core.client.shader.Shader;
 import thothbot.parallax.core.client.shader.Uniform;
-import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.client.textures.CubeTexture;
 import thothbot.parallax.core.client.textures.DataTexture;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
@@ -68,17 +68,12 @@ import thothbot.parallax.core.shared.lights.PointLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
 import thothbot.parallax.core.shared.materials.HasEnvMap;
 import thothbot.parallax.core.shared.materials.HasFog;
-import thothbot.parallax.core.shared.materials.HasLightMap;
-import thothbot.parallax.core.shared.materials.HasMap;
 import thothbot.parallax.core.shared.materials.HasSkinning;
-import thothbot.parallax.core.shared.materials.HasVertexColors;
 import thothbot.parallax.core.shared.materials.HasWireframe;
-import thothbot.parallax.core.shared.materials.HasWrap;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
-import thothbot.parallax.core.shared.materials.ParticleBasicMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 import thothbot.parallax.core.shared.objects.HasSides;
@@ -92,10 +87,6 @@ import thothbot.parallax.core.shared.objects.WebGLObject;
 import thothbot.parallax.core.shared.scenes.Fog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugin.lensflare.LensFlare;
-import thothbot.parallax.plugin.lensflare.LensFlarePlugin;
-import thothbot.parallax.plugin.sprite.Sprite;
-import thothbot.parallax.plugin.sprite.SpritePlugin;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
@@ -243,24 +234,25 @@ public class WebGLRenderer
 		// default plugins (order is important)
 		this.renderPluginsPre = new ArrayList<Plugin>();
 		this.renderPluginsPost = new ArrayList<Plugin>();
-		
-//		this.shadowMapPlugin = new THREE.ShadowMapPlugin();
-//		this.addPrePlugin( this.shadowMapPlugin );
-	
-		addPostPlugin( new SpritePlugin() );
-		addPostPlugin( new LensFlarePlugin() );
-	}
-	
-	public void addPostPlugin( Plugin plugin ) 
-	{
-		plugin.init( this );
-		this.renderPluginsPost.add( plugin );
 	}
 
-	public void addPrePlugin( Plugin plugin ) 
+	public void addPlugin(Plugin plugin)
 	{
+		if(plugin.getType() == Plugin.TYPE.PRE_RENDER)
+		{
+			this.renderPluginsPre.add( plugin );
+		}
+		else if(plugin.getType() == Plugin.TYPE.POST_RENDER)
+		{
+			this.renderPluginsPost.add( plugin );
+		}
+		else
+		{
+			Log.error("Unknown plugin type: " + plugin.getType());
+			return;
+		}
+
 		plugin.init( this );
-		this.renderPluginsPre.add( plugin );
 	}
 
 	/**
@@ -1601,8 +1593,6 @@ public class WebGLRenderer
 		{
 			scene.__webglObjects = new ArrayList<WebGLObject>();
 			scene.__webglObjectsImmediate = new ArrayList<WebGLObject>();
-			scene.__webglSprites = new ArrayList<Sprite>();
-			scene.__webglFlares = new ArrayList<LensFlare>();
 		}
 
 		Log.debug("initWebGLObjects() objectsAdded=" + scene.getObjectsAdded().size() 
@@ -1679,22 +1669,11 @@ public class WebGLRenderer
 				Geometry geometry = ((GeometryObject)object).getGeometry();
 				addBuffer( scene.__webglObjects, geometry, (GeometryObject)object );
 			}
-
-			
 //		} else if ( object.getClass() instanceof THREE.ImmediateRenderObject || object.immediateRenderCallback ) {
 //
 //			addBufferImmediate( scene.__webglObjectsImmediate, object );
 //
 		} 
-		else if ( object.getClass() == Sprite.class ) 
-		{
-			scene.__webglSprites.add( (Sprite) object );
-
-		} 
-		else if ( object.getClass() == LensFlare.class ) 
-		{
-			scene.__webglFlares.add( (LensFlare) object );
-		}
 	}
 
 	private void addBuffer ( List<WebGLObject> objlist, GeometryBuffer buffer, GeometryObject object ) 
@@ -1723,20 +1702,6 @@ public class WebGLRenderer
 			for ( int o = scene.__webglObjects.size() - 1; o >= 0; o -- )
 				if ( scene.__webglObjects.get( o ).object == object )
 					scene.__webglObjects.remove(o);
-
-		} 
-		else if ( object.getClass() == Sprite.class ) 
-		{
-			for ( int o = scene.__webglSprites.size() - 1; o >= 0; o -- )
-				if ( scene.__webglSprites.get( o ) == object )
-					scene.__webglSprites.remove(o);
-
-		} 
-		else if ( object.getClass() == LensFlare.class ) 
-		{
-			for ( int o = scene.__webglFlares.size() - 1; o >= 0; o -- )
-				if ( scene.__webglFlares.get( o ) == object )
-					scene.__webglFlares.remove(o);
 
 //		} else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
 //			removeInstances( scene.__webglObjectsImmediate, object );

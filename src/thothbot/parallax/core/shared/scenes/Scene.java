@@ -75,11 +75,7 @@ public final class Scene extends Object3D
 	 */
 	private ArrayList<DimensionalObject> objectsRemoved;
 
-	/////////////////////////////////////////////
-	// TODO: Check
 	public Material overrideMaterial;
-	public List<Sprite> __webglSprites;
-	public List<LensFlare> __webglFlares;
 	public List<WebGLObject> __webglObjectsImmediate;
 	public List<WebGLObject> __webglObjects;
 	

@@ -484,11 +484,33 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
+	public List<? extends DimensionalObject> getChildrenByClass(Class clazz, boolean recursive)
+	{
+		List<DimensionalObject> retval = new ArrayList<DimensionalObject>();
+		
+		for (int c = 0, cl = this.children.size(); c < cl; c++) 
+		{
+			DimensionalObject child = this.children.get(c);
+
+			if (child.getClass() == clazz) 
+			{
+				retval.add(child);
+			}
+
+			if (recursive) 
+			{
+				retval.addAll(child.getChildrenByClass(clazz, recursive));
+			}
+		}
+
+		return retval;
+	}
+	
+	@Override
 	public DimensionalObject getChildByName(String name, boolean recursive)
 	{
 		for (int c = 0, cl = this.children.size(); c < cl; c++) 
 		{
-
 			DimensionalObject child = this.children.get(c);
 
 			if (child.getName().equals(name)) 
