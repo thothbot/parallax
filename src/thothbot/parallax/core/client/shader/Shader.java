@@ -317,6 +317,10 @@ public abstract class Shader
 	public void setAttributes(Map<String, Attribute> attributes) {
 		this.attributes = attributes;
 	}
+	
+	public void addAttributes(String id, Attribute attribute) {
+		this.attributes.put(id, attribute);
+	}
 
 	public boolean areCustomAttributesDirty() 
 	{

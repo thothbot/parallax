@@ -25,8 +25,8 @@ import thothbot.parallax.core.shared.scenes.Scene;
 public abstract class Plugin 
 {
 	protected WebGLRenderer renderer;
-	
+
 	public abstract void init(WebGLRenderer webGLRenderer);
-	
+
 	public abstract void render( Scene scene, Camera camera, int currentWidth, int currentHeight );
 }

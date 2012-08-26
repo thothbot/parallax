@@ -19,8 +19,13 @@
 
 package thothbot.parallax.plugin.lensflare;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.thirdparty.streamhtmlparser.HtmlParser.ATTR_TYPE;
+import com.google.gwt.thirdparty.streamhtmlparser.HtmlParserFactory.AttributeOptions;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -30,8 +35,11 @@ import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.shader.Attribute;
 import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -132,7 +140,11 @@ public final class LensFlarePlugin extends Plugin
 			lensFlare.shader = new ShaderLensFlareVertexTexture();
 		}
 
-		lensFlare.attributesEnabled = false;
+		Map<String, Attribute> attributes = GWT.isScript() ? 
+				new FastMap<Attribute>() : new HashMap<String, Attribute>();
+		attributes.put("vertex", new Attribute(Attribute.TYPE.V3, null));
+		lensFlare.shader.setAttributes(attributes);
+		lensFlare.shader.buildProgram(gl);
 	}
 
 

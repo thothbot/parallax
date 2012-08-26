@@ -39,9 +39,4 @@ public final class ShaderLensFlareVertexTexture extends ShaderLensFlare
 	{
 		super(Resources.INSTANCE);
 	}
-
-	@Override
-	protected void initUniforms()
-	{
-	}
 }
