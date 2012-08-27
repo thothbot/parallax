@@ -33,8 +33,8 @@ public class ClearMaskPass extends Pass
 	}
 
 	@Override
-	public void render(EffectComposer effectComposer, double delta, boolean maskActive ) 
+	public void render(Postprocessing postprocessing, double delta, boolean maskActive ) 
 	{
-		effectComposer.getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );
+		postprocessing.getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );
 	}
 }

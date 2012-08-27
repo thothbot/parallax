@@ -69,24 +69,24 @@ public class RenderPass extends Pass
 	}
 
 	@Override
-	public void render(EffectComposer effectComposer, double delta, boolean maskActive)
+	public void render(Postprocessing postprocessing, double delta, boolean maskActive)
 	{
 		this.scene.overrideMaterial = this.overrideMaterial;
 
 		if ( this.clearColor != null ) 
 		{
 
-			this.oldClearColor.copy( effectComposer.getRenderer().getClearColor() );
-			this.oldClearAlpha = effectComposer.getRenderer().getClearAlpha();
+			this.oldClearColor.copy( postprocessing.getRenderer().getClearColor() );
+			this.oldClearAlpha = postprocessing.getRenderer().getClearAlpha();
 
-			effectComposer.getRenderer().setClearColor( this.clearColor, this.clearAlpha );
+			postprocessing.getRenderer().setClearColor( this.clearColor, this.clearAlpha );
 
 		}
 
-		effectComposer.getRenderer().render( this.scene, this.camera, effectComposer.getReadBuffer(), this.clear );
+		postprocessing.getRenderer().render( this.scene, this.camera, postprocessing.getReadBuffer(), this.clear );
 
 		if ( this.clearColor != null)
-			effectComposer.getRenderer().setClearColor( this.oldClearColor, this.oldClearAlpha );
+			postprocessing.getRenderer().setClearColor( this.oldClearColor, this.oldClearAlpha );
 
 		this.scene.overrideMaterial = null;
 	}

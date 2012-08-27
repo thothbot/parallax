@@ -42,7 +42,7 @@ public class MaskPass extends Pass
 	}
 		
 	@Override
-	public void render (EffectComposer ecffectComposer, double delta, boolean maskActive) 
+	public void render (Postprocessing ecffectComposer, double delta, boolean maskActive) 
 	{
 		// don't update color or depth
 		ecffectComposer.getRenderer().getGL().colorMask( false, false, false, false );

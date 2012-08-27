@@ -93,38 +93,38 @@ public class BloomPass extends Pass
 	}
 
 	@Override
-	public void render(EffectComposer effectComposer, double delta, boolean maskActive)
+	public void render(Postprocessing postprocessing, double delta, boolean maskActive)
 	{
 		if ( maskActive ) 
-			effectComposer.getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );
+			postprocessing.getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );
 
 		// Render quad with blured scene into texture (convolution pass 1)
-		effectComposer.getQuad().setMaterial(this.materialConvolution);
+		postprocessing.getQuad().setMaterial(this.materialConvolution);
 
-		this.materialConvolution.getShader().getUniforms().get("tDiffuse" ).setTexture( effectComposer.getReadBuffer() );
+		this.materialConvolution.getShader().getUniforms().get("tDiffuse" ).setTexture( postprocessing.getReadBuffer() );
 		this.materialConvolution.getShader().getUniforms().get("uImageIncrement").setValue( BloomPass.blurX );
 
-		effectComposer.getRenderer().render( 
-				effectComposer.getScene(), effectComposer.getCamera(), this.renderTargetX, true );
+		postprocessing.getRenderer().render( 
+				postprocessing.getScene(), postprocessing.getCamera(), this.renderTargetX, true );
 
 
 		// Render quad with blured scene into texture (convolution pass 2)
 		this.materialConvolution.getShader().getUniforms().get("tDiffuse").setTexture( this.renderTargetX );
 		this.materialConvolution.getShader().getUniforms().get("uImageIncrement").setValue( BloomPass.blurY );
 
-		effectComposer.getRenderer().render( 
-				effectComposer.getScene(), effectComposer.getCamera(), this.renderTargetY, true );
+		postprocessing.getRenderer().render( 
+				postprocessing.getScene(), postprocessing.getCamera(), this.renderTargetY, true );
 
 		// Render original scene with superimposed blur to texture
-		effectComposer.getQuad().setMaterial(this.materialScreen);
+		postprocessing.getQuad().setMaterial(this.materialScreen);
 
 		this.materialScreen.getShader().getUniforms().get("tDiffuse").setTexture( this.renderTargetY );
 
 		if ( maskActive ) 
-			effectComposer.getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );
+			postprocessing.getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );
 
-		effectComposer.getRenderer().render( 
-				effectComposer.getScene(), effectComposer.getCamera(), effectComposer.getReadBuffer(), this.clear );
+		postprocessing.getRenderer().render( 
+				postprocessing.getScene(), postprocessing.getCamera(), postprocessing.getReadBuffer(), this.clear );
 	}
 
 }

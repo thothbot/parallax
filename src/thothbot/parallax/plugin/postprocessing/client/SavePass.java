@@ -59,15 +59,15 @@ public class SavePass extends Pass
 		this.setNeedsSwap(false);
 	}
 	@Override
-	public void render(EffectComposer effectComposer, double delta, boolean maskActive)
+	public void render(Postprocessing postprocessing, double delta, boolean maskActive)
 	{
 		if ( this.material.getShader().getUniforms().containsKey(this.textureID))
-			this.material.getShader().getUniforms().get("this.textureID").setTexture( effectComposer.getReadBuffer() );
+			this.material.getShader().getUniforms().get("this.textureID").setTexture( postprocessing.getReadBuffer() );
 
-		effectComposer.getQuad().setMaterial(this.material);
+		postprocessing.getQuad().setMaterial(this.material);
 
-		effectComposer.getRenderer().render( 
-				effectComposer.getScene(), effectComposer.getCamera(), this.renderTarget, this.clear );
+		postprocessing.getRenderer().render( 
+				postprocessing.getScene(), postprocessing.getCamera(), this.renderTarget, this.clear );
 
 	}
 

@@ -63,18 +63,18 @@ public class ShaderPass extends Pass
 	}
 	
 	@Override
-	public void render( EffectComposer effectComposer, double delta, boolean maskActive) 
+	public void render( Postprocessing postprocessing, double delta, boolean maskActive) 
 	{
 		if ( getUniforms().containsKey(this.textureID))
-			getUniforms().get( this.textureID ).setTexture( effectComposer.getReadBuffer() );
+			getUniforms().get( this.textureID ).setTexture( postprocessing.getReadBuffer() );
 
-		effectComposer.getQuad().setMaterial(this.material);
+		postprocessing.getQuad().setMaterial(this.material);
 
 		if ( this.isRenderToScreen )
-			effectComposer.getRenderer().render( 
-				effectComposer.getScene(), effectComposer.getCamera() );
+			postprocessing.getRenderer().render( 
+				postprocessing.getScene(), postprocessing.getCamera() );
 		else
-			effectComposer.getRenderer().render( 
-				effectComposer.getScene(), effectComposer.getCamera(), effectComposer.getWriteBuffer(), this.isClear );
+			postprocessing.getRenderer().render( 
+				postprocessing.getScene(), postprocessing.getCamera(), postprocessing.getWriteBuffer(), this.isClear );
 	}
 }

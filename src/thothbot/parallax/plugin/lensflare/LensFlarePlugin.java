@@ -38,8 +38,6 @@ import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.objects.DimensionalObject;
-import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugin.lensflare.shader.ShaderLensFlare;
 import thothbot.parallax.plugin.lensflare.shader.ShaderLensFlareVertexTexture;
@@ -67,36 +65,15 @@ public final class LensFlarePlugin extends Plugin
 	}
 
 	private LensFlareGeometry lensFlare;
+	private List<LensFlare> objects;
 	
 	public LensFlarePlugin(WebGLRenderer renderer, Scene scene) 
 	{
 		super(renderer, scene);
-	}
-	
-	@Override
-	public Plugin.TYPE getType()
-	{
-		return Plugin.TYPE.POST_RENDER;
-	}
-
-	@Override
-	public List<LensFlare> getObjects() 
-	{
-		if(this.objects == null)
-		{
-			this.objects = getScene().getChildrenByClass(LensFlare.class, true);
-		}
 		
-		return (List<LensFlare>)(ArrayList)this.objects;
-	}
-
-	@Override
-	public void init(WebGLRenderer webGLRenderer) 
-	{
-		this.renderer = webGLRenderer;
 		this.lensFlare = new LensFlareGeometry();
 		
-		WebGLRenderingContext gl = this.renderer.getGL();
+		WebGLRenderingContext gl = getRenderer().getGL();
 
 		lensFlare.vertices = Float32Array.create( 8 + 8 );
 		lensFlare.faces = Uint16Array.create( 6 );
@@ -165,7 +142,22 @@ public final class LensFlarePlugin extends Plugin
 		lensFlare.shader.setAttributes(attributes);
 		lensFlare.shader.buildProgram(gl);
 	}
+	
+	@Override
+	public Plugin.TYPE getType()
+	{
+		return Plugin.TYPE.POST_RENDER;
+	}
 
+	public List<LensFlare> getObjects() 
+	{
+		if(this.objects == null)
+		{
+			this.objects = (List<LensFlare>)(ArrayList)getScene().getChildrenByClass(LensFlare.class, true);
+		}
+		
+		return (List<LensFlare>)(ArrayList)this.objects;
+	}
 
 	/**
 	 * Render lens flares
@@ -183,7 +175,7 @@ public final class LensFlarePlugin extends Plugin
 
 		if ( nFlares == 0 ) return;
 
-		WebGLRenderingContext gl = this.renderer.getGL();
+		WebGLRenderingContext gl = getRenderer().getGL();
 
 		Vector3 tempPosition = new Vector3();
 
@@ -326,8 +318,8 @@ public final class LensFlarePlugin extends Plugin
 						gl.uniform3f( uniforms.get("color").getLocation(), sprite.color.getR(), sprite.color.getG(), sprite.color.getB() );
 
 //						renderer.setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
-						renderer.setBlending( sprite.blending );
-						renderer.setTexture( sprite.texture, 1 );
+						getRenderer().setBlending( sprite.blending );
+						getRenderer().setTexture( sprite.texture, 1 );
 
 						gl.drawElements( GLenum.TRIANGLES.getValue(), 6, GLenum.UNSIGNED_SHORT.getValue(), 0 );
 					}

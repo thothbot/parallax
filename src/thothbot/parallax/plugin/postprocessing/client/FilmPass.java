@@ -44,7 +44,7 @@ public class FilmPass extends Pass
 	}
 	
 	@Override
-	public void render(EffectComposer effectCocmposer, double delta, boolean maskActive)
+	public void render(Postprocessing effectCocmposer, double delta, boolean maskActive)
 	{
 		this.material.getShader().getUniforms().get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
 		this.material.getShader().getUniforms().get( "time" ).setValue( (Double)this.material.getShader().getUniforms().get( "time" ).getValue() + delta );

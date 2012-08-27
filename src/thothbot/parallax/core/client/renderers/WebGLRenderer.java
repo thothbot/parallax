@@ -251,8 +251,6 @@ public class WebGLRenderer
 			Log.error("Unknown plugin type: " + plugin.getType());
 			return;
 		}
-
-		plugin.init( this );
 	}
 
 	/**

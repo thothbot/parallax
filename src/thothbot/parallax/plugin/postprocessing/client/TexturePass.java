@@ -46,11 +46,11 @@ public class TexturePass extends Pass
 	}
 
 	@Override
-	public void render(EffectComposer effectComposer, double delta, boolean maskActive)
+	public void render(Postprocessing postprocessing, double delta, boolean maskActive)
 	{
-		effectComposer.getQuad().setMaterial(this.material);
+		postprocessing.getQuad().setMaterial(this.material);
 
-		effectComposer.getRenderer().render( 
-				effectComposer.getScene(), effectComposer.getCamera(), effectComposer.getReadBuffer(), false );
+		postprocessing.getRenderer().render( 
+				postprocessing.getScene(), postprocessing.getCamera(), postprocessing.getReadBuffer(), false );
 	}
 }

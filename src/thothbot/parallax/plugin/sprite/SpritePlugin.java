@@ -33,10 +33,7 @@ import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.objects.DimensionalObject;
-import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugin.lensflare.LensFlare;
 import thothbot.parallax.plugin.sprite.shader.ShaderSprite;
 
 public final class SpritePlugin extends Plugin 
@@ -55,36 +52,15 @@ public final class SpritePlugin extends Plugin
 	}
 	
 	private SpriteGeometry sprite;
+	private List<Sprite> objects;
 	
 	public SpritePlugin(WebGLRenderer renderer, Scene scene) 
 	{
 		super(renderer, scene);
-	}
-	
-	@Override
-	public Plugin.TYPE getType()
-	{
-		return Plugin.TYPE.POST_RENDER;
-	}
-	
-	@Override
-	public List<Sprite> getObjects() 
-	{
-		if(this.objects == null)
-		{
-			this.objects = getScene().getChildrenByClass(Sprite.class, true);
-		}
 		
-		return (List<Sprite>)(ArrayList)this.objects;
-	}
-
-	@Override
-	public void init(WebGLRenderer webGLRenderer) 
-	{
-		this.renderer = webGLRenderer;
 		this.sprite = new SpriteGeometry();
 		
-		WebGLRenderingContext gl = this.renderer.getGL();
+		WebGLRenderingContext gl = getRenderer().getGL();
 		
 		sprite.vertices = Float32Array.create( 8 + 8 );
 		sprite.faces = Uint16Array.create( 6 );
@@ -120,6 +96,22 @@ public final class SpritePlugin extends Plugin
 		sprite.shader = new ShaderSprite();
 		sprite.shader.buildProgram(gl);
 	}
+	
+	@Override
+	public Plugin.TYPE getType()
+	{
+		return Plugin.TYPE.POST_RENDER;
+	}
+	
+	public List<Sprite> getObjects() 
+	{
+		if(this.objects == null)
+		{
+			this.objects = (List<Sprite>)(ArrayList)getScene().getChildrenByClass(Sprite.class, true);
+		}
+		
+		return this.objects;
+	}
 
 	@Override
 	public void render(Scene scene, Camera camera, int viewportWidth, int viewportHeight) 
@@ -129,7 +121,7 @@ public final class SpritePlugin extends Plugin
 
 		if ( nSprites == 0 ) return;
 
-		WebGLRenderingContext gl = this.renderer.getGL();
+		WebGLRenderingContext gl = getRenderer().getGL();
 
 		Map<String, Uniform> uniforms = this.sprite.shader.getUniforms();
 		Map<String, Integer> attributesLocations = this.sprite.shader.getAttributesLocations();
@@ -248,8 +240,8 @@ public final class SpritePlugin extends Plugin
 				}
 
 				//	renderer.setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
-				renderer.setBlending( sprite.getBlending() );
-				renderer.setTexture( sprite.getMap(), 0 );
+				getRenderer().setBlending( sprite.getBlending() );
+				getRenderer().setTexture( sprite.getMap(), 0 );
 
 				gl.drawElements( GLenum.TRIANGLES.getValue(), 6, GLenum.UNSIGNED_SHORT.getValue(), 0 );
 			}
