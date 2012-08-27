@@ -58,7 +58,6 @@ public class Postprocessing extends Plugin
 	private OrthographicCamera camera;
 	
 	// shared fullscreen quad scene
-	private Scene scene;
 	private Plane geometry;
 	private Mesh quad;
 
@@ -78,8 +77,8 @@ public class Postprocessing extends Plugin
 		
 	public Postprocessing( WebGLRenderer renderer, Scene scene, RenderTargetTexture renderTarget ) 
 	{
-		super(renderer, scene);
-		
+		super(renderer, new Scene());
+
 		this.renderTarget1 = renderTarget;
 		this.renderTarget2 = this.renderTarget1.clone();
 
@@ -100,15 +99,14 @@ public class Postprocessing extends Plugin
 		
 		this.geometry = new Plane( 1, 1 );
 		this.quad = new Mesh( geometry, null );
-		this.scene = new Scene();
 		
 		geometry.applyMatrix( new Matrix4().makeRotationX( Math.PI / 2.0) );
 		
 		quad.getPosition().setZ(-100);
 		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
 
-		scene.addChild( quad );
-		scene.addChild( camera );
+		getScene().addChild( quad );
+		getScene().addChild( camera );
 	}
 	
 	public Plugin.TYPE getType() {
@@ -117,10 +115,6 @@ public class Postprocessing extends Plugin
 	
 	public OrthographicCamera getCamera() {
 		return this.camera;
-	}
-	
-	public Scene getScene() {
-		return this.scene;
 	}
 	
 	public Plane getGeometry() {

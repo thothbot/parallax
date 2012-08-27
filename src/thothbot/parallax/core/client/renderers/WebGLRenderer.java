@@ -1028,7 +1028,6 @@ public class WebGLRenderer
 		// custom render plugins (post pass)
 		renderPlugins( this.renderPluginsPost, scene, camera );
 
-
 		// Generate mipmap if we're using any kind of mipmap filtering
 		if ( renderTarget != null && renderTarget.isGenerateMipmaps() 
 				&& renderTarget.getMinFilter() != TextureMinFilter.NEAREST 
@@ -1052,6 +1051,10 @@ public class WebGLRenderer
 		for ( int i = 0, il = plugins.size(); i < il; i ++ ) 
 		{
 			Plugin plugin = plugins.get( i );
+			if(plugin.isRendering())
+				return;
+
+			plugin.setRendering(true);
 			Log.debug("Called renderPlugins(): " + plugin.getClass().getName());
 
 			// reset state for plugin (to start from clean slate)
@@ -1086,6 +1089,8 @@ public class WebGLRenderer
 			this.cache_currentMaterialId = -1;
 
 			this.isLightsNeedUpdate = true;
+			
+			plugin.setRendering(false);
 		}
 	}
 	

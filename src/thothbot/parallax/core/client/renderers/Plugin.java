@@ -31,6 +31,7 @@ public abstract class Plugin
 
 	private WebGLRenderer renderer;
 	private Scene scene;
+	private boolean isRendering;
 
 	public Plugin(WebGLRenderer renderer, Scene scene) 
 	{
@@ -45,6 +46,14 @@ public abstract class Plugin
 
 	public Scene getScene() {
 		return this.scene;
+	}
+	
+	public boolean isRendering() {
+		return this.isRendering;
+	}
+	
+	public void setRendering(boolean isRendering) {
+		this.isRendering = isRendering;
 	}
 
 	public abstract Plugin.TYPE getType();
