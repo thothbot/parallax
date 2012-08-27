@@ -321,7 +321,7 @@ public abstract class Material
 		return this.shader;
 	}
 
-	public Shader buildShader(WebGLRenderingContext gl, ProgramParameters parameters)
+	public void updateProgramParameters(ProgramParameters parameters)
 	{
 		parameters.map      = (this instanceof HasMap && ((HasMap)this).getMap() != null);
 		parameters.envMap   = (this instanceof HasEnvMap && ((HasEnvMap)this).getEnvMap() != null);
@@ -346,7 +346,10 @@ public abstract class Material
 		}
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
-		
+	}
+
+	public Shader buildShader(WebGLRenderingContext gl, ProgramParameters parameters)
+	{
 		Shader shader = getShader();
 
 		// Sets material prefixes

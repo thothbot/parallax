@@ -1751,9 +1751,12 @@ public class WebGLRenderer
 
 		parameters.doubleSided = object instanceof HasSides && ((HasSides)object).isDoubleSided();
 
+		material.updateProgramParameters(parameters);
 		Log.debug("initMaterial() called new Program");
 
-		String cashKey = material.getShader().getFragmentSource() + material.getShader().getVertexSource() + parameters.toString();
+		String cashKey = material.getShader().getFragmentSource() 
+				+ material.getShader().getVertexSource()
+				+ parameters.toString();
 		if(this.cache_programs.containsKey(cashKey))
 		{
 			material.setShader( this.cache_programs.get(cashKey));
