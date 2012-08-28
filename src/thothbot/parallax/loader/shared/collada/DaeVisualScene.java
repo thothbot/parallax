@@ -14,7 +14,7 @@
  * for more details.
  * 
  * You should have received a copy of the GNU General Public License along with 
- * Squirrel. If not, see http://www.gnu.org/licenses/.
+ * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
 package thothbot.parallax.loader.shared.collada;
