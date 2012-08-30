@@ -419,7 +419,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 
 			getObject().getPosition().add( pan );
 			this.target.add( pan );
-			Log.error(getObject().getPosition());
+						
 			if ( this.isStaticMoving )
 				panStart = panEnd;
 

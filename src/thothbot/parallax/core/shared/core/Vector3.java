@@ -22,6 +22,8 @@
 
 package thothbot.parallax.core.shared.core;
 
+import thothbot.parallax.core.shared.Log;
+
 /**
  * This class is realization of (X, Y, Z) vector. 
  * Where:
@@ -314,15 +316,16 @@ public class Vector3 extends Vector2 implements Vector
 	 */
 	public Vector3 cross(Vector3 v1, Vector3 v2)
 	{
-		this.setX( v1.y * v2.z - v1.z * v2.y);
-		this.setY( v1.z * v2.x - v1.x * v2.z);
-		this.setZ( v1.x * v2.y - v1.y * v2.x);
+		double x = v1.y * v2.z - v1.z * v2.y;
+		double y = v1.z * v2.x - v1.x * v2.z;
+		double z = v1.x * v2.y - v1.y * v2.x;
+		this.set(x, y, z);
 		return this;
 	}
-
+	
 	public Vector3 cross(Vector3 v)
 	{
-		return this.cross(this, v);
+		return cross(this, v);
 	}
 
 	@Override
@@ -396,9 +399,7 @@ public class Vector3 extends Vector2 implements Vector
 		tmp.set(m.getArray().get(8), m.getArray().get(9), m.getArray().get(10));
 		double sz = tmp.length();
 
-		this.x = sx;
-		this.y = sy;
-		this.z = sz;
+		set(sx, sy, sz);
 	}
 
 	/**
