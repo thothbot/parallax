@@ -34,7 +34,7 @@ package thothbot.parallax.core.shared.geometries;
  */
 public final class Octahedron extends Polyhedron
 {
-	public Octahedron( int radius, int detail ) 
+	public Octahedron( double radius, int detail ) 
 	{
 		super(
 				Octahedron.getDefaultVertices(),

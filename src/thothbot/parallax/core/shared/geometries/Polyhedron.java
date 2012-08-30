@@ -56,7 +56,7 @@ public class Polyhedron extends Geometry
 		this(vertices, faces, 1, 0);
 	}
 	
-	public Polyhedron(Double[][] vertices, Integer[][] faces, int radius, int detail) 
+	public Polyhedron(Double[][] vertices, Integer[][] faces, double radius, int detail) 
 	{
 		super();
 		this.containers = new ArrayList<ContainerOfVector>();

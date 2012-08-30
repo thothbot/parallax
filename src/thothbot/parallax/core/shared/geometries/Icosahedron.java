@@ -34,7 +34,7 @@ package thothbot.parallax.core.shared.geometries;
  */
 public final class Icosahedron extends Polyhedron
 {
-	public Icosahedron( int radius, int detail ) 
+	public Icosahedron( double radius, int detail ) 
 	{
 		super(
 				Icosahedron.getDefaultVertices(),
