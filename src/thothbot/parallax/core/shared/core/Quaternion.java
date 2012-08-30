@@ -186,7 +186,6 @@ public class Quaternion
 
 	public void setFromAxisAngle(Vector3 axis, double angle)
 	{
-
 		// from
 		// http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
 		// axis have to be normalized
@@ -322,8 +321,13 @@ public class Quaternion
 	 */
 	public Vector3 multiply(Vector3 vector, Vector3 dest)
 	{
-		double x = vector.getX(), y = vector.getY(), z = vector.getZ();
-		double qx = this.getX(), qy = this.getY(), qz = this.getZ(), qw = this.getW();
+		double x = vector.getX(), 
+			   y = vector.getY(), 
+			   z = vector.getZ();
+		double qx = this.getX(), 
+			   qy = this.getY(), 
+			   qz = this.getZ(), 
+			   qw = this.getW();
 
 		// calculate quat * vector
 		double ix = qw * x + qy * z - qz * y;
@@ -332,9 +336,11 @@ public class Quaternion
 		double iw = -qx * x - qy * y - qz * z;
 
 		// calculate result * inverse quat
-		dest.setX( ix * qw + iw * -qx + iy * -qz - iz * -qy );
-		dest.setY( iy * qw + iw * -qy + iz * -qx - ix * -qz );
-		dest.setZ( iz * qw + iw * -qz + ix * -qy - iy * -qx );
+		dest.set( 
+				(ix * qw + iw * -qx + iy * -qz - iz * -qy), // x
+				(iy * qw + iw * -qy + iz * -qx - ix * -qz), // y
+				(iz * qw + iw * -qz + ix * -qy - iy * -qx)  // z 
+			);
 
 		return dest;
 	}
@@ -415,5 +421,11 @@ public class Quaternion
 	private double copySign(double a, double b)
 	{
 		return b < 0 ? -Math.abs(a) : Math.abs(a);
+	}
+	
+	@Override
+	public String toString() 
+	{
+		return "(" + this.x + ", " + this.y + ", " + this.z +  ", " + this.w + ")";
 	}
 }

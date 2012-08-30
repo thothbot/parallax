@@ -463,15 +463,15 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 
 			quaternion.multiply( rotateEnd );
 
-			if ( this.isStaticMoving ) 
-			{
-				rotateStart = rotateEnd;
-			} 
-			else 
-			{
-				quaternion.setFromAxisAngle( axis, angle * ( this.dynamicDampingFactor - 1.0 ) );
-				quaternion.multiply( rotateStart );
-			}
+//			if ( this.isStaticMoving ) 
+//			{
+//				rotateStart = rotateEnd;
+//			} 
+//			else 
+//			{
+//				quaternion.setFromAxisAngle( axis, angle * ( this.dynamicDampingFactor - 1.0 ) );
+//				quaternion.multiply( rotateStart );
+//			}
 		}
 	}
 }
