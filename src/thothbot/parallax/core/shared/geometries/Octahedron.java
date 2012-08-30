@@ -36,28 +36,25 @@ public final class Octahedron extends Polyhedron
 {
 	public Octahedron( double radius, int detail ) 
 	{
-		super(
-				Octahedron.getDefaultVertices(),
-				Octahedron.getDefaultFaces(), 
-				radius, 
-				detail
-		);
-	};
-	
-	private static Integer[][] getDefaultFaces()
-	{
-		Integer[][] faces = {
-			{ 0, 2, 4 }, { 0, 4, 3 }, { 0, 3, 5 }, { 0, 5, 2 }, { 1, 2, 5 }, { 1, 5, 3 }, { 1, 3, 4 }, { 1, 4, 2 }
-		};
-		return faces;
+		super( radius, detail );
 	}
 
-	private static Double[][] getDefaultVertices()
+	@Override
+	protected double[][] getGeometryVertices() 
 	{
-		Double[][] vertices = {
-			{ 1.0, 0.0, 0.0 }, { -1.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, -1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, -1.0 }
+		double[][] vertices = {
+				{ 1.0, 0.0, 0.0 }, { -1.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, -1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, -1.0 }
 		};
-		
+
 		return vertices;
+	}
+
+	@Override
+	protected int[][] getGeometryFaces() 
+	{
+		int[][] faces = {
+				{ 0, 2, 4 }, { 0, 4, 3 }, { 0, 3, 5 }, { 0, 5, 2 }, { 1, 2, 5 }, { 1, 5, 3 }, { 1, 3, 4 }, { 1, 4, 2 }
+		};
+		return faces;
 	}
 }

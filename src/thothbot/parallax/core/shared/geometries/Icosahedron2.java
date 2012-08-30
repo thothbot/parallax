@@ -1,9 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * This file based on the JavaScript source file of the THREE.JS project, 
- * licensed under MIT License.
- * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -22,30 +19,25 @@
 
 package thothbot.parallax.core.shared.geometries;
 
-/**
- * The Tetrahedron geometry
- * <p>
- * <img src="http://thothbot.github.com/parallax/static/docs/tetrahedron.gif" />
- * <p>
- * Based on the three.js code.
- * 
- * @author thothbot
- *
- */
-public class Tetrahedron extends Polyhedron
+public final class Icosahedron2 extends Polyhedron 
 {
-	public Tetrahedron( double radius, int detail ) 
+	public Icosahedron2( double radius, int detail ) 
 	{
-		super( radius, detail );
-	}
-
+		super(radius, detail );
+	}	
+	
 	@Override
 	protected double[][] getGeometryVertices() 
 	{
+		double a = 4 / Math.sqrt( 2 * (5 + Math.sqrt(5)) ) / 2;
+		double b = Math.sqrt(1 - a*a);
+		
 		double[][] vertices = {
-				{ 1.0,  1.0,  1.0 }, { -1.0, -1.0, 1.0 }, { -1.0, 1.0, -1.0 }, { 1.0, -1.0, -1.0 }
+				{-a, 0.0, b}, {a, 0.0, b}, {-a, 0.0, -b}, {a, 0.0, -b},
+				{0.0, b, a}, {0.0, b, -a}, {0.0, -b, a}, {0.0, -b, -a},
+				{b, a, 0.0}, {-b, a, 0.0}, {b, -a, 0.0}, {-b, -a, 0.0}
 		};
-
+		
 		return vertices;
 	}
 
@@ -53,8 +45,13 @@ public class Tetrahedron extends Polyhedron
 	protected int[][] getGeometryFaces() 
 	{
 		int[][] faces = {
-				{ 2, 1, 0 }, { 0, 3, 2 }, { 1, 3, 0 }, { 2, 3, 1 }
+				{0,4,1}, {0,9,4}, {9,5,4},{4,5,8}, {4,8,1},
+				{8,10,1}, {8,3,10},{5,3,8}, {5,2,3}, {2,7,3},
+				{7,10,3}, {7,6,10}, {7,11,6}, {11,0,6}, {0,1,6},
+				{6,1,10}, {9,0,11}, {9,11,2}, {9,2,5}, {7,2,11}
 		};
+
 		return faces;
 	}
+
 }

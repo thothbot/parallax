@@ -34,7 +34,7 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
-public class Polyhedron extends Geometry
+public abstract class Polyhedron extends Geometry
 {
 	private Map<Integer, Map<Integer, ContainerOfVector>> midpoints;
 	private List<ContainerOfVector> containers;
@@ -51,20 +51,22 @@ public class Polyhedron extends Geometry
 		}
 	}
 
-	public Polyhedron(Double[][] vertices, Integer[][] faces) 
+	public Polyhedron() 
 	{
-		this(vertices, faces, 1, 0);
+		this(1.0, 0);
 	}
 	
-	public Polyhedron(Double[][] vertices, Integer[][] faces, double radius, int detail) 
+	public Polyhedron(double radius, int detail) 
 	{
 		super();
 		this.containers = new ArrayList<ContainerOfVector>();
 		this.midpoints = new HashMap<Integer, Map<Integer,ContainerOfVector>>();
 
+		double[][] vertices = getGeometryVertices();
 		for ( int i = 0, l = vertices.length; i < l; i ++ )
 			prepare( new ContainerOfVector( vertices[ i ][ 0 ], vertices[ i ][ 1 ], vertices[ i ][2 ] ) );
 
+		int[][] faces = getGeometryFaces();
 		for ( int i = 0, l = faces.length; i < l; i ++ )
 			make( this.containers.get( faces[ i ][ 0 ] ), 
 					this.containers.get( faces[ i ][ 1 ] ),
@@ -81,6 +83,16 @@ public class Polyhedron extends Geometry
 
 		setBoundingSphere(new BoundingSphere(radius)); 
 	}
+	
+	/**
+	 * Gets geometry vertices.
+	 */
+	protected abstract double[][] getGeometryVertices();
+	
+	/**
+	 * Gets geometry faces.
+	 */
+	protected abstract int[][] getGeometryFaces();
 	
 	/**
 	 * Project vector onto sphere's surface
