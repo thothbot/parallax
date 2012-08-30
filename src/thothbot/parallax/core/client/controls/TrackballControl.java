@@ -20,6 +20,7 @@
 package thothbot.parallax.core.client.controls;
 
 import thothbot.parallax.core.client.AnimatedScene;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Quaternion;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
@@ -53,6 +54,14 @@ import com.google.gwt.user.client.ui.Widget;
 public final class TrackballControl extends Control implements MouseMoveHandler, MouseDownHandler, MouseUpHandler, 
 KeyDownHandler, KeyUpHandler, ContextMenuHandler
 {
+	
+	private enum STATE {
+		 NONE,
+		 ROTATE, 
+		 ZOOM, 
+		 PAN
+	};
+
 	private boolean isEnabled = true;
 	private double rotateSpeed = 1.0;
 	private double zoomSpeed = 1.2;
@@ -73,13 +82,6 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	private int keyPan = 68; // D
 		
 	private double radius;
-	
-	private enum STATE {
-		 NONE,
-		 ROTATE, 
-		 ZOOM, 
-		 PAN
-	};
 
 	private Vector3 target;
 
@@ -108,15 +110,15 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 		if(getWidget().getClass() != RootPanel.class)
 			getWidget().getElement().setAttribute( "tabindex", "-1" );
 		
-		this.target = new Vector3();
-		lastPosition = new Vector3();
-		eye = new Vector3();
-		rotateStart = new Vector3();
-		rotateEnd = new Vector3();
-		zoomStart = new Vector2();
-		zoomEnd = new Vector2();
-		panStart = new Vector2();
-		panEnd = new Vector2();
+		this.target       = new Vector3();
+		this.lastPosition = new Vector3();
+		this.eye          = new Vector3();
+		this.rotateStart  = new Vector3();
+		this.rotateEnd    = new Vector3();
+		this.zoomStart    = new Vector2();
+		this.zoomEnd      = new Vector2();
+		this.panStart     = new Vector2();
+		this.panEnd       = new Vector2();
 		
 		getWidget().addDomHandler(this, ContextMenuEvent.getType());
 
@@ -321,6 +323,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 			else if ( event.getNativeButton() == NativeEvent.BUTTON_RIGHT && this.isPan ) 
 			{
 				panStart = panEnd = getMouseOnScreen( event.getX(), event.getY() );
+				state = STATE.PAN;
 			}
 		}
 	}
@@ -342,15 +345,15 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 		if ( this.state == STATE.NONE ) 
 		{
 			return;
-		} 
+		}
 		else if ( this.state == STATE.ROTATE && this.isRotate ) 
 		{
 			rotateEnd = getMouseProjectionOnBall( event.getX(), event.getY() );
-		} 
+		}
 		else if ( this.state == STATE.ZOOM && this.isZoom ) 
 		{
 			zoomEnd = getMouseOnScreen( event.getX(), event.getY() );
-		} 
+		}
 		else if ( this.state == STATE.PAN && this.isPan ) 
 		{
 			panEnd = getMouseOnScreen( event.getX(), event.getY() );
@@ -360,16 +363,16 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	private Vector2 getMouseOnScreen( int clientX, int clientY ) 
 	{
 		return new Vector2(
-			( clientX - getWidget().getAbsoluteLeft() ) / this.radius * 0.5,
-			( clientY - getWidget().getAbsoluteTop() ) / this.radius * 0.5
+			(double)clientX / this.radius * 0.5,
+			(double)clientY / this.radius * 0.5
 		);
 	}
 
 	private Vector3 getMouseProjectionOnBall ( int clientX, int clientY ) 
 	{
 		Vector3 mouseOnBall = new Vector3(
-			( clientX - getWidget().getOffsetWidth() * 0.5 - getWidget().getAbsoluteLeft() ) / this.radius,
-			( getWidget().getOffsetHeight() * 0.5 + getWidget().getAbsoluteTop() - clientY ) / this.radius,
+			(double)( clientX - getWidget().getOffsetWidth() * 0.5) / this.radius,
+			(double)( getWidget().getOffsetHeight() * 0.5 - clientY ) / this.radius,
 			0.0
 		);
 
@@ -416,7 +419,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 
 			getObject().getPosition().add( pan );
 			this.target.add( pan );
-
+			Log.error(getObject().getPosition());
 			if ( this.isStaticMoving )
 				panStart = panEnd;
 

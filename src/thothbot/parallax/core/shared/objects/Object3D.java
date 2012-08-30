@@ -446,7 +446,7 @@ public class Object3D implements DimensionalObject
 	public <E extends DimensionalObject> void removeChild(E child)
 	{
 		int index = this.children.indexOf(child);
-		Log.error("______", index);
+
 		if (index != -1) 
 		{
 			child.setParent(null);
