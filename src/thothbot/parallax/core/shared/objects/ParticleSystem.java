@@ -214,7 +214,8 @@ public class ParticleSystem extends GeometryObject
 				{
 					Attribute customAttribute = customAttributes.get( i );
 
-					if ( ! ( customAttribute.boundTo == null || customAttribute.boundTo.equals("vertices") ) ) 
+					if ( ! ( customAttribute.getBoundTo() == null 
+							|| customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) ) 
 						continue;
 
 					int offset = 0;
@@ -330,8 +331,8 @@ public class ParticleSystem extends GeometryObject
 					int offset = 0;
 
 					if ( customAttribute.needsUpdate &&
-						 ( customAttribute.boundTo == null ||
-						   customAttribute.boundTo.equals("vertices") ) )
+						 ( customAttribute.getBoundTo() == null ||
+						   customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) )
 					{
 
 						if ( customAttribute.size == 1 ) 

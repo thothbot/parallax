@@ -1382,7 +1382,8 @@ public class Mesh  extends GeometryObject implements HasSides
 
 				 if ( customAttribute.size == 1 ) 
 				 {
-					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
+					 if ( customAttribute.getBoundTo() == null 
+							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
 					 {
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 						 {
@@ -1407,7 +1408,7 @@ public class Mesh  extends GeometryObject implements HasSides
 							 offset_custom += 4;
 						 }
 					 }
-					 else if ( customAttribute.boundTo == "faces" ) 
+					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES ) 
 					 {
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 						 {
@@ -1436,7 +1437,8 @@ public class Mesh  extends GeometryObject implements HasSides
 				 } 
 				 else if ( customAttribute.size == 2 ) 
 				 {
-					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
+					 if ( customAttribute.getBoundTo() == null 
+							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
 					 {
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 						 {
@@ -1483,7 +1485,7 @@ public class Mesh  extends GeometryObject implements HasSides
 							 offset_custom += 8;
 						 }
 					 } 
-					 else if ( customAttribute.boundTo == "faces" ) 
+					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES ) 
 					 {
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 						 {
@@ -1536,7 +1538,8 @@ public class Mesh  extends GeometryObject implements HasSides
 				 } 
 				 else if ( customAttribute.size == 3 ) 
 				 {
-					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
+					 if ( customAttribute.getBoundTo() == null 
+							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
 					 {
 
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
@@ -1583,7 +1586,8 @@ public class Mesh  extends GeometryObject implements HasSides
 
 						 }
 
-						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) {
+						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
+						 {
 
 							 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
 
@@ -1636,10 +1640,14 @@ public class Mesh  extends GeometryObject implements HasSides
 							 offset_custom += 12;
 						 }
 
-					 } else if ( customAttribute.boundTo == "faces" ) {
+					 } 
+					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES ) 
+					 {
 
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
-							 if(customAttribute.type == Attribute.TYPE.C) {
+						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
+						 {
+							 if(customAttribute.type == Attribute.TYPE.C) 
+							 {
 								 Color value = (Color) customAttribute.getValue().get(chunk_faces3.get(f));
 								 Color v1 = value;
 								 Color v2 = value;
@@ -1732,16 +1740,14 @@ public class Mesh  extends GeometryObject implements HasSides
 							 }
 
 							 offset_custom += 12;
-
 						 }
-
 					 }
-
 				 } 
 				 else if ( customAttribute.size == 4 ) 
 				 {
 
-					 if ( customAttribute.boundTo == null || customAttribute.boundTo == "vertices" ) 
+					 if ( customAttribute.getBoundTo() == null 
+							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
 					 {
 
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
@@ -1803,7 +1809,9 @@ public class Mesh  extends GeometryObject implements HasSides
 							 offset_custom += 16;
 						 }
 
-					 } else if ( customAttribute.boundTo == "faces" ) {
+					 } 
+					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES) 
+					 {
 
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
 

@@ -209,8 +209,9 @@ public class Line extends GeometryObject
 				Attribute customAttribute = customAttributes.get(i);
 
 				if (customAttribute.needsUpdate
-						&& (customAttribute.boundTo == null || customAttribute.boundTo
-								.equals("vertices"))) {
+						&& (customAttribute.getBoundTo() == null 
+						|| customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES)) 
+				{
 
 					int offset = 0;
 

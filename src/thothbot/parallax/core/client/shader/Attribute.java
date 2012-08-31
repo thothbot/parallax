@@ -36,6 +36,12 @@ public class Attribute
 		C,
 		F
 	};
+	
+	public static enum BOUND_TO {
+		FACES,
+		VERTICES,
+		FACE_VERTICES
+	};
 
 	public WebGLBuffer buffer;
 	public boolean createUniqueBuffers;
@@ -43,12 +49,11 @@ public class Attribute
 	// TODO: remove = change to type (initCustomAttributes)
 	public int size;
 	private List<?> value;
+	private BOUND_TO boundTo;
+	
 	public Float32Array array;
 	public boolean needsUpdate;
 	public String belongsToAttribute;
-
-	public String boundTo;
-
 	public Attribute __original;
 
 	public boolean __webglInitialized;
@@ -64,7 +69,24 @@ public class Attribute
 		this.value = value;
 	}
 	
-	public Attribute clone() {
+	public List<?> getValue() {
+		return value;
+	}
+
+	public void setValue(List<Object> value) {
+		this.value = value;
+	}
+	
+	public BOUND_TO getBoundTo() {
+		return this.boundTo;
+	}
+	
+	public void setBoundTo(BOUND_TO boundTo) {
+		this.boundTo = boundTo;
+	}
+	
+	public Attribute clone() 
+	{
 		Attribute att = new Attribute();
 		att.buffer = this.buffer;
 		att.createUniqueBuffers = this.createUniqueBuffers;
@@ -77,20 +99,11 @@ public class Attribute
 		
 		return att;
 	}
-
-	public List<?> getValue()
-	{
-		return value;
-	}
-
-	public void setValue(List<Object> value)
-	{
-		this.value = value;
-	}
 	
 	public String toString()
 	{
 		return "{ type=" + this.type.name() 
+				+ ", boundTo=" + this.boundTo
 				+ ", needsUpdate=" + this.needsUpdate 
 				+ ", belongsToAttribute=" + this.belongsToAttribute
 				+ ", valueSize=" + this.value.size() 

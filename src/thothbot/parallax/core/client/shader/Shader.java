@@ -318,7 +318,13 @@ public abstract class Shader
 		this.attributes = attributes;
 	}
 	
-	public void addAttributes(String id, Attribute attribute) {
+	public void addAttributes(String id, Attribute attribute) 
+	{
+		if(this.attributes == null)
+		{
+			this.attributes = GWT.isScript() ? 
+					new FastMap<Attribute>() : new HashMap<String, Attribute>();
+		}
 		this.attributes.put(id, attribute);
 	}
 
