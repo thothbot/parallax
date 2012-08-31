@@ -263,7 +263,7 @@ public class Mesh  extends GeometryObject implements HasSides
 		if (normalType != null)
 			geometryGroup.setWebGlNormalArray( Float32Array.create(nvertices * 3) );
 
-		if (geometry.getHasTangents())
+		if (geometry.hasTangents())
 			geometryGroup.setWebGlTangentArray( Float32Array.create(nvertices * 4) );
 
 		if (vertexColorType != null)
@@ -1033,7 +1033,7 @@ public class Mesh  extends GeometryObject implements HasSides
 			 }
 		 }
 
-		 if ( getGeometry().tangetsNeedUpdate && geometry.getHasTangents()) 
+		 if ( getGeometry().tangetsNeedUpdate && geometry.hasTangents()) 
 		 {
 			 Float32Array tangentArray = geometryGroup.getWebGlTangentArray();
 			 int offset_tangent = 0;

@@ -23,6 +23,7 @@
 package thothbot.parallax.core.shared.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -205,5 +206,127 @@ public class GeometryUtils
 			uvs1.add( uvCopy );
 
 		}
+	}
+	
+	public static void triangulateQuads(Geometry geometry ) 
+	{
+		List<Face3> faces = new ArrayList<Face3>();
+		List<List<UV>> faceUvs = new ArrayList<List<UV>>();
+		List<List<List<UV>>> faceVertexUvs = new ArrayList<List<List<UV>>>();
+
+		for ( int i = 0, il = geometry.getFaceUvs().size(); i < il; i ++ ) 
+		{
+			faceUvs.add(new ArrayList<UV>());
+		}
+
+		for ( int i = 0, il = geometry.getFaceVertexUvs().size(); i < il; i ++ ) 
+		{
+			faceVertexUvs.add(new ArrayList<List<UV>>());
+		}
+
+		for ( int i = 0, il = geometry.getFaces().size(); i < il; i ++ ) 
+		{
+			Face3 face = geometry.getFaces().get(i);
+
+			if ( face instanceof Face4 ) 
+			{
+				int a = face.getA();
+				int b = face.getB();
+				int c = face.getC();
+				int d = ((Face4) face).getD();
+
+				Face3 triA = new Face3(0, 0, 0);
+				Face3 triB = new Face3(0, 0, 0);
+
+				triA.getColor().copy( face.getColor() );
+				triB.getColor().copy( face.getColor() );
+
+				triA.setMaterialIndex(face.getMaterialIndex());
+				triB.setMaterialIndex(face.getMaterialIndex());
+
+				triA.setA(a);
+				triA.setB(b);
+				triA.setC(d);
+
+				triB.setA(b);
+				triB.setB(c);
+				triB.setC(d);
+
+				if ( face.getVertexColors().size() == 4 ) 
+				{
+
+					triA.getVertexColors().set( 0, face.getVertexColors().get( 0 ).clone() );
+					triA.getVertexColors().set( 1, face.getVertexColors().get( 1 ).clone() );
+					triA.getVertexColors().set( 2, face.getVertexColors().get( 3 ).clone() );
+
+					triB.getVertexColors().set( 0, face.getVertexColors().get( 1 ).clone() );
+					triB.getVertexColors().set( 1, face.getVertexColors().get( 2 ).clone() );
+					triB.getVertexColors().set( 2, face.getVertexColors().get( 3 ).clone() );
+
+				}
+
+				faces.add( triA );
+				faces.add( triB );
+
+				for ( int j = 0, jl = geometry.getFaceVertexUvs().size(); j < jl; j ++ ) 
+				{
+
+					if ( geometry.getFaceVertexUvs().get( j ).size() > 0 ) 
+					{
+						List<UV> uvs = geometry.getFaceVertexUvs().get( j ).get( i );
+
+						UV uvA = uvs.get( 0 );
+						UV uvB = uvs.get( 1 );
+						UV uvC = uvs.get( 2 );
+						UV uvD = uvs.get( 3 );
+
+						List<UV> uvsTriA = Arrays.asList( uvA.clone(), uvB.clone(), uvD.clone() );
+						List<UV> uvsTriB = Arrays.asList( uvB.clone(), uvC.clone(), uvD.clone() );
+
+						faceVertexUvs.get( j ).add( uvsTriA );
+						faceVertexUvs.get( j ).add( uvsTriB );
+					}
+				}
+
+				for ( int j = 0, jl = geometry.getFaceUvs().size(); j < jl; j ++ ) 
+				{
+
+					if ( geometry.getFaceUvs().get( j ).size() > 0 ) 
+					{
+
+						UV faceUv = geometry.getFaceUvs().get( j ).get( i );
+
+						faceUvs.get( j ).add( faceUv );
+						faceUvs.get( j ).add( faceUv );
+					}
+				}
+			} 
+			else 
+			{
+				faces.add( face );
+
+				for ( int j = 0, jl = geometry.getFaceUvs().size(); j < jl; j ++ ) 
+				{
+					faceUvs.get( j ).add( geometry.getFaceUvs().get( j ).get( i ) );
+				}
+
+				for ( int j = 0, jl = geometry.getFaceVertexUvs().size(); j < jl; j ++ ) 
+				{
+					faceVertexUvs.get( j ).add( geometry.getFaceVertexUvs().get( j ).get( i )  );
+				}
+			}
+		}
+
+		geometry.setFaces(faces);
+		geometry.setFaceUvs(faceUvs);
+		geometry.setFaceVertexUvs(faceVertexUvs);
+
+		geometry.computeCentroids();
+		geometry.computeFaceNormals(false);
+		geometry.computeVertexNormals();
+
+		if ( geometry.hasTangents() ) 
+			geometry.computeTangents();
+
 	}
 }

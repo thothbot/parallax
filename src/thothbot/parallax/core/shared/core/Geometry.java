@@ -28,12 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
-
-import thothbot.parallax.core.client.shader.Uniform;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.Object3D;
+
+import com.google.gwt.core.client.GWT;
 
 /**
  * Represents geometric object geometry.
@@ -233,7 +232,7 @@ public class Geometry extends GeometryBuffer
 		this.dynamic = dynamic;
 	}
 
-	public Boolean getHasTangents() {
+	public Boolean hasTangents() {
 		return hasTangents;
 	}
 
@@ -315,6 +314,10 @@ public class Geometry extends GeometryBuffer
 	
 	public List<List<List<UV>>> getFaceVertexUvs(){
 		return this.faceVertexUvs;
+	}
+	
+	public void setFaceVertexUvs(List<List<List<UV>>> faceVertexUvs) {
+		this.faceVertexUvs = faceVertexUvs;
 	}
 
 	public void computeCentroids()

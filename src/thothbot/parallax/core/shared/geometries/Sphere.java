@@ -50,22 +50,22 @@ public final class Sphere extends Geometry
 		this(50);
 	}
 
-	public Sphere(int radius) 
+	public Sphere(double radius) 
 	{
 		this(radius, 8, 6);
 	}
 	
-	public Sphere(int radius, int segmentsWidth, int segmentsHeight) 
+	public Sphere(double radius, int segmentsWidth, int segmentsHeight) 
 	{
 		this(radius, segmentsWidth, segmentsHeight, 0.0, Math.PI * 2.0 );
 	}
 	
-	public Sphere(int radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength)
+	public Sphere(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength)
 	{
 		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0, Math.PI);
 	}
 
-	public Sphere(int radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength, double thetaStart, double thetaLength) 
+	public Sphere(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength, double thetaStart, double thetaLength) 
 	{
 		super();
 		int segmentsX = Math.max( 3, segmentsWidth );
