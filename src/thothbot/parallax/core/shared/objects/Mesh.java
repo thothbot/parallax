@@ -1846,6 +1846,7 @@ public class Mesh  extends GeometryObject implements HasSides
 				 }
 				 else if ( customAttribute.size == 4 ) 
 				 {
+					 Log.error(customAttribute);
 					 if ( customAttribute.getBoundTo() == null 
 							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
 					 {
@@ -2002,7 +2003,7 @@ public class Mesh  extends GeometryObject implements HasSides
 						 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ )
 						 {
 							 List<Vector4> value = (List<Vector4>) customAttribute.getValue().get(chunk_faces4.get(f));
-
+Log.error(value);
 							 Vector4 v1 = value.get(0);
 							 Vector4 v2 = value.get(1);
 							 Vector4 v3 = value.get(2);

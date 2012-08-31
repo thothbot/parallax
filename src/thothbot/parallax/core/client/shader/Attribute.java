@@ -87,13 +87,14 @@ public class Attribute
 	
 	public Attribute clone() 
 	{
-		Attribute att = new Attribute();
+		Attribute att = new Attribute(this.type, this.value);
 		att.buffer = this.buffer;
 		att.createUniqueBuffers = this.createUniqueBuffers;
-		att.type = this.type;
 		att.size = this.size;
 		att.array = this.array;
 		att.needsUpdate = this.needsUpdate;
+		att.belongsToAttribute = this.belongsToAttribute;
+		att.boundTo = this.boundTo;
 		att.__webglInitialized = this.__webglInitialized;
 		att.__original = this;
 		
@@ -106,7 +107,7 @@ public class Attribute
 				+ ", boundTo=" + this.boundTo
 				+ ", needsUpdate=" + this.needsUpdate 
 				+ ", belongsToAttribute=" + this.belongsToAttribute
-				+ ", valueSize=" + this.value.size() 
+				+ ", valueSize=" + (this.value == null ? "null" : this.value.size() ) 
 				+ ", value=" + this.value + "}";
 	}
 }
