@@ -548,23 +548,47 @@ public abstract class Material
 			else
 				uniforms.get("diffuse").setValue( ((HasColor)this).getColor() );
 		}
-
+		
 		if(this instanceof HasMap)
 		{
 			uniforms.get("map").setTexture( ((HasMap) this).getMap() );
-
-			if ( ((HasMap) this).getMap() != null) 
-			{
-				((Vector4)uniforms.get("offsetRepeat").getValue()).set( 
-						((HasMap) this).getMap().getOffset().getX(), 
-						((HasMap) this).getMap().getOffset().getY(), 
-						((HasMap) this).getMap().getRepeat().getX(), 
-						((HasMap) this).getMap().getRepeat().getY() );
-			}
 		}
 
 		if(this instanceof HasLightMap)
 			uniforms.get("lightMap").setTexture( ((HasLightMap)this).getLightMap() );	
+		
+		if(this instanceof HasSpecularMap)
+		{
+			uniforms.get("specularMap").setTexture( ((HasSpecularMap)this).getSpecularMap() );
+		}
+		
+		if(this instanceof HasBumpMap)
+		{
+			uniforms.get("bumpMap").setTexture( ((HasBumpMap)this).getBumpMap() );
+			uniforms.get("bumpScale").setValue( ((HasBumpMap)this).getBumpScale() );
+		}	
+		
+		// uv repeat and offset setting priorities
+		//	1. color map
+		//	2. specular map
+		//	3. bump map
+		Texture uvScaleMap = null;
+		
+		if(this instanceof HasMap)
+			uvScaleMap = ((HasMap) this).getMap();
+		else if(this instanceof HasSpecularMap)
+			uvScaleMap = ((HasSpecularMap)this).getSpecularMap();
+		else if(this instanceof HasBumpMap)
+			uvScaleMap = ((HasBumpMap)this).getBumpMap();
+		
+		if(uvScaleMap != null)
+		{
+			((Vector4)uniforms.get("offsetRepeat").getValue()).set( 
+					uvScaleMap.getOffset().getX(), 
+					uvScaleMap.getOffset().getY(), 
+					uvScaleMap.getRepeat().getX(), 
+					uvScaleMap.getRepeat().getY() );
+		}
 		
 		if(this instanceof HasEnvMap)
 		{

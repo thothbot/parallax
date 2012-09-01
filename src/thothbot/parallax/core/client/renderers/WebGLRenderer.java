@@ -2276,7 +2276,8 @@ Log.error("?????????????");
 		{
 			Light light = lights.get( l );
 
-			if ( light.isOnlyShadow() ) continue;
+			if ( light.isOnlyShadow() || ! light.isVisible()) 
+				continue;
 
 			Color color = light.getColor();
 
