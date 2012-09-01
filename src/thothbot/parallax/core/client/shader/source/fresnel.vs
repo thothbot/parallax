@@ -10,9 +10,9 @@ varying float vReflectionFactor;
 void main() {
 
 	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-	vec4 mPosition = objectMatrix * vec4( position, 1.0 );
+	vec4 mPosition = modelMatrix * vec4( position, 1.0 );
 
-	vec3 nWorld = normalize ( mat3( objectMatrix[0].xyz, objectMatrix[1].xyz, objectMatrix[2].xyz ) * normal );
+	vec3 nWorld = normalize ( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );
 
 	vec3 I = mPosition.xyz - cameraPosition;
 

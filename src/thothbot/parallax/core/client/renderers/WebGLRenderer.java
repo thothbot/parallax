@@ -1996,8 +1996,8 @@ public class WebGLRenderer
 
 		loadUniformsMatrices( m_uniforms, object );
 
-		if ( m_uniforms.get("objectMatrix").getLocation() != null )
-			getGL().uniformMatrix4fv( m_uniforms.get("objectMatrix").getLocation(), false, object.getMatrixWorld().getArray() );
+		if ( m_uniforms.get("modelMatrix").getLocation() != null )
+			getGL().uniformMatrix4fv( m_uniforms.get("modelMatrix").getLocation(), false, object.getMatrixWorld().getArray() );
 
 		return program;
 	}
