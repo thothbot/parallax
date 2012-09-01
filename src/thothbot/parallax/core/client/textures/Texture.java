@@ -445,6 +445,12 @@ public class Texture
 		return clonedTexture;
 	}
 
+	// TODO: check in rendering targets 
+	public void setTextureParameters (WebGLRenderingContext gl, int textureType, boolean isImagePowerOfTwo )
+	{
+		setTextureParameters(gl, 0, textureType, isImagePowerOfTwo);
+	}
+
 	public void setTextureParameters (WebGLRenderingContext gl, int maxAnisotropy, int textureType, boolean isImagePowerOfTwo ) 
 	{	
 		if ( isImagePowerOfTwo ) 
