@@ -111,8 +111,8 @@ public class Line extends GeometryObject
 			createBuffers(renderer, geometry );
 			initBuffers(renderer.getGL(), geometry );
 
-			geometry.verticesNeedUpdate = true;
-			geometry.colorsNeedUpdate = true;
+			geometry.isVerticesNeedUpdate = true;
+			geometry.isColorsNeedUpdate = true;
 		}
 	}
 	
@@ -147,8 +147,8 @@ public class Line extends GeometryObject
 		this.material = Material.getBufferMaterial( this, null );
 
 		boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
-		if ( this.geometry.verticesNeedUpdate 
-				|| this.geometry.colorsNeedUpdate 
+		if ( this.geometry.isVerticesNeedUpdate 
+				|| this.geometry.isColorsNeedUpdate 
 				|| areCustomAttributesDirty 
 		) {
 			this.setBuffers( gl, geometry, GLenum.DYNAMIC_DRAW.getValue() );
@@ -156,8 +156,8 @@ public class Line extends GeometryObject
 			this.material.getShader().clearCustomAttributes();
 		}
 
-		this.geometry.verticesNeedUpdate = false;
-		this.geometry.colorsNeedUpdate = false;
+		this.geometry.isVerticesNeedUpdate = false;
+		this.geometry.isColorsNeedUpdate = false;
 	}
 
 	// setLineBuffers
@@ -166,8 +166,8 @@ public class Line extends GeometryObject
 		List<Vector3> vertices = geometry.getVertices();
 		List<Color> colors = geometry.getColors();
 
-		boolean dirtyVertices = geometry.verticesNeedUpdate;
-		boolean dirtyColors = geometry.colorsNeedUpdate;
+		boolean dirtyVertices = geometry.isVerticesNeedUpdate;
+		boolean dirtyColors = geometry.isColorsNeedUpdate;
 
 		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
 

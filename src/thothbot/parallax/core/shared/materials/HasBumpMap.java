@@ -1,9 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * This file based on the JavaScript source file of the THREE.JS project, 
- * licensed under MIT License.
- * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -20,15 +17,17 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.shared.objects;
+package thothbot.parallax.core.shared.materials;
 
-public interface HasSides
+import thothbot.parallax.core.client.textures.Texture;
+
+public interface HasBumpMap 
 {
-	public abstract boolean isFlipSided();
+	public Texture getBumpMap();
 
-	public abstract void setFlipSided(boolean flipSided);
+	public void setBumpMap(Texture bumpMap); 
 
-	public abstract boolean isDoubleSided();
+	public double getBumpScale();
 
-	public abstract void setDoubleSided(boolean doubleSided);
+	public void setBumpScale(double bumpScale);
 }

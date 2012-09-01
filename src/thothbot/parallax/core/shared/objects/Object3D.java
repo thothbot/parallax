@@ -101,7 +101,7 @@ public class Object3D implements DimensionalObject
 	public WebGLBuffer __webglNormalBuffer;
 	public boolean isWebglActive;
 	public boolean isWebglInit;
-	public Float32Array _objectMatrixArray;
+	public Float32Array _modelMatrixArray;
 	public Object _modelViewMatrixArray;
 	public Object _normalMatrixArray;
 	public Matrix3 _normalMatrix;

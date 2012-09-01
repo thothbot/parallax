@@ -35,7 +35,7 @@ import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector3;
 
 public final class MeshPhongMaterial extends Material 
-	implements HasMaterialMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
+	implements HasMaterialMap, HasBumpMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
 	HasSkinning, HasAmbientEmissiveColor
 {
 	private boolean isWrapAround;
@@ -353,18 +353,22 @@ public final class MeshPhongMaterial extends Material
 		this.specularMap = specularMap;
 	}
 	
+	@Override
 	public Texture getBumpMap() {
 		return this.bumpMap;
 	}
 
+	@Override
 	public void setBumpMap(Texture bumpMap) {
 		this.bumpMap = bumpMap;
 	}
 
+	@Override
 	public double getBumpScale() {
 		return this.bumpScale;
 	}
 
+	@Override
 	public void setBumpScale(double bumpScale) {
 		this.bumpScale = bumpScale;
 	}

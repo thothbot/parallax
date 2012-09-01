@@ -68,15 +68,6 @@ public class Canvas3d extends FocusWidget
 				gl = null;
 				Log.error("3d context: " + contextId + ", " + e.getMessage());
 			}
-
-			if (gl != null) 
-			{
-				Log.info("3d context: " + contextId);
-				if (gl.getExtension( "OES_texture_float" ) == null )
-					throw new Canvas3dException("GL is not supported float textures.");
-
-				break;
-			} 
 		}
 		
 		if( gl == null )

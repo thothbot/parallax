@@ -99,8 +99,8 @@ public class ParticleSystem extends GeometryObject
 			createBuffers( renderer, geometry );
 			initBuffers( renderer.getGL(), geometry );
 
-			geometry.verticesNeedUpdate = true;
-			geometry.colorsNeedUpdate = true;
+			geometry.isVerticesNeedUpdate = true;
+			geometry.isColorsNeedUpdate = true;
 		}
 	}
 	
@@ -134,8 +134,8 @@ public class ParticleSystem extends GeometryObject
 		this.material = Material.getBufferMaterial( this, null );
 
 		boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
-		if ( this.geometry.verticesNeedUpdate 
-				|| this.geometry.colorsNeedUpdate 
+		if ( this.geometry.isVerticesNeedUpdate 
+				|| this.geometry.isColorsNeedUpdate 
 				|| this.sortParticles 
 				|| areCustomAttributesDirty
 		) {
@@ -143,8 +143,8 @@ public class ParticleSystem extends GeometryObject
 			this.material.getShader().clearCustomAttributes();
 		}
 
-		this.getGeometry().verticesNeedUpdate = false;
-		this.getGeometry().colorsNeedUpdate = false;
+		this.getGeometry().isVerticesNeedUpdate = false;
+		this.getGeometry().isColorsNeedUpdate = false;
 	}
 
 	// setParticleBuffers
@@ -157,9 +157,9 @@ public class ParticleSystem extends GeometryObject
 
 		List<List<Integer>> sortArray = geometry.sortArray;
 
-		boolean dirtyVertices = geometry.verticesNeedUpdate;
-		boolean dirtyElements = geometry.elementsNeedUpdate;
-		boolean dirtyColors   = geometry.colorsNeedUpdate;
+		boolean dirtyVertices = geometry.isVerticesNeedUpdate;
+		boolean dirtyElements = geometry.isElementsNeedUpdate;
+		boolean dirtyColors   = geometry.isColorsNeedUpdate;
 
 		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
 		

@@ -53,7 +53,7 @@ import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 
 import com.google.gwt.core.client.GWT;
 
-public class Mesh  extends GeometryObject implements HasSides
+public class Mesh  extends GeometryObject
 {
 	private Boolean flipSided;
 	private Boolean doubleSided;
@@ -228,13 +228,13 @@ public class Mesh  extends GeometryObject implements HasSides
 					initBuffers(renderer.getGL(), geometryGroup );
 					info.getMemory().geometries++;
 
-					geometry.verticesNeedUpdate = true;
-					geometry.morphTargetsNeedUpdate = true;
-					geometry.elementsNeedUpdate = true;
-					geometry.uvsNeedUpdate = true;
-					geometry.normalsNeedUpdate = true;
-					geometry.tangetsNeedUpdate = true;
-					geometry.colorsNeedUpdate = true;
+					geometry.isVerticesNeedUpdate = true;
+					geometry.isMorphTargetsNeedUpdate = true;
+					geometry.isElementsNeedUpdate = true;
+					geometry.isUvsNeedUpdate = true;
+					geometry.isNormalsNeedUpdate = true;
+					geometry.isTangentsNeedUpdate = true;
+					geometry.isColorsNeedUpdate = true;
 				}
 			}
 		}
@@ -428,13 +428,13 @@ public class Mesh  extends GeometryObject implements HasSides
 				material = Material.getBufferMaterial( this, geometryGroup );
 
 				boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
-				if ( geometry.verticesNeedUpdate 
-						|| geometry.morphTargetsNeedUpdate
-						|| geometry.elementsNeedUpdate 
-						|| geometry.uvsNeedUpdate      
-						|| geometry.normalsNeedUpdate      
-						|| geometry.colorsNeedUpdate   
-						|| geometry.tangetsNeedUpdate      
+				if ( geometry.isVerticesNeedUpdate 
+						|| geometry.isMorphTargetsNeedUpdate
+						|| geometry.isElementsNeedUpdate 
+						|| geometry.isUvsNeedUpdate      
+						|| geometry.isNormalsNeedUpdate      
+						|| geometry.isColorsNeedUpdate   
+						|| geometry.isTangentsNeedUpdate      
 						|| areCustomAttributesDirty
 				) {
 					setBuffers(gl, geometryGroup, GLenum.DYNAMIC_DRAW.getValue(), !geometry.isDynamic(), material );
@@ -442,13 +442,13 @@ public class Mesh  extends GeometryObject implements HasSides
 				}
 			}
 
-			geometry.verticesNeedUpdate = false;
-			geometry.morphTargetsNeedUpdate = false;
-			geometry.elementsNeedUpdate = false;
-			geometry.uvsNeedUpdate = false;
-			geometry.normalsNeedUpdate = false;
-			geometry.colorsNeedUpdate = false;
-			geometry.tangetsNeedUpdate = false;
+			geometry.isVerticesNeedUpdate = false;
+			geometry.isMorphTargetsNeedUpdate = false;
+			geometry.isElementsNeedUpdate = false;
+			geometry.isUvsNeedUpdate = false;
+			geometry.isNormalsNeedUpdate = false;
+			geometry.isColorsNeedUpdate = false;
+			geometry.isTangentsNeedUpdate = false;
 //		}
 
 	}
@@ -480,7 +480,7 @@ public class Mesh  extends GeometryObject implements HasSides
 		 List<Geometry.MorphNormal> morphNormals = getGeometry().getMorphNormals();
 		 List<Geometry.MorphTarget> morphTargets = getGeometry().getMorphTargets();
 		 
-		 if ( getGeometry().verticesNeedUpdate ) 
+		 if ( getGeometry().isVerticesNeedUpdate ) 
 		 {
 			 Float32Array vertexArray = geometryGroup.getWebGlVertexArray();
 			 int offset = 0;
@@ -540,7 +540,7 @@ public class Mesh  extends GeometryObject implements HasSides
 			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), vertexArray, hint );
 		 }
 		 
-		 if ( getGeometry().morphTargetsNeedUpdate ) 
+		 if ( getGeometry().isMorphTargetsNeedUpdate ) 
 		 {
 			 
 			 for ( int vk = 0, vkl = getGeometry().getMorphTargets().size(); vk < vkl; vk ++ ) 
@@ -940,7 +940,7 @@ public class Mesh  extends GeometryObject implements HasSides
 			 }
 		 }
 
-		 if ( getGeometry().colorsNeedUpdate && (vertexColorType != null )) 
+		 if ( getGeometry().isColorsNeedUpdate && (vertexColorType != null )) 
 		 {
 			 Float32Array colorArray = geometryGroup.getWebGlColorArray();
 			 int offset_color = 0;
@@ -1033,7 +1033,7 @@ public class Mesh  extends GeometryObject implements HasSides
 			 }
 		 }
 
-		 if ( getGeometry().tangetsNeedUpdate && geometry.hasTangents()) 
+		 if ( getGeometry().isTangentsNeedUpdate && geometry.hasTangents()) 
 		 {
 			 Float32Array tangentArray = geometryGroup.getWebGlTangentArray();
 			 int offset_tangent = 0;
@@ -1108,7 +1108,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 		 }
 
-		 if ( getGeometry().normalsNeedUpdate && (normalType != null )) 
+		 if ( getGeometry().isNormalsNeedUpdate && (normalType != null )) 
 		 {
 			 int offset_normal = 0;
 			 
@@ -1193,7 +1193,7 @@ public class Mesh  extends GeometryObject implements HasSides
 
 		 }
 
-		 if ( getGeometry().uvsNeedUpdate && (obj_uvs != null) && uvType ) 
+		 if ( getGeometry().isUvsNeedUpdate && (obj_uvs != null) && uvType ) 
 		 {
 			 Float32Array uvArray = geometryGroup.getWebGlUvArray();
 			 int offset_uv = 0;
@@ -1247,7 +1247,7 @@ public class Mesh  extends GeometryObject implements HasSides
 			 }
 		 }
 
-		 if ( getGeometry().uvsNeedUpdate && (obj_uvs2 != null) && uvType ) 
+		 if ( getGeometry().isUvsNeedUpdate && (obj_uvs2 != null) && uvType ) 
 		 {
 			 Float32Array uv2Array = geometryGroup.getWebGlUv2Array();
 			 int offset_uv2 = 0;
@@ -1299,7 +1299,7 @@ public class Mesh  extends GeometryObject implements HasSides
 			 }
 		 }
 
-		 if (  getGeometry().elementsNeedUpdate ) 
+		 if (  getGeometry().isElementsNeedUpdate ) 
 		 {
 			 int offset_line = 0;
 			 int offset_face = 0;

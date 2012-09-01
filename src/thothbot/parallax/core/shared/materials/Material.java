@@ -49,6 +49,13 @@ public abstract class Material
 {
 	private static int MaterialCount;
 
+	public static enum SIDE
+	{
+		FRONT,
+		BACK,
+		DOUBLE
+	}
+
 	/**
 	 * Shading
 	 */
@@ -144,6 +151,8 @@ public abstract class Material
 	private boolean isVisible = true;
 	private boolean isNeedsUpdate = true;
 	
+	private SIDE side = SIDE.FRONT;
+	
 	// 
 
 	// Store shader associated to the material
@@ -187,6 +196,14 @@ public abstract class Material
 	
 	public void setVisible(boolean visible) {
 		this.isVisible = visible;
+	}
+	
+	public SIDE getSides() {
+		return this.side;
+	}
+	
+	public void setSide(SIDE side) {
+		this.side = side;
 	}
 	
 	public boolean isNeedsUpdate() {
@@ -595,6 +612,12 @@ public abstract class Material
 			return true;
 		
 		if(this instanceof HasLightMap && ((HasLightMap)this).getLightMap() != null)
+			return true;
+		
+		if(this instanceof HasBumpMap && ((HasBumpMap)this).getBumpMap() != null)
+			return true;
+		
+		if(this instanceof HasSpecularMap && ((HasSpecularMap)this).getSpecularMap() != null)
 			return true;
 		
 		return false;

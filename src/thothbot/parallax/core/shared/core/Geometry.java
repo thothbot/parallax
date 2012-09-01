@@ -130,17 +130,17 @@ public class Geometry extends GeometryBuffer
 	// Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
 	// Unless set to true internal typed arrays corresponding to buffers will be deleted once sent to GPU.
 	// unless set to true the *Arrays will be deleted once sent to a buffer.
-	private boolean dynamic = false; 
+	private boolean isDynamic = false; 
 
 	public List<List<Integer>> sortArray;
 	
-	public boolean verticesNeedUpdate;
-	public boolean morphTargetsNeedUpdate;
-	public boolean uvsNeedUpdate;
-	public boolean normalsNeedUpdate;
-	public boolean tangetsNeedUpdate;
-	public boolean elementsNeedUpdate;
-	public boolean colorsNeedUpdate;
+	public boolean isVerticesNeedUpdate;
+	public boolean isMorphTargetsNeedUpdate;
+	public boolean isUvsNeedUpdate;
+	public boolean isNormalsNeedUpdate;
+	public boolean isTangentsNeedUpdate;
+	public boolean isElementsNeedUpdate;
+	public boolean isColorsNeedUpdate;
 	
 	private Map<String, GeometryGroup> geometryGroups;
 	private List<GeometryGroup> geometryGroupsList;
@@ -171,7 +171,7 @@ public class Geometry extends GeometryBuffer
 
 		this.hasTangents = false;
 		
-		this.dynamic = false; 
+		this.isDynamic = false; 
 		
 		this.debug = new Object3D();
 	}
@@ -225,11 +225,11 @@ public class Geometry extends GeometryBuffer
 	}
 	
 	public boolean isDynamic() {
-		return this.dynamic;
+		return this.isDynamic;
 	}
 	
 	public void setDynamic(boolean dynamic) {
-		this.dynamic = dynamic;
+		this.isDynamic = dynamic;
 	}
 
 	public Boolean hasTangents() {

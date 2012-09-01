@@ -76,7 +76,6 @@ import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.GeometryObject;
-import thothbot.parallax.core.shared.objects.HasSides;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Object3D;
@@ -161,8 +160,7 @@ public class WebGLRenderer
 	
 	// GL state cache
 
-	private Boolean cache_oldDoubleSided = null;
-	private Boolean cache_oldFlipSided = null;
+	private Material.SIDE cache_oldMaterialSided = null;
 
 	private Material.BLENDING cache_oldBlending = null;
 	private BlendEquationMode cache_oldBlendEquation = null;
@@ -204,6 +202,10 @@ public class WebGLRenderer
 	private int GPUmaxTextureSize;
 	private int GPUmaxCubemapSize;
 	
+	private int GPUmaxAnisotropy;
+	private boolean isGPUsupportsVertexTextures;
+	private boolean isGPUsupportsBoneTextures;
+	
 	/**
 	 * The constructor will create renderer for the {@link Canvas3d} widget.
 	 * 
@@ -227,6 +229,35 @@ public class WebGLRenderer
 		this.GPUmaxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
 		this.GPUmaxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
 		this.GPUmaxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
+		
+		this.isGPUsupportsVertexTextures = ( this.GPUmaxVertexTextures > 0 ); 
+		
+		if ( getGL().getExtension( "OES_texture_float" ) != null)
+		{
+			this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures; 
+		}
+		else
+		{
+			Log.warn( "WebGLRenderer: Float textures not supported." );
+		}
+
+		if ( getGL().getExtension( "OES_standard_derivatives" ) == null )
+		{
+			Log.warn( "WebGLRenderer: Standard derivatives not supported." );
+		}
+
+		// TODO: http://www.khronos.org/registry/webgl/extensions/EXT_texture_filter_anisotropic/
+		if ( getGL().getExtension( "EXT_texture_filter_anisotropic" ) != null)
+		{
+			this.GPUmaxAnisotropy = getGL().getParameteri(0x84FF); 
+		}
+
+		if(this.GPUmaxAnisotropy == 0 
+				|| getGL().getExtension( "MOZ_EXT_texture_filter_anisotropic" ) == null 
+				|| getGL().getExtension( "WEBKIT_EXT_texture_filter_anisotropic" ) == null )
+		{
+			Log.warn( "WebGLRenderer: Anisotropic texture filtering not supported." );
+		}
 
 		setViewport(0, 0, getCanvas().getWidth(), getCanvas().getHeight());
 		setDefaultGLState();
@@ -628,7 +659,7 @@ public class WebGLRenderer
 
 		object._normalMatrixArray = null;
 		object._modelViewMatrixArray = null;
-		object._objectMatrixArray = null;
+		object._modelMatrixArray = null;
 
 		if ( object.getClass() == Mesh.class )
 			for ( GeometryGroup g : object.getGeometry().getGeometryGroups().values() )
@@ -679,8 +710,7 @@ public class WebGLRenderer
 		this.cache_currentGeometryGroupHash = -1;
 		this.cache_currentMaterialId = -1;
 		this.isLightsNeedUpdate = true;
-		this.cache_oldDoubleSided = null;
-		this.cache_oldFlipSided = null;
+		this.cache_oldMaterialSided= null;
 
 		//TODO: this is extras 
 		//shadowMapPlugin.update( scene, camera );
@@ -903,6 +933,9 @@ public class WebGLRenderer
 				scene.updateMatrixWorld(false);
 
 		// update camera matrices and frustum
+		
+		if ( camera.getParent() == null ) 
+			camera.updateMatrixWorld(false);
 
 		if ( camera._viewMatrixArray == null ) 
 			camera._viewMatrixArray = Float32Array.create( 16 );
@@ -1064,8 +1097,7 @@ public class WebGLRenderer
 			this.cache_oldBlending = null;
 			this.cache_oldDepthTest = null;
 			this.cache_oldDepthWrite = null;
-			this.cache_oldDoubleSided = null;
-			this.cache_oldFlipSided = null;
+			this.cache_oldMaterialSided = null;
 
 			this.cache_currentGeometryGroupHash = -1;
 			this.cache_currentMaterialId = -1;
@@ -1082,8 +1114,7 @@ public class WebGLRenderer
 			this.cache_oldBlending = null;
 			this.cache_oldDepthTest = null;
 			this.cache_oldDepthWrite = null;
-			this.cache_oldDoubleSided = null;
-			this.cache_oldFlipSided = null;
+			this.cache_oldMaterialSided = null;
 
 			this.cache_currentGeometryGroupHash = -1;
 			this.cache_currentMaterialId = -1;
@@ -1101,7 +1132,7 @@ public class WebGLRenderer
 
 		this.cache_currentGeometryGroupHash = -1;
 
-		setObjectFaces( (HasSides) object );
+		setMaterialFaces( material );
 
 //		if ( object.immediateRenderCallback )
 //			object.immediateRenderCallback( program, this._gl, this._frustum );
@@ -1215,8 +1246,7 @@ public class WebGLRenderer
 					setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits());
 				}
 
-				if(object instanceof HasSides)
-					setObjectFaces( (HasSides) object );
+				setMaterialFaces( material );
 
 				// TODO: Extras
 //				if ( buffer instanceof THREE.BufferGeometry )
@@ -1749,7 +1779,7 @@ public class WebGLRenderer
 		parameters.shadowMapDebug   = this.isShadowMapDebug;
 		parameters.shadowMapCascade = this.isShadowMapCascade;
 
-		parameters.doubleSided = object instanceof HasSides && ((HasSides)object).isDoubleSided();
+		parameters.doubleSided = material.getSides() == Material.SIDE.DOUBLE;
 
 		material.updateProgramParameters(parameters);
 		Log.debug("initMaterial() called new Program");
@@ -2391,26 +2421,21 @@ Log.error("?????????????");
 		getGL().enable( GLenum.CULL_FACE.getValue() );
 	}
 
-	private void setObjectFaces( HasSides object ) 
+	private void setMaterialFaces( Material material )
 	{
-		if ( this.cache_oldDoubleSided == null || this.cache_oldDoubleSided != object.isDoubleSided() ) 
+		if ( this.cache_oldMaterialSided == null || this.cache_oldMaterialSided != material.getSides() ) 
 		{
-			if ( object.isDoubleSided() )
+			if(material.getSides() == Material.SIDE.DOUBLE)
 				getGL().disable( GLenum.CULL_FACE.getValue() );
 			else
 				getGL().enable( GLenum.CULL_FACE.getValue() );
 
-			this.cache_oldDoubleSided = object.isDoubleSided();
-		}
-
-		if ( this.cache_oldFlipSided == null || this.cache_oldFlipSided != object.isFlipSided() ) 
-		{
-			if ( object.isFlipSided() )
+			if ( material.getSides() == Material.SIDE.BACK ) 
 				getGL().frontFace( GLenum.CW.getValue() );
 			else
 				getGL().frontFace( GLenum.CCW.getValue() );
 
-			this.cache_oldFlipSided = object.isFlipSided();
+			this.cache_oldMaterialSided = material.getSides();
 		}
 	}
 
