@@ -27,7 +27,6 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
-import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -43,23 +42,20 @@ import thothbot.parallax.core.shared.scenes.Scene;
  */
 public final class CubeCamera extends Object3D 
 {
-	protected double fieldOfView = 90.0;
-	protected double aspectRatio = 1.0;
-	
-	protected double near;
-	protected double far;
-	
-	PerspectiveCamera cameraPX;
-	PerspectiveCamera cameraNX;
-	
-	PerspectiveCamera cameraPY;
-	PerspectiveCamera cameraNY;
-	
-	PerspectiveCamera cameraPZ;
-	PerspectiveCamera cameraNZ;
-	
-	RenderTargetCubeTexture renderTarget;
-	
+	private double fieldOfView = 90.0;
+	private double aspectRatio = 1.0;
+
+	private PerspectiveCamera cameraPX;
+	private PerspectiveCamera cameraNX;
+
+	private PerspectiveCamera cameraPY;
+	private PerspectiveCamera cameraNY;
+
+	private PerspectiveCamera cameraPZ;
+	private PerspectiveCamera cameraNZ;
+
+	private RenderTargetCubeTexture renderTarget;
+
 	public CubeCamera(double near, double far, int cubeResolution)
 	{
 		this.cameraPX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );

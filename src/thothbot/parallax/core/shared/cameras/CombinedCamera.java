@@ -52,11 +52,10 @@ public class CombinedCamera extends Camera
 	private OrthographicCamera cameraO;
 	private PerspectiveCamera cameraP;
 
-	public boolean inPersepectiveMode = true;
+	public boolean inPerspectiveMode = true;
 	public boolean inOrthographicMode = false;
 
-	public CombinedCamera(int width, int height, double fov, double near, double far, double orthonear,
-			double orthofar) 
+	public CombinedCamera(int width, int height, double fov, double near, double far, double orthoNear,	double orthoFar) 
 	{
 		this.fov = fov;
 
@@ -68,7 +67,7 @@ public class CombinedCamera extends Camera
 		// We could also handle the projectionMatrix internally, but just wanted
 		// to test nested camera objects
 		this.cameraO = new OrthographicCamera(width / -2.0, width / 2.0, height / 2.0, height / -2.0,
-				orthonear, orthofar);
+				orthoNear, orthoFar);
 		this.cameraP = new PerspectiveCamera(fov, width / height, near, far);
 
 		toPerspective();
@@ -85,7 +84,7 @@ public class CombinedCamera extends Camera
 		this.cameraP.updateProjectionMatrix();
 		this.projectionMatrix = this.cameraP.projectionMatrix;
 
-		this.inPersepectiveMode = true;
+		this.inPerspectiveMode = true;
 		this.inOrthographicMode = false;
 	}
 
@@ -130,7 +129,7 @@ public class CombinedCamera extends Camera
 		this.far = this.cameraO.far;
 		this.projectionMatrix = this.cameraO.projectionMatrix;
 
-		this.inPersepectiveMode = false;
+		this.inPerspectiveMode = false;
 		this.inOrthographicMode = true;
 	}
 
@@ -147,7 +146,7 @@ public class CombinedCamera extends Camera
 	{
 		this.fov = fov;
 
-		if (this.inPersepectiveMode) 
+		if (this.inPerspectiveMode) 
 		{
 			this.toPerspective();
 		} 
@@ -162,7 +161,7 @@ public class CombinedCamera extends Camera
 	 */
 	public void updateProjectionMatrix()
 	{
-		if (this.inPersepectiveMode) 
+		if (this.inPerspectiveMode) 
 		{
 			this.toPerspective();
 		} 
@@ -195,7 +194,7 @@ public class CombinedCamera extends Camera
 
 		this.zoom = zoom;
 
-		if (this.inPersepectiveMode) 
+		if (this.inPerspectiveMode) 
 		{
 			this.toPerspective();
 		} 
@@ -205,41 +204,47 @@ public class CombinedCamera extends Camera
 		}
 	}
 	
-	public void toFrontView() {
+	public void toFrontView() 
+	{
 		this.rotation.set(0, 0, 0);
 		// should we be modifing the matrix instead?
 		this.rotationAutoUpdate = false;
 	}
 
-	public void toBackView() {
+	public void toBackView() 
+	{
 		this.rotation.setX(0);
 		this.rotation.setY(Math.PI);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;
 	}
 		
-	public void toLeftView() {
+	public void toLeftView() 
+	{
 		this.rotation.setX(0);
 		this.rotation.setY(- Math.PI / 2.0);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;
 	}
 
-	public void toRightView() {
+	public void toRightView() 
+	{
 		this.rotation.setX(0);
 		this.rotation.setY(Math.PI / 2.0);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;
 	}
 
-	public void toTopView() {
+	public void toTopView() 
+	{
 		this.rotation.setX(- Math.PI / 2.0);
 		this.rotation.setY(0);
 		this.rotation.setZ(0);
 		this.rotationAutoUpdate = false;
 	}
 
-	public void toBottomView() {
+	public void toBottomView() 
+	{
 		this.rotation.setX(Math.PI / 2.0);
 		this.rotation.setY(0);
 		this.rotation.setZ(0);

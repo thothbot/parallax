@@ -79,7 +79,7 @@ public final class Torus extends Geometry
 
 				getVertices().add( vertex );
 
-				uvs.add( new UV( i / (double)segmentsT, 1.0 - j / (double)segmentsR * 1.8 ) );
+				uvs.add( new UV( i / (double)segmentsT, j / (double)segmentsR * 1.8 ) );
 				normals.add( vertex.clone().sub( center ).normalize() );
 			}
 		}
