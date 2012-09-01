@@ -1,4 +1,4 @@
-#ifdef USE_ENVMAP
+#if defined( USE_ENVMAP ) && ! defined( USE_BUMPMAP )
 
 	varying vec3 vReflect;
 

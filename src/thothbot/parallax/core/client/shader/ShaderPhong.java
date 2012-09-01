@@ -63,6 +63,7 @@ public final class ShaderPhong extends Shader
 	protected void initUniforms()
 	{
 		this.setUniforms(UniformsLib.getCommon());
+		this.setUniforms(UniformsLib.getBump());
 		this.setUniforms(UniformsLib.getFog());
 		this.setUniforms(UniformsLib.getLights());
 		this.setUniforms(UniformsLib.getShadowmap());
@@ -95,7 +96,10 @@ public final class ShaderPhong extends Shader
 		);
 
 		List<String> main2 = Arrays.asList(
-			ChunksVertexShader.MORPH_NORMAL
+			ChunksVertexShader.MORPH_NORMAL,
+			ChunksVertexShader.SKINBASE,
+			ChunksVertexShader.SKINNORMAL,
+			ChunksVertexShader.DEFAULTNORMAL
 		);
 
 		List<String> main3 = Arrays.asList(
@@ -119,12 +123,16 @@ public final class ShaderPhong extends Shader
 			ChunksFragmentShader.ENVMAP_PARS,
 			ChunksFragmentShader.FOG_PARS,
 			ChunksFragmentShader.LIGHTS_PONG_PARS,
-			ChunksFragmentShader.SHADOWMAP_PARS
+			ChunksFragmentShader.SHADOWMAP_PARS,
+			ChunksFragmentShader.BUMPMAP_PARS,
+			ChunksFragmentShader.SPECULARMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
 			ChunksFragmentShader.MAP,
 			ChunksFragmentShader.ALPHA_TEST,
+			ChunksFragmentShader.SPECULARMAP,
+			
 			ChunksFragmentShader.LIGHTS_PONG,
 					
 			ChunksFragmentShader.LIGHTMAP,

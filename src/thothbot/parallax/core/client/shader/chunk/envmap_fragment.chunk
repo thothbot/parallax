@@ -1,12 +1,34 @@
 #ifdef USE_ENVMAP
 
-	#ifdef DOUBLE_SIDED
-		float flipNormal = ( -1.0 + 2.0 * float( gl_FrontFacing ) );
-		vec4 cubeColor = textureCube( envMap, flipNormal * vec3( flipEnvMap * vReflect.x, vReflect.yz ) );
+	vec3 reflectVec;
+
+	#ifdef USE_BUMPMAP
+
+		vec3 cameraToVertex = normalize( vWorldPosition - cameraPosition );
+
+		if ( useRefract ) {
+
+			reflectVec = refract( cameraToVertex, normal, refractionRatio );
+
+		} else { 
+
+			reflectVec = reflect( cameraToVertex, normal );
+
+		}
 
 	#else
 
-		vec4 cubeColor = textureCube( envMap, vec3( flipEnvMap * vReflect.x, vReflect.yz ) );
+		reflectVec = vReflect;
+
+	#endif
+			
+	#ifdef DOUBLE_SIDED
+		float flipNormal = ( -1.0 + 2.0 * float( gl_FrontFacing ) );
+		vec4 cubeColor = textureCube( envMap, flipNormal * vec3( flipEnvMap * reflectVec.x, reflectVec.yz ) );
+
+	#else
+
+		vec4 cubeColor = textureCube( envMap, vec3( flipEnvMap * reflectVec.x, reflectVec.yz ) );
 	#endif
 
 	#ifdef GAMMA_INPUT
@@ -14,9 +36,9 @@
 	#endif
 
 	if ( combine == 1 ) {
-		gl_FragColor.xyz = mix( gl_FragColor.xyz, cubeColor.xyz, reflectivity );
+		gl_FragColor.xyz = mix( gl_FragColor.xyz, cubeColor.xyz, specularStrength * reflectivity );
 	} else {
-		gl_FragColor.xyz = gl_FragColor.xyz * cubeColor.xyz;
+		gl_FragColor.xyz = mix( gl_FragColor.xyz, gl_FragColor.xyz * cubeColor.xyz, specularStrength * reflectivity );
 	}
 
 #endif

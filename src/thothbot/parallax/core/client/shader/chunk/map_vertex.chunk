@@ -1,3 +1,3 @@
-#ifdef USE_MAP
+#if defined( USE_MAP ) || defined( USE_BUMPMAP ) || defined( USE_SPECULARMAP )
 	vUv = uv * offsetRepeat.zw + offsetRepeat.xy;
 #endif

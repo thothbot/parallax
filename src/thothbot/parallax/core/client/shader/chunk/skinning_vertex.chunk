@@ -1,5 +1,8 @@
 #ifdef USE_SKINNING
-	gl_Position  = ( boneGlobalMatrices[ int( skinIndex.x ) ] * skinVertexA ) * skinWeight.x;
-	gl_Position += ( boneGlobalMatrices[ int( skinIndex.y ) ] * skinVertexB ) * skinWeight.y;
-	gl_Position  = projectionMatrix * modelViewMatrix * gl_Position;
+
+	vec4 skinned  = boneMatX * skinVertexA * skinWeight.x;
+	skinned 	  += boneMatY * skinVertexB * skinWeight.y;
+
+	gl_Position  = projectionMatrix * modelViewMatrix * skinned;
+
 #endif

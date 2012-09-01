@@ -93,7 +93,10 @@ public final class ShaderLambert extends Shader
 			ChunksVertexShader.LIGHTMAP,
 			ChunksVertexShader.ENVMAP,
 			ChunksVertexShader.COLOR,
-			ChunksVertexShader.MORPH_NORMAL
+			ChunksVertexShader.MORPH_NORMAL,
+			ChunksVertexShader.SKINBASE,
+			ChunksVertexShader.SKINNORMAL,
+			ChunksVertexShader.DEFAULTNORMAL
 		);
 
 		List<String> main2 = Arrays.asList(
@@ -116,12 +119,14 @@ public final class ShaderLambert extends Shader
 			ChunksFragmentShader.LIGHTMAP_PARS,
 			ChunksFragmentShader.ENVMAP_PARS,
 			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.SHADOWMAP_PARS
+			ChunksFragmentShader.SHADOWMAP_PARS,
+			ChunksFragmentShader.SPECULARMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
 			ChunksFragmentShader.MAP,
-			ChunksFragmentShader.ALPHA_TEST
+			ChunksFragmentShader.ALPHA_TEST,
+			ChunksFragmentShader.SPECULARMAP
 		);
 		
 		List<String> main2 = Arrays.asList(

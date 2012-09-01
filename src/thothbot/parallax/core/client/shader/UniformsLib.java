@@ -51,6 +51,7 @@ public class UniformsLib
 		retval.put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4( 0, 0, 1, 1 ) ));
 			
 		retval.put("lightMap", new Uniform(Uniform.TYPE.T,  2 ));
+		retval.put("specularMap", new Uniform(Uniform.TYPE.T,  3 ));
 			
 		retval.put("envMap", new Uniform(Uniform.TYPE.T,  1 ));
 		retval.put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
@@ -60,6 +61,16 @@ public class UniformsLib
 		retval.put("combine", new Uniform(Uniform.TYPE.I,  0 ));
 			
 		retval.put("morphTargetInfluences", new Uniform(Uniform.TYPE.F,  0.0 ));
+		
+		return retval;
+	}
+	
+	public static Map<String, Uniform> getBump ()
+	{
+		Map<String, Uniform> retval = new HashMap<String, Uniform>();
+		
+		retval.put("bumpMap", new Uniform(Uniform.TYPE.T,  4 ));
+		retval.put("bumpScale", new Uniform(Uniform.TYPE.F, 1.0 ));
 		
 		return retval;
 	}

@@ -32,6 +32,8 @@ public class ChunksVertexShader
 	public static String DEFAULT_PARS = Chunks.INSTANCE.getDefaultParsVertex().getText();
 	public static String DEFAULT = Chunks.INSTANCE.getDefaultVertex().getText();
 	
+	public static String DEFAULTNORMAL = Chunks.INSTANCE.getDefaultNormalVertex().getText();
+	
 	public static String ENVMAP_PARS = Chunks.INSTANCE.getEnvmapParsVertex().getText();
 	public static String ENVMAP = Chunks.INSTANCE.getEnvmapVertex().getText();
 	
@@ -54,6 +56,10 @@ public class ChunksVertexShader
 	
 	public static String SHADOWMAP_PARS = Chunks.INSTANCE.getShadowmapParsVertex().getText();
 	public static String SHADOWMAP = Chunks.INSTANCE.getShadowmapVertex().getText();
+	
+	public static String SKINBASE = Chunks.INSTANCE.getSkinBaseVertex().getText();
+	
+	public static String SKINNORMAL = Chunks.INSTANCE.getSkinNormalVertex().getText();
 	
 	public static String SKINNING_PARS = Chunks.INSTANCE.getSkinningParsVertex().getText();
 	public static String SKINNING = Chunks.INSTANCE.getSkinningVertex().getText();

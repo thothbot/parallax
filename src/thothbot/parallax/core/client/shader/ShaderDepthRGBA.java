@@ -64,10 +64,13 @@ public final class ShaderDepthRGBA extends Shader
 	protected void updateVertexSource(String src)
 	{
 		List<String> vars = Arrays.asList(
+			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.MORPH_TARGET_PARS
 		);
 		
 		List<String> main = Arrays.asList(
+			ChunksVertexShader.SKINBASE,
+			ChunksVertexShader.SKINNING,
 			ChunksVertexShader.MORPH_TARGET,
 			ChunksVertexShader.DEFAULT
 		);

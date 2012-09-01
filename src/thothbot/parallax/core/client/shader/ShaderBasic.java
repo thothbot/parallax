@@ -71,6 +71,7 @@ public final class ShaderBasic extends Shader
 			ChunksVertexShader.LIGHTMAP_PARS,
 			ChunksVertexShader.ENVMAP_PARS,
 			ChunksVertexShader.COLOR_PARS,
+			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.MORPH_TARGET_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
@@ -99,12 +100,14 @@ public final class ShaderBasic extends Shader
 			ChunksFragmentShader.LIGHTMAP_PARS,
 			ChunksFragmentShader.ENVMAP_PARS,
 			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.SHADOWMAP_PARS
+			ChunksFragmentShader.SHADOWMAP_PARS,
+			ChunksFragmentShader.SPECULARMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
 			ChunksFragmentShader.MAP,
 			ChunksFragmentShader.ALPHA_TEST,
+			ChunksFragmentShader.SPECULARMAP,
 			ChunksFragmentShader.LIGHTMAP,
 			ChunksFragmentShader.COLOR,
 			ChunksFragmentShader.ENVMAP,

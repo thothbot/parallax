@@ -35,6 +35,9 @@ public interface Chunks extends ClientBundle
 
 	@Source("chunk/alphatest_fragment.chunk")
 	TextResource getAlphatestFragment();
+	
+	@Source("chunk/bumpmap_pars_fragment.chunk")
+	TextResource getBumpmapParsFragment();
 
 	@Source("chunk/color_fragment.chunk")
 	TextResource getColorFragment();
@@ -48,6 +51,9 @@ public interface Chunks extends ClientBundle
 	@Source("chunk/color_vertex.chunk")
 	TextResource getColorVertex();
 
+	@Source("chunk/defaultnormal_vertex.chunk")
+	TextResource getDefaultNormalVertex();
+	
 	@Source("chunk/default_pars_vertex.chunk")
 	TextResource getDefaultParsVertex();
 	
@@ -152,4 +158,16 @@ public interface Chunks extends ClientBundle
 
 	@Source("chunk/skinning_vertex.chunk")
 	TextResource getSkinningVertex();
+	
+	@Source("chunk/skinbase_vertex.chunk")
+	TextResource getSkinBaseVertex();
+	
+	@Source("chunk/skinnormal_vertex.chunk")
+	TextResource getSkinNormalVertex();
+	
+	@Source("chunk/specularmap_fragment.chunk")
+	TextResource getSpecularmapFragment();
+	
+	@Source("chunk/specularmap_pars_fragment.chunk")
+	TextResource getSpecularmapParsFragment();
 }

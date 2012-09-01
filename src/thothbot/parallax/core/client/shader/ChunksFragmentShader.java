@@ -27,6 +27,8 @@ package thothbot.parallax.core.client.shader;
 public class ChunksFragmentShader
 {
 	public static String ALPHA_TEST = Chunks.INSTANCE.getAlphatestFragment().getText();
+
+	public static String BUMPMAP_PARS = Chunks.INSTANCE.getBumpmapParsFragment().getText();
 	
 	public static String COLOR_PARS = Chunks.INSTANCE.getColorParsFragment().getText();
 	public static String COLOR = Chunks.INSTANCE.getColorFragment().getText();
@@ -55,5 +57,8 @@ public class ChunksFragmentShader
 	
 	public static String SHADOWMAP_PARS = Chunks.INSTANCE.getShadowmapParsFragment().getText();
 	public static String SHADOWMAP = Chunks.INSTANCE.getShadowmapFragment().getText();
+	
+	public static String SPECULARMAP_PARS = Chunks.INSTANCE.getSpecularmapParsFragment().getText();
+	public static String SPECULARMAP = Chunks.INSTANCE.getSpecularmapFragment().getText();
 	
 }
