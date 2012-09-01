@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
@@ -36,10 +37,21 @@ public class SkinnedMesh extends Mesh
 
 	public List<Bone> bones;
 	public Float32Array boneMatrices;
+	public boolean 	useVertexTexture;
+	public int boneTextureWidth;
+	public int boneTextureHeight;
+	public Texture boneTexture;
 	
-	public SkinnedMesh(Geometry geometry, Material material) 
+	public SkinnedMesh(Geometry geometry, Material material)
+	{
+		this(geometry, material, true);
+	}
+
+	public SkinnedMesh(Geometry geometry, Material material, boolean useVertexTexture) 
 	{
 		super(geometry, material);
+
+		this.useVertexTexture = useVertexTexture;
 
 		// init bones
 		this.identityMatrix = new Matrix4();

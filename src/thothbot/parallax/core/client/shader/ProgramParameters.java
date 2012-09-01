@@ -31,10 +31,15 @@ public class ProgramParameters
 	
 	public int maxShadows;
 	public int maxBones;
+	public int boneTextureWidth;
+	public int boneTextureHeight;
+	public boolean useVertexTexture;
 	
 	public boolean map;
 	public boolean envMap;
 	public boolean lightMap;
+	public boolean bumpMap;
+	public boolean specularMap;
 	public boolean vertexColors;
 	public boolean skinning;
 	public boolean morphTargets;
@@ -59,12 +64,13 @@ public class ProgramParameters
 	
 	public int maxVertexTextures;
 	
-	public String toString() {
+	public String toString() 
+	{
 		String retval = "";
 		retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading + "-1-"
 				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + "-2-"
-				+ maxShadows + ", " + maxBones + "-2-"
-				+ map + ", " + envMap + ", " + lightMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
+				+ maxShadows + ", " + maxBones + ", " + boneTextureWidth + ", " + boneTextureHeight + ", " + useVertexTexture + "-2-"
+				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + specularMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
 				+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + "-5-"
 				+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-6-"
 				+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals + ", " + maxVertexTextures;

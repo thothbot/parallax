@@ -343,6 +343,8 @@ public abstract class Material
 		parameters.map      = (this instanceof HasMap && ((HasMap)this).getMap() != null);
 		parameters.envMap   = (this instanceof HasEnvMap && ((HasEnvMap)this).getEnvMap() != null);
 		parameters.lightMap = (this instanceof HasLightMap &&  ((HasLightMap)this).getLightMap() != null);
+		parameters.bumpMap  = (this instanceof HasBumpMap &&  ((HasBumpMap)this).getBumpMap() != null);
+		parameters.specularMap  = (this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null);
 
 		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
 
@@ -363,6 +365,7 @@ public abstract class Material
 		}
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
+		parameters.doubleSided = this.getSides() == Material.SIDE.DOUBLE;
 	}
 
 	public Shader buildShader(WebGLRenderingContext gl, ProgramParameters parameters)

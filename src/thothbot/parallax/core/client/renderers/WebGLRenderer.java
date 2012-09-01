@@ -1751,8 +1751,7 @@ public class WebGLRenderer
 		// (not to blow over maxLights budget)
 		Map<String, Integer> maxLightCount = allocateLights( lights );
 		int maxShadows = allocateShadows( lights );
-		int maxBones   = allocateBones( object );
-		
+
 		ProgramParameters parameters = new ProgramParameters();
 		
 		parameters.gammaInput  = isGammaInput();
@@ -1763,8 +1762,15 @@ public class WebGLRenderer
 		parameters.useFog  = (fog != null);
 		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
 
-		parameters.maxBones = maxBones;
-		
+		parameters.maxBones = allocateBones( object );
+
+		if(object instanceof SkinnedMesh)
+		{
+			parameters.useVertexTexture = this.isGPUsupportsBoneTextures && ((SkinnedMesh)object).useVertexTexture;
+			parameters.boneTextureWidth = ((SkinnedMesh)object).boneTextureWidth;
+			parameters.boneTextureHeight = ((SkinnedMesh)object).boneTextureHeight;
+		}
+
 		parameters.maxMorphTargets = this.maxMorphTargets;
 		parameters.maxMorphNormals = this.maxMorphNormals;
 
@@ -1778,8 +1784,6 @@ public class WebGLRenderer
 		parameters.shadowMapSoft    = this.isShadowMapSoft;
 		parameters.shadowMapDebug   = this.isShadowMapDebug;
 		parameters.shadowMapCascade = this.isShadowMapCascade;
-
-		parameters.doubleSided = material.getSides() == Material.SIDE.DOUBLE;
 
 		material.updateProgramParameters(parameters);
 		Log.debug("initMaterial() called new Program");
@@ -1881,8 +1885,8 @@ public class WebGLRenderer
 			{
 				((Mesh)object).__webglMorphTargetInfluences = Float32Array.create( this.maxMorphTargets );
 
-				for ( int i = 0, il = this.maxMorphTargets; i < il; i ++ )
-					((Mesh)object).__webglMorphTargetInfluences.set(i, 0);
+//				for ( int i = 0, il = this.maxMorphTargets; i < il; i ++ )
+//					((Mesh)object).__webglMorphTargetInfluences.set(i, 0);
 			}
 		}
 
@@ -1966,9 +1970,29 @@ public class WebGLRenderer
 					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera._viewMatrixArray );
 			}
 
-			// TODO: fix this
-//			if ( material.skinning )
-//				getGL().uniformMatrix4fv( p_uniforms.get("boneGlobalMatrices"), false, object.boneMatrices );
+			if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() )
+			{
+				if ( object instanceof SkinnedMesh && ((SkinnedMesh)object).useVertexTexture && this.isGPUsupportsBoneTextures) 
+				{
+					if ( m_uniforms.get("boneTexture").getLocation() != null ) 
+					{
+						// shadowMap texture array starts from 6
+						// texture unit 12 should leave space for 6 shadowmaps
+
+						int textureUnit = 12;
+
+						getGL().uniform1i( m_uniforms.get("boneTexture").getLocation(), textureUnit );
+						setTexture( ((SkinnedMesh)object).boneTexture, textureUnit );
+					}
+				} 
+				else 
+				{
+					if ( m_uniforms.get("boneGlobalMatrices").getLocation() != null ) 
+					{
+						getGL().uniformMatrix4fv( m_uniforms.get("boneGlobalMatrices").getLocation(), false, ((SkinnedMesh)object).boneMatrices );
+					}
+				}
+			}
 		}
 
 		loadUniformsMatrices( m_uniforms, object );
