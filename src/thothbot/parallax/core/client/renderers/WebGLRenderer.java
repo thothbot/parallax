@@ -231,7 +231,7 @@ public class WebGLRenderer
 		this.GPUmaxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
 		
 		this.isGPUsupportsVertexTextures = ( this.GPUmaxVertexTextures > 0 ); 
-		
+		Log.error("AAAAAAAAAA");
 		if ( getGL().getExtension( "OES_texture_float" ) != null)
 		{
 			this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures; 
@@ -248,8 +248,8 @@ public class WebGLRenderer
 
 		// TODO: http://www.khronos.org/registry/webgl/extensions/EXT_texture_filter_anisotropic/
 		if ( getGL().getExtension( "EXT_texture_filter_anisotropic" ) != null
-				|| getGL().getExtension( "MOZ_EXT_texture_filter_anisotropic" ) == null 
-				|| getGL().getExtension( "WEBKIT_EXT_texture_filter_anisotropic" ) == null)
+				|| getGL().getExtension( "MOZ_EXT_texture_filter_anisotropic" ) != null 
+				|| getGL().getExtension( "WEBKIT_EXT_texture_filter_anisotropic" ) != null)
 		{
 			this.GPUmaxAnisotropy = getGL().getParameteri(0x84FF); 
 		}

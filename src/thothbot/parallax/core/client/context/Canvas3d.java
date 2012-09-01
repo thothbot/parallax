@@ -68,6 +68,8 @@ public class Canvas3d extends FocusWidget
 				gl = null;
 				Log.error("3d context: " + contextId + ", " + e.getMessage());
 			}
+
+			if(gl != null) break;
 		}
 		
 		if( gl == null )

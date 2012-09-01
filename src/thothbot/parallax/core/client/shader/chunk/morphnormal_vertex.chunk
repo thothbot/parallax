@@ -8,8 +8,5 @@
 	morphedNormal +=  ( morphNormal3 - normal ) * morphTargetInfluences[ 3 ];
 
 	morphedNormal += normal;
-	vec3 transformedNormal = normalMatrix * morphedNormal;
 
-#else
-	vec3 transformedNormal = normalMatrix * normal;
 #endif
