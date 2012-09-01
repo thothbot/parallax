@@ -46,29 +46,29 @@ public final class Plane extends Geometry
 		this(width, height, 1, 1);
 	}
 
-	public Plane(int width, int depth, int segmentsWidth, int segmentsDepth) 
+	public Plane(int width, int height, int segmentsWidth, int segmentsHeight) 
 	{
 		super();
 
 		double width_half = width / 2.0;
-		double depth_half = depth / 2.0;
+		double height_half = height / 2.0;
 		int gridX = segmentsWidth;
-		int gridZ = segmentsDepth;
+		int gridZ = segmentsHeight;
 		int gridX1 = gridX + 1;
 		int gridZ1 = gridZ + 1;
 		double segment_width = width / (double)gridX;
-		double segment_depth = depth / (double)gridZ;
+		double segment_height = height / (double)gridZ;
 
-		Vector3 normal = new Vector3( 0, 1, 0 );
+		Vector3 normal = new Vector3( 0, 0, 1 );
 
 		for ( int iz = 0; iz < gridZ1; iz ++ ) 
 		{
 			for ( int ix = 0; ix < gridX1; ix ++ ) 
 			{
 				double x = ix * segment_width - width_half;
-				double z =  iz * segment_depth - depth_half;
+				double y =  iz * segment_height - height_half;
 
-				getVertices().add( new Vector3( x, 0, z ) );
+				getVertices().add( new Vector3( x, -y, 0 ) );
 			}
 		}
 
@@ -87,10 +87,10 @@ public final class Plane extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UV( ix / (double)gridX,                     iz / (double)gridZ ),
-					new UV( ix / (double)gridX,           ( iz + 1.0 ) / (double)gridZ ),
-					new UV( ( ix + 1.0 ) / (double)gridX, ( iz + 1.0 ) / (double)gridZ ),
-					new UV( ( ix + 1.0 ) / (double)gridX,           iz / (double)gridZ )
+					new UV( ix / (double)gridX,                     1.0 - iz / (double)gridZ ),
+					new UV( ix / (double)gridX,           1.0 - ( iz + 1.0 ) / (double)gridZ ),
+					new UV( ( ix + 1.0 ) / (double)gridX, 1.0 - ( iz + 1.0 ) / (double)gridZ ),
+					new UV( ( ix + 1.0 ) / (double)gridX,           1.0 - iz / (double)gridZ )
 				) );
 			}
 		}
