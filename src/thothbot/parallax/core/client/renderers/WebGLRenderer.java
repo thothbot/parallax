@@ -247,14 +247,13 @@ public class WebGLRenderer
 		}
 
 		// TODO: http://www.khronos.org/registry/webgl/extensions/EXT_texture_filter_anisotropic/
-		if ( getGL().getExtension( "EXT_texture_filter_anisotropic" ) != null)
+		if ( getGL().getExtension( "EXT_texture_filter_anisotropic" ) != null
+				|| getGL().getExtension( "MOZ_EXT_texture_filter_anisotropic" ) == null 
+				|| getGL().getExtension( "WEBKIT_EXT_texture_filter_anisotropic" ) == null)
 		{
 			this.GPUmaxAnisotropy = getGL().getParameteri(0x84FF); 
 		}
-
-		if(this.GPUmaxAnisotropy == 0 
-				|| getGL().getExtension( "MOZ_EXT_texture_filter_anisotropic" ) == null 
-				|| getGL().getExtension( "WEBKIT_EXT_texture_filter_anisotropic" ) == null )
+		else
 		{
 			Log.warn( "WebGLRenderer: Anisotropic texture filtering not supported." );
 		}
@@ -1757,7 +1756,7 @@ public class WebGLRenderer
 		parameters.gammaInput  = isGammaInput();
 		parameters.gammaOutput = isGammaOutput();
 		parameters.physicallyBasedShading = isPhysicallyBasedShading();
-		parameters.maxVertexTextures = this.GPUmaxVertexTextures;
+		parameters.isSupportsVertexTextures = this.isGPUsupportsVertexTextures;
 		
 		parameters.useFog  = (fog != null);
 		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
@@ -2606,13 +2605,14 @@ Log.error("?????????????");
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
 
+			getGL().pixelStorei( GLenum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? -1 : 1 );
 			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? -1 : 1 );
 
 			Element image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
-			texture.setTextureParameters( getGL(), GLenum.TEXTURE_2D.getValue(), isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, GLenum.TEXTURE_2D.getValue(), isImagePowerOfTwo );
 
 			if ( texture instanceof DataTexture ) 
 			{
@@ -2684,6 +2684,7 @@ Log.error("?????????????");
 
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
+			getGL().pixelStorei( GLenum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? -1 : 1 );
 
 			List<Element> cubeImage = new ArrayList<Element>();
 
@@ -2700,7 +2701,7 @@ Log.error("?????????????");
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
-			texture.setTextureParameters( getGL(), GLenum.TEXTURE_CUBE_MAP.getValue(), isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, GLenum.TEXTURE_CUBE_MAP.getValue(), isImagePowerOfTwo );
 
 			for ( int i = 0; i < 6; i ++ ) 
 			{
@@ -2767,12 +2768,38 @@ Log.error("?????????????");
 	 */
 	private int allocateBones (GeometryObject object ) 
 	{
-		int maxBones = 50;
+		if ( this.isGPUsupportsBoneTextures && object instanceof SkinnedMesh && ((SkinnedMesh)object).useVertexTexture ) 
+		{
+			return 1024;
+		} 
+		else 
+		{
+			// default for when object is not specified
+			// ( for example when prebuilding shader
+			//   to be used with multiple objects )
+			//
+			// 	- leave some extra space for other uniforms
+			//  - limit here is ANGLE's 254 max uniform vectors
+			//    (up to 54 should be safe)
 
-		if ( object !=null && object instanceof SkinnedMesh )
-			maxBones = ((SkinnedMesh)object).bones.size();
+			int nVertexUniforms = getGL().getParameteri( GLenum.MAX_VERTEX_UNIFORM_VECTORS.getValue() );
+			int nVertexMatrices = (int) Math.floor( ( nVertexUniforms - 20 ) / 4 );
 
-		return maxBones;
+			int maxBones = nVertexMatrices;
+
+			if ( object instanceof SkinnedMesh ) 
+			{
+				maxBones = Math.min( ((SkinnedMesh)object).bones.size(), maxBones );
+
+				if ( maxBones < ((SkinnedMesh)object).bones.size() )
+				{
+					Log.warn( "WebGLRenderer: too many bones - " + ((SkinnedMesh)object).bones.size() 
+							+ ", this GPU supports just " + maxBones + " (try OpenGL instead of ANGLE)" );
+				}
+			}
+
+			return maxBones;
+		}
 	}
 
 	private Map<String, Integer> allocateLights ( List<Light> lights ) 

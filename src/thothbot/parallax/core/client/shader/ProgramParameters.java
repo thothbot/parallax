@@ -62,7 +62,7 @@ public class ProgramParameters
 	public int maxMorphTargets;
 	public int maxMorphNormals;
 	
-	public int maxVertexTextures;
+	public boolean isSupportsVertexTextures;
 	
 	public String toString() 
 	{
@@ -73,7 +73,7 @@ public class ProgramParameters
 				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + specularMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
 				+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + "-5-"
 				+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-6-"
-				+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals + ", " + maxVertexTextures;
+				+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals + ", " + isSupportsVertexTextures;
 		return retval;
 	}
 }

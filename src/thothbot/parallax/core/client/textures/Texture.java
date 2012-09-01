@@ -90,10 +90,15 @@ public class Texture
 
 	private boolean isGenerateMipmaps = true;
 	private boolean isPremultiplyAlpha = false;
+	private boolean isFlipY = true;
 
 	private boolean isNeedsUpdate = false;
 	
 	private WebGLTexture webglTexture;
+	
+	private int anisotropy;
+	
+	private int cache_oldAnisotropy;
 
 	/**
 	 * Default constructor will create new instance of texture.
@@ -137,6 +142,13 @@ public class Texture
 		this(image, mapping, wrapS, wrapT, magFilter, minFilter, PixelFormat.RGBA, DataType.UNSIGNED_BYTE);
 	}
 	
+	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
+			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
+			PixelFormat format, DataType type)
+	{
+		this(image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, 1);
+	}
+	
 	/**
 	 * Constructor will create a texture instance.
 	 * 
@@ -148,10 +160,11 @@ public class Texture
 	 * @param minFilter the texture minifying function. @see {@link TextureMinFilter}.
 	 * @param format    the {@link PixelFormat} value.
 	 * @param type      the {@link DataType} value.
+	 * @param anisotropy the anisotropy value.
 	 */
 	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
-			PixelFormat format, DataType type) 
+			PixelFormat format, DataType type, int anisotropy) 
 	{	
 		this.image = image;		
 		this.mapping = mapping;
@@ -381,12 +394,28 @@ public class Texture
 	public boolean isPremultiplyAlpha() {
 		return isPremultiplyAlpha;
 	}
+	
+	public int getAnisotropy() {
+		return this.anisotropy;
+	}
+	
+	public void setAnisotropy(int anisotropy) {
+		this.anisotropy = anisotropy;
+	}
 
 	/**
 	 * Sets premultiply alpha flag.
 	 */
 	public void setPremultiplyAlpha(boolean premultiplyAlpha) {
 		this.isPremultiplyAlpha = premultiplyAlpha;
+	}
+	
+	public boolean isFlipY() {
+		return this.isFlipY;
+	}
+	
+	public void setFlipY(boolean isFlipY) {
+		this.isFlipY = isFlipY;
 	}
 
 	public WebGLTexture getWebGlTexture() {
@@ -404,15 +433,19 @@ public class Texture
 	public Texture clone()
 	{
 		Texture clonedTexture = new Texture(this.image, this.mapping, this.wrapS, this.wrapT,
-				this.magFilter, this.minFilter, this.format, this.type);
+				this.magFilter, this.minFilter, this.format, this.type, this.anisotropy);
 
 		clonedTexture.offset.copy(this.offset);
 		clonedTexture.repeat.copy(this.repeat);
+		
+		clonedTexture.setGenerateMipmaps(this.isGenerateMipmaps);
+		clonedTexture.setPremultiplyAlpha(this.isPremultiplyAlpha);
+		clonedTexture.setFlipY(this.isFlipY);
 
 		return clonedTexture;
 	}
 
-	public void setTextureParameters (WebGLRenderingContext gl, int textureType, boolean isImagePowerOfTwo ) 
+	public void setTextureParameters (WebGLRenderingContext gl, int maxAnisotropy, int textureType, boolean isImagePowerOfTwo ) 
 	{	
 		if ( isImagePowerOfTwo ) 
 		{
@@ -427,6 +460,16 @@ public class Texture
 			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_T.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
 			gl.texParameteri( textureType, GLenum.TEXTURE_MAG_FILTER.getValue(), filterFallback( this.magFilter.getEnum() ) );
 			gl.texParameteri( textureType, GLenum.TEXTURE_MIN_FILTER.getValue(), filterFallback( this.minFilter.getEnum() ) );
+		}
+		
+		// TODO: test this approach
+		if ( maxAnisotropy > 0 && this.type != DataType.FLOAT ) 
+		{
+			if ( this.anisotropy > 1 || this.cache_oldAnisotropy > 1 ) 
+			{
+				gl.texParameterf( textureType, 0x84FE, Math.min( this.anisotropy, maxAnisotropy ) );
+				this.cache_oldAnisotropy = this.anisotropy;
+			}
 		}
 	}
 	

@@ -99,8 +99,9 @@ public abstract class Material
 		MAX_SHADOWS, // param
 		MAX_BONES, // param
 
-		USE_MAP, USE_ENVMAP, USE_LIGHTMAP, USE_COLOR, USE_SKINNING, USE_MORPHTARGETS, USE_MORPHNORMALS,
+		USE_MAP, USE_ENVMAP, USE_LIGHTMAP, USE_BUMPMAP, USE_SPECULARMAP, USE_COLOR, USE_SKINNING, USE_MORPHTARGETS, USE_MORPHNORMALS,
 
+		BONE_TEXTURE, N_BONE_PIXEL_X, N_BONE_PIXEL_Y,
 		PHONG_PER_PIXEL, WRAP_AROUND, DOUBLE_SIDED,
 
 		USE_SHADOWMAP, SHADOWMAP_SOFT, SHADOWMAP_DEBUG, SHADOWMAP_CASCADE,
@@ -376,7 +377,7 @@ public abstract class Material
 		shader.setVertexSource(getPrefixVertex(parameters) + "\n" + shader.getVertexSource());
 		shader.setFragmentSource(getPrefixFragment(parameters) + "\n" + shader.getFragmentSource());
 
-		this.shader = shader.buildProgram(gl, parameters.maxMorphTargets, parameters.maxMorphNormals);
+		this.shader = shader.buildProgram(gl, parameters.useVertexTexture, parameters.maxMorphTargets, parameters.maxMorphNormals);
 
 		return this.shader;
 	}
@@ -388,7 +389,7 @@ public abstract class Material
 
 		options.add("");
 		
-		if (parameters.maxVertexTextures > 0)
+		if (parameters.isSupportsVertexTextures)
 			options.add(SHADER_DEFINE.VERTEX_TEXTURES.getValue());
 
 		if (parameters.gammaInput)
@@ -416,6 +417,12 @@ public abstract class Material
 
 		if (parameters.lightMap)
 			options.add(SHADER_DEFINE.USE_LIGHTMAP.getValue());
+		
+		if (parameters.bumpMap)
+			options.add(SHADER_DEFINE.USE_BUMPMAP.getValue());
+		
+		if (parameters.specularMap)
+			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
 
 		if (parameters.vertexColors)
 			options.add(SHADER_DEFINE.USE_COLOR.getValue());
@@ -423,6 +430,15 @@ public abstract class Material
 		if (parameters.skinning)
 			options.add(SHADER_DEFINE.USE_SKINNING.getValue());
 
+		if (parameters.useVertexTexture)
+			options.add(SHADER_DEFINE.BONE_TEXTURE.getValue());
+		
+		if (parameters.boneTextureWidth > 0)
+			options.add(SHADER_DEFINE.N_BONE_PIXEL_X.getValue(parameters.boneTextureWidth));
+		
+		if (parameters.boneTextureHeight> 0)
+			options.add(SHADER_DEFINE.N_BONE_PIXEL_Y.getValue(parameters.boneTextureHeight));
+		
 		if (parameters.morphTargets)
 			options.add(SHADER_DEFINE.USE_MORPHTARGETS.getValue());
 		if (parameters.morphNormals)
@@ -463,6 +479,9 @@ public abstract class Material
 
 		options.add("");
 		
+		if (parameters.bumpMap)
+			options.add("#extension GL_OES_standard_derivatives : enable");
+		
 		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
 		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
 		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
@@ -495,6 +514,12 @@ public abstract class Material
 
 		if (parameters.lightMap)
 			options.add(SHADER_DEFINE.USE_LIGHTMAP.getValue());
+		
+		if (parameters.bumpMap)
+			options.add(SHADER_DEFINE.USE_BUMPMAP.getValue());
+		
+		if (parameters.specularMap)
+			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
 
 		if (parameters.vertexColors)
 			options.add(SHADER_DEFINE.USE_COLOR.getValue());

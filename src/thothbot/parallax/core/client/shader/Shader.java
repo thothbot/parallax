@@ -130,12 +130,13 @@ public abstract class Shader
 		return this.program;
 	}
 	
+	// Called in renderer plugins
 	public Shader buildProgram(WebGLRenderingContext gl) 
 	{
-		return buildProgram(gl, 0, 0);
+		return buildProgram(gl, false, 0, 0);
 	}
 	
-	public Shader buildProgram(WebGLRenderingContext gl, int maxMorphTargets, int maxMorphNormals) 
+	public Shader buildProgram(WebGLRenderingContext gl, boolean useVertexTexture, int maxMorphTargets, int maxMorphNormals) 
 	{
 		Log.debug("Building new program...");
 
@@ -146,11 +147,19 @@ public abstract class Shader
 		addUniform("modelViewMatrix",       new Uniform(Uniform.TYPE.FV1, null));
 		addUniform("projectionMatrix",      new Uniform(Uniform.TYPE.FV1, null));
 		addUniform("normalMatrix",          new Uniform(Uniform.TYPE.FV1, null));
-		addUniform("objectMatrix",          new Uniform(Uniform.TYPE.FV1, null));
+		addUniform("modelMatrix",           new Uniform(Uniform.TYPE.FV1, null));
 		addUniform("cameraPosition",        new Uniform(Uniform.TYPE.FV1, null));
-		addUniform("boneGlobalMatrices",    new Uniform(Uniform.TYPE.FV1, null));
 		addUniform("morphTargetInfluences", new Uniform(Uniform.TYPE.FV1, null));
 				
+		if ( useVertexTexture ) 
+		{
+			addUniform("boneTexture", new Uniform(Uniform.TYPE.FV1, null));
+		} 
+		else 
+		{
+			addUniform("boneGlobalMatrices", new Uniform(Uniform.TYPE.FV1, null));
+		}
+		
 		// Cache location
 		Map<String, Uniform> uniforms = getUniforms();
 		for (String id : uniforms.keySet())
