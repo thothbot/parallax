@@ -51,6 +51,10 @@ public final class MeshPhongMaterial extends Material
 	
 	private Texture lightMap;
 	
+	private Texture specularMap;
+	private Texture bumpMap;
+	private double bumpScale;
+	
 	private boolean isFog;
 	
 	private Color color;
@@ -96,6 +100,8 @@ public final class MeshPhongMaterial extends Material
 		setVertexColors(Material.COLORS.NO);
 		
 		setShininess(30);
+		
+		setBumpScale(1.0);
 	}
 
 	@Override
@@ -335,6 +341,32 @@ public final class MeshPhongMaterial extends Material
 	@Override
 	public void setEmissive(Color emissive) {
 		this.emissive = emissive;
+	}
+	
+	@Override
+	public Texture getSpecularMap() {
+		return this.specularMap;
+	}
+
+	@Override
+	public void setSpecularMap(Texture specularMap) {
+		this.specularMap = specularMap;
+	}
+	
+	public Texture getBumpMap() {
+		return this.bumpMap;
+	}
+
+	public void setBumpMap(Texture bumpMap) {
+		this.bumpMap = bumpMap;
+	}
+
+	public double getBumpScale() {
+		return this.bumpScale;
+	}
+
+	public void setBumpScale(double bumpScale) {
+		this.bumpScale = bumpScale;
 	}
 	
 	@Override

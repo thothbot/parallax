@@ -52,6 +52,8 @@ public final class MeshLambertMaterial extends Material
 	
 	private Texture lightMap;
 	
+	private Texture specularMap;
+	
 	private boolean isFog;
 	
 	private Color color;
@@ -294,6 +296,16 @@ public final class MeshLambertMaterial extends Material
 	@Override
 	public void setNumSupportedMorphNormals(int num) {
 		this.numSupportedMorphNormals = num;
+	}
+	
+	@Override
+	public Texture getSpecularMap() {
+		return this.specularMap;
+	}
+
+	@Override
+	public void setSpecularMap(Texture specularMap) {
+		this.specularMap = specularMap;
 	}
 	
 	@Override

@@ -41,6 +41,8 @@ public class MeshBasicMaterial extends Material
 	
 	private Texture lightMap;
 	
+	private Texture specularMap;
+	
 	private boolean isFog;
 	
 	private Color color;
@@ -246,5 +248,15 @@ public class MeshBasicMaterial extends Material
 	@Override
 	public void setMap(Texture map) {
 		this.map = map;
+	}
+	
+	@Override
+	public Texture getSpecularMap() {
+		return this.specularMap;
+	}
+
+	@Override
+	public void setSpecularMap(Texture specularMap) {
+		this.specularMap = specularMap;
 	}
 }

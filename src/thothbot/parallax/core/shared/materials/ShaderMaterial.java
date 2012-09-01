@@ -86,7 +86,7 @@ public class ShaderMaterial extends Material
 		setWireframe(false);
 		setWireframeLineWidth(1);
 		
-		setFog(true);
+		setFog(false);
 		
 		setColor(new Color(0xffffff));
 		
