@@ -231,7 +231,7 @@ public class WebGLRenderer
 		this.GPUmaxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
 		
 		this.isGPUsupportsVertexTextures = ( this.GPUmaxVertexTextures > 0 ); 
-		Log.error("AAAAAAAAAA");
+
 		if ( getGL().getExtension( "OES_texture_float" ) != null)
 		{
 			this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures; 

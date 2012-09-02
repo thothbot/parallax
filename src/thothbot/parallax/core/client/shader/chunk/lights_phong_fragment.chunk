@@ -162,7 +162,7 @@ vec3 viewPosition = normalize( vViewPosition );
 #if MAX_DIR_LIGHTS > 0
 
 	vec3 dirDiffuse  = vec3( 0.0 );
-	vec3 dirSpecular = vec3( 0.0 );" ,
+	vec3 dirSpecular = vec3( 0.0 );
 
 	for( int i = 0; i < MAX_DIR_LIGHTS; i ++ ) {
 
