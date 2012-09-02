@@ -55,8 +55,6 @@ import com.google.gwt.core.client.GWT;
 
 public class Mesh  extends GeometryObject
 {
-	private Boolean flipSided;
-	private Boolean doubleSided;
 	private Boolean overdraw;
 	private Integer morphTargetBase = null;
 	private List<Double> morphTargetInfluences;
@@ -83,8 +81,6 @@ public class Mesh  extends GeometryObject
 
 		this.geometry = geometry;
 		this.material = material;
-		this.flipSided = false;
-		this.doubleSided = false;
 		this.overdraw = false;
 
 		if (this.geometry != null) 
@@ -112,26 +108,6 @@ public class Mesh  extends GeometryObject
 				}
 			}
 		}
-	}
-
-	public boolean isFlipSided()
-	{
-		return this.flipSided;
-	}
-
-	public void setFlipSided(boolean flipSided)
-	{
-		this.flipSided = flipSided;
-	}
-
-	public boolean isDoubleSided()
-	{
-		return this.doubleSided;
-	}
-
-	public void setDoubleSided(boolean doubleSided)
-	{
-		this.doubleSided = doubleSided;
 	}
 
 	public boolean getOverdraw()
