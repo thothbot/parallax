@@ -2605,8 +2605,8 @@ Log.error("?????????????");
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
 
-			getGL().pixelStorei( GLenum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? -1 : 1 );
-			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? -1 : 1 );
+			getGL().pixelStorei( GLenum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0 );
+			getGL().pixelStorei( GLenum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? 1 : 0 );
 
 			Element image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
@@ -2684,7 +2684,7 @@ Log.error("?????????????");
 
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
-			getGL().pixelStorei( GLenum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? -1 : 1 );
+			getGL().pixelStorei( GLenum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0 );
 
 			List<Element> cubeImage = new ArrayList<Element>();
 

@@ -158,6 +158,7 @@ public final class ImageUtils
 	{
 		List<Element> elements = new ArrayList<Element>();
 		final CubeTexture texture = new CubeTexture(elements, mapping);
+		texture.setFlipY(false);
 	
 		loadedCount = 0;
 		for(Image image: images)
