@@ -222,7 +222,6 @@ public abstract class Shader
 			Log.info("initProgram(): shaders has been initialised");
 	}
 	
-
 	public void setPrecision(Shader.PRECISION precision) {
 		this.precision = precision;
 	}
@@ -378,27 +377,33 @@ public abstract class Shader
 	}
 		
 	// Methods
-	private static String SHADER_REPLACE_ARG = "[*]";
-	public static String updateShaderSource(String src, String mod)
-	{
-		return Shader.updateShaderSource(src, Arrays.asList(mod));
-	}
-
 	public static String updateShaderSource(String src, List<String> ... allMods)
 	{
-		StringBuffer result = new StringBuffer();
-		int s = 0;
-		int e = 0;
-		
+		String[] mods = new String[allMods.length];
+		for(int i = 0; i < allMods.length; i++)
+		{
+			String replace = "";
+
+			for(String mod : allMods[i])
+				replace += mod + "\n";
+
+			mods[i] = replace;
+		}
+
+		return Shader.updateShaderSource(src, mods);
+	}
+
+	private static String SHADER_REPLACE_ARG = "[*]";
+	public static String updateShaderSource(String src, String ... allMods)
+	{	
 		if(src.indexOf(SHADER_REPLACE_ARG) >= 0)
 		{
-			for ( List<String> mods : allMods )
+			StringBuffer result = new StringBuffer();
+			int s = 0;
+			int e = 0;
+
+			for ( String replace : allMods )
 			{
-				String replace = "";
-
-				for(String mod : mods)
-					replace += mod + "\n";
-
 				if((e = src.indexOf(SHADER_REPLACE_ARG, s)) >= 0)
 				{
 					result.append(src.substring(s, e));
@@ -408,9 +413,11 @@ public abstract class Shader
 			}
 
 			result.append(src.substring(s));
+
+			return result.toString();
 		}
 
-		return result.toString();
+		return src;
 	}
 
 	public static Float32Array buildKernel( double sigma ) 
