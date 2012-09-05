@@ -379,7 +379,12 @@ public abstract class Shader
 		
 	// Methods
 	private static String SHADER_REPLACE_ARG = "[*]";
-	protected static String updateShaderSource(String src, List<String> ... allMods)
+	public static String updateShaderSource(String src, String mod)
+	{
+		return Shader.updateShaderSource(src, Arrays.asList(mod));
+	}
+
+	public static String updateShaderSource(String src, List<String> ... allMods)
 	{
 		StringBuffer result = new StringBuffer();
 		int s = 0;

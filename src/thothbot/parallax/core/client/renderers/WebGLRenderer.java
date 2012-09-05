@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
@@ -647,7 +648,7 @@ public class WebGLRenderer
 	 * that the GL context keeps about the object, but it doesn't release textures or affect any 
 	 * JavaScript data.
 	 */
-	private void deallocateObject( GeometryObject object ) 
+	public void deallocateObject( GeometryObject object ) 
 	{
 		if ( ! object.isWebglInit ) return;
 
@@ -695,6 +696,24 @@ public class WebGLRenderer
 	public void deallocateRenderTarget ( RenderTargetTexture renderTarget ) 
 	{
 		renderTarget.deallocate(getGL());
+	}
+	
+	public void deallocateMaterial( Material material ) 
+	{
+		WebGLProgram program = material.getShader().getProgram();
+		if ( program == null ) return;
+
+		for ( String key: cache_programs.keySet()) 
+		{
+			Shader shader = cache_programs.get(key);
+			
+			if ( shader == material.getShader() ) 
+			{
+				getInfo().getMemory().programs --;
+				cache_programs.remove(key);
+				break;
+			}
+		}
 	}
 
 	/**
@@ -1792,7 +1811,7 @@ public class WebGLRenderer
 				+ parameters.toString();
 		if(this.cache_programs.containsKey(cashKey))
 		{
-			material.setShader( this.cache_programs.get(cashKey));
+			material.setShader( this.cache_programs.get(cashKey) );
 		}
 		else
 		{

@@ -672,12 +672,12 @@ public class Matrix4
 		return this;
 	}
 
-	public void setRotationFromEuler(Vector3 v)
+	public Matrix4 setRotationFromEuler(Vector3 v)
 	{
-		setRotationFromEuler(v, Euler.XYZ);
+		return setRotationFromEuler(v, Euler.XYZ);
 	}
 
-	public void setRotationFromEuler(Vector3 v, Euler order)
+	public Matrix4 setRotationFromEuler(Vector3 v, Euler order)
 	{
 
 		double x = v.getX(), y = v.getY(), z = v.getZ();
@@ -812,6 +812,7 @@ public class Matrix4
 
 		}
 
+		return this;
 	}
 
 	public void setRotationFromQuaternion(Quaternion q)
