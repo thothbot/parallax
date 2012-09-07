@@ -28,7 +28,6 @@ import thothbot.parallax.core.shared.core.Color;
 public class ShaderMaterial extends Material 
 	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning
 { 
-	
 	class ShaderMaterialShader extends Shader
 	{
 

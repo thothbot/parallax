@@ -373,7 +373,7 @@ public abstract class Material
 	{
 		Shader shader = getShader();
 
-		// Sets material prefixes
+		// Sets material prefixes for non shader materials only
 		shader.setVertexSource(getPrefixVertex(parameters) + "\n" + shader.getVertexSource());
 		shader.setFragmentSource(getPrefixFragment(parameters) + "\n" + shader.getFragmentSource());
 

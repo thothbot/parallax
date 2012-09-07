@@ -41,9 +41,9 @@ public class ColorUtils
 	 */
 	public static class HSV 
 	{
-		double hue;
-		double saturation;
-		double value;
+		public double hue;
+		public double saturation;
+		public double value;
 		
 		public HSV() 
 		{
