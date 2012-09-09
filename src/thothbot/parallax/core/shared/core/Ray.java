@@ -26,7 +26,6 @@ import java.util.List;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.objects.DimensionalObject;
-import thothbot.parallax.core.shared.objects.GeometryObject;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Particle;
 
@@ -72,20 +71,6 @@ public class Ray
 		this.direction = direction;
 		this.near = near;
 		this.far = far;
-
-		//
-
-		//		var a = new THREE.Vector3();
-		//		var b = new THREE.Vector3();
-		//		var c = new THREE.Vector3();
-		//		var d = new THREE.Vector3();
-		//
-		//		var originCopy = new THREE.Vector3();
-		//		var directionCopy = new THREE.Vector3();
-		//
-		//		var vector = new THREE.Vector3();
-		//		var normal = new THREE.Vector3();
-		//		var intersectPoint = new THREE.Vector3();
 	}
 
 	//
