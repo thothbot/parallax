@@ -38,7 +38,7 @@ public class Ray
 
 	private double precision = 0.0001;
 
-	class Intersect implements Comparable<Intersect>
+	public class Intersect implements Comparable<Intersect>
 	{
 		public double distance;
 		public Vector3 point;
@@ -269,6 +269,11 @@ public class Ray
 		Collections.sort(intersects);
 
 		return intersects;
+	}
+
+	public List<Ray.Intersect> intersectObjects(List<DimensionalObject> objects)
+	{
+		return intersectObjects(objects, false);
 	}
 
 	public List<Ray.Intersect> intersectObjects(List<DimensionalObject> objects, boolean recursive ) 
