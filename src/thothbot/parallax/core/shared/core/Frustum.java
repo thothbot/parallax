@@ -88,7 +88,6 @@ public class Frustum
 	 */
 	public boolean contains(GeometryObject object)
 	{
-		double distance;
 		Matrix4 matrix = object.getMatrixWorld();
 		Float32Array me = matrix.getArray();
 		double radius = -object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
@@ -96,7 +95,7 @@ public class Frustum
 		for (int i = 0; i < 6; i++) 
 		{
 			Vector4 plane = planes.get(i);
-			distance = plane.getX() * me.get(12) 
+			double distance = plane.getX() * me.get(12) 
 					+ plane.getY()  * me.get(13) 
 					+ plane.getZ()	* me.get(14) 
 					+ plane.getW();

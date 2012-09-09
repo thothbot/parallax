@@ -168,13 +168,13 @@ public class Ray
 		else if ( object instanceof Mesh ) 
 		{
 			// Checking boundingSphere
-			Vector3 scale = Frustum.__v1.set( 
+			Vector3 scale = new Vector3( 
 					object.getMatrixWorld().getColumnX().length(),
 					object.getMatrixWorld().getColumnY().length(),
 					object.getMatrixWorld().getColumnZ().length() );
 
 			double scaledRadius = ((Mesh)object).getGeometry().getBoundingSphere().radius 
-					* Math.max( scale.x, Math.max( scale.y, scale.z ) );
+					* Math.max( scale.getX(), Math.max( scale.getY(), scale.getZ() ) );
 
 			// Checking distance to ray
 			double distance = distanceFromIntersection( this.origin, this.direction, object.getMatrixWorld().getPosition() );
@@ -186,8 +186,6 @@ public class Ray
 			// Checking faces
 			Geometry geometry = ((Mesh) object).getGeometry();
 			List<Vector3> vertices = geometry.getVertices();
-			//				objMatrix,
-			//				isFaceMaterial, material, side;
 
 			List<Material> geometryMaterials = ((Mesh) object).getGeometry().getMaterials();
 			boolean isFaceMaterial = ((Mesh) object).getMaterial() instanceof MeshFaceMaterial;
@@ -214,8 +212,8 @@ public class Ray
 				// determine if ray intersects the plane of the face
 				// note: this works regardless of the direction of the face normal
 
-				Vector4 vector = objMatrix.multiplyVector3( vector.copy( face.centroid ) ).sub( originCopy );
-				Vector4 normal = object.getMatrixRotationWorld().multiplyVector3( normal.copy( face.normal ) );
+				Vector3 vector = objMatrix.multiplyVector3( face.centroid.clone().sub( originCopy ) );
+				Vector3 normal = object.getMatrixRotationWorld().multiplyVector3( face.normal.clone() );
 				double dot = directionCopy.dot( normal );
 
 				// bail if ray and plane are parallel
@@ -243,9 +241,9 @@ public class Ray
 
 					if ( face.getClass() == Face3.class ) 
 					{
-						Vector3 a = objMatrix.multiplyVector3( a.copy( vertices.get( face.getA() ) ) );
-						Vector3 b = objMatrix.multiplyVector3( b.copy( vertices.get( face.getB() ) ) );
-						Vector3 c = objMatrix.multiplyVector3( c.copy( vertices.get( face.getC() ) ) );
+						Vector3 a = objMatrix.multiplyVector3( vertices.get( face.getA() ).clone() );
+						Vector3 b = objMatrix.multiplyVector3( vertices.get( face.getB() ).clone() );
+						Vector3 c = objMatrix.multiplyVector3( vertices.get( face.getC() ).clone() );
 
 						if ( pointInFace3( intersectPoint, a, b, c ) ) 
 						{
@@ -262,10 +260,10 @@ public class Ray
 					} 
 					else if ( face.getClass() == Face4.class ) 
 					{
-						Vector3 a = objMatrix.multiplyVector3( a.copy( vertices.get( face.getA() ) ) );
-						Vector3 b = objMatrix.multiplyVector3( b.copy( vertices.get( face.getB() ) ) );
-						Vector3 c = objMatrix.multiplyVector3( c.copy( vertices.get( face.getC() ) ) );
-						Vector3 d = objMatrix.multiplyVector3( d.copy( vertices.get( ((Face4)face).getD() ) ) );
+						Vector3 a = objMatrix.multiplyVector3( vertices.get( face.getA() ).clone() );
+						Vector3 b = objMatrix.multiplyVector3( vertices.get( face.getB() ).clone() );
+						Vector3 c = objMatrix.multiplyVector3( vertices.get( face.getC() ).clone() );
+						Vector3 d = objMatrix.multiplyVector3( vertices.get( ((Face4)face).getD() ).clone() );
 
 						if ( pointInFace3( intersectPoint, a, b, d ) || pointInFace3( intersectPoint, b, c, d ) ) 
 						{
