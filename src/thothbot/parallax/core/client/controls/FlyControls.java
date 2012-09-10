@@ -39,7 +39,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public final class FlyControls extends Control implements 
+public final class FlyControls extends Controls implements 
 	MouseMoveHandler, MouseDownHandler, MouseUpHandler, 
 	KeyDownHandler, KeyUpHandler, ContextMenuHandler
 {
@@ -78,7 +78,7 @@ public final class FlyControls extends Control implements
 	private int viewHalfY;
 		
 	/**
-	 * @see Control#Control(Object3D, Widget).
+	 * @see Controls#Control(Object3D, Widget).
 	 */
 	public FlyControls(Object3D object, Widget widget)
 	{

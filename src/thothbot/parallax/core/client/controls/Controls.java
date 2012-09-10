@@ -31,20 +31,20 @@ import com.google.gwt.user.client.ui.Widget;
  * @author thothbot
  *
  */
-public abstract class Control
+public abstract class Controls
 {
 	private Object3D object;
 	private Widget widget;
 	
 	/**
-	 * The constructor will create a {@link Control} instance.
+	 * The constructor will create a {@link Controls} instance.
 	 * 
 	 * @param object the {@link Object3D} which will be controlled. 
 	 * 				For example {@link Camera} object.
 	 * @param widget the Widget where to listen control commands. 
 	 * 				Basically {@link Canvas3d} widget.
 	 */
-	public Control(Object3D object, Widget widget)
+	public Controls(Object3D object, Widget widget)
 	{
 		this.object = object;
 		this.widget = widget;

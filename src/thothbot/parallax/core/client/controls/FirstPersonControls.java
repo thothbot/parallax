@@ -68,7 +68,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author thothbot
  *
  */
-public class FirstPersonControl extends Control 
+public class FirstPersonControls extends Controls 
 		implements MouseMoveHandler, MouseDownHandler, MouseUpHandler, 
 		KeyDownHandler, KeyUpHandler, ContextMenuHandler
 {
@@ -116,9 +116,9 @@ public class FirstPersonControl extends Control
 	private int viewHalfY;
 	
 	/**
-	 * @see Control#Control(Object3D, Widget).
+	 * @see Controls#Control(Object3D, Widget).
 	 */
-	public FirstPersonControl(Object3D object, Widget widget)
+	public FirstPersonControls(Object3D object, Widget widget)
 	{
 		super(object, widget);
 		

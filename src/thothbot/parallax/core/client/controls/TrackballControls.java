@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * The control implements Trackball Control.
+ * The control implements Trackball Controls.
  * There is disabled the context menu for the {@link #getWidget()}.
  * <p>
  * Based on the three.js code.
@@ -50,7 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author thothbot
  *
  */
-public final class TrackballControl extends Control implements MouseMoveHandler, MouseDownHandler, MouseUpHandler, 
+public final class TrackballControls extends Controls implements MouseMoveHandler, MouseDownHandler, MouseUpHandler, 
 KeyDownHandler, KeyUpHandler, ContextMenuHandler
 {
 	
@@ -100,7 +100,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	private Vector2 panStart;
 	private Vector2 panEnd;
 	
-	public TrackballControl(Object3D object, Widget widget) 
+	public TrackballControls(Object3D object, Widget widget) 
 	{
 		super(object, widget);
 		
