@@ -2431,7 +2431,7 @@ Log.error("?????????????");
 			else if( light.getClass() == SpotLight.class ) 
 			{
 				SpotLight spotLight = (SpotLight) light;
-				double intensity = spotLight.intensity;
+				double intensity = spotLight.getIntensity();
 				double distance = spotLight.distance;
 
 				soffset = slength * 3;
@@ -2458,14 +2458,14 @@ Log.error("?????????????");
 				sdistances.set(slength, distance);
 
 				this.cache_direction.copy( position );
-				this.cache_direction.sub( spotLight.target.getMatrixWorld().getPosition() );
+				this.cache_direction.sub( spotLight.getTarget().getMatrixWorld().getPosition() );
 				this.cache_direction.normalize();
 
 				sdirections.set(soffset, this.cache_direction.getX());
 				sdirections.set(soffset + 1, this.cache_direction.getY());
 				sdirections.set(soffset + 2, this.cache_direction.getZ());
 
-				sangles.set(slength, Math.cos( spotLight.angle ));
+				sangles.set(slength, Math.cos( spotLight.getAngle() ));
 				sexponents.set( slength, spotLight.exponent);
 
 				slength += 1;

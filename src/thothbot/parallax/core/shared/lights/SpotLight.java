@@ -28,34 +28,32 @@ import thothbot.parallax.core.shared.objects.Object3D;
 
 public class SpotLight extends Light
 {
-	public Object3D target;
+	private Object3D target;
 	
-	public Vector3 position;
-
-	public double intensity;
+	private double intensity;
 	public double distance;
 	
-	public double angle;
+	private double angle;
 	public double exponent;
 	
-	public boolean castShadow = false;
+	private boolean castShadow = false;
 	
-	public double shadowCameraNear = 50;
-	public double shadowCameraFar = 5000;
-	public double shadowCameraFov = 50;
+	private double shadowCameraNear = 50;
+	private double shadowCameraFar = 5000;
+	private double shadowCameraFov = 50;
 	
-	public boolean shadowCameraVisible = false;
+	private boolean shadowCameraVisible = false;
 	
-	public double shadowBias = 0;
-	public double shadowDarkness = 0.5;
+	private double shadowBias = 0;
+	private double shadowDarkness = 0.5;
 	
-	public int shadowMapWidth = 512;
-	public int shadowMapHeight = 512;
+	private int shadowMapWidth = 512;
+	private int shadowMapHeight = 512;
 	
-	public Object shadowMap;
-	public Object shadowMapSize;
-	public Object shadowCamera;
-	public Matrix4 shadowMatrix;
+	private Object shadowMap;
+	private Object shadowMapSize;
+	private Object shadowCamera;
+	private Matrix4 shadowMatrix;
 	
 	public SpotLight(int hex) 
 	{
@@ -70,16 +68,146 @@ public class SpotLight extends Light
 	public SpotLight(int hex, double intensity, double distance, double angle, double exponent) 
 	{
 		super(hex);
-		this.intensity = intensity;
+		this.setIntensity(intensity);
 		this.distance = distance;
-		this.angle = angle;
+		this.setAngle(angle);
 		this.exponent = exponent;
 		
 		this.position = new Vector3( 0, 1, 0 );
-		this.target = new Object3D();
+		this.setTarget(new Object3D());
 	}
 	
 	public boolean isAllocateShadows() {
-		return this.castShadow;
+		return this.isCastShadow();
 	}
+
+	public Object3D getTarget() {
+		return target;
+	}
+
+	public void setTarget(Object3D target) {
+		this.target = target;
+	}
+
+	public double getIntensity() {
+		return intensity;
+	}
+
+	public void setIntensity(double intensity) {
+		this.intensity = intensity;
+	}
+
+	public double getAngle() {
+		return angle;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
+	}
+
+	public boolean isCastShadow() {
+		return castShadow;
+	}
+
+	public void setCastShadow(boolean castShadow) {
+		this.castShadow = castShadow;
+	}
+
+	public double getShadowCameraNear() {
+		return shadowCameraNear;
+	}
+
+	public void setShadowCameraNear(double shadowCameraNear) {
+		this.shadowCameraNear = shadowCameraNear;
+	}
+
+	public double getShadowCameraFar() {
+		return shadowCameraFar;
+	}
+
+	public void setShadowCameraFar(double shadowCameraFar) {
+		this.shadowCameraFar = shadowCameraFar;
+	}
+
+	public double getShadowCameraFov() {
+		return shadowCameraFov;
+	}
+
+	public void setShadowCameraFov(double shadowCameraFov) {
+		this.shadowCameraFov = shadowCameraFov;
+	}
+
+	public boolean isShadowCameraVisible() {
+		return shadowCameraVisible;
+	}
+
+	public void setShadowCameraVisible(boolean shadowCameraVisible) {
+		this.shadowCameraVisible = shadowCameraVisible;
+	}
+
+	public double getShadowBias() {
+		return shadowBias;
+	}
+
+	public void setShadowBias(double shadowBias) {
+		this.shadowBias = shadowBias;
+	}
+
+	public double getShadowDarkness() {
+		return shadowDarkness;
+	}
+
+	public void setShadowDarkness(double shadowDarkness) {
+		this.shadowDarkness = shadowDarkness;
+	}
+
+	public int getShadowMapWidth() {
+		return shadowMapWidth;
+	}
+
+	public void setShadowMapWidth(int shadowMapWidth) {
+		this.shadowMapWidth = shadowMapWidth;
+	}
+
+	public int getShadowMapHeight() {
+		return shadowMapHeight;
+	}
+
+	public void setShadowMapHeight(int shadowMapHeight) {
+		this.shadowMapHeight = shadowMapHeight;
+	}
+
+	public Object getShadowMap() {
+		return shadowMap;
+	}
+
+	public void setShadowMap(Object shadowMap) {
+		this.shadowMap = shadowMap;
+	}
+
+	public Object getShadowMapSize() {
+		return shadowMapSize;
+	}
+
+	public void setShadowMapSize(Object shadowMapSize) {
+		this.shadowMapSize = shadowMapSize;
+	}
+
+	public Object getShadowCamera() {
+		return shadowCamera;
+	}
+
+	public void setShadowCamera(Object shadowCamera) {
+		this.shadowCamera = shadowCamera;
+	}
+
+	public Matrix4 getShadowMatrix() {
+		return shadowMatrix;
+	}
+
+	public void setShadowMatrix(Matrix4 shadowMatrix) {
+		this.shadowMatrix = shadowMatrix;
+	}
+	
+	
 }
