@@ -992,7 +992,7 @@ public class WebGLRenderer
 		if ( camera.getParent() == null ) 
 		{
 			Log.warn("DEPRECATED: Camera hasn\'t been added to a Scene. Adding it...");
-			scene.addChild( camera );
+			scene.add( camera );
 		}
 
 		Log.debug("render() this.autoUpdateScene=" + this.isAutoUpdateScene());

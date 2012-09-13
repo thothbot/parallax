@@ -61,32 +61,32 @@ public final class CubeCamera extends Object3D
 		this.cameraPX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraPX.getUp().set( 0.0, -1.0, 0.0 );
 		cameraPX.lookAt( new Vector3( 1.0, 0.0, 0.0 ) );
-		this.addChild( cameraPX );
+		this.add( cameraPX );
 
 		this.cameraNX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraNX.getUp().set( 0.0, -1.0, 0.0 );
 		cameraNX.lookAt( new Vector3( -1.0, 0.0, 0.0 ) );
-		this.addChild( cameraNX );
+		this.add( cameraNX );
 
 		this.cameraPY = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraPY.getUp().set( 0.0, 0.0, 1.0 );
 		cameraPY.lookAt( new Vector3( 0.0, 1.0, 0.0 ) );
-		this.addChild( cameraPY );
+		this.add( cameraPY );
 
 		this.cameraNY = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraNY.getUp().set( 0.0, 0.0, -1.0 );
 		cameraNY.lookAt( new Vector3( 0.0, -1.0, 0.0 ) );
-		this.addChild( cameraNY );
+		this.add( cameraNY );
 
 		this.cameraPZ = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraPZ.getUp().set( 0.0, -1.0, 0.0 );
 		cameraPZ.lookAt( new Vector3( 0.0, 0.0, 1.0 ) );
-		this.addChild( cameraPZ );
+		this.add( cameraPZ );
 
 		this.cameraNZ = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
 		cameraNZ.getUp().set( 0.0, -1.0, 0.0 );
 		cameraNZ.lookAt( new Vector3( 0.0, 0.0, -1.0 ) );
-		this.addChild( cameraNZ );
+		this.add( cameraNZ );
 
 		this.renderTarget = new RenderTargetCubeTexture( cubeResolution, cubeResolution );
 		this.renderTarget.setFormat(PixelFormat.RGB);

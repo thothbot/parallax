@@ -54,12 +54,12 @@ public class AxisHelper extends Object3D
 		
 		Line line1 = new Line( lineGeometry, lbmX );
 		line1.getRotation().setZ( - Math.PI / 2.0 );
-		this.addChild(line1 );
+		this.add(line1 );
 		
 		Mesh cone1 = new Mesh( coneGeometry, mbmX );
 		cone1.getPosition().setX(100);
 		cone1.getRotation().setZ(- Math.PI / 2.0 );
-		this.addChild( cone1 );
+		this.add( cone1 );
 
 		// y
 		LineBasicMaterial lbmY = new LineBasicMaterial();
@@ -69,11 +69,11 @@ public class AxisHelper extends Object3D
 		mbmY.setColor( new Color(0x00ff00) );
 
 		Line line2 = new Line( lineGeometry, lbmY );
-		this.addChild( line2 );
+		this.add( line2 );
 
 		Mesh cone2 = new Mesh( coneGeometry, mbmY );
 		cone2.getPosition().setY(100);
-		this.addChild( cone2 );
+		this.add( cone2 );
 
 		// z
 		LineBasicMaterial lbmZ = new LineBasicMaterial();
@@ -84,11 +84,11 @@ public class AxisHelper extends Object3D
 
 		Line line3 = new Line( lineGeometry, lbmZ );
 		line3.getRotation().setX( Math.PI / 2.0 );
-		this.addChild( line3 );
+		this.add( line3 );
 
 		Mesh cone3 = new Mesh( coneGeometry, mbmZ );
 		cone3.getPosition().setZ(100);
 		cone3.getRotation().setX( Math.PI / 2.0 );
-		this.addChild( cone3 );
+		this.add( cone3 );
 	}
 }

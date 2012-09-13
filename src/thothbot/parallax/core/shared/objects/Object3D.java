@@ -417,7 +417,7 @@ public class Object3D implements DimensionalObject
 	}
 	
 	@Override
-	public <E extends DimensionalObject> void addChild(E child)
+	public <E extends DimensionalObject> void add(E child)
 	{
 		Log.info("Adding for ID " + this.getId() + " = " + this.getClass().getName() 
 				+ " child ID " + child.getId() + " = " + child.getClass().getName());
@@ -425,7 +425,7 @@ public class Object3D implements DimensionalObject
 		if (this.children.indexOf(child) == -1) 
 		{
 			if(child.getParent() != null )
-				child.getParent().removeChild(child);
+				child.getParent().remove(child);
 
 			child.setParent(this);
 			this.children.add(child);
@@ -443,7 +443,7 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public <E extends DimensionalObject> void removeChild(E child)
+	public <E extends DimensionalObject> void remove(E child)
 	{
 		int index = this.children.indexOf(child);
 

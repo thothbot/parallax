@@ -34,37 +34,37 @@ import thothbot.parallax.core.shared.core.Vector3;
 public interface DimensionalObject 
 {
 	/**
-	 * Get object ID.
+	 * Gets object ID.
 	 * 
 	 * @return the object ID
 	 */
 	public int getId();
 
 	/**
-	 * Get name of the current object.
+	 * Gets name of the current object.
 	 * 
 	 * @return the name of the object
 	 */
 	public String getName();
 
 	/**
-	 * Adding child object to the current object
+	 * Adds child object to the current object
 	 * 
 	 * @param child
 	 *            the Child DimensionalObject
 	 */
-	public <E extends DimensionalObject> void addChild(E child);
+	public <E extends DimensionalObject> void add(E child);
 
 	/**
-	 * Remove child DimensionalObject from the current object
+	 * Removes child DimensionalObject from the current object
 	 * 
 	 * @param child
 	 *            the Child DimensionalObject
 	 */
-	public <E extends DimensionalObject> void removeChild(E child);
+	public <E extends DimensionalObject> void remove(E child);
 
 	/**
-	 * Get list of children DimensionalObject asictiated with the current
+	 * Gets list of children DimensionalObject associated with the current
 	 * object.
 	 * 
 	 * @return the list of children DimensionalObject
@@ -72,7 +72,7 @@ public interface DimensionalObject
 	public List<DimensionalObject> getChildren();
 
 	/**
-	 * Get child DimensionalObject associated with the current object by its
+	 * Gets child DimensionalObject associated with the current object by its
 	 * name.
 	 * 
 	 * @param name
@@ -87,7 +87,7 @@ public interface DimensionalObject
 	public List<? extends DimensionalObject> getChildrenByClass(Class clazz, boolean recursive);
 
 	/**
-	 * Get parent DimensionalObject in which this object is included.
+	 * Gets parent DimensionalObject in which this object is included.
 	 * 
 	 * @return the parent DimensionalObject
 	 */
@@ -112,12 +112,12 @@ public interface DimensionalObject
 	public void setUseQuaternion(boolean use);
 
 	/**
-	 * Chick if the DimensionalObject visible or not
+	 * Chicks if the DimensionalObject visible or not
 	 */
 	public boolean isVisible();
 	
 	/**
-	 * Set object visibility.
+	 * Sets object visibility.
 	 * 
 	 * @param visible the visibility: true of false
 	 */
@@ -176,7 +176,7 @@ public interface DimensionalObject
 	public void applyMatrix(Matrix4 matrix);
 
 	/**
-	 * Move object on XYZ-axis by defined distance.
+	 * Moves object on XYZ-axis by defined distance.
 	 * 
 	 * @param distance the moving distance
 	 * @param axis     the axis
@@ -184,28 +184,28 @@ public interface DimensionalObject
 	public void translate(double distance, Vector3 axis);
 
 	/**
-	 * Move object on X-axis by defined distance.
+	 * Moves object on X-axis by defined distance.
 	 * 
 	 * @param distance the moving distance
 	 */
 	public void translateX(double distance);
 
 	/**
-	 * Move object on Y-axis by defined distance.
+	 * Moves object on Y-axis by defined distance.
 	 * 
 	 * @param distance the moving distance
 	 */
 	public void translateY(double distance);
 
 	/**
-	 * Move object on Z-axis by defined distance.
+	 * Moves object on Z-axis by defined distance.
 	 * 
 	 * @param distance the moving distance
 	 */
 	public void translateZ(double distance);
 
 	/**
-	 * Do update of the object's matrix
+	 * Does update of the object's matrix
 	 */
 	public void updateMatrix();
 

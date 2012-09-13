@@ -60,7 +60,7 @@ public class LOD extends Object3D
 		lod.visibleAtDistance = visibleAtDistance;
 		lod.object3D = object3D;
 
-		this.addChild( object3D );
+		this.add( object3D );
 	}
 
 	public void update ( Camera camera ) 

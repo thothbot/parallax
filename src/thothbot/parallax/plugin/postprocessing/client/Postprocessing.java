@@ -105,8 +105,8 @@ public class Postprocessing extends Plugin
 		quad.getPosition().setZ(-100);
 		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
 
-		getScene().addChild( quad );
-		getScene().addChild( camera );
+		getScene().add( quad );
+		getScene().add( camera );
 	}
 	
 	public Plugin.TYPE getType() {

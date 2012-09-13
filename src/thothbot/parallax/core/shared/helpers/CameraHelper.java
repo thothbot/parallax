@@ -128,7 +128,7 @@ public class CameraHelper extends Object3D
 		update();
 
 		this.line = new Line( this.lineGeometry, this.lineMaterial, Line.TYPE.PIECES );
-		this.addChild( this.line );
+		this.add( this.line );
 	}
 	
 	public Line getLine()

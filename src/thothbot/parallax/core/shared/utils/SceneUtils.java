@@ -58,7 +58,7 @@ public class SceneUtils
 		for ( int i = 0; i < list.size(); i ++ ) 
 		{
 			Mesh object = new Mesh( geometry, list.get( i ) );
-			group.addChild( object );
+			group.add( object );
 		}
 
 		return group;

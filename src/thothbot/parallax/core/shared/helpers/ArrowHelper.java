@@ -61,7 +61,7 @@ public class ArrowHelper extends Object3D
 		LineBasicMaterial lbm = new LineBasicMaterial();
 		lbm.setColor(new Color(hex));
 		this.line = new Line( lineGeometry, lbm );
-		this.addChild( this.line );
+		this.add( this.line );
 
 		Cylinder coneGeometry = new Cylinder( 0, 0.05, 0.25, 5, 1 );
 
@@ -69,7 +69,7 @@ public class ArrowHelper extends Object3D
 		mbm.setColor(new Color(hex));
 		this.cone = new Mesh( coneGeometry, mbm );
 		this.cone.getPosition().set( 0, 1, 0 );
-		this.addChild( this.cone );
+		this.add( this.cone );
 
 		setPosition( origin );
 		setDirection( dir );

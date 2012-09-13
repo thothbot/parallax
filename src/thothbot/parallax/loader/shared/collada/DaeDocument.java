@@ -72,7 +72,7 @@ public class DaeDocument
 			this.scene = new Object3D();
 			for ( int i = 0; i < scenes.size(); i ++ ) 
 			{
-				scene.addChild( getSceneObject( scenes.get(i) ) );
+				scene.add( getSceneObject( scenes.get(i) ) );
 			}
 		}
 		

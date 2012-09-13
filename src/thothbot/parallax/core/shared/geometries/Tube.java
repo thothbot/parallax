@@ -89,9 +89,9 @@ public final class Tube extends Geometry
 
 			if ( debug ) 
 			{
-				getDebug().addChild( new ArrowHelper( tangents.get( i ),  pos, radius, 0x0000ff ) );	
-				getDebug().addChild( new ArrowHelper( normals.get( i ),   pos, radius, 0xff0000 ) );
-				getDebug().addChild( new ArrowHelper( binormals.get( i ), pos, radius, 0x00ff00 ) );
+				getDebug().add( new ArrowHelper( tangents.get( i ),  pos, radius, 0x0000ff ) );	
+				getDebug().add( new ArrowHelper( normals.get( i ),   pos, radius, 0xff0000 ) );
+				getDebug().add( new ArrowHelper( binormals.get( i ), pos, radius, 0x00ff00 ) );
 			}
 
 			for ( int j = 0; j < segmentsRadius; j++ ) 
