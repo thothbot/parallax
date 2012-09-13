@@ -22,8 +22,8 @@
 
 package thothbot.parallax.plugin.postprocessing.client.shader;
 
-import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.shaders.Shader;
+import thothbot.parallax.core.client.shaders.Uniform;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;

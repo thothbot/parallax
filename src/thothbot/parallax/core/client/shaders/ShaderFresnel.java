@@ -1,6 +1,9 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
+ * This file based on the JavaScript source file of the THREE.JS project, 
+ * licensed under MIT License.
+ * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -17,41 +20,45 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.shader;
+package thothbot.parallax.core.client.shaders;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * CubeGeometry map shader.
+ * Fresnel shader.
  * <p>
- * Based on three.js code.
- *  
+ * based on Nvidia Cg tutorial and three.js code
+ * 
  * @author thothbot
  *
  */
-public final class ShaderCubeMap extends Shader 
+public final class ShaderFresnel extends Shader 
 {
+
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 
-		@Source("source/cube_map.vs")
+		@Source("source/fresnel.vs")
 		TextResource getVertexShader();
 
-		@Source("source/cube_map.fs")
+		@Source("source/fresnel.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderCubeMap() 
+	public ShaderFresnel() 
 	{
 		super(Resources.INSTANCE);
 	}
 
 	@Override
-	protected void initUniforms()
+	protected void initUniforms() 
 	{
+		this.addUniform("mRefractionRatio", new Uniform(Uniform.TYPE.F, 1.02 ));
+		this.addUniform("mFresnelBias", new Uniform(Uniform.TYPE.F, .1 ));
+		this.addUniform("mFresnelPower", new Uniform(Uniform.TYPE.F, 2.0 ));
+		this.addUniform("mFresnelScale", new Uniform(Uniform.TYPE.F, 1.0 ));
 		this.addUniform("tCube", new Uniform(Uniform.TYPE.T, 1 ));
-		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0 ));
 	}
 }

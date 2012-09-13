@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.shader;
+package thothbot.parallax.core.client.shaders;
 
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;

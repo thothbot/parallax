@@ -20,37 +20,33 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.shader;
-
-import java.util.Arrays;
-import java.util.List;
+package thothbot.parallax.core.client.shaders;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Depth encoding into RGBA texture.
+ * Normal shader.
  * <p>
- * Based on SpiderGL shadow map example @see <a href="http://spidergl.org/example.php?id=6">http://spidergl.org</a><br>
- * Originally from @see <a href="http://www.gamedev.net/topic/442138-packing-a-float-into-a-a8r8g8b8-texture-shader/page__whichpage__1%25EF%25BF%25BD">http://www.gamedev.net</a><br>
- * See also here @see <a href="http://aras-p.info/blog/2009/07/30/encoding-floats-to-rgba-the-final/">http://aras-p.info</a>
+ * Based on the three.js code.
  * 
  * @author thothbot
+ *
  */
-public final class ShaderDepthRGBA extends Shader
+public final class ShaderNormal extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("chunk/depthRGBA_vs.chunk")
+		@Source("source/normal.vs")
 		TextResource getVertexShader();
 
-		@Source("chunk/depthRGBA_fs.chunk")
+		@Source("source/normal.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderDepthRGBA() 
+	public ShaderNormal() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,24 +54,6 @@ public final class ShaderDepthRGBA extends Shader
 	@Override
 	protected void initUniforms()
 	{
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
 	}
-	
-	@Override
-	protected void updateVertexSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksVertexShader.SKINNING_PARS,
-			ChunksVertexShader.MORPH_TARGET_PARS
-		);
-		
-		List<String> main = Arrays.asList(
-			ChunksVertexShader.SKINBASE,
-			ChunksVertexShader.SKINNING,
-			ChunksVertexShader.MORPH_TARGET,
-			ChunksVertexShader.DEFAULT
-		);
-
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
-	}
-
 }

@@ -28,7 +28,7 @@ import java.util.Map;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.shader.Attribute;
+import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.materials.Material;

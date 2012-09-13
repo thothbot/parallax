@@ -24,8 +24,8 @@ package thothbot.parallax.plugin.postprocessing.client;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.shaders.Shader;
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
 

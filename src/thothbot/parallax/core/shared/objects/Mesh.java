@@ -34,7 +34,7 @@ import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.shader.Attribute;
+import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Face3;

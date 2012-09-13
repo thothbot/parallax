@@ -20,37 +20,38 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.shader;
+package thothbot.parallax.core.client.shaders;
 
 import java.util.Arrays;
 import java.util.List;
+
+import thothbot.parallax.core.client.shaders.ShaderBasic.Resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Basic shader.
+ * Simple Particle shader.
  * <p>
- * Based on the three.js code. 
+ * Based on the three.js code.
  * 
  * @author thothbot
  *
  */
-public final class ShaderBasic extends Shader
+public final class ShaderParticleBasic extends Shader
 {
-
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("chunk/basic_vs.chunk")
+		
+		@Source("chunk/particle_basic_vs.chunk")
 		TextResource getVertexShader();
 
-		@Source("chunk/basic_fs.chunk")
+		@Source("chunk/particle_basic_fs.chunk")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderBasic() 
+	
+	public ShaderParticleBasic() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,8 +59,7 @@ public final class ShaderBasic extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.setUniforms(UniformsLib.getCommon());
-		this.setUniforms(UniformsLib.getFog());
+		this.setUniforms(UniformsLib.getParticle());
 		this.setUniforms(UniformsLib.getShadowmap());
 	}
 	
@@ -67,28 +67,19 @@ public final class ShaderBasic extends Shader
 	protected void updateVertexSource(String src)
 	{
 		List<String> vars = Arrays.asList(
-			ChunksVertexShader.MAP_PARS,
-			ChunksVertexShader.LIGHTMAP_PARS,
-			ChunksVertexShader.ENVMAP_PARS,
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.SKINBASE,
-			ChunksVertexShader.SKINNING_PARS,
-			ChunksVertexShader.MORPH_TARGET_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
-			ChunksVertexShader.MAP,
-			ChunksVertexShader.LIGHTMAP,
-			ChunksVertexShader.ENVMAP,
-			ChunksVertexShader.COLOR,
-			ChunksVertexShader.SKINNING,
-			ChunksVertexShader.MORPH_TARGET,
-			ChunksVertexShader.DEFAULT,
+			ChunksVertexShader.COLOR
+		);
+		
+		List<String> main2 = Arrays.asList(
 			ChunksVertexShader.SHADOWMAP
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main, main2));
 	}
 	
 	@Override
@@ -96,23 +87,16 @@ public final class ShaderBasic extends Shader
 	{
 		List<String> vars = Arrays.asList(
 			ChunksFragmentShader.COLOR_PARS,
-			ChunksFragmentShader.MAP_PARS,
-			ChunksFragmentShader.LIGHTMAP_PARS,
-			ChunksFragmentShader.ENVMAP_PARS,
+			ChunksFragmentShader.MAP_PARTICLE_PARS,
 			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.SHADOWMAP_PARS,
-			ChunksFragmentShader.SPECULARMAP_PARS
+			ChunksFragmentShader.SHADOWMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
-			ChunksFragmentShader.MAP,
+			ChunksFragmentShader.MAP_PARTICLE,
 			ChunksFragmentShader.ALPHA_TEST,
-			ChunksFragmentShader.SPECULARMAP,
-			ChunksFragmentShader.LIGHTMAP,
 			ChunksFragmentShader.COLOR,
-			ChunksFragmentShader.ENVMAP,
 			ChunksFragmentShader.SHADOWMAP,
-			ChunksFragmentShader.LENEAR_TO_GAMMA,
 			ChunksFragmentShader.FOG
 		);
 		

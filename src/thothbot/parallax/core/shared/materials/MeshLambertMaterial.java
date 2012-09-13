@@ -25,9 +25,9 @@ package thothbot.parallax.core.shared.materials;
 import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
-import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.ShaderLambert;
-import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.shaders.Shader;
+import thothbot.parallax.core.client.shaders.ShaderLambert;
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.Log;

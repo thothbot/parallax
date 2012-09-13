@@ -19,8 +19,8 @@
 
 package thothbot.parallax.plugin.lensflare.shader;
 
-import thothbot.parallax.core.client.shader.Shader;
-import thothbot.parallax.core.client.shader.Uniform;
+import thothbot.parallax.core.client.shaders.Shader;
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;

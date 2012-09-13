@@ -26,7 +26,7 @@ import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.client.shader.Shader;
+import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.materials.Material;

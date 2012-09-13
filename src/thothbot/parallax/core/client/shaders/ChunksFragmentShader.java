@@ -17,7 +17,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.shader;
+package thothbot.parallax.core.client.shaders;
 
 /**
  * Chunks used in Fragment Shader

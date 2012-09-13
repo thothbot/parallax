@@ -1,9 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * This file based on the JavaScript source file of the THREE.JS project, 
- * licensed under MIT License.
- * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -20,33 +17,33 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.shader;
+package thothbot.parallax.core.client.shaders;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Normal shader.
+ * CubeGeometry map shader.
  * <p>
- * Based on the three.js code.
- * 
+ * Based on three.js code.
+ *  
  * @author thothbot
  *
  */
-public final class ShaderNormal extends Shader
+public final class ShaderCubeMap extends Shader 
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/normal.vs")
+
+		@Source("source/cube_map.vs")
 		TextResource getVertexShader();
 
-		@Source("source/normal.fs")
+		@Source("source/cube_map.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderNormal() 
+	public ShaderCubeMap() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -54,6 +51,7 @@ public final class ShaderNormal extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("tCube", new Uniform(Uniform.TYPE.T, 1 ));
+		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0 ));
 	}
 }

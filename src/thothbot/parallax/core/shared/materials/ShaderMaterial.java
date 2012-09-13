@@ -22,7 +22,7 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import thothbot.parallax.core.client.shader.Shader;
+import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.shared.core.Color;
 
 public class ShaderMaterial extends Material 

@@ -26,7 +26,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.shader.Attribute;
+import thothbot.parallax.core.client.shaders.Attribute;
 
 
 public abstract class GeometryBuffer
