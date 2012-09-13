@@ -23,7 +23,7 @@
 package thothbot.parallax.plugin.postprocessing.client;
 
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugin.postprocessing.client.shader.ShaderFilm;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderFilm;
 
 public class FilmPass extends Pass
 {

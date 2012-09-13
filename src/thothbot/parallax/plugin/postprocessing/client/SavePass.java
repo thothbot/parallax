@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugin.postprocessing.client.shader.ShaderScreen;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderScreen;
 
 public class SavePass extends Pass
 {

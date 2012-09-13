@@ -24,7 +24,7 @@ package thothbot.parallax.plugin.postprocessing.client;
 
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugin.postprocessing.client.shader.ShaderScreen;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderScreen;
 
 public class TexturePass extends Pass
 {

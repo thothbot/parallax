@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -29,14 +29,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Vertical Blur shader
+ * Unpack RGBA depth shader - show RGBA encoded depth as monochrome color
  * <p>
  * Based on three.js code
  * 
  * @author thothbot
  *
  */
-public final class ShaderVerticalBlur extends Shader
+public final class ShaderUnpackDepthRGBA extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -45,11 +45,11 @@ public final class ShaderVerticalBlur extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/verticalBlur.fs")
+		@Source("source/unpackDepthRGBA.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public ShaderVerticalBlur() 
+	public ShaderUnpackDepthRGBA() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,7 +58,6 @@ public final class ShaderVerticalBlur extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
-
 }

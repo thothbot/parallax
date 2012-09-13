@@ -1,6 +1,9 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
+ * This file based on the JavaScript source file of the THREE.JS project, 
+ * licensed under MIT License.
+ * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -17,51 +20,48 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.lensflare.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Color;
-import thothbot.parallax.core.shared.core.Vector2;
-import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
-public class ShaderLensFlare extends Shader 
+/**
+ * Blend two textures
+ * <p>
+ * Based on three.js code
+ * 
+ * @author thothbot
+ *
+ */
+public final class ShaderBlend extends Shader
 {
+
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("source/lensFlare.vs")
+		
+		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/lensFlare.fs")
+		@Source("source/blend.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderLensFlare() 
-	{
-		this(Resources.INSTANCE);
-	}
 	
-	public ShaderLensFlare(DefaultResources resource) 
+	public ShaderBlend() 
 	{
-		super(resource);
+		super(Resources.INSTANCE);
 	}
 
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("renderType", new Uniform(Uniform.TYPE.I,  1 ));
-		this.addUniform("map", new Uniform(Uniform.TYPE.T,  0 ) );
-		this.addUniform("occlusionMap", new Uniform(Uniform.TYPE.T,  1 ) );
-		
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
-		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
-		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 ) ));
-		this.addUniform("rotation", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("screenPosition", new Uniform(Uniform.TYPE.V3,  new Vector3( 0.0, 0.0, 0.0 ) ));
+		this.addUniform("tDiffuse1", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDiffuse2", new Uniform(Uniform.TYPE.T, 1));
+		this.addUniform("mixRatio", new Uniform(Uniform.TYPE.F, 0.5));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
+
 }

@@ -39,8 +39,8 @@ import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugin.lensflare.shader.ShaderLensFlare;
-import thothbot.parallax.plugin.lensflare.shader.ShaderLensFlareVertexTexture;
+import thothbot.parallax.plugin.lensflare.shaders.ShaderLensFlare;
+import thothbot.parallax.plugin.lensflare.shaders.ShaderLensFlareVertexTexture;
 
 import com.google.gwt.core.client.GWT;
 

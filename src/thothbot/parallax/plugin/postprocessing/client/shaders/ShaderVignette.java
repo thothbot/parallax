@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -29,14 +29,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Unpack RGBA depth shader - show RGBA encoded depth as monochrome color
+ * Vignette shader
  * <p>
- * Based on three.js code
- * 
+ * Based on three.js code<br>
+ * based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
  * @author thothbot
  *
  */
-public final class ShaderUnpackDepthRGBA extends Shader
+public final class ShaderVignette extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -45,11 +45,11 @@ public final class ShaderUnpackDepthRGBA extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/unpackDepthRGBA.fs")
+		@Source("source/vignette.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public ShaderUnpackDepthRGBA() 
+	public ShaderVignette()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,6 +58,9 @@ public final class ShaderUnpackDepthRGBA extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
+
 	}
+
 }

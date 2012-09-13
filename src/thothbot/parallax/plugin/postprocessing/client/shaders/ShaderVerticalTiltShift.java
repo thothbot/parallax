@@ -20,24 +20,23 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Color;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Colorify shader
+ * Vertical Tilt Shift shader.
  * <p>
  * Based on three.js code
  * 
  * @author thothbot
  *
  */
-public final class ShaderColorify extends Shader
+public final class ShaderVerticalTiltShift extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -46,11 +45,11 @@ public final class ShaderColorify extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/colorify.fs")
+		@Source("source/verticalTiltShift.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderColorify() 
+	
+	public ShaderVerticalTiltShift() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -59,6 +58,8 @@ public final class ShaderColorify extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
+		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("r", new Uniform(Uniform.TYPE.F, 0.35));
 	}
+
 }

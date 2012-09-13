@@ -25,7 +25,7 @@ package thothbot.parallax.plugin.postprocessing.client;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugin.postprocessing.client.shader.ShaderDotscreen;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderDotscreen;
 
 public class DotScreenPass extends Pass
 {

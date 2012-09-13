@@ -20,27 +20,25 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Two pass Gaussian blur filter (horizontal and vertical blur shaders)
- * described in <a href="http://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader/">gamerendering.com</a>
- * and used in <a href="http://www.cake23.de/traveling-wavefronts-lit-up.html">www.cake23.de</a>.
+ * NVIDIA FXAA by Timothy Lottes
+ * @see <a href="http://timothylottes.blogspot.com/2011/06/fxaa3-source-released.html">timothylottes.blogspot.com</a>
  * <p>
- * 9 samples per pass<br>
- * standard deviation 2.7<br>
- *  "h" and "v" parameters should be set to "1 / width" and "1 / height"
- *  
+ * WebGL port by \@supereggbert <a href="http://www.glge.org/demos/fxaa/">www.glge.org</a>
+ * 
  * @author thothbot
  *
  */
-public final class ShaderHorizontalBlur extends Shader
+public final class ShaderFxaa extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -49,11 +47,11 @@ public final class ShaderHorizontalBlur extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/horizontalBlur.fs")
+		@Source("source/fxaa.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderHorizontalBlur() 
+
+	public ShaderFxaa() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -62,6 +60,7 @@ public final class ShaderHorizontalBlur extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("h", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0 / 1024.0, 1.0 / 512.0 )));
 	}
+
 }

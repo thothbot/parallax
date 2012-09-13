@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -29,14 +29,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Vertical Tilt Shift shader.
+ * Simple fake tilt-shift effect, modulating two pass Gaussian blur (see above) by vertical position
  * <p>
  * Based on three.js code
+ * <p>
+ * 9 samples per pass<br>
+ * standard deviation 2.7<br>
+ * "h" and "v" parameters should be set to "1 / width" and "1 / height"<br>
+ * "r" parameter control where "focused" horizontal line lies<br>
  * 
  * @author thothbot
- *
+ *  
  */
-public final class ShaderVerticalTiltShift extends Shader
+public final class ShaderHorizontalTiltShift extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -45,21 +50,20 @@ public final class ShaderVerticalTiltShift extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/verticalTiltShift.fs")
+		@Source("source/horizontalTiltShift.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderVerticalTiltShift() 
+
+	public ShaderHorizontalTiltShift() 
 	{
 		super(Resources.INSTANCE);
 	}
-
+	
 	@Override
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("h", new Uniform(Uniform.TYPE.F, 1.0/512.0));
 		this.addUniform("r", new Uniform(Uniform.TYPE.F, 0.35));
 	}
-
 }

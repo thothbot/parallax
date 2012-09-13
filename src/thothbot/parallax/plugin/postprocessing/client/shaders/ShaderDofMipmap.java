@@ -20,31 +20,27 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Triangle blur shader
+ * Depth-of-field shader using mipmaps
+ * <p>
+ * requires power-of-2 sized render target with enabled mipmaps
  * <p>
  * Based on three.js code<br>
- * Based on glfx.js triangle blur shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
- * <p>
- * A basic blur filter, which convolves the image with a
- * pyramid filter. The pyramid filter is separable and is applied as two
- * perpendicular triangle filters.
+ * From Matt Handley \@applmak
  * 
  * @author thothbot
  *
  */
-public final class ShaderRriangleBlur extends Shader
+public final class ShaderDofMipmap extends Shader
 {
-
 	public interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
@@ -52,11 +48,11 @@ public final class ShaderRriangleBlur extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/triangleBlur.fs")
+		@Source("source/dofmipmap.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderRriangleBlur()
+
+	public ShaderDofMipmap() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -64,8 +60,10 @@ public final class ShaderRriangleBlur extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("texture", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 )));
+		this.addUniform("tColor", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
+		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
 	}
 
 }

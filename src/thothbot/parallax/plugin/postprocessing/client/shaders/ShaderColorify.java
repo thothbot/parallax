@@ -20,23 +20,24 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Color;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Full-screen textured quad shader
+ * Colorify shader
  * <p>
  * Based on three.js code
  * 
  * @author thothbot
  *
  */
-public final class ShaderScreen extends Shader
+public final class ShaderColorify extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -45,11 +46,11 @@ public final class ShaderScreen extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/screen.fs")
+		@Source("source/colorify.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderScreen()
+	public ShaderColorify() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,6 +59,6 @@ public final class ShaderScreen extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 	}
 }

@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -29,30 +29,27 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Depth-of-field shader using mipmaps
+ * Full-screen textured quad shader
  * <p>
- * requires power-of-2 sized render target with enabled mipmaps
- * <p>
- * Based on three.js code<br>
- * From Matt Handley \@applmak
+ * Based on three.js code
  * 
  * @author thothbot
  *
  */
-public final class ShaderDofMipmap extends Shader
+public final class ShaderScreen extends Shader
 {
-	public interface Resources extends DefaultResources
+	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/dofmipmap.fs")
+		@Source("source/screen.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderDofMipmap() 
+	public ShaderScreen()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -60,10 +57,7 @@ public final class ShaderDofMipmap extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tColor", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
-
 }

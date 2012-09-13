@@ -20,9 +20,8 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
-import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.core.Vector2;
@@ -31,37 +30,41 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Convolution shader
+ * Dot screen shader
  * <p>
- * Based on three.js code<b>
- * Ported from o3d sample to WebGL / GLSL <a href="http://o3d.googlecode.com/svn/trunk/samples/convolution.html">o3d.googlecode.com</a>
+ * Based on three.js code<br>
+ * Based on glfx.js sepia shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
  * 
  * @author thothbot
  *
  */
-public final class ShaderConvolution extends Shader
+public final class ShaderDotscreen extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("source/convolution.vs")
+		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/convolution.fs")
+		@Source("source/dotscreen.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderConvolution() 
+	
+	public ShaderDotscreen()
 	{
 		super(Resources.INSTANCE);
 	}
-	
+
 	@Override
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("uImageIncrement", new Uniform(Uniform.TYPE.V2, new Vector2(0.001953125, 0.0)));
-		this.addUniform("cKernel", new Uniform(Uniform.TYPE.FV1, Float32Array.createArray()));
+		this.addUniform("tSize", new Uniform(Uniform.TYPE.V2, new Vector2( 256, 256 )));
+		this.addUniform("center", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 1.57));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.F, 1.0));
+
 	}
+
 }

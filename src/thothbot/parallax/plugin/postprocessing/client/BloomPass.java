@@ -31,8 +31,8 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugin.postprocessing.client.shader.ShaderConvolution;
-import thothbot.parallax.plugin.postprocessing.client.shader.ShaderScreen;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderConvolution;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderScreen;
 
 public class BloomPass extends Pass
 {

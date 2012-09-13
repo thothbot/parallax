@@ -40,7 +40,7 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.geometries.PlaneGeometry;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugin.postprocessing.client.shader.ShaderScreen;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderScreen;
 
 public class Postprocessing extends Plugin
 {

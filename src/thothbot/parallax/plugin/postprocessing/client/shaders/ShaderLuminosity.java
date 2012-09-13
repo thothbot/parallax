@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -29,35 +29,26 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Film grain & scanlines shader
- * <p>
- * Based on three.js code<br>
- * Ported from HLSL to WebGL / GLSL <a href="http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html">truevision3d.com</a>
- * <p>
- * Screen Space Static Postprocessor
- * <p>
- * Produces an analogue noise overlay similar to a film grain / TV static
- * <p>
- * Original implementation and noise algorithm Pat 'Hawthorne' Shearon<br>
- * Optimized scanlines + noise version with intensity scaling Georg 'Leviathan' Steinrohder
+ * Luminosity
+ * @see <a href="http://en.wikipedia.org/wiki/Luminosity">wikipedia.org</a>
  * 
  * @author thothbot
  *
  */
-public final class ShaderFilm extends Shader
+public final class ShaderLuminosity extends Shader
 {
-	public interface Resources extends DefaultResources
+	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/film.fs")
+		@Source("source/luminosity.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderFilm()
+	public ShaderLuminosity() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -66,10 +57,6 @@ public final class ShaderFilm extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("time", new Uniform(Uniform.TYPE.F, 0.0));
-		this.addUniform("nIntensity", new Uniform(Uniform.TYPE.F, 0.5));
-		this.addUniform("sIntensity", new Uniform(Uniform.TYPE.F, 0.05));
-		this.addUniform("sCount", new Uniform(Uniform.TYPE.F, 4096));
-		this.addUniform("grayscale", new Uniform(Uniform.TYPE.I, 1));
 	}
+
 }

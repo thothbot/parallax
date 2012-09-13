@@ -20,39 +20,43 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Bleach bypass shader
- * 
- * @see <a href="http://en.wikipedia.org/wiki/Bleach_bypass">wikipedia.org</a>
+ * Triangle blur shader
  * <p>
- * Based on three.js code <br>
- * Based on Nvidia example <a href="http://developer.download.nvidia.com/shaderlibrary/webpages/shader_library.html#post_bleach_bypass">nvidia.com</a>
+ * Based on three.js code<br>
+ * Based on glfx.js triangle blur shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
+ * <p>
+ * A basic blur filter, which convolves the image with a
+ * pyramid filter. The pyramid filter is separable and is applied as two
+ * perpendicular triangle filters.
  * 
  * @author thothbot
  *
  */
-public final class ShaderBleachbypass extends Shader
+public final class ShaderRriangleBlur extends Shader
 {
-	interface Resources extends DefaultResources
+
+	public interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-
+		
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/bleachbypass.fs")
+		@Source("source/triangleBlur.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public ShaderBleachbypass() 
+	public ShaderRriangleBlur()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -60,8 +64,8 @@ public final class ShaderBleachbypass extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("texture", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 )));
 	}
 
 }

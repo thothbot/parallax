@@ -34,7 +34,7 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugin.sprite.shader.ShaderSprite;
+import thothbot.parallax.plugin.sprite.shaders.ShaderSprite;
 
 public final class SpritePlugin extends Plugin 
 {

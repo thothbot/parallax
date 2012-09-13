@@ -20,31 +20,24 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Screen-space ambient occlusion shader
+ * Focus shader
  * <p>
  * Based on three.js code<br>
- * 
- * Ported from SSAO GLSL shader v1.2 
- * assembled by Martins Upitis (martinsh) (<a href="http://devlog-martinsh.blogspot.com">devlog-martinsh.blogspot.com</a>).
- * Original technique is made by ArKano22 (<a href="http://www.gamedev.net/topic/550699-ssao-no-halo-artifacts/">gamedev.net</a>).<br>
- * 
- * Modified to use RGBA packed depth texture (use clear color 1,1,1,1 for depth pass), 
- * made fog more compatible with three.js linear fog
+ * Based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
  * 
  * @author thothbot
  *
  */
-public final class ShaderSsao extends Shader
+public final class ShaderFocus extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -53,11 +46,11 @@ public final class ShaderSsao extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/ssao.fs")
+		@Source("source/focus.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderSsao() 
+	public ShaderFocus()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -66,15 +59,9 @@ public final class ShaderSsao extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("size", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
-		this.addUniform("cameraNear", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("cameraFar", new Uniform(Uniform.TYPE.F, 100));
-		this.addUniform("fogNear", new Uniform(Uniform.TYPE.F, 5.0));
-		this.addUniform("fogFar", new Uniform(Uniform.TYPE.F, 100));
-		this.addUniform("fogEnabled", new Uniform(Uniform.TYPE.I, 0));
-		this.addUniform("onlyAO", new Uniform(Uniform.TYPE.I, 0));
-		this.addUniform("aoClamp", new Uniform(Uniform.TYPE.F, 0.3));
-		this.addUniform("lumInfluence", new Uniform(Uniform.TYPE.F,0.9));
+		this.addUniform("screenWidth", new Uniform(Uniform.TYPE.F, 1024));
+		this.addUniform("screenHeight", new Uniform(Uniform.TYPE.F, 1024));
+		this.addUniform("sampleDistance", new Uniform(Uniform.TYPE.F, 0.94));
+		this.addUniform("waveFactor", new Uniform(Uniform.TYPE.F, 0.00125));
 	}
 }

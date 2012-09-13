@@ -20,7 +20,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shader;
+package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -29,28 +29,30 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Sepia tone shader 
+ * Bleach bypass shader
+ * 
+ * @see <a href="http://en.wikipedia.org/wiki/Bleach_bypass">wikipedia.org</a>
  * <p>
- * Based on thrre.js code<br>
- * Based on glfx.js sepia shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
+ * Based on three.js code <br>
+ * Based on Nvidia example <a href="http://developer.download.nvidia.com/shaderlibrary/webpages/shader_library.html#post_bleach_bypass">nvidia.com</a>
  * 
  * @author thothbot
  *
  */
-public final class ShaderSepia extends Shader
+public final class ShaderBleachbypass extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-		
+
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/sepia.fs")
+		@Source("source/bleachbypass.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public ShaderSepia()
+	public ShaderBleachbypass() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -59,8 +61,7 @@ public final class ShaderSepia extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("amount", new Uniform(Uniform.TYPE.F, 1.0));
-
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
 
 }
