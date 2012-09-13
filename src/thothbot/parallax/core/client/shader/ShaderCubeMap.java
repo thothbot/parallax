@@ -23,7 +23,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Cube map shader.
+ * CubeGeometry map shader.
  * <p>
  * Based on three.js code.
  *  

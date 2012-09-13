@@ -32,7 +32,7 @@ import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
 /**
- * The Torus geometry
+ * The TorusGeometry geometry
  * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/torus.gif" />
  * <p>
@@ -41,20 +41,20 @@ import thothbot.parallax.core.shared.core.Vector3;
  * @author thothbot
  *
  */
-public final class Torus extends Geometry
+public final class TorusGeometry extends Geometry
 {
 	
-	public Torus() 
+	public TorusGeometry() 
 	{
 		this(100, 40, 8, 6);
 	}
 	
-	public Torus(int radius, int tube, int segmentsR, int segmentsT) 
+	public TorusGeometry(int radius, int tube, int segmentsR, int segmentsT) 
 	{
 		this(radius, tube, segmentsR, segmentsT, Math.PI * 2.0);
 	}
 	
-	public Torus(int radius, int tube, int segmentsR, int segmentsT, double arc) 
+	public TorusGeometry(int radius, int tube, int segmentsR, int segmentsT, double arc) 
 	{
 		super();
 		

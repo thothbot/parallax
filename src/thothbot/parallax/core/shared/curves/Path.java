@@ -41,7 +41,7 @@ public class Path extends CurvePath
 		QUADRATIC_CURVE_TO, // Bezier quadratic curve
 		BEZIER_CURVE_TO, 	// Bezier cubic curve
 		CSPLINE_THRU,		// Catmull-rom spline
-		ARC					// Circle
+		ARC					// CircleGeometry
 	};
 	
 	public class Action 

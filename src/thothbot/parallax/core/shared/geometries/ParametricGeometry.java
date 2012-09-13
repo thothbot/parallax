@@ -30,19 +30,19 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
-public class Parametric extends Geometry
+public class ParametricGeometry extends Geometry
 {
 	public static interface ParametricFunction 
 	{
 		Vector3 run(double u, double v);
 	}
 
-	public Parametric(final ParametricFunction function, int slices, int stacks)
+	public ParametricGeometry(final ParametricFunction function, int slices, int stacks)
 	{
 		this(function, slices, stacks, false);
 	}
 	
-	public Parametric(final ParametricFunction function, int slices, int stacks, boolean useTris)
+	public ParametricGeometry(final ParametricFunction function, int slices, int stacks, boolean useTris)
 	{
 		super();
 

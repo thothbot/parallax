@@ -25,7 +25,7 @@ package thothbot.parallax.core.shared.helpers;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.geometries.Cylinder;
+import thothbot.parallax.core.shared.geometries.CylinderGeometry;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.objects.Line;
@@ -43,7 +43,7 @@ public class AxisHelper extends Object3D
 		lineGeometry.getVertices().add( new Vector3() );
 		lineGeometry.getVertices().add( new Vector3( 0, 100, 0 ) );
 
-		Cylinder coneGeometry = new Cylinder( 0, 5, 25, 5, 1 );
+		CylinderGeometry coneGeometry = new CylinderGeometry( 0, 5, 25, 5, 1 );
 
 		// x
 		LineBasicMaterial lbmX = new LineBasicMaterial();

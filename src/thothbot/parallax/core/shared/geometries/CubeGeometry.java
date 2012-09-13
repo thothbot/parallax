@@ -33,7 +33,7 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 
 /**
- * The Cube geometry
+ * The CubeGeometry geometry
  * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/cube.gif" />
  * <p>
@@ -42,7 +42,7 @@ import thothbot.parallax.core.shared.materials.Material;
  * @author thothbot
  *
  */
-public final class Cube extends Geometry 
+public final class CubeGeometry extends Geometry 
 {
 	public class Sides
 	{
@@ -60,22 +60,22 @@ public final class Cube extends Geometry
 	private int segmentsHeight;
 	private int segmentsDepth;
 	
-	public Cube() 
+	public CubeGeometry() 
 	{
 		this(100, 100, 100, 1, 1, 1);
 	}
 
-	public Cube( double width, double height, double depth) 
+	public CubeGeometry( double width, double height, double depth) 
 	{
 		this(width, height, depth, 1, 1, 1);
 	}
 	
-	public Cube( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth)
+	public CubeGeometry( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth)
 	{
 		this(width, height, depth, segmentsWidth, segmentsHeight, segmentsDepth, null, null);
 	}
 
-	public Cube( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth, 
+	public CubeGeometry( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth, 
 			List<Material> materials, Sides sides) 
 	{
 		super();

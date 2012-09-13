@@ -23,12 +23,12 @@
 package thothbot.parallax.core.shared.geometries.parametric;
 
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.geometries.Parametric;
+import thothbot.parallax.core.shared.geometries.ParametricGeometry;
 
-public class Mobius3d extends Parametric
+public class Mobius3dParametricGeometry extends ParametricGeometry
 {
 
-	public Mobius3d(int slices, int stacks) {
+	public Mobius3dParametricGeometry(int slices, int stacks) {
 		super(new ParametricFunction() {
 			
 			@Override

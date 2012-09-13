@@ -19,9 +19,9 @@
 
 package thothbot.parallax.core.shared.geometries;
 
-public final class Icosahedron2 extends Polyhedron 
+public final class Icosahedron2Geometry extends PolyhedronGeometry 
 {
-	public Icosahedron2( double radius, int detail ) 
+	public Icosahedron2Geometry( double radius, int detail ) 
 	{
 		super(radius, detail );
 	}	

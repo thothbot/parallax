@@ -23,46 +23,22 @@
 package thothbot.parallax.core.shared.geometries.parametric;
 
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.geometries.Parametric;
+import thothbot.parallax.core.shared.geometries.ParametricGeometry;
 
-/**
- * The Klein bottle geometry
- * <p>
- * <img src="http://thothbot.github.com/parallax/static/docs/klein_bottle.gif" />
- * <p>
- * Based on the three.js code.
- * 
- * @author thothbot
- *
- */
-public class Klein extends Parametric
+public class PlaneParametricGeometry extends ParametricGeometry
 {
-	public Klein(int slices, int stacks) 
+
+	public PlaneParametricGeometry(final int width, final int height, int slices, int stacks)
 	{
-		super(new Parametric.ParametricFunction() 
-		{	
+		super(new ParametricFunction() {
+			
 			@Override
 			public Vector3 run(double u, double v)
 			{
-				u *= Math.PI;
-				v *= 2.0 * Math.PI;
+				double x = u * (double)width;
+				double y = 0.0;
+				double z = v * (double)height;
 
-				u = u * 2.0;
-				double x,y,z;
-
-				if (u < Math.PI) 
-				{
-					x = 3.0 * Math.cos(u) * (1.0 + Math.sin(u)) + (2.0 * (1.0 - Math.cos(u) / 2.0)) * Math.cos(u) * Math.cos(v);
-					z = -8.0 * Math.sin(u) - 2.0 * (1.0 - Math.cos(u) / 2.0) * Math.sin(u) * Math.cos(v);
-				} 
-				else 
-				{
-					x = 3.0 * Math.cos(u) * (1.0 + Math.sin(u)) + (2.0 * (1.0 - Math.cos(u) / 2.0)) * Math.cos(v + Math.PI);
-					z = -8.0 * Math.sin(u);
-				}
-
-				y = -2.0 * (1.0 - Math.cos(u) / 2.0) * Math.sin(v);
-				
 				return new Vector3(x, y, z);
 			}
 		}, slices, stacks);

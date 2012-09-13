@@ -20,7 +20,7 @@
 package thothbot.parallax.core.shared.core;
 
 /**
- * Bounding Sphere is a container which used for quickly and easily 
+ * Bounding SphereGeometry is a container which used for quickly and easily 
  * determination of the location of an object in space.
  * 
  * @author thothbot

@@ -46,7 +46,7 @@ import thothbot.parallax.core.shared.objects.Object3D;
  * 
  * @author thothbot
  */
-public final class Tube extends Geometry
+public final class TubeGeometry extends Geometry
 {
 	private List<Vector3> tangents;
 	private List<Vector3> normals;
@@ -55,12 +55,12 @@ public final class Tube extends Geometry
 	
 	private List<List<Integer>> grid;
 	
-	public Tube( Curve path )
+	public TubeGeometry( Curve path )
 	{
 		this(path, 64, 1.0, 8, false, true);
 	}
 	
-	public Tube( Curve path, int segments, double radius, int segmentsRadius, boolean closed, boolean debug ) 
+	public TubeGeometry( Curve path, int segments, double radius, int segmentsRadius, boolean closed, boolean debug ) 
 	{
 		super();
 		

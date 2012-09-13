@@ -34,7 +34,7 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
-public abstract class Polyhedron extends Geometry
+public abstract class PolyhedronGeometry extends Geometry
 {
 	private Map<Integer, Map<Integer, ContainerOfVector>> midpoints;
 	private List<ContainerOfVector> containers;
@@ -51,12 +51,12 @@ public abstract class Polyhedron extends Geometry
 		}
 	}
 
-	public Polyhedron() 
+	public PolyhedronGeometry() 
 	{
 		this(1.0, 0);
 	}
 	
-	public Polyhedron(double radius, int detail) 
+	public PolyhedronGeometry(double radius, int detail) 
 	{
 		super();
 		this.containers = new ArrayList<ContainerOfVector>();

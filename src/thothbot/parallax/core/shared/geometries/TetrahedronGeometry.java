@@ -23,7 +23,7 @@
 package thothbot.parallax.core.shared.geometries;
 
 /**
- * The Tetrahedron geometry
+ * The TetrahedronGeometry geometry
  * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/tetrahedron.gif" />
  * <p>
@@ -32,9 +32,9 @@ package thothbot.parallax.core.shared.geometries;
  * @author thothbot
  *
  */
-public class Tetrahedron extends Polyhedron
+public class TetrahedronGeometry extends PolyhedronGeometry
 {
-	public Tetrahedron( double radius, int detail ) 
+	public TetrahedronGeometry( double radius, int detail ) 
 	{
 		super( radius, detail );
 	}

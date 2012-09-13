@@ -23,25 +23,39 @@
 package thothbot.parallax.core.shared.geometries.parametric;
 
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.geometries.Parametric;
+import thothbot.parallax.core.shared.geometries.ParametricGeometry;
 
-public class Plane extends Parametric
+/**
+ * The flat MobiusParametricGeometry strip geometry
+ * <p>
+ * <img src="http://thothbot.github.com/parallax/static/docs/mobius_strip.gif" />
+ * <p>
+ * Based on the three.js code.
+ * 
+ * @author thothbot
+ *
+ */
+public class MobiusParametricGeometry extends ParametricGeometry
 {
 
-	public Plane(final int width, final int height, int slices, int stacks)
+	public MobiusParametricGeometry(int slices, int stacks) 
 	{
-		super(new ParametricFunction() {
+		super(new ParametricGeometry.ParametricFunction() {
 			
 			@Override
-			public Vector3 run(double u, double v)
+			public Vector3 run(double u, double t)
 			{
-				double x = u * (double)width;
-				double y = 0.0;
-				double z = v * (double)height;
+				u = u - 0.5;
+				double v = 2.0 * Math.PI * t;
 
+				double a = 2.0;
+	
+				double x = Math.cos(v) * (a + u * Math.cos(v/2.0));
+				double y = Math.sin(v) * (a + u * Math.cos(v/2.0));
+				double z = u * Math.sin(v/2.0);
 				return new Vector3(x, y, z);
 			}
-		}, slices, stacks);
+		}, 
+		slices, stacks);
 	}
-
 }

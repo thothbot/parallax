@@ -34,7 +34,7 @@ import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
 /**
- * The Sphere geometry
+ * The SphereGeometry geometry
  * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/sphere.gif" />
  * <p>
@@ -43,29 +43,29 @@ import thothbot.parallax.core.shared.core.Vector3;
  * @author thothbot
  *
  */
-public final class Sphere extends Geometry
+public final class SphereGeometry extends Geometry
 {
-	public Sphere() 
+	public SphereGeometry() 
 	{
 		this(50);
 	}
 
-	public Sphere(double radius) 
+	public SphereGeometry(double radius) 
 	{
 		this(radius, 8, 6);
 	}
 	
-	public Sphere(double radius, int segmentsWidth, int segmentsHeight) 
+	public SphereGeometry(double radius, int segmentsWidth, int segmentsHeight) 
 	{
 		this(radius, segmentsWidth, segmentsHeight, 0.0, Math.PI * 2.0 );
 	}
 	
-	public Sphere(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength)
+	public SphereGeometry(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength)
 	{
 		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0, Math.PI);
 	}
 
-	public Sphere(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength, double thetaStart, double thetaLength) 
+	public SphereGeometry(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength, double thetaStart, double thetaLength) 
 	{
 		super();
 		int segmentsX = Math.max( 3, segmentsWidth );

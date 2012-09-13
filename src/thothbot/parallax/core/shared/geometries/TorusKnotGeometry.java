@@ -29,20 +29,20 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
-public final class TorusKnot extends Geometry
+public final class TorusKnotGeometry extends Geometry
 {
 
-	public TorusKnot() 
+	public TorusKnotGeometry() 
 	{
 		this(200, 40, 64, 8);
 	}
 	
-	public TorusKnot(int radius, int tube, int segmentsR, int segmentsT)
+	public TorusKnotGeometry(int radius, int tube, int segmentsR, int segmentsT)
 	{
 		this(radius, tube, segmentsR, segmentsT, 2, 3, 1);
 	}
 			
-	public TorusKnot(int radius, int tube, int segmentsR, int segmentsT, int p, int q, int heightScale ) 
+	public TorusKnotGeometry(int radius, int tube, int segmentsR, int segmentsT, int p, int q, int heightScale ) 
 	{
 		super();
 		

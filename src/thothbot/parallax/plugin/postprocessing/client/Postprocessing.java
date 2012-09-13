@@ -37,7 +37,7 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.core.Matrix4;
-import thothbot.parallax.core.shared.geometries.Plane;
+import thothbot.parallax.core.shared.geometries.PlaneGeometry;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugin.postprocessing.client.shader.ShaderScreen;
@@ -58,7 +58,7 @@ public class Postprocessing extends Plugin
 	private OrthographicCamera camera;
 	
 	// shared fullscreen quad scene
-	private Plane geometry;
+	private PlaneGeometry geometry;
 	private Mesh quad;
 
 	public Postprocessing( WebGLRenderer renderer, Scene scene)
@@ -97,7 +97,7 @@ public class Postprocessing extends Plugin
 			-10000, 10000
 		);
 		
-		this.geometry = new Plane( 1, 1 );
+		this.geometry = new PlaneGeometry( 1, 1 );
 		this.quad = new Mesh( geometry, null );
 		
 		geometry.applyMatrix( new Matrix4().makeRotationX( Math.PI / 2.0) );
@@ -117,7 +117,7 @@ public class Postprocessing extends Plugin
 		return this.camera;
 	}
 	
-	public Plane getGeometry() {
+	public PlaneGeometry getGeometry() {
 		return this.geometry;
 	}
 	

@@ -32,20 +32,20 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
-public final class Lathe extends Geometry
+public final class LatheGeometry extends Geometry
 {
 	
-	public Lathe ( List<Vector3> points) 
+	public LatheGeometry ( List<Vector3> points) 
 	{
 		this(points, 12);
 	}
 	
-	public Lathe ( List<Vector3> points, int steps)
+	public LatheGeometry ( List<Vector3> points, int steps)
 	{
 		this(points, steps, 2.0 * Math.PI);
 	}
 
-	public Lathe ( List<Vector3> points, int steps, double angle ) 
+	public LatheGeometry ( List<Vector3> points, int steps, double angle ) 
 	{
 		super();
 

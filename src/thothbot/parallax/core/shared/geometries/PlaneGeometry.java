@@ -30,7 +30,7 @@ import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
 /**
- * The Plane geometry
+ * The PlaneGeometry geometry
  * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/plane.gif" />
  * <p>
@@ -39,14 +39,14 @@ import thothbot.parallax.core.shared.core.Vector3;
  * @author thothbot
  *
  */
-public final class Plane extends Geometry
+public final class PlaneGeometry extends Geometry
 {
-	public Plane(int width, int height) 
+	public PlaneGeometry(int width, int height) 
 	{
 		this(width, height, 1, 1);
 	}
 
-	public Plane(int width, int height, int segmentsWidth, int segmentsHeight) 
+	public PlaneGeometry(int width, int height, int segmentsWidth, int segmentsHeight) 
 	{
 		super();
 

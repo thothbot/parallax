@@ -33,7 +33,7 @@ import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
 /**
- * The Cylinder geometry
+ * The CylinderGeometry geometry
  * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/cylinder.gif" />
  * <p>
@@ -42,20 +42,20 @@ import thothbot.parallax.core.shared.core.Vector3;
  * @author thothbot
  *
  */
-public final class Cylinder extends Geometry
+public final class CylinderGeometry extends Geometry
 {
 
-	public Cylinder() 
+	public CylinderGeometry() 
 	{
 		this(20, 20, 100, 8, 1);
 	}
 	
-	public Cylinder(double radiusTop, double radiusBottom, double height, int segmentsRadius, int segmentsHeight)
+	public CylinderGeometry(double radiusTop, double radiusBottom, double height, int segmentsRadius, int segmentsHeight)
 	{
 		this(radiusTop, radiusBottom, height, segmentsRadius, segmentsHeight, false);
 	}
 
-	public Cylinder(double radiusTop, double radiusBottom, double height, int segmentsRadius, int segmentsHeight, boolean openEnded) 
+	public CylinderGeometry(double radiusTop, double radiusBottom, double height, int segmentsRadius, int segmentsHeight, boolean openEnded) 
 	{
 		super();
 

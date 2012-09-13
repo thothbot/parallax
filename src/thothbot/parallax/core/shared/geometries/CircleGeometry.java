@@ -30,19 +30,19 @@ import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
 
-public final class Circle extends Geometry 
+public final class CircleGeometry extends Geometry 
 {
-	public Circle()
+	public CircleGeometry()
 	{
 		this(50, 8);
 	}
 	
-	public Circle(double radius, int segments)
+	public CircleGeometry(double radius, int segments)
 	{
 		this(radius, segments, 0, Math.PI * 2.0);
 	}
 
-	public Circle(double radius, int segments, double thetaStart, double thetaLength)
+	public CircleGeometry(double radius, int segments, double thetaStart, double thetaLength)
 	{
 	    segments = Math.max( 3, segments );
 
