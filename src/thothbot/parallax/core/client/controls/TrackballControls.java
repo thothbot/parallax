@@ -170,6 +170,14 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	public void setZoom(boolean isZoom) {
 		this.isZoom = isZoom;
 	}
+	
+	/**
+	 * Enable/Disable pan. Default true.
+	 * @param isZoom
+	 */
+	public void setPan(boolean isPan) {
+		this.isPan = isPan;
+	}
 
 	/**
 	 * Enable/Disable static moving. Default true.
