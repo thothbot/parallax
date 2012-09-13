@@ -93,7 +93,7 @@ public class Ray
 	 * @param a
 	 * @param b
 	 * @param c
-	 * @return
+	 * @return  true or false
 	 */
 	public boolean pointInFace3( Vector3 p, Vector3 a, Vector3 b, Vector3 c ) 
 	{

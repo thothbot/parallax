@@ -78,7 +78,7 @@ public final class FlyControls extends Controls implements
 	private int viewHalfY;
 		
 	/**
-	 * @see Controls#Control(Object3D, Widget).
+	 * @see Controls#Controls(Object3D, Widget).
 	 */
 	public FlyControls(Object3D object, Widget widget)
 	{
