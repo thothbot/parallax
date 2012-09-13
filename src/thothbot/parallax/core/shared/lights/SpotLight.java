@@ -40,9 +40,9 @@ public class SpotLight extends Light
 	
 	public boolean castShadow = false;
 	
-	public int shadowCameraNear = 50;
-	public int shadowCameraFar = 5000;
-	public int shadowCameraFov = 50;
+	public double shadowCameraNear = 50;
+	public double shadowCameraFar = 5000;
+	public double shadowCameraFov = 50;
 	
 	public boolean shadowCameraVisible = false;
 	
@@ -59,7 +59,12 @@ public class SpotLight extends Light
 	
 	public SpotLight(int hex) 
 	{
-		this(hex, 1, 0, Math.PI / 2.0, 10);
+		this(hex, 1.0);
+	}
+
+	public SpotLight(int hex, double intensity)
+	{
+		this(hex, intensity, 0, Math.PI / 2.0, 10);
 	}
 
 	public SpotLight(int hex, double intensity, double distance, double angle, double exponent) 

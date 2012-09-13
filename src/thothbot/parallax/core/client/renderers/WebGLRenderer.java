@@ -454,6 +454,55 @@ public class WebGLRenderer
 		this.canvas = canvas;
 	}
 	
+
+	public boolean isShadowMapEnabled() {
+		return isShadowMapEnabled;
+	}
+
+	public void setShadowMapEnabled(boolean isShadowMapEnabled) {
+		this.isShadowMapEnabled = isShadowMapEnabled;
+	}
+
+	public boolean isShadowMapAutoUpdate() {
+		return isShadowMapAutoUpdate;
+	}
+
+	public void setShadowMapAutoUpdate(boolean isShadowMapAutoUpdate) {
+		this.isShadowMapAutoUpdate = isShadowMapAutoUpdate;
+	}
+
+	public boolean isShadowMapSoft() {
+		return isShadowMapSoft;
+	}
+
+	public void setShadowMapSoft(boolean isShadowMapSoft) {
+		this.isShadowMapSoft = isShadowMapSoft;
+	}
+
+	public boolean isShadowMapCullFrontFaces() {
+		return isShadowMapCullFrontFaces;
+	}
+
+	public void setShadowMapCullFrontFaces(boolean isShadowMapCullFrontFaces) {
+		this.isShadowMapCullFrontFaces = isShadowMapCullFrontFaces;
+	}
+
+	public boolean isShadowMapDebug() {
+		return isShadowMapDebug;
+	}
+
+	public void setShadowMapDebug(boolean isShadowMapDebug) {
+		this.isShadowMapDebug = isShadowMapDebug;
+	}
+
+	public boolean isShadowMapCascade() {
+		return isShadowMapCascade;
+	}
+
+	public void setShadowMapCascade(boolean isShadowMapCascade) {
+		this.isShadowMapCascade = isShadowMapCascade;
+	}
+	
 	/**
 	 * Gets the WebGL context from the {@link Canvas3d} widget.
 	 * 
