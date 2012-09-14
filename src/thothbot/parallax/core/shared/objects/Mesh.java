@@ -53,7 +53,7 @@ import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 
 import com.google.gwt.core.client.GWT;
 
-public class Mesh  extends GeometryObject
+public class Mesh extends GeometryObject
 {
 	private Boolean overdraw;
 	private Integer morphTargetBase = null;

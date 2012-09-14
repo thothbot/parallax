@@ -27,6 +27,7 @@ import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.objects.DimensionalObject;
 import thothbot.parallax.core.shared.objects.Mesh;
+import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.Particle;
 
 public class Ray 
@@ -121,7 +122,12 @@ public class Ray
 		this.precision = value;
 	}
 
-	public List<Ray.Intersect> intersectObject( DimensionalObject object, boolean recursive ) 
+	public List<Ray.Intersect> intersectObject( Object3D object )
+	{
+		return intersectObject(object, false);
+	}
+
+	public List<Ray.Intersect> intersectObject( Object3D object, boolean recursive ) 
 	{
 		//			var intersect, 
 		List<Ray.Intersect> intersects = new ArrayList<Ray.Intersect>();
@@ -130,7 +136,7 @@ public class Ray
 		{
 			for ( int i = 0, l = object.getChildren().size(); i < l; i ++ ) 
 			{
-				intersects.addAll( intersectObject( object.getChildren().get( i ), recursive ) );
+				intersects.addAll( intersectObject( (Object3D) object.getChildren().get( i ), recursive ) );
 			}
 		}
 
@@ -271,12 +277,12 @@ public class Ray
 		return intersects;
 	}
 
-	public List<Ray.Intersect> intersectObjects(List<DimensionalObject> objects)
+	public List<Ray.Intersect> intersectObjects(List<Object3D> objects)
 	{
 		return intersectObjects(objects, false);
 	}
 
-	public List<Ray.Intersect> intersectObjects(List<DimensionalObject> objects, boolean recursive ) 
+	public List<Ray.Intersect> intersectObjects(List<Object3D> objects, boolean recursive ) 
 	{
 		List<Ray.Intersect> intersects = new ArrayList<Ray.Intersect>();
 
