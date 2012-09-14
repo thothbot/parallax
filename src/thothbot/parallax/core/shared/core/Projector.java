@@ -42,4 +42,19 @@ public class Projector
 
 		return vector;
 	}
+	
+	public Ray pickingRay( Vector3 vector, Camera camera ) 
+	{
+		// set two vectors with opposing z values
+		vector.setZ( -1.0 );
+		Vector3 end = new Vector3( vector.getX(), vector.getY(), 1.0 );
+
+		this.unprojectVector( vector, camera );
+		this.unprojectVector( end, camera );
+
+		// find direction from vector to end
+		end.sub( vector ).normalize();
+
+		return new Ray( vector, end );
+	}
 }
