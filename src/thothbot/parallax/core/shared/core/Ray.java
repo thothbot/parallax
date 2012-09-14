@@ -122,12 +122,12 @@ public class Ray
 		this.precision = value;
 	}
 
-	public List<Ray.Intersect> intersectObject( Object3D object )
+	public List<Ray.Intersect> intersectObject( DimensionalObject object )
 	{
 		return intersectObject(object, false);
 	}
 
-	public List<Ray.Intersect> intersectObject( Object3D object, boolean recursive ) 
+	public List<Ray.Intersect> intersectObject( DimensionalObject object, boolean recursive ) 
 	{
 		//			var intersect, 
 		List<Ray.Intersect> intersects = new ArrayList<Ray.Intersect>();
@@ -136,7 +136,7 @@ public class Ray
 		{
 			for ( int i = 0, l = object.getChildren().size(); i < l; i ++ ) 
 			{
-				intersects.addAll( intersectObject( (Object3D) object.getChildren().get( i ), recursive ) );
+				intersects.addAll( intersectObject( object.getChildren().get( i ), recursive ) );
 			}
 		}
 
@@ -277,12 +277,12 @@ public class Ray
 		return intersects;
 	}
 
-	public List<Ray.Intersect> intersectObjects(List<Object3D> objects)
+	public List<Ray.Intersect> intersectObjects(List<? extends DimensionalObject> objects)
 	{
 		return intersectObjects(objects, false);
 	}
-
-	public List<Ray.Intersect> intersectObjects(List<Object3D> objects, boolean recursive ) 
+	
+	public List<Ray.Intersect> intersectObjects(List<? extends DimensionalObject> objects, boolean recursive ) 
 	{
 		List<Ray.Intersect> intersects = new ArrayList<Ray.Intersect>();
 
