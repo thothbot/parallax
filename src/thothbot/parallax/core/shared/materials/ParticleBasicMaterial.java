@@ -26,7 +26,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.ShaderParticleBasic;
+import thothbot.parallax.core.client.shaders.ParticleBasicShader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.cameras.Camera;
@@ -79,7 +79,7 @@ public final class ParticleBasicMaterial extends Material
 	
 	public Shader getAssociatedShader() 
 	{
-		return new ShaderParticleBasic();
+		return new ParticleBasicShader();
 	}
 	
 	@Override

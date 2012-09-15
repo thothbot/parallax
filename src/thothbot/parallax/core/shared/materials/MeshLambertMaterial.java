@@ -26,7 +26,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.ShaderLambert;
+import thothbot.parallax.core.client.shaders.LambertShader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
@@ -95,7 +95,7 @@ public final class MeshLambertMaterial extends Material
 	@Override
 	public Shader getAssociatedShader()
 	{
-		return new ShaderLambert();
+		return new LambertShader();
 	}
 
 	@Override

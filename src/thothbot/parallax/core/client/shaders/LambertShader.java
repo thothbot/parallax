@@ -25,32 +25,39 @@ package thothbot.parallax.core.client.shaders;
 import java.util.Arrays;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.core.Vector3;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Basic shader.
+ * Lambert shader. This is the simplest model of light - a pure diffuse lighting. 
+ * It is believed that the incident light  is scattered in all direction. 
+ * Thus, the illumination is determined by the light density at the surface 
+ * only and it depends linearly on the cosine of the angle of incidence.
  * <p>
- * Based on the three.js code. 
+ * Based on the three.js code.
  * 
  * @author thothbot
  *
  */
-public final class ShaderBasic extends Shader
+public final class LambertShader extends Shader
 {
 
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("chunk/basic_vs.chunk")
+		
+		@Source("chunk/lambert_vs.chunk")
 		TextResource getVertexShader();
 
-		@Source("chunk/basic_fs.chunk")
+		@Source("chunk/lambert_fs.chunk")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderBasic() 
+	public LambertShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -60,7 +67,11 @@ public final class ShaderBasic extends Shader
 	{
 		this.setUniforms(UniformsLib.getCommon());
 		this.setUniforms(UniformsLib.getFog());
+		this.setUniforms(UniformsLib.getLights());
 		this.setUniforms(UniformsLib.getShadowmap());
+		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
+		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
+		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0, 1.0, 1.0 ) ));
 	}
 	
 	@Override
@@ -70,8 +81,8 @@ public final class ShaderBasic extends Shader
 			ChunksVertexShader.MAP_PARS,
 			ChunksVertexShader.LIGHTMAP_PARS,
 			ChunksVertexShader.ENVMAP_PARS,
+			ChunksVertexShader.LIGHTS_LAMBERT_PARS,
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.MORPH_TARGET_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
@@ -82,13 +93,21 @@ public final class ShaderBasic extends Shader
 			ChunksVertexShader.LIGHTMAP,
 			ChunksVertexShader.ENVMAP,
 			ChunksVertexShader.COLOR,
+			ChunksVertexShader.MORPH_NORMAL,
+			ChunksVertexShader.SKINBASE,
+			ChunksVertexShader.SKINNORMAL,
+			ChunksVertexShader.DEFAULTNORMAL
+		);
+
+		List<String> main2 = Arrays.asList(
+			ChunksVertexShader.LIGHTS_LAMBERT,
 			ChunksVertexShader.SKINNING,
 			ChunksVertexShader.MORPH_TARGET,
 			ChunksVertexShader.DEFAULT,
 			ChunksVertexShader.SHADOWMAP
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main, main2));
 	}
 	
 	@Override
@@ -107,7 +126,10 @@ public final class ShaderBasic extends Shader
 		List<String> main = Arrays.asList(
 			ChunksFragmentShader.MAP,
 			ChunksFragmentShader.ALPHA_TEST,
-			ChunksFragmentShader.SPECULARMAP,
+			ChunksFragmentShader.SPECULARMAP
+		);
+		
+		List<String> main2 = Arrays.asList(
 			ChunksFragmentShader.LIGHTMAP,
 			ChunksFragmentShader.COLOR,
 			ChunksFragmentShader.ENVMAP,
@@ -116,6 +138,7 @@ public final class ShaderBasic extends Shader
 			ChunksFragmentShader.FOG
 		);
 		
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));		
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main, main2));		
 	}
+
 }

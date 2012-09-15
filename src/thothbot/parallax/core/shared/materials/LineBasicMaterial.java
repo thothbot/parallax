@@ -26,7 +26,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.ShaderBasic;
+import thothbot.parallax.core.client.shaders.BasicShader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
@@ -57,7 +57,7 @@ public final class LineBasicMaterial extends Material
 	@Override
 	public Shader getAssociatedShader()
 	{
-		return new ShaderBasic();
+		return new BasicShader();
 	}
 
 	public double getLinewidth() {

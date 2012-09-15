@@ -25,33 +25,32 @@ package thothbot.parallax.core.client.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.client.shaders.ShaderBasic.Resources;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Simple Particle shader.
+ * Depth encoding into RGBA texture.
  * <p>
- * Based on the three.js code.
+ * Based on SpiderGL shadow map example @see <a href="http://spidergl.org/example.php?id=6">http://spidergl.org</a><br>
+ * Originally from @see <a href="http://www.gamedev.net/topic/442138-packing-a-float-into-a-a8r8g8b8-texture-shader/page__whichpage__1%25EF%25BF%25BD">http://www.gamedev.net</a><br>
+ * See also here @see <a href="http://aras-p.info/blog/2009/07/30/encoding-floats-to-rgba-the-final/">http://aras-p.info</a>
  * 
  * @author thothbot
- *
  */
-public final class ShaderParticleBasic extends Shader
+public final class DepthRGBAShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("chunk/particle_basic_vs.chunk")
+		@Source("chunk/depthRGBA_vs.chunk")
 		TextResource getVertexShader();
 
-		@Source("chunk/particle_basic_fs.chunk")
+		@Source("chunk/depthRGBA_fs.chunk")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderParticleBasic() 
+
+	public DepthRGBAShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -59,47 +58,24 @@ public final class ShaderParticleBasic extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.setUniforms(UniformsLib.getParticle());
-		this.setUniforms(UniformsLib.getShadowmap());
 	}
 	
 	@Override
 	protected void updateVertexSource(String src)
 	{
 		List<String> vars = Arrays.asList(
-			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.SHADOWMAP_PARS
+			ChunksVertexShader.SKINNING_PARS,
+			ChunksVertexShader.MORPH_TARGET_PARS
 		);
 		
 		List<String> main = Arrays.asList(
-			ChunksVertexShader.COLOR
-		);
-		
-		List<String> main2 = Arrays.asList(
-			ChunksVertexShader.SHADOWMAP
+			ChunksVertexShader.SKINBASE,
+			ChunksVertexShader.SKINNING,
+			ChunksVertexShader.MORPH_TARGET,
+			ChunksVertexShader.DEFAULT
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main, main2));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
 	}
-	
-	@Override
-	protected void updateFragmentSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksFragmentShader.COLOR_PARS,
-			ChunksFragmentShader.MAP_PARTICLE_PARS,
-			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.SHADOWMAP_PARS
-		);
-		
-		List<String> main = Arrays.asList(
-			ChunksFragmentShader.MAP_PARTICLE,
-			ChunksFragmentShader.ALPHA_TEST,
-			ChunksFragmentShader.COLOR,
-			ChunksFragmentShader.SHADOWMAP,
-			ChunksFragmentShader.FOG
-		);
-		
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));		
-	}
+
 }

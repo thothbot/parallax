@@ -26,7 +26,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.ShaderDepth;
+import thothbot.parallax.core.client.shaders.DepthShader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
@@ -51,7 +51,7 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	@Override
 	public Shader getAssociatedShader()
 	{
-		return new ShaderDepth();
+		return new DepthShader();
 	}
 	
 	@Override

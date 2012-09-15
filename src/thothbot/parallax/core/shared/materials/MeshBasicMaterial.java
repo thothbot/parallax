@@ -23,7 +23,7 @@
 package thothbot.parallax.core.shared.materials;
 
 import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.ShaderBasic;
+import thothbot.parallax.core.client.shaders.BasicShader;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.core.Color;
@@ -77,7 +77,7 @@ public class MeshBasicMaterial extends Material
 	@Override
 	public Shader getAssociatedShader() 
 	{
-		return new ShaderBasic();
+		return new BasicShader();
 	}
 	
 	public Material.SHADING bufferGuessNormalType () 

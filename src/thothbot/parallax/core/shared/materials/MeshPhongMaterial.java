@@ -26,7 +26,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.ShaderPhong;
+import thothbot.parallax.core.client.shaders.PhongShader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
@@ -107,7 +107,7 @@ public final class MeshPhongMaterial extends Material
 	@Override
 	public Shader getAssociatedShader()
 	{
-		return new ShaderPhong();
+		return new PhongShader();
 	}
 	
 	

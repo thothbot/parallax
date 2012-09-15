@@ -26,27 +26,24 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Normal shader.
+ * Simple depth shader.
  * <p>
  * Based on the three.js code.
  * 
  * @author thothbot
  *
  */
-public final class ShaderNormal extends Shader
+public final class DepthShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/normal.vs")
-		TextResource getVertexShader();
 
-		@Source("source/normal.fs")
+		@Source("source/depth.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderNormal() 
+	
+	public DepthShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -54,6 +51,8 @@ public final class ShaderNormal extends Shader
 	@Override
 	protected void initUniforms()
 	{
+		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0 ));
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
 	}
 }

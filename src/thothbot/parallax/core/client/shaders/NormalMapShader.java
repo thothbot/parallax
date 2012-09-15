@@ -40,7 +40,7 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public final class ShaderNormalMap extends Shader 
+public final class NormalMapShader extends Shader 
 {
 
 	interface Resources extends DefaultResources
@@ -54,7 +54,7 @@ public final class ShaderNormalMap extends Shader
 		TextResource getFragmentShader();
 	}
 
-	public ShaderNormalMap() 
+	public NormalMapShader() 
 	{
 		super(Resources.INSTANCE);
 	}

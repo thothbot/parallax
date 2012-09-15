@@ -33,7 +33,7 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public final class ShaderFresnel extends Shader 
+public final class FresnelShader extends Shader 
 {
 
 	interface Resources extends DefaultResources
@@ -47,7 +47,7 @@ public final class ShaderFresnel extends Shader
 		TextResource getFragmentShader();
 	}
 
-	public ShaderFresnel() 
+	public FresnelShader() 
 	{
 		super(Resources.INSTANCE);
 	}
