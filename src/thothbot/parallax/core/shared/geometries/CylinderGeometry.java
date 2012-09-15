@@ -192,6 +192,6 @@ public final class CylinderGeometry extends Geometry
 		}
 
 		computeCentroids();
-		computeFaceNormals(false);
+		computeFaceNormals();
 	}
 }

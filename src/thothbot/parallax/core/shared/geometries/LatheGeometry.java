@@ -91,7 +91,7 @@ public final class LatheGeometry extends Geometry
 		}
 
 		this.computeCentroids();
-		this.computeFaceNormals(false);
+		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}
 

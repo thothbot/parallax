@@ -434,6 +434,11 @@ public class Geometry extends GeometryBuffer
 		}
 	}
 	
+	public void computeFaceNormals()
+	{
+		computeFaceNormals(false);
+	}
+
 	public void computeFaceNormals(Boolean useVertexNormals)
 	{
 		Vector3 cb = new Vector3(), ab = new Vector3();
@@ -532,7 +537,7 @@ public class Geometry extends GeometryBuffer
 			tmpGeo.setVertices( this.morphTargets.get( j ).vertices );
 
 			// Compute morph normals
-			tmpGeo.computeFaceNormals(false);
+			tmpGeo.computeFaceNormals();
 			tmpGeo.computeVertexNormals();
 
 			// Store morph normals

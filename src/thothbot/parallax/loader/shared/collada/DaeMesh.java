@@ -127,7 +127,7 @@ public class DaeMesh extends DaeElement
 		}
 
 		this.geometry.computeCentroids();
-		this.geometry.computeFaceNormals(false);
+		this.geometry.computeFaceNormals();
 		
 //		if ( this.geometry.calcNormals )
 //			this.geometry.computeVertexNormals();		

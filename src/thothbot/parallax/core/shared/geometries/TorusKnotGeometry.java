@@ -106,7 +106,7 @@ public final class TorusKnotGeometry extends Geometry
 		}
 
 		this.computeCentroids();
-		this.computeFaceNormals(false);
+		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}
 	

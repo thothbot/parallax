@@ -322,7 +322,7 @@ public class GeometryUtils
 		geometry.setFaceVertexUvs(faceVertexUvs);
 
 		geometry.computeCentroids();
-		geometry.computeFaceNormals(false);
+		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
 		if ( geometry.hasTangents() ) 

@@ -112,7 +112,7 @@ public class ExtrudeGeometry extends Geometry
 		this.addShape( shapes, options );
 
 		this.computeCentroids();
-		this.computeFaceNormals(false);
+		this.computeFaceNormals();
 	}
 	
 	public void addShape(List<Shape> shapes, ExtrudeGeometryParameters options) 

@@ -77,7 +77,7 @@ public final class CircleGeometry extends Geometry
 	    }
 
 	    this.computeCentroids();
-	    this.computeFaceNormals(false);
+	    this.computeFaceNormals();
 
 	    setBoundingSphere( new BoundingSphere(radius) );
 	}

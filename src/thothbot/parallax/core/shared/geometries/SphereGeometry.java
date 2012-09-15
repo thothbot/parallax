@@ -142,7 +142,7 @@ public final class SphereGeometry extends Geometry
 		}
 
 		this.computeCentroids();
-		this.computeFaceNormals(false);
+		this.computeFaceNormals();
 
 		setBoundingSphere( new BoundingSphere(radius) );
 	}

@@ -73,7 +73,7 @@ public class JsonLoader extends Loader
 		parseMorphing();
 
 		geometry.computeCentroids();
-		geometry.computeFaceNormals(false);
+		geometry.computeFaceNormals();
 
 		if ( hasNormals() ) 
 			geometry.computeTangents();
