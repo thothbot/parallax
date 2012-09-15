@@ -29,14 +29,14 @@ import com.google.gwt.http.client.Response;
 
 public abstract class Loader 
 {
-	public interface Callback 
+	public interface ModelLoadHandler 
 	{
-		public void onLoaded();
+		public void onModeLoad();
 	}
 	
 	private String texturePath;
 	
-	public void load(final String url, final Callback callback) throws RequestException 
+	public void load(final String url, final ModelLoadHandler modelLoadHandler) throws RequestException 
 	{
 		texturePath = extractUrlBase(url);
 		
@@ -47,7 +47,7 @@ public abstract class Loader
 			public void onResponseReceived(Request request, Response response) 
 			{
 				parse(response.getText());
-				callback.onLoaded();
+				modelLoadHandler.onModeLoad();
 			}
 
 			@Override
