@@ -30,15 +30,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * NVIDIA FXAA by Timothy Lottes
- * @see <a href="http://timothylottes.blogspot.com/2011/06/fxaa3-source-released.html">timothylottes.blogspot.com</a>
+ * Dot screen shader
  * <p>
- * WebGL port by \@supereggbert <a href="http://www.glge.org/demos/fxaa/">www.glge.org</a>
+ * Based on three.js code<br>
+ * Based on glfx.js sepia shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
  * 
  * @author thothbot
  *
  */
-public final class ShaderFxaa extends Shader
+public final class DotscreenShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -47,11 +47,11 @@ public final class ShaderFxaa extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/fxaa.fs")
+		@Source("source/dotscreen.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderFxaa() 
+	
+	public DotscreenShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -60,7 +60,11 @@ public final class ShaderFxaa extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0 / 1024.0, 1.0 / 512.0 )));
+		this.addUniform("tSize", new Uniform(Uniform.TYPE.V2, new Vector2( 256, 256 )));
+		this.addUniform("center", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 1.57));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.F, 1.0));
+
 	}
 
 }

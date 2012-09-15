@@ -29,28 +29,30 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Depth-of-field shader with bokeh
+ * Bleach bypass shader
+ * 
+ * @see <a href="http://en.wikipedia.org/wiki/Bleach_bypass">wikipedia.org</a>
  * <p>
- * Based on three.js code<br>
- * Ported from GLSL shader by Martins Upitis <a href="http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html">artmartinsh.blogspot.com</a>
- *
+ * Based on three.js code <br>
+ * Based on Nvidia example <a href="http://developer.download.nvidia.com/shaderlibrary/webpages/shader_library.html#post_bleach_bypass">nvidia.com</a>
+ * 
  * @author thothbot
  *
  */
-public final class ShaderBokeh extends Shader
+public final class BleachbypassShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-		
+
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/bokeh.fs")
+		@Source("source/bleachbypass.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderBokeh() 
+	
+	public BleachbypassShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,12 +60,8 @@ public final class ShaderBokeh extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tColor", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("aspect", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("aperture", new Uniform(Uniform.TYPE.F, 0.025));
-		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
 
 }

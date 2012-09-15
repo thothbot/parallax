@@ -24,19 +24,21 @@ package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Vertical Tilt Shift shader.
+ * NVIDIA FXAA by Timothy Lottes
+ * @see <a href="http://timothylottes.blogspot.com/2011/06/fxaa3-source-released.html">timothylottes.blogspot.com</a>
  * <p>
- * Based on three.js code
+ * WebGL port by \@supereggbert <a href="http://www.glge.org/demos/fxaa/">www.glge.org</a>
  * 
  * @author thothbot
  *
  */
-public final class ShaderVerticalTiltShift extends Shader
+public final class FxaaShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -45,11 +47,11 @@ public final class ShaderVerticalTiltShift extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/verticalTiltShift.fs")
+		@Source("source/fxaa.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderVerticalTiltShift() 
+
+	public FxaaShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,8 +60,7 @@ public final class ShaderVerticalTiltShift extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
-		this.addUniform("r", new Uniform(Uniform.TYPE.F, 0.35));
+		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0 / 1024.0, 1.0 / 512.0 )));
 	}
 
 }

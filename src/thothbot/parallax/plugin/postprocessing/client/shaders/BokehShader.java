@@ -29,13 +29,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Luminosity
- * @see <a href="http://en.wikipedia.org/wiki/Luminosity">wikipedia.org</a>
- * 
+ * Depth-of-field shader with bokeh
+ * <p>
+ * Based on three.js code<br>
+ * Ported from GLSL shader by Martins Upitis <a href="http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html">artmartinsh.blogspot.com</a>
+ *
  * @author thothbot
  *
  */
-public final class ShaderLuminosity extends Shader
+public final class BokehShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -44,11 +46,11 @@ public final class ShaderLuminosity extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/luminosity.fs")
+		@Source("source/bokeh.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderLuminosity() 
+	public BokehShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -56,7 +58,12 @@ public final class ShaderLuminosity extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tColor", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
+		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("aspect", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("aperture", new Uniform(Uniform.TYPE.F, 0.025));
+		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
 	}
 
 }

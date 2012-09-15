@@ -24,28 +24,27 @@ package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Film grain & scanlines shader
+ * Triangle blur shader
  * <p>
  * Based on three.js code<br>
- * Ported from HLSL to WebGL / GLSL <a href="http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html">truevision3d.com</a>
+ * Based on glfx.js triangle blur shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
  * <p>
- * Screen Space Static Postprocessor
- * <p>
- * Produces an analogue noise overlay similar to a film grain / TV static
- * <p>
- * Original implementation and noise algorithm Pat 'Hawthorne' Shearon<br>
- * Optimized scanlines + noise version with intensity scaling Georg 'Leviathan' Steinrohder
+ * A basic blur filter, which convolves the image with a
+ * pyramid filter. The pyramid filter is separable and is applied as two
+ * perpendicular triangle filters.
  * 
  * @author thothbot
  *
  */
-public final class ShaderFilm extends Shader
+public final class RriangleBlurShader extends Shader
 {
+
 	public interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
@@ -53,11 +52,11 @@ public final class ShaderFilm extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/film.fs")
+		@Source("source/triangleBlur.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderFilm()
+	
+	public RriangleBlurShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -65,11 +64,8 @@ public final class ShaderFilm extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("time", new Uniform(Uniform.TYPE.F, 0.0));
-		this.addUniform("nIntensity", new Uniform(Uniform.TYPE.F, 0.5));
-		this.addUniform("sIntensity", new Uniform(Uniform.TYPE.F, 0.05));
-		this.addUniform("sCount", new Uniform(Uniform.TYPE.F, 4096));
-		this.addUniform("grayscale", new Uniform(Uniform.TYPE.I, 1));
+		this.addUniform("texture", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 )));
 	}
+
 }

@@ -1,9 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * This file based on the JavaScript source file of the THREE.JS project, 
- * licensed under MIT License.
- * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -20,45 +17,26 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shaders;
-
-import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.Uniform;
+package thothbot.parallax.plugin.lensflare.shaders;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
-/**
- * Vertical Blur shader
- * <p>
- * Based on three.js code
- * 
- * @author thothbot
- *
- */
-public final class ShaderVerticalBlur extends Shader
+public final class LensFlareVertexTextureShader extends LensFlareShader 
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/defaultUv.vs")
+
+		@Source("source/lensFlareVertexTexture.vs")
 		TextResource getVertexShader();
 
-		@Source("source/verticalBlur.fs")
+		@Source("source/lensFlareVertexTexture.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderVerticalBlur() 
+
+	public LensFlareVertexTextureShader() 
 	{
 		super(Resources.INSTANCE);
 	}
-
-	@Override
-	protected void initUniforms()
-	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
-	}
-
 }

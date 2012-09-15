@@ -29,18 +29,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Two pass Gaussian blur filter (horizontal and vertical blur shaders)
- * described in <a href="http://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader/">gamerendering.com</a>
- * and used in <a href="http://www.cake23.de/traveling-wavefronts-lit-up.html">www.cake23.de</a>.
+ * Sepia tone shader 
  * <p>
- * 9 samples per pass<br>
- * standard deviation 2.7<br>
- *  "h" and "v" parameters should be set to "1 / width" and "1 / height"
- *  
+ * Based on thrre.js code<br>
+ * Based on glfx.js sepia shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
+ * 
  * @author thothbot
  *
  */
-public final class ShaderHorizontalBlur extends Shader
+public final class SepiaShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -49,11 +46,11 @@ public final class ShaderHorizontalBlur extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/horizontalBlur.fs")
+		@Source("source/sepia.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public ShaderHorizontalBlur() 
+	public SepiaShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -62,6 +59,8 @@ public final class ShaderHorizontalBlur extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("h", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("amount", new Uniform(Uniform.TYPE.F, 1.0));
+
 	}
+
 }

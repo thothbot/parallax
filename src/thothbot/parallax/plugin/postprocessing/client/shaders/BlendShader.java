@@ -29,30 +29,28 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Depth-of-field shader using mipmaps
+ * Blend two textures
  * <p>
- * requires power-of-2 sized render target with enabled mipmaps
- * <p>
- * Based on three.js code<br>
- * From Matt Handley \@applmak
+ * Based on three.js code
  * 
  * @author thothbot
  *
  */
-public final class ShaderDofMipmap extends Shader
+public final class BlendShader extends Shader
 {
-	public interface Resources extends DefaultResources
+
+	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/dofmipmap.fs")
+		@Source("source/blend.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderDofMipmap() 
+	
+	public BlendShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -60,10 +58,10 @@ public final class ShaderDofMipmap extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tColor", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
+		this.addUniform("tDiffuse1", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDiffuse2", new Uniform(Uniform.TYPE.T, 1));
+		this.addUniform("mixRatio", new Uniform(Uniform.TYPE.F, 0.5));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
 
 }

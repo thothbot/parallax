@@ -29,16 +29,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Blend two textures
+ * Vignette shader
  * <p>
- * Based on three.js code
- * 
+ * Based on three.js code<br>
+ * based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
  * @author thothbot
  *
  */
-public final class ShaderBlend extends Shader
+public final class VignetteShader extends Shader
 {
-
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
@@ -46,11 +45,11 @@ public final class ShaderBlend extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/blend.fs")
+		@Source("source/vignette.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public ShaderBlend() 
+	public VignetteShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,10 +57,10 @@ public final class ShaderBlend extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse1", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tDiffuse2", new Uniform(Uniform.TYPE.T, 1));
-		this.addUniform("mixRatio", new Uniform(Uniform.TYPE.F, 0.5));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
+
 	}
 
 }

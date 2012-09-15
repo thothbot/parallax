@@ -22,46 +22,48 @@
 
 package thothbot.parallax.plugin.postprocessing.client.shaders;
 
-import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Convolution shader
+ * Depth-of-field shader using mipmaps
  * <p>
- * Based on three.js code<b>
- * Ported from o3d sample to WebGL / GLSL <a href="http://o3d.googlecode.com/svn/trunk/samples/convolution.html">o3d.googlecode.com</a>
+ * requires power-of-2 sized render target with enabled mipmaps
+ * <p>
+ * Based on three.js code<br>
+ * From Matt Handley \@applmak
  * 
  * @author thothbot
  *
  */
-public final class ShaderConvolution extends Shader
+public final class DofMipmapShader extends Shader
 {
-	interface Resources extends DefaultResources
+	public interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("source/convolution.vs")
+		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/convolution.fs")
+		@Source("source/dofmipmap.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderConvolution() 
+	public DofMipmapShader() 
 	{
 		super(Resources.INSTANCE);
 	}
-	
+
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("uImageIncrement", new Uniform(Uniform.TYPE.V2, new Vector2(0.001953125, 0.0)));
-		this.addUniform("cKernel", new Uniform(Uniform.TYPE.FV1, Float32Array.createArray()));
+		this.addUniform("tColor", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
+		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
 	}
+
 }

@@ -34,7 +34,7 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugin.sprite.shaders.ShaderSprite;
+import thothbot.parallax.plugin.sprite.shaders.SpriteShader;
 
 public final class SpritePlugin extends Plugin 
 {
@@ -46,7 +46,7 @@ public final class SpritePlugin extends Plugin
 		WebGLBuffer vertexBuffer;
 		WebGLBuffer elementBuffer;
 		
-		ShaderSprite shader;
+		SpriteShader shader;
 		
 		boolean attributesEnabled;
 	}
@@ -93,7 +93,7 @@ public final class SpritePlugin extends Plugin
 		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
 		gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.faces, GLenum.STATIC_DRAW.getValue() );
 
-		sprite.shader = new ShaderSprite();
+		sprite.shader = new SpriteShader();
 		sprite.shader.buildProgram(gl);
 	}
 	

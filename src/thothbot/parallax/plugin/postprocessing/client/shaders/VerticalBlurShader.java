@@ -24,22 +24,19 @@ package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Normal map shader
+ * Vertical Blur shader
  * <p>
  * Based on three.js code
- * <p>
- * compute normals from heightmap
  * 
  * @author thothbot
  *
  */
-public final class ShaderNormalmap extends Shader
+public final class VerticalBlurShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -48,11 +45,11 @@ public final class ShaderNormalmap extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/normalmap.fs")
+		@Source("source/verticalBlur.fs")
 		TextResource getFragmentShader();
 	}
-
-	public ShaderNormalmap()
+	
+	public VerticalBlurShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -60,9 +57,8 @@ public final class ShaderNormalmap extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("heightMap", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
-		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 )));
-		this.addUniform("height", new Uniform(Uniform.TYPE.F, 0.05));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
 	}
+
 }

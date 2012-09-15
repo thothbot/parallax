@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderScreen;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ScreenShader;
 
 public class SavePass extends Pass
 {
@@ -53,7 +53,7 @@ public class SavePass extends Pass
 		
 		this.textureID = "tDiffuse";
 		
-		this.material = new ShaderMaterial(new ShaderScreen());
+		this.material = new ShaderMaterial(new ScreenShader());
 		
 		this.setEnabled(true);
 		this.setNeedsSwap(false);

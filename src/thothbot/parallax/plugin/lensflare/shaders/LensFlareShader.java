@@ -1,9 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * This file based on the JavaScript source file of the THREE.JS project, 
- * licensed under MIT License.
- * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -20,51 +17,51 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.plugin.postprocessing.client.shaders;
+package thothbot.parallax.plugin.lensflare.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
-/**
- * Dot screen shader
- * <p>
- * Based on three.js code<br>
- * Based on glfx.js sepia shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
- * 
- * @author thothbot
- *
- */
-public final class ShaderDotscreen extends Shader
+public class LensFlareShader extends Shader 
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/defaultUv.vs")
+
+		@Source("source/lensFlare.vs")
 		TextResource getVertexShader();
 
-		@Source("source/dotscreen.fs")
+		@Source("source/lensFlare.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderDotscreen()
+
+	public LensFlareShader() 
 	{
-		super(Resources.INSTANCE);
+		this(Resources.INSTANCE);
+	}
+	
+	public LensFlareShader(DefaultResources resource) 
+	{
+		super(resource);
 	}
 
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tSize", new Uniform(Uniform.TYPE.V2, new Vector2( 256, 256 )));
-		this.addUniform("center", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
-		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 1.57));
-		this.addUniform("scale", new Uniform(Uniform.TYPE.F, 1.0));
-
+		this.addUniform("renderType", new Uniform(Uniform.TYPE.I,  1 ));
+		this.addUniform("map", new Uniform(Uniform.TYPE.T,  0 ) );
+		this.addUniform("occlusionMap", new Uniform(Uniform.TYPE.T,  1 ) );
+		
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 ) ));
+		this.addUniform("rotation", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("screenPosition", new Uniform(Uniform.TYPE.V3,  new Vector3( 0.0, 0.0, 0.0 ) ));
 	}
-
 }

@@ -31,7 +31,7 @@ import thothbot.parallax.core.shared.core.Vector4;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
-public final class ShaderSprite extends Shader 
+public final class SpriteShader extends Shader 
 {
 
 	interface Resources extends DefaultResources
@@ -45,7 +45,7 @@ public final class ShaderSprite extends Shader
 		TextResource getFragmentShader();
 	}
 
-	public ShaderSprite() 
+	public SpriteShader() 
 	{
 		super(Resources.INSTANCE);
 	}

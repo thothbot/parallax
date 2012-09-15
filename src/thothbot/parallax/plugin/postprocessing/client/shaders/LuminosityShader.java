@@ -29,14 +29,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Unpack RGBA depth shader - show RGBA encoded depth as monochrome color
- * <p>
- * Based on three.js code
+ * Luminosity
+ * @see <a href="http://en.wikipedia.org/wiki/Luminosity">wikipedia.org</a>
  * 
  * @author thothbot
  *
  */
-public final class ShaderUnpackDepthRGBA extends Shader
+public final class LuminosityShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -45,11 +44,11 @@ public final class ShaderUnpackDepthRGBA extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/unpackDepthRGBA.fs")
+		@Source("source/luminosity.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderUnpackDepthRGBA() 
+
+	public LuminosityShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,6 +57,6 @@ public final class ShaderUnpackDepthRGBA extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
+
 }

@@ -39,8 +39,8 @@ import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugin.lensflare.shaders.ShaderLensFlare;
-import thothbot.parallax.plugin.lensflare.shaders.ShaderLensFlareVertexTexture;
+import thothbot.parallax.plugin.lensflare.shaders.LensFlareShader;
+import thothbot.parallax.plugin.lensflare.shaders.LensFlareVertexTextureShader;
 
 import com.google.gwt.core.client.GWT;
 
@@ -58,7 +58,7 @@ public final class LensFlarePlugin extends Plugin
 		WebGLTexture tempTexture;
 		WebGLTexture occlusionTexture;
 		
-		ShaderLensFlare shader;
+		LensFlareShader shader;
 		
 		boolean hasVertexTexture;
 		boolean attributesEnabled;
@@ -128,12 +128,12 @@ public final class LensFlarePlugin extends Plugin
 		if ( gl.getParameteri( GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue() ) <= 0 ) 
 		{
 			lensFlare.hasVertexTexture = false;
-			lensFlare.shader = new ShaderLensFlare();
+			lensFlare.shader = new LensFlareShader();
 		} 
 		else 
 		{
 			lensFlare.hasVertexTexture = true;
-			lensFlare.shader = new ShaderLensFlareVertexTexture();
+			lensFlare.shader = new LensFlareVertexTextureShader();
 		}
 
 		Map<String, Attribute> attributes = GWT.isScript() ? 

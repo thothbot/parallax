@@ -29,14 +29,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Full-screen textured quad shader
+ * Simple fake tilt-shift effect, modulating two pass Gaussian blur (see above) by vertical position
  * <p>
  * Based on three.js code
+ * <p>
+ * 9 samples per pass<br>
+ * standard deviation 2.7<br>
+ * "h" and "v" parameters should be set to "1 / width" and "1 / height"<br>
+ * "r" parameter control where "focused" horizontal line lies<br>
  * 
  * @author thothbot
- *
+ *  
  */
-public final class ShaderScreen extends Shader
+public final class HorizontalTiltShiftShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -45,19 +50,20 @@ public final class ShaderScreen extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/screen.fs")
+		@Source("source/horizontalTiltShift.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderScreen()
+	public HorizontalTiltShiftShader() 
 	{
 		super(Resources.INSTANCE);
 	}
-
+	
 	@Override
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("h", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("r", new Uniform(Uniform.TYPE.F, 0.35));
 	}
 }

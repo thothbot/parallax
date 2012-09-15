@@ -24,20 +24,20 @@ package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Color;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Colorify shader
+ * Focus shader
  * <p>
- * Based on three.js code
+ * Based on three.js code<br>
+ * Based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
  * 
  * @author thothbot
  *
  */
-public final class ShaderColorify extends Shader
+public final class FocusShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -46,11 +46,11 @@ public final class ShaderColorify extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/colorify.fs")
+		@Source("source/focus.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ShaderColorify() 
+	public FocusShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -59,6 +59,9 @@ public final class ShaderColorify extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
+		this.addUniform("screenWidth", new Uniform(Uniform.TYPE.F, 1024));
+		this.addUniform("screenHeight", new Uniform(Uniform.TYPE.F, 1024));
+		this.addUniform("sampleDistance", new Uniform(Uniform.TYPE.F, 0.94));
+		this.addUniform("waveFactor", new Uniform(Uniform.TYPE.F, 0.00125));
 	}
 }

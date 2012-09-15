@@ -24,35 +24,33 @@ package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Color;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Bleach bypass shader
- * 
- * @see <a href="http://en.wikipedia.org/wiki/Bleach_bypass">wikipedia.org</a>
+ * Colorify shader
  * <p>
- * Based on three.js code <br>
- * Based on Nvidia example <a href="http://developer.download.nvidia.com/shaderlibrary/webpages/shader_library.html#post_bleach_bypass">nvidia.com</a>
+ * Based on three.js code
  * 
  * @author thothbot
  *
  */
-public final class ShaderBleachbypass extends Shader
+public final class ColorifyShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-
+		
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/bleachbypass.fs")
+		@Source("source/colorify.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderBleachbypass() 
+
+	public ColorifyShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -61,7 +59,6 @@ public final class ShaderBleachbypass extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 	}
-
 }

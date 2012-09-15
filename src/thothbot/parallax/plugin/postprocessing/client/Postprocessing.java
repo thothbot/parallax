@@ -40,7 +40,7 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.geometries.PlaneGeometry;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderScreen;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ScreenShader;
 
 public class Postprocessing extends Plugin
 {
@@ -87,7 +87,7 @@ public class Postprocessing extends Plugin
 
 		this.passes = new ArrayList<Pass>();
 
-		this.copyPass = new ShaderPass( new ShaderScreen() );
+		this.copyPass = new ShaderPass( new ScreenShader() );
 		
 		Canvas3d canvas = renderer.getCanvas();
 

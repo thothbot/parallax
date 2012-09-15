@@ -31,8 +31,8 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderConvolution;
-import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderScreen;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ConvolutionShader;
+import thothbot.parallax.plugin.postprocessing.client.shaders.ScreenShader;
 
 public class BloomPass extends Pass
 {
@@ -75,13 +75,13 @@ public class BloomPass extends Pass
 		// screen material
 
 		
-		this.materialScreen = new ShaderMaterial(new ShaderScreen());
+		this.materialScreen = new ShaderMaterial(new ScreenShader());
 		this.materialScreen.getShader().getUniforms().get("opacity").setValue( strength );
 		this.materialScreen.setBlending(Material.BLENDING.ADDITIVE);
 		this.materialScreen.setTransparent(true);
 
 		// convolution material
-		Shader convolutionShader = new ShaderConvolution();
+		Shader convolutionShader = new ConvolutionShader();
 
 		this.materialConvolution = new ShaderMaterial(
 				"#define KERNEL_SIZE " + kernelSize + ".0\n" + convolutionShader.getVertexSource(),

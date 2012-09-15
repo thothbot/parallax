@@ -24,20 +24,22 @@ package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Sepia tone shader 
+ * Normal map shader
  * <p>
- * Based on thrre.js code<br>
- * Based on glfx.js sepia shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
+ * Based on three.js code
+ * <p>
+ * compute normals from heightmap
  * 
  * @author thothbot
  *
  */
-public final class ShaderSepia extends Shader
+public final class NormalmapShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -46,11 +48,11 @@ public final class ShaderSepia extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/sepia.fs")
+		@Source("source/normalmap.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public ShaderSepia()
+
+	public NormalmapShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,9 +60,9 @@ public final class ShaderSepia extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("amount", new Uniform(Uniform.TYPE.F, 1.0));
-
+		this.addUniform("heightMap", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 )));
+		this.addUniform("height", new Uniform(Uniform.TYPE.F, 0.05));
 	}
-
 }

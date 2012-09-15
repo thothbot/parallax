@@ -24,20 +24,19 @@ package thothbot.parallax.plugin.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Vector3;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Color correction
+ * Vertical Tilt Shift shader.
  * <p>
- * Based on three.js code.
+ * Based on three.js code
  * 
  * @author thothbot
  *
  */
-public final class ShaderColorCorrection extends Shader
+public final class VerticalTiltShiftShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -46,11 +45,11 @@ public final class ShaderColorCorrection extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/colorCorrection.fs")
+		@Source("source/verticalTiltShift.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public ShaderColorCorrection() 
+	public VerticalTiltShiftShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -59,7 +58,8 @@ public final class ShaderColorCorrection extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("powRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 2, 2, 2 )));
-		this.addUniform("mulRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1, 1, 1 )));
+		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("r", new Uniform(Uniform.TYPE.F, 0.35));
 	}
+
 }

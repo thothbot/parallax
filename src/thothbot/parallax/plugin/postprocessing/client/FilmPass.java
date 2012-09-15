@@ -23,7 +23,7 @@
 package thothbot.parallax.plugin.postprocessing.client;
 
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugin.postprocessing.client.shaders.ShaderFilm;
+import thothbot.parallax.plugin.postprocessing.client.shaders.FilmShader;
 
 public class FilmPass extends Pass
 {
@@ -32,7 +32,7 @@ public class FilmPass extends Pass
 
 	public FilmPass( int noiseIntensity, int scanlinesIntensity, int scanlinesCount, double grayscale ) 
 	{
-		this.material = new ShaderMaterial(new ShaderFilm());
+		this.material = new ShaderMaterial(new FilmShader());
 
 		this.material.getShader().getUniforms().get("grayscale").setValue( grayscale );
 		this.material.getShader().getUniforms().get("nIntensity").setValue( noiseIntensity );
