@@ -44,7 +44,7 @@ import com.google.gwt.json.client.JSONException;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 
-public class Json extends Loader 
+public class JsonLoader extends Loader 
 {
 
 	private JSONObject json;

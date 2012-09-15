@@ -24,11 +24,8 @@ package thothbot.parallax.loader.shared;
 
 import java.util.Map;
 
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Geometry.MorphTarget;
 import thothbot.parallax.core.shared.core.Mathematics;
-import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Mesh;
 
 public class MorphAnimation
