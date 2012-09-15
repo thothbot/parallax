@@ -228,6 +228,14 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 		this.keyPan = keyPan;
 	}
 
+	public Vector3 getTarget() {
+		return target;
+	}
+
+	public void setTarget(Vector3 target) {
+		this.target = target;
+	}
+	
 	/**
 	 * The method must be called in the {@link AnimatedScene}} onUpdate method.
 	 */
