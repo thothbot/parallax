@@ -60,9 +60,9 @@ public final class ImageUtils
 	/**
 	 * This callback will be called when the image has been loaded.
 	 */
-	public static interface Callback 
+	public static interface ImageLoadHandler 
 	{
-		void run(Texture texture);
+		void onImageLoad(Texture texture);
 	}
 	
 	private static int loadedCount;
@@ -91,12 +91,12 @@ public final class ImageUtils
 		return ImageUtils.loadTexture(url, mapping, null);
 	}
 
-	public static Texture loadTexture(String url, Texture.MAPPING_MODE mapping, Callback callback)
+	public static Texture loadTexture(String url, Texture.MAPPING_MODE mapping, ImageLoadHandler imageLoadHandler)
 	{
 		Image image = new Image();
 		image.setUrl(url);
 
-		return ImageUtils.loadTexture(image, mapping, callback);
+		return ImageUtils.loadTexture(image, mapping, imageLoadHandler);
 	}
 	
 	/**
@@ -104,11 +104,11 @@ public final class ImageUtils
 	 * 
 	 * @param image          the Image
 	 * @param mapping        the mapping mode {@link thothbot.parallax.core.client.textures.Texture.MAPPING_MODE}. Not necessary.
-	 * @param callback       the {@link ImageUtils.Callback}. Not necessary.
+	 * @param imageLoadHandler       the {@link ImageUtils.ImageLoadHandler}. Not necessary.
 	 * 
 	 * @return the new instance of {@link thothbot.parallax.core.client.textures.Texture}
 	 */
-	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, final Callback callback)
+	public static Texture loadTexture(Image image, Texture.MAPPING_MODE mapping, final ImageLoadHandler imageLoadHandler)
 	{	
 		final Texture texture = new Texture(image.getElement(), mapping);
 
@@ -118,8 +118,8 @@ public final class ImageUtils
 			public void onLoad() {
 				
 				texture.setNeedsUpdate(true);
-				if (callback != null)
-					callback.run(texture);
+				if (imageLoadHandler != null)
+					imageLoadHandler.onImageLoad(texture);
 			}
 		});
 
@@ -136,7 +136,7 @@ public final class ImageUtils
 		return ImageUtils.loadTextureCube(url, mapping, null);
 	}
 
-	public static CubeTexture loadTextureCube(String url, Texture.MAPPING_MODE mapping, Callback callback)
+	public static CubeTexture loadTextureCube(String url, Texture.MAPPING_MODE mapping, ImageLoadHandler imageLoadHandler)
 	{
 		List<Image> images = new ArrayList<Image>();
 		
@@ -151,10 +151,10 @@ public final class ImageUtils
 			images.add(image);
 		}
 
-		return ImageUtils.loadTextureCube(images, mapping, callback);
+		return ImageUtils.loadTextureCube(images, mapping, imageLoadHandler);
 	}
 	
-	public static CubeTexture loadTextureCube(List<Image> images, Texture.MAPPING_MODE mapping, final Callback callback)
+	public static CubeTexture loadTextureCube(List<Image> images, Texture.MAPPING_MODE mapping, final ImageLoadHandler imageLoadHandler)
 	{
 		List<Element> elements = new ArrayList<Element>();
 		final CubeTexture texture = new CubeTexture(elements, mapping);
@@ -170,8 +170,8 @@ public final class ImageUtils
 					if(++loadedCount == 6)
 					{
 						texture.setNeedsUpdate(true);
-						if (callback != null)
-							callback.run(texture);
+						if (imageLoadHandler != null)
+							imageLoadHandler.onImageLoad(texture);
 					}
 				}
 			});
