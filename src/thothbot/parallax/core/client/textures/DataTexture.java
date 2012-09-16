@@ -19,6 +19,8 @@
 
 package thothbot.parallax.core.client.textures;
 
+import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
+
 /**
  * Implementation of data texture.
  * 
@@ -27,5 +29,38 @@ package thothbot.parallax.core.client.textures;
  */
 public class DataTexture extends Texture
 {
+	private Uint8Array data;
+	private int width;
+	private int height;
+	
+	public DataTexture( Uint8Array data, int width, int height)
+	{
+		this.data = data;
+		this.width = width;
+		this.height = height;
+	}
+	
+	public Uint8Array getData() {
+		return data;
+	}
 
+	public void setData(Uint8Array data) {
+		this.data = data;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
 }

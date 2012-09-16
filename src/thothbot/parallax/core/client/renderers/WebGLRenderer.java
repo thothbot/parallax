@@ -2684,9 +2684,13 @@ Log.error("?????????????");
 
 			if ( texture instanceof DataTexture ) 
 			{
-				Log.error("WebGLRenderer. Todo: fix DataTexture");
-//				getGL().texImage2D( GLenum.TEXTURE_2D, 0, texture.getFormat().getValue(), 
-//						image.getWidth(), image.getHeight(), 0, texture.getFormat().getValue(), texture.getType().getValue(), image.getdata );
+				getGL().texImage2D( GLenum.TEXTURE_2D.getValue(), 0, texture.getFormat().getValue(), 
+						((DataTexture) texture).getWidth(), 
+						((DataTexture) texture).getHeight(), 
+						0, 
+						texture.getFormat().getValue(), 
+						texture.getType().getValue(), 
+						((DataTexture) texture).getData() );
 			} 
 			else 
 			{

@@ -228,7 +228,8 @@ public final class ImageUtils
 
 		}
 
-		DataTexture texture = new DataTexture( data, width, height, PixelFormat.RGB );
+		DataTexture texture = new DataTexture( data, width, height );
+		texture.setFormat(PixelFormat.RGB);
 		texture.setNeedsUpdate(true);
 
 		return texture;
