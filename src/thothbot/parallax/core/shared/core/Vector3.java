@@ -351,43 +351,6 @@ public class Vector3 extends Vector2 implements Vector
 		this.z = m.getArray().get(14);
 	}
 
-//	public Vector3 getRotationFromMatrix(Matrix4 m)
-//	{
-//		return getRotationFromMatrix(m, new Vector3(1, 1, 1));
-//	}
-//
-//	public Vector3 getRotationFromMatrix(Matrix4 m, Vector3 scale)
-//	{
-//		double sx = scale.x;
-//		double sy = scale.y;
-//		double sz = scale.z;
-//
-//		double m11 = m.getArray().get(0) / sx, 
-//				m12 = m.getArray().get(4) / sy,
-//				m13 = m.getArray().get(8) / sz;
-//		double m21 = m.getArray().get(1) / sx, 
-//				m22 = m.getArray().get(5) / sy, 
-//				m23 = m.getArray().get(9) / sz;
-//		double m33 = m.getArray().get(10) / sz;
-//
-//		this.y = Math.asin(m13);
-//
-//		double cosY = Math.cos(this.y);
-//
-//		if (Math.abs(cosY) > 0.00001) 
-//		{
-//			this.x = Math.atan2(-m23 / cosY, m33 / cosY);
-//			this.z = Math.atan2(-m12 / cosY, m11 / cosY);
-//		} 
-//		else 
-//		{
-//			this.x = 0.0;
-//			this.z = Math.atan2(m21, m22);
-//		}
-//
-//		return this;
-//	}
-
 	public void getScaleFromMatrix(Matrix4 m)
 	{
 		Vector3 tmp = new Vector3();
@@ -511,8 +474,65 @@ public class Vector3 extends Vector2 implements Vector
 		}
 		
 		return this;
-
 	}
+	
+	/**
+	 * q is assumed to be normalized
+	 * <p>
+	 * <a href="http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m">www.mathworks.com</a> 
+	 */
+	public Vector3 setEulerFromQuaternion ( Quaternion q )
+	{
+		return setEulerFromQuaternion(q, Euler.XYZ);
+	}
+
+	public Vector3 setEulerFromQuaternion ( Quaternion q, Euler order ) 
+	{
+		double sqx = q.x * q.x;
+		double sqy = q.y * q.y;
+		double sqz = q.z * q.z;
+		double sqw = q.w * q.w;
+
+		if ( order == Euler.XYZ) 
+		{
+			setX( Math.atan2( 2 * ( q.x * q.w - q.y * q.z ), ( sqw - sqx - sqy + sqz ) ) );
+			setY( Math.asin(  Mathematics.clamp( 2 * ( q.x * q.z + q.y * q.w ), -1, 1 ) ) );
+			setZ( Math.atan2( 2 * ( q.z * q.w - q.x * q.y ), ( sqw + sqx - sqy - sqz ) ) );
+		} 
+		else if ( order == Euler.YXZ ) 
+		{
+			setX( Math.asin(  Mathematics.clamp( 2 * ( q.x * q.w - q.y * q.z ), -1, 1 ) ) );
+			setY( Math.atan2( 2 * ( q.x * q.z + q.y * q.w ), ( sqw - sqx - sqy + sqz ) ) );
+			setZ( Math.atan2( 2 * ( q.x * q.y + q.z * q.w ), ( sqw - sqx + sqy - sqz ) ) );
+		} 
+		else if ( order == Euler.ZXY ) 
+		{	
+			setX( Math.asin(  Mathematics.clamp( 2 * ( q.x * q.w + q.y * q.z ), -1, 1 ) ) );
+			setY( Math.atan2( 2 * ( q.y * q.w - q.z * q.x ), ( sqw - sqx - sqy + sqz ) ) );
+			setZ( Math.atan2( 2 * ( q.z * q.w - q.x * q.y ), ( sqw - sqx + sqy - sqz ) ) );
+		} 
+		else if ( order == Euler.ZYX ) 
+		{
+			setX( Math.atan2( 2 * ( q.x * q.w + q.z * q.y ), ( sqw - sqx - sqy + sqz ) ) );
+			setY( Math.asin(  Mathematics.clamp( 2 * ( q.y * q.w - q.x * q.z ), -1, 1 ) ) );
+			setZ( Math.atan2( 2 * ( q.x * q.y + q.z * q.w ), ( sqw + sqx - sqy - sqz ) ) );
+		} 
+		else if ( order == Euler.YZX ) 
+		{
+			setX( Math.atan2( 2 * ( q.x * q.w - q.z * q.y ), ( sqw - sqx + sqy - sqz ) ) );
+			setY( Math.atan2( 2 * ( q.y * q.w - q.x * q.z ), ( sqw + sqx - sqy - sqz ) ) );
+			setZ( Math.asin(  Mathematics.clamp( 2 * ( q.x * q.y + q.z * q.w ), -1, 1 ) ) );	
+		} 
+		else if ( order == Euler.XZY ) 
+		{
+			setX( Math.atan2( 2 * ( q.x * q.w + q.y * q.z ), ( sqw - sqx + sqy - sqz ) ) );
+			setY( Math.atan2( 2 * ( q.x * q.z + q.y * q.w ), ( sqw + sqx - sqy - sqz ) ) );
+			setZ( Math.asin(  Mathematics.clamp( 2 * ( q.z * q.w - q.x * q.y ), -1, 1 ) ) );
+		}
+
+		return this;
+	}
+
 
 	/**
 	 * Returns true if all of the data members of v1 are equal to the
