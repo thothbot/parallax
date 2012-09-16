@@ -25,9 +25,13 @@ package thothbot.parallax.core.shared.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
+import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.textures.CubeTexture;
+import thothbot.parallax.core.client.textures.DataTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.Color;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ErrorEvent;
@@ -205,5 +209,28 @@ public final class ImageUtils
 				loader.onLoad();
 			}
 		});
+	}
+	
+	public static DataTexture generateDataTexture( int width, int height, Color color ) 
+	{
+		int size = width * height;
+		Uint8Array data = Uint8Array.create( 3 * size );
+
+		int r = (int)Math.floor( color.getR() * 255 );
+		int g = (int)Math.floor( color.getG() * 255 );
+		int b = (int)Math.floor( color.getB() * 255 );
+
+		for ( int i = 0; i < size; i ++ ) 
+		{
+			data.set( i * 3, r);
+			data.set( i * 3 + 1, g);
+			data.set( i * 3 + 2, b);
+
+		}
+
+		DataTexture texture = new DataTexture( data, width, height, PixelFormat.RGB );
+		texture.setNeedsUpdate(true);
+
+		return texture;
 	}
 }
