@@ -1062,7 +1062,7 @@ public class WebGLRenderer
 						else 
 						{
 							this.cache_vector3.copy( object.getMatrixWorld().getPosition() );
-							this.cache_projScreenMatrix.multiplyVector3( cache_vector3 );
+							this.cache_projScreenMatrix.multiplyVector4( cache_vector3 );
 
 							webglObject.z = cache_vector3.getZ();
 						}

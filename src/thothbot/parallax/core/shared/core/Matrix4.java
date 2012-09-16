@@ -23,7 +23,6 @@
 package thothbot.parallax.core.shared.core;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.shared.Log;
 
 /**
  * This class implements three-dimensional matrix. NxN, where N=4.
@@ -334,31 +333,6 @@ public class Matrix4
 	 * 
 	 * @return the multiplication input vector
 	 */
-	public Vector4 multiplyVector3(Vector4 v)
-	{
-		Float32Array te = this.getArray();
-
-		double vx = v.getX();
-		double vy = v.getY();
-		double vz = v.getZ();
-		double d = 1.0 / ( te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) );
-
-		v.setX( ( te.get(0) * vx + te.get(4) * vy + te.get(8)  * vz + te.get(12) ) * d );
-		v.setY( ( te.get(1) * vx + te.get(5) * vy + te.get(9)  * vz + te.get(13) ) * d );
-		v.setZ( ( te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) ) * d );
-
-		return v;
-	}
-	
-	/**
-	 * Sets the value of input vector to the matrix-vector multiplication of itself and
-	 * vector v.
-	 * {@code (this = this * v)}
-	 * 
-	 * @param v the input vector
-	 * 
-	 * @return the multiplication input vector
-	 */
 	public Vector3 multiplyVector3(Vector3 v)
 	{
 		Float32Array te = this.getArray();
@@ -389,10 +363,10 @@ public class Matrix4
 		Float32Array te = this.getArray();
 		double vx = v.x, vy = v.y, vz = v.z, vw = v.w;
 
-		v.x = te.get(0) * vx + te.get(4) * vy + te.get(8) * vz + te.get(12) * vw;
-		v.y = te.get(1) * vx + te.get(5) * vy + te.get(9) * vz + te.get(13) * vw;
-		v.z = te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) * vw;
-		v.w = te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) * vw;
+		v.setX( te.get(0) * vx + te.get(4) * vy + te.get(8) * vz + te.get(12) * vw );
+		v.setY( te.get(1) * vx + te.get(5) * vy + te.get(9) * vz + te.get(13) * vw );
+		v.setZ( te.get(2) * vx + te.get(6) * vy + te.get(10) * vz + te.get(14) * vw );
+		v.setW( te.get(3) * vx + te.get(7) * vy + te.get(11) * vz + te.get(15) * vw );
 
 		return v;
 	}

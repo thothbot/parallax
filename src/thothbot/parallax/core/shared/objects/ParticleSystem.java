@@ -172,7 +172,7 @@ public class ParticleSystem extends GeometryObject
 				Vector3 vertex = vertices.get( v );
 
 				renderer.getCache_vector3().copy( vertex );
-				this.projScreenMatrixPS.multiplyVector3( renderer.getCache_vector3() );
+				this.projScreenMatrixPS.multiplyVector4( renderer.getCache_vector3() );
 				 
 				sortArray.add(v, new ArrayList<Integer>(Arrays.asList((int)renderer.getCache_vector3().getZ(), v)));
 			}
