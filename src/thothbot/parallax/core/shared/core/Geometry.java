@@ -132,13 +132,13 @@ public class Geometry extends GeometryBuffer
 
 	public List<List<Integer>> sortArray;
 	
-	public boolean isVerticesNeedUpdate;
-	public boolean isMorphTargetsNeedUpdate;
-	public boolean isUvsNeedUpdate;
-	public boolean isNormalsNeedUpdate;
-	public boolean isTangentsNeedUpdate;
-	public boolean isElementsNeedUpdate;
-	public boolean isColorsNeedUpdate;
+	private boolean isVerticesNeedUpdate;
+	private boolean isMorphTargetsNeedUpdate;
+	private boolean isUvsNeedUpdate;
+	private boolean isNormalsNeedUpdate;
+	private boolean isTangentsNeedUpdate;
+	private boolean isElementsNeedUpdate;
+	private boolean isColorsNeedUpdate;
 	
 	private Map<String, GeometryGroup> geometryGroups;
 	private List<GeometryGroup> geometryGroupsList;
@@ -228,6 +228,62 @@ public class Geometry extends GeometryBuffer
 	
 	public void setDynamic(boolean dynamic) {
 		this.isDynamic = dynamic;
+	}
+
+	public boolean isVerticesNeedUpdate() {
+		return isVerticesNeedUpdate;
+	}
+
+	public void setVerticesNeedUpdate(boolean isVerticesNeedUpdate) {
+		this.isVerticesNeedUpdate = isVerticesNeedUpdate;
+	}
+
+	public boolean isMorphTargetsNeedUpdate() {
+		return isMorphTargetsNeedUpdate;
+	}
+
+	public void setMorphTargetsNeedUpdate(boolean isMorphTargetsNeedUpdate) {
+		this.isMorphTargetsNeedUpdate = isMorphTargetsNeedUpdate;
+	}
+
+	public boolean isTangentsNeedUpdate() {
+		return isTangentsNeedUpdate;
+	}
+
+	public void setTangentsNeedUpdate(boolean isTangentsNeedUpdate) {
+		this.isTangentsNeedUpdate = isTangentsNeedUpdate;
+	}
+
+	public boolean isNormalsNeedUpdate() {
+		return isNormalsNeedUpdate;
+	}
+
+	public void setNormalsNeedUpdate(boolean isNormalsNeedUpdate) {
+		this.isNormalsNeedUpdate = isNormalsNeedUpdate;
+	}
+
+	public boolean isUvsNeedUpdate() {
+		return isUvsNeedUpdate;
+	}
+
+	public void setUvsNeedUpdate(boolean isUvsNeedUpdate) {
+		this.isUvsNeedUpdate = isUvsNeedUpdate;
+	}
+
+	public boolean isElementsNeedUpdate() {
+		return isElementsNeedUpdate;
+	}
+
+	public void setElementsNeedUpdate(boolean isElementsNeedUpdate) {
+		this.isElementsNeedUpdate = isElementsNeedUpdate;
+	}
+
+	public boolean isColorsNeedUpdate() {
+		return isColorsNeedUpdate;
+	}
+
+	public void setColorsNeedUpdate(boolean isColorsNeedUpdate) {
+		this.isColorsNeedUpdate = isColorsNeedUpdate;
 	}
 
 	public Boolean hasTangents() {

@@ -183,7 +183,7 @@ public class CameraHelper extends Object3D
 		setPoint( "cn3",  0, -h, -1 );
 		setPoint( "cn4",  0,  h, -1 );
 
-		this.lineGeometry.isVerticesNeedUpdate = true;
+		this.lineGeometry.setVerticesNeedUpdate(true);
 	}
 
 	private void addLine( String a, String b, int hex ) 

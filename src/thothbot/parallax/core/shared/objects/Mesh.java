@@ -204,13 +204,13 @@ public class Mesh extends GeometryObject
 					initBuffers(renderer.getGL(), geometryGroup );
 					info.getMemory().geometries++;
 
-					geometry.isVerticesNeedUpdate = true;
-					geometry.isMorphTargetsNeedUpdate = true;
-					geometry.isElementsNeedUpdate = true;
-					geometry.isUvsNeedUpdate = true;
-					geometry.isNormalsNeedUpdate = true;
-					geometry.isTangentsNeedUpdate = true;
-					geometry.isColorsNeedUpdate = true;
+					geometry.setVerticesNeedUpdate(true);
+					geometry.setMorphTargetsNeedUpdate(true);
+					geometry.setElementsNeedUpdate(true);
+					geometry.setUvsNeedUpdate(true);
+					geometry.setNormalsNeedUpdate(true);
+					geometry.setTangentsNeedUpdate(true);
+					geometry.setColorsNeedUpdate(true);
 				}
 			}
 		}
@@ -404,13 +404,13 @@ public class Mesh extends GeometryObject
 				material = Material.getBufferMaterial( this, geometryGroup );
 
 				boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
-				if ( geometry.isVerticesNeedUpdate 
-						|| geometry.isMorphTargetsNeedUpdate
-						|| geometry.isElementsNeedUpdate 
-						|| geometry.isUvsNeedUpdate      
-						|| geometry.isNormalsNeedUpdate      
-						|| geometry.isColorsNeedUpdate   
-						|| geometry.isTangentsNeedUpdate      
+				if ( geometry.isVerticesNeedUpdate() 
+						|| geometry.isMorphTargetsNeedUpdate()
+						|| geometry.isElementsNeedUpdate() 
+						|| geometry.isUvsNeedUpdate()      
+						|| geometry.isNormalsNeedUpdate()      
+						|| geometry.isColorsNeedUpdate()   
+						|| geometry.isTangentsNeedUpdate()      
 						|| areCustomAttributesDirty
 				) {
 					setBuffers(gl, geometryGroup, GLenum.DYNAMIC_DRAW.getValue(), !geometry.isDynamic(), material );
@@ -418,13 +418,13 @@ public class Mesh extends GeometryObject
 				}
 			}
 
-			geometry.isVerticesNeedUpdate = false;
-			geometry.isMorphTargetsNeedUpdate = false;
-			geometry.isElementsNeedUpdate = false;
-			geometry.isUvsNeedUpdate = false;
-			geometry.isNormalsNeedUpdate = false;
-			geometry.isColorsNeedUpdate = false;
-			geometry.isTangentsNeedUpdate = false;
+			geometry.setVerticesNeedUpdate(false);
+			geometry.setMorphTargetsNeedUpdate(false);
+			geometry.setElementsNeedUpdate(false);
+			geometry.setUvsNeedUpdate(false);
+			geometry.setNormalsNeedUpdate(false);
+			geometry.setColorsNeedUpdate(false);
+			geometry.setTangentsNeedUpdate(false);
 //		}
 
 	}
@@ -456,7 +456,7 @@ public class Mesh extends GeometryObject
 		 List<Geometry.MorphNormal> morphNormals = getGeometry().getMorphNormals();
 		 List<Geometry.MorphTarget> morphTargets = getGeometry().getMorphTargets();
 		 
-		 if ( getGeometry().isVerticesNeedUpdate ) 
+		 if ( getGeometry().isVerticesNeedUpdate() ) 
 		 {
 			 Float32Array vertexArray = geometryGroup.getWebGlVertexArray();
 			 int offset = 0;
@@ -516,7 +516,7 @@ public class Mesh extends GeometryObject
 			 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), vertexArray, hint );
 		 }
 		 
-		 if ( getGeometry().isMorphTargetsNeedUpdate ) 
+		 if ( getGeometry().isMorphTargetsNeedUpdate() ) 
 		 {
 			 
 			 for ( int vk = 0, vkl = getGeometry().getMorphTargets().size(); vk < vkl; vk ++ ) 
@@ -916,7 +916,7 @@ public class Mesh extends GeometryObject
 			 }
 		 }
 
-		 if ( getGeometry().isColorsNeedUpdate && (vertexColorType != null )) 
+		 if ( getGeometry().isColorsNeedUpdate() && (vertexColorType != null )) 
 		 {
 			 Float32Array colorArray = geometryGroup.getWebGlColorArray();
 			 int offset_color = 0;
@@ -1009,7 +1009,7 @@ public class Mesh extends GeometryObject
 			 }
 		 }
 
-		 if ( getGeometry().isTangentsNeedUpdate && geometry.hasTangents()) 
+		 if ( getGeometry().isTangentsNeedUpdate() && geometry.hasTangents()) 
 		 {
 			 Float32Array tangentArray = geometryGroup.getWebGlTangentArray();
 			 int offset_tangent = 0;
@@ -1084,7 +1084,7 @@ public class Mesh extends GeometryObject
 
 		 }
 
-		 if ( getGeometry().isNormalsNeedUpdate && (normalType != null )) 
+		 if ( getGeometry().isNormalsNeedUpdate() && (normalType != null )) 
 		 {
 			 int offset_normal = 0;
 			 
@@ -1169,7 +1169,7 @@ public class Mesh extends GeometryObject
 
 		 }
 
-		 if ( getGeometry().isUvsNeedUpdate && (obj_uvs != null) && uvType ) 
+		 if ( getGeometry().isUvsNeedUpdate() && (obj_uvs != null) && uvType ) 
 		 {
 			 Float32Array uvArray = geometryGroup.getWebGlUvArray();
 			 int offset_uv = 0;
@@ -1223,7 +1223,7 @@ public class Mesh extends GeometryObject
 			 }
 		 }
 
-		 if ( getGeometry().isUvsNeedUpdate && (obj_uvs2 != null) && uvType ) 
+		 if ( getGeometry().isUvsNeedUpdate() && (obj_uvs2 != null) && uvType ) 
 		 {
 			 Float32Array uv2Array = geometryGroup.getWebGlUv2Array();
 			 int offset_uv2 = 0;
@@ -1275,7 +1275,7 @@ public class Mesh extends GeometryObject
 			 }
 		 }
 
-		 if (  getGeometry().isElementsNeedUpdate ) 
+		 if (  getGeometry().isElementsNeedUpdate() ) 
 		 {
 			 int offset_line = 0;
 			 int offset_face = 0;

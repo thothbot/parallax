@@ -46,11 +46,11 @@ public class Ribbon extends GeometryObject
 	@Override
 	public void setBuffer(WebGLRenderer renderer)
 	{
-		if ( this.getGeometry().isVerticesNeedUpdate || this.getGeometry().isColorsNeedUpdate )
+		if ( this.getGeometry().isVerticesNeedUpdate() || this.getGeometry().isColorsNeedUpdate() )
 			this.setBuffers( renderer, geometry, GLenum.DYNAMIC_DRAW.getValue() );
 
-		this.getGeometry().isVerticesNeedUpdate = false;
-		this.getGeometry().isColorsNeedUpdate = false;
+		this.getGeometry().setVerticesNeedUpdate(false);
+		this.getGeometry().setColorsNeedUpdate(false);
 	}
 
 	@Override
@@ -73,8 +73,8 @@ public class Ribbon extends GeometryObject
 			createBuffers( renderer, geometry );
 			initBuffers( renderer.getGL(), geometry );
 
-			geometry.isVerticesNeedUpdate = true;
-			geometry.isColorsNeedUpdate = true;
+			geometry.setVerticesNeedUpdate(true);
+			geometry.setColorsNeedUpdate(true);
 		}
 	}
 	
@@ -107,8 +107,8 @@ public class Ribbon extends GeometryObject
 		List<Vector3> vertices = geometry.getVertices();
 		List<Color> colors = geometry.getColors();
 
-		boolean dirtyVertices = geometry.isVerticesNeedUpdate;
-		boolean dirtyColors = geometry.isColorsNeedUpdate;
+		boolean dirtyVertices = geometry.isVerticesNeedUpdate();
+		boolean dirtyColors = geometry.isColorsNeedUpdate();
 
 		if (dirtyVertices) 
 		{
