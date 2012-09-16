@@ -369,12 +369,12 @@ public class Vector3 extends Vector2 implements Vector
 	/**
 	 * Assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 	 */
-	public Vector3 setEulerFromRotationMatrix( Matrix3 m ) 
+	public Vector3 setEulerFromRotationMatrix( Matrix4 m ) 
 	{
 		return setEulerFromRotationMatrix(m, Euler.XYZ);
 	}
 
-	public Vector3 setEulerFromRotationMatrix( Matrix3 m, Euler order ) 
+	public Vector3 setEulerFromRotationMatrix( Matrix4 m, Euler order ) 
 	{
 		Float32Array te = m.getArray();
 		double m11 = te.get(0), m12 = te.get(4), m13 = te.get(8);

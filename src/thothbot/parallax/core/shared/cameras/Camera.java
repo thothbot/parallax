@@ -88,6 +88,6 @@ public class Camera extends Object3D
 		this.matrix.lookAt(this.position, vector, this.up);
 
 		if (this.rotationAutoUpdate)
-			this.rotation.getRotationFromMatrix(this.matrix);
+			this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
 	}
 }

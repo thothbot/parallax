@@ -74,7 +74,6 @@ public class BloomPass extends Pass
 
 		// screen material
 
-		
 		this.materialScreen = new ShaderMaterial(new ScreenShader());
 		this.materialScreen.getShader().getUniforms().get("opacity").setValue( strength );
 		this.materialScreen.setBlending(Material.BLENDING.ADDITIVE);

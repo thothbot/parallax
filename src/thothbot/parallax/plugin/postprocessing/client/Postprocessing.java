@@ -174,7 +174,6 @@ public class Postprocessing extends Plugin
 				}
 
 				this.swapBuffers();
-
 			}
 
 			maskActive = pass.isMaskActive();

@@ -29,6 +29,7 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.Euler;
 import thothbot.parallax.core.shared.core.Matrix3;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Quaternion;
@@ -86,6 +87,8 @@ public class Object3D implements DimensionalObject
 	protected double boundRadius;
 
 	protected double boundRadiusScale;
+	
+	protected Euler eulerOrder = Euler.XYZ;
 
 	public boolean hasPos;
 	public boolean hasNormal;
@@ -412,7 +415,7 @@ public class Object3D implements DimensionalObject
 
 		if (this.rotationAutoUpdate)
 		{
-			this.rotation.getRotationFromMatrix(this.matrix);
+			this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
 		}
 	}
 	
@@ -537,7 +540,10 @@ public class Object3D implements DimensionalObject
 		this.matrix.multiply(matrix, this.matrix);
 
 		this.scale.getScaleFromMatrix(this.matrix);
-		this.rotation.getRotationFromMatrix(this.matrix, this.scale);
+		
+		Matrix4 mat = new Matrix4().extractRotation( this.matrix );
+		this.rotation.setEulerFromRotationMatrix( mat, this.eulerOrder );
+
 		this.position.getPositionFromMatrix(this.matrix);
 	}
 

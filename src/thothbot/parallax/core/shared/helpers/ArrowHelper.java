@@ -22,7 +22,6 @@
 
 package thothbot.parallax.core.shared.helpers;
 
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Matrix4;
@@ -84,7 +83,7 @@ public class ArrowHelper extends Object3D
 
 		this.matrix = new Matrix4().makeRotationAxis( axis.normalize(), radians );
 
-		this.rotation.getRotationFromMatrix( this.matrix, this.scale );
+		this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
 	}
 
 	public void setLength( double length ) 

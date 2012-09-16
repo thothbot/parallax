@@ -941,7 +941,7 @@ public class Matrix4
 	 * 
 	 * @param m the input matrix
 	 */
-	public void extractRotation(Matrix4 m)
+	public Matrix4 extractRotation(Matrix4 m)
 	{
 		Float32Array me = m.getArray();
 
@@ -962,6 +962,8 @@ public class Matrix4
 		this.getArray().set(8, me.get(8) * scaleZ);
 		this.getArray().set(9, me.get(9) * scaleZ);
 		this.getArray().set(10, me.get(10) * scaleZ);
+		
+		return this;
 	}
 
 	/**
