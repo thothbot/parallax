@@ -127,10 +127,8 @@ public class Geometry extends GeometryBuffer
 
 	private List<Bone> bones;
 
-	// Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
-	// Unless set to true internal typed arrays corresponding to buffers will be deleted once sent to GPU.
-	// unless set to true the *Arrays will be deleted once sent to a buffer.
-	private boolean isDynamic = false; 
+	// the intermediate typearrays will be deleted when set to false
+	private boolean isDynamic = true; 
 
 	public List<List<Integer>> sortArray;
 	
@@ -687,13 +685,20 @@ public class Geometry extends GeometryBuffer
 	}
 
 	public void computeBoundingSphere()
-	{
-		double radius = this.boundingSphere == null ? 0 : this.boundingSphere.radius;
-		for (int v = 0, vl = this.vertices.size(); v < vl; v++) 
+	{	
+		double maxRadiusSq = 0;
+
+		if ( this.boundingSphere == null ) 
+			this.boundingSphere = new BoundingSphere(0);
+
+		for ( int i = 0, l = this.vertices.size(); i < l; i ++ ) 
 		{
-			radius = Math.max(radius, this.vertices.get(v).length());
+			double radiusSq = this.vertices.get( i ).lengthSq();
+			if ( radiusSq > maxRadiusSq ) 
+				maxRadiusSq = radiusSq;
 		}
-		this.boundingSphere = new BoundingSphere(radius);
+
+		this.boundingSphere.radius = Math.sqrt( maxRadiusSq );
 	}
 	
 	private String getHash(int a, int b)
@@ -765,10 +770,9 @@ public class Geometry extends GeometryBuffer
 		}		
 	}
 
-	/*
+	/**
 	 * Checks for duplicate vertices with hashmap.
-	 * Duplicated vertices are removed
-	 * and faces' vertices are updated.
+	 * Duplicated vertices are removed and faces' vertices are updated.
 	 */
 	public int mergeVertices() 
 	{
@@ -834,7 +838,7 @@ public class Geometry extends GeometryBuffer
 					{
 						// console.log('faces', face.a, face.b, face.c, face.d, 'dup at', k);
 						o.remove(k);
-						this.faces.set( i, new Face3(o.get(0), o.get(1), o.get(2)));
+						this.faces.set( i, new Face3(o.get(0), o.get(1), o.get(2), face.getNormal(), face.getColor(), face.getMaterialIndex() ));
 						
 						for (int j=0,jl = this.faceVertexUvs.size(); j<jl; j++) 
 						{
@@ -842,6 +846,8 @@ public class Geometry extends GeometryBuffer
 							if (u != null) 
 								u.remove(k);
 						}
+						
+						this.faces.get( i ).setVertexColors( face.getVertexColors() );
 						
 						break;
 					}
