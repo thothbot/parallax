@@ -54,7 +54,7 @@ public class ProgramParameters
 	public boolean shadowMapCascade;
 	public boolean sizeAttenuation;
 	
-	public int alphaTest;
+	public double alphaTest;
 	public boolean useFog;
 	public boolean useFog2;
 	public boolean metal;

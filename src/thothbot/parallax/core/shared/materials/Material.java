@@ -121,6 +121,11 @@ public abstract class Material
 		{
 			return "#define " + this.name() + " " + param;
 		}
+		
+		public String getValue(double param)
+		{
+			return "#define " + this.name() + " " + param;
+		}
 	}
 
 	private int id;
@@ -144,7 +149,7 @@ public abstract class Material
 	private double polygonOffsetFactor;
 	private double polygonOffsetUnits;
 	
-	private int alphaTest;
+	private double alphaTest;
 	
 	// Boolean for fixing antialiasing gaps in CanvasRenderer
 	private boolean isOverdraw;
@@ -303,11 +308,11 @@ public abstract class Material
 		this.polygonOffsetUnits = polygonOffsetUnits;
 	}
 
-	public int getAlphaTest() {
+	public double getAlphaTest() {
 		return alphaTest;
 	}
 
-	public void setAlphaTest(int alphaTest) {
+	public void setAlphaTest(double alphaTest) {
 		this.alphaTest = alphaTest;
 	}
 	
