@@ -58,5 +58,5 @@ public abstract class Plugin
 
 	public abstract Plugin.TYPE getType();
 
-	public abstract void render( Scene scene, Camera camera, int currentWidth, int currentHeight );
+	public abstract void render( Camera camera, int currentWidth, int currentHeight );
 }

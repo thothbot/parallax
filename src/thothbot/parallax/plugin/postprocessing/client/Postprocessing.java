@@ -34,6 +34,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.core.Matrix4;
@@ -138,7 +139,8 @@ public class Postprocessing extends Plugin
 		this.passes.add( pass );
 	}
 
-	public void render( Scene scene, Camera camera, int currentWidth, int currentHeight ) 
+	@Override
+	public void render( Camera camera, int currentWidth, int currentHeight ) 
 	{
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
@@ -153,6 +155,8 @@ public class Postprocessing extends Plugin
 		for ( int i = 0; i < this.passes.size(); i ++ ) 
 		{
 			Pass pass = this.passes.get( i );
+			
+			Log.error("Called pass", pass.getClass().getName() );
 
 			if ( !pass.isEnabled() ) continue;
 

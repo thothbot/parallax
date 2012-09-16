@@ -1021,7 +1021,7 @@ public class WebGLRenderer
 			initWebGLObjects( scene );
 
 		// custom render plugins (pre pass)
-		renderPlugins( this.renderPluginsPre, scene, camera );
+		renderPlugins( this.renderPluginsPre, camera );
 
 		this.getInfo().getRender().calls = 0;
 		this.getInfo().getRender().vertices = 0;
@@ -1125,7 +1125,7 @@ public class WebGLRenderer
 		}
 
 		// custom render plugins (post pass)
-		renderPlugins( this.renderPluginsPost, scene, camera );
+		renderPlugins( this.renderPluginsPost, camera );
 
 		// Generate mipmap if we're using any kind of mipmap filtering
 		if ( renderTarget != null && renderTarget.isGenerateMipmaps() 
@@ -1143,13 +1143,14 @@ public class WebGLRenderer
 //		 getGL().finish();
 	}
 
-	private void renderPlugins( List<Plugin> plugins, Scene scene, Camera camera ) 
+	private void renderPlugins( List<Plugin> plugins, Camera camera ) 
 	{
 		if ( plugins.size() == 0 ) return;
 
 		for ( int i = 0, il = plugins.size(); i < il; i ++ ) 
 		{
 			Plugin plugin = plugins.get( i );
+
 			if(plugin.isRendering())
 				return;
 
@@ -1170,7 +1171,7 @@ public class WebGLRenderer
 
 			this.isLightsNeedUpdate = true;
 
-			plugin.render( scene, camera, _currentWidth, _currentHeight );
+			plugin.render( camera, _currentWidth, _currentHeight );
 
 			// reset state after plugin (anything could have changed)
 
