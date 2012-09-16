@@ -22,7 +22,8 @@
 
 package thothbot.parallax.core.shared.core;
 
-import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+
 
 /**
  * This class is realization of (X, Y, Z) vector. 
@@ -350,42 +351,42 @@ public class Vector3 extends Vector2 implements Vector
 		this.z = m.getArray().get(14);
 	}
 
-	public Vector3 getRotationFromMatrix(Matrix4 m)
-	{
-		return getRotationFromMatrix(m, new Vector3(1, 1, 1));
-	}
-
-	public Vector3 getRotationFromMatrix(Matrix4 m, Vector3 scale)
-	{
-		double sx = scale.x;
-		double sy = scale.y;
-		double sz = scale.z;
-
-		double m11 = m.getArray().get(0) / sx, 
-				m12 = m.getArray().get(4) / sy,
-				m13 = m.getArray().get(8) / sz;
-		double m21 = m.getArray().get(1) / sx, 
-				m22 = m.getArray().get(5) / sy, 
-				m23 = m.getArray().get(9) / sz;
-		double m33 = m.getArray().get(10) / sz;
-
-		this.y = Math.asin(m13);
-
-		double cosY = Math.cos(this.y);
-
-		if (Math.abs(cosY) > 0.00001) 
-		{
-			this.x = Math.atan2(-m23 / cosY, m33 / cosY);
-			this.z = Math.atan2(-m12 / cosY, m11 / cosY);
-		} 
-		else 
-		{
-			this.x = 0.0;
-			this.z = Math.atan2(m21, m22);
-		}
-
-		return this;
-	}
+//	public Vector3 getRotationFromMatrix(Matrix4 m)
+//	{
+//		return getRotationFromMatrix(m, new Vector3(1, 1, 1));
+//	}
+//
+//	public Vector3 getRotationFromMatrix(Matrix4 m, Vector3 scale)
+//	{
+//		double sx = scale.x;
+//		double sy = scale.y;
+//		double sz = scale.z;
+//
+//		double m11 = m.getArray().get(0) / sx, 
+//				m12 = m.getArray().get(4) / sy,
+//				m13 = m.getArray().get(8) / sz;
+//		double m21 = m.getArray().get(1) / sx, 
+//				m22 = m.getArray().get(5) / sy, 
+//				m23 = m.getArray().get(9) / sz;
+//		double m33 = m.getArray().get(10) / sz;
+//
+//		this.y = Math.asin(m13);
+//
+//		double cosY = Math.cos(this.y);
+//
+//		if (Math.abs(cosY) > 0.00001) 
+//		{
+//			this.x = Math.atan2(-m23 / cosY, m33 / cosY);
+//			this.z = Math.atan2(-m12 / cosY, m11 / cosY);
+//		} 
+//		else 
+//		{
+//			this.x = 0.0;
+//			this.z = Math.atan2(m21, m22);
+//		}
+//
+//		return this;
+//	}
 
 	public void getScaleFromMatrix(Matrix4 m)
 	{
@@ -401,6 +402,117 @@ public class Vector3 extends Vector2 implements Vector
 
 		set(sx, sy, sz);
 	}
+	
+	/**
+	 * Assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
+	 */
+	public Vector3 setEulerFromRotationMatrix( Matrix3 m ) 
+	{
+		return setEulerFromRotationMatrix(m, Euler.XYZ);
+	}
+
+	public Vector3 setEulerFromRotationMatrix( Matrix3 m, Euler order ) 
+	{
+		Float32Array te = m.getArray();
+		double m11 = te.get(0), m12 = te.get(4), m13 = te.get(8);
+		double m21 = te.get(1), m22 = te.get(5), m23 = te.get(9);
+		double m31 = te.get(2), m32 = te.get(6), m33 = te.get(10);
+
+		if ( order == Euler.XYZ ) 
+		{
+			setY( Math.asin( Mathematics.clamp( m13, -1, 1 ) ));
+		
+			if ( Math.abs( m13 ) < 0.99999 ) 
+			{
+				setX( Math.atan2( - m23, m33 ) );
+				setZ( Math.atan2( - m12, m11 ) );
+			} 
+			else 
+			{
+				setX( Math.atan2( m21, m22 ) );
+				setZ( 0 );
+			}
+
+		} 
+		else if ( order == Euler.YXZ )
+		{
+			setX( Math.asin( - Mathematics.clamp( m23, -1, 1 ) ) );
+		
+			if ( Math.abs( m23 ) < 0.99999 ) 
+			{
+				setY( Math.atan2( m13, m33 ) );
+				setZ( Math.atan2( m21, m22 ) );	
+			} 
+			else 
+			{
+				setY( Math.atan2( - m31, m11 ) );
+				setZ( 0 );	
+			}
+		} 
+		else if ( order == Euler.ZXY ) 
+		{
+			setX( Math.asin( Mathematics.clamp( m32, -1, 1 ) ) );
+		
+			if ( Math.abs( m32 ) < 0.99999 ) 
+			{
+				setY( Math.atan2( - m31, m33 ) );
+				setZ( Math.atan2( - m12, m22 ) );	
+			} 
+			else 
+			{	
+				setY( 0 );
+				setZ( Math.atan2( m13, m11 ) );	
+			}
+		} 
+		else if ( order == Euler.ZYX ) 
+		{
+			setY( Math.asin( - Mathematics.clamp( m31, -1, 1 ) ) );
+			
+			if ( Math.abs( m31 ) < 0.99999 ) 
+			{
+				setX( Math.atan2( m32, m33 ) );
+				setZ( Math.atan2( m21, m11 ) );
+			}
+			else 
+			{
+				setX( 0 );
+				setZ( Math.atan2( - m12, m22 ) );
+			}
+		} 
+		else if ( order == Euler.YZX ) 
+		{
+			setZ( Math.asin( Mathematics.clamp( m21, -1, 1 ) ) );
+		
+			if ( Math.abs( m21 ) < 0.99999 ) 
+			{
+				setX( Math.atan2( - m23, m22 ) );
+				setY( Math.atan2( - m31, m11 ) );
+			} 
+			else 
+			{
+				setX( 0 );
+				setY( Math.atan2( m31, m33 ) );
+			}	
+		} 
+		else if ( order == Euler.XZY ) 
+		{
+			setZ( Math.asin( - Mathematics.clamp( m12, -1, 1 ) ) );
+		
+			if ( Math.abs( m12 ) < 0.99999 ) 
+			{
+				setX( Math.atan2( m32, m22 ) );
+				setY( Math.atan2( m13, m11 ) );
+			}
+			else 
+			{
+				setX( Math.atan2( - m13, m33 ) );
+				setY( 0 );
+			}	
+		}
+		
+		return this;
+
+	}
 
 	/**
 	 * Returns true if all of the data members of v1 are equal to the
@@ -412,14 +524,7 @@ public class Vector3 extends Vector2 implements Vector
 	 */
 	public boolean equals(Vector3 v1)
 	{
-		try 
-		{
-			return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
-		} 
-		catch (NullPointerException e2) 
-		{
-			return false;
-		}
+		return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
 	}
 
 	public boolean isZero()
