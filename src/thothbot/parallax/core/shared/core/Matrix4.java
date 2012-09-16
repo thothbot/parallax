@@ -653,137 +653,109 @@ public class Matrix4
 
 	public Matrix4 setRotationFromEuler(Vector3 v, Euler order)
 	{
+		Float32Array te = this.elements;
 
-		double x = v.getX(), y = v.getY(), z = v.getZ();
-		double a = Math.cos(x), b = Math.sin(x);
-		double c = Math.cos(y), d = Math.sin(y);
-		double e = Math.cos(z), f = Math.sin(z);
+		double x = v.x, y = v.y, z = v.z;
+		double a = Math.cos( x ), b = Math.sin( x );
+		double c = Math.cos( y ), d = Math.sin( y );
+		double e = Math.cos( z ), f = Math.sin( z );
 
-		double ce, cf, de, df;
-		double ae, af, be, bf;
-		double ac, ad, bc, bd;
-		switch (order) {
+		if ( order == Euler.XYZ ) 
+		{
+			double ae = a * e, af = a * f, be = b * e, bf = b * f;
 
-		case YXZ:
+			te.set(0, c * e);
+			te.set(4, - c * f);
+			te.set(8, d);
 
-			ce = c * e;
-			cf = c * f;
-			de = d * e;
-			df = d * f;
+			te.set(1, af + be * d);
+			te.set(5, ae - bf * d);
+			te.set(9, - b * c);
 
-			this.getArray().set(0, ce + df * b);
-			this.getArray().set(4, de * b - cf);
-			this.getArray().set(8, a * d);
+			te.set(2, bf - ae * d);
+			te.set(6, be + af * d);
+			te.set(10, a * c);
+		} 
+		else if ( order == Euler.YXZ ) 
+		{
+			double ce = c * e, cf = c * f, de = d * e, df = d * f;
 
-			this.getArray().set(1, a * f);
-			this.getArray().set(5, a * e);
-			this.getArray().set(9, -b);
+			te.set(0, ce + df * b);
+			te.set(4, de * b - cf);
+			te.set(8, a * d);
 
-			this.getArray().set(2, cf * b - de);
-			this.getArray().set(6, df + ce * b);
-			this.getArray().set(10, a * c);
-			break;
+			te.set(1, a * f);
+			te.set(5, a * e);
+			te.set(9, - b);
 
-		case ZXY:
+			te.set(2, cf * b - de);
+			te.set(6, df + ce * b);
+			te.set(10, a * c);
 
-			ce = c * e;
-			cf = c * f;
-			de = d * e;
-			df = d * f;
+		} 
+		else if ( order == Euler.ZXY ) 
+		{
+			double ce = c * e, cf = c * f, de = d * e, df = d * f;
 
-			this.getArray().set(0, ce - df * b);
-			this.getArray().set(4, -a * f);
-			this.getArray().set(8, de + cf * b);
+			te.set(0, ce - df * b);
+			te.set(4, - a * f);
+			te.set(8, de + cf * b);
 
-			this.getArray().set(1, cf + de * b);
-			this.getArray().set(5, a * e);
-			this.getArray().set(9, df - ce * b);
+			te.set(1, cf + de * b);
+			te.set(5, a * e);
+			te.set(9, df - ce * b);
 
-			this.getArray().set(2, -a * d);
-			this.getArray().set(6, b);
-			this.getArray().set(10, a * c);
-			break;
+			te.set(2, - a * d);
+			te.set(6, b);
+			te.set(10, a * c);
+		} 
+		else if ( order == Euler.ZYX ) 
+		{
+			double ae = a * e, af = a * f, be = b * e, bf = b * f;
 
-		case ZYX:
+			te.set(0, c * e);
+			te.set(4, be * d - af);
+			te.set(8, ae * d + bf);
 
-			ae = a * e;
-			af = a * f;
-			be = b * e;
-			bf = b * f;
+			te.set(1, c * f);
+			te.set(5, bf * d + ae);
+			te.set(9, af * d - be);
 
-			this.getArray().set(0, c * e);
-			this.getArray().set(4, be * d - af);
-			this.getArray().set(8, ae * d + bf);
+			te.set(2, - d);
+			te.set(6, b * c);
+			te.set(10, a * c);
+		}
+		else if ( order == Euler.YZX ) 
+		{
+			double ac = a * c, ad = a * d, bc = b * c, bd = b * d;
 
-			this.getArray().set(1, c * f);
-			this.getArray().set(5, bf * d + ae);
-			this.getArray().set(9, af * d - be);
+			te.set(0, c * e);
+			te.set(4, bd - ac * f);
+			te.set(8, bc * f + ad);
 
-			this.getArray().set(2, -d);
-			this.getArray().set(6, b * c);
-			this.getArray().set(10, a * c);
-			break;
+			te.set(1, f);
+			te.set(5, a * e);
+			te.set(9, - b * e);
 
-		case YZX:
+			te.set(2, - d * e);
+			te.set(6, ad * f + bc);
+			te.set(10, ac - bd * f);
+		}
+		else if ( order == Euler.XZY ) 
+		{
+			double ac = a * c, ad = a * d, bc = b * c, bd = b * d;
 
-			ac = a * c;
-			ad = a * d;
-			bc = b * c;
-			bd = b * d;
+			te.set(0, c * e);
+			te.set(4, - f);
+			te.set(8, d * e);
 
-			this.getArray().set(0, c * e);
-			this.getArray().set(4, bd - ac * f);
-			this.getArray().set(8, bc * f + ad);
+			te.set(1, ac * f + bd);
+			te.set(5, a * e);
+			te.set(9, ad * f - bc);
 
-			this.getArray().set(1, f);
-			this.getArray().set(5, a * e);
-			this.getArray().set(9, -b * e);
-
-			this.getArray().set(2, -d * e);
-			this.getArray().set(6, ad * f + bc);
-			this.getArray().set(10, ac - bd * f);
-			break;
-
-		case XZY:
-
-			ac = a * c;
-			ad = a * d;
-			bc = b * c;
-			bd = b * d;
-
-			this.getArray().set(0, c * e);
-			this.getArray().set(4, -f);
-			this.getArray().set(8, d * e);
-
-			this.getArray().set(1, ac * f + bd);
-			this.getArray().set(5, a * e);
-			this.getArray().set(9, ad * f - bc);
-
-			this.getArray().set(2, bc * f - ad);
-			this.getArray().set(6, b * e);
-			this.getArray().set(10, bd * f + ac);
-			break;
-
-		default: // 'XYZ'
-
-			ae = a * e;
-			af = a * f;
-			be = b * e;
-			bf = b * f;
-
-			this.getArray().set(0, c * e);
-			this.getArray().set(4, -c * f);
-			this.getArray().set(8, d);
-
-			this.getArray().set(1, af + be * d);
-			this.getArray().set(5, ae - bf * d);
-			this.getArray().set(9, -b * c);
-
-			this.getArray().set(2, bf - ae * d);
-			this.getArray().set(6, be + af * d);
-			this.getArray().set(10, a * c);
-			break;
-
+			te.set(2, bc * f - ad);
+			te.set(6, b * e);
+			te.set(10, bd * f + ac);
 		}
 
 		return this;
