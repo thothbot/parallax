@@ -473,10 +473,10 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 
 			quaternion.setFromAxisAngle( axis, -angle );
 
-			quaternion.multiply( eye );
-			quaternion.multiply( getObject().getUp() );
+			quaternion.multiplyVector3( eye );
+			quaternion.multiplyVector3( getObject().getUp() );
 
-			quaternion.multiply( rotateEnd );
+			quaternion.multiplyVector3( rotateEnd );
 
 			if ( this.isStaticMoving ) 
 			{
@@ -485,7 +485,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 			else 
 			{
 				quaternion.setFromAxisAngle( axis, angle * ( this.dynamicDampingFactor - 1.0 ) );
-				quaternion.multiply( rotateStart );
+				quaternion.multiplyVector3( rotateStart );
 			}
 		}
 	}

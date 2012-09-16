@@ -144,238 +144,207 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return this.id;
 	}
 	
 	@Override
-	public DimensionalObject getParent()
-	{
+	public DimensionalObject getParent() {
 		return this.parent;
 	}
 
 	@Override
-	public void setParent(DimensionalObject parent)
-	{
+	public void setParent(DimensionalObject parent) {
 		this.parent = parent;
 	}
 
 	@Override
-	public List<DimensionalObject> getChildren()
-	{
+	public List<DimensionalObject> getChildren() {
 		return this.children;
 	}
 
 	@Override
-	public void setChildren(Collection<? extends DimensionalObject> children)
-	{
+	public void setChildren(Collection<? extends DimensionalObject> children) {
 		this.children = new ArrayList<DimensionalObject>(children);
 	}
 
 	@Override
-	public Vector3 getPosition()
-	{
+	public Vector3 getPosition() {
 		return this.position;
 	}
 
 	@Override
-	public void setPosition(Vector3 position)
-	{
+	public void setPosition(Vector3 position) {
 		this.position = position;
 	}
 
 	@Override
-	public Vector3 getRotation()
-	{
+	public Vector3 getRotation() {
 		return this.rotation;
 	}
 
 	@Override
-	public void setRotation(Vector3 rotation)
-	{
+	public void setRotation(Vector3 rotation) {
 		this.rotation = rotation;
 	}
 
 	@Override
-	public void setDynamic(boolean dynamic)
-	{
+	public void setDynamic(boolean dynamic) {
 		this.dynamic = dynamic;
 	}
 
 	@Override
-	public boolean isDynamic()
-	{
+	public boolean isDynamic() {
 		return dynamic;
 	}
 
 	@Override
-	public void setRotationAutoUpdate(boolean rotationAutoUpdate)
-	{
+	public void setRotationAutoUpdate(boolean rotationAutoUpdate) {
 		this.rotationAutoUpdate = rotationAutoUpdate;
 
 	}
 
 	@Override
-	public boolean isRotationAutoUpdate()
-	{
+	public boolean isRotationAutoUpdate() {
 		return rotationAutoUpdate;
 	}
 
 	@Override
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public Vector3 getScale()
-	{
+	public Vector3 getScale() {
 		return this.scale;
 	}
 
 	@Override
-	public void setScale(Vector3 scale)
-	{
+	public void setScale(Vector3 scale) {
 		this.scale = scale;
 	}
 
 	@Override
-	public Vector3 getUp()
-	{
+	public Vector3 getUp() {
 		return this.up;
 	}
 
 	@Override
-	public void setUp(Vector3 up)
-	{
+	public void setUp(Vector3 up) {
 		this.up = up;
 	}
 
 	@Override
-	public Matrix4 getMatrix()
-	{
+	public Matrix4 getMatrix() {
 		return this.matrix;
 	}
 
 	@Override
-	public void setMatrix(Matrix4 matrix)
-	{
+	public void setMatrix(Matrix4 matrix) {
 		this.matrix = matrix;
 	};
 
 	@Override
-	public Matrix4 getMatrixWorld()
-	{
+	public Matrix4 getMatrixWorld() {
 		return this.matrixWorld;
 	}
 
 	@Override
-	public void setMatrixWorld(Matrix4 matrixWorld)
-	{
+	public void setMatrixWorld(Matrix4 matrixWorld) {
 		this.matrixWorld = matrixWorld;
 	}
 
 	@Override
-	public Matrix4 getMatrixRotationWorld()
-	{
+	public Matrix4 getMatrixRotationWorld() {
 		return this.matrixRotationWorld;
 	}
 
 	@Override
-	public void setMatrixRotationWorld(Matrix4 rotation)
-	{
+	public void setMatrixRotationWorld(Matrix4 rotation) {
 		this.matrixRotationWorld = rotation;
 	}
 
 	@Override
-	public boolean isMatrixWorldNeedsUpdate()
-	{
+	public boolean isMatrixWorldNeedsUpdate() {
 		return this.matrixWorldNeedsUpdate;
 	}
 
 	@Override
-	public void setMatrixWorldNeedsUpdate(boolean needsUpdate)
-	{
+	public void setMatrixWorldNeedsUpdate(boolean needsUpdate) {
 		this.matrixWorldNeedsUpdate = needsUpdate;
 	}
 
 	@Override
-	public boolean isMatrixAutoUpdate()
-	{
+	public boolean isMatrixAutoUpdate() {
 		return this.matrixAutoUpdate;
 	}
 
 	@Override
-	public void setMatrixAutoUpdate(boolean autoUpdate)
-	{
+	public void setMatrixAutoUpdate(boolean autoUpdate) {
 		this.matrixAutoUpdate = autoUpdate;
 	}
 
 	@Override
-	public Quaternion getQuaternion()
-	{
+	public Quaternion getQuaternion() {
 		return this.quaternion;
 	}
 
 	@Override
-	public void setQuaternion(Quaternion quaternion)
-	{
+	public void setQuaternion(Quaternion quaternion) {
 		this.quaternion = quaternion;
 	}
 
 	@Override
-	public boolean isUseQuaternion()
-	{
+	public boolean isUseQuaternion() {
 		return this.useQuaternion;
 	}
 
 	@Override
-	public void setUseQuaternion(boolean use)
-	{
+	public void setUseQuaternion(boolean use) {
 		this.useQuaternion = use;
 	}
 
 	@Override
-	public double getBoundRadius()
-	{
+	public double getBoundRadius() {
 		return this.boundRadius;
 	}
 
 	@Override
-	public void setBoundRadius(double boundRadius)
-	{
+	public void setBoundRadius(double boundRadius) {
 		this.boundRadius = boundRadius;
 	}
 
 	@Override
-	public double getBoundRadiusScale()
-	{
+	public double getBoundRadiusScale() {
 		return this.boundRadiusScale;
 	}
 
 	@Override
-	public void setBoundRadiusScale(double scale)
-	{
+	public void setBoundRadiusScale(double scale) {
 		this.boundRadiusScale = scale;
 	}
 
 	@Override
-	public boolean isVisible()
-	{
+	public boolean isVisible() {
 		return this.visible;
 	}
 
 	@Override
-	public void setVisible(boolean visible)
-	{
+	public void setVisible(boolean visible)	{
 		this.visible = visible;
+	}
+	
+	public Euler getEulerOrder() {
+		return eulerOrder;
+	}
+
+	public void setEulerOrder(Euler eulerOrder) {
+		this.eulerOrder = eulerOrder;
 	}
 
 	@Override

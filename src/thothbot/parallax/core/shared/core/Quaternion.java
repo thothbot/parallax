@@ -161,35 +161,78 @@ public class Quaternion
 		return this;
 	}
 
-	public void setFromEuler(Vector3 vector)
+	/**
+	 * <a href="http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m">www.mathworks.com</a>
+	 * @param vector the Vector3
+	 */
+	public Quaternion setFromEuler(Vector3 v)
 	{
-
-		double c = Math.PI / 360.0, // 0.5 * Math.PI / 360, // 0.5 is an
-											// optimization
-		x = vector.x * c, y = vector.y * c, z = vector.z * c;
-
-		double c1 = Math.cos(y);
-		double s1 = Math.sin(y);
-		double c2 = Math.cos(-z);
-		double s2 = Math.sin(-z);
-		double c3 = Math.cos(x);
-		double s3 = Math.sin(x);
-
-		double c1c2 = c1 * c2;
-		double s1s2 = s1 * s2;
-
-		this.w = c1c2 * c3 - s1s2 * s3;
-		this.x = c1c2 * s3 + s1s2 * c3;
-		this.y = s1 * c2 * c3 + c1 * s2 * s3;
-		this.z = c1 * s2 * c3 - s1 * c2 * s3;
+		return setFromEuler(v, Euler.XYZ);
 	}
 
+	public Quaternion setFromEuler(Vector3 v, Euler order)
+	{
+		double c1 = Math.cos( v.getX() / 2.0 );
+		double c2 = Math.cos( v.getY() / 2.0 );
+		double c3 = Math.cos( v.getZ() / 2.0 );
+		double s1 = Math.sin( v.getX() / 2.0 );
+		double s2 = Math.sin( v.getY() / 2.0 );
+		double s3 = Math.sin( v.getZ() / 2.0 );
+
+		if ( order == Euler.XYZ ) 
+		{
+			this.x = s1 * c2 * c3 + c1 * s2 * s3;
+			this.y = c1 * s2 * c3 - s1 * c2 * s3;
+			this.z = c1 * c2 * s3 + s1 * s2 * c3;
+			this.w = c1 * c2 * c3 - s1 * s2 * s3;
+		} 
+		else if ( order == Euler.YXZ ) 
+		{
+			this.x = s1 * c2 * c3 + c1 * s2 * s3;
+			this.y = c1 * s2 * c3 - s1 * c2 * s3;
+			this.z = c1 * c2 * s3 - s1 * s2 * c3;
+			this.w = c1 * c2 * c3 + s1 * s2 * s3;		
+		} 
+		else if ( order == Euler.ZXY ) 
+		{
+			this.x = s1 * c2 * c3 - c1 * s2 * s3;
+			this.y = c1 * s2 * c3 + s1 * c2 * s3;
+			this.z = c1 * c2 * s3 + s1 * s2 * c3;
+			this.w = c1 * c2 * c3 - s1 * s2 * s3;
+		} 
+		else if ( order == Euler.ZYX ) 
+		{
+			this.x = s1 * c2 * c3 - c1 * s2 * s3;
+			this.y = c1 * s2 * c3 + s1 * c2 * s3;
+			this.z = c1 * c2 * s3 - s1 * s2 * c3;
+			this.w = c1 * c2 * c3 + s1 * s2 * s3;
+		} 
+		else if ( order == Euler.YZX ) 
+		{
+			this.x = s1 * c2 * c3 + c1 * s2 * s3;
+			this.y = c1 * s2 * c3 + s1 * c2 * s3;
+			this.z = c1 * c2 * s3 - s1 * s2 * c3;
+			this.w = c1 * c2 * c3 - s1 * s2 * s3;
+		} 
+		else if ( order == Euler.XZY ) 
+		{	
+			this.x = s1 * c2 * c3 - c1 * s2 * s3;
+			this.y = c1 * s2 * c3 - s1 * c2 * s3;
+			this.z = c1 * c2 * s3 + s1 * s2 * c3;
+			this.w = c1 * c2 * c3 + s1 * s2 * s3;
+		}
+		
+		return this;
+	}
+
+	/**
+	 * from
+	 * <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm">www.euclideanspace.com</a>		
+	 * @param axis the axis have to be normalized
+	 * @param angle the angle
+	 */
 	public void setFromAxisAngle(Vector3 axis, double angle)
 	{
-		// from
-		// http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
-		// axis have to be normalized
-
 		double halfAngle = angle / 2.0;
 		double s = Math.sin(halfAngle);
 
@@ -199,11 +242,13 @@ public class Quaternion
 		this.w = Math.cos(halfAngle);
 	}
 
+	/**
+	 * Adapted from:
+	 * <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm">www.euclideanspace.com</a>
+	 * @param m the Matrix4
+	 */
 	public void setFromRotationMatrix(Matrix4 m)
 	{
-		// Adapted from:
-		// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
-
 		double absQ = Math.pow(m.determinant(), 1.0 / 3.0);
 
 		this.w = Math.sqrt(Math.max(0, absQ + m.getArray().get(0) + m.getArray().get(5)	+ m.getArray().get(10))) / 2.0;
@@ -271,12 +316,17 @@ public class Quaternion
 	 * @param b the second Quaternion
 	 * 
 	 */
-	public void multiply(Quaternion a, Quaternion b)
+	public Quaternion multiply(Quaternion a, Quaternion b)
 	{
-		this.x = a.x * b.w  + a.y * b.z - a.z * b.y + a.w * b.x;
-		this.y = -a.x * b.z + a.y * b.w + a.z * b.x + a.w * b.y;
-		this.z = a.x * b.y  - a.y * b.x + a.z * b.w + a.w * b.z;
-		this.w = -a.x * b.x - a.y * b.y - a.z * b.z + a.w * b.w;
+		double qax = a.x, qay = a.y, qaz = a.z, qaw = a.w;
+		double qbx = b.x, qby = b.y, qbz = b.z, qbw = b.w;
+
+		this.x =  qax * qbw + qay * qbz - qaz * qby + qaw * qbx;
+		this.y = -qax * qbz + qay * qbw + qaz * qbx + qaw * qby;
+		this.z =  qax * qby - qay * qbx + qaz * qbw + qaw * qbz;
+		this.w = -qax * qbx - qay * qby - qaz * qbz + qaw * qbw;
+				
+		return this;
 	}
 
 	/**
@@ -289,7 +339,8 @@ public class Quaternion
 	 */
 	public void multiply(Quaternion b)
 	{
-		double qax = this.x, qay = this.y, qaz = this.z, qaw = this.w, qbx = b.x, qby = b.y, qbz = b.z, qbw = b.w;
+		double qax = this.x, qay = this.y, qaz = this.z, qaw = this.w;
+		double qbx = b.x, qby = b.y, qbz = b.z, qbw = b.w;
 
 		this.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
 		this.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
@@ -305,9 +356,9 @@ public class Quaternion
 	 * 
 	 * @return the modified input vector
 	 */
-	public Vector3 multiply(Vector3 vector)
+	public Vector3 multiplyVector3(Vector3 vector)
 	{
-		return multiply(vector, vector);
+		return multiplyVector3(vector, vector);
 	}
 
 	/**
@@ -319,7 +370,7 @@ public class Quaternion
 	 * 
 	 * @return the modified destination vector
 	 */
-	public Vector3 multiply(Vector3 vector, Vector3 dest)
+	public Vector3 multiplyVector3(Vector3 vector, Vector3 dest)
 	{
 		double x = vector.getX(), 
 			   y = vector.getY(), 
