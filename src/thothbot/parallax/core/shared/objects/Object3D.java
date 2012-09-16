@@ -90,13 +90,16 @@ public class Object3D implements DimensionalObject
 	
 	protected Euler eulerOrder = Euler.XYZ;
 
+	protected boolean isCastShadow = false;
+	
+	protected boolean isReceiveShadow = false;
+	
+	protected boolean isFrustumCulled = true;
+	
 	public boolean hasPos;
 	public boolean hasNormal;
 	public double renderDepth;
 	public Matrix4 identityMatrix;
-	public boolean isCastShadow = false;
-	public boolean isReceiveShadow = false;
-	public boolean isFrustumCulled = true;
 	public boolean hasImmediateRenderCallback;
 	public Float32Array positionArray;
 	public Float32Array normalArray;
@@ -196,6 +199,30 @@ public class Object3D implements DimensionalObject
 	@Override
 	public boolean isDynamic() {
 		return dynamic;
+	}
+
+	public boolean isCastShadow() {
+		return isCastShadow;
+	}
+
+	public void setCastShadow(boolean isCastShadow) {
+		this.isCastShadow = isCastShadow;
+	}
+
+	public boolean isReceiveShadow() {
+		return isReceiveShadow;
+	}
+
+	public void setReceiveShadow(boolean isReceiveShadow) {
+		this.isReceiveShadow = isReceiveShadow;
+	}
+
+	public boolean isFrustumCulled() {
+		return isFrustumCulled;
+	}
+
+	public void setFrustumCulled(boolean isFrustumCulled) {
+		this.isFrustumCulled = isFrustumCulled;
 	}
 
 	@Override

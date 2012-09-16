@@ -1046,7 +1046,7 @@ public class WebGLRenderer
 			{
 				if ( ! ( object.getClass() == Mesh.class 
 						|| object.getClass() == ParticleSystem.class ) 
-						|| ! ( object.isFrustumCulled ) 
+						|| ! ( object.isFrustumCulled() ) 
 						|| frustum.contains( object ) )
 				{
 					setupMatrices( (Object3D) object, camera );
@@ -1847,7 +1847,7 @@ public class WebGLRenderer
 		
 		parameters.maxShadows = maxShadows;
 		
-		parameters.shadowMapEnabled = this.isShadowMapEnabled && object.isReceiveShadow;
+		parameters.shadowMapEnabled = this.isShadowMapEnabled && object.isReceiveShadow();
 		parameters.shadowMapSoft    = this.isShadowMapSoft;
 		parameters.shadowMapDebug   = this.isShadowMapDebug;
 		parameters.shadowMapCascade = this.isShadowMapCascade;
