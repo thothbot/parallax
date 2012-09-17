@@ -2916,13 +2916,17 @@ Log.error("?????????????");
 		return retval;
 	}
 
-	private int allocateShadows ( List<Light> lights ) 
+	private int allocateShadows( List<Light> lights ) 
 	{
 		int maxShadows = 0;
 
 		for (Light light: lights)
+		{
 			if ( light.isAllocateShadows() )
+			{
 				maxShadows ++;
+			}
+		}
 
 		return maxShadows;
 	}

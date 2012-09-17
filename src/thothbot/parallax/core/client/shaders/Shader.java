@@ -214,6 +214,7 @@ public abstract class Shader
 		if (!gl.getProgramParameterb(this.program, GLenum.LINK_STATUS.getValue()))
 			Log.error("Could not initialise shader\n"
 					+ "GL error: " + gl.getProgramInfoLog(program)
+					+ "Shader: " + this.getClass().getName()
 					+ "\n-----\nVERTEX:\n" + vertex
 					+ "\n-----\nFRAGMENT:\n" + fragment
 			);

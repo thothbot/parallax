@@ -22,6 +22,7 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
@@ -32,8 +33,6 @@ public class DirectionalLight extends Light
 	
 	private double intensity;
 	private double distance;
-
-	private boolean castShadow = false;
 
 	//
 
@@ -122,18 +121,9 @@ public class DirectionalLight extends Light
 		this.distance = distance;
 	}
 
-	public void setCastShadow(Boolean castShadow)
-	{
-		this.castShadow = castShadow;
-	}
-
-	public Boolean getCastShadow()
-	{
-		return castShadow;
-	}
-
+	@Override
 	public boolean isAllocateShadows()
 	{
-		return this.castShadow && !this.shadowCascade;
+		return isCastShadow() && !this.shadowCascade;
 	}
 }

@@ -47,8 +47,7 @@ public class Light extends Object3D
 	public boolean isOnlyShadow() {
 		return this.isOnlyShadow;
 	}
-	
-	// TODO check
+
 	public boolean isAllocateShadows() {
 		return false;
 	}
