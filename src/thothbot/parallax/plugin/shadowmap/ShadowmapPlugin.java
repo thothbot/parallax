@@ -27,12 +27,15 @@ import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.DepthRGBAShader;
+import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Frustum;
+import thothbot.parallax.core.shared.core.Gyroscope;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Projector;
+import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.Light;
@@ -42,7 +45,7 @@ import thothbot.parallax.core.shared.scenes.Scene;
 public final class ShadowmapPlugin extends Plugin 
 {
 
-	private ShaderMaterial depthMaterial, depthMaterialMorph, depthMaterialSkin;
+	private ShaderMaterial depthMaterial, depthMaterialMorph, depthMaterialSkin, depthMaterialMorphSkin;
 
 	private Frustum frustum;
 	private Matrix4 projScreenMatrix;
@@ -69,10 +72,14 @@ public final class ShadowmapPlugin extends Plugin
 		this.depthMaterialMorph.setMorphTargets(true);
 		this.depthMaterialSkin = new ShaderMaterial( depthShader );
 		this.depthMaterialSkin.setSkinning(true);
+		this.depthMaterialMorphSkin = new ShaderMaterial( depthShader );
+		this.depthMaterialMorphSkin.setMorphTargets(true);
+		this.depthMaterialMorphSkin.setSkinning(true);
 
 //		_depthMaterial._shadowPass = true;
 //		_depthMaterialMorph._shadowPass = true;
 //		_depthMaterialSkin._shadowPass = true;
+//		_depthMaterialMorphSkin._shadowPass = true;
 	}
 
 	@Override
@@ -88,21 +95,13 @@ public final class ShadowmapPlugin extends Plugin
 
 		WebGLRenderingContext gl = getRenderer().getGL();
 		
-//		var i, il, j, jl, n,
-//
-//		shadowMap, shadowMatrix, shadowCamera,
-//		program, buffer, material,
-//		webglObject, object, light,
-//		renderList,
-
-//		fog = null;
-
 		// set GL state for depth map
 
 		gl.clearColor( 1, 1, 1, 1 );
 		gl.disable( GLenum.BLEND.getValue() );
 
 		gl.enable( GLenum.CULL_FACE.getValue() );
+		gl.frontFace( GLenum.CCW.getValue() );
 
 		if ( getRenderer().isShadowMapCullFrontFaces() ) 
 		{
@@ -114,7 +113,7 @@ public final class ShadowmapPlugin extends Plugin
 		}
 
 		getRenderer().setDepthTest( true );
-
+/*
 		// preprocess lights
 		// 	- skip lights that are not casting shadows
 		//	- create virtual lights for cascaded shadow maps
@@ -139,21 +138,21 @@ public final class ShadowmapPlugin extends Plugin
 						virtualLight = createVirtualLight( light, n );
 						virtualLight.originalCamera = camera;
 
-						var gyro = new Gyroscope();
-						gyro.position = light.shadowCascadeOffset;
+						Gyroscope gyro = new Gyroscope();
+						gyro.setPosition( light.shadowCascadeOffset );
 
 						gyro.add( virtualLight );
 						gyro.add( virtualLight.target );
 
 						camera.add( gyro );
 
-						light.shadowCascadeArray[ n ] = virtualLight;
+						((DirectionalLight)light).shadowCascadeArray.add( n, virtualLight);
 
 						Log.debug( "Shadowmap plugin: Created virtualLight");
 					} 
 					else 
 					{
-						virtualLight = light.shadowCascadeArray.get( n );
+						virtualLight = ((DirectionalLight)light).shadowCascadeArray.get( n );
 					}
 
 					updateVirtualLight( light, n );
@@ -175,10 +174,10 @@ public final class ShadowmapPlugin extends Plugin
 			{
 				var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat };
 
-				light.shadowMap = new THREE.WebGLRenderTarget( light.shadowMapWidth, light.shadowMapHeight, pars );
-				light.shadowMapSize = new THREE.Vector2( light.shadowMapWidth, light.shadowMapHeight );
+				light.shadowMap = new RenderTargetTexture( light.shadowMapWidth, light.shadowMapHeight, pars );
+				light.shadowMapSize = new Vector2( light.shadowMapWidth, light.shadowMapHeight );
 
-				light.shadowMatrix = new THREE.Matrix4();
+				light.shadowMatrix = new Matrix4();
 			}
 
 			if ( ! light.shadowCamera ) 
@@ -226,7 +225,7 @@ public final class ShadowmapPlugin extends Plugin
 			shadowCamera.matrixWorldInverse.getInverse( shadowCamera.matrixWorld );
 
 			if ( light.cameraHelper ) 
-				light.cameraHelper.lines.visible = light.shadowCameraVisible;
+				light.cameraHelper.visible = light.shadowCameraVisible;
 			if ( light.shadowCameraVisible ) 
 				light.cameraHelper.update();
 
@@ -296,13 +295,15 @@ public final class ShadowmapPlugin extends Plugin
 					{
 						material = object.customDepthMaterial;
 					} 
+					else if ( object instanceof SkinnedMesh ) 
+					{
+
+						material = object.geometry.morphTargets.length ? _depthMaterialMorphSkin : _depthMaterialSkin;
+
+					}
 					else if ( object.geometry.morphTargets.length ) 
 					{
 						material = _depthMaterialMorph;
-					} 
-					else if ( object instanceof THREE.SkinnedMesh ) 
-					{
-						material = _depthMaterialSkin;
 					} 
 					else 
 					{
@@ -351,10 +352,12 @@ public final class ShadowmapPlugin extends Plugin
 		{
 			gl.cullFace( GLenum.BACK.getValue() );
 		}
+		*/
 	}
 
 	private DirectionalLight createVirtualLight( Light light, int cascade ) 
 	{
+		/*
 		DirectionalLight virtualLight = new DirectionalLight();
 
 		virtualLight.isVirtual = true;
@@ -404,6 +407,8 @@ public final class ShadowmapPlugin extends Plugin
 		pointsFrustum[ 7 ].set(  1,  1, farZ );
 
 		return virtualLight;
+		*/
+		return null;
 	}
 	
 	/** 
@@ -411,6 +416,7 @@ public final class ShadowmapPlugin extends Plugin
 	 */
 	private void updateVirtualLight( Light light, int cascade ) 
 	{
+		/*
 		var virtualLight = light.shadowCascadeArray[ cascade ];
 
 		virtualLight.position.copy( light.position );
@@ -436,7 +442,7 @@ public final class ShadowmapPlugin extends Plugin
 		pointsFrustum[ 5 ].z = farZ;
 		pointsFrustum[ 6 ].z = farZ;
 		pointsFrustum[ 7 ].z = farZ;
-
+*/
 	}
 	
 	/**
@@ -444,6 +450,7 @@ public final class ShadowmapPlugin extends Plugin
 	 */
 	private void updateShadowCamera( Camera camera, Light light ) 
 	{
+		/*
 		var shadowCamera = light.shadowCamera,
 			pointsFrustum = light.pointsFrustum,
 			pointsWorld = light.pointsWorld;
@@ -477,5 +484,6 @@ public final class ShadowmapPlugin extends Plugin
 		shadowCamera.bottom = this.min.getY();
 
 		shadowCamera.updateProjectionMatrix();
+		*/
 	}
 }
