@@ -32,8 +32,6 @@ import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.DimensionalObject;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.WebGLObject;
-import thothbot.parallax.plugin.lensflare.LensFlare;
-import thothbot.parallax.plugin.sprite.Sprite;
 
 /**
  * 3D Scene. The basic class for rendering.

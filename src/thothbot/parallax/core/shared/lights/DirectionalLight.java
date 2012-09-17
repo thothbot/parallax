@@ -22,6 +22,8 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import java.util.List;
+
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
@@ -66,7 +68,7 @@ public class DirectionalLight extends Light
 	public double[] shadowCascadeNearZ = { -1.000, 0.990, 0.998 };
 	public double[] shadowCascadeFarZ = { 0.990, 0.998, 1.000 };
 
-	public Object[] shadowCascadeArray;
+	public List<DirectionalLight> shadowCascadeArray;
 
 	//
 

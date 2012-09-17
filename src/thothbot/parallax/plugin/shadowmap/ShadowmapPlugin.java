@@ -19,6 +19,9 @@
 
 package thothbot.parallax.plugin.shadowmap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.GLenum;
 import thothbot.parallax.core.client.renderers.Plugin;
@@ -92,9 +95,6 @@ public final class ShadowmapPlugin extends Plugin
 //		webglObject, object, light,
 //		renderList,
 
-//		lights = [];
-//		k = 0;
-//
 //		fog = null;
 
 		// set GL state for depth map
@@ -119,24 +119,27 @@ public final class ShadowmapPlugin extends Plugin
 		// 	- skip lights that are not casting shadows
 		//	- create virtual lights for cascaded shadow maps
 
-		for ( int i = 0, il = getScene().__lights.length; i < il; i ++ ) 
+		List<Light> sceneLights = getScene().getLights();
+		List<Light> lights = new ArrayList<Light>();
+		
+		for ( int i = 0, il = sceneLights.size(); i < il; i ++ ) 
 		{
-			light = scene.__lights[ i ];
+			Light light = sceneLights.get( i );
 
-			if ( ! light.castShadow ) continue;
+			if ( ! light.isCastShadow() ) continue;
 
-			if ( ( light instanceof DirectionalLight ) && light.shadowCascade ) 
+			if ( ( light instanceof DirectionalLight ) && ((DirectionalLight)light).shadowCascade ) 
 			{
-				for ( int n = 0; n < light.shadowCascadeCount; n ++ ) 
+				for ( int n = 0; n < ((DirectionalLight)light).shadowCascadeCount; n ++ ) 
 				{
-					var virtualLight;
+					DirectionalLight virtualLight;
 
-					if ( ! light.shadowCascadeArray[ n ] ) 
+					if ( ((DirectionalLight)light).shadowCascadeArray.get( n ) == null ) 
 					{
 						virtualLight = createVirtualLight( light, n );
 						virtualLight.originalCamera = camera;
 
-						var gyro = new THREE.Gyroscope();
+						var gyro = new Gyroscope();
 						gyro.position = light.shadowCascadeOffset;
 
 						gyro.add( virtualLight );
@@ -146,33 +149,27 @@ public final class ShadowmapPlugin extends Plugin
 
 						light.shadowCascadeArray[ n ] = virtualLight;
 
-						Log.debug( "Shadowmap plugin: Created virtualLight", virtualLight );
-
+						Log.debug( "Shadowmap plugin: Created virtualLight");
 					} 
 					else 
 					{
-						virtualLight = light.shadowCascadeArray[ n ];
+						virtualLight = light.shadowCascadeArray.get( n );
 					}
 
 					updateVirtualLight( light, n );
-
-					lights[ k ] = virtualLight;
-					k ++;
-
+					lights.add(virtualLight);
 				}
 			} 
 			else 
 			{
-				lights[ k ] = light;
-				k ++;
+				lights.add(light);
 			}
 		}
 
 		// render depth map
-
-		for ( int i = 0, il = lights.length; i < il; i ++ ) 
+		for ( int i = 0, il = lights.size(); i < il; i ++ ) 
 		{
-			light = lights[ i ];
+			Light light = lights.get( i );
 
 			if ( ! light.shadowMap ) 
 			{
@@ -356,7 +353,7 @@ public final class ShadowmapPlugin extends Plugin
 		}
 	}
 
-	private void createVirtualLight( Light light, int cascade ) 
+	private DirectionalLight createVirtualLight( Light light, int cascade ) 
 	{
 		DirectionalLight virtualLight = new DirectionalLight();
 
