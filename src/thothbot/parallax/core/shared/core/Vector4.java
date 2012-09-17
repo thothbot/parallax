@@ -333,6 +333,11 @@ public class Vector4 extends Vector3 implements Vector
 	{
 		return dot(this);
 	}
+	
+	public double lengthManhattan() 
+	{
+		return Math.abs( getX() ) + Math.abs( getY() ) + Math.abs( getZ() ) + Math.abs( getW() );
+	}
 
 	/**
 	 * Normalizes this vector in place.
