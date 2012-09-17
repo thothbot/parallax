@@ -2531,7 +2531,7 @@ Log.error("?????????????");
 		}
 	}
 
-	private void setDepthTest( boolean depthTest ) 
+	public void setDepthTest( boolean depthTest ) 
 	{
 		if ( this.cache_oldDepthTest == null || this.cache_oldDepthTest != depthTest ) 
 		{
@@ -2544,7 +2544,7 @@ Log.error("?????????????");
 		}
 	}
 
-	private void setDepthWrite(boolean depthWrite ) 
+	public void setDepthWrite(boolean depthWrite ) 
 	{
 		if ( this.cache_oldDepthWrite == null || this.cache_oldDepthWrite != depthWrite ) 
 		{
