@@ -29,14 +29,14 @@ public class PointLight extends Light
 
 	private Vector3 position;
 	private double intensity;
-	private int distance;
+	private double distance;
 	
 	public PointLight(int hex) 
 	{
 		this(hex, 1, 0);
 	}
 	
-	public PointLight(int hex, double intensity, int distance ) 
+	public PointLight(int hex, double intensity, double distance ) 
 	{
 		super(hex);
 		this.intensity = intensity;
@@ -56,11 +56,11 @@ public class PointLight extends Light
 		this.intensity = intensity;
 	}
 
-	public void setDistance(int distance) {
+	public void setDistance(double distance) {
 		this.distance = distance;
 	}
 
-	public int getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 }

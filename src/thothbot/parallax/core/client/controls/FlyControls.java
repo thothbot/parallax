@@ -59,8 +59,8 @@ public final class FlyControls extends Controls implements
 		public boolean forward;
 		public boolean back;
 		public boolean pitchUp;
-		public int pitchDown;
-		public int yawLeft;
+		public double pitchDown;
+		public double yawLeft;
 		public boolean yawRight;
 		public boolean rollLeft;
 		public boolean rollRight;
@@ -74,8 +74,8 @@ public final class FlyControls extends Controls implements
 	private Vector3 moveVector;
 	private Vector3 rotationVector;
 	
-	private int viewHalfX;
-	private int viewHalfY;
+	private double viewHalfX;
+	private double viewHalfY;
 		
 	/**
 	 * @see Controls#Controls(Object3D, Widget).
@@ -87,8 +87,8 @@ public final class FlyControls extends Controls implements
 		if(getWidget().getClass() != RootPanel.class)
 			getWidget().getElement().setAttribute( "tabindex", "-1" );
 		
-		this.viewHalfX = widget.getOffsetWidth() / 2;
-		this.viewHalfY = widget.getOffsetHeight() / 2;
+		this.viewHalfX = widget.getOffsetWidth() / 2.0;
+		this.viewHalfY = widget.getOffsetHeight() / 2.0;
 
 		// disable default target object behavior
 
@@ -268,8 +268,8 @@ public final class FlyControls extends Controls implements
 	{
 		if ( !this.isDragToLook || this.mouseStatus > 0 ) 
 		{
-			this.moveState.yawLeft   = - ( ( event.getX() - getWidget().getAbsoluteLeft() ) - viewHalfX  ) / viewHalfX;
-			this.moveState.pitchDown =   ( ( event.getY() - getWidget().getAbsoluteTop() ) - viewHalfY ) / viewHalfY;
+			this.moveState.yawLeft   = - ( event.getX() - viewHalfX ) / viewHalfX;
+			this.moveState.pitchDown =   ( event.getY() - viewHalfY ) / viewHalfY;
 
 			this.updateRotationVector();
 		}

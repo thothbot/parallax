@@ -34,6 +34,7 @@ import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Vector2;
@@ -332,6 +333,5 @@ public final class LensFlarePlugin extends Plugin
 		gl.enable( GLenum.CULL_FACE.getValue() );
 		gl.enable( GLenum.DEPTH_TEST.getValue() );
 		gl.depthMask( true );
-
 	}
 }
