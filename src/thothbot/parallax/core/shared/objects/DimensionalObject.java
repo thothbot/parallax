@@ -84,7 +84,7 @@ public interface DimensionalObject
 	 */
 	public DimensionalObject getChildByName(String name, boolean recursive);
 	
-	public List<? extends DimensionalObject> getChildrenByClass(Class clazz, boolean recursive);
+	public List<? extends DimensionalObject> getChildrenByClass(Class<?> clazz, boolean recursive);
 
 	/**
 	 * Gets parent DimensionalObject in which this object is included.

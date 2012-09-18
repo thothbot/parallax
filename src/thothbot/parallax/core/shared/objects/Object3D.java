@@ -543,7 +543,7 @@ public class Object3D implements DimensionalObject
 	}
 
 	@Override
-	public List<? extends DimensionalObject> getChildrenByClass(Class clazz, boolean recursive)
+	public List<? extends DimensionalObject> getChildrenByClass(Class<?> clazz, boolean recursive)
 	{
 		List<DimensionalObject> retval = new ArrayList<DimensionalObject>();
 		

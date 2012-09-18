@@ -38,7 +38,7 @@ public class Ray
 
 	private double precision = 0.0001;
 	
-	// internal
+	// internals
 	private Vector3 originCopy;
 
 	private Vector3 localOriginCopy;
