@@ -2406,9 +2406,9 @@ Log.error("?????????????");
 
 				if ( this.isGammaInput ) 
 				{
-					pcolors.set(  poffset, color.getR() * color.getR() * intensity * intensity);
-					pcolors.set(  poffset + 1, color.getG() * color.getG() * intensity * intensity);
-					pcolors.set(  poffset + 2, color.getB() * color.getB() * intensity * intensity);
+					pcolors.set(  poffset, color.getR() * color.getR() * intensity * intensity );
+					pcolors.set(  poffset + 1, color.getG() * color.getG() * intensity * intensity );
+					pcolors.set(  poffset + 2, color.getB() * color.getB() * intensity * intensity );
 				} 
 				else 
 				{
@@ -2426,7 +2426,6 @@ Log.error("?????????????");
 				pdistances.set( plength, distance);
 
 				plength += 1;
-
 			} 
 			else if( light.getClass() == SpotLight.class ) 
 			{
