@@ -22,6 +22,8 @@
 
 package thothbot.parallax.core.shared.core;
 
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+
 /**
  * This class is realization of (X, Y, Z, W) vector. 
  * Where:
@@ -379,6 +381,160 @@ public class Vector4 extends Vector3 implements Vector
 		this.y += (v1.y - this.y) * alpha;
 		this.z += (v1.z - this.z) * alpha;
 		this.w += (v1.w - this.w) * alpha;
+	}
+	
+	/**
+	 * <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm">www.euclideanspace.com</a>
+	 * @param q is assumed to be normalized
+	 * @return
+	 */
+	public Vector4 setAxisAngleFromQuaternion( Quaternion q ) 
+	{
+		this.w = 2 * Math.acos( q.w );
+
+		double s = Math.sqrt( 1 - q.w * q.w );
+
+		if ( s < 0.0001 ) 
+		{
+			 this.x = 1;
+			 this.y = 0;
+			 this.z = 0;
+		} 
+		else
+		{
+			 this.x = q.x / s;
+			 this.y = q.y / s;
+			 this.z = q.z / s;
+		}
+
+		return this;
+	}
+
+	/**
+	 * <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm">www.euclideanspace.com</a>
+	 * @param m assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
+	 * @return
+	 */
+	public Vector4 setAxisAngleFromRotationMatrix( Matrix4 m ) 
+	{
+		// variables for result
+		double angle, x, y, z;
+		// margin to allow for rounding errors
+		double epsilon = 0.01;	
+		// margin to distinguish between 0 and 180 degrees
+		double epsilon2 = 0.1;		
+
+		Float32Array te = m.getArray();
+
+		double m11 = te.get(0), m12 = te.get(4), m13 = te.get(8);
+		double m21 = te.get(1), m22 = te.get(5), m23 = te.get(9);
+		double m31 = te.get(2), m32 = te.get(6), m33 = te.get(10);
+
+		if ( ( Math.abs( m12 - m21 ) < epsilon )
+		  && ( Math.abs( m13 - m31 ) < epsilon )
+		  && ( Math.abs( m23 - m32 ) < epsilon ) 
+		  ) {
+
+			// singularity found
+			// first check for identity matrix which must have +1 for all terms
+			// in leading diagonal and zero in other terms
+
+			if ( ( Math.abs( m12 + m21 ) < epsilon2 )
+			  && ( Math.abs( m13 + m31 ) < epsilon2 )
+			  && ( Math.abs( m23 + m32 ) < epsilon2 )
+			  && ( Math.abs( m11 + m22 + m33 - 3 ) < epsilon2 ) 
+			  ) {
+
+				// this singularity is identity matrix so angle = 0
+
+				this.set( 1, 0, 0, 0 );
+
+				return this; // zero angle, arbitrary axis
+
+			}
+
+			// otherwise this singularity is angle = 180
+
+			angle = Math.PI;
+
+			double xx = ( m11 + 1 ) / 2;
+			double yy = ( m22 + 1 ) / 2;
+			double zz = ( m33 + 1 ) / 2;
+			double xy = ( m12 + m21 ) / 4;
+			double xz = ( m13 + m31 ) / 4;
+			double yz = ( m23 + m32 ) / 4;
+
+			// m11 is the largest diagonal term
+			if ( ( xx > yy ) && ( xx > zz ) ) 
+			{ 
+				if ( xx < epsilon ) 
+				{
+					x = 0;
+					y = 0.707106781;
+					z = 0.707106781;
+				} 
+				else 
+				{
+					x = Math.sqrt( xx );
+					y = xy / x;
+					z = xz / x;
+				}
+			} 
+			// m22 is the largest diagonal term
+			else if ( yy > zz ) 
+			{ 
+				if ( yy < epsilon ) 
+				{
+					x = 0.707106781;
+					y = 0;
+					z = 0.707106781;
+				} 
+				else 
+				{
+					y = Math.sqrt( yy );
+					x = xy / y;
+					z = yz / y;
+				}
+			} 
+			// m33 is the largest diagonal term so base result on this
+			else 
+			{ 
+				if ( zz < epsilon ) 
+				{
+					x = 0.707106781;
+					y = 0.707106781;
+					z = 0;
+				} 
+				else 
+				{
+					z = Math.sqrt( zz );
+					x = xz / z;
+					y = yz / z;
+				}
+			}
+
+			this.set( x, y, z, angle );
+
+			return this; // return 180 deg rotation
+		}
+
+		// as we have reached here there are no singularities so we can handle normally
+
+		double s = Math.sqrt( ( m32 - m23 ) * ( m32 - m23 )
+						 + ( m13 - m31 ) * ( m13 - m31 )
+						 + ( m21 - m12 ) * ( m21 - m12 ) ); // used to normalize
+
+		if ( Math.abs( s ) < 0.001 ) s = 1; 
+
+		// prevent divide by zero, should not happen if matrix is orthogonal and should be
+		// caught by singularity test above, but I've left it in just in case
+
+		this.x = ( m32 - m23 ) / s;
+		this.y = ( m13 - m31 ) / s;
+		this.z = ( m21 - m12 ) / s;
+		this.w = Math.acos( ( m11 + m22 + m33 - 1 ) / 2 );
+
+		return this;
 	}
 	
 	@Override
