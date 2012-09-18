@@ -86,8 +86,16 @@ public class Postprocessing extends Plugin
 
 		this.copyPass = new ShaderPass( new ScreenShader() );
 
-		this.camera = new OrthographicCamera( -1, 1, 1, -1, 0, 1 );
-		this.quad = new Mesh( new PlaneGeometry( 2, 2 ), null );
+		Canvas3d canvas = renderer.getCanvas();
+		
+		this.camera = new OrthographicCamera( 
+				canvas.getWidth() / -2.0, canvas.getWidth() / 2.0, 
+				canvas.getHeight() / 2.0, canvas.getHeight() / -2.0, 
+				-10000, 10000
+		);
+		this.quad = new Mesh( new PlaneGeometry( 1, 1 ), null );
+		quad.getPosition().setZ(-100);
+		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
 		
 		getScene().add( quad );
 		getScene().add( camera );
