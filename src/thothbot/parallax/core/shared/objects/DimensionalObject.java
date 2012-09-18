@@ -203,6 +203,12 @@ public interface DimensionalObject
 	 * @param distance the moving distance
 	 */
 	public void translateZ(double distance);
+	
+	public Vector3 localToWorld( Vector3 vector );
+	
+	public Vector3 worldToLocal( Vector3 vector );
+
+	public List<DimensionalObject> getDescendants();
 
 	/**
 	 * Does update of the object's matrix

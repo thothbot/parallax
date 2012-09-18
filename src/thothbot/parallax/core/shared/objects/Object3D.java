@@ -44,6 +44,7 @@ import thothbot.parallax.core.shared.scenes.Scene;
  */
 public class Object3D implements DimensionalObject
 {
+	private static Matrix4 __m1 = new Matrix4();
 	private static int Object3DCount = 0;
 
 	protected int id = 0;
@@ -113,7 +114,7 @@ public class Object3D implements DimensionalObject
 	public Matrix3 _normalMatrix;
 	public Matrix4 _modelViewMatrix;
 	public int count;
-
+	
 	public Object3D() 
 	{
 		this.id = Object3D.Object3DCount++;
@@ -402,7 +403,19 @@ public class Object3D implements DimensionalObject
 		this.vector.set(0, 0, 1);
 		this.translate(distance, this.vector);
 	}
-	
+
+	@Override
+	public Vector3 localToWorld( Vector3 vector ) 
+	{
+		return this.matrixWorld.multiplyVector3( vector );
+	}
+
+	@Override
+	public Vector3 worldToLocal( Vector3 vector ) 
+	{
+		return Object3D.__m1.getInverse( this.matrixWorld ).multiplyVector3( vector );
+	}
+
 	@Override
 	public void lookAt(Vector3 vector)
 	{
@@ -463,23 +476,70 @@ public class Object3D implements DimensionalObject
 	}
 	
 	@Override
+	public List<DimensionalObject> getDescendants() 
+	{
+		List<DimensionalObject> retval = new ArrayList<DimensionalObject>();
+		retval.addAll(getChildren());
+
+		for ( int i = 0, l = this.children.size(); i < l; i ++ ) 
+		{
+			retval.addAll(this.children.get( i ).getDescendants());
+		}
+
+		return retval;
+	}
+	
+	@Override
 	public void updateMatrix()
 	{
-		getMatrix().setPosition(this.position);
 
-		if (isUseQuaternion())
-			getMatrix().setRotationFromQuaternion(getQuaternion());
-		else
-			getMatrix().setRotationFromEuler(getRotation());
+		this.matrix.setPosition( this.position );
 
-		if ( getScale().getX() != 1 || getScale().getY() != 1 || getScale().getZ() != 1) 
+		if ( this.useQuaternion == false )  
 		{
+			this.matrix.setRotationFromEuler( this.rotation, this.eulerOrder );
+		}
+		else
+		{
+			this.matrix.setRotationFromQuaternion( this.quaternion );
+		}
 
-			getMatrix().scale(this.scale);
-			this.boundRadiusScale = Math.max(getScale().getX(), Math.max( getScale().getY(), getScale().getZ()));
+		if ( this.scale.getX() != 1 || this.scale.getY() != 1 || this.scale.getZ() != 1 ) 
+		{
+			this.matrix.scale( this.scale );
+			this.boundRadiusScale = Math.max( this.scale.getX(), Math.max( this.scale.getY(), this.scale.getZ() ) );
 		}
 
 		this.matrixWorldNeedsUpdate = true;
+	}
+	
+	public void updateMatrixWorld(boolean force)
+	{
+		if ( this.matrixAutoUpdate ) 
+			this.updateMatrix();
+
+		if ( this.matrixWorldNeedsUpdate || force ) 
+		{
+			if ( this.parent == null ) 
+			{
+				this.matrixWorld.copy( this.matrix );
+			} 
+			else 
+			{
+				this.matrixWorld.multiply( this.parent.getMatrixWorld(), this.matrix );
+			}
+
+			this.matrixWorldNeedsUpdate = false;
+
+			force = true;
+		}
+
+		// update children
+
+		for ( int i = 0, l = this.children.size(); i < l; i ++ ) 
+		{
+			this.children.get( i ).updateMatrixWorld( force );
+		}
 	}
 
 	@Override
@@ -541,33 +601,5 @@ public class Object3D implements DimensionalObject
 		this.rotation.setEulerFromRotationMatrix( mat, this.eulerOrder );
 
 		this.position.getPositionFromMatrix(this.matrix);
-	}
-
-	public void updateMatrixWorld(boolean force)
-	{
-		if (this.matrixAutoUpdate)
-			this.updateMatrix();
-
-		// update matrixWorld
-		if (this.matrixWorldNeedsUpdate || force) 
-		{
-			
-			if (this.parent != null)
-			{
-				this.matrixWorld.multiply(this.parent.getMatrixWorld(), this.matrix);
-			}
-			else
-			{
-				this.matrixWorld.copy(this.matrix);
-			}
-
-			this.matrixWorldNeedsUpdate = false;
-
-			force = true;
-		}
-
-		// update children
-		for (int i = 0, l = this.children.size(); i < l; i++)
-			this.children.get(i).updateMatrixWorld(force);
 	}
 }
