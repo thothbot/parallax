@@ -143,67 +143,55 @@ public class Ray
 
 		return ( u >= 0 ) && ( v >= 0 ) && ( u + v < 1 );
 	}
-	var intersectObject = function ( object, ray, intersects ) {
+	
+	public void intersectObject( DimensionalObject object, Ray ray, List<Ray.Intersect> intersects ) 
+	{
+		Matrix4 objMatrix = object.getMatrixWorld();
+		
+		if ( object instanceof Particle ) 
+		{
+			double distance = distanceFromIntersection( ray.origin, ray.direction, objMatrix.getPosition() );
 
-		var distance,intersect;
-
-		if ( object instanceof THREE.Particle ) {
-
-			distance = distanceFromIntersection( ray.origin, ray.direction, object.matrixWorld.getPosition() );
-
-			if ( distance > object.scale.x ) {
-
-				return intersects;
-
+			if ( distance > object.getScale().getX() ) 
+			{
+				return;
 			}
 
-			intersect = {
-
-				distance: distance,
-				point: object.position,
-				face: null,
-				object: object
-
-			};
-
-			intersects.push( intersect );
-
-		} else if ( object instanceof THREE.Mesh ) {
-
+			Ray.Intersect intersect = new Ray.Intersect();
+			intersect.distance = distance;
+			intersect.point = object.getPosition();
+			intersect.object = object;
+			
+			intersects.add( intersect );
+		} 
+		else if ( object instanceof Mesh ) 
+		{
 			// Checking boundingSphere
 
-			var scaledRadius = object.geometry.boundingSphere.radius * object.matrixWorld.getMaxScaleOnAxis();
+			double scaledRadius = ((Mesh) object).getGeometry().getBoundingSphere().radius * object.getMatrixWorld().getMaxScaleOnAxis();
 
 			// Checking distance to ray
 
-			distance = distanceFromIntersection( ray.origin, ray.direction, object.matrixWorld.getPosition() );
+			double distance = distanceFromIntersection( ray.origin, ray.direction, object.getMatrixWorld().getPosition() );
 
-			if ( distance > scaledRadius) {
-
-				return intersects;
-
+			if ( distance > scaledRadius) 
+			{
+				return;
 			}
 
 			// Checking faces
 
-			var f, fl, face, dot, scalar,
-			geometry = object.geometry,
-			vertices = geometry.vertices,
-			objMatrix, geometryMaterials,
-			isFaceMaterial, material, side, point;
+			Geometry geometry = ((Mesh) object).getGeometry();
+			List<Vector3> vertices = geometry.getVertices();
 
-			geometryMaterials = object.geometry.materials;
-			isFaceMaterial = object.material instanceof THREE.MeshFaceMaterial;
-			side = object.material.side;
-
-			var a, b, c, d;
-			var precision = ray.precision;
-
-			object.matrixRotationWorld.extractRotation( object.matrixWorld );
+			List<Material> geometryMaterials = geometry.getMaterials();
+			boolean isFaceMaterial = ((Mesh) object).getMaterial() instanceof MeshFaceMaterial;
+			Material.SIDE side = ((Mesh) object).getMaterial().getSides();
+			
+			object.getMatrixRotationWorld().extractRotation( objMatrix );
 
 			originCopy.copy( ray.origin );
 
-			objMatrix = object.matrixWorld;
 			inverseMatrix.getInverse( objMatrix );
 
 			localOriginCopy.copy( originCopy );
@@ -212,86 +200,79 @@ public class Ray
 			localDirectionCopy.copy( ray.direction );
 			inverseMatrix.rotateAxis( localDirectionCopy ).normalize();
 
-			for ( f = 0, fl = geometry.faces.length; f < fl; f ++ ) {
+			for ( int f = 0, fl = geometry.getFaces().size(); f < fl; f ++ ) 
+			{
+				Face3 face = geometry.getFaces().get( f );
 
-				face = geometry.faces[ f ];
+				Material material = ( isFaceMaterial == true ) ? geometryMaterials.get( face.getMaterialIndex() ) : ((Mesh) object).getMaterial();
 
-				material = isFaceMaterial === true ? geometryMaterials[ face.materialIndex ] : object.material;
-				if ( material === undefined ) continue;
-				side = material.side;
+				if ( material == null ) 
+					continue;
+				side = material.getSides();
 
-				vector.sub( face.centroid, localOriginCopy );
+				vector.sub( face.getCentroid(), localOriginCopy );
 				normal = face.normal;
-				dot = localDirectionCopy.dot( normal );
+				double dot = localDirectionCopy.dot( normal );
 
 				// bail if ray and plane are parallel
 
-				if ( Math.abs( dot ) < precision ) continue;
+				if ( Math.abs( dot ) < precision ) 
+					continue;
 
 				// calc distance to plane
 
-				scalar = normal.dot( vector ) / dot;
+				double scalar = normal.dot( vector ) / dot;
 
 				// if negative distance, then plane is behind ray
 
 				if ( scalar < 0 ) continue;
 
-				if ( side === THREE.DoubleSide || ( side === THREE.FrontSide ? dot < 0 : dot > 0 ) ) {
+				if ( side == Material.SIDE.DOUBLE || (side == Material.SIDE.FRONT ? dot < 0 : dot > 0 ) ) 
+				{
+					intersectPoint.add( localOriginCopy, localDirectionCopy.multiply( scalar ) );
 
-					intersectPoint.add( localOriginCopy, localDirectionCopy.multiplyScalar( scalar ) );
-
-					if ( face instanceof THREE.Face3 ) {
-
-						a = vertices[ face.a ];
-						b = vertices[ face.b ];
-						c = vertices[ face.c ];
-
-						if ( pointInFace3( intersectPoint, a, b, c ) ) {
-
-							point = object.matrixWorld.multiplyVector3( intersectPoint.clone() );
+					Vector3 a = vertices.get( face.getA() );
+					Vector3 b = vertices.get( face.getB() );
+					Vector3 c = vertices.get( face.getC() );
+					
+					if ( face.getClass() == Face3.class ) 
+					{
+						if ( pointInFace3( intersectPoint, a, b, c ) ) 
+						{
+							Vector3 point = objMatrix.multiplyVector3( intersectPoint.clone() );
 							distance = originCopy.distanceTo( point );
 
 							if ( distance < ray.near || distance > ray.far ) continue;
+							
+							Ray.Intersect intersect = new Ray.Intersect();
+							intersect.distance = distance;
+							intersect.point = point;
+							intersect.face = face;
+							intersect.faceIndex = f;
+							intersect.object = object;
 
-							intersect = {
-
-								distance: distance,
-								point: point,
-								face: face,
-								faceIndex: f,
-								object: object
-
-							};
-
-							intersects.push( intersect );
-
+							intersects.add( intersect );
 						}
+					} 
+					else if ( face.getClass() == Face4.class ) 
+					{
+						Vector3 d = vertices.get(((Face4)face).getD() );
 
-					} else if ( face instanceof THREE.Face4 ) {
-
-						a = vertices[ face.a ];
-						b = vertices[ face.b ];
-						c = vertices[ face.c ];
-						d = vertices[ face.d ];
-
-						if ( pointInFace3( intersectPoint, a, b, d ) || pointInFace3( intersectPoint, b, c, d ) ) {
-
-							point = object.matrixWorld.multiplyVector3( intersectPoint.clone() );
+						if ( pointInFace3( intersectPoint, a, b, d ) || pointInFace3( intersectPoint, b, c, d ) ) 
+						{
+							Vector3 point = objMatrix.multiplyVector3( intersectPoint.clone() );
 							distance = originCopy.distanceTo( point );
 
 							if ( distance < ray.near || distance > ray.far ) continue;
+							
+							Ray.Intersect intersect = new Ray.Intersect();
+							intersect.distance = distance;
+							intersect.point = point;
+							intersect.face = face;
+							intersect.faceIndex = f;
+							intersect.object = object;
 
-							intersect = {
-
-								distance: distance,
-								point: point,
-								face: face,
-								faceIndex: f,
-								object: object
-
-							};
-
-							intersects.push( intersect );
+							intersects.add( intersect );
 						}
 					}
 				}
@@ -301,14 +282,19 @@ public class Ray
 
 	public void intersectDescendants( DimensionalObject object, Ray ray, List<Ray.Intersect> intersects ) 
 	{
-		var descendants = object.getDescendants();
+		List<DimensionalObject> descendants = object.getDescendants();
 
-		for ( int i = 0, l = descendants.length; i < l; i ++ ) 
+		for ( int i = 0, l = descendants.size(); i < l; i ++ ) 
 		{
-			intersectObject( descendants[ i ], ray, intersects );
+			intersectObject( descendants.get( i ), ray, intersects );
 		}
 	}
 
+	public List<Ray.Intersect> intersectObject( DimensionalObject object ) 
+	{
+		return intersectObject(object, false);
+	}
+	
 	public List<Ray.Intersect> intersectObject( DimensionalObject object, boolean recursive ) 
 	{
 
@@ -324,6 +310,11 @@ public class Ray
 		Collections.sort( intersects );
 
 		return intersects;
+	}
+
+	public List<Ray.Intersect> intersectObjects(List<? extends DimensionalObject> objects)
+	{
+		return intersectObjects(objects, false);
 	}
 
 	public List<Ray.Intersect> intersectObjects(List<? extends DimensionalObject> objects, boolean recursive) 
