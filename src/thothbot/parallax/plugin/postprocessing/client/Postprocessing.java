@@ -114,6 +114,14 @@ public class Postprocessing extends Plugin
 		return Plugin.TYPE.POST_RENDER;
 	}
 	
+	public RenderTargetTexture getRenderTarget1() {
+		return renderTarget1;
+	}
+
+	public RenderTargetTexture getRenderTarget2() {
+		return renderTarget2;
+	}
+	
 	public OrthographicCamera getCamera() {
 		return this.camera;
 	}
