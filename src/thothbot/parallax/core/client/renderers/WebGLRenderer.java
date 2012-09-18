@@ -63,6 +63,7 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
+import thothbot.parallax.core.shared.lights.HemisphereLight;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.lights.PointLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
@@ -1842,6 +1843,7 @@ public class WebGLRenderer
 		parameters.maxDirLights   = maxLightCount.get("directional");
 		parameters.maxPointLights = maxLightCount.get("point");
 		parameters.maxSpotLights  = maxLightCount.get("spot");
+		parameters.maxHemiLights  = maxLightCount.get("hemi");
 		
 		parameters.maxShadows = maxShadows;
 		
@@ -2085,6 +2087,10 @@ public class WebGLRenderer
 		uniforms.get("spotLightDirection").setValue( lights.spot.directions );
 		uniforms.get("spotLightAngle").setValue( lights.spot.angles );
 		uniforms.get("spotLightExponent").setValue( lights.spot.exponents );
+		
+		uniforms.get("hemisphereLightSkyColor").setValue( lights.hemi.skyColors );
+		uniforms.get("hemisphereLightGroundColor").setValue( lights.hemi.groundColors );
+		uniforms.get("hemisphereLightPosition.").setValue( lights.hemi.positions );
 	}
 
 	private void refreshUniformsShadow ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
@@ -2314,27 +2320,34 @@ Log.error("?????????????");
 
 		WebGLRenderLights zlights = this.cache_lights; 
 
-		Float32Array dcolors     = zlights.directional.colors;
-		Float32Array dpositions  = zlights.directional.positions;
+		Float32Array dirColors     = zlights.directional.colors;
+		Float32Array dirPositions  = zlights.directional.positions;
 
-		Float32Array pcolors     = zlights.point.colors;
-		Float32Array ppositions  = zlights.point.positions;
-		Float32Array pdistances  = zlights.point.distances;
+		Float32Array pointColors     = zlights.point.colors;
+		Float32Array pointPositions  = zlights.point.positions;
+		Float32Array pointDistances  = zlights.point.distances;
 
-		Float32Array scolors     = zlights.spot.colors;
-		Float32Array spositions  = zlights.spot.positions;
-		Float32Array sdistances  = zlights.spot.distances;
-		Float32Array sdirections = zlights.spot.directions;
-		Float32Array sangles     = zlights.spot.angles;
-		Float32Array sexponents  = zlights.spot.exponents;
+		Float32Array spotColors     = zlights.spot.colors;
+		Float32Array spotPositions  = zlights.spot.positions;
+		Float32Array spotDistances  = zlights.spot.distances;
+		Float32Array spotDirections = zlights.spot.directions;
+		Float32Array spotAngles     = zlights.spot.angles;
+		Float32Array spotExponents  = zlights.spot.exponents;
+		
+		Float32Array hemiSkyColors    = zlights.hemi.skyColors;
+		Float32Array hemiGroundColors = zlights.hemi.groundColors;
+		Float32Array hemiPositions    = zlights.hemi.positions;
 
-		int dlength = 0;
-		int plength = 0;
-		int slength = 0;
+		int dirLength = 0;
+		int pointLength = 0;
+		int spotLength = 0;
+		int hemiLength = 0;
 
-		int doffset = 0;
-		int poffset = 0;
-		int soffset = 0;
+		int dirOffset = 0;
+		int pointOffset = 0;
+		int spotOffset = 0;
+		int hemiOffset = 0;
+		
 		double r = 0, g = 0, b = 0;
 
 		for ( int l = 0, ll = lights.size(); l < ll; l ++ ) 
@@ -2368,30 +2381,26 @@ Log.error("?????????????");
 				DirectionalLight directionalLight = (DirectionalLight) light;
 				double intensity = directionalLight.getIntensity();
 
-				doffset = dlength * 3;
+				dirOffset = dirLength * 3;
 
 				if ( this.isGammaInput ) 
 				{
-					dcolors.set( doffset, color.getR() * color.getR() * intensity * intensity);
-					dcolors.set( doffset + 1, color.getG() * color.getG() * intensity * intensity);
-					dcolors.set( doffset + 2, color.getB() * color.getB() * intensity * intensity);
+					setColorGamma( dirColors, dirOffset, color, intensity * intensity );
 				} 
 				else 
 				{
-					dcolors.set( doffset, color.getR() * intensity);
-					dcolors.set( doffset + 1, color.getG() * intensity);
-					dcolors.set( doffset + 2, color.getB() * intensity);
+					setColorLinear( dirColors, dirOffset, color, intensity );
 				}
 
 				this.cache_direction.copy( directionalLight.getMatrixWorld().getPosition() );
 				this.cache_direction.sub( directionalLight.getTarget().getMatrixWorld().getPosition() );
 				this.cache_direction.normalize();
 
-				dpositions.set( doffset, this.cache_direction.getX());
-				dpositions.set( doffset + 1, this.cache_direction.getY());
-				dpositions.set( doffset + 2, this.cache_direction.getZ());
+				dirPositions.set( dirOffset, this.cache_direction.getX());
+				dirPositions.set( dirOffset + 1, this.cache_direction.getY());
+				dirPositions.set( dirOffset + 2, this.cache_direction.getZ());
 
-				dlength += 1;
+				dirLength += 1;
 
 			} 
 			else if( light.getClass() == PointLight.class ) 
@@ -2400,30 +2409,26 @@ Log.error("?????????????");
 				PointLight pointLight = (PointLight) light;
 				double intensity = pointLight.getIntensity();
 				double distance = pointLight.getDistance();
-				poffset = plength * 3;
+				pointOffset = pointLength * 3;
 
 				if ( this.isGammaInput ) 
 				{
-					pcolors.set(  poffset, color.getR() * color.getR() * intensity * intensity );
-					pcolors.set(  poffset + 1, color.getG() * color.getG() * intensity * intensity );
-					pcolors.set(  poffset + 2, color.getB() * color.getB() * intensity * intensity );
+					setColorGamma( pointColors, pointOffset, color, intensity * intensity );
 				} 
 				else 
 				{
-					pcolors.set(  poffset, color.getR() * intensity);
-					pcolors.set(  poffset + 1, color.getG() * intensity);
-					pcolors.set(  poffset + 2, color.getB() * intensity);
+					setColorLinear( pointColors, pointOffset, color, intensity );
 				}
 
 				Vector3 position = pointLight.getMatrixWorld().getPosition();
 
-				ppositions.set(  poffset, position.getX());
-				ppositions.set(  poffset + 1, position.getY());
-				ppositions.set(  poffset + 2, position.getZ());
+				pointPositions.set(  pointOffset, position.getX());
+				pointPositions.set(  pointOffset + 1, position.getY());
+				pointPositions.set(  pointOffset + 2, position.getZ());
 
-				pdistances.set( plength, distance);
+				pointPositions.set(pointLength, distance);
 
-				plength += 1;
+				pointLength += 1;
 			} 
 			else if( light.getClass() == SpotLight.class ) 
 			{
@@ -2431,57 +2436,100 @@ Log.error("?????????????");
 				double intensity = spotLight.getIntensity();
 				double distance = spotLight.distance;
 
-				soffset = slength * 3;
+				spotOffset = spotLength * 3;
 
 				if ( this.isGammaInput ) 
 				{
-					scolors.set(soffset, color.getR() * color.getR() * intensity * intensity);
-					scolors.set(soffset + 1, color.getG() * color.getG() * intensity * intensity);
-					scolors.set(soffset + 2, color.getB() * color.getB() * intensity * intensity);
+					setColorGamma( spotColors, spotOffset, color, intensity * intensity );
 				} 
 				else 
 				{
-					scolors.set(soffset, color.getR() * intensity);
-					scolors.set(soffset + 1, color.getG() * intensity);
-					scolors.set(soffset + 2, color.getB() * intensity);
+					setColorLinear( spotColors, spotOffset, color, intensity );
 				}
 
 				Vector3 position = spotLight.getMatrixWorld().getPosition();
 
-				spositions.set(soffset, position.getX());
-				spositions.set(soffset + 1, position.getY());
-				spositions.set(soffset + 2, position.getZ());
+				spotPositions.set(spotOffset, position.getX());
+				spotPositions.set(spotOffset + 1, position.getY());
+				spotPositions.set(spotOffset + 2, position.getZ());
 
-				sdistances.set(slength, distance);
+				spotDistances.set(spotLength, distance);
 
 				this.cache_direction.copy( position );
 				this.cache_direction.sub( spotLight.getTarget().getMatrixWorld().getPosition() );
 				this.cache_direction.normalize();
 
-				sdirections.set(soffset, this.cache_direction.getX());
-				sdirections.set(soffset + 1, this.cache_direction.getY());
-				sdirections.set(soffset + 2, this.cache_direction.getZ());
+				spotDirections.set(spotOffset, this.cache_direction.getX());
+				spotDirections.set(spotOffset + 1, this.cache_direction.getY());
+				spotDirections.set(spotOffset + 2, this.cache_direction.getZ());
 
-				sangles.set(slength, Math.cos( spotLight.getAngle() ));
-				sexponents.set( slength, spotLight.exponent);
+				spotAngles.set(spotLength, Math.cos( spotLight.getAngle() ));
+				spotExponents.set( spotLength, spotLight.exponent);
 
-				slength += 1;
+				spotLength += 1;
+			} 
+			else if ( light instanceof HemisphereLight ) 
+			{
+				HemisphereLight hemiLight = (HemisphereLight) light;
+				Color skyColor = hemiLight.getColor();
+				Color groundColor = hemiLight.getGroundColor();
+				double intensity = hemiLight.getIntensity();
+
+				hemiOffset = hemiLength * 3;
+
+				if (  this.isGammaInput ) 
+				{
+					double intensitySq = intensity * intensity;
+
+					setColorGamma( hemiSkyColors, hemiOffset, skyColor, intensitySq );
+					setColorGamma( hemiGroundColors, hemiOffset, groundColor, intensitySq );
+				} 
+				else 
+				{
+					setColorLinear( hemiSkyColors, hemiOffset, skyColor, intensity );
+					setColorLinear( hemiGroundColors, hemiOffset, groundColor, intensity );
+				}
+
+				Vector3 position = hemiLight.getMatrixWorld().getPosition();
+
+				hemiPositions.set( hemiOffset, position.getX());
+				hemiPositions.set( hemiOffset + 1, position.getY());
+				hemiPositions.set( hemiOffset + 2, position.getZ());
+
+				hemiLength += 1;
 			}
 		}
 
 		// null eventual remains from removed lights
 		// (this is to avoid if in shader)
-		for ( int l = dlength * 3, ll = dcolors.getLength(); l < ll; l ++ ) dcolors.set( l, 0.0 );
-		for ( int l = plength * 3, ll = pcolors.getLength(); l < ll; l ++ ) pcolors.set( l, 0.0 );
-		for ( int l = slength * 3, ll = scolors.getLength(); l < ll; l ++ ) scolors.set( l, 0.0 );
+		for ( int l = dirLength * 3, ll = dirColors.getLength(); l < ll; l ++ ) dirColors.set( l, 0.0 );
+		for ( int l = pointLength * 3, ll = pointColors.getLength(); l < ll; l ++ ) pointColors.set( l, 0.0 );
+		for ( int l = spotLength * 3, ll = spotColors.getLength(); l < ll; l ++ ) spotColors.set( l, 0.0 );
+		for ( int l = hemiLength * 3, ll = hemiSkyColors.getLength(); l < ll; l ++ ) hemiSkyColors.set( l, 0.0 );
+		for ( int l = hemiLength * 3, ll = hemiGroundColors.getLength(); l < ll; l ++ ) hemiGroundColors.set( l, 0.0 );
 
-		zlights.directional.length = dlength;
-		zlights.point.length = plength;
-		zlights.spot.length = slength;
+		zlights.directional.length = dirLength;
+		zlights.point.length = pointLength;
+		zlights.spot.length = spotLength;
+		zlights.hemi.length = hemiLength;
 
 		zlights.ambient.set( 0, r );
 		zlights.ambient.set( 1, g );
 		zlights.ambient.set( 2, b );
+	}
+	
+	private void setColorGamma( Float32Array array, int offset, Color color, double intensitySq ) 
+	{
+		array.set( offset, color.getR() * color.getR() * intensitySq);
+		array.set( offset + 1, color.getG() * color.getG() * intensitySq);
+		array.set( offset + 2, color.getB() * color.getB() * intensitySq);
+	}
+
+	private void  setColorLinear( Float32Array array, int offset, Color color, double intensity ) 
+	{
+		array.set( offset, color.getR() * intensity);
+		array.set( offset + 1, color.getG() * intensity);
+		array.set( offset + 2, color.getB() * intensity);
 	}
 
 	// GL state setting
@@ -2873,13 +2921,9 @@ Log.error("?????????????");
 
 	private Map<String, Integer> allocateLights ( List<Light> lights ) 
 	{
-		int dirLights = 0;
-		int pointLights = 0;
-		int spotLights = 0;
+		int dirLights = 0, pointLights = 0, spotLights = 0, hemiLights = 0;
 		
-		int maxDirLights;
-		int maxPointLights;
-		int maxSpotLights;
+		int maxDirLights = 0, maxPointLights = 0, maxSpotLights = 0, maxHemiLights = 0;
 		
 		for(Light light: lights) 
 		{
@@ -2888,20 +2932,23 @@ Log.error("?????????????");
 			if ( light instanceof DirectionalLight ) dirLights ++;
 			if ( light instanceof PointLight ) pointLights ++;
 			if ( light instanceof SpotLight ) spotLights ++;
+			if ( light instanceof HemisphereLight ) hemiLights ++;
 		}
 
-		if ( ( pointLights + spotLights + dirLights ) <= this.maxLights ) 
+		if ( ( pointLights + spotLights + dirLights + hemiLights ) <= this.maxLights ) 
 		{
 			maxDirLights = dirLights;
 			maxPointLights = pointLights;
 			maxSpotLights = spotLights;
-
+			maxHemiLights = hemiLights;
 		} 
 		else 
 		{
 			maxDirLights = (int) Math.ceil( this.maxLights * dirLights / ( pointLights + dirLights ) );
 			maxPointLights = this.maxLights - maxDirLights;
-			maxSpotLights = maxPointLights; // this is not really correct
+			
+			maxSpotLights = maxPointLights;
+			maxHemiLights = maxDirLights;
 		}
 
 		Map<String, Integer> retval = GWT.isScript() ? 
@@ -2909,6 +2956,7 @@ Log.error("?????????????");
 		retval.put("directional", maxDirLights);
 		retval.put("point", maxPointLights);
 		retval.put("spot", maxSpotLights);
+		retval.put("hemi", maxHemiLights);
 
 		return retval;
 	}

@@ -35,6 +35,7 @@ public class WebGLRenderLights
 	public WebGLRenderLightsDirectional directional;
 	public WebGLRenderLightsPoint point;
 	public WebGLRenderLightsSpot spot;
+	public WebGLRenderLightsHemi hemi;
 	
 	public WebGLRenderLights() 
 	{
@@ -45,6 +46,7 @@ public class WebGLRenderLights
 		this.directional = new WebGLRenderLightsDirectional();
 		this.point       = new WebGLRenderLightsPoint();
 		this.spot        = new WebGLRenderLightsSpot();
+		this.hemi        = new WebGLRenderLightsHemi();
 	}
 	
 	public class WebGLRenderLightsSpot extends WebGLRenderLightsPoint 
@@ -82,6 +84,21 @@ public class WebGLRenderLights
 		public WebGLRenderLightsDirectional() 
 		{
 			this.colors    = (Float32Array) Float32Array.createArray();
+			this.positions = (Float32Array) Float32Array.createArray();
+		}
+	}
+	
+	public class WebGLRenderLightsHemi 
+	{
+		public int length = 0;
+		public Float32Array skyColors;
+		public Float32Array groundColors;
+		public Float32Array positions;
+		
+		public WebGLRenderLightsHemi() 
+		{
+			this.skyColors    = (Float32Array) Float32Array.createArray();
+			this.groundColors = (Float32Array) Float32Array.createArray();
 			this.positions = (Float32Array) Float32Array.createArray();
 		}
 	}

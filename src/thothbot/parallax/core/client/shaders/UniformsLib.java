@@ -107,6 +107,10 @@ public class UniformsLib
 		retval.put("spotLightDistance",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		retval.put("spotLightAngle",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		retval.put("spotLightExponent",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+		
+		retval.put("hemisphereLightPosition",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		retval.put("hemisphereLightSkyColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		retval.put("hemisphereLightGroundColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 
 		return retval;
 	}

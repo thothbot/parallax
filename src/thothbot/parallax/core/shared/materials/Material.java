@@ -96,6 +96,7 @@ public abstract class Material
 		MAX_DIR_LIGHTS, // param
 		MAX_POINT_LIGHTS, // param
 		MAX_SPOT_LIGHTS, // param
+		MAX_HEMI_LIGHTS, // param
 		MAX_SHADOWS, // param
 		MAX_BONES, // param
 
@@ -408,6 +409,7 @@ public abstract class Material
 		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
 		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
 		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
+		options.add(SHADER_DEFINE.MAX_HEMI_LIGHTS.getValue(parameters.maxHemiLights));
 
 		options.add(SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
 
@@ -489,6 +491,7 @@ public abstract class Material
 		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
 		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
 		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
+		options.add(SHADER_DEFINE.MAX_HEMI_LIGHTS.getValue(parameters.maxHemiLights));
 
 		options.add(SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
 

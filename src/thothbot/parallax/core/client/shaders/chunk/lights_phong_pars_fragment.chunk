@@ -7,6 +7,14 @@ uniform vec3 ambientLightColor;
 
 #endif
 
+#if MAX_HEMI_LIGHTS > 0
+
+	uniform vec3 hemisphereLightSkyColor[ MAX_HEMI_LIGHTS ];
+	uniform vec3 hemisphereLightGroundColor[ MAX_HEMI_LIGHTS ];
+	uniform vec3 hemisphereLightPosition[ MAX_HEMI_LIGHTS ];
+
+#endif
+
 #if MAX_POINT_LIGHTS > 0
 
 	uniform vec3 pointLightColor[ MAX_POINT_LIGHTS ];

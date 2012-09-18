@@ -28,6 +28,7 @@ public class ProgramParameters
 	public int maxDirLights;
 	public int maxPointLights;
 	public int maxSpotLights;
+	public int maxHemiLights;
 	
 	public int maxShadows;
 	public int maxBones;
@@ -68,7 +69,7 @@ public class ProgramParameters
 	{
 		String retval = "";
 		retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading + "-1-"
-				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + "-2-"
+				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + ", " + maxHemiLights + "-2-"
 				+ maxShadows + ", " + maxBones + ", " + boneTextureWidth + ", " + boneTextureHeight + ", " + useVertexTexture + "-2-"
 				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + specularMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
 				+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + "-5-"
