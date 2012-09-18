@@ -121,7 +121,7 @@ public final class NormalMapShader extends Shader
 		
 		List<String> main = Arrays.asList(
 			ChunksFragmentShader.SHADOWMAP,
-			ChunksFragmentShader.LENEAR_TO_GAMMA,
+			ChunksFragmentShader.LINEAR_TO_GAMMA,
 			ChunksFragmentShader.FOG
 		);
 		

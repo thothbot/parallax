@@ -47,7 +47,7 @@ public class ChunksFragmentShader
 	public static String LIGHTS_PONG_PARS = Chunks.INSTANCE.getLightsPhongParsFragment().getText();
 	public static String LIGHTS_PONG = Chunks.INSTANCE.getLightsPhongFragment().getText();
 	
-	public static String LENEAR_TO_GAMMA = Chunks.INSTANCE.getLinearToGammaFragment().getText();
+	public static String LINEAR_TO_GAMMA = Chunks.INSTANCE.getLinearToGammaFragment().getText();
 	
 	public static String MAP_PARS = Chunks.INSTANCE.getMapParsFragment().getText();
 	public static String MAP = Chunks.INSTANCE.getMapFragment().getText();

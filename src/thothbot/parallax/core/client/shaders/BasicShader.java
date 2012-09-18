@@ -112,7 +112,7 @@ public final class BasicShader extends Shader
 			ChunksFragmentShader.COLOR,
 			ChunksFragmentShader.ENVMAP,
 			ChunksFragmentShader.SHADOWMAP,
-			ChunksFragmentShader.LENEAR_TO_GAMMA,
+			ChunksFragmentShader.LINEAR_TO_GAMMA,
 			ChunksFragmentShader.FOG
 		);
 		
