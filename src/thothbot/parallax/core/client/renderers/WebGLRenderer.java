@@ -709,17 +709,17 @@ public class WebGLRenderer
 		object._modelViewMatrixArray = null;
 		object._modelMatrixArray = null;
 
-		if ( object.getClass() == Mesh.class )
+		if ( object instanceof Mesh )
 			for ( GeometryGroup g : object.getGeometry().getGeometryGroups().values() )
 				deleteMeshBuffers( g );
 					
-		else if ( object.getClass() == Ribbon.class )
+		else if ( object instanceof Ribbon )
 			deleteRibbonBuffers( object.getGeometry() );
 
-		else if ( object.getClass() == Line.class )
+		else if ( object instanceof Line )
 			deleteLineBuffers( object.getGeometry() );
 
-		else if ( object.getClass() == ParticleSystem.class )
+		else if ( object instanceof ParticleSystem )
 			deleteParticleBuffers( object.getGeometry() );
 	}
 
@@ -1081,7 +1081,6 @@ public class WebGLRenderer
 		for(WebGLObject webglObject: renderListI)
 		{
 			GeometryObject object = webglObject.object;
-
 			if ( object.isVisible() ) 
 			{
 				Log.debug("render(): set matrices for immediate objects");
@@ -1724,7 +1723,6 @@ public class WebGLRenderer
 	private void addObject ( Object3D object, Scene scene )
 	{
 		Log.debug("addObject() object=" + object.getClass().getName());
-
 		if ( object instanceof GeometryObject && ! object.isWebglInit ) 
 		{
 			object.isWebglInit = true;
@@ -1761,9 +1759,9 @@ public class WebGLRenderer
 				//			}
 
 			} 
-			else if ( object.getClass() == Ribbon.class ||
-					object.getClass() == Line.class ||
-					object.getClass() == ParticleSystem.class 
+			else if ( object instanceof Ribbon ||
+					object instanceof Line ||
+					object instanceof ParticleSystem 
 			) {
 
 				Geometry geometry = ((GeometryObject)object).getGeometry();
