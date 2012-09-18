@@ -2090,7 +2090,7 @@ public class WebGLRenderer
 		
 		uniforms.get("hemisphereLightSkyColor").setValue( lights.hemi.skyColors );
 		uniforms.get("hemisphereLightGroundColor").setValue( lights.hemi.groundColors );
-		uniforms.get("hemisphereLightPosition.").setValue( lights.hemi.positions );
+		uniforms.get("hemisphereLightPosition").setValue( lights.hemi.positions );
 	}
 
 	private void refreshUniformsShadow ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
@@ -2152,7 +2152,8 @@ Log.error("?????????????");
 			switch ( type ) {
 
 				case I: // single integer
-					getGL().uniform1i( location, (Integer) value );
+					int val = (value instanceof Boolean) ? ((Boolean)value) ? 1 : 0 : (Integer) value;
+					getGL().uniform1i( location, val );
 					break;
 
 				case F: // single double
