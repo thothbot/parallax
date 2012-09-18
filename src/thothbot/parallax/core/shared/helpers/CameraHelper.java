@@ -27,8 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
-
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.FastMap;
@@ -38,16 +36,24 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Line;
-import thothbot.parallax.core.shared.objects.Object3D;
 
-public class CameraHelper extends Object3D
+import com.google.gwt.core.client.GWT;
+
+/**
+ * 
+ * Shows frustum, line of sight and up of the camera.
+ * <p>
+ * Based on frustum visualization in lightgl.js shadowmap example
+ * <a href="http://evanw.github.com/lightgl.js/tests/shadowmap.html">github.com</a>
+ * <p>
+ * Based on three.js code.
+ * 
+ * @author thothbot
+ *
+ */
+public class CameraHelper extends Line
 {
 	private Camera camera;
-	
-	private Line line;
-
-	private Geometry lineGeometry;
-	private LineBasicMaterial lineMaterial;
 	
 	private Map<String, List<Integer>> pointMap;
 	
@@ -57,15 +63,18 @@ public class CameraHelper extends Object3D
 	
 	public CameraHelper(Camera camera)
 	{
+		super(new Geometry());
+
 		this.camera = camera;
-		
-		this.lineGeometry = new Geometry();
 		
 		LineBasicMaterial lbm = new LineBasicMaterial();
 		lbm.setColor( new Color(0xffffff) );
 		lbm.setVertexColors( Material.COLORS.FACE );
-
-		this.lineMaterial = lbm;
+		setMaterial(lbm);
+		setType(Line.TYPE.PIECES);
+		
+		setMatrixWorld(camera.getMatrixWorld());
+		setMatrixAutoUpdate(false);
 
 		this.pointMap = GWT.isScript() ? 
 				new FastMap<List<Integer>>() : new HashMap<String, List<Integer>>();
@@ -126,16 +135,8 @@ public class CameraHelper extends Object3D
 		addLine( "cf3", "cf4", hexCross );
 	
 		update();
+	}
 
-		this.line = new Line( this.lineGeometry, this.lineMaterial, Line.TYPE.PIECES );
-		this.add( this.line );
-	}
-	
-	public Line getLine()
-	{
-		return this.line;
-	}
-	
 	public void update() 
 	{
 		double w = 1.0;
@@ -183,7 +184,7 @@ public class CameraHelper extends Object3D
 		setPoint( "cn3",  0, -h, -1 );
 		setPoint( "cn4",  0,  h, -1 );
 
-		this.lineGeometry.setVerticesNeedUpdate(true);
+		getGeometry().setVerticesNeedUpdate(true);
 	}
 
 	private void addLine( String a, String b, int hex ) 
@@ -195,13 +196,13 @@ public class CameraHelper extends Object3D
 
 	private void addPoint( String id, int hex ) 
 	{
-		this.lineGeometry.getVertices().add( new Vector3() );
-		this.lineGeometry.getColors().add( new Color( hex ) );
+		getGeometry().getVertices().add( new Vector3() );
+		getGeometry().getColors().add( new Color( hex ) );
 
 		if ( !this.pointMap.containsKey(id) ) 
 			this.pointMap.put( id, new ArrayList<Integer>() );
 		
-		this.pointMap.get( id ).add( this.lineGeometry.getVertices().size() - 1 );
+		this.pointMap.get( id ).add( getGeometry().getVertices().size() - 1 );
 	}
 	
 	private void setPoint( String point, double x, double y, double z ) 
@@ -216,7 +217,7 @@ public class CameraHelper extends Object3D
 			for ( int i = 0, il = points.size(); i < il; i ++ ) 
 			{
 				int j = points.get( i );
-				this.lineGeometry.getVertices().get( j ).copy( CameraHelper.__v );
+				getGeometry().getVertices().get( j ).copy( CameraHelper.__v );
 			}
 		}
 	}	
