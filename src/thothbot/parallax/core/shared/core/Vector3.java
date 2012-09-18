@@ -392,7 +392,7 @@ public class Vector3 extends Vector2 implements Vector
 			} 
 			else 
 			{
-				setX( Math.atan2( m21, m22 ) );
+				setX( Math.atan2( m32, m22 ) );
 				setZ( 0 );
 			}
 
@@ -424,7 +424,7 @@ public class Vector3 extends Vector2 implements Vector
 			else 
 			{	
 				setY( 0 );
-				setZ( Math.atan2( m13, m11 ) );	
+				setZ( Math.atan2( m21, m11 ) );	
 			}
 		} 
 		else if ( order == Euler.ZYX ) 
@@ -454,7 +454,7 @@ public class Vector3 extends Vector2 implements Vector
 			else 
 			{
 				setX( 0 );
-				setY( Math.atan2( m31, m33 ) );
+				setY( Math.atan2( m13, m33 ) );
 			}	
 		} 
 		else if ( order == Euler.XZY ) 
@@ -468,7 +468,7 @@ public class Vector3 extends Vector2 implements Vector
 			}
 			else 
 			{
-				setX( Math.atan2( - m13, m33 ) );
+				setX( Math.atan2( - m23, m33 ) );
 				setY( 0 );
 			}	
 		}
