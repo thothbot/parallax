@@ -37,7 +37,6 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
-import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.geometries.PlaneGeometry;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -57,9 +56,6 @@ public class Postprocessing extends Plugin
 
 	// shared ortho camera
 	private OrthographicCamera camera;
-	
-	// shared fullscreen quad scene
-	private PlaneGeometry geometry;
 	private Mesh quad;
 
 	public Postprocessing( WebGLRenderer renderer, Scene scene)
@@ -89,23 +85,10 @@ public class Postprocessing extends Plugin
 		this.passes = new ArrayList<Pass>();
 
 		this.copyPass = new ShaderPass( new ScreenShader() );
-		
-		Canvas3d canvas = renderer.getCanvas();
 
-		this.camera = new OrthographicCamera( 
-			canvas.getWidth() / -2.0, canvas.getWidth() / 2.0, 
-			canvas.getHeight() / 2.0, canvas.getHeight() / -2.0, 
-			-10000, 10000
-		);
+		this.camera = new OrthographicCamera( -1, 1, 1, -1, 0, 1 );
+		this.quad = new Mesh( new PlaneGeometry( 2, 2 ), null );
 		
-		this.geometry = new PlaneGeometry( 1, 1 );
-		this.quad = new Mesh( geometry, null );
-		
-		geometry.applyMatrix( new Matrix4().makeRotationX( Math.PI / 2.0) );
-		
-		quad.getPosition().setZ(-100);
-		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
-
 		getScene().add( quad );
 		getScene().add( camera );
 	}
@@ -125,11 +108,7 @@ public class Postprocessing extends Plugin
 	public OrthographicCamera getCamera() {
 		return this.camera;
 	}
-	
-	public PlaneGeometry getGeometry() {
-		return this.geometry;
-	}
-	
+
 	public Mesh getQuad() {
 		return this.quad;
 	}
