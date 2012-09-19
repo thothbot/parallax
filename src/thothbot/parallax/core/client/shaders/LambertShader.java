@@ -83,31 +83,29 @@ public final class LambertShader extends Shader
 			ChunksVertexShader.ENVMAP_PARS,
 			ChunksVertexShader.LIGHTS_LAMBERT_PARS,
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.MORPH_TARGET_PARS,
+			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
 			ChunksVertexShader.MAP,
 			ChunksVertexShader.LIGHTMAP,
-			ChunksVertexShader.ENVMAP,
 			ChunksVertexShader.COLOR,
 			ChunksVertexShader.MORPH_NORMAL,
 			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNORMAL,
-			ChunksVertexShader.DEFAULTNORMAL
-		);
-
-		List<String> main2 = Arrays.asList(
-			ChunksVertexShader.LIGHTS_LAMBERT,
-			ChunksVertexShader.SKINNING,
+			ChunksVertexShader.DEFAULTNORMAL,
 			ChunksVertexShader.MORPH_TARGET,
+			ChunksVertexShader.SKINNING,
 			ChunksVertexShader.DEFAULT,
+			ChunksVertexShader.WORLDPOS,
+			ChunksVertexShader.ENVMAP,
+			ChunksVertexShader.LIGHTS_LAMBERT,
 			ChunksVertexShader.SHADOWMAP
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main, main2));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
 	}
 	
 	@Override

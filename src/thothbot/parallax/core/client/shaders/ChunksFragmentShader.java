@@ -55,6 +55,8 @@ public class ChunksFragmentShader
 	public static String MAP_PARTICLE_PARS = Chunks.INSTANCE.getMapParticleParsFragment().getText();
 	public static String MAP_PARTICLE = Chunks.INSTANCE.getMapParticleFragment().getText();
 	
+	public static String NORMALMAP_PARS = Chunks.INSTANCE.getNormalmapParsFragment().getText();
+	
 	public static String SHADOWMAP_PARS = Chunks.INSTANCE.getShadowmapParsFragment().getText();
 	public static String SHADOWMAP = Chunks.INSTANCE.getShadowmapFragment().getText();
 	

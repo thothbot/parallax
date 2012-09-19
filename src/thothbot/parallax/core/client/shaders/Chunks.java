@@ -140,6 +140,9 @@ public interface Chunks extends ClientBundle
 
 	@Source("chunk/morphtarget_vertex.chunk")
 	TextResource getMorphtargetVertex();
+	
+	@Source("chunk/normalmap_pars_fragment.chunk")
+	TextResource getNormalmapParsFragment();
 
 	@Source("chunk/shadowmap_fragment.chunk")
 	TextResource getShadowmapFragment();

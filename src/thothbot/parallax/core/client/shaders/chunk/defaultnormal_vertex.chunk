@@ -1,23 +1,27 @@
-vec3 transformedNormal;
+vec3 objectNormal;
 
 #ifdef USE_SKINNING
 
-	transformedNormal = skinnedNormal.xyz;
+	objectNormal = skinnedNormal.xyz;
 
 #endif
 
-#ifdef USE_MORPHNORMALS
+#if !defined( USE_SKINNING ) && defined( USE_MORPHNORMALS )
 
-	transformedNormal = morphedNormal;
+	objectNormal = morphedNormal;
+
+#endif
+
+#if !defined( USE_SKINNING ) && ! defined( USE_MORPHNORMALS )
+
+	objectNormal = normal;
 
 #endif
 
-#ifndef USE_MORPHNORMALS
-#ifndef USE_SKINNING
+#ifdef FLIP_SIDED
 
-	transformedNormal = normal;
+	objectNormal = -objectNormal;
 
 #endif
-#endif
 
-transformedNormal = normalMatrix * transformedNormal;
+vec3 transformedNormal = normalMatrix * objectNormal;

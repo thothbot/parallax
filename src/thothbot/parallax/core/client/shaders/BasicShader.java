@@ -71,24 +71,34 @@ public final class BasicShader extends Shader
 			ChunksVertexShader.LIGHTMAP_PARS,
 			ChunksVertexShader.ENVMAP_PARS,
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.SKINBASE,
-			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.MORPH_TARGET_PARS,
+			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
 		);
 		
-		List<String> main = Arrays.asList(
+		List<String> main1 = Arrays.asList(
 			ChunksVertexShader.MAP,
 			ChunksVertexShader.LIGHTMAP,
-			ChunksVertexShader.ENVMAP,
-			ChunksVertexShader.COLOR,
-			ChunksVertexShader.SKINNING,
+			ChunksVertexShader.COLOR
+		);
+		
+		List<String> mainEnv = Arrays.asList(
+			ChunksVertexShader.MORPH_NORMAL,
+			ChunksVertexShader.SKINBASE,
+			ChunksVertexShader.SKINNORMAL,
+			ChunksVertexShader.DEFAULTNORMAL
+		);
+
+		List<String> main2 = Arrays.asList(
 			ChunksVertexShader.MORPH_TARGET,
+			ChunksVertexShader.SKINNING,
 			ChunksVertexShader.DEFAULT,
+			ChunksVertexShader.WORLDPOS,
+			ChunksVertexShader.ENVMAP,
 			ChunksVertexShader.SHADOWMAP
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main1, mainEnv, main2));
 	}
 	
 	@Override

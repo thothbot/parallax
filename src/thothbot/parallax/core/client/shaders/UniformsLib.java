@@ -75,6 +75,16 @@ public class UniformsLib
 		return retval;
 	}
 	
+	public static Map<String, Uniform> getNormal ()
+	{
+		Map<String, Uniform> retval = new HashMap<String, Uniform>();
+		
+		retval.put("normalMap", new Uniform(Uniform.TYPE.T ));
+		retval.put("normalScale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 ) ));
+		
+		return retval;
+	}
+	
 	public static Map<String, Uniform> getFog()
 	{
 		Map<String, Uniform> retval = new HashMap<String, Uniform>();

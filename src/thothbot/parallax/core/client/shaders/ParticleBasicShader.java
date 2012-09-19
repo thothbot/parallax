@@ -74,6 +74,7 @@ public final class ParticleBasicShader extends Shader
 		);
 		
 		List<String> main2 = Arrays.asList(
+			ChunksVertexShader.WORLDPOS,
 			ChunksVertexShader.SHADOWMAP
 		);
 

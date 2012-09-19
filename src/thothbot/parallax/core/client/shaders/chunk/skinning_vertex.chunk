@@ -1,8 +1,16 @@
 #ifdef USE_SKINNING
 
-	vec4 skinned  = boneMatX * skinVertexA * skinWeight.x;
-	skinned 	  += boneMatY * skinVertexB * skinWeight.y;
+	#ifdef USE_MORPHTARGETS
 
-	gl_Position  = projectionMatrix * modelViewMatrix * skinned;
+		vec4 skinVertex = vec4( morphed, 1.0 );
+
+	#else
+
+		vec4 skinVertex = vec4( position, 1.0 );
+
+	#endif
+
+	vec4 skinned  = boneMatX * skinVertex * skinWeight.x;
+	skinned 	  += boneMatY * skinVertex * skinWeight.y;
 
 #endif

@@ -47,10 +47,10 @@ public final class PhongShader extends Shader
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("chunk/phong_vs.chunk")
+		@Source("source/phong.vs")
 		TextResource getVertexShader();
 
-		@Source("chunk/phong_fs.chunk")
+		@Source("source/phong.fs")
 		TextResource getFragmentShader();
 	}
 	
@@ -64,6 +64,7 @@ public final class PhongShader extends Shader
 	{
 		this.setUniforms(UniformsLib.getCommon());
 		this.setUniforms(UniformsLib.getBump());
+		this.setUniforms(UniformsLib.getNormal());
 		this.setUniforms(UniformsLib.getFog());
 		this.setUniforms(UniformsLib.getLights());
 		this.setUniforms(UniformsLib.getShadowmap());
@@ -83,30 +84,31 @@ public final class PhongShader extends Shader
 			ChunksVertexShader.ENVMAP_PARS,
 			ChunksVertexShader.LIGHTS_PHONG_PARS,
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.MORPH_TARGET_PARS,
+			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
 			ChunksVertexShader.MAP,
 			ChunksVertexShader.LIGHTMAP,
-			ChunksVertexShader.ENVMAP,
-			ChunksVertexShader.COLOR
-		);
-
-		List<String> main2 = Arrays.asList(
+			ChunksVertexShader.COLOR,
 			ChunksVertexShader.MORPH_NORMAL,
 			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNORMAL,
 			ChunksVertexShader.DEFAULTNORMAL
 		);
 
+		List<String> main2 = Arrays.asList(
+				ChunksVertexShader.MORPH_TARGET,
+				ChunksVertexShader.SKINNING,
+				ChunksVertexShader.DEFAULT
+		);
+
 		List<String> main3 = Arrays.asList(
+			ChunksVertexShader.WORLDPOS,
+			ChunksVertexShader.ENVMAP,
 			ChunksVertexShader.LIGHTS_PHONG,
-			ChunksVertexShader.SKINNING,
-			ChunksVertexShader.MORPH_TARGET,
-			ChunksVertexShader.DEFAULT,
 			ChunksVertexShader.SHADOWMAP
 		);
 
@@ -125,6 +127,7 @@ public final class PhongShader extends Shader
 			ChunksFragmentShader.LIGHTS_PONG_PARS,
 			ChunksFragmentShader.SHADOWMAP_PARS,
 			ChunksFragmentShader.BUMPMAP_PARS,
+			ChunksFragmentShader.NORMALMAP_PARS,
 			ChunksFragmentShader.SPECULARMAP_PARS
 		);
 		

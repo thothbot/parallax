@@ -1,26 +1,8 @@
 #ifdef USE_SHADOWMAP
 
-	vec4 transformedPosition;
-
-	#ifdef USE_MORPHTARGETS
-
-		transformedPosition = modelMatrix * vec4( morphed, 1.0 );
-
-	#else
-	#ifdef USE_SKINNING
-
-		transformedPosition = modelMatrix * skinned;
-
-	#else
-
-		transformedPosition = modelMatrix * vec4( position, 1.0 );
-
-	#endif
-	#endif
-
 	for( int i = 0; i < MAX_SHADOWS; i ++ ) {
 
-		vShadowCoord[ i ] = shadowMatrix[ i ] * transformedPosition;
+		vShadowCoord[ i ] = shadowMatrix[ i ] * mPosition;
 
 	}
 
