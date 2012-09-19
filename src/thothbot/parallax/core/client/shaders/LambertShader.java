@@ -50,10 +50,10 @@ public final class LambertShader extends Shader
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("chunk/lambert_vs.chunk")
+		@Source("source/lambert.vs")
 		TextResource getVertexShader();
 
-		@Source("chunk/lambert_fs.chunk")
+		@Source("source/lambert.fs")
 		TextResource getFragmentShader();
 	}
 

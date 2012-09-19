@@ -47,10 +47,10 @@ public final class NormalMapShader extends Shader
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 
-		@Source("chunk/normalmap_vs.chunk")
+		@Source("source/normalmap.vs")
 		TextResource getVertexShader();
 
-		@Source("chunk/normalmap_fs.chunk")
+		@Source("source/normalmap.fs")
 		TextResource getFragmentShader();
 	}
 

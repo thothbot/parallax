@@ -43,10 +43,10 @@ public final class BasicShader extends Shader
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 
-		@Source("chunk/basic_vs.chunk")
+		@Source("source/basic.vs")
 		TextResource getVertexShader();
 
-		@Source("chunk/basic_fs.chunk")
+		@Source("source/basic.fs")
 		TextResource getFragmentShader();
 	}
 

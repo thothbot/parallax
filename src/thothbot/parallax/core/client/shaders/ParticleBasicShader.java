@@ -25,8 +25,6 @@ package thothbot.parallax.core.client.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.client.shaders.BasicShader.Resources;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
@@ -44,10 +42,10 @@ public final class ParticleBasicShader extends Shader
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("chunk/particle_basic_vs.chunk")
+		@Source("source/particle_basic.vs")
 		TextResource getVertexShader();
 
-		@Source("chunk/particle_basic_fs.chunk")
+		@Source("source/particle_basic.fs")
 		TextResource getFragmentShader();
 	}
 	

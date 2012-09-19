@@ -43,10 +43,10 @@ public final class DepthRGBAShader extends Shader
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("chunk/depthRGBA_vs.chunk")
+		@Source("source/depthRGBA.vs")
 		TextResource getVertexShader();
 
-		@Source("chunk/depthRGBA_fs.chunk")
+		@Source("source/depthRGBA.fs")
 		TextResource getFragmentShader();
 	}
 
