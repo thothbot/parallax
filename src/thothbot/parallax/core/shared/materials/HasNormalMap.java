@@ -20,6 +20,7 @@
 package thothbot.parallax.core.shared.materials;
 
 import thothbot.parallax.core.client.textures.Texture;
+import thothbot.parallax.core.shared.core.Vector2;
 
 public interface HasNormalMap 
 {
@@ -27,7 +28,7 @@ public interface HasNormalMap
 
 	public void setNormalMap(Texture normalMap); 
 
-	public double getNormalScale();
+	public Vector2 getNormalScale();
 
-	public void setNormalScale(double normalScale);
+	public void setNormalScale(Vector2 normalScale);
 }

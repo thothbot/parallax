@@ -32,6 +32,7 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 
 public final class MeshPhongMaterial extends Material 
@@ -56,7 +57,7 @@ public final class MeshPhongMaterial extends Material
 	private double bumpScale;
 	
 	private Texture normalMap;
-	private double normalScale;
+	private Vector2 normalScale;
 	
 	private boolean isFog;
 	
@@ -92,6 +93,8 @@ public final class MeshPhongMaterial extends Material
 		setCombine(OPERATIONS.MULTIPLY);
 		setReflectivity(1.0);
 		setRefractionRatio(0.98);
+		
+		setNormalScale(new Vector2(1, 1));
 		
 		setFog(true);
 		
@@ -387,12 +390,12 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public double getNormalScale() {
+	public Vector2 getNormalScale() {
 		return this.normalScale;
 	}
 
 	@Override
-	public void setNormalScale(double normalScale) {
+	public void setNormalScale(Vector2 normalScale) {
 		this.normalScale = normalScale;
 	}
 	
