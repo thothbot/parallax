@@ -580,6 +580,7 @@ public abstract class Material
 	{
 		if ( ! (this instanceof HasMaterialMap) )
 			return;
+
 		Map<String, Uniform> uniforms = getShader().getUniforms();
 		
 		uniforms.get("opacity").setValue( getOpacity() );
@@ -615,7 +616,7 @@ public abstract class Material
 		if(this instanceof HasNormalMap)
 		{
 			uniforms.get("normalMap").setValue( ((HasNormalMap)this).getNormalMap() );
-			uniforms.get("normalScal").setValue( ((HasNormalMap)this).getNormalScale() );
+			uniforms.get("normalScale").setValue( ((HasNormalMap)this).getNormalScale() );
 		}	
 		
 		// uv repeat and offset setting priorities
