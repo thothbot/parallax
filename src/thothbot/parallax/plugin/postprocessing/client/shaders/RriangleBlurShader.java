@@ -64,7 +64,7 @@ public final class RriangleBlurShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("texture", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("texture", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 )));
 	}
 

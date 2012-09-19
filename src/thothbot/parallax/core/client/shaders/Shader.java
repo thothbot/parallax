@@ -143,13 +143,13 @@ public abstract class Shader
 		initShaderProgram(gl);
 
 		// Adds default uniforms
-		addUniform("viewMatrix",            new Uniform(Uniform.TYPE.FV1, null));
-		addUniform("modelViewMatrix",       new Uniform(Uniform.TYPE.FV1, null));
-		addUniform("projectionMatrix",      new Uniform(Uniform.TYPE.FV1, null));
-		addUniform("normalMatrix",          new Uniform(Uniform.TYPE.FV1, null));
-		addUniform("modelMatrix",           new Uniform(Uniform.TYPE.FV1, null));
-		addUniform("cameraPosition",        new Uniform(Uniform.TYPE.FV1, null));
-		addUniform("morphTargetInfluences", new Uniform(Uniform.TYPE.FV1, null));
+		addUniform("viewMatrix",            new Uniform(Uniform.TYPE.FV1 ));
+		addUniform("modelViewMatrix",       new Uniform(Uniform.TYPE.FV1 ));
+		addUniform("projectionMatrix",      new Uniform(Uniform.TYPE.FV1 ));
+		addUniform("normalMatrix",          new Uniform(Uniform.TYPE.FV1 ));
+		addUniform("modelMatrix",           new Uniform(Uniform.TYPE.FV1 ));
+		addUniform("cameraPosition",        new Uniform(Uniform.TYPE.FV1 ));
+		addUniform("morphTargetInfluences", new Uniform(Uniform.TYPE.FV1 ));
 				
 		if ( useVertexTexture ) 
 		{

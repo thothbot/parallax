@@ -71,12 +71,12 @@ public final class NormalMapShader extends Shader
 		this.addUniform("enableSpecular",   new Uniform(Uniform.TYPE.I, 0 ));
 		this.addUniform("enableReflection", new Uniform(Uniform.TYPE.I, 0 ));
 		
-		this.addUniform("tDiffuse",      new Uniform(Uniform.TYPE.T, 0 ));
-		this.addUniform("tCube",         new Uniform(Uniform.TYPE.T, 1 ));
-		this.addUniform("tNormal",       new Uniform(Uniform.TYPE.T, 2 ));
-		this.addUniform("tSpecular",     new Uniform(Uniform.TYPE.T, 3 ));
-		this.addUniform("tAO",           new Uniform(Uniform.TYPE.T, 4 ));
-		this.addUniform("tDisplacement", new Uniform(Uniform.TYPE.T, 5 ));
+		this.addUniform("tDiffuse",      new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tCube",         new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tNormal",       new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tSpecular",     new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tAO",           new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tDisplacement", new Uniform(Uniform.TYPE.T ));
 		
 		this.addUniform("uNormalScale", new Uniform(Uniform.TYPE.F, 1.0 ));
 		

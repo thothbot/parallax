@@ -58,7 +58,7 @@ public final class FocusShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("screenWidth", new Uniform(Uniform.TYPE.F, 1024));
 		this.addUniform("screenHeight", new Uniform(Uniform.TYPE.F, 1024));
 		this.addUniform("sampleDistance", new Uniform(Uniform.TYPE.F, 0.94));

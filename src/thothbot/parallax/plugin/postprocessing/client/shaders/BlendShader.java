@@ -58,8 +58,8 @@ public final class BlendShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse1", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tDiffuse2", new Uniform(Uniform.TYPE.T, 1));
+		this.addUniform("tDiffuse1", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tDiffuse2", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("mixRatio", new Uniform(Uniform.TYPE.F, 0.5));
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}

@@ -62,7 +62,7 @@ public class SavePass extends Pass
 	public void render(Postprocessing postprocessing, double delta, boolean maskActive)
 	{
 		if ( this.material.getShader().getUniforms().containsKey(this.textureID))
-			this.material.getShader().getUniforms().get("this.textureID").setTexture( postprocessing.getReadBuffer() );
+			this.material.getShader().getUniforms().get("this.textureID").setValue( postprocessing.getReadBuffer() );
 
 		postprocessing.getQuad().setMaterial(this.material);
 

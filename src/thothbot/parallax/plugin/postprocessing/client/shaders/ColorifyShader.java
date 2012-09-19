@@ -58,7 +58,7 @@ public final class ColorifyShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 	}
 }

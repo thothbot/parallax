@@ -65,8 +65,8 @@ public final class SsaoShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
+		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T));
 		this.addUniform("size", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
 		this.addUniform("cameraNear", new Uniform(Uniform.TYPE.F, 1.0));
 		this.addUniform("cameraFar", new Uniform(Uniform.TYPE.F, 100));

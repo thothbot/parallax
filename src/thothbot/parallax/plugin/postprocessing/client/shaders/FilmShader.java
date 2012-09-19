@@ -65,7 +65,7 @@ public final class FilmShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("time", new Uniform(Uniform.TYPE.F, 0.0));
 		this.addUniform("nIntensity", new Uniform(Uniform.TYPE.F, 0.5));
 		this.addUniform("sIntensity", new Uniform(Uniform.TYPE.F, 0.05));

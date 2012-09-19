@@ -133,6 +133,6 @@ public final class ParticleBasicMaterial extends Material
 		uniforms.get("size").setValue( getSize() );
 		uniforms.get("scale").setValue( canvas.getHeight() / 2.0 );
 
-		uniforms.get("map").setTexture( getMap() );
+		uniforms.get("map").setValue( getMap() );
 	}
 }

@@ -55,8 +55,8 @@ public class LensFlareShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("renderType", new Uniform(Uniform.TYPE.I,  1 ));
-		this.addUniform("map", new Uniform(Uniform.TYPE.T,  0 ) );
-		this.addUniform("occlusionMap", new Uniform(Uniform.TYPE.T,  1 ) );
+		this.addUniform("map", new Uniform(Uniform.TYPE.T ) );
+		this.addUniform("occlusionMap", new Uniform(Uniform.TYPE.T ) );
 		
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));

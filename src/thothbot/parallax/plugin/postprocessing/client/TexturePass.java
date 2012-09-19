@@ -39,7 +39,7 @@ public class TexturePass extends Pass
 	{
 		this.material = new ShaderMaterial(new ScreenShader());
 		this.material.getShader().getUniforms().get("opacity").setValue( opacity );
-		this.material.getShader().getUniforms().get("tDiffuse").setTexture( texture );
+		this.material.getShader().getUniforms().get("tDiffuse").setValue( texture );
 		
 		this.setEnabled(true);
 		this.setNeedsSwap(false);

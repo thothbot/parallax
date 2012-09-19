@@ -46,7 +46,7 @@ public class DotScreenPass extends Pass
 	@Override
 	public void render(Postprocessing effectCocmposer, double delta, boolean maskActive)
 	{
-		this.material.getShader().getUniforms().get("tDiffuse").setTexture( effectCocmposer.getReadBuffer() );
+		this.material.getShader().getUniforms().get("tDiffuse").setValue( effectCocmposer.getReadBuffer() );
 		((Vector2) this.material.getShader().getUniforms().get("tSize").getValue()).set( 
 				effectCocmposer.getReadBuffer().getWidth(), effectCocmposer.getReadBuffer().getHeight() );
 

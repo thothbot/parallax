@@ -159,6 +159,8 @@ public class WebGLRenderer
 	private int cache_currentGeometryGroupHash = -1;
 	private Camera cache_currentCamera = null;
 	
+	private int usedTextureUnits = 0;
+	
 	// GL state cache
 
 	private Material.SIDE cache_oldMaterialSided = null;
@@ -199,6 +201,7 @@ public class WebGLRenderer
 	private Map<String, Shader> cache_programs;
 
 	// GPU capabilities
+	private int GPUmaxTextures;
 	private int GPUmaxVertexTextures;
 	private int GPUmaxTextureSize;
 	private int GPUmaxCubemapSize;
@@ -227,6 +230,7 @@ public class WebGLRenderer
 		this.cache_programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
 		
+		this.GPUmaxTextures       = getGL().getParameteri(GLenum.MAX_TEXTURE_IMAGE_UNITS.getValue());
 		this.GPUmaxVertexTextures = getGL().getParameteri(GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue());
 		this.GPUmaxTextureSize    = getGL().getParameteri(GLenum.MAX_TEXTURE_SIZE.getValue());
 		this.GPUmaxCubemapSize    = getGL().getParameteri(GLenum.MAX_CUBE_MAP_TEXTURE_SIZE.getValue());
@@ -1940,6 +1944,9 @@ public class WebGLRenderer
 
 	private WebGLProgram setProgram( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
 	{
+		// Use new material units for new shader
+		this.usedTextureUnits = 0;
+
 		if ( material.getShader() == null || material.getShader().getProgram() == null || material.isNeedsUpdate() ) 
 		{
 			initMaterial( material, lights, fog, object );
@@ -2263,20 +2270,22 @@ Log.error("?????????????");
 					break;
 
 				case T: // single THREE.Texture (2d or cube)
-					getGL().uniform1i( location, (Integer)value );
 
-					Texture texture = uniform.getTexture();
+					Texture texture = (Texture)value;
+					int textureUnit = getTextureUnit();
+					
+					getGL().uniform1i( location, textureUnit );
 
 					if ( texture == null ) continue;
 
 					if ( texture.getClass() == CubeTexture.class )
-						setCubeTexture( (CubeTexture) texture, (Integer)value );
+						setCubeTexture( (CubeTexture) texture, textureUnit );
 
 					else if ( texture.getClass() == RenderTargetCubeTexture.class )
-						setCubeTextureDynamic( (RenderTargetCubeTexture)texture, (Integer)value );
+						setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
 
 					else
-						setTexture( texture, (Integer)value );
+						setTexture( texture, textureUnit );
 
 					break;
 
@@ -2305,6 +2314,18 @@ Log.error("?????????????");
 					break;
 			}
 		}
+	}
+	
+	public int getTextureUnit() 
+	{
+		int textureUnit = this.usedTextureUnits ++;
+
+		if ( textureUnit >= this.GPUmaxTextures ) 
+		{
+			Log.warn( "Trying to use " + textureUnit + " texture units while this GPU supports only " + this.GPUmaxTextures );
+		}
+
+		return textureUnit;
 	}
 
 	private void setupMatrices ( Object3D object, Camera camera ) 

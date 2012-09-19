@@ -59,6 +59,6 @@ public final class FresnelShader extends Shader
 		this.addUniform("mFresnelBias", new Uniform(Uniform.TYPE.F, .1 ));
 		this.addUniform("mFresnelPower", new Uniform(Uniform.TYPE.F, 2.0 ));
 		this.addUniform("mFresnelScale", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("tCube", new Uniform(Uniform.TYPE.T, 1 ));
+		this.addUniform("tCube", new Uniform(Uniform.TYPE.T ));
 	}
 }

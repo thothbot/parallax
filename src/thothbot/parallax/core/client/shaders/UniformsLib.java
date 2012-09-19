@@ -47,13 +47,13 @@ public class UniformsLib
 		retval.put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
 		retval.put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
-		retval.put("map", new Uniform(Uniform.TYPE.T,  0 ));
+		retval.put("map", new Uniform(Uniform.TYPE.T ));
 		retval.put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4( 0, 0, 1, 1 ) ));
 			
-		retval.put("lightMap", new Uniform(Uniform.TYPE.T,  2 ));
-		retval.put("specularMap", new Uniform(Uniform.TYPE.T,  3 ));
+		retval.put("lightMap", new Uniform(Uniform.TYPE.T ));
+		retval.put("specularMap", new Uniform(Uniform.TYPE.T ));
 			
-		retval.put("envMap", new Uniform(Uniform.TYPE.T,  1 ));
+		retval.put("envMap", new Uniform(Uniform.TYPE.T ));
 		retval.put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
 		retval.put("useRefract", new Uniform(Uniform.TYPE.I,  1 ));
 		retval.put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
@@ -69,7 +69,7 @@ public class UniformsLib
 	{
 		Map<String, Uniform> retval = new HashMap<String, Uniform>();
 		
-		retval.put("bumpMap", new Uniform(Uniform.TYPE.T,  4 ));
+		retval.put("bumpMap", new Uniform(Uniform.TYPE.T ));
 		retval.put("bumpScale", new Uniform(Uniform.TYPE.F, 1.0 ));
 		
 		return retval;
@@ -123,7 +123,7 @@ public class UniformsLib
 		retval.put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 		retval.put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
 		retval.put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
-		retval.put("map",     new Uniform(Uniform.TYPE.T,  0 ));
+		retval.put("map",     new Uniform(Uniform.TYPE.T ));
 			
 		retval.put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
 		retval.put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0 ));
@@ -138,7 +138,7 @@ public class UniformsLib
 		
 		Map<String, Uniform> retval = new HashMap<String, Uniform>();	
 
-		retval.put("shadowMap",      new Uniform(Uniform.TYPE.TV, 6 ));
+		retval.put("shadowMap",      new Uniform(Uniform.TYPE.TV ));
 		retval.put("shadowMapSize",  new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2>() ));
 		retval.put("shadowBias",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		retval.put("shadowDarkness", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));

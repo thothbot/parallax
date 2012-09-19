@@ -60,8 +60,8 @@ public final class DofMipmapShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tColor", new Uniform(Uniform.TYPE.T, 0));
-		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T, 1));
+		this.addUniform("tColor", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
 		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
 	}

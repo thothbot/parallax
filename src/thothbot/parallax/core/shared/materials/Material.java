@@ -583,20 +583,20 @@ public abstract class Material
 		
 		if(this instanceof HasMap)
 		{
-			uniforms.get("map").setTexture( ((HasMap) this).getMap() );
+			uniforms.get("map").setValue( ((HasMap) this).getMap() );
 		}
 
 		if(this instanceof HasLightMap)
-			uniforms.get("lightMap").setTexture( ((HasLightMap)this).getLightMap() );	
+			uniforms.get("lightMap").setValue( ((HasLightMap)this).getLightMap() );	
 		
 		if(this instanceof HasSpecularMap)
 		{
-			uniforms.get("specularMap").setTexture( ((HasSpecularMap)this).getSpecularMap() );
+			uniforms.get("specularMap").setValue( ((HasSpecularMap)this).getSpecularMap() );
 		}
 		
 		if(this instanceof HasBumpMap)
 		{
-			uniforms.get("bumpMap").setTexture( ((HasBumpMap)this).getBumpMap() );
+			uniforms.get("bumpMap").setValue( ((HasBumpMap)this).getBumpMap() );
 			uniforms.get("bumpScale").setValue( ((HasBumpMap)this).getBumpScale() );
 		}	
 		
@@ -626,7 +626,7 @@ public abstract class Material
 		{
 			HasEnvMap envMapMaterial = (HasEnvMap)this;
 
-			uniforms.get("envMap").setTexture( envMapMaterial.getEnvMap() );
+			uniforms.get("envMap").setValue( envMapMaterial.getEnvMap() );
 			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null 
 					&& envMapMaterial.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0 : -1.0 );
 

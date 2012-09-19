@@ -27,7 +27,6 @@ import java.util.Map;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.utils.UniformsUtils;
 
 public class ShaderPass extends Pass
 {
@@ -66,7 +65,7 @@ public class ShaderPass extends Pass
 	public void render( Postprocessing postprocessing, double delta, boolean maskActive) 
 	{
 		if ( getUniforms().containsKey(this.textureID))
-			getUniforms().get( this.textureID ).setTexture( postprocessing.getReadBuffer() );
+			getUniforms().get( this.textureID ).setValue( postprocessing.getReadBuffer() );
 
 		postprocessing.getQuad().setMaterial(this.material);
 

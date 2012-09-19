@@ -58,7 +58,7 @@ public final class SepiaShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
 		this.addUniform("amount", new Uniform(Uniform.TYPE.F, 1.0));
 
 	}

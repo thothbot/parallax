@@ -24,7 +24,6 @@ package thothbot.parallax.core.client.shaders;
 
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.textures.Texture;
 
 /**
  * Shader's uniforms.
@@ -54,23 +53,20 @@ public class Uniform
 
 	private Uniform.TYPE type;
 	private Object value;
-	private Texture texture;
 	private Float32Array cache_array;
 	private WebGLUniformLocation location;
-	
+
+	public Uniform(Uniform.TYPE type) 
+	{
+		this(type, null);
+	}
+
 	public Uniform(Uniform.TYPE type, Object value) 
 	{
 		this.type = type;
 		this.value = value;
 	}
-	
-	public Uniform(Uniform.TYPE type, Object value, Texture texture) 
-	{
-		this.type = type;
-		this.value = value;
-		this.texture = texture;
-	}
-	
+		
 	public Uniform.TYPE getType() {
 		return this.type;
 	}
@@ -81,14 +77,6 @@ public class Uniform
 	
 	public void setValue(Object value) {
 		this.value = value;
-	}
-	
-	public Texture getTexture() {
-		return this.texture;
-	}
-	
-	public void setTexture(Texture texture) {
-		this.texture = texture;
 	}
 	
 	public Float32Array getCacheArray() {
@@ -109,12 +97,12 @@ public class Uniform
 	
 	public String toString()
 	{
-		return "{type=" + type.name() + ", value=" + value + ", texture=" + texture + "}";
+		return "{type=" + type.name() + ", value=" + value + "}";
 	}
 	
 	public Uniform clone()
 	{
-		Uniform result = new Uniform(this.type, this.value, this.texture);
+		Uniform result = new Uniform(this.type, this.value);
 		result.cache_array = this.cache_array;
 
 		return result;

@@ -60,7 +60,7 @@ public final class NormalMapShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("heightMap", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("heightMap", new Uniform(Uniform.TYPE.T));
 		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
 		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 )));
 		this.addUniform("height", new Uniform(Uniform.TYPE.F, 0.05));

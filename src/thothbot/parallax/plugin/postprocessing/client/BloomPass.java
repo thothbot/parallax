@@ -100,7 +100,7 @@ public class BloomPass extends Pass
 		// Render quad with blured scene into texture (convolution pass 1)
 		postprocessing.getQuad().setMaterial(this.materialConvolution);
 
-		this.materialConvolution.getShader().getUniforms().get("tDiffuse" ).setTexture( postprocessing.getReadBuffer() );
+		this.materialConvolution.getShader().getUniforms().get("tDiffuse" ).setValue( postprocessing.getReadBuffer() );
 		this.materialConvolution.getShader().getUniforms().get("uImageIncrement").setValue( BloomPass.blurX );
 
 		postprocessing.getRenderer().render( 
@@ -108,7 +108,7 @@ public class BloomPass extends Pass
 
 
 		// Render quad with blured scene into texture (convolution pass 2)
-		this.materialConvolution.getShader().getUniforms().get("tDiffuse").setTexture( this.renderTargetX );
+		this.materialConvolution.getShader().getUniforms().get("tDiffuse").setValue( this.renderTargetX );
 		this.materialConvolution.getShader().getUniforms().get("uImageIncrement").setValue( BloomPass.blurY );
 
 		postprocessing.getRenderer().render( 
@@ -117,7 +117,7 @@ public class BloomPass extends Pass
 		// Render original scene with superimposed blur to texture
 		postprocessing.getQuad().setMaterial(this.materialScreen);
 
-		this.materialScreen.getShader().getUniforms().get("tDiffuse").setTexture( this.renderTargetY );
+		this.materialScreen.getShader().getUniforms().get("tDiffuse").setValue( this.renderTargetY );
 
 		if ( maskActive ) 
 			postprocessing.getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );

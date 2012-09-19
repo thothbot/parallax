@@ -61,7 +61,7 @@ public final class SpriteShader extends Shader
 		this.addUniform("alignment", new Uniform(Uniform.TYPE.V2, new Vector2( 0.0, 0.0 ) ));
 		
 		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
-		this.addUniform("map", new Uniform(Uniform.TYPE.T,  0 ) );
+		this.addUniform("map", new Uniform(Uniform.TYPE.T) );
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
 		this.addUniform("useScreenCoordinates", new Uniform(Uniform.TYPE.I,  1 ));

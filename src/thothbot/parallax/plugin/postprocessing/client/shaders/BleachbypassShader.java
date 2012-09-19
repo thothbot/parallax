@@ -60,7 +60,7 @@ public final class BleachbypassShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, 0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
 	}
 
