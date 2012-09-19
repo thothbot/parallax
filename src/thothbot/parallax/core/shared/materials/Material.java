@@ -160,8 +160,8 @@ public abstract class Material
 	
 	private SIDE side = SIDE.FRONT;
 	
-	// 
-
+	private boolean isShadowPass;
+	
 	// Store shader associated to the material
 	private Shader shader;
 	
@@ -331,6 +331,14 @@ public abstract class Material
 
 	public void setShading(Material.SHADING shading) {
 		this.shading = shading;
+	}
+	
+	public boolean isShadowPass() {
+		return isShadowPass;
+	}
+
+	public void setShadowPass(boolean isShadowPass) {
+		this.isShadowPass = isShadowPass;
 	}
 
 	public Shader getShader() 

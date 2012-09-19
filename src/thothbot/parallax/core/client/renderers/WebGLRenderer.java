@@ -129,6 +129,7 @@ public class WebGLRenderer
 	private boolean isPhysicallyBasedShading = false;
 
 	// shadow map
+	private ShadowMap shadowMap;
 	private boolean isShadowMapEnabled = false;
 	private boolean isShadowMapAutoUpdate = true;
 	private boolean isShadowMapSoft = true;
@@ -996,21 +997,35 @@ public class WebGLRenderer
 			Log.warn("DEPRECATED: Camera hasn\'t been added to a Scene. Adding it...");
 			scene.add( camera );
 		}
+		
+		// Shadowmap
+		if(this.isShadowMapEnabled && this.shadowMap == null)
+		{
+			Log.info("Including shadow map plugin");
+			this.shadowMap = new ShadowMap(this, scene);
+		}
 
-		Log.debug("render() this.autoUpdateScene=" + this.isAutoUpdateScene());
 		if ( this.isAutoUpdateScene() ) 
-				scene.updateMatrixWorld(false);
+		{
+			scene.updateMatrixWorld(false);
+		}
 
 		// update camera matrices and frustum
 		
 		if ( camera.getParent() == null ) 
+		{
 			camera.updateMatrixWorld(false);
+		}
 
-		if ( camera._viewMatrixArray == null ) 
+		if ( camera._viewMatrixArray == null )
+		{
 			camera._viewMatrixArray = Float32Array.create( 16 );
+		}
 
-		if ( camera._projectionMatrixArray == null ) 
+		if ( camera._projectionMatrixArray == null )
+		{
 			camera._projectionMatrixArray = Float32Array.create( 16 );
+		}
 
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
 		camera.getMatrixWorldInverse().flattenToArray( camera._viewMatrixArray );
@@ -1021,7 +1036,9 @@ public class WebGLRenderer
 
 		// update WebGL objects
 		if ( this.isAutoUpdateObjects() ) 
+		{
 			initWebGLObjects( scene );
+		}
 
 		// custom render plugins (pre pass)
 		renderPlugins( this.renderPluginsPre, camera );
@@ -1034,7 +1051,9 @@ public class WebGLRenderer
 		setRenderTarget( renderTarget );
 
 		if ( this.isAutoClear() || forceClear )
+		{
 			clear( this.isAutoClearColor(), this.isAutoClearDepth(), this.isAutoClearStencil() );
+		}
 
 		// set matrices for regular objects (frustum culled)
 		List<WebGLObject> renderList = scene.__webglObjects;
@@ -2131,10 +2150,8 @@ Log.error("?????????????");
 
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
-//		for ( Uniform uniform : materialUniforms.values() ) 
-		for ( String key : materialUniforms.keySet() )
+		for ( Uniform uniform : materialUniforms.values() ) 
 		{
-			Uniform uniform = materialUniforms.get(key);
 			WebGLUniformLocation location = uniform.getLocation();
 		
 			if ( location == null ) continue;
@@ -2145,7 +2162,7 @@ Log.error("?????????????");
 
 			Uniform.TYPE type = uniform.getType();
 
-			Log.debug("loadUniformsGeneric() " + key + ": " + uniform);
+			Log.debug("loadUniformsGeneric() " + uniform);
 			
 			switch ( type ) {
 
@@ -2859,7 +2876,7 @@ Log.error("?????????????");
 	 * 
 	 * @param renderTarget the render target
 	 */
-	private void setRenderTarget( RenderTargetTexture renderTarget ) 
+	public void setRenderTarget( RenderTargetTexture renderTarget ) 
 	{
 		Log.debug("Called setRenderTarget(params)");
 		WebGLFramebuffer framebuffer = null;

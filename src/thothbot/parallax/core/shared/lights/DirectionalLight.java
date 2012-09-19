@@ -24,59 +24,30 @@ package thothbot.parallax.core.shared.lights;
 
 import java.util.List;
 
-import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.objects.Object3D;
 
-public class DirectionalLight extends Light
-{
-	private Object3D target;
+public class DirectionalLight extends AbstractShadowLight
+{	
+	private Vector3 shadowCascadeOffset;
+	private int shadowCascadeCount = 2;
+
+	private double[] shadowCascadeBias = { 0.0, 0.0, 0.0};
+	private int[] shadowCascadeWidth = { 512, 512, 512 };
+	private int[] shadowCascadeHeight = { 512, 512, 512 };
+
+	private double[] shadowCascadeNearZ = { -1.000, 0.990, 0.998 };
+	private double[] shadowCascadeFarZ = { 0.990, 0.998, 1.000 };
+
+	private List<VirtualLight> shadowCascadeArray;
+
+	//
 	
-	private double intensity;
-	private double distance;
+	private int shadowCameraLeft = -500;
+	private int shadowCameraRight = 500;
+	private int shadowCameraTop = 500;
+	private int shadowCameraBottom = -500;
 
 	//
-
-	public int shadowCameraNear = 50;
-	public int shadowCameraFar = 5000;
-
-	public int shadowCameraLeft = -500;
-	public int shadowCameraRight = 500;
-	public int shadowCameraTop = 500;
-	public int shadowCameraBottom = -500;
-
-	public boolean shadowCameraVisible = false;
-
-	public double shadowBias = 0.0;
-	public double shadowDarkness = 0.5;
-
-	public int shadowMapWidth = 512;
-	public int shadowMapHeight = 512;
-
-	//
-
-	public boolean shadowCascade = false;
-
-	public Vector3 shadowCascadeOffset;
-	public int shadowCascadeCount = 2;
-
-	public double[] shadowCascadeBias = { 0.0, 0.0, 0.0};
-	public int[] shadowCascadeWidth = { 512, 512, 512 };
-	public int[] shadowCascadeHeight = { 512, 512, 512 };
-
-	public double[] shadowCascadeNearZ = { -1.000, 0.990, 0.998 };
-	public double[] shadowCascadeFarZ = { 0.990, 0.998, 1.000 };
-
-	public List<DirectionalLight> shadowCascadeArray;
-
-	//
-
-	public Object shadowMap;
-	public Object shadowMapSize;
-	public Object shadowCamera;
-	public Matrix4 shadowMatrix;
-
 	public DirectionalLight(int hex) 
 	{
 		this(hex, 1.0);
@@ -91,41 +62,105 @@ public class DirectionalLight extends Light
 	{
 		super(hex);
 
-		this.intensity = intensity;
-		this.distance = distance;
+		setIntensity(intensity);
+		setDistance(distance);
 
-		this.position = new Vector3(0, 1, 0);
-		this.target   = new Object3D();
 		this.shadowCascadeOffset = new Vector3(0, 0, -1000);
 	}
 	
-	public Object3D getTarget() {
-		return this.target;
-	}
-	
-	public void setTarget(Object3D target) {
-		this.target = target;
-	}
-	
-	public double getIntensity() {
-		return this.intensity;
-	}
-	
-	public void setIntensity(double intensity) {
-		this.intensity = intensity;
-	}
-	
-	public double getDistance() {
-		return this.distance;
-	}
-	
-	public void setDistance(double distance) {
-		this.distance = distance;
+	public Vector3 getShadowCascadeOffset() {
+		return shadowCascadeOffset;
 	}
 
-	@Override
-	public boolean isAllocateShadows()
-	{
-		return isCastShadow() && !this.shadowCascade;
+	public void setShadowCascadeOffset(Vector3 shadowCascadeOffset) {
+		this.shadowCascadeOffset = shadowCascadeOffset;
+	}
+
+	public int getShadowCascadeCount() {
+		return shadowCascadeCount;
+	}
+	
+	public void setShadowCascadeCount(int shadowCascadeCount) {
+		this.shadowCascadeCount = shadowCascadeCount;
+	}
+
+	public double[] getShadowCascadeBias() {
+		return shadowCascadeBias;
+	}
+
+	public void setShadowCascadeBias(double[] shadowCascadeBias) {
+		this.shadowCascadeBias = shadowCascadeBias;
+	}
+
+	public int[] getShadowCascadeWidth() {
+		return shadowCascadeWidth;
+	}
+
+	public void setShadowCascadeWidth(int[] shadowCascadeWidth) {
+		this.shadowCascadeWidth = shadowCascadeWidth;
+	}
+
+	public int[] getShadowCascadeHeight() {
+		return shadowCascadeHeight;
+	}
+
+	public void setShadowCascadeHeight(int[] shadowCascadeHeight) {
+		this.shadowCascadeHeight = shadowCascadeHeight;
+	}
+	
+	public double[] getShadowCascadeNearZ() {
+		return shadowCascadeNearZ;
+	}
+
+	public void setShadowCascadeNearZ(double[] shadowCascadeNearZ) {
+		this.shadowCascadeNearZ = shadowCascadeNearZ;
+	}
+
+	public double[] getShadowCascadeFarZ() {
+		return shadowCascadeFarZ;
+	}
+
+	public void setShadowCascadeFarZ(double[] shadowCascadeFarZ) {
+		this.shadowCascadeFarZ = shadowCascadeFarZ;
+	}
+
+	public List<DirectionalLight> getShadowCascadeArray() {
+		return shadowCascadeArray;
+	}
+
+	public void setShadowCascadeArray(List<DirectionalLight> shadowCascadeArray) {
+		this.shadowCascadeArray = shadowCascadeArray;
+	}
+
+	public int getShadowCameraLeft() {
+		return shadowCameraLeft;
+	}
+
+	public void setShadowCameraLeft(int shadowCameraLeft) {
+		this.shadowCameraLeft = shadowCameraLeft;
+	}
+
+	public int getShadowCameraRight() {
+		return shadowCameraRight;
+	}
+
+	public void setShadowCameraRight(int shadowCameraRight) {
+		this.shadowCameraRight = shadowCameraRight;
+	}
+
+	public int getShadowCameraTop() {
+		return shadowCameraTop;
+	}
+
+	public void setShadowCameraTop(int shadowCameraTop) {
+		this.shadowCameraTop = shadowCameraTop;
+	}
+
+	public int getShadowCameraBottom() {
+		return shadowCameraBottom;
+	}
+
+	public void setShadowCameraBottom(int shadowCameraBottom) {
+		this.shadowCameraBottom = shadowCameraBottom;
 	}
 }
