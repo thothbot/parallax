@@ -63,4 +63,6 @@ public class ChunksVertexShader
 	
 	public static String SKINNING_PARS = Chunks.INSTANCE.getSkinningParsVertex().getText();
 	public static String SKINNING = Chunks.INSTANCE.getSkinningVertex().getText();
+	
+	public static String WORLDPOS = Chunks.INSTANCE.getWorldposVertex().getText();
 }

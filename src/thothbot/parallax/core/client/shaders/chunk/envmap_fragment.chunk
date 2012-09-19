@@ -2,7 +2,7 @@
 
 	vec3 reflectVec;
 
-	#ifdef USE_BUMPMAP
+	#if defined( USE_BUMPMAP ) || defined( USE_NORMALMAP )
 
 		vec3 cameraToVertex = normalize( vWorldPosition - cameraPosition );
 

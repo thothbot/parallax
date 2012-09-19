@@ -170,4 +170,7 @@ public interface Chunks extends ClientBundle
 	
 	@Source("chunk/specularmap_pars_fragment.chunk")
 	TextResource getSpecularmapParsFragment();
+	
+	@Source("chunk/worldpos_vertex.chunk")
+	TextResource getWorldposVertex();
 }
