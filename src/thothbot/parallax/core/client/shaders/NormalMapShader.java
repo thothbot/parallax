@@ -79,7 +79,7 @@ public final class NormalMapShader extends Shader
 		this.addUniform("tSpecular",     new Uniform(Uniform.TYPE.T ));
 		this.addUniform("tAO",           new Uniform(Uniform.TYPE.T ));
 		
-		this.addUniform("uNormalScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("uNormalScale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 ) ));
 		
 		this.addUniform("uDisplacementBias",  new Uniform(Uniform.TYPE.F, 0.0 ));
 		this.addUniform("uDisplacementScale", new Uniform(Uniform.TYPE.F, 1.0 ));
@@ -102,11 +102,13 @@ public final class NormalMapShader extends Shader
 	protected void updateVertexSource(String src)
 	{
 		List<String> vars = Arrays.asList(
+			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
-			ChunksVertexShader.SHADOWMAP
+			ChunksVertexShader.SKINBASE,
+			ChunksVertexShader.SKINNORMAL
 		);
 
 		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));

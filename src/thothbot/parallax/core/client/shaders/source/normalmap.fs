@@ -16,7 +16,10 @@ uniform sampler2D tAO;
 
 uniform samplerCube tCube;
 
-uniform float uNormalScale;
+uniform vec2 uNormalScale;
+
+uniform bool useRefract;
+uniform float uRefractionRatio;
 uniform float uReflectivity;
 
 varying vec3 vTangent;
@@ -27,19 +30,46 @@ varying vec2 vUv;
 uniform vec3 ambientLightColor;
 
 #if MAX_DIR_LIGHTS > 0
+
 	uniform vec3 directionalLightColor[ MAX_DIR_LIGHTS ];
 	uniform vec3 directionalLightDirection[ MAX_DIR_LIGHTS ];
+
+#endif
+
+#if MAX_HEMI_LIGHTS > 0
+
+	uniform vec3 hemisphereLightSkyColor[ MAX_HEMI_LIGHTS ];
+	uniform vec3 hemisphereLightGroundColor[ MAX_HEMI_LIGHTS ];
+	uniform vec3 hemisphereLightPosition[ MAX_HEMI_LIGHTS ];
+
 #endif
 
 #if MAX_POINT_LIGHTS > 0
+
 	uniform vec3 pointLightColor[ MAX_POINT_LIGHTS ];
-	varying vec4 vPointLight[ MAX_POINT_LIGHTS ];
+	uniform vec3 pointLightPosition[ MAX_POINT_LIGHTS ];
+	uniform float pointLightDistance[ MAX_POINT_LIGHTS ];
+
+#endif
+
+#if MAX_SPOT_LIGHTS > 0
+
+	uniform vec3 spotLightColor[ MAX_SPOT_LIGHTS ];
+	uniform vec3 spotLightPosition[ MAX_SPOT_LIGHTS ];
+	uniform vec3 spotLightDirection[ MAX_SPOT_LIGHTS ];
+	uniform float spotLightAngle[ MAX_SPOT_LIGHTS ];
+	uniform float spotLightExponent[ MAX_SPOT_LIGHTS ];
+	uniform float spotLightDistance[ MAX_SPOT_LIGHTS ];
+
 #endif
 
 #ifdef WRAP_AROUND
+
 	uniform vec3 wrapRGB;
+
 #endif
 
+varying vec3 vWorldPosition;
 varying vec3 vViewPosition;
 
 [*]
@@ -94,6 +124,12 @@ void main() {
 	mat3 tsb = mat3( normalize( vTangent ), normalize( vBinormal ), normalize( vNormal ) );
 	vec3 finalNormal = tsb * normalTex;
 
+	#ifdef FLIP_SIDED
+
+		finalNormal = -finalNormal;
+
+	#endif
+
 	vec3 normal = normalize( finalNormal );
 	vec3 viewPosition = normalize( vViewPosition );
 
@@ -106,8 +142,14 @@ void main() {
 
 		for ( int i = 0; i < MAX_POINT_LIGHTS; i ++ ) {
 
-			vec3 pointVector = normalize( vPointLight[ i ].xyz );
-			float pointDistance = vPointLight[ i ].w;
+			vec4 lPosition = viewMatrix * vec4( pointLightPosition[ i ], 1.0 );
+			vec3 pointVector = lPosition.xyz + vViewPosition.xyz;
+
+			float pointDistance = 1.0;
+			if ( pointLightDistance[ i ] > 0.0 )
+				pointDistance = 1.0 - min( ( length( pointVector ) / pointLightDistance[ i ] ), 1.0 );
+
+			pointVector = normalize( pointVector );
 
 			// diffuse
 
@@ -146,6 +188,74 @@ void main() {
 				pointSpecular += pointDistance * pointLightColor[ i ] * uSpecularColor * pointSpecularWeight * pointDiffuseWeight;
 
 			#endif
+
+		}
+
+	#endif
+
+	// spot lights
+
+	#if MAX_SPOT_LIGHTS > 0
+
+		vec3 spotDiffuse = vec3( 0.0 );
+		vec3 spotSpecular = vec3( 0.0 );
+
+		for ( int i = 0; i < MAX_SPOT_LIGHTS; i ++ ) {
+
+			vec4 lPosition = viewMatrix * vec4( spotLightPosition[ i ], 1.0 );
+			vec3 spotVector = lPosition.xyz + vViewPosition.xyz;
+
+			float spotDistance = 1.0;
+			if ( spotLightDistance[ i ] > 0.0 )
+				spotDistance = 1.0 - min( ( length( spotVector ) / spotLightDistance[ i ] ), 1.0 );
+
+			spotVector = normalize( spotVector );
+
+			float spotEffect = dot( spotLightDirection[ i ], normalize( spotLightPosition[ i ] - vWorldPosition ) );
+
+			if ( spotEffect > spotLightAngle[ i ] ) {
+
+				spotEffect = pow( spotEffect, spotLightExponent[ i ] );
+
+				// diffuse
+
+				#ifdef WRAP_AROUND
+
+					float spotDiffuseWeightFull = max( dot( normal, spotVector ), 0.0 );
+					float spotDiffuseWeightHalf = max( 0.5 * dot( normal, spotVector ) + 0.5, 0.0 );
+
+					vec3 spotDiffuseWeight = mix( vec3 ( spotDiffuseWeightFull ), vec3( spotDiffuseWeightHalf ), wrapRGB );
+
+				#else
+
+					float spotDiffuseWeight = max( dot( normal, spotVector ), 0.0 );
+
+				#endif
+
+				spotDiffuse += spotDistance * spotLightColor[ i ] * uDiffuseColor * spotDiffuseWeight * spotEffect;
+
+				// specular
+
+				vec3 spotHalfVector = normalize( spotVector + viewPosition );
+				float spotDotNormalHalf = max( dot( normal, spotHalfVector ), 0.0 );
+				float spotSpecularWeight = specularTex.r * max( pow( spotDotNormalHalf, uShininess ), 0.0 );
+
+				#ifdef PHYSICALLY_BASED_SHADING
+
+					// 2.0 => 2.0001 is hack to work around ANGLE bug
+
+					float specularNormalization = ( uShininess + 2.0001 ) / 8.0;
+
+					vec3 schlick = uSpecularColor + vec3( 1.0 - uSpecularColor ) * pow( 1.0 - dot( spotVector, spotHalfVector ), 5.0 );
+					spotSpecular += schlick * spotLightColor[ i ] * spotSpecularWeight * spotDiffuseWeight * spotDistance * specularNormalization * spotEffect;
+
+				#else
+
+					spotSpecular += spotDistance * spotLightColor[ i ] * uSpecularColor * spotSpecularWeight * spotDiffuseWeight * spotEffect;
+
+				#endif
+
+			}
 
 		}
 
@@ -205,6 +315,64 @@ void main() {
 
 	#endif
 
+	// hemisphere lights
+
+	#if MAX_HEMI_LIGHTS > 0
+
+		vec3 hemiDiffuse  = vec3( 0.0 );
+		vec3 hemiSpecular = vec3( 0.0 );" ,
+
+		for( int i = 0; i < MAX_HEMI_LIGHTS; i ++ ) {
+
+			vec4 lPosition = viewMatrix * vec4( hemisphereLightPosition[ i ], 1.0 );
+			vec3 lVector = normalize( lPosition.xyz + vViewPosition.xyz );
+
+			// diffuse
+
+			float dotProduct = dot( normal, lVector );
+			float hemiDiffuseWeight = 0.5 * dotProduct + 0.5;
+
+			vec3 hemiColor = mix( hemisphereLightGroundColor[ i ], hemisphereLightSkyColor[ i ], hemiDiffuseWeight );
+
+			hemiDiffuse += uDiffuseColor * hemiColor;
+
+			// specular (sky light)
+
+
+			vec3 hemiHalfVectorSky = normalize( lVector + viewPosition );
+			float hemiDotNormalHalfSky = 0.5 * dot( normal, hemiHalfVectorSky ) + 0.5;
+			float hemiSpecularWeightSky = specularTex.r * max( pow( hemiDotNormalHalfSky, uShininess ), 0.0 );
+
+			// specular (ground light)
+
+			vec3 lVectorGround = normalize( -lPosition.xyz + vViewPosition.xyz );
+
+			vec3 hemiHalfVectorGround = normalize( lVectorGround + viewPosition );
+			float hemiDotNormalHalfGround = 0.5 * dot( normal, hemiHalfVectorGround ) + 0.5;
+			float hemiSpecularWeightGround = specularTex.r * max( pow( hemiDotNormalHalfGround, uShininess ), 0.0 );
+
+			#ifdef PHYSICALLY_BASED_SHADING
+
+				float dotProductGround = dot( normal, lVectorGround );
+
+				// 2.0 => 2.0001 is hack to work around ANGLE bug
+
+				float specularNormalization = ( uShininess + 2.0001 ) / 8.0;
+
+				vec3 schlickSky = uSpecularColor + vec3( 1.0 - uSpecularColor ) * pow( 1.0 - dot( lVector, hemiHalfVectorSky ), 5.0 );
+				vec3 schlickGround = uSpecularColor + vec3( 1.0 - uSpecularColor ) * pow( 1.0 - dot( lVectorGround, hemiHalfVectorGround ), 5.0 );
+				hemiSpecular += hemiColor * specularNormalization * ( schlickSky * hemiSpecularWeightSky * max( dotProduct, 0.0 ) + schlickGround * hemiSpecularWeightGround * max( dotProductGround, 0.0 ) );
+
+			#else
+
+				hemiSpecular += uSpecularColor * hemiColor * ( hemiSpecularWeightSky + hemiSpecularWeightGround ) * hemiDiffuseWeight;
+
+			#endif
+
+		}
+
+	#endif
+
 	// all lights contribution summation
 
 	vec3 totalDiffuse = vec3( 0.0 );
@@ -217,6 +385,13 @@ void main() {
 
 	#endif
 
+	#if MAX_HEMI_LIGHTS > 0
+
+		totalDiffuse += hemiDiffuse;
+		totalSpecular += hemiSpecular;
+
+	#endif
+
 	#if MAX_POINT_LIGHTS > 0
 
 		totalDiffuse += pointDiffuse;
@@ -224,12 +399,37 @@ void main() {
 
 	#endif
 
-	gl_FragColor.xyz = gl_FragColor.xyz * ( totalDiffuse + ambientLightColor * uAmbientColor) + totalSpecular;
+	#if MAX_SPOT_LIGHTS > 0
+
+		totalDiffuse += spotDiffuse;
+		totalSpecular += spotSpecular;
+
+	#endif
+
+	#ifdef METAL
+
+		gl_FragColor.xyz = gl_FragColor.xyz * ( totalDiffuse + ambientLightColor * uAmbientColor + totalSpecular );
+
+	#else
+
+		gl_FragColor.xyz = gl_FragColor.xyz * ( totalDiffuse + ambientLightColor * uAmbientColor ) + totalSpecular;
+
+	#endif
 
 	if ( enableReflection ) {
 
-		vec3 wPos = cameraPosition - vViewPosition;
-		vec3 vReflect = reflect( normalize( wPos ), normal );
+		vec3 vReflect;
+		vec3 cameraToVertex = normalize( vWorldPosition - cameraPosition );
+
+		if ( useRefract ) {
+
+			vReflect = refract( cameraToVertex, normal, uRefractionRatio );
+
+		} else {
+
+			vReflect = reflect( cameraToVertex, normal );
+
+		}
 
 		vec4 cubeColor = textureCube( tCube, vec3( -vReflect.x, vReflect.yz ) );
 

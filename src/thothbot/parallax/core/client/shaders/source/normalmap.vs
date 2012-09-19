@@ -3,6 +3,8 @@ attribute vec4 tangent;
 uniform vec2 uOffset;
 uniform vec2 uRepeat;
 
+uniform bool enableDisplacement;
+
 #ifdef VERTEX_TEXTURES
 
 	uniform sampler2D tDisplacement;
@@ -16,69 +18,107 @@ varying vec3 vBinormal;
 varying vec3 vNormal;
 varying vec2 vUv;
 
-#if MAX_POINT_LIGHTS > 0
-
-	uniform vec3 pointLightPosition[ MAX_POINT_LIGHTS ];
-	uniform float pointLightDistance[ MAX_POINT_LIGHTS ];
-
-	varying vec4 vPointLight[ MAX_POINT_LIGHTS ];
-
-#endif
-
+varying vec3 vWorldPosition;
 varying vec3 vViewPosition;
 
 [*]
 
 void main() {
 
-	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-
-	vViewPosition = -mvPosition.xyz;
+[*]
 
 	// normal, tangent and binormal vectors
 
-	vNormal = normalMatrix * normal;
-	vTangent = normalMatrix * tangent.xyz;
+	#ifdef USE_SKINNING
+
+		vNormal = normalMatrix * skinnedNormal.xyz;
+
+		vec4 skinnedTangent = skinMatrix * vec4( tangent.xyz, 0.0 );
+		vTangent = normalMatrix * skinnedTangent.xyz;
+
+	#else
+
+		vNormal = normalMatrix * normal;
+		vTangent = normalMatrix * tangent.xyz;
+
+	#endif
+
 	vBinormal = cross( vNormal, vTangent ) * tangent.w;
 
 	vUv = uv * uRepeat + uOffset;
 
-	// point lights
+	// displacement mapping
 
-	#if MAX_POINT_LIGHTS > 0
+	vec3 displacedPosition;
 
-		for( int i = 0; i < MAX_POINT_LIGHTS; i++ ) {
+	#ifdef VERTEX_TEXTURES
 
-			vec4 lPosition = viewMatrix * vec4( pointLightPosition[ i ], 1.0 );
-			vec3 lVector = lPosition.xyz - mvPosition.xyz;
+		if ( enableDisplacement ) {
 
-			float lDistance = 1.0;
-			if ( pointLightDistance[ i ] > 0.0 )
-				lDistance = 1.0 - min( ( length( lVector ) / pointLightDistance[ i ] ), 1.0 );
+			vec3 dv = texture2D( tDisplacement, uv ).xyz;
+			float df = uDisplacementScale * dv.x + uDisplacementBias;
+			displacedPosition = position + normalize( normal ) * df;
 
-			lVector = normalize( lVector );
+		} else {
 
-			vPointLight[ i ] = vec4( lVector, lDistance );
+			#ifdef USE_SKINNING
+
+				vec4 skinVertex = vec4( position, 1.0 );
+
+				vec4 skinned  = boneMatX * skinVertex * skinWeight.x;
+				skinned 	  += boneMatY * skinVertex * skinWeight.y;
+
+				displacedPosition  = skinned.xyz;
+
+			#else
+
+				displacedPosition = position;
+
+			#endif
+
+		}
+
+	#else
+
+		#ifdef USE_SKINNING
+
+			vec4 skinVertex = vec4( position, 1.0 );
+
+			vec4 skinned  = boneMatX * skinVertex * skinWeight.x;
+			skinned 	  += boneMatY * skinVertex * skinWeight.y;
+
+			displacedPosition  = skinned.xyz;
+
+		#else
+
+			displacedPosition = position;
+
+		#endif
+
+	#endif
+
+	//
+
+	vec4 mvPosition = modelViewMatrix * vec4( displacedPosition, 1.0 );
+	vec4 mPosition = modelMatrix * vec4( displacedPosition, 1.0 );
+
+	gl_Position = projectionMatrix * mvPosition;
+
+	//
+
+	vWorldPosition = mPosition.xyz;
+	vViewPosition = -mvPosition.xyz;
+
+	// shadows
+
+	#ifdef USE_SHADOWMAP
+
+		for( int i = 0; i < MAX_SHADOWS; i ++ ) {
+
+			vShadowCoord[ i ] = shadowMatrix[ i ] * mPosition;
 
 		}
 
 	#endif
-
-	// displacement mapping
-
-	#ifdef VERTEX_TEXTURES
-
-		vec3 dv = texture2D( tDisplacement, uv ).xyz;
-		float df = uDisplacementScale * dv.x + uDisplacementBias;
-		vec4 displacedPosition = vec4( normalize( vNormal.xyz ) * df, 0.0 ) + mvPosition;
-		gl_Position = projectionMatrix * displacedPosition;
-
-	#else
-
-		gl_Position = projectionMatrix * mvPosition;
-
-	#endif
-
-[*]
 
 }
