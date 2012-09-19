@@ -794,13 +794,6 @@ public class Mesh extends GeometryObject
 				 skinIndexArray.set(offset_skin + 14, si4.getZ());
 				 skinIndexArray.set(offset_skin + 15, si4.getW());
 
-				 // vertices A
-
-				 Vector3 sa1 = getGeometry().getSkinVerticesA().get(face.getA());
-				 Vector3 sa2 = getGeometry().getSkinVerticesA().get(face.getB());
-				 Vector3 sa3 = getGeometry().getSkinVerticesA().get(face.getC());
-				 Vector3 sa4 = getGeometry().getSkinVerticesA().get(face.getD());
-
 				 offset_skin += 16;
 
 			 }
