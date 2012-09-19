@@ -814,8 +814,6 @@ public class WebGLRenderer
 		getGL().deleteBuffer( geometryGroup.__webglUVBuffer );
 		getGL().deleteBuffer( geometryGroup.__webglUV2Buffer );
 
-		getGL().deleteBuffer( geometryGroup.__webglSkinVertexABuffer );
-		getGL().deleteBuffer( geometryGroup.__webglSkinVertexBBuffer );
 		getGL().deleteBuffer( geometryGroup.__webglSkinIndicesBuffer );
 		getGL().deleteBuffer( geometryGroup.__webglSkinWeightsBuffer );
 
@@ -1448,16 +1446,8 @@ public class WebGLRenderer
 			}
 
 			if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() &&
-				 attributes.get("skinVertexA") >= 0 && attributes.get("skinVertexB") >= 0 &&
 				 attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 ) 
 			{
-
-				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinVertexABuffer );
-				getGL().vertexAttribPointer( attributes.get("skinVertexA"), 4, GLenum.FLOAT.getValue(), false, 0, 0 );
-
-				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinVertexBBuffer );
-				getGL().vertexAttribPointer( attributes.get("skinVertexB"), 4, GLenum.FLOAT.getValue(), false, 0, 0 );
-
 				getGL().bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinIndicesBuffer );
 				getGL().vertexAttribPointer( attributes.get("skinIndex"), 4, GLenum.FLOAT.getValue(), false, 0, 0 );
 
@@ -1890,11 +1880,8 @@ public class WebGLRenderer
 			getGL().enableVertexAttribArray( attributes.get("tangent") );
 
 		if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() &&
-			 attributes.get("skinVertexA") >=0 && attributes.get("skinVertexB") >= 0 &&
 			 attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 
 		) {
-			getGL().enableVertexAttribArray( attributes.get("skinVertexA") );
-			getGL().enableVertexAttribArray( attributes.get("skinVertexB") );
 			getGL().enableVertexAttribArray( attributes.get("skinIndex") );
 			getGL().enableVertexAttribArray( attributes.get("skinWeight") );
 		}

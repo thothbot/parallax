@@ -256,8 +256,6 @@ public class Mesh extends GeometryObject
 
 		if (this.geometry.getSkinWeights().size() > 0 && this.geometry.getSkinIndices().size() > 0) 
 		{
-			geometryGroup.setWebGlSkinVertexAArray( Float32Array.create(nvertices * 4) );
-			geometryGroup.setWebGlSkinVertexBArray( Float32Array.create(nvertices * 4) );
 			geometryGroup.setWebGlSkinIndexArray  ( Float32Array.create(nvertices * 4) );
 			geometryGroup.setWebGlSkinWeightArray ( Float32Array.create(nvertices * 4) );
 		}
@@ -346,8 +344,6 @@ public class Mesh extends GeometryObject
 		geometryGroup.__webglUVBuffer = gl.createBuffer();
 		geometryGroup.__webglUV2Buffer = gl.createBuffer();
 
-		geometryGroup.__webglSkinVertexABuffer = gl.createBuffer();
-		geometryGroup.__webglSkinVertexBBuffer = gl.createBuffer();
 		geometryGroup.__webglSkinIndicesBuffer = gl.createBuffer();
 		geometryGroup.__webglSkinWeightsBuffer = gl.createBuffer();
 
@@ -685,8 +681,6 @@ public class Mesh extends GeometryObject
 		 if ( getGeometry().getSkinWeights().size() > 0 ) 
 		 {
 			 int offset_skin = 0;
-			 Float32Array skinVertexAArray = geometryGroup.getWebGlSkinVertexAArray();
-			 Float32Array skinVertexBArray = geometryGroup.getWebGlSkinVertexBArray();
 
 			 Float32Array skinIndexArray = geometryGroup.getWebGlSkinIndexArray();
 			 Float32Array skinWeightArray = geometryGroup.getWebGlSkinWeightArray();
@@ -736,48 +730,6 @@ public class Mesh extends GeometryObject
 				 skinIndexArray.set(offset_skin + 9, si3.getY());
 				 skinIndexArray.set(offset_skin + 10, si3.getZ());
 				 skinIndexArray.set(offset_skin + 11, si3.getW());
-
-				 // vertices A
-
-				 Vector3 sa1 = getGeometry().getSkinVerticesA().get(face.getA());
-				 Vector3 sa2 = getGeometry().getSkinVerticesA().get(face.getB());
-				 Vector3 sa3 = getGeometry().getSkinVerticesA().get(face.getC());
-
-				 skinVertexAArray.set(offset_skin, sa1.getX());
-				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
-				 skinVertexAArray.set(offset_skin + 2, sa1.getZ());
-				 skinVertexAArray.set(offset_skin + 3, 1.0); // pad for faster vertex shader
-
-				 skinVertexAArray.set(offset_skin + 4, sa2.getX());
-				 skinVertexAArray.set(offset_skin + 5, sa2.getY());
-				 skinVertexAArray.set(offset_skin + 6, sa2.getZ());
-				 skinVertexAArray.set(offset_skin + 7, 1.0);
-
-				 skinVertexAArray.set(offset_skin + 8, sa3.getX());
-				 skinVertexAArray.set(offset_skin + 9, sa3.getY());
-				 skinVertexAArray.set(offset_skin + 10, sa3.getZ());
-				 skinVertexAArray.set(offset_skin + 11, 1.0);
-
-				 // vertices B
-
-				 Vector3 sb1 = getGeometry().getSkinVerticesB().get(face.getA());
-				 Vector3 sb2 = getGeometry().getSkinVerticesB().get(face.getB());
-				 Vector3 sb3 = getGeometry().getSkinVerticesB().get(face.getC());
-
-				 skinVertexBArray.set(offset_skin, sb1.getX());
-				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
-				 skinVertexBArray.set(offset_skin + 2, sb1.getZ());
-				 skinVertexBArray.set(offset_skin + 3, 1.0); // pad for faster vertex shader
-
-				 skinVertexBArray.set(offset_skin + 4, sb2.getX());
-				 skinVertexBArray.set(offset_skin + 5, sb2.getY());
-				 skinVertexBArray.set(offset_skin + 6, sb2.getZ());
-				 skinVertexBArray.set(offset_skin + 7, 1.0);
-
-				 skinVertexBArray.set(offset_skin + 8, sb3.getX());
-				 skinVertexBArray.set(offset_skin + 9, sb3.getY());
-				 skinVertexBArray.set(offset_skin + 10, sb3.getZ());
-				 skinVertexBArray.set(offset_skin + 11, 1.0);
 
 				 offset_skin += 12;
 
@@ -849,65 +801,12 @@ public class Mesh extends GeometryObject
 				 Vector3 sa3 = getGeometry().getSkinVerticesA().get(face.getC());
 				 Vector3 sa4 = getGeometry().getSkinVerticesA().get(face.getD());
 
-				 skinVertexAArray.set(offset_skin, sa1.getX());
-				 skinVertexAArray.set(offset_skin + 1, sa1.getY());
-				 skinVertexAArray.set(offset_skin + 2, sa1.getZ());
-				 skinVertexAArray.set(offset_skin + 3, 1.0); // pad for faster vertex shader
-
-				 skinVertexAArray.set(offset_skin + 4, sa2.getX());
-				 skinVertexAArray.set(offset_skin + 5, sa2.getY());
-				 skinVertexAArray.set(offset_skin + 6, sa2.getZ());
-				 skinVertexAArray.set(offset_skin + 7, 1.0);
-
-				 skinVertexAArray.set(offset_skin + 8, sa3.getX());
-				 skinVertexAArray.set(offset_skin + 9, sa3.getY());
-				 skinVertexAArray.set(offset_skin + 10, sa3.getZ());
-				 skinVertexAArray.set(offset_skin + 11, 1.0);
-
-				 skinVertexAArray.set(offset_skin + 12, sa4.getX());
-				 skinVertexAArray.set(offset_skin + 13, sa4.getY());
-				 skinVertexAArray.set(offset_skin + 14, sa4.getZ());
-				 skinVertexAArray.set(offset_skin + 15, 1.0);
-
-				 // vertices B
-
-				 Vector3 sb1 = getGeometry().getSkinVerticesB().get(face.getA());
-				 Vector3 sb2 = getGeometry().getSkinVerticesB().get(face.getB());
-				 Vector3 sb3 = getGeometry().getSkinVerticesB().get(face.getC());
-				 Vector3 sb4 = getGeometry().getSkinVerticesB().get(face.getD());
-
-				 skinVertexBArray.set(offset_skin, sb1.getX());
-				 skinVertexBArray.set(offset_skin + 1, sb1.getY());
-				 skinVertexBArray.set(offset_skin + 2, sb1.getZ());
-				 skinVertexBArray.set(offset_skin + 3, 1.0); // pad for faster vertex shader
-
-				 skinVertexBArray.set(offset_skin + 4, sb2.getX());
-				 skinVertexBArray.set(offset_skin + 5, sb2.getY());
-				 skinVertexBArray.set(offset_skin + 6, sb2.getZ());
-				 skinVertexBArray.set(offset_skin + 7, 1.0);
-
-				 skinVertexBArray.set(offset_skin + 8, sb3.getX());
-				 skinVertexBArray.set(offset_skin + 9, sb3.getY());
-				 skinVertexBArray.set(offset_skin + 10, sb3.getZ());
-				 skinVertexBArray.set(offset_skin + 11, 1.0);
-
-				 skinVertexBArray.set(offset_skin + 12, sb4.getX());
-				 skinVertexBArray.set(offset_skin + 13, sb4.getY());
-				 skinVertexBArray.set(offset_skin + 14, sb4.getZ());
-				 skinVertexBArray.set(offset_skin + 15, 1.0);
-
 				 offset_skin += 16;
 
 			 }
 
 			 if ( offset_skin > 0 ) 
 			 {
-				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinVertexABuffer );
-				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), skinVertexAArray, hint );
-
-				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinVertexBBuffer );
-				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), skinVertexBArray, hint );
-
 				 gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinIndicesBuffer );
 				 gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), skinIndexArray, hint );
 

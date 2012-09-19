@@ -43,8 +43,6 @@ attribute vec2 uv2;
 
 #ifdef USE_SKINNING
 
-	attribute vec4 skinVertexA;
-	attribute vec4 skinVertexB;
 	attribute vec4 skinIndex;
 	attribute vec4 skinWeight;
 

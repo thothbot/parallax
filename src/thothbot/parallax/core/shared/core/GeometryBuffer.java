@@ -46,8 +46,6 @@ public abstract class GeometryBuffer
 	public WebGLBuffer __webglUVBuffer;
 	public WebGLBuffer __webglUV2Buffer;
 	
-	public WebGLBuffer __webglSkinVertexABuffer;
-	public WebGLBuffer __webglSkinVertexBBuffer;
 	public WebGLBuffer __webglSkinIndicesBuffer;
 	public WebGLBuffer __webglSkinWeightsBuffer;
 	

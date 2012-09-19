@@ -40,6 +40,7 @@ public class ProgramParameters
 	public boolean envMap;
 	public boolean lightMap;
 	public boolean bumpMap;
+	public boolean normalMap;
 	public boolean specularMap;
 	public boolean vertexColors;
 	public boolean skinning;
@@ -48,6 +49,7 @@ public class ProgramParameters
 	public boolean perPixel;
 	public boolean wrapAround;
 	public boolean doubleSided;
+	public boolean flipSided;
 	
 	public boolean shadowMapEnabled;
 	public boolean shadowMapSoft;
@@ -71,8 +73,8 @@ public class ProgramParameters
 		retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading + "-1-"
 				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + ", " + maxHemiLights + "-2-"
 				+ maxShadows + ", " + maxBones + ", " + boneTextureWidth + ", " + boneTextureHeight + ", " + useVertexTexture + "-2-"
-				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + specularMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
-				+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + "-5-"
+				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + normalMap + ", " + specularMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
+				+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + ", " + flipSided + "-5-"
 				+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-6-"
 				+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals + ", " + isSupportsVertexTextures;
 		return retval;

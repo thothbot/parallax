@@ -56,8 +56,6 @@ public class GeometryGroup extends GeometryBuffer
 	private Uint16Array webGlFaceArray;
 	private Uint16Array webGlLineArray;
 
-	private Float32Array webGlSkinVertexAArray;
-	private Float32Array webGlSkinVertexBArray;
 	private Float32Array webGlSkinIndexArray;
 	private Float32Array webGlSkinWeightArray;
 					
@@ -103,16 +101,6 @@ public class GeometryGroup extends GeometryBuffer
 		return webGlLineArray;
 	}
 
-	public Float32Array getWebGlSkinVertexAArray() 
-	{
-		return webGlSkinVertexAArray;
-	}
-
-	public Float32Array getWebGlSkinVertexBArray() 
-	{
-		return webGlSkinVertexBArray;
-	}
-
 	public Float32Array getWebGlSkinIndexArray() 
 	{
 		return webGlSkinIndexArray;
@@ -153,16 +141,6 @@ public class GeometryGroup extends GeometryBuffer
 		this.webGlLineArray = a;
 	}
 	
-	public void setWebGlSkinVertexAArray(Float32Array a)
-	{
-		this.webGlSkinVertexAArray = a;
-	}
-	
-	public void setWebGlSkinVertexBArray(Float32Array a)
-	{
-		this.webGlSkinVertexBArray = a;
-	}
-	
 	public void setWebGlSkinIndexArray(Float32Array a)
 	{
 		this.webGlSkinIndexArray = a;
@@ -186,8 +164,6 @@ public class GeometryGroup extends GeometryBuffer
 		setWebGlFaceArray( null );
 		setWebGlLineArray( null );
 		
-		setWebGlSkinVertexAArray( null );
-		setWebGlSkinVertexBArray( null );
 		setWebGlSkinIndexArray( null );
 		setWebGlSkinWeightArray( null );
 	}

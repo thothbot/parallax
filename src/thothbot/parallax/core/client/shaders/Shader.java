@@ -167,8 +167,7 @@ public abstract class Shader
 
 		// cache attributes locations
 		List<String> attributesIds = new ArrayList<String>(Arrays.asList("position", "normal",
-				"uv", "uv2", "tangent", "color", "skinVertexA", "skinVertexB", "skinIndex",
-				"skinWeight"));
+				"uv", "uv2", "tangent", "color", "skinIndex", "skinWeight"));
 
 		for (int i = 0; i < maxMorphTargets; i++)
 			attributesIds.add("morphTarget" + i);

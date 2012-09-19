@@ -100,10 +100,10 @@ public abstract class Material
 		MAX_SHADOWS, // param
 		MAX_BONES, // param
 
-		USE_MAP, USE_ENVMAP, USE_LIGHTMAP, USE_BUMPMAP, USE_SPECULARMAP, USE_COLOR, USE_SKINNING, USE_MORPHTARGETS, USE_MORPHNORMALS,
+		USE_MAP, USE_ENVMAP, USE_LIGHTMAP, USE_BUMPMAP, USE_NORMALMAP, USE_SPECULARMAP, USE_COLOR, USE_SKINNING, USE_MORPHTARGETS, USE_MORPHNORMALS,
 
 		BONE_TEXTURE, N_BONE_PIXEL_X, N_BONE_PIXEL_Y,
-		PHONG_PER_PIXEL, WRAP_AROUND, DOUBLE_SIDED,
+		PHONG_PER_PIXEL, WRAP_AROUND, DOUBLE_SIDED, FLIP_SIDED,
 
 		USE_SHADOWMAP, SHADOWMAP_SOFT, SHADOWMAP_DEBUG, SHADOWMAP_CASCADE,
 
@@ -347,10 +347,11 @@ public abstract class Material
 
 	public void updateProgramParameters(ProgramParameters parameters)
 	{
-		parameters.map      = (this instanceof HasMap && ((HasMap)this).getMap() != null);
-		parameters.envMap   = (this instanceof HasEnvMap && ((HasEnvMap)this).getEnvMap() != null);
-		parameters.lightMap = (this instanceof HasLightMap &&  ((HasLightMap)this).getLightMap() != null);
-		parameters.bumpMap  = (this instanceof HasBumpMap &&  ((HasBumpMap)this).getBumpMap() != null);
+		parameters.map       = (this instanceof HasMap && ((HasMap)this).getMap() != null);
+		parameters.envMap    = (this instanceof HasEnvMap && ((HasEnvMap)this).getEnvMap() != null);
+		parameters.lightMap  = (this instanceof HasLightMap &&  ((HasLightMap)this).getLightMap() != null);
+		parameters.bumpMap   = (this instanceof HasBumpMap &&  ((HasBumpMap)this).getBumpMap() != null);
+		parameters.normalMap = (this instanceof HasNormalMap &&  ((HasNormalMap)this).getNormalMap() != null);
 		parameters.specularMap  = (this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null);
 
 		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
@@ -373,6 +374,7 @@ public abstract class Material
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
 		parameters.doubleSided = this.getSides() == Material.SIDE.DOUBLE;
+		parameters.flipSided = this.getSides() == Material.SIDE.BACK;
 	}
 
 	public Shader buildShader(WebGLRenderingContext gl, ProgramParameters parameters)
@@ -427,6 +429,9 @@ public abstract class Material
 		if (parameters.bumpMap)
 			options.add(SHADER_DEFINE.USE_BUMPMAP.getValue());
 		
+		if (parameters.normalMap)
+			options.add(SHADER_DEFINE.USE_NORMALMAP.getValue());
+		
 		if (parameters.specularMap)
 			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
 
@@ -456,6 +461,8 @@ public abstract class Material
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
 		if (parameters.doubleSided)
 			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
+		if (parameters.flipSided)
+			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
 
 		if (parameters.shadowMapEnabled)
 			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
@@ -485,7 +492,7 @@ public abstract class Material
 
 		options.add("");
 		
-		if (parameters.bumpMap)
+		if (parameters.bumpMap || parameters.normalMap)
 			options.add("#extension GL_OES_standard_derivatives : enable");
 		
 		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
@@ -525,6 +532,9 @@ public abstract class Material
 		if (parameters.bumpMap)
 			options.add(SHADER_DEFINE.USE_BUMPMAP.getValue());
 		
+		if (parameters.normalMap)
+			options.add(SHADER_DEFINE.USE_NORMALMAP.getValue());
+		
 		if (parameters.specularMap)
 			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
 
@@ -540,6 +550,8 @@ public abstract class Material
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
 		if (parameters.doubleSided)
 			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
+		if (parameters.flipSided)
+			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
 
 		if (parameters.shadowMapEnabled)
 			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
@@ -600,16 +612,25 @@ public abstract class Material
 			uniforms.get("bumpScale").setValue( ((HasBumpMap)this).getBumpScale() );
 		}	
 		
+		if(this instanceof HasNormalMap)
+		{
+			uniforms.get("normalMap").setValue( ((HasNormalMap)this).getNormalMap() );
+			uniforms.get("normalScal").setValue( ((HasNormalMap)this).getNormalScale() );
+		}	
+		
 		// uv repeat and offset setting priorities
 		//	1. color map
 		//	2. specular map
-		//	3. bump map
+		//	3. normal map
+		//  4. bump map
 		Texture uvScaleMap = null;
 		
 		if(this instanceof HasMap)
 			uvScaleMap = ((HasMap) this).getMap();
 		else if(this instanceof HasSpecularMap)
 			uvScaleMap = ((HasSpecularMap)this).getSpecularMap();
+		else if(this instanceof HasNormalMap)
+			uvScaleMap = ((HasNormalMap)this).getNormalMap();
 		else if(this instanceof HasBumpMap)
 			uvScaleMap = ((HasBumpMap)this).getBumpMap();
 		
@@ -674,6 +695,9 @@ public abstract class Material
 			return true;
 		
 		if(this instanceof HasBumpMap && ((HasBumpMap)this).getBumpMap() != null)
+			return true;
+		
+		if(this instanceof HasNormalMap && ((HasNormalMap)this).getNormalMap() != null)
 			return true;
 		
 		if(this instanceof HasSpecularMap && ((HasSpecularMap)this).getSpecularMap() != null)
