@@ -1962,14 +1962,14 @@ public class WebGLRenderer
 			this.cache_currentProgram = program;
 
 			refreshMaterial = true;
-			Log.error(1);
+			Log.error("program != cache_currentProgram");
 		}
 
 		if ( material.getId() != this.cache_currentMaterialId ) 
 		{
 			this.cache_currentMaterialId = material.getId();
 			refreshMaterial = true;
-			Log.error(2);
+			Log.error("material.getId() != this.cache_currentMaterialId");
 		}
 
 		if ( refreshMaterial || camera != this.cache_currentCamera ) 

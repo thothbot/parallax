@@ -5,7 +5,7 @@
 	uniform float flipEnvMap;
 	uniform int combine;
 
-	#if defined( USE_BUMPMAP ) || defined( USE_NORMALMAP 
+	#if defined( USE_BUMPMAP ) || defined( USE_NORMALMAP )
 
 		uniform bool useRefract;
 		uniform float refractionRatio;
