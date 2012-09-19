@@ -1975,12 +1975,14 @@ public class WebGLRenderer
 			this.cache_currentProgram = program;
 
 			refreshMaterial = true;
+			Log.error(1);
 		}
 
 		if ( material.getId() != this.cache_currentMaterialId ) 
 		{
 			this.cache_currentMaterialId = material.getId();
 			refreshMaterial = true;
+			Log.error(2);
 		}
 
 		if ( refreshMaterial || camera != this.cache_currentCamera ) 
@@ -1991,6 +1993,30 @@ public class WebGLRenderer
 				this.cache_currentCamera = camera;
 		}
 
+		// skinning uniforms must be set even if material didn't change
+		// auto-setting of texture unit for bone texture must go before other textures
+		// not sure why, but otherwise weird things happen
+		if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() )
+		{
+			if ( object instanceof SkinnedMesh && ((SkinnedMesh)object).useVertexTexture && this.isGPUsupportsBoneTextures) 
+			{
+				if ( m_uniforms.get("boneTexture").getLocation() != null ) 
+				{
+					int textureUnit = getTextureUnit();
+
+					getGL().uniform1i( m_uniforms.get("boneTexture").getLocation(), textureUnit );
+					setTexture( ((SkinnedMesh)object).boneTexture, textureUnit );
+				}
+			} 
+			else 
+			{
+				if ( m_uniforms.get("boneGlobalMatrices").getLocation() != null ) 
+				{
+					getGL().uniformMatrix4fv( m_uniforms.get("boneGlobalMatrices").getLocation(), false, ((SkinnedMesh)object).boneMatrices );
+				}
+			}
+		}
+		
 		if ( refreshMaterial ) 
 		{
 			// refresh uniforms common to several materials
@@ -2042,30 +2068,6 @@ public class WebGLRenderer
 
 				if ( m_uniforms.get("viewMatrix").getLocation() != null ) 
 					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera._viewMatrixArray );
-			}
-
-			if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() )
-			{
-				if ( object instanceof SkinnedMesh && ((SkinnedMesh)object).useVertexTexture && this.isGPUsupportsBoneTextures) 
-				{
-					if ( m_uniforms.get("boneTexture").getLocation() != null ) 
-					{
-						// shadowMap texture array starts from 6
-						// texture unit 12 should leave space for 6 shadowmaps
-
-						int textureUnit = 12;
-
-						getGL().uniform1i( m_uniforms.get("boneTexture").getLocation(), textureUnit );
-						setTexture( ((SkinnedMesh)object).boneTexture, textureUnit );
-					}
-				} 
-				else 
-				{
-					if ( m_uniforms.get("boneGlobalMatrices").getLocation() != null ) 
-					{
-						getGL().uniformMatrix4fv( m_uniforms.get("boneGlobalMatrices").getLocation(), false, ((SkinnedMesh)object).boneMatrices );
-					}
-				}
 			}
 		}
 
@@ -2142,8 +2144,10 @@ Log.error("?????????????");
 
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
-		for ( Uniform uniform : materialUniforms.values() ) 
+//		for ( Uniform uniform : materialUniforms.values() ) 
+		for ( String key : materialUniforms.keySet() )
 		{
+			Uniform uniform = materialUniforms.get(key);
 			WebGLUniformLocation location = uniform.getLocation();
 		
 			if ( location == null ) continue;
@@ -2153,8 +2157,8 @@ Log.error("?????????????");
 			if ( value == null ) continue;
 
 			Uniform.TYPE type = uniform.getType();
-			
-			Log.debug("loadUniformsGeneric() " + uniform);
+
+			Log.debug("loadUniformsGeneric() " + key + ": " + uniform);
 			
 			switch ( type ) {
 
@@ -2732,10 +2736,12 @@ Log.error("?????????????");
 		{
 			if ( texture.getWebGlTexture() == null ) 
 			{
-				texture.setWebGlTexture(getGL().createTexture());
+				texture.setWebGlTexture( getGL().createTexture() );
 
 				this.getInfo().getMemory().textures ++;
 			}
+			
+			Log.error(slot, texture);
 
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
