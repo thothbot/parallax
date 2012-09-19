@@ -149,11 +149,11 @@ public final class ShadowMap extends Plugin
 				for ( int n = 0; n < dirLight.getShadowCascadeCount(); n ++ ) 
 				{
 					VirtualLight virtualLight;
-					List<DirectionalLight> shadowCascadeArray = dirLight.getShadowCascadeArray();
+					List<VirtualLight> shadowCascadeArray = dirLight.getShadowCascadeArray();
 
 					if ( shadowCascadeArray.size() <= n || shadowCascadeArray.get( n ) == null ) 
 					{
-						virtualLight = createVirtualLight( light, n );
+						virtualLight = createVirtualLight( dirLight, n );
 						virtualLight.setOriginalCamera( camera );
 
 						Gyroscope gyro = new Gyroscope();
@@ -233,11 +233,11 @@ public final class ShadowMap extends Plugin
 
 			if ( light.isShadowCameraVisible() && light.getCameraHelper() == null ) 
 			{
-				light.setCameraHelper( new CameraHelper( light.getShadowCamera() );
+				light.setCameraHelper( new CameraHelper( light.getShadowCamera() ));
 				light.getShadowCamera().add( light.getCameraHelper() );
 			}
 
-			if ( light.isVirtual && virtualLight.originalCamera == camera ) 
+			if ( light instanceof VirtualLight && ((VirtualLight)light).getOriginalCamera() == camera ) 
 			{
 				updateShadowCamera( camera, light );
 			}
@@ -383,55 +383,43 @@ public final class ShadowMap extends Plugin
 		}
 	}
 
-	private VirtualLight createVirtualLight( Light light, int cascade ) 
+	private VirtualLight createVirtualLight( DirectionalLight light, int cascade ) 
 	{
-		VirtualLight virtualLight = new VirtualLight();
+		VirtualLight virtualLight = new VirtualLight(light.getColor().getHex());
 
-		virtualLight.isVirtual = true;
+		virtualLight.setOnlyShadow(true);
+		virtualLight.setCastShadow(true);
 
-		virtualLight.onlyShadow = true;
-		virtualLight.castShadow = true;
+		virtualLight.setShadowCameraNear( light.getShadowCameraNear() );
+		virtualLight.setShadowCameraFar( light.getShadowCameraFar() );
 
-		virtualLight.shadowCameraNear = light.shadowCameraNear;
-		virtualLight.shadowCameraFar = light.shadowCameraFar;
+		virtualLight.setShadowCameraLeft( light.getShadowCameraLeft() );
+		virtualLight.setShadowCameraRight( light.getShadowCameraRight() );
+		virtualLight.setShadowCameraBottom( light.getShadowCameraBottom() );
+		virtualLight.setShadowCameraTop( light.getShadowCameraTop() );
 
-		virtualLight.shadowCameraLeft = light.shadowCameraLeft;
-		virtualLight.shadowCameraRight = light.shadowCameraRight;
-		virtualLight.shadowCameraBottom = light.shadowCameraBottom;
-		virtualLight.shadowCameraTop = light.shadowCameraTop;
+		virtualLight.setShadowCameraVisible( light.isShadowCameraVisible() );
 
-		virtualLight.shadowCameraVisible = light.shadowCameraVisible;
+		virtualLight.setShadowDarkness( light.getShadowDarkness() );
 
-		virtualLight.shadowDarkness = light.shadowDarkness;
+		virtualLight.setShadowBias( light.getShadowCascadeBias()[ cascade ] );
+		virtualLight.setShadowMapWidth( light.getShadowCascadeWidth()[ cascade ] );
+		virtualLight.setShadowMapHeight( light.getShadowCascadeHeight()[ cascade ] );
 
-		virtualLight.shadowBias = light.shadowCascadeBias[ cascade ];
-		virtualLight.shadowMapWidth = light.shadowCascadeWidth[ cascade ];
-		virtualLight.shadowMapHeight = light.shadowCascadeHeight[ cascade ];
+		double nearZ = light.getShadowCascadeNearZ()[ cascade ];
+		double farZ = light.getShadowCascadeFarZ()[ cascade ];
 
-		virtualLight.pointsWorld = [];
-		virtualLight.pointsFrustum = [];
+		List<Vector3> pointsFrustum = virtualLight.getPointsFrustum();
+		
+		pointsFrustum.get( 0 ).set( -1, -1, nearZ );
+		pointsFrustum.get( 1 ).set(  1, -1, nearZ );
+		pointsFrustum.get( 2 ).set( -1,  1, nearZ );
+		pointsFrustum.get( 3 ).set(  1,  1, nearZ );
 
-		var pointsWorld = virtualLight.pointsWorld,
-			pointsFrustum = virtualLight.pointsFrustum;
-
-		for ( int i = 0; i < 8; i ++ ) 
-		{
-			pointsWorld[ i ] = new THREE.Vector3();
-			pointsFrustum[ i ] = new THREE.Vector3();
-		}
-
-		var nearZ = light.shadowCascadeNearZ[ cascade ];
-		var farZ = light.shadowCascadeFarZ[ cascade ];
-
-		pointsFrustum[ 0 ].set( -1, -1, nearZ );
-		pointsFrustum[ 1 ].set(  1, -1, nearZ );
-		pointsFrustum[ 2 ].set( -1,  1, nearZ );
-		pointsFrustum[ 3 ].set(  1,  1, nearZ );
-
-		pointsFrustum[ 4 ].set( -1, -1, farZ );
-		pointsFrustum[ 5 ].set(  1, -1, farZ );
-		pointsFrustum[ 6 ].set( -1,  1, farZ );
-		pointsFrustum[ 7 ].set(  1,  1, farZ );
+		pointsFrustum.get( 4 ).set( -1, -1, farZ );
+		pointsFrustum.get( 5 ).set(  1, -1, farZ );
+		pointsFrustum.get( 6 ).set( -1,  1, farZ );
+		pointsFrustum.get( 7 ).set(  1,  1, farZ );
 
 		return virtualLight;
 	}
@@ -439,7 +427,7 @@ public final class ShadowMap extends Plugin
 	/** 
 	 * Synchronize virtual light with the original light
 	 */
-	private void updateVirtualLight( AbstractShadowLight light, int cascade ) 
+	private void updateVirtualLight( VirtualLight light, int cascade ) 
 	{
 		VirtualLight virtualLight = light.getShadowCascadeArray().get( cascade );
 
@@ -455,17 +443,17 @@ public final class ShadowMap extends Plugin
 		var nearZ = light.shadowCascadeNearZ[ cascade ];
 		var farZ = light.shadowCascadeFarZ[ cascade ];
 
-		var pointsFrustum = virtualLight.pointsFrustum;
+		List<Vector3> pointsFrustum = virtualLight.getPointsFrustum();
 
-		pointsFrustum[ 0 ].z = nearZ;
-		pointsFrustum[ 1 ].z = nearZ;
-		pointsFrustum[ 2 ].z = nearZ;
-		pointsFrustum[ 3 ].z = nearZ;
+		pointsFrustum.get( 0 ).setZ( nearZ );
+		pointsFrustum.get( 1 ).setZ( nearZ );
+		pointsFrustum.get( 2 ).setZ( nearZ );
+		pointsFrustum.get( 3 ).setZ( nearZ );
 
-		pointsFrustum[ 4 ].z = farZ;
-		pointsFrustum[ 5 ].z = farZ;
-		pointsFrustum[ 6 ].z = farZ;
-		pointsFrustum[ 7 ].z = farZ;
+		pointsFrustum.get( 4 ).setZ( farZ );
+		pointsFrustum.get( 5 ).setZ( farZ );
+		pointsFrustum.get( 6 ).setZ( farZ );
+		pointsFrustum.get( 7 ).setZ( farZ );
 	}
 	
 	/**

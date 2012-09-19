@@ -42,6 +42,7 @@ public abstract class AbstractShadowLight extends Light
 	private double intensity;
 	public double distance;
 	
+	private boolean onlyShadow = false;
 	private boolean shadowCascade = false;
 	
 	private RenderTargetTexture shadowMap;
@@ -97,6 +98,14 @@ public abstract class AbstractShadowLight extends Light
 		this.distance = distance;
 	}
 	
+	public boolean isOnlyShadow() {
+		return onlyShadow;
+	}
+
+	public void setOnlyShadow(boolean onlyShadow) {
+		this.onlyShadow = onlyShadow;
+	}
+
 	public boolean isShadowCascade() {
 		return shadowCascade;
 	}

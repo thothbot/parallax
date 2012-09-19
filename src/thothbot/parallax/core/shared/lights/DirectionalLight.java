@@ -124,11 +124,11 @@ public class DirectionalLight extends AbstractShadowLight
 		this.shadowCascadeFarZ = shadowCascadeFarZ;
 	}
 
-	public List<DirectionalLight> getShadowCascadeArray() {
+	public List<VirtualLight> getShadowCascadeArray() {
 		return shadowCascadeArray;
 	}
 
-	public void setShadowCascadeArray(List<DirectionalLight> shadowCascadeArray) {
+	public void setShadowCascadeArray(List<VirtualLight> shadowCascadeArray) {
 		this.shadowCascadeArray = shadowCascadeArray;
 	}
 

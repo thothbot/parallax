@@ -19,16 +19,32 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.Vector3;
 
 public final class VirtualLight extends DirectionalLight 
 {
 
 	private Camera originalCamera;
 	
-	public VirtualLight(int hex) {
+	private List<Vector3> pointsWorld;
+	private List<Vector3> pointsFrustum;
+	
+	public VirtualLight(int hex) 
+	{
 		super(hex);
-		// TODO Auto-generated constructor stub
+		
+		pointsWorld = new ArrayList<Vector3>();
+		pointsFrustum = new ArrayList<Vector3>();
+		
+		for ( int i = 0; i < 8; i ++ ) 
+		{
+			getPointsWorld().set( i, new Vector3() );
+			getPointsFrustum().set( i, new Vector3() );
+		}
 	}
 
 	public Camera getOriginalCamera() {
@@ -37,6 +53,22 @@ public final class VirtualLight extends DirectionalLight
 
 	public void setOriginalCamera(Camera originalCamera) {
 		this.originalCamera = originalCamera;
+	}
+
+	public List<Vector3> getPointsWorld() {
+		return pointsWorld;
+	}
+
+	public void setPointsWorld(List<Vector3> pointsWorld) {
+		this.pointsWorld = pointsWorld;
+	}
+
+	public List<Vector3> getPointsFrustum() {
+		return pointsFrustum;
+	}
+
+	public void setPointsFrustum(List<Vector3> pointsFrustum) {
+		this.pointsFrustum = pointsFrustum;
 	}
 
 }
