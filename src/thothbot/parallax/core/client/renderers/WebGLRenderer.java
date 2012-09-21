@@ -43,6 +43,7 @@ import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.client.shaders.Uniform.TYPE;
 import thothbot.parallax.core.client.textures.CubeTexture;
 import thothbot.parallax.core.client.textures.DataTexture;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
@@ -61,6 +62,7 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
+import thothbot.parallax.core.shared.lights.AbstractShadowLight;
 import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.HemisphereLight;
@@ -93,6 +95,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.editor.client.Editor.Ignore;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
@@ -769,24 +772,6 @@ public class WebGLRenderer
 			}
 		}
 	}
-
-	/**
-	 * Tells the shadow map plugin to update using the passed scene and camera parameters.
-	 */
-	private void updateShadowMap( Scene scene, Camera camera ) 
-	{
-		this.cache_currentProgram = null;
-		this.cache_oldBlending = null;
-		this.cache_oldDepthTest = null;
-		this.cache_oldDepthWrite = null;
-		this.cache_currentGeometryGroupHash = -1;
-		this.cache_currentMaterialId = -1;
-		this.isLightsNeedUpdate = true;
-		this.cache_oldMaterialSided= null;
-
-		//TODO: this is extras 
-		//shadowMapPlugin.update( scene, camera );
-	}
 	
 	private void deleteParticleBuffers ( Geometry geometry ) 
 	{
@@ -1350,7 +1335,7 @@ public class WebGLRenderer
 	 * Buffer rendering.
 	 * Render GeometryObject with material.
 	 */
-	private void renderBuffer( Camera camera, List<Light> lights, Fog fog, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
+	public void renderBuffer( Camera camera, List<Light> lights, Fog fog, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
 	{
 		if ( ! material.isVisible()) 
 			return;
@@ -2045,9 +2030,8 @@ public class WebGLRenderer
 
 			material.refreshUniforms(getCanvas(), camera, this.isGammaInput);
 
-			// TODO: fix this
-//			if ( object.receiveShadow && ! material._shadowPass )
-//				refreshUniformsShadow( m_uniforms, lights );
+			if ( object.isReceiveShadow() && ! material.isShadowPass() )
+				refreshUniformsShadow( m_uniforms, lights );
 
 			// load common uniforms
 			loadUniformsGeneric( m_uniforms );
@@ -2108,32 +2092,32 @@ public class WebGLRenderer
 		uniforms.get("hemisphereLightPosition").setValue( lights.hemi.positions );
 	}
 
-	private void refreshUniformsShadow ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
+	private void refreshUniformsShadow ( Map<String, Uniform> uniforms, List<Light> lights ) 
 	{
-		if ( uniforms.containsKey("shadowMatrix") ) 
+		if ( uniforms.containsKey("shadowMatrix") && uniforms.get("shadowMatrix").getLocation() != null) 
 		{
-Log.error("?????????????");
-//			var j = 0;
-//
-//			for ( int i = 0, il = lights.size(); i < il; i ++ ) {
-//
-//				var light = lights[ i ];
-//
-//				if ( ! light.castShadow ) continue;
-//
-//				if ( light instanceof THREE.SpotLight || ( light instanceof THREE.DirectionalLight && ! light.shadowCascade ) ) {
-//
-//					uniforms.shadowMap.texture[ j ] = light.shadowMap;
-//					uniforms.shadowMapSize.value[ j ] = light.shadowMapSize;
-//
-//					uniforms.shadowMatrix.value[ j ] = light.shadowMatrix;
-//
-//					uniforms.shadowDarkness.value[ j ] = light.shadowDarkness;
-//					uniforms.shadowBias.value[ j ] = light.shadowBias;
-//
-//					j ++;
-//				}
-//			}
+			int j = 0;
+
+			for ( int i = 0, il = lights.size(); i < il; i ++ ) 
+			{
+				Light light = lights.get( i );
+
+				if ( ! light.isCastShadow() ) continue;
+
+				if ( light instanceof AbstractShadowLight && ! ((AbstractShadowLight)light).isShadowCascade() )  
+				{
+					AbstractShadowLight shaowLight = (AbstractShadowLight) light;
+					((List<Texture>)uniforms.get("shadowMap").getValue()).add( j, shaowLight.getShadowMap() );
+					((List<Vector2>)uniforms.get("shadowMapSize").getValue()).add( j, shaowLight.getShadowMapSize() );
+
+					((List<Matrix4>)uniforms.get("shadowMatrix").getValue()).add( j, shaowLight.getShadowMatrix());
+
+					((Float32Array)uniforms.get("shadowDarkness").getValue()).set( j, shaowLight.getShadowDarkness());
+					((Float32Array)uniforms.get("shadowBias").getValue()).set(j, shaowLight.getShadowBias());
+
+					j ++;
+				}
+			}
 		}
 	}
 
@@ -2148,6 +2132,7 @@ Log.error("?????????????");
 			getGL().uniformMatrix3fv( uniforms.get("normalMatrix").getLocation(), false, objectImpl._normalMatrix.getArray() );
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
 		for ( Uniform uniform : materialUniforms.values() ) 
@@ -2157,169 +2142,160 @@ Log.error("?????????????");
 			if ( location == null ) continue;
 
 			Object value = uniform.getValue();
-			
+		
 			if ( value == null ) continue;
 
 			Uniform.TYPE type = uniform.getType();
 
 			Log.debug("loadUniformsGeneric() " + uniform);
 			
-			switch ( type ) {
+			WebGLRenderingContext gl = getGL();
+			
+			if(type == TYPE.I) // single integer
+			{
+				gl.uniform1i( location, (value instanceof Boolean) ? ((Boolean)value) ? 1 : 0 : (Integer) value );
+			}
+			else if(type == TYPE.F) // single double
+			{
+				gl.uniform1f( location, (Double)value );
+			}
+			else if(type == TYPE.V2) // single Vector2
+			{ 
+				gl.uniform2f( location, ((Vector2)value).getX(), ((Vector2)value).getX() );
+			}
+			else if(type == TYPE.V3) // single Vector3
+			{ 
+				gl.uniform3f( location, ((Vector3)value).getX(), ((Vector3)value).getY(), ((Vector3)value).getZ() );
+			}
+			else if(type == TYPE.V4) // single Vector4
+			{
+				gl.uniform4f( location, ((Vector4)value).getX(), ((Vector4)value).getY(), ((Vector4)value).getZ(), ((Vector4)value).getW() );
+			}
+			else if(type == TYPE.C) // single Color
+			{
+				gl.uniform3f( location, ((Color)value).getR(), ((Color)value).getG(), ((Color)value).getB() );
+			}
+			else if(type == TYPE.FV1) // flat array of floats (JS or typed array)
+			{
+				gl.uniform1fv( location, (Float32Array)value );
+				break;
+			}
+			else if(type == TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
+			{ 
+				gl.uniform3fv( location, (Float32Array) value );
+			}
+			else if(type == TYPE.V2V) // List of Vector2
+			{ 
+				List<Vector2> listVector2f = (List<Vector2>) value;
+				if ( uniform.getCacheArray() == null )
+					uniform.setCacheArray( Float32Array.create( 2 * listVector2f.size() ) );
 
-				case I: // single integer
-					int val = (value instanceof Boolean) ? ((Boolean)value) ? 1 : 0 : (Integer) value;
-					getGL().uniform1i( location, val );
-					break;
+				for ( int i = 0, il = listVector2f.size(); i < il; i ++ ) 
+				{
+					int offset = i * 2;
 
-				case F: // single double
-					getGL().uniform1f( location, (Double) value );
-					break;
+					uniform.getCacheArray().set(offset, listVector2f.get(i).getX());
+					uniform.getCacheArray().set(offset + 1, listVector2f.get(i).getY());
+				}
 
-				case V2: // single THREE.Vector2
-					Vector2 vector2 = (Vector2) value;
-					getGL().uniform2f( location, vector2.getX(), vector2.getX() );
-					break;
+				gl.uniform2fv( location, uniform.getCacheArray() );
+			}
+			else if(type == TYPE.V3V) // List of Vector3
+			{
+				List<Vector3> listVector3f = (List<Vector3>) value;
+				if ( uniform.getCacheArray() == null )
+					uniform.setCacheArray( Float32Array.create( 3 * listVector3f.size() ) );
 
-				case V3: // single THREE.Vector3
-					Vector3 vector3 = (Vector3) value;
-					getGL().uniform3f( location, vector3.getX(), vector3.getY(), vector3.getZ() );
-					break;
+				for ( int i = 0, il = listVector3f.size(); i < il; i ++ ) 
+				{
+					int offset = i * 3;
 
-				case V4: // single THREE.Vector4
-					Vector4 vector4 = (Vector4) value;
-					getGL().uniform4f( location, vector4.getX(), vector4.getY(), vector4.getZ(), vector4.getW() );
-					break;
+					uniform.getCacheArray().set(offset, listVector3f.get( i ).getX());
+					uniform.getCacheArray().set(offset + 1, listVector3f.get( i ).getY());
+					uniform.getCacheArray().set(offset + 2 , listVector3f.get( i ).getZ());
+				}
 
-				case C: // single THREE.Color
-					Color color = (Color) value;
-					getGL().uniform3f( location, color.getR(), color.getG(), color.getB() );
-					break;
-
-				case FV1: // flat array of floats (JS or typed array)
-					Float32Array float1 = (Float32Array) value;
-					getGL().uniform1fv( location, float1 );
-					break;
-
-				case FV: // flat array of floats with 3 x N size (JS or typed array)
-					Float32Array float2 = (Float32Array) value;
-					getGL().uniform3fv( location, float2 );
-					break;
-
-				case V2V: // array of THREE.Vector2
-					List<Vector2> listVector2f = (List<Vector2>) value;
-					if ( uniform.getCacheArray() == null )
-						uniform.setCacheArray( Float32Array.create( 2 * listVector2f.size() ) );
-
-					for ( int i = 0, il = listVector2f.size(); i < il; i ++ ) 
-					{
-						int offset = i * 2;
-
-						uniform.getCacheArray().set(offset, listVector2f.get(i).getX());
-						uniform.getCacheArray().set(offset + 1, listVector2f.get(i).getY());
-					}
-
-					getGL().uniform2fv( location, uniform.getCacheArray() );
-					break;
-
-				case V3V: // array of THREE.Vector3
-					List<Vector3> listVector3f = (List<Vector3>) value;
-					if ( uniform.getCacheArray() == null )
-						uniform.setCacheArray( Float32Array.create( 3 * listVector3f.size() ) );
-
-					for ( int i = 0, il = listVector3f.size(); i < il; i ++ ) 
-					{
-						int offset = i * 3;
-
-						uniform.getCacheArray().set(offset, listVector3f.get( i ).getX());
-						uniform.getCacheArray().set(offset + 1, listVector3f.get( i ).getY());
-						uniform.getCacheArray().set(offset + 2 , listVector3f.get( i ).getZ());
-					}
-
-					getGL().uniform3fv( location, uniform.getCacheArray() );
-					break;
-
-				case V4V: // array of THREE.Vector4
-					List<Vector4> listVector4f = (List<Vector4>) value;
-					if ( uniform.getCacheArray() == null)
-						uniform.setCacheArray( Float32Array.create( 4 * listVector4f.size() ) );
+				gl.uniform3fv( location, uniform.getCacheArray() );
+			}
+			else if(type == TYPE.V4V) // List of Vector4
+			{
+				List<Vector4> listVector4f = (List<Vector4>) value;
+				if ( uniform.getCacheArray() == null)
+					uniform.setCacheArray( Float32Array.create( 4 * listVector4f.size() ) );
 
 
-					for ( int i = 0, il = listVector4f.size(); i < il; i ++ ) 
-					{
-						int offset = i * 4;
+				for ( int i = 0, il = listVector4f.size(); i < il; i ++ ) 
+				{
+					int offset = i * 4;
 
-						uniform.getCacheArray().set(offset, listVector4f.get( i ).getX());
-						uniform.getCacheArray().set(offset + 1, listVector4f.get( i ).getY());
-						uniform.getCacheArray().set(offset + 2, listVector4f.get( i ).getZ());
-						uniform.getCacheArray().set(offset + 3, listVector4f.get( i ).getW());
-					}
+					uniform.getCacheArray().set(offset, listVector4f.get( i ).getX());
+					uniform.getCacheArray().set(offset + 1, listVector4f.get( i ).getY());
+					uniform.getCacheArray().set(offset + 2, listVector4f.get( i ).getZ());
+					uniform.getCacheArray().set(offset + 3, listVector4f.get( i ).getW());
+				}
 
-					getGL().uniform4fv( location, uniform.getCacheArray() );
-					break;
+				gl.uniform4fv( location, uniform.getCacheArray() );
+			}
+			else if(type == TYPE.M4) // single Matrix4
+			{
+				Matrix4 matrix4 = (Matrix4) value;
+				if ( uniform.getCacheArray() == null )
+					uniform.setCacheArray( Float32Array.create( 16 ) );
 
-				case M4: // single THREE.Matrix4
-					Matrix4 matrix4 = (Matrix4) value;
-					if ( uniform.getCacheArray() == null )
-						uniform.setCacheArray( Float32Array.create( 16 ) );
+				matrix4.flattenToArray( uniform.getCacheArray() );
+				gl.uniformMatrix4fv( location, false, uniform.getCacheArray() );
+			}
+			else if(type == TYPE.M4V) // List of Matrix4
+			{
 
-					matrix4.flattenToArray( uniform.getCacheArray() );
-					getGL().uniformMatrix4fv( location, false, uniform.getCacheArray() );
-					break;
+				List<Matrix4> listMatrix4f = (List<Matrix4>) value;
+				if ( uniform.getCacheArray() == null )
+					uniform.setCacheArray( Float32Array.create( 16 * listMatrix4f.size() ) );
 
-				case M4V: // array of THREE.Matrix4
-					List<Matrix4> listMatrix4f = (List<Matrix4>) value;
-					if ( uniform.getCacheArray() == null )
-						uniform.setCacheArray( Float32Array.create( 16 * listMatrix4f.size() ) );
+				for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
+					listMatrix4f.get( i ).flattenToArray( uniform.getCacheArray(), i * 16 );
 
-					for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
-						listMatrix4f.get( i ).flattenToArray( uniform.getCacheArray(), i * 16 );
+				gl.uniformMatrix4fv( location, false, uniform.getCacheArray() );
+			}
+			else if(type == TYPE.T) // single Texture (2d or cube)
+			{
+				Texture texture = (Texture)value;
+				int textureUnit = getTextureUnit();
 
-					getGL().uniformMatrix4fv( location, false, uniform.getCacheArray() );
-					break;
+				gl.uniform1i( location, textureUnit );
 
-				case T: // single THREE.Texture (2d or cube)
+				if ( texture == null ) continue;
 
-					Texture texture = (Texture)value;
-					int textureUnit = getTextureUnit();
-					
-					getGL().uniform1i( location, textureUnit );
+				if ( texture.getClass() == CubeTexture.class )
+					setCubeTexture( (CubeTexture) texture, textureUnit );
+
+				else if ( texture.getClass() == RenderTargetCubeTexture.class )
+					setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
+
+				else
+					setTexture( texture, textureUnit );
+			}
+			else if(type == TYPE.TV) //List of Texture (2d)
+			{
+				List<Texture> textureList = (List<Texture>)value;
+				int[] units = new int[textureList.size()];
+
+				for( int i = 0, il = textureList.size(); i < il; i ++ ) 
+				{
+					units[ i ] = getTextureUnit();
+				}
+
+				gl.uniform1iv( location, units );
+
+				for( int i = 0, il = textureList.size(); i < il; i ++ ) 
+				{
+					Texture texture = textureList.get( i );
+					int textureUnit = units[ i ];
 
 					if ( texture == null ) continue;
 
-					if ( texture.getClass() == CubeTexture.class )
-						setCubeTexture( (CubeTexture) texture, textureUnit );
-
-					else if ( texture.getClass() == RenderTargetCubeTexture.class )
-						setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
-
-					else
-						setTexture( texture, textureUnit );
-
-					break;
-
-				case TV: // array of THREE.Texture (2d)
-					Log.error("WebGL Render: Fix this");
-//					if ( uniform._array == null ) 
-//					{
-//						uniform._array = (Float32Array) Float32Array.createArray();
-//
-//						for( int i = 0, il = uniform.texture.length; i < il; i ++ )
-//							uniform._array.set( i, (Integer)value + i);
-//					}
-//
-//					getGL().uniform1iv( name, uniform._array );
-//
-//					for( i = 0, il = uniform.texture.length; i < il; i ++ ) {
-//
-//						texture = uniform.texture[ i ];
-//
-//						if ( !texture ) continue;
-//
-//						_this.setTexture( texture, uniform._array[ i ] );
-//
-//					}
-//
-					break;
+					setTexture( texture, textureUnit );
+				}
 			}
 		}
 	}
@@ -2464,7 +2440,7 @@ Log.error("?????????????");
 			{
 				SpotLight spotLight = (SpotLight) light;
 				double intensity = spotLight.getIntensity();
-				double distance = spotLight.distance;
+				double distance = spotLight.getDistance();
 
 				spotOffset = spotLength * 3;
 

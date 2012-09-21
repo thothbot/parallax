@@ -46,10 +46,10 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.helpers.CameraHelper;
 import thothbot.parallax.core.shared.lights.AbstractShadowLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
-import thothbot.parallax.core.shared.lights.HasShadow;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.lights.SpotLight;
 import thothbot.parallax.core.shared.lights.VirtualLight;
+import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 import thothbot.parallax.core.shared.objects.Mesh;
@@ -239,7 +239,7 @@ public final class ShadowMap extends Plugin
 
 			if ( light instanceof VirtualLight && ((VirtualLight)light).getOriginalCamera() == camera ) 
 			{
-				updateShadowCamera( camera, light );
+				updateShadowCamera( camera, (VirtualLight)light );
 			}
 
 			RenderTargetTexture shadowMap = light.getShadowMap();
@@ -322,9 +322,9 @@ public final class ShadowMap extends Plugin
 					// culling is overriden globally for all objects
 					// while rendering depth map
 
-					if ( object.customDepthMaterial ) 
+					if ( object.getCustomDepthMaterial() != null ) 
 					{
-						material = object.customDepthMaterial;
+						material = object.getCustomDepthMaterial();
 					} 
 					else if ( object instanceof SkinnedMesh ) 
 					{
@@ -333,7 +333,7 @@ public final class ShadowMap extends Plugin
 					else if ( object.getGeometry().getMorphTargets().size() > 0 ) 
 					{
 						material = this.depthMaterialMorph;
-					} 
+					}
 					else 
 					{
 						material = this.depthMaterial;
@@ -427,21 +427,21 @@ public final class ShadowMap extends Plugin
 	/** 
 	 * Synchronize virtual light with the original light
 	 */
-	private void updateVirtualLight( VirtualLight light, int cascade ) 
+	private void updateVirtualLight( DirectionalLight light, int cascade ) 
 	{
 		VirtualLight virtualLight = light.getShadowCascadeArray().get( cascade );
 
 		virtualLight.getPosition().copy( light.getPosition() );
 		virtualLight.getTarget().getPosition().copy( light.getTarget().getPosition() );
-		virtualLight.lookAt( virtualLight.getTarget() );
+		virtualLight.lookAt( virtualLight.getTarget().getPosition() );
 
 		virtualLight.setShadowCameraVisible( light.isShadowCameraVisible() );
 		virtualLight.setShadowDarkness( light.getShadowDarkness());
 
-		virtualLight.setShadowBias( light.shadowCascadeBias[ cascade ] );
+		virtualLight.setShadowBias( light.getShadowCascadeBias()[ cascade ] );
 
-		var nearZ = light.shadowCascadeNearZ[ cascade ];
-		var farZ = light.shadowCascadeFarZ[ cascade ];
+		double nearZ = light.getShadowCascadeNearZ()[ cascade ];
+		double farZ = light.getShadowCascadeFarZ()[ cascade ];
 
 		List<Vector3> pointsFrustum = virtualLight.getPointsFrustum();
 
@@ -459,23 +459,23 @@ public final class ShadowMap extends Plugin
 	/**
 	 * Fit shadow camera's ortho frustum to camera frustum
 	 */
-	private void updateShadowCamera( Camera camera, Light light ) 
+	private void updateShadowCamera( Camera camera, VirtualLight light ) 
 	{
-		var shadowCamera = light.shadowCamera,
-			pointsFrustum = light.pointsFrustum,
-			pointsWorld = light.pointsWorld;
+		OrthographicCamera shadowCamera = (OrthographicCamera) light.getShadowCamera();
+		List<Vector3> pointsFrustum = light.getPointsFrustum();
+		List<Vector3> pointsWorld = light.getPointsWorld();
 
 		this.min.set( Double.POSITIVE_INFINITY );
 		this.max.set( Double.NEGATIVE_INFINITY );
 
 		for ( int i = 0; i < 8; i ++ ) 
 		{
-			Vector3 p = pointsWorld[ i ];
+			Vector3 p = pointsWorld.get( i );
 
-			p.copy( pointsFrustum[ i ] );
+			p.copy( pointsFrustum.get( i ) );
 			ShadowMap.projector.unprojectVector( p, camera );
 
-			shadowCamera.matrixWorldInverse.multiplyVector3( p );
+			shadowCamera.getMatrixWorldInverse().multiplyVector3( p );
 
 			if ( p.getX() < this.min.getX() ) this.min.setX( p.getX() );
 			if ( p.getX() > this.max.getX() ) this.max.setX( p.getX() );
@@ -488,10 +488,10 @@ public final class ShadowMap extends Plugin
 
 		}
 
-		shadowCamera.left = this.min.getX();
-		shadowCamera.right = this.max.getX();
-		shadowCamera.top = this.max.getY();
-		shadowCamera.bottom = this.min.getY();
+		shadowCamera.setLeft( this.min.getX() );
+		shadowCamera.setRight( this.max.getX() );
+		shadowCamera.setTop( this.max.getY() );
+		shadowCamera.setBottom( this.min.getY() );
 
 		shadowCamera.updateProjectionMatrix();
 	}

@@ -37,6 +37,7 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 {
 	protected Geometry geometry;
 	protected Material material;
+	protected Material customDepthMaterial;
 	
 	private double cache_oldLineWidth = -1;
 
@@ -60,6 +61,14 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 		this.material = material;
 	}
 	
+	public Material getCustomDepthMaterial() {
+		return customDepthMaterial;
+	}
+
+	public void setCustomDepthMaterial(Material customDepthMaterial) {
+		this.customDepthMaterial = customDepthMaterial;
+	}
+
 	public abstract void initBuffer(WebGLRenderer renderer);
 
 	public abstract void setBuffer(WebGLRenderer renderer);

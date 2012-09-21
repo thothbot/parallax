@@ -35,12 +35,12 @@ public abstract class AbstractShadowLight extends Light
 	private Matrix4 shadowMatrix;
 	
 	private Camera shadowCamera;
-	private int shadowCameraNear = 50;
-	private int shadowCameraFar = 5000;
+	private double shadowCameraNear = 50;
+	private double shadowCameraFar = 5000;
 	private boolean shadowCameraVisible = false;
 	
 	private double intensity;
-	public double distance;
+	private double distance;
 	
 	private boolean onlyShadow = false;
 	private boolean shadowCascade = false;
@@ -154,19 +154,19 @@ public abstract class AbstractShadowLight extends Light
 		this.shadowCamera = shadowCamera;
 	}
 	
-	public int getShadowCameraNear() {
+	public double getShadowCameraNear() {
 		return shadowCameraNear;
 	}
 
-	public void setShadowCameraNear(int shadowCameraNear) {
+	public void setShadowCameraNear(double shadowCameraNear) {
 		this.shadowCameraNear = shadowCameraNear;
 	}
 
-	public int getShadowCameraFar() {
+	public double getShadowCameraFar() {
 		return shadowCameraFar;
 	}
 
-	public void setShadowCameraFar(int shadowCameraFar) {
+	public void setShadowCameraFar(double shadowCameraFar) {
 		this.shadowCameraFar = shadowCameraFar;
 	}
 
