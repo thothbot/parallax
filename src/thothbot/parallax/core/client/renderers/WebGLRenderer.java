@@ -2092,7 +2092,7 @@ public class WebGLRenderer
 		uniforms.get("hemisphereLightPosition").setValue( lights.hemi.positions );
 	}
 
-	private void refreshUniformsShadow ( Map<String, Uniform> uniforms, List<Light> lights ) 
+	private void refreshUniformsShadow( Map<String, Uniform> uniforms, List<Light> lights ) 
 	{
 		if ( uniforms.containsKey("shadowMatrix") && uniforms.get("shadowMatrix").getLocation() != null) 
 		{
@@ -2106,14 +2106,14 @@ public class WebGLRenderer
 
 				if ( light instanceof AbstractShadowLight && ! ((AbstractShadowLight)light).isShadowCascade() )  
 				{
-					AbstractShadowLight shaowLight = (AbstractShadowLight) light;
-					((List<Texture>)uniforms.get("shadowMap").getValue()).add( j, shaowLight.getShadowMap() );
-					((List<Vector2>)uniforms.get("shadowMapSize").getValue()).add( j, shaowLight.getShadowMapSize() );
+					AbstractShadowLight shadowLight = (AbstractShadowLight) light;
+					((List<Texture>)uniforms.get("shadowMap").getValue()).add( j, shadowLight.getShadowMap() );
+					((List<Vector2>)uniforms.get("shadowMapSize").getValue()).add( j, shadowLight.getShadowMapSize() );
 
-					((List<Matrix4>)uniforms.get("shadowMatrix").getValue()).add( j, shaowLight.getShadowMatrix());
+					((List<Matrix4>)uniforms.get("shadowMatrix").getValue()).add( j, shadowLight.getShadowMatrix());
 
-					((Float32Array)uniforms.get("shadowDarkness").getValue()).set( j, shaowLight.getShadowDarkness());
-					((Float32Array)uniforms.get("shadowBias").getValue()).set(j, shaowLight.getShadowBias());
+					((Float32Array)uniforms.get("shadowDarkness").getValue()).set( j, shadowLight.getShadowDarkness());
+					((Float32Array)uniforms.get("shadowBias").getValue()).set(j, shadowLight.getShadowBias());
 
 					j ++;
 				}

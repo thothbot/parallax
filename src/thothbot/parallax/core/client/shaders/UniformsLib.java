@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
@@ -148,7 +149,7 @@ public class UniformsLib
 		
 		Map<String, Uniform> retval = new HashMap<String, Uniform>();	
 
-		retval.put("shadowMap",      new Uniform(Uniform.TYPE.TV ));
+		retval.put("shadowMap",      new Uniform(Uniform.TYPE.TV, new ArrayList<Texture>() ));
 		retval.put("shadowMapSize",  new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2>() ));
 		retval.put("shadowBias",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		retval.put("shadowDarkness", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));

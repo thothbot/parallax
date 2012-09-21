@@ -129,22 +129,21 @@ public final class ShadowMap extends Plugin
 
 		getRenderer().setDepthTest( true );
 
+		List<Light> sceneLights = getScene().getLights();
+		
 		// preprocess lights
 		// 	- skip lights that are not casting shadows
 		//	- create virtual lights for cascaded shadow maps
-
-		List<Light> sceneLights = getScene().getLights();
-		List<AbstractShadowLight> lights = new ArrayList<AbstractShadowLight>();
-		
+		// render depth map
 		for ( int i = 0, il = sceneLights.size(); i < il; i ++ ) 
 		{
-			Light light = sceneLights.get( i );
+			Light sceneLight = sceneLights.get( i );
 
-			if ( ! light.isCastShadow() ) continue;
-
-			if ( ( light instanceof DirectionalLight ) && ((DirectionalLight)light).isShadowCascade() ) 
+			if ( ! sceneLight.isCastShadow() ) continue;
+						
+			if ( ( sceneLight instanceof DirectionalLight ) && ((DirectionalLight)sceneLight).isShadowCascade() ) 
 			{
-				DirectionalLight dirLight = (DirectionalLight)light;
+				DirectionalLight dirLight = (DirectionalLight)sceneLight;
 
 				for ( int n = 0; n < dirLight.getShadowCascadeCount(); n ++ ) 
 				{
@@ -174,20 +173,13 @@ public final class ShadowMap extends Plugin
 					}
 
 					updateVirtualLight( dirLight, n );
-					lights.add(virtualLight);
+					sceneLights.set(i, virtualLight);
+					sceneLight = virtualLight; 
 				}
-			} 
-			else 
-			{
-				lights.add((AbstractShadowLight) light);
 			}
-		}
 
-		// render depth map
-		for ( int i = 0, il = lights.size(); i < il; i ++ ) 
-		{
-			AbstractShadowLight light = lights.get( i );
-
+			AbstractShadowLight light = (AbstractShadowLight) sceneLight;
+			
 			if ( light.getShadowMap() == null ) 
 			{
 				RenderTargetTexture map = new RenderTargetTexture(light.getShadowMapWidth(), light.getShadowMapHeight());
