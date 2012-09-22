@@ -85,7 +85,7 @@ public final class MeshLambertMaterial extends Material
 		
 		setFog(true);
 		
-		setColor(new Color(0xffffff));
+		setColor(new Color(0xffffff)); // diffuse
 		setAmbient(new Color(0xffffff));
 		setEmissive(new Color( 0x000000 ));
 		

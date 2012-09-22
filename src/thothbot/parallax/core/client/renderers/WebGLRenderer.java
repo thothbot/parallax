@@ -95,7 +95,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.editor.client.Editor.Ignore;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
@@ -986,7 +985,7 @@ public class WebGLRenderer
 		// Shadowmap
 		if(this.isShadowMapEnabled && this.shadowMap == null)
 		{
-			Log.info("Including shadow map plugin");
+			Log.error("Including shadow map plugin");
 			this.shadowMap = new ShadowMap(this, scene);
 		}
 
@@ -1146,6 +1145,7 @@ public class WebGLRenderer
 		this.setDepthTest( true );
 		this.setDepthWrite( true );
 
+		assert(1==2);
 //		 getGL().finish();
 	}
 
@@ -1845,10 +1845,13 @@ public class WebGLRenderer
 		
 		parameters.maxShadows = maxShadows;
 		
-		parameters.shadowMapEnabled = this.isShadowMapEnabled && object.isReceiveShadow();
-		parameters.shadowMapSoft    = this.isShadowMapSoft;
-		parameters.shadowMapDebug   = this.isShadowMapDebug;
-		parameters.shadowMapCascade = this.isShadowMapCascade;
+		if(this.isShadowMapEnabled && object.isReceiveShadow())
+		{
+			parameters.shadowMapEnabled = true;
+			parameters.shadowMapSoft    = this.isShadowMapSoft;
+			parameters.shadowMapDebug   = this.isShadowMapDebug;
+			parameters.shadowMapCascade = this.isShadowMapCascade;
+		}
 
 		material.updateProgramParameters(parameters);
 		Log.debug("initMaterial() called new Program");
@@ -1856,6 +1859,7 @@ public class WebGLRenderer
 		String cashKey = material.getShader().getFragmentSource() 
 				+ material.getShader().getVertexSource()
 				+ parameters.toString();
+
 		if(this.cache_programs.containsKey(cashKey))
 		{
 			material.setShader( this.cache_programs.get(cashKey) );
@@ -1949,9 +1953,6 @@ public class WebGLRenderer
 			if ( object instanceof Mesh && ((Mesh)object).__webglMorphTargetInfluences == null ) 
 			{
 				((Mesh)object).__webglMorphTargetInfluences = Float32Array.create( this.maxMorphTargets );
-
-//				for ( int i = 0, il = this.maxMorphTargets; i < il; i ++ )
-//					((Mesh)object).__webglMorphTargetInfluences.set(i, 0);
 			}
 		}
 
@@ -2094,7 +2095,7 @@ public class WebGLRenderer
 
 	private void refreshUniformsShadow( Map<String, Uniform> uniforms, List<Light> lights ) 
 	{
-		if ( uniforms.containsKey("shadowMatrix") && uniforms.get("shadowMatrix").getLocation() != null) 
+		if ( uniforms.containsKey("shadowMatrix") ) 
 		{
 			int j = 0;
 
@@ -2142,7 +2143,7 @@ public class WebGLRenderer
 			if ( location == null ) continue;
 
 			Object value = uniform.getValue();
-		
+
 			if ( value == null ) continue;
 
 			Uniform.TYPE type = uniform.getType();
@@ -2150,7 +2151,7 @@ public class WebGLRenderer
 			Log.debug("loadUniformsGeneric() " + uniform);
 			
 			WebGLRenderingContext gl = getGL();
-			
+
 			if(type == TYPE.I) // single integer
 			{
 				gl.uniform1i( location, (value instanceof Boolean) ? ((Boolean)value) ? 1 : 0 : (Integer) value );
@@ -2178,7 +2179,6 @@ public class WebGLRenderer
 			else if(type == TYPE.FV1) // flat array of floats (JS or typed array)
 			{
 				gl.uniform1fv( location, (Float32Array)value );
-				break;
 			}
 			else if(type == TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
 			{ 
@@ -2247,7 +2247,6 @@ public class WebGLRenderer
 			}
 			else if(type == TYPE.M4V) // List of Matrix4
 			{
-
 				List<Matrix4> listMatrix4f = (List<Matrix4>) value;
 				if ( uniform.getCacheArray() == null )
 					uniform.setCacheArray( Float32Array.create( 16 * listMatrix4f.size() ) );
@@ -2264,16 +2263,17 @@ public class WebGLRenderer
 
 				gl.uniform1i( location, textureUnit );
 
-				if ( texture == null ) continue;
+				if ( texture != null )
+				{
+					if ( texture.getClass() == CubeTexture.class )
+						setCubeTexture( (CubeTexture) texture, textureUnit );
 
-				if ( texture.getClass() == CubeTexture.class )
-					setCubeTexture( (CubeTexture) texture, textureUnit );
+					else if ( texture.getClass() == RenderTargetCubeTexture.class )
+						setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
 
-				else if ( texture.getClass() == RenderTargetCubeTexture.class )
-					setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
-
-				else
-					setTexture( texture, textureUnit );
+					else
+						setTexture( texture, textureUnit );
+				}
 			}
 			else if(type == TYPE.TV) //List of Texture (2d)
 			{
@@ -2428,11 +2428,11 @@ public class WebGLRenderer
 
 				Vector3 position = pointLight.getMatrixWorld().getPosition();
 
-				pointPositions.set(  pointOffset, position.getX());
-				pointPositions.set(  pointOffset + 1, position.getY());
-				pointPositions.set(  pointOffset + 2, position.getZ());
+				pointPositions.set(  pointOffset, position.getX() );
+				pointPositions.set(  pointOffset + 1, position.getY() );
+				pointPositions.set(  pointOffset + 2, position.getZ() );
 
-				pointPositions.set(pointLength, distance);
+				pointDistances.set( pointLength, distance );
 
 				pointLength += 1;
 			} 
@@ -2498,9 +2498,9 @@ public class WebGLRenderer
 
 				Vector3 position = hemiLight.getMatrixWorld().getPosition();
 
-				hemiPositions.set( hemiOffset, position.getX());
-				hemiPositions.set( hemiOffset + 1, position.getY());
-				hemiPositions.set( hemiOffset + 2, position.getZ());
+				hemiPositions.set( hemiOffset, position.getX() );
+				hemiPositions.set( hemiOffset + 1, position.getY() );
+				hemiPositions.set( hemiOffset + 2, position.getZ() );
 
 				hemiLength += 1;
 			}

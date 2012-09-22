@@ -205,8 +205,10 @@ public abstract class Shader
 		String vertex = getShaderPrecisionDefinition() + "\n" + getVertexSource();
 		String fragment = getShaderPrecisionDefinition() + "\n" + getFragmentSource();
 		
-		gl.attachShader(this.program, getShaderProgram(gl, ChunksVertexShader.class, vertex));
-		gl.attachShader(this.program, getShaderProgram(gl, ChunksFragmentShader.class, fragment));
+		WebGLShader glVertexShader = getShaderProgram(gl, ChunksVertexShader.class, vertex);
+		WebGLShader glFragmentShader = getShaderProgram(gl, ChunksFragmentShader.class, fragment); 
+		gl.attachShader(this.program, glVertexShader);
+		gl.attachShader(this.program, glFragmentShader);
 
 		gl.linkProgram(this.program);
 
@@ -220,6 +222,10 @@ public abstract class Shader
 
 		else
 			Log.info("initProgram(): shaders has been initialised");
+
+		// clean up
+		gl.deleteShader( glVertexShader );
+		gl.deleteShader( glFragmentShader );
 	}
 	
 	public void setPrecision(Shader.PRECISION precision) {
