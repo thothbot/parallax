@@ -62,6 +62,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	};
 
 	private boolean isEnabled = true;
+
 	private double rotateSpeed = 1.0;
 	private double zoomSpeed = 1.2;
 	private double panSpeed = 0.3;
@@ -128,10 +129,14 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 		RootPanel.get().addDomHandler(this, KeyUpEvent.getType());	
 	}
 	
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
 	/**
 	 * Enable/Disable this control. Default true.
 	 */
-	public void isEnabled(boolean isEnabled) {
+	public void setEnabled(boolean isEnabled) {
 		this.isEnabled = isEnabled;
 	}
 
