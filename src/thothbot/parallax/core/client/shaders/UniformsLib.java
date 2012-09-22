@@ -56,7 +56,7 @@ public class UniformsLib
 			
 		retval.put("envMap", new Uniform(Uniform.TYPE.T ));
 		retval.put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
-		retval.put("useRefract", new Uniform(Uniform.TYPE.I,  1 ));
+		retval.put("useRefract", new Uniform(Uniform.TYPE.I,  true ));
 		retval.put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
 		retval.put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98 ));
 		retval.put("combine", new Uniform(Uniform.TYPE.I,  0 ));
@@ -76,7 +76,7 @@ public class UniformsLib
 		return retval;
 	}
 	
-	public static Map<String, Uniform> getNormal ()
+	public static Map<String, Uniform> getNormalMap ()
 	{
 		Map<String, Uniform> retval = new HashMap<String, Uniform>();
 		
@@ -107,9 +107,12 @@ public class UniformsLib
 		retval.put("directionalLightDirection", new Uniform(Uniform.TYPE.FV, Float32Array.createArray() ));
 		retval.put("directionalLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 
+		retval.put("hemisphereLightPosition",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		retval.put("hemisphereLightSkyColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		retval.put("hemisphereLightGroundColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		
 		retval.put("pointLightColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 		retval.put("pointLightPosition", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-
 		retval.put("pointLightDistance", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 
 		retval.put("spotLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
@@ -119,10 +122,6 @@ public class UniformsLib
 		retval.put("spotLightAngle",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		retval.put("spotLightExponent",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		
-		retval.put("hemisphereLightPosition",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("hemisphereLightSkyColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("hemisphereLightGroundColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-
 		return retval;
 	}
 	

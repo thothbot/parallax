@@ -22,15 +22,15 @@
 
 		vec3 shadowCoord = vShadowCoord[ i ].xyz / vShadowCoord[ i ].w;
 
-				// if ( something && something )" 		 breaks ATI OpenGL shader compiler
-				// if ( all( something, something ) )"  using this instead
+		// "if ( something && something )" 		 breaks ATI OpenGL shader compiler
+		// "if ( all( something, something ) )"  using this instead
 
 		bvec4 inFrustumVec = bvec4 ( shadowCoord.x >= 0.0, shadowCoord.x <= 1.0, shadowCoord.y >= 0.0, shadowCoord.y <= 1.0 );
 		bool inFrustum = all( inFrustumVec );
 
-				// don't shadow pixels outside of light frustum
-				// use just first frustum (for cascades)
-				// don't shadow pixels behind far plane of light frustum
+		// don't shadow pixels outside of light frustum
+		// use just first frustum (for cascades)
+		// don't shadow pixels behind far plane of light frustum
 
 		#ifdef SHADOWMAP_CASCADE
 
@@ -51,11 +51,34 @@
 
 			#ifdef SHADOWMAP_SOFT
 
-						// Percentage-close filtering
-						// (9 pixel kernel)
-						// http://fabiensanglard.net/shadowmappingPCF/
+				// Percentage-close filtering
+				// (9 pixel kernel)
+				// http://fabiensanglard.net/shadowmappingPCF/
 
 				float shadow = 0.0;
+
+				/*
+				// nested loops breaks shader compiler / validator on some ATI cards when using OpenGL
+				// must enroll loop manually
+
+				for ( float y = -1.25; y <= 1.25; y += 1.25 )
+					for ( float x = -1.25; x <= 1.25; x += 1.25 ) {
+
+						vec4 rgbaDepth = texture2D( shadowMap[ i ], vec2( x * xPixelOffset, y * yPixelOffset ) + shadowCoord.xy );
+
+						// doesn't seem to produce any noticeable visual difference compared to simple "texture2D" lookup
+						//"vec4 rgbaDepth = texture2DProj( shadowMap[ i ], vec4( vShadowCoord[ i ].w * ( vec2( x * xPixelOffset, y * yPixelOffset ) + shadowCoord.xy ), 0.05, vShadowCoord[ i ].w ) );
+
+						float fDepth = unpackDepth( rgbaDepth );
+
+						if ( fDepth < shadowCoord.z )
+							shadow += 1.0;
+
+				}
+
+				shadow /= 9.0;
+
+				*/
 
 				const float shadowDelta = 1.0 / 9.0;
 
@@ -103,13 +126,13 @@
 
 				if ( fDepth < shadowCoord.z )
 
-							// spot with multiple shadows is darker
+					// spot with multiple shadows is darker
 
 					shadowColor = shadowColor * vec3( 1.0 - shadowDarkness[ i ] );
 
-							// spot with multiple shadows has the same color as single shadow spot
+					// spot with multiple shadows has the same color as single shadow spot
 
-							//shadowColor = min( shadowColor, vec3( shadowDarkness[ i ] ) );
+					//"shadowColor = min( shadowColor, vec3( shadowDarkness[ i ] ) );
 
 			#endif
 

@@ -71,7 +71,7 @@ public final class BasicShader extends Shader
 			ChunksVertexShader.LIGHTMAP_PARS,
 			ChunksVertexShader.ENVMAP_PARS,
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.MORPH_TARGET_PARS,
+			ChunksVertexShader.MORPHTARGET_PARS,
 			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
 		);
@@ -83,14 +83,14 @@ public final class BasicShader extends Shader
 		);
 		
 		List<String> mainEnv = Arrays.asList(
-			ChunksVertexShader.MORPH_NORMAL,
+			ChunksVertexShader.MORPHNORMAL,
 			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNORMAL,
 			ChunksVertexShader.DEFAULTNORMAL
 		);
 
 		List<String> main2 = Arrays.asList(
-			ChunksVertexShader.MORPH_TARGET,
+			ChunksVertexShader.MORPHTARGET,
 			ChunksVertexShader.SKINNING,
 			ChunksVertexShader.DEFAULT,
 			ChunksVertexShader.WORLDPOS,

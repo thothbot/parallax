@@ -49,10 +49,10 @@ public class ChunksVertexShader
 	public static String MAP_PARS = Chunks.INSTANCE.getMapParsVertex().getText();
 	public static String MAP = Chunks.INSTANCE.getMapVertex().getText();
 	
-	public static String MORPH_NORMAL = Chunks.INSTANCE.getMorphnormalVertex().getText();
+	public static String MORPHNORMAL = Chunks.INSTANCE.getMorphnormalVertex().getText();
 	
-	public static String MORPH_TARGET_PARS = Chunks.INSTANCE.getMorphtargetParsVertex().getText();
-	public static String MORPH_TARGET = Chunks.INSTANCE.getMorphtargetVertex().getText();
+	public static String MORPHTARGET_PARS = Chunks.INSTANCE.getMorphtargetParsVertex().getText();
+	public static String MORPHTARGET = Chunks.INSTANCE.getMorphtargetVertex().getText();
 	
 	public static String SHADOWMAP_PARS = Chunks.INSTANCE.getShadowmapParsVertex().getText();
 	public static String SHADOWMAP = Chunks.INSTANCE.getShadowmapVertex().getText();

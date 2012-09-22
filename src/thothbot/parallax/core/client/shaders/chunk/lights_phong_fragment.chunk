@@ -62,7 +62,7 @@ vec3 viewPosition = normalize( vViewPosition );
 		pointDiffuse  += diffuse * pointLightColor[ i ] * pointDiffuseWeight * lDistance;
 
 		// specular
-
+		
 		vec3 pointHalfVector = normalize( lVector + viewPosition );
 		float pointDotNormalHalf = max( dot( normal, pointHalfVector ), 0.0 );
 		float pointSpecularWeight = specularStrength * max( pow( pointDotNormalHalf, shininess ), 0.0 );
@@ -201,7 +201,7 @@ vec3 viewPosition = normalize( vViewPosition );
 		#ifdef PHYSICALLY_BASED_SHADING
 
 			/*
-			// fresnel term from skin shader
+					// fresnel term from skin shader
 			const float F0 = 0.128;
 
 			float base = 1.0 - dot( viewPosition, dirHalfVector );
@@ -211,7 +211,7 @@ vec3 viewPosition = normalize( vViewPosition );
 			*/
 
 			/*
-			// fresnel term from fresnel shader
+					// fresnel term from fresnel shader
 			const float mFresnelBias = 0.08;
 			const float mFresnelScale = 0.3;
 			const float mFresnelPower = 5.0;
@@ -290,9 +290,9 @@ vec3 viewPosition = normalize( vViewPosition );
 		#endif
 
 	}
-	
+
 #endif
-		
+
 vec3 totalDiffuse = vec3( 0.0 );
 vec3 totalSpecular = vec3( 0.0 );
 

@@ -8,15 +8,13 @@
 
 	#ifndef USE_MORPHNORMALS
 
-		morphed += ( morphTarget4 - position ) * morphTargetInfluences[ 4 ];
-		morphed += ( morphTarget5 - position ) * morphTargetInfluences[ 5 ];
-		morphed += ( morphTarget6 - position ) * morphTargetInfluences[ 6 ];
-		morphed += ( morphTarget7 - position ) * morphTargetInfluences[ 7 ];
+	morphed += ( morphTarget4 - position ) * morphTargetInfluences[ 4 ];
+	morphed += ( morphTarget5 - position ) * morphTargetInfluences[ 5 ];
+	morphed += ( morphTarget6 - position ) * morphTargetInfluences[ 6 ];
+	morphed += ( morphTarget7 - position ) * morphTargetInfluences[ 7 ];
 
 	#endif
 
-		morphed += position;
-
-		gl_Position = projectionMatrix * modelViewMatrix * vec4( morphed, 1.0 );
+	morphed += position;
 
 #endif

@@ -83,7 +83,7 @@ public final class LambertShader extends Shader
 			ChunksVertexShader.ENVMAP_PARS,
 			ChunksVertexShader.LIGHTS_LAMBERT_PARS,
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.MORPH_TARGET_PARS,
+			ChunksVertexShader.MORPHTARGET_PARS,
 			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
 		);
@@ -92,11 +92,11 @@ public final class LambertShader extends Shader
 			ChunksVertexShader.MAP,
 			ChunksVertexShader.LIGHTMAP,
 			ChunksVertexShader.COLOR,
-			ChunksVertexShader.MORPH_NORMAL,
+			ChunksVertexShader.MORPHNORMAL,
 			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNORMAL,
 			ChunksVertexShader.DEFAULTNORMAL,
-			ChunksVertexShader.MORPH_TARGET,
+			ChunksVertexShader.MORPHTARGET,
 			ChunksVertexShader.SKINNING,
 			ChunksVertexShader.DEFAULT,
 			ChunksVertexShader.WORLDPOS,

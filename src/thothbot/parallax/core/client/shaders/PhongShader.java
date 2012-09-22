@@ -64,7 +64,7 @@ public final class PhongShader extends Shader
 	{
 		this.setUniforms(UniformsLib.getCommon());
 		this.setUniforms(UniformsLib.getBump());
-		this.setUniforms(UniformsLib.getNormal());
+		this.setUniforms(UniformsLib.getNormalMap());
 		this.setUniforms(UniformsLib.getFog());
 		this.setUniforms(UniformsLib.getLights());
 		this.setUniforms(UniformsLib.getShadowmap());
@@ -84,7 +84,7 @@ public final class PhongShader extends Shader
 			ChunksVertexShader.ENVMAP_PARS,
 			ChunksVertexShader.LIGHTS_PHONG_PARS,
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.MORPH_TARGET_PARS,
+			ChunksVertexShader.MORPHTARGET_PARS,
 			ChunksVertexShader.SKINNING_PARS,
 			ChunksVertexShader.SHADOWMAP_PARS
 		);
@@ -93,14 +93,14 @@ public final class PhongShader extends Shader
 			ChunksVertexShader.MAP,
 			ChunksVertexShader.LIGHTMAP,
 			ChunksVertexShader.COLOR,
-			ChunksVertexShader.MORPH_NORMAL,
+			ChunksVertexShader.MORPHNORMAL,
 			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNORMAL,
 			ChunksVertexShader.DEFAULTNORMAL
 		);
 
 		List<String> main2 = Arrays.asList(
-				ChunksVertexShader.MORPH_TARGET,
+				ChunksVertexShader.MORPHTARGET,
 				ChunksVertexShader.SKINNING,
 				ChunksVertexShader.DEFAULT
 		);
