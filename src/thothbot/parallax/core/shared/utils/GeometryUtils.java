@@ -133,14 +133,14 @@ public class GeometryUtils
 			List<Vector3> faceVertexNormals = face.getVertexNormals();
 			List<Color> faceVertexColors = face.getVertexColors();
 
-			if ( face instanceof Face3 ) 
+			if ( face.getClass() == Face3.class ) 
 			{
 				faceCopy = new Face3( face.getA() + vertexOffset, face.getB() + vertexOffset, face.getC() + vertexOffset );
 
-			} else if ( face instanceof Face4 ) 
+			} 
+			else if ( face.getClass() == Face4.class ) 
 			{
-				Face4 face4 = (Face4) face;
-				faceCopy = new Face4( face4.getA() + vertexOffset, face4.getB() + vertexOffset, face4.getC() + vertexOffset, face4.getD() + vertexOffset );
+				faceCopy = new Face4( face.getA() + vertexOffset, face.getB() + vertexOffset, face.getC() + vertexOffset, ((Face4)face).getD() + vertexOffset );
 			}
 
 			faceCopy.getNormal().copy( face.getNormal() );
@@ -228,7 +228,7 @@ public class GeometryUtils
 		{
 			Face3 face = geometry.getFaces().get(i);
 
-			if ( face instanceof Face4 ) 
+			if ( face.getClass() == Face4.class ) 
 			{
 				int a = face.getA();
 				int b = face.getB();

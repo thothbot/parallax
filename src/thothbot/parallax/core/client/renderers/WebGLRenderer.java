@@ -1145,7 +1145,7 @@ public class WebGLRenderer
 		this.setDepthTest( true );
 		this.setDepthWrite( true );
 
-		assert(1==2);
+//		assert(1==2);
 //		 getGL().finish();
 	}
 
@@ -2111,10 +2111,10 @@ public class WebGLRenderer
 					((List<Texture>)uniforms.get("shadowMap").getValue()).add( j, shadowLight.getShadowMap() );
 					((List<Vector2>)uniforms.get("shadowMapSize").getValue()).add( j, shadowLight.getShadowMapSize() );
 
-					((List<Matrix4>)uniforms.get("shadowMatrix").getValue()).add( j, shadowLight.getShadowMatrix());
+					((List<Matrix4>)uniforms.get("shadowMatrix").getValue()).add( j, shadowLight.getShadowMatrix() );
 
-					((Float32Array)uniforms.get("shadowDarkness").getValue()).set( j, shadowLight.getShadowDarkness());
-					((Float32Array)uniforms.get("shadowBias").getValue()).set(j, shadowLight.getShadowBias());
+					((Float32Array)uniforms.get("shadowDarkness").getValue()).set( j, shadowLight.getShadowDarkness() );
+					((Float32Array)uniforms.get("shadowBias").getValue()).set( j, shadowLight.getShadowBias() );
 
 					j ++;
 				}
@@ -2136,8 +2136,11 @@ public class WebGLRenderer
 	@SuppressWarnings("unchecked")
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
-		for ( Uniform uniform : materialUniforms.values() ) 
+		for(String key: materialUniforms.keySet())
 		{
+			Uniform uniform = materialUniforms.get(key);
+//		for ( Uniform uniform : materialUniforms.values() ) 
+//		{
 			WebGLUniformLocation location = uniform.getLocation();
 		
 			if ( location == null ) continue;
@@ -2186,6 +2189,7 @@ public class WebGLRenderer
 			}
 			else if(type == TYPE.V2V) // List of Vector2
 			{ 
+				Log.error(key, value);
 				List<Vector2> listVector2f = (List<Vector2>) value;
 				if ( uniform.getCacheArray() == null )
 					uniform.setCacheArray( Float32Array.create( 2 * listVector2f.size() ) );

@@ -130,7 +130,7 @@ public final class ShadowMap extends Plugin
 		getRenderer().setDepthTest( true );
 
 		List<Light> sceneLights = getScene().getLights();
-		
+
 		// preprocess lights
 		// 	- skip lights that are not casting shadows
 		//	- create virtual lights for cascaded shadow maps
@@ -187,7 +187,7 @@ public final class ShadowMap extends Plugin
 				map.setMagFilter(TextureMagFilter.LINEAR);
 				map.setFormat(PixelFormat.RGBA);
 				light.setShadowMap(map);
-				
+
 				light.setShadowMapSize( new Vector2( light.getShadowMapWidth(), light.getShadowMapHeight() ) );
 			}
 
