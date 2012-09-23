@@ -2136,25 +2136,19 @@ public class WebGLRenderer
 	@SuppressWarnings("unchecked")
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
-		for(String key: materialUniforms.keySet())
+		for ( Uniform uniform : materialUniforms.values() ) 
 		{
-			Uniform uniform = materialUniforms.get(key);
-//		for ( Uniform uniform : materialUniforms.values() ) 
-//		{
 			WebGLUniformLocation location = uniform.getLocation();
 		
 			if ( location == null ) continue;
 
 			Object value = uniform.getValue();
-
-			if ( key.equals("viewMatrix") || key.equals("modelViewMatrix") 
-					|| key.equals("projectionMatrix") || key.equals("normalMatrix")
-					|| key.equals("modelMatrix") || key.equals("cameraPosition") || key.equals("morphTargetInfluences")
-					|| key.equals("boneTexture") || key.equals("boneGlobalMatrices")) continue;
-
 			Uniform.TYPE type = uniform.getType();
+			
+			// Up textures also for undefined values
+			if ( type != Uniform.TYPE.T && value == null ) continue;
 
-			Log.debug("loadUniformsGeneric() " + key + ": " + uniform);
+			Log.debug("loadUniformsGeneric() " + uniform);
 			
 			WebGLRenderingContext gl = getGL();
 
