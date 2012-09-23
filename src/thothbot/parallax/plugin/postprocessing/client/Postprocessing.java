@@ -93,6 +93,11 @@ public class Postprocessing extends Plugin
 				canvas.getHeight() / 2.0, canvas.getHeight() / -2.0, 
 				-10000, 10000
 		);
+		this.camera = new OrthographicCamera( 
+				canvas.getWidth() / -2.0, canvas.getWidth() / 2.0, 
+				canvas.getHeight() / 2.0, canvas.getHeight() / -2.0, 
+				-10000, 10000
+		);
 		this.quad = new Mesh( new PlaneGeometry( 1, 1 ), null );
 		quad.getPosition().setZ(-100);
 		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );

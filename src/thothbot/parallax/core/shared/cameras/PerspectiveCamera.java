@@ -164,7 +164,6 @@ public class PerspectiveCamera extends Camera
 	 * is used if frame size is not specified; Formula based on
 	 * http://www.bobatkins.com/photography/technical/field_of_view.html
 	 */
-
 	public void setLens(int focalLength)
 	{
 		setLens(focalLength, 24);
@@ -173,7 +172,7 @@ public class PerspectiveCamera extends Camera
 	public void setLens(int focalLength, int frameHeight)
 	{
 		this.fieldOfView = 2.0 * Math.atan( frameHeight / ( focalLength * 2.0 ) ) * ( 180.0 / Math.PI );
-		this.updateProjectionMatrix();
+		this.updateProjectionMatrix();		
 	}
 	
 	/**

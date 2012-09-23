@@ -66,10 +66,11 @@ public final class NormalMapShader extends Shader
 		this.setUniforms(UniformsLib.getLights());
 		this.setUniforms(UniformsLib.getShadowmap());
 		
-		this.addUniform("enableAO",         new Uniform(Uniform.TYPE.I, 0 ));
-		this.addUniform("enableDiffuse",    new Uniform(Uniform.TYPE.I, 0 ));
-		this.addUniform("enableSpecular",   new Uniform(Uniform.TYPE.I, 0 ));
-		this.addUniform("enableReflection", new Uniform(Uniform.TYPE.I, 0 ));
+		this.addUniform("enableAO",         new Uniform(Uniform.TYPE.I, false ));
+		this.addUniform("enableDiffuse",    new Uniform(Uniform.TYPE.I, false ));
+		this.addUniform("enableSpecular",   new Uniform(Uniform.TYPE.I, false ));
+		this.addUniform("enableReflection", new Uniform(Uniform.TYPE.I, false ));
+		this.addUniform("enableDisplacement", new Uniform(Uniform.TYPE.I, false ));
 		
 		// must go first as this is vertex texture
 		this.addUniform("tDisplacement", new Uniform(Uniform.TYPE.T ));
@@ -90,6 +91,8 @@ public final class NormalMapShader extends Shader
 		this.addUniform("uShininess",     new Uniform(Uniform.TYPE.F, 30.0  ));
 		this.addUniform("uOpacity",       new Uniform(Uniform.TYPE.F, 1.0 ));
 		
+		this.addUniform("useRefract", new Uniform(Uniform.TYPE.I, false ));
+		this.addUniform("uRefractionRatio", new Uniform(Uniform.TYPE.F, 0.98 ));
 		this.addUniform("uReflectivity", new Uniform(Uniform.TYPE.F, 0.5 ));
 		
 		this.addUniform("uOffset", new Uniform(Uniform.TYPE.V2, new Vector2( 0.0, 0.0 ) ));

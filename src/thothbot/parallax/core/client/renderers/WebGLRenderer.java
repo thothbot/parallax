@@ -2151,7 +2151,7 @@ public class WebGLRenderer
 
 			Uniform.TYPE type = uniform.getType();
 
-			Log.debug("loadUniformsGeneric() " + uniform);
+			Log.debug("loadUniformsGeneric() " + key + ": " + uniform);
 			
 			WebGLRenderingContext gl = getGL();
 
