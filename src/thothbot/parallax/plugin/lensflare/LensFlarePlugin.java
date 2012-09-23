@@ -139,7 +139,8 @@ public final class LensFlarePlugin extends Plugin
 
 		Map<String, Attribute> attributes = GWT.isScript() ? 
 				new FastMap<Attribute>() : new HashMap<String, Attribute>();
-		attributes.put("vertex", new Attribute(Attribute.TYPE.V3, null));
+		attributes.put("position", new Attribute(Attribute.TYPE.V3, null));
+		attributes.put("uv", new Attribute(Attribute.TYPE.V3, null));
 		lensFlare.shader.setAttributes(attributes);
 		lensFlare.shader.buildProgram(gl);
 	}
@@ -199,7 +200,7 @@ public final class LensFlarePlugin extends Plugin
 
 		if ( ! lensFlare.attributesEnabled ) 
 		{
-			gl.enableVertexAttribArray( attributesLocation.get("vertex") );
+			gl.enableVertexAttribArray( attributesLocation.get("position") );
 			gl.enableVertexAttribArray( attributesLocation.get("uv") );
 
 			lensFlare.attributesEnabled = true;
@@ -212,7 +213,7 @@ public final class LensFlarePlugin extends Plugin
 		gl.uniform1i( uniforms.get("map").getLocation(), 1 );
 
 		gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), lensFlare.vertexBuffer );
-		gl.vertexAttribPointer( attributesLocation.get("vertex"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 0 );
+		gl.vertexAttribPointer( attributesLocation.get("position"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 0 );
 		gl.vertexAttribPointer( attributesLocation.get("uv"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 8 );
 
 		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
