@@ -985,7 +985,7 @@ public class WebGLRenderer
 		// Shadowmap
 		if(this.isShadowMapEnabled && this.shadowMap == null)
 		{
-			Log.error("Including shadow map plugin");
+			Log.info("Including shadow map plugin");
 			this.shadowMap = new ShadowMap(this, scene);
 		}
 
@@ -2147,7 +2147,10 @@ public class WebGLRenderer
 
 			Object value = uniform.getValue();
 
-			if ( value == null ) continue;
+			if ( key.equals("viewMatrix") || key.equals("modelViewMatrix") 
+					|| key.equals("projectionMatrix") || key.equals("normalMatrix")
+					|| key.equals("modelMatrix") || key.equals("cameraPosition") || key.equals("morphTargetInfluences")
+					|| key.equals("boneTexture") || key.equals("boneGlobalMatrices")) continue;
 
 			Uniform.TYPE type = uniform.getType();
 
@@ -2189,7 +2192,6 @@ public class WebGLRenderer
 			}
 			else if(type == TYPE.V2V) // List of Vector2
 			{ 
-				Log.error(key, value);
 				List<Vector2> listVector2f = (List<Vector2>) value;
 				if ( uniform.getCacheArray() == null )
 					uniform.setCacheArray( Float32Array.create( 2 * listVector2f.size() ) );
@@ -2725,8 +2727,6 @@ public class WebGLRenderer
 				this.getInfo().getMemory().textures ++;
 			}
 			
-			Log.error(slot, texture);
-
 			getGL().activeTexture( GLenum.TEXTURE0.getValue() + slot );
 			getGL().bindTexture( GLenum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
 
