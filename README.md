@@ -27,12 +27,12 @@ Parallax supports and will support WebGL-canvas render only.
 
 ![Demo](http://thothbot.github.com/parallax/static/examples_banner.jpg)
 
-[Latest demo](http://thothbot.github.com/parallax/demo/) | [Dev demo](http://thothbot.github.com/parallax/demo/dev/)
+[Latest demo](http://thothbot.github.com/parallax/demo/index.html) | [Dev demo](http://thothbot.github.com/parallax/demo/dev/)
 
 
 ### Documentation ###
 
-Stable version [API Reference](http://thothbot.github.com/parallax/docs/) 
+Stable version [API Reference](http://thothbot.github.com/parallax/docs/index.html) 
 | Dev [API Reference](http://thothbot.github.com/parallax/docs/dev/) 
 
 [Wiki](https://github.com/thothbot/parallax/wiki) 
