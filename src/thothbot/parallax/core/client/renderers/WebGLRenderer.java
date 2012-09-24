@@ -669,6 +669,11 @@ public class WebGLRenderer
 		return this.clearAlpha;
 	}
 
+	public void clear() 
+	{
+		clear(true, true, true);
+	}
+
 	/**
 	 * Tells the renderer to clear its color, depth or stencil drawing buffer(s).
 	 * If no parameters are passed, no buffer will be cleared.
@@ -2097,26 +2102,30 @@ public class WebGLRenderer
 	{
 		if ( uniforms.containsKey("shadowMatrix") ) 
 		{
+			// Make them zero
+			uniforms.get("shadowMap").setValue(new ArrayList<Texture>());
+			uniforms.get("shadowMapSize").setValue(new ArrayList<Vector2>());
+			uniforms.get("shadowMatrix").setValue(new ArrayList<Matrix4>());
+			List<Texture> shadowMap = (List<Texture>)uniforms.get("shadowMap").getValue();
+			List<Vector2> shadowMapSize = (List<Vector2>)uniforms.get("shadowMapSize").getValue();
+			List<Matrix4> shadowMatrix = (List<Matrix4>)uniforms.get("shadowMatrix").getValue();
+			
 			int j = 0;
-
-			for ( int i = 0, il = lights.size(); i < il; i ++ ) 
+			for ( Light light: lights) 
 			{
-				Light light = lights.get( i );
-
 				if ( ! light.isCastShadow() ) continue;
 
 				if ( light instanceof AbstractShadowLight && ! ((AbstractShadowLight)light).isShadowCascade() )  
 				{
 					AbstractShadowLight shadowLight = (AbstractShadowLight) light;
-					((List<Texture>)uniforms.get("shadowMap").getValue()).add( j, shadowLight.getShadowMap() );
-					((List<Vector2>)uniforms.get("shadowMapSize").getValue()).add( j, shadowLight.getShadowMapSize() );
 
-					((List<Matrix4>)uniforms.get("shadowMatrix").getValue()).add( j, shadowLight.getShadowMatrix() );
+					shadowMap.add(shadowLight.getShadowMap() );
+					shadowMapSize.add(shadowLight.getShadowMapSize() );
+					shadowMatrix.add(shadowLight.getShadowMatrix() );
 
 					((Float32Array)uniforms.get("shadowDarkness").getValue()).set( j, shadowLight.getShadowDarkness() );
 					((Float32Array)uniforms.get("shadowBias").getValue()).set( j, shadowLight.getShadowBias() );
-
-					j ++;
+					j++;
 				}
 			}
 		}
@@ -2136,8 +2145,11 @@ public class WebGLRenderer
 	@SuppressWarnings("unchecked")
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
-		for ( Uniform uniform : materialUniforms.values() ) 
-		{
+//		for ( Uniform uniform : materialUniforms.values() ) 
+//		{
+			for ( String key: materialUniforms.keySet() ) 
+			{
+				 Uniform uniform = materialUniforms.get(key);
 			WebGLUniformLocation location = uniform.getLocation();
 		
 			if ( location == null ) continue;
@@ -2148,7 +2160,7 @@ public class WebGLRenderer
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
 
-			Log.debug("loadUniformsGeneric() " + uniform);
+			Log.debug("loadUniformsGeneric() " + key + ": "+ uniform);
 			
 			WebGLRenderingContext gl = getGL();
 

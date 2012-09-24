@@ -19,7 +19,6 @@
 
 package thothbot.parallax.core.client.renderers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -30,7 +29,6 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.shaders.DepthRGBAShader;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
@@ -189,6 +187,7 @@ public final class ShadowMap extends Plugin
 				light.setShadowMap(map);
 
 				light.setShadowMapSize( new Vector2( light.getShadowMapWidth(), light.getShadowMapHeight() ) );
+				light.setShadowMatrix( new Matrix4() );
 			}
 
 			if ( light.getShadowCamera() == null ) 
@@ -234,8 +233,6 @@ public final class ShadowMap extends Plugin
 				updateShadowCamera( camera, (VirtualLight)light );
 			}
 
-			RenderTargetTexture shadowMap = light.getShadowMap();
-			Matrix4 shadowMatrix = light.getShadowMatrix();
 			Camera shadowCamera = light.getShadowCamera();
 
 			shadowCamera.getPosition().copy( light.getMatrixWorld().getPosition() );
@@ -250,7 +247,7 @@ public final class ShadowMap extends Plugin
 				light.getCameraHelper().update();
 
 			// compute shadow matrix
-
+			Matrix4 shadowMatrix = light.getShadowMatrix();
 			shadowMatrix.set( 0.5, 0.0, 0.0, 0.5,
 							  0.0, 0.5, 0.0, 0.5,
 							  0.0, 0.0, 0.5, 0.5,
@@ -274,8 +271,8 @@ public final class ShadowMap extends Plugin
 
 			// render shadow map
 
-			getRenderer().setRenderTarget( shadowMap );
-			getRenderer().clear(false, false, false);
+			getRenderer().setRenderTarget( light.getShadowMap() );
+			getRenderer().clear();
 
 			// set object matrices & frustum culling
 
@@ -293,7 +290,6 @@ public final class ShadowMap extends Plugin
 					if ( ! ( object instanceof Mesh ) || ! ( object.isFrustumCulled() ) || this.frustum.contains( object ) ) 
 					{
 						object._modelViewMatrix.multiply( shadowCamera.getMatrixWorldInverse(), object.getMatrixWorld() );
-
 						webglObject.render = true;
 					}
 				}
