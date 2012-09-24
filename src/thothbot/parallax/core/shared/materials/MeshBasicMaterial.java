@@ -28,6 +28,14 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
 import thothbot.parallax.core.shared.core.Color;
 
+/**
+ * A material for drawing geometries in a simple shaded (flat or wireframe) way.
+ * <p>
+ * The default will render as flat polygons. To draw the mesh as wireframe, simply set {@link #setWireframe(boolean)} to true.
+
+ * @author thothbot
+ *
+ */
 public class MeshBasicMaterial extends Material
 	implements HasMaterialMap, HasWireframe, HasFog, HasVertexColors, HasSkinning
 {

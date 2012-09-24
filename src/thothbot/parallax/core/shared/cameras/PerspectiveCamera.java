@@ -238,6 +238,7 @@ public class PerspectiveCamera extends Camera
 	 *
 	 *<pre>
 	 *{@code
+	 *
 	 *   +---+---+---+
 	 *   | A | B | C |
 	 *   +---+---+---+
@@ -249,6 +250,7 @@ public class PerspectiveCamera extends Camera
 	 *
 	 *<pre>
 	 *{@code
+	 *
 	 *   double w = 1920;
 	 *   double h = 1080;
 	 *   double fullWidth = w * 3;

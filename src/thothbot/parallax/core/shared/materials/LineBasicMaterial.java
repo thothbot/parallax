@@ -31,6 +31,12 @@ import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
 
+/**
+ * A material for drawing wireframe-style geometries.
+ * 
+ * @author thothbot
+ *
+ */
 public final class LineBasicMaterial extends Material 
 	implements HasFog, HasColor, HasVertexColors
 {

@@ -44,9 +44,18 @@ import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ParticleBasicMaterial;
 
+/**
+ * A class for displaying particles in the form of variable size points. 
+ * <p>
+ * For example, the particles are displayed using GL_POINTS.
+ * 
+ * @author thothbot
+ *
+ */
 public class ParticleSystem extends GeometryObject
 {
 	public boolean sortParticles = false;
+	// Specifies whether the particle system will be culled if it's outside the camera's frustum. By default this is set to false.
 	public boolean frustumCulled = false;
 	
 	// camera matrices cache

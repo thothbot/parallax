@@ -45,10 +45,21 @@ import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 
+/**
+ * Materials describe the appearance of objects. 
+ * They are defined in a (mostly) renderer-independent way, so you don't 
+ * have to rewrite materials if you decide to use a different renderer.
+ * 
+ * @author thothbot
+ *
+ */
 public abstract class Material
 {
 	private static int MaterialCount;
 
+	/**
+	 * Material sides
+	 */
 	public static enum SIDE
 	{
 		FRONT,
@@ -152,9 +163,6 @@ public abstract class Material
 	
 	private double alphaTest;
 	
-	// Boolean for fixing antialiasing gaps in CanvasRenderer
-	private boolean isOverdraw;
-
 	private boolean isVisible = true;
 	private boolean isNeedsUpdate = true;
 	
@@ -187,20 +195,34 @@ public abstract class Material
 		setPolygonOffsetUnits(0.0);
 		
 		setAlphaTest(0);
-		setOverdraw(false);
 	}
 	
 	// Must be overwriten
 	protected abstract Shader getAssociatedShader();
 
+	/**
+	 * Gets unique number of this material instance.
+	 */
 	public int getId() {
 		return id;
+	}
+	
+	/**
+	 * Gets material name. Default is an empty string.
+	 */
+	public String getName() {
+		return this.name;
 	}
 	
 	public boolean isVisible() {
 		return this.isVisible;
 	}
 	
+	/**
+	 * Defines whether this material is visible.
+	 * <p> 
+	 * Default is true.
+	 */
 	public void setVisible(boolean visible) {
 		this.isVisible = visible;
 	}
@@ -209,6 +231,13 @@ public abstract class Material
 		return this.side;
 	}
 	
+	/**
+	 * Defines which of the face sides will be rendered - front, back or both.
+	 * <p>
+	 * Default is {@link SIDE#FRONT}
+	 * 
+	 * @param side see options {@link Material.SIDE}.
+	 */
 	public void setSide(SIDE side) {
 		this.side = side;
 	}
@@ -217,14 +246,26 @@ public abstract class Material
 		return this.isNeedsUpdate;
 	}
 	
+	/**
+	 * Specifies that the material needs to be updated, WebGL wise. 
+	 * Set it to true if you made changes that need to be reflected in WebGL.
+	 * <p>
+	 * This property is automatically set to true when instancing a new material.
+	 */
 	public void setNeedsUpdate(boolean visible) {
 		this.isNeedsUpdate = visible;
 	}
 
+	/**
+	 * Gets opacity. Default is 1.
+	 */
 	public double getOpacity() {
 		return opacity;
 	}
 
+	/**
+	 * Sets opacity. Default is 1.
+	 */
 	public void setOpacity(double opacity) {
 		this.opacity = opacity;
 	}
@@ -233,6 +274,12 @@ public abstract class Material
 		return isTransparent;
 	}
 
+	/**
+	 * Defines whether this material is transparent. 
+	 * <p>
+	 * This has an effect on rendering, as transparent objects need an special treatment, 
+	 * and are rendered after the opaque (i.e. non transparent) objects. 
+	 */
 	public void setTransparent(boolean transparent) {
 		this.isTransparent = transparent;
 	}
@@ -241,6 +288,11 @@ public abstract class Material
 		return blending;
 	}
 
+	/**
+	 * Sets which blending to use when displaying objects with this material.
+	 * <p>
+	 * Default is {@link Material.BLENDING#NORMAL}.
+	 */
 	public void setBlending(Material.BLENDING blending) {
 		this.blending = blending;
 	}
@@ -249,6 +301,13 @@ public abstract class Material
 		return blendSrc;
 	}
 
+	/**
+	 * Sets blending source. It's one of the {@link BlendingFactorSrc} constants. 
+	 * <p>
+	 * Default is {@link BlendingFactorSrc#SRC_ALPHA}.
+	 * 
+	 * @param blendSrc
+	 */
 	public void setBlendSrc(BlendingFactorSrc blendSrc) {
 		this.blendSrc = blendSrc;
 	}
@@ -257,6 +316,13 @@ public abstract class Material
 		return blendDst;
 	}
 
+	/**
+	 * Sets blending destination. It's one of the {@link BlendingFactorDest} constants. 
+	 * <p>
+	 * Default is {@link BlendingFactorDest#ONE_MINUS_SRC_ALPHA}.
+	 * 
+	 * @param blendDst
+	 */
 	public void setBlendDst(BlendingFactorDest blendDst) {
 		this.blendDst = blendDst;
 	}
@@ -265,6 +331,14 @@ public abstract class Material
 		return blendEquation;
 	}
 
+	/**
+	 * Sets blending equation to use when applying blending. 
+	 * It's one of the {@link BlendEquationMode} constants.
+	 * <p>
+	 * Default is {@link BlendEquationMode#FUNC_ADD}.
+	 * 
+	 * @param blendEquation
+	 */
 	public void setBlendEquation(BlendEquationMode blendEquation) {
 		this.blendEquation = blendEquation;
 	}
@@ -273,6 +347,11 @@ public abstract class Material
 		return isDepthTest;
 	}
 
+	/**
+	 * Whether to have depth test enabled when rendering this material. 
+	 * <p>
+	 * Default is true.
+	 */
 	public void setDepthTest(boolean depthTest) {
 		this.isDepthTest = depthTest;
 	}
@@ -281,6 +360,14 @@ public abstract class Material
 		return isDepthWrite;
 	}
 
+	/**
+	 * Whether rendering this material has any effect on the depth buffer.
+	 * <p> 
+	 * Default is true.
+	 * <p>
+	 * When drawing 2D overlays it can be useful to disable the depth writing in order 
+	 * to layer several things together without creating z-index artifacts.
+	 */
 	public void setDepthWrite(boolean depthWrite) {
 		this.isDepthWrite = depthWrite;
 	}
@@ -289,6 +376,13 @@ public abstract class Material
 		return isPolygonOffset;
 	}
 
+	/**
+	 * Whether to use polygon offset. 
+	 * <p>
+	 * Default is false.
+	 * <p> 
+	 * This corresponds to the POLYGON_OFFSET_FILL WebGL feature.
+	 */
 	public void setPolygonOffset(boolean polygonOffset) {
 		this.isPolygonOffset = polygonOffset;
 	}
@@ -297,6 +391,11 @@ public abstract class Material
 		return polygonOffsetFactor;
 	}
 
+	/**
+	 * Sets the polygon offset factor.
+	 * <p> 
+	 * Default is 0.
+	 */
 	public void setPolygonOffsetFactor(double polygonOffsetFactor) {
 		this.polygonOffsetFactor = polygonOffsetFactor;
 	}
@@ -305,6 +404,11 @@ public abstract class Material
 		return polygonOffsetUnits;
 	}
 
+	/**
+	 * Sets the polygon offset units.
+	 * <p> 
+	 * Default is 0.
+	 */
 	public void setPolygonOffsetUnits(double polygonOffsetUnits) {
 		this.polygonOffsetUnits = polygonOffsetUnits;
 	}
@@ -313,18 +417,15 @@ public abstract class Material
 		return alphaTest;
 	}
 
+	/**
+	 * Sets the alpha value to be used when running an alpha test.
+	 * <p> 
+	 * Default is 0.
+	 */
 	public void setAlphaTest(double alphaTest) {
 		this.alphaTest = alphaTest;
 	}
 	
-	public boolean isOverdraw() {
-		return isOverdraw;
-	}
-	
-	public void setOverdraw(boolean overdraw) {
-		this.isOverdraw = overdraw;
-	}
-
 	public Material.SHADING getShading() {
 		return this.shading;
 	}

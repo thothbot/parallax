@@ -20,7 +20,7 @@
 package thothbot.parallax.core.shared.materials;
 
 /**
- * Material has fog
+ * Define whether the material color is affected by global fog settings.
  * 
  * @author thothbot
  *

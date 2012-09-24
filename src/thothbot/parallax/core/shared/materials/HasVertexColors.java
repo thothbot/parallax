@@ -20,7 +20,7 @@
 package thothbot.parallax.core.shared.materials;
 
 /**
- * Material has vertex color
+ * Define whether the material uses vertex colors, or not.
  * 
  * @author thothbot
  *
