@@ -23,8 +23,13 @@
 package thothbot.parallax.core.shared.cameras;
 
 /**
- * Implementation of Perspective Camera.
- * 
+ * Camera with perspective projection.
+ * <pre>
+ * {@code
+ * PerspectiveCamera camera = new PerspectiveCamera( 45, width / height, 1, 1000 );
+ * getScene().add( camera );
+ * }
+ * </pre>
  * @author thothbot
  *
  */
@@ -42,11 +47,28 @@ public class PerspectiveCamera extends Camera
 	protected int width;
 	protected int height;
 
+	/**
+	 * Perspective Camera default constructor. It uses the following defaults:<br>
+	 * <ul>
+	 * <li>fieldOfView - 50</li>
+	 * <li>aspectRatio - 1</li>
+	 * <li>near - 0.1</li>
+	 * <li>far - 2000</li>
+	 * </ul>
+	 * 
+	 */
 	public PerspectiveCamera() 
 	{
 		this(50, 1, 0.1, 2000);
 	}
 
+	/**
+	 * Perspective Camera constructor
+	 * @param fieldOfView Camera frustum vertical field of view.
+	 * @param aspectRatio Camera frustum aspect ratio.
+	 * @param near        Camera frustum near plane.
+	 * @param far         Camera frustum far plane.
+	 */
 	public PerspectiveCamera(double fieldOfView, double aspectRatio, double near, double far) 
 	{
 		super();
@@ -58,42 +80,66 @@ public class PerspectiveCamera extends Camera
 		updateProjectionMatrix();
 	}
 
+	/**
+	 * Gets Camera frustum vertical field of view.
+	 */
 	public double getFieldOfView()
 	{
 		return fieldOfView;
 	}
 
+	/**
+	 * Sets Camera frustum vertical field of view.
+	 */
 	public void setFieldOfView(double fov)
 	{
 		this.fieldOfView = fov;
 	}
 
+	/**
+	 * Gets Camera frustum aspect ratio.
+	 */
 	public double getAspectRation()
 	{
 		return aspectRatio;
 	}
 
+	/**
+	 * Sets Camera frustum aspect ratio.
+	 */
 	public void setAspectRatio(double aspect)
 	{
 		this.aspectRatio = aspect;
 		this.updateProjectionMatrix();
 	}
 
+	/**
+	 * Gets Camera frustum near plane.
+	 */
 	public double getNear()
 	{
 		return near;
 	}
 
+	/**
+	 * Sets Camera frustum near plane.
+	 */
 	public void setNear(double near)
 	{
 		this.near = near;
 	}
 
+	/**
+	 * Gets Camera frustum far plane.
+	 */
 	public double getFar()
 	{
 		return far;
 	}
 
+	/**
+	 * Sets Camera frustum far plane.
+	 */
 	public void setFar(double far)
 	{
 		this.far = far;
@@ -160,15 +206,23 @@ public class PerspectiveCamera extends Camera
 	}
 
 	/**
-	 * Uses Focal Length (in mm) to estimate and set FOV 35mm (fullframe) camera
-	 * is used if frame size is not specified; Formula based on
-	 * http://www.bobatkins.com/photography/technical/field_of_view.html
+	 * {@see #setLens(int, int)}
+	 * 
+	 * @param focalLength the focal length
 	 */
 	public void setLens(int focalLength)
 	{
 		setLens(focalLength, 24);
 	}
 
+	/**
+	 * Uses Focal Length (in mm) to estimate and set FOV 35mm (fullframe) camera
+	 * is used if frame size is not specified.<br>
+	 * Formula based on <a href="http://www.bobatkins.com/photography/technical/field_of_view.html">bobatkins.com</a>
+	 * 
+	 * @param focalLength the focal length
+	 * @param frameHeight the frame size
+	 */
 	public void setLens(int focalLength, int frameHeight)
 	{
 		this.fieldOfView = 2.0 * Math.atan( frameHeight / ( focalLength * 2.0 ) ) * ( 180.0 / Math.PI );
@@ -178,24 +232,27 @@ public class PerspectiveCamera extends Camera
 	/**
 	 * Sets an offset in a larger frustum. This is useful for multi-window or
 	 * multi-monitor/multi-machine setups.
-	 *
+	 * <p>
 	 * For example, if you have 3x2 monitors and each monitor is 1920x1080 and
 	 * the monitors are in grid like this
 	 *
 	 *<pre>
+	 *{@code
 	 *   +---+---+---+
 	 *   | A | B | C |
 	 *   +---+---+---+
 	 *   | D | E | F |
 	 *   +---+---+---+
+	 *}
 	 *</pre>
 	 * then for each monitor you would call it like this
 	 *
 	 *<pre>
-	 *   var w = 1920;
-	 *   var h = 1080;
-	 *   var fullWidth = w * 3;
-	 *   var fullHeight = h * 2;
+	 *{@code
+	 *   double w = 1920;
+	 *   double h = 1080;
+	 *   double fullWidth = w * 3;
+	 *   double fullHeight = h * 2;
 	 *
 	 *   --A--
 	 *   camera.setOffset( fullWidth, fullHeight, w * 0, h * 0, w, h );
@@ -209,9 +266,17 @@ public class PerspectiveCamera extends Camera
 	 *   camera.setOffset( fullWidth, fullHeight, w * 1, h * 1, w, h );
 	 *   --F--
 	 *   camera.setOffset( fullWidth, fullHeight, w * 2, h * 1, w, h );
+	 *}
 	 *</pre>
 	 *
 	 *   Note there is no reason monitors have to be the same size or in a grid.
+	 * 
+	 * @param fullWidth  the full width of multiview setup
+	 * @param fullHeight the full height of multiview setup
+	 * @param x          the horizontal offset of subcamera
+	 * @param y          the vertical offset of subcamera
+	 * @param width      the width of subcamera
+	 * @param height     the height of subcamera
 	 */
 	public void setViewOffset( int fullWidth, int fullHeight, double x, double y, int width, int height ) 
 	{
@@ -225,6 +290,11 @@ public class PerspectiveCamera extends Camera
 		this.updateProjectionMatrix();
 	}
 	
+	/**
+	 * Updates the camera projection matrix.
+	 * <p>
+	 * Must be called after change of parameters.
+	 */
 	public void updateProjectionMatrix() 
 	{
 		if ( this.fullWidth != 0) 

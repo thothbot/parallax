@@ -28,7 +28,7 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 /**
- * Simple camera
+ * Abstract base class for cameras.
  * 
  * @author thothbot
  *
@@ -81,7 +81,6 @@ public class Camera extends Object3D
 		this.projectionMatrixInverse = projectionMatrix;
 	}
 
-	// TODO: Add hierarchy support.
 	@Override
 	public void lookAt(Vector3 vector)
 	{

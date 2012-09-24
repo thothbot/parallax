@@ -1257,6 +1257,9 @@ public class Matrix4
 		);
 	}
 
+	/**
+	 * Creates a frustum matrix.
+	 */
 	public Matrix4 makeFrustum(double left, double right, double bottom, double top, double near, double far)
 	{
 		Float32Array te = this.getArray();

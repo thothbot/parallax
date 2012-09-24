@@ -26,7 +26,13 @@ import java.util.List;
 
 /**
  * Face4 represent the rectangular sides (A, B, C, D) of the geometric object.
- * 
+ * <pre>
+ * {@code
+ * Vector3 normal = new Vector3( 0, 1, 0 ); 
+ * Color color = new Color( 0xffaa00 ); 
+ * Face4 face = new Face4( 0, 1, 2, 3, normal, color, 0 );
+ * }
+ * </pre>
  * @author thothbot
  *
  */
@@ -52,11 +58,17 @@ public class Face4 extends Face3
 		this.setD(d);
 	}
 
+	/**
+	 * Sets Vertex D index.
+	 */
 	public void setD(int d)
 	{
 		this.d = d;
 	}
 
+	/**
+	 * Gets Vertex D index.
+	 */
 	public int getD()
 	{
 		return d;

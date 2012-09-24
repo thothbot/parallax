@@ -75,6 +75,9 @@ public abstract class GeometryBuffer
 		this.id = id;
 	}
 
+	/**
+	 * Gets the Unique number of this geometry instance
+	 */
 	public int getId() 
 	{
 		return id;

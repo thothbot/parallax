@@ -27,7 +27,6 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.objects.GeometryObject;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 /**
  * This class implements three-dimensional region which is visible on the screen.

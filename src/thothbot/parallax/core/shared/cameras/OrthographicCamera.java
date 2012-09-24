@@ -23,7 +23,13 @@
 package thothbot.parallax.core.shared.cameras;
 
 /**
- * Implementation of Orthographic Camera.
+ * Camera with orthographic projection
+ * <pre>
+ * {@code
+ * OrthographicCamera camera = new OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 ); 
+ * getScene().add( camera );
+ * }
+ * </pre>
  * 
  * @author thothbot
  *
@@ -39,11 +45,33 @@ public class OrthographicCamera extends Camera
 	protected double near;
 	protected double far;
 
+	/**
+	 * Orthographic Camera constructor. It uses the following defaults:<br>
+	 * <ul>
+	 * <li>near - 0.1</li>
+	 * <li>far - 2000</li>
+	 * </ul>
+	 *  
+	 * @param left   Camera frustum left plane.
+	 * @param right  Camera frustum right plane.
+	 * @param top    Camera frustum top plane.
+	 * @param bottom Camera frustum bottom plane.
+	 */
 	public OrthographicCamera(double left, double right, double top, double bottom) 
 	{
 		this(left, right, top, bottom, 0.1, 2000);
 	}
 
+	/**
+	 * Orthographic Camera constructor
+	 * 
+	 * @param left   Camera frustum left plane.
+	 * @param right  Camera frustum right plane.
+	 * @param top    Camera frustum top plane.
+	 * @param bottom Camera frustum bottom plane.
+	 * @param near   Camera frustum near plane
+	 * @param far    Camera frustum far plane.
+	 */
 	public OrthographicCamera(double left, double right, double top, double bottom, double near, double far) 
 	{
 		super();
@@ -58,66 +86,107 @@ public class OrthographicCamera extends Camera
 		updateProjectionMatrix();
 	}
 
+	/**
+	 * Gets Camera frustum left plane.
+	 */
 	public double getLeft()
 	{
 		return left;
 	}
 
+	/**
+	 * Sets Camera frustum left plane.
+	 */
 	public void setLeft(double left)
 	{
 		this.left = left;
 	}
 
+	/**
+	 * Gets Camera frustum right plane.
+	 */
 	public double getRight()
 	{
 		return right;
 	}
 
+	/**
+	 * Sets Camera frustum right plane.
+	 */
 	public void setRight(double right)
 	{
 		this.right = right;
 	}
 
+	/**
+	 * Gets Camera frustum top plane.
+	 */
 	public double getTop()
 	{
 		return top;
 	}
 
+	/**
+	 * Sets Camera frustum top plane.
+	 */
 	public void setTop(double top)
 	{
 		this.top = top;
 	}
 
+	/**
+	 * Gets Camera frustum bottom plane.
+	 */
 	public double getBottom()
 	{
 		return bottom;
 	}
 
+	/**
+	 * Sets Camera frustum bottom plane.
+	 */
 	public void setBottom(double bottom)
 	{
 		this.bottom = bottom;
 	}
 
+	/**
+	 * Gets Camera frustum near plane.
+	 */
 	public double getNear()
 	{
 		return near;
 	}
 
+	/**
+	 * Sets Camera frustum near plane.
+	 */
 	public void setNear(double near)
 	{
 		this.near = near;
 	}
 
+	/**
+	 * Gets Camera frustum far plane.
+	 */
 	public double getFar()
 	{
 		return far;
 	}
 
+	/**
+	 * Sets Camera frustum far plane.
+	 */
 	public void setFar(double far)
 	{
 		this.far = far;
 	}
 	
+	/**
+	 * Updates the camera projection matrix.
+	 * <p> 
+	 * Must be called after change of parameters.
+	 */
 	public void updateProjectionMatrix()
 	{
 		this.projectionMatrix.makeOrthographic( getLeft(), getRight(), getTop(), getBottom(), getNear(), getFar() );

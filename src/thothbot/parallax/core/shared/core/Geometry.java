@@ -30,12 +30,28 @@ import java.util.Map;
 
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Bone;
+import thothbot.parallax.core.shared.objects.Line;
+import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Object3D;
+import thothbot.parallax.core.shared.objects.ParticleSystem;
+import thothbot.parallax.core.shared.objects.Ribbon;
 
 import com.google.gwt.core.client.GWT;
 
 /**
- * Represents geometric object geometry.
+ * Base class for geometries
+ * <pre>
+ * {@code
+ * Geometry geometry = new Geometry();
+ * 
+ * geometry.getVertices().add( new Vector3( -10, 10, 0 ) ); 
+ * geometry.getVertices().add( new Vector3( -10, -10, 0 ) );
+ * geometry.getVertices().add( new Vector3( 10, -10, 0 ) );  
+ * geometry.getFaces().add( new Face3( 0, 1, 2 ) );  
+ * 
+ * geometry.computeBoundingSphere();
+ * }
+ * </pre>
  * 
  * @author thothbot
  *
@@ -74,31 +90,17 @@ public class Geometry extends GeometryBuffer
 	// Bounding sphere.
 	private BoundingSphere boundingSphere = null;
 	
-	// Array of morph targets. Each morph target is JS object:
-	//  		{ name: "targetName", vertices: [ new Vector3(), ... ] }
-	// Morph vertices match number and order of primary vertices.
-	private List<MorphTarget> morphTargets;
-
 	// Array of vertices.
 	private List<Vector3> vertices;
 	
 	private ArrayList<Vector3> tempVerticles;
 
-	// Array of vertex colors, matching number and order of vertices.
-	// Used in ParticleSystem, Line and Ribbon.
-	// Meshes use per-face-use-of-vertex colors embedded directly in faces.
-	private List<Color> colors; // one-to-one vertex colors, used in
-								// ParticleSystem, Line and Ribbon
+	private List<Color> colors;
 
-	// Array of triangles or/and quads.
 	private List<Face3> faces;
 
-	// Array of face UV layers.
-	// Each UV layer is an array of UV matching order and number of vertices in faces.
 	private List<List<UV>> faceUvs;
 	
-	// Array of face UV layers.
-	// Each UV layer is an array of UV matching order and number of vertices in faces.
 	private List<List<List<UV>>> faceVertexUvs;
 	
 	// True if geometry has tangents. Set in Geometry.computeTangents.
@@ -107,19 +109,12 @@ public class Geometry extends GeometryBuffer
 	// Array of materials.
 	private List<Material> materials;
 
-
-	// Array of morph colors. Morph colors have similar structure as morph targets, each color set is JS object:
-	//		morphColor = { name: "colorName", colors: [ new Color(), ... ] }
-	// Morph colors can match either number and order of faces (face colors) or number of vertices (vertex colors).
+	private List<MorphTarget> morphTargets;
 	private List<MorphColor> morphColors;
-
-	// 		morphNormals = { faceNormals: [ new Vector3(), ... ],  vertexNormals: [ new Vector3(), ... ]}
 	private List<MorphNormal> morphNormals;
 
-	// Array of skinning weights, matching number and order of vertices.
 	private List<Vector4> skinWeights;
 
-	// Array of skinning indices, matching number and order of vertices.
 	private List<Vector4> skinIndices;
 	
 	private List<Vector3> skinVerticesA;
@@ -194,10 +189,18 @@ public class Geometry extends GeometryBuffer
 		this.geometryGroupsList = geometryGroupsList;
 	}
 	
+	/**
+	 * Gets the List of skinning weights, matching number and order of vertices.
+	 * @return
+	 */
 	public List<Vector4> getSkinWeights() {
 		return this.skinWeights;
 	}
 	
+	/**
+	 * Gets tje List of skinning indices, matching number and order of vertices.
+	 * @return
+	 */
 	public List<Vector4> getSkinIndices() {
 		return this.skinIndices;
 	}
@@ -226,6 +229,10 @@ public class Geometry extends GeometryBuffer
 		return this.isDynamic;
 	}
 	
+	/**
+	 * Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
+	 * Unless set to true internal typed arrays corresponding to buffers will be deleted once sent to GPU.
+	 */
 	public void setDynamic(boolean dynamic) {
 		this.isDynamic = dynamic;
 	}
@@ -286,6 +293,9 @@ public class Geometry extends GeometryBuffer
 		this.isColorsNeedUpdate = isColorsNeedUpdate;
 	}
 
+	/**
+	 * Gets True if geometry has tangents. {@see Geometry#computeTangents()} 
+	 */
 	public Boolean hasTangents() {
 		return hasTangents;
 	}
@@ -294,6 +304,10 @@ public class Geometry extends GeometryBuffer
 		this.faceUvs = faceUvs;
 	}
 
+	/**
+	 * Gets the List of face {@link UV} layers.
+	 * Each UV layer is an List of {@link UV} matching order and number of faces.
+	 */
 	public List<List<UV>> getFaceUvs() {
 		return faceUvs;
 	}
@@ -302,6 +316,12 @@ public class Geometry extends GeometryBuffer
 		this.colors = colors;
 	}
 
+	/**
+	 * Gets List of vertex {@link Color}s, matching number and order of vertices.
+	 * <p>
+	 * Used in {@link ParticleSystem}, {@link Line} and {@link Ribbon}.<br>
+	 * {@link Mesh}es use per-face-use-of-vertex colors embedded directly in faces.
+	 */
 	public List<Color> getColors() {
 		return colors;
 	}
@@ -310,13 +330,16 @@ public class Geometry extends GeometryBuffer
 		this.faces = faces;
 	}
 
-	/*
-	 * Can be Face3 and Face4
+	/**
+	 * Gets the List of triangles: {@link Face3} or/and quads: {@link Face4}
 	 */
 	public List<Face3> getFaces() {
 		return faces;
 	}
 	
+	/**
+	 * Gets the List of {@link Material}s.
+	 */
 	public List<Material> getMaterials() 
 	{
 		return this.materials;
@@ -332,6 +355,9 @@ public class Geometry extends GeometryBuffer
 		this.vertices = vertices;
 	}
 
+	/**
+	 * Gets List of {@link Vector3}.
+	 */
 	public List<Vector3> getVertices() 
 	{
 		return vertices;
@@ -354,6 +380,10 @@ public class Geometry extends GeometryBuffer
 		return boundingBox;
 	}
 
+	/**
+	 * Gets the List of {@link Geometry.MorphTarget}. 
+	 * Morph vertices match number and order of primary vertices.
+	 */
 	public List<MorphTarget> getMorphTargets() {
 		return morphTargets;
 	}
@@ -362,10 +392,18 @@ public class Geometry extends GeometryBuffer
 		return morphNormals;
 	}
 	
+	/**
+	 * Gets the List of {@link Geometry.MorphColor}. Morph colors have similar structure as {@link Geometry.MorphTarget}.
+	 * Morph colors can match either number and order of faces (face colors) or number of vertices (vertex colors).
+	 */
 	public List<MorphColor> getMorphColors() {
 		return this.morphColors;
 	}
 	
+	/**
+	 * Gets the List of face {@link UV} layers.
+	 * Each UV layer is an List of UV matching order and number of vertices in faces.
+	 */
 	public List<List<List<UV>>> getFaceVertexUvs(){
 		return this.faceVertexUvs;
 	}
@@ -374,6 +412,9 @@ public class Geometry extends GeometryBuffer
 		this.faceVertexUvs = faceVertexUvs;
 	}
 
+	/**
+	 * Computes centroids for all faces.
+	 */
 	public void computeCentroids()
 	{
 		for (Face3 face: this.faces) {
@@ -401,6 +442,10 @@ public class Geometry extends GeometryBuffer
 		}
 	}
 
+	/**
+	 * Computes vertex normals by averaging face normals.
+	 * Face normals must be existing / computed beforehand.
+	 */
 	public void computeVertexNormals()
 	{
 		// create internal buffers for reuse when calling this method repeatedly
@@ -488,6 +533,9 @@ public class Geometry extends GeometryBuffer
 		}
 	}
 	
+	/**
+	 * Computes face normals.
+	 */
 	public void computeFaceNormals()
 	{
 		computeFaceNormals(false);
@@ -629,6 +677,12 @@ public class Geometry extends GeometryBuffer
 		}
 	}
 	
+	/**
+	 * Computes vertex tangents.<br>
+	 * Based on <a href="http://www.terathon.com/code/tangent.html">terathon.com</a>
+	 * <p>
+	 * Geometry must have vertex {@link UV}s (layer 0 will be used).
+	 */
 	public void computeTangents()
 	{
 		Face3 face;
@@ -695,6 +749,9 @@ public class Geometry extends GeometryBuffer
 		this.hasTangents = true;
 	}
 
+	/**
+	 * Computes bounding box of the geometry.
+	 */
 	public void computeBoundingBox() 
 	{
 
@@ -740,6 +797,12 @@ public class Geometry extends GeometryBuffer
 
 	}
 
+	/**
+	 * Computes bounding sphere of the geometry.
+	 * <p>
+	 * Neither bounding boxes or bounding spheres are computed by default. 
+	 * They need to be explicitly computed, otherwise they are null.
+	 */
 	public void computeBoundingSphere()
 	{	
 		double maxRadiusSq = 0;
@@ -806,9 +869,9 @@ public class Geometry extends GeometryBuffer
 	}
 
 
-	/////////////////////////////////////////////////////
-	// TODO: Check methods
-	
+	/**
+	 * Makes matrix transform directly into vertex coordinates.	
+	 */
 	public void applyMatrix(Matrix4 matrix)
 	{
 		Matrix4 matrixRotation = new Matrix4();

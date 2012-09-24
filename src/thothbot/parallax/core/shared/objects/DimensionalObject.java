@@ -143,6 +143,10 @@ public interface DimensionalObject
 
 	public Vector3 getUp();
 
+	/**
+	 * Looks at specific point
+	 * @param vector - the point to look at
+	 */
 	public void lookAt(Vector3 vector);
 
 	public void setBoundRadius(double boundRadius);
