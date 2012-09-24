@@ -24,6 +24,7 @@ package thothbot.parallax.core.shared.cameras;
 
 /**
  * Camera with orthographic projection
+ * 
  * <pre>
  * {@code
  * OrthographicCamera camera = new OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 ); 

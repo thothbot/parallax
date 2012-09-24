@@ -202,6 +202,12 @@ public class Object3D implements DimensionalObject
 		return dynamic;
 	}
 
+	/**
+	 * If set to true light will cast dynamic shadows. 
+	 * Warning: This is expensive and requires tweaking to get shadows looking right.
+	 * <p>
+	 * Default — false.
+	 */
 	public boolean isCastShadow() {
 		return isCastShadow;
 	}

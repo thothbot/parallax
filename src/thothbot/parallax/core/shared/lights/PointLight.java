@@ -23,7 +23,23 @@
 package thothbot.parallax.core.shared.lights;
 
 import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
+import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 
+/**
+ * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
+ * 
+ * <pre>
+ * {@code
+ * PointLight light = new PointLight( 0xff0000, 1, 100 ); 
+ * light.position.set( 50, 50, 50 ); 
+ * getScene().add( light );
+ * }
+ * </pre>
+ * 
+ * @author thothbot
+ *
+ */
 public class PointLight extends Light
 {
 	private double intensity;

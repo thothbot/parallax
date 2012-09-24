@@ -24,18 +24,26 @@ package thothbot.parallax.core.shared.core;
 
 /**
  * Class implements UV texture mapping.
- * 
+ * <p>
  * UV texturing permits polygons that make up a 3D object to be 
  * painted with color from an image.
- * 
+ * <p>
  * Here are:
- * U - Horizontal coordinate.
- * V - Vertical coordinate.
+ * <ul>
+ * <li>U - Horizontal coordinate.</li>
+ * <li>V - Vertical coordinate.</li>
+ * </ul>
  * 
  * UV coordinates should be applied per face. not per vertex. This means 
  * a shared vertex can have different UV coordinates in each of its 
  * triangles, so adjacent triangles can be cut apart and positioned 
  * on different areas of the texture map.
+ * 
+ * <pre>
+ * {@code
+ * UV uv = new UV( 0, 1 );
+ * }
+ * </pre>
  * 
  * @author thothbot
  *

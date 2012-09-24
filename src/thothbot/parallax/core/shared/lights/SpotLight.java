@@ -22,7 +22,34 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
+import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 
+/**
+ * A point light that can cast shadow in one direction.
+ * <p>
+ * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
+ * 
+ * <pre>
+ * {@code
+ * // white spotlight shining from the side, casting shadow 
+ * 
+ * SpotLight spotLight = new SpotLight( 0xffffff ); 
+ * spotLight.getPosition().set( 100, 1000, 100 );  
+ * spotLight.setCastShadow( true );  
+ * spotLight.setShadowMapWidth( 1024 ); 
+ * spotLight.setShadowMapHeight( 1024 );  
+ * spotLight.setShadowCameraNear( 500 ); 
+ * spotLight.setShadowCameraFar( 4000 ); 
+ * spotLight.setShadowCameraFov( 30 );  
+ * 
+ * getScene().add( spotLight );
+ * }
+ * </pre>
+ * 
+ * @author thothbot
+ *
+ */
 public class SpotLight extends AbstractShadowLight
 {
 	private double angle;

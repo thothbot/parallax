@@ -385,8 +385,8 @@ public class Vector4 extends Vector3 implements Vector
 	
 	/**
 	 * <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm">www.euclideanspace.com</a>
+	 * 
 	 * @param q is assumed to be normalized
-	 * @return
 	 */
 	public Vector4 setAxisAngleFromQuaternion( Quaternion q ) 
 	{
@@ -412,8 +412,8 @@ public class Vector4 extends Vector3 implements Vector
 
 	/**
 	 * <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm">www.euclideanspace.com</a>
+	 * 
 	 * @param m assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
-	 * @return
 	 */
 	public Vector4 setAxisAngleFromRotationMatrix( Matrix4 m ) 
 	{

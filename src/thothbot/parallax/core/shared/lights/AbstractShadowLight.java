@@ -20,7 +20,6 @@
 package thothbot.parallax.core.shared.lights;
 
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
@@ -65,10 +64,16 @@ public abstract class AbstractShadowLight extends Light
 		this.shadowMatrix = new Matrix4();
 	}
 
+	/**
+	 * Gets Target used for shadow camera orientation.
+	 */
 	public Object3D getTarget() {
 		return this.target;
 	}
 	
+	/**
+	 * Sets Target used for shadow camera orientation.
+	 */
 	public void setTarget(Object3D target) {
 		this.target = target;
 	}
@@ -81,19 +86,33 @@ public abstract class AbstractShadowLight extends Light
 		this.shadowMatrix = shadowMatrix;
 	}
 
+	/**
+	 * Gets Light's intensity.
+	 */
 	public double getIntensity() {
 		return this.intensity;
 	}
-	
+
+	/**
+	 * Sets Light's intensity.
+	 */
 	public void setIntensity(double intensity) {
 		this.intensity = intensity;
 	}
 	
 	
+	/**
+	 * Gets the distance. Default — 0.0.
+	 */
 	public double getDistance() {
 		return this.distance;
 	}
-	
+
+	/**
+	 * Sets the distance.
+	 * <p>
+	 * If non-zero, light will attenuate linearly from maximum intensity at light position down to zero at distance.
+	 */
 	public void setDistance(double distance) {
 		this.distance = distance;
 	}
@@ -102,6 +121,11 @@ public abstract class AbstractShadowLight extends Light
 		return onlyShadow;
 	}
 
+	/**
+	 * If set to true light will only cast shadow but not contribute any lighting (as if intensity was 0 but cheaper to compute).
+	 * <p>
+	 * Default — false.
+	 */
 	public void setOnlyShadow(boolean onlyShadow) {
 		this.onlyShadow = onlyShadow;
 	}

@@ -25,6 +25,12 @@ package thothbot.parallax.core.shared.lights;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.objects.Object3D;
 
+/**
+ * Abstract base class for lights.
+ * 
+ * @author thothbot
+ *
+ */
 public class Light extends Object3D
 {
 	private Color color;

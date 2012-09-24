@@ -206,7 +206,7 @@ public class PerspectiveCamera extends Camera
 	}
 
 	/**
-	 * {@see #setLens(int, int)}
+	 * @see #setLens(int, int)
 	 * 
 	 * @param focalLength the focal length
 	 */

@@ -24,6 +24,14 @@ package thothbot.parallax.core.shared.core;
 
 import thothbot.parallax.core.shared.cameras.Camera;
 
+/**
+ * Projects points between spaces.
+ * <p>
+ * Based on three.js code
+ * 
+ * @author thothbot
+ *
+ */
 public class Projector
 {
 	private Matrix4 _projScreenMatrix;
@@ -43,6 +51,12 @@ public class Projector
 		return vector;
 	}
 	
+	/**
+	 * Translates a 2D point from NDC (Normalized Device Coordinates) 
+	 * to a Ray that can be used for picking.
+	 * <p> 
+	 * NDC range from [-1..1] in x (left to right) and [1.0 .. -1.0] in y (top to bottom).
+	 */
 	public Ray pickingRay( Vector3 vector, Camera camera ) 
 	{
 		// set two vectors with opposing z values

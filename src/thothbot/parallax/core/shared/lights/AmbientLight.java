@@ -22,6 +22,19 @@
 
 package thothbot.parallax.core.shared.lights;
 
+/**
+ * This light's color gets applied to all the objects in the scene globally.
+ * 
+ * <pre>
+ * {@code
+ * AmbientLight light = new AmbientLight( 0xff0000 ); 
+ * getScene().add( light );
+ * }
+ * </pre>
+ * 
+ * @author thothbot
+ *
+ */
 public final class AmbientLight extends Light
 {
 

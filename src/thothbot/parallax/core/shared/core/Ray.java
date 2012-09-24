@@ -29,11 +29,29 @@ import thothbot.parallax.core.shared.objects.DimensionalObject;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Particle;
 
+/**
+ * Representation of a ray in space.
+ * <p>
+ * Pretty useful for detecting collisions between objects in a scene.
+ * <p>
+ * Based on three.js code.
+ * 
+ * @author thothbot
+ *
+ */
 public class Ray 
 {
+	// Where does the ray start. Default is 0, 0, 0.
 	private Vector3 origin;
+	
+	// A vector pointing in the direction the ray goes. Default is 0, 0, 0.
 	private Vector3 direction;
+	
+	// Defines the closest distance that will be checked for intersections, starting from origin. Default is 0.
 	private double near;
+	
+	// Defines the furthest distance that will be checked for intersections, starting from origin. Default is Infinity.
+	// Hence, intersections will only be checked in the range (near, far).
 	private double far;
 
 	private double precision = 0.0001;
@@ -54,10 +72,22 @@ public class Ray
 
 	public class Intersect implements Comparable<Intersect>
 	{
+		/**
+		 * Distance between the origin and the intersected object,
+		 */
 		public double distance;
+		/**
+		 * Exact point where the intersection occurs
+		 */
 		public Vector3 point;
+		/**
+		 * Exact face that the ray intersected,
+		 */
 		public Face3 face;
 		public int faceIndex;
+		/**
+		 * The intersected object
+		 */
 		public DimensionalObject object;
 
 		@Override
@@ -104,6 +134,12 @@ public class Ray
 		this.direction = direction;
 	}
 	
+	/**
+	 * Defines the maximum precision used when determining intersections. 
+	 * This is specially important when checking collisions between almost parallel objects, 
+	 * and can make the difference between reporting a collision or not.
+	 * 
+	 */
 	public void setPrecision( double value ) 
 	{
 		this.precision = value;
@@ -290,6 +326,13 @@ public class Ray
 		}
 	}
 
+	/**
+	 * Determines whether the ray intersects object. The result is an array containing tuples of the form.
+	 * <p>
+	 * Note that even if we're checking only an object against a ray, 
+	 * the ray can intersect the object in more than one point. 
+	 * Hence, the return value is an array and not a single tuple.
+	 */
 	public List<Ray.Intersect> intersectObject( DimensionalObject object ) 
 	{
 		return intersectObject(object, false);
@@ -312,6 +355,12 @@ public class Ray
 		return intersects;
 	}
 
+	/**
+	 * Goes through the objects array, and determine whether they ray intersects them. 
+	 * The result is an array that contains similar tuples to the ones returned by intersectObject
+	 * <p>
+	 * The entries in the returned array are sorted by ascending distance (i.e. closest objects first).
+	 */
 	public List<Ray.Intersect> intersectObjects(List<? extends DimensionalObject> objects)
 	{
 		return intersectObjects(objects, false);

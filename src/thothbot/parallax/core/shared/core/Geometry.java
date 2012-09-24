@@ -191,15 +191,13 @@ public class Geometry extends GeometryBuffer
 	
 	/**
 	 * Gets the List of skinning weights, matching number and order of vertices.
-	 * @return
 	 */
 	public List<Vector4> getSkinWeights() {
 		return this.skinWeights;
 	}
 	
 	/**
-	 * Gets tje List of skinning indices, matching number and order of vertices.
-	 * @return
+	 * Gets the List of skinning indices, matching number and order of vertices.
 	 */
 	public List<Vector4> getSkinIndices() {
 		return this.skinIndices;
@@ -294,7 +292,7 @@ public class Geometry extends GeometryBuffer
 	}
 
 	/**
-	 * Gets True if geometry has tangents. {@see Geometry#computeTangents()} 
+	 * Gets True if geometry has tangents. {@link Geometry#computeTangents()} 
 	 */
 	public Boolean hasTangents() {
 		return hasTangents;

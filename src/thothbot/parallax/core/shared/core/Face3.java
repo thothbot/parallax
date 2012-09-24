@@ -61,7 +61,7 @@ public class Face3
 	 * @param a             the Vertex A index.
 	 * @param b             the Vertex B index.
 	 * @param c             the Vertex C index.
-	 * @param normal        the List of vertex normals.
+	 * @param normals       the List of vertex normals.
 	 */
 	public Face3(int a, int b, int c, List<Vector3> normals)
 	{
@@ -118,8 +118,8 @@ public class Face3
 	 * @param a             the Vertex A index.
 	 * @param b             the Vertex B index.
 	 * @param c             the Vertex C index.
-	 * @param normal        the List of vertex normals.
-	 * @param color         the List of vertex colors.
+	 * @param normals       the List of vertex normals.
+	 * @param colors        the List of vertex colors.
 	 * @param materialIndex the Material index.
 	 */
 	public Face3(int a, int b, int c, List<Vector3> normals, List<Color> colors, int materialIndex) 

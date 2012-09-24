@@ -25,7 +25,24 @@ package thothbot.parallax.core.shared.lights;
 import java.util.List;
 
 import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
+import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 
+/**
+ * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
+ * 
+ * <pre>
+ * {@code
+ * // White directional light at half intensity shining from the top. 
+ * 
+ * DirectionalLight directionalLight = new DirectionalLight( 0xffffff, 0.5 ); 
+ * directionalLight.position.set( 0, 1, 0 ); 
+ * getScene().add( directionalLight );
+ * }
+ * </pre>
+ * @author thothbot
+ *
+ */
 public class DirectionalLight extends AbstractShadowLight
 {	
 	private Vector3 shadowCascadeOffset;

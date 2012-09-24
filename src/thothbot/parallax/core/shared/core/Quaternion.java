@@ -25,9 +25,18 @@ package thothbot.parallax.core.shared.core;
 /**
  * Implementation of Quaternion which provide a convenient mathematical notation 
  * for representing orientations and rotations of objects in three dimensions.
- * 
+ * <p>
  * Quaternion represented by four coordinates: X, Y, Z, W
  * 
+ * <pre>
+ * {@code
+ * Quaternion q = new Quaternion(); 
+ * q.setFromAxisAngle( new Vector3( 0, 1, 0 ), Math.PI / 2 );  
+ * 
+ * Vector3 v = new Vector3( 1, 0, 0 ); 
+ * q.multiplyVector3( v );
+ * }
+ * </pre>
  * @author thothbot
  *
  */
@@ -163,7 +172,8 @@ public class Quaternion
 
 	/**
 	 * <a href="http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m">www.mathworks.com</a>
-	 * @param vector the Vector3
+	 * 
+	 * @param v the Vector3
 	 */
 	public Quaternion setFromEuler(Vector3 v)
 	{
