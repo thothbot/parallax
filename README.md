@@ -21,8 +21,6 @@ Parallax supports and will support WebGL-canvas render only.
 
 ### Download ###
 
-Stable version: 1.0.
-
 [Download JAR](http://github.com/thothbot/parallax/downloads)
 
 ### Examples ###
