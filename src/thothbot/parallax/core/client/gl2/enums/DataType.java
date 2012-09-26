@@ -19,21 +19,23 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * GL2 Data type flags.
  * 
  * @author thothbot
  *
  */
-public enum DataType implements GLConstants
+public enum DataType implements WebGLConstants
 {
-	BYTE(GLConstants.BYTE),
-	UNSIGNED_BYTE(GLConstants.UNSIGNED_BYTE),
-	SHORT(GLConstants.SHORT),
-	UNSIGNED_SHORT(GLConstants.UNSIGNED_SHORT),
-	INT(GLConstants.INT),
-	UNSIGNED_INT(GLConstants.UNSIGNED_INT),
-	FLOAT(GLConstants.FLOAT);
+	BYTE(WebGLConstants.BYTE),
+	UNSIGNED_BYTE(WebGLConstants.UNSIGNED_BYTE),
+	SHORT(WebGLConstants.SHORT),
+	UNSIGNED_SHORT(WebGLConstants.UNSIGNED_SHORT),
+	INT(WebGLConstants.INT),
+	UNSIGNED_INT(WebGLConstants.UNSIGNED_INT),
+	FLOAT(WebGLConstants.FLOAT);
 
 	private final int value;
 

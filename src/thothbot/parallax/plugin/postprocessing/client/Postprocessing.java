@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.context.Canvas3d;
+import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;

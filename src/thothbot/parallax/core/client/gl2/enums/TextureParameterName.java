@@ -19,28 +19,26 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+import thothbot.parallax.core.client.gl2.extension.TextureFilterAnisotropic;
+
 /**
  * GL2 Texture Parameter name flags.
  * 
  * @author thothbot
  *
  */
-public enum TextureParameterName implements GLConstants
+public enum TextureParameterName implements WebGLConstants
 {
-	TEXTURE_MAG_FILTER(GLConstants.TEXTURE_MAG_FILTER),
-	TEXTURE_MIN_FILTER(GLConstants.TEXTURE_MIN_FILTER),
-	TEXTURE_WRAP_S(GLConstants.TEXTURE_WRAP_S),
-	TEXTURE_WRAP_T(GLConstants.TEXTURE_WRAP_T),
+	TEXTURE_MAG_FILTER(WebGLConstants.TEXTURE_MAG_FILTER),
+	TEXTURE_MIN_FILTER(WebGLConstants.TEXTURE_MIN_FILTER),
+	TEXTURE_WRAP_S(WebGLConstants.TEXTURE_WRAP_S),
+	TEXTURE_WRAP_T(WebGLConstants.TEXTURE_WRAP_T),
 	
-	TEXTURE_MAX_ANISOTROPY_EXT(EXT_TextureFilterAnisotropic.TEXTURE_MAX_ANISOTROPY_EXT),
-	MAX_TEXTURE_MAX_ANISOTROPY_EXT(EXT_TextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+	// Extensions
+	TEXTURE_MAX_ANISOTROPY_EXT(TextureFilterAnisotropic.TEXTURE_MAX_ANISOTROPY_EXT);
 
 	private final int value;
-
-	private TextureParameterName(EXT_TextureFilterAnisotropic GLEnum) 
-	{
-		this.value = GLEnum.getValue();
-	}
 	
 	private TextureParameterName(int value) {
 		this.value = value;

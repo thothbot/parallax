@@ -19,20 +19,22 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * GL2 Pixel format flags.
  * 
  * @author thothbot
  *
  */
-public enum PixelFormat implements GLConstants
+public enum PixelFormat implements WebGLConstants
 {
-	DEPTH_COMPONENT(GLConstants.DEPTH_COMPONENT),
-	ALPHA(GLConstants.ALPHA),
-	RGB(GLConstants.RGB),
-	RGBA(GLConstants.RGBA),
-	LUMINANCE(GLConstants.LUMINANCE),
-	LUMINANCE_ALPHA(GLConstants.LUMINANCE_ALPHA);
+	DEPTH_COMPONENT(WebGLConstants.DEPTH_COMPONENT),
+	ALPHA(WebGLConstants.ALPHA),
+	RGB(WebGLConstants.RGB),
+	RGBA(WebGLConstants.RGBA),
+	LUMINANCE(WebGLConstants.LUMINANCE),
+	LUMINANCE_ALPHA(WebGLConstants.LUMINANCE_ALPHA);
 
 	private final int value;
 

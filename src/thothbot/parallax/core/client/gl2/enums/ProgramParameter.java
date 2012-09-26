@@ -19,52 +19,54 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum ProgramParameter implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum ProgramParameter implements WebGLConstants
 {
 	/** 
 	 * Returns boolean 
 	 */
-	DELETE_STATUS(GLConstants.DELETE_STATUS),
+	DELETE_STATUS(WebGLConstants.DELETE_STATUS),
 	
 	/** 
 	 * Returns boolean
 	 */
-	LINK_STATUS(GLConstants.LINK_STATUS),
+	LINK_STATUS(WebGLConstants.LINK_STATUS),
 	
 	/** 
 	 * Returns boolean 
 	 */
-	VALIDATE_STATUS(GLConstants.VALIDATE_STATUS),
+	VALIDATE_STATUS(WebGLConstants.VALIDATE_STATUS),
 	
 	/** 
 	 * Returns int 
 	 */
-	INFO_LOG_LENGTH(GLConstants.INFO_LOG_LENGTH),
+	INFO_LOG_LENGTH(WebGLConstants.INFO_LOG_LENGTH),
 	
 	/** 
 	 * Returns int 
 	 */
-	ATTACHED_SHADERS(GLConstants.ATTACHED_SHADERS),
+	ATTACHED_SHADERS(WebGLConstants.ATTACHED_SHADERS),
 	
 	/** 
 	 * Returns int 
 	 */
-	ACTIVE_UNIFORMS(GLConstants.ACTIVE_UNIFORMS),
+	ACTIVE_UNIFORMS(WebGLConstants.ACTIVE_UNIFORMS),
 	
 	/** 
 	 * Returns int 
 	 */
-	ACTIVE_UNIFORM_MAX_LENGTH(GLConstants.ACTIVE_UNIFORM_MAX_LENGTH),
+	ACTIVE_UNIFORM_MAX_LENGTH(WebGLConstants.ACTIVE_UNIFORM_MAX_LENGTH),
 	
 	/** 
 	 * Returns int 
 	 */
-	ACTIVE_ATTRIBUTES(GLConstants.ACTIVE_ATTRIBUTES),
+	ACTIVE_ATTRIBUTES(WebGLConstants.ACTIVE_ATTRIBUTES),
 	
 	/** 
 	 * Returns int 
 	 */
-	ACTIVE_ATTRIBUTE_MAX_LENGTH(GLConstants.ACTIVE_ATTRIBUTE_MAX_LENGTH);
+	ACTIVE_ATTRIBUTE_MAX_LENGTH(WebGLConstants.ACTIVE_ATTRIBUTE_MAX_LENGTH);
 
 	private final int value;
 

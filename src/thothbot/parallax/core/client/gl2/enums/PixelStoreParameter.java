@@ -19,12 +19,14 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum PixelStoreParameter implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum PixelStoreParameter implements WebGLConstants
 {
-	PACK_ALIGNMENT(GLConstants.PACK_ALIGNMENT),
-	UNPACK_ALIGNMENT(GLConstants.UNPACK_ALIGNMENT),
-	UNPACK_FLIP_Y_WEBGL(GLConstants.UNPACK_FLIP_Y_WEBGL),
-	UNPACK_PREMULTIPLY_ALPHA_WEBGL(GLConstants.UNPACK_PREMULTIPLY_ALPHA_WEBGL);
+	PACK_ALIGNMENT(WebGLConstants.PACK_ALIGNMENT),
+	UNPACK_ALIGNMENT(WebGLConstants.UNPACK_ALIGNMENT),
+	UNPACK_FLIP_Y_WEBGL(WebGLConstants.UNPACK_FLIP_Y_WEBGL),
+	UNPACK_PREMULTIPLY_ALPHA_WEBGL(WebGLConstants.UNPACK_PREMULTIPLY_ALPHA_WEBGL);
 
 	private final int value;
 

@@ -19,14 +19,16 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum ShaderPrecisionSpecifiedTypes implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum ShaderPrecisionSpecifiedTypes implements WebGLConstants
 {
-	LOW_FLOAT(GLConstants.LOW_FLOAT),
-	MEDIUM_FLOAT(GLConstants.MEDIUM_FLOAT),
-	HIGH_FLOAT(GLConstants.HIGH_FLOAT),
-	LOW_INT(GLConstants.LOW_INT),
-	MEDIUM_INT(GLConstants.MEDIUM_INT),
-	HIGH_INT(GLConstants.HIGH_INT);
+	LOW_FLOAT(WebGLConstants.LOW_FLOAT),
+	MEDIUM_FLOAT(WebGLConstants.MEDIUM_FLOAT),
+	HIGH_FLOAT(WebGLConstants.HIGH_FLOAT),
+	LOW_INT(WebGLConstants.LOW_INT),
+	MEDIUM_INT(WebGLConstants.MEDIUM_INT),
+	HIGH_INT(WebGLConstants.HIGH_INT);
 
 	private final int value;
 

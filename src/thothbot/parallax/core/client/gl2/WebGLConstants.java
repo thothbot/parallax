@@ -17,14 +17,14 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.gl2.enums;
+package thothbot.parallax.core.client.gl2;
 
 /**
  * All GL2 flags
  * 
  * @author thothbot
  */
-public interface GLConstants 
+public interface WebGLConstants 
 {
 	/* ClearBufferMask */
 	int DEPTH_BUFFER_BIT = 0x00000100;

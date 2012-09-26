@@ -19,10 +19,12 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum BufferTarget implements GLConstants 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum BufferTarget implements WebGLConstants 
 {
-	ARRAY_BUFFER(GLConstants.ARRAY_BUFFER),
-	ELEMENT_ARRAY_BUFFER(GLConstants.ELEMENT_ARRAY_BUFFER);
+	ARRAY_BUFFER(WebGLConstants.ARRAY_BUFFER),
+	ELEMENT_ARRAY_BUFFER(WebGLConstants.ELEMENT_ARRAY_BUFFER);
 
 	private final int value;
 

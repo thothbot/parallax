@@ -19,10 +19,12 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum FrontFaceDirection implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum FrontFaceDirection implements WebGLConstants
 {
-	CW(GLConstants.CW),
-	CCW(GLConstants.CCW);
+	CW(WebGLConstants.CW),
+	CCW(WebGLConstants.CCW);
 
 	private final int value;
 

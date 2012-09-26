@@ -19,14 +19,16 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum RenderbufferInternalFormat implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum RenderbufferInternalFormat implements WebGLConstants
 {
-	RGBA4(GLConstants.RGBA4),
-	RGB5_A1(GLConstants.RGB5_A1),
-	RGB565(GLConstants.RGB565),
-	DEPTH_COMPONENT16(GLConstants.DEPTH_COMPONENT16),
-	STENCIL_INDEX8(GLConstants.STENCIL_INDEX8),
-	DEPTH_STENCIL(GLConstants.DEPTH_STENCIL);
+	RGBA4(WebGLConstants.RGBA4),
+	RGB5_A1(WebGLConstants.RGB5_A1),
+	RGB565(WebGLConstants.RGB565),
+	DEPTH_COMPONENT16(WebGLConstants.DEPTH_COMPONENT16),
+	STENCIL_INDEX8(WebGLConstants.STENCIL_INDEX8),
+	DEPTH_STENCIL(WebGLConstants.DEPTH_STENCIL);
 
 	private final int value;
 

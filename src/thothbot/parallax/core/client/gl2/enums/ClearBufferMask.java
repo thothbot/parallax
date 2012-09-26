@@ -19,11 +19,13 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum ClearBufferMask implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum ClearBufferMask implements WebGLConstants
 {
-	DEPTH_BUFFER_BIT(GLConstants.DEPTH_BUFFER_BIT),
-	STENCIL_BUFFER_BIT(GLConstants.STENCIL_BUFFER_BIT),
-	COLOR_BUFFER_BIT(GLConstants.COLOR_BUFFER_BIT);
+	DEPTH_BUFFER_BIT(WebGLConstants.DEPTH_BUFFER_BIT),
+	STENCIL_BUFFER_BIT(WebGLConstants.STENCIL_BUFFER_BIT),
+	COLOR_BUFFER_BIT(WebGLConstants.COLOR_BUFFER_BIT);
 
 	private final int value;
 

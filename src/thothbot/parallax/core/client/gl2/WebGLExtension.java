@@ -17,25 +17,10 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.gl2.enums;
+package thothbot.parallax.core.client.gl2;
 
-import thothbot.parallax.core.client.gl2.WebGLConstants;
+import com.google.gwt.core.client.JavaScriptObject;
 
-public enum FramebufferSlot implements WebGLConstants
-{
-	COLOR_ATTACHMENT0(WebGLConstants.COLOR_ATTACHMENT0),
-	DEPTH_ATTACHMENT(WebGLConstants.DEPTH_ATTACHMENT),
-	STENCIL_ATTACHMENT(WebGLConstants.STENCIL_ATTACHMENT),
-	DEPTH_STENCIL_ATTACHMENT(WebGLConstants.DEPTH_STENCIL_ATTACHMENT);
+public abstract class WebGLExtension extends JavaScriptObject {
 
-	private final int value;
-
-	private FramebufferSlot(int value) {
-		this.value = value;
-	}
-
-	@Override
-	public int getValue() {
-		return value;
-	}
 }

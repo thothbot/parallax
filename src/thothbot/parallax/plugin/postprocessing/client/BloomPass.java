@@ -22,8 +22,8 @@
 
 package thothbot.parallax.plugin.postprocessing.client;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
-import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;

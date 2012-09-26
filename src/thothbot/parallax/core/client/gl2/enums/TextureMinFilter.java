@@ -19,6 +19,8 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * The texture minifying function is used whenever the pixel being textured 
  * maps to an area greater than one texture element. There are six defined 
@@ -28,39 +30,39 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum TextureMinFilter implements GLConstants
+public enum TextureMinFilter implements WebGLConstants
 {
 	/**
 	 * Returns the value of the texture element that is nearest 
 	 * (in Manhattan distance) to the center of the pixel being textured.
 	 */
-	NEAREST(GLConstants.NEAREST),
+	NEAREST(WebGLConstants.NEAREST),
 	/**
 	 * Returns the weighted average of the four texture elements that 
 	 * are closest to the center of the pixel being textured. 
 	 */
-	LINEAR(GLConstants.LINEAR),
+	LINEAR(WebGLConstants.LINEAR),
 	/**
 	 * Chooses the mipmap that most closely matches the size of the 
 	 * pixel being textured and uses the {@link TextureMinFilter#NEAREST} criterion 
 	 * (the texture element nearest to the center of the pixel) 
 	 * to produce a texture value.
 	 */
-	NEAREST_MIPMAP_NEAREST(GLConstants.NEAREST_MIPMAP_NEAREST),
+	NEAREST_MIPMAP_NEAREST(WebGLConstants.NEAREST_MIPMAP_NEAREST),
 	/**
 	 * Chooses the mipmap that most closely matches the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#LINEAR} criterion 
 	 * (a weighted average of the four texture elements that are closest to 
 	 * the center of the pixel) to produce a texture value.
 	 */
-	LINEAR_MIPMAP_NEAREST(GLConstants.LINEAR_MIPMAP_NEAREST),
+	LINEAR_MIPMAP_NEAREST(WebGLConstants.LINEAR_MIPMAP_NEAREST),
 	/**
 	 * Chooses the two mipmaps that most closely match the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#NEAREST} criterion (the texture element
 	 * nearest to the center of the pixel) to produce a texture value from 
 	 * each mipmap. The final texture value is a weighted average of those two values.
 	 */
-	NEAREST_MIPMAP_LINEAR(GLConstants.NEAREST_MIPMAP_LINEAR),
+	NEAREST_MIPMAP_LINEAR(WebGLConstants.NEAREST_MIPMAP_LINEAR),
 	/**
 	 * Chooses the two mipmaps that most closely match the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#LINEAR} criterion 
@@ -68,7 +70,7 @@ public enum TextureMinFilter implements GLConstants
 	 * center of the pixel) to produce a texture value from each mipmap. 
 	 * The final texture value is a weighted average of those two values.
 	 */
-	LINEAR_MIPMAP_LINEAR(GLConstants.LINEAR_MIPMAP_LINEAR);
+	LINEAR_MIPMAP_LINEAR(WebGLConstants.LINEAR_MIPMAP_LINEAR);
 
 	private final int value;
 

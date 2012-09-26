@@ -19,11 +19,13 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum HintMode implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum HintMode implements WebGLConstants
 {
-	DONT_CARE(GLConstants.DONT_CARE),
-	FASTEST(GLConstants.FASTEST),
-	NICEST(GLConstants.NICEST);
+	DONT_CARE(WebGLConstants.DONT_CARE),
+	FASTEST(WebGLConstants.FASTEST),
+	NICEST(WebGLConstants.NICEST);
 
 	private final int value;
 

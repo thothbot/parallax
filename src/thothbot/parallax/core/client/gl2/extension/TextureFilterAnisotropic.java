@@ -17,25 +17,12 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.gl2.enums;
+package thothbot.parallax.core.client.gl2.extension;
 
-public enum EXT_TextureFilterAnisotropic 
+import thothbot.parallax.core.client.gl2.WebGLExtension;
+
+public class TextureFilterAnisotropic extends WebGLExtension 
 {
-	TEXTURE_MAX_ANISOTROPY_EXT(0x84FE),
-	MAX_TEXTURE_MAX_ANISOTROPY_EXT(0x84FF);
-	
-	private final int value;
-
-	private EXT_TextureFilterAnisotropic(int value) 
-	{
-		this.value = value;
-	}
-
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	 public int getValue() 
-	{
-		return value;
-	}
+	public static final int TEXTURE_MAX_ANISOTROPY_EXT = 0x84FE;
+	public static final int MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;	
 }

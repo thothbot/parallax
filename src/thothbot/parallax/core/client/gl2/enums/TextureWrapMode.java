@@ -19,6 +19,8 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * Implements the wrap parameter for texture coordinate.
  * It is useful for preventing wrapping artifacts when mapping 
@@ -27,21 +29,21 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum TextureWrapMode implements GLConstants
+public enum TextureWrapMode implements WebGLConstants
 {
 	/**
 	 *  This causes the integer part of the s coordinate to be ignored; 
 	 *  the GL uses only the fractional part, thereby creating a 
 	 *  repeating pattern. 
 	 */
-	REPEAT(GLConstants.REPEAT),
+	REPEAT(WebGLConstants.REPEAT),
 	/**
 	 * This causes s or t coordinates to be clamped to the range [0, 1] 
 	 * and is useful for preventing wrapping artifacts when mapping a 
 	 * single image onto an object.
 	 */
-	CLAMP_TO_EDGE(GLConstants.CLAMP_TO_EDGE),
-	MIRRORED_REPEAT(GLConstants.MIRRORED_REPEAT);
+	CLAMP_TO_EDGE(WebGLConstants.CLAMP_TO_EDGE),
+	MIRRORED_REPEAT(WebGLConstants.MIRRORED_REPEAT);
 
 	private final int value;
 

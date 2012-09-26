@@ -25,11 +25,11 @@ package thothbot.parallax.core.client.textures;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
-import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.shared.core.Mathematics;
 

@@ -19,11 +19,13 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum BufferUsage implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum BufferUsage implements WebGLConstants
 {
-	STREAM_DRAW(GLConstants.STREAM_DRAW),
-	STATIC_DRAW(GLConstants.STATIC_DRAW),
-	DYNAMIC_DRAW(GLConstants.DYNAMIC_DRAW);
+	STREAM_DRAW(WebGLConstants.STREAM_DRAW),
+	STATIC_DRAW(WebGLConstants.STATIC_DRAW),
+	DYNAMIC_DRAW(WebGLConstants.DYNAMIC_DRAW);
 
 	private final int value;
 

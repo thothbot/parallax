@@ -19,17 +19,19 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum EnableCap implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum EnableCap implements WebGLConstants
 {
-	CULL_FACE(GLConstants.CULL_FACE),
-	BLEND(GLConstants.BLEND),
-	DITHER(GLConstants.DITHER),
-	STENCIL_TEST(GLConstants.STENCIL_TEST),
-	DEPTH_TEST(GLConstants.DEPTH_TEST),
-	SCISSOR_TEST(GLConstants.SCISSOR_TEST),
-	POLYGON_OFFSET_FILL(GLConstants.POLYGON_OFFSET_FILL),
-	SAMPLE_ALPHA_TO_COVERAGE(GLConstants.SAMPLE_ALPHA_TO_COVERAGE),
-	SAMPLE_COVERAGE(GLConstants.SAMPLE_COVERAGE);
+	CULL_FACE(WebGLConstants.CULL_FACE),
+	BLEND(WebGLConstants.BLEND),
+	DITHER(WebGLConstants.DITHER),
+	STENCIL_TEST(WebGLConstants.STENCIL_TEST),
+	DEPTH_TEST(WebGLConstants.DEPTH_TEST),
+	SCISSOR_TEST(WebGLConstants.SCISSOR_TEST),
+	POLYGON_OFFSET_FILL(WebGLConstants.POLYGON_OFFSET_FILL),
+	SAMPLE_ALPHA_TO_COVERAGE(WebGLConstants.SAMPLE_ALPHA_TO_COVERAGE),
+	SAMPLE_COVERAGE(WebGLConstants.SAMPLE_COVERAGE);
 
 	private final int value;
 

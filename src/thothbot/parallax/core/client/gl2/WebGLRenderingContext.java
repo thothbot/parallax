@@ -44,7 +44,6 @@ import thothbot.parallax.core.client.gl2.enums.FramebufferErrorCode;
 import thothbot.parallax.core.client.gl2.enums.FramebufferParameterName;
 import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
 import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
-import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.PixelStoreParameter;
 import thothbot.parallax.core.client.gl2.enums.PixelType;
@@ -151,7 +150,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    */
 
   public void bindFramebuffer(WebGLFramebuffer buffer) {
-	  bindFramebuffer(GLConstants.FRAMEBUFFER, buffer);
+	  bindFramebuffer(WebGLConstants.FRAMEBUFFER, buffer);
   }
 
   private native void bindFramebuffer(int target, WebGLFramebuffer buffer) /*-{
@@ -164,7 +163,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * @param buffer Specifies the name of a renderbuffer object.
    */
   public void bindRenderbuffer(WebGLRenderbuffer buffer) {
-	  bindRenderbuffer(GLConstants.RENDERBUFFER, buffer);
+	  bindRenderbuffer(WebGLConstants.RENDERBUFFER, buffer);
   }
 
   private native void bindRenderbuffer(int target, WebGLRenderbuffer buffer) /*-{
@@ -333,7 +332,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * 				completeness is violated.
    */
   public FramebufferErrorCode checkFramebufferStatus() {
-	  return FramebufferErrorCode.parseErrorCode(checkFramebufferStatus(GLConstants.FRAMEBUFFER));
+	  return FramebufferErrorCode.parseErrorCode(checkFramebufferStatus(WebGLConstants.FRAMEBUFFER));
   }
 
   private native int checkFramebufferStatus(int target) /*-{
@@ -760,8 +759,8 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * 				attached.
    */
   public void framebufferRenderbuffer(FramebufferSlot attachment, WebGLRenderbuffer renderbuffer) {
-	  framebufferRenderbuffer(GLConstants.FRAMEBUFFER, attachment.getValue(),
-			  GLConstants.RENDERBUFFER, renderbuffer);
+	  framebufferRenderbuffer(WebGLConstants.FRAMEBUFFER, attachment.getValue(),
+			  WebGLConstants.RENDERBUFFER, renderbuffer);
   }
 
   private native void framebufferRenderbuffer(int target, int attachment, int rbtarget,
@@ -781,7 +780,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    */
   public void framebufferTexture2D(FramebufferSlot attachment, TextureTarget textarget,
 		  WebGLTexture texture, int level) {
-	  framebufferTexture2D(GLConstants.FRAMEBUFFER, attachment.getValue(),
+	  framebufferTexture2D(WebGLConstants.FRAMEBUFFER, attachment.getValue(),
 			  textarget.getValue(), texture, level);
   }
   
@@ -793,7 +792,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    */
   public void framebufferTexture2D(FramebufferSlot attachment, TextureTarget textarget, int slot,
 		  WebGLTexture texture, int level) {
-	  framebufferTexture2D(GLConstants.FRAMEBUFFER, attachment.getValue(),
+	  framebufferTexture2D(WebGLConstants.FRAMEBUFFER, attachment.getValue(),
 			  textarget.getValue() + slot, texture, level);
   }
 
@@ -931,7 +930,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * object must still be returned. That object is used to indicate that the 
    * extension has been enabled.
    */
-  public native JavaScriptObject getExtension(String name) /*-{
+  public native WebGLExtension getExtension(String name) /*-{
 		return this.getExtension(name);
   }-*/;
 
@@ -946,7 +945,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    */
   public JavaScriptObject getFramebufferAttachmentParameter(FramebufferSlot attachment, 
 		  FramebufferParameterName pname) {
-	  return getFramebufferAttachmentParameter(GLConstants.FRAMEBUFFER,
+	  return getFramebufferAttachmentParameter(WebGLConstants.FRAMEBUFFER,
 			  attachment.getValue(), pname.getValue());
   }
 
@@ -967,7 +966,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    */
   public int getFramebufferAttachmentParameteri(
 		  FramebufferSlot attachment, FramebufferParameterName pname) {
-	  return getFramebufferAttachmentParameteri(GLConstants.FRAMEBUFFER,
+	  return getFramebufferAttachmentParameteri(WebGLConstants.FRAMEBUFFER,
 			  attachment.getValue(), pname.getValue());
   }
 
@@ -1043,7 +1042,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * 				parameter.
    */
   public int getRenderbufferParameteri(RenderbufferParameterName pname) {
-	  return getRenderbufferParameteri(GLConstants.RENDERBUFFER, pname.getValue());
+	  return getRenderbufferParameteri(WebGLConstants.RENDERBUFFER, pname.getValue());
   }
 
   private native int getRenderbufferParameteri(int target, int pname) /*-{
@@ -1368,7 +1367,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * @param height Specifies the height of the renderbuffer in pixels.
    */
   public void renderbufferStorage(RenderbufferInternalFormat internalformat, int width, int height) {
-	  renderbufferStorage(GLConstants.RENDERBUFFER, internalformat.getValue(), 
+	  renderbufferStorage(WebGLConstants.RENDERBUFFER, internalformat.getValue(), 
 			  width, height);
   }
 

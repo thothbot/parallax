@@ -19,17 +19,19 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum SeparateBlendFunctions implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum SeparateBlendFunctions implements WebGLConstants
 {
-	BLEND_DST_RGB(GLConstants.BLEND_DST_RGB),
-	BLEND_SRC_RGB(GLConstants.BLEND_SRC_RGB),
-	BLEND_DST_ALPHA(GLConstants.BLEND_DST_ALPHA),
-	BLEND_SRC_ALPHA(GLConstants.BLEND_SRC_ALPHA),
-	CONSTANT_COLOR(GLConstants.CONSTANT_COLOR),
-	ONE_MINUS_CONSTANT_COLOR(GLConstants.ONE_MINUS_CONSTANT_COLOR),
-	CONSTANT_ALPHA(GLConstants.CONSTANT_ALPHA),
-	ONE_MINUS_CONSTANT_ALPHA(GLConstants.ONE_MINUS_CONSTANT_ALPHA),
-	BLEND_COLOR(GLConstants.BLEND_COLOR);
+	BLEND_DST_RGB(WebGLConstants.BLEND_DST_RGB),
+	BLEND_SRC_RGB(WebGLConstants.BLEND_SRC_RGB),
+	BLEND_DST_ALPHA(WebGLConstants.BLEND_DST_ALPHA),
+	BLEND_SRC_ALPHA(WebGLConstants.BLEND_SRC_ALPHA),
+	CONSTANT_COLOR(WebGLConstants.CONSTANT_COLOR),
+	ONE_MINUS_CONSTANT_COLOR(WebGLConstants.ONE_MINUS_CONSTANT_COLOR),
+	CONSTANT_ALPHA(WebGLConstants.CONSTANT_ALPHA),
+	ONE_MINUS_CONSTANT_ALPHA(WebGLConstants.ONE_MINUS_CONSTANT_ALPHA),
+	BLEND_COLOR(WebGLConstants.BLEND_COLOR);
 
 	private final int value;
 

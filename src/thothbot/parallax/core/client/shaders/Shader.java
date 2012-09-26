@@ -25,11 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLShader;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.ProgramParameter;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
@@ -246,15 +246,15 @@ public abstract class Shader
 		WebGLShader shader = null;
 
 		if (type == ChunksFragmentShader.class)
-			shader = gl.createShader(GLConstants.FRAGMENT_SHADER);
+			shader = gl.createShader(WebGLConstants.FRAGMENT_SHADER);
 
 		else if (type == ChunksVertexShader.class)
-			shader = gl.createShader(GLConstants.VERTEX_SHADER);
+			shader = gl.createShader(WebGLConstants.VERTEX_SHADER);
 
 		gl.shaderSource(shader, string);
 		gl.compileShader(shader);
 
-		if (!gl.getShaderParameterb(shader, GLConstants.COMPILE_STATUS)) 
+		if (!gl.getShaderParameterb(shader, WebGLConstants.COMPILE_STATUS)) 
 		{
 			Log.error(gl.getShaderInfoLog(shader));
 			return null;

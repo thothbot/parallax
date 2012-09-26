@@ -19,9 +19,11 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum HintTarget implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum HintTarget implements WebGLConstants
 {
-	GENERATE_MIPMAP_HINT(GLConstants.GENERATE_MIPMAP_HINT);
+	GENERATE_MIPMAP_HINT(WebGLConstants.GENERATE_MIPMAP_HINT);
 
 	private final int value;
 

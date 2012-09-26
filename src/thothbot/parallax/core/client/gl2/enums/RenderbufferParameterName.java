@@ -19,52 +19,54 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum RenderbufferParameterName implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum RenderbufferParameterName implements WebGLConstants
 {
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_WIDTH(GLConstants.RENDERBUFFER_WIDTH),
+	RENDERBUFFER_WIDTH(WebGLConstants.RENDERBUFFER_WIDTH),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_HEIGHT(GLConstants.RENDERBUFFER_HEIGHT),
+	RENDERBUFFER_HEIGHT(WebGLConstants.RENDERBUFFER_HEIGHT),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_INTERNAL_FORMAT(GLConstants.RENDERBUFFER_INTERNAL_FORMAT),
+	RENDERBUFFER_INTERNAL_FORMAT(WebGLConstants.RENDERBUFFER_INTERNAL_FORMAT),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_RED_SIZE(GLConstants.RENDERBUFFER_RED_SIZE),
+	RENDERBUFFER_RED_SIZE(WebGLConstants.RENDERBUFFER_RED_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_GREEN_SIZE(GLConstants.RENDERBUFFER_GREEN_SIZE),
+	RENDERBUFFER_GREEN_SIZE(WebGLConstants.RENDERBUFFER_GREEN_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_BLUE_SIZE(GLConstants.RENDERBUFFER_BLUE_SIZE),
+	RENDERBUFFER_BLUE_SIZE(WebGLConstants.RENDERBUFFER_BLUE_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_ALPHA_SIZE(GLConstants.RENDERBUFFER_ALPHA_SIZE),
+	RENDERBUFFER_ALPHA_SIZE(WebGLConstants.RENDERBUFFER_ALPHA_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_DEPTH_SIZE(GLConstants.RENDERBUFFER_DEPTH_SIZE),
+	RENDERBUFFER_DEPTH_SIZE(WebGLConstants.RENDERBUFFER_DEPTH_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_STENCIL_SIZE(GLConstants.RENDERBUFFER_STENCIL_SIZE);
+	RENDERBUFFER_STENCIL_SIZE(WebGLConstants.RENDERBUFFER_STENCIL_SIZE);
 
 	private final int value;
 

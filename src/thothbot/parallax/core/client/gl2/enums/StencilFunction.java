@@ -19,16 +19,18 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum StencilFunction implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum StencilFunction implements WebGLConstants
 {
-	NEVER(GLConstants.NEVER),
-	LESS(GLConstants.LESS),
-	EQUAL(GLConstants.EQUAL),
-	LEQUAL(GLConstants.LEQUAL),
-	GREATER(GLConstants.GREATER),
-	NOTEQUAL(GLConstants.NOTEQUAL),
-	GEQUAL(GLConstants.GEQUAL),
-	ALWAYS(GLConstants.ALWAYS);
+	NEVER(WebGLConstants.NEVER),
+	LESS(WebGLConstants.LESS),
+	EQUAL(WebGLConstants.EQUAL),
+	LEQUAL(WebGLConstants.LEQUAL),
+	GREATER(WebGLConstants.GREATER),
+	NOTEQUAL(WebGLConstants.NOTEQUAL),
+	GEQUAL(WebGLConstants.GEQUAL),
+	ALWAYS(WebGLConstants.ALWAYS);
 
 	private final int value;
 

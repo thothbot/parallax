@@ -19,14 +19,16 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum GetTextureParameter implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum GetTextureParameter implements WebGLConstants
 {
-	TEXTURE_MAG_FILTER(GLConstants.TEXTURE_MAG_FILTER),
-	TEXTURE_MIN_FILTER(GLConstants.TEXTURE_MIN_FILTER),
-	TEXTURE_WRAP_S(GLConstants.TEXTURE_WRAP_S),
-	TEXTURE_WRAP_T(GLConstants.TEXTURE_WRAP_T),
-	NUM_COMPRESSED_TEXTURE_FORMATS(GLConstants.NUM_COMPRESSED_TEXTURE_FORMATS),
-	COMPRESSED_TEXTURE_FORMATS(GLConstants.COMPRESSED_TEXTURE_FORMATS);
+	TEXTURE_MAG_FILTER(WebGLConstants.TEXTURE_MAG_FILTER),
+	TEXTURE_MIN_FILTER(WebGLConstants.TEXTURE_MIN_FILTER),
+	TEXTURE_WRAP_S(WebGLConstants.TEXTURE_WRAP_S),
+	TEXTURE_WRAP_T(WebGLConstants.TEXTURE_WRAP_T),
+	NUM_COMPRESSED_TEXTURE_FORMATS(WebGLConstants.NUM_COMPRESSED_TEXTURE_FORMATS),
+	COMPRESSED_TEXTURE_FORMATS(WebGLConstants.COMPRESSED_TEXTURE_FORMATS);
 
 	private final int value;
 

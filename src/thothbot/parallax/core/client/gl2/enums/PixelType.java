@@ -19,12 +19,14 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum PixelType implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum PixelType implements WebGLConstants
 {
-	UNSIGNED_BYTE(GLConstants.UNSIGNED_BYTE),
-	UNSIGNED_SHORT_4_4_4_4(GLConstants.UNSIGNED_SHORT_4_4_4_4),
-	UNSIGNED_SHORT_5_5_5_1(GLConstants.UNSIGNED_SHORT_5_5_5_1),
-	UNSIGNED_SHORT_5_6_5(GLConstants.UNSIGNED_SHORT_5_6_5);
+	UNSIGNED_BYTE(WebGLConstants.UNSIGNED_BYTE),
+	UNSIGNED_SHORT_4_4_4_4(WebGLConstants.UNSIGNED_SHORT_4_4_4_4),
+	UNSIGNED_SHORT_5_5_5_1(WebGLConstants.UNSIGNED_SHORT_5_5_5_1),
+	UNSIGNED_SHORT_5_6_5(WebGLConstants.UNSIGNED_SHORT_5_6_5);
 
 	private final int value;
 

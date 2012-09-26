@@ -22,10 +22,10 @@
 
 package thothbot.parallax.core.client.textures;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.enums.DataType;
-import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
@@ -465,8 +465,8 @@ public class Texture
 		} 
 		else 
 		{
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_S, GLConstants.CLAMP_TO_EDGE );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_T, GLConstants.CLAMP_TO_EDGE );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_S, WebGLConstants.CLAMP_TO_EDGE );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_T, WebGLConstants.CLAMP_TO_EDGE );
 			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MAG_FILTER, filterFallback( this.magFilter.getValue() ) );
 			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MIN_FILTER, filterFallback( this.minFilter.getValue() ) );
 		}
@@ -486,10 +486,10 @@ public class Texture
 	 */
 	private int filterFallback ( int f ) 
 	{
-		if(f == GLConstants.NEAREST || f == GLConstants.NEAREST_MIPMAP_NEAREST || f == GLConstants.NEAREST_MIPMAP_LINEAR)
-			return GLConstants.NEAREST;
+		if(f == WebGLConstants.NEAREST || f == WebGLConstants.NEAREST_MIPMAP_NEAREST || f == WebGLConstants.NEAREST_MIPMAP_LINEAR)
+			return WebGLConstants.NEAREST;
 
-//		if(f == GLConstants.LINEAR || f == GLConstants.LINEAR_MIPMAP_NEAREST || f == GLConstants.LINEAR_MIPMAP_LINEAR)
-			return GLConstants.LINEAR;
+//		if(f == WebGLConstants.LINEAR || f == WebGLConstants.LINEAR_MIPMAP_NEAREST || f == WebGLConstants.LINEAR_MIPMAP_LINEAR)
+			return WebGLConstants.LINEAR;
 	}
 }

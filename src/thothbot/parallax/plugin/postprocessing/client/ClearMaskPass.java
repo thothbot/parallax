@@ -22,8 +22,8 @@
 
 package thothbot.parallax.plugin.postprocessing.client;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
-import thothbot.parallax.core.client.gl2.enums.GLConstants;
 
 public class ClearMaskPass extends Pass 
 {	

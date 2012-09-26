@@ -19,16 +19,18 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum StencilOp implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum StencilOp implements WebGLConstants
 {
-	ZERO(GLConstants.ZERO),
-	KEEP(GLConstants.KEEP),
-	REPLACE(GLConstants.REPLACE),
-	INCR(GLConstants.INCR),
-	DECR(GLConstants.DECR),
-	INVERT(GLConstants.INVERT),
-	INCR_WRAP(GLConstants.INCR_WRAP),
-	DECR_WRAP(GLConstants.DECR_WRAP);
+	ZERO(WebGLConstants.ZERO),
+	KEEP(WebGLConstants.KEEP),
+	REPLACE(WebGLConstants.REPLACE),
+	INCR(WebGLConstants.INCR),
+	DECR(WebGLConstants.DECR),
+	INVERT(WebGLConstants.INVERT),
+	INCR_WRAP(WebGLConstants.INCR_WRAP),
+	DECR_WRAP(WebGLConstants.DECR_WRAP);
 
 	private final int value;
 

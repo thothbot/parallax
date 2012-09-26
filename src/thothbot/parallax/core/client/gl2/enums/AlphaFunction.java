@@ -19,53 +19,55 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * The alpha test function
  * 
  * @author thothbot
  *
  */
-public enum AlphaFunction implements GLConstants
+public enum AlphaFunction implements WebGLConstants
 {
 	/**
 	 * Never passes.
 	 */
-	NEVER(GLConstants.NEVER),
+	NEVER(WebGLConstants.NEVER),
 	
 	/**
 	 * Passes if the incoming alpha value is less than the reference value.
 	 */
-	LESS(GLConstants.LESS),
+	LESS(WebGLConstants.LESS),
 	
 	/**
 	 * Passes if the incoming alpha value is equal to the reference value.
 	 */
-	EQUAL(GLConstants.EQUAL),
+	EQUAL(WebGLConstants.EQUAL),
 	
 	/**
 	 * Passes if the incoming alpha value is less than or equal to the reference value.
 	 */
-	LEQUAL(GLConstants.LEQUAL),
+	LEQUAL(WebGLConstants.LEQUAL),
 	
 	/**
 	 * Passes if the incoming alpha value is greater than the reference value.
 	 */
-	GREATER(GLConstants.GREATER),
+	GREATER(WebGLConstants.GREATER),
 	
 	/**
 	 * Passes if the incoming alpha value is not equal to the reference value.
 	 */
-	NOTEQUAL(GLConstants.NOTEQUAL),
+	NOTEQUAL(WebGLConstants.NOTEQUAL),
 	
 	/**
 	 * Passes if the incoming alpha value is greater than or equal to the reference value.
 	 */
-	GEQUAL(GLConstants.GEQUAL),
+	GEQUAL(WebGLConstants.GEQUAL),
 	
 	/**
 	 * Always passes (initial value).
 	 */
-	ALWAYS(GLConstants.ALWAYS);
+	ALWAYS(WebGLConstants.ALWAYS);
 
 	private final int value;
 

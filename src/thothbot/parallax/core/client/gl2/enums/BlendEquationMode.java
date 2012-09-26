@@ -19,17 +19,19 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * GL2 BlendEquationMode flags.
  * 
  * @author thothbot
  *
  */
-public enum BlendEquationMode implements GLConstants
+public enum BlendEquationMode implements WebGLConstants
 {
-	FUNC_ADD(GLConstants.FUNC_ADD),
-	FUNC_REVERSE_SUBTRACT(GLConstants.FUNC_REVERSE_SUBTRACT),
-	FUNC_SUBTRACT(GLConstants.FUNC_SUBTRACT);
+	FUNC_ADD(WebGLConstants.FUNC_ADD),
+	FUNC_REVERSE_SUBTRACT(WebGLConstants.FUNC_REVERSE_SUBTRACT),
+	FUNC_SUBTRACT(WebGLConstants.FUNC_SUBTRACT);
 
 	private final int value;
 

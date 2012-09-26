@@ -19,6 +19,8 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * Specifies the primitive or primitives that will be created from vertices presented
  * between glBegin and the subsequent glEnd.
@@ -26,37 +28,37 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum BeginMode implements GLConstants
+public enum BeginMode implements WebGLConstants
 {
 	/**
 	 * Treats each vertex as a single point. Vertex n defines point n. N points are drawn.
 	 */
-	POINTS(GLConstants.POINTS),
+	POINTS(WebGLConstants.POINTS),
 	
 	/**
 	 * Treats each pair of vertices as an independent line segment. 
 	 * Vertices 2n - 1  and 2n  define line n. N/2 lines are drawn.	
 	 */
-	LINES(GLConstants.LINES),
+	LINES(WebGLConstants.LINES),
 	
 	/**
 	 * Draws a connected group of line segments from the first vertex to 
 	 * the last, then back to the first. Vertices n and n + 1  define line n. 
 	 * The last line, however, is defined by vertices N and 1 . N lines are drawn.
 	 */
-	LINE_LOOP(GLConstants.LINE_LOOP),
+	LINE_LOOP(WebGLConstants.LINE_LOOP),
 	
 	/**
 	 * Draws a connected group of line segments from the first vertex to the last. 
 	 * Vertices n and n + 1  define line n. N - 1  lines are drawn.
 	 */
-	LINE_STRIP(GLConstants.LINE_STRIP),
+	LINE_STRIP(WebGLConstants.LINE_STRIP),
 	
 	/**
 	 * Treats each triplet of vertices as an independent triangle. Vertices 3 n - 2, 
 	 * 3 n - 1, and 3 n  define triangle n. N/3 triangles are drawn.
 	 */
-	TRIANGLES(GLConstants.TRIANGLES),
+	TRIANGLES(WebGLConstants.TRIANGLES),
 	
 	/**
 	 * Draws a connected group of triangles. One triangle is defined for each 
@@ -64,14 +66,14 @@ public enum BeginMode implements GLConstants
 	 * n + 1 , and n + 2  define triangle n. For even n, vertices n + 1 , n, 
 	 * and n + 2  define triangle n. N - 2 triangles are drawn.
 	 */
-	TRIANGLE_STRIP(GLConstants.TRIANGLE_STRIP),
+	TRIANGLE_STRIP(WebGLConstants.TRIANGLE_STRIP),
 	
 	/**
 	 * Draws a connected group of triangles. One triangle is defined for 
 	 * each vertex presented after the first two vertices. Vertices 1, 
 	 * n + 1 , and n + 2  define triangle n. N - 2  triangles are drawn.
 	 */
-	TRIANGLE_FAN(GLConstants.TRIANGLE_FAN);
+	TRIANGLE_FAN(WebGLConstants.TRIANGLE_FAN);
 
 	private final int value;
 

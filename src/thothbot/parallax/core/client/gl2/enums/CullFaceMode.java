@@ -19,11 +19,13 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum CullFaceMode implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum CullFaceMode implements WebGLConstants
 {
-	FRONT(GLConstants.FRONT),
-	BACK(GLConstants.BACK),
-	FRONT_AND_BACK(GLConstants.FRONT_AND_BACK);
+	FRONT(WebGLConstants.FRONT),
+	BACK(WebGLConstants.BACK),
+	FRONT_AND_BACK(WebGLConstants.FRONT_AND_BACK);
 
 	private final int value;
 

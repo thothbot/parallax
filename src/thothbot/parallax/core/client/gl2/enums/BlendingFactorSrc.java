@@ -19,23 +19,25 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * GL2 BlendingFactorSrc flags.
  * 
  * @author thothbot
  *
  */
-public enum BlendingFactorSrc implements GLConstants 
+public enum BlendingFactorSrc implements WebGLConstants 
 {
-	ZERO(GLConstants.ZERO),
-	ONE(GLConstants.ONE),
-	DST_COLOR(GLConstants.DST_COLOR),
-	ONE_MINUS_DST_COLOR(GLConstants.ONE_MINUS_DST_COLOR),
-	SRC_ALPHA_SATURATE(GLConstants.SRC_ALPHA_SATURATE),
-	SRC_ALPHA(GLConstants.SRC_ALPHA),
-	ONE_MINUS_SRC_ALPHA(GLConstants.ONE_MINUS_SRC_ALPHA),
-	DST_ALPHA(GLConstants.DST_ALPHA),
-	ONE_MINUS_DST_ALPHA(GLConstants.ONE_MINUS_DST_ALPHA);
+	ZERO(WebGLConstants.ZERO),
+	ONE(WebGLConstants.ONE),
+	DST_COLOR(WebGLConstants.DST_COLOR),
+	ONE_MINUS_DST_COLOR(WebGLConstants.ONE_MINUS_DST_COLOR),
+	SRC_ALPHA_SATURATE(WebGLConstants.SRC_ALPHA_SATURATE),
+	SRC_ALPHA(WebGLConstants.SRC_ALPHA),
+	ONE_MINUS_SRC_ALPHA(WebGLConstants.ONE_MINUS_SRC_ALPHA),
+	DST_ALPHA(WebGLConstants.DST_ALPHA),
+	ONE_MINUS_DST_ALPHA(WebGLConstants.ONE_MINUS_DST_ALPHA);
 
 	private final int value;
 

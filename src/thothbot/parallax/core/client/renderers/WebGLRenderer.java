@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
+import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -46,11 +47,11 @@ import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.DepthFunction;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
-import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.PixelStoreParameter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
+import thothbot.parallax.core.client.gl2.extension.TextureFilterAnisotropic;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
 import thothbot.parallax.core.client.shaders.Shader;
@@ -245,10 +246,10 @@ public class WebGLRenderer
 		this.cache_programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
 		
-		this.GPUmaxTextures       = getGL().getParameteri(GLConstants.MAX_TEXTURE_IMAGE_UNITS);
-		this.GPUmaxVertexTextures = getGL().getParameteri(GLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-		this.GPUmaxTextureSize    = getGL().getParameteri(GLConstants.MAX_TEXTURE_SIZE);
-		this.GPUmaxCubemapSize    = getGL().getParameteri(GLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
+		this.GPUmaxTextures       = getGL().getParameteri(WebGLConstants.MAX_TEXTURE_IMAGE_UNITS);
+		this.GPUmaxVertexTextures = getGL().getParameteri(WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+		this.GPUmaxTextureSize    = getGL().getParameteri(WebGLConstants.MAX_TEXTURE_SIZE);
+		this.GPUmaxCubemapSize    = getGL().getParameteri(WebGLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
 		
 		this.isGPUsupportsVertexTextures = ( this.GPUmaxVertexTextures > 0 ); 
 
@@ -266,12 +267,11 @@ public class WebGLRenderer
 			Log.warn( "WebGLRenderer: Standard derivatives not supported." );
 		}
 
-		// TODO: http://www.khronos.org/registry/webgl/extensions/EXT_texture_filter_anisotropic/
 		if ( getGL().getExtension( "EXT_texture_filter_anisotropic" ) != null
 				|| getGL().getExtension( "MOZ_EXT_texture_filter_anisotropic" ) != null 
 				|| getGL().getExtension( "WEBKIT_EXT_texture_filter_anisotropic" ) != null)
 		{
-			this.GPUmaxAnisotropy = getGL().getParameteri(0x84FF); 
+			this.GPUmaxAnisotropy = getGL().getParameteri(TextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 		}
 		else
 		{
@@ -1575,18 +1575,18 @@ public class WebGLRenderer
 //
 //					// vertices
 //
-//					getGL().bindBuffer( GLConstants.ARRAY_BUFFER, geometryGroup.vertexPositionBuffer );
+//					getGL().bindBuffer( WebGLConstants.ARRAY_BUFFER, geometryGroup.vertexPositionBuffer );
 //					getGL().vertexAttribPointer( attributes.get("position"), 
 //							geometryGroup.vertexPositionBuffer.itemSize, 
-//							GLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
+//							WebGLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
 //
 //					// normals
 //
 //					if ( attributes.get("normal") >= 0 && geometryGroup.vertexNormalBuffer != null) {
-//						getGL().bindBuffer( GLConstants.ARRAY_BUFFER, geometryGroup.vertexNormalBuffer );
+//						getGL().bindBuffer( WebGLConstants.ARRAY_BUFFER, geometryGroup.vertexNormalBuffer );
 //						getGL().vertexAttribPointer( attributes.get("normal"), 
 //								geometryGroup.vertexNormalBuffer.itemSize, 
-//								GLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
+//								WebGLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
 //					}
 //
 //					// uvs
@@ -1594,10 +1594,10 @@ public class WebGLRenderer
 //					if ( attributes.uv >= 0 && geometryGroup.vertexUvBuffer != null ) {
 //
 //						if ( geometryGroup.vertexUvBuffer != null) {
-//							getGL().bindBuffer( GLConstants.ARRAY_BUFFER, geometryGroup.vertexUvBuffer );
+//							getGL().bindBuffer( WebGLConstants.ARRAY_BUFFER, geometryGroup.vertexUvBuffer );
 //							getGL().vertexAttribPointer(  attributes.get("uv"), 
 //									geometryGroup.vertexUvBuffer.itemSize, 
-//									GLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 2 );
+//									WebGLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 2 );
 //							getGL().enableVertexAttribArray( attributes.uv );
 //						} else {
 //							getGL().disableVertexAttribArray( attributes.uv );
@@ -1608,17 +1608,17 @@ public class WebGLRenderer
 //					// colors
 //
 //					if ( attributes.color >= 0 && geometryGroup.vertexColorBuffer != null ) {
-//						getGL().bindBuffer( GLConstants.ARRAY_BUFFER, geometryGroup.vertexColorBuffer );
+//						getGL().bindBuffer( WebGLConstants.ARRAY_BUFFER, geometryGroup.vertexColorBuffer );
 //						getGL().vertexAttribPointer( attributes.get("color"), 
 //								geometryGroup.vertexColorBuffer.itemSize, 
-//								GLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 4 );
+//								WebGLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 4 );
 //					}
 //
-//					getGL().bindBuffer( GLConstants.ELEMENT_ARRAY_BUFFER, geometryGroup.vertexIndexBuffer );
+//					getGL().bindBuffer( WebGLConstants.ELEMENT_ARRAY_BUFFER, geometryGroup.vertexIndexBuffer );
 //				}
 //
 //				// render indexed triangles
-//				getGL().drawElements( GLConstants.TRIANGLES, offsets.get( i ).count, GLConstants.UNSIGNED_SHORT, offsets.get( i ).start * 2 ); // 2 = Uint16
+//				getGL().drawElements( WebGLConstants.TRIANGLES, offsets.get( i ).count, WebGLConstants.UNSIGNED_SHORT, offsets.get( i ).start * 2 ); // 2 = Uint16
 //
 //				this.info.render.calls ++;
 //				// not really true, here vertices can be shared
@@ -2931,7 +2931,7 @@ public class WebGLRenderer
 			//  - limit here is ANGLE's 254 max uniform vectors
 			//    (up to 54 should be safe)
 
-			int nVertexUniforms = getGL().getParameteri( GLConstants.MAX_VERTEX_UNIFORM_VECTORS );
+			int nVertexUniforms = getGL().getParameteri( WebGLConstants.MAX_VERTEX_UNIFORM_VECTORS );
 			int nVertexMatrices = (int) Math.floor( ( nVertexUniforms - 20 ) / 4 );
 
 			int maxBones = nVertexMatrices;

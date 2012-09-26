@@ -22,13 +22,15 @@ package thothbot.parallax.core.client.gl2.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ErrorCode implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum ErrorCode implements WebGLConstants
 {
-	NO_ERROR(GLConstants.NO_ERROR),
-	INVALID_ENUM(GLConstants.INVALID_ENUM),
-	INVALID_VALUE(GLConstants.INVALID_VALUE),
-	INVALID_OPERATION(GLConstants.INVALID_OPERATION),
-	OUT_OF_MEMORY(GLConstants.OUT_OF_MEMORY);
+	NO_ERROR(WebGLConstants.NO_ERROR),
+	INVALID_ENUM(WebGLConstants.INVALID_ENUM),
+	INVALID_VALUE(WebGLConstants.INVALID_VALUE),
+	INVALID_OPERATION(WebGLConstants.INVALID_OPERATION),
+	OUT_OF_MEMORY(WebGLConstants.OUT_OF_MEMORY);
 
 	private static Map<Integer, ErrorCode> errorCodeMap;
 	private final int value;

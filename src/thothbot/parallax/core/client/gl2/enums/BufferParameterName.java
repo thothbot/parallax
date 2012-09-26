@@ -19,16 +19,18 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum BufferParameterName implements GLConstants
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
+public enum BufferParameterName implements WebGLConstants
 {
 	/** 
 	 * Returns int 
 	 * /
-	BUFFER_SIZE(GLConstants.BUFFER_SIZE),
+	BUFFER_SIZE(WebGLConstants.BUFFER_SIZE),
 	/** 
 	 * Returns int 
 	 */
-	BUFFER_USAGE(GLConstants.BUFFER_USAGE);
+	BUFFER_USAGE(WebGLConstants.BUFFER_USAGE);
 
 	private final int value;
 

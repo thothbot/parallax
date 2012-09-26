@@ -19,6 +19,8 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+
 /**
  * The texture magnification function is used when the pixel being 
  * textured maps to an area less than or equal to one texture element.
@@ -26,19 +28,19 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum TextureMagFilter implements GLConstants
+public enum TextureMagFilter implements WebGLConstants
 {
 	/**
 	 * Returns the value of the texture element that is nearest 
 	 * (in Manhattan distance) to the center of the pixel being textured.
 	 */
-	NEAREST(GLConstants.NEAREST),
+	NEAREST(WebGLConstants.NEAREST),
 	
 	/**
 	 * Returns the weighted average of the four texture elements that 
 	 * are closest to the center of the pixel being textured.
 	 */
-	LINEAR(GLConstants.LINEAR);
+	LINEAR(WebGLConstants.LINEAR);
 
 	private final int value;
 
