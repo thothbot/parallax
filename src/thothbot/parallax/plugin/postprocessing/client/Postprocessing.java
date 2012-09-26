@@ -29,6 +29,7 @@ import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.client.gl2.enums.StencilFunction;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.Plugin;
@@ -166,11 +167,11 @@ public class Postprocessing extends Plugin
 			{
 				if ( maskActive ) 
 				{
-					gl.stencilFunc( GLEnum.NOTEQUAL.getValue(), 1, 0xffffffff );
+					gl.stencilFunc( StencilFunction.NOTEQUAL, 1, 0xffffffff );
 
 					this.copyPass.render( this, delta, true );
 
-					gl.stencilFunc( GLEnum.EQUAL.getValue(), 1, 0xffffffff );
+					gl.stencilFunc( StencilFunction.EQUAL, 1, 0xffffffff );
 				}
 
 				this.swapBuffers();

@@ -97,8 +97,8 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			this.webglFramebuffer.add( gl.createFramebuffer() );
 			this.webglRenderbuffer.add( gl.createRenderbuffer() );
 
-			gl.texImage2D( GLEnum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, getFormat().getValue(), getWidth(), getHeight(), 0, 
-					getFormat().getValue(), getType().getValue(), null );
+			gl.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i, 0, getWidth(), getHeight(), 0, 
+					getFormat(), getType(), null );
 
 			this.setupFrameBuffer(gl, this.webglFramebuffer.get( i ), TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i);
 			this.setupRenderBuffer(gl, this.webglRenderbuffer.get( i ));

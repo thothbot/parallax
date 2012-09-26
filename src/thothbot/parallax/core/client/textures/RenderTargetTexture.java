@@ -29,6 +29,8 @@ import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.client.gl2.enums.PixelType;
+import thothbot.parallax.core.client.gl2.enums.RenderbufferInternalFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
@@ -51,13 +53,13 @@ public class RenderTargetTexture extends Texture
 		this(width, height, 
 				TextureWrapMode.CLAMP_TO_EDGE, TextureWrapMode.CLAMP_TO_EDGE, 
 				TextureMagFilter.LINEAR,       TextureMinFilter.LINEAR_MIPMAP_LINEAR,
-				PixelFormat.RGBA,              DataType.UNSIGNED_BYTE);
+				PixelFormat.RGBA,              PixelType.UNSIGNED_BYTE);
 	}
 
 	public RenderTargetTexture(int width, int height, 
 			TextureWrapMode wrapS,      TextureWrapMode wrapT, 
 			TextureMagFilter magFilter, TextureMinFilter minFilter,
-			PixelFormat format,         DataType type) 
+			PixelFormat format,         PixelType type) 
 	{
 		super(); // call super Texture
 
@@ -161,8 +163,7 @@ public class RenderTargetTexture extends Texture
 
 		setTextureParameters(gl, GLEnum.TEXTURE_2D.getValue(), isTargetPowerOfTwo);
 
-		gl.texImage2D(GLEnum.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,
-				getFormat().getValue(), getType().getValue(), null);
+		gl.texImage2D(TextureTarget.TEXTURE_2D, 0, this.width, this.height, 0, getFormat(), getType(), null);
 
 		setupFrameBuffer(gl, this.webglFramebuffer, TextureTarget.TEXTURE_2D);
 		setupRenderBuffer(gl, this.webglRenderbuffer);
@@ -195,7 +196,7 @@ public class RenderTargetTexture extends Texture
 
 		if (this.isDepthBuffer && !this.isStencilBuffer) 
 		{
-			gl.renderbufferStorage(GLEnum.RENDERBUFFER.getValue(), GLEnum.DEPTH_COMPONENT16.getValue(), this.width, this.height);
+			gl.renderbufferStorage(RenderbufferInternalFormat.DEPTH_COMPONENT16, this.width, this.height);
 			gl.framebufferRenderbuffer(FramebufferSlot.DEPTH_ATTACHMENT, renderbuffer);
 
 			/*
@@ -211,14 +212,12 @@ public class RenderTargetTexture extends Texture
 		} 
 		else if (this.isDepthBuffer && this.isStencilBuffer) 
 		{
-			gl.renderbufferStorage(GLEnum.RENDERBUFFER.getValue(),
-					GLEnum.DEPTH_STENCIL.getValue(), this.width, this.height);
+			gl.renderbufferStorage(RenderbufferInternalFormat.DEPTH_STENCIL, this.width, this.height);
 			gl.framebufferRenderbuffer( FramebufferSlot.DEPTH_STENCIL_ATTACHMENT, renderbuffer);
 		} 
 		else 
 		{
-			gl.renderbufferStorage(GLEnum.RENDERBUFFER.getValue(),
-					GLEnum.RGBA4.getValue(), this.width, this.height);
+			gl.renderbufferStorage(RenderbufferInternalFormat.RGBA4, this.width, this.height);
 		}
 	}
 }

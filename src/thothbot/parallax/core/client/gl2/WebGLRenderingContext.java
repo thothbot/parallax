@@ -44,18 +44,29 @@ import thothbot.parallax.core.client.gl2.enums.FramebufferParameterName;
 import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
 import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
-import thothbot.parallax.core.client.gl2.enums.PixelInternalFormat;
+import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.client.gl2.enums.PixelStoreParameter;
+import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.ProgramParameter;
+import thothbot.parallax.core.client.gl2.enums.RenderbufferInternalFormat;
+import thothbot.parallax.core.client.gl2.enums.RenderbufferParameterName;
+import thothbot.parallax.core.client.gl2.enums.StencilFunction;
+import thothbot.parallax.core.client.gl2.enums.StencilOp;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 
 import com.google.gwt.canvas.dom.client.Context;
+import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.VideoElement;
 
 /**
  * 
@@ -415,7 +426,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * @param border Specifies the width of the border. Must be 0.
    */
   public void copyTexImage2D(TextureTarget target, int level,
-		  PixelInternalFormat internalformat, int x, int y, int width, int height,
+		  PixelFormat internalformat, int x, int y, int width, int height,
 		  int border) 
   {
 	  copyTexImage2D(target.getValue(), level, internalformat.getValue(), 
@@ -1015,40 +1026,78 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		return this.getProgramParameter(program, pname);
   }-*/;
 
-  public native int getRenderbufferParameteri(int target, int pname) /*-{
+  /**
+   * Return the value for the passed pname given the passed target.
+   * 
+   * @param pname Specifies the symbolic name of a renderbuffer object 
+   * 				parameter.
+   */
+  public int getRenderbufferParameteri(RenderbufferParameterName pname) {
+	  return getRenderbufferParameteri(GLEnum.RENDERBUFFER.getValue(), pname.getValue());
+  }
+
+  private native int getRenderbufferParameteri(int target, int pname) /*-{
 		return this.getRenderbufferParameter(target, pname);
   }-*/;
 
+  /**
+   * Returns the information log for a shader object.
+   * 
+   * @param shader Specifies the shader object whose information log is to be 
+   * 				queried.
+   */
   public native String getShaderInfoLog(WebGLShader shader) /*-{
 		return this.getShaderInfoLog(shader);
   }-*/;
 
+  /**
+   * Return the value for the passed pname given the passed shader.
+   * 
+   * @param shader Specifies the shader object to be queried.
+   * @param pname Specifies the object parameter.
+   */
   public native boolean getShaderParameterb(WebGLShader shader, int pname) /*-{
 		return this.getShaderParameter(shader, pname);
   }-*/;
 
+  /**
+   * @see #getShaderParameterb(WebGLShader, int)
+   * 
+   * @param shader
+   * @param pname
+   */
   public native int getShaderParameteri(WebGLShader shader, int pname) /*-{
 		return this.getShaderParameter(shader, pname);
   }-*/;
 
+  /**
+   * Returns the source code string from a shader object.
+   * 
+   * @param shader Specifies the shader object to be queried.
+   */
   public native String getShaderSource(WebGLShader shader) /*-{
 		return this.getShaderSource(shader);
   }-*/;
 
   /**
-   * Determines the extensions supported by the WebGL implementation.
+   * Returns an array of all the supported extension strings. Any string in 
+   * this list, when passed to getExtension must return a valid object. Any 
+   * other string passed to getExtension must return null.
    * 
    * @return an array containing the names of the supported extensions.
    */
-   public String[] getSupportedExtensions() {
-		JsArrayString supportedExts = getSupportedExtensionsAsJsArray();
-		String[] outSupportedExts = new String[supportedExts.length()];
-		for (int i = 0; i < outSupportedExts.length; i++) {
-			outSupportedExts[i] = supportedExts.get(i);
-		}
-		return outSupportedExts;
+  public String[] getSupportedExtensions() {
+	  JsArrayString supportedExts = getSupportedExtensionsAsJsArray();
+	  String[] outSupportedExts = new String[supportedExts.length()];
+	  for (int i = 0; i < outSupportedExts.length; i++) {
+		  outSupportedExts[i] = supportedExts.get(i);
+	  }
+	  return outSupportedExts;
   }
 
+  /**
+   * @see #getSupportedExtensions()
+   */
   public native JsArrayString getSupportedExtensionsAsJsArray() /*-{
 		return this.getSupportedExtensions();
   }-*/;
@@ -1057,35 +1106,104 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		return this.getTexParameter(target, pname);
   }-*/;
 
-  public native <T extends thothbot.parallax.core.client.gl2.arrays.TypeArray> T getUniforma(
+  /**
+   * Return the uniform value at the passed location in the passed program. 
+   * 
+   * @param <T> return type is dependent on the type of the uniform variable.
+   * @param program Specifies the program object to be queried.
+   * @param location Specifies the location of the uniform variable to be 
+   * 				queried.
+   * @return The type returned is dependent on the uniform type.
+   */
+  public native <T extends thothbot.parallax.core.client.gl2.arrays.TypeArray> T getUniform(
       WebGLProgram program, WebGLUniformLocation location) /*-{
 		return this.getUniform(program, location);
   }-*/;
 
+  /**
+   * Return the uniform value at the passed location in the passed program. 
+   * 
+   * @param program Specifies the program object to be queried.
+   * @param location Specifies the location of the uniform variable to be 
+   * 				queried.
+   */
   public native boolean getUniformb(WebGLProgram program, WebGLUniformLocation location) /*-{
 		return this.getUniform(program, location);
   }-*/;
 
+  /**
+   * Return the uniform value at the passed location in the passed program. 
+   * 
+   * @param program Specifies the program object to be queried.
+   * @param location Specifies the location of the uniform variable to be 
+   * 				queried.
+   * @return The type returned is dependent on the uniform type.
+   */
   public native double getUniformf(WebGLProgram program, WebGLUniformLocation location) /*-{
 		return this.getUniform(program, location);
   }-*/;
 
+  /**
+   * Return the uniform value at the passed location in the passed program. 
+   * 
+   * @param program Specifies the program object to be queried.
+   * @param location Specifies the location of the uniform variable to be 
+   * 				queried.
+   */
   public native int getUniformi(WebGLProgram program, WebGLUniformLocation location) /*-{
 		return this.getUniform(program, location);
   }-*/;
 
+  /**
+   * Return the location of a uniform variable.
+   * 
+   * @param program Specifies the program object to be queried.
+   * @param name Points to a string containing the name of the uniform variable 
+   * 				whose location is to be queried.
+   */
   public native WebGLUniformLocation getUniformLocation(WebGLProgram program, String name) /*-{
 		return this.getUniformLocation(program, name);
   }-*/;
 
+  /**
+   * Return the information requested in pname about the vertex attribute at 
+   * the passed index. 
+   * 
+   * @param <T> return type is dependent on pname.
+   * @param index Specifies the generic vertex attribute parameter to be 
+   * 				queried.
+   * @param pname Specifies the symbolic name of the vertex attribute parameter
+   * 				to be queried.
+   * @return The type returned is dependent on the information requested.
+   */
   public native <T extends JavaScriptObject> T getVertexAttrib(int index, int pname) /*-{
 		return this.getVertexAttrib(index, pname);
   }-*/;
 
+  /**
+   * Return the information requested in pname about the vertex attribute at 
+   * the passed index. 
+   * 
+   * @param index Specifies the generic vertex attribute parameter to be 
+   * 				queried.
+   * @param pname Specifies the symbolic name of the vertex attribute parameter
+   * 				to be queried.
+   * @return The type returned is dependent on the information requested.
+   */
   public native boolean getVertexAttribb(int index, int pname) /*-{
 		return this.getVertexAttrib(index, pname);
   }-*/;
 
+  /**
+   * Return the information requested in pname about the vertex attribute at 
+   * the passed index. 
+   * 
+   * @param index Specifies the generic vertex attribute parameter to be 
+   * 				queried.
+   * @param pname Specifies the symbolic name of the vertex attribute parameter
+   * 				to be queried.
+   * @return The type returned is dependent on the information requested.
+   */
   public native int getVertexAttribi(int index, int pname) /*-{
 		return this.getVertexAttrib(index, pname);
   }-*/;
@@ -1094,99 +1212,505 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		return this.getVertexAttribOffset(index, pname);
   }-*/;
 
+  /**
+   * Determine if a name corresponds to a buffer object.
+   * 
+   * @param buffer
+   */
   public native boolean isBuffer(WebGLBuffer buffer) /*-{
 		return this.isBuffer(buffer);
   }-*/;
 
+  /**
+   * Return true if the passed WebGLObject is a WebGLFramebuffer and false 
+   * otherwise.
+   * 
+   * @param buffer
+   */
   public native boolean isFramebuffer(JavaScriptObject buffer) /*-{
 		return this.isFramebuffer(buffer);
   }-*/;
 
+  /**
+   * Return true if the passed WebGLObject is a WebGLProgram and false 
+   * otherwise.
+   * 
+   * @param program
+   */
   public native boolean isProgram(WebGLProgram program) /*-{
 		return this.isProgram(program);
   }-*/;
 
+  /**
+   * Return true if the passed WebGLObject is a WebGLRenderbuffer and false 
+   * otherwise.
+   * 
+   * @param buffer
+   */
   public native boolean isRenderbuffer(WebGLRenderbuffer buffer) /*-{
 		return this.isRenderbuffer(buffer);
   }-*/;
 
+  /**
+   * Return true if the passed WebGLObject is a WebGLShader and false 
+   * otherwise.
+   * 
+   * @param shader
+   */
   public native boolean isShader(JavaScriptObject shader) /*-{
 		return this.isShader(shader);
   }-*/;
 
+  /**
+   * Return true if the passed WebGLObject is a WebGLTexture and false 
+   * otherwise.
+   * 
+   * @param buffer
+   */
   public native boolean isTexture(WebGLTexture texture) /*-{
 		return this.isTexture(texture);
   }-*/;
 
+  /**
+   * Specifies the width of rasterized lines. The initial value is 1.
+   * 
+   * @param width
+   */
   public native void lineWidth(double width) /*-{
 		this.lineWidth(width);
   }-*/;
 
+  /**
+   * Link a program object.
+   * 
+   * @param program Specifies the handle of the program object to be linked.
+   */
   public native void linkProgram(WebGLProgram program) /*-{
 		this.linkProgram(program);
   }-*/;
 
-  public native void pixelStorei(int pname, int param) /*-{
+  /**
+   * Set pixel storage modes.
+   * 
+   * @param pname
+   * @param param
+   */
+  public void pixelStorei(PixelStoreParameter pname, int param) {
+	  pixelStorei(pname.getValue(), param);
+  }
+
+  private native void pixelStorei(int pname, int param) /*-{
 		this.pixelStorei(pname, param);
   }-*/;
 
+  /**
+   * Set the scale and units used to calculate depth values.
+   * 
+   * @param factor Specifies a scale factor that is used to create a variable 
+   * 				depth offset for each polygon. The initial value is 0.
+   * @param units Is multiplied by an implementation-specific value to create a
+   * 				constant depth offset. The initial value is 0.
+   */
   public native void polygonOffset(double factor, double units) /*-{
 		this.polygonOffset(factor, units);
   }-*/;
 
-  public native void readPixels(int x, int y, int width, int height, int format, int type,
+  /**
+   * Fills pixels with the pixel data in the specified rectangle of the frame 
+   * buffer. The data returned from readPixels must be up-to-date as of the 
+   * most recently sent drawing command.
+   *  
+   * For any pixel lying outside the frame buffer, the value read contains 0 
+   * in all channels.
+   *  
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param format
+   * @param type The type of pixels must match the type of the data to be read.
+   * 				If it is UNSIGNED_BYTE, a Uint8Array must be supplied; if it is
+   * 				UNSIGNED_SHORT_5_6_5, UNSIGNED_SHORT_4_4_4_4, or 
+   * 				UNSIGNED_SHORT_5_5_5_1, a Uint16Array must be supplied. If the 
+   * 				types do not match, an INVALID_OPERATION error is generated.
+   * @param pixels If pixels is null, an INVALID_VALUE error is generated. 
+   * 				If pixels is non-null, but is not large enough to retrieve all of 
+   * 				the pixels in the specified rectangle taking into account pixel 
+   * 				store modes, an INVALID_OPERATION value is generated.
+   */
+  public void readPixels(int x, int y, int width, int height,
+		  PixelFormat format, PixelType type, ArrayBufferView pixels) {
+	  readPixels(x, y, width, height, format.getValue(), type.getValue(),
+			  pixels);
+  }
+
+  private native void readPixels(int x, int y, int width, int height, int format, int type,
       ArrayBufferView pixels) /*-{
 		this.readPixels(x, y, width, height, format, type, pixels);
   }-*/;
 
-  public native void renderbufferStorage(int target, int format, int width, int height) /*-{
+  /**
+   * Create and initialize a renderbuffer object's data store.
+   * 
+   * @param internalformat Specifies the color-renderable, depth-renderable, 
+   * 				or stencil-renderable format of the renderbuffer.
+   * @param width Specifies the width of the renderbuffer in pixels.
+   * @param height Specifies the height of the renderbuffer in pixels.
+   */
+  public void renderbufferStorage(RenderbufferInternalFormat internalformat, int width, int height) {
+	  renderbufferStorage(GLEnum.RENDERBUFFER.getValue(), internalformat.getValue(), 
+			  width, height);
+  }
+
+  private native void renderbufferStorage(int target, int format, int width, int height) /*-{
 		this.renderbufferStorage(target, format, width, height);
   }-*/;
 
+  /**
+   * Specify multisample coverage parameters.
+   * 
+   * @param value Specify a single floating-point sample coverage value. The 
+   * 				value is clamped to the range 0 1 . The initial value is 1.0.
+   * @param invert Specify a single boolean value representing if the coverage 
+   * 				masks should be inverted.
+   */
   public native void sampleCoverage(double value, boolean invert) /*-{
 		this.sampleCoverage(value, invert);
   }-*/;
 
+  /**
+   * Define the scissor box.
+   * 
+   * @param x Specify the lower left corner of	the scissor box. Initially 0.
+   * @param y Specify the lower left corner of	the scissor box. Initially 0.
+   * @param width Specify the width of the scissor box. When a GL context is 
+   * 				first attached to a window, width and height are set to the 
+   * 				dimensions	of that	window.
+   * @param height Specify the height of the scissor box. When a GL context is 
+   * 				first attached to a window, width and height are set to the 
+   * 				dimensions	of that	window.
+   */
   public native void scissor(int x, int y, int width, int height) /*-{
 		this.scissor(x, y, width, height);
   }-*/;
 
+  /**
+   * Replace the source code in a shader object.
+   * 
+   * @param shader Specifies the handle of the shader object whose source code 
+   * 				is to be replaced.
+   * @param source Specifies a string containing the source code to be loaded 
+   * 				into the shader.
+   */
   public native void shaderSource(WebGLShader shader, String shaderSrc) /*-{
 		this.shaderSource(shader, shaderSrc);
   }-*/;
 
-  public native void stencilFunc(int func, int ref, int mask) /*-{
+  /**
+   * Set front and back function and reference value for stencil testing.
+   * 
+   * @param func Specifies the test function.
+   * @param ref Specifies the reference value for the stencil test. ref is 
+   * 				clamped to the range 0 to 2^n - 1 , where n is the number of 
+   * 				bitplanes	in the stencil buffer. The initial value is 0.
+   * @param mask Specifies a mask that is ANDed with both the reference value 
+   * 				and the stored stencil value when the test is done. The initial 
+   * 				value is all 1's.
+   */
+  public void stencilFunc(StencilFunction func, int ref, int mask) {
+	  stencilFunc(func.getValue(), ref, mask);
+  }
+
+  private native void stencilFunc(int func, int ref, int mask) /*-{
 		this.stencilFunc(func, ref, mask);
   }-*/;
+
+  /**
+   * Set front and/or back function and reference value for stencil testing.
+   * 
+   * @param face Specifies whether front and/or back stencil state is updated.
+   * @param func Specifies the test function.
+   * @param ref Specifies the reference value for the stencil test. ref is 
+   * 				clamped to the range 0 to 2^n - 1 , where n is the number of 
+   * 				bitplanes	in the stencil buffer. The initial value is 0.
+   * @param mask Specifies a mask that is ANDed with both the reference value 
+   * 				and the stored stencil value when the test is done. The initial 
+   * 				value is all 1's.
+   */
+  public void stencilFuncSeparate(CullFaceMode face, StencilFunction func,
+		  int ref, int mask) {
+	  stencilFuncSeparate(face.getValue(), func.getValue(), ref, mask);
+  }
 
   public native void stencilFuncSeparate(int face, int func, int ref, int mask) /*-{
 		this.stencilFuncSeparate(face, func, ref, mask);
   }-*/;
 
+  /**
+   * Specifies a bit mask to enable and disable writing of individual bits in 
+   * the stencil planes. Initially, the mask is all 1's.
+   * 
+   * @param mask Specifies a bit mask to enable and disable writing of 
+   * 				individual bits in the stencil planes. Initially, the mask is 
+   * 				all 1's.
+   */
   public native void stencilMask(int mask) /*-{
 		this.stencilMask(mask);
   }-*/;
 
-  public native void stencilMaskSeparate(int face, int mask) /*-{
+  /**
+   * Control the front and/or back writing of individual bits in the stencil 
+   * planes.
+   * 
+   * @param face Specifies whether the front and/or back stencil writemask is 
+   * 				updated.
+   * @param mask Specifies a bit mask to enable and disable writing of 
+   * 				individual bits in the stencil planes. Initially, the mask is 
+   * 				all 1's.
+   */
+  public void stencilMaskSeparate(CullFaceMode face, int mask) {
+	  stencilMaskSeparate(face.getValue(), mask);
+  }
+
+  private native void stencilMaskSeparate(int face, int mask) /*-{
 		this.stencilMaskSeparate(face, mask);
   }-*/;
 
-  public native void stencilOp(int sfail, int dpfail, int dppass) /*-{
+  /**
+   * Sets front and back stencil test actions.
+   * 
+   * @param fail
+   * @param zfail
+   * @param zpass
+   */
+  public void stencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) {
+	  stencilOp(fail.getValue(), zfail.getValue(), zpass.getValue());
+  }
+
+  private native void stencilOp(int sfail, int dpfail, int dppass) /*-{
 		this.stencilOp(sfail, dpfail, dppass);
   }-*/;
 
-  public native void stencilOpSeparate(int face, int sfail, int dpfail, int dppass) /*-{
+  /**
+   * Sets front and/or back stencil test actions.
+   * 
+   * @param face
+   * @param fail
+   * @param zfail
+   * @param zpass
+   */
+  public void stencilOpSeparate(CullFaceMode face, StencilOp fail, StencilOp zfail, StencilOp zpass) {
+	  stencilOpSeparate(face.getValue(), fail.getValue(), zfail.getValue(),
+			  zpass.getValue());
+  }
+
+  private native void stencilOpSeparate(int face, int sfail, int dpfail, int dppass) /*-{
 		this.stencilOpSeparate(face, sfail, dpfail, dppass);
   }-*/;
 
-  public native void texImage2D(int target, int level, int internalformat, int width, int height,
-      int border, int format, int type, ArrayBufferView pixels) /*-{
-		this.texImage2D(target, level, internalformat, width, height, border,
-				format, type, pixels);
+  /**
+   * Specify a two-dimensional texture image.
+   * 
+   * If the passed pixels value is null a buffer of sufficient size initialized 
+   * to 0 is passed. If an attempt is made to call this function with no 
+   * WebGLTexture bound, an INVALID_OPERATION error is raised.
+   * 
+   * @param target Specifies the target texture.
+   * @param level Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param width Specifies the width of the texture subimage.
+   * @param height Specifies the height of the texture subimage.
+   * @param border Specifies the width of the border. Must be 0.
+   * @param format Specifies the format of the texel data. 
+   * @param type Specifies the data type of the texel data.
+   * @param pixels Specifies a pointer to the image data in memory.
+   */
+  public void texImage2D(TextureTarget target, int level,
+		  int width, int height, int border, PixelFormat format, PixelType type, ArrayBufferView pixels) {
+	  texImage2D(target.getValue(), level, format.getValue(), 
+			  width, height, border, format.getValue(), type.getValue(), pixels);
+  }
+  
+  /**
+   * Specify a two-dimensional texture image.
+   * 
+   * If the passed pixels value is null a buffer of sufficient size initialized 
+   * to 0 is passed. If an attempt is made to call this function with no 
+   * WebGLTexture bound, an INVALID_OPERATION error is raised.
+   * 
+   * @param target Specifies the target texture.
+   * @param slot   the target texture offset
+   * @param level Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param width Specifies the width of the texture subimage.
+   * @param height Specifies the height of the texture subimage.
+   * @param border Specifies the width of the border. Must be 0.
+   * @param format Specifies the format of the texel data. 
+   * @param type Specifies the data type of the texel data.
+   * @param pixels Specifies a pointer to the image data in memory.
+   */
+  public void texImage2D(TextureTarget target, int slot, int level,
+		  int width, int height, int border, PixelFormat format, PixelType type, ArrayBufferView pixels) {
+	  texImage2D(target.getValue() + slot, level, format.getValue(), 
+			  width, height, border, format.getValue(), type.getValue(), pixels);
+  }
+  
+  private native void texImage2D(int target, int level, int internalformat, int width, int height,
+		  int border, int format, int type, ArrayBufferView pixels) /*-{
+				this.texImage2D(target, level, internalformat, width, height, border,
+						format, type, pixels);
   }-*/;
 
-  public native void texImage2D(int target, int level, int internalformat, int format, int type,
-      JavaScriptObject data) /*-{
+  /**
+   * Uploads the given element or image data to the currently bound WebGLTexture.
+   * 
+   * The source image data is conceptually first converted to the data type and format 
+   * specified by the format and type arguments, and then transferred to the OpenGL 
+   * implementation. If a packed pixel format is specified which would imply loss of 
+   * bits of precision from the image data, this loss of precision must occur. 
+   * 
+   * If the source image is an RGB or RGBA lossless image with 8 bits per channel, the 
+   * browser guarantees that the full precision of all channels is preserved. 
+   * 
+   * If the original image semantically contains an alpha channel and the 
+   * UNPACK_PREMULTIPLY_ALPHA_WEBGL pixel storage parameter is false, then the alpha 
+   * channel is guaranteed to never have been premultiplied by the RGB values, whether 
+   * those values are derived directly from the original file format or converted from 
+   * some other color format. 
+   * 
+   * If an attempt is made to call this function with no WebGLTexture bound (see above), 
+   * an INVALID_OPERATION error is generated. 
+   * 
+   * @param target Specifies the target texture.
+   * @param level Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param format Specifies the format of the texel data. 
+   * @param type Specifies the data type of the texel data.
+   * @param pixels
+   */
+  public void texImage2D(TextureTarget target, int level, 
+		  PixelFormat format, 
+		  PixelType type, CanvasElement pixels) {
+	  texImage2D(target.getValue(), level, format.getValue(), 
+			  format.getValue(), type.getValue(), pixels);
+  }
+
+  /**
+   * Uploads the given element or image data to the currently bound WebGLTexture.
+   * 
+   * The source image data is conceptually first converted to the data type and format 
+   * specified by the format and type arguments, and then transferred to the OpenGL 
+   * implementation. If a packed pixel format is specified which would imply loss of 
+   * bits of precision from the image data, this loss of precision must occur. 
+   * 
+   * If the source image is an RGB or RGBA lossless image with 8 bits per channel, the 
+   * browser guarantees that the full precision of all channels is preserved. 
+   * 
+   * If the original image semantically contains an alpha channel and the 
+   * UNPACK_PREMULTIPLY_ALPHA_WEBGL pixel storage parameter is false, then the alpha 
+   * channel is guaranteed to never have been premultiplied by the RGB values, whether 
+   * those values are derived directly from the original file format or converted from 
+   * some other color format. 
+   * 
+   * If an attempt is made to call this function with no WebGLTexture bound (see above), 
+   * an INVALID_OPERATION error is generated. 
+   * 
+   * @param target Specifies the target texture.
+   * @param level Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param format Specifies the format of the texel data.
+   * @param type Specifies the data type of the texel data.
+   * @param pixels
+   */
+  public void texImage2D(TextureTarget target, int level, 
+		  PixelFormat format, 
+		  PixelType type, ImageData pixels) {
+	  texImage2D(target.getValue(), level, format.getValue(), 
+			  format.getValue(), type.getValue(), pixels);
+  }
+
+  /**
+   * Uploads the given element or image data to the currently bound WebGLTexture.
+   * 
+   * The source image data is conceptually first converted to the data type and format 
+   * specified by the format and type arguments, and then transferred to the OpenGL 
+   * implementation. If a packed pixel format is specified which would imply loss of 
+   * bits of precision from the image data, this loss of precision must occur. 
+   * 
+   * If the source image is an RGB or RGBA lossless image with 8 bits per channel, the 
+   * browser guarantees that the full precision of all channels is preserved. 
+   * 
+   * If the original image semantically contains an alpha channel and the 
+   * UNPACK_PREMULTIPLY_ALPHA_WEBGL pixel storage parameter is false, then the alpha 
+   * channel is guaranteed to never have been premultiplied by the RGB values, whether 
+   * those values are derived directly from the original file format or converted from 
+   * some other color format. 
+   * 
+   * If an attempt is made to call this function with no WebGLTexture bound (see above), 
+   * an INVALID_OPERATION error is generated. 
+   * 
+   * @param target Specifies the target texture.
+   * @param level Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param format Specifies the format of the texel data.
+   * @param type Specifies the data type of the texel data.
+   * @param pixels
+   */
+  public void texImage2D(TextureTarget target, int level, 
+		  PixelFormat format, 
+		  PixelType type, ImageElement pixels) {
+	  texImage2D(target.getValue(), level, format.getValue(), 
+			  format.getValue(), type.getValue(), pixels);
+  }
+
+  /**
+   * Uploads the given element or image data to the currently bound WebGLTexture.
+   * 
+   * The source image data is conceptually first converted to the data type and format 
+   * specified by the format and type arguments, and then transferred to the OpenGL 
+   * implementation. If a packed pixel format is specified which would imply loss of 
+   * bits of precision from the image data, this loss of precision must occur. 
+   * 
+   * If the source image is an RGB or RGBA lossless image with 8 bits per channel, the 
+   * browser guarantees that the full precision of all channels is preserved. 
+   * 
+   * If the original image semantically contains an alpha channel and the 
+   * UNPACK_PREMULTIPLY_ALPHA_WEBGL pixel storage parameter is false, then the alpha 
+   * channel is guaranteed to never have been premultiplied by the RGB values, whether 
+   * those values are derived directly from the original file format or converted from 
+   * some other color format. 
+   * 
+   * If an attempt is made to call this function with no WebGLTexture bound (see above), 
+   * an INVALID_OPERATION error is generated. 
+   * 
+   * @param target Specifies the target texture.
+   * @param level Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param format Specifies the format of the texel data. 
+   * @param type Specifies the data type of the texel data.
+   * @param pixels
+   */
+  public void texImage2D(TextureTarget target, int level, 
+		  PixelFormat format, 
+		  PixelType type, VideoElement pixels) {
+	  texImage2D(target.getValue(), level, format.getValue(), 
+			  format.getValue(), type.getValue(), pixels);
+  }
+  
+  @Deprecated
+  public void texImage2D(TextureTarget target, int level, PixelFormat format, PixelType type, Element pixels) {
+	  texImage2D(target.getValue(), level, format.getValue(), 
+			  format.getValue(), type.getValue(), pixels);
+  }
+  
+  @Deprecated
+  public void texImage2D(TextureTarget target, int slot, int level, PixelFormat format, PixelType type, Element pixels) {
+	  texImage2D(target.getValue() + slot, level, format.getValue(), 
+			  format.getValue(), type.getValue(), pixels);
+  }
+	
+  private native void texImage2D(int target, int level, int internalformat, int format, int type,
+		  JavaScriptObject data) /*-{
 		this.texImage2D(target, level, internalformat, format, type, data);
   }-*/;
 

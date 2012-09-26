@@ -27,6 +27,7 @@ import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureWrapMode;
@@ -86,7 +87,7 @@ public class Texture
 	private TextureMinFilter minFilter;
 
 	private PixelFormat format;
-	private DataType type;
+	private PixelType type;
 
 	private boolean isGenerateMipmaps = true;
 	private boolean isPremultiplyAlpha = false;
@@ -139,12 +140,12 @@ public class Texture
 	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter)
 	{
-		this(image, mapping, wrapS, wrapT, magFilter, minFilter, PixelFormat.RGBA, DataType.UNSIGNED_BYTE);
+		this(image, mapping, wrapS, wrapT, magFilter, minFilter, PixelFormat.RGBA, PixelType.UNSIGNED_BYTE);
 	}
 	
 	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
-			PixelFormat format, DataType type)
+			PixelFormat format, PixelType type)
 	{
 		this(image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, 1);
 	}
@@ -164,7 +165,7 @@ public class Texture
 	 */
 	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
-			PixelFormat format, DataType type, int anisotropy) 
+			PixelFormat format, PixelType type, int anisotropy) 
 	{	
 		this.image = image;		
 		this.mapping = mapping;
@@ -357,20 +358,20 @@ public class Texture
 	}
 
 	/**
-	 * Sets the {@link DataType} value.
+	 * Sets the {@link PixelType} value.
 	 * 
-	 * @return the {@link DataType} value.
+	 * @return the {@link PixelType} value.
 	 */
-	public DataType getType() {
+	public PixelType getType() {
 		return type;
 	}
 
 	/**
-	 * Sets the {@link DataType} value.
+	 * Sets the {@link PixelType} value.
 	 * 
-	 * @param type the {@link DataType} value.
+	 * @param type the {@link PixelType} value.
 	 */
-	public void setType(DataType type) {
+	public void setType(PixelType type) {
 		this.type = type;
 	}
 
@@ -468,8 +469,7 @@ public class Texture
 			gl.texParameteri( textureType, GLEnum.TEXTURE_MIN_FILTER.getValue(), filterFallback( this.minFilter.getEnum() ) );
 		}
 		
-		// TODO: test this approach
-		if ( maxAnisotropy > 0 && this.type != DataType.FLOAT ) 
+		if ( maxAnisotropy > 0 ) 
 		{
 			if ( this.anisotropy > 1 || this.cache_oldAnisotropy > 1 ) 
 			{

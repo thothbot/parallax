@@ -46,6 +46,7 @@ import thothbot.parallax.core.client.gl2.enums.DepthFunction;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.PixelStoreParameter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
@@ -2749,8 +2750,8 @@ public class WebGLRenderer
 			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 			getGL().bindTexture( TextureTarget.TEXTURE_2D, texture.getWebGlTexture() );
 
-			getGL().pixelStorei( GLEnum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0 );
-			getGL().pixelStorei( GLEnum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? 1 : 0 );
+			getGL().pixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL, texture.isFlipY() ? 1 : 0 );
+			getGL().pixelStorei( PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.isPremultiplyAlpha() ? 1 : 0 );
 
 			Element image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
@@ -2760,18 +2761,17 @@ public class WebGLRenderer
 
 			if ( texture instanceof DataTexture ) 
 			{
-				getGL().texImage2D( GLEnum.TEXTURE_2D.getValue(), 0, texture.getFormat().getValue(), 
-						((DataTexture) texture).getWidth(), 
+				getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, 
+						((DataTexture) texture).getWidth(),
 						((DataTexture) texture).getHeight(), 
 						0, 
-						texture.getFormat().getValue(), 
-						texture.getType().getValue(), 
+						texture.getFormat(), 
+						texture.getType(),
 						((DataTexture) texture).getData() );
 			} 
 			else 
 			{
-				getGL().texImage2D( GLEnum.TEXTURE_2D.getValue(), 0, texture.getFormat().getValue(), 
-						texture.getFormat().getValue(), texture.getType().getValue(), image);
+				getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(), image);
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo ) 
@@ -2832,7 +2832,7 @@ public class WebGLRenderer
 
 			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 			getGL().bindTexture( TextureTarget.TEXTURE_CUBE_MAP, texture.getWebGlTexture() );
-			getGL().pixelStorei( GLEnum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0 );
+			getGL().pixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL, texture.isFlipY() ? 1 : 0 );
 
 			List<Element> cubeImage = new ArrayList<Element>();
 
@@ -2853,8 +2853,8 @@ public class WebGLRenderer
 
 			for ( int i = 0; i < 6; i ++ ) 
 			{
-				getGL().texImage2D( GLEnum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, 
-						texture.getFormat().getValue(), texture.getFormat().getValue(), texture.getType().getValue(), cubeImage.get( i ) );
+				getGL().texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i, 0, 
+						texture.getFormat(), texture.getType(), cubeImage.get( i ) );
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )	
