@@ -30,6 +30,7 @@ import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
@@ -105,10 +106,10 @@ public final class LensFlarePlugin extends Plugin
 		lensFlare.elementBuffer    = gl.createBuffer();
 
 		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, lensFlare.vertexBuffer );
-		gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), lensFlare.vertices, GLEnum.STATIC_DRAW.getValue() );
+		gl.bufferData( BufferTarget.ARRAY_BUFFER, lensFlare.vertices, BufferUsage.STATIC_DRAW );
 
 		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, lensFlare.elementBuffer );
-		gl.bufferData( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.faces, GLEnum.STATIC_DRAW.getValue() );
+		gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, lensFlare.faces, BufferUsage.STATIC_DRAW );
 
 		// textures
 

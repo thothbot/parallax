@@ -31,6 +31,7 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
@@ -149,7 +150,7 @@ public class ParticleSystem extends GeometryObject
 				|| this.sortParticles 
 				|| areCustomAttributesDirty
 		) {
-			this.setBuffers( renderer, this.geometry, GLEnum.DYNAMIC_DRAW.getValue());
+			this.setBuffers( renderer, this.geometry, BufferUsage.DYNAMIC_DRAW);
 			this.material.getShader().clearCustomAttributes();
 		}
 
@@ -158,7 +159,7 @@ public class ParticleSystem extends GeometryObject
 	}
 
 	// setParticleBuffers
-	public void setBuffers (WebGLRenderer renderer, Geometry geometry, int hint) 
+	public void setBuffers (WebGLRenderer renderer, Geometry geometry, BufferUsage hint) 
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		List<Vector3> vertices = geometry.getVertices();
@@ -420,13 +421,13 @@ public class ParticleSystem extends GeometryObject
 		if ( dirtyVertices || this.sortParticles ) 
 		{
 			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer );
-			gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlVertexArray(), hint );
 		}
 
 		if ( dirtyColors || this.sortParticles ) 
 		{
 			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer );
-			gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlColorArray(), hint );
 		}
 
 		if ( customAttributes != null ) 
@@ -438,7 +439,7 @@ public class ParticleSystem extends GeometryObject
 				if ( customAttribute.needsUpdate || this.sortParticles ) 
 				{
 					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, customAttribute.buffer );
-					gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), customAttribute.array, hint );
+					gl.bufferData( BufferTarget.ARRAY_BUFFER, customAttribute.array, hint );
 				}
 			}
 		}

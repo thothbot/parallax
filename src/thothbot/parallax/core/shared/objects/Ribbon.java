@@ -27,6 +27,7 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
@@ -48,7 +49,7 @@ public class Ribbon extends GeometryObject
 	public void setBuffer(WebGLRenderer renderer)
 	{
 		if ( this.getGeometry().isVerticesNeedUpdate() || this.getGeometry().isColorsNeedUpdate() )
-			this.setBuffers( renderer, geometry, GLEnum.DYNAMIC_DRAW.getValue() );
+			this.setBuffers( renderer, geometry, BufferUsage.DYNAMIC_DRAW );
 
 		this.getGeometry().setVerticesNeedUpdate(false);
 		this.getGeometry().setColorsNeedUpdate(false);
@@ -101,7 +102,7 @@ public class Ribbon extends GeometryObject
 	}
 
 	// setRibbonBuffers
-	public void setBuffers(WebGLRenderer renderer, Geometry geometry, int hint)
+	public void setBuffers(WebGLRenderer renderer, Geometry geometry, BufferUsage hint)
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		
@@ -125,7 +126,7 @@ public class Ribbon extends GeometryObject
 			}
 
 			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer);
-			gl.bufferData(GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint);
+			gl.bufferData(BufferTarget.ARRAY_BUFFER, geometry.getWebGlVertexArray(), hint);
 		}
 
 		if (dirtyColors) 
@@ -144,7 +145,7 @@ public class Ribbon extends GeometryObject
 			}
 
 			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer);
-			gl.bufferData(GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint);
+			gl.bufferData(BufferTarget.ARRAY_BUFFER, geometry.getWebGlColorArray(), hint);
 		}
 	}
 }

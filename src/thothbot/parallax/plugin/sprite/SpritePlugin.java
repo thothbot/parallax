@@ -29,6 +29,7 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.renderers.Plugin;
@@ -90,10 +91,10 @@ public final class SpritePlugin extends Plugin
 		sprite.elementBuffer = gl.createBuffer();
 
 		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, sprite.vertexBuffer );
-		gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), sprite.vertices, GLEnum.STATIC_DRAW.getValue() );
+		gl.bufferData( BufferTarget.ARRAY_BUFFER, sprite.vertices, BufferUsage.STATIC_DRAW );
 
 		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.elementBuffer );
-		gl.bufferData( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.faces, GLEnum.STATIC_DRAW.getValue() );
+		gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.faces, BufferUsage.STATIC_DRAW );
 
 		sprite.shader = new SpriteShader();
 		sprite.shader.buildProgram(gl);

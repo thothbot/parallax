@@ -38,6 +38,7 @@ import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
@@ -539,7 +540,7 @@ public class WebGLRenderer
 
 		getGL().enable( GLEnum.BLEND.getValue() );
 		getGL().blendEquation( BlendEquationMode.FUNC_ADD );
-		getGL().blendFunc( GLEnum.SRC_ALPHA.getValue(), GLEnum.ONE_MINUS_SRC_ALPHA.getValue() );
+		getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
 	}
 
 	/**
@@ -1486,7 +1487,7 @@ public class WebGLRenderer
 		if ( object.hasPos ) 
 		{
 			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglVertexBuffer );
-			getGL().bufferData( GLEnum.ARRAY_BUFFER.getValue(), object.positionArray, GLEnum.DYNAMIC_DRAW.getValue() );
+			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.positionArray, BufferUsage.DYNAMIC_DRAW );
 			getGL().enableVertexAttribArray( attributes.get("position") );
 			getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 		}
@@ -1531,7 +1532,7 @@ public class WebGLRenderer
 				}
 			}
 
-			getGL().bufferData( GLEnum.ARRAY_BUFFER.getValue(), object.normalArray, GLEnum.DYNAMIC_DRAW.getValue() );
+			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.normalArray, BufferUsage.DYNAMIC_DRAW );
 			getGL().enableVertexAttribArray( attributes.get("normal") );
 			getGL().vertexAttribPointer( attributes.get("normal"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 		}
@@ -2656,7 +2657,7 @@ public class WebGLRenderer
 			{
 				getGL().enable( GLEnum.BLEND.getValue() );
 				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
-				getGL().blendFunc( GLEnum.SRC_ALPHA.getValue(), GLEnum.ONE.getValue() );
+				getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE );
 				
 			// TODO: Find blendFuncSeparate() combination
 			} 
@@ -2664,7 +2665,7 @@ public class WebGLRenderer
 			{
 				getGL().enable( GLEnum.BLEND.getValue() );
 				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
-				getGL().blendFunc( GLEnum.ZERO.getValue(), GLEnum.ONE_MINUS_SRC_COLOR.getValue() );
+				getGL().blendFunc( BlendingFactorSrc.ZERO, BlendingFactorDest.ONE_MINUS_SRC_COLOR );
 
 			// TODO: Find blendFuncSeparate() combination
 			} 
@@ -2672,7 +2673,7 @@ public class WebGLRenderer
 			{
 				getGL().enable( GLEnum.BLEND.getValue() );
 				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
-				getGL().blendFunc( GLEnum.ZERO.getValue(), GLEnum.SRC_COLOR.getValue() );
+				getGL().blendFunc( BlendingFactorSrc.ZERO, BlendingFactorDest.SRC_COLOR );
 
 			} 
 			else if( blending == Material.BLENDING.CUSTOM) 
@@ -2683,8 +2684,11 @@ public class WebGLRenderer
 			else 
 			{
 				getGL().enable( GLEnum.BLEND.getValue() );
-				getGL().blendEquationSeparate( GLEnum.FUNC_ADD.getValue(), GLEnum.FUNC_ADD.getValue() );
-				getGL().blendFuncSeparate( GLEnum.SRC_ALPHA.getValue(), GLEnum.ONE_MINUS_SRC_ALPHA.getValue(), GLEnum.ONE.getValue(), GLEnum.ONE_MINUS_SRC_ALPHA.getValue() );
+				getGL().blendEquationSeparate( BlendEquationMode.FUNC_ADD, BlendEquationMode.FUNC_ADD );
+				getGL().blendFuncSeparate( BlendingFactorSrc.SRC_ALPHA, 
+						BlendingFactorDest.ONE_MINUS_SRC_ALPHA, 
+						BlendingFactorSrc.ONE, 
+						BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
 			}
 
 			this.cache_oldBlending = blending;
@@ -2709,7 +2713,7 @@ public class WebGLRenderer
 
 			if ( blendSrc != cache_oldBlendSrc || blendDst != cache_oldBlendDst ) 
 			{
-				getGL().blendFunc( blendSrc.getValue(), blendDst.getValue());
+				getGL().blendFunc( blendSrc, blendDst);
 
 				this.cache_oldBlendSrc = blendSrc;
 				this.cache_oldBlendDst = blendDst;

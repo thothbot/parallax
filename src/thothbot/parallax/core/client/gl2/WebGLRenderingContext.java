@@ -28,7 +28,10 @@ import thothbot.parallax.core.client.gl2.arrays.Int32Array;
 import thothbot.parallax.core.client.gl2.arrays.JsArrayUtil;
 import thothbot.parallax.core.client.gl2.arrays.TypeArray;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
+import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
+import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
@@ -182,28 +185,95 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.blendEquation(mode);
   }-*/;
 
-  public native void blendEquationSeparate(int modeRGB, int modeAlpha) /*-{
+  /**
+   * Set the RGB blend equation and the alpha blend equation separately.
+   */
+  public void blendEquationSeparate(BlendEquationMode modeRGB, BlendEquationMode modeAlpha) {
+	  blendEquationSeparate(modeRGB.getValue(), modeAlpha.getValue());
+  }
+
+  private native void blendEquationSeparate(int modeRGB, int modeAlpha) /*-{
 		this.blendEquationSeparate(modeRGB, modeAlpha);
   }-*/;
 
-  public native void blendFunc(int sfactor, int dfactor) /*-{
+  /**
+   * Specify pixel arithmetic.
+   */
+  public void blendFunc(BlendingFactorSrc sfactor, BlendingFactorDest dfactor) {
+	  blendFunc(sfactor.getValue(), dfactor.getValue());
+  }
+
+  private native void blendFunc(int sfactor, int dfactor) /*-{
 		this.blendFunc(sfactor, dfactor);
   }-*/;
 
-  public native void blendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) /*-{
+  /**
+   * Set the RGB blend equation and the alpha blend equation separately.
+   */
+  public void blendFuncSeparate(BlendingFactorSrc srcRGB,
+		  BlendingFactorDest dstRGB, 
+		  BlendingFactorSrc srcAlpha,
+		  BlendingFactorDest dstAlpha) 
+  {
+	  blendFuncSeparate(srcRGB.getValue(), dstRGB.getValue(), srcAlpha
+			  .getValue(), dstAlpha.getValue());
+  }
+
+  private native void blendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) /*-{
 		this.blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
   }-*/;
 
-  public native void bufferData(int target, ArrayBuffer dta, int usage) /*-{
-		this.bufferData(target, dta, usage);
+  /**
+   * Set the size of the currently bound WebGLBuffer object for the passed 
+   * target to the size of the passed data, then write the contents of data to 
+   * the buffer object.
+   * 
+   * @param target Specifies the target buffer object.
+   * @param data Specifies a pointer to data that will be copied into the data 
+   * 				store for initialization
+   * @param usage Specifies the expected usage pattern of the data store.
+   */
+  public void bufferData(BufferTarget target, ArrayBuffer data, BufferUsage usage) {
+	  bufferData(target.getValue(), data, usage.getValue());
+  }
+
+  private native void bufferData(int target, ArrayBuffer data, int usage) /*-{
+		this.bufferData(target, data, usage);
   }-*/;
 
-  public native void bufferData(int target, int size, int usage) /*-{
+  /**
+   * Set the size of the currently bound WebGLBuffer object for the passed 
+   * target. The buffer is initialized to 0.
+   * 
+   * @param target Specifies the target buffer object.
+   * @param size Specifies the size in bytes of the buffer object's new data 
+   * 				store.
+   * @param usage Specifies the expected usage pattern of the data store.
+   */
+  public void bufferData(BufferTarget target, int size, BufferUsage usage) {
+	  bufferData(target.getValue(), size, usage.getValue());
+  }
+	
+  private native void bufferData(int target, int size, int usage) /*-{
 		this.bufferData(target, size, usage);
   }-*/;
 
-  public native void bufferData(int target, TypeArray dta, int usage) /*-{
-		this.bufferData(target, dta, usage);
+  /**
+   * Set the size of the currently bound WebGLBuffer object for the passed 
+   * target to the size of the passed data, then write the contents of data to 
+   * the buffer object.
+   * 
+   * @param target Specifies the target buffer object.
+   * @param data Specifies a pointer to data that will be copied into the data 
+   * 				store for initialization
+   * @param usage Specifies the expected usage pattern of the data store.
+   */
+  public void bufferData(BufferTarget target, TypeArray data, BufferUsage usage) {
+	  bufferData(target.getValue(), data, usage.getValue());
+  }
+
+  private native void bufferData(int target, TypeArray data, int usage) /*-{
+		this.bufferData(target, data, usage);
   }-*/;
 
   public native void bufferSubData(int target, int offset, ArrayBuffer data) /*-{
