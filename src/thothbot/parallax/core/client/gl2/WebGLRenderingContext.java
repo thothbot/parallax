@@ -31,16 +31,21 @@ import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
+import thothbot.parallax.core.client.gl2.enums.BufferParameterName;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
 import thothbot.parallax.core.client.gl2.enums.DepthFunction;
 import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
+import thothbot.parallax.core.client.gl2.enums.ErrorCode;
 import thothbot.parallax.core.client.gl2.enums.FramebufferErrorCode;
+import thothbot.parallax.core.client.gl2.enums.FramebufferParameterName;
 import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
+import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelInternalFormat;
+import thothbot.parallax.core.client.gl2.enums.ProgramParameter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 
@@ -785,18 +790,51 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.framebufferTexture2D(target, att, textarget, tex, level);
   }-*/;
 
-  public native void frontFace(int mode) /*-{
+  /**
+   * Define front- and back-facing polygons.
+   * 
+   * @param mode
+   */
+  public void frontFace(FrontFaceDirection mode) {
+	  frontFace(mode.getValue());
+  }
+
+  private native void frontFace(int mode) /*-{
 		this.frontFace(mode);
   }-*/;
 
-  public native void generateMipmap(int target) /*-{
+  /**
+   * If an attempt is made to call this function with no WebGLTexture bound, 
+   * an INVALID_OPERATION error is raised.
+   * 
+   * @param target
+   */
+  public void generateMipmap(TextureTarget target) {
+	  generateMipmap(target.getValue());
+  }
+
+  private native void generateMipmap(int target) /*-{
 		this.generateMipmap(target);
   }-*/;
 
+  /**
+   * Returns information about the size, type and name of the vertex attribute 
+   * at the passed index of the passed program object.
+   * 
+   * @param program
+   * @param index
+   */
   public native WebGLActiveInfo getActiveAttrib(WebGLProgram program, int index) /*-{
 		return this.getActiveAttrib(program, index);
   }-*/;
 
+  /**
+   * Returns information about the size, type and name of the uniform at the 
+   * passed index of the passed program object.
+   * 
+   * @param program
+   * @param index
+   */
   public native WebGLActiveInfo getActiveUniform(WebGLProgram program, int idx) /*-{
 		return this.getActiveUniform(program, idx);
   }-*/;
@@ -809,54 +847,119 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * @see "http://www.khronos.org/opengles/sdk/docs/man/glGetAttachedShaders.xml"
    */
   public WebGLShader[] getAttachedShaders(WebGLProgram program) {
-    // TODO implement this in the generator
-    try {
-      if (GWT.isProdMode()) {
-        return getAttachedShadersProd(program);
-      }
-      JsArray<WebGLShader> shaders = getAttachedShadersDev(program);
+	  // TODO implement this in the generator
+	  try {
+		  if (GWT.isProdMode()) {
+			  return getAttachedShadersProd(program);
+		  }
+		  JsArray<WebGLShader> shaders = getAttachedShadersDev(program);
 
-      WebGLShader[] result = new WebGLShader[shaders.length()];
-      for (int i = 0; i < shaders.length(); i++) {
-        result[i] = shaders.get(i);
-      }
-      return result;
-    } catch (Exception e) {
-      return new WebGLShader[0];
-    }
+		  WebGLShader[] result = new WebGLShader[shaders.length()];
+		  for (int i = 0; i < shaders.length(); i++) {
+			  result[i] = shaders.get(i);
+		  }
+		  return result;
+	  } catch (Exception e) {
+		  return new WebGLShader[0];
+	  }
   }
 
+  /**
+   * Returns the location of an attribute variable.
+   * 
+   * @param program Specifies the program object to be queried.
+   * @param name Points to string containing the name of the attribute variable 
+   * 				whose location is to be queried.
+   */
   public native int getAttribLocation(WebGLProgram program, String name) /*-{
 		return this.getAttribLocation(program, name);
   }-*/;
+  
+  /**
+   * Return parameters of a buffer object
+   * 
+   * @param target Specifies the target buffer object.
+   * @param pname Specifies the symbolic name of a buffer object parameter.
+   * @return the value for the passed pname. The type returned is the natural 
+   * 				type for the requested pname.
+   */
+  public int getBufferParameteri(BufferTarget target, BufferParameterName pname) {
+	  return getBufferParameteri(target.getValue(), pname.getValue());
+  }
 
-  public native int getBufferParameteri(int target, int pname) /*-{
+  private native int getBufferParameteri(int target, int pname) /*-{
 		return this.getBufferParameter(target, pname);
   }-*/;
 
-  public native int getError() /*-{
+  /**
+   * Return error information.
+   */
+  public ErrorCode getError() {
+	  return ErrorCode.parseErrorCode(getErrorImpl());
+  }
+
+  private native int getErrorImpl() /*-{
 		return this.getError();
   }-*/;
 
+  /**
+   * Returns an object if the passed extension is supported, or null if not. 
+   * The object returned from getExtension contains any constants or 
+   * functions used by the extension, if any. A returned object may have no 
+   * constants or functions if the extension does not define any, but a unique 
+   * object must still be returned. That object is used to indicate that the 
+   * extension has been enabled.
+   */
   public native JavaScriptObject getExtension(String name) /*-{
 		return this.getExtension(name);
   }-*/;
 
-  public native int getExtensioni(String name) /*-{
-		return this.getExtension(name);
-  }-*/;
+  /**
+   * Return the value for the passed pname given the passed target and 
+   * attachment.
+   * 
+   * @param attachment Specifies the symbolic name of a framebuffer object 
+   * 				attachment point.
+   * @param pname Specifies the symbolic name of a framebuffer object 
+   * 				attachment parameter.
+   */
+  public JavaScriptObject getFramebufferAttachmentParameter(FramebufferSlot attachment, 
+		  FramebufferParameterName pname) {
+	  return getFramebufferAttachmentParameter(GLEnum.FRAMEBUFFER.getValue(),
+			  attachment.getValue(), pname.getValue());
+  }
 
-  public native JavaScriptObject getFramebufferAttachmentParameter(int target, int attachment,
+  private native JavaScriptObject getFramebufferAttachmentParameter(int target, int attachment,
       int pname) /*-{
 		return this
 				.getFramebufferAttachmentParameter(target, attachment, pname);
   }-*/;
 
-  public native int getFramebufferAttachmentParameteri(int target, int attachment, int pname) /*-{
+  /**
+   * Return the value for the passed pname given the passed target and 
+   * attachment.
+   * 
+   * @param attachment Specifies the symbolic name of a framebuffer object 
+   * 				attachment point.
+   * @param pname Specifies the symbolic name of a framebuffer object 
+   * 				attachment parameter.
+   */
+  public int getFramebufferAttachmentParameteri(
+		  FramebufferSlot attachment, FramebufferParameterName pname) {
+	  return getFramebufferAttachmentParameteri(GLEnum.FRAMEBUFFER.getValue(),
+			  attachment.getValue(), pname.getValue());
+  }
+
+  private native int getFramebufferAttachmentParameteri(int target, int attachment, int pname) /*-{
 		return this
 				.getFramebufferAttachmentParameter(target, attachment, pname);
   }-*/;
 
+  /**
+   * Return the value or values of a selected parameter.
+   * 
+   * @param pname
+   */
   public native <T extends JavaScriptObject> T getParameter(int pname) /*-{
 		return this.getParameter(pname);
   }-*/;
@@ -873,15 +976,42 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		return this.getParameter(pname);
   }-*/;
 
+  /**
+   * Returns the information log for a program object.
+   * 
+   * @param program Specifies the program object whose information log is to 
+   * 				be queried.
+   */
   public native String getProgramInfoLog(WebGLProgram program) /*-{
 		return this.getProgramInfoLog(program);
   }-*/;
+  
+  /**
+   * Return the value for the passed pname given the passed program.
+   * 
+   * @param program Specifies the program object to be queried.
+   * @param pname Specifies the object parameter.
+   */
+  public boolean getProgramParameterb(WebGLProgram program,
+		  ProgramParameter pname) {
+	  return getProgramParameterb(program, pname.getValue());
+  }
 
-  public native boolean getProgramParameterb(WebGLProgram program, int pname) /*-{
+  private native boolean getProgramParameterb(WebGLProgram program, int pname) /*-{
 		return this.getProgramParameter(program, pname);
   }-*/;
 
-  public native int getProgramParameteri(WebGLProgram program, int pname) /*-{
+  /**
+   * @see #getProgramParameterb(WebGLProgram, ProgramParameter)
+   * 
+   * @param program
+   * @param pname
+   */
+  public int getProgramParameteri(WebGLProgram program, ProgramParameter pname) {
+	  return getProgramParameteri(program, pname.getValue());
+  }
+
+  private native int getProgramParameteri(WebGLProgram program, int pname) /*-{
 		return this.getProgramParameter(program, pname);
   }-*/;
 

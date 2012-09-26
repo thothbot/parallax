@@ -30,6 +30,7 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLShader;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.ProgramParameter;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Mathematics;
@@ -212,7 +213,7 @@ public abstract class Shader
 
 		gl.linkProgram(this.program);
 
-		if (!gl.getProgramParameterb(this.program, GLEnum.LINK_STATUS.getValue()))
+		if (!gl.getProgramParameterb(this.program, ProgramParameter.LINK_STATUS))
 			Log.error("Could not initialise shader\n"
 					+ "GL error: " + gl.getProgramInfoLog(program)
 					+ "Shader: " + this.getClass().getName()

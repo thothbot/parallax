@@ -105,7 +105,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		}
 
 		if ( isTargetPowerOfTwo ) 
-			gl.generateMipmap( GLEnum.TEXTURE_CUBE_MAP.getValue() );
+			gl.generateMipmap( TextureTarget.TEXTURE_CUBE_MAP );
 
 		// Release everything
 		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, null );
@@ -123,7 +123,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl) 
 	{	
 		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, this.getWebGlTexture() );
-		gl.generateMipmap( GLEnum.TEXTURE_CUBE_MAP.getValue() );
+		gl.generateMipmap( TextureTarget.TEXTURE_CUBE_MAP );
 		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, null );
 	}
 }

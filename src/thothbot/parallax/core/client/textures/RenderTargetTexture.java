@@ -168,7 +168,7 @@ public class RenderTargetTexture extends Texture
 		setupRenderBuffer(gl, this.webglRenderbuffer);
 
 		if (isTargetPowerOfTwo)
-			gl.generateMipmap(GLEnum.TEXTURE_2D.getValue());
+			gl.generateMipmap(TextureTarget.TEXTURE_2D);
 
 		// Release everything
 		gl.bindTexture(TextureTarget.TEXTURE_2D, null);
@@ -179,7 +179,7 @@ public class RenderTargetTexture extends Texture
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl)
 	{	
 		gl.bindTexture(TextureTarget.TEXTURE_2D, this.getWebGlTexture());
-		gl.generateMipmap(GLEnum.TEXTURE_2D.getValue());
+		gl.generateMipmap(TextureTarget.TEXTURE_2D);
 		gl.bindTexture(TextureTarget.TEXTURE_2D, null);
 	}
 

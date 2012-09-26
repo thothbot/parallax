@@ -19,6 +19,9 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum ErrorCode 
 {
 	NO_ERROR(GLEnum.NO_ERROR),
@@ -27,6 +30,7 @@ public enum ErrorCode
 	INVALID_OPERATION(GLEnum.INVALID_OPERATION),
 	OUT_OF_MEMORY(GLEnum.OUT_OF_MEMORY);
 
+	private static Map<Integer, ErrorCode> errorCodeMap;
 	private final int value;
 
 	private ErrorCode(GLEnum glEnum) {
@@ -38,5 +42,20 @@ public enum ErrorCode
 	 */
 	public int getValue() {
 		return value;
+	}
+
+	/**
+	 * Parses an integer error code to its corresponding ErrorCode enum.
+	 * 
+	 * @param errorCode
+	 */
+	public static ErrorCode parseErrorCode(int errorCode) {
+		if (errorCodeMap == null) {
+			errorCodeMap = new HashMap<Integer, ErrorCode>();
+			for (ErrorCode v : values()) {
+				errorCodeMap.put(v.getValue(), v);
+			}
+		}
+		return errorCodeMap.get(errorCode);
 	}
 }

@@ -44,6 +44,7 @@ import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
 import thothbot.parallax.core.client.gl2.enums.DepthFunction;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
+import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
@@ -539,7 +540,7 @@ public class WebGLRenderer
 		getGL().enable( EnableCap.DEPTH_TEST );
 		getGL().depthFunc( DepthFunction.LEQUAL );
 
-		getGL().frontFace( GLEnum.CCW.getValue() );
+		getGL().frontFace( FrontFaceDirection.CCW );
 		getGL().cullFace( CullFaceMode.BACK );
 		getGL().enable( EnableCap.CULL_FACE );
 
@@ -2569,9 +2570,9 @@ public class WebGLRenderer
 	private void setFaceCulling(String cullFace, String frontFace) 
 	{
 		if ( frontFace == null || frontFace.equals("ccw") )
-			getGL().frontFace( GLEnum.CCW.getValue() );
+			getGL().frontFace( FrontFaceDirection.CCW );
 		else
-			getGL().frontFace( GLEnum.CW.getValue() );
+			getGL().frontFace( FrontFaceDirection.CW );
 
 		if( cullFace.equals("back") )
 			getGL().cullFace( CullFaceMode.BACK );
@@ -2595,9 +2596,9 @@ public class WebGLRenderer
 				getGL().enable( EnableCap.CULL_FACE );
 
 			if ( material.getSides() == Material.SIDE.BACK ) 
-				getGL().frontFace( GLEnum.CW.getValue() );
+				getGL().frontFace( FrontFaceDirection.CW );
 			else
-				getGL().frontFace( GLEnum.CCW.getValue() );
+				getGL().frontFace( FrontFaceDirection.CCW );
 
 			this.cache_oldMaterialSided = material.getSides();
 		}
@@ -2774,7 +2775,7 @@ public class WebGLRenderer
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo ) 
-				getGL().generateMipmap( GLEnum.TEXTURE_2D.getValue() );
+				getGL().generateMipmap( TextureTarget.TEXTURE_2D );
 
 			texture.setNeedsUpdate(false);
 		} 
@@ -2857,7 +2858,7 @@ public class WebGLRenderer
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )	
-				getGL().generateMipmap( GLEnum.TEXTURE_CUBE_MAP.getValue() );
+				getGL().generateMipmap( TextureTarget.TEXTURE_CUBE_MAP );
 
 			texture.setNeedsUpdate(false);
 		} 
