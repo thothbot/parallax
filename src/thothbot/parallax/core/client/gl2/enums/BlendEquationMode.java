@@ -25,23 +25,20 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum BlendEquationMode 
+public enum BlendEquationMode implements GLConstants
 {
-	FUNC_ADD(GLEnum.FUNC_ADD),
-	FUNC_REVERSE_SUBTRACT(GLEnum.FUNC_REVERSE_SUBTRACT),
-	FUNC_SUBTRACT(GLEnum.FUNC_SUBTRACT);
+	FUNC_ADD(GLConstants.FUNC_ADD),
+	FUNC_REVERSE_SUBTRACT(GLConstants.FUNC_REVERSE_SUBTRACT),
+	FUNC_SUBTRACT(GLConstants.FUNC_SUBTRACT);
 
 	private final int value;
 
-	private BlendEquationMode(GLEnum GLEnum) 
-	{
-		this.value = GLEnum.getValue();
+	private BlendEquationMode(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	public int getValue() 
-	{
+
+	@Override
+	public int getValue() {
 		return value;
 	}
 }

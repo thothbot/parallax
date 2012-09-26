@@ -19,21 +19,19 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum BufferUsage 
+public enum BufferUsage implements GLConstants
 {
-	STREAM_DRAW(GLEnum.STREAM_DRAW),
-	STATIC_DRAW(GLEnum.STATIC_DRAW),
-	DYNAMIC_DRAW(GLEnum.DYNAMIC_DRAW);
+	STREAM_DRAW(GLConstants.STREAM_DRAW),
+	STATIC_DRAW(GLConstants.STATIC_DRAW),
+	DYNAMIC_DRAW(GLConstants.DYNAMIC_DRAW);
 
 	private final int value;
 
-	private BufferUsage(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private BufferUsage(int value) {
+		this.value = value;
 	}
-	
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

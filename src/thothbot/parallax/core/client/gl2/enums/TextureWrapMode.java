@@ -27,34 +27,30 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum TextureWrapMode 
+public enum TextureWrapMode implements GLConstants
 {
 	/**
 	 *  This causes the integer part of the s coordinate to be ignored; 
 	 *  the GL uses only the fractional part, thereby creating a 
 	 *  repeating pattern. 
 	 */
-	REPEAT(GLEnum.REPEAT),
+	REPEAT(GLConstants.REPEAT),
 	/**
 	 * This causes s or t coordinates to be clamped to the range [0, 1] 
 	 * and is useful for preventing wrapping artifacts when mapping a 
 	 * single image onto an object.
 	 */
-	CLAMP_TO_EDGE(GLEnum.CLAMP_TO_EDGE),
-	MIRRORED_REPEAT(GLEnum.MIRRORED_REPEAT);
+	CLAMP_TO_EDGE(GLConstants.CLAMP_TO_EDGE),
+	MIRRORED_REPEAT(GLConstants.MIRRORED_REPEAT);
 
 	private final int value;
 
-	private TextureWrapMode(GLEnum GLEnum) 
-	{
-		this.value = GLEnum.getValue();
+	private TextureWrapMode(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	public int getValue() 
-	{
+	@Override
+	public int getValue() {
 		return value;
 	}
 }

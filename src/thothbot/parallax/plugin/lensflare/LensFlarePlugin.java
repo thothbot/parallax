@@ -35,7 +35,7 @@ import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
-import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
@@ -125,19 +125,19 @@ public final class LensFlarePlugin extends Plugin
 
 		gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.tempTexture );
 		gl.texImage2D( TextureTarget.TEXTURE_2D, 0, 16, 16, 0, PixelFormat.RGB, PixelType.UNSIGNED_BYTE, null );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_S, GLEnum.CLAMP_TO_EDGE.getValue() );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_T, GLEnum.CLAMP_TO_EDGE.getValue() );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MAG_FILTER, GLEnum.NEAREST.getValue() );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MIN_FILTER, GLEnum.NEAREST.getValue() );
+		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_S, GLConstants.CLAMP_TO_EDGE );
+		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_T, GLConstants.CLAMP_TO_EDGE );
+		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MAG_FILTER, GLConstants.NEAREST );
+		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MIN_FILTER, GLConstants.NEAREST );
 
 		gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.occlusionTexture );
 		gl.texImage2D( TextureTarget.TEXTURE_2D, 0, 16, 16, 0, PixelFormat.RGBA, PixelType.UNSIGNED_BYTE, null );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_S, GLEnum.CLAMP_TO_EDGE.getValue() );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_T, GLEnum.CLAMP_TO_EDGE.getValue() );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MAG_FILTER, GLEnum.NEAREST.getValue() );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MIN_FILTER, GLEnum.NEAREST.getValue() );
+		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_S, GLConstants.CLAMP_TO_EDGE );
+		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_T, GLConstants.CLAMP_TO_EDGE );
+		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MAG_FILTER, GLConstants.NEAREST );
+		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MIN_FILTER, GLConstants.NEAREST );
 
-		if ( gl.getParameteri( GLEnum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue() ) <= 0 ) 
+		if ( gl.getParameteri( GLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS ) <= 0 ) 
 		{
 			lensFlare.hasVertexTexture = false;
 			lensFlare.shader = new LensFlareShader();

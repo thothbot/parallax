@@ -22,24 +22,22 @@ package thothbot.parallax.core.client.gl2.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ErrorCode 
+public enum ErrorCode implements GLConstants
 {
-	NO_ERROR(GLEnum.NO_ERROR),
-	INVALID_ENUM(GLEnum.INVALID_ENUM),
-	INVALID_VALUE(GLEnum.INVALID_VALUE),
-	INVALID_OPERATION(GLEnum.INVALID_OPERATION),
-	OUT_OF_MEMORY(GLEnum.OUT_OF_MEMORY);
+	NO_ERROR(GLConstants.NO_ERROR),
+	INVALID_ENUM(GLConstants.INVALID_ENUM),
+	INVALID_VALUE(GLConstants.INVALID_VALUE),
+	INVALID_OPERATION(GLConstants.INVALID_OPERATION),
+	OUT_OF_MEMORY(GLConstants.OUT_OF_MEMORY);
 
 	private static Map<Integer, ErrorCode> errorCodeMap;
 	private final int value;
 
-	private ErrorCode(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private ErrorCode(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}

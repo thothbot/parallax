@@ -19,26 +19,24 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum StencilOp 
+public enum StencilOp implements GLConstants
 {
-	ZERO(GLEnum.ZERO),
-	KEEP(GLEnum.KEEP),
-	REPLACE(GLEnum.REPLACE),
-	INCR(GLEnum.INCR),
-	DECR(GLEnum.DECR),
-	INVERT(GLEnum.INVERT),
-	INCR_WRAP(GLEnum.INCR_WRAP),
-	DECR_WRAP(GLEnum.DECR_WRAP);
+	ZERO(GLConstants.ZERO),
+	KEEP(GLConstants.KEEP),
+	REPLACE(GLConstants.REPLACE),
+	INCR(GLConstants.INCR),
+	DECR(GLConstants.DECR),
+	INVERT(GLConstants.INVERT),
+	INCR_WRAP(GLConstants.INCR_WRAP),
+	DECR_WRAP(GLConstants.DECR_WRAP);
 
 	private final int value;
 
-	private StencilOp(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private StencilOp(int value) {
+		this.value = value;
 	}
-	
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

@@ -19,20 +19,18 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum HintTarget 
+public enum HintTarget implements GLConstants
 {
-	GENERATE_MIPMAP_HINT(GLEnum.GENERATE_MIPMAP_HINT);
+	GENERATE_MIPMAP_HINT(GLConstants.GENERATE_MIPMAP_HINT);
 
 	private final int value;
 
-	private HintTarget(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private HintTarget(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}
-
 }

@@ -26,37 +26,28 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum TextureMagFilter 
+public enum TextureMagFilter implements GLConstants
 {
 	/**
 	 * Returns the value of the texture element that is nearest 
 	 * (in Manhattan distance) to the center of the pixel being textured.
 	 */
-	NEAREST(GLEnum.NEAREST),
+	NEAREST(GLConstants.NEAREST),
 	
 	/**
 	 * Returns the weighted average of the four texture elements that 
 	 * are closest to the center of the pixel being textured.
 	 */
-	LINEAR(GLEnum.LINEAR);
+	LINEAR(GLConstants.LINEAR);
 
-	private final GLEnum value;
+	private final int value;
 
-	private TextureMagFilter(GLEnum GLEnum) 
-	{
-		this.value = GLEnum;
-	}
-	
-	public GLEnum getEnum()
-	{
-		return this.value;
+	private TextureMagFilter(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	public int getValue() 
-	{
-		return value.getValue();
+	@Override
+	public int getValue() {
+		return value;
 	}
 }

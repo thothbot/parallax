@@ -22,24 +22,22 @@ package thothbot.parallax.core.client.gl2.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum FramebufferErrorCode 
+public enum FramebufferErrorCode implements GLConstants
 {
-	FRAMEBUFFER_COMPLETE(GLEnum.FRAMEBUFFER_COMPLETE),
-	FRAMEBUFFER_INCOMPLETE_ATTACHMENT(GLEnum.FRAMEBUFFER_INCOMPLETE_ATTACHMENT),
-	FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT(GLEnum.FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT),
-	FRAMEBUFFER_INCOMPLETE_DIMENSIONS(GLEnum.FRAMEBUFFER_INCOMPLETE_DIMENSIONS),
-	FRAMEBUFFER_UNSUPPORTED(GLEnum.FRAMEBUFFER_UNSUPPORTED);
+	FRAMEBUFFER_COMPLETE(GLConstants.FRAMEBUFFER_COMPLETE),
+	FRAMEBUFFER_INCOMPLETE_ATTACHMENT(GLConstants.FRAMEBUFFER_INCOMPLETE_ATTACHMENT),
+	FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT(GLConstants.FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT),
+	FRAMEBUFFER_INCOMPLETE_DIMENSIONS(GLConstants.FRAMEBUFFER_INCOMPLETE_DIMENSIONS),
+	FRAMEBUFFER_UNSUPPORTED(GLConstants.FRAMEBUFFER_UNSUPPORTED);
 
 	private static Map<Integer, FramebufferErrorCode> errorCodeMap;
 	private final int value;
 
-	private FramebufferErrorCode(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private FramebufferErrorCode(int value) {
+		this.value = value;
 	}
-	
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

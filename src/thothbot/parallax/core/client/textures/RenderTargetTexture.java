@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
-import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.RenderbufferInternalFormat;
@@ -203,11 +203,11 @@ public class RenderTargetTexture extends Texture
 			 * For some reason this is not working. Defaulting to RGBA4. } else
 			 * if( ! this.depthBuffer && this.stencilBuffer ) {
 			 * 
-			 * _gl.renderbufferStorage( GLEnum.RENDERBUFFER,
-			 * GLEnum.STENCIL_INDEX8, this.width, this.height );
-			 * _gl.framebufferRenderbuffer( GLEnum.FRAMEBUFFER,
-			 * GLEnum.STENCIL_ATTACHMENT,
-			 * GLEnum.RENDERBUFFER, renderbuffer );
+			 * _gl.renderbufferStorage( GLConstants.RENDERBUFFER,
+			 * GLConstants.STENCIL_INDEX8, this.width, this.height );
+			 * _gl.framebufferRenderbuffer( GLConstants.FRAMEBUFFER,
+			 * GLConstants.STENCIL_ATTACHMENT,
+			 * GLConstants.RENDERBUFFER, renderbuffer );
 			 */
 		} 
 		else if (this.isDepthBuffer && this.isStencilBuffer) 

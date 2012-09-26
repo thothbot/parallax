@@ -25,27 +25,23 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum PixelFormat 
+public enum PixelFormat implements GLConstants
 {
-	DEPTH_COMPONENT(GLEnum.DEPTH_COMPONENT),
-	ALPHA(GLEnum.ALPHA),
-	RGB(GLEnum.RGB),
-	RGBA(GLEnum.RGBA),
-	LUMINANCE(GLEnum.LUMINANCE),
-	LUMINANCE_ALPHA(GLEnum.LUMINANCE_ALPHA);
+	DEPTH_COMPONENT(GLConstants.DEPTH_COMPONENT),
+	ALPHA(GLConstants.ALPHA),
+	RGB(GLConstants.RGB),
+	RGBA(GLConstants.RGBA),
+	LUMINANCE(GLConstants.LUMINANCE),
+	LUMINANCE_ALPHA(GLConstants.LUMINANCE_ALPHA);
 
 	private final int value;
 
-	private PixelFormat(GLEnum GLEnum) 
-	{
-		this.value = GLEnum.getValue();
+	private PixelFormat(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	public int getValue() 
-	{
+	@Override
+	public int getValue() {
 		return value;
 	}
 }

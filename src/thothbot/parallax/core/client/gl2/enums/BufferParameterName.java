@@ -19,28 +19,25 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum BufferParameterName 
+public enum BufferParameterName implements GLConstants
 {
 	/** 
 	 * Returns int 
 	 * /
-	BUFFER_SIZE(GLEnum.BUFFER_SIZE),
+	BUFFER_SIZE(GLConstants.BUFFER_SIZE),
 	/** 
 	 * Returns int 
 	 */
-	BUFFER_USAGE(GLEnum.BUFFER_USAGE);
+	BUFFER_USAGE(GLConstants.BUFFER_USAGE);
 
 	private final int value;
 
-	private BufferParameterName(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private BufferParameterName(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}
-
 }

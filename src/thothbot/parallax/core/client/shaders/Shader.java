@@ -29,7 +29,7 @@ import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLShader;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.ProgramParameter;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
@@ -246,15 +246,15 @@ public abstract class Shader
 		WebGLShader shader = null;
 
 		if (type == ChunksFragmentShader.class)
-			shader = gl.createShader(GLEnum.FRAGMENT_SHADER.getValue());
+			shader = gl.createShader(GLConstants.FRAGMENT_SHADER);
 
 		else if (type == ChunksVertexShader.class)
-			shader = gl.createShader(GLEnum.VERTEX_SHADER.getValue());
+			shader = gl.createShader(GLConstants.VERTEX_SHADER);
 
 		gl.shaderSource(shader, string);
 		gl.compileShader(shader);
 
-		if (!gl.getShaderParameterb(shader, GLEnum.COMPILE_STATUS.getValue())) 
+		if (!gl.getShaderParameterb(shader, GLConstants.COMPILE_STATUS)) 
 		{
 			Log.error(gl.getShaderInfoLog(shader));
 			return null;

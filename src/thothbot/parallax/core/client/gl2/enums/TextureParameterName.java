@@ -25,12 +25,12 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum TextureParameterName 
+public enum TextureParameterName implements GLConstants
 {
-	TEXTURE_MAG_FILTER(GLEnum.TEXTURE_MAG_FILTER),
-	TEXTURE_MIN_FILTER(GLEnum.TEXTURE_MIN_FILTER),
-	TEXTURE_WRAP_S(GLEnum.TEXTURE_WRAP_S),
-	TEXTURE_WRAP_T(GLEnum.TEXTURE_WRAP_T),
+	TEXTURE_MAG_FILTER(GLConstants.TEXTURE_MAG_FILTER),
+	TEXTURE_MIN_FILTER(GLConstants.TEXTURE_MIN_FILTER),
+	TEXTURE_WRAP_S(GLConstants.TEXTURE_WRAP_S),
+	TEXTURE_WRAP_T(GLConstants.TEXTURE_WRAP_T),
 	
 	TEXTURE_MAX_ANISOTROPY_EXT(EXT_TextureFilterAnisotropic.TEXTURE_MAX_ANISOTROPY_EXT),
 	MAX_TEXTURE_MAX_ANISOTROPY_EXT(EXT_TextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
@@ -42,16 +42,12 @@ public enum TextureParameterName
 		this.value = GLEnum.getValue();
 	}
 	
-	private TextureParameterName(GLEnum GLEnum) 
-	{
-		this.value = GLEnum.getValue();
+	private TextureParameterName(int value) {
+		this.value = value;
 	}
-	
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	public int getValue() 
-	{
+
+	@Override
+	public int getValue() {
 		return value;
 	}
 }

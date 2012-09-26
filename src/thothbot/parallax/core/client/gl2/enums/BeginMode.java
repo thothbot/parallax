@@ -26,37 +26,37 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum BeginMode 
+public enum BeginMode implements GLConstants
 {
 	/**
 	 * Treats each vertex as a single point. Vertex n defines point n. N points are drawn.
 	 */
-	POINTS(GLEnum.POINTS),
+	POINTS(GLConstants.POINTS),
 	
 	/**
 	 * Treats each pair of vertices as an independent line segment. 
 	 * Vertices 2n - 1  and 2n  define line n. N/2 lines are drawn.	
 	 */
-	LINES(GLEnum.LINES),
+	LINES(GLConstants.LINES),
 	
 	/**
 	 * Draws a connected group of line segments from the first vertex to 
 	 * the last, then back to the first. Vertices n and n + 1  define line n. 
 	 * The last line, however, is defined by vertices N and 1 . N lines are drawn.
 	 */
-	LINE_LOOP(GLEnum.LINE_LOOP),
+	LINE_LOOP(GLConstants.LINE_LOOP),
 	
 	/**
 	 * Draws a connected group of line segments from the first vertex to the last. 
 	 * Vertices n and n + 1  define line n. N - 1  lines are drawn.
 	 */
-	LINE_STRIP(GLEnum.LINE_STRIP),
+	LINE_STRIP(GLConstants.LINE_STRIP),
 	
 	/**
 	 * Treats each triplet of vertices as an independent triangle. Vertices 3 n - 2, 
 	 * 3 n - 1, and 3 n  define triangle n. N/3 triangles are drawn.
 	 */
-	TRIANGLES(GLEnum.TRIANGLES),
+	TRIANGLES(GLConstants.TRIANGLES),
 	
 	/**
 	 * Draws a connected group of triangles. One triangle is defined for each 
@@ -64,23 +64,22 @@ public enum BeginMode
 	 * n + 1 , and n + 2  define triangle n. For even n, vertices n + 1 , n, 
 	 * and n + 2  define triangle n. N - 2 triangles are drawn.
 	 */
-	TRIANGLE_STRIP(GLEnum.TRIANGLE_STRIP),
+	TRIANGLE_STRIP(GLConstants.TRIANGLE_STRIP),
 	
 	/**
 	 * Draws a connected group of triangles. One triangle is defined for 
 	 * each vertex presented after the first two vertices. Vertices 1, 
 	 * n + 1 , and n + 2  define triangle n. N - 2  triangles are drawn.
 	 */
-	TRIANGLE_FAN(GLEnum.TRIANGLE_FAN);
+	TRIANGLE_FAN(GLConstants.TRIANGLE_FAN);
 
 	private final int value;
 
-	private BeginMode(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private BeginMode(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

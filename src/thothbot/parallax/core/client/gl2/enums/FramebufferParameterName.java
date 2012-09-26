@@ -19,21 +19,20 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum FramebufferParameterName 
+public enum FramebufferParameterName implements GLConstants
 {
-	FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE(GLEnum.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE),
-	FRAMEBUFFER_ATTACHMENT_OBJECT_NAME(GLEnum.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME),
-	FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL(GLEnum.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL),
-	FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE(GLEnum.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE);
+	FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE(GLConstants.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE),
+	FRAMEBUFFER_ATTACHMENT_OBJECT_NAME(GLConstants.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME),
+	FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL(GLConstants.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL),
+	FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE(GLConstants.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE);
 
 	private final int value;
 
-	private FramebufferParameterName(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private FramebufferParameterName(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

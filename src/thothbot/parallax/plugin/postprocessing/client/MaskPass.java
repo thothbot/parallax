@@ -23,7 +23,7 @@
 package thothbot.parallax.plugin.postprocessing.client;
 
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
-import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
 import thothbot.parallax.core.client.gl2.enums.StencilOp;
 import thothbot.parallax.core.shared.cameras.Camera;

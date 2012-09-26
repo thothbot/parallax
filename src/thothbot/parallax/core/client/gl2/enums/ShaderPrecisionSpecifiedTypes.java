@@ -19,24 +19,22 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum ShaderPrecisionSpecifiedTypes 
+public enum ShaderPrecisionSpecifiedTypes implements GLConstants
 {
-	LOW_FLOAT(GLEnum.LOW_FLOAT),
-	MEDIUM_FLOAT(GLEnum.MEDIUM_FLOAT),
-	HIGH_FLOAT(GLEnum.HIGH_FLOAT),
-	LOW_INT(GLEnum.LOW_INT),
-	MEDIUM_INT(GLEnum.MEDIUM_INT),
-	HIGH_INT(GLEnum.HIGH_INT);
+	LOW_FLOAT(GLConstants.LOW_FLOAT),
+	MEDIUM_FLOAT(GLConstants.MEDIUM_FLOAT),
+	HIGH_FLOAT(GLConstants.HIGH_FLOAT),
+	LOW_INT(GLConstants.LOW_INT),
+	MEDIUM_INT(GLConstants.MEDIUM_INT),
+	HIGH_INT(GLConstants.HIGH_INT);
 
 	private final int value;
 
-	private ShaderPrecisionSpecifiedTypes(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private ShaderPrecisionSpecifiedTypes(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}

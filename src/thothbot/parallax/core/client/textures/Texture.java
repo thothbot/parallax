@@ -25,7 +25,7 @@ package thothbot.parallax.core.client.textures;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.enums.DataType;
-import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.GLConstants;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
@@ -465,10 +465,10 @@ public class Texture
 		} 
 		else 
 		{
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_S, GLEnum.CLAMP_TO_EDGE.getValue() );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_T, GLEnum.CLAMP_TO_EDGE.getValue() );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MAG_FILTER, filterFallback( this.magFilter.getEnum() ) );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MIN_FILTER, filterFallback( this.minFilter.getEnum() ) );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_S, GLConstants.CLAMP_TO_EDGE );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_T, GLConstants.CLAMP_TO_EDGE );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MAG_FILTER, filterFallback( this.magFilter.getValue() ) );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MIN_FILTER, filterFallback( this.minFilter.getValue() ) );
 		}
 		
 		if ( maxAnisotropy > 0 ) 
@@ -484,21 +484,12 @@ public class Texture
 	/**
 	 * Fallback filters for non-power-of-2 textures.
 	 */
-	private int filterFallback ( GLEnum f ) 
+	private int filterFallback ( int f ) 
 	{
-		switch ( f ) {
+		if(f == GLConstants.NEAREST || f == GLConstants.NEAREST_MIPMAP_NEAREST || f == GLConstants.NEAREST_MIPMAP_LINEAR)
+			return GLConstants.NEAREST;
 
-		case NEAREST:
-		case NEAREST_MIPMAP_NEAREST:
-		case NEAREST_MIPMAP_LINEAR: 
-			return GLEnum.NEAREST.getValue();
-
-		case LINEAR:
-		case LINEAR_MIPMAP_NEAREST:
-		case LINEAR_MIPMAP_LINEAR:
-		default:
-			return GLEnum.LINEAR.getValue();
-
-		}
+//		if(f == GLConstants.LINEAR || f == GLConstants.LINEAR_MIPMAP_NEAREST || f == GLConstants.LINEAR_MIPMAP_LINEAR)
+			return GLConstants.LINEAR;
 	}
 }

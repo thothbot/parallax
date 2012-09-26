@@ -19,22 +19,20 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum PixelType
+public enum PixelType implements GLConstants
 {
-	UNSIGNED_BYTE(GLEnum.UNSIGNED_BYTE),
-	UNSIGNED_SHORT_4_4_4_4(GLEnum.UNSIGNED_SHORT_4_4_4_4),
-	UNSIGNED_SHORT_5_5_5_1(GLEnum.UNSIGNED_SHORT_5_5_5_1),
-	UNSIGNED_SHORT_5_6_5(GLEnum.UNSIGNED_SHORT_5_6_5);
+	UNSIGNED_BYTE(GLConstants.UNSIGNED_BYTE),
+	UNSIGNED_SHORT_4_4_4_4(GLConstants.UNSIGNED_SHORT_4_4_4_4),
+	UNSIGNED_SHORT_5_5_5_1(GLConstants.UNSIGNED_SHORT_5_5_5_1),
+	UNSIGNED_SHORT_5_6_5(GLConstants.UNSIGNED_SHORT_5_6_5);
 
 	private final int value;
 
-	private PixelType(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private PixelType(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}

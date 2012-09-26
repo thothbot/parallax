@@ -19,62 +19,60 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum ProgramParameter 
+public enum ProgramParameter implements GLConstants
 {
 	/** 
 	 * Returns boolean 
 	 */
-	DELETE_STATUS(GLEnum.DELETE_STATUS),
+	DELETE_STATUS(GLConstants.DELETE_STATUS),
 	
 	/** 
 	 * Returns boolean
 	 */
-	LINK_STATUS(GLEnum.LINK_STATUS),
+	LINK_STATUS(GLConstants.LINK_STATUS),
 	
 	/** 
 	 * Returns boolean 
 	 */
-	VALIDATE_STATUS(GLEnum.VALIDATE_STATUS),
+	VALIDATE_STATUS(GLConstants.VALIDATE_STATUS),
 	
 	/** 
 	 * Returns int 
 	 */
-	INFO_LOG_LENGTH(GLEnum.INFO_LOG_LENGTH),
+	INFO_LOG_LENGTH(GLConstants.INFO_LOG_LENGTH),
 	
 	/** 
 	 * Returns int 
 	 */
-	ATTACHED_SHADERS(GLEnum.ATTACHED_SHADERS),
+	ATTACHED_SHADERS(GLConstants.ATTACHED_SHADERS),
 	
 	/** 
 	 * Returns int 
 	 */
-	ACTIVE_UNIFORMS(GLEnum.ACTIVE_UNIFORMS),
+	ACTIVE_UNIFORMS(GLConstants.ACTIVE_UNIFORMS),
 	
 	/** 
 	 * Returns int 
 	 */
-	ACTIVE_UNIFORM_MAX_LENGTH(GLEnum.ACTIVE_UNIFORM_MAX_LENGTH),
+	ACTIVE_UNIFORM_MAX_LENGTH(GLConstants.ACTIVE_UNIFORM_MAX_LENGTH),
 	
 	/** 
 	 * Returns int 
 	 */
-	ACTIVE_ATTRIBUTES(GLEnum.ACTIVE_ATTRIBUTES),
+	ACTIVE_ATTRIBUTES(GLConstants.ACTIVE_ATTRIBUTES),
 	
 	/** 
 	 * Returns int 
 	 */
-	ACTIVE_ATTRIBUTE_MAX_LENGTH(GLEnum.ACTIVE_ATTRIBUTE_MAX_LENGTH);
+	ACTIVE_ATTRIBUTE_MAX_LENGTH(GLConstants.ACTIVE_ATTRIBUTE_MAX_LENGTH);
 
 	private final int value;
 
-	private ProgramParameter(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private ProgramParameter(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}

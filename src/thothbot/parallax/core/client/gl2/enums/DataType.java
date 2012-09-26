@@ -25,28 +25,24 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum DataType 
+public enum DataType implements GLConstants
 {
-	BYTE(GLEnum.BYTE),
-	UNSIGNED_BYTE(GLEnum.UNSIGNED_BYTE),
-	SHORT(GLEnum.SHORT),
-	UNSIGNED_SHORT(GLEnum.UNSIGNED_SHORT),
-	INT(GLEnum.INT),
-	UNSIGNED_INT(GLEnum.UNSIGNED_INT),
-	FLOAT(GLEnum.FLOAT);
+	BYTE(GLConstants.BYTE),
+	UNSIGNED_BYTE(GLConstants.UNSIGNED_BYTE),
+	SHORT(GLConstants.SHORT),
+	UNSIGNED_SHORT(GLConstants.UNSIGNED_SHORT),
+	INT(GLConstants.INT),
+	UNSIGNED_INT(GLConstants.UNSIGNED_INT),
+	FLOAT(GLConstants.FLOAT);
 
 	private final int value;
 
-	private DataType(GLEnum GLEnum) 
-	{
-		this.value = GLEnum.getValue();
+	private DataType(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	public int getValue() 
-	{
+	@Override
+	public int getValue() {
 		return value;
 	}
 }

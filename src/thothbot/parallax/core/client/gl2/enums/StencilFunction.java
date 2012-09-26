@@ -19,28 +19,25 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum StencilFunction 
+public enum StencilFunction implements GLConstants
 {
-	NEVER(GLEnum.NEVER),
-	LESS(GLEnum.LESS),
-	EQUAL(GLEnum.EQUAL),
-	LEQUAL(GLEnum.LEQUAL),
-	GREATER(GLEnum.GREATER),
-	NOTEQUAL(GLEnum.NOTEQUAL),
-	GEQUAL(GLEnum.GEQUAL),
-	ALWAYS(GLEnum.ALWAYS);
+	NEVER(GLConstants.NEVER),
+	LESS(GLConstants.LESS),
+	EQUAL(GLConstants.EQUAL),
+	LEQUAL(GLConstants.LEQUAL),
+	GREATER(GLConstants.GREATER),
+	NOTEQUAL(GLConstants.NOTEQUAL),
+	GEQUAL(GLConstants.GEQUAL),
+	ALWAYS(GLConstants.ALWAYS);
 
 	private final int value;
 
-	private StencilFunction(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private StencilFunction(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}
-
 }

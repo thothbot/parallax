@@ -19,24 +19,21 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum ShaderSource 
+public enum ShaderSource implements GLConstants
 {
-	COMPILE_STATUS(GLEnum.COMPILE_STATUS),
-	INFO_LOG_LENGTH(GLEnum.INFO_LOG_LENGTH),
-	SHADER_SOURCE_LENGTH(GLEnum.SHADER_SOURCE_LENGTH),
-	SHADER_COMPILER(GLEnum.SHADER_COMPILER);
+	COMPILE_STATUS(GLConstants.COMPILE_STATUS),
+	INFO_LOG_LENGTH(GLConstants.INFO_LOG_LENGTH),
+	SHADER_SOURCE_LENGTH(GLConstants.SHADER_SOURCE_LENGTH),
+	SHADER_COMPILER(GLConstants.SHADER_COMPILER);
 
 	private final int value;
 
-	private ShaderSource(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private ShaderSource(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}
-
 }

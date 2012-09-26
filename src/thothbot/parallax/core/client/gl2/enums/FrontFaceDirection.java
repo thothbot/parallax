@@ -19,19 +19,18 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum FrontFaceDirection 
+public enum FrontFaceDirection implements GLConstants
 {
-	CW(GLEnum.CW),
-	CCW(GLEnum.CCW);
+	CW(GLConstants.CW),
+	CCW(GLConstants.CCW);
 
 	private final int value;
 
-	private FrontFaceDirection(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private FrontFaceDirection(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

@@ -19,20 +19,19 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum ClearBufferMask 
+public enum ClearBufferMask implements GLConstants
 {
-	DEPTH_BUFFER_BIT(GLEnum.DEPTH_BUFFER_BIT),
-	STENCIL_BUFFER_BIT(GLEnum.STENCIL_BUFFER_BIT),
-	COLOR_BUFFER_BIT(GLEnum.COLOR_BUFFER_BIT);
+	DEPTH_BUFFER_BIT(GLConstants.DEPTH_BUFFER_BIT),
+	STENCIL_BUFFER_BIT(GLConstants.STENCIL_BUFFER_BIT),
+	COLOR_BUFFER_BIT(GLConstants.COLOR_BUFFER_BIT);
 
 	private final int value;
 
-	private ClearBufferMask(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private ClearBufferMask(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

@@ -19,24 +19,22 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum RenderbufferInternalFormat 
+public enum RenderbufferInternalFormat implements GLConstants
 {
-	RGBA4(GLEnum.RGBA4),
-	RGB5_A1(GLEnum.RGB5_A1),
-	RGB565(GLEnum.RGB565),
-	DEPTH_COMPONENT16(GLEnum.DEPTH_COMPONENT16),
-	STENCIL_INDEX8(GLEnum.STENCIL_INDEX8),
-	DEPTH_STENCIL(GLEnum.DEPTH_STENCIL);
+	RGBA4(GLConstants.RGBA4),
+	RGB5_A1(GLConstants.RGB5_A1),
+	RGB565(GLConstants.RGB565),
+	DEPTH_COMPONENT16(GLConstants.DEPTH_COMPONENT16),
+	STENCIL_INDEX8(GLConstants.STENCIL_INDEX8),
+	DEPTH_STENCIL(GLConstants.DEPTH_STENCIL);
 
 	private final int value;
 
-	private RenderbufferInternalFormat(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private RenderbufferInternalFormat(int value) {
+		this.value = value;
 	}
-	
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

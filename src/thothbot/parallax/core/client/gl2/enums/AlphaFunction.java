@@ -25,57 +25,55 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum AlphaFunction 
+public enum AlphaFunction implements GLConstants
 {
 	/**
 	 * Never passes.
 	 */
-	NEVER(GLEnum.NEVER),
+	NEVER(GLConstants.NEVER),
 	
 	/**
 	 * Passes if the incoming alpha value is less than the reference value.
 	 */
-	LESS(GLEnum.LESS),
+	LESS(GLConstants.LESS),
 	
 	/**
 	 * Passes if the incoming alpha value is equal to the reference value.
 	 */
-	EQUAL(GLEnum.EQUAL),
+	EQUAL(GLConstants.EQUAL),
 	
 	/**
 	 * Passes if the incoming alpha value is less than or equal to the reference value.
 	 */
-	LEQUAL(GLEnum.LEQUAL),
+	LEQUAL(GLConstants.LEQUAL),
 	
 	/**
 	 * Passes if the incoming alpha value is greater than the reference value.
 	 */
-	GREATER(GLEnum.GREATER),
+	GREATER(GLConstants.GREATER),
 	
 	/**
 	 * Passes if the incoming alpha value is not equal to the reference value.
 	 */
-	NOTEQUAL(GLEnum.NOTEQUAL),
+	NOTEQUAL(GLConstants.NOTEQUAL),
 	
 	/**
 	 * Passes if the incoming alpha value is greater than or equal to the reference value.
 	 */
-	GEQUAL(GLEnum.GEQUAL),
+	GEQUAL(GLConstants.GEQUAL),
 	
 	/**
 	 * Always passes (initial value).
 	 */
-	ALWAYS(GLEnum.ALWAYS);
+	ALWAYS(GLConstants.ALWAYS);
 
 	private final int value;
 
-	private AlphaFunction(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private AlphaFunction(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}

@@ -19,27 +19,25 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum EnableCap 
+public enum EnableCap implements GLConstants
 {
-	CULL_FACE(GLEnum.CULL_FACE),
-	BLEND(GLEnum.BLEND),
-	DITHER(GLEnum.DITHER),
-	STENCIL_TEST(GLEnum.STENCIL_TEST),
-	DEPTH_TEST(GLEnum.DEPTH_TEST),
-	SCISSOR_TEST(GLEnum.SCISSOR_TEST),
-	POLYGON_OFFSET_FILL(GLEnum.POLYGON_OFFSET_FILL),
-	SAMPLE_ALPHA_TO_COVERAGE(GLEnum.SAMPLE_ALPHA_TO_COVERAGE),
-	SAMPLE_COVERAGE(GLEnum.SAMPLE_COVERAGE);
+	CULL_FACE(GLConstants.CULL_FACE),
+	BLEND(GLConstants.BLEND),
+	DITHER(GLConstants.DITHER),
+	STENCIL_TEST(GLConstants.STENCIL_TEST),
+	DEPTH_TEST(GLConstants.DEPTH_TEST),
+	SCISSOR_TEST(GLConstants.SCISSOR_TEST),
+	POLYGON_OFFSET_FILL(GLConstants.POLYGON_OFFSET_FILL),
+	SAMPLE_ALPHA_TO_COVERAGE(GLConstants.SAMPLE_ALPHA_TO_COVERAGE),
+	SAMPLE_COVERAGE(GLConstants.SAMPLE_COVERAGE);
 
 	private final int value;
 
-	private EnableCap(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private EnableCap(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}

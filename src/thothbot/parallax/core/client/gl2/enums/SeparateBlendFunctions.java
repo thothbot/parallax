@@ -19,27 +19,25 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum SeparateBlendFunctions 
+public enum SeparateBlendFunctions implements GLConstants
 {
-	BLEND_DST_RGB(GLEnum.BLEND_DST_RGB),
-	BLEND_SRC_RGB(GLEnum.BLEND_SRC_RGB),
-	BLEND_DST_ALPHA(GLEnum.BLEND_DST_ALPHA),
-	BLEND_SRC_ALPHA(GLEnum.BLEND_SRC_ALPHA),
-	CONSTANT_COLOR(GLEnum.CONSTANT_COLOR),
-	ONE_MINUS_CONSTANT_COLOR(GLEnum.ONE_MINUS_CONSTANT_COLOR),
-	CONSTANT_ALPHA(GLEnum.CONSTANT_ALPHA),
-	ONE_MINUS_CONSTANT_ALPHA(GLEnum.ONE_MINUS_CONSTANT_ALPHA),
-	BLEND_COLOR(GLEnum.BLEND_COLOR);
+	BLEND_DST_RGB(GLConstants.BLEND_DST_RGB),
+	BLEND_SRC_RGB(GLConstants.BLEND_SRC_RGB),
+	BLEND_DST_ALPHA(GLConstants.BLEND_DST_ALPHA),
+	BLEND_SRC_ALPHA(GLConstants.BLEND_SRC_ALPHA),
+	CONSTANT_COLOR(GLConstants.CONSTANT_COLOR),
+	ONE_MINUS_CONSTANT_COLOR(GLConstants.ONE_MINUS_CONSTANT_COLOR),
+	CONSTANT_ALPHA(GLConstants.CONSTANT_ALPHA),
+	ONE_MINUS_CONSTANT_ALPHA(GLConstants.ONE_MINUS_CONSTANT_ALPHA),
+	BLEND_COLOR(GLConstants.BLEND_COLOR);
 
 	private final int value;
 
-	private SeparateBlendFunctions(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private SeparateBlendFunctions(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}

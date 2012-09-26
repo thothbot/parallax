@@ -19,19 +19,18 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum BufferTarget 
+public enum BufferTarget implements GLConstants 
 {
-	ARRAY_BUFFER(GLEnum.ARRAY_BUFFER),
-	ELEMENT_ARRAY_BUFFER(GLEnum.ELEMENT_ARRAY_BUFFER);
+	ARRAY_BUFFER(GLConstants.ARRAY_BUFFER),
+	ELEMENT_ARRAY_BUFFER(GLConstants.ELEMENT_ARRAY_BUFFER);
 
 	private final int value;
 
-	private BufferTarget(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private BufferTarget(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

@@ -19,20 +19,18 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum ReadFormat 
+public enum ReadFormat implements GLConstants
 {
-	IMPLEMENTATION_COLOR_READ_TYPE(GLEnum.IMPLEMENTATION_COLOR_READ_TYPE),
-	IMPLEMENTATION_COLOR_READ_FORMAT(GLEnum.IMPLEMENTATION_COLOR_READ_FORMAT);
+	IMPLEMENTATION_COLOR_READ_TYPE(GLConstants.IMPLEMENTATION_COLOR_READ_TYPE),
+	IMPLEMENTATION_COLOR_READ_FORMAT(GLConstants.IMPLEMENTATION_COLOR_READ_FORMAT);
 
 	private final int value;
 
-	private ReadFormat(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private ReadFormat(int value) {
+		this.value = value;
 	}
-	
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

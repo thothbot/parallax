@@ -19,30 +19,27 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum BufferObjects 
+public enum BufferObjects implements GLConstants 
 {
-	ARRAY_BUFFER(GLEnum.ARRAY_BUFFER),
-	ELEMENT_ARRAY_BUFFER(GLEnum.ELEMENT_ARRAY_BUFFER),
-	ARRAY_BUFFER_BINDING(GLEnum.ARRAY_BUFFER_BINDING),
-	ELEMENT_ARRAY_BUFFER_BINDING(GLEnum.ELEMENT_ARRAY_BUFFER_BINDING),
-	STREAM_DRAW(GLEnum.STREAM_DRAW),
-	STATIC_DRAW(GLEnum.STATIC_DRAW),
-	DYNAMIC_DRAW(GLEnum.DYNAMIC_DRAW),
-	BUFFER_SIZE(GLEnum.BUFFER_SIZE),
-	BUFFER_USAGE(GLEnum.BUFFER_USAGE),
-	CURRENT_VERTEX_ATTRIB(GLEnum.CURRENT_VERTEX_ATTRIB);
+	ARRAY_BUFFER(GLConstants.ARRAY_BUFFER),
+	ELEMENT_ARRAY_BUFFER(GLConstants.ELEMENT_ARRAY_BUFFER),
+	ARRAY_BUFFER_BINDING(GLConstants.ARRAY_BUFFER_BINDING),
+	ELEMENT_ARRAY_BUFFER_BINDING(GLConstants.ELEMENT_ARRAY_BUFFER_BINDING),
+	STREAM_DRAW(GLConstants.STREAM_DRAW),
+	STATIC_DRAW(GLConstants.STATIC_DRAW),
+	DYNAMIC_DRAW(GLConstants.DYNAMIC_DRAW),
+	BUFFER_SIZE(GLConstants.BUFFER_SIZE),
+	BUFFER_USAGE(GLConstants.BUFFER_USAGE),
+	CURRENT_VERTEX_ATTRIB(GLConstants.CURRENT_VERTEX_ATTRIB);
 
 	private final int value;
 
-	private BufferObjects(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private BufferObjects(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}
-
 }

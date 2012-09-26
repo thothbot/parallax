@@ -28,39 +28,39 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum TextureMinFilter 
+public enum TextureMinFilter implements GLConstants
 {
 	/**
 	 * Returns the value of the texture element that is nearest 
 	 * (in Manhattan distance) to the center of the pixel being textured.
 	 */
-	NEAREST(GLEnum.NEAREST),
+	NEAREST(GLConstants.NEAREST),
 	/**
 	 * Returns the weighted average of the four texture elements that 
 	 * are closest to the center of the pixel being textured. 
 	 */
-	LINEAR(GLEnum.LINEAR),
+	LINEAR(GLConstants.LINEAR),
 	/**
 	 * Chooses the mipmap that most closely matches the size of the 
 	 * pixel being textured and uses the {@link TextureMinFilter#NEAREST} criterion 
 	 * (the texture element nearest to the center of the pixel) 
 	 * to produce a texture value.
 	 */
-	NEAREST_MIPMAP_NEAREST(GLEnum.NEAREST_MIPMAP_NEAREST),
+	NEAREST_MIPMAP_NEAREST(GLConstants.NEAREST_MIPMAP_NEAREST),
 	/**
 	 * Chooses the mipmap that most closely matches the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#LINEAR} criterion 
 	 * (a weighted average of the four texture elements that are closest to 
 	 * the center of the pixel) to produce a texture value.
 	 */
-	LINEAR_MIPMAP_NEAREST(GLEnum.LINEAR_MIPMAP_NEAREST),
+	LINEAR_MIPMAP_NEAREST(GLConstants.LINEAR_MIPMAP_NEAREST),
 	/**
 	 * Chooses the two mipmaps that most closely match the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#NEAREST} criterion (the texture element
 	 * nearest to the center of the pixel) to produce a texture value from 
 	 * each mipmap. The final texture value is a weighted average of those two values.
 	 */
-	NEAREST_MIPMAP_LINEAR(GLEnum.NEAREST_MIPMAP_LINEAR),
+	NEAREST_MIPMAP_LINEAR(GLConstants.NEAREST_MIPMAP_LINEAR),
 	/**
 	 * Chooses the two mipmaps that most closely match the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#LINEAR} criterion 
@@ -68,25 +68,16 @@ public enum TextureMinFilter
 	 * center of the pixel) to produce a texture value from each mipmap. 
 	 * The final texture value is a weighted average of those two values.
 	 */
-	LINEAR_MIPMAP_LINEAR(GLEnum.LINEAR_MIPMAP_LINEAR);
+	LINEAR_MIPMAP_LINEAR(GLConstants.LINEAR_MIPMAP_LINEAR);
 
-	private final GLEnum value;
+	private final int value;
 
-	private TextureMinFilter(GLEnum GLEnum) 
-	{
-		this.value = GLEnum;
-	}
-	
-	public GLEnum getEnum()
-	{
-		return this.value;
+	private TextureMinFilter(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	public int getValue() 
-	{
-		return value.getValue();
+	@Override
+	public int getValue() {
+		return value;
 	}
 }

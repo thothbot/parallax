@@ -19,21 +19,20 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum FramebufferSlot 
+public enum FramebufferSlot implements GLConstants
 {
-	COLOR_ATTACHMENT0(GLEnum.COLOR_ATTACHMENT0),
-	DEPTH_ATTACHMENT(GLEnum.DEPTH_ATTACHMENT),
-	STENCIL_ATTACHMENT(GLEnum.STENCIL_ATTACHMENT),
-	DEPTH_STENCIL_ATTACHMENT(GLEnum.DEPTH_STENCIL_ATTACHMENT);
+	COLOR_ATTACHMENT0(GLConstants.COLOR_ATTACHMENT0),
+	DEPTH_ATTACHMENT(GLConstants.DEPTH_ATTACHMENT),
+	STENCIL_ATTACHMENT(GLConstants.STENCIL_ATTACHMENT),
+	DEPTH_STENCIL_ATTACHMENT(GLConstants.DEPTH_STENCIL_ATTACHMENT);
 
 	private final int value;
 
-	private FramebufferSlot(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private FramebufferSlot(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

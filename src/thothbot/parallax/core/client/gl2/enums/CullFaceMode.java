@@ -19,23 +19,20 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum CullFaceMode 
+public enum CullFaceMode implements GLConstants
 {
-	FRONT(GLEnum.FRONT),
-	BACK(GLEnum.BACK),
-	FRONT_AND_BACK(GLEnum.FRONT_AND_BACK);
+	FRONT(GLConstants.FRONT),
+	BACK(GLConstants.BACK),
+	FRONT_AND_BACK(GLConstants.FRONT_AND_BACK);
 
 	private final int value;
 
-	private CullFaceMode(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private CullFaceMode(int value) {
+		this.value = value;
 	}
-	
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}
-
 }

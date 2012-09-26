@@ -19,32 +19,31 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum UniformTypes 
+public enum UniformTypes implements GLConstants
 {
-	FLOAT_VEC2(GLEnum.FLOAT_VEC2),
-	FLOAT_VEC3(GLEnum.FLOAT_VEC3),
-	FLOAT_VEC4(GLEnum.FLOAT_VEC4),
-	INT_VEC2(GLEnum.INT_VEC2),
-	INT_VEC3(GLEnum.INT_VEC3),
-	INT_VEC4(GLEnum.INT_VEC4),
-	BOOL(GLEnum.BOOL),
-	BOOL_VEC2(GLEnum.BOOL_VEC2),
-	BOOL_VEC3(GLEnum.BOOL_VEC3),
-	BOOL_VEC4(GLEnum.BOOL_VEC4),
-	FLOAT_MAT2(GLEnum.FLOAT_MAT2),
-	FLOAT_MAT3(GLEnum.FLOAT_MAT3),
-	FLOAT_MAT4(GLEnum.FLOAT_MAT4),
-	SAMPLER_2D(GLEnum.SAMPLER_2D),
-	SAMPLER_CUBE(GLEnum.SAMPLER_CUBE);
+	FLOAT_VEC2(GLConstants.FLOAT_VEC2),
+	FLOAT_VEC3(GLConstants.FLOAT_VEC3),
+	FLOAT_VEC4(GLConstants.FLOAT_VEC4),
+	INT_VEC2(GLConstants.INT_VEC2),
+	INT_VEC3(GLConstants.INT_VEC3),
+	INT_VEC4(GLConstants.INT_VEC4),
+	BOOL(GLConstants.BOOL),
+	BOOL_VEC2(GLConstants.BOOL_VEC2),
+	BOOL_VEC3(GLConstants.BOOL_VEC3),
+	BOOL_VEC4(GLConstants.BOOL_VEC4),
+	FLOAT_MAT2(GLConstants.FLOAT_MAT2),
+	FLOAT_MAT3(GLConstants.FLOAT_MAT3),
+	FLOAT_MAT4(GLConstants.FLOAT_MAT4),
+	SAMPLER_2D(GLConstants.SAMPLER_2D),
+	SAMPLER_CUBE(GLConstants.SAMPLER_CUBE);
 
 	private final int value;
 
-	private UniformTypes(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private UniformTypes(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

@@ -19,21 +19,19 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum HintMode 
+public enum HintMode implements GLConstants
 {
-	DONT_CARE(GLEnum.DONT_CARE),
-	FASTEST(GLEnum.FASTEST),
-	NICEST(GLEnum.NICEST);
+	DONT_CARE(GLConstants.DONT_CARE),
+	FASTEST(GLConstants.FASTEST),
+	NICEST(GLConstants.NICEST);
 
 	private final int value;
 
-	private HintMode(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private HintMode(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}

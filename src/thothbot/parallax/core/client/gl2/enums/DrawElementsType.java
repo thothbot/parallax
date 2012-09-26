@@ -19,22 +19,19 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum DrawElementsType 
+public enum DrawElementsType implements GLConstants
 {
-	UNSIGNED_BYTE(GLEnum.UNSIGNED_BYTE),
-	UNSIGNED_SHORT(GLEnum.UNSIGNED_SHORT);
+	UNSIGNED_BYTE(GLConstants.UNSIGNED_BYTE),
+	UNSIGNED_SHORT(GLConstants.UNSIGNED_SHORT);
 
 	private final int value;
 
-	private DrawElementsType(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private DrawElementsType(int value) {
+		this.value = value;
 	}
 
-	/**
-	 * Gets the enum's numerical value.
-	 */
+	@Override
 	public int getValue() {
 		return value;
 	}
-
 }

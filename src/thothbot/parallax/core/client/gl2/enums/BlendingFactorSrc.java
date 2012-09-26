@@ -25,29 +25,26 @@ package thothbot.parallax.core.client.gl2.enums;
  * @author thothbot
  *
  */
-public enum BlendingFactorSrc 
+public enum BlendingFactorSrc implements GLConstants 
 {
-	ZERO(GLEnum.ZERO),
-	ONE(GLEnum.ONE),
-	DST_COLOR(GLEnum.DST_COLOR),
-	ONE_MINUS_DST_COLOR(GLEnum.ONE_MINUS_DST_COLOR),
-	SRC_ALPHA_SATURATE(GLEnum.SRC_ALPHA_SATURATE),
-	SRC_ALPHA(GLEnum.SRC_ALPHA),
-	ONE_MINUS_SRC_ALPHA(GLEnum.ONE_MINUS_SRC_ALPHA),
-	DST_ALPHA(GLEnum.DST_ALPHA),
-	ONE_MINUS_DST_ALPHA(GLEnum.ONE_MINUS_DST_ALPHA);
+	ZERO(GLConstants.ZERO),
+	ONE(GLConstants.ONE),
+	DST_COLOR(GLConstants.DST_COLOR),
+	ONE_MINUS_DST_COLOR(GLConstants.ONE_MINUS_DST_COLOR),
+	SRC_ALPHA_SATURATE(GLConstants.SRC_ALPHA_SATURATE),
+	SRC_ALPHA(GLConstants.SRC_ALPHA),
+	ONE_MINUS_SRC_ALPHA(GLConstants.ONE_MINUS_SRC_ALPHA),
+	DST_ALPHA(GLConstants.DST_ALPHA),
+	ONE_MINUS_DST_ALPHA(GLConstants.ONE_MINUS_DST_ALPHA);
 
 	private final int value;
 
-	private BlendingFactorSrc(GLEnum GLEnum) 
-	{
-		this.value = GLEnum.getValue();
+	private BlendingFactorSrc(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
-	public int getValue() 
-	{
+
+	@Override
+	public int getValue() {
 		return value;
 	}
 }

@@ -19,21 +19,20 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum PixelStoreParameter 
+public enum PixelStoreParameter implements GLConstants
 {
-	PACK_ALIGNMENT(GLEnum.PACK_ALIGNMENT),
-	UNPACK_ALIGNMENT(GLEnum.UNPACK_ALIGNMENT),
-	UNPACK_FLIP_Y_WEBGL(GLEnum.UNPACK_FLIP_Y_WEBGL),
-	UNPACK_PREMULTIPLY_ALPHA_WEBGL(GLEnum.UNPACK_PREMULTIPLY_ALPHA_WEBGL);
+	PACK_ALIGNMENT(GLConstants.PACK_ALIGNMENT),
+	UNPACK_ALIGNMENT(GLConstants.UNPACK_ALIGNMENT),
+	UNPACK_FLIP_Y_WEBGL(GLConstants.UNPACK_FLIP_Y_WEBGL),
+	UNPACK_PREMULTIPLY_ALPHA_WEBGL(GLConstants.UNPACK_PREMULTIPLY_ALPHA_WEBGL);
 
 	private final int value;
 
-	private PixelStoreParameter(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private PixelStoreParameter(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}

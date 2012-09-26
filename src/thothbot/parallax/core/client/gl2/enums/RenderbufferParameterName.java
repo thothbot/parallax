@@ -19,63 +19,61 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-public enum RenderbufferParameterName 
+public enum RenderbufferParameterName implements GLConstants
 {
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_WIDTH(GLEnum.RENDERBUFFER_WIDTH),
+	RENDERBUFFER_WIDTH(GLConstants.RENDERBUFFER_WIDTH),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_HEIGHT(GLEnum.RENDERBUFFER_HEIGHT),
+	RENDERBUFFER_HEIGHT(GLConstants.RENDERBUFFER_HEIGHT),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_INTERNAL_FORMAT(GLEnum.RENDERBUFFER_INTERNAL_FORMAT),
+	RENDERBUFFER_INTERNAL_FORMAT(GLConstants.RENDERBUFFER_INTERNAL_FORMAT),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_RED_SIZE(GLEnum.RENDERBUFFER_RED_SIZE),
+	RENDERBUFFER_RED_SIZE(GLConstants.RENDERBUFFER_RED_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_GREEN_SIZE(GLEnum.RENDERBUFFER_GREEN_SIZE),
+	RENDERBUFFER_GREEN_SIZE(GLConstants.RENDERBUFFER_GREEN_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_BLUE_SIZE(GLEnum.RENDERBUFFER_BLUE_SIZE),
+	RENDERBUFFER_BLUE_SIZE(GLConstants.RENDERBUFFER_BLUE_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_ALPHA_SIZE(GLEnum.RENDERBUFFER_ALPHA_SIZE),
+	RENDERBUFFER_ALPHA_SIZE(GLConstants.RENDERBUFFER_ALPHA_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_DEPTH_SIZE(GLEnum.RENDERBUFFER_DEPTH_SIZE),
+	RENDERBUFFER_DEPTH_SIZE(GLConstants.RENDERBUFFER_DEPTH_SIZE),
 	
 	/** 
 	 * Returns int 
 	 */
-	RENDERBUFFER_STENCIL_SIZE(GLEnum.RENDERBUFFER_STENCIL_SIZE);
+	RENDERBUFFER_STENCIL_SIZE(GLConstants.RENDERBUFFER_STENCIL_SIZE);
 
 	private final int value;
 
-	private RenderbufferParameterName(GLEnum glEnum) {
-		this.value = glEnum.getValue();
+	private RenderbufferParameterName(int value) {
+		this.value = value;
 	}
-	/**
-	 * Gets the enum's numerical value.
-	 */
+
+	@Override
 	public int getValue() {
 		return value;
 	}
-
 }
