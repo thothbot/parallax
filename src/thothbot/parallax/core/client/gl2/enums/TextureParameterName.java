@@ -20,7 +20,7 @@
 package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
-import thothbot.parallax.core.client.gl2.extension.TextureFilterAnisotropic;
+import thothbot.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
 
 /**
  * GL2 Texture Parameter name flags.
@@ -36,7 +36,7 @@ public enum TextureParameterName implements WebGLConstants
 	TEXTURE_WRAP_T(WebGLConstants.TEXTURE_WRAP_T),
 	
 	// Extensions
-	TEXTURE_MAX_ANISOTROPY_EXT(TextureFilterAnisotropic.TEXTURE_MAX_ANISOTROPY_EXT);
+	TEXTURE_MAX_ANISOTROPY_EXT(ExtTextureFilterAnisotropic.TEXTURE_MAX_ANISOTROPY_EXT);
 
 	private final int value;
 	

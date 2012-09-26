@@ -51,7 +51,7 @@ import thothbot.parallax.core.client.gl2.enums.PixelStoreParameter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
-import thothbot.parallax.core.client.gl2.extension.TextureFilterAnisotropic;
+import thothbot.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
 import thothbot.parallax.core.client.shaders.Shader;
@@ -271,7 +271,7 @@ public class WebGLRenderer
 				|| getGL().getExtension( "MOZ_EXT_texture_filter_anisotropic" ) != null 
 				|| getGL().getExtension( "WEBKIT_EXT_texture_filter_anisotropic" ) != null)
 		{
-			this.GPUmaxAnisotropy = getGL().getParameteri(TextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+			this.GPUmaxAnisotropy = getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 		}
 		else
 		{
