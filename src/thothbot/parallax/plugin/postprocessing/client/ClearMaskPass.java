@@ -22,7 +22,7 @@
 
 package thothbot.parallax.plugin.postprocessing.client;
 
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 
 public class ClearMaskPass extends Pass 
 {	
@@ -35,6 +35,6 @@ public class ClearMaskPass extends Pass
 	@Override
 	public void render(Postprocessing postprocessing, double delta, boolean maskActive ) 
 	{
-		postprocessing.getRenderer().getGL().disable( GLenum.STENCIL_TEST.getValue() );
+		postprocessing.getRenderer().getGL().disable( GLEnum.STENCIL_TEST.getValue() );
 	}
 }

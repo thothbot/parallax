@@ -27,19 +27,19 @@ package thothbot.parallax.core.client.gl2.enums;
  */
 public enum DataType 
 {
-	BYTE(GLenum.BYTE),
-	UNSIGNED_BYTE(GLenum.UNSIGNED_BYTE),
-	SHORT(GLenum.SHORT),
-	UNSIGNED_SHORT(GLenum.UNSIGNED_SHORT),
-	INT(GLenum.INT),
-	UNSIGNED_INT(GLenum.UNSIGNED_INT),
-	FLOAT(GLenum.FLOAT);
+	BYTE(GLEnum.BYTE),
+	UNSIGNED_BYTE(GLEnum.UNSIGNED_BYTE),
+	SHORT(GLEnum.SHORT),
+	UNSIGNED_SHORT(GLEnum.UNSIGNED_SHORT),
+	INT(GLEnum.INT),
+	UNSIGNED_INT(GLEnum.UNSIGNED_INT),
+	FLOAT(GLEnum.FLOAT);
 
 	private final int value;
 
-	private DataType(GLenum GLenum) 
+	private DataType(GLEnum GLEnum) 
 	{
-		this.value = GLenum.getValue();
+		this.value = GLEnum.getValue();
 	}
 
 	/**

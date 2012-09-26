@@ -27,18 +27,18 @@ package thothbot.parallax.core.client.gl2.enums;
  */
 public enum PixelFormat 
 {
-	DEPTH_COMPONENT(GLenum.DEPTH_COMPONENT),
-	ALPHA(GLenum.ALPHA),
-	RGB(GLenum.RGB),
-	RGBA(GLenum.RGBA),
-	LUMINANCE(GLenum.LUMINANCE),
-	LUMINANCE_ALPHA(GLenum.LUMINANCE_ALPHA);
+	DEPTH_COMPONENT(GLEnum.DEPTH_COMPONENT),
+	ALPHA(GLEnum.ALPHA),
+	RGB(GLEnum.RGB),
+	RGBA(GLEnum.RGBA),
+	LUMINANCE(GLEnum.LUMINANCE),
+	LUMINANCE_ALPHA(GLEnum.LUMINANCE_ALPHA);
 
 	private final int value;
 
-	private PixelFormat(GLenum GLenum) 
+	private PixelFormat(GLEnum GLEnum) 
 	{
-		this.value = GLenum.getValue();
+		this.value = GLEnum.getValue();
 	}
 
 	/**

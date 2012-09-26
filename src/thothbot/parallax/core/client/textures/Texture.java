@@ -25,7 +25,7 @@ package thothbot.parallax.core.client.textures;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.enums.DataType;
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
@@ -455,17 +455,17 @@ public class Texture
 	{	
 		if ( isImagePowerOfTwo ) 
 		{
-			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue() );
-			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue() );
-			gl.texParameteri( textureType, GLenum.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
-			gl.texParameteri( textureType, GLenum.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue() );
+			gl.texParameteri( textureType, GLEnum.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue() );
+			gl.texParameteri( textureType, GLEnum.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue() );
+			gl.texParameteri( textureType, GLEnum.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
+			gl.texParameteri( textureType, GLEnum.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue() );
 		} 
 		else 
 		{
-			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_S.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
-			gl.texParameteri( textureType, GLenum.TEXTURE_WRAP_T.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
-			gl.texParameteri( textureType, GLenum.TEXTURE_MAG_FILTER.getValue(), filterFallback( this.magFilter.getEnum() ) );
-			gl.texParameteri( textureType, GLenum.TEXTURE_MIN_FILTER.getValue(), filterFallback( this.minFilter.getEnum() ) );
+			gl.texParameteri( textureType, GLEnum.TEXTURE_WRAP_S.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
+			gl.texParameteri( textureType, GLEnum.TEXTURE_WRAP_T.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
+			gl.texParameteri( textureType, GLEnum.TEXTURE_MAG_FILTER.getValue(), filterFallback( this.magFilter.getEnum() ) );
+			gl.texParameteri( textureType, GLEnum.TEXTURE_MIN_FILTER.getValue(), filterFallback( this.minFilter.getEnum() ) );
 		}
 		
 		// TODO: test this approach
@@ -482,20 +482,20 @@ public class Texture
 	/**
 	 * Fallback filters for non-power-of-2 textures.
 	 */
-	private int filterFallback ( GLenum f ) 
+	private int filterFallback ( GLEnum f ) 
 	{
 		switch ( f ) {
 
 		case NEAREST:
 		case NEAREST_MIPMAP_NEAREST:
 		case NEAREST_MIPMAP_LINEAR: 
-			return GLenum.NEAREST.getValue();
+			return GLEnum.NEAREST.getValue();
 
 		case LINEAR:
 		case LINEAR_MIPMAP_NEAREST:
 		case LINEAR_MIPMAP_LINEAR:
 		default:
-			return GLenum.LINEAR.getValue();
+			return GLEnum.LINEAR.getValue();
 
 		}
 	}

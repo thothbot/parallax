@@ -27,16 +27,16 @@ package thothbot.parallax.core.client.gl2.enums;
  */
 public enum TextureParameterName 
 {
-	TEXTURE_MAG_FILTER(GLenum.TEXTURE_MAG_FILTER),
-	TEXTURE_MIN_FILTER(GLenum.TEXTURE_MIN_FILTER),
-	TEXTURE_WRAP_S(GLenum.TEXTURE_WRAP_S),
-	TEXTURE_WRAP_T(GLenum.TEXTURE_WRAP_T);
+	TEXTURE_MAG_FILTER(GLEnum.TEXTURE_MAG_FILTER),
+	TEXTURE_MIN_FILTER(GLEnum.TEXTURE_MIN_FILTER),
+	TEXTURE_WRAP_S(GLEnum.TEXTURE_WRAP_S),
+	TEXTURE_WRAP_T(GLEnum.TEXTURE_WRAP_T);
 
 	private final int value;
 
-	private TextureParameterName(GLenum GLenum) 
+	private TextureParameterName(GLEnum GLEnum) 
 	{
-		this.value = GLenum.getValue();
+		this.value = GLEnum.getValue();
 	}
 	
 	/**

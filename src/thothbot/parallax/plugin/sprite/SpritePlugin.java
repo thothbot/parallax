@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -87,11 +87,11 @@ public final class SpritePlugin extends Plugin
 		sprite.vertexBuffer  = gl.createBuffer();
 		sprite.elementBuffer = gl.createBuffer();
 
-		gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), sprite.vertexBuffer );
-		gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), sprite.vertices, GLenum.STATIC_DRAW.getValue() );
+		gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), sprite.vertexBuffer );
+		gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), sprite.vertices, GLEnum.STATIC_DRAW.getValue() );
 
-		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
-		gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.faces, GLenum.STATIC_DRAW.getValue() );
+		gl.bindBuffer( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
+		gl.bufferData( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.faces, GLEnum.STATIC_DRAW.getValue() );
 
 		sprite.shader = new SpriteShader();
 		sprite.shader.buildProgram(gl);
@@ -145,19 +145,19 @@ public final class SpritePlugin extends Plugin
 			sprite.attributesEnabled = true;
 		}
 
-		gl.disable( GLenum.CULL_FACE.getValue() );
-		gl.enable( GLenum.BLEND.getValue() );
+		gl.disable( GLEnum.CULL_FACE.getValue() );
+		gl.enable( GLEnum.BLEND.getValue() );
 		gl.depthMask( true );
 
-		gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), sprite.vertexBuffer );
-		gl.vertexAttribPointer( attributesLocations.get("position"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 0 );
-		gl.vertexAttribPointer( attributesLocations.get("uv"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 8 );
+		gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), sprite.vertexBuffer );
+		gl.vertexAttribPointer( attributesLocations.get("position"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 0 );
+		gl.vertexAttribPointer( attributesLocations.get("uv"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 8 );
 
-		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
+		gl.bindBuffer( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
 
 		gl.uniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
 
-		gl.activeTexture( GLenum.TEXTURE0.getValue() );
+		gl.activeTexture( GLEnum.TEXTURE0.getValue() );
 		gl.uniform1i( uniforms.get("map").getLocation(), 0 );
 
 		// update positions and sort
@@ -230,12 +230,12 @@ public final class SpritePlugin extends Plugin
 
 				if ( sprite.isMergeWith3D() && !mergeWith3D ) 
 				{
-					gl.enable( GLenum.DEPTH_TEST.getValue() );
+					gl.enable( GLEnum.DEPTH_TEST.getValue() );
 					mergeWith3D = true;
 				} 
 				else if ( ! sprite.isMergeWith3D() && mergeWith3D ) 
 				{
-					gl.disable( GLenum.DEPTH_TEST.getValue() );
+					gl.disable( GLEnum.DEPTH_TEST.getValue() );
 					mergeWith3D = false;
 				}
 
@@ -243,14 +243,14 @@ public final class SpritePlugin extends Plugin
 				getRenderer().setBlending( sprite.getBlending() );
 				getRenderer().setTexture( sprite.getMap(), 0 );
 
-				gl.drawElements( GLenum.TRIANGLES.getValue(), 6, GLenum.UNSIGNED_SHORT.getValue(), 0 );
+				gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
 			}
 		}
 
 		// restore gl
 
-		gl.enable( GLenum.CULL_FACE.getValue() );
-		gl.enable( GLenum.DEPTH_TEST.getValue() );
+		gl.enable( GLEnum.CULL_FACE.getValue() );
+		gl.enable( GLEnum.DEPTH_TEST.getValue() );
 		gl.depthMask( true );
 	}
 }

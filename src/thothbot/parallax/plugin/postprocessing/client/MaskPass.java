@@ -22,7 +22,7 @@
 
 package thothbot.parallax.plugin.postprocessing.client;
 
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -63,9 +63,9 @@ public class MaskPass extends Pass
 			clearValue = 0;
 		}
 
-		ecffectComposer.getRenderer().getGL().enable( GLenum.STENCIL_TEST.getValue() );
-		ecffectComposer.getRenderer().getGL().stencilOp( GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue(), GLenum.REPLACE.getValue() );
-		ecffectComposer.getRenderer().getGL().stencilFunc( GLenum.ALWAYS.getValue(), writeValue, 0xffffffff );
+		ecffectComposer.getRenderer().getGL().enable( GLEnum.STENCIL_TEST.getValue() );
+		ecffectComposer.getRenderer().getGL().stencilOp( GLEnum.REPLACE.getValue(), GLEnum.REPLACE.getValue(), GLEnum.REPLACE.getValue() );
+		ecffectComposer.getRenderer().getGL().stencilFunc( GLEnum.ALWAYS.getValue(), writeValue, 0xffffffff );
 		ecffectComposer.getRenderer().getGL().clearStencil( clearValue );
 
 		// draw into the stencil buffer
@@ -77,8 +77,8 @@ public class MaskPass extends Pass
 		ecffectComposer.getRenderer().getGL().depthMask( true );
 
 		// only render where stencil is set to 1
-		ecffectComposer.getRenderer().getGL().stencilFunc( GLenum.EQUAL.getValue(), 1, 0xffffffff );  // draw if == 1
-		ecffectComposer.getRenderer().getGL().stencilOp( GLenum.KEEP.getValue(), GLenum.KEEP.getValue(), GLenum.KEEP.getValue() );
+		ecffectComposer.getRenderer().getGL().stencilFunc( GLEnum.EQUAL.getValue(), 1, 0xffffffff );  // draw if == 1
+		ecffectComposer.getRenderer().getGL().stencilOp( GLEnum.KEEP.getValue(), GLEnum.KEEP.getValue(), GLEnum.KEEP.getValue() );
 	}
 	
 	@Override

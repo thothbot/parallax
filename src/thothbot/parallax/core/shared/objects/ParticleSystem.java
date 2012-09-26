@@ -30,7 +30,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
@@ -93,7 +93,7 @@ public class ParticleSystem extends GeometryObject
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGLRenderInfo info = renderer.getInfo();
 		
-		gl.drawArrays( GLenum.POINTS.getValue(), 0, geometryBuffer.__webglParticleCount );
+		gl.drawArrays( GLEnum.POINTS.getValue(), 0, geometryBuffer.__webglParticleCount );
 
 		info.getRender().calls ++;
 		info.getRender().points += geometryBuffer.__webglParticleCount;
@@ -148,7 +148,7 @@ public class ParticleSystem extends GeometryObject
 				|| this.sortParticles 
 				|| areCustomAttributesDirty
 		) {
-			this.setBuffers( renderer, this.geometry, GLenum.DYNAMIC_DRAW.getValue());
+			this.setBuffers( renderer, this.geometry, GLEnum.DYNAMIC_DRAW.getValue());
 			this.material.getShader().clearCustomAttributes();
 		}
 
@@ -418,14 +418,14 @@ public class ParticleSystem extends GeometryObject
 
 		if ( dirtyVertices || this.sortParticles ) 
 		{
-			gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer );
-			gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint );
+			gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer );
+			gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint );
 		}
 
 		if ( dirtyColors || this.sortParticles ) 
 		{
-			gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer );
-			gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint );
+			gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer );
+			gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint );
 		}
 
 		if ( customAttributes != null ) 
@@ -436,8 +436,8 @@ public class ParticleSystem extends GeometryObject
 
 				if ( customAttribute.needsUpdate || this.sortParticles ) 
 				{
-					gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), customAttribute.buffer );
-					gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), customAttribute.array, hint );
+					gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), customAttribute.buffer );
+					gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), customAttribute.array, hint );
 				}
 			}
 		}

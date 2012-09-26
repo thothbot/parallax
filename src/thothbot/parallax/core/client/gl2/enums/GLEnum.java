@@ -24,7 +24,7 @@ package thothbot.parallax.core.client.gl2.enums;
  * 
  * @author thothbot
  */
-public enum GLenum 
+public enum GLEnum 
 {
 	/* ClearBufferMask */
 	DEPTH_BUFFER_BIT(0x00000100),
@@ -424,7 +424,7 @@ public enum GLenum
 
 	private final int value;
 
-	private GLenum(int value) 
+	private GLEnum(int value) 
 	{
 		this.value = value;
 	}

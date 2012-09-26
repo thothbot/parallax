@@ -23,7 +23,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
@@ -111,18 +111,18 @@ public final class ShadowMap extends Plugin
 		// set GL state for depth map
 
 		gl.clearColor( 1, 1, 1, 1 );
-		gl.disable( GLenum.BLEND.getValue() );
+		gl.disable( GLEnum.BLEND.getValue() );
 
-		gl.enable( GLenum.CULL_FACE.getValue() );
-		gl.frontFace( GLenum.CCW.getValue() );
+		gl.enable( GLEnum.CULL_FACE.getValue() );
+		gl.frontFace( GLEnum.CCW.getValue() );
 
 		if ( getRenderer().isShadowMapCullFrontFaces() ) 
 		{
-			gl.cullFace( GLenum.FRONT.getValue() );
+			gl.cullFace( GLEnum.FRONT.getValue() );
 		} 
 		else 
 		{
-			gl.cullFace( GLenum.BACK.getValue() );
+			gl.cullFace( GLEnum.BACK.getValue() );
 		}
 
 		getRenderer().setDepthTest( true );
@@ -363,11 +363,11 @@ public final class ShadowMap extends Plugin
 		double clearAlpha = getRenderer().getClearAlpha();
 
 		gl.clearColor( clearColor.getR(), clearColor.getG(), clearColor.getB(), clearAlpha );
-		gl.enable( GLenum.BLEND.getValue() );
+		gl.enable( GLEnum.BLEND.getValue() );
 
 		if ( getRenderer().isShadowMapCullFrontFaces() ) 
 		{
-			gl.cullFace( GLenum.BACK.getValue() );
+			gl.cullFace( GLEnum.BACK.getValue() );
 		}
 	}
 

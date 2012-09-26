@@ -34,33 +34,33 @@ public enum TextureMinFilter
 	 * Returns the value of the texture element that is nearest 
 	 * (in Manhattan distance) to the center of the pixel being textured.
 	 */
-	NEAREST(GLenum.NEAREST),
+	NEAREST(GLEnum.NEAREST),
 	/**
 	 * Returns the weighted average of the four texture elements that 
 	 * are closest to the center of the pixel being textured. 
 	 */
-	LINEAR(GLenum.LINEAR),
+	LINEAR(GLEnum.LINEAR),
 	/**
 	 * Chooses the mipmap that most closely matches the size of the 
 	 * pixel being textured and uses the {@link TextureMinFilter#NEAREST} criterion 
 	 * (the texture element nearest to the center of the pixel) 
 	 * to produce a texture value.
 	 */
-	NEAREST_MIPMAP_NEAREST(GLenum.NEAREST_MIPMAP_NEAREST),
+	NEAREST_MIPMAP_NEAREST(GLEnum.NEAREST_MIPMAP_NEAREST),
 	/**
 	 * Chooses the mipmap that most closely matches the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#LINEAR} criterion 
 	 * (a weighted average of the four texture elements that are closest to 
 	 * the center of the pixel) to produce a texture value.
 	 */
-	LINEAR_MIPMAP_NEAREST(GLenum.LINEAR_MIPMAP_NEAREST),
+	LINEAR_MIPMAP_NEAREST(GLEnum.LINEAR_MIPMAP_NEAREST),
 	/**
 	 * Chooses the two mipmaps that most closely match the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#NEAREST} criterion (the texture element
 	 * nearest to the center of the pixel) to produce a texture value from 
 	 * each mipmap. The final texture value is a weighted average of those two values.
 	 */
-	NEAREST_MIPMAP_LINEAR(GLenum.NEAREST_MIPMAP_LINEAR),
+	NEAREST_MIPMAP_LINEAR(GLEnum.NEAREST_MIPMAP_LINEAR),
 	/**
 	 * Chooses the two mipmaps that most closely match the size of the pixel 
 	 * being textured and uses the {@link TextureMinFilter#LINEAR} criterion 
@@ -68,16 +68,16 @@ public enum TextureMinFilter
 	 * center of the pixel) to produce a texture value from each mipmap. 
 	 * The final texture value is a weighted average of those two values.
 	 */
-	LINEAR_MIPMAP_LINEAR(GLenum.LINEAR_MIPMAP_LINEAR);
+	LINEAR_MIPMAP_LINEAR(GLEnum.LINEAR_MIPMAP_LINEAR);
 
-	private final GLenum value;
+	private final GLEnum value;
 
-	private TextureMinFilter(GLenum GLenum) 
+	private TextureMinFilter(GLEnum GLEnum) 
 	{
-		this.value = GLenum;
+		this.value = GLEnum;
 	}
 	
-	public GLenum getEnum()
+	public GLEnum getEnum()
 	{
 		return this.value;
 	}

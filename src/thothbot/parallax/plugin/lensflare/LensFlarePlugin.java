@@ -29,7 +29,7 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
@@ -101,32 +101,32 @@ public final class LensFlarePlugin extends Plugin
 		lensFlare.vertexBuffer     = gl.createBuffer();
 		lensFlare.elementBuffer    = gl.createBuffer();
 
-		gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), lensFlare.vertexBuffer );
-		gl.bufferData( GLenum.ARRAY_BUFFER.getValue(), lensFlare.vertices, GLenum.STATIC_DRAW.getValue() );
+		gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), lensFlare.vertexBuffer );
+		gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), lensFlare.vertices, GLEnum.STATIC_DRAW.getValue() );
 
-		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
-		gl.bufferData( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.faces, GLenum.STATIC_DRAW.getValue() );
+		gl.bindBuffer( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
+		gl.bufferData( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.faces, GLEnum.STATIC_DRAW.getValue() );
 
 		// textures
 
 		lensFlare.tempTexture      = gl.createTexture();
 		lensFlare.occlusionTexture = gl.createTexture();
 
-		gl.bindTexture( GLenum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
-		gl.texImage2D( GLenum.TEXTURE_2D.getValue(), 0, GLenum.RGB.getValue(), 16, 16, 0, GLenum.RGB.getValue(), GLenum.UNSIGNED_BYTE.getValue(), null );
-		gl.texParameteri( GLenum.TEXTURE_2D.getValue(), GLenum.TEXTURE_WRAP_S.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
-		gl.texParameteri( GLenum.TEXTURE_2D.getValue(), GLenum.TEXTURE_WRAP_T.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
-		gl.texParameteri( GLenum.TEXTURE_2D.getValue(), GLenum.TEXTURE_MAG_FILTER.getValue(), GLenum.NEAREST.getValue() );
-		gl.texParameteri( GLenum.TEXTURE_2D.getValue(), GLenum.TEXTURE_MIN_FILTER.getValue(), GLenum.NEAREST.getValue() );
+		gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+		gl.texImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGB.getValue(), 16, 16, 0, GLEnum.RGB.getValue(), GLEnum.UNSIGNED_BYTE.getValue(), null );
+		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_WRAP_S.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
+		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_WRAP_T.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
+		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_MAG_FILTER.getValue(), GLEnum.NEAREST.getValue() );
+		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_MIN_FILTER.getValue(), GLEnum.NEAREST.getValue() );
 
-		gl.bindTexture( GLenum.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
-		gl.texImage2D( GLenum.TEXTURE_2D.getValue(), 0, GLenum.RGBA.getValue(), 16, 16, 0, GLenum.RGBA.getValue(), GLenum.UNSIGNED_BYTE.getValue(), null );
-		gl.texParameteri( GLenum.TEXTURE_2D.getValue(), GLenum.TEXTURE_WRAP_S.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
-		gl.texParameteri( GLenum.TEXTURE_2D.getValue(), GLenum.TEXTURE_WRAP_T.getValue(), GLenum.CLAMP_TO_EDGE.getValue() );
-		gl.texParameteri( GLenum.TEXTURE_2D.getValue(), GLenum.TEXTURE_MAG_FILTER.getValue(), GLenum.NEAREST.getValue() );
-		gl.texParameteri( GLenum.TEXTURE_2D.getValue(), GLenum.TEXTURE_MIN_FILTER.getValue(), GLenum.NEAREST.getValue() );
+		gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
+		gl.texImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGBA.getValue(), 16, 16, 0, GLEnum.RGBA.getValue(), GLEnum.UNSIGNED_BYTE.getValue(), null );
+		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_WRAP_S.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
+		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_WRAP_T.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
+		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_MAG_FILTER.getValue(), GLEnum.NEAREST.getValue() );
+		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_MIN_FILTER.getValue(), GLEnum.NEAREST.getValue() );
 
-		if ( gl.getParameteri( GLenum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue() ) <= 0 ) 
+		if ( gl.getParameteri( GLEnum.MAX_VERTEX_TEXTURE_IMAGE_UNITS.getValue() ) <= 0 ) 
 		{
 			lensFlare.hasVertexTexture = false;
 			lensFlare.shader = new LensFlareShader();
@@ -212,13 +212,13 @@ public final class LensFlarePlugin extends Plugin
 		gl.uniform1i( uniforms.get("occlusionMap").getLocation(), 0 );
 		gl.uniform1i( uniforms.get("map").getLocation(), 1 );
 
-		gl.bindBuffer( GLenum.ARRAY_BUFFER.getValue(), lensFlare.vertexBuffer );
-		gl.vertexAttribPointer( attributesLocation.get("position"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 0 );
-		gl.vertexAttribPointer( attributesLocation.get("uv"), 2, GLenum.FLOAT.getValue(), false, 2 * 8, 8 );
+		gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), lensFlare.vertexBuffer );
+		gl.vertexAttribPointer( attributesLocation.get("position"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 0 );
+		gl.vertexAttribPointer( attributesLocation.get("uv"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 8 );
 
-		gl.bindBuffer( GLenum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
+		gl.bindBuffer( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
 
-		gl.disable( GLenum.CULL_FACE.getValue() );
+		gl.disable( GLEnum.CULL_FACE.getValue() );
 		gl.depthMask( false );
 
 		for ( int i = 0; i < nFlares; i ++ ) 
@@ -256,9 +256,9 @@ public final class LensFlarePlugin extends Plugin
 
 				// save current RGB to temp texture
 
-				gl.activeTexture( GLenum.TEXTURE1.getValue() );
-				gl.bindTexture( GLenum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
-				gl.copyTexImage2D( GLenum.TEXTURE_2D.getValue(), 0, GLenum.RGB.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
+				gl.activeTexture( GLEnum.TEXTURE1.getValue() );
+				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+				gl.copyTexImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGB.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
 				// render pink quad
 
@@ -266,25 +266,25 @@ public final class LensFlarePlugin extends Plugin
 				gl.uniform2f( uniforms.get("scale").getLocation(), scale.getX(), scale.getY() );
 				gl.uniform3f( uniforms.get("screenPosition").getLocation(), screenPosition.getX(), screenPosition.getY(), screenPosition.getZ() );
 
-				gl.disable( GLenum.BLEND.getValue() );
-				gl.enable( GLenum.DEPTH_TEST.getValue() );
+				gl.disable( GLEnum.BLEND.getValue() );
+				gl.enable( GLEnum.DEPTH_TEST.getValue() );
 
-				gl.drawElements( GLenum.TRIANGLES.getValue(), 6, GLenum.UNSIGNED_SHORT.getValue(), 0 );
+				gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
 
 				// copy result to occlusionMap
 
-				gl.activeTexture( GLenum.TEXTURE0.getValue() );
-				gl.bindTexture( GLenum.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
-				gl.copyTexImage2D( GLenum.TEXTURE_2D.getValue(), 0, GLenum.RGBA.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
+				gl.activeTexture( GLEnum.TEXTURE0.getValue() );
+				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
+				gl.copyTexImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGBA.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
 				// restore graphics
 
 				gl.uniform1i( uniforms.get("renderType").getLocation(), 1 );
-				gl.disable( GLenum.DEPTH_TEST.getValue() );
+				gl.disable( GLEnum.DEPTH_TEST.getValue() );
 
-				gl.activeTexture( GLenum.TEXTURE1.getValue() );
-				gl.bindTexture( GLenum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
-				gl.drawElements( GLenum.TRIANGLES.getValue(), 6, GLenum.UNSIGNED_SHORT.getValue(), 0 );
+				gl.activeTexture( GLEnum.TEXTURE1.getValue() );
+				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+				gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
 
 				// update object positions
 
@@ -295,7 +295,7 @@ public final class LensFlarePlugin extends Plugin
 				// render flares
 
 				gl.uniform1i( uniforms.get("renderType").getLocation(), 2 );
-				gl.enable( GLenum.BLEND.getValue() );
+				gl.enable( GLEnum.BLEND.getValue() );
 
 				for ( int j = 0, jl = flare.getLensFlares().size(); j < jl; j ++ ) 
 				{
@@ -323,7 +323,7 @@ public final class LensFlarePlugin extends Plugin
 						getRenderer().setBlending( sprite.blending );
 						getRenderer().setTexture( sprite.texture, 1 );
 
-						gl.drawElements( GLenum.TRIANGLES.getValue(), 6, GLenum.UNSIGNED_SHORT.getValue(), 0 );
+						gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
 					}
 				}
 			}
@@ -331,8 +331,8 @@ public final class LensFlarePlugin extends Plugin
 
 		// restore gl
 
-		gl.enable( GLenum.CULL_FACE.getValue() );
-		gl.enable( GLenum.DEPTH_TEST.getValue() );
+		gl.enable( GLEnum.CULL_FACE.getValue() );
+		gl.enable( GLEnum.DEPTH_TEST.getValue() );
 		gl.depthMask( true );
 	}
 }

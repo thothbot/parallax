@@ -29,7 +29,7 @@ import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLShader;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Mathematics;
@@ -212,7 +212,7 @@ public abstract class Shader
 
 		gl.linkProgram(this.program);
 
-		if (!gl.getProgramParameterb(this.program, GLenum.LINK_STATUS.getValue()))
+		if (!gl.getProgramParameterb(this.program, GLEnum.LINK_STATUS.getValue()))
 			Log.error("Could not initialise shader\n"
 					+ "GL error: " + gl.getProgramInfoLog(program)
 					+ "Shader: " + this.getClass().getName()
@@ -245,15 +245,15 @@ public abstract class Shader
 		WebGLShader shader = null;
 
 		if (type == ChunksFragmentShader.class)
-			shader = gl.createShader(GLenum.FRAGMENT_SHADER.getValue());
+			shader = gl.createShader(GLEnum.FRAGMENT_SHADER.getValue());
 
 		else if (type == ChunksVertexShader.class)
-			shader = gl.createShader(GLenum.VERTEX_SHADER.getValue());
+			shader = gl.createShader(GLEnum.VERTEX_SHADER.getValue());
 
 		gl.shaderSource(shader, string);
 		gl.compileShader(shader);
 
-		if (!gl.getShaderParameterb(shader, GLenum.COMPILE_STATUS.getValue())) 
+		if (!gl.getShaderParameterb(shader, GLEnum.COMPILE_STATUS.getValue())) 
 		{
 			Log.error(gl.getShaderInfoLog(shader));
 			return null;

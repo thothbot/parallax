@@ -32,22 +32,22 @@ public enum TextureMagFilter
 	 * Returns the value of the texture element that is nearest 
 	 * (in Manhattan distance) to the center of the pixel being textured.
 	 */
-	NEAREST(GLenum.NEAREST),
+	NEAREST(GLEnum.NEAREST),
 	
 	/**
 	 * Returns the weighted average of the four texture elements that 
 	 * are closest to the center of the pixel being textured.
 	 */
-	LINEAR(GLenum.LINEAR);
+	LINEAR(GLEnum.LINEAR);
 
-	private final GLenum value;
+	private final GLEnum value;
 
-	private TextureMagFilter(GLenum GLenum) 
+	private TextureMagFilter(GLEnum GLEnum) 
 	{
-		this.value = GLenum;
+		this.value = GLEnum;
 	}
 	
-	public GLenum getEnum()
+	public GLEnum getEnum()
 	{
 		return this.value;
 	}

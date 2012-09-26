@@ -34,20 +34,20 @@ public enum TextureWrapMode
 	 *  the GL uses only the fractional part, thereby creating a 
 	 *  repeating pattern. 
 	 */
-	REPEAT(GLenum.REPEAT),
+	REPEAT(GLEnum.REPEAT),
 	/**
 	 * This causes s or t coordinates to be clamped to the range [0, 1] 
 	 * and is useful for preventing wrapping artifacts when mapping a 
 	 * single image onto an object.
 	 */
-	CLAMP_TO_EDGE(GLenum.CLAMP_TO_EDGE),
-	MIRRORED_REPEAT(GLenum.MIRRORED_REPEAT);
+	CLAMP_TO_EDGE(GLEnum.CLAMP_TO_EDGE),
+	MIRRORED_REPEAT(GLEnum.MIRRORED_REPEAT);
 
 	private final int value;
 
-	private TextureWrapMode(GLenum GLenum) 
+	private TextureWrapMode(GLEnum GLEnum) 
 	{
-		this.value = GLenum.getValue();
+		this.value = GLEnum.getValue();
 	}
 
 	/**

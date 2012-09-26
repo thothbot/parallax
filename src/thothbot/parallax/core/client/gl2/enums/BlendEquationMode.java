@@ -27,15 +27,15 @@ package thothbot.parallax.core.client.gl2.enums;
  */
 public enum BlendEquationMode 
 {
-	FUNC_ADD(GLenum.FUNC_ADD),
-	FUNC_REVERSE_SUBTRACT(GLenum.FUNC_REVERSE_SUBTRACT),
-	FUNC_SUBTRACT(GLenum.FUNC_SUBTRACT);
+	FUNC_ADD(GLEnum.FUNC_ADD),
+	FUNC_REVERSE_SUBTRACT(GLEnum.FUNC_REVERSE_SUBTRACT),
+	FUNC_SUBTRACT(GLEnum.FUNC_SUBTRACT);
 
 	private final int value;
 
-	private BlendEquationMode(GLenum GLenum) 
+	private BlendEquationMode(GLEnum GLEnum) 
 	{
-		this.value = GLenum.getValue();
+		this.value = GLEnum.getValue();
 	}
 	/**
 	 * Gets the enum's numerical value.

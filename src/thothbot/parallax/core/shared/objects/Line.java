@@ -26,7 +26,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
@@ -112,8 +112,8 @@ public class Line extends GeometryObject
 		WebGLRenderInfo info = renderer.getInfo();
 		
 		int primitives = ( this.getType() == Line.TYPE.STRIPS) 
-				? GLenum.LINE_STRIP.getValue() 
-				: GLenum.LINES.getValue();
+				? GLEnum.LINE_STRIP.getValue() 
+				: GLEnum.LINES.getValue();
 
 		setLineWidth( gl, ((LineBasicMaterial)material).getLinewidth() );
 
@@ -172,7 +172,7 @@ public class Line extends GeometryObject
 				|| this.geometry.isColorsNeedUpdate() 
 				|| areCustomAttributesDirty 
 		) {
-			this.setBuffers( gl, geometry, GLenum.DYNAMIC_DRAW.getValue() );
+			this.setBuffers( gl, geometry, GLEnum.DYNAMIC_DRAW.getValue() );
 
 			this.material.getShader().clearCustomAttributes();
 		}
@@ -203,8 +203,8 @@ public class Line extends GeometryObject
 				geometry.getWebGlVertexArray().set(offset + 2, vertex.getZ());
 			}
 
-			gl.bindBuffer(GLenum.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
-			gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint);
+			gl.bindBuffer(GLEnum.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+			gl.bufferData(GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint);
 		}
 
 		if (dirtyColors) 
@@ -219,8 +219,8 @@ public class Line extends GeometryObject
 				geometry.getWebGlColorArray().set(offset + 2, color.getB());
 			}
 
-			gl.bindBuffer(GLenum.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-			gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint);
+			gl.bindBuffer(GLEnum.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
+			gl.bufferData(GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint);
 		}
 
 		if (customAttributes != null) 
@@ -303,8 +303,8 @@ public class Line extends GeometryObject
 						}
 					}
 
-					gl.bindBuffer(GLenum.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-					gl.bufferData(GLenum.ARRAY_BUFFER.getValue(), customAttribute.array, hint);
+					gl.bindBuffer(GLEnum.ARRAY_BUFFER.getValue(), customAttribute.buffer);
+					gl.bufferData(GLEnum.ARRAY_BUFFER.getValue(), customAttribute.array, hint);
 				}
 			}
 		}

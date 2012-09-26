@@ -26,7 +26,7 @@ import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.DataType;
-import thothbot.parallax.core.client.gl2.enums.GLenum;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
@@ -155,70 +155,70 @@ public class RenderTargetTexture extends Texture
 		this.webglFramebuffer = gl.createFramebuffer();
 		this.webglRenderbuffer = gl.createRenderbuffer();
 
-		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.getWebGlTexture());
+		gl.bindTexture(GLEnum.TEXTURE_2D.getValue(), this.getWebGlTexture());
 
-		setTextureParameters(gl, GLenum.TEXTURE_2D.getValue(), isTargetPowerOfTwo);
+		setTextureParameters(gl, GLEnum.TEXTURE_2D.getValue(), isTargetPowerOfTwo);
 
-		gl.texImage2D(GLenum.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,
+		gl.texImage2D(GLEnum.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,
 				getFormat().getValue(), getType().getValue(), null);
 
-		setupFrameBuffer(gl, this.webglFramebuffer, GLenum.TEXTURE_2D.getValue());
+		setupFrameBuffer(gl, this.webglFramebuffer, GLEnum.TEXTURE_2D.getValue());
 		setupRenderBuffer(gl, this.webglRenderbuffer);
 
 		if (isTargetPowerOfTwo)
-			gl.generateMipmap(GLenum.TEXTURE_2D.getValue());
+			gl.generateMipmap(GLEnum.TEXTURE_2D.getValue());
 
 		// Release everything
-		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), null);
-		gl.bindRenderbuffer(GLenum.RENDERBUFFER.getValue(), null);
-		gl.bindFramebuffer(GLenum.FRAMEBUFFER.getValue(), null);
+		gl.bindTexture(GLEnum.TEXTURE_2D.getValue(), null);
+		gl.bindRenderbuffer(GLEnum.RENDERBUFFER.getValue(), null);
+		gl.bindFramebuffer(GLEnum.FRAMEBUFFER.getValue(), null);
 	}
 
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl)
 	{	
-		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), this.getWebGlTexture());
-		gl.generateMipmap(GLenum.TEXTURE_2D.getValue());
-		gl.bindTexture(GLenum.TEXTURE_2D.getValue(), null);
+		gl.bindTexture(GLEnum.TEXTURE_2D.getValue(), this.getWebGlTexture());
+		gl.generateMipmap(GLEnum.TEXTURE_2D.getValue());
+		gl.bindTexture(GLEnum.TEXTURE_2D.getValue(), null);
 	}
 
 	public void setupFrameBuffer(WebGLRenderingContext gl, WebGLFramebuffer framebuffer, int textureTarget)
 	{	
-		gl.bindFramebuffer(GLenum.FRAMEBUFFER.getValue(), framebuffer);
-		gl.framebufferTexture2D(GLenum.FRAMEBUFFER.getValue(), GLenum.COLOR_ATTACHMENT0.getValue(), textureTarget, this.getWebGlTexture(), 0);
+		gl.bindFramebuffer(GLEnum.FRAMEBUFFER.getValue(), framebuffer);
+		gl.framebufferTexture2D(GLEnum.FRAMEBUFFER.getValue(), GLEnum.COLOR_ATTACHMENT0.getValue(), textureTarget, this.getWebGlTexture(), 0);
 	}
 
 	public void setupRenderBuffer(WebGLRenderingContext gl, WebGLRenderbuffer renderbuffer)
 	{	
-		gl.bindRenderbuffer(GLenum.RENDERBUFFER.getValue(), renderbuffer);
+		gl.bindRenderbuffer(GLEnum.RENDERBUFFER.getValue(), renderbuffer);
 
 		if (this.isDepthBuffer && !this.isStencilBuffer) 
 		{
-			gl.renderbufferStorage(GLenum.RENDERBUFFER.getValue(), GLenum.DEPTH_COMPONENT16.getValue(), this.width, this.height);
-			gl.framebufferRenderbuffer(GLenum.FRAMEBUFFER.getValue(), GLenum.DEPTH_ATTACHMENT.getValue(), GLenum.RENDERBUFFER.getValue(), renderbuffer);
+			gl.renderbufferStorage(GLEnum.RENDERBUFFER.getValue(), GLEnum.DEPTH_COMPONENT16.getValue(), this.width, this.height);
+			gl.framebufferRenderbuffer(GLEnum.FRAMEBUFFER.getValue(), GLEnum.DEPTH_ATTACHMENT.getValue(), GLEnum.RENDERBUFFER.getValue(), renderbuffer);
 
 			/*
 			 * For some reason this is not working. Defaulting to RGBA4. } else
 			 * if( ! this.depthBuffer && this.stencilBuffer ) {
 			 * 
-			 * _gl.renderbufferStorage( GLenum.RENDERBUFFER,
-			 * GLenum.STENCIL_INDEX8, this.width, this.height );
-			 * _gl.framebufferRenderbuffer( GLenum.FRAMEBUFFER,
-			 * GLenum.STENCIL_ATTACHMENT,
-			 * GLenum.RENDERBUFFER, renderbuffer );
+			 * _gl.renderbufferStorage( GLEnum.RENDERBUFFER,
+			 * GLEnum.STENCIL_INDEX8, this.width, this.height );
+			 * _gl.framebufferRenderbuffer( GLEnum.FRAMEBUFFER,
+			 * GLEnum.STENCIL_ATTACHMENT,
+			 * GLEnum.RENDERBUFFER, renderbuffer );
 			 */
 		} 
 		else if (this.isDepthBuffer && this.isStencilBuffer) 
 		{
-			gl.renderbufferStorage(GLenum.RENDERBUFFER.getValue(),
-					GLenum.DEPTH_STENCIL.getValue(), this.width, this.height);
-			gl.framebufferRenderbuffer(GLenum.FRAMEBUFFER.getValue(),
-					GLenum.DEPTH_STENCIL_ATTACHMENT.getValue(),
-					GLenum.RENDERBUFFER.getValue(), renderbuffer);
+			gl.renderbufferStorage(GLEnum.RENDERBUFFER.getValue(),
+					GLEnum.DEPTH_STENCIL.getValue(), this.width, this.height);
+			gl.framebufferRenderbuffer(GLEnum.FRAMEBUFFER.getValue(),
+					GLEnum.DEPTH_STENCIL_ATTACHMENT.getValue(),
+					GLEnum.RENDERBUFFER.getValue(), renderbuffer);
 		} 
 		else 
 		{
-			gl.renderbufferStorage(GLenum.RENDERBUFFER.getValue(),
-					GLenum.RGBA4.getValue(), this.width, this.height);
+			gl.renderbufferStorage(GLEnum.RENDERBUFFER.getValue(),
+					GLEnum.RGBA4.getValue(), this.width, this.height);
 		}
 	}
 }

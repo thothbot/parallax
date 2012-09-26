@@ -27,21 +27,21 @@ package thothbot.parallax.core.client.gl2.enums;
  */
 public enum BlendingFactorSrc 
 {
-	ZERO(GLenum.ZERO),
-	ONE(GLenum.ONE),
-	DST_COLOR(GLenum.DST_COLOR),
-	ONE_MINUS_DST_COLOR(GLenum.ONE_MINUS_DST_COLOR),
-	SRC_ALPHA_SATURATE(GLenum.SRC_ALPHA_SATURATE),
-	SRC_ALPHA(GLenum.SRC_ALPHA),
-	ONE_MINUS_SRC_ALPHA(GLenum.ONE_MINUS_SRC_ALPHA),
-	DST_ALPHA(GLenum.DST_ALPHA),
-	ONE_MINUS_DST_ALPHA(GLenum.ONE_MINUS_DST_ALPHA);
+	ZERO(GLEnum.ZERO),
+	ONE(GLEnum.ONE),
+	DST_COLOR(GLEnum.DST_COLOR),
+	ONE_MINUS_DST_COLOR(GLEnum.ONE_MINUS_DST_COLOR),
+	SRC_ALPHA_SATURATE(GLEnum.SRC_ALPHA_SATURATE),
+	SRC_ALPHA(GLEnum.SRC_ALPHA),
+	ONE_MINUS_SRC_ALPHA(GLEnum.ONE_MINUS_SRC_ALPHA),
+	DST_ALPHA(GLEnum.DST_ALPHA),
+	ONE_MINUS_DST_ALPHA(GLEnum.ONE_MINUS_DST_ALPHA);
 
 	private final int value;
 
-	private BlendingFactorSrc(GLenum GLenum) 
+	private BlendingFactorSrc(GLEnum GLEnum) 
 	{
-		this.value = GLenum.getValue();
+		this.value = GLEnum.getValue();
 	}
 	/**
 	 * Gets the enum's numerical value.
