@@ -21,6 +21,7 @@ package thothbot.parallax.core.client.gl2;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public abstract class WebGLExtension extends JavaScriptObject {
-
+public abstract class WebGLExtension extends JavaScriptObject 
+{
+	protected WebGLExtension(){}
 }
