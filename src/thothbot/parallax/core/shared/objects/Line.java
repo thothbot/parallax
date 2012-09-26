@@ -26,6 +26,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
@@ -113,9 +114,9 @@ public class Line extends GeometryObject
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGLRenderInfo info = renderer.getInfo();
 		
-		int primitives = ( this.getType() == Line.TYPE.STRIPS) 
-				? GLEnum.LINE_STRIP.getValue() 
-				: GLEnum.LINES.getValue();
+		BeginMode primitives = ( this.getType() == Line.TYPE.STRIPS) 
+				? BeginMode.LINE_STRIP 
+				: BeginMode.LINES;
 
 		setLineWidth( gl, ((LineBasicMaterial)material).getLinewidth() );
 

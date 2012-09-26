@@ -31,8 +31,10 @@ import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
+import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
@@ -167,7 +169,7 @@ public class Mesh extends GeometryObject
 			if ( updateBuffers ) 
 				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryBuffer.__webglLineBuffer );
 			
-			gl.drawElements( GLEnum.LINES.getValue(), geometryBuffer.__webglLineCount, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
+			gl.drawElements( BeginMode.LINES, geometryBuffer.__webglLineCount, DrawElementsType.UNSIGNED_SHORT, 0 );
 
 			// triangles
 
@@ -177,7 +179,7 @@ public class Mesh extends GeometryObject
 			if ( updateBuffers ) 
 				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryBuffer.__webglFaceBuffer );
 			
-			gl.drawElements( GLEnum.TRIANGLES.getValue(), geometryBuffer.__webglFaceCount, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
+			gl.drawElements( BeginMode.TRIANGLES, geometryBuffer.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT, 0 );
 		}
 		
 		info.getRender().calls ++;

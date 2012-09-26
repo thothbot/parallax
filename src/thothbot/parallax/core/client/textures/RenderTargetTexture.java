@@ -26,6 +26,7 @@ import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.DataType;
+import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
@@ -163,7 +164,7 @@ public class RenderTargetTexture extends Texture
 		gl.texImage2D(GLEnum.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,
 				getFormat().getValue(), getType().getValue(), null);
 
-		setupFrameBuffer(gl, this.webglFramebuffer, GLEnum.TEXTURE_2D.getValue());
+		setupFrameBuffer(gl, this.webglFramebuffer, TextureTarget.TEXTURE_2D);
 		setupRenderBuffer(gl, this.webglRenderbuffer);
 
 		if (isTargetPowerOfTwo)
@@ -182,10 +183,10 @@ public class RenderTargetTexture extends Texture
 		gl.bindTexture(TextureTarget.TEXTURE_2D, null);
 	}
 
-	public void setupFrameBuffer(WebGLRenderingContext gl, WebGLFramebuffer framebuffer, int textureTarget)
+	public void setupFrameBuffer(WebGLRenderingContext gl, WebGLFramebuffer framebuffer, TextureTarget textureTarget)
 	{	
 		gl.bindFramebuffer(framebuffer);
-		gl.framebufferTexture2D(GLEnum.FRAMEBUFFER.getValue(), GLEnum.COLOR_ATTACHMENT0.getValue(), textureTarget, this.getWebGlTexture(), 0);
+		gl.framebufferTexture2D(FramebufferSlot.COLOR_ATTACHMENT0, textureTarget, this.getWebGlTexture(), 0);
 	}
 
 	public void setupRenderBuffer(WebGLRenderingContext gl, WebGLRenderbuffer renderbuffer)
@@ -195,7 +196,7 @@ public class RenderTargetTexture extends Texture
 		if (this.isDepthBuffer && !this.isStencilBuffer) 
 		{
 			gl.renderbufferStorage(GLEnum.RENDERBUFFER.getValue(), GLEnum.DEPTH_COMPONENT16.getValue(), this.width, this.height);
-			gl.framebufferRenderbuffer(GLEnum.FRAMEBUFFER.getValue(), GLEnum.DEPTH_ATTACHMENT.getValue(), GLEnum.RENDERBUFFER.getValue(), renderbuffer);
+			gl.framebufferRenderbuffer(FramebufferSlot.DEPTH_ATTACHMENT, renderbuffer);
 
 			/*
 			 * For some reason this is not working. Defaulting to RGBA4. } else
@@ -212,9 +213,7 @@ public class RenderTargetTexture extends Texture
 		{
 			gl.renderbufferStorage(GLEnum.RENDERBUFFER.getValue(),
 					GLEnum.DEPTH_STENCIL.getValue(), this.width, this.height);
-			gl.framebufferRenderbuffer(GLEnum.FRAMEBUFFER.getValue(),
-					GLEnum.DEPTH_STENCIL_ATTACHMENT.getValue(),
-					GLEnum.RENDERBUFFER.getValue(), renderbuffer);
+			gl.framebufferRenderbuffer( FramebufferSlot.DEPTH_STENCIL_ATTACHMENT, renderbuffer);
 		} 
 		else 
 		{

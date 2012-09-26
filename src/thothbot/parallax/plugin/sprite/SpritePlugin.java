@@ -28,8 +28,11 @@ import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
+import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
+import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.renderers.Plugin;
@@ -148,8 +151,8 @@ public final class SpritePlugin extends Plugin
 			sprite.attributesEnabled = true;
 		}
 
-		gl.disable( GLEnum.CULL_FACE.getValue() );
-		gl.enable( GLEnum.BLEND.getValue() );
+		gl.disable( EnableCap.CULL_FACE );
+		gl.enable( EnableCap.BLEND );
 		gl.depthMask( true );
 
 		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, sprite.vertexBuffer );
@@ -233,12 +236,12 @@ public final class SpritePlugin extends Plugin
 
 				if ( sprite.isMergeWith3D() && !mergeWith3D ) 
 				{
-					gl.enable( GLEnum.DEPTH_TEST.getValue() );
+					gl.enable( EnableCap.DEPTH_TEST );
 					mergeWith3D = true;
 				} 
 				else if ( ! sprite.isMergeWith3D() && mergeWith3D ) 
 				{
-					gl.disable( GLEnum.DEPTH_TEST.getValue() );
+					gl.disable( EnableCap.DEPTH_TEST );
 					mergeWith3D = false;
 				}
 
@@ -246,14 +249,14 @@ public final class SpritePlugin extends Plugin
 				getRenderer().setBlending( sprite.getBlending() );
 				getRenderer().setTexture( sprite.getMap(), 0 );
 
-				gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
+				gl.drawElements( BeginMode.TRIANGLES, 6, DrawElementsType.UNSIGNED_SHORT, 0 );
 			}
 		}
 
 		// restore gl
 
-		gl.enable( GLEnum.CULL_FACE.getValue() );
-		gl.enable( GLEnum.DEPTH_TEST.getValue() );
+		gl.enable( EnableCap.CULL_FACE );
+		gl.enable( EnableCap.DEPTH_TEST );
 		gl.depthMask( true );
 	}
 }

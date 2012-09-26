@@ -29,8 +29,11 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
+import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
+import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelInternalFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
@@ -223,7 +226,7 @@ public final class LensFlarePlugin extends Plugin
 
 		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, lensFlare.elementBuffer );
 
-		gl.disable( GLEnum.CULL_FACE.getValue() );
+		gl.disable( EnableCap.CULL_FACE );
 		gl.depthMask( false );
 
 		for ( int i = 0; i < nFlares; i ++ ) 
@@ -271,10 +274,10 @@ public final class LensFlarePlugin extends Plugin
 				gl.uniform2f( uniforms.get("scale").getLocation(), scale.getX(), scale.getY() );
 				gl.uniform3f( uniforms.get("screenPosition").getLocation(), screenPosition.getX(), screenPosition.getY(), screenPosition.getZ() );
 
-				gl.disable( GLEnum.BLEND.getValue() );
-				gl.enable( GLEnum.DEPTH_TEST.getValue() );
+				gl.disable( EnableCap.BLEND );
+				gl.enable( EnableCap.DEPTH_TEST );
 
-				gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
+				gl.drawElements( BeginMode.TRIANGLES, 6, DrawElementsType.UNSIGNED_SHORT, 0 );
 
 				// copy result to occlusionMap
 
@@ -285,11 +288,11 @@ public final class LensFlarePlugin extends Plugin
 				// restore graphics
 
 				gl.uniform1i( uniforms.get("renderType").getLocation(), 1 );
-				gl.disable( GLEnum.DEPTH_TEST.getValue() );
+				gl.disable( EnableCap.DEPTH_TEST );
 
 				gl.activeTexture( TextureUnit.TEXTURE1 );
 				gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.tempTexture );
-				gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
+				gl.drawElements( BeginMode.TRIANGLES, 6, DrawElementsType.UNSIGNED_SHORT, 0 );
 
 				// update object positions
 
@@ -300,7 +303,7 @@ public final class LensFlarePlugin extends Plugin
 				// render flares
 
 				gl.uniform1i( uniforms.get("renderType").getLocation(), 2 );
-				gl.enable( GLEnum.BLEND.getValue() );
+				gl.enable( EnableCap.BLEND );
 
 				for ( int j = 0, jl = flare.getLensFlares().size(); j < jl; j ++ ) 
 				{
@@ -328,7 +331,7 @@ public final class LensFlarePlugin extends Plugin
 						getRenderer().setBlending( sprite.blending );
 						getRenderer().setTexture( sprite.texture, 1 );
 
-						gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
+						gl.drawElements( BeginMode.TRIANGLES, 6, DrawElementsType.UNSIGNED_SHORT, 0 );
 					}
 				}
 			}
@@ -336,8 +339,8 @@ public final class LensFlarePlugin extends Plugin
 
 		// restore gl
 
-		gl.enable( GLEnum.CULL_FACE.getValue() );
-		gl.enable( GLEnum.DEPTH_TEST.getValue() );
+		gl.enable( EnableCap.CULL_FACE );
+		gl.enable( EnableCap.DEPTH_TEST );
 		gl.depthMask( true );
 	}
 }

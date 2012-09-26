@@ -28,6 +28,7 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
+import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.shared.core.Mathematics;
@@ -99,7 +100,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			gl.texImage2D( GLEnum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, getFormat().getValue(), getWidth(), getHeight(), 0, 
 					getFormat().getValue(), getType().getValue(), null );
 
-			this.setupFrameBuffer(gl, this.webglFramebuffer.get( i ), GLEnum.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i);
+			this.setupFrameBuffer(gl, this.webglFramebuffer.get( i ), TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i);
 			this.setupRenderBuffer(gl, this.webglRenderbuffer.get( i ));
 		}
 
@@ -110,6 +111,12 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, null );
 		gl.bindRenderbuffer(null);
 		gl.bindFramebuffer(null);
+	}
+	
+	public void setupFrameBuffer(WebGLRenderingContext gl, WebGLFramebuffer framebuffer, TextureTarget textureTarget, int slot)
+	{	
+		gl.bindFramebuffer(framebuffer);
+		gl.framebufferTexture2D(FramebufferSlot.COLOR_ATTACHMENT0, textureTarget, slot, this.getWebGlTexture(), 0);
 	}
 	
 	@Override

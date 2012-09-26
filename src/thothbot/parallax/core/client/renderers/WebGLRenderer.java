@@ -34,12 +34,16 @@ import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
+import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
+import thothbot.parallax.core.client.gl2.enums.DepthFunction;
+import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
@@ -532,14 +536,14 @@ public class WebGLRenderer
 		getGL().clearDepth( 1 );
 		getGL().clearStencil( 0 );
 
-		getGL().enable( GLEnum.DEPTH_TEST.getValue() );
-		getGL().depthFunc( GLEnum.LEQUAL.getValue() );
+		getGL().enable( EnableCap.DEPTH_TEST );
+		getGL().depthFunc( DepthFunction.LEQUAL );
 
 		getGL().frontFace( GLEnum.CCW.getValue() );
-		getGL().cullFace( GLEnum.BACK.getValue() );
-		getGL().enable( GLEnum.CULL_FACE.getValue() );
+		getGL().cullFace( CullFaceMode.BACK );
+		getGL().enable( EnableCap.CULL_FACE );
 
-		getGL().enable( GLEnum.BLEND.getValue() );
+		getGL().enable( EnableCap.BLEND );
 		getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 		getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
 	}
@@ -595,9 +599,9 @@ public class WebGLRenderer
 	public void enableScissorTest(boolean enable)
 	{
 		if (enable)
-			getGL().enable(GLEnum.SCISSOR_TEST.getValue());
+			getGL().enable(EnableCap.SCISSOR_TEST);
 		else
-			getGL().disable(GLEnum.SCISSOR_TEST.getValue());
+			getGL().disable(EnableCap.SCISSOR_TEST);
 	}
 	
 	/**
@@ -1538,7 +1542,7 @@ public class WebGLRenderer
 			getGL().vertexAttribPointer( attributes.get("normal"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 		}
 
-		getGL().drawArrays( GLEnum.TRIANGLES.getValue(), 0, object.count );
+		getGL().drawArrays( BeginMode.TRIANGLES, 0, object.count );
 		object.count = 0;
 	}
 	
@@ -2559,7 +2563,7 @@ public class WebGLRenderer
 	
 	private void setFaceCulling(String frontFace ) 
 	{
-		getGL().disable( GLEnum.CULL_FACE.getValue() );
+		getGL().disable( EnableCap.CULL_FACE );
 	}
 
 	private void setFaceCulling(String cullFace, String frontFace) 
@@ -2570,15 +2574,15 @@ public class WebGLRenderer
 			getGL().frontFace( GLEnum.CW.getValue() );
 
 		if( cullFace.equals("back") )
-			getGL().cullFace( GLEnum.BACK.getValue() );
+			getGL().cullFace( CullFaceMode.BACK );
 			
 		else if( cullFace.equals("front") )
-			getGL().cullFace( GLEnum.FRONT.getValue() );
+			getGL().cullFace( CullFaceMode.FRONT );
 			
 		else
-			getGL().cullFace( GLEnum.FRONT_AND_BACK.getValue() );
+			getGL().cullFace( CullFaceMode.FRONT_AND_BACK );
 
-		getGL().enable( GLEnum.CULL_FACE.getValue() );
+		getGL().enable( EnableCap.CULL_FACE );
 	}
 
 	private void setMaterialFaces( Material material )
@@ -2586,9 +2590,9 @@ public class WebGLRenderer
 		if ( this.cache_oldMaterialSided == null || this.cache_oldMaterialSided != material.getSides() ) 
 		{
 			if(material.getSides() == Material.SIDE.DOUBLE)
-				getGL().disable( GLEnum.CULL_FACE.getValue() );
+				getGL().disable( EnableCap.CULL_FACE );
 			else
-				getGL().enable( GLEnum.CULL_FACE.getValue() );
+				getGL().enable( EnableCap.CULL_FACE );
 
 			if ( material.getSides() == Material.SIDE.BACK ) 
 				getGL().frontFace( GLEnum.CW.getValue() );
@@ -2604,9 +2608,9 @@ public class WebGLRenderer
 		if ( this.cache_oldDepthTest == null || this.cache_oldDepthTest != depthTest ) 
 		{
 			if ( depthTest )
-				getGL().enable( GLEnum.DEPTH_TEST.getValue() );
+				getGL().enable( EnableCap.DEPTH_TEST );
 			else 
-				getGL().disable( GLEnum.DEPTH_TEST.getValue() );
+				getGL().disable( EnableCap.DEPTH_TEST );
 
 			this.cache_oldDepthTest = depthTest;
 		}
@@ -2626,9 +2630,9 @@ public class WebGLRenderer
 		if ( this.cache_oldPolygonOffset == null || this.cache_oldPolygonOffset != polygonoffset ) 
 		{
 			if ( polygonoffset )
-				getGL().enable( GLEnum.POLYGON_OFFSET_FILL.getValue() );
+				getGL().enable( EnableCap.POLYGON_OFFSET_FILL );
 			else
-				getGL().disable( GLEnum.POLYGON_OFFSET_FILL.getValue() );
+				getGL().disable( EnableCap.POLYGON_OFFSET_FILL );
 
 			this.cache_oldPolygonOffset = polygonoffset;
 		}
@@ -2651,12 +2655,12 @@ public class WebGLRenderer
 		{
 			if( blending == Material.BLENDING.NO) 
 			{
-				getGL().disable( GLEnum.BLEND.getValue() );
+				getGL().disable( EnableCap.BLEND );
 				
 			} 
 			else if( blending == Material.BLENDING.ADDITIVE) 
 			{
-				getGL().enable( GLEnum.BLEND.getValue() );
+				getGL().enable( EnableCap.BLEND );
 				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 				getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE );
 				
@@ -2664,7 +2668,7 @@ public class WebGLRenderer
 			} 
 			else if( blending == Material.BLENDING.SUBTRACTIVE) 
 			{
-				getGL().enable( GLEnum.BLEND.getValue() );
+				getGL().enable( EnableCap.BLEND );
 				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 				getGL().blendFunc( BlendingFactorSrc.ZERO, BlendingFactorDest.ONE_MINUS_SRC_COLOR );
 
@@ -2672,19 +2676,19 @@ public class WebGLRenderer
 			} 
 			else if( blending == Material.BLENDING.MULTIPLY) 
 			{
-				getGL().enable( GLEnum.BLEND.getValue() );
+				getGL().enable( EnableCap.BLEND );
 				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 				getGL().blendFunc( BlendingFactorSrc.ZERO, BlendingFactorDest.SRC_COLOR );
 
 			} 
 			else if( blending == Material.BLENDING.CUSTOM) 
 			{
-				getGL().enable( GLEnum.BLEND.getValue() );
+				getGL().enable( EnableCap.BLEND );
 
 			} 
 			else 
 			{
-				getGL().enable( GLEnum.BLEND.getValue() );
+				getGL().enable( EnableCap.BLEND );
 				getGL().blendEquationSeparate( BlendEquationMode.FUNC_ADD, BlendEquationMode.FUNC_ADD );
 				getGL().blendFuncSeparate( BlendingFactorSrc.SRC_ALPHA, 
 						BlendingFactorDest.ONE_MINUS_SRC_ALPHA, 

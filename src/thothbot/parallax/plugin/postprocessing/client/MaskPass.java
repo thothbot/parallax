@@ -22,6 +22,7 @@
 
 package thothbot.parallax.plugin.postprocessing.client;
 
+import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -63,7 +64,7 @@ public class MaskPass extends Pass
 			clearValue = 0;
 		}
 
-		ecffectComposer.getRenderer().getGL().enable( GLEnum.STENCIL_TEST.getValue() );
+		ecffectComposer.getRenderer().getGL().enable( EnableCap.STENCIL_TEST );
 		ecffectComposer.getRenderer().getGL().stencilOp( GLEnum.REPLACE.getValue(), GLEnum.REPLACE.getValue(), GLEnum.REPLACE.getValue() );
 		ecffectComposer.getRenderer().getGL().stencilFunc( GLEnum.ALWAYS.getValue(), writeValue, 0xffffffff );
 		ecffectComposer.getRenderer().getGL().clearStencil( clearValue );

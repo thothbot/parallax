@@ -22,6 +22,7 @@
 
 package thothbot.parallax.plugin.postprocessing.client;
 
+import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
@@ -95,7 +96,7 @@ public class BloomPass extends Pass
 	public void render(Postprocessing postprocessing, double delta, boolean maskActive)
 	{
 		if ( maskActive ) 
-			postprocessing.getRenderer().getGL().disable( GLEnum.STENCIL_TEST.getValue() );
+			postprocessing.getRenderer().getGL().disable( EnableCap.STENCIL_TEST );
 
 		// Render quad with blured scene into texture (convolution pass 1)
 		postprocessing.getQuad().setMaterial(this.materialConvolution);
@@ -120,7 +121,7 @@ public class BloomPass extends Pass
 		this.materialScreen.getShader().getUniforms().get("tDiffuse").setValue( this.renderTargetY );
 
 		if ( maskActive ) 
-			postprocessing.getRenderer().getGL().enable( GLEnum.STENCIL_TEST.getValue() );
+			postprocessing.getRenderer().getGL().enable( EnableCap.STENCIL_TEST );
 
 		postprocessing.getRenderer().render( 
 				postprocessing.getScene(), postprocessing.getCamera(), postprocessing.getReadBuffer(), this.clear );

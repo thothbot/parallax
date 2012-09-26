@@ -26,6 +26,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
@@ -61,7 +62,7 @@ public class Ribbon extends GeometryObject
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGLRenderInfo info = renderer.getInfo();
 		
-		gl.drawArrays( GLEnum.TRIANGLE_STRIP.getValue(), 0, geometryBuffer.__webglVertexCount );
+		gl.drawArrays( BeginMode.TRIANGLE_STRIP, 0, geometryBuffer.__webglVertexCount );
 
 		info.getRender().calls ++;
 	}

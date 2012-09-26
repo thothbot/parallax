@@ -27,13 +27,18 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int32Array;
 import thothbot.parallax.core.client.gl2.arrays.JsArrayUtil;
 import thothbot.parallax.core.client.gl2.arrays.TypeArray;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
-import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
+import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
+import thothbot.parallax.core.client.gl2.enums.DepthFunction;
+import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
+import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.FramebufferErrorCode;
+import thothbot.parallax.core.client.gl2.enums.FramebufferSlot;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelInternalFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
@@ -496,88 +501,286 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		return this.createTexture();
   }-*/;
 
-  public native void cullFace(int mode) /*-{
+  /**
+   * Specify whether front- or back-facing facets can be culled.
+   * 
+   * @param mode
+   */
+  public void cullFace(CullFaceMode mode) {
+	  cullFace(mode.getValue());
+  }
+
+  private native void cullFace(int mode) /*-{
 		this.cullFace(mode);
   }-*/;
 
+  /**
+   * Delete the buffer object contained in the passed WebGLBuffer as if by 
+   * calling glDeleteBuffers. If the buffer has already been deleted the call 
+   * has no effect. Note that the buffer object will be deleted when the 
+   * WebGLBuffer object is destroyed. This method merely gives the author 
+   * greater control over when the buffer object is destroyed.
+   * 
+   * @param buffer
+   */
   public native void deleteBuffer(WebGLBuffer buffer) /*-{
 		this.deleteBuffer(buffer);
   }-*/;
 
+  /**
+   * Delete the framebuffer object contained in the passed WebGLFramebuffer as 
+   * if by calling glDeleteFramebuffers. If the framebuffer has already been 
+   * deleted the call has no effect. Note that the framebuffer object will be 
+   * deleted when the WebGLFramebuffer object is destroyed. This method merely 
+   * gives the author greater control over when the framebuffer object is 
+   * destroyed.
+   * 
+   * @param buffer
+   */
   public native void deleteFramebuffer(WebGLFramebuffer buffer) /*-{
 		this.deleteFramebuffer(buffer);
   }-*/;
 
+  /**
+   * Delete the program object contained in the passed WebGLProgram as if by 
+   * calling glDeleteProgram. If the program has already been deleted the call 
+   * has no effect. Note that the program object will be deleted when the 
+   * WebGLProgram object is destroyed. This method merely gives the author 
+   * greater control over when the program object is destroyed.
+   * 
+   * @param program
+   */
   public native void deleteProgram(WebGLProgram program) /*-{
 		this.deleteProgram(program);
   }-*/;
 
+  /**
+   * Delete the renderbuffer object contained in the passed WebGLRenderbuffer 
+   * as if by calling glDeleteRenderbuffers. If the renderbuffer has already 
+   * been deleted the call has no effect. Note that the renderbuffer object 
+   * will be deleted when the WebGLRenderbuffer object is destroyed. This 
+   * method merely gives the author greater control over when the renderbuffer 
+   * object is destroyed.
+   * 
+   * @param buffer
+   */
   public native void deleteRenderbuffer(WebGLRenderbuffer buffer) /*-{
 		this.deleteRenderbuffer(buffer);
   }-*/;
 
+  /**
+   * Delete the shader object contained in the passed WebGLShader as if by 
+   * calling glDeleteShader. If the shader has already been deleted the call
+   * has no effect. Note that the shader object will be deleted when the 
+   * WebGLShader object is destroyed. This method merely gives the author 
+   * greater control over when the shader object is destroyed.
+   * 
+   * @param shader
+   */
   public native void deleteShader(WebGLShader shader) /*-{
 		this.deleteShader(shader);
   }-*/;
 
+  /**
+   * Delete the texture object contained in the passed WebGLTexture as if by 
+   * calling glDeleteTextures. If the texture has already been deleted the 
+   * call has no effect. Note that the texture object will be deleted when the 
+   * WebGLTexture object is destroyed. This method merely gives the author 
+   * greater control over when the texture object is destroyed.
+   * 
+   * @param texture
+   */
   public native void deleteTexture(WebGLTexture texture) /*-{
 		this.deleteTexture(texture);
   }-*/;
 
-  public native void depthFunc(int func) /*-{
+  /**
+   * Specify the value used for depth buffer comparisons.
+   * 
+   * @param func
+   */
+  public void depthFunc(DepthFunction func) {
+	  depthFunc(func.getValue());
+  }
+
+  private native void depthFunc(int func) /*-{
 		this.depthFunc(func);
   }-*/;
 
+  /**
+   * Enable or disable writing into the depth buffer.
+   * 
+   * @param flag
+   */
   public native void depthMask(boolean flag) /*-{
 		this.depthMask(flag);
   }-*/;
 
+  /**
+   * Specify mapping of depth values from normalized device coordinates to 
+   * window coordinates.
+   * 
+   * @param zNear Specifies the mapping of the near clipping plane to window 
+   * 				coordinates. The initial value is 0.
+   * @param zFar Specifies the mapping of the far clipping plane to window
+   * 				coordinates. The initial value is 1.
+   */
   public native void depthRange(double nearVal, double farVal) /*-{
 		this.depthRange(nearVal, farVal);
   }-*/;
 
+  /**
+   * Detach a shader object from a program object.
+   * 
+   * @param program Specifies the program object from which to detach the 
+   * 				shader object.
+   * @param shader Specifies the shader object to be detached.
+   */
   public native void detachShader(WebGLProgram program, WebGLShader shader) /*-{
 		this.detachShader(program, shader);
   }-*/;
 
-  public native void disable(int param) /*-{
+  /**
+   * Disable server-side GL capabilities.
+   * 
+   * @param cap
+   */
+  public void disable(EnableCap cap) {
+	  disable(cap.getValue());
+  }
+
+  private native void disable(int param) /*-{
 		this.disable(param);
   }-*/;
 
+  /**
+   * Disable a generic vertex attribute array.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to be 
+   * 				disabled.
+   */
   public native void disableVertexAttribArray(int index) /*-{
 		this.disableVertexAttribArray(index);
   }-*/;
 
-  public native void drawArrays(int mode, int first, int count) /*-{
+  /**
+   * Draw using the currently bound index array.
+   * 
+   * @param mode Specifies what kind of primitives to render.
+   * @param first Specifies the starting index in the enabled arrays.
+   * @param count Specifies the number of indices to be rendered.
+   */
+  public void drawArrays(BeginMode mode, int first, int count) {
+	  drawArrays(mode.getValue(), first, count);
+  }
+
+  private native void drawArrays(int mode, int first, int count) /*-{
 		this.drawArrays(mode, first, count);
   }-*/;
 
-  public native void drawElements(int mode, int count, int type, int offset) /*-{
+  /**
+   * Draw using the currently bound index array. The given offset is in bytes, 
+   * and must be a valid multiple of the size of the given type or an 
+   * INVALID_VALUE error will be raised.
+   * 
+   * @param mode Specifies what kind of primitives to render.
+   * @param count Specifies the number of elements to be rendered.
+   * @param type Specifies the type of the values in indices.
+   * @param offset Specifies a pointer to the location where the indices are 
+   * 				stored.
+   */
+  public void drawElements(BeginMode mode, int count, DrawElementsType type, int offset) {
+	  drawElements(mode.getValue(), count, type.getValue(), offset);
+  }
+
+  private native void drawElements(int mode, int count, int type, int offset) /*-{
 		this.drawElements(mode, count, type, offset);
   }-*/;
 
-  public native void enable(int param) /*-{
+  /**
+   * Enable server-side GL capabilities.
+   * 
+   * @param cap
+   */
+  public void enable(EnableCap cap) {
+	  enable(cap.getValue());
+  }
+
+  private native void enable(int param) /*-{
 		this.enable(param);
   }-*/;
 
+  /**
+   * Enable a generic vertex attribute array.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to be 
+   * 				disabled.
+   */
   public native void enableVertexAttribArray(int index) /*-{
 		this.enableVertexAttribArray(index);
   }-*/;
 
+  /**
+   * Block until all GL execution is complete.
+   */
   public native void finish() /*-{
 		this.finish();
   }-*/;
 
+  /**
+   * Force execution of GL commands in finite time
+   */
   public native void flush() /*-{
 		this.flush();
   }-*/;
 
-  public native void framebufferRenderbuffer(int target, int attachment, int rbtarget,
+  /**
+   * Attach a renderbuffer object to a framebuffer object.
+   * 
+   * @param attachment Specifies the attachment point to which renderbuffer 
+   * 				should be attached.
+   * @param renderbuffer Specifies the renderbuffer object that is to be 
+   * 				attached.
+   */
+  public void framebufferRenderbuffer(FramebufferSlot attachment, WebGLRenderbuffer renderbuffer) {
+	  framebufferRenderbuffer(GLEnum.FRAMEBUFFER.getValue(), attachment.getValue(),
+			  GLEnum.RENDERBUFFER.getValue(), renderbuffer);
+  }
+
+  private native void framebufferRenderbuffer(int target, int attachment, int rbtarget,
       WebGLRenderbuffer rbuffer) /*-{
 		this.framebufferRenderbuffer(target, attachment, rbtarget, rbuffer);
   }-*/;
 
-  public native void framebufferTexture2D(int target, int att, int textarget, WebGLTexture tex,
+  /**
+   * Attach a texture image to a framebuffer object.
+   * 
+   * @param attachment Specifies the attachment point to which an image from 
+   * 				texture should be attached.
+   * @param textarget Specifies the texture target.
+   * @param texture Specifies the texture object whose image is to be attached.
+   * @param level Specifies the mipmap level of the texture image to be 
+   * 				attached, which must be 0.
+   */
+  public void framebufferTexture2D(FramebufferSlot attachment, TextureTarget textarget,
+		  WebGLTexture texture, int level) {
+	  framebufferTexture2D(GLEnum.FRAMEBUFFER.getValue(), attachment.getValue(),
+			  textarget.getValue(), texture, level);
+  }
+  
+  /**
+   * @see #framebufferTexture2D(FramebufferSlot, TextureTarget, WebGLTexture, int)
+   * @param attachment
+   * @param textarget
+   * @param slot
+   */
+  public void framebufferTexture2D(FramebufferSlot attachment, TextureTarget textarget, int slot,
+		  WebGLTexture texture, int level) {
+	  framebufferTexture2D(GLEnum.FRAMEBUFFER.getValue(), attachment.getValue(),
+			  textarget.getValue() + slot, texture, level);
+  }
+
+  private native void framebufferTexture2D(int target, int att, int textarget, WebGLTexture tex,
       int level) /*-{
 		this.framebufferTexture2D(target, att, textarget, tex, level);
   }-*/;
