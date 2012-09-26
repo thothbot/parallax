@@ -19,38 +19,22 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-/**
- * GL2 Texture Parameter name flags.
- * 
- * @author thothbot
- *
- */
-public enum TextureParameterName 
+public enum EXT_TextureFilterAnisotropic 
 {
-	TEXTURE_MAG_FILTER(GLEnum.TEXTURE_MAG_FILTER),
-	TEXTURE_MIN_FILTER(GLEnum.TEXTURE_MIN_FILTER),
-	TEXTURE_WRAP_S(GLEnum.TEXTURE_WRAP_S),
-	TEXTURE_WRAP_T(GLEnum.TEXTURE_WRAP_T),
+	TEXTURE_MAX_ANISOTROPY_EXT(0x84FE),
+	MAX_TEXTURE_MAX_ANISOTROPY_EXT(0x84FF);
 	
-	TEXTURE_MAX_ANISOTROPY_EXT(EXT_TextureFilterAnisotropic.TEXTURE_MAX_ANISOTROPY_EXT),
-	MAX_TEXTURE_MAX_ANISOTROPY_EXT(EXT_TextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-
 	private final int value;
 
-	private TextureParameterName(EXT_TextureFilterAnisotropic GLEnum) 
+	private EXT_TextureFilterAnisotropic(int value) 
 	{
-		this.value = GLEnum.getValue();
+		this.value = value;
 	}
-	
-	private TextureParameterName(GLEnum GLEnum) 
-	{
-		this.value = GLEnum.getValue();
-	}
-	
+
 	/**
 	 * Gets the enum's numerical value.
 	 */
-	public int getValue() 
+	 public int getValue() 
 	{
 		return value;
 	}

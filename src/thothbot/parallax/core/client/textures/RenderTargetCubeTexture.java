@@ -90,7 +90,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 
 		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, this.getWebGlTexture() );
 
-		setTextureParameters( gl, GLEnum.TEXTURE_CUBE_MAP.getValue(), isTargetPowerOfTwo );
+		setTextureParameters( gl, TextureTarget.TEXTURE_CUBE_MAP, isTargetPowerOfTwo );
 
 		for ( int i = 0; i < 6; i ++ ) 
 		{

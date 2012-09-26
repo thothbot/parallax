@@ -30,6 +30,8 @@ import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
+import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureWrapMode;
 import thothbot.parallax.core.shared.core.Vector2;
 
@@ -447,33 +449,33 @@ public class Texture
 	}
 
 	// TODO: check in rendering targets 
-	public void setTextureParameters (WebGLRenderingContext gl, int textureType, boolean isImagePowerOfTwo )
+	public void setTextureParameters (WebGLRenderingContext gl, TextureTarget textureType, boolean isImagePowerOfTwo )
 	{
 		setTextureParameters(gl, 0, textureType, isImagePowerOfTwo);
 	}
 
-	public void setTextureParameters (WebGLRenderingContext gl, int maxAnisotropy, int textureType, boolean isImagePowerOfTwo ) 
+	public void setTextureParameters (WebGLRenderingContext gl, int maxAnisotropy, TextureTarget textureType, boolean isImagePowerOfTwo ) 
 	{	
 		if ( isImagePowerOfTwo ) 
 		{
-			gl.texParameteri( textureType, GLEnum.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue() );
-			gl.texParameteri( textureType, GLEnum.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue() );
-			gl.texParameteri( textureType, GLEnum.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
-			gl.texParameteri( textureType, GLEnum.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue() );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_S, this.wrapS.getValue() );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_T, this.wrapT.getValue() );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MAG_FILTER, this.magFilter.getValue() );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MIN_FILTER, this.minFilter.getValue() );
 		} 
 		else 
 		{
-			gl.texParameteri( textureType, GLEnum.TEXTURE_WRAP_S.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
-			gl.texParameteri( textureType, GLEnum.TEXTURE_WRAP_T.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
-			gl.texParameteri( textureType, GLEnum.TEXTURE_MAG_FILTER.getValue(), filterFallback( this.magFilter.getEnum() ) );
-			gl.texParameteri( textureType, GLEnum.TEXTURE_MIN_FILTER.getValue(), filterFallback( this.minFilter.getEnum() ) );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_S, GLEnum.CLAMP_TO_EDGE.getValue() );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_T, GLEnum.CLAMP_TO_EDGE.getValue() );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MAG_FILTER, filterFallback( this.magFilter.getEnum() ) );
+			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MIN_FILTER, filterFallback( this.minFilter.getEnum() ) );
 		}
 		
 		if ( maxAnisotropy > 0 ) 
 		{
 			if ( this.anisotropy > 1 || this.cache_oldAnisotropy > 1 ) 
 			{
-				gl.texParameterf( textureType, 0x84FE, Math.min( this.anisotropy, maxAnisotropy ) );
+				gl.texParameterf( textureType, TextureParameterName.TEXTURE_MAX_ANISOTROPY_EXT, Math.min( this.anisotropy, maxAnisotropy ) );
 				this.cache_oldAnisotropy = this.anisotropy;
 			}
 		}

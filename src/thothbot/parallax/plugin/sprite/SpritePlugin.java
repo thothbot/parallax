@@ -31,6 +31,7 @@ import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
+import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
@@ -156,8 +157,8 @@ public final class SpritePlugin extends Plugin
 		gl.depthMask( true );
 
 		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, sprite.vertexBuffer );
-		gl.vertexAttribPointer( attributesLocations.get("position"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 0 );
-		gl.vertexAttribPointer( attributesLocations.get("uv"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 8 );
+		gl.vertexAttribPointer( attributesLocations.get("position"), 2, DataType.FLOAT, false, 2 * 8, 0 );
+		gl.vertexAttribPointer( attributesLocations.get("uv"), 2, DataType.FLOAT, false, 2 * 8, 8 );
 
 		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.elementBuffer );
 

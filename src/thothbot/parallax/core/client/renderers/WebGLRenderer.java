@@ -42,6 +42,7 @@ import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
+import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.DepthFunction;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
@@ -863,13 +864,13 @@ public class WebGLRenderer
 		if ( object.getMorphTargetBase() != - 1 ) 
 		{
 			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( object.getMorphTargetBase() ) );
-			getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+			getGL().vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, 0 );
 
 		} 
 		else if ( attributes.get("position") >= 0 ) 
 		{
 			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglVertexBuffer );
-			getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+			getGL().vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, 0 );
 		}
 
 		if ( object.getMorphTargetForcedOrder().size() > 0 ) 
@@ -885,12 +886,12 @@ public class WebGLRenderer
 					&& m < order.size() 
 			) {
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( order.get( m ) ) );
-				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, DataType.FLOAT, false, 0, 0 );
 
 				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals()) 
 				{
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( order.get( m ) ) );
-					getGL().vertexAttribPointer( attributes.get("morphNormal" + m ), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+					getGL().vertexAttribPointer( attributes.get("morphNormal" + m ), 3, DataType.FLOAT, false, 0, 0 );
 				}
 
 				object.__webglMorphTargetInfluences.set( m , influences.get( order.get( m ) ));
@@ -924,12 +925,12 @@ public class WebGLRenderer
 				}
 
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( candidate ) );
-				getGL().vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+				getGL().vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, DataType.FLOAT, false, 0, 0 );
 
 				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
 				{
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( candidate ) );
-					getGL().vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+					getGL().vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, DataType.FLOAT, false, 0, 0 );
 				}
 
 				object.__webglMorphTargetInfluences.set( m, candidateInfluence);
@@ -1385,7 +1386,7 @@ public class WebGLRenderer
 			if ( updateBuffers ) 
 			{
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglVertexBuffer );
-				getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+				getGL().vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, 0 );
 			}
 
 		} 
@@ -1410,7 +1411,7 @@ public class WebGLRenderer
 					if( attributes.get( attribute.belongsToAttribute ) >= 0 ) 
 					{
 						getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, attribute.buffer );
-						getGL().vertexAttribPointer( attributes.get( attribute.belongsToAttribute ), attribute.size, GLEnum.FLOAT.getValue(), false, 0, 0 );
+						getGL().vertexAttribPointer( attributes.get( attribute.belongsToAttribute ), attribute.size, DataType.FLOAT, false, 0, 0 );
 					}
 				}
 			}
@@ -1419,21 +1420,21 @@ public class WebGLRenderer
 			if ( attributes.get("color") >= 0 ) 
 			{
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglColorBuffer );
-				getGL().vertexAttribPointer( attributes.get("color"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+				getGL().vertexAttribPointer( attributes.get("color"), 3, DataType.FLOAT, false, 0, 0 );
 			}
 
 			// normals
 			if ( attributes.get("normal") >= 0 ) 
 			{
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglNormalBuffer );
-				getGL().vertexAttribPointer( attributes.get("normal"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+				getGL().vertexAttribPointer( attributes.get("normal"), 3, DataType.FLOAT, false, 0, 0 );
 			}
 
 			// tangents
 			if ( attributes.get("tangent") >= 0 ) 
 			{
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglTangentBuffer );
-				getGL().vertexAttribPointer( attributes.get("tangent"), 4, GLEnum.FLOAT.getValue(), false, 0, 0 );
+				getGL().vertexAttribPointer( attributes.get("tangent"), 4, DataType.FLOAT, false, 0, 0 );
 			}
 
 			// uvs
@@ -1442,7 +1443,7 @@ public class WebGLRenderer
 				if ( geometryBuffer.__webglUVBuffer != null) 
 				{
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglUVBuffer );
-					getGL().vertexAttribPointer( attributes.get("uv"), 2, GLEnum.FLOAT.getValue(), false, 0, 0 );
+					getGL().vertexAttribPointer( attributes.get("uv"), 2, DataType.FLOAT, false, 0, 0 );
 
 					getGL().enableVertexAttribArray( attributes.get("uv") );
 
@@ -1456,7 +1457,7 @@ public class WebGLRenderer
 				if ( geometryBuffer.__webglUV2Buffer != null) 
 				{
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglUV2Buffer );
-					getGL().vertexAttribPointer( attributes.get("uv2"), 2, GLEnum.FLOAT.getValue(), false, 0, 0 );
+					getGL().vertexAttribPointer( attributes.get("uv2"), 2, DataType.FLOAT, false, 0, 0 );
 
 					getGL().enableVertexAttribArray( attributes.get("uv2") );
 
@@ -1469,10 +1470,10 @@ public class WebGLRenderer
 				 attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 ) 
 			{
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglSkinIndicesBuffer );
-				getGL().vertexAttribPointer( attributes.get("skinIndex"), 4, GLEnum.FLOAT.getValue(), false, 0, 0 );
+				getGL().vertexAttribPointer( attributes.get("skinIndex"), 4, DataType.FLOAT, false, 0, 0 );
 
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglSkinWeightsBuffer );
-				getGL().vertexAttribPointer( attributes.get("skinWeight"), 4, GLEnum.FLOAT.getValue(), false, 0, 0 );
+				getGL().vertexAttribPointer( attributes.get("skinWeight"), 4, DataType.FLOAT, false, 0, 0 );
 			}
 		}
 
@@ -1496,7 +1497,7 @@ public class WebGLRenderer
 			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglVertexBuffer );
 			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.positionArray, BufferUsage.DYNAMIC_DRAW );
 			getGL().enableVertexAttribArray( attributes.get("position") );
-			getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+			getGL().vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, 0 );
 		}
 
 		if ( object.hasNormal ) 
@@ -1541,7 +1542,7 @@ public class WebGLRenderer
 
 			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.normalArray, BufferUsage.DYNAMIC_DRAW );
 			getGL().enableVertexAttribArray( attributes.get("normal") );
-			getGL().vertexAttribPointer( attributes.get("normal"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
+			getGL().vertexAttribPointer( attributes.get("normal"), 3, DataType.FLOAT, false, 0, 0 );
 		}
 
 		getGL().drawArrays( BeginMode.TRIANGLES, 0, object.count );
@@ -2757,7 +2758,7 @@ public class WebGLRenderer
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
-			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, GLEnum.TEXTURE_2D.getValue(), isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
 			if ( texture instanceof DataTexture ) 
 			{
@@ -2771,7 +2772,7 @@ public class WebGLRenderer
 			} 
 			else 
 			{
-				getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(), image);
+				getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(), image );
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo ) 
@@ -2849,7 +2850,7 @@ public class WebGLRenderer
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
-			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, GLEnum.TEXTURE_CUBE_MAP.getValue(), isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_CUBE_MAP, isImagePowerOfTwo );
 
 			for ( int i = 0; i < 6; i ++ ) 
 			{

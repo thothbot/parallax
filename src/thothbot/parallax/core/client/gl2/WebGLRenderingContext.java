@@ -35,6 +35,7 @@ import thothbot.parallax.core.client.gl2.enums.BufferParameterName;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
+import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.DepthFunction;
 import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
@@ -52,6 +53,7 @@ import thothbot.parallax.core.client.gl2.enums.RenderbufferInternalFormat;
 import thothbot.parallax.core.client.gl2.enums.RenderbufferParameterName;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
 import thothbot.parallax.core.client.gl2.enums.StencilOp;
+import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 
@@ -874,6 +876,15 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		  return new WebGLShader[0];
 	  }
   }
+  
+  private native com.google.gwt.core.client.JsArray<WebGLShader> getAttachedShadersDev(
+	      WebGLProgram program) /*-{
+			return this.getAttachedShaders(program);
+  }-*/;
+
+  private native WebGLShader[] getAttachedShadersProd(WebGLProgram program) /*-{
+			return this.getAttachedShaders(program);
+  }-*/;
 
   /**
    * Returns the location of an attribute variable.
@@ -1714,11 +1725,27 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.texImage2D(target, level, internalformat, format, type, data);
   }-*/;
 
-  public native void texParameterf(int target, int pname, double value) /*-{
+  /**
+   * If an attempt is made to call this function with no WebGLTexture bound, 
+   * an INVALID_OPERATION error is raised.
+   */
+  public void texParameterf(TextureTarget target, TextureParameterName pname, double param) {
+	  texParameterf(target.getValue(), pname.getValue(), param);
+  }
+
+  private native void texParameterf(int target, int pname, double value) /*-{
 		this.texParameterf(target, pname, value);
   }-*/;
 
-  public native void texParameteri(int target, int pname, int value) /*-{
+  /**
+   * If an attempt is made to call this function with no WebGLTexture bound, 
+   * an INVALID_OPERATION error is raised.
+   */
+  public void texParameteri(TextureTarget target, TextureParameterName pname, int param) {
+	  texParameteri(target.getValue(), pname.getValue(), param);
+  }
+
+  private native void texParameteri(int target, int pname, int value) /*-{
 		this.texParameteri(target, pname, value);
   }-*/;
 
@@ -1744,264 +1771,795 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 				asPremultipliedAlpha);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided. 
+   * 
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v0
+   */
   public native void uniform1f(WebGLUniformLocation location, double v0) /*-{
 		this.uniform1f(location, v0);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public void uniform1fv(WebGLUniformLocation location, double[] values) {
     uniform1fv(location, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public native void uniform1fv(WebGLUniformLocation location, JsArrayNumber values) /*-{
 		this.uniform1fv(location, values);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v
+   */
   public native void uniform1fv(WebGLUniformLocation location, Float32Array v) /*-{
 		this.uniform1fv(location, v);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v0
+   */
   public native void uniform1i(WebGLUniformLocation location, int v0) /*-{
 		this.uniform1i(location, v0);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public void uniform1iv(WebGLUniformLocation location, int[] values) {
     uniform1iv(location, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v
+   */
   public native void uniform1iv(WebGLUniformLocation location, Int32Array v) /*-{
 		this.uniform1iv(location, v);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public native void uniform1iv(WebGLUniformLocation location, JsArrayInteger values) /*-{
 		this.uniform1iv(location, values);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v0
+   * @param v1
+   */
   public native void uniform2f(WebGLUniformLocation location, double v0, double v1) /*-{
 		this.uniform2f(location, v0, v1);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public void uniform2fv(WebGLUniformLocation location, double[] values) {
     uniform2fv(location, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v
+   */
   public native void uniform2fv(WebGLUniformLocation location, Float32Array v) /*-{
 		this.uniform2fv(location, v);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public native void uniform2fv(WebGLUniformLocation location, JsArrayNumber values) /*-{
 		this.uniform2fv(location, values);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v0
+   * @param v1
+   */
   public native void uniform2i(WebGLUniformLocation location, int v0, int v1) /*-{
 		this.uniform2i(location, v0, v1);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public void uniform2iv(WebGLUniformLocation location, int[] values) {
     uniform2iv(location, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v
+   */
   public native void uniform2iv(WebGLUniformLocation location, Int32Array v) /*-{
 		this.uniform2iv(location, v);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public native void uniform2iv(WebGLUniformLocation location, JsArrayInteger values) /*-{
 		this.uniform2iv(location, values);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v0
+   * @param v1
+   * @param v2
+   */
   public native void uniform3f(WebGLUniformLocation location, double v0, double v1, double v2) /*-{
 		this.uniform3f(location, v0, v1, v2);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public void uniform3fv(WebGLUniformLocation location, double[] values) {
     uniform3fv(location, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v
+   */
   public native void uniform3fv(WebGLUniformLocation location, Float32Array v) /*-{
 		this.uniform3fv(location, v);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public native void uniform3fv(WebGLUniformLocation location, JsArrayNumber values) /*-{
 		this.uniform3fv(location, values);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v0
+   * @param v1
+   * @param v2
+   */
   public native void uniform3i(WebGLUniformLocation location, int v0, int v1, int v2) /*-{
 		this.uniform3i(location, v0, v1, v2);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public void uniform3iv(WebGLUniformLocation location, int[] values) {
     uniform3iv(location, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public native void uniform3iv(WebGLUniformLocation location, JsArrayInteger values) /*-{
 		this.uniform3iv(location, values);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v
+   */
   public native void uniform3iv(WebGLUniformLocation location, Int32Array v) /*-{
 		this.uniform3iv(location, v);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v0
+   * @param v1
+   * @param v2
+   * @param v3
+   */
   public native void uniform4f(WebGLUniformLocation location, double v0, double v1, double v2, double v3) /*-{
 		this.uniform4f(location, v0, v1, v2, v3);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public void uniform4fv(WebGLUniformLocation location, double[] values) {
     uniform4fv(location, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v
+   */
   public native void uniform4fv(WebGLUniformLocation location, Float32Array v) /*-{
 		this.uniform4fv(location, v);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public native void uniform4fv(WebGLUniformLocation location, JsArrayNumber values) /*-{
 		this.uniform4fv(location, values);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v0
+   * @param v1
+   * @param v2
+   * @param v3
+   */
   public native void uniform4i(WebGLUniformLocation location, int v0, int v1, int v2, int v3) /*-{
 		this.uniform4i(location, v0, v1, v2, v3);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public void uniform4iv(WebGLUniformLocation location, int[] values) {
     uniform4iv(location, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param v
+   */
   public native void uniform4iv(WebGLUniformLocation location, Int32Array v) /*-{
 		this.uniform4iv(location, v);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param values
+   */
   public native void uniform4iv(WebGLUniformLocation location, JsArrayInteger values) /*-{
 		this.uniform4iv(location, values);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public void uniformMatrix2fv(WebGLUniformLocation location, boolean transpose, double[] value) {
     uniformMatrix2fv(location, transpose, JsArrayUtil.wrapArray(value));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public native void uniformMatrix2fv(WebGLUniformLocation location, boolean transpose,
       Float32Array value) /*-{
 		this.uniformMatrix2fv(location, transpose, value);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public native void uniformMatrix2fv(WebGLUniformLocation location, boolean transpose,
       JsArrayNumber value) /*-{
 		this.uniformMatrix2fv(location, transpose, value);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public void uniformMatrix3fv(WebGLUniformLocation location, boolean transpose, double[] value) {
     uniformMatrix3fv(location, transpose, JsArrayUtil.wrapArray(value));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public native void uniformMatrix3fv(WebGLUniformLocation location, boolean transpose,
       Float32Array value) /*-{
 		this.uniformMatrix3fv(location, transpose, value);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public native void uniformMatrix3fv(WebGLUniformLocation location, boolean transpose,
       JsArrayNumber value) /*-{
 		this.uniformMatrix3fv(location, transpose, value);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public void uniformMatrix4fv(WebGLUniformLocation location, boolean transpose, double[] value) {
     uniformMatrix4fv(location, transpose, JsArrayUtil.wrapArray(value));
   }
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public native void uniformMatrix4fv(WebGLUniformLocation location, boolean transpose,
       Float32Array value) /*-{
 		this.uniformMatrix4fv(location, transpose, value);
   }-*/;
 
+  /**
+   * Sets the specified uniform to the values provided.
+   *  
+   * @param location must have been obtained from the currently used program 
+   * 				via an earlier call to getUniformLocation, or an INVALID_VALUE 
+   * 				error will be raised.
+   * @param transpose
+   * @param value
+   */
   public native void uniformMatrix4fv(WebGLUniformLocation location, boolean transpose,
       JsArrayNumber value) /*-{
 		this.uniformMatrix4fv(location, transpose, value);
   }-*/;
 
+  /**
+   * Install a program object as part of current rendering state.
+   * 
+   * @param program Specifies the handle of the program object whose 
+   * 				executables are to be used as part of current rendering state.
+   */
   public native void useProgram(WebGLProgram program) /*-{
 		this.useProgram(program);
   }-*/;
 
+  /**
+   * Validate a program object.
+   * 
+   * @param program Specifies the handle of the program object to be validated.
+   */
   public native void validateProgram(WebGLProgram program) /*-{
 		this.validateProgram(program);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param x Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib1f(int index, double x) /*-{
 		this.vertexAttrib1f(index, x);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public void vertexAttrib1fv(int index, double[] values) {
     vertexAttrib1fv(index, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib1fv(int index, Float32Array values) /*-{
 		this.vertexAttrib1fv(index, values);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib1fv(int index, JsArrayNumber values) /*-{
 		this.vertexAttrib1fv(index, values);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param x Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   * @param y Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib2f(int index, double x, double y) /*-{
 		this.vertexAttrib2f(index, x, y);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public void vertexAttrib2fv(int index, double[] values) {
     vertexAttrib2fv(index, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib2fv(int index, Float32Array values) /*-{
 		this.vertexAttrib2fv(index, values);
   }-*/;
-
+  
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib2fv(int index, JsArrayNumber values) /*-{
 		this.vertexAttrib2fv(index, values);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param x Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   * @param y Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   * @param z Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib3f(int index, double x, double y, double z) /*-{
 		this.vertexAttrib3f(index, x, y, z);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public void vertexAttrib3fv(int index, double[] values) {
     vertexAttrib3fv(index, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib3fv(int index, Float32Array values) /*-{
 		this.vertexAttrib3fv(index, values);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib3fv(int index, JsArrayNumber values) /*-{
 		this.vertexAttrib3fv(index, values);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param x Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   * @param y Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   * @param z Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   * @param w Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib4f(int index, double x, double y, double z, double w) /*-{
 		this.vertexAttrib4f(index, x, y, z, w);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public void vertexAttrib4fv(int index, double[] values) {
     vertexAttrib4fv(index, JsArrayUtil.wrapArray(values));
   }
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib4fv(int index, Float32Array values) /*-{
 		this.vertexAttrib4fv(index, values);
   }-*/;
 
+  /**
+   * Specifies the value of a generic vertex attribute.
+   * 
+   * @param index Specifies the index of the generic vertex attribute to 
+   * 				be modified.
+   * @param values Specifies the new values to be used for the specified vertex 
+   * 				attribute.
+   */
   public native void vertexAttrib4fv(int index, JsArrayNumber values) /*-{
 		this.vertexAttrib4fv(index, values);
   }-*/;
 
-  public native void vertexAttribPointer(int index, int size, int type, boolean normalized,
+  /**
+   * Assign the currently bound WebGLBuffer object to the passed vertex attrib 
+   * index. Size is number of components per attribute. Stride and offset are 
+   * in units of bytes. Passed stride and offset must be appropriate for the 
+   * passed type and size or an INVALID_VALUE error will be raised.
+   * 
+   * @param indx Specifies the index of the generic vertex attribute to be 
+   * 				modified.
+   * @param size Specifies the number of components per generic vertex 
+   * 				attribute. Must be 1, 2, 3, or 4. The initial value is 4.
+   * @param type Specifies the data type of each component in the array.
+   * @param normalized Specifies whether fixed-point data values should be 
+   * 				normalized true or converted directly as fixed-point values 
+   * 				false when they are accessed.
+   * @param stride Specifies the byte offset between consecutive generic vertex
+   * 				attributes. If stride is 0, the generic vertex attributes are 
+   * 				understood to be tightly packed in the array. The initial value 
+   * 				is 0.
+   * @param offset Specifies a pointer to the first component of the first 
+   * 				generic vertex attribute in the array. The initial value is 0.
+   */
+  public void vertexAttribPointer(int indx, int size, DataType type,
+		  boolean normalized, int stride, int offset) {
+	  vertexAttribPointer(indx, size, type.getValue(), normalized,
+			  stride, offset);
+  }
+
+  private native void vertexAttribPointer(int index, int size, int type, boolean normalized,
       int stride, int offset) /*-{
 		this.vertexAttribPointer(index, size, type, normalized, stride, offset);
   }-*/;
 
-  public native void viewport(int x, int y, int w, int h) /*-{
-		this.viewport(x, y, w, h);
+  /**
+   * Set the viewport.
+   * 
+   * @param x Specify the lower left corner of the viewport rectangle, 
+   * 				in pixels. The initial value is 0.
+   * @param y Specify the lower left corner of the viewport rectangle, 
+   * 				in pixels. The initial value is 0.
+   * @param width Specify the width of the viewport. When a GL context is 
+   * 				first attached to a window, width and height are set to the 
+   * 				dimensions of that window.
+   * @param height Specify the height of the viewport. When a GL context is 
+   * 				first attached to a window, width and height are set to the 
+   * 				dimensions of that window.
+   */
+  public native void viewport(int x, int y, int width, int height) /*-{
+		this.viewport(x, y, width, height);
   }-*/;
-
-  protected native com.google.gwt.core.client.JsArray<WebGLShader> getAttachedShadersDev(
-      WebGLProgram program) /*-{
-		return this.getAttachedShaders(program);
-  }-*/;
-
-  protected native WebGLShader[] getAttachedShadersProd(WebGLProgram program) /*-{
-		return this.getAttachedShaders(program);
-  }-*/;
-
 }
