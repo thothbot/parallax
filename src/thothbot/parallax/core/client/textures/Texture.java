@@ -33,9 +33,18 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureWrapMode;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ErrorEvent;
+import com.google.gwt.event.dom.client.ErrorHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Basic implementation of texture.
@@ -47,6 +56,14 @@ import com.google.gwt.dom.client.Element;
  */
 public class Texture
 {
+	/**
+	 * This callback will be called when the image has been loaded.
+	 */
+	public static interface ImageLoadHandler 
+	{
+		void onImageLoad(Texture texture);
+	}
+
 	private static int TextureCount = 0;
 	
 	public static enum OPERATIONS 
@@ -108,7 +125,41 @@ public class Texture
 	 */
 	public Texture() 
 	{
-		this(null);
+		this((Element)Element.createObject());
+	}
+	
+	public Texture(String url)
+	{
+		this(url, null);
+	}
+
+	public Texture(String url, final ImageLoadHandler imageLoadHandler)
+	{
+		this(new Image(url), imageLoadHandler);
+	}
+
+	/**
+	 * Loading of texture.
+	 * 
+	 * @param image              the Image
+	 * @param imageLoadHandler   the {@link ImageUtils.ImageLoadHandler}. Not necessary.
+	 * 
+	 * @return the new instance of {@link thothbot.parallax.core.client.textures.Texture}
+	 */
+	public Texture(Image image, final ImageLoadHandler imageLoadHandler)
+	{
+		this(image.getElement());
+
+		loadImage(image, new Loader() {
+			
+			@Override
+			public void onLoad() {
+				
+				setNeedsUpdate(true);
+				if (imageLoadHandler != null)
+					imageLoadHandler.onImageLoad(Texture.this);
+			}
+		});
 	}
 
 	/**
@@ -118,38 +169,15 @@ public class Texture
 	 */
 	public Texture(Element image) 
 	{
-		this(image, Texture.MAPPING_MODE.UV);
-	}
-
-	/**
-	 * Constructor will create a texture instance.
-	 * 
-	 * @param image    the media element
-	 * @param mapping  the @{link Texture.MAPPING_MODE} value
-	 */
-	public Texture(Element image, Texture.MAPPING_MODE mapping)
-	{
-		this(image, mapping, TextureWrapMode.CLAMP_TO_EDGE, TextureWrapMode.CLAMP_TO_EDGE);
-	}
-	
-	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
-			TextureWrapMode wrapT)
-	{
-		this(image, mapping, wrapS, wrapT, TextureMagFilter.LINEAR, 
-				TextureMinFilter.LINEAR_MIPMAP_LINEAR);
-	}
-
-	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
-			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter)
-	{
-		this(image, mapping, wrapS, wrapT, magFilter, minFilter, PixelFormat.RGBA, PixelType.UNSIGNED_BYTE);
-	}
-	
-	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
-			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
-			PixelFormat format, PixelType type)
-	{
-		this(image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, 1);
+		this(image, 
+				Texture.MAPPING_MODE.UV, 
+				TextureWrapMode.CLAMP_TO_EDGE, 
+				TextureWrapMode.CLAMP_TO_EDGE,
+				TextureMagFilter.LINEAR, 
+				TextureMinFilter.LINEAR_MIPMAP_LINEAR,
+				PixelFormat.RGBA, 
+				PixelType.UNSIGNED_BYTE, 
+				1);
 	}
 	
 	/**
@@ -429,26 +457,6 @@ public class Texture
 		this.webglTexture = webglTexture;
 	}
 
-	/**
-	 * Clone the texture, where
-	 * {@code this.clone() != this}
-	 */
-	public Texture clone()
-	{
-		Texture clonedTexture = new Texture(this.image, this.mapping, this.wrapS, this.wrapT,
-				this.magFilter, this.minFilter, this.format, this.type, this.anisotropy);
-
-		clonedTexture.offset.copy(this.offset);
-		clonedTexture.repeat.copy(this.repeat);
-		
-		clonedTexture.setGenerateMipmaps(this.isGenerateMipmaps);
-		clonedTexture.setPremultiplyAlpha(this.isPremultiplyAlpha);
-		clonedTexture.setFlipY(this.isFlipY);
-
-		return clonedTexture;
-	}
-
-	// TODO: check in rendering targets 
 	public void setTextureParameters (WebGLRenderingContext gl, TextureTarget textureType, boolean isImagePowerOfTwo )
 	{
 		setTextureParameters(gl, 0, textureType, isImagePowerOfTwo);
@@ -491,5 +499,65 @@ public class Texture
 
 //		if(f == WebGLConstants.LINEAR || f == WebGLConstants.LINEAR_MIPMAP_NEAREST || f == WebGLConstants.LINEAR_MIPMAP_LINEAR)
 			return WebGLConstants.LINEAR;
+	}
+
+	/**
+	 * Clone the texture, where
+	 * {@code this.clone() != this}
+	 */
+	public Texture clone()
+	{
+		Texture clonedTexture = new Texture(this.image, this.mapping, this.wrapS, this.wrapT,
+				this.magFilter, this.minFilter, this.format, this.type, this.anisotropy);
+
+		clonedTexture.offset.copy(this.offset);
+		clonedTexture.repeat.copy(this.repeat);
+		
+		clonedTexture.setGenerateMipmaps(this.isGenerateMipmaps);
+		clonedTexture.setPremultiplyAlpha(this.isPremultiplyAlpha);
+		clonedTexture.setFlipY(this.isFlipY);
+
+		return clonedTexture;
+	}
+	
+	private static FlowPanel loadingArea = new FlowPanel();
+	static {
+		loadingArea.getElement().getStyle().setProperty("visibility", "hidden");
+        loadingArea.getElement().getStyle().setProperty("position", "absolute");
+        loadingArea.getElement().getStyle().setProperty("width", "1px");
+        loadingArea.getElement().getStyle().setProperty("height", "1px");
+        loadingArea.getElement().getStyle().setProperty("overflow", "hidden");
+        RootPanel.get().add(loadingArea);
+	}
+	
+	protected interface Loader 
+	{
+		void onLoad();
+	}
+	
+	protected void loadImage(final Image image, final Loader loader)
+	{
+		loadingArea.add(image);
+		
+	    // Hook up an error handler, so that we can be informed if the image fails
+	    // to load.
+		image.addErrorHandler(new ErrorHandler() {
+			
+			@Override
+			public void onError(ErrorEvent event)
+			{
+				Log.error("An error occurred while loading image: " + image.getUrl());
+			}
+		});
+
+		image.addLoadHandler(new LoadHandler() {
+
+			@Override
+			public void onLoad(LoadEvent event) 
+			{			
+				Log.info("Loaded image: " + image.getUrl());
+				loader.onLoad();
+			}
+		});
 	}
 }

@@ -20,6 +20,8 @@
 package thothbot.parallax.core.client.textures;
 
 import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
+import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.shared.core.Color;
 
 /**
  * Implementation of data texture.
@@ -33,11 +35,12 @@ public class DataTexture extends Texture
 	private int width;
 	private int height;
 	
-	public DataTexture( Uint8Array data, int width, int height)
+	public DataTexture( int width, int height, Color color )
 	{
-		this.data = data;
 		this.width = width;
 		this.height = height;
+
+		generateDataTexture(color);
 	}
 	
 	public Uint8Array getData() {
@@ -62,5 +65,27 @@ public class DataTexture extends Texture
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+	
+	public void generateDataTexture( Color color ) 
+	{
+		int size = width * height;
+		Uint8Array data = Uint8Array.create( 3 * size );
+
+		int r = (int)Math.floor( color.getR() * 255 );
+		int g = (int)Math.floor( color.getG() * 255 );
+		int b = (int)Math.floor( color.getB() * 255 );
+
+		for ( int i = 0; i < size; i ++ ) 
+		{
+			data.set( i * 3, r);
+			data.set( i * 3 + 1, g);
+			data.set( i * 3 + 2, b);
+
+		}
+
+		setData( data );
+		setFormat( PixelFormat.RGB );
+		setNeedsUpdate( true );
 	}
 }
