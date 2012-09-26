@@ -39,6 +39,7 @@ import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
+import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
@@ -690,9 +691,9 @@ public class WebGLRenderer
 	{
 		int bits = 0;
 
-		if ( color ) bits |= GLEnum.COLOR_BUFFER_BIT.getValue();
-		if ( depth ) bits |= GLEnum.DEPTH_BUFFER_BIT.getValue();
-		if ( stencil ) bits |= GLEnum.STENCIL_BUFFER_BIT.getValue();
+		if ( color ) bits |= ClearBufferMask.COLOR_BUFFER_BIT.getValue();
+		if ( depth ) bits |= ClearBufferMask.DEPTH_BUFFER_BIT.getValue();
+		if ( stencil ) bits |= ClearBufferMask.STENCIL_BUFFER_BIT.getValue();
 
 		getGL().clear( bits );
 	}

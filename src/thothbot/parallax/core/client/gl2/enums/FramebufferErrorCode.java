@@ -19,6 +19,9 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum FramebufferErrorCode 
 {
 	FRAMEBUFFER_COMPLETE(GLEnum.FRAMEBUFFER_COMPLETE),
@@ -27,6 +30,7 @@ public enum FramebufferErrorCode
 	FRAMEBUFFER_INCOMPLETE_DIMENSIONS(GLEnum.FRAMEBUFFER_INCOMPLETE_DIMENSIONS),
 	FRAMEBUFFER_UNSUPPORTED(GLEnum.FRAMEBUFFER_UNSUPPORTED);
 
+	private static Map<Integer, FramebufferErrorCode> errorCodeMap;
 	private final int value;
 
 	private FramebufferErrorCode(GLEnum glEnum) {
@@ -38,5 +42,23 @@ public enum FramebufferErrorCode
 	 */
 	public int getValue() {
 		return value;
+	}
+
+	/**
+	 * Parses an integer framebuffer error code to its corresponding 
+	 * FramebufferErrorCode enum.
+	 * 
+	 * @param errorCode
+	 */
+	public static FramebufferErrorCode parseErrorCode(int errorCode) 
+	{
+		if (errorCodeMap == null) 
+		{
+			errorCodeMap = new HashMap<Integer, FramebufferErrorCode>();
+			for (FramebufferErrorCode v : values()) {
+				errorCodeMap.put(v.getValue(), v);
+			}
+		}
+		return errorCodeMap.get(errorCode);
 	}
 }

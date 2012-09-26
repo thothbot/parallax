@@ -32,6 +32,7 @@ import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.PixelInternalFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.renderers.Plugin;
@@ -262,7 +263,7 @@ public final class LensFlarePlugin extends Plugin
 
 				gl.activeTexture( TextureUnit.TEXTURE1 );
 				gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.tempTexture );
-				gl.copyTexImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGB.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
+				gl.copyTexImage2D( TextureTarget.TEXTURE_2D, 0, PixelInternalFormat.RGB, (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
 				// render pink quad
 
@@ -279,7 +280,7 @@ public final class LensFlarePlugin extends Plugin
 
 				gl.activeTexture( TextureUnit.TEXTURE0 );
 				gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.occlusionTexture );
-				gl.copyTexImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGBA.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
+				gl.copyTexImage2D( TextureTarget.TEXTURE_2D, 0, PixelInternalFormat.RGBA, (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
 				// restore graphics
 

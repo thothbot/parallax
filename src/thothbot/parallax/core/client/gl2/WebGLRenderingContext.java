@@ -32,7 +32,10 @@ import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
+import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
+import thothbot.parallax.core.client.gl2.enums.FramebufferErrorCode;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.PixelInternalFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 
@@ -215,8 +218,8 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		  BlendingFactorSrc srcAlpha,
 		  BlendingFactorDest dstAlpha) 
   {
-	  blendFuncSeparate(srcRGB.getValue(), dstRGB.getValue(), srcAlpha
-			  .getValue(), dstAlpha.getValue());
+	  blendFuncSeparate(srcRGB.getValue(), dstRGB.getValue(), 
+			  srcAlpha.getValue(), dstAlpha.getValue());
   }
 
   private native void blendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) /*-{
@@ -224,14 +227,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
   }-*/;
 
   /**
-   * Set the size of the currently bound WebGLBuffer object for the passed 
-   * target to the size of the passed data, then write the contents of data to 
-   * the buffer object.
-   * 
-   * @param target Specifies the target buffer object.
-   * @param data Specifies a pointer to data that will be copied into the data 
-   * 				store for initialization
-   * @param usage Specifies the expected usage pattern of the data store.
+   * @see #bufferData(BufferTarget, TypeArray, BufferUsage)
    */
   public void bufferData(BufferTarget target, ArrayBuffer data, BufferUsage usage) {
 	  bufferData(target.getValue(), data, usage.getValue());
@@ -276,74 +272,226 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.bufferData(target, data, usage);
   }-*/;
 
-  public native void bufferSubData(int target, int offset, ArrayBuffer data) /*-{
+  /**
+   * @see #bufferSubData(BufferTarget, int, TypeArray)
+   */
+  public void bufferSubData(BufferTarget target, int offset, ArrayBuffer data) {
+	  bufferSubData(target.getValue(), offset, data);
+  }
+
+  private native void bufferSubData(int target, int offset, ArrayBuffer data) /*-{
 		this.bufferSubData(target, offset, data);
   }-*/;
 
-  public native void bufferSubData(int target, int offset, TypeArray data) /*-{
+  /**
+   * For the WebGLBuffer object bound to the passed target write the passed 
+   * data starting at the passed offset. If the data would be written past the 
+   * end of the buffer object an INVALID_VALUE error is raised.
+   * 
+   * @param target Specifies the target buffer object.
+   * @param offset Specifies the offset into the buffer object's data store 
+   * 				where data replacement will begin, measured in bytes.
+   * @param data Specifies a pointer to the new data that will be copied into 
+   * 				the data store.
+   */
+  public void bufferSubData(BufferTarget target, int offset, TypeArray data) {
+	  bufferSubData(target.getValue(), offset, data);
+  }
+
+  private native void bufferSubData(int target, int offset, TypeArray data) /*-{
 		this.bufferSubData(target, offset, data);
   }-*/;
 
-  public native int checkFramebufferStatus(int target) /*-{
+  /**
+   * Return the framebuffer completeness status of a framebuffer object.
+   *
+   * @return identifies whether or not the currently bound framebuffer is 
+   * 				framebuffer complete, and if not, which of the rules of framebuffer 
+   * 				completeness is violated.
+   */
+  public FramebufferErrorCode checkFramebufferStatus() {
+	  return FramebufferErrorCode.parseErrorCode(checkFramebufferStatus(
+			  GLEnum.FRAMEBUFFER.getValue()));
+  }
+
+  private native int checkFramebufferStatus(int target) /*-{
 		return this.checkFramebufferStatus(target);
   }-*/;
 
+  /**
+   * Clear buffers to preset values.
+   * 
+   * @param mask
+   */
   public native void clear(int mask) /*-{
 		this.clear(mask);
   }-*/;
 
+  /**
+   * Specify the red, green, blue, and alpha values used when the color buffers 
+   * are cleared. The initial values are all 0.
+   * 
+   * @param red 
+   * @param green
+   * @param blue
+   * @param alpha
+   */
   public native void clearColor(double red, double green, double blue, double alpha) /*-{
 		this.clearColor(red, green, blue, alpha);
   }-*/;
 
+  /**
+   * Specifies the depth value used when the depth buffer is cleared. The 
+   * initial value is 1.
+   * 
+   * @param depth
+   */
   public native void clearDepth(double depth) /*-{
 		this.clearDepth(depth);
   }-*/;
 
+  /**
+   * Specifies the index used when the stencil buffer is cleared. The initial 
+   * value is 0.
+   * 
+   * @param s
+   */
   public native void clearStencil(int s) /*-{
 		this.clearStencil(s);
   }-*/;
 
+  /**
+   * Specify whether red, green, blue, and alpha can or cannot be written into 
+   * the frame buffer. The initial values are all true, indicating that the 
+   * color components can be written.
+   * 
+   * @param red
+   * @param green
+   * @param blue
+   * @param alpha
+   */
   public native void colorMask(boolean red, boolean green, boolean blue, boolean alpha) /*-{
 		this.colorMask(red, green, blue, alpha);
   }-*/;
 
+  /**
+   * Compile a shader object.
+   * 
+   * @param shader Specifies the shader object to be compiled.
+   */
   public native void compileShader(WebGLShader shader) /*-{
 		this.compileShader(shader);
   }-*/;
 
-  public native void copyTexImage2D(int target, int level, int intformat, int x, int y, int width,
+  /**
+   * If an attempt is made to call this function with no WebGLTexture bound, 
+   * an INVALID_OPERATION error is raised.
+   * 
+   * @param target Specifies the target texture.
+   * @param level Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param internalformat Specifies the internal format of the texture.
+   * @param x Specify the window coordinates of the x-coordinate of the 
+   * 				rectangular region of pixels to be copied.
+   * @param y Specify the window coordinates of the y-coordinate of the 
+   * 				rectangular region of pixels to be copied.
+   * @param width Specifies the width of the texture image. All implementations 
+   * 				support 2D texture images that are at least 64 texels wide and 
+   * 				cube-mapped texture images that are at least 16 texels wide.
+   * @param height Specifies the height of the texture image. All 
+   * 				implementations support 2D texture images that are at least 64 
+   * 				texels high and cube-mapped texture images that are at least 16 
+   * 				texels high.
+   * @param border Specifies the width of the border. Must be 0.
+   */
+  public void copyTexImage2D(TextureTarget target, int level,
+		  PixelInternalFormat internalformat, int x, int y, int width, int height,
+		  int border) 
+  {
+	  copyTexImage2D(target.getValue(), level, internalformat.getValue(), 
+			  x, y, width, height, border);
+  }
+
+  private native void copyTexImage2D(int target, int level, int intformat, int x, int y, int width,
       int height, int border) /*-{
 		this.copyTexImage2D(target, level, intformat, x, y, width, height,
 				border);
   }-*/;
 
-  public native void copyTexSubImage2D(int target, int level, int intformat, int xoffset,
+  /**
+   * If an attempt is made to call this function with no WebGLTexture bound, 
+   * an INVALID_OPERATION error is raised.
+   * 
+   * @param target Specifies the target texture.
+   * @param level Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param xoffset Specifies a texel offset in the x direction within the 
+   * 				texture array.
+   * @param yoffset Specifies a texel offset in the y direction within the 
+   * 				texture array.
+   * @param x Specify the window coordinates of the lower left corner of the 
+   * 				rectangular region of pixels to be copied.
+   * @param y Specify the window coordinates of the lower left corner of the 
+   * 				rectangular region of pixels to be copied.
+   * @param width Specifies the width of the texture subimage.
+   * @param height Specifies the height of the texture subimage.
+   */
+  public void copyTexSubImage2D(TextureTarget target, int level, int xoffset,
+		  int yoffset, int x, int y, int width, int height) {
+	  copyTexSubImage2D(target.getValue(), level, xoffset, yoffset, x, y, 
+			  width, height);
+  }
+
+  private native void copyTexSubImage2D(int target, int level, int xoffset,
       int yoffset, int x, int y, int width, int height) /*-{
-		this.copyTexSubImage2D(target, level, intformat, xoffset, yoffset, x,
+		this.copyTexSubImage2D(target, level, xoffset, yoffset, x,
 				y, width, height);
   }-*/;
 
+  /**
+   * Create a WebGLBuffer object and initialize it with a buffer object name as 
+   * if by calling glGenBuffers.
+   */
   public native WebGLBuffer createBuffer() /*-{
 		return this.createBuffer();
   }-*/;
 
+  /**
+   * Create a WebGLFramebuffer object and initialize it with a framebuffer 
+   * object name as if by calling glGenFramebuffers.
+   */
   public native WebGLFramebuffer createFramebuffer() /*-{
 		return this.createFramebuffer();
   }-*/;
 
+  /**
+   * Create a WebGLProgram object and initialize it with a program object name 
+   * as if by calling glCreateProgram.
+   */
   public native WebGLProgram createProgram() /*-{
 		return this.createProgram();
   }-*/;
 
+  /**
+   * Create a WebGLRenderbuffer object and initialize it with a renderbuffer 
+   * object name as if by calling glGenRenderbuffers.
+   */
   public native WebGLRenderbuffer createRenderbuffer() /*-{
 		return this.createRenderbuffer();
   }-*/;
 
+  /**
+   * Create a WebGLShader object and initialize it with a shader object name 
+   * as if by calling glCreateShader.
+   */
   public native WebGLShader createShader(int shaderType) /*-{
 		return this.createShader(shaderType);
   }-*/;
 
+  /**
+   * Create a WebGLTexture object and initialize it with a texture object name 
+   * as if by calling glGenTextures.
+   */
   public native WebGLTexture createTexture() /*-{
 		return this.createTexture();
   }-*/;
