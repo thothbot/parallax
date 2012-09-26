@@ -31,6 +31,7 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
@@ -114,14 +115,14 @@ public final class LensFlarePlugin extends Plugin
 		lensFlare.tempTexture      = gl.createTexture();
 		lensFlare.occlusionTexture = gl.createTexture();
 
-		gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+		gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.tempTexture );
 		gl.texImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGB.getValue(), 16, 16, 0, GLEnum.RGB.getValue(), GLEnum.UNSIGNED_BYTE.getValue(), null );
 		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_WRAP_S.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
 		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_WRAP_T.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
 		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_MAG_FILTER.getValue(), GLEnum.NEAREST.getValue() );
 		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_MIN_FILTER.getValue(), GLEnum.NEAREST.getValue() );
 
-		gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
+		gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.occlusionTexture );
 		gl.texImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGBA.getValue(), 16, 16, 0, GLEnum.RGBA.getValue(), GLEnum.UNSIGNED_BYTE.getValue(), null );
 		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_WRAP_S.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
 		gl.texParameteri( GLEnum.TEXTURE_2D.getValue(), GLEnum.TEXTURE_WRAP_T.getValue(), GLEnum.CLAMP_TO_EDGE.getValue() );
@@ -259,7 +260,7 @@ public final class LensFlarePlugin extends Plugin
 				// save current RGB to temp texture
 
 				gl.activeTexture( TextureUnit.TEXTURE1 );
-				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+				gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.tempTexture );
 				gl.copyTexImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGB.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
 				// render pink quad
@@ -276,7 +277,7 @@ public final class LensFlarePlugin extends Plugin
 				// copy result to occlusionMap
 
 				gl.activeTexture( TextureUnit.TEXTURE0 );
-				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
+				gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.occlusionTexture );
 				gl.copyTexImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGBA.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
 				// restore graphics
@@ -285,7 +286,7 @@ public final class LensFlarePlugin extends Plugin
 				gl.disable( GLEnum.DEPTH_TEST.getValue() );
 
 				gl.activeTexture( TextureUnit.TEXTURE1 );
-				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+				gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.tempTexture );
 				gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
 
 				// update object positions

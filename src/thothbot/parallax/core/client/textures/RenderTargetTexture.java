@@ -30,6 +30,7 @@ import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureWrapMode;
 import thothbot.parallax.core.shared.core.Mathematics;
 
@@ -155,7 +156,7 @@ public class RenderTargetTexture extends Texture
 		this.webglFramebuffer = gl.createFramebuffer();
 		this.webglRenderbuffer = gl.createRenderbuffer();
 
-		gl.bindTexture(GLEnum.TEXTURE_2D.getValue(), this.getWebGlTexture());
+		gl.bindTexture(TextureTarget.TEXTURE_2D, this.getWebGlTexture());
 
 		setTextureParameters(gl, GLEnum.TEXTURE_2D.getValue(), isTargetPowerOfTwo);
 
@@ -169,27 +170,27 @@ public class RenderTargetTexture extends Texture
 			gl.generateMipmap(GLEnum.TEXTURE_2D.getValue());
 
 		// Release everything
-		gl.bindTexture(GLEnum.TEXTURE_2D.getValue(), null);
-		gl.bindRenderbuffer(GLEnum.RENDERBUFFER.getValue(), null);
-		gl.bindFramebuffer(GLEnum.FRAMEBUFFER.getValue(), null);
+		gl.bindTexture(TextureTarget.TEXTURE_2D, null);
+		gl.bindRenderbuffer(null);
+		gl.bindFramebuffer(null);
 	}
 
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl)
 	{	
-		gl.bindTexture(GLEnum.TEXTURE_2D.getValue(), this.getWebGlTexture());
+		gl.bindTexture(TextureTarget.TEXTURE_2D, this.getWebGlTexture());
 		gl.generateMipmap(GLEnum.TEXTURE_2D.getValue());
-		gl.bindTexture(GLEnum.TEXTURE_2D.getValue(), null);
+		gl.bindTexture(TextureTarget.TEXTURE_2D, null);
 	}
 
 	public void setupFrameBuffer(WebGLRenderingContext gl, WebGLFramebuffer framebuffer, int textureTarget)
 	{	
-		gl.bindFramebuffer(GLEnum.FRAMEBUFFER.getValue(), framebuffer);
+		gl.bindFramebuffer(framebuffer);
 		gl.framebufferTexture2D(GLEnum.FRAMEBUFFER.getValue(), GLEnum.COLOR_ATTACHMENT0.getValue(), textureTarget, this.getWebGlTexture(), 0);
 	}
 
 	public void setupRenderBuffer(WebGLRenderingContext gl, WebGLRenderbuffer renderbuffer)
 	{	
-		gl.bindRenderbuffer(GLEnum.RENDERBUFFER.getValue(), renderbuffer);
+		gl.bindRenderbuffer(renderbuffer);
 
 		if (this.isDepthBuffer && !this.isStencilBuffer) 
 		{

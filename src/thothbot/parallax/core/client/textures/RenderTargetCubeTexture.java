@@ -29,8 +29,8 @@ import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.shared.core.Mathematics;
-
 
 public class RenderTargetCubeTexture extends RenderTargetTexture
 {
@@ -87,7 +87,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		this.webglFramebuffer = new ArrayList<WebGLFramebuffer>();
 		this.webglRenderbuffer = new ArrayList<WebGLRenderbuffer>();
 
-		gl.bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), this.getWebGlTexture() );
+		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, this.getWebGlTexture() );
 
 		setTextureParameters( gl, GLEnum.TEXTURE_CUBE_MAP.getValue(), isTargetPowerOfTwo );
 
@@ -107,16 +107,16 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			gl.generateMipmap( GLEnum.TEXTURE_CUBE_MAP.getValue() );
 
 		// Release everything
-		gl.bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), null );
-		gl.bindRenderbuffer(GLEnum.RENDERBUFFER.getValue(), null);
-		gl.bindFramebuffer(GLEnum.FRAMEBUFFER.getValue(), null);
+		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, null );
+		gl.bindRenderbuffer(null);
+		gl.bindFramebuffer(null);
 	}
 	
 	@Override
 	public void updateRenderTargetMipmap(WebGLRenderingContext gl) 
 	{	
-		gl.bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), this.getWebGlTexture() );
+		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, this.getWebGlTexture() );
 		gl.generateMipmap( GLEnum.TEXTURE_CUBE_MAP.getValue() );
-		gl.bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), null );
+		gl.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, null );
 	}
 }

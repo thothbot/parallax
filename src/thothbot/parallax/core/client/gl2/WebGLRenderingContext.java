@@ -27,7 +27,10 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int32Array;
 import thothbot.parallax.core.client.gl2.arrays.JsArrayUtil;
 import thothbot.parallax.core.client.gl2.arrays.TypeArray;
+import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 
 import com.google.gwt.canvas.dom.client.Context;
@@ -113,23 +116,69 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		this.bindBuffer(target, buffer);
   }-*/;
 
-  public native void bindFramebuffer(int target, WebGLFramebuffer buffer) /*-{
+  /**
+   * Bind a named framebuffer object.
+   * @param buffer Specifies the name of a framebuffer object.
+   */
+
+  public void bindFramebuffer(WebGLFramebuffer buffer) {
+	  bindFramebuffer(GLEnum.FRAMEBUFFER.getValue(), buffer);
+  }
+
+  private native void bindFramebuffer(int target, WebGLFramebuffer buffer) /*-{
 		this.bindFramebuffer(target, buffer);
   }-*/;
 
-  public native void bindRenderbuffer(int target, WebGLRenderbuffer buffer) /*-{
+  /**
+   * Bind a named renderbuffer object.
+   * 
+   * @param buffer Specifies the name of a renderbuffer object.
+   */
+  public void bindRenderbuffer(WebGLRenderbuffer buffer) {
+	  bindRenderbuffer(GLEnum.RENDERBUFFER.getValue(), buffer);
+  }
+
+  private native void bindRenderbuffer(int target, WebGLRenderbuffer buffer) /*-{
 		this.bindRenderbuffer(target, buffer);
   }-*/;
 
-  public native void bindTexture(int target, WebGLTexture texture) /*-{
+  /**
+   * Bind a named texture to a texturing target.
+   * 
+   * @param target Specifies the target to which the texture is bound.
+   * @param texture Specifies the name of a texture.
+   */
+  public void bindTexture(TextureTarget target, WebGLTexture texture) {
+	  bindTexture(target.getValue(), texture);		
+  }
+
+  private native void bindTexture(int target, WebGLTexture texture) /*-{
 		this.bindTexture(target, texture);
   }-*/;
 
+  /**
+   * Set the blend color.
+   * 
+   * @param red
+   * @param green
+   * @param blue
+   * @param alpha
+   */
   public native void blendColor(double red, double green, double blue, double alpha) /*-{
 		this.blendColor(red, green, blue, alpha);
   }-*/;
 
-  public native void blendEquation(int mode) /*-{
+  /**
+   * Specify the equation used for both the RGB blend equation and the Alpha 
+   * blend equation.
+   * 
+   * @param mode
+   */
+  public void blendEquation(BlendEquationMode mode) {
+	  blendEquation(mode.getValue());
+  }
+
+  private native void blendEquation(int mode) /*-{
 		this.blendEquation(mode);
   }-*/;
 

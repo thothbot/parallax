@@ -40,6 +40,7 @@ import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
@@ -537,7 +538,7 @@ public class WebGLRenderer
 		getGL().enable( GLEnum.CULL_FACE.getValue() );
 
 		getGL().enable( GLEnum.BLEND.getValue() );
-		getGL().blendEquation( GLEnum.FUNC_ADD.getValue() );
+		getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 		getGL().blendFunc( GLEnum.SRC_ALPHA.getValue(), GLEnum.ONE_MINUS_SRC_ALPHA.getValue() );
 	}
 
@@ -2654,7 +2655,7 @@ public class WebGLRenderer
 			else if( blending == Material.BLENDING.ADDITIVE) 
 			{
 				getGL().enable( GLEnum.BLEND.getValue() );
-				getGL().blendEquation( GLEnum.FUNC_ADD.getValue() );
+				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 				getGL().blendFunc( GLEnum.SRC_ALPHA.getValue(), GLEnum.ONE.getValue() );
 				
 			// TODO: Find blendFuncSeparate() combination
@@ -2662,7 +2663,7 @@ public class WebGLRenderer
 			else if( blending == Material.BLENDING.SUBTRACTIVE) 
 			{
 				getGL().enable( GLEnum.BLEND.getValue() );
-				getGL().blendEquation( GLEnum.FUNC_ADD.getValue() );
+				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 				getGL().blendFunc( GLEnum.ZERO.getValue(), GLEnum.ONE_MINUS_SRC_COLOR.getValue() );
 
 			// TODO: Find blendFuncSeparate() combination
@@ -2670,7 +2671,7 @@ public class WebGLRenderer
 			else if( blending == Material.BLENDING.MULTIPLY) 
 			{
 				getGL().enable( GLEnum.BLEND.getValue() );
-				getGL().blendEquation( GLEnum.FUNC_ADD.getValue() );
+				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 				getGL().blendFunc( GLEnum.ZERO.getValue(), GLEnum.SRC_COLOR.getValue() );
 
 			} 
@@ -2702,7 +2703,7 @@ public class WebGLRenderer
 		{
 			if ( blendEquation != this.cache_oldBlendEquation ) 
 			{
-				getGL().blendEquation( blendEquation.getValue() );
+				getGL().blendEquation( blendEquation );
 				this.cache_oldBlendEquation = blendEquation;
 			}
 
@@ -2721,7 +2722,7 @@ public class WebGLRenderer
 	private void setCubeTextureDynamic(RenderTargetCubeTexture texture, int slot) 
 	{
 		getGL().activeTexture( TextureUnit.TEXTURE0, slot );
-		getGL().bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
+		getGL().bindTexture( TextureTarget.TEXTURE_CUBE_MAP, texture.getWebGlTexture() );
 	}
 
 	public void setTexture( Texture texture, int slot ) 
@@ -2736,7 +2737,7 @@ public class WebGLRenderer
 			}
 			
 			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
-			getGL().bindTexture( GLEnum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
+			getGL().bindTexture( TextureTarget.TEXTURE_2D, texture.getWebGlTexture() );
 
 			getGL().pixelStorei( GLEnum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0 );
 			getGL().pixelStorei( GLEnum.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? 1 : 0 );
@@ -2771,7 +2772,7 @@ public class WebGLRenderer
 		else 
 		{
 			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
-			getGL().bindTexture( GLEnum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
+			getGL().bindTexture( TextureTarget.TEXTURE_2D, texture.getWebGlTexture() );
 		}
 	}
 
@@ -2820,7 +2821,7 @@ public class WebGLRenderer
 			}
 
 			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
-			getGL().bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
+			getGL().bindTexture( TextureTarget.TEXTURE_CUBE_MAP, texture.getWebGlTexture() );
 			getGL().pixelStorei( GLEnum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0 );
 
 			List<Element> cubeImage = new ArrayList<Element>();
@@ -2854,7 +2855,7 @@ public class WebGLRenderer
 		else 
 		{
 			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
-			getGL().bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
+			getGL().bindTexture( TextureTarget.TEXTURE_CUBE_MAP, texture.getWebGlTexture() );
 		}
 
 	}
@@ -2886,7 +2887,7 @@ public class WebGLRenderer
 
 		if ( framebuffer != this.cache_currentFramebuffer ) 
 		{
-			getGL().bindFramebuffer( GLEnum.FRAMEBUFFER.getValue(), framebuffer );
+			getGL().bindFramebuffer( framebuffer );
 			getGL().viewport( 0, 0, this._currentWidth, this._currentHeight );
 
 			this.cache_currentFramebuffer = framebuffer;
