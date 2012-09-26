@@ -27,6 +27,8 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int32Array;
 import thothbot.parallax.core.client.gl2.arrays.JsArrayUtil;
 import thothbot.parallax.core.client.gl2.arrays.TypeArray;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 
 import com.google.gwt.canvas.dom.client.Context;
 import com.google.gwt.core.client.GWT;
@@ -49,19 +51,65 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
   protected WebGLRenderingContext() {
   }
 
-  public native void activeTexture(int texture) /*-{
+  /**
+   * @see #activeTexture(TextureUnit, int)
+   * 
+   * @param texture
+   */
+  public void activeTexture(TextureUnit texture) {
+	  activeTexture(texture.getValue());
+  }
+  
+  /**
+   * Select active texture unit.
+   * 
+   * @param texture
+   * @param slot the texture offset value
+   */
+  public void activeTexture(TextureUnit texture, int slot) {
+	  activeTexture(texture.getValue() + slot);
+  }
+
+  private native void activeTexture(int texture) /*-{
 		this.activeTexture(texture);
   }-*/;
 
+  /**
+   * Attach a shader object to a program object.
+   * 
+   * @param program Specifies the program object to which a shader object will 
+   * 				be attached.
+   * @param shader Specifies the shader object that is to be attached.
+   */
   public native void attachShader(WebGLProgram program, WebGLShader shader) /*-{
 		this.attachShader(program, shader);
   }-*/;
 
+  /**
+   * Associate a generic vertex attribute index with a named attribute variable.
+   * 
+   * @param program Specifies the handle of the program object in which the 
+   * 				association is to be made.
+   * @param index Specifies the index of the generic vertex attribute to be 
+   * 				bound.
+   * @param name Specifies a null terminated string containing the name of the 
+   * 				vertex shader attribute variable to which index is to be bound.
+   */
   public native void bindAttribLocation(WebGLProgram program, int index, String name) /*-{
 		this.bindAttribLocation(program, index, name);
   }-*/;
 
-  public native void bindBuffer(int target, WebGLBuffer buffer) /*-{
+  /**
+   * Bind a named buffer object.
+   * 
+   * @param target Specifies the target to which the buffer object is bound.
+   * @param buffer Specifies the name of a buffer object.
+   */
+  public void bindBuffer(BufferTarget target, WebGLBuffer buffer) {
+	  bindBuffer(target.getValue(), buffer);
+  }
+
+  private native void bindBuffer(int target, WebGLBuffer buffer) /*-{
 		this.bindBuffer(target, buffer);
   }-*/;
 

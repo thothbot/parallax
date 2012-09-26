@@ -28,7 +28,9 @@ import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -87,10 +89,10 @@ public final class SpritePlugin extends Plugin
 		sprite.vertexBuffer  = gl.createBuffer();
 		sprite.elementBuffer = gl.createBuffer();
 
-		gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), sprite.vertexBuffer );
+		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, sprite.vertexBuffer );
 		gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), sprite.vertices, GLEnum.STATIC_DRAW.getValue() );
 
-		gl.bindBuffer( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
+		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.elementBuffer );
 		gl.bufferData( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.faces, GLEnum.STATIC_DRAW.getValue() );
 
 		sprite.shader = new SpriteShader();
@@ -149,15 +151,15 @@ public final class SpritePlugin extends Plugin
 		gl.enable( GLEnum.BLEND.getValue() );
 		gl.depthMask( true );
 
-		gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), sprite.vertexBuffer );
+		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, sprite.vertexBuffer );
 		gl.vertexAttribPointer( attributesLocations.get("position"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 0 );
 		gl.vertexAttribPointer( attributesLocations.get("uv"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 8 );
 
-		gl.bindBuffer( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), sprite.elementBuffer );
+		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.elementBuffer );
 
 		gl.uniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
 
-		gl.activeTexture( GLEnum.TEXTURE0.getValue() );
+		gl.activeTexture( TextureUnit.TEXTURE0 );
 		gl.uniform1i( uniforms.get("map").getLocation(), 0 );
 
 		// update positions and sort

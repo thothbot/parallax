@@ -26,6 +26,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
@@ -203,7 +204,7 @@ public class Line extends GeometryObject
 				geometry.getWebGlVertexArray().set(offset + 2, vertex.getZ());
 			}
 
-			gl.bindBuffer(GLEnum.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer);
 			gl.bufferData(GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlVertexArray(), hint);
 		}
 
@@ -219,7 +220,7 @@ public class Line extends GeometryObject
 				geometry.getWebGlColorArray().set(offset + 2, color.getB());
 			}
 
-			gl.bindBuffer(GLEnum.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
+			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer);
 			gl.bufferData(GLEnum.ARRAY_BUFFER.getValue(), geometry.getWebGlColorArray(), hint);
 		}
 
@@ -303,7 +304,7 @@ public class Line extends GeometryObject
 						}
 					}
 
-					gl.bindBuffer(GLEnum.ARRAY_BUFFER.getValue(), customAttribute.buffer);
+					gl.bindBuffer(BufferTarget.ARRAY_BUFFER, customAttribute.buffer);
 					gl.bufferData(GLEnum.ARRAY_BUFFER.getValue(), customAttribute.array, hint);
 				}
 			}

@@ -29,7 +29,9 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
+import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
@@ -101,10 +103,10 @@ public final class LensFlarePlugin extends Plugin
 		lensFlare.vertexBuffer     = gl.createBuffer();
 		lensFlare.elementBuffer    = gl.createBuffer();
 
-		gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), lensFlare.vertexBuffer );
+		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, lensFlare.vertexBuffer );
 		gl.bufferData( GLEnum.ARRAY_BUFFER.getValue(), lensFlare.vertices, GLEnum.STATIC_DRAW.getValue() );
 
-		gl.bindBuffer( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
+		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, lensFlare.elementBuffer );
 		gl.bufferData( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.faces, GLEnum.STATIC_DRAW.getValue() );
 
 		// textures
@@ -212,11 +214,11 @@ public final class LensFlarePlugin extends Plugin
 		gl.uniform1i( uniforms.get("occlusionMap").getLocation(), 0 );
 		gl.uniform1i( uniforms.get("map").getLocation(), 1 );
 
-		gl.bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), lensFlare.vertexBuffer );
+		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, lensFlare.vertexBuffer );
 		gl.vertexAttribPointer( attributesLocation.get("position"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 0 );
 		gl.vertexAttribPointer( attributesLocation.get("uv"), 2, GLEnum.FLOAT.getValue(), false, 2 * 8, 8 );
 
-		gl.bindBuffer( GLEnum.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
+		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, lensFlare.elementBuffer );
 
 		gl.disable( GLEnum.CULL_FACE.getValue() );
 		gl.depthMask( false );
@@ -256,7 +258,7 @@ public final class LensFlarePlugin extends Plugin
 
 				// save current RGB to temp texture
 
-				gl.activeTexture( GLEnum.TEXTURE1.getValue() );
+				gl.activeTexture( TextureUnit.TEXTURE1 );
 				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
 				gl.copyTexImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGB.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
@@ -273,7 +275,7 @@ public final class LensFlarePlugin extends Plugin
 
 				// copy result to occlusionMap
 
-				gl.activeTexture( GLEnum.TEXTURE0.getValue() );
+				gl.activeTexture( TextureUnit.TEXTURE0 );
 				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
 				gl.copyTexImage2D( GLEnum.TEXTURE_2D.getValue(), 0, GLEnum.RGBA.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
@@ -282,7 +284,7 @@ public final class LensFlarePlugin extends Plugin
 				gl.uniform1i( uniforms.get("renderType").getLocation(), 1 );
 				gl.disable( GLEnum.DEPTH_TEST.getValue() );
 
-				gl.activeTexture( GLEnum.TEXTURE1.getValue() );
+				gl.activeTexture( TextureUnit.TEXTURE1 );
 				gl.bindTexture( GLEnum.TEXTURE_2D.getValue(), lensFlare.tempTexture );
 				gl.drawElements( GLEnum.TRIANGLES.getValue(), 6, GLEnum.UNSIGNED_SHORT.getValue(), 0 );
 

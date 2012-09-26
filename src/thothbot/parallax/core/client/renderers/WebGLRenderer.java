@@ -37,8 +37,10 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.GLEnum;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
 import thothbot.parallax.core.client.shaders.Shader;
@@ -851,13 +853,13 @@ public class WebGLRenderer
 
 		if ( object.getMorphTargetBase() != - 1 ) 
 		{
-			getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get( object.getMorphTargetBase() ) );
+			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( object.getMorphTargetBase() ) );
 			getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 
 		} 
 		else if ( attributes.get("position") >= 0 ) 
 		{
-			getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglVertexBuffer );
+			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglVertexBuffer );
 			getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 		}
 
@@ -873,12 +875,12 @@ public class WebGLRenderer
 					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() 
 					&& m < order.size() 
 			) {
-				getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get( order.get( m ) ) );
+				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( order.get( m ) ) );
 				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 
 				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals()) 
 				{
-					getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get( order.get( m ) ) );
+					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( order.get( m ) ) );
 					getGL().vertexAttribPointer( attributes.get("morphNormal" + m ), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 				}
 
@@ -912,12 +914,12 @@ public class WebGLRenderer
 					}
 				}
 
-				getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get( candidate ) );
+				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( candidate ) );
 				getGL().vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 
 				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
 				{
-					getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get( candidate ) );
+					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( candidate ) );
 					getGL().vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 				}
 
@@ -1373,7 +1375,7 @@ public class WebGLRenderer
 		{
 			if ( updateBuffers ) 
 			{
-				getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglVertexBuffer );
+				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglVertexBuffer );
 				getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 			}
 
@@ -1398,7 +1400,7 @@ public class WebGLRenderer
 
 					if( attributes.get( attribute.belongsToAttribute ) >= 0 ) 
 					{
-						getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), attribute.buffer );
+						getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, attribute.buffer );
 						getGL().vertexAttribPointer( attributes.get( attribute.belongsToAttribute ), attribute.size, GLEnum.FLOAT.getValue(), false, 0, 0 );
 					}
 				}
@@ -1407,21 +1409,21 @@ public class WebGLRenderer
 			// colors
 			if ( attributes.get("color") >= 0 ) 
 			{
-				getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglColorBuffer );
+				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglColorBuffer );
 				getGL().vertexAttribPointer( attributes.get("color"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 			}
 
 			// normals
 			if ( attributes.get("normal") >= 0 ) 
 			{
-				getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglNormalBuffer );
+				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglNormalBuffer );
 				getGL().vertexAttribPointer( attributes.get("normal"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
 			}
 
 			// tangents
 			if ( attributes.get("tangent") >= 0 ) 
 			{
-				getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglTangentBuffer );
+				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglTangentBuffer );
 				getGL().vertexAttribPointer( attributes.get("tangent"), 4, GLEnum.FLOAT.getValue(), false, 0, 0 );
 			}
 
@@ -1430,7 +1432,7 @@ public class WebGLRenderer
 			{
 				if ( geometryBuffer.__webglUVBuffer != null) 
 				{
-					getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglUVBuffer );
+					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglUVBuffer );
 					getGL().vertexAttribPointer( attributes.get("uv"), 2, GLEnum.FLOAT.getValue(), false, 0, 0 );
 
 					getGL().enableVertexAttribArray( attributes.get("uv") );
@@ -1444,7 +1446,7 @@ public class WebGLRenderer
 			{
 				if ( geometryBuffer.__webglUV2Buffer != null) 
 				{
-					getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglUV2Buffer );
+					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglUV2Buffer );
 					getGL().vertexAttribPointer( attributes.get("uv2"), 2, GLEnum.FLOAT.getValue(), false, 0, 0 );
 
 					getGL().enableVertexAttribArray( attributes.get("uv2") );
@@ -1457,10 +1459,10 @@ public class WebGLRenderer
 			if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() &&
 				 attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 ) 
 			{
-				getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinIndicesBuffer );
+				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglSkinIndicesBuffer );
 				getGL().vertexAttribPointer( attributes.get("skinIndex"), 4, GLEnum.FLOAT.getValue(), false, 0, 0 );
 
-				getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), geometryBuffer.__webglSkinWeightsBuffer );
+				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglSkinWeightsBuffer );
 				getGL().vertexAttribPointer( attributes.get("skinWeight"), 4, GLEnum.FLOAT.getValue(), false, 0, 0 );
 			}
 		}
@@ -1482,7 +1484,7 @@ public class WebGLRenderer
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		if ( object.hasPos ) 
 		{
-			getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), object.__webglVertexBuffer );
+			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglVertexBuffer );
 			getGL().bufferData( GLEnum.ARRAY_BUFFER.getValue(), object.positionArray, GLEnum.DYNAMIC_DRAW.getValue() );
 			getGL().enableVertexAttribArray( attributes.get("position") );
 			getGL().vertexAttribPointer( attributes.get("position"), 3, GLEnum.FLOAT.getValue(), false, 0, 0 );
@@ -1490,7 +1492,7 @@ public class WebGLRenderer
 
 		if ( object.hasNormal ) 
 		{
-			getGL().bindBuffer( GLEnum.ARRAY_BUFFER.getValue(), object.__webglNormalBuffer );
+			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglNormalBuffer );
 
 			if ( shading == Material.SHADING.FLAT ) 
 			{
@@ -2718,7 +2720,7 @@ public class WebGLRenderer
 	
 	private void setCubeTextureDynamic(RenderTargetCubeTexture texture, int slot) 
 	{
-		getGL().activeTexture( GLEnum.TEXTURE0.getValue() + slot );
+		getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 		getGL().bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
 	}
 
@@ -2733,7 +2735,7 @@ public class WebGLRenderer
 				this.getInfo().getMemory().textures ++;
 			}
 			
-			getGL().activeTexture( GLEnum.TEXTURE0.getValue() + slot );
+			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 			getGL().bindTexture( GLEnum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
 
 			getGL().pixelStorei( GLEnum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0 );
@@ -2768,7 +2770,7 @@ public class WebGLRenderer
 		} 
 		else 
 		{
-			getGL().activeTexture( GLEnum.TEXTURE0.getValue() + slot );
+			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 			getGL().bindTexture( GLEnum.TEXTURE_2D.getValue(), texture.getWebGlTexture() );
 		}
 	}
@@ -2817,7 +2819,7 @@ public class WebGLRenderer
 				this.getInfo().getMemory().textures += 6;
 			}
 
-			getGL().activeTexture( GLEnum.TEXTURE0.getValue() + slot );
+			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 			getGL().bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
 			getGL().pixelStorei( GLEnum.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0 );
 
@@ -2851,7 +2853,7 @@ public class WebGLRenderer
 		} 
 		else 
 		{
-			getGL().activeTexture( GLEnum.TEXTURE0.getValue() + slot );
+			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 			getGL().bindTexture( GLEnum.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture() );
 		}
 
