@@ -17,16 +17,14 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.gl2.extension;
+package thothbot.parallax.core.client.textures;
 
-import thothbot.parallax.core.client.gl2.WebGLExtension;
-
-public class ExtTextureFilterAnisotropic extends WebGLExtension 
+public class CompressedCubeTexture extends CompressedTexture 
 {
-	public static final int TEXTURE_MAX_ANISOTROPY_EXT = 0x84FE;
-	public static final int MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;
-	
-	protected ExtTextureFilterAnisotropic() {
-		
+
+	public CompressedCubeTexture(String url) 
+	{
+		super(url);
 	}
+
 }

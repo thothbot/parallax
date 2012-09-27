@@ -17,16 +17,29 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.gl2.extension;
+package thothbot.parallax.core.shared.core;
 
-import thothbot.parallax.core.client.gl2.WebGLExtension;
+import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
 
-public class ExtTextureFilterAnisotropic extends WebGLExtension 
+import com.google.gwt.xhr.client.XMLHttpRequest;
+
+public class XMLHttpRequestBinary extends XMLHttpRequest 
 {
-	public static final int TEXTURE_MAX_ANISOTROPY_EXT = 0x84FE;
-	public static final int MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;
+	/**
+	 * Get the response as an {@link ArrayBuffer}.
+	 * 
+	 * @return an {@link ArrayBuffer} containing the response, or null if the
+	 *     request is in progress or failed
+	 */
+	public final native ArrayBuffer getResponseArrayBuffer() /*-{
+	    return this.response;
+	}-*/;
 	
-	protected ExtTextureFilterAnisotropic() {
-		
-	}
+	/**
+	 * Sets response type like to "arraybuffer" or "blob" for binary response
+	 * @param value
+	 */ 
+    public native void setResponseType(String value) /*-{
+       this.responseType = value;
+    }-*/;
 }

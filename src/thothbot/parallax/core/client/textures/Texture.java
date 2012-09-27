@@ -41,7 +41,6 @@ import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -139,12 +138,10 @@ public class Texture
 	}
 
 	/**
-	 * Loading of texture.
+	 * Constructor
 	 * 
 	 * @param image              the Image
-	 * @param imageLoadHandler   the {@link ImageUtils.ImageLoadHandler}. Not necessary.
-	 * 
-	 * @return the new instance of {@link thothbot.parallax.core.client.textures.Texture}
+	 * @param imageLoadHandler   the {@link Texture.ImageLoadHandler}. Not necessary.
 	 */
 	public Texture(Image image, final ImageLoadHandler imageLoadHandler)
 	{

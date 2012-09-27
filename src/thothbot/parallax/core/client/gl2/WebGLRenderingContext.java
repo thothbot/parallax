@@ -636,9 +636,9 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * Specify mapping of depth values from normalized device coordinates to 
    * window coordinates.
    * 
-   * @param zNear Specifies the mapping of the near clipping plane to window 
+   * @param nearVal Specifies the mapping of the near clipping plane to window 
    * 				coordinates. The initial value is 0.
-   * @param zFar Specifies the mapping of the far clipping plane to window
+   * @param farVal Specifies the mapping of the far clipping plane to window
    * 				coordinates. The initial value is 1.
    */
   public native void depthRange(double nearVal, double farVal) /*-{
@@ -846,8 +846,8 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * @param program
    * @param index
    */
-  public native WebGLActiveInfo getActiveUniform(WebGLProgram program, int idx) /*-{
-		return this.getActiveUniform(program, idx);
+  public native WebGLActiveInfo getActiveUniform(WebGLProgram program, int index) /*-{
+		return this.getActiveUniform(program, index);
   }-*/;
 
   /**
@@ -1274,7 +1274,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * Return true if the passed WebGLObject is a WebGLTexture and false 
    * otherwise.
    * 
-   * @param buffer
+   * @param texture
    */
   public native boolean isTexture(WebGLTexture texture) /*-{
 		return this.isTexture(texture);
@@ -1411,8 +1411,8 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * @param source Specifies a string containing the source code to be loaded 
    * 				into the shader.
    */
-  public native void shaderSource(WebGLShader shader, String shaderSrc) /*-{
-		this.shaderSource(shader, shaderSrc);
+  public native void shaderSource(WebGLShader shader, String source) /*-{
+		this.shaderSource(shader, source);
   }-*/;
 
   /**

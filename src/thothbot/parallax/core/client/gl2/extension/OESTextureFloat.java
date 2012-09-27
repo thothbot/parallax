@@ -23,5 +23,7 @@ import thothbot.parallax.core.client.gl2.WebGLExtension;
 
 public class OESTextureFloat extends WebGLExtension {
 
-	protected OESTextureFloat(){}
+	protected OESTextureFloat(){
+		
+	}
 }

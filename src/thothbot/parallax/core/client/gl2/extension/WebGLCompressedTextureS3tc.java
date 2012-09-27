@@ -28,5 +28,7 @@ public class WebGLCompressedTextureS3tc extends WebGLExtension
 	public static final int COMPRESSED_RGBA_S3TC_DXT3_EXT = 0x83F2;
 	public static final int COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83F3;
 	
-	protected WebGLCompressedTextureS3tc(){}
+	protected WebGLCompressedTextureS3tc(){
+		
+	}
 }

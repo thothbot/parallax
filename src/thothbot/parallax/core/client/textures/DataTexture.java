@@ -34,7 +34,20 @@ public class DataTexture extends Texture
 	private Uint8Array data;
 	private int width;
 	private int height;
-	
+
+	public DataTexture( int width, int height )
+	{
+		this.width = width;
+		this.height = height;
+	}
+
+	/**
+	 * Constructor which can be used to generate random data texture.
+	 * 
+	 * @param width
+	 * @param height
+	 * @param color
+	 */
 	public DataTexture( int width, int height, Color color )
 	{
 		this.width = width;

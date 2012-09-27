@@ -57,6 +57,7 @@ import thothbot.parallax.core.client.shaders.ProgramParameters;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.shaders.Uniform.TYPE;
+import thothbot.parallax.core.client.textures.CompressedTexture;
 import thothbot.parallax.core.client.textures.CubeTexture;
 import thothbot.parallax.core.client.textures.DataTexture;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
@@ -2157,11 +2158,11 @@ public class WebGLRenderer
 	@SuppressWarnings("unchecked")
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
-//		for ( Uniform uniform : materialUniforms.values() ) 
-//		{
-			for ( String key: materialUniforms.keySet() ) 
-			{
-				 Uniform uniform = materialUniforms.get(key);
+		for ( Uniform uniform : materialUniforms.values() ) 
+		{
+//			for ( String key: materialUniforms.keySet() ) 
+//			{
+//				 Uniform uniform = materialUniforms.get(key);
 			WebGLUniformLocation location = uniform.getLocation();
 		
 			if ( location == null ) continue;
@@ -2172,7 +2173,7 @@ public class WebGLRenderer
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
 
-			Log.debug("loadUniformsGeneric() " + key + ": "+ uniform);
+			Log.debug("loadUniformsGeneric() " + uniform);
 			
 			WebGLRenderingContext gl = getGL();
 
@@ -2760,7 +2761,18 @@ public class WebGLRenderer
 
 			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
-			if ( texture instanceof DataTexture ) 
+			if ( texture instanceof CompressedTexture ) 
+			{
+				List<DataTexture> mipmaps = ((CompressedTexture) texture).getMipmaps();
+
+				for( int i = 0, il = mipmaps.size(); i < il; i ++ ) 
+				{
+					DataTexture mipmap = mipmaps.get( i );
+					getGL().texImage2D( TextureTarget.TEXTURE_2D, i, mipmap.getWidth(), mipmap.getHeight(), 0, texture.getFormat(), 
+							texture.getType(), mipmap.getData() );
+				}
+			}
+			else if ( texture instanceof DataTexture ) 
 			{
 				getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, 
 						((DataTexture) texture).getWidth(),
