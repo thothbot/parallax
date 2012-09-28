@@ -76,7 +76,7 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
-import thothbot.parallax.core.shared.lights.AbstractShadowLight;
+import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.HemisphereLight;
@@ -2128,9 +2128,9 @@ public class WebGLRenderer
 			{
 				if ( ! light.isCastShadow() ) continue;
 
-				if ( light instanceof AbstractShadowLight && ! ((AbstractShadowLight)light).isShadowCascade() )  
+				if ( light instanceof ShadowLight && ! ((ShadowLight)light).isShadowCascade() )  
 				{
-					AbstractShadowLight shadowLight = (AbstractShadowLight) light;
+					ShadowLight shadowLight = (ShadowLight) light;
 
 					shadowMap.add(shadowLight.getShadowMap() );
 					shadowMapSize.add(shadowLight.getShadowMapSize() );

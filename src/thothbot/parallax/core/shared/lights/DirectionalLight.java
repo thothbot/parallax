@@ -43,7 +43,7 @@ import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
  * @author thothbot
  *
  */
-public class DirectionalLight extends AbstractShadowLight
+public class DirectionalLight extends ShadowLight
 {	
 	private Vector3 shadowCascadeOffset;
 	private int shadowCascadeCount = 2;

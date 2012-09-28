@@ -50,7 +50,7 @@ import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
  * @author thothbot
  *
  */
-public class SpotLight extends AbstractShadowLight
+public class SpotLight extends ShadowLight
 {
 	private double angle;
 	public double exponent;

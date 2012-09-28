@@ -27,7 +27,7 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.helpers.CameraHelper;
 import thothbot.parallax.core.shared.objects.Object3D;
 
-public abstract class AbstractShadowLight extends Light
+public abstract class ShadowLight extends Light
 {
 	private Object3D target;
 	
@@ -55,7 +55,7 @@ public abstract class AbstractShadowLight extends Light
 	
 	private CameraHelper cameraHelper;
 	
-	public AbstractShadowLight(int hex) 
+	public ShadowLight(int hex) 
 	{
 		super(hex);
 		

@@ -45,7 +45,7 @@ import thothbot.parallax.core.shared.core.Projector;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.helpers.CameraHelper;
-import thothbot.parallax.core.shared.lights.AbstractShadowLight;
+import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.lights.SpotLight;
@@ -179,7 +179,7 @@ public final class ShadowMap extends Plugin
 				}
 			}
 
-			AbstractShadowLight light = (AbstractShadowLight) sceneLight;
+			ShadowLight light = (ShadowLight) sceneLight;
 			
 			if ( light.getShadowMap() == null ) 
 			{
