@@ -10,10 +10,13 @@ Parallax - 3D for web
       </td>
       <td>
 
-Parallax is 3D library for the web. It was based on three.js project and written on Java using 
-Google Web Toolkit. The aim of the project is to use Java as the most 
-readable and compilable language to create 3D content for the web.
-Parallax supports WebGL-canvas render only.
+Parallax is 3D library for the web. It is written on Java using [Google Web Toolkit](https://developers.google.com/web-toolkit/) v2.4, 
+which is Java to JavaScript cross-compiler, which allows developers to write Java code and convert it to standard JavaScript during compilation.
+ 
+Parallax based on [three.js](http://github.com/mrdoob/three.js) project. The most methods and objects are equivalent three.js for the back compatibility.
+
+The aim of the project is to use GWT which helps maintaining complex pieces of code, and provides better design-time support in IDEs like refactoring, validation, etc...
+Parallax supports WebGL-canvas renderer only.
 
       </td>
    </tr>
