@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum TextureMagFilter implements WebGLConstants
+public enum TextureMagFilter implements GLEnum
 {
 	/**
 	 * Returns the value of the texture element that is nearest 

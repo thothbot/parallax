@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum PixelFormat implements WebGLConstants
+public enum PixelFormat implements GLEnum
 {
 	DEPTH_COMPONENT(WebGLConstants.DEPTH_COMPONENT),
 	ALPHA(WebGLConstants.ALPHA),

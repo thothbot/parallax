@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum BlendingFactorDest implements WebGLConstants
+public enum BlendingFactorDest implements GLEnum
 {
 	ZERO(WebGLConstants.ZERO),
 	ONE(WebGLConstants.ONE),

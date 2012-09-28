@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum RenderbufferInternalFormat implements WebGLConstants
+public enum RenderbufferInternalFormat implements GLEnum
 {
 	RGBA4(WebGLConstants.RGBA4),
 	RGB5_A1(WebGLConstants.RGB5_A1),

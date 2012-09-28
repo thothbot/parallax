@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum ReadFormat implements WebGLConstants
+public enum ReadFormat implements GLEnum
 {
 	IMPLEMENTATION_COLOR_READ_TYPE(WebGLConstants.IMPLEMENTATION_COLOR_READ_TYPE),
 	IMPLEMENTATION_COLOR_READ_FORMAT(WebGLConstants.IMPLEMENTATION_COLOR_READ_FORMAT);

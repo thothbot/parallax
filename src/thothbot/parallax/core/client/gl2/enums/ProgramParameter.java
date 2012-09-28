@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum ProgramParameter implements WebGLConstants
+public enum ProgramParameter implements GLEnum
 {
 	/** 
 	 * Returns boolean 

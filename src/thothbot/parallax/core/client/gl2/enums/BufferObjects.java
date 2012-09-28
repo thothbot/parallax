@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum BufferObjects implements WebGLConstants 
+public enum BufferObjects implements GLEnum 
 {
 	ARRAY_BUFFER(WebGLConstants.ARRAY_BUFFER),
 	ELEMENT_ARRAY_BUFFER(WebGLConstants.ELEMENT_ARRAY_BUFFER),

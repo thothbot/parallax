@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum Shaders implements WebGLConstants
+public enum Shaders implements GLEnum
 {
 	FRAGMENT_SHADER(WebGLConstants.FRAGMENT_SHADER),
 	VERTEX_SHADER(WebGLConstants.VERTEX_SHADER),

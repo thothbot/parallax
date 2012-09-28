@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum PixelStoreParameter implements WebGLConstants
+public enum PixelStoreParameter implements GLEnum
 {
 	PACK_ALIGNMENT(WebGLConstants.PACK_ALIGNMENT),
 	UNPACK_ALIGNMENT(WebGLConstants.UNPACK_ALIGNMENT),

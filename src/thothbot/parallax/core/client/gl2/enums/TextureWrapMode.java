@@ -29,7 +29,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum TextureWrapMode implements WebGLConstants
+public enum TextureWrapMode implements GLEnum
 {
 	/**
 	 *  This causes the integer part of the s coordinate to be ignored; 

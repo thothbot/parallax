@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum FramebufferParameterName implements WebGLConstants
+public enum FramebufferParameterName implements GLEnum
 {
 	FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE(WebGLConstants.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE),
 	FRAMEBUFFER_ATTACHMENT_OBJECT_NAME(WebGLConstants.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME),

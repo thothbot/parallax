@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
  * @author thothbot
  *
  */
-public enum TextureParameterName implements WebGLConstants
+public enum TextureParameterName implements GLEnum
 {
 	TEXTURE_MAG_FILTER(WebGLConstants.TEXTURE_MAG_FILTER),
 	TEXTURE_MIN_FILTER(WebGLConstants.TEXTURE_MIN_FILTER),

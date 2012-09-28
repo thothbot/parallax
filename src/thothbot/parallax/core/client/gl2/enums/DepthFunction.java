@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum DepthFunction implements WebGLConstants
+public enum DepthFunction implements GLEnum
 {
 	NEVER(WebGLConstants.NEVER),
 	LESS(WebGLConstants.LESS),

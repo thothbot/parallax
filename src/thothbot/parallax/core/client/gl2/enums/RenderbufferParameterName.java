@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum RenderbufferParameterName implements WebGLConstants
+public enum RenderbufferParameterName implements GLEnum
 {
 	/** 
 	 * Returns int 

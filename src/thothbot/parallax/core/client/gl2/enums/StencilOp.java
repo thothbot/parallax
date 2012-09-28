@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum StencilOp implements WebGLConstants
+public enum StencilOp implements GLEnum
 {
 	ZERO(WebGLConstants.ZERO),
 	KEEP(WebGLConstants.KEEP),

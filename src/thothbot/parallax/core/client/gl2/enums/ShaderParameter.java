@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum ShaderParameter implements WebGLConstants
+public enum ShaderParameter implements GLEnum
 {
 	/** Returns int */
 	SHADER_TYPE(WebGLConstants.SHADER_TYPE),

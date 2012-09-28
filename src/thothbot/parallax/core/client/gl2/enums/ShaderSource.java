@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum ShaderSource implements WebGLConstants
+public enum ShaderSource implements GLEnum
 {
 	COMPILE_STATUS(WebGLConstants.COMPILE_STATUS),
 	INFO_LOG_LENGTH(WebGLConstants.INFO_LOG_LENGTH),

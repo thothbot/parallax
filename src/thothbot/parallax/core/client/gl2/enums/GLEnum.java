@@ -19,21 +19,10 @@
 
 package thothbot.parallax.core.client.gl2.enums;
 
-import thothbot.parallax.core.client.gl2.WebGLConstants;
-
-public enum FrontFaceDirection implements GLEnum
+public interface GLEnum 
 {
-	CW(WebGLConstants.CW),
-	CCW(WebGLConstants.CCW);
-
-	private final int value;
-
-	private FrontFaceDirection(int value) {
-		this.value = value;
-	}
-
-	@Override
-	public int getValue() {
-		return value;
-	}
+	/**
+	 * Gets the enum's numerical value.
+	 */
+	int getValue();
 }

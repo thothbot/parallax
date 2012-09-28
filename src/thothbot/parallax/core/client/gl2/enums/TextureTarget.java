@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum TextureTarget implements WebGLConstants
+public enum TextureTarget implements GLEnum
 {
 	TEXTURE_2D(WebGLConstants.TEXTURE_2D),
 	TEXTURE(WebGLConstants.TEXTURE),

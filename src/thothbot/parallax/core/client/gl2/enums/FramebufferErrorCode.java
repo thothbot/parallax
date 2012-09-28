@@ -24,7 +24,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum FramebufferErrorCode implements WebGLConstants
+public enum FramebufferErrorCode implements GLEnum
 {
 	FRAMEBUFFER_COMPLETE(WebGLConstants.FRAMEBUFFER_COMPLETE),
 	FRAMEBUFFER_INCOMPLETE_ATTACHMENT(WebGLConstants.FRAMEBUFFER_INCOMPLETE_ATTACHMENT),

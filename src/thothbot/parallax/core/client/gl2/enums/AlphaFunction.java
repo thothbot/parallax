@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum AlphaFunction implements WebGLConstants
+public enum AlphaFunction implements GLEnum
 {
 	/**
 	 * Never passes.

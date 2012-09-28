@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum DataType implements WebGLConstants
+public enum DataType implements GLEnum
 {
 	BYTE(WebGLConstants.BYTE),
 	UNSIGNED_BYTE(WebGLConstants.UNSIGNED_BYTE),

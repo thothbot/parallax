@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum HintMode implements WebGLConstants
+public enum HintMode implements GLEnum
 {
 	DONT_CARE(WebGLConstants.DONT_CARE),
 	FASTEST(WebGLConstants.FASTEST),

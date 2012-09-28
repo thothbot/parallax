@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum BeginMode implements WebGLConstants
+public enum BeginMode implements GLEnum
 {
 	/**
 	 * Treats each vertex as a single point. Vertex n defines point n. N points are drawn.

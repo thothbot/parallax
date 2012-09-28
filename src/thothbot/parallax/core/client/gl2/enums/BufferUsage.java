@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum BufferUsage implements WebGLConstants
+public enum BufferUsage implements GLEnum
 {
 	STREAM_DRAW(WebGLConstants.STREAM_DRAW),
 	STATIC_DRAW(WebGLConstants.STATIC_DRAW),

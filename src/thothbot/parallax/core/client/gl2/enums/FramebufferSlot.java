@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum FramebufferSlot implements WebGLConstants
+public enum FramebufferSlot implements GLEnum
 {
 	COLOR_ATTACHMENT0(WebGLConstants.COLOR_ATTACHMENT0),
 	DEPTH_ATTACHMENT(WebGLConstants.DEPTH_ATTACHMENT),

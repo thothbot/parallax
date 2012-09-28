@@ -2761,6 +2761,7 @@ public class WebGLRenderer
 
 			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
+			// TODO: Check
 			if ( texture instanceof CompressedTexture ) 
 			{
 				List<DataTexture> mipmaps = ((CompressedTexture) texture).getMipmaps();

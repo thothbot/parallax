@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum VertexArrays implements WebGLConstants
+public enum VertexArrays implements GLEnum
 {
 	VERTEX_ATTRIB_ARRAY_ENABLED(WebGLConstants.VERTEX_ATTRIB_ARRAY_ENABLED),
 	VERTEX_ATTRIB_ARRAY_SIZE(WebGLConstants.VERTEX_ATTRIB_ARRAY_SIZE),

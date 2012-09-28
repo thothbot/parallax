@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum ShaderPrecisionSpecifiedTypes implements WebGLConstants
+public enum ShaderPrecisionSpecifiedTypes implements GLEnum
 {
 	LOW_FLOAT(WebGLConstants.LOW_FLOAT),
 	MEDIUM_FLOAT(WebGLConstants.MEDIUM_FLOAT),

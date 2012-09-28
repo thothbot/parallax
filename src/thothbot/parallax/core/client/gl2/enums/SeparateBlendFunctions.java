@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum SeparateBlendFunctions implements WebGLConstants
+public enum SeparateBlendFunctions implements GLEnum
 {
 	BLEND_DST_RGB(WebGLConstants.BLEND_DST_RGB),
 	BLEND_SRC_RGB(WebGLConstants.BLEND_SRC_RGB),

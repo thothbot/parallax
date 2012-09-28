@@ -30,7 +30,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum TextureMinFilter implements WebGLConstants
+public enum TextureMinFilter implements GLEnum
 {
 	/**
 	 * Returns the value of the texture element that is nearest 

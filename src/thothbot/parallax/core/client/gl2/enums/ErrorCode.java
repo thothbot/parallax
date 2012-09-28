@@ -24,7 +24,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum ErrorCode implements WebGLConstants
+public enum ErrorCode implements GLEnum
 {
 	NO_ERROR(WebGLConstants.NO_ERROR),
 	INVALID_ENUM(WebGLConstants.INVALID_ENUM),

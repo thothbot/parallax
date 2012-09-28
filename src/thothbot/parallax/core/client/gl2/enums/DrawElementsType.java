@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum DrawElementsType implements WebGLConstants
+public enum DrawElementsType implements GLEnum
 {
 	UNSIGNED_BYTE(WebGLConstants.UNSIGNED_BYTE),
 	UNSIGNED_SHORT(WebGLConstants.UNSIGNED_SHORT);

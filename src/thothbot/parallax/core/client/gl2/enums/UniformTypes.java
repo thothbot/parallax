@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum UniformTypes implements WebGLConstants
+public enum UniformTypes implements GLEnum
 {
 	FLOAT_VEC2(WebGLConstants.FLOAT_VEC2),
 	FLOAT_VEC3(WebGLConstants.FLOAT_VEC3),

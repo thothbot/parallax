@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum CullFaceMode implements WebGLConstants
+public enum CullFaceMode implements GLEnum
 {
 	FRONT(WebGLConstants.FRONT),
 	BACK(WebGLConstants.BACK),

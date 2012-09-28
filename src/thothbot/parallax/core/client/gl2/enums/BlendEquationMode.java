@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.WebGLConstants;
  * @author thothbot
  *
  */
-public enum BlendEquationMode implements WebGLConstants
+public enum BlendEquationMode implements GLEnum
 {
 	FUNC_ADD(WebGLConstants.FUNC_ADD),
 	FUNC_REVERSE_SUBTRACT(WebGLConstants.FUNC_REVERSE_SUBTRACT),

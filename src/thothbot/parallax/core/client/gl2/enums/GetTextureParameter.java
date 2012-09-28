@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.gl2.enums;
 
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 
-public enum GetTextureParameter implements WebGLConstants
+public enum GetTextureParameter implements GLEnum
 {
 	TEXTURE_MAG_FILTER(WebGLConstants.TEXTURE_MAG_FILTER),
 	TEXTURE_MIN_FILTER(WebGLConstants.TEXTURE_MIN_FILTER),
