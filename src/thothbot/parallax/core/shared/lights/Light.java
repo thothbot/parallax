@@ -31,7 +31,7 @@ import thothbot.parallax.core.shared.objects.Object3D;
  * @author thothbot
  *
  */
-public class Light extends Object3D
+public abstract class Light extends Object3D
 {
 	private Color color;
 	private boolean isOnlyShadow = false;
