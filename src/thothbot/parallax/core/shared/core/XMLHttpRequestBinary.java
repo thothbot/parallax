@@ -23,8 +23,12 @@ import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
 
 import com.google.gwt.xhr.client.XMLHttpRequest;
 
-public class XMLHttpRequestBinary extends XMLHttpRequest 
+public final class XMLHttpRequestBinary extends XMLHttpRequest 
 {
+	protected XMLHttpRequestBinary() {
+		
+	}
+
 	/**
 	 * Get the response as an {@link ArrayBuffer}.
 	 * 
