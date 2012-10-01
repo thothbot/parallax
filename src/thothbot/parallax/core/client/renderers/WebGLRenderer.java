@@ -30,6 +30,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.WebGLConstants;
+import thothbot.parallax.core.client.gl2.WebGLExtension;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -229,7 +230,7 @@ public class WebGLRenderer
 	private int GPUmaxAnisotropy;
 	private boolean isGPUsupportsVertexTextures;
 	private boolean isGPUsupportsBoneTextures;
-	
+		
 	private OESTextureFloat GLExtensionTextureFloat;
 	private OESStandardDerivatives GLExtensionStandardDerivatives;
 	private ExtTextureFilterAnisotropic GLExtensionTextureFilterAnisotropic;

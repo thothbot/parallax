@@ -23,5 +23,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public abstract class WebGLExtension extends JavaScriptObject 
 {
+	
 	protected WebGLExtension(){}
+	
 }
