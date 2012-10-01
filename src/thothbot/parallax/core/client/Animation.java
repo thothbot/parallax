@@ -163,7 +163,9 @@ public abstract class Animation
 	 * implementation of this method calls {@link #onStop()} only if the
 	 * animation has actually started running.
 	 */
-	protected abstract void onStop();
+	protected void onStop() {
+		
+	}
 
 	/**
 	 * Called immediately before the animation starts.
