@@ -30,7 +30,6 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.WebGLConstants;
-import thothbot.parallax.core.client.gl2.WebGLExtension;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -80,12 +79,12 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
-import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.HemisphereLight;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.lights.PointLight;
+import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
 import thothbot.parallax.core.shared.materials.HasEnvMap;
 import thothbot.parallax.core.shared.materials.HasFog;
@@ -226,8 +225,8 @@ public class WebGLRenderer
 	private int GPUmaxVertexTextures;
 	private int GPUmaxTextureSize;
 	private int GPUmaxCubemapSize;
-	
 	private int GPUmaxAnisotropy;
+
 	private boolean isGPUsupportsVertexTextures;
 	private boolean isGPUsupportsBoneTextures;
 		
@@ -317,6 +316,26 @@ public class WebGLRenderer
 			Log.error("Unknown plugin type: " + plugin.getType());
 			return;
 		}
+	}
+	
+	public int getGPUmaxTextures() {
+		return GPUmaxTextures;
+	}
+
+	public int getGPUmaxVertexTextures() {
+		return GPUmaxVertexTextures;
+	}
+
+	public int getGPUmaxTextureSize() {
+		return GPUmaxTextureSize;
+	}
+
+	public int getGPUmaxCubemapSize() {
+		return GPUmaxCubemapSize;
+	}
+
+	public int getGPUmaxAnisotropy() {
+		return GPUmaxAnisotropy;
 	}
 
 	/**
