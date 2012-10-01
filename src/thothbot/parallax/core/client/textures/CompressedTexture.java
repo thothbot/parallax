@@ -25,6 +25,7 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Int32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
+import thothbot.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.XMLHttpRequestBinary;
 
@@ -33,14 +34,7 @@ import com.google.gwt.xhr.client.XMLHttpRequest;
 
 public class CompressedTexture extends Texture 
 {
-	public enum COMPRESSED_TEXTURE_FORMAT 
-	{
-		RGB_S3TC_DXT1_Format,
-		RGBA_S3TC_DXT3_Format,
-		RGBA_S3TC_DXT5_Format
-	}
-	
-	private COMPRESSED_TEXTURE_FORMAT compressedFormat;
+	private int compressedFormat;
 	private List<DataTexture> mipmaps;
 	
 	public CompressedTexture( String url )
@@ -80,11 +74,11 @@ public class CompressedTexture extends Texture
 		});
 	}
 	
-	public COMPRESSED_TEXTURE_FORMAT getCompressedFormat() {
+	public int getCompressedFormat() {
 		return compressedFormat;
 	}
 
-	public void setCompressedFormat(COMPRESSED_TEXTURE_FORMAT compressedFormat) {
+	public void setCompressedFormat(int compressedFormat) {
 		this.compressedFormat = compressedFormat;
 	}
 
@@ -185,17 +179,17 @@ public class CompressedTexture extends Texture
 		if ( fourCC == FOURCC_DXT1)
 		{
 			blockBytes = 8;
-			this.compressedFormat = COMPRESSED_TEXTURE_FORMAT.RGB_S3TC_DXT1_Format;
+			this.compressedFormat = WebGLCompressedTextureS3tc.COMPRESSED_RGB_S3TC_DXT1_EXT;
 		}
 		else if(fourCC == FOURCC_DXT3)
 		{
 			blockBytes = 16;
-			this.compressedFormat = COMPRESSED_TEXTURE_FORMAT.RGBA_S3TC_DXT3_Format;
+			this.compressedFormat = WebGLCompressedTextureS3tc.COMPRESSED_RGBA_S3TC_DXT3_EXT;
 		}
 		else if(fourCC == FOURCC_DXT5)
 		{
 			blockBytes = 16;
-			this.compressedFormat = COMPRESSED_TEXTURE_FORMAT.RGBA_S3TC_DXT5_Format;
+			this.compressedFormat = WebGLCompressedTextureS3tc.COMPRESSED_RGBA_S3TC_DXT5_EXT;
 		}
 		else
 		{

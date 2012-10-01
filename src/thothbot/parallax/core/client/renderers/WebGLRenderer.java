@@ -2768,8 +2768,8 @@ public class WebGLRenderer
 				for( int i = 0, il = mipmaps.size(); i < il; i ++ ) 
 				{
 					DataTexture mipmap = mipmaps.get( i );
-					Log.error(i, mipmap.getWidth(), mipmap.getHeight());
-					getGL().compressedTexImage2D( TextureTarget.TEXTURE_2D, i, texture.getFormat(), 
+					Log.error(i, mipmap.getWidth(), mipmap.getHeight(), ((CompressedTexture) texture).getCompressedFormat());
+					getGL().compressedTexImage2D( TextureTarget.TEXTURE_2D, i, ((CompressedTexture) texture).getCompressedFormat(), 
 							mipmap.getWidth(), mipmap.getHeight(), 0, mipmap.getData() );
 				}
 			}

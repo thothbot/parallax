@@ -1733,15 +1733,15 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    * @param target Specifies the target texture.
    * @param level  Specifies the level-of-detail number. Level 0 is the base 
    * 				image level. Level n is the nth mipmap reduction image.
-   * @param format Specifies the format of the texel data. 
+   * @param format Specifies the format of the compressed texel data. 
    * @param width  Specifies the width of the texture subimage.
    * @param height Specifies the height of the texture subimage.
    * @param border Specifies the width of the border. Must be 0.
    * @param pixels Specifies a pointer to the image data in memory.
    */
-  public void compressedTexImage2D(TextureTarget target, int level, PixelFormat format,  
+  public void compressedTexImage2D(TextureTarget target, int level, int format,  
 		  int width, int height, int border, ArrayBufferView pixels) {
-	  compressedTexImage2D(target.getValue(), level, format.getValue(), width, height, border, pixels);
+	  compressedTexImage2D(target.getValue(), level, format, width, height, border, pixels);
   }
   
   private native void compressedTexImage2D(int target, int level, int internalformat, int width, int height,
