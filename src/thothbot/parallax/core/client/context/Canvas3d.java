@@ -25,7 +25,6 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -36,7 +35,8 @@ import com.google.gwt.user.client.ui.FocusWidget;
  */
 public class Canvas3d extends FocusWidget 
 {
-	private static final String[] CONTEXT_IDS = { "experimental-webgl", "webgl", "webkit-3d", "opera-3d", "moz-glweb20", "moz-webgl", "3d" };
+	// "webkit-3d", "opera-3d", "moz-glweb20", "moz-webgl", "3d" 
+	private static final String[] CONTEXT_IDS = { "webgl", "experimental-webgl" };
 
 	private WebGLRenderingContext gl;	
 	private final CanvasElement canvas;

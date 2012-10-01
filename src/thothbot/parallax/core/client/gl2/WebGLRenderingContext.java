@@ -1722,6 +1722,32 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		  JavaScriptObject data) /*-{
 		this.texImage2D(target, level, internalformat, format, type, data);
   }-*/;
+  
+  /**
+   * Specify a two-dimensional compressed texture.
+   * 
+   * If the passed pixels value is null a buffer of sufficient size initialized 
+   * to 0 is passed. If an attempt is made to call this function with no 
+   * WebGLTexture bound, an INVALID_OPERATION error is raised.
+   * 
+   * @param target Specifies the target texture.
+   * @param level  Specifies the level-of-detail number. Level 0 is the base 
+   * 				image level. Level n is the nth mipmap reduction image.
+   * @param format Specifies the format of the texel data. 
+   * @param width  Specifies the width of the texture subimage.
+   * @param height Specifies the height of the texture subimage.
+   * @param border Specifies the width of the border. Must be 0.
+   * @param pixels Specifies a pointer to the image data in memory.
+   */
+  public void compressedTexImage2D(TextureTarget target, int level, PixelFormat format,  
+		  int width, int height, int border, ArrayBufferView pixels) {
+	  compressedTexImage2D(target.getValue(), level, format.getValue(), width, height, border, pixels);
+  }
+  
+  private native void compressedTexImage2D(int target, int level, int internalformat, int width, int height,
+		  int border, ArrayBufferView pixels) /*-{
+				this.compressedTexImage2D(target, level, internalformat, width, height, border, pixels);
+  }-*/;
 
   /**
    * If an attempt is made to call this function with no WebGLTexture bound, 

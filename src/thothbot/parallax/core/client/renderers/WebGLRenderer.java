@@ -2761,7 +2761,6 @@ public class WebGLRenderer
 
 			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
-			// TODO: Check
 			if ( texture instanceof CompressedTexture ) 
 			{
 				List<DataTexture> mipmaps = ((CompressedTexture) texture).getMipmaps();
@@ -2769,8 +2768,9 @@ public class WebGLRenderer
 				for( int i = 0, il = mipmaps.size(); i < il; i ++ ) 
 				{
 					DataTexture mipmap = mipmaps.get( i );
-					getGL().texImage2D( TextureTarget.TEXTURE_2D, i, mipmap.getWidth(), mipmap.getHeight(), 0, texture.getFormat(), 
-							texture.getType(), mipmap.getData() );
+					Log.error(i, mipmap.getWidth(), mipmap.getHeight());
+					getGL().compressedTexImage2D( TextureTarget.TEXTURE_2D, i, texture.getFormat(), 
+							mipmap.getWidth(), mipmap.getHeight(), 0, mipmap.getData() );
 				}
 			}
 			else if ( texture instanceof DataTexture ) 
