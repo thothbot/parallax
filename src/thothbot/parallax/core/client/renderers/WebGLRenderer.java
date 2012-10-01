@@ -52,6 +52,9 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
+import thothbot.parallax.core.client.gl2.extension.OESStandardDerivatives;
+import thothbot.parallax.core.client.gl2.extension.OESTextureFloat;
+import thothbot.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
 import thothbot.parallax.core.client.shaders.Shader;
@@ -227,6 +230,11 @@ public class WebGLRenderer
 	private boolean isGPUsupportsVertexTextures;
 	private boolean isGPUsupportsBoneTextures;
 	
+	private OESTextureFloat GLExtensionTextureFloat;
+	private OESStandardDerivatives GLExtensionStandardDerivatives;
+	private ExtTextureFilterAnisotropic GLExtensionTextureFilterAnisotropic;
+	private WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC;
+	
 	/**
 	 * The constructor will create renderer for the {@link Canvas3d} widget.
 	 * 
@@ -247,37 +255,43 @@ public class WebGLRenderer
 		this.cache_programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
 		
-		this.GPUmaxTextures       = getGL().getParameteri(WebGLConstants.MAX_TEXTURE_IMAGE_UNITS);
-		this.GPUmaxVertexTextures = getGL().getParameteri(WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-		this.GPUmaxTextureSize    = getGL().getParameteri(WebGLConstants.MAX_TEXTURE_SIZE);
-		this.GPUmaxCubemapSize    = getGL().getParameteri(WebGLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
+		WebGLRenderingContext gl = getGL();
 		
+		this.GPUmaxTextures       = gl.getParameteri(WebGLConstants.MAX_TEXTURE_IMAGE_UNITS);
+		this.GPUmaxVertexTextures = gl.getParameteri(WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+		this.GPUmaxTextureSize    = gl.getParameteri(WebGLConstants.MAX_TEXTURE_SIZE);
+		this.GPUmaxCubemapSize    = gl.getParameteri(WebGLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
+
 		this.isGPUsupportsVertexTextures = ( this.GPUmaxVertexTextures > 0 ); 
-
-		if ( getGL().getExtension( "OES_texture_float" ) != null)
-		{
-			this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures; 
-		}
-		else
-		{
+		
+		this.GLExtensionTextureFloat = (OESTextureFloat) gl.getExtension("OES_texture_float");
+		if(this.GLExtensionTextureFloat == null)
 			Log.warn( "WebGLRenderer: Float textures not supported." );
-		}
-
-		if ( getGL().getExtension( "OES_standard_derivatives" ) == null )
-		{
-			Log.warn( "WebGLRenderer: Standard derivatives not supported." );
-		}
-
-		if ( getGL().getExtension( "EXT_texture_filter_anisotropic" ) != null
-				|| getGL().getExtension( "MOZ_EXT_texture_filter_anisotropic" ) != null 
-				|| getGL().getExtension( "WEBKIT_EXT_texture_filter_anisotropic" ) != null)
-		{
-			this.GPUmaxAnisotropy = getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-		}
 		else
-		{
+			this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures;
+		
+		this.GLExtensionStandardDerivatives = (OESStandardDerivatives) gl.getExtension( "OES_standard_derivatives" );
+		if(this.GLExtensionStandardDerivatives == null)
+			Log.warn( "WebGLRenderer: Standard derivatives not supported." );
+
+		this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "EXT_texture_filter_anisotropic" );
+		if(this.GLExtensionTextureFilterAnisotropic == null)
+			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "MOZ_EXT_texture_filter_anisotropic" );
+		if(this.GLExtensionTextureFilterAnisotropic == null)
+			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "WEBKIT_EXT_texture_filter_anisotropic" );
+		if(this.GLExtensionTextureFilterAnisotropic == null)
 			Log.warn( "WebGLRenderer: Anisotropic texture filtering not supported." );
-		}
+		else
+			this.GPUmaxAnisotropy = getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);	
+		
+		this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
+		if(this.GLExtensionCompressedTextureS3TC == null)
+			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
+		if(this.GLExtensionCompressedTextureS3TC == null)
+			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
+		if(this.GLExtensionCompressedTextureS3TC == null)
+			Log.warn( "WebGLRenderer: S3TC compressed textures not supported." );
+
 
 		setViewport(0, 0, getCanvas().getWidth(), getCanvas().getHeight());
 		setDefaultGLState();
@@ -2758,7 +2772,7 @@ public class WebGLRenderer
 			Element image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
-
+			isImagePowerOfTwo = true;
 			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
 			if ( texture instanceof CompressedTexture ) 
@@ -2768,7 +2782,6 @@ public class WebGLRenderer
 				for( int i = 0, il = mipmaps.size(); i < il; i ++ ) 
 				{
 					DataTexture mipmap = mipmaps.get( i );
-					Log.error(i, mipmap.getWidth(), mipmap.getHeight(), ((CompressedTexture) texture).getCompressedFormat());
 					getGL().compressedTexImage2D( TextureTarget.TEXTURE_2D, i, ((CompressedTexture) texture).getCompressedFormat(), 
 							mipmap.getWidth(), mipmap.getHeight(), 0, mipmap.getData() );
 				}
