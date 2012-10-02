@@ -49,12 +49,12 @@ public final class TorusGeometry extends Geometry
 		this(100, 40, 8, 6);
 	}
 	
-	public TorusGeometry(int radius, int tube, int segmentsR, int segmentsT) 
+	public TorusGeometry(double radius, double tube, int segmentsR, int segmentsT) 
 	{
 		this(radius, tube, segmentsR, segmentsT, Math.PI * 2.0);
 	}
 	
-	public TorusGeometry(int radius, int tube, int segmentsR, int segmentsT, double arc) 
+	public TorusGeometry(double radius, double tube, int segmentsR, int segmentsT, double arc) 
 	{
 		super();
 		
