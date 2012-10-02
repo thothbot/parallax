@@ -37,7 +37,7 @@ import thothbot.parallax.core.shared.objects.RendererObject;
  * 3D Scene. The basic class for rendering.
  * To use this Object in rendering you should add at least one {@link DimensionalObject} 
  * and {@link Camera}.
- * Also you may want to add Lights and {@link Fog} to the Scene Object. 
+ * Also you may want to add Lights and {@link FogAbstract} to the Scene Object. 
  * 
  * @author thothbot
  *
@@ -55,9 +55,9 @@ public final class Scene extends Object3D
 	private ArrayList<Light> lights;
 	
 	/**
-	 * Here is stored fog
+	 * Here is stored fogAbstract
 	 */
-	private Fog fog;
+	private FogAbstract fogAbstract;
 	
 	/**
 	 * History list of added DimensionalObject to the Scene.
@@ -83,7 +83,7 @@ public final class Scene extends Object3D
 	public Scene()
 	{
 		super();
-		this.fog = null;
+		this.fogAbstract = null;
 		this.objects = new ArrayList<DimensionalObject>();
 		this.lights = new ArrayList<Light>();
 		this.objectsAdded = new ArrayList<DimensionalObject>();
@@ -111,13 +111,13 @@ public final class Scene extends Object3D
 	}
 	
 	/**
-	 * Get fog associated with the Scene.
+	 * Get fogAbstract associated with the Scene.
 	 * 
-	 * @return the fog
+	 * @return the fogAbstract
 	 */
-	public Fog getFog()
+	public FogAbstract getFog()
 	{
-		return this.fog;
+		return this.fogAbstract;
 	}
 	
 	/**
@@ -141,13 +141,13 @@ public final class Scene extends Object3D
 	}
 	
 	/**
-	 * Set the fog to the Scene.
+	 * Set the fogAbstract to the Scene.
 	 * 
-	 * @param fog the Fog
+	 * @param fogAbstract the FogAbstract
 	 */
-	public void setFog(Fog fog)
+	public void setFog(FogAbstract fogAbstract)
 	{
-		this.fog = fog;
+		this.fogAbstract = fogAbstract;
 	}
 	
 	/** 

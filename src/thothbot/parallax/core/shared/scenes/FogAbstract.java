@@ -25,64 +25,57 @@ package thothbot.parallax.core.shared.scenes;
 import java.util.Map;
 
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Color;
 
 /**
- * This class implements fog with density.
+ * Abstract realization of FogAbstract. This class implements color
+ * property only.
  * 
  * @author thothbot
  *
  */
-public final class FogExp2 extends FogAbstract
+public abstract class FogAbstract
 {
-	private double density;
-
+	private Color color;
+	
 	/**
-	 * This default constructor will make fog with 
-	 * density parameter 0.00025.
-	 * 
+	 * This default constructor will make abstract FogAbstract with
+	 * defined color
+	 *  
 	 * @param hex the color in HEX format
 	 */
-	public FogExp2(int hex) 
+	public FogAbstract(int hex)
 	{
-		this(hex, 0.00025);
+		this.color = new Color(hex);
 	}
 
 	/**
-	 * This constructor will make fog with defined density.
+	 * Set color for the FogAbstract
 	 * 
-	 * @param hex     the color in HEX format
-	 * @param density the density value in range <0.0, 1.0>
+	 * @param color the color instance
 	 */
-	public FogExp2(int hex, double density) 
+	public void setColor(Color color)
 	{
-		super(hex);
-		this.density = density;
+		this.color = color;
 	}
 
 	/**
-	 * Set density parameter
+	 * Get color of the FogAbstract
 	 * 
-	 * @param density the density value in range <0.0, 1.0>
+	 * @return the color instance
 	 */
-	public void setDensity(double density)
+	public Color getColor()
 	{
-		this.density = density;
-	}
-
-	/**
-	 * Get density parameter
-	 * 
-	 * @return the density value
-	 */
-	public double getDensity()
-	{
-		return this.density;
+		return color;
 	}
 	
-	@Override
+	/**
+	 * The method refreshes uniforms for the fog
+	 * 
+	 * @param uniforms the map of uniforms
+	 */
 	public void refreshUniforms(Map<String, Uniform> uniforms) 
 	{
-		super.refreshUniforms(uniforms);
-		uniforms.get("fogDensity").setValue( getDensity() );
+		uniforms.get("fogColor").setValue( getColor() );
 	}
 }

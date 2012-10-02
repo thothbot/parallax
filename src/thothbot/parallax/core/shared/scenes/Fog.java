@@ -1,9 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * This file based on the JavaScript source file of the THREE.JS project, 
- * licensed under MIT License.
- * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -25,57 +22,89 @@ package thothbot.parallax.core.shared.scenes;
 import java.util.Map;
 
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Color;
 
 /**
- * Abstract realization of Fog. This class implements color
- * property only.
+ * This class implements simple fog with near and far options.
  * 
  * @author thothbot
  *
  */
-public abstract class Fog
+public final class Fog extends FogAbstract 
 {
-	private Color color;
-	
+	private double near;
+	private double far;
+
 	/**
-	 * This default constructor will make abstract Fog with
-	 * defined color
-	 *  
+	 * This default constructor will make simple fog with 
+	 * near parameter 1.0 and far 1000
+	 * 
 	 * @param hex the color in HEX format
 	 */
-	public Fog(int hex)
+	public Fog(int hex) 
 	{
-		this.color = new Color(hex);
+		this(hex, 1, 1000);
 	}
 
 	/**
-	 * Set color for the Fog
+	 * This constructor will make simple fog with defined parameters.
 	 * 
-	 * @param color the color instance
+	 * @param hex  the color in HEX format
+	 * @param near the near scalar value
+	 * @param far  the far scala value
 	 */
-	public void setColor(Color color)
+	public Fog(int hex, double near, double far) 
 	{
-		this.color = color;
+		super(hex);
+		this.near = near;
+		this.far = far;
 	}
 
 	/**
-	 * Get color of the Fog
+	 * Set near fog parameter
 	 * 
-	 * @return the color instance
+	 * @param near the near scalar value
 	 */
-	public Color getColor()
+	public void setNear(double near)
 	{
-		return color;
+		this.near = near;
+	}
+
+	/**
+	 * Get near fog parameter
+	 * 
+	 * @return the near fog parameter
+	 */
+	public double getNear()
+	{
+		return near;
+	}
+
+	/**
+	 * Set far fog parameter
+	 * 
+	 * @param far the far fog parameter
+	 */
+	public void setFar(double far)
+	{
+		this.far = far;
+	}
+
+	/**
+	 * Get far fog parameter
+	 * 
+	 * @return the far fog parameter
+	 */
+	public double getFar()
+	{
+		return far;
 	}
 	
-	/**
-	 * The method refreshes uniforms for the fog
-	 * 
-	 * @param uniforms the map of uniforms
-	 */
+	@Override
 	public void refreshUniforms(Map<String, Uniform> uniforms) 
 	{
-		uniforms.get("fogColor").setValue( getColor() );
+		super.refreshUniforms(uniforms);
+		
+		uniforms.get("fogNear").setValue( getNear() );
+		uniforms.get("fogFar").setValue( getFar() );
 	}
 }
