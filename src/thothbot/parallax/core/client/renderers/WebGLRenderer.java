@@ -1021,7 +1021,7 @@ public class WebGLRenderer
 		Log.debug("Called render()");
 
 		List<Light> lights = scene.getLights();
-		FogAbstract fogAbstract = scene.getFog();
+		FogAbstract fog = scene.getFog();
 
 		// reset caching for this frame
 		this.cache_currentMaterialId = -1;
@@ -1172,13 +1172,13 @@ public class WebGLRenderer
 
 			setBlending( Material.BLENDING.NORMAL);
 
-			renderObjects( scene.__webglObjects, true, "opaque", camera, lights, fogAbstract, false );
-			renderObjectsImmediate( scene.__webglObjectsImmediate, "opaque", camera, lights, fogAbstract, false );
+			renderObjects( scene.__webglObjects, true, "opaque", camera, lights, fog, false );
+			renderObjectsImmediate( scene.__webglObjectsImmediate, "opaque", camera, lights, fog, false );
 
 			// transparent pass (back-to-front order)
 
-			renderObjects( scene.__webglObjects, false, "transparent", camera, lights, fogAbstract, true );
-			renderObjectsImmediate( scene.__webglObjectsImmediate, "transparent", camera, lights, fogAbstract, true );
+			renderObjects( scene.__webglObjects, false, "transparent", camera, lights, fog, true );
+			renderObjectsImmediate( scene.__webglObjectsImmediate, "transparent", camera, lights, fog, true );
 		}
 
 		// custom render plugins (post pass)
@@ -1251,9 +1251,9 @@ public class WebGLRenderer
 	}
 	
 	// TODO: CHECK callback
-	private void renderImmediateObject( Camera camera, List<Light> lights, FogAbstract fogAbstract, Material material, GeometryObject object ) 
+	private void renderImmediateObject( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryObject object ) 
 	{
-		WebGLProgram program = setProgram( camera, lights, fogAbstract, material, object );
+		WebGLProgram program = setProgram( camera, lights, fog, material, object );
 
 		this.cache_currentGeometryGroupHash = -1;
 
@@ -1266,12 +1266,12 @@ public class WebGLRenderer
 //			object.render( function( object ) { _this.renderBufferImmediate( object, program, material.shading ); } );
 	}
 	
-	private void renderObjectsImmediate ( List<RendererObject> renderList, String materialType, Camera camera, List<Light> lights, FogAbstract fogAbstract, boolean useBlending) 
+	private void renderObjectsImmediate ( List<RendererObject> renderList, String materialType, Camera camera, List<Light> lights, FogAbstract fog, boolean useBlending) 
 	{
-		renderObjectsImmediate ( renderList, materialType, camera, lights, fogAbstract,  useBlending, null);
+		renderObjectsImmediate ( renderList, materialType, camera, lights, fog,  useBlending, null);
 	}
 
-	private void renderObjectsImmediate ( List<RendererObject> renderList, String materialType, Camera camera, List<Light> lights, FogAbstract fogAbstract, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjectsImmediate ( List<RendererObject> renderList, String materialType, Camera camera, List<Light> lights, FogAbstract fog, boolean useBlending, Material overrideMaterial ) 
 	{
 		for ( int i = 0; i < renderList.size(); i ++ ) 
 		{
@@ -1305,17 +1305,17 @@ public class WebGLRenderer
 					setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits());
 				}
 
-				renderImmediateObject( camera, lights, fogAbstract, material, object );
+				renderImmediateObject( camera, lights, fog, material, object );
 			}
 		}
 	}
 
-	private void renderObjects ( List<RendererObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, FogAbstract fogAbstract, boolean useBlending) 
+	private void renderObjects ( List<RendererObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, FogAbstract fog, boolean useBlending) 
 	{
-		renderObjects ( renderList, reverse, materialType, camera, lights, fogAbstract, useBlending, null);
+		renderObjects ( renderList, reverse, materialType, camera, lights, fog, useBlending, null);
 	}
 
-	private void renderObjects ( List<RendererObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, FogAbstract fogAbstract, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjects ( List<RendererObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, FogAbstract fog, boolean useBlending, Material overrideMaterial ) 
 	{
 		Log.debug("Called renderObjects() render list contains = " + renderList.size());
 		
@@ -1377,7 +1377,7 @@ public class WebGLRenderer
 //				if ( buffer instanceof THREE.BufferGeometry )
 //					_this.renderBufferDirect( camera, lights, fog, material, buffer, object );
 //				else
-					renderBuffer( camera, lights, fogAbstract, material, buffer, (GeometryObject) object );
+					renderBuffer( camera, lights, fog, material, buffer, (GeometryObject) object );
 			}
 		}
 	}
@@ -1387,12 +1387,12 @@ public class WebGLRenderer
 	 * Buffer rendering.
 	 * Render GeometryObject with material.
 	 */
-	public void renderBuffer( Camera camera, List<Light> lights, FogAbstract fogAbstract, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
+	public void renderBuffer( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
 	{
 		if ( ! material.isVisible()) 
 			return;
 
-		WebGLProgram program = setProgram( camera, lights, fogAbstract, material, object );
+		WebGLProgram program = setProgram( camera, lights, fog, material, object );
 
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 
@@ -1859,7 +1859,7 @@ public class WebGLRenderer
 		object.isWebglActive = false;
 	}
 
-	private void initMaterial ( Material material, List<Light> lights, FogAbstract fogAbstract, GeometryObject object ) 
+	private void initMaterial ( Material material, List<Light> lights, FogAbstract fog, GeometryObject object ) 
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
 
@@ -1875,8 +1875,8 @@ public class WebGLRenderer
 		parameters.physicallyBasedShading = isPhysicallyBasedShading();
 		parameters.isSupportsVertexTextures = this.isGPUsupportsVertexTextures;
 		
-		parameters.useFog  = (fogAbstract != null);
-		parameters.useFog2 = (fogAbstract != null && fogAbstract.getClass() == FogExp2.class);
+		parameters.useFog  = (fog != null);
+		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
 
 		parameters.maxBones = allocateBones( object );
 
@@ -1989,14 +1989,14 @@ public class WebGLRenderer
 		}
 	}
 
-	private WebGLProgram setProgram( Camera camera, List<Light> lights, FogAbstract fogAbstract, Material material, GeometryObject object ) 
+	private WebGLProgram setProgram( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryObject object ) 
 	{
 		// Use new material units for new shader
 		this.usedTextureUnits = 0;
 
 		if ( material.getShader() == null || material.getShader().getProgram() == null || material.isNeedsUpdate() ) 
 		{
-			initMaterial( material, lights, fogAbstract, object );
+			initMaterial( material, lights, fog, object );
 			material.setNeedsUpdate(false);
 		}
 
@@ -2064,8 +2064,8 @@ public class WebGLRenderer
 		if ( refreshMaterial ) 
 		{
 			// refresh uniforms common to several materials
-			if ( fogAbstract != null && material instanceof HasFog && ((HasFog)material).isFog())
-				fogAbstract.refreshUniforms( m_uniforms );
+			if ( fog != null && material instanceof HasFog && ((HasFog)material).isFog())
+				fog.refreshUniforms( m_uniforms );
 
 			if ( material.getClass() == MeshPhongMaterial.class ||
 				 material.getClass() == MeshLambertMaterial.class ||
