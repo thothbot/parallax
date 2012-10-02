@@ -1020,6 +1020,8 @@ public class WebGLRenderer
 	{
 		Log.debug("Called render()");
 
+		scene.setRenderer(this);
+
 		List<Light> lights = scene.getLights();
 		FogAbstract fog = scene.getFog();
 
@@ -1073,7 +1075,7 @@ public class WebGLRenderer
 		// update WebGL objects
 		if ( this.isAutoUpdateObjects() ) 
 		{
-			initWebGLObjects( scene );
+			scene.initWebGLObjects();
 		}
 
 		// custom render plugins (pre pass)
@@ -1731,105 +1733,7 @@ public class WebGLRenderer
 			}
 		}
 	}
-
-	/**
-	 * Refresh Scene's objects
-	 * 
-	 * @param scene the Scene with child objects
-	 */
-	public void initWebGLObjects(Scene scene ) 
-	{
-		if ( scene.__webglObjects == null ) 
-		{
-			scene.__webglObjects = new ArrayList<RendererObject>();
-			scene.__webglObjectsImmediate = new ArrayList<RendererObject>();
-		}
-
-		Log.debug("initWebGLObjects() objectsAdded=" + scene.getObjectsAdded().size() 
-				+ ", objectsRemoved=" + scene.getObjectsRemoved().size() 
-				+ ", update=" + scene.__webglObjects.size());
-		
-		while ( scene.getObjectsAdded().size() > 0 ) 
-		{
-			addObject( (Object3D) scene.getObjectsAdded().get( 0 ), scene );
-			scene.getObjectsAdded().remove(0);
-		}
-
-		while ( scene.getObjectsRemoved().size() > 0 ) 
-		{
-			removeObject( (Object3D) scene.getObjectsRemoved().get( 0 ), scene );
-			scene.getObjectsRemoved().remove(0);
-		}
-
-		// update must be called after objects adding / removal
-		for(RendererObject object: scene.__webglObjects)
-		{
-			object.object.setBuffer(this);
-		}			
-	}
-
-	/**
-	 * Adds objects
-	 */
-	private void addObject ( Object3D object, Scene scene )
-	{
-		Log.debug("addObject() object=" + object.getClass().getName());
-		if ( object instanceof GeometryObject && ! object.isWebglInit ) 
-		{
-			object.isWebglInit = true;
-
-			Log.debug("addObject() initBuffer()");
-			((GeometryObject)object).initBuffer(this);
-		}
-
-		if ( ! object.isWebglActive ) 
-		{
-			object.isWebglActive = true;
-
-			Log.debug("addObject() addObjectAddBuffer()");
-			addObjectAddBuffer(object, scene);
-		}
-	}
 	
-	private void addObjectAddBuffer(Object3D object, Scene scene)
-	{
-		if(object instanceof GeometryObject)
-		{
-			if ( object instanceof Mesh ) 
-			{
-				Mesh mesh = (Mesh)object;
-				Geometry geometry = mesh.getGeometry();
-				Log.debug("addObject() add Mesh buffer");
-				//			if(geometry instanceof BufferGeometry) 
-				//			{
-				//				addBuffer( scene.__webglObjects, geometry, object );
-				//			}
-				//			else {				
-				for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values())
-					addBuffer( scene.__webglObjects, geometryGroup, (GeometryObject)object );
-				//			}
-
-			} 
-			else if ( object instanceof Ribbon ||
-					object instanceof Line ||
-					object instanceof ParticleSystem 
-			) {
-
-				Geometry geometry = ((GeometryObject)object).getGeometry();
-				addBuffer( scene.__webglObjects, geometry, (GeometryObject)object );
-			}
-//		} else if ( object.getClass() instanceof THREE.ImmediateRenderObject || object.immediateRenderCallback ) {
-//
-//			addBufferImmediate( scene.__webglObjectsImmediate, object );
-//
-		} 
-	}
-
-	private void addBuffer ( List<RendererObject> objlist, GeometryBuffer buffer, GeometryObject object ) 
-	{
-		objlist.add(new RendererObject(buffer, object, null, null));
-	}
-
 //	function addBufferImmediate ( objlist, object ) {
 //
 //		objlist.push(
@@ -1840,24 +1744,6 @@ public class WebGLRenderer
 //			}
 //		);
 //	}
-
-	/*
-	 * Objects removal
-	 */
-	private static void removeObject ( Object3D object, Scene scene ) 
-	{
-		if ( object instanceof GeometryObject) 
-		{
-			for ( int o = scene.__webglObjects.size() - 1; o >= 0; o -- )
-				if ( scene.__webglObjects.get( o ).object == object )
-					scene.__webglObjects.remove(o);
-
-//		} else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
-//			removeInstances( scene.__webglObjectsImmediate, object );
-		}
-
-		object.isWebglActive = false;
-	}
 
 	private void initMaterial ( Material material, List<Light> lights, FogAbstract fog, GeometryObject object ) 
 	{

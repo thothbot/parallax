@@ -25,13 +25,23 @@ package thothbot.parallax.core.shared.scene;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.GeometryBuffer;
+import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.DimensionalObject;
+import thothbot.parallax.core.shared.objects.GeometryObject;
+import thothbot.parallax.core.shared.objects.Line;
+import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Object3D;
+import thothbot.parallax.core.shared.objects.ParticleSystem;
 import thothbot.parallax.core.shared.objects.RendererObject;
+import thothbot.parallax.core.shared.objects.Ribbon;
 
 /**
  * 3D Scene. The basic class for rendering.
@@ -77,6 +87,8 @@ public final class Scene extends Object3D
 	public List<RendererObject> __webglObjectsImmediate;
 	public List<RendererObject> __webglObjects;
 	
+	private WebGLRenderer renderer;
+	
 	/**
 	 * This default constructor will create new Scene instance.
 	 */
@@ -88,6 +100,14 @@ public final class Scene extends Object3D
 		this.lights = new ArrayList<Light>();
 		this.objectsAdded = new ArrayList<DimensionalObject>();
 		this.objectsRemoved = new ArrayList<DimensionalObject>();
+	}
+	
+	public WebGLRenderer getRenderer() {
+		return this.renderer;
+	}
+
+	public void setRenderer(WebGLRenderer renderer) {
+		this.renderer = renderer;
 	}
 	
 	/**
@@ -198,5 +218,122 @@ public final class Scene extends Object3D
 		
 		for (DimensionalObject item : child.getChildren())
 			this.removeSceneItem(item);
+	}
+	
+	/**
+	 * Refresh Scene's objects
+	 * 
+	 * @param scene the Scene with child objects
+	 */
+	public void initWebGLObjects() 
+	{
+		if ( this.__webglObjects == null ) 
+		{
+			this.__webglObjects = new ArrayList<RendererObject>();
+			this.__webglObjectsImmediate = new ArrayList<RendererObject>();
+		}
+
+		Log.debug("initWebGLObjects() objectsAdded=" + getObjectsAdded().size() 
+				+ ", objectsRemoved=" + getObjectsRemoved().size() 
+				+ ", update=" + this.__webglObjects.size());
+		
+		while ( getObjectsAdded().size() > 0 ) 
+		{
+			addObject( (Object3D) getObjectsAdded().get( 0 ) );
+			getObjectsAdded().remove(0);
+		}
+
+		while ( getObjectsRemoved().size() > 0 ) 
+		{
+			removeObject( (Object3D) getObjectsRemoved().get( 0 ) );
+			getObjectsRemoved().remove(0);
+		}
+
+		// update must be called after objects adding / removal
+		for(RendererObject object: this.__webglObjects)
+		{
+			object.object.setBuffer(this.renderer);
+		}			
+	}
+	
+	/**
+	 * Adds objects
+	 */
+	private void addObject ( Object3D object )
+	{
+		Log.debug("addObject() object=" + object.getClass().getName());
+
+		if ( object instanceof GeometryObject && ! object.isWebglInit ) 
+		{
+			object.isWebglInit = true;
+
+			Log.debug("addObject() initBuffer()");
+			((GeometryObject)object).initBuffer(this.renderer);
+		}
+
+		if ( ! object.isWebglActive ) 
+		{
+			object.isWebglActive = true;
+
+			Log.debug("addObject() addObjectAddBuffer()");
+			addObjectAddBuffer( object );
+		}
+	}
+	
+	/*
+	 * Objects removal
+	 */
+	private void removeObject ( Object3D object ) 
+	{
+		if ( object instanceof GeometryObject) 
+		{
+			for ( int o = this.__webglObjects.size() - 1; o >= 0; o -- )
+				if ( this.__webglObjects.get( o ).object == object )
+					this.__webglObjects.remove(o);
+
+//		} else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
+//			removeInstances( scene.__webglObjectsImmediate, object );
+		}
+
+		object.isWebglActive = false;
+	}
+	
+	private void addObjectAddBuffer(Object3D object)
+	{
+		if(object instanceof GeometryObject)
+		{
+			if ( object instanceof Mesh ) 
+			{
+				Mesh mesh = (Mesh)object;
+				Geometry geometry = mesh.getGeometry();
+				Log.debug("addObject() add Mesh buffer");
+				//			if(geometry instanceof BufferGeometry) 
+				//			{
+				//				addBuffer( scene.__webglObjects, geometry, object );
+				//			}
+				//			else {				
+				for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values())
+					addBuffer( geometryGroup, (GeometryObject)object );
+				//			}
+
+			} 
+			else if ( object instanceof Ribbon ||
+					object instanceof Line ||
+					object instanceof ParticleSystem 
+			) {
+
+				Geometry geometry = ((GeometryObject)object).getGeometry();
+				addBuffer( geometry, (GeometryObject)object );
+			}
+//		} else if ( object.getClass() instanceof THREE.ImmediateRenderObject || object.immediateRenderCallback ) {
+//
+//			addBufferImmediate( scene.__webglObjectsImmediate, object );
+//
+		} 
+	}
+	
+	private void addBuffer (GeometryBuffer buffer, GeometryObject object ) 
+	{
+		this.__webglObjects.add(new RendererObject(buffer, object, null, null));
 	}
 }
