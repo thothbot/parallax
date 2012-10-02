@@ -24,7 +24,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.scenes.Scene;
+import thothbot.parallax.core.shared.scene.Scene;
 
 /**
  * Lights used in the {@link Scene}.

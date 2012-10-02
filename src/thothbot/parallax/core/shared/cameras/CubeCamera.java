@@ -29,7 +29,7 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
-import thothbot.parallax.core.shared.scenes.Scene;
+import thothbot.parallax.core.shared.scene.Scene;
 
 /**
  * Camera for rendering cube maps
