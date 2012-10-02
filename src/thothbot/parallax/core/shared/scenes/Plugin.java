@@ -17,10 +17,10 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.renderers;
+package thothbot.parallax.core.shared.scenes;
 
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.scenes.Scene;
 
 public abstract class Plugin 
 {
