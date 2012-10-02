@@ -31,7 +31,7 @@ import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.DimensionalObject;
 import thothbot.parallax.core.shared.objects.Object3D;
-import thothbot.parallax.core.shared.objects.WebGLObject;
+import thothbot.parallax.core.shared.objects.RendererObject;
 
 /**
  * 3D Scene. The basic class for rendering.
@@ -74,8 +74,8 @@ public final class Scene extends Object3D
 	private ArrayList<DimensionalObject> objectsRemoved;
 
 	public Material overrideMaterial;
-	public List<WebGLObject> __webglObjectsImmediate;
-	public List<WebGLObject> __webglObjects;
+	public List<RendererObject> __webglObjectsImmediate;
+	public List<RendererObject> __webglObjects;
 	
 	/**
 	 * This default constructor will create new Scene instance.

@@ -23,7 +23,10 @@
 package thothbot.parallax.core.shared.lights;
 
 import java.util.List;
+import java.util.Map;
 
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
@@ -45,6 +48,27 @@ import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
  */
 public class DirectionalLight extends ShadowLight
 {	
+	public static class UniformDirectional implements Light.UniformLight 
+	{
+		public Float32Array colors;
+		public Float32Array positions;
+
+		@Override
+		public void reset() 
+		{
+			this.colors    = (Float32Array) Float32Array.createArray();
+			this.positions = (Float32Array) Float32Array.createArray();
+			
+		}
+
+		@Override
+		public void refreshUniform(Map<String, Uniform> uniforms) 
+		{
+			uniforms.get("directionalLightColor").setValue( colors );
+			uniforms.get("directionalLightDirection").setValue( positions );
+		}
+	}
+
 	private Vector3 shadowCascadeOffset;
 	private int shadowCascadeCount = 2;
 
@@ -179,5 +203,30 @@ public class DirectionalLight extends ShadowLight
 
 	public void setShadowCameraBottom(int shadowCameraBottom) {
 		this.shadowCameraBottom = shadowCameraBottom;
+	}
+	
+	@Override
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
+	{
+		Float32Array dirColors     = zlights.directional.colors;
+		Float32Array dirPositions  = zlights.directional.positions;
+
+		double intensity = getIntensity();
+
+		int dirOffset = dirColors.getLength();
+
+		if ( isGammaInput )
+			setColorGamma( dirColors, dirOffset, getColor(), intensity ); 
+		else 
+			setColorLinear( dirColors, dirOffset, getColor(), intensity );
+
+		Vector3 position = new Vector3();
+		position.copy( getMatrixWorld().getPosition() );
+		position.sub( getTarget().getMatrixWorld().getPosition() );
+		position.normalize();
+
+		dirPositions.set( dirOffset, position.getX());
+		dirPositions.set( dirOffset + 1, position.getY());
+		dirPositions.set( dirOffset + 2, position.getZ());
 	}
 }

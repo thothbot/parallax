@@ -1231,7 +1231,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
   }-*/;
 
   /**
-   * Return true if the passed WebGLObject is a WebGLFramebuffer and false 
+   * Return true if the passed RendererObject is a WebGLFramebuffer and false 
    * otherwise.
    * 
    * @param buffer
@@ -1241,7 +1241,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
   }-*/;
 
   /**
-   * Return true if the passed WebGLObject is a WebGLProgram and false 
+   * Return true if the passed RendererObject is a WebGLProgram and false 
    * otherwise.
    * 
    * @param program
@@ -1251,7 +1251,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
   }-*/;
 
   /**
-   * Return true if the passed WebGLObject is a WebGLRenderbuffer and false 
+   * Return true if the passed RendererObject is a WebGLRenderbuffer and false 
    * otherwise.
    * 
    * @param buffer
@@ -1261,7 +1261,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
   }-*/;
 
   /**
-   * Return true if the passed WebGLObject is a WebGLShader and false 
+   * Return true if the passed RendererObject is a WebGLShader and false 
    * otherwise.
    * 
    * @param shader
@@ -1271,7 +1271,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
   }-*/;
 
   /**
-   * Return true if the passed WebGLObject is a WebGLTexture and false 
+   * Return true if the passed RendererObject is a WebGLTexture and false 
    * otherwise.
    * 
    * @param texture

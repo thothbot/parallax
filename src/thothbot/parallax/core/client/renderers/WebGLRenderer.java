@@ -86,6 +86,7 @@ import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.lights.PointLight;
 import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
+import thothbot.parallax.core.shared.lights.RendererLights;
 import thothbot.parallax.core.shared.materials.HasEnvMap;
 import thothbot.parallax.core.shared.materials.HasFog;
 import thothbot.parallax.core.shared.materials.HasSkinning;
@@ -102,7 +103,7 @@ import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.ParticleSystem;
 import thothbot.parallax.core.shared.objects.Ribbon;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
-import thothbot.parallax.core.shared.objects.WebGLObject;
+import thothbot.parallax.core.shared.objects.RendererObject;
 import thothbot.parallax.core.shared.scenes.Fog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -214,9 +215,8 @@ public class WebGLRenderer
 	private Vector4 cache_vector3;
 
 	// light arrays cache
-	private Vector3 cache_direction;
 	private boolean isLightsNeedUpdate = true;
-	private WebGLRenderLights cache_lights;
+	private RendererLights cache_lights;
 	
 	private Map<String, Shader> cache_programs;
 
@@ -250,8 +250,7 @@ public class WebGLRenderer
 		
 		this.cache_projScreenMatrix = new Matrix4();
 		this.cache_vector3          = new Vector4();
-		this.cache_direction        = new Vector3();
-		this.cache_lights           = new WebGLRenderLights();
+		this.cache_lights           = new RendererLights();
 		this.cache_programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
 		
@@ -1092,10 +1091,10 @@ public class WebGLRenderer
 		}
 
 		// set matrices for regular objects (frustum culled)
-		List<WebGLObject> renderList = scene.__webglObjects;
+		List<RendererObject> renderList = scene.__webglObjects;
 		Log.debug("render(): Render list size is: " + renderList.size());
 
-		for(WebGLObject webglObject: renderList) 
+		for(RendererObject webglObject: renderList) 
 		{
 			GeometryObject object = webglObject.object;
 			webglObject.render = false;
@@ -1134,9 +1133,9 @@ public class WebGLRenderer
 
 		// set matrices for immediate objects
 
-		List<WebGLObject> renderListI = scene.__webglObjectsImmediate;
+		List<RendererObject> renderListI = scene.__webglObjectsImmediate;
 
-		for(WebGLObject webglObject: renderListI)
+		for(RendererObject webglObject: renderListI)
 		{
 			GeometryObject object = webglObject.object;
 			if ( object.isVisible() ) 
@@ -1266,17 +1265,17 @@ public class WebGLRenderer
 //			object.render( function( object ) { _this.renderBufferImmediate( object, program, material.shading ); } );
 	}
 	
-	private void renderObjectsImmediate ( List<WebGLObject> renderList, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending) 
+	private void renderObjectsImmediate ( List<RendererObject> renderList, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending) 
 	{
 		renderObjectsImmediate ( renderList, materialType, camera, lights, fog,  useBlending, null);
 	}
 
-	private void renderObjectsImmediate ( List<WebGLObject> renderList, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjectsImmediate ( List<RendererObject> renderList, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
 	{
 		for ( int i = 0; i < renderList.size(); i ++ ) 
 		{
 
-			WebGLObject webglObject = renderList.get( i );
+			RendererObject webglObject = renderList.get( i );
 			GeometryObject object = webglObject.object;
 
 			if ( object.isVisible()) 
@@ -1310,12 +1309,12 @@ public class WebGLRenderer
 		}
 	}
 
-	private void renderObjects ( List<WebGLObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending) 
+	private void renderObjects ( List<RendererObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending) 
 	{
 		renderObjects ( renderList, reverse, materialType, camera, lights, fog, useBlending, null);
 	}
 
-	private void renderObjects ( List<WebGLObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjects ( List<RendererObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, Fog fog, boolean useBlending, Material overrideMaterial ) 
 	{
 		Log.debug("Called renderObjects() render list contains = " + renderList.size());
 		
@@ -1341,7 +1340,7 @@ public class WebGLRenderer
 
 		for ( int i = start; i != end; i += delta ) {
 
-			WebGLObject webglObject = renderList.get( i );
+			RendererObject webglObject = renderList.get( i );
 
 			if ( webglObject.render ) 
 			{
@@ -1663,7 +1662,7 @@ public class WebGLRenderer
 //		}
 //	}
 
-	private void unrollImmediateBufferMaterial ( WebGLObject globject ) 
+	private void unrollImmediateBufferMaterial ( RendererObject globject ) 
 	{
 		GeometryObject object = globject.object;
 		Material material = object.getMaterial();
@@ -1681,7 +1680,7 @@ public class WebGLRenderer
 		}
 	}
 
-	private void unrollBufferMaterial (  WebGLObject globject ) 
+	private void unrollBufferMaterial (  RendererObject globject ) 
 	{
 		GeometryObject object = globject.object;
 
@@ -1741,8 +1740,8 @@ public class WebGLRenderer
 	{
 		if ( scene.__webglObjects == null ) 
 		{
-			scene.__webglObjects = new ArrayList<WebGLObject>();
-			scene.__webglObjectsImmediate = new ArrayList<WebGLObject>();
+			scene.__webglObjects = new ArrayList<RendererObject>();
+			scene.__webglObjectsImmediate = new ArrayList<RendererObject>();
 		}
 
 		Log.debug("initWebGLObjects() objectsAdded=" + scene.getObjectsAdded().size() 
@@ -1762,7 +1761,7 @@ public class WebGLRenderer
 		}
 
 		// update must be called after objects adding / removal
-		for(WebGLObject object: scene.__webglObjects)
+		for(RendererObject object: scene.__webglObjects)
 		{
 			object.object.setBuffer(this);
 		}			
@@ -1825,9 +1824,9 @@ public class WebGLRenderer
 		} 
 	}
 
-	private void addBuffer ( List<WebGLObject> objlist, GeometryBuffer buffer, GeometryObject object ) 
+	private void addBuffer ( List<RendererObject> objlist, GeometryBuffer buffer, GeometryObject object ) 
 	{
-		objlist.add(new WebGLObject(buffer, object, null, null));
+		objlist.add(new RendererObject(buffer, object, null, null));
 	}
 
 //	function addBufferImmediate ( objlist, object ) {
@@ -2074,11 +2073,11 @@ public class WebGLRenderer
 
 				if (this.isLightsNeedUpdate ) 
 				{
-					setupLights( lights );
+					this.cache_lights.setupLights( lights, this.isGammaInput );
 					this.isLightsNeedUpdate = false;
 				}
 
-				refreshUniformsLights( m_uniforms, this.cache_lights );
+				this.cache_lights.refreshUniformsLights( m_uniforms );
 			}
 
 			material.refreshUniforms(getCanvas(), camera, this.isGammaInput);
@@ -2120,29 +2119,6 @@ public class WebGLRenderer
 			getGL().uniformMatrix4fv( m_uniforms.get("modelMatrix").getLocation(), false, object.getMatrixWorld().getArray() );
 
 		return program;
-	}
-
-	private void refreshUniformsLights ( Map<String, Uniform> uniforms, WebGLRenderLights lights ) 
-	{
-		uniforms.get("ambientLightColor").setValue( lights.ambient );
-		
-		uniforms.get("directionalLightColor").setValue( lights.directional.colors );
-		uniforms.get("directionalLightDirection").setValue( lights.directional.positions );
-
-		uniforms.get("pointLightColor").setValue( lights.point.colors );
-		uniforms.get("pointLightPosition").setValue( lights.point.positions );
-		uniforms.get("pointLightDistance").setValue( lights.point.distances );
-
-		uniforms.get("spotLightColor").setValue( lights.spot.colors );
-		uniforms.get("spotLightPosition").setValue( lights.spot.positions );
-		uniforms.get("spotLightDistance").setValue( lights.spot.distances );
-		uniforms.get("spotLightDirection").setValue( lights.spot.directions );
-		uniforms.get("spotLightAngle").setValue( lights.spot.angles );
-		uniforms.get("spotLightExponent").setValue( lights.spot.exponents );
-		
-		uniforms.get("hemisphereLightSkyColor").setValue( lights.hemi.skyColors );
-		uniforms.get("hemisphereLightGroundColor").setValue( lights.hemi.groundColors );
-		uniforms.get("hemisphereLightPosition").setValue( lights.hemi.positions );
 	}
 
 	private void refreshUniformsShadow( Map<String, Uniform> uniforms, List<Light> lights ) 
@@ -2378,225 +2354,7 @@ public class WebGLRenderer
 		object._normalMatrix.getInverse(object._modelViewMatrix );
 		object._normalMatrix.transpose();
 	}
-
-	private void setupLights ( List<Light> lights ) 
-	{
-		Log.debug("Called setupLights()");
-
-		WebGLRenderLights zlights = this.cache_lights; 
-
-		Float32Array dirColors     = zlights.directional.colors;
-		Float32Array dirPositions  = zlights.directional.positions;
-
-		Float32Array pointColors     = zlights.point.colors;
-		Float32Array pointPositions  = zlights.point.positions;
-		Float32Array pointDistances  = zlights.point.distances;
-
-		Float32Array spotColors     = zlights.spot.colors;
-		Float32Array spotPositions  = zlights.spot.positions;
-		Float32Array spotDistances  = zlights.spot.distances;
-		Float32Array spotDirections = zlights.spot.directions;
-		Float32Array spotAngles     = zlights.spot.angles;
-		Float32Array spotExponents  = zlights.spot.exponents;
-		
-		Float32Array hemiSkyColors    = zlights.hemi.skyColors;
-		Float32Array hemiGroundColors = zlights.hemi.groundColors;
-		Float32Array hemiPositions    = zlights.hemi.positions;
-
-		int dirLength = 0;
-		int pointLength = 0;
-		int spotLength = 0;
-		int hemiLength = 0;
-
-		int dirOffset = 0;
-		int pointOffset = 0;
-		int spotOffset = 0;
-		int hemiOffset = 0;
-		
-		double r = 0, g = 0, b = 0;
-
-		for ( int l = 0, ll = lights.size(); l < ll; l ++ ) 
-		{
-			Light light = lights.get( l );
-
-			if ( light.isOnlyShadow() || ! light.isVisible()) 
-				continue;
-
-			Color color = light.getColor();
-
-			if ( light.getClass() == AmbientLight.class ) 
-			{
-				if ( this.isGammaInput ) 
-				{
-					r += color.getR() * color.getR();
-					g += color.getG() * color.getG();
-					b += color.getB() * color.getB();
-				} 
-				else 
-				{
-					r += color.getR();
-					g += color.getG();
-					b += color.getB();
-				}
-
-			} 
-			else if ( light.getClass() == DirectionalLight.class ) 
-			{
-
-				DirectionalLight directionalLight = (DirectionalLight) light;
-				double intensity = directionalLight.getIntensity();
-
-				dirOffset = dirLength * 3;
-
-				if ( this.isGammaInput ) 
-				{
-					setColorGamma( dirColors, dirOffset, color, intensity * intensity );
-				} 
-				else 
-				{
-					setColorLinear( dirColors, dirOffset, color, intensity );
-				}
-
-				this.cache_direction.copy( directionalLight.getMatrixWorld().getPosition() );
-				this.cache_direction.sub( directionalLight.getTarget().getMatrixWorld().getPosition() );
-				this.cache_direction.normalize();
-
-				dirPositions.set( dirOffset, this.cache_direction.getX());
-				dirPositions.set( dirOffset + 1, this.cache_direction.getY());
-				dirPositions.set( dirOffset + 2, this.cache_direction.getZ());
-
-				dirLength += 1;
-
-			} 
-			else if( light.getClass() == PointLight.class ) 
-			{
-
-				PointLight pointLight = (PointLight) light;
-				double intensity = pointLight.getIntensity();
-				double distance = pointLight.getDistance();
-				pointOffset = pointLength * 3;
-
-				if ( this.isGammaInput ) 
-				{
-					setColorGamma( pointColors, pointOffset, color, intensity * intensity );
-				} 
-				else 
-				{
-					setColorLinear( pointColors, pointOffset, color, intensity );
-				}
-
-				Vector3 position = pointLight.getMatrixWorld().getPosition();
-
-				pointPositions.set(  pointOffset, position.getX() );
-				pointPositions.set(  pointOffset + 1, position.getY() );
-				pointPositions.set(  pointOffset + 2, position.getZ() );
-
-				pointDistances.set( pointLength, distance );
-
-				pointLength += 1;
-			} 
-			else if( light.getClass() == SpotLight.class ) 
-			{
-				SpotLight spotLight = (SpotLight) light;
-				double intensity = spotLight.getIntensity();
-				double distance = spotLight.getDistance();
-
-				spotOffset = spotLength * 3;
-
-				if ( this.isGammaInput ) 
-				{
-					setColorGamma( spotColors, spotOffset, color, intensity * intensity );
-				} 
-				else 
-				{
-					setColorLinear( spotColors, spotOffset, color, intensity );
-				}
-
-				Vector3 position = spotLight.getMatrixWorld().getPosition();
-
-				spotPositions.set(spotOffset, position.getX());
-				spotPositions.set(spotOffset + 1, position.getY());
-				spotPositions.set(spotOffset + 2, position.getZ());
-
-				spotDistances.set(spotLength, distance);
-
-				this.cache_direction.copy( position );
-				this.cache_direction.sub( spotLight.getTarget().getMatrixWorld().getPosition() );
-				this.cache_direction.normalize();
-
-				spotDirections.set(spotOffset, this.cache_direction.getX());
-				spotDirections.set(spotOffset + 1, this.cache_direction.getY());
-				spotDirections.set(spotOffset + 2, this.cache_direction.getZ());
-
-				spotAngles.set(spotLength, Math.cos( spotLight.getAngle() ));
-				spotExponents.set( spotLength, spotLight.exponent);
-
-				spotLength += 1;
-			} 
-			else if ( light instanceof HemisphereLight ) 
-			{
-				HemisphereLight hemiLight = (HemisphereLight) light;
-				Color skyColor = hemiLight.getColor();
-				Color groundColor = hemiLight.getGroundColor();
-				double intensity = hemiLight.getIntensity();
-
-				hemiOffset = hemiLength * 3;
-
-				if (  this.isGammaInput ) 
-				{
-					double intensitySq = intensity * intensity;
-
-					setColorGamma( hemiSkyColors, hemiOffset, skyColor, intensitySq );
-					setColorGamma( hemiGroundColors, hemiOffset, groundColor, intensitySq );
-				} 
-				else 
-				{
-					setColorLinear( hemiSkyColors, hemiOffset, skyColor, intensity );
-					setColorLinear( hemiGroundColors, hemiOffset, groundColor, intensity );
-				}
-
-				Vector3 position = hemiLight.getMatrixWorld().getPosition();
-
-				hemiPositions.set( hemiOffset, position.getX() );
-				hemiPositions.set( hemiOffset + 1, position.getY() );
-				hemiPositions.set( hemiOffset + 2, position.getZ() );
-
-				hemiLength += 1;
-			}
-		}
-
-		// null eventual remains from removed lights
-		// (this is to avoid if in shader)
-		for ( int l = dirLength * 3, ll = dirColors.getLength(); l < ll; l ++ ) dirColors.set( l, 0.0 );
-		for ( int l = pointLength * 3, ll = pointColors.getLength(); l < ll; l ++ ) pointColors.set( l, 0.0 );
-		for ( int l = spotLength * 3, ll = spotColors.getLength(); l < ll; l ++ ) spotColors.set( l, 0.0 );
-		for ( int l = hemiLength * 3, ll = hemiSkyColors.getLength(); l < ll; l ++ ) hemiSkyColors.set( l, 0.0 );
-		for ( int l = hemiLength * 3, ll = hemiGroundColors.getLength(); l < ll; l ++ ) hemiGroundColors.set( l, 0.0 );
-
-		zlights.directional.length = dirLength;
-		zlights.point.length = pointLength;
-		zlights.spot.length = spotLength;
-		zlights.hemi.length = hemiLength;
-
-		zlights.ambient.set( 0, r );
-		zlights.ambient.set( 1, g );
-		zlights.ambient.set( 2, b );
-	}
 	
-	private void setColorGamma( Float32Array array, int offset, Color color, double intensitySq ) 
-	{
-		array.set( offset, color.getR() * color.getR() * intensitySq);
-		array.set( offset + 1, color.getG() * color.getG() * intensitySq);
-		array.set( offset + 2, color.getB() * color.getB() * intensitySq);
-	}
-
-	private void  setColorLinear( Float32Array array, int offset, Color color, double intensity ) 
-	{
-		array.set( offset, color.getR() * intensity);
-		array.set( offset + 1, color.getG() * intensity);
-		array.set( offset + 2, color.getB() * intensity);
-	}
-
 	// GL state setting
 	
 	private void setFaceCulling(String frontFace ) 

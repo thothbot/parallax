@@ -55,7 +55,7 @@ import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
-import thothbot.parallax.core.shared.objects.WebGLObject;
+import thothbot.parallax.core.shared.objects.RendererObject;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 public final class ShadowMap extends Plugin 
@@ -279,11 +279,11 @@ public final class ShadowMap extends Plugin
 
 			// set object matrices & frustum culling
 
-			List<WebGLObject> renderList = getScene().__webglObjects;
+			List<RendererObject> renderList = getScene().__webglObjects;
 
 			for ( int j = 0, jl = renderList.size(); j < jl; j ++ ) 
 			{
-				WebGLObject webglObject = renderList.get( j );
+				RendererObject webglObject = renderList.get( j );
 				GeometryObject object = webglObject.object;
 
 				webglObject.render = false;
@@ -302,7 +302,7 @@ public final class ShadowMap extends Plugin
 
 			for ( int j = 0, jl = renderList.size(); j < jl; j ++ ) 
 			{
-				WebGLObject webglObject = renderList.get( j );
+				RendererObject webglObject = renderList.get( j );
 
 				if ( webglObject.render ) 
 				{
