@@ -28,9 +28,9 @@ import thothbot.parallax.plugin.postprocessing.client.shaders.FilmShader;
 public class FilmPass extends Pass
 {
 	private ShaderMaterial material;
-	private boolean renderToScreen = false;
+	private boolean isRenderToScreen = false;
 
-	public FilmPass( int noiseIntensity, int scanlinesIntensity, int scanlinesCount, double grayscale ) 
+	public FilmPass( double noiseIntensity, double scanlinesIntensity, int scanlinesCount, boolean grayscale ) 
 	{
 		this.material = new ShaderMaterial(new FilmShader());
 
@@ -43,6 +43,14 @@ public class FilmPass extends Pass
 		this.setNeedsSwap(true);
 	}
 	
+	public boolean isRenderToScreen() {
+		return this.isRenderToScreen;
+	}
+	
+	public void setRenderToScreen(boolean isRenderToScreen) {
+		this.isRenderToScreen = isRenderToScreen;
+	}
+	
 	@Override
 	public void render(Postprocessing effectCocmposer, double delta, boolean maskActive)
 	{
@@ -51,7 +59,7 @@ public class FilmPass extends Pass
 
 		effectCocmposer.getQuad().setMaterial(this.material);
 
-		if ( this.renderToScreen )
+		if ( this.isRenderToScreen )
 			effectCocmposer.getRenderer().render( 
 					effectCocmposer.getScene(), effectCocmposer.getCamera() );
 

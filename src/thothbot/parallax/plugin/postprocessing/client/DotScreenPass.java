@@ -30,7 +30,7 @@ import thothbot.parallax.plugin.postprocessing.client.shaders.DotscreenShader;
 public class DotScreenPass extends Pass
 {
 	private ShaderMaterial material;
-	private boolean renderToScreen = false;
+	private boolean isRenderToScreen = false;
 	
 	public DotScreenPass( Vector3 center, double angle, double scale ) 
 	{
@@ -43,6 +43,14 @@ public class DotScreenPass extends Pass
 		this.setNeedsSwap(true);
 	}
 	
+	public boolean isRenderToScreen() {
+		return this.isRenderToScreen;
+	}
+	
+	public void setRenderToScreen(boolean isRenderToScreen) {
+		this.isRenderToScreen = isRenderToScreen;
+	}
+	
 	@Override
 	public void render(Postprocessing effectCocmposer, double delta, boolean maskActive)
 	{
@@ -52,7 +60,7 @@ public class DotScreenPass extends Pass
 
 		effectCocmposer.getQuad().setMaterial(this.material);
 
-		if ( this.renderToScreen )
+		if ( this.isRenderToScreen )
 			effectCocmposer.getRenderer().render( 
 					effectCocmposer.getScene(), effectCocmposer.getCamera() );
 
