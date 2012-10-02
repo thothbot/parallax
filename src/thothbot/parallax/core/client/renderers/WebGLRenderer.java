@@ -68,6 +68,7 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Frustum;
@@ -990,20 +991,12 @@ public class WebGLRenderer
 		}
 	}
 
-	/**
-	 * Rendering. 
-	 * @see #render(Scene, Camera, RenderTargetTexture, boolean).
-	 */
-	public void render( Scene scene, Camera camera)
+	public void render( Scene scene, Camera camera )
 	{
 		render(scene, camera, null);
 	}
 
-	/**
-	 * Rendering. 
-	 * @see #render(Scene, Camera, RenderTargetTexture, boolean).
-	 */
-	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget)
+	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget )
 	{
 		render(scene, camera, renderTarget, false);
 	}
@@ -1012,7 +1005,6 @@ public class WebGLRenderer
 	 * Rendering.
 	 * 
 	 * @param scene        the {@link Scene} object.
-	 * @param camera       the {@link Camera} object
 	 * @param renderTarget optional
 	 * @param forceClear   optional
 	 */
@@ -1021,6 +1013,14 @@ public class WebGLRenderer
 		Log.debug("Called render()");
 
 		scene.setRenderer(this);
+		camera.setRenderer(this);
+		// Check onResize
+		if(camera.getClass() == PerspectiveCamera.class &&
+				getCanvas().getAspectRation() != ((PerspectiveCamera)camera).getAspectRation())
+		{
+			((PerspectiveCamera)camera).setAspectRatio(
+					getCanvas().getAspectRation());
+		}
 
 		List<Light> lights = scene.getLights();
 		FogAbstract fog = scene.getFog();

@@ -109,7 +109,7 @@ public final class Scene extends Object3D
 	public void setRenderer(WebGLRenderer renderer) {
 		this.renderer = renderer;
 	}
-	
+
 	/**
 	 * Get DimensionalObject associated with the Scene.
 	 * 
@@ -185,7 +185,8 @@ public final class Scene extends Object3D
 		}
 		else if (!(child instanceof Camera || child instanceof Bone)) 
 		{
-			if (this.objects.indexOf(child) == -1) {
+			if (this.objects.indexOf(child) == -1) 
+			{
 				this.objects.add(child);
 				this.objectsAdded.add(child);
 			}

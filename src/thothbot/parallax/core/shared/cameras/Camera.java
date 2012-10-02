@@ -23,6 +23,7 @@
 package thothbot.parallax.core.shared.cameras;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
@@ -41,6 +42,8 @@ public class Camera extends Object3D
 
 	public Float32Array _viewMatrixArray;
 	public Float32Array _projectionMatrixArray;
+	
+	private WebGLRenderer renderer;
 
 	public Camera() 
 	{
@@ -49,6 +52,14 @@ public class Camera extends Object3D
 		this.projectionMatrix = new Matrix4();
 		this.projectionMatrixInverse = new Matrix4();
 
+	}
+	
+	public WebGLRenderer getRenderer() {
+		return this.renderer;
+	}
+
+	public void setRenderer(WebGLRenderer renderer) {
+		this.renderer = renderer;
 	}
 
 	public Matrix4 getMatrixWorldInverse()

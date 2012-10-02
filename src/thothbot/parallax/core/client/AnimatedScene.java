@@ -21,7 +21,6 @@ package thothbot.parallax.core.client;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.scene.Scene;
 
@@ -52,37 +51,8 @@ public abstract class AnimatedScene extends Animation
 
 	private WebGLRenderer renderer;
 	private Scene scene;
-	private Camera camera;
 	private AnimatedSceneCallback animatedSceneCallback;
 
-	/**
-	 * Gets {@link WebGLRenderer} associated with the AnimatedScene.
-	 * 
-	 * @return the {@link WebGLRenderer} instance.
-	 */
-	public WebGLRenderer getRenderer() 
-	{
-		return this.renderer;
-	}
-	
-	/**
-	 * Loads the main {@link Scene} for the {@link WebGLRenderer}. 
-	 */
-	protected void loadScene()
-	{
-		setScene(new Scene());
-	}
-
-	/**
-	 * Sets the main {@link Scene} object.
-	 * 
-	 * @param scene the Scene instance.
-	 */
-	protected void setScene(Scene scene)
-	{
-		this.scene = scene;
-	}
-	
 	/**
 	 * Gets the main {@link Scene} object.
 	 * 
@@ -94,30 +64,15 @@ public abstract class AnimatedScene extends Animation
 	}
 
 	/**
-	 * Loads default camera for the current {@link Scene},
-	 */
-	protected abstract void loadCamera();
-
-	/**
-	 * Sets default {@link Camera} to the current {@Scene}
+	 * Gets {@link WebGLRenderer} associated with the AnimatedScene.
 	 * 
-	 * @param camera the Camera instance.
+	 * @return the {@link WebGLRenderer} instance.
 	 */
-	protected void setCamera(Camera camera)
+	public WebGLRenderer getRenderer() 
 	{
-		this.camera = camera;
+		return this.renderer;
 	}
 
-	/**
-	 * Gets default {@link Camera} object associated with the current {@link Scene}.
-	 * 
-	 * @return the Camera instance
-	 */
-	public Camera getCamera() 
-	{
-		return this.camera;
-	}
-	
 	/**
 	 * Initialize the scene.
 	 * 
@@ -126,13 +81,11 @@ public abstract class AnimatedScene extends Animation
 	 */
 	public void init(WebGLRenderer renderer, AnimatedSceneCallback animatedSceneCallback)
 	{
-		if(this.renderer != null)
+		if(getRenderer() != null)
 			return;
 
 		this.renderer = renderer;
-
-		loadScene();
-		loadCamera();
+		this.scene = new Scene();
 
 		this.animatedSceneCallback = animatedSceneCallback;		
 	}
@@ -142,9 +95,8 @@ public abstract class AnimatedScene extends Animation
 	@Override
 	protected void onRefresh(double duration)
 	{
-		this.renderer.getInfo().getTimer().render = new Duration();
+		getRenderer().getInfo().getTimer().render = new Duration();
 		onUpdate(duration);
-		this.renderer.render(getScene(), getCamera());
 		
 		animatedSceneCallback.onUpdate();
 	}
@@ -153,12 +105,7 @@ public abstract class AnimatedScene extends Animation
 	 * Called when size has been changed on {@link Canvas3d} element. 
 	 * This method basically used for updating aspect ratio for {@link PerspectiveCamera}.
 	 */
-	protected void onResize()
-	{
-		if(getCamera() != null && getCamera().getClass() == PerspectiveCamera.class )
-		{
-			((PerspectiveCamera)getCamera()).setAspectRatio(
-					getRenderer().getCanvas().getAspectRation());		
-		}
+	protected void onResize() {
+		// Empty
 	}
 }
