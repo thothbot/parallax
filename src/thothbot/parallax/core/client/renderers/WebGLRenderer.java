@@ -79,14 +79,13 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
-import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.HemisphereLight;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.lights.PointLight;
+import thothbot.parallax.core.shared.lights.RendererLights;
 import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
-import thothbot.parallax.core.shared.lights.RendererLights;
 import thothbot.parallax.core.shared.materials.HasEnvMap;
 import thothbot.parallax.core.shared.materials.HasFog;
 import thothbot.parallax.core.shared.materials.HasSkinning;
@@ -101,9 +100,9 @@ import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.ParticleSystem;
+import thothbot.parallax.core.shared.objects.RendererObject;
 import thothbot.parallax.core.shared.objects.Ribbon;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
-import thothbot.parallax.core.shared.objects.RendererObject;
 import thothbot.parallax.core.shared.scenes.Fog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -2355,32 +2354,6 @@ public class WebGLRenderer
 		object._normalMatrix.transpose();
 	}
 	
-	// GL state setting
-	
-	private void setFaceCulling(String frontFace ) 
-	{
-		getGL().disable( EnableCap.CULL_FACE );
-	}
-
-	private void setFaceCulling(String cullFace, String frontFace) 
-	{
-		if ( frontFace == null || frontFace.equals("ccw") )
-			getGL().frontFace( FrontFaceDirection.CCW );
-		else
-			getGL().frontFace( FrontFaceDirection.CW );
-
-		if( cullFace.equals("back") )
-			getGL().cullFace( CullFaceMode.BACK );
-			
-		else if( cullFace.equals("front") )
-			getGL().cullFace( CullFaceMode.FRONT );
-			
-		else
-			getGL().cullFace( CullFaceMode.FRONT_AND_BACK );
-
-		getGL().enable( EnableCap.CULL_FACE );
-	}
-
 	private void setMaterialFaces( Material material )
 	{
 		if ( this.cache_oldMaterialSided == null || this.cache_oldMaterialSided != material.getSides() ) 
