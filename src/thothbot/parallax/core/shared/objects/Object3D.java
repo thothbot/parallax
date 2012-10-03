@@ -34,7 +34,7 @@ import thothbot.parallax.core.shared.core.Matrix3;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Quaternion;
 import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.scene.Scene;
+import thothbot.parallax.core.shared.scenes.Scene;
 
 /**
  * Implementation of DimensionalObject

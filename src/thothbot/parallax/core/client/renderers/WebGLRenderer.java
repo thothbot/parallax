@@ -104,11 +104,9 @@ import thothbot.parallax.core.shared.objects.ParticleSystem;
 import thothbot.parallax.core.shared.objects.RendererObject;
 import thothbot.parallax.core.shared.objects.Ribbon;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
-import thothbot.parallax.core.shared.scene.FogAbstract;
-import thothbot.parallax.core.shared.scene.FogExp2;
-import thothbot.parallax.core.shared.scene.Plugin;
-import thothbot.parallax.core.shared.scene.Scene;
-import thothbot.parallax.core.shared.scene.ShadowMap;
+import thothbot.parallax.core.shared.scenes.FogAbstract;
+import thothbot.parallax.core.shared.scenes.FogExp2;
+import thothbot.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
