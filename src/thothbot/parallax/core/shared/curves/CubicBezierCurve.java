@@ -23,45 +23,43 @@
 package thothbot.parallax.core.shared.curves;
 
 import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.utils.CurveUtils;
+import thothbot.parallax.core.shared.utils.ShapeUtils;
 
-public class CurveArc extends Curve
+public class CubicBezierCurve extends Curve
 {
-	
-	public double aX;
-	public double aY;
+	public Vector2 v0;
+	public Vector2 v1;
+	public Vector2 v2;
+	public Vector2 v3;
 
-	public double aRadius;
-
-	public double aStartAngle;
-	public double aEndAngle;
-
-	public boolean aClockwise;
-
-	public CurveArc(double aX, double aY, double aRadius, double aStartAngle, double aEndAngle,
-			boolean aClockwise) 
+	public CubicBezierCurve(Vector2 v0, Vector2 v1, Vector2 v2, Vector2 v3) 
 	{
-		this.aX = aX;
-		this.aY = aY;
-		this.aRadius = aRadius;
-		this.aStartAngle = aStartAngle;
-		this.aEndAngle = aEndAngle;
-		this.aClockwise = aClockwise;
+		this.v0 = v0;
+		this.v1 = v1;
+		this.v2 = v2;
+		this.v3 = v3;
 	}
 
-	@Override
 	public Vector2 getPoint(double t)
 	{
-		double deltaAngle = this.aEndAngle - this.aStartAngle;
+		double tx = ShapeUtils.b3(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
+		double ty = ShapeUtils.b3(t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY());
 
-		if ( !this.aClockwise )
-			t = 1 - t;
-		
-		double angle = this.aStartAngle + t * deltaAngle;
+		return new Vector2(tx, ty);
+	}
+	
+	@Override
+	public Vector2 getTangent( double t ) 
+	{
+		double tx = CurveUtils.tangentCubicBezier( t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX() );
+		double ty = CurveUtils.tangentCubicBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY() );
 
-		double tx = this.aX + this.aRadius * Math.cos( angle );
-		double ty = this.aY + this.aRadius * Math.sin( angle );
+		// returns unit vector
+		Vector2 tangent = new Vector2( tx, ty );
+		tangent.normalize();
 
-		return new Vector2( tx, ty );
+		return tangent;
 	}
 
 }

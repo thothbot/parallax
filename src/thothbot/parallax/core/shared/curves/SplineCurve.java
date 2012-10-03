@@ -22,44 +22,46 @@
 
 package thothbot.parallax.core.shared.curves;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.utils.CurveUtils;
-import thothbot.parallax.core.shared.utils.ShapeUtils;
 
-public class CurveCubicBezier extends Curve
+
+public class SplineCurve extends Curve
 {
-	public Vector2 v0;
-	public Vector2 v1;
-	public Vector2 v2;
-	public Vector2 v3;
 
-	public CurveCubicBezier(Vector2 v0, Vector2 v1, Vector2 v2, Vector2 v3) 
+	public List<Vector2> points;
+	
+	public SplineCurve() 
 	{
-		this.v0 = v0;
-		this.v1 = v1;
-		this.v2 = v2;
-		this.v3 = v3;
+		this.points = new ArrayList<Vector2>();
 	}
 
+	public SplineCurve(List<Vector2> points) 
+	{
+		this.points = points;
+	}
+
+	@Override
 	public Vector2 getPoint(double t)
 	{
-		double tx = ShapeUtils.b3(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
-		double ty = ShapeUtils.b3(t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY());
+		Vector2 v = new Vector2();
+		
+		double point = ( points.size() - 1.0 ) * t;
+		int intPoint = (int) Math.floor( point );
+		
+		double weight = point - intPoint;
 
-		return new Vector2(tx, ty);
+		int c0 = intPoint == 0 ? intPoint : intPoint - 1;
+		int c1 = intPoint;
+		int c2 = intPoint  > points.size() - 2 ? points.size() -1 : intPoint + 1;
+		int c3 = intPoint  > points.size() - 3 ? points.size() -1 : intPoint + 2;
+
+		v.setX( CurveUtils.interpolate( points.get(c0).getX(), points.get(c1).getX(), points.get(c2).getX(), points.get(c3).getX(), weight ) );
+		v.setY( CurveUtils.interpolate( points.get(c0).getY(), points.get(c1).getY(), points.get(c2).getY(), points.get(c3).getY(), weight ) );
+
+		return v;
 	}
-	
-	@Override
-	public Vector2 getTangent( double t ) 
-	{
-		double tx = CurveUtils.tangentCubicBezier( t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX() );
-		double ty = CurveUtils.tangentCubicBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY() );
-
-		// returns unit vector
-		Vector2 tangent = new Vector2( tx, ty );
-		tangent.normalize();
-
-		return tangent;
-	}
-
 }

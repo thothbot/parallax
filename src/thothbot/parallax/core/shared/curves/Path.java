@@ -104,7 +104,7 @@ public class Path extends CurvePath
 		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
 		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
-		CurveLine curve = new CurveLine( new Vector2( x0, y0 ), new Vector2( x, y ) );
+		LineCurve curve = new LineCurve( new Vector2( x0, y0 ), new Vector2( x, y ) );
 		add(curve);
 
 		this.actions.add( new Action( PATH_ACTIONS.LINE_TO, x, y ) );
@@ -117,7 +117,7 @@ public class Path extends CurvePath
 		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
 		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
-		CurveQuadraticBezier curve = new CurveQuadraticBezier( 
+		QuadraticBezierCurve curve = new QuadraticBezierCurve( 
 				new Vector2( x0, y0 ),
 				new Vector2( aCPx, aCPy ),
 				new Vector2( aX, aY ) );
@@ -134,7 +134,7 @@ public class Path extends CurvePath
 		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
 		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
 
-		CurveCubicBezier curve = new CurveCubicBezier( new Vector2( x0, y0 ),
+		CubicBezierCurve curve = new CubicBezierCurve( new Vector2( x0, y0 ),
 				new Vector2( aCP1x, aCP1y ),
 				new Vector2( aCP2x, aCP2y ),
 				new Vector2( aX, aY ) );
@@ -159,7 +159,7 @@ public class Path extends CurvePath
 		npts.add(new Vector3( x0, y0, 0 ));
 		npts.addAll(pts);
 	
-		CurveSpline curve = new CurveSpline( npts );
+		SplineCurve curve = new SplineCurve( npts );
 		add( curve );
 
 		this.actions.add( new Action(PATH_ACTIONS.CSPLINE_THRU, pts ) );
@@ -173,7 +173,7 @@ public class Path extends CurvePath
 	{
 		List<Object> laste = this.actions.get( this.actions.size() - 1 ).args;
 		
-		CurveArc curve = new CurveArc( (Double)laste.get(0) + aX, (Double)laste.get(1) + aY, aRadius,
+		ArcCurve curve = new ArcCurve( (Double)laste.get(0) + aX, (Double)laste.get(1) + aY, aRadius,
 				aStartAngle, aEndAngle, aClockwise );
 		add( curve );
 
@@ -186,7 +186,7 @@ public class Path extends CurvePath
 
 	public void absarc( double aX, double aY, double aRadius, double aStartAngle, double aEndAngle, boolean aClockwise ) 
 	{		
-			CurveArc curve = new CurveArc( aX, aY, aRadius,
+			ArcCurve curve = new ArcCurve( aX, aY, aRadius,
 					aStartAngle, aEndAngle, aClockwise );
 			add( curve );
 
@@ -339,7 +339,7 @@ public class Path extends CurvePath
 
 				spts.addAll(v);
 
-				CurveSpline spline = new CurveSpline( spts );
+				SplineCurve spline = new SplineCurve( spts );
 
 				for ( int j = 1; j <= n; j ++ )
 					points.add( (Vector2) spline.getPointAt( j / n ) ) ;

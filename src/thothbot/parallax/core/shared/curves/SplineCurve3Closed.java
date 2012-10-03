@@ -28,16 +28,16 @@ import java.util.List;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.utils.CurveUtils;
 
-public class CurveSplineClosed3D extends Curve
+public class SplineCurve3Closed extends Curve
 {
 	public List<Vector3> points;
 	
-	public CurveSplineClosed3D() 
+	public SplineCurve3Closed() 
 	{
 		this.points = new ArrayList<Vector3>();
 	}
 
-	public CurveSplineClosed3D(List<Vector3> points) 
+	public SplineCurve3Closed(List<Vector3> points) 
 	{
 		this.points = points;
 	}

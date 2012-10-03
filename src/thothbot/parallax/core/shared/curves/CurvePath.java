@@ -87,7 +87,7 @@ public class CurvePath extends Curve
 		Vector2 endPoint = (Vector2) getCurves().get(this.curves.size() - 1 ).getPoint(1);
 		
 		if (!startPoint.equals(endPoint))
-			this.curves.add( new CurveLine(endPoint, startPoint) );
+			this.curves.add( new LineCurve(endPoint, startPoint) );
 	}
 	
 	/*

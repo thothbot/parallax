@@ -22,46 +22,33 @@
 
 package thothbot.parallax.core.shared.curves;
 
-import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.utils.ShapeUtils;
 
-public class CurveLine extends Curve
+public class CubicBezierCurve3 extends Curve
 {
 
-	private Vector2 v1;
-	private Vector2 v2;
+	private Vector3 v0;
+	private Vector3 v1;
+	private Vector3 v2;
+	private Vector3 v3;
 
-	public CurveLine(Vector2 v1, Vector2 v2) 
+	public CubicBezierCurve3(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3) 
 	{
+		this.v0 = v0;
 		this.v1 = v1;
 		this.v2 = v2;
+		this.v3 = v3;
 	}
 
 	@Override
-	public Vector2 getPoint(double t)
+	public Vector3 getPoint(double t)
 	{
-		Vector2 point = this.v2.clone();
-		point.sub(this.v1);
-		point.multiply(t);
-		point.add(this.v1);
+		double tx = ShapeUtils.b3(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
+		double ty = ShapeUtils.b3(t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY());
+		double tz = ShapeUtils.b3(t, this.v0.getZ(), this.v1.getZ(), this.v2.getZ(), this.v3.getZ());
 
-		return point;
+		return new Vector3(tx, ty, tz);
 	}
 
-	/*
-	 * Line curve is linear, so we can overwrite default getPointAt
-	 */
-	@Override
-	public Vector2 getPointAt(double u)
-	{
-		return this.getPoint(u);
-	}
-
-	@Override
-	public Vector2 getTangent(double t)
-	{
-		Vector2 tangent = this.v2.clone();
-		tangent.sub(this.v1);
-		tangent.normalize();
-		return tangent;
-	}
 }

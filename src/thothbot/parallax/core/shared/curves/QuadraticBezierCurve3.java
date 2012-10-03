@@ -22,17 +22,16 @@
 
 package thothbot.parallax.core.shared.curves;
 
-import thothbot.parallax.core.shared.core.Vector2;
-import thothbot.parallax.core.shared.utils.CurveUtils;
+import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
 
-public class CurveQuadraticBezier extends Curve
+public class QuadraticBezierCurve3 extends Curve
 {
-	private Vector2 v0;
-	private Vector2 v1;
-	private Vector2 v2;
-	
-	public CurveQuadraticBezier(Vector2 v0, Vector2 v1, Vector2 v2) 
+	private Vector3 v0;
+	private Vector3 v1;
+	private Vector3 v2;
+
+	public QuadraticBezierCurve3(Vector3 v0, Vector3 v1, Vector3 v2) 
 	{
 		this.v0 = v0;
 		this.v1 = v1;
@@ -40,24 +39,12 @@ public class CurveQuadraticBezier extends Curve
 	}
 
 	@Override
-	public Vector2 getPoint(double t)
+	public Vector3 getPoint(double t)
 	{
-		double tx = ShapeUtils.b2( t, this.v0.getX(), this.v1.getX(), this.v2.getX() );
-		double ty = ShapeUtils.b2( t, this.v0.getY(), this.v1.getY(), this.v2.getY() );
+		double tx = ShapeUtils.b2(t, this.v0.getX(), this.v1.getX(), this.v2.getX());
+		double ty = ShapeUtils.b2(t, this.v0.getY(), this.v1.getY(), this.v2.getY());
+		double tz = ShapeUtils.b2(t, this.v0.getZ(), this.v1.getZ(), this.v2.getZ());
 
-		return new Vector2( tx, ty );
-	}
-
-	@Override
-	public Vector2 getTangent( double t ) 
-	{
-		double tx = CurveUtils.tangentQuadraticBezier( t, this.v0.getX(), this.v1.getX(), this.v2.getX() );
-		double ty = CurveUtils.tangentQuadraticBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY() );
-
-		// returns unit vector
-		Vector2 tangent = new Vector2( tx, ty );
-		tangent.normalize();
-
-		return tangent;
+		return new Vector3(tx, ty, tz);
 	}
 }
