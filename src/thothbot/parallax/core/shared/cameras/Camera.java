@@ -53,14 +53,6 @@ public class Camera extends Object3D
 		this.projectionMatrixInverse = new Matrix4();
 
 	}
-	
-	public WebGLRenderer getRenderer() {
-		return this.renderer;
-	}
-
-	public void setRenderer(WebGLRenderer renderer) {
-		this.renderer = renderer;
-	}
 
 	public Matrix4 getMatrixWorldInverse()
 	{

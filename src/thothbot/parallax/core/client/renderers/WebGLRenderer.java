@@ -1013,7 +1013,6 @@ public class WebGLRenderer
 		Log.debug("Called render()");
 
 		scene.setRenderer(this);
-		camera.setRenderer(this);
 
 		// TODO: not correct. Move it to AnimatedScene
 		if(camera.getClass() == PerspectiveCamera.class &&
@@ -1731,9 +1730,12 @@ public class WebGLRenderer
 //		);
 //	}
 
-	private void initMaterial ( Material material, List<Light> lights, FogAbstract fog, GeometryObject object ) 
+	private void initMaterial ( Scene scene, Material material, GeometryObject object ) 
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
+
+		List<Light> lights = scene.getLights(); 
+		FogAbstract fog = scene.getFog();
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
@@ -1863,16 +1865,12 @@ public class WebGLRenderer
 
 	private WebGLProgram setProgram( Scene scene, Camera camera, Material material, GeometryObject object ) 
 	{
-		List<Light> lights = scene.getLights(); 
-		FogAbstract fog = scene.getFog();
-
 		// Use new material units for new shader
 		this.usedTextureUnits = 0;
 
-		Shader shader = material.getShader(); 
-		if ( shader == null || shader.getProgram() == null || material.isNeedsUpdate() ) 
+		if ( material.getShader() == null || material.getShader().getProgram() == null || material.isNeedsUpdate() ) 
 		{
-			initMaterial( material, lights, fog, object );
+			initMaterial( scene, material, object );
 			material.setNeedsUpdate(false);
 		}
 
@@ -1886,6 +1884,7 @@ public class WebGLRenderer
 
 		boolean refreshMaterial = false;
 
+		Shader shader = material.getShader(); 
 		WebGLProgram program = shader.getProgram();
 		Map<String, Uniform> m_uniforms = shader.getUniforms();
 
@@ -1939,6 +1938,9 @@ public class WebGLRenderer
 		
 		if ( refreshMaterial ) 
 		{
+			List<Light> lights = scene.getLights(); 
+			FogAbstract fog = scene.getFog();
+
 			// refresh uniforms common to several materials
 			if ( fog != null && material instanceof HasFog && ((HasFog)material).isFog())
 				fog.refreshUniforms( m_uniforms );
