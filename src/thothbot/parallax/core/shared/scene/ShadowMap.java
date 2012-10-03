@@ -337,7 +337,7 @@ public final class ShadowMap extends Plugin
 //					} 
 //					else 
 //					{
-						getRenderer().renderBuffer( shadowCamera, getScene().getLights(), null, material, buffer, object );
+						getRenderer().renderBuffer( shadowCamera, getScene(), material, buffer, object );
 //					}
 				}
 			}

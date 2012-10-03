@@ -1014,16 +1014,14 @@ public class WebGLRenderer
 
 		scene.setRenderer(this);
 		camera.setRenderer(this);
-		// Check onResize
+
+		// TODO: not correct. Move it to AnimatedScene
 		if(camera.getClass() == PerspectiveCamera.class &&
 				getCanvas().getAspectRation() != ((PerspectiveCamera)camera).getAspectRation())
 		{
 			((PerspectiveCamera)camera).setAspectRatio(
 					getCanvas().getAspectRation());
 		}
-
-		List<Light> lights = scene.getLights();
-		FogAbstract fog = scene.getFog();
 
 		// reset caching for this frame
 		this.cache_currentMaterialId = -1;
@@ -1174,13 +1172,13 @@ public class WebGLRenderer
 
 			setBlending( Material.BLENDING.NORMAL);
 
-			renderObjects( scene.__webglObjects, true, "opaque", camera, lights, fog, false );
-			renderObjectsImmediate( scene.__webglObjectsImmediate, "opaque", camera, lights, fog, false );
+			renderObjects( scene, true, "opaque", camera, false );
+			renderObjectsImmediate( scene, "opaque", camera, false );
 
 			// transparent pass (back-to-front order)
 
-			renderObjects( scene.__webglObjects, false, "transparent", camera, lights, fog, true );
-			renderObjectsImmediate( scene.__webglObjectsImmediate, "transparent", camera, lights, fog, true );
+			renderObjects( scene, false, "transparent", camera, true );
+			renderObjectsImmediate( scene, "transparent", camera, true );
 		}
 
 		// custom render plugins (post pass)
@@ -1252,29 +1250,14 @@ public class WebGLRenderer
 		}
 	}
 	
-	// TODO: CHECK callback
-	private void renderImmediateObject( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryObject object ) 
+	private void renderObjectsImmediate ( Scene scene, String materialType, Camera camera, boolean useBlending) 
 	{
-		WebGLProgram program = setProgram( camera, lights, fog, material, object );
-
-		this.cache_currentGeometryGroupHash = -1;
-
-		setMaterialFaces( material );
-
-//		if ( object.immediateRenderCallback )
-//			object.immediateRenderCallback( program, this._gl, this._frustum );
-//
-//		else
-//			object.render( function( object ) { _this.renderBufferImmediate( object, program, material.shading ); } );
-	}
-	
-	private void renderObjectsImmediate ( List<RendererObject> renderList, String materialType, Camera camera, List<Light> lights, FogAbstract fog, boolean useBlending) 
-	{
-		renderObjectsImmediate ( renderList, materialType, camera, lights, fog,  useBlending, null);
+		renderObjectsImmediate ( scene, materialType, camera, useBlending, null);
 	}
 
-	private void renderObjectsImmediate ( List<RendererObject> renderList, String materialType, Camera camera, List<Light> lights, FogAbstract fog, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjectsImmediate ( Scene scene, String materialType, Camera camera, boolean useBlending, Material overrideMaterial ) 
 	{
+		List<RendererObject> renderList = scene.__webglObjectsImmediate;
 		for ( int i = 0; i < renderList.size(); i ++ ) 
 		{
 
@@ -1307,18 +1290,35 @@ public class WebGLRenderer
 					setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits());
 				}
 
-				renderImmediateObject( camera, lights, fog, material, object );
+				renderImmediateObject( camera, scene.getLights(), scene.getFog(), material, object );
 			}
 		}
 	}
-
-	private void renderObjects ( List<RendererObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, FogAbstract fog, boolean useBlending) 
+	
+	// TODO: CHECK callback
+	private void renderImmediateObject( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryObject object ) 
 	{
-		renderObjects ( renderList, reverse, materialType, camera, lights, fog, useBlending, null);
+		WebGLProgram program = setProgram( camera, lights, fog, material, object );
+
+		this.cache_currentGeometryGroupHash = -1;
+
+		setMaterialFaces( material );
+
+//		if ( object.immediateRenderCallback )
+//			object.immediateRenderCallback( program, this._gl, this._frustum );
+//
+//		else
+//			object.render( function( object ) { _this.renderBufferImmediate( object, program, material.shading ); } );
 	}
 
-	private void renderObjects ( List<RendererObject> renderList, boolean reverse, String materialType, Camera camera, List<Light> lights, FogAbstract fog, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjects ( Scene scene, boolean reverse, String materialType, Camera camera, boolean useBlending) 
 	{
+		renderObjects ( scene, reverse, materialType, camera, useBlending, null);
+	}
+
+	private void renderObjects ( Scene scene, boolean reverse, String materialType, Camera camera, boolean useBlending, Material overrideMaterial ) 
+	{
+		List<RendererObject> renderList = scene.__webglObjects;
 		Log.debug("Called renderObjects() render list contains = " + renderList.size());
 		
 		int start = 0;
@@ -1341,8 +1341,8 @@ public class WebGLRenderer
 
 		Material material = null;
 
-		for ( int i = start; i != end; i += delta ) {
-
+		for ( int i = start; i != end; i += delta ) 
+		{
 			RendererObject webglObject = renderList.get( i );
 
 			if ( webglObject.render ) 
@@ -1379,7 +1379,7 @@ public class WebGLRenderer
 //				if ( buffer instanceof THREE.BufferGeometry )
 //					_this.renderBufferDirect( camera, lights, fog, material, buffer, object );
 //				else
-					renderBuffer( camera, lights, fog, material, buffer, (GeometryObject) object );
+					renderBuffer( camera, scene, material, buffer, (GeometryObject) object );
 			}
 		}
 	}
@@ -1389,10 +1389,13 @@ public class WebGLRenderer
 	 * Buffer rendering.
 	 * Render GeometryObject with material.
 	 */
-	public void renderBuffer( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
+	public void renderBuffer( Camera camera, Scene scene, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
 	{
 		if ( ! material.isVisible()) 
 			return;
+
+		List<Light> lights = scene.getLights();
+		FogAbstract fog = scene.getFog();
 
 		WebGLProgram program = setProgram( camera, lights, fog, material, object );
 
