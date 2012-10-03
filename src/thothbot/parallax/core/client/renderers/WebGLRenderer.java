@@ -1280,15 +1280,15 @@ public class WebGLRenderer
 					setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits());
 				}
 
-				renderImmediateObject( camera, scene.getLights(), scene.getFog(), material, object );
+				renderImmediateObject( scene, camera, material, object );
 			}
 		}
 	}
 	
 	// TODO: CHECK callback
-	private void renderImmediateObject( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryObject object ) 
+	private void renderImmediateObject( Scene scene, Camera camera, Material material, GeometryObject object ) 
 	{
-		WebGLProgram program = setProgram( camera, lights, fog, material, object );
+		setProgram( scene, camera, material, object );
 
 		this.cache_currentGeometryGroupHash = -1;
 
@@ -1365,7 +1365,7 @@ public class WebGLRenderer
 //				if ( buffer instanceof THREE.BufferGeometry )
 //					_this.renderBufferDirect( camera, lights, fog, material, buffer, object );
 //				else
-					renderBuffer( camera, scene, material, buffer, (GeometryObject) object );
+					renderBuffer( scene, camera, material, buffer, (GeometryObject) object );
 			}
 		}
 	}
@@ -1375,15 +1375,12 @@ public class WebGLRenderer
 	 * Buffer rendering.
 	 * Render GeometryObject with material.
 	 */
-	public void renderBuffer( Camera camera, Scene scene, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
+	public void renderBuffer( Scene scene, Camera camera, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
 	{
-		if ( ! material.isVisible()) 
+		if ( ! material.isVisible() ) 
 			return;
 
-		List<Light> lights = scene.getLights();
-		FogAbstract fog = scene.getFog();
-
-		WebGLProgram program = setProgram( camera, lights, fog, material, object );
+		setProgram( scene, camera, material, object );
 
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 
@@ -1864,8 +1861,11 @@ public class WebGLRenderer
 		}
 	}
 
-	private WebGLProgram setProgram( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryObject object ) 
+	private WebGLProgram setProgram( Scene scene, Camera camera, Material material, GeometryObject object ) 
 	{
+		List<Light> lights = scene.getLights(); 
+		FogAbstract fog = scene.getFog();
+
 		// Use new material units for new shader
 		this.usedTextureUnits = 0;
 
