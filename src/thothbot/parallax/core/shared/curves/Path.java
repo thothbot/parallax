@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Vector;
 import thothbot.parallax.core.shared.core.Vector2;
@@ -41,7 +40,8 @@ public class Path extends CurvePath
 		QUADRATIC_CURVE_TO, // Bezier quadratic curve
 		BEZIER_CURVE_TO, 	// Bezier cubic curve
 		CSPLINE_THRU,		// Catmull-rom spline
-		ARC					// CircleGeometry
+		ARC,				// Circle
+		ELLIPSE
 	};
 	
 	public class Action 
@@ -167,35 +167,50 @@ public class Path extends CurvePath
 	
 	/*
 	 * FUTURE: Change the API or follow canvas API?
-	 * TODO ARC ( x, y, x - radius, y - radius, startAngle, endAngle )
 	 */
-	public void arc( double aX, double aY, double aRadius, double aStartAngle, double aEndAngle, boolean aClockwise ) 
+	public void arc( double aX, double aY, double aRadius, 
+			double aStartAngle, double aEndAngle, boolean aClockwise ) 
 	{
-		List<Object> laste = this.actions.get( this.actions.size() - 1 ).args;
+		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 		
-		ArcCurve curve = new ArcCurve( (Double)laste.get(0) + aX, (Double)laste.get(1) + aY, aRadius,
+		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
+		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
+		
+		absarc(aX + x0, aY + y0, aRadius, aStartAngle, aEndAngle, aClockwise );
+	}
+
+	public void absarc( double aX, double aY, double aRadius, 
+			double aStartAngle, double aEndAngle, boolean aClockwise ) 
+	{		
+		absellipse(aX, aY, aRadius, aRadius, aStartAngle, aEndAngle, aClockwise);
+	}
+	
+	public void ellipse( double aX, double aY, double xRadius, double yRadius,
+			double aStartAngle, double aEndAngle, boolean aClockwise ) 
+	{
+		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
+		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
+		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
+
+		absellipse(aX + x0, aY + y0, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise );
+	}
+	
+	public void absellipse(double aX, double aY, double xRadius, double yRadius,
+			double aStartAngle, double aEndAngle, boolean aClockwise ) 
+	{
+
+		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
+				
+		EllipseCurve curve = new EllipseCurve( aX, aY, xRadius, yRadius,
 				aStartAngle, aEndAngle, aClockwise );
 		add( curve );
 
-		// All of the other actions look to the last two elements in the list to
-		// find the ending point, so we need to append them.
 		Vector2 lastPoint = curve.getPoint(aClockwise ? 1 : 0);
 
-		this.actions.add( new Action(PATH_ACTIONS.ARC, aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise, lastPoint.getX(), lastPoint.getY() ) );
+		this.actions.add( new Action(PATH_ACTIONS.ELLIPSE, aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, lastPoint.getX(), lastPoint.getY() ) );
 	}
 
-	public void absarc( double aX, double aY, double aRadius, double aStartAngle, double aEndAngle, boolean aClockwise ) 
-	{		
-			ArcCurve curve = new ArcCurve( aX, aY, aRadius,
-					aStartAngle, aEndAngle, aClockwise );
-			add( curve );
 
-			// All of the other actions look to the last two elements in the list to
-			// find the ending point, so we need to append them.
-			Vector2 lastPoint = curve.getPoint(aClockwise ? 1 : 0);
-
-			this.actions.add( new Action(PATH_ACTIONS.ARC, aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise, lastPoint.getX(), lastPoint.getY() ) );
-	}
 	
 	public List<Vector> getSpacedPoints( boolean closedPath )
 	{
@@ -378,6 +393,42 @@ public class Path extends CurvePath
 				//console.log(points);
 
 			  break;
+			  
+			  
+			case ELLIPSE:
+
+				double aXE = (Double)args.get( 0 );
+				double aYE = (Double)args.get( 1 );
+				double xRadiusE = (Double)args.get( 2 );
+				double yRadiusE = (Double)args.get( 3 );
+				double aStartAngleE = (Double)args.get( 4 ); 
+				double aEndAngleE = (Double)args.get( 5 );
+				boolean aClockwiseE = !!(Boolean)args.get( 6 );
+				
+				double deltaAngleE = aEndAngleE - aStartAngleE;
+				double tdivisionsE = divisions * 2;
+
+				for ( int j = 1; j <= tdivisionsE; j ++ ) 
+				{
+					double t = j / (double)tdivisionsE;
+
+					if ( ! aClockwiseE ) 
+					{
+						t = 1 - t;
+					}
+
+					double angle = aStartAngleE + t * deltaAngleE;
+
+					double tx = aXE + xRadiusE * Math.cos( angle );
+					double ty = aYE + yRadiusE * Math.sin( angle );
+
+					points.add( new Vector2( tx, ty ) );
+
+				}
+
+				//console.log(points);
+
+			  break;
 
 			} // end switch
 
@@ -396,35 +447,6 @@ public class Path extends CurvePath
 		return points;
 	}
 	
-	/*
-	 * Read http://www.tinaja.com/glib/nonlingr.pdf
-	 * nonlinear transforms
-	 * @param a horizontal size
-	 * @param b lean
-	 * @param c X-offset
-	 * @param d vertical size
-	 * @param e climb
-	 * @param f Y-offset
-	 */
-//	public List<Vector2> nltransform( double a, double b, double c, double d, double e, double f ) 
-//	{
-//		List<Vector2> oldPts = this.getPoints();
-//
-//		for ( i = 0, il = oldPts.length; i < il; i ++ ) 
-//		{
-//			Vector2 p = oldPts.get(i);
-//
-//			double oldX = p.getX();
-//			double oldY = p.getY();
-//
-//			p.setX( a * oldX + b * oldY + c);
-//			p.setY( d * oldY + e * oldX + f);
-//		}
-//
-//		return oldPts;
-//	}
-//	
-//
 //	// Breaks path into shapes
 //
 //	public void toShapes() 
