@@ -1026,13 +1026,6 @@ public class WebGLRenderer
 		// reset caching for this frame
 		this.cache_currentMaterialId = -1;
 		this.isLightsNeedUpdate = true;
-
-		// update scene graph
-		if ( camera.getParent() == null ) 
-		{
-			Log.warn("DEPRECATED: Camera hasn\'t been added to a Scene. Adding it...");
-			scene.add( camera );
-		}
 		
 		// Shadowmap
 		if(this.isShadowMapEnabled && this.shadowMap == null)
@@ -1172,13 +1165,13 @@ public class WebGLRenderer
 
 			setBlending( Material.BLENDING.NORMAL);
 
-			renderObjects( scene, true, "opaque", camera, false );
-			renderObjectsImmediate( scene, "opaque", camera, false );
+			//                      scene - camera - isMaterialTransparent - useBlending - reverse 
+			renderObjects(          scene, camera, false, false, true);
+			renderObjectsImmediate( scene, camera, false, false );
 
 			// transparent pass (back-to-front order)
-
-			renderObjects( scene, false, "transparent", camera, true );
-			renderObjectsImmediate( scene, "transparent", camera, true );
+			renderObjects(          scene, camera, true, true, false );
+			renderObjectsImmediate( scene, camera, true, true );
 		}
 
 		// custom render plugins (post pass)
@@ -1250,12 +1243,12 @@ public class WebGLRenderer
 		}
 	}
 	
-	private void renderObjectsImmediate ( Scene scene, String materialType, Camera camera, boolean useBlending) 
+	private void renderObjectsImmediate ( Scene scene, Camera camera, boolean isMaterialTransparent, boolean useBlending) 
 	{
-		renderObjectsImmediate ( scene, materialType, camera, useBlending, null);
+		renderObjectsImmediate ( scene, camera, isMaterialTransparent, useBlending, null);
 	}
 
-	private void renderObjectsImmediate ( Scene scene, String materialType, Camera camera, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjectsImmediate ( Scene scene, Camera camera, boolean isMaterialTransparent, boolean useBlending, Material overrideMaterial ) 
 	{
 		List<RendererObject> renderList = scene.__webglObjectsImmediate;
 		for ( int i = 0; i < renderList.size(); i ++ ) 
@@ -1275,11 +1268,8 @@ public class WebGLRenderer
 				} 
 				else 
 				{
-					if(materialType == "opaque")
-						material = webglObject.opaque;
-					else if(materialType == "transparent")
-						material = webglObject.transparent;
-
+					material = (isMaterialTransparent) ? webglObject.transparent : webglObject.opaque;
+					
 					if ( material == null ) continue;
 
 					if ( useBlending ) 
@@ -1311,12 +1301,12 @@ public class WebGLRenderer
 //			object.render( function( object ) { _this.renderBufferImmediate( object, program, material.shading ); } );
 	}
 
-	private void renderObjects ( Scene scene, boolean reverse, String materialType, Camera camera, boolean useBlending) 
+	private void renderObjects ( Scene scene, Camera camera, boolean isMaterialTransparent, boolean useBlending, boolean reverse ) 
 	{
-		renderObjects ( scene, reverse, materialType, camera, useBlending, null);
+		renderObjects ( scene, camera, isMaterialTransparent, useBlending, reverse, null);
 	}
 
-	private void renderObjects ( Scene scene, boolean reverse, String materialType, Camera camera, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjects ( Scene scene, Camera camera, boolean isMaterialTransparent, boolean useBlending, boolean reverse, Material overrideMaterial ) 
 	{
 		List<RendererObject> renderList = scene.__webglObjects;
 		Log.debug("Called renderObjects() render list contains = " + renderList.size());
@@ -1358,11 +1348,7 @@ public class WebGLRenderer
 				} 
 				else 
 				{
-					if(materialType == "opaque")
-						material = webglObject.opaque;
-					else if(materialType == "transparent")
-						material = webglObject.transparent;
-
+					material = (isMaterialTransparent) ? webglObject.transparent : webglObject.opaque;
 					if ( material == null ) continue;
 
 					if ( useBlending ) 
