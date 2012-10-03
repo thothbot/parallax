@@ -21,7 +21,6 @@ package thothbot.parallax.core.shared.scene;
 
 import java.util.List;
 
-import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
@@ -46,21 +45,28 @@ import thothbot.parallax.core.shared.core.Projector;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.helpers.CameraHelper;
-import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.Light;
+import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
 import thothbot.parallax.core.shared.lights.VirtualLight;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.GeometryObject;
 import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.objects.RendererObject;
+import thothbot.parallax.core.shared.objects.SkinnedMesh;
 
 public final class ShadowMap extends Plugin 
 {
 
+	private boolean isEnabled = true;
+	private boolean isAutoUpdate = true;
+	private boolean isSoft = true;
+	private boolean isCullFrontFaces = true;
+	private boolean isDebugEnabled = false;
+	private boolean isCascade = false;
+	
 	private ShaderMaterial depthMaterial, depthMaterialMorph, depthMaterialSkin, depthMaterialMorphSkin;
 
 	private Frustum frustum;
@@ -97,6 +103,54 @@ public final class ShadowMap extends Plugin
 		this.depthMaterialSkin.setShadowPass(true);
 		this.depthMaterialMorphSkin.setShadowPass(true);
 	}
+	
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
+	public boolean isAutoUpdate() {
+		return isAutoUpdate;
+	}
+
+	public void setAutoUpdate(boolean isAutoUpdate) {
+		this.isAutoUpdate = isAutoUpdate;
+	}
+
+	public boolean isSoft() {
+		return isSoft;
+	}
+
+	public void setSoft(boolean isSoft) {
+		this.isSoft = isSoft;
+	}
+
+	public boolean isCullFrontFaces() {
+		return isCullFrontFaces;
+	}
+
+	public void setCullFrontFaces(boolean isCullFrontFaces) {
+		this.isCullFrontFaces = isCullFrontFaces;
+	}
+
+	public boolean isDebugEnabled() {
+		return isDebugEnabled;
+	}
+
+	public void setDebugEnabled(boolean isDebugEnabled) {
+		this.isDebugEnabled = isDebugEnabled;
+	}
+
+	public boolean isCascade() {
+		return isCascade;
+	}
+
+	public void setCascade(boolean isCascade) {
+		this.isCascade = isCascade;
+	}
 
 	@Override
 	public TYPE getType() 
@@ -107,7 +161,7 @@ public final class ShadowMap extends Plugin
 	@Override
 	public void render(Camera camera, int currentWidth, int currentHeight) 
 	{
-		if ( ! ( getRenderer().isShadowMapEnabled() && getRenderer().isShadowMapAutoUpdate() ) ) return;
+		if ( ! ( isEnabled() && isAutoUpdate() ) ) return;
 
 		WebGLRenderingContext gl = getRenderer().getGL();
 		
@@ -119,7 +173,7 @@ public final class ShadowMap extends Plugin
 		gl.enable( EnableCap.CULL_FACE );
 		gl.frontFace( FrontFaceDirection.CCW );
 
-		if ( getRenderer().isShadowMapCullFrontFaces() ) 
+		if ( isCullFrontFaces() ) 
 		{
 			gl.cullFace( CullFaceMode.FRONT );
 		} 
@@ -368,7 +422,7 @@ public final class ShadowMap extends Plugin
 		gl.clearColor( clearColor.getR(), clearColor.getG(), clearColor.getB(), clearAlpha );
 		gl.enable( EnableCap.BLEND );
 
-		if ( getRenderer().isShadowMapCullFrontFaces() ) 
+		if ( isCullFrontFaces() ) 
 		{
 			gl.cullFace( CullFaceMode.BACK );
 		}

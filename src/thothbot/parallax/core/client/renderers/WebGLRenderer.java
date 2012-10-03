@@ -150,15 +150,6 @@ public class WebGLRenderer
 	private boolean isGammaOutput = false;
 	private boolean isPhysicallyBasedShading = false;
 
-	// shadow map
-	private ShadowMap shadowMap;
-	private boolean isShadowMapEnabled = false;
-	private boolean isShadowMapAutoUpdate = true;
-	private boolean isShadowMapSoft = true;
-	private boolean isShadowMapCullFrontFaces = true;
-	private boolean isShadowMapDebug = false;
-	private boolean isShadowMapCascade = false;
-
 	// morphs
 	private int maxMorphTargets = 8;
 	private int maxMorphNormals = 4;
@@ -508,56 +499,7 @@ public class WebGLRenderer
 	private void setCanvas(Canvas3d canvas) {
 		this.canvas = canvas;
 	}
-	
-
-	public boolean isShadowMapEnabled() {
-		return isShadowMapEnabled;
-	}
-
-	public void setShadowMapEnabled(boolean isShadowMapEnabled) {
-		this.isShadowMapEnabled = isShadowMapEnabled;
-	}
-
-	public boolean isShadowMapAutoUpdate() {
-		return isShadowMapAutoUpdate;
-	}
-
-	public void setShadowMapAutoUpdate(boolean isShadowMapAutoUpdate) {
-		this.isShadowMapAutoUpdate = isShadowMapAutoUpdate;
-	}
-
-	public boolean isShadowMapSoft() {
-		return isShadowMapSoft;
-	}
-
-	public void setShadowMapSoft(boolean isShadowMapSoft) {
-		this.isShadowMapSoft = isShadowMapSoft;
-	}
-
-	public boolean isShadowMapCullFrontFaces() {
-		return isShadowMapCullFrontFaces;
-	}
-
-	public void setShadowMapCullFrontFaces(boolean isShadowMapCullFrontFaces) {
-		this.isShadowMapCullFrontFaces = isShadowMapCullFrontFaces;
-	}
-
-	public boolean isShadowMapDebug() {
-		return isShadowMapDebug;
-	}
-
-	public void setShadowMapDebug(boolean isShadowMapDebug) {
-		this.isShadowMapDebug = isShadowMapDebug;
-	}
-
-	public boolean isShadowMapCascade() {
-		return isShadowMapCascade;
-	}
-
-	public void setShadowMapCascade(boolean isShadowMapCascade) {
-		this.isShadowMapCascade = isShadowMapCascade;
-	}
-	
+		
 	/**
 	 * Gets the WebGL context from the {@link Canvas3d} widget.
 	 * 
@@ -1025,13 +967,6 @@ public class WebGLRenderer
 		// reset caching for this frame
 		this.cache_currentMaterialId = -1;
 		this.isLightsNeedUpdate = true;
-		
-		// Shadowmap
-		if(this.isShadowMapEnabled && this.shadowMap == null)
-		{
-			Log.info("Including shadow map plugin");
-			this.shadowMap = new ShadowMap(this, scene);
-		}
 
 		if ( this.isAutoUpdateScene() ) 
 		{
@@ -1771,12 +1706,13 @@ public class WebGLRenderer
 		
 		parameters.maxShadows = maxShadows;
 		
-		if(this.isShadowMapEnabled && object.isReceiveShadow())
+		for(Plugin plugin: this.renderPluginsPre)
+		if(plugin instanceof ShadowMap && ((ShadowMap)plugin).isEnabled() && object.isReceiveShadow())
 		{
 			parameters.shadowMapEnabled = true;
-			parameters.shadowMapSoft    = this.isShadowMapSoft;
-			parameters.shadowMapDebug   = this.isShadowMapDebug;
-			parameters.shadowMapCascade = this.isShadowMapCascade;
+			parameters.shadowMapSoft    = ((ShadowMap)plugin).isSoft();
+			parameters.shadowMapDebug   = ((ShadowMap)plugin).isDebugEnabled();
+			parameters.shadowMapCascade = ((ShadowMap)plugin).isCascade();
 		}
 
 		material.updateProgramParameters(parameters);
