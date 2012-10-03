@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.context.Canvas3d;
-import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
@@ -61,9 +60,8 @@ public class Postprocessing extends Plugin
 
 	public Postprocessing( WebGLRenderer renderer, Scene scene)
 	{
-		this(renderer, scene, new RenderTargetTexture(
-				renderer.getCanvas().getWidth(), 
-				renderer.getCanvas().getHeight()));
+		this(renderer, scene, new RenderTargetTexture(1000,1000	)
+		);
 			
 		this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 		this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
@@ -86,17 +84,10 @@ public class Postprocessing extends Plugin
 		this.passes = new ArrayList<Pass>();
 
 		this.copyPass = new ShaderPass( new ScreenShader() );
-
-		Canvas3d canvas = renderer.getCanvas();
 		
-		this.camera = new OrthographicCamera( 
-				canvas.getWidth() / -2.0, canvas.getWidth() / 2.0, 
-				canvas.getHeight() / 2.0, canvas.getHeight() / -2.0, 
-				-10000, 10000
-		);
-		this.quad = new Mesh( new PlaneGeometry( 1, 1 ), null );
-		quad.getPosition().setZ(-100);
-		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
+		this.camera = new OrthographicCamera( -1, 1, 1, -1, 0, 1 );
+
+		this.quad = new Mesh( new PlaneGeometry( 2, 2 ), null );
 		
 		getScene().add( quad );
 		getScene().add( camera );
@@ -143,15 +134,13 @@ public class Postprocessing extends Plugin
 
 		boolean maskActive = false;
 		
-		updateSizes();
+//		updateSizes();
 		// TODO: check
 		double delta = 0;
 		WebGLRenderingContext gl = getRenderer().getGL();
 		
-		for ( int i = 0; i < this.passes.size(); i ++ ) 
-		{
-			Pass pass = this.passes.get( i );
-			
+		for ( Pass pass : this.passes ) 
+		{	
 			Log.error("Called pass", pass.getClass().getName() );
 
 			if ( !pass.isEnabled() ) continue;
@@ -182,9 +171,7 @@ public class Postprocessing extends Plugin
 
 		if ( this.renderTarget1 == null )
 		{
-			this.renderTarget1 = new RenderTargetTexture(
-					getRenderer().getCanvas().getWidth(), 
-					getRenderer().getCanvas().getHeight());
+			this.renderTarget1 = new RenderTargetTexture(1000, 1000);
 			
 			this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 			this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
@@ -196,16 +183,6 @@ public class Postprocessing extends Plugin
 
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
-
-		Canvas3d canvas = this.getRenderer().getCanvas();
-		this.quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
-
-		this.camera.setLeft(canvas.getWidth() / -2.0);
-		this.camera.setRight(canvas.getWidth() / 2.0);
-		this.camera.setTop(canvas.getHeight() / 2.0);
-		this.camera.setBottom(canvas.getHeight() / -2.0);
-
-		this.camera.updateProjectionMatrix();
 	}
 	
 	private void swapBuffers() 
@@ -213,30 +190,5 @@ public class Postprocessing extends Plugin
 		RenderTargetTexture tmp = this.readBuffer;
 		this.readBuffer = this.writeBuffer;
 		this.writeBuffer = tmp;
-	}
-	
-	private void updateSizes() 
-	{
-		Canvas3d canvas = getRenderer().getCanvas();
-
-		double oldWidth = this.renderTarget1.getWidth();
-		double oldHeight = this.renderTarget1.getHeight();
-		
-		if(oldWidth == canvas.getWidth() && oldHeight == canvas.getWidth())
-			return;
-		
-		this.camera.setLeft(canvas.getWidth() / -2.0);
-		this.camera.setRight(canvas.getWidth() / 2.0);
-		this.camera.setTop(canvas.getHeight() / 2.0);
-		this.camera.setBottom(canvas.getHeight() / -2.0); 
-		this.camera.updateProjectionMatrix();
-		
-		quad.getScale().set( canvas.getWidth(), canvas.getHeight(), 1 );
-		
-		this.renderTarget1.setWidth(canvas.getWidth());
-		this.renderTarget1.setHeight(canvas.getHeight());
-		
-		this.renderTarget2.setWidth(canvas.getWidth());
-		this.renderTarget2.setHeight(canvas.getHeight());
 	}
 }
