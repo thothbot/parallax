@@ -32,10 +32,10 @@ public class DotScreenPass extends Pass
 	private ShaderMaterial material;
 	private boolean isRenderToScreen = false;
 	
-	public DotScreenPass( Vector3 center, double angle, double scale ) 
+	public DotScreenPass( Vector2 center, double angle, double scale ) 
 	{
 		this.material = new ShaderMaterial(new DotscreenShader());
-		((Vector3) this.material.getShader().getUniforms().get("center").getValue()).copy( center );
+		((Vector2) this.material.getShader().getUniforms().get("center").getValue()).copy( center );
 		this.material.getShader().getUniforms().get("angle").setValue( angle );
 		this.material.getShader().getUniforms().get("scale").setValue( scale );
 

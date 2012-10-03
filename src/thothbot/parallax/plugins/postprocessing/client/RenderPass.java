@@ -67,6 +67,10 @@ public class RenderPass extends Pass
 		this.setEnabled(true);
 		this.setNeedsSwap(false);
 	}
+	
+	public void setClear(boolean clear) {
+		this.clear = clear;
+	}
 
 	@Override
 	public void render(Postprocessing postprocessing, double delta, boolean maskActive)

@@ -42,7 +42,11 @@ public class MaskPass extends Pass
 		this.camera = camera;
 		this.setEnabled(true);
 	}
-		
+	
+	public void setInverse(boolean inverse) {
+		this.inverse = inverse;
+	}
+			
 	@Override
 	public void render (Postprocessing ecffectComposer, double delta, boolean maskActive) 
 	{
@@ -88,4 +92,5 @@ public class MaskPass extends Pass
 	{
 		return true;
 	}
+
 }

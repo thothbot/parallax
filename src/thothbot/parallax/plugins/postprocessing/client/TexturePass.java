@@ -44,6 +44,10 @@ public class TexturePass extends Pass
 		this.setEnabled(true);
 		this.setNeedsSwap(false);
 	}
+	
+	public ShaderMaterial getMaterial() {
+		return this.material;
+	}
 
 	@Override
 	public void render(Postprocessing postprocessing, double delta, boolean maskActive)

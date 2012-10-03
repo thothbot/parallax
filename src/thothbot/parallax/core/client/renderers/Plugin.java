@@ -29,6 +29,7 @@ public abstract class Plugin
 		POST_RENDER,
 	};
 
+	private boolean isEnabled = true;
 	private WebGLRenderer renderer;
 	private Scene scene;
 	private boolean isRendering;
@@ -46,6 +47,14 @@ public abstract class Plugin
 
 	public Scene getScene() {
 		return this.scene;
+	}
+	
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 	
 	public boolean isRendering() {

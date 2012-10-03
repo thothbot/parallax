@@ -1134,7 +1134,7 @@ public class WebGLRenderer
 		{
 			Plugin plugin = plugins.get( i );
 
-			if(plugin.isRendering())
+			if(! plugin.isEnabled() || plugin.isRendering())
 				return;
 
 			plugin.setRendering(true);

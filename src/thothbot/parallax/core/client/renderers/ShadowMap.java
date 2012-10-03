@@ -59,8 +59,6 @@ import thothbot.parallax.core.shared.scenes.Scene;
 
 public final class ShadowMap extends Plugin 
 {
-
-	private boolean isEnabled = true;
 	private boolean isAutoUpdate = true;
 	private boolean isSoft = true;
 	private boolean isCullFrontFaces = true;
@@ -102,14 +100,6 @@ public final class ShadowMap extends Plugin
 		this.depthMaterialMorph.setShadowPass(true);
 		this.depthMaterialSkin.setShadowPass(true);
 		this.depthMaterialMorphSkin.setShadowPass(true);
-	}
-	
-	public boolean isEnabled() {
-		return isEnabled;
-	}
-
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
 	}
 
 	public boolean isAutoUpdate() {
