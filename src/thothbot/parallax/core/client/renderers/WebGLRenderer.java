@@ -1869,7 +1869,8 @@ public class WebGLRenderer
 		// Use new material units for new shader
 		this.usedTextureUnits = 0;
 
-		if ( material.getShader() == null || material.getShader().getProgram() == null || material.isNeedsUpdate() ) 
+		Shader shader = material.getShader(); 
+		if ( shader == null || shader.getProgram() == null || material.isNeedsUpdate() ) 
 		{
 			initMaterial( material, lights, fog, object );
 			material.setNeedsUpdate(false);
@@ -1885,8 +1886,8 @@ public class WebGLRenderer
 
 		boolean refreshMaterial = false;
 
-		WebGLProgram program = material.getShader().getProgram();
-		Map<String, Uniform> m_uniforms = material.getShader().getUniforms();
+		WebGLProgram program = shader.getProgram();
+		Map<String, Uniform> m_uniforms = shader.getUniforms();
 
 		if ( program != cache_currentProgram )
 		{
