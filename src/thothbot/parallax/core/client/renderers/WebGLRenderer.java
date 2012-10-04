@@ -72,9 +72,7 @@ import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Frustum;
-import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
-import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
@@ -92,17 +90,14 @@ import thothbot.parallax.core.shared.materials.HasFog;
 import thothbot.parallax.core.shared.materials.HasSkinning;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.GeometryObject;
-import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.ParticleSystem;
 import thothbot.parallax.core.shared.objects.RendererObject;
-import thothbot.parallax.core.shared.objects.Ribbon;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.FogAbstract;
 import thothbot.parallax.core.shared.scenes.FogExp2;
@@ -209,7 +204,7 @@ public class WebGLRenderer
 	private boolean isLightsNeedUpdate = true;
 	private RendererLights cache_lights;
 	
-	public Map<String, Shader> cache_programs;
+	private Map<String, Shader> cache_programs;
 
 	// GPU capabilities
 	private int GPUmaxTextures;
@@ -690,8 +685,6 @@ public class WebGLRenderer
 		setRenderTarget( renderTarget );
 		clear( color, depth, stencil );
 	}
-	
-	// Buffer initialization
 	
 	/**
 	 * Morph Targets Buffer initialization
@@ -2401,5 +2394,10 @@ public class WebGLRenderer
 	@Deprecated
 	public Vector4 getCache_vector3() {
 		return cache_vector3;
+	}
+	
+	@Deprecated
+	public Map<String, Shader> getCache_programs() {
+		return this.cache_programs;
 	}
 }

@@ -835,14 +835,14 @@ public abstract class Material
 		WebGLProgram program = getShader().getProgram();
 		if ( program == null ) return;
 
-		for ( String key: renderer.cache_programs.keySet()) 
+		for ( String key: renderer.getCache_programs().keySet()) 
 		{
-			Shader shader = renderer.cache_programs.get(key);
+			Shader shader = renderer.getCache_programs().get(key);
 			
 			if ( shader == getShader() ) 
 			{
 				renderer.getInfo().getMemory().programs --;
-				renderer.cache_programs.remove(key);
+				renderer.getCache_programs().remove(key);
 				break;
 			}
 		}
