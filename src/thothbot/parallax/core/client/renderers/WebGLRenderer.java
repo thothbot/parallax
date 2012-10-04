@@ -952,8 +952,6 @@ public class WebGLRenderer
 	{
 		Log.debug("Called render()");
 
-		scene.setRenderer(this);
-
 		// TODO: not correct. Move it to AnimatedScene
 		if(camera.getClass() == PerspectiveCamera.class &&
 				getCanvas().getAspectRation() != ((PerspectiveCamera)camera).getAspectRation())
@@ -998,7 +996,7 @@ public class WebGLRenderer
 		// update WebGL objects
 		if ( this.isAutoUpdateObjects() ) 
 		{
-			scene.initWebGLObjects();
+			scene.initWebGLObjects(this);
 		}
 
 		// custom render plugins (pre pass)
@@ -1134,7 +1132,7 @@ public class WebGLRenderer
 		{
 			Plugin plugin = plugins.get( i );
 
-			if(! plugin.isEnabled() || plugin.isRendering())
+			if( ! plugin.isEnabled() || plugin.isRendering() )
 				return;
 
 			plugin.setRendering(true);

@@ -87,8 +87,6 @@ public final class Scene extends Object3D
 	public List<RendererObject> __webglObjectsImmediate;
 	public List<RendererObject> __webglObjects;
 	
-	private WebGLRenderer renderer;
-	
 	/**
 	 * This default constructor will create new Scene instance.
 	 */
@@ -100,14 +98,6 @@ public final class Scene extends Object3D
 		this.lights = new ArrayList<Light>();
 		this.objectsAdded = new ArrayList<DimensionalObject>();
 		this.objectsRemoved = new ArrayList<DimensionalObject>();
-	}
-	
-	public WebGLRenderer getRenderer() {
-		return this.renderer;
-	}
-
-	public void setRenderer(WebGLRenderer renderer) {
-		this.renderer = renderer;
 	}
 
 	/**
@@ -226,7 +216,7 @@ public final class Scene extends Object3D
 	 * 
 	 * @param scene the Scene with child objects
 	 */
-	public void initWebGLObjects() 
+	public void initWebGLObjects(WebGLRenderer renderer) 
 	{
 		if ( this.__webglObjects == null ) 
 		{
@@ -240,7 +230,7 @@ public final class Scene extends Object3D
 		
 		while ( getObjectsAdded().size() > 0 ) 
 		{
-			addObject( (Object3D) getObjectsAdded().get( 0 ) );
+			addObject( renderer, (Object3D) getObjectsAdded().get( 0 ) );
 			getObjectsAdded().remove(0);
 		}
 
@@ -253,14 +243,14 @@ public final class Scene extends Object3D
 		// update must be called after objects adding / removal
 		for(RendererObject object: this.__webglObjects)
 		{
-			object.object.setBuffer(this.renderer);
+			object.object.setBuffer(renderer);
 		}			
 	}
 	
 	/**
 	 * Adds objects
 	 */
-	private void addObject ( Object3D object )
+	private void addObject ( WebGLRenderer renderer, Object3D object )
 	{
 		Log.debug("addObject() object=" + object.getClass().getName());
 
@@ -269,7 +259,7 @@ public final class Scene extends Object3D
 			object.isWebglInit = true;
 
 			Log.debug("addObject() initBuffer()");
-			((GeometryObject)object).initBuffer(this.renderer);
+			((GeometryObject)object).initBuffer(renderer);
 		}
 
 		if ( ! object.isWebglActive ) 

@@ -59,7 +59,7 @@ public final class VignetteShader extends Shader
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
 		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("darkness", new Uniform(Uniform.TYPE.F, 1.0));
 
 	}
 
