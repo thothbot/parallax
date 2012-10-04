@@ -93,23 +93,6 @@ public class RendererObject implements Comparable<RendererObject>
 		}
 	}
 	
-	public void unrollImmediateBufferMaterial () 
-	{
-		Material material = object.getMaterial();
-
-		if ( material.isTransparent()) 
-		{
-			transparent = material;
-			opaque = null;
-
-		} 
-		else 
-		{
-			opaque = material;
-			transparent = null;
-		}
-	}
-	
 	@Override
 	public int compareTo(RendererObject o)
 	{

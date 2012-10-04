@@ -101,7 +101,6 @@ public class Object3D implements DimensionalObject
 	public boolean hasNormal;
 	public double renderDepth;
 	public Matrix4 identityMatrix;
-	public boolean hasImmediateRenderCallback;
 	public Float32Array positionArray;
 	public Float32Array normalArray;
 	public WebGLBuffer __webglVertexBuffer;

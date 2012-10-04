@@ -913,23 +913,6 @@ public class WebGLRenderer
 		if ( this.isSortObjects() )
 			Collections.sort(renderList);
 
-		// set matrices for immediate objects
-
-		List<RendererObject> renderListI = scene.__webglObjectsImmediate;
-
-		for(RendererObject webglObject: renderListI)
-		{
-			GeometryObject object = webglObject.object;
-			if ( object.isVisible() ) 
-			{
-				Log.debug("render(): set matrices for immediate objects");
-
-				setupMatrices( (Object3D) object, camera );
-
-				webglObject.unrollImmediateBufferMaterial();
-			}
-		}
-
 		if ( scene.overrideMaterial != null ) 
 		{
 			Log.error("render(): override material");
@@ -943,23 +926,18 @@ public class WebGLRenderer
 //			setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits() );
 //
 //			renderObjects( scene.__webglObjects, false, "", camera, lights, fog, true, material );
-//			renderObjectsImmediate( scene.__webglObjectsImmediate, "", camera, lights, fog, false, material );
-
 		} 
 		else 
 		{
 			Log.debug("render(): NON override material");
 			// opaque pass (front-to-back order)
-
 			setBlending( Material.BLENDING.NORMAL);
 
 			//                      scene - camera - isMaterialTransparent - useBlending - reverse 
 			renderObjects(          scene, camera, false, false, true);
-			renderObjectsImmediate( scene, camera, false, false );
 
 			// transparent pass (back-to-front order)
 			renderObjects(          scene, camera, true, true, false );
-			renderObjectsImmediate( scene, camera, true, true );
 		}
 
 		// custom render plugins (post pass)
@@ -1029,64 +1007,6 @@ public class WebGLRenderer
 			
 			plugin.setRendering(false);
 		}
-	}
-	
-	private void renderObjectsImmediate ( Scene scene, Camera camera, boolean isMaterialTransparent, boolean useBlending) 
-	{
-		renderObjectsImmediate ( scene, camera, isMaterialTransparent, useBlending, null);
-	}
-
-	private void renderObjectsImmediate ( Scene scene, Camera camera, boolean isMaterialTransparent, boolean useBlending, Material overrideMaterial ) 
-	{
-		List<RendererObject> renderList = scene.__webglObjectsImmediate;
-		for ( int i = 0; i < renderList.size(); i ++ ) 
-		{
-
-			RendererObject webglObject = renderList.get( i );
-			GeometryObject object = webglObject.object;
-
-			if ( object.isVisible()) 
-			{
-
-				Material material = null;
-				if ( overrideMaterial != null)
-				{
-					material = overrideMaterial;
-
-				} 
-				else 
-				{
-					material = (isMaterialTransparent) ? webglObject.transparent : webglObject.opaque;
-					
-					if ( material == null ) continue;
-
-					if ( useBlending ) 
-						this.setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
-
-					this.setDepthTest( material.isDepthTest() );
-					this.setDepthWrite( material.isDepthWrite() );
-					setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits());
-				}
-
-				renderImmediateObject( scene, camera, material, object );
-			}
-		}
-	}
-	
-	// TODO: CHECK callback
-	private void renderImmediateObject( Scene scene, Camera camera, Material material, GeometryObject object ) 
-	{
-		setProgram( scene, camera, material, object );
-
-		this.cache_currentGeometryGroupHash = -1;
-
-		setMaterialFaces( material );
-
-//		if ( object.immediateRenderCallback )
-//			object.immediateRenderCallback( program, this._gl, this._frustum );
-//
-//		else
-//			object.render( function( object ) { _this.renderBufferImmediate( object, program, material.shading ); } );
 	}
 
 	private void renderObjects ( Scene scene, Camera camera, boolean isMaterialTransparent, boolean useBlending, boolean reverse ) 
@@ -1294,72 +1214,6 @@ public class WebGLRenderer
 		object.renderBuffer(this, geometryBuffer, updateBuffers);
 	}
 
-	private void renderBufferImmediate( Object3D object, Material material, Material.SHADING shading ) 
-	{
-		if ( object.__webglVertexBuffer == null ) 
-			object.__webglVertexBuffer = getGL().createBuffer();
-
-		if ( object.__webglNormalBuffer == null ) 
-			object.__webglNormalBuffer = getGL().createBuffer();
-
-		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
-		if ( object.hasPos ) 
-		{
-			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglVertexBuffer );
-			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.positionArray, BufferUsage.DYNAMIC_DRAW );
-			getGL().enableVertexAttribArray( attributes.get("position") );
-			getGL().vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, 0 );
-		}
-
-		if ( object.hasNormal ) 
-		{
-			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglNormalBuffer );
-
-			if ( shading == Material.SHADING.FLAT ) 
-			{
-				for(int  i = 0; i < (object.count * 3); i += 9 ) 
-				{
-					Float32Array normalArray = object.normalArray;
-
-					double nax  = normalArray.get( i );
-					double nay  = normalArray.get( i + 1 );
-					double naz  = normalArray.get( i + 2 );
-
-					double nbx  = normalArray.get( i + 3 );
-					double nby  = normalArray.get( i + 4 );
-					double nbz  = normalArray.get( i + 5 );
-
-					double ncx  = normalArray.get( i + 6 );
-					double ncy  = normalArray.get( i + 7 );
-					double ncz  = normalArray.get( i + 8 );
-
-					double nx = ( nax + nbx + ncx ) / 3.0;
-					double ny = ( nay + nby + ncy ) / 3.0;
-					double nz = ( naz + nbz + ncz ) / 3.0;
-
-					normalArray.set(i, nx);
-					normalArray.set( i + 1, ny);
-					normalArray.set( i + 2, nz);
-
-					normalArray.set( i + 3, nx);
-					normalArray.set( i + 4, ny);
-					normalArray.set( i + 5, nz);
-
-					normalArray.set( i + 6, nx);
-					normalArray.set( i + 7, ny);
-					normalArray.set( i + 8, nz);
-				}
-			}
-
-			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.normalArray, BufferUsage.DYNAMIC_DRAW );
-			getGL().enableVertexAttribArray( attributes.get("normal") );
-			getGL().vertexAttribPointer( attributes.get("normal"), 3, DataType.FLOAT, false, 0, 0 );
-		}
-
-		getGL().drawArrays( BeginMode.TRIANGLES, 0, object.count );
-		object.count = 0;
-	}
-	
 //	public void renderBufferDirect ( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryGroup geometryGroup, Object3D object ) 
 //	{
 //		if ( !material.visible ) return;
@@ -1437,17 +1291,6 @@ public class WebGLRenderer
 //				this.info.render.faces += offsets.get( i ).count / 3;
 //			}
 //		}
-//	}
-	
-//	function addBufferImmediate ( objlist, object ) {
-//
-//		objlist.push(
-//			{
-//				object: object,
-//				opaque: null,
-//				transparent: null
-//			}
-//		);
 //	}
 
 	private void initMaterial ( Scene scene, Material material, GeometryObject object ) 

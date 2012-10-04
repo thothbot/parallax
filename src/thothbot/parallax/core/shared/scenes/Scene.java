@@ -84,7 +84,6 @@ public final class Scene extends Object3D
 	private ArrayList<DimensionalObject> objectsRemoved;
 
 	public Material overrideMaterial;
-	public List<RendererObject> __webglObjectsImmediate;
 	public List<RendererObject> __webglObjects;
 	
 	/**
@@ -221,7 +220,6 @@ public final class Scene extends Object3D
 		if ( this.__webglObjects == null ) 
 		{
 			this.__webglObjects = new ArrayList<RendererObject>();
-			this.__webglObjectsImmediate = new ArrayList<RendererObject>();
 		}
 
 		Log.debug("initWebGLObjects() objectsAdded=" + getObjectsAdded().size() 
@@ -281,9 +279,6 @@ public final class Scene extends Object3D
 			for ( int o = this.__webglObjects.size() - 1; o >= 0; o -- )
 				if ( this.__webglObjects.get( o ).object == object )
 					this.__webglObjects.remove(o);
-
-//		} else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
-//			removeInstances( scene.__webglObjectsImmediate, object );
 		}
 
 		object.isWebglActive = false;
@@ -316,10 +311,6 @@ public final class Scene extends Object3D
 				Geometry geometry = ((GeometryObject)object).getGeometry();
 				addBuffer( geometry, (GeometryObject)object );
 			}
-//		} else if ( object.getClass() instanceof THREE.ImmediateRenderObject || object.immediateRenderCallback ) {
-//
-//			addBufferImmediate( scene.__webglObjectsImmediate, object );
-//
 		} 
 	}
 	

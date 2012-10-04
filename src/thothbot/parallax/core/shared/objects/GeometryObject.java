@@ -31,7 +31,6 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
-import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.materials.Material;
 
 public abstract class GeometryObject extends Object3D implements DimensionalObject

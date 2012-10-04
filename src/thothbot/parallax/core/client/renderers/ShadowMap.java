@@ -385,23 +385,6 @@ public final class ShadowMap extends Plugin
 //					}
 				}
 			}
-
-			// set matrices and render immediate objects
-
-//			renderList = scene.__webglObjectsImmediate;
-//
-//			for ( int j = 0, jl = renderList.length; j < jl; j ++ ) 
-//			{
-//				webglObject = renderList[ j ];
-//				object = webglObject.object;
-//
-//				if ( object.visible && object.castShadow ) 
-//				{
-//					object._modelViewMatrix.multiply( shadowCamera.matrixWorldInverse, object.matrixWorld );
-//
-//					_renderer.renderImmediateObject( shadowCamera, scene.__lights, fog, _depthMaterial, object );
-//				}
-//			}
 		}
 
 		// restore GL state
