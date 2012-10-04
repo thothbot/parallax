@@ -31,6 +31,7 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
+import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.materials.Material;
 
 public abstract class GeometryObject extends Object3D implements DimensionalObject
@@ -68,13 +69,43 @@ public abstract class GeometryObject extends Object3D implements DimensionalObje
 	public void setCustomDepthMaterial(Material customDepthMaterial) {
 		this.customDepthMaterial = customDepthMaterial;
 	}
-
+	
 	public abstract void initBuffer(WebGLRenderer renderer);
 
 	public abstract void setBuffer(WebGLRenderer renderer);
 	
 	public abstract void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers);
 	
+	/**
+	 * object — an instance of Object3D
+	 * Removes an object from the GL context and releases all the data (geometry, matrices...) 
+	 * that the GL context keeps about the object, but it doesn't release textures or affect any 
+	 * JavaScript data.
+	 */
+	public void deallocate(WebGLRenderer renderer) 
+	{
+		if ( ! isWebglInit ) return;
+
+		isWebglInit = false;
+
+		_modelViewMatrix = null;
+		_normalMatrix = null;
+
+		_normalMatrixArray = null;
+		_modelViewMatrixArray = null;
+		_modelMatrixArray = null;
+
+		deleteBuffers(renderer);
+	}
+	
+	public void deleteBuffers(WebGLRenderer renderer) 
+	{
+		renderer.getGL().deleteBuffer( geometry.__webglVertexBuffer );
+		renderer.getGL().deleteBuffer( geometry.__webglColorBuffer );
+
+		renderer.getInfo().getMemory().geometries --;
+	}
+
 	protected void setLineWidth (WebGLRenderingContext gl, double width ) 
 	{
 		if ( width != this.cache_oldLineWidth ) 

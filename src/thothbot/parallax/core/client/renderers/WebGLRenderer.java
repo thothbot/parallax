@@ -209,7 +209,7 @@ public class WebGLRenderer
 	private boolean isLightsNeedUpdate = true;
 	private RendererLights cache_lights;
 	
-	private Map<String, Shader> cache_programs;
+	public Map<String, Shader> cache_programs;
 
 	// GPU capabilities
 	private int GPUmaxTextures;
@@ -691,141 +691,6 @@ public class WebGLRenderer
 		clear( color, depth, stencil );
 	}
 	
-	/**
-	 * object — an instance of Object3D
-	 * Removes an object from the GL context and releases all the data (geometry, matrices...) 
-	 * that the GL context keeps about the object, but it doesn't release textures or affect any 
-	 * JavaScript data.
-	 */
-	public void deallocateObject( GeometryObject object ) 
-	{
-		if ( ! object.isWebglInit ) return;
-
-		object.isWebglInit = false;
-
-		object._modelViewMatrix = null;
-		object._normalMatrix = null;
-
-		object._normalMatrixArray = null;
-		object._modelViewMatrixArray = null;
-		object._modelMatrixArray = null;
-
-		if ( object instanceof Mesh )
-			for ( GeometryGroup g : object.getGeometry().getGeometryGroups().values() )
-				deleteMeshBuffers( g );
-					
-		else if ( object instanceof Ribbon )
-			deleteRibbonBuffers( object.getGeometry() );
-
-		else if ( object instanceof Line )
-			deleteLineBuffers( object.getGeometry() );
-
-		else if ( object instanceof ParticleSystem )
-			deleteParticleBuffers( object.getGeometry() );
-	}
-
-	/**
-	 * Releases a texture from the GL context.
-	 * texture — an instance of Texture
-	 */
-	public void deallocateTexture( Texture texture ) 
-	{
-		if ( texture.getWebGlTexture() == null ) return;
-
-		getGL().deleteTexture( texture.getWebGlTexture() );
-
-		this.getInfo().getMemory().textures--;
-	}
-
-	/**
-	 * Releases a render target from the GL context.
-	 * 
-	 * @param renderTarget the instance of {@link RenderTargetTexture}
-	 */
-	public void deallocateRenderTarget ( RenderTargetTexture renderTarget ) 
-	{
-		renderTarget.deallocate(getGL());
-	}
-	
-	public void deallocateMaterial( Material material ) 
-	{
-		WebGLProgram program = material.getShader().getProgram();
-		if ( program == null ) return;
-
-		for ( String key: cache_programs.keySet()) 
-		{
-			Shader shader = cache_programs.get(key);
-			
-			if ( shader == material.getShader() ) 
-			{
-				getInfo().getMemory().programs --;
-				cache_programs.remove(key);
-				break;
-			}
-		}
-	}
-	
-	private void deleteParticleBuffers ( Geometry geometry ) 
-	{
-		getGL().deleteBuffer( geometry.__webglVertexBuffer );
-		getGL().deleteBuffer( geometry.__webglColorBuffer );
-
-		this.getInfo().getMemory().geometries --;
-	}
-	
-	private void deleteLineBuffers (Geometry geometry ) 
-	{
-		deleteParticleBuffers(geometry);
-	};
-
-	private void deleteRibbonBuffers (Geometry geometry ) 
-	{
-		deleteParticleBuffers(geometry);
-	}
-	
-	private void deleteMeshBuffers ( GeometryGroup geometryGroup ) 
-	{
-		getGL().deleteBuffer( geometryGroup.__webglVertexBuffer );
-		getGL().deleteBuffer( geometryGroup.__webglNormalBuffer );
-		getGL().deleteBuffer( geometryGroup.__webglTangentBuffer );
-		getGL().deleteBuffer( geometryGroup.__webglColorBuffer );
-		getGL().deleteBuffer( geometryGroup.__webglUVBuffer );
-		getGL().deleteBuffer( geometryGroup.__webglUV2Buffer );
-
-		getGL().deleteBuffer( geometryGroup.__webglSkinIndicesBuffer );
-		getGL().deleteBuffer( geometryGroup.__webglSkinWeightsBuffer );
-
-		getGL().deleteBuffer( geometryGroup.__webglFaceBuffer );
-		getGL().deleteBuffer( geometryGroup.__webglLineBuffer );
-
-		if ( geometryGroup.numMorphTargets != 0) 
-		{
-			for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) 
-			{
-				getGL().deleteBuffer( geometryGroup.__webglMorphTargetsBuffers.get( m ) );
-			}
-		}
-
-		if ( geometryGroup.numMorphNormals != 0 ) 
-		{
-			for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) 
-			{
-				getGL().deleteBuffer( geometryGroup.__webglMorphNormalsBuffers.get( m ) );
-			}
-		}
-
-
-		if ( geometryGroup.__webglCustomAttributesList != null) 
-		{
-			for ( Attribute att : geometryGroup.__webglCustomAttributesList ) 
-			{
-				getGL().deleteBuffer( att.buffer );
-			}
-		}
-
-		this.getInfo().getMemory().geometries --;
-	}
-	
 	// Buffer initialization
 	
 	/**
@@ -1031,7 +896,7 @@ public class WebGLRenderer
 						|| frustum.contains( object ) )
 				{
 					setupMatrices( (Object3D) object, camera );
-					unrollBufferMaterial( webglObject );
+					webglObject.unrollBufferMaterial();
 					webglObject.render = true;
 
 					if ( this.isSortObjects() ) 
@@ -1068,7 +933,7 @@ public class WebGLRenderer
 
 				setupMatrices( (Object3D) object, camera );
 
-				unrollImmediateBufferMaterial( webglObject );
+				webglObject.unrollImmediateBufferMaterial();
 			}
 		}
 
@@ -1580,75 +1445,6 @@ public class WebGLRenderer
 //			}
 //		}
 //	}
-
-	private void unrollImmediateBufferMaterial ( RendererObject globject ) 
-	{
-		GeometryObject object = globject.object;
-		Material material = object.getMaterial();
-
-		if ( material.isTransparent()) 
-		{
-			globject.transparent = material;
-			globject.opaque = null;
-
-		} 
-		else 
-		{
-			globject.opaque = material;
-			globject.transparent = null;
-		}
-	}
-
-	private void unrollBufferMaterial (  RendererObject globject ) 
-	{
-		GeometryObject object = globject.object;
-
-		Material meshMaterial = object.getMaterial();
-
-		if ( meshMaterial instanceof MeshFaceMaterial ) 
-		{
-			GeometryGroup buffer = (GeometryGroup) globject.buffer;
-			int materialIndex = buffer.materialIndex;
-
-			if ( materialIndex >= 0 ) 
-			{
-				Material material = object.getGeometry().getMaterials().get( materialIndex );
-
-				if ( material.isTransparent() ) 
-				{
-					globject.transparent = material;
-					globject.opaque = null;
-					
-				} 
-				else 
-				{
-					globject.opaque = material;
-					globject.transparent = null;
-				}
-			}
-
-		} 
-		else 
-		{
-
-			Material material = meshMaterial;
-
-			if ( material != null) 
-			{
-				if ( material.isTransparent() ) 
-				{
-					globject.transparent = material;
-					globject.opaque = null;
-
-				} 
-				else 
-				{
-					globject.opaque = material;
-					globject.transparent = null;
-				}
-			}
-		}
-	}
 	
 //	function addBufferImmediate ( objlist, object ) {
 //

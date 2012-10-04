@@ -27,10 +27,12 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
+import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.ChunksFragmentShader;
 import thothbot.parallax.core.client.shaders.ChunksVertexShader;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
@@ -825,5 +827,24 @@ public abstract class Material
 			return object.getGeometry().getMaterials().get( geometryGroup.materialIndex );
 		
 		return null;
+	}
+	
+	
+	public void deallocate( WebGLRenderer renderer ) 
+	{
+		WebGLProgram program = getShader().getProgram();
+		if ( program == null ) return;
+
+		for ( String key: renderer.cache_programs.keySet()) 
+		{
+			Shader shader = renderer.cache_programs.get(key);
+			
+			if ( shader == getShader() ) 
+			{
+				renderer.getInfo().getMemory().programs --;
+				renderer.cache_programs.remove(key);
+				break;
+			}
+		}
 	}
 }

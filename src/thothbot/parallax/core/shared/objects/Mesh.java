@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
@@ -1918,6 +1917,53 @@ public class Mesh extends GeometryObject
 
 		 if ( dispose ) 
 			 geometryGroup.dispose();
+	}
+	
+	@Override
+	public void deleteBuffers(WebGLRenderer renderer) 
+	{
+		for ( GeometryGroup geometryGroup : getGeometry().getGeometryGroups().values() )
+		{
+			renderer.getGL().deleteBuffer( geometryGroup.__webglVertexBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglNormalBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglTangentBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglColorBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglUVBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglUV2Buffer );
+
+			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinIndicesBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinWeightsBuffer );
+
+			renderer.getGL().deleteBuffer( geometryGroup.__webglFaceBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglLineBuffer );
+
+			if ( geometryGroup.numMorphTargets != 0) 
+			{
+				for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) 
+				{
+					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphTargetsBuffers.get( m ) );
+				}
+			}
+
+			if ( geometryGroup.numMorphNormals != 0 ) 
+			{
+				for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) 
+				{
+					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphNormalsBuffers.get( m ) );
+				}
+			}
+
+
+			if ( geometryGroup.__webglCustomAttributesList != null) 
+			{
+				for ( Attribute att : geometryGroup.__webglCustomAttributesList ) 
+				{
+					renderer.getGL().deleteBuffer( att.buffer );
+				}
+			}
+
+			renderer.getInfo().getMemory().geometries --;
+		}
 	}
 
 	private void sortFacesByMaterial ( Geometry geometry ) 

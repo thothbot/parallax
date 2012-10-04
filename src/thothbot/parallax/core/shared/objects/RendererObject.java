@@ -23,7 +23,9 @@
 package thothbot.parallax.core.shared.objects;
 
 import thothbot.parallax.core.shared.core.GeometryBuffer;
+import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 
 public class RendererObject implements Comparable<RendererObject>
 {
@@ -42,6 +44,70 @@ public class RendererObject implements Comparable<RendererObject>
 		this.object = object;
 		this.opaque = opaque;
 		this.transparent = transparent;
+	}
+	
+	public void unrollBufferMaterial() 
+	{
+		Material meshMaterial = object.getMaterial();
+
+		if ( meshMaterial instanceof MeshFaceMaterial ) 
+		{
+			int materialIndex = ((GeometryGroup)buffer).materialIndex;
+
+			if ( materialIndex >= 0 ) 
+			{
+				Material material = object.getGeometry().getMaterials().get( materialIndex );
+
+				if ( material.isTransparent() ) 
+				{
+					transparent = material;
+					opaque = null;
+					
+				} 
+				else 
+				{
+					opaque = material;
+					transparent = null;
+				}
+			}
+		} 
+		else 
+		{
+
+			Material material = meshMaterial;
+
+			if ( material != null) 
+			{
+				if ( material.isTransparent() ) 
+				{
+					transparent = material;
+					opaque = null;
+
+				} 
+				else 
+				{
+					opaque = material;
+					transparent = null;
+				}
+			}
+		}
+	}
+	
+	public void unrollImmediateBufferMaterial () 
+	{
+		Material material = object.getMaterial();
+
+		if ( material.isTransparent()) 
+		{
+			transparent = material;
+			opaque = null;
+
+		} 
+		else 
+		{
+			opaque = material;
+			transparent = null;
+		}
 	}
 	
 	@Override

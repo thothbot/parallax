@@ -33,6 +33,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureWrapMode;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Vector2;
 
@@ -497,6 +498,21 @@ public class Texture
 //		if(f == WebGLConstants.LINEAR || f == WebGLConstants.LINEAR_MIPMAP_NEAREST || f == WebGLConstants.LINEAR_MIPMAP_LINEAR)
 			return WebGLConstants.LINEAR;
 	}
+	
+	
+	/**
+	 * Releases a texture from the GL context.
+	 * texture — an instance of Texture
+	 */
+	public void deallocate( WebGLRenderer renderer ) 
+	{
+		if ( getWebGlTexture() == null ) return;
+
+		renderer.getGL().deleteTexture( getWebGlTexture() );
+
+		renderer.getInfo().getMemory().textures--;
+	}
+
 
 	/**
 	 * Clone the texture, where
