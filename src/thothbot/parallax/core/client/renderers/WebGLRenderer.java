@@ -35,6 +35,8 @@ import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.arrays.Int16Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
@@ -45,6 +47,7 @@ import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
 import thothbot.parallax.core.client.gl2.enums.DataType;
 import thothbot.parallax.core.client.gl2.enums.DepthFunction;
+import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
 import thothbot.parallax.core.client.gl2.enums.PixelStoreParameter;
@@ -1069,10 +1072,9 @@ public class WebGLRenderer
 
 				setMaterialFaces( material );
 
-				// TODO: Extras
-//				if ( buffer instanceof THREE.BufferGeometry )
-//					_this.renderBufferDirect( camera, lights, fog, material, buffer, object );
-//				else
+				if ( buffer.getClass() == GeometryBuffer.class )
+					renderBufferDirect( scene, camera, material, buffer, (GeometryObject) object );
+				else
 					renderBuffer( scene, camera, material, buffer, (GeometryObject) object );
 			}
 		}
@@ -1214,84 +1216,164 @@ public class WebGLRenderer
 		object.renderBuffer(this, geometryBuffer, updateBuffers);
 	}
 
-//	public void renderBufferDirect ( Camera camera, List<Light> lights, FogAbstract fog, Material material, GeometryGroup geometryGroup, Object3D object ) 
-//	{
-//		if ( !material.visible ) return;
-//
-//		Program program = setProgram( camera, lights, fog, material, object );
-//		Map<String, Integer> attributes = program.attributes;
-//
-//		boolean updateBuffers = false;
-//		int wireframeBit = material.wireframe ? 1 : 0;
-//		int geometryGroupHash = ( geometryGroup.id * 0xffffff ) + ( program.id * 2 ) + wireframeBit;
-//
-//		if ( geometryGroupHash != this._currentGeometryGroupHash ) {
-//			this._currentGeometryGroupHash = geometryGroupHash;
-//			updateBuffers = true;
-//		}
-//
-//		// render mesh
-//		if ( object instanceof Mesh ) {
-//
-//			List<Integer> offsets = geometryGroup.offsets;
-//
-//			for ( int i = 0; i < offsets.size(); ++ i ) {
-//				if ( updateBuffers ) {
-//
-//					// vertices
-//
-//					getGL().bindBuffer( WebGLConstants.ARRAY_BUFFER, geometryGroup.vertexPositionBuffer );
-//					getGL().vertexAttribPointer( attributes.get("position"), 
-//							geometryGroup.vertexPositionBuffer.itemSize, 
-//							WebGLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
-//
-//					// normals
-//
-//					if ( attributes.get("normal") >= 0 && geometryGroup.vertexNormalBuffer != null) {
-//						getGL().bindBuffer( WebGLConstants.ARRAY_BUFFER, geometryGroup.vertexNormalBuffer );
-//						getGL().vertexAttribPointer( attributes.get("normal"), 
-//								geometryGroup.vertexNormalBuffer.itemSize, 
-//								WebGLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 3 );
-//					}
-//
-//					// uvs
-//
-//					if ( attributes.uv >= 0 && geometryGroup.vertexUvBuffer != null ) {
-//
-//						if ( geometryGroup.vertexUvBuffer != null) {
-//							getGL().bindBuffer( WebGLConstants.ARRAY_BUFFER, geometryGroup.vertexUvBuffer );
-//							getGL().vertexAttribPointer(  attributes.get("uv"), 
-//									geometryGroup.vertexUvBuffer.itemSize, 
-//									WebGLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 2 );
-//							getGL().enableVertexAttribArray( attributes.uv );
-//						} else {
-//							getGL().disableVertexAttribArray( attributes.uv );
-//						}
-//
-//					}
-//
-//					// colors
-//
-//					if ( attributes.color >= 0 && geometryGroup.vertexColorBuffer != null ) {
-//						getGL().bindBuffer( WebGLConstants.ARRAY_BUFFER, geometryGroup.vertexColorBuffer );
-//						getGL().vertexAttribPointer( attributes.get("color"), 
-//								geometryGroup.vertexColorBuffer.itemSize, 
-//								WebGLConstants.FLOAT, false, 0, offsets.get( i ).index * 4 * 4 );
-//					}
-//
-//					getGL().bindBuffer( WebGLConstants.ELEMENT_ARRAY_BUFFER, geometryGroup.vertexIndexBuffer );
-//				}
-//
-//				// render indexed triangles
-//				getGL().drawElements( WebGLConstants.TRIANGLES, offsets.get( i ).count, WebGLConstants.UNSIGNED_SHORT, offsets.get( i ).start * 2 ); // 2 = Uint16
-//
-//				this.info.render.calls ++;
-//				// not really true, here vertices can be shared
-//				this.info.render.vertices += offsets.get( i ).count; 
-//				this.info.render.faces += offsets.get( i ).count / 3;
-//			}
-//		}
-//	}
+	public void renderBufferDirect( Scene scene, Camera camera, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
+	{
+		if ( ! material.isVisible() ) 
+			return;
+
+		setProgram( scene, camera, material, object );
+
+		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
+		
+		boolean updateBuffers = false;
+		int wireframeBit = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? 1 : 0;
+
+		int geometryGroupHash = ( geometryBuffer.getId() * 0xffffff ) + ( material.getShader().getId() * 2 ) + wireframeBit;
+
+		if ( geometryGroupHash != this.cache_currentGeometryGroupHash ) 
+		{
+			this.cache_currentGeometryGroupHash = geometryGroupHash;
+			updateBuffers = true;
+		}
+		
+		WebGLRenderingContext gl = getGL();
+				
+		// render mesh
+
+		if ( object instanceof Mesh ) 
+		{
+			List<GeometryBuffer.Offset> offsets = geometryBuffer.offsets;
+
+			// if there is more than 1 chunk
+			// must set attribute pointers to use new offsets for each chunk
+			// even if geometry and materials didn't change
+
+			if ( offsets.size() > 1 ) 
+				updateBuffers = true;
+
+			for ( int i = 0, il = offsets.size(); i < il; ++ i ) 
+			{
+				int startIndex = offsets.get( i ).index;
+
+				if ( updateBuffers ) 
+				{
+					// vertices
+
+					Float32Array position = geometryBuffer.getWebGlPositionArray();
+					int positionSize = position.getLength();
+
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglPositionBuffer );
+					gl.vertexAttribPointer( attributes.get("position"), positionSize, DataType.FLOAT, false, 0, startIndex * positionSize * 4 ); // 4 bytes per Float32
+
+					// normals
+
+					Float32Array normal = geometryBuffer.getWebGlNormalArray();
+
+					if ( attributes.get("normal") >= 0 && normal != null ) 
+					{
+						int normalSize = normal.getLength();
+
+						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglNormalBuffer );
+						gl.vertexAttribPointer( attributes.get("normal"), normalSize, DataType.FLOAT, false, 0, startIndex * normalSize * 4 );
+					}
+
+					// uvs
+
+					Float32Array uv = geometryBuffer.getWebGlUvArray();
+
+					if ( attributes.get("uv") >= 0 && uv != null ) 
+					{
+						if ( geometryBuffer.__webglUVBuffer != null ) 
+						{
+							int uvSize = uv.getLength();
+
+							gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglUVBuffer );
+							gl.vertexAttribPointer( attributes.get("uv"), uvSize, DataType.FLOAT, false, 0, startIndex * uvSize * 4 );
+
+							gl.enableVertexAttribArray( attributes.get("uv") );
+						} 
+						else 
+						{
+							gl.disableVertexAttribArray( attributes.get("uv") );
+						}
+
+					}
+
+					// colors
+
+					Float32Array color = geometryBuffer.getWebGlColorArray();
+
+					if ( attributes.get("color") >= 0 && color != null ) 
+					{
+						int colorSize = color.getLength();
+
+						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglColorBuffer );
+						gl.vertexAttribPointer( attributes.get("color"), colorSize, DataType.FLOAT, false, 0, startIndex * colorSize * 4 );
+					}
+
+					// tangents
+
+					Float32Array tangent = geometryBuffer.getWebGlTangentArray();
+
+					if ( attributes.get("tangent") >= 0 && tangent != null )
+					{
+						int tangentSize = tangent.getLength();
+
+						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglTangentBuffer );
+						gl.vertexAttribPointer( attributes.get("tangent"), tangentSize, DataType.FLOAT, false, 0, startIndex * tangentSize * 4 );
+					}
+
+					// indices
+
+					Int16Array index = geometryBuffer.getWebGlIndexArray();
+
+					gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryBuffer.__webglIndexBuffer );
+				}
+
+				// render indexed triangles
+
+				gl.drawElements( BeginMode.TRIANGLES, offsets.get( i ).count, DrawElementsType.UNSIGNED_SHORT, offsets.get( i ).start * 2 ); // 2 bytes per Uint16
+
+				getInfo().getRender().calls ++;
+				getInfo().getRender().vertices += offsets.get( i ).count; // not really true, here vertices can be shared
+				getInfo().getRender().faces += offsets.get( i ).count / 3;
+			}
+
+			// render particles
+		} 
+		else if ( object instanceof ParticleSystem ) 
+		{
+			if ( updateBuffers ) 
+			{
+				// vertices
+
+				Float32Array position = geometryBuffer.getWebGlPositionArray();
+				int positionSize = position.getLength();
+
+				gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglPositionBuffer );
+				gl.vertexAttribPointer( attributes.get("position"), positionSize, DataType.FLOAT, false, 0, 0 );
+
+				// colors
+
+				Float32Array color = geometryBuffer.getWebGlColorArray();
+
+				if ( attributes.get("color") >= 0 && color != null ) 
+				{
+					int colorSize = color.getLength();
+
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglColorBuffer );
+					gl.vertexAttribPointer( attributes.get("color"), colorSize, DataType.FLOAT, false, 0, 0 );
+				}
+
+				// render particles
+
+				gl.drawArrays( BeginMode.POINTS, 0, position.getLength() / 3 );
+
+				getInfo().getRender().calls ++;
+				getInfo().getRender().points += position.getLength() / 3;
+			}
+		}
+	}
 
 	private void initMaterial ( Scene scene, Material material, GeometryObject object ) 
 	{

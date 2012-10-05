@@ -762,36 +762,37 @@ public class Geometry extends GeometryBuffer
 			this.boundingBox.max.set( 0, 0, 0 );
 			return;
 		}
-		
-			Vector3 firstPosition = this.vertices.get( 0 );
 
-			this.boundingBox.min.copy( firstPosition );
-			this.boundingBox.max.copy( firstPosition );
+		Vector3 firstPosition = this.vertices.get( 0 );
 
-			Vector3 min = this.boundingBox.min;
-			Vector3 max = this.boundingBox.max;
+		this.boundingBox.min.copy( firstPosition );
+		this.boundingBox.max.copy( firstPosition );
 
-			for(Vector3 position: this.vertices) {
-				if ( position.x < min.x ) {
-					min.x = position.x;
+		Vector3 min = this.boundingBox.min;
+		Vector3 max = this.boundingBox.max;
 
-				} else if ( position.x > max.x ) {
-					max.x = position.x;
-				}
+		for(Vector3 position: this.vertices) 
+		{
+			if ( position.x < min.x ) {
+				min.x = position.x;
 
-				if ( position.y < min.y ) {
-					min.y = position.y;
-				} else if ( position.y > max.y ) {
-					max.y = position.y;
-				}
-
-				if ( position.z < min.z ) {
-					min.z = position.z;
-				} else if ( position.z > max.z ) {
-					max.z = position.z;
-				}
-
+			} else if ( position.x > max.x ) {
+				max.x = position.x;
 			}
+
+			if ( position.y < min.y ) {
+				min.y = position.y;
+			} else if ( position.y > max.y ) {
+				max.y = position.y;
+			}
+
+			if ( position.z < min.z ) {
+				min.z = position.z;
+			} else if ( position.z > max.z ) {
+				max.z = position.z;
+			}
+
+		}
 
 	}
 
@@ -816,11 +817,6 @@ public class Geometry extends GeometryBuffer
 		}
 
 		this.boundingSphere.radius = Math.sqrt( maxRadiusSq );
-	}
-	
-	private String getHash(int a, int b)
-	{
-		return Math.min(a, b) + "_" + Math.max(a, b);
 	}
 	
 	private void handleTriangle(int a, int b, int c, int ua, int ub, int uc, UV[] uv, List<Vector3> tan1, List<Vector3> tan2)
