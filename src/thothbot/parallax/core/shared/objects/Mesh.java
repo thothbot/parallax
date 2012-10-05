@@ -71,7 +71,7 @@ public class Mesh extends GeometryObject
 	private Map<String, Integer> morphTargetDictionary;
 	public Float32Array __webglMorphTargetInfluences;
 	
-	private static int _geometryGroupCounter = 0;
+//	private static int _geometryGroupCounter = 0;
 
 	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {
@@ -193,8 +193,7 @@ public class Mesh extends GeometryObject
 	public void initBuffer(WebGLRenderer renderer) 
 	{
 		WebGLRenderInfo info = renderer.getInfo();
-		int geometries = 0;
-		
+	
 		Geometry geometry = this.getGeometry();
 
 		if(geometry instanceof Geometry) 
@@ -204,7 +203,7 @@ public class Mesh extends GeometryObject
 				sortFacesByMaterial( this.getGeometry() );
 
 			// create separate VBOs per geometry chunk
-			for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values() ) 
+			for ( GeometryGroup geometryGroup : geometry.getGeometryGroups() ) 
 			{
 				// initialise VBO on the first access
 				if ( geometryGroup.__webglVertexBuffer == null ) 
@@ -399,9 +398,9 @@ public class Mesh extends GeometryObject
 //		else 
 //		{
 			// check all geometry groups
-			for( int i = 0, il = geometry.getGeometryGroupsList().size(); i < il; i ++ ) 
+
+			for( GeometryGroup geometryGroup : geometry.getGeometryGroups() ) 
 			{
-				GeometryGroup geometryGroup = geometry.getGeometryGroupsList().get( i );
 				material = Material.getBufferMaterial( this, geometryGroup );
 
 				boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
@@ -1917,7 +1916,7 @@ public class Mesh extends GeometryObject
 	@Override
 	public void deleteBuffers(WebGLRenderer renderer) 
 	{
-		for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values() )
+		for ( GeometryGroup geometryGroup : geometry.getGeometryGroupsCache().values() )
 		{
 			renderer.getGL().deleteBuffer( geometryGroup.__webglVertexBuffer );
 			renderer.getGL().deleteBuffer( geometryGroup.__webglNormalBuffer );
@@ -1968,7 +1967,7 @@ public class Mesh extends GeometryObject
 		int numMorphTargets = geometry.getMorphTargets().size();
 		int numMorphNormals = geometry.getMorphNormals().size();
 
-		geometry.setGeometryGroups( new HashMap<String, GeometryGroup>() );
+		geometry.setGeometryGroupsCache( new HashMap<String, GeometryGroup>() );
 
 		Map<String, Integer> hash_map = GWT.isScript() ? 
 				new FastMap<Integer>() : new HashMap<String, Integer>();
@@ -1988,35 +1987,35 @@ public class Mesh extends GeometryObject
 
 			String groupHash = materialHash + '_' + hash_map.get(materialHash);
 			
-			if( ! geometry.getGeometryGroups().containsKey(groupHash))
-				geometry.getGeometryGroups().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
+			if( ! geometry.getGeometryGroupsCache().containsKey(groupHash))
+				geometry.getGeometryGroupsCache().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
 
 			int vertices = face.getClass() == Face3.class ? 3 : 4;
 
-			if ( geometry.getGeometryGroups().get(groupHash).vertices + vertices > 65535 ) 
+			if ( geometry.getGeometryGroupsCache().get(groupHash).vertices + vertices > 65535 ) 
 			{
 				hash_map.put(materialHash, hash_map.get(materialHash) + 1);
 				groupHash = materialHash + '_' + hash_map.get( materialHash );
 
-				if ( ! geometry.getGeometryGroups().containsKey(groupHash))
-					geometry.getGeometryGroups().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
+				if ( ! geometry.getGeometryGroupsCache().containsKey(groupHash))
+					geometry.getGeometryGroupsCache().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
 			}
 
 			if ( face.getClass() == Face3.class )
-				geometry.getGeometryGroups().get(groupHash).faces3.add( f );
+				geometry.getGeometryGroupsCache().get(groupHash).faces3.add( f );
 
 			else
-				geometry.getGeometryGroups().get(groupHash).faces4.add( f );
+				geometry.getGeometryGroupsCache().get(groupHash).faces4.add( f );
 
-			geometry.getGeometryGroups().get(groupHash).vertices += vertices;
+			geometry.getGeometryGroupsCache().get(groupHash).vertices += vertices;
 		}
 
-		geometry.setGeometryGroupsList( new ArrayList<GeometryGroup>() );
+		geometry.setGeometryGroups( new ArrayList<GeometryGroup>() );
 
-		for ( GeometryGroup g : geometry.getGeometryGroups().values() ) 
+		for ( GeometryGroup g : geometry.getGeometryGroupsCache().values() ) 
 		{
-			g.setId(Mesh._geometryGroupCounter ++);
-			geometry.getGeometryGroupsList().add( g );
+//			g.setId(Mesh._geometryGroupCounter ++);
+			geometry.getGeometryGroups().add( g );
 		}
 	}
 }

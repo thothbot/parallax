@@ -299,7 +299,7 @@ public final class Scene extends Object3D
 //				}
 //				else 
 //				{				
-					for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values())
+					for ( GeometryGroup geometryGroup : geometry.getGeometryGroups())
 					{
 						addBuffer( geometryGroup, (GeometryObject)object );
 					}

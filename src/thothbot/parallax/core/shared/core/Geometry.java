@@ -117,8 +117,8 @@ public class Geometry extends GeometryBuffer
 	
 	private boolean isMorphTargetsNeedUpdate;
 	
-	private Map<String, GeometryGroup> geometryGroups;
-	private List<GeometryGroup> geometryGroupsList;
+	private List<GeometryGroup> geometryGroups;
+	private Map<String, GeometryGroup> geometryGroupsCache;
 		
 	private Object3D debug;
 	
@@ -144,20 +144,20 @@ public class Geometry extends GeometryBuffer
 		this.debug = new Object3D();
 	}
 	
-	public Map<String, GeometryGroup> getGeometryGroups() {
+	public Map<String, GeometryGroup> getGeometryGroupsCache() {
+		return this.geometryGroupsCache;
+	}
+	
+	public void setGeometryGroupsCache(Map<String, GeometryGroup> geometryGroups) {
+		this.geometryGroupsCache = geometryGroups;
+	}
+	
+	public List<GeometryGroup> getGeometryGroups() {
 		return this.geometryGroups;
 	}
 	
-	public void setGeometryGroups(Map<String, GeometryGroup> geometryGroups) {
-		this.geometryGroups = geometryGroups;
-	}
-	
-	public List<GeometryGroup> getGeometryGroupsList() {
-		return this.geometryGroupsList;
-	}
-	
-	public void setGeometryGroupsList(List<GeometryGroup> geometryGroupsList) {
-		this.geometryGroupsList = geometryGroupsList;
+	public void setGeometryGroups(List<GeometryGroup> geometryGroupsList) {
+		this.geometryGroups = geometryGroupsList;
 	}
 	
 	public Object3D getDebug() {
