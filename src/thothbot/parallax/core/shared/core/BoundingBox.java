@@ -34,8 +34,14 @@ public class BoundingBox
 	
 	public BoundingBox() 
 	{
-		this.min = new Vector3();
-		this.max = new Vector3();
+		this(new Vector3(), new Vector3());
+		
 		this.centroid = new Vector3();
+	}
+	
+	public BoundingBox(Vector3 min, Vector3 max) 
+	{
+		this.min = min;
+		this.max = max;
 	}
 }

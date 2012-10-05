@@ -84,12 +84,6 @@ public class Geometry extends GeometryBuffer
 		public List<Vector3> vertices;
 	}
 	
-	// Bounding box.		
-	private BoundingBox boundingBox = null;
-
-	// Bounding sphere.
-	private BoundingSphere boundingSphere = null;
-	
 	// Array of vertices.
 	private List<Vector3> vertices;
 	
@@ -102,10 +96,7 @@ public class Geometry extends GeometryBuffer
 	private List<List<UV>> faceUvs;
 	
 	private List<List<List<UV>>> faceVertexUvs;
-	
-	// True if geometry has tangents. Set in Geometry.computeTangents.
-	private Boolean hasTangents = false;
-	
+		
 	// Array of materials.
 	private List<Material> materials;
 
@@ -130,8 +121,6 @@ public class Geometry extends GeometryBuffer
 	private boolean isVerticesNeedUpdate;
 	private boolean isMorphTargetsNeedUpdate;
 	private boolean isUvsNeedUpdate;
-	private boolean isNormalsNeedUpdate;
-	private boolean isTangentsNeedUpdate;
 	private boolean isElementsNeedUpdate;
 	private boolean isColorsNeedUpdate;
 	
@@ -159,13 +148,6 @@ public class Geometry extends GeometryBuffer
 		this.skinWeights = new ArrayList<Vector4>();
 		this.skinIndices = new ArrayList<Vector4>();
 
-		this.boundingBox = null;
-		this.boundingSphere = null;
-
-		this.hasTangents = false;
-		
-		this.isDynamic = false; 
-		
 		this.debug = new Object3D();
 	}
 	
@@ -218,10 +200,6 @@ public class Geometry extends GeometryBuffer
 	public void setSkinVerticesB(List<Vector3>  skinVerticesB) {
 		this.skinVerticesB = skinVerticesB;
 	}
-
-	public void setHasTangents(Boolean hasTangents) {
-		this.hasTangents = hasTangents;
-	}
 	
 	public boolean isDynamic() {
 		return this.isDynamic;
@@ -251,22 +229,6 @@ public class Geometry extends GeometryBuffer
 		this.isMorphTargetsNeedUpdate = isMorphTargetsNeedUpdate;
 	}
 
-	public boolean isTangentsNeedUpdate() {
-		return isTangentsNeedUpdate;
-	}
-
-	public void setTangentsNeedUpdate(boolean isTangentsNeedUpdate) {
-		this.isTangentsNeedUpdate = isTangentsNeedUpdate;
-	}
-
-	public boolean isNormalsNeedUpdate() {
-		return isNormalsNeedUpdate;
-	}
-
-	public void setNormalsNeedUpdate(boolean isNormalsNeedUpdate) {
-		this.isNormalsNeedUpdate = isNormalsNeedUpdate;
-	}
-
 	public boolean isUvsNeedUpdate() {
 		return isUvsNeedUpdate;
 	}
@@ -289,13 +251,6 @@ public class Geometry extends GeometryBuffer
 
 	public void setColorsNeedUpdate(boolean isColorsNeedUpdate) {
 		this.isColorsNeedUpdate = isColorsNeedUpdate;
-	}
-
-	/**
-	 * Gets True if geometry has tangents. {@link Geometry#computeTangents()} 
-	 */
-	public Boolean hasTangents() {
-		return hasTangents;
 	}
 
 	public void setFaceUvs(List<List<UV>> faceUvs) {
@@ -359,23 +314,6 @@ public class Geometry extends GeometryBuffer
 	public List<Vector3> getVertices() 
 	{
 		return vertices;
-	}
-
-	public void setBoundingSphere(BoundingSphere boundingSphere) 
-	{
-		this.boundingSphere = boundingSphere;
-	}
-
-	public BoundingSphere getBoundingSphere() {
-		return boundingSphere;
-	}
-
-	public void setBoundingBox(BoundingBox boundingBox) {
-		this.boundingBox = boundingBox;
-	}
-
-	public BoundingBox getBoundingBox() {
-		return boundingBox;
 	}
 
 	/**
@@ -744,7 +682,7 @@ public class Geometry extends GeometryBuffer
 			}
 		}
 
-		this.hasTangents = true;
+		setHasTangents(true);
 	}
 
 	/**
@@ -753,23 +691,24 @@ public class Geometry extends GeometryBuffer
 	public void computeBoundingBox() 
 	{
 
-		if ( this.boundingBox == null )
-			this.boundingBox = new BoundingBox();
+		if ( getBoundingBox() == null )
+			setBoundingBox( new BoundingBox() );
 
+		BoundingBox boundingBox = getBoundingBox();
 		if(this.vertices.size() == 0 )
 		{
-			this.boundingBox.min.set( 0, 0, 0 );
-			this.boundingBox.max.set( 0, 0, 0 );
+			boundingBox.min.set( 0, 0, 0 );
+			boundingBox.max.set( 0, 0, 0 );
 			return;
 		}
 
 		Vector3 firstPosition = this.vertices.get( 0 );
 
-		this.boundingBox.min.copy( firstPosition );
-		this.boundingBox.max.copy( firstPosition );
+		boundingBox.min.copy( firstPosition );
+		boundingBox.max.copy( firstPosition );
 
-		Vector3 min = this.boundingBox.min;
-		Vector3 max = this.boundingBox.max;
+		Vector3 min = boundingBox.min;
+		Vector3 max = boundingBox.max;
 
 		for(Vector3 position: this.vertices) 
 		{
@@ -791,9 +730,7 @@ public class Geometry extends GeometryBuffer
 			} else if ( position.z > max.z ) {
 				max.z = position.z;
 			}
-
 		}
-
 	}
 
 	/**
@@ -806,8 +743,10 @@ public class Geometry extends GeometryBuffer
 	{	
 		double maxRadiusSq = 0;
 
-		if ( this.boundingSphere == null ) 
-			this.boundingSphere = new BoundingSphere(0);
+		if ( getBoundingSphere() == null ) 
+			setBoundingSphere( new BoundingSphere(0) );
+		
+		BoundingSphere boundingSphere = getBoundingSphere();
 
 		for ( int i = 0, l = this.vertices.size(); i < l; i ++ ) 
 		{
@@ -816,7 +755,7 @@ public class Geometry extends GeometryBuffer
 				maxRadiusSq = radiusSq;
 		}
 
-		this.boundingSphere.radius = Math.sqrt( maxRadiusSq );
+		boundingSphere.radius = Math.sqrt( maxRadiusSq );
 	}
 	
 	private void handleTriangle(int a, int b, int c, int ua, int ub, int uc, UV[] uv, List<Vector3> tan1, List<Vector3> tan2)

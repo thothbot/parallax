@@ -22,6 +22,7 @@
 
 package thothbot.parallax.core.shared.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
@@ -29,11 +30,12 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int16Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.shaders.Attribute;
+import thothbot.parallax.core.shared.Log;
 
 
 public class GeometryBuffer
 {
-	public class Offset 
+	public static class Offset 
 	{
 		public int start;
 		public int count;
@@ -42,6 +44,18 @@ public class GeometryBuffer
 
 	public static int Counter = 0;
 	private int id = 0;
+	
+	// Bounding box.		
+	private BoundingBox boundingBox = null;
+
+	// Bounding sphere.
+	private BoundingSphere boundingSphere = null;
+	
+	// True if geometry has tangents. Set in Geometry.computeTangents.
+	private Boolean hasTangents = false;
+
+	private boolean isNormalsNeedUpdate;
+	private boolean isTangentsNeedUpdate;
 
 	public List<GeometryBuffer.Offset> offsets;
 	
@@ -86,10 +100,13 @@ public class GeometryBuffer
 	public int __webglLineCount;
 	public int __webglVertexCount;
 	public int __webglFaceCount;
-	
+		
 	public GeometryBuffer() 
 	{
 		this.id = GeometryBuffer.Counter++;
+		
+		this.boundingBox = null;
+		this.boundingSphere = null;
 	}
 		
 	public void setId(int id) 
@@ -103,6 +120,50 @@ public class GeometryBuffer
 	public int getId() 
 	{
 		return id;
+	}
+	
+	/**
+	 * Gets True if geometry has tangents. {@link Geometry#computeTangents()} 
+	 */
+	public Boolean hasTangents() {
+		return hasTangents;
+	}
+	
+	public void setHasTangents(Boolean hasTangents) {
+		this.hasTangents = hasTangents;
+	}
+	
+	public boolean isNormalsNeedUpdate() {
+		return isNormalsNeedUpdate;
+	}
+
+	public void setNormalsNeedUpdate(boolean isNormalsNeedUpdate) {
+		this.isNormalsNeedUpdate = isNormalsNeedUpdate;
+	}
+	
+	public boolean isTangentsNeedUpdate() {
+		return isTangentsNeedUpdate;
+	}
+
+	public void setTangentsNeedUpdate(boolean isTangentsNeedUpdate) {
+		this.isTangentsNeedUpdate = isTangentsNeedUpdate;
+	}
+
+	public void setBoundingSphere(BoundingSphere boundingSphere) 
+	{
+		this.boundingSphere = boundingSphere;
+	}
+
+	public BoundingSphere getBoundingSphere() {
+		return boundingSphere;
+	}
+
+	public void setBoundingBox(BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
+	}
+
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
 	}
 	
 	/**
@@ -234,5 +295,366 @@ public class GeometryBuffer
 		setWebGlTangentArray( null );
 		setWebGlUvArray( null );
 		setWebGlUv2Array( null );		
+	}
+	
+	public void computeBoundingBox() 
+	{
+		if ( getBoundingBox() == null) 
+		{
+			setBoundingBox( new BoundingBox(
+					new Vector3( Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY ), 
+					new Vector3( Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY )) );
+		}
+		
+		BoundingBox boundingBox = getBoundingBox();
+
+		Float32Array positions = getWebGlPositionArray();
+
+		if ( positions != null) 
+		{
+			for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) 
+			{
+				double x = positions.get( i );
+				double y = positions.get( i + 1 );
+				double z = positions.get( i + 2 );
+
+				// bounding box
+
+				if ( x < boundingBox.min.getX() ) {
+
+					boundingBox.min.setX( x );
+
+				} else if ( x > boundingBox.max.getX() ) {
+
+					boundingBox.max.setX( x );
+
+				}
+
+				if ( y < boundingBox.min.getY() ) {
+
+					boundingBox.min.setY( y );
+
+				} else if ( y > boundingBox.max.getY() ) {
+
+					boundingBox.max.setY( y );
+
+				}
+
+				if ( z < boundingBox.min.getZ() ) {
+
+					boundingBox.min.setZ( z );
+
+				} else if ( z > boundingBox.max.getZ() ) {
+
+					boundingBox.max.setZ( z );
+
+				}
+			}
+		}
+
+		if ( positions == null || positions.getLength() == 0 ) 
+		{
+			this.boundingBox.min.set( 0, 0, 0 );
+			this.boundingBox.max.set( 0, 0, 0 );
+		}
+	}
+	
+	public void computeBoundingSphere() 
+	{
+		if ( getBoundingSphere() == null ) 
+			setBoundingSphere( new BoundingSphere(0) );
+		Float32Array positions = getWebGlPositionArray();
+
+		if ( positions != null) 
+		{
+			double maxRadiusSq = 0;
+
+			for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) 
+			{
+				double x = positions.get( i );
+				double y = positions.get( i + 1 );
+				double z = positions.get( i + 2 );
+
+				double radiusSq =  x * x + y * y + z * z;
+				if ( radiusSq > maxRadiusSq ) maxRadiusSq = radiusSq;
+
+			}
+
+			this.boundingSphere.radius = Math.sqrt( maxRadiusSq );
+		}
+	}
+	
+	public void computeVertexNormals() 
+	{
+		if ( getWebGlPositionArray() != null && getWebGlIndexArray() != null ) 
+		{
+			int nVertexElements = getWebGlPositionArray().getLength();
+
+			if ( getWebGlNormalArray() == null ) 
+			{
+				setWebGlNormalArray(Float32Array.create(nVertexElements));
+			}
+			else 
+			{
+				// reset existing normals to zero
+
+				for ( int i = 0, il = getWebGlNormalArray().getLength(); i < il; i ++ ) 
+				{
+					getWebGlNormalArray().set( i, 0 );
+				}
+			}
+
+			List<GeometryBuffer.Offset> offsets = this.offsets;
+
+			Int16Array indices = getWebGlIndexArray();
+			Float32Array positions = getWebGlPositionArray();
+			Float32Array normals = getWebGlNormalArray();
+
+			Vector3 pA = new Vector3();
+			Vector3 pB = new Vector3();
+			Vector3 pC = new Vector3();
+
+			Vector3 cb = new Vector3();
+			Vector3 ab = new Vector3();
+
+			for ( int j = 0, jl = offsets.size(); j < jl; ++ j ) 
+			{
+				int start = offsets.get( j ).start;
+				int count = offsets.get( j ).count;
+				int index = offsets.get( j ).index;
+
+				for ( int i = start, il = start + count; i < il; i += 3 ) 
+				{
+
+					int vA = index + indices.get( i );
+					int vB = index + indices.get( i + 1 );
+					int vC = index + indices.get( i + 2 );
+
+					
+					pA.set(
+							positions.get( vA * 3 ),
+							positions.get( vA * 3 + 1 ),
+							positions.get( vA * 3 + 2 ));
+
+					pB.set(
+							positions.get( vB * 3 ),
+							positions.get( vB * 3 + 1 ),
+							positions.get( vB * 3 + 2 ));
+
+					pC.set(
+							positions.get( vC * 3 ),
+							positions.get( vC * 3 + 1 ),
+							positions.get( vC * 3 + 2 ));
+					
+					cb.sub( pC, pB );
+					ab.sub( pA, pB );
+					cb.cross( ab );
+
+					normals.set( vA * 3, normals.get( vA * 3) + cb.x);
+					normals.set( vA * 3 + 1,  normals.get( vA * 3 + 1) + cb.y);
+					normals.set( vA * 3 + 2,  normals.get( vA * 3 + 2) + cb.z);
+
+					normals.set( vB * 3,  normals.get( vB * 3) + cb.x);
+					normals.set( vB * 3 + 1,  normals.get( vB * 3 + 1) + cb.y);
+					normals.set( vB * 3 + 2,  normals.get( vB * 3 + 2) + cb.z);
+
+					normals.set( vC * 3,  normals.get( vC * 3) + cb.x);
+					normals.set( vC * 3 + 1,  normals.get( vC * 3 + 1) + cb.y);
+					normals.set( vC * 3 + 2,  normals.get( vC * 3 + 2) + cb.z);
+				}
+			}
+
+			// normalize normals
+
+			for ( int i = 0, il = normals.getLength(); i < il; i += 3 ) 
+			{
+				double x = normals.get( i );
+				double y = normals.get( i + 1 );
+				double z = normals.get( i + 2 );
+
+				double  n = 1.0 / Math.sqrt( x * x + y * y + z * z );
+
+				normals.set( i , normals.get(i) *  n );
+				normals.set( i + 1 , normals.get(i + 1) *  n );
+				normals.set( i + 2 , normals.get(i + 2) *  n );
+			}
+
+			setNormalsNeedUpdate(true);
+		}
+	}
+	
+	/**
+	 * 	Based on < href="http://www.terathon.com/code/tangent.html">terathon.com</a>
+	 * (per vertex tangents)
+	 */
+	public void computeTangents() 
+	{
+		if ( getWebGlIndexArray() == null ||
+			 getWebGlPositionArray() == null ||
+			 getWebGlNormalArray() == null ||
+			 getWebGlUvArray() == null) 
+		{
+			Log.warn( "Missing required attributes (index, position, normal or uv) in BufferGeometry.computeTangents()" );
+			return;
+		}
+
+		Int16Array indices = getWebGlIndexArray();
+		Float32Array positions = getWebGlPositionArray();
+		Float32Array normals = getWebGlNormalArray();
+		Float32Array uvs = getWebGlUvArray();
+
+		int nVertices = positions.getLength() / 3;
+
+		if ( getWebGlTangentArray() == null ) 
+		{
+			int nTangentElements = 4 * nVertices;
+
+			setWebGlTangentArray(Float32Array.create(nTangentElements));
+		}
+
+		Float32Array tangents = getWebGlTangentArray();
+
+		List<Vector3> tan1 = new ArrayList<Vector3>();
+		List<Vector3> tan2 = new ArrayList<Vector3>();
+
+		for ( int k = 0; k < nVertices; k ++ ) 
+		{
+			tan1.add( new Vector3() );
+			tan2.add( new Vector3() );
+		}
+
+		List<GeometryBuffer.Offset> offsets = this.offsets;
+
+		for ( int j = 0, jl = offsets.size(); j < jl; ++ j ) 
+		{
+			int start = offsets.get( j ).start;
+			int count = offsets.get( j ).count;
+			int index = offsets.get( j ).index;
+
+			for ( int i = start, il = start + count; i < il; i += 3 ) 
+			{
+				int iA = index + indices.get( i );
+				int iB = index + indices.get( i + 1 );
+				int iC = index + indices.get( i + 2 );
+
+				handleTriangle( tan1, tan2, iA, iB, iC );
+			}
+		}
+
+		for ( int j = 0, jl = offsets.size(); j < jl; ++ j ) 
+		{
+			int start = offsets.get( j ).start;
+			int count = offsets.get( j ).count;
+			int index = offsets.get( j ).index;
+
+			for ( int i = start, il = start + count; i < il; i += 3 ) 
+			{
+				int iA = index + indices.get( i );
+				int iB = index + indices.get( i + 1 );
+				int iC = index + indices.get( i + 2 );
+
+				handleVertex( tan1, tan2, iA );
+				handleVertex( tan1, tan2, iB );
+				handleVertex( tan1, tan2, iC );
+			}
+		}
+
+		this.setHasTangents(true);
+		this.setTangentsNeedUpdate(true);
+
+	}
+	
+	private void handleTriangle( List<Vector3> tan1, List<Vector3> tan2, int a, int b, int c ) 
+	{
+		Float32Array positions = getWebGlPositionArray();
+		Float32Array uvs = getWebGlUvArray();
+		
+		double xA = positions.get( a * 3 );
+		double yA = positions.get( a * 3 + 1 );
+		double zA = positions.get( a * 3 + 2 );
+
+		double xB = positions.get( b * 3 );
+		double yB = positions.get( b * 3 + 1 );
+		double zB = positions.get( b * 3 + 2 );
+
+		double xC = positions.get( c * 3 );
+		double yC = positions.get( c * 3 + 1 );
+		double zC = positions.get( c * 3 + 2 );
+
+		double uA = uvs.get( a * 2 );
+		double vA = uvs.get( a * 2 + 1 );
+
+		double uB = uvs.get( b * 2 );
+		double vB = uvs.get( b * 2 + 1 );
+
+		double uC = uvs.get( c * 2 );
+		double vC = uvs.get( c * 2 + 1 );
+
+		double x1 = xB - xA;
+		double x2 = xC - xA;
+
+		double y1 = yB - yA;
+		double y2 = yC - yA;
+
+		double z1 = zB - zA;
+		double z2 = zC - zA;
+
+		double s1 = uB - uA;
+		double s2 = uC - uA;
+
+		double t1 = vB - vA;
+		double t2 = vC - vA;
+
+		double r = 1.0 / ( s1 * t2 - s2 * t1 );
+
+		Vector3 sdir = new Vector3(
+				( t2 * x1 - t1 * x2 ) * r,
+				( t2 * y1 - t1 * y2 ) * r,
+				( t2 * z1 - t1 * z2 ) * r);
+		
+		Vector3 tdir = new Vector3(
+				( s1 * x2 - s2 * x1 ) * r,
+				( s1 * y2 - s2 * y1 ) * r,
+				( s1 * z2 - s2 * z1 ) * r);
+
+		tan1.get( a ).add( sdir );
+		tan1.get( b ).add( sdir );
+		tan1.get( c ).add( sdir );
+
+		tan2.get( a ).add( tdir );
+		tan2.get( b ).add( tdir );
+		tan2.get( c ).add( tdir );
+	}
+	
+	private void handleVertex( List<Vector3> tan1, List<Vector3> tan2, int v ) 
+	{
+		Float32Array normals = getWebGlNormalArray();
+		Float32Array tangents = getWebGlTangentArray();
+		
+		Vector3 n = new Vector3(
+				normals.get( v * 3 ),
+				normals.get( v * 3 + 1 ),
+				normals.get( v * 3 + 2 ));
+		
+		Vector3 n2 = n.clone();
+
+		Vector3 t = tan1.get( v );
+
+		// Gram-Schmidt orthogonalize
+
+		Vector3 tmp = t.clone();
+		tmp.sub( n.multiply( n.dot( t ) ) ).normalize();
+
+		// Calculate handedness
+
+		Vector3 tmp2 = new Vector3();
+		tmp2.cross( n2, t );
+		double test = tmp2.dot( tan2.get( v ) );
+		double w = ( test < 0.0 ) ? -1.0 : 1.0;
+
+		tangents.set( v * 4, tmp.getX());
+		tangents.set( v * 4 + 1, tmp.getY());
+		tangents.set( v * 4 + 2, tmp.getZ());
+		tangents.set( v * 4 + 3, w);
 	}
 }
