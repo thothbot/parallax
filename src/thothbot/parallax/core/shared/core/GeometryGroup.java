@@ -25,29 +25,27 @@ package thothbot.parallax.core.shared.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 
 public class GeometryGroup extends GeometryBuffer
 {
 	public List<Integer> faces3;
 	public List<Integer> faces4;
-	
+
 	public int materialIndex = -1;
 
 	public int vertices;
-	
-	public List<Float32Array> __morphTargetsArrays;	
+
+	public List<Float32Array> __morphTargetsArrays;
 	public List<Float32Array> __morphNormalsArrays;
 
 	private Float32Array webGlSkinIndexArray;
 	private Float32Array webGlSkinWeightArray;
-							
+
 	public GeometryGroup(int materialIndex, int numMorphTargets, int numMorphNormals) 
 	{
 		super();
-		
+
 		this.faces3 = new ArrayList<Integer>();
 		this.faces4 = new ArrayList<Integer>();
 		this.materialIndex = materialIndex;
@@ -55,7 +53,7 @@ public class GeometryGroup extends GeometryBuffer
 		this.numMorphTargets = numMorphTargets;
 		this.numMorphNormals = numMorphNormals;
 	}
-		
+
 	public Float32Array getWebGlSkinIndexArray() 
 	{
 		return webGlSkinIndexArray;

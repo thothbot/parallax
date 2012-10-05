@@ -292,16 +292,18 @@ public final class Scene extends Object3D
 			{
 				Mesh mesh = (Mesh)object;
 				Geometry geometry = mesh.getGeometry();
-				Log.debug("addObject() add Mesh buffer");
-				//			if(geometry instanceof BufferGeometry) 
-				//			{
-				//				addBuffer( scene.__webglObjects, geometry, object );
-				//			}
-				//			else {				
-				for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values())
-					addBuffer( geometryGroup, (GeometryObject)object );
-				//			}
 
+//				if(geometry instanceof GeometryBuffer) 
+//				{
+//					addBuffer( geometry, object );
+//				}
+//				else 
+//				{				
+					for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values())
+					{
+						addBuffer( geometryGroup, (GeometryObject)object );
+					}
+//				}
 			} 
 			else if ( object instanceof Ribbon ||
 					object instanceof Line ||

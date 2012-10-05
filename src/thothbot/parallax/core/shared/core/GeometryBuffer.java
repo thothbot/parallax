@@ -26,9 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
+import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int16Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
 
@@ -45,6 +48,9 @@ public class GeometryBuffer
 	public static int Counter = 0;
 	private int id = 0;
 	
+	// the intermediate typearrays will be deleted when set to false
+	private boolean isDynamic = true; 
+	
 	// Bounding box.		
 	private BoundingBox boundingBox = null;
 
@@ -56,6 +62,10 @@ public class GeometryBuffer
 
 	private boolean isNormalsNeedUpdate;
 	private boolean isTangentsNeedUpdate;
+	private boolean isElementsNeedUpdate;
+	private boolean isVerticesNeedUpdate;
+	private boolean isUvsNeedUpdate;
+	private boolean isColorsNeedUpdate;
 
 	public List<GeometryBuffer.Offset> offsets;
 	
@@ -122,6 +132,18 @@ public class GeometryBuffer
 		return id;
 	}
 	
+	public boolean isDynamic() {
+		return this.isDynamic;
+	}
+	
+	/**
+	 * Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
+	 * Unless set to true internal typed arrays corresponding to buffers will be deleted once sent to GPU.
+	 */
+	public void setDynamic(boolean dynamic) {
+		this.isDynamic = dynamic;
+	}
+	
 	/**
 	 * Gets True if geometry has tangents. {@link Geometry#computeTangents()} 
 	 */
@@ -131,6 +153,14 @@ public class GeometryBuffer
 	
 	public void setHasTangents(Boolean hasTangents) {
 		this.hasTangents = hasTangents;
+	}
+	
+	public boolean isElementsNeedUpdate() {
+		return isElementsNeedUpdate;
+	}
+
+	public void setElementsNeedUpdate(boolean isElementsNeedUpdate) {
+		this.isElementsNeedUpdate = isElementsNeedUpdate;
 	}
 	
 	public boolean isNormalsNeedUpdate() {
@@ -147,6 +177,30 @@ public class GeometryBuffer
 
 	public void setTangentsNeedUpdate(boolean isTangentsNeedUpdate) {
 		this.isTangentsNeedUpdate = isTangentsNeedUpdate;
+	}
+	
+	public boolean isVerticesNeedUpdate() {
+		return isVerticesNeedUpdate;
+	}
+
+	public void setVerticesNeedUpdate(boolean isVerticesNeedUpdate) {
+		this.isVerticesNeedUpdate = isVerticesNeedUpdate;
+	}
+	
+	public boolean isUvsNeedUpdate() {
+		return isUvsNeedUpdate;
+	}
+
+	public void setUvsNeedUpdate(boolean isUvsNeedUpdate) {
+		this.isUvsNeedUpdate = isUvsNeedUpdate;
+	}
+
+	public boolean isColorsNeedUpdate() {
+		return isColorsNeedUpdate;
+	}
+
+	public void setColorsNeedUpdate(boolean isColorsNeedUpdate) {
+		this.isColorsNeedUpdate = isColorsNeedUpdate;
 	}
 
 	public void setBoundingSphere(BoundingSphere boundingSphere) 
@@ -657,4 +711,56 @@ public class GeometryBuffer
 		tangents.set( v * 4 + 2, tmp.getZ());
 		tangents.set( v * 4 + 3, w);
 	}
+	
+	public void setDirectBuffers ( WebGLRenderingContext gl, BufferUsage hint, boolean dispose ) 
+	{
+		Int16Array index = getWebGlIndexArray();
+		Float32Array position = getWebGlPositionArray();
+		Float32Array normal = getWebGlNormalArray();
+		Float32Array uv = getWebGlUvArray();
+		Float32Array color = getWebGlColorArray();
+		Float32Array tangent = getWebGlTangentArray();
+
+		if ( isElementsNeedUpdate() && index != null ) 
+		{
+			gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, this.__webglIndexBuffer );
+			gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, index, hint );
+		}
+
+		if ( isVerticesNeedUpdate() && position != null ) 
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, this.__webglPositionBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, position, hint );
+		}
+
+		if ( isNormalsNeedUpdate() && normal != null ) 
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, this.__webglNormalBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, normal, hint );
+		}
+
+		if ( isUvsNeedUpdate() && uv != null ) 
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, this.__webglUVBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, uv, hint );
+		}
+
+		if ( isColorsNeedUpdate() && color != null ) 
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, this.__webglColorBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, color, hint );
+		}
+
+		if ( isTangentsNeedUpdate() && tangent != null ) 
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, this.__webglTangentBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, tangent, hint );
+		}
+
+		if ( dispose ) 
+		{
+			dispose();
+		}
+	}
+
 }

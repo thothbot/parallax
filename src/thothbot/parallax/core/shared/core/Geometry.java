@@ -113,20 +113,13 @@ public class Geometry extends GeometryBuffer
 
 	private List<Bone> bones;
 
-	// the intermediate typearrays will be deleted when set to false
-	private boolean isDynamic = true; 
-
 	public List<List<Integer>> sortArray;
 	
-	private boolean isVerticesNeedUpdate;
 	private boolean isMorphTargetsNeedUpdate;
-	private boolean isUvsNeedUpdate;
-	private boolean isElementsNeedUpdate;
-	private boolean isColorsNeedUpdate;
 	
 	private Map<String, GeometryGroup> geometryGroups;
 	private List<GeometryGroup> geometryGroupsList;
-	
+		
 	private Object3D debug;
 	
 	public Geometry() {
@@ -151,10 +144,6 @@ public class Geometry extends GeometryBuffer
 		this.debug = new Object3D();
 	}
 	
-	public Object3D getDebug() {
-		return this.debug;
-	}
-	
 	public Map<String, GeometryGroup> getGeometryGroups() {
 		return this.geometryGroups;
 	}
@@ -169,6 +158,10 @@ public class Geometry extends GeometryBuffer
 	
 	public void setGeometryGroupsList(List<GeometryGroup> geometryGroupsList) {
 		this.geometryGroupsList = geometryGroupsList;
+	}
+	
+	public Object3D getDebug() {
+		return this.debug;
 	}
 	
 	/**
@@ -200,26 +193,6 @@ public class Geometry extends GeometryBuffer
 	public void setSkinVerticesB(List<Vector3>  skinVerticesB) {
 		this.skinVerticesB = skinVerticesB;
 	}
-	
-	public boolean isDynamic() {
-		return this.isDynamic;
-	}
-	
-	/**
-	 * Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
-	 * Unless set to true internal typed arrays corresponding to buffers will be deleted once sent to GPU.
-	 */
-	public void setDynamic(boolean dynamic) {
-		this.isDynamic = dynamic;
-	}
-
-	public boolean isVerticesNeedUpdate() {
-		return isVerticesNeedUpdate;
-	}
-
-	public void setVerticesNeedUpdate(boolean isVerticesNeedUpdate) {
-		this.isVerticesNeedUpdate = isVerticesNeedUpdate;
-	}
 
 	public boolean isMorphTargetsNeedUpdate() {
 		return isMorphTargetsNeedUpdate;
@@ -227,30 +200,6 @@ public class Geometry extends GeometryBuffer
 
 	public void setMorphTargetsNeedUpdate(boolean isMorphTargetsNeedUpdate) {
 		this.isMorphTargetsNeedUpdate = isMorphTargetsNeedUpdate;
-	}
-
-	public boolean isUvsNeedUpdate() {
-		return isUvsNeedUpdate;
-	}
-
-	public void setUvsNeedUpdate(boolean isUvsNeedUpdate) {
-		this.isUvsNeedUpdate = isUvsNeedUpdate;
-	}
-
-	public boolean isElementsNeedUpdate() {
-		return isElementsNeedUpdate;
-	}
-
-	public void setElementsNeedUpdate(boolean isElementsNeedUpdate) {
-		this.isElementsNeedUpdate = isElementsNeedUpdate;
-	}
-
-	public boolean isColorsNeedUpdate() {
-		return isColorsNeedUpdate;
-	}
-
-	public void setColorsNeedUpdate(boolean isColorsNeedUpdate) {
-		this.isColorsNeedUpdate = isColorsNeedUpdate;
 	}
 
 	public void setFaceUvs(List<List<UV>> faceUvs) {

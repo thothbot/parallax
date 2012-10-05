@@ -199,7 +199,7 @@ public class Mesh extends GeometryObject
 
 		if(geometry instanceof Geometry) 
 		{
-			Log.debug("addObject() geometry.geometryGroups is null: " + ( this.getGeometry().getGeometryGroups() == null ));
+			Log.debug("addObject() geometry.geometryGroups is null: " + ( geometry.getGeometryGroups() == null ));
 			if ( geometry.getGeometryGroups() == null )
 				sortFacesByMaterial( this.getGeometry() );
 
@@ -374,34 +374,30 @@ public class Mesh extends GeometryObject
 				geometryGroup.__webglMorphNormalsBuffers.add(gl.createBuffer());
 			}
 		}
-
 	}
 
 	public void setBuffer(WebGLRenderer renderer) 
 	{
 		WebGLRenderingContext gl = renderer.getGL();
-		// TODO: Fix BufferGeometry
-//		if ( geometry.getClass() == BufferGeometry.class ) {
-//
-//			/*
-//			if ( geometry.verticesNeedUpdate || geometry.elementsNeedUpdate ||
-//				 geometry.uvsNeedUpdate || geometry.normalsNeedUpdate ||
-//				 geometry.colorsNeedUpdate  ) {
-//
-//				// TODO
-//				// set buffers from typed arrays
-//
-//			}
-//			*/
-//
-//			geometry.verticesNeedUpdate = false;
-//			geometry.elementsNeedUpdate = false;
-//			geometry.uvsNeedUpdate = false;
-//			geometry.normalsNeedUpdate = false;
-//			geometry.colorsNeedUpdate = false;
-//
-//		} else {
 
+//		if ( geometry.getClass() == GeometryBuffer.class ) 
+//		{
+//			if ( geometry.isVerticesNeedUpdate() || geometry.isElementsNeedUpdate() ||
+//				 geometry.isUvsNeedUpdate() || geometry.isNormalsNeedUpdate() ||
+//				 geometry.isColorsNeedUpdate() || geometry.isTangentsNeedUpdate() ) 
+//			{
+//				((GeometryBuffer)geometry).setDirectBuffers( renderer.getGL(), BufferUsage.DYNAMIC_DRAW, !geometry.isDynamic() );
+//			}
+//
+//			geometry.setVerticesNeedUpdate(false);
+//			geometry.setElementsNeedUpdate(false);
+//			geometry.setUvsNeedUpdate(false);
+//			geometry.setNormalsNeedUpdate(false);
+//			geometry.setColorsNeedUpdate(false);
+//			geometry.setTangentsNeedUpdate(false);
+//		} 
+//		else 
+//		{
 			// check all geometry groups
 			for( int i = 0, il = geometry.getGeometryGroupsList().size(); i < il; i ++ ) 
 			{
@@ -431,7 +427,6 @@ public class Mesh extends GeometryObject
 			geometry.setColorsNeedUpdate(false);
 			geometry.setTangentsNeedUpdate(false);
 //		}
-
 	}
 
 	// setMeshBuffers
@@ -1922,7 +1917,7 @@ public class Mesh extends GeometryObject
 	@Override
 	public void deleteBuffers(WebGLRenderer renderer) 
 	{
-		for ( GeometryGroup geometryGroup : getGeometry().getGeometryGroups().values() )
+		for ( GeometryGroup geometryGroup : geometry.getGeometryGroups().values() )
 		{
 			renderer.getGL().deleteBuffer( geometryGroup.__webglVertexBuffer );
 			renderer.getGL().deleteBuffer( geometryGroup.__webglNormalBuffer );
@@ -1993,7 +1988,7 @@ public class Mesh extends GeometryObject
 
 			String groupHash = materialHash + '_' + hash_map.get(materialHash);
 			
-			if(!geometry.getGeometryGroups().containsKey(groupHash))
+			if( ! geometry.getGeometryGroups().containsKey(groupHash))
 				geometry.getGeometryGroups().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
 
 			int vertices = face.getClass() == Face3.class ? 3 : 4;
@@ -2003,7 +1998,7 @@ public class Mesh extends GeometryObject
 				hash_map.put(materialHash, hash_map.get(materialHash) + 1);
 				groupHash = materialHash + '_' + hash_map.get( materialHash );
 
-				if (!geometry.getGeometryGroups().containsKey(groupHash))
+				if ( ! geometry.getGeometryGroups().containsKey(groupHash))
 					geometry.getGeometryGroups().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
 			}
 
