@@ -36,10 +36,16 @@ import thothbot.parallax.core.shared.materials.Material;
 public abstract class GeometryObject extends Object3D implements DimensionalObject
 {
 	protected Geometry geometry;
+	protected GeometryBuffer geometryBuffer;
 	protected Material material;
 	protected Material customDepthMaterial;
 	
 	private double cache_oldLineWidth = -1;
+
+	public GeometryBuffer getGeometryBuffer()
+	{
+		return this.geometryBuffer;
+	}
 
 	public Geometry getGeometry()
 	{

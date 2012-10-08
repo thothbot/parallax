@@ -89,7 +89,9 @@ public class Frustum
 	{
 		Matrix4 matrix = object.getMatrixWorld();
 		Float32Array me = matrix.getArray();
-		double radius = -object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
+		double radius = object.getGeometryBuffer() != null ?   
+				-object.getGeometryBuffer().getBoundingSphere().radius * matrix.getMaxScaleOnAxis() :
+				-object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
 
 		for (int i = 0; i < 6; i++) 
 		{

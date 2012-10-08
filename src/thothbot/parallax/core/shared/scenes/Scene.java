@@ -292,17 +292,17 @@ public final class Scene extends Object3D
 				Mesh mesh = (Mesh)object;
 				Geometry geometry = mesh.getGeometry();
 
-//				if(geometry instanceof GeometryBuffer) 
-//				{
-//					addBuffer( geometry, object );
-//				}
-//				else 
-//				{				
+				if(mesh.getGeometryBuffer() != null) 
+				{
+					addBuffer( mesh.getGeometryBuffer(), (GeometryObject)object );
+				}
+				else 
+				{				
 					for ( GeometryGroup geometryGroup : geometry.getGeometryGroups())
 					{
 						addBuffer( geometryGroup, (GeometryObject)object );
 					}
-//				}
+				}
 			} 
 			else if ( object instanceof Ribbon ||
 					object instanceof Line ||

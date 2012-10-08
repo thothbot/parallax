@@ -82,14 +82,17 @@ public class Mesh extends GeometryObject
 		this(geometry, Mesh.defaultMaterial);
 	}
 	
+	public Mesh(GeometryBuffer geometry, Material material) 
+	{
+		this(material);
+		this.geometryBuffer = geometry;
+	}
+	
 	public Mesh(Geometry geometry, Material material) 
 	{
-		super();
-
+		this(material);
 		this.geometry = geometry;
-		this.material = material;
-		this.overdraw = false;
-
+		
 		if (this.geometry != null) 
 		{
 			// calc bound radius
@@ -116,7 +119,14 @@ public class Mesh extends GeometryObject
 			}
 		}
 	}
-
+	
+	protected Mesh(Material material)
+	{
+		super();
+		
+		this.material = material;
+	}
+	
 	public boolean getOverdraw()
 	{
 		return this.overdraw;
@@ -194,7 +204,12 @@ public class Mesh extends GeometryObject
 	
 		Geometry geometry = this.getGeometry();
 
-		if(geometry instanceof Geometry) 
+		if(geometryBuffer != null)
+		{
+			createBuffers(renderer, geometryBuffer );
+			initDirectBuffers(renderer.getGL(), geometryBuffer );
+		}
+		else if(geometry instanceof Geometry) 
 		{
 			Log.debug("addObject() geometry.geometryGroups is null: " + ( geometry.getGeometryGroups() == null ));
 			if ( geometry.getGeometryGroups() == null )
@@ -220,8 +235,48 @@ public class Mesh extends GeometryObject
 				}
 			}
 		}
+			
 	}
 
+	private void initDirectBuffers(WebGLRenderingContext gl, GeometryBuffer geometry)
+	{
+		if(geometry.getWebGlIndexArray() != null)
+		{
+			gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometry.__webglIndexBuffer );
+			gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, geometry.getWebGlIndexArray(), BufferUsage.STATIC_DRAW );
+		}
+		if(geometry.getWebGlPositionArray() != null)
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglPositionBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlPositionArray(), BufferUsage.STATIC_DRAW );
+		}
+		if(geometry.getWebGlColorArray() != null)
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlColorArray(), BufferUsage.STATIC_DRAW );
+		}
+		if(geometry.getWebGlVertexArray() != null)
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlVertexArray(), BufferUsage.STATIC_DRAW );
+		}
+		if(geometry.getWebGlNormalArray() != null)
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglNormalBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlNormalArray(), BufferUsage.STATIC_DRAW );
+		}
+		if(geometry.getWebGlTangentArray() != null)
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglTangentBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlTangentArray(), BufferUsage.STATIC_DRAW );
+		}
+		if(geometry.getWebGlUvArray() != null)
+		{
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglUVBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlUvArray(), BufferUsage.STATIC_DRAW );
+		}
+	}
+	
 	// initMeshBuffers
 	private void initBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup)
 	{
@@ -339,10 +394,11 @@ public class Mesh extends GeometryObject
 	}
 
 	// createMeshBuffers
-	private void createBuffers(WebGLRenderer renderer, GeometryGroup geometryGroup)
+	private void createBuffers(WebGLRenderer renderer, GeometryBuffer geometryGroup)
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		
+		geometryGroup.__webglPositionBuffer = gl.createBuffer();
 		geometryGroup.__webglVertexBuffer = gl.createBuffer();
 		geometryGroup.__webglNormalBuffer = gl.createBuffer();
 		geometryGroup.__webglTangentBuffer = gl.createBuffer();
@@ -353,6 +409,7 @@ public class Mesh extends GeometryObject
 		geometryGroup.__webglSkinIndicesBuffer = gl.createBuffer();
 		geometryGroup.__webglSkinWeightsBuffer = gl.createBuffer();
 
+		geometryGroup.__webglIndexBuffer = gl.createBuffer();
 		geometryGroup.__webglFaceBuffer = gl.createBuffer();
 		geometryGroup.__webglLineBuffer = gl.createBuffer();
 
@@ -378,24 +435,24 @@ public class Mesh extends GeometryObject
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 
-//		if ( geometry.getClass() == GeometryBuffer.class ) 
-//		{
-//			if ( geometry.isVerticesNeedUpdate() || geometry.isElementsNeedUpdate() ||
-//				 geometry.isUvsNeedUpdate() || geometry.isNormalsNeedUpdate() ||
-//				 geometry.isColorsNeedUpdate() || geometry.isTangentsNeedUpdate() ) 
-//			{
-//				((GeometryBuffer)geometry).setDirectBuffers( renderer.getGL(), BufferUsage.DYNAMIC_DRAW, !geometry.isDynamic() );
-//			}
-//
-//			geometry.setVerticesNeedUpdate(false);
-//			geometry.setElementsNeedUpdate(false);
-//			geometry.setUvsNeedUpdate(false);
-//			geometry.setNormalsNeedUpdate(false);
-//			geometry.setColorsNeedUpdate(false);
-//			geometry.setTangentsNeedUpdate(false);
-//		} 
-//		else 
-//		{
+		if ( geometryBuffer != null ) 
+		{
+			if ( geometryBuffer.isVerticesNeedUpdate() || geometryBuffer.isElementsNeedUpdate() ||
+				geometryBuffer.isUvsNeedUpdate() || geometryBuffer.isNormalsNeedUpdate() ||
+				geometryBuffer.isColorsNeedUpdate() || geometryBuffer.isTangentsNeedUpdate() ) 
+			{
+				((GeometryBuffer)geometryBuffer).setDirectBuffers( renderer.getGL(), BufferUsage.DYNAMIC_DRAW, !geometryBuffer.isDynamic() );
+			}
+
+			geometryBuffer.setVerticesNeedUpdate(false);
+			geometryBuffer.setElementsNeedUpdate(false);
+			geometryBuffer.setUvsNeedUpdate(false);
+			geometryBuffer.setNormalsNeedUpdate(false);
+			geometryBuffer.setColorsNeedUpdate(false);
+			geometryBuffer.setTangentsNeedUpdate(false);
+		} 
+		else 
+		{
 			// check all geometry groups
 
 			for( GeometryGroup geometryGroup : geometry.getGeometryGroups() ) 
@@ -424,7 +481,7 @@ public class Mesh extends GeometryObject
 			geometry.setNormalsNeedUpdate(false);
 			geometry.setColorsNeedUpdate(false);
 			geometry.setTangentsNeedUpdate(false);
-//		}
+		}
 	}
 
 	// setMeshBuffers

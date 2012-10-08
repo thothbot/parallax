@@ -374,15 +374,15 @@ public final class ShadowMap extends Plugin
 						material = this.depthMaterial;
 					}
 
-//					if ( buffer instanceof BufferGeometry ) 
-//					{
-//						getRenderer().renderBufferDirect( shadowCamera, scene.__lights, fog, material, buffer, object );
-//
-//					} 
-//					else 
-//					{
+					if ( buffer.getClass() == GeometryBuffer.class ) 
+					{
+						getRenderer().renderBufferDirect( getScene(), shadowCamera, material, buffer, object );
+
+					} 
+					else 
+					{
 						getRenderer().renderBuffer( getScene(), shadowCamera, material, buffer, object );
-//					}
+					}
 				}
 			}
 		}

@@ -1260,7 +1260,7 @@ public class WebGLRenderer
 					int positionSize = position.getLength();
 
 					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglPositionBuffer );
-					gl.vertexAttribPointer( attributes.get("position"), positionSize, DataType.FLOAT, false, 0, startIndex * positionSize * 4 ); // 4 bytes per Float32
+					gl.vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, startIndex * 3 * 4 ); // 4 bytes per Float32
 
 					// normals
 
@@ -1271,7 +1271,7 @@ public class WebGLRenderer
 						int normalSize = normal.getLength();
 
 						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglNormalBuffer );
-						gl.vertexAttribPointer( attributes.get("normal"), normalSize, DataType.FLOAT, false, 0, startIndex * normalSize * 4 );
+						gl.vertexAttribPointer( attributes.get("normal"), 3, DataType.FLOAT, false, 0, startIndex * 3 * 4 );
 					}
 
 					// uvs
@@ -1285,7 +1285,7 @@ public class WebGLRenderer
 							int uvSize = uv.getLength();
 
 							gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglUVBuffer );
-							gl.vertexAttribPointer( attributes.get("uv"), uvSize, DataType.FLOAT, false, 0, startIndex * uvSize * 4 );
+							gl.vertexAttribPointer( attributes.get("uv"), 3, DataType.FLOAT, false, 0, startIndex * 3 * 4 );
 
 							gl.enableVertexAttribArray( attributes.get("uv") );
 						} 
@@ -1305,7 +1305,7 @@ public class WebGLRenderer
 						int colorSize = color.getLength();
 
 						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglColorBuffer );
-						gl.vertexAttribPointer( attributes.get("color"), colorSize, DataType.FLOAT, false, 0, startIndex * colorSize * 4 );
+						gl.vertexAttribPointer( attributes.get("color"), 3, DataType.FLOAT, false, 0, startIndex * 3 * 4 );
 					}
 
 					// tangents
@@ -1317,7 +1317,7 @@ public class WebGLRenderer
 						int tangentSize = tangent.getLength();
 
 						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglTangentBuffer );
-						gl.vertexAttribPointer( attributes.get("tangent"), tangentSize, DataType.FLOAT, false, 0, startIndex * tangentSize * 4 );
+						gl.vertexAttribPointer( attributes.get("tangent"), 3, DataType.FLOAT, false, 0, startIndex * 3 * 4 );
 					}
 
 					// indices
@@ -1328,7 +1328,6 @@ public class WebGLRenderer
 				}
 
 				// render indexed triangles
-
 				gl.drawElements( BeginMode.TRIANGLES, offsets.get( i ).count, DrawElementsType.UNSIGNED_SHORT, offsets.get( i ).start * 2 ); // 2 bytes per Uint16
 
 				getInfo().getRender().calls ++;
