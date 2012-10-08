@@ -358,7 +358,6 @@ public class Mesh extends GeometryObject
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		
-		geometryGroup.__webglPositionBuffer = gl.createBuffer();
 		geometryGroup.__webglVertexBuffer = gl.createBuffer();
 		geometryGroup.__webglNormalBuffer = gl.createBuffer();
 		geometryGroup.__webglTangentBuffer = gl.createBuffer();

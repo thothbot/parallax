@@ -74,7 +74,6 @@ public class GeometryBuffer implements Geometric
 	private Uint16Array webGlFaceArray;
 	private Uint16Array webGlLineArray;
 	
-	private Float32Array webGlPositionArray;
 	private Float32Array webGlColorArray;
 	private Float32Array webGlVertexArray;
 	private Float32Array webGlNormalArray;
@@ -86,7 +85,6 @@ public class GeometryBuffer implements Geometric
 	public WebGLBuffer __webglFaceBuffer;
 	public WebGLBuffer __webglLineBuffer;
 	
-	public WebGLBuffer __webglPositionBuffer;
 	public WebGLBuffer __webglColorBuffer;
 	public WebGLBuffer __webglVertexBuffer;
 	public WebGLBuffer __webglNormalBuffer;
@@ -236,16 +234,6 @@ public class GeometryBuffer implements Geometric
 	{
 		return this.webGlVertexArray;
 	}
-
-	public Float32Array getWebGlPositionArray()
-	{
-		return this.webGlPositionArray;
-	}
-	
-	public void setWebGlPositionArray(Float32Array a)
-	{
-		this.webGlPositionArray = a;
-	}
 	
 	public Float32Array getWebGlColorArray()
 	{
@@ -340,7 +328,7 @@ public class GeometryBuffer implements Geometric
 		setWebGlFaceArray( null );
 		setWebGlLineArray( null );
 		
-		setWebGlPositionArray( null );
+
 		setWebGlColorArray ( null );
 		setWebGlVertexArray( null );
 
@@ -362,7 +350,7 @@ public class GeometryBuffer implements Geometric
 		
 		BoundingBox boundingBox = getBoundingBox();
 
-		Float32Array positions = getWebGlPositionArray();
+		Float32Array positions = getWebGlVertexArray();
 
 		if ( positions != null) 
 		{
@@ -418,7 +406,7 @@ public class GeometryBuffer implements Geometric
 	{
 		if ( getBoundingSphere() == null ) 
 			setBoundingSphere( new BoundingSphere(0) );
-		Float32Array positions = getWebGlPositionArray();
+		Float32Array positions = getWebGlVertexArray();
 
 		if ( positions != null) 
 		{
@@ -442,9 +430,9 @@ public class GeometryBuffer implements Geometric
 	@Override
 	public void computeVertexNormals() 
 	{
-		if ( getWebGlPositionArray() != null && getWebGlIndexArray() != null ) 
+		if ( getWebGlVertexArray() != null && getWebGlIndexArray() != null ) 
 		{
-			int nVertexElements = getWebGlPositionArray().getLength();
+			int nVertexElements = getWebGlVertexArray().getLength();
 
 			if ( getWebGlNormalArray() == null ) 
 			{
@@ -463,7 +451,7 @@ public class GeometryBuffer implements Geometric
 			List<GeometryBuffer.Offset> offsets = this.offsets;
 
 			Int16Array indices = getWebGlIndexArray();
-			Float32Array positions = getWebGlPositionArray();
+			Float32Array positions = getWebGlVertexArray();
 			Float32Array normals = getWebGlNormalArray();
 
 			Vector3 pA = new Vector3();
@@ -547,7 +535,7 @@ public class GeometryBuffer implements Geometric
 	public void computeTangents() 
 	{
 		if ( getWebGlIndexArray() == null ||
-			 getWebGlPositionArray() == null ||
+				getWebGlVertexArray() == null ||
 			 getWebGlNormalArray() == null ||
 			 getWebGlUvArray() == null) 
 		{
@@ -556,7 +544,7 @@ public class GeometryBuffer implements Geometric
 		}
 
 		Int16Array indices = getWebGlIndexArray();
-		Float32Array positions = getWebGlPositionArray();
+		Float32Array positions = getWebGlVertexArray();
 		Float32Array normals = getWebGlNormalArray();
 		Float32Array uvs = getWebGlUvArray();
 
@@ -623,7 +611,7 @@ public class GeometryBuffer implements Geometric
 	
 	private void handleTriangle( List<Vector3> tan1, List<Vector3> tan2, int a, int b, int c ) 
 	{
-		Float32Array positions = getWebGlPositionArray();
+		Float32Array positions = getWebGlVertexArray();
 		Float32Array uvs = getWebGlUvArray();
 		
 		double xA = positions.get( a * 3 );
@@ -718,7 +706,7 @@ public class GeometryBuffer implements Geometric
 	public void setDirectBuffers ( WebGLRenderingContext gl, BufferUsage hint, boolean dispose ) 
 	{
 		Int16Array index = getWebGlIndexArray();
-		Float32Array position = getWebGlPositionArray();
+		Float32Array position = getWebGlVertexArray();
 		Float32Array normal = getWebGlNormalArray();
 		Float32Array uv = getWebGlUvArray();
 		Float32Array color = getWebGlColorArray();
@@ -732,7 +720,7 @@ public class GeometryBuffer implements Geometric
 
 		if ( isVerticesNeedUpdate() && position != null ) 
 		{
-			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, this.__webglPositionBuffer );
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, this.__webglVertexBuffer );
 			gl.bufferData( BufferTarget.ARRAY_BUFFER, position, hint );
 		}
 

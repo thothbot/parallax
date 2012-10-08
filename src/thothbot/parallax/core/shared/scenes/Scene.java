@@ -304,9 +304,19 @@ public final class Scene extends Object3D
 					}
 				}
 			} 
+			if ( object instanceof ParticleSystem ) 
+			{
+				if(((GeometryObject)object).getGeometryBuffer() != null) 
+				{
+					addBuffer( ((GeometryObject)object).getGeometryBuffer(), (GeometryObject)object );
+				}
+				else
+				{
+					addBuffer( ((GeometryObject)object).getGeometry(), (GeometryObject)object );
+				}
+			}
 			else if ( object instanceof Ribbon ||
-					object instanceof Line ||
-					object instanceof ParticleSystem 
+					object instanceof Line 
 			) {
 
 				Geometry geometry = ((GeometryObject)object).getGeometry();

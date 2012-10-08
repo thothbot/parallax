@@ -1256,10 +1256,10 @@ public class WebGLRenderer
 				{
 					// vertices
 
-					Float32Array position = geometryBuffer.getWebGlPositionArray();
+					Float32Array position = geometryBuffer.getWebGlVertexArray();
 					int positionSize = position.getLength();
 
-					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglPositionBuffer );
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglVertexBuffer );
 					gl.vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, startIndex * 3 * 4 ); // 4 bytes per Float32
 
 					// normals
@@ -1343,11 +1343,11 @@ public class WebGLRenderer
 			{
 				// vertices
 
-				Float32Array position = geometryBuffer.getWebGlPositionArray();
+				Float32Array position = geometryBuffer.getWebGlVertexArray();
 				int positionSize = position.getLength();
 
-				gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglPositionBuffer );
-				gl.vertexAttribPointer( attributes.get("position"), positionSize, DataType.FLOAT, false, 0, 0 );
+				gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglVertexBuffer );
+				gl.vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, 0 );
 
 				// colors
 
@@ -1358,7 +1358,7 @@ public class WebGLRenderer
 					int colorSize = color.getLength();
 
 					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglColorBuffer );
-					gl.vertexAttribPointer( attributes.get("color"), colorSize, DataType.FLOAT, false, 0, 0 );
+					gl.vertexAttribPointer( attributes.get("color"), 3, DataType.FLOAT, false, 0, 0 );
 				}
 
 				// render particles

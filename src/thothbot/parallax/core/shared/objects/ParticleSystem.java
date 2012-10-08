@@ -72,14 +72,19 @@ public class ParticleSystem extends GeometryObject
 	{
 		this(geometry, defaultMaterial);
 	}
+	
+	public ParticleSystem(GeometryBuffer geometry, Material material) 
+	{
+		this(material);
+		this.geometryBuffer = geometry;
+	}
 
 	public ParticleSystem(Geometry geometry, Material material) 
 	{
-		this.geometry = geometry;
-		this.material = material;
+		this(material);
 		
-		this.projScreenMatrixPS = new Matrix4();
-
+		this.geometry = geometry;
+	
 		if ( this.geometry != null ) 
 		{
 			// calc bound radius
@@ -88,6 +93,13 @@ public class ParticleSystem extends GeometryObject
 
 			this.boundRadius = geometry.getBoundingSphere().radius;
 		}
+	}
+	
+	protected ParticleSystem(Material material)
+	{
+		this.material = material;
+		
+		this.projScreenMatrixPS = new Matrix4();
 	}
 	
 	public void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers)
@@ -105,7 +117,11 @@ public class ParticleSystem extends GeometryObject
 	{
 		Geometry geometry = this.getGeometry();
 
-		if ( geometry.__webglVertexBuffer == null ) 
+		if(geometryBuffer != null)
+		{
+			createBuffers(renderer, geometryBuffer );
+		}
+		else if ( geometry.__webglVertexBuffer == null ) 
 		{
 			createBuffers( renderer, geometry );
 			initBuffers( renderer.getGL(), geometry );
@@ -115,7 +131,7 @@ public class ParticleSystem extends GeometryObject
 		}
 	}
 	
-	private void createBuffers (  WebGLRenderer renderer, Geometry geometry ) 
+	private void createBuffers (  WebGLRenderer renderer, GeometryBuffer geometry ) 
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGLRenderInfo info = renderer.getInfo();
@@ -145,17 +161,31 @@ public class ParticleSystem extends GeometryObject
 		this.material = Material.getBufferMaterial( this, null );
 
 		boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
-		if ( this.geometry.isVerticesNeedUpdate() 
-				|| this.geometry.isColorsNeedUpdate() 
-				|| this.sortParticles 
-				|| areCustomAttributesDirty
-		) {
-			this.setBuffers( renderer, this.geometry, BufferUsage.DYNAMIC_DRAW);
-			this.material.getShader().clearCustomAttributes();
-		}
+		if ( geometryBuffer != null ) 
+		{
+			if(this.geometryBuffer.isVerticesNeedUpdate() 
+					|| this.geometryBuffer.isColorsNeedUpdate() )
+			{
+				((GeometryBuffer)geometryBuffer).setDirectBuffers( renderer.getGL(), BufferUsage.DYNAMIC_DRAW, !geometryBuffer.isDynamic() );
+			}
 
-		this.getGeometry().setVerticesNeedUpdate(false);
-		this.getGeometry().setColorsNeedUpdate(false);
+			this.getGeometryBuffer().setVerticesNeedUpdate(false);
+			this.getGeometryBuffer().setColorsNeedUpdate(false);
+		}
+		else
+		{
+			if ( this.geometry.isVerticesNeedUpdate() 
+					|| this.geometry.isColorsNeedUpdate() 
+					|| this.sortParticles 
+					|| areCustomAttributesDirty
+					) {
+				this.setBuffers( renderer, this.geometry, BufferUsage.DYNAMIC_DRAW);
+				this.material.getShader().clearCustomAttributes();
+			}
+
+			this.getGeometry().setVerticesNeedUpdate(false);
+			this.getGeometry().setColorsNeedUpdate(false);
+		}
 	}
 
 	// setParticleBuffers
