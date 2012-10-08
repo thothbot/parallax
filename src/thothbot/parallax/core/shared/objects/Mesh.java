@@ -207,7 +207,6 @@ public class Mesh extends GeometryObject
 		if(geometryBuffer != null)
 		{
 			createBuffers(renderer, geometryBuffer );
-			initDirectBuffers(renderer.getGL(), geometryBuffer );
 		}
 		else if(geometry instanceof Geometry) 
 		{
@@ -238,45 +237,6 @@ public class Mesh extends GeometryObject
 			
 	}
 
-	private void initDirectBuffers(WebGLRenderingContext gl, GeometryBuffer geometry)
-	{
-		if(geometry.getWebGlIndexArray() != null)
-		{
-			gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometry.__webglIndexBuffer );
-			gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, geometry.getWebGlIndexArray(), BufferUsage.STATIC_DRAW );
-		}
-		if(geometry.getWebGlPositionArray() != null)
-		{
-			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglPositionBuffer );
-			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlPositionArray(), BufferUsage.STATIC_DRAW );
-		}
-		if(geometry.getWebGlColorArray() != null)
-		{
-			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer );
-			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlColorArray(), BufferUsage.STATIC_DRAW );
-		}
-		if(geometry.getWebGlVertexArray() != null)
-		{
-			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer );
-			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlVertexArray(), BufferUsage.STATIC_DRAW );
-		}
-		if(geometry.getWebGlNormalArray() != null)
-		{
-			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglNormalBuffer );
-			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlNormalArray(), BufferUsage.STATIC_DRAW );
-		}
-		if(geometry.getWebGlTangentArray() != null)
-		{
-			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglTangentBuffer );
-			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlTangentArray(), BufferUsage.STATIC_DRAW );
-		}
-		if(geometry.getWebGlUvArray() != null)
-		{
-			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglUVBuffer );
-			gl.bufferData( BufferTarget.ARRAY_BUFFER, geometry.getWebGlUvArray(), BufferUsage.STATIC_DRAW );
-		}
-	}
-	
 	// initMeshBuffers
 	private void initBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup)
 	{
