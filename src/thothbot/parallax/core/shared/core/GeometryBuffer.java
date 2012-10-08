@@ -35,8 +35,7 @@ import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
 
-
-public class GeometryBuffer
+public class GeometryBuffer implements Geometric
 {
 	public static class Offset 
 	{
@@ -351,6 +350,7 @@ public class GeometryBuffer
 		setWebGlUv2Array( null );		
 	}
 	
+	@Override
 	public void computeBoundingBox() 
 	{
 		if ( getBoundingBox() == null) 
@@ -413,6 +413,7 @@ public class GeometryBuffer
 		}
 	}
 	
+	@Override
 	public void computeBoundingSphere() 
 	{
 		if ( getBoundingSphere() == null ) 
@@ -438,6 +439,7 @@ public class GeometryBuffer
 		}
 	}
 	
+	@Override
 	public void computeVertexNormals() 
 	{
 		if ( getWebGlPositionArray() != null && getWebGlIndexArray() != null ) 
@@ -541,6 +543,7 @@ public class GeometryBuffer
 	 * 	Based on < href="http://www.terathon.com/code/tangent.html">terathon.com</a>
 	 * (per vertex tangents)
 	 */
+	@Override
 	public void computeTangents() 
 	{
 		if ( getWebGlIndexArray() == null ||

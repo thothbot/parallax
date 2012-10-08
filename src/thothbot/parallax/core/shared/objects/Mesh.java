@@ -70,8 +70,6 @@ public class Mesh extends GeometryObject
 	private List<Integer> morphTargetForcedOrder;
 	private Map<String, Integer> morphTargetDictionary;
 	public Float32Array __webglMorphTargetInfluences;
-	
-//	private static int _geometryGroupCounter = 0;
 
 	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {
@@ -375,6 +373,7 @@ public class Mesh extends GeometryObject
 		}
 	}
 
+	@Override
 	public void setBuffer(WebGLRenderer renderer) 
 	{
 		WebGLRenderingContext gl = renderer.getGL();
@@ -2014,7 +2013,6 @@ public class Mesh extends GeometryObject
 
 		for ( GeometryGroup g : geometry.getGeometryGroupsCache().values() ) 
 		{
-//			g.setId(Mesh._geometryGroupCounter ++);
 			geometry.getGeometryGroups().add( g );
 		}
 	}

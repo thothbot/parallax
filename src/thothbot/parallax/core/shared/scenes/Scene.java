@@ -60,16 +60,6 @@ public final class Scene extends Object3D
 	private ArrayList<DimensionalObject> objects;
 	
 	/**
-	 * Here are stored lights associated with the Scene
-	 */
-	private ArrayList<Light> lights;
-	
-	/**
-	 * Here is stored fogAbstract
-	 */
-	private FogAbstract fogAbstract;
-	
-	/**
 	 * History list of added DimensionalObject to the Scene.
 	 * This list needed to recalculate buffers from 
 	 * the renderer
@@ -83,8 +73,19 @@ public final class Scene extends Object3D
 	 */
 	private ArrayList<DimensionalObject> objectsRemoved;
 
+	public List<RendererObject> __webglObjects;	
+
 	public Material overrideMaterial;
-	public List<RendererObject> __webglObjects;
+
+	/**
+	 * Here are stored lights associated with the Scene
+	 */
+	private ArrayList<Light> lights;
+	
+	/**
+	 * Here is stored fogAbstract
+	 */
+	private FogAbstract fogAbstract;
 	
 	/**
 	 * This default constructor will create new Scene instance.
@@ -97,6 +98,8 @@ public final class Scene extends Object3D
 		this.lights = new ArrayList<Light>();
 		this.objectsAdded = new ArrayList<DimensionalObject>();
 		this.objectsRemoved = new ArrayList<DimensionalObject>();
+		
+		this.__webglObjects = new ArrayList<RendererObject>();
 	}
 
 	/**
@@ -217,17 +220,13 @@ public final class Scene extends Object3D
 	 */
 	public void initWebGLObjects(WebGLRenderer renderer) 
 	{
-		if ( this.__webglObjects == null ) 
-		{
-			this.__webglObjects = new ArrayList<RendererObject>();
-		}
-
 		Log.debug("initWebGLObjects() objectsAdded=" + getObjectsAdded().size() 
 				+ ", objectsRemoved=" + getObjectsRemoved().size() 
 				+ ", update=" + this.__webglObjects.size());
 		
 		while ( getObjectsAdded().size() > 0 ) 
 		{
+			// object.createBuffer()->initBuffer(), + __webglObject
 			addObject( renderer, (Object3D) getObjectsAdded().get( 0 ) );
 			getObjectsAdded().remove(0);
 		}

@@ -56,7 +56,7 @@ import com.google.gwt.core.client.GWT;
  * @author thothbot
  *
  */
-public class Geometry extends GeometryBuffer
+public class Geometry extends GeometryBuffer implements Geometric
 {
 	public class MorphColor
 	{
@@ -568,6 +568,7 @@ public class Geometry extends GeometryBuffer
 	 * <p>
 	 * Geometry must have vertex {@link UV}s (layer 0 will be used).
 	 */
+	@Override
 	public void computeTangents()
 	{
 		Face3 face;
@@ -637,6 +638,7 @@ public class Geometry extends GeometryBuffer
 	/**
 	 * Computes bounding box of the geometry.
 	 */
+	@Override
 	public void computeBoundingBox() 
 	{
 
@@ -688,6 +690,7 @@ public class Geometry extends GeometryBuffer
 	 * Neither bounding boxes or bounding spheres are computed by default. 
 	 * They need to be explicitly computed, otherwise they are null.
 	 */
+	@Override
 	public void computeBoundingSphere()
 	{	
 		double maxRadiusSq = 0;

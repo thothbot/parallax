@@ -936,11 +936,11 @@ public class WebGLRenderer
 			// opaque pass (front-to-back order)
 			setBlending( Material.BLENDING.NORMAL);
 
-			//                      scene - camera - isMaterialTransparent - useBlending - reverse 
-			renderObjects(          scene, camera, false, false, true);
+			// scene - camera - isMaterialTransparent - useBlending - reverse 
+			renderObjects(scene, camera, false, false, true);
 
 			// transparent pass (back-to-front order)
-			renderObjects(          scene, camera, true, true, false );
+			renderObjects(scene, camera, true, true, false );
 		}
 
 		// custom render plugins (post pass)
@@ -959,7 +959,6 @@ public class WebGLRenderer
 		this.setDepthTest( true );
 		this.setDepthWrite( true );
 
-//		assert(1==2);
 //		 getGL().finish();
 	}
 
