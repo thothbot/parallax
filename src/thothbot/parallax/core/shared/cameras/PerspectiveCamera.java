@@ -27,7 +27,6 @@ package thothbot.parallax.core.shared.cameras;
  * <pre>
  * {@code
  * PerspectiveCamera camera = new PerspectiveCamera( 45, width / height, 1, 1000 );
- * getScene().add( camera );
  * }
  * </pre>
  * @author thothbot
