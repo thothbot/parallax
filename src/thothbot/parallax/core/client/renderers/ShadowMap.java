@@ -305,11 +305,6 @@ public final class ShadowMap extends Plugin
 
 			// update camera matrices and frustum
 
-			if ( shadowCamera._viewMatrixArray == null )
-				shadowCamera._viewMatrixArray = Float32Array.create( 16 );
-			if ( shadowCamera._projectionMatrixArray == null ) 
-				shadowCamera._projectionMatrixArray = Float32Array.create( 16 );
-
 			shadowCamera.getMatrixWorldInverse().flattenToArray( shadowCamera._viewMatrixArray );
 			shadowCamera.getProjectionMatrix().flattenToArray( shadowCamera._projectionMatrixArray );
 

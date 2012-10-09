@@ -835,16 +835,6 @@ public class WebGLRenderer
 			camera.updateMatrixWorld(false);
 		}
 
-		if ( camera._viewMatrixArray == null )
-		{
-			camera._viewMatrixArray = Float32Array.create( 16 );
-		}
-
-		if ( camera._projectionMatrixArray == null )
-		{
-			camera._projectionMatrixArray = Float32Array.create( 16 );
-		}
-
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
 		camera.getMatrixWorldInverse().flattenToArray( camera._viewMatrixArray );
 		camera.getProjectionMatrix().flattenToArray( camera._projectionMatrixArray );

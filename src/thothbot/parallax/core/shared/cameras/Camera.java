@@ -43,15 +43,15 @@ public class Camera extends Object3D
 	public Float32Array _viewMatrixArray;
 	public Float32Array _projectionMatrixArray;
 	
-	private WebGLRenderer renderer;
-
 	public Camera() 
 	{
 		super();
 		this.matrixWorldInverse = new Matrix4();
 		this.projectionMatrix = new Matrix4();
 		this.projectionMatrixInverse = new Matrix4();
-
+		
+		this._viewMatrixArray = Float32Array.create( 16 );
+		this._projectionMatrixArray = Float32Array.create( 16 );
 	}
 
 	public Matrix4 getMatrixWorldInverse()
