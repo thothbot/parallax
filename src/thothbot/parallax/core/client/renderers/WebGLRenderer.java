@@ -1232,7 +1232,7 @@ public class WebGLRenderer
 			this.cache_currentGeometryGroupHash = geometryGroupHash;
 			updateBuffers = true;
 		}
-		
+
 		WebGLRenderingContext gl = getGL();
 				
 		// render mesh
@@ -1339,8 +1339,8 @@ public class WebGLRenderer
 		} 
 		else if ( object instanceof ParticleSystem ) 
 		{
-			if ( updateBuffers ) 
-			{
+//			if ( updateBuffers ) 
+//			{
 				// vertices
 
 				Float32Array position = geometryBuffer.getWebGlVertexArray();
@@ -1367,7 +1367,7 @@ public class WebGLRenderer
 
 				getInfo().getRender().calls ++;
 				getInfo().getRender().points += position.getLength() / 3;
-			}
+//			}
 		}
 	}
 
