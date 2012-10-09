@@ -66,8 +66,7 @@ public class CombinedCamera extends Camera
 
 		// We could also handle the projectionMatrix internally, but just wanted
 		// to test nested camera objects
-		this.cameraO = new OrthographicCamera(width / -2.0, width / 2.0, height / 2.0, height / -2.0,
-				orthoNear, orthoFar);
+		this.cameraO = new OrthographicCamera(width, height, orthoNear, orthoFar);
 		this.cameraP = new PerspectiveCamera(fov, width / height, near, far);
 
 		toPerspective();

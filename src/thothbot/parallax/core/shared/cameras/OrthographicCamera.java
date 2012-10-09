@@ -47,24 +47,20 @@ public class OrthographicCamera extends Camera
 	protected double far;
 
 	/**
-	 * Orthographic Camera constructor. It uses the following defaults:<br>
-	 * <ul>
-	 * <li>near - 0.1</li>
-	 * <li>far - 2000</li>
-	 * </ul>
-	 *  
-	 * @param left   Camera frustum left plane.
-	 * @param right  Camera frustum right plane.
-	 * @param top    Camera frustum top plane.
-	 * @param bottom Camera frustum bottom plane.
+	 * Orthographic Camera constructor.
+	 * 
+	 * @param width  Camera frustum width plane.
+	 * @param height Camera frustum height plane.
+	 * @param near   Camera frustum near plane
+	 * @param far    Camera frustum far plane.
 	 */
-	public OrthographicCamera(double left, double right, double top, double bottom) 
+	public OrthographicCamera(double width, double height, double near, double far)
 	{
-		this(left, right, top, bottom, 0.1, 2000);
+		this(width / -2.0, width / 2.0, height / 2.0, height / -2.0, near, far);
 	}
 
 	/**
-	 * Orthographic Camera constructor
+	 * Orthographic Camera constructor. 
 	 * 
 	 * @param left   Camera frustum left plane.
 	 * @param right  Camera frustum right plane.
@@ -84,6 +80,16 @@ public class OrthographicCamera extends Camera
 		this.near = near;
 		this.far = far;
 		
+		updateProjectionMatrix();
+	}
+
+	public void setSize(double width, double height)
+	{
+		this.left = width / -2.0;
+		this.right = width / 2.0;
+		this.top = height / 2.0;
+		this.bottom = height / -2.0;
+
 		updateProjectionMatrix();
 	}
 

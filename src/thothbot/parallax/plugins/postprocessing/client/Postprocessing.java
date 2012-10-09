@@ -84,7 +84,7 @@ public class Postprocessing extends Plugin
 
 		this.copyPass = new ShaderPass( new ScreenShader() );
 		
-		this.camera = new OrthographicCamera( -1, 1, 1, -1, 0, 1 );
+		this.camera = new OrthographicCamera( 2, 2, 0, 1 );
 
 		this.quad = new Mesh( new PlaneGeometry( 2, 2 ), null );
 		
