@@ -829,7 +829,6 @@ public class WebGLRenderer
 		}
 
 		// update camera matrices and frustum
-		
 		if ( camera.getParent() == null ) 
 		{
 			camera.updateMatrixWorld(false);

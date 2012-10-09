@@ -286,7 +286,14 @@ public final class ShadowMap extends Plugin
 			shadowCamera.lookAt( light.getTarget().getMatrixWorld().getPosition() );
 			shadowCamera.updateMatrixWorld(false);
 
+			// update camera matrices and frustum
+			
 			shadowCamera.getMatrixWorldInverse().getInverse( shadowCamera.getMatrixWorld() );
+			shadowCamera.getMatrixWorldInverse().flattenToArray( shadowCamera._viewMatrixArray );
+			shadowCamera.getProjectionMatrix().flattenToArray( shadowCamera._projectionMatrixArray );
+
+			this.projScreenMatrix.multiply( shadowCamera.getProjectionMatrix(), shadowCamera.getMatrixWorldInverse() );
+			this.frustum.setFromMatrix( this.projScreenMatrix );
 
 			if ( light.getCameraHelper() != null ) 
 				light.getCameraHelper().setVisible( light.isShadowCameraVisible() );
@@ -302,14 +309,6 @@ public final class ShadowMap extends Plugin
 
 			shadowMatrix.multiply( shadowCamera.getProjectionMatrix() );
 			shadowMatrix.multiply( shadowCamera.getMatrixWorldInverse() );
-
-			// update camera matrices and frustum
-
-			shadowCamera.getMatrixWorldInverse().flattenToArray( shadowCamera._viewMatrixArray );
-			shadowCamera.getProjectionMatrix().flattenToArray( shadowCamera._projectionMatrixArray );
-
-			this.projScreenMatrix.multiply( shadowCamera.getProjectionMatrix(), shadowCamera.getMatrixWorldInverse() );
-			this.frustum.setFromMatrix( this.projScreenMatrix );
 
 			// render shadow map
 
