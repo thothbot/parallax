@@ -41,7 +41,7 @@ public abstract class AnimatedScene extends Animation
 	 * @author thothbot
 	 *
 	 */
-	public static interface AnimatedSceneCallback
+	public static interface AnimationUpdateHandler
 	{
 		/**
 		 * Called when {@link #onUpdate()} called.
@@ -49,9 +49,9 @@ public abstract class AnimatedScene extends Animation
 		public void onUpdate();
 	}
 
-	private WebGLRenderer renderer;
+	private RenderingPanel renderingPanel;
 	private Scene scene;
-	private AnimatedSceneCallback animatedSceneCallback;
+	private AnimationUpdateHandler animationUpdateHandler;
 
 	/**
 	 * Gets the main {@link Scene} object.
@@ -70,24 +70,29 @@ public abstract class AnimatedScene extends Animation
 	 */
 	public WebGLRenderer getRenderer() 
 	{
-		return this.renderer;
+		return this.renderingPanel.getRenderer();
+	}
+	
+	public Canvas3d getCanvas() 
+	{
+		return this.renderingPanel.getCanvas();
 	}
 
 	/**
 	 * Initialize the scene.
 	 * 
 	 * @param renderer the {@link WebGLRenderer} instance.
-	 * @param animatedSceneCallback this parameter used for updating debug info. Can be null.
+	 * @param animationUpdateHandler this parameter used for updating debug info. Can be null.
 	 */
-	public void init(WebGLRenderer renderer, AnimatedSceneCallback animatedSceneCallback)
+	public void init(RenderingPanel renderingPanel, AnimationUpdateHandler animationUpdateHandler)
 	{
-		if(getRenderer() != null)
+		if(renderingPanel != null)
 			return;
 
-		this.renderer = renderer;
+		this.renderingPanel = renderingPanel;
 		this.scene = new Scene();
 
-		this.animatedSceneCallback = animatedSceneCallback;		
+		this.animationUpdateHandler = animationUpdateHandler;		
 	}
 
 	protected abstract void onUpdate(double duration);
@@ -98,7 +103,7 @@ public abstract class AnimatedScene extends Animation
 		getRenderer().getInfo().getTimer().render = new Duration();
 		onUpdate(duration);
 		
-		animatedSceneCallback.onUpdate();
+		animationUpdateHandler.onUpdate();
 	}
 	
 	/**

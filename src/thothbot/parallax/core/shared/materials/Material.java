@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
@@ -585,7 +584,10 @@ public abstract class Material
 			options.add(SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
 
 		if (parameters.sizeAttenuation)
+		{
+			Log.error("Fix uniform in Particle material: size");
 			options.add(SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
+		}
 
 		options.add(ChunksVertexShader.DEFAULT_PARS);
 		options.add("");

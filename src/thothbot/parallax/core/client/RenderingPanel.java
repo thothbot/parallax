@@ -261,7 +261,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				
 		if(getAnimatedScene() != null)
 		{
-			this.animatedScene.init(getRenderer(), new AnimatedScene.AnimatedSceneCallback() {
+			this.animatedScene.init(this, new AnimatedScene.AnimationUpdateHandler() {
 				
 				@Override
 				public void onUpdate()
