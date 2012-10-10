@@ -808,7 +808,7 @@ public class WebGLRenderer
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
 	{
 		Log.debug("Called render()");
-Log.error(getAbsoluteAspectRation());
+
 		// TODO: not correct. Move it to AnimatedScene
 		if(camera.getClass() == PerspectiveCamera.class &&
 				getAbsoluteAspectRation() != ((PerspectiveCamera)camera).getAspectRation())
