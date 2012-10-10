@@ -123,15 +123,15 @@ public final class ParticleBasicMaterial extends Material
 	}
 	
 	@Override
-	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
+	public void refreshUniforms(Camera camera, boolean isGammaInput) 
 	{
-		super.refreshUniforms(canvas, camera, isGammaInput);
+		super.refreshUniforms(camera, isGammaInput);
 		Map<String, Uniform> uniforms = getShader().getUniforms();
 		
 		uniforms.get("psColor").setValue( getColor() );
 		uniforms.get("opacity").setValue( getOpacity() );
 		uniforms.get("size").setValue( getSize() );
-		uniforms.get("scale").setValue( canvas.getHeight() / 2.0 );
+//		uniforms.get("scale").setValue( canvas.getHeight() / 2.0 );
 
 		uniforms.get("map").setValue( getMap() );
 	}

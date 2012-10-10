@@ -116,7 +116,8 @@ import com.google.gwt.dom.client.Element;
 public class WebGLRenderer
 {
 	// The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
-	private Canvas3d canvas;
+	private WebGLRenderingContext gl;
+
 	private WebGLRenderInfo info;
 				
 	// Integer, default is Color(0x000000).
@@ -186,8 +187,8 @@ public class WebGLRenderer
 	private Double cache_oldPolygonOffsetFactor = null;
 	private Double cache_oldPolygonOffsetUnits = null;
 			
-	private int viewportX = 0;
-	private int viewportY = 0;
+	private int absoluteWidth = 0;
+	private int absoluteHeight = 0;
 	private int viewportWidth = 0;
 	private int viewportHeight = 0;
 	private int _currentWidth = 0;
@@ -225,11 +226,13 @@ public class WebGLRenderer
 	/**
 	 * The constructor will create renderer for the {@link Canvas3d} widget.
 	 * 
-	 * @param canvas the {@link Canvas3d} widget
+	 * @param gl     the {@link WebGLRenderingContext}
+	 * @param absoluteWidth  the viewport absoluteWidth
+	 * @param absoluteHeight the viewport absoluteHeight
 	 */
-	public WebGLRenderer(Canvas3d canvas)
+	public WebGLRenderer(WebGLRenderingContext gl, int width, int height)
 	{
-		setCanvas(canvas);
+		this.gl = gl;
 
 		this.setInfo(new WebGLRenderInfo());
 		
@@ -240,9 +243,7 @@ public class WebGLRenderer
 		this.cache_lights           = new RendererLights();
 		this.cache_programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
-		
-		WebGLRenderingContext gl = getGL();
-		
+			
 		this.GPUmaxTextures       = gl.getParameteri(WebGLConstants.MAX_TEXTURE_IMAGE_UNITS);
 		this.GPUmaxVertexTextures = gl.getParameteri(WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
 		this.GPUmaxTextureSize    = gl.getParameteri(WebGLConstants.MAX_TEXTURE_SIZE);
@@ -279,7 +280,7 @@ public class WebGLRenderer
 			Log.warn( "WebGLRenderer: S3TC compressed textures not supported." );
 
 
-		setViewport(0, 0, getCanvas().getWidth(), getCanvas().getHeight());
+		setSize(width, height);
 		setDefaultGLState();
 		
 		// default plugins (order is important)
@@ -480,20 +481,7 @@ public class WebGLRenderer
 	private void setInfo(WebGLRenderInfo info) {
 		this.info = info;
 	}
-	
-	/**
-	 * Gets {@link Canvas3d} widget with whom the renderer is associated.
-	 * 
-	 * @return the {@link Canvas3d} widget.
-	 */
-	public Canvas3d getCanvas() {
-		return this.canvas;
-	}
-	
-	private void setCanvas(Canvas3d canvas) {
-		this.canvas = canvas;
-	}
-		
+
 	/**
 	 * Gets the WebGL context from the {@link Canvas3d} widget.
 	 * 
@@ -502,7 +490,7 @@ public class WebGLRenderer
 	 */
 	public WebGLRenderingContext getGL()
 	{
-		return getCanvas().getGL();
+		return this.gl;
 	}
 
 	private void setDefaultGLState () 
@@ -532,34 +520,44 @@ public class WebGLRenderer
 	}
 
 	/**
-	 * Sets the {@link Canvas3d} and also sets {@link #setViewport(int, int, int, int)} size.
+	 * Sets the sizes and also sets {@link #setViewport(int, int, int, int)} size.
 	 * 
-	 * @param width the {@link Canvas3d} width.
-	 * @param height the {@link Canvas3d} height.
+	 * @param absoluteWidth  the {@link Canvas3d} absoluteWidth.
+	 * @param absoluteHeight the {@link Canvas3d} absoluteHeight.
 	 */
 	public void setSize(int width, int height)
 	{
-		getCanvas().setSize(width, height);
+		this.absoluteWidth = width;
+		this.absoluteHeight = height;
 		setViewport(0, 0, width, height);
 	}
 
 	/**
-	 * Sets the viewport to render from (X, Y) to (X + width, Y + height).
+	 * Sets the viewport to render from (X, Y) to (X + absoluteWidth, Y + absoluteHeight).
 	 * By default X and Y = 0.
 	 */
 	public void setViewport(int x, int y, int width, int height)
 	{
-		this.viewportX = x;
-		this.viewportY = y;
-
 		this.viewportWidth = width;
 		this.viewportHeight = height;
 
-		getGL().viewport(this.viewportX, this.viewportY, this.viewportWidth, this.viewportHeight);
+		getGL().viewport(x, y, this.viewportWidth, this.viewportHeight);
+	}
+	
+	public int getAbsoluteWidth() {
+		return this.absoluteWidth;
+	}
+	
+	public int getAbsoluteHeight() {
+		return this.absoluteHeight;
+	}
+
+	public double getAbsoluteAspectRation() {
+		return getAbsoluteWidth() / getAbsoluteHeight();
 	}
 
 	/**
-	 * Sets the scissor area from (x, y) to (x + width, y + height).
+	 * Sets the scissor area from (x, y) to (x + absoluteWidth, y + absoluteHeight).
 	 */
 	public void setScissor(int x, int y, int width, int height)
 	{
@@ -813,10 +811,9 @@ public class WebGLRenderer
 
 		// TODO: not correct. Move it to AnimatedScene
 		if(camera.getClass() == PerspectiveCamera.class &&
-				getCanvas().getAspectRation() != ((PerspectiveCamera)camera).getAspectRation())
+				getAbsoluteAspectRation() != ((PerspectiveCamera)camera).getAspectRation())
 		{
-			((PerspectiveCamera)camera).setAspectRatio(
-					getCanvas().getAspectRation());
+			((PerspectiveCamera)camera).setAspectRatio(getAbsoluteAspectRation());
 		}
 
 		// reset caching for this frame
@@ -1590,7 +1587,7 @@ public class WebGLRenderer
 				this.cache_lights.refreshUniformsLights( m_uniforms );
 			}
 
-			material.refreshUniforms(getCanvas(), camera, this.isGammaInput);
+			material.refreshUniforms(camera, this.isGammaInput);
 
 			if ( object.isReceiveShadow() && ! material.isShadowPass() )
 				refreshUniformsShadow( m_uniforms, lights );
@@ -2080,7 +2077,7 @@ public class WebGLRenderer
 	 * premultiplied alpha.
 	 * 
 	 * @param image    the image element
-	 * @param maxSize  the max size of width or height
+	 * @param maxSize  the max size of absoluteWidth or absoluteHeight
 	 * 
 	 * @return the image element (Canvas or Image)
 	 */

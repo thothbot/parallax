@@ -66,9 +66,9 @@ public final class MeshNormalMaterial extends Material implements HasWireframe
 	}
 	
 	@Override
-	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
+	public void refreshUniforms(Camera camera, boolean isGammaInput) 
 	{
-		super.refreshUniforms(canvas, camera, isGammaInput);
+		super.refreshUniforms(camera, isGammaInput);
 		
 		getShader().getUniforms().get("opacity").setValue( getOpacity() );
 	}

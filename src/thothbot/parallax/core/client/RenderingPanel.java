@@ -69,6 +69,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	// Loading info panel
 	private LoadingPanel loadingPanal; 
 
+	private Canvas3d canvas;
 	private WebGLRenderer renderer;
 
 	/**
@@ -93,6 +94,11 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		add(this.loadingPanal);
 	}
 	
+	public Canvas3d getCanvas()
+	{
+		return this.canvas;
+	}
+
 	/**
 	 * Gets {@link WebGLRenderer}. Use {@link AnimatedScene#getRenderer()} instead. 
 	 *  
@@ -157,7 +163,8 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		{
 			Log.debug("RenderingPanel: initRenderer()");
 
-			this.renderer = new WebGLRenderer(loadCanvas());
+			canvas = loadCanvas();
+			this.renderer = new WebGLRenderer(canvas.getGL(), canvas.getWidth(), canvas.getHeight());
 			this.renderer.setClearColorHex(this.clearColor, this.clearAlpha);
 		}
 	}
@@ -314,8 +321,8 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	{
 		Log.debug("RenderingPanel: set size: W=" + width + ", H=" + height); 
 
-		if(this.animatedScene != null && animatedScene.getRenderer() != null)
-			animatedScene.getRenderer().setSize(width, height);
+		getCanvas().setSize(width, height);
+		getRenderer().setSize(width, height);
 	}
 	
 	private void updateBackground()

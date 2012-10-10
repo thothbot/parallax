@@ -309,9 +309,9 @@ public final class MeshLambertMaterial extends Material
 	}
 	
 	@Override
-	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
+	public void refreshUniforms(Camera camera, boolean isGammaInput) 
 	{
-		super.refreshUniforms(canvas, camera, isGammaInput);
+		super.refreshUniforms(camera, isGammaInput);
 		Map<String, Uniform> uniforms = getShader().getUniforms(); 
 		
 		if ( isGammaInput ) 

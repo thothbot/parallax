@@ -687,7 +687,7 @@ public abstract class Material
 		this.shader = shader;
 	}
 
-	public void refreshUniforms(Canvas3d canvas, Camera camera, boolean isGammaInput) 
+	public void refreshUniforms(Camera camera, boolean isGammaInput) 
 	{
 		if ( ! (this instanceof HasMaterialMap) )
 			return;
