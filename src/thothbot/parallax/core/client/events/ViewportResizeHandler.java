@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.events;
 
 import com.google.gwt.event.shared.EventHandler;
 
-public interface WebGlRendererResizeHandler extends EventHandler
+public interface ViewportResizeHandler extends EventHandler
 {
-	public void onResize(WebGlRendererResizeEvent event);
+	public void onResize(ViewportResizeEvent event);
 }

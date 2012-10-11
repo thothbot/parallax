@@ -23,13 +23,13 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 
 import com.google.gwt.event.shared.GwtEvent;
 
-public class WebGlRendererResizeEvent extends GwtEvent<WebGlRendererResizeHandler>
+public class ViewportResizeEvent extends GwtEvent<ViewportResizeHandler>
 {
-	public static Type<WebGlRendererResizeHandler> TYPE = new Type<WebGlRendererResizeHandler>();
+	public static Type<ViewportResizeHandler> TYPE = new Type<ViewportResizeHandler>();
 
 	private WebGLRenderer renderer;
 	
-    public WebGlRendererResizeEvent(WebGLRenderer renderer) 
+    public ViewportResizeEvent(WebGLRenderer renderer) 
     {
     	this.renderer = renderer;
     }
@@ -39,13 +39,13 @@ public class WebGlRendererResizeEvent extends GwtEvent<WebGlRendererResizeHandle
     }
 
     @Override
-    public Type<WebGlRendererResizeHandler> getAssociatedType() 
+    public Type<ViewportResizeHandler> getAssociatedType() 
     {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(WebGlRendererResizeHandler handler) 
+    protected void dispatch(ViewportResizeHandler handler) 
     {
         handler.onResize(this);
     }

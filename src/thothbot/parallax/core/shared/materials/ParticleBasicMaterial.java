@@ -26,8 +26,8 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.events.HasEventBus;
-import thothbot.parallax.core.client.events.WebGlRendererResizeEvent;
-import thothbot.parallax.core.client.events.WebGlRendererResizeHandler;
+import thothbot.parallax.core.client.events.ViewportResizeEvent;
+import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.ParticleBasicShader;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -135,10 +135,10 @@ public final class ParticleBasicMaterial extends Material
 		uniforms.get("opacity").setValue( getOpacity() );
 		uniforms.get("size").setValue( getSize() );
 		
-		EVENT_BUS.addHandler(WebGlRendererResizeEvent.TYPE, new WebGlRendererResizeHandler() {
+		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, new ViewportResizeHandler() {
 			
 			@Override
-			public void onResize(WebGlRendererResizeEvent event) {
+			public void onResize(ViewportResizeEvent event) {
 				uniforms.get("scale").setValue( event.getRenderer().getAbsoluteHeight() / 2.0 );	
 			}
 		});

@@ -23,8 +23,8 @@
 package thothbot.parallax.core.shared.cameras;
 
 import thothbot.parallax.core.client.events.HasEventBus;
-import thothbot.parallax.core.client.events.WebGlRendererResizeEvent;
-import thothbot.parallax.core.client.events.WebGlRendererResizeHandler;
+import thothbot.parallax.core.client.events.ViewportResizeEvent;
+import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
@@ -39,7 +39,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
  * @author thothbot
  *
  */
-public class Camera extends Object3D implements HasEventBus, WebGlRendererResizeHandler
+public class Camera extends Object3D implements HasEventBus, ViewportResizeHandler
 {
 	protected Matrix4 matrixWorldInverse;
 	protected Matrix4 projectionMatrix;
@@ -62,13 +62,13 @@ public class Camera extends Object3D implements HasEventBus, WebGlRendererResize
 		addWebGlResizeEventHandler(this);
 	}
 	
-	public HandlerRegistration addWebGlResizeEventHandler(WebGlRendererResizeHandler handler) 
+	public HandlerRegistration addWebGlResizeEventHandler(ViewportResizeHandler handler) 
 	{
-		return EVENT_BUS.addHandler(WebGlRendererResizeEvent.TYPE, handler);
+		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler);
 	}
 	
 	@Override
-	public void onResize(WebGlRendererResizeEvent event) {
+	public void onResize(ViewportResizeEvent event) {
 		//  Empty for capability
 	}
 

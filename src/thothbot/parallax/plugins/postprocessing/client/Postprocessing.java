@@ -25,8 +25,8 @@ package thothbot.parallax.plugins.postprocessing.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.client.events.WebGlRendererResizeEvent;
-import thothbot.parallax.core.client.events.WebGlRendererResizeHandler;
+import thothbot.parallax.core.client.events.ViewportResizeEvent;
+import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
@@ -86,10 +86,10 @@ public class Postprocessing extends Plugin
 		this.copyPass = new ShaderPass( new ScreenShader() );
 		
 		this.camera = new OrthographicCamera( 2, 2, 0, 1 );
-		this.camera.addWebGlResizeEventHandler(new WebGlRendererResizeHandler() {
+		this.camera.addWebGlResizeEventHandler(new ViewportResizeHandler() {
 			
 			@Override
-			public void onResize(WebGlRendererResizeEvent event) {
+			public void onResize(ViewportResizeEvent event) {
 				camera.setSize(2, 2);
 			}
 		});

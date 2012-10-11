@@ -30,7 +30,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.events.HasEventBus;
-import thothbot.parallax.core.client.events.WebGlRendererResizeEvent;
+import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
@@ -536,7 +536,7 @@ public class WebGLRenderer implements HasEventBus
 		
 		setViewport(0, 0, width, height);
 		
-		EVENT_BUS.fireEvent(new WebGlRendererResizeEvent(this));
+		EVENT_BUS.fireEvent(new ViewportResizeEvent(this));
 	}
 
 	/**
