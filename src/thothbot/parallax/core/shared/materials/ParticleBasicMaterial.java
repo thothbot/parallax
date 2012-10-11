@@ -25,15 +25,18 @@ package thothbot.parallax.core.shared.materials;
 import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
+import thothbot.parallax.core.client.renderers.WebGlRendererResizeEvent;
+import thothbot.parallax.core.client.renderers.WebGlRendererResizeHandler;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.ParticleBasicShader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.core.HasEventBus;
 
 public final class ParticleBasicMaterial extends Material 
-	implements HasFog, HasColor, HasMap, HasVertexColors
+	implements HasFog, HasColor, HasMap, HasVertexColors, HasEventBus
 {
 	private boolean isFog;
 	
@@ -126,12 +129,19 @@ public final class ParticleBasicMaterial extends Material
 	public void refreshUniforms(Camera camera, boolean isGammaInput) 
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		Map<String, Uniform> uniforms = getShader().getUniforms();
+		final Map<String, Uniform> uniforms = getShader().getUniforms();
 		
 		uniforms.get("psColor").setValue( getColor() );
 		uniforms.get("opacity").setValue( getOpacity() );
 		uniforms.get("size").setValue( getSize() );
-//		uniforms.get("scale").setValue( canvas.getHeight() / 2.0 );
+		
+		EVENT_BUS.addHandler(WebGlRendererResizeEvent.TYPE, new WebGlRendererResizeHandler() {
+			
+			@Override
+			public void onResize(WebGlRendererResizeEvent event) {
+				uniforms.get("scale").setValue( event.getRenderer().getAbsoluteHeight() / 2.0 );	
+			}
+		});
 
 		uniforms.get("map").setValue( getMap() );
 	}
