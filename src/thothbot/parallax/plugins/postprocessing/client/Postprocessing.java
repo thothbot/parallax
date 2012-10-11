@@ -32,6 +32,8 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.renderers.WebGlRendererResizeEvent;
+import thothbot.parallax.core.client.renderers.WebGlRendererResizeHandler;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
@@ -59,9 +61,8 @@ public class Postprocessing extends Plugin
 
 	public Postprocessing( WebGLRenderer renderer, Scene scene)
 	{
-		this(renderer, scene, new RenderTargetTexture(1000,1000	)
-		);
-			
+		this(renderer, scene, new RenderTargetTexture( 1000,1000 ));
+
 		this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 		this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
 		this.renderTarget1.setFormat(PixelFormat.RGB);
@@ -85,6 +86,13 @@ public class Postprocessing extends Plugin
 		this.copyPass = new ShaderPass( new ScreenShader() );
 		
 		this.camera = new OrthographicCamera( 2, 2, 0, 1 );
+		this.camera.addWebGlResizeEventHandler(new WebGlRendererResizeHandler() {
+			
+			@Override
+			public void onResize(WebGlRendererResizeEvent event) {
+				camera.setSize(2, 2);
+			}
+		});
 
 		this.quad = new Mesh( new PlaneGeometry( 2, 2 ), null );
 		
@@ -132,9 +140,7 @@ public class Postprocessing extends Plugin
 		this.readBuffer = this.renderTarget2;
 
 		boolean maskActive = false;
-		
-//		updateSizes();
-		// TODO: check
+
 		double delta = 0;
 		WebGLRenderingContext gl = getRenderer().getGL();
 		
