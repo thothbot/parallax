@@ -23,6 +23,8 @@ import java.util.List;
 
 public interface JsoMaterial 
 {
+	JsoBlending getBlending();
+	
 	List<Double> getColorAmbient();
 	
 	List<Double> getColorDiffuse();

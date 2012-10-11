@@ -22,9 +22,9 @@ package thothbot.parallax.loader.shared.json;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 
-public interface JsoFactory extends AutoBeanFactory 
+public interface JsoObjectFactory extends AutoBeanFactory 
 {
-	AutoBean<JsoFile> file();
+	AutoBean<JsoObject> file();
 	
 	AutoBean<JsoMaterial> material();
 	

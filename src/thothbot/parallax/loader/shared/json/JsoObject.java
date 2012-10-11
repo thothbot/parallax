@@ -21,7 +21,7 @@ package thothbot.parallax.loader.shared.json;
 
 import java.util.List;
 
-public interface JsoFile 
+public interface JsoObject 
 {
 	JsoMetadata getMetadata();
 	
@@ -29,7 +29,7 @@ public interface JsoFile
 	
 	List<JsoMaterial> getMaterials();
 	
-	List<Integer> getVertices();
+	List<Double> getVertices();
 	
 	List<JsoMorphTargets> getMorphTargets();
 	
@@ -37,9 +37,16 @@ public interface JsoFile
 	
 	List<Double> getNormals();
 	
-	List<Double> getColors();
+	/**
+	 * Hex color values
+	 */
+	List<Integer> getColors();
 	
 	List<List<Double>> getUvs();
 	
 	List<Integer> getFaces();
+	
+	List<Double> getSkinWeights();
+	
+	List<Integer> getSkinIndices();
 }

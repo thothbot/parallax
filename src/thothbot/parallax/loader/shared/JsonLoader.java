@@ -31,15 +31,20 @@ import thothbot.parallax.core.shared.core.Geometry.MorphColor;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
+import thothbot.parallax.core.shared.materials.HasVertexColors;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
+import thothbot.parallax.core.shared.materials.Material.COLORS;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.utils.ColorUtils;
-import thothbot.parallax.loader.shared.json.JsoFactory;
-import thothbot.parallax.loader.shared.json.JsoFile;
+import thothbot.parallax.loader.shared.json.JsoMaterial;
+import thothbot.parallax.loader.shared.json.JsoMorphColors;
+import thothbot.parallax.loader.shared.json.JsoMorphTargets;
+import thothbot.parallax.loader.shared.json.JsoObjectFactory;
+import thothbot.parallax.loader.shared.json.JsoObject;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
@@ -52,14 +57,13 @@ import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 public class JsonLoader extends Loader 
 {
 
-	private JSONObject json;
+	private JsoObject object;
 	private Geometry geometry;
 	private Mesh mesh;
 	private Material material;
 	private MorphAnimation animation;
 	
 	private List<Material> materials;
-	private boolean isParsed = false;
 	
 	@Override
 	public void parse(String string) 
@@ -141,12 +145,12 @@ public class JsonLoader extends Loader
 	
 	private boolean isThisJsonStringValid(String iJSonString) 
 	{ 
-		JsoFactory factory = GWT.create(JsoFactory.class);
-		AutoBean<JsoFile> bean = AutoBeanCodex.decode(factory, JsoFile.class, iJSonString);
-//	    return bean.as();
+		JsoObjectFactory factory = GWT.create(JsoObjectFactory.class);
+
 		try 
-		{   
-			json = JSONParser.parseLenient(iJSonString).isObject();
+		{
+			AutoBean<JsoObject> bean = AutoBeanCodex.decode(factory, JsoObject.class, iJSonString);
+			object = bean.as();
 		} 
 		catch ( JSONException e) 
 		{
@@ -159,34 +163,30 @@ public class JsonLoader extends Loader
 		
 	private void parseMaterials()
 	{
-		if(! json.containsKey("materials")) 
+		if(object.getMaterials() == null) 
 			return;
 		
 		Log.debug("JSON parseMaterials()");
 		
-		JSONArray materials = json.get("materials").isArray();
-		
-		this.materials= new ArrayList<Material>(); 
-		for ( int i = 0; i < materials.size(); ++ i )
-			this.materials.add( createMaterial( materials.get(i).isObject()) );
+		this.materials = new ArrayList<Material>(); 
+		for ( JsoMaterial material: object.getMaterials() )
+			this.materials.add( createMaterial( material ) );
 	}
 	
-	private Material createMaterial(JSONObject jsonMaterial)
+	private Material createMaterial(JsoMaterial jsonMaterial)
 	{
 		// defaults
 		Material material = new MeshLambertMaterial();
 		material.setOpacity(1.0);
 		((MeshLambertMaterial)material).setColor(new Color(0xeeeeee));
-		if(jsonMaterial.containsKey("wireframe"))
-			((MeshLambertMaterial)material).setWireframe(true);
 		
-		if(jsonMaterial.containsKey("shading"))
+		if(jsonMaterial.getShading() != null)
 		{
-			if(jsonMaterial.get("shading").isString().stringValue().compareToIgnoreCase("phong") == 0)
+			if(jsonMaterial.getShading().compareToIgnoreCase("phong") == 0)
 			{
 				material = new MeshPhongMaterial();
 			}
-			else if(jsonMaterial.get("shading").isString().stringValue().compareToIgnoreCase("basic") == 0)
+			else if(jsonMaterial.getShading().compareToIgnoreCase("basic") == 0)
 			{
 				material = new MeshBasicMaterial();
 			}
@@ -194,44 +194,20 @@ public class JsonLoader extends Loader
 		
 		// parameters from model file
 
-//		if ( m.blending !== undefined && THREE[ m.blending ] !== undefined ) {
-//
-//			mpars.blending = THREE[ m.blending ];
-//
-//		}
-//
-//		if ( m.transparent !== undefined || m.opacity < 1.0 ) {
-//
-//			mpars.transparent = m.transparent;
-//
-//		}
-//
-//		if ( m.depthTest !== undefined ) {
-//
-//			mpars.depthTest = m.depthTest;
-//
-//		}
-//
-//		if ( m.depthWrite !== undefined ) {
-//
-//			mpars.depthWrite = m.depthWrite;
-//
-//		}
-//
-//		if ( m.vertexColors !== undefined ) {
-//
-//			if ( m.vertexColors == "face" ) {
-//
-//				mpars.vertexColors = THREE.FaceColors;
-//
-//			} else if ( m.vertexColors ) {
-//
-//				mpars.vertexColors = THREE.VertexColors;
-//
-//			}
-//
-//		}
-//
+		if ( jsonMaterial.getBlending() != null ) 
+		{
+			material.setBlending(jsonMaterial.getBlending().getValue());
+		}
+
+		material.setTransparent(jsonMaterial.getTransparent());
+		material.setDepthTest(jsonMaterial.getDepthTest());
+		material.setDepthWrite(jsonMaterial.getDepthWrite());
+		
+		if(jsonMaterial.getVertexColors() && material instanceof HasVertexColors)
+		{
+			((HasVertexColors) material).setVertexColors(COLORS.VERTEX);
+		}
+			
 //		// colors
 //
 //		if ( m.colorDiffuse ) {
@@ -362,12 +338,12 @@ public class JsonLoader extends Loader
 
 	private void parseVertices()
 	{
-		if(! json.containsKey("vertices")) 
+		if(object.getVertices() == null) 
 			return;
 		
 		Log.debug("JSON parseVertices()");
 		
-		JSONArray vertices = json.get("vertices").isArray();
+		List<Double> vertices = object.getVertices();
 		
 		double scale = getScale();
 		int offset = 0;
@@ -377,9 +353,9 @@ public class JsonLoader extends Loader
 		{
 			Vector3 vertex = new Vector3();
 
-			vertex.setX( (float) ( value( vertices, offset ++ ) * scale) );
-			vertex.setY( (float) ( value( vertices, offset ++ ) * scale) );
-			vertex.setZ( (float) ( value( vertices, offset ++ ) * scale) );
+			vertex.setX( vertices.get(offset++) * scale );
+			vertex.setY( vertices.get(offset++) * scale );
+			vertex.setZ( vertices.get(offset++) * scale );
 
 			this.geometry.getVertices().add( vertex );
 		}
@@ -387,29 +363,29 @@ public class JsonLoader extends Loader
 	
 	private void parseFaces()
 	{
-		if(! json.containsKey("faces")) 
+		if(object.getFaces() == null) 
 			return;
 		
 		Log.debug("JSON parseFaces()");
 		
-		JSONArray faces = json.get("faces").isArray();
+		List<Integer> faces = object.getFaces();
 
-		JSONArray uvs = json.get("uvs").isArray();
+		List<List<Double>> uvs = object.getUvs();
 		int nUvLayers = 0;
 		
 		// disregard empty arrays
 		for ( int i = 0; i < uvs.size(); i++ )
-			if ( uvs.get( i ).isArray().size() > 0) nUvLayers ++;
+			if ( uvs.get( i ).size() > 0) nUvLayers ++;
 		
-		JSONArray normals = json.get("normals").isArray();
-		JSONArray colors = json.get("colors").isArray();
+		List<Double> normals = object.getNormals();
+		List<Integer> colors = object.getColors();
 				
 		int offset = 0;
 		int zLength = faces.size();
 
 		while ( offset < zLength ) 
 		{
-			int type = (int) value( faces, offset ++ );
+			int type = faces.get(offset++);
 
 			boolean isQuad          	= isBitSet( type, 0 );
 			boolean hasMaterial         = isBitSet( type, 1 );
@@ -420,32 +396,22 @@ public class JsonLoader extends Loader
 			boolean hasFaceColor	    = isBitSet( type, 6 );
 			boolean hasFaceVertexColor  = isBitSet( type, 7 );
 
-//			Log.debug("parseFaces() type " + type + ", bits={" 
-//					+ isQuad + ", " + hasMaterial + ", " + hasFaceUv + ", " + hasFaceVertexUv + ", " 
-//					+ hasFaceNormal + ", " + hasFaceVertexNormal + ", " + hasFaceColor + ", " + hasFaceVertexColor + "}");
 
 			Face3 face;
 			int nVertices;
 			if ( isQuad ) 
 			{
 				nVertices = 4;
-				face = new Face4(
-					(int)value( faces, offset ++ ),
-					(int)value( faces, offset ++ ),
-					(int)value( faces, offset ++ ),
-					(int)value( faces, offset ++ ));
+				face = new Face4(faces.get(offset++), faces.get(offset++), faces.get(offset++),faces.get(offset++));
 			} 
 			else 
 			{
 				nVertices = 3;
-				face = new Face3(
-					(int)value( faces, offset ++ ),
-					(int)value( faces, offset ++ ),
-					(int)value( faces, offset ++ ));
+				face = new Face3(faces.get(offset++), faces.get(offset++), faces.get(offset++));
 			}
 
 			if ( hasMaterial ) 
-				face.setMaterialIndex((int)value( faces, offset ++ ));
+				face.setMaterialIndex(faces.get(offset++));
 
 			// to get face <=> uv index correspondence
 //			int fi = geometry.getFaces().size();
@@ -454,13 +420,11 @@ public class JsonLoader extends Loader
 			{
 				for ( int i = 0; i < nUvLayers; i++ ) 
 				{
-					JSONArray uvLayer = uvs.get(i).isArray();
+					List<Double> uvLayer = uvs.get(i);
 
-					int uvIndex = (int)value( faces, offset ++ );
+					int uvIndex = faces.get(offset++);
 
-					UV UV = new UV( 
-						(float) value( uvLayer, uvIndex * 2), 
-						(float) value( uvLayer, uvIndex * 2 + 1));
+					UV UV = new UV( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1));
 
 					this.geometry.getFaceUvs().get(i).add(UV);
 				}
@@ -470,16 +434,14 @@ public class JsonLoader extends Loader
 			{
 				for ( int i = 0; i < nUvLayers; i++ ) 
 				{
-					JSONArray uvLayer = uvs.get(i).isArray();
+					List<Double> uvLayer = uvs.get(i);
 
 					List<UV> UVs = new ArrayList<UV>();
 
 					for ( int j = 0; j < nVertices; j ++ ) 
 					{
-						int uvIndex = (int)value( faces, offset ++ );
-						UVs.add( new UV( 
-							(float) value( uvLayer, uvIndex * 2), 
-							(float) value( uvLayer, uvIndex * 2 + 1)));
+						int uvIndex = faces.get(offset++);
+						UVs.add( new UV( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1) ) );
 					}
 
 					geometry.getFaceVertexUvs().get(i).add(UVs);
@@ -488,13 +450,13 @@ public class JsonLoader extends Loader
 
 			if ( hasFaceNormal ) 
 			{
-				int normalIndex = (int)value( faces, offset ++ ) * 3;
+				int normalIndex = faces.get(offset++) * 3;
 
 				Vector3 normal = new Vector3();
 
-				normal.setX( (float) value( normals, normalIndex ++ ) );
-				normal.setY( (float) value( normals, normalIndex ++ ) );
-				normal.setZ( (float) value( normals, normalIndex ) );
+				normal.setX( normals.get( normalIndex ++ ) );
+				normal.setY( normals.get( normalIndex ++ ) );
+				normal.setZ( normals.get( normalIndex ) );
 
 				face.setNormal(normal);
 			}
@@ -503,12 +465,12 @@ public class JsonLoader extends Loader
 			{
 				for ( int i = 0; i < nVertices; i++ ) 
 				{
-					int normalIndex = (int)value( faces, offset ++ ) * 3;
+					int normalIndex = faces.get(offset++) * 3;
 					Vector3 normal = new Vector3();
 					
-					normal.setX( (float) value( normals, normalIndex ++ ) );
-					normal.setY( (float) value( normals, normalIndex ++ ) );
-					normal.setZ( (float) value( normals, normalIndex ) );
+					normal.setX( normals.get( normalIndex ++ ) );
+					normal.setY( normals.get( normalIndex ++ ) );
+					normal.setZ( normals.get( normalIndex ) );
 
 					face.getVertexNormals().add( normal );
 				}
@@ -517,16 +479,16 @@ public class JsonLoader extends Loader
 
 			if ( hasFaceColor ) 
 			{
-				int colorIndex = (int)value( faces, offset ++ );
-				face.setColor(new Color((int)value(colors, colorIndex)));
+				int colorIndex = faces.get(offset++);
+				face.setColor(new Color(colors.get(colorIndex)));
 			}
 
 			if ( hasFaceVertexColor ) 
 			{
 				for ( int i = 0; i < nVertices; i++ ) 
 				{
-					int colorIndex = (int)value( faces, offset ++ );
-					face.getVertexColors().add( new Color((int)value(colors, colorIndex) ));
+					int colorIndex = faces.get(offset++);
+					face.getVertexColors().add(new Color(colors.get(colorIndex)));
 				}
 			}
 
@@ -538,28 +500,23 @@ public class JsonLoader extends Loader
 	{
 		Log.debug("JSON parseSkin()");
 		
-		if ( json.containsKey("skinWeights") ) 
+		if ( object.getSkinWeights() != null ) 
 		{
-			JSONArray skinWeights = json.get("skinWeights").isArray();
+			List<Double> skinWeights = object.getSkinWeights();
 			for ( int i = 0, l = skinWeights.size(); i < l; i += 2 ) 
 			{
-				geometry.getSkinWeights().add( new Vector4( 
-						(float)value( skinWeights, i ),
-						(float)value( skinWeights, i + 1 ), 
-						0, 0 ) );
+				geometry.getSkinWeights().add( new Vector4(skinWeights.get(i), skinWeights.get(i + 1), 0, 0 ) );
 			}
 
 		}
 
-		if ( json.containsKey("skinIndices") ) 
+		if ( object.getSkinIndices() != null) 
 		{
-			JSONArray skinIndices = json.get("skinIndices").isArray();
+			List<Integer> skinIndices = object.getSkinIndices();
+
 			for ( int i = 0, l = skinIndices.size(); i < l; i += 2 ) 
 			{
-				geometry.getSkinIndices().add( new Vector4(
-						(float)value( skinIndices, i ),
-						(float)value( skinIndices, i + 1 ), 
-						0, 0) );
+				geometry.getSkinIndices().add( new Vector4(skinIndices.get(i), skinIndices.get(i + 1), 0, 0) );
 			}
 		}
 
@@ -573,46 +530,45 @@ public class JsonLoader extends Loader
 		
 		double scale = getScale();
 		
-		if ( json.containsKey("morphTargets")) 
+		if ( object.getMorphTargets() != null) 
 		{
-			JSONArray morphTargets = json.get("morphTargets").isArray();
+			List<JsoMorphTargets> morphTargets = object.getMorphTargets();
+			
 			for ( int i = 0, l = morphTargets.size(); i < l; i ++ ) 
 			{
 				Geometry.MorphTarget morphTarget = geometry.new MorphTarget();
-				morphTarget.name = morphTargets.get(i).isObject().get("name").isString().stringValue();
+				morphTarget.name = morphTargets.get(i).getName();
 				morphTarget.vertices = new ArrayList<Vector3>();
 				
-				JSONArray srcVertices = morphTargets.get(i).isObject().get("vertices").isArray();
+				List<Double> srcVertices = morphTargets.get(i).getVertices();
 				for( int v = 0, vl = srcVertices.size(); v < vl; v += 3 ) 
 				{
-					morphTarget.vertices.add( new Vector3(
-						(float)(value( srcVertices, v ) * scale),
-						(float)(value( srcVertices, v + 1 ) * scale),
-						(float)(value( srcVertices, v + 2 ) * scale)
-					) );
+					morphTarget.vertices.add( 
+							new Vector3(
+									srcVertices.get(v) * scale, 
+									srcVertices.get(v + 1) * scale,
+									srcVertices.get(v + 2) * scale));
 				}
 
 				geometry.getMorphTargets().add(morphTarget);
 			}
 		}
 
-		if ( json.containsKey("morphColors") ) 
+		if ( object.getMorphColors() != null ) 
 		{
-			JSONArray morphColors = json.get("morphColors").isArray();
+			List<JsoMorphColors> morphColors = object.getMorphColors();
+			
 			for ( int i = 0, l = morphColors.size(); i < l; i++ ) 
 			{
 				Geometry.MorphColor morphColor = geometry.new MorphColor();
-				morphColor.name = morphColors.get(i).isObject().get("name").isString().stringValue();
+				morphColor.name = morphColors.get(i).getName();
 				morphColor.colors = new ArrayList<Color>();
 								
-				JSONArray srcColors = morphColors.get(i).isObject().get("colors").isArray();
+				List<Double> srcColors = morphColors.get(i).getColors();
 				for ( int c = 0, cl = srcColors.size(); c < cl; c += 3 ) 
 				{
 					Color color = new Color( 0xffaa00 );
-					color.setRGB( 
-						(float)value(srcColors, c ), 
-						(float)value(srcColors, c + 1 ), 
-						(float)value(srcColors, c + 2 ) );
+					color.setRGB(srcColors.get(c), srcColors.get(c + 1), srcColors.get(c + 2));
 					morphColor.colors.add(color);
 				}
 				
@@ -623,18 +579,13 @@ public class JsonLoader extends Loader
 	
 	private double getScale()
 	{
-		return ( json.containsKey("scale") ) 
-				? 1.0 / json.get("scale").isNumber().doubleValue() : 1.0;
+		return ( object.getScale() > 0 ) 
+				? 1.0 / object.getScale() : 1.0;
 	}
 	
 	private boolean isBitSet( int value, int position ) 
 	{
 		return (value & ( 1 << position )) > 0;
-	}
-	
-	private double value(JSONArray array, int offset) 
-	{
-		return array.get( offset ).isNumber().doubleValue();
 	}
 	
 	private boolean is_pow2( int n ) 

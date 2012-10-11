@@ -25,5 +25,5 @@ public interface JsoMorphTargets
 {
 	String getName();
 
-	List<Integer> getVertices();
+	List<Double> getVertices();
 }
