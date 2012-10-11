@@ -22,10 +22,10 @@
 
 package thothbot.parallax.core.shared.cameras;
 
+import thothbot.parallax.core.client.events.HasEventBus;
+import thothbot.parallax.core.client.events.WebGlRendererResizeEvent;
+import thothbot.parallax.core.client.events.WebGlRendererResizeHandler;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.renderers.WebGlRendererResizeEvent;
-import thothbot.parallax.core.client.renderers.WebGlRendererResizeHandler;
-import thothbot.parallax.core.shared.core.HasEventBus;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;

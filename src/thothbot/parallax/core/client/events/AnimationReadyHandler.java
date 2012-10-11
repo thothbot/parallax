@@ -17,7 +17,9 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client;
+package thothbot.parallax.core.client.events;
+
+import thothbot.parallax.core.client.AnimatedScene;
 
 import com.google.gwt.event.shared.EventHandler;
 

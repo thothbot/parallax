@@ -24,6 +24,8 @@ import java.beans.Beans;
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.context.Canvas3dAttributes;
 import thothbot.parallax.core.client.context.Canvas3dException;
+import thothbot.parallax.core.client.events.AnimationReadyEvent;
+import thothbot.parallax.core.client.events.AnimationReadyHandler;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.widget.BadCanvasPanel;
 import thothbot.parallax.core.client.widget.Debugger;

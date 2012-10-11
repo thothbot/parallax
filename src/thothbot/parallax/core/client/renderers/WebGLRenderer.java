@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.context.Canvas3d;
+import thothbot.parallax.core.client.events.HasEventBus;
+import thothbot.parallax.core.client.events.WebGlRendererResizeEvent;
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
@@ -73,7 +75,6 @@ import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Frustum;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
-import thothbot.parallax.core.shared.core.HasEventBus;
 import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;

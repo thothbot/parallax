@@ -17,13 +17,11 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.shared.core;
+package thothbot.parallax.core.client.events;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.EventHandler;
 
-public interface HasEventBus 
+public interface WebGlRendererResizeHandler extends EventHandler
 {
-	public static EventBus EVENT_BUS = GWT.create(SimpleEventBus.class);
+	public void onResize(WebGlRendererResizeEvent event);
 }

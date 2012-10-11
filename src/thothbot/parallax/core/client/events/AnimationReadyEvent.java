@@ -17,34 +17,38 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.renderers;
+package thothbot.parallax.core.client.events;
+
+import thothbot.parallax.core.client.AnimatedScene;
+import thothbot.parallax.core.client.RenderingPanel;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 
 import com.google.gwt.event.shared.GwtEvent;
 
-public class WebGlRendererResizeEvent extends GwtEvent<WebGlRendererResizeHandler>
+/**
+ * The event is called when the {@link RenderingPanel} is fully initialized and 
+ * {@link AnimatedScene} is ready for the {@link WebGLRenderer}.
+ * 
+ * @author thothbot
+ *
+ */
+public class AnimationReadyEvent extends GwtEvent<AnimationReadyHandler>
 {
-	public static Type<WebGlRendererResizeHandler> TYPE = new Type<WebGlRendererResizeHandler>();
+	public static Type<AnimationReadyHandler> TYPE = new Type<AnimationReadyHandler>();
 
-	private WebGLRenderer renderer;
-	
-    public WebGlRendererResizeEvent(WebGLRenderer renderer) 
+    public AnimationReadyEvent() 
     {
-    	this.renderer = renderer;
-    }
-    
-    public WebGLRenderer getRenderer() {
-    	return this.renderer;
     }
 
     @Override
-    public Type<WebGlRendererResizeHandler> getAssociatedType() 
+    public Type<AnimationReadyHandler> getAssociatedType() 
     {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(WebGlRendererResizeHandler handler) 
+    protected void dispatch(AnimationReadyHandler handler) 
     {
-        handler.onResize(this);
+        handler.onAnimationReady(this);
     }
 }

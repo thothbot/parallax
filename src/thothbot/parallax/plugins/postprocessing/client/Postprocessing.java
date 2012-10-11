@@ -25,6 +25,8 @@ package thothbot.parallax.plugins.postprocessing.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.client.events.WebGlRendererResizeEvent;
+import thothbot.parallax.core.client.events.WebGlRendererResizeHandler;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
@@ -32,8 +34,6 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.renderers.WebGlRendererResizeEvent;
-import thothbot.parallax.core.client.renderers.WebGlRendererResizeHandler;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;

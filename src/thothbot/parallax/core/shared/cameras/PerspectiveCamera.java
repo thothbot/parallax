@@ -22,8 +22,8 @@
 
 package thothbot.parallax.core.shared.cameras;
 
-import thothbot.parallax.core.client.renderers.WebGlRendererResizeEvent;
-import thothbot.parallax.core.client.renderers.WebGlRendererResizeHandler;
+import thothbot.parallax.core.client.events.WebGlRendererResizeEvent;
+import thothbot.parallax.core.client.events.WebGlRendererResizeHandler;
 
 /**
  * Camera with perspective projection.
