@@ -69,7 +69,6 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Frustum;
@@ -109,16 +108,21 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HasHandlers;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
-public class WebGLRenderer
+public class WebGLRenderer implements HasHandlers
 {
+	private HandlerManager handlerManager;
+	
 	// The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
 	private WebGLRenderingContext gl;
 
-	private WebGLRenderInfo info;
+	private WebGlRendererInfo info;
 				
 	// Integer, default is Color(0x000000).
 	private Color clearColor = new Color(0x000000);
@@ -233,8 +237,9 @@ public class WebGLRenderer
 	public WebGLRenderer(WebGLRenderingContext gl, int width, int height)
 	{
 		this.gl = gl;
+		this.handlerManager = new HandlerManager(this);
 
-		this.setInfo(new WebGLRenderInfo());
+		this.setInfo(new WebGlRendererInfo());
 		
 		this.frustum = new Frustum();
 		
@@ -287,6 +292,11 @@ public class WebGLRenderer
 		this.renderPluginsPre = new ArrayList<Plugin>();
 		this.renderPluginsPost = new ArrayList<Plugin>();
 	}
+	
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        handlerManager.fireEvent(event);
+    }
 
 	public void addPlugin(Plugin plugin)
 	{
@@ -470,15 +480,15 @@ public class WebGLRenderer
 	}
 
 	/**
-	 * Gets {@link WebGLRenderInfo} instance with debug information.
+	 * Gets {@link WebGlRendererInfo} instance with debug information.
 	 * 
-	 * @return the {@link WebGLRenderInfo} instance
+	 * @return the {@link WebGlRendererInfo} instance
 	 */
-	public WebGLRenderInfo getInfo() {
+	public WebGlRendererInfo getInfo() {
 		return info;
 	}
 	
-	private void setInfo(WebGLRenderInfo info) {
+	private void setInfo(WebGlRendererInfo info) {
 		this.info = info;
 	}
 
@@ -529,7 +539,10 @@ public class WebGLRenderer
 	{
 		this.absoluteWidth = width;
 		this.absoluteHeight = height;
+		
 		setViewport(0, 0, width, height);
+		
+		fireEvent(new WebGlRendererResizeEvent(this));
 	}
 
 	/**
@@ -808,13 +821,6 @@ public class WebGLRenderer
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
 	{
 		Log.debug("Called render()");
-
-		// TODO: not correct. Move it to AnimatedScene
-		if(camera.getClass() == PerspectiveCamera.class &&
-				getAbsoluteAspectRation() != ((PerspectiveCamera)camera).getAspectRation())
-		{
-			((PerspectiveCamera)camera).setAspectRatio(getAbsoluteAspectRation());
-		}
 
 		// reset caching for this frame
 		this.cache_currentMaterialId = -1;

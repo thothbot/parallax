@@ -35,7 +35,7 @@ import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
-import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
+import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
@@ -166,7 +166,7 @@ public class Mesh extends GeometryObject
 	public void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers)
 	{
 		WebGLRenderingContext gl = renderer.getGL();
-		WebGLRenderInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 
 		// wireframe
 		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() ) 
@@ -200,7 +200,7 @@ public class Mesh extends GeometryObject
 	@Override
 	public void initBuffer(WebGLRenderer renderer) 
 	{
-		WebGLRenderInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 	
 		Geometry geometry = this.getGeometry();
 

@@ -86,9 +86,6 @@ public abstract class AnimatedScene extends Animation
 	 */
 	public void init(RenderingPanel renderingPanel, AnimationUpdateHandler animationUpdateHandler)
 	{
-		if(renderingPanel != null)
-			return;
-
 		this.renderingPanel = renderingPanel;
 		this.scene = new Scene();
 

@@ -30,7 +30,7 @@ import com.google.gwt.core.client.Duration;
  * @author thothbot
  *
  */
-public class WebGLRenderInfo
+public class WebGlRendererInfo
 {
 
 	/**
@@ -91,9 +91,9 @@ public class WebGLRenderInfo
 	private WebGLRenderTimer timer;
 	
 	/**
-	 * Default constructor for {@link WebGLRenderInfo} initialization.
+	 * Default constructor for {@link WebGlRendererInfo} initialization.
 	 */
-	public WebGLRenderInfo() 
+	public WebGlRendererInfo() 
 	{
 		this.render = new WebGLRenderInfoRender();
 		this.memory = new WebGLRenderInfoMemory();
@@ -101,7 +101,7 @@ public class WebGLRenderInfo
 	}
 
 	/**
-	 * Gets {@link WebGLRenderInfo.WebGLRenderInfoRender} information.
+	 * Gets {@link WebGlRendererInfo.WebGLRenderInfoRender} information.
 	 */
 	public WebGLRenderInfoRender getRender()
 	{
@@ -109,7 +109,7 @@ public class WebGLRenderInfo
 	}
 
 	/**
-	 * Gets {@link WebGLRenderInfo.WebGLRenderInfoMemory} information.
+	 * Gets {@link WebGlRendererInfo.WebGLRenderInfoMemory} information.
 	 */
 	public WebGLRenderInfoMemory getMemory()
 	{
@@ -117,7 +117,7 @@ public class WebGLRenderInfo
 	}
 
 	/**
-	 * Gets {@link WebGLRenderInfo.WebGLRenderTimer} information.
+	 * Gets {@link WebGlRendererInfo.WebGLRenderTimer} information.
 	 */
 	public WebGLRenderTimer getTimer()
 	{

@@ -33,7 +33,7 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
-import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
+import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
@@ -106,7 +106,7 @@ public class ParticleSystem extends GeometryObject
 	public void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers)
 	{
 		WebGLRenderingContext gl = renderer.getGL();
-		WebGLRenderInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 		
 		gl.drawArrays( BeginMode.POINTS, 0, geometryBuffer.__webglParticleCount );
 
@@ -135,7 +135,7 @@ public class ParticleSystem extends GeometryObject
 	private void createBuffers (  WebGLRenderer renderer, GeometryBuffer geometry ) 
 	{
 		WebGLRenderingContext gl = renderer.getGL();
-		WebGLRenderInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 		
 		geometry.__webglVertexBuffer = gl.createBuffer();
 		geometry.__webglColorBuffer = gl.createBuffer();

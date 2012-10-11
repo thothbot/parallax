@@ -22,6 +22,9 @@
 
 package thothbot.parallax.core.shared.cameras;
 
+import thothbot.parallax.core.client.renderers.WebGlRendererResizeEvent;
+import thothbot.parallax.core.client.renderers.WebGlRendererResizeHandler;
+
 /**
  * Camera with perspective projection.
  * <pre>
@@ -77,6 +80,12 @@ public class PerspectiveCamera extends Camera
 		this.far = far;
 
 		updateProjectionMatrix();
+	}
+	
+	@Override
+	public void onResize(WebGlRendererResizeEvent event) 
+	{
+		setAspectRatio(event.getRenderer().getAbsoluteAspectRation());	
 	}
 
 	/**

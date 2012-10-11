@@ -20,7 +20,7 @@
 package thothbot.parallax.core.client.widget;
 
 import thothbot.parallax.core.client.RenderingPanel;
-import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
+import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Label;
  */
 public class Debugger extends FlowPanel
 {
-	private WebGLRenderInfo info;
+	private WebGlRendererInfo info;
 	
 	FlowPanel frameRate;
 	FlowPanel renderingInfo;
@@ -45,7 +45,7 @@ public class Debugger extends FlowPanel
 	private Label string1;
 	private Label string2;
 	
-	public Debugger(WebGLRenderInfo info)
+	public Debugger(WebGlRendererInfo info)
 	{
 		super();
 		this.setStyleName("common-panel", true);

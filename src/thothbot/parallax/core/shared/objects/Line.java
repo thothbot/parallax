@@ -29,7 +29,7 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
-import thothbot.parallax.core.client.renderers.WebGLRenderInfo;
+import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.core.Color;
@@ -111,7 +111,7 @@ public class Line extends GeometryObject
 	public void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers)
 	{
 		WebGLRenderingContext gl = renderer.getGL();
-		WebGLRenderInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 		
 		BeginMode primitives = ( this.getType() == Line.TYPE.STRIPS) 
 				? BeginMode.LINE_STRIP 
@@ -142,7 +142,7 @@ public class Line extends GeometryObject
 	private void createBuffers ( WebGLRenderer renderer, Geometry geometry ) 
 	{
 		WebGLRenderingContext gl = renderer.getGL();
-		WebGLRenderInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 		
 		geometry.__webglVertexBuffer = gl.createBuffer();
 		geometry.__webglColorBuffer = gl.createBuffer();

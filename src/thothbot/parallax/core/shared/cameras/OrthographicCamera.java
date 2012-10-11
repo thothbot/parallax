@@ -22,6 +22,9 @@
 
 package thothbot.parallax.core.shared.cameras;
 
+import thothbot.parallax.core.client.renderers.WebGlRendererResizeEvent;
+import thothbot.parallax.core.client.renderers.WebGlRendererResizeHandler;
+
 /**
  * Camera with orthographic projection
  * 
@@ -82,10 +85,16 @@ public class OrthographicCamera extends Camera
 
 		this.near = near;
 		this.far = far;
-		
+
 		updateProjectionMatrix();
 	}
-
+	
+	@Override
+	public void onResize(WebGlRendererResizeEvent event) 
+	{
+		setSize( event.getRenderer().getAbsoluteWidth(), event.getRenderer().getAbsoluteHeight() );
+	}
+	
 	public void setSize(double width, double height)
 	{
 		this.left = width / -2.0;
