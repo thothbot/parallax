@@ -21,7 +21,6 @@ package thothbot.parallax.core.client;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.core.client.Duration;
@@ -101,13 +100,5 @@ public abstract class AnimatedScene extends Animation
 		onUpdate(duration);
 		
 		animationUpdateHandler.onUpdate();
-	}
-	
-	/**
-	 * Called when size has been changed on {@link Canvas3d} element. 
-	 * This method basically used for updating aspect ratio for {@link PerspectiveCamera}.
-	 */
-	protected void onResize() {
-		// Empty
 	}
 }

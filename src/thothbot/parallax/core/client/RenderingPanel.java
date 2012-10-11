@@ -295,9 +295,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 			public void execute() 
 			{
 				setSize(RenderingPanel.this.getOffsetWidth(), RenderingPanel.this.getOffsetHeight());
-
-				if(animatedScene != null)
-					animatedScene.onResize();
 			}
 		});
 	}
