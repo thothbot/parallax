@@ -38,11 +38,16 @@ import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.utils.ColorUtils;
+import thothbot.parallax.loader.shared.json.JsoFactory;
+import thothbot.parallax.loader.shared.json.JsoFile;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONException;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
+import com.google.web.bindery.autobean.shared.AutoBean;
+import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 
 public class JsonLoader extends Loader 
 {
@@ -58,7 +63,7 @@ public class JsonLoader extends Loader
 	
 	@Override
 	public void parse(String string) 
-	{
+	{		 
 		if(!isThisJsonStringValid(string))
 			return;
 		
@@ -136,6 +141,9 @@ public class JsonLoader extends Loader
 	
 	private boolean isThisJsonStringValid(String iJSonString) 
 	{ 
+		JsoFactory factory = GWT.create(JsoFactory.class);
+		AutoBean<JsoFile> bean = AutoBeanCodex.decode(factory, JsoFile.class, iJSonString);
+//	    return bean.as();
 		try 
 		{   
 			json = JSONParser.parseLenient(iJSonString).isObject();
