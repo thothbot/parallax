@@ -73,6 +73,7 @@ import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Frustum;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
+import thothbot.parallax.core.shared.core.HasEventBus;
 import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector2;
@@ -115,10 +116,8 @@ import com.google.gwt.event.shared.HasHandlers;
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
-public class WebGLRenderer implements HasHandlers
+public class WebGLRenderer implements HasEventBus
 {
-	private HandlerManager handlerManager;
-	
 	// The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
 	private WebGLRenderingContext gl;
 
@@ -237,7 +236,6 @@ public class WebGLRenderer implements HasHandlers
 	public WebGLRenderer(WebGLRenderingContext gl, int width, int height)
 	{
 		this.gl = gl;
-		this.handlerManager = new HandlerManager(this);
 
 		this.setInfo(new WebGlRendererInfo());
 		
@@ -292,11 +290,6 @@ public class WebGLRenderer implements HasHandlers
 		this.renderPluginsPre = new ArrayList<Plugin>();
 		this.renderPluginsPost = new ArrayList<Plugin>();
 	}
-	
-    @Override
-    public void fireEvent(GwtEvent<?> event) {
-        handlerManager.fireEvent(event);
-    }
 
 	public void addPlugin(Plugin plugin)
 	{
@@ -542,7 +535,7 @@ public class WebGLRenderer implements HasHandlers
 		
 		setViewport(0, 0, width, height);
 		
-		fireEvent(new WebGlRendererResizeEvent(this));
+		EVENT_BUS.fireEvent(new WebGlRendererResizeEvent(this));
 	}
 
 	/**

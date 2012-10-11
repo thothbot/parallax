@@ -25,6 +25,7 @@ package thothbot.parallax.core.shared.cameras;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.renderers.WebGlRendererResizeEvent;
 import thothbot.parallax.core.client.renderers.WebGlRendererResizeHandler;
+import thothbot.parallax.core.shared.core.HasEventBus;
 import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
@@ -38,7 +39,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
  * @author thothbot
  *
  */
-public class Camera extends Object3D implements WebGlRendererResizeHandler
+public class Camera extends Object3D implements HasEventBus, WebGlRendererResizeHandler
 {
 	protected Matrix4 matrixWorldInverse;
 	protected Matrix4 projectionMatrix;
@@ -47,12 +48,9 @@ public class Camera extends Object3D implements WebGlRendererResizeHandler
 	public Float32Array _viewMatrixArray;
 	public Float32Array _projectionMatrixArray;
 	
-	private HandlerManager handlerManager;
-
 	public Camera() 
 	{
 		super();
-		this.handlerManager = new HandlerManager(this);
 
 		this.matrixWorldInverse = new Matrix4();
 		this.projectionMatrix = new Matrix4();
@@ -66,12 +64,12 @@ public class Camera extends Object3D implements WebGlRendererResizeHandler
 	
 	public HandlerRegistration addWebGlResizeEventHandler(WebGlRendererResizeHandler handler) 
 	{
-		return handlerManager.addHandler(WebGlRendererResizeEvent.TYPE, handler);
+		return EVENT_BUS.addHandler(WebGlRendererResizeEvent.TYPE, handler);
 	}
 	
 	@Override
 	public void onResize(WebGlRendererResizeEvent event) {
-		//  Empty
+		//  Empty for capability
 	}
 
 	public Matrix4 getMatrixWorldInverse()
