@@ -34,6 +34,7 @@ import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphColor;
+import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
@@ -61,7 +62,11 @@ import thothbot.parallax.loader.shared.json.JsoObject;
 import thothbot.parallax.loader.shared.json.JsoObjectFactory;
 import thothbot.parallax.loader.shared.json.JsoTextureWrapMode;
 
+import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.json.client.JSONException;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
@@ -673,7 +678,7 @@ public class JsonLoader extends Loader
 		boolean isCompressed = sourceFile.toLowerCase().endsWith(".dds");
 		String fullPath =  getTexturePath() + sourceFile;
 
-		Texture texture;
+		final Texture texture;
 		
 		if ( isCompressed ) 
 		{
@@ -681,7 +686,31 @@ public class JsonLoader extends Loader
 		} 
 		else 
 		{
-			texture = new Texture(fullPath);
+			texture = new Texture(fullPath, new Texture.ImageLoadHandler() {
+				
+				@Override
+				public void onImageLoad(Texture texture) 
+				{
+					int oWidth =  texture.getImage().getOffsetWidth();
+					int oHeight = texture.getImage().getOffsetHeight();
+							
+					if ( !Mathematics.isPowerOfTwo( oWidth ) || !Mathematics.isPowerOfTwo( oHeight ) ) 
+					{
+						CanvasElement canvas = Document.get().createElement("canvas").cast();
+						int width = Mathematics.getNextHighestPowerOfTwo(oWidth);
+						int height = Mathematics.getNextHighestPowerOfTwo(oHeight);
+						canvas.setWidth(width);
+						canvas.setHeight(height);
+						
+						Context2d context = canvas.getContext2d();
+						context.drawImage( (ImageElement)texture.getImage(), 0, 0, width, height );
+
+						texture.setImage(canvas);
+					} 
+
+					texture.setNeedsUpdate(true);
+				}
+			});
 		}
 
 		if( repeat != null) 
