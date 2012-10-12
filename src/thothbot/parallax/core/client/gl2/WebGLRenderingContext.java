@@ -1603,6 +1603,13 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 	  texImage2D(target.getValue(), level, format.getValue(), 
 			  format.getValue(), type.getValue(), pixels);
   }
+  
+  public void texImage2D(TextureTarget target, int slot, int level, 
+		  PixelFormat format, 
+		  PixelType type, CanvasElement pixels) {
+	  texImage2D(target.getValue() + slot, level, format.getValue(), 
+			  format.getValue(), type.getValue(), pixels);
+  }
 
   /**
    * Uploads the given element or image data to the currently bound WebGLTexture.
@@ -1671,6 +1678,13 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 	  texImage2D(target.getValue(), level, format.getValue(), 
 			  format.getValue(), type.getValue(), pixels);
   }
+  
+  public void texImage2D(TextureTarget target, int slot, int level, 
+		  PixelFormat format, 
+		  PixelType type, ImageElement pixels) {
+	  texImage2D(target.getValue() + slot, level, format.getValue(), 
+			  format.getValue(), type.getValue(), pixels);
+  }
 
   /**
    * Uploads the given element or image data to the currently bound WebGLTexture.
@@ -1703,18 +1717,6 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 		  PixelFormat format, 
 		  PixelType type, VideoElement pixels) {
 	  texImage2D(target.getValue(), level, format.getValue(), 
-			  format.getValue(), type.getValue(), pixels);
-  }
-  
-  @Deprecated
-  public void texImage2D(TextureTarget target, int level, PixelFormat format, PixelType type, Element pixels) {
-	  texImage2D(target.getValue(), level, format.getValue(), 
-			  format.getValue(), type.getValue(), pixels);
-  }
-  
-  @Deprecated
-  public void texImage2D(TextureTarget target, int slot, int level, PixelFormat format, PixelType type, Element pixels) {
-	  texImage2D(target.getValue() + slot, level, format.getValue(), 
 			  format.getValue(), type.getValue(), pixels);
   }
 	

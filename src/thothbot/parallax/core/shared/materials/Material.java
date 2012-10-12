@@ -824,7 +824,6 @@ public abstract class Material
 		return false;
 	}
 
-	// TODO: vary bad code
 	public static Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) 
 	{
 		Material material = null;
@@ -839,6 +838,7 @@ public abstract class Material
 		
 		return material;
 	}
+	
 	
 	public void deallocate( WebGLRenderer renderer ) 
 	{

@@ -110,6 +110,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.ImageElement;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
@@ -2025,11 +2026,7 @@ public class WebGLRenderer implements HasEventBus
 			getGL().pixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL, texture.isFlipY() ? 1 : 0 );
 			getGL().pixelStorei( PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.isPremultiplyAlpha() ? 1 : 0 );
 
-			Element image = texture.getImage();
-			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
-					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
-
-			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, true /*power of two*/ );
 
 			if ( texture instanceof CompressedTexture ) 
 			{
@@ -2054,10 +2051,23 @@ public class WebGLRenderer implements HasEventBus
 			} 
 			else 
 			{
-				getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(), image );
+				Element image = texture.getImage();
+				boolean isImagePowerOfTwo = 
+						   Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
+						&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
+
+				if(!isImagePowerOfTwo) 
+				{
+					getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(),
+							createPowerOfTwoImage((ImageElement)image));
+				}
+				else
+				{
+					getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(), (ImageElement)image );
+				}
 			}
 
-			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo ) 
+			if ( texture.isGenerateMipmaps() ) 
 				getGL().generateMipmap( TextureTarget.TEXTURE_2D );
 
 			texture.setNeedsUpdate(false);
@@ -2067,6 +2077,23 @@ public class WebGLRenderer implements HasEventBus
 			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 			getGL().bindTexture( TextureTarget.TEXTURE_2D, texture.getWebGlTexture() );
 		}
+	}
+	
+	private CanvasElement createPowerOfTwoImage(Element image) 
+	{
+		int width = image.getOffsetWidth();
+		int height = image.getOffsetHeight();
+		
+		CanvasElement canvas = Document.get().createElement("canvas").cast();
+		
+		// Scale up the texture to the next highest power of two dimensions.
+		canvas.setWidth( Mathematics.getNextHighestPowerOfTwo( width ) );
+		canvas.setHeight( Mathematics.getNextHighestPowerOfTwo( height ) );
+
+		Context2d context = canvas.getContext2d();
+		context.drawImage((ImageElement)image, 0, 0, width, height);
+		
+		return canvas;
 	}
 
 	/**
@@ -2095,7 +2122,7 @@ public class WebGLRenderer implements HasEventBus
 		canvas.setHeight(newHeight);
 		
 		Context2d context = canvas.getContext2d();
-		context.drawImage((CanvasElement) image, 0, 0, imgWidth, imgHeight, 0, 0, newWidth, newHeight );
+		context.drawImage((ImageElement)image, 0, 0, imgWidth, imgHeight, 0, 0, newWidth, newHeight );
 
 		return canvas;
 	}
@@ -2132,15 +2159,23 @@ public class WebGLRenderer implements HasEventBus
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
-			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_CUBE_MAP, isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_CUBE_MAP, true /*power of two*/ );
 
 			for ( int i = 0; i < 6; i ++ ) 
 			{
-				getGL().texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i, 0, 
-						texture.getFormat(), texture.getType(), cubeImage.get( i ) );
+				if(!isImagePowerOfTwo)
+				{
+					getGL().texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i, 0, 
+							texture.getFormat(), texture.getType(), createPowerOfTwoImage( cubeImage.get( i ) ) );
+				}
+				else
+				{
+					getGL().texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i, 0, 
+							texture.getFormat(), texture.getType(), (ImageElement)cubeImage.get( i ) );
+				}
 			}
 
-			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )	
+			if ( texture.isGenerateMipmaps() )	
 				getGL().generateMipmap( TextureTarget.TEXTURE_CUBE_MAP );
 
 			texture.setNeedsUpdate(false);

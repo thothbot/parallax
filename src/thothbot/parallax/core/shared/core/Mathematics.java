@@ -39,6 +39,17 @@ public class Mathematics
 	{
 		return ( value & ( value - 1 ) ) == 0;
 	}
+	
+	 
+	public static int getNextHighestPowerOfTwo( int x) 
+	{
+	    --x;
+	    for (int i = 1; i < 32; i <<= 1) 
+	    {
+	        x = x | x >> i;
+	    }
+	    return x + 1;
+	}
 
 	/**
 	 * The method checks id the value is even.

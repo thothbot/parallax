@@ -498,10 +498,8 @@ public class Texture
 		if(f == WebGLConstants.NEAREST || f == WebGLConstants.NEAREST_MIPMAP_NEAREST || f == WebGLConstants.NEAREST_MIPMAP_LINEAR)
 			return WebGLConstants.NEAREST;
 
-//		if(f == WebGLConstants.LINEAR || f == WebGLConstants.LINEAR_MIPMAP_NEAREST || f == WebGLConstants.LINEAR_MIPMAP_LINEAR)
-			return WebGLConstants.LINEAR;
+		return WebGLConstants.LINEAR;
 	}
-	
 	
 	/**
 	 * Releases a texture from the GL context.
