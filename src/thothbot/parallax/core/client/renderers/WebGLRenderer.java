@@ -2026,7 +2026,11 @@ public class WebGLRenderer implements HasEventBus
 			getGL().pixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL, texture.isFlipY() ? 1 : 0 );
 			getGL().pixelStorei( PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.isPremultiplyAlpha() ? 1 : 0 );
 
-			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, true /*power of two*/ );
+			Element image = texture.getImage();
+			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
+					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
+
+			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
 			if ( texture instanceof CompressedTexture ) 
 			{
@@ -2051,23 +2055,10 @@ public class WebGLRenderer implements HasEventBus
 			} 
 			else 
 			{
-				Element image = texture.getImage();
-				boolean isImagePowerOfTwo = 
-						   Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
-						&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
-
-				if(!isImagePowerOfTwo) 
-				{
-					getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(),
-							createPowerOfTwoImage((ImageElement)image));
-				}
-				else
-				{
-					getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(), (ImageElement)image );
-				}
+				getGL().texImage2D( TextureTarget.TEXTURE_2D, 0, texture.getFormat(), texture.getType(), (ImageElement)image );
 			}
 
-			if ( texture.isGenerateMipmaps() ) 
+			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo ) 
 				getGL().generateMipmap( TextureTarget.TEXTURE_2D );
 
 			texture.setNeedsUpdate(false);
