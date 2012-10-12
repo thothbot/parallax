@@ -22,6 +22,9 @@
 
 package thothbot.parallax.core.client.textures;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLTexture;
@@ -533,6 +536,7 @@ public class Texture
 		return clonedTexture;
 	}
 	
+	private static List<String> loadedImages = new ArrayList<String>();
 	private static FlowPanel loadingArea = new FlowPanel();
 	static {
 		loadingArea.getElement().getStyle().setProperty("visibility", "hidden");
@@ -550,6 +554,14 @@ public class Texture
 	
 	protected void loadImage(final Image image, final Loader loader)
 	{
+		// Do not load loaded image
+		if(loadedImages.contains(image.getUrl()))
+		{
+			loader.onLoad();
+			return;
+		}
+		
+		loadedImages.add(image.getUrl());
 		loadingArea.add(image);
 		
 	    // Hook up an error handler, so that we can be informed if the image fails

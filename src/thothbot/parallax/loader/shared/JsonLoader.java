@@ -452,8 +452,6 @@ public class JsonLoader extends Loader
 				nUvLayers ++;
 		}
 		
-		Log.error(nUvLayers, uvs.size());
-		
 		for ( int i = 0; i < nUvLayers; i++ ) 
 		{
 			geometry.getFaceUvs().add( i, new ArrayList<UV>());
@@ -495,9 +493,6 @@ public class JsonLoader extends Loader
 
 			if ( hasMaterial ) 
 				face.setMaterialIndex(faces.get(offset++));
-
-			// to get face <=> uv index correspondence
-//			int fi = geometry.getFaces().size();
 
 			if ( hasFaceUv ) 
 			{
@@ -723,7 +718,7 @@ public class JsonLoader extends Loader
 		return new Color(
 				  ((int)(rgb.get(0) * 255) << 16 ) 
 				+ ((int)(rgb.get(1) * 255) << 8 ) 
-				+  (int)(rgb.get(2) * 255));
+				+  (int)(rgb.get(2) * 255));		
 	}
 
 	private boolean hasNormals() 
