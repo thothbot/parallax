@@ -31,6 +31,9 @@ import thothbot.parallax.core.shared.core.Geometry.MorphColor;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.core.Vector4;
+import thothbot.parallax.core.shared.materials.HasAmbientEmissiveColor;
+import thothbot.parallax.core.shared.materials.HasColor;
+import thothbot.parallax.core.shared.materials.HasSpecularMap;
 import thothbot.parallax.core.shared.materials.HasVertexColors;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
@@ -208,43 +211,37 @@ public class JsonLoader extends Loader
 			((HasVertexColors) material).setVertexColors(COLORS.VERTEX);
 		}
 			
-//		// colors
-//
-//		if ( m.colorDiffuse ) {
-//
-//			mpars.color = rgb2hex( m.colorDiffuse );
-//
-//		} else if ( m.DbgColor ) {
-//
-//			mpars.color = m.DbgColor;
-//
-//		}
-//
-//		if ( m.colorSpecular ) {
-//
-//			mpars.specular = rgb2hex( m.colorSpecular );
-//
-//		}
-//
-//		if ( m.colorAmbient ) {
-//
-//			mpars.ambient = rgb2hex( m.colorAmbient );
-//
-//		}
-//
-//		// modifiers
-//
-//		if ( m.transparency ) {
-//
-//			mpars.opacity = m.transparency;
-//
-//		}
-//
-//		if ( m.specularCoef ) {
-//
-//			mpars.shininess = m.specularCoef;
-//
-//		}
+		if(material instanceof HasColor)
+		{
+			if(jsonMaterial.getColorDiffuse() != null)
+			{
+				((HasColor) material).setColor(getColor(jsonMaterial.getColorDiffuse()));
+			}
+			else if(jsonMaterial.getDbgColor() > 0)
+			{
+				((HasColor) material).setColor(new Color(jsonMaterial.getDbgColor()));
+			}
+		}
+		
+		if(jsonMaterial.getColorSpecular() != null && material instanceof MeshPhongMaterial)
+		{
+			((MeshPhongMaterial)material).setSpecular(getColor(jsonMaterial.getColorSpecular()));
+		}
+
+		if(jsonMaterial.getColorAmbient() != null && material instanceof HasAmbientEmissiveColor)
+		{
+			((HasAmbientEmissiveColor)material).setAmbient(getColor(jsonMaterial.getColorAmbient()));
+		}
+		
+		if(jsonMaterial.getTransparent())
+		{
+			material.setOpacity(jsonMaterial.getTransparency());
+		}
+		
+		if(jsonMaterial.getSpecularCoef() > 0 && material instanceof MeshPhongMaterial)
+		{
+			((MeshPhongMaterial)material).setShininess(jsonMaterial.getSpecularCoef());
+		}
 //
 //		// textures
 //
@@ -665,6 +662,15 @@ public class JsonLoader extends Loader
 //		load_image( where[ name ], texturePath + "/" + sourceFile );
 //	}
 	
+
+	private Color getColor( List<Double> rgb ) 
+	{
+		return new Color(
+				  ((int)(rgb.get(0) * 255) << 16 ) 
+				+ ((int)(rgb.get(1) * 255) << 8 ) 
+				+  (int)(rgb.get(2) * 255));
+	}
+
 	private boolean hasNormals() 
 	{
 		for( int i = 0; i < this.materials.size(); i ++ ) 

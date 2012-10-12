@@ -23,12 +23,25 @@ import java.util.List;
 
 public interface JsoMaterial 
 {
+	int getDbgColor();
+	int getDbgIndex();
+	String getDbgName();
+	
 	JsoBlending getBlending();
 	
+	/**
+	 * List of R, G, B
+	 */
 	List<Double> getColorAmbient();
-	
+
+	/**
+	 * List of R, G, B
+	 */
 	List<Double> getColorDiffuse();
 	
+	/**
+	 * List of R, G, B
+	 */
 	List<Double> getColorSpecular();
 	
 	double getIllumination();
