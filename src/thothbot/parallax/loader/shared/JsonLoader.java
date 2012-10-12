@@ -447,7 +447,18 @@ public class JsonLoader extends Loader
 		
 		// disregard empty arrays
 		for ( int i = 0; i < uvs.size(); i++ )
-			if ( uvs.get( i ).size() > 0) nUvLayers ++;
+		{
+			if ( uvs.get( i ).size() > 0) 
+				nUvLayers ++;
+		}
+		
+		Log.error(nUvLayers, uvs.size());
+		
+		for ( int i = 0; i < nUvLayers; i++ ) 
+		{
+			geometry.getFaceUvs().add( i, new ArrayList<UV>());
+			geometry.getFaceVertexUvs().add( i, new ArrayList<List<UV>>());
+		}
 		
 		List<Double> normals = object.getNormals();
 		List<Integer> colors = object.getColors();
