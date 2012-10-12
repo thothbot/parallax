@@ -52,28 +52,6 @@ public interface JsoMaterial
 	
 	boolean getDepthWrite();
 
-	String getMapLight();
-	
-	String getMapBump();
-	
-	String getMapSpecular();
-	
-	List<Integer> getMapBumpRepeat();
-	
-	List<Integer> getMapSpecularRepeat();
-	
-	List<String> getMapBumpWrap();
-	
-	List<String> getMapSpecularWrap();
-	
-	double getMapBumpScale();
-	
-	int getMapBumpAnisotropy();
-	
-	int getMapSpecularAnisotropy();
-	
-	int getMapLightAnisotropy();
-	
 	String getShading();
 	
 	double getSpecularCoef();
@@ -83,4 +61,44 @@ public interface JsoMaterial
 	boolean getTransparent();
 	
 	boolean getVertexColors();
+
+	///////////////////////////////////////////////
+	// Textures
+	
+	// Diffuse
+	String getMapDiffuse();
+	List<Integer> getMapDiffuseRepeat();
+	List<JsoTextureWrapMode> getMapDiffuseWrap();
+	int getMapDiffuseAnisotropy();
+	List<Double> getMapDiffuseOffset();
+
+	// Light
+	String getMapLight();
+	List<Integer> getMapLightRepeat();
+	List<JsoTextureWrapMode> getMapLightWrap();
+	int getMapLightAnisotropy();
+	List<Double> getMapLightOffset();
+	
+	// Bump
+	String getMapBump();
+	List<Integer> getMapBumpRepeat();
+	List<JsoTextureWrapMode> getMapBumpWrap();
+	double getMapBumpScale();
+	int getMapBumpAnisotropy();
+	List<Double> getMapBumpOffset();
+	
+	// Normal
+	String getMapNormal();
+	List<Integer> getMapNormalRepeat();
+	List<JsoTextureWrapMode> getMapNormalWrap();
+	int getMapNormalAnisotropy();
+	List<Double> getMapNormalOffset();
+	double getMapNormalFactor();
+	
+	// Specular
+	String getMapSpecular();
+	List<Integer> getMapSpecularRepeat();
+	List<JsoTextureWrapMode> getMapSpecularWrap();
+	int getMapSpecularAnisotropy();
+	List<Double> getMapSpecularOffset();
 }

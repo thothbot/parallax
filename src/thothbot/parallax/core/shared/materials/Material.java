@@ -144,7 +144,7 @@ public abstract class Material
 	private int id;
 	
 	private String name;
-	
+
 	private double opacity;
 	private boolean isTransparent;
 	
@@ -213,6 +213,10 @@ public abstract class Material
 	 */
 	public String getName() {
 		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public boolean isVisible() {
