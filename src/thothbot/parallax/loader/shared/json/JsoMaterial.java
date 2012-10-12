@@ -21,10 +21,15 @@ package thothbot.parallax.loader.shared.json;
 
 import java.util.List;
 
+import com.google.web.bindery.autobean.shared.AutoBean.PropertyName;
+
 public interface JsoMaterial 
 {
+	@PropertyName("DbgColor")
 	int getDbgColor();
+	@PropertyName("DbgIndex")
 	int getDbgIndex();
+	@PropertyName("DbgName")
 	String getDbgName();
 	
 	JsoBlending getBlending();

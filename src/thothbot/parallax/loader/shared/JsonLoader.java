@@ -182,7 +182,10 @@ public class JsonLoader extends Loader
 		
 		this.materials = new ArrayList<Material>(); 
 		for ( JsoMaterial material: object.getMaterials() )
+		{
 			this.materials.add( createMaterial( material ) );
+		}
+		geometry.setMaterials(this.materials);
 	}
 	
 	private Material createMaterial(JsoMaterial jsonMaterial)
@@ -401,6 +404,7 @@ public class JsonLoader extends Loader
 			material.setName(jsonMaterial.getDbgName());
 		}
 
+		Log.debug("Created new material - " + material.getName() + " - " + material.getClass().getName());
 		return material;
 	}
 
@@ -659,7 +663,7 @@ public class JsonLoader extends Loader
 	private Texture create_texture( String sourceFile, List<Integer> repeat, List<Double> offset, List<JsoTextureWrapMode> wrap, int anisotropy ) 
 	{
 		boolean isCompressed = sourceFile.toLowerCase().endsWith(".dds");
-		String fullPath =  getTexturePath() + "/" + sourceFile;
+		String fullPath =  getTexturePath() + sourceFile;
 
 		Texture texture;
 		
