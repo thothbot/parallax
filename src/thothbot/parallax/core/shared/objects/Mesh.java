@@ -1134,7 +1134,7 @@ public class Mesh extends GeometryObject
 			 }
 		 }
 
-		 if ( getGeometry().isUvsNeedUpdate() && (obj_uvs2 != null) && uvType ) 
+		 if ( getGeometry().isUvsNeedUpdate() && (obj_uvs2 != null && obj_uvs2.size() > 0) && uvType ) 
 		 {
 			 Float32Array uv2Array = geometryGroup.getWebGlUv2Array();
 			 int offset_uv2 = 0;

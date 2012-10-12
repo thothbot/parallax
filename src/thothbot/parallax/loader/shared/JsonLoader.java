@@ -437,21 +437,22 @@ public class JsonLoader extends Loader
 	{
 		if(object.getFaces() == null) 
 			return;
-		
+
 		Log.debug("JSON parseFaces()");
-		
+
 		List<Integer> faces = object.getFaces();
 
 		List<List<Double>> uvs = object.getUvs();
 		int nUvLayers = 0;
-		
+
 		// disregard empty arrays
 		for ( int i = 0; i < uvs.size(); i++ )
 		{
 			if ( uvs.get( i ).size() > 0) 
 				nUvLayers ++;
 		}
-		
+
+		// 0-index is initialized already
 		for ( int i = 0; i < nUvLayers; i++ ) 
 		{
 			geometry.getFaceUvs().add( i, new ArrayList<UV>());
@@ -460,7 +461,7 @@ public class JsonLoader extends Loader
 		
 		List<Double> normals = object.getNormals();
 		List<Integer> colors = object.getColors();
-				
+
 		int offset = 0;
 		int zLength = faces.size();
 
@@ -503,7 +504,6 @@ public class JsonLoader extends Loader
 					List<Double> uvLayer = uvs.get(i);
 
 					int uvIndex = faces.get(offset++);
-
 					UV UV = new UV( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1));
 
 					this.geometry.getFaceUvs().get(i).add(UV);
