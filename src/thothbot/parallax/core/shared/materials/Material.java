@@ -826,13 +826,20 @@ public abstract class Material
 
 	public static Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) 
 	{
+		Log.error(geometryGroup.materialIndex);
+		Material material = null;
 		if ( object.getMaterial() != null && !( object.getMaterial() instanceof MeshFaceMaterial ) )
-			return object.getMaterial();
-
+		{
+			material = object.getMaterial(); 
+			Log.error("++++++++++", material.getId());
+		}
 		else if ( geometryGroup.materialIndex >= 0 )
-			return object.getGeometry().getMaterials().get( geometryGroup.materialIndex );
+		{
+			material = object.getGeometry().getMaterials().get( geometryGroup.materialIndex );
+		Log.error("============", material.getId());	
+		}
 		
-		return null;
+		return material;
 	}
 	
 	

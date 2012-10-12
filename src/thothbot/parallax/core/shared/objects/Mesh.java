@@ -428,7 +428,7 @@ public class Mesh extends GeometryObject
 						|| geometry.isTangentsNeedUpdate()      
 						|| areCustomAttributesDirty
 				) {
-					setBuffers(gl, geometryGroup, BufferUsage.DYNAMIC_DRAW, !geometry.isDynamic(), material );
+					setBuffers( gl, geometryGroup, BufferUsage.DYNAMIC_DRAW );
 					material.getShader().clearCustomAttributes();
 				}
 			}
@@ -444,7 +444,7 @@ public class Mesh extends GeometryObject
 	}
 
 	// setMeshBuffers
-	private void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
+	private void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BufferUsage hint)
 	{
 		Log.debug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
 
@@ -1924,7 +1924,7 @@ public class Mesh extends GeometryObject
 			 }
 		 }
 
-		 if ( dispose ) 
+		 if ( !geometry.isDynamic() ) 
 			 geometryGroup.dispose();
 	}
 	

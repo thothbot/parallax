@@ -404,7 +404,7 @@ public class JsonLoader extends Loader
 			material.setName(jsonMaterial.getDbgName());
 		}
 
-		Log.debug("Created new material - " + material.getName() + " - " + material.getClass().getName());
+		Log.debug("Created new material ID " + material.getId() + " - " + material.getName() + " - " + material.getClass().getName());
 		return material;
 	}
 
@@ -492,7 +492,9 @@ public class JsonLoader extends Loader
 			}
 
 			if ( hasMaterial ) 
+			{
 				face.setMaterialIndex(faces.get(offset++));
+			}
 
 			if ( hasFaceUv ) 
 			{

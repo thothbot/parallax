@@ -180,7 +180,7 @@ public class ParticleSystem extends GeometryObject
 					|| this.sortParticles 
 					|| areCustomAttributesDirty
 					) {
-				this.setBuffers( renderer, this.geometry, BufferUsage.DYNAMIC_DRAW);
+				this.setBuffers( renderer, BufferUsage.DYNAMIC_DRAW);
 				this.material.getShader().clearCustomAttributes();
 			}
 
@@ -190,7 +190,7 @@ public class ParticleSystem extends GeometryObject
 	}
 
 	// setParticleBuffers
-	public void setBuffers (WebGLRenderer renderer, Geometry geometry, BufferUsage hint) 
+	public void setBuffers (WebGLRenderer renderer, BufferUsage hint) 
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		List<Vector3> vertices = geometry.getVertices();

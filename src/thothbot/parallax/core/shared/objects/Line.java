@@ -174,7 +174,7 @@ public class Line extends GeometryObject
 				|| this.geometry.isColorsNeedUpdate() 
 				|| areCustomAttributesDirty 
 		) {
-			this.setBuffers( gl, geometry, BufferUsage.DYNAMIC_DRAW );
+			this.setBuffers( gl, BufferUsage.DYNAMIC_DRAW );
 
 			this.material.getShader().clearCustomAttributes();
 		}
@@ -184,7 +184,7 @@ public class Line extends GeometryObject
 	}
 
 	// setLineBuffers
-	public void setBuffers(WebGLRenderingContext gl, Geometry geometry, BufferUsage hint)
+	public void setBuffers(WebGLRenderingContext gl, BufferUsage hint)
 	{		
 		List<Vector3> vertices = geometry.getVertices();
 		List<Color> colors = geometry.getColors();
