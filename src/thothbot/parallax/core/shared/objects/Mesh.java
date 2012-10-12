@@ -416,7 +416,8 @@ public class Mesh extends GeometryObject
 
 			for( GeometryGroup geometryGroup : geometry.getGeometryGroups() ) 
 			{
-				material = Material.getBufferMaterial( this, geometryGroup );
+				// TODO: try to make object's material
+				Material material = Material.getBufferMaterial( this, geometryGroup );
 
 				boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
 				if ( geometry.isVerticesNeedUpdate() 
@@ -428,7 +429,7 @@ public class Mesh extends GeometryObject
 						|| geometry.isTangentsNeedUpdate()      
 						|| areCustomAttributesDirty
 				) {
-					setBuffers( gl, geometryGroup, BufferUsage.DYNAMIC_DRAW );
+					setBuffers( gl, geometryGroup, BufferUsage.DYNAMIC_DRAW, material);
 					material.getShader().clearCustomAttributes();
 				}
 			}
@@ -444,7 +445,7 @@ public class Mesh extends GeometryObject
 	}
 
 	// setMeshBuffers
-	private void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BufferUsage hint)
+	private void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BufferUsage hint, Material material)
 	{
 		Log.debug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
 

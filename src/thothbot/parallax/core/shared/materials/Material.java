@@ -826,22 +826,18 @@ public abstract class Material
 
 	public static Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) 
 	{
-		Log.error(geometryGroup.materialIndex);
 		Material material = null;
 		if ( object.getMaterial() != null && !( object.getMaterial() instanceof MeshFaceMaterial ) )
 		{
 			material = object.getMaterial(); 
-			Log.error("++++++++++", material.getId());
 		}
 		else if ( geometryGroup.materialIndex >= 0 )
 		{
-			material = object.getGeometry().getMaterials().get( geometryGroup.materialIndex );
-		Log.error("============", material.getId());	
+			material = object.getGeometry().getMaterials().get( geometryGroup.materialIndex );	
 		}
 		
 		return material;
 	}
-	
 	
 	public void deallocate( WebGLRenderer renderer ) 
 	{
