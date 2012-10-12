@@ -31,7 +31,7 @@ public abstract class Loader
 {
 	public interface ModelLoadHandler 
 	{
-		public void onModeLoad();
+		public void onModelLoaded();
 	}
 	
 	private String texturePath;
@@ -47,7 +47,7 @@ public abstract class Loader
 			public void onResponseReceived(Request request, Response response) 
 			{
 				parse(response.getText());
-				modelLoadHandler.onModeLoad();
+				modelLoadHandler.onModelLoaded();
 			}
 
 			@Override
