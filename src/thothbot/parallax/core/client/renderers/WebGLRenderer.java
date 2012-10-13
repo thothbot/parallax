@@ -2063,7 +2063,8 @@ public class WebGLRenderer implements HasEventBus
 
 			texture.setNeedsUpdate(false);
 		} 
-		else 
+		// Needed to check webgl texture in case deferred loading
+		else if(texture.getWebGlTexture() != null)
 		{
 			getGL().activeTexture( TextureUnit.TEXTURE0, slot );
 			getGL().bindTexture( TextureTarget.TEXTURE_2D, texture.getWebGlTexture() );

@@ -409,7 +409,6 @@ public class JsonLoader extends Loader
 			material.setName(jsonMaterial.getDbgName());
 		}
 
-		Log.debug("Created new material ID " + material.getId() + " - " + material.getName() + " - " + material.getClass().getName());
 		return material;
 	}
 
@@ -701,7 +700,7 @@ public class JsonLoader extends Loader
 						int height = Mathematics.getNextHighestPowerOfTwo(oHeight);
 						canvas.setWidth(width);
 						canvas.setHeight(height);
-						
+
 						Context2d context = canvas.getContext2d();
 						context.drawImage( (ImageElement)texture.getImage(), 0, 0, width, height );
 
@@ -711,6 +710,7 @@ public class JsonLoader extends Loader
 					texture.setNeedsUpdate(true);
 				}
 			});
+			texture.setNeedsUpdate(false);
 		}
 
 		if( repeat != null) 
@@ -740,7 +740,7 @@ public class JsonLoader extends Loader
 		{
 			texture.setAnisotropy(anisotropy);
 		}
-		
+		Log.error("========", sourceFile, texture.getRepeat(), texture.getWrapS(), texture.getWrapT(), texture.getAnisotropy(), texture.getOffset());
 		return texture;
 	}
 
