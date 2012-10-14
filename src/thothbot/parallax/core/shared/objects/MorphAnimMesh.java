@@ -20,15 +20,15 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.loader.shared;
+package thothbot.parallax.core.shared.objects;
 
 import java.util.Map;
 
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Mathematics;
-import thothbot.parallax.core.shared.objects.Mesh;
+import thothbot.parallax.core.shared.materials.Material;
 
-public class MorphAnimation
+public class MorphAnimMesh extends Mesh
 {
 	public class Animation {
 		public int start;
@@ -52,23 +52,15 @@ public class MorphAnimation
 	
 	private Map<String, Animation> animations;
 	
-	private Geometry geometry;
-	private Mesh mesh;
-	
-	public MorphAnimation() 
+	public MorphAnimMesh(Geometry geometry, Material material) 
 	{			
+		super(geometry, material);
 		setDuration(1000);
-	}
-	
-	public void init(Mesh mesh, Geometry geometry)
-	{
-		this.mesh = mesh;
-		this.geometry = geometry;
-
 		// internals
 		this.setFrameRange( 0, geometry.getMorphTargets().size() - 1 );
-	}
 
+	}
+	
 	/**
 	 * Sets animation duration. Default: 1000ms.
 	 * 
@@ -153,7 +145,7 @@ public class MorphAnimation
 
 	public void updateAnimation( int delta ) 
 	{
-		if(this.mesh == null || this.geometry == null)
+		if(this.geometry == null)
 			return;
 		
 		delta = 8;
@@ -196,10 +188,10 @@ public class MorphAnimation
 
 		if ( keyframe != this.currentKeyframe ) 
 		{
-			mesh.getMorphTargetInfluences().set( this.lastKeyframe, 0.0);
-			mesh.getMorphTargetInfluences().set( this.currentKeyframe, 1.0);
+			getMorphTargetInfluences().set( this.lastKeyframe, 0.0);
+			getMorphTargetInfluences().set( this.currentKeyframe, 1.0);
 
-			mesh.getMorphTargetInfluences().set( keyframe, 0.0 );
+			getMorphTargetInfluences().set( keyframe, 0.0 );
 
 			this.lastKeyframe = this.currentKeyframe;
 			this.currentKeyframe = keyframe;
@@ -210,8 +202,8 @@ public class MorphAnimation
 		if ( this.directionBackwards )
 			mix = 1 - mix;
 
-		mesh.getMorphTargetInfluences().set( this.currentKeyframe, mix);
-		mesh.getMorphTargetInfluences().set( this.lastKeyframe, 1.0 - mix);
+		getMorphTargetInfluences().set( this.currentKeyframe, mix);
+		getMorphTargetInfluences().set( this.lastKeyframe, 1.0 - mix);
 	}
 	
 	private void setFrameRange(int start, int end ) 

@@ -53,7 +53,6 @@ import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.utils.ColorUtils;
 import thothbot.parallax.loader.shared.json.JsoMaterial;
 import thothbot.parallax.loader.shared.json.JsoMorphColors;
@@ -76,9 +75,6 @@ public class JsonLoader extends Loader
 
 	private JsoObject object;
 	private Geometry geometry;
-	private Mesh mesh;
-	private Material material;
-	private MorphAnimation animation;
 	
 	private List<Material> materials;
 	
@@ -105,18 +101,6 @@ public class JsonLoader extends Loader
 			geometry.computeTangents();
 		
 		geometry.computeMorphNormals();
-		
-		getAnimation().init(getMesh(), getGeometry());
-	}
-
-	public MorphAnimation getAnimation()
-	{
-		if(this.animation == null)
-		{
-			this.animation = new MorphAnimation();
-		}
-		
-		return this.animation;
 	}
 	
 	public Geometry getGeometry() 
@@ -124,40 +108,18 @@ public class JsonLoader extends Loader
 		return this.geometry;
 	}
 	
-	public Material getMaterial() 
+	public void morphColorsToFaceColors() 
 	{
-		if(this.material == null)
+		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
 		{
-			MeshPhongMaterial material = new MeshPhongMaterial();
-			material.setColor( new Color(0xffffff) );
-			material.setSpecular( new Color(0xffffff) );
-			material.setShininess(20);
-			material.setMorphTargets( true );
-			material.setMorphNormals( true );
-			material.setVertexColors(Material.COLORS.FACE);
-			material.setShading(Material.SHADING.SMOOTH); 
-			material.setPerPixel(false);
-			setMaterial(material);
-			
-			morphColorsToFaceColors();
+			MorphColor colorMap = geometry.getMorphColors().get( 0 );
+
+			for ( int i = 0; i < colorMap.colors.size(); i ++ ) 
+			{
+				geometry.getFaces().get(i).setColor( colorMap.colors.get(i) );
+				ColorUtils.adjustHSV( geometry.getFaces().get(i).getColor(), 0.0, 0.125, 0.0 );
+			}
 		}
-		
-		return this.material;
-	}
-	
-	public void setMaterial(Material material)
-	{
-		this.material = material;
-	}
-	
-	public Mesh getMesh() 
-	{
-		if(this.mesh == null)
-		{
-			this.mesh = new Mesh(getGeometry(), getMaterial());
-		}
-		
-		return this.mesh;
 	}
 	
 	private boolean isThisJsonStringValid(String iJSonString) 
@@ -759,20 +721,6 @@ public class JsonLoader extends Loader
 				return true;
 
 		return false;
-	}
-	
-	private void morphColorsToFaceColors() 
-	{
-		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
-		{
-			MorphColor colorMap = geometry.getMorphColors().get( 0 );
-
-			for ( int i = 0; i < colorMap.colors.size(); i ++ ) 
-			{
-				geometry.getFaces().get(i).setColor( colorMap.colors.get(i) );
-				ColorUtils.adjustHSV( geometry.getFaces().get(i).getColor(), 0.0, 0.125, 0.0 );
-			}
-		}
-	}
+	}	
 }
 
