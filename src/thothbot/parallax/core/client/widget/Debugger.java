@@ -36,11 +36,8 @@ public class Debugger extends FlowPanel
 {
 	private WebGlRendererInfo info;
 	
-	FlowPanel frameRate;
+	VisualGraph graph;
 	FlowPanel renderingInfo;
-	
-	private Label frames;
-	private Label duration;
 	
 	private Label string1;
 	private Label string2;
@@ -52,22 +49,15 @@ public class Debugger extends FlowPanel
 		this.setStyleName("corner-panel", true);
 		this.info = info;
 		
-		this.frameRate = new FlowPanel();
-		this.frameRate.setStyleName("debug-panel-element");
-		this.frameRate.getElement().getStyle().setProperty("borderRight", "1px solid #999999");
-		this.add(this.frameRate);
+		this.graph = new VisualGraph();
+		this.add(graph);
 		
 		this.renderingInfo = new FlowPanel();
 		this.renderingInfo.setStyleName("debug-panel-element");
 		this.add(this.renderingInfo);
 		
-		this.frames = new Label();
-		this.duration = new Label();
 		this.string1 = new Label();
 		this.string2 = new Label();
-		
-		this.frameRate.add(this.frames);
-		this.frameRate.add(this.duration);
 		
 		this.renderingInfo.add(this.string1);
 		this.renderingInfo.add(this.string2);
@@ -78,14 +68,7 @@ public class Debugger extends FlowPanel
 	 */
 	public void update()
 	{
-		long elapsedTime = this.info.getTimer().render.elapsedMillis();
-		double frames = 1.0 / elapsedTime * 1000.0;
-		
-		String fs = NumberFormat.getFormat("0.0").format((frames > 60) ? 60 : frames);
-		String ms = NumberFormat.getDecimalFormat().format((elapsedTime < 0) ? 0 : elapsedTime);
-
-		this.frames.setText(fs + " fs");
-		this.duration.setText(ms + " ms");
+		this.graph.update();
 		
 		this.string1.setText(
 				"[R] C:" + this.info.getRender().calls

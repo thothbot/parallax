@@ -36,4 +36,8 @@ public interface CoreResources extends ClientBundle
 	@Source("style.css")
 	@CssResource.NotStrict
 	CssResource css();
+	
+	@Source("graph.css")
+	@CssResource.NotStrict
+	CssResource graphCss();
 }
