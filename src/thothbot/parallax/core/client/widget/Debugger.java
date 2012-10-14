@@ -70,15 +70,15 @@ public class Debugger extends FlowPanel
 	{
 		this.graph.update();
 		
-		this.string1.setText(
-				"[R] C:" + this.info.getRender().calls
-				+", F:" + this.info.getRender().faces
+		this.string1.setText( 
+				"F:" + this.info.getRender().faces
 				+", P:" + this.info.getRender().points
 				+", V:" + this.info.getRender().vertices
 		);
 
 		this.string2.setText(
-				"[M] G:" + this.info.getMemory().geometries
+				"C:" + this.info.getRender().calls
+				+ ", G:" + this.info.getMemory().geometries
 				+", P:" + this.info.getMemory().programs
 				+", T:" + this.info.getMemory().textures
 		);

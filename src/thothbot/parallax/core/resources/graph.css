@@ -1,4 +1,5 @@
 .debugger-graph-container {
+	display: table-cell;
 	width: 80px;
 	opacity: 0.9;
 	cursor: pointer;

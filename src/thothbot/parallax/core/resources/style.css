@@ -17,14 +17,14 @@
 }
 
 .corner-panel {
-	padding: 2px;
+	padding: 0;
 	display: table; 
 	width: 100%;
   	height: 100%;
 }
 
 .debug-panel-element {
-	display: table-cell; 
+	display: table-cell;
 	padding-left: 3px;
 }
 
