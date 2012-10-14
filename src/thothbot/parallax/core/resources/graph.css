@@ -5,7 +5,7 @@
 }
 
 .debugger-fps { background-color:#002; }
-.debugger-ms { background-color:#020; display:none; }
+.debugger-ms { background-color:#020; }
 .debugger-fps, .debugger-ms {
 	padding:0 0 3px 3px;
 	text-align:left;
@@ -22,8 +22,7 @@
 
 .debugger-graph-text {
 	position:relative;
-	margin-top:-30px;
-	margin-left: 1px;
+	margin: -30px 0 0 1px; 
 	width:70px;
 	height:30px;
 }
@@ -36,7 +35,7 @@
 .debugger-ms-text-max, .debugger-ms-text-min {
 	position:absolute;
 	font-size:7px;
-	padding-right:1px;
+	padding:0 1px 0 1px;
 }
 
 .debugger-fps-graph { background-color:#0ff; }
