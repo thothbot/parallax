@@ -343,6 +343,11 @@ public class Vector3 extends Vector2 implements Vector
 	{
 		return Math.sqrt(distanceToSquared(v1));
 	}
+	
+	public double angleTo( Vector3 v ) 
+	{
+		return Math.acos( this.dot( v ) / this.length() / v.length() );
+	}
 
 	public void getPositionFromMatrix(Matrix4 m)
 	{
