@@ -86,7 +86,7 @@ public class Postprocessing extends Plugin
 		this.copyPass = new ShaderPass( new ScreenShader() );
 		
 		this.camera = new OrthographicCamera( 2, 2, 0, 1 );
-		this.camera.addWebGlResizeEventHandler(new ViewportResizeHandler() {
+		this.camera.addViewportResizeHandler(new ViewportResizeHandler() {
 			
 			@Override
 			public void onResize(ViewportResizeEvent event) {

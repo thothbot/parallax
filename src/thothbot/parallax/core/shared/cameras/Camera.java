@@ -59,10 +59,10 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 		this._viewMatrixArray = Float32Array.create( 16 );
 		this._projectionMatrixArray = Float32Array.create( 16 );
 		
-		addWebGlResizeEventHandler(this);
+		addViewportResizeHandler(this);
 	}
 	
-	public HandlerRegistration addWebGlResizeEventHandler(ViewportResizeHandler handler) 
+	public HandlerRegistration addViewportResizeHandler(ViewportResizeHandler handler) 
 	{
 		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler);
 	}
