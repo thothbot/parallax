@@ -61,7 +61,7 @@ public class Postprocessing extends Plugin
 
 	public Postprocessing( WebGLRenderer renderer, Scene scene)
 	{
-		this(renderer, scene, new RenderTargetTexture( 1000, 1000 ));
+		this(renderer, scene, new RenderTargetTexture( renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight() ));
 
 		this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 		this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
@@ -176,7 +176,7 @@ public class Postprocessing extends Plugin
 
 		if ( this.renderTarget1 == null )
 		{
-			this.renderTarget1 = new RenderTargetTexture(1000, 1000);
+			this.renderTarget1 = new RenderTargetTexture(getRenderer().getAbsoluteWidth(), getRenderer().getAbsoluteHeight());
 			
 			this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 			this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
