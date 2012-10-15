@@ -26,18 +26,18 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Brightness and contrast adjustment
+ * Hue and saturation adjustment
  * <p>
  * <a href="https://github.com/evanw/glfx.js">github.com</a>
  * <ul>
- * <li>brightness: -1 to 1 (-1 is solid black, 0 is no change, and 1 is solid white)</li>
- * <li>contrast: -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)</li>
+ * <li>hue: -1 to 1 (-1 is 180 degrees in the negative direction, 0 is no change, etc.</li>
+ * <li>saturation: -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)</li>
  * </ul>
  * 
  * @author thothbot
  * @author tapio / http://tapio.github.com/
  */
-public final class BrightnessContrastShader extends Shader 
+public final class HueSaturationShader extends Shader 
 {
 
 	interface Resources extends DefaultResources
@@ -47,11 +47,11 @@ public final class BrightnessContrastShader extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/brightnessContrastShader.fs")
+		@Source("source/hueSaturationShader.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public BrightnessContrastShader() 
+	public HueSaturationShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -60,8 +60,8 @@ public final class BrightnessContrastShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("brightness", new Uniform(Uniform.TYPE.F, 0.0));
-		this.addUniform("contrast", new Uniform(Uniform.TYPE.F, 0.0));
+		this.addUniform("hue", new Uniform(Uniform.TYPE.F, 0.0));
+		this.addUniform("saturation", new Uniform(Uniform.TYPE.F, 0.0));
 	}
 
 }
