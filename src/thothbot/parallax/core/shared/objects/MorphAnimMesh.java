@@ -69,6 +69,10 @@ public class MorphAnimMesh extends Mesh
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
+	
+	public int getDuration() {
+		return this.duration;
+	}
 		
 	public void setDirectionForward() 
 	{
@@ -76,6 +80,14 @@ public class MorphAnimMesh extends Mesh
 		this.directionBackwards = false;
 	}
 	
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
+	}
+
 	public void setDirectionBackward() 
 	{
 		this.direction = -1;
