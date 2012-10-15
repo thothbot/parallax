@@ -39,7 +39,7 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public final class BleachbypassShader extends Shader
+public final class BleachBypassShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -52,7 +52,7 @@ public final class BleachbypassShader extends Shader
 		TextResource getFragmentShader();
 	}
 	
-	public BleachbypassShader() 
+	public BleachBypassShader() 
 	{
 		super(Resources.INSTANCE);
 	}
