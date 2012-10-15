@@ -24,35 +24,34 @@ package thothbot.parallax.plugins.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Depth-of-field shader using mipmaps
- * <p>
- * requires power-of-2 sized render target with enabled mipmaps
+ * Dot screen shader
  * <p>
  * Based on three.js code<br>
- * From Matt Handley \@applmak
+ * Based on glfx.js sepia shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
  * 
  * @author thothbot
  *
  */
-public final class DofMipmapShader extends Shader
+public final class DotScreenShader extends Shader
 {
-	public interface Resources extends DefaultResources
+	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/dofmipmap.fs")
+		@Source("source/dotscreen.fs")
 		TextResource getFragmentShader();
 	}
-
-	public DofMipmapShader() 
+	
+	public DotScreenShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -60,10 +59,12 @@ public final class DofMipmapShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tColor", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tSize", new Uniform(Uniform.TYPE.V2, new Vector2( 256, 256 )));
+		this.addUniform("center", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 1.57));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.F, 1.0));
+
 	}
 
 }

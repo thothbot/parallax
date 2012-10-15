@@ -25,7 +25,7 @@ package thothbot.parallax.plugins.postprocessing.client;
 import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugins.postprocessing.client.shaders.DotscreenShader;
+import thothbot.parallax.plugins.postprocessing.client.shaders.DotScreenShader;
 
 public class DotScreenPass extends Pass
 {
@@ -34,7 +34,7 @@ public class DotScreenPass extends Pass
 	
 	public DotScreenPass( Vector2 center, double angle, double scale ) 
 	{
-		this.material = new ShaderMaterial(new DotscreenShader());
+		this.material = new ShaderMaterial(new DotScreenShader());
 		((Vector2) this.material.getShader().getUniforms().get("center").getValue()).copy( center );
 		this.material.getShader().getUniforms().get("angle").setValue( angle );
 		this.material.getShader().getUniforms().get("scale").setValue( scale );
