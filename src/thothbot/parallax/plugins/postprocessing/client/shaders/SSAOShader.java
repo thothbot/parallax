@@ -44,7 +44,7 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public final class SsaoShader extends Shader
+public final class SSAOShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -57,7 +57,7 @@ public final class SsaoShader extends Shader
 		TextResource getFragmentShader();
 	}
 
-	public SsaoShader() 
+	public SSAOShader() 
 	{
 		super(Resources.INSTANCE);
 	}
