@@ -29,16 +29,17 @@ import com.google.gwt.resources.client.TextResource;
 /**
  * Triangle blur shader
  * <p>
- * based on glfx.js triangle blur shader <a href="https://github.com/evanw/glfx.js">github.com</a>
+ * Based on glfx.js triangle blur shader <a href="https://github.com/evanw/glfx.js">github.com</a>
+ * <p>
+ * Based on three.js code
  * <p>
  * A basic blur filter, which convolves the image with a
  * pyramid filter. The pyramid filter is separable and is applied as two
  * perpendicular triangle filters.
  * 
  * @author thothbot
- * @author zz85 / http://www.lab4games.net/zz85/blog
+ * 
  */
-
 public final class TriangleBlurShader extends Shader 
 {
 
@@ -49,7 +50,7 @@ public final class TriangleBlurShader extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/triangleBlurShader.fs")
+		@Source("source/triangleBlur.fs")
 		TextResource getFragmentShader();
 	}
 	

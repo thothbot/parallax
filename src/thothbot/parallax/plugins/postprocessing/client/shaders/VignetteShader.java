@@ -32,9 +32,10 @@ import com.google.gwt.resources.client.TextResource;
  * Vignette shader
  * <p>
  * Based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
+ * <p>
+ * Based on three.js code
  * 
  * @author thothbot
- * @author alteredq / http://alteredqualia.com/
  *
  */
 public final class VignetteShader extends Shader

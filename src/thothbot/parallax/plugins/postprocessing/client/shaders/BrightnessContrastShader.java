@@ -27,15 +27,17 @@ import com.google.gwt.resources.client.TextResource;
 
 /**
  * Brightness and contrast adjustment
- * <p>
  * <a href="https://github.com/evanw/glfx.js">github.com</a>
+ * <p>
+ * Based on three.js code
+ * 
  * <ul>
  * <li>brightness: -1 to 1 (-1 is solid black, 0 is no change, and 1 is solid white)</li>
  * <li>contrast: -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)</li>
  * </ul>
  * 
  * @author thothbot
- * @author tapio / http://tapio.github.com/
+ * 
  */
 public final class BrightnessContrastShader extends Shader 
 {
@@ -47,7 +49,7 @@ public final class BrightnessContrastShader extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/brightnessContrastShader.fs")
+		@Source("source/brightnessContrast.fs")
 		TextResource getFragmentShader();
 	}
 	

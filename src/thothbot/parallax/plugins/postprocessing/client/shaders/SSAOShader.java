@@ -32,17 +32,17 @@ import com.google.gwt.resources.client.TextResource;
 /**
  * Screen-space ambient occlusion shader
  * <p>
- * Based on three.js code<br>
- * 
- * Ported from SSAO GLSL shader v1.2 
- * assembled by Martins Upitis (martinsh) (<a href="http://devlog-martinsh.blogspot.com">devlog-martinsh.blogspot.com</a>).
+ * Ported from SSAO GLSL shader v1.2. 
+ * Assembled by Martins Upitis (martinsh) (<a href="http://devlog-martinsh.blogspot.com">devlog-martinsh.blogspot.com</a>).
  * Original technique is made by ArKano22 (<a href="http://www.gamedev.net/topic/550699-ssao-no-halo-artifacts/">gamedev.net</a>).<br>
- * 
+ * <p>
+ * Based on three.js code
+ * <p>
  * Modified to use RGBA packed depth texture (use clear color 1,1,1,1 for depth pass), 
  * made fog more compatible with three.js linear fog
  * 
  * @author thothbot
- *
+ * 
  */
 public final class SSAOShader extends Shader
 {

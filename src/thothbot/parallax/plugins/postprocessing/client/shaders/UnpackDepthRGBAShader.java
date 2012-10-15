@@ -29,12 +29,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Unpack RGBA depth shader - show RGBA encoded depth as monochrome color
+ * Unpack RGBA depth shader
+ * <p>
+ * Show RGBA encoded depth as monochrome color.
  * <p>
  * Based on three.js code
  * 
  * @author thothbot
- *
+ * 
  */
 public final class UnpackDepthRGBAShader extends Shader
 {

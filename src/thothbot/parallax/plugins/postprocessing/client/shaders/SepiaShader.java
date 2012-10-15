@@ -31,8 +31,9 @@ import com.google.gwt.resources.client.TextResource;
 /**
  * Sepia tone shader 
  * <p>
- * Based on thrre.js code<br>
  * Based on glfx.js sepia shader <a href="https://github.com/evanw/glfx.js">github.com/evanw/glfx.js</a>
+ * <p>
+ * Based on three.js code
  * 
  * @author thothbot
  *

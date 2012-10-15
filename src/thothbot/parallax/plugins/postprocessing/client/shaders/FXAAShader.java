@@ -31,9 +31,11 @@ import com.google.gwt.resources.client.TextResource;
 
 /**
  * NVIDIA FXAA by Timothy Lottes
- * @see <a href="http://timothylottes.blogspot.com/2011/06/fxaa3-source-released.html">timothylottes.blogspot.com</a>
+ * <a href="http://timothylottes.blogspot.com/2011/06/fxaa3-source-released.html">timothylottes.blogspot.com</a>
  * <p>
  * WebGL port by \@supereggbert <a href="http://www.glge.org/demos/fxaa/">www.glge.org</a>
+ * <p>
+ * Based on three.js code
  * 
  * @author thothbot
  *

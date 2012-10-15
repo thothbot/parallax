@@ -30,7 +30,9 @@ import com.google.gwt.resources.client.TextResource;
 
 /**
  * Luminosity
- * @see <a href="http://en.wikipedia.org/wiki/Luminosity">wikipedia.org</a>
+ * <a href="http://en.wikipedia.org/wiki/Luminosity">wikipedia.org</a>
+ * <p>
+ * Based on three.js code
  * 
  * @author thothbot
  *

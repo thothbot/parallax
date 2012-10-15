@@ -32,11 +32,13 @@ import com.google.gwt.resources.client.TextResource;
  * Simple fake tilt-shift effect, modulating two pass Gaussian blur (see above) by vertical position
  * <p>
  * Based on three.js code
- * <p>
- * 9 samples per pass<br>
- * standard deviation 2.7<br>
- * "h" and "v" parameters should be set to "1 / width" and "1 / height"<br>
- * "r" parameter control where "focused" horizontal line lies<br>
+ * 
+ * <ul>
+ * <li>9 samples per pass</li>
+ * <li>standard deviation 2.7</li>
+ * <li>"h" and "v" parameters should be set to "1 / width" and "1 / height"</li>
+ * <li>"r" parameter control where "focused" horizontal line lies</li>
+ * </ul>
  * 
  * @author thothbot
  *  

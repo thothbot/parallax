@@ -30,8 +30,7 @@ import com.google.gwt.resources.client.TextResource;
 
 /**
  * Bleach bypass shader
- * 
- * @see <a href="http://en.wikipedia.org/wiki/Bleach_bypass">wikipedia.org</a>
+ * <a href="http://en.wikipedia.org/wiki/Bleach_bypass">wikipedia.org</a>
  * <p>
  * Based on three.js code <br>
  * Based on Nvidia example <a href="http://developer.download.nvidia.com/shaderlibrary/webpages/shader_library.html#post_bleach_bypass">nvidia.com</a>

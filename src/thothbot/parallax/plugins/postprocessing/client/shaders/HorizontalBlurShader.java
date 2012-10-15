@@ -30,12 +30,17 @@ import com.google.gwt.resources.client.TextResource;
 
 /**
  * Two pass Gaussian blur filter (horizontal and vertical blur shaders)
- * described in <a href="http://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader/">gamerendering.com</a>
+ * <p>
+ * Described in <a href="http://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader/">gamerendering.com</a>
  * and used in <a href="http://www.cake23.de/traveling-wavefronts-lit-up.html">www.cake23.de</a>.
  * <p>
- * 9 samples per pass<br>
- * standard deviation 2.7<br>
- *  "h" and "v" parameters should be set to "1 / width" and "1 / height"
+ * Based on three.js code
+ * 
+ * <ul>
+ * <li>9 samples per pass</li>
+ * <li>standard deviation 2.7</li>
+ * <li>"h" and "v" parameters should be set to "1 / width" and "1 / height"</li>
+ * </ul>
  *  
  * @author thothbot
  *
