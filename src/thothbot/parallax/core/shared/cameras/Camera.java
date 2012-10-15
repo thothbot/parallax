@@ -30,7 +30,6 @@ import thothbot.parallax.core.shared.core.Matrix4;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /**

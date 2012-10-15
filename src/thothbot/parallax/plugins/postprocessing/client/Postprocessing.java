@@ -61,7 +61,7 @@ public class Postprocessing extends Plugin
 
 	public Postprocessing( WebGLRenderer renderer, Scene scene)
 	{
-		this(renderer, scene, new RenderTargetTexture( 1000,1000 ));
+		this(renderer, scene, new RenderTargetTexture( 1000, 1000 ));
 
 		this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 		this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
