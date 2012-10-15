@@ -229,8 +229,8 @@ public class WebGLRenderer implements HasEventBus
 	 * The constructor will create renderer for the {@link Canvas3d} widget.
 	 * 
 	 * @param gl     the {@link WebGLRenderingContext}
-	 * @param absoluteWidth  the viewport absoluteWidth
-	 * @param absoluteHeight the viewport absoluteHeight
+	 * @param width  the viewport width
+	 * @param height the viewport height
 	 */
 	public WebGLRenderer(WebGLRenderingContext gl, int width, int height)
 	{
@@ -524,8 +524,8 @@ public class WebGLRenderer implements HasEventBus
 	/**
 	 * Sets the sizes and also sets {@link #setViewport(int, int, int, int)} size.
 	 * 
-	 * @param absoluteWidth  the {@link Canvas3d} absoluteWidth.
-	 * @param absoluteHeight the {@link Canvas3d} absoluteHeight.
+	 * @param width  the {@link Canvas3d} width.
+	 * @param height the {@link Canvas3d} height.
 	 */
 	public void setSize(int width, int height)
 	{

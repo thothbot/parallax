@@ -216,7 +216,7 @@ public final class Scene extends Object3D
 	/**
 	 * Refresh Scene's objects
 	 * 
-	 * @param scene the Scene with child objects
+	 * @param renderer the renderer instance
 	 */
 	public void initWebGLObjects(WebGLRenderer renderer) 
 	{

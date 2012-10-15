@@ -80,7 +80,7 @@ public abstract class AnimatedScene extends Animation
 	/**
 	 * Initialize the scene.
 	 * 
-	 * @param renderer the {@link WebGLRenderer} instance.
+	 * @param renderingPanel
 	 * @param animationUpdateHandler this parameter used for updating debug info. Can be null.
 	 */
 	public void init(RenderingPanel renderingPanel, AnimationUpdateHandler animationUpdateHandler)
