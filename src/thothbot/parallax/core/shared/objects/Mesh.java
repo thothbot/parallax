@@ -1090,7 +1090,6 @@ public class Mesh extends GeometryObject
 
 				 int fi = chunk_faces3.get(f);
 
-				 Face3 face = obj_faces.get(fi);
 				 List<UV> uv = obj_uvs.get(fi);
 
 				 if ( uv == null ) continue;
@@ -1110,7 +1109,6 @@ public class Mesh extends GeometryObject
 			 {
 				 int fi = chunk_faces4.get(f);
 
-				 Face4 face = (Face4) obj_faces.get(fi);
 				 List<UV>uv = obj_uvs.get(fi);
 
 				 if ( uv == null ) continue;
@@ -1143,7 +1141,6 @@ public class Mesh extends GeometryObject
 			 {
 				 int fi = chunk_faces3.get(f);
 
-				 Face3 face = obj_faces.get(fi);
 				 List<UV> uv2 = obj_uvs2.get(fi);
 
 				 if ( uv2 == null ) continue;
@@ -1163,7 +1160,6 @@ public class Mesh extends GeometryObject
 			 {
 				 int fi = chunk_faces4.get(f);
 
-				 Face4 face = (Face4) obj_faces.get(fi);
 				 List<UV> uv2 = obj_uvs2.get(fi);
 
 				 if ( uv2 == null ) continue;
@@ -1194,8 +1190,6 @@ public class Mesh extends GeometryObject
 			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
-				 Face3 face = obj_faces.get(chunk_faces3.get(f));
-
 				 geometryGroup.getWebGlFaceArray().set(offset_face, vertexIndex);
 				 geometryGroup.getWebGlFaceArray().set(offset_face + 1, vertexIndex + 1);
 				 geometryGroup.getWebGlFaceArray().set(offset_face + 2, vertexIndex + 2);
@@ -1218,8 +1212,6 @@ public class Mesh extends GeometryObject
 
 			 for ( int f = 0, fl = chunk_faces4.size(); f < fl; f ++ ) 
 			 {
-				 Face4 face = (Face4) obj_faces.get(chunk_faces4.get(f));
-
 				 geometryGroup.getWebGlFaceArray().set(offset_face, vertexIndex);
 				 geometryGroup.getWebGlFaceArray().set(offset_face + 1, vertexIndex + 1);
 				 geometryGroup.getWebGlFaceArray().set(offset_face + 2, vertexIndex + 3);
