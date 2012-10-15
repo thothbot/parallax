@@ -38,7 +38,7 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public final class FxaaShader extends Shader
+public final class FXAAShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -51,7 +51,7 @@ public final class FxaaShader extends Shader
 		TextResource getFragmentShader();
 	}
 
-	public FxaaShader() 
+	public FXAAShader() 
 	{
 		super(Resources.INSTANCE);
 	}
