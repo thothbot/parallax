@@ -24,7 +24,7 @@ package thothbot.parallax.plugins.postprocessing.client;
 
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugins.postprocessing.client.shaders.ScreenShader;
+import thothbot.parallax.plugins.postprocessing.client.shaders.CopyShader;
 
 public class TexturePass extends Pass
 {
@@ -37,7 +37,7 @@ public class TexturePass extends Pass
 	
 	public TexturePass ( Texture texture, double opacity ) 
 	{
-		this.material = new ShaderMaterial(new ScreenShader());
+		this.material = new ShaderMaterial(new CopyShader());
 		this.material.getShader().getUniforms().get("opacity").setValue( opacity );
 		this.material.getShader().getUniforms().get("tDiffuse").setValue( texture );
 		

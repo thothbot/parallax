@@ -36,7 +36,7 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public final class ScreenShader extends Shader
+public final class CopyShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
@@ -45,11 +45,11 @@ public final class ScreenShader extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/screen.fs")
+		@Source("source/copy.fs")
 		TextResource getFragmentShader();
 	}
 
-	public ScreenShader()
+	public CopyShader()
 	{
 		super(Resources.INSTANCE);
 	}

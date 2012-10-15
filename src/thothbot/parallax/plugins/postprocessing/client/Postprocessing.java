@@ -41,7 +41,7 @@ import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.geometries.PlaneGeometry;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugins.postprocessing.client.shaders.ScreenShader;
+import thothbot.parallax.plugins.postprocessing.client.shaders.CopyShader;
 
 public class Postprocessing extends Plugin
 {
@@ -83,7 +83,7 @@ public class Postprocessing extends Plugin
 
 		this.passes = new ArrayList<Pass>();
 
-		this.copyPass = new ShaderPass( new ScreenShader() );
+		this.copyPass = new ShaderPass( new CopyShader() );
 		
 		this.camera = new OrthographicCamera( 2, 2, 0, 1 );
 		this.camera.addViewportResizeHandler(new ViewportResizeHandler() {
