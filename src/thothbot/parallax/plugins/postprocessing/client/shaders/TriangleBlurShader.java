@@ -1,9 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * This file based on the JavaScript source file of the THREE.JS project, 
- * licensed under MIT License.
- * 
  * This file is part of Parallax project.
  * 
  * Parallax is free software: you can redistribute it and/or modify it 
@@ -24,21 +21,27 @@ package thothbot.parallax.plugins.postprocessing.client.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Vignette shader
+ * Triangle blur shader
  * <p>
- * Based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
+ * based on glfx.js triangle blur shader <a href="https://github.com/evanw/glfx.js">github.com</a>
+ * <p>
+ * A basic blur filter, which convolves the image with a
+ * pyramid filter. The pyramid filter is separable and is applied as two
+ * perpendicular triangle filters.
  * 
  * @author thothbot
- * @author alteredq / http://alteredqualia.com/
- *
+ * @author zz85 / http://www.lab4games.net/zz85/blog
  */
-public final class VignetteShader extends Shader
+
+public final class TriangleBlurShader extends Shader 
 {
+
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
@@ -46,11 +49,11 @@ public final class VignetteShader extends Shader
 		@Source("source/defaultUv.vs")
 		TextResource getVertexShader();
 
-		@Source("source/vignette.fs")
+		@Source("source/triangleBlurShader.fs")
 		TextResource getFragmentShader();
 	}
 	
-	public VignetteShader()
+	public TriangleBlurShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,10 +61,8 @@ public final class VignetteShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("darkness", new Uniform(Uniform.TYPE.F, 1.0));
-
+		this.addUniform("texture", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 )));
 	}
 
 }
