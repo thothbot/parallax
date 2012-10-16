@@ -83,6 +83,8 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		
 		this.ensureDebugId("renderingPanel");
 		this.getElement().getStyle().setPosition(Position.RELATIVE);
+		this.setWidth("100%");
+		this.setHeight("100%");
 		this.canvas3dAttributes = new Canvas3dAttributes();
 		this.canvas3dAttributes.setStencilEnable(true);
 
