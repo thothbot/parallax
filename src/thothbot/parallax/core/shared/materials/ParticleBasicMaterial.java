@@ -24,12 +24,11 @@ package thothbot.parallax.core.shared.materials;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.events.HasEventBus;
 import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.events.ViewportResizeHandler;
-import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.ParticleBasicShader;
+import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.cameras.Camera;
@@ -142,6 +141,9 @@ public final class ParticleBasicMaterial extends Material
 				uniforms.get("scale").setValue( event.getRenderer().getAbsoluteHeight() / 2.0 );	
 			}
 		});
+		
+		// Default
+		uniforms.get("scale").setValue( 500 / 2.0 );
 
 		uniforms.get("map").setValue( getMap() );
 	}
