@@ -24,20 +24,22 @@ import java.beans.Beans;
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.context.Canvas3dAttributes;
 import thothbot.parallax.core.client.context.Canvas3dException;
+import thothbot.parallax.core.client.debugger.Debugger;
 import thothbot.parallax.core.client.events.AnimationReadyEvent;
 import thothbot.parallax.core.client.events.AnimationReadyHandler;
+import thothbot.parallax.core.client.events.Context3dErrorEvent;
+import thothbot.parallax.core.client.events.Context3dErrorHandler;
 import thothbot.parallax.core.client.events.SceneLoadingEvent;
 import thothbot.parallax.core.client.events.SceneLoadingHandler;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.widget.BadCanvasPanel;
-import thothbot.parallax.core.client.widget.Debugger;
-import thothbot.parallax.core.client.widget.LoadingPanel;
 import thothbot.parallax.core.resources.CoreResources;
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
@@ -223,9 +225,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				catch (Exception ex)
 				{
 					Log.error(ex.getMessage(), ex.fillInStackTrace());
-					handlerManager.fireEvent(new SceneLoadingEvent(true));
-
-					add(new BadCanvasPanel(ex.getMessage()));
+					handlerManager.fireEvent(new Context3dErrorEvent(ex.getMessage()));
 					return;
 				}
 
@@ -305,18 +305,22 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		});
 	}
 
-	public HandlerRegistration addAnimationReadyHandler(AnimationReadyHandler handler) 
-	{
-		Log.debug("RenderingPanel: Registered event for class " + handler.getClass().getName());
-
-		return handlerManager.addHandler(AnimationReadyEvent.TYPE, handler);
+	public HandlerRegistration addAnimationReadyHandler(AnimationReadyHandler handler) {
+		return addHandler(AnimationReadyEvent.TYPE, handler);
 	}
 
-	public HandlerRegistration addSceneLoadingHandler(SceneLoadingHandler handler) 
+	public HandlerRegistration addSceneLoadingHandler(SceneLoadingHandler handler) {
+		return addHandler(SceneLoadingEvent.TYPE, handler);
+	}
+	
+	public HandlerRegistration addCanvas3dErrorHandler(Context3dErrorHandler handler) {
+		return addHandler(Context3dErrorEvent.TYPE, handler);
+	}
+
+	protected <H extends EventHandler> HandlerRegistration addHandler(GwtEvent.Type<H> type, H handler) 
 	{
 		Log.debug("RenderingPanel: Registered event for class " + handler.getClass().getName());
-
-		return handlerManager.addHandler(SceneLoadingEvent.TYPE, handler);
+		return handlerManager.addHandler(type, handler);
 	}
 
 	/**

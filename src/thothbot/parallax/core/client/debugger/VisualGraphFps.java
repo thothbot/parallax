@@ -17,7 +17,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.widget;
+package thothbot.parallax.core.client.debugger;
 
 import com.google.gwt.core.client.Duration;
 

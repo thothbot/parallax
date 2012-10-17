@@ -17,22 +17,35 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.widget;
+package thothbot.parallax.core.client.events;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.event.shared.GwtEvent;
 
-/**
- * Simple loading widget. 
- * 
- * @author thothbot
- *
- */
-public class LoadingPanel extends InfoPanel
+public class Context3dErrorEvent extends GwtEvent<Context3dErrorHandler>
 {
-	@Override
-	public Widget getContent()
-	{
-		return new Label("Loading scene...");
-	}
+
+	public static Type<Context3dErrorHandler> TYPE = new Type<Context3dErrorHandler>();
+
+	private String message;
+	
+    public Context3dErrorEvent(String message) 
+    {
+    	this.message = message;
+    }
+        
+    public String getMessage() {
+    	return this.message;
+    }
+
+    @Override
+    public Type<Context3dErrorHandler> getAssociatedType() 
+    {
+        return TYPE;
+    }
+
+    @Override
+    protected void dispatch(Context3dErrorHandler handler) 
+    {
+    	handler.onContextError(this);
+    }
 }

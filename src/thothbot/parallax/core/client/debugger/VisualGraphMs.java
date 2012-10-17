@@ -17,29 +17,32 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.widget;
+package thothbot.parallax.core.client.debugger;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.core.client.Duration;
 
-/**
- * Widget is used when the user's browser can not initialize 
- * a canvas in 3D context.
- * 
- * @author thothbot
- *
- */
-public class BadCanvasPanel extends InfoPanel
+public final class VisualGraphMs extends VisualGraphAbstract 
 {
-	private String msg;
 
-	public BadCanvasPanel(String msg)
-	{
-		this.msg = msg;
-	}
+	private double ms = 0, msMin = Double.POSITIVE_INFINITY, msMax = 0;
+	private double startTime = Duration.currentTimeMillis();
+	
 	@Override
-	public Widget getContent()
+	protected String getType() { return "ms"; }
+
+	@Override
+	protected void update(double time) 
 	{
-		return new Label("Can not initialize Canvas: " + this.msg);
-	}	
+		ms = time - startTime;
+		msMin = Math.min( msMin, ms );
+		msMax = Math.max( msMax, ms );
+
+		text.setInnerText( ms + " MS");
+		textMin.setInnerText(msMin + "");
+		textMax.setInnerText(msMax + "");
+		updateGraph( graph, Math.min( 30, 30 - ( ms / 200 ) * 30 ) );
+		
+		startTime = time;
+	}
+
 }

@@ -17,32 +17,13 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.widget;
+package thothbot.parallax.core.client.events;
 
-import com.google.gwt.core.client.Duration;
+import com.google.gwt.event.shared.EventHandler;
 
-public final class VisualGraphMs extends VisualGraphAbstract 
+public interface Context3dErrorHandler extends EventHandler 
 {
-
-	private double ms = 0, msMin = Double.POSITIVE_INFINITY, msMax = 0;
-	private double startTime = Duration.currentTimeMillis();
 	
-	@Override
-	protected String getType() { return "ms"; }
-
-	@Override
-	protected void update(double time) 
-	{
-		ms = time - startTime;
-		msMin = Math.min( msMin, ms );
-		msMax = Math.max( msMax, ms );
-
-		text.setInnerText( ms + " MS");
-		textMin.setInnerText(msMin + "");
-		textMax.setInnerText(msMax + "");
-		updateGraph( graph, Math.min( 30, 30 - ( ms / 200 ) * 30 ) );
-		
-		startTime = time;
-	}
-
+	public void onContextError(Context3dErrorEvent event);
+	
 }

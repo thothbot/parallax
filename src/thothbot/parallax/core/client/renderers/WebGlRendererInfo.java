@@ -19,7 +19,7 @@
 
 package thothbot.parallax.core.client.renderers;
 
-import thothbot.parallax.core.client.widget.Debugger;
+import thothbot.parallax.core.client.debugger.Debugger;
 
 import com.google.gwt.core.client.Duration;
 

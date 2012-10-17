@@ -17,7 +17,7 @@
  * Parallax. If not, see http://www.gnu.org/licenses/.
  */
 
-package thothbot.parallax.core.client.widget;
+package thothbot.parallax.core.client.debugger;
 
 import thothbot.parallax.core.client.RenderingPanel;
 import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
