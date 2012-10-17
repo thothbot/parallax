@@ -26,6 +26,8 @@ import thothbot.parallax.core.client.context.Canvas3dAttributes;
 import thothbot.parallax.core.client.context.Canvas3dException;
 import thothbot.parallax.core.client.events.AnimationReadyEvent;
 import thothbot.parallax.core.client.events.AnimationReadyHandler;
+import thothbot.parallax.core.client.events.SceneLoadingEvent;
+import thothbot.parallax.core.client.events.SceneLoadingHandler;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.widget.BadCanvasPanel;
 import thothbot.parallax.core.client.widget.Debugger;
@@ -50,7 +52,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
  * @author thothbot
  * 
  */
-public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets, HasHandlers
+public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets, HasHandlers, SceneLoadingHandler
 {	
     // Sets the background color for the {@link Canvas3d}. Default: black (#000000).
 	private int clearColor = 0x000000;
@@ -69,7 +71,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	private Debugger debugger;
 	
 	// Loading info panel
-	private LoadingPanel loadingPanal; 
+	private LoadingPanel loadingPanel;
 
 	private Canvas3d canvas;
 	private WebGLRenderer renderer;
@@ -93,9 +95,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		// Loading specific styles
 		CoreResources.INSTANCE.css().ensureInjected();
 		
-		// Add loading panel
-		this.loadingPanal = new LoadingPanel();
-		add(this.loadingPanal);
+		addSceneLoadingHandler(this);
 	}
 	
 	public Canvas3d getCanvas()
@@ -130,6 +130,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	public void setAnimatedScene(AnimatedScene animatedScene)
 	{
 		this.animatedScene = animatedScene;
+		handlerManager.fireEvent(new SceneLoadingEvent());
 	}
 	
 	public void enableDebug(boolean enabled)
@@ -211,8 +212,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	{
 		Log.debug("RenderingPanel: onLoad()");
 		
-		this.loadingPanal.show();
-
 		super.onLoad();
 
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
@@ -226,7 +225,8 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				catch (Exception ex)
 				{
 					Log.error(ex.getMessage(), ex.fillInStackTrace());
-					loadingPanal.hide();
+					handlerManager.fireEvent(new SceneLoadingEvent(true));
+
 					add(new BadCanvasPanel(ex.getMessage()));
 					return;
 				}
@@ -262,7 +262,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		isLoaded = true;
 
 		setSize(this.getOffsetWidth(), this.getOffsetHeight());
-				
+
 		if(getAnimatedScene() != null)
 		{
 			this.animatedScene.init(this, new AnimatedScene.AnimationUpdateHandler() {
@@ -270,14 +270,12 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				@Override
 				public void onUpdate()
 				{
-					// Remove loading panel
-					loadingPanal.hide();
+					handlerManager.fireEvent(new SceneLoadingEvent(true));
 
 					loadDebuger();
 					
 					// Update debugger
-					if(debugger != null)
-						debugger.update();
+					if(debugger != null) debugger.update();
 				}
 			});
 			handlerManager.fireEvent(new AnimationReadyEvent());
@@ -302,12 +300,34 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 			}
 		});
 	}
-	
-	public HandlerRegistration addAnimationReadyEventHandler(AnimationReadyHandler handler) 
+
+	public HandlerRegistration addAnimationReadyHandler(AnimationReadyHandler handler) 
 	{
 		Log.debug("RenderingPanel: Registered event for class " + handler.getClass().getName());
 
 		return handlerManager.addHandler(AnimationReadyEvent.TYPE, handler);
+	}
+
+	public HandlerRegistration addSceneLoadingHandler(SceneLoadingHandler handler) 
+	{
+		Log.debug("RenderingPanel: Registered event for class " + handler.getClass().getName());
+
+		return handlerManager.addHandler(SceneLoadingEvent.TYPE, handler);
+	}
+
+	@Override
+	public void onSceneLoading(SceneLoadingEvent event) 
+	{
+		if(event.isLoaded() && loadingPanel != null) 
+		{
+			loadingPanel.hide();
+		}
+		else if(this.loadingPanel == null)
+		{
+			this.loadingPanel = new LoadingPanel();
+			loadingPanel.show();
+			add(this.loadingPanel);
+		}
 	}
 
 	/**
