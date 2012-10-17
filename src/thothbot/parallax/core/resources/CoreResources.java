@@ -33,11 +33,7 @@ public interface CoreResources extends ClientBundle
 {
 	CoreResources INSTANCE = GWT.create(CoreResources.class);
 	
-	@Source("style.css")
+	@Source("debugger.css")
 	@CssResource.NotStrict
-	CssResource css();
-	
-	@Source("graph.css")
-	@CssResource.NotStrict
-	CssResource graphCss();
+	CssResource debuggerCss();
 }

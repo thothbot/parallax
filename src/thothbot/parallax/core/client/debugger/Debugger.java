@@ -45,8 +45,7 @@ public class Debugger extends FlowPanel
 	public Debugger(WebGlRendererInfo info)
 	{
 		super();
-		this.setStyleName("common-panel", true);
-		this.setStyleName("corner-panel", true);
+		this.setStyleName("debug-panel");
 		this.info = info;
 		
 		this.graph = new VisualGraph();

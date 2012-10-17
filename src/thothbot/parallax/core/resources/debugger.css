@@ -1,3 +1,19 @@
+.debug-panel {
+	display: table;
+	padding: 0;
+	color: white;
+	background-color:#555555;
+	border: 1px solid #999999;
+	opacity: 0.6;
+	margin: auto;
+	padding: 5px; 
+}
+
+.debug-panel-element {
+	display: table-cell;
+	padding-left: 3px;
+}
+
 .debugger-graph-container {
 	display: table-cell;
 	width: 80px;

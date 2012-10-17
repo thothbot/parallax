@@ -93,9 +93,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		this.canvas3dAttributes.setStencilEnable(true);
 
 		updateBackground();
-
-		// Loading specific styles
-		CoreResources.INSTANCE.css().ensureInjected();
 	}
 	
 	public Canvas3d getCanvas()

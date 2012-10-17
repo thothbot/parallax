@@ -41,7 +41,7 @@ public class VisualGraph extends FocusWidget implements MouseDownHandler
 		setElement(container);
 		
 		// Loading specific styles
-		CoreResources.INSTANCE.graphCss().ensureInjected();
+		CoreResources.INSTANCE.debuggerCss().ensureInjected();
 		addMouseDownHandler(this);
 		
 		visualGraphFps = new VisualGraphFps();
