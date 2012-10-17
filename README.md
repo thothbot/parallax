@@ -27,7 +27,7 @@ The aim of the project is to use GWT which helps maintaining complex pieces of c
 Parallax supports WebGL-canvas renderer only.
 
 
-### Download ###
+### Download - Parallax v1.3 ###
 
 [Download JAR](http://github.com/thothbot/parallax/downloads) | [Change log](http://github.com/thothbot/parallax/wiki/Change-log)
 
