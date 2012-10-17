@@ -52,7 +52,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
  * @author thothbot
  * 
  */
-public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets, HasHandlers, SceneLoadingHandler
+public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets, HasHandlers
 {	
     // Sets the background color for the {@link Canvas3d}. Default: black (#000000).
 	private int clearColor = 0x000000;
@@ -71,7 +71,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	private Debugger debugger;
 	
 	// Loading info panel
-	private LoadingPanel loadingPanel;
 	private boolean isSceneLoaded;
 
 	private Canvas3d canvas;
@@ -95,8 +94,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 
 		// Loading specific styles
 		CoreResources.INSTANCE.css().ensureInjected();
-		
-		addSceneLoadingHandler(this);
 	}
 	
 	public Canvas3d getCanvas()
@@ -320,21 +317,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		Log.debug("RenderingPanel: Registered event for class " + handler.getClass().getName());
 
 		return handlerManager.addHandler(SceneLoadingEvent.TYPE, handler);
-	}
-
-	@Override
-	public void onSceneLoading(SceneLoadingEvent event) 
-	{
-		if(event.isLoaded() && loadingPanel != null) 
-		{
-			loadingPanel.hide();
-		}
-		else if(this.loadingPanel == null)
-		{
-			this.loadingPanel = new LoadingPanel();
-			loadingPanel.show();
-			add(this.loadingPanel);
-		}
 	}
 
 	/**
