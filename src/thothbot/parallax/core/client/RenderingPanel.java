@@ -72,6 +72,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	
 	// Loading info panel
 	private LoadingPanel loadingPanel;
+	private boolean isSceneLoaded;
 
 	private Canvas3d canvas;
 	private WebGLRenderer renderer;
@@ -270,14 +271,20 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				@Override
 				public void onUpdate()
 				{
-					loadDebuger();
-					
+
+					if(!isSceneLoaded)
+					{
+						handlerManager.fireEvent(new SceneLoadingEvent(true));
+						isSceneLoaded = true;
+						
+						loadDebuger();
+					}
+				
 					// Update debugger
 					if(debugger != null) debugger.update();
 				}
 			});
 
-			handlerManager.fireEvent(new SceneLoadingEvent(true));
 			handlerManager.fireEvent(new AnimationReadyEvent());
 
 			getAnimatedScene().run();
