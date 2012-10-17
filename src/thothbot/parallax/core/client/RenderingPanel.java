@@ -270,14 +270,14 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 				@Override
 				public void onUpdate()
 				{
-					handlerManager.fireEvent(new SceneLoadingEvent(true));
-
 					loadDebuger();
 					
 					// Update debugger
 					if(debugger != null) debugger.update();
 				}
 			});
+
+			handlerManager.fireEvent(new SceneLoadingEvent(true));
 			handlerManager.fireEvent(new AnimationReadyEvent());
 
 			getAnimatedScene().run();
