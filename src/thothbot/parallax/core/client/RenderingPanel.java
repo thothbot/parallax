@@ -32,7 +32,6 @@ import thothbot.parallax.core.client.events.Context3dErrorHandler;
 import thothbot.parallax.core.client.events.SceneLoadingEvent;
 import thothbot.parallax.core.client.events.SceneLoadingHandler;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.resources.CoreResources;
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.core.client.Scheduler;
@@ -48,8 +47,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 /**
- * A widget where {@link AnimatedScene} will be rendered. 
- * This is complex widget which used for display {@link LoadingPanel} and {@link Debugger}.
+ * Widget which manages {@link WebGLRenderer} and {@link Canvas3d}
  * 
  * @author thothbot
  * 
