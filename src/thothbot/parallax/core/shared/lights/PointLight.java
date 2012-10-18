@@ -36,7 +36,7 @@ import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
  * <pre>
  * {@code
  * PointLight light = new PointLight( 0xff0000, 1, 100 ); 
- * light.position.set( 50, 50, 50 ); 
+ * light.getPosition().set( 50, 50, 50 ); 
  * getScene().add( light );
  * }
  * </pre>

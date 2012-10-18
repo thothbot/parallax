@@ -38,9 +38,9 @@ import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
  * {@code
  * // White directional light at half intensity shining from the top. 
  * 
- * DirectionalLight directionalLight = new DirectionalLight( 0xffffff, 0.5 ); 
- * directionalLight.position.set( 0, 1, 0 ); 
- * getScene().add( directionalLight );
+ * DirectionalLight light = new DirectionalLight( 0xffffff, 0.5 ); 
+ * light.position.set( 0, 1, 0 ); 
+ * getScene().add( light );
  * }
  * </pre>
  * @author thothbot
