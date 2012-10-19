@@ -23,11 +23,9 @@
 package thothbot.parallax.core.shared.geometries;
 
 /**
- * The TetrahedronGeometry geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/tetrahedron.gif" />
  * <p>
- * Based on the three.js code.
+ * Tetrahedron geometry
  * 
  * @author thothbot
  *

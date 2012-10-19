@@ -30,11 +30,9 @@ import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
 /**
- * The PlaneGeometry geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/plane.gif" />
  * <p>
- * Based on the three.js code.
+ * Plane geometry
  * 
  * @author thothbot
  *

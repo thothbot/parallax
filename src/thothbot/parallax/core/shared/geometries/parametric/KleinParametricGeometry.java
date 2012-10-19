@@ -26,11 +26,9 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.ParametricGeometry;
 
 /**
- * The KleinParametricGeometry bottle geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/klein_bottle.gif" />
  * <p>
- * Based on the three.js code.
+ * Klein bottle geometry
  * 
  * @author thothbot
  *

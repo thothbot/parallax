@@ -34,11 +34,9 @@ import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
 /**
- * The SphereGeometry geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/sphere.gif" />
  * <p>
- * Based on the three.js code.
+ * The Sphere geometry
  * 
  * @author thothbot
  *

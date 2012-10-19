@@ -32,11 +32,9 @@ import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
 /**
- * The TorusGeometry geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/torus.gif" />
  * <p>
- * Based on the three.js code.
+ * Torus geometry
  * 
  * @author thothbot
  *

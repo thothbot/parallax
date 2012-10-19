@@ -46,7 +46,6 @@ public class ParametricGeometry extends Geometry
 	{
 		super();
 
-		int stackCount = stacks + 1;
 		int sliceCount = slices + 1;
 		
 		for ( int i = 0; i <= stacks; i ++ ) 

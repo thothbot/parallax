@@ -29,6 +29,14 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
+/**
+ * <img src="http://thothbot.github.com/parallax/static/docs/torus_knot.gif" />
+ * <p>
+ * Torus knot geometry
+ * 
+ * @author thothbot
+ *
+ */
 public final class TorusKnotGeometry extends Geometry
 {
 
@@ -119,7 +127,6 @@ public final class TorusKnotGeometry extends Geometry
 	private Vector3 getPos( double u, double v, int in_q, int in_p, int radius, int heightScale ) 
 	{
 		double cu = Math.cos( u );
-		double cv = Math.cos( v );
 		double su = Math.sin( u );
 		double quOverP = in_q / (double)in_p * u;
 		double cs = Math.cos( quOverP );

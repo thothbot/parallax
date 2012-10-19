@@ -29,7 +29,15 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
-
+/**
+ * <img src="http://thothbot.github.com/parallax/static/docs/circle.gif" />
+ * 
+ * <p>
+ * Circle geometry
+ * 
+ * @author thothbot
+ *
+ */
 public final class CircleGeometry extends Geometry 
 {
 	public CircleGeometry()

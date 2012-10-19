@@ -26,11 +26,9 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.ParametricGeometry;
 
 /**
- * The flat MobiusParametricGeometry strip geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/mobius_strip.gif" />
  * <p>
- * Based on the three.js code.
+ * Flat Mobius strip geometry
  * 
  * @author thothbot
  *

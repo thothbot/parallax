@@ -25,6 +25,14 @@ package thothbot.parallax.core.shared.geometries.parametric;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.ParametricGeometry;
 
+/**
+ * <img src="http://thothbot.github.com/parallax/static/docs/mobius_3d.gif" />
+ * <p>
+ * Mobius 3D geometry
+ * 
+ * @author thothbot
+ *
+ */
 public class Mobius3dParametricGeometry extends ParametricGeometry
 {
 

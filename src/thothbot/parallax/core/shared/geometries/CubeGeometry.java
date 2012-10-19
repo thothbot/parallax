@@ -33,11 +33,10 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.Material;
 
 /**
- * The CubeGeometry geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/cube.gif" />
+ * 
  * <p>
- * Based on the three.js code.
+ * Cube geometry
  * 
  * @author thothbot
  *

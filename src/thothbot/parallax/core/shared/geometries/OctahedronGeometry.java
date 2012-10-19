@@ -23,11 +23,9 @@
 package thothbot.parallax.core.shared.geometries;
 
 /**
- * The OctahedronGeometry geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/octahedron.gif" />
  * <p>
- * Based on the three.js code.
+ * Octahedron geometry
  * 
  * @author thothbot
  *

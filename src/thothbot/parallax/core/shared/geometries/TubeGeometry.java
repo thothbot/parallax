@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
@@ -34,7 +33,6 @@ import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
 import thothbot.parallax.core.shared.helpers.ArrowHelper;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 /**
  * Creates a tube which extrudes along a 3d spline.

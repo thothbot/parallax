@@ -23,11 +23,9 @@
 package thothbot.parallax.core.shared.geometries;
 
 /**
- * The IcosahedronGeometry geometry
- * <p>
  * <img src="http://thothbot.github.com/parallax/static/docs/icosahedron.gif" />
  * <p>
- * Based on the three.js code.
+ * Icosahedron geometry
  * 
  * @author thothbot
  *
