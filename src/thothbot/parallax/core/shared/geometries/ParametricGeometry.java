@@ -30,6 +30,14 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.UV;
 import thothbot.parallax.core.shared.core.Vector3;
 
+/**
+ * Parametric Surfaces Geometry.
+ * <p>
+ * Based on the article <a href="http://prideout.net/blog/?p=44">prideout.net</a>
+ * 
+ * @author thothbot
+ *
+ */
 public class ParametricGeometry extends Geometry
 {
 	public static interface ParametricFunction 
