@@ -428,6 +428,10 @@ public class Texture
 		return this.anisotropy;
 	}
 	
+	/**
+	 * Method of enhancing the image quality of texture on surfaces 
+	 * that are at oblique viewing angles.
+	 */
 	public void setAnisotropy(int anisotropy) {
 		this.anisotropy = anisotropy;
 	}
