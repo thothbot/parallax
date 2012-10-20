@@ -32,7 +32,7 @@ import com.google.gwt.resources.client.TextResource;
  * Based on three.js code
  * 
  * <ul>
- * <li>hue: -1 to 1 (-1 is 180 degrees in the negative direction, 0 is no change, etc.</li>
+ * <li>hue: -1 to 1 (-1 is 180 degrees in the negative direction, 0 is no change, etc.)</li>
  * <li>saturation: -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)</li>
  * </ul>
  * 

@@ -23,7 +23,6 @@
 package thothbot.parallax.plugins.postprocessing;
 
 import thothbot.parallax.core.shared.core.Vector2;
-import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.plugins.postprocessing.shaders.DotScreenShader;
 

@@ -39,7 +39,7 @@ import com.google.gwt.resources.client.TextResource;
  * Based on three.js code
  * <p>
  * Modified to use RGBA packed depth texture (use clear color 1,1,1,1 for depth pass), 
- * made fog more compatible with three.js linear fog
+ * made fog more compatible with linear fog
  * 
  * @author thothbot
  * 

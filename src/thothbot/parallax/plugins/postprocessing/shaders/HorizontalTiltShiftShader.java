@@ -36,7 +36,7 @@ import com.google.gwt.resources.client.TextResource;
  * <ul>
  * <li>9 samples per pass</li>
  * <li>standard deviation 2.7</li>
- * <li>"h" and "v" parameters should be set to "1 / width" and "1 / height"</li>
+ * <li>"h" parameters should be set to "1 / width" and "1 / height"</li>
  * <li>"r" parameter control where "focused" horizontal line lies</li>
  * </ul>
  * 
