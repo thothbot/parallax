@@ -63,7 +63,7 @@ public final class BokehShader extends Shader
 		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
 		this.addUniform("aspect", new Uniform(Uniform.TYPE.F, 1.0));
 		this.addUniform("aperture", new Uniform(Uniform.TYPE.F, 0.025));
-		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
+		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, true));
 	}
 
 }

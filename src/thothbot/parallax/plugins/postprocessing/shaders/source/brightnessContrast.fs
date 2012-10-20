@@ -16,4 +16,4 @@ void main() {
 		gl_FragColor.rgb = (gl_FragColor.rgb - 0.5) * (1.0 + contrast) + 0.5;
 	}
 
-}"\
+}

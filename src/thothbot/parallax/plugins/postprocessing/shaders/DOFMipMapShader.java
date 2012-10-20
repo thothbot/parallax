@@ -63,7 +63,7 @@ public final class DOFMipMapShader extends Shader
 		this.addUniform("tColor", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("focus", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, 1.0));
+		this.addUniform("maxblur", new Uniform(Uniform.TYPE.I, true));
 	}
 
 }

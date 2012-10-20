@@ -69,12 +69,12 @@ public final class SSAOShader extends Shader
 		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T));
 		this.addUniform("size", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
 		this.addUniform("cameraNear", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("cameraFar", new Uniform(Uniform.TYPE.F, 100));
+		this.addUniform("cameraFar", new Uniform(Uniform.TYPE.F, 100.0));
 		this.addUniform("fogNear", new Uniform(Uniform.TYPE.F, 5.0));
-		this.addUniform("fogFar", new Uniform(Uniform.TYPE.F, 100));
-		this.addUniform("fogEnabled", new Uniform(Uniform.TYPE.I, 0));
-		this.addUniform("onlyAO", new Uniform(Uniform.TYPE.I, 0));
+		this.addUniform("fogFar", new Uniform(Uniform.TYPE.F, 100.0));
+		this.addUniform("fogEnabled", new Uniform(Uniform.TYPE.I, false));
+		this.addUniform("onlyAO", new Uniform(Uniform.TYPE.I, false));
 		this.addUniform("aoClamp", new Uniform(Uniform.TYPE.F, 0.3));
-		this.addUniform("lumInfluence", new Uniform(Uniform.TYPE.F,0.9));
+		this.addUniform("lumInfluence", new Uniform(Uniform.TYPE.F, 0.9));
 	}
 }
