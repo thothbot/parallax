@@ -29,6 +29,7 @@ import java.util.Set;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 
+@SuppressWarnings("serial")
 public class FastMap<V> extends AbstractMap<String, V> implements Serializable {
   private static class FastMapEntry<V> implements Map.Entry<String, V> {
 

@@ -22,7 +22,6 @@ package thothbot.parallax.core.client.debugger;
 import thothbot.parallax.core.client.RenderingPanel;
 import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 

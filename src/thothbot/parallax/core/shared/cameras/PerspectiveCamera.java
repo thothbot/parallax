@@ -23,7 +23,6 @@
 package thothbot.parallax.core.shared.cameras;
 
 import thothbot.parallax.core.client.events.ViewportResizeEvent;
-import thothbot.parallax.core.client.events.ViewportResizeHandler;
 
 /**
  * Camera with perspective projection.

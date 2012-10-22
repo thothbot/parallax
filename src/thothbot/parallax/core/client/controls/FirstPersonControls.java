@@ -76,7 +76,6 @@ public class FirstPersonControls extends Controls
 	private double movementSpeed = 1.0;
 	private double lookSpeed = 0.005;
 
-	private boolean noFly = false;
 	private boolean lookVertical = true;
 	private boolean autoForward = false;
 
@@ -109,8 +108,6 @@ public class FirstPersonControls extends Controls
 	private boolean moveUp = false;
 	private boolean moveDown = false;
 	private boolean freeze = false;
-
-	private boolean mouseDragOn = false;
 	
 	private int viewHalfX;
 	private int viewHalfY;
@@ -287,8 +284,6 @@ public class FirstPersonControls extends Controls
 			case NativeEvent.BUTTON_RIGHT: this.moveBackward = true; break;
 			}
 		}
-
-		this.mouseDragOn = true;
 	}
 
 	@Override
@@ -305,8 +300,6 @@ public class FirstPersonControls extends Controls
 			case NativeEvent.BUTTON_RIGHT: this.moveBackward = false; break;
 			}
 		}
-
-		this.mouseDragOn = false;
 	}
 
 	@Override
