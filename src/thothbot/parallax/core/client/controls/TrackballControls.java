@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * The control implements Trackball Controls.
- * There is disabled the context menu for the {@link #getWidget()}.
+ * There is disabled a context menu for the {@link #getWidget()}.
  * <p>
  * Based on the three.js code.
  * 
