@@ -34,56 +34,54 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.Color;
 
-public final class ParticleBasicMaterial extends Material 
-	implements HasFog, HasColor, HasMap, HasVertexColors, HasEventBus
-{
+public final class ParticleBasicMaterial extends Material implements HasFog,
+		HasColor, HasMap, HasVertexColors, HasEventBus {
 	private boolean isFog;
-	
+
 	private Color color;
-	
+
 	private Texture map;
-	
+
 	private Material.COLORS vertexColors;
-	
+
 	private double size;
-	
+
 	private boolean sizeAttenuation;
 
-	public ParticleBasicMaterial()
-	{
-		
+	public ParticleBasicMaterial() {
+
 		setFog(true);
-		
+
 		setColor(new Color(0xffffff));
-		
+
 		setSize(1.0);
 		setSizeAttenuation(true);
-		
+
 		setVertexColors(Material.COLORS.NO);
-		
+
 	}
 
 	public double getSize() {
 		return this.size;
 	}
-	
+
 	public void setSize(double size) {
-		this.size = size;;
+		this.size = size;
+		;
 	}
 
 	public boolean isSizeAttenuation() {
 		return sizeAttenuation;
 	}
-	
+
 	public void setSizeAttenuation(boolean sizeAttenuation) {
 		this.sizeAttenuation = sizeAttenuation;
 	}
-	
-	public Shader getAssociatedShader() 
-	{
+
+	public Shader getAssociatedShader() {
 		return new ParticleBasicShader();
 	}
-	
+
 	@Override
 	public boolean isFog() {
 		return this.isFog;
@@ -93,17 +91,17 @@ public final class ParticleBasicMaterial extends Material
 	public void setFog(boolean fog) {
 		this.isFog = fog;
 	}
-	
+
 	@Override
 	public Color getColor() {
 		return color;
 	}
-	
+
 	@Override
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	
+
 	@Override
 	public Texture getMap() {
 		return this.map;
@@ -123,28 +121,29 @@ public final class ParticleBasicMaterial extends Material
 	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
-	
+
 	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput) 
-	{
+	public void refreshUniforms(Camera camera, boolean isGammaInput) {
 		super.refreshUniforms(camera, isGammaInput);
 		final Map<String, Uniform> uniforms = getShader().getUniforms();
-		
-		uniforms.get("psColor").setValue( getColor() );
-		uniforms.get("opacity").setValue( getOpacity() );
-		uniforms.get("size").setValue( getSize() );
-		
-		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, new ViewportResizeHandler() {
-			
-			@Override
-			public void onResize(ViewportResizeEvent event) {
-				uniforms.get("scale").setValue( event.getRenderer().getAbsoluteHeight() / 2.0 );	
-			}
-		});
-		
-		// Default
-		uniforms.get("scale").setValue( 500 / 2.0 );
 
-		uniforms.get("map").setValue( getMap() );
+		uniforms.get("psColor").setValue(getColor());
+		uniforms.get("opacity").setValue(getOpacity());
+		uniforms.get("size").setValue(getSize());
+
+		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE,
+				new ViewportResizeHandler() {
+
+					@Override
+					public void onResize(ViewportResizeEvent event) {
+						uniforms.get("scale").setValue(
+								event.getRenderer().getAbsoluteHeight() / 2.0);
+					}
+				});
+
+		// Default
+		uniforms.get("scale").setValue(500 / 2.0);
+
+		uniforms.get("map").setValue(getMap());
 	}
 }

@@ -24,9 +24,8 @@ package thothbot.parallax.core.shared.materials;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.context.Canvas3d;
-import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.DepthShader;
+import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
