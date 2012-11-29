@@ -22,13 +22,14 @@ package thothbot.parallax.core.client.textures;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
-import thothbot.parallax.core.client.gl2.arrays.Int32Array;
-import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
 import thothbot.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.XMLHttpRequestBinary;
 
+import com.google.gwt.typedarrays.client.Int32ArrayNative;
+import com.google.gwt.typedarrays.client.Uint8ArrayNative;
+import com.google.gwt.typedarrays.shared.ArrayBuffer;
+import com.google.gwt.typedarrays.shared.Int32Array;
+import com.google.gwt.typedarrays.shared.Uint8Array;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 
@@ -47,7 +48,7 @@ public class CompressedTexture extends Texture
 
 		this.mipmaps = new ArrayList<DataTexture>();
 
-		XMLHttpRequestBinary binxhr = (XMLHttpRequestBinary)XMLHttpRequestBinary.create();
+		XMLHttpRequest binxhr = (XMLHttpRequest)XMLHttpRequest.create();
 		binxhr.open("GET", url);
 		binxhr.setResponseType("arraybuffer");
 		binxhr.send();
@@ -57,7 +58,7 @@ public class CompressedTexture extends Texture
 		    @Override
 		     public void onReadyStateChange(XMLHttpRequest xhr)
 		     {
-		         XMLHttpRequestBinary binxhr = (XMLHttpRequestBinary)xhr;
+		    	XMLHttpRequest binxhr = (XMLHttpRequest)xhr;
 		         if( binxhr.getReadyState() == XMLHttpRequest.DONE )
 		         {
 		             binxhr.clearOnReadyStateChange();
@@ -158,7 +159,7 @@ public class CompressedTexture extends Texture
 
 		// Parse header
 
-		Int32Array header = Int32Array.create( buffer, 0, headerLengthInt );
+		Int32Array header = Int32ArrayNative.create( buffer, 0, headerLengthInt );
 
         if ( header.get( off_magic ) != DDS_MAGIC ) 
         {
@@ -217,10 +218,11 @@ public class CompressedTexture extends Texture
 		for ( int i = 0; i < mipmapCount; i ++ ) 
 		{
 			int dataLength = Math.max( 4, width ) / 4 * Math.max( 4, height ) / 4 * blockBytes;
-			Uint8Array byteArray = Uint8Array.create( buffer, dataOffset, dataLength );
+			Uint8Array byteArray = Uint8ArrayNative.create( buffer, dataOffset, dataLength );
 
 			DataTexture mipmap = new DataTexture(width, height);
-			mipmap.setData(byteArray);
+			//TODO: change to google
+//			mipmap.setData(byteArray);
 			mipmaps.add( mipmap );
 
 			dataOffset += dataLength;
