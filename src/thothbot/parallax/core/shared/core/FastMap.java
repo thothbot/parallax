@@ -1,17 +1,19 @@
 /*
- * Copyright 2007 Google Inc.
+ * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * This file is part of Parallax project.
  * 
- * http://www.apache.org/licenses/LICENSE-2.0
+ * Parallax is free software: you can redistribute it and/or modify it 
+ * under the terms of the Creative Commons Attribution 3.0 Unported License.
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * Parallax is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the Creative Commons Attribution 
+ * 3.0 Unported License. for more details.
+ * 
+ * You should have received a copy of the the Creative Commons Attribution 
+ * 3.0 Unported License along with Parallax. 
+ * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
 package thothbot.parallax.core.shared.core;
