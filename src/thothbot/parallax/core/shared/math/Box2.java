@@ -37,7 +37,14 @@ public class Box2
 		this.min = min;
 		this.max = max;
 	}
-	
+
+	public Vector2 getMin() {
+		return min;
+	}
+	public Vector2 getMax() {
+		return max;
+	}
+
 	public Box2 set( Vector2 min, Vector2 max ) 
 	{
 		this.min.copy( min );
