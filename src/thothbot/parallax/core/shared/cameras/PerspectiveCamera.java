@@ -19,6 +19,7 @@
 package thothbot.parallax.core.shared.cameras;
 
 import thothbot.parallax.core.client.events.ViewportResizeEvent;
+import thothbot.parallax.core.shared.math.Mathematics;
 
 /**
  * Camera with perspective projection.
@@ -228,8 +229,8 @@ public class PerspectiveCamera extends Camera
 	 */
 	public void setLens(int focalLength, int frameHeight)
 	{
-		this.fieldOfView = 2.0 * Math.atan( frameHeight / ( focalLength * 2.0 ) ) * ( 180.0 / Math.PI );
-		this.updateProjectionMatrix();		
+		this.fieldOfView = 2.0 * Mathematics.radToDeg( Math.atan( frameHeight / ( focalLength * 2.0 ) ) );
+		this.updateProjectionMatrix();
 	}
 	
 	/**

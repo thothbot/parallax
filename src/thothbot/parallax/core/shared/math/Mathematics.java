@@ -176,4 +176,14 @@ public class Mathematics
 	{
 		return Math.exp( - ( x * x ) / ( 2.0 * sigma * sigma ) );
 	}
+	
+	public static double degToRad ( double degrees ) 
+	{
+		return degrees * Math.PI / 180;
+	}
+
+	public static double radToDeg( double radians ) 
+	{
+		return radians * 180 / Math.PI;
+	}
 }
