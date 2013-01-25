@@ -18,14 +18,11 @@
 
 package thothbot.parallax.core.shared.math;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
 public class Plane 
 {
 	private Vector3 normal;
 	private double constant;
 	
-	private static Vector3 __vZero = new Vector3( 0, 0, 0 );
 	private static Vector3 __v1 = new Vector3();
 	private static Vector3 __v2 = new Vector3();
 

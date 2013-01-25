@@ -46,7 +46,7 @@ public class Frustum
 	{
 		this.planes = new ArrayList<Plane>();
 		for(int i = 0; i < 6; i++)
-			this.planes.set(i, new Plane());
+			this.planes.add(new Plane());
 	}
 
 	public Frustum set( Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5 ) 

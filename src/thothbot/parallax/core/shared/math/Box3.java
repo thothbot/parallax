@@ -18,7 +18,6 @@
 
 package thothbot.parallax.core.shared.math;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -285,7 +284,7 @@ public class Box3
 	public Box3 transform( Matrix4 matrix ) 
 	{
 		// NOTE: I am using a binary pattern to specify all 2^3 combinations below
-		List newPoints = Arrays.asList(
+		List<Vector3> newPoints = Arrays.asList(
 			Box3.__v0.set( this.min.x, this.min.y, this.min.z ).apply( matrix ),
 			Box3.__v0.set( this.min.x, this.min.y, this.min.z ).apply( matrix ), // 000
 			Box3.__v1.set( this.min.x, this.min.y, this.max.z ).apply( matrix ), // 001
