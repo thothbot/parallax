@@ -195,6 +195,102 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 	}
 	
+	public Vector3 apply( Matrix3 m ) 
+	{
+		double x = this.x;
+		double y = this.y;
+		double z = this.z;
+
+		Float32Array e = m.getArray();
+
+		this.x = e.get(0) * x + e.get(3) * y + e.get(6) * z;
+		this.y = e.get(1) * x + e.get(4) * y + e.get(7) * z;
+		this.z = e.get(2) * x + e.get(5) * y + e.get(8) * z;
+
+		return this;
+	}
+
+	public Vector3 apply( Matrix4 m ) 
+	{
+
+		// input: THREE.Matrix4 affine matrix
+
+		double x = this.x, y = this.y, z = this.z;
+
+		Float32Array e = m.getArray();
+
+		this.x = e.get(0) * x + e.get(4) * y + e.get(8)  * z + e.get(12);
+		this.y = e.get(1) * x + e.get(5) * y + e.get(9)  * z + e.get(13);
+		this.z = e.get(2) * x + e.get(6) * y + e.get(10) * z + e.get(14);
+
+		return this;
+	}
+
+//	public Vector3 applyProjection: function ( m ) {
+//
+//		// input: THREE.Matrix4 projection matrix
+//
+//		var x = this.x, y = this.y, z = this.z;
+//
+//		var e = m.elements;
+//		var d = 1 / ( e[3] * x + e[7] * y + e[11] * z + e[15] ); // perspective divide
+//
+//		this.x = ( e[0] * x + e[4] * y + e[8]  * z + e[12] ) * d;
+//		this.y = ( e[1] * x + e[5] * y + e[9]  * z + e[13] ) * d;
+//		this.z = ( e[2] * x + e[6] * y + e[10] * z + e[14] ) * d;
+//
+//		return this;
+//
+//	},
+
+	public Vector3 apply( Quaternion q ) 
+	{
+		double x = this.x;
+		double y = this.y;
+		double z = this.z;
+
+		double qx = q.x;
+		double qy = q.y;
+		double qz = q.z;
+		double qw = q.w;
+
+		// calculate quat * vector
+
+		double ix =  qw * x + qy * z - qz * y;
+		double iy =  qw * y + qz * x - qx * z;
+		double iz =  qw * z + qx * y - qy * x;
+		double iw = -qx * x - qy * y - qz * z;
+
+		// calculate result * inverse quat
+
+		this.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
+		this.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
+		this.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
+
+		return this;
+	}
+
+//	applyEuler: function ( v, eulerOrder ) {
+//
+//		var quaternion = THREE.Vector3.__q1.setFromEuler( v, eulerOrder );
+//
+//		this.applyQuaternion( quaternion );
+//
+//		return this;
+//
+//	},
+
+//	applyAxisAngle: function ( axis, angle ) {
+//
+//		var quaternion = THREE.Vector3.__q1.setFromAxisAngle( axis, angle );
+//
+//		this.applyQuaternion( quaternion );
+//
+//		return this;
+//
+//	},
+
+	
 	@Override
 	public Vector3 divide(Vector v)
 	{

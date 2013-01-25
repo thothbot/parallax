@@ -253,15 +253,15 @@ public class Box3
 		return clampedPoint.sub( point ).length();
 	}
 
-	public Vector3 getBoundingSphere( Sphere optionalTarget )
+	public Sphere getBoundingSphere()
 	{
 		return getBoundingSphere(new Sphere());
 	}
 	
-	public Vector3 getBoundingSphere( Sphere optionalTarget ) 
+	public Sphere getBoundingSphere( Sphere optionalTarget ) 
 	{
-		optionalTarget.center = this.center();
-		optionalTarget.radius = this.size( Box3.__v0 ).length() * 0.5;
+		optionalTarget.setCenter( this.center());
+		optionalTarget.setRadius( this.size( Box3.__v0 ).length() * 0.5 );
 
 		return optionalTarget;
 	}
@@ -288,13 +288,13 @@ public class Box3
 		List newPoints = Arrays.asList(
 			Box3.__v0.set( this.min.x, this.min.y, this.min.z ).apply( matrix ),
 			Box3.__v0.set( this.min.x, this.min.y, this.min.z ).apply( matrix ), // 000
-			Box3.__v1.set( this.min.x, this.min.y, this.max.z ).applyMatrix4( matrix ), // 001
-			Box3.__v2.set( this.min.x, this.max.y, this.min.z ).applyMatrix4( matrix ), // 010
-			Box3.__v3.set( this.min.x, this.max.y, this.max.z ).applyMatrix4( matrix ), // 011
-			Box3.__v4.set( this.max.x, this.min.y, this.min.z ).applyMatrix4( matrix ), // 100
-			Box3.__v5.set( this.max.x, this.min.y, this.max.z ).applyMatrix4( matrix ), // 101
-			Box3.__v6.set( this.max.x, this.max.y, this.min.z ).applyMatrix4( matrix ), // 110
-			Box3.__v7.set( this.max.x, this.max.y, this.max.z ).applyMatrix4( matrix )  // 111
+			Box3.__v1.set( this.min.x, this.min.y, this.max.z ).apply( matrix ), // 001
+			Box3.__v2.set( this.min.x, this.max.y, this.min.z ).apply( matrix ), // 010
+			Box3.__v3.set( this.min.x, this.max.y, this.max.z ).apply( matrix ), // 011
+			Box3.__v4.set( this.max.x, this.min.y, this.min.z ).apply( matrix ), // 100
+			Box3.__v5.set( this.max.x, this.min.y, this.max.z ).apply( matrix ), // 101
+			Box3.__v6.set( this.max.x, this.max.y, this.min.z ).apply( matrix ), // 110
+			Box3.__v7.set( this.max.x, this.max.y, this.max.z ).apply( matrix )  // 111
 		);
 
 		this.makeEmpty();

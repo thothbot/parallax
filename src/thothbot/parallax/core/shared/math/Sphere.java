@@ -37,6 +37,22 @@ public class Sphere
 		this.radius = radius;
 	}
 	
+	public Vector3 getCenter() {
+		return center;
+	}
+
+	public void setCenter(Vector3 center) {
+		this.center = center;
+	}
+
+	public double getRadius() {
+		return radius;
+	}
+
+	public void setRadius(double radius) {
+		this.radius = radius;
+	}
+	
 	public Sphere set( Vector3 center, double radius ) 
 	{
 		this.center.copy( center );
@@ -128,7 +144,7 @@ public class Sphere
 
 	public Sphere transform( Matrix4 matrix ) 
 	{
-		this.center.applyMatrix4( matrix );
+		this.center.apply( matrix );
 		this.radius = this.radius * matrix.getMaxScaleOnAxis();
 
 		return this;
