@@ -16,7 +16,9 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.shared.core;
+package thothbot.parallax.core.shared.math;
+
+import thothbot.parallax.core.shared.core.Euler;
 
 /**
  * Implementation of Quaternion which provide a convenient mathematical notation 

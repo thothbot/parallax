@@ -24,10 +24,10 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.textures.Texture;
-import thothbot.parallax.core.shared.core.Color;
-import thothbot.parallax.core.shared.core.Matrix4;
-import thothbot.parallax.core.shared.core.Vector2;
-import thothbot.parallax.core.shared.core.Vector4;
+import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Vector2;
+import thothbot.parallax.core.shared.math.Vector4;
 
 /**
  * Some common uniforms used by shaders.

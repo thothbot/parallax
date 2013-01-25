@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.math.Matrix4;
 
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;

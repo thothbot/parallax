@@ -20,10 +20,10 @@ package thothbot.parallax.core.shared.lights;
 
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Matrix4;
-import thothbot.parallax.core.shared.core.Vector2;
-import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.helpers.CameraHelper;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Vector2;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 public abstract class ShadowLight extends Light

@@ -21,7 +21,7 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.utils.CurveUtils;
 
 

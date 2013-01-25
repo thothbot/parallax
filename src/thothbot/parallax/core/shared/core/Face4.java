@@ -20,6 +20,9 @@ package thothbot.parallax.core.shared.core;
 
 import java.util.List;
 
+import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Vector3;
+
 /**
  * Face4 represent the rectangular sides (A, B, C, D) of the geometric object.
  * <pre>

@@ -21,9 +21,9 @@ package thothbot.parallax.core.shared.objects;
 import java.util.Collection;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Matrix4;
-import thothbot.parallax.core.shared.core.Quaternion;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Quaternion;
+import thothbot.parallax.core.shared.math.Vector3;
 
 /**
  * Abstract Dimensional Object

@@ -25,7 +25,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Mesh;
 
 import com.google.gwt.xml.client.Node;

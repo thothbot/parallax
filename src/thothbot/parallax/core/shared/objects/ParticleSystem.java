@@ -32,15 +32,15 @@ import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
-import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
-import thothbot.parallax.core.shared.core.Matrix4;
-import thothbot.parallax.core.shared.core.Vector2;
-import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ParticleBasicMaterial;
+import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Vector2;
+import thothbot.parallax.core.shared.math.Vector3;
+import thothbot.parallax.core.shared.math.Vector4;
 
 /**
  * A class for displaying particles in the form of variable size points. 

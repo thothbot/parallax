@@ -22,9 +22,9 @@ import thothbot.parallax.core.client.events.HasEventBus;
 import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.shared.core.Matrix4;
-import thothbot.parallax.core.shared.core.Quaternion;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Quaternion;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.event.shared.HandlerRegistration;

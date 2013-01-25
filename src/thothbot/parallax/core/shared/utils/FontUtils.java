@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.math.Vector2;
 
 
 public class FontUtils

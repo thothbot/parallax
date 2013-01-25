@@ -18,7 +18,7 @@
 
 package thothbot.parallax.core.shared.curves;
 
-import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.utils.CurveUtils;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
 

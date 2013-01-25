@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.math.Color;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;

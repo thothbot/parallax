@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.shared.core;
+package thothbot.parallax.core.shared.math;
 
 /**
  * Interface of the vector.

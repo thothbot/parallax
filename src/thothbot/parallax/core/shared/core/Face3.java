@@ -21,6 +21,10 @@ package thothbot.parallax.core.shared.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Vector3;
+import thothbot.parallax.core.shared.math.Vector4;
+
 /**
  * Face3 represent the triangular sides (A, B, C) of the geometric object.
  * <pre>

@@ -23,7 +23,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
 

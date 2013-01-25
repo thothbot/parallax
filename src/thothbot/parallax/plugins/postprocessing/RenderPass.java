@@ -19,8 +19,8 @@
 package thothbot.parallax.plugins.postprocessing;
 
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 public class RenderPass extends Pass

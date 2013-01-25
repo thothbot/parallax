@@ -28,7 +28,7 @@ import com.google.gwt.core.client.GWT;
 
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
-import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.math.Vector2;
 
 
 /**

@@ -18,8 +18,8 @@
 
 package thothbot.parallax.plugins.postprocessing;
 
-import thothbot.parallax.core.shared.core.Vector2;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.plugins.postprocessing.shaders.DotScreenShader;
 
 public class DotScreenPass extends Pass

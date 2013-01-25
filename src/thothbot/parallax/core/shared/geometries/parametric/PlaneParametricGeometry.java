@@ -18,8 +18,8 @@
 
 package thothbot.parallax.core.shared.geometries.parametric;
 
-import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.geometries.ParametricGeometry;
+import thothbot.parallax.core.shared.math.Vector3;
 
 public class PlaneParametricGeometry extends ParametricGeometry
 {

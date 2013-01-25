@@ -18,7 +18,7 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.math.Color;
 
 /**
  * The Material has both an Ambient and Emissive colors.

@@ -25,6 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector3;
+import thothbot.parallax.core.shared.math.Vector4;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
@@ -624,7 +629,7 @@ public class Geometry extends GeometryBuffer implements Geometric
 				double test = tmp2.dot(tan2.get(vertexIndex));
 				double w = (test < 0.0) ? -1.0 : 1.0;
 				
-				face.getVertexTangents().add(i, new Vector4(tmp.x,tmp.y,tmp.z,w));
+				face.getVertexTangents().add(i, new Vector4(tmp.getX(),tmp.getY(),tmp.getZ(), w));
 			}
 		}
 
@@ -659,23 +664,23 @@ public class Geometry extends GeometryBuffer implements Geometric
 
 		for(Vector3 position: this.vertices) 
 		{
-			if ( position.x < min.x ) {
-				min.x = position.x;
+			if ( position.getX() < min.getX() ) {
+				min.setX( position.getX() );
 
-			} else if ( position.x > max.x ) {
-				max.x = position.x;
+			} else if ( position.getX() > max.getX() ) {
+				max.setX( position.getX() );
 			}
 
-			if ( position.y < min.y ) {
-				min.y = position.y;
-			} else if ( position.y > max.y ) {
-				max.y = position.y;
+			if ( position.getY() < min.getY() ) {
+				min.setY( position.getY() );
+			} else if ( position.getY() > max.getY() ) {
+				max.setY( position.getY() );
 			}
 
-			if ( position.z < min.z ) {
-				min.z = position.z;
-			} else if ( position.z > max.z ) {
-				max.z = position.z;
+			if ( position.getZ() < min.getZ() ) {
+				min.setZ( position.getZ() );
+			} else if ( position.getZ() > max.getZ() ) {
+				max.setZ( position.getZ() );
 			}
 		}
 	}
@@ -716,12 +721,12 @@ public class Geometry extends GeometryBuffer implements Geometric
 		UV uvB = uv[ub];
 		UV uvC = uv[uc];
 		
-		double x1 = vB.x - vA.x;
-		double x2 = vC.x - vA.x;
-		double y1 = vB.y - vA.y;
-		double y2 = vC.y - vA.y;
-		double z1 = vB.z - vA.z;
-		double z2 = vC.z - vA.z;
+		double x1 = vB.getX() - vA.getX();
+		double x2 = vC.getX() - vA.getX();
+		double y1 = vB.getY() - vA.getY();
+		double y2 = vC.getY() - vA.getY();
+		double z1 = vB.getZ() - vA.getZ();
+		double z2 = vC.getZ() - vA.getZ();
 		
 		double s1 = uvB.getU() - uvA.getU();
 		double s2 = uvC.getU() - uvA.getU();
@@ -789,7 +794,7 @@ public class Geometry extends GeometryBuffer implements Geometric
 		for ( int i = 0; i < this.vertices.size(); i ++ ) 
 		{
 			Vector3 v = this.vertices.get( i );
-			String key = Math.round( v.x * precision ) + "_" + Math.round( v.y * precision ) + "_"  + Math.round( v.z * precision );
+			String key = Math.round( v.getX() * precision ) + "_" + Math.round( v.getY() * precision ) + "_"  + Math.round( v.getZ() * precision );
 
 			if ( !verticesMap.containsKey(key)) 
 			{

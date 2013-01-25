@@ -18,7 +18,7 @@
 
 package thothbot.parallax.core.shared.curves;
 
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Vector3;
 
 public class LineCurve3 extends Curve
 {

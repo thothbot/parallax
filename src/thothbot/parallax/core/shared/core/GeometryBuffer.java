@@ -30,6 +30,7 @@ import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.math.Vector3;
 
 public class GeometryBuffer implements Geometric
 {
@@ -490,17 +491,17 @@ public class GeometryBuffer implements Geometric
 					ab.sub( pA, pB );
 					cb.cross( ab );
 
-					normals.set( vA * 3, normals.get( vA * 3) + cb.x);
-					normals.set( vA * 3 + 1,  normals.get( vA * 3 + 1) + cb.y);
-					normals.set( vA * 3 + 2,  normals.get( vA * 3 + 2) + cb.z);
+					normals.set( vA * 3, normals.get( vA * 3) + cb.getX());
+					normals.set( vA * 3 + 1,  normals.get( vA * 3 + 1) + cb.getY());
+					normals.set( vA * 3 + 2,  normals.get( vA * 3 + 2) + cb.getZ());
 
-					normals.set( vB * 3,  normals.get( vB * 3) + cb.x);
-					normals.set( vB * 3 + 1,  normals.get( vB * 3 + 1) + cb.y);
-					normals.set( vB * 3 + 2,  normals.get( vB * 3 + 2) + cb.z);
+					normals.set( vB * 3,  normals.get( vB * 3) + cb.getX());
+					normals.set( vB * 3 + 1,  normals.get( vB * 3 + 1) + cb.getY());
+					normals.set( vB * 3 + 2,  normals.get( vB * 3 + 2) + cb.getZ());
 
-					normals.set( vC * 3,  normals.get( vC * 3) + cb.x);
-					normals.set( vC * 3 + 1,  normals.get( vC * 3 + 1) + cb.y);
-					normals.set( vC * 3 + 2,  normals.get( vC * 3 + 2) + cb.z);
+					normals.set( vC * 3,  normals.get( vC * 3) + cb.getX());
+					normals.set( vC * 3 + 1,  normals.get( vC * 3 + 1) + cb.getY());
+					normals.set( vC * 3 + 2,  normals.get( vC * 3 + 2) + cb.getZ());
 				}
 			}
 

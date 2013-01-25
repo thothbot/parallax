@@ -32,7 +32,7 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.ProgramParameter;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
-import thothbot.parallax.core.shared.core.Mathematics;
+import thothbot.parallax.core.shared.math.Mathematics;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;

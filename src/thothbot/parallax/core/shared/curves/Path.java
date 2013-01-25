@@ -23,9 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Vector;
-import thothbot.parallax.core.shared.core.Vector2;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Vector;
+import thothbot.parallax.core.shared.math.Vector2;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
 
 public class Path extends CurvePath

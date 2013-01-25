@@ -18,7 +18,7 @@
 
 package thothbot.parallax.loader.shared.collada;
 
-import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.math.Matrix4;
 
 import com.google.gwt.xml.client.Node;
 

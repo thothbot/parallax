@@ -23,8 +23,8 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.ExtrudeGeometry;
-import thothbot.parallax.core.shared.core.Vector;
-import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.math.Vector;
+import thothbot.parallax.core.shared.math.Vector2;
 
 /**
  * @author zz85 / http://www.lab4games.net/zz85/blog

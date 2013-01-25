@@ -20,7 +20,7 @@ package thothbot.parallax.core.client.textures;
 
 import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
-import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.math.Color;
 
 /**
  * Implementation of data texture.

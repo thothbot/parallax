@@ -24,7 +24,7 @@ import thothbot.parallax.core.client.shaders.BasicShader;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.math.Color;
 
 /**
  * A material for drawing wireframe-style geometries.

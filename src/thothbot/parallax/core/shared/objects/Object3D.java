@@ -26,10 +26,10 @@ import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Euler;
-import thothbot.parallax.core.shared.core.Matrix3;
-import thothbot.parallax.core.shared.core.Matrix4;
-import thothbot.parallax.core.shared.core.Quaternion;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Matrix3;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Quaternion;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 /**

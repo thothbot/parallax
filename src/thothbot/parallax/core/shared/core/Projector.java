@@ -19,6 +19,9 @@
 package thothbot.parallax.core.shared.core;
 
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Ray;
+import thothbot.parallax.core.shared.math.Vector3;
 
 /**
  * Projects points between spaces.

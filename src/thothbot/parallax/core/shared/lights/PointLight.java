@@ -22,9 +22,9 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
+import thothbot.parallax.core.shared.math.Vector3;
 
 /**
  * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.

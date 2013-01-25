@@ -28,6 +28,10 @@ import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.curves.CurvePath;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
 import thothbot.parallax.core.shared.curves.Shape;
+import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector;
+import thothbot.parallax.core.shared.math.Vector2;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
 
 

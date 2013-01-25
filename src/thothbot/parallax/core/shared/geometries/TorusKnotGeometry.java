@@ -22,8 +22,8 @@ import java.util.Arrays;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UV;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector3;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/torus_knot.gif" />

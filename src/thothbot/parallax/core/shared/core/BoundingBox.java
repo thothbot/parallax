@@ -18,6 +18,8 @@
 
 package thothbot.parallax.core.shared.core;
 
+import thothbot.parallax.core.shared.math.Vector3;
+
 /**
  * Bounding Box is a container which used for quickly and easily 
  * determination of the location of an object in space.

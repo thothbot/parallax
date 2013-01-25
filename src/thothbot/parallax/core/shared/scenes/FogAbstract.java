@@ -21,7 +21,7 @@ package thothbot.parallax.core.shared.scenes;
 import java.util.Map;
 
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.math.Color;
 
 /**
  * Abstract realization of FogAbstract. This class implements color

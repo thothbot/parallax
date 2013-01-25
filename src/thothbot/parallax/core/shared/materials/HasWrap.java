@@ -18,7 +18,7 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Vector3;
 
 /**
  * Material has wrap.

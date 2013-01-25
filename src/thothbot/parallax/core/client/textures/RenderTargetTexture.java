@@ -29,7 +29,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureWrapMode;
-import thothbot.parallax.core.shared.core.Mathematics;
+import thothbot.parallax.core.shared.math.Mathematics;
 
 public class RenderTargetTexture extends Texture
 {

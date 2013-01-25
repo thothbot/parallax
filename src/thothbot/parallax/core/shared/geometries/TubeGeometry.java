@@ -24,11 +24,11 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.UV;
-import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
 import thothbot.parallax.core.shared.helpers.ArrowHelper;
+import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector3;
 
 /**
  * Creates a tube which extrudes along a 3d spline.

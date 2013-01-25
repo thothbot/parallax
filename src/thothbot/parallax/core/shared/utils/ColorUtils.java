@@ -18,8 +18,8 @@
 
 package thothbot.parallax.core.shared.utils;
 
-import thothbot.parallax.core.shared.core.Color;
-import thothbot.parallax.core.shared.core.Mathematics;
+import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Mathematics;
 
 /**
  * This class implements some color related helpers methods.

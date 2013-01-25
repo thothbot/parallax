@@ -22,7 +22,7 @@ import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.BasicShader;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.client.textures.Texture.OPERATIONS;
-import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.math.Color;
 
 /**
  * A material for drawing geometries in a simple shaded (flat or wireframe) way.

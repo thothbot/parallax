@@ -16,12 +16,15 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.shared.core;
+package thothbot.parallax.core.shared.math;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import thothbot.parallax.core.shared.core.Face3;
+import thothbot.parallax.core.shared.core.Face4;
+import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.objects.DimensionalObject;
@@ -246,7 +249,7 @@ public class Ray
 				side = material.getSides();
 
 				vector.sub( face.getCentroid(), localOriginCopy );
-				normal = face.normal;
+				normal = face.getNormal();
 				double dot = localDirectionCopy.dot( normal );
 
 				// bail if ray and plane are parallel

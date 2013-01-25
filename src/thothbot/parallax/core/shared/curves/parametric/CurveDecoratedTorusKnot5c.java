@@ -18,7 +18,7 @@
 
 package thothbot.parallax.core.shared.curves.parametric;
 
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Vector3;
 
 public final class CurveDecoratedTorusKnot5c extends CurveDecoratedTorusKnot4a 
 {

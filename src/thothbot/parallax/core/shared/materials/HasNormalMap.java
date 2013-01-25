@@ -19,7 +19,7 @@
 package thothbot.parallax.core.shared.materials;
 
 import thothbot.parallax.core.client.textures.Texture;
-import thothbot.parallax.core.shared.core.Vector2;
+import thothbot.parallax.core.shared.math.Vector2;
 
 public interface HasNormalMap 
 {

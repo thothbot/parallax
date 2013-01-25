@@ -18,7 +18,7 @@
 
 package thothbot.parallax.core.shared.objects;
 
-import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.math.Matrix4;
 
 public class Bone extends Object3D
 {

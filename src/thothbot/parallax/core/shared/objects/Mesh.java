@@ -35,20 +35,20 @@ import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryBuffer;
 import thothbot.parallax.core.shared.core.GeometryGroup;
-import thothbot.parallax.core.shared.core.UV;
-import thothbot.parallax.core.shared.core.Vector3;
-import thothbot.parallax.core.shared.core.Vector4;
 import thothbot.parallax.core.shared.materials.HasSkinning;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
+import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector3;
+import thothbot.parallax.core.shared.math.Vector4;
 
 import com.google.gwt.core.client.GWT;
 

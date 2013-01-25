@@ -21,8 +21,8 @@ package thothbot.parallax.core.shared.objects;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Mathematics;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.math.Mathematics;
 
 public class MorphAnimMesh extends Mesh
 {

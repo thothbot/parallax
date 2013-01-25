@@ -19,7 +19,7 @@
 package thothbot.parallax.core.shared.materials;
 
 import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.math.Color;
 
 public class ShaderMaterial extends Material 
 	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning

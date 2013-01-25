@@ -19,8 +19,8 @@
 package thothbot.parallax.core.client.controls;
 
 import thothbot.parallax.core.client.AnimatedScene;
-import thothbot.parallax.core.shared.core.Mathematics;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Mathematics;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.dom.client.NativeEvent;

@@ -24,13 +24,13 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Color;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Projector;
-import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Line;
 
 import com.google.gwt.core.client.GWT;

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.core.Color;
+import thothbot.parallax.core.shared.math.Color;
 
 /**
  * This light's color gets applied to all the objects in the scene globally.

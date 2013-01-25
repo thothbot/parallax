@@ -18,8 +18,8 @@
 
 package thothbot.parallax.core.client.controls;
 
-import thothbot.parallax.core.shared.core.Quaternion;
-import thothbot.parallax.core.shared.core.Vector3;
+import thothbot.parallax.core.shared.math.Quaternion;
+import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.dom.client.NativeEvent;
