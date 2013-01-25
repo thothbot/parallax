@@ -110,7 +110,7 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 				Quaternion q = new Quaternion();
 				getMatrix().decompose(new Vector3(), q, new Vector3());
 				this.quaternion.copy( q );
-			} 
+			}
 			else 
 			{
 				this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
