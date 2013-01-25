@@ -326,7 +326,7 @@ public final class ShadowMap extends Plugin
 
 				if ( object.isVisible() && object.isCastShadow() ) 
 				{
-					if ( ! ( object instanceof Mesh ) || ! ( object.isFrustumCulled() ) || this.frustum.contains( object ) ) 
+					if ( ! ( object instanceof Mesh ) || ! ( object.isFrustumCulled() ) || this.frustum.isIntersectsObject( object ) ) 
 					{
 						object._modelViewMatrix.multiply( shadowCamera.getMatrixWorldInverse(), object.getMatrixWorld() );
 						webglObject.render = true;

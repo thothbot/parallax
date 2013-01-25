@@ -36,7 +36,7 @@ public class Frustum
 	/**
 	 * Panes of the Frustum of a rectangular pyramid
 	 */
-	public List<Vector4> planes;
+	private List<Plane> planes;
 
 	/**
 	 * Default constructor will make Frustum of a rectangular pyramid 
@@ -44,17 +44,32 @@ public class Frustum
 	 */
 	public Frustum() 
 	{
-		this.planes = new ArrayList<Vector4>();
+		this.planes = new ArrayList<Plane>();
 		for(int i = 0; i < 6; i++)
-			this.planes.add(new Vector4());
+			this.planes.set(i, new Plane());
 	}
 
-	/**
-	 * Setting planes of the Frustum from the projection matrix
-	 * 
-	 * @param m the projection matrix
-	 */
-	public void setFromMatrix(Matrix4 m)
+	public Frustum set( Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5 ) 
+	{
+		this.planes.get(0).copy( p0 );
+		this.planes.get(1).copy( p1 );
+		this.planes.get(2).copy( p2 );
+		this.planes.get(3).copy( p3 );
+		this.planes.get(4).copy( p4 );
+		this.planes.get(5).copy( p5 );
+
+		return this;
+	}
+
+	public Frustum copy( Frustum frustum ) 
+	{
+		for(int i = 0; i < 6; i++)
+			this.planes.get(i).copy(frustum.planes.get(i));
+
+		return this;
+	}
+
+	public Frustum setFromMatrix( Matrix4 m ) 
 	{
 		Float32Array me = m.getArray();
 		double me0 = me.get(0), me1 = me.get(1), me2 = me.get(2), me3 = me.get(3);
@@ -62,45 +77,69 @@ public class Frustum
 		double me8 = me.get(8), me9 = me.get(9), me10 = me.get(10), me11 = me.get(11);
 		double me12 = me.get(12), me13 = me.get(13), me14 = me.get(14), me15 = me.get(15);
 
-		planes.get(0).set(me3 - me0, me7 - me4, me11 - me8, me15 - me12);
-		planes.get(1).set(me3 + me0, me7 + me4, me11 + me8, me15 + me12);
-		planes.get(2).set(me3 + me1, me7 + me5, me11 + me9, me15 + me13);
-		planes.get(3).set(me3 - me1, me7 - me5, me11 - me9, me15 - me13);
-		planes.get(4).set(me3 - me2, me7 - me6, me11 - me10, me15 - me14);
-		planes.get(5).set(me3 + me2, me7 + me6, me11 + me10, me15 + me14);
+		this.planes.get(0).setComponents( me3 - me0, me7 - me4, me11 - me8, me15 - me12 ).normalize();
+		this.planes.get(1).setComponents( me3 + me0, me7 + me4, me11 + me8, me15 + me12 ).normalize();
+		this.planes.get(2).setComponents( me3 + me1, me7 + me5, me11 + me9, me15 + me13 ).normalize();
+		this.planes.get(3).setComponents( me3 - me1, me7 - me5, me11 - me9, me15 - me13 ).normalize();
+		this.planes.get(4).setComponents( me3 - me2, me7 - me6, me11 - me10, me15 - me14 ).normalize();
+		this.planes.get(5).setComponents( me3 + me2, me7 + me6, me11 + me10, me15 + me14 ).normalize();
 
-		for (int i = 0; i < 6; i++) 
-		{
-			Vector4 plane = planes.get(i);
-			plane.divide(Math.sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z));
-		}
+		return this;
 	}
 
-	/**
-	 * Checking if the 3D object located inside Frustum.
-	 * 
-	 * @param object any of 3D object
-	 */
-	public boolean contains(GeometryObject object)
+	public boolean isIntersectsObject( GeometryObject object ) 
 	{
+		// this method is expanded inlined for performance reasons.
 		Matrix4 matrix = object.getMatrixWorld();
-		Float32Array me = matrix.getArray();
-		double radius = object.getGeometryBuffer() != null ?   
-				-object.getGeometryBuffer().getBoundingSphere().radius * matrix.getMaxScaleOnAxis() :
-				-object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
+		Vector3 center = matrix.getPosition();
+		double negRadius = - object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
 
-		for (int i = 0; i < 6; i++) 
+		for ( int i = 0; i < 6; i ++ ) 
 		{
-			Vector4 plane = planes.get(i);
-			double distance = plane.getX() * me.get(12) 
-					+ plane.getY()  * me.get(13) 
-					+ plane.getZ()	* me.get(14) 
-					+ plane.getW();
-			
-			if (distance <= radius)
+			double distance = this.planes.get( i ).distanceToPoint( center );
+
+			if( distance < negRadius ) 
+			{
 				return false;
+			}
 		}
 
 		return true;
+	}
+
+	public boolean isIntersectsSphere( Sphere sphere ) 
+	{
+		Vector3 center = sphere.getCenter();
+		double negRadius = -sphere.getRadius();
+
+		for ( int i = 0; i < 6; i ++ ) 
+		{
+			double distance = planes.get( i ).distanceToPoint( center );
+
+			if( distance < negRadius ) 
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public boolean isContainsPoint( Vector3 point ) 
+	{
+		for ( int i = 0; i < 6; i ++ ) 
+		{
+			if( planes.get( i ).distanceToPoint( point ) < 0 ) 
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public Frustum clone() 
+	{
+		return new Frustum().copy( this );
 	}
 }

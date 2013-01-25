@@ -867,7 +867,7 @@ public class WebGLRenderer implements HasEventBus
 				if ( ! ( object.getClass() == Mesh.class 
 						|| object.getClass() == ParticleSystem.class ) 
 						|| ! ( object.isFrustumCulled() ) 
-						|| frustum.contains( object ) )
+						|| frustum.isIntersectsObject( object ) )
 				{
 					setupMatrices( (Object3D) object, camera );
 					webglObject.unrollBufferMaterial();
