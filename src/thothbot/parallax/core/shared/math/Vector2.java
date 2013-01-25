@@ -356,8 +356,34 @@ public class Vector2 implements Vector
 
 		return this;
 	}
-
 	
+	/**
+	 * This function assumes min < max, if this assumption isn't true it will not operate correctly
+	 * 
+	 */
+	public Vector2 clamp( Vector2 min, Vector2 max ) 
+	{
+		if ( this.x < min.x ) 
+		{
+			this.x = min.x;
+		} 
+		else if ( this.x > max.x ) 
+		{
+			this.x = max.x;
+		}
+
+		if ( this.y < min.y ) 
+		{
+			this.y = min.y;
+		} 
+		else if ( this.y > max.y ) 
+		{
+			this.y = max.y;
+		}
+
+		return this;
+	}
+
 	@Override
 	public Vector2 clone()
 	{

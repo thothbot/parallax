@@ -582,6 +582,51 @@ public class Vector4 extends Vector3 implements Vector
 
 		return this;
 	}
+	
+	/**
+	 * This function assumes min < max, if this assumption isn't true it will not operate correctly
+	 */
+	public Vector4 clamp( Vector4 min, Vector4 max ) 
+	{
+		if ( this.x < min.x ) 
+		{
+			this.x = min.x;
+		} 
+		else if ( this.x > max.x ) 
+		{
+			this.x = max.x;
+		}
+
+		if ( this.y < min.y ) 
+		{
+			this.y = min.y;
+		}
+		else if ( this.y > max.y ) 
+		{
+			this.y = max.y;
+		}
+
+		if ( this.z < min.z ) 
+		{
+			this.z = min.z;
+		} 
+		else if ( this.z > max.z ) 
+		{
+			this.z = max.z;
+		}
+
+		if ( this.w < min.w ) 
+		{
+			this.w = min.w;
+		} 
+		else if ( this.w > max.w ) 
+		{
+			this.w = max.w;
+		}
+
+		return this;
+	}
+
 
 	@Override
 	public Vector4 clone() 
