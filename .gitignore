@@ -3,3 +3,6 @@
 /.gwt
 /.project
 /war/WEB-INF
+/war/thothbot.*
+/www-test
+/gwt-unitCache
