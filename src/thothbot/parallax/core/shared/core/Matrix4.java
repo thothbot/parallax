@@ -795,11 +795,6 @@ public class Matrix4
 		this.getArray().set(14, translation.z);
 	}
 
-	public void decompose()
-	{
-		decompose(new Vector3(), new Quaternion(), new Vector3());
-	}
-
 	public void decompose(Vector3 translation, Quaternion rotation, Vector3 scale)
 	{
 		// grab the axis vectors
@@ -838,8 +833,6 @@ public class Matrix4
 		matrix.getArray().set(10, matrix.getArray().get(10) / scale.z);
 
 		rotation.setFromRotationMatrix(matrix);
-
-		// return [ translation, rotation, scale ];
 	}
 
 	/**

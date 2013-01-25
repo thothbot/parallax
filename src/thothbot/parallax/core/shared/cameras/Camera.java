@@ -23,6 +23,7 @@ import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.core.Quaternion;
 import thothbot.parallax.core.shared.core.Vector3;
 import thothbot.parallax.core.shared.objects.Object3D;
 
@@ -102,7 +103,18 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 	{
 		this.matrix.lookAt(this.position, vector, this.up);
 
-		if (this.rotationAutoUpdate)
-			this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
+		if ( isRotationAutoUpdate() )
+		{
+			if ( isUseQuaternion() )  
+			{
+				Quaternion q = new Quaternion();
+				getMatrix().decompose(new Vector3(), q, new Vector3());
+				this.quaternion.copy( q );
+			} 
+			else 
+			{
+				this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
+			}
+		}
 	}
 }
