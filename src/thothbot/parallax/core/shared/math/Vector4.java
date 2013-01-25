@@ -533,6 +533,56 @@ public class Vector4 extends Vector3 implements Vector
 		return this;
 	}
 	
+	public Vector4 min( Vector4 v ) 
+	{
+		if ( this.x > v.x ) 
+		{
+			this.x = v.x;
+		}
+
+		if ( this.y > v.y ) 
+		{
+			this.y = v.y;
+		}
+
+		if ( this.z > v.z ) 
+		{
+			this.z = v.z;
+		}
+
+		if ( this.w > v.w ) 
+		{
+			this.w = v.w;
+		}
+
+		return this;
+	}
+	
+	public Vector4 max( Vector4 v ) 
+	{
+		if ( this.x < v.x ) 
+		{
+			this.x = v.x;
+		}
+
+		if ( this.y < v.y ) 
+		{
+			this.y = v.y;
+		}
+
+		if ( this.z < v.z ) 
+		{
+			this.z = v.z;
+		}
+
+		if ( this.w < v.w ) 
+		{
+			this.w = v.w;
+		}
+
+		return this;
+	}
+
 	@Override
 	public Vector4 clone() 
 	{

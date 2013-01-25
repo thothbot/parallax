@@ -166,7 +166,7 @@ public interface Vector
 	
 	
 	public Vector normalize();
-	
+		
 	public Vector clone();
 	public String toString();
 }

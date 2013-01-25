@@ -553,6 +553,46 @@ public class Vector3 extends Vector2 implements Vector
 	{
 		return (this.lengthSq() < 0.0001 /* almostZero */);
 	}
+	
+	public Vector3 min( Vector3 v ) 
+	{
+		if ( this.x > v.x ) 
+		{
+			this.x = v.x;
+		}
+
+		if ( this.y > v.y ) 
+		{
+			this.y = v.y;
+		}
+
+		if ( this.z > v.z ) 
+		{
+			this.z = v.z;
+		}
+
+		return this;
+	}
+
+	public Vector3 max( Vector3 v ) 
+	{
+		if ( this.x < v.x ) 
+		{
+			this.x = v.x;
+		}
+
+		if ( this.y < v.y ) 
+		{
+			this.y = v.y;
+		}
+
+		if ( this.z < v.z ) 
+		{
+			this.z = v.z;
+		}
+
+		return this;
+	}
 
 	@Override
 	public Vector3 clone()

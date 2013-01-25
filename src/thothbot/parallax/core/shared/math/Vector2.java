@@ -327,6 +327,37 @@ public class Vector2 implements Vector
 		return (this.lengthSq() < 0.0001 /* almostZero */);
 	}
 	
+	public Vector2 min( Vector2 v ) 
+	{
+		if ( this.x > v.x ) 
+		{
+			this.x = v.x;
+		}
+
+		if ( this.y > v.y ) 
+		{
+			this.y = v.y;
+		}
+
+		return this;
+	}
+
+	public Vector2 max( Vector2 v ) 
+	{
+		if ( this.x < v.x ) 
+		{
+			this.x = v.x;
+		}
+
+		if ( this.y < v.y ) 
+		{
+			this.y = v.y;
+		}
+
+		return this;
+	}
+
+	
 	@Override
 	public Vector2 clone()
 	{
