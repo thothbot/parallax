@@ -72,7 +72,7 @@ public class Matrix3
 	 * 
 	 * @param m the matrix to be inverted
 	 */
-	public void getInverse(Matrix4 m)
+	public Matrix3 getInverse(Matrix4 m)
 	{
 		// input: THREE.Matrix4
 		// ( based on http://code.google.com/p/webgl-mjs/ )
@@ -106,13 +106,15 @@ public class Matrix3
 		this.getArray().set(6, idet * a13);
 		this.getArray().set(7, idet * a23);
 		this.getArray().set(8, idet * a33);
+		
+		return this;
 	}
 
 	/**
 	 * Transpose the current matrix where its rows will be the 
 	 * columns or its columns are the rows of the current matrix.
 	 */
-	public void transpose()
+	public Matrix3 transpose()
 	{
 		double tmp;
 		Float32Array m = this.getArray();
@@ -128,6 +130,8 @@ public class Matrix3
 		tmp = m.get(5);
 		m.set(5, m.get(7));
 		m.set(7, tmp);
+		
+		return this;
 	}
 
 	/**
