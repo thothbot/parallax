@@ -228,7 +228,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( a.distanceToPoint( a.coplanarPoint() ), 0.0);
 
 		Plane b = new Plane( new Vector3( 0, 1, 0 ), -1 );
-		assertEquals( b.distanceToPoint( a.coplanarPoint() ), 0.0);
+		assertEquals( b.distanceToPoint( b.coplanarPoint() ), 0.0);
 	}
 
 	@Test
