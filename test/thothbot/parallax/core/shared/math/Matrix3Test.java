@@ -24,6 +24,7 @@ import java.util.List;
 import org.junit.Test;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.junit.client.GWTTestCase;
 

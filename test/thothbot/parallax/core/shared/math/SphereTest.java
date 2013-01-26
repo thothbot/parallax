@@ -20,6 +20,8 @@ package thothbot.parallax.core.shared.math;
 
 import org.junit.Test;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.junit.client.GWTTestCase;
 
 public class SphereTest extends GWTTestCase 

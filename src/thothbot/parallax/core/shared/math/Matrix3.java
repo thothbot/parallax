@@ -140,18 +140,19 @@ public class Matrix3
 		// input: THREE.Matrix4
 		// ( based on http://code.google.com/p/webgl-mjs/ )
 		Float32Array me = m.getArray();
+		Float32Array te = this.getArray();
 
-		double a11 = me.get(10) * me.get(5) - me.get(6) * me.get(9);
-		double a21 = -me.get(10) * me.get(1) + me.get(2) * me.get(9);
-		double a31 = me.get(6) * me.get(1) - me.get(2) * me.get(5);
-		double a12 = -me.get(10) * me.get(4) + me.get(6) * me.get(8);
-		double a22 = me.get(10) * me.get(0) - me.get(2) * me.get(8);
-		double a32 = -me.get(6) * me.get(0) + me.get(2) * me.get(4);
-		double a13 = me.get(9) * me.get(4) - me.get(5) * me.get(8);
-		double a23 = -me.get(9) * me.get(0) + me.get(1) * me.get(8);
-		double a33 = me.get(5) * me.get(0) - me.get(1) * me.get(4);
+		te.set(0, me.get(10) * me.get(5) - me.get(6) * me.get(9));
+		te.set(1, -me.get(10) * me.get(1) + me.get(2) * me.get(9));
+		te.set(2,  me.get(6) * me.get(1) - me.get(2) * me.get(5));
+		te.set(3, -me.get(10) * me.get(4) + me.get(6) * me.get(8));
+		te.set(4, me.get(10) * me.get(0) - me.get(2) * me.get(8));
+		te.set(5, -me.get(6) * me.get(0) + me.get(2) * me.get(4));
+		te.set(6, me.get(9) * me.get(4) - me.get(5) * me.get(8));
+		te.set(7, -me.get(9) * me.get(0) + me.get(1) * me.get(8));
+		te.set(8, me.get(5) * me.get(0) - me.get(1) * me.get(4));
 
-		double det = me.get(0) * a11 + me.get(1) * a12 + me.get(2) * a13;
+		double det = me.get(0) * te.get(0) + me.get(1) * te.get(3) + me.get(2) * te.get(6);
 
 		// no inverse
 

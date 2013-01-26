@@ -335,4 +335,9 @@ public class Box3
 	{
 		return new Box3().copy( this );
 	}
+	
+	public String toString()
+	{
+		return "{min:" + this.min.toString() + ", max:" + this.max.toString() + "}";
+	}
 }

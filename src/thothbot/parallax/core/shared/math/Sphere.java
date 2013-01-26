@@ -20,6 +20,8 @@ package thothbot.parallax.core.shared.math;
 
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
+
 public class Sphere 
 {
 
@@ -119,11 +121,10 @@ public class Sphere
 
 		optionalTarget.copy( point );
 
-		if ( deltaLengthSq > ( this.radius * this.radius ) ) {
-
+		if ( deltaLengthSq > ( this.radius * this.radius ) ) 
+		{
 			optionalTarget.sub( this.center ).normalize();
 			optionalTarget.multiply( this.radius ).add( this.center );
-
 		}
 
 		return optionalTarget;
