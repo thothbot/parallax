@@ -20,6 +20,8 @@ package thothbot.parallax.core.shared.math;
 
 import org.junit.Test;
 
+import thothbot.parallax.core.shared.Log;
+
 import com.google.gwt.junit.client.GWTTestCase;
 
 public class PlaneTest extends GWTTestCase  
@@ -100,7 +102,7 @@ public class PlaneTest extends GWTTestCase
 		Plane a = new Plane().setFromNormalAndCoplanarPoint( normal, zero3 );
 		
 		assertTrue( a.getNormal().equals( normal ));
-		assertEquals( a.getConstant(), 0.0);
+		assertTrue( a.getConstant() == 0.0);
 	}
 
 	@Test
