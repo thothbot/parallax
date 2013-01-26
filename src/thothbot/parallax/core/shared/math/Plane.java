@@ -30,10 +30,26 @@ public class Plane
 	{
 		this(new Vector3(1, 0, 0), 0);
 	}
-	
+
 	public Plane ( Vector3 normal, double constant ) 
 	{
 		this.normal = normal;
+		this.constant = constant;
+	}
+	
+	public Vector3 getNormal() {
+		return normal;
+	}
+
+	public void setNormal(Vector3 normal) {
+		this.normal = normal;
+	}
+
+	public double getConstant() {
+		return constant;
+	}
+
+	public void setConstant(double constant) {
 		this.constant = constant;
 	}
 	
@@ -109,12 +125,17 @@ public class Plane
 		return this.distanceToPoint( sphere.getCenter() ) - sphere.getRadius();
 	}
 
+	public Vector3 projectPoint( Vector3 point ) 
+	{
+		return this.orthoPoint( point ).sub( point ).negate();
+	}
+	
 	public Vector3 projectPoint( Vector3 point, Vector3 optionalTarget ) 
 	{
 		return this.orthoPoint( point, optionalTarget ).sub( point ).negate();
 	}
 
-	public Vector3 orthoPoint( Vector3 point)
+	public Vector3 orthoPoint( Vector3 point )
 	{
 		return orthoPoint(point, new Vector3());
 	}
