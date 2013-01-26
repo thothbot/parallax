@@ -48,6 +48,17 @@ public class Frustum
 		for(int i = 0; i < 6; i++)
 			this.planes.add(new Plane());
 	}
+	
+	public Frustum(Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5) 
+	{
+		this.planes = new ArrayList<Plane>();
+		this.planes.add(p0);
+		this.planes.add(p1);
+		this.planes.add(p2);
+		this.planes.add(p3);
+		this.planes.add(p4);
+		this.planes.add(p5);
+	}
 
 	public Frustum set( Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5 ) 
 	{
@@ -59,6 +70,10 @@ public class Frustum
 		this.planes.get(5).copy( p5 );
 
 		return this;
+	}
+	
+	public List<Plane> getPlanes() {
+		return planes;
 	}
 
 	public Frustum copy( Frustum frustum ) 
