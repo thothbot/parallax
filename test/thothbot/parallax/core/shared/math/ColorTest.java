@@ -59,9 +59,9 @@ public class ColorTest extends GWTTestCase
 	{
 		Color c = new Color();
 	    c.setRGB(255, 2, 1);
-	    assertEquals( c.getR() * 255, 255);
-	    assertEquals( c.getG() * 255, 2);
-	    assertEquals( c.getB() * 255, 1);
+	    assertEquals( c.getR(), 255);
+	    assertEquals( c.getG(), 2);
+	    assertEquals( c.getB(), 1);
 	}
 
 	@Test
@@ -70,9 +70,9 @@ public class ColorTest extends GWTTestCase
 		Color c = new Color();
 	    c.setRGB(2, 4, 8);
 	    c.convertGammaToLinear();
-	    assertEquals( c.getR() * 255, 4);
-	    assertEquals( c.getG() * 255, 16);
-	    assertEquals( c.getB() * 255, 64);
+	    assertEquals( c.getR(), 4);
+	    assertEquals( c.getG(), 16);
+	    assertEquals( c.getB(), 64);
 	}
 
 	@Test
@@ -81,8 +81,8 @@ public class ColorTest extends GWTTestCase
 		Color c = new Color();
 	    c.setRGB(4, 9, 16);
 	    c.convertLinearToGamma();
-	    assertEquals( c.getR() * 255, 2);
-	    assertEquals( c.getG() * 255, 3);
-	    assertEquals( c.getB() * 255, 4);
+	    assertEquals( c.getR(), 2);
+	    assertEquals( c.getG(), 3);
+	    assertEquals( c.getB(), 4);
 	}
 }
