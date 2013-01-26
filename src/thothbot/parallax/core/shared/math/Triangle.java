@@ -42,7 +42,31 @@ public class Triangle
 		this.b = b;
 		this.c = c;
 
-	};
+	}
+	
+	public Vector3 getA() {
+		return a;
+	}
+
+	public void setA(Vector3 a) {
+		this.a = a;
+	}
+
+	public Vector3 getB() {
+		return b;
+	}
+
+	public void setB(Vector3 b) {
+		this.b = b;
+	}
+
+	public Vector3 getC() {
+		return c;
+	}
+
+	public void setC(Vector3 c) {
+		this.c = c;
+	}
 
 	public static Vector3 normal( Vector3 a, Vector3 b, Vector3 c) 
 	{
@@ -177,6 +201,11 @@ public class Triangle
 		return optionalTarget.setFromCoplanarPoints( this.a, this.b, this.c );
 	}
 
+	public Vector3 barycoordFromPoint( Vector3 point) 
+	{
+		return Triangle.barycoordFromPoint( point, this.a, this.b, this.c, new Vector3() );
+	}
+	
 	public Vector3 barycoordFromPoint( Vector3 point, Vector3 optionalTarget ) 
 	{
 		return Triangle.barycoordFromPoint( point, this.a, this.b, this.c, optionalTarget );
