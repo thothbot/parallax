@@ -81,6 +81,52 @@ public class Matrix3
 	{
 		return elements;
 	}
+	
+	public Matrix3 identity() 
+	{
+		set(
+			1, 0, 0,
+			0, 1, 0,
+			0, 0, 1
+		);
+
+		return this;
+	}
+
+	public Matrix3 copy( Matrix3 m ) 
+	{
+		Float32Array me = m.getArray();
+
+		this.set(
+			me.get(0), me.get(3), me.get(6),
+			me.get(1), me.get(4), me.get(7),
+			me.get(2), me.get(5), me.get(8)
+		);
+
+		return this;
+	}
+
+	public Matrix3 multiply( double s ) 
+	{
+		Float32Array te = this.getArray();
+
+		te.set(0, te.get(0) * s); te.set(3, te.get(3) * s); te.set(6, te.get(6) * s);
+		te.set(1, te.get(1) * s); te.set(4, te.get(4) * s); te.set(7, te.get(7) * s);
+		te.set(2, te.get(2) * s); te.set(5, te.get(5) * s); te.set(8, te.get(8) * s);
+
+		return this;
+	}
+
+	public double determinant() 
+	{
+		Float32Array te = this.getArray();
+
+		double a = te.get(0), b = te.get(1), c = te.get(2),
+			d = te.get(3), e = te.get(4), f = te.get(5),
+			g = te.get(6), h = te.get(7), i = te.get(8);
+
+		return a*e*i - a*f*h - b*d*i + b*f*g + c*d*h - c*e*g;
+	}
 
 	/**
 	 * Sets the value of this matrix to the matrix inverse of the passed matrix
@@ -186,5 +232,17 @@ public class Matrix3
 			retval += this.getArray().get(i) + ", ";
 		
 		return retval + "]";
+	}
+	
+	public Matrix3 clone() 
+	{
+		Float32Array te = this.getArray();
+
+		return new Matrix3(
+
+			te.get(0), te.get(3), te.get(6),
+			te.get(1), te.get(4), te.get(7),
+			te.get(2), te.get(5), te.get(8)
+		);
 	}
 }
