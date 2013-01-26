@@ -202,7 +202,7 @@ public class Matrix4
 	 * 0 0 0 1
 	 * }</pre>
 	 */
-	public void identity()
+	public Matrix4 identity()
 	{
 		set(
 			1, 0, 0, 0, 
@@ -210,6 +210,8 @@ public class Matrix4
 			0, 0, 1, 0, 
 			0, 0, 0, 1
 		);
+		
+		return this;
 	}
 
 	/**

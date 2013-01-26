@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import com.google.gwt.junit.client.GWTTestCase;
 
-public class PlaneTest  extends GWTTestCase  
+public class PlaneTest extends GWTTestCase  
 {
 
 	private static Vector3 zero3 = new Vector3();
