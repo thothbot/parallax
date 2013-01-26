@@ -466,6 +466,11 @@ public class Quaternion
 		return qm;
 	}
 
+	public boolean equals( Quaternion v ) 
+	{
+		return ( ( v.x == this.x ) && ( v.y == this.y ) && ( v.z == this.z ) && ( v.w == this.w ) );
+	}
+	
 	/**
 	 * Clone the current Quaternion
 	 * quaternion.clone() != quaternion;
