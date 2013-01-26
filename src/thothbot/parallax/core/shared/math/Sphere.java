@@ -157,7 +157,7 @@ public class Sphere
 		return this;
 	}
 
-	public boolean isEquals( Sphere sphere ) 
+	public boolean equals( Sphere sphere ) 
 	{
 		return sphere.center.equals( this.center ) && ( sphere.radius == this.radius );
 	}

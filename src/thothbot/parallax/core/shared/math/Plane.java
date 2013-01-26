@@ -228,7 +228,7 @@ public class Plane
 		return this;
 	}
 
-	public boolean isEquals( Plane plane ) 
+	public boolean equals( Plane plane ) 
 	{
 		return plane.normal.equals( this.normal ) && ( plane.constant == this.constant );
 	}

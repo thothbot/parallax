@@ -262,7 +262,7 @@ public class Box2
 		return this;
 	}
 
-	public boolean isEquals( Box2 box ) 
+	public boolean equals( Box2 box ) 
 	{
 		return box.min.equals( this.min ) && box.max.equals( this.max );
 	}
@@ -270,5 +270,10 @@ public class Box2
 	public Box2 clone()
 	{
 		return new Box2().copy( this );
+	}
+	
+	public String toString()
+	{
+		return "{min:" + this.min.toString() + ", max:" + this.max.toString() + "}";
 	}
 }

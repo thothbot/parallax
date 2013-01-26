@@ -20,9 +20,6 @@ package thothbot.parallax.core.shared.math;
 
 import org.junit.Test;
 
-import thothbot.parallax.core.shared.math.Box2;
-import thothbot.parallax.core.shared.math.Vector2;
-
 import com.google.gwt.junit.client.GWTTestCase;
 
 public class Box2Test extends GWTTestCase 

@@ -326,7 +326,7 @@ public class Box3
 		return this;
 	}
 
-	public boolean isEquals( Box3 box ) 
+	public boolean equals( Box3 box ) 
 	{
 		return box.min.equals( this.min ) && box.max.equals( this.max );
 	}
