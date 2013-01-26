@@ -44,6 +44,13 @@ public class Box2
 	public Vector2 getMax() {
 		return max;
 	}
+	
+	public void setMin(Vector2 min) {
+		this.min = min;
+	}
+	public void setMax(Vector2 max) {
+		this.max = max;
+	}
 
 	public Box2 set( Vector2 min, Vector2 max ) 
 	{
