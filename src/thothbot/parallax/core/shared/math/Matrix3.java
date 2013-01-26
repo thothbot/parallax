@@ -48,6 +48,22 @@ public class Matrix3
 		this.elements = Float32Array.create(9);
 	}
 	
+	public Matrix3( double n11, double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33 ) 
+	{
+		this();
+		set(n11, n12, n13, n21, n22, n23, n31, n32, n33 );
+	}
+	
+	public Matrix3 set( double n11, double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33 ) 
+	{
+		Float32Array te = this.getArray();
+
+		te.set(0, n11); te.set(3, n12); te.set(6, n13);
+		te.set(1, n21); te.set(4, n22); te.set(7, n23);
+		te.set(2, n31); te.set(5, n32); te.set(8, n33);
+
+		return this;
+	}
 
 	/**
 	 * get the current Matrix which is represented 
