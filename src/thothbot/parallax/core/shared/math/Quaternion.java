@@ -151,12 +151,14 @@ public class Quaternion
 	 * 
 	 * @param c1 the input Quaternion
 	 */
-	public void copy(Quaternion c1)
+	public Quaternion copy(Quaternion c1)
 	{
 		this.x = c1.x;
 		this.y = c1.y;
 		this.z = c1.z;
 		this.w = c1.w;
+		
+		return this;
 	}
 	
 	public Quaternion set(double x, double y, double z, double w)
@@ -239,7 +241,7 @@ public class Quaternion
 	 * @param axis the axis have to be normalized
 	 * @param angle the angle
 	 */
-	public void setFromAxisAngle(Vector3 axis, double angle)
+	public Quaternion setFromAxisAngle(Vector3 axis, double angle)
 	{
 		double halfAngle = angle / 2.0;
 		double s = Math.sin(halfAngle);
@@ -248,6 +250,8 @@ public class Quaternion
 		this.y = axis.y * s;
 		this.z = axis.z * s;
 		this.w = Math.cos(halfAngle);
+		
+		return this;
 	}
 
 	/**
@@ -255,7 +259,7 @@ public class Quaternion
 	 * <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm">www.euclideanspace.com</a>
 	 * @param m the Matrix4
 	 */
-	public void setFromRotationMatrix(Matrix4 m)
+	public Quaternion setFromRotationMatrix(Matrix4 m)
 	{
 		double absQ = Math.pow(m.determinant(), 1.0 / 3.0);
 
@@ -267,6 +271,8 @@ public class Quaternion
 		this.y = copySign(this.y, (m.getArray().get(8) - m.getArray().get(2)));
 		this.z = copySign(this.z, (m.getArray().get(1) - m.getArray().get(4)));
 		this.normalize();
+		
+		return this;
 	}
 
 	public void calculateW()
@@ -277,13 +283,29 @@ public class Quaternion
 	/**
 	 * Negates the value of this Quaternion in place.
 	 */
-	public void inverse()
+	public Quaternion inverse()
 	{
 		this.x *= -1;
 		this.y *= -1;
 		this.z *= -1;
+		
+		return this;
 	}
 
+	public Quaternion conjugate() 
+	{
+		this.x *= -1;
+		this.y *= -1;
+		this.z *= -1;
+
+		return this;
+	}
+
+	public double lengthSq() 
+	{
+		return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
+	}
+	
 	public double length()
 	{
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
@@ -345,7 +367,7 @@ public class Quaternion
 	 * @param b the other Quaternion
 	 * 
 	 */
-	public void multiply(Quaternion b)
+	public Quaternion multiply(Quaternion b)
 	{
 		double qax = this.x, qay = this.y, qaz = this.z, qaw = this.w;
 		double qbx = b.x, qby = b.y, qbz = b.z, qbw = b.w;
@@ -354,6 +376,8 @@ public class Quaternion
 		this.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
 		this.z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
 		this.w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
+		
+		return this;
 	}
 
 	/**
