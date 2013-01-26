@@ -162,7 +162,7 @@ public class Matrix3Test extends GWTTestCase
 			new Matrix4().makeRotationZ( 0.3 ),
 			new Matrix4().makeRotationZ( -0.3 ),
 			new Matrix4().makeScale( 1, 2, 3 ),
-			new Matrix4().makeScale( 1/8.0, 1/2.0, 1/3.0 )
+			new Matrix4().makeScale( 1.0/8, 1.0/2, 1.0/3 )
 		);
 
 		for( int i = 0, il = testMatrices.size(); i < il; i ++ ) 

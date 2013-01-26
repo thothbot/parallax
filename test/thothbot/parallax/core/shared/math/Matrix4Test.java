@@ -64,7 +64,7 @@ public class Matrix4Test extends GWTTestCase
 	public void testSet() 
 	{
 		Matrix4 b = new Matrix4();
-		assertEquals( b.determinant(), 1);
+		assertEquals( b.determinant(), 1.0);
 
 		b.set( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
 		assertEquals( b.getArray().get(0), 0.0 );
@@ -170,17 +170,17 @@ public class Matrix4Test extends GWTTestCase
 	public void testDeterminant() 
 	{
 		Matrix4 a = new Matrix4();
-		assertEquals( a.determinant(), 1);
+		assertEquals( a.determinant(), 1.0);
 
 		a.getArray().set(0, 2);
-		assertEquals( a.determinant(), 2);
+		assertEquals( a.determinant(), 2.0);
 
 		a.getArray().set(0, 0);
-		assertEquals( a.determinant(), 0);
+		assertEquals( a.determinant(), 0.0);
 
 		// calculated via http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/fourD/index.htm
 		a.set( 2, 3, 4, 5, -1, -21, -3, -4, 6, 7, 8, 10, -8, -9, -10, -12 );
-		assertEquals( a.determinant(), 76);
+		assertEquals( a.determinant(), 76.0);
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public class Matrix4Test extends GWTTestCase
 			new Matrix4().makeRotationZ( 0.3 ),
 			new Matrix4().makeRotationZ( -0.3 ),
 			new Matrix4().makeScale( 1, 2, 3 ),
-			new Matrix4().makeScale( 1/8, 1/2, 1/3 ),
+			new Matrix4().makeScale( 1.0/8, 1.0/2, 1.0/3 ),
 			new Matrix4().makeFrustum( -1, 1, -1, 1, 1, 1000 ),
 			new Matrix4().makeFrustum( -16, 16, -9, 9, 0.1, 10000 ),
 			new Matrix4().makeTranslation( 1, 2, 3 )
