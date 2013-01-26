@@ -33,7 +33,6 @@ public class Box2Test extends GWTTestCase
 
 	private static Vector2 zero2 = new Vector2();
 	private static Vector2 one2 = new Vector2( 1, 1 );
-	private static Vector2 two2 = new Vector2( 2, 2 );
 
 	@Override
 	public String getModuleName() {
@@ -47,11 +46,7 @@ public class Box2Test extends GWTTestCase
 
 		assertTrue( a.getMin().equals( Box2Test.posInf2 ));
 		assertTrue( a.getMax().equals( Box2Test.negInf2 ));
-	}
-
-	@Test
-	public void testBox2Vector2Vector2() 
-	{
+		
 		Box2 b = new Box2( Box2Test.zero2.clone(), Box2Test.one2.clone() );
 		
 		assertTrue( b.getMin().equals( Box2Test.zero2 ));

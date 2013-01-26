@@ -48,6 +48,22 @@ public class Box3
 		this.max = max;
 	}
 	
+	public Vector3 getMin() {
+		return min;
+	}
+
+	public void setMin(Vector3 min) {
+		this.min = min;
+	}
+
+	public Vector3 getMax() {
+		return max;
+	}
+
+	public void setMax(Vector3 max) {
+		this.max = max;
+	}
+	
 	public Box3 set( Vector3 min, Vector3 max ) 
 	{
 		this.min.copy( min );
