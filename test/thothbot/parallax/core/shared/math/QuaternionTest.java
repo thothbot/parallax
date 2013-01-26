@@ -47,10 +47,10 @@ public class QuaternionTest extends GWTTestCase
 	public void testQuaternion() 
 	{
 		Quaternion a = new Quaternion();
-		assertEquals( a.x, 0);
-		assertEquals( a.y, 0);
-		assertEquals( a.z, 0);
-		assertEquals( a.w, 1);
+		assertEquals( a.x, 0.0);
+		assertEquals( a.y, 0.0);
+		assertEquals( a.z, 0.0);
+		assertEquals( a.w, 1.0);
 
 		a = new Quaternion( X, Y, Z, W );
 		assertEquals( a.x, X);
@@ -82,10 +82,10 @@ public class QuaternionTest extends GWTTestCase
 	public void testSet() 
 	{
 		Quaternion a = new Quaternion();
-		assertEquals( a.x, 0);
-		assertEquals( a.y, 0);
-		assertEquals( a.z, 0);
-		assertEquals( a.w, 1);
+		assertEquals( a.x, 0.0);
+		assertEquals( a.y, 0.0);
+		assertEquals( a.z, 0.0);
+		assertEquals( a.w, 1.0);
 
 		a.set( X, Y, Z, W );
 		assertEquals( a.x, X);
@@ -156,18 +156,19 @@ public class QuaternionTest extends GWTTestCase
 		Quaternion a = new Quaternion( X, Y, Z, W );
 		Quaternion b = new Quaternion( -X, -Y, -Z, -W );
 
-		assertTrue( a.length() != 1);
-		assertTrue( a.lengthSq() != 1);
+		assertTrue( a.length() != 1.0);
+		assertTrue( a.lengthSq() != 1.0);
 		a.normalize();
-		assertEquals( a.length(), 1);
-		assertEquals( a.lengthSq(), 1);
+		assertEquals( a.length(), 1.0);
+		assertEquals( a.lengthSq(), 1.0);
 
 		a.set( 0, 0, 0, 0 );
-		assertEquals( a.lengthSq(), 0);
-		assertEquals( a.length(), 0);
-		a.normalize();
-		assertEquals( a.lengthSq(), 1);
-		assertEquals( a.length(), 1);
+		assertEquals( a.lengthSq(), 0.0);
+		assertEquals( a.length(), 0.0);
+
+		b.normalize();
+		assertEquals( b.lengthSq(), 1.0);
+		assertEquals( b.length(), 1.0);
 	}
 
 	@Test
