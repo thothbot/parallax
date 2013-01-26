@@ -39,7 +39,7 @@ public class SphereTest extends GWTTestCase
 	{
 		Sphere a = new Sphere();
 		assertTrue( a.getCenter().equals( zero3 ));
-		assertEquals( a.getRadius(),0);
+		assertEquals( a.getRadius(), 0.0);
 
 		Sphere b = new Sphere( one3, 1.0 );
 		assertTrue( b.getCenter().equals( one3 ));
@@ -99,7 +99,7 @@ public class SphereTest extends GWTTestCase
 		Sphere a = new Sphere( one3, 1 );
 
 		assertTrue( ( a.distanceToPoint( zero3 ) - 0.7320 ) < 0.001);
-		assertEquals( a.distanceToPoint( one3 ),-1);
+		assertEquals( a.distanceToPoint( one3 ), -1.0);
 	}
 
 	@Test
