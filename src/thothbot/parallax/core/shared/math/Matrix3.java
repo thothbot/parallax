@@ -46,6 +46,7 @@ public class Matrix3
 	public Matrix3() 
 	{
 		this.elements = Float32Array.create(9);
+		identity();
 	}
 	
 	public Matrix3( double n11, double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33 ) 
