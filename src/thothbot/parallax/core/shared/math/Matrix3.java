@@ -156,20 +156,15 @@ public class Matrix3
 		// no inverse
 
 		if (det == 0)
+		{
 			Log.error("Matrix3.invert(): determinant == 0");
+			this.identity();
+		}
+		else
+		{
+			this.multiply( 1.0 / det );	
+		}
 
-		double idet = 1.0 / det;
-
-		this.getArray().set(0, idet * a11);
-		this.getArray().set(1, idet * a21);
-		this.getArray().set(2, idet * a31);
-		this.getArray().set(3, idet * a12);
-		this.getArray().set(4, idet * a22);
-		this.getArray().set(5, idet * a32);
-		this.getArray().set(6, idet * a13);
-		this.getArray().set(7, idet * a23);
-		this.getArray().set(8, idet * a33);
-		
 		return this;
 	}
 

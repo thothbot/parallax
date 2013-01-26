@@ -18,7 +18,12 @@
 
 package thothbot.parallax.core.shared.math;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
+
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 
 import com.google.gwt.junit.client.GWTTestCase;
 
@@ -38,17 +43,170 @@ public class Matrix3Test extends GWTTestCase
 
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
 		assertEquals( b.getArray().get(0), 0.0 );
-		assertEquals( b.getArray().get(0), 3.0 );
-		assertEquals( b.getArray().get(0), 6.0 );
-		assertEquals( b.getArray().get(0), 1.0 );
-		assertEquals( b.getArray().get(0), 4.0 );
-		assertEquals( b.getArray().get(0), 7.0 );
-		assertEquals( b.getArray().get(0), 2.0 );
-		assertEquals( b.getArray().get(0), 5.0 );
-		assertEquals( b.getArray().get(0), 8.0 );
+		assertEquals( b.getArray().get(1), 3.0 );
+		assertEquals( b.getArray().get(2), 6.0 );
+		assertEquals( b.getArray().get(3), 1.0 );
+		assertEquals( b.getArray().get(4), 4.0 );
+		assertEquals( b.getArray().get(5), 7.0 );
+		assertEquals( b.getArray().get(6), 2.0 );
+		assertEquals( b.getArray().get(7), 5.0 );
+		assertEquals( b.getArray().get(8), 8.0 );
 
 		assertTrue( ! matrixEquals3( a, b ) );
 
+	}
+	
+	@Test
+	public void testCopy() 
+	{
+		Matrix3 a = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
+		Matrix3 b = new Matrix3().copy( a );
+
+		assertTrue( matrixEquals3( a, b ));
+
+		// ensure that it is a true copy
+		a.getArray().set(0, 2);
+		assertTrue( ! matrixEquals3( a, b ));
+	}
+
+	@Test
+	public void testSet() 
+	{
+		Matrix3 b = new Matrix3();
+		assertEquals( b.determinant(), 1.0);
+
+		b.set( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
+		assertEquals( b.getArray().get(0), 0.0 );
+		assertEquals( b.getArray().get(1), 3.0 );
+		assertEquals( b.getArray().get(2), 6.0 );
+		assertEquals( b.getArray().get(3), 1.0 );
+		assertEquals( b.getArray().get(4), 4.0 );
+		assertEquals( b.getArray().get(5), 7.0 );
+		assertEquals( b.getArray().get(6), 2.0 );
+		assertEquals( b.getArray().get(7), 5.0 );
+		assertEquals( b.getArray().get(8), 8.0 );
+	}
+
+	@Test
+	public void testIdentity() 
+	{
+		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
+		assertEquals( b.getArray().get(0), 0.0 );
+		assertEquals( b.getArray().get(1), 3.0 );
+		assertEquals( b.getArray().get(2), 6.0 );
+		assertEquals( b.getArray().get(3), 1.0 );
+		assertEquals( b.getArray().get(4), 4.0 );
+		assertEquals( b.getArray().get(5), 7.0 );
+		assertEquals( b.getArray().get(6), 2.0 );
+		assertEquals( b.getArray().get(7), 5.0 );
+		assertEquals( b.getArray().get(8), 8.0 );
+
+		Matrix3 a = new Matrix3();
+		assertTrue( ! matrixEquals3( a, b ));
+
+		b.identity();
+		assertTrue( matrixEquals3( a, b ));
+	}
+
+	@Test
+	public void testMultiplyScalar() 
+	{
+		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
+
+		b.multiply( 2 );
+		assertEquals( b.getArray().get(0), 0.0 * 2 );
+		assertEquals( b.getArray().get(1), 3.0 * 2 );
+		assertEquals( b.getArray().get(2), 6.0 * 2 );
+		assertEquals( b.getArray().get(3), 1.0 * 2 );
+		assertEquals( b.getArray().get(4), 4.0 * 2 );
+		assertEquals( b.getArray().get(5), 7.0 * 2 );
+		assertEquals( b.getArray().get(6), 2.0 * 2 );
+		assertEquals( b.getArray().get(7), 5.0 * 2 );
+		assertEquals( b.getArray().get(8), 8.0 * 2 );		
+	};
+
+	@Test
+	public void testDeterminant() 
+	{
+		Matrix3 a = new Matrix3();
+		assertEquals( a.determinant(), 1.0);
+
+		a.getArray().set(0, 2);
+		assertEquals( a.determinant(), 2.0);
+
+		a.getArray().set(0, 0);
+		assertEquals( a.determinant(), 0.0);
+
+		// calculated via http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/threeD/index.htm
+		a.set( 2, 3, 4, 5, 13, 7, 8, 9, 11 );
+		assertEquals( a.determinant(), -73.0);
+	}
+
+	@Test
+	public void testGetInverse() 
+	{
+		Matrix3 identity = new Matrix3();
+		Matrix4 a = new Matrix4();
+		Matrix3 b = new Matrix3( 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+		Matrix3 c = new Matrix3( 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+
+//		assertTrue( ! matrixEquals3( a, b ));
+		b.getInverse( a );
+		assertTrue( matrixEquals3( b, new Matrix3() ));
+
+		List<Matrix4> testMatrices = Arrays.asList(
+			new Matrix4().makeRotationX( 0.3 ),
+			new Matrix4().makeRotationX( -0.3 ),
+			new Matrix4().makeRotationY( 0.3 ),
+			new Matrix4().makeRotationY( -0.3 ),
+			new Matrix4().makeRotationZ( 0.3 ),
+			new Matrix4().makeRotationZ( -0.3 ),
+			new Matrix4().makeScale( 1, 2, 3 ),
+			new Matrix4().makeScale( 1/8.0, 1/2.0, 1/3.0 )
+		);
+
+		for( int i = 0, il = testMatrices.size(); i < il; i ++ ) 
+		{
+			Matrix4 m = testMatrices.get(i);
+			Matrix3 mInverse3 = new Matrix3().getInverse( m );
+
+			Matrix4 mInverse = toMatrix4( mInverse3 );
+
+			// the determinant of the inverse should be the reciprocal
+			assertTrue( Math.abs( m.determinant() * mInverse3.determinant() - 1 ) < 0.0001);
+			assertTrue( Math.abs( m.determinant() * mInverse.determinant() - 1 ) < 0.0001);
+
+			Matrix4 mProduct = new Matrix4().multiply( m, mInverse );
+			assertTrue( Math.abs( mProduct.determinant() - 1 ) < 0.0001);
+//			assertTrue( matrixEquals3( mProduct, identity ));
+		}
+	}
+
+	@Test
+	public void testTranspose() 
+	{
+		Matrix3 a = new Matrix3();
+		Matrix3 b = a.clone().transpose();
+		assertTrue( matrixEquals3( a, b ));
+
+		b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
+		Matrix3 c = b.clone().transpose();
+		assertTrue( ! matrixEquals3( b, c )); 
+		c.transpose();
+		assertTrue( matrixEquals3( b, c )); 
+	}
+
+	@Test
+	public void testClone() 
+	{
+		Matrix3 a = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
+		Matrix3 b = a.clone();
+
+		assertTrue( matrixEquals3( a, b ));
+
+		// ensure that it is a true copy
+		a.getArray().set(0, 2);
+		assertTrue( ! matrixEquals3( a, b ));
 	}
 
 	private boolean matrixEquals3( Matrix3 a, Matrix3 b) 
@@ -68,5 +226,23 @@ public class Matrix3Test extends GWTTestCase
 			}
 		}
 		return true;
+	}
+	
+	private Matrix4 toMatrix4( Matrix3 m3 ) 
+	{
+		Matrix4 result = new Matrix4();
+		Float32Array re = result.getArray();
+		Float32Array me = m3.getArray();
+		re.set(0, me.get(0));
+		re.set(1, me.get(1));
+		re.set(2, me.get(2));
+		re.set(4, me.get(3));
+		re.set(5, me.get(4));
+		re.set(6, me.get(5));
+		re.set(8, me.get(6));
+		re.set(9, me.get(7));
+		re.set(10, me.get(8));
+
+		return result;
 	}
 }
