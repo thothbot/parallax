@@ -159,7 +159,7 @@ public class Vector2Test extends GWTTestCase
 		assertEquals( result, (-X * X - Y * Y));
 
 		result = a.dot( c );
-		assertEquals( result, 0);
+		assertEquals( result, 0.0);
 	}
 
 	@Test
