@@ -77,28 +77,6 @@ public class Vector4Test extends GWTTestCase
 	}
 
 	@Test
-	public void testDistanceTo() 
-	{
-		Vector4 a = new Vector4( X, 0, 0, 0 );
-		Vector4 b = new Vector4( 0, -Y, 0, 0 );
-		Vector4 c = new Vector4( 0, 0, Z, 0 );
-		Vector4 d = new Vector4( 0, 0, 0, -W );
-		Vector4 e = new Vector4();
-		
-		assertEquals( a.distanceTo( e ), X);
-		assertEquals( a.distanceToSquared( e ), X*X);
-
-		assertEquals( b.distanceTo( e ), Y);
-		assertEquals( b.distanceToSquared( e ), Y*Y);
-
-		assertEquals( c.distanceTo( e ), Z);
-		assertEquals( c.distanceToSquared( e ), Z*Z);
-
-		assertEquals( d.distanceTo( e ), W);
-		assertEquals( d.distanceToSquared( e ), W*W);
-	}
-
-	@Test
 	public void testSetXYZW() 
 	{
 		Vector4 a = new Vector4();

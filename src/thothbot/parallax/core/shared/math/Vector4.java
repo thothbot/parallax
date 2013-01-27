@@ -113,7 +113,7 @@ public class Vector4 extends Vector3 implements Vector
 	 */
 	public Vector4 copy(Vector4 v)
 	{
-		return this.set(v.getX(), v.getY(), v.getZ(), 1.0);
+		return this.set(v.getX(), v.getY(), v.getZ(), v.getW());
 	}
 	
 	/**
