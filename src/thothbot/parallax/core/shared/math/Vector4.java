@@ -371,12 +371,14 @@ public class Vector4 extends Vector3 implements Vector
 		return multiply(l);
 	}
 
-	public void lerp(Vector4 v1, double alpha)
+	public Vector4 lerp(Vector4 v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
 		this.z += (v1.z - this.z) * alpha;
 		this.w += (v1.w - this.w) * alpha;
+		
+		return this;
 	}
 	
 	/**
