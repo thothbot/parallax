@@ -393,11 +393,13 @@ public class Vector3 extends Vector2 implements Vector
 		return multiply(l);
 	}
 
-	public void lerp(Vector3 v1, double alpha)
+	public Vector3 lerp(Vector3 v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
 		this.z += (v1.z - this.z) * alpha;
+		
+		return this;
 	}
 
 	/**
