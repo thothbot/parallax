@@ -627,6 +627,10 @@ public class Vector4 extends Vector3 implements Vector
 		return this;
 	}
 
+	public boolean equals( Vector4 v ) 
+	{
+		return ( ( v.x == this.x ) && ( v.y == this.y ) && ( v.z == this.z ) && ( v.w == this.w ) );
+	}
 
 	@Override
 	public Vector4 clone() 
