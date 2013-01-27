@@ -20,8 +20,6 @@ package thothbot.parallax.core.shared.math;
 
 import java.util.List;
 
-import thothbot.parallax.core.shared.Log;
-
 public class Sphere 
 {
 

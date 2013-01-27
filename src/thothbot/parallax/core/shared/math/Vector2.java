@@ -312,14 +312,22 @@ public class Vector2 implements Vector
 
 	public Vector2 setLength(double l)
 	{
-		normalize();
-		return multiply(l);
+		double oldLength = this.length();
+
+		if ( oldLength != 0 && l != oldLength ) 
+		{
+			this.multiply( l / oldLength );
+		}
+
+		return this;
 	}
 
-	public void lerp(Vector2 v1, double alpha)
+	public Vector2 lerp(Vector2 v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
+		
+		return this;
 	}
 
 	public boolean isZero()
@@ -394,17 +402,13 @@ public class Vector2 implements Vector
 	 * Returns true if all of the data members of Tuple2f t1 are equal to the
 	 * corresponding data members in this Tuple2f.
 	 * 
-	 * @param v1
-	 *            the vector with which the comparison is made
+	 * @param v		the vector with which the comparison is made
+	 * 
 	 * @return true or false
 	 */
-	public boolean equals(Vector2 v1)
+	public boolean equals(Vector2 v)
 	{
-		try {
-			return (this.x == v1.x && this.y == v1.y);
-		} catch (NullPointerException e2) {
-			return false;
-		}
+		return ( ( v.x == this.x ) && ( v.y == this.y ) );
 	}
 	
 	@Override
