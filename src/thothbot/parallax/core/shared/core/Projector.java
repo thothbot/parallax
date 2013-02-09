@@ -20,7 +20,6 @@ package thothbot.parallax.core.shared.core;
 
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.math.Matrix4;
-import thothbot.parallax.core.shared.math.Ray;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -52,11 +51,11 @@ public class Projector
 	
 	/**
 	 * Translates a 2D point from NDC (Normalized Device Coordinates) 
-	 * to a Ray that can be used for picking.
+	 * to a Raycaster that can be used for picking.
 	 * <p> 
 	 * NDC range from [-1..1] in x (left to right) and [1.0 .. -1.0] in y (top to bottom).
 	 */
-	public Ray pickingRay( Vector3 vector, Camera camera ) 
+	public Raycaster pickingRay( Vector3 vector, Camera camera ) 
 	{
 		// set two vectors with opposing z values
 		vector.setZ( -1.0 );
@@ -68,6 +67,6 @@ public class Projector
 		// find direction from vector to end
 		end.sub( vector ).normalize();
 
-		return new Ray( vector, end );
+		return new Raycaster( vector, end );
 	}
 }

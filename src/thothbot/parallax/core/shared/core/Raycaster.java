@@ -213,7 +213,7 @@ public class Raycaster
 		}
 	}
 
-	private void intersectDescendants( GeometryObject object, Raycaster raycaster, List<Raycaster.Intersect> intersects ) 
+	private void intersectDescendants( DimensionalObject object, Raycaster raycaster, List<Raycaster.Intersect> intersects ) 
 	{
 		List<DimensionalObject> descendants = object.getDescendants();
 
@@ -236,7 +236,12 @@ public class Raycaster
 		}
 	}
 
-	public List<Raycaster.Intersect> intersectObject( GeometryObject object, boolean recursive ) 
+	public List<Raycaster.Intersect> intersectObject( DimensionalObject object ) 
+	{
+		return intersectObject(object, false);
+	}
+	
+	public List<Raycaster.Intersect> intersectObject( DimensionalObject object, boolean recursive ) 
 	{
 		List<Raycaster.Intersect> intersects = new ArrayList<Raycaster.Intersect>();
 
@@ -252,7 +257,12 @@ public class Raycaster
 		return intersects;
 	}
 
-	public List<Raycaster.Intersect> intersectObjects( List<GeometryObject> objects, boolean recursive ) 
+	public List<Raycaster.Intersect> intersectObjects( List<? extends DimensionalObject> objects ) 
+	{
+		return intersectObjects(objects, false);
+	}
+	
+	public List<Raycaster.Intersect> intersectObjects( List<? extends DimensionalObject> objects, boolean recursive ) 
 	{
 		List<Raycaster.Intersect> intersects = new ArrayList<Raycaster.Intersect>();
 		
