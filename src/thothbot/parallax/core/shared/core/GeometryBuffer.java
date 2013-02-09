@@ -30,6 +30,8 @@ import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.math.Box3;
+import thothbot.parallax.core.shared.math.Sphere;
 import thothbot.parallax.core.shared.math.Vector3;
 
 public class GeometryBuffer implements Geometric
@@ -48,10 +50,10 @@ public class GeometryBuffer implements Geometric
 	private boolean isDynamic = true; 
 	
 	// Bounding box.		
-	private BoundingBox boundingBox = null;
+	protected Box3 boundingBox = null;
 
 	// Bounding sphere.
-	private BoundingSphere boundingSphere = null;
+	protected Sphere boundingSphere = null;
 	
 	// True if geometry has tangents. Set in Geometry.computeTangents.
 	private Boolean hasTangents = false;
@@ -62,6 +64,8 @@ public class GeometryBuffer implements Geometric
 	private boolean isVerticesNeedUpdate;
 	private boolean isUvsNeedUpdate;
 	private boolean isColorsNeedUpdate;
+	
+	private boolean isBuffersNeedUpdate;
 
 	public List<GeometryBuffer.Offset> offsets;
 	
@@ -197,20 +201,20 @@ public class GeometryBuffer implements Geometric
 		this.isColorsNeedUpdate = isColorsNeedUpdate;
 	}
 
-	public void setBoundingSphere(BoundingSphere boundingSphere) 
+	public void setBoundingSphere(Sphere boundingSphere) 
 	{
 		this.boundingSphere = boundingSphere;
 	}
 
-	public BoundingSphere getBoundingSphere() {
+	public Sphere getBoundingSphere() {
 		return boundingSphere;
 	}
 
-	public void setBoundingBox(BoundingBox boundingBox) {
+	public void setBoundingBox(Box3 boundingBox) {
 		this.boundingBox = boundingBox;
 	}
 
-	public BoundingBox getBoundingBox() {
+	public Box3 getBoundingBox() {
 		return boundingBox;
 	}
 	
@@ -340,18 +344,25 @@ public class GeometryBuffer implements Geometric
 	{
 		if ( getBoundingBox() == null) 
 		{
-			setBoundingBox( new BoundingBox(
-					new Vector3( Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY ), 
-					new Vector3( Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY )) );
+			this.boundingBox = new Box3();
 		}
 		
-		BoundingBox boundingBox = getBoundingBox();
-
 		Float32Array positions = getWebGlVertexArray();
 
 		if ( positions != null) 
 		{
-			for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) 
+			Box3 bb = this.boundingBox;
+			if( positions.getLength() >= 3 ) 
+			{
+				bb.getMin().setX(positions.get( 0 )); 
+				bb.getMax().setX(positions.get( 0 ));
+				bb.getMin().setY(positions.get( 1 )); 		
+				bb.getMax().setY(positions.get( 1 ));
+				bb.getMin().setZ(positions.get( 2 ));
+				bb.getMax().setZ(positions.get( 2 ));
+			}
+			
+			for ( int i = 3, il = positions.getLength(); i < il; i += 3  ) 
 			{
 				double x = positions.get( i );
 				double y = positions.get( i + 1 );
@@ -359,50 +370,44 @@ public class GeometryBuffer implements Geometric
 
 				// bounding box
 
-				if ( x < boundingBox.min.getX() ) {
+				if ( x < bb.getMin().getX() ) {
+					bb.getMin().setX( x );
 
-					boundingBox.min.setX( x );
-
-				} else if ( x > boundingBox.max.getX() ) {
-
-					boundingBox.max.setX( x );
-
+				} else if ( x > bb.getMax().getX() ) {
+					bb.getMax().setX( x );
 				}
 
-				if ( y < boundingBox.min.getY() ) {
+				if ( y < bb.getMin().getY() ) {
+					bb.getMin().setY( y );
 
-					boundingBox.min.setY( y );
-
-				} else if ( y > boundingBox.max.getY() ) {
-
-					boundingBox.max.setY( y );
-
+				} else if ( y > bb.getMax().getY() ) {
+					bb.getMax().setY( y );
 				}
 
-				if ( z < boundingBox.min.getZ() ) {
+				if ( z < bb.getMin().getZ() ) {
+					bb.getMin().setZ( z );
 
-					boundingBox.min.setZ( z );
-
-				} else if ( z > boundingBox.max.getZ() ) {
-
-					boundingBox.max.setZ( z );
-
+				} else if ( z > bb.getMax().getZ() ) {
+					bb.getMax().setZ( z );
 				}
 			}
 		}
 
 		if ( positions == null || positions.getLength() == 0 ) 
 		{
-			this.boundingBox.min.set( 0, 0, 0 );
-			this.boundingBox.max.set( 0, 0, 0 );
+			this.boundingBox.getMin().set( 0, 0, 0 );
+			this.boundingBox.getMax().set( 0, 0, 0 );
 		}
 	}
 	
 	@Override
 	public void computeBoundingSphere() 
 	{
-		if ( getBoundingSphere() == null ) 
-			setBoundingSphere( new BoundingSphere(0) );
+		if ( this.boundingSphere == null ) 
+		{
+			this.boundingSphere = new Sphere();
+		}
+
 		Float32Array positions = getWebGlVertexArray();
 
 		if ( positions != null) 
@@ -420,7 +425,7 @@ public class GeometryBuffer implements Geometric
 
 			}
 
-			this.boundingSphere.radius = Math.sqrt( maxRadiusSq );
+			this.boundingSphere.setRadius( Math.sqrt( maxRadiusSq ) );
 		}
 	}
 	

@@ -107,7 +107,7 @@ public class Frustum
 		// this method is expanded inlined for performance reasons.
 		Matrix4 matrix = object.getMatrixWorld();
 		Vector3 center = matrix.getPosition();
-		double negRadius = - object.getGeometry().getBoundingSphere().radius * matrix.getMaxScaleOnAxis();
+		double negRadius = - object.getGeometry().getBoundingSphere().getRadius() * matrix.getMaxScaleOnAxis();
 
 		for ( int i = 0; i < 6; i ++ ) 
 		{

@@ -31,6 +31,11 @@ public class Sphere
 		this(new Vector3(), 0);
 	}
 	
+	public Sphere(double radius)
+	{
+		this(new Vector3(), radius);
+	}
+
 	public Sphere(Vector3 center, double radius)
 	{
 		this.center = center;

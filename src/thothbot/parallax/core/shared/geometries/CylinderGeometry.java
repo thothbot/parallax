@@ -25,7 +25,7 @@ import java.util.List;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -60,12 +60,12 @@ public final class CylinderGeometry extends Geometry
 		int x = 0, y = 0; 
 		
 		List<List<Integer>> vertices = new ArrayList<List<Integer>>();
-		List<List<UV>> uvs = new ArrayList<List<UV>>();
+		List<List<Vector2>> uvs = new ArrayList<List<Vector2>>();
 
 		for ( y = 0; y <= segmentsY; y ++ ) 
 		{
 			List<Integer> verticesRow = new ArrayList<Integer>();
-			List<UV> uvsRow = new ArrayList<UV>();
+			List<Vector2> uvsRow = new ArrayList<Vector2>();
 
 			double v = y / (double)segmentsY;
 			double radius = v * ( radiusBottom - radiusTop ) + radiusTop;
@@ -83,7 +83,7 @@ public final class CylinderGeometry extends Geometry
 				getVertices().add( vertex );
 
 				verticesRow.add( getVertices().size() - 1 );
-				uvsRow.add( new UV( u, v ) );
+				uvsRow.add( new Vector2( u, v ) );
 
 			}
 
@@ -124,10 +124,10 @@ public final class CylinderGeometry extends Geometry
 				Vector3 n3 = nb.clone();
 				Vector3 n4 = nb.clone();
 
-				UV uv1 = uvs.get( y ).get( x ).clone();
-				UV uv2 = uvs.get( y + 1 ).get( x ).clone();
-				UV uv3 = uvs.get( y + 1 ).get( x + 1 ).clone();
-				UV uv4 = uvs.get( y ).get( x + 1 ).clone();
+				Vector2 uv1 = uvs.get( y ).get( x ).clone();
+				Vector2 uv2 = uvs.get( y + 1 ).get( x ).clone();
+				Vector2 uv3 = uvs.get( y + 1 ).get( x + 1 ).clone();
+				Vector2 uv4 = uvs.get( y ).get( x + 1 ).clone();
 
 				getFaces().add( new Face4( v1, v2, v3, v4, Arrays.asList( n1, n2, n3, n4 ) ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3, uv4 ) );
@@ -151,9 +151,9 @@ public final class CylinderGeometry extends Geometry
 				Vector3 n2 = new Vector3( 0, 1, 0 );
 				Vector3 n3 = new Vector3( 0, 1, 0 );
 
-				UV uv1 = uvs.get( 0 ).get( x ).clone();
-				UV uv2 = uvs.get( 0 ).get( x + 1 ).clone();
-				UV uv3 = new UV( uv2.getU(), 0 );
+				Vector2 uv1 = uvs.get( 0 ).get( x ).clone();
+				Vector2 uv2 = uvs.get( 0 ).get( x + 1 ).clone();
+				Vector2 uv3 = new Vector2( uv2.getX(), 0 );
 
 				getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
@@ -176,9 +176,9 @@ public final class CylinderGeometry extends Geometry
 				Vector3 n2 = new Vector3( 0.0, - 1.0, 0.0 );
 				Vector3 n3 = new Vector3( 0.0, - 1.0, 0.0 );
 
-				UV uv1 = uvs.get( y ).get( x + 1 ).clone();
-				UV uv2 = uvs.get( y ).get( x ).clone();
-				UV uv3 = new UV( uv2.getU(), 1 );
+				Vector2 uv1 = uvs.get( y ).get( x + 1 ).clone();
+				Vector2 uv2 = uvs.get( y ).get( x ).clone();
+				Vector2 uv3 = new Vector2( uv2.getX(), 1 );
 
 				getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );

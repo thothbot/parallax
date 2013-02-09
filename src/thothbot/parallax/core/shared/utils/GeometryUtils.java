@@ -31,7 +31,7 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Matrix4;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Mesh;
 
@@ -91,8 +91,8 @@ public class GeometryUtils
 		List<Vector3> vertices2 = geometry2.getVertices();
 		List<Face3> faces1 = geometry1.getFaces();
 		List<Face3> faces2 = geometry2.getFaces();
-		List<List<UV>> uvs1 = geometry1.getFaceVertexUvs().get( 0 );
-		List<List<UV>> uvs2 = geometry2.getFaceVertexUvs().get( 0 );
+		List<List<Vector2>> uvs1 = geometry1.getFaceVertexUvs().get( 0 );
+		List<List<Vector2>> uvs2 = geometry2.getFaceVertexUvs().get( 0 );
 
 		Map<Integer, Integer> geo1MaterialsMap = new HashMap<Integer, Integer>();
 
@@ -193,11 +193,11 @@ public class GeometryUtils
 
 		for ( int i = 0, il = uvs2.size(); i < il; i ++ ) 
 		{
-			List<UV> uv = uvs2.get( i );
-			List<UV> uvCopy = new ArrayList<UV>();
+			List<Vector2> uv = uvs2.get( i );
+			List<Vector2> uvCopy = new ArrayList<Vector2>();
 
 			for ( int j = 0, jl = uv.size(); j < jl; j ++ ) 
-				uvCopy.add( new UV( uv.get( j ).getU(), uv.get( j ).getV() ) );
+				uvCopy.add( new Vector2( uv.get( j ).getX(), uv.get( j ).getY() ) );
 
 			uvs1.add( uvCopy );
 
@@ -207,17 +207,17 @@ public class GeometryUtils
 	public static void triangulateQuads(Geometry geometry ) 
 	{
 		List<Face3> faces = new ArrayList<Face3>();
-		List<List<UV>> faceUvs = new ArrayList<List<UV>>();
-		List<List<List<UV>>> faceVertexUvs = new ArrayList<List<List<UV>>>();
+		List<List<Vector2>> faceUvs = new ArrayList<List<Vector2>>();
+		List<List<List<Vector2>>> faceVertexUvs = new ArrayList<List<List<Vector2>>>();
 
 		for ( int i = 0, il = geometry.getFaceUvs().size(); i < il; i ++ ) 
 		{
-			faceUvs.add(new ArrayList<UV>());
+			faceUvs.add(new ArrayList<Vector2>());
 		}
 
 		for ( int i = 0, il = geometry.getFaceVertexUvs().size(); i < il; i ++ ) 
 		{
-			faceVertexUvs.add(new ArrayList<List<UV>>());
+			faceVertexUvs.add(new ArrayList<List<Vector2>>());
 		}
 
 		for ( int i = 0, il = geometry.getFaces().size(); i < il; i ++ ) 
@@ -269,15 +269,15 @@ public class GeometryUtils
 
 					if ( geometry.getFaceVertexUvs().get( j ).size() > 0 ) 
 					{
-						List<UV> uvs = geometry.getFaceVertexUvs().get( j ).get( i );
+						List<Vector2> uvs = geometry.getFaceVertexUvs().get( j ).get( i );
 
-						UV uvA = uvs.get( 0 );
-						UV uvB = uvs.get( 1 );
-						UV uvC = uvs.get( 2 );
-						UV uvD = uvs.get( 3 );
+						Vector2 uvA = uvs.get( 0 );
+						Vector2 uvB = uvs.get( 1 );
+						Vector2 uvC = uvs.get( 2 );
+						Vector2 uvD = uvs.get( 3 );
 
-						List<UV> uvsTriA = Arrays.asList( uvA.clone(), uvB.clone(), uvD.clone() );
-						List<UV> uvsTriB = Arrays.asList( uvB.clone(), uvC.clone(), uvD.clone() );
+						List<Vector2> uvsTriA = Arrays.asList( uvA.clone(), uvB.clone(), uvD.clone() );
+						List<Vector2> uvsTriB = Arrays.asList( uvB.clone(), uvC.clone(), uvD.clone() );
 
 						faceVertexUvs.get( j ).add( uvsTriA );
 						faceVertexUvs.get( j ).add( uvsTriB );
@@ -290,7 +290,7 @@ public class GeometryUtils
 					if ( geometry.getFaceUvs().get( j ).size() > 0 ) 
 					{
 
-						UV faceUv = geometry.getFaceUvs().get( j ).get( i );
+						Vector2 faceUv = geometry.getFaceUvs().get( j ).get( i );
 
 						faceUvs.get( j ).add( faceUv );
 						faceUvs.get( j ).add( faceUv );

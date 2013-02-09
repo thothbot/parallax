@@ -25,7 +25,7 @@ import java.util.List;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -39,21 +39,9 @@ import thothbot.parallax.core.shared.math.Vector3;
  */
 public final class CubeGeometry extends Geometry 
 {
-	public class Sides
-	{
-		public boolean px = true;
-		public boolean nx = true;
-		public boolean py = true;
-		public boolean ny = true;
-		public boolean pz = true;
-		public boolean nz = true;
-	}
-	
-	private Sides sides;
-
-	private int segmentsWidth;
-	private int segmentsHeight;
-	private int segmentsDepth;
+	private int widthSegments;
+	private int heightSegments;
+	private int depthSegments;
 	
 	public CubeGeometry() 
 	{
@@ -65,56 +53,24 @@ public final class CubeGeometry extends Geometry
 		this(width, height, depth, 1, 1, 1);
 	}
 	
-	public CubeGeometry( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth)
-	{
-		this(width, height, depth, segmentsWidth, segmentsHeight, segmentsDepth, null, null);
-	}
-
-	public CubeGeometry( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth, 
-			List<Material> materials, Sides sides) 
+	public CubeGeometry( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth) 
 	{
 		super();
 		
-		this.segmentsWidth = segmentsWidth;
-		this.segmentsHeight = segmentsHeight;
-		this.segmentsDepth = segmentsDepth;
+		this.widthSegments = segmentsWidth;
+		this.heightSegments = segmentsHeight;
+		this.depthSegments = segmentsDepth;
 
 		double width_half = width / 2.0;
 		double height_half = height / 2.0;
 		double depth_half = depth / 2.0;
 
-		int mpx = 0;
-		int mpy = 0;
-		int mpz = 0;
-		int mnx = 0;
-		int mny = 0;
-		int mnz = 0;
-
-		setMaterials( new ArrayList<Material>() );
-		
-		if ( materials != null ) 
-		{
-			setMaterials( materials );
-			mpx = 0; mnx = 1; mpy = 2; mny = 3; mpz = 4; mnz = 5;
-		}
-
-		if ( sides != null )
-			this.sides = sides;
-		else
-			this.sides = new Sides();
-
-		if(this.sides.px) 
-			buildPlane( "z", "y", - 1, - 1, depth, height, width_half, mpx );
-		if(this.sides.nx) 
-			buildPlane( "z", "y",   1, - 1, depth, height, - width_half, mnx );
-		if(this.sides.py) 
-			buildPlane( "x", "z",   1,   1, width, depth, height_half, mpy );
-		if(this.sides.ny) 
-			buildPlane( "x", "z",   1, - 1, width, depth, - height_half, mny );
-		if(this.sides.pz) 
-			buildPlane( "x", "y",   1, - 1, width, height, depth_half, mpz );
-		if(this.sides.nz) 
-			buildPlane( "x", "y", - 1, - 1, width, height, - depth_half, mnz );
+		buildPlane( "z", "y", - 1, - 1, depth, height, width_half, 0 ); 
+		buildPlane( "z", "y",   1, - 1, depth, height, - width_half, 1 ); 
+		buildPlane( "x", "z",   1,   1, width, depth, height_half, 2 ); 
+		buildPlane( "x", "z",   1, - 1, width, depth, - height_half, 3 ); 
+		buildPlane( "x", "y",   1, - 1, width, height, depth_half, 4 ); 
+		buildPlane( "x", "y", - 1, - 1, width, height, - depth_half, 5 );
 
 		this.computeCentroids();
 		this.mergeVertices();
@@ -122,8 +78,8 @@ public final class CubeGeometry extends Geometry
 	
 	private void buildPlane( String u, String v, int udir, int vdir, double width, double height, double depth, int material ) 
 	{
-		int gridX = this.segmentsWidth;
-		int gridY = this.segmentsHeight;
+		int gridX = this.widthSegments;
+		int gridY = this.heightSegments;
 		double width_half = width / 2.0;
 		double height_half = height / 2.0;
 		
@@ -138,12 +94,12 @@ public final class CubeGeometry extends Geometry
 		else if ( ( u.equals("x") && v.equals("z") ) || ( u.equals("z") && v.equals("x") ) ) 
 		{
 			w = "y";
-			gridY = this.segmentsDepth;
+			gridY = this.depthSegments;
 		} 
 		else if ( ( u.equals("z") && v.equals("y") ) || ( u.equals("y") && v.equals("z") ) ) 
 		{
 			w = "x";
-			gridX = this.segmentsDepth;
+			gridX = this.depthSegments;
 
 		}
 
@@ -210,10 +166,10 @@ public final class CubeGeometry extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UV( ix / (double)gridX,                 iy / (double)gridY ),
-					new UV( ix / (double)gridX,         ( iy + 1 ) / (double)gridY ),
-					new UV( ( ix + 1 ) / (double)gridX, ( iy + 1 ) / (double)gridY ),
-					new UV( ( ix + 1 ) / (double)gridX,         iy / (double)gridY )
+					new Vector2( ix / (double)gridX,                 iy / (double)gridY ),
+					new Vector2( ix / (double)gridX,         ( iy + 1 ) / (double)gridY ),
+					new Vector2( ( ix + 1 ) / (double)gridX, ( iy + 1 ) / (double)gridY ),
+					new Vector2( ( ix + 1 ) / (double)gridX,         iy / (double)gridY )
 				) );
 			}
 		}

@@ -21,7 +21,7 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.BoundingBox;
+import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Vector2;
 
 
@@ -158,7 +158,7 @@ public class CurvePath extends Curve
 	/*
 	 * Returns min and max coordinates, as well as centroid
 	 */
-	public BoundingBox getBoundingBox() 
+	public Box3 getBoundingBox() 
 	{
 		List<Vector2> points = (ArrayList)this.getPoints();
 
@@ -188,11 +188,9 @@ public class CurvePath extends Curve
 			sum.add( p );
 		}
 
-		BoundingBox boundingBox = new BoundingBox();
-		boundingBox.min.set(minX, minY, 0);
-		boundingBox.max.set(maxX, maxY, 0);
-		Vector2 centroid = sum.divide( il );
-		boundingBox.centroid.set(centroid.getX(), centroid.getY(), 0);
+		Box3 boundingBox = new Box3();
+		boundingBox.getMin().set(minX, minY, 0);
+		boundingBox.getMax().set(maxX, maxY, 0);
 		
 		return boundingBox;
 	}
@@ -215,7 +213,7 @@ public class CurvePath extends Curve
 	 */
 	protected List<Vector2> getWrapPoints(  List<Vector2> oldPts, CurvePath path ) 
 	{
-		BoundingBox bounds = this.getBoundingBox();
+		Box3 bounds = this.getBoundingBox();
 
 		for ( int i = 0, il = oldPts.size(); i < il; i ++ ) 
 		{
@@ -224,7 +222,7 @@ public class CurvePath extends Curve
 			double oldX = p.getX();
 			double oldY = p.getY();
 
-			double xNorm = oldX / bounds.max.getX();
+			double xNorm = oldX / bounds.getMax().getX();
 
 			// If using actual distance, for length > path, requires line extrusions
 			//xNorm = path.getUtoTmapping(xNorm, oldX); // 3 styles. 1) wrap stretched. 2) wrap stretch by arc length 3) warp by actual distance

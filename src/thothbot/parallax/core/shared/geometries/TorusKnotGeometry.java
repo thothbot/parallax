@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -99,10 +99,10 @@ public final class TorusKnotGeometry extends Geometry
 				int c = grid[ ip ][ jp ];
 				int d = grid[ i ][ jp ];
 
-				UV uva = new UV(           i / (double)segmentsR,           j / (double)segmentsT );
-				UV uvb = new UV( ( i + 1.0 ) / (double)segmentsR,           j / (double)segmentsT );
-				UV uvc = new UV( ( i + 1.0 ) / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
-				UV uvd = new UV(           i / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
+				Vector2 uva = new Vector2(           i / (double)segmentsR,           j / (double)segmentsT );
+				Vector2 uvb = new Vector2( ( i + 1.0 ) / (double)segmentsR,           j / (double)segmentsT );
+				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
+				Vector2 uvd = new Vector2(           i / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
 
 				getFaces().add( new Face4( a, b, c, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );

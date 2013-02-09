@@ -22,10 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.BoundingSphere;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Sphere;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -54,8 +54,8 @@ public final class CircleGeometry extends Geometry
 	    segments = Math.max( 3, segments );
 
    		Vector3 center = new Vector3();
-	    UV centerUV = new UV( 0.5, 0.5 );
-	    List<UV> uvs = new ArrayList<UV>();
+   		Vector2 centerUV = new Vector2( 0.5, 0.5 );
+	    List<Vector2> uvs = new ArrayList<Vector2>();
 
 	    this.getVertices().add(center);
 	    uvs.add( centerUV );
@@ -68,7 +68,7 @@ public final class CircleGeometry extends Geometry
 	        vertex.setY(radius * Math.sin( thetaStart + (double)i / segments * thetaLength ));
 
 	        this.getVertices().add( vertex );
-	        uvs.add( new UV( ( vertex.getX() / radius + 1.0 ) / 2.0, - ( vertex.getY() / radius + 1.0 ) / 2.0 + 1.0 ) );
+	        uvs.add( new Vector2( ( vertex.getX() / radius + 1.0 ) / 2.0, - ( vertex.getY() / radius + 1.0 ) / 2.0 + 1.0 ) );
 	    }
 
 	    Vector3 n = new Vector3( 0, 0, -1 );
@@ -86,6 +86,6 @@ public final class CircleGeometry extends Geometry
 	    this.computeCentroids();
 	    this.computeFaceNormals();
 
-	    setBoundingSphere( new BoundingSphere(radius) );
+	    setBoundingSphere( new Sphere(radius) );
 	}
 }

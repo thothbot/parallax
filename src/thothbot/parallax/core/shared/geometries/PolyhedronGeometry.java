@@ -24,10 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thothbot.parallax.core.shared.core.BoundingSphere;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Sphere;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 public abstract class PolyhedronGeometry extends Geometry
@@ -39,7 +39,7 @@ public abstract class PolyhedronGeometry extends Geometry
 	{
 		public Vector3 vector;
 		public int index;
-		public UV uv;
+		public Vector2 uv;
 		
 		public ContainerOfVector(double x, double y, double z)
 		{
@@ -77,7 +77,7 @@ public abstract class PolyhedronGeometry extends Geometry
 		
 		this.computeCentroids();
 
-		setBoundingSphere(new BoundingSphere(radius)); 
+		setBoundingSphere(new Sphere(radius)); 
 	}
 	
 	/**
@@ -103,7 +103,7 @@ public abstract class PolyhedronGeometry extends Geometry
 		// Texture coords are equivalent to map coords, calculate angle and convert to fraction of a circle.
 		double u = azimuth( container.vector ) / 2.0 / Math.PI + 0.5;
 		double v = inclination( container.vector ) / Math.PI + 0.5;
-		container.uv = new UV( u, v );
+		container.uv = new Vector2( u, v );
 
 		return container;
 	}
@@ -187,13 +187,13 @@ public abstract class PolyhedronGeometry extends Geometry
 	/**
 	 * Texture fixing helper. Spheres have some odd behaviours.
 	 */
-	protected UV correctUV( UV uv, Vector3 vector, double azimuth ) 
+	protected Vector2 correctUV( Vector2 uv, Vector3 vector, double azimuth ) 
 	{
-		if ( (azimuth < 0) && (uv.getU() == 1) ) 
-			uv = new UV( uv.getU() - 1.0, uv.getV() );
+		if ( (azimuth < 0) && (uv.getX() == 1) ) 
+			uv = new Vector2( uv.getX() - 1.0, uv.getY() );
 		
 		if ( (vector.getX() == 0) && (vector.getZ() == 0) ) 
-			uv = new UV( azimuth / 2.0 / Math.PI + 0.5, uv.getV() );
+			uv = new Vector2( azimuth / 2.0 / Math.PI + 0.5, uv.getY() );
 		
 		return uv;
 	}

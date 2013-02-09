@@ -22,11 +22,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.BoundingSphere;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Sphere;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -66,12 +66,12 @@ public final class SphereGeometry extends Geometry
 		int segmentsY = Math.max( 2, segmentsHeight );
 		
 		List<List<Integer>> vertices = new ArrayList<List<Integer>>();
-		List<List<UV>> uvs = new ArrayList<List<UV>>();
+		List<List<Vector2>> uvs = new ArrayList<List<Vector2>>();
 		
 		for (int y = 0; y <= segmentsY; y++) 
 		{
 			List<Integer> verticesRow = new ArrayList<Integer>();
-			List<UV> uvsRow = new ArrayList<UV>();
+			List<Vector2> uvsRow = new ArrayList<Vector2>();
 			
 			for (int x = 0; x <= segmentsX; x++) 
 			{
@@ -87,7 +87,7 @@ public final class SphereGeometry extends Geometry
 				getVertices().add( vertex );
 
 				verticesRow.add( getVertices().size() - 1 );
-				uvsRow.add( new UV( u, v ) );
+				uvsRow.add( new Vector2( u, v ) );
 			}
 			
 			vertices.add( verticesRow );
@@ -112,10 +112,10 @@ public final class SphereGeometry extends Geometry
 				Vector3 n4 = getVertices().get( v4 ).clone();
 				n4.normalize();
 
-				UV uv1 = uvs.get( y ).get( x + 1 ).clone();
-				UV uv2 = uvs.get( y ).get( x ).clone();
-				UV uv3 = uvs.get( y + 1 ).get( x ).clone();
-				UV uv4 = uvs.get( y + 1 ).get( x + 1 ).clone();
+				Vector2 uv1 = uvs.get( y ).get( x + 1 ).clone();
+				Vector2 uv2 = uvs.get( y ).get( x ).clone();
+				Vector2 uv3 = uvs.get( y + 1 ).get( x ).clone();
+				Vector2 uv4 = uvs.get( y + 1 ).get( x + 1 ).clone();
 
 				if ( Math.abs( getVertices().get( v1 ).getY() ) == radius ) 
 				{
@@ -138,6 +138,6 @@ public final class SphereGeometry extends Geometry
 		this.computeCentroids();
 		this.computeFaceNormals();
 
-		setBoundingSphere( new BoundingSphere(radius) );
+		setBoundingSphere( new Sphere(radius) );
 	}
 }

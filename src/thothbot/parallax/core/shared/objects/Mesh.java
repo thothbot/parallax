@@ -46,7 +46,7 @@ import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.math.Color;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.math.Vector4;
 
@@ -95,7 +95,7 @@ public class Mesh extends GeometryObject
 			if (this.geometry.getBoundingSphere() == null)
 				this.geometry.computeBoundingSphere();
 
-			this.boundRadius = this.geometry.getBoundingSphere().radius;
+			this.boundRadius = this.geometry.getBoundingSphere().getRadius();
 
 			// setup morph targets
 			if (this.geometry.getMorphTargets().size() != 0) 
@@ -458,10 +458,10 @@ public class Mesh extends GeometryObject
 		 List<Integer> chunk_faces4 = geometryGroup.faces4;
 		 List<Face3> obj_faces = getGeometry().getFaces();
 
-		 List<List<UV>> obj_uvs = (getGeometry().getFaceVertexUvs().size() > 0) 
+		 List<List<Vector2>> obj_uvs = (getGeometry().getFaceVertexUvs().size() > 0) 
 				 ? getGeometry().getFaceVertexUvs().get(0) : null;
 
-		 List<List<UV>> obj_uvs2 = (getGeometry().getFaceVertexUvs().size() > 1) 
+		 List<List<Vector2>> obj_uvs2 = (getGeometry().getFaceVertexUvs().size() > 1) 
 				 ? getGeometry().getFaceVertexUvs().get(1) : null;
 						
 		 List<Geometry.MorphNormal> morphNormals = getGeometry().getMorphNormals();
@@ -1086,16 +1086,16 @@ public class Mesh extends GeometryObject
 
 				 int fi = chunk_faces3.get(f);
 
-				 List<UV> uv = obj_uvs.get(fi);
+				 List<Vector2> uv = obj_uvs.get(fi);
 
 				 if ( uv == null ) continue;
 
 				 for ( int i = 0; i < 3; i ++ ) {
 
-					 UV uvi = uv.get(i);
+					 Vector2 uvi = uv.get(i);
 
-					 uvArray.set(offset_uv, uvi.getU());
-					 uvArray.set(offset_uv + 1, uvi.getV());
+					 uvArray.set(offset_uv, uvi.getX());
+					 uvArray.set(offset_uv + 1, uvi.getY());
 
 					 offset_uv += 2;
 				 }
@@ -1105,17 +1105,17 @@ public class Mesh extends GeometryObject
 			 {
 				 int fi = chunk_faces4.get(f);
 
-				 List<UV>uv = obj_uvs.get(fi);
+				 List<Vector2>uv = obj_uvs.get(fi);
 
 				 if ( uv == null ) continue;
 
 				 for ( int i = 0; i < 4; i ++ ) 
 				 {
 
-					 UV uvi = uv.get(i);
+					 Vector2 uvi = uv.get(i);
 
-					 uvArray.set(offset_uv, uvi.getU());
-					 uvArray.set(offset_uv + 1, uvi.getV());
+					 uvArray.set(offset_uv, uvi.getX());
+					 uvArray.set(offset_uv + 1, uvi.getY());
 
 					 offset_uv += 2;
 				 }
@@ -1137,16 +1137,16 @@ public class Mesh extends GeometryObject
 			 {
 				 int fi = chunk_faces3.get(f);
 
-				 List<UV> uv2 = obj_uvs2.get(fi);
+				 List<Vector2> uv2 = obj_uvs2.get(fi);
 
 				 if ( uv2 == null ) continue;
 
 				 for ( int i = 0; i < 3; i ++ ) 
 				 {
-					 UV uv2i = uv2.get(i);
+					 Vector2 uv2i = uv2.get(i);
 
-					 uv2Array.set(offset_uv2, uv2i.getU());
-					 uv2Array.set(offset_uv2 + 1, uv2i.getV());
+					 uv2Array.set(offset_uv2, uv2i.getX());
+					 uv2Array.set(offset_uv2 + 1, uv2i.getY());
 
 					 offset_uv2 += 2;
 				 }
@@ -1156,16 +1156,16 @@ public class Mesh extends GeometryObject
 			 {
 				 int fi = chunk_faces4.get(f);
 
-				 List<UV> uv2 = obj_uvs2.get(fi);
+				 List<Vector2> uv2 = obj_uvs2.get(fi);
 
 				 if ( uv2 == null ) continue;
 
 				 for ( int i = 0; i < 4; i ++ ) 
 				 {
-					 UV uv2i = uv2.get(i);
+					 Vector2 uv2i = uv2.get(i);
 
-					 uv2Array.set(offset_uv2, uv2i.getU());
-					 uv2Array.set(offset_uv2 + 1, uv2i.getV());
+					 uv2Array.set(offset_uv2, uv2i.getX());
+					 uv2Array.set(offset_uv2 + 1, uv2i.getY());
 
 					 offset_uv2 += 2;
 				 }

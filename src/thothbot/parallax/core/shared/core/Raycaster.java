@@ -116,7 +116,7 @@ public class Raycaster
 			// Checking boundingSphere distance to ray
 			sphere.set(
 				object.getMatrixWorld().getPosition(),
-				((Mesh) object).getGeometry().getBoundingSphere().radius * object.getMatrixWorld().getMaxScaleOnAxis() );
+				((Mesh) object).getGeometry().getBoundingSphere().getRadius() * object.getMatrixWorld().getMaxScaleOnAxis() );
 
 			if ( ! raycaster.ray.isIntersectionSphere( sphere ) ) 
 			{

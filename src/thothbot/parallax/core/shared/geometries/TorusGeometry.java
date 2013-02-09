@@ -24,7 +24,7 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -53,7 +53,7 @@ public final class TorusGeometry extends Geometry
 		super();
 		
 		Vector3 center = new Vector3();
-		List<UV> uvs = new ArrayList<UV>();
+		List<Vector2> uvs = new ArrayList<Vector2>();
 		List<Vector3> normals = new ArrayList<Vector3>();
 		
 		for ( int j = 0; j <= segmentsR; j ++ ) 
@@ -73,7 +73,7 @@ public final class TorusGeometry extends Geometry
 
 				getVertices().add( vertex );
 
-				uvs.add( new UV( i / (double)segmentsT, j / (double)segmentsR ) );
+				uvs.add( new Vector2( i / (double)segmentsT, j / (double)segmentsR ) );
 				normals.add( vertex.clone().sub( center ).normalize() );
 			}
 		}

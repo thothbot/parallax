@@ -87,7 +87,7 @@ public class ParticleSystem extends GeometryObject
 			if( this.geometry.getBoundingSphere() == null)
 				this.geometry.computeBoundingSphere();
 
-			this.boundRadius = geometry.getBoundingSphere().radius;
+			this.boundRadius = geometry.getBoundingSphere().getRadius();
 		}
 	}
 	

@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -81,10 +81,10 @@ public final class PlaneGeometry extends Geometry
 
 				getFaces().add( face );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new UV( ix / (double)gridX,                     1.0 - iz / (double)gridZ ),
-					new UV( ix / (double)gridX,           1.0 - ( iz + 1.0 ) / (double)gridZ ),
-					new UV( ( ix + 1.0 ) / (double)gridX, 1.0 - ( iz + 1.0 ) / (double)gridZ ),
-					new UV( ( ix + 1.0 ) / (double)gridX,           1.0 - iz / (double)gridZ )
+					new Vector2( ix / (double)gridX,                     1.0 - iz / (double)gridZ ),
+					new Vector2( ix / (double)gridX,           1.0 - ( iz + 1.0 ) / (double)gridZ ),
+					new Vector2( ( ix + 1.0 ) / (double)gridX, 1.0 - ( iz + 1.0 ) / (double)gridZ ),
+					new Vector2( ( ix + 1.0 ) / (double)gridX,           1.0 - iz / (double)gridZ )
 				) );
 			}
 		}

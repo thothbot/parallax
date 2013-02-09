@@ -23,7 +23,7 @@ import java.util.Arrays;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -75,10 +75,10 @@ public class ParametricGeometry extends Geometry
 				int c = (i + 1) * sliceCount + j;
 				int d = (i + 1) * sliceCount + j + 1;
 
-				UV uva = new UV( i / (double)slices,                      j / (double)stacks );
-				UV uvb = new UV( i / (double)slices,            ( j + 1.0 ) / (double)stacks );
-				UV uvc = new UV( ( i + 1.0 ) / (double)slices,            j / (double)stacks );
-				UV uvd = new UV( ( i + 1.0 ) / (double)slices,  ( j + 1.0 ) / (double)stacks );
+				Vector2 uva = new Vector2( i / (double)slices,                      j / (double)stacks );
+				Vector2 uvb = new Vector2( i / (double)slices,            ( j + 1.0 ) / (double)stacks );
+				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)slices,            j / (double)stacks );
+				Vector2 uvd = new Vector2( ( i + 1.0 ) / (double)slices,  ( j + 1.0 ) / (double)stacks );
 
 				if ( useTris ) 
 				{

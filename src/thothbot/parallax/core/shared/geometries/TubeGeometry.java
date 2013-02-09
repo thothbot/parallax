@@ -27,7 +27,7 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
 import thothbot.parallax.core.shared.helpers.ArrowHelper;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
@@ -121,10 +121,10 @@ public final class TubeGeometry extends Geometry
 				int c = this.grid.get( ip ).get( jp );
 				int d = this.grid.get( i ).get( jp );
 
-				UV uva = new UV( i / (double)segments,                     j / (double)segmentsRadius );
-				UV uvb = new UV( ( i + 1.0 ) / (double)segments,           j / (double)segmentsRadius );
-				UV uvc = new UV( ( i + 1.0 ) / (double)segments, ( j + 1.0 ) / (double)segmentsRadius );
-				UV uvd = new UV( i / (double)segments,           ( j + 1.0 ) / (double)segmentsRadius );
+				Vector2 uva = new Vector2( i / (double)segments,                     j / (double)segmentsRadius );
+				Vector2 uvb = new Vector2( ( i + 1.0 ) / (double)segments,           j / (double)segmentsRadius );
+				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)segments, ( j + 1.0 ) / (double)segmentsRadius );
+				Vector2 uvd = new Vector2( i / (double)segments,           ( j + 1.0 ) / (double)segmentsRadius );
 
 				getFaces().add( new Face4( a, b, c, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );

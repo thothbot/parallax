@@ -48,7 +48,6 @@ import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Mathematics;
-import thothbot.parallax.core.shared.math.UV;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.math.Vector4;
@@ -420,8 +419,8 @@ public class JsonLoader extends Loader
 		// 0-index is initialized already
 		for ( int i = 0; i < nUvLayers; i++ ) 
 		{
-			geometry.getFaceUvs().add( i, new ArrayList<UV>());
-			geometry.getFaceVertexUvs().add( i, new ArrayList<List<UV>>());
+			geometry.getFaceUvs().add( i, new ArrayList<Vector2>());
+			geometry.getFaceVertexUvs().add( i, new ArrayList<List<Vector2>>());
 		}
 		
 		List<Double> normals = object.getNormals();
@@ -469,7 +468,7 @@ public class JsonLoader extends Loader
 					List<Double> uvLayer = uvs.get(i);
 
 					int uvIndex = faces.get(offset++);
-					UV UV = new UV( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1));
+					Vector2 UV = new Vector2( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1));
 
 					this.geometry.getFaceUvs().get(i).add(UV);
 				}
@@ -481,12 +480,12 @@ public class JsonLoader extends Loader
 				{
 					List<Double> uvLayer = uvs.get(i);
 
-					List<UV> UVs = new ArrayList<UV>();
+					List<Vector2> UVs = new ArrayList<Vector2>();
 
 					for ( int j = 0; j < nVertices; j ++ ) 
 					{
 						int uvIndex = faces.get(offset++);
-						UVs.add( new UV( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1) ) );
+						UVs.add( new Vector2( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1) ) );
 					}
 
 					geometry.getFaceVertexUvs().get(i).add(UVs);

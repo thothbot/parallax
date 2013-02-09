@@ -25,7 +25,7 @@ import java.util.List;
 import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Matrix4;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
 public final class LatheGeometry extends Geometry
@@ -77,10 +77,10 @@ public final class LatheGeometry extends Geometry
 				double stepsf = steps / 1.0;
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 
-					new UV( (1.0 - i / (double)stepsf),                     k / (double)kl ),
-					new UV( (1.0 - ( i + 1.0 ) / (double)stepsf),           k / (double)kl ),
-					new UV( (1.0 - ( i + 1.0 ) / (double)stepsf), ( k + 1.0 ) / (double)kl ),
-					new UV( (1.0 - i / (double)stepsf),           ( k + 1.0 ) / (double)kl )
+					new Vector2( (1.0 - i / (double)stepsf),                     k / (double)kl ),
+					new Vector2( (1.0 - ( i + 1.0 ) / (double)stepsf),           k / (double)kl ),
+					new Vector2( (1.0 - ( i + 1.0 ) / (double)stepsf), ( k + 1.0 ) / (double)kl ),
+					new Vector2( (1.0 - i / (double)stepsf),           ( k + 1.0 ) / (double)kl )
 					
 				) );
 			}

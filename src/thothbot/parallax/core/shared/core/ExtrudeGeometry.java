@@ -28,7 +28,7 @@ import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.curves.CurvePath;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
 import thothbot.parallax.core.shared.curves.Shape;
-import thothbot.parallax.core.shared.math.UV;
+import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Vector;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
@@ -84,7 +84,7 @@ public class ExtrudeGeometry extends Geometry
 	private static Vector2 __v5 = new Vector2();
 	private static Vector2 __v6 = new Vector2();
 	
-	private BoundingBox shapebb;
+	private Box3 shapebb;
 	private List<List<Vector2>> holes;
 	private List<List<Integer>> localFaces;
 	private ExtrudeGeometryParameters options;
@@ -578,7 +578,7 @@ public class ExtrudeGeometry extends Geometry
 		// normal, color, material
 		getFaces().add( new Face3( a, b, c, this.options.material ) );
 
-		List<UV> uvs = isBottom 
+		List<Vector2> uvs = isBottom 
 				? WorldUVGenerator.generateBottomUV( this, a, b, c)
 		        : WorldUVGenerator.generateTopUV( this, a, b, c);
 
@@ -594,13 +594,13 @@ public class ExtrudeGeometry extends Geometry
 
  		getFaces().add( new Face4( a, b, c, d, null, null, this.options.extrudeMaterial ) );
  
- 		List<UV> uvs = WorldUVGenerator.generateSideWallUV(this, a, b, c, d);
+ 		List<Vector2> uvs = WorldUVGenerator.generateSideWallUV(this, a, b, c, d);
  		getFaceVertexUvs().get( 0 ).add(uvs);
 	}
 	
 	public static class WorldUVGenerator
 	{
-		public static List<UV> generateTopUV( Geometry geometry, int indexA, int indexB, int indexC ) 
+		public static List<Vector2> generateTopUV( Geometry geometry, int indexA, int indexB, int indexC ) 
 		{
 			double ax = geometry.getVertices().get( indexA ).getX();
 			double ay = geometry.getVertices().get( indexA ).getY();
@@ -612,18 +612,18 @@ public class ExtrudeGeometry extends Geometry
 			double cy = geometry.getVertices().get( indexC ).getY();
 				
 			return Arrays.asList(
-				new UV( ax, 1 - ay ),
-				new UV( bx, 1 - by ),
-				new UV( cx, 1 - cy )
+				new Vector2( ax, 1 - ay ),
+				new Vector2( bx, 1 - by ),
+				new Vector2( cx, 1 - cy )
 			);
 		}
 
-		public static List<UV> generateBottomUV( ExtrudeGeometry geometry, int indexA, int indexB, int indexC) 
+		public static List<Vector2> generateBottomUV( ExtrudeGeometry geometry, int indexA, int indexB, int indexC) 
 		{
 			return generateTopUV( geometry, indexA, indexB, indexC );
 		}
 
-		public static List<UV> generateSideWallUV( Geometry geometry, int indexA, int indexB, int indexC, int indexD)
+		public static List<Vector2> generateSideWallUV( Geometry geometry, int indexA, int indexB, int indexC, int indexD)
 		{
 			double ax = geometry.getVertices().get( indexA ).getX();
 			double ay = geometry.getVertices().get( indexA ).getY();
@@ -644,19 +644,19 @@ public class ExtrudeGeometry extends Geometry
 			if ( Math.abs( ay - by ) < 0.01 ) 
 			{
 				return Arrays.asList(
-					new UV( ax, az ),
-					new UV( bx, bz ),
-					new UV( cx, cz ),
-					new UV( dx, dz )
+					new Vector2( ax, az ),
+					new Vector2( bx, bz ),
+					new Vector2( cx, cz ),
+					new Vector2( dx, dz )
 				);
 			} 
 			else 
 			{
 				return Arrays.asList(
-					new UV( ay, az ),
-					new UV( by, bz ),
-					new UV( cy, cz ),
-					new UV( dy, dz )
+					new Vector2( ay, az ),
+					new Vector2( by, bz ),
+					new Vector2( cy, cz ),
+					new Vector2( dy, dz )
 				);
 			}
 		}
