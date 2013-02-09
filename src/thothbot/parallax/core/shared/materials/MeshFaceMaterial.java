@@ -18,13 +18,28 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import thothbot.parallax.core.client.shaders.Shader;
 
 public final class MeshFaceMaterial extends Material 
 {
+	List<Material> materials;
+	
 	public MeshFaceMaterial() 
 	{
-
+		this.materials = new ArrayList<Material>();
+	}
+	
+	public MeshFaceMaterial(List<Material> materials) 
+	{
+		this.materials = materials;
+	}
+	
+	public List<Material> getMaterials() 
+	{
+		return this.materials;
 	}
 
 	@Override

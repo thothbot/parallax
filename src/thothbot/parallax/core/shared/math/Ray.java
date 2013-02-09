@@ -18,18 +18,6 @@
 
 package thothbot.parallax.core.shared.math;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import thothbot.parallax.core.shared.core.Face3;
-import thothbot.parallax.core.shared.core.Face4;
-import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
-import thothbot.parallax.core.shared.objects.DimensionalObject;
-import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.Particle;
 
 /**
  * Representation of a ray in space.
@@ -125,7 +113,7 @@ public class Ray
 		return optionalTarget.copy( this.direction ).multiply( directionDistance ).add( this.origin );
 	}
 
-	double distanceToPoint( Vector3 point ) 
+	public double distanceToPoint( Vector3 point ) 
 	{
 		double directionDistance = Ray.__v1.sub( point, this.origin ).dot( this.direction );
 		Ray.__v1.copy( this.direction ).multiply( directionDistance ).add( this.origin );
