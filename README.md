@@ -13,7 +13,7 @@ Parallax
       <td>
 
 <p>
-Parallax is 3D library for the web. It is written on Java using <a href="https://developers.google.com/web-toolkit/">Google Web Toolkit</a> v2.4, 
+Parallax is 3D library for the web. It is written on Java using <a href="https://developers.google.com/web-toolkit/">Google Web Toolkit</a>, 
 which is Java to JavaScript cross-compiler. GWT allows developers to write Java code and convert it to standard JavaScript during compilation.
 </p>
 
@@ -29,7 +29,7 @@ Parallax supports WebGL-canvas renderer only.
 
 ### Download - Parallax v1.3 ###
 
-[Download JAR](http://github.com/thothbot/parallax/downloads) | [Change log](http://github.com/thothbot/parallax/wiki/Change-log)
+[[Download JAR | http://github.com/thothbot/parallax/wiki/Download]] | [Change log](http://github.com/thothbot/parallax/wiki/Change-log)
 
 ### Examples ###
 
