@@ -226,23 +226,25 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 	}
 
-//	public Vector3 applyProjection: function ( m ) {
-//
-//		// input: THREE.Matrix4 projection matrix
-//
-//		var x = this.x, y = this.y, z = this.z;
-//
-//		var e = m.elements;
-//		var d = 1 / ( e[3] * x + e[7] * y + e[11] * z + e[15] ); // perspective divide
-//
-//		this.x = ( e[0] * x + e[4] * y + e[8]  * z + e[12] ) * d;
-//		this.y = ( e[1] * x + e[5] * y + e[9]  * z + e[13] ) * d;
-//		this.z = ( e[2] * x + e[6] * y + e[10] * z + e[14] ) * d;
-//
-//		return this;
-//
-//	},
+	/**
+	 * 
+	 * @param m the Matrix4 projection matrix
+	 * @return
+	 */
+	public Vector3 applyProjection( Matrix4 m ) 
+	{
+		double x = this.x, y = this.y, z = this.z;
 
+		Float32Array e = m.getArray();
+		double d = 1 / ( e.get(3) * x + e.get(7) * y + e.get(11) * z + e.get(15) ); // perspective divide
+
+		this.x = ( e.get(0) * x + e.get(4) * y + e.get(8)  * z + e.get(12) ) * d;
+		this.y = ( e.get(1) * x + e.get(5) * y + e.get(9)  * z + e.get(13) ) * d;
+		this.z = ( e.get(2) * x + e.get(6) * y + e.get(10) * z + e.get(14) ) * d;
+
+		return this;
+	}
+	
 	public Vector3 apply( Quaternion q ) 
 	{
 		double x = this.x;
