@@ -297,7 +297,7 @@ public class Box3
 		return this;
 	}
 
-	public Box3 transform( Matrix4 matrix ) 
+	public Box3 apply( Matrix4 matrix ) 
 	{
 		// NOTE: I am using a binary pattern to specify all 2^3 combinations below
 		List<Vector3> newPoints = Arrays.asList(

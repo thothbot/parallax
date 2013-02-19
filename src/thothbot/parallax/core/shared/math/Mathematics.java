@@ -46,6 +46,34 @@ public class Mathematics
 	    }
 	    return x + 1;
 	}
+	
+	/**
+	 * http://en.wikipedia.org/wiki/Smoothstep
+	 * 
+	 * @param x
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public static double smoothstep( double x, double min, double max ) 
+	{
+		if ( x <= min ) return 0;
+		if ( x >= max ) return 1;
+
+		x = ( x - min )/( max - min );
+
+		return x*x*(3 - 2*x);
+	}
+
+	public static double smootherstep( double x, double min, double max ) 
+	{
+		if ( x <= min ) return 0;
+		if ( x >= max ) return 1;
+
+		x = ( x - min )/( max - min );
+
+		return x*x*x*(x*(x*6 - 15) + 10);
+	}
 
 	/**
 	 * The method checks id the value is even.

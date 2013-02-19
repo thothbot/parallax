@@ -308,10 +308,10 @@ public class Box3Test extends GWTTestCase
 		Matrix4 m = new Matrix4().makeTranslation( 1, -2, 1 );
 		Vector3 t1 = new Vector3( 1, -2, 1 );
 
-		assertTrue( compareBox( a.clone().transform( m ), a.clone().translate( t1 ) ));
-		assertTrue( compareBox( b.clone().transform( m ), b.clone().translate( t1 ) ));
-		assertTrue( compareBox( c.clone().transform( m ), c.clone().translate( t1 ) ));
-		assertTrue( compareBox( d.clone().transform( m ), d.clone().translate( t1 ) ));
+		assertTrue( compareBox( a.clone().apply( m ), a.clone().translate( t1 ) ));
+		assertTrue( compareBox( b.clone().apply( m ), b.clone().translate( t1 ) ));
+		assertTrue( compareBox( c.clone().apply( m ), c.clone().translate( t1 ) ));
+		assertTrue( compareBox( d.clone().apply( m ), d.clone().translate( t1 ) ));
 	}
 	
 	private boolean compareBox( Box3 a, Box3 b ) 
