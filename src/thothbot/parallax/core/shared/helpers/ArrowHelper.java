@@ -24,6 +24,7 @@ import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Quaternion;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
@@ -34,6 +35,10 @@ public class ArrowHelper extends Object3D
 
 	public Line line;
 	public Mesh cone;
+	
+	private static Vector3 __v1 = new Vector3();
+	private static Vector3 __v2 = new Vector3();
+    private static Quaternion __q1 = new Quaternion();
 	
 	public ArrowHelper ( Vector3 dir, Vector3 origin)
 	{
@@ -73,13 +78,24 @@ public class ArrowHelper extends Object3D
 	
 	public void setDirection( Vector3 dir ) 
 	{
-		Vector3 axis = new Vector3( 0, 1, 0 ).cross( dir );
+	    Vector3 d = ArrowHelper.__v1.copy( dir ).normalize();
 
-		double radians = Math.acos( new Vector3( 0, 1, 0 ).dot( dir.clone().normalize() ) );
+	    if ( d.getY() > 0.999 ) 
+	    {
+	        this.rotation.set( 0, 0, 0 );
+	    } 
+	    else if ( d.getY() < - 0.999 ) 
+	    {
+	        this.rotation.set( Math.PI, 0, 0 );
+	    } 
+	    else 
+	    {
+		    Vector3 axis = __v2.set( d.getZ(), 0, - d.getX() ).normalize();
+		    double radians = Math.acos( d.getY() );
+		    Quaternion quaternion = __q1.setFromAxisAngle( axis, radians );
 
-		this.matrix = new Matrix4().makeRotationAxis( axis.normalize(), radians );
-
-		this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
+		    this.rotation.setEulerFromQuaternion( quaternion, this.eulerOrder );
+		}
 	}
 
 	public void setLength( double length ) 
