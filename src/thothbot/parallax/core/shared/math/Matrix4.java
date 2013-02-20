@@ -121,36 +121,6 @@ public class Matrix4
 	}
 	
 	/**
-	 * Returns the vector of the first matrix column. 
-	 * 
-	 * @return the vector
-	 */
-	public Vector3 getColumnX()
-	{
-		return Matrix4.__v1.set(this.getArray().get(0), this.getArray().get(1), this.getArray().get(2));
-	}
-
-	/**
-	 * Returns the vector of the second matrix column. 
-	 * 
-	 * @return the vector
-	 */
-	public Vector3 getColumnY()
-	{
-		return Matrix4.__v1.set(this.getArray().get(4), this.getArray().get(5), this.getArray().get(6));
-	}
-
-	/**
-	 * Returns the vector of the third matrix column. 
-	 * 
-	 * @return the vector
-	 */
-	public Vector3 getColumnZ()
-	{
-		return Matrix4.__v1.set(this.getArray().get(8), this.getArray().get(9), this.getArray().get(10));
-	}
-
-	/**
 	 * Setting input values n11-n44 to the current matrix.
 	 * This matrix will be represented as the following:
 	 * 
@@ -584,6 +554,7 @@ public class Matrix4
 	 * 
 	 * @return the position vector 
 	 */
+	@Deprecated
 	public Vector3 getPosition()
 	{
 		return Matrix4.__v1.set(this.getArray().get(12), this.getArray().get(13), this.getArray().get(14));
