@@ -38,6 +38,22 @@ public class Line3
 		this.end = end;
 	}
 	
+	public Vector3 getStart() {
+		return start;
+	}
+
+	public void setStart(Vector3 start) {
+		this.start = start;
+	}
+
+	public Vector3 getEnd() {
+		return end;
+	}
+
+	public void setEnd(Vector3 end) {
+		this.end = end;
+	}
+	
 	public Line3 set( Vector3 start, Vector3 end ) 
 	{
 		this.start.copy( start );
