@@ -97,17 +97,17 @@ public class TriangleTest extends GWTTestCase
 	{
 		Triangle a = new Triangle();
 
-		assertEquals( a.area(), 0.0);
+		assertEquals( 0.0, a.area() );
 
 		a = new Triangle( new Vector3( 0, 0, 0 ), new Vector3( 1, 0, 0 ), new Vector3( 0, 1, 0 ) );
-		assertEquals( a.area(), 0.5);
+		assertEquals( 0.5, a.area() );
 
 		a = new Triangle( new Vector3( 2, 0, 0 ), new Vector3( 0, 0, 0 ), new Vector3( 0, 0, 2 ) );
-		assertEquals( a.area(), 2.0);
+		assertEquals( 2.0, a.area() );
 
 		// colinear triangle.
 		a = new Triangle( new Vector3( 2, 0, 0 ), new Vector3( 0, 0, 0 ), new Vector3( 3, 0, 0 ) );
-		assertEquals( a.area(), 0.0);
+		assertEquals( 0.0, a.area() );
 	}
 
 	@Test
@@ -144,21 +144,21 @@ public class TriangleTest extends GWTTestCase
 		Triangle a = new Triangle();
 
 		// artificial normal is created in this case.
-		assertEquals( a.plane().distanceToPoint( a.getA() ), 0.0);
-		assertEquals( a.plane().distanceToPoint( a.getB() ), 0.0);
-		assertEquals( a.plane().distanceToPoint( a.getC() ), 0.0);
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ) );
 		assertTrue( a.plane().getNormal().equals( a.normal() ));
 
 		a = new Triangle( new Vector3( 0, 0, 0 ), new Vector3( 1, 0, 0 ), new Vector3( 0, 1, 0 ) );
-		assertEquals( a.plane().distanceToPoint( a.getA() ), 0.0);
-		assertEquals( a.plane().distanceToPoint( a.getB() ), 0.0);
-		assertEquals( a.plane().distanceToPoint( a.getC() ), 0.0);
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ) );
 		assertTrue( a.plane().getNormal().equals( a.normal() ));
 
 		a = new Triangle( new Vector3( 2, 0, 0 ), new Vector3( 0, 0, 0 ), new Vector3( 0, 0, 2 ) );
-		assertEquals( a.plane().distanceToPoint( a.getA() ), 0.0);
-		assertEquals( a.plane().distanceToPoint( a.getB() ), 0.0);
-		assertEquals( a.plane().distanceToPoint( a.getC() ), 0.0);
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ) );
 		assertTrue( a.plane().getNormal().clone().normalize().equals( a.normal() ));
 	}
 
@@ -209,5 +209,4 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( a.containsPoint( a.midpoint() ));
 		assertTrue( ! a.containsPoint( new Vector3( -1, -1, -1 ) ));
 	}
-
 }

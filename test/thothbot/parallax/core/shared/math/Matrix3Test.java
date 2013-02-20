@@ -42,15 +42,15 @@ public class Matrix3Test extends GWTTestCase
 		assertEquals( a.determinant(), 1.0);
 
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( b.getArray().get(0), 0.0 );
-		assertEquals( b.getArray().get(1), 3.0 );
-		assertEquals( b.getArray().get(2), 6.0 );
-		assertEquals( b.getArray().get(3), 1.0 );
-		assertEquals( b.getArray().get(4), 4.0 );
-		assertEquals( b.getArray().get(5), 7.0 );
-		assertEquals( b.getArray().get(6), 2.0 );
-		assertEquals( b.getArray().get(7), 5.0 );
-		assertEquals( b.getArray().get(8), 8.0 );
+		assertEquals( 0.0, b.getArray().get(0) );
+		assertEquals( 3.0, b.getArray().get(1) );
+		assertEquals( 6.0, b.getArray().get(2) );
+		assertEquals( 1.0, b.getArray().get(3) );
+		assertEquals( 4.0, b.getArray().get(4) );
+		assertEquals( 7.0, b.getArray().get(5) );
+		assertEquals( 2.0, b.getArray().get(6) );
+		assertEquals( 5.0, b.getArray().get(7) );
+		assertEquals( 8.0, b.getArray().get(8) );
 
 		assertTrue( ! matrixEquals3( a, b ) );
 
@@ -76,31 +76,31 @@ public class Matrix3Test extends GWTTestCase
 		assertEquals( b.determinant(), 1.0);
 
 		b.set( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( b.getArray().get(0), 0.0 );
-		assertEquals( b.getArray().get(1), 3.0 );
-		assertEquals( b.getArray().get(2), 6.0 );
-		assertEquals( b.getArray().get(3), 1.0 );
-		assertEquals( b.getArray().get(4), 4.0 );
-		assertEquals( b.getArray().get(5), 7.0 );
-		assertEquals( b.getArray().get(6), 2.0 );
-		assertEquals( b.getArray().get(7), 5.0 );
-		assertEquals( b.getArray().get(8), 8.0 );
+		assertEquals( 0.0, b.getArray().get(0) );
+		assertEquals( 3.0, b.getArray().get(1) );
+		assertEquals( 6.0, b.getArray().get(2) );
+		assertEquals( 1.0, b.getArray().get(3) );
+		assertEquals( 4.0, b.getArray().get(4) );
+		assertEquals( 7.0, b.getArray().get(5) );
+		assertEquals( 2.0, b.getArray().get(6) );
+		assertEquals( 5.0, b.getArray().get(7) );
+		assertEquals( 8.0, b.getArray().get(8) );
 	}
 
 	@Test
 	public void testIdentity() 
 	{
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( b.getArray().get(0), 0.0 );
-		assertEquals( b.getArray().get(1), 3.0 );
-		assertEquals( b.getArray().get(2), 6.0 );
-		assertEquals( b.getArray().get(3), 1.0 );
-		assertEquals( b.getArray().get(4), 4.0 );
-		assertEquals( b.getArray().get(5), 7.0 );
-		assertEquals( b.getArray().get(6), 2.0 );
-		assertEquals( b.getArray().get(7), 5.0 );
-		assertEquals( b.getArray().get(8), 8.0 );
-
+		assertEquals( 0.0, b.getArray().get(0) );
+		assertEquals( 3.0, b.getArray().get(1) );
+		assertEquals( 6.0, b.getArray().get(2) );
+		assertEquals( 1.0, b.getArray().get(3) );
+		assertEquals( 4.0, b.getArray().get(4) );
+		assertEquals( 7.0, b.getArray().get(5) );
+		assertEquals( 2.0, b.getArray().get(6) );
+		assertEquals( 5.0, b.getArray().get(7) );
+		assertEquals( 8.0, b.getArray().get(8) );
+		
 		Matrix3 a = new Matrix3();
 		assertTrue( ! matrixEquals3( a, b ));
 
@@ -114,32 +114,32 @@ public class Matrix3Test extends GWTTestCase
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
 
 		b.multiply( 2 );
-		assertEquals( b.getArray().get(0), 0.0 * 2 );
-		assertEquals( b.getArray().get(1), 3.0 * 2 );
-		assertEquals( b.getArray().get(2), 6.0 * 2 );
-		assertEquals( b.getArray().get(3), 1.0 * 2 );
-		assertEquals( b.getArray().get(4), 4.0 * 2 );
-		assertEquals( b.getArray().get(5), 7.0 * 2 );
-		assertEquals( b.getArray().get(6), 2.0 * 2 );
-		assertEquals( b.getArray().get(7), 5.0 * 2 );
-		assertEquals( b.getArray().get(8), 8.0 * 2 );		
+		assertEquals( 0.0 * 2, b.getArray().get(0) );
+		assertEquals( 3.0 * 2, b.getArray().get(1) );
+		assertEquals( 6.0 * 2, b.getArray().get(2) );
+		assertEquals( 1.0 * 2, b.getArray().get(3) );
+		assertEquals( 4.0 * 2, b.getArray().get(4) );
+		assertEquals( 7.0 * 2, b.getArray().get(5) );
+		assertEquals( 2.0 * 2, b.getArray().get(6) );
+		assertEquals( 5.0 * 2, b.getArray().get(7) );
+		assertEquals( 8.0 * 2, b.getArray().get(8) );
 	};
 
 	@Test
 	public void testDeterminant() 
 	{
 		Matrix3 a = new Matrix3();
-		assertEquals( a.determinant(), 1.0);
+		assertEquals( 1.0, a.determinant());
 
 		a.getArray().set(0, 2);
-		assertEquals( a.determinant(), 2.0);
+		assertEquals( 2.0, a.determinant());
 
 		a.getArray().set(0, 0);
-		assertEquals( a.determinant(), 0.0);
+		assertEquals( 0.0, a.determinant());
 
 		// calculated via http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/threeD/index.htm
 		a.set( 2, 3, 4, 5, 13, 7, 8, 9, 11 );
-		assertEquals( a.determinant(), -73.0);
+		assertEquals( -73.0, a.determinant());
 	}
 
 	@Test

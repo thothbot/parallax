@@ -30,9 +30,7 @@ public class Box3Test extends GWTTestCase
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
-	private static Vector3 two3 = new Vector3( 2, 2, 2 );
-
-	
+		
 	@Override
 	public String getModuleName() {
 		return "thothbot.parallax.core.Core";

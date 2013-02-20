@@ -123,11 +123,11 @@ public class RayTest extends GWTTestCase
 
 		// nearby the ray
 		double b = a.distanceToPoint( zero3 );
-		assertEquals( b, Math.sqrt( 2 ));
+		assertEquals( Math.sqrt( 2 ), b );
 
 		// exactly on the ray
 		double c = a.distanceToPoint( one3 );
-		assertEquals( c, 0.0);
+		assertEquals( 0.0, c );
 	}
 
 	@Test
@@ -224,5 +224,4 @@ public class RayTest extends GWTTestCase
 		assertTrue( a3.getOrigin().distanceTo( b.getOrigin() ) < 0.0001);
 		assertTrue( a3.getDirection().distanceTo( b.getDirection() ) < 0.0001);
 	}
-
 }

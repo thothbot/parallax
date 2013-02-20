@@ -20,8 +20,6 @@ package thothbot.parallax.core.shared.math;
 
 import org.junit.Test;
 
-import thothbot.parallax.core.shared.Log;
-
 import com.google.gwt.junit.client.GWTTestCase;
 
 public class SphereTest extends GWTTestCase 
@@ -41,11 +39,11 @@ public class SphereTest extends GWTTestCase
 	{
 		Sphere a = new Sphere();
 		assertTrue( a.getCenter().equals( zero3 ));
-		assertEquals( a.getRadius(), 0.0);
+		assertEquals( 0.0, a.getRadius() );
 
 		Sphere b = new Sphere( one3, 1.0 );
 		assertTrue( b.getCenter().equals( one3 ));
-		assertEquals( b.getRadius(), 1.0);
+		assertEquals( 1.0, b.getRadius() );
 	}
 
 	@Test
@@ -53,11 +51,11 @@ public class SphereTest extends GWTTestCase
 	{
 		Sphere a = new Sphere();
 		assertTrue( a.getCenter().equals( zero3 ));
-		assertEquals( a.getRadius(), 0.0);
+		assertEquals( 0.0, a.getRadius() );
 
 		a.set( one3, 1 );
 		assertTrue( a.getCenter().equals( one3 ));
-		assertEquals( a.getRadius(), 1.0);
+		assertEquals( 1.0, a.getRadius() );
 	}
 
 	@Test
@@ -67,13 +65,13 @@ public class SphereTest extends GWTTestCase
 		Sphere b = new Sphere().copy( a );
 
 		assertTrue( b.getCenter().equals( one3 ));
-		assertEquals( b.getRadius(), 1.0);
+		assertEquals( 1.0, b.getRadius() );
 
 		// ensure that it is a true copy
 		a.setCenter( zero3 );
 		a.setRadius( 0 );
 		assertTrue( b.getCenter().equals( one3 ));
-		assertEquals( b.getRadius(), 1.0);
+		assertEquals( 1.0, b.getRadius() );
 	}
 
 	@Test
@@ -101,7 +99,7 @@ public class SphereTest extends GWTTestCase
 		Sphere a = new Sphere( one3, 1 );
 
 		assertTrue( ( a.distanceToPoint( zero3 ) - 0.7320 ) < 0.001);
-		assertEquals( a.distanceToPoint( one3 ), -1.0);
+		assertEquals( -1.0, a.distanceToPoint( one3 ) );
 	}
 
 	@Test

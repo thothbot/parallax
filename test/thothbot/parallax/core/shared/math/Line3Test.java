@@ -88,22 +88,22 @@ public class Line3Test extends GWTTestCase
 		Line3 a = new Line3( one3.clone(), new Vector3( 1, 1, 2 ) );
 
 		// nearby the ray
-		assertEquals( a.closestPointToPointParameter( zero3.clone(), true ), 0.0 );
+		assertEquals( 0.0, a.closestPointToPointParameter( zero3.clone(), true ));
 		Vector3 b1 = a.closestPointToPoint( zero3.clone(), true );
 		assertTrue( b1.distanceTo( new Vector3( 1, 1, 1 ) ) < 0.0001);
 
 		// nearby the ray
-		assertEquals( a.closestPointToPointParameter( zero3.clone(), false ), -1.0);
+		assertEquals( -1.0, a.closestPointToPointParameter( zero3.clone(), false ));
 		Vector3 b2 = a.closestPointToPoint( zero3.clone(), false );
 		assertTrue( b2.distanceTo( new Vector3( 1, 1, 0 ) ) < 0.0001);
 
 		// nearby the ray
-		assertEquals( a.closestPointToPointParameter( new Vector3( 1, 1, 5 ), true ), 1.0);
+		assertEquals( 1.0, a.closestPointToPointParameter( new Vector3( 1, 1, 5 ), true ));
 		Vector3 b = a.closestPointToPoint( new Vector3( 1, 1, 5 ), true );
 		assertTrue( b.distanceTo( new Vector3( 1, 1, 2 ) ) < 0.0001);
 
 		// exactly on the ray
-		assertEquals( a.closestPointToPointParameter( one3.clone(), true ), 0.0);
+		assertEquals( 0.0, a.closestPointToPointParameter( one3.clone(), true ) );
 		Vector3 c = a.closestPointToPoint( one3.clone(), true );
 		assertTrue( c.distanceTo( one3.clone() ) < 0.0001);
 	}

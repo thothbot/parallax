@@ -38,14 +38,14 @@ public class Vector3Test extends GWTTestCase
 	public void testVector3() 
 	{
 		Vector3 a = new Vector3();
-		assertEquals( a.x, 0.0);
-		assertEquals( a.y, 0.0);
-		assertEquals( a.z, 0.0);
+		assertEquals( 0.0, a.x );
+		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.z );
 
 		a = new Vector3( X, Y, Z );
-		assertEquals( a.x, X);
-		assertEquals( a.y, Y);
-		assertEquals( a.z, Z);
+		assertEquals( X, a.x );
+		assertEquals( Y, a.y );
+		assertEquals( Z, a.z );
 	}
 	
 	@Test
@@ -56,18 +56,18 @@ public class Vector3Test extends GWTTestCase
 		Vector3 c = new Vector3( 0, 0, Z );
 		Vector3 d = new Vector3();
 
-		assertEquals( a.length(), X);
-		assertEquals( a.lengthSq(), X*X);
-		assertEquals( b.length(), Y);
-		assertEquals( b.lengthSq(), Y*Y);
-		assertEquals( c.length(), Z);
-		assertEquals( c.lengthSq(), Z*Z);
-		assertEquals( d.length(), 0.0);
-		assertEquals( d.lengthSq(), 0.0);
+		assertEquals( X, a.length() );
+		assertEquals( X * X, a.lengthSq() );
+		assertEquals( Y, b.length() );
+		assertEquals( Y * Y, b.lengthSq() );
+		assertEquals( Z, c.length() );
+		assertEquals( Z * Z, c.lengthSq() );
+		assertEquals( 0.0, d.length() );
+		assertEquals( 0.0, d.lengthSq() );
 
 		a.set( X, Y, Z );
-		assertEquals( a.length(), Math.sqrt( X*X + Y*Y + Z*Z ));
-		assertEquals( a.lengthSq(), ( X*X + Y*Y + Z*Z ));
+		assertEquals( Math.sqrt( X*X + Y*Y + Z*Z ), a.length() );
+		assertEquals( ( X*X + Y*Y + Z*Z ), a.lengthSq() );
 	}
 
 	@Test
@@ -78,14 +78,14 @@ public class Vector3Test extends GWTTestCase
 		Vector3 c = new Vector3( 0, 0, Z );
 		Vector3 d = new Vector3();
 
-		assertEquals( a.distanceTo( d ), X);
-		assertEquals( a.distanceToSquared( d ), X*X);
+		assertEquals( X, a.distanceTo( d ) );
+		assertEquals( X * X, a.distanceToSquared( d ) );
 
-		assertEquals( b.distanceTo( d ), Y);
-		assertEquals( b.distanceToSquared( d ), Y*Y);
+		assertEquals( Y, b.distanceTo( d ) );
+		assertEquals( Y * Y, b.distanceToSquared( d ) );
 
-		assertEquals( c.distanceTo( d ), Z);
-		assertEquals( c.distanceToSquared( d ), Z*Z);
+		assertEquals( Z, c.distanceTo( d ) );
+		assertEquals( Z * Z, c.distanceToSquared( d ) );
 	}
 
 	@Test
@@ -93,31 +93,31 @@ public class Vector3Test extends GWTTestCase
 	{
 		Vector3 a = new Vector3( X, Y, Z );
 		Vector3 b = new Vector3().copy( a );
-		assertEquals( b.x, X);
-		assertEquals( b.y, Y);
-		assertEquals( b.z, Z);
+		assertEquals( X, b.x );
+		assertEquals( Y, b.y );
+		assertEquals( Z, b.z );
 
 		// ensure that it is a true copy
 		a.x = 0;
 		a.y = -1;
 		a.z = -2;
-		assertEquals( b.x, X);
-		assertEquals( b.y, Y);
-		assertEquals( b.z, Z);
+		assertEquals( X, b.x );
+		assertEquals( Y, b.y );
+		assertEquals( Z, b.z );
 	}
 
 	@Test
 	public void testSet() 
 	{
 		Vector3 a = new Vector3();
-		assertEquals( a.x, 0.0);
-		assertEquals( a.y, 0.0);
-		assertEquals( a.z, 0.0);
+		assertEquals( 0.0, a.x );
+		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.z );
 
 		a.set( X, Y, Z );
-		assertEquals( a.x, X);
-		assertEquals( a.y, Y);
-		assertEquals( a.z, Z);
+		assertEquals( X, a.x );
+		assertEquals( Y, a.y );
+		assertEquals( Z, a.z );
 	}
 
 	@Test
@@ -127,14 +127,14 @@ public class Vector3Test extends GWTTestCase
 		Vector3 b = new Vector3( -X, -Y, -Z );
 
 		a.add( b );
-		assertEquals( a.x, 0.0);
-		assertEquals( a.y, 0.0);
-		assertEquals( a.z, 0.0);
+		assertEquals( 0.0, a.x, 0.0);
+		assertEquals( 0.0, a.y, 0.0);
+		assertEquals( 0.0, a.z, 0.0);
 
 		Vector3 c = new Vector3().add( b, b );
-		assertEquals( c.x, -2*X);
-		assertEquals( c.y, -2*Y);
-		assertEquals( c.z, -2*Z);
+		assertEquals( -2*X, c.x );
+		assertEquals( -2*Y, c.y );
+		assertEquals( -2*Z, c.z );
 	}
 
 	@Test
@@ -144,14 +144,14 @@ public class Vector3Test extends GWTTestCase
 		Vector3 b = new Vector3( -X, -Y, -Z );
 
 		a.sub( b );
-		assertEquals( a.x, 2*X);
-		assertEquals( a.y, 2*Y);
-		assertEquals( a.z, 2*Z);
+		assertEquals( 2 * X, a.x );
+		assertEquals( 2 * Y, a.y );
+		assertEquals( 2 * Z, a.z );
 
 		Vector3 c = new Vector3().sub( a, a );
-		assertEquals( c.x, 0.0);
-		assertEquals( c.y, 0.0);
-		assertEquals( c.z, 0.0);
+		assertEquals( 0.0, c.x );
+		assertEquals( 0.0, c.y );
+		assertEquals( 0.0, c.z );
 	}
 
 	@Test
@@ -161,24 +161,24 @@ public class Vector3Test extends GWTTestCase
 		Vector3 b = new Vector3( -X, -Y, -Z );
 
 		a.multiply( -2 );
-		assertEquals( a.x, X*-2);
-		assertEquals( a.y, Y*-2);
-		assertEquals( a.z, Z*-2);
+		assertEquals( X * -2, a.x );
+		assertEquals( Y * -2, a.y );
+		assertEquals( Z * -2, a.z );
 
 		b.multiply( -2 );
-		assertEquals( b.x, 2*X);
-		assertEquals( b.y, 2*Y);
-		assertEquals( b.z, 2*Z);
+		assertEquals( 2 * X, b.x );
+		assertEquals( 2 * Y, b.y );
+		assertEquals( 2 * Z, b.z );
 
 		a.divide( -2 );
-		assertEquals( a.x, X);
-		assertEquals( a.y, Y);
-		assertEquals( a.z, Z);
+		assertEquals( X, a.x );
+		assertEquals( Y, a.y );
+		assertEquals( Z, a.z );
 
 		b.divide( -2 );
-		assertEquals( b.x, -X);
-		assertEquals( b.y, -Y);
-		assertEquals( b.z, -Z);
+		assertEquals( -X, b.x );
+		assertEquals( -Y, b.y );
+		assertEquals( -Z, b.z );
 	}
 
 	@Test
@@ -187,9 +187,9 @@ public class Vector3Test extends GWTTestCase
 		Vector3 a = new Vector3( X, Y, Z );
 
 		a.negate();
-		assertEquals( a.x, -X);
-		assertEquals( a.y, -Y);
-		assertEquals( a.z, -Z);
+		assertEquals( -X, a.x );
+		assertEquals( -Y, a.y );
+		assertEquals( -Z, a.z );
 	}
 
 	@Test
@@ -200,10 +200,10 @@ public class Vector3Test extends GWTTestCase
 		Vector3 c = new Vector3();
 
 		double result = a.dot( b );
-		assertEquals( result, (-X*X-Y*Y-Z*Z));
+		assertEquals( (-X*X-Y*Y-Z*Z), result );
 
 		result = a.dot( c );
-		assertEquals( result, 0.0);
+		assertEquals( 0.0, result );
 	}
 
 	@Test
@@ -214,16 +214,16 @@ public class Vector3Test extends GWTTestCase
 		Vector3 c = new Vector3( 0, 0, Z );
 
 		a.normalize();
-		assertEquals( a.length(), 1.0);
-		assertEquals( a.x, 1.0);
+		assertEquals( 1.0, a.length() );
+		assertEquals( 1.0, a.x );
 
 		b.normalize();
-		assertEquals( b.length(), 1.0);
-		assertEquals( b.y, -1.0);
+		assertEquals( 1.0, b.length() );
+		assertEquals( -1.0, b.y );
 
 		c.normalize();
-		assertEquals( c.length(), 1.0);
-		assertEquals( c.z, 1.0);
+		assertEquals( 1.0, c.length() );
+		assertEquals( 1.0, c.z );
 	}
 
 	@Test
@@ -231,14 +231,14 @@ public class Vector3Test extends GWTTestCase
 	{
 		Vector3 a = new Vector3( X, 0, 0 );
 
-		assertEquals( a.length(), X);
+		assertEquals( X, a.length() );
 		a.setLength( Y );
-		assertEquals( a.length(), Y);
+		assertEquals( Y, a.length() );
 
 		a = new Vector3( 0, 0, 0 );
-		assertEquals( a.length(), 0.0);
+		assertEquals( 0.0, a.length() );
 		a.setLength( Y );
-		assertEquals( a.length(), 0.0);
+		assertEquals( 0.0, a.length() );
 	}
 
 	@Test
@@ -252,9 +252,9 @@ public class Vector3Test extends GWTTestCase
 
 		assertTrue( a.clone().lerp( b, 0 ).equals( a ));
 
-		assertEquals( a.clone().lerp( b, 0.5 ).x, X*0.5);
-		assertEquals( a.clone().lerp( b, 0.5 ).y, -Y*0.5);
-		assertEquals( a.clone().lerp( b, 0.5 ).z, Z*0.5);
+		assertEquals( X * 0.5, a.clone().lerp( b, 0.5 ).x );
+		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5 ).y );
+		assertEquals( Z * 0.5, a.clone().lerp( b, 0.5 ).z );
 
 		assertTrue( a.clone().lerp( b, 1 ).equals( b ));
 	}
@@ -273,9 +273,9 @@ public class Vector3Test extends GWTTestCase
 		assertTrue( ! b.equals( a ));
 
 		a.copy( b );
-		assertEquals( a.x, b.x);
-		assertEquals( a.y, b.y);
-		assertEquals( a.z, b.z);
+		assertEquals( b.x, a.x);
+		assertEquals( b.y, a.y);
+		assertEquals( b.z, a.z);
 
 		assertTrue( a.equals( b ));
 		assertTrue( b.equals( a ));
@@ -289,36 +289,36 @@ public class Vector3Test extends GWTTestCase
 		Vector3 c = new Vector3();
 
 		c.copy( a ).min( b );
-		assertEquals( c.x, -X);
-		assertEquals( c.y, -Y);
-		assertEquals( c.z, -Z);
+		assertEquals( -X, c.x );
+		assertEquals( -Y, c.y );
+		assertEquals( -Z, c.z );
 
 		c.copy( a ).max( b );
-		assertEquals( c.x, X);
-		assertEquals( c.y, Y);
-		assertEquals( c.z, Z);
+		assertEquals( X, c.x );
+		assertEquals( Y, c.y );
+		assertEquals( Z, c.z );
 
 		c.set( -2*X, 2*Y, -2*Z );
 		c.clamp( b, a );
-		assertEquals( c.x, -X);
-		assertEquals( c.y, Y);
-		assertEquals( c.z, -Z);
+		assertEquals( -X, c.x );
+		assertEquals( Y, c.y );
+		assertEquals( -Z, c.z );
 	}
 
 	@Test
 	public void testSetXYZ() 
 	{
 		Vector3 a = new Vector3();
-		assertEquals( a.x, 0.0);
-		assertEquals( a.y, 0.0);
-		assertEquals( a.z, 0.0);
+		assertEquals( 0.0, a.x );
+		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.z );
 
 		a.setX( X );
 		a.setY( Y );
 		a.setZ( Z );
 
-		assertEquals( a.x, X);
-		assertEquals( a.y, Y);
-		assertEquals( a.z, Z);
+		assertEquals( X, a.x );
+		assertEquals( Y, a.y );
+		assertEquals( Z, a.z );
 	}
 }

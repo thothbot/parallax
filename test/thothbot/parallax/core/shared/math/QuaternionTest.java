@@ -47,16 +47,16 @@ public class QuaternionTest extends GWTTestCase
 	public void testQuaternion() 
 	{
 		Quaternion a = new Quaternion();
-		assertEquals( a.x, 0.0);
-		assertEquals( a.y, 0.0);
-		assertEquals( a.z, 0.0);
-		assertEquals( a.w, 1.0);
+		assertEquals( 0.0, a.x );
+		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.z );
+		assertEquals( 1.0, a.w );
 
 		a = new Quaternion( X, Y, Z, W );
-		assertEquals( a.x, X);
-		assertEquals( a.y, Y);
-		assertEquals( a.z, Z);
-		assertEquals( a.w, W);
+		assertEquals( X, a.x );
+		assertEquals( Y, a.y );
+		assertEquals( Z, a.z );
+		assertEquals( W, a.w );
 	}
 
 	@Test
@@ -64,34 +64,34 @@ public class QuaternionTest extends GWTTestCase
 	{
 		Quaternion a = new Quaternion( X, Y, Z, W );
 		Quaternion b = new Quaternion().copy( a );
-		assertEquals( b.x, X);
-		assertEquals( b.y, Y);
-		assertEquals( b.z, Z);
-		assertEquals( b.w, W);
+		assertEquals( X, b.x );
+		assertEquals( Y, b.y );
+		assertEquals( Z, b.z );
+		assertEquals( W, b.w );
 
 		// ensure that it is a true copy
 		a.x = 0;
 		a.y = -1;
 		a.z = 0;
 		a.w = -1;
-		assertEquals( b.x, X);
-		assertEquals( b.y, Y);
+		assertEquals( X, b.x );
+		assertEquals( Y, b.y );
 	}
 
 	@Test
 	public void testSet() 
 	{
 		Quaternion a = new Quaternion();
-		assertEquals( a.x, 0.0);
-		assertEquals( a.y, 0.0);
-		assertEquals( a.z, 0.0);
-		assertEquals( a.w, 1.0);
+		assertEquals( 0.0, a.x );
+		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.z );
+		assertEquals( 1.0, a.w );
 
 		a.set( X, Y, Z, W );
-		assertEquals( a.x, X);
-		assertEquals( a.y, Y);
-		assertEquals( a.z, Z);
-		assertEquals( a.w, W);
+		assertEquals( X, a.x );
+		assertEquals( Y, a.y );
+		assertEquals( Z, a.z );
+		assertEquals( W, a.w );
 	}
 
 	@Test
@@ -159,16 +159,16 @@ public class QuaternionTest extends GWTTestCase
 		assertTrue( a.length() != 1.0);
 		assertTrue( a.lengthSq() != 1.0);
 		a.normalize();
-		assertEquals( a.length(), 1.0);
-		assertEquals( a.lengthSq(), 1.0);
+		assertEquals( 1.0, a.length() );
+		assertEquals( 1.0, a.lengthSq() );
 
 		a.set( 0, 0, 0, 0 );
-		assertEquals( a.lengthSq(), 0.0);
-		assertEquals( a.length(), 0.0);
+		assertEquals( 0.0, a.lengthSq() );
+		assertEquals( 0.0, a.length() );
 
 		b.normalize();
-		assertEquals( b.lengthSq(), 1.0);
-		assertEquals( b.length(), 1.0);
+		assertEquals( 1.0, b.lengthSq() );
+		assertEquals( 1.0, b.length() );
 	}
 
 	@Test
@@ -180,10 +180,10 @@ public class QuaternionTest extends GWTTestCase
 
 		Quaternion b = a.clone().conjugate();
 
-		assertEquals( a.x, -b.x);
-		assertEquals( a.y, -b.y);
-		assertEquals( a.z, -b.z);
-		assertEquals( a.w, b.w);	
+		assertEquals( -b.x, a.x );
+		assertEquals( -b.y, a.y );
+		assertEquals( -b.z, a.z );
+		assertEquals( b.w, a.w );	
 	}
 	
 	@Test
@@ -243,8 +243,8 @@ public class QuaternionTest extends GWTTestCase
 		assertTrue( ! b.equals( a ));
 
 		a.copy( b );
-		assertEquals( a.x, b.x);
-		assertEquals( a.y, b.y);
+		assertEquals( b.x, a.x );
+		assertEquals( b.y, a.y );
 
 		assertTrue( a.equals( b ));
 		assertTrue( b.equals( a ));
