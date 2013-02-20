@@ -272,26 +272,46 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 	}
 
-//	applyEuler: function ( v, eulerOrder ) {
-//
-//		var quaternion = THREE.Vector3.__q1.setFromEuler( v, eulerOrder );
-//
-//		this.applyQuaternion( quaternion );
-//
-//		return this;
-//
-//	},
+	public Vector3 applyEuler(Vector3 v, Euler eulerOrder) 
+	{
+		Quaternion q1 = new Quaternion();
 
-//	applyAxisAngle: function ( axis, angle ) {
-//
-//		var quaternion = THREE.Vector3.__q1.setFromAxisAngle( axis, angle );
-//
-//		this.applyQuaternion( quaternion );
-//
-//		return this;
-//
-//	},
+		Quaternion quaternion = q1.setFromEuler( v, eulerOrder );
 
+		this.apply( quaternion );
+
+		return this;
+	}
+
+	public Vector3 applyAxisAngle(Vector3 axis, double angle) 
+	{
+		Quaternion q1 = new Quaternion();
+		Quaternion quaternion = q1.setFromAxisAngle( axis, angle );
+
+		this.apply( quaternion );
+
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param m Matrix4 affine matrix vector interpreted as a direction
+	 * @return
+	 */
+	public Vector3 transformDirection( Matrix4 m ) 
+	{
+		double x = this.x, y = this.y, z = this.z;
+
+		Float32Array e = m.getArray();
+
+		this.x = e.get(0) * x + e.get(4) * y + e.get(8)  * z;
+		this.y = e.get(1) * x + e.get(5) * y + e.get(9)  * z;
+		this.z = e.get(2) * x + e.get(6) * y + e.get(10) * z;
+
+		this.normalize();
+
+		return this;
+	}
 	
 	@Override
 	public Vector3 divide(Vector v)
@@ -441,9 +461,40 @@ public class Vector3 extends Vector2 implements Vector
 		return Math.sqrt(distanceToSquared(v1));
 	}
 	
+	public Vector3 projectOnVector(Vector3 vector) 
+	{
+		Vector3 v1 = new Vector3();
+
+		v1.copy( vector ).normalize();
+		double d = this.dot( v1 );
+		return this.copy( v1 ).multiply( d );
+	}
+
+	public Vector3 projectOnPlane(Vector3 planeNormal) 
+	{
+		Vector3 v1 = new Vector3();
+
+		v1.copy( this ).projectOnVector( planeNormal );
+
+		return this.sub( v1 );
+	}
+
+	public Vector3 reflect(Vector3 vector) 
+	{
+		Vector3 v1 = new Vector3();
+
+	    v1.copy( this ).projectOnVector( vector ).multiply( 2 );
+
+	    return this.sub( v1, this );
+	}
+	
 	public double angleTo( Vector3 v ) 
 	{
-		return Math.acos( this.dot( v ) / this.length() / v.length() );
+		double theta = this.dot( v ) / ( this.length() * v.length() );
+
+		// clamp, to handle numerical problems
+
+		return Math.acos( Mathematics.clamp( theta, -1, 1 ) );
 	}
 
 	public void getPositionFromMatrix(Matrix4 m)

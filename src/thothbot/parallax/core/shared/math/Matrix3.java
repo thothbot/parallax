@@ -192,6 +192,18 @@ public class Matrix3
 		
 		return this;
 	}
+	
+	/**
+	 * 
+	 * @param m Matrix4
+	 * @return
+	 */
+	public Matrix3 getNormalMatrix( Matrix4 m ) 
+	{
+		this.getInverse( m ).transpose();
+
+		return this;
+	}
 
 	/**
 	 * Transpose the current matrix into new Matrix which is represented 
