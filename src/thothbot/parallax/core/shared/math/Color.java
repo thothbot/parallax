@@ -18,6 +18,8 @@
 
 package thothbot.parallax.core.shared.math;
 
+import thothbot.parallax.core.shared.Log;
+
 /**
  * The Color class is used encapsulate colors in the default RGB color space.
  * This class doesn't work with alpha value. 
@@ -30,22 +32,34 @@ package thothbot.parallax.core.shared.math;
 public final class Color
 {
 	/**
-	 * The Color in HEX.
+	 * HSL presentation of color
 	 */
-	private int hex;
-
+	public static class HSL 
+	{
+		public double hue;
+		public double saturation;
+		public double lightness;
+		
+		public HSL() 
+		{
+			this.hue = 0.0;
+			this.saturation = 0.0;
+			this.lightness = 0.0;
+		}
+	}
+	
 	/**
-	 * The R-component of the color.
+	 * The R-component of the color. 0.0-1.0
 	 */
 	private double r;
 
 	/**
-	 * The G-component of the color.
+	 * The G-component of the color. 0.0-1.0
 	 */
 	private double g;
 
 	/**
-	 * The B-component of the color.
+	 * The B-component of the color. 0.0-1.0
 	 */
 	private double b;
 
@@ -131,26 +145,20 @@ public final class Color
 	}
 	
 	/**
-	 * get color in HEX. For example 0xFFFFFF, which
-	 * means completely white. 
-	 * 
-	 * @return a color in HEX
-	 */
-	public int getHex()
-	{
-		return this.hex;
-	}
-	
-	/**
 	 * Setting color in HEX format. For example 0xFFFFFF will create 
 	 * a color in RGB(255, 255, 255), which means completely white.
 	 * 
 	 * @param hex Color in HEX format
 	 */	
-	public void setHex(int hex)
+	public Color setHex( int hex ) 
 	{
-		this.hex = (~~hex) & 0xffffff;
-		this.updateRGB();
+		hex = (~~hex) & 0xffffff;
+
+		this.r = ( hex >> 16 & 255 ) / 255.0;
+		this.g = ( hex >> 8 & 255 ) / 255.0;
+		this.b = ( hex & 255 ) / 255.0;
+
+		return this;
 	}
 	
 	/**
@@ -163,16 +171,15 @@ public final class Color
 	 * 
 	 * @return a current color
 	 */
-	public Color setRGB(double r, double g, double b)
+	public Color setRGB( double r, double g, double b ) 
 	{
-		this.setR(r);
-		this.setG(g);
-		this.setB(b);
-		this.updateHex();
-		
+		this.r = r;
+		this.g = g;
+		this.b = b;
+
 		return this;
 	}
-	
+
 	/**
 	 * Setting color based on HSV color model. Each input values H, S, V
 	 * should be in range <0.0, 1.0>.
@@ -185,49 +192,55 @@ public final class Color
 	 * 
 	 * @return a current color
 	 */
-	public Color setHSV(double h, double s, double v)
+	@Deprecated
+	public Color setHSV( double h, double s, double v ) 
 	{
-		double r = 0, g = 0, b = 0, f, p, q, t;
+		return this.setHSL(h,s*v/((h=(2-s)*v)<1?h:2-h),h/2); // https://gist.github.com/xpansive/1337890
+	}
 
-		if (v == 0.0) 
+	/**
+	 * h,s,l ranges are in <0.0 - 1.0>
+	 * 
+	 * @param h Hue
+	 * @param s Saturation
+	 * @param l Lightness (Intensity)
+	 * @return
+	 */
+	public Color setHSL( double h, double s, double l ) 
+	{
+		if ( s == 0 ) 
 		{
-			r = g = b = 0.0;
+			this.r = this.g = this.b = (int)(l * 255);
 		} 
 		else 
 		{
-			int i = (int) Math.floor(h * 6.0);
-			f = (h * 6.0) - i;
-			p = v * (1.0 - s);
-			q = v * (1.0 - (s * f));
-			t = v * (1.0 - (s * (1.0 - f)));
 
-			switch (i) {
+			double p = l <= 0.5 ? l * ( 1 + s ) : l + s - ( l * s );
+			double q = ( 2 * l ) - p;
 
-			case 1: r = q; g = v; b = p; break;
-			case 2: r = p; g = v; b = t; break;
-			case 3: r = p; g = q; b = v; break;
-			case 4: r = t; g = p; b = v; break;
-			case 5: r = v; g = p; b = q; break;
-			case 6: // fall through
-			case 0: r = v; g = t; b = p; break;
-
-			}
+			this.r = hue2rgb( q, p, h + 1 / 3.0 );
+			this.g = hue2rgb( q, p, h );
+			this.b = hue2rgb( q, p, h - 1 / 3.0 );
 
 		}
 
-		return this.setRGB(r, g, b);
+		return this;
 	}
-
+	
 	/**
 	 * Set value of the color from another color.
 	 * 
 	 * @param color the other color
 	 */
-	public void copy(Color color)
+	public Color copy( Color color ) 
 	{
-		this.setRGB(color.getR(), color.getG(), color.getB());
+		this.r = color.r;
+		this.g = color.g;
+		this.b = color.b;
+
+		return this;
 	}
-	
+
 	/**
 	 * Set value of color from gamma.
 	 * 
@@ -235,12 +248,12 @@ public final class Color
 	 * 
 	 * @return the current color
 	 */
-	public Color copyGammaToLinear(Color color)
+	public Color copyGammaToLinear ( Color color ) 
 	{
-		this.setR(color.getR() * color.getR());
-		this.setG(color.getG() * color.getG());
-		this.setB(color.getB() * color.getB());
-		
+		this.r = color.r * color.r;
+		this.g = color.g * color.g;
+		this.b = color.b * color.b;
+
 		return this;
 	}
 
@@ -251,12 +264,12 @@ public final class Color
 	 * 
 	 * @return a gamma
 	 */
-	public Color copyLinearToGamma(Color color)
+	public Color copyLinearToGamma ( Color color ) 
 	{
+		this.r = Math.sqrt( color.r );
+		this.g = Math.sqrt( color.g );
+		this.b = Math.sqrt( color.b );
 
-		this.setR(Math.sqrt(color.getR()));
-		this.setG(Math.sqrt(color.getG()));
-		this.setB(Math.sqrt(color.getB()));
 		return this;
 	}
 
@@ -265,11 +278,13 @@ public final class Color
 	 * 
 	 * @return a current color
 	 */
-	public Color convertGammaToLinear()
+	public Color convertGammaToLinear() 
 	{
-		this.setR(this.getR() * this.getR());
-		this.setG(this.getG() * this.getG());
-		this.setB(this.getB() * this.getB());
+		double r = this.r, g = this.g, b = this.b;
+
+		this.r = r * r;
+		this.g = g * g;
+		this.b = b * b;
 
 		return this;
 	}
@@ -279,11 +294,130 @@ public final class Color
 	 * 
 	 * @return a current gamma
 	 */
-	public Color convertLinearToGamma()
+	public Color convertLinearToGamma() 
 	{
-		this.setR(Math.sqrt(this.getR()));
-		this.setG(Math.sqrt(this.getG()));
-		this.setB(Math.sqrt(this.getB()));
+		this.r = Math.sqrt( this.r );
+		this.g = Math.sqrt( this.g );
+		this.b = Math.sqrt( this.b );
+
+		return this;
+	}
+
+	/**
+	 * Gets HEX value.
+	 */
+	public int getHex() 
+	{
+		return ~~((int) Math.floor(this.r * 255)) << 16
+				^ ~~((int) Math.floor(this.g * 255)) << 8 
+				^ ~~((int) Math.floor(this.b * 255));
+	}
+
+	public String getHexString() 
+	{
+		return ( "000000" + Integer.toString(this.getHex(), 16).substring(-6));
+	}
+
+	public Color.HSL getHSL() 
+	{
+		// h,s,l ranges are in 0.0 - 1.0
+
+		double r = this.r, g = this.g, b = this.b;
+
+		double max = Math.max(Math.max( r, g), b );
+		double min = Math.min(Math.min( r, g), b );
+
+		double hue = 0, saturation = 0;
+		double lightness = ( min + max ) / 2.0;
+
+		Color.HSL hsl = new Color.HSL();
+		
+		if ( min == max ) 
+		{
+			hue = 0;
+			saturation = 0;
+		} 
+		else 
+		{
+			double delta = max - min;
+
+			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2 - max - min );
+
+			if( max == r) hue = ( g - b ) / delta + ( g < b ? 6 : 0 );
+			else if(max == g) hue = ( b - r ) / delta + 2;
+			else if(max == b) hue = ( r - g ) / delta + 4;
+			
+			hue /= 6.0;
+		}
+
+		hsl.hue = hue;
+		hsl.saturation = saturation;
+		hsl.lightness = lightness;
+
+		return hsl;
+	}
+
+	public String getStyle() 
+	{
+		return "rgb(" + ( ( (int)(this.r * 255) ) | 0 ) 
+				+ "," + ( ( (int)(this.g * 255) ) | 0 ) 
+				+ "," + ( ( (int)(this.b * 255) | 0) ) + ")";
+	}
+
+	public Color offsetHSL( double h, double s, double l ) 
+	{
+		Color.HSL hsl = this.getHSL();
+
+		hsl.hue += h; hsl.saturation += s; hsl.lightness += l;
+
+		this.setHSL( hsl.hue, hsl.saturation, hsl.lightness );
+
+		return this;
+	}
+
+	public Color add( Color color ) 
+	{
+
+		this.r += color.r;
+		this.g += color.g;
+		this.b += color.b;
+
+		return this;
+	}
+
+	public Color add( Color color1, Color color2 ) 
+	{
+		this.r = color1.r + color2.r;
+		this.g = color1.g + color2.g;
+		this.b = color1.b + color2.b;
+
+		return this;
+	}
+
+	public Color add( int s ) 
+	{
+		this.r += s;
+		this.g += s;
+		this.b += s;
+
+		return this;
+	}
+
+	public Color multiply( Color color ) 
+	{
+		this.r *= color.r;
+		this.g *= color.g;
+		this.b *= color.b;
+
+		return this;
+	}
+
+	public Color multiply( int s ) 
+	{
+
+		this.r *= s;
+		this.g *= s;
+		this.b *= s;
 
 		return this;
 	}
@@ -294,11 +428,13 @@ public final class Color
 	 * @param color the input color
 	 * @param alpha the alpha value in range <0.0, 1.0>
 	 */
-	public void lerp(Color color, double alpha)
+	public Color lerp( Color color, double alpha ) 
 	{
-		this.setR(this.getR() + (color.getR() - this.getR()) * alpha);
-		this.setG(this.getG() + (color.getG() - this.getG()) * alpha);
-		this.setB(this.getB() + (color.getB() - this.getB()) * alpha);
+		this.r += ( color.r - this.r ) * alpha;
+		this.g += ( color.g - this.g ) * alpha;
+		this.b += ( color.b - this.b ) * alpha;
+
+		return this;
 	}
 
 	/**
@@ -307,10 +443,11 @@ public final class Color
 	 * 
 	 * @return a new color instance, based on the current color class
 	 */
-	public Color clone()
+	public Color clone() 
 	{
-		return new Color(this.hex);
+		return new Color().setRGB( this.r, this.g, this.b );
 	}
+	
 	
 	/**
 	 * get Color class description by multiplying each value by 255. 
@@ -318,26 +455,17 @@ public final class Color
 	 */
 	public String toString()
 	{
-		return "rgb(" + Math.floor(this.r * 255) + ',' + Math.floor(this.g * 255) + ','
-				+ Math.floor(this.b * 255) + ")";
-	}
-	
-	/**
-	 * Update HEX value of the color by RGB values.
-	 */
-	private void updateHex()
-	{
-		this.hex = ~~((int) Math.floor(this.r * 255)) << 16
-				^ ~~((int) Math.floor(this.g * 255)) << 8 ^ ~~((int) Math.floor(this.b * 255));
+		return getStyle();
 	}
 
-	/**
-	 * Update RGB value of the color by HEX value.
-	 */
-	private void updateRGB()
+	private double hue2rgb( double p, double q, double t ) 
 	{
-		this.setR((this.hex >> 16 & 255) / 255.0);
-		this.setG((this.hex >> 8 & 255) / 255.0);
-		this.setB((this.hex & 255) / 255.0);
+		if ( t < 0 ) t += 1;
+		if ( t > 1 ) t -= 1;
+		if ( t < 1 / 6.0 ) return p + ( q - p ) * 6 * t;
+		if ( t < 1 / 2.0 ) return q;
+		if ( t < 2 / 3.0 ) return p + ( q - p ) * 6 * ( 2 / 3 - t );
+		
+		return p;
 	}
 }

@@ -51,7 +51,6 @@ import thothbot.parallax.core.shared.math.Mathematics;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.math.Vector4;
-import thothbot.parallax.core.shared.utils.ColorUtils;
 import thothbot.parallax.loader.shared.json.JsoMaterial;
 import thothbot.parallax.loader.shared.json.JsoMorphColors;
 import thothbot.parallax.loader.shared.json.JsoMorphTargets;
@@ -115,7 +114,7 @@ public class JsonLoader extends Loader
 			for ( int i = 0; i < colorMap.colors.size(); i ++ ) 
 			{
 				geometry.getFaces().get(i).setColor( colorMap.colors.get(i) );
-				ColorUtils.adjustHSV( geometry.getFaces().get(i).getColor(), 0.0, 0.125, 0.0 );
+				geometry.getFaces().get(i).getColor().offsetHSL( 0, 0.3, 0 );
 			}
 		}
 	}
