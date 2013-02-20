@@ -146,7 +146,7 @@ public class Sphere
 		return optionalTarget;
 	}
 
-	public Sphere transform( Matrix4 matrix ) 
+	public Sphere apply( Matrix4 matrix ) 
 	{
 		this.center.apply( matrix );
 		this.radius = this.radius * matrix.getMaxScaleOnAxis();

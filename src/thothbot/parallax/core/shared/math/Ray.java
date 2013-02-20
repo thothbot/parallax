@@ -182,7 +182,7 @@ public class Ray
 		return this.at( t, optionalTarget );
 	}
 
-	public Ray transform( Matrix4 matrix4 ) 
+	public Ray apply( Matrix4 matrix4 ) 
 	{
 		this.direction.add( this.origin ).apply( matrix4 );
 		this.origin.apply( matrix4 );

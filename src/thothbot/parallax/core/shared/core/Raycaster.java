@@ -140,7 +140,7 @@ public class Raycaster
 
 			inverseMatrix.getInverse( object.getMatrixWorld() );
 
-			localRay.copy( raycaster.ray ).transform( inverseMatrix );
+			localRay.copy( raycaster.ray ).apply( inverseMatrix );
 	
 			for ( int f = 0, fl = geometry.getFaces().size(); f < fl; f ++ ) 
 			{

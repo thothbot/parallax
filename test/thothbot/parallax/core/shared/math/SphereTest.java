@@ -142,7 +142,7 @@ public class SphereTest extends GWTTestCase
 
 		Matrix4 m = new Matrix4().makeTranslation( 1, -2, 1 );
 
-		assertTrue( a.clone().transform( m ).getBoundingBox().equals( a.getBoundingBox().apply( m ) ));
+		assertTrue( a.clone().apply( m ).getBoundingBox().equals( a.getBoundingBox().apply( m ) ));
 	}
 
 	@Test

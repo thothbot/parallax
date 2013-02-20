@@ -241,13 +241,13 @@ public class PlaneTest extends GWTTestCase
 		Matrix4 m = new Matrix4();
 		m.makeRotationZ( Math.PI * 0.5 );
 
-		assertTrue( comparePlane( a.clone().transform( m ), new Plane( new Vector3( 0, 1, 0 ), 0 ) ));
+		assertTrue( comparePlane( a.clone().apply( m ), new Plane( new Vector3( 0, 1, 0 ), 0 ) ));
 
 		a = new Plane( new Vector3( 0, 1, 0 ), -1 );
-		assertTrue( comparePlane( a.clone().transform( m ), new Plane( new Vector3( -1, 0, 0 ), -1 ) ));
+		assertTrue( comparePlane( a.clone().apply( m ), new Plane( new Vector3( -1, 0, 0 ), -1 ) ));
 
 		m.makeTranslation( 1, 1, 1 );
-		assertTrue( comparePlane( a.clone().transform( m ), a.clone().translate( new Vector3( 1, 1, 1 ) ) ));
+		assertTrue( comparePlane( a.clone().apply( m ), a.clone().translate( new Vector3( 1, 1, 1 ) ) ));
 	}
 
 	private boolean comparePlane( Plane a, Plane b ) 

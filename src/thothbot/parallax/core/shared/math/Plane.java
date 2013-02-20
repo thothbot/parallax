@@ -202,12 +202,12 @@ public class Plane
 		return optionalTarget.copy( this.normal ).multiply( - this.constant );
 	}
 
-	public Plane transform( Matrix4 matrix)
+	public Plane apply( Matrix4 matrix )
 	{
-		return transform(matrix, new Matrix3().getInverse( matrix ).transpose());
+		return apply(matrix, new Matrix3().getInverse( matrix ).transpose());
 	}
 	
-	public Plane transform( Matrix4 matrix, Matrix3 optionalNormalMatrix ) 
+	public Plane apply( Matrix4 matrix, Matrix3 optionalNormalMatrix ) 
 	{
 		// compute new normal based on theory here:
 		// http://www.songho.ca/opengl/gl_normaltransform.html
