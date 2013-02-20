@@ -201,7 +201,7 @@ public class Object3D implements DimensionalObject
 	 * If set to true light will cast dynamic shadows. 
 	 * Warning: This is expensive and requires tweaking to get shadows looking right.
 	 * <p>
-	 * Default — false.
+	 * Default ï¿½ false.
 	 */
 	public boolean isCastShadow() {
 		return isCastShadow;
@@ -423,9 +423,18 @@ public class Object3D implements DimensionalObject
 		// TODO: Add hierarchy support.
 		this.matrix.lookAt(vector, this.position, this.up);
 
-		if (this.rotationAutoUpdate)
-		{
-			this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
+		if ( this.rotationAutoUpdate ) {
+
+			if ( this.useQuaternion == false )  
+			{
+				this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
+			} 
+			else 
+			{
+				Quaternion q = new Quaternion();
+				this.matrix.decompose(new Vector3(), q, new Vector3());
+				this.quaternion.copy(q);
+			}
 		}
 	}
 	
@@ -602,5 +611,51 @@ public class Object3D implements DimensionalObject
 		this.rotation.setEulerFromRotationMatrix( mat, this.eulerOrder );
 
 		this.position.getPositionFromMatrix(this.matrix);
+	}
+	
+	public Object3D clone()
+	{
+		return clone(new Object3D());
+	}
+	
+	public Object3D clone( Object3D object ) 
+	{
+		object.name = this.name;
+
+		object.up.copy( this.up );
+
+		object.position.copy( this.position ); 
+		object.rotation.copy( this.rotation ); // because of Sprite madness
+		object.eulerOrder = this.eulerOrder;
+		object.scale.copy( this.scale );
+
+		object.renderDepth = this.renderDepth;
+
+		object.rotationAutoUpdate = this.rotationAutoUpdate;
+
+		object.matrix.copy( this.matrix );
+		object.matrixWorld.copy( this.matrixWorld );
+		object.matrixRotationWorld.copy( this.matrixRotationWorld );
+
+		object.matrixAutoUpdate = this.matrixAutoUpdate;
+		object.matrixWorldNeedsUpdate = this.matrixWorldNeedsUpdate;
+
+		object.quaternion.copy( this.quaternion );
+		object.useQuaternion = this.useQuaternion;
+
+		object.visible = this.visible;
+
+		object.isCastShadow = this.isCastShadow;
+		object.isReceiveShadow = this.isReceiveShadow;
+
+		object.isFrustumCulled = this.isFrustumCulled;
+
+		for ( int i = 0; i < this.children.size(); i ++ ) 
+		{
+			DimensionalObject child = this.children.get( i );
+			object.add( child.clone() );
+		}
+
+		return object;
 	}
 }

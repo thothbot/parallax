@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.ArrayUtils;
-
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Color;

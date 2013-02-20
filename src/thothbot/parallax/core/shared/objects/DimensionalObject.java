@@ -219,4 +219,6 @@ public interface DimensionalObject
 	public void updateMatrix();
 
 	public void updateMatrixWorld(boolean force);
+	
+	public DimensionalObject clone();
 }
