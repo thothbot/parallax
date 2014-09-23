@@ -45,17 +45,20 @@ public class DaeImage extends DaeIdElement
 	public static Map<String, DaeImage> parse(DaeDocument document)
 	{
 		Map<String, DaeImage> retval = new HashMap<String, DaeImage>();
-		
-		Node lib = document.getDocument().getElementsByTagName("library_images").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("image"); 
-		for (int i = 0; i < list.getLength(); i++) 
+		NodeList listLib = document.getDocument().getElementsByTagName("library_images");
+		if (listLib.getLength() > 0)
 		{
-			Node child = list.item(i);
-
-			DaeImage image = new DaeImage(child);
-			if (image.getID() != null) 
+			Node lib = listLib.item(0);
+			NodeList list = ((Element) lib).getElementsByTagName("image");
+			for (int i = 0; i < list.getLength(); i++)
 			{
-				retval.put(image.getID(), image);
+				Node child = list.item(i);
+
+				DaeImage image = new DaeImage(child);
+				if (image.getID() != null)
+				{
+					retval.put(image.getID(), image);
+				}
 			}
 		}
 
