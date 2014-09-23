@@ -159,7 +159,7 @@ public class SkinnedMesh extends Mesh
 	{
 		updateMatrixWorld( true );
 		
-		List<Matrix4> boneInverses = null;
+		List<Matrix4> boneInverses = new ArrayList<Matrix4>();
 
 		for (int b = 0; b < this.bones.size(); b ++ ) 
 		{
