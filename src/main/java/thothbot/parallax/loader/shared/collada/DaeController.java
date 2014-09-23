@@ -45,18 +45,20 @@ public class DaeController extends DaeIdElement
 	public static Map<String, DaeController> parse(DaeDocument document)
 	{
 		Map<String, DaeController> retval = new HashMap<String, DaeController>();
-		
-		Node lib = document.getDocument().getElementsByTagName("library_controllers").item(0);
-		NodeList list = ((Element)lib).getElementsByTagName("controller"); 
-		for (int i = 0; i < list.getLength(); i++) 
+		NodeList listLib = document.getDocument().getElementsByTagName("library_controllers");
+		if (listLib.getLength() > 0)
 		{
-			DaeController controller = new DaeController(list.item(i));
-			if (controller.getID() != null) 
+			Node lib = listLib.item(0);
+			NodeList list = ((Element)lib).getElementsByTagName("controller"); 
+			for (int i = 0; i < list.getLength(); i++) 
 			{
-				retval.put(controller.getID(), controller);
+				DaeController controller = new DaeController(list.item(i));
+				if (controller.getID() != null) 
+				{
+					retval.put(controller.getID(), controller);
+				}
 			}
 		}
-		
 		return retval;
 	}
 	

@@ -65,7 +65,14 @@ public abstract class Loader
 	
 	private String extractUrlBase( String url ) 
 	{
-		String part = url.substring(0, url.lastIndexOf('/'));
-		return ( part.length() < 1 ? "." : part ) + '/';
+		int i = url.lastIndexOf('/');
+		if (i >= 0)
+		{
+			return url.substring(0, i) + '/';
+		}
+		else
+		{
+			return "";
+		}
 	}
 }
