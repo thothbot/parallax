@@ -1523,7 +1523,6 @@ public class WebGLRenderer implements HasEventBus
 		{
 			this.cache_currentMaterialId = material.getId();
 			refreshMaterial = true;
-			Log.error("material.getId() != this.cache_currentMaterialId");
 		}
 
 		if ( refreshMaterial || camera != this.cache_currentCamera ) 
