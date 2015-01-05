@@ -292,6 +292,15 @@ public class Vector3 extends Vector2 implements Vector
 
 		return this;
 	}
+	
+	public Vector3 setFromMatrixPosition( Matrix4 m ) {
+
+		this.x = m.getArray().get( 12 );
+		this.y = m.getArray().get( 13 );
+		this.z = m.getArray().get( 14 );
+
+		return this;
+	}
 
 	/**
 	 * 

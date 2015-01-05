@@ -328,4 +328,21 @@ public class PerspectiveCamera extends Camera
 			this.projectionMatrix.makePerspective( getFieldOfView(), getAspectRation(), getNear(), getFar() );
 		}
 	}
+	
+	public PerspectiveCamera clone () {
+
+		PerspectiveCamera camera = new PerspectiveCamera();
+
+		super.clone(camera);
+
+		camera.setFieldOfView( this.getFieldOfView() );
+		camera.setAspectRatio( this.getAspectRation() );
+		camera.setNear( this.getNear() );
+		camera.setFar( this.getFar() );
+
+		camera.projectionMatrix.copy( this.projectionMatrix );
+
+		return camera;
+
+	};
 }

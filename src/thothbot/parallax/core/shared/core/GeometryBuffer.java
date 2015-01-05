@@ -71,7 +71,7 @@ public class GeometryBuffer implements Geometric
 	
 	private boolean isArrayInitialized;
 	
-	private Int16Array webGlIndexArray;
+	private Uint16Array webGlIndexArray;
 	private Uint16Array webGlFaceArray;
 	private Uint16Array webGlLineArray;
 	
@@ -291,12 +291,12 @@ public class GeometryBuffer implements Geometric
 		return webGlUv2Array;
 	}
 	
-	public Int16Array getWebGlIndexArray() 
+	public Uint16Array getWebGlIndexArray() 
 	{
 		return webGlIndexArray;
 	}
 	
-	public void setWebGlIndexArray(Int16Array a)
+	public void setWebGlIndexArray(Uint16Array a)
 	{
 		this.webGlIndexArray = a;
 	}
@@ -452,7 +452,7 @@ public class GeometryBuffer implements Geometric
 
 			List<GeometryBuffer.Offset> offsets = this.offsets;
 
-			Int16Array indices = getWebGlIndexArray();
+			Uint16Array indices = getWebGlIndexArray();
 			Float32Array positions = getWebGlVertexArray();
 			Float32Array normals = getWebGlNormalArray();
 
@@ -545,7 +545,7 @@ public class GeometryBuffer implements Geometric
 			return;
 		}
 
-		Int16Array indices = getWebGlIndexArray();
+		Uint16Array indices = getWebGlIndexArray();
 		Float32Array positions = getWebGlVertexArray();
 		Float32Array normals = getWebGlNormalArray();
 		Float32Array uvs = getWebGlUvArray();
@@ -707,7 +707,7 @@ public class GeometryBuffer implements Geometric
 	
 	public void setDirectBuffers ( WebGLRenderingContext gl, BufferUsage hint, boolean dispose ) 
 	{
-		Int16Array index = getWebGlIndexArray();
+		Uint16Array index = getWebGlIndexArray();
 		Float32Array position = getWebGlVertexArray();
 		Float32Array normal = getWebGlNormalArray();
 		Float32Array uv = getWebGlUvArray();

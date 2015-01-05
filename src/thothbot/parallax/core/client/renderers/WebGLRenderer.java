@@ -34,6 +34,7 @@ import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int16Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
@@ -1302,7 +1303,7 @@ public class WebGLRenderer implements HasEventBus
 
 					// indices
 
-					Int16Array index = geometryBuffer.getWebGlIndexArray();
+					Uint16Array index = geometryBuffer.getWebGlIndexArray();
 
 					gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryBuffer.__webglIndexBuffer );
 				}
@@ -1683,7 +1684,7 @@ public class WebGLRenderer implements HasEventBus
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
 
-			Log.debug("loadUniformsGeneric() " + uniform);
+			//Log.debug("loadUniformsGeneric() " + uniform);
 			
 			WebGLRenderingContext gl = getGL();
 

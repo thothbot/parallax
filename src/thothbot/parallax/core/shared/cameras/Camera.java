@@ -117,4 +117,18 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 			}
 		}
 	}
+	
+	public Camera clone ( Camera camera ) {
+
+		if ( camera == null ) 
+			camera = new Camera();
+		
+
+		super.clone(camera);
+
+		camera.matrixWorldInverse.copy( this.matrixWorldInverse );
+		camera.projectionMatrix.copy( this.projectionMatrix );
+
+		return camera;
+	};
 }
