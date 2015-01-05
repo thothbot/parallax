@@ -491,10 +491,7 @@ public class Vector3 extends Vector2 implements Vector
 	public Vector3 reflect(Vector3 vector) 
 	{
 		Vector3 v1 = new Vector3();
-
-	    v1.copy( this ).projectOnVector( vector ).multiply( 2 );
-
-	    return this.sub( v1, this );
+		return this.sub( v1.copy( vector ).multiply( 2 * this.dot( vector ) ) );
 	}
 	
 	public double angleTo( Vector3 v ) 

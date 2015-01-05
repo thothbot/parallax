@@ -38,7 +38,7 @@ import thothbot.parallax.core.shared.math.Vector4;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.core.shared.utils.UniformsUtils;
 
-public class Water extends Mirror{
+public class Water extends Mirror {
 
 	/**
 	 * options
@@ -65,7 +65,6 @@ public class Water extends Mirror{
 		this.renderer = renderer;
 		this.scene = scene;
 		
-
 		if ( camera instanceof PerspectiveCamera ) {
 
 			this.camera = (PerspectiveCamera) camera;
@@ -80,7 +79,6 @@ public class Water extends Mirror{
 		this.textureMatrix = new Matrix4();
 
 		this.mirrorCamera = this.camera.clone();
-		
 		this.texture = new RenderTargetTexture( width, height );
 		this.tempTexture = new RenderTargetTexture( width, height );
 		
@@ -90,6 +88,10 @@ public class Water extends Mirror{
 		this.material = new ShaderMaterial(mirrorShader);
 		this.material.setTransparent(true);
 		
+		//updateUniforms();
+	}
+	
+	public void updateUniforms() {
 		material.getShader().getUniforms().get("mirrorSampler").setValue(  this.texture );
 		material.getShader().getUniforms().get("textureMatrix").setValue(  this.textureMatrix );
 		material.getShader().getUniforms().get("alpha").setValue(  this.alpha );
@@ -100,7 +102,7 @@ public class Water extends Mirror{
 		material.getShader().getUniforms().get("sunDirection").setValue(  this.sunDirection );
 		material.getShader().getUniforms().get("distortionScale").setValue(  this.distortionScale );
 		material.getShader().getUniforms().get("eye").setValue(  this.eye );
-		
+		Log.error(material.getShader().getUniforms());
 		if ( !Mathematics.isPowerOfTwo(width) || !Mathematics.isPowerOfTwo( height ) ) {
 
 			this.texture.setGenerateMipmaps(false);
@@ -110,14 +112,12 @@ public class Water extends Mirror{
 
 		this.updateTextureMatrix();
 		this.render();
-
 	}
-	
+
 	private double sign(double x) { return x != 0 ? x < 0 ? -1.0 : 1.0 : 0; }
 	
 	@Override
 	protected void updateTextureMatrix() {
-
 
 		this.updateMatrixWorld(false);
 		this.camera.updateMatrixWorld(false);
@@ -179,7 +179,7 @@ public class Water extends Mirror{
 		q.setY( (sign(this.clipPlane.getY()) + projectionMatrix.getArray().get(9)) / projectionMatrix.getArray().get(5) );
 		q.setZ( -1.0 );
 		q.setW( (1.0 + projectionMatrix.getArray().get(10)) / projectionMatrix.getArray().get(14) );
-		
+
 		// Calculate the scaled plane vector
 		Vector4 c = new Vector4();
 		c = this.clipPlane.multiply( 2.0 / this.clipPlane.dot(q) );
@@ -194,8 +194,6 @@ public class Water extends Mirror{
 		worldCoordinates.setFromMatrixPosition( this.camera.getMatrixWorld() );
 		this.eye = worldCoordinates;
 		material.getShader().getUniforms().get("eye").setValue(  this.eye );
-		
-		Log.error("---------------------pr" + material.getShader().getUniforms());
 	}
 
 }

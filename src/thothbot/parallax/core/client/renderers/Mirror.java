@@ -210,7 +210,6 @@ public class Mirror extends Object3D {
 		projectionMatrix.getArray().set(6, c.getY());
 		projectionMatrix.getArray().set(10, c.getZ() + 1.0 - this.clipBias);
 		projectionMatrix.getArray().set(14, c.getW());
-
 	}
 	
 	public void render() {
