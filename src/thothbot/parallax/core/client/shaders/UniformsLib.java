@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.client.renders.shaders;
+package thothbot.parallax.core.client.shaders;
 
 import java.util.ArrayList;
 import java.util.HashMap;

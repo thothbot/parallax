@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.client.renders.shaders;
+package thothbot.parallax.core.client.shaders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,29 +24,21 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
-/**
- * Depth encoding into RGBA texture.
- * <p>
- * Based on SpiderGL shadow map example @see <a href="http://spidergl.org/example.php?id=6">http://spidergl.org</a><br>
- * Originally from @see <a href="http://www.gamedev.net/topic/442138-packing-a-float-into-a-a8r8g8b8-texture-shader/page__whichpage__1%25EF%25BF%25BD">http://www.gamedev.net</a><br>
- * See also here @see <a href="http://aras-p.info/blog/2009/07/30/encoding-floats-to-rgba-the-final/">http://aras-p.info</a>
- * 
- * @author thothbot
- */
-public final class DepthRGBAShader extends Shader
+public class DashedShader extends Shader 
 {
+
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/depthRGBA.vs")
+
+		@Source("source/dashed.vs")
 		TextResource getVertexShader();
 
-		@Source("source/depthRGBA.fs")
+		@Source("source/dashed.fs")
 		TextResource getFragmentShader();
 	}
 
-	public DepthRGBAShader() 
+	public DashedShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -54,24 +46,32 @@ public final class DepthRGBAShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
+		this.setUniforms(UniformsLib.getCommon());
+		this.setUniforms(UniformsLib.getFog());
+		this.addUniform("scale",     new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("totalSize", new Uniform(Uniform.TYPE.F, 2.0 ));
 	}
 	
 	@Override
 	protected void updateVertexSource(String src)
 	{
-		List<String> vars = Arrays.asList(
-			ChunksVertexShader.MORPHTARGET_PARS,
-			ChunksVertexShader.SKINNING_PARS
-		);
-		
-		List<String> main = Arrays.asList(
-			ChunksVertexShader.SKINBASE,
-			ChunksVertexShader.MORPHTARGET,
-			ChunksVertexShader.SKINNING,
-			ChunksVertexShader.DEFAULT
-		);
-
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
+		super.updateFragmentSource(Shader.updateShaderSource(src, ChunksVertexShader.COLOR_PARS, ChunksVertexShader.COLOR));	
 	}
-
+	
+	@Override
+	protected void updateFragmentSource(String src)
+	{
+		List<String> vars = Arrays.asList(
+			ChunksFragmentShader.COLOR_PARS,
+			ChunksFragmentShader.FOG_PARS
+		);
+			
+		List<String> main = Arrays.asList(
+			ChunksFragmentShader.COLOR,
+			ChunksFragmentShader.FOG
+		);
+			
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
+	}
 }

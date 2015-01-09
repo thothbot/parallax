@@ -36,7 +36,7 @@ import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.renders.shaders.Uniform;
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugins.sprite.shaders.SpriteShader;

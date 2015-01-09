@@ -27,7 +27,7 @@ import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.client.renders.shaders.DepthRGBAShader;
+import thothbot.parallax.core.client.shaders.DepthRGBAShader;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;

@@ -15,7 +15,7 @@
  * 3.0 Unported License along with Parallax. 
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package thothbot.parallax.core.client.renders.shaders;
+package thothbot.parallax.core.client.shaders;
 
 /**
  * Chunks used in Fragment Shader

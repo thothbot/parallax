@@ -21,7 +21,7 @@ package thothbot.parallax.core.shared.materials;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.client.renders.shaders.Shader;
+import thothbot.parallax.core.client.shaders.Shader;
 
 public final class MeshFaceMaterial extends Material 
 {

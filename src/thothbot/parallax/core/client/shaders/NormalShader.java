@@ -16,30 +16,33 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.client.renders.shaders;
+package thothbot.parallax.core.client.shaders;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Simple depth shader.
+ * Normal shader.
  * <p>
  * Based on the three.js code.
  * 
  * @author thothbot
  *
  */
-public final class DepthShader extends Shader
+public final class NormalShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
+		
+		@Source("source/normal.vs")
+		TextResource getVertexShader();
 
-		@Source("source/depth.fs")
+		@Source("source/normal.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public DepthShader() 
+
+	public NormalShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -47,8 +50,6 @@ public final class DepthShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0 ));
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
 	}
 }

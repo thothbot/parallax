@@ -21,7 +21,7 @@ package thothbot.parallax.core.client.renderers;
 import java.util.List;
 import java.util.Map;
 
-import thothbot.parallax.core.client.renders.shaders.Uniform;
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.lights.AmbientLight;
 import thothbot.parallax.core.shared.lights.DirectionalLight;

@@ -22,7 +22,7 @@ import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.client.renders.shaders.Shader;
+import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
