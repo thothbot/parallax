@@ -1,8 +1,10 @@
+[*]
+
 vec4 pack_depth( const in float depth ) {
 
 	const vec4 bit_shift = vec4( 256.0 * 256.0 * 256.0, 256.0 * 256.0, 256.0, 1.0 );
-	const vec4 bit_mask  = vec4( 0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0 );
-	vec4 res = fract( depth * bit_shift );
+	const vec4 bit_mask = vec4( 0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0 );
+	vec4 res = mod( depth * bit_shift * vec4( 255 ), vec4( 256 ) ) / vec4( 255 ); // vec4 res = fract( depth * bit_shift );
 	res -= res.xxyz * bit_mask;
 	return res;
 
@@ -10,7 +12,17 @@ vec4 pack_depth( const in float depth ) {
 
 void main() {
 
-	gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z );
+[*]
+
+	#ifdef USE_LOGDEPTHBUF_EXT
+
+		gl_FragData[ 0 ] = pack_depth( gl_FragDepthEXT );
+
+	#else
+
+		gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z );
+
+	#endif
 
 	//"gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z / gl_FragCoord.w );
 	//"float z = ( ( gl_FragCoord.z / gl_FragCoord.w ) - 3.0 ) / ( 4000.0 - 3.0 );

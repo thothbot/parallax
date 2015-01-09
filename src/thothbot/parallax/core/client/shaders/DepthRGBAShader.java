@@ -61,17 +61,33 @@ public final class DepthRGBAShader extends Shader
 	{
 		List<String> vars = Arrays.asList(
 			ChunksVertexShader.MORPHTARGET_PARS,
-			ChunksVertexShader.SKINNING_PARS
+			ChunksVertexShader.SKINNING_PARS,
+			ChunksVertexShader.LOGDEPTHBUF_PAR
 		);
 		
 		List<String> main = Arrays.asList(
 			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.MORPHTARGET,
 			ChunksVertexShader.SKINNING,
-			ChunksVertexShader.DEFAULT
+			ChunksVertexShader.DEFAULT,
+			ChunksVertexShader.LOGDEPTHBUF
 		);
 
 		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
+	}
+	
+	@Override
+	protected void updateFragmentSource(String src)
+	{
+		List<String> vars = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF_PAR
+		);
+			
+		List<String> main = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF
+		);
+			
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
 	}
 
 }
