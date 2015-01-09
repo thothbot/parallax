@@ -84,15 +84,15 @@ public final class NormalMapShader extends Shader
 		this.addUniform("uDisplacementBias",  new Uniform(Uniform.TYPE.F, 0.0 ));
 		this.addUniform("uDisplacementScale", new Uniform(Uniform.TYPE.F, 1.0 ));
 		
-		this.addUniform("uDiffuseColor",  new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
-		this.addUniform("uSpecularColor", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
-		this.addUniform("uAmbientColor",  new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
-		this.addUniform("uShininess",     new Uniform(Uniform.TYPE.F, 30.0  ));
-		this.addUniform("uOpacity",       new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("diffuse",  new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
+		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
+		this.addUniform("ambient",  new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
+		this.addUniform("shininess",     new Uniform(Uniform.TYPE.F, 30.0  ));
+		this.addUniform("opacity",       new Uniform(Uniform.TYPE.F, 1.0 ));
 		
 		this.addUniform("useRefract", new Uniform(Uniform.TYPE.I, false ));
-		this.addUniform("uRefractionRatio", new Uniform(Uniform.TYPE.F, 0.98 ));
-		this.addUniform("uReflectivity", new Uniform(Uniform.TYPE.F, 0.5 ));
+		this.addUniform("refractionRatio", new Uniform(Uniform.TYPE.F, 0.98 ));
+		this.addUniform("reflectivity", new Uniform(Uniform.TYPE.F, 0.5 ));
 		
 		this.addUniform("uOffset", new Uniform(Uniform.TYPE.V2, new Vector2( 0.0, 0.0 ) ));
 		this.addUniform("uRepeat", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 ) ));
@@ -105,15 +105,20 @@ public final class NormalMapShader extends Shader
 	{
 		List<String> vars = Arrays.asList(
 			ChunksVertexShader.SKINNING_PARS,
-			ChunksVertexShader.SHADOWMAP_PARS
+			ChunksVertexShader.SHADOWMAP_PARS,
+			ChunksVertexShader.LOGDEPTHBUF_PAR
 		);
 		
-		List<String> main = Arrays.asList(
+		List<String> main1 = Arrays.asList(
 			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNORMAL
 		);
+		
+		List<String> main2 = Arrays.asList(
+			ChunksVertexShader.LOGDEPTHBUF
+		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main1, main2));
 	}
 	
 	@Override
@@ -121,16 +126,25 @@ public final class NormalMapShader extends Shader
 	{
 		List<String> vars = Arrays.asList(
 			ChunksFragmentShader.SHADOWMAP_PARS,
-			ChunksFragmentShader.FOG_PARS
+			ChunksFragmentShader.FOG_PARS,
+			ChunksFragmentShader.LOGDEPTHBUF_PAR
 		);
 		
-		List<String> main = Arrays.asList(
+		List<String> main1 = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF
+		);
+		
+		List<String> main2 = Arrays.asList(
+			ChunksFragmentShader.ALPHA_TEST
+		);
+		
+		List<String> main3 = Arrays.asList(
 			ChunksFragmentShader.SHADOWMAP,
 			ChunksFragmentShader.LINEAR_TO_GAMMA,
 			ChunksFragmentShader.FOG
 		);
 		
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));		
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main1, main2, main3));		
 	}
 
 }

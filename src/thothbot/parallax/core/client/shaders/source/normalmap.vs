@@ -27,27 +27,27 @@ void main() {
 
 [*]
 
-	// normal, tangent and binormal vectors
+				// normal, tangent and binormal vectors
 
 	#ifdef USE_SKINNING
 
-		vNormal = normalMatrix * skinnedNormal.xyz;
+		vNormal = normalize( normalMatrix * skinnedNormal.xyz );
 
 		vec4 skinnedTangent = skinMatrix * vec4( tangent.xyz, 0.0 );
-		vTangent = normalMatrix * skinnedTangent.xyz;
+		vTangent = normalize( normalMatrix * skinnedTangent.xyz );
 
 	#else
 
-		vNormal = normalMatrix * normal;
-		vTangent = normalMatrix * tangent.xyz;
+		vNormal = normalize( normalMatrix * normal );
+		vTangent = normalize( normalMatrix * tangent.xyz );
 
 	#endif
 
-	vBinormal = cross( vNormal, vTangent ) * tangent.w;
+	vBinormal = normalize( cross( vNormal, vTangent ) * tangent.w );
 
 	vUv = uv * uRepeat + uOffset;
 
-	// displacement mapping
+				// displacement mapping
 
 	vec3 displacedPosition;
 
@@ -63,12 +63,16 @@ void main() {
 
 			#ifdef USE_SKINNING
 
-				vec4 skinVertex = vec4( position, 1.0 );
+				vec4 skinVertex = bindMatrix * vec4( position, 1.0 );
 
-				vec4 skinned  = boneMatX * skinVertex * skinWeight.x;
-				skinned 	  += boneMatY * skinVertex * skinWeight.y;
+				vec4 skinned = vec4( 0.0 );
+				skinned += boneMatX * skinVertex * skinWeight.x;
+				skinned += boneMatY * skinVertex * skinWeight.y;
+				skinned += boneMatZ * skinVertex * skinWeight.z;
+				skinned += boneMatW * skinVertex * skinWeight.w;
+				skinned  = bindMatrixInverse * skinned;
 
-				displacedPosition  = skinned.xyz;
+				displacedPosition = skinned.xyz;
 
 			#else
 
@@ -82,12 +86,16 @@ void main() {
 
 		#ifdef USE_SKINNING
 
-			vec4 skinVertex = vec4( position, 1.0 );
+			vec4 skinVertex = bindMatrix * vec4( position, 1.0 );
 
-			vec4 skinned  = boneMatX * skinVertex * skinWeight.x;
-			skinned 	  += boneMatY * skinVertex * skinWeight.y;
+			vec4 skinned = vec4( 0.0 );
+			skinned += boneMatX * skinVertex * skinWeight.x;
+			skinned += boneMatY * skinVertex * skinWeight.y;
+			skinned += boneMatZ * skinVertex * skinWeight.z;
+			skinned += boneMatW * skinVertex * skinWeight.w;
+			skinned  = bindMatrixInverse * skinned;
 
-			displacedPosition  = skinned.xyz;
+			displacedPosition = skinned.xyz;
 
 		#else
 
@@ -97,25 +105,27 @@ void main() {
 
 	#endif
 
-	//
+				//
 
 	vec4 mvPosition = modelViewMatrix * vec4( displacedPosition, 1.0 );
-	vec4 mPosition = modelMatrix * vec4( displacedPosition, 1.0 );
+	vec4 worldPosition = modelMatrix * vec4( displacedPosition, 1.0 );
 
 	gl_Position = projectionMatrix * mvPosition;
 
-	//
+[*]
 
-	vWorldPosition = mPosition.xyz;
+				//
+
+	vWorldPosition = worldPosition.xyz;
 	vViewPosition = -mvPosition.xyz;
 
-	// shadows
+				// shadows
 
 	#ifdef USE_SHADOWMAP
 
 		for( int i = 0; i < MAX_SHADOWS; i ++ ) {
 
-			vShadowCoord[ i ] = shadowMatrix[ i ] * mPosition;
+			vShadowCoord[ i ] = shadowMatrix[ i ] * worldPosition;
 
 		}
 
