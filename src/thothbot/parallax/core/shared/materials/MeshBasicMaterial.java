@@ -33,34 +33,35 @@ import thothbot.parallax.core.shared.math.Color;
  *
  */
 public class MeshBasicMaterial extends Material
-	implements HasMaterialMap, HasWireframe, HasFog, HasVertexColors, HasSkinning
+	implements HasMaterialMap, HasWireframe, HasFog, HasVertexColors, HasSkinning, HasShading
 {
-	private boolean isWireframe;
-	private int wireframeLineWidth;
+	private Color color;
+	
+	private Texture map;
+	private Texture lightMap;
+	private Texture specularMap;
+	private Texture alphaMap;
 	
 	private Texture envMap;
 	private Texture.OPERATIONS combine;
 	private double reflectivity;
 	private double refractionRatio;
 	
-	private Texture lightMap;
-	
-	private Texture specularMap;
-	
 	private boolean isFog;
 	
-	private Color color;
+	private Material.SHADING shading;
 	
-	private Texture map;
-	
+	private boolean isWireframe = false;
+	private int wireframeLineWidth;
+		
 	private Material.COLORS vertexColors;
 	
 	private boolean isSkinning;
 	private boolean isMorphTargets;
 	private boolean isMorphNormals;
 	
-	private int numSupportedMorphTargets;
-	private int numSupportedMorphNormals;
+//	private int numSupportedMorphTargets;
+//	private int numSupportedMorphNormals;
 	
 	public MeshBasicMaterial()
 	{	
@@ -70,6 +71,8 @@ public class MeshBasicMaterial extends Material
 		setCombine(OPERATIONS.MULTIPLY);
 		setReflectivity(1.0);
 		setRefractionRatio(0.98);
+		
+		setShading(Material.SHADING.SMOOTH);
 		
 		setFog(true);
 		
@@ -121,6 +124,16 @@ public class MeshBasicMaterial extends Material
 	@Override
 	public void setEnvMap(Texture envMap) {
 		this.envMap = envMap;
+	}
+	
+	@Override
+	public Texture getAlphaMap() {
+		return this.alphaMap;
+	}
+
+	@Override
+	public void setAlphaMap(Texture alphaMap) {
+		this.alphaMap = alphaMap;
 	}
 
 	@Override
@@ -224,25 +237,25 @@ public class MeshBasicMaterial extends Material
 		this.isMorphNormals = isMorphNormals;
 	}
 	
-	@Override
-	public int getNumSupportedMorphTargets() {
-		return this.numSupportedMorphTargets;
-	}
+//	@Override
+//	public int getNumSupportedMorphTargets() {
+//		return this.numSupportedMorphTargets;
+//	}
 	
-	@Override
-	public void setNumSupportedMorphTargets(int num) {
-		this.numSupportedMorphTargets = num;
-	}
-	
-	@Override
-	public int getNumSupportedMorphNormals() {
-		return this.numSupportedMorphNormals;
-	}
-	
-	@Override
-	public void setNumSupportedMorphNormals(int num) {
-		this.numSupportedMorphNormals = num;
-	}
+//	@Override
+//	public void setNumSupportedMorphTargets(int num) {
+//		this.numSupportedMorphTargets = num;
+//	}
+//	
+//	@Override
+//	public int getNumSupportedMorphNormals() {
+//		return this.numSupportedMorphNormals;
+//	}
+//	
+//	@Override
+//	public void setNumSupportedMorphNormals(int num) {
+//		this.numSupportedMorphNormals = num;
+//	}
 
 	@Override
 	public Texture getMap() {
@@ -262,5 +275,50 @@ public class MeshBasicMaterial extends Material
 	@Override
 	public void setSpecularMap(Texture specularMap) {
 		this.specularMap = specularMap;
+	}
+	
+	public Material.SHADING getShading() {
+		return this.shading;
+	}
+
+	public void setShading(Material.SHADING shading) {
+		this.shading = shading;
+	}
+	
+	public MeshBasicMaterial clone() {
+
+		MeshBasicMaterial material = new MeshBasicMaterial();
+		
+		super.clone(material);
+
+		material.color.copy( this.color );
+
+		material.map = this.map;
+
+		material.lightMap = this.lightMap;
+
+		material.specularMap = this.specularMap;
+
+		material.alphaMap = this.alphaMap;
+
+		material.envMap = this.envMap;
+		material.combine = this.combine;
+		material.reflectivity = this.reflectivity;
+		material.refractionRatio = this.refractionRatio;
+
+		material.isFog = this.isFog;
+
+		material.shading = this.shading;
+
+		material.isWireframe = this.isWireframe;
+		material.wireframeLineWidth = this.wireframeLineWidth;
+
+		material.vertexColors = this.vertexColors;
+
+		material.isSkinning = this.isSkinning;
+		material.isMorphTargets = this.isMorphTargets;
+
+		return material;
+
 	}
 }

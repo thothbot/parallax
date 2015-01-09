@@ -18,21 +18,10 @@
 
 package thothbot.parallax.core.shared.materials;
 
-public interface HasSkinning 
-{
-	public boolean isSkinning();
-	public void setSkinning(boolean isSkinning);
-	
-	public boolean isMorphTargets();
-	public void setMorphTargets(boolean isMorphTargets);
-	
-	public boolean isMorphNormals();
-	public void setMorphNormals(boolean isMorphNormals);
-//	
-//	
-//	public int getNumSupportedMorphTargets();
-//	public void setNumSupportedMorphTargets(int num);
-//	
-//	public int getNumSupportedMorphNormals();
-//	public void setNumSupportedMorphNormals(int num);
+import thothbot.parallax.core.client.textures.Texture;
+
+public interface HasAlphaMap {
+
+	public Texture getAlphaMap();
+	public void setAlphaMap(Texture map);
 }

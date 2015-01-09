@@ -22,7 +22,7 @@ import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.shared.math.Color;
 
 public class ShaderMaterial extends Material 
-	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning
+	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning, HasShading
 { 
 	class ShaderMaterialShader extends Shader
 	{
@@ -42,19 +42,26 @@ public class ShaderMaterial extends Material
 	private boolean isWireframe;
 	private int wireframeLineWidth;
 	
+	// set to use scene fog
 	private boolean isFog;
+	
+	private Material.SHADING shading;
 	
 	private Color color;
 	
 	private Material.COLORS vertexColors;
 	
+	// set to use skinning attribute streams
 	private boolean isSkinning;
+	// set to use morph targets
 	private boolean isMorphTargets;
+	// set to use morph normals
 	private boolean isMorphNormals;
 	
 	private int numSupportedMorphTargets;
 	private int numSupportedMorphNormals;
 	
+	// set to use scene lights
 	private boolean isLights;
 	
 	private Shader shader;
@@ -82,6 +89,8 @@ public class ShaderMaterial extends Material
 		setWireframeLineWidth(1);
 		
 		setFog(false);
+		
+		setShading(Material.SHADING.SMOOTH);
 		
 		setColor(new Color(0xffffff));
 		
@@ -189,23 +198,64 @@ public class ShaderMaterial extends Material
 		this.isMorphNormals = isMorphNormals;
 	}
 	
-	@Override
-	public int getNumSupportedMorphTargets() {
-		return this.numSupportedMorphTargets;
+//	@Override
+//	public int getNumSupportedMorphTargets() {
+//		return this.numSupportedMorphTargets;
+//	}
+//	
+//	@Override
+//	public void setNumSupportedMorphTargets(int num) {
+//		this.numSupportedMorphTargets = num;
+//	}
+//	
+//	@Override
+//	public int getNumSupportedMorphNormals() {
+//		return this.numSupportedMorphNormals;
+//	}
+//	
+//	@Override
+//	public void setNumSupportedMorphNormals(int num) {
+//		this.numSupportedMorphNormals = num;
+//	}
+	
+	public Material.SHADING getShading() {
+		return this.shading;
+	}
+
+	public void setShading(Material.SHADING shading) {
+		this.shading = shading;
 	}
 	
-	@Override
-	public void setNumSupportedMorphTargets(int num) {
-		this.numSupportedMorphTargets = num;
-	}
-	
-	@Override
-	public int getNumSupportedMorphNormals() {
-		return this.numSupportedMorphNormals;
-	}
-	
-	@Override
-	public void setNumSupportedMorphNormals(int num) {
-		this.numSupportedMorphNormals = num;
+	public ShaderMaterial clone() {
+
+		ShaderMaterial material = new ShaderMaterial();
+		
+		super.clone(material);
+
+		material.shader = this.shader;
+
+//		material.uniforms = THREE.UniformsUtils.clone( this.uniforms );
+
+//		material.attributes = this.attributes;
+//		material.defines = this.defines;
+
+		material.shading = this.shading;
+
+		material.isWireframe = this.isWireframe;
+		material.wireframeLineWidth = this.wireframeLineWidth;
+
+		material.isFog = this.isFog;
+
+		material.isLights = this.isLights;
+
+		material.vertexColors = this.vertexColors;
+
+		material.isSkinning = this.isSkinning;
+
+		material.isMorphTargets = this.isMorphTargets;
+		material.isMorphNormals = this.isSkinning;
+
+		return material;
+
 	}
 }

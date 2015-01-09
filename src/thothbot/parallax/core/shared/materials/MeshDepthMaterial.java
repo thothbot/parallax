@@ -28,6 +28,7 @@ import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 
 public class MeshDepthMaterial extends Material implements HasWireframe
 {
+//	private boolean isMorphTargets = false;
 	private boolean isWireframe;
 	private int wireframeLineWidth;
 
@@ -67,6 +68,19 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	@Override
 	public void setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+	}
+	
+	public MeshDepthMaterial clone () {
+
+		MeshDepthMaterial material = new MeshDepthMaterial();
+		
+		super.clone(material);
+
+		material.isWireframe = this.isWireframe;
+		material.wireframeLineWidth = this.wireframeLineWidth;
+
+		return material;
+
 	}
 	
 	@Override

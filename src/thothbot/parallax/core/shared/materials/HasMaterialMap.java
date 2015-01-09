@@ -24,7 +24,7 @@ package thothbot.parallax.core.shared.materials;
  * @author thothbot
  */
 public interface HasMaterialMap extends HasColor, HasMap, HasLightMap,
-		HasEnvMap, HasSpecularMap
+		HasEnvMap, HasSpecularMap, HasAlphaMap
 {
 
 }

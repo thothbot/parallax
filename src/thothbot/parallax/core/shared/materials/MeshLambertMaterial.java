@@ -31,39 +31,40 @@ import thothbot.parallax.core.shared.math.Vector3;
 
 public final class MeshLambertMaterial extends Material 
 	implements HasMaterialMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
-	HasSkinning, HasAmbientEmissiveColor
+	HasSkinning, HasAmbientEmissiveColor, HasShading
 {
+	private Color color;
+	private Color ambient;
+	private Color emissive;
+
 	private boolean isWrapAround;
 	private Vector3 wrapRGB;
-	
-	private boolean isWireframe;
-	private int wireframeLineWidth;
+
+	private Texture map;
+	private Texture lightMap;
+	private Texture specularMap;
+	private Texture alphaMap;
 	
 	private Texture envMap;
 	private Texture.OPERATIONS combine;
 	private double reflectivity;
 	private double refractionRatio;
-	
-	private Texture lightMap;
-	
-	private Texture specularMap;
-	
+		
 	private boolean isFog;
 	
-	private Color color;
-	private Color ambient;
-	private Color emissive;
+	private Material.SHADING shading;
 	
-	private Texture map;
-	
+	private boolean isWireframe;
+	private int wireframeLineWidth;
+
 	private Material.COLORS vertexColors;
 	
 	private boolean isSkinning;
 	private boolean isMorphTargets;
 	private boolean isMorphNormals;
 	
-	private int numSupportedMorphTargets;
-	private int numSupportedMorphNormals;
+//	private int numSupportedMorphTargets;
+//	private int numSupportedMorphNormals;
 	
 	public MeshLambertMaterial() 
 	{
@@ -78,6 +79,8 @@ public final class MeshLambertMaterial extends Material
 		setRefractionRatio(0.98);
 		
 		setFog(true);
+		
+		setShading(Material.SHADING.SMOOTH);
 		
 		setColor(new Color(0xffffff)); // diffuse
 		setAmbient(new Color(0xffffff));
@@ -140,6 +143,16 @@ public final class MeshLambertMaterial extends Material
 	@Override
 	public void setEnvMap(Texture envMap) {
 		this.envMap = envMap;
+	}
+	
+	@Override
+	public Texture getAlphaMap() {
+		return this.alphaMap;
+	}
+
+	@Override
+	public void setAlphaMap(Texture alphaMap) {
+		this.alphaMap = alphaMap;
 	}
 
 	@Override
@@ -272,25 +285,25 @@ public final class MeshLambertMaterial extends Material
 		this.emissive = emissive;
 	}
 	
-	@Override
-	public int getNumSupportedMorphTargets() {
-		return this.numSupportedMorphTargets;
-	}
-	
-	@Override
-	public void setNumSupportedMorphTargets(int num) {
-		this.numSupportedMorphTargets = num;
-	}
-	
-	@Override
-	public int getNumSupportedMorphNormals() {
-		return this.numSupportedMorphNormals;
-	}
-	
-	@Override
-	public void setNumSupportedMorphNormals(int num) {
-		this.numSupportedMorphNormals = num;
-	}
+//	@Override
+//	public int getNumSupportedMorphTargets() {
+//		return this.numSupportedMorphTargets;
+//	}
+//	
+//	@Override
+//	public void setNumSupportedMorphTargets(int num) {
+//		this.numSupportedMorphTargets = num;
+//	}
+//	
+//	@Override
+//	public int getNumSupportedMorphNormals() {
+//		return this.numSupportedMorphNormals;
+//	}
+//	
+//	@Override
+//	public void setNumSupportedMorphNormals(int num) {
+//		this.numSupportedMorphNormals = num;
+//	}
 	
 	@Override
 	public Texture getSpecularMap() {
@@ -300,6 +313,57 @@ public final class MeshLambertMaterial extends Material
 	@Override
 	public void setSpecularMap(Texture specularMap) {
 		this.specularMap = specularMap;
+	}
+	
+	public Material.SHADING getShading() {
+		return this.shading;
+	}
+
+	public void setShading(Material.SHADING shading) {
+		this.shading = shading;
+	}
+	
+	public MeshLambertMaterial clone() {
+
+		MeshLambertMaterial material = new MeshLambertMaterial();
+		
+		super.clone(material);
+
+		material.color.copy( this.color );
+		material.ambient.copy( this.ambient );
+		material.emissive.copy( this.emissive );
+
+		material.isWrapAround = this.isWrapAround;
+		material.wrapRGB.copy( this.wrapRGB );
+
+		material.map = this.map;
+
+		material.lightMap = this.lightMap;
+
+		material.specularMap = this.specularMap;
+
+		material.alphaMap = this.alphaMap;
+
+		material.envMap = this.envMap;
+		material.combine = this.combine;
+		material.reflectivity = this.reflectivity;
+		material.refractionRatio = this.refractionRatio;
+
+		material.isFog = this.isFog;
+
+		material.shading = this.shading;
+
+		material.isWireframe = this.isWireframe;
+		material.wireframeLineWidth = this.wireframeLineWidth;
+
+		material.vertexColors = this.vertexColors;
+
+		material.isSkinning = this.isSkinning;
+		material.isMorphTargets = this.isMorphTargets;
+		material.isMorphNormals = this.isMorphNormals;
+
+		return material;
+
 	}
 	
 	@Override

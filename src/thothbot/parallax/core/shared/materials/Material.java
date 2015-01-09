@@ -37,7 +37,6 @@ import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector4;
@@ -138,12 +137,15 @@ public abstract class Material
 	private int id;
 	
 	private String name;
+	
+	// Store shader associated to the material
+	private Shader shader;
+
+	private SIDE side = SIDE.FRONT;
 
 	private double opacity;
 	private boolean isTransparent;
-	
-	private Material.SHADING shading;
-	
+		
 	private Material.BLENDING blending;
 	private BlendingFactorSrc blendSrc;
 	private BlendingFactorDest blendDst;
@@ -158,25 +160,22 @@ public abstract class Material
 	
 	private double alphaTest;
 	
+	private double overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
+	
 	private boolean isVisible = true;
 	private boolean isNeedsUpdate = true;
 	
-	private SIDE side = SIDE.FRONT;
-	
-	private boolean isShadowPass;
-	
-	// Store shader associated to the material
-	private Shader shader;
-	
+	//
+		
+//	private boolean isShadowPass;
+		
 	public Material()
 	{
 		this.id = Material.MaterialCount++;
 		
 		setOpacity(1.0);
 		setTransparent(false);
-		
-		setShading(Material.SHADING.SMOOTH);
-		
+				
 		setBlending( Material.BLENDING.NORMAL );
 		setBlendSrc( BlendingFactorSrc.SRC_ALPHA );
 		setBlendDst( BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
@@ -192,11 +191,6 @@ public abstract class Material
 		setAlphaTest(0);
 	}
 	
-	// Must be overwriten
-	protected abstract Shader getAssociatedShader();
-	
-	public abstract Material clone();
-
 	/**
 	 * Gets unique number of this material instance.
 	 */
@@ -427,21 +421,13 @@ public abstract class Material
 		this.alphaTest = alphaTest;
 	}
 	
-	public Material.SHADING getShading() {
-		return this.shading;
-	}
-
-	public void setShading(Material.SHADING shading) {
-		this.shading = shading;
-	}
-	
-	public boolean isShadowPass() {
-		return isShadowPass;
-	}
-
-	public void setShadowPass(boolean isShadowPass) {
-		this.isShadowPass = isShadowPass;
-	}
+//	public boolean isShadowPass() {
+//		return isShadowPass;
+//	}
+//
+//	public void setShadowPass(boolean isShadowPass) {
+//		this.isShadowPass = isShadowPass;
+//	}
 
 	public Shader getShader() 
 	{
@@ -453,6 +439,43 @@ public abstract class Material
 		}
 
 		return this.shader;
+	}
+	
+	// Must be overwriten
+	protected abstract Shader getAssociatedShader();
+	
+	public abstract Material clone();
+	
+	public Material clone( Material material ) {
+
+		material.name = this.name;
+
+		material.side = this.side;
+
+		material.opacity = this.opacity;
+		material.isTransparent = this.isTransparent;
+
+		material.blending = this.blending;
+
+		material.blendSrc = this.blendSrc;
+		material.blendDst = this.blendDst;
+		material.blendEquation = this.blendEquation;
+
+		material.isDepthTest = this.isDepthTest;
+		material.isDepthWrite = this.isDepthWrite;
+
+		material.isPolygonOffset = this.isPolygonOffset;
+		material.polygonOffsetFactor = this.polygonOffsetFactor;
+		material.polygonOffsetUnits = this.polygonOffsetUnits;
+
+		material.alphaTest = this.alphaTest;
+
+		material.overdraw = this.overdraw;
+
+		material.isVisible = this.isVisible;
+
+		return material;
+
 	}
 
 	public void updateProgramParameters(ProgramParameters parameters)
@@ -466,7 +489,7 @@ public abstract class Material
 
 		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
 
-		parameters.sizeAttenuation = this instanceof ParticleBasicMaterial && ((ParticleBasicMaterial)this).isSizeAttenuation();
+		parameters.sizeAttenuation = this instanceof PointCloudMaterial && ((PointCloudMaterial)this).isSizeAttenuation();
 
 		if(this instanceof HasSkinning)
 		{
@@ -589,7 +612,6 @@ public abstract class Material
 			options.add(SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
 		}
 
-		options.add(ChunksVertexShader.DEFAULT_PARS);
 		options.add("");
 
 		String retval = "";
@@ -674,8 +696,6 @@ public abstract class Material
 			options.add(SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
 		if (parameters.shadowMapCascade)
 			options.add(SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
-
-		options.add(ChunksFragmentShader.DEFAULT_PARS);
 
 		options.add("");
 		String retval = "";

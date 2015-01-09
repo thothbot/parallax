@@ -36,7 +36,7 @@ public final class LineBasicMaterial extends Material
 	implements HasFog, HasColor, HasVertexColors
 {
 
-	private boolean isFog;
+	private boolean isFog = true;
 	
 	private Color color;
 	
@@ -46,9 +46,9 @@ public final class LineBasicMaterial extends Material
 	
 	public LineBasicMaterial()
 	{	
-		setFog(true);
+		this.isFog = true;
 		
-		setColor(new Color(0xffffff));
+		this.color = new Color(0xffffff);
 		
 		setLinewidth(1.0);
 		
@@ -97,6 +97,24 @@ public final class LineBasicMaterial extends Material
 	@Override
 	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
+	}
+	
+	public LineBasicMaterial clone() {
+
+		LineBasicMaterial material = new LineBasicMaterial();
+		super.clone(material);
+
+
+		material.color.copy( this.color );
+
+		material.linewidth = this.linewidth;
+
+		material.vertexColors = this.vertexColors;
+
+		material.isFog = this.isFog;
+
+		return material;
+
 	}
 	
 	@Override

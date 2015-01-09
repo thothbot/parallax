@@ -30,7 +30,7 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.math.Color;
 
-public final class ParticleBasicMaterial extends Material implements HasFog,
+public final class PointCloudMaterial extends Material implements HasFog,
 		HasColor, HasMap, HasVertexColors, HasEventBus {
 	private boolean isFog;
 
@@ -44,7 +44,7 @@ public final class ParticleBasicMaterial extends Material implements HasFog,
 
 	private boolean sizeAttenuation;
 
-	public ParticleBasicMaterial() {
+	public PointCloudMaterial() {
 
 		setFog(true);
 
@@ -116,6 +116,27 @@ public final class ParticleBasicMaterial extends Material implements HasFog,
 	@Override
 	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
+	}
+	
+	public PointCloudMaterial clone () {
+
+		PointCloudMaterial material = new PointCloudMaterial();
+		
+		super.clone(material);
+
+		material.color.copy( this.color );
+
+		material.map = this.map;
+
+		material.size = this.size;
+		material.sizeAttenuation = this.sizeAttenuation;
+
+		material.vertexColors = this.vertexColors;
+
+		material.isFog = this.isFog;
+
+		return material;
+
 	}
 
 	@Override

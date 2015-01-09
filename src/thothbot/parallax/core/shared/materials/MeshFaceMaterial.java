@@ -47,4 +47,19 @@ public final class MeshFaceMaterial extends Material
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public MeshFaceMaterial clone() {
+
+		MeshFaceMaterial material = new MeshFaceMaterial();
+
+		for ( int i = 0; i < this.materials.size(); i ++ ) {
+
+			material.materials.add( this.materials.get( i ).clone() );
+
+		}
+
+		return material;
+
+	}
+
 }

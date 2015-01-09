@@ -32,38 +32,44 @@ import thothbot.parallax.core.shared.math.Vector3;
 
 public final class MeshPhongMaterial extends Material 
 	implements HasMaterialMap, HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
-	HasSkinning, HasAmbientEmissiveColor
+	HasSkinning, HasAmbientEmissiveColor, HasShading
 {
+	
+	private Color color;
+	private Color ambient;
+	private Color emissive;
+	private Color specular;	
+	private double shininess;
+	
+	private boolean isMetal;
+	
 	private boolean isWrapAround;
 	private Vector3 wrapRGB;
-	
-	private boolean isWireframe;
-	private int wireframeLineWidth;
-	
-	private Texture envMap;
-	private Texture.OPERATIONS combine;
-	private double reflectivity;
-	private double refractionRatio;
-	
+		
+	private Texture map;
 	private Texture lightMap;
 	
-	private Texture specularMap;
 	private Texture bumpMap;
 	private double bumpScale;
 	
 	private Texture normalMap;
 	private Vector2 normalScale;
 	
+	private Texture specularMap;
+	
+	private Texture alphaMap;
+	
+	private Texture envMap;
+	private Texture.OPERATIONS combine;
+	private double reflectivity;
+	private double refractionRatio;
+	
 	private boolean isFog;
 	
-	private Color color;
-	private Color ambient;
-	private Color emissive;
-	private Color specular;	
-
-	private double shininess;
+	private Material.SHADING shading;
 	
-	private Texture map;
+	private boolean isWireframe;
+	private int wireframeLineWidth;
 	
 	private Material.COLORS vertexColors;
 	
@@ -71,11 +77,10 @@ public final class MeshPhongMaterial extends Material
 	private boolean isMorphTargets;
 	private boolean isMorphNormals;
 	
-	private int numSupportedMorphTargets;
-	private int numSupportedMorphNormals;	
+//	private int numSupportedMorphTargets;
+//	private int numSupportedMorphNormals;	
 	
-	private boolean isMetal;
-	private boolean isPerPixel;
+//	private boolean isPerPixel;
 	
 	public MeshPhongMaterial()
 	{	
@@ -92,6 +97,8 @@ public final class MeshPhongMaterial extends Material
 		setNormalScale(new Vector2(1, 1));
 		
 		setFog(true);
+		
+		setShading(Material.SHADING.SMOOTH);
 		
 		setColor(new Color(0xffffff));
 		setAmbient(new Color(0xffffff));
@@ -128,13 +135,13 @@ public final class MeshPhongMaterial extends Material
 		this.shininess = shininess;
 	}
 	
-	public boolean isPerPixel() {
-		return this.isPerPixel;
-	}
-	
-	public void setPerPixel(boolean isPerPixel) {
-		this.isPerPixel = isPerPixel;
-	}
+//	public boolean isPerPixel() {
+//		return this.isPerPixel;
+//	}
+//	
+//	public void setPerPixel(boolean isPerPixel) {
+//		this.isPerPixel = isPerPixel;
+//	}
 	
 	public boolean isMetal() {
 		return this.isMetal;
@@ -265,6 +272,16 @@ public final class MeshPhongMaterial extends Material
 	}
 	
 	@Override
+	public Texture getAlphaMap() {
+		return this.alphaMap;
+	}
+
+	@Override
+	public void setAlphaMap(Texture alphaMap) {
+		this.alphaMap = alphaMap;
+	}
+	
+	@Override
 	public Material.COLORS isVertexColors() {
 		return this.vertexColors;
 	}
@@ -304,25 +321,25 @@ public final class MeshPhongMaterial extends Material
 		this.isMorphNormals = isMorphNormals;
 	}
 	
-	@Override
-	public int getNumSupportedMorphTargets() {
-		return this.numSupportedMorphTargets;
-	}
-	
-	@Override
-	public void setNumSupportedMorphTargets(int num) {
-		this.numSupportedMorphTargets = num;
-	}
-	
-	@Override
-	public int getNumSupportedMorphNormals() {
-		return this.numSupportedMorphNormals;
-	}
-	
-	@Override
-	public void setNumSupportedMorphNormals(int num) {
-		this.numSupportedMorphNormals = num;
-	}
+//	@Override
+//	public int getNumSupportedMorphTargets() {
+//		return this.numSupportedMorphTargets;
+//	}
+//	
+//	@Override
+//	public void setNumSupportedMorphTargets(int num) {
+//		this.numSupportedMorphTargets = num;
+//	}
+//	
+//	@Override
+//	public int getNumSupportedMorphNormals() {
+//		return this.numSupportedMorphNormals;
+//	}
+//	
+//	@Override
+//	public void setNumSupportedMorphNormals(int num) {
+//		this.numSupportedMorphNormals = num;
+//	}
 
 	@Override
 	public Color getAmbient() {
@@ -392,6 +409,67 @@ public final class MeshPhongMaterial extends Material
 	@Override
 	public void setNormalScale(Vector2 normalScale) {
 		this.normalScale = normalScale;
+	}
+	
+	public Material.SHADING getShading() {
+		return this.shading;
+	}
+
+	public void setShading(Material.SHADING shading) {
+		this.shading = shading;
+	}
+	
+	public MeshPhongMaterial clone() {
+
+		MeshPhongMaterial material = new MeshPhongMaterial();
+		
+		super.clone(material);
+
+		material.color.copy( this.color );
+		material.ambient.copy( this.ambient );
+		material.emissive.copy( this.emissive );
+		material.specular.copy( this.specular );
+		material.shininess = this.shininess;
+
+		material.isMetal = this.isMetal;
+
+		material.isWrapAround = this.isWrapAround;
+		material.wrapRGB.copy( this.wrapRGB );
+
+		material.map = this.map;
+
+		material.lightMap = this.lightMap;
+
+		material.bumpMap = this.bumpMap;
+		material.bumpScale = this.bumpScale;
+
+		material.normalMap = this.normalMap;
+		material.normalScale.copy( this.normalScale );
+
+		material.specularMap = this.specularMap;
+
+		material.alphaMap = this.alphaMap;
+
+		material.envMap = this.envMap;
+		material.combine = this.combine;
+		material.reflectivity = this.reflectivity;
+		material.refractionRatio = this.refractionRatio;
+
+		material.isFog = this.isFog;
+
+		material.shading = this.shading;
+
+		material.isWireframe = this.isWireframe;
+		material.wireframeLineWidth = this.wireframeLineWidth;
+
+		material.vertexColors = this.vertexColors;
+
+		material.isSkinning = this.isSkinning;
+		material.isMorphTargets = this.isMorphTargets;
+		material.isMorphNormals = this.isMorphNormals;
+
+		return material;
+
 	}
 	
 	@Override

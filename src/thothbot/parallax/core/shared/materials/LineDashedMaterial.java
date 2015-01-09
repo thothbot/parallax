@@ -120,5 +120,27 @@ public class LineDashedMaterial extends Material implements
 	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
+	
+	public LineDashedMaterial clone() {
+
+		LineDashedMaterial material = new LineDashedMaterial();
+		
+		super.clone(material);
+
+		material.color.copy( this.color );
+
+		material.linewidth = this.linewidth;
+
+		material.scale = this.scale;
+		material.dashSize = this.dashSize;
+		material.gapSize = this.gapSize;
+
+		material.vertexColors = this.vertexColors;
+
+		material.isFog = this.isFog;
+
+		return material;
+
+	}
 
 }

@@ -18,14 +18,18 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import com.google.gwt.safehtml.client.HasSafeHtml;
+
 import thothbot.parallax.core.client.shaders.NormalShader;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.shared.cameras.Camera;
 
-public final class MeshNormalMaterial extends Material implements HasWireframe
+public final class MeshNormalMaterial extends Material implements HasWireframe, HasShading
 {
 	private boolean isWireframe;
 	private int wireframeLineWidth;
+	
+	private Material.SHADING shading;
 	
 	public MeshNormalMaterial()
 	{
@@ -58,6 +62,29 @@ public final class MeshNormalMaterial extends Material implements HasWireframe
 	@Override
 	public void setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+	}
+	
+	public Material.SHADING getShading() {
+		return this.shading;
+	}
+
+	public void setShading(Material.SHADING shading) {
+		this.shading = shading;
+	}
+	
+	public MeshNormalMaterial clone() {
+
+		MeshNormalMaterial material = new MeshNormalMaterial();
+		
+		super.clone(material);
+
+		material.shading = this.shading;
+
+		material.isWireframe = this.isWireframe;
+		material.wireframeLineWidth = this.wireframeLineWidth;
+
+		return material;
+
 	}
 	
 	@Override
