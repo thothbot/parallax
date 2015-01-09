@@ -18,6 +18,9 @@
 
 package thothbot.parallax.core.client.shaders;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
@@ -29,20 +32,20 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public final class CubeMapShader extends Shader 
+public final class CubeShader extends Shader 
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 
-		@Source("source/cube_map.vs")
+		@Source("source/cube.vs")
 		TextResource getVertexShader();
 
-		@Source("source/cube_map.fs")
+		@Source("source/cube.fs")
 		TextResource getFragmentShader();
 	}
 
-	public CubeMapShader() 
+	public CubeShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -52,5 +55,33 @@ public final class CubeMapShader extends Shader
 	{
 		this.addUniform("tCube", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0 ));
+	}
+	
+	@Override
+	protected void updateVertexSource(String src)
+	{
+		List<String> vars = Arrays.asList(
+			ChunksVertexShader.LOGDEPTHBUF_PAR
+		);
+		
+		List<String> main = Arrays.asList(
+			ChunksVertexShader.LOGDEPTHBUF
+		);
+
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
+	}
+	
+	@Override
+	protected void updateFragmentSource(String src)
+	{
+		List<String> vars = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF_PAR
+		);
+			
+		List<String> main = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF
+		);
+			
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
 	}
 }
