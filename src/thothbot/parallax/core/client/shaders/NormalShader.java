@@ -18,6 +18,9 @@
 
 package thothbot.parallax.core.client.shaders;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
@@ -51,5 +54,36 @@ public final class NormalShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
+	}
+	
+	@Override
+	protected void updateVertexSource(String src)
+	{
+		List<String> vars = Arrays.asList(
+			ChunksVertexShader.MORPHTARGET_PARS,
+			ChunksVertexShader.LOGDEPTHBUF_PAR
+		);
+		
+		List<String> main1 = Arrays.asList(
+			ChunksVertexShader.MORPHTARGET,
+			ChunksVertexShader.DEFAULT,
+			ChunksVertexShader.LOGDEPTHBUF
+		);
+		
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main1));	
+	}
+	
+	@Override
+	protected void updateFragmentSource(String src)
+	{
+		List<String> vars = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF_PAR
+		);
+			
+		List<String> main = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF
+		);
+
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
 	}
 }
