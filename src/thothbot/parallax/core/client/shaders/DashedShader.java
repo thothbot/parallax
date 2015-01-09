@@ -56,7 +56,20 @@ public class DashedShader extends Shader
 	@Override
 	protected void updateVertexSource(String src)
 	{
-		super.updateFragmentSource(Shader.updateShaderSource(src, ChunksVertexShader.COLOR_PARS, ChunksVertexShader.COLOR));	
+		List<String> vars = Arrays.asList(
+			ChunksVertexShader.COLOR_PARS,
+			ChunksVertexShader.LOGDEPTHBUF_PAR
+		);
+		
+		List<String> main1 = Arrays.asList(
+			ChunksVertexShader.COLOR
+		);
+		
+		List<String> main2 = Arrays.asList(
+			ChunksVertexShader.LOGDEPTHBUF
+		);
+		
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main1, main2));	
 	}
 	
 	@Override
@@ -64,10 +77,12 @@ public class DashedShader extends Shader
 	{
 		List<String> vars = Arrays.asList(
 			ChunksFragmentShader.COLOR_PARS,
-			ChunksFragmentShader.FOG_PARS
+			ChunksFragmentShader.FOG_PARS,
+			ChunksFragmentShader.LOGDEPTHBUF_PAR
 		);
 			
 		List<String> main = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF,
 			ChunksFragmentShader.COLOR,
 			ChunksFragmentShader.FOG
 		);
