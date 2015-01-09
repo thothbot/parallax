@@ -62,7 +62,8 @@ public final class ParticleBasicShader extends Shader
 	{
 		List<String> vars = Arrays.asList(
 			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.SHADOWMAP_PARS
+			ChunksVertexShader.SHADOWMAP_PARS,
+			ChunksVertexShader.LOGDEPTHBUF_PAR
 		);
 		
 		List<String> main = Arrays.asList(
@@ -70,6 +71,7 @@ public final class ParticleBasicShader extends Shader
 		);
 		
 		List<String> main2 = Arrays.asList(
+			ChunksVertexShader.LOGDEPTHBUF,
 			ChunksVertexShader.WORLDPOS,
 			ChunksVertexShader.SHADOWMAP
 		);
@@ -84,10 +86,12 @@ public final class ParticleBasicShader extends Shader
 			ChunksFragmentShader.COLOR_PARS,
 			ChunksFragmentShader.MAP_PARTICLE_PARS,
 			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.SHADOWMAP_PARS
+			ChunksFragmentShader.SHADOWMAP_PARS,
+			ChunksFragmentShader.LOGDEPTHBUF_PAR
 		);
 		
 		List<String> main = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF,
 			ChunksFragmentShader.MAP_PARTICLE,
 			ChunksFragmentShader.ALPHA_TEST,
 			ChunksFragmentShader.COLOR,
