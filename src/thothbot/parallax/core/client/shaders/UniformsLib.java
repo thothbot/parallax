@@ -40,7 +40,7 @@ public class UniformsLib
 	public static Map<String, Uniform> getCommon ()
 	{
 		Map<String, Uniform> retval = new HashMap<String, Uniform>();
-		
+				
 		retval.put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
 		retval.put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
@@ -49,10 +49,11 @@ public class UniformsLib
 			
 		retval.put("lightMap", new Uniform(Uniform.TYPE.T ));
 		retval.put("specularMap", new Uniform(Uniform.TYPE.T ));
+		retval.put("alphaMap", new Uniform(Uniform.TYPE.T ));
 			
 		retval.put("envMap", new Uniform(Uniform.TYPE.T ));
 		retval.put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
-		retval.put("useRefract", new Uniform(Uniform.TYPE.I,  true ));
+		retval.put("useRefract", new Uniform(Uniform.TYPE.I,  0 ));
 		retval.put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
 		retval.put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98 ));
 		retval.put("combine", new Uniform(Uniform.TYPE.I,  0 ));
@@ -115,7 +116,7 @@ public class UniformsLib
 		retval.put("spotLightPosition",  new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 		retval.put("spotLightDirection", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
 		retval.put("spotLightDistance",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-		retval.put("spotLightAngle",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+		retval.put("spotLightAngleCos",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		retval.put("spotLightExponent",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
 		
 		return retval;

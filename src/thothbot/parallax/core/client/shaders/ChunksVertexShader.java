@@ -28,7 +28,6 @@ public class ChunksVertexShader
 	public static String COLOR_PARS = Chunks.INSTANCE.getColorParsVertex().getText();
 	public static String COLOR = Chunks.INSTANCE.getColorVertex().getText();
 	
-	public static String DEFAULT_PARS = Chunks.INSTANCE.getDefaultParsVertex().getText();
 	public static String DEFAULT = Chunks.INSTANCE.getDefaultVertex().getText();
 	
 	public static String DEFAULTNORMAL = Chunks.INSTANCE.getDefaultNormalVertex().getText();

@@ -34,8 +34,6 @@ public class ChunksFragmentShader
 	public static String ENVMAP_PARS = Chunks.INSTANCE.getEnvmapParsFragment().getText();
 	public static String ENVMAP = Chunks.INSTANCE.getEnvmapFragment().getText();
 	
-	public static String DEFAULT_PARS = Chunks.INSTANCE.getDefaultParsFragment().getText();
-	
 	public static String FOG_PARS = Chunks.INSTANCE.getFogParsFragment().getText();
 	public static String FOG = Chunks.INSTANCE.getFogFragment().getText();
 	
