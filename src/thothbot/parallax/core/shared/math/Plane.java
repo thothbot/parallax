@@ -23,9 +23,6 @@ public class Plane
 	private Vector3 normal;
 	private double constant;
 	
-	private static Vector3 __v1 = new Vector3();
-	private static Vector3 __v2 = new Vector3();
-
 	public Plane()
 	{
 		this(new Vector3(1, 0, 0), 0);
@@ -60,26 +57,29 @@ public class Plane
 
 		return this;
 	}
+	
+	public Plane setComponents( double x, double y, double z, double w ) {
 
-	public Plane setComponents( double x, double y, double z, double w ) 
-	{
 		this.normal.set( x, y, z );
 		this.constant = w;
 
 		return this;
 	}
-
-	public Plane  setFromNormalAndCoplanarPoint(Vector3 normal, Vector3 point ) 
+	
+	public Plane setFromNormalAndCoplanarPoint(Vector3 normal, Vector3 point ) 
 	{
 		this.normal.copy( normal );
 		this.constant = - point.dot( this.normal );	// must be this.normal, not normal, as this.normal is normalized
 
 		return this;
 	}
-
+	
 	public Plane setFromCoplanarPoints( Vector3 a, Vector3 b, Vector3 c ) 
 	{
-		Vector3 normal = Plane.__v1.sub( c, b ).cross( Plane.__v2.sub( a, b ) ).normalize();
+		Vector3 v1 = new Vector3();
+		Vector3 v2 = new Vector3();
+
+		Vector3 normal = v1.sub( c, b ).cross( v2.sub( a, b ) ).normalize();
 
 		// Q: should an error be thrown if normal is zero (e.g. degenerate plane)?
 
@@ -109,7 +109,7 @@ public class Plane
 
 	public Plane negate() 
 	{
-		this.constant *= -1;
+		this.constant *= - 1;
 		this.normal.negate();
 
 		return this;
@@ -125,16 +125,11 @@ public class Plane
 		return this.distanceToPoint( sphere.getCenter() ) - sphere.getRadius();
 	}
 
-	public Vector3 projectPoint( Vector3 point ) 
-	{
-		return this.orthoPoint( point ).sub( point ).negate();
-	}
-	
 	public Vector3 projectPoint( Vector3 point, Vector3 optionalTarget ) 
 	{
 		return this.orthoPoint( point, optionalTarget ).sub( point ).negate();
 	}
-
+	
 	public Vector3 orthoPoint( Vector3 point )
 	{
 		return orthoPoint(point, new Vector3());
@@ -150,46 +145,54 @@ public class Plane
 	/**
 	 * Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
 	 */
-	public boolean isIntersectionLine( Vector3 startPoint, Vector3 endPoint ) 
+	public boolean isIntersectionLine( Line3 line ) 
 	{
-		double startSign = this.distanceToPoint( startPoint );
-		double endSign = this.distanceToPoint( endPoint );
+		// Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
+
+		double startSign = this.distanceToPoint( line.getStart() );
+		double endSign = this.distanceToPoint( line.getEnd() );
 
 		return ( startSign < 0 && endSign > 0 ) || ( endSign < 0 && startSign > 0 );
 	}
 
-	public Vector3 intersectLine( Vector3 startPoint, Vector3 endPoint)
+	public Vector3 intersectLine( Line3 line )
 	{
-		return intersectLine(startPoint, endPoint, new Vector3());
+		return intersectLine(line, new Vector3());
 	}
 	
-	public Vector3 intersectLine( Vector3 startPoint, Vector3 endPoint, Vector3 optionalTarget ) 
+	public Vector3 intersectLine( Line3 line, Vector3 optionalTarget ) 
 	{
 
-		Vector3 direction = Plane.__v1.sub( endPoint, startPoint );
+		Vector3 v1 = new Vector3();
+
+		Vector3 direction = line.delta( v1 );
 
 		double denominator = this.normal.dot( direction );
 
-		if ( denominator == 0 ) 
-		{
+		if ( denominator == 0 ) {
+
 			// line is coplanar, return origin
-			if( this.distanceToPoint( startPoint ) == 0 ) 
-			{
-				return optionalTarget.copy( startPoint );
+			if ( this.distanceToPoint( line.getStart() ) == 0 ) {
+
+				return optionalTarget.copy( line.getStart() );
+
 			}
 
 			// Unsure if this is the correct method to handle this case.
 			return null;
+
 		}
 
-		double t = - ( startPoint.dot( this.normal ) + this.constant ) / denominator;
+		double t = - ( line.getStart().dot( this.normal ) + this.constant ) / denominator;
 
-		if( t < 0 || t > 1 ) 
-		{
+		if ( t < 0 || t > 1 ) {
+
 			return null;
+
 		}
 
-		return optionalTarget.copy( direction ).multiply( t ).add( startPoint );
+		return optionalTarget.copy( direction ).multiply( t ).add( line.getStart() );
+
 	}
 
 	public Vector3 coplanarPoint()
@@ -204,16 +207,21 @@ public class Plane
 
 	public Plane apply( Matrix4 matrix )
 	{
-		return apply(matrix, new Matrix3().getInverse( matrix ).transpose());
+		Matrix3 m1 = new Matrix3();
+		
+		return apply(matrix, m1.getNormalMatrix( matrix ));
 	}
 	
-	public Plane apply( Matrix4 matrix, Matrix3 optionalNormalMatrix ) 
+	public Plane apply( Matrix4 matrix, Matrix3 normalMatrix ) 
 	{
+		Vector3 v1 = new Vector3();
+		Vector3 v2 = new Vector3();
+
 		// compute new normal based on theory here:
 		// http://www.songho.ca/opengl/gl_normaltransform.html
-		Vector3 newNormal = Plane.__v1.copy( this.normal ).apply( optionalNormalMatrix );
+		Vector3 newNormal = v1.copy( this.normal ).apply( normalMatrix );
 
-		Vector3 newCoplanarPoint = this.coplanarPoint( Plane.__v2 );
+		Vector3 newCoplanarPoint = this.coplanarPoint( v2 );
 		newCoplanarPoint.apply( matrix );
 
 		this.setFromNormalAndCoplanarPoint( newNormal, newCoplanarPoint );

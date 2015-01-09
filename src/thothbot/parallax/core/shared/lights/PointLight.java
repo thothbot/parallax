@@ -42,45 +42,19 @@ import thothbot.parallax.core.shared.math.Vector3;
  */
 public class PointLight extends Light
 {
-	public static class UniformPoint implements Light.UniformLight 
-	{
-		public Float32Array distances;
-		public Float32Array colors;
-		public Float32Array positions;
-		
-		@Override
-		public void reset() 
-		{
-			this.distances = (Float32Array) Float32Array.createArray();
-			this.colors    = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
-			
-		}
-
-		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms) 
-		{
-			uniforms.get("pointLightColor").setValue( colors );
-			uniforms.get("pointLightPosition").setValue( positions );
-			uniforms.get("pointLightDistance").setValue( distances );
-			
-		}
-	}
-
 	private double intensity;
 	private double distance;
 	
 	public PointLight(int hex) 
 	{
-		this(hex, 1, 0);
+		this(hex, 1.0, 0.0);
 	}
 	
-	public PointLight(int hex, double intensity, double distance ) 
+	public PointLight(int color, double intensity, double distance ) 
 	{
-		super(hex);
+		super(color);
 		this.intensity = intensity;
 		this.distance = distance;
-		this.position = new Vector3(0, 0, 0);
 	}
 
 	public double getIntensity() {
@@ -99,28 +73,16 @@ public class PointLight extends Light
 		return distance;
 	}
 	
-	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
-	{
-		Float32Array pointColors     = zlights.point.colors;
-		Float32Array pointPositions  = zlights.point.positions;
-		Float32Array pointDistances  = zlights.point.distances;
+	public PointLight clone() {
+
+		PointLight light = new PointLight(0x000000);
 		
-		double intensity = getIntensity();
-		double distance = getDistance();
-		int pointOffset = pointColors.getLength();
+		super.clone(light);
 
-		if ( isGammaInput ) 
-			setColorGamma( pointColors, pointOffset, getColor(), intensity ); 
-		else 
-			setColorLinear( pointColors, pointOffset, getColor(), intensity );
+		light.intensity = this.intensity;
+		light.distance = this.distance;
 
-		Vector3 position = getMatrixWorld().getPosition();
+		return light;
 
-		pointPositions.set(  pointOffset,     position.getX() );
-		pointPositions.set(  pointOffset + 1, position.getY() );
-		pointPositions.set(  pointOffset + 2, position.getZ() );
-
-		pointDistances.set( pointOffset / 3, distance );
 	}
 }

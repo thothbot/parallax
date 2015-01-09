@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Color;
@@ -36,9 +37,6 @@ import thothbot.parallax.core.shared.math.Vector4;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.Object3D;
-import thothbot.parallax.core.shared.objects.ParticleSystem;
-import thothbot.parallax.core.shared.objects.Ribbon;
 
 import com.google.gwt.core.client.GWT;
 
@@ -60,7 +58,7 @@ import com.google.gwt.core.client.GWT;
  * @author thothbot
  *
  */
-public class Geometry extends GeometryBuffer implements Geometric
+public class Geometry extends AbstractGeometry
 {
 	public class MorphColor
 	{
@@ -87,17 +85,14 @@ public class Geometry extends GeometryBuffer implements Geometric
 		public String name;
 		public List<Vector3> vertices;
 	}
-	
+		
 	// Array of vertices.
 	private List<Vector3> vertices;
 	// one-to-one vertex colors, used in ParticleSystem, Line and Ribbon
 	private List<Color> colors;
-	// one-to-one vertex normals, used in Ribbon
-	private List<Vector3> normals;
-
+	
 	private List<Face3> faces;
 	
-	private List<List<Vector2>> faceUvs;	
 	private List<List<List<Vector2>>> faceVertexUvs;
 
 	private List<MorphTarget> morphTargets;
@@ -108,37 +103,63 @@ public class Geometry extends GeometryBuffer implements Geometric
 	private List<Vector4> skinIndices;
 
 	private List<Double> lineDistances;
-	private boolean isLineDistancesNeedUpdate;
 	
-	// Array of materials.
-	private List<Material> materials;
-	
-	private List<Vector3> skinVerticesA;
-	private List<Vector3> skinVerticesB;
+	protected boolean hasTangents = false;
 
-	private List<Bone> bones;
+	protected boolean dynamic = true; // the intermediate typed arrays will be deleted when set to false
 
-	public List<List<Integer>> sortArray;
+	// update flags
 	
-	private boolean isMorphTargetsNeedUpdate;
+	public boolean verticesNeedUpdate = false;
+	public boolean elementsNeedUpdate = false;
+	public boolean normalsNeedUpdate = false;
+	public boolean colorsNeedUpdate = false;
+	public boolean uvsNeedUpdate = false;
+	public boolean tangentsNeedUpdate = false;
+	public boolean lineDistancesNeedUpdate = false;
+
+	public boolean groupsNeedUpdate = false;
+
 	
-	private List<GeometryGroup> geometryGroups;
-	private Map<String, GeometryGroup> geometryGroupsCache;
-		
-	private Object3D debug;
-	
-	private ArrayList<Vector3> __tmpVertices;
+//	//
+//	
+//	// one-to-one vertex normals, used in Ribbon
+//	private List<Vector3> normals;
+//
+//	
+//	private List<List<Vector2>> faceUvs;	
+//
+//
+//	private boolean isLineDistancesNeedUpdate;
+//	
+//	// Array of materials.
+//	private List<Material> materials;
+//	
+//	private List<Vector3> skinVerticesA;
+//	private List<Vector3> skinVerticesB;
+//
+//	private List<Bone> bones;
+//
+//	public List<List<Integer>> sortArray;
+//	
+//	private boolean isMorphTargetsNeedUpdate;
+//	
+//	private List<GeometryGroup> geometryGroups;
+//	private Map<String, GeometryGroup> geometryGroupsCache;
+//		
+//	private Object3D debug;
+//	
+//	private ArrayList<Vector3> __tmpVertices;
 	
 	public Geometry() 
 	{
 		super();
-
+		
 		this.vertices = new ArrayList<Vector3>();
 		this.colors = new ArrayList<Color>(); // one-to-one vertex colors, used in ParticleSystem, Line and Ribbon
 
 		this.faces = new ArrayList<Face3>();
-
-		this.faceUvs = new ArrayList<List<Vector2>>();
+		
 		this.faceVertexUvs = new ArrayList<List<List<Vector2>>>();
 		this.faceVertexUvs.add(new ArrayList<List<Vector2>>());
 
@@ -148,30 +169,37 @@ public class Geometry extends GeometryBuffer implements Geometric
 
 		this.skinWeights = new ArrayList<Vector4>();
 		this.skinIndices = new ArrayList<Vector4>();
+		
+		this.lineDistances = new ArrayList<Double>();
+		//
 
-		this.debug = new Object3D();
+//		this.faceUvs = new ArrayList<List<Vector2>>();
+//
+//
+//
+//		this.debug = new Object3D();
 	}
-	
-	public Map<String, GeometryGroup> getGeometryGroupsCache() {
-		return this.geometryGroupsCache;
-	}
-	
-	public void setGeometryGroupsCache(Map<String, GeometryGroup> geometryGroups) {
-		this.geometryGroupsCache = geometryGroups;
-	}
-	
-	public List<GeometryGroup> getGeometryGroups() {
-		return this.geometryGroups;
-	}
-	
-	public void setGeometryGroups(List<GeometryGroup> geometryGroupsList) {
-		this.geometryGroups = geometryGroupsList;
-	}
-	
-	public Object3D getDebug() {
-		return this.debug;
-	}
-	
+		
+//	public Map<String, GeometryGroup> getGeometryGroupsCache() {
+//		return this.geometryGroupsCache;
+//	}
+//	
+//	public void setGeometryGroupsCache(Map<String, GeometryGroup> geometryGroups) {
+//		this.geometryGroupsCache = geometryGroups;
+//	}
+//	
+//	public List<GeometryGroup> getGeometryGroups() {
+//		return this.geometryGroups;
+//	}
+//	
+//	public void setGeometryGroups(List<GeometryGroup> geometryGroupsList) {
+//		this.geometryGroups = geometryGroupsList;
+//	}
+//	
+//	public Object3D getDebug() {
+//		return this.debug;
+//	}
+//	
 	/**
 	 * Gets the List of skinning weights, matching number and order of vertices.
 	 */
@@ -186,41 +214,41 @@ public class Geometry extends GeometryBuffer implements Geometric
 		return this.skinIndices;
 	}
 	
-	public List<Vector3> getSkinVerticesA() {
-		return this.skinVerticesA;
-	}
-	
-	public void setSkinVerticesA(List<Vector3> skinVerticesA) {
-		this.skinVerticesA = skinVerticesA;
-	}
-	
-	public List<Vector3> getSkinVerticesB() {
-		return this.skinVerticesB;
-	}
-	
-	public void setSkinVerticesB(List<Vector3>  skinVerticesB) {
-		this.skinVerticesB = skinVerticesB;
-	}
+//	public List<Vector3> getSkinVerticesA() {
+//		return this.skinVerticesA;
+//	}
+//	
+//	public void setSkinVerticesA(List<Vector3> skinVerticesA) {
+//		this.skinVerticesA = skinVerticesA;
+//	}
+//	
+//	public List<Vector3> getSkinVerticesB() {
+//		return this.skinVerticesB;
+//	}
+//	
+//	public void setSkinVerticesB(List<Vector3>  skinVerticesB) {
+//		this.skinVerticesB = skinVerticesB;
+//	}
+//
+//	public boolean isMorphTargetsNeedUpdate() {
+//		return isMorphTargetsNeedUpdate;
+//	}
+//
+//	public void setMorphTargetsNeedUpdate(boolean isMorphTargetsNeedUpdate) {
+//		this.isMorphTargetsNeedUpdate = isMorphTargetsNeedUpdate;
+//	}
+//
+//	public void setFaceUvs(List<List<Vector2>> faceUvs) {
+//		this.faceUvs = faceUvs;
+//	}
 
-	public boolean isMorphTargetsNeedUpdate() {
-		return isMorphTargetsNeedUpdate;
-	}
-
-	public void setMorphTargetsNeedUpdate(boolean isMorphTargetsNeedUpdate) {
-		this.isMorphTargetsNeedUpdate = isMorphTargetsNeedUpdate;
-	}
-
-	public void setFaceUvs(List<List<Vector2>> faceUvs) {
-		this.faceUvs = faceUvs;
-	}
-
-	/**
-	 * Gets the List of face {@link UV} layers.
-	 * Each UV layer is an List of {@link UV} matching order and number of faces.
-	 */
-	public List<List<Vector2>> getFaceUvs() {
-		return faceUvs;
-	}
+//	/**
+//	 * Gets the List of face {@link UV} layers.
+//	 * Each UV layer is an List of {@link UV} matching order and number of faces.
+//	 */
+//	public List<List<Vector2>> getFaceUvs() {
+//		return faceUvs;
+//	}
 
 	public void setColors(List<Color> colors) {
 		this.colors = colors;
@@ -247,18 +275,18 @@ public class Geometry extends GeometryBuffer implements Geometric
 		return faces;
 	}
 	
-	/**
-	 * Gets the List of {@link Material}s.
-	 */
-	public List<Material> getMaterials() 
-	{
-		return this.materials;
-	}
-	
-	public void setMaterials(List<Material> materials) 
-	{
-		this.materials = materials;
-	}
+//	/**
+//	 * Gets the List of {@link Material}s.
+//	 */
+//	public List<Material> getMaterials() 
+//	{
+//		return this.materials;
+//	}
+//	
+//	public void setMaterials(List<Material> materials) 
+//	{
+//		this.materials = materials;
+//	}
 	
 	public void setVertices(List<Vector3> vertices) 
 	{
@@ -311,89 +339,155 @@ public class Geometry extends GeometryBuffer implements Geometric
 	 */
 	public void applyMatrix(Matrix4 matrix)
 	{
-		Matrix3 normalMatrix = new Matrix3().getInverse( matrix ).transpose();
+		Matrix3 normalMatrix = new Matrix3().getNormalMatrix( matrix );
 
-		for ( int i = 0, il = this.vertices.size(); i < il; i ++ ) 
-		{
+		for ( int i = 0, il = this.vertices.size(); i < il; i ++ ) {
+
 			Vector3 vertex = this.vertices.get( i );
 			vertex.apply( matrix );
+
 		}
 
-		for ( int i = 0, il = this.faces.size(); i < il; i ++ ) 
-		{
+		for ( int i = 0, il = this.faces.size(); i < il; i ++ ) {
+
 			Face3 face = this.faces.get( i );
-			face.getNormal().apply( normalMatrix ).normalize();
+			face.normal.apply( normalMatrix ).normalize();
 
-			for ( int j = 0, jl = face.vertexNormals.size(); j < jl; j ++ ) 
-			{
-				face.getVertexNormals().get( j ).apply( normalMatrix ).normalize();
-			}
+			for ( int j = 0, jl = face.vertexNormals.size(); j < jl; j ++ ) {
 
-			face.centroid.apply( matrix );
-		}
-	}
-	
-	/**
-	 * Computes centroids for all faces.
-	 */
-	public void computeCentroids()
-	{
-		for (Face3 face: this.faces) 
-		{
-			face.getCentroid().set(0,0,0);
+				face.vertexNormals.get( j ).apply( normalMatrix ).normalize();
 
-			if (face.getClass() == Face3.class) 
-			{
-				Face3 face3 = (Face3)face;
-				face3.getCentroid().add(this.vertices.get(face3.getA()));
-				face3.getCentroid().add(this.vertices.get(face3.getB()));
-				face3.getCentroid().add(this.vertices.get(face3.getC()));
-				face3.getCentroid().divide(3);
-
-			} 
-			else if (face.getClass() == Face4.class) 
-			{
-				Face4 face4 = (Face4)face;
-				face4.getCentroid().add(this.vertices.get(face4.getA()));
-				face4.getCentroid().add(this.vertices.get(face4.getB()));
-				face4.getCentroid().add(this.vertices.get(face4.getC()));
-				face4.getCentroid().add(this.vertices.get(face4.getD()));
-				face4.getCentroid().divide(4);
 			}
 
 		}
+
+		this.computeBoundingBox();
+
+		this.computeBoundingSphere();
 	}
 	
-	/**
-	 * Computes face normals.
-	 */
-	public void computeFaceNormals()
-	{
-		computeFaceNormals(false);
-	}
+	public Geometry fromBufferGeometry( BufferGeometry geometry ) {
 
-	public void computeFaceNormals(Boolean useVertexNormals)
+		Map<String, BufferAttribute> attributes = geometry.getAttributes();
+
+		Float32Array vertices = geometry.getAttribute("position").getArray();
+		Float32Array indices = geometry.getAttribute("index") != null 
+				? geometry.getAttribute("index").getArray() : null;
+		Float32Array normals = geometry.getAttribute("normal") != null 
+				? geometry.getAttribute("normal").getArray() : null;
+		Float32Array colors = geometry.getAttribute("color") != null 
+				? geometry.getAttribute("color").getArray() : null;
+		Float32Array uvs = geometry.getAttribute("uv") != null
+				? geometry.getAttribute("uv").getArray() : null;
+
+		List<Vector3> tempNormals = new ArrayList<Vector3>();
+		List<Vector2> tempUVs = new ArrayList<Vector2>();
+
+		for ( int i = 0, j = 0; i < vertices.getLength(); i += 3, j += 2 ) {
+
+			this.vertices.add( new Vector3( vertices.get( i ), vertices.get( i + 1 ), vertices.get( i + 2 ) ) );
+
+			if ( normals != null ) {
+
+				tempNormals.add( new Vector3( normals.get( i ), normals.get( i + 1 ), normals.get( i + 2 ) ) );
+
+			}
+
+			if ( colors != null ) {
+
+				Color color = new Color();
+				this.colors.add( color.setRGB( colors.get( i ), colors.get( i + 1 ), colors.get( i + 2 ) ) );
+
+			}
+
+			if ( uvs != null ) {
+
+				tempUVs.add( new Vector2( uvs.get( j ), uvs.get( j + 1 ) ) );
+
+			}
+
+		}
+
+		if ( indices != null ) {
+
+			for ( int i = 0; i < indices.getLength(); i += 3 ) {
+
+				addFace( normals, colors, tempNormals, tempUVs, (int)indices.get( i ), (int)indices.get( i + 1 ), (int)indices.get( i + 2 ) );
+
+			}
+
+		} else {
+
+			for ( int i = 0; i < vertices.getLength() / 3; i += 3 ) {
+
+				addFace( normals, colors, tempNormals, tempUVs, i, i + 1, i + 2 );
+
+			}
+
+		}
+		
+		this.computeFaceNormals();
+
+		this.boundingBox = geometry.boundingBox.clone();
+		this.boundingSphere = geometry.boundingSphere.clone();
+
+		return this;
+	}
+	
+	private void addFace(Float32Array normals, Float32Array colors, List<Vector3> tempNormals, List<Vector2> tempUVs, int a, int b, int c ) 
 	{
+		List<Vector3> vertexNormals = normals != null 
+				? Arrays.asList( tempNormals.get( a ).clone(), tempNormals.get( b ).clone(), tempNormals.get( c ).clone() ) 
+						: new ArrayList<Vector3>();
+		List<Color> vertexColors = colors != null 
+				? Arrays.asList( this.colors.get( a ).clone(), this.colors.get( b ).clone(), this.colors.get( c ).clone() ) 
+						: new ArrayList<Color>();
+
+		this.faces.add( new Face3( a, b, c, vertexNormals, vertexColors, 0 ) );
+		this.faceVertexUvs.get( 0 ).add( Arrays.asList( tempUVs.get( a ), tempUVs.get( b ), tempUVs.get( c ) ) );
+
+	}
+	
+	public Vector3 center() {
+
+		this.computeBoundingBox();
+
+		Vector3 offset = new Vector3();
+
+		offset.add( this.boundingBox.getMin(), this.boundingBox.getMax() );
+		offset.multiply( - 0.5 );
+
+		this.applyMatrix( new Matrix4().makeTranslation( offset.getX(), offset.getY(), offset.getZ() ) );
+		this.computeBoundingBox();
+
+		return offset;
+
+	}
+	
+	public void computeFaceNormals() {
+
 		Vector3 cb = new Vector3(), ab = new Vector3();
 
-		for (int f = 0, fl = this.faces.size(); f < fl; f ++ ) 
-		{
+		for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
+
 			Face3 face = this.faces.get( f );
 
-			Vector3 vA = this.vertices.get(face.getA());
-			Vector3 vB = this.vertices.get(face.getB());
-			Vector3 vC = this.vertices.get(face.getC());
+			Vector3 vA = this.vertices.get( face.getA() );
+			Vector3 vB = this.vertices.get( face.getB() );
+			Vector3 vC = this.vertices.get( face.getC() );
 
-			cb.sub(vC, vB);
-			ab.sub(vA, vB);
-			cb.cross(ab);
+			cb.sub( vC, vB );
+			ab.sub( vA, vB );
+			cb.cross( ab );
 
 			cb.normalize();
 
-			face.getNormal().copy(cb);
-		}
-	}
+			face.normal.copy( cb );
 
+		}
+
+	}
+	
 	public void computeVertexNormals()
 	{
 		computeVertexNormals(false);
@@ -405,47 +499,17 @@ public class Geometry extends GeometryBuffer implements Geometric
 	 */
 	public void computeVertexNormals(boolean areaWeighted)
 	{
-		List<Vector3> vertices;
+		Vector3[] vertices = new Vector3[this.vertices.size()];
 		Face3 face;
 		
-		// create internal buffers for reuse when calling this method repeatedly
-		// (otherwise memory allocation / deallocation every frame is big resource hog)
-		if ( this.__tmpVertices == null ) 
-		{
-			this.__tmpVertices = new ArrayList<Vector3>( this.vertices.size() );
-			vertices = this.__tmpVertices;
+		for ( int v = 0, vl = this.vertices.size(); v < vl; v ++ ) {
 
-			for ( int v = 0, vl = this.vertices.size(); v < vl; v ++ ) 
-			{
-				vertices.add( v, new Vector3());
-			}
+			vertices[ v ] = new Vector3();
 
-			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) 
-			{
-				face = this.faces.get( f );
-
-				if ( face.getClass() == Face3.class ) 
-				{
-					face.setVertexNormals(Arrays.asList( new Vector3(), new Vector3(), new Vector3() ));
-				}
-				else if ( face.getClass() == Face4.class ) 
-				{
-					face.setVertexNormals( Arrays.asList( new Vector3(), new Vector3(), new Vector3(), new Vector3() ));
-				}
-			}
-		} 
-		else 
-		{
-			vertices = this.__tmpVertices;
-
-			for ( int v = 0, vl = this.vertices.size(); v < vl; v ++ ) 
-			{
-				vertices.get( v ).set( 0, 0, 0 );
-			}
 		}
 
-		if ( areaWeighted ) 
-		{
+		if ( areaWeighted ) {
+
 			// vertex normals weighted by triangle areas
 			// http://www.iquilezles.org/www/articles/normals/normals.htm
 
@@ -453,134 +517,94 @@ public class Geometry extends GeometryBuffer implements Geometric
 			Vector3 cb = new Vector3(), ab = new Vector3(),
 				db = new Vector3(), dc = new Vector3(), bc = new Vector3();
 
-			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) 
-			{
+			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
+
 				face = this.faces.get( f );
 
-				if ( face.getClass() == Face3.class ) 
-				{
+				vA = this.vertices.get( face.a );
+				vB = this.vertices.get( face.b );
+				vC = this.vertices.get( face.c );
 
-					vA = this.vertices.get( face.getA() );
-					vB = this.vertices.get( face.getB() );
-					vC = this.vertices.get( face.getC() );
+				cb.sub( vC, vB );
+				ab.sub( vA, vB );
+				cb.cross( ab );
 
-					cb.sub( vC, vB );
-					ab.sub( vA, vB );
-					cb.cross( ab );
+				vertices[ face.a ].add( cb );
+				vertices[ face.b ].add( cb );
+				vertices[ face.c ].add( cb );
 
-					vertices.get( face.getA() ).add( cb );
-					vertices.get( face.getB() ).add( cb );
-					vertices.get( face.getC() ).add( cb );
-
-				} 
-				else if ( face.getClass() == Face4.class ) 
-				{
-					vA = this.vertices.get( face.getA() );
-					vB = this.vertices.get( face.getB() );
-					vC = this.vertices.get( face.getC() );
-					vD = this.vertices.get( ((Face4)face).getD() );
-
-					// abd
-
-					db.sub( vD, vB );
-					ab.sub( vA, vB );
-					db.cross( ab );
-
-					vertices.get( face.getA() ).add( db );
-					vertices.get( face.getB() ).add( db );
-					vertices.get( ((Face4)face).getD() ).add( db );
-
-					// bcd
-
-					dc.sub( vD, vC );
-					bc.sub( vB, vC );
-					dc.cross( bc );
-
-					vertices.get( face.getB() ).add( dc );
-					vertices.get( face.getC() ).add( dc );
-					vertices.get( ((Face4)face).getD() ).add( dc );
-				}
 			}
-		} 
-		else 
-		{
-			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) 
-			{
+
+		} else {
+
+			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
+
 				face = this.faces.get( f );
 
-				if ( face.getClass() == Face3.class ) 
-				{
-					vertices.get( face.getA() ).add( face.normal );
-					vertices.get( face.getB() ).add( face.normal );
-					vertices.get( face.getC() ).add( face.normal );
-				} 
-				else if ( face.getClass() == Face4.class ) 
-				{
-					vertices.get( face.getA() ).add( face.normal );
-					vertices.get( face.getB() ).add( face.normal );
-					vertices.get( face.getC() ).add( face.normal );
-					vertices.get( ((Face4)face).getD() ).add( face.normal );
-				}
+				vertices[ face.a ].add( face.normal );
+				vertices[ face.b ].add( face.normal );
+				vertices[ face.c ].add( face.normal );
+
 			}
+
 		}
 
-		for ( int v = 0, vl = this.vertices.size(); v < vl; v ++ ) 
-		{
-			vertices.get( v ).normalize();
+		for ( int v = 0, vl = this.vertices.size(); v < vl; v ++ ) {
+
+			vertices[ v ].normalize();
+
 		}
 
-		for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) 
-		{
+		for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
+
 			face = this.faces.get( f );
 
-			if ( face.getClass() == Face3.class ) 
-			{
-				face.vertexNormals.get( 0 ).copy( vertices.get( face.getA() ) );
-				face.vertexNormals.get( 1 ).copy( vertices.get( face.getB() ) );
-				face.vertexNormals.get( 2 ).copy( vertices.get( face.getC() ) );
-			} 
-			else if ( face.getClass() == Face4.class ) 
-			{
-				face.vertexNormals.get( 0 ).copy( vertices.get( face.getA() ) );
-				face.vertexNormals.get( 1 ).copy( vertices.get( face.getB() ) );
-				face.vertexNormals.get( 2 ).copy( vertices.get( face.getC() ) );
-				face.vertexNormals.get( 3 ).copy( vertices.get( ((Face4)face).getD() ) );
-			}
+			face.getVertexNormals().set( 0 , vertices[ face.a ].clone() );
+			face.getVertexNormals().set( 1 , vertices[ face.b ].clone() );
+			face.getVertexNormals().set( 2 , vertices[ face.c ].clone() );
+
 		}
 	}
-	
-	public void computeMorphNormals() 
-	{
+
+	public void computeMorphNormals() {
+
 		Face3 face;
-		
+
 		// save original normals
 		// - create temp variables on first access
 		//   otherwise just copy (for faster repeated calls)
-		for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) 
-		{
+
+		for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
+
 			face = this.faces.get( f );
 
-			if ( face.__originalFaceNormal == null ) 
-			{
-				face.__originalFaceNormal = face.getNormal().clone();
-			} 
-			else 
-			{
-				face.__originalFaceNormal.copy( face.getNormal() );
+			if ( face.__originalFaceNormal == null ) {
+
+				face.__originalFaceNormal = face.normal.clone();
+
+			} else {
+
+				face.__originalFaceNormal.copy( face.normal );
+
 			}
 
-			for ( int i = 0, il = face.vertexNormals.size(); i < il; i ++ ) 
-			{
-				if ( face.__originalVertexNormals.size() <= i 
-						|| face.__originalVertexNormals.get( i ) == null)
-				{
-					face.__originalVertexNormals.add( i, face.getVertexNormals().get( i ).clone());
+			if ( face.__originalVertexNormals == null ) 
+				face.__originalVertexNormals = new ArrayList<Vector3>();
+
+			for ( int i = 0, il = face.vertexNormals.size(); i < il; i ++ ) {
+
+				if ( face.__originalVertexNormals.get( i ) == null ) {
+
+					face.__originalVertexNormals.set( i , face.vertexNormals.get( i ).clone() );
+
+				} else {
+
+					face.__originalVertexNormals.get( i ).copy( face.vertexNormals.get( i ) );
+
 				}
-				else
-				{
-					face.__originalVertexNormals.get( i ).copy( face.getVertexNormals().get( i ) );
-				}
+
 			}
+
 		}
 
 		// use temp geometry to compute face and vertex normals for each morph
@@ -588,43 +612,31 @@ public class Geometry extends GeometryBuffer implements Geometric
 		Geometry tmpGeo = new Geometry();
 		tmpGeo.faces = this.faces;
 
-		for ( int i = 0, il = this.morphTargets.size(); i < il; i ++ ) 
-		{
+		for ( int i = 0, il = this.morphTargets.size(); i < il; i ++ ) {
+
 			// create on first access
 
-			if ( this.morphNormals.size() == i ) 
-			{
-				MorphNormal morphNormal = new MorphNormal();
-				morphNormal.faceNormals = new ArrayList<Vector3>();
-				morphNormal.vertexNormals = new ArrayList<VertextNormal>();
-				
+			if ( this.morphNormals.get( i ) == null ) {
+
+				this.morphNormals.set( i, new MorphNormal() );
+				this.morphNormals.get( i ).faceNormals = new ArrayList<Vector3>();
+				this.morphNormals.get( i ).vertexNormals = new ArrayList<Geometry.VertextNormal>();
+
 				List<Vector3> dstNormalsFace = this.morphNormals.get( i ).faceNormals;
 				List<VertextNormal> dstNormalsVertex = this.morphNormals.get( i ).vertexNormals;
 
-				for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) 
-				{
-					face = this.faces.get( f );
+				for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
 
-					Vector3 faceNormal = new Vector3();
 					VertextNormal vertexNormals = new VertextNormal();
-					
-					if ( face.getClass() == Face3.class ) 
-					{
-						vertexNormals.a = new Vector3();
-						vertexNormals.b = new Vector3();
-						vertexNormals.c = new Vector3();
-					} 
-					else 
-					{
-						vertexNormals.a = new Vector3();
-						vertexNormals.b = new Vector3();
-						vertexNormals.c = new Vector3();
-						vertexNormals.c = new Vector3();
-					}
+					vertexNormals.a  = new Vector3();
+					vertexNormals.b  = new Vector3();
+					vertexNormals.c  = new Vector3();
 
-					dstNormalsFace.add( faceNormal );
+					dstNormalsFace.add( new Vector3() );
 					dstNormalsVertex.add( vertexNormals );
+
 				}
+
 			}
 
 			MorphNormal morphNormals = this.morphNormals.get( i );
@@ -640,41 +652,38 @@ public class Geometry extends GeometryBuffer implements Geometric
 
 			// store morph normals
 
-			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) 
-			{
+//			var faceNormal, vertexNormals;
+
+			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
+
 				face = this.faces.get( f );
 
-				Vector3 faceNormal = morphNormals.faceNormals.get(f);
-				VertextNormal vertexNormals = morphNormals.vertexNormals.get(f);
+				Vector3 faceNormal = morphNormals.faceNormals.get( f );
+				VertextNormal vertexNormals = morphNormals.vertexNormals.get( f );
 
 				faceNormal.copy( face.normal );
 
-				if ( face.getClass() == Face3.class ) 
-				{
-					vertexNormals.a.copy( face.getVertexNormals().get(0) );
-					vertexNormals.b.copy( face.getVertexNormals().get(1) );
-					vertexNormals.c.copy( face.getVertexNormals().get(2) );
-				} 
-				else 
-				{
-					vertexNormals.a.copy( face.getVertexNormals().get(0) );
-					vertexNormals.b.copy( face.getVertexNormals().get(1) );
-					vertexNormals.c.copy( face.getVertexNormals().get(2) );
-					vertexNormals.d.copy( face.getVertexNormals().get(3) );
-				}
+				vertexNormals.a.copy( face.vertexNormals.get( 0 ) );
+				vertexNormals.b.copy( face.vertexNormals.get( 1 ) );
+				vertexNormals.c.copy( face.vertexNormals.get( 2 ) );
 
 			}
+
 		}
 
 		// restore original normals
-		for ( int f = 0, fl = getFaces().size(); f < fl; f ++ ) 
-		{
-			face = getFaces().get(f);
-			face.setNormal( face.__originalFaceNormal );
-			face.setVertexNormals( face.__originalVertexNormals );
+
+		for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
+
+			face = this.faces.get( f );
+
+			face.normal = face.__originalFaceNormal;
+			face.vertexNormals = face.__originalVertexNormals;
+
 		}
+
 	}
-	
+
 	/**
 	 * Computes vertex tangents.<br>
 	 * Based on <a href="http://www.terathon.com/code/tangent.html">terathon.com</a>
@@ -703,15 +712,7 @@ public class Geometry extends GeometryBuffer implements Geometric
 			face = this.faces.get(f);
 			uv = this.faceVertexUvs.get(0).get(f).toArray(uv); // use UV layer 0 for tangents
 
-			if (face.getClass() == Face3.class) {
-				handleTriangle(face.getA(), face.getB(), face.getC(), 0, 1, 2, uv, tan1, tan2);
-
-			} else if (face.getClass() == Face4.class) {
-				Face4 face4 = (Face4)face;
-				handleTriangle(face4.getA(), face4.getB(), face4.getC(), 0, 1, 3, uv, tan1, tan2);
-				handleTriangle(face4.getA(), face4.getB(), face4.getD(), 1, 2, 3, uv, tan1, tan2);
-
-			}
+			handleTriangle(face.getA(), face.getB(), face.getC(), 0, 1, 2, uv, tan1, tan2);
 		}
 
 		for (f = 0, fl = this.faces.size(); f < fl; f ++ ) 
@@ -743,9 +744,9 @@ public class Geometry extends GeometryBuffer implements Geometric
 			}
 		}
 
-		setHasTangents(true);
+		this.hasTangents = true;
 	}
-
+	
 	public void computeLineDistances( ) 
 	{
 		double d = 0;
@@ -760,6 +761,7 @@ public class Geometry extends GeometryBuffer implements Geometric
 			this.lineDistances.add( i, d );
 		}
 	}
+	
 
 	/**
 	 * Computes bounding box of the geometry.
@@ -789,10 +791,122 @@ public class Geometry extends GeometryBuffer implements Geometric
 			this.boundingSphere = new Sphere();
 
 		}
+		
+		this.boundingSphere.setFromPoints( this.vertices, null );
 
-		this.boundingSphere.setFromCenterAndPoints( this.boundingSphere.getCenter(), this.vertices );
+	}
+	
+	public void merge( Geometry geometry, Matrix4 matrix ) {
+		
+		merge(geometry, matrix, 0);
+		
 	}
 
+	public void merge( Geometry geometry, Matrix4 matrix, int materialIndexOffset ) {
+
+		Matrix3 normalMatrix = null;
+		
+		int vertexOffset = this.vertices.size();
+		List<Vector3> vertices1 = this.vertices;
+		List<Vector3> vertices2 = geometry.vertices;
+		List<Face3> faces1 = this.faces;
+		List<Face3> faces2 = geometry.faces;
+		
+		List<List<Vector2>>uvs1 = this.faceVertexUvs.get( 0 );
+		List<List<Vector2>>uvs2 = geometry.faceVertexUvs.get( 0 );
+
+		if ( matrix != null ) {
+
+			normalMatrix = new Matrix3().getNormalMatrix( matrix );
+
+		}
+
+		// vertices
+
+		for ( int i = 0, il = vertices2.size(); i < il; i ++ ) {
+
+			Vector3 vertex = vertices2.get( i );
+
+			Vector3 vertexCopy = vertex.clone();
+
+			if ( matrix != null ) vertexCopy.apply( matrix );
+
+			vertices1.add( vertexCopy );
+
+		}
+
+		// faces
+
+		for ( int i = 0, il = faces2.size(); i < il; i ++ ) {
+
+			Face3 face = faces2.get( i );
+
+			List<Vector3> faceVertexNormals = face.vertexNormals;
+			List<Color> faceVertexColors = face.vertexColors;
+
+			Face3 faceCopy = new Face3( face.a + vertexOffset, face.b + vertexOffset, face.c + vertexOffset );
+			faceCopy.getNormal().copy( face.normal );
+
+			if ( normalMatrix != null ) {
+
+				faceCopy.getNormal().apply( normalMatrix ).normalize();
+
+			}
+
+			for ( int j = 0, jl = faceVertexNormals.size(); j < jl; j ++ ) {
+
+				Vector3 normal = faceVertexNormals.get( j ).clone();
+
+				if ( normalMatrix != null ) {
+
+					normal.apply( normalMatrix ).normalize();
+
+				}
+
+				faceCopy.vertexNormals.add( normal );
+
+			}
+
+			faceCopy.color.copy( face.color );
+
+			for ( int j = 0, jl = faceVertexColors.size(); j < jl; j ++ ) {
+
+				Color color = faceVertexColors.get( j );
+				faceCopy.vertexColors.add( color.clone() );
+
+			}
+
+			faceCopy.materialIndex = face.materialIndex + materialIndexOffset;
+
+			faces1.add( faceCopy );
+
+		}
+
+		// uvs
+
+		for ( int i = 0, il = uvs2.size(); i < il; i ++ ) {
+
+			List<Vector2> uv = uvs2.get( i );
+			List<Vector2> uvCopy = new ArrayList<Vector2>();
+
+			if ( uv == null ) {
+
+				continue;
+
+			}
+
+			for ( int j = 0, jl = uv.size(); j < jl; j ++ ) {
+
+				uvCopy.add( new Vector2( uv.get( j ).getX(), uv.get( j ).getY() ) );
+
+			}
+
+			uvs1.add( uvCopy );
+
+		}
+
+	}
+	
 	/**
 	 * Checks for duplicate vertices with hashmap.
 	 * Duplicated vertices are removed and faces' vertices are updated.
@@ -807,9 +921,6 @@ public class Geometry extends GeometryBuffer implements Geometric
 
 		int precisionPoints = 4; // number of decimal points, eg. 4 for epsilon of 0.0001
 		double precision = Math.pow( 10, precisionPoints );
-
-		// reset cache of vertices as it now will be changing.
-		this.__tmpVertices = null;
 
 		for ( int i = 0, il = this.vertices.size(); i < il; i ++ ) 
 		{
@@ -836,88 +947,24 @@ public class Geometry extends GeometryBuffer implements Geometric
 		for( int i = 0, il = this.faces.size(); i < il; i ++ ) 
 		{
 			Face3 face = this.faces.get( i );
+			
+			face.setA( changes.get( face.getA() ) );
+			face.setB( changes.get( face.getB() ) );
+			face.setC( changes.get( face.getC() ) );
 
-			if ( face.getClass() == Face3.class ) 
+			int[] indices = { face.getA(), face.getB(), face.getC() };
+
+			int dupIndex = -1;
+
+			// if any duplicate vertices are found in a Face3
+			// we have to remove the face as nothing can be saved
+			for ( int n = 0; n < 3; n ++ ) 
 			{
-				face.setA( changes.get( face.getA() ) );
-				face.setB( changes.get( face.getB() ) );
-				face.setC( changes.get( face.getC() ) );
-
-				int[] indices = { face.getA(), face.getB(), face.getC() };
-
-				int dupIndex = -1;
-
-				// if any duplicate vertices are found in a Face3
-				// we have to remove the face as nothing can be saved
-				for ( int n = 0; n < 3; n ++ ) 
+				if ( indices[ n ] == indices[ ( n + 1 ) % 3 ] ) 
 				{
-					if ( indices[ n ] == indices[ ( n + 1 ) % 3 ] ) 
-					{
-						dupIndex = n;
-						faceIndicesToRemove.add( i );
-						break;
-					}
-				}
-
-			}
-			else if ( face.getClass() == Face4.class ) 
-			{
-
-				face.setA( changes.get( face.getA() ) );
-				face.setB( changes.get( face.getB() ) );
-				face.setC( changes.get( face.getC() ) );
-				((Face4)face).setD( changes.get( ((Face4)face).getD() ) );
-
-				// check dups in (a, b, c, d) and convert to -> face3
-
-				List<Integer> indices = Arrays.asList( face.getA(), face.getB(), face.getC(), ((Face4)face).getD() );
-
-				int dupIndex = -1;
-
-				for ( int n = 0; n < 4; n ++ ) 
-				{
-					if ( indices.get( n ) == indices.get( ( n + 1 ) % 4 ) ) 
-					{
-						// if more than one duplicated vertex is found
-						// we can't generate any valid Face3's, thus
-						// we need to remove this face complete.
-						if ( dupIndex >= 0 ) 
-						{
-							faceIndicesToRemove.add( i );
-						}
-
-						dupIndex = n;
-					}
-				}
-
-				if ( dupIndex >= 0 ) 
-				{
-					indices.remove( dupIndex );
-
-					Face3 newFace = new Face3( indices.get(0), indices.get(1), indices.get(2), face.normal, face.color, face.materialIndex );
-
-					for ( int j = 0, jl = this.faceVertexUvs.size(); j < jl; j ++ ) 
-					{
-						List<Vector2> u = this.faceVertexUvs.get( j ).get( i );
-
-						if ( u != null ) {
-							u.remove( dupIndex );
-						}
-					}
-
-					if( face.vertexNormals != null && face.vertexNormals.size() > 0) 
-					{
-						newFace.vertexNormals = face.vertexNormals;
-						newFace.vertexNormals.remove( dupIndex);
-					}
-
-					if( face.vertexColors != null && face.vertexColors.size() > 0 ) 
-					{
-						newFace.vertexColors = face.vertexColors;
-						newFace.vertexColors.remove( dupIndex );
-					}
-
-					this.faces.set( i, newFace );
+					dupIndex = n;
+					faceIndicesToRemove.add( i );
+					break;
 				}
 			}
 		}
@@ -939,38 +986,43 @@ public class Geometry extends GeometryBuffer implements Geometric
 		return diff;
 	}
 	
-	public Geometry clone() 
-	{
+	public Geometry clone() {
+
 		Geometry geometry = new Geometry();
 
-		for ( int i = 0, il = vertices.size(); i < il; i ++ ) 
-		{
+
+		for ( int i = 0, il = this.vertices.size(); i < il; i ++ ) {
+
 			geometry.vertices.add( this.vertices.get( i ).clone() );
+
 		}
 
-		for ( int i = 0, il = faces.size(); i < il; i ++ ) 
-		{
+		for ( int i = 0, il = this.faces.size(); i < il; i ++ ) {
+
 			geometry.faces.add( this.faces.get( i ).clone() );
 		}
 
 		List<List<Vector2>> uvs = this.faceVertexUvs.get( 0 );
 
-		for ( int i = 0, il = uvs.size(); i < il; i ++ ) 
-		{
-			List<Vector2> uv = uvs.get( i ), uvCopy = new ArrayList<Vector2>();
+		for ( int i = 0, il = uvs.size(); i < il; i ++ ) {
 
-			for ( int j = 0, jl = uv.size(); j < jl; j ++ ) 
-			{
+			List<Vector2> uv = uvs.get( i );
+			List<Vector2> uvCopy = new ArrayList<Vector2>();
+
+			for ( int j = 0, jl = uv.size(); j < jl; j ++ ) {
+
 				uvCopy.add( new Vector2( uv.get( j ).getX(), uv.get( j ).getY() ) );
+
 			}
 
 			geometry.faceVertexUvs.get( 0 ).add( uvCopy );
+
 		}
 
 		return geometry;
+		
 	}
-	
-	
+
 	private void handleTriangle(int a, int b, int c, int ua, int ub, int uc, Vector2[] uv, List<Vector3> tan1, List<Vector3> tan2)
 	{
 		Vector3 vA = this.vertices.get(a);

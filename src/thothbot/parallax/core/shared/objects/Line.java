@@ -29,10 +29,15 @@ import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.GeometryBuffer;
+import thothbot.parallax.core.shared.core.BufferGeometry;
+import thothbot.parallax.core.shared.core.GeometryObject;
+import thothbot.parallax.core.shared.core.Raycaster;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Matrix4;
+import thothbot.parallax.core.shared.math.Ray;
+import thothbot.parallax.core.shared.math.Sphere;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.math.Vector4;
@@ -48,7 +53,7 @@ public class Line extends GeometryObject
 	/**
 	 * In OpenGL terms, LineStrip is the classic GL_LINE_STRIP and LinePieces is the equivalent to GL_LINES. 
 	 */
-	public static enum TYPE 
+	public static enum MODE 
 	{
 		/**
 		 * Will draw a series of segments connecting each point 
@@ -64,247 +69,313 @@ public class Line extends GeometryObject
 		PIECES
 	};
 
-	private TYPE type;
+	private MODE mode;
 	
 	private static LineBasicMaterial defaultMaterial = new LineBasicMaterial();
 	static {
 		defaultMaterial.setColor( new Color((int)Math.random() * 0xffffff) );
 	};
 
+	public Line() {
+		this(new Geometry());
+	}
+	
 	public Line(Geometry geometry) 
 	{
-		this(geometry, Line.defaultMaterial, Line.TYPE.STRIPS);
+		this(geometry, Line.defaultMaterial, Line.MODE.STRIPS);
 	}
 
 	public Line(Geometry geometry, LineBasicMaterial material) 
 	{
-		this(geometry, material, Line.TYPE.STRIPS);
+		this(geometry, material, Line.MODE.STRIPS);
 	}
 
-	public Line(Geometry geometry, LineBasicMaterial material, Line.TYPE type) 
+	public Line(Geometry geometry, LineBasicMaterial material, Line.MODE mode) 
 	{
-		super();
-		this.geometry = geometry;
-		this.material = material;
-		this.type = type;
+		super(geometry, material);
 
-		if (this.geometry != null)
-			if (this.geometry.getBoundingSphere() != null)
-				this.geometry.computeBoundingSphere();
+		this.mode = mode;
 	}
 
-	public void setType(Line.TYPE type)
+	public void setMode(Line.MODE mode)
 	{
-		this.type = type;
+		this.mode = mode;
 	}
 
-	public Line.TYPE getType()
+	public Line.MODE getType()
 	{
-		return type;
+		return mode;
 	}
 	
-	@Override
-	public void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers)
-	{
-		WebGLRenderingContext gl = renderer.getGL();
-		WebGlRendererInfo info = renderer.getInfo();
-		
-		BeginMode primitives = ( this.getType() == Line.TYPE.STRIPS) 
-				? BeginMode.LINE_STRIP 
-				: BeginMode.LINES;
+	public void raycast( Raycaster raycaster, List<Raycaster.Intersect> intersects) {
 
-		setLineWidth( gl, ((LineBasicMaterial)material).getLinewidth() );
+		Matrix4 inverseMatrix = new Matrix4();
+		Ray ray = new Ray();
+		Sphere sphere = new Sphere();
 
-		gl.drawArrays( primitives, 0, geometryBuffer.__webglLineCount );
+		double precision = Raycaster.linePrecision;
+		double precisionSq = precision * precision;
 
-		info.getRender().calls ++;
-	}
-	
-	@Override
-	public void initBuffer(WebGLRenderer renderer)
-	{
-		Geometry geometry = this.getGeometry();
+		Geometry geometry = (Geometry) this.getGeometry();
 
-		if( geometry.__webglVertexBuffer == null ) 
-		{
-			createBuffers(renderer, geometry );
-			initBuffers(renderer.getGL(), geometry );
+		if ( geometry.getBoundingSphere() == null ) 
+			geometry.computeBoundingSphere();
 
-			geometry.setVerticesNeedUpdate(true);
-			geometry.setColorsNeedUpdate(true);
-		}
-	}
-	
-	private void createBuffers ( WebGLRenderer renderer, Geometry geometry ) 
-	{
-		WebGLRenderingContext gl = renderer.getGL();
-		WebGlRendererInfo info = renderer.getInfo();
-		
-		geometry.__webglVertexBuffer = gl.createBuffer();
-		geometry.__webglColorBuffer = gl.createBuffer();
+		// Checking boundingSphere distance to ray
 
-		info.getMemory().geometries ++;
-	}
+		sphere.copy( geometry.getBoundingSphere() );
+		sphere.apply( this.matrixWorld );
 
-	private void initBuffers (WebGLRenderingContext gl, Geometry geometry) 
-	{
-		int nvertices = geometry.getVertices().size();
+		if ( raycaster.getRay().isIntersectionSphere( sphere ) == false ) {
 
-		geometry.setWebGlVertexArray( Float32Array.create( nvertices * 3 ) );
-		geometry.setWebGlColorArray( Float32Array.create( nvertices * 3 ) );
+			return;
 
-		geometry.__webglLineCount = nvertices;
-
-		initCustomAttributes ( gl, geometry );
-	}
-
-	@Override
-	public void setBuffer(WebGLRenderer renderer)
-	{
-		WebGLRenderingContext gl = renderer.getGL();
-
-		this.material = Material.getBufferMaterial( this, null );
-
-		boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
-		if ( this.geometry.isVerticesNeedUpdate() 
-				|| this.geometry.isColorsNeedUpdate() 
-				|| areCustomAttributesDirty 
-		) {
-			this.setBuffers( gl, BufferUsage.DYNAMIC_DRAW );
-
-			this.material.getShader().clearCustomAttributes();
 		}
 
-		this.geometry.setVerticesNeedUpdate(false);
-		this.geometry.setColorsNeedUpdate(false);
-	}
+		inverseMatrix.getInverse( this.matrixWorld );
+		ray.copy( raycaster.getRay() ).apply( inverseMatrix );
 
-	// setLineBuffers
-	public void setBuffers(WebGLRenderingContext gl, BufferUsage hint)
-	{		
 		List<Vector3> vertices = geometry.getVertices();
-		List<Color> colors = geometry.getColors();
+		int nbVertices = vertices.size();
+		Vector3 interSegment = new Vector3();
+		Vector3 interRay = new Vector3();
+		int step = this.mode == Line.MODE.STRIPS ? 1 : 2;
 
-		boolean dirtyVertices = geometry.isVerticesNeedUpdate();
-		boolean dirtyColors = geometry.isColorsNeedUpdate();
+		for ( int i = 0; i < nbVertices - 1; i = i + step ) {
 
-		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
+			double distSq = ray.distanceSqToSegment( vertices.get( i ), vertices.get( i + 1 ), interRay, interSegment );
 
-		if (dirtyVertices) 
-		{
-			for (int v = 0; v < vertices.size(); v++) 
-			{
-				Vector3 vertex = vertices.get(v);
-				int offset = v * 3;
-				geometry.getWebGlVertexArray().set(offset, vertex.getX());
-				geometry.getWebGlVertexArray().set(offset + 1, vertex.getY());
-				geometry.getWebGlVertexArray().set(offset + 2, vertex.getZ());
-			}
+			if ( distSq > precisionSq ) continue;
 
-			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer);
-			gl.bufferData(BufferTarget.ARRAY_BUFFER, geometry.getWebGlVertexArray(), hint);
-		}
+			double distance = ray.getOrigin().distanceTo( interRay );
 
-		if (dirtyColors) 
-		{
-			for (int c = 0; c < colors.size(); c++) 
-			{
-				Color color = colors.get(c);
-				int offset = c * 3;
+			if ( distance < raycaster.getNear() || distance > raycaster.getFar() ) continue;
 
-				geometry.getWebGlColorArray().set(offset, color.getR());
-				geometry.getWebGlColorArray().set(offset + 1, color.getG());
-				geometry.getWebGlColorArray().set(offset + 2, color.getB());
-			}
+			Raycaster.Intersect intersect = new Raycaster.Intersect();
+			intersect.distance = distance;
+			intersect.point = interSegment.clone().apply( this.matrixWorld );
+			intersects.add( intersect );
 
-			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer);
-			gl.bufferData(BufferTarget.ARRAY_BUFFER, geometry.getWebGlColorArray(), hint);
-		}
-
-		if (customAttributes != null) 
-		{
-			for (int i = 0; i < customAttributes.size(); i++) 
-			{
-				Attribute customAttribute = customAttributes.get(i);
-
-				if (customAttribute.needsUpdate
-						&& (customAttribute.getBoundTo() == null 
-						|| customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES)) 
-				{
-
-					int offset = 0;
-
-					if (customAttribute.size == 1) 
-					{
-						for (int ca = 0; ca < customAttribute.getValue().size(); ca++)
-							customAttribute.array.set(ca, (Double)customAttribute.getValue().get(ca));
-
-					}
-					else if (customAttribute.size == 2) 
-					{
-						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
-						{
-
-							Vector2 value = (Vector2) customAttribute.getValue().get(ca);
-
-							customAttribute.array.set(offset, value.getX());
-							customAttribute.array.set(offset + 1, value.getY());
-
-							offset += 2;
-						}
-
-					} 
-					else if (customAttribute.size == 3) 
-					{
-						if (customAttribute.type == Attribute.TYPE.C) 
-						{
-							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
-							{
-
-								Color value = (Color) customAttribute.getValue().get(ca);
-
-								customAttribute.array.set(offset, value.getR());
-								customAttribute.array.set(offset + 1, value.getG());
-								customAttribute.array.set(offset + 2, value.getB());
-
-								offset += 3;
-							}
-
-						} 
-						else 
-						{
-							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
-							{
-								Vector3 value = (Vector3) customAttribute.getValue().get(ca);
-
-								customAttribute.array.set(offset, value.getX());
-								customAttribute.array.set(offset + 1, value.getY());
-								customAttribute.array.set(offset + 2, value.getZ());
-
-								offset += 3;
-							}
-						}
-
-					} 
-					else if (customAttribute.size == 4) 
-					{
-						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
-						{
-							Vector4 value = (Vector4) customAttribute.getValue().get(ca);
-
-							customAttribute.array.set(offset, value.getX());
-							customAttribute.array.set(offset + 1, value.getY());
-							customAttribute.array.set(offset + 2, value.getZ());
-							customAttribute.array.set(offset + 3, value.getW());
-
-							offset += 4;
-						}
-					}
-
-					gl.bindBuffer(BufferTarget.ARRAY_BUFFER, customAttribute.buffer);
-					gl.bufferData(BufferTarget.ARRAY_BUFFER, customAttribute.array, hint);
-				}
-			}
 		}
 	}
+	
+	public Line clone() {
+		
+		return clone(new Line( (Geometry) this.getGeometry(), (LineBasicMaterial) this.getMaterial(), this.mode ));
+				
+	}
+	
+	public Line clone( Line object ) {
+		
+		super.clone(object);
+		
+		return object;
+		
+	}
+
+	
+//	@Override
+//	public void renderBuffer(WebGLRenderer renderer, BufferGeometry geometryBuffer, boolean updateBuffers)
+//	{
+//		WebGLRenderingContext gl = renderer.getGL();
+//		WebGlRendererInfo info = renderer.getInfo();
+//		
+//		BeginMode primitives = ( this.getType() == Line.TYPE.STRIPS) 
+//				? BeginMode.LINE_STRIP 
+//				: BeginMode.LINES;
+//
+//		setLineWidth( gl, ((LineBasicMaterial)material).getLinewidth() );
+//
+//		gl.drawArrays( primitives, 0, geometryBuffer.__webglLineCount );
+//
+//		info.getRender().calls ++;
+//	}
+//	
+//	@Override
+//	public void initBuffer(WebGLRenderer renderer)
+//	{
+//		Geometry geometry = this.getGeometry();
+//
+//		if( geometry.__webglVertexBuffer == null ) 
+//		{
+//			createBuffers(renderer, geometry );
+//			initBuffers(renderer.getGL(), geometry );
+//
+//			geometry.setVerticesNeedUpdate(true);
+//			geometry.setColorsNeedUpdate(true);
+//		}
+//	}
+//	
+//	private void createBuffers ( WebGLRenderer renderer, Geometry geometry ) 
+//	{
+//		WebGLRenderingContext gl = renderer.getGL();
+//		WebGlRendererInfo info = renderer.getInfo();
+//		
+//		geometry.__webglVertexBuffer = gl.createBuffer();
+//		geometry.__webglColorBuffer = gl.createBuffer();
+//
+//		info.getMemory().geometries ++;
+//	}
+//
+//	private void initBuffers (WebGLRenderingContext gl, Geometry geometry) 
+//	{
+//		int nvertices = geometry.getVertices().size();
+//
+//		geometry.setWebGlVertexArray( Float32Array.create( nvertices * 3 ) );
+//		geometry.setWebGlColorArray( Float32Array.create( nvertices * 3 ) );
+//
+//		geometry.__webglLineCount = nvertices;
+//
+//		initCustomAttributes ( gl, geometry );
+//	}
+//
+//	@Override
+//	public void setBuffer(WebGLRenderer renderer)
+//	{
+//		WebGLRenderingContext gl = renderer.getGL();
+//
+//		this.material = Material.getBufferMaterial( this, null );
+//
+//		boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
+//		if ( this.geometry.isVerticesNeedUpdate() 
+//				|| this.geometry.isColorsNeedUpdate() 
+//				|| areCustomAttributesDirty 
+//		) {
+//			this.setBuffers( gl, BufferUsage.DYNAMIC_DRAW );
+//
+//			this.material.getShader().clearCustomAttributes();
+//		}
+//
+//		this.geometry.setVerticesNeedUpdate(false);
+//		this.geometry.setColorsNeedUpdate(false);
+//	}
+//
+//	// setLineBuffers
+//	public void setBuffers(WebGLRenderingContext gl, BufferUsage hint)
+//	{		
+//		List<Vector3> vertices = geometry.getVertices();
+//		List<Color> colors = geometry.getColors();
+//
+//		boolean dirtyVertices = geometry.isVerticesNeedUpdate();
+//		boolean dirtyColors = geometry.isColorsNeedUpdate();
+//
+//		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
+//
+//		if (dirtyVertices) 
+//		{
+//			for (int v = 0; v < vertices.size(); v++) 
+//			{
+//				Vector3 vertex = vertices.get(v);
+//				int offset = v * 3;
+//				geometry.getWebGlVertexArray().set(offset, vertex.getX());
+//				geometry.getWebGlVertexArray().set(offset + 1, vertex.getY());
+//				geometry.getWebGlVertexArray().set(offset + 2, vertex.getZ());
+//			}
+//
+//			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer);
+//			gl.bufferData(BufferTarget.ARRAY_BUFFER, geometry.getWebGlVertexArray(), hint);
+//		}
+//
+//		if (dirtyColors) 
+//		{
+//			for (int c = 0; c < colors.size(); c++) 
+//			{
+//				Color color = colors.get(c);
+//				int offset = c * 3;
+//
+//				geometry.getWebGlColorArray().set(offset, color.getR());
+//				geometry.getWebGlColorArray().set(offset + 1, color.getG());
+//				geometry.getWebGlColorArray().set(offset + 2, color.getB());
+//			}
+//
+//			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer);
+//			gl.bufferData(BufferTarget.ARRAY_BUFFER, geometry.getWebGlColorArray(), hint);
+//		}
+//
+//		if (customAttributes != null) 
+//		{
+//			for (int i = 0; i < customAttributes.size(); i++) 
+//			{
+//				Attribute customAttribute = customAttributes.get(i);
+//
+//				if (customAttribute.needsUpdate
+//						&& (customAttribute.getBoundTo() == null 
+//						|| customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES)) 
+//				{
+//
+//					int offset = 0;
+//
+//					if (customAttribute.size == 1) 
+//					{
+//						for (int ca = 0; ca < customAttribute.getValue().size(); ca++)
+//							customAttribute.array.set(ca, (Double)customAttribute.getValue().get(ca));
+//
+//					}
+//					else if (customAttribute.size == 2) 
+//					{
+//						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
+//						{
+//
+//							Vector2 value = (Vector2) customAttribute.getValue().get(ca);
+//
+//							customAttribute.array.set(offset, value.getX());
+//							customAttribute.array.set(offset + 1, value.getY());
+//
+//							offset += 2;
+//						}
+//
+//					} 
+//					else if (customAttribute.size == 3) 
+//					{
+//						if (customAttribute.type == Attribute.TYPE.C) 
+//						{
+//							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
+//							{
+//
+//								Color value = (Color) customAttribute.getValue().get(ca);
+//
+//								customAttribute.array.set(offset, value.getR());
+//								customAttribute.array.set(offset + 1, value.getG());
+//								customAttribute.array.set(offset + 2, value.getB());
+//
+//								offset += 3;
+//							}
+//
+//						} 
+//						else 
+//						{
+//							for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
+//							{
+//								Vector3 value = (Vector3) customAttribute.getValue().get(ca);
+//
+//								customAttribute.array.set(offset, value.getX());
+//								customAttribute.array.set(offset + 1, value.getY());
+//								customAttribute.array.set(offset + 2, value.getZ());
+//
+//								offset += 3;
+//							}
+//						}
+//
+//					} 
+//					else if (customAttribute.size == 4) 
+//					{
+//						for (int ca = 0; ca < customAttribute.getValue().size(); ca++) 
+//						{
+//							Vector4 value = (Vector4) customAttribute.getValue().get(ca);
+//
+//							customAttribute.array.set(offset, value.getX());
+//							customAttribute.array.set(offset + 1, value.getY());
+//							customAttribute.array.set(offset + 2, value.getZ());
+//							customAttribute.array.set(offset + 3, value.getW());
+//
+//							offset += 4;
+//						}
+//					}
+//
+//					gl.bindBuffer(BufferTarget.ARRAY_BUFFER, customAttribute.buffer);
+//					gl.bufferData(BufferTarget.ARRAY_BUFFER, customAttribute.array, hint);
+//				}
+//			}
+//		}
+//	}
 }

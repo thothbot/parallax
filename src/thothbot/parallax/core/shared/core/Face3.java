@@ -50,14 +50,23 @@ public class Face3 {
 	protected Color color;
 	protected List<Color> vertexColors;
 	// protected List<Material> materials;
-	protected int materialIndex;
+	protected int materialIndex = 0;
 	protected List<Vector4> vertexTangents;
-	protected Vector3 centroid;
+//	protected Vector3 centroid;
 
-	public Vector3 __originalNormal;
+//	public Vector3 __originalNormal;
+	
+	// Special case used in Geometry.computeMorphNormals()
 	public Vector3 __originalFaceNormal;
 	public List<Vector3> __originalVertexNormals;
 
+	public Face3(int a, int b, int c, Vector3 normal) {
+		this(a, b, c);
+
+		this.normal = normal;
+	}
+
+	
 	/**
 	 * Face3 constructor
 	 * 
@@ -111,16 +120,14 @@ public class Face3 {
 		this.setNormal(new Vector3());
 		this.setVertexTangents(new ArrayList<Vector4>());
 		this.setVertexNormals(new ArrayList<Vector3>());
-		this.setCentroid(new Vector3());
 		this.setColor(new Color(0x000000));
 		this.setVertexColors(new ArrayList<Color>());
 
-		this.materialIndex = -1;
 		this.vertexColors = new ArrayList<Color>();
 		// this.materials = new ArrayList<Material>();
 
-		this.__originalNormal = new Vector3();
-		this.__originalVertexNormals = new ArrayList<Vector3>();
+//		this.__originalNormal = new Vector3();
+//		this.__originalVertexNormals = new ArrayList<Vector3>();
 	}
 
 	/**
@@ -297,20 +304,20 @@ public class Face3 {
 	public List<Vector4> getVertexTangents() {
 		return vertexTangents;
 	}
-
-	/**
-	 * Sets the Face centroid.
-	 */
-	public void setCentroid(Vector3 centroid) {
-		this.centroid = centroid;
-	}
-
-	/**
-	 * Gets the Face centroid.
-	 */
-	public Vector3 getCentroid() {
-		return centroid;
-	}
+//
+//	/**
+//	 * Sets the Face centroid.
+//	 */
+//	public void setCentroid(Vector3 centroid) {
+//		this.centroid = centroid;
+//	}
+//
+//	/**
+//	 * Gets the Face centroid.
+//	 */
+//	public Vector3 getCentroid() {
+//		return centroid;
+//	}
 
 	// public List<Material> getMaterials(){
 	// return this.materials;
@@ -335,7 +342,6 @@ public class Face3 {
 
 		face.normal.copy(this.normal);
 		face.color.copy(this.color);
-		face.centroid.copy(this.centroid);
 		face.materialIndex = this.materialIndex;
 
 		for (int i = 0, il = this.vertexNormals.size(); i < il; i++)

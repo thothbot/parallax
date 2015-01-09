@@ -23,10 +23,10 @@ import java.util.List;
 
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 
 public final class LensFlare extends Object3D

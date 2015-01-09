@@ -19,6 +19,7 @@
 package thothbot.parallax.core.shared.helpers;
 
 import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.geometries.CylinderGeometry;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
@@ -28,79 +29,101 @@ import thothbot.parallax.core.shared.math.Quaternion;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 public class ArrowHelper extends Object3D
 {
 
 	public Line line;
 	public Mesh cone;
-	
-	private static Vector3 __v1 = new Vector3();
-	private static Vector3 __v2 = new Vector3();
-    private static Quaternion __q1 = new Quaternion();
-	
+		
 	public ArrowHelper ( Vector3 dir, Vector3 origin)
 	{
-		this(dir, origin, 20);
+		this(dir, origin, 1);
 	}
 	
 	public ArrowHelper ( Vector3 dir, Vector3 origin, double length)
 	{
 		this(dir, origin, length, 0xffff00);
 	}
+	
+	public ArrowHelper ( Vector3 dir, Vector3 origin, double length, int color) 
+	{	
+		this(dir, origin, length, color, 0.2 * length, 0.2 * 0.2 * length);
+	}
 
-	public ArrowHelper ( Vector3 dir, Vector3 origin, double length, int hex ) 
+	public ArrowHelper ( Vector3 dir, Vector3 origin, double length, int color, double headLength, double headWidth ) 
 	{
 		super();
-
+		
+		this.getPosition().copy(origin);
+		
 		Geometry lineGeometry = new Geometry();
 		lineGeometry.getVertices().add( new Vector3( 0, 0, 0 ) );
 		lineGeometry.getVertices().add( new Vector3( 0, 1, 0 ) );
 
+		CylinderGeometry coneGeometry = new CylinderGeometry( 0, 0.5, 1, 5, 1 );
+		coneGeometry.applyMatrix( new Matrix4().makeTranslation( 0, - 0.5, 0 ) );
+		
 		LineBasicMaterial lbm = new LineBasicMaterial();
-		lbm.setColor(new Color(hex));
+		lbm.setColor(new Color(color));
 		this.line = new Line( lineGeometry, lbm );
+		this.line.setMatrixAutoUpdate(false);
 		this.add( this.line );
 
-		CylinderGeometry coneGeometry = new CylinderGeometry( 0, 0.05, 0.25, 5, 1 );
-
 		MeshBasicMaterial mbm = new MeshBasicMaterial();
-		mbm.setColor(new Color(hex));
+		mbm.setColor(new Color(color));
 		this.cone = new Mesh( coneGeometry, mbm );
-		this.cone.getPosition().set( 0, 1, 0 );
+		this.cone.setMatrixAutoUpdate(false);
 		this.add( this.cone );
 
-		setPosition( origin );
 		setDirection( dir );
-		setLength( length );
+		setLength( length, headLength, headWidth );
 	}
 	
 	public void setDirection( Vector3 dir ) 
 	{
-	    Vector3 d = ArrowHelper.__v1.copy( dir ).normalize();
+		Vector3 axis = new Vector3();
+		double radians;
 
-	    if ( d.getY() > 0.999 ) 
-	    {
-	        this.rotation.set( 0, 0, 0 );
-	    } 
-	    else if ( d.getY() < - 0.999 ) 
-	    {
-	        this.rotation.set( Math.PI, 0, 0 );
-	    } 
-	    else 
-	    {
-		    Vector3 axis = __v2.set( d.getZ(), 0, - d.getX() ).normalize();
-		    double radians = Math.acos( d.getY() );
-		    Quaternion quaternion = __q1.setFromAxisAngle( axis, radians );
+		// dir is assumed to be normalized
 
-		    this.rotation.setEulerFromQuaternion( quaternion, this.eulerOrder );
+		if ( dir.getY() > 0.99999 ) {
+
+			this.quaternion.set( 0, 0, 0, 1 );
+
+		} else if ( dir.getY() < - 0.99999 ) {
+
+			this.quaternion.set( 1, 0, 0, 0 );
+
+		} else {
+
+			axis.set( dir.getZ(), 0, - dir.getX() ).normalize();
+
+			radians = Math.acos( dir.getY() );
+
+			this.quaternion.setFromAxisAngle( axis, radians );
+
 		}
-	}
 
-	public void setLength( double length ) 
-	{
-		this.scale.set( length );
+	}
+	
+	public void setLength ( double length ) {
+		
+		double headLength = 0.2 * length;
+		double headWidth = 0.2 * headLength;
+		
+		setLength(length, headLength, headWidth);
+	}
+	
+	public void setLength ( double length, double headLength, double headWidth ) {
+
+		this.line.getScale().set( 1, length, 1 );
+		this.line.updateMatrix();
+
+		this.cone.getScale().set( headWidth, headLength, headWidth );
+		this.cone.getPosition().setY( length );
+		this.cone.updateMatrix();
+
 	}
 
 	public void setColor( int hex ) 

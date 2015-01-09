@@ -36,7 +36,7 @@ public abstract class TypeArray extends ArrayBufferView {
    * 
    * @param array
    */
-  public final native void set(Int8Array array) /*-{
+  public final native void set(TypeArray array) /*-{
 		this.set(array);
 	}-*/;
   
@@ -53,7 +53,7 @@ public abstract class TypeArray extends ArrayBufferView {
    * @param offset indicates the index in the current array where values are 
    * 				written.
    */
-  public final native void set(Int8Array array, int offset) /*-{
+  public final native void set(TypeArray array, int offset) /*-{
   	this.set(array, offset);
   }-*/;
   

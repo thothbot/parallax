@@ -33,7 +33,8 @@ import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
-import thothbot.parallax.core.shared.core.GeometryBuffer;
+import thothbot.parallax.core.shared.core.BufferGeometry;
+import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Gyroscope;
 import thothbot.parallax.core.shared.core.Projector;
 import thothbot.parallax.core.shared.helpers.CameraHelper;
@@ -49,7 +50,6 @@ import thothbot.parallax.core.shared.math.Frustum;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.GeometryObject;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.RendererObject;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
@@ -287,8 +287,8 @@ public final class ShadowMap extends Plugin
 			// update camera matrices and frustum
 			
 			shadowCamera.getMatrixWorldInverse().getInverse( shadowCamera.getMatrixWorld() );
-			shadowCamera.getMatrixWorldInverse().flattenToArray( shadowCamera._viewMatrixArray );
-			shadowCamera.getProjectionMatrix().flattenToArray( shadowCamera._projectionMatrixArray );
+			shadowCamera.getMatrixWorldInverse().flattenToArrayOffset( shadowCamera._viewMatrixArray );
+			shadowCamera.getProjectionMatrix().flattenToArrayOffset( shadowCamera._projectionMatrixArray );
 
 			this.projScreenMatrix.multiply( shadowCamera.getProjectionMatrix(), shadowCamera.getMatrixWorldInverse() );
 			this.frustum.setFromMatrix( this.projScreenMatrix );
@@ -343,7 +343,7 @@ public final class ShadowMap extends Plugin
 				if ( webglObject.render ) 
 				{
 					GeometryObject object = webglObject.object;
-					GeometryBuffer buffer = webglObject.buffer;
+					BufferGeometry buffer = webglObject.buffer;
 					Material material;
 
 					// culling is overriden globally for all objects
@@ -366,7 +366,7 @@ public final class ShadowMap extends Plugin
 						material = this.depthMaterial;
 					}
 
-					if ( buffer.getClass() == GeometryBuffer.class ) 
+					if ( buffer.getClass() == BufferGeometry.class ) 
 					{
 						getRenderer().renderBufferDirect( getScene(), shadowCamera, material, buffer, object );
 

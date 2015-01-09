@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.math.Matrix4;
 
 

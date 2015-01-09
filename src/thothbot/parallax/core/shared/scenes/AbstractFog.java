@@ -30,8 +30,9 @@ import thothbot.parallax.core.shared.math.Color;
  * @author thothbot
  *
  */
-public abstract class FogAbstract
+public abstract class AbstractFog
 {
+	private String name;
 	private Color color;
 	
 	/**
@@ -40,8 +41,9 @@ public abstract class FogAbstract
 	 *  
 	 * @param hex the color in HEX format
 	 */
-	public FogAbstract(int hex)
+	public AbstractFog(int hex)
 	{
+		this.name = "";
 		this.color = new Color(hex);
 	}
 
@@ -65,6 +67,23 @@ public abstract class FogAbstract
 		return color;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public abstract AbstractFog clone();
+	
+	public AbstractFog clone(AbstractFog fog) {
+		fog.name = this.name;
+		fog.color = this.color.clone();
+		
+		return fog;
+	}
+
 	/**
 	 * The method refreshes uniforms for the fog
 	 * 

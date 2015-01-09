@@ -20,7 +20,7 @@ package thothbot.parallax.core.shared.geometries;
 
 import java.util.Arrays;
 
-import thothbot.parallax.core.shared.core.Face4;
+import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
@@ -103,13 +103,16 @@ public final class TorusKnotGeometry extends Geometry
 				Vector2 uvb = new Vector2( ( i + 1.0 ) / (double)segmentsR,           j / (double)segmentsT );
 				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
 				Vector2 uvd = new Vector2(           i / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
+		
+				getFaces().add( new Face3( a, b, d ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvd ) );
 
-				getFaces().add( new Face4( a, b, c, d ) );
-				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
+				getFaces().add( new Face3( b, c, d ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvb.clone(), uvc, uvd.clone() ) );
+
 			}
 		}
 
-		this.computeCentroids();
 		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}

@@ -16,13 +16,10 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.shared.core;
+package thothbot.parallax.core.shared.objects;
 
-public enum Euler {
-	YXZ,
-	ZXY,
-	ZYX,
-	YZX,
-	XZY,
-	XYZ
+import thothbot.parallax.core.shared.core.Object3D;
+
+public class Group extends Object3D {
+
 }

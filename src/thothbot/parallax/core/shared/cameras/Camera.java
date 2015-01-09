@@ -22,10 +22,10 @@ import thothbot.parallax.core.client.events.HasEventBus;
 import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Quaternion;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
@@ -39,10 +39,6 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 {
 	protected Matrix4 matrixWorldInverse;
 	protected Matrix4 projectionMatrix;
-	protected Matrix4 projectionMatrixInverse;
-
-	public Float32Array _viewMatrixArray;
-	public Float32Array _projectionMatrixArray;
 	
 	public Camera() 
 	{
@@ -50,11 +46,7 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 
 		this.matrixWorldInverse = new Matrix4();
 		this.projectionMatrix = new Matrix4();
-		this.projectionMatrixInverse = new Matrix4();
-		
-		this._viewMatrixArray = Float32Array.create( 16 );
-		this._projectionMatrixArray = Float32Array.create( 16 );
-		
+
 		addViewportResizeHandler(this);
 	}
 	
@@ -87,42 +79,40 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 	{
 		this.projectionMatrix = projectionMatrix;
 	}
-
-	public Matrix4 getProjectionMatrixInverse()
-	{
-		return this.projectionMatrixInverse;
-	}
-
-	public void setProjectionMatrixInverse(Matrix4 projectionMatrix)
-	{
-		this.projectionMatrixInverse = projectionMatrix;
+	
+	@Override
+	public Vector3 getWorldDirection() {
+		return getWorldDirection(new Vector3());
 	}
 
 	@Override
+	public Vector3 getWorldDirection(Vector3 optionalTarget) {
+
+		Quaternion quaternion = new Quaternion();
+
+		this.getWorldQuaternion( quaternion );
+
+		return optionalTarget.set( 0, 0, - 1 ).apply( quaternion );
+
+	}
+	
+	@Override
 	public void lookAt(Vector3 vector)
 	{
-		this.matrix.lookAt(this.position, vector, this.up);
+		// This routine does not support cameras with rotated and/or translated parent(s)
 
-		if ( isRotationAutoUpdate() )
-		{
-			if ( isUseQuaternion() )  
-			{
-				Quaternion q = new Quaternion();
-				getMatrix().decompose(new Vector3(), q, new Vector3());
-				this.quaternion.copy( q );
-			}
-			else 
-			{
-				this.rotation.setEulerFromRotationMatrix( this.matrix, this.eulerOrder );
-			}
-		}
+		Matrix4 m1 = new Matrix4();
+
+		m1.lookAt( this.position, vector, this.up );
+
+		this.quaternion.setFromRotationMatrix( m1 );
+	}
+	
+	public Camera clone() {
+		return clone(new Camera());
 	}
 	
 	public Camera clone ( Camera camera ) {
-
-		if ( camera == null ) 
-			camera = new Camera();
-		
 
 		super.clone(camera);
 

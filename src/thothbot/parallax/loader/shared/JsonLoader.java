@@ -29,7 +29,6 @@ import thothbot.parallax.core.client.textures.CompressedTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.Face3;
-import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphColor;
 import thothbot.parallax.core.shared.materials.HasAmbientEmissiveColor;

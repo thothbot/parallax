@@ -18,46 +18,17 @@
 
 package thothbot.parallax.core.shared.lights;
 
-import java.util.Map;
-
-import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector3;
 
 public final class HemisphereLight extends Light 
 {
-	public static class UniformHemisphere implements Light.UniformLight 
-	{
-		public Float32Array skyColors;
-		public Float32Array groundColors;
-		public Float32Array positions;
-		
-		@Override
-		public void reset() 
-		{
-			this.skyColors    = (Float32Array) Float32Array.createArray();
-			this.groundColors = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
-			
-		}
-
-		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms) 
-		{
-			uniforms.get("hemisphereLightSkyColor").setValue( skyColors );
-			uniforms.get("hemisphereLightGroundColor").setValue( groundColors );
-			uniforms.get("hemisphereLightPosition").setValue( positions );
-			
-		}
-	}
-
 	private Color groundColor;
 	private double intensity;
 	
 	public HemisphereLight(int skyColorHex, int groundColorHex)
 	{
-		this(skyColorHex, groundColorHex, 1);
+		this(skyColorHex, groundColorHex, 1.0);
 	}
 	
 	public HemisphereLight(int skyColorHex, int groundColorHex, double intensity)
@@ -66,7 +37,7 @@ public final class HemisphereLight extends Light
 		
 		this.groundColor = new Color( groundColorHex );
 
-		this.position = new Vector3( 0, 100, 0 );
+		this.position = new Vector3( 0, 100.0, 0 );
 
 		this.intensity = intensity;
 	}
@@ -87,34 +58,16 @@ public final class HemisphereLight extends Light
 		this.intensity = intensity;
 	}
 	
-	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
-	{
-		Float32Array hemiSkyColors    = zlights.hemi.skyColors;
-		Float32Array hemiGroundColors = zlights.hemi.groundColors;
-		Float32Array hemiPositions    = zlights.hemi.positions;
+	public HemisphereLight clone() {
+
+		HemisphereLight light = new HemisphereLight(0x000000, 0x000000);
 		
-		Color skyColor = getColor();
-		Color groundColor = getGroundColor();
-		double intensity = getIntensity();
+		super.clone(light);
 
-		int hemiOffset = hemiSkyColors.getLength() * 3;
+		light.groundColor.copy( this.groundColor );
+		light.intensity = this.intensity;
 
-		if (  isGammaInput ) 
-		{
-			setColorGamma( hemiSkyColors, hemiOffset, skyColor, intensity );
-			setColorGamma( hemiGroundColors, hemiOffset, groundColor, intensity );
-		} 
-		else 
-		{
-			setColorLinear( hemiSkyColors, hemiOffset, skyColor, intensity );
-			setColorLinear( hemiGroundColors, hemiOffset, groundColor, intensity );
-		}
+		return light;
 
-		Vector3 position = getMatrixWorld().getPosition();
-
-		hemiPositions.set( hemiOffset,     position.getX() );
-		hemiPositions.set( hemiOffset + 1, position.getY() );
-		hemiPositions.set( hemiOffset + 2, position.getZ() );
 	}
 }

@@ -20,7 +20,7 @@ package thothbot.parallax.core.client.controls;
 
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.objects.Object3D;
+import thothbot.parallax.core.shared.core.Object3D;
 
 import com.google.gwt.user.client.ui.Widget;
 

@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
@@ -58,7 +57,7 @@ public final class LatheGeometry extends Geometry
 		{
 			for ( int j = 0; j < newV.size(); j ++ ) 
 			{
-				newV.set( j , (Vector3) matrix.multiplyVector3( newV.get( j ).clone() ));
+//				newV.set( j , (Vector3) matrix.multiply( newV.get( j ).clone() ));
 				getVertices().add( newV.get( j ) );
 			}
 		}
@@ -72,7 +71,7 @@ public final class LatheGeometry extends Geometry
 				int c = ( ( i + 1 ) % (steps + 1) ) * kl + ( k + 1 ) % kl;
 				int d = i * kl + ( k + 1 ) % kl;
 
-				getFaces().add( new Face4( a, b, c, d ) );
+//				getFaces().add( new Face4( a, b, c, d ) );
 
 				double stepsf = steps / 1.0;
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
@@ -86,7 +85,7 @@ public final class LatheGeometry extends Geometry
 			}
 		}
 
-		this.computeCentroids();
+		this.mergeVertices();
 		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}

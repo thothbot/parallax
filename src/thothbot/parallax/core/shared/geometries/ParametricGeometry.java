@@ -21,7 +21,6 @@ package thothbot.parallax.core.shared.geometries;
 import java.util.Arrays;
 
 import thothbot.parallax.core.shared.core.Face3;
-import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
@@ -42,11 +41,6 @@ public class ParametricGeometry extends Geometry
 	}
 
 	public ParametricGeometry(final ParametricFunction function, int slices, int stacks)
-	{
-		this(function, slices, stacks, false);
-	}
-	
-	public ParametricGeometry(final ParametricFunction function, int slices, int stacks, boolean useTris)
 	{
 		super();
 
@@ -80,24 +74,15 @@ public class ParametricGeometry extends Geometry
 				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)slices,            j / (double)stacks );
 				Vector2 uvd = new Vector2( ( i + 1.0 ) / (double)slices,  ( j + 1.0 ) / (double)stacks );
 
-				if ( useTris ) 
-				{
-					this.getFaces().add( new Face3( a, b, c ) );
-					this.getFaces().add( new Face3( b, d, c ) );
+				this.getFaces().add( new Face3( a, b, c ) );
+				this.getFaces().add( new Face3( b, d, c ) );
 
-					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc ) );
-					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvb, uvd, uvc ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvb, uvd, uvc ) );
 
-				} 
-				else 
-				{
-					this.getFaces().add( new Face4( a, b, d, c ) );
-					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
-				}
 			}
 		}
 		
-		this.computeCentroids();
 		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}

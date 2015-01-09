@@ -38,9 +38,9 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.GeometryGroup;
+import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector4;
-import thothbot.parallax.core.shared.objects.GeometryObject;
 
 /**
  * Materials describe the appearance of objects. 
@@ -194,6 +194,8 @@ public abstract class Material
 	
 	// Must be overwriten
 	protected abstract Shader getAssociatedShader();
+	
+	public abstract Material clone();
 
 	/**
 	 * Gets unique number of this material instance.

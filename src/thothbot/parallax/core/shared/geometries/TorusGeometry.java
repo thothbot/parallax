@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Face4;
+import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
@@ -87,20 +87,17 @@ public final class TorusGeometry extends Geometry
 				int c = ( segmentsT + 1 ) * ( j - 1 ) + i;
 				int d = ( segmentsT + 1 ) * j + i;
 
-				Face4 face = new Face4( a, b, c, d, Arrays.asList(normals.get( a ), normals.get( b ), normals.get( c ), normals.get( d ) ) );
-				face.getNormal().add( normals.get( a ) );
-				face.getNormal().add( normals.get( b ) );
-				face.getNormal().add( normals.get( c ) );
-				face.getNormal().add( normals.get( d ) );
-				face.getNormal().normalize();
-
+				Face3 face = new Face3( a, b, d, Arrays.asList( normals.get( a ).clone(), normals.get( b ).clone(), normals.get( d ).clone() ) );
 				getFaces().add( face );
-				getFaceVertexUvs().get( 0 ).add( 
-						Arrays.asList(uvs.get( a ).clone(), uvs.get( b ).clone(), uvs.get( c ).clone(), uvs.get( d ).clone() ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( a ).clone(), uvs.get( b ).clone(), uvs.get( d ).clone() ) );
+
+				face = new Face3( b, c, d, Arrays.asList( normals.get( b ).clone(), normals.get( c ).clone(), normals.get( d ).clone() ) );
+				getFaces().add( face );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( b ).clone(), uvs.get( c ).clone(), uvs.get( d ).clone() ) );
 			}
 
 		}
 
-		this.computeCentroids();
+		this.computeFaceNormals();
 	}
 }

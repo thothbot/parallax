@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face3;
-import thothbot.parallax.core.shared.core.Face4;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Sphere;
 import thothbot.parallax.core.shared.math.Vector2;
@@ -124,20 +123,25 @@ public final class SphereGeometry extends Geometry
 				} 
 				else if ( Math.abs( getVertices().get( v3 ).getY() ) ==  radius ) 
 				{
+					uv3.setX( ( uv3.getX() + uv4.getX() ) / 2.0 );
 					getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
+
 				} 
 				else 
 				{
-					getFaces().add( new Face4( v1, v2, v3, v4, Arrays.asList( n1, n2, n3, n4 ) ) );
-					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3, uv4 ) );
+					getFaces().add( new Face3( v1, v2, v4,  Arrays.asList( n1, n2, n4 ) ) );
+					getFaceVertexUvs().get( 0 ).add(  Arrays.asList( uv1, uv2, uv4 ) );
+
+					getFaces().add( new Face3( v2, v3, v4,  Arrays.asList( n2.clone(), n3, n4.clone() ) ) );
+					getFaceVertexUvs().get( 0 ).add(  Arrays.asList( uv2.clone(), uv3, uv4.clone() ) );
+
 				}
 			}
 		}
 
-		this.computeCentroids();
 		this.computeFaceNormals();
 
-		setBoundingSphere( new Sphere(radius) );
+		setBoundingSphere( new Sphere(new Vector3(), radius) );
 	}
 }

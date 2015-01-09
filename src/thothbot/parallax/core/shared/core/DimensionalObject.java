@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.shared.objects;
+package thothbot.parallax.core.shared.core;
 
 import java.util.Collection;
 import java.util.List;

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Face4;
+import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.curves.FrenetFrames;
@@ -80,13 +80,13 @@ public final class TubeGeometry extends Geometry
 			double u = i / (double)( numpoints - 1 );
 
 			Vector3 pos = (Vector3) path.getPointAt( u );
-
-			if ( debug ) 
-			{
-				getDebug().add( new ArrowHelper( tangents.get( i ),  pos, radius, 0x0000ff ) );	
-				getDebug().add( new ArrowHelper( normals.get( i ),   pos, radius, 0xff0000 ) );
-				getDebug().add( new ArrowHelper( binormals.get( i ), pos, radius, 0x00ff00 ) );
-			}
+//
+//			if ( debug ) 
+//			{
+//				getDebug().add( new ArrowHelper( tangents.get( i ),  pos, radius, 0x0000ff ) );	
+//				getDebug().add( new ArrowHelper( normals.get( i ),   pos, radius, 0xff0000 ) );
+//				getDebug().add( new ArrowHelper( binormals.get( i ), pos, radius, 0x00ff00 ) );
+//			}
 
 			for ( int j = 0; j < segmentsRadius; j++ ) 
 			{
@@ -126,12 +126,14 @@ public final class TubeGeometry extends Geometry
 				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)segments, ( j + 1.0 ) / (double)segmentsRadius );
 				Vector2 uvd = new Vector2( i / (double)segments,           ( j + 1.0 ) / (double)segmentsRadius );
 
-				getFaces().add( new Face4( a, b, c, d ) );
-				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvc, uvd ) );
+				getFaces().add( new Face3( a, b, d ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvd ) );
+
+				getFaces().add( new Face3( b, c, d ) );
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvb.clone(), uvc, uvd.clone() ) );
 			}
 		}
 
-		this.computeCentroids();
 		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}

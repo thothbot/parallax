@@ -65,21 +65,37 @@ public class Sphere
 
 		return this;
 	}
+	
+	public Sphere setFromPoints(List<Vector3> points, Vector3 optionalCenter) {
+		return setFromPoints(points.toArray(new Vector3[points.size()]), optionalCenter);
+	}
+	
+	public Sphere setFromPoints(Vector3[] points, Vector3 optionalCenter) {
 
-	public Sphere setFromCenterAndPoints( Vector3 center, List<Vector3> points ) 
-	{
-		double maxRadiusSq = 0;
+		Box3 box = new Box3();
 
-		for ( int i = 0, il = points.size(); i < il; i ++ ) 
-		{
-			double radiusSq = center.distanceToSquared( points.get( i ) );
-			maxRadiusSq = Math.max( maxRadiusSq, radiusSq );
+		if ( optionalCenter != null ) {
+
+			center.copy( optionalCenter );
+
+		} else {
+
+			box.setFromPoints( points ).center( center );
+
 		}
 
-		this.center = center;
+		double maxRadiusSq = 0;
+
+		for ( int i = 0, il = points.length; i < il; i ++ ) {
+
+			maxRadiusSq = Math.max( maxRadiusSq, center.distanceToSquared( points[ i ] ) );
+
+		}
+
 		this.radius = Math.sqrt( maxRadiusSq );
 
 		return this;
+
 	}
 
 	public Sphere copy( Sphere sphere ) 
@@ -99,7 +115,7 @@ public class Sphere
 	{
 		return ( point.distanceToSquared( this.center ) <= ( this.radius * this.radius ) );
 	}
-
+	
 	public double distanceToPoint( Vector3 point ) 
 	{
 		return ( point.distanceTo( this.center ) - this.radius );
@@ -132,7 +148,7 @@ public class Sphere
 
 		return optionalTarget;
 	}
-
+	
 	public Box3 getBoundingBox()
 	{
 		return getBoundingBox(new Box3());
@@ -145,7 +161,7 @@ public class Sphere
 
 		return optionalTarget;
 	}
-
+	
 	public Sphere apply( Matrix4 matrix ) 
 	{
 		this.center.apply( matrix );

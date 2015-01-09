@@ -22,11 +22,11 @@ import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.textures.Texture;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 public class Sprite extends Object3D implements Comparable<Sprite>
 {

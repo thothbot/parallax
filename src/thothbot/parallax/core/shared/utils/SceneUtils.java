@@ -20,11 +20,13 @@ package thothbot.parallax.core.shared.utils;
 
 import java.util.List;
 
+import thothbot.parallax.core.shared.core.DimensionalObject;
 import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.objects.DimensionalObject;
+import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.Object3D;
+import thothbot.parallax.core.shared.scenes.Scene;
 
 /**
  * The class implements some 3D Scene related helper methods
@@ -47,16 +49,36 @@ public class SceneUtils
 	 * 
 	 * @return the new instance of {@link DimensionalObject}
 	 */
-	public static DimensionalObject createMultiMaterialObject( Geometry geometry, List<? extends Material> list ) 
+	public static Object3D createMultiMaterialObject( Geometry geometry, List<? extends Material> materials ) 
 	{
-		DimensionalObject group = new Object3D();
+		Object3D group = new Object3D();
 
-		for ( int i = 0; i < list.size(); i ++ ) 
-		{
-			Mesh object = new Mesh( geometry, list.get( i ) );
-			group.add( object );
+		for ( int i = 0, l = materials.size(); i < l; i ++ ) {
+
+			group.add( new Mesh( geometry, materials.get( i ) ) );
+
 		}
 
 		return group;
 	}
+	
+	public static void detach( Object3D child, Object3D parent, Scene scene ) {
+
+		child.applyMatrix( parent.getMatrixWorld() );
+		parent.remove( child );
+		scene.add( child );
+
+	}
+
+	public static void attach ( Object3D child, Scene scene, Object3D parent ) {
+
+		Matrix4 matrixWorldInverse = new Matrix4();
+		matrixWorldInverse.getInverse( parent.getMatrixWorld() );
+		child.applyMatrix( matrixWorldInverse );
+
+		scene.remove( child );
+		parent.add( child );
+
+	}
+
 }

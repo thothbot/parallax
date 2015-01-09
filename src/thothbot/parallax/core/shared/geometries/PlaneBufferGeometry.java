@@ -21,19 +21,16 @@ package thothbot.parallax.core.shared.geometries;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint32Array;
-import thothbot.parallax.core.shared.core.GeometryBuffer;
+import thothbot.parallax.core.shared.core.BufferAttribute;
+import thothbot.parallax.core.shared.core.BufferGeometry;
 
-public class PlaneBufferGeometry extends GeometryBuffer {
+public class PlaneBufferGeometry extends BufferGeometry {
 
 	public PlaneBufferGeometry(int width, int height) {
 		this(width, height, 1, 1);
 	}
 	
 	public PlaneBufferGeometry(int width, int height, int widthSegments, int heightSegments) {
-		this.setElementsNeedUpdate(true);
-		this.setVerticesNeedUpdate(true);
-		this.setNormalsNeedUpdate(true);
-		this.setColorsNeedUpdate(true);
 		
 		double width_half = width / 2.0;
 		double height_half = height / 2.0;
@@ -64,6 +61,7 @@ public class PlaneBufferGeometry extends GeometryBuffer {
 
 				vertices.set( offset,       x);
 				vertices.set( offset + 1, - y);
+				
 				normals.set( offset + 2, 1);
 
 				uvs.set( offset2, ix / gridX);
@@ -78,7 +76,7 @@ public class PlaneBufferGeometry extends GeometryBuffer {
 
 		offset = 0;
 
-		Uint16Array indices = Uint16Array.create( gridX * gridY * 6 );
+		Float32Array indices = Float32Array.create( gridX * gridY * 6 );
 
 		for ( int iy = 0; iy < gridY; iy ++ ) {
 
@@ -103,17 +101,11 @@ public class PlaneBufferGeometry extends GeometryBuffer {
 
 		}
 		
-		this.setWebGlIndexArray(indices);
-		this.setWebGlVertexArray(vertices);
-		this.setWebGlNormalArray(normals);
-		this.setWebGlUvArray(uvs);
-		
-		this.computeBoundingSphere();
+		this.addAttribute( "index", new BufferAttribute( indices, 1 ) );
+		this.addAttribute( "position", new BufferAttribute( vertices, 3 ) );
+		this.addAttribute( "normal", new BufferAttribute( normals, 3 ) );
+		this.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
 
-//		this.addAttribute( "index", new BufferAttribute( indices, 1 ) );
-//		this.addAttribute( "position", new BufferAttribute( vertices, 3 ) );
-//		this.addAttribute( "normal", new BufferAttribute( normals, 3 ) );
-//		this.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
 
 	}
 }

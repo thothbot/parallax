@@ -24,9 +24,7 @@ public class Box2
 {
 	private Vector2 min;
 	private Vector2 max;
-	
-	private static Vector2 __v1 = new Vector2();
-	
+
 	public Box2()
 	{
 		this(new Vector2(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY), 
@@ -62,39 +60,13 @@ public class Box2
 
 	public Box2 setFromPoints( List<Vector2>points ) 
 	{
-		if ( points.size() > 0 ) 
-		{
-			Vector2 point = points.get(0);
 
-			this.min.copy( point );
-			this.max.copy( point );
+		this.makeEmpty();
 
-			for ( int i = 1, il = points.size(); i < il; i ++ ) 
-			{
-				point = points.get(i);
+		for ( int i = 0, il = points.size(); i < il; i ++ ) {
 
-				if ( point.x < this.min.x ) 
-				{
-					this.min.x = point.x;
-				} 
-				else if ( point.x > this.max.x ) 
-				{
-					this.max.x = point.x;
-				}
+			this.expandByPoint( points.get( i ) );
 
-				if ( point.y < this.min.y ) 
-				{
-					this.min.y = point.y;
-				}
-				else if ( point.y > this.max.y ) 
-				{
-					this.max.y = point.y;
-				}
-			}
-		} 
-		else 
-		{
-			this.makeEmpty();
 		}
 
 		return this;
@@ -102,7 +74,9 @@ public class Box2
 
 	public Box2 setFromCenterAndSize( Vector2 center, Vector2 size ) 
 	{
-		Vector2 halfSize = Box2.__v1.copy( size ).multiply( 0.5 );
+		Vector2 v1 = new Vector2();
+		
+		Vector2 halfSize = v1.copy( size ).multiply( 0.5 );
 		this.min.copy( center ).sub( halfSize );
 		this.max.copy( center ).add( halfSize );
 
@@ -197,13 +171,18 @@ public class Box2
 
 		return false;
 	}
+	
+	public Vector2 getParameter( Vector2 point )
+	{
+		return getParameter(point, new Vector2());
+	}
 
-	public Vector2 getParameter( Vector2 point ) 
+	public Vector2 getParameter( Vector2 point, Vector2 optionalTarget ) 
 	{
 		// This can potentially have a divide by zero if the box
 		// has a size dimension of 0.
-
-		return new Vector2(
+		
+		return optionalTarget.set(
 			( point.x - this.min.x ) / ( this.max.x - this.min.x ),
 			( point.y - this.min.y ) / ( this.max.y - this.min.y )
 		);
@@ -234,7 +213,9 @@ public class Box2
 
 	public double distanceToPoint( Vector2 point ) 
 	{
-		Vector2 clampedPoint = Box2.__v1.copy( point ).clamp( this.min, this.max );
+		Vector2 v1 = new Vector2();
+		
+		Vector2 clampedPoint = v1.copy( point ).clamp( this.min, this.max );
 		return clampedPoint.sub( point ).length();
 	}
 

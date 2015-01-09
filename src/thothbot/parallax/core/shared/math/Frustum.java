@@ -23,7 +23,9 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.objects.GeometryObject;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
+import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.GeometryObject;
 
 /**
  * This class implements three-dimensional region which is visible on the screen.
@@ -105,22 +107,17 @@ public class Frustum
 
 	public boolean isIntersectsObject( GeometryObject object ) 
 	{
-		// this method is expanded inlined for performance reasons.
-		Matrix4 matrix = object.getMatrixWorld();
-		Vector3 center = matrix.getPosition();
-		double negRadius = - object.getGeometry().getBoundingSphere().getRadius() * matrix.getMaxScaleOnAxis();
+		Sphere sphere = new Sphere();
+		
+		AbstractGeometry geometry = object.getGeometry();
 
-		for ( int i = 0; i < 6; i ++ ) 
-		{
-			double distance = this.planes.get( i ).distanceToPoint( center );
+		if ( geometry.getBoundingSphere() == null ) 
+			geometry.computeBoundingSphere();
 
-			if( distance < negRadius ) 
-			{
-				return false;
-			}
-		}
+		sphere.copy( geometry.getBoundingSphere() );
+		sphere.apply( object.getMatrixWorld() );
 
-		return true;
+		return this.isIntersectsSphere( sphere );		
 	}
 
 	public boolean isIntersectsSphere( Sphere sphere ) 
@@ -140,6 +137,38 @@ public class Frustum
 
 		return true;
 	}
+	
+	public boolean isIntersectsBox(Box3 box) {
+
+		Vector3 p1 = new Vector3(),
+			p2 = new Vector3();
+
+		for ( int i = 0; i < 6 ; i ++ ) {
+
+			Plane plane = planes.get( i );
+
+			p1.x = plane.getNormal().x > 0 ? box.getMin().x : box.getMax().x;
+			p2.x = plane.getNormal().x > 0 ? box.getMax().x : box.getMin().x;
+			p1.y = plane.getNormal().y > 0 ? box.getMin().y : box.getMax().y;
+			p2.y = plane.getNormal().y > 0 ? box.getMax().y : box.getMin().y;
+			p1.z = plane.getNormal().z > 0 ? box.getMin().z : box.getMax().z;
+			p2.z = plane.getNormal().z > 0 ? box.getMax().z : box.getMin().z;
+
+			double d1 = plane.distanceToPoint( p1 );
+			double d2 = plane.distanceToPoint( p2 );
+
+			// if both outside plane, no intersection
+
+			if ( d1 < 0 && d2 < 0 ) {
+
+				return false;
+
+			}
+		}
+
+		return true;
+	}
+
 
 	public boolean isContainsPoint( Vector3 point ) 
 	{

@@ -103,6 +103,55 @@ public class Vector4 extends Vector3 implements Vector
 	{
 		this.w = w;
 	}
+	
+	/**
+	 * Sets the value of this vector to the specified xyzw coordinates.
+	 * 
+	 * @param x
+	 *            the x coordinate
+	 * @param y
+	 *            the y coordinate
+	 * @param z
+	 *            the z coordinate
+	 * @param w
+	 *            the w coordinate
+	 */
+	public Vector4 set(double x, double y, double z, double w)
+	{
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
+		return this;
+	}
+	
+	public void setComponent( int index, double value ) {
+
+		switch ( index ) {
+
+			case 0: this.x = value; break;
+			case 1: this.y = value; break;
+			case 2: this.z = value; break;
+			case 3: this.w = value; break;
+			default: throw new Error( "index is out of range: " + index );
+
+		}
+		
+	}
+
+	public double getComponent( int index ) {
+
+		switch ( index ) {
+
+			case 0: return this.x;
+			case 1: return this.y;
+			case 2: return this.z;
+			case 3: return this.w;
+			default: throw new Error( "index is out of range: " + index );
+
+		}
+		
+	}
 
 	/**
 	 * Set value of the vector from another vector.
@@ -128,27 +177,6 @@ public class Vector4 extends Vector3 implements Vector
 		return this.set(v.getX(), v.getY(), v.getZ(), 1.0);
 	}
 	
-	/**
-	 * Sets the value of this vector to the specified xyzw coordinates.
-	 * 
-	 * @param x
-	 *            the x coordinate
-	 * @param y
-	 *            the y coordinate
-	 * @param z
-	 *            the z coordinate
-	 * @param w
-	 *            the w coordinate
-	 */
-	public Vector4 set(double x, double y, double z, double w)
-	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.w = w;
-		return this;
-	}
-
 	public Vector4 add(Vector4 v)
 	{
 		return this.add(this, v);
@@ -183,7 +211,7 @@ public class Vector4 extends Vector3 implements Vector
 		return this.add(this, (Vector4) v);
 	}
 
-	public Vector4 addScalar(double s)
+	public Vector4 add(double s)
 	{
 		this.x += s;
 		this.y += s;
@@ -259,6 +287,24 @@ public class Vector4 extends Vector3 implements Vector
 
 		return this;
 	}
+	
+	public Vector4 applyMatrix4( Matrix4 m ) {
+
+		double x = this.x;
+		double y = this.y;
+		double z = this.z;
+		double w = this.w;
+
+		Float32Array e = m.getArray();
+
+		this.x = e.get( 0 ) * x + e.get( 4 ) * y + e.get( 8 ) * z + e.get( 12 ) * w;
+		this.y = e.get( 1 ) * x + e.get( 5 ) * y + e.get( 9 ) * z + e.get( 13 ) * w;
+		this.z = e.get( 2 ) * x + e.get( 6 ) * y + e.get( 10 ) * z + e.get( 14 ) * w;
+		this.w = e.get( 3 ) * x + e.get( 7 ) * y + e.get( 11 ) * z + e.get( 15 ) * w;
+
+		return this;
+
+	}
 
 	public Vector4 divide(Vector4 v1, Vector4 v2)
 	{
@@ -274,111 +320,28 @@ public class Vector4 extends Vector3 implements Vector
 		return this.divide(this, v);
 	}
 	
-	public Vector4 divide(double s)
+	public Vector4 divide(double scalar)
 	{
-		if (s != 0) 
-		{
+		if ( scalar != 0 ) {
 
-			this.x /= s;
-			this.y /= s;
-			this.z /= s;
-			this.w /= s;
+			double invScalar = 1.0 / scalar;
 
-		} 
-		else 
-		{
-			set(0, 0, 0, 1);
+			this.x *= invScalar;
+			this.y *= invScalar;
+			this.z *= invScalar;
+			this.w *= invScalar;
+
+		} else {
+
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+			this.w = 1;
+
 		}
+
 		return this;
-	}
 
-	/**
-	 * Negates the value of this vector in place.
-	 */
-	public Vector4 negate()
-	{
-		return this.multiply(-1);
-	}
-
-	/**
-	 * returns the dot product of this vector and v1
-	 * 
-	 * @param v1
-	 *            the other vector
-	 * @return the dot product of this vector and v1
-	 */
-	public double dot(Vector4 v1)
-	{
-		return (this.x * v1.x + this.y * v1.y + this.z * v1.z + this.w * v1.w);
-	}
-
-	/**
-	 * Returns the length of this vector.
-	 * 
-	 * @return the length of this vector as a double
-	 */
-	public double length()
-	{
-		return Math.sqrt(lengthSq());
-	}
-
-	/**
-	 * Returns the squared length of this vector
-	 * 
-	 * @return the squared length of this vector as a double
-	 */
-	public double lengthSq()
-	{
-		return dot(this);
-	}
-	
-	public double lengthManhattan() 
-	{
-		return Math.abs( getX() ) + Math.abs( getY() ) + Math.abs( getZ() ) + Math.abs( getW() );
-	}
-
-	/**
-	 * Normalizes this vector in place.
-	 */
-	@Override
-	public Vector4 normalize()
-	{
-		divide(length());
-		return this;
-	}
-
-	/**
-	 * This method is not implemented yet.
-	 */
-	@Override
-	public double distanceToSquared(Vector v1)
-	{
-		return 0;
-	}
-
-	/**
-	 * This method is not implemented yet.
-	 */
-	@Override
-	public double distanceTo(Vector v)
-	{
-		return 0;
-	}
-
-	public Vector4 setLength(double l)
-	{
-		this.normalize();
-		return multiply(l);
-	}
-
-	public Vector4 lerp(Vector4 v1, double alpha)
-	{
-		this.x += (v1.x - this.x) * alpha;
-		this.y += (v1.y - this.y) * alpha;
-		this.z += (v1.z - this.z) * alpha;
-		this.w += (v1.w - this.w) * alpha;
-		
-		return this;
 	}
 	
 	/**
@@ -407,7 +370,7 @@ public class Vector4 extends Vector3 implements Vector
 
 		return this;
 	}
-
+	
 	/**
 	 * <a href="http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm">www.euclideanspace.com</a>
 	 * 
@@ -455,12 +418,12 @@ public class Vector4 extends Vector3 implements Vector
 
 			angle = Math.PI;
 
-			double xx = ( m11 + 1 ) / 2;
-			double yy = ( m22 + 1 ) / 2;
-			double zz = ( m33 + 1 ) / 2;
-			double xy = ( m12 + m21 ) / 4;
-			double xz = ( m13 + m31 ) / 4;
-			double yz = ( m23 + m32 ) / 4;
+			double xx = ( m11 + 1.0 ) / 2.0;
+			double yy = ( m22 + 1.0 ) / 2.0;
+			double zz = ( m33 + 1.0 ) / 2.0;
+			double xy = ( m12 + m21 ) / 4.0;
+			double xz = ( m13 + m31 ) / 4.0;
+			double yz = ( m23 + m32 ) / 4.0;
 
 			// m11 is the largest diagonal term
 			if ( ( xx > yy ) && ( xx > zz ) ) 
@@ -530,7 +493,7 @@ public class Vector4 extends Vector3 implements Vector
 		this.x = ( m32 - m23 ) / s;
 		this.y = ( m13 - m31 ) / s;
 		this.z = ( m21 - m12 ) / s;
-		this.w = Math.acos( ( m11 + m22 + m33 - 1 ) / 2 );
+		this.w = Math.acos( ( m11 + m22 + m33 - 1.0 ) / 2.0 );
 
 		return this;
 	}
@@ -583,7 +546,7 @@ public class Vector4 extends Vector3 implements Vector
 		}
 
 		return this;
-	}
+	}	
 	
 	/**
 	 * This function assumes min < max, if this assumption isn't true it will not operate correctly
@@ -628,7 +591,146 @@ public class Vector4 extends Vector3 implements Vector
 
 		return this;
 	}
+	
+	public Vector4 clamp( double minVal, double maxVal ) {
 
+		Vector4 min = new Vector4(), max = new Vector4();
+
+		min.set( minVal, minVal, minVal, minVal );
+		max.set( maxVal, maxVal, maxVal, maxVal );
+
+		return this.clamp( min, max );
+	}
+	
+    public Vector4 floor() {
+
+        this.x = Math.floor( this.x );
+        this.y = Math.floor( this.y );
+        this.z = Math.floor( this.z );
+        this.w = Math.floor( this.w );
+
+        return this;
+
+    }
+
+    public Vector4 ceil() {
+
+        this.x = Math.ceil( this.x );
+        this.y = Math.ceil( this.y );
+        this.z = Math.ceil( this.z );
+        this.w = Math.ceil( this.w );
+
+        return this;
+
+    }
+
+    public Vector4 round() {
+
+        this.x = Math.round( this.x );
+        this.y = Math.round( this.y );
+        this.z = Math.round( this.z );
+        this.w = Math.round( this.w );
+
+        return this;
+
+    }
+
+    public Vector4 roundToZero() {
+
+        this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
+        this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
+        this.z = ( this.z < 0 ) ? Math.ceil( this.z ) : Math.floor( this.z );
+        this.w = ( this.w < 0 ) ? Math.ceil( this.w ) : Math.floor( this.w );
+
+        return this;
+
+    }
+
+
+	/**
+	 * Negates the value of this vector in place.
+	 */
+	public Vector4 negate()
+	{
+		this.x = - this.x;
+		this.y = - this.y;
+		this.z = - this.z;
+		this.w = - this.w;
+
+		return this;
+	}
+
+	/**
+	 * returns the dot product of this vector and v1
+	 * 
+	 * @param v1
+	 *            the other vector
+	 * @return the dot product of this vector and v1
+	 */
+	public double dot(Vector4 v1)
+	{
+		return (this.x * v1.x + this.y * v1.y + this.z * v1.z + this.w * v1.w);
+	}
+
+	/**
+	 * Returns the length of this vector.
+	 * 
+	 * @return the length of this vector as a double
+	 */
+	public double length()
+	{
+		return Math.sqrt(lengthSq());
+	}
+
+	/**
+	 * Returns the squared length of this vector
+	 * 
+	 * @return the squared length of this vector as a double
+	 */
+	public double lengthSq()
+	{
+		return dot(this);
+	}
+	
+	public double lengthManhattan() 
+	{
+		return Math.abs( getX() ) + Math.abs( getY() ) + Math.abs( getZ() ) + Math.abs( getW() );
+	}
+
+	/**
+	 * Normalizes this vector in place.
+	 */
+	@Override
+	public Vector4 normalize()
+	{
+		return divide(length());
+	}
+	
+
+	public Vector4 setLength(double l)
+	{
+		double oldLength = this.length();
+
+		if ( oldLength != 0 && l != oldLength ) {
+
+			this.multiply( l / oldLength );
+
+		}
+
+		return this;
+
+	}
+	
+	public Vector4 lerp(Vector4 v1, double alpha)
+	{
+		this.x += (v1.x - this.x) * alpha;
+		this.y += (v1.y - this.y) * alpha;
+		this.z += (v1.z - this.z) * alpha;
+		this.w += (v1.w - this.w) * alpha;
+		
+		return this;
+	}
+	
 	public boolean equals( Vector4 v ) 
 	{
 		return ( ( v.x == this.x ) && ( v.y == this.y ) && ( v.z == this.z ) && ( v.w == this.w ) );
@@ -645,4 +747,22 @@ public class Vector4 extends Vector3 implements Vector
 	{
 		return "(" + this.x + ", " + this.y + ", " + this.z +  ", " + this.w + ")";
 	}
+
+//	/**
+//	 * This method is not implemented yet.
+//	 */
+//	@Override
+//	public double distanceToSquared(Vector v1)
+//	{
+//		return 0;
+//	}
+//
+//	/**
+//	 * This method is not implemented yet.
+//	 */
+//	@Override
+//	public double distanceTo(Vector v)
+//	{
+//		return 0;
+//	}
 }

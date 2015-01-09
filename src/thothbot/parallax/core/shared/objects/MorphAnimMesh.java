@@ -151,68 +151,68 @@ public class MorphAnimMesh extends Mesh
 //		}
 //	}
 
-	public void updateAnimation( int delta ) 
-	{
-		if(this.geometry == null)
-			return;
-		
-		delta = 8;
-
-		double frameTime = (double)this.duration / this.length;
-
-		this.time += this.direction * delta;
-
-		if ( this.mirroredLoop ) 
-		{
-			if ( this.time > this.duration || this.time < 0 ) 
-			{
-
-				this.direction *= -1;
-
-				if ( this.time > this.duration ) 
-				{
-					this.time = this.duration;
-					this.directionBackwards = true;
-				}
-
-				if ( this.time < 0 ) 
-				{
-					this.time = 0;
-					this.directionBackwards = false;
-				}
-			}
-
-		} 
-		else 
-		{
-			this.time = this.time % this.duration;
-
-			if ( this.time < 0 ) 
-				this.time += this.duration;
-		}
-
-		int keyframe = this.startKeyframe + (int)Mathematics.clamp( 
-				(int)Math.floor( this.time / frameTime ), 0, this.length - 1 );
-
-		if ( keyframe != this.currentKeyframe ) 
-		{
-			getMorphTargetInfluences().set( this.lastKeyframe, 0.0);
-			getMorphTargetInfluences().set( this.currentKeyframe, 1.0);
-
-			getMorphTargetInfluences().set( keyframe, 0.0 );
-
-			this.lastKeyframe = this.currentKeyframe;
-			this.currentKeyframe = keyframe;
-		}
-
-		double mix = ( this.time % frameTime ) / frameTime;
-		
-		if ( this.directionBackwards )
-			mix = 1 - mix;
-
-		getMorphTargetInfluences().set( this.currentKeyframe, mix);
-		getMorphTargetInfluences().set( this.lastKeyframe, 1.0 - mix);
-	}
+//	public void updateAnimation( int delta ) 
+//	{
+//		if(this.geometry == null)
+//			return;
+//		
+//		delta = 8;
+//
+//		double frameTime = (double)this.duration / this.length;
+//
+//		this.time += this.direction * delta;
+//
+//		if ( this.mirroredLoop ) 
+//		{
+//			if ( this.time > this.duration || this.time < 0 ) 
+//			{
+//
+//				this.direction *= -1;
+//
+//				if ( this.time > this.duration ) 
+//				{
+//					this.time = this.duration;
+//					this.directionBackwards = true;
+//				}
+//
+//				if ( this.time < 0 ) 
+//				{
+//					this.time = 0;
+//					this.directionBackwards = false;
+//				}
+//			}
+//
+//		} 
+//		else 
+//		{
+//			this.time = this.time % this.duration;
+//
+//			if ( this.time < 0 ) 
+//				this.time += this.duration;
+//		}
+//
+//		int keyframe = this.startKeyframe + (int)Mathematics.clamp( 
+//				(int)Math.floor( this.time / frameTime ), 0, this.length - 1 );
+//
+//		if ( keyframe != this.currentKeyframe ) 
+//		{
+//			getMorphTargetInfluences().set( this.lastKeyframe, 0.0);
+//			getMorphTargetInfluences().set( this.currentKeyframe, 1.0);
+//
+//			getMorphTargetInfluences().set( keyframe, 0.0 );
+//
+//			this.lastKeyframe = this.currentKeyframe;
+//			this.currentKeyframe = keyframe;
+//		}
+//
+//		double mix = ( this.time % frameTime ) / frameTime;
+//		
+//		if ( this.directionBackwards )
+//			mix = 1 - mix;
+//
+//		getMorphTargetInfluences().set( this.currentKeyframe, mix);
+//		getMorphTargetInfluences().set( this.lastKeyframe, 1.0 - mix);
+//	}
 	
 	private void setFrameRange(int start, int end ) 
 	{

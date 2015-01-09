@@ -39,13 +39,14 @@ import thothbot.parallax.core.client.events.ViewportResizeEvent;
 public class OrthographicCamera extends Camera
 {
 
+	protected double zoom = 1.0;
 	protected double left;
 	protected double right;
 	protected double top;
 	protected double bottom;
 
-	protected double near;
-	protected double far;
+	protected double near = 0.1;
+	protected double far = 200.0;
 
 	/**
 	 * Orthographic Camera constructor.
@@ -59,7 +60,7 @@ public class OrthographicCamera extends Camera
 	{
 		this(width / -2.0, width / 2.0, height / 2.0, height / -2.0, near, far);
 	}
-
+	
 	/**
 	 * Orthographic Camera constructor. 
 	 * 
@@ -201,8 +202,35 @@ public class OrthographicCamera extends Camera
 	 * <p> 
 	 * Must be called after change of parameters.
 	 */
-	public void updateProjectionMatrix()
-	{
-		this.projectionMatrix.makeOrthographic( getLeft(), getRight(), getTop(), getBottom(), getNear(), getFar() );
+	public void updateProjectionMatrix() {
+
+		double dx = ( this.right - this.left ) / ( 2 * this.zoom );
+		double dy = ( this.top - this.bottom ) / ( 2 * this.zoom );
+		double cx = ( this.right + this.left ) / 2;
+		double cy = ( this.top + this.bottom ) / 2;
+
+		this.projectionMatrix.makeOrthographic( cx - dx, cx + dx, cy + dy, cy - dy, this.near, this.far );
+
+	}
+	
+	public OrthographicCamera clone() {
+
+		OrthographicCamera camera = new OrthographicCamera(10, 10, 10, 10);
+		
+		super.clone(camera);
+
+		camera.zoom = this.zoom;
+
+		camera.left = this.left;
+		camera.right = this.right;
+		camera.top = this.top;
+		camera.bottom = this.bottom;
+
+		camera.near = this.near;
+		camera.far = this.far;
+
+		camera.projectionMatrix.copy( this.projectionMatrix );
+
+		return camera;
 	}
 }

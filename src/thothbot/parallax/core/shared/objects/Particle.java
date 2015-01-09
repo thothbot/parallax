@@ -18,6 +18,7 @@
 
 package thothbot.parallax.core.shared.objects;
 
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.materials.Material;
 
 public class Particle  extends Object3D

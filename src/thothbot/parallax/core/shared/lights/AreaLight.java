@@ -16,15 +16,35 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.shared.core;
+package thothbot.parallax.core.shared.lights;
 
-public interface Geometric 
-{
-	public void computeBoundingBox();
+import thothbot.parallax.core.shared.math.Vector3;
+
+public class AreaLight extends Light {
+
+	public Vector3 normal;
+	public Vector3 right;
+
+	public double intensity;
+
+	public double width = 1.0;
+	public double height = 1.0;
+
+	public double constantAttenuation = 1.5;
+	public double linearAttenuation = 0.5;
+	public double quadraticAttenuation = 0.1;
 	
-	public void computeBoundingSphere();
+	public AreaLight ( int color) {
+		this(color, 1.0);
+	}
 	
-	public void computeVertexNormals();
-	
-	public void computeTangents();
+	public AreaLight ( int color, double intensity ) {
+
+		super(color);
+
+		this.normal = new Vector3( 0, - 1, 0 );
+		this.right = new Vector3( 1, 0, 0 );
+
+		this.intensity = intensity;
+	}
 }

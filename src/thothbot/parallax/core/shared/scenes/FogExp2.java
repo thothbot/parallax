@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.shaders.Uniform;
  * @author thothbot
  *
  */
-public final class FogExp2 extends FogAbstract
+public final class FogExp2 extends AbstractFog
 {
 	private double density;
 
@@ -73,6 +73,15 @@ public final class FogExp2 extends FogAbstract
 	public double getDensity()
 	{
 		return this.density;
+	}
+	
+	public FogExp2 clone() {
+		FogExp2 fog = new FogExp2(0x000000);
+		super.clone(fog);
+		
+		fog.density = this.density;
+		
+		return fog;
 	}
 	
 	@Override

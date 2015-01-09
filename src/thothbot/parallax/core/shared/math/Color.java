@@ -18,7 +18,6 @@
 
 package thothbot.parallax.core.shared.math;
 
-import thothbot.parallax.core.shared.Log;
 
 /**
  * The Color class is used encapsulate colors in the default RGB color space.
@@ -208,23 +207,25 @@ public final class Color
 	 */
 	public Color setHSL( double h, double s, double l ) 
 	{
-		if ( s == 0 ) 
-		{
-			this.r = this.g = this.b = (int)(l * 255);
-		} 
-		else 
-		{
+		// h,s,l ranges are in 0.0 - 1.0
 
-			double p = l <= 0.5 ? l * ( 1 + s ) : l + s - ( l * s );
-			double q = ( 2 * l ) - p;
+		if ( s == 0 ) {
 
-			this.r = hue2rgb( q, p, h + 1 / 3.0 );
+			this.r = this.g = this.b = l;
+
+		} else {
+
+			double p = l <= 0.5 ? l * ( 1.0 + s ) : l + s - ( l * s );
+			double q = ( 2.0 * l ) - p;
+
+			this.r = hue2rgb( q, p, h + 1.0 / 3.0 );
 			this.g = hue2rgb( q, p, h );
-			this.b = hue2rgb( q, p, h - 1 / 3.0 );
+			this.b = hue2rgb( q, p, h - 1.0 / 3.0 );
 
 		}
 
 		return this;
+
 	}
 	
 	/**
@@ -310,7 +311,9 @@ public final class Color
 	{
 		return ~~((int) Math.floor(this.r * 255)) << 16
 				^ ~~((int) Math.floor(this.g * 255)) << 8 
-				^ ~~((int) Math.floor(this.b * 255));
+				^ ~~((int) Math.floor(this.b * 255)) << 0;
+		
+//		return ( this.r * 255 ) << 16 ^ ( this.g * 255 ) << 8 ^ ( this.b * 255 ) << 0;
 	}
 
 	public String getHexString() 
@@ -341,11 +344,11 @@ public final class Color
 		{
 			double delta = max - min;
 
-			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2 - max - min );
+			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2.0 - max - min );
 
 			if( max == r) hue = ( g - b ) / delta + ( g < b ? 6 : 0 );
-			else if(max == g) hue = ( b - r ) / delta + 2;
-			else if(max == b) hue = ( r - g ) / delta + 4;
+			else if(max == g) hue = ( b - r ) / delta + 2.0;
+			else if(max == b) hue = ( r - g ) / delta + 4.0;
 			
 			hue /= 6.0;
 		}
@@ -436,6 +439,12 @@ public final class Color
 
 		return this;
 	}
+	
+	public boolean equals( Color c ) {
+
+		return ( c.r == this.r ) && ( c.g == this.g ) && ( c.b == this.b );
+
+	}
 
 	/**
 	 * Clone the current color class.
@@ -460,11 +469,11 @@ public final class Color
 
 	private double hue2rgb( double p, double q, double t ) 
 	{
-		if ( t < 0 ) t += 1;
-		if ( t > 1 ) t -= 1;
-		if ( t < 1 / 6.0 ) return p + ( q - p ) * 6 * t;
+		if ( t < 0 ) t += 1.0;
+		if ( t > 1 ) t -= 1.0;
+		if ( t < 1 / 6.0 ) return p + ( q - p ) * 6.0 * t;
 		if ( t < 1 / 2.0 ) return q;
-		if ( t < 2 / 3.0 ) return p + ( q - p ) * 6 * ( 2 / 3 - t );
+		if ( t < 2 / 3.0 ) return p + ( q - p ) * 6.0 * ( 2.0 / 3.0 - t );
 		
 		return p;
 	}

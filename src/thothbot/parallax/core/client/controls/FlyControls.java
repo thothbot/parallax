@@ -18,9 +18,9 @@
 
 package thothbot.parallax.core.client.controls;
 
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.math.Quaternion;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
@@ -90,9 +90,6 @@ public final class FlyControls extends Controls implements
 		this.viewHalfY = widget.getOffsetHeight() / 2.0;
 
 		// disable default target object behavior
-
-		getObject().setUseQuaternion(true);
-
 		this.tmpQuaternion = new Quaternion();
 
 		this.mouseStatus = 0;
@@ -142,10 +139,9 @@ public final class FlyControls extends Controls implements
 				1.0).normalize();
 
 		getObject().getQuaternion().multiply( this.tmpQuaternion );
-
-		getObject().getMatrix().setPosition( getObject().getPosition() );
-		getObject().getMatrix().setRotationFromQuaternion( getObject().getQuaternion() );
-		getObject().setMatrixWorldNeedsUpdate(true);
+		
+		// expose the rotation vector for convenience
+		getObject().getRotation().setFromQuaternion( getObject().getQuaternion(), getObject().getRotation().getOrder() );
 	}
 
 	@Override

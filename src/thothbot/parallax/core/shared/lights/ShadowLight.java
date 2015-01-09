@@ -20,47 +20,48 @@ package thothbot.parallax.core.shared.lights;
 
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.helpers.CameraHelper;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Object3D;
-
 public abstract class ShadowLight extends Light
 {
-	private Object3D target;
+	protected Object3D target;
 	
-	private Matrix4 shadowMatrix;
-	
-	private Camera shadowCamera;
-	private double shadowCameraNear = 50;
-	private double shadowCameraFar = 5000;
-	private boolean shadowCameraVisible = false;
-	
-	private double intensity;
-	private double distance;
-	
-	private boolean onlyShadow = false;
-	private boolean shadowCascade = false;
-	
-	private RenderTargetTexture shadowMap;
-	private Vector2 shadowMapSize;
+	protected double intensity;
 
-	private int shadowMapWidth = 512;
-	private int shadowMapHeight = 512;
+	protected boolean onlyShadow = false;
 		
-	private double shadowBias = 0.0;
-	private double shadowDarkness = 0.5;
+	protected double shadowCameraNear = 50;
+	protected double shadowCameraFar = 5000;
+	protected boolean shadowCameraVisible = false;
+
+	//
 	
-	private CameraHelper cameraHelper;
+	protected double shadowBias = 0.0;
+	protected double shadowDarkness = 0.5;
+
+	protected int shadowMapWidth = 512;
+	protected int shadowMapHeight = 512;
+
+	protected boolean shadowCascade = false;
+	
+//
+//		
+//	private CameraHelper cameraHelper;
+//	
+//	
 	
 	public ShadowLight(int hex) 
 	{
 		super(hex);
 		
-		this.position = new Vector3(0, 1, 0);
+		this.position = new Vector3(0, 1.0, 0);
 		this.target   = new Object3D();
-		this.shadowMatrix = new Matrix4();
+		
+		
+//		this.shadowMatrix = new Matrix4();
 	}
 
 	/**
@@ -77,13 +78,6 @@ public abstract class ShadowLight extends Light
 		this.target = target;
 	}
 	
-	public Matrix4 getShadowMatrix() {
-		return shadowMatrix;
-	}
-
-	public void setShadowMatrix(Matrix4 shadowMatrix) {
-		this.shadowMatrix = shadowMatrix;
-	}
 
 	/**
 	 * Gets Light's intensity.
@@ -99,23 +93,6 @@ public abstract class ShadowLight extends Light
 		this.intensity = intensity;
 	}
 	
-	
-	/**
-	 * Gets the distance. Default — 0.0.
-	 */
-	public double getDistance() {
-		return this.distance;
-	}
-
-	/**
-	 * Sets the distance.
-	 * <p>
-	 * If non-zero, light will attenuate linearly from maximum intensity at light position down to zero at distance.
-	 */
-	public void setDistance(double distance) {
-		this.distance = distance;
-	}
-	
 	public boolean isOnlyShadow() {
 		return onlyShadow;
 	}
@@ -123,7 +100,7 @@ public abstract class ShadowLight extends Light
 	/**
 	 * If set to true light will only cast shadow but not contribute any lighting (as if intensity was 0 but cheaper to compute).
 	 * <p>
-	 * Default — false.
+	 * Default ï¿½ false.
 	 */
 	public void setOnlyShadow(boolean onlyShadow) {
 		this.onlyShadow = onlyShadow;
@@ -135,22 +112,6 @@ public abstract class ShadowLight extends Light
 
 	public void setShadowCascade(boolean shadowCascade) {
 		this.shadowCascade = shadowCascade;
-	}
-
-	public RenderTargetTexture getShadowMap() {
-		return shadowMap;
-	}
-
-	public void setShadowMap(RenderTargetTexture shadowMap) {
-		this.shadowMap = shadowMap;
-	}
-
-	public Vector2 getShadowMapSize() {
-		return shadowMapSize;
-	}
-
-	public void setShadowMapSize(Vector2 shadowMapSize) {
-		this.shadowMapSize = shadowMapSize;
 	}
 
 	public int getShadowMapWidth() {
@@ -167,14 +128,6 @@ public abstract class ShadowLight extends Light
 
 	public void setShadowMapHeight(int shadowMapHeight) {
 		this.shadowMapHeight = shadowMapHeight;
-	}
-
-	public Camera getShadowCamera() {
-		return shadowCamera;
-	}
-
-	public void setShadowCamera(Camera shadowCamera) {
-		this.shadowCamera = shadowCamera;
 	}
 	
 	public double getShadowCameraNear() {
@@ -201,14 +154,6 @@ public abstract class ShadowLight extends Light
 		this.shadowCameraVisible = shadowCameraVisible;
 	}
 
-	public CameraHelper getCameraHelper() {
-		return cameraHelper;
-	}
-
-	public void setCameraHelper(CameraHelper cameraHelper) {
-		this.cameraHelper = cameraHelper;
-	}
-
 	public double getShadowBias() {
 		return shadowBias;
 	}
@@ -229,4 +174,12 @@ public abstract class ShadowLight extends Light
 	{
 		return isCastShadow() && !isShadowCascade();
 	}
+	
+//	public CameraHelper getCameraHelper() {
+//		return cameraHelper;
+//	}
+//
+//	public void setCameraHelper(CameraHelper cameraHelper) {
+//		this.cameraHelper = cameraHelper;
+//	}
 }

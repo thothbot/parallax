@@ -26,11 +26,6 @@ public class Triangle
 	private Vector3 b;
 	private Vector3 c;
 	
-	private static Vector3 __v0 = new Vector3();
-	private static Vector3 __v1 = new Vector3();
-	private static Vector3 __v2 = new Vector3();
-	private static Vector3 __v3 = new Vector3();
-
 	public Triangle()
 	{
 		this(new Vector3(), new Vector3(), new Vector3());
@@ -75,17 +70,21 @@ public class Triangle
 
 	public static Vector3 normal( Vector3 a, Vector3 b, Vector3 c, Vector3 optionalTarget ) 
 	{
+		Vector3 v0 = new Vector3();
+		
 		optionalTarget.sub( c, b );
-		Triangle.__v0.sub( a, b );
-		optionalTarget.cross( Triangle.__v0 );
+		v0.sub( a, b );
+		optionalTarget.cross( v0 );
 
 		double resultLengthSq = optionalTarget.lengthSq();
-		if( resultLengthSq > 0 ) 
-		{
+		if ( resultLengthSq > 0 ) {
+
 			return optionalTarget.multiply( 1.0 / Math.sqrt( resultLengthSq ) );
+
 		}
 
 		return optionalTarget.set( 0, 0, 0 );
+
 	}
 
 	/**
@@ -100,24 +99,27 @@ public class Triangle
 	public static Vector3 barycoordFromPoint( Vector3 point, Vector3 a, Vector3 b, Vector3 c, Vector3 optionalTarget ) 
 	{
 
-		Triangle.__v0.sub( c, a );
-		Triangle.__v1.sub( b, a );
-		Triangle.__v2.sub( point, a );
+		Vector3 v0 = new Vector3();
+		Vector3 v1 = new Vector3();
+		Vector3 v2 = new Vector3();
 
-		double dot00 = Triangle.__v0.dot( Triangle.__v0 );
-		double dot01 = Triangle.__v0.dot( Triangle.__v1 );
-		double dot02 = Triangle.__v0.dot( Triangle.__v2 );
-		double dot11 = Triangle.__v1.dot( Triangle.__v1 );
-		double dot12 = Triangle.__v1.dot( Triangle.__v2 );
+		v0.sub( c, a );
+		v1.sub( b, a );
+		v2.sub( point, a );
+
+		double dot00 = v0.dot( v0 );
+		double dot01 = v0.dot( v1 );
+		double dot02 = v0.dot( v2 );
+		double dot11 = v1.dot( v1 );
+		double dot12 = v1.dot( v2 );
 
 		double denom = ( dot00 * dot11 - dot01 * dot01 );
 
 		// colinear or singular triangle
-		if( denom == 0.0 ) 
-		{
+		if ( denom == 0 ) {
 			// arbitrary location outside of triangle?
 			// not sure if this is the best idea, maybe should be returning undefined
-			return optionalTarget.set( -2, -1, -1 );
+			return optionalTarget.set( - 2.0, - 1.0, - 1.0 );
 		}
 
 		double invDenom = 1.0 / denom;
@@ -125,13 +127,15 @@ public class Triangle
 		double v = ( dot00 * dot12 - dot01 * dot02 ) * invDenom;
 
 		// barycoordinates must always sum to 1
-		return optionalTarget.set( 1 - u - v, v, u );
+		return optionalTarget.set( 1.0 - u - v, v, u );
+
 	}
 
 	public static boolean containsPoint( Vector3 point, Vector3 a, Vector3 b, Vector3 c ) 
 	{
-		// NOTE: need to use __v3 here because __v0, __v1 and __v2 are used in barycoordFromPoint.
-		Vector3 result = Triangle.barycoordFromPoint( point, a, b, c, Triangle.__v3 );
+		Vector3 v1 = new Vector3();
+		
+		Vector3 result = Triangle.barycoordFromPoint( point, a, b, c, v1 );
 
 		return ( result.x >= 0 ) && ( result.y >= 0 ) && ( ( result.x + result.y ) <= 1 );
 	}
@@ -165,10 +169,13 @@ public class Triangle
 
 	public double area() 
 	{
-		Triangle.__v0.sub( this.c, this.b );
-		Triangle.__v1.sub( this.a, this.b );
+		Vector3 v0 = new Vector3();
+		Vector3 v1 = new Vector3();
 
-		return Triangle.__v0.cross( Triangle.__v1 ).length() * 0.5;
+		v0.sub( this.c, this.b );
+		v1.sub( this.a, this.b );
+
+		return v0.cross( v1 ).length() * 0.5;
 	}
 
 	public Vector3 midpoint()

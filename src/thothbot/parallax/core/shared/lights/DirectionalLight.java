@@ -44,27 +44,15 @@ import thothbot.parallax.core.shared.math.Vector3;
  */
 public class DirectionalLight extends ShadowLight
 {	
-	public static class UniformDirectional implements Light.UniformLight 
-	{
-		public Float32Array colors;
-		public Float32Array positions;
+	//
+	
+	private int shadowCameraLeft = -500;
+	private int shadowCameraRight = 500;
+	private int shadowCameraTop = 500;
+	private int shadowCameraBottom = -500;
 
-		@Override
-		public void reset() 
-		{
-			this.colors    = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
-			
-		}
-
-		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms) 
-		{
-			uniforms.get("directionalLightColor").setValue( colors );
-			uniforms.get("directionalLightDirection").setValue( positions );
-		}
-	}
-
+	//
+	
 	private Vector3 shadowCascadeOffset;
 	private int shadowCascadeCount = 2;
 
@@ -77,34 +65,20 @@ public class DirectionalLight extends ShadowLight
 
 	private List<VirtualLight> shadowCascadeArray;
 
-	//
-	
-	private int shadowCameraLeft = -500;
-	private int shadowCameraRight = 500;
-	private int shadowCameraTop = 500;
-	private int shadowCameraBottom = -500;
-
-	//
 	public DirectionalLight(int hex) 
 	{
 		this(hex, 1.0);
 	}
 
 	public DirectionalLight(int hex, double intensity)
-	{
-		this(hex, intensity, 0.0);
-	}
-	
-	public DirectionalLight(int hex, double intensity, double distance) 
-	{
+	{		
 		super(hex);
 
 		setIntensity(intensity);
-		setDistance(distance);
 
 		this.shadowCascadeOffset = new Vector3(0, 0, -1000);
 	}
-	
+		
 	public Vector3 getShadowCascadeOffset() {
 		return shadowCascadeOffset;
 	}
@@ -201,28 +175,52 @@ public class DirectionalLight extends ShadowLight
 		this.shadowCameraBottom = shadowCameraBottom;
 	}
 	
-	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
-	{
-		Float32Array dirColors     = zlights.directional.colors;
-		Float32Array dirPositions  = zlights.directional.positions;
+	public DirectionalLight clone() {
 
-		double intensity = getIntensity();
+		DirectionalLight light = new DirectionalLight(0x000000);
+		
+		super.clone(light);
 
-		int dirOffset = dirColors.getLength();
+		light.setTarget(  this.getTarget().clone() );
 
-		if ( isGammaInput )
-			setColorGamma( dirColors, dirOffset, getColor(), intensity ); 
-		else 
-			setColorLinear( dirColors, dirOffset, getColor(), intensity );
+		light.setIntensity( this.getIntensity() );
 
-		Vector3 position = new Vector3();
-		position.copy( getMatrixWorld().getPosition() );
-		position.sub( getTarget().getMatrixWorld().getPosition() );
-		position.normalize();
+		light.setCastShadow( this.isCastShadow() );
+		light.onlyShadow =  this.onlyShadow;
 
-		dirPositions.set( dirOffset, position.getX());
-		dirPositions.set( dirOffset + 1, position.getY());
-		dirPositions.set( dirOffset + 2, position.getZ());
+		//
+
+		light.shadowCameraNear = this.shadowCameraNear;
+		light.shadowCameraFar = this.shadowCameraFar;
+
+		light.shadowCameraLeft = this.shadowCameraLeft;
+		light.shadowCameraRight = this.shadowCameraRight;
+		light.shadowCameraTop = this.shadowCameraTop;
+		light.shadowCameraBottom = this.shadowCameraBottom;
+
+		light.shadowCameraVisible = this.shadowCameraVisible;
+
+		light.shadowBias = this.shadowBias;
+		light.shadowDarkness = this.shadowDarkness;
+
+		light.shadowMapWidth = this.shadowMapWidth;
+		light.shadowMapHeight = this.shadowMapHeight;
+
+		//
+
+		light.shadowCascade = this.shadowCascade;
+
+		light.shadowCascadeOffset.copy( this.shadowCascadeOffset );
+		light.shadowCascadeCount = this.shadowCascadeCount;
+
+		light.shadowCascadeBias = this.shadowCascadeBias.clone();
+		light.shadowCascadeWidth = this.shadowCascadeWidth.clone();
+		light.shadowCascadeHeight = this.shadowCascadeHeight.clone();
+
+		light.shadowCascadeNearZ = this.shadowCascadeNearZ.clone();
+		light.shadowCascadeFarZ  = this.shadowCascadeFarZ.clone();
+
+		return light;
+
 	}
 }

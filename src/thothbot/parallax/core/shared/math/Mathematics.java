@@ -18,6 +18,8 @@
 
 package thothbot.parallax.core.shared.math;
 
+import java.lang.reflect.Array;
+
 /**
  * Class implements some mathematical helpers methods.
  * 
@@ -26,65 +28,6 @@ package thothbot.parallax.core.shared.math;
 		
 public class Mathematics
 {
-	/**
-	 * The method checks if the value is power of two.
-	 * 
-	 * @param value the Integer value
-	 */
-	public static boolean isPowerOfTwo ( int value ) 
-	{
-		return ( value & ( value - 1 ) ) == 0;
-	}
-	
-	 
-	public static int getNextHighestPowerOfTwo( int x) 
-	{
-	    --x;
-	    for (int i = 1; i < 32; i <<= 1) 
-	    {
-	        x = x | x >> i;
-	    }
-	    return x + 1;
-	}
-	
-	/**
-	 * http://en.wikipedia.org/wiki/Smoothstep
-	 * 
-	 * @param x
-	 * @param min
-	 * @param max
-	 * @return
-	 */
-	public static double smoothstep( double x, double min, double max ) 
-	{
-		if ( x <= min ) return 0;
-		if ( x >= max ) return 1;
-
-		x = ( x - min )/( max - min );
-
-		return x*x*(3 - 2*x);
-	}
-
-	public static double smootherstep( double x, double min, double max ) 
-	{
-		if ( x <= min ) return 0;
-		if ( x >= max ) return 1;
-
-		x = ( x - min )/( max - min );
-
-		return x*x*x*(x*(x*6 - 15) + 10);
-	}
-
-	/**
-	 * The method checks id the value is even.
-	 * 
-	 * @param value the Integer value
-	 */
-	public static boolean isEven(int value)
-	{
-		return (value % 2 == 1);
-	}
-	
 	/**
 	 * The method clamps the scalar x to range <a, b>.
 	 * 
@@ -96,7 +39,7 @@ public class Mathematics
 	 */
 	public static double clamp(double x, double a, double b)
 	{
-		return (x < a) ? a : ((x > b) ? b : x);
+		return ( x < a ) ? a : ( ( x > b ) ? b : x );
 	}
 
 	/**
@@ -111,7 +54,7 @@ public class Mathematics
 	{
 		return x < a ? a : x;
 	}
-
+	
 	/**
 	 * Linear mapping the scalar x from range <a1, a2> to range <b1, b2>
 	 * 
@@ -125,7 +68,35 @@ public class Mathematics
 	 */
 	public static double mapLinear(double x, double a1, double a2, double b1, double b2)
 	{
-		return b1 + (x - a1) * (b2 - b1) / (a2 - a1);
+		return b1 + ( x - a1 ) * ( b2 - b1 ) / ( a2 - a1 );
+	}
+
+	/**
+	 * http://en.wikipedia.org/wiki/Smoothstep
+	 * 
+	 * @param x
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public static double smoothstep( double x, double min, double max ) 
+	{
+		if ( x <= min ) return 0.0;
+		if ( x >= max ) return 1.0;
+
+		x = ( x - min ) / ( max - min );
+
+		return x * x * ( 3.0 - 2.0 * x );
+	}
+
+	public static double smootherstep( double x, double min, double max ) 
+	{
+		if ( x <= min ) return 0.0;
+		if ( x >= max ) return 1.0;
+
+		x = ( x - min ) / ( max - min );
+
+		return x * x * x * ( x * ( x * 6.0 - 15.0 ) + 10.0 );
 	}
 
 	/**
@@ -179,6 +150,46 @@ public class Mathematics
 	{
 		return range * (0.5 - Math.random());
 	}
+	
+	public static double degToRad ( double degrees ) 
+	{
+		return degrees * Math.PI / 180;
+	}
+
+	public static double radToDeg( double radians ) 
+	{
+		return radians * 180 / Math.PI;
+	}
+	
+	/**
+	 * The method checks if the value is power of two.
+	 * 
+	 * @param value the Integer value
+	 */
+	public static boolean isPowerOfTwo ( int value ) 
+	{
+		return ( value & ( value - 1 ) ) == 0;
+	}
+	 
+	public static int getNextHighestPowerOfTwo( int x) 
+	{
+	    --x;
+	    for (int i = 1; i < 32; i <<= 1) 
+	    {
+	        x = x | x >> i;
+	    }
+	    return x + 1;
+	}
+	
+	/**
+	 * The method checks id the value is even.
+	 * 
+	 * @param value the Integer value
+	 */
+	public static boolean isEven(int value)
+	{
+		return (value % 2 == 1);
+	}
 
 	/**
 	 * This method returns a sign of the scalar x.
@@ -187,9 +198,9 @@ public class Mathematics
 	 * 
 	 * @return 1 or -1
 	 */
-	public static int sign(double x)
+	public static double sign(double x)
 	{
-		return (x < 0) ? -1 : ((x > 0) ? 1 : 0);
+		return (x < 0) ? -1.0 : ((x > 0) ? 1.0 : 0);
 	}
 	
 	/**
@@ -203,15 +214,5 @@ public class Mathematics
 	public static double gauss( double x, double sigma ) 
 	{
 		return Math.exp( - ( x * x ) / ( 2.0 * sigma * sigma ) );
-	}
-	
-	public static double degToRad ( double degrees ) 
-	{
-		return degrees * Math.PI / 180;
-	}
-
-	public static double radToDeg( double radians ) 
-	{
-		return radians * 180 / Math.PI;
-	}
+	}	
 }

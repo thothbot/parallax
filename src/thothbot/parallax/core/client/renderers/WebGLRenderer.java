@@ -69,7 +69,9 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.FastMap;
-import thothbot.parallax.core.shared.core.GeometryBuffer;
+import thothbot.parallax.core.shared.core.BufferGeometry;
+import thothbot.parallax.core.shared.core.GeometryObject;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.HemisphereLight;
 import thothbot.parallax.core.shared.lights.Light;
@@ -92,13 +94,11 @@ import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.math.Vector4;
-import thothbot.parallax.core.shared.objects.GeometryObject;
 import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.objects.ParticleSystem;
 import thothbot.parallax.core.shared.objects.RendererObject;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
-import thothbot.parallax.core.shared.scenes.FogAbstract;
+import thothbot.parallax.core.shared.scenes.AbstractFog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -690,7 +690,7 @@ public class WebGLRenderer implements HasEventBus
 	/**
 	 * Morph Targets Buffer initialization
 	 */
-	private void setupMorphTargets ( Material material, GeometryBuffer geometrybuffer, Mesh object ) 
+	private void setupMorphTargets ( Material material, BufferGeometry geometrybuffer, Mesh object ) 
 	{
 		// set base
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
@@ -827,8 +827,8 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
-		camera.getMatrixWorldInverse().flattenToArray( camera._viewMatrixArray );
-		camera.getProjectionMatrix().flattenToArray( camera._projectionMatrixArray );
+		camera.getMatrixWorldInverse().flattenToArrayOffset( camera._viewMatrixArray );
+		camera.getProjectionMatrix().flattenToArrayOffset( camera._projectionMatrixArray );
 
 		this.cache_projScreenMatrix.multiply( camera.getProjectionMatrix(), camera.getMatrixWorldInverse() );
 		this.frustum.setFromMatrix( cache_projScreenMatrix );
@@ -1028,7 +1028,7 @@ public class WebGLRenderer implements HasEventBus
 			{
  
 				GeometryObject object = webglObject.object;
-				GeometryBuffer buffer = webglObject.buffer;
+				BufferGeometry buffer = webglObject.buffer;
 
 				if ( overrideMaterial != null ) 
 				{
@@ -1050,7 +1050,7 @@ public class WebGLRenderer implements HasEventBus
 
 				setMaterialFaces( material );
 
-				if ( buffer.getClass() == GeometryBuffer.class )
+				if ( buffer.getClass() == BufferGeometry.class )
 					renderBufferDirect( scene, camera, material, buffer, (GeometryObject) object );
 				else
 					renderBuffer( scene, camera, material, buffer, (GeometryObject) object );
@@ -1063,7 +1063,7 @@ public class WebGLRenderer implements HasEventBus
 	 * Buffer rendering.
 	 * Render GeometryObject with material.
 	 */
-	public void renderBuffer( Scene scene, Camera camera, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
+	public void renderBuffer( Scene scene, Camera camera, Material material, BufferGeometry geometryBuffer, GeometryObject object ) 
 	{
 		if ( ! material.isVisible() ) 
 			return;
@@ -1194,7 +1194,7 @@ public class WebGLRenderer implements HasEventBus
 		object.renderBuffer(this, geometryBuffer, updateBuffers);
 	}
 
-	public void renderBufferDirect( Scene scene, Camera camera, Material material, GeometryBuffer geometryBuffer, GeometryObject object ) 
+	public void renderBufferDirect( Scene scene, Camera camera, Material material, BufferGeometry geometryBuffer, GeometryObject object ) 
 	{
 		if ( ! material.isVisible() ) 
 			return;
@@ -1220,7 +1220,7 @@ public class WebGLRenderer implements HasEventBus
 
 		if ( object instanceof Mesh ) 
 		{
-			List<GeometryBuffer.Offset> offsets = geometryBuffer.offsets;
+			List<BufferGeometry.Offset> offsets = geometryBuffer.offsets;
 
 			// if there is more than 1 chunk
 			// must set attribute pointers to use new offsets for each chunk
@@ -1357,7 +1357,7 @@ public class WebGLRenderer implements HasEventBus
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
 
 		List<Light> lights = scene.getLights(); 
-		FogAbstract fog = scene.getFog();
+		AbstractFog fog = scene.getFog();
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
@@ -1561,7 +1561,7 @@ public class WebGLRenderer implements HasEventBus
 		if ( refreshMaterial ) 
 		{
 			List<Light> lights = scene.getLights(); 
-			FogAbstract fog = scene.getFog();
+			AbstractFog fog = scene.getFog();
 
 			// refresh uniforms common to several materials
 			if ( fog != null && material instanceof HasFog && ((HasFog)material).isFog())
@@ -1778,7 +1778,7 @@ public class WebGLRenderer implements HasEventBus
 				if ( uniform.getCacheArray() == null )
 					uniform.setCacheArray( Float32Array.create( 16 ) );
 
-				matrix4.flattenToArray( uniform.getCacheArray() );
+				matrix4.flattenToArrayOffset( uniform.getCacheArray() );
 				gl.uniformMatrix4fv( location, false, uniform.getCacheArray() );
 			}
 			else if(type == TYPE.M4V) // List of Matrix4
@@ -1788,7 +1788,7 @@ public class WebGLRenderer implements HasEventBus
 					uniform.setCacheArray( Float32Array.create( 16 * listMatrix4f.size() ) );
 
 				for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
-					listMatrix4f.get( i ).flattenToArray( uniform.getCacheArray(), i * 16 );
+					listMatrix4f.get( i ).flattenToArrayOffset( uniform.getCacheArray(), i * 16 );
 
 				gl.uniformMatrix4fv( location, false, uniform.getCacheArray() );
 			}

@@ -83,7 +83,6 @@ public final class CircleGeometry extends Geometry
 	        this.getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( i ), uvs.get( i + 1 ), centerUV ) );
 	    }
 
-	    this.computeCentroids();
 	    this.computeFaceNormals();
 
 	    setBoundingSphere( new Sphere(radius) );

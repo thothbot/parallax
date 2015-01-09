@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.core.Face4;
+import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Vector2;
@@ -37,23 +37,23 @@ import thothbot.parallax.core.shared.math.Vector3;
  * @author thothbot
  *
  */
-public final class CubeGeometry extends Geometry 
+public final class BoxGeometry extends Geometry 
 {
 	private int widthSegments;
 	private int heightSegments;
 	private int depthSegments;
 	
-	public CubeGeometry() 
+	public BoxGeometry() 
 	{
 		this(100, 100, 100, 1, 1, 1);
 	}
 
-	public CubeGeometry( double width, double height, double depth) 
+	public BoxGeometry( double width, double height, double depth) 
 	{
 		this(width, height, depth, 1, 1, 1);
 	}
 	
-	public CubeGeometry( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth) 
+	public BoxGeometry( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth) 
 	{
 		super();
 		
@@ -72,11 +72,10 @@ public final class CubeGeometry extends Geometry
 		buildPlane( "x", "y",   1, - 1, width, height, depth_half, 4 ); 
 		buildPlane( "x", "y", - 1, - 1, width, height, - depth_half, 5 );
 
-		this.computeCentroids();
 		this.mergeVertices();
 	}
 	
-	private void buildPlane( String u, String v, int udir, int vdir, double width, double height, double depth, int material ) 
+	private void buildPlane( String u, String v, int udir, int vdir, double width, double height, double depth, int materialIndex ) 
 	{
 		int gridX = this.widthSegments;
 		int gridY = this.heightSegments;
@@ -159,18 +158,27 @@ public final class CubeGeometry extends Geometry
 				int c = ( ix + 1 ) + gridX1 * ( iy + 1 );
 				int d = ( ix + 1 ) + gridX1 * iy;
 				
-				Face4 face = new Face4( a + offset, b + offset, c + offset, d + offset );
-				face.getNormal().copy( normal );
-				face.setVertexNormals(Arrays.asList(normal.clone(), normal.clone(), normal.clone(), normal.clone()));
-				face.setMaterialIndex(material);
+				Vector2 uva = new Vector2( ix / gridX, 1.0 - iy / gridY );
+				Vector2 uvb = new Vector2( ix / gridX, 1.0 - ( iy + 1.0 ) / gridY );
+				Vector2 uvc = new Vector2( ( ix + 1.0 ) / gridX, 1.0 - ( iy + 1.0 ) / gridY );
+				Vector2 uvd = new Vector2( ( ix + 1.0 ) / gridX, 1.0 - iy / gridY );
 
-				getFaces().add( face );
-				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					new Vector2( ix / (double)gridX,                 iy / (double)gridY ),
-					new Vector2( ix / (double)gridX,         ( iy + 1 ) / (double)gridY ),
-					new Vector2( ( ix + 1 ) / (double)gridX, ( iy + 1 ) / (double)gridY ),
-					new Vector2( ( ix + 1 ) / (double)gridX,         iy / (double)gridY )
-				) );
+				Face3 face = new Face3( a + offset, b + offset, d + offset );
+				face.getNormal().copy( normal );
+				face.getVertexNormals().addAll( Arrays.asList( normal.clone(), normal.clone(), normal.clone() ) );
+				face.setMaterialIndex( materialIndex );
+
+				this.getFaces().add( face );
+				this.getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvd ) );
+
+				face = new Face3( b + offset, c + offset, d + offset );
+				face.getNormal().copy( normal );
+				face.getVertexNormals().addAll( Arrays.asList( normal.clone(), normal.clone(), normal.clone()) );
+				face.setMaterialIndex( materialIndex );
+
+				this.getFaces().add( face );
+				this.getFaceVertexUvs().get( 0 ).add( Arrays.asList(  uvb.clone(), uvc, uvd.clone() ) );
+
 			}
 		}
 	}

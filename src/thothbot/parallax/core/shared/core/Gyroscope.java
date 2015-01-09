@@ -20,7 +20,6 @@ package thothbot.parallax.core.shared.core;
 
 import thothbot.parallax.core.shared.math.Quaternion;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 public class Gyroscope extends Object3D 
 {

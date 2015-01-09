@@ -165,6 +165,10 @@ public final class Float32Array extends TypeArray {
   	this.set(array);
   }-*/;
   
+  public native void set(Float32Array array) /*-{
+	this.set(array);
+  }-*/; 
+  
   /**
    * /**
    * Set multiple values, reading input values from the array.

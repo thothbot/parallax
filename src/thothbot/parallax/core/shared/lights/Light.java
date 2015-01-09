@@ -18,12 +18,8 @@
 
 package thothbot.parallax.core.shared.lights;
 
-import java.util.Map;
-
-import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.math.Color;
-import thothbot.parallax.core.shared.objects.Object3D;
 
 /**
  * Abstract base class for lights.
@@ -31,16 +27,9 @@ import thothbot.parallax.core.shared.objects.Object3D;
  * @author thothbot
  *
  */
-public abstract class Light extends Object3D
+public class Light extends Object3D
 {
-	public interface UniformLight 
-	{
-		public void reset();
-		public void refreshUniform(Map<String, Uniform> uniforms);
-	}
-
 	private Color color;
-	private boolean isOnlyShadow = false;
 	
 	public Light(int hex) 
 	{
@@ -56,27 +45,16 @@ public abstract class Light extends Object3D
 		return color;
 	}
 	
-	public boolean isOnlyShadow() {
-		return this.isOnlyShadow;
-	}
-
-	public boolean isAllocateShadows() {
-		return false;
+	public Light clone() {
+		return clone(new Light(0x000000));
 	}
 	
-	public abstract void setupRendererLights(RendererLights zlights, boolean isGammaInput);
+	public Light clone( Light light ) {
+		
+		super.clone(light);
 
-	protected void setColorGamma( Float32Array array, int offset, Color color, double intensity ) 
-	{
-		array.set( offset,     color.getR() * color.getR() * intensity * intensity);
-		array.set( offset + 1, color.getG() * color.getG() * intensity * intensity);
-		array.set( offset + 2, color.getB() * color.getB() * intensity * intensity);
-	}
+		light.color.copy( this.color );
 
-	protected void  setColorLinear( Float32Array array, int offset, Color color, double intensity ) 
-	{
-		array.set( offset,     color.getR() * intensity);
-		array.set( offset + 1, color.getG() * intensity);
-		array.set( offset + 2, color.getB() * intensity);
+		return light;
 	}
 }

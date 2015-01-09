@@ -21,21 +21,19 @@ package thothbot.parallax.core.shared.math;
 import java.util.Arrays;
 import java.util.List;
 
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
+import thothbot.parallax.core.shared.core.BufferGeometry;
+import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.GeometryObject;
+import thothbot.parallax.core.shared.core.Object3D;
+import thothbot.parallax.core.shared.core.Object3D.Traverse;
+
 public class Box3 
 {
 	private Vector3 min;
 	private Vector3 max;
-	
-	private static Vector3 __v0 = new Vector3();
-	private static Vector3 __v1 = new Vector3();
-	private static Vector3 __v2 = new Vector3();
-	private static Vector3 __v3 = new Vector3();
-	private static Vector3 __v4 = new Vector3();
-	private static Vector3 __v5 = new Vector3();
-	private static Vector3 __v6 = new Vector3();
-	private static Vector3 __v7 = new Vector3();
-
-	
+		
 	public Box3() 
 	{
 		this(new Vector3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
@@ -71,51 +69,20 @@ public class Box3
 
 		return this;
 	}
-
-	public Box3 setFromPoints( List<Vector3>points ) 
+	
+	public Box3 setFromPoints( List<Vector3> points ) 
 	{
-		if ( points.size() > 0 ) 
-		{
-			Vector3 point = points.get(0);
+		return setFromPoints(points.toArray(new Vector3[points.size()]));
+	}
 
-			this.min.copy( point );
-			this.max.copy( point );
+	public Box3 setFromPoints( Vector3[] points ) 
+	{
+		this.makeEmpty();
 
-			for ( int i = 1, il = points.size(); i < il; i ++ ) 
-			{
-				point = points.get( i );
+		for ( int i = 0, il = points.length; i < il; i ++ ) {
 
-				if ( point.x < this.min.x ) 
-				{
-					this.min.x = point.x;
-				} 
-				else if ( point.x > this.max.x ) 
-				{
-					this.max.x = point.x;
-				}
+			this.expandByPoint( points[ i ] );
 
-				if ( point.y < this.min.y ) 
-				{
-					this.min.y = point.y;
-				} 
-				else if ( point.y > this.max.y ) 
-				{
-					this.max.y = point.y;
-				}
-
-				if ( point.z < this.min.z ) 
-				{
-					this.min.z = point.z;
-				} 
-				else if ( point.z > this.max.z ) 
-				{
-					this.max.z = point.z;
-				}
-			}
-		} 
-		else 
-		{
-			this.makeEmpty();
 		}
 
 		return this;
@@ -123,12 +90,72 @@ public class Box3
 
 	public Box3 setFromCenterAndSize( Vector3 center, Vector3 size ) 
 	{
-		Vector3 halfSize = Box3.__v1.copy( size ).multiply( 0.5 );
+		Vector3 v1 = new Vector3();
+		
+		Vector3 halfSize = v1.copy( size ).multiply( 0.5 );
 
 		this.min.copy( center ).sub( halfSize );
 		this.max.copy( center ).add( halfSize );
 
 		return this;
+
+	}
+	
+	public Box3 setFromObject(Object3D object) {
+
+		// Computes the world-axis-aligned bounding box of an object (including its children),
+		// accounting for both the object's, and childrens', world transforms
+
+		object.updateMatrixWorld( true );
+
+		this.makeEmpty();
+		
+		object.traverse(new Traverse() {
+			
+			@Override
+			public void callback(Object3D node) {
+				
+				AbstractGeometry geometry = ((GeometryObject)node).getGeometry();
+				
+				Vector3 v1 = new Vector3();
+
+
+				if ( geometry != null ) {
+
+					if ( geometry instanceof Geometry ) {
+
+						List<Vector3> vertices = ((Geometry)geometry).getVertices();
+
+						for ( int i = 0, il = vertices.size(); i < il; i ++ ) {
+
+							v1.copy( vertices.get( i ) );
+
+							v1.apply( node.getMatrixWorld() );
+
+							expandByPoint( v1 );
+
+						}
+
+					} else if ( geometry instanceof BufferGeometry && ((BufferGeometry)geometry).getAttribute("position") != null ) {
+
+						Float32Array positions = ((BufferGeometry)geometry).getAttribute("position").getArray();
+
+						for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {
+
+							v1.set( positions.get( i ), positions.get( i + 1 ), positions.get( i + 2 ) );
+
+							v1.apply( node.getMatrixWorld() );
+
+							expandByPoint( v1 );
+
+						}
+					}
+				}
+			}
+		});
+
+		return this;
+
 	}
 
 	public Box3 copy( Box3 box ) 
@@ -264,7 +291,8 @@ public class Box3
 
 	public double distanceToPoint( Vector3 point ) 
 	{
-		Vector3 clampedPoint = Box3.__v1.copy( point ).clamp( this.min, this.max );
+		Vector3 v1 = new Vector3();
+		Vector3 clampedPoint = v1.copy( point ).clamp( this.min, this.max );
 		return clampedPoint.sub( point ).length();
 	}
 
@@ -275,10 +303,13 @@ public class Box3
 	
 	public Sphere getBoundingSphere( Sphere optionalTarget ) 
 	{
-		optionalTarget.setCenter( this.center());
-		optionalTarget.setRadius( this.size( Box3.__v0 ).length() * 0.5 );
+		Vector3 v1 = new Vector3();
+
+		optionalTarget.setCenter( this.center() );
+		optionalTarget.setRadius( this.size( v1 ).length() * 0.5 );
 
 		return optionalTarget;
+
 	}
 
     public Box3 intersect( Box3 box ) 
@@ -299,21 +330,29 @@ public class Box3
 
 	public Box3 apply( Matrix4 matrix ) 
 	{
+		Vector3[] points = {
+  			new Vector3(),
+  			new Vector3(),
+  			new Vector3(),
+  			new Vector3(),
+  			new Vector3(),
+  			new Vector3(),
+  			new Vector3(),
+  			new Vector3()
+		};
+
 		// NOTE: I am using a binary pattern to specify all 2^3 combinations below
-		List<Vector3> newPoints = Arrays.asList(
-			Box3.__v0.set( this.min.x, this.min.y, this.min.z ).apply( matrix ),
-			Box3.__v0.set( this.min.x, this.min.y, this.min.z ).apply( matrix ), // 000
-			Box3.__v1.set( this.min.x, this.min.y, this.max.z ).apply( matrix ), // 001
-			Box3.__v2.set( this.min.x, this.max.y, this.min.z ).apply( matrix ), // 010
-			Box3.__v3.set( this.min.x, this.max.y, this.max.z ).apply( matrix ), // 011
-			Box3.__v4.set( this.max.x, this.min.y, this.min.z ).apply( matrix ), // 100
-			Box3.__v5.set( this.max.x, this.min.y, this.max.z ).apply( matrix ), // 101
-			Box3.__v6.set( this.max.x, this.max.y, this.min.z ).apply( matrix ), // 110
-			Box3.__v7.set( this.max.x, this.max.y, this.max.z ).apply( matrix )  // 111
-		);
+		points[ 0 ].set( this.min.x, this.min.y, this.min.z ).apply( matrix ); // 000
+		points[ 1 ].set( this.min.x, this.min.y, this.max.z ).apply( matrix ); // 001
+		points[ 2 ].set( this.min.x, this.max.y, this.min.z ).apply( matrix ); // 010
+		points[ 3 ].set( this.min.x, this.max.y, this.max.z ).apply( matrix ); // 011
+		points[ 4 ].set( this.max.x, this.min.y, this.min.z ).apply( matrix ); // 100
+		points[ 5 ].set( this.max.x, this.min.y, this.max.z ).apply( matrix ); // 101
+		points[ 6 ].set( this.max.x, this.max.y, this.min.z ).apply( matrix ); // 110
+		points[ 7 ].set( this.max.x, this.max.y, this.max.z ).apply( matrix );  // 111
 
 		this.makeEmpty();
-		this.setFromPoints( newPoints );
+		this.setFromPoints( points );
 
 		return this;
 	}

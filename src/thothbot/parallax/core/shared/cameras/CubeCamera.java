@@ -23,8 +23,8 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
+import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Object3D;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 /**
@@ -38,8 +38,8 @@ import thothbot.parallax.core.shared.scenes.Scene;
  */
 public final class CubeCamera extends Object3D 
 {
-	private double fieldOfView = 90.0;
-	private double aspectRatio = 1.0;
+	private double fov = 90.0;
+	private double aspect = 1.0;
 
 	private PerspectiveCamera cameraPX;
 	private PerspectiveCamera cameraNX;
@@ -54,32 +54,32 @@ public final class CubeCamera extends Object3D
 
 	public CubeCamera(double near, double far, int cubeResolution)
 	{
-		this.cameraPX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
+		this.cameraPX = new PerspectiveCamera( fov, aspect, near, far );
 		cameraPX.getUp().set( 0.0, -1.0, 0.0 );
 		cameraPX.lookAt( new Vector3( 1.0, 0.0, 0.0 ) );
 		this.add( cameraPX );
 
-		this.cameraNX = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
+		this.cameraNX = new PerspectiveCamera( fov, aspect, near, far );
 		cameraNX.getUp().set( 0.0, -1.0, 0.0 );
 		cameraNX.lookAt( new Vector3( -1.0, 0.0, 0.0 ) );
 		this.add( cameraNX );
 
-		this.cameraPY = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
+		this.cameraPY = new PerspectiveCamera( fov, aspect, near, far );
 		cameraPY.getUp().set( 0.0, 0.0, 1.0 );
 		cameraPY.lookAt( new Vector3( 0.0, 1.0, 0.0 ) );
 		this.add( cameraPY );
 
-		this.cameraNY = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
+		this.cameraNY = new PerspectiveCamera( fov, aspect, near, far );
 		cameraNY.getUp().set( 0.0, 0.0, -1.0 );
 		cameraNY.lookAt( new Vector3( 0.0, -1.0, 0.0 ) );
 		this.add( cameraNY );
 
-		this.cameraPZ = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
+		this.cameraPZ = new PerspectiveCamera( fov, aspect, near, far );
 		cameraPZ.getUp().set( 0.0, -1.0, 0.0 );
 		cameraPZ.lookAt( new Vector3( 0.0, 0.0, 1.0 ) );
 		this.add( cameraPZ );
 
-		this.cameraNZ = new PerspectiveCamera( fieldOfView, aspectRatio, near, far );
+		this.cameraNZ = new PerspectiveCamera( fov, aspect, near, far );
 		cameraNZ.getUp().set( 0.0, -1.0, 0.0 );
 		cameraNZ.lookAt( new Vector3( 0.0, 0.0, -1.0 ) );
 		this.add( cameraNZ );

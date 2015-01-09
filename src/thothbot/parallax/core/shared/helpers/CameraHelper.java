@@ -26,7 +26,6 @@ import java.util.Map;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.Projector;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
@@ -50,12 +49,12 @@ import com.google.gwt.core.client.GWT;
 public class CameraHelper extends Line
 {
 	private Camera camera;
-	
+//	
 	private Map<String, List<Integer>> pointMap;
-	
-	private static Projector __projector = new Projector();
-	private static Vector3 __v = new Vector3();
-	private static Camera __c = new Camera();
+//	
+//	private static Projector __projector = new Projector();
+//	private static Vector3 __v = new Vector3();
+//	private static Camera __c = new Camera();
 	
 	public CameraHelper(Camera camera)
 	{
@@ -67,11 +66,11 @@ public class CameraHelper extends Line
 		lbm.setColor( new Color(0xffffff) );
 		lbm.setVertexColors( Material.COLORS.FACE );
 		setMaterial(lbm);
-		setType(Line.TYPE.PIECES);
+		setMode(Line.MODE.PIECES);
 		
-		setMatrixWorld(camera.getMatrixWorld());
+		setMatrix(camera.getMatrixWorld());
 		setMatrixAutoUpdate(false);
-
+		
 		this.pointMap = GWT.isScript() ? 
 				new FastMap<List<Integer>>() : new HashMap<String, List<Integer>>();
 
@@ -132,6 +131,24 @@ public class CameraHelper extends Line
 	
 		update();
 	}
+	
+	private void addLine( String a, String b, int hex ) 
+	{
+		addPoint( a, hex );
+		addPoint( b, hex );
+
+	}
+
+	private void addPoint( String id, int hex ) 
+	{
+		((Geometry)getGeometry()).getVertices().add( new Vector3() );
+		((Geometry)getGeometry()).getColors().add( new Color( hex ) );
+
+		if ( !this.pointMap.containsKey(id) ) 
+			this.pointMap.put( id, new ArrayList<Integer>() );
+		
+		this.pointMap.get( id ).add(((Geometry)getGeometry()).getVertices().size() - 1 );
+	}
 
 	public void update() 
 	{
@@ -141,7 +158,8 @@ public class CameraHelper extends Line
 		// we need just camera projection matrix
 		// world matrix must be identity
 
-		CameraHelper.__c.getProjectionMatrix().copy( this.camera.getProjectionMatrix() );
+		Camera camera = new Camera();
+		camera.getProjectionMatrix().copy( this.camera.getProjectionMatrix() );
 
 		// center / target
 
@@ -180,31 +198,13 @@ public class CameraHelper extends Line
 		setPoint( "cn3",  0, -h, -1 );
 		setPoint( "cn4",  0,  h, -1 );
 
-		getGeometry().setVerticesNeedUpdate(true);
-	}
-
-	private void addLine( String a, String b, int hex ) 
-	{
-		addPoint( a, hex );
-		addPoint( b, hex );
-
-	}
-
-	private void addPoint( String id, int hex ) 
-	{
-		getGeometry().getVertices().add( new Vector3() );
-		getGeometry().getColors().add( new Color( hex ) );
-
-		if ( !this.pointMap.containsKey(id) ) 
-			this.pointMap.put( id, new ArrayList<Integer>() );
-		
-		this.pointMap.get( id ).add( getGeometry().getVertices().size() - 1 );
+		((Geometry)getGeometry()).verticesNeedUpdate = true;
 	}
 	
 	private void setPoint( String point, double x, double y, double z ) 
 	{
-		CameraHelper.__v.set( x, y, z );
-		CameraHelper.__projector.unprojectVector( CameraHelper.__v, CameraHelper.__c );
+		Vector3 vector = new Vector3();
+		vector.set( x, y, z ).unproject( camera );
 
 		List<Integer> points = this.pointMap.get( point );
 
@@ -213,7 +213,7 @@ public class CameraHelper extends Line
 			for ( int i = 0, il = points.size(); i < il; i ++ ) 
 			{
 				int j = points.get( i );
-				getGeometry().getVertices().get( j ).copy( CameraHelper.__v );
+				((Geometry)getGeometry()).getVertices().get( j ).copy( vector );
 			}
 		}
 	}	

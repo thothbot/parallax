@@ -19,7 +19,7 @@
 package thothbot.parallax.core.shared.math;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.shared.core.Euler;
+import thothbot.parallax.core.shared.cameras.Camera;
 
 
 /**
@@ -92,19 +92,6 @@ public class Vector3 extends Vector2 implements Vector
 	}
 	
 	/**
-	 * Set value of the vector from another vector.
-	 * 
-	 * @param v the other vector
-	 * 
-	 * @return the current vector
-	 */
-	public Vector3 copy(Vector3 v)
-	{
-		this.set(v.getX(), v.getY(), v.getZ());
-		return this;
-	}
-	
-	/**
 	 * Set value of the vector to the specified (X, Y, Z) coordinates.
 	 * 
 	 * @param x the X coordinate
@@ -131,7 +118,46 @@ public class Vector3 extends Vector2 implements Vector
 		this.z = a;
 		return this;
 	}
+	
+	public void setComponent ( int index, double value ) {
 
+		switch ( index ) {
+
+			case 0: this.x = value; break;
+			case 1: this.y = value; break;
+			case 2: this.z = value; break;
+			default: throw new Error( "index is out of range: " + index );
+
+		}
+
+	}
+
+	public double getComponent( int index ) {
+
+		switch ( index ) {
+
+			case 0: return this.x;
+			case 1: return this.y;
+			case 2: return this.z;
+			default: throw new Error( "index is out of range: " + index );
+
+		}
+
+	}
+
+	/**
+	 * Set value of the vector from another vector.
+	 * 
+	 * @param v the other vector
+	 * 
+	 * @return the current vector
+	 */
+	public Vector3 copy(Vector3 v)
+	{
+		this.set(v.getX(), v.getY(), v.getZ());
+		return this;
+	}
+	
 	@Override
 	public Vector3 add(Vector v)
 	{
@@ -192,6 +218,24 @@ public class Vector3 extends Vector2 implements Vector
 		this.x *= s;
 		this.y *= s;
 		this.z *= s;
+		return this;
+	}
+	
+	public Vector3 applyEuler( Euler euler) 
+	{
+		Quaternion quaternion = new Quaternion();
+		
+		this.apply( quaternion.setFromEuler( euler ) );
+
+		return this;
+	}
+	
+	public Vector3 applyAxisAngle(Vector3 axis, double angle) 
+	{
+		Quaternion quaternion = new Quaternion();
+
+		this.apply( quaternion.setFromAxisAngle( axis, angle ) );
+
 		return this;
 	}
 	
@@ -261,47 +305,35 @@ public class Vector3 extends Vector2 implements Vector
 		double ix =  qw * x + qy * z - qz * y;
 		double iy =  qw * y + qz * x - qx * z;
 		double iz =  qw * z + qx * y - qy * x;
-		double iw = -qx * x - qy * y - qz * z;
+		double iw = - qx * x - qy * y - qz * z;
 
 		// calculate result * inverse quat
 
-		this.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
-		this.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
-		this.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
+		this.x = ix * qw + iw * - qx + iy * - qz - iz * - qy;
+		this.y = iy * qw + iw * - qy + iz * - qx - ix * - qz;
+		this.z = iz * qw + iw * - qz + ix * - qy - iy * - qx;
 
 		return this;
-	}
 
-	public Vector3 applyEuler(Vector3 v, Euler eulerOrder) 
-	{
-		Quaternion q1 = new Quaternion();
-
-		Quaternion quaternion = q1.setFromEuler( v, eulerOrder );
-
-		this.apply( quaternion );
-
-		return this;
-	}
-
-	public Vector3 applyAxisAngle(Vector3 axis, double angle) 
-	{
-		Quaternion q1 = new Quaternion();
-		Quaternion quaternion = q1.setFromAxisAngle( axis, angle );
-
-		this.apply( quaternion );
-
-		return this;
 	}
 	
-	public Vector3 setFromMatrixPosition( Matrix4 m ) {
+	public Vector3 project(Camera camera) {
 
-		this.x = m.getArray().get( 12 );
-		this.y = m.getArray().get( 13 );
-		this.z = m.getArray().get( 14 );
+		Matrix4 matrix = new Matrix4();
 
-		return this;
+		matrix.multiply( camera.getProjectionMatrix(), matrix.getInverse( camera.getMatrixWorld() ) );
+		return this.applyProjection( matrix );
+
 	}
+	
+	public Vector3 unproject(Camera camera) {
 
+		Matrix4 matrix = new Matrix4();
+
+		matrix.multiply( camera.getMatrixWorld(), matrix.getInverse( camera.getProjectionMatrix() ) );
+		return this.applyProjection( matrix );
+	}
+	
 	/**
 	 * 
 	 * @param m Matrix4 affine matrix vector interpreted as a direction
@@ -338,377 +370,26 @@ public class Vector3 extends Vector2 implements Vector
 	}
 
 	@Override
-	public Vector3 divide(double s)
+	public Vector3 divide(double scalar)
 	{
-		if (s != 0) 
-		{
-			this.x /= s;
-			this.y /= s;
-			this.z /= s;
-		} 
-		else 
-		{
-			this.set(0, 0, 1);
+		if ( scalar != 0 ) {
+
+			double invScalar = 1.0 / scalar;
+
+			this.x *= invScalar;
+			this.y *= invScalar;
+			this.z *= invScalar;
+
+		} else {
+
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+
 		}
 
 		return this;
-	}
 
-	@Override
-	public Vector3 negate()
-	{
-		return this.multiply(-1);
-	}
-	
-	/**
-	 * Computes the dot product of this vector and vector v1.
-	 * 
-	 * @param v1
-	 *            the other vector
-	 * @return the dot product of this vector and v1
-	 */
-	public double dot(Vector3 v1)
-	{
-		return (this.x * v1.x + this.y * v1.y + this.z * v1.z);
-	}
-
-	/**
-	 * Returns the squared length of this vector.
-	 * 
-	 * @return the squared length of this vector
-	 */
-	public double lengthSq()
-	{
-		return dot(this);
-	}
-
-	/**
-	 * Returns the length of this vector.
-	 * 
-	 * @return the length of this vector
-	 */
-	public double length()
-	{
-		return Math.sqrt(lengthSq());
-	}
-
-	public double lengthManhattan()
-	{
-		return Math.abs(this.x) + Math.abs(this.y) + Math.abs(this.z);
-	}
-
-	/**
-	 * Normalizes this vector in place.
-	 */
-	@Override
-	public Vector3 normalize()
-	{
-		double len = this.length();
-		if (len > 0)
-		{
-			this.multiply(1.0 / len);
-		} 
-		else 
-		{
-			this.setX(0);
-			this.setY(0);
-			this.setZ(0);
-		}
-
-		return this;
-	}
-
-	public Vector3 setLength(double l)
-	{
-		normalize();
-		return multiply(l);
-	}
-
-	public Vector3 lerp(Vector3 v1, double alpha)
-	{
-		this.x += (v1.x - this.x) * alpha;
-		this.y += (v1.y - this.y) * alpha;
-		this.z += (v1.z - this.z) * alpha;
-		
-		return this;
-	}
-
-	/**
-	 * Sets this vector to be the vector cross product of vectors v1 and v2.
-	 * 
-	 * @param v1
-	 *            the first vector
-	 * @param v2
-	 *            the second vector
-	 */
-	public Vector3 cross(Vector3 v1, Vector3 v2)
-	{
-		double x = v1.y * v2.z - v1.z * v2.y;
-		double y = v1.z * v2.x - v1.x * v2.z;
-		double z = v1.x * v2.y - v1.y * v2.x;
-		this.set(x, y, z);
-		return this;
-	}
-	
-	public Vector3 cross(Vector3 v)
-	{
-		return cross(this, v);
-	}
-
-	@Override
-	public double distanceToSquared(Vector v1)
-	{
-		double dx = this.getX() - ((Vector3)v1).getX();
-		double dy = this.getY() - ((Vector3)v1).getY();
-		double dz = this.getZ() - ((Vector3)v1).getZ();
-		return (dx * dx + dy * dy + dz * dz);
-	}
-
-	@Override
-	public double distanceTo(Vector v1)
-	{
-		return Math.sqrt(distanceToSquared(v1));
-	}
-	
-	public Vector3 projectOnVector(Vector3 vector) 
-	{
-		Vector3 v1 = new Vector3();
-
-		v1.copy( vector ).normalize();
-		double d = this.dot( v1 );
-		return this.copy( v1 ).multiply( d );
-	}
-
-	public Vector3 projectOnPlane(Vector3 planeNormal) 
-	{
-		Vector3 v1 = new Vector3();
-
-		v1.copy( this ).projectOnVector( planeNormal );
-
-		return this.sub( v1 );
-	}
-
-	public Vector3 reflect(Vector3 vector) 
-	{
-		Vector3 v1 = new Vector3();
-		return this.sub( v1.copy( vector ).multiply( 2 * this.dot( vector ) ) );
-	}
-	
-	public double angleTo( Vector3 v ) 
-	{
-		double theta = this.dot( v ) / ( this.length() * v.length() );
-
-		// clamp, to handle numerical problems
-
-		return Math.acos( Mathematics.clamp( theta, -1, 1 ) );
-	}
-
-	public void getPositionFromMatrix(Matrix4 m)
-	{
-		this.x = m.getArray().get(12);
-		this.y = m.getArray().get(13);
-		this.z = m.getArray().get(14);
-	}
-
-	public void getScaleFromMatrix(Matrix4 m)
-	{
-		Vector3 tmp = new Vector3();
-		tmp.set(m.getArray().get(0), m.getArray().get(1), m.getArray().get(2));
-		double sx = tmp.length();
-
-		tmp.set(m.getArray().get(4), m.getArray().get(5), m.getArray().get(6));
-		double sy = tmp.length();
-
-		tmp.set(m.getArray().get(8), m.getArray().get(9), m.getArray().get(10));
-		double sz = tmp.length();
-
-		set(sx, sy, sz);
-	}
-	
-	/**
-	 * Assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
-	 */
-	public Vector3 setEulerFromRotationMatrix( Matrix4 m ) 
-	{
-		return setEulerFromRotationMatrix(m, Euler.XYZ);
-	}
-
-	public Vector3 setEulerFromRotationMatrix( Matrix4 m, Euler order ) 
-	{
-		Float32Array te = m.getArray();
-		double m11 = te.get(0), m12 = te.get(4), m13 = te.get(8);
-		double m21 = te.get(1), m22 = te.get(5), m23 = te.get(9);
-		double m31 = te.get(2), m32 = te.get(6), m33 = te.get(10);
-
-		if ( order == Euler.XYZ ) 
-		{
-			setY( Math.asin( Mathematics.clamp( m13, -1, 1 ) ));
-		
-			if ( Math.abs( m13 ) < 0.99999 ) 
-			{
-				setX( Math.atan2( - m23, m33 ) );
-				setZ( Math.atan2( - m12, m11 ) );
-			} 
-			else 
-			{
-				setX( Math.atan2( m32, m22 ) );
-				setZ( 0 );
-			}
-
-		} 
-		else if ( order == Euler.YXZ )
-		{
-			setX( Math.asin( - Mathematics.clamp( m23, -1, 1 ) ) );
-		
-			if ( Math.abs( m23 ) < 0.99999 ) 
-			{
-				setY( Math.atan2( m13, m33 ) );
-				setZ( Math.atan2( m21, m22 ) );	
-			} 
-			else 
-			{
-				setY( Math.atan2( - m31, m11 ) );
-				setZ( 0 );	
-			}
-		} 
-		else if ( order == Euler.ZXY ) 
-		{
-			setX( Math.asin( Mathematics.clamp( m32, -1, 1 ) ) );
-		
-			if ( Math.abs( m32 ) < 0.99999 ) 
-			{
-				setY( Math.atan2( - m31, m33 ) );
-				setZ( Math.atan2( - m12, m22 ) );	
-			} 
-			else 
-			{	
-				setY( 0 );
-				setZ( Math.atan2( m21, m11 ) );	
-			}
-		} 
-		else if ( order == Euler.ZYX ) 
-		{
-			setY( Math.asin( - Mathematics.clamp( m31, -1, 1 ) ) );
-			
-			if ( Math.abs( m31 ) < 0.99999 ) 
-			{
-				setX( Math.atan2( m32, m33 ) );
-				setZ( Math.atan2( m21, m11 ) );
-			}
-			else 
-			{
-				setX( 0 );
-				setZ( Math.atan2( - m12, m22 ) );
-			}
-		} 
-		else if ( order == Euler.YZX ) 
-		{
-			setZ( Math.asin( Mathematics.clamp( m21, -1, 1 ) ) );
-		
-			if ( Math.abs( m21 ) < 0.99999 ) 
-			{
-				setX( Math.atan2( - m23, m22 ) );
-				setY( Math.atan2( - m31, m11 ) );
-			} 
-			else 
-			{
-				setX( 0 );
-				setY( Math.atan2( m13, m33 ) );
-			}	
-		} 
-		else if ( order == Euler.XZY ) 
-		{
-			setZ( Math.asin( - Mathematics.clamp( m12, -1, 1 ) ) );
-		
-			if ( Math.abs( m12 ) < 0.99999 ) 
-			{
-				setX( Math.atan2( m32, m22 ) );
-				setY( Math.atan2( m13, m11 ) );
-			}
-			else 
-			{
-				setX( Math.atan2( - m23, m33 ) );
-				setY( 0 );
-			}	
-		}
-		
-		return this;
-	}
-	
-	/**
-	 * q is assumed to be normalized
-	 * <p>
-	 * <a href="http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m">www.mathworks.com</a> 
-	 */
-	public Vector3 setEulerFromQuaternion ( Quaternion q )
-	{
-		return setEulerFromQuaternion(q, Euler.XYZ);
-	}
-
-	public Vector3 setEulerFromQuaternion ( Quaternion q, Euler order ) 
-	{
-		double sqx = q.x * q.x;
-		double sqy = q.y * q.y;
-		double sqz = q.z * q.z;
-		double sqw = q.w * q.w;
-
-		if ( order == Euler.XYZ) 
-		{
-			setX( Math.atan2( 2 * ( q.x * q.w - q.y * q.z ), ( sqw - sqx - sqy + sqz ) ) );
-			setY( Math.asin(  Mathematics.clamp( 2 * ( q.x * q.z + q.y * q.w ), -1, 1 ) ) );
-			setZ( Math.atan2( 2 * ( q.z * q.w - q.x * q.y ), ( sqw + sqx - sqy - sqz ) ) );
-		} 
-		else if ( order == Euler.YXZ ) 
-		{
-			setX( Math.asin(  Mathematics.clamp( 2 * ( q.x * q.w - q.y * q.z ), -1, 1 ) ) );
-			setY( Math.atan2( 2 * ( q.x * q.z + q.y * q.w ), ( sqw - sqx - sqy + sqz ) ) );
-			setZ( Math.atan2( 2 * ( q.x * q.y + q.z * q.w ), ( sqw - sqx + sqy - sqz ) ) );
-		} 
-		else if ( order == Euler.ZXY ) 
-		{	
-			setX( Math.asin(  Mathematics.clamp( 2 * ( q.x * q.w + q.y * q.z ), -1, 1 ) ) );
-			setY( Math.atan2( 2 * ( q.y * q.w - q.z * q.x ), ( sqw - sqx - sqy + sqz ) ) );
-			setZ( Math.atan2( 2 * ( q.z * q.w - q.x * q.y ), ( sqw - sqx + sqy - sqz ) ) );
-		} 
-		else if ( order == Euler.ZYX ) 
-		{
-			setX( Math.atan2( 2 * ( q.x * q.w + q.z * q.y ), ( sqw - sqx - sqy + sqz ) ) );
-			setY( Math.asin(  Mathematics.clamp( 2 * ( q.y * q.w - q.x * q.z ), -1, 1 ) ) );
-			setZ( Math.atan2( 2 * ( q.x * q.y + q.z * q.w ), ( sqw + sqx - sqy - sqz ) ) );
-		} 
-		else if ( order == Euler.YZX ) 
-		{
-			setX( Math.atan2( 2 * ( q.x * q.w - q.z * q.y ), ( sqw - sqx + sqy - sqz ) ) );
-			setY( Math.atan2( 2 * ( q.y * q.w - q.x * q.z ), ( sqw + sqx - sqy - sqz ) ) );
-			setZ( Math.asin(  Mathematics.clamp( 2 * ( q.x * q.y + q.z * q.w ), -1, 1 ) ) );	
-		} 
-		else if ( order == Euler.XZY ) 
-		{
-			setX( Math.atan2( 2 * ( q.x * q.w + q.y * q.z ), ( sqw - sqx + sqy - sqz ) ) );
-			setY( Math.atan2( 2 * ( q.x * q.z + q.y * q.w ), ( sqw + sqx - sqy - sqz ) ) );
-			setZ( Math.asin(  Mathematics.clamp( 2 * ( q.z * q.w - q.x * q.y ), -1, 1 ) ) );
-		}
-
-		return this;
-	}
-
-
-	/**
-	 * Returns true if all of the data members of v1 are equal to the
-	 * corresponding data members in this Vector3.
-	 * 
-	 * @param v1
-	 *            the vector with which the comparison is made
-	 * @return true or false
-	 */
-	public boolean equals(Vector3 v1)
-	{
-		return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
-	}
-
-	public boolean isZero()
-	{
-		return (this.lengthSq() < 0.0001 /* almostZero */);
 	}
 	
 	public Vector3 min( Vector3 v ) 
@@ -756,36 +437,324 @@ public class Vector3 extends Vector2 implements Vector
 	 */
 	public Vector3 clamp( Vector3 min, Vector3 max ) 
 	{
-		if ( this.x < min.x )
-		{
+		// This function assumes min < max, if this assumption isn't true it will not operate correctly
+
+		if ( this.x < min.x ) {
+
 			this.x = min.x;
-		} 
-		else if ( this.x > max.x ) 
-		{
+
+		} else if ( this.x > max.x ) {
+
 			this.x = max.x;
+
 		}
 
-		if ( this.y < min.y ) 
-		{
+		if ( this.y < min.y ) {
+
 			this.y = min.y;
-		} 
-		else if ( this.y > max.y ) 
-		{
+
+		} else if ( this.y > max.y ) {
+
 			this.y = max.y;
+
 		}
 
-		if ( this.z < min.z ) 
-		{
+		if ( this.z < min.z ) {
+
 			this.z = min.z;
-		} 
-		else if ( this.z > max.z ) 
-		{
+
+		} else if ( this.z > max.z ) {
+
 			this.z = max.z;
+
+		}
+
+		return this;
+	}
+	
+	public Vector3 clamp(double minVal, double maxVal) {
+
+		Vector3 min = new Vector3(), max = new Vector3();
+
+		min.set( minVal, minVal, minVal );
+		max.set( maxVal, maxVal, maxVal );
+
+		return this.clamp( min, max );
+	}
+
+	public Vector3 floor() {
+
+		this.x = Math.floor( this.x );
+		this.y = Math.floor( this.y );
+		this.z = Math.floor( this.z );
+
+		return this;
+
+	}
+
+	public Vector3 ceil() {
+
+		this.x = Math.ceil( this.x );
+		this.y = Math.ceil( this.y );
+		this.z = Math.ceil( this.z );
+
+		return this;
+
+	}
+
+	public Vector3 round() {
+
+		this.x = Math.round( this.x );
+		this.y = Math.round( this.y );
+		this.z = Math.round( this.z );
+
+		return this;
+
+	}
+
+	public Vector3 roundToZero() {
+
+		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
+		this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
+		this.z = ( this.z < 0 ) ? Math.ceil( this.z ) : Math.floor( this.z );
+
+		return this;
+
+	}
+
+	@Override
+	public Vector3 negate()
+	{
+		this.x = - this.x;
+		this.y = - this.y;
+		this.z = - this.z;
+
+		return this;
+	}
+	
+	/**
+	 * Computes the dot product of this vector and vector v1.
+	 * 
+	 * @param v1
+	 *            the other vector
+	 * @return the dot product of this vector and v1
+	 */
+	public double dot(Vector3 v1)
+	{
+		return (this.x * v1.x + this.y * v1.y + this.z * v1.z);
+	}
+
+	/**
+	 * Returns the squared length of this vector.
+	 * 
+	 * @return the squared length of this vector
+	 */
+	public double lengthSq()
+	{
+		return dot(this);
+	}
+
+	/**
+	 * Returns the length of this vector.
+	 * 
+	 * @return the length of this vector
+	 */
+	public double length()
+	{
+		return Math.sqrt(lengthSq());
+	}
+
+	public double lengthManhattan()
+	{
+		return Math.abs(this.x) + Math.abs(this.y) + Math.abs(this.z);
+	}
+
+	/**
+	 * Normalizes this vector in place.
+	 */
+	@Override
+	public Vector3 normalize()
+	{
+		return this.divide( this.length() );
+	}
+
+	public Vector3 setLength(double l)
+	{
+		double oldLength = this.length();
+
+		if ( oldLength != 0 && l != oldLength  ) {
+
+			this.multiply( l / oldLength );
 		}
 
 		return this;
 	}
 
+	public Vector3 lerp(Vector3 v1, double alpha)
+	{
+		this.x += (v1.x - this.x) * alpha;
+		this.y += (v1.y - this.y) * alpha;
+		this.z += (v1.z - this.z) * alpha;
+		
+		return this;
+	}
+
+	/**
+	 * Sets this vector to be the vector cross product of vectors v1 and v2.
+	 * 
+	 * @param a
+	 *            the first vector
+	 * @param b
+	 *            the second vector
+	 */
+	public Vector3 cross(Vector3 a, Vector3 b)
+	{
+		double ax = a.x, ay = a.y, az = a.z;
+		double bx = b.x, by = b.y, bz = b.z;
+
+		this.x = ay * bz - az * by;
+		this.y = az * bx - ax * bz;
+		this.z = ax * by - ay * bx;
+
+		return this;
+	}
+	
+	public Vector3 cross(Vector3 v)
+	{
+		return cross(this, v);
+	}
+	
+	
+	public Vector3 projectOnVector(Vector3 vector) 
+	{
+		Vector3 v1 = new Vector3();
+
+		v1.copy( vector ).normalize();
+
+		double dot = this.dot( v1 );
+
+		return this.copy( v1 ).multiply( dot );
+	}
+
+	public Vector3 projectOnPlane(Vector3 planeNormal) 
+	{
+		Vector3 v1 = new Vector3();
+
+		v1.copy( this ).projectOnVector( planeNormal );
+
+		return this.sub( v1 );
+	}
+	
+
+	public Vector3 reflect(Vector3 normal) 
+	{
+		// reflect incident vector off plane orthogonal to normal
+		// normal is assumed to have unit length
+		
+		Vector3 v1 = new Vector3();
+		return this.sub( v1.copy( normal ).multiply( 2 * this.dot( normal ) ) );
+	}
+	
+	public double angleTo( Vector3 v ) 
+	{
+		double theta = this.dot( v ) / ( this.length() * v.length() );
+
+		// clamp, to handle numerical problems
+
+		return Math.acos( Mathematics.clamp( theta, - 1, 1 ) );
+	}
+
+	@Override
+	public double distanceTo(Vector v1)
+	{
+		return Math.sqrt(distanceToSquared(v1));
+	}
+	
+	@Override
+	public double distanceToSquared(Vector v1)
+	{
+		double dx = this.getX() - ((Vector3)v1).getX();
+		double dy = this.getY() - ((Vector3)v1).getY();
+		double dz = this.getZ() - ((Vector3)v1).getZ();
+		return (dx * dx + dy * dy + dz * dz);
+	}
+	
+	public Vector3 setFromMatrixPosition( Matrix4 m ) {
+
+		this.x = m.getArray().get( 12 );
+		this.y = m.getArray().get( 13 );
+		this.z = m.getArray().get( 14 );
+
+		return this;
+	}
+	
+	public Vector3 setFromMatrixScale( Matrix4 m ) {
+
+		double sx = this.set( m.getArray().get( 0 ), m.getArray().get( 1 ), m.getArray().get(  2 ) ).length();
+		double sy = this.set( m.getArray().get( 4 ), m.getArray().get( 5 ), m.getArray().get(  6 ) ).length();
+		double sz = this.set( m.getArray().get( 8 ), m.getArray().get( 9 ), m.getArray().get( 10 ) ).length();
+
+		this.x = sx;
+		this.y = sy;
+		this.z = sz;
+
+		return this;
+	}
+	
+	public Vector3 setFromMatrixColumn( int index, Matrix4 matrix ) {
+
+		int offset = index * 4;
+
+		Float32Array me = matrix.getArray();
+
+		this.x = me.get( offset );
+		this.y = me.get( offset + 1 );
+		this.z = me.get( offset + 2 );
+
+		return this;
+
+	}
+	
+	/**
+	 * Returns true if all of the data members of v1 are equal to the
+	 * corresponding data members in this Vector3.
+	 * 
+	 * @param v1
+	 *            the vector with which the comparison is made
+	 * @return true or false
+	 */
+	public boolean equals(Vector3 v1)
+	{
+		return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
+	}
+	
+	public Vector3 fromArray ( Float32Array array ) {
+		return fromArray(array, 0);
+	}
+	
+	public Vector3 fromArray ( Float32Array array, int offset ) {
+
+		this.x = array.get( offset );
+		this.y = array.get( offset + 1 );
+		this.z = array.get( offset + 2 );
+
+		return this;
+
+	}
+	
+	public Float32Array toArray() {
+		return toArray(Float32Array.create(3), 0);
+	}
+
+	public Float32Array toArray( Float32Array array, int offset ) {
+
+		array.set( offset , this.x);
+		array.set( offset + 1 , this.y);
+		array.set( offset + 2 , this.z);
+
+		return array;
+	}
+	
 	@Override
 	public Vector3 clone()
 	{

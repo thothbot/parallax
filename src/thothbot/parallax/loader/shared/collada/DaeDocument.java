@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.objects.Object3D;
+import thothbot.parallax.core.shared.core.Object3D;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.NodeList;

@@ -33,8 +33,10 @@ import thothbot.parallax.core.shared.math.Mathematics;
  */
 public class PerspectiveCamera extends Camera
 {
-	protected double fieldOfView;
-	protected double aspectRatio;
+	protected double zoom = 1.0;
+	
+	protected double fov;
+	protected double aspect;
 	protected double near;
 	protected double far;
 	
@@ -70,8 +72,8 @@ public class PerspectiveCamera extends Camera
 	public PerspectiveCamera(double fieldOfView, double aspectRatio, double near, double far) 
 	{
 		super();
-		this.fieldOfView = fieldOfView;
-		this.aspectRatio = aspectRatio;
+		this.fov = fieldOfView;
+		this.aspect = aspectRatio;
 		this.near = near;
 		this.far = far;
 
@@ -81,39 +83,39 @@ public class PerspectiveCamera extends Camera
 	@Override
 	public void onResize(ViewportResizeEvent event) 
 	{
-		setAspectRatio(event.getRenderer().getAbsoluteAspectRation());	
+		setAspect(event.getRenderer().getAbsoluteAspectRation());	
 	}
 
 	/**
 	 * Gets Camera frustum vertical field of view.
 	 */
-	public double getFieldOfView()
+	public double getFov()
 	{
-		return fieldOfView;
+		return fov;
 	}
 
 	/**
 	 * Sets Camera frustum vertical field of view.
 	 */
-	public void setFieldOfView(double fov)
+	public void setFov(double fov)
 	{
-		this.fieldOfView = fov;
+		this.fov = fov;
 	}
 
 	/**
 	 * Gets Camera frustum aspect ratio.
 	 */
-	public double getAspectRation()
+	public double getAspect()
 	{
-		return aspectRatio;
+		return aspect;
 	}
 
 	/**
 	 * Sets Camera frustum aspect ratio.
 	 */
-	public void setAspectRatio(double aspect)
+	public void setAspect(double aspect)
 	{
-		this.aspectRatio = aspect;
+		this.aspect = aspect;
 		this.updateProjectionMatrix();
 	}
 
@@ -229,7 +231,7 @@ public class PerspectiveCamera extends Camera
 	 */
 	public void setLens(int focalLength, int frameHeight)
 	{
-		this.fieldOfView = 2.0 * Mathematics.radToDeg( Math.atan( frameHeight / ( focalLength * 2.0 ) ) );
+		this.fov = 2.0 * Mathematics.radToDeg( Math.atan( frameHeight / ( focalLength * 2.0 ) ) );
 		this.updateProjectionMatrix();
 	}
 	
@@ -303,46 +305,51 @@ public class PerspectiveCamera extends Camera
 	 */
 	public void updateProjectionMatrix() 
 	{
-		if ( this.fullWidth != 0) 
-		{
-			double aspect = this.fullWidth / (double)this.fullHeight;
-			double top = Math.tan( this.fieldOfView * Math.PI / 360.0 ) * this.near;
-			double bottom = -top;
+		double fov = Mathematics.radToDeg( 2 * Math.atan( Math.tan( Mathematics.degToRad( this.fov ) * 0.5 ) / this.zoom ) );
+
+		if ( this.fullWidth > 0 ) {
+
+			double aspect = (double)this.fullWidth / (double)this.fullHeight;
+			double top = Math.tan( Mathematics.degToRad( fov * 0.5 ) ) * this.near;
+			double bottom = - top;
 			double left = aspect * bottom;
 			double right = aspect * top;
 			double width = Math.abs( right - left );
 			double height = Math.abs( top - bottom );
 
-			this.projectionMatrix.makeFrustum
-			(
-				left + this.x * width / (double)this.fullWidth,
-				left + ( this.x + this.width ) * width / (double)this.fullWidth,
-				top - ( this.y + this.height ) * height / (double)this.fullHeight,
-				top - this.y * height / (double)this.fullHeight,
-				getNear(),
-				getFar()
+			this.projectionMatrix.makeFrustum(
+				left + this.x * width / this.fullWidth,
+				left + ( this.x + this.width ) * width / this.fullWidth,
+				top - ( this.y + this.height ) * height / this.fullHeight,
+				top - this.y * height / this.fullHeight,
+				this.near,
+				this.far
 			);
+
+		} else {
+
+			this.projectionMatrix.makePerspective( fov, this.aspect, this.near, this.far );
+
 		}
-		else 
-		{
-			this.projectionMatrix.makePerspective( getFieldOfView(), getAspectRation(), getNear(), getFar() );
-		}
+
 	}
 	
 	public PerspectiveCamera clone () {
 
 		PerspectiveCamera camera = new PerspectiveCamera();
-
+		
 		super.clone(camera);
 
-		camera.setFieldOfView( this.getFieldOfView() );
-		camera.setAspectRatio( this.getAspectRation() );
-		camera.setNear( this.getNear() );
-		camera.setFar( this.getFar() );
+		camera.zoom = this.zoom;
+
+		camera.fov = this.fov;
+		camera.aspect = this.aspect;
+		camera.near = this.near;
+		camera.far = this.far;
 
 		camera.projectionMatrix.copy( this.projectionMatrix );
 
 		return camera;
 
-	};
+	}
 }

@@ -18,6 +18,8 @@
 
 package thothbot.parallax.core.shared.math;
 
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+
 /**
  * This class is realization of (X, Y) vector. 
  * Where:
@@ -122,6 +124,44 @@ public class Vector2 implements Vector
 	}
 
 	/**
+	 * Set value of the vector to the specified (X, Y, Z) coordinates.
+	 * 
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
+	 */
+	public Vector2 set(double x, double y)
+	{
+		this.x = x;
+		this.y = y;
+		
+		return this;
+	}
+	
+	public void setComponent( int index, double value ) {
+
+		switch ( index ) {
+
+			case 0: this.x = value; break;
+			case 1: this.y = value; break;
+			default: throw new Error( "index is out of range: " + index );
+
+		}
+
+	}
+
+	public double getComponent ( int index ) {
+
+		switch ( index ) {
+
+			case 0: return this.x;
+			case 1: return this.y;
+			default: throw new Error( "index is out of range: " + index );
+
+		}
+
+	}
+
+	/**
 	 * Set value of the vector from another vector.
 	 * 
 	 * @param v the other vector
@@ -132,18 +172,6 @@ public class Vector2 implements Vector
 	{
 		this.set(v.getX(), v.getY());
 		return this;
-	}
-	
-	/**
-	 * Set value of the vector to the specified (X, Y, Z) coordinates.
-	 * 
-	 * @param x the X coordinate
-	 * @param y the Y coordinate
-	 */
-	public void set(double x, double y)
-	{
-		this.x = x;
-		this.y = y;
 	}
 
 	@Override
@@ -235,16 +263,123 @@ public class Vector2 implements Vector
 		{
 			this.set(0, 0);
 		}
+	
+		return this;
+	}
 		
+	public Vector2 min( Vector2 v ) 
+	{
+		if ( this.x > v.x ) 
+		{
+			this.x = v.x;
+		}
+
+		if ( this.y > v.y ) 
+		{
+			this.y = v.y;
+		}
+
 		return this;
 	}
 
+	public Vector2 max( Vector2 v ) 
+	{
+		if ( this.x < v.x ) 
+		{
+			this.x = v.x;
+		}
+
+		if ( this.y < v.y ) 
+		{
+			this.y = v.y;
+		}
+
+		return this;
+	}
+	
+	/**
+	 * This function assumes min < max, if this assumption isn't true it will not operate correctly
+	 * 
+	 */
+	public Vector2 clamp( Vector2 min, Vector2 max ) 
+	{
+		if ( this.x < min.x ) 
+		{
+			this.x = min.x;
+		} 
+		else if ( this.x > max.x ) 
+		{
+			this.x = max.x;
+		}
+
+		if ( this.y < min.y ) 
+		{
+			this.y = min.y;
+		} 
+		else if ( this.y > max.y ) 
+		{
+			this.y = max.y;
+		}
+
+		return this;
+	}
+	
+	public Vector2 clamp (double minVal, double maxVal) {
+
+		Vector2 min = new Vector2();
+		Vector2 max = new Vector2();
+
+		min.set( minVal, minVal );
+		max.set( maxVal, maxVal );
+
+		return this.clamp( min, max );
+	} 
+	
+	public Vector2 floor() {
+
+		this.x = Math.floor( this.x );
+		this.y = Math.floor( this.y );
+
+		return this;
+
+	}
+	
+	public Vector2 ceil() {
+
+		this.x = Math.ceil( this.x );
+		this.y = Math.ceil( this.y );
+
+		return this;
+
+	}
+	
+	public Vector2 round() {
+
+		this.x = Math.round( this.x );
+		this.y = Math.round( this.y );
+
+		return this;
+
+	}
+
+	public Vector2 roundToZero() {
+
+		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
+		this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
+
+		return this;
+
+	}
+	
 	/**
 	 * Negates the value of this vector in place.
 	 */
 	public Vector2 negate()
 	{
-		return this.multiply(-1);
+		this.x = - this.x;
+		this.y = - this.y;
+
+		return this;
 	}
 
 	/**
@@ -253,9 +388,9 @@ public class Vector2 implements Vector
 	 * @param v1
 	 *            the other vector
 	 */
-	public double dot(Vector2 v1)
+	public double dot(Vector2 v)
 	{
-		return (this.x * v1.x + this.y * v1.y);
+		return (this.x * v.x + this.y * v.y);
 	}
 
 	/**
@@ -335,61 +470,30 @@ public class Vector2 implements Vector
 		return (this.lengthSq() < 0.0001 /* almostZero */);
 	}
 	
-	public Vector2 min( Vector2 v ) 
-	{
-		if ( this.x > v.x ) 
-		{
-			this.x = v.x;
-		}
-
-		if ( this.y > v.y ) 
-		{
-			this.y = v.y;
-		}
-
-		return this;
-	}
-
-	public Vector2 max( Vector2 v ) 
-	{
-		if ( this.x < v.x ) 
-		{
-			this.x = v.x;
-		}
-
-		if ( this.y < v.y ) 
-		{
-			this.y = v.y;
-		}
-
-		return this;
+	public Vector2 fromArray( Float32Array array) {
+		return fromArray(array, 0);
 	}
 	
-	/**
-	 * This function assumes min < max, if this assumption isn't true it will not operate correctly
-	 * 
-	 */
-	public Vector2 clamp( Vector2 min, Vector2 max ) 
-	{
-		if ( this.x < min.x ) 
-		{
-			this.x = min.x;
-		} 
-		else if ( this.x > max.x ) 
-		{
-			this.x = max.x;
-		}
+	public Vector2 fromArray( Float32Array array, int offset ) {
 
-		if ( this.y < min.y ) 
-		{
-			this.y = min.y;
-		} 
-		else if ( this.y > max.y ) 
-		{
-			this.y = max.y;
-		}
-
+		this.x = array.get( offset );
+		this.y = array.get( offset + 1 );
+		
 		return this;
+
+	}
+	
+	public Float32Array toArray() {
+		return toArray(Float32Array.create(2), 0);
+	}
+
+	public Float32Array toArray( Float32Array array, int offset ) {
+
+		array.set( offset , this.x);
+		array.set( offset + 1 , this.y);
+
+		return array;
+
 	}
 
 	@Override

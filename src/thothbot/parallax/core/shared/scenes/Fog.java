@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.shaders.Uniform;
  * @author thothbot
  *
  */
-public final class Fog extends FogAbstract 
+public final class Fog extends AbstractFog 
 {
 	private double near;
 	private double far;
@@ -96,6 +96,16 @@ public final class Fog extends FogAbstract
 	public double getFar()
 	{
 		return far;
+	}
+	
+	public Fog clone() {
+		Fog fog = new Fog(0x000000);
+		super.clone(fog);
+		
+		fog.near = this.near;
+		fog.far = this.far;
+		
+		return fog;
 	}
 	
 	@Override
