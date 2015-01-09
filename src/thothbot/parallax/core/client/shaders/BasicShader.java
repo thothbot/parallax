@@ -69,18 +69,19 @@ public final class BasicShader extends Shader
 			ChunksVertexShader.COLOR_PARS,
 			ChunksVertexShader.MORPHTARGET_PARS,
 			ChunksVertexShader.SKINNING_PARS,
-			ChunksVertexShader.SHADOWMAP_PARS
+			ChunksVertexShader.SHADOWMAP_PARS,
+			ChunksVertexShader.LOGDEPTHBUF_PAR
 		);
 		
 		List<String> main1 = Arrays.asList(
 			ChunksVertexShader.MAP,
 			ChunksVertexShader.LIGHTMAP,
-			ChunksVertexShader.COLOR
+			ChunksVertexShader.COLOR,
+			ChunksVertexShader.SKINBASE
 		);
 		
 		List<String> mainEnv = Arrays.asList(
 			ChunksVertexShader.MORPHNORMAL,
-			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNORMAL,
 			ChunksVertexShader.DEFAULTNORMAL
 		);
@@ -89,6 +90,8 @@ public final class BasicShader extends Shader
 			ChunksVertexShader.MORPHTARGET,
 			ChunksVertexShader.SKINNING,
 			ChunksVertexShader.DEFAULT,
+			ChunksVertexShader.LOGDEPTHBUF,
+			
 			ChunksVertexShader.WORLDPOS,
 			ChunksVertexShader.ENVMAP,
 			ChunksVertexShader.SHADOWMAP
@@ -103,15 +106,19 @@ public final class BasicShader extends Shader
 		List<String> vars = Arrays.asList(
 			ChunksFragmentShader.COLOR_PARS,
 			ChunksFragmentShader.MAP_PARS,
+			ChunksFragmentShader.ALPHAMAP_PARS,
 			ChunksFragmentShader.LIGHTMAP_PARS,
 			ChunksFragmentShader.ENVMAP_PARS,
 			ChunksFragmentShader.FOG_PARS,
 			ChunksFragmentShader.SHADOWMAP_PARS,
-			ChunksFragmentShader.SPECULARMAP_PARS
+			ChunksFragmentShader.SPECULARMAP_PARS,
+			ChunksFragmentShader.LOGDEPTHBUF_PAR
 		);
 		
 		List<String> main = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF,
 			ChunksFragmentShader.MAP,
+			ChunksFragmentShader.ALPHAMAP,
 			ChunksFragmentShader.ALPHA_TEST,
 			ChunksFragmentShader.SPECULARMAP,
 			ChunksFragmentShader.LIGHTMAP,

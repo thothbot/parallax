@@ -44,6 +44,9 @@ public class ChunksVertexShader
 	public static String LIGHTS_PHONG_PARS = Chunks.INSTANCE.getLightsPhongParsVertex().getText();
 	public static String LIGHTS_PHONG = Chunks.INSTANCE.getLightsPhongVertex().getText();
 	
+	public static String LOGDEPTHBUF_PAR = Chunks.INSTANCE.getLogdepthbufParVertex().getText();
+	public static String LOGDEPTHBUF = Chunks.INSTANCE.getLogdepthbufVertex().getText();
+	
 	public static String MAP_PARS = Chunks.INSTANCE.getMapParsVertex().getText();
 	public static String MAP = Chunks.INSTANCE.getMapVertex().getText();
 	

@@ -24,6 +24,10 @@ package thothbot.parallax.core.client.shaders;
  */
 public class ChunksFragmentShader
 {
+	
+	public static String ALPHAMAP_PARS = Chunks.INSTANCE.getAlphamapParsFragment().getText();
+	public static String ALPHAMAP = Chunks.INSTANCE.getAlphamapFragment().getText();
+	
 	public static String ALPHA_TEST = Chunks.INSTANCE.getAlphatestFragment().getText();
 
 	public static String BUMPMAP_PARS = Chunks.INSTANCE.getBumpmapParsFragment().getText();
@@ -44,6 +48,9 @@ public class ChunksFragmentShader
 	public static String LIGHTS_PONG = Chunks.INSTANCE.getLightsPhongFragment().getText();
 	
 	public static String LINEAR_TO_GAMMA = Chunks.INSTANCE.getLinearToGammaFragment().getText();
+	
+	public static String LOGDEPTHBUF_PAR = Chunks.INSTANCE.getLogdepthbufParFragment().getText();
+	public static String LOGDEPTHBUF = Chunks.INSTANCE.getLogdepthbufFragment().getText();
 	
 	public static String MAP_PARS = Chunks.INSTANCE.getMapParsFragment().getText();
 	public static String MAP = Chunks.INSTANCE.getMapFragment().getText();
