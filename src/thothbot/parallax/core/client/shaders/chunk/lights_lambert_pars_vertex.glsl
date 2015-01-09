@@ -15,7 +15,7 @@ uniform vec3 ambientLightColor;
 
 	uniform vec3 hemisphereLightSkyColor[ MAX_HEMI_LIGHTS ];
 	uniform vec3 hemisphereLightGroundColor[ MAX_HEMI_LIGHTS ];
-	uniform vec3 hemisphereLightPosition[ MAX_HEMI_LIGHTS ];
+	uniform vec3 hemisphereLightDirection[ MAX_HEMI_LIGHTS ];
 
 #endif
 
@@ -33,7 +33,7 @@ uniform vec3 ambientLightColor;
 	uniform vec3 spotLightPosition[ MAX_SPOT_LIGHTS ];
 	uniform vec3 spotLightDirection[ MAX_SPOT_LIGHTS ];
 	uniform float spotLightDistance[ MAX_SPOT_LIGHTS ];
-	uniform float spotLightAngle[ MAX_SPOT_LIGHTS ];
+	uniform float spotLightAngleCos[ MAX_SPOT_LIGHTS ];
 	uniform float spotLightExponent[ MAX_SPOT_LIGHTS ];
 
 #endif

@@ -2,19 +2,19 @@
 
 	#ifdef USE_SKINNING
 
-		vec4 mPosition = modelMatrix * skinned;
+		vec4 worldPosition = modelMatrix * skinned;
 
 	#endif
 
 	#if defined( USE_MORPHTARGETS ) && ! defined( USE_SKINNING )
 
-		vec4 mPosition = modelMatrix * vec4( morphed, 1.0 );
+		vec4 worldPosition = modelMatrix * vec4( morphed, 1.0 );
 
 	#endif
 
 	#if ! defined( USE_MORPHTARGETS ) && ! defined( USE_SKINNING )
 
-		vec4 mPosition = modelMatrix * vec4( position, 1.0 );
+		vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
 
 	#endif
 

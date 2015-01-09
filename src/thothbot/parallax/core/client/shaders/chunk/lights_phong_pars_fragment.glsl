@@ -11,7 +11,7 @@ uniform vec3 ambientLightColor;
 
 	uniform vec3 hemisphereLightSkyColor[ MAX_HEMI_LIGHTS ];
 	uniform vec3 hemisphereLightGroundColor[ MAX_HEMI_LIGHTS ];
-	uniform vec3 hemisphereLightPosition[ MAX_HEMI_LIGHTS ];
+	uniform vec3 hemisphereLightDirection[ MAX_HEMI_LIGHTS ];
 
 #endif
 
@@ -19,16 +19,8 @@ uniform vec3 ambientLightColor;
 
 	uniform vec3 pointLightColor[ MAX_POINT_LIGHTS ];
 
-	#ifdef PHONG_PER_PIXEL
-
-		uniform vec3 pointLightPosition[ MAX_POINT_LIGHTS ];
-		uniform float pointLightDistance[ MAX_POINT_LIGHTS ];
-
-	#else
-
-		varying vec4 vPointLight[ MAX_POINT_LIGHTS ];
-
-	#endif
+	uniform vec3 pointLightPosition[ MAX_POINT_LIGHTS ];
+	uniform float pointLightDistance[ MAX_POINT_LIGHTS ];
 
 #endif
 
@@ -37,22 +29,14 @@ uniform vec3 ambientLightColor;
 	uniform vec3 spotLightColor[ MAX_SPOT_LIGHTS ];
 	uniform vec3 spotLightPosition[ MAX_SPOT_LIGHTS ];
 	uniform vec3 spotLightDirection[ MAX_SPOT_LIGHTS ];
-	uniform float spotLightAngle[ MAX_SPOT_LIGHTS ];
+	uniform float spotLightAngleCos[ MAX_SPOT_LIGHTS ];
 	uniform float spotLightExponent[ MAX_SPOT_LIGHTS ];
 
-	#ifdef PHONG_PER_PIXEL
-
-		uniform float spotLightDistance[ MAX_SPOT_LIGHTS ];
-
-	#else
-
-		varying vec4 vSpotLight[ MAX_SPOT_LIGHTS ];
-
-	#endif
+	uniform float spotLightDistance[ MAX_SPOT_LIGHTS ];
 
 #endif
 
-#if MAX_SPOT_LIGHTS > 0 || defined( USE_BUMPMAP )
+#if MAX_SPOT_LIGHTS > 0 || defined( USE_BUMPMAP ) || defined( USE_ENVMAP )
 
 	varying vec3 vWorldPosition;
 

@@ -1,6 +1,14 @@
 #ifdef USE_FOG
 
-	float depth = gl_FragCoord.z / gl_FragCoord.w;
+	#ifdef USE_LOGDEPTHBUF_EXT
+
+		float depth = gl_FragDepthEXT / gl_FragCoord.w;
+
+	#else
+
+		float depth = gl_FragCoord.z / gl_FragCoord.w;
+
+	#endif
 
 	#ifdef FOG_EXP2
 
@@ -13,7 +21,7 @@
 		float fogFactor = smoothstep( fogNear, fogFar, depth );
 
 	#endif
-
+	
 	gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
 
 #endif

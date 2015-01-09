@@ -2,17 +2,22 @@
 
 	vec3 reflectVec;
 
-	#if defined( USE_BUMPMAP ) || defined( USE_NORMALMAP )
+	#if defined( USE_BUMPMAP ) || defined( USE_NORMALMAP ) || defined( PHONG )
 
 		vec3 cameraToVertex = normalize( vWorldPosition - cameraPosition );
 
+		// http://en.wikibooks.org/wiki/GLSL_Programming/Applying_Matrix_Transformations
+		// Transforming Normal Vectors with the Inverse Transformation
+
+		vec3 worldNormal = normalize( vec3( vec4( normal, 0.0 ) * viewMatrix ) );
+
 		if ( useRefract ) {
 
-			reflectVec = refract( cameraToVertex, normal, refractionRatio );
+			reflectVec = refract( cameraToVertex, worldNormal, refractionRatio );
 
 		} else { 
 
-			reflectVec = reflect( cameraToVertex, normal );
+			reflectVec = reflect( cameraToVertex, worldNormal );
 
 		}
 
@@ -42,6 +47,10 @@
 	if ( combine == 1 ) {
 
 		gl_FragColor.xyz = mix( gl_FragColor.xyz, cubeColor.xyz, specularStrength * reflectivity );
+
+	} else if ( combine == 2 ) {
+
+		gl_FragColor.xyz += cubeColor.xyz * specularStrength * reflectivity;
 
 	} else {
 

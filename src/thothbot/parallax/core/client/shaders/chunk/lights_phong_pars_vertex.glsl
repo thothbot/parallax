@@ -1,26 +1,4 @@
-#ifndef PHONG_PER_PIXEL
-
-#if MAX_POINT_LIGHTS > 0
-
-	uniform vec3 pointLightPosition[ MAX_POINT_LIGHTS ];
-	uniform float pointLightDistance[ MAX_POINT_LIGHTS ];
-
-	varying vec4 vPointLight[ MAX_POINT_LIGHTS ];
-
-#endif
-
-#if MAX_SPOT_LIGHTS > 0
-
-	uniform vec3 spotLightPosition[ MAX_SPOT_LIGHTS ];
-	uniform float spotLightDistance[ MAX_SPOT_LIGHTS ];
-
-	varying vec4 vSpotLight[ MAX_SPOT_LIGHTS ];
-
-#endif
-
-#endif
-
-#if MAX_SPOT_LIGHTS > 0 || defined( USE_BUMPMAP )
+#if MAX_SPOT_LIGHTS > 0 || defined( USE_BUMPMAP ) || defined( USE_ENVMAP )
 
 	varying vec3 vWorldPosition;
 

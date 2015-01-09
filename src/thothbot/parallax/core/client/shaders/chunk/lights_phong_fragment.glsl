@@ -9,7 +9,7 @@ vec3 viewPosition = normalize( vViewPosition );
 
 #ifdef USE_NORMALMAP
 
-	normal = perturbNormal2Arb( -viewPosition, normal );
+	normal = perturbNormal2Arb( -vViewPosition, normal );
 
 #elif defined( USE_BUMPMAP )
 
@@ -19,30 +19,21 @@ vec3 viewPosition = normalize( vViewPosition );
 
 #if MAX_POINT_LIGHTS > 0
 
-	vec3 pointDiffuse  = vec3( 0.0 );
+	vec3 pointDiffuse = vec3( 0.0 );
 	vec3 pointSpecular = vec3( 0.0 );
 
 	for ( int i = 0; i < MAX_POINT_LIGHTS; i ++ ) {
 
-		#ifdef PHONG_PER_PIXEL
+		vec4 lPosition = viewMatrix * vec4( pointLightPosition[ i ], 1.0 );
+		vec3 lVector = lPosition.xyz + vViewPosition.xyz;
 
-			vec4 lPosition = viewMatrix * vec4( pointLightPosition[ i ], 1.0 );
-			vec3 lVector = lPosition.xyz + vViewPosition.xyz;
+		float lDistance = 1.0;
+		if ( pointLightDistance[ i ] > 0.0 )
+			lDistance = 1.0 - min( ( length( lVector ) / pointLightDistance[ i ] ), 1.0 );
 
-			float lDistance = 1.0;
-			if ( pointLightDistance[ i ] > 0.0 )
-				lDistance = 1.0 - min( ( length( lVector ) / pointLightDistance[ i ] ), 1.0 );
+		lVector = normalize( lVector );
 
-			lVector = normalize( lVector );
-
-		#else
-
-			vec3 lVector = normalize( vPointLight[ i ].xyz );
-			float lDistance = vPointLight[ i ].w;
-
-		#endif
-
-		// diffuse
+				// diffuse
 
 		float dotProduct = dot( normal, lVector );
 
@@ -51,7 +42,7 @@ vec3 viewPosition = normalize( vViewPosition );
 			float pointDiffuseWeightFull = max( dotProduct, 0.0 );
 			float pointDiffuseWeightHalf = max( 0.5 * dotProduct + 0.5, 0.0 );
 
-			vec3 pointDiffuseWeight = mix( vec3 ( pointDiffuseWeightFull ), vec3( pointDiffuseWeightHalf ), wrapRGB );
+			vec3 pointDiffuseWeight = mix( vec3( pointDiffuseWeightFull ), vec3( pointDiffuseWeightHalf ), wrapRGB );
 
 		#else
 
@@ -59,28 +50,18 @@ vec3 viewPosition = normalize( vViewPosition );
 
 		#endif
 
-		pointDiffuse  += diffuse * pointLightColor[ i ] * pointDiffuseWeight * lDistance;
+		pointDiffuse += diffuse * pointLightColor[ i ] * pointDiffuseWeight * lDistance;
 
-		// specular
-		
+				// specular
+
 		vec3 pointHalfVector = normalize( lVector + viewPosition );
 		float pointDotNormalHalf = max( dot( normal, pointHalfVector ), 0.0 );
 		float pointSpecularWeight = specularStrength * max( pow( pointDotNormalHalf, shininess ), 0.0 );
 
-		#ifdef PHYSICALLY_BASED_SHADING
+		float specularNormalization = ( shininess + 2.0 ) / 8.0;
 
-			// 2.0 => 2.0001 is hack to work around ANGLE bug
-
-			float specularNormalization = ( shininess + 2.0001 ) / 8.0;
-
-			vec3 schlick = specular + vec3( 1.0 - specular ) * pow( 1.0 - dot( lVector, pointHalfVector ), 5.0 );
-			pointSpecular += schlick * pointLightColor[ i ] * pointSpecularWeight * pointDiffuseWeight * lDistance * specularNormalization;
-
-		#else
-
-			pointSpecular += specular * pointLightColor[ i ] * pointSpecularWeight * pointDiffuseWeight * lDistance;
-
-		#endif
+		vec3 schlick = specular + vec3( 1.0 - specular ) * pow( max( 1.0 - dot( lVector, pointHalfVector ), 0.0 ), 5.0 );
+		pointSpecular += schlick * pointLightColor[ i ] * pointSpecularWeight * pointDiffuseWeight * lDistance * specularNormalization;
 
 	}
 
@@ -88,36 +69,27 @@ vec3 viewPosition = normalize( vViewPosition );
 
 #if MAX_SPOT_LIGHTS > 0
 
-	vec3 spotDiffuse  = vec3( 0.0 );
+	vec3 spotDiffuse = vec3( 0.0 );
 	vec3 spotSpecular = vec3( 0.0 );
 
 	for ( int i = 0; i < MAX_SPOT_LIGHTS; i ++ ) {
 
-		#ifdef PHONG_PER_PIXEL
+		vec4 lPosition = viewMatrix * vec4( spotLightPosition[ i ], 1.0 );
+		vec3 lVector = lPosition.xyz + vViewPosition.xyz;
 
-			vec4 lPosition = viewMatrix * vec4( spotLightPosition[ i ], 1.0 );
-			vec3 lVector = lPosition.xyz + vViewPosition.xyz;
+		float lDistance = 1.0;
+		if ( spotLightDistance[ i ] > 0.0 )
+			lDistance = 1.0 - min( ( length( lVector ) / spotLightDistance[ i ] ), 1.0 );
 
-			float lDistance = 1.0;
-			if ( spotLightDistance[ i ] > 0.0 )
-				lDistance = 1.0 - min( ( length( lVector ) / spotLightDistance[ i ] ), 1.0 );
-
-			lVector = normalize( lVector );
-
-		#else
-
-			vec3 lVector = normalize( vSpotLight[ i ].xyz );
-			float lDistance = vSpotLight[ i ].w;
-
-		#endif
+		lVector = normalize( lVector );
 
 		float spotEffect = dot( spotLightDirection[ i ], normalize( spotLightPosition[ i ] - vWorldPosition ) );
 
-		if ( spotEffect > spotLightAngle[ i ] ) {
+		if ( spotEffect > spotLightAngleCos[ i ] ) {
 
-			spotEffect = pow( spotEffect, spotLightExponent[ i ] );
+			spotEffect = max( pow( max( spotEffect, 0.0 ), spotLightExponent[ i ] ), 0.0 );
 
-			// diffuse
+					// diffuse
 
 			float dotProduct = dot( normal, lVector );
 
@@ -126,7 +98,7 @@ vec3 viewPosition = normalize( vViewPosition );
 				float spotDiffuseWeightFull = max( dotProduct, 0.0 );
 				float spotDiffuseWeightHalf = max( 0.5 * dotProduct + 0.5, 0.0 );
 
-				vec3 spotDiffuseWeight = mix( vec3 ( spotDiffuseWeightFull ), vec3( spotDiffuseWeightHalf ), wrapRGB );
+				vec3 spotDiffuseWeight = mix( vec3( spotDiffuseWeightFull ), vec3( spotDiffuseWeightHalf ), wrapRGB );
 
 			#else
 
@@ -136,26 +108,16 @@ vec3 viewPosition = normalize( vViewPosition );
 
 			spotDiffuse += diffuse * spotLightColor[ i ] * spotDiffuseWeight * lDistance * spotEffect;
 
-			// specular
+					// specular
 
 			vec3 spotHalfVector = normalize( lVector + viewPosition );
 			float spotDotNormalHalf = max( dot( normal, spotHalfVector ), 0.0 );
 			float spotSpecularWeight = specularStrength * max( pow( spotDotNormalHalf, shininess ), 0.0 );
 
-			#ifdef PHYSICALLY_BASED_SHADING
+			float specularNormalization = ( shininess + 2.0 ) / 8.0;
 
-				// 2.0 => 2.0001 is hack to work around ANGLE bug
-
-				float specularNormalization = ( shininess + 2.0001 ) / 8.0;
-
-				vec3 schlick = specular + vec3( 1.0 - specular ) * pow( 1.0 - dot( lVector, spotHalfVector ), 5.0 );
-				spotSpecular += schlick * spotLightColor[ i ] * spotSpecularWeight * spotDiffuseWeight * lDistance * specularNormalization * spotEffect;
-
-			#else
-
-				spotSpecular += specular * spotLightColor[ i ] * spotSpecularWeight * spotDiffuseWeight * lDistance * spotEffect;
-
-			#endif
+			vec3 schlick = specular + vec3( 1.0 - specular ) * pow( max( 1.0 - dot( lVector, spotHalfVector ), 0.0 ), 5.0 );
+			spotSpecular += schlick * spotLightColor[ i ] * spotSpecularWeight * spotDiffuseWeight * lDistance * specularNormalization * spotEffect;
 
 		}
 
@@ -165,7 +127,7 @@ vec3 viewPosition = normalize( vViewPosition );
 
 #if MAX_DIR_LIGHTS > 0
 
-	vec3 dirDiffuse  = vec3( 0.0 );
+	vec3 dirDiffuse = vec3( 0.0 );
 	vec3 dirSpecular = vec3( 0.0 );
 
 	for( int i = 0; i < MAX_DIR_LIGHTS; i ++ ) {
@@ -173,7 +135,7 @@ vec3 viewPosition = normalize( vViewPosition );
 		vec4 lDirection = viewMatrix * vec4( directionalLightDirection[ i ], 0.0 );
 		vec3 dirVector = normalize( lDirection.xyz );
 
-		// diffuse
+				// diffuse
 
 		float dotProduct = dot( normal, dirVector );
 
@@ -190,7 +152,7 @@ vec3 viewPosition = normalize( vViewPosition );
 
 		#endif
 
-		dirDiffuse  += diffuse * directionalLightColor[ i ] * dirDiffuseWeight;
+		dirDiffuse += diffuse * directionalLightColor[ i ] * dirDiffuseWeight;
 
 		// specular
 
@@ -198,41 +160,32 @@ vec3 viewPosition = normalize( vViewPosition );
 		float dirDotNormalHalf = max( dot( normal, dirHalfVector ), 0.0 );
 		float dirSpecularWeight = specularStrength * max( pow( dirDotNormalHalf, shininess ), 0.0 );
 
-		#ifdef PHYSICALLY_BASED_SHADING
+		/*
+		// fresnel term from skin shader
+		const float F0 = 0.128;
 
-			/*
-					// fresnel term from skin shader
-			const float F0 = 0.128;
+		float base = 1.0 - dot( viewPosition, dirHalfVector );
+		float exponential = pow( base, 5.0 );
 
-			float base = 1.0 - dot( viewPosition, dirHalfVector );
-			float exponential = pow( base, 5.0 );
+		float fresnel = exponential + F0 * ( 1.0 - exponential );
+		*/
 
-			float fresnel = exponential + F0 * ( 1.0 - exponential );
-			*/
+		/*
+		// fresnel term from fresnel shader
+		const float mFresnelBias = 0.08;
+		const float mFresnelScale = 0.3;
+		const float mFresnelPower = 5.0;
 
-			/*
-					// fresnel term from fresnel shader
-			const float mFresnelBias = 0.08;
-			const float mFresnelScale = 0.3;
-			const float mFresnelPower = 5.0;
+		float fresnel = mFresnelBias + mFresnelScale * pow( 1.0 + dot( normalize( -viewPosition ), normal ), mFresnelPower );
+		*/
 
-			float fresnel = mFresnelBias + mFresnelScale * pow( 1.0 + dot( normalize( -viewPosition ), normal ), mFresnelPower );
-			*/
+		float specularNormalization = ( shininess + 2.0 ) / 8.0;
 
-			// 2.0 => 2.0001 is hack to work around ANGLE bug
+		// 		dirSpecular += specular * directionalLightColor[ i ] * dirSpecularWeight * dirDiffuseWeight * specularNormalization * fresnel;
 
-			float specularNormalization = ( shininess + 2.0001 ) / 8.0;
+		vec3 schlick = specular + vec3( 1.0 - specular ) * pow( max( 1.0 - dot( dirVector, dirHalfVector ), 0.0 ), 5.0 );
+		dirSpecular += schlick * directionalLightColor[ i ] * dirSpecularWeight * dirDiffuseWeight * specularNormalization;
 
-			//"dirSpecular += specular * directionalLightColor[ i ] * dirSpecularWeight * dirDiffuseWeight * specularNormalization * fresnel;
-
-			vec3 schlick = specular + vec3( 1.0 - specular ) * pow( 1.0 - dot( dirVector, dirHalfVector ), 5.0 );
-			dirSpecular += schlick * directionalLightColor[ i ] * dirSpecularWeight * dirDiffuseWeight * specularNormalization;
-
-		#else
-
-			dirSpecular += specular * directionalLightColor[ i ] * dirSpecularWeight * dirDiffuseWeight;
-
-		#endif
 
 	}
 
@@ -240,13 +193,13 @@ vec3 viewPosition = normalize( vViewPosition );
 
 #if MAX_HEMI_LIGHTS > 0
 
-	vec3 hemiDiffuse  = vec3( 0.0 );
+	vec3 hemiDiffuse = vec3( 0.0 );
 	vec3 hemiSpecular = vec3( 0.0 );
 
 	for( int i = 0; i < MAX_HEMI_LIGHTS; i ++ ) {
 
-		vec4 lPosition = viewMatrix * vec4( hemisphereLightPosition[ i ], 1.0 );
-		vec3 lVector = normalize( lPosition.xyz + vViewPosition.xyz );
+		vec4 lDirection = viewMatrix * vec4( hemisphereLightDirection[ i ], 0.0 );
+		vec3 lVector = normalize( lDirection.xyz );
 
 		// diffuse
 
@@ -261,33 +214,23 @@ vec3 viewPosition = normalize( vViewPosition );
 
 		vec3 hemiHalfVectorSky = normalize( lVector + viewPosition );
 		float hemiDotNormalHalfSky = 0.5 * dot( normal, hemiHalfVectorSky ) + 0.5;
-		float hemiSpecularWeightSky = specularStrength * max( pow( hemiDotNormalHalfSky, shininess ), 0.0 );
+		float hemiSpecularWeightSky = specularStrength * max( pow( max( hemiDotNormalHalfSky, 0.0 ), shininess ), 0.0 );
 
 		// specular (ground light)
 
-		vec3 lVectorGround = normalize( -lPosition.xyz + vViewPosition.xyz );
+		vec3 lVectorGround = -lVector;
 
 		vec3 hemiHalfVectorGround = normalize( lVectorGround + viewPosition );
 		float hemiDotNormalHalfGround = 0.5 * dot( normal, hemiHalfVectorGround ) + 0.5;
-		float hemiSpecularWeightGround = specularStrength * max( pow( hemiDotNormalHalfGround, shininess ), 0.0 );
+		float hemiSpecularWeightGround = specularStrength * max( pow( max( hemiDotNormalHalfGround, 0.0 ), shininess ), 0.0 );
 
-		#ifdef PHYSICALLY_BASED_SHADING
+		float dotProductGround = dot( normal, lVectorGround );
 
-			float dotProductGround = dot( normal, lVectorGround );
+		float specularNormalization = ( shininess + 2.0 ) / 8.0;
 
-			// 2.0 => 2.0001 is hack to work around ANGLE bug
-
-			float specularNormalization = ( shininess + 2.0001 ) / 8.0;
-
-			vec3 schlickSky = specular + vec3( 1.0 - specular ) * pow( 1.0 - dot( lVector, hemiHalfVectorSky ), 5.0 );
-			vec3 schlickGround = specular + vec3( 1.0 - specular ) * pow( 1.0 - dot( lVectorGround, hemiHalfVectorGround ), 5.0 );
-			hemiSpecular += hemiColor * specularNormalization * ( schlickSky * hemiSpecularWeightSky * max( dotProduct, 0.0 ) + schlickGround * hemiSpecularWeightGround * max( dotProductGround, 0.0 ) );
-
-		#else
-
-			hemiSpecular += specular * hemiColor * ( hemiSpecularWeightSky + hemiSpecularWeightGround ) * hemiDiffuseWeight;
-
-		#endif
+		vec3 schlickSky = specular + vec3( 1.0 - specular ) * pow( max( 1.0 - dot( lVector, hemiHalfVectorSky ), 0.0 ), 5.0 );
+		vec3 schlickGround = specular + vec3( 1.0 - specular ) * pow( max( 1.0 - dot( lVectorGround, hemiHalfVectorGround ), 0.0 ), 5.0 );
+		hemiSpecular += hemiColor * specularNormalization * ( schlickSky * hemiSpecularWeightSky * max( dotProduct, 0.0 ) + schlickGround * hemiSpecularWeightGround * max( dotProductGround, 0.0 ) );
 
 	}
 

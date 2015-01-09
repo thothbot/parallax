@@ -115,17 +115,17 @@ for( int i = 0; i < MAX_DIR_LIGHTS; i ++ ) {
 		vec4 lPosition = viewMatrix * vec4( spotLightPosition[ i ], 1.0 );
 		vec3 lVector = lPosition.xyz - mvPosition.xyz;
 
-		lVector = normalize( lVector );
+		float spotEffect = dot( spotLightDirection[ i ], normalize( spotLightPosition[ i ] - worldPosition.xyz ) );
 
-		float spotEffect = dot( spotLightDirection[ i ], normalize( spotLightPosition[ i ] - mPosition.xyz ) );
+		if ( spotEffect > spotLightAngleCos[ i ] ) {
 
-		if ( spotEffect > spotLightAngle[ i ] ) {
-
-			spotEffect = pow( spotEffect, spotLightExponent[ i ] );
+			spotEffect = max( pow( max( spotEffect, 0.0 ), spotLightExponent[ i ] ), 0.0 );
 
 			float lDistance = 1.0;
 			if ( spotLightDistance[ i ] > 0.0 )
 				lDistance = 1.0 - min( ( length( lVector ) / spotLightDistance[ i ] ), 1.0 );
+
+			lVector = normalize( lVector );
 
 			float dotProduct = dot( transformedNormal, lVector );
 			vec3 spotLightWeighting = vec3( max( dotProduct, 0.0 ) );
@@ -173,10 +173,8 @@ for( int i = 0; i < MAX_DIR_LIGHTS; i ++ ) {
 
 	for( int i = 0; i < MAX_HEMI_LIGHTS; i ++ ) {
 
-		vec4 lPosition = viewMatrix * vec4( hemisphereLightPosition[ i ], 1.0 );
-		vec3 lVector = lPosition.xyz - mvPosition.xyz;
-
-		lVector = normalize( lVector );
+		vec4 lDirection = viewMatrix * vec4( hemisphereLightDirection[ i ], 0.0 );
+		vec3 lVector = normalize( lDirection.xyz );
 
 		float dotProduct = dot( transformedNormal, lVector );
 

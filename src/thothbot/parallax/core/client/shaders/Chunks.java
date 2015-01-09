@@ -32,6 +32,12 @@ public interface Chunks extends ClientBundle
 {
 	Chunks INSTANCE = GWT.create(Chunks.class);
 
+	@Source("chunk/alphamap_fragment.glsl")
+	TextResource getAlphamapFragment();
+	
+	@Source("chunk/alphamap_pars_fragment.glsl")
+	TextResource getAlphamapParsFragment();
+
 	@Source("chunk/alphatest_fragment.glsl")
 	TextResource getAlphatestFragment();
 	
@@ -52,13 +58,7 @@ public interface Chunks extends ClientBundle
 
 	@Source("chunk/defaultnormal_vertex.glsl")
 	TextResource getDefaultNormalVertex();
-	
-	@Source("chunk/default_pars_vertex.glsl")
-	TextResource getDefaultParsVertex();
-	
-	@Source("chunk/default_pars_fragment.glsl")
-	TextResource getDefaultParsFragment();
-	
+		
 	@Source("chunk/default_vertex.glsl")
 	TextResource getDefaultVertex();
 
@@ -112,6 +112,18 @@ public interface Chunks extends ClientBundle
 
 	@Source("chunk/linear_to_gamma_fragment.glsl")
 	TextResource getLinearToGammaFragment();
+	
+	@Source("chunk/logdepthbuf_fragment.glsl")
+	TextResource getLogdepthbufFragment();
+	
+	@Source("chunk/logdepthbuf_par_fragment.glsl")
+	TextResource getLogdepthbufParFragment();
+	
+	@Source("chunk/logdepthbuf_par_vertex.glsl")
+	TextResource getLogdepthbufParVertex();
+	
+	@Source("chunk/logdepthbuf_vertex.glsl")
+	TextResource getLogdepthbufVertex();
 
 	@Source("chunk/map_fragment.glsl")
 	TextResource getMapFragment();

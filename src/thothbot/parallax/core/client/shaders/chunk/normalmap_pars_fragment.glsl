@@ -3,8 +3,8 @@
 	uniform sampler2D normalMap;
 	uniform vec2 normalScale;
 
-	// Per-Pixel Tangent Space Normal Mapping
-	// http://hacksoflife.blogspot.ch/2009/11/per-pixel-tangent-space-normal-mapping.html
+			// Per-Pixel Tangent Space Normal Mapping
+			// http://hacksoflife.blogspot.ch/2009/11/per-pixel-tangent-space-normal-mapping.html
 
 	vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm ) {
 
@@ -13,7 +13,7 @@
 		vec2 st0 = dFdx( vUv.st );
 		vec2 st1 = dFdy( vUv.st );
 
-		vec3 S = normalize(  q0 * st1.t - q1 * st0.t );
+		vec3 S = normalize( q0 * st1.t - q1 * st0.t );
 		vec3 T = normalize( -q0 * st1.s + q1 * st0.s );
 		vec3 N = normalize( surf_norm );
 
