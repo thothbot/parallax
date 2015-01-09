@@ -21,7 +21,6 @@ package thothbot.parallax.core.client.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector3;
 
@@ -81,7 +80,8 @@ public final class LambertShader extends Shader
 			ChunksVertexShader.COLOR_PARS,
 			ChunksVertexShader.MORPHTARGET_PARS,
 			ChunksVertexShader.SKINNING_PARS,
-			ChunksVertexShader.SHADOWMAP_PARS
+			ChunksVertexShader.SHADOWMAP_PARS,
+			ChunksVertexShader.LOGDEPTHBUF_PAR
 		);
 		
 		List<String> main = Arrays.asList(
@@ -95,6 +95,8 @@ public final class LambertShader extends Shader
 			ChunksVertexShader.MORPHTARGET,
 			ChunksVertexShader.SKINNING,
 			ChunksVertexShader.DEFAULT,
+			ChunksVertexShader.LOGDEPTHBUF,
+			
 			ChunksVertexShader.WORLDPOS,
 			ChunksVertexShader.ENVMAP,
 			ChunksVertexShader.LIGHTS_LAMBERT,
@@ -110,15 +112,19 @@ public final class LambertShader extends Shader
 		List<String> vars = Arrays.asList(
 			ChunksFragmentShader.COLOR_PARS,
 			ChunksFragmentShader.MAP_PARS,
+			ChunksFragmentShader.ALPHAMAP_PARS,
 			ChunksFragmentShader.LIGHTMAP_PARS,
 			ChunksFragmentShader.ENVMAP_PARS,
 			ChunksFragmentShader.FOG_PARS,
 			ChunksFragmentShader.SHADOWMAP_PARS,
-			ChunksFragmentShader.SPECULARMAP_PARS
+			ChunksFragmentShader.SPECULARMAP_PARS,
+			ChunksFragmentShader.LOGDEPTHBUF_PAR
 		);
 		
 		List<String> main = Arrays.asList(
+			ChunksFragmentShader.LOGDEPTHBUF,
 			ChunksFragmentShader.MAP,
+			ChunksFragmentShader.ALPHAMAP,
 			ChunksFragmentShader.ALPHA_TEST,
 			ChunksFragmentShader.SPECULARMAP
 		);
@@ -128,7 +134,9 @@ public final class LambertShader extends Shader
 			ChunksFragmentShader.COLOR,
 			ChunksFragmentShader.ENVMAP,
 			ChunksFragmentShader.SHADOWMAP,
+			
 			ChunksFragmentShader.LINEAR_TO_GAMMA,
+			
 			ChunksFragmentShader.FOG
 		);
 		
