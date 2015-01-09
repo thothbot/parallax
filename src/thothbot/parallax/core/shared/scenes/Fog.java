@@ -20,7 +20,7 @@ package thothbot.parallax.core.shared.scenes;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.client.renders.shaders.Uniform;
 
 /**
  * This class implements simple fog with near and far options.

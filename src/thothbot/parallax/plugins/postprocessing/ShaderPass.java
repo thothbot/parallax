@@ -20,8 +20,8 @@ package thothbot.parallax.plugins.postprocessing;
 
 import java.util.Map;
 
-import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.client.renders.shaders.Shader;
+import thothbot.parallax.core.client.renders.shaders.Uniform;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 
 public class ShaderPass extends Pass

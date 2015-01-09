@@ -21,7 +21,7 @@ package thothbot.parallax.core.shared.lights;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.client.renders.shaders.Uniform;
 import thothbot.parallax.core.shared.math.Color;
 
 /**

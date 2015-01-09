@@ -16,11 +16,12 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.client.shaders;
+package thothbot.parallax.core.client.renders.shaders;
 
 import java.util.Arrays;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector3;
 
@@ -28,29 +29,31 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Phong shading - lighting model three-dimensional objects, 
- * including models and polygonal primitives.
+ * Lambert shader. This is the simplest model of light - a pure diffuse lighting. 
+ * It is believed that the incident light  is scattered in all direction. 
+ * Thus, the illumination is determined by the light density at the surface 
+ * only and it depends linearly on the cosine of the angle of incidence.
  * <p>
- * Based on three.js code.
+ * Based on the three.js code.
  * 
  * @author thothbot
  *
  */
-public final class PhongShader extends Shader
+public final class LambertShader extends Shader
 {
 
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 		
-		@Source("source/phong.vs")
+		@Source("source/lambert.vs")
 		TextResource getVertexShader();
 
-		@Source("source/phong.fs")
+		@Source("source/lambert.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public PhongShader() 
+
+	public LambertShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -59,16 +62,12 @@ public final class PhongShader extends Shader
 	protected void initUniforms()
 	{
 		this.setUniforms(UniformsLib.getCommon());
-		this.setUniforms(UniformsLib.getBump());
-		this.setUniforms(UniformsLib.getNormalMap());
 		this.setUniforms(UniformsLib.getFog());
 		this.setUniforms(UniformsLib.getLights());
 		this.setUniforms(UniformsLib.getShadowmap());
 		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
-		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
-		this.addUniform("shininess", new Uniform(Uniform.TYPE.F, 30.0 ));
-		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1, 1, 1 ) ));
+		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0, 1.0, 1.0 ) ));
 	}
 	
 	@Override
@@ -78,7 +77,7 @@ public final class PhongShader extends Shader
 			ChunksVertexShader.MAP_PARS,
 			ChunksVertexShader.LIGHTMAP_PARS,
 			ChunksVertexShader.ENVMAP_PARS,
-			ChunksVertexShader.LIGHTS_PHONG_PARS,
+			ChunksVertexShader.LIGHTS_LAMBERT_PARS,
 			ChunksVertexShader.COLOR_PARS,
 			ChunksVertexShader.MORPHTARGET_PARS,
 			ChunksVertexShader.SKINNING_PARS,
@@ -92,23 +91,17 @@ public final class PhongShader extends Shader
 			ChunksVertexShader.MORPHNORMAL,
 			ChunksVertexShader.SKINBASE,
 			ChunksVertexShader.SKINNORMAL,
-			ChunksVertexShader.DEFAULTNORMAL
-		);
-
-		List<String> main2 = Arrays.asList(
-				ChunksVertexShader.MORPHTARGET,
-				ChunksVertexShader.SKINNING,
-				ChunksVertexShader.DEFAULT
-		);
-
-		List<String> main3 = Arrays.asList(
+			ChunksVertexShader.DEFAULTNORMAL,
+			ChunksVertexShader.MORPHTARGET,
+			ChunksVertexShader.SKINNING,
+			ChunksVertexShader.DEFAULT,
 			ChunksVertexShader.WORLDPOS,
 			ChunksVertexShader.ENVMAP,
-			ChunksVertexShader.LIGHTS_PHONG,
+			ChunksVertexShader.LIGHTS_LAMBERT,
 			ChunksVertexShader.SHADOWMAP
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main, main2, main3));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));
 	}
 	
 	@Override
@@ -120,20 +113,17 @@ public final class PhongShader extends Shader
 			ChunksFragmentShader.LIGHTMAP_PARS,
 			ChunksFragmentShader.ENVMAP_PARS,
 			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.LIGHTS_PONG_PARS,
 			ChunksFragmentShader.SHADOWMAP_PARS,
-			ChunksFragmentShader.BUMPMAP_PARS,
-			ChunksFragmentShader.NORMALMAP_PARS,
 			ChunksFragmentShader.SPECULARMAP_PARS
 		);
 		
 		List<String> main = Arrays.asList(
 			ChunksFragmentShader.MAP,
 			ChunksFragmentShader.ALPHA_TEST,
-			ChunksFragmentShader.SPECULARMAP,
-			
-			ChunksFragmentShader.LIGHTS_PONG,
-					
+			ChunksFragmentShader.SPECULARMAP
+		);
+		
+		List<String> main2 = Arrays.asList(
 			ChunksFragmentShader.LIGHTMAP,
 			ChunksFragmentShader.COLOR,
 			ChunksFragmentShader.ENVMAP,
@@ -142,7 +132,7 @@ public final class PhongShader extends Shader
 			ChunksFragmentShader.FOG
 		);
 		
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));		
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main, main2));		
 	}
 
 }

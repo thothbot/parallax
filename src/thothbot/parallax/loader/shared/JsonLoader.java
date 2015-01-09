@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.enums.TextureWrapMode;
-import thothbot.parallax.core.client.shaders.NormalMapShader;
-import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.client.renders.shaders.NormalMapShader;
+import thothbot.parallax.core.client.renders.shaders.Uniform;
 import thothbot.parallax.core.client.textures.CompressedTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;

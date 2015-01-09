@@ -16,39 +16,45 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.client.shaders;
+package thothbot.parallax.core.client.renders.shaders;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Simple depth shader.
+ * Fresnel shader.
  * <p>
- * Based on the three.js code.
+ * based on Nvidia Cg tutorial and three.js code
  * 
  * @author thothbot
  *
  */
-public final class DepthShader extends Shader
+public final class FresnelShader extends Shader 
 {
+
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 
-		@Source("source/depth.fs")
+		@Source("source/fresnel.vs")
+		TextResource getVertexShader();
+
+		@Source("source/fresnel.fs")
 		TextResource getFragmentShader();
 	}
-	
-	public DepthShader() 
+
+	public FresnelShader() 
 	{
 		super(Resources.INSTANCE);
 	}
 
 	@Override
-	protected void initUniforms()
+	protected void initUniforms() 
 	{
-		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0 ));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("mRefractionRatio", new Uniform(Uniform.TYPE.F, 1.02 ));
+		this.addUniform("mFresnelBias", new Uniform(Uniform.TYPE.F, .1 ));
+		this.addUniform("mFresnelPower", new Uniform(Uniform.TYPE.F, 2.0 ));
+		this.addUniform("mFresnelScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("tCube", new Uniform(Uniform.TYPE.T ));
 	}
 }

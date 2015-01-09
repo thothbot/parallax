@@ -23,7 +23,7 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 
-import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.client.renders.shaders.Uniform;
 import thothbot.parallax.core.shared.core.FastMap;
 
 /**

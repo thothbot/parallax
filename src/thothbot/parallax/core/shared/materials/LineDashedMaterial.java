@@ -18,8 +18,8 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import thothbot.parallax.core.client.shaders.DashedShader;
-import thothbot.parallax.core.client.shaders.Shader;
+import thothbot.parallax.core.client.renders.shaders.DashedShader;
+import thothbot.parallax.core.client.renders.shaders.Shader;
 import thothbot.parallax.core.shared.math.Color;
 
 public class LineDashedMaterial extends Material implements 

@@ -16,45 +16,40 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.client.shaders;
+package thothbot.parallax.core.client.renders.shaders;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
 
 /**
- * Fresnel shader.
+ * Normal shader.
  * <p>
- * based on Nvidia Cg tutorial and three.js code
+ * Based on the three.js code.
  * 
  * @author thothbot
  *
  */
-public final class FresnelShader extends Shader 
+public final class NormalShader extends Shader
 {
-
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("source/fresnel.vs")
+		
+		@Source("source/normal.vs")
 		TextResource getVertexShader();
 
-		@Source("source/fresnel.fs")
+		@Source("source/normal.fs")
 		TextResource getFragmentShader();
 	}
 
-	public FresnelShader() 
+	public NormalShader() 
 	{
 		super(Resources.INSTANCE);
 	}
 
 	@Override
-	protected void initUniforms() 
+	protected void initUniforms()
 	{
-		this.addUniform("mRefractionRatio", new Uniform(Uniform.TYPE.F, 1.02 ));
-		this.addUniform("mFresnelBias", new Uniform(Uniform.TYPE.F, .1 ));
-		this.addUniform("mFresnelPower", new Uniform(Uniform.TYPE.F, 2.0 ));
-		this.addUniform("mFresnelScale", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("tCube", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
 	}
 }
