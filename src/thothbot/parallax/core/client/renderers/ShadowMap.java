@@ -36,7 +36,6 @@ import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Gyroscope;
-import thothbot.parallax.core.shared.core.Projector;
 import thothbot.parallax.core.shared.helpers.CameraHelper;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.Light;
@@ -51,8 +50,6 @@ import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.RendererObject;
-import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 public final class ShadowMap extends Plugin 
