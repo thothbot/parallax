@@ -164,7 +164,7 @@ public final class LensFlarePlugin extends Plugin
 	{
 		if(this.objects == null)
 		{
-			this.objects = (List<LensFlare>)(ArrayList)getScene().getChildrenByClass(LensFlare.class, true);
+//			this.objects = (List<LensFlare>)(ArrayList)getScene().getChildrenByClass(LensFlare.class, true);
 		}
 		
 		return (List<LensFlare>)(ArrayList)this.objects;
@@ -244,8 +244,8 @@ public final class LensFlarePlugin extends Plugin
 					flare.getMatrixWorld().getArray().get(13), 
 					flare.getMatrixWorld().getArray().get(14) );
 
-			camera.getMatrixWorldInverse().multiplyVector3( tempPosition );
-			camera.getProjectionMatrix().multiplyVector3( tempPosition );
+//			camera.getMatrixWorldInverse().multiplyVector3( tempPosition );
+//			camera.getProjectionMatrix().multiplyVector3( tempPosition );
 
 			// setup arrays for gl programs
 

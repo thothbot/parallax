@@ -112,7 +112,7 @@ public final class SpritePlugin extends Plugin
 	{
 		if(this.objects == null)
 		{
-			this.objects = (List<Sprite>)(ArrayList)getScene().getChildrenByClass(Sprite.class, true);
+//			this.objects = (List<Sprite>)(ArrayList)getScene().getChildrenByClass(Sprite.class, true);
 		}
 		
 		return this.objects;
@@ -160,7 +160,7 @@ public final class SpritePlugin extends Plugin
 
 		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.elementBuffer );
 
-		gl.uniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
+//		gl.uniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
 
 		gl.activeTexture( TextureUnit.TEXTURE0 );
 		gl.uniform1i( uniforms.get("map").getLocation(), 0 );
@@ -175,8 +175,8 @@ public final class SpritePlugin extends Plugin
 
 			if( ! sprite.isUseScreenCoordinates() ) 
 			{
-				sprite._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), sprite.getMatrixWorld());
-				sprite.setZ( - sprite._modelViewMatrix.getArray().get(14) );
+//				sprite._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), sprite.getMatrixWorld());
+//				sprite.setZ( - sprite._modelViewMatrix.getArray().get(14) );
 			} 
 			else 
 			{
@@ -210,7 +210,7 @@ public final class SpritePlugin extends Plugin
 				{
 					gl.uniform1i( uniforms.get("useScreenCoordinates").getLocation(), 0 );
 					gl.uniform1i( uniforms.get("affectedByDistance").getLocation(), sprite.isAffectedByDistance() ? 1 : 0 );
-					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, sprite._modelViewMatrix.getArray());
+//					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, sprite._modelViewMatrix.getArray());
 				}
 
 				double size = sprite.getMap().getImage().getOffsetWidth() 

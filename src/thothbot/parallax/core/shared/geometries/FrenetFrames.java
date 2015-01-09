@@ -16,11 +16,12 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.shared.curves;
+package thothbot.parallax.core.shared.geometries;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.shared.curves.Curve;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector3;
 
@@ -78,7 +79,7 @@ public class FrenetFrames
 				double aCos =  tangents.get( i - 1 ).dot( tangents.get( i ) );
 				double theta = Math.acos( aCos > 1 ? 1.0 : aCos );
 			
-				mat.makeRotationAxis( vec, theta ).multiplyVector3( normals.get( i ) );
+				normals.get( i ).apply( mat.makeRotationAxis( vec, theta ) );
 			}
 
 			binormals.get( i ).cross( tangents.get( i ), normals.get( i ) );
@@ -97,7 +98,7 @@ public class FrenetFrames
 			for ( int i = 1; i < numpoints; i++ ) 
 			{
 				// twist a little...
-				mat.makeRotationAxis( tangents.get( i ), theta * i ).multiplyVector3( normals.get( i ) );
+				normals.get( i ).apply( mat.makeRotationAxis( tangents.get( i ), theta * i ) );
 				binormals.get( i ).cross( tangents.get( i ), normals.get( i ) );
 			}
 		}

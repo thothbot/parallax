@@ -90,7 +90,7 @@ public class JsonLoader extends Loader
 		parseSkin();
 		parseMorphing();
 
-		geometry.computeCentroids();
+//		geometry.computeCentroids();
 		geometry.computeFaceNormals();
 
 		if ( hasNormals() ) 
@@ -148,7 +148,7 @@ public class JsonLoader extends Loader
 		{
 			this.materials.add( createMaterial( material ) );
 		}
-		geometry.setMaterials(this.materials);
+//		geometry.setMaterials(this.materials);
 	}
 	
 	private Material createMaterial(JsoMaterial jsonMaterial)
@@ -417,7 +417,7 @@ public class JsonLoader extends Loader
 		// 0-index is initialized already
 		for ( int i = 0; i < nUvLayers; i++ ) 
 		{
-			geometry.getFaceUvs().add( i, new ArrayList<Vector2>());
+//			geometry.getFaceUvs().add( i, new ArrayList<Vector2>());
 			geometry.getFaceVertexUvs().add( i, new ArrayList<List<Vector2>>());
 		}
 		
@@ -441,12 +441,12 @@ public class JsonLoader extends Loader
 			boolean hasFaceVertexColor  = isBitSet( type, 7 );
 
 
-			Face3 face;
+			Face3 face = null;
 			int nVertices;
 			if ( isQuad ) 
 			{
 				nVertices = 4;
-				face = new Face4(faces.get(offset++), faces.get(offset++), faces.get(offset++),faces.get(offset++));
+//				face = new Face4(faces.get(offset++), faces.get(offset++), faces.get(offset++),faces.get(offset++));
 			} 
 			else 
 			{
@@ -468,7 +468,7 @@ public class JsonLoader extends Loader
 					int uvIndex = faces.get(offset++);
 					Vector2 UV = new Vector2( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1));
 
-					this.geometry.getFaceUvs().get(i).add(UV);
+//					this.geometry.getFaceUvs().get(i).add(UV);
 				}
 			}
 
@@ -486,7 +486,7 @@ public class JsonLoader extends Loader
 						UVs.add( new Vector2( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1) ) );
 					}
 
-					geometry.getFaceVertexUvs().get(i).add(UVs);
+//					geometry.getFaceVertexUvs().get(i).add(UVs);
 				}
 			}
 

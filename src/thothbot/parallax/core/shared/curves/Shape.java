@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.core.ExtrudeGeometry;
 import thothbot.parallax.core.shared.math.Vector;
 import thothbot.parallax.core.shared.math.Vector2;
 
@@ -58,10 +57,10 @@ public class Shape extends Path
 	/*
 	 * Convenience method to return ExtrudeGeometry
 	 */
-	public ExtrudeGeometry extrude( ExtrudeGeometry.ExtrudeGeometryParameters options ) 
-	{
-		return new ExtrudeGeometry( this, options );
-	}
+//	public ExtrudeGeometry extrude( ExtrudeGeometry.ExtrudeGeometryParameters options ) 
+//	{
+//		return new ExtrudeGeometry( this, options );
+//	}
 
 	/*
 	 * Get points of holes

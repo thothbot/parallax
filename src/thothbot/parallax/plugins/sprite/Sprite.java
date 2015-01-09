@@ -90,7 +90,7 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 		this.affectedByDistance = !this.useScreenCoordinates;
 		this.scaleByViewport = !this.affectedByDistance;
 
-		this.rotation3d = this.rotation;
+//		this.rotation3d = this.rotation;
 		this.rotationFactor = 0;
 
 		this.uvOffset = new Vector2( 0, 0 );
@@ -233,12 +233,12 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 		this.matrix.setPosition( this.position );
 
 		this.rotation3d.set( 0, 0, this.rotationFactor );
-		this.matrix.setRotationFromEuler( this.rotation3d );
+//		this.matrix.setRotationFromEuler( this.rotation3d );
 
 		if ( this.scale.getX() != 1 || this.scale.getY() != 1 ) 
 		{
 			this.matrix.scale( this.scale );
-			this.boundRadiusScale = Math.max( this.scale.getX(), this.scale.getY() );
+//			this.boundRadiusScale = Math.max( this.scale.getX(), this.scale.getY() );
 		}
 
 		this.matrixWorldNeedsUpdate = true;

@@ -71,7 +71,7 @@ public class RenderPass extends Pass
 	@Override
 	public void render(Postprocessing postprocessing, double delta, boolean maskActive)
 	{
-		this.scene.overrideMaterial = this.overrideMaterial;
+//		this.scene.overrideMaterial = this.overrideMaterial;
 
 		if ( this.clearColor != null ) 
 		{
@@ -88,6 +88,6 @@ public class RenderPass extends Pass
 		if ( this.clearColor != null)
 			postprocessing.getRenderer().setClearColor( this.oldClearColor, this.oldClearAlpha );
 
-		this.scene.overrideMaterial = null;
+//		this.scene.overrideMaterial = null;
 	}
 }

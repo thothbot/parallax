@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.materials.HasShading;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
@@ -86,7 +87,7 @@ public class DaeEffect extends DaeIdElement
 				}
 			}
 			
-			this.material.setShading(Material.SHADING.SMOOTH);
+			((HasShading)this.material).setShading(Material.SHADING.SMOOTH);
 		}
 
 		return this.material;
