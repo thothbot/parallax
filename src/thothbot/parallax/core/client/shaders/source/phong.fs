@@ -1,3 +1,5 @@
+#define PHONG
+
 uniform vec3 diffuse;
 uniform float opacity;
 
@@ -9,7 +11,7 @@ uniform float shininess;
 [*]
 			
 void main() {
-	gl_FragColor = vec4( vec3 ( 1.0 ), opacity );
+	gl_FragColor = vec4( vec3( 1.0 ), opacity );
 				
 [*]
 				

@@ -9,7 +9,7 @@ void main() {
 			
 [*]
 			
-vNormal = transformedNormal;
+vNormal = normalize( transformedNormal );
 
 [*]
 
