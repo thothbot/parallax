@@ -25,18 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.Messages.Offset;
-
-import thothbot.parallax.core.client.gl2.WebGLBuffer;
-import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int32Array;
-import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.client.gl2.enums.BufferTarget;
-import thothbot.parallax.core.client.gl2.enums.BufferUsage;
-import thothbot.parallax.core.client.shaders.Attribute;
-import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
@@ -46,6 +36,8 @@ import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Sphere;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
+
+import com.google.gwt.core.client.GWT;
 
 public class BufferGeometry extends AbstractGeometry
 {

@@ -125,16 +125,27 @@ public final class Scene extends Object3D
 //	{
 //		return this.lights;
 //	}
-//	
-//	/**
-//	 * Get fogAbstract associated with the Scene.
-//	 * 
-//	 * @return the fogAbstract
-//	 */
-//	public AbstractFog getFog()
-//	{
-//		return this.fogAbstract;
-//	}
+	
+	/**
+	 * Get fogAbstract associated with the Scene.
+	 * 
+	 * @return the fogAbstract
+	 */
+	public AbstractFog getFog()
+	{
+		return this.fog;
+	}
+	
+	/**
+	 * Set the fogAbstract to the Scene.
+	 * 
+	 * @param fogAbstract the FogAbstract
+	 */
+	public void setFog(AbstractFog fog)
+	{
+		this.fog = fog;
+	}
+
 //	
 //	/**
 //	 * Return the history list of Dimensional objects added to the list.
@@ -154,16 +165,6 @@ public final class Scene extends Object3D
 //	public ArrayList<DimensionalObject> getObjectsRemoved()
 //	{
 //		return this.objectsRemoved;
-//	}
-//	
-//	/**
-//	 * Set the fogAbstract to the Scene.
-//	 * 
-//	 * @param fogAbstract the FogAbstract
-//	 */
-//	public void setFog(AbstractFog fogAbstract)
-//	{
-//		this.fogAbstract = fogAbstract;
 //	}
 //	
 //	/** 
