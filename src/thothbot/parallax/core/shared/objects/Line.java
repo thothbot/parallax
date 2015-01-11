@@ -205,30 +205,32 @@ public class Line extends GeometryObject
 //			geometry.setColorsNeedUpdate(true);
 //		}
 //	}
-//	
-//	private void createBuffers ( WebGLRenderer renderer, Geometry geometry ) 
-//	{
-//		WebGLRenderingContext gl = renderer.getGL();
-//		WebGlRendererInfo info = renderer.getInfo();
-//		
-//		geometry.__webglVertexBuffer = gl.createBuffer();
-//		geometry.__webglColorBuffer = gl.createBuffer();
-//
-//		info.getMemory().geometries ++;
-//	}
-//
-//	private void initBuffers (WebGLRenderingContext gl, Geometry geometry) 
-//	{
-//		int nvertices = geometry.getVertices().size();
-//
-//		geometry.setWebGlVertexArray( Float32Array.create( nvertices * 3 ) );
-//		geometry.setWebGlColorArray( Float32Array.create( nvertices * 3 ) );
-//
-//		geometry.__webglLineCount = nvertices;
-//
-//		initCustomAttributes ( gl, geometry );
-//	}
-//
+	
+	private void createBuffers ( WebGLRenderer renderer, Geometry geometry ) 
+	{
+		WebGLRenderingContext gl = renderer.getGL();
+		WebGlRendererInfo info = renderer.getInfo();
+		
+		geometry.__webglVertexBuffer = gl.createBuffer();
+		geometry.__webglColorBuffer = gl.createBuffer();
+		geometry.__webglLineDistanceBuffer = gl.createBuffer();
+
+		info.getMemory().geometries ++;
+	}
+
+	private void initBuffers (WebGLRenderingContext gl, Geometry geometry) 
+	{
+		int nvertices = geometry.getVertices().size();
+
+		geometry.__vertexArray = Float32Array.create( nvertices * 3 );
+		geometry.__colorArray = Float32Array.create( nvertices * 3 );
+		geometry.__lineDistanceArray = Float32Array.create( nvertices * 3 );
+
+		geometry.__webglLineCount = nvertices;
+
+		initCustomAttributes ( gl, geometry );
+	}
+
 //	@Override
 //	public void setBuffer(WebGLRenderer renderer)
 //	{

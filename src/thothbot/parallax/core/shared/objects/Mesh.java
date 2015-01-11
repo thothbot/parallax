@@ -641,43 +641,45 @@ public class Mesh extends GeometryObject
 //
 //		geometryGroup.setArrayInitialized(true);
 //	}
-//
-//	// createMeshBuffers
-//	private void createBuffers(WebGLRenderer renderer, BufferGeometry geometryGroup)
-//	{
-//		WebGLRenderingContext gl = renderer.getGL();
-//		
-//		geometryGroup.__webglVertexBuffer = gl.createBuffer();
-//		geometryGroup.__webglNormalBuffer = gl.createBuffer();
-//		geometryGroup.__webglTangentBuffer = gl.createBuffer();
-//		geometryGroup.__webglColorBuffer = gl.createBuffer();
-//		geometryGroup.__webglUVBuffer = gl.createBuffer();
-//		geometryGroup.__webglUV2Buffer = gl.createBuffer();
-//
-//		geometryGroup.__webglSkinIndicesBuffer = gl.createBuffer();
-//		geometryGroup.__webglSkinWeightsBuffer = gl.createBuffer();
-//
-//		geometryGroup.__webglIndexBuffer = gl.createBuffer();
-//		geometryGroup.__webglFaceBuffer = gl.createBuffer();
-//		geometryGroup.__webglLineBuffer = gl.createBuffer();
-//
-//		if (geometryGroup.numMorphTargets != 0) {
-//			geometryGroup.__webglMorphTargetsBuffers = new ArrayList<WebGLBuffer>();
-//
-//			for (int m = 0; m < geometryGroup.numMorphTargets; m++) {
-//				geometryGroup.__webglMorphTargetsBuffers.add(gl.createBuffer());
-//			}
-//		}
-//
-//		if (geometryGroup.numMorphNormals != 0) {
-//			geometryGroup.__webglMorphNormalsBuffers = new ArrayList<WebGLBuffer>();
-//
-//			for (int m = 0; m < geometryGroup.numMorphNormals; m++) {
-//				geometryGroup.__webglMorphNormalsBuffers.add(gl.createBuffer());
-//			}
-//		}
-//	}
-//
+
+	// createMeshBuffers
+	private void createBuffers(WebGLRenderer renderer, BufferGeometry geometryGroup)
+	{
+		WebGLRenderingContext gl = renderer.getGL();
+		WebGlRendererInfo info = renderer.getInfo();
+
+		geometryGroup.__webglVertexBuffer = gl.createBuffer();
+		geometryGroup.__webglNormalBuffer = gl.createBuffer();
+		geometryGroup.__webglTangentBuffer = gl.createBuffer();
+		geometryGroup.__webglColorBuffer = gl.createBuffer();
+		geometryGroup.__webglUVBuffer = gl.createBuffer();
+		geometryGroup.__webglUV2Buffer = gl.createBuffer();
+
+		geometryGroup.__webglSkinIndicesBuffer = gl.createBuffer();
+		geometryGroup.__webglSkinWeightsBuffer = gl.createBuffer();
+
+		geometryGroup.__webglFaceBuffer = gl.createBuffer();
+		geometryGroup.__webglLineBuffer = gl.createBuffer();
+
+		if (geometryGroup.numMorphTargets != 0) {
+			geometryGroup.__webglMorphTargetsBuffers = new ArrayList<WebGLBuffer>();
+
+			for (int m = 0; m < geometryGroup.numMorphTargets; m++) {
+				geometryGroup.__webglMorphTargetsBuffers.add(gl.createBuffer());
+			}
+		}
+
+		if (geometryGroup.numMorphNormals != 0) {
+			geometryGroup.__webglMorphNormalsBuffers = new ArrayList<WebGLBuffer>();
+
+			for (int m = 0; m < geometryGroup.numMorphNormals; m++) {
+				geometryGroup.__webglMorphNormalsBuffers.add(gl.createBuffer());
+			}
+		}
+		
+		info.getMemory().geometries ++;
+	}
+
 //	@Override
 //	public void setBuffer(WebGLRenderer renderer) 
 //	{
@@ -2209,53 +2211,53 @@ public class Mesh extends GeometryObject
 //		 if ( !geometry.isDynamic() ) 
 //			 geometryGroup.dispose();
 //	}
-//	
-//	@Override
-//	public void deleteBuffers(WebGLRenderer renderer) 
-//	{
-//		for ( GeometryGroup geometryGroup : geometry.getGeometryGroupsCache().values() )
-//		{
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglVertexBuffer );
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglNormalBuffer );
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglTangentBuffer );
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglColorBuffer );
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglUVBuffer );
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglUV2Buffer );
-//
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinIndicesBuffer );
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinWeightsBuffer );
-//
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglFaceBuffer );
-//			renderer.getGL().deleteBuffer( geometryGroup.__webglLineBuffer );
-//
-//			if ( geometryGroup.numMorphTargets != 0) 
-//			{
-//				for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) 
-//				{
-//					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphTargetsBuffers.get( m ) );
-//				}
-//			}
-//
-//			if ( geometryGroup.numMorphNormals != 0 ) 
-//			{
-//				for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) 
-//				{
-//					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphNormalsBuffers.get( m ) );
-//				}
-//			}
-//
-//
-//			if ( geometryGroup.__webglCustomAttributesList != null) 
-//			{
-//				for ( Attribute att : geometryGroup.__webglCustomAttributesList ) 
-//				{
-//					renderer.getGL().deleteBuffer( att.buffer );
-//				}
-//			}
-//
-//			renderer.getInfo().getMemory().geometries --;
-//		}
-//	}
+	
+	@Override
+	public void deleteBuffers(WebGLRenderer renderer) 
+	{
+		for ( GeometryGroup geometryGroup : geometry.getGeometryGroupsCache().values() )
+		{
+			renderer.getGL().deleteBuffer( geometryGroup.__webglVertexBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglNormalBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglTangentBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglColorBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglUVBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglUV2Buffer );
+
+			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinIndicesBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinWeightsBuffer );
+
+			renderer.getGL().deleteBuffer( geometryGroup.__webglFaceBuffer );
+			renderer.getGL().deleteBuffer( geometryGroup.__webglLineBuffer );
+
+			if ( geometryGroup.numMorphTargets != 0) 
+			{
+				for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) 
+				{
+					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphTargetsBuffers.get( m ) );
+				}
+			}
+
+			if ( geometryGroup.numMorphNormals != 0 ) 
+			{
+				for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) 
+				{
+					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphNormalsBuffers.get( m ) );
+				}
+			}
+
+
+			if ( geometryGroup.__webglCustomAttributesList != null) 
+			{
+				for ( Attribute att : geometryGroup.__webglCustomAttributesList ) 
+				{
+					renderer.getGL().deleteBuffer( att.buffer );
+				}
+			}
+
+			renderer.getInfo().getMemory().geometries --;
+		}
+	}
 //
 //	private void sortFacesByMaterial ( Geometry geometry ) 
 //	{

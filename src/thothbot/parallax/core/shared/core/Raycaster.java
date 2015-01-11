@@ -31,7 +31,7 @@ import thothbot.parallax.core.shared.math.Sphere;
 import thothbot.parallax.core.shared.math.Triangle;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.Particle;
+import thothbot.parallax.core.shared.objects.PointCloud;
 
 public class Raycaster 
 {
@@ -43,6 +43,7 @@ public class Raycaster
 		// this works because the original ray was normalized, and the transformed localRay wasn't
 		public double distance;	
 		public Vector3 point;
+		public double distanceToRay;
 		public Face3 face;
 		public int faceIndex;
 		public GeometryObject object;

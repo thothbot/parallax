@@ -18,6 +18,11 @@
 
 package thothbot.parallax.core.shared.core;
 
+import java.util.List;
+
+import thothbot.parallax.core.client.gl2.WebGLBuffer;
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Sphere;
 
@@ -34,6 +39,43 @@ public abstract class AbstractGeometry
 
 	// Bounding sphere.
 	protected Sphere boundingSphere = null;
+	
+	public Float32Array __colorArray;
+	public Float32Array __vertexArray;
+	public Float32Array __normalArray;
+	public Float32Array __tangentArray;
+	public Float32Array __uvArray;
+	public Float32Array __uv2Array;
+	
+	public Float32Array __lineDistanceArray;
+	
+	public WebGLBuffer __webglColorBuffer;
+	public WebGLBuffer __webglVertexBuffer;
+	public WebGLBuffer __webglNormalBuffer;
+	public WebGLBuffer __webglTangentBuffer;
+	public WebGLBuffer __webglUVBuffer;
+	public WebGLBuffer __webglUV2Buffer;
+	
+	public WebGLBuffer __webglLineDistanceBuffer;
+	
+	public WebGLBuffer __webglSkinIndicesBuffer;
+	public WebGLBuffer __webglSkinWeightsBuffer;
+		
+	public WebGLBuffer __webglFaceBuffer;
+	public WebGLBuffer __webglLineBuffer;
+	
+	public int numMorphTargets;
+	public List<WebGLBuffer> __webglMorphTargetsBuffers;
+	
+	public int numMorphNormals;
+	public List<WebGLBuffer> __webglMorphNormalsBuffers;
+	
+	public List<Attribute> __webglCustomAttributesList;
+	
+	public int __webglParticleCount;
+	public int __webglLineCount;
+	public int __webglVertexCount;
+	public int __webglFaceCount;
 		
 	public AbstractGeometry() {
 		this.id = BufferGeometry.Counter++;

@@ -83,40 +83,10 @@ public class BufferGeometry extends AbstractGeometry
 //	private Uint16Array webGlFaceArray;
 //	private Uint16Array webGlLineArray;
 //	
-//	private Float32Array webGlColorArray;
-//	private Float32Array webGlVertexArray;
-//	private Float32Array webGlNormalArray;
-//	private Float32Array webGlTangentArray;
-//	private Float32Array webGlUvArray;
-//	private Float32Array webGlUv2Array;
 //	
 //	public WebGLBuffer __webglIndexBuffer;
-//	public WebGLBuffer __webglFaceBuffer;
-//	public WebGLBuffer __webglLineBuffer;
-//	
-//	public WebGLBuffer __webglColorBuffer;
-//	public WebGLBuffer __webglVertexBuffer;
-//	public WebGLBuffer __webglNormalBuffer;
-//	public WebGLBuffer __webglTangentBuffer;
-//	public WebGLBuffer __webglUVBuffer;
-//	public WebGLBuffer __webglUV2Buffer;
-//	
-//	public WebGLBuffer __webglSkinIndicesBuffer;
-//	public WebGLBuffer __webglSkinWeightsBuffer;
-//		
-//	public int numMorphTargets;
-//	public List<WebGLBuffer> __webglMorphTargetsBuffers;
-//	
-//	public int numMorphNormals;
-//	public List<WebGLBuffer> __webglMorphNormalsBuffers;
-//	
-//	public List<Attribute> __webglCustomAttributesList;
-//	
-//	public int __webglParticleCount;
-//	public int __webglLineCount;
-//	public int __webglVertexCount;
-//	public int __webglFaceCount;
-		
+	
+	
 	public BufferGeometry() 
 	{
 		super();

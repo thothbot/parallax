@@ -91,6 +91,9 @@ public class Object3D
 	protected boolean isFrustumCulled = true;
 	
 	protected ObjectHandler handler;
+	
+	
+	public boolean isWebglActive;
 		
 	public Object3D() 
 	{

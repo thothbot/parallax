@@ -55,6 +55,7 @@ import thothbot.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
 import thothbot.parallax.core.client.gl2.extension.OESStandardDerivatives;
 import thothbot.parallax.core.client.gl2.extension.OESTextureFloat;
 import thothbot.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;
+import thothbot.parallax.core.client.renderers.WebGLExtensions.Id;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
 import thothbot.parallax.core.client.shaders.Shader;
@@ -245,34 +246,44 @@ public class WebGLRenderer implements HasEventBus
 		this.GPUmaxCubemapSize    = gl.getParameteri(WebGLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
 
 		this.isGPUsupportsVertexTextures = ( this.GPUmaxVertexTextures > 0 ); 
-		
-		this.GLExtensionTextureFloat = (OESTextureFloat) gl.getExtension("OES_texture_float");
-		if(this.GLExtensionTextureFloat == null)
-			Log.warn( "WebGLRenderer: Float textures not supported." );
-		else
-			this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures;
-		
-		this.GLExtensionStandardDerivatives = (OESStandardDerivatives) gl.getExtension( "OES_standard_derivatives" );
-		if(this.GLExtensionStandardDerivatives == null)
-			Log.warn( "WebGLRenderer: Standard derivatives not supported." );
+		this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures && WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float) != null );
 
-		this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "EXT_texture_filter_anisotropic" );
-		if(this.GLExtensionTextureFilterAnisotropic == null)
-			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "MOZ_EXT_texture_filter_anisotropic" );
-		if(this.GLExtensionTextureFilterAnisotropic == null)
-			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "WEBKIT_EXT_texture_filter_anisotropic" );
-		if(this.GLExtensionTextureFilterAnisotropic == null)
-			Log.warn( "WebGLRenderer: Anisotropic texture filtering not supported." );
-		else
-			this.GPUmaxAnisotropy = getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);	
+		//
+
+//		var _vertexShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( gl.VERTEX_SHADER, gl.HIGH_FLOAT );
+//		var _vertexShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( gl.VERTEX_SHADER, gl.MEDIUM_FLOAT );
+//		var _vertexShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( gl.VERTEX_SHADER, gl.LOW_FLOAT );
+//
+//		var _fragmentShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( gl.FRAGMENT_SHADER, gl.HIGH_FLOAT );
+//		var _fragmentShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT );
+//		var _fragmentShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( gl.FRAGMENT_SHADER, gl.LOW_FLOAT );
+
 		
-		this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
-		if(this.GLExtensionCompressedTextureS3TC == null)
-			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
-		if(this.GLExtensionCompressedTextureS3TC == null)
-			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
-		if(this.GLExtensionCompressedTextureS3TC == null)
-			Log.warn( "WebGLRenderer: S3TC compressed textures not supported." );
+		this.GLExtensionTextureFloat = (OESTextureFloat) WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float);
+		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float_linear);
+		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_standard_derivatives);
+		
+//		this.GLExtensionStandardDerivatives = (OESStandardDerivatives) gl.getExtension( "OES_standard_derivatives" );
+//		if(this.GLExtensionStandardDerivatives == null)
+//			Log.warn( "WebGLRenderer: Standard derivatives not supported." );
+//
+//		this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "EXT_texture_filter_anisotropic" );
+//		if(this.GLExtensionTextureFilterAnisotropic == null)
+//			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "MOZ_EXT_texture_filter_anisotropic" );
+//		if(this.GLExtensionTextureFilterAnisotropic == null)
+//			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "WEBKIT_EXT_texture_filter_anisotropic" );
+//		if(this.GLExtensionTextureFilterAnisotropic == null)
+//			Log.warn( "WebGLRenderer: Anisotropic texture filtering not supported." );
+//		else
+//			this.GPUmaxAnisotropy = getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);	
+//		
+//		this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
+//		if(this.GLExtensionCompressedTextureS3TC == null)
+//			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
+//		if(this.GLExtensionCompressedTextureS3TC == null)
+//			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
+//		if(this.GLExtensionCompressedTextureS3TC == null)
+//			Log.warn( "WebGLRenderer: S3TC compressed textures not supported." );
 
 
 		setSize(width, height);
@@ -513,6 +524,43 @@ public class WebGLRenderer implements HasEventBus
 	{
 		return this.GPUmaxVertexTextures > 0;
 	}
+	
+	public boolean supportsFloatTextures() 
+	{
+		return WebGLExtensions.get( this.gl, Id.OES_texture_float ) != null;
+	}
+
+	public boolean supportsStandardDerivatives() 
+	{
+		return WebGLExtensions.get( this.gl, Id.OES_standard_derivatives ) != null;
+	}
+
+	public boolean supportsCompressedTextureS3TC() 
+	{
+		return WebGLExtensions.get( this.gl, Id.WEBGL_compressed_texture_s3tc ) != null;
+	}
+
+	public boolean supportsCompressedTexturePVRTC() 
+	{
+		return WebGLExtensions.get( this.gl, Id.WEBGL_compressed_texture_pvrtc ) != null;
+	}
+
+	public boolean supportsBlendMinMax() 
+	{
+		return WebGLExtensions.get( this.gl, Id.EXT_blend_minmax ) != null;
+	}
+
+	public int getMaxAnisotropy() 
+	{
+		if(this.GPUmaxAnisotropy > 0)
+			return this.GPUmaxAnisotropy;
+
+		if( WebGLExtensions.get( this.gl, Id.EXT_texture_filter_anisotropic ) != null)
+			this.GPUmaxAnisotropy = getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+
+		return this.GPUmaxAnisotropy;
+	}
+
 
 	/**
 	 * Sets the sizes and also sets {@link #setViewport(int, int, int, int)} size.
@@ -591,27 +639,10 @@ public class WebGLRenderer implements HasEventBus
 	 * 
 	 * @param hex the clear color value.
 	 */
-	public void setClearColorHex( int hex )
+	public void setClearColor( int hex, double alpha  )
 	{
-		setClearColorHex(hex, 1.0);
+		setClearColor(new Color(hex), alpha);
 	}
-
-	/**
-	 * Sets the the background color, using hex for the color and alpha for the opacity.<br>
-	 * Default clear clolor is 0x000000 - black.<br>
-	 * Default clear alpha is 1.0 - opaque.<br>
-	 * 
-	 * @param hex   the clear color value.
-	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
-	 */
-	public void setClearColorHex( int hex, double alpha ) 
-	{
-		this.clearColor.setHex( hex );
-		this.clearAlpha = alpha;
-
-		getGL().clearColor( this.clearColor.getR(), this.clearColor.getG(), this.clearColor.getB(), this.clearAlpha );
-	}
-	
 
 	/**
 	 * Sets the the background color, using {@link Color} for the color and alpha for the opacity.
@@ -672,6 +703,22 @@ public class WebGLRenderer implements HasEventBus
 
 		getGL().clear( bits );
 	}
+	
+	public void clearColor() 
+	{
+		getGL().clear( ClearBufferMask.COLOR_BUFFER_BIT.getValue() );
+	}
+
+	public void clearDepth() 
+	{
+		getGL().clear( ClearBufferMask.DEPTH_BUFFER_BIT.getValue() );
+	}
+
+	public void clearStencil() 
+	{
+		getGL().clear( ClearBufferMask.STENCIL_BUFFER_BIT.getValue() );
+	}
+
 
 	/**
 	 * Clear {@link RenderTargetTexture} and GL buffers.

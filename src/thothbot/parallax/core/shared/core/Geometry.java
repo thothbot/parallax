@@ -116,6 +116,7 @@ public class Geometry extends AbstractGeometry
 	public boolean colorsNeedUpdate = false;
 	public boolean uvsNeedUpdate = false;
 	public boolean tangentsNeedUpdate = false;
+	public boolean morphTargetsNeedUpdate = false;
 	public boolean lineDistancesNeedUpdate = false;
 
 	public boolean groupsNeedUpdate = false;

@@ -36,7 +36,7 @@ public final class WebGLExtensions {
 		EXT_frag_depth
 	};
 
-	public WebGLExtension get(WebGLRenderingContext gl, Id id) {
+	public static WebGLExtension get(WebGLRenderingContext gl, Id id) {
 		
 		WebGLExtension extension = null;
 		
