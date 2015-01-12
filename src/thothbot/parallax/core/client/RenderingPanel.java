@@ -164,7 +164,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 
 			canvas = loadCanvas();
 			this.renderer = new WebGLRenderer(canvas.getGL(), canvas.getWidth(), canvas.getHeight());
-			this.renderer.setClearColorHex(this.clearColor, this.clearAlpha);
+			this.renderer.setClearColor(this.clearColor, this.clearAlpha);
 		}
 	}
 	
@@ -340,7 +340,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 			this.getElement().getStyle().setOpacity(this.clearAlpha);	
 		
 		if(this.renderer != null)
-			this.renderer.setClearColorHex(this.clearColor, this.clearAlpha);
+			this.renderer.setClearColor(this.clearColor, this.clearAlpha);
 	}
 	
 	private static String cssColor(int color)

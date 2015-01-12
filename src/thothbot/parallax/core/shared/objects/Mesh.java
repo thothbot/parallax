@@ -74,9 +74,9 @@ import com.google.gwt.core.client.GWT;
 public class Mesh extends GeometryObject
 {
 //	private Boolean overdraw;
-	private Integer morphTargetBase = null;
-	private List<Double> morphTargetInfluences;
-	private List<Integer> morphTargetForcedOrder;
+	public Integer morphTargetBase = null;
+	public List<Double> morphTargetInfluences;
+	public List<Integer> morphTargetForcedOrder;
 	private Map<String, Integer> morphTargetDictionary;
 	// TODO: check morphTargetInfluences
 	private List<Double> morphInfluences; 

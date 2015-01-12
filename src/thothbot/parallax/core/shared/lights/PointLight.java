@@ -21,6 +21,7 @@ package thothbot.parallax.core.shared.lights;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.RendererLights;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
@@ -109,5 +110,31 @@ public class PointLight extends Light
 
 		return light;
 
+	}
+	
+	@Override
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
+	{
+		Float32Array pointColors     = zlights.point.colors;
+		Float32Array pointPositions  = zlights.point.positions;
+		Float32Array pointDistances  = zlights.point.distances;
+		
+		double intensity = getIntensity();
+		double distance = getDistance();
+		int pointOffset = pointColors.getLength();
+
+		if ( isGammaInput ) 
+			setColorGamma( pointColors, pointOffset, getColor(), intensity ); 
+		else 
+			setColorLinear( pointColors, pointOffset, getColor(), intensity );
+
+		Vector3 position = new Vector3();
+		position.setFromMatrixPosition( getMatrixWorld() );
+
+		pointPositions.set(  pointOffset,     position.getX() );
+		pointPositions.set(  pointOffset + 1, position.getY() );
+		pointPositions.set(  pointOffset + 2, position.getZ() );
+
+		pointDistances.set( pointOffset / 3, distance );
 	}
 }

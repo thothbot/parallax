@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.RendererLights;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
@@ -243,5 +244,32 @@ public class DirectionalLight extends ShadowLight
 
 		return light;
 
+	}
+	
+	@Override
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
+	{
+		Float32Array dirColors     = zlights.directional.colors;
+		Float32Array dirPositions  = zlights.directional.positions;
+
+		double intensity = getIntensity();
+
+		int dirOffset = dirColors.getLength();
+
+		if ( isGammaInput )
+			setColorGamma( dirColors, dirOffset, getColor(), intensity ); 
+		else 
+			setColorLinear( dirColors, dirOffset, getColor(), intensity );
+
+		Vector3 position = new Vector3();
+		position.setFromMatrixPosition(  getMatrixWorld());
+		Vector3 _vector3 = new Vector3();
+		_vector3.setFromMatrixPosition( getTarget().getMatrixWorld() );
+		position.sub( _vector3 );
+		position.normalize();
+
+		dirPositions.set( dirOffset, position.getX());
+		dirPositions.set( dirOffset + 1, position.getY());
+		dirPositions.set( dirOffset + 2, position.getZ());
 	}
 }

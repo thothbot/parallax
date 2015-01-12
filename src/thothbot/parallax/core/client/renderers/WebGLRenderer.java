@@ -35,6 +35,7 @@ import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int16Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
@@ -95,6 +96,7 @@ import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.math.Vector4;
 import thothbot.parallax.core.shared.objects.Mesh;
+import thothbot.parallax.core.shared.objects.PointCloud;
 import thothbot.parallax.core.shared.scenes.AbstractFog;
 import thothbot.parallax.core.shared.scenes.Fog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
@@ -193,17 +195,22 @@ public class WebGLRenderer implements HasEventBus
 	
 	// frustum
 
-	private Frustum frustum;
+	private Frustum _frustum = new Frustum();
 
 	 // camera matrices cache
-	private Matrix4 cache_projScreenMatrix;
-	private Vector4 cache_vector3;
+
+	private Matrix4 _projScreenMatrix = new Matrix4();
+	private Matrix4 _projScreenMatrixPS = new Matrix4();
+	
+	private Vector3 _vector3 = new Vector3();
 
 	// light arrays cache
 	private boolean isLightsNeedUpdate = true;
 	private RendererLights cache_lights;
 	
 	public Map<String, Shader> _programs;
+	
+	private List<Light> lights = new ArrayList<Light>();
 
 	// GPU capabilities
 	private int GPUmaxTextures;
@@ -220,6 +227,9 @@ public class WebGLRenderer implements HasEventBus
 	private ExtTextureFilterAnisotropic GLExtensionTextureFilterAnisotropic;
 	private WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC;
 	
+	private Uint8Array _newAttributes = Uint8Array.create( 16 );
+	private Uint8Array _enabledAttributes = Uint8Array.create( 16 );
+	
 	/**
 	 * The constructor will create renderer for the {@link Canvas3d} widget.
 	 * 
@@ -233,10 +243,6 @@ public class WebGLRenderer implements HasEventBus
 
 		this.setInfo(new WebGlRendererInfo());
 		
-		this.frustum = new Frustum();
-		
-		this.cache_projScreenMatrix = new Matrix4();
-		this.cache_vector3          = new Vector4();
 		this.cache_lights           = new RendererLights();
 		this._programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
@@ -247,7 +253,7 @@ public class WebGLRenderer implements HasEventBus
 		this.GPUmaxCubemapSize    = gl.getParameteri(WebGLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
 
 		this.isGPUsupportsVertexTextures = ( this.GPUmaxVertexTextures > 0 ); 
-		this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures && WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float) != null );
+		this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures && WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float) != null ;
 
 		//
 
@@ -731,6 +737,45 @@ public class WebGLRenderer implements HasEventBus
 		clear( color, depth, stencil );
 	}
 	
+	private void initAttributes() {
+
+		for ( int i = 0, l = _newAttributes.getLength(); i < l; i ++ ) {
+
+			_newAttributes.set( i, 0);
+
+		}
+
+	}
+
+	private void enableAttribute( Integer attribute ) {
+
+		_newAttributes.set( attribute,  1);
+
+		if ( _enabledAttributes.get( attribute ) == 0 ) {
+
+			getGL().enableVertexAttribArray( attribute );
+			_enabledAttributes.set( attribute, 1);
+
+		}
+
+	}
+
+	private void  disableUnusedAttributes() {
+
+		for ( int i = 0, l = _enabledAttributes.getLength(); i < l; i ++ ) {
+
+			if ( _enabledAttributes.get( i ) != _newAttributes.get( i ) ) {
+
+				getGL().disableVertexAttribArray( i );
+				_enabledAttributes.set( i, 0);
+
+			}
+
+		}
+
+	}
+
+	
 	/**
 	 * Morph Targets Buffer initialization
 	 */
@@ -740,36 +785,40 @@ public class WebGLRenderer implements HasEventBus
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		Map<String, Uniform> uniforms = material.getShader().getUniforms();
 
-		if ( object.getMorphTargetBase() != - 1 ) 
+		if ( object.morphTargetBase != - 1 && attributes.get("position") >= 0) 
 		{
-			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( object.getMorphTargetBase() ) );
+			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( object.morphTargetBase ) );
+			enableAttribute( attributes.get("position") );
 			getGL().vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, 0 );
 
 		} 
 		else if ( attributes.get("position") >= 0 ) 
 		{
 			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglVertexBuffer );
+			enableAttribute( attributes.get("position") );
 			getGL().vertexAttribPointer( attributes.get("position"), 3, DataType.FLOAT, false, 0, 0 );
 		}
 
-		if ( object.getMorphTargetForcedOrder().size() > 0 ) 
+		if ( object.morphTargetForcedOrder.size() > 0 ) 
 		{
 			// set forced order
 
 			int m = 0;
-			List<Integer> order = object.getMorphTargetForcedOrder();
-			List<Double> influences = object.getMorphTargetInfluences();
+			List<Integer> order = object.morphTargetForcedOrder;
+			List<Double> influences = object.morphTargetInfluences;
 
-			while ( material instanceof HasSkinning 
-					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() 
+			while ( material instanceof ShaderMaterial 
+					&& m < ((ShaderMaterial)material).getNumSupportedMorphTargets() 
 					&& m < order.size() 
 			) {
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( order.get( m ) ) );
+				enableAttribute( attributes.get("morphTarget" + m ) );
 				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, DataType.FLOAT, false, 0, 0 );
 
 				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals()) 
 				{
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( order.get( m ) ) );
+					enableAttribute(  attributes.get("morphNormal" + m ) );
 					getGL().vertexAttribPointer( attributes.get("morphNormal" + m ), 3, DataType.FLOAT, false, 0, 0 );
 				}
 
@@ -785,14 +834,14 @@ public class WebGLRenderer implements HasEventBus
 			Map<Integer, Boolean> used = new HashMap<Integer, Boolean>();
 			double candidateInfluence = - 1;
 			int candidate = 0;
-			List<Double> influences = object.getMorphTargetInfluences();			
+			List<Double> influences = object.morphTargetInfluences;			
 
-			if ( object.getMorphTargetBase() != - 1 )
-				used.put( object.getMorphTargetBase(), true);
+			if ( object.morphTargetBase != - 1 )
+				used.put( object.morphTargetBase, true);
 
 			int m = 0;
-			while ( material instanceof HasSkinning 
-					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() ) 
+			while ( material instanceof ShaderMaterial 
+					&& m < ((ShaderMaterial)material).getNumSupportedMorphTargets() ) 
 			{
 				for ( int i = 0; i < influences.size(); i ++ ) 
 				{
@@ -804,11 +853,13 @@ public class WebGLRenderer implements HasEventBus
 				}
 
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( candidate ) );
+				enableAttribute( attributes.get( "morphTarget" + m ) );
 				getGL().vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, DataType.FLOAT, false, 0, 0 );
 
 				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
 				{
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( candidate ) );
+					enableAttribute( attributes.get( "morphNormal" + m ) );
 					getGL().vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, DataType.FLOAT, false, 0, 0 );
 				}
 
@@ -834,110 +885,110 @@ public class WebGLRenderer implements HasEventBus
 		}
 	}
 	
-	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
-
-		initAttributes();
-
-		if ( object.hasPositions && ! object.__webglVertexBuffer ) object.__webglVertexBuffer = getGL().createBuffer();
-		if ( object.hasNormals && ! object.__webglNormalBuffer ) object.__webglNormalBuffer = getGL().createBuffer();
-		if ( object.hasUvs && ! object.__webglUvBuffer ) object.__webglUvBuffer = getGL().createBuffer();
-		if ( object.hasColors && ! object.__webglColorBuffer ) object.__webglColorBuffer = getGL().createBuffer();
-
-		if ( object.hasPositions )
-		{
-
-			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglVertexBuffer );
-			getGL().bufferData( getGL().ARRAY_BUFFER, object.positionArray, getGL().DYNAMIC_DRAW );
-			enableAttribute( program.attributes.position );
-			getGL().vertexAttribPointer( program.attributes.position, 3, getGL().FLOAT, false, 0, 0 );
-
-		}
-
-		if ( object.hasNormals ) {
-
-			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglNormalBuffer );
-
-			if ( material.shading === THREE.FlatShading ) {
-
-				var nx, ny, nz,
-					nax, nbx, ncx, nay, nby, ncy, naz, nbz, ncz,
-					normalArray,
-					i, il = object.count * 3;
-
-				for ( i = 0; i < il; i += 9 ) {
-
-					normalArray = object.normalArray;
-
-					nax  = normalArray[ i ];
-					nay  = normalArray[ i + 1 ];
-					naz  = normalArray[ i + 2 ];
-
-					nbx  = normalArray[ i + 3 ];
-					nby  = normalArray[ i + 4 ];
-					nbz  = normalArray[ i + 5 ];
-
-					ncx  = normalArray[ i + 6 ];
-					ncy  = normalArray[ i + 7 ];
-					ncz  = normalArray[ i + 8 ];
-
-					nx = ( nax + nbx + ncx ) / 3;
-					ny = ( nay + nby + ncy ) / 3;
-					nz = ( naz + nbz + ncz ) / 3;
-
-					normalArray[ i ]   = nx;
-					normalArray[ i + 1 ] = ny;
-					normalArray[ i + 2 ] = nz;
-
-					normalArray[ i + 3 ] = nx;
-					normalArray[ i + 4 ] = ny;
-					normalArray[ i + 5 ] = nz;
-
-					normalArray[ i + 6 ] = nx;
-					normalArray[ i + 7 ] = ny;
-					normalArray[ i + 8 ] = nz;
-
-				}
-
-			}
-
-			getGL().bufferData( getGL().ARRAY_BUFFER, object.normalArray, getGL().DYNAMIC_DRAW );
-			enableAttribute( program.attributes.normal );
-			getGL().vertexAttribPointer( program.attributes.normal, 3, getGL().FLOAT, false, 0, 0 );
-
-		}
-
-		if ( object.hasUvs && material.map ) {
-
-			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglUvBuffer );
-			getGL().bufferData( getGL().ARRAY_BUFFER, object.uvArray, getGL().DYNAMIC_DRAW );
-			enableAttribute( program.attributes.uv );
-			getGL().vertexAttribPointer( program.attributes.uv, 2, getGL().FLOAT, false, 0, 0 );
-
-		}
-
-		if ( object.hasColors && material.vertexColors !== THREE.NoColors ) {
-
-			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglColorBuffer );
-			getGL().bufferData( getGL().ARRAY_BUFFER, object.colorArray, getGL().DYNAMIC_DRAW );
-			enableAttribute( program.attributes.color );
-			getGL().vertexAttribPointer( program.attributes.color, 3, getGL().FLOAT, false, 0, 0 );
-
-		}
-
-		disableUnusedAttributes();
-
-		getGL().drawArrays( getGL().TRIANGLES, 0, object.count );
-
-		object.count = 0;
-
-	}
+//	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
+//
+//		initAttributes();
+//
+//		if ( object.hasPositions && ! object.__webglVertexBuffer ) object.__webglVertexBuffer = getGL().createBuffer();
+//		if ( object.hasNormals && ! object.__webglNormalBuffer ) object.__webglNormalBuffer = getGL().createBuffer();
+//		if ( object.hasUvs && ! object.__webglUvBuffer ) object.__webglUvBuffer = getGL().createBuffer();
+//		if ( object.hasColors && ! object.__webglColorBuffer ) object.__webglColorBuffer = getGL().createBuffer();
+//
+//		if ( object.hasPositions )
+//		{
+//
+//			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglVertexBuffer );
+//			getGL().bufferData( getGL().ARRAY_BUFFER, object.positionArray, getGL().DYNAMIC_DRAW );
+//			enableAttribute( program.attributes.position );
+//			getGL().vertexAttribPointer( program.attributes.position, 3, getGL().FLOAT, false, 0, 0 );
+//
+//		}
+//
+//		if ( object.hasNormals ) {
+//
+//			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglNormalBuffer );
+//
+//			if ( material.shading === THREE.FlatShading ) {
+//
+//				var nx, ny, nz,
+//					nax, nbx, ncx, nay, nby, ncy, naz, nbz, ncz,
+//					normalArray,
+//					i, il = object.count * 3;
+//
+//				for ( i = 0; i < il; i += 9 ) {
+//
+//					normalArray = object.normalArray;
+//
+//					nax  = normalArray[ i ];
+//					nay  = normalArray[ i + 1 ];
+//					naz  = normalArray[ i + 2 ];
+//
+//					nbx  = normalArray[ i + 3 ];
+//					nby  = normalArray[ i + 4 ];
+//					nbz  = normalArray[ i + 5 ];
+//
+//					ncx  = normalArray[ i + 6 ];
+//					ncy  = normalArray[ i + 7 ];
+//					ncz  = normalArray[ i + 8 ];
+//
+//					nx = ( nax + nbx + ncx ) / 3;
+//					ny = ( nay + nby + ncy ) / 3;
+//					nz = ( naz + nbz + ncz ) / 3;
+//
+//					normalArray[ i ]   = nx;
+//					normalArray[ i + 1 ] = ny;
+//					normalArray[ i + 2 ] = nz;
+//
+//					normalArray[ i + 3 ] = nx;
+//					normalArray[ i + 4 ] = ny;
+//					normalArray[ i + 5 ] = nz;
+//
+//					normalArray[ i + 6 ] = nx;
+//					normalArray[ i + 7 ] = ny;
+//					normalArray[ i + 8 ] = nz;
+//
+//				}
+//
+//			}
+//
+//			getGL().bufferData( getGL().ARRAY_BUFFER, object.normalArray, getGL().DYNAMIC_DRAW );
+//			enableAttribute( program.attributes.normal );
+//			getGL().vertexAttribPointer( program.attributes.normal, 3, getGL().FLOAT, false, 0, 0 );
+//
+//		}
+//
+//		if ( object.hasUvs && material.map ) {
+//
+//			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglUvBuffer );
+//			getGL().bufferData( getGL().ARRAY_BUFFER, object.uvArray, getGL().DYNAMIC_DRAW );
+//			enableAttribute( program.attributes.uv );
+//			getGL().vertexAttribPointer( program.attributes.uv, 2, getGL().FLOAT, false, 0, 0 );
+//
+//		}
+//
+//		if ( object.hasColors && material.vertexColors !== THREE.NoColors ) {
+//
+//			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglColorBuffer );
+//			getGL().bufferData( getGL().ARRAY_BUFFER, object.colorArray, getGL().DYNAMIC_DRAW );
+//			enableAttribute( program.attributes.color );
+//			getGL().vertexAttribPointer( program.attributes.color, 3, getGL().FLOAT, false, 0, 0 );
+//
+//		}
+//
+//		disableUnusedAttributes();
+//
+//		getGL().drawArrays( getGL().TRIANGLES, 0, object.count );
+//
+//		object.count = 0;
+//
+//	}
 	
 	public void renderBufferDirect( Camera camera, List<Light> lights, Fog fog, Material material, BufferGeometry geometryBuffer, GeometryObject object ) 
 	{
 		if ( ! material.isVisible() ) 
 			return;
 
-		setProgram( scene, camera, material, object );
+		setProgram( camera, lights, fog, material, object );
 
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		
@@ -958,7 +1009,7 @@ public class WebGLRenderer implements HasEventBus
 
 		if ( object instanceof Mesh ) 
 		{
-			List<BufferGeometry.Offset> offsets = geometryBuffer.offsets;
+			List<BufferGeometry.DrawCall> offsets = geometryBuffer.offsets;
 
 			// if there is more than 1 chunk
 			// must set attribute pointers to use new offsets for each chunk
@@ -975,7 +1026,7 @@ public class WebGLRenderer implements HasEventBus
 				{
 					// vertices
 
-					Float32Array position = geometryBuffer.getWebGlVertexArray();
+					Float32Array position = geometryBuffer.__vertexArray;
 					int positionSize = position.getLength();
 
 					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglVertexBuffer );
@@ -983,7 +1034,7 @@ public class WebGLRenderer implements HasEventBus
 
 					// normals
 
-					Float32Array normal = geometryBuffer.getWebGlNormalArray();
+					Float32Array normal = geometryBuffer.__normalArray;
 
 					if ( attributes.get("normal") >= 0 && normal != null ) 
 					{
@@ -995,7 +1046,7 @@ public class WebGLRenderer implements HasEventBus
 
 					// uvs
 
-					Float32Array uv = geometryBuffer.getWebGlUvArray();
+					Float32Array uv = geometryBuffer.__uvArray;
 
 					if ( attributes.get("uv") >= 0 && uv != null ) 
 					{
@@ -1017,7 +1068,7 @@ public class WebGLRenderer implements HasEventBus
 
 					// colors
 
-					Float32Array color = geometryBuffer.getWebGlColorArray();
+					Float32Array color = geometryBuffer.__colorArray;
 
 					if ( attributes.get("color") >= 0 && color != null ) 
 					{
@@ -1029,7 +1080,7 @@ public class WebGLRenderer implements HasEventBus
 
 					// tangents
 
-					Float32Array tangent = geometryBuffer.getWebGlTangentArray();
+					Float32Array tangent = geometryBuffer.__tangentArray;
 
 					if ( attributes.get("tangent") >= 0 && tangent != null )
 					{
@@ -1056,13 +1107,13 @@ public class WebGLRenderer implements HasEventBus
 
 			// render particles
 		} 
-		else if ( object instanceof ParticleSystem ) 
+		else if ( object instanceof PointCloud ) 
 		{
 //			if ( updateBuffers ) 
 //			{
 				// vertices
 
-				Float32Array position = geometryBuffer.getWebGlVertexArray();
+				Float32Array position = geometryBuffer.__vertexArray;
 				int positionSize = position.getLength();
 
 				gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryBuffer.__webglVertexBuffer );
@@ -1070,7 +1121,7 @@ public class WebGLRenderer implements HasEventBus
 
 				// colors
 
-				Float32Array color = geometryBuffer.getWebGlColorArray();
+				Float32Array color = geometryBuffer.__colorArray;
 
 				if ( attributes.get("color") >= 0 && color != null ) 
 				{
@@ -1100,6 +1151,80 @@ public class WebGLRenderer implements HasEventBus
 	{
 		render(scene, camera, renderTarget, false);
 	}
+	
+	private void projectObject( Object3D scene, Object3D object ) {
+
+		if ( object.isVisible() == false ) return;
+
+		if ( object instanceof Scene /*|| object instanceof Group */) {
+
+			// skip
+
+		} else {
+
+			initObject( object, scene );
+
+			if ( object instanceof Light ) {
+
+				lights.add( (Light) object );
+
+			} /*else if ( object instanceof Sprite ) {
+
+				sprites.push( object );
+
+			} else if ( object instanceof LensFlare ) {
+
+				lensFlares.push( object );
+
+			} */else {
+
+				var webglObjects = _webglObjects.get( object.getId() );
+
+				if ( webglObjects && ( object.frustumCulled == false || _frustum.intersectsObject( object ) == true ) ) {
+
+					updateObject( object, scene );
+
+					for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
+
+						var webglObject = webglObjects.get(i);
+
+						unrollBufferMaterial( webglObject );
+
+						webglObject.render = true;
+
+//						if ( _this.sortObjects == true ) {
+//
+//							if ( object.renderDepth != null ) {
+//
+//								webglObject.z = object.renderDepth;
+//
+//							} else {
+//
+//								_vector3.setFromMatrixPosition( object.matrixWorld );
+//								_vector3.applyProjection( _projScreenMatrix );
+//
+//								webglObject.z = _vector3.z;
+//
+//							}
+//
+//						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		for ( int i = 0, l = object.getChildren().size(); i < l; i ++ ) {
+
+			projectObject( scene, object.getChildren().get( i ) );
+
+		}
+
+	}
+
 
 	/**
 	 * Rendering.
@@ -1128,17 +1253,11 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
-		camera.getMatrixWorldInverse().flattenToArrayOffset( camera._viewMatrixArray );
-		camera.getProjectionMatrix().flattenToArrayOffset( camera._projectionMatrixArray );
+		
+		_projScreenMatrix.multiply( camera.getProjectionMatrix(), camera.getMatrixWorldInverse() );
+		_frustum.setFromMatrix( _projScreenMatrix );
 
-		this.cache_projScreenMatrix.multiply( camera.getProjectionMatrix(), camera.getMatrixWorldInverse() );
-		this.frustum.setFromMatrix( cache_projScreenMatrix );
-
-		// update WebGL objects
-		if ( this.isAutoUpdateObjects() ) 
-		{
-			scene.initWebGLObjects(this);
-		}
+		projectObject( scene, scene );
 
 		// custom render plugins (pre pass)
 		renderPlugins( this.renderPluginsPre, camera );
@@ -1998,10 +2117,8 @@ public class WebGLRenderer implements HasEventBus
 
 	private void setupMatrices ( Object3D object, Camera camera ) 
 	{
-		object._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), object.getMatrixWorld());
-
-		object._normalMatrix.getInverse(object._modelViewMatrix );
-		object._normalMatrix.transpose();
+		object._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), object.getMatrixWorld() );
+		object._normalMatrix.getNormalMatrix( object._modelViewMatrix );
 	}
 	
 	private void setMaterialFaces( Material material )

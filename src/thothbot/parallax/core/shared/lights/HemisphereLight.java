@@ -21,6 +21,7 @@ package thothbot.parallax.core.shared.lights;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.RendererLights;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector3;
@@ -98,5 +99,39 @@ public final class HemisphereLight extends Light
 
 		return light;
 
+	}
+	
+	@Override
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
+	{
+		Float32Array hemiSkyColors    = zlights.hemi.skyColors;
+		Float32Array hemiGroundColors = zlights.hemi.groundColors;
+		Float32Array hemiPositions    = zlights.hemi.positions;
+		
+		Color skyColor = getColor();
+		Color groundColor = getGroundColor();
+		double intensity = getIntensity();
+
+		int hemiOffset = hemiSkyColors.getLength() * 3;
+
+		if (  isGammaInput ) 
+		{
+			setColorGamma( hemiSkyColors, hemiOffset, skyColor, intensity );
+			setColorGamma( hemiGroundColors, hemiOffset, groundColor, intensity );
+		} 
+		else 
+		{
+			setColorLinear( hemiSkyColors, hemiOffset, skyColor, intensity );
+			setColorLinear( hemiGroundColors, hemiOffset, groundColor, intensity );
+		}
+		
+		Vector3 _direction = new Vector3();
+		
+		_direction.setFromMatrixPosition( getMatrixWorld() );
+		_direction.normalize();
+
+		hemiPositions.set( hemiOffset,     _direction.getX() );
+		hemiPositions.set( hemiOffset + 1, _direction.getY() );
+		hemiPositions.set( hemiOffset + 2, _direction.getZ() );
 	}
 }

@@ -21,6 +21,7 @@ package thothbot.parallax.core.shared.lights;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.RendererLights;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.math.Color;
 
@@ -71,6 +72,38 @@ public final class AmbientLight extends Light
 
 		return light;
 
+	}
+	
+	@Override
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
+	{
+		Float32Array colors = zlights.ambient.colors;
+	
+		Color color = getColor();
+		double r = 0, g = 0, b = 0;
+		if(colors.getLength() == 3)
+		{
+			r = colors.get(0);
+			g = colors.get(1);
+			b = colors.get(2);
+		}
+		
+		if ( isGammaInput ) 
+		{
+			r += color.getR() * color.getR();
+			g += color.getG() * color.getG();
+			b += color.getB() * color.getB();
+		} 
+		else 
+		{
+			r += color.getR();
+			g += color.getG();
+			b += color.getB();
+		}
+
+		colors.set( 0, r );
+		colors.set( 1, g );
+		colors.set( 2, b ); 
 	}
 
 }

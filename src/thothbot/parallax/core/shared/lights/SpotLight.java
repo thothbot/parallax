@@ -21,6 +21,7 @@ package thothbot.parallax.core.shared.lights;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.RendererLights;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
@@ -28,6 +29,7 @@ import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
+import thothbot.parallax.core.shared.math.Vector3;
 
 /**
  * A point light that can cast shadow in one direction.
@@ -195,5 +197,47 @@ public class SpotLight extends ShadowLight
 
 	public void setShadowCamera(Camera shadowCamera) {
 		this.shadowCamera = shadowCamera;
+	}
+	
+	@Override
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
+	{
+		Float32Array spotColors     = zlights.spot.colors;
+		Float32Array spotPositions  = zlights.spot.positions;
+		Float32Array spotDistances  = zlights.spot.distances;
+		Float32Array spotDirections = zlights.spot.directions;
+		Float32Array spotAngles     = zlights.spot.angles;
+		Float32Array spotExponents  = zlights.spot.exponents;
+		
+		double intensity = getIntensity();
+		double distance =  getDistance();
+
+		int spotOffset = spotColors.getLength();
+
+		if ( isGammaInput ) 
+			setColorGamma( spotColors, spotOffset, getColor(), intensity ); 
+		else 
+			setColorLinear( spotColors, spotOffset, getColor(), intensity );
+
+		Vector3 position = new Vector3();
+		position.setFromMatrixPosition( getMatrixWorld() );
+
+		spotPositions.set(spotOffset,     position.getX());
+		spotPositions.set(spotOffset + 1, position.getY());
+		spotPositions.set(spotOffset + 2, position.getZ());
+
+		spotDistances.set(spotOffset / 3, distance);
+
+		Vector3 vector3 = new Vector3();
+		vector3.setFromMatrixPosition( getTarget().getMatrixWorld() );
+		position.sub( vector3 );
+		position.normalize();
+
+		spotDirections.set(spotOffset,    position.getX());
+		spotDirections.set(spotOffset + 1, position.getY());
+		spotDirections.set(spotOffset + 2, position.getZ());
+
+		spotAngles.set(spotOffset / 3, Math.cos( getAngle() ));
+		spotExponents.set( spotOffset / 3, getExponent());
 	}
 }

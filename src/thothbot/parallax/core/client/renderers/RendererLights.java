@@ -28,6 +28,7 @@ import thothbot.parallax.core.shared.lights.DirectionalLight;
 import thothbot.parallax.core.shared.lights.HemisphereLight;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.lights.PointLight;
+import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -39,11 +40,11 @@ import thothbot.parallax.core.shared.scenes.Scene;
  */
 public class RendererLights
 {
-	AmbientLight.UniformAmbient ambient;
-	DirectionalLight.UniformDirectional directional;
-	PointLight.UniformPoint point;
-	SpotLight.UniformSport spot;
-	HemisphereLight.UniformHemisphere hemi;
+	public AmbientLight.UniformAmbient ambient;
+	public DirectionalLight.UniformDirectional directional;
+	public PointLight.UniformPoint point;
+	public SpotLight.UniformSport spot;
+	public HemisphereLight.UniformHemisphere hemi;
 	
 	public RendererLights() 
 	{
@@ -67,7 +68,7 @@ public class RendererLights
 		
 		for ( Light light: lights) 
 		{
-			if ( light.isOnlyShadow() || ! light.isVisible()) 
+			if ( (light instanceof ShadowLight && ((ShadowLight)light).isOnlyShadow()) || ! light.isVisible()) 
 				continue;
 
 			light.setupRendererLights(this, isGammaInput);

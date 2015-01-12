@@ -25,6 +25,7 @@ import java.util.List;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.math.Euler;
 import thothbot.parallax.core.shared.math.Euler.EulerChangeHandler;
+import thothbot.parallax.core.shared.math.Matrix3;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Quaternion;
 import thothbot.parallax.core.shared.math.Quaternion.QuaternionChangeHandler;
@@ -92,6 +93,9 @@ public class Object3D
 	
 	protected ObjectHandler handler;
 	
+
+	public Matrix3 _normalMatrix;
+	public Matrix4 _modelViewMatrix;
 	
 	public boolean isWebglActive;
 		

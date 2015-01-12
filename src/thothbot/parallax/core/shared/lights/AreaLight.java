@@ -18,6 +18,7 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import thothbot.parallax.core.client.renderers.RendererLights;
 import thothbot.parallax.core.shared.math.Vector3;
 
 public class AreaLight extends Light {
@@ -46,5 +47,11 @@ public class AreaLight extends Light {
 		this.right = new Vector3( 1, 0, 0 );
 
 		this.intensity = intensity;
+	}
+
+	@Override
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) {
+		// TODO Auto-generated method stub
+		
 	}
 }
