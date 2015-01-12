@@ -25,8 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int32Array;
+import thothbot.parallax.core.client.gl2.enums.BufferObjects;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
@@ -865,6 +870,35 @@ public class BufferGeometry extends AbstractGeometry
 		tan2[ a ].add( tdir );
 		tan2[ b ].add( tdir );
 		tan2[ c ].add( tdir );
+
+	}
+	
+	public void setDirectBuffers( WebGLRenderingContext gl ) {
+
+		for ( int i = 0, l = this.attributesKeys.size(); i < l; i ++ ) {
+
+			String key = (String) this.attributesKeys.toArray()[ i ];
+			BufferAttribute attribute = this.attributes.get( key );
+
+			if ( attribute == null ) {
+
+				attribute.buffer = gl.createBuffer();
+				attribute.needsUpdate = true;
+
+			}
+
+			if ( attribute.needsUpdate == true ) {
+
+				BufferTarget bufferType = ( key == "index" ) ? BufferTarget.ELEMENT_ARRAY_BUFFER : BufferTarget.ARRAY_BUFFER;
+
+				gl.bindBuffer( bufferType, attribute.buffer );
+				gl.bufferData( bufferType, attribute.getArray(), BufferUsage.STATIC_DRAW );
+
+				attribute.needsUpdate = false;
+
+			}
+
+		}
 
 	}
 }
