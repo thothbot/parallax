@@ -18,6 +18,10 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import java.util.Map;
+
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
@@ -52,6 +56,41 @@ import thothbot.parallax.core.shared.math.Vector2;
  */
 public class SpotLight extends ShadowLight
 {
+	public static class UniformSport implements Light.UniformLight 
+	{
+		public Float32Array distances;
+		public Float32Array colors;
+		public Float32Array positions;
+		
+		public Float32Array directions;
+		public Float32Array angles;
+		public Float32Array exponents;
+		
+		@Override
+		public void reset() 
+		{
+			this.colors    = (Float32Array) Float32Array.createArray();
+			this.distances = (Float32Array) Float32Array.createArray();
+			this.positions = (Float32Array) Float32Array.createArray();
+			
+			this.directions = (Float32Array) Float32Array.createArray();
+			this.angles     = (Float32Array) Float32Array.createArray();
+			this.exponents  = (Float32Array) Float32Array.createArray();
+		}
+
+		@Override
+		public void refreshUniform(Map<String, Uniform> uniforms) 
+		{
+			uniforms.get("spotLightColor").setValue( colors );
+			uniforms.get("spotLightPosition").setValue( positions );
+			uniforms.get("spotLightDistance").setValue( distances );
+
+			uniforms.get("spotLightDirection").setValue( directions );
+			uniforms.get("spotLightAngle").setValue( angles );
+			uniforms.get("spotLightExponent").setValue( exponents );
+		}
+	}
+	
 	private double distance;
 	private double angle;
 	private double exponent;

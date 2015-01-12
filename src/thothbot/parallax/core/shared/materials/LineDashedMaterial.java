@@ -18,8 +18,12 @@
 
 package thothbot.parallax.core.shared.materials;
 
+import java.util.Map;
+
 import thothbot.parallax.core.client.shaders.DashedShader;
 import thothbot.parallax.core.client.shaders.Shader;
+import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.math.Color;
 
 public class LineDashedMaterial extends Material implements 
@@ -142,5 +146,17 @@ public class LineDashedMaterial extends Material implements
 		return material;
 
 	}
+	
+	@Override
+	public void refreshUniforms(Camera camera, boolean isGammaInput) 
+	{
+		super.refreshUniforms(camera, isGammaInput);
+		Map<String, Uniform> uniforms = getShader().getUniforms();
+		
+		uniforms.get("dashSize").setValue( getDashSize() );
+		uniforms.get("totalSize").setValue( getDashSize() + getGapSize() );
+		uniforms.get("scale").setValue( getScale() );
+	}
 
 }
+

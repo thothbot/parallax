@@ -743,6 +743,11 @@ public abstract class Material
 			uniforms.get("specularMap").setValue( ((HasSpecularMap)this).getSpecularMap() );
 		}
 		
+		if(this instanceof HasAlphaMap)
+		{
+			uniforms.get("alphaMap").setValue( ((HasAlphaMap)this).getAlphaMap() );
+		}
+		
 		if(this instanceof HasBumpMap)
 		{
 			uniforms.get("bumpMap").setValue( ((HasBumpMap)this).getBumpMap() );
@@ -756,10 +761,11 @@ public abstract class Material
 		}	
 		
 		// uv repeat and offset setting priorities
-		//	1. color map
-		//	2. specular map
-		//	3. normal map
+		//  1. color map
+		//  2. specular map
+		//  3. normal map
 		//  4. bump map
+		//  5. alpha map
 		Texture uvScaleMap = null;
 		
 		if(this instanceof HasMap)
@@ -770,6 +776,8 @@ public abstract class Material
 			uvScaleMap = ((HasNormalMap)this).getNormalMap();
 		else if(this instanceof HasBumpMap)
 			uvScaleMap = ((HasBumpMap)this).getBumpMap();
+		else if(this instanceof HasBumpMap)
+			uvScaleMap = ((HasAlphaMap)this).getAlphaMap();
 		
 		if(uvScaleMap != null)
 		{
@@ -863,17 +871,49 @@ public abstract class Material
 	{
 		WebGLProgram program = getShader().getProgram();
 		if ( program == null ) return;
+		
+		getShader().setPrecision(null);
+				
+		boolean deleteProgram = false;
 
-		for ( String key: renderer.getCache_programs().keySet()) 
+		for ( String key: renderer._programs.keySet()) 
 		{
-			Shader shader = renderer.getCache_programs().get(key);
+			Shader shader = renderer._programs.get(key);
 			
 			if ( shader == getShader() ) 
 			{
 				renderer.getInfo().getMemory().programs --;
-				renderer.getCache_programs().remove(key);
+				renderer._programs.remove(key);
+				deleteProgram = true;
 				break;
 			}
 		}
+		
+		if ( deleteProgram == true ) {
+
+			// avoid using array.splice, this is costlier than creating new array from scratch
+
+//			var newPrograms = [];
+//
+//			for ( int i = 0, il = renderer._programs.length; i < il; i ++ ) {
+//
+//				programInfo = _programs[ i ];
+//
+//				if ( programInfo.program != program ) {
+//
+//					newPrograms.push( programInfo );
+//
+//				}
+//
+//			}
+
+//			renderer._programs = newPrograms;
+
+			renderer.getGL().deleteProgram( program );
+
+			renderer.getInfo().getMemory().programs --;
+
+		}
+
 	}
 }

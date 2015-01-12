@@ -18,11 +18,40 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import java.util.Map;
+
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector3;
 
 public final class HemisphereLight extends Light 
 {
+	public static class UniformHemisphere implements Light.UniformLight 
+	{
+		public Float32Array skyColors;
+		public Float32Array groundColors;
+		public Float32Array positions;
+		
+		@Override
+		public void reset() 
+		{
+			this.skyColors    = (Float32Array) Float32Array.createArray();
+			this.groundColors = (Float32Array) Float32Array.createArray();
+			this.positions = (Float32Array) Float32Array.createArray();
+			
+		}
+
+		@Override
+		public void refreshUniform(Map<String, Uniform> uniforms) 
+		{
+			uniforms.get("hemisphereLightSkyColor").setValue( skyColors );
+			uniforms.get("hemisphereLightGroundColor").setValue( groundColors );
+			uniforms.get("hemisphereLightPosition").setValue( positions );
+			
+		}
+	}
+	
 	private Color groundColor;
 	private double intensity;
 	

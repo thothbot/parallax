@@ -203,7 +203,7 @@ public class WebGLRenderer implements HasEventBus
 	private boolean isLightsNeedUpdate = true;
 	private RendererLights cache_lights;
 	
-	private Map<String, Shader> cache_programs;
+	public Map<String, Shader> _programs;
 
 	// GPU capabilities
 	private int GPUmaxTextures;
@@ -238,7 +238,7 @@ public class WebGLRenderer implements HasEventBus
 		this.cache_projScreenMatrix = new Matrix4();
 		this.cache_vector3          = new Vector4();
 		this.cache_lights           = new RendererLights();
-		this.cache_programs         = GWT.isScript() ? 
+		this._programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
 			
 		this.GPUmaxTextures       = gl.getParameteri(WebGLConstants.MAX_TEXTURE_IMAGE_UNITS);
@@ -1495,12 +1495,9 @@ public class WebGLRenderer implements HasEventBus
 		object.renderBuffer(this, geometryBuffer, updateBuffers);
 	}
 
-	private void initMaterial ( Scene scene, Material material, GeometryObject object ) 
+	private void initMaterial ( Material material, List<Light> lights, AbstractFog fog, GeometryObject object ) 
 	{
 		Log.debug("Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
-
-		List<Light> lights = scene.getLights(); 
-		AbstractFog fog = scene.getFog();
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
@@ -1519,12 +1516,12 @@ public class WebGLRenderer implements HasEventBus
 
 		parameters.maxBones = allocateBones( object );
 
-		if(object instanceof SkinnedMesh)
-		{
-			parameters.useVertexTexture = this.isGPUsupportsBoneTextures && ((SkinnedMesh)object).useVertexTexture;
-			parameters.boneTextureWidth = ((SkinnedMesh)object).boneTextureWidth;
-			parameters.boneTextureHeight = ((SkinnedMesh)object).boneTextureHeight;
-		}
+//		if(object instanceof SkinnedMesh)
+//		{
+//			parameters.useVertexTexture = this.isGPUsupportsBoneTextures && ((SkinnedMesh)object).useVertexTexture;
+//			parameters.boneTextureWidth = ((SkinnedMesh)object).boneTextureWidth;
+//			parameters.boneTextureHeight = ((SkinnedMesh)object).boneTextureHeight;
+//		}
 
 		parameters.maxMorphTargets = this.maxMorphTargets;
 		parameters.maxMorphNormals = this.maxMorphNormals;
@@ -1552,17 +1549,17 @@ public class WebGLRenderer implements HasEventBus
 				+ material.getShader().getVertexSource()
 				+ parameters.toString();
 
-		if(this.cache_programs.containsKey(cashKey))
+		if(this._programs.containsKey(cashKey))
 		{
-			material.setShader( this.cache_programs.get(cashKey) );
+			material.setShader( this._programs.get(cashKey) );
 		}
 		else
 		{
 			Shader shader = material.buildShader(getGL(), parameters);
 
-			this.cache_programs.put(cashKey, shader);
+			this._programs.put(cashKey, shader);
 
-			this.getInfo().getMemory().programs = cache_programs.size();
+			this.getInfo().getMemory().programs = _programs.size();
 		}
 		
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
@@ -1591,7 +1588,7 @@ public class WebGLRenderer implements HasEventBus
 				if( a != null && a >= 0 ) 
 					getGL().enableVertexAttribArray( a );
 
-		if(material instanceof HasSkinning)
+		if(material instanceof ShaderMaterial)
 		{
 			if ( ((HasSkinning)material).isMorphTargets()) 
 			{
@@ -1607,7 +1604,7 @@ public class WebGLRenderer implements HasEventBus
 					}
 				}
 				
-				((HasSkinning)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
+				((ShaderMaterial)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
 			}
 
 			if ( ((HasSkinning)material).isMorphNormals() ) 
@@ -1624,19 +1621,22 @@ public class WebGLRenderer implements HasEventBus
 					}
 				}
 
-				((HasSkinning)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
+				((ShaderMaterial)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
 			}
 		}
 	}
 
-	private WebGLProgram setProgram( Scene scene, Camera camera, Material material, GeometryObject object ) 
+	private WebGLProgram setProgram( Camera camera, List<Light> lights, Fog fog, Material material, GeometryObject object ) 
 	{
 		// Use new material units for new shader
 		this.usedTextureUnits = 0;
-
-		if ( material.getShader() == null || material.getShader().getProgram() == null || material.isNeedsUpdate() ) 
+		
+		if(material.isNeedsUpdate()) 
 		{
-			initMaterial( scene, material, object );
+			if(material.getShader() == null || material.getShader().getProgram() == null)
+				material.deallocate(this);
+			
+			initMaterial( material, lights, fog, object );
 			material.setNeedsUpdate(false);
 		}
 
@@ -1648,7 +1648,9 @@ public class WebGLRenderer implements HasEventBus
 			}
 		}
 
+		boolean refreshProgram = false;
 		boolean refreshMaterial = false;
+		boolean refreshLights = false;
 
 		Shader shader = material.getShader(); 
 		WebGLProgram program = shader.getProgram();
@@ -1659,7 +1661,10 @@ public class WebGLRenderer implements HasEventBus
 			getGL().useProgram( program );
 			this.cache_currentProgram = program;
 
+			refreshProgram = true;
 			refreshMaterial = true;
+			refreshLights = true;
+
 			Log.error("program != cache_currentProgram");
 		}
 
@@ -1671,7 +1676,7 @@ public class WebGLRenderer implements HasEventBus
 
 		if ( refreshMaterial || camera != this.cache_currentCamera ) 
 		{
-			getGL().uniformMatrix4fv( m_uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
+			getGL().uniformMatrix4fv( m_uniforms.get("projectionMatrix").getLocation(), false, camera.getProjectionMatrix().getArray() );
 
 			if ( camera != this.cache_currentCamera ) 
 				this.cache_currentCamera = camera;
@@ -2464,10 +2469,5 @@ public class WebGLRenderer implements HasEventBus
 	@Deprecated
 	public Vector4 getCache_vector3() {
 		return cache_vector3;
-	}
-	
-	@Deprecated
-	public Map<String, Shader> getCache_programs() {
-		return this.cache_programs;
 	}
 }

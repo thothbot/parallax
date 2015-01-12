@@ -198,25 +198,21 @@ public class ShaderMaterial extends Material
 		this.isMorphNormals = isMorphNormals;
 	}
 	
-//	@Override
-//	public int getNumSupportedMorphTargets() {
-//		return this.numSupportedMorphTargets;
-//	}
-//	
-//	@Override
-//	public void setNumSupportedMorphTargets(int num) {
-//		this.numSupportedMorphTargets = num;
-//	}
-//	
-//	@Override
-//	public int getNumSupportedMorphNormals() {
-//		return this.numSupportedMorphNormals;
-//	}
-//	
-//	@Override
-//	public void setNumSupportedMorphNormals(int num) {
-//		this.numSupportedMorphNormals = num;
-//	}
+	public int getNumSupportedMorphTargets() {
+		return this.numSupportedMorphTargets;
+	}
+	
+	public void setNumSupportedMorphTargets(int num) {
+		this.numSupportedMorphTargets = num;
+	}
+	
+	public int getNumSupportedMorphNormals() {
+		return this.numSupportedMorphNormals;
+	}
+	
+	public void setNumSupportedMorphNormals(int num) {
+		this.numSupportedMorphNormals = num;
+	}
 	
 	public Material.SHADING getShading() {
 		return this.shading;

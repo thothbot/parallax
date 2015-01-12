@@ -28,8 +28,7 @@ public interface HasSkinning
 	
 	public boolean isMorphNormals();
 	public void setMorphNormals(boolean isMorphNormals);
-//	
-//	
+
 //	public int getNumSupportedMorphTargets();
 //	public void setNumSupportedMorphTargets(int num);
 //	

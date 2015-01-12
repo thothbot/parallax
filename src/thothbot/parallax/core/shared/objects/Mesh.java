@@ -80,7 +80,8 @@ public class Mesh extends GeometryObject
 	private Map<String, Integer> morphTargetDictionary;
 	// TODO: check morphTargetInfluences
 	private List<Double> morphInfluences; 
-//	public Float32Array __webglMorphTargetInfluences;
+	
+	public Float32Array __webglMorphTargetInfluences;
 
 	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {

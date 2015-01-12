@@ -39,6 +39,26 @@ import thothbot.parallax.core.shared.math.Color;
  */
 public final class AmbientLight extends Light
 {
+	public static class UniformAmbient implements Light.UniformLight 
+	{
+		public Float32Array colors;
+		
+		@Override
+		public void reset() 
+		{
+			this.colors = (Float32Array) Float32Array.createArray();
+			for(int i = 0; i < 3; i++)
+				this.colors.set(i, 0.0);
+			
+		}
+
+		@Override
+		public void refreshUniform(Map<String, Uniform> uniforms) 
+		{
+			uniforms.get("ambientLightColor").setValue( colors );
+		}
+	}
+	
 	public AmbientLight(int hex) {
 		super(hex);
 	}

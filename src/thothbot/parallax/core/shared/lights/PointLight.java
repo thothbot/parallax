@@ -42,6 +42,31 @@ import thothbot.parallax.core.shared.math.Vector3;
  */
 public class PointLight extends Light
 {
+	public static class UniformPoint implements Light.UniformLight 
+	{
+		public Float32Array distances;
+		public Float32Array colors;
+		public Float32Array positions;
+		
+		@Override
+		public void reset() 
+		{
+			this.distances = (Float32Array) Float32Array.createArray();
+			this.colors    = (Float32Array) Float32Array.createArray();
+			this.positions = (Float32Array) Float32Array.createArray();
+			
+		}
+
+		@Override
+		public void refreshUniform(Map<String, Uniform> uniforms) 
+		{
+			uniforms.get("pointLightColor").setValue( colors );
+			uniforms.get("pointLightPosition").setValue( positions );
+			uniforms.get("pointLightDistance").setValue( distances );
+			
+		}
+	}
+	
 	private double intensity;
 	private double distance;
 	

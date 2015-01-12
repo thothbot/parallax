@@ -18,6 +18,9 @@
 
 package thothbot.parallax.core.shared.lights;
 
+import java.util.Map;
+
+import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.math.Color;
 
@@ -29,6 +32,12 @@ import thothbot.parallax.core.shared.math.Color;
  */
 public class Light extends Object3D
 {
+	public interface UniformLight 
+	{
+		public void reset();
+		public void refreshUniform(Map<String, Uniform> uniforms);
+	}
+	
 	private Color color;
 	
 	public Light(int hex) 

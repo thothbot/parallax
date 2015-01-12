@@ -44,6 +44,27 @@ import thothbot.parallax.core.shared.math.Vector3;
  */
 public class DirectionalLight extends ShadowLight
 {	
+	public static class UniformDirectional implements Light.UniformLight 
+	{
+		public Float32Array colors;
+		public Float32Array positions;
+
+		@Override
+		public void reset() 
+		{
+			this.colors    = (Float32Array) Float32Array.createArray();
+			this.positions = (Float32Array) Float32Array.createArray();
+			
+		}
+
+		@Override
+		public void refreshUniform(Map<String, Uniform> uniforms) 
+		{
+			uniforms.get("directionalLightColor").setValue( colors );
+			uniforms.get("directionalLightDirection").setValue( positions );
+		}
+	}
+	
 	//
 	
 	private int shadowCameraLeft = -500;

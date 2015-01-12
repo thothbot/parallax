@@ -41,7 +41,15 @@ public class ProgramParameters
 	public boolean bumpMap;
 	public boolean normalMap;
 	public boolean specularMap;
+	public boolean akphaMap;
+	
 	public boolean vertexColors;
+
+	public boolean useFog;
+	public boolean useFog2;
+
+	public boolean metal;
+
 	public boolean skinning;
 	public boolean morphTargets;
 	public boolean morphNormals;
@@ -57,9 +65,6 @@ public class ProgramParameters
 	public boolean sizeAttenuation;
 	
 	public double alphaTest;
-	public boolean useFog;
-	public boolean useFog2;
-	public boolean metal;
 	
 	public int maxMorphTargets;
 	public int maxMorphNormals;
