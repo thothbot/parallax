@@ -16,15 +16,17 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.shared.objects;
+package thothbot.parallax.core.client.renderers;
 
+import thothbot.parallax.core.shared.core.BufferGeometry;
+import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 
 public class RendererObject implements Comparable<RendererObject>
 {
 	public GeometryObject object;
-	public GeometryBuffer buffer;
+	public BufferGeometry buffer;
 	public boolean render;
 	
 	public Material opaque;
@@ -32,7 +34,7 @@ public class RendererObject implements Comparable<RendererObject>
 	// render depth
 	public double z;
 
-	public RendererObject(GeometryBuffer buffer, GeometryObject object, Material opaque, Material transparent) 
+	public RendererObject(BufferGeometry buffer, GeometryObject object, Material opaque, Material transparent) 
 	{
 		this.buffer = buffer;
 		this.object = object;
@@ -46,7 +48,7 @@ public class RendererObject implements Comparable<RendererObject>
 
 		if ( meshMaterial instanceof MeshFaceMaterial ) 
 		{
-			int materialIndex = ((GeometryGroup)buffer).materialIndex;
+			int materialIndex = ((BufferGeometry)buffer).materialIndex;
 
 			if ( materialIndex >= 0 ) 
 			{

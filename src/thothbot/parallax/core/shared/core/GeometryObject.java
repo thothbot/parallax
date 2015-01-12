@@ -24,6 +24,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.materials.Material;
 
@@ -76,9 +77,9 @@ public abstract class GeometryObject extends Object3D
 //		this.customDepthMaterial = customDepthMaterial;
 //	}
 	
-//	public abstract void initBuffer(WebGLRenderer renderer);
-//
-//	public abstract void setBuffer(WebGLRenderer renderer);
+	public abstract void initBuffer(WebGLRenderer renderer);
+
+	public abstract void setBuffer(WebGLRenderer renderer);
 //	
 //	public abstract void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers);
 	
@@ -104,13 +105,13 @@ public abstract class GeometryObject extends Object3D
 //		deleteBuffers(renderer);
 //	}
 	
-//	public void deleteBuffers(WebGLRenderer renderer) 
-//	{
-//		renderer.getGL().deleteBuffer( geometry.__webglVertexBuffer );
-//		renderer.getGL().deleteBuffer( geometry.__webglColorBuffer );
-//
-//		renderer.getInfo().getMemory().geometries --;
-//	}
+	public void deleteBuffers(WebGLRenderer renderer) 
+	{
+		renderer.getGL().deleteBuffer( geometry.__webglVertexBuffer );
+		renderer.getGL().deleteBuffer( geometry.__webglColorBuffer );
+
+		renderer.getInfo().getMemory().geometries --;
+	}
 //
 //	protected void setLineWidth (WebGLRenderingContext gl, double width ) 
 //	{

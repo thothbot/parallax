@@ -60,32 +60,6 @@ public class BufferGeometry extends AbstractGeometry
 	public List<BufferGeometry.DrawCall> drawcalls;
 	public List<BufferGeometry.DrawCall> offsets; // backwards compatibility
 
-	
-//	// the intermediate typearrays will be deleted when set to false
-//	private boolean isDynamic = true; 
-//	
-//	
-//	// True if geometry has tangents. Set in Geometry.computeTangents.
-//	private Boolean hasTangents = false;
-//
-//	private boolean isNormalsNeedUpdate;
-//	private boolean isTangentsNeedUpdate;
-//	private boolean isElementsNeedUpdate;
-//	private boolean isVerticesNeedUpdate;
-//	private boolean isUvsNeedUpdate;
-//	private boolean isColorsNeedUpdate;
-//	
-//	private boolean isBuffersNeedUpdate;
-//
-//	
-//	private Uint16Array webGlIndexArray;
-//	private Uint16Array webGlFaceArray;
-//	private Uint16Array webGlLineArray;
-//	
-//	
-//	public WebGLBuffer __webglIndexBuffer;
-	
-	
 	public BufferGeometry() 
 	{
 		super();
