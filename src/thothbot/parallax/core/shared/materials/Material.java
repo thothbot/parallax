@@ -22,11 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.safehtml.client.HasSafeHtml;
+
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
+import thothbot.parallax.core.client.renderers.GeometryGroup;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.ChunksFragmentShader;
 import thothbot.parallax.core.client.shaders.ChunksVertexShader;
@@ -800,7 +803,7 @@ public abstract class Material
 
 	private boolean materialNeedsSmoothNormals() 
 	{
-		return this.shading != null && this.shading == Material.SHADING.SMOOTH;
+		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == Material.SHADING.SMOOTH;
 	}
 
 	public Material.SHADING bufferGuessNormalType () 

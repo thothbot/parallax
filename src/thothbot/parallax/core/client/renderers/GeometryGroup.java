@@ -27,7 +27,10 @@ import com.google.gwt.core.client.GWT;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.shaders.Shader;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.FastMap;
@@ -36,7 +39,7 @@ import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.scenes.Scene;
 
-public class GeometryGroup
+public class GeometryGroup extends WebGLGeometry
 {
 	public static Map<String, List<GeometryGroup>> geometryGroups = GWT.isScript() ? 
 			new FastMap<List<GeometryGroup>>() : new HashMap<String, List<GeometryGroup>>(); 
@@ -53,14 +56,17 @@ public class GeometryGroup
 	
 	public int numMorphTargets;
 	public int numMorphNormals;
-	
-	public WebGLBuffer __webglVertexBuffer;
 
-//	public List<Float32Array> __morphTargetsArrays;
-//	public List<Float32Array> __morphNormalsArrays;
-//
-//	private Float32Array webGlSkinIndexArray;
-//	private Float32Array webGlSkinWeightArray;
+	public Float32Array __skinIndexArray;
+	public Float32Array __skinWeightArray;
+	
+	public Uint16Array __faceArray;
+	public Uint16Array __lineArray;
+	
+	public List<Float32Array> __morphTargetsArrays;
+	public List<Float32Array> __morphNormalsArrays;
+	
+	public boolean __inittedArrays;
 
 	public GeometryGroup(int materialIndex, int numMorphTargets, int numMorphNormals) 
 	{
@@ -193,35 +199,16 @@ public class GeometryGroup
 		object.isWebglActive = true;
 
 	}
-
-
-
-//	public Float32Array getWebGlSkinIndexArray() 
-//	{
-//		return webGlSkinIndexArray;
-//	}
-//
-//	public Float32Array getWebGlSkinWeightArray() 
-//	{
-//		return webGlSkinWeightArray;
-//	}
-//	
-//	public void setWebGlSkinIndexArray(Float32Array a)
-//	{
-//		this.webGlSkinIndexArray = a;
-//	}
-//	
-//	public void setWebGlSkinWeightArray(Float32Array a)
-//	{
-//		this.webGlSkinWeightArray = a;
-//	}
 	
-//	@Override
-//	public void dispose() 
-//	{
-//		super.dispose();
-//		
-//		setWebGlSkinIndexArray( null );
-//		setWebGlSkinWeightArray( null );
-//	}
+	@Override
+	public void dispose() 
+	{
+		super.dispose();
+		
+		__inittedArrays = false;
+		__faceArray = null;
+		__lineArray = null;
+		__skinIndexArray = null;
+		__skinWeightArray = null;
+	}
 }

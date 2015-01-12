@@ -104,9 +104,9 @@ public class Geometry extends AbstractGeometry
 
 	private List<Double> lineDistances;
 	
-	protected boolean hasTangents = false;
+	public boolean hasTangents = false;
 
-	protected boolean dynamic = true; // the intermediate typed arrays will be deleted when set to false
+	public boolean dynamic = true; // the intermediate typed arrays will be deleted when set to false
 
 	// update flags
 	
@@ -215,6 +215,8 @@ public class Geometry extends AbstractGeometry
 		return this.skinIndices;
 	}
 	
+	
+	
 //	public List<Vector3> getSkinVerticesA() {
 //		return this.skinVerticesA;
 //	}
@@ -250,6 +252,10 @@ public class Geometry extends AbstractGeometry
 //	public List<List<Vector2>> getFaceUvs() {
 //		return faceUvs;
 //	}
+
+	public List<Double> getLineDistances() {
+		return lineDistances;
+	}
 
 	public void setColors(List<Color> colors) {
 		this.colors = colors;

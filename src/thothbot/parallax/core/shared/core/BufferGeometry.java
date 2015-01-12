@@ -77,7 +77,6 @@ public class BufferGeometry extends AbstractGeometry
 //	
 //	private boolean isBuffersNeedUpdate;
 //
-//	private boolean isArrayInitialized;
 //	
 //	private Uint16Array webGlIndexArray;
 //	private Uint16Array webGlFaceArray;
