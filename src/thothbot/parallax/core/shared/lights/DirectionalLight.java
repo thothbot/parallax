@@ -235,12 +235,12 @@ public class DirectionalLight extends ShadowLight
 		light.shadowCascadeOffset.copy( this.shadowCascadeOffset );
 		light.shadowCascadeCount = this.shadowCascadeCount;
 
-		light.shadowCascadeBias = this.shadowCascadeBias.clone();
-		light.shadowCascadeWidth = this.shadowCascadeWidth.clone();
-		light.shadowCascadeHeight = this.shadowCascadeHeight.clone();
+		light.shadowCascadeBias = this.shadowCascadeBias;
+		light.shadowCascadeWidth = this.shadowCascadeWidth;
+		light.shadowCascadeHeight = this.shadowCascadeHeight;
 
-		light.shadowCascadeNearZ = this.shadowCascadeNearZ.clone();
-		light.shadowCascadeFarZ  = this.shadowCascadeFarZ.clone();
+		light.shadowCascadeNearZ = this.shadowCascadeNearZ;
+		light.shadowCascadeFarZ  = this.shadowCascadeFarZ;
 
 		return light;
 

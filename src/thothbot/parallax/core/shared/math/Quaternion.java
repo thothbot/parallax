@@ -192,17 +192,12 @@ public class Quaternion
 		return this;
 	}
 	
-	/**
-	 * <a href="http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m">www.mathworks.com</a>
-	 * 
-	 * @param v the Vector3
-	 */
-//	public Quaternion setFromEuler(Vector3 v)
-//	{
-//		return setFromEuler(v, Euler.XYZ);
-//	}
-
-	public Quaternion setFromEuler( Euler euler ) {
+	public Quaternion setFromEuler( Euler euler ) 
+	{
+		return setFromEuler(euler, false);
+	}
+	
+	public Quaternion setFromEuler( Euler euler, boolean update ) {
 
 		// http://www.mathworks.com/matlabcentral/fileexchange/
 		// 	20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
@@ -259,7 +254,7 @@ public class Quaternion
 
 		}
 		
-		this.onChange();
+		if(update) this.onChange();
 
 		return this;
 	}

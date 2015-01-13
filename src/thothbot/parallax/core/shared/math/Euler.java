@@ -297,11 +297,17 @@ public class Euler {
 		return this;
 	}
 	
-	public Euler setFromQuaternion ( Quaternion q ) {
+	public Euler setFromQuaternion ( Quaternion q ) 
+	{
 		return setFromQuaternion(q, this.order);
 	}
+	
+	public Euler setFromQuaternion ( Quaternion q, String order) 
+	{
+		return setFromQuaternion(q, order, false);
+	}
 
-	public Euler setFromQuaternion ( Quaternion q, String order ) {
+	public Euler setFromQuaternion ( Quaternion q, String order, boolean update ) {
 
 		// q is assumed to be normalized
 
@@ -356,7 +362,7 @@ public class Euler {
 
 		this.order = order;
 		
-		this.onChange();
+		if(update) this.onChange();
 
 		return this;
 	}
