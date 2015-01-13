@@ -18,13 +18,10 @@
 
 package thothbot.parallax.core.shared.geometries;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 

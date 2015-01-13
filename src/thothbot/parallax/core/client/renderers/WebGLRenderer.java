@@ -19,7 +19,6 @@
 package thothbot.parallax.core.client.renderers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,15 +32,12 @@ import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.arrays.Int16Array;
-import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
-import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
 import thothbot.parallax.core.client.gl2.enums.DataType;
@@ -73,9 +69,9 @@ import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
+import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry.DrawCall;
 import thothbot.parallax.core.shared.core.FastMap;
-import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Object3D;
@@ -87,9 +83,7 @@ import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
 import thothbot.parallax.core.shared.materials.HasEnvMap;
 import thothbot.parallax.core.shared.materials.HasFog;
-import thothbot.parallax.core.shared.materials.HasShading;
 import thothbot.parallax.core.shared.materials.HasSkinning;
-import thothbot.parallax.core.shared.materials.HasVertexColors;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
@@ -108,7 +102,6 @@ import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.PointCloud;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.AbstractFog;
-import thothbot.parallax.core.shared.scenes.Fog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
 
@@ -129,106 +122,121 @@ public class WebGLRenderer implements HasEventBus
 
 	private WebGlRendererInfo info;
 				
-	// Integer, default is Color(0x000000).
-	private Color clearColor = new Color(0x000000);
+	// Default Color and alpha
+	private Color _clearColor = new Color(0x000000);
+	private double _clearAlpha = 1.0;
+	
+	private List<Light> lights = new ArrayList<Light>();
+	
+	public List<WebGLObject> _webglObjects = new ArrayList<WebGLObject>();	
+	public List<WebGLObject> _webglObjectsImmediate  = new ArrayList<WebGLObject>();
 
-	// double, default is 0
-	private double clearAlpha = 1.0;
+	public List<WebGLObject> opaqueObjects = new ArrayList<WebGLObject>();
+	public List<WebGLObject> transparentObjects = new ArrayList<WebGLObject>();
 	
-	// Integer, default is 4
-	private int maxLights = 4;
+	public double devicePixelRatio = _devicePixelRatio();	
+	public final native double _devicePixelRatio() /*-{
+    	return self.devicePixelRatio !==null ? self.devicePixelRatio : 1.0;
+  	}-*/; 
+
+	// ---- Properties ------------------------------------
 	
-	// Properties
-	private boolean isAutoClear = true;
-	private boolean isAutoClearColor = true;
-	private boolean isAutoClearDepth = true;
-	private boolean isAutoClearStencil = true;
+	// clearing
+	private boolean autoClear = true;
+	private boolean autoClearColor = true;
+	private boolean autoClearDepth = true;
+	private boolean autoClearStencil = true;
 
 	// scene graph
-	private boolean isSortObjects = true;
-	private boolean isAutoUpdateObjects = true;
-	private boolean isAutoUpdateScene = true;
-
+	private boolean sortObjects = true;
+	
 	// physically based shading
-	private boolean isGammaInput = false;
-	private boolean isGammaOutput = false;
-	private boolean isPhysicallyBasedShading = false;
+	private boolean gammaInput = false;
+	private boolean gammaOutput = false;
 
+	// shadow map
+
+	private boolean shadowMapEnabled = false;
+//	shadowMapType = PCFShadowMap;
+	private CullFaceMode shadowMapCullFace = CullFaceMode.FRONT;
+	private boolean shadowMapDebug = false;
+	private boolean shadowMapCascade = false;
+	
 	// morphs
 	private int maxMorphTargets = 8;
 	private int maxMorphNormals = 4;
 
 	// flags
-	private boolean isAutoScaleCubemaps = true;
+	private boolean autoScaleCubemaps = true;
 
-	// custom render plugins
-
-	// An array with render plugins to be applied before rendering.
-	private List<Plugin> renderPluginsPre;
+	// ---- Internal properties ----------------------------
 	
-	//An array with render plugins to be applied after rendering.
-	private List<Plugin> renderPluginsPost;
-
-	// internal state cache
-
+	public Map<String, Shader> _programs;
+	
 	private WebGLProgram _currentProgram = null;
 	private WebGLFramebuffer _currentFramebuffer = null;
 	private int _currentMaterialId = -1;
 	private int _currentGeometryGroupHash = -1;
-	private Camera _currentCamera = null;
+	private Camera _currentCamera = null;	
 	
 	private int _usedTextureUnits = 0;
 	
 	// GL state cache
-
+	
+//	_oldDoubleSided = - 1,
+//	_oldFlipSided = - 1,
 	private Material.SIDE cache_oldMaterialSided = null;
 
-	private Material.BLENDING cache_oldBlending = null;
-	private BlendEquationMode cache_oldBlendEquation = null;
+	private Material.BLENDING _oldBlending = null;
+	
+	private BlendEquationMode _oldBlendEquation = null;
+	private BlendingFactorSrc _oldBlendSrc = null;
+	private BlendingFactorDest _oldBlendDst = null;
+	
+	private Boolean _oldDepthTest = null;
+	private Boolean _oldDepthWrite = null;
 
-	private BlendingFactorSrc cache_oldBlendSrc = null;
-	private BlendingFactorDest cache_oldBlendDst = null;
+	private Boolean _oldPolygonOffset = null;
+	private Double _oldPolygonOffsetFactor = null;
+	private Double _oldPolygonOffsetUnits = null;
+	
+//	_oldLineWidth = null,
 
-	private Boolean cache_oldDepthTest = null;
-	private Boolean cache_oldDepthWrite = null;
-
-	private Boolean cache_oldPolygonOffset = null;
-	private Double cache_oldPolygonOffsetFactor = null;
-	private Double cache_oldPolygonOffsetUnits = null;
-			
 	private int absoluteWidth = 0;
 	private int absoluteHeight = 0;
-	private int viewportWidth = 0;
-	private int viewportHeight = 0;
+	private int _viewportWidth = 0;
+	private int _viewportHeight = 0;
 	private int _currentWidth = 0;
 	private int _currentHeight = 0;
-	
-	// frustum
 
+	private Uint8Array _newAttributes = Uint8Array.create( 16 );
+	private Uint8Array _enabledAttributes = Uint8Array.create( 16 );
+
+	// frustum
 	private Frustum _frustum = new Frustum();
 
 	 // camera matrices cache
 
 	private Matrix4 _projScreenMatrix = new Matrix4();
 	private Matrix4 _projScreenMatrixPS = new Matrix4();
-	
+
 	private Vector3 _vector3 = new Vector3();
-
+	
 	// light arrays cache
-	private boolean _lightsNeedUpdate = true;
-	private RendererLights cache_lights;
-	
-	public Map<String, Shader> _programs;
-	
-	private List<Light> lights = new ArrayList<Light>();
-	public List<RendererObject> opaqueObjects = new ArrayList<RendererObject>();
-	public List<RendererObject> transparentObjects = new ArrayList<RendererObject>();
+	private Vector3 _direction = new Vector3();
 
+	private boolean _lightsNeedUpdate = true;
+
+	private RendererLights _lights;
+		
+	// An array with render plugins to be applied before rendering.
+	private List<Plugin> renderPluginsPre;
+	
+	//An array with render plugins to be applied after rendering.
+	private List<Plugin> renderPluginsPost;
+		
 //	var sprites = [];
 //	var lensFlares = [];
-
-	public List<RendererObject> _webglObjects = new ArrayList<RendererObject>();	
-	public List<RendererObject> _webglObjectsImmediate  = new ArrayList<RendererObject>();
 
 	// GPU capabilities
 	private int GPUmaxTextures;
@@ -244,10 +252,10 @@ public class WebGLRenderer implements HasEventBus
 	private OESStandardDerivatives GLExtensionStandardDerivatives;
 	private ExtTextureFilterAnisotropic GLExtensionTextureFilterAnisotropic;
 	private WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC;
-	
-	private Uint8Array _newAttributes = Uint8Array.create( 16 );
-	private Uint8Array _enabledAttributes = Uint8Array.create( 16 );
-	
+		
+	private boolean isAutoUpdateObjects = true;
+	private boolean isAutoUpdateScene = true;
+
 	/**
 	 * The constructor will create renderer for the {@link Canvas3d} widget.
 	 * 
@@ -261,7 +269,7 @@ public class WebGLRenderer implements HasEventBus
 
 		this.setInfo(new WebGlRendererInfo());
 		
-		this.cache_lights           = new RendererLights();
+		this._lights           = new RendererLights();
 		this._programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
 			
@@ -360,7 +368,7 @@ public class WebGLRenderer implements HasEventBus
 	 * Gets {@link #setAutoClear(boolean)} flag.
 	 */
 	public boolean isAutoClear() {
-		return isAutoClear;
+		return autoClear;
 	}
 
 	/**
@@ -370,14 +378,14 @@ public class WebGLRenderer implements HasEventBus
 	 * @param isAutoClear false or true
 	 */
 	public void setAutoClear(boolean isAutoClear) {
-		this.isAutoClear = isAutoClear;
+		this.autoClear = isAutoClear;
 	}
 
 	/**
 	 * Gets {@link #setAutoClearColor(boolean)} flag.
 	 */
 	public boolean isAutoClearColor() {
-		return isAutoClearColor;
+		return autoClearColor;
 	}
 
 	/**
@@ -387,7 +395,7 @@ public class WebGLRenderer implements HasEventBus
 	 * @param isAutoClearColor false or true
 	 */
 	public void setAutoClearColor(boolean isAutoClearColor) {
-		this.isAutoClearColor = isAutoClearColor;
+		this.autoClearColor = isAutoClearColor;
 	}
 
 
@@ -395,7 +403,7 @@ public class WebGLRenderer implements HasEventBus
 	 * Gets {@link #setAutoClearDepth(boolean)} flag.
 	 */
 	public boolean isAutoClearDepth() {
-		return isAutoClearDepth;
+		return autoClearDepth;
 	}
 
 	/**
@@ -405,14 +413,14 @@ public class WebGLRenderer implements HasEventBus
 	 * @param isAutoClearDepth false or true
 	 */
 	public void setAutoClearDepth(boolean isAutoClearDepth) {
-		this.isAutoClearDepth = isAutoClearDepth;
+		this.autoClearDepth = isAutoClearDepth;
 	}
 
 	/**
 	 * Gets {@link #setAutoClearStencil(boolean)} flag.
 	 */
 	public boolean isAutoClearStencil() {
-		return isAutoClearStencil;
+		return autoClearStencil;
 	}
 
 	/**
@@ -422,14 +430,14 @@ public class WebGLRenderer implements HasEventBus
 	 * @param isAutoClearStencil false or true
 	 */
 	public void setAutoClearStencil(boolean isAutoClearStencil) {
-		this.isAutoClearStencil = isAutoClearStencil;
+		this.autoClearStencil = isAutoClearStencil;
 	}
 
 	/**
 	 * Gets {@link #setSortObjects(boolean)} flag.
 	 */
 	public boolean isSortObjects() {
-		return isSortObjects;
+		return sortObjects;
 	}
 
 	/**
@@ -439,7 +447,7 @@ public class WebGLRenderer implements HasEventBus
 	 * @param isSortObjects false or true
 	 */
 	public void setSortObjects(boolean isSortObjects) {
-		this.isSortObjects = isSortObjects;
+		this.sortObjects = isSortObjects;
 	}
 
 	/**
@@ -467,28 +475,22 @@ public class WebGLRenderer implements HasEventBus
 	}
 	
 	public boolean isGammaInput() {
-		return this.isGammaInput;
+		return this.gammaInput;
 	}
 	
 	public void setGammaInput(boolean isGammaInput) {
-		this.isGammaInput = isGammaInput;
+		this.gammaInput = isGammaInput;
 	}
 	
 	public boolean isGammaOutput() {
-		return this.isGammaOutput;
+		return this.gammaOutput;
 	}
 	
 	public void setGammaOutput(boolean isGammaOutput) {
-		this.isGammaOutput = isGammaOutput;
+		this.gammaOutput = isGammaOutput;
 	}
 
-	public boolean isPhysicallyBasedShading() {
-		return this.isPhysicallyBasedShading;
-	}
-	
-	public void setPhysicallyBasedShading(boolean isPhysicallyBasedShading) {
-		this.isPhysicallyBasedShading = isPhysicallyBasedShading;
-	}
+
 
 	/**
 	 * Defines whether the renderer should auto update the scene.
@@ -609,10 +611,10 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public void setViewport(int x, int y, int width, int height)
 	{
-		this.viewportWidth = width;
-		this.viewportHeight = height;
+		this._viewportWidth = width;
+		this._viewportHeight = height;
 
-		getGL().viewport(x, y, this.viewportWidth, this.viewportHeight);
+		getGL().viewport(x, y, this._viewportWidth, this._viewportHeight);
 	}
 	
 	public int getAbsoluteWidth() {
@@ -648,16 +650,6 @@ public class WebGLRenderer implements HasEventBus
 			getGL().disable(EnableCap.SCISSOR_TEST);
 	}
 	
-	/**
-	 * Specifies how many total lights are allowed in the scene 
-	 * (divided evenly between point & directional lights) By default there are 4.
-	 * 
-	 * @param maxLights
-	 */
-	public void setMaxLights(int maxLights) 
-	{
-		this.maxLights = maxLights;
-	}
 
 	public void setClearColor( int hex )
 	{
@@ -684,10 +676,10 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public void setClearColor( Color color, double alpha ) 
 	{
-		this.clearColor.copy(color);
-		this.clearAlpha = alpha;
+		this._clearColor.copy(color);
+		this._clearAlpha = alpha;
 
-		getGL().clearColor( this.clearColor.getR(), this.clearColor.getG(), this.clearColor.getB(), this.clearAlpha );
+		getGL().clearColor( this._clearColor.getR(), this._clearColor.getG(), this._clearColor.getB(), this._clearAlpha );
 	}
 
 	/**
@@ -697,7 +689,7 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public Color getClearColor() 
 	{
-		return this.clearColor;
+		return this._clearColor;
 	}
 
 	/**
@@ -707,7 +699,7 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public double getClearAlpha() 
 	{
-		return this.clearAlpha;
+		return this._clearAlpha;
 	}
 
 	public void clear() 
@@ -1496,8 +1488,8 @@ public class WebGLRenderer implements HasEventBus
 		_frustum.setFromMatrix( _projScreenMatrix );
 		
 		this.lights = new ArrayList<Light>();
-		this.opaqueObjects = new ArrayList<RendererObject>();
-		this.transparentObjects = new ArrayList<RendererObject>();
+		this.opaqueObjects = new ArrayList<WebGLObject>();
+		this.transparentObjects = new ArrayList<WebGLObject>();
 //		this.sprites.length = 0;
 //		this.lensFlares.length = 0;
 
@@ -1522,7 +1514,7 @@ public class WebGLRenderer implements HasEventBus
 
 		for ( int i = 0, il = this._webglObjectsImmediate.size(); i < il; i ++ ) {
 
-			RendererObject webglObject = this._webglObjectsImmediate.get( i );
+			WebGLObject webglObject = this._webglObjectsImmediate.get( i );
 			Object3D object = webglObject.object;
 
 			if ( object.isVisible() ) {
@@ -1590,14 +1582,14 @@ public class WebGLRenderer implements HasEventBus
 //		 getGL().finish();
 	}
 	
-	public void renderObjectsImmediate ( List<RendererObject> renderList, Boolean isTransparentMaterial, Camera camera,
+	public void renderObjectsImmediate ( List<WebGLObject> renderList, Boolean isTransparentMaterial, Camera camera,
 				List<Light> lights, AbstractFog fog, boolean useBlending, Material overrideMaterial ) {
 
 		Material material = null;
 
 		for ( int i = 0, il = renderList.size(); i < il; i ++ ) {
 
-			RendererObject webglObject = renderList.get( i );
+			WebGLObject webglObject = renderList.get( i );
 			GeometryObject object = webglObject.object;
 
 			if ( object.isVisible() ) {
@@ -1670,9 +1662,9 @@ public class WebGLRenderer implements HasEventBus
 			this._currentProgram = null;
 			this._currentCamera = null;
 
-			this.cache_oldBlending = null;
-			this.cache_oldDepthTest = null;
-			this.cache_oldDepthWrite = null;
+			this._oldBlending = null;
+			this._oldDepthTest = null;
+			this._oldDepthWrite = null;
 			this.cache_oldMaterialSided = null;
 
 			this._currentGeometryGroupHash = -1;
@@ -1687,9 +1679,9 @@ public class WebGLRenderer implements HasEventBus
 			this._currentProgram = null;
 			this._currentCamera = null;
 
-			this.cache_oldBlending = null;
-			this.cache_oldDepthTest = null;
-			this.cache_oldDepthWrite = null;
+			this._oldBlending = null;
+			this._oldDepthTest = null;
+			this._oldDepthWrite = null;
 			this.cache_oldMaterialSided = null;
 
 			this._currentGeometryGroupHash = -1;
@@ -1701,13 +1693,13 @@ public class WebGLRenderer implements HasEventBus
 		}
 	}
 
-	private void renderObjects (List<RendererObject> renderList, Camera camera, List<Light> lights, AbstractFog fog, boolean useBlending ) 
+	private void renderObjects (List<WebGLObject> renderList, Camera camera, List<Light> lights, AbstractFog fog, boolean useBlending ) 
 	{
 		renderObjects ( renderList, camera, lights, fog, useBlending, null);
 	}
 
 	//renderList, camera, lights, fog, useBlending, overrideMaterial
-	private void renderObjects (List<RendererObject> renderList, Camera camera, List<Light> lights, AbstractFog fog, boolean useBlending, Material overrideMaterial ) 
+	private void renderObjects (List<WebGLObject> renderList, Camera camera, List<Light> lights, AbstractFog fog, boolean useBlending, Material overrideMaterial ) 
 	{
 		Log.debug("Called renderObjects() render list contains = " + renderList.size());
 		
@@ -1715,7 +1707,7 @@ public class WebGLRenderer implements HasEventBus
 		
 		for ( int i = renderList.size() - 1; i != - 1; i -- ) {
 
-			RendererObject webglObject = renderList.get( i );
+			WebGLObject webglObject = renderList.get( i );
 
 			GeometryObject object = webglObject.object;
 			AbstractGeometry buffer = webglObject.buffer;
@@ -1941,7 +1933,6 @@ public class WebGLRenderer implements HasEventBus
 		
 		parameters.gammaInput  = isGammaInput();
 		parameters.gammaOutput = isGammaOutput();
-		parameters.physicallyBasedShading = isPhysicallyBasedShading();
 		parameters.isSupportsVertexTextures = this.isGPUsupportsVertexTextures;
 		
 		parameters.useFog  = (fog != null);
@@ -2152,14 +2143,14 @@ public class WebGLRenderer implements HasEventBus
 
 				if (this._lightsNeedUpdate ) 
 				{
-					this.cache_lights.setupLights( lights, this.isGammaInput );
+					this._lights.setupLights( lights, this.gammaInput );
 					this._lightsNeedUpdate = false;
 				}
 
-				this.cache_lights.refreshUniformsLights( m_uniforms );
+				this._lights.refreshUniformsLights( m_uniforms );
 			}
 
-			material.refreshUniforms(camera, this.isGammaInput);
+			material.refreshUniforms(camera, this.gammaInput);
 
 			if ( object.isReceiveShadow() && ! material.isShadowPass() )
 				refreshUniformsShadow( m_uniforms, lights );
@@ -2453,53 +2444,53 @@ public class WebGLRenderer implements HasEventBus
 
 	public void setDepthTest( boolean depthTest ) 
 	{
-		if ( this.cache_oldDepthTest == null || this.cache_oldDepthTest != depthTest ) 
+		if ( this._oldDepthTest == null || this._oldDepthTest != depthTest ) 
 		{
 			if ( depthTest )
 				getGL().enable( EnableCap.DEPTH_TEST );
 			else 
 				getGL().disable( EnableCap.DEPTH_TEST );
 
-			this.cache_oldDepthTest = depthTest;
+			this._oldDepthTest = depthTest;
 		}
 	}
 
 	public void setDepthWrite(boolean depthWrite ) 
 	{
-		if ( this.cache_oldDepthWrite == null || this.cache_oldDepthWrite != depthWrite ) 
+		if ( this._oldDepthWrite == null || this._oldDepthWrite != depthWrite ) 
 		{
 			getGL().depthMask( depthWrite );
-			cache_oldDepthWrite = depthWrite;
+			_oldDepthWrite = depthWrite;
 		}
 	}
 
 	private void setPolygonOffset( boolean polygonoffset, double factor, double units ) 
 	{
-		if ( this.cache_oldPolygonOffset == null || this.cache_oldPolygonOffset != polygonoffset ) 
+		if ( this._oldPolygonOffset == null || this._oldPolygonOffset != polygonoffset ) 
 		{
 			if ( polygonoffset )
 				getGL().enable( EnableCap.POLYGON_OFFSET_FILL );
 			else
 				getGL().disable( EnableCap.POLYGON_OFFSET_FILL );
 
-			this.cache_oldPolygonOffset = polygonoffset;
+			this._oldPolygonOffset = polygonoffset;
 		}
 
-		if ( polygonoffset && ( cache_oldPolygonOffsetFactor == null || 
-				cache_oldPolygonOffsetUnits == null || 
-				cache_oldPolygonOffsetFactor != factor || 
-				cache_oldPolygonOffsetUnits != units ) 
+		if ( polygonoffset && ( _oldPolygonOffsetFactor == null || 
+				_oldPolygonOffsetUnits == null || 
+				_oldPolygonOffsetFactor != factor || 
+				_oldPolygonOffsetUnits != units ) 
 		) {
 			getGL().polygonOffset( factor, units );
 
-			this.cache_oldPolygonOffsetFactor = factor;
-			this.cache_oldPolygonOffsetUnits = units;
+			this._oldPolygonOffsetFactor = factor;
+			this._oldPolygonOffsetUnits = units;
 		}
 	}
 
 	public void setBlending( Material.BLENDING blending) 
 	{
-		if ( blending != this.cache_oldBlending ) 
+		if ( blending != this._oldBlending ) 
 		{
 			if( blending == Material.BLENDING.NO) 
 			{
@@ -2544,12 +2535,12 @@ public class WebGLRenderer implements HasEventBus
 						BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
 			}
 
-			this.cache_oldBlending = blending;
+			this._oldBlending = blending;
 		}
 		
-		this.cache_oldBlendEquation = null;
-		this.cache_oldBlendSrc = null;
-		this.cache_oldBlendDst = null;
+		this._oldBlendEquation = null;
+		this._oldBlendSrc = null;
+		this._oldBlendDst = null;
 	}
 
 	private void setBlending( Material.BLENDING blending, BlendEquationMode blendEquation, BlendingFactorSrc blendSrc, BlendingFactorDest blendDst ) 
@@ -2558,18 +2549,18 @@ public class WebGLRenderer implements HasEventBus
 
 		if ( blending == Material.BLENDING.CUSTOM ) 
 		{
-			if ( blendEquation != this.cache_oldBlendEquation ) 
+			if ( blendEquation != this._oldBlendEquation ) 
 			{
 				getGL().blendEquation( blendEquation );
-				this.cache_oldBlendEquation = blendEquation;
+				this._oldBlendEquation = blendEquation;
 			}
 
-			if ( blendSrc != cache_oldBlendSrc || blendDst != cache_oldBlendDst ) 
+			if ( blendSrc != _oldBlendSrc || blendDst != _oldBlendDst ) 
 			{
 				getGL().blendFunc( blendSrc, blendDst);
 
-				this.cache_oldBlendSrc = blendSrc;
-				this.cache_oldBlendDst = blendDst;
+				this._oldBlendSrc = blendSrc;
+				this._oldBlendDst = blendDst;
 			}
 		}
 	}
@@ -2713,7 +2704,7 @@ public class WebGLRenderer implements HasEventBus
 
 			for ( int i = 0; i < 6; i ++ ) 
 			{
-				if ( this.isAutoScaleCubemaps )
+				if ( this.autoScaleCubemaps )
 					cubeImage.add(clampToMaxSize( texture.getImage( i ), this.GPUmaxCubemapSize ));
 
 				else
@@ -2774,8 +2765,8 @@ public class WebGLRenderer implements HasEventBus
 		} 
 		else 
 		{
-			this._currentWidth = this.viewportWidth;
-			this._currentHeight = this.viewportHeight;
+			this._currentWidth = this._viewportWidth;
+			this._currentHeight = this._viewportHeight;
 		}
 
 		if ( framebuffer != this._currentFramebuffer ) 
