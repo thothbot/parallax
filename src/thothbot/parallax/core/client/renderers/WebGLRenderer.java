@@ -41,6 +41,7 @@ import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
 import thothbot.parallax.core.client.gl2.enums.DataType;
@@ -86,7 +87,9 @@ import thothbot.parallax.core.shared.lights.ShadowLight;
 import thothbot.parallax.core.shared.lights.SpotLight;
 import thothbot.parallax.core.shared.materials.HasEnvMap;
 import thothbot.parallax.core.shared.materials.HasFog;
+import thothbot.parallax.core.shared.materials.HasShading;
 import thothbot.parallax.core.shared.materials.HasSkinning;
+import thothbot.parallax.core.shared.materials.HasVertexColors;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
@@ -656,12 +659,17 @@ public class WebGLRenderer implements HasEventBus
 		this.maxLights = maxLights;
 	}
 
+	public void setClearColor( int hex )
+	{
+		setClearColor(new Color(hex), 1.0);
+	}
+
 	/**
 	 * Sets the the background color, using hex for the color.<br>
 	 * 
 	 * @param hex the clear color value.
 	 */
-	public void setClearColor( int hex, double alpha  )
+	public void setClearColor( int hex, double alpha )
 	{
 		setClearColor(new Color(hex), alpha);
 	}
@@ -794,7 +802,7 @@ public class WebGLRenderer implements HasEventBus
 	/**
 	 * Morph Targets Buffer initialization
 	 */
-	private void setupMorphTargets ( Material material, BufferGeometry geometrybuffer, Mesh object ) 
+	private void setupMorphTargets ( Material material, Geometry geometrybuffer, Mesh object ) 
 	{
 		// set base
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
@@ -900,8 +908,8 @@ public class WebGLRenderer implements HasEventBus
 		}
 	}
 	
-//	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
-//
+	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
+
 //		initAttributes();
 //
 //		if ( object.hasPositions && ! object.__webglVertexBuffer ) object.__webglVertexBuffer = getGL().createBuffer();
@@ -912,8 +920,8 @@ public class WebGLRenderer implements HasEventBus
 //		if ( object.hasPositions )
 //		{
 //
-//			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglVertexBuffer );
-//			getGL().bufferData( getGL().ARRAY_BUFFER, object.positionArray, getGL().DYNAMIC_DRAW );
+//			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglVertexBuffer );
+//			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.positionArray, BufferUsage.DYNAMIC_DRAW );
 //			enableAttribute( program.attributes.position );
 //			getGL().vertexAttribPointer( program.attributes.position, 3, getGL().FLOAT, false, 0, 0 );
 //
@@ -921,16 +929,16 @@ public class WebGLRenderer implements HasEventBus
 //
 //		if ( object.hasNormals ) {
 //
-//			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglNormalBuffer );
+//			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglNormalBuffer );
 //
-//			if ( material.shading === THREE.FlatShading ) {
+//			if (((HasShading)material).getShading() == Material.SHADING.FLAT ) {
 //
 //				var nx, ny, nz,
 //					nax, nbx, ncx, nay, nby, ncy, naz, nbz, ncz,
 //					normalArray,
 //					i, il = object.count * 3;
 //
-//				for ( i = 0; i < il; i += 9 ) {
+//				for ( int i = 0; i < il; i += 9 ) {
 //
 //					normalArray = object.normalArray;
 //
@@ -966,7 +974,7 @@ public class WebGLRenderer implements HasEventBus
 //
 //			}
 //
-//			getGL().bufferData( getGL().ARRAY_BUFFER, object.normalArray, getGL().DYNAMIC_DRAW );
+//			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.normalArray, BufferUsage.DYNAMIC_DRAW );
 //			enableAttribute( program.attributes.normal );
 //			getGL().vertexAttribPointer( program.attributes.normal, 3, getGL().FLOAT, false, 0, 0 );
 //
@@ -974,75 +982,75 @@ public class WebGLRenderer implements HasEventBus
 //
 //		if ( object.hasUvs && material.map ) {
 //
-//			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglUvBuffer );
-//			getGL().bufferData( getGL().ARRAY_BUFFER, object.uvArray, getGL().DYNAMIC_DRAW );
+//			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglUvBuffer );
+//			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.uvArray, BufferUsage.DYNAMIC_DRAW );
 //			enableAttribute( program.attributes.uv );
-//			getGL().vertexAttribPointer( program.attributes.uv, 2, getGL().FLOAT, false, 0, 0 );
+//			getGL().vertexAttribPointer( program.attributes.uv, 2, DataType.FLOAT, false, 0, 0 );
 //
 //		}
 //
-//		if ( object.hasColors && material.vertexColors !== THREE.NoColors ) {
+//		if ( object.hasColors && ((HasVertexColors)material).isVertexColors != Material.COLORS.NO ) {
 //
-//			getGL().bindBuffer( getGL().ARRAY_BUFFER, object.__webglColorBuffer );
-//			getGL().bufferData( getGL().ARRAY_BUFFER, object.colorArray, getGL().DYNAMIC_DRAW );
+//			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, object.__webglColorBuffer );
+//			getGL().bufferData( BufferTarget.ARRAY_BUFFER, object.colorArray, BufferUsage.DYNAMIC_DRAW );
 //			enableAttribute( program.attributes.color );
-//			getGL().vertexAttribPointer( program.attributes.color, 3, getGL().FLOAT, false, 0, 0 );
+//			getGL().vertexAttribPointer( program.attributes.color, 3, DataType.FLOAT, false, 0, 0 );
 //
 //		}
 //
 //		disableUnusedAttributes();
 //
-//		getGL().drawArrays( getGL().TRIANGLES, 0, object.count );
+//		getGL().drawArrays( BeginMode.TRIANGLES, 0, object.count );
 //
 //		object.count = 0;
-//
-//	}
+
+	}
 	
 	private void setupVertexAttributes( Material material, Shader program, BufferGeometry geometry, int startIndex ) {
 
-		var geometryAttributes = geometry.attributes;
-
-		var programAttributes = program.attributes;
-		var programAttributesKeys = program.attributesKeys;
-
-		for ( var i = 0, l = programAttributesKeys.length; i < l; i ++ ) {
-
-			var key = programAttributesKeys[ i ];
-			var programAttribute = programAttributes[ key ];
-
-			if ( programAttribute >= 0 ) {
-
-				var geometryAttribute = geometryAttributes[ key ];
-
-				if ( geometryAttribute != undefined ) {
-
-					var size = geometryAttribute.itemSize;
-
-					gl.bindBuffer( _gl.ARRAY_BUFFER, geometryAttribute.buffer );
-
-					enableAttribute( programAttribute );
-
-					gl.vertexAttribPointer( programAttribute, size, _gl.FLOAT, false, 0, startIndex * size * 4 ); // 4 bytes per Float32
-
-				} else if ( material.defaultAttributeValues !== undefined ) {
-
-					if ( material.defaultAttributeValues[ key ].length === 2 ) {
-
-						gl.vertexAttrib2fv( programAttribute, material.defaultAttributeValues[ key ] );
-
-					} else if ( material.defaultAttributeValues[ key ].length === 3 ) {
-
-						gl.vertexAttrib3fv( programAttribute, material.defaultAttributeValues[ key ] );
-
-					}
-
-				}
-
-			}
-
-		}
-
-		disableUnusedAttributes();
+//		var geometryAttributes = geometry.attributes;
+//
+//		var programAttributes = program.attributes;
+//		var programAttributesKeys = program.attributesKeys;
+//
+//		for ( var i = 0, l = programAttributesKeys.length; i < l; i ++ ) {
+//
+//			var key = programAttributesKeys[ i ];
+//			var programAttribute = programAttributes[ key ];
+//
+//			if ( programAttribute >= 0 ) {
+//
+//				var geometryAttribute = geometryAttributes[ key ];
+//
+//				if ( geometryAttribute != undefined ) {
+//
+//					var size = geometryAttribute.itemSize;
+//
+//					gl.bindBuffer( _gl.ARRAY_BUFFER, geometryAttribute.buffer );
+//
+//					enableAttribute( programAttribute );
+//
+//					gl.vertexAttribPointer( programAttribute, size, _gl.FLOAT, false, 0, startIndex * size * 4 ); // 4 bytes per Float32
+//
+//				} else if ( material.defaultAttributeValues !== undefined ) {
+//
+//					if ( material.defaultAttributeValues[ key ].length === 2 ) {
+//
+//						gl.vertexAttrib2fv( programAttribute, material.defaultAttributeValues[ key ] );
+//
+//					} else if ( material.defaultAttributeValues[ key ].length === 3 ) {
+//
+//						gl.vertexAttrib3fv( programAttribute, material.defaultAttributeValues[ key ] );
+//
+//					}
+//
+//				}
+//
+//			}
+//
+//		}
+//
+//		disableUnusedAttributes();
 
 	}
 
@@ -1543,7 +1551,7 @@ public class WebGLRenderer implements HasEventBus
 
 			renderObjects( opaqueObjects, camera, lights, fog, true, material );
 			renderObjects( transparentObjects, camera, lights, fog, true, material );
-			renderObjectsImmediate( _webglObjectsImmediate, "", camera, lights, fog, false, material );
+			renderObjectsImmediate( _webglObjectsImmediate, null, camera, lights, fog, false, material );
 		} 
 		else 
 		{
@@ -1555,12 +1563,12 @@ public class WebGLRenderer implements HasEventBus
 			setBlending( Material.BLENDING.NO);
 
 			renderObjects( opaqueObjects, camera, lights, fog, false, material );
-			renderObjectsImmediate( _webglObjectsImmediate, 'opaque', camera, lights, fog, false, material );
+			renderObjectsImmediate( _webglObjectsImmediate, false, camera, lights, fog, false, material );
 
 			// transparent pass (back-to-front order)
 
 			renderObjects( transparentObjects, camera, lights, fog, true, material );
-			renderObjectsImmediate( _webglObjectsImmediate, 'transparent', camera, lights, fog, true, material );
+			renderObjectsImmediate( _webglObjectsImmediate, true, camera, lights, fog, true, material );
 		}
 
 		// custom render plugins (post pass)
@@ -1580,6 +1588,68 @@ public class WebGLRenderer implements HasEventBus
 		this.setDepthWrite( true );
 
 //		 getGL().finish();
+	}
+	
+	public void renderObjectsImmediate ( List<RendererObject> renderList, Boolean isTransparentMaterial, Camera camera,
+				List<Light> lights, AbstractFog fog, boolean useBlending, Material overrideMaterial ) {
+
+		Material material = null;
+
+		for ( int i = 0, il = renderList.size(); i < il; i ++ ) {
+
+			RendererObject webglObject = renderList.get( i );
+			GeometryObject object = webglObject.object;
+
+			if ( object.isVisible() ) {
+
+				if ( overrideMaterial != null) {
+
+					material = overrideMaterial;
+
+				} else {
+
+					if(isTransparentMaterial != null)
+						material = isTransparentMaterial ? webglObject.transparent : webglObject.opaque;
+
+					if ( material == null ) 
+						continue;
+
+					if ( useBlending )
+						setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
+
+					setDepthTest( material.isDepthTest() );
+					setDepthWrite( material.isDepthWrite() );
+					setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits() );
+
+				}
+
+				renderImmediateObject( camera, lights, fog, material, object );
+
+			}
+
+		}
+
+	}
+	
+	private void renderImmediateObject( Camera camera, List<Light> lights, AbstractFog fog, Material material, GeometryObject object ) {
+
+		Shader program = setProgram( camera, lights, fog, material, object );
+
+		this._currentGeometryGroupHash = - 1;
+
+		setMaterialFaces( material );
+
+//		if ( object.immediateRenderCallback ) {
+//
+//			object.immediateRenderCallback( program, _gl, _frustum );
+//
+//		} else {
+
+//			object.render( function ( object ) { _this.renderBufferImmediate( object, program, material ); } );
+		renderBufferImmediate( object, program, material );
+
+//		}
+
 	}
 
 	private void renderPlugins( List<Plugin> plugins, Camera camera ) 
@@ -2106,7 +2176,8 @@ public class WebGLRenderer implements HasEventBus
 
 				if ( m_uniforms.get("cameraPosition").getLocation() != null ) 
 				{
-					Vector3 position = camera.getMatrixWorld().getPosition();
+					Vector3 position = new Vector3();
+					position.setFromMatrixPosition( camera.getMatrixWorld() );
 					getGL().uniform3f( m_uniforms.get("cameraPosition").getLocation(), position.getX(), position.getY(), position.getZ() );
 				}
 			}
@@ -2118,7 +2189,7 @@ public class WebGLRenderer implements HasEventBus
 			) {
 
 				if ( m_uniforms.get("viewMatrix").getLocation() != null ) 
-					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera._viewMatrixArray );
+					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera.getMatrixWorldInverse().getArray() );
 			}
 		}
 

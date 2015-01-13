@@ -52,10 +52,11 @@ public class Euler {
 	private EulerChangeHandler handler;
 	
 	public Euler() {
-		this.x = 0.0;
-		this.y = 0.0;
-		this.z = 0.0;
-		this.order = DefaultOrder;
+		this(0.0,0.0,0.0);
+	}
+	
+	public Euler (double x, double y, double z) {
+		this(x, y, z, DefaultOrder);
 	}
 	
 	public Euler (double x, double y, double z, String order) {

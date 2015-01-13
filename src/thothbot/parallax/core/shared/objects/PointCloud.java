@@ -56,12 +56,12 @@ public class PointCloud extends GeometryObject
 		this(new Geometry());
 	}
 	
-	public PointCloud(Geometry geometry) 
+	public PointCloud(AbstractGeometry geometry) 
 	{
 		this(geometry, PointCloud.defaultMaterial);
 	}
 
-	public PointCloud(Geometry geometry, PointCloudMaterial material) 
+	public PointCloud(AbstractGeometry geometry, Material material) 
 	{
 		super(geometry, material);
 	}
