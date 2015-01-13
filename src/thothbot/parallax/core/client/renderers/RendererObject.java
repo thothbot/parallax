@@ -61,49 +61,49 @@ public class RendererObject implements Comparable<RendererObject>
 		}
 	}
 	
-	public void unrollBufferMaterial() 
+	public void unrollBufferMaterial(WebGLRenderer renderer) 
 	{
-		Material meshMaterial = object.getMaterial();
+		GeometryObject object = this.object;
+		AbstractGeometry buffer = this.buffer;
 
-		if ( meshMaterial instanceof MeshFaceMaterial ) 
+		AbstractGeometry geometry = object.getGeometry();
+		Material material = object.getMaterial();
+
+		if ( material instanceof MeshFaceMaterial ) 
 		{
-			int materialIndex = ((BufferGeometry)buffer).materialIndex;
+			int materialIndex = geometry instanceof BufferGeometry ? 0 : 0; //((BufferGeometry)buffer).;
 
-			if ( materialIndex >= 0 ) 
-			{
-				Material material = object.getGeometry().getMaterials().get( materialIndex );
+			material = ((MeshFaceMaterial)material).getMaterials().get( materialIndex );
 
-				if ( material.isTransparent() ) 
-				{
-					transparent = material;
-					opaque = null;
-					
-				} 
-				else 
-				{
-					opaque = material;
-					transparent = null;
-				}
+			this.material = material;
+
+			if ( material.isTransparent() ) {
+
+				renderer.transparentObjects.add( this );
+
+			} else {
+
+				renderer.opaqueObjects.add( this );
+
 			}
 		} 
 		else 
 		{
 
-			Material material = meshMaterial;
+			this.material = material;
 
 			if ( material != null) 
 			{
-				if ( material.isTransparent() ) 
-				{
-					transparent = material;
-					opaque = null;
+				if ( material.isTransparent() ) {
 
-				} 
-				else 
-				{
-					opaque = material;
-					transparent = null;
+					renderer.transparentObjects.add( this );
+
+				} else {
+
+					renderer.opaqueObjects.add( this );
+
 				}
+
 			}
 		}
 	}

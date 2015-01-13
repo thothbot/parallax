@@ -218,8 +218,8 @@ public class WebGLRenderer implements HasEventBus
 	public Map<String, Shader> _programs;
 	
 	private List<Light> lights = new ArrayList<Light>();
-	private List<RendererObject> opaqueObjects = new ArrayList<RendererObject>();
-	private List<RendererObject> transparentObjects = new ArrayList<RendererObject>();
+	public List<RendererObject> opaqueObjects = new ArrayList<RendererObject>();
+	public List<RendererObject> transparentObjects = new ArrayList<RendererObject>();
 
 //	var sprites = [];
 //	var lensFlares = [];
