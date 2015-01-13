@@ -103,6 +103,7 @@ import thothbot.parallax.core.shared.math.Vector4;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.PointCloud;
+import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.AbstractFog;
 import thothbot.parallax.core.shared.scenes.Fog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
@@ -2633,7 +2634,7 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	private int allocateBones (GeometryObject object ) 
 	{
-		if ( this.isGPUsupportsBoneTextures && object instanceof SkinnedMesh && ((SkinnedMesh)object).useVertexTexture ) 
+		if ( this.isGPUsupportsBoneTextures && object instanceof SkinnedMesh && ((SkinnedMesh)object).isUseVertexTexture() ) 
 		{
 			return 1024;
 		} 
@@ -2654,11 +2655,11 @@ public class WebGLRenderer implements HasEventBus
 
 			if ( object instanceof SkinnedMesh ) 
 			{
-				maxBones = Math.min( ((SkinnedMesh)object).bones.size(), maxBones );
+				maxBones = Math.min( ((SkinnedMesh)object).getBones().size(), maxBones );
 
-				if ( maxBones < ((SkinnedMesh)object).bones.size() )
+				if ( maxBones < ((SkinnedMesh)object).getBones().size() )
 				{
-					Log.warn( "WebGLRenderer: too many bones - " + ((SkinnedMesh)object).bones.size() 
+					Log.warn( "WebGLRenderer: too many bones - " + ((SkinnedMesh)object).getBones().size() 
 							+ ", this GPU supports just " + maxBones + " (try OpenGL instead of ANGLE)" );
 				}
 			}

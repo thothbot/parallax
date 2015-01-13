@@ -37,6 +37,7 @@ public class SkinnedMesh extends Mesh {
 	private Matrix4 bindMatrix = new Matrix4();
 	private Matrix4 bindMatrixInverse = new Matrix4();
 	private boolean useVertexTexture;
+	List<Bone> bones = new ArrayList<Bone>();	
 	
 	public SkinnedMesh(AbstractGeometry geometry, Material material, boolean useVertexTexture) {
 		super(geometry, material);
@@ -45,8 +46,6 @@ public class SkinnedMesh extends Mesh {
 
 		// TODO: remove bone creation as there is no reason (other than
 		// convenience) for THREE.SkinnedMesh to do this.
-
-		List<Bone> bones = new ArrayList<Bone>();
 
 		if ( getGeometry() != null && ((Geometry)getGeometry()).getBones() != null ) {
 
@@ -102,7 +101,23 @@ public class SkinnedMesh extends Mesh {
 //		this.bind( new THREE.Skeleton( bones, undefined, useVertexTexture ) );
 
 	}
-	
+		
+	public List<Bone> getBones() {
+		return bones;
+	}
+
+	public void setBones(List<Bone> bones) {
+		this.bones = bones;
+	}
+
+	public boolean isUseVertexTexture() {
+		return useVertexTexture;
+	}
+
+	public void setUseVertexTexture(boolean useVertexTexture) {
+		this.useVertexTexture = useVertexTexture;
+	}
+
 	public void normalizeSkinWeights () {
 
 		if ( getGeometry() instanceof Geometry ) {
