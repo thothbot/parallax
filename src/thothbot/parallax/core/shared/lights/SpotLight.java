@@ -99,11 +99,7 @@ public class SpotLight extends ShadowLight
 
 	private double shadowCameraFov = 50;
 	
-	private RenderTargetTexture shadowMap;
-	private Vector2 shadowMapSize;
 	private Camera shadowCamera;
-	private Matrix4 shadowMatrix;
-
 
 	public SpotLight(int hex) 
 	{
@@ -165,30 +161,6 @@ public class SpotLight extends ShadowLight
 
 	public void setShadowCameraFov(double shadowCameraFov) {
 		this.shadowCameraFov = shadowCameraFov;
-	}
-	
-	public Matrix4 getShadowMatrix() {
-		return shadowMatrix;
-	}
-
-	public void setShadowMatrix(Matrix4 shadowMatrix) {
-		this.shadowMatrix = shadowMatrix;
-	}
-	
-	public RenderTargetTexture getShadowMap() {
-		return shadowMap;
-	}
-
-	public void setShadowMap(RenderTargetTexture shadowMap) {
-		this.shadowMap = shadowMap;
-	}
-
-	public Vector2 getShadowMapSize() {
-		return shadowMapSize;
-	}
-
-	public void setShadowMapSize(Vector2 shadowMapSize) {
-		this.shadowMapSize = shadowMapSize;
 	}
 	
 	public Camera getShadowCamera() {

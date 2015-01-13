@@ -21,6 +21,8 @@ package thothbot.parallax.core.shared.objects;
 import java.util.ArrayList;
 import java.util.List;
 
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.Geometry;
@@ -32,6 +34,9 @@ import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.math.Vector4;
 
 public class SkinnedMesh extends Mesh {
+	
+	public Texture boneTexture;
+	public Float32Array boneMatrices = (Float32Array) Float32Array.createArray();
 	
 	private String bindMode = "attached";
 	private Matrix4 bindMatrix = new Matrix4();
@@ -116,6 +121,22 @@ public class SkinnedMesh extends Mesh {
 
 	public void setUseVertexTexture(boolean useVertexTexture) {
 		this.useVertexTexture = useVertexTexture;
+	}
+	
+	public Texture getBoneTexture() {
+		return boneTexture;
+	}
+
+	public void setBoneTexture(Texture boneTexture) {
+		this.boneTexture = boneTexture;
+	}
+
+	public Float32Array getBoneMatrices() {
+		return boneMatrices;
+	}
+
+	public void setBoneMatrices(Float32Array boneMatrices) {
+		this.boneMatrices = boneMatrices;
 	}
 
 	public void normalizeSkinWeights () {

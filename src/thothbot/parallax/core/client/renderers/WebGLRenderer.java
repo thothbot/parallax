@@ -1956,7 +1956,7 @@ public class WebGLRenderer implements HasEventBus
 		// not sure why, but otherwise weird things happen
 		if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() )
 		{
-			if ( object instanceof SkinnedMesh && ((SkinnedMesh)object).useVertexTexture && this.isGPUsupportsBoneTextures) 
+			if ( object instanceof SkinnedMesh && ((SkinnedMesh)object).isUseVertexTexture() && this.isGPUsupportsBoneTextures) 
 			{
 				if ( m_uniforms.get("boneTexture").getLocation() != null ) 
 				{
