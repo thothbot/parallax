@@ -40,6 +40,7 @@ import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector4;
@@ -170,7 +171,7 @@ public abstract class Material
 	
 	//
 		
-//	private boolean isShadowPass;
+	private boolean isShadowPass;
 		
 	public Material()
 	{
@@ -424,13 +425,13 @@ public abstract class Material
 		this.alphaTest = alphaTest;
 	}
 	
-//	public boolean isShadowPass() {
-//		return isShadowPass;
-//	}
-//
-//	public void setShadowPass(boolean isShadowPass) {
-//		this.isShadowPass = isShadowPass;
-//	}
+	public boolean isShadowPass() {
+		return isShadowPass;
+	}
+
+	public void setShadowPass(boolean isShadowPass) {
+		this.isShadowPass = isShadowPass;
+	}
 
 	public Shader getShader() 
 	{
@@ -505,7 +506,7 @@ public abstract class Material
 		if(this instanceof MeshPhongMaterial)
 		{
 			parameters.metal = ((MeshPhongMaterial)this).isMetal();
-			parameters.perPixel = ((MeshPhongMaterial)this).isPerPixel();
+//			parameters.perPixel = ((MeshPhongMaterial)this).isPerPixel();
 		}
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
@@ -809,7 +810,7 @@ public abstract class Material
 		}
 	}
 
-	private boolean materialNeedsSmoothNormals() 
+	public boolean materialNeedsSmoothNormals() 
 	{
 		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == Material.SHADING.SMOOTH;
 	}
@@ -860,7 +861,7 @@ public abstract class Material
 		}
 		else if ( geometryGroup.materialIndex >= 0 )
 		{
-			material = object.getGeometry().getMaterials().get( geometryGroup.materialIndex );	
+			material = ((Geometry)object.getGeometry()).materials.get( geometryGroup.materialIndex );	
 		}
 		
 		return material;

@@ -1182,8 +1182,7 @@ public class WebGLRenderer implements HasEventBus
 		{
 
 			BeginMode mode = ( ((Line)object).getMode() == Line.MODE.STRIPS ) ? BeginMode.LINE_STRIP : BeginMode.LINES;
-
-			setLineWidth( ((LineBasicMaterial)material.getLinewidth() );
+			object.setLineWidth(gl, ((LineBasicMaterial)material).getLinewidth());
 
 			BufferAttribute index = geometry.getAttribute("index");
 
@@ -1272,8 +1271,175 @@ public class WebGLRenderer implements HasEventBus
 
 		}
 	}
+	
+	private void initObject( Object3D object, Object3D scene ) {
+
+//		if ( object.__webglInit == null ) {
+//
+//			object.__webglInit = true;
+//			object._modelViewMatrix = new THREE.Matrix4();
+//			object._normalMatrix = new THREE.Matrix3();
+//
+//		}
+//
+//		var geometry = object.geometry;
+//
+//		if ( geometry == null ) {
+//
+//			// ImmediateRenderObject
+//
+//		} else if ( geometry.__webglInit == null ) {
+//
+//			geometry.__webglInit = true;
+//			geometry.addEventListener( 'dispose', onGeometryDispose );
+//
+//			if ( geometry instanceof BufferGeometry ) {
+//
+//				//
+//
+//			} else if ( object instanceof Mesh ) {
+//
+//				initGeometryGroups( scene, object, geometry );
+//
+//			} else if ( object instanceof Line ) {
+//
+//				if ( geometry.__webglVertexBuffer == null ) {
+//
+//					createLineBuffers( geometry );
+//					initLineBuffers( geometry, object );
+//
+//					geometry.verticesNeedUpdate = true;
+//					geometry.colorsNeedUpdate = true;
+//					geometry.lineDistancesNeedUpdate = true;
+//
+//				}
+//
+//			} else if ( object instanceof PointCloud ) {
+//
+//				if ( geometry.__webglVertexBuffer == null ) {
+//
+//					createParticleBuffers( geometry );
+//					initParticleBuffers( geometry, object );
+//
+//					geometry.verticesNeedUpdate = true;
+//					geometry.colorsNeedUpdate = true;
+//
+//				}
+//
+//			}
+//
+//		}
+//
+//		if ( object.__webglActive == null) {
+//
+//			object.__webglActive = true;
+//
+//			if ( object instanceof Mesh ) {
+//
+//				if ( geometry instanceof BufferGeometry ) {
+//
+//					addBuffer( _webglObjects, geometry, object );
+//
+//				} else if ( geometry instanceof Geometry ) {
+//
+//					var geometryGroupsList = geometryGroups[ geometry.id ];
+//
+//					for ( var i = 0,l = geometryGroupsList.length; i < l; i ++ ) {
+//
+//						addBuffer( _webglObjects, geometryGroupsList[ i ], object );
+//
+//					}
+//
+//				}
+//
+//			} else if ( object instanceof Line || object instanceof PointCloud ) {
+//
+//				addBuffer( _webglObjects, geometry, object );
+//
+//			} else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
+//
+//				addBufferImmediate( _webglObjectsImmediate, object );
+//
+//			}
+//
+//		}
+
+	}
 
 
+	private void projectObject( Object3D scene, Object3D object ) {
+
+//		if ( object.isVisible() == false ) return;
+//
+//		if ( object instanceof Scene /*|| object instanceof Group */) {
+//
+//			// skip
+//
+//		} else {
+//
+//			initObject( object, scene );
+//
+//			if ( object instanceof Light ) {
+//
+//				lights.add( (Light) object );
+//
+//			} /*else if ( object instanceof Sprite ) {
+//
+//				sprites.push( object );
+//
+//			} else if ( object instanceof LensFlare ) {
+//
+//				lensFlares.push( object );
+//
+//			} */else {
+//
+//				RendererObject webglObjects = this._webglObjects.get( object.getId() );
+//
+//				if ( webglObjects != null && ( object.isFrustumCulled() == false || _frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
+//
+//					updateObject( object, scene );
+//
+//					for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
+//
+//						RendererObject webglObject = webglObjects.get(i);
+//
+//						webglObject.unrollBufferMaterial(this);
+//
+//						webglObject.render = true;
+//
+////						if ( _this.sortObjects == true ) {
+////
+////							if ( object.renderDepth != null ) {
+////
+////								webglObject.z = object.renderDepth;
+////
+////							} else {
+////
+////								_vector3.setFromMatrixPosition( object.matrixWorld );
+////								_vector3.applyProjection( _projScreenMatrix );
+////
+////								webglObject.z = _vector3.z;
+////
+////							}
+////
+////						}
+//
+//					}
+//
+//				}
+//
+//			}
+//
+//		}
+//
+//		for ( int i = 0, l = object.getChildren().size(); i < l; i ++ ) {
+//
+//			projectObject( scene, object.getChildren().get( i ) );
+//
+//		}
+
+	}
+	
 	public void render( Scene scene, Camera camera )
 	{
 		render(scene, camera, null);
@@ -1284,78 +1450,6 @@ public class WebGLRenderer implements HasEventBus
 		render(scene, camera, renderTarget, false);
 	}
 	
-	private void projectObject( Object3D scene, Object3D object ) {
-
-		if ( object.isVisible() == false ) return;
-
-		if ( object instanceof Scene /*|| object instanceof Group */) {
-
-			// skip
-
-		} else {
-
-			initObject( object, scene );
-
-			if ( object instanceof Light ) {
-
-				lights.add( (Light) object );
-
-			} /*else if ( object instanceof Sprite ) {
-
-				sprites.push( object );
-
-			} else if ( object instanceof LensFlare ) {
-
-				lensFlares.push( object );
-
-			} */else {
-
-				RendererObject webglObjects = this._webglObjects.get( object.getId() );
-
-				if ( webglObjects != null && ( object.isFrustumCulled() == false || _frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
-
-					updateObject( object, scene );
-
-					for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
-
-						RendererObject webglObject = webglObjects.get(i);
-
-						unrollBufferMaterial( webglObject );
-
-						webglObject.render = true;
-
-//						if ( _this.sortObjects == true ) {
-//
-//							if ( object.renderDepth != null ) {
-//
-//								webglObject.z = object.renderDepth;
-//
-//							} else {
-//
-//								_vector3.setFromMatrixPosition( object.matrixWorld );
-//								_vector3.applyProjection( _projScreenMatrix );
-//
-//								webglObject.z = _vector3.z;
-//
-//							}
-//
-//						}
-
-					}
-
-				}
-
-			}
-
-		}
-
-		for ( int i = 0, l = object.getChildren().size(); i < l; i ++ ) {
-
-			projectObject( scene, object.getChildren().get( i ) );
-
-		}
-
-	}
 	
 
 	/**

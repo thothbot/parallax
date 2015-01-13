@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Matrix3;
@@ -131,9 +132,9 @@ public class Geometry extends AbstractGeometry
 //
 //
 //	private boolean isLineDistancesNeedUpdate;
-//	
-//	// Array of materials.
-//	private List<Material> materials;
+	
+	// Array of materials.
+	public List<Material> materials;
 //	
 //	private List<Vector3> skinVerticesA;
 //	private List<Vector3> skinVerticesB;

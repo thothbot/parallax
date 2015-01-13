@@ -761,7 +761,7 @@ public class Mesh extends GeometryObject
 		if ( ! geometryGroup.__inittedArrays )
 			 return;
 		
-		boolean needsSmoothNormals = materialNeedsSmoothNormals( material );
+		boolean needsSmoothNormals = material.materialNeedsSmoothNormals();
 		
 		int vertexIndex = 0,
 
@@ -1560,48 +1560,48 @@ public class Mesh extends GeometryObject
 	@Override
 	public void deleteBuffers(WebGLRenderer renderer) 
 	{
-		for ( GeometryGroup geometryGroup : geometry.getGeometryGroupsCache().values() )
-		{
-			renderer.getGL().deleteBuffer( geometryGroup.__webglVertexBuffer );
-			renderer.getGL().deleteBuffer( geometryGroup.__webglNormalBuffer );
-			renderer.getGL().deleteBuffer( geometryGroup.__webglTangentBuffer );
-			renderer.getGL().deleteBuffer( geometryGroup.__webglColorBuffer );
-			renderer.getGL().deleteBuffer( geometryGroup.__webglUVBuffer );
-			renderer.getGL().deleteBuffer( geometryGroup.__webglUV2Buffer );
-
-			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinIndicesBuffer );
-			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinWeightsBuffer );
-
-			renderer.getGL().deleteBuffer( geometryGroup.__webglFaceBuffer );
-			renderer.getGL().deleteBuffer( geometryGroup.__webglLineBuffer );
-
-			if ( geometryGroup.numMorphTargets != 0) 
-			{
-				for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) 
-				{
-					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphTargetsBuffers.get( m ) );
-				}
-			}
-
-			if ( geometryGroup.numMorphNormals != 0 ) 
-			{
-				for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) 
-				{
-					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphNormalsBuffers.get( m ) );
-				}
-			}
-
-
-			if ( geometryGroup.__webglCustomAttributesList != null) 
-			{
-				for ( Attribute att : geometryGroup.__webglCustomAttributesList ) 
-				{
-					renderer.getGL().deleteBuffer( att.buffer );
-				}
-			}
-
-			renderer.getInfo().getMemory().geometries --;
-		}
+//		for ( GeometryGroup geometryGroup : ((Geometry)getGeometry()).getGeometryGroupsCache().values() )
+//		{
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglVertexBuffer );
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglNormalBuffer );
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglTangentBuffer );
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglColorBuffer );
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglUVBuffer );
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglUV2Buffer );
+//
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinIndicesBuffer );
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglSkinWeightsBuffer );
+//
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglFaceBuffer );
+//			renderer.getGL().deleteBuffer( geometryGroup.__webglLineBuffer );
+//
+//			if ( geometryGroup.numMorphTargets != 0) 
+//			{
+//				for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) 
+//				{
+//					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphTargetsBuffers.get( m ) );
+//				}
+//			}
+//
+//			if ( geometryGroup.numMorphNormals != 0 ) 
+//			{
+//				for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) 
+//				{
+//					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphNormalsBuffers.get( m ) );
+//				}
+//			}
+//
+//
+//			if ( geometryGroup.__webglCustomAttributesList != null) 
+//			{
+//				for ( Attribute att : geometryGroup.__webglCustomAttributesList ) 
+//				{
+//					renderer.getGL().deleteBuffer( att.buffer );
+//				}
+//			}
+//
+//			renderer.getInfo().getMemory().geometries --;
+//		}
 	}
 //
 //	private void sortFacesByMaterial ( Geometry geometry ) 

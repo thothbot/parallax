@@ -145,58 +145,58 @@ public class GeometryGroup extends WebGLGeometry
 	
 	public static void initGeometryGroups( Scene scene, Object3D object, Geometry geometry ) {
 
-		var material = object.material, addBuffers = false;
-
-		if ( geometryGroups.get( geometry.getId() ) == null || geometry.groupsNeedUpdate == true ) {
-
-			delete _webglObjects[ object.id ];
-
-			geometryGroups.pub( geometry.getId(), makeGroups( geometry, material instanceof MeshFaceMaterial ));
-
-			geometry.groupsNeedUpdate = false;
-
-		}
-
-		List<GeometryGroup> geometryGroupsList = geometryGroups.get( geometry.getId() );
-
-		// create separate VBOs per geometry chunk
-
-		for ( int i = 0, il = geometryGroupsList.size(); i < il; i ++ ) {
-
-			GeometryGroup geometryGroup = geometryGroupsList.get( i );
-
-			// initialise VBO on the first access
-
-			if ( geometryGroup.__webglVertexBuffer == null ) {
-
-				createMeshBuffers( geometryGroup );
-				initMeshBuffers( geometryGroup, object );
-
-				geometry.verticesNeedUpdate = true;
-				geometry.morphTargetsNeedUpdate = true;
-				geometry.elementsNeedUpdate = true;
-				geometry.uvsNeedUpdate = true;
-				geometry.normalsNeedUpdate = true;
-				geometry.tangentsNeedUpdate = true;
-				geometry.colorsNeedUpdate = true;
-
-				addBuffers = true;
-
-			} else {
-
-				addBuffers = false;
-
-			}
-
-			if ( addBuffers || !object.isWebglActive ) {
-
-				addBuffer( _webglObjects, geometryGroup, object );
-
-			}
-
-		}
-
-		object.isWebglActive = true;
+//		var material = object.material, addBuffers = false;
+//
+//		if ( geometryGroups.get( geometry.getId() ) == null || geometry.groupsNeedUpdate == true ) {
+//
+//			delete _webglObjects[ object.id ];
+//
+//			geometryGroups.pub( geometry.getId(), makeGroups( geometry, material instanceof MeshFaceMaterial ));
+//
+//			geometry.groupsNeedUpdate = false;
+//
+//		}
+//
+//		List<GeometryGroup> geometryGroupsList = geometryGroups.get( geometry.getId() );
+//
+//		// create separate VBOs per geometry chunk
+//
+//		for ( int i = 0, il = geometryGroupsList.size(); i < il; i ++ ) {
+//
+//			GeometryGroup geometryGroup = geometryGroupsList.get( i );
+//
+//			// initialise VBO on the first access
+//
+//			if ( geometryGroup.__webglVertexBuffer == null ) {
+//
+//				createMeshBuffers( geometryGroup );
+//				initMeshBuffers( geometryGroup, object );
+//
+//				geometry.verticesNeedUpdate = true;
+//				geometry.morphTargetsNeedUpdate = true;
+//				geometry.elementsNeedUpdate = true;
+//				geometry.uvsNeedUpdate = true;
+//				geometry.normalsNeedUpdate = true;
+//				geometry.tangentsNeedUpdate = true;
+//				geometry.colorsNeedUpdate = true;
+//
+//				addBuffers = true;
+//
+//			} else {
+//
+//				addBuffers = false;
+//
+//			}
+//
+//			if ( addBuffers || !object.isWebglActive ) {
+//
+//				addBuffer( _webglObjects, geometryGroup, object );
+//
+//			}
+//
+//		}
+//
+//		object.isWebglActive = true;
 
 	}
 	

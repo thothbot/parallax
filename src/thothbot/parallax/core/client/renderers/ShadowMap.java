@@ -68,7 +68,7 @@ public final class ShadowMap extends Plugin
 	private Vector3 min;
 	private Vector3 max;
 	
-	private static Projector projector = new Projector();
+//	private static Projector projector = new Projector();
 	
 	public ShadowMap(WebGLRenderer renderer, Scene scene) 
 	{
@@ -148,246 +148,246 @@ public final class ShadowMap extends Plugin
 	{
 		if ( ! ( isEnabled() && isAutoUpdate() ) ) return;
 
-		WebGLRenderingContext gl = getRenderer().getGL();
-		
-		// set GL state for depth map
-
-		gl.clearColor( 1, 1, 1, 1 );
-		gl.disable( EnableCap.BLEND );
-
-		gl.enable( EnableCap.CULL_FACE );
-		gl.frontFace( FrontFaceDirection.CCW );
-
-		if ( isCullFrontFaces() ) 
-		{
-			gl.cullFace( CullFaceMode.FRONT );
-		} 
-		else 
-		{
-			gl.cullFace( CullFaceMode.BACK );
-		}
-
-		getRenderer().setDepthTest( true );
-
-		List<Light> sceneLights = getScene().getLights();
-
-		// preprocess lights
-		// 	- skip lights that are not casting shadows
-		//	- create virtual lights for cascaded shadow maps
-		// render depth map
-		for ( int i = 0, il = sceneLights.size(); i < il; i ++ ) 
-		{
-			Light sceneLight = sceneLights.get( i );
-
-			if ( ! sceneLight.isCastShadow() ) continue;
-						
-			if ( ( sceneLight instanceof DirectionalLight ) && ((DirectionalLight)sceneLight).isShadowCascade() ) 
-			{
-				DirectionalLight dirLight = (DirectionalLight)sceneLight;
-
-				for ( int n = 0; n < dirLight.getShadowCascadeCount(); n ++ ) 
-				{
-					VirtualLight virtualLight;
-					List<VirtualLight> shadowCascadeArray = dirLight.getShadowCascadeArray();
-
-					if ( shadowCascadeArray.size() <= n || shadowCascadeArray.get( n ) == null ) 
-					{
-						virtualLight = createVirtualLight( dirLight, n );
-						virtualLight.setOriginalCamera( camera );
-
-						Gyroscope gyro = new Gyroscope();
-						gyro.setPosition( dirLight.getShadowCascadeOffset() );
-
-						gyro.add( virtualLight );
-						gyro.add( virtualLight.getTarget() );
-
-						camera.add( gyro );
-
-						shadowCascadeArray.add( n, virtualLight );
-
-						Log.debug( "Shadowmap plugin: Created virtualLight");
-					} 
-					else 
-					{
-						virtualLight = (VirtualLight) shadowCascadeArray.get( n );
-					}
-
-					updateVirtualLight( dirLight, n );
-					sceneLights.set(i, virtualLight);
-					sceneLight = virtualLight; 
-				}
-			}
-
-			ShadowLight light = (ShadowLight) sceneLight;
-			
-			if ( light.getShadowMap() == null ) 
-			{
-				RenderTargetTexture map = new RenderTargetTexture(light.getShadowMapWidth(), light.getShadowMapHeight());
-				map.setMinFilter(TextureMinFilter.LINEAR);
-				map.setMagFilter(TextureMagFilter.LINEAR);
-				map.setFormat(PixelFormat.RGBA);
-				light.setShadowMap(map);
-
-				light.setShadowMapSize( new Vector2( light.getShadowMapWidth(), light.getShadowMapHeight() ) );
-				light.setShadowMatrix( new Matrix4() );
-			}
-
-			if ( light.getShadowCamera() == null ) 
-			{
-				if ( light instanceof SpotLight )
-				{
-					light.setShadowCamera(new PerspectiveCamera( 
-							((SpotLight)light).getShadowCameraFov(), 
-							light.getShadowMapWidth() / light.getShadowMapHeight(), 
-							light.getShadowCameraNear(), 
-							light.getShadowCameraFar() ));
-				} 
-				else if ( light instanceof DirectionalLight ) 
-				{
-					light.setShadowCamera(new OrthographicCamera( 
-							((DirectionalLight) light).getShadowCameraLeft(), 
-							((DirectionalLight) light).getShadowCameraRight(), 
-							((DirectionalLight) light).getShadowCameraTop(), 
-							((DirectionalLight) light).getShadowCameraBottom(), 
-							light.getShadowCameraNear(), 
-							light.getShadowCameraFar() ));
-				} 
-				else 
-				{
-					Log.error( "Shadowmap plugin: Unsupported light class for shadow: " + light.getClass().getName() );
-					continue;
-				}
-
-				getScene().add( light.getShadowCamera() );
-
-				if ( getRenderer().isAutoUpdateScene() ) 
-					getScene().updateMatrixWorld(false);
-			}
-
-			if ( light.isShadowCameraVisible() && light.getCameraHelper() == null ) 
-			{
-				light.setCameraHelper( new CameraHelper( light.getShadowCamera() ));
-				light.getShadowCamera().add( light.getCameraHelper() );
-			}
-
-			if ( light instanceof VirtualLight && ((VirtualLight)light).getOriginalCamera() == camera ) 
-			{
-				updateShadowCamera( camera, (VirtualLight)light );
-			}
-
-			Camera shadowCamera = light.getShadowCamera();
-
-			shadowCamera.getPosition().copy( light.getMatrixWorld().getPosition() );
-			shadowCamera.lookAt( light.getTarget().getMatrixWorld().getPosition() );
-			shadowCamera.updateMatrixWorld(false);
-
-			// update camera matrices and frustum
-			
-			shadowCamera.getMatrixWorldInverse().getInverse( shadowCamera.getMatrixWorld() );
-			shadowCamera.getMatrixWorldInverse().flattenToArrayOffset( shadowCamera._viewMatrixArray );
-			shadowCamera.getProjectionMatrix().flattenToArrayOffset( shadowCamera._projectionMatrixArray );
-
-			this.projScreenMatrix.multiply( shadowCamera.getProjectionMatrix(), shadowCamera.getMatrixWorldInverse() );
-			this.frustum.setFromMatrix( this.projScreenMatrix );
-
-			if ( light.getCameraHelper() != null ) 
-				light.getCameraHelper().setVisible( light.isShadowCameraVisible() );
-			if ( light.isShadowCameraVisible() ) 
-				light.getCameraHelper().update();
-
-			// compute shadow matrix
-			Matrix4 shadowMatrix = light.getShadowMatrix();
-			shadowMatrix.set( 0.5, 0.0, 0.0, 0.5,
-							  0.0, 0.5, 0.0, 0.5,
-							  0.0, 0.0, 0.5, 0.5,
-							  0.0, 0.0, 0.0, 1.0 );
-
-			shadowMatrix.multiply( shadowCamera.getProjectionMatrix() );
-			shadowMatrix.multiply( shadowCamera.getMatrixWorldInverse() );
-
-			// render shadow map
-
-			getRenderer().setRenderTarget( light.getShadowMap() );
-			getRenderer().clear();
-
-			// set object matrices & frustum culling
-
-			List<RendererObject> renderList = getScene().__webglObjects;
-
-			for ( int j = 0, jl = renderList.size(); j < jl; j ++ ) 
-			{
-				RendererObject webglObject = renderList.get( j );
-				GeometryObject object = webglObject.object;
-
-				webglObject.render = false;
-
-				if ( object.isVisible() && object.isCastShadow() ) 
-				{
-					if ( ! ( object instanceof Mesh ) || ! ( object.isFrustumCulled() ) || this.frustum.isIntersectsObject( object ) ) 
-					{
-						object._modelViewMatrix.multiply( shadowCamera.getMatrixWorldInverse(), object.getMatrixWorld() );
-						webglObject.render = true;
-					}
-				}
-			}
-
-			// render regular objects
-
-			for ( int j = 0, jl = renderList.size(); j < jl; j ++ ) 
-			{
-				RendererObject webglObject = renderList.get( j );
-
-				if ( webglObject.render ) 
-				{
-					GeometryObject object = webglObject.object;
-					BufferGeometry buffer = webglObject.buffer;
-					Material material;
-
-					// culling is overriden globally for all objects
-					// while rendering depth map
-
-					if ( object.getCustomDepthMaterial() != null ) 
-					{
-						material = object.getCustomDepthMaterial();
-					} 
-					else if ( object instanceof SkinnedMesh ) 
-					{
-						material = object.getGeometry().getMorphTargets().size() > 0 ? this.depthMaterialMorphSkin : this.depthMaterialSkin;
-					}
-					else if ( object.getGeometry().getMorphTargets().size() > 0 ) 
-					{
-						material = this.depthMaterialMorph;
-					}
-					else 
-					{
-						material = this.depthMaterial;
-					}
-
-					if ( buffer.getClass() == BufferGeometry.class ) 
-					{
-						getRenderer().renderBufferDirect( getScene(), shadowCamera, material, buffer, object );
-
-					} 
-					else 
-					{
-						getRenderer().renderBuffer( getScene(), shadowCamera, material, buffer, object );
-					}
-				}
-			}
-		}
-
-		// restore GL state
-
-		Color clearColor = getRenderer().getClearColor();
-		double clearAlpha = getRenderer().getClearAlpha();
-
-		gl.clearColor( clearColor.getR(), clearColor.getG(), clearColor.getB(), clearAlpha );
-		gl.enable( EnableCap.BLEND );
-
-		if ( isCullFrontFaces() ) 
-		{
-			gl.cullFace( CullFaceMode.BACK );
-		}
+//		WebGLRenderingContext gl = getRenderer().getGL();
+//		
+//		// set GL state for depth map
+//
+//		gl.clearColor( 1, 1, 1, 1 );
+//		gl.disable( EnableCap.BLEND );
+//
+//		gl.enable( EnableCap.CULL_FACE );
+//		gl.frontFace( FrontFaceDirection.CCW );
+//
+//		if ( isCullFrontFaces() ) 
+//		{
+//			gl.cullFace( CullFaceMode.FRONT );
+//		} 
+//		else 
+//		{
+//			gl.cullFace( CullFaceMode.BACK );
+//		}
+//
+//		getRenderer().setDepthTest( true );
+//
+//		List<Light> sceneLights = getScene().getLights();
+//
+//		// preprocess lights
+//		// 	- skip lights that are not casting shadows
+//		//	- create virtual lights for cascaded shadow maps
+//		// render depth map
+//		for ( int i = 0, il = sceneLights.size(); i < il; i ++ ) 
+//		{
+//			Light sceneLight = sceneLights.get( i );
+//
+//			if ( ! sceneLight.isCastShadow() ) continue;
+//						
+//			if ( ( sceneLight instanceof DirectionalLight ) && ((DirectionalLight)sceneLight).isShadowCascade() ) 
+//			{
+//				DirectionalLight dirLight = (DirectionalLight)sceneLight;
+//
+//				for ( int n = 0; n < dirLight.getShadowCascadeCount(); n ++ ) 
+//				{
+//					VirtualLight virtualLight;
+//					List<VirtualLight> shadowCascadeArray = dirLight.getShadowCascadeArray();
+//
+//					if ( shadowCascadeArray.size() <= n || shadowCascadeArray.get( n ) == null ) 
+//					{
+//						virtualLight = createVirtualLight( dirLight, n );
+//						virtualLight.setOriginalCamera( camera );
+//
+//						Gyroscope gyro = new Gyroscope();
+//						gyro.setPosition( dirLight.getShadowCascadeOffset() );
+//
+//						gyro.add( virtualLight );
+//						gyro.add( virtualLight.getTarget() );
+//
+//						camera.add( gyro );
+//
+//						shadowCascadeArray.add( n, virtualLight );
+//
+//						Log.debug( "Shadowmap plugin: Created virtualLight");
+//					} 
+//					else 
+//					{
+//						virtualLight = (VirtualLight) shadowCascadeArray.get( n );
+//					}
+//
+//					updateVirtualLight( dirLight, n );
+//					sceneLights.set(i, virtualLight);
+//					sceneLight = virtualLight; 
+//				}
+//			}
+//
+//			ShadowLight light = (ShadowLight) sceneLight;
+//			
+//			if ( light.getShadowMap() == null ) 
+//			{
+//				RenderTargetTexture map = new RenderTargetTexture(light.getShadowMapWidth(), light.getShadowMapHeight());
+//				map.setMinFilter(TextureMinFilter.LINEAR);
+//				map.setMagFilter(TextureMagFilter.LINEAR);
+//				map.setFormat(PixelFormat.RGBA);
+//				light.setShadowMap(map);
+//
+//				light.setShadowMapSize( new Vector2( light.getShadowMapWidth(), light.getShadowMapHeight() ) );
+//				light.setShadowMatrix( new Matrix4() );
+//			}
+//
+//			if ( light.getShadowCamera() == null ) 
+//			{
+//				if ( light instanceof SpotLight )
+//				{
+//					light.setShadowCamera(new PerspectiveCamera( 
+//							((SpotLight)light).getShadowCameraFov(), 
+//							light.getShadowMapWidth() / light.getShadowMapHeight(), 
+//							light.getShadowCameraNear(), 
+//							light.getShadowCameraFar() ));
+//				} 
+//				else if ( light instanceof DirectionalLight ) 
+//				{
+//					light.setShadowCamera(new OrthographicCamera( 
+//							((DirectionalLight) light).getShadowCameraLeft(), 
+//							((DirectionalLight) light).getShadowCameraRight(), 
+//							((DirectionalLight) light).getShadowCameraTop(), 
+//							((DirectionalLight) light).getShadowCameraBottom(), 
+//							light.getShadowCameraNear(), 
+//							light.getShadowCameraFar() ));
+//				} 
+//				else 
+//				{
+//					Log.error( "Shadowmap plugin: Unsupported light class for shadow: " + light.getClass().getName() );
+//					continue;
+//				}
+//
+//				getScene().add( light.getShadowCamera() );
+//
+//				if ( getRenderer().isAutoUpdateScene() ) 
+//					getScene().updateMatrixWorld(false);
+//			}
+//
+//			if ( light.isShadowCameraVisible() && light.getCameraHelper() == null ) 
+//			{
+//				light.setCameraHelper( new CameraHelper( light.getShadowCamera() ));
+//				light.getShadowCamera().add( light.getCameraHelper() );
+//			}
+//
+//			if ( light instanceof VirtualLight && ((VirtualLight)light).getOriginalCamera() == camera ) 
+//			{
+//				updateShadowCamera( camera, (VirtualLight)light );
+//			}
+//
+//			Camera shadowCamera = light.getShadowCamera();
+//
+//			shadowCamera.getPosition().copy( light.getMatrixWorld().getPosition() );
+//			shadowCamera.lookAt( light.getTarget().getMatrixWorld().getPosition() );
+//			shadowCamera.updateMatrixWorld(false);
+//
+//			// update camera matrices and frustum
+//			
+//			shadowCamera.getMatrixWorldInverse().getInverse( shadowCamera.getMatrixWorld() );
+//			shadowCamera.getMatrixWorldInverse().flattenToArrayOffset( shadowCamera._viewMatrixArray );
+//			shadowCamera.getProjectionMatrix().flattenToArrayOffset( shadowCamera._projectionMatrixArray );
+//
+//			this.projScreenMatrix.multiply( shadowCamera.getProjectionMatrix(), shadowCamera.getMatrixWorldInverse() );
+//			this.frustum.setFromMatrix( this.projScreenMatrix );
+//
+//			if ( light.getCameraHelper() != null ) 
+//				light.getCameraHelper().setVisible( light.isShadowCameraVisible() );
+//			if ( light.isShadowCameraVisible() ) 
+//				light.getCameraHelper().update();
+//
+//			// compute shadow matrix
+//			Matrix4 shadowMatrix = light.getShadowMatrix();
+//			shadowMatrix.set( 0.5, 0.0, 0.0, 0.5,
+//							  0.0, 0.5, 0.0, 0.5,
+//							  0.0, 0.0, 0.5, 0.5,
+//							  0.0, 0.0, 0.0, 1.0 );
+//
+//			shadowMatrix.multiply( shadowCamera.getProjectionMatrix() );
+//			shadowMatrix.multiply( shadowCamera.getMatrixWorldInverse() );
+//
+//			// render shadow map
+//
+//			getRenderer().setRenderTarget( light.getShadowMap() );
+//			getRenderer().clear();
+//
+//			// set object matrices & frustum culling
+//
+//			List<RendererObject> renderList = getScene().__webglObjects;
+//
+//			for ( int j = 0, jl = renderList.size(); j < jl; j ++ ) 
+//			{
+//				RendererObject webglObject = renderList.get( j );
+//				GeometryObject object = webglObject.object;
+//
+//				webglObject.render = false;
+//
+//				if ( object.isVisible() && object.isCastShadow() ) 
+//				{
+//					if ( ! ( object instanceof Mesh ) || ! ( object.isFrustumCulled() ) || this.frustum.isIntersectsObject( object ) ) 
+//					{
+//						object._modelViewMatrix.multiply( shadowCamera.getMatrixWorldInverse(), object.getMatrixWorld() );
+//						webglObject.render = true;
+//					}
+//				}
+//			}
+//
+//			// render regular objects
+//
+//			for ( int j = 0, jl = renderList.size(); j < jl; j ++ ) 
+//			{
+//				RendererObject webglObject = renderList.get( j );
+//
+//				if ( webglObject.render ) 
+//				{
+//					GeometryObject object = webglObject.object;
+//					BufferGeometry buffer = webglObject.buffer;
+//					Material material;
+//
+//					// culling is overriden globally for all objects
+//					// while rendering depth map
+//
+//					if ( object.getCustomDepthMaterial() != null ) 
+//					{
+//						material = object.getCustomDepthMaterial();
+//					} 
+//					else if ( object instanceof SkinnedMesh ) 
+//					{
+//						material = object.getGeometry().getMorphTargets().size() > 0 ? this.depthMaterialMorphSkin : this.depthMaterialSkin;
+//					}
+//					else if ( object.getGeometry().getMorphTargets().size() > 0 ) 
+//					{
+//						material = this.depthMaterialMorph;
+//					}
+//					else 
+//					{
+//						material = this.depthMaterial;
+//					}
+//
+//					if ( buffer.getClass() == BufferGeometry.class ) 
+//					{
+//						getRenderer().renderBufferDirect( getScene(), shadowCamera, material, buffer, object );
+//
+//					} 
+//					else 
+//					{
+//						getRenderer().renderBuffer( getScene(), shadowCamera, material, buffer, object );
+//					}
+//				}
+//			}
+//		}
+//
+//		// restore GL state
+//
+//		Color clearColor = getRenderer().getClearColor();
+//		double clearAlpha = getRenderer().getClearAlpha();
+//
+//		gl.clearColor( clearColor.getR(), clearColor.getG(), clearColor.getB(), clearAlpha );
+//		gl.enable( EnableCap.BLEND );
+//
+//		if ( isCullFrontFaces() ) 
+//		{
+//			gl.cullFace( CullFaceMode.BACK );
+//		}
 	}
 
 	private VirtualLight createVirtualLight( DirectionalLight light, int cascade ) 
@@ -468,38 +468,38 @@ public final class ShadowMap extends Plugin
 	 */
 	private void updateShadowCamera( Camera camera, VirtualLight light ) 
 	{
-		OrthographicCamera shadowCamera = (OrthographicCamera) light.getShadowCamera();
-		List<Vector3> pointsFrustum = light.getPointsFrustum();
-		List<Vector3> pointsWorld = light.getPointsWorld();
-
-		this.min.set( Double.POSITIVE_INFINITY );
-		this.max.set( Double.NEGATIVE_INFINITY );
-
-		for ( int i = 0; i < 8; i ++ ) 
-		{
-			Vector3 p = pointsWorld.get( i );
-
-			p.copy( pointsFrustum.get( i ) );
-			ShadowMap.projector.unprojectVector( p, camera );
-
-			shadowCamera.getMatrixWorldInverse().multiplyVector3( p );
-
-			if ( p.getX() < this.min.getX() ) this.min.setX( p.getX() );
-			if ( p.getX() > this.max.getX() ) this.max.setX( p.getX() );
-
-			if ( p.getY() < this.min.getY() ) this.min.setY( p.getY() );
-			if ( p.getY() > this.max.getY() ) this.max.setY( p.getY() );
-
-			if ( p.getZ() < this.min.getZ() ) this.min.setZ( p.getZ() );
-			if ( p.getZ() > this.max.getZ() ) this.max.setZ( p.getZ() );
-
-		}
-
-		shadowCamera.setLeft( this.min.getX() );
-		shadowCamera.setRight( this.max.getX() );
-		shadowCamera.setTop( this.max.getY() );
-		shadowCamera.setBottom( this.min.getY() );
-
-		shadowCamera.updateProjectionMatrix();
+//		OrthographicCamera shadowCamera = (OrthographicCamera) light.getShadowCamera();
+//		List<Vector3> pointsFrustum = light.getPointsFrustum();
+//		List<Vector3> pointsWorld = light.getPointsWorld();
+//
+//		this.min.set( Double.POSITIVE_INFINITY );
+//		this.max.set( Double.NEGATIVE_INFINITY );
+//
+//		for ( int i = 0; i < 8; i ++ ) 
+//		{
+//			Vector3 p = pointsWorld.get( i );
+//
+//			p.copy( pointsFrustum.get( i ) );
+//			ShadowMap.projector.unprojectVector( p, camera );
+//
+//			shadowCamera.getMatrixWorldInverse().multiplyVector3( p );
+//
+//			if ( p.getX() < this.min.getX() ) this.min.setX( p.getX() );
+//			if ( p.getX() > this.max.getX() ) this.max.setX( p.getX() );
+//
+//			if ( p.getY() < this.min.getY() ) this.min.setY( p.getY() );
+//			if ( p.getY() > this.max.getY() ) this.max.setY( p.getY() );
+//
+//			if ( p.getZ() < this.min.getZ() ) this.min.setZ( p.getZ() );
+//			if ( p.getZ() > this.max.getZ() ) this.max.setZ( p.getZ() );
+//
+//		}
+//
+//		shadowCamera.setLeft( this.min.getX() );
+//		shadowCamera.setRight( this.max.getX() );
+//		shadowCamera.setTop( this.max.getY() );
+//		shadowCamera.setBottom( this.min.getY() );
+//
+//		shadowCamera.updateProjectionMatrix();
 	}
 }
