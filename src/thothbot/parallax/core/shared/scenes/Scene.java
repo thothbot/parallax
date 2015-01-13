@@ -67,7 +67,7 @@ public final class Scene extends Object3D
 	 */
 	private AbstractFog fog;
 	
-	private Material overrideMaterial;
+	public Material overrideMaterial;
 	
 	private boolean autoUpdate = true;
 	

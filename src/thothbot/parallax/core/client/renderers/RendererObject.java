@@ -18,6 +18,7 @@
 
 package thothbot.parallax.core.client.renderers;
 
+import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.materials.Material;
@@ -26,20 +27,38 @@ import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 public class RendererObject implements Comparable<RendererObject>
 {
 	public GeometryObject object;
-	public BufferGeometry buffer;
+	public AbstractGeometry buffer;
 	public boolean render;
+	
+	public Material material;
 	
 	public Material opaque;
 	public Material transparent;
 	// render depth
 	public double z;
 
-	public RendererObject(BufferGeometry buffer, GeometryObject object, Material opaque, Material transparent) 
+	public RendererObject(AbstractGeometry buffer, GeometryObject object, Material opaque, Material transparent) 
 	{
 		this.buffer = buffer;
 		this.object = object;
 		this.opaque = opaque;
 		this.transparent = transparent;
+	}
+	
+	public void unrollImmediateBufferMaterial() {
+		Material material = object.getMaterial();
+
+		if ( material.isTransparent() ) {
+
+			this.transparent = material;
+			this.opaque = null;
+
+		} else {
+
+			this.opaque = material;
+			this.transparent = null;
+
+		}
 	}
 	
 	public void unrollBufferMaterial() 

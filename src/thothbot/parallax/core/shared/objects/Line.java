@@ -96,6 +96,10 @@ public class Line extends GeometryObject
 
 		this.mode = mode;
 	}
+	
+	public MODE getMode() {
+		return mode;
+	}
 
 	public void setMode(Line.MODE mode)
 	{
