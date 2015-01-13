@@ -22,6 +22,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
@@ -187,6 +188,19 @@ public class PointCloud extends GeometryObject
 
 		return object;
 
+	}
+	
+	@Override
+	public void renderBuffer(WebGLRenderer renderer, Geometry geometryBuffer, boolean updateBuffers)
+	{
+		WebGLRenderingContext gl = renderer.getGL();
+		WebGlRendererInfo info = renderer.getInfo();
+		
+
+		gl.drawArrays( BeginMode.POINTS, 0, geometryBuffer.__webglParticleCount );
+
+		info.getRender().calls ++;
+		info.getRender().points += geometryBuffer.__webglParticleCount;
 	}
 	
 	private void initBuffers (WebGLRenderingContext gl, Geometry geometry) 

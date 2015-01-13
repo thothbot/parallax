@@ -35,7 +35,7 @@ public abstract class GeometryObject extends Object3D
 	private Material material;
 //	protected Material customDepthMaterial;
 	
-//	private double cache_oldLineWidth = -1;
+	private double _oldLineWidth = -1;
 
 //	public GeometryBuffer getGeometryBuffer()
 //	{
@@ -80,8 +80,8 @@ public abstract class GeometryObject extends Object3D
 	public abstract void initBuffer(WebGLRenderer renderer);
 
 	public abstract void setBuffer(WebGLRenderer renderer);
-//	
-//	public abstract void renderBuffer(WebGLRenderer renderer, GeometryBuffer geometryBuffer, boolean updateBuffers);
+	
+	public abstract void renderBuffer(WebGLRenderer renderer, Geometry geometryBuffer, boolean updateBuffers);
 	
 //	/**
 //	 * object � an instance of Object3D
@@ -112,15 +112,15 @@ public abstract class GeometryObject extends Object3D
 
 		renderer.getInfo().getMemory().geometries --;
 	}
-//
-//	protected void setLineWidth (WebGLRenderingContext gl, double width ) 
-//	{
-//		if ( width != this.cache_oldLineWidth ) 
-//		{
-//			gl.lineWidth( width );
-//			this.cache_oldLineWidth = width;
-//		}
-//	}
+
+	protected void setLineWidth (WebGLRenderingContext gl, double width ) 
+	{
+		if ( width != this._oldLineWidth ) 
+		{
+			gl.lineWidth( width );
+			this._oldLineWidth = width;
+		}
+	}
 		
 	protected void initCustomAttributes (WebGLRenderingContext gl, Geometry geometry ) 
 	{		

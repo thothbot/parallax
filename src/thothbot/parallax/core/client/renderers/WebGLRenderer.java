@@ -1933,7 +1933,7 @@ public class WebGLRenderer implements HasEventBus
 			refreshMaterial = true;
 			refreshLights = true;
 
-			Log.error("program != cache_currentProgram");
+			Log.error("program != _currentProgram");
 		}
 
 		if ( material.getId() != this._currentMaterialId ) 
@@ -1942,12 +1942,12 @@ public class WebGLRenderer implements HasEventBus
 			refreshMaterial = true;
 		}
 
-		if ( refreshMaterial || camera != this.cache_currentCamera ) 
+		if ( refreshMaterial || camera != this._currentCamera ) 
 		{
 			getGL().uniformMatrix4fv( m_uniforms.get("projectionMatrix").getLocation(), false, camera.getProjectionMatrix().getArray() );
 
-			if ( camera != this.cache_currentCamera ) 
-				this.cache_currentCamera = camera;
+			if ( camera != this._currentCamera ) 
+				this._currentCamera = camera;
 		}
 
 		// skinning uniforms must be set even if material didn't change
@@ -1976,9 +1976,6 @@ public class WebGLRenderer implements HasEventBus
 		
 		if ( refreshMaterial ) 
 		{
-			List<Light> lights = scene.getLights(); 
-			AbstractFog fog = scene.getFog();
-
 			// refresh uniforms common to several materials
 			if ( fog != null && material instanceof HasFog && ((HasFog)material).isFog())
 				fog.refreshUniforms( m_uniforms );
@@ -2678,28 +2675,12 @@ public class WebGLRenderer implements HasEventBus
 		
 		for(Light light: lights) 
 		{
-			if ( light.isOnlyShadow() ) continue;
+			if ( light instanceof ShadowLight && ((ShadowLight)light).isOnlyShadow() ) continue;
 
 			if ( light instanceof DirectionalLight ) dirLights ++;
 			if ( light instanceof PointLight ) pointLights ++;
 			if ( light instanceof SpotLight ) spotLights ++;
 			if ( light instanceof HemisphereLight ) hemiLights ++;
-		}
-
-		if ( ( pointLights + spotLights + dirLights + hemiLights ) <= this.maxLights ) 
-		{
-			maxDirLights = dirLights;
-			maxPointLights = pointLights;
-			maxSpotLights = spotLights;
-			maxHemiLights = hemiLights;
-		} 
-		else 
-		{
-			maxDirLights = (int) Math.ceil( this.maxLights * dirLights / ( pointLights + dirLights ) );
-			maxPointLights = this.maxLights - maxDirLights;
-			
-			maxSpotLights = maxPointLights;
-			maxHemiLights = maxDirLights;
 		}
 
 		Map<String, Integer> retval = GWT.isScript() ? 
@@ -2718,22 +2699,15 @@ public class WebGLRenderer implements HasEventBus
 
 		for (Light light: lights)
 		{
-			if ( light.isAllocateShadows() )
+			if ( light instanceof ShadowLight)
 			{
+				if( !((ShadowLight)light).isCastShadow() )
+					continue;
+
 				maxShadows ++;
 			}
 		}
 
 		return maxShadows;
-	}
-
-	@Deprecated
-	public Matrix4 getCache_projScreenMatrix() {
-		return cache_projScreenMatrix;
-	}
-
-	@Deprecated
-	public Vector4 getCache_vector3() {
-		return cache_vector3;
 	}
 }

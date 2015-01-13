@@ -456,39 +456,39 @@ public class Mesh extends GeometryObject
 //	public List<Integer> getMorphTargetForcedOrder() {
 //		return this.morphTargetForcedOrder;
 //	}
-//
-//	@Override
-//	public void renderBuffer(WebGLRenderer renderer, BufferGeometry geometryBuffer, boolean updateBuffers)
-//	{
-//		WebGLRenderingContext gl = renderer.getGL();
-//		WebGlRendererInfo info = renderer.getInfo();
-//
-//		// wireframe
-//		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() ) 
-//		{
-//			setLineWidth( gl, ((HasWireframe)getMaterial()).getWireframeLineWidth() );
-//
-//			if ( updateBuffers ) 
-//				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryBuffer.__webglLineBuffer );
-//			
-//			gl.drawElements( BeginMode.LINES, geometryBuffer.__webglLineCount, DrawElementsType.UNSIGNED_SHORT, 0 );
-//
-//			// triangles
-//
-//		}
-//		else 
-//		{
-//			if ( updateBuffers ) 
-//				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryBuffer.__webglFaceBuffer );
-//			
-//			gl.drawElements( BeginMode.TRIANGLES, geometryBuffer.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT, 0 );
-//		}
-//		
-//		info.getRender().calls ++;
-//		info.getRender().vertices += geometryBuffer.__webglFaceCount;
-//		info.getRender().faces += geometryBuffer.__webglFaceCount / 3;
-//	}
-//
+
+	@Override
+	public void renderBuffer(WebGLRenderer renderer, Geometry geometryGroup, boolean updateBuffers)
+	{
+		WebGLRenderingContext gl = renderer.getGL();
+		WebGlRendererInfo info = renderer.getInfo();
+
+		// wireframe
+		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() ) 
+		{
+			setLineWidth( gl, ((HasWireframe)getMaterial()).getWireframeLineWidth() );
+
+			if ( updateBuffers ) 
+				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglLineBuffer );
+			
+			gl.drawElements( BeginMode.LINES, geometryGroup.__webglLineCount, DrawElementsType.UNSIGNED_SHORT, 0 );
+
+			// triangles
+
+		}
+		else 
+		{
+			if ( updateBuffers ) 
+				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglFaceBuffer );
+			
+			gl.drawElements( BeginMode.TRIANGLES, geometryGroup.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT, 0 );
+		}
+		
+		info.getRender().calls ++;
+		info.getRender().vertices += geometryGroup.__webglFaceCount;
+		info.getRender().faces += geometryGroup.__webglFaceCount / 3;
+	}
+
 //	/*
 //	 * Returns geometry quantities
 //	 */

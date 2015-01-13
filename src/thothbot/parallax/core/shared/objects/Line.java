@@ -177,24 +177,23 @@ public class Line extends GeometryObject
 		
 	}
 
+	@Override
+	public void renderBuffer(WebGLRenderer renderer, Geometry geometryBuffer, boolean updateBuffers)
+	{
+		WebGLRenderingContext gl = renderer.getGL();
+		WebGlRendererInfo info = renderer.getInfo();
+		
+		BeginMode primitives = ( this.getType() == Line.MODE.STRIPS) 
+				? BeginMode.LINE_STRIP 
+				: BeginMode.LINES;
+
+		setLineWidth( gl, ((LineBasicMaterial)getMaterial()).getLinewidth() );
+
+		gl.drawArrays( primitives, 0, geometryBuffer.__webglLineCount );
+
+		info.getRender().calls ++;
+	}
 	
-//	@Override
-//	public void renderBuffer(WebGLRenderer renderer, BufferGeometry geometryBuffer, boolean updateBuffers)
-//	{
-//		WebGLRenderingContext gl = renderer.getGL();
-//		WebGlRendererInfo info = renderer.getInfo();
-//		
-//		BeginMode primitives = ( this.getType() == Line.TYPE.STRIPS) 
-//				? BeginMode.LINE_STRIP 
-//				: BeginMode.LINES;
-//
-//		setLineWidth( gl, ((LineBasicMaterial)material).getLinewidth() );
-//
-//		gl.drawArrays( primitives, 0, geometryBuffer.__webglLineCount );
-//
-//		info.getRender().calls ++;
-//	}
-//	
 //	@Override
 //	public void initBuffer(WebGLRenderer renderer)
 //	{

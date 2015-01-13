@@ -33,6 +33,7 @@ import thothbot.parallax.core.shared.math.Sphere;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.math.Vector4;
+import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
 
@@ -137,7 +138,7 @@ public class Geometry extends AbstractGeometry
 //	private List<Vector3> skinVerticesA;
 //	private List<Vector3> skinVerticesB;
 //
-//	private List<Bone> bones;
+	private List<Bone> bones;
 //
 //	public List<List<Integer>> sortArray;
 //	
@@ -338,6 +339,13 @@ public class Geometry extends AbstractGeometry
 		this.faceVertexUvs = faceVertexUvs;
 	}
 
+	public List<Bone> getBones() {
+		return bones;
+	}
+
+	public void setBones(List<Bone> bones) {
+		this.bones = bones;
+	}
 
 	/**
 	 * Makes matrix transform directly into vertex coordinates.	

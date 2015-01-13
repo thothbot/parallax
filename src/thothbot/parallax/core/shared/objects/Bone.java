@@ -25,7 +25,7 @@ import thothbot.parallax.core.shared.math.Matrix4;
 public class Bone extends Object3D
 {
 
-	public int skin;
+	public Object3D skin;
 //	public Matrix4 skinMatrix;
 //	public Matrix4 identityMatrix;
 //
@@ -34,7 +34,7 @@ public class Bone extends Object3D
 //		this.skinMatrix = new Matrix4();
 //	}
 
-	public Bone(int belongsToSkin) 
+	public Bone(Object3D belongsToSkin) 
 	{
 //		this();
 		this.skin = belongsToSkin;		
