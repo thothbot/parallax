@@ -74,6 +74,43 @@ public class Euler {
 			this.handler.onChange(Euler.this);
 	}
 	
+	
+	/**
+	 * This method will add specified value to X coordinate of the vector.
+	 * In another words: x += value.
+	 * 
+	 * @param x the X coordinate
+	 */
+	public void addX(double x)
+	{
+		this.x += x;
+		this.onChange();
+	}
+	
+	/**
+	 * This method will add specified value to Y coordinate of the vector.
+	 * In another words: y += value.
+	 * 
+	 * @param y the Y coordinate
+	 */
+	public void addY(double y)
+	{
+		this.y += y;
+		this.onChange();
+	}
+	
+	/**
+	 * This method will add specified value to Y coordinate of the vector.
+	 * In another words: z += value.
+	 * 
+	 * @param z the Z coordinate
+	 */
+	public void addZ(double z)
+	{
+		this.z += z;
+		this.onChange();
+	}
+	
 	public double getX () {
 		return this.x;
 	}
