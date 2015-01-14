@@ -48,6 +48,8 @@ public abstract class AbstractGeometry extends WebGLGeometry
 	public boolean lineDistancesNeedUpdate = false;
 
 	public boolean groupsNeedUpdate = false;
+	
+	public boolean dynamic = false;
 			
 	public AbstractGeometry() {
 		this.id = BufferGeometry.Counter++;

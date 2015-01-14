@@ -40,6 +40,7 @@ import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
 import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.ClearBufferMask;
 import thothbot.parallax.core.client.gl2.enums.CullFaceMode;
 import thothbot.parallax.core.client.gl2.enums.DataType;
@@ -229,10 +230,10 @@ public class WebGLRenderer implements HasEventBus
 
 	 // camera matrices cache
 
-	private Matrix4 _projScreenMatrix = new Matrix4();
-	private Matrix4 _projScreenMatrixPS = new Matrix4();
+	public Matrix4 _projScreenMatrix = new Matrix4();
+	public Matrix4 _projScreenMatrixPS = new Matrix4();
 
-	private Vector3 _vector3 = new Vector3();
+	public Vector3 _vector3 = new Vector3();
 	
 	// light arrays cache
 	private Vector3 _direction = new Vector3();
@@ -1540,7 +1541,6 @@ public class WebGLRenderer implements HasEventBus
 		list.add(webGLObject);
 	}
 
-
 	private void projectObject( Object3D scene, Object3D object ) {
 
 		if ( object.isVisible() == false ) return;
@@ -1571,7 +1571,7 @@ public class WebGLRenderer implements HasEventBus
 
 				if ( webglObjects != null && ( object.isFrustumCulled() == false || _frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
 
-					updateObject( object, scene );
+					updateObject( (GeometryObject) object, scene );
 
 					for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
 
@@ -1613,6 +1613,103 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 	}
+	
+	public void updateObject( GeometryObject object, Object3D scene ) 
+	{
+		AbstractGeometry geometry = object.getGeometry();
+		
+		Material material = null;
+
+		if ( geometry instanceof BufferGeometry ) {
+
+			setDirectBuffers( geometry );
+
+		} else if ( object instanceof Mesh ) {
+
+			// check all geometry groups
+
+			if ( geometry.groupsNeedUpdate == true ) {
+
+				initGeometryGroups( scene, (Mesh)object, (Geometry)geometry );
+
+			}
+
+			List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() );
+
+			for ( int i = 0, il = geometryGroupsList.size(); i < il; i ++ ) {
+
+				GeometryGroup geometryGroup = geometryGroupsList.get( i );
+
+				material = getBufferMaterial( object, geometryGroup );
+
+				if ( geometry.groupsNeedUpdate == true ) {
+
+					((Mesh)object).initBuffers( gl, geometryGroup );
+
+				}
+
+				customAttributesDirty = material.attributes && areCustomAttributesDirty( material );
+
+				if ( geometry.verticesNeedUpdate || geometry.morphTargetsNeedUpdate || geometry.elementsNeedUpdate ||
+					 geometry.uvsNeedUpdate || geometry.normalsNeedUpdate ||
+					 geometry.colorsNeedUpdate || geometry.tangentsNeedUpdate || customAttributesDirty ) {
+
+					((Mesh)object).setBuffers( gl, geometryGroup, BufferUsage.DYNAMIC_DRAW, ! geometry.dynamic, material );
+
+				}
+
+			}
+
+			geometry.verticesNeedUpdate = false;
+			geometry.morphTargetsNeedUpdate = false;
+			geometry.elementsNeedUpdate = false;
+			geometry.uvsNeedUpdate = false;
+			geometry.normalsNeedUpdate = false;
+			geometry.colorsNeedUpdate = false;
+			geometry.tangentsNeedUpdate = false;
+
+			material.attributes && clearCustomAttributes( material );
+
+		} else if ( object instanceof Line ) {
+
+			material = getBufferMaterial( object, geometry );
+
+			customAttributesDirty = material.attributes && areCustomAttributesDirty( material );
+
+			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || geometry.lineDistancesNeedUpdate || customAttributesDirty ) {
+
+				((Line)object).setBuffers( gl, BufferUsage.DYNAMIC_DRAW );
+
+			}
+
+			geometry.verticesNeedUpdate = false;
+			geometry.colorsNeedUpdate = false;
+			geometry.lineDistancesNeedUpdate = false;
+
+			material.attributes && clearCustomAttributes( material );
+
+
+		} else if ( object instanceof PointCloud ) {
+
+			material = getBufferMaterial( object, geometry );
+
+			customAttributesDirty = material.attributes && areCustomAttributesDirty( material );
+
+			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || object.sortParticles || customAttributesDirty ) {
+
+				((PointCloud)object).setBuffers( this, BufferUsage.DYNAMIC_DRAW );
+
+			}
+
+			geometry.verticesNeedUpdate = false;
+			geometry.colorsNeedUpdate = false;
+
+			material.attributes && clearCustomAttributes( material );
+
+		}
+
+	}
+
 	
 	public void render( Scene scene, Camera camera )
 	{

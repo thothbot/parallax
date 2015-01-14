@@ -23,8 +23,13 @@ import java.util.List;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
+import thothbot.parallax.core.client.shaders.Attribute;
+import thothbot.parallax.core.client.shaders.Attribute.BOUND_TO;
+import thothbot.parallax.core.client.shaders.Attribute.TYPE;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry.DrawCall;
@@ -39,7 +44,9 @@ import thothbot.parallax.core.shared.materials.PointCloudMaterial;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Ray;
+import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
+import thothbot.parallax.core.shared.math.Vector4;
 
 public class PointCloud extends GeometryObject
 {
@@ -228,5 +235,334 @@ public class PointCloud extends GeometryObject
 
 		info.getMemory().geometries ++;
 	}
+	
+	public void setBuffers(WebGLRenderer renderer, BufferUsage hint) 
+	{
+
+		WebGLRenderingContext gl = renderer.getGL();
+
+		Geometry geometry = (Geometry)getGeometry();
+		
+		List<Vector3> vertices = geometry.getVertices();
+		int vl = vertices.size();
+
+		List<Color> colors = geometry.getColors();
+		int cl = colors.size();
+
+		Float32Array vertexArray = geometry.__vertexArray;
+		Float32Array colorArray = geometry.__colorArray;
+
+//		Float32Array sortArray = geometry.__sortArray;
+
+		boolean dirtyVertices = geometry.verticesNeedUpdate;
+		boolean dirtyElements = geometry.elementsNeedUpdate;
+		boolean dirtyColors = geometry.colorsNeedUpdate;
+
+		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
+
+		if ( this.sortParticles ) {
+
+			renderer._projScreenMatrixPS.copy( renderer._projScreenMatrix );
+			renderer._projScreenMatrixPS.multiply( getMatrixWorld() );
+
+			for ( int v = 0; v < vl; v ++ ) {
+
+				Vector3 vertex = vertices.get( v );
+
+				renderer._vector3.copy( vertex );
+				renderer._vector3.applyProjection( renderer._projScreenMatrixPS );
+
+//				sort, v ] = [ _vector3.z, v ];
+
+			}
+
+//			sortArray.sort( numericalSort );
+
+			for ( int v = 0; v < vl; v ++ ) {
+
+//				vertex = vertices[ sortArray[ v ][ 1 ] ];
+				Vector3 vertex = vertices.get( v );
+
+				int offset = v * 3;
+
+				vertexArray.set( offset , vertex.getX());
+				vertexArray.set( offset + 1 , vertex.getY());
+				vertexArray.set( offset + 2 , vertex.getZ());
+
+			}
+
+			for ( int c = 0; c < cl; c ++ ) {
+
+				int offset = c * 3;
+
+//				Color color = colors[ sortArray[ c ][ 1 ] ];
+				Color color = colors.get(c);
+
+				colorArray.set( offset , color.getR());
+				colorArray.set( offset + 1 , color.getG());
+				colorArray.set( offset + 2 , color.getB());
+
+			}
+
+			if ( customAttributes != null ) {
+
+				for ( int i = 0, il = customAttributes.size(); i < il; i ++ ) {
+
+					Attribute customAttribute = customAttributes.get( i );
+
+					if ( ! ( customAttribute.getBoundTo() == null || customAttribute.getBoundTo() == BOUND_TO.VERTICES ) ) continue;
+
+					int offset = 0;
+
+					int cal = customAttribute.getValue().size();
+
+					if ( customAttribute.size == 1 ) {
+
+						for ( int ca = 0; ca < cal; ca ++ ) {
+
+//							index = sortArray[ ca ][ 1 ];
+							int index = ca;
+
+							customAttribute.array.set( ca, (Double) customAttribute.getValue().get( index ));
+
+						}
+
+					} else if ( customAttribute.size == 2 ) {
+
+						for ( int ca = 0; ca < cal; ca ++ ) {
+
+//							index = sortArray[ ca ][ 1 ];
+							int index = ca;
+
+							Vector2 value = (Vector2)customAttribute.getValue().get( index );
+
+							customAttribute.array.set( offset , value.getX());
+							customAttribute.array.set( offset + 1 , value.getY());
+
+							offset += 2;
+
+						}
+
+					} else if ( customAttribute.size == 3 ) {
+
+						if ( customAttribute.type == TYPE.C) {
+
+							for ( int ca = 0; ca < cal; ca ++ ) {
+
+//								index = sortArray[ ca ][ 1 ];
+								int index = ca;
+
+								Color value = (Color)customAttribute.getValue().get( index );
+
+								customAttribute.array.set( offset , value.getR());
+								customAttribute.array.set( offset + 1 , value.getG());
+								customAttribute.array.set( offset + 2 , value.getB());
+
+								offset += 3;
+
+							}
+
+						} else {
+
+							for ( int ca = 0; ca < cal; ca ++ ) {
+
+//								index = sortArray[ ca ][ 1 ];
+								int index = ca;
+
+								Vector3 value = (Vector3)customAttribute.getValue().get( index );
+
+								customAttribute.array.set( offset , value.getX());
+								customAttribute.array.set( offset + 1 , value.getY());
+								customAttribute.array.set( offset + 2 , value.getZ());
+
+								offset += 3;
+
+							}
+
+						}
+
+					} else if ( customAttribute.size == 4 ) {
+
+						for ( int ca = 0; ca < cal; ca ++ ) {
+
+//							index = sortArray[ ca ][ 1 ];
+							int index = ca;
+
+							Vector4 value = (Vector4)customAttribute.getValue().get( index );
+
+							customAttribute.array.set( offset , value.getX());
+							customAttribute.array.set( offset + 1  , value.getY());
+							customAttribute.array.set( offset + 2  , value.getZ());
+							customAttribute.array.set( offset + 3  , value.getW());
+
+							offset += 4;
+
+						}
+
+					}
+
+				}
+
+			}
+
+		} else {
+
+			if ( dirtyVertices ) {
+
+				for ( int v = 0; v < vl; v ++ ) {
+
+					Vector3 vertex = vertices.get( v );
+
+					int offset = v * 3;
+
+					vertexArray.set( offset , vertex.getX());
+					vertexArray.set( offset + 1 , vertex.getY());
+					vertexArray.set( offset + 2 , vertex.getZ());
+
+				}
+
+			}
+
+			if ( dirtyColors ) {
+
+				for ( int c = 0; c < cl; c ++ ) {
+
+					Color color = colors.get( c );
+
+					int offset = c * 3;
+
+					colorArray.set( offset , color.getR());
+					colorArray.set( offset + 1 , color.getG());
+					colorArray.set( offset + 2 , color.getB());
+
+				}
+
+			}
+
+			if ( customAttributes != null ) {
+
+				for ( int i = 0, il = customAttributes.size(); i < il; i ++ ) {
+
+					Attribute customAttribute = customAttributes.get( i );
+
+					if ( customAttribute.needsUpdate &&
+						 ( customAttribute.getBoundTo() == null ||
+							 customAttribute.getBoundTo() == BOUND_TO.VERTICES ) ) {
+
+						int cal = customAttribute.getValue().size();
+
+						int offset = 0;
+
+						if ( customAttribute.size == 1 ) {
+
+							for ( int ca = 0; ca < cal; ca ++ ) {
+
+								customAttribute.array.set( ca , (Double)customAttribute.getValue().get( ca ));
+
+							}
+
+						} else if ( customAttribute.size == 2 ) {
+
+							for ( int ca = 0; ca < cal; ca ++ ) {
+
+								Vector2 value = (Vector2)customAttribute.getValue().get( ca );
+
+								customAttribute.array.set( offset , value.getX());
+								customAttribute.array.set( offset + 1 , value.getY());
+
+								offset += 2;
+
+							}
+
+						} else if ( customAttribute.size == 3 ) {
+
+							if ( customAttribute.type == TYPE.C ) {
+
+								for ( int ca = 0; ca < cal; ca ++ ) {
+
+									Color value = (Color)customAttribute.getValue().get( ca );
+
+									customAttribute.array.set( offset , value.getR());
+									customAttribute.array.set( offset + 1 , value.getG());
+									customAttribute.array.set( offset + 2 , value.getB());
+
+									offset += 3;
+
+								}
+
+							} else {
+
+								for ( int ca = 0; ca < cal; ca ++ ) {
+
+									Vector3 value = (Vector3)customAttribute.getValue().get( ca );
+
+									customAttribute.array.set( offset , value.getX());
+									customAttribute.array.set( offset + 1 , value.getY());
+									customAttribute.array.set( offset + 2 , value.getZ());
+
+									offset += 3;
+
+								}
+
+							}
+
+						} else if ( customAttribute.size == 4 ) {
+
+							for ( int ca = 0; ca < cal; ca ++ ) {
+
+								Vector4 value = (Vector4)customAttribute.getValue().get( ca );
+
+								customAttribute.array.set( offset , value.getX());
+								customAttribute.array.set( offset + 1  , value.getY());
+								customAttribute.array.set( offset + 2  , value.getZ());
+								customAttribute.array.set( offset + 3  , value.getW());
+
+								offset += 4;
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		if ( dirtyVertices || this.sortParticles ) {
+
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, vertexArray, hint );
+
+		}
+
+		if ( dirtyColors || this.sortParticles ) {
+
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer );
+			gl.bufferData( BufferTarget.ARRAY_BUFFER, colorArray, hint );
+
+		}
+
+		if ( customAttributes != null ) {
+
+			for ( int i = 0, il = customAttributes.size(); i < il; i ++ ) {
+
+				Attribute customAttribute = customAttributes.get( i );
+
+				if ( customAttribute.needsUpdate || this.sortParticles ) {
+
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, customAttribute.buffer );
+					gl.bufferData( BufferTarget.ARRAY_BUFFER, customAttribute.array, hint );
+
+				}
+
+			}
+
+		}
+
+	}
+
 
 }

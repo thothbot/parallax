@@ -751,7 +751,7 @@ public class Mesh extends GeometryObject
 //	}
 
 	// setMeshBuffers
-	private void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
+	public void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
 	{
 		Log.debug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
 
