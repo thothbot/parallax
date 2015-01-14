@@ -1622,7 +1622,7 @@ public class WebGLRenderer implements HasEventBus
 
 		if ( geometry instanceof BufferGeometry ) {
 
-			setDirectBuffers( geometry );
+//			setDirectBuffers( geometry );
 
 		} else if ( object instanceof Mesh ) {
 
@@ -1648,7 +1648,7 @@ public class WebGLRenderer implements HasEventBus
 
 				}
 
-				customAttributesDirty = material.attributes && areCustomAttributesDirty( material );
+				boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
 				if ( geometry.verticesNeedUpdate || geometry.morphTargetsNeedUpdate || geometry.elementsNeedUpdate ||
 					 geometry.uvsNeedUpdate || geometry.normalsNeedUpdate ||
@@ -1668,13 +1668,15 @@ public class WebGLRenderer implements HasEventBus
 			geometry.colorsNeedUpdate = false;
 			geometry.tangentsNeedUpdate = false;
 
-			material.attributes && clearCustomAttributes( material );
+			if(material instanceof ShaderMaterial ) {
+				((ShaderMaterial)material).getShader().clearCustomAttributes();
+			}
 
 		} else if ( object instanceof Line ) {
 
 			material = getBufferMaterial( object, geometry );
 
-			customAttributesDirty = material.attributes && areCustomAttributesDirty( material );
+			boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
 			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || geometry.lineDistancesNeedUpdate || customAttributesDirty ) {
 
@@ -1686,14 +1688,16 @@ public class WebGLRenderer implements HasEventBus
 			geometry.colorsNeedUpdate = false;
 			geometry.lineDistancesNeedUpdate = false;
 
-			material.attributes && clearCustomAttributes( material );
+			if(material instanceof ShaderMaterial ) {
+				((ShaderMaterial)material).getShader().clearCustomAttributes();
+			}
 
 
 		} else if ( object instanceof PointCloud ) {
 
 			material = getBufferMaterial( object, geometry );
 
-			customAttributesDirty = material.attributes && areCustomAttributesDirty( material );
+			boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
 			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || object.sortParticles || customAttributesDirty ) {
 
@@ -1704,13 +1708,14 @@ public class WebGLRenderer implements HasEventBus
 			geometry.verticesNeedUpdate = false;
 			geometry.colorsNeedUpdate = false;
 
-			material.attributes && clearCustomAttributes( material );
+			if(material instanceof ShaderMaterial ) {
+				((ShaderMaterial)material).getShader().clearCustomAttributes();
+			}
 
 		}
 
 	}
 
-	
 	public void render( Scene scene, Camera camera )
 	{
 		render(scene, camera, null);
