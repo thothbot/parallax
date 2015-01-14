@@ -72,7 +72,15 @@ public class PointCloud extends GeometryObject
 	{
 		super(geometry, material);
 	}
-	
+		
+	public boolean isSortParticles() {
+		return sortParticles;
+	}
+
+	public void setSortParticles(boolean sortParticles) {
+		this.sortParticles = sortParticles;
+	}
+
 	@Override
 	public void raycast(Raycaster raycaster, List<Intersect> intersects) {
 		Matrix4 inverseMatrix = new Matrix4();

@@ -1614,6 +1614,21 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 	
+	public Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) {
+
+		return object.getMaterial() instanceof MeshFaceMaterial
+			 ? ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.materialIndex )
+			 : object.getMaterial();
+
+	}
+	
+	public Material getBufferMaterial( GeometryObject object, Geometry geometry ) {
+
+		return object.getMaterial();
+
+	}
+
+	
 	public void updateObject( GeometryObject object, Object3D scene ) 
 	{
 		AbstractGeometry geometry = object.getGeometry();
@@ -1674,7 +1689,7 @@ public class WebGLRenderer implements HasEventBus
 
 		} else if ( object instanceof Line ) {
 
-			material = getBufferMaterial( object, geometry );
+			material = getBufferMaterial( object, (Geometry)geometry );
 
 			boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
@@ -1695,11 +1710,11 @@ public class WebGLRenderer implements HasEventBus
 
 		} else if ( object instanceof PointCloud ) {
 
-			material = getBufferMaterial( object, geometry );
+			material = getBufferMaterial( object, (Geometry)geometry );
 
 			boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
-			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || object.sortParticles || customAttributesDirty ) {
+			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || ((PointCloud)object).isSortParticles() || customAttributesDirty ) {
 
 				((PointCloud)object).setBuffers( this, BufferUsage.DYNAMIC_DRAW );
 
