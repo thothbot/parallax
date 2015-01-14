@@ -203,8 +203,9 @@ public class PointCloud extends GeometryObject
 		info.getRender().points += geometryBuffer.__webglParticleCount;
 	}
 	
-	private void initBuffers (WebGLRenderingContext gl, Geometry geometry) 
+	public void initBuffers (WebGLRenderingContext gl) 
 	{
+		Geometry geometry = (Geometry)getGeometry();
 		int nvertices = geometry.getVertices().size();
 
 		geometry.__vertexArray = Float32Array.create( nvertices * 3 );
@@ -216,8 +217,9 @@ public class PointCloud extends GeometryObject
 		initCustomAttributes ( gl, geometry );
 	}
 	
-	private void createBuffers ( WebGLRenderer renderer, Geometry geometry ) 
+	public void createBuffers ( WebGLRenderer renderer) 
 	{
+		Geometry geometry = (Geometry)getGeometry();
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 		

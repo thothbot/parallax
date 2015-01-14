@@ -75,8 +75,10 @@ import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry.DrawCall;
+import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.lights.DirectionalLight;
@@ -91,12 +93,14 @@ import thothbot.parallax.core.shared.materials.HasSkinning;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Frustum;
 import thothbot.parallax.core.shared.math.Mathematics;
+import thothbot.parallax.core.shared.math.Matrix3;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
@@ -132,7 +136,9 @@ public class WebGLRenderer implements HasEventBus
 	
 	private List<Light> lights = new ArrayList<Light>();
 	
-	public List<WebGLObject> _webglObjects = new ArrayList<WebGLObject>();	
+	public Map<String, List<WebGLObject>> _webglObjects = GWT.isScript() ? 
+			new FastMap<List<WebGLObject>>() : new HashMap<String, List<WebGLObject>>();	
+
 	public List<WebGLObject> _webglObjectsImmediate  = new ArrayList<WebGLObject>();
 
 	public List<WebGLObject> opaqueObjects = new ArrayList<WebGLObject>();
@@ -189,8 +195,8 @@ public class WebGLRenderer implements HasEventBus
 	
 	// GL state cache
 	
-//	_oldDoubleSided = - 1,
-//	_oldFlipSided = - 1,
+	private Material.SIDE _oldDoubleSided = null;
+	private Material.SIDE _oldFlipSided = null;
 	private Material.SIDE cache_oldMaterialSided = null;
 
 	private Material.BLENDING _oldBlending = null;
@@ -772,6 +778,22 @@ public class WebGLRenderer implements HasEventBus
 		clear( color, depth, stencil );
 	}
 	
+	public void resetGLState() 
+	{
+		_currentProgram = null;
+		_currentCamera = null;
+
+		_oldBlending = null;
+		_oldDepthTest = null;
+		_oldDepthWrite = null;
+		_oldDoubleSided = null;
+		_oldFlipSided = null;
+		_currentGeometryGroupHash = -1;
+		_currentMaterialId = -1;
+
+		_lightsNeedUpdate = true;
+	}
+	
 	private void initAttributes() {
 
 		for ( int i = 0, l = _newAttributes.getLength(); i < l; i ++ ) {
@@ -1292,171 +1314,303 @@ public class WebGLRenderer implements HasEventBus
 		}
 	}
 	
-	private void initObject( Object3D object, Object3D scene ) {
+	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {
+		
+		long maxVerticesInGroup = WebGLExtensions.get(gl, WebGLExtensions.Id.OES_element_index_uint) != null ? 4294967296L : 65535L;
+		
+		int numMorphTargets = geometry.getMorphTargets().size();
+		int numMorphNormals = geometry.getMorphNormals().size();
 
-//		if ( object.__webglInit == null ) {
-//
-//			object.__webglInit = true;
-//			object._modelViewMatrix = new THREE.Matrix4();
-//			object._normalMatrix = new THREE.Matrix3();
-//
-//		}
-//
-//		var geometry = object.geometry;
-//
-//		if ( geometry == null ) {
-//
-//			// ImmediateRenderObject
-//
-//		} else if ( geometry.__webglInit == null ) {
-//
-//			geometry.__webglInit = true;
+		String groupHash;
+
+		Map<String, Integer> hash_map = GWT.isScript() ? 
+				new FastMap<Integer>() : new HashMap<String, Integer>(); 
+
+		Map<String, GeometryGroup> groups = GWT.isScript() ? 
+				new FastMap<GeometryGroup>() : new HashMap<String, GeometryGroup>();
+				
+		List<GeometryGroup> groupsList = new ArrayList<GeometryGroup>();
+		
+		for ( int f = 0, fl = geometry.getFaces().size(); f < fl; f ++ ) {
+
+			Face3 face = geometry.getFaces().get( f );
+			Integer materialIndex = usesFaceMaterial ? face.getMaterialIndex() : 0;
+
+			if ( ! hash_map.containsKey(materialIndex) ) {
+
+				hash_map.put(materialIndex.toString(), 0);
+
+			}
+
+			groupHash = materialIndex + "_" + hash_map.get( materialIndex );
+
+			if ( ! groups.containsKey(groupHash) ) {
+
+				GeometryGroup group = new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals);
+				
+				groups.put(groupHash, group);
+				groupsList.add( group );
+
+			}
+
+			if ( groups.get( groupHash ).vertices + 3 > maxVerticesInGroup ) {
+
+				hash_map.put( materialIndex.toString(), hash_map.get( materialIndex ) + 1 );
+				groupHash = materialIndex + "_" + hash_map.get( materialIndex );
+
+				if ( ! groups.containsKey(groupHash) ) {
+
+					GeometryGroup group = new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals);
+					groups.put(groupHash, group);
+					groupsList.add( group );
+					
+				}
+
+			}
+
+			groups.get( groupHash ).faces3.add( f );
+			groups.get( groupHash ).vertices += 3;
+
+		}
+
+		return groupsList;
+
+	}
+	
+	public void initGeometryGroups( Object3D scene, Mesh object, Geometry geometry ) {
+
+		Material material = object.getMaterial();
+		boolean addBuffers = false;
+
+		if ( GeometryGroup.geometryGroups.get( geometry.getId() ) == null || geometry.groupsNeedUpdate == true ) {
+
+			this._webglObjects.put(object.getId() + "", new ArrayList<WebGLObject>());
+
+			GeometryGroup.geometryGroups.put( geometry.getId() + "", makeGroups( geometry, material instanceof MeshFaceMaterial ));
+
+			geometry.groupsNeedUpdate = false;
+
+		}
+
+		List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() );
+
+		// create separate VBOs per geometry chunk
+
+		for ( int i = 0, il = geometryGroupsList.size(); i < il; i ++ ) {
+
+			GeometryGroup geometryGroup = geometryGroupsList.get( i );
+
+			// initialise VBO on the first access
+
+			if ( geometryGroup.__webglVertexBuffer == null ) {
+
+				((Mesh)object).createBuffers(this, geometryGroup);
+				((Mesh)object).initBuffers(gl, geometryGroup);
+
+				geometry.verticesNeedUpdate = true;
+				geometry.morphTargetsNeedUpdate = true;
+				geometry.elementsNeedUpdate = true;
+				geometry.uvsNeedUpdate = true;
+				geometry.normalsNeedUpdate = true;
+				geometry.tangentsNeedUpdate = true;
+				geometry.colorsNeedUpdate = true;
+
+				addBuffers = true;
+
+			} else {
+
+				addBuffers = false;
+
+			}
+
+			if ( addBuffers || !object.__webglActive ) {
+
+				addBuffer( _webglObjects, geometryGroup, object );
+
+			}
+
+		}
+
+		object.__webglActive = true;
+
+	}
+
+	private void initObject( GeometryObject object, Object3D scene ) {
+
+		if ( !object.__webglInit ) {
+
+			object.__webglInit = true;
+			object._modelViewMatrix = new Matrix4();
+			object._normalMatrix = new Matrix3();
+
+		}
+
+		AbstractGeometry geometry = object.getGeometry();
+
+		if ( geometry == null ) {
+
+			// ImmediateRenderObject
+
+		} else if ( ! geometry.__webglInit ) {
+
+			geometry.__webglInit = true;
 //			geometry.addEventListener( 'dispose', onGeometryDispose );
-//
-//			if ( geometry instanceof BufferGeometry ) {
-//
-//				//
-//
-//			} else if ( object instanceof Mesh ) {
-//
-//				initGeometryGroups( scene, object, geometry );
-//
-//			} else if ( object instanceof Line ) {
-//
-//				if ( geometry.__webglVertexBuffer == null ) {
-//
-//					createLineBuffers( geometry );
-//					initLineBuffers( geometry, object );
-//
-//					geometry.verticesNeedUpdate = true;
-//					geometry.colorsNeedUpdate = true;
-//					geometry.lineDistancesNeedUpdate = true;
-//
-//				}
-//
-//			} else if ( object instanceof PointCloud ) {
-//
-//				if ( geometry.__webglVertexBuffer == null ) {
-//
-//					createParticleBuffers( geometry );
-//					initParticleBuffers( geometry, object );
-//
-//					geometry.verticesNeedUpdate = true;
-//					geometry.colorsNeedUpdate = true;
-//
-//				}
-//
-//			}
-//
-//		}
-//
-//		if ( object.__webglActive == null) {
-//
-//			object.__webglActive = true;
-//
-//			if ( object instanceof Mesh ) {
-//
-//				if ( geometry instanceof BufferGeometry ) {
-//
-//					addBuffer( _webglObjects, geometry, object );
-//
-//				} else if ( geometry instanceof Geometry ) {
-//
-//					var geometryGroupsList = geometryGroups[ geometry.id ];
-//
-//					for ( var i = 0,l = geometryGroupsList.length; i < l; i ++ ) {
-//
-//						addBuffer( _webglObjects, geometryGroupsList[ i ], object );
-//
-//					}
-//
-//				}
-//
-//			} else if ( object instanceof Line || object instanceof PointCloud ) {
-//
-//				addBuffer( _webglObjects, geometry, object );
-//
-//			} else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
-//
-//				addBufferImmediate( _webglObjectsImmediate, object );
-//
-//			}
-//
-//		}
 
+			if ( geometry instanceof BufferGeometry ) {
+
+				//
+
+			} else if ( object instanceof Mesh ) {
+
+				initGeometryGroups( scene, (Mesh) object, (Geometry)geometry );
+
+			} else if ( object instanceof Line ) {
+
+				if ( geometry.__webglVertexBuffer == null ) {
+
+					((Line)object).createBuffers(this);
+					((Line)object).initBuffers(gl);
+
+					geometry.verticesNeedUpdate = true;
+					geometry.colorsNeedUpdate = true;
+					geometry.lineDistancesNeedUpdate = true;
+
+				}
+
+			} else if ( object instanceof PointCloud ) {
+
+				if ( geometry.__webglVertexBuffer == null ) {
+					
+					((PointCloud)object).createBuffers(this);
+					((PointCloud)object).initBuffers(gl);
+
+					geometry.verticesNeedUpdate = true;
+					geometry.colorsNeedUpdate = true;
+
+				}
+
+			}
+
+		}
+
+		if ( !object.__webglActive ) {
+
+			object.__webglActive = true;
+
+			if ( object instanceof Mesh ) {
+
+				if ( geometry instanceof BufferGeometry ) {
+
+					addBuffer( _webglObjects, geometry, object );
+
+				} else if ( geometry instanceof Geometry ) {
+
+					List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() );
+
+					for ( int i = 0,l = geometryGroupsList.size(); i < l; i ++ ) {
+
+						addBuffer( _webglObjects, geometryGroupsList.get( i ), object );
+
+					}
+
+				}
+
+			} else if ( object instanceof Line || object instanceof PointCloud ) {
+
+				addBuffer( _webglObjects, geometry, object );
+
+			} /*else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
+
+				addBufferImmediate( _webglObjectsImmediate, object );
+
+			}*/
+
+		}
+
+	}
+	
+	private void addBuffer( Map<String, List<WebGLObject>>objlist, WebGLGeometry buffer, GeometryObject object ) {
+
+		int id = object.getId();
+		List<WebGLObject> list = objlist.get(id);
+		if(list == null)
+			list = new ArrayList<WebGLObject>();
+		
+		WebGLObject webGLObject = new WebGLObject(buffer, object);
+		list.add(webGLObject);
 	}
 
 
 	private void projectObject( Object3D scene, Object3D object ) {
 
-//		if ( object.isVisible() == false ) return;
-//
-//		if ( object instanceof Scene /*|| object instanceof Group */) {
-//
-//			// skip
-//
-//		} else {
-//
-//			initObject( object, scene );
-//
-//			if ( object instanceof Light ) {
-//
-//				lights.add( (Light) object );
-//
-//			} /*else if ( object instanceof Sprite ) {
-//
-//				sprites.push( object );
-//
-//			} else if ( object instanceof LensFlare ) {
-//
-//				lensFlares.push( object );
-//
-//			} */else {
-//
-//				RendererObject webglObjects = this._webglObjects.get( object.getId() );
-//
-//				if ( webglObjects != null && ( object.isFrustumCulled() == false || _frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
-//
-//					updateObject( object, scene );
-//
-//					for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
-//
-//						RendererObject webglObject = webglObjects.get(i);
-//
-//						webglObject.unrollBufferMaterial(this);
-//
-//						webglObject.render = true;
-//
-////						if ( _this.sortObjects == true ) {
-////
-////							if ( object.renderDepth != null ) {
-////
-////								webglObject.z = object.renderDepth;
-////
-////							} else {
-////
-////								_vector3.setFromMatrixPosition( object.matrixWorld );
-////								_vector3.applyProjection( _projScreenMatrix );
-////
-////								webglObject.z = _vector3.z;
-////
-////							}
-////
-////						}
-//
-//					}
-//
-//				}
-//
-//			}
-//
-//		}
-//
-//		for ( int i = 0, l = object.getChildren().size(); i < l; i ++ ) {
-//
-//			projectObject( scene, object.getChildren().get( i ) );
-//
-//		}
+		if ( object.isVisible() == false ) return;
+
+		if ( object instanceof Scene /*|| object instanceof Group */) {
+
+			// skip
+
+		} else {
+
+			initObject( (GeometryObject) object, scene );
+
+			if ( object instanceof Light ) {
+
+				lights.add( (Light) object );
+
+			} /*else if ( object instanceof Sprite ) {
+
+				sprites.push( object );
+
+			} else if ( object instanceof LensFlare ) {
+
+				lensFlares.push( object );
+
+			} */else {
+
+				List<WebGLObject> webglObjects = this._webglObjects.get( object.getId() );
+
+				if ( webglObjects != null && ( object.isFrustumCulled() == false || _frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
+
+					updateObject( object, scene );
+
+					for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
+
+						WebGLObject webglObject = webglObjects.get(i);
+
+						webglObject.unrollBufferMaterial(this);
+
+						webglObject.render = true;
+
+						if ( this.sortObjects == true ) {
+
+							if ( object.renderDepth > 0 ) {
+
+								webglObject.z = object.renderDepth;
+
+							} else {
+
+								_vector3.setFromMatrixPosition( object.getMatrixWorld() );
+								_vector3.applyProjection( _projScreenMatrix );
+
+								webglObject.z = _vector3.getZ();
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		for ( int i = 0, l = object.getChildren().size(); i < l; i ++ ) {
+
+			projectObject( scene, object.getChildren().get( i ) );
+
+		}
 
 	}
 	
@@ -1514,6 +1668,9 @@ public class WebGLRenderer implements HasEventBus
 //		this.lensFlares.length = 0;
 
 		projectObject( scene, scene );
+		
+//		if ( this.isSortObjects() )
+//		Collections.sort(renderList);
 
 		// custom render plugins (pre pass)
 		renderPlugins( this.renderPluginsPre, camera );
@@ -1546,9 +1703,6 @@ public class WebGLRenderer implements HasEventBus
 			}
 
 		}
-
-//		if ( this.isSortObjects() )
-//			Collections.sort(renderList);
 
 		if ( scene.overrideMaterial != null ) 
 		{
@@ -1730,7 +1884,7 @@ public class WebGLRenderer implements HasEventBus
 			WebGLObject webglObject = renderList.get( i );
 
 			GeometryObject object = webglObject.object;
-			AbstractGeometry buffer = webglObject.buffer;
+			WebGLGeometry buffer = webglObject.buffer;
 
 			setupMatrices( object, camera );
 

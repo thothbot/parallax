@@ -27,7 +27,7 @@ import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 public class WebGLObject implements Comparable<WebGLObject>
 {
 	public GeometryObject object;
-	public AbstractGeometry buffer;
+	public WebGLGeometry buffer;
 	public boolean render;
 	
 	public Material material;
@@ -37,7 +37,12 @@ public class WebGLObject implements Comparable<WebGLObject>
 	// render depth
 	public double z;
 
-	public WebGLObject(AbstractGeometry buffer, GeometryObject object, Material opaque, Material transparent) 
+	public WebGLObject(WebGLGeometry buffer, GeometryObject object)
+	{
+		this(buffer, object, null, null);
+	}
+	
+	public WebGLObject(WebGLGeometry buffer, GeometryObject object, Material opaque, Material transparent) 
 	{
 		this.buffer = buffer;
 		this.object = object;
@@ -64,7 +69,7 @@ public class WebGLObject implements Comparable<WebGLObject>
 	public void unrollBufferMaterial(WebGLRenderer renderer) 
 	{
 		GeometryObject object = this.object;
-		AbstractGeometry buffer = this.buffer;
+		WebGLGeometry buffer = this.buffer;
 
 		AbstractGeometry geometry = object.getGeometry();
 		Material material = object.getMaterial();

@@ -107,20 +107,6 @@ public class Geometry extends AbstractGeometry
 	public boolean hasTangents = false;
 
 	public boolean dynamic = true; // the intermediate typed arrays will be deleted when set to false
-
-	// update flags
-	
-	public boolean verticesNeedUpdate = false;
-	public boolean elementsNeedUpdate = false;
-	public boolean normalsNeedUpdate = false;
-	public boolean colorsNeedUpdate = false;
-	public boolean uvsNeedUpdate = false;
-	public boolean tangentsNeedUpdate = false;
-	public boolean morphTargetsNeedUpdate = false;
-	public boolean lineDistancesNeedUpdate = false;
-
-	public boolean groupsNeedUpdate = false;
-
 	
 //	//
 //	

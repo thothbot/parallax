@@ -35,6 +35,19 @@ public abstract class AbstractGeometry extends WebGLGeometry
 
 	// Bounding sphere.
 	protected Sphere boundingSphere = null;
+	
+	// update flags
+	
+	public boolean verticesNeedUpdate = false;
+	public boolean elementsNeedUpdate = false;
+	public boolean normalsNeedUpdate = false;
+	public boolean colorsNeedUpdate = false;
+	public boolean uvsNeedUpdate = false;
+	public boolean tangentsNeedUpdate = false;
+	public boolean morphTargetsNeedUpdate = false;
+	public boolean lineDistancesNeedUpdate = false;
+
+	public boolean groupsNeedUpdate = false;
 			
 	public AbstractGeometry() {
 		this.id = BufferGeometry.Counter++;

@@ -25,15 +25,13 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
-import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Raycaster;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
-import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Ray;
@@ -209,8 +207,10 @@ public class Line extends GeometryObject
 //		}
 //	}
 	
-	private void createBuffers ( WebGLRenderer renderer, Geometry geometry ) 
+	public void createBuffers ( WebGLRenderer renderer ) 
 	{
+		Geometry geometry = (Geometry)getGeometry();
+		
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 		
@@ -221,8 +221,10 @@ public class Line extends GeometryObject
 		info.getMemory().geometries ++;
 	}
 
-	private void initBuffers (WebGLRenderingContext gl, Geometry geometry) 
+	public void initBuffers (WebGLRenderingContext gl) 
 	{
+		Geometry geometry = (Geometry)getGeometry();
+		
 		int nvertices = geometry.getVertices().size();
 
 		geometry.__vertexArray = Float32Array.create( nvertices * 3 );

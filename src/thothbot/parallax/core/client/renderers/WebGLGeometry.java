@@ -58,6 +58,8 @@ public class WebGLGeometry {
 	public int __webglLineCount;
 	public int __webglVertexCount;
 	public int __webglFaceCount;
+	
+	public boolean __webglInit;
 		
 	public void dispose() 
 	{	

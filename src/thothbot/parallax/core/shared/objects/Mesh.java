@@ -27,23 +27,20 @@ import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.client.gl2.arrays.Uint32Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
-import thothbot.parallax.core.client.renderers.GeometryGroup;
-import thothbot.parallax.core.client.renderers.WebGLExtensions;
-import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
-import thothbot.parallax.core.shared.core.BufferAttribute;
+import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.core.BufferGeometry;
+import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.Geometry.MorphNormal;
 import thothbot.parallax.core.shared.core.Geometry.MorphTarget;
 import thothbot.parallax.core.shared.core.GeometryObject;
@@ -533,7 +530,7 @@ public class Mesh extends GeometryObject
 //	}
 //
 	// initMeshBuffers
-	private void initBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup)
+	public void initBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup)
 	{
 		Geometry geometry = (Geometry) this.getGeometry();
 
@@ -661,7 +658,7 @@ public class Mesh extends GeometryObject
 	}
 
 	// createMeshBuffers
-	private void createBuffers(WebGLRenderer renderer, GeometryGroup geometryGroup)
+	public void createBuffers(WebGLRenderer renderer, GeometryGroup geometryGroup)
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();

@@ -96,9 +96,7 @@ public class Object3D
 
 	public Matrix3 _normalMatrix;
 	public Matrix4 _modelViewMatrix;
-	
-	public boolean isWebglActive;
-		
+			
 	public Object3D() 
 	{
 		this.id = Object3D.Object3DCount++;
