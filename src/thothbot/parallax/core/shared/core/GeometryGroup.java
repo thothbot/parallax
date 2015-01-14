@@ -43,7 +43,7 @@ public class GeometryGroup extends WebGLGeometry
 	
 	public static int Counter = 0;
 	
-	public int id = 0;
+	private int id = 0;
 	
 	public List<Integer> faces3;
 
@@ -75,6 +75,10 @@ public class GeometryGroup extends WebGLGeometry
 		this.vertices = 0;
 		this.numMorphTargets = numMorphTargets;
 		this.numMorphNormals = numMorphNormals;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 		
 	@Override

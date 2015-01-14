@@ -26,6 +26,7 @@ import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 
 public class WebGLObject implements Comparable<WebGLObject>
 {
+	public int id;
 	public GeometryObject object;
 	public WebGLGeometry buffer;
 	public boolean render;
@@ -119,5 +120,13 @@ public class WebGLObject implements Comparable<WebGLObject>
 		double result = o.z - this.z; 
 		return (result == 0) ? 0 
 				: (result > 0) ? 1 : -1;
+	}
+	
+	public String toString() {
+		return "{id: " + this.id 
+				+ ", material: " + this.material.getClass().getName() 
+				+ ", object: " + this.object.getClass().getName()
+				+ ", render: " + this.render
+				+ ", z: " + this.z + "}";
 	}
 }

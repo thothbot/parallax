@@ -55,9 +55,6 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
-import thothbot.parallax.core.client.gl2.extension.OESStandardDerivatives;
-import thothbot.parallax.core.client.gl2.extension.OESTextureFloat;
-import thothbot.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;
 import thothbot.parallax.core.client.renderers.WebGLExtensions.Id;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
@@ -768,7 +765,6 @@ public class WebGLRenderer implements HasEventBus
 		getGL().clear( ClearBufferMask.STENCIL_BUFFER_BIT.getValue() );
 	}
 
-
 	/**
 	 * Clear {@link RenderTargetTexture} and GL buffers.
 	 * @see #clear(boolean, boolean, boolean).
@@ -837,7 +833,7 @@ public class WebGLRenderer implements HasEventBus
 	/**
 	 * Morph Targets Buffer initialization
 	 */
-	private void setupMorphTargets ( Material material, Geometry geometrybuffer, Mesh object ) 
+	private void setupMorphTargets ( Material material, WebGLGeometry geometrybuffer, Mesh object ) 
 	{
 		// set base
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
@@ -1393,7 +1389,7 @@ public class WebGLRenderer implements HasEventBus
 
 		}
 
-		List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() );
+		List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() + "" );
 
 		// create separate VBOs per geometry chunk
 
@@ -1506,7 +1502,7 @@ public class WebGLRenderer implements HasEventBus
 
 				} else if ( geometry instanceof Geometry ) {
 
-					List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() );
+					List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() + "" );
 
 					for ( int i = 0,l = geometryGroupsList.size(); i < l; i ++ ) {
 
@@ -1533,11 +1529,12 @@ public class WebGLRenderer implements HasEventBus
 	private void addBuffer( Map<String, List<WebGLObject>>objlist, WebGLGeometry buffer, GeometryObject object ) {
 
 		int id = object.getId();
-		List<WebGLObject> list = objlist.get(id);
+		List<WebGLObject> list = objlist.get(id + "");
 		if(list == null)
 			list = new ArrayList<WebGLObject>();
 		
 		WebGLObject webGLObject = new WebGLObject(buffer, object);
+		webGLObject.id = id;
 		list.add(webGLObject);
 	}
 
@@ -1567,8 +1564,8 @@ public class WebGLRenderer implements HasEventBus
 
 			} */else {
 
-				List<WebGLObject> webglObjects = this._webglObjects.get( object.getId() );
-
+				List<WebGLObject> webglObjects = this._webglObjects.get( object.getId() + "" );	
+							
 				if ( webglObjects != null && ( object.isFrustumCulled() == false || _frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
 
 					updateObject( (GeometryObject) object, scene );
@@ -1649,7 +1646,7 @@ public class WebGLRenderer implements HasEventBus
 
 			}
 
-			List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() );
+			List<GeometryGroup> geometryGroupsList = GeometryGroup.geometryGroups.get( geometry.getId() + "" );
 
 			for ( int i = 0, il = geometryGroupsList.size(); i < il; i ++ ) {
 
@@ -1843,8 +1840,8 @@ public class WebGLRenderer implements HasEventBus
 			Material material = null;
 			
 			// opaque pass (front-to-back order)
-			setBlending( Material.BLENDING.NO);
-
+			setBlending( Material.BLENDING.NO );
+Log.error(opaqueObjects.get(0));
 			renderObjects( opaqueObjects, camera, lights, fog, false, material );
 			renderObjectsImmediate( _webglObjectsImmediate, false, camera, lights, fog, false, material );
 
@@ -2031,21 +2028,20 @@ public class WebGLRenderer implements HasEventBus
 
 			} else {
 
-				renderBuffer( camera, lights, fog, material, (Geometry)buffer, object );
+				renderBuffer( camera, lights, fog, material, buffer, object );
 
 			}
 
 		}
 
 	}
-
 	
 	/**
 	 * Buffer rendering.
 	 * Render GeometryObject with material.
 	 */
 	//camera, lights, fog, material, geometryGroup, object
-	public void renderBuffer( Camera camera, List<Light> lights, AbstractFog fog, Material material, Geometry geometry, GeometryObject object ) 
+	public void renderBuffer( Camera camera, List<Light> lights, AbstractFog fog, Material material, WebGLGeometry geometry, GeometryObject object ) 
 	{
 		if ( ! material.isVisible() ) 
 			return;
@@ -2114,7 +2110,7 @@ public class WebGLRenderer implements HasEventBus
 			// colors
 			if ( attributes.get("color") >= 0 ) 
 			{
-				if ( geometry.getColors().size() > 0 || geometry.getFaces().size() > 0 ) {
+				if ( ((Geometry)geometry).getColors().size() > 0 || ((Geometry)geometry).getFaces().size() > 0 ) {
 
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer );
 					enableAttribute( attributes.get("color") );

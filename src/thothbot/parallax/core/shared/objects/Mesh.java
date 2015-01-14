@@ -31,6 +31,7 @@ import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
+import thothbot.parallax.core.client.renderers.WebGLGeometry;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
@@ -455,7 +456,7 @@ public class Mesh extends GeometryObject
 //	}
 
 	@Override
-	public void renderBuffer(WebGLRenderer renderer, Geometry geometryGroup, boolean updateBuffers)
+	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryGroup, boolean updateBuffers)
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
@@ -807,8 +808,11 @@ public class Mesh extends GeometryObject
 		List<Integer> chunk_faces3 = geometryGroup.faces3;
 		List<Face3> obj_faces = geometry.getFaces();
 
-		List<List<Vector2>> obj_uvs  = geometry.getFaceVertexUvs().get( 0 ),
-				obj_uvs2 = geometry.getFaceVertexUvs().get( 1 );
+		List<List<Vector2>> obj_uvs  = geometry.getFaceVertexUvs().get( 0 );
+
+		List<List<Vector2>>	obj_uvs2 = null;
+		if(geometry.getFaceVertexUvs().size() > 1)
+			obj_uvs2 = geometry.getFaceVertexUvs().get( 1 );
 
 		List<Color> obj_colors = geometry.getColors();
 

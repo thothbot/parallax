@@ -24,6 +24,7 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.renderers.WebGLGeometry;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.materials.Material;
@@ -84,7 +85,7 @@ public abstract class GeometryObject extends Object3D
 
 //	public abstract void setBuffer(WebGLRenderer renderer);
 	
-	public abstract void renderBuffer(WebGLRenderer renderer, Geometry geometryBuffer, boolean updateBuffers);
+	public abstract void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers);
 	
 //	/**
 //	 * object � an instance of Object3D

@@ -24,7 +24,7 @@ import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.shaders.Attribute;
 
-public class WebGLGeometry {
+public abstract class WebGLGeometry {
 
 	public Float32Array __colorArray;
 	public Float32Array __vertexArray;
@@ -61,6 +61,8 @@ public class WebGLGeometry {
 	
 	public boolean __webglInit;
 		
+	public abstract int getId();
+	
 	public void dispose() 
 	{	
 		__colorArray = null;
