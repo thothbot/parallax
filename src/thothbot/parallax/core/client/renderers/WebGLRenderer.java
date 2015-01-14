@@ -27,9 +27,11 @@ import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.events.HasEventBus;
 import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.gl2.WebGLConstants;
+import thothbot.parallax.core.client.gl2.WebGLExtension;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLProgram;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
+import thothbot.parallax.core.client.gl2.WebGLShaderPrecisionFormat;
 import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
@@ -46,6 +48,8 @@ import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
 import thothbot.parallax.core.client.gl2.enums.EnableCap;
 import thothbot.parallax.core.client.gl2.enums.FrontFaceDirection;
 import thothbot.parallax.core.client.gl2.enums.PixelStoreParameter;
+import thothbot.parallax.core.client.gl2.enums.ShaderPrecisionSpecifiedTypes;
+import thothbot.parallax.core.client.gl2.enums.Shaders;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
@@ -239,14 +243,21 @@ public class WebGLRenderer implements HasEventBus
 //	var lensFlares = [];
 
 	// GPU capabilities
-	private int GPUmaxTextures;
-	private int GPUmaxVertexTextures;
-	private int GPUmaxTextureSize;
-	private int GPUmaxCubemapSize;
-	private int GPUmaxAnisotropy;
+	private int _maxTextures;
+	private int _maxVertexTextures;
+	private int _maxTextureSize;
+	private int _maxCubemapSize;
 
-	private boolean isGPUsupportsVertexTextures;
-	private boolean isGPUsupportsBoneTextures;
+	private boolean _supportsVertexTextures;
+	private boolean _supportsBoneTextures;
+	
+	private WebGLShaderPrecisionFormat _vertexShaderPrecisionHighpFloat;
+	private WebGLShaderPrecisionFormat _vertexShaderPrecisionMediumpFloat;
+	private WebGLShaderPrecisionFormat _vertexShaderPrecisionLowpFloat;
+
+	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionHighpFloat;
+	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionMediumpFloat;
+	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionLowpFloat;
 		
 	private OESTextureFloat GLExtensionTextureFloat;
 	private OESStandardDerivatives GLExtensionStandardDerivatives;
@@ -273,25 +284,22 @@ public class WebGLRenderer implements HasEventBus
 		this._programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
 			
-		this.GPUmaxTextures       = gl.getParameteri(WebGLConstants.MAX_TEXTURE_IMAGE_UNITS);
-		this.GPUmaxVertexTextures = gl.getParameteri(WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-		this.GPUmaxTextureSize    = gl.getParameteri(WebGLConstants.MAX_TEXTURE_SIZE);
-		this.GPUmaxCubemapSize    = gl.getParameteri(WebGLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
+		this._maxTextures       = gl.getParameteri(WebGLConstants.MAX_TEXTURE_IMAGE_UNITS);
+		this._maxVertexTextures = gl.getParameteri(WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+		this._maxTextureSize    = gl.getParameteri(WebGLConstants.MAX_TEXTURE_SIZE);
+		this._maxCubemapSize    = gl.getParameteri(WebGLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
 
-		this.isGPUsupportsVertexTextures = ( this.GPUmaxVertexTextures > 0 ); 
-		this.isGPUsupportsBoneTextures = this.isGPUsupportsVertexTextures && WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float) != null ;
-
-		//
-
-//		var _vertexShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( gl.VERTEX_SHADER, gl.HIGH_FLOAT );
-//		var _vertexShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( gl.VERTEX_SHADER, gl.MEDIUM_FLOAT );
-//		var _vertexShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( gl.VERTEX_SHADER, gl.LOW_FLOAT );
-//
-//		var _fragmentShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( gl.FRAGMENT_SHADER, gl.HIGH_FLOAT );
-//		var _fragmentShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT );
-//		var _fragmentShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( gl.FRAGMENT_SHADER, gl.LOW_FLOAT );
-
+		this._supportsVertexTextures = ( this._maxVertexTextures > 0 ); 
+		this._supportsBoneTextures = this._supportsVertexTextures && WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float) != null ;
 		
+		this._vertexShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT );
+		this._vertexShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT );
+		this._vertexShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT );
+
+		this._fragmentShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT );
+		this._fragmentShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT );
+		this._fragmentShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT );
+				
 		this.GLExtensionTextureFloat = (OESTextureFloat) WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float);
 		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float_linear);
 		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_standard_derivatives);
@@ -345,23 +353,19 @@ public class WebGLRenderer implements HasEventBus
 	}
 	
 	public int getGPUmaxTextures() {
-		return GPUmaxTextures;
+		return _maxTextures;
 	}
 
 	public int getGPUmaxVertexTextures() {
-		return GPUmaxVertexTextures;
+		return _maxVertexTextures;
 	}
 
 	public int getGPUmaxTextureSize() {
-		return GPUmaxTextureSize;
+		return _maxTextureSize;
 	}
 
 	public int getGPUmaxCubemapSize() {
-		return GPUmaxCubemapSize;
-	}
-
-	public int getGPUmaxAnisotropy() {
-		return GPUmaxAnisotropy;
+		return _maxCubemapSize;
 	}
 
 	/**
@@ -549,7 +553,7 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public boolean supportsVertexTextures()
 	{
-		return this.GPUmaxVertexTextures > 0;
+		return this._maxVertexTextures > 0;
 	}
 	
 	public boolean supportsFloatTextures() 
@@ -579,13 +583,9 @@ public class WebGLRenderer implements HasEventBus
 
 	public int getMaxAnisotropy() 
 	{
-		if(this.GPUmaxAnisotropy > 0)
-			return this.GPUmaxAnisotropy;
+		WebGLExtension extension = WebGLExtensions.get( this.gl, Id.EXT_texture_filter_anisotropic ); 
 
-		if( WebGLExtensions.get( this.gl, Id.EXT_texture_filter_anisotropic ) != null)
-			this.GPUmaxAnisotropy = getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-
-		return this.GPUmaxAnisotropy;
+		return extension != null ? getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
 	}
 
 
@@ -1933,7 +1933,7 @@ public class WebGLRenderer implements HasEventBus
 		
 		parameters.gammaInput  = isGammaInput();
 		parameters.gammaOutput = isGammaOutput();
-		parameters.isSupportsVertexTextures = this.isGPUsupportsVertexTextures;
+		parameters.isSupportsVertexTextures = this._supportsVertexTextures;
 		
 		parameters.useFog  = (fog != null);
 		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
@@ -2111,7 +2111,7 @@ public class WebGLRenderer implements HasEventBus
 		// not sure why, but otherwise weird things happen
 		if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() )
 		{
-			if ( object instanceof SkinnedMesh && ((SkinnedMesh)object).isUseVertexTexture() && this.isGPUsupportsBoneTextures) 
+			if ( object instanceof SkinnedMesh && ((SkinnedMesh)object).isUseVertexTexture() && this._supportsBoneTextures) 
 			{
 				if ( m_uniforms.get("boneTexture").getLocation() != null ) 
 				{
@@ -2410,9 +2410,9 @@ public class WebGLRenderer implements HasEventBus
 	{
 		int textureUnit = this._usedTextureUnits ++;
 
-		if ( textureUnit >= this.GPUmaxTextures ) 
+		if ( textureUnit >= this._maxTextures ) 
 		{
-			Log.warn( "Trying to use " + textureUnit + " texture units while this GPU supports only " + this.GPUmaxTextures );
+			Log.warn( "Trying to use " + textureUnit + " texture units while this GPU supports only " + this._maxTextures );
 		}
 
 		return textureUnit;
@@ -2594,7 +2594,7 @@ public class WebGLRenderer implements HasEventBus
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
-			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
 			if ( texture instanceof CompressedTexture ) 
 			{
@@ -2705,7 +2705,7 @@ public class WebGLRenderer implements HasEventBus
 			for ( int i = 0; i < 6; i ++ ) 
 			{
 				if ( this.autoScaleCubemaps )
-					cubeImage.add(clampToMaxSize( texture.getImage( i ), this.GPUmaxCubemapSize ));
+					cubeImage.add(clampToMaxSize( texture.getImage( i ), this._maxCubemapSize ));
 
 				else
 					cubeImage.add(texture.getImage( i ));
@@ -2715,7 +2715,7 @@ public class WebGLRenderer implements HasEventBus
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
-			texture.setTextureParameters( getGL(), this.GPUmaxAnisotropy, TextureTarget.TEXTURE_CUBE_MAP, true /*power of two*/ );
+			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP, true /*power of two*/ );
 
 			for ( int i = 0; i < 6; i ++ ) 
 			{
@@ -2790,7 +2790,7 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	private int allocateBones (GeometryObject object ) 
 	{
-		if ( this.isGPUsupportsBoneTextures && object instanceof SkinnedMesh && ((SkinnedMesh)object).isUseVertexTexture() ) 
+		if ( this._supportsBoneTextures && object instanceof SkinnedMesh && ((SkinnedMesh)object).isUseVertexTexture() ) 
 		{
 			return 1024;
 		} 

@@ -47,6 +47,8 @@ import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.ProgramParameter;
 import thothbot.parallax.core.client.gl2.enums.RenderbufferInternalFormat;
 import thothbot.parallax.core.client.gl2.enums.RenderbufferParameterName;
+import thothbot.parallax.core.client.gl2.enums.ShaderPrecisionSpecifiedTypes;
+import thothbot.parallax.core.client.gl2.enums.Shaders;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
 import thothbot.parallax.core.client.gl2.enums.StencilOp;
 import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
@@ -844,6 +846,27 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
    */
   public native WebGLActiveInfo getActiveUniform(WebGLProgram program, int index) /*-{
 		return this.getActiveUniform(program, index);
+  }-*/;
+  
+  public WebGLShaderPrecisionFormat getShaderPrecisionFormat(Shaders shader, ShaderPrecisionSpecifiedTypes precisionType)
+  {
+	  return getShaderPrecisionFormat(shader.getValue(), precisionType.getValue());
+  }
+
+  protected native WebGLShaderPrecisionFormat getShaderPrecisionFormat(int shader, int precisionType) /*-{
+  		if ( this.getShaderPrecisionFormat === undefined ) 
+  		{
+			this.getShaderPrecisionFormat = function () {
+
+				return {
+					'rangeMin': 1,
+					'rangeMax': 1,
+					'precision': 1
+				};
+			}
+		}
+  	
+		return this.getShaderPrecisionFormat(shader, precisionType);
   }-*/;
 
   /**
