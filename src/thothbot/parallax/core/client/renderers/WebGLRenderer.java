@@ -384,22 +384,47 @@ public class WebGLRenderer implements HasEventBus
 		}
 	}
 	
-	public int getGPUmaxTextures() {
-		return _maxTextures;
+	public boolean supportsVertexTextures()
+	{
+		return this._maxVertexTextures > 0;
+	}
+	
+	public boolean supportsFloatTextures() 
+	{
+		return WebGLExtensions.get( this.gl, Id.OES_texture_float ) != null;
 	}
 
-	public int getGPUmaxVertexTextures() {
-		return _maxVertexTextures;
+	public boolean supportsStandardDerivatives() 
+	{
+		return WebGLExtensions.get( this.gl, Id.OES_standard_derivatives ) != null;
 	}
 
-	public int getGPUmaxTextureSize() {
-		return _maxTextureSize;
+	public boolean supportsCompressedTextureS3TC() 
+	{
+		return WebGLExtensions.get( this.gl, Id.WEBGL_compressed_texture_s3tc ) != null;
 	}
 
-	public int getGPUmaxCubemapSize() {
-		return _maxCubemapSize;
+	public boolean supportsCompressedTexturePVRTC() 
+	{
+		return WebGLExtensions.get( this.gl, Id.WEBGL_compressed_texture_pvrtc ) != null;
 	}
 
+	public boolean supportsBlendMinMax() 
+	{
+		return WebGLExtensions.get( this.gl, Id.EXT_blend_minmax ) != null;
+	}
+
+	public int getMaxAnisotropy() 
+	{
+		WebGLExtension extension = WebGLExtensions.get( this.gl, Id.EXT_texture_filter_anisotropic ); 
+
+		return extension != null ? getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
+	}
+
+	public Shader.PRECISION getPrecision() {
+		return this._precision;
+	}
+	
 	/**
 	 * Gets {@link #setAutoClear(boolean)} flag.
 	 */
@@ -583,43 +608,6 @@ public class WebGLRenderer implements HasEventBus
 	/**
 	 * Return a Boolean true if the context supports vertex textures.
 	 */
-	public boolean supportsVertexTextures()
-	{
-		return this._maxVertexTextures > 0;
-	}
-	
-	public boolean supportsFloatTextures() 
-	{
-		return WebGLExtensions.get( this.gl, Id.OES_texture_float ) != null;
-	}
-
-	public boolean supportsStandardDerivatives() 
-	{
-		return WebGLExtensions.get( this.gl, Id.OES_standard_derivatives ) != null;
-	}
-
-	public boolean supportsCompressedTextureS3TC() 
-	{
-		return WebGLExtensions.get( this.gl, Id.WEBGL_compressed_texture_s3tc ) != null;
-	}
-
-	public boolean supportsCompressedTexturePVRTC() 
-	{
-		return WebGLExtensions.get( this.gl, Id.WEBGL_compressed_texture_pvrtc ) != null;
-	}
-
-	public boolean supportsBlendMinMax() 
-	{
-		return WebGLExtensions.get( this.gl, Id.EXT_blend_minmax ) != null;
-	}
-
-	public int getMaxAnisotropy() 
-	{
-		WebGLExtension extension = WebGLExtensions.get( this.gl, Id.EXT_texture_filter_anisotropic ); 
-
-		return extension != null ? getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
-	}
-
 
 	/**
 	 * Sets the sizes and also sets {@link #setViewport(int, int, int, int)} size.
