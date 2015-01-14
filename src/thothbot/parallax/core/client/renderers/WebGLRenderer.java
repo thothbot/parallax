@@ -125,7 +125,7 @@ public class WebGLRenderer implements HasEventBus
 	private WebGLRenderingContext gl;
 
 	private WebGlRendererInfo info;
-				
+					
 	// Default Color and alpha
 	private Color _clearColor = new Color(0x000000);
 	private double _clearAlpha = 1.0;
@@ -144,6 +144,8 @@ public class WebGLRenderer implements HasEventBus
   	}-*/; 
 
 	// ---- Properties ------------------------------------
+	
+	public Shader.PRECISION _precision = Shader.PRECISION.HIGHP;
 	
 	// clearing
 	private boolean autoClear = true;
@@ -259,10 +261,14 @@ public class WebGLRenderer implements HasEventBus
 	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionMediumpFloat;
 	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionLowpFloat;
 		
-	private OESTextureFloat GLExtensionTextureFloat;
-	private OESStandardDerivatives GLExtensionStandardDerivatives;
-	private ExtTextureFilterAnisotropic GLExtensionTextureFilterAnisotropic;
-	private WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC;
+//	private OESTextureFloat GLExtensionTextureFloat;
+//	private OESStandardDerivatives GLExtensionStandardDerivatives;
+//	private ExtTextureFilterAnisotropic GLExtensionTextureFilterAnisotropic;
+//	private WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC;
+	
+	// clamp precision to maximum available
+	private boolean highpAvailable;
+	private boolean mediumpAvailable;
 		
 	private boolean isAutoUpdateObjects = true;
 	private boolean isAutoUpdateScene = true;
@@ -299,10 +305,36 @@ public class WebGLRenderer implements HasEventBus
 		this._fragmentShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT );
 		this._fragmentShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT );
 		this._fragmentShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT );
+		
+		this.highpAvailable = _vertexShaderPrecisionHighpFloat.getPrecision() > 0 && _fragmentShaderPrecisionHighpFloat.getPrecision() > 0;
+		this.mediumpAvailable = _vertexShaderPrecisionMediumpFloat.getPrecision() > 0 && _fragmentShaderPrecisionMediumpFloat.getPrecision() > 0;
+		
+		if ( this._precision == Shader.PRECISION.HIGHP && ! highpAvailable ) {
+
+			if ( mediumpAvailable ) {
+
+				this._precision = Shader.PRECISION.MEDIUMP;
+				Log.warn( "WebGLRenderer: highp not supported, using mediump." );
+
+			} else {
+
+				this._precision = Shader.PRECISION.LOWP;
+				Log.warn( "WebGLRenderer: highp and mediump not supported, using lowp." );
+
+			}
+
+		}
+
+		if ( this._precision == Shader.PRECISION.MEDIUMP && ! mediumpAvailable ) {
+
+			this._precision = Shader.PRECISION.LOWP;
+			Log.warn( "THREE.WebGLRenderer: mediump not supported, using lowp." );
+		}
+
 				
-		this.GLExtensionTextureFloat = (OESTextureFloat) WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float);
-		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float_linear);
-		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_standard_derivatives);
+//		this.GLExtensionTextureFloat = (OESTextureFloat) WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float);
+//		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float_linear);
+//		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_standard_derivatives);
 		
 //		this.GLExtensionStandardDerivatives = (OESStandardDerivatives) gl.getExtension( "OES_standard_derivatives" );
 //		if(this.GLExtensionStandardDerivatives == null)
