@@ -88,7 +88,7 @@ public class SpotLight extends ShadowLight
 			uniforms.get("spotLightDistance").setValue( distances );
 
 			uniforms.get("spotLightDirection").setValue( directions );
-			uniforms.get("spotLightAngle").setValue( angles );
+			uniforms.get("spotLightAngleCos").setValue( angles );
 			uniforms.get("spotLightExponent").setValue( exponents );
 		}
 	}

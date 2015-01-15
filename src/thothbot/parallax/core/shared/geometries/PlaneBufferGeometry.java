@@ -19,8 +19,6 @@
 package thothbot.parallax.core.shared.geometries;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.client.gl2.arrays.Uint32Array;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 

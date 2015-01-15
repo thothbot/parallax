@@ -96,6 +96,10 @@ public class Object3D
 
 	public Matrix3 _normalMatrix;
 	public Matrix4 _modelViewMatrix;
+	
+	public boolean __webglActive;
+	public boolean __webglInit;
+
 			
 	public Object3D() 
 	{
@@ -724,5 +728,10 @@ public class Object3D
 
 		return object;
 
+	}
+	
+	public String toString() {
+		return "{class=" + this.getClass().getSimpleName() 
+				+ ", id: " + this.getId() + "}";
 	}
 }

@@ -532,7 +532,7 @@ public abstract class Material
 
 		options.add("");
 		
-		if (parameters.isSupportsVertexTextures)
+		if (parameters.supportsVertexTextures)
 			options.add(SHADER_DEFINE.VERTEX_TEXTURES.getValue());
 
 		if (parameters.gammaInput)

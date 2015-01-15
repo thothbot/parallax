@@ -38,9 +38,6 @@ public abstract class GeometryObject extends Object3D
 	
 	private double _oldLineWidth = -1;
 	
-	public boolean __webglActive;
-	public boolean __webglInit;
-
 //	public GeometryBuffer getGeometryBuffer()
 //	{
 //		return this.geometryBuffer;

@@ -102,4 +102,8 @@ public abstract class AbstractGeometry extends WebGLGeometry
 	public abstract void computeVertexNormals();
 	
 	public abstract void computeTangents();
+	
+	public String toString() {
+		return getClass().getSimpleName();
+	}
 }

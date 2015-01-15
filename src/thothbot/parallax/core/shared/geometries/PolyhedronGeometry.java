@@ -121,17 +121,17 @@ public abstract class PolyhedronGeometry extends Geometry
 		{
 			Face3 face = new Face3( c1.index, c2.index, c3.index, Arrays.asList(c1.vector.clone(), c2.vector.clone(), c3.vector.clone()) );
 			
-//			face.getCentroid().add( c1.vector ).add( c2.vector ).add( c3.vector ).divide( 3 );
-//			face.setNormal(face.getCentroid().clone().normalize());
-//			
-//			getFaces().add( face );
-//
-//			double azi = azimuth( face.getCentroid() );
-//			getFaceVertexUvs().get( 0 ).add( Arrays.asList( 
-//				correctUV( c1.uv, c1.vector, azi ),
-//				correctUV( c2.uv, c2.vector, azi ),
-//				correctUV( c3.uv, c3.vector, azi )
-//			) );
+			Vector3 centroid = new Vector3();
+			centroid.copy( c1.vector ).add( c2.vector ).add( c3.vector ).divide( 3.0 );
+			
+			getFaces().add( face );
+
+			double azi = azimuth( centroid );
+			getFaceVertexUvs().get( 0 ).add( Arrays.asList( 
+				correctUV( c1.uv, c1.vector, azi ),
+				correctUV( c2.uv, c2.vector, azi ),
+				correctUV( c3.uv, c3.vector, azi )
+			) );
 		}
 		else 
 		{

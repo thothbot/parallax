@@ -124,8 +124,8 @@ public class WebGLObject implements Comparable<WebGLObject>
 	
 	public String toString() {
 		return "{id: " + this.id 
-				+ ", material: " + this.material.getClass().getName() 
-				+ ", object: " + this.object.getClass().getName()
+				+ ", material: " + (this.material != null ? this.material.getClass().getSimpleName() : "null") 
+				+ ", object: " + (this.object != null ? this.object.getClass().getSimpleName() : "null")
 				+ ", render: " + this.render
 				+ ", z: " + this.z + "}";
 	}

@@ -22,6 +22,7 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.core.DimensionalObject;
 import thothbot.parallax.core.shared.core.Geometry;
+import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Matrix4;

@@ -20,21 +20,10 @@ package thothbot.parallax.core.client.shaders;
 
 public class ProgramParameters 
 {
-	public boolean gammaInput;
-	public boolean gammaOutput;
-	public boolean physicallyBasedShading;
+	public Shader.PRECISION precision;
 	
-	public int maxDirLights;
-	public int maxPointLights;
-	public int maxSpotLights;
-	public int maxHemiLights;
-	
-	public int maxShadows;
-	public int maxBones;
-	public int boneTextureWidth;
-	public int boneTextureHeight;
-	public boolean useVertexTexture;
-	
+	public boolean supportsVertexTextures;
+
 	public boolean map;
 	public boolean envMap;
 	public boolean lightMap;
@@ -47,42 +36,48 @@ public class ProgramParameters
 
 	public boolean useFog;
 	public boolean useFog2;
-
-	public boolean metal;
-
+	
+	public boolean sizeAttenuation;
+	public boolean logarithmicDepthBuffer;
+	
 	public boolean skinning;
+	public int maxBones;
+	public boolean useVertexTexture;
+	
 	public boolean morphTargets;
 	public boolean morphNormals;
-	public boolean perPixel;
-	public boolean wrapAround;
-	public boolean doubleSided;
-	public boolean flipSided;
-	
+	public int maxMorphTargets;
+	public int maxMorphNormals;
+
+	public int maxDirLights;
+	public int maxPointLights;
+	public int maxSpotLights;
+	public int maxHemiLights;
+
+	public int maxShadows;
 	public boolean shadowMapEnabled;
 	public boolean shadowMapSoft;
 	public boolean shadowMapDebug;
 	public boolean shadowMapCascade;
-	public boolean sizeAttenuation;
-	
+
 	public double alphaTest;
+	public boolean metal;
+	public boolean wrapAround;
+	public boolean doubleSided;
+	public boolean flipSided;
 	
-	public int maxMorphTargets;
-	public int maxMorphNormals;
-	
-	public boolean isSupportsVertexTextures;
-	
-	public boolean logarithmicDepthBuffer;
+	public boolean gammaInput;
+	public boolean gammaOutput;
 	
 	public String toString() 
 	{
 		String retval = "";
-		retval += gammaInput + ", " + gammaOutput + ", " + physicallyBasedShading + "-1-"
-				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + ", " + maxHemiLights + "-2-"
-				+ maxShadows + ", " + maxBones + ", " + boneTextureWidth + ", " + boneTextureHeight + ", " + useVertexTexture + "-2-"
-				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + normalMap + ", " + specularMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-4-"
-				+ morphNormals + ", " + perPixel + ", " + wrapAround + ", " + doubleSided + ", " + flipSided + "-5-"
-				+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-6-"
-				+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals + ", " + isSupportsVertexTextures;
+		retval += maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + ", " + maxHemiLights + "-1-"
+				+ maxShadows + ", " + maxBones + ", " + useVertexTexture + "-2-"
+				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + normalMap + ", " + specularMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-3-"
+				+ morphNormals + ", " + wrapAround + ", " + doubleSided + ", " + flipSided + "-4-"
+				+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-5-"
+				+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals + ", " + supportsVertexTextures;
 		return retval;
 	}
 }

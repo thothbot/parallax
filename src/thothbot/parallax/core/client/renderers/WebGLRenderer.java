@@ -146,6 +146,8 @@ public class WebGLRenderer implements HasEventBus
 	public final native double _devicePixelRatio() /*-{
     	return self.devicePixelRatio !==null ? self.devicePixelRatio : 1.0;
   	}-*/; 
+	
+	public boolean _logarithmicDepthBuffer = false;
 
 	// ---- Properties ------------------------------------
 	
@@ -336,14 +338,16 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 				
-//		this.GLExtensionTextureFloat = (OESTextureFloat) WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float);
-//		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float_linear);
-//		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_standard_derivatives);
+		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float);
+		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float_linear);
+		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_standard_derivatives);
 		
-//		this.GLExtensionStandardDerivatives = (OESStandardDerivatives) gl.getExtension( "OES_standard_derivatives" );
-//		if(this.GLExtensionStandardDerivatives == null)
-//			Log.warn( "WebGLRenderer: Standard derivatives not supported." );
-//
+		if ( _logarithmicDepthBuffer ) 
+		{
+			WebGLExtensions.get(gl, WebGLExtensions.Id.EXT_frag_depth);
+		}
+
+		
 //		this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "EXT_texture_filter_anisotropic" );
 //		if(this.GLExtensionTextureFilterAnisotropic == null)
 //			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "MOZ_EXT_texture_filter_anisotropic" );
@@ -361,7 +365,6 @@ public class WebGLRenderer implements HasEventBus
 //			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
 //		if(this.GLExtensionCompressedTextureS3TC == null)
 //			Log.warn( "WebGLRenderer: S3TC compressed textures not supported." );
-
 
 		setSize(width, height);
 		setDefaultGLState();
@@ -1327,7 +1330,7 @@ public class WebGLRenderer implements HasEventBus
 				new FastMap<GeometryGroup>() : new HashMap<String, GeometryGroup>();
 				
 		List<GeometryGroup> groupsList = new ArrayList<GeometryGroup>();
-		
+
 		for ( int f = 0, fl = geometry.getFaces().size(); f < fl; f ++ ) {
 
 			Face3 face = geometry.getFaces().get( f );
@@ -1379,7 +1382,7 @@ public class WebGLRenderer implements HasEventBus
 		Material material = object.getMaterial();
 		boolean addBuffers = false;
 
-		if ( GeometryGroup.geometryGroups.get( geometry.getId() ) == null || geometry.groupsNeedUpdate == true ) {
+		if ( GeometryGroup.geometryGroups.get( geometry.getId() + "" ) == null || geometry.groupsNeedUpdate == true ) {
 
 			this._webglObjects.put(object.getId() + "", new ArrayList<WebGLObject>());
 
@@ -1432,7 +1435,7 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 
-	private void initObject( GeometryObject object, Object3D scene ) {
+	private void initObject( Object3D object, Object3D scene ) {
 
 		if ( !object.__webglInit ) {
 
@@ -1442,7 +1445,7 @@ public class WebGLRenderer implements HasEventBus
 
 		}
 
-		AbstractGeometry geometry = object.getGeometry();
+		AbstractGeometry geometry = object instanceof GeometryObject ? ((GeometryObject)object).getGeometry() : null;
 
 		if ( geometry == null ) {
 
@@ -1498,7 +1501,7 @@ public class WebGLRenderer implements HasEventBus
 
 				if ( geometry instanceof BufferGeometry ) {
 
-					addBuffer( _webglObjects, geometry, object );
+					addBuffer( _webglObjects, geometry, (GeometryObject) object );
 
 				} else if ( geometry instanceof Geometry ) {
 
@@ -1506,7 +1509,7 @@ public class WebGLRenderer implements HasEventBus
 
 					for ( int i = 0,l = geometryGroupsList.size(); i < l; i ++ ) {
 
-						addBuffer( _webglObjects, geometryGroupsList.get( i ), object );
+						addBuffer( _webglObjects, geometryGroupsList.get( i ), (GeometryObject) object );
 
 					}
 
@@ -1514,7 +1517,7 @@ public class WebGLRenderer implements HasEventBus
 
 			} else if ( object instanceof Line || object instanceof PointCloud ) {
 
-				addBuffer( _webglObjects, geometry, object );
+				addBuffer( _webglObjects, geometry, (GeometryObject) object );
 
 			} /*else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
 
@@ -1548,7 +1551,8 @@ public class WebGLRenderer implements HasEventBus
 
 		} else {
 
-			initObject( (GeometryObject) object, scene );
+			if(!(object instanceof Light))
+				initObject( object, scene );
 
 			if ( object instanceof Light ) {
 
@@ -1565,7 +1569,7 @@ public class WebGLRenderer implements HasEventBus
 			} */else {
 
 				List<WebGLObject> webglObjects = this._webglObjects.get( object.getId() + "" );	
-							
+			
 				if ( webglObjects != null && ( object.isFrustumCulled() == false || _frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
 
 					updateObject( (GeometryObject) object, scene );
@@ -1737,8 +1741,6 @@ public class WebGLRenderer implements HasEventBus
 	{
 		render(scene, camera, renderTarget, false);
 	}
-	
-	
 
 	/**
 	 * Rendering.
@@ -1841,10 +1843,10 @@ public class WebGLRenderer implements HasEventBus
 			
 			// opaque pass (front-to-back order)
 			setBlending( Material.BLENDING.NO );
-Log.error(opaqueObjects.get(0));
+
 			renderObjects( opaqueObjects, camera, lights, fog, false, material );
 			renderObjectsImmediate( _webglObjectsImmediate, false, camera, lights, fog, false, material );
-
+Log.error("render", opaqueObjects.size(), transparentObjects.size(), this._webglObjects, _webglObjectsImmediate.size());
 			// transparent pass (back-to-front order)
 
 			renderObjects( transparentObjects, camera, lights, fog, true, material );
@@ -2110,7 +2112,7 @@ Log.error(opaqueObjects.get(0));
 			// colors
 			if ( attributes.get("color") >= 0 ) 
 			{
-				if ( ((Geometry)geometry).getColors().size() > 0 || ((Geometry)geometry).getFaces().size() > 0 ) {
+				if ( ((Geometry)object.getGeometry()).getColors().size() > 0 || ((Geometry)object.getGeometry()).getFaces().size() > 0 ) {
 
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer );
 					enableAttribute( attributes.get("color") );
@@ -2218,21 +2220,24 @@ Log.error(opaqueObjects.get(0));
 
 		ProgramParameters parameters = new ProgramParameters();
 		
-		parameters.gammaInput  = isGammaInput();
-		parameters.gammaOutput = isGammaOutput();
-		parameters.isSupportsVertexTextures = this._supportsVertexTextures;
+		parameters.gammaInput = this.isGammaInput();
+		parameters.gammaOutput = this.isGammaOutput();
 		
+		parameters.precision = this._precision;
+
+		parameters.supportsVertexTextures = this._supportsVertexTextures;
+
 		parameters.useFog  = (fog != null);
 		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
-
+		
+		parameters.logarithmicDepthBuffer = this._logarithmicDepthBuffer;
+		
 		parameters.maxBones = allocateBones( object );
 
-//		if(object instanceof SkinnedMesh)
-//		{
-//			parameters.useVertexTexture = this.isGPUsupportsBoneTextures && ((SkinnedMesh)object).useVertexTexture;
-//			parameters.boneTextureWidth = ((SkinnedMesh)object).boneTextureWidth;
-//			parameters.boneTextureHeight = ((SkinnedMesh)object).boneTextureHeight;
-//		}
+		if(object instanceof SkinnedMesh)
+		{
+			parameters.useVertexTexture = this._supportsBoneTextures;// && ((SkinnedMesh)object).useVertexTexture;
+		}
 
 		parameters.maxMorphTargets = this.maxMorphTargets;
 		parameters.maxMorphNormals = this.maxMorphNormals;
@@ -2247,7 +2252,7 @@ Log.error(opaqueObjects.get(0));
 		for(Plugin plugin: this.renderPluginsPre)
 		if(plugin instanceof ShadowMap && ((ShadowMap)plugin).isEnabled() && object.isReceiveShadow())
 		{
-			parameters.shadowMapEnabled = true;
+			parameters.shadowMapEnabled = this.shadowMapEnabled && object.isReceiveShadow() && maxShadows > 0;
 			parameters.shadowMapSoft    = ((ShadowMap)plugin).isSoft();
 			parameters.shadowMapDebug   = ((ShadowMap)plugin).isDebugEnabled();
 			parameters.shadowMapCascade = ((ShadowMap)plugin).isCascade();
@@ -3114,9 +3119,7 @@ Log.error(opaqueObjects.get(0));
 	private Map<String, Integer> allocateLights ( List<Light> lights ) 
 	{
 		int dirLights = 0, pointLights = 0, spotLights = 0, hemiLights = 0;
-		
-		int maxDirLights = 0, maxPointLights = 0, maxSpotLights = 0, maxHemiLights = 0;
-		
+				
 		for(Light light: lights) 
 		{
 			if ( light instanceof ShadowLight && ((ShadowLight)light).isOnlyShadow() ) continue;
@@ -3129,10 +3132,10 @@ Log.error(opaqueObjects.get(0));
 
 		Map<String, Integer> retval = GWT.isScript() ? 
 				new FastMap<Integer>() : new HashMap<String, Integer>();
-		retval.put("directional", maxDirLights);
-		retval.put("point", maxPointLights);
-		retval.put("spot", maxSpotLights);
-		retval.put("hemi", maxHemiLights);
+		retval.put("directional", dirLights);
+		retval.put("point", pointLights);
+		retval.put("spot", spotLights);
+		retval.put("hemi", hemiLights);
 
 		return retval;
 	}
