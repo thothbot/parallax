@@ -46,63 +46,64 @@ public final class TorusKnotGeometry extends Geometry
 		this(radius, tube, segmentsR, segmentsT, 2, 3, 1);
 	}
 			
-	public TorusKnotGeometry(int radius, int tube, int segmentsR, int segmentsT, int p, int q, int heightScale ) 
+	public TorusKnotGeometry(int radius, int tube, int radialSegments, int tubularSegments, int p, int q, int heightScale ) 
 	{
 		super();
 		
-		int[][] grid = new int[segmentsR][];
+		int[][] grid = new int[radialSegments][];
 
 		Vector3 tang = new Vector3();
 		Vector3 n = new Vector3();
 		Vector3 bitan = new Vector3();
 
-		for ( int i = 0; i < segmentsR; ++ i )  	
+		for ( int i = 0; i < radialSegments; ++ i )  	
 		{
-			grid[ i ] = new int[segmentsT];
-
-			for ( int j = 0; j < segmentsT; ++ j ) 
+			grid[ i ] = new int[tubularSegments];
+			double u = i / (double)radialSegments * 2.0 * p * Math.PI;
+			Vector3 p1 = getPos( u,        q, p, radius, heightScale );
+			Vector3 p2 = getPos( u + 0.01, q, p, radius, heightScale );
+			tang.sub( p2, p1 );
+			n.add( p2, p1 );
+			bitan.cross( tang, n );
+			n.cross( bitan, tang );
+			bitan.normalize();
+			n.normalize();
+			
+			for ( int j = 0; j < tubularSegments; ++ j ) 
 			{
-				double u = i / (double)segmentsR * 2.0 * p * Math.PI;
-				double v = j / (double)segmentsT * 2.0 * Math.PI;
-
-				Vector3 p1 = getPos( u,        v, q, p, radius, heightScale );
-				Vector3 p2 = getPos( u + 0.01, v, q, p, radius, heightScale );
-				
-				tang.sub( p2, p1 );
-				n.add( p2, p1 );
-
-				bitan.cross( tang, n );
-				n.cross( bitan, tang );
-				bitan.normalize();
-				n.normalize();
-
+				double v = j / (double)tubularSegments * 2.0 * Math.PI;
 				double cx = -tube * Math.cos( v ); // TODO: Hack: Negating it so it faces outside.
 				double cy = tube * Math.sin( v );
+
+				Vector3 pos = new Vector3();
+				pos.setX( p1.getX() + cx * n.getX() + cy * bitan.getX() );
+				pos.setY( p1.getY() + cx * n.getY() + cy * bitan.getY() );
+				pos.setZ( p1.getZ() + cx * n.getZ() + cy * bitan.getZ() );
 
 				p1.addX(cx * n.getX() + cy * bitan.getX());
 				p1.addY(cx * n.getY() + cy * bitan.getY());
 				p1.addZ(cx * n.getZ() + cy * bitan.getZ());
 
-				grid[ i ][ j ] = vert( p1.getX(), p1.getY(), p1.getZ() );
+				grid[ i ][ j ] = vert( pos );
 			}
 		}
 		
-		for ( int i = 0; i < segmentsR; ++ i ) 
+		for ( int i = 0; i < radialSegments; ++ i ) 
 		{
-			for ( int j = 0; j < segmentsT; ++ j ) 
+			for ( int j = 0; j < tubularSegments; ++ j ) 
 			{
-				int ip = ( i + 1 ) % segmentsR;
-				int jp = ( j + 1 ) % segmentsT;
+				int ip = ( i + 1 ) % radialSegments;
+				int jp = ( j + 1 ) % tubularSegments;
 
 				int a = grid[ i ][ j ];
 				int b = grid[ ip ][ j ];
 				int c = grid[ ip ][ jp ];
 				int d = grid[ i ][ jp ];
 
-				Vector2 uva = new Vector2(           i / (double)segmentsR,           j / (double)segmentsT );
-				Vector2 uvb = new Vector2( ( i + 1.0 ) / (double)segmentsR,           j / (double)segmentsT );
-				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
-				Vector2 uvd = new Vector2(           i / (double)segmentsR, ( j + 1.0 ) / (double)segmentsT );
+				Vector2 uva = new Vector2(           i / (double)radialSegments,           j / (double)tubularSegments );
+				Vector2 uvb = new Vector2( ( i + 1.0 ) / (double)radialSegments,           j / (double)tubularSegments );
+				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)radialSegments, ( j + 1.0 ) / (double)tubularSegments );
+				Vector2 uvd = new Vector2(           i / (double)radialSegments, ( j + 1.0 ) / (double)tubularSegments );
 		
 				getFaces().add( new Face3( a, b, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvd ) );
@@ -117,13 +118,13 @@ public final class TorusKnotGeometry extends Geometry
 		this.computeVertexNormals();
 	}
 	
-	private int vert( double x, double y, double z ) 
+	private int vert( Vector3 pos ) 
 	{
-		getVertices().add( new Vector3( x, y, z ) );
+		getVertices().add( pos );
 		return getVertices().size() - 1;
 	}
 
-	private Vector3 getPos( double u, double v, int in_q, int in_p, int radius, int heightScale ) 
+	private Vector3 getPos( double u, int in_q, int in_p, int radius, int heightScale ) 
 	{
 		double cu = Math.cos( u );
 		double su = Math.sin( u );

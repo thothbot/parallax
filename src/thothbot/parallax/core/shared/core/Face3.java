@@ -45,16 +45,13 @@ public class Face3 {
 	protected int b;
 	protected int c;
 
-	protected Vector3 normal;
+	protected Vector3 normal ;
 	protected List<Vector3> vertexNormals;
 	protected Color color;
 	protected List<Color> vertexColors;
 	// protected List<Material> materials;
 	protected int materialIndex = 0;
 	protected List<Vector4> vertexTangents;
-//	protected Vector3 centroid;
-
-//	public Vector3 __originalNormal;
 	
 	// Special case used in Geometry.computeMorphNormals()
 	public Vector3 __originalFaceNormal;
@@ -118,16 +115,11 @@ public class Face3 {
 		this.setB(b);
 		this.setC(c);
 		this.setNormal(new Vector3());
-		this.setVertexTangents(new ArrayList<Vector4>());
-		this.setVertexNormals(new ArrayList<Vector3>());
-		this.setColor(new Color(0x000000));
-		this.setVertexColors(new ArrayList<Color>());
+		this.vertexTangents = new ArrayList<Vector4>();
+		this.vertexNormals = new ArrayList<Vector3>();
+		this.color = new Color(0x000000);
 
 		this.vertexColors = new ArrayList<Color>();
-		// this.materials = new ArrayList<Material>();
-
-//		this.__originalNormal = new Vector3();
-//		this.__originalVertexNormals = new ArrayList<Vector3>();
 	}
 
 	/**

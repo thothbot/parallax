@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Color;
@@ -428,8 +429,11 @@ public class Geometry extends AbstractGeometry
 		
 		this.computeFaceNormals();
 
-		this.boundingBox = geometry.boundingBox.clone();
-		this.boundingSphere = geometry.boundingSphere.clone();
+		if(geometry.boundingBox != null)
+			this.boundingBox = geometry.boundingBox.clone();
+		
+		if(geometry.boundingSphere != null)
+			this.boundingSphere = geometry.boundingSphere.clone();
 
 		return this;
 	}
@@ -559,9 +563,9 @@ public class Geometry extends AbstractGeometry
 
 			face = this.faces.get( f );
 
-			face.getVertexNormals().set( 0 , vertices[ face.a ].clone() );
-			face.getVertexNormals().set( 1 , vertices[ face.b ].clone() );
-			face.getVertexNormals().set( 2 , vertices[ face.c ].clone() );
+			face.getVertexNormals().add(vertices[ face.a ].clone() );
+			face.getVertexNormals().add(vertices[ face.b ].clone() );
+			face.getVertexNormals().add(vertices[ face.c ].clone() );
 
 		}
 	}
