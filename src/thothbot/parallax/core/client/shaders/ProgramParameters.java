@@ -41,7 +41,7 @@ public class ProgramParameters
 	public boolean bumpMap;
 	public boolean normalMap;
 	public boolean specularMap;
-	public boolean akphaMap;
+	public boolean alphaMap;
 	
 	public boolean vertexColors;
 
@@ -70,6 +70,8 @@ public class ProgramParameters
 	public int maxMorphNormals;
 	
 	public boolean isSupportsVertexTextures;
+	
+	public boolean logarithmicDepthBuffer;
 	
 	public String toString() 
 	{

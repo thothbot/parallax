@@ -2189,7 +2189,7 @@ Log.error(opaqueObjects.get(0));
 			
 			// line distances
 
-			if ( attributes.get("lineDistance") >= 0 ) {
+			if ( attributes.get("lineDistance") != null && attributes.get("lineDistance") >= 0 ) {
 
 				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglLineDistanceBuffer );
 				enableAttribute( attributes.get("lineDistance") );

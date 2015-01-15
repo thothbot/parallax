@@ -19,6 +19,7 @@
 package thothbot.parallax.core.shared.materials;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -96,7 +97,7 @@ public abstract class Material
 	}
 	
 	private static enum SHADER_DEFINE {
-		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT, PHYSICALLY_BASED_SHADING,
+		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT,
 
 		MAX_DIR_LIGHTS, // param
 		MAX_POINT_LIGHTS, // param
@@ -105,14 +106,16 @@ public abstract class Material
 		MAX_SHADOWS, // param
 		MAX_BONES, // param
 
-		USE_MAP, USE_ENVMAP, USE_LIGHTMAP, USE_BUMPMAP, USE_NORMALMAP, USE_SPECULARMAP, USE_COLOR, USE_SKINNING, USE_MORPHTARGETS, USE_MORPHNORMALS,
+		USE_MAP, USE_ENVMAP, USE_LIGHTMAP, USE_BUMPMAP, USE_NORMALMAP, USE_SPECULARMAP, USE_ALPHAMAP, USE_COLOR, USE_SKINNING, USE_MORPHTARGETS, USE_MORPHNORMALS,
 
-		BONE_TEXTURE, N_BONE_PIXEL_X, N_BONE_PIXEL_Y,
-		PHONG_PER_PIXEL, WRAP_AROUND, DOUBLE_SIDED, FLIP_SIDED,
+		BONE_TEXTURE,
+		WRAP_AROUND, DOUBLE_SIDED, FLIP_SIDED,
 
 		USE_SHADOWMAP, SHADOWMAP_SOFT, SHADOWMAP_DEBUG, SHADOWMAP_CASCADE,
 
 		USE_SIZEATTENUATION,
+		
+		USE_LOGDEPTHBUF,
 
 		ALPHATEST,
 
@@ -538,9 +541,6 @@ public abstract class Material
 		if (parameters.gammaOutput)
 			options.add(SHADER_DEFINE.GAMMA_OUTPUT.getValue());
 
-		if (parameters.physicallyBasedShading)
-			options.add(SHADER_DEFINE.PHYSICALLY_BASED_SHADING.getValue());
-
 		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
 		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
 		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
@@ -567,6 +567,9 @@ public abstract class Material
 		
 		if (parameters.specularMap)
 			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
+		
+		if (parameters.alphaMap)
+			options.add(SHADER_DEFINE.USE_ALPHAMAP.getValue());
 
 		if (parameters.vertexColors)
 			options.add(SHADER_DEFINE.USE_COLOR.getValue());
@@ -576,20 +579,12 @@ public abstract class Material
 
 		if (parameters.useVertexTexture)
 			options.add(SHADER_DEFINE.BONE_TEXTURE.getValue());
-		
-		if (parameters.boneTextureWidth > 0)
-			options.add(SHADER_DEFINE.N_BONE_PIXEL_X.getValue(parameters.boneTextureWidth));
-		
-		if (parameters.boneTextureHeight> 0)
-			options.add(SHADER_DEFINE.N_BONE_PIXEL_Y.getValue(parameters.boneTextureHeight));
-		
+				
 		if (parameters.morphTargets)
 			options.add(SHADER_DEFINE.USE_MORPHTARGETS.getValue());
 		if (parameters.morphNormals)
 			options.add(SHADER_DEFINE.USE_MORPHNORMALS.getValue());
 		
-		if (parameters.perPixel)
-			options.add(SHADER_DEFINE.PHONG_PER_PIXEL.getValue());
 		if (parameters.wrapAround)
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
 		if (parameters.doubleSided)
@@ -611,12 +606,69 @@ public abstract class Material
 			Log.error("Fix uniform in Particle material: size");
 			options.add(SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
 		}
+		
+		if (parameters.logarithmicDepthBuffer)
+			options.add(SHADER_DEFINE.USE_LOGDEPTHBUF.getValue());
 
 		options.add("");
 
 		String retval = "";
 		for(String opt: options)
 			retval += opt + "\n";
+		
+		List<String> extra = Arrays.asList("uniform mat4 modelMatrix;",
+				"uniform mat4 modelViewMatrix;",
+				"uniform mat4 projectionMatrix;",
+				"uniform mat4 viewMatrix;",
+				"uniform mat3 normalMatrix;",
+				"uniform vec3 cameraPosition;",
+
+				"attribute vec3 position;",
+				"attribute vec3 normal;",
+				"attribute vec2 uv;",
+				"attribute vec2 uv2;",
+
+				"#ifdef USE_COLOR",
+
+				"	attribute vec3 color;",
+
+				"#endif",
+
+				"#ifdef USE_MORPHTARGETS",
+
+				"	attribute vec3 morphTarget0;",
+				"	attribute vec3 morphTarget1;",
+				"	attribute vec3 morphTarget2;",
+				"	attribute vec3 morphTarget3;",
+
+				"	#ifdef USE_MORPHNORMALS",
+
+				"		attribute vec3 morphNormal0;",
+				"		attribute vec3 morphNormal1;",
+				"		attribute vec3 morphNormal2;",
+				"		attribute vec3 morphNormal3;",
+
+				"	#else",
+
+				"		attribute vec3 morphTarget4;",
+				"		attribute vec3 morphTarget5;",
+				"		attribute vec3 morphTarget6;",
+				"		attribute vec3 morphTarget7;",
+
+				"	#endif",
+
+				"#endif",
+
+				"#ifdef USE_SKINNING",
+
+				"	attribute vec4 skinIndex;",
+				"	attribute vec4 skinWeight;",
+
+				"#endif");
+		
+		for(String opt: extra)
+			retval += opt + "\n";
+
 		return retval;
 	}
 
@@ -646,9 +698,6 @@ public abstract class Material
 		if (parameters.gammaOutput)
 			options.add(SHADER_DEFINE.GAMMA_OUTPUT.getValue());
 
-		if (parameters.physicallyBasedShading)
-			options.add(SHADER_DEFINE.PHYSICALLY_BASED_SHADING.getValue());
-
 		if (parameters.useFog)
 			options.add(SHADER_DEFINE.USE_FOG.getValue());
 
@@ -672,6 +721,9 @@ public abstract class Material
 		
 		if (parameters.specularMap)
 			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
+		
+		if (parameters.alphaMap)
+			options.add(SHADER_DEFINE.USE_ALPHAMAP.getValue());
 
 		if (parameters.vertexColors)
 			options.add(SHADER_DEFINE.USE_COLOR.getValue());
@@ -679,8 +731,6 @@ public abstract class Material
 		if (parameters.metal)
 			options.add(SHADER_DEFINE.METAL.getValue());
 
-		if (parameters.perPixel)
-			options.add(SHADER_DEFINE.PHONG_PER_PIXEL.getValue());
 		if (parameters.wrapAround)
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
 		if (parameters.doubleSided)
@@ -697,11 +747,21 @@ public abstract class Material
 		if (parameters.shadowMapCascade)
 			options.add(SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
 
+		if (parameters.logarithmicDepthBuffer)
+			options.add(SHADER_DEFINE.USE_LOGDEPTHBUF.getValue());
+		
 		options.add("");
 		String retval = "";
 		for(String opt: options)
 			retval += opt + "\n";
 
+		List<String> extra = Arrays.asList(
+				"uniform mat4 viewMatrix;",
+				"uniform vec3 cameraPosition;");
+		
+		for(String opt: extra)
+			retval += opt + "\n";
+		
 		return retval;
 	}
 
