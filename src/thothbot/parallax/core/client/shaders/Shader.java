@@ -150,10 +150,14 @@ public abstract class Shader
 		addUniform("modelMatrix",           new Uniform(Uniform.TYPE.FV1 ));
 		addUniform("cameraPosition",        new Uniform(Uniform.TYPE.FV1 ));
 		addUniform("morphTargetInfluences", new Uniform(Uniform.TYPE.FV1 ));
+		addUniform("bindMatrix",            new Uniform(Uniform.TYPE.FV1 ));
+		addUniform("bindMatrixInverse",     new Uniform(Uniform.TYPE.FV1 ));
 				
 		if ( useVertexTexture ) 
 		{
 			addUniform("boneTexture", new Uniform(Uniform.TYPE.FV1, null));
+			addUniform("boneTextureWidth", new Uniform(Uniform.TYPE.F, null));
+			addUniform("boneTextureHeight", new Uniform(Uniform.TYPE.F, null));
 		} 
 		else 
 		{
@@ -167,7 +171,7 @@ public abstract class Shader
 
 		// cache attributes locations
 		List<String> attributesIds = new ArrayList<String>(Arrays.asList("position", "normal",
-				"uv", "uv2", "tangent", "color", "skinIndex", "skinWeight"));
+				"uv", "uv2", "tangent", "color", "skinIndex", "skinWeight", "lineDistance"));
 
 		for (int i = 0; i < maxMorphTargets; i++)
 			attributesIds.add("morphTarget" + i);

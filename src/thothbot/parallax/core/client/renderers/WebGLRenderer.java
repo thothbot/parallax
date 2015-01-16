@@ -1042,31 +1042,30 @@ public class WebGLRenderer implements HasEventBus
 	
 	private void setupVertexAttributes( Material material, Shader program, BufferGeometry geometry, int startIndex ) {
 
-//		var geometryAttributes = geometry.attributes;
-//
-//		var programAttributes = program.attributes;
-//		var programAttributesKeys = program.attributesKeys;
-//
-//		for ( var i = 0, l = programAttributesKeys.length; i < l; i ++ ) {
-//
-//			var key = programAttributesKeys[ i ];
-//			var programAttribute = programAttributes[ key ];
-//
-//			if ( programAttribute >= 0 ) {
-//
-//				var geometryAttribute = geometryAttributes[ key ];
-//
-//				if ( geometryAttribute != undefined ) {
-//
-//					var size = geometryAttribute.itemSize;
-//
-//					gl.bindBuffer( _gl.ARRAY_BUFFER, geometryAttribute.buffer );
-//
-//					enableAttribute( programAttribute );
-//
-//					gl.vertexAttribPointer( programAttribute, size, _gl.FLOAT, false, 0, startIndex * size * 4 ); // 4 bytes per Float32
-//
-//				} else if ( material.defaultAttributeValues !== undefined ) {
+		Map<String, BufferAttribute> geometryAttributes = geometry.getAttributes();
+
+		Map<String, Integer> programAttributes = program.getAttributesLocations();
+
+		for ( String key: programAttributes.keySet()) {
+
+			 Integer programAttribute = programAttributes.get(key);
+		
+			if ( programAttribute >= 0 ) {
+
+				BufferAttribute geometryAttribute = geometryAttributes.get( key );
+
+				if ( geometryAttribute != null ) {
+
+					int size = geometryAttribute.getItemSize();
+
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryAttribute.buffer );
+
+					enableAttribute( programAttribute );
+Log.error(key, programAttribute, size, DataType.FLOAT, false, 0, startIndex * size * 4 );
+					gl.vertexAttribPointer( programAttribute, size, DataType.FLOAT, false, 0, startIndex * size * 4 ); // 4 bytes per Float32
+
+				}
+//				else if ( material.defaultAttributeValues != null ) {
 //
 //					if ( material.defaultAttributeValues[ key ].length === 2 ) {
 //
@@ -1079,12 +1078,12 @@ public class WebGLRenderer implements HasEventBus
 //					}
 //
 //				}
-//
-//			}
-//
-//		}
-//
-//		disableUnusedAttributes();
+
+			}
+
+		}
+
+		disableUnusedAttributes();
 
 	}
 
@@ -1130,9 +1129,9 @@ public class WebGLRenderer implements HasEventBus
 			{
 				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
 				int size = 2;
-				
+
 				List<BufferGeometry.DrawCall> offsets = geometry.offsets;
-				
+
 				if ( offsets.size() == 0 ) {
 
 					if ( updateBuffers ) {
@@ -1167,7 +1166,8 @@ public class WebGLRenderer implements HasEventBus
 
 						}
 
-						gl.drawElements( mode,  offsets.get( i ).count, type, offsets.get( i ).start );
+
+						gl.drawElements( mode,  offsets.get( i ).count, type, offsets.get( i ).start * size  );
 
 						getInfo().getRender().calls ++;
 						getInfo().getRender().vertices += offsets.get( i ).count; // not really true, here vertices can be shared
@@ -1425,7 +1425,7 @@ public class WebGLRenderer implements HasEventBus
 
 			if ( addBuffers || !object.__webglActive ) {
 
-				addBuffer( _webglObjects, geometryGroup, object );
+				addBuffer( geometryGroup, object );
 
 			}
 
@@ -1501,7 +1501,7 @@ public class WebGLRenderer implements HasEventBus
 
 				if ( geometry instanceof BufferGeometry ) {
 
-					addBuffer( _webglObjects, geometry, (GeometryObject) object );
+					addBuffer( geometry, (GeometryObject) object );
 
 				} else if ( geometry instanceof Geometry ) {
 
@@ -1509,7 +1509,7 @@ public class WebGLRenderer implements HasEventBus
 
 					for ( int i = 0,l = geometryGroupsList.size(); i < l; i ++ ) {
 
-						addBuffer( _webglObjects, geometryGroupsList.get( i ), (GeometryObject) object );
+						addBuffer( geometryGroupsList.get( i ), (GeometryObject) object );
 
 					}
 
@@ -1517,7 +1517,7 @@ public class WebGLRenderer implements HasEventBus
 
 			} else if ( object instanceof Line || object instanceof PointCloud ) {
 
-				addBuffer( _webglObjects, geometry, (GeometryObject) object );
+				addBuffer( geometry, (GeometryObject) object );
 
 			} /*else if ( object instanceof ImmediateRenderObject || object.immediateRenderCallback ) {
 
@@ -1529,12 +1529,14 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 	
-	private void addBuffer( Map<String, List<WebGLObject>>objlist, WebGLGeometry buffer, GeometryObject object ) {
+	private void addBuffer( WebGLGeometry buffer, GeometryObject object ) {
 
 		int id = object.getId();
-		List<WebGLObject> list = objlist.get(id + "");
-		if(list == null)
+		List<WebGLObject> list = _webglObjects.get(id + "");
+		if(list == null) {
 			list = new ArrayList<WebGLObject>();
+			_webglObjects.put(id + "", list);
+		}
 		
 		WebGLObject webGLObject = new WebGLObject(buffer, object);
 		webGLObject.id = id;
@@ -1805,8 +1807,8 @@ public class WebGLRenderer implements HasEventBus
 		
 		// set matrices for immediate objects
 
-		for ( int i = 0, il = this._webglObjectsImmediate.size(); i < il; i ++ ) {
-
+		for ( int i = 0, il = this._webglObjectsImmediate.size(); i < il; i ++ ) 
+		{
 			WebGLObject webglObject = this._webglObjectsImmediate.get( i );
 			Object3D object = webglObject.object;
 
@@ -1820,6 +1822,7 @@ public class WebGLRenderer implements HasEventBus
 
 		}
 
+		Log.error("render", opaqueObjects.size(), transparentObjects.size(), this._webglObjects, _webglObjectsImmediate.size());
 		if ( scene.overrideMaterial != null ) 
 		{
 			Log.error("render(): override material");
@@ -1846,9 +1849,8 @@ public class WebGLRenderer implements HasEventBus
 
 			renderObjects( opaqueObjects, camera, lights, fog, false, material );
 			renderObjectsImmediate( _webglObjectsImmediate, false, camera, lights, fog, false, material );
-Log.error("render", opaqueObjects.size(), transparentObjects.size(), this._webglObjects, _webglObjectsImmediate.size());
-			// transparent pass (back-to-front order)
 
+			// transparent pass (back-to-front order)
 			renderObjects( transparentObjects, camera, lights, fog, true, material );
 			renderObjectsImmediate( _webglObjectsImmediate, true, camera, lights, fog, true, material );
 		}

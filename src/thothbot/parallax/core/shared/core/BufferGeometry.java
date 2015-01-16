@@ -28,10 +28,8 @@ import java.util.Set;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int32Array;
-import thothbot.parallax.core.client.gl2.enums.BufferObjects;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
@@ -900,5 +898,12 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
+	}
+	
+	public String toString() {
+		return getClass().getSimpleName() 
+				+ "{id: " + getId() 
+				+ ", offsets: " + this.offsets.size()
+				+ ", drawcalls: " + this.drawcalls.size() + "}";
 	}
 }
