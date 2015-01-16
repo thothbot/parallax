@@ -83,15 +83,17 @@ public class JsonLoader extends Loader
 		Log.debug("JSON parse()");
 		
 		geometry = new Geometry();
-		
-		parseMaterials();
-		parseVertices();
-		parseFaces();
-		parseSkin();
-		parseMorphing();
 
-//		geometry.computeCentroids();
+		double scale = object.getScale() > 0 ? 1.0 / object.getScale() : 1.0;
+
+		parseMaterials();
+		parseModel(scale);
+
+		parseSkin();
+		parseMorphing(scale);
+
 		geometry.computeFaceNormals();
+		geometry.computeBoundingSphere();
 
 		if ( hasNormals() ) 
 			geometry.computeTangents();
@@ -369,33 +371,8 @@ public class JsonLoader extends Loader
 
 		return material;
 	}
-
-	private void parseVertices()
-	{
-		if(object.getVertices() == null) 
-			return;
-		
-		Log.debug("JSON parseVertices()");
-		
-		List<Double> vertices = object.getVertices();
-		
-		double scale = getScale();
-		int offset = 0;
-		int zLength = vertices.size();
-
-		while ( offset < zLength ) 
-		{
-			Vector3 vertex = new Vector3();
-
-			vertex.setX( vertices.get(offset++) * scale );
-			vertex.setY( vertices.get(offset++) * scale );
-			vertex.setZ( vertices.get(offset++) * scale );
-
-			this.geometry.getVertices().add( vertex );
-		}
-	}
 	
-	private void parseFaces()
+	private void parseModel(double scale)
 	{
 		if(object.getFaces() == null) 
 			return;
@@ -403,29 +380,47 @@ public class JsonLoader extends Loader
 		Log.debug("JSON parseFaces()");
 
 		List<Integer> faces = object.getFaces();
-
+		List<Double> vertices = object.getVertices();
 		List<List<Double>> uvs = object.getUvs();
-		int nUvLayers = 0;
-
-		// disregard empty arrays
-		for ( int i = 0; i < uvs.size(); i++ )
-		{
-			if ( uvs.get( i ).size() > 0) 
-				nUvLayers ++;
-		}
-
-		// 0-index is initialized already
-		for ( int i = 0; i < nUvLayers; i++ ) 
-		{
-//			geometry.getFaceUvs().add( i, new ArrayList<Vector2>());
-			geometry.getFaceVertexUvs().add( i, new ArrayList<List<Vector2>>());
-		}
-		
 		List<Double> normals = object.getNormals();
 		List<Integer> colors = object.getColors();
+	
+		int nUvLayers = 0;
+
+		if(uvs != null)
+		{
+			// disregard empty arrays
+			for ( int i = 0; i < uvs.size(); i++ )
+			{
+				if ( uvs.get( i ).size() > 0) 
+					nUvLayers ++;
+			}
+	
+			// 0-index is initialized already
+			for ( int i = 0; i < nUvLayers; i++ ) 
+			{
+				geometry.getFaceVertexUvs().add( i, new ArrayList<List<Vector2>>());
+			}
+		}
+		
 
 		int offset = 0;
-		int zLength = faces.size();
+		int zLength = vertices.size();
+		
+		while ( offset < zLength ) {
+
+			Vector3 vertex = new Vector3();
+
+			vertex.setX( vertices.get( offset ++ ) * scale );
+			vertex.setY( vertices.get( offset ++ ) * scale );
+			vertex.setZ( vertices.get( offset ++ ) * scale );
+
+			geometry.getVertices().add( vertex );
+
+		}
+
+		offset = 0;
+		zLength = faces.size();
 
 		while ( offset < zLength ) 
 		{
@@ -433,121 +428,237 @@ public class JsonLoader extends Loader
 
 			boolean isQuad          	= isBitSet( type, 0 );
 			boolean hasMaterial         = isBitSet( type, 1 );
-			boolean hasFaceUv           = isBitSet( type, 2 );
 			boolean hasFaceVertexUv     = isBitSet( type, 3 );
 			boolean hasFaceNormal       = isBitSet( type, 4 );
 			boolean hasFaceVertexNormal = isBitSet( type, 5 );
 			boolean hasFaceColor	    = isBitSet( type, 6 );
 			boolean hasFaceVertexColor  = isBitSet( type, 7 );
-
-
-			Face3 face = null;
-			int nVertices;
-			if ( isQuad ) 
+			
+			if( isQuad )
 			{
-				nVertices = 4;
-//				face = new Face4(faces.get(offset++), faces.get(offset++), faces.get(offset++),faces.get(offset++));
-			} 
-			else 
-			{
-				nVertices = 3;
-				face = new Face3(faces.get(offset++), faces.get(offset++), faces.get(offset++));
-			}
+				Face3 faceA = new Face3(faces.get( offset ), faces.get( offset + 1 ), faces.get( offset + 3 ));
 
-			if ( hasMaterial ) 
-			{
-				face.setMaterialIndex(faces.get(offset++));
-			}
+				Face3 faceB = new Face3(faces.get( offset + 1 ), faces.get( offset + 2 ), faces.get( offset + 3 ));
 
-			if ( hasFaceUv ) 
-			{
-				for ( int i = 0; i < nUvLayers; i++ ) 
-				{
-					List<Double> uvLayer = uvs.get(i);
+				offset += 4;
+				
+				if ( hasMaterial ) {
 
-					int uvIndex = faces.get(offset++);
-					Vector2 UV = new Vector2( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1));
+					int materialIndex = faces.get( offset ++ );
+					faceA.setMaterialIndex( materialIndex );
+					faceB.setMaterialIndex( materialIndex );
 
-//					this.geometry.getFaceUvs().get(i).add(UV);
 				}
-			}
+				
+				// to get face <=> uv index correspondence
 
-			if ( hasFaceVertexUv ) 
-			{
-				for ( int i = 0; i < nUvLayers; i++ ) 
-				{
-					List<Double> uvLayer = uvs.get(i);
+				int fi = geometry.getFaces().size();
 
-					List<Vector2> UVs = new ArrayList<Vector2>();
+				if ( hasFaceVertexUv ) {
 
-					for ( int j = 0; j < nVertices; j ++ ) 
-					{
-						int uvIndex = faces.get(offset++);
-						UVs.add( new Vector2( uvLayer.get(uvIndex * 2), uvLayer.get(uvIndex * 2 + 1) ) );
+					for ( int i = 0; i < nUvLayers; i ++ ) {
+
+						List<Double> uvLayer = uvs.get( i );
+
+//						geometry.getFaceVertexUvs().get( i ).set( fi, new ArrayList<Vector2>() );
+//						geometry.getFaceVertexUvs().get( i ).set( fi + 1, new ArrayList<Vector2>() );
+
+						geometry.getFaceVertexUvs().get( i ).add( fi, new ArrayList<Vector2>() );
+						geometry.getFaceVertexUvs().get( i ).add( fi + 1, new ArrayList<Vector2>() );
+
+						for ( int j = 0; j < 4; j ++ ) {
+
+							Integer uvIndex = faces.get( offset ++ );
+
+							Double u = uvLayer.get( uvIndex * 2 );
+							Double v = uvLayer.get( uvIndex * 2 + 1 );
+
+							Vector2 uv = new Vector2( u, v );
+
+							if ( j != 2 ) geometry.getFaceVertexUvs().get( i ).get( fi ).add( uv );
+							if ( j != 0 ) geometry.getFaceVertexUvs().get( i ).get( fi + 1 ).add( uv );
+
+						}
+
 					}
 
-//					geometry.getFaceVertexUvs().get(i).add(UVs);
 				}
-			}
+				
+				if ( hasFaceNormal ) {
 
-			if ( hasFaceNormal ) 
-			{
-				int normalIndex = faces.get(offset++) * 3;
+					Integer normalIndex = faces.get( offset ++ ) * 3;
 
-				Vector3 normal = new Vector3();
+					faceA.getNormal().set(
+						normals.get( normalIndex ++ ),
+						normals.get( normalIndex ++ ),
+						normals.get( normalIndex )
+					);
 
-				normal.setX( normals.get( normalIndex ++ ) );
-				normal.setY( normals.get( normalIndex ++ ) );
-				normal.setZ( normals.get( normalIndex ) );
+					faceB.getNormal().copy( faceA.getNormal() );
 
-				face.setNormal(normal);
-			}
-
-			if ( hasFaceVertexNormal ) 
-			{
-				for ( int i = 0; i < nVertices; i++ ) 
-				{
-					int normalIndex = faces.get(offset++) * 3;
-					Vector3 normal = new Vector3();
-					
-					normal.setX( normals.get( normalIndex ++ ) );
-					normal.setY( normals.get( normalIndex ++ ) );
-					normal.setZ( normals.get( normalIndex ) );
-
-					face.getVertexNormals().add( normal );
 				}
-			}
+
+				if ( hasFaceVertexNormal ) {
+
+					for ( int i = 0; i < 4; i ++ ) {
+
+						Integer normalIndex = faces.get( offset ++ ) * 3;
+
+						Vector3 normal = new Vector3(
+							normals.get( normalIndex ++ ),
+							normals.get( normalIndex ++ ),
+							normals.get( normalIndex )
+						);
 
 
-			if ( hasFaceColor ) 
-			{
-				int colorIndex = faces.get(offset++);
-				face.setColor(new Color(colors.get(colorIndex)));
-			}
+						if ( i != 2 ) faceA.getVertexNormals().add( normal );
+						if ( i != 0 ) faceB.getVertexNormals().add( normal );
 
-			if ( hasFaceVertexColor ) 
-			{
-				for ( int i = 0; i < nVertices; i++ ) 
-				{
-					int colorIndex = faces.get(offset++);
-					face.getVertexColors().add(new Color(colors.get(colorIndex)));
+					}
+
 				}
-			}
+				
+				if ( hasFaceColor ) {
 
-			this.geometry.getFaces().add( face );
+					Integer colorIndex = faces.get( offset ++ );
+					Integer hex = colors.get( colorIndex );
+
+					faceA.getColor().setHex( hex );
+					faceB.getColor().setHex( hex );
+
+				}
+				
+				if ( hasFaceVertexColor ) {
+
+					for ( int i = 0; i < 4; i ++ ) {
+
+						Integer colorIndex = faces.get( offset ++ );
+						Integer hex = colors.get( colorIndex );
+
+						if ( i != 2 ) faceA.getVertexColors().add( new Color( hex ) );
+						if ( i != 0 ) faceB.getVertexColors().add( new Color( hex ) );
+
+					}
+
+				}
+
+				geometry.getFaces().add( faceA );
+				geometry.getFaces().add( faceB );
+
+			}
+			else
+			{
+			
+				Face3 face = new Face3( faces.get( offset ++ ), faces.get( offset ++ ), faces.get( offset ++ ));
+
+				if ( hasMaterial ) {
+
+					int materialIndex = faces.get( offset ++ );
+					face.setMaterialIndex( materialIndex );
+
+				}
+				
+				// to get face <=> uv index correspondence
+
+				int fi = geometry.getFaces().size();
+
+				if ( hasFaceVertexUv ) {
+
+					for ( int i = 0; i < nUvLayers; i ++ ) {
+
+						List<Double> uvLayer = uvs.get( i );
+
+						geometry.getFaceVertexUvs().get( i ).add( fi, new ArrayList<Vector2>());
+
+						for ( int j = 0; j < 3; j ++ ) {
+
+							Integer uvIndex = faces.get( offset ++ );
+
+							double u = uvLayer.get( uvIndex * 2 );
+							double v = uvLayer.get( uvIndex * 2 + 1 );
+
+							Vector2 uv = new Vector2( u, v );
+
+							geometry.getFaceVertexUvs().get( i ).get( fi ).add( uv );
+
+						}
+
+					}
+
+				}
+				
+				if ( hasFaceNormal ) {
+
+					Integer normalIndex = faces.get( offset ++ ) * 3;
+
+					face.getNormal().set(
+						normals.get( normalIndex ++ ),
+						normals.get( normalIndex ++ ),
+						normals.get( normalIndex )
+					);
+
+				}
+
+				if ( hasFaceVertexNormal ) {
+
+					for ( int i = 0; i < 3; i ++ ) {
+
+						Integer normalIndex = faces.get( offset ++ ) * 3;
+
+						Vector3 normal = new Vector3(
+							normals.get( normalIndex ++ ),
+							normals.get( normalIndex ++ ),
+							normals.get( normalIndex )
+						);
+
+						face.getVertexNormals().add( normal );
+
+					}
+
+				}
+
+
+				if ( hasFaceColor ) {
+
+					Integer colorIndex = faces.get( offset ++ );
+					face.getColor().setHex( colors.get( colorIndex ) );
+
+				}
+				
+				if ( hasFaceVertexColor ) {
+
+					for ( int i = 0; i < 3; i ++ ) {
+
+						Integer colorIndex = faces.get( offset ++ );
+						face.getVertexColors().add( new Color( colors.get( colorIndex ) ) );
+
+					}
+
+				}
+
+				geometry.getFaces().add( face );
+
+			}
 		}
 	}
 	
 	private void parseSkin() 
 	{
+		int influencesPerVertex = ( object.getInfluencesPerVertex() > 0 ) ? object.getInfluencesPerVertex() : 2;
+		
 		Log.debug("JSON parseSkin()");
 		
 		if ( object.getSkinWeights() != null ) 
 		{
 			List<Double> skinWeights = object.getSkinWeights();
-			for ( int i = 0, l = skinWeights.size(); i < l; i += 2 ) 
+			for ( int i = 0, l = skinWeights.size(); i < l; i += influencesPerVertex ) 
 			{
-				geometry.getSkinWeights().add( new Vector4(skinWeights.get(i), skinWeights.get(i + 1), 0, 0 ) );
+				double x =                               skinWeights.get( i     );
+				double y = ( influencesPerVertex > 1 ) ? skinWeights.get( i + 1 ) : 0;
+				double z = ( influencesPerVertex > 2 ) ? skinWeights.get( i + 2 ) : 0;
+				double w = ( influencesPerVertex > 3 ) ? skinWeights.get( i + 3 ) : 0;
+			
+				geometry.getSkinWeights().add( new Vector4( x, y, z, w ) );
 			}
 
 		}
@@ -558,20 +669,23 @@ public class JsonLoader extends Loader
 
 			for ( int i = 0, l = skinIndices.size(); i < l; i += 2 ) 
 			{
-				geometry.getSkinIndices().add( new Vector4(skinIndices.get(i), skinIndices.get(i + 1), 0, 0) );
+				double a =                               skinIndices.get( i     );
+				double b = ( influencesPerVertex > 1 ) ? skinIndices.get( i + 1 ) : 0;
+				double c = ( influencesPerVertex > 2 ) ? skinIndices.get( i + 2 ) : 0;
+				double d = ( influencesPerVertex > 3 ) ? skinIndices.get( i + 3 ) : 0;
+			
+				geometry.getSkinIndices().add( new Vector4( a, b, c, d ) );
 			}
 		}
 
-//		geometry.bones = json.bones;
+//	    geometry.bones = json.bones;
 //		geometry.animation = json.animation;
 	}
 
-	private void parseMorphing() 
+	private void parseMorphing(double scale) 
 	{
 		Log.debug("JSON parseMorphing()");
-		
-		double scale = getScale();
-		
+				
 		if ( object.getMorphTargets() != null) 
 		{
 			List<JsoMorphTargets> morphTargets = object.getMorphTargets();
@@ -617,12 +731,6 @@ public class JsonLoader extends Loader
 				geometry.getMorphColors().add(morphColor);
 			}
 		}
-	}
-	
-	private double getScale()
-	{
-		return ( object.getScale() > 0 ) 
-				? 1.0 / object.getScale() : 1.0;
 	}
 	
 	private boolean isBitSet( int value, int position ) 

@@ -598,9 +598,9 @@ public class Geometry extends AbstractGeometry
 
 			for ( int i = 0, il = face.vertexNormals.size(); i < il; i ++ ) {
 
-				if ( face.__originalVertexNormals.get( i ) == null ) {
+				if ( face.__originalVertexNormals.size() <= i || face.__originalVertexNormals.get( i ) == null ) {
 
-					face.__originalVertexNormals.set( i , face.vertexNormals.get( i ).clone() );
+					face.__originalVertexNormals.add( i , face.vertexNormals.get( i ).clone() );
 
 				} else {
 

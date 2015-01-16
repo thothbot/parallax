@@ -168,7 +168,7 @@ public class WebGLRenderer implements HasEventBus
 
 	// shadow map
 
-	private boolean shadowMapEnabled = false;
+//	private boolean shadowMapEnabled = false;
 //	shadowMapType = PCFShadowMap;
 	private CullFaceMode shadowMapCullFace = CullFaceMode.FRONT;
 	private boolean shadowMapDebug = false;
@@ -2254,7 +2254,7 @@ public class WebGLRenderer implements HasEventBus
 		for(Plugin plugin: this.renderPluginsPre)
 		if(plugin instanceof ShadowMap && ((ShadowMap)plugin).isEnabled() && object.isReceiveShadow())
 		{
-			parameters.shadowMapEnabled = this.shadowMapEnabled && object.isReceiveShadow() && maxShadows > 0;
+			parameters.shadowMapEnabled = object.isReceiveShadow() && maxShadows > 0;
 			parameters.shadowMapSoft    = ((ShadowMap)plugin).isSoft();
 			parameters.shadowMapDebug   = ((ShadowMap)plugin).isDebugEnabled();
 			parameters.shadowMapCascade = ((ShadowMap)plugin).isCascade();
@@ -2647,6 +2647,7 @@ public class WebGLRenderer implements HasEventBus
 			}
 			else if(type == TYPE.M4V) // List of Matrix4
 			{
+				Log.error("------", uniform);
 				List<Matrix4> listMatrix4f = (List<Matrix4>) value;
 				if ( uniform.getCacheArray() == null )
 					uniform.setCacheArray( Float32Array.create( 16 * listMatrix4f.size() ) );

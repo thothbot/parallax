@@ -20,10 +20,13 @@ package thothbot.parallax.loader.shared.json;
 
 import java.util.List;
 
+import thothbot.parallax.core.shared.objects.Bone;
+
 public interface JsoObject 
 {
 	JsoMetadata getMetadata();
 	
+	int getInfluencesPerVertex();
 	double getScale();
 	
 	List<JsoMaterial> getMaterials();
@@ -48,4 +51,5 @@ public interface JsoObject
 	List<Double> getSkinWeights();
 	
 	List<Integer> getSkinIndices();
+
 }

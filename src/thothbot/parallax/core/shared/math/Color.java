@@ -191,7 +191,6 @@ public final class Color
 	 * 
 	 * @return a current color
 	 */
-	@Deprecated
 	public Color setHSV( double h, double s, double v ) 
 	{
 		return this.setHSL(h,s*v/((h=(2-s)*v)<1?h:2-h),h/2); // https://gist.github.com/xpansive/1337890
