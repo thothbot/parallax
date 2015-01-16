@@ -911,13 +911,13 @@ public abstract class Material
 	public static Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) 
 	{
 		Material material = null;
-		if ( object.getMaterial() != null && !( object.getMaterial() instanceof MeshFaceMaterial ) )
+		if ( object.getMaterial() instanceof MeshFaceMaterial )
 		{
-			material = object.getMaterial(); 
+			material = ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.materialIndex );
 		}
 		else if ( geometryGroup.materialIndex >= 0 )
 		{
-			material = ((Geometry)object.getGeometry()).materials.get( geometryGroup.materialIndex );	
+			material = object.getMaterial();	
 		}
 		
 		return material;

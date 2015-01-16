@@ -106,6 +106,10 @@ public class JsonLoader extends Loader
 		return this.geometry;
 	}
 	
+	public List<Material> getMaterials() {
+		return this.materials;
+	}
+	
 	public void morphColorsToFaceColors() 
 	{
 		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
@@ -206,7 +210,7 @@ public class JsonLoader extends Loader
 			if(material instanceof ShaderMaterial)
 			{
 				Map<String, Uniform> uniforms = material.getShader().getUniforms();
-				uniforms.get( "uDiffuseColor" ).setValue(diffuseColor);	
+				uniforms.get( "diffuse" ).setValue(diffuseColor);	
 			}
 			else if(material instanceof HasColor)
 			{
@@ -221,7 +225,7 @@ public class JsonLoader extends Loader
 			if(material instanceof ShaderMaterial)
 			{
 				Map<String, Uniform> uniforms = material.getShader().getUniforms();
-				uniforms.get( "uSpecularColor" ).setValue(color);
+				uniforms.get( "specular" ).setValue(color);
 			}
 			else if(material instanceof MeshPhongMaterial)
 			{
@@ -235,7 +239,7 @@ public class JsonLoader extends Loader
 			if(material instanceof ShaderMaterial)
 			{
 				Map<String, Uniform> uniforms = material.getShader().getUniforms();
-				uniforms.get( "uAmbientColor" ).setValue(color);
+				uniforms.get( "ambient" ).setValue(color);
 			}
 			else if( material instanceof HasAmbientEmissiveColor)
 			{
@@ -248,7 +252,7 @@ public class JsonLoader extends Loader
 			if(material instanceof ShaderMaterial)
 			{
 				Map<String, Uniform> uniforms = material.getShader().getUniforms();
-				uniforms.get( "uOpacity" ).setValue(jsonMaterial.getTransparency());
+				uniforms.get( "opacity" ).setValue(jsonMaterial.getTransparency());
 			}
 			else 
 			{
@@ -262,7 +266,7 @@ public class JsonLoader extends Loader
 			if(material instanceof ShaderMaterial)
 			{
 				Map<String, Uniform> uniforms = material.getShader().getUniforms();
-				uniforms.get( "uShininess" ).setValue(jsonMaterial.getSpecularCoef());
+				uniforms.get( "shininess" ).setValue(jsonMaterial.getSpecularCoef());
 			}
 			else if(material instanceof MeshPhongMaterial)
 			{
@@ -806,7 +810,6 @@ public class JsonLoader extends Loader
 		{
 			texture.setAnisotropy(anisotropy);
 		}
-		Log.error("========", sourceFile, texture.getRepeat(), texture.getWrapS(), texture.getWrapT(), texture.getAnisotropy(), texture.getOffset());
 		return texture;
 	}
 

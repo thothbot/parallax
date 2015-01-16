@@ -122,7 +122,7 @@ public class Geometry extends AbstractGeometry
 //	private boolean isLineDistancesNeedUpdate;
 	
 	// Array of materials.
-	public List<Material> materials;
+//	public List<Material> materials;
 //	
 //	private List<Vector3> skinVerticesA;
 //	private List<Vector3> skinVerticesB;
