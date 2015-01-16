@@ -138,7 +138,7 @@ public class Box3
 
 					} else if ( geometry instanceof BufferGeometry && ((BufferGeometry)geometry).getAttribute("position") != null ) {
 
-						Float32Array positions = ((BufferGeometry)geometry).getAttribute("position").getArray();
+						Float32Array positions = (Float32Array)((BufferGeometry)geometry).getAttribute("position").getArray();
 
 						for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {
 

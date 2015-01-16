@@ -211,8 +211,8 @@ public class Mesh extends GeometryObject
 
 			if ( bGeometry.getAttribute("index") != null ) {
 
-				Float32Array indices = bGeometry.getAttribute("index").getArray();
-				Float32Array positions = bGeometry.getAttribute("position").getArray();
+				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
+				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 				List<BufferGeometry.DrawCall> offsets = bGeometry.getOffsets();
 
 				if ( offsets.size() == 0 ) {
@@ -270,7 +270,7 @@ public class Mesh extends GeometryObject
 
 			} else {
 
-				Float32Array positions = bGeometry.getAttribute("position").getArray();
+				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 
 				for ( int i = 0, j = 0, il = positions.getLength(); i < il; i += 3, j += 9 ) {
 

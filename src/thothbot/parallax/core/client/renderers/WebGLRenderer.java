@@ -1061,7 +1061,7 @@ public class WebGLRenderer implements HasEventBus
 					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryAttribute.buffer );
 
 					enableAttribute( programAttribute );
-Log.error(key, programAttribute, size, DataType.FLOAT, false, 0, startIndex * size * 4 );
+
 					gl.vertexAttribPointer( programAttribute, size, DataType.FLOAT, false, 0, startIndex * size * 4 ); // 4 bytes per Float32
 
 				}
@@ -1124,7 +1124,7 @@ Log.error(key, programAttribute, size, DataType.FLOAT, false, 0, startIndex * si
 			BeginMode mode = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? BeginMode.LINES : BeginMode.TRIANGLES;
 			
 			BufferAttribute index = geometry.getAttribute("index");
-			
+
 			if(index != null)
 			{
 				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
@@ -1137,6 +1137,7 @@ Log.error(key, programAttribute, size, DataType.FLOAT, false, 0, startIndex * si
 					if ( updateBuffers ) {
 
 						setupVertexAttributes( material, program, geometry, 0 );
+
 						getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
 
 					}
@@ -1165,7 +1166,6 @@ Log.error(key, programAttribute, size, DataType.FLOAT, false, 0, startIndex * si
 							getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
 
 						}
-
 
 						gl.drawElements( mode,  offsets.get( i ).count, type, offsets.get( i ).start * size  );
 
@@ -1640,7 +1640,7 @@ Log.error(key, programAttribute, size, DataType.FLOAT, false, 0, startIndex * si
 
 		if ( geometry instanceof BufferGeometry ) {
 
-//			setDirectBuffers( geometry );
+			((BufferGeometry)geometry).setDirectBuffers(gl);
 
 		} else if ( object instanceof Mesh ) {
 

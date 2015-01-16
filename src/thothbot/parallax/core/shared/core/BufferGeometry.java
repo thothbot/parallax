@@ -28,6 +28,7 @@ import java.util.Set;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Int32Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
 import thothbot.parallax.core.shared.Log;
@@ -114,7 +115,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		if ( position != null ) {
 
-			matrix.applyToVector3Array( position.getArray() );
+			matrix.applyToVector3Array( (Float32Array) position.getArray() );
 			position.setNeedsUpdate( true );
 
 		}
@@ -125,7 +126,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			Matrix3 normalMatrix = new Matrix3().getNormalMatrix( matrix );
 
-			normalMatrix.applyToVector3Array( normal.getArray() );
+			normalMatrix.applyToVector3Array( (Float32Array) normal.getArray() );
 			normal.setNeedsUpdate( true );
 
 		}
@@ -293,7 +294,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		Float32Array positions = getAttribute("position").getArray();
+		Float32Array positions = (Float32Array) getAttribute("position").getArray();
 
 		if ( positions != null) {
 
@@ -329,7 +330,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		Float32Array positions = getAttribute("position").getArray();
+		Float32Array positions = (Float32Array) getAttribute("position").getArray();
 
 		if ( positions != null ) {
 
@@ -370,7 +371,7 @@ public class BufferGeometry extends AbstractGeometry
 		
 		if ( positionAttribute != null ) {
 		
-			Float32Array positions =  positionAttribute.getArray();
+			Float32Array positions =  (Float32Array) positionAttribute.getArray();
 
 			BufferAttribute normalAttribute = getAttribute("normal");
 
@@ -382,7 +383,7 @@ public class BufferGeometry extends AbstractGeometry
 
 				// reset existing normals to zero
 
-				Float32Array normals = normalAttribute.getArray();
+				Float32Array normals = (Float32Array) normalAttribute.getArray();
 
 				for ( int i = 0, il = normals.getLength(); i < il; i ++ ) {
 
@@ -392,7 +393,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			}
 
-			Float32Array normals = normalAttribute.getArray();
+			Float32Array normals = (Float32Array) normalAttribute.getArray();
 
 			int vA, vB, vC;
 
@@ -407,7 +408,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			if ( getAttribute("index") != null ) {
 
-				Float32Array indices = getAttribute("normal").getArray();
+				Uint16Array indices = (Uint16Array) getAttribute("normal").getArray();
 
 				List<BufferGeometry.DrawCall> offsets = this.offsets.size() > 0 
 						? this.offsets 
@@ -502,10 +503,10 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		Float32Array indices = getAttribute("index").getArray();
-		Float32Array positions = getAttribute("position").getArray();
-		Float32Array normals = getAttribute("normal").getArray();
-		Float32Array uvs = getAttribute("uv").getArray();
+		Uint16Array indices = (Uint16Array)getAttribute("index").getArray();
+		Float32Array positions = (Float32Array)getAttribute("position").getArray();
+		Float32Array normals = (Float32Array)getAttribute("normal").getArray();
+		Float32Array uvs = (Float32Array)getAttribute("uv").getArray();
 
 		int nVertices = positions.getLength() / 3;
 
@@ -524,7 +525,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		Float32Array tangents = getAttribute("tangent").getArray();
+		Float32Array tangents = (Float32Array)getAttribute("tangent").getArray();
 
 		if ( this.drawcalls.size() == 0 ) {
 
@@ -590,8 +591,8 @@ public class BufferGeometry extends AbstractGeometry
 
 //		var s = Date.now();
 
-		Float32Array indices = getAttribute("index").getArray();
-		Float32Array vertices = getAttribute("position").getArray();
+		Uint16Array indices = (Uint16Array)getAttribute("index").getArray();
+		Float32Array vertices = (Float32Array)getAttribute("position").getArray();
 
 		int verticesCount = ( vertices.getLength() / 3 );
 		int facesCount = ( indices.getLength() / 3 );
@@ -685,7 +686,7 @@ public class BufferGeometry extends AbstractGeometry
 	
 	public void normalizeNormals() {
 
-		Float32Array normals = getAttribute("normal").getArray();
+		Float32Array normals = (Float32Array)getAttribute("normal").getArray();
 
 		double x, y, z, n;
 
@@ -723,7 +724,7 @@ public class BufferGeometry extends AbstractGeometry
 				continue;
 				
 			BufferAttribute attribute = getAttribute(attr); 
-			Float32Array sourceArray = attribute.getArray();
+			Float32Array sourceArray = (Float32Array)attribute.getArray();
 			sortedAttributes.put( attr,Float32Array.create(  attribute.getItemSize() * vertexCount ));
 		}
 
@@ -735,7 +736,7 @@ public class BufferGeometry extends AbstractGeometry
 					continue;
 			
 				BufferAttribute attribute = getAttribute(attr);
-				Float32Array attrArray = attribute.getArray();
+				Float32Array attrArray = (Float32Array)attribute.getArray();
 				int attrSize = attribute.getItemSize();
 				 		
 				Float32Array sortedAttr = sortedAttributes.get( attr );
@@ -878,7 +879,7 @@ public class BufferGeometry extends AbstractGeometry
 			String key = (String) this.attributesKeys.toArray()[ i ];
 			BufferAttribute attribute = this.attributes.get( key );
 
-			if ( attribute == null ) {
+			if ( attribute.buffer == null ) {
 
 				attribute.buffer = gl.createBuffer();
 				attribute.needsUpdate = true;

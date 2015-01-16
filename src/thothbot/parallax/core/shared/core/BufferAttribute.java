@@ -20,10 +20,11 @@ package thothbot.parallax.core.shared.core;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.arrays.TypeArray;
 
 public class BufferAttribute {
 	
-	private Float32Array array;
+	private TypeArray array;
 	private int itemSize;
 	
 	// TODO: Fix it (BufferGeometry)
@@ -32,7 +33,7 @@ public class BufferAttribute {
 	public boolean needsUpdate = false;
 	public WebGLBuffer buffer;
 	
-	public BufferAttribute(Float32Array array, int itemSize) {
+	public BufferAttribute(TypeArray array, int itemSize) {
 		this.array = array;
 		this.itemSize = itemSize;
 	}
@@ -47,7 +48,7 @@ public class BufferAttribute {
 		return this.itemSize;
 	}
 	
-	public Float32Array getArray() {
+	public TypeArray getArray() {
 		return this.array;
 	}
 	
@@ -66,7 +67,7 @@ public class BufferAttribute {
 
 		for ( int i = 0, l = this.itemSize; i < l; i ++ ) {
 
-			this.array.set( index1 + i , attribute.array.get( index2 + i ) );
+			((Float32Array)this.array).set( index1 + i , ((Float32Array)attribute.array).get( index2 + i ) );
 
 		}
 
@@ -82,7 +83,7 @@ public class BufferAttribute {
 	
 	public BufferAttribute setX( int index, double x ) {
 
-		this.array.set( index * this.itemSize , x );
+		((Float32Array)this.array).set( index * this.itemSize , x );
 
 		return this;
 
@@ -90,7 +91,7 @@ public class BufferAttribute {
 
 	public BufferAttribute setY( int index, double y ) {
 
-		this.array.set( index * this.itemSize + 1 , y );
+		((Float32Array)this.array).set( index * this.itemSize + 1 , y );
 
 		return this;
 
@@ -98,7 +99,7 @@ public class BufferAttribute {
 
 	public BufferAttribute setZ( int index, double z ) {
 
-		this.array.set( index * this.itemSize + 2 , z );
+		((Float32Array)this.array).set( index * this.itemSize + 2 , z );
 
 		return this;
 
@@ -108,8 +109,8 @@ public class BufferAttribute {
 
 		index *= this.itemSize;
 
-		this.array.set( index     , x);
-		this.array.set( index + 1 , y );
+		((Float32Array)this.array).set( index     , x);
+		((Float32Array)this.array).set( index + 1 , y );
 
 		return this;
 
@@ -119,9 +120,9 @@ public class BufferAttribute {
 
 		index *= this.itemSize;
 
-		this.array.set( index     , x );	
-		this.array.set( index + 1 , y );
-		this.array.set( index + 2 , z );
+		((Float32Array)this.array).set( index     , x );	
+		((Float32Array)this.array).set( index + 1 , y );
+		((Float32Array)this.array).set( index + 2 , z );
 
 		return this;
 
@@ -131,10 +132,10 @@ public class BufferAttribute {
 
 		index *= this.itemSize;
 
-		this.array.set( index     , x );
-		this.array.set( index + 1 , y );
-		this.array.set( index + 2 , z );
-		this.array.set( index + 3 , w );
+		((Float32Array)this.array).set( index     , x );
+		((Float32Array)this.array).set( index + 1 , y );
+		((Float32Array)this.array).set( index + 2 , z );
+		((Float32Array)this.array).set( index + 3 , w );
 
 		return this;
 
@@ -146,5 +147,10 @@ public class BufferAttribute {
 
 	}
 
-
+	public String toString() {
+		return "{array: " + this.array.getLength() 
+				+ ", itemSize: " + this.itemSize 
+				+ ", needsUpdate: " + this.needsUpdate 
+				+ ", buffer: " + this.buffer + "}";
+	}
 }

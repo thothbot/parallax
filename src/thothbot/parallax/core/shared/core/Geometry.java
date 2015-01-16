@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
@@ -371,15 +372,15 @@ public class Geometry extends AbstractGeometry
 
 		Map<String, BufferAttribute> attributes = geometry.getAttributes();
 
-		Float32Array vertices = geometry.getAttribute("position").getArray();
-		Float32Array indices = geometry.getAttribute("index") != null 
-				? geometry.getAttribute("index").getArray() : null;
+		Float32Array vertices = (Float32Array)geometry.getAttribute("position").getArray();
+		Uint16Array indices = geometry.getAttribute("index") != null 
+				? (Uint16Array)geometry.getAttribute("index").getArray() : null;
 		Float32Array normals = geometry.getAttribute("normal") != null 
-				? geometry.getAttribute("normal").getArray() : null;
+				? (Float32Array)geometry.getAttribute("normal").getArray() : null;
 		Float32Array colors = geometry.getAttribute("color") != null 
-				? geometry.getAttribute("color").getArray() : null;
+				? (Float32Array)geometry.getAttribute("color").getArray() : null;
 		Float32Array uvs = geometry.getAttribute("uv") != null
-				? geometry.getAttribute("uv").getArray() : null;
+				? (Float32Array)geometry.getAttribute("uv").getArray() : null;
 
 		List<Vector3> tempNormals = new ArrayList<Vector3>();
 		List<Vector2> tempUVs = new ArrayList<Vector2>();

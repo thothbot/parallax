@@ -22,6 +22,7 @@ import java.util.List;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.BeginMode;
 import thothbot.parallax.core.client.gl2.enums.BufferTarget;
 import thothbot.parallax.core.client.gl2.enums.BufferUsage;
@@ -105,11 +106,11 @@ public class PointCloud extends GeometryObject
 		if ( geometry instanceof BufferGeometry ) {
 
 			BufferGeometry bGeometry = (BufferGeometry)geometry;
-			Float32Array positions = bGeometry.getAttribute("position").getArray();
+			Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 
 			if ( bGeometry.getAttribute("index") != null ) {
 
-				Float32Array indices = bGeometry.getAttribute("index").getArray();
+				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
 				List<DrawCall> offsets = bGeometry.getOffsets();
 
 				if ( offsets.size() == 0 ) {
