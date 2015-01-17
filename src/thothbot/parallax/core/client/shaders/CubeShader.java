@@ -68,7 +68,7 @@ public final class CubeShader extends Shader
 			ChunksVertexShader.LOGDEPTHBUF
 		);
 
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main));	
 	}
 	
 	@Override

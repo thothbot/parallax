@@ -70,7 +70,7 @@ public final class NormalShader extends Shader
 			ChunksVertexShader.LOGDEPTHBUF
 		);
 		
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main1));	
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main1));	
 	}
 	
 	@Override
