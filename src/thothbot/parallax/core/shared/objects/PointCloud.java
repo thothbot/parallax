@@ -20,6 +20,8 @@ package thothbot.parallax.core.shared.objects;
 
 import java.util.List;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Console;
+
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
@@ -32,6 +34,7 @@ import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.Attribute.BOUND_TO;
 import thothbot.parallax.core.client.shaders.Attribute.TYPE;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry.DrawCall;
@@ -210,7 +213,6 @@ public class PointCloud extends GeometryObject
 	{
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
-		
 
 		gl.drawArrays( BeginMode.POINTS, 0, geometryBuffer.__webglParticleCount );
 
@@ -226,8 +228,7 @@ public class PointCloud extends GeometryObject
 		geometry.__vertexArray = Float32Array.create( nvertices * 3 );
 		geometry.__colorArray = Float32Array.create( nvertices * 3 );
 	
-
-		geometry.__webglLineCount = nvertices;
+		geometry.__webglParticleCount = nvertices;
 
 		initCustomAttributes ( gl, geometry );
 	}
