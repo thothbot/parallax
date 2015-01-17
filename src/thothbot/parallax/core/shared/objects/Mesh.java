@@ -1133,6 +1133,8 @@ public class Mesh extends GeometryObject
 
 				 int fi = chunk_faces3.get(f);
 
+				 if(obj_uvs.size() <= fi) continue;
+
 				 List<Vector2> uv = obj_uvs.get(fi);
 
 				 if ( uv == null ) continue;

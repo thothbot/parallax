@@ -564,15 +564,14 @@ public class JsonLoader extends Loader
 				
 				// to get face <=> uv index correspondence
 
-				int fi = geometry.getFaces().size();
-
 				if ( hasFaceVertexUv ) {
 
 					for ( int i = 0; i < nUvLayers; i ++ ) {
 
 						List<Double> uvLayer = uvs.get( i );
 
-						geometry.getFaceVertexUvs().get( i ).add( fi, new ArrayList<Vector2>());
+						ArrayList<Vector2> getFaceVertexUvs = new ArrayList<Vector2>();
+						int fi = geometry.getFaces().size();
 
 						for ( int j = 0; j < 3; j ++ ) {
 
@@ -583,9 +582,11 @@ public class JsonLoader extends Loader
 
 							Vector2 uv = new Vector2( u, v );
 
-							geometry.getFaceVertexUvs().get( i ).get( fi ).add( uv );
+							getFaceVertexUvs.add( uv );
 
 						}
+						
+						geometry.getFaceVertexUvs().get( i ).add(getFaceVertexUvs);
 
 					}
 

@@ -621,14 +621,14 @@ public class Geometry extends AbstractGeometry
 
 			// create on first access
 
-			if ( this.morphNormals.get( i ) == null ) {
+			if ( this.morphNormals.size() <= i || this.morphNormals.get( i ) == null ) {
 
-				this.morphNormals.set( i, new MorphNormal() );
-				this.morphNormals.get( i ).faceNormals = new ArrayList<Vector3>();
-				this.morphNormals.get( i ).vertexNormals = new ArrayList<Geometry.VertextNormal>();
+				Geometry.MorphNormal morphNormal = new MorphNormal();
+				morphNormal.faceNormals = new ArrayList<Vector3>();
+				morphNormal.vertexNormals = new ArrayList<Geometry.VertextNormal>();
 
-				List<Vector3> dstNormalsFace = this.morphNormals.get( i ).faceNormals;
-				List<VertextNormal> dstNormalsVertex = this.morphNormals.get( i ).vertexNormals;
+				List<Vector3> dstNormalsFace = morphNormal.faceNormals;
+				List<VertextNormal> dstNormalsVertex = morphNormal.vertexNormals;
 
 				for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
 
@@ -641,6 +641,8 @@ public class Geometry extends AbstractGeometry
 					dstNormalsVertex.add( vertexNormals );
 
 				}
+				
+				this.morphNormals.add( i, morphNormal);
 
 			}
 
