@@ -80,10 +80,6 @@ public final class TorusKnotGeometry extends Geometry
 				pos.setY( p1.getY() + cx * n.getY() + cy * bitan.getY() );
 				pos.setZ( p1.getZ() + cx * n.getZ() + cy * bitan.getZ() );
 
-				p1.addX(cx * n.getX() + cy * bitan.getX());
-				p1.addY(cx * n.getY() + cy * bitan.getY());
-				p1.addZ(cx * n.getZ() + cy * bitan.getZ());
-
 				grid[ i ][ j ] = vert( pos );
 			}
 		}

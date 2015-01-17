@@ -58,25 +58,23 @@ public final class SphereGeometry extends Geometry
 		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0, Math.PI);
 	}
 
-	public SphereGeometry(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength, double thetaStart, double thetaLength) 
+	public SphereGeometry(double radius, int widthSegments, int heightSegments, double phiStart, double phiLength, double thetaStart, double thetaLength) 
 	{
 		super();
-		int segmentsX = Math.max( 3, segmentsWidth );
-		int segmentsY = Math.max( 2, segmentsHeight );
 		
 		List<List<Integer>> vertices = new ArrayList<List<Integer>>();
 		List<List<Vector2>> uvs = new ArrayList<List<Vector2>>();
 		
-		for (int y = 0; y <= segmentsY; y++) 
+		for (int y = 0; y <= heightSegments; y++) 
 		{
 			List<Integer> verticesRow = new ArrayList<Integer>();
 			List<Vector2> uvsRow = new ArrayList<Vector2>();
 			
-			for (int x = 0; x <= segmentsX; x++) 
+			for (int x = 0; x <= widthSegments; x++) 
 			{
 
-				double u = x / (double)segmentsX;
-				double v = y / (double)segmentsY;
+				double u = x / (double)widthSegments;
+				double v = y / (double)heightSegments;
 
 				Vector3 vertex = new Vector3();
 				vertex.setX(- radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
@@ -86,30 +84,26 @@ public final class SphereGeometry extends Geometry
 				getVertices().add( vertex );
 
 				verticesRow.add( getVertices().size() - 1 );
-				uvsRow.add( new Vector2( u, v ) );
+				uvsRow.add( new Vector2( u, 1- v ) );
 			}
 			
 			vertices.add( verticesRow );
 			uvs.add( uvsRow );
 		}
 
-		for ( int y = 0; y < segmentsY; y ++ ) 
+		for ( int y = 0; y < heightSegments; y ++ ) 
 		{
-			for ( int x = 0; x < segmentsX; x ++ ) 
+			for ( int x = 0; x < widthSegments; x ++ ) 
 			{
 				int v1 = vertices.get( y ).get( x + 1 );
 				int v2 = vertices.get( y ).get( x );
 				int v3 = vertices.get( y + 1 ).get( x );
 				int v4 = vertices.get( y + 1 ).get( x + 1 );
 
-				Vector3 n1 = getVertices().get( v1 ).clone();
-				n1.normalize();
-				Vector3 n2 = getVertices().get( v2 ).clone();
-				n2.normalize();
-				Vector3 n3 = getVertices().get( v3 ).clone();
-				n3.normalize();
-				Vector3 n4 = getVertices().get( v4 ).clone();
-				n4.normalize();
+				Vector3 n1 = getVertices().get( v1 ).clone().normalize();
+				Vector3 n2 = getVertices().get( v2 ).clone().normalize();
+				Vector3 n3 = getVertices().get( v3 ).clone().normalize();
+				Vector3 n4 = getVertices().get( v4 ).clone().normalize();
 
 				Vector2 uv1 = uvs.get( y ).get( x + 1 ).clone();
 				Vector2 uv2 = uvs.get( y ).get( x ).clone();
@@ -118,6 +112,7 @@ public final class SphereGeometry extends Geometry
 
 				if ( Math.abs( getVertices().get( v1 ).getY() ) == radius ) 
 				{
+					uv1.setX( ( uv1.getX() + uv2.getX() ) / 2.0 );
 					getFaces().add( new Face3( v1, v3, v4, Arrays.asList( n1, n3, n4 ) ) );
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv3, uv4 ) );
 				} 

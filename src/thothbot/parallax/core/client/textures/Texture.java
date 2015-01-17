@@ -500,7 +500,7 @@ public class Texture
 	
 	/**
 	 * Releases a texture from the GL context.
-	 * texture — an instance of Texture
+	 * texture ï¿½ an instance of Texture
 	 */
 	public void deallocate( WebGLRenderer renderer ) 
 	{
