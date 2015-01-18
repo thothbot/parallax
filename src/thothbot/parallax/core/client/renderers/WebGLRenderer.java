@@ -55,6 +55,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
+import thothbot.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;
 import thothbot.parallax.core.client.renderers.WebGLExtensions.Id;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.ProgramParameters;
@@ -346,25 +347,14 @@ public class WebGLRenderer implements HasEventBus
 		{
 			WebGLExtensions.get(gl, WebGLExtensions.Id.EXT_frag_depth);
 		}
-
 		
-//		this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "EXT_texture_filter_anisotropic" );
-//		if(this.GLExtensionTextureFilterAnisotropic == null)
-//			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "MOZ_EXT_texture_filter_anisotropic" );
-//		if(this.GLExtensionTextureFilterAnisotropic == null)
-//			this.GLExtensionTextureFilterAnisotropic = (ExtTextureFilterAnisotropic) gl.getExtension( "WEBKIT_EXT_texture_filter_anisotropic" );
-//		if(this.GLExtensionTextureFilterAnisotropic == null)
-//			Log.warn( "WebGLRenderer: Anisotropic texture filtering not supported." );
-//		else
-//			this.GPUmaxAnisotropy = getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT);	
-//		
-//		this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
-//		if(this.GLExtensionCompressedTextureS3TC == null)
-//			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
-//		if(this.GLExtensionCompressedTextureS3TC == null)
-//			this.GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
-//		if(this.GLExtensionCompressedTextureS3TC == null)
-//			Log.warn( "WebGLRenderer: S3TC compressed textures not supported." );
+		WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
+		if(GLExtensionCompressedTextureS3TC == null)
+			GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
+		if(GLExtensionCompressedTextureS3TC == null)
+			GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
+		if(GLExtensionCompressedTextureS3TC == null)
+			Log.warn( "WebGLRenderer: S3TC compressed textures not supported." );
 
 		setSize(width, height);
 		setDefaultGLState();

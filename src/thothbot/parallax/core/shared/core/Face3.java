@@ -337,13 +337,13 @@ public class Face3 {
 		face.materialIndex = this.materialIndex;
 
 		for (int i = 0, il = this.vertexNormals.size(); i < il; i++)
-			face.vertexNormals.set(i, this.vertexNormals.get(i).clone());
+			face.vertexNormals.add(this.vertexNormals.get(i).clone());
 
 		for (int i = 0, il = this.vertexColors.size(); i < il; i++)
-			face.vertexColors.set(i, this.vertexColors.get(i).clone());
+			face.vertexColors.add(this.vertexColors.get(i).clone());
 
 		for (int i = 0, il = this.vertexTangents.size(); i < il; i++)
-			face.vertexTangents.set(i, this.vertexTangents.get(i).clone());
+			face.vertexTangents.add(this.vertexTangents.get(i).clone());
 
 		return face;
 	}
