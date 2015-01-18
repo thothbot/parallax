@@ -27,7 +27,7 @@ void main() {
 
 [*]
 
-				// normal, tangent and binormal vectors
+	// normal, tangent and binormal vectors
 
 	#ifdef USE_SKINNING
 
@@ -47,7 +47,7 @@ void main() {
 
 	vUv = uv * uRepeat + uOffset;
 
-				// displacement mapping
+	// displacement mapping
 
 	vec3 displacedPosition;
 
@@ -105,7 +105,7 @@ void main() {
 
 	#endif
 
-				//
+	//
 
 	vec4 mvPosition = modelViewMatrix * vec4( displacedPosition, 1.0 );
 	vec4 worldPosition = modelMatrix * vec4( displacedPosition, 1.0 );
@@ -114,12 +114,12 @@ void main() {
 
 [*]
 
-				//
+	//
 
 	vWorldPosition = worldPosition.xyz;
 	vViewPosition = -mvPosition.xyz;
 
-				// shadows
+	// shadows
 
 	#ifdef USE_SHADOWMAP
 

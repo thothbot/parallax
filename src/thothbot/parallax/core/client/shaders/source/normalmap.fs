@@ -137,7 +137,7 @@ void main() {
 	vec3 normal = normalize( finalNormal );
 	vec3 viewPosition = normalize( vViewPosition );
 
-				// point lights
+	// point lights
 
 	#if MAX_POINT_LIGHTS > 0
 
@@ -155,7 +155,7 @@ void main() {
 
 			pointVector = normalize( pointVector );
 
-						// diffuse
+			// diffuse
 
 			#ifdef WRAP_AROUND
 
@@ -172,7 +172,7 @@ void main() {
 
 			pointDiffuse += pointDistance * pointLightColor[ i ] * diffuse * pointDiffuseWeight;
 
-						// specular
+			// specular
 
 			vec3 pointHalfVector = normalize( pointVector + viewPosition );
 			float pointDotNormalHalf = max( dot( normal, pointHalfVector ), 0.0 );
@@ -187,7 +187,7 @@ void main() {
 
 	#endif
 
-				// spot lights
+	// spot lights
 
 	#if MAX_SPOT_LIGHTS > 0
 
@@ -211,7 +211,7 @@ void main() {
 
 				spotEffect = max( pow( max( spotEffect, 0.0 ), spotLightExponent[ i ] ), 0.0 );
 
-							// diffuse
+				// diffuse
 
 				#ifdef WRAP_AROUND
 
@@ -228,7 +228,7 @@ void main() {
 
 				spotDiffuse += spotDistance * spotLightColor[ i ] * diffuse * spotDiffuseWeight * spotEffect;
 
-							// specular
+				// specular
 
 				vec3 spotHalfVector = normalize( spotVector + viewPosition );
 				float spotDotNormalHalf = max( dot( normal, spotHalfVector ), 0.0 );
@@ -245,7 +245,7 @@ void main() {
 
 	#endif
 
-				// directional lights
+	// directional lights
 
 	#if MAX_DIR_LIGHTS > 0
 
@@ -257,7 +257,7 @@ void main() {
 			vec4 lDirection = viewMatrix * vec4( directionalLightDirection[ i ], 0.0 );
 			vec3 dirVector = normalize( lDirection.xyz );
 
-						// diffuse
+			// diffuse
 
 			#ifdef WRAP_AROUND
 
@@ -274,7 +274,7 @@ void main() {
 
 			dirDiffuse += directionalLightColor[ i ] * diffuse * dirDiffuseWeight;
 
-						// specular
+			// specular
 
 			vec3 dirHalfVector = normalize( dirVector + viewPosition );
 			float dirDotNormalHalf = max( dot( normal, dirHalfVector ), 0.0 );
@@ -289,19 +289,19 @@ void main() {
 
 	#endif
 
-				// hemisphere lights
+	// hemisphere lights
 
 	#if MAX_HEMI_LIGHTS > 0
 
 		vec3 hemiDiffuse = vec3( 0.0 );
-		vec3 hemiSpecular = vec3( 0.0 );" ,
+		vec3 hemiSpecular = vec3( 0.0 );
 
 		for( int i = 0; i < MAX_HEMI_LIGHTS; i ++ ) {
 
 			vec4 lDirection = viewMatrix * vec4( hemisphereLightDirection[ i ], 0.0 );
 			vec3 lVector = normalize( lDirection.xyz );
 
-						// diffuse
+			// diffuse
 
 			float dotProduct = dot( normal, lVector );
 			float hemiDiffuseWeight = 0.5 * dotProduct + 0.5;
@@ -310,14 +310,14 @@ void main() {
 
 			hemiDiffuse += diffuse * hemiColor;
 
-						// specular (sky light)
+			// specular (sky light)
 
 
 			vec3 hemiHalfVectorSky = normalize( lVector + viewPosition );
 			float hemiDotNormalHalfSky = 0.5 * dot( normal, hemiHalfVectorSky ) + 0.5;
 			float hemiSpecularWeightSky = specularTex.r * max( pow( max( hemiDotNormalHalfSky, 0.0 ), shininess ), 0.0 );
 
-						// specular (ground light)
+			// specular (ground light)
 
 			vec3 lVectorGround = -lVector;
 
@@ -337,7 +337,7 @@ void main() {
 
 	#endif
 
-				// all lights contribution summation
+	// all lights contribution summation
 
 	vec3 totalDiffuse = vec3( 0.0 );
 	vec3 totalSpecular = vec3( 0.0 );
