@@ -563,10 +563,16 @@ public class Geometry extends AbstractGeometry
 		for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
 
 			face = this.faces.get( f );
-
-			face.getVertexNormals().set(0, vertices[ face.a ].clone() );
-			face.getVertexNormals().set(1, vertices[ face.b ].clone() );
-			face.getVertexNormals().set(2, vertices[ face.c ].clone() );
+ 
+			if(face.getVertexNormals().size() > 0) {
+				face.getVertexNormals().set(0, vertices[ face.a ].clone() );
+				face.getVertexNormals().set(1, vertices[ face.b ].clone() );
+				face.getVertexNormals().set(2, vertices[ face.c ].clone() );
+			} else {
+				face.getVertexNormals().add(0, vertices[ face.a ].clone() );
+				face.getVertexNormals().add(1, vertices[ face.b ].clone() );
+				face.getVertexNormals().add(2, vertices[ face.c ].clone() );
+			}
 
 		}
 	}
