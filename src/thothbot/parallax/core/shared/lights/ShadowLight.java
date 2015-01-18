@@ -32,7 +32,8 @@ public abstract class ShadowLight extends Light
 	protected double intensity;
 
 	protected boolean onlyShadow = false;
-		
+	
+	private Camera shadowCamera;
 	protected double shadowCameraNear = 50;
 	protected double shadowCameraFar = 5000;
 	protected boolean shadowCameraVisible = false;
@@ -50,12 +51,12 @@ public abstract class ShadowLight extends Light
 	private RenderTargetTexture shadowMap;
 	private Vector2 shadowMapSize;
 	private Matrix4 shadowMatrix;
+	
 
-//
-//		
-//	private CameraHelper cameraHelper;
-//	
-//	
+		
+	private CameraHelper cameraHelper;
+	
+	
 	
 	public ShadowLight(int hex) 
 	{
@@ -134,6 +135,14 @@ public abstract class ShadowLight extends Light
 		this.shadowMapHeight = shadowMapHeight;
 	}
 	
+	public Camera getShadowCamera() {
+		return shadowCamera;
+	}
+
+	public void setShadowCamera(Camera shadowCamera) {
+		this.shadowCamera = shadowCamera;
+	}
+	
 	public double getShadowCameraNear() {
 		return shadowCameraNear;
 	}
@@ -203,11 +212,11 @@ public abstract class ShadowLight extends Light
 		this.shadowMapSize = shadowMapSize;
 	}
 	
-//	public CameraHelper getCameraHelper() {
-//		return cameraHelper;
-//	}
-//
-//	public void setCameraHelper(CameraHelper cameraHelper) {
-//		this.cameraHelper = cameraHelper;
-//	}
+	public CameraHelper getCameraHelper() {
+		return cameraHelper;
+	}
+
+	public void setCameraHelper(CameraHelper cameraHelper) {
+		this.cameraHelper = cameraHelper;
+	}
 }

@@ -99,8 +99,6 @@ public class SpotLight extends ShadowLight
 
 	private double shadowCameraFov = 50;
 	
-	private Camera shadowCamera;
-
 	public SpotLight(int hex) 
 	{
 		this(hex, 1.0);
@@ -161,14 +159,6 @@ public class SpotLight extends ShadowLight
 
 	public void setShadowCameraFov(double shadowCameraFov) {
 		this.shadowCameraFov = shadowCameraFov;
-	}
-	
-	public Camera getShadowCamera() {
-		return shadowCamera;
-	}
-
-	public void setShadowCamera(Camera shadowCamera) {
-		this.shadowCamera = shadowCamera;
 	}
 	
 	@Override

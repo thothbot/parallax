@@ -28,6 +28,7 @@ import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
@@ -130,7 +131,7 @@ public class Postprocessing extends Plugin
 	}
 
 	@Override
-	public void render( Camera camera, int currentWidth, int currentHeight ) 
+	public void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight ) 
 	{
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;

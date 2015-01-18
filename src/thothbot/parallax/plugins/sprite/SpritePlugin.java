@@ -40,6 +40,7 @@ import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugins.sprite.shaders.SpriteShader;
+import thothbot.parallax.core.shared.lights.Light;
 
 public final class SpritePlugin extends Plugin 
 {
@@ -119,7 +120,7 @@ public final class SpritePlugin extends Plugin
 	}
 
 	@Override
-	public void render( Camera camera, int viewportWidth, int viewportHeight) 
+	public void render( Camera camera, List<Light> lights, int viewportWidth, int viewportHeight) 
 	{
 		List<Sprite> sprites = getObjects();
 		int nSprites = sprites.size();

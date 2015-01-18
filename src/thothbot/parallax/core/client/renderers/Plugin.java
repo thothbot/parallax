@@ -18,7 +18,10 @@
 
 package thothbot.parallax.core.client.renderers;
 
+import java.util.List;
+
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 public abstract class Plugin 
@@ -66,5 +69,5 @@ public abstract class Plugin
 
 	public abstract Plugin.TYPE getType();
 
-	public abstract void render( Camera camera, int currentWidth, int currentHeight );
+	public abstract void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight );
 }

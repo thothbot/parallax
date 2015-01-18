@@ -40,6 +40,7 @@ import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
+import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
@@ -179,7 +180,7 @@ public final class LensFlarePlugin extends Plugin
 	 *
 	 */
 	@Override
-	public void render( Camera camera, int viewportWidth, int viewportHeight) 
+	public void render( Camera camera, List<Light> lights, int viewportWidth, int viewportHeight) 
 	{
 		List<LensFlare> flares = getObjects();
 		int nFlares = flares.size();

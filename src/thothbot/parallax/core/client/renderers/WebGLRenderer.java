@@ -226,7 +226,7 @@ public class WebGLRenderer implements HasEventBus
 	private Uint8Array _enabledAttributes = Uint8Array.create( 16 );
 
 	// frustum
-	private Frustum _frustum = new Frustum();
+	public Frustum _frustum = new Frustum();
 
 	 // camera matrices cache
 
@@ -1905,7 +1905,7 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 	
-	private void renderImmediateObject( Camera camera, List<Light> lights, AbstractFog fog, Material material, GeometryObject object ) {
+	public void renderImmediateObject( Camera camera, List<Light> lights, AbstractFog fog, Material material, GeometryObject object ) {
 
 		Shader program = setProgram( camera, lights, fog, material, object );
 
@@ -1954,7 +1954,7 @@ public class WebGLRenderer implements HasEventBus
 
 			this._lightsNeedUpdate = true;
 
-			plugin.render( camera, _currentWidth, _currentHeight );
+			plugin.render( camera, lights, _currentWidth, _currentHeight );
 
 			// reset state after plugin (anything could have changed)
 
@@ -2709,7 +2709,7 @@ public class WebGLRenderer implements HasEventBus
 		object._normalMatrix.getNormalMatrix( object._modelViewMatrix );
 	}
 	
-	private void setMaterialFaces( Material material )
+	public void setMaterialFaces( Material material )
 	{
 		if ( this.cache_oldMaterialSided == null || this.cache_oldMaterialSided != material.getSides() ) 
 		{
