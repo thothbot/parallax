@@ -244,8 +244,8 @@ public final class ShadowMap extends Plugin
 			if ( light.getShadowMap() == null ) 
 			{
 				RenderTargetTexture map = new RenderTargetTexture(light.getShadowMapWidth(), light.getShadowMapHeight());
-				map.setMinFilter(TextureMinFilter.LINEAR);
-				map.setMagFilter(TextureMagFilter.LINEAR);
+				map.setMinFilter(TextureMinFilter.NEAREST);
+				map.setMagFilter(TextureMagFilter.NEAREST);
 				map.setFormat(PixelFormat.RGBA);
 				light.setShadowMap(map);
 

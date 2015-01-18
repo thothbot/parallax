@@ -191,10 +191,10 @@ public final class Color
 	 * 
 	 * @return a current color
 	 */
-	public Color setHSV( double h, double s, double v ) 
-	{
-		return this.setHSL(h,s*v/((h=(2-s)*v)<1?h:2-h),h/2); // https://gist.github.com/xpansive/1337890
-	}
+//	public Color setHSV( double h, double s, double v ) 
+//	{
+//		return this.setHSL(h,s*v/((h=(2-s)*v)<1?h:2-h),h/2); // https://gist.github.com/xpansive/1337890
+//	}
 
 	/**
 	 * h,s,l ranges are in <0.0 - 1.0>
