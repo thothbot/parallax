@@ -37,6 +37,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugins.sprite.shaders.SpriteShader;
@@ -113,7 +114,7 @@ public final class SpritePlugin extends Plugin
 	{
 		if(this.objects == null)
 		{
-//			this.objects = (List<Sprite>)(ArrayList)getScene().getChildrenByClass(Sprite.class, true);
+			this.objects = (List<Sprite>)(ArrayList)getScene().getChildrenByClass(Sprite.class, true);
 		}
 		
 		return this.objects;
@@ -161,7 +162,7 @@ public final class SpritePlugin extends Plugin
 
 		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.elementBuffer );
 
-//		gl.uniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), false, camera._projectionMatrixArray );
+		gl.uniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), false, camera.getProjectionMatrix().getArray() );
 
 		gl.activeTexture( TextureUnit.TEXTURE0 );
 		gl.uniform1i( uniforms.get("map").getLocation(), 0 );
@@ -176,8 +177,8 @@ public final class SpritePlugin extends Plugin
 
 			if( ! sprite.isUseScreenCoordinates() ) 
 			{
-//				sprite._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), sprite.getMatrixWorld());
-//				sprite.setZ( - sprite._modelViewMatrix.getArray().get(14) );
+				sprite._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), sprite.getMatrixWorld());
+				sprite.setZ( - sprite._modelViewMatrix.getArray().get(14) );
 			} 
 			else 
 			{
@@ -199,7 +200,6 @@ public final class SpritePlugin extends Plugin
 					&& sprite.getMap().getImage() != null 
 					&& sprite.getMap().getImage().getOffsetWidth() > 0 ) 
 			{
-
 				if ( sprite.isUseScreenCoordinates() ) 
 				{
 					gl.uniform1i( uniforms.get("useScreenCoordinates").getLocation(), 1 );
@@ -208,10 +208,10 @@ public final class SpritePlugin extends Plugin
 							Math.max( 0, Math.min( 1, sprite.getPosition().getZ() ) ) );
 				} 
 				else 
-				{
+				{		
 					gl.uniform1i( uniforms.get("useScreenCoordinates").getLocation(), 0 );
 					gl.uniform1i( uniforms.get("affectedByDistance").getLocation(), sprite.isAffectedByDistance() ? 1 : 0 );
-//					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, sprite._modelViewMatrix.getArray());
+					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, sprite._modelViewMatrix.getArray());
 				}
 
 				double size = sprite.getMap().getImage().getOffsetWidth() 
@@ -258,5 +258,6 @@ public final class SpritePlugin extends Plugin
 		gl.enable( EnableCap.CULL_FACE );
 		gl.enable( EnableCap.DEPTH_TEST );
 		gl.depthMask( true );
+		getRenderer().resetGLState();
 	}
 }

@@ -25,6 +25,7 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.core.Object3D;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Euler;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
@@ -57,7 +58,7 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 	}
 	
 	private Color color;
-	private Vector3 rotation3d;
+	private Euler rotation3d;
 	private Texture map;
 	
 	private Material.BLENDING blending = Material.BLENDING.NORMAL;
@@ -90,7 +91,7 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 		this.affectedByDistance = !this.useScreenCoordinates;
 		this.scaleByViewport = !this.affectedByDistance;
 
-//		this.rotation3d = this.rotation;
+		this.rotation3d = this.getRotation();
 		this.rotationFactor = 0;
 
 		this.uvOffset = new Vector2( 0, 0 );
@@ -232,8 +233,8 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 	{
 		this.matrix.setPosition( this.position );
 
-		this.rotation3d.set( 0, 0, this.rotationFactor );
-//		this.matrix.setRotationFromEuler( this.rotation3d );
+		this.rotation3d.set( 0.0, 0.0, this.rotationFactor );
+		this.matrix.makeRotationFromEuler( this.rotation3d );
 
 		if ( this.scale.getX() != 1 || this.scale.getY() != 1 ) 
 		{

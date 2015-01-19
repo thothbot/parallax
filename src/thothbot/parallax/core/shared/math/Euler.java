@@ -151,6 +151,10 @@ public class Euler {
 		
 		this.onChange();
 	}
+	
+	public Euler set( double x, double y, double z) {
+		return set(x, y, z, DefaultOrder);
+	}
 
 	public Euler set( double x, double y, double z, String order ) {
 		this.x = x;
