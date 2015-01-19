@@ -1772,8 +1772,6 @@ public class WebGLRenderer implements HasEventBus
 		this.lights = new ArrayList<Light>();
 		this.opaqueObjects = new ArrayList<WebGLObject>();
 		this.transparentObjects = new ArrayList<WebGLObject>();
-//		this.sprites.length = 0;
-//		this.lensFlares.length = 0;
 
 		projectObject( scene, scene );
 		

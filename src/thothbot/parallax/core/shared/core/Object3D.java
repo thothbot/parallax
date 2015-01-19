@@ -182,6 +182,28 @@ public class Object3D
 	public void setChildren(Collection<? extends Object3D> children) {
 		this.children = new ArrayList<Object3D>(children);
 	}
+	
+	public List<? extends Object3D> getChildrenByClass(Class<?> clazz, boolean recursive)
+	{
+		List<Object3D> retval = new ArrayList<Object3D>();
+		
+		for (int c = 0, cl = this.children.size(); c < cl; c++) 
+		{
+			Object3D child = this.children.get(c);
+
+			if (child.getClass() == clazz) 
+			{
+				retval.add(child);
+			}
+
+			if (recursive) 
+			{
+				retval.addAll(child.getChildrenByClass(clazz, recursive));
+			}
+		}
+
+		return retval;
+	}
 
 	public Vector3 getPosition() {
 		return this.position;

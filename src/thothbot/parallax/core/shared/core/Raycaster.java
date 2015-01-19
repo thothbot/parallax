@@ -144,6 +144,23 @@ public class Raycaster
 
 	}
 	
+	public List<Raycaster.Intersect> intersectObjects ( List<Object3D> objects ) {
+
+		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
+
+		for ( int i = 0, l = objects.size(); i < l; i ++ ) {
+
+			if(objects instanceof GeometryObject)
+			intersectObject( (GeometryObject)objects.get( i ), this, intersects, false );
+
+		}
+
+		Collections.sort(intersects);
+
+		return intersects;
+
+	}
+		
 	public List<Raycaster.Intersect> intersectObjects ( List<GeometryObject> objects, boolean recursive ) {
 
 		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();

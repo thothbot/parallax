@@ -1,8 +1,7 @@
-precision mediump float;
+uniform lowp int renderType;
 
 uniform sampler2D map;
 uniform float opacity;
-uniform int renderType;
 uniform vec3 color;
 
 varying vec2 vUV;
@@ -10,19 +9,19 @@ varying float vVisibility;
 
 void main() {
 
-	// pink square
+						// pink square
 
 	if( renderType == 0 ) {
 
 		gl_FragColor = vec4( 1.0, 0.0, 1.0, 0.0 );
 
-	// restore
+						// restore
 
 	} else if( renderType == 1 ) {
 
 		gl_FragColor = texture2D( map, vUV );
 
-	// flare
+						// flare
 
 	} else {
 

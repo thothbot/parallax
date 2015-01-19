@@ -1,7 +1,8 @@
+uniform lowp int renderType;
+
 uniform vec3 screenPosition;
 uniform vec2 scale;
 uniform float rotation;
-uniform int renderType;
 
 attribute vec2 position;
 attribute vec2 uv;

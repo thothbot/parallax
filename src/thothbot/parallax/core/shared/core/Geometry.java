@@ -886,6 +886,7 @@ public class Geometry extends AbstractGeometry
 
 				Color color = faceVertexColors.get( j );
 				faceCopy.vertexColors.add( color.clone() );
+//				faceCopy.vertexColors.add( color );
 
 			}
 

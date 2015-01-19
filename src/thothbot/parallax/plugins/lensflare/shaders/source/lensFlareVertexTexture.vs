@@ -1,7 +1,8 @@
+uniform lowp int renderType;
+
 uniform vec3 screenPosition;
 uniform vec2 scale;
 uniform float rotation;
-uniform int renderType;
 
 uniform sampler2D occlusionMap;
 
@@ -19,20 +20,20 @@ void main() {
 
 	if( renderType == 2 ) {
 
-		vec4 visibility = texture2D( occlusionMap, vec2( 0.1, 0.1 ) ) +
-									  texture2D( occlusionMap, vec2( 0.5, 0.1 ) ) +
-									  texture2D( occlusionMap, vec2( 0.9, 0.1 ) ) +
-									  texture2D( occlusionMap, vec2( 0.9, 0.5 ) ) +
-									  texture2D( occlusionMap, vec2( 0.9, 0.9 ) ) +
-									  texture2D( occlusionMap, vec2( 0.5, 0.9 ) ) +
-									  texture2D( occlusionMap, vec2( 0.1, 0.9 ) ) +
-									  texture2D( occlusionMap, vec2( 0.1, 0.5 ) ) +
-									  texture2D( occlusionMap, vec2( 0.5, 0.5 ) );
+		vec4 visibility = texture2D( occlusionMap, vec2( 0.1, 0.1 ) );
+		visibility += texture2D( occlusionMap, vec2( 0.5, 0.1 ) );
+		visibility += texture2D( occlusionMap, vec2( 0.9, 0.1 ) );
+		visibility += texture2D( occlusionMap, vec2( 0.9, 0.5 ) );
+		visibility += texture2D( occlusionMap, vec2( 0.9, 0.9 ) );
+		visibility += texture2D( occlusionMap, vec2( 0.5, 0.9 ) );
+		visibility += texture2D( occlusionMap, vec2( 0.1, 0.9 ) );
+		visibility += texture2D( occlusionMap, vec2( 0.1, 0.5 ) );
+		visibility += texture2D( occlusionMap, vec2( 0.5, 0.5 ) );
 
-		vVisibility = (       visibility.r / 9.0 ) *
-					  ( 1.0 - visibility.g / 9.0 ) *
-					  (       visibility.b / 9.0 ) *
-					  ( 1.0 - visibility.a / 9.0 );
+		vVisibility =        visibility.r / 9.0;
+		vVisibility *= 1.0 - visibility.g / 9.0;
+		vVisibility *=       visibility.b / 9.0;
+		vVisibility *= 1.0 - visibility.a / 9.0;
 
 		pos.x = cos( rotation ) * position.x - sin( rotation ) * position.y;
 		pos.y = sin( rotation ) * position.x + cos( rotation ) * position.y;

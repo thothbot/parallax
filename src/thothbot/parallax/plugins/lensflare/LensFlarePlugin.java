@@ -40,6 +40,7 @@ import thothbot.parallax.core.client.gl2.enums.PixelType;
 import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
@@ -165,7 +166,7 @@ public final class LensFlarePlugin extends Plugin
 	{
 		if(this.objects == null)
 		{
-//			this.objects = (List<LensFlare>)(ArrayList)getScene().getChildrenByClass(LensFlare.class, true);
+			this.objects = (List<LensFlare>)(ArrayList)getScene().getChildrenByClass(LensFlare.class, true);
 		}
 		
 		return (List<LensFlare>)(ArrayList)this.objects;
@@ -245,8 +246,8 @@ public final class LensFlarePlugin extends Plugin
 					flare.getMatrixWorld().getArray().get(13), 
 					flare.getMatrixWorld().getArray().get(14) );
 
-//			camera.getMatrixWorldInverse().multiplyVector3( tempPosition );
-//			camera.getProjectionMatrix().multiplyVector3( tempPosition );
+			tempPosition.apply( camera.getMatrixWorldInverse() );
+			tempPosition.applyProjection( camera.getProjectionMatrix() );
 
 			// setup arrays for gl programs
 
@@ -329,7 +330,7 @@ public final class LensFlarePlugin extends Plugin
 						gl.uniform1f( uniforms.get("opacity").getLocation(), sprite.opacity );
 						gl.uniform3f( uniforms.get("color").getLocation(), sprite.color.getR(), sprite.color.getG(), sprite.color.getB() );
 
-//						renderer.setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
+//						getRenderer().setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
 						getRenderer().setBlending( sprite.blending );
 						getRenderer().setTexture( sprite.texture, 1 );
 
@@ -344,5 +345,8 @@ public final class LensFlarePlugin extends Plugin
 		gl.enable( EnableCap.CULL_FACE );
 		gl.enable( EnableCap.DEPTH_TEST );
 		gl.depthMask( true );
+		
+		getRenderer().resetGLState();
+
 	}
 }
