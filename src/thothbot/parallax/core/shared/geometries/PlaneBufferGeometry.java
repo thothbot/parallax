@@ -19,6 +19,7 @@
 package thothbot.parallax.core.shared.geometries;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 
@@ -74,7 +75,7 @@ public class PlaneBufferGeometry extends BufferGeometry {
 
 		offset = 0;
 
-		Float32Array indices = Float32Array.create( gridX * gridY * 6 );
+		Uint16Array indices = Uint16Array.create( gridX * gridY * 6 );
 
 		for ( int iy = 0; iy < gridY; iy ++ ) {
 
@@ -98,12 +99,11 @@ public class PlaneBufferGeometry extends BufferGeometry {
 			}
 
 		}
-		
+
 		this.addAttribute( "index", new BufferAttribute( indices, 1 ) );
 		this.addAttribute( "position", new BufferAttribute( vertices, 3 ) );
 		this.addAttribute( "normal", new BufferAttribute( normals, 3 ) );
 		this.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
-
 
 	}
 }

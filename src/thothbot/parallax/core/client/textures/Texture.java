@@ -107,6 +107,7 @@ public class Texture
 	private boolean isGenerateMipmaps = true;
 	private boolean isPremultiplyAlpha = false;
 	private boolean isFlipY = true;
+	private int unpackAlignment = 4; // valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
 
 	private boolean isNeedsUpdate = false;
 	
@@ -445,6 +446,14 @@ public class Texture
 	
 	public void setFlipY(boolean isFlipY) {
 		this.isFlipY = isFlipY;
+	}
+	
+	public int getUnpackAlignment() {
+		return unpackAlignment;
+	}
+
+	public void setUnpackAlignment(int unpackAlignment) {
+		this.unpackAlignment = unpackAlignment;
 	}
 
 	public WebGLTexture getWebGlTexture() {

@@ -2873,7 +2873,8 @@ public class WebGLRenderer implements HasEventBus
 			getGL().bindTexture( TextureTarget.TEXTURE_2D, texture.getWebGlTexture() );
 
 			getGL().pixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL, texture.isFlipY() ? 1 : 0 );
-			getGL().pixelStorei( PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.isPremultiplyAlpha() ? 1 : 0 );
+			getGL().pixelStorei( PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.isPremultiplyAlpha() ? 1 : 0 );		
+			getGL().pixelStorei( PixelStoreParameter.UNPACK_ALIGNMENT, texture.getUnpackAlignment() );
 
 			Element image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
