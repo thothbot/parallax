@@ -67,6 +67,11 @@ public class Raycaster
 //	private Plane facePlane = new Plane();
 //	private Vector3 intersectPoint = new Vector3();
 //	private Matrix4 inverseMatrix = new Matrix4();
+	
+	public Raycaster()
+	{
+		this(new Vector3(), new Vector3());
+	}
 
 	public Raycaster( Vector3 origin, Vector3 direction)
 	{

@@ -442,6 +442,10 @@ public class Ray
 		return this.at( tmin >= 0 ? tmin : tmax, optionalTarget );
 	}
 	
+	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling) {
+		return intersectTriangle(a,b,c, backfaceCulling, new Vector3());
+	}
+	
 	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling, Vector3 optionalTarget) {
 
 		// Compute the offset origin, edges, and normal.

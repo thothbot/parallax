@@ -241,11 +241,11 @@ public class Mesh extends GeometryObject
 						
 						if ( material.getSides() == Material.SIDE.BACK ) {
 
-							intersectionPoint = ray.intersectTriangle( vC, vB, vA, true, null);
+							intersectionPoint = ray.intersectTriangle( vC, vB, vA, true);
 
 						} else {
 
-							intersectionPoint = ray.intersectTriangle( vA, vB, vC, material.getSides() != Material.SIDE.DOUBLE, null );
+							intersectionPoint = ray.intersectTriangle( vA, vB, vC, material.getSides() != Material.SIDE.DOUBLE );
 
 						}
 
@@ -378,11 +378,11 @@ public class Mesh extends GeometryObject
 				
 				if ( material.getSides() == Material.SIDE.BACK ) {
 
-					intersectionPoint = ray.intersectTriangle( c, b, a, true, null );
+					intersectionPoint = ray.intersectTriangle( c, b, a, true );
 
 				} else {
 
-					intersectionPoint = ray.intersectTriangle( a, b, c, material.getSides() != Material.SIDE.DOUBLE, null );
+					intersectionPoint = ray.intersectTriangle( a, b, c, material.getSides() != Material.SIDE.DOUBLE );
 
 				}
 
