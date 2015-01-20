@@ -464,9 +464,6 @@ public class JsonLoader extends Loader
 
 						List<Double> uvLayer = uvs.get( i );
 
-//						geometry.getFaceVertexUvs().get( i ).set( fi, new ArrayList<Vector2>() );
-//						geometry.getFaceVertexUvs().get( i ).set( fi + 1, new ArrayList<Vector2>() );
-
 						geometry.getFaceVertexUvs().get( i ).add( fi, new ArrayList<Vector2>() );
 						geometry.getFaceVertexUvs().get( i ).add( fi + 1, new ArrayList<Vector2>() );
 
@@ -746,7 +743,7 @@ public class JsonLoader extends Loader
 	private Texture create_texture( String sourceFile, List<Integer> repeat, List<Double> offset, List<JsoTextureWrapMode> wrap, int anisotropy ) 
 	{
 		boolean isCompressed = sourceFile.toLowerCase().endsWith(".dds");
-		String fullPath =  getTexturePath() + sourceFile;
+		final String fullPath =  getTexturePath() + sourceFile;
 
 		final Texture texture;
 		
@@ -757,7 +754,7 @@ public class JsonLoader extends Loader
 		else 
 		{
 			texture = new Texture(fullPath, new Texture.ImageLoadHandler() {
-				
+
 				@Override
 				public void onImageLoad(Texture texture) 
 				{

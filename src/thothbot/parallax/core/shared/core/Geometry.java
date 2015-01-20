@@ -79,7 +79,6 @@ public class Geometry extends AbstractGeometry
 		public Vector3 a;
 		public Vector3 b;
 		public Vector3 c;
-		public Vector3 d;
 	}
 	
 	public class MorphTarget
@@ -603,7 +602,7 @@ public class Geometry extends AbstractGeometry
 				face.__originalVertexNormals = new ArrayList<Vector3>();
 
 			for ( int i = 0, il = face.vertexNormals.size(); i < il; i ++ ) {
-
+			
 				if ( face.__originalVertexNormals.size() <= i || face.__originalVertexNormals.get( i ) == null ) {
 
 					face.__originalVertexNormals.add( i , face.vertexNormals.get( i ).clone() );
@@ -649,7 +648,6 @@ public class Geometry extends AbstractGeometry
 				}
 				
 				this.morphNormals.add( i, morphNormal);
-
 			}
 
 			MorphNormal morphNormals = this.morphNormals.get( i );
@@ -664,8 +662,6 @@ public class Geometry extends AbstractGeometry
 			tmpGeo.computeVertexNormals();
 
 			// store morph normals
-
-//			var faceNormal, vertexNormals;
 
 			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
 

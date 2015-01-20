@@ -77,9 +77,7 @@ public final class ShadowMap extends Plugin
 	private Vector3 max;
 	
 	List<WebGLObject> _renderList = new ArrayList<WebGLObject>();
-	
-//	private static Projector projector = new Projector();
-	
+		
 	public ShadowMap(WebGLRenderer renderer, Scene scene) 
 	{
 		super(renderer, scene);

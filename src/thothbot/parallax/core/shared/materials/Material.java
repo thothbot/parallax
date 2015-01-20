@@ -111,7 +111,7 @@ public abstract class Material
 		BONE_TEXTURE,
 		WRAP_AROUND, DOUBLE_SIDED, FLIP_SIDED,
 
-		USE_SHADOWMAP, SHADOWMAP_SOFT, SHADOWMAP_DEBUG, SHADOWMAP_CASCADE,
+		USE_SHADOWMAP, SHADOWMAP_TYPE_BASIC, SHADOWMAP_TYPE_PCF, SHADOWMAP_TYPE_PCF_SOFT, SHADOWMAP_DEBUG, SHADOWMAP_CASCADE,
 
 		USE_SIZEATTENUATION,
 		
@@ -552,31 +552,23 @@ public abstract class Material
 
 		if (parameters.map)
 			options.add(SHADER_DEFINE.USE_MAP.getValue());
-
 		if (parameters.envMap)
 			options.add(SHADER_DEFINE.USE_ENVMAP.getValue());
-
 		if (parameters.lightMap)
 			options.add(SHADER_DEFINE.USE_LIGHTMAP.getValue());
-		
 		if (parameters.bumpMap)
 			options.add(SHADER_DEFINE.USE_BUMPMAP.getValue());
-		
 		if (parameters.normalMap)
 			options.add(SHADER_DEFINE.USE_NORMALMAP.getValue());
-		
 		if (parameters.specularMap)
 			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
-		
 		if (parameters.alphaMap)
 			options.add(SHADER_DEFINE.USE_ALPHAMAP.getValue());
-
 		if (parameters.vertexColors)
 			options.add(SHADER_DEFINE.USE_COLOR.getValue());
 
 		if (parameters.skinning)
 			options.add(SHADER_DEFINE.USE_SKINNING.getValue());
-
 		if (parameters.useVertexTexture)
 			options.add(SHADER_DEFINE.BONE_TEXTURE.getValue());
 				
@@ -584,7 +576,6 @@ public abstract class Material
 			options.add(SHADER_DEFINE.USE_MORPHTARGETS.getValue());
 		if (parameters.morphNormals)
 			options.add(SHADER_DEFINE.USE_MORPHNORMALS.getValue());
-		
 		if (parameters.wrapAround)
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
 		if (parameters.doubleSided)
@@ -592,20 +583,21 @@ public abstract class Material
 		if (parameters.flipSided)
 			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
 
-		if (parameters.shadowMapEnabled)
+		if (parameters.shadowMapEnabled) {
 			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
-		if (parameters.shadowMapSoft)
-			options.add(SHADER_DEFINE.SHADOWMAP_SOFT.getValue());
+			if (parameters.shadowMapSoft)
+				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_PCF.getValue());
+			else
+				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_BASIC.getValue());
+		}
+
 		if (parameters.shadowMapDebug)
 			options.add(SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
 		if (parameters.shadowMapCascade)
 			options.add(SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
 
 		if (parameters.sizeAttenuation)
-		{
-			Log.error("Fix uniform in Particle material: size");
 			options.add(SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
-		}
 		
 		if (parameters.logarithmicDepthBuffer)
 			options.add(SHADER_DEFINE.USE_LOGDEPTHBUF.getValue());
@@ -679,69 +671,63 @@ public abstract class Material
 
 		options.add("");
 		
-		if (parameters.bumpMap || parameters.normalMap)
+		if(parameters.bumpMap || parameters.normalMap)
 			options.add("#extension GL_OES_standard_derivatives : enable");
-		
+
 		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
 		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
 		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
 		options.add(SHADER_DEFINE.MAX_HEMI_LIGHTS.getValue(parameters.maxHemiLights));
 
 		options.add(SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
-
+		
 		if (parameters.alphaTest > 0)
 			options.add(SHADER_DEFINE.ALPHATEST.getValue(parameters.alphaTest));
 
 		if (parameters.gammaInput)
 			options.add(SHADER_DEFINE.GAMMA_INPUT.getValue());
-
 		if (parameters.gammaOutput)
 			options.add(SHADER_DEFINE.GAMMA_OUTPUT.getValue());
-
+		
 		if (parameters.useFog)
 			options.add(SHADER_DEFINE.USE_FOG.getValue());
-
 		if (parameters.useFog2)
 			options.add(SHADER_DEFINE.FOG_EXP2.getValue());
 
 		if (parameters.map)
 			options.add(SHADER_DEFINE.USE_MAP.getValue());
-
 		if (parameters.envMap)
 			options.add(SHADER_DEFINE.USE_ENVMAP.getValue());
-
 		if (parameters.lightMap)
 			options.add(SHADER_DEFINE.USE_LIGHTMAP.getValue());
-		
 		if (parameters.bumpMap)
 			options.add(SHADER_DEFINE.USE_BUMPMAP.getValue());
-		
 		if (parameters.normalMap)
 			options.add(SHADER_DEFINE.USE_NORMALMAP.getValue());
-		
 		if (parameters.specularMap)
 			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
-		
 		if (parameters.alphaMap)
 			options.add(SHADER_DEFINE.USE_ALPHAMAP.getValue());
-
 		if (parameters.vertexColors)
 			options.add(SHADER_DEFINE.USE_COLOR.getValue());
 
 		if (parameters.metal)
 			options.add(SHADER_DEFINE.METAL.getValue());
-
 		if (parameters.wrapAround)
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
 		if (parameters.doubleSided)
 			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
 		if (parameters.flipSided)
 			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
-
-		if (parameters.shadowMapEnabled)
+		
+		if (parameters.shadowMapEnabled) {
 			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
-		if (parameters.shadowMapSoft)
-			options.add(SHADER_DEFINE.SHADOWMAP_SOFT.getValue());
+			if (parameters.shadowMapSoft)
+				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_PCF.getValue());
+			else
+				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_BASIC.getValue());
+		}
+		
 		if (parameters.shadowMapDebug)
 			options.add(SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
 		if (parameters.shadowMapCascade)

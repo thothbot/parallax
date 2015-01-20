@@ -2270,7 +2270,7 @@ public class WebGLRenderer implements HasEventBus
 		parameters.precision = this._precision;
 
 		parameters.supportsVertexTextures = this._supportsVertexTextures;
-
+		
 		parameters.useFog  = (fog != null);
 		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
 		
