@@ -835,7 +835,7 @@ public class WebGLRenderer implements HasEventBus
 		// set base
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		Map<String, Uniform> uniforms = material.getShader().getUniforms();
-
+		Log.error(attributes);
 		if ( object.morphTargetBase != - 1 && attributes.get("position") >= 0) 
 		{
 			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( object.morphTargetBase ) );
@@ -944,7 +944,7 @@ public class WebGLRenderer implements HasEventBus
 
 					}
 
-					if ( attributes.get( "morphNormal" + m ) >= 0 && material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) {
+					if ( attributes.get( "morphNormal" + m ) >= 0 && ((HasSkinning)material).isMorphNormals() ) {
 
 						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( influenceIndex ) );
 						enableAttribute( attributes.get( "morphNormal" + m ) );
