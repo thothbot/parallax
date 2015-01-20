@@ -54,6 +54,7 @@ import thothbot.parallax.core.client.gl2.enums.StencilOp;
 import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
+import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.canvas.dom.client.Context;
 import com.google.gwt.canvas.dom.client.ImageData;

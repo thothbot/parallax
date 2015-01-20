@@ -93,7 +93,9 @@ public class Uniform
 	
 	public String toString()
 	{
-		return "{type=" + type.name() + ", value=" + value + "}\n";
+		return "{type=" + type.name() 
+				+ ", value=" + value 
+				+ ", location=" + location + "}\n";
 	}
 	
 	public Uniform clone()

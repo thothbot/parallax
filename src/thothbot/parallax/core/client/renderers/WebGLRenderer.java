@@ -19,6 +19,9 @@
 package thothbot.parallax.core.client.renderers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -828,6 +831,7 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	private void setupMorphTargets ( Material material, WebGLGeometry geometrybuffer, Mesh object ) 
 	{
+
 		// set base
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		Map<String, Uniform> uniforms = material.getShader().getUniforms();
@@ -854,19 +858,23 @@ public class WebGLRenderer implements HasEventBus
 			List<Integer> order = object.morphTargetForcedOrder;
 			List<Double> influences = object.morphTargetInfluences;
 
-			while ( material instanceof ShaderMaterial 
-					&& m < ((ShaderMaterial)material).getNumSupportedMorphTargets() 
+			while ( material instanceof HasSkinning 
+					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() 
 					&& m < order.size() 
 			) {
-				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( order.get( m ) ) );
-				enableAttribute( attributes.get("morphTarget" + m ) );
-				getGL().vertexAttribPointer( attributes.get("morphTarget" + m ), 3, DataType.FLOAT, false, 0, 0 );
-
-				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals()) 
+				if ( attributes.get("morphTarget" + m )  >= 0 ) 
 				{
-					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( order.get( m ) ) );
-					enableAttribute(  attributes.get("morphNormal" + m ) );
-					getGL().vertexAttribPointer( attributes.get("morphNormal" + m ), 3, DataType.FLOAT, false, 0, 0 );
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( order.get( m ) ) );
+					enableAttribute( attributes.get("morphTarget" + m ) );
+					gl.vertexAttribPointer( attributes.get("morphTarget" + m) , 3, DataType.FLOAT, false, 0, 0 );
+					
+				}
+
+				if (  attributes.get("morphNormal" + m )  >= 0 && material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals()) 
+				{
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( order.get( m ) ) );
+					enableAttribute( attributes.get("morphNormal" + m ));
+					gl.vertexAttribPointer( attributes.get("morphNormal" + m ), 3, DataType.FLOAT, false, 0, 0 );
 				}
 
 				object.__webglMorphTargetInfluences.set( m , influences.get( order.get( m ) ));
@@ -878,42 +886,90 @@ public class WebGLRenderer implements HasEventBus
 		{
 			// find most influencing
 
-			Map<Integer, Boolean> used = new HashMap<Integer, Boolean>();
-			double candidateInfluence = - 1;
-			int candidate = 0;
-			List<Double> influences = object.morphTargetInfluences;			
+			List<Double> influences = object.morphTargetInfluences;
+			List<Double[]> activeInfluenceIndices = new ArrayList<Double[]>();
+			
+			for ( int i = 0; i < influences.size(); i ++ ) {
 
-			if ( object.morphTargetBase != - 1 )
-				used.put( object.morphTargetBase, true);
+				double influence = influences.get( i );
 
+				if ( influence > 0 ) {
+
+					Double[] tmp = new Double[]{influence, (double)i};
+					activeInfluenceIndices.add( tmp );
+
+				}
+
+			}
+			
+			if ( activeInfluenceIndices.size() > ((HasSkinning)material).getNumSupportedMorphTargets() ) {
+			
+				Collections.sort(activeInfluenceIndices, new Comparator<Double[]>() {
+					   public int compare(Double[] a, Double[] b) {
+						   return (int)(b[ 0 ] - a[ 0 ]);
+					   }
+					});
+
+
+			} else if ( activeInfluenceIndices.size() > ((HasSkinning)material).getNumSupportedMorphNormals() ) {
+			
+				Collections.sort(activeInfluenceIndices, new Comparator<Double[]>() {
+					   public int compare(Double[] a, Double[] b) {
+						   return (int)(b[ 0 ] - a[ 0 ]);
+					   }
+					});
+
+			} else if ( activeInfluenceIndices.size() == 0 ) {
+
+				activeInfluenceIndices.add(  new Double[]{0.0, 0.0} );
+
+			}
+
+			int influenceIndex;
 			int m = 0;
-			while ( material instanceof ShaderMaterial 
-					&& m < ((ShaderMaterial)material).getNumSupportedMorphTargets() ) 
+
+			while ( material instanceof HasSkinning 
+					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() ) 
 			{
-				for ( int i = 0; i < influences.size(); i ++ ) 
+				
+				if ( activeInfluenceIndices.size() > m && activeInfluenceIndices.get( m ) != null ) 
 				{
-					if ( !used.containsKey(i) && influences.get( i ) > candidateInfluence ) 
-					{
-						candidate = i;
-						candidateInfluence = influences.get( candidate );
+					influenceIndex = activeInfluenceIndices.get( m )[ 1 ].intValue();
+
+					if ( attributes.get( "morphTarget" + m ) >= 0 ) {
+
+						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( influenceIndex ) );
+						enableAttribute( attributes.get( "morphTarget" + m ) );
+						gl.vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, DataType.FLOAT, false, 0, 0 );
+
 					}
+
+					if ( attributes.get( "morphNormal" + m ) >= 0 && material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) {
+
+						gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( influenceIndex ) );
+						enableAttribute( attributes.get( "morphNormal" + m ) );
+						gl.vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, DataType.FLOAT, false, 0, 0 );
+
+					}
+
+					object.__webglMorphTargetInfluences.set( m, influences.get( influenceIndex ));
+
+				} else {
+
+					/*
+					_gl.vertexAttribPointer( attributes[ "morphTarget" + m ], 3, _gl.FLOAT, false, 0, 0 );
+
+					if ( material.morphNormals ) {
+
+						_gl.vertexAttribPointer( attributes[ "morphNormal" + m ], 3, _gl.FLOAT, false, 0, 0 );
+
+					}
+					*/
+
+					object.__webglMorphTargetInfluences.set( m, 0);
+
 				}
-
-				getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( candidate ) );
-				enableAttribute( attributes.get( "morphTarget" + m ) );
-				getGL().vertexAttribPointer( attributes.get( "morphTarget" + m ), 3, DataType.FLOAT, false, 0, 0 );
-
-				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
-				{
-					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphNormalsBuffers.get( candidate ) );
-					enableAttribute( attributes.get( "morphNormal" + m ) );
-					getGL().vertexAttribPointer( attributes.get( "morphNormal" + m ), 3, DataType.FLOAT, false, 0, 0 );
-				}
-
-				object.__webglMorphTargetInfluences.set( m, candidateInfluence);
-
-				used.put( candidate, true);
-				candidateInfluence = -1;
+				
 				m ++;
 			}
 		}
@@ -922,19 +978,13 @@ public class WebGLRenderer implements HasEventBus
 		if( uniforms.get("morphTargetInfluences").getLocation() != null ) 
 		{
 			Float32Array vals = object.__webglMorphTargetInfluences;
-			double[] val2 = new double[vals.getLength()];
-			for (int i = 0; i < vals.getLength(); i++) 
-			{
-			    Double f = vals.get(i);
-			    val2[i] = (f != null ? f : Double.NaN); // Or whatever default you want.
-			}
-			getGL().uniform1fv( uniforms.get("morphTargetInfluences").getLocation(), val2 );
+			getGL().uniform1fv( uniforms.get("morphTargetInfluences").getLocation(), vals );
 		}
 	}
 	
 	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
 
-//		initAttributes();
+		initAttributes();
 //
 //		if ( object.hasPositions && ! object.__webglVertexBuffer ) object.__webglVertexBuffer = getGL().createBuffer();
 //		if ( object.hasNormals && ! object.__webglNormalBuffer ) object.__webglNormalBuffer = getGL().createBuffer();
@@ -2060,6 +2110,12 @@ public class WebGLRenderer implements HasEventBus
 			this._currentGeometryGroupHash = geometryGroupHash;
 			updateBuffers = true;
 		}
+		
+		if ( updateBuffers ) {
+
+			initAttributes();
+
+		}
 
 		// vertices
 		if ( !(material instanceof HasSkinning && ((HasSkinning)material).isMorphTargets()) && attributes.get("position") >= 0 ) 
@@ -2156,8 +2212,6 @@ public class WebGLRenderer implements HasEventBus
 					getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglUV2Buffer );
 					enableAttribute( attributes.get("uv2") );
 					getGL().vertexAttribPointer( attributes.get("uv2"), 2, DataType.FLOAT, false, 0, 0 );
-
-					getGL().enableVertexAttribArray( attributes.get("uv2") );
 
 				} else {
 					
@@ -2270,31 +2324,7 @@ public class WebGLRenderer implements HasEventBus
 		
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 
-		if ( attributes.get("position") >= 0 ) 
-			getGL().enableVertexAttribArray( attributes.get("position") );
-
-		if ( attributes.get("color") >= 0 ) 
-			getGL().enableVertexAttribArray( attributes.get("color") );
-
-		if ( attributes.get("normal") >= 0 ) 
-			getGL().enableVertexAttribArray( attributes.get("normal") );
-
-		if ( attributes.get("tangent") >= 0 ) 
-			getGL().enableVertexAttribArray( attributes.get("tangent") );
-
-		if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() &&
-			 attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 
-		) {
-			getGL().enableVertexAttribArray( attributes.get("skinIndex") );
-			getGL().enableVertexAttribArray( attributes.get("skinWeight") );
-		}
-
-		if ( attributes != null )
-			for ( Integer a : attributes.values() )
-				if( a != null && a >= 0 ) 
-					getGL().enableVertexAttribArray( a );
-
-		if(material instanceof ShaderMaterial)
+		if(material instanceof HasSkinning)
 		{
 			if ( ((HasSkinning)material).isMorphTargets()) 
 			{
@@ -2305,12 +2335,11 @@ public class WebGLRenderer implements HasEventBus
 
 					if ( attributes.get( id ) >= 0 ) 
 					{
-						getGL().enableVertexAttribArray( attributes.get( id ) );
 						numSupportedMorphTargets ++;
 					}
 				}
 				
-				((ShaderMaterial)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
+				((HasSkinning)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
 			}
 
 			if ( ((HasSkinning)material).isMorphNormals() ) 
@@ -2322,12 +2351,11 @@ public class WebGLRenderer implements HasEventBus
 
 					if ( attributes.get( id ) >= 0 ) 
 					{
-						getGL().enableVertexAttribArray( attributes.get( id ) );
 						numSupportedMorphNormals ++;
 					}
 				}
 
-				((ShaderMaterial)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
+				((HasSkinning)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
 			}
 		}
 	}
@@ -2635,7 +2663,6 @@ public class WebGLRenderer implements HasEventBus
 			}
 			else if(type == TYPE.M4V) // List of Matrix4
 			{
-				Log.error("------", uniform);
 				List<Matrix4> listMatrix4f = (List<Matrix4>) value;
 				if ( uniform.getCacheArray() == null )
 					uniform.setCacheArray( Float32Array.create( 16 * listMatrix4f.size() ) );

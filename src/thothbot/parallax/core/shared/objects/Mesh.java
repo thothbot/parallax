@@ -76,8 +76,6 @@ public class Mesh extends GeometryObject
 	public List<Double> morphTargetInfluences;
 	public List<Integer> morphTargetForcedOrder;
 	private Map<String, Integer> morphTargetDictionary;
-	// TODO: check morphTargetInfluences
-	private List<Double> morphInfluences; 
 	
 	public Float32Array __webglMorphTargetInfluences;
 
@@ -107,32 +105,6 @@ public class Mesh extends GeometryObject
 		super(geometry, material);
 		
 		this.updateMorphTargets();
-		
-//		if (this.geometry != null) 
-//		{
-//			// calc bound radius
-//			if (this.geometry.getBoundingSphere() == null)
-//				this.geometry.computeBoundingSphere();
-//
-//			this.boundRadius = this.geometry.getBoundingSphere().getRadius();
-//
-//			// setup morph targets
-//			if (this.geometry.getMorphTargets().size() != 0) 
-//			{
-//				this.morphTargetBase = -1;
-//				this.morphTargetForcedOrder = new ArrayList<Integer>();
-//				this.morphTargetInfluences = new ArrayList<Double>();
-//				this.morphTargetDictionary = GWT.isScript() ? 
-//						new FastMap<Integer>() : new HashMap<String, Integer>();
-//
-//				List<Geometry.MorphTarget> morphTargets = this.geometry.getMorphTargets();
-//				for (int m = 0; m < morphTargets.size(); m++) 
-//				{
-//					this.morphTargetInfluences.add(0.0);
-//					this.morphTargetDictionary.put(morphTargets.get(m).name, m);
-//				}
-//			}
-//		}
 	}
 	
 	public void updateMorphTargets() {
@@ -200,7 +172,7 @@ public class Mesh extends GeometryObject
 		}
 
 		double precision = Raycaster.precision;
-		
+
 		if ( geometry instanceof BufferGeometry ) {
 
 			Material material = this.getMaterial();
@@ -344,7 +316,7 @@ public class Mesh extends GeometryObject
 
 					for ( int t = 0, tl = morphTargets.size(); t < tl; t ++ ) {
 
-						double influence = this.morphInfluences.get( t );
+						double influence = this.morphTargetInfluences.get( t );
 
 						if ( influence == 0 ) continue;
 
@@ -537,9 +509,9 @@ public class Mesh extends GeometryObject
 
 		List<Integer> faces3 = geometryGroup.faces3;
 
-		int nvertices = faces3.size() * 3 + faces3.size() * 4;
-		int ntris = faces3.size() * 1 + faces3.size() * 2;
-		int nlines = faces3.size() * 3 + faces3.size() * 4;
+		int nvertices = faces3.size() * 3 ;
+		int ntris = faces3.size() * 1;
+		int nlines = faces3.size() * 3;
 
 		Material material = Material.getBufferMaterial(this, geometryGroup);
 
