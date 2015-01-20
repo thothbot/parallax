@@ -298,7 +298,7 @@ public class Vector2 implements Vector
 	}
 	
 	/**
-	 * This function assumes min < max, if this assumption isn't true it will not operate correctly
+	 * This function assumes min &#60; max, if this assumption isn't true it will not operate correctly
 	 * 
 	 */
 	public Vector2 clamp( Vector2 min, Vector2 max ) 
@@ -385,7 +385,7 @@ public class Vector2 implements Vector
 	/**
 	 * Computes the dot product of the this vector and vector v1.
 	 * 
-	 * @param v1
+	 * @param v
 	 *            the other vector
 	 */
 	public double dot(Vector2 v)

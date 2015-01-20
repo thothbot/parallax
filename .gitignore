@@ -1,5 +1,6 @@
 .settings
 .classpath
+/doc
 /.gwt
 /.project
 /war/WEB-INF

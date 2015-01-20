@@ -689,8 +689,6 @@ public class WebGLRenderer implements HasEventBus
 	/**
 	 * Sets the the background color, using {@link Color} for the color and alpha for the opacity.
 	 * 
-	 * @see #setClearColorHex(int, double). 
-	 * 
 	 * @param color the {@link Color} instance.
 	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
 	 */
@@ -715,7 +713,7 @@ public class WebGLRenderer implements HasEventBus
 	/**
 	 * Returns the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque)
 	 * 
-	 * @return the value in range <0,1>.
+	 * @return the value in range &#60;0,1&#62;.
 	 */
 	public double getClearAlpha() 
 	{
@@ -763,7 +761,6 @@ public class WebGLRenderer implements HasEventBus
 
 	/**
 	 * Clear {@link RenderTargetTexture} and GL buffers.
-	 * @see #clear(boolean, boolean, boolean).
 	 */
 	public void clearTarget( RenderTargetTexture renderTarget, boolean color, boolean depth, boolean stencil ) 
 	{

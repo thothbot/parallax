@@ -48,17 +48,17 @@ public final class Color
 	}
 	
 	/**
-	 * The R-component of the color. 0.0-1.0
+	 * The R-component of the color. &#60;0.0-1.0&#62;
 	 */
 	private double r;
 
 	/**
-	 * The G-component of the color. 0.0-1.0
+	 * The G-component of the color. &#60;0.0-1.0&#62;
 	 */
 	private double g;
 
 	/**
-	 * The B-component of the color. 0.0-1.0
+	 * The B-component of the color. &#60;0.0-1.0&#62;
 	 */
 	private double b;
 
@@ -86,7 +86,7 @@ public final class Color
 	/**
 	 * get R-component of the color. 
 	 * 
-	 * @return a value in range <0.0, 1.0> 
+	 * @return a value in range &#60;0.0, 1.0&#62;
 	 */
 	public double getR()
 	{
@@ -96,7 +96,7 @@ public final class Color
 	/**
 	 * get G-component of the color. 
 	 * 
-	 * @return a value in range <0.0, 1.0> 
+	 * @return a value in range &#60;0.0, 1.0&#62; 
 	 */
 	public double getG()
 	{
@@ -106,7 +106,7 @@ public final class Color
 	/**
 	 * get B-component of the color. 
 	 * 
-	 * @return a value in range <0.0, 1.0> 
+	 * @return a value in range &#60;0.0, 1.0&#62;
 	 */
 	public double getB()
 	{
@@ -116,7 +116,7 @@ public final class Color
 	/**
 	 * Setting R-component of the color.
 	 * 
-	 * @param r the value in range <0.0, 1.0> 
+	 * @param r the value in range &#60;0.0, 1.0&#62; 
 	 */
 	public void setR(double r)
 	{
@@ -126,7 +126,7 @@ public final class Color
 	/**
 	 * Setting G-component of the color.
 	 * 
-	 * @param g the value in range <0.0, 1.0> 
+	 * @param g the value in range &#60;0.0, 1.0&#62; 
 	 */
 	public void setG(double g)
 	{
@@ -136,7 +136,7 @@ public final class Color
 	/**
 	 * Setting B-component of the color.
 	 * 
-	 * @param b the value in range <0.0, 1.0> 
+	 * @param b the value in range &#60;0.0, 1.0&#62; 
 	 */
 	public void setB(double b)
 	{

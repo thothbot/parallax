@@ -549,7 +549,7 @@ public class Vector4 extends Vector3 implements Vector
 	}	
 	
 	/**
-	 * This function assumes min < max, if this assumption isn't true it will not operate correctly
+	 * This function assumes min &#60; max, if this assumption isn't true it will not operate correctly
 	 */
 	public Vector4 clamp( Vector4 min, Vector4 max ) 
 	{

@@ -108,9 +108,6 @@ public class FirstPersonControls extends Controls
 	private int viewHalfX;
 	private int viewHalfY;
 	
-	/**
-	 * @see Controls#Controls(Object3D, Widget).
-	 */
 	public FirstPersonControls(Object3D object, Widget widget)
 	{
 		super(object, widget);

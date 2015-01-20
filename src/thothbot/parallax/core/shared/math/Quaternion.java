@@ -511,7 +511,7 @@ public class Quaternion
 	 * 
 	 * Based on <a href="http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/">http://www.euclideanspace.com</a>
 	 * 
-	 * @param qa  the quaternion a (first quaternion to be interpolated between)
+	 * @param qb  the quaternion a (first quaternion to be interpolated between)
 	 * @param t   a scalar between 0.0 (at qa) and 1.0 (at qb)
 	 * 
 	 * @return the interpolated quaternion

@@ -29,13 +29,13 @@ import java.lang.reflect.Array;
 public class Mathematics
 {
 	/**
-	 * The method clamps the scalar x to range <a, b>.
+	 * The method clamps the scalar x to range &#60;a, b&#62;.
 	 * 
 	 * @param x the scalar value for clamping
 	 * @param a the start value of the range
 	 * @param b the end value of the range
 	 * 
-	 * @return a clamped scalar by range <a, b>
+	 * @return a clamped scalar by range &#60;a, b&#62;
 	 */
 	public static double clamp(double x, double a, double b)
 	{
@@ -43,12 +43,12 @@ public class Mathematics
 	}
 
 	/**
-	 * The method clamps the scalar x to range <a, inf).
+	 * The method clamps the scalar x to range &#60;a, inf).
 	 * 
 	 * @param x the scalar value for clamping
 	 * @param a the start value of the range
 	 * 
-	 * @return a clamped scalar by range <a, inf).
+	 * @return a clamped scalar by range &#60;a, inf).
 	 */
 	public static double clampBottom(double x, double a)
 	{
@@ -56,7 +56,7 @@ public class Mathematics
 	}
 	
 	/**
-	 * Linear mapping the scalar x from range <a1, a2> to range <b1, b2>
+	 * Linear mapping the scalar x from range &#60;a1, a2&#62; to range &#60;b1, b&#62;
 	 * 
 	 * @param x  the scalar value for linear mapping
 	 * @param a1 the start value of the first range
@@ -100,7 +100,7 @@ public class Mathematics
 	}
 
 	/**
-	 * The method generates random double value in the range <0, 1> with 
+	 * The method generates random double value in the range &#60;0, 1&#62; with 
 	 * 16 bits of randomness (standard Math.random() creates repetitive 
 	 * patterns when applied over larger space).
 	 * 
@@ -113,7 +113,7 @@ public class Mathematics
 	}
 
 	/**
-	 * The method generates random integer value in the interval <low, high>.  
+	 * The method generates random integer value in the interval &#60;low, high&#62;.  
 	 * 
 	 * @param low  the start value of the interval.
 	 * @param high the end value of the interval
@@ -126,7 +126,7 @@ public class Mathematics
 	}
 
 	/**
-	 * The method generates random double value in the range <low, high>.
+	 * The method generates random double value in the range &#60;low, high&#62;.
 	 * 
 	 * @param low  the start value of the range.
 	 * @param high the end value of the range
@@ -140,7 +140,7 @@ public class Mathematics
 
 	/**
 	 * The method generates random double value in the interval 
-	 * <-range/2, range/2>.
+	 * &#60;-range/2, range/2&#62;.
 	 * 
 	 * @param range the value used to build the interval
 	 * 
