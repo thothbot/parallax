@@ -520,6 +520,17 @@ public class Texture
 		renderer.getInfo().getMemory().textures--;
 	}
 
+	public Texture clone(Texture texture)
+	{
+		texture.offset.copy(this.offset);
+		texture.repeat.copy(this.repeat);
+		
+		texture.setGenerateMipmaps(this.isGenerateMipmaps);
+		texture.setPremultiplyAlpha(this.isPremultiplyAlpha);
+		texture.setFlipY(this.isFlipY);
+
+		return texture;
+	}
 
 	/**
 	 * Clone the texture, where
@@ -527,17 +538,8 @@ public class Texture
 	 */
 	public Texture clone()
 	{
-		Texture clonedTexture = new Texture(this.image, this.mapping, this.wrapS, this.wrapT,
-				this.magFilter, this.minFilter, this.format, this.type, this.anisotropy);
-
-		clonedTexture.offset.copy(this.offset);
-		clonedTexture.repeat.copy(this.repeat);
-		
-		clonedTexture.setGenerateMipmaps(this.isGenerateMipmaps);
-		clonedTexture.setPremultiplyAlpha(this.isPremultiplyAlpha);
-		clonedTexture.setFlipY(this.isFlipY);
-
-		return clonedTexture;
+		return clone(new Texture(this.image, this.mapping, this.wrapS, this.wrapT,
+				this.magFilter, this.minFilter, this.format, this.type, this.anisotropy));
 	}
 	
 	private static FlowPanel loadingArea = new FlowPanel();

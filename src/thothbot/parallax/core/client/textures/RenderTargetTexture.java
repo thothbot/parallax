@@ -120,6 +120,8 @@ public class RenderTargetTexture extends Texture
 	{
 		RenderTargetTexture tmp = new RenderTargetTexture(this.width, this.height);
 
+		super.clone(tmp);
+		
 		tmp.setWrapS( getWrapS() );
 		tmp.setWrapT( getWrapT() );
 
