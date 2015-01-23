@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
-
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.math.Vector2;
+
+import com.google.gwt.core.client.GWT;
 
 
 /**

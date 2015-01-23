@@ -20,7 +20,6 @@ package thothbot.parallax.core.shared.math;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.math.Quaternion.QuaternionChangeHandler;
 
 public class Euler {
 	

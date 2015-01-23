@@ -20,12 +20,9 @@ package thothbot.parallax.plugins.sprite.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.client.shaders.Shader.DefaultResources;
-import thothbot.parallax.core.client.shaders.Uniform.TYPE;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.math.Vector4;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;

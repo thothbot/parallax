@@ -22,16 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
-import thothbot.parallax.core.shared.math.Matrix4;
-import thothbot.parallax.core.shared.math.Plane;
 import thothbot.parallax.core.shared.math.Ray;
-import thothbot.parallax.core.shared.math.Sphere;
-import thothbot.parallax.core.shared.math.Triangle;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.objects.PointCloud;
 
 public class Raycaster 
 {

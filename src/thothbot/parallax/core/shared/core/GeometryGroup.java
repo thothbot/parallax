@@ -23,18 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
-
-import thothbot.parallax.core.client.gl2.WebGLBuffer;
-import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.client.renderers.WebGLExtensions;
 import thothbot.parallax.core.client.renderers.WebGLGeometry;
-import thothbot.parallax.core.client.renderers.WebGLExtensions.Id;
-import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
-import thothbot.parallax.core.shared.scenes.Scene;
+
+import com.google.gwt.core.client.GWT;
 
 public class GeometryGroup extends WebGLGeometry
 {

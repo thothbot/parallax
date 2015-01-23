@@ -20,8 +20,6 @@ package thothbot.parallax.core.shared.objects;
 
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Console;
-
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
@@ -34,7 +32,6 @@ import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.Attribute.BOUND_TO;
 import thothbot.parallax.core.client.shaders.Attribute.TYPE;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry.DrawCall;

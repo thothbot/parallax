@@ -199,6 +199,6 @@ public abstract class PolyhedronGeometry extends Geometry
 		if ( (vector.getX() == 0) && (vector.getZ() == 0) ) 
 			uv = new Vector2( azimuth / 2.0 / Math.PI + 0.5, uv.getY() );
 		
-		return uv;
+		return uv.clone();
 	}
 }

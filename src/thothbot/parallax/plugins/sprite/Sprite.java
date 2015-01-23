@@ -27,7 +27,6 @@ import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Euler;
 import thothbot.parallax.core.shared.math.Vector2;
-import thothbot.parallax.core.shared.math.Vector3;
 
 public class Sprite extends Object3D implements Comparable<Sprite>
 {

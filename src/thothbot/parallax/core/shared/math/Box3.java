@@ -18,7 +18,6 @@
 
 package thothbot.parallax.core.shared.math;
 
-import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;

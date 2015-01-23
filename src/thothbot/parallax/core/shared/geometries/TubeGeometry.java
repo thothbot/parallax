@@ -25,7 +25,6 @@ import java.util.List;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.curves.Curve;
-import thothbot.parallax.core.shared.helpers.ArrowHelper;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 

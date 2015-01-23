@@ -21,20 +21,17 @@ package thothbot.parallax.core.shared.objects;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.regexp.shared.MatchResult;
-import com.google.gwt.regexp.shared.RegExp;
-
-import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphTarget;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Mathematics;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 
 public class MorphAnimMesh extends Mesh
 {

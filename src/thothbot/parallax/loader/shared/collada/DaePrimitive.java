@@ -18,9 +18,6 @@
 
 package thothbot.parallax.loader.shared.collada;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;

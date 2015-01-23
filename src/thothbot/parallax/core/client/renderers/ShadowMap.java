@@ -54,7 +54,6 @@ import thothbot.parallax.core.shared.math.Frustum;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
-import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.Scene;
 

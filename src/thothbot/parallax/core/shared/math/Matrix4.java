@@ -18,8 +18,6 @@
 
 package thothbot.parallax.core.shared.math;
 
-import com.google.gwt.core.client.JsArrayNumber;
-
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
 

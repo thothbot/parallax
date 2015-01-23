@@ -18,8 +18,6 @@
 
 package thothbot.parallax.core.shared.materials;
 
-import com.google.gwt.safehtml.client.HasSafeHtml;
-
 import thothbot.parallax.core.client.shaders.NormalShader;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.shared.cameras.Camera;
