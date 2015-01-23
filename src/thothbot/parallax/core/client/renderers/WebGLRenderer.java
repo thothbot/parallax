@@ -832,7 +832,7 @@ public class WebGLRenderer implements HasEventBus
 		// set base
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		Map<String, Uniform> uniforms = material.getShader().getUniforms();
-		Log.error(attributes);
+
 		if ( object.morphTargetBase != - 1 && attributes.get("position") >= 0) 
 		{
 			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( object.morphTargetBase ) );
@@ -1857,10 +1857,9 @@ public class WebGLRenderer implements HasEventBus
 
 		}
 
-		Log.error("render", opaqueObjects.size(), transparentObjects.size(), this._webglObjects, _webglObjectsImmediate.size());
 		if ( scene.overrideMaterial != null ) 
 		{
-			Log.error("render(): override material");
+			Log.debug("render(): override material");
 			
 			Material material = scene.overrideMaterial;
 			
@@ -2396,7 +2395,7 @@ public class WebGLRenderer implements HasEventBus
 			refreshMaterial = true;
 			refreshLights = true;
 
-			Log.error("program != _currentProgram");
+			Log.warn("program != _currentProgram");
 		}
 
 		if ( material.getId() != this._currentMaterialId ) 

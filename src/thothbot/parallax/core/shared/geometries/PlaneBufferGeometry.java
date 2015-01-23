@@ -56,15 +56,15 @@ public class PlaneBufferGeometry extends BufferGeometry {
 
 			for ( int ix = 0; ix < gridX1; ix ++ ) {
 
-				double x = ix * segment_width - width_half;
+				double x = (double)(ix * segment_width) - width_half;
 
 				vertices.set( offset,       x);
 				vertices.set( offset + 1, - y);
 				
-				normals.set( offset + 2, 1);
+				normals.set( offset + 2, 1.0);
 
-				uvs.set( offset2, ix / gridX);
-				uvs.set( offset2 + 1, 1 - ( iy / gridY ));
+				uvs.set( offset2, ix / (double)gridX);
+				uvs.set( offset2 + 1, 1.0 - ( iy / (double)gridY ));
 
 				offset += 3;
 				offset2 += 2;

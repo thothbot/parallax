@@ -62,12 +62,12 @@ public final class BoxGeometry extends Geometry
 		double height_half = height / 2.0;
 		double depth_half = depth / 2.0;
 
-		buildPlane( "z", "y", - 1, - 1, depth, height, width_half, 0 ); 
-		buildPlane( "z", "y",   1, - 1, depth, height, - width_half, 1 ); 
-		buildPlane( "x", "z",   1,   1, width, depth, height_half, 2 ); 
-		buildPlane( "x", "z",   1, - 1, width, depth, - height_half, 3 ); 
-		buildPlane( "x", "y",   1, - 1, width, height, depth_half, 4 ); 
-		buildPlane( "x", "y", - 1, - 1, width, height, - depth_half, 5 );
+		buildPlane( "z", "y", - 1, - 1, depth, height, width_half, 0 );   // px 
+		buildPlane( "z", "y",   1, - 1, depth, height, - width_half, 1 ); // nx
+		buildPlane( "x", "z",   1,   1, width, depth, height_half, 2 );   // py
+		buildPlane( "x", "z",   1, - 1, width, depth, - height_half, 3 ); // ny
+		buildPlane( "x", "y",   1, - 1, width, height, depth_half, 4 );   // pz
+		buildPlane( "x", "y", - 1, - 1, width, height, - depth_half, 5 ); // nz
 
 		this.mergeVertices();
 	}
@@ -79,7 +79,7 @@ public final class BoxGeometry extends Geometry
 		double width_half = width / 2.0;
 		double height_half = height / 2.0;
 		
-		int offset = getVertices().size();
+		int offset = this.getVertices().size();
 
 		String w = "";
 
@@ -155,10 +155,10 @@ public final class BoxGeometry extends Geometry
 				int c = ( ix + 1 ) + gridX1 * ( iy + 1 );
 				int d = ( ix + 1 ) + gridX1 * iy;
 				
-				Vector2 uva = new Vector2( ix / gridX, 1.0 - iy / gridY );
-				Vector2 uvb = new Vector2( ix / gridX, 1.0 - ( iy + 1.0 ) / gridY );
-				Vector2 uvc = new Vector2( ( ix + 1.0 ) / gridX, 1.0 - ( iy + 1.0 ) / gridY );
-				Vector2 uvd = new Vector2( ( ix + 1.0 ) / gridX, 1.0 - iy / gridY );
+				Vector2 uva = new Vector2( ix / (double)gridX, 1.0 - iy / (double)gridY );
+				Vector2 uvb = new Vector2( ix / (double)gridX, 1.0 - ( iy + 1.0 ) / (double)gridY );
+				Vector2 uvc = new Vector2( ( ix + 1.0 ) / (double)gridX, 1.0 - ( iy + 1.0 ) / (double)gridY );
+				Vector2 uvd = new Vector2( ( ix + 1.0 ) / (double)gridX, 1.0 - iy / (double)gridY );
 
 				Face3 face = new Face3( a + offset, b + offset, d + offset );
 				face.getNormal().copy( normal );
