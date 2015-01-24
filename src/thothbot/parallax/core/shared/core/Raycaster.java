@@ -24,10 +24,22 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.math.Ray;
 import thothbot.parallax.core.shared.math.Vector3;
+import thothbot.parallax.core.shared.objects.Line;
+import thothbot.parallax.core.shared.objects.Mesh;
 
+/**
+ * This class makes raycasting easier. Raycasting is used for picking and more.
+ * 
+ */
 public class Raycaster 
 {
+	/**
+	 * The precision factor of the raycaster when intersecting {@link Mesh} objects.
+	 */
 	public static final double precision = 0.0001;
+	/**
+	 * The precision factor of the raycaster when intersecting {@link Line} objects.
+	 */
 	public static final double linePrecision = 1;
 	
 	public static class Intersect implements Comparable
@@ -44,7 +56,6 @@ public class Raycaster
 		public int compareTo(Object arg0) 
 		{
 			Intersect b = (Intersect)arg0;
-//			return this.distance - b.distance;
 			return (this.distance == b.distance) 
 					? 0 : this.distance < b.distance ? -1 : 1;
 		}
@@ -53,13 +64,7 @@ public class Raycaster
 	private Ray ray;
 	private double near;
 	private double far;
-	
-//	private Sphere sphere = new Sphere();
-//	private Ray localRay = new Ray();
-//	private Plane facePlane = new Plane();
-//	private Vector3 intersectPoint = new Vector3();
-//	private Matrix4 inverseMatrix = new Matrix4();
-	
+		
 	public Raycaster()
 	{
 		this(new Vector3(), new Vector3());
@@ -70,29 +75,25 @@ public class Raycaster
 		this(origin, direction, 0, Double.POSITIVE_INFINITY);
 	}
 	
+	/**
+	 * This creates a new raycaster object.
+	 * @param origin The origin vector where the ray casts from.
+	 * @param direction The direction vector that gives direction to the ray.
+	 * @param near All results returned are further away than near. Near can't be negative. Default value is 0.
+	 * @param far All results returned are closer then far. Far can't be lower then near . Default value is Infinity.
+	 */
 	public Raycaster( Vector3 origin, Vector3 direction, double near, double far ) 
 	{
 
 		this.ray = new Ray( origin, direction );
-		
-//		// normalized ray.direction required for accurate distance calculations
-//		if( this.ray.getDirection().length() > 0 ) 
-//		{
-//			this.ray.getDirection().normalize();
-//		}
-
 		this.near = near;
 		this.far = far;
 	}
-	
-	
-	
-//	var descSort = function ( a, b ) {
-//
-//		return a.distance - b.distance;
-//
-//	};
 		
+	/**
+	 * The Ray used for the raycasting.
+	 * @return
+	 */
 	public Ray getRay() {
 		return ray;
 	}
@@ -101,6 +102,12 @@ public class Raycaster
 		this.ray = ray;
 	}
 
+	/**
+	 * The near factor of the raycaster. 
+	 * This value indicates which objects can be discarded based on the distance.
+	 * This value shouldn't be negative and should be smaller than the far property.
+	 * @return
+	 */
 	public double getNear() {
 		return near;
 	}
@@ -109,6 +116,12 @@ public class Raycaster
 		this.near = near;
 	}
 
+	/**
+	 * The far factor of the raycaster. 
+	 * This value indicates which objects can be discarded based on the distance.
+	 * This value shouldn't be negative and should be larger than the near property.
+	 * @return
+	 */
 	public double getFar() {
 		return far;
 	}

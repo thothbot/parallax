@@ -28,6 +28,9 @@ import thothbot.parallax.core.client.renderers.WebGLGeometry;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.objects.Line;
+import thothbot.parallax.core.shared.objects.Mesh;
+import thothbot.parallax.core.shared.objects.PointCloud;
 
 public abstract class GeometryObject extends Object3D
 {
@@ -68,6 +71,12 @@ public abstract class GeometryObject extends Object3D
 		this.material = material;
 	}
 	
+	/**
+	 * Abstract method to get intersections between a casted ray and this object. 
+	 * Subclasses such as {@link Mesh}, {@link Line}, and {@link PointCloud} implement this method in order to participate in raycasting.
+	 * @param raycaster
+	 * @param intersects
+	 */
 	public abstract void raycast( Raycaster raycaster, List<Raycaster.Intersect> intersects);
 	
 //	public Material getCustomDepthMaterial() {

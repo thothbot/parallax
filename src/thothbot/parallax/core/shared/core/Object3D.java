@@ -32,7 +32,7 @@ import thothbot.parallax.core.shared.math.Quaternion.QuaternionChangeHandler;
 import thothbot.parallax.core.shared.math.Vector3;
 
 /**
- * Implementation of DimensionalObject
+ * Base class for scene objects.
  * 
  * @author thothbot
  *
@@ -163,10 +163,20 @@ public class Object3D
 			this.handler.onRemove(Object3D.this);
 	}
 	
+	/**
+	 * Unique number for this object instance.
+	 * 
+	 * @return
+	 */
 	public int getId() {
 		return this.id;
 	}
 	
+	/**
+	 * Object's parent in the scene graph.
+	 * 
+	 * @return
+	 */
 	public Object3D getParent() {
 		return this.parent;
 	}
@@ -175,6 +185,10 @@ public class Object3D
 		this.parent = parent;
 	}
 
+	/**
+	 * Array with object's children.
+	 * @return
+	 */
 	public List<Object3D> getChildren() {
 		return this.children;
 	}
@@ -205,6 +219,10 @@ public class Object3D
 		return retval;
 	}
 
+	/**
+	 * Object's local position.
+	 * @return
+	 */
 	public Vector3 getPosition() {
 		return this.position;
 	}
@@ -213,6 +231,10 @@ public class Object3D
 		this.position = position;
 	}
 
+	/**
+	 * Object's local rotation ({@link Euler} angles), in radians.
+	 * @return
+	 */
 	public Euler getRotation() {
 		return this.rotation;
 	}
@@ -223,7 +245,6 @@ public class Object3D
 
 	/**
 	 * If set to true light will cast dynamic shadows. 
-	 * Warning: This is expensive and requires tweaking to get shadows looking right.
 	 * <p>
 	 * Default � false.
 	 */
@@ -235,6 +256,10 @@ public class Object3D
 		this.isCastShadow = isCastShadow;
 	}
 
+	/**
+	 * Material gets baked in shadow receiving. default – false
+	 * @return
+	 */
 	public boolean isReceiveShadow() {
 		return isReceiveShadow;
 	}
@@ -243,6 +268,11 @@ public class Object3D
 		this.isReceiveShadow = isReceiveShadow;
 	}
 
+	/**
+	 * When this is set, it checks every frame if the object is in the frustum of the camera. 
+	 * Otherwise the object gets drawn every frame even if it isn't visible. default – true
+	 * @return
+	 */
 	public boolean isFrustumCulled() {
 		return isFrustumCulled;
 	}
@@ -256,6 +286,10 @@ public class Object3D
 
 	}
 
+	/**
+	 * When this is set, then the rotationMatrix gets calculated every frame. default – true
+	 * @return
+	 */
 	public boolean isRotationAutoUpdate() {
 		return rotationAutoUpdate;
 	}
@@ -264,10 +298,19 @@ public class Object3D
 		this.name = name;
 	}
 
+	/**
+	 * Optional name of the object (doesn't need to be unique).
+	 * 
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Object's local scale.
+	 * @return
+	 */
 	public Vector3 getScale() {
 		return this.scale;
 	}
@@ -276,6 +319,10 @@ public class Object3D
 		this.scale = scale;
 	}
 
+	/**
+	 * Up direction.
+	 * @return
+	 */
 	public Vector3 getUp() {
 		return this.up;
 	}
@@ -284,14 +331,22 @@ public class Object3D
 		this.up = up;
 	}
 
+	/**
+	 * Local transform.
+	 * @return
+	 */
 	public Matrix4 getMatrix() {
 		return this.matrix;
 	}
 
 	public void setMatrix(Matrix4 matrix) {
 		this.matrix = matrix;
-	};
+	}
 
+	/**
+	 * The global transform of the object. If the Object3d has no parent, then it's identical to the local transform.
+	 * @return
+	 */
 	public Matrix4 getMatrixWorld() {
 		return this.matrixWorld;
 	}
@@ -300,6 +355,10 @@ public class Object3D
 		this.matrixWorld = matrixWorld;
 	}
 
+	/**
+	 * When this is set, it calculates the matrixWorld in that frame and resets this property to false. default – false
+	 * @return
+	 */
 	public boolean isMatrixWorldNeedsUpdate() {
 		return this.matrixWorldNeedsUpdate;
 	}
@@ -308,6 +367,11 @@ public class Object3D
 		this.matrixWorldNeedsUpdate = needsUpdate;
 	}
 
+	/**
+	 * When this is set, it calculates the matrix of position, (rotation or quaternion) and scale every
+	 * frame and also recalculates the matrixWorld property. default – true
+	 * @return
+	 */
 	public boolean isMatrixAutoUpdate() {
 		return this.matrixAutoUpdate;
 	}
@@ -316,6 +380,10 @@ public class Object3D
 		this.matrixAutoUpdate = autoUpdate;
 	}
 
+	/**
+	 * Object's local rotation as {@link Quaternion}.
+	 * @return
+	 */
 	public Quaternion getQuaternion() {
 		return this.quaternion;
 	}
@@ -324,6 +392,10 @@ public class Object3D
 		this.quaternion = quaternion;
 	}
 
+	/**
+	 * Object gets rendered if true. default – true
+	 * @return
+	 */
 	public boolean isVisible() {
 		return this.visible;
 	}
@@ -332,6 +404,10 @@ public class Object3D
 		this.visible = visible;
 	}
 	
+	/**
+	 * This updates the position, rotation and scale with the matrix.
+	 * @param matrix
+	 */
 	public void applyMatrix(Matrix4 matrix)
 	{
 		this.matrix.multiply( matrix, this.matrix );
@@ -369,10 +445,13 @@ public class Object3D
 
 	}
 
+	/**
+	 * Rotate an object along an axis in object space. The axis is assumed to be normalized.
+	 * @param axis A normalized vector in object space. 
+	 * @param angle The angle in radians.
+	 * @return
+	 */
 	public Object3D rotateOnAxis(Vector3 axis, double angle) {
-
-		// rotate object on axis in object space
-		// axis is assumed to be normalized
 
 		Quaternion q1 = new Quaternion();
 
@@ -408,10 +487,13 @@ public class Object3D
 
 	}
 	
+	/**
+	 * Translate an object by distance along an axis in object space. The axis is assumed to be normalized.
+	 * @param axis A normalized vector in object space.
+	 * @param distance The distance to translate.
+	 * @return
+	 */
 	public Object3D translateOnAxis ( Vector3 axis, double distance ) {
-
-		// translate object by distance along axis in object space
-		// axis is assumed to be normalized
 
 		Vector3 v1 = new Vector3();
 
@@ -423,6 +505,11 @@ public class Object3D
 		return this;
 	}
 
+	/**
+	 * Translates object along x axis by distance.
+	 * @param distance
+	 * @return
+	 */
 	public Object3D translateX(double distance) {
 
 		Vector3 v1 = new Vector3( 1.0, 0, 0 );
@@ -431,6 +518,11 @@ public class Object3D
 
 	}
 
+	/**
+	 * Translates object along y axis by distance.
+	 * @param distance
+	 * @return
+	 */
 	public Object3D translateY(double distance) {
 
 		Vector3 v1 = new Vector3( 0, 1.0, 0 );
@@ -439,6 +531,11 @@ public class Object3D
 
 	}
 
+	/**
+	 * Translates object along z axis by distance.
+	 * @param distance
+	 * @return
+	 */
 	public Object3D translateZ(double distance) {
 
 		Vector3 v1 = new Vector3( 0, 0, 1.0 );
@@ -452,6 +549,11 @@ public class Object3D
 		return vector.apply( this.matrixWorld );
 	}
 
+	/**
+	 * Updates the vector from world space to local space.
+	 * @param vector A world vector.
+	 * @return
+	 */
 	public Vector3 worldToLocal( Vector3 vector ) 
 	{
 		Matrix4 m1 = new Matrix4();
@@ -459,6 +561,10 @@ public class Object3D
 		return vector.apply( m1.getInverse( this.matrixWorld ) );
 	}
 
+	/**
+	 * Rotates object to face point in space.
+	 * @param vector A world vector to look at.
+	 */
 	public void lookAt(Vector3 vector)
 	{
 		// This routine does not support objects with rotated and/or translated parent(s)
@@ -479,6 +585,11 @@ public class Object3D
 		return this;
 	}
 	
+	/**
+	 * Adds object as child of this object.
+	 * @param object An object
+	 * @return
+	 */
 	public Object3D add(Object3D object)
 	{
 		if(object.equals(this)) {
@@ -510,6 +621,10 @@ public class Object3D
 			this.remove(objects.get(i));
 	}
 
+	/**
+	 * Removes object as child of this object.
+	 * @param object An object.
+	 */
 	public void remove(Object3D object)
 	{
 		int index = this.children.indexOf(object);
@@ -524,6 +639,12 @@ public class Object3D
 		}
 	}
 	
+	/**
+	 * Searches through the object's children and returns the first with a matching id, optionally recursive.
+	 * @param id Unique number of the object instance
+	 * @param recursive Boolean whether to search through the children's children.
+	 * @return
+	 */
 	public Object3D getObjectById(int id, boolean recursive ) {
 
 		if ( this.id == id ) return this;
@@ -544,6 +665,12 @@ public class Object3D
 		return null;
 	}
 	
+	/**
+	 * Searches through the object's children and returns the first with a matching name, optionally recursive.
+	 * @param name String to match to the children's Object3d.name property. 
+	 * @param recursive Boolean whether to search through the children's children.
+	 * @return
+	 */
 	public Object3D getObjectByName( String name, boolean recursive ) {
 
 		if ( this.name.equals( name ) ) return this;
@@ -636,6 +763,10 @@ public class Object3D
 
 	}
 	
+	/**
+	 * Executes the callback on this object and all descendants
+	 * @param traverse A {@link Traverse} interface with as first argument an object3D object.
+	 */
 	public void traverse ( Traverse traverse ) {
 
 		traverse.callback(this);
@@ -647,6 +778,10 @@ public class Object3D
 		}
 	}
 
+	/**
+	 * Like {@link Object3D#traverse(Traverse)}, but the {@link Traverse} will only be executed for visible objects. Descendants of invisible objects are not traversed.
+	 * @param traverse A {@link Traverse} interface with as first argument an object3D object.
+	 */
 	public void traverseVisible ( Traverse traverse ) {
 
 		if ( this.visible == false ) return;
@@ -661,6 +796,9 @@ public class Object3D
 
 	}
 	
+	/**
+	 * Updates local transform.
+	 */
 	public void updateMatrix()
 	{
 
@@ -670,6 +808,10 @@ public class Object3D
 
 	}
 	
+	/**
+	 * Updates global transform of the object and its children.
+	 * @param force
+	 */
 	public void updateMatrixWorld(boolean force)
 	{
 		if ( this.matrixAutoUpdate == true ) this.updateMatrix();
@@ -702,6 +844,9 @@ public class Object3D
 
 	}
 	
+	/**
+	 * Creates a new clone of this object and all descendants.
+	 */
 	public Object3D clone() {
 		return clone(new Object3D());
 	}

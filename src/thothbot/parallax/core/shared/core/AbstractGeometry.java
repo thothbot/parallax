@@ -37,7 +37,6 @@ public abstract class AbstractGeometry extends WebGLGeometry
 	protected Sphere boundingSphere = null;
 	
 	// update flags
-	
 	public boolean verticesNeedUpdate = false;
 	public boolean elementsNeedUpdate = false;
 	public boolean normalsNeedUpdate = false;
@@ -57,10 +56,18 @@ public abstract class AbstractGeometry extends WebGLGeometry
 		this.name = "";
 	}
 	
+	/**
+	 * Name for this geometry. Default is an empty string.
+	 * @return Name
+	 */
 	public String getName() {
 		return this.name;
 	}
 	
+	/**
+	 * Set name for this geometry.
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
