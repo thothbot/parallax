@@ -89,6 +89,13 @@ public class Line extends GeometryObject
 		this(geometry, material, Line.MODE.STRIPS);
 	}
 
+	/**
+	 * If no material is supplied, a randomized line material will be created and assigned to the object.
+	 * Also, if no type is supplied, the default {@link Line.MODE}.STRIPS will be used).
+	 * @param geometry  Vertices representing the line segment(s).
+	 * @param material Material for the line. Default is {@link LineBasicMaterial}.
+	 * @param mode Connection type between vertices. Default is {@link Line.MODE}.STRIPS.
+	 */
 	public Line(Geometry geometry, LineBasicMaterial material, Line.MODE mode) 
 	{
 		super(geometry, material);

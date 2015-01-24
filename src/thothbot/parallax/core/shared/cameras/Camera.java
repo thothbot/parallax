@@ -39,6 +39,9 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 	protected Matrix4 matrixWorldInverse;
 	protected Matrix4 projectionMatrix;
 	
+	/**
+	 * This constructor sets the following properties to the correct type: matrixWorldInverse and projectionMatrix.
+	 */
 	public Camera() 
 	{
 		super();
@@ -59,6 +62,10 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 		//  Empty for capability
 	}
 
+	/**
+	 * This is the inverse of matrixWorld. MatrixWorld contains the Matrix which has the world transform of the Camera.
+	 * @return
+	 */
 	public Matrix4 getMatrixWorldInverse()
 	{
 		return this.matrixWorldInverse;
@@ -69,6 +76,10 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 		this.matrixWorldInverse = matrixWorldInverse;
 	}
 
+	/**
+	 * This is the matrix which contains the projection.
+	 * @return
+	 */
 	public Matrix4 getProjectionMatrix()
 	{
 		return this.projectionMatrix;
@@ -95,6 +106,10 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 
 	}
 	
+	/**
+	 * This makes the camera look at the vector position in the global space as long as the parent 
+	 * of this camera is the scene or at position (0,0,0).
+	 */
 	@Override
 	public void lookAt(Vector3 vector)
 	{

@@ -26,6 +26,10 @@ import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 
+/**
+ * A material for drawing geometry by depth. Depth is based off of the camera near and far plane. White is nearest, black is farthest.
+ *
+ */
 public class MeshDepthMaterial extends Material implements HasWireframe
 {
 //	private boolean isMorphTargets = false;

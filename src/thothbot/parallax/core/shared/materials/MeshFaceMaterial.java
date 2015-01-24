@@ -23,6 +23,13 @@ import java.util.List;
 
 import thothbot.parallax.core.client.shaders.Shader;
 
+/**
+ * A Material to define multiple materials for the same geometry.
+ * The geometry decides which material is used for which faces by the faces materialindex. 
+ * The materialindex corresponds with the index of the material in the materials array.
+ *
+ */
+
 public final class MeshFaceMaterial extends Material 
 {
 	List<Material> materials;
@@ -32,11 +39,19 @@ public final class MeshFaceMaterial extends Material
 		this.materials = new ArrayList<Material>();
 	}
 	
+	/**
+	 * Creates a MeshFaceMaterial with the correct materials.
+	 * @param materials  The materials for the geometry.
+	 */
 	public MeshFaceMaterial(List<Material> materials) 
 	{
 		this.materials = materials;
 	}
 	
+	/**
+	 * Get or set the materials for the geometry.
+	 * @return
+	 */
 	public List<Material> getMaterials() 
 	{
 		return this.materials;

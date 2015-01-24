@@ -20,12 +20,20 @@ package thothbot.parallax.core.shared.objects;
 
 import thothbot.parallax.core.shared.core.Object3D;
 
+/**
+ * A bone which is part of a SkinnedMesh.
+ *
+ */
 public class Bone extends Object3D
 {
 
-	public Object3D skin;
+	public SkinnedMesh skin;
 
-	public Bone(Object3D belongsToSkin) 
+	/**
+	 * 
+	 * @param belongsToSkin An instance of {@link SkinnedMesh}.
+	 */
+	public Bone(SkinnedMesh belongsToSkin) 
 	{
 		this.skin = belongsToSkin;		
 	}

@@ -30,6 +30,10 @@ import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
+/**
+ * A material for shiny surfaces, evaluated per pixel.
+ *
+ */
 public final class MeshPhongMaterial extends Material 
 	implements HasMaterialMap, HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
 	HasSkinning, HasAmbientEmissiveColor, HasShading

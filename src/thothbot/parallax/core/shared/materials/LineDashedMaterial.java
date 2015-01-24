@@ -26,6 +26,10 @@ import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.math.Color;
 
+/**
+ * A material for drawing wireframe-style geometries with dashed lines.
+ *
+ */
 public class LineDashedMaterial extends Material implements 
 	HasFog, HasColor, HasVertexColors
 {
@@ -71,6 +75,10 @@ public class LineDashedMaterial extends Material implements
 		this.scale = scale;
 	}
 
+	/**
+	 * The size of the dash. This is both the gap with the stroke. Default is 3.
+	 * @return
+	 */
 	public double getDashSize() {
 		return dashSize;
 	}
@@ -79,6 +87,10 @@ public class LineDashedMaterial extends Material implements
 		this.dashSize = dashSize;
 	}
 
+	/**
+	 * The size of the gap. Default is 1.
+	 * @return
+	 */
 	public double getGapSize() {
 		return gapSize;
 	}
@@ -87,6 +99,10 @@ public class LineDashedMaterial extends Material implements
 		this.gapSize = gapSize;
 	}
 	
+	/**
+	 * The size of the gap. Default is 1.
+	 * @return
+	 */
 	public double getLinewidth() {
 		return this.linewidth;
 	}
