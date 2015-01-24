@@ -43,6 +43,33 @@ import thothbot.parallax.core.shared.math.Vector3;
 
 import com.google.gwt.core.client.GWT;
 
+/**
+ * This class is an efficient alternative to {@link Geometry}, because it stores all data, including vertex positions, 
+ * face indices, normals, colors, UVs, and custom attributes within buffers; this reduces the cost of passing 
+ * all this data to the GPU. This also makes BufferGeometry harder to work with than {@link Geometry}; rather than 
+ * accessing position data as {@link Vector3} objects, color data as {@link Color} objects, and so on, you have to access 
+ * the raw data from the appropriate attribute buffer {@link BufferAttribute}.  
+ *
+ *<pre>
+ * BufferGeometry geometry = new BufferGeometry();
+ *
+ * int chunkSize = 20000;
+ *
+ * // three components per vertex
+ * int triangles = 160000;
+ * Uint16Array indices = Uint16Array.create( triangles * 3 );
+ *
+ * for ( int i = 0; i < indices.getLength(); i ++ ) 
+ * {
+ *		indices.set( i, i % ( 3 * chunkSize ));
+ * }
+ *
+ * Float32Array positions = Float32Array.create( triangles * 3 * 3 );
+ *
+ * //itemSize = 3 because there are 3 values (components) per vertex
+ * geometry.addAttribute( "position", new BufferAttribute( positions, 3 ) );
+ *</pre>
+ */
 public class BufferGeometry extends AbstractGeometry
 {
 	public static class DrawCall 
@@ -82,6 +109,29 @@ public class BufferGeometry extends AbstractGeometry
 		return this.attributes;
 	}
 	
+	/**
+	 * WebGL stores data associated with individual vertices of a geometry in attributes. 
+	 * Examples include the position of the vertex, the normal vector for the vertex, the vertex color, and so on.
+	 *  When using {@link Geometry}, the renderer takes care of wrapping up this information into typed array buffers and sending this 
+	 *  data to the shader. With BufferGeometry, all of this data is stored in buffers associated with an individual attributes. 
+	 *  This means that to get the position data associated with a vertex (for instance), you must call .getAttribute() to access 
+	 *  the "position" attribute, then access the individual x, y, and z coordinates of the position.
+	 *  <p>
+	 *  The following attributes are set by various members of this class:
+	 *  
+	 *  <ul>
+	 *  	<li>position - Stores the x, y, and z coordinates of each vertex in this geometry. Set by .fromGeometry().</li>
+	 *  	<li>normal - Stores the x, y, and z components of the face or vertex normal vector of each vertex in this geometry. Set by .fromGeometry().</li>
+	 *  	<li>color - Stores the red, green, and blue channels of vertex color of each vertex in this geometry. Set by .fromGeometry().</li>
+	 *      <li>tangent - Stores the x, y, and z components of the tangent vector of each vertex in this geometry. Set by .computeTangents().</li>
+	 *      <li>index - Allows for vertices to be re-used across multiple triangles; this is called using "indexed triangles," 
+	 *      	and works much the same as it does in Geometry: each triangle is associated with the index of three vertices.
+	 *      	This attribute therefore stores the index of each vertex for each triangular face. If this attribute is not set, the renderer 
+	 *      	assumes that each three contiguous positions represent a single triangle.</li>
+	 *  </ul>
+	 * @param name Attribute name
+	 * @param attribute
+	 */
 	public void addAttribute( String name, BufferAttribute attribute ) {
 
 		this.attributes.put( name, attribute );
@@ -95,6 +145,12 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 	
+	/**
+	 * For geometries that use indexed triangles, this Array can be used to split the object into multiple WebGL draw calls. 
+	 * Each draw call will draw some subset of the vertices in this geometry using the configured shader. 
+	 * This may be necessary if, for instance, you have more than 65535 vertices in your object.
+	 * @return
+	 */
 	public List<BufferGeometry.DrawCall> getOffsets() {
 		return offsets;
 	}
@@ -109,6 +165,10 @@ public class BufferGeometry extends AbstractGeometry
 		this.drawcalls.add(drawCall);
 	}
 	
+	/**
+	 * Bakes matrix transform directly into vertex coordinates.
+	 * @param matrix
+	 */
 	public void applyMatrix( Matrix4 matrix ) {
 
 		BufferAttribute position = getAttribute("position");
@@ -133,6 +193,11 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 	
+	/**
+	 * Populates this BufferGeometry with data from a {@link Geometry} object.
+	 * @param geometry
+	 * @return
+	 */
 	public BufferGeometry fromGeometry( Geometry geometry) {
 	
 		return fromGeometry(geometry, Material.COLORS.NO);
@@ -283,6 +348,10 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 
+	/**
+	 * Computes bounding box of the geometry, updating Geometry.boundingBox attribute.
+	 * Bounding boxes aren't computed by default. They need to be explicitly computed, otherwise they are null.
+	 */
 	@Override
 	public void computeBoundingBox() {
 
@@ -319,6 +388,10 @@ public class BufferGeometry extends AbstractGeometry
 		
 	}
 
+	/**
+	 * Computes bounding sphere of the geometry, updating Geometry.boundingSphere attribute.
+	 * Bounding spheres aren't computed by default. They need to be explicitly computed, otherwise they are null.
+	 */
 	public void computeBoundingSphere() {
 
 		Box3 box = new Box3();
@@ -365,6 +438,9 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 
+	/**
+	 * Computes vertex normals by averaging face normals.
+	 */
 	public void computeVertexNormals() {
 
 		BufferAttribute positionAttribute = getAttribute("position");
@@ -488,6 +564,11 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 	
+	/**
+	 * Computes vertex tangents.
+	 * Based on http://www.terathon.com/code/tangent.html
+	 * Geometry must have vertex UVs (layer 0 will be used).
+	 */
 	public void computeTangents() {
 
 		// based on http://www.terathon.com/code/tangent.html
@@ -575,18 +656,18 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 	
-	/**
-		computeOffsets
-		Compute the draw offset for large models by chunking the index buffer into chunks of 65k addressable vertices.
-		This method will effectively rewrite the index buffer and remap all attributes to match the new indices.
-		WARNING: This method will also expand the vertex count to prevent sprawled triangles across draw offsets.
-		indexBufferSize - Defaults to 65535, but allows for larger or smaller chunks.
-	*/
 	public List<BufferGeometry.DrawCall> computeOffsets() {
 	    //WebGL limits type of index buffer values to 16-bit.
 		return computeOffsets(65535);
 	}
-	
+
+	/**
+	 * Compute the draw offset for large models by chunking the index buffer into chunks of 65k addressable vertices.
+	 * This method will effectively rewrite the index buffer and remap all attributes to match the new indices.
+	 * WARNING: This method will also expand the vertex count to prevent sprawled triangles across draw offsets
+	 * @param size Defaults to 65535, but allows for larger or smaller chunks.
+	 * @return
+	 */
 	public List<BufferGeometry.DrawCall> computeOffsets( int size /* indexBufferSize */ ) {
 
 //		var s = Date.now();
@@ -684,6 +765,9 @@ public class BufferGeometry extends AbstractGeometry
 		return offsets;
 	}
 	
+	/**
+	 * Every normal vector in a geometry will have a magnitude of 1. This will correct lighting on the geometry surfaces.
+	 */
 	public void normalizeNormals() {
 
 		Float32Array normals = (Float32Array)getAttribute("normal").getArray();

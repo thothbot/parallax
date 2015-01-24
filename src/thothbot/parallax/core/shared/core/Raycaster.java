@@ -44,12 +44,26 @@ public class Raycaster
 	
 	public static class Intersect implements Comparable
 	{
-		// this works because the original ray was normalized, and the transformed localRay wasn't
+		/**
+		 * distance between the origin of the ray and the intersection
+		 */
 		public double distance;	
+		/**
+		 * point of intersection, in world coordinates
+		 */
 		public Vector3 point;
 		public double distanceToRay;
+		/**
+		 * intersected face
+		 */
 		public Face3 face;
+		/**
+		 * index of the intersected face
+		 */
 		public int faceIndex;
+		/**
+		 * the intersected object
+		 */
 		public GeometryObject object;
 		
 		@Override
@@ -137,18 +151,6 @@ public class Raycaster
 
 	}
 	
-	public List<Raycaster.Intersect> intersectObject( GeometryObject object, boolean recursive ) {
-
-		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
-
-		intersectObject( object, this, intersects, recursive );
-
-		Collections.sort(intersects);
-
-		return intersects;
-
-	}
-	
 	public List<Raycaster.Intersect> intersectObjects ( List<Object3D> objects ) {
 
 		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
@@ -165,7 +167,15 @@ public class Raycaster
 		return intersects;
 
 	}
-		
+	
+	/**
+	 * Checks all intersection between the ray and the objects with or without the descendants. 
+	 * Intersections are returned sorted by distance, closest first. Intersections are of the same form as 
+	 * those returned by {@link Raycaster#intersectObject(GeometryObject, boolean)}
+	 * @param objects The objects to check for intersection with the ray.
+	 * @param recursive If set, it also checks all descendants of the objects. Otherwise it only checks intersecton with the objects.
+	 * @return
+	 */
 	public List<Raycaster.Intersect> intersectObjects ( List<GeometryObject> objects, boolean recursive ) {
 
 		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
@@ -181,7 +191,26 @@ public class Raycaster
 		return intersects;
 
 	}
+	
 
+	/**
+	 * Checks all intersection between the ray and the object with or without the descendants. Intersections are returned sorted by distance, 
+	 * closest first. An array of intersections is returned...
+	 * @param object The object to check for intersection with the ray.
+	 * @param recursive If set, it also checks all descendants. Otherwise it only checks intersecton with the object.
+	 * @return
+	 */
+	public List<Raycaster.Intersect> intersectObject( GeometryObject object, boolean recursive ) {
+
+		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
+
+		intersectObject( object, this, intersects, recursive );
+
+		Collections.sort(intersects);
+
+		return intersects;
+
+	}
 	
 	private void intersectObject ( GeometryObject object, Raycaster raycaster, List<Intersect> intersects, boolean recursive ) {
 
