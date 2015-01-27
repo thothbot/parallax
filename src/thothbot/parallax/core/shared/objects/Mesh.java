@@ -793,9 +793,9 @@ public class Mesh extends GeometryObject
 
 		List<MorphTarget> morphTargets = geometry.getMorphTargets();
 		List<MorphNormal> morphNormals = geometry.getMorphNormals();
-		Log.error(dirtyVertices);		 
-		 if ( dirtyVertices ) 
-		 {			 
+
+		if ( dirtyVertices ) 
+		{			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
 				 Face3 face = obj_faces.get( chunk_faces3.get( f ) );
@@ -821,10 +821,10 @@ public class Mesh extends GeometryObject
 			 
 			 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglVertexBuffer);
 			 gl.bufferData( BufferTarget.ARRAY_BUFFER, vertexArray, hint );
-		 }
+		}
 		 
-		 if ( dirtyMorphTargets ) 
-		 {
+		if ( dirtyMorphTargets ) 
+		{
 			 
 			 for ( int vk = 0, vkl = morphTargets.size(); vk < vkl; vk ++ ) 
 			 {
@@ -905,10 +905,10 @@ public class Mesh extends GeometryObject
 					 gl.bufferData( BufferTarget.ARRAY_BUFFER, morphNormalsArrays.get( vk ), hint );
 				 }
 			 }
-		 }
+		}
 
-		 if ( obj_skinWeights.size() > 0 ) 
-		 {			 
+		if ( obj_skinWeights.size() > 0 ) 
+		{			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
 				 Face3 face = obj_faces.get( chunk_faces3.get( f ) );
