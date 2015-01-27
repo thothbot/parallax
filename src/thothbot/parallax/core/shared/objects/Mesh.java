@@ -767,7 +767,7 @@ public class Mesh extends GeometryObject
 				lineArray = geometryGroup.__lineArray;
 
 		Geometry geometry = (Geometry)this.getGeometry(); // this is shared for all chunks
-		
+
 		boolean dirtyVertices = geometry.verticesNeedUpdate,
 				dirtyElements = geometry.elementsNeedUpdate,
 				dirtyUvs = geometry.uvsNeedUpdate,
@@ -793,7 +793,7 @@ public class Mesh extends GeometryObject
 
 		List<MorphTarget> morphTargets = geometry.getMorphTargets();
 		List<MorphNormal> morphNormals = geometry.getMorphNormals();
-		 
+		Log.error(dirtyVertices);		 
 		 if ( dirtyVertices ) 
 		 {			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
