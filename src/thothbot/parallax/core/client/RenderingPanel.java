@@ -23,7 +23,6 @@ import java.beans.Beans;
 import thothbot.parallax.core.client.context.Canvas3d;
 import thothbot.parallax.core.client.context.Canvas3dAttributes;
 import thothbot.parallax.core.client.context.Canvas3dException;
-import thothbot.parallax.core.client.debugger.Debugger;
 import thothbot.parallax.core.client.events.AnimationReadyEvent;
 import thothbot.parallax.core.client.events.AnimationReadyHandler;
 import thothbot.parallax.core.client.events.Context3dErrorEvent;
@@ -35,7 +34,6 @@ import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
@@ -53,6 +51,11 @@ import com.google.gwt.user.client.ui.LayoutPanel;
  */
 public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets, HasHandlers
 {	
+	public interface AnimationUpdateHandler 
+	{
+		public void onUpdate(double duration);
+	}
+	
     // Sets the background color for the {@link Canvas3d}. Default: black (#000000).
 	private int clearColor = 0x000000;
 
@@ -64,16 +67,14 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	private AnimatedScene animatedScene;
 	private HandlerManager handlerManager;
 	private boolean isLoaded = false;
-		
-	// Debug panel
-	private boolean isDebugEnabled;
-	private Debugger debugger;
 	
 	// Loading info panel
 	private boolean isSceneLoaded;
 
 	private Canvas3d canvas;
 	private WebGLRenderer renderer;
+	
+	private AnimationUpdateHandler animationUpdateHandler;
 
 	/**
 	 * This constructor will create new instance of the widget.
@@ -117,6 +118,11 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		return this.animatedScene;
 	}
 	
+	public void setAnimationUpdateHandler(AnimationUpdateHandler animationUpdateHandler) 
+	{
+		this.animationUpdateHandler = animationUpdateHandler;
+	}
+	
 	/**
 	 * Sets the {@link AnimatedScene} to the widget.
 	 * @param animatedScene
@@ -125,11 +131,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	{
 		this.animatedScene = animatedScene;
 		handlerManager.fireEvent(new SceneLoadingEvent());
-	}
-	
-	public void enableDebug(boolean enabled)
-	{
-		this.isDebugEnabled = enabled;
 	}
 	
 	public void setBackground(int color)
@@ -181,20 +182,6 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		this.add(canvas);
 
 		return canvas;
-	}
-	
-	/**
-	 * Load Debugger
-	 */
-	private void loadDebuger()
-	{
-		if(this.isDebugEnabled && this.debugger == null)
-		{
-			this.debugger = new Debugger(getRenderer().getInfo());
-			this.add(this.debugger);
-			this.setWidgetRightWidth(this.debugger, 1, Unit.PX, 17, Unit.EM);
-			this.setWidgetTopHeight(this.debugger, 1, Unit.PX, 50, Unit.PX);			
-		}
 	}
 
 	/**
@@ -260,19 +247,17 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 			this.animatedScene.init(this, new AnimatedScene.AnimationUpdateHandler() {
 				
 				@Override
-				public void onUpdate()
+				public void onUpdate(double duration)
 				{
 
 					if(!isSceneLoaded)
 					{
 						handlerManager.fireEvent(new SceneLoadingEvent(true));
 						isSceneLoaded = true;
-						
-						loadDebuger();
 					}
-				
-					// Update debugger
-					if(debugger != null) debugger.update();
+					
+					if(animationUpdateHandler != null)
+						animationUpdateHandler.onUpdate(duration);
 				}
 			});
 
