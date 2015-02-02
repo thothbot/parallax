@@ -1814,7 +1814,7 @@ public class WebGLRenderer implements HasEventBus
 		
 		_projScreenMatrix.multiply( camera.getProjectionMatrix(), camera.getMatrixWorldInverse() );
 		_frustum.setFromMatrix( _projScreenMatrix );
-		
+
 		this.lights = new ArrayList<Light>();
 		this.opaqueObjects = new ArrayList<WebGLObject>();
 		this.transparentObjects = new ArrayList<WebGLObject>();
@@ -3099,28 +3099,33 @@ public class WebGLRenderer implements HasEventBus
 		Log.debug("Called setRenderTarget(params)");
 		WebGLFramebuffer framebuffer = null;
 		
+		int width, height;
+		
 		if(renderTarget != null) 
 		{
 			renderTarget.setRenderTarget(getGL());
 		    framebuffer = renderTarget.getWebGLFramebuffer();
 
-			this._currentWidth = renderTarget.getWidth();
-			this._currentHeight = renderTarget.getHeight();
+		    width = renderTarget.getWidth();
+		    height = renderTarget.getHeight();
 
 		} 
 		else 
 		{
-			this._currentWidth = this._viewportWidth;
-			this._currentHeight = this._viewportHeight;
+			width = this._viewportWidth;
+			height = this._viewportHeight;
 		}
 
 		if ( framebuffer != this._currentFramebuffer ) 
 		{
 			getGL().bindFramebuffer( framebuffer );
-			getGL().viewport( 0, 0, this._currentWidth, this._currentHeight );
+			getGL().viewport( 0, 0, width, height);
 
 			this._currentFramebuffer = framebuffer;
 		}
+
+		_currentWidth = width;
+		_currentHeight = height;
 	}
 
 	/**

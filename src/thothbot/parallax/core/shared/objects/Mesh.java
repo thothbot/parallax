@@ -380,6 +380,10 @@ public class Mesh extends GeometryObject
 
 	}
 	
+	public Mesh clone() {
+		return clone(false);
+	}
+	
 	public Mesh clone( boolean recursive ) {
 		return clone(new Mesh( this.getGeometry(), this.getMaterial() ), recursive);
 	}

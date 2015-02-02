@@ -18,6 +18,8 @@
 
 package thothbot.parallax.core.client.renderers.effects;
 
+import thothbot.parallax.core.client.events.ViewportResizeEvent;
+import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
@@ -46,7 +48,7 @@ public class AnaglyphEffect
 	private PerspectiveCamera _cameraL = new PerspectiveCamera();
 	private PerspectiveCamera _cameraR = new PerspectiveCamera();
 
-	private OrthographicCamera _camera = new OrthographicCamera( -1, 1, 1, - 1, 0, 1 );
+	private OrthographicCamera _camera = new OrthographicCamera( 2, 2, 0, 1 );
 
 	private Scene _scene = new Scene();
 	
@@ -61,7 +63,16 @@ public class AnaglyphEffect
 				
 		_cameraL.setMatrixAutoUpdate(false);
 		_cameraR.setMatrixAutoUpdate(false);
-
+		
+		_camera.addViewportResizeHandler(new ViewportResizeHandler() {
+			
+			@Override
+			public void onResize(ViewportResizeEvent event) {
+				_camera.setSize( 2, 2 );
+				
+			}
+		});
+				
 		initRenderTargets(renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight());
  
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), _material );
@@ -79,10 +90,10 @@ public class AnaglyphEffect
 	
 	private void initRenderTargets(int width, int height ) 
 	{
-//		if ( _renderTargetL != null ) 
-//			_renderTargetL.dispose();
-//		if ( _renderTargetR != null ) 
-//			_renderTargetR.dispose();
+		if ( _renderTargetL != null ) 
+			_renderTargetL.deallocate(this.renderer.getGL());
+		if ( _renderTargetR != null ) 
+			_renderTargetR.deallocate(this.renderer.getGL());
 
 		_renderTargetL = new RenderTargetTexture( width, height );
 		_renderTargetL.setMinFilter(TextureMinFilter.LINEAR);
@@ -96,7 +107,8 @@ public class AnaglyphEffect
 
 		_material = new ShaderMaterial(new AnaglyphShader());
 		_material.getShader().getUniforms().get( "mapLeft" ).setValue( _renderTargetL );
-		_material.getShader().getUniforms().get( "mapRight").setValue(  _renderTargetR );
+		_material.getShader().getUniforms().get( "mapRight").setValue( _renderTargetR );
+		
 	}
 
 	/*

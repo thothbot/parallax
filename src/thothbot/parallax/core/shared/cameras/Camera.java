@@ -54,7 +54,7 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 	
 	public HandlerRegistration addViewportResizeHandler(ViewportResizeHandler handler) 
 	{
-		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler);
+		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler); 
 	}
 	
 	@Override
