@@ -55,11 +55,16 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			return;
 	
 		gl.deleteTexture(this.getWebGlTexture());
+		this.setWebGlTexture(null);
+		
 		for (int i = 0; i < 6; i++) 
 		{
 			gl.deleteFramebuffer(this.webglFramebuffer.get(i));
 			gl.deleteRenderbuffer(this.webglRenderbuffer.get(i));
 		}
+		
+		this.webglFramebuffer = null;
+		this.webglRenderbuffer = null;
 	}
 	
 	@Override

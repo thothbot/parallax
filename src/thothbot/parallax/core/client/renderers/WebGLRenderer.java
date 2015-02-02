@@ -1820,9 +1820,48 @@ public class WebGLRenderer implements HasEventBus
 		this.transparentObjects = new ArrayList<WebGLObject>();
 
 		projectObject( scene, scene );
+
+		if ( this.isSortObjects() ) {
+			
+			Collections.sort(opaqueObjects, new Comparator<WebGLObject>() {
+
+				@Override
+				public int compare(WebGLObject a, WebGLObject b) {
+					if ( a.z != b.z ) {
+					
+						return (int)(b.z - a.z);
 		
-//		if ( this.isSortObjects() )
-//		Collections.sort(renderList);
+					} else {
+		
+						return a.id - b.id;
+		
+					}
+			
+				}
+			});
+			
+			Collections.sort(transparentObjects, new Comparator<WebGLObject>() {
+
+				@Override
+				public int compare(WebGLObject a, WebGLObject b) {
+					if ( a.material.getId() != b.material.getId() ) {
+				
+						return a.material.getId() - b.material.getId();
+		
+					} else if ( a.z != b.z ) {
+		
+						return (int)(a.z - b.z);
+		
+					} else {
+		
+						return a.id - b.id;
+		
+					}
+			
+				}
+			});
+
+		}
 
 		// custom render plugins (pre pass)
 		renderPlugins( this.renderPluginsPre, camera );

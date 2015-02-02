@@ -46,7 +46,7 @@ public class AnaglyphShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("mapLeft", new Uniform( Uniform.TYPE.T, null ));
-		this.addUniform("mapRight",  new Uniform( Uniform.TYPE.T, null ));
+		this.addUniform("mapLeft", new Uniform( Uniform.TYPE.T ));
+		this.addUniform("mapRight",  new Uniform( Uniform.TYPE.T ));
 	}
 }

@@ -61,9 +61,9 @@ public class AnaglyphEffect
 				
 		_cameraL.setMatrixAutoUpdate(false);
 		_cameraR.setMatrixAutoUpdate(false);
-		
+
 		initRenderTargets(renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight());
-		
+ 
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), _material );
 		_scene.add( mesh );
 
@@ -88,7 +88,7 @@ public class AnaglyphEffect
 		_renderTargetL.setMinFilter(TextureMinFilter.LINEAR);
 		_renderTargetL.setMagFilter(TextureMagFilter.NEAREST);
 		_renderTargetL.setFormat(PixelFormat.RGBA);
-
+		
 		_renderTargetR = new RenderTargetTexture( width, height );
 		_renderTargetR.setMinFilter(TextureMinFilter.LINEAR);
 		_renderTargetR.setMagFilter(TextureMagFilter.NEAREST);

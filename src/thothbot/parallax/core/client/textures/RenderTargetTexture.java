@@ -18,6 +18,7 @@
 
 package thothbot.parallax.core.client.textures;
 
+import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -41,6 +42,8 @@ public class RenderTargetTexture extends Texture
 
 	private WebGLFramebuffer webglFramebuffer;
 	private WebGLRenderbuffer webglRenderbuffer;
+	
+	public RenderTargetTexture shareDepthFrom;
 
 	public RenderTargetTexture(int width, int height) 
 	{
@@ -112,8 +115,13 @@ public class RenderTargetTexture extends Texture
 			return;
 
 		gl.deleteTexture(this.getWebGlTexture());
+		this.setWebGlTexture(null);
+		
 		gl.deleteFramebuffer(this.webglFramebuffer);
 		gl.deleteRenderbuffer(this.webglRenderbuffer);
+		
+		this.webglFramebuffer = null;
+		this.webglRenderbuffer = null;
 	}
 
 	public RenderTargetTexture clone()
@@ -144,31 +152,56 @@ public class RenderTargetTexture extends Texture
 	{
 		if (this.webglFramebuffer != null)
 			return;
-
+		
+		this.deallocate(gl);
 		this.setWebGlTexture(gl.createTexture());
-
+		
 		// Setup texture, create render and frame buffers
 
 		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(this.width)
 				&& Mathematics.isPowerOfTwo(this.height);
 
 		this.webglFramebuffer = gl.createFramebuffer();
-		this.webglRenderbuffer = gl.createRenderbuffer();
+		
+		if ( this.shareDepthFrom != null ) 
+		{
+			this.webglRenderbuffer = this.shareDepthFrom.webglRenderbuffer;
+		} 
+		else 
+		{
+			this.webglRenderbuffer = gl.createRenderbuffer();
+		}
 
 		gl.bindTexture(TextureTarget.TEXTURE_2D, this.getWebGlTexture());
-
 		setTextureParameters(gl, TextureTarget.TEXTURE_2D, isTargetPowerOfTwo);
 
 		gl.texImage2D(TextureTarget.TEXTURE_2D, 0, this.width, this.height, 0, getFormat(), getType(), null);
 
 		setupFrameBuffer(gl, this.webglFramebuffer, TextureTarget.TEXTURE_2D);
-		setupRenderBuffer(gl, this.webglRenderbuffer);
+		
+		if ( this.shareDepthFrom != null ) 
+		{
+
+			if ( this.isDepthBuffer && ! this.isStencilBuffer ) {
+
+				gl.framebufferRenderbuffer( FramebufferSlot.DEPTH_ATTACHMENT, this.webglRenderbuffer );
+
+			} else if ( this.isDepthBuffer && this.isStencilBuffer ) {
+
+				gl.framebufferRenderbuffer( FramebufferSlot.DEPTH_STENCIL_ATTACHMENT, this.webglRenderbuffer );
+
+			}
+
+		} else {
+
+			setupRenderBuffer( gl, this.webglRenderbuffer );
+
+		}
 
 		if (isTargetPowerOfTwo)
 			gl.generateMipmap(TextureTarget.TEXTURE_2D);
 
 		// Release everything
-		gl.bindTexture(TextureTarget.TEXTURE_2D, null);
 		gl.bindRenderbuffer(null);
 		gl.bindFramebuffer(null);
 	}

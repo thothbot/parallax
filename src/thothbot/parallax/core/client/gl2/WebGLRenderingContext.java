@@ -1582,7 +1582,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 	  texImage2D(target.getValue() + slot, level, format.getValue(), 
 			  width, height, border, format.getValue(), type.getValue(), pixels);
   }
-  
+
   private native void texImage2D(int target, int level, int internalformat, int width, int height,
 		  int border, int format, int type, ArrayBufferView pixels) /*-{
 				this.texImage2D(target, level, internalformat, width, height, border,
