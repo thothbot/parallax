@@ -370,6 +370,7 @@ public class WebGLRenderer implements HasEventBus
 
 	public void addPlugin(Plugin plugin)
 	{
+		deletePlugin(plugin);
 		if(plugin.getType() == Plugin.TYPE.PRE_RENDER)
 		{
 			this.renderPluginsPre.add( plugin );
@@ -377,6 +378,26 @@ public class WebGLRenderer implements HasEventBus
 		else if(plugin.getType() == Plugin.TYPE.POST_RENDER)
 		{
 			this.renderPluginsPost.add( plugin );
+		}
+		else
+		{
+			Log.error("Unknown plugin type: " + plugin.getType());
+			return;
+		}
+	}
+	
+	public void deletePlugin(Plugin plugin)
+	{
+		if(plugin == null)
+			return;
+
+		if(plugin.getType() == Plugin.TYPE.PRE_RENDER)
+		{
+			this.renderPluginsPre.remove( plugin );
+		}
+		else if(plugin.getType() == Plugin.TYPE.POST_RENDER)
+		{
+			this.renderPluginsPost.remove( plugin );
 		}
 		else
 		{

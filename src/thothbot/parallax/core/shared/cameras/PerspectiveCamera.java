@@ -33,7 +33,7 @@ import thothbot.parallax.core.shared.math.Mathematics;
  */
 public class PerspectiveCamera extends Camera
 {
-	protected double zoom = 1.0;
+	public double zoom = 1.0;
 	
 	protected double fov;
 	protected double aspect;

@@ -40,7 +40,7 @@ import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugins.effects.shaders.AnaglyphShader;
 
-public class Anaglyph extends Plugin
+public class Anaglyph extends Effect
 {
 	private Matrix4 eyeRight = new Matrix4();
 	private Matrix4 eyeLeft = new Matrix4();
@@ -82,13 +82,7 @@ public class Anaglyph extends Plugin
 		_scene.add( mesh );
 
 	}
-	
-
-	@Override
-	public TYPE getType() {
-		return Plugin.TYPE.POST_RENDER;
-	}
-	
+		
 	public void setSize( int width, int height ) {
 	
 		initRenderTargets(width, height);
