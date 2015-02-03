@@ -72,6 +72,7 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
@@ -113,6 +114,7 @@ import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.AbstractFog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
+import thothbot.parallax.plugins.effects.Anaglyph;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
@@ -1779,7 +1781,7 @@ public class WebGLRenderer implements HasEventBus
 	{
 		render(scene, camera, renderTarget, false);
 	}
-
+	
 	/**
 	 * Rendering.
 	 * 
@@ -1790,7 +1792,7 @@ public class WebGLRenderer implements HasEventBus
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
 	{
 		Log.debug("Called render()");
-		
+				
 		AbstractFog fog = scene.getFog();
 
 		// reset caching for this frame

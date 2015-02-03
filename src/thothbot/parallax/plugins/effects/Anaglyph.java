@@ -16,30 +16,32 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.client.renderers.effects;
+package thothbot.parallax.plugins.effects;
+
+import java.util.List;
 
 import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
+import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.geometries.PlaneBufferGeometry;
+import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.materials.ShaderMaterial;
 import thothbot.parallax.core.shared.math.Mathematics;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
+import thothbot.parallax.plugins.effects.shaders.AnaglyphShader;
 
-public class AnaglyphEffect 
+public class Anaglyph extends Plugin
 {
-	
-	WebGLRenderer renderer;
-	
 	private Matrix4 eyeRight = new Matrix4();
 	private Matrix4 eyeLeft = new Matrix4();
 	private double focalLength = 125;
@@ -56,10 +58,10 @@ public class AnaglyphEffect
 	private RenderTargetTexture _renderTargetR;
 	
 	private ShaderMaterial _material;
-	
-	public AnaglyphEffect(WebGLRenderer renderer) 
+		
+	public Anaglyph(WebGLRenderer renderer, Scene scene) 
 	{
-		this.renderer = renderer;
+		super(renderer, scene);
 				
 		_cameraL.setMatrixAutoUpdate(false);
 		_cameraR.setMatrixAutoUpdate(false);
@@ -68,6 +70,7 @@ public class AnaglyphEffect
 			
 			@Override
 			public void onResize(ViewportResizeEvent event) {
+
 				_camera.setSize( 2, 2 );
 				
 			}
@@ -78,6 +81,12 @@ public class AnaglyphEffect
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), _material );
 		_scene.add( mesh );
 
+	}
+	
+
+	@Override
+	public TYPE getType() {
+		return Plugin.TYPE.POST_RENDER;
 	}
 	
 	public void setSize( int width, int height ) {
@@ -120,10 +129,16 @@ public class AnaglyphEffect
 	 * Added a focal length parameter to, this is where the parallax is equal to 0.
 	 */
 
-	public void render( Scene scene, PerspectiveCamera camera ) 
+	@Override
+	public void render( Camera sceneCamera, List<Light> lights, int currentWidth, int currentHeight )
 	{
-		scene.updateMatrixWorld(false);
+		if(!(sceneCamera instanceof PerspectiveCamera))
+			return;
+		
+		PerspectiveCamera camera = (PerspectiveCamera)sceneCamera;
 
+		scene.updateMatrixWorld(false);
+		
 		if ( camera.getParent() == null ) 
 			camera.updateMatrixWorld(false);
 
@@ -186,5 +201,4 @@ public class AnaglyphEffect
 		renderer.render( _scene, _camera );
 		
 	}
-
 }

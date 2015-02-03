@@ -32,9 +32,10 @@ public abstract class Plugin
 	};
 
 	private boolean isEnabled = true;
-	private WebGLRenderer renderer;
-	private Scene scene;
 	private boolean isRendering;
+	
+	protected WebGLRenderer renderer;
+	protected Scene scene;
 
 	public Plugin(WebGLRenderer renderer, Scene scene) 
 	{

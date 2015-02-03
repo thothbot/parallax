@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package thothbot.parallax.core.client.renderers.effects;
+package thothbot.parallax.plugins.effects.shaders;
 
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
@@ -31,10 +31,10 @@ public class AnaglyphShader extends Shader
 	{
 		Resources INSTANCE = GWT.create(Resources.class);
 
-		@Source("shaders/anaglyph.vs")
+		@Source("source/anaglyph.vs")
 		TextResource getVertexShader();
 
-		@Source("shaders/anaglyph.fs")
+		@Source("source/anaglyph.fs")
 		TextResource getFragmentShader();
 	}
 

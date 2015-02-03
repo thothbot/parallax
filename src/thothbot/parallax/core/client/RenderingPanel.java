@@ -357,4 +357,12 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
      	element.width = rect.width;
      	element.height = rect.height;
 	}-*/;
+
+	public boolean isSupportFullScreen() {
+		return RenderingPanel.isSupportFullScreen(this.getElement());
+	}
+
+	private static native boolean isSupportFullScreen(Element element) /*-{
+		return (element.requestFullscreen || element.webkitRequestFullscreen || element.mozRequestFullscreen) ? true : false;
+	}-*/;
 }
