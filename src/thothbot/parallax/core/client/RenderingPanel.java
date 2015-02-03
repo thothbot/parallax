@@ -33,6 +33,7 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -338,4 +339,22 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 		
 		return retval;
 	}
+	
+	public void toFullScreen() {
+		RenderingPanel.toFullScreen(this.getElement());
+	}
+	
+	private static native void toFullScreen(Element element) /*-{
+  	   if(element.requestFullscreen) {
+		    element.requestFullscreen();
+	   } else if(element.webkitRequestFullscreen) {
+		    element.webkitRequestFullscreen();
+	   } else if(element.mozRequestFullscreen) {
+		    element.mozRequestFullScreen();
+	   }
+	  
+	  	var rect = element.getBoundingClientRect();
+     	element.width = rect.width;
+     	element.height = rect.height;
+	}-*/;
 }

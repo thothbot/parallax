@@ -24,6 +24,7 @@ import thothbot.parallax.core.shared.Log;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
 
@@ -47,9 +48,9 @@ public class Canvas3d extends FocusWidget
 	 */
 	public Canvas3d(Canvas3dAttributes attribs) throws Exception 
 	{
-		canvas = Document.get().createElement("canvas").cast();
+		canvas = Document.get().createCanvasElement();
 		setElement(canvas);
-
+		
 		for (final String contextId : CONTEXT_IDS) 
 		{
 			try
@@ -77,7 +78,7 @@ public class Canvas3d extends FocusWidget
 			JavaScriptObject glContextAttr) /*-{
 		return canvas.getContext(contextId, glContextAttr);
     }-*/;
-	
+		
 	/**
 	 * Gets the width of the canvas3d.
 	 */
