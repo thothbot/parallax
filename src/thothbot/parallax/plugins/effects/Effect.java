@@ -18,13 +18,8 @@
 
 package thothbot.parallax.plugins.effects;
 
-import java.util.List;
-
 import thothbot.parallax.core.client.renderers.Plugin;
-import thothbot.parallax.core.client.renderers.Plugin.TYPE;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.scenes.Scene;
 
 public abstract class Effect extends Plugin {
@@ -35,6 +30,6 @@ public abstract class Effect extends Plugin {
 
 	@Override
 	public TYPE getType() {
-		return Plugin.TYPE.POST_RENDER;
+		return Plugin.TYPE.BASIC_RENDER;
 	}
 }

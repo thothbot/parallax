@@ -20,6 +20,7 @@ package thothbot.parallax.core.client.renderers;
 
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.scenes.Scene;
@@ -27,6 +28,7 @@ import thothbot.parallax.core.shared.scenes.Scene;
 public abstract class Plugin 
 {
 	public enum TYPE {
+		BASIC_RENDER,
 		PRE_RENDER,
 		POST_RENDER,
 	};

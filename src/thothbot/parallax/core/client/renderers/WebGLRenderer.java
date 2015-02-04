@@ -72,7 +72,6 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
@@ -114,7 +113,6 @@ import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.AbstractFog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugins.effects.Anaglyph;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
@@ -246,6 +244,8 @@ public class WebGLRenderer implements HasEventBus
 
 	private RendererLights _lights;
 		
+	private List<Plugin> renderPluginsBasic;
+	
 	// An array with render plugins to be applied before rendering.
 	private List<Plugin> renderPluginsPre;
 	
@@ -364,6 +364,7 @@ public class WebGLRenderer implements HasEventBus
 		setDefaultGLState();
 		
 		// default plugins (order is important)
+		this.renderPluginsBasic = new ArrayList<Plugin>();
 		this.renderPluginsPre = new ArrayList<Plugin>();
 		this.renderPluginsPost = new ArrayList<Plugin>();
 	}
@@ -379,10 +380,9 @@ public class WebGLRenderer implements HasEventBus
 		{
 			this.renderPluginsPost.add( plugin );
 		}
-		else
+		else if(plugin.getType() == Plugin.TYPE.BASIC_RENDER)
 		{
-			Log.error("Unknown plugin type: " + plugin.getType());
-			return;
+			this.renderPluginsBasic.add( plugin );
 		}
 	}
 	
@@ -399,10 +399,9 @@ public class WebGLRenderer implements HasEventBus
 		{
 			this.renderPluginsPost.remove( plugin );
 		}
-		else
+		else if(plugin.getType() == Plugin.TYPE.BASIC_RENDER)
 		{
-			Log.error("Unknown plugin type: " + plugin.getType());
-			return;
+			this.renderPluginsBasic.remove( plugin );
 		}
 	}
 	
@@ -1811,7 +1810,11 @@ public class WebGLRenderer implements HasEventBus
 	 * @param forceClear   optional
 	 */
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
-	{
+	{		
+		// Render basic plugins
+		if(renderPlugins( this.renderPluginsBasic, camera ))
+			return;
+
 		Log.debug("Called render()");
 				
 		AbstractFog fog = scene.getFog();
@@ -2031,16 +2034,18 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 
-	private void renderPlugins( List<Plugin> plugins, Camera camera ) 
-	{
-		if ( plugins.size() == 0 ) return;
+	private boolean renderPlugins( List<Plugin> plugins, Camera camera ) 
+	{		
+		if ( plugins.size() == 0 ) 
+			return false;
 
+		boolean retval = false;
 		for ( int i = 0, il = plugins.size(); i < il; i ++ ) 
 		{
 			Plugin plugin = plugins.get( i );
 
 			if( ! plugin.isEnabled() || plugin.isRendering() )
-				return;
+				continue;
 
 			plugin.setRendering(true);
 			Log.debug("Called renderPlugins(): " + plugin.getClass().getName());
@@ -2077,7 +2082,11 @@ public class WebGLRenderer implements HasEventBus
 			this._lightsNeedUpdate = true;
 			
 			plugin.setRendering(false);
+			
+			retval = true;
 		}
+		
+		return retval;
 	}
 
 	private void renderObjects (List<WebGLObject> renderList, Camera camera, List<Light> lights, AbstractFog fog, boolean useBlending ) 
