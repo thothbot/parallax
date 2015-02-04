@@ -244,13 +244,7 @@ public class WebGLRenderer implements HasEventBus
 
 	private RendererLights _lights;
 		
-	private List<Plugin> renderPluginsBasic;
-	
-	// An array with render plugins to be applied before rendering.
-	private List<Plugin> renderPluginsPre;
-	
-	//An array with render plugins to be applied after rendering.
-	private List<Plugin> renderPluginsPost;
+	private List<Plugin> plugins;
 		
 //	var sprites = [];
 //	var lensFlares = [];
@@ -364,26 +358,13 @@ public class WebGLRenderer implements HasEventBus
 		setDefaultGLState();
 		
 		// default plugins (order is important)
-		this.renderPluginsBasic = new ArrayList<Plugin>();
-		this.renderPluginsPre = new ArrayList<Plugin>();
-		this.renderPluginsPost = new ArrayList<Plugin>();
+		this.plugins = new ArrayList<Plugin>();
 	}
 
 	public void addPlugin(Plugin plugin)
 	{
 		deletePlugin(plugin);
-		if(plugin.getType() == Plugin.TYPE.PRE_RENDER)
-		{
-			this.renderPluginsPre.add( plugin );
-		}
-		else if(plugin.getType() == Plugin.TYPE.POST_RENDER)
-		{
-			this.renderPluginsPost.add( plugin );
-		}
-		else if(plugin.getType() == Plugin.TYPE.BASIC_RENDER)
-		{
-			this.renderPluginsBasic.add( plugin );
-		}
+		this.plugins.add( plugin );
 	}
 	
 	public void deletePlugin(Plugin plugin)
@@ -391,18 +372,7 @@ public class WebGLRenderer implements HasEventBus
 		if(plugin == null)
 			return;
 
-		if(plugin.getType() == Plugin.TYPE.PRE_RENDER)
-		{
-			this.renderPluginsPre.remove( plugin );
-		}
-		else if(plugin.getType() == Plugin.TYPE.POST_RENDER)
-		{
-			this.renderPluginsPost.remove( plugin );
-		}
-		else if(plugin.getType() == Plugin.TYPE.BASIC_RENDER)
-		{
-			this.renderPluginsBasic.remove( plugin );
-		}
+		this.plugins.remove( plugin );
 	}
 	
 	public boolean supportsVertexTextures()
@@ -1812,7 +1782,7 @@ public class WebGLRenderer implements HasEventBus
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
 	{		
 		// Render basic plugins
-		if(renderPlugins( this.renderPluginsBasic, camera ))
+		if(renderPlugins( this.plugins, camera, Plugin.TYPE.BASIC_RENDER ))
 			return;
 
 		Log.debug("Called render()");
@@ -1890,7 +1860,7 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 		// custom render plugins (pre pass)
-		renderPlugins( this.renderPluginsPre, camera );
+		renderPlugins( this.plugins, camera, Plugin.TYPE.PRE_RENDER );
 
 		this.getInfo().getRender().calls = 0;
 		this.getInfo().getRender().vertices = 0;
@@ -1954,7 +1924,7 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 		// custom render plugins (post pass)
-		renderPlugins( this.renderPluginsPost, camera );
+		renderPlugins( this.plugins, camera, Plugin.TYPE.POST_RENDER );
 
 		// Generate mipmap if we're using any kind of mipmap filtering
 		if ( renderTarget != null && renderTarget.isGenerateMipmaps() 
@@ -2034,7 +2004,7 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 
-	private boolean renderPlugins( List<Plugin> plugins, Camera camera ) 
+	private boolean renderPlugins( List<Plugin> plugins, Camera camera, Plugin.TYPE type ) 
 	{		
 		if ( plugins.size() == 0 ) 
 			return false;
@@ -2044,7 +2014,7 @@ public class WebGLRenderer implements HasEventBus
 		{
 			Plugin plugin = plugins.get( i );
 
-			if( ! plugin.isEnabled() || plugin.isRendering() )
+			if( ! plugin.isEnabled() || plugin.isRendering() || plugin.getType() != type )
 				continue;
 
 			plugin.setRendering(true);
@@ -2359,13 +2329,14 @@ public class WebGLRenderer implements HasEventBus
 		
 		parameters.maxShadows = maxShadows;
 		
-		for(Plugin plugin: this.renderPluginsPre)
+		for(Plugin plugin: this.plugins)
 		if(plugin instanceof ShadowMap && ((ShadowMap)plugin).isEnabled() && object.isReceiveShadow())
 		{
 			parameters.shadowMapEnabled = object.isReceiveShadow() && maxShadows > 0;
 			parameters.shadowMapSoft    = ((ShadowMap)plugin).isSoft();
 			parameters.shadowMapDebug   = ((ShadowMap)plugin).isDebugEnabled();
 			parameters.shadowMapCascade = ((ShadowMap)plugin).isCascade();
+			break;
 		}
 
 		material.updateProgramParameters(parameters);
