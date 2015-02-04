@@ -11,7 +11,7 @@ void main()
   vec2 theta = (uv-lensCenter)*scaleIn;
   float rSq = theta.x*theta.x + theta.y*theta.y;
   vec2 rvector = theta*(hmdWarpParam.x + hmdWarpParam.y*rSq + hmdWarpParam.z*rSq*rSq + hmdWarpParam.w*rSq*rSq*rSq);
-			'  vec2 rBlue = rvector * (chromAbParam.z + chromAbParam.w * rSq);',
+  vec2 rBlue = rvector * (chromAbParam.z + chromAbParam.w * rSq);
   vec2 tcBlue = (lensCenter + scale * rBlue);
   tcBlue = (tcBlue+1.0)/2.0; // range from [-1,1] to [0,1]
   if (any(bvec2(clamp(tcBlue, vec2(0.0,0.0), vec2(1.0,1.0))-tcBlue))) {

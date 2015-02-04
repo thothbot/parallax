@@ -27,6 +27,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
@@ -78,7 +79,7 @@ public class OculusRift extends Effect {
 	};
 
 	// worldFactor indicates how many units is 1 meter
-	private double worldFactor = 1.0;
+	private double worldFactor = 100.0;
 	private OculusRift.HMD hdm;
 	
 	// Perspective camera
@@ -121,13 +122,12 @@ public class OculusRift extends Effect {
 		});
 				
 		RTMaterial = new ShaderMaterial(new OculusRiftShader());
-		
+		setHMD(new OculusRift.HMD());
+
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), RTMaterial );
 		
 		finalScene.add( oCamera );
-		finalScene.add( mesh );
-		
-		setHMD(new OculusRift.HMD());
+		finalScene.add( mesh );		
 	}
 	
 	private void initRenderTargets(int width, int height ) 
@@ -172,8 +172,13 @@ public class OculusRift extends Effect {
 		right.tranform = (new Matrix4()).makeTranslation( worldFactor * hdm.interpupillaryDistance/2.0, 0.0, 0.0 );
 
 		// Compute Viewport
-		left.viewport = new int[]{0, 0, hdm.hResolution/2, hdm.vResolution};
-		right.viewport = new int[]{hdm.hResolution/2, 0, hdm.hResolution/2, hdm.vResolution};
+//		left.viewport = new int[]{0, 0, hdm.hResolution/2, hdm.vResolution};
+//		right.viewport = new int[]{hdm.hResolution/2, 0, hdm.hResolution/2, hdm.vResolution};
+		
+		int width = renderer.getAbsoluteWidth();
+		int height = renderer.getAbsoluteHeight();
+		left.viewport = new int[]{width/2 - hdm.hResolution/2, height/2 - hdm.vResolution/2, hdm.hResolution/2, hdm.vResolution};
+		right.viewport = new int[]{width/2, height/2 - hdm.vResolution/2, hdm.hResolution/2, hdm.vResolution};
 
 		// Distortion shader parameters
 		double lensShift = 4.0 * (hdm.hScreenSize/4.0 - hdm.lensSeparationDistance/2.0) / hdm.hScreenSize;
@@ -192,7 +197,6 @@ public class OculusRift extends Effect {
 	@Override
 	public void render(Camera sceneCamera, List<Light> lights, int currentWidth,	int currentHeight) 
 	{
-	
 		if(!(sceneCamera instanceof PerspectiveCamera))
 			return;
 		
