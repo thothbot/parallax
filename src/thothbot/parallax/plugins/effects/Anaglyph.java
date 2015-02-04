@@ -81,15 +81,7 @@ public class Anaglyph extends Effect
 		_scene.add( mesh );
 
 	}
-		
-	public void setSize( int width, int height ) {
-	
-		initRenderTargets(width, height);
-		
-		renderer.setSize( width, height );
-
-	}
-	
+			
 	private void initRenderTargets(int width, int height ) 
 	{
 		if ( _renderTargetL != null ) 
@@ -192,6 +184,10 @@ public class Anaglyph extends Effect
 		renderer.render( scene, _cameraR, _renderTargetR, true );
 
 		renderer.render( _scene, _camera );
-		
+	}
+	
+	@Override
+	public void deallocate() {
+		super.deallocate();
 	}
 }

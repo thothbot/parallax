@@ -73,4 +73,8 @@ public abstract class Plugin
 	public abstract Plugin.TYPE getType();
 
 	public abstract void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight );
+	
+	public void deallocate() {
+		
+	}
 }

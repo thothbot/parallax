@@ -372,9 +372,11 @@ public class WebGLRenderer implements HasEventBus
 		if(plugin == null)
 			return;
 
-		this.plugins.remove( plugin );
+		if(this.plugins.remove( plugin )) {
+			plugin.deallocate();
+		}
 	}
-	
+
 	public boolean supportsVertexTextures()
 	{
 		return this._maxVertexTextures > 0;
@@ -660,11 +662,15 @@ public class WebGLRenderer implements HasEventBus
 		else
 			getGL().disable(EnableCap.SCISSOR_TEST);
 	}
-	
-
+		
 	public void setClearColor( int hex )
 	{
-		setClearColor(new Color(hex), 1.0);
+		setClearColor(new Color(hex));
+	}
+	
+	public void setClearColor( Color color )
+	{
+		setClearColor(color, 1.0);
 	}
 
 	/**

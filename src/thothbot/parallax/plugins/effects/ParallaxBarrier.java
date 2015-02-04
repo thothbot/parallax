@@ -71,15 +71,7 @@ public class ParallaxBarrier extends Effect {
 		_scene.add( mesh );
 		
 	}
-	
-	public void setSize( int width, int height ) {
-	
-		initRenderTargets(width, height);
 		
-		renderer.setSize( width, height );
-	
-	}
-	
 	private void initRenderTargets(int width, int height ) 
 	{
 		if ( _renderTargetL != null ) 
