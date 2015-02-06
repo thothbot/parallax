@@ -27,6 +27,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
@@ -47,17 +48,17 @@ public class OculusRift extends Effect {
 	
 	private static class HMD {
 		// DK1
-		/*
-		hResolution: 1280,
-		vResolution: 800,
-		hScreenSize: 0.14976,
-		vScreenSize: 0.0936,
-		interpupillaryDistance: 0.064,
-		lensSeparationDistance: 0.064,
-		eyeToScreenDistance: 0.041,
-		distortionK : [1.0, 0.22, 0.24, 0.0],
-		chromaAbParameter: [ 0.996, -0.004, 1.014, 0.0]
-		*/
+		
+//		public int hResolution = 1280;
+//		public int vResolution = 800;
+//		hScreenSize: 0.14976,
+//		vScreenSize: 0.0936,
+//		interpupillaryDistance: 0.064,
+//		lensSeparationDistance: 0.064,
+//		eyeToScreenDistance: 0.041,
+//		distortionK : [1.0, 0.22, 0.24, 0.0],
+//		chromaAbParameter: [ 0.996, -0.004, 1.014, 0.0]
+		
 		// DK2
 		public int hResolution = 1920;
 		public int vResolution = 1080;
@@ -78,7 +79,7 @@ public class OculusRift extends Effect {
 	};
 
 	// worldFactor indicates how many units is 1 meter
-	private double worldFactor = 100.0;
+	private double worldFactor = 1.0;
 	private OculusRift.HMD hdm;
 	
 	// Perspective camera
@@ -132,6 +133,18 @@ public class OculusRift extends Effect {
 		finalScene.add( mesh );		
 	}
 	
+	@Override
+	public void onResize(ViewportResizeEvent event) 
+	{
+		int width = event.getRenderer().getAbsoluteWidth();
+		int height = event.getRenderer().getAbsoluteHeight();
+		
+		left.viewport = new int[]{width/2 - hdm.hResolution/2, height/2 - hdm.vResolution/2, hdm.hResolution/2, hdm.vResolution};
+		right.viewport = new int[]{width/2, height/2 - hdm.vResolution/2, hdm.hResolution/2, hdm.vResolution};
+
+		initRenderTargets(width, height);
+	}
+	
 	private void initRenderTargets(int width, int height ) 
 	{
 		if ( renderTarget != null ) 
@@ -154,7 +167,7 @@ public class OculusRift extends Effect {
 		this.hdm = hdm;
 
 		// Compute aspect ratio and FOV
-		double aspect = hdm.hResolution / (2*hdm.vResolution);
+		double aspect = (double)hdm.hResolution / (double)(2.0 * hdm.vResolution);
 
 		// Fov is normally computed with:
 		//   THREE.Math.radToDeg( 2*Math.atan2(HMD.vScreenSize,2*HMD.eyeToScreenDistance) );
@@ -176,7 +189,7 @@ public class OculusRift extends Effect {
 		// Compute Viewport
 //		left.viewport = new int[]{0, 0, hdm.hResolution/2, hdm.vResolution};
 //		right.viewport = new int[]{hdm.hResolution/2, 0, hdm.hResolution/2, hdm.vResolution};
-		
+
 		int width = renderer.getAbsoluteWidth();
 		int height = renderer.getAbsoluteHeight();
 		left.viewport = new int[]{width/2 - hdm.hResolution/2, height/2 - hdm.vResolution/2, hdm.hResolution/2, hdm.vResolution};
@@ -187,13 +200,13 @@ public class OculusRift extends Effect {
 		left.lensCenter = new Vector2(lensShift, 0.0);
 		right.lensCenter = new Vector2(-lensShift, 0.0);
 
+		// Create render target
+		initRenderTargets((int)(hdm.hResolution * distScale / 2.0), (int)(hdm.vResolution * distScale));
+
 		RTMaterial.getShader().getUniforms().get( "hmdWarpParam" ).setValue( new Vector4(hdm.distortionK[0], hdm.distortionK[1], hdm.distortionK[2], hdm.distortionK[3]) );
 		RTMaterial.getShader().getUniforms().get( "chromAbParam" ).setValue( new Vector4(hdm.chromaAbParameter[0], hdm.chromaAbParameter[1], hdm.chromaAbParameter[2], hdm.chromaAbParameter[3]) );
 		RTMaterial.getShader().getUniforms().get( "scaleIn" ).setValue( new Vector2(1.0,1.0/aspect) );
 		RTMaterial.getShader().getUniforms().get( "scale" ).setValue( new Vector2(1.0/distScale, 1.0*aspect/distScale) );
-
-		// Create render target
-		initRenderTargets((int)(hdm.hResolution * distScale / 2.0), (int)(hdm.vResolution * distScale));
 	}
 
 	@Override
@@ -245,8 +258,6 @@ public class OculusRift extends Effect {
 
 		renderer.render( scene, pCamera, renderTarget, true );
 		renderer.render( finalScene, oCamera );
-
-
 	}
 	
 	@Override
@@ -260,6 +271,9 @@ public class OculusRift extends Effect {
 		renderer.setViewport( 0, 0, _width, _height );
 		
 		renderer.setAutoClear(_oldAutoClear);
-	}
+		
+		renderTarget.deallocate(this.renderer.getGL());
 
+		RTMaterial.deallocate(renderer);
+	}
 }

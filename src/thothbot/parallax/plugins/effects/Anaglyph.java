@@ -76,11 +76,20 @@ public class Anaglyph extends Effect
 			}
 		});
 
+		_material = new ShaderMaterial(new AnaglyphShader());
 		initRenderTargets(renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight());
  
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), _material );
 		_scene.add( mesh );
+	}
+	
+	@Override
+	public void onResize(ViewportResizeEvent event) 
+	{
+		int width = event.getRenderer().getAbsoluteWidth();
+		int height = event.getRenderer().getAbsoluteHeight();
 
+		initRenderTargets(width, height);
 	}
 			
 	private void initRenderTargets(int width, int height ) 
@@ -100,10 +109,8 @@ public class Anaglyph extends Effect
 		_renderTargetR.setMagFilter(TextureMagFilter.NEAREST);
 		_renderTargetR.setFormat(PixelFormat.RGBA);
 
-		_material = new ShaderMaterial(new AnaglyphShader());
 		_material.getShader().getUniforms().get( "mapLeft" ).setValue( _renderTargetL );
 		_material.getShader().getUniforms().get( "mapRight").setValue( _renderTargetR );
-		
 	}
 
 	/*

@@ -219,6 +219,8 @@ public class WebGLRenderer implements HasEventBus
 
 	private int absoluteWidth = 0;
 	private int absoluteHeight = 0;
+	private int _viewportX = 0;
+	private int _viewportY = 0;
 	private int _viewportWidth = 0;
 	private int _viewportHeight = 0;
 	private int _currentWidth = 0;
@@ -596,6 +598,9 @@ public class WebGLRenderer implements HasEventBus
 		getGL().enable( EnableCap.BLEND );
 		getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 		getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
+		
+		getGL().viewport( _viewportX, _viewportY, _viewportWidth, _viewportHeight );
+		getGL().clearColor( _clearColor.getR(), _clearColor.getG(), _clearColor.getB(), _clearAlpha );
 	}
 
 	/**
@@ -624,10 +629,13 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public void setViewport(int x, int y, int width, int height)
 	{
+		this._viewportX = x;
+		this._viewportY = y;
+
 		this._viewportWidth = width;
 		this._viewportHeight = height;
 
-		getGL().viewport(x, y, this._viewportWidth, this._viewportHeight);
+		getGL().viewport(this._viewportX, this._viewportY, this._viewportWidth, this._viewportHeight);
 	}
 	
 	public int getAbsoluteWidth() {
@@ -3107,7 +3115,7 @@ public class WebGLRenderer implements HasEventBus
 		Log.debug("  ----> Called setRenderTarget(params)");
 		WebGLFramebuffer framebuffer = null;
 		
-		int width, height;
+		int width, height, vx, vy;
 		
 		if(renderTarget != null) 
 		{
@@ -3116,18 +3124,25 @@ public class WebGLRenderer implements HasEventBus
 
 		    width = renderTarget.getWidth();
 		    height = renderTarget.getHeight();
+		    
+			vx = 0;
+			vy = 0;
 
 		} 
 		else 
 		{
 			width = this._viewportWidth;
 			height = this._viewportHeight;
+			
+			vx = _viewportX;
+			vy = _viewportY;
+
 		}
 
 		if ( framebuffer != this._currentFramebuffer ) 
 		{
 			getGL().bindFramebuffer( framebuffer );
-			getGL().viewport( 0, 0, width, height);
+			getGL().viewport( vx, vy, width, height);
 
 			this._currentFramebuffer = framebuffer;
 		}

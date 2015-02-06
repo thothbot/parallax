@@ -18,18 +18,33 @@
 
 package thothbot.parallax.plugins.effects;
 
+import com.google.gwt.event.shared.HandlerRegistration;
+
+import thothbot.parallax.core.client.events.HasEventBus;
+import thothbot.parallax.core.client.events.ViewportResizeEvent;
+import thothbot.parallax.core.client.events.ViewportResizeHandler;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.scenes.Scene;
 
-public abstract class Effect extends Plugin {
+public abstract class Effect extends Plugin implements HasEventBus, ViewportResizeHandler {
 
 	public Effect(WebGLRenderer renderer, Scene scene) {
 		super(renderer, scene);
+		
+		addViewportResizeHandler(this);
 	}
 
 	@Override
 	public TYPE getType() {
 		return Plugin.TYPE.BASIC_RENDER;
 	}
+	
+	public HandlerRegistration addViewportResizeHandler(ViewportResizeHandler handler) 
+	{
+		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler); 
+	}
+	
+	@Override
+	public abstract void onResize(ViewportResizeEvent event);
 }

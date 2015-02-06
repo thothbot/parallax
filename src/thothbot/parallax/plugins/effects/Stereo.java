@@ -20,6 +20,7 @@ package thothbot.parallax.plugins.effects;
 
 import java.util.List;
 
+import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
@@ -56,6 +57,12 @@ public class Stereo extends Effect {
 		
 		_oldAutoClear = renderer.isAutoClear();
 		renderer.setAutoClear(false);
+	}
+	
+	@Override
+	public void onResize(ViewportResizeEvent event) 
+	{
+		
 	}
 
 	@Override

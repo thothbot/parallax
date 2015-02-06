@@ -20,6 +20,7 @@ package thothbot.parallax.plugins.effects;
 
 import java.util.List;
 
+import thothbot.parallax.core.client.events.ViewportResizeEvent;
 import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
@@ -64,12 +65,21 @@ public class ParallaxBarrier extends Effect {
 		_camera.getPosition().setZ(2);
 		_scene.add( _camera );
 		
-		
+		_material = new ShaderMaterial(new ParallaxBarrierShader());
 		initRenderTargets(renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight());
 		
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), _material );
 		_scene.add( mesh );
 		
+	}
+	
+	@Override
+	public void onResize(ViewportResizeEvent event) 
+	{
+		int width = event.getRenderer().getAbsoluteWidth();
+		int height = event.getRenderer().getAbsoluteHeight();
+
+		initRenderTargets(width, height);
 	}
 		
 	private void initRenderTargets(int width, int height ) 
@@ -89,7 +99,6 @@ public class ParallaxBarrier extends Effect {
 		_renderTargetR.setMagFilter(TextureMagFilter.NEAREST);
 		_renderTargetR.setFormat(PixelFormat.RGBA);
 
-		_material = new ShaderMaterial(new ParallaxBarrierShader());
 		_material.getShader().getUniforms().get( "mapLeft" ).setValue( _renderTargetL );
 		_material.getShader().getUniforms().get( "mapRight").setValue( _renderTargetR );
 		
