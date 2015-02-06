@@ -27,7 +27,6 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
@@ -101,10 +100,13 @@ public class OculusRift extends Effect {
     double distScale = 1.0;
     
     Params left = new Params(), right = new Params();
+    
+    boolean _oldAutoClear;
 
 	public OculusRift(WebGLRenderer renderer, Scene scene) {
 		super(renderer, scene);
 		
+		_oldAutoClear = renderer.isAutoClear();
 		renderer.setAutoClear(false);
 
 		pCamera.setMatrixAutoUpdate(false);
@@ -245,6 +247,19 @@ public class OculusRift extends Effect {
 		renderer.render( finalScene, oCamera );
 
 
+	}
+	
+	@Override
+	public void deallocate() {
+		super.deallocate();
+
+		int _width = renderer.getAbsoluteWidth();
+		int _height = renderer.getAbsoluteHeight();
+		
+		renderer.setScissor( 0, 0, _width, _height );
+		renderer.setViewport( 0, 0, _width, _height );
+		
+		renderer.setAutoClear(_oldAutoClear);
 	}
 
 }

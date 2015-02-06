@@ -48,10 +48,13 @@ public class Stereo extends Effect {
 	double _outer, _inner, _top, _bottom;
 	double _ndfl, _halfFocalWidth, _halfFocalHeight;
 	double _innerFactor, _outerFactor;
+	
+	boolean _oldAutoClear;
 
 	public Stereo(WebGLRenderer renderer, Scene scene) {
 		super(renderer, scene);
 		
+		_oldAutoClear = renderer.isAutoClear();
 		renderer.setAutoClear(false);
 	}
 
@@ -134,6 +137,19 @@ public class Stereo extends Effect {
 
 		renderer.enableScissorTest( false );
 
+	}
+	
+	@Override
+	public void deallocate() {
+		super.deallocate();
+
+		int _width = renderer.getAbsoluteWidth();
+		int _height = renderer.getAbsoluteHeight();
+		
+		renderer.setScissor( 0, 0, _width, _height );
+		renderer.setViewport( 0, 0, _width, _height );
+		
+		renderer.setAutoClear(_oldAutoClear);
 	}
 
 }

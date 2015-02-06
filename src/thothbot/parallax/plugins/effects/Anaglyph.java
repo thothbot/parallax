@@ -27,6 +27,7 @@ import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
@@ -74,7 +75,7 @@ public class Anaglyph extends Effect
 				
 			}
 		});
-				
+
 		initRenderTargets(renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight());
  
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), _material );
@@ -189,5 +190,10 @@ public class Anaglyph extends Effect
 	@Override
 	public void deallocate() {
 		super.deallocate();
+
+		_renderTargetL.deallocate(this.renderer.getGL());
+		_renderTargetR.deallocate(this.renderer.getGL());
+
+		_material.deallocate(renderer);
 	}
 }

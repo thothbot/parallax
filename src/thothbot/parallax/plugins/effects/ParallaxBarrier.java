@@ -179,5 +179,15 @@ public class ParallaxBarrier extends Effect {
 
 
 	}
+	
+	@Override
+	public void deallocate() {
+		super.deallocate();
+
+		_renderTargetL.deallocate(this.renderer.getGL());
+		_renderTargetR.deallocate(this.renderer.getGL());
+
+		_material.deallocate(renderer);
+	}
 
 }

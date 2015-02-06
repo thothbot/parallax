@@ -1897,10 +1897,13 @@ public class WebGLRenderer implements HasEventBus
 
 		}
 
+		Log.debug("  -- render() overrideMaterial : " + (scene.overrideMaterial != null)
+				+ ", lights: " + lights.size()
+				+ ", opaqueObjects: " + opaqueObjects.size()
+				+ ", transparentObjects: " + transparentObjects.size() );
+		
 		if ( scene.overrideMaterial != null ) 
-		{
-			Log.debug("render(): override material");
-			
+		{			
 			Material material = scene.overrideMaterial;
 			
 			this.setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
@@ -1913,9 +1916,7 @@ public class WebGLRenderer implements HasEventBus
 			renderObjectsImmediate( _webglObjectsImmediate, null, camera, lights, fog, false, material );
 		} 
 		else 
-		{
-			Log.debug("render(): NON override material");
-			
+		{		
 			Material material = null;
 			
 			// opaque pass (front-to-back order)
@@ -2072,9 +2073,7 @@ public class WebGLRenderer implements HasEventBus
 
 	//renderList, camera, lights, fog, useBlending, overrideMaterial
 	private void renderObjects (List<WebGLObject> renderList, Camera camera, List<Light> lights, AbstractFog fog, boolean useBlending, Material overrideMaterial ) 
-	{
-		Log.debug("Called renderObjects() render list contains = " + renderList.size());
-		
+	{		
 		Material material = null;
 		
 		for ( int i = renderList.size() - 1; i != - 1; i -- ) {
@@ -2289,7 +2288,7 @@ public class WebGLRenderer implements HasEventBus
 		
 		disableUnusedAttributes();
 
-		Log.debug(" -> renderBuffer() ID " + object.getId() + " = " + object.getClass().getName());
+		Log.debug("  ----> renderBuffer() ID " + object.getId() + " (" + object.getClass().getSimpleName() + ")");
 
 		// Render object's buffers
 		object.renderBuffer(this, geometry, updateBuffers);
@@ -3105,7 +3104,7 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public void setRenderTarget( RenderTargetTexture renderTarget ) 
 	{
-		Log.debug("Called setRenderTarget(params)");
+		Log.debug("  ----> Called setRenderTarget(params)");
 		WebGLFramebuffer framebuffer = null;
 		
 		int width, height;
