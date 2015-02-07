@@ -117,10 +117,10 @@ public class MorphAnimMesh extends Mesh
 		{
 			MorphTarget morph = geometry.getMorphTargets().get(i);
 			
-			MatchResult matcher = pattern.exec(morph.name);
-			for (int j=0; i<=matcher.getGroupCount(); i++) {
-			    String label = matcher.getGroup(1);
-			    String num = matcher.getGroup(2);
+			for (MatchResult result = pattern.exec(morph.name); result != null; result = pattern.exec(morph.name)) 
+			{
+			    String label = result.getGroup(1);
+			    String num = result.getGroup(2);
 
 				if ( ! this.animations.containsKey( label ) ) {
 					Animation animation = new Animation();

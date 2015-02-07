@@ -62,5 +62,9 @@ public abstract class TypeArray extends ArrayBufferView {
    */
   public final native int getLength() /*-{
   	return this.length;
- 	}-*/;
+  }-*/;
+  
+  public final native int reverse() /*-{
+	return this.reverse;
+  }-*/;
 }

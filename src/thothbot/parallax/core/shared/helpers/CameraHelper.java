@@ -49,12 +49,8 @@ import com.google.gwt.core.client.GWT;
 public class CameraHelper extends Line
 {
 	private Camera camera;
-//	
+	
 	private Map<String, List<Integer>> pointMap;
-//	
-//	private static Projector __projector = new Projector();
-//	private static Vector3 __v = new Vector3();
-//	private static Camera __c = new Camera();
 	
 	public CameraHelper(Camera camera)
 	{
