@@ -23,6 +23,7 @@ import com.google.gwt.regexp.shared.RegExp;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
@@ -124,18 +125,21 @@ public class STLLoader extends Loader {
 
 	}
 	
-	AbstractGeometry geometry;
-	Uint8Array binData;
+	private AbstractGeometry geometry;
+	private Uint8Array binData;
 
 	@Override
 	public void parse(String string) {
-		
-		this.binData = ensureBinary( string );
 
+		this.binData = ensureBinary( string );
 		if(isBinary())
 			this.parseBinary();
 		else
 			this.parseASCII( string );
+	}
+	
+	public AbstractGeometry getGeometry() {
+		return this.geometry;
 	}
 	
 	private void parseBinary()
