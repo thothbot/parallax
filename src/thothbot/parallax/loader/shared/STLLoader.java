@@ -26,7 +26,6 @@ import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
 import thothbot.parallax.core.client.gl2.arrays.DataView;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
@@ -36,7 +35,6 @@ import thothbot.parallax.core.shared.math.Vector3;
 
 public class STLLoader extends Loader {
 
-	private AbstractGeometry geometry;
 	private ArrayBuffer binData;
 	
 	public boolean hasColors;
@@ -49,31 +47,24 @@ public class STLLoader extends Loader {
 	}
 	
 	@Override
-	public void parse(ArrayBuffer buffer) 
+	public AbstractGeometry parse(ArrayBuffer buffer) 
 	{
 		this.binData = buffer;
 
 		if(isBinary())
-			this.parseBinary();
+			return this.parseBinary();
 		else
-			this.parseASCII( ensureString(buffer) );
+			return this.parseASCII( ensureString(buffer) );
 		
 	}
 
 	@Override
-	public void parse(String string) {
-
-//		this.binData = ensureBinary( string );
-
-//			this.parseBinary();
-	}
-	
-	public AbstractGeometry getGeometry() 
+	public AbstractGeometry parse(String string) 
 	{
-		return this.geometry;
+		return null;
 	}
-	
-	private void parseBinary()
+
+	private AbstractGeometry parseBinary()
 	{
 		DataView reader = DataView.create( this.binData  );
 		int faces = (int)reader.getUint32( 80, true );
@@ -107,7 +98,7 @@ public class STLLoader extends Loader {
 
 		int offset = 0;
 
-		geometry = new BufferGeometry();
+		BufferGeometry geometry = new BufferGeometry();
 
 		Float32Array vertices = Float32Array.create( faces * 3 * 3 );
 		Float32Array normals = Float32Array.create( faces * 3 * 3 );
@@ -170,11 +161,12 @@ public class STLLoader extends Loader {
 			this.alpha = alpha;
 		}
 
+		return geometry;
 	}
 	
-	private void parseASCII( String data ) 
+	private AbstractGeometry parseASCII( String data ) 
 	{
-		this.geometry = new Geometry();
+		Geometry geometry = new Geometry();
 
 		Vector3 normal = null;
 		RegExp patternFace = RegExp.compile("facet([\\s\\S]*?)endfacet", "g");
@@ -206,6 +198,7 @@ public class STLLoader extends Loader {
 		geometry.computeBoundingBox();
 		geometry.computeBoundingSphere();
 
+		return geometry;
 	}
 
 	private Uint8Array ensureBinary( String buf ) {

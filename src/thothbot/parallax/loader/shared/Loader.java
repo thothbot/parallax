@@ -20,6 +20,7 @@ package thothbot.parallax.loader.shared;
 
 import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
 
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
@@ -30,7 +31,7 @@ public abstract class Loader
 {
 	public interface ModelLoadHandler 
 	{
-		public void onModelLoaded();
+		public void onModelLoaded(AbstractGeometry geometry);
 	}
 	
 	private String texturePath;
@@ -56,14 +57,16 @@ public abstract class Loader
 					}
 					else
 					{
+						AbstractGeometry geometry = null;
+						
 						if(xhr.getResponseType().equals("arraybuffer")) {
 							com.google.gwt.typedarrays.shared.ArrayBuffer origin = xhr.getResponseArrayBuffer(); 
 
-							parse(ArrayBuffer.copy(origin));
+							geometry = parse(ArrayBuffer.copy(origin));
 						} else
-							parse(xhr.getResponseText());
+							geometry = parse(xhr.getResponseText());
 
-						modelLoadHandler.onModelLoaded();						
+						modelLoadHandler.onModelLoaded(geometry);						
 					}
 					
 					request.clearOnReadyStateChange();
@@ -73,9 +76,9 @@ public abstract class Loader
 		});
 	}
 	
-	public abstract void parse(String string);
-	public void parse(ArrayBuffer buffer) {
-		
+	public abstract AbstractGeometry parse(String string);
+	public AbstractGeometry parse(ArrayBuffer buffer) {
+		return null;
 	}
 	
 	public String getTexturePath() {

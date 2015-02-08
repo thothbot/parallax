@@ -28,6 +28,7 @@ import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.CompressedTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphColor;
@@ -68,29 +69,25 @@ import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 
 public class JsonLoader extends Loader 
 {
-
 	private JsoObject object;
-	private Geometry geometry;
 	
 	private List<Material> materials;
 	
 	@Override
-	public void parse(String string) 
+	public AbstractGeometry parse(String string) 
 	{		 
 		if(!isThisJsonStringValid(string))
-			return;
+			return null;
 		
 		Log.debug("JSON parse()");
 		
-		geometry = new Geometry();
-
-		double scale = object.getScale() > 0 ? 1.0 / object.getScale() : 1.0;
+		Geometry geometry = new Geometry();
 
 		parseMaterials();
-		parseModel(scale);
+		parseModel(geometry);
 
-		parseSkin();
-		parseMorphing(scale);
+		parseSkin(geometry);
+		parseMorphing(geometry);
 
 		geometry.computeFaceNormals();
 		geometry.computeBoundingSphere();
@@ -99,18 +96,15 @@ public class JsonLoader extends Loader
 			geometry.computeTangents();
 		
 		geometry.computeMorphNormals();
+		
+		return geometry;
 	}
-	
-	public Geometry getGeometry() 
-	{
-		return this.geometry;
-	}
-	
+
 	public List<Material> getMaterials() {
 		return this.materials;
 	}
 	
-	public void morphColorsToFaceColors() 
+	public void morphColorsToFaceColors(Geometry geometry) 
 	{
 		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
 		{
@@ -376,12 +370,14 @@ public class JsonLoader extends Loader
 		return material;
 	}
 	
-	private void parseModel(double scale)
+	private void parseModel(Geometry geometry)
 	{
 		if(object.getFaces() == null) 
 			return;
 
 		Log.debug("JSON parseFaces()");
+		
+		double scale = object.getScale() > 0 ? 1.0 / object.getScale() : 1.0;
 
 		List<Integer> faces = object.getFaces();
 		List<Double> vertices = object.getVertices();
@@ -644,7 +640,7 @@ public class JsonLoader extends Loader
 		}
 	}
 	
-	private void parseSkin() 
+	private void parseSkin(Geometry geometry) 
 	{
 		int influencesPerVertex = ( object.getInfluencesPerVertex() > 0 ) ? object.getInfluencesPerVertex() : 2;
 		
@@ -684,9 +680,11 @@ public class JsonLoader extends Loader
 //		geometry.animation = json.animation;
 	}
 
-	private void parseMorphing(double scale) 
+	private void parseMorphing(Geometry geometry) 
 	{
 		Log.debug("JSON parseMorphing()");
+		
+		double scale = object.getScale() > 0 ? 1.0 / object.getScale() : 1.0;
 				
 		if ( object.getMorphTargets() != null) 
 		{
