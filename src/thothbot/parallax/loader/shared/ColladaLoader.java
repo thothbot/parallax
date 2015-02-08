@@ -24,7 +24,7 @@ import thothbot.parallax.loader.shared.collada.DaeDocument;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 
-public class ColladaLoader extends Loader
+public class ColladaLoader extends XHRLoader
 {
 	private DaeDocument daeDocument;
 	private Document document;

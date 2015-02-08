@@ -33,17 +33,25 @@ import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Vector3;
 
-public class STLLoader extends Loader {
+public class STLLoader extends XHRLoader {
 
 	private ArrayBuffer binData;
 	
-	public boolean hasColors;
-	public double alpha;
+	private boolean hasColors;
+	private double alpha;
 	
 	public STLLoader() 
 	{
 		// Load binary data by default
 		setResponseType(ResponseType.ArrayBuffer);
+	}
+	
+	public boolean isHasColors() {
+		return hasColors;
+	}
+
+	public double getAlpha() {
+		return alpha;
 	}
 	
 	@Override

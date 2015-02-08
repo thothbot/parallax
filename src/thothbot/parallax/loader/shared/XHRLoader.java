@@ -27,7 +27,7 @@ import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
 
-public abstract class Loader 
+public abstract class XHRLoader 
 {
 	public interface ModelLoadHandler 
 	{
