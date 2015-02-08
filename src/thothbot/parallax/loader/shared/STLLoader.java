@@ -20,7 +20,10 @@ package thothbot.parallax.loader.shared;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
 
+import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
+import thothbot.parallax.core.client.gl2.arrays.DataView;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint8Array;
 import thothbot.parallax.core.shared.Log;
@@ -32,120 +35,48 @@ import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Vector3;
 
 public class STLLoader extends Loader {
+
+	private AbstractGeometry geometry;
+	private ArrayBuffer binData;
 	
-	public class DataView {
-		
-		Uint8Array buffer;
-		int byteOffset = 0;
-		int byteLength;
-		
-		public DataView(Uint8Array buffer) {
-			this(buffer, 0, buffer.getByteLength() > 0 ? buffer.getByteLength() : buffer.getLength());
-		}
-
-		public DataView(Uint8Array buffer, int byteOffset, int byteLength) {
-			this.buffer = buffer;
-			this.byteOffset = byteOffset;
-			this.byteLength = byteLength;
-//			this._isString = typeof buffer === "string";
-		}
-		
-		public double getFloat32 (int byteOffset, boolean littleEndian) {
-
-			Uint8Array b = this._getBytes(4, byteOffset, littleEndian);
-
-			int sign = 1 - (2 * (b.get(3) >> 7));
-			int exponent = (((b.get(3) << 1) & 0xff) | (b.get(2) >> 7)) - 127;
-			int mantissa = ((b.get(2) & 0x7f) << 16) | (b.get(1) << 8) | b.get(0);
-
-			if (exponent == 128) {
-				if (mantissa != 0) {
-					return Double.NaN;
-				} else {
-					return sign * Double.POSITIVE_INFINITY;
-				}
-			}
-
-			if (exponent == -127) { // Denormalized
-				return sign * mantissa * Math.pow(2, -126 - 23);
-			}
-
-			return sign * (1 + mantissa * Math.pow(2, -23)) * Math.pow(2, exponent);
-		}
-
-		
-		public int getInt32 (int byteOffset, boolean littleEndian) {
-			Uint8Array b = this._getBytes(4, byteOffset, littleEndian);
-			return (b.get(3) << 24) | (b.get(2) << 16) | (b.get(1) << 8) | b.get(0);
-		}
-
-		public int getUint32 (int byteOffset, boolean littleEndian) {
-			return this.getInt32(byteOffset, littleEndian) >>> 0;
-		}
-
-		public int getInt16 (int byteOffset, boolean littleEndian) {
-			return (this.getUint16(byteOffset, littleEndian) << 16) >> 16;
-		}
-
-		public int getUint16 (int byteOffset, boolean littleEndian) {
-			Uint8Array b = this._getBytes(2, byteOffset, littleEndian);
-			return (b.get(1) << 8) | b.get(0);
-		}
-
-		public int getInt8 (int byteOffset) {
-			return (this.getUint8(byteOffset) << 24) >> 24;
-		}
-
-		public int getUint8 (int byteOffset) {
-			return this._getBytes(1, byteOffset, false).get(0);
-		}
-
-		private Uint8Array _getBytes(int length, int byteOffset, boolean littleEndian) {
-
-			Uint8Array result;
-
-			byteOffset = this.byteOffset + byteOffset;
-
-			if (length < 0 || byteOffset + length > this.byteLength) {
-
-				throw new Error("DataView length or (byteOffset+length) value is out of bounds");
-
-			}
-
-			result = this.buffer.slice(byteOffset, byteOffset + length);
-
-			if (!littleEndian && length > 1) 
-			{
-				result.reverse();
-			}
-
-			return result;
-
-		}
-
+	public boolean hasColors;
+	public double alpha;
+	
+	public STLLoader() 
+	{
+		// Load binary data by default
+		setResponseType(ResponseType.ArrayBuffer);
 	}
 	
-	private AbstractGeometry geometry;
-	private Uint8Array binData;
+	@Override
+	public void parse(ArrayBuffer buffer) 
+	{
+		this.binData = buffer;
+
+		if(isBinary())
+			this.parseBinary();
+		else
+			this.parseASCII( ensureString(buffer) );
+		
+	}
 
 	@Override
 	public void parse(String string) {
 
-		this.binData = ensureBinary( string );
-		if(isBinary())
-			this.parseBinary();
-		else
-			this.parseASCII( string );
+//		this.binData = ensureBinary( string );
+
+//			this.parseBinary();
 	}
 	
-	public AbstractGeometry getGeometry() {
+	public AbstractGeometry getGeometry() 
+	{
 		return this.geometry;
 	}
 	
 	private void parseBinary()
 	{
-		DataView reader = new DataView( this.binData  );
-		int faces = reader.getUint32( 80, true );
+		DataView reader = DataView.create( this.binData  );
+		int faces = (int)reader.getUint32( 80, true );
 
 		boolean hasColors = false;
 		Float32Array colors = null;
@@ -184,6 +115,7 @@ public class STLLoader extends Loader {
 		for ( int face = 0; face < faces; face ++ ) {
 
 			int start = dataOffset + face * faceLength;
+
 			double normalX = reader.getFloat32(start, true);
 			double normalY = reader.getFloat32(start + 4, true);
 			double normalZ = reader.getFloat32(start + 8, true);
@@ -234,15 +166,14 @@ public class STLLoader extends Loader {
 
 		if (hasColors) {
 			((BufferGeometry)geometry).addAttribute( "color", new BufferAttribute( colors, 3 ) );
-//			geometry.hasColors = true;
-//			geometry.alpha = alpha;
+			this.hasColors = true;
+			this.alpha = alpha;
 		}
 
 	}
 	
 	private void parseASCII( String data ) 
 	{
-//		var  length, normal, patternFace, patternNormal, patternVertex, result, text;
 		this.geometry = new Geometry();
 
 		Vector3 normal = null;
@@ -288,16 +219,25 @@ public class STLLoader extends Loader {
 		
 		return  array_buffer;
 	}
-
 	
+	private String ensureString ( ArrayBuffer buf ) {
+
+		Uint8Array array_buffer = Uint8Array.create(buf);
+		 StringBuilder builder = new StringBuilder(buf.getByteLength());
+		for(int i = 0; i < buf.getByteLength(); i++) {
+			builder.append(Character.toChars(array_buffer.get(i))); // implicitly assumes little-endian
+		}
+		return builder.toString();
+	}
+
 	private boolean isBinary() {
 
-		DataView reader = new DataView( this.binData );
+		DataView reader = DataView.create( this.binData );
 		int face_size = (32 / 8 * 3) + ((32 / 8 * 3) * 3) + (16 / 8);
-		int n_faces = reader.getUint32(80, true);
+		int n_faces = (int)reader.getUint32(80, true);
 		int expect = 80 + (32 / 8) + (n_faces * face_size);
-		
-		if ( expect == reader.byteLength ) {
+			
+		if ( expect == reader.byteLength() ) {
 			
 			return true;
 			
@@ -305,7 +245,7 @@ public class STLLoader extends Loader {
 
 		// some binary files will have different size from expected,
 		// checking characters higher than ASCII to confirm is binary
-		int fileLength = reader.byteLength;
+		int fileLength = reader.byteLength();
 		for ( int index = 0; index < fileLength; index ++ ) {
 
 			if ( reader.getUint8(index) > 127 ) {
