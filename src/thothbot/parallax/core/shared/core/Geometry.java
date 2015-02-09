@@ -37,6 +37,7 @@ import thothbot.parallax.core.shared.math.Vector4;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
+import thothbot.parallax.core.shared.objects.PointCloud;
 
 import com.google.gwt.core.client.GWT;
 

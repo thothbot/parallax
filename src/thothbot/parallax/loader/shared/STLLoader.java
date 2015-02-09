@@ -18,10 +18,6 @@
 
 package thothbot.parallax.loader.shared;
 
-import com.google.gwt.regexp.shared.MatchResult;
-import com.google.gwt.regexp.shared.RegExp;
-import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
-
 import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
 import thothbot.parallax.core.client.gl2.arrays.DataView;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
@@ -33,6 +29,10 @@ import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.math.Vector3;
 
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
+
 public class STLLoader extends XHRLoader {
 
 	private ArrayBuffer binData;
@@ -40,10 +40,13 @@ public class STLLoader extends XHRLoader {
 	private boolean hasColors;
 	private double alpha;
 	
-	public STLLoader() 
+	public STLLoader(String url, ModelLoadHandler modelLoadHandler) 
 	{
+		super(url, modelLoadHandler);
 		// Load binary data by default
 		setResponseType(ResponseType.ArrayBuffer);
+		
+		load();
 	}
 	
 	public boolean isHasColors() {
@@ -55,7 +58,7 @@ public class STLLoader extends XHRLoader {
 	}
 	
 	@Override
-	public AbstractGeometry parse(ArrayBuffer buffer) 
+	protected AbstractGeometry parse(ArrayBuffer buffer) 
 	{
 		this.binData = buffer;
 
@@ -67,7 +70,7 @@ public class STLLoader extends XHRLoader {
 	}
 
 	@Override
-	public AbstractGeometry parse(String string) 
+	protected AbstractGeometry parse(String string) 
 	{
 		return null;
 	}

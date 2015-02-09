@@ -25,7 +25,6 @@ import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 
-import com.google.gwt.http.client.RequestException;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
@@ -46,16 +45,24 @@ public abstract class XHRLoader
 	
 	public interface ModelLoadHandler 
 	{
-		public void onModelLoaded(AbstractGeometry geometry);
+		public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry);
 	}
-	
+
+	private String url;
 	private String texturePath;
+	private ModelLoadHandler modelLoadHandler;
 	private ResponseType responseType = ResponseType.Default;
 	
-	public void load(final String url, final ModelLoadHandler modelLoadHandler) throws RequestException 
+	public XHRLoader(String url, ModelLoadHandler modelLoadHandler) 
 	{
-		texturePath = extractUrlBase(url);
+		this.url = url;
+		this.texturePath = extractUrlBase(url);
 		
+		this.modelLoadHandler = modelLoadHandler;
+	}
+
+	protected void load() 
+	{		
 		final XMLHttpRequest request = XMLHttpRequest.create();
 		request.open( "GET", url );
 		request.setResponseType(this.responseType);
@@ -70,8 +77,9 @@ public abstract class XHRLoader
 			public void onReadyStateChange(XMLHttpRequest xhr) {
 				if(xhr.getReadyState() == XMLHttpRequest.DONE) 
 				{
-					if (xhr.getStatus() >= 400) {
-						Log.error("Error while loading file: " + url);	
+					if (xhr.getStatus() >= 400) 
+					{
+						Log.error("Error while loading file: " + url + ", status: " + xhr.getStatus());	
 					}
 					else
 					{
@@ -84,7 +92,7 @@ public abstract class XHRLoader
 						} else
 							geometry = parse(xhr.getResponseText());
 
-						modelLoadHandler.onModelLoaded(geometry);						
+						modelLoadHandler.onModelLoaded(XHRLoader.this, geometry);						
 					}
 					
 					request.clearOnReadyStateChange();
@@ -98,8 +106,8 @@ public abstract class XHRLoader
 		});
 	}
 	
-	public abstract AbstractGeometry parse(String string);
-	public AbstractGeometry parse(ArrayBuffer buffer) {
+	protected abstract AbstractGeometry parse(String string);
+	protected AbstractGeometry parse(ArrayBuffer buffer) {
 		return null;
 	}
 	

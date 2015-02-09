@@ -73,8 +73,15 @@ public class JsonLoader extends XHRLoader
 	
 	private List<Material> materials;
 	
+	public JsonLoader(String url, ModelLoadHandler modelLoadHandler) 
+	{
+		super(url, modelLoadHandler);
+		
+		load();
+	}
+	
 	@Override
-	public AbstractGeometry parse(String string) 
+	protected AbstractGeometry parse(String string) 
 	{		 
 		if(!isThisJsonStringValid(string))
 			return null;

@@ -28,8 +28,15 @@ public class ColladaLoader extends XHRLoader
 {
 	private DaeDocument daeDocument;
 	private Document document;
+	
+	public ColladaLoader(String url, ModelLoadHandler modelLoadHandler) 
+	{
+		super(url, modelLoadHandler);
+		
+		load();
+	} 
 
-	public AbstractGeometry parse(String xmlString) 
+	protected AbstractGeometry parse(String xmlString) 
 	{
 		document = XMLParser.parse(xmlString);
 		daeDocument = new DaeDocument(document);

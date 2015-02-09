@@ -18,7 +18,6 @@
 
 package thothbot.parallax.core.client.textures;
 
-import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
