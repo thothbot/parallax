@@ -18,6 +18,9 @@
 
 package thothbot.parallax.loader.shared;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import thothbot.parallax.core.client.gl2.arrays.ArrayBuffer;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
@@ -29,6 +32,18 @@ import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
 
 public abstract class XHRLoader 
 {
+	private static List<ModelLoadHandler> loadHandlers = new ArrayList<ModelLoadHandler>();
+	private static LoaderProgressHandler loaderProgressHandler;
+	public static void addLoaderProgress(LoaderProgressHandler loaderProgressHandler) 
+	{
+		XHRLoader.loaderProgressHandler = loaderProgressHandler;
+	}
+
+	public interface LoaderProgressHandler
+	{
+		public void onProgressUpdate(int left);
+	}
+	
 	public interface ModelLoadHandler 
 	{
 		public void onModelLoaded(AbstractGeometry geometry);
@@ -45,6 +60,9 @@ public abstract class XHRLoader
 		request.open( "GET", url );
 		request.setResponseType(this.responseType);
 		request.send( null );
+		
+		loadHandlers.add(modelLoadHandler);
+		XHRLoader.loaderProgressHandler.onProgressUpdate(loadHandlers.size());
 
 		request.setOnReadyStateChange(new ReadyStateChangeHandler() {
 			
@@ -71,6 +89,10 @@ public abstract class XHRLoader
 					
 					request.clearOnReadyStateChange();
 					request.abort();
+					
+					loadHandlers.remove(modelLoadHandler);
+					if(XHRLoader.loaderProgressHandler != null)
+						XHRLoader.loaderProgressHandler.onProgressUpdate(loadHandlers.size());
 				}
 			}
 		});
