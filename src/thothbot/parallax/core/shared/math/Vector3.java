@@ -280,7 +280,7 @@ public class Vector3 extends Vector2 implements Vector
 		double x = this.x, y = this.y, z = this.z;
 
 		Float32Array e = m.getArray();
-		double d = 1 / ( e.get(3) * x + e.get(7) * y + e.get(11) * z + e.get(15) ); // perspective divide
+		double d = 1.0 / ( e.get(3) * x + e.get(7) * y + e.get(11) * z + e.get(15) ); // perspective divide
 
 		this.x = ( e.get(0) * x + e.get(4) * y + e.get(8)  * z + e.get(12) ) * d;
 		this.y = ( e.get(1) * x + e.get(5) * y + e.get(9)  * z + e.get(13) ) * d;
