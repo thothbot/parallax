@@ -18,7 +18,8 @@
 
 package thothbot.parallax.core.shared.materials;
 
-public interface HasShading {
+public interface HasShading 
+{
 	public Material.SHADING getShading();
 
 	public void setShading(Material.SHADING shading);

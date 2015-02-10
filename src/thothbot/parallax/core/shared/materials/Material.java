@@ -856,16 +856,7 @@ public abstract class Material
 		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == Material.SHADING.SMOOTH;
 	}
 
-	public Material.SHADING bufferGuessNormalType () 
-	{
-		// only MeshBasicMaterial and MeshDepthMaterial don't need normals
-		if (materialNeedsSmoothNormals())
-			return Material.SHADING.SMOOTH;
-		else
-			return Material.SHADING.FLAT;
-	}
-	
-	public Material.COLORS bufferGuessVertexColorType () 
+	public Material.COLORS bufferGuessVertexColorType() 
 	{
 		if(this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO)
 			return ((HasVertexColors)this).isVertexColors();
@@ -873,7 +864,7 @@ public abstract class Material
 		return null;
 	}
 	
-	public boolean bufferGuessUVType () 
+	public boolean bufferGuessUVType() 
 	{
 		if(this instanceof HasMap && ((HasMap)this).getMap() != null)
 			return true;

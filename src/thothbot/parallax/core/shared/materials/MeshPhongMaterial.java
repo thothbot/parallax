@@ -137,14 +137,6 @@ public final class MeshPhongMaterial extends Material
 		this.shininess = shininess;
 	}
 	
-//	public boolean isPerPixel() {
-//		return this.isPerPixel;
-//	}
-//	
-//	public void setPerPixel(boolean isPerPixel) {
-//		this.isPerPixel = isPerPixel;
-//	}
-	
 	public boolean isMetal() {
 		return this.isMetal;
 	}

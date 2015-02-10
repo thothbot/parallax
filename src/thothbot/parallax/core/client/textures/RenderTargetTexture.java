@@ -72,6 +72,11 @@ public class RenderTargetTexture extends Texture
 		setType( type );
 	}
 	
+	public void setSize(int width, int height) {
+		setWidth(width);
+		setHeight(height);
+	}
+	
 	public int getWidth() {
 		return width;
 	}

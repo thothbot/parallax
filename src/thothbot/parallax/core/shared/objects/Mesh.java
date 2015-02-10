@@ -518,10 +518,6 @@ public class Mesh extends GeometryObject
 		int nlines = faces3.size() * 3;
 
 		Material material = Material.getBufferMaterial(this, geometryGroup);
-
-		boolean uvType = material.bufferGuessUVType();
-		Material.SHADING normalType = material.bufferGuessNormalType();
-		Material.COLORS vertexColorType = material.bufferGuessVertexColorType();
 		
 		geometryGroup.__vertexArray = Float32Array.create( nvertices * 3 );
 		geometryGroup.__normalArray =  Float32Array.create( nvertices * 3 );
@@ -736,7 +732,7 @@ public class Mesh extends GeometryObject
 			 return;
 		
 		boolean needsSmoothNormals = material.materialNeedsSmoothNormals();
-		
+
 		int vertexIndex = 0,
 
 		offset = 0,

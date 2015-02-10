@@ -174,13 +174,11 @@ public class MorphAnimMesh extends Mesh
 		}
 	}
 
-	public void updateAnimation( int delta ) 
+	public void updateAnimation( double delta ) 
 	{
-//		if(this.getGeometry() == null)
-//			return;
+		if(this.getGeometry() == null)
+			return;
 		
-//		delta = 8;
-
 		double frameTime = (double)this.duration / this.length;
 
 		this.time += this.direction * delta;
