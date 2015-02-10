@@ -39,68 +39,60 @@ import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.lights.Light;
+import thothbot.parallax.core.shared.math.Quaternion;
+import thothbot.parallax.core.shared.math.Vector3;
+import thothbot.parallax.core.shared.scenes.AbstractFog;
+import thothbot.parallax.core.shared.scenes.Fog;
+import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugins.sprite.shaders.SpriteShader;
 
 public final class SpritePlugin extends Plugin 
 {
-	private class SpriteGeometry 
-	{
-		Float32Array vertices;
-		Uint16Array faces;
-		
-		WebGLBuffer vertexBuffer;
-		WebGLBuffer elementBuffer;
-		
-		SpriteShader shader;
-		
-		boolean attributesEnabled;
-	}
-	
-	private SpriteGeometry sprite;
 	private List<Sprite> objects;
 	
+	Float32Array vertices;
+	Uint16Array faces;
+	
+	WebGLBuffer vertexBuffer;
+	WebGLBuffer elementBuffer;
+	
+	SpriteShader shader;
+	
+	// decompose matrixWorld
+
+	Vector3 spritePosition = new Vector3();
+	Quaternion spriteRotation = new Quaternion();
+	Vector3 spriteScale = new Vector3();
+		
 	public SpritePlugin(WebGLRenderer renderer, Scene scene) 
 	{
 		super(renderer, scene);
-		
-		this.sprite = new SpriteGeometry();
-		
+
 		WebGLRenderingContext gl = getRenderer().getGL();
 		
-		sprite.vertices = Float32Array.create( 8 + 8 );
-		sprite.faces = Uint16Array.create( 6 );
+		vertices = Float32Array.create(
+				- 0.5, - 0.5,  0, 0,
+				  0.5, - 0.5,  1, 0,
+				  0.5,   0.5,  1, 1,
+				- 0.5,   0.5,  0, 1
+		);
+		faces = Uint16Array.create(
+				0, 1, 2,
+				0, 2, 3
+		);
 		
-		int i = 0;
+		vertexBuffer  = gl.createBuffer();
+		elementBuffer = gl.createBuffer();
 
-		sprite.vertices.set( i++,  -1); sprite.vertices.set( i++,  -1);	// vertex 0
-		sprite.vertices.set( i++,  0);  sprite.vertices.set( i++,  1);	// uv 0
+		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, vertexBuffer );
+		gl.bufferData( BufferTarget.ARRAY_BUFFER, vertices, BufferUsage.STATIC_DRAW );
 
-		sprite.vertices.set( i++,  1);  sprite.vertices.set( i++,  -1);	// vertex 1
-		sprite.vertices.set( i++,  1);  sprite.vertices.set( i++,  1);	// uv 1
+		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, elementBuffer );
+		gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, faces, BufferUsage.STATIC_DRAW );
 
-		sprite.vertices.set( i++,  1);  sprite.vertices.set( i++,  1);	// vertex 2
-		sprite.vertices.set( i++,  1);  sprite.vertices.set( i++,  0);	// uv 2
-
-		sprite.vertices.set( i++,  -1); sprite.vertices.set( i++,  1);	// vertex 3
-		sprite.vertices.set( i++,  0);  sprite.vertices.set( i++,  0);	// uv 3
-
-		i = 0;
-
-		sprite.faces.set( i++,  0); sprite.faces.set( i++,  1); sprite.faces.set( i++,  2);
-		sprite.faces.set( i++,  0); sprite.faces.set( i++,  2); sprite.faces.set( i++,  3);
-
-		sprite.vertexBuffer  = gl.createBuffer();
-		sprite.elementBuffer = gl.createBuffer();
-
-		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, sprite.vertexBuffer );
-		gl.bufferData( BufferTarget.ARRAY_BUFFER, sprite.vertices, BufferUsage.STATIC_DRAW );
-
-		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.elementBuffer );
-		gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.faces, BufferUsage.STATIC_DRAW );
-
-		sprite.shader = new SpriteShader();
-		sprite.shader.buildProgram(gl);
+		shader = new SpriteShader();
+		shader.buildProgram(gl);
 	}
 	
 	@Override
@@ -111,7 +103,7 @@ public final class SpritePlugin extends Plugin
 	
 	public List<Sprite> getObjects() 
 	{
-		if(this.objects == null)
+		if(this.objects == null || this.objects.size() == 0)
 		{
 			this.objects = (List<Sprite>)(ArrayList)getScene().getChildrenByClass(Sprite.class, true);
 		}
@@ -129,42 +121,65 @@ public final class SpritePlugin extends Plugin
 
 		WebGLRenderingContext gl = getRenderer().getGL();
 
-		Map<String, Uniform> uniforms = this.sprite.shader.getUniforms();
-		Map<String, Integer> attributesLocations = this.sprite.shader.getAttributesLocations();
-
-		double invAspect = (double)viewportHeight / viewportWidth;
-
-		double halfViewportWidth = viewportWidth * 0.5;
-		double halfViewportHeight = viewportHeight * 0.5;
-
-		boolean mergeWith3D = true;
+		Map<String, Uniform> uniforms = this.shader.getUniforms();
+		Map<String, Integer> attributesLocations = this.shader.getAttributesLocations();
 
 		// setup gl
 
-		gl.useProgram( this.sprite.shader.getProgram() );
+		gl.useProgram( this.shader.getProgram() );
 
-		if ( ! sprite.attributesEnabled ) 
-		{
-			gl.enableVertexAttribArray( attributesLocations.get("position") );
-			gl.enableVertexAttribArray( attributesLocations.get("uv") );
-
-			sprite.attributesEnabled = true;
-		}
+		gl.enableVertexAttribArray( attributesLocations.get("position") );
+		gl.enableVertexAttribArray( attributesLocations.get("uv") );
 
 		gl.disable( EnableCap.CULL_FACE );
 		gl.enable( EnableCap.BLEND );
-		gl.depthMask( true );
 
-		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, sprite.vertexBuffer );
+		gl.bindBuffer( BufferTarget.ARRAY_BUFFER, vertexBuffer );
 		gl.vertexAttribPointer( attributesLocations.get("position"), 2, DataType.FLOAT, false, 2 * 8, 0 );
 		gl.vertexAttribPointer( attributesLocations.get("uv"), 2, DataType.FLOAT, false, 2 * 8, 8 );
 
-		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, sprite.elementBuffer );
+		gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, elementBuffer );
 
 		gl.uniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), false, camera.getProjectionMatrix().getArray() );
 
 		gl.activeTexture( TextureUnit.TEXTURE0 );
 		gl.uniform1i( uniforms.get("map").getLocation(), 0 );
+		
+		int oldFogType = 0;
+		int sceneFogType = 0;
+		AbstractFog fog = scene.getFog();
+
+		if ( fog != null ) {
+
+			gl.uniform3f( uniforms.get("fogColor").getLocation(), fog.getColor().getR(), fog.getColor().getG(), fog.getColor().getB() );
+
+			if ( fog instanceof Fog ) {
+
+				gl.uniform1f( uniforms.get("fogNear").getLocation(), ((Fog)fog).getNear() );
+				gl.uniform1f( uniforms.get("fogFar").getLocation(), ((Fog)fog).getFar() );
+
+				gl.uniform1i( uniforms.get("fogType").getLocation(), 1 );
+				oldFogType = 1;
+				sceneFogType = 1;
+
+			} else if ( fog instanceof FogExp2 ) {
+
+				gl.uniform1f( uniforms.get("fogDensity").getLocation(), ((FogExp2)fog).getDensity() );
+
+				gl.uniform1i( uniforms.get("fogType").getLocation(), 2 );
+				oldFogType = 2;
+				sceneFogType = 2;
+
+			}
+
+		} else {
+
+			gl.uniform1i( uniforms.get("fogType").getLocation(), 0 );
+			oldFogType = 0;
+			sceneFogType = 0;
+
+		}
+
 
 		// update positions and sort
 
@@ -172,17 +187,10 @@ public final class SpritePlugin extends Plugin
 		{
 			Sprite sprite = sprites.get( i );
 
-			if ( ! sprite.isVisible() || sprite.getOpacity() == 0 ) continue;
+			if ( ! sprite.isVisible() ) continue;
 
-			if( ! sprite.isUseScreenCoordinates() ) 
-			{
-				sprite._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), sprite.getMatrixWorld());
-				sprite.setZ( - sprite._modelViewMatrix.getArray().get(14) );
-			} 
-			else 
-			{
-				sprite.setZ( - sprite.getPosition().getZ() );
-			}
+			sprite._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), sprite.getMatrixWorld());
+			sprite.setZ( - sprite._modelViewMatrix.getArray().get(14) );
 		}
 
 		Collections.sort((List<Sprite>)(ArrayList)sprites);
@@ -192,71 +200,71 @@ public final class SpritePlugin extends Plugin
 		for( int i = 0; i < nSprites; i ++ ) 
 		{
 			Sprite sprite = sprites.get( i );
+			SpriteMaterial material = (SpriteMaterial) sprite.getMaterial();
 
-			if ( ! sprite.isVisible() || sprite.getOpacity() == 0 ) continue;
+			if ( ! sprite.isVisible() ) continue;
 
-			if ( sprite.getMap() != null 
-					&& sprite.getMap().getImage() != null 
-					&& sprite.getMap().getImage().getOffsetWidth() > 0 ) 
-			{
-				if ( sprite.isUseScreenCoordinates() ) 
-				{
-					gl.uniform1i( uniforms.get("useScreenCoordinates").getLocation(), 1 );
-					gl.uniform3f( uniforms.get("screenPosition").getLocation(), ( sprite.getPosition().getX() - halfViewportWidth  ) / halfViewportWidth,
-							( halfViewportHeight - sprite.getPosition().getY() ) / halfViewportHeight,
-							Math.max( 0, Math.min( 1, sprite.getPosition().getZ() ) ) );
-				} 
-				else 
-				{		
-					gl.uniform1i( uniforms.get("useScreenCoordinates").getLocation(), 0 );
-					gl.uniform1i( uniforms.get("affectedByDistance").getLocation(), sprite.isAffectedByDistance() ? 1 : 0 );
-					gl.uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, sprite._modelViewMatrix.getArray());
-				}
+			gl.uniform1f( uniforms.get("alphaTest").getLocation(), material.getAlphaTest() );
+			gl.uniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), false, sprite._modelViewMatrix.getArray());
+			
+			sprite.getMatrixWorld().decompose( spritePosition, spriteRotation, spriteScale );
+			
+			int fogType = 0;
 
-				double size = sprite.getMap().getImage().getOffsetWidth() 
-						/ ( sprite.isScaleByViewport() ? viewportHeight : 1.0 );
+			if ( scene.getFog() != null && material.isFog() ) {
 
-				double[] scale = { 
-						size * invAspect * sprite.getScale().getX(),
-						size * sprite.getScale().getY() };
+				fogType = sceneFogType;
 
-				gl.uniform2f( uniforms.get("uvScale").getLocation(), sprite.getUvScale().getX(), sprite.getUvScale().getY() );
-				gl.uniform2f( uniforms.get("uvOffset").getLocation(), sprite.getUvOffset().getX(), sprite.getUvOffset().getY() );
-				gl.uniform2f( uniforms.get("alignment").getLocation(), sprite.getAlignment().get().getX(), sprite.getAlignment().get().getY() );
-
-				gl.uniform1f( uniforms.get("opacity").getLocation(), sprite.getOpacity() );
-				gl.uniform3f( uniforms.get("color").getLocation(), 
-						sprite.getColor().getR(), 
-						sprite.getColor().getG(), 
-						sprite.getColor().getB() );
-
-				gl.uniform1f( uniforms.get("rotation").getLocation(), sprite.getRotationFactor() );
-				gl.uniform2fv( uniforms.get("scale").getLocation(), scale );
-
-				if ( sprite.isMergeWith3D() && !mergeWith3D ) 
-				{
-					gl.enable( EnableCap.DEPTH_TEST );
-					mergeWith3D = true;
-				} 
-				else if ( ! sprite.isMergeWith3D() && mergeWith3D ) 
-				{
-					gl.disable( EnableCap.DEPTH_TEST );
-					mergeWith3D = false;
-				}
-
-				//	renderer.setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
-				getRenderer().setBlending( sprite.getBlending() );
-				getRenderer().setTexture( sprite.getMap(), 0 );
-
-				gl.drawElements( BeginMode.TRIANGLES, 6, DrawElementsType.UNSIGNED_SHORT, 0 );
 			}
+
+			if ( oldFogType != fogType ) {
+
+				gl.uniform1i( uniforms.get("fogType").getLocation(), fogType );
+				oldFogType = fogType;
+
+			}
+
+			if (  material.getMap() != null 
+					&& material.getMap().getImage() != null 
+					&& material.getMap().getImage().getOffsetWidth() > 0 ) {
+
+				gl.uniform2f( uniforms.get("uvOffset").getLocation(), material.getMap().getOffset().getX(), material.getMap().getOffset().getY() );
+				gl.uniform2f( uniforms.get("uvScale").getLocation(), material.getMap().getRepeat().getX(), material.getMap().getRepeat().getY() );
+
+			} else {
+
+				gl.uniform2f( uniforms.get("uvOffset").getLocation(), 0.0, 0.0 );
+				gl.uniform2f( uniforms.get("uvScale").getLocation(), 1.0, 1.0 );
+
+			}
+			
+			gl.uniform1f( uniforms.get("opacity").getLocation(), material.getOpacity() );
+			gl.uniform3f( uniforms.get("color").getLocation(),
+					material.getColor().getR(), material.getColor().getG(), material.getColor().getB() );
+
+			gl.uniform1f( uniforms.get("rotation").getLocation(), material.getRotation() );
+			gl.uniform2fv( uniforms.get("scale").getLocation(), new double[]{spriteScale.getX(), spriteScale.getY()} );
+
+			//	renderer.setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
+			getRenderer().setBlending( material.getBlending() );
+			getRenderer().setDepthTest( material.isDepthTest() );
+			getRenderer().setDepthWrite( material.isDepthWrite() );
+
+			
+			if (  material.getMap() != null 
+					&& material.getMap().getImage() != null 
+					&& material.getMap().getImage().getOffsetWidth() > 0 ) {
+			
+				getRenderer().setTexture( material.getMap(), 0 );
+			}
+
+			gl.drawElements( BeginMode.TRIANGLES, 6, DrawElementsType.UNSIGNED_SHORT, 0 );
 		}
 
 		// restore gl
 
 		gl.enable( EnableCap.CULL_FACE );
-		gl.enable( EnableCap.DEPTH_TEST );
-		gl.depthMask( true );
+
 		getRenderer().resetGLState();
 	}
 }

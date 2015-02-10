@@ -18,205 +18,63 @@
 
 package thothbot.parallax.plugins.sprite;
 
-import thothbot.parallax.core.client.gl2.enums.BlendEquationMode;
-import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
-import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
-import thothbot.parallax.core.client.textures.Texture;
-import thothbot.parallax.core.shared.core.Object3D;
+import java.util.List;
+
+import thothbot.parallax.core.client.gl2.arrays.Float32Array;
+import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
+import thothbot.parallax.core.client.renderers.WebGLGeometry;
+import thothbot.parallax.core.client.renderers.WebGLRenderer;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
+import thothbot.parallax.core.shared.core.BufferAttribute;
+import thothbot.parallax.core.shared.core.BufferGeometry;
+import thothbot.parallax.core.shared.core.GeometryObject;
+import thothbot.parallax.core.shared.core.Raycaster;
+import thothbot.parallax.core.shared.core.Raycaster.Intersect;
 import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.math.Color;
-import thothbot.parallax.core.shared.math.Euler;
-import thothbot.parallax.core.shared.math.Vector2;
+import thothbot.parallax.core.shared.math.Vector3;
 
-public class Sprite extends Object3D implements Comparable<Sprite>
+public class Sprite extends GeometryObject implements Comparable<Sprite>
 {
-	/*
-	 * Alignment
-	 */
-	public static enum ALIGNMENT 
-	{
-		TOP_LEFT(1, -1),
-		TOP_CENTER(0, -1),
-		TOP_RIGHT(-1, -1),
-		CENTER_LEFT(1, 0),
-		CENTER(0, 0),
-		CENTER_RIGHT(-1, 0),
-		BOTTOM_LEFT(1, 1),
-		BOTTOM_CENTER(0, 1),
-		BOTTOM_RIGHT(-1, 1);
+	private static SpriteMaterial defaultMaterial = new SpriteMaterial();
 
-		double x, y;
-		ALIGNMENT(double x, double y) {
-			this.x = x;
-			this.y = y;
-		}
+	private static BufferGeometry defaultGeometry = new BufferGeometry();
+	static {
+		Uint16Array indices = Uint16Array.create( 
+				0, 1, 2,  
+				0, 2, 3 );
+		Float32Array vertices = Float32Array.create( 
+			    - 0.5, - 0.5, 0,  
+			 	  0.5, - 0.5, 0,   
+				  0.5, 0.5, 0,   
+				- 0.5, 0.5, 0);
+		Float32Array uvs = Float32Array.create( 
+				0, 0,   
+				1, 0,   
+				1, 1,   
+				0, 1);
 		
-		public Vector2 get() {
-			return new Vector2(this.x, this.y);
-		}
-	}
+		defaultGeometry.addAttribute( "index", new BufferAttribute( indices, 1 ) );
+		defaultGeometry.addAttribute( "position", new BufferAttribute( vertices, 3 ) );
+		defaultGeometry.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
+	};
 	
-	private Color color;
-	private Euler rotation3d;
-	private Texture map;
-	
-	private Material.BLENDING blending = Material.BLENDING.NORMAL;
-	private BlendingFactorSrc blendSrc = BlendingFactorSrc.SRC_ALPHA;
-	private BlendingFactorDest  blendDst = BlendingFactorDest.ONE_MINUS_SRC_ALPHA; 
-	private BlendEquationMode blendEquation = BlendEquationMode.FUNC_ADD;
-	
-	private boolean useScreenCoordinates = true;
-	private boolean mergeWith3D;
-	private boolean affectedByDistance;
-	private boolean scaleByViewport;
-	
-	private Sprite.ALIGNMENT alignment = Sprite.ALIGNMENT.CENTER;
-	
-	private Vector2 uvOffset;
-	private Vector2 uvScale;
-	
-	private double opacity = 1.0;
-	
-	private double rotationFactor;
-	
-	private double z;
+	double z;
 	
 	public Sprite() 
 	{
-		this.color = new Color( 0xffffff );
-		this.map = new Texture();
-
-		this.mergeWith3D = !this.useScreenCoordinates;
-		this.affectedByDistance = !this.useScreenCoordinates;
-		this.scaleByViewport = !this.affectedByDistance;
-
-		this.rotation3d = this.getRotation();
-		this.rotationFactor = 0;
-
-		this.uvOffset = new Vector2( 0, 0 );
-		this.uvScale  = new Vector2( 1, 1 );
+		this(defaultMaterial);
 	}
 	
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	public Texture getMap() {
-		return map;
-	}
-
-	public void setMap(Texture map) {
-		this.map = map;
-	}
-
-	public Material.BLENDING getBlending() {
-		return blending;
-	}
-
-	public void setBlending(Material.BLENDING blending) {
-		this.blending = blending;
-	}
-
-	public BlendingFactorSrc getBlendSrc() {
-		return blendSrc;
-	}
-
-	public void setBlendSrc(BlendingFactorSrc blendSrc) {
-		this.blendSrc = blendSrc;
-	}
-
-	public BlendingFactorDest getBlendDst() {
-		return blendDst;
-	}
-
-	public void setBlendDst(BlendingFactorDest blendDst) {
-		this.blendDst = blendDst;
-	}
-
-	public BlendEquationMode getBlendEquation() {
-		return blendEquation;
-	}
-
-	public void setBlendEquation(BlendEquationMode blendEquation) {
-		this.blendEquation = blendEquation;
-	}
-
-	public Sprite.ALIGNMENT getAlignment() {
-		return alignment;
-	}
-
-	public void setAlignment(Sprite.ALIGNMENT alignment) {
-		this.alignment = alignment;
-	}
-
-	public Vector2 getUvOffset() {
-		return uvOffset;
-	}
-
-	public void setUvOffset(Vector2 uvOffset) {
-		this.uvOffset = uvOffset;
-	}
-
-	public Vector2 getUvScale() {
-		return uvScale;
-	}
-
-	public void setUvScale(Vector2 uvScale) {
-		this.uvScale = uvScale;
-	}
-
-	public double getOpacity() {
-		return opacity;
-	}
-
-	public void setOpacity(double opacity) {
-		this.opacity = opacity;
-	}
-
-	public double getRotationFactor() {
-		return rotationFactor;
-	}
-
-	public void setRotationFactor(double rotation) {
-		this.rotationFactor = rotation;
+	public Sprite(SpriteMaterial material) 
+	{
+		this(defaultGeometry, material);
 	}
 	
-	public boolean isUseScreenCoordinates() {
-		return useScreenCoordinates;
-	}
-
-	public void setUseScreenCoordinates(boolean useScreenCoordinates) {
-		this.useScreenCoordinates = useScreenCoordinates;
-	}
-
-	public boolean isMergeWith3D() {
-		return mergeWith3D;
-	}
-
-	public void setMergeWith3D(boolean mergeWith3D) {
-		this.mergeWith3D = mergeWith3D;
+	public Sprite(AbstractGeometry geometry, Material material) 
+	{
+		super(geometry, material);
 	}
 	
-	public boolean isAffectedByDistance() {
-		return affectedByDistance;
-	}
-
-	public void setAffectedByDistance(boolean affectedByDistance) {
-		this.affectedByDistance = affectedByDistance;
-	}
-
-	public boolean isScaleByViewport() {
-		return scaleByViewport;
-	}
-
-	public void setScaleByViewport(boolean scaleByViewport) {
-		this.scaleByViewport = scaleByViewport;
-	}
-
 	public double getZ() {
 		return z;
 	}
@@ -224,31 +82,61 @@ public class Sprite extends Object3D implements Comparable<Sprite>
 	public void setZ(double z) {
 		this.z = z;
 	}
+		
+	@Override
+	public void raycast(Raycaster raycaster, List<Intersect> intersects) {
+		Vector3 matrixPosition = new Vector3();
+		
+		matrixPosition.setFromMatrixPosition( this.matrixWorld );
 
-	/*
-	 * Custom update matrix
-	 */
-	public void updateMatrix() 
-	{
-		this.matrix.setPosition( this.position );
+		double distance = raycaster.getRay().distanceToPoint( matrixPosition );
 
-		this.rotation3d.set( 0.0, 0.0, this.rotationFactor );
-		this.matrix.makeRotationFromEuler( this.rotation3d );
+		if ( distance > this.scale.getX() ) {
 
-		if ( this.scale.getX() != 1 || this.scale.getY() != 1 ) 
-		{
-			this.matrix.scale( this.scale );
-//			this.boundRadiusScale = Math.max( this.scale.getX(), this.scale.getY() );
+			return;
+
 		}
 
-		this.matrixWorldNeedsUpdate = true;
+		Raycaster.Intersect intersect = new Raycaster.Intersect();
+		intersect.distance = distance;
+		intersect.point = this.position;
+		intersect.object = this;
+		intersects.add( intersect );
+		
 	}
 	
 	@Override
-	public int compareTo(Sprite o)
-	{
-		double result = o.z - this.z;
-		return (result == 0) ? 0 
-				: (result > 0) ? 1 : -1;
+	public void renderBuffer(WebGLRenderer renderer,
+			WebGLGeometry geometryBuffer, boolean updateBuffers) {
+		// TODO Auto-generated method stub
+		
 	}
+
+	public Sprite clone() 
+	{
+
+		Sprite object = new Sprite( (SpriteMaterial) this.material );
+
+		super.clone( object );
+
+		return object;
+
+	}
+	
+	@Override
+	public int compareTo(Sprite b)
+	{
+		Sprite a = this;
+		if ( a.z != b.z ) {
+
+			return (int) (b.z - a.z);
+
+		} else {
+
+			return b.id - a.id;
+
+		}
+
+	}
+
 }
