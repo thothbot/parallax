@@ -113,6 +113,7 @@ import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.AbstractFog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
+import thothbot.parallax.plugins.postprocessing.Postprocessing;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
@@ -1796,9 +1797,9 @@ public class WebGLRenderer implements HasEventBus
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
 	{		
 		// Render basic plugins
-		if(renderPlugins( this.plugins, camera, Plugin.TYPE.BASIC_RENDER ))
+		if(renderPlugins( this.plugins, scene, camera, Plugin.TYPE.BASIC_RENDER ))
 			return;
-
+		
 		Log.debug("Called render()");
 				
 		AbstractFog fog = scene.getFog();
@@ -1874,7 +1875,7 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 		// custom render plugins (pre pass)
-		renderPlugins( this.plugins, camera, Plugin.TYPE.PRE_RENDER );
+		renderPlugins( this.plugins, scene, camera, Plugin.TYPE.PRE_RENDER );
 
 		this.getInfo().getRender().calls = 0;
 		this.getInfo().getRender().vertices = 0;
@@ -1939,7 +1940,7 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 		// custom render plugins (post pass)
-		renderPlugins( this.plugins, camera, Plugin.TYPE.POST_RENDER );
+		renderPlugins( this.plugins, scene, camera, Plugin.TYPE.POST_RENDER );
 
 		// Generate mipmap if we're using any kind of mipmap filtering
 		if ( renderTarget != null && renderTarget.isGenerateMipmaps() 
@@ -2019,7 +2020,7 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 
-	private boolean renderPlugins( List<Plugin> plugins, Camera camera, Plugin.TYPE type ) 
+	private boolean renderPlugins( List<Plugin> plugins, Scene scene, Camera camera, Plugin.TYPE type ) 
 	{		
 		if ( plugins.size() == 0 ) 
 			return false;
@@ -2029,9 +2030,12 @@ public class WebGLRenderer implements HasEventBus
 		{
 			Plugin plugin = plugins.get( i );
 
-			if( ! plugin.isEnabled() || plugin.isRendering() || plugin.getType() != type )
+			if( ! plugin.isEnabled() 
+					|| plugin.isRendering() 
+					|| plugin.getType() != type 
+					|| ( !(plugin instanceof Postprocessing) && !plugin.getScene().equals(scene)))
 				continue;
-
+			
 			plugin.setRendering(true);
 			Log.debug("Called renderPlugins(): " + plugin.getClass().getName());
 

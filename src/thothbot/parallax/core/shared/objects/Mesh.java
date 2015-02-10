@@ -579,6 +579,7 @@ public class Mesh extends GeometryObject
 
 
 		// custom attributes
+
 		Map<String, Attribute> attributes = material.getShader().getAttributes();
 
 		if (attributes != null) 

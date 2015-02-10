@@ -34,9 +34,9 @@ import thothbot.parallax.core.shared.objects.PointCloud;
 
 public abstract class GeometryObject extends Object3D
 {
-	private AbstractGeometry geometry;
+	protected AbstractGeometry geometry;
 //	protected GeometryBuffer geometryBuffer;
-	private Material material;
+	protected Material material;
 //	protected Material customDepthMaterial;
 	
 	private double _oldLineWidth = -1;
