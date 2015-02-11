@@ -72,7 +72,7 @@ public class Line extends GeometryObject
 	
 	private static LineBasicMaterial defaultMaterial = new LineBasicMaterial();
 	static {
-		defaultMaterial.setColor( new Color((int)Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 	};
 
 	public Line() {

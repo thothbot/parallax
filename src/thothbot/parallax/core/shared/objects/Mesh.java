@@ -81,7 +81,7 @@ public class Mesh extends GeometryObject
 
 	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {
-		defaultMaterial.setColor( new Color((int) Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 		defaultMaterial.setWireframe( true );
 	};
 	

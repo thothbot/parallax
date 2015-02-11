@@ -143,7 +143,7 @@ public class Postprocessing extends Plugin
 		
 		for ( Pass pass : this.passes ) 
 		{	
-			Log.error("Called pass", pass.getClass().getName() );
+			Log.info("Postprocessing.render(): pass " + pass.getClass().getSimpleName() );
 
 			if ( !pass.isEnabled() ) continue;
 

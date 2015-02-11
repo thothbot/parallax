@@ -32,6 +32,7 @@ import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphColor;
+import thothbot.parallax.core.shared.materials.HasAlphaMap;
 import thothbot.parallax.core.shared.materials.HasAmbientEmissiveColor;
 import thothbot.parallax.core.shared.materials.HasBumpMap;
 import thothbot.parallax.core.shared.materials.HasColor;
@@ -215,7 +216,6 @@ public class JsonLoader extends XHRLoader
 			}
 			else if(material instanceof HasColor)
 			{
-
 				((HasColor) material).setColor(diffuseColor);
 			}
 		}
@@ -245,6 +245,20 @@ public class JsonLoader extends XHRLoader
 			else if( material instanceof HasAmbientEmissiveColor)
 			{
 				((HasAmbientEmissiveColor)material).setAmbient(color);	
+			}
+		}
+		
+		if(jsonMaterial.getColorEmissive() != null )
+		{
+			Color color = getColor(jsonMaterial.getColorEmissive());
+			if(material instanceof ShaderMaterial)
+			{
+				Map<String, Uniform> uniforms = material.getShader().getUniforms();
+				uniforms.get( "emissive" ).setValue(color);
+			}
+			else if( material instanceof HasAmbientEmissiveColor)
+			{
+				((HasAmbientEmissiveColor)material).setEmissive(color);	
 			}
 		}
 		
@@ -317,26 +331,6 @@ public class JsonLoader extends XHRLoader
 			}
 		}
 		
-		if ( jsonMaterial.getMapSpecular() != null) 
-		{
-			Texture texture = create_texture(jsonMaterial.getMapSpecular(),
-					jsonMaterial.getMapSpecularRepeat(),
-					jsonMaterial.getMapSpecularOffset(),
-					jsonMaterial.getMapSpecularWrap(),
-					jsonMaterial.getMapSpecularAnisotropy());
-			
-			if(material instanceof ShaderMaterial)
-			{
-				Map<String, Uniform> uniforms = material.getShader().getUniforms();
-				uniforms.get( "tSpecular" ).setValue(texture);
-				uniforms.get( "enableSpecular" ).setValue(true);
-			}
-			else if( material instanceof HasSpecularMap )
-			{
-				((HasSpecularMap)material).setSpecularMap(texture);
-			}
-		}
-
 		if ( jsonMaterial.getMapBump() != null && material instanceof HasBumpMap) 
 		{
 			((HasBumpMap)material).setBumpMap(
@@ -366,6 +360,40 @@ public class JsonLoader extends XHRLoader
 			{
 				((Vector2)uniforms.get( "uNormalScale" ).getValue()).set( 
 						jsonMaterial.getMapNormalFactor(), jsonMaterial.getMapNormalFactor() );
+			}
+		}
+		
+		if ( jsonMaterial.getMapSpecular() != null) 
+		{
+			Texture texture = create_texture(jsonMaterial.getMapSpecular(),
+					jsonMaterial.getMapSpecularRepeat(),
+					jsonMaterial.getMapSpecularOffset(),
+					jsonMaterial.getMapSpecularWrap(),
+					jsonMaterial.getMapSpecularAnisotropy());
+
+			if(material instanceof ShaderMaterial)
+			{
+				Map<String, Uniform> uniforms = material.getShader().getUniforms();
+				uniforms.get( "tSpecular" ).setValue(texture);
+				uniforms.get( "enableSpecular" ).setValue(true);
+			}
+			else if( material instanceof HasSpecularMap )
+			{
+				((HasSpecularMap)material).setSpecularMap(texture);
+			}
+		}
+		
+		if ( jsonMaterial.getMapAlpha() != null) 
+		{
+			Texture texture = create_texture(jsonMaterial.getMapAlpha(),
+					jsonMaterial.getMapAlphaRepeat(),
+					jsonMaterial.getMapAlphaOffset(),
+					jsonMaterial.getMapAlphaWrap(),
+					jsonMaterial.getMapAlphaAnisotropy());
+			
+			if( material instanceof HasAlphaMap )
+			{
+				((HasAlphaMap)material).setAlphaMap(texture);
 			}
 		}
 

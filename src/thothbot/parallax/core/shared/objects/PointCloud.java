@@ -56,7 +56,7 @@ public class PointCloud extends GeometryObject
 	
 	private static PointCloudMaterial defaultMaterial = new PointCloudMaterial();
 	static {
-		defaultMaterial.setColor( new Color((int)Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 	};
 	
 	public PointCloud() {

@@ -48,6 +48,11 @@ public interface JsoMaterial
 	 */
 	List<Double> getColorSpecular();
 	
+	/**
+	 * List of R, G, B
+	 */
+	List<Double> getColorEmissive();
+	
 	double getIllumination();
 	
 	double getOpticalDensity();
@@ -105,4 +110,10 @@ public interface JsoMaterial
 	List<JsoTextureWrapMode> getMapSpecularWrap();
 	int getMapSpecularAnisotropy();
 	List<Double> getMapSpecularOffset();
+	
+	String getMapAlpha();
+	List<Integer> getMapAlphaRepeat();
+	List<JsoTextureWrapMode> getMapAlphaWrap();
+	int getMapAlphaAnisotropy();
+	List<Double> getMapAlphaOffset();
 }

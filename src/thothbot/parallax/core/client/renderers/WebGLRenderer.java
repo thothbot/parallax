@@ -2150,11 +2150,11 @@ public class WebGLRenderer implements HasEventBus
 
 		int geometryGroupHash = ( geometry.getId() * 0xffffff ) + ( material.getShader().getId() * 2 ) + wireframeBit;
 
-//		GWT.log("--- renderBuffer() geometryGroupHash=" + geometryGroupHash 
+//		Log.error("--- renderBuffer() geometryGroupHash=" + geometryGroupHash 
 //				+ ", _currentGeometryGroupHash=" +  this._currentGeometryGroupHash
-//				+ ", program.id=" + program.id
-//				+ ", geometryGroup.id=" + geometryBuffer.getId()
-//				+ ", __webglLineCount=" + geometryBuffer.__webglLineCount
+//				+ ", program.id=" + program.getId()
+////				+ ", geometryGroup.id=" + geometryBuffer.getId()
+////				+ ", __webglLineCount=" + geometryBuffer.__webglLineCount
 //				+ ", object.id=" + object.getId()
 //				+ ", wireframeBit=" + wireframeBit);
 
