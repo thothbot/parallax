@@ -769,13 +769,13 @@ public class Mesh extends GeometryObject
 
 		Geometry geometry = (Geometry)this.getGeometry(); // this is shared for all chunks
 
-		boolean dirtyVertices = geometry.verticesNeedUpdate,
-				dirtyElements = geometry.elementsNeedUpdate,
-				dirtyUvs = geometry.uvsNeedUpdate,
-				dirtyNormals = geometry.normalsNeedUpdate,
-				dirtyTangents = geometry.tangentsNeedUpdate,
-				dirtyColors = geometry.colorsNeedUpdate,
-				dirtyMorphTargets = geometry.morphTargetsNeedUpdate;
+		boolean dirtyVertices = geometry.isVerticesNeedUpdate(),
+				dirtyElements = geometry.isElementsNeedUpdate(),
+				dirtyUvs = geometry.isUvsNeedUpdate(),
+				dirtyNormals = geometry.isNormalsNeedUpdate(),
+				dirtyTangents = geometry.isTangentsNeedUpdate(),
+				dirtyColors = geometry.isColorsNeedUpdate(),
+				dirtyMorphTargets = geometry.isMorphTargetsNeedUpdate();
 
 		List<Vector3> vertices = geometry.getVertices();
 		List<Integer> chunk_faces3 = geometryGroup.faces3;

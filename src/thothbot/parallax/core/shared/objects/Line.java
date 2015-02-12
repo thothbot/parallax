@@ -282,9 +282,9 @@ public class Line extends GeometryObject
 		Float32Array colorArray = geometry.__colorArray;
 		Float32Array lineDistanceArray = geometry.__lineDistanceArray;
 
-		boolean dirtyVertices = geometry.verticesNeedUpdate;
-		boolean dirtyColors = geometry.colorsNeedUpdate;
-		boolean dirtyLineDistances = geometry.lineDistancesNeedUpdate;
+		boolean dirtyVertices = geometry.isVerticesNeedUpdate();
+		boolean dirtyColors = geometry.isColorsNeedUpdate();
+		boolean dirtyLineDistances = geometry.isLineDistancesNeedUpdate();
 
 		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
 

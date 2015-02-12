@@ -1425,13 +1425,13 @@ public class WebGLRenderer implements HasEventBus
 		Material material = object.getMaterial();
 		boolean addBuffers = false;
 
-		if ( GeometryGroup.geometryGroups.get( geometry.getId() + "" ) == null || geometry.groupsNeedUpdate == true ) {
+		if ( GeometryGroup.geometryGroups.get( geometry.getId() + "" ) == null || geometry.isGroupsNeedUpdate() ) {
 
 			this._webglObjects.put(object.getId() + "", new ArrayList<WebGLObject>());
 
 			GeometryGroup.geometryGroups.put( geometry.getId() + "", makeGroups( geometry, material instanceof MeshFaceMaterial ));
 
-			geometry.groupsNeedUpdate = false;
+			geometry.setGroupsNeedUpdate( false );
 
 		}
 
@@ -1450,13 +1450,13 @@ public class WebGLRenderer implements HasEventBus
 				((Mesh)object).createBuffers(this, geometryGroup);
 				((Mesh)object).initBuffers(gl, geometryGroup);
 
-				geometry.verticesNeedUpdate = true;
-				geometry.morphTargetsNeedUpdate = true;
-				geometry.elementsNeedUpdate = true;
-				geometry.uvsNeedUpdate = true;
-				geometry.normalsNeedUpdate = true;
-				geometry.tangentsNeedUpdate = true;
-				geometry.colorsNeedUpdate = true;
+				geometry.setVerticesNeedUpdate( true );
+				geometry.setMorphTargetsNeedUpdate( true );
+				geometry.setElementsNeedUpdate( true );
+				geometry.setUvsNeedUpdate( true );
+				geometry.setNormalsNeedUpdate( true );
+				geometry.setTangentsNeedUpdate( true );
+				geometry.setColorsNeedUpdate( true );
 
 				addBuffers = true;
 
@@ -1514,9 +1514,9 @@ public class WebGLRenderer implements HasEventBus
 					((Line)object).createBuffers(this);
 					((Line)object).initBuffers(gl);
 
-					geometry.verticesNeedUpdate = true;
-					geometry.colorsNeedUpdate = true;
-					geometry.lineDistancesNeedUpdate = true;
+					geometry.setVerticesNeedUpdate( true );
+					geometry.setColorsNeedUpdate( true );
+					geometry.setLineDistancesNeedUpdate( true );
 
 				}
 
@@ -1527,8 +1527,8 @@ public class WebGLRenderer implements HasEventBus
 					((PointCloud)object).createBuffers(this);
 					((PointCloud)object).initBuffers(gl);
 
-					geometry.verticesNeedUpdate = true;
-					geometry.colorsNeedUpdate = true;
+					geometry.setVerticesNeedUpdate( true );
+					geometry.setColorsNeedUpdate( true );
 
 				}
 
@@ -1660,7 +1660,8 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 	
-	public Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) {
+	public Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) 
+	{
 
 		return object.getMaterial() instanceof MeshFaceMaterial
 			 ? ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.materialIndex )
@@ -1689,7 +1690,7 @@ public class WebGLRenderer implements HasEventBus
 
 			// check all geometry groups
 
-			if ( geometry.groupsNeedUpdate == true ) {
+			if ( geometry.isGroupsNeedUpdate() ) {
 
 				initGeometryGroups( scene, (Mesh)object, (Geometry)geometry );
 
@@ -1703,7 +1704,7 @@ public class WebGLRenderer implements HasEventBus
 
 				material = getBufferMaterial( object, geometryGroup );
 
-				if ( geometry.groupsNeedUpdate == true ) {
+				if ( geometry.isGroupsNeedUpdate() ) {
 
 					((Mesh)object).initBuffers( gl, geometryGroup );
 
@@ -1711,9 +1712,9 @@ public class WebGLRenderer implements HasEventBus
 
 				boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
-				if ( geometry.verticesNeedUpdate || geometry.morphTargetsNeedUpdate || geometry.elementsNeedUpdate ||
-					 geometry.uvsNeedUpdate || geometry.normalsNeedUpdate ||
-					 geometry.colorsNeedUpdate || geometry.tangentsNeedUpdate || customAttributesDirty ) {
+				if ( geometry.isVerticesNeedUpdate() || geometry.isMorphTargetsNeedUpdate() || geometry.isElementsNeedUpdate() ||
+					 geometry.isUvsNeedUpdate() || geometry.isNormalsNeedUpdate() ||
+					 geometry.isColorsNeedUpdate() || geometry.isTangentsNeedUpdate() || customAttributesDirty ) {
 
 					((Mesh)object).setBuffers( gl, geometryGroup, BufferUsage.DYNAMIC_DRAW, ! ((Geometry)geometry).isDynamic(), material );
 
@@ -1721,13 +1722,13 @@ public class WebGLRenderer implements HasEventBus
 
 			}
 
-			geometry.verticesNeedUpdate = false;
-			geometry.morphTargetsNeedUpdate = false;
-			geometry.elementsNeedUpdate = false;
-			geometry.uvsNeedUpdate = false;
-			geometry.normalsNeedUpdate = false;
-			geometry.colorsNeedUpdate = false;
-			geometry.tangentsNeedUpdate = false;
+			geometry.setVerticesNeedUpdate( false );
+			geometry.setMorphTargetsNeedUpdate( false );
+			geometry.setElementsNeedUpdate( false );
+			geometry.setUvsNeedUpdate( false );
+			geometry.setNormalsNeedUpdate( false );
+			geometry.setColorsNeedUpdate( false );
+			geometry.setTangentsNeedUpdate( false );
 
 			if(material instanceof ShaderMaterial ) {
 				((ShaderMaterial)material).getShader().clearCustomAttributes();
@@ -1739,15 +1740,15 @@ public class WebGLRenderer implements HasEventBus
 
 			boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
-			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || geometry.lineDistancesNeedUpdate || customAttributesDirty ) {
+			if ( geometry.isVerticesNeedUpdate() || geometry.isColorsNeedUpdate() || geometry.isLineDistancesNeedUpdate() || customAttributesDirty ) {
 
 				((Line)object).setBuffers( gl, BufferUsage.DYNAMIC_DRAW );
 
 			}
 
-			geometry.verticesNeedUpdate = false;
-			geometry.colorsNeedUpdate = false;
-			geometry.lineDistancesNeedUpdate = false;
+			geometry.setVerticesNeedUpdate( false );
+			geometry.setColorsNeedUpdate( false );
+			geometry.setLineDistancesNeedUpdate( false );
 
 			if(material instanceof ShaderMaterial ) {
 				((ShaderMaterial)material).getShader().clearCustomAttributes();
@@ -1760,14 +1761,14 @@ public class WebGLRenderer implements HasEventBus
 
 			boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
-			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || ((PointCloud)object).isSortParticles() || customAttributesDirty ) {
+			if ( geometry.isVerticesNeedUpdate() || geometry.isColorsNeedUpdate() || ((PointCloud)object).isSortParticles() || customAttributesDirty ) {
 
 				((PointCloud)object).setBuffers( this, BufferUsage.DYNAMIC_DRAW );
 
 			}
 
-			geometry.verticesNeedUpdate = false;
-			geometry.colorsNeedUpdate = false;
+			geometry.setVerticesNeedUpdate( false );
+			geometry.setColorsNeedUpdate( false );
 
 			if(material instanceof ShaderMaterial ) {
 				((ShaderMaterial)material).getShader().clearCustomAttributes();

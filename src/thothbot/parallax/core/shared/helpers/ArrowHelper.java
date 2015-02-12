@@ -31,10 +31,9 @@ import thothbot.parallax.core.shared.objects.Mesh;
 
 public class ArrowHelper extends Object3D
 {
+	private Line line;
+	private Mesh cone;
 
-	public Line line;
-	public Mesh cone;
-		
 	public ArrowHelper ( Vector3 dir, Vector3 origin)
 	{
 		this(dir, origin, 1);

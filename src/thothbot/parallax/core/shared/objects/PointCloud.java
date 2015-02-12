@@ -260,9 +260,9 @@ public class PointCloud extends GeometryObject
 
 //		Float32Array sortArray = geometry.__sortArray;
 
-		boolean dirtyVertices = geometry.verticesNeedUpdate;
-		boolean dirtyElements = geometry.elementsNeedUpdate;
-		boolean dirtyColors = geometry.colorsNeedUpdate;
+		boolean dirtyVertices = geometry.isVerticesNeedUpdate();
+		boolean dirtyElements = geometry.isElementsNeedUpdate();
+		boolean dirtyColors = geometry.isColorsNeedUpdate();
 
 		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
 

@@ -482,12 +482,13 @@ public abstract class Material
 
 	public void updateProgramParameters(ProgramParameters parameters)
 	{
-		parameters.map       = (this instanceof HasMap && ((HasMap)this).getMap() != null);
-		parameters.envMap    = (this instanceof HasEnvMap && ((HasEnvMap)this).getEnvMap() != null);
-		parameters.lightMap  = (this instanceof HasLightMap &&  ((HasLightMap)this).getLightMap() != null);
-		parameters.bumpMap   = (this instanceof HasBumpMap &&  ((HasBumpMap)this).getBumpMap() != null);
-		parameters.normalMap = (this instanceof HasNormalMap &&  ((HasNormalMap)this).getNormalMap() != null);
+		parameters.map          = (this instanceof HasMap         && ((HasMap)this).getMap() != null);
+		parameters.envMap       = (this instanceof HasEnvMap      && ((HasEnvMap)this).getEnvMap() != null);
+		parameters.lightMap     = (this instanceof HasLightMap    &&  ((HasLightMap)this).getLightMap() != null);
+		parameters.bumpMap      = (this instanceof HasBumpMap     &&  ((HasBumpMap)this).getBumpMap() != null);
+		parameters.normalMap    = (this instanceof HasNormalMap   &&  ((HasNormalMap)this).getNormalMap() != null);
 		parameters.specularMap  = (this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null);
+		parameters.alphaMap     = (this instanceof HasAlphaMap    &&  ((HasAlphaMap)this).getAlphaMap() != null);
 
 		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
 
@@ -504,7 +505,6 @@ public abstract class Material
 		if(this instanceof MeshPhongMaterial)
 		{
 			parameters.metal = ((MeshPhongMaterial)this).isMetal();
-//			parameters.perPixel = ((MeshPhongMaterial)this).isPerPixel();
 		}
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
@@ -818,7 +818,7 @@ public abstract class Material
 			uvScaleMap = ((HasNormalMap)this).getNormalMap();
 		else if(this instanceof HasBumpMap)
 			uvScaleMap = ((HasBumpMap)this).getBumpMap();
-		else if(this instanceof HasBumpMap)
+		else if(this instanceof HasAlphaMap)
 			uvScaleMap = ((HasAlphaMap)this).getAlphaMap();
 		
 		if(uvScaleMap != null)
@@ -948,5 +948,10 @@ public abstract class Material
 
 		}
 
+	}
+
+	public String toString() 
+	{
+		return this.getClass().getSimpleName() + " { id=" + this.getId() + " }";
 	}
 }

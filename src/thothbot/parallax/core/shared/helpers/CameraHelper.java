@@ -196,7 +196,7 @@ public class CameraHelper extends Line
 		setPoint( "cn3",  0, -h, -1 );
 		setPoint( "cn4",  0,  h, -1 );
 
-		((Geometry)getGeometry()).verticesNeedUpdate = true;
+		((Geometry)getGeometry()).setVerticesNeedUpdate( true );
 	}
 	
 	private void setPoint( String point, double x, double y, double z ) 
