@@ -34,18 +34,18 @@ public class GeometryGroup extends WebGLGeometry
 	public static Map<String, List<GeometryGroup>> geometryGroups = GWT.isScript() ? 
 			new FastMap<List<GeometryGroup>>() : new HashMap<String, List<GeometryGroup>>(); 
 	
-	public static int Counter = 0;
+	private static int Counter = 0;
 	
 	private int id = 0;
 	
-	public List<Integer> faces3;
+	private List<Integer> faces3;
 
-	public int materialIndex = -1;
+	private int materialIndex = -1;
 
-	public int vertices;
+	private int vertices;
 	
-	public int numMorphTargets;
-	public int numMorphNormals;
+	private int numMorphTargets;
+	private int numMorphNormals;
 
 	public Float32Array __skinIndexArray;
 	public Float32Array __skinWeightArray;
@@ -63,17 +63,88 @@ public class GeometryGroup extends WebGLGeometry
 		super();
 
 		this.id = GeometryGroup.Counter++;
-		this.faces3 = new ArrayList<Integer>();
-		this.materialIndex = materialIndex;
-		this.vertices = 0;
-		this.numMorphTargets = numMorphTargets;
-		this.numMorphNormals = numMorphNormals;
+		this.setFaces3(new ArrayList<Integer>());
+		this.setMaterialIndex(materialIndex);
+		this.setVertices(0);
+		this.setNumMorphTargets(numMorphTargets);
+		this.setNumMorphNormals(numMorphNormals);
 	}
 	
 	public int getId() {
 		return this.id;
 	}
-		
+
+
+	/**
+	 * @return the faces3
+	 */
+	public List<Integer> getFaces3() {
+		return faces3;
+	}
+
+	/**
+	 * @param faces3 the faces3 to set
+	 */
+	public void setFaces3(List<Integer> faces3) {
+		this.faces3 = faces3;
+	}
+
+	/**
+	 * @return the materialIndex
+	 */
+	public int getMaterialIndex() {
+		return materialIndex;
+	}
+
+	/**
+	 * @param materialIndex the materialIndex to set
+	 */
+	public void setMaterialIndex(int materialIndex) {
+		this.materialIndex = materialIndex;
+	}
+
+	/**
+	 * @return the vertices
+	 */
+	public int getVertices() {
+		return vertices;
+	}
+
+	/**
+	 * @param vertices the vertices to set
+	 */
+	public void setVertices(int vertices) {
+		this.vertices = vertices;
+	}
+
+	/**
+	 * @return the numMorphTargets
+	 */
+	public int getNumMorphTargets() {
+		return numMorphTargets;
+	}
+
+	/**
+	 * @param numMorphTargets the numMorphTargets to set
+	 */
+	public void setNumMorphTargets(int numMorphTargets) {
+		this.numMorphTargets = numMorphTargets;
+	}
+
+	/**
+	 * @return the numMorphNormals
+	 */
+	public int getNumMorphNormals() {
+		return numMorphNormals;
+	}
+
+	/**
+	 * @param numMorphNormals the numMorphNormals to set
+	 */
+	public void setNumMorphNormals(int numMorphNormals) {
+		this.numMorphNormals = numMorphNormals;
+	}
+	
 	@Override
 	public void dispose() 
 	{

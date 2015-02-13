@@ -78,7 +78,7 @@ public class WebGLObject implements Comparable<WebGLObject>
 
 		if ( material instanceof MeshFaceMaterial ) 
 		{
-			int materialIndex = geometry instanceof BufferGeometry ? 0 : ((GeometryGroup)buffer).materialIndex;
+			int materialIndex = geometry instanceof BufferGeometry ? 0 : ((GeometryGroup)buffer).getMaterialIndex();
 
 			material = ((MeshFaceMaterial)material).getMaterials().get( materialIndex );
 

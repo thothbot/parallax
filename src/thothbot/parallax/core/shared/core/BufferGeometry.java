@@ -88,8 +88,7 @@ public class BufferGeometry extends AbstractGeometry
 	private Map<String, BufferAttribute> attributes;
 	private Set<String> attributesKeys;
 	
-	public List<BufferGeometry.DrawCall> drawcalls;
-	public List<BufferGeometry.DrawCall> offsets; // backwards compatibility
+	private List<BufferGeometry.DrawCall> drawcalls;
 
 	public BufferGeometry() 
 	{
@@ -98,8 +97,7 @@ public class BufferGeometry extends AbstractGeometry
 		this.attributes  = GWT.isScript() ? 
 				new FastMap<BufferAttribute>() : new HashMap<String, BufferAttribute>();
 					
-		this.drawcalls = new ArrayList<BufferGeometry.DrawCall>();
-		this.offsets = this.drawcalls;
+		this.setDrawcalls(new ArrayList<BufferGeometry.DrawCall>());
 
 		this.boundingBox = null;
 		this.boundingSphere = null;
@@ -151,8 +149,15 @@ public class BufferGeometry extends AbstractGeometry
 	 * This may be necessary if, for instance, you have more than 65535 vertices in your object.
 	 * @return
 	 */
-	public List<BufferGeometry.DrawCall> getOffsets() {
-		return offsets;
+	public List<BufferGeometry.DrawCall> getDrawcalls() {
+		return drawcalls;
+	}
+
+	/**
+	 * @param drawcalls the drawcalls to set
+	 */
+	public void setDrawcalls(List<BufferGeometry.DrawCall> drawcalls) {
+		this.drawcalls = drawcalls;
 	}
 
 	public void addDrawCall( int start, int count ) {
@@ -162,7 +167,7 @@ public class BufferGeometry extends AbstractGeometry
 	public void addDrawCall( int start, int count, int indexOffset ) {
 
 		DrawCall drawCall = new DrawCall(start, count, indexOffset);
-		this.drawcalls.add(drawCall);
+		this.getDrawcalls().add(drawCall);
 	}
 	
 	/**
@@ -486,8 +491,8 @@ public class BufferGeometry extends AbstractGeometry
 
 				Uint16Array indices = (Uint16Array) getAttribute("normal").getArray();
 
-				List<BufferGeometry.DrawCall> offsets = this.offsets.size() > 0 
-						? this.offsets 
+				List<BufferGeometry.DrawCall> offsets = this.drawcalls.size() > 0 
+						? this.drawcalls 
 						: Arrays.asList( new BufferGeometry.DrawCall(0, indices.getLength(), 0 ) ) ;
 
 				for ( int j = 0, jl = offsets.size(); j < jl; ++ j ) {
@@ -608,13 +613,13 @@ public class BufferGeometry extends AbstractGeometry
 
 		Float32Array tangents = (Float32Array)getAttribute("tangent").getArray();
 
-		if ( this.drawcalls.size() == 0 ) {
+		if ( this.getDrawcalls().size() == 0 ) {
 
 			this.addDrawCall( 0, indices.getLength(), 0 );
 
 		}
 
-		List<DrawCall> drawcalls = this.drawcalls;
+		List<DrawCall> drawcalls = this.getDrawcalls();
 
 		for ( int j = 0, jl = drawcalls.size(); j < jl; ++ j ) {
 
@@ -752,7 +757,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		/* Move all attribute values to map to the new computed indices , also expand the vertice stack to match our new vertexPtr. */
 		this.reorderBuffers( sortedIndices, revVertexMap, vertexPtr );
-		this.offsets = offsets;
+		this.drawcalls = offsets;
 
 		/*
 		var orderTime = Date.now();
@@ -837,7 +842,7 @@ public class BufferGeometry extends AbstractGeometry
 				continue;
 
 			this.attributes.get( attr ).setArray( sortedAttributes.get( attr ) );
-			this.attributes.get( attr ).numItems = this.attributes.get( attr ).getItemSize() * vertexCount;
+			this.attributes.get( attr ).setNumItems(this.attributes.get( attr ).getItemSize() * vertexCount);
 		}
 	}
 	
@@ -850,11 +855,11 @@ public class BufferGeometry extends AbstractGeometry
 			geometry.addAttribute( attr, sourceAttr.clone() );
 		}
 
-		for ( int i = 0, il = this.offsets.size(); i < il; i ++ ) {
+		for ( int i = 0, il = this.drawcalls.size(); i < il; i ++ ) {
 
-			DrawCall offset = this.offsets.get( i );
+			DrawCall offset = this.drawcalls.get( i );
 
-			geometry.offsets.add( new DrawCall(
+			geometry.drawcalls.add( new DrawCall(
 
 				offset.start,
 				offset.index,
@@ -963,21 +968,21 @@ public class BufferGeometry extends AbstractGeometry
 			String key = (String) this.attributesKeys.toArray()[ i ];
 			BufferAttribute attribute = this.attributes.get( key );
 
-			if ( attribute.buffer == null ) {
+			if ( attribute.getBuffer() == null ) {
 
-				attribute.buffer = gl.createBuffer();
-				attribute.needsUpdate = true;
+				attribute.setBuffer(gl.createBuffer());
+				attribute.setNeedsUpdate(true);
 
 			}
 
-			if ( attribute.needsUpdate == true ) {
+			if ( attribute.isNeedsUpdate() == true ) {
 
 				BufferTarget bufferType = ( key == "index" ) ? BufferTarget.ELEMENT_ARRAY_BUFFER : BufferTarget.ARRAY_BUFFER;
 
-				gl.bindBuffer( bufferType, attribute.buffer );
+				gl.bindBuffer( bufferType, attribute.getBuffer() );
 				gl.bufferData( bufferType, attribute.getArray(), BufferUsage.STATIC_DRAW );
 
-				attribute.needsUpdate = false;
+				attribute.setNeedsUpdate(false);
 
 			}
 
@@ -988,7 +993,7 @@ public class BufferGeometry extends AbstractGeometry
 	public String toString() {
 		return getClass().getSimpleName() 
 				+ "{id: " + getId() 
-				+ ", offsets: " + this.offsets.size()
-				+ ", drawcalls: " + this.drawcalls.size() + "}";
+				+ ", offsets: " + this.drawcalls.size()
+				+ ", drawcalls: " + this.getDrawcalls().size() + "}";
 	}
 }

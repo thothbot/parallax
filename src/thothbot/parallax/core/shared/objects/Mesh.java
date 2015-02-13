@@ -179,7 +179,7 @@ public class Mesh extends GeometryObject
 
 				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
 				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
-				List<BufferGeometry.DrawCall> offsets = bGeometry.getOffsets();
+				List<BufferGeometry.DrawCall> offsets = bGeometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
@@ -505,7 +505,7 @@ public class Mesh extends GeometryObject
 	{
 		Geometry geometry = (Geometry) this.getGeometry();
 
-		List<Integer> faces3 = geometryGroup.faces3;
+		List<Integer> faces3 = geometryGroup.getFaces3();
 
 		int nvertices = faces3.size() * 3 ;
 		int ntris = faces3.size() * 1;
@@ -544,11 +544,11 @@ public class Mesh extends GeometryObject
 		geometryGroup.__faceArray = Uint16Array.create( ntris * 3 );
 		geometryGroup.__lineArray = Uint16Array.create( nlines * 2 );
 
-		if ( geometryGroup.numMorphTargets > 0 ) {
+		if ( geometryGroup.getNumMorphTargets() > 0 ) {
 
 			geometryGroup.__morphTargetsArrays = new ArrayList<Float32Array>();
 
-			for ( int m = 0, ml = geometryGroup.numMorphTargets; m < ml; m ++ ) {
+			for ( int m = 0, ml = geometryGroup.getNumMorphTargets(); m < ml; m ++ ) {
 
 				geometryGroup.__morphTargetsArrays.add( Float32Array.create( nvertices * 3 ) );
 
@@ -556,11 +556,11 @@ public class Mesh extends GeometryObject
 
 		}
 
-		if ( geometryGroup.numMorphNormals > 0 ) {
+		if ( geometryGroup.getNumMorphNormals() > 0 ) {
 
 			geometryGroup.__morphNormalsArrays  = new ArrayList<Float32Array>();
 
-			for ( int m = 0, ml = geometryGroup.numMorphNormals; m < ml; m ++ ) {
+			for ( int m = 0, ml = geometryGroup.getNumMorphNormals(); m < ml; m ++ ) {
 
 				geometryGroup.__morphNormalsArrays.add( Float32Array.create( nvertices * 3 ) );
 
@@ -644,18 +644,18 @@ public class Mesh extends GeometryObject
 		geometryGroup.__webglFaceBuffer = gl.createBuffer();
 		geometryGroup.__webglLineBuffer = gl.createBuffer();
 
-		if (geometryGroup.numMorphTargets != 0) {
+		if (geometryGroup.getNumMorphTargets() != 0) {
 			geometryGroup.__webglMorphTargetsBuffers = new ArrayList<WebGLBuffer>();
 
-			for (int m = 0; m < geometryGroup.numMorphTargets; m++) {
+			for (int m = 0; m < geometryGroup.getNumMorphTargets(); m++) {
 				geometryGroup.__webglMorphTargetsBuffers.add(gl.createBuffer());
 			}
 		}
 
-		if (geometryGroup.numMorphNormals != 0) {
+		if (geometryGroup.getNumMorphNormals() != 0) {
 			geometryGroup.__webglMorphNormalsBuffers = new ArrayList<WebGLBuffer>();
 
-			for (int m = 0; m < geometryGroup.numMorphNormals; m++) {
+			for (int m = 0; m < geometryGroup.getNumMorphNormals(); m++) {
 				geometryGroup.__webglMorphNormalsBuffers.add(gl.createBuffer());
 			}
 		}
@@ -772,7 +772,7 @@ public class Mesh extends GeometryObject
 				dirtyMorphTargets = geometry.isMorphTargetsNeedUpdate();
 
 		List<Vector3> vertices = geometry.getVertices();
-		List<Integer> chunk_faces3 = geometryGroup.faces3;
+		List<Integer> chunk_faces3 = geometryGroup.getFaces3();
 		List<Face3> obj_faces = geometry.getFaces();
 
 		List<List<Vector2>> obj_uvs  = geometry.getFaceVertexUvs().get( 0 );

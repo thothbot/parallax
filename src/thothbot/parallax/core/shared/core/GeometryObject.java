@@ -35,16 +35,9 @@ import thothbot.parallax.core.shared.objects.PointCloud;
 public abstract class GeometryObject extends Object3D
 {
 	protected AbstractGeometry geometry;
-//	protected GeometryBuffer geometryBuffer;
 	protected Material material;
-//	protected Material customDepthMaterial;
 	
 	private double _oldLineWidth = -1;
-	
-//	public GeometryBuffer getGeometryBuffer()
-//	{
-//		return this.geometryBuffer;
-//	}
 	
 	public GeometryObject(AbstractGeometry geometry, Material material) {
 		this.geometry = geometry;
@@ -78,18 +71,6 @@ public abstract class GeometryObject extends Object3D
 	 * @param intersects
 	 */
 	public abstract void raycast( Raycaster raycaster, List<Raycaster.Intersect> intersects);
-	
-//	public Material getCustomDepthMaterial() {
-//		return customDepthMaterial;
-//	}
-//
-//	public void setCustomDepthMaterial(Material customDepthMaterial) {
-//		this.customDepthMaterial = customDepthMaterial;
-//	}
-	
-//	public abstract void initBuffer(WebGLRenderer renderer);
-
-//	public abstract void setBuffer(WebGLRenderer renderer);
 	
 	public abstract void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers);
 	

@@ -28,10 +28,10 @@ public class BufferAttribute {
 	private int itemSize;
 	
 	// TODO: Fix it (BufferGeometry)
-	public int numItems;
+	private int numItems;
 	
-	public boolean needsUpdate = false;
-	public WebGLBuffer buffer;
+	private boolean needsUpdate = false;
+	private WebGLBuffer buffer;
 	
 	public BufferAttribute(TypeArray array, int itemSize) {
 		this.array = array;
@@ -56,10 +56,45 @@ public class BufferAttribute {
 		this.array = array;
 	}
 	
+	/**
+	 * @return the numItems
+	 */
+	public int getNumItems() {
+		return numItems;
+	}
+
+	/**
+	 * @param numItems the numItems to set
+	 */
+	public void setNumItems(int numItems) {
+		this.numItems = numItems;
+	}
+
+	/**
+	 * @return the needsUpdate
+	 */
+	public boolean isNeedsUpdate() {
+		return needsUpdate;
+	}
+	
 	public void setNeedsUpdate(boolean needsUpdate) {
 		this.needsUpdate = needsUpdate;
 	}
-	
+
+	/**
+	 * @return the buffer
+	 */
+	public WebGLBuffer getBuffer() {
+		return buffer;
+	}
+
+	/**
+	 * @param buffer the buffer to set
+	 */
+	public void setBuffer(WebGLBuffer buffer) {
+		this.buffer = buffer;
+	}
+		
 	public void copyAt( int index1, BufferAttribute attribute, int index2 ) {
 
 		index1 *= this.itemSize;
@@ -150,7 +185,7 @@ public class BufferAttribute {
 	public String toString() {
 		return "{array: " + this.array.getLength() 
 				+ ", itemSize: " + this.itemSize 
-				+ ", needsUpdate: " + this.needsUpdate 
-				+ ", buffer: " + this.buffer + "}";
+				+ ", needsUpdate: " + this.isNeedsUpdate() 
+				+ ", buffer: " + this.getBuffer() + "}";
 	}
 }

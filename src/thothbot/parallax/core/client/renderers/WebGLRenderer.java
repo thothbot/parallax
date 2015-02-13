@@ -1101,7 +1101,7 @@ public class WebGLRenderer implements HasEventBus
 
 					int size = geometryAttribute.getItemSize();
 
-					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryAttribute.buffer );
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryAttribute.getBuffer() );
 
 					enableAttribute( programAttribute );
 
@@ -1173,7 +1173,7 @@ public class WebGLRenderer implements HasEventBus
 				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
 				int size = 2;
 
-				List<BufferGeometry.DrawCall> offsets = geometry.offsets;
+				List<BufferGeometry.DrawCall> offsets = geometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
@@ -1181,7 +1181,7 @@ public class WebGLRenderer implements HasEventBus
 
 						setupVertexAttributes( material, program, geometry, 0 );
 
-						getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
+						getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.getBuffer() );
 
 					}
 
@@ -1206,7 +1206,7 @@ public class WebGLRenderer implements HasEventBus
 						if ( updateBuffers ) {
 
 							setupVertexAttributes( material, program, geometry, startIndex );
-							getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
+							getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.getBuffer() );
 
 						}
 
@@ -1289,14 +1289,14 @@ public class WebGLRenderer implements HasEventBus
 
 //				}
 
-				List<DrawCall> offsets = geometry.getOffsets();
+				List<DrawCall> drawcalls = geometry.getDrawcalls();
 
-				if ( offsets.size() == 0 ) {
+				if ( drawcalls.size() == 0 ) {
 
 					if ( updateBuffers ) {
 
 						setupVertexAttributes( material, program, geometry, 0 );
-						gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
+						gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.getBuffer() );
 
 					}
 
@@ -1311,25 +1311,25 @@ public class WebGLRenderer implements HasEventBus
 					// must set attribute pointers to use new offsets for each chunk
 					// even if geometry and materials didn't change
 
-					if ( offsets.size() > 1 ) updateBuffers = true;
+					if ( drawcalls.size() > 1 ) updateBuffers = true;
 
-					for ( int i = 0, il = offsets.size(); i < il; i ++ ) {
+					for ( int i = 0, il = drawcalls.size(); i < il; i ++ ) {
 
-						int startIndex = offsets.get( i ).index;
+						int startIndex = drawcalls.get( i ).index;
 
 						if ( updateBuffers ) {
 
 							setupVertexAttributes( material, program, geometry, startIndex );
-							gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
+							gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.getBuffer() );
 
 						}
 
 						// render indexed lines
 
-						gl.drawElements( mode, offsets.get( i ).count, type, offsets.get( i ).start * size ); // 2 bytes per Uint16Array
+						gl.drawElements( mode, drawcalls.get( i ).count, type, drawcalls.get( i ).start * size ); // 2 bytes per Uint16Array
 
 						this.info.getRender().calls ++;
-						this.info.getRender().vertices += offsets.get( i ).count; // not really true, here vertices can be shared
+						this.info.getRender().vertices += drawcalls.get( i ).count; // not really true, here vertices can be shared
 
 					}
 
@@ -1396,7 +1396,7 @@ public class WebGLRenderer implements HasEventBus
 
 			}
 
-			if ( groups.get( groupHash ).vertices + 3 > maxVerticesInGroup ) {
+			if ( groups.get( groupHash ).getVertices() + 3 > maxVerticesInGroup ) {
 
 				hash_map.put( materialIndex.toString(), hash_map.get( materialIndex ) + 1 );
 				groupHash = materialIndex + "_" + hash_map.get( materialIndex );
@@ -1411,8 +1411,8 @@ public class WebGLRenderer implements HasEventBus
 
 			}
 
-			groups.get( groupHash ).faces3.add( f );
-			groups.get( groupHash ).vertices += 3;
+			groups.get( groupHash ).getFaces3().add( f );
+			groups.get( groupHash ).setVertices(groups.get( groupHash ).getVertices() + 3);
 
 		}
 
@@ -1664,7 +1664,7 @@ public class WebGLRenderer implements HasEventBus
 	{
 
 		return object.getMaterial() instanceof MeshFaceMaterial
-			 ? ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.materialIndex )
+			 ? ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.getMaterialIndex() )
 			 : object.getMaterial();
 
 	}

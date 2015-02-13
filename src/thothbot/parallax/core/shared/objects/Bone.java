@@ -27,7 +27,7 @@ import thothbot.parallax.core.shared.core.Object3D;
 public class Bone extends Object3D
 {
 
-	public SkinnedMesh skin;
+	private SkinnedMesh skin;
 
 	/**
 	 * 
@@ -35,7 +35,21 @@ public class Bone extends Object3D
 	 */
 	public Bone(SkinnedMesh belongsToSkin) 
 	{
-		this.skin = belongsToSkin;		
+		this.setSkin(belongsToSkin);		
+	}
+
+	/**
+	 * @return the skin
+	 */
+	public SkinnedMesh getSkin() {
+		return skin;
+	}
+
+	/**
+	 * @param skin the skin to set
+	 */
+	public void setSkin(SkinnedMesh skin) {
+		this.skin = skin;
 	}
 
 }

@@ -889,9 +889,9 @@ public abstract class Material
 		Material material = null;
 		if ( object.getMaterial() instanceof MeshFaceMaterial )
 		{
-			material = ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.materialIndex );
+			material = ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.getMaterialIndex() );
 		}
-		else if ( geometryGroup.materialIndex >= 0 )
+		else if ( geometryGroup.getMaterialIndex() >= 0 )
 		{
 			material = object.getMaterial();	
 		}

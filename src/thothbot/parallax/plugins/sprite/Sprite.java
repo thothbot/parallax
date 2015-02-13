@@ -58,7 +58,7 @@ public class Sprite extends GeometryObject implements Comparable<Sprite>
 		defaultGeometry.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
 	};
 	
-	double z;
+	private double z;
 	
 	public Sprite() 
 	{

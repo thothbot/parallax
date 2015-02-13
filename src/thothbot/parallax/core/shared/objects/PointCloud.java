@@ -111,7 +111,7 @@ public class PointCloud extends GeometryObject
 			if ( bGeometry.getAttribute("index") != null ) {
 
 				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
-				List<DrawCall> offsets = bGeometry.getOffsets();
+				List<DrawCall> offsets = bGeometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
