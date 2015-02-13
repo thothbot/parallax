@@ -38,9 +38,9 @@ public final class Scene extends Object3D
 	 */
 	private AbstractFog fog;
 	
-	public Material overrideMaterial;
+	private Material overrideMaterial;
 	
-	private boolean autoUpdate = true;
+	private boolean isAutoUpdate = true;
 	
 	/**
 	 * This default constructor will create new Scene instance.
@@ -50,25 +50,6 @@ public final class Scene extends Object3D
 		super();
 	}
 	
-	public Scene clone() {
-		return clone(new Scene());
-	}
-	
-	public Scene clone(Scene object ) {
-
-		super.clone(object);
-
-		if ( this.fog != null ) 
-			object.fog = this.fog.clone();
-		if ( this.overrideMaterial != null ) 
-			object.overrideMaterial = this.overrideMaterial.clone();
-
-		object.autoUpdate = this.autoUpdate;
-		object.matrixAutoUpdate = this.matrixAutoUpdate;
-
-		return object;
-
-	};
 
 	/**
 	 * Get fogAbstract associated with the Scene.
@@ -89,4 +70,43 @@ public final class Scene extends Object3D
 	{
 		this.fog = fog;
 	}
+	
+	public Material getOverrideMaterial() {
+		return overrideMaterial;
+	}
+
+
+	public void setOverrideMaterial(Material overrideMaterial) {
+		this.overrideMaterial = overrideMaterial;
+	}
+
+
+	public boolean isAutoUpdate() {
+		return isAutoUpdate;
+	}
+
+
+	public void setAutoUpdate(boolean isAutoUpdate) {
+		this.isAutoUpdate = isAutoUpdate;
+	}
+
+	public Scene clone() {
+		return clone(new Scene());
+	}
+	
+	public Scene clone(Scene object ) {
+
+		super.clone(object);
+
+		if ( this.fog != null ) 
+			object.fog = this.fog.clone();
+		if ( this.overrideMaterial != null ) 
+			object.overrideMaterial = this.overrideMaterial.clone();
+
+		object.isAutoUpdate = this.isAutoUpdate;
+		object.matrixAutoUpdate = this.matrixAutoUpdate;
+
+		return object;
+
+	};
 }

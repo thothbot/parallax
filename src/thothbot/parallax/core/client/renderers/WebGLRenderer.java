@@ -1907,14 +1907,14 @@ public class WebGLRenderer implements HasEventBus
 
 		}
 
-		Log.debug("  -- render() overrideMaterial : " + (scene.overrideMaterial != null)
+		Log.debug("  -- render() overrideMaterial : " + (scene.getOverrideMaterial() != null)
 				+ ", lights: " + lights.size()
 				+ ", opaqueObjects: " + opaqueObjects.size()
 				+ ", transparentObjects: " + transparentObjects.size() );
 		
-		if ( scene.overrideMaterial != null ) 
+		if ( scene.getOverrideMaterial() != null ) 
 		{			
-			Material material = scene.overrideMaterial;
+			Material material = scene.getOverrideMaterial();
 			
 			this.setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
 			this.setDepthTest( material.isDepthTest() );

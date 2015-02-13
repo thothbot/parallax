@@ -94,12 +94,6 @@ public class Mesh extends GeometryObject
 		this(geometry, Mesh.defaultMaterial);
 	}
 	
-//	public Mesh(BufferGeometry geometry, Material material) 
-//	{
-//		this(material);
-//		this.geometryBuffer = geometry;
-//	}
-	
 	public Mesh(AbstractGeometry geometry, Material material) 
 	{
 		super(geometry, material);
