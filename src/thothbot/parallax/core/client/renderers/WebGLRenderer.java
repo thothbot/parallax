@@ -1629,9 +1629,9 @@ public class WebGLRenderer implements HasEventBus
 
 						if ( this.sortObjects == true ) {
 
-							if ( object.renderDepth > 0 ) {
+							if ( object.getRenderDepth() > 0 ) {
 
-								webglObject.z = object.renderDepth;
+								webglObject.z = object.getRenderDepth();
 
 							} else {
 

@@ -71,7 +71,7 @@ public class Object3D
 	
 	protected Vector3 scale;
 	
-	public double renderDepth;
+	private double renderDepth;
 	
 	protected boolean rotationAutoUpdate;
 
@@ -317,6 +317,20 @@ public class Object3D
 
 	public void setScale(Vector3 scale) {
 		this.scale = scale;
+	}
+	
+	/**
+	 * @return the renderDepth
+	 */
+	public double getRenderDepth() {
+		return renderDepth;
+	}
+
+	/**
+	 * @param renderDepth the renderDepth to set
+	 */
+	public void setRenderDepth(double renderDepth) {
+		this.renderDepth = renderDepth;
 	}
 
 	/**
@@ -865,7 +879,7 @@ public class Object3D
 		object.quaternion.copy( this.quaternion );
 		object.scale.copy( this.scale );
 
-		object.renderDepth = this.renderDepth;
+		object.setRenderDepth(this.getRenderDepth());
 
 		object.rotationAutoUpdate = this.rotationAutoUpdate;
 
@@ -901,4 +915,5 @@ public class Object3D
 		return "{class=" + this.getClass().getSimpleName() 
 				+ ", id: " + this.getId() + "}";
 	}
+
 }

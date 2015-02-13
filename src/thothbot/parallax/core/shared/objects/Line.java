@@ -123,7 +123,7 @@ public class Line extends GeometryObject
 		Ray ray = new Ray();
 		Sphere sphere = new Sphere();
 
-		double precision = Raycaster.linePrecision;
+		double precision = Raycaster.LINE_PRECISION;
 		double precisionSq = precision * precision;
 
 		Geometry geometry = (Geometry) this.getGeometry();

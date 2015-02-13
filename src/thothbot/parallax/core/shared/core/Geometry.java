@@ -113,7 +113,7 @@ public class Geometry extends AbstractGeometry
 	/*
 	 * True if geometry has tangents. Set in Geometry.computeTangents.
 	 */
-	public boolean hasTangents = false;
+	private boolean hasTangents = false;
 
 	/*
 	 * The intermediate typed arrays will be deleted when set to false
@@ -261,6 +261,20 @@ public class Geometry extends AbstractGeometry
 
 	public void setBones(List<Bone> bones) {
 		this.bones = bones;
+	}
+	
+	/**
+	 * @return the hasTangents
+	 */
+	public boolean isHasTangents() {
+		return hasTangents;
+	}
+
+	/**
+	 * @param hasTangents the hasTangents to set
+	 */
+	public void setHasTangents(boolean hasTangents) {
+		this.hasTangents = hasTangents;
 	}
 
 	/**
@@ -687,7 +701,7 @@ public class Geometry extends AbstractGeometry
 			}
 		}
 
-		this.hasTangents = true;
+		this.setHasTangents(true);
 	}
 	
 	/**

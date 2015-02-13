@@ -165,7 +165,7 @@ public class Mesh extends GeometryObject
 
 		}
 
-		double precision = Raycaster.precision;
+		double precision = Raycaster.PRECISION;
 
 		if ( geometry instanceof BufferGeometry ) {
 
@@ -524,7 +524,7 @@ public class Mesh extends GeometryObject
 
 		}
 
-		if ( geometry.hasTangents ) {
+		if ( geometry.isHasTangents() ) {
 
 			geometryGroup.__tangentArray = Float32Array.create( nvertices * 4 );
 
@@ -1010,7 +1010,7 @@ public class Mesh extends GeometryObject
 			 }
 		 }
 
-		 if ( dirtyTangents && geometry.hasTangents) 
+		 if ( dirtyTangents && geometry.isHasTangents()) 
 		 {			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
