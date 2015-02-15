@@ -37,7 +37,7 @@ import thothbot.parallax.core.shared.Log;
  * @author thothbot
  *
  */
-public class OrthographicCamera extends Camera
+public class OrthographicCamera extends Camera implements HasNearFar
 {
 
 	protected double zoom = 1.0;

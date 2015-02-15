@@ -140,12 +140,14 @@ public class Postprocessing extends Plugin
 
 		double delta = 0;
 		WebGLRenderingContext gl = getRenderer().getGL();
-		
+
 		for ( Pass pass : this.passes ) 
 		{	
-			Log.info("Postprocessing.render(): pass " + pass.getClass().getSimpleName() );
-
 			if ( !pass.isEnabled() ) continue;
+			
+			Log.info(" ----> Postprocessing.render(): pass " + pass.getClass().getSimpleName() 
+					+ (pass.getClass().equals(ShaderPass.class) ? 
+							"(" + ((ShaderPass)pass).getMaterial().getShader().getClass().getSimpleName() + ")" : "") );
 
 			pass.render( this, delta, maskActive );
 

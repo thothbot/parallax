@@ -169,6 +169,9 @@ public class LineDashedMaterial extends Material implements
 		super.refreshUniforms(camera, isGammaInput);
 		Map<String, Uniform> uniforms = getShader().getUniforms();
 		
+		uniforms.get("diffuse").setValue( getColor() );
+		uniforms.get("opacity").setValue( getOpacity() );
+		
 		uniforms.get("dashSize").setValue( getDashSize() );
 		uniforms.get("totalSize").setValue( getDashSize() + getGapSize() );
 		uniforms.get("scale").setValue( getScale() );

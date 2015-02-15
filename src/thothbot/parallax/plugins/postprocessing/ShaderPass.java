@@ -57,6 +57,10 @@ public class ShaderPass extends Pass
 		return this.material.getShader().getUniforms();
 	}
 	
+	public ShaderMaterial getMaterial() {
+		return this.material;
+	}
+	
 	@Override
 	public void render( Postprocessing postprocessing, double delta, boolean maskActive) 
 	{

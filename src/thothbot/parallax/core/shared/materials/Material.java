@@ -905,8 +905,12 @@ public abstract class Material
 		WebGLProgram program = getShader().getProgram();
 		if ( program == null ) return;
 		
-		getShader().setPrecision(null);
-				
+//		getShader().setPrecision(null);
+		
+		// only deallocate GL program if this was the last use of shared program
+		// assumed there is only single copy of any program in the _programs list
+		// (that's how it's constructed)
+
 		boolean deleteProgram = false;
 
 		for ( String key: renderer._programs.keySet()) 
@@ -915,37 +919,18 @@ public abstract class Material
 			
 			if ( shader == getShader() ) 
 			{
-				renderer.getInfo().getMemory().programs --;
 				renderer._programs.remove(key);
 				deleteProgram = true;
 				break;
 			}
 		}
 		
-		if ( deleteProgram == true ) {
-
-			// avoid using array.splice, this is costlier than creating new array from scratch
-
-//			var newPrograms = [];
-//
-//			for ( int i = 0, il = renderer._programs.length; i < il; i ++ ) {
-//
-//				programInfo = _programs[ i ];
-//
-//				if ( programInfo.program != program ) {
-//
-//					newPrograms.push( programInfo );
-//
-//				}
-//
-//			}
-
-//			renderer._programs = newPrograms;
+		if ( deleteProgram == true ) 
+		{
 
 			renderer.getGL().deleteProgram( program );
 
 			renderer.getInfo().getMemory().programs --;
-
 		}
 
 	}

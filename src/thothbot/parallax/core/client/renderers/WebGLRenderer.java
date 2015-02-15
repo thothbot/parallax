@@ -72,6 +72,9 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.cameras.HasNearFar;
+import thothbot.parallax.core.shared.cameras.OrthographicCamera;
+import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
@@ -94,6 +97,7 @@ import thothbot.parallax.core.shared.materials.HasSkinning;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
@@ -2445,7 +2449,7 @@ public class WebGLRenderer implements HasEventBus
 		WebGLProgram program = shader.getProgram();
 		Map<String, Uniform> m_uniforms = shader.getUniforms();
 
-		if ( program != _currentProgram )
+		if ( !program.equals(_currentProgram) )
 		{
 			getGL().useProgram( program );
 			this._currentProgram = program;
@@ -2453,22 +2457,55 @@ public class WebGLRenderer implements HasEventBus
 			refreshProgram = true;
 			refreshMaterial = true;
 			refreshLights = true;
-
-			Log.warn("program != _currentProgram");
 		}
 
 		if ( material.getId() != this._currentMaterialId ) 
 		{
+			if(_currentMaterialId == -1) refreshLights = true;
+			
 			this._currentMaterialId = material.getId();
 			refreshMaterial = true;
 		}
 
-		if ( refreshMaterial || camera != this._currentCamera ) 
+		if ( refreshProgram || !camera.equals( this._currentCamera) ) 
 		{
 			getGL().uniformMatrix4fv( m_uniforms.get("projectionMatrix").getLocation(), false, camera.getProjectionMatrix().getArray() );
 
-			if ( camera != this._currentCamera ) 
+			if ( _logarithmicDepthBuffer ) {
+
+				gl.uniform1f( m_uniforms.get("logDepthBufFC").getLocation(), 2.0 / ( Math.log( ((HasNearFar)camera).getFar() + 1.0 ) / 0.6931471805599453 /*Math.LN2*/ ) );
+
+			}
+
+			if ( !camera.equals( this._currentCamera) ) 
 				this._currentCamera = camera;
+			
+			// load material specific uniforms
+			// (shader material also gets them for the sake of genericity)
+			if ( material.getClass() == ShaderMaterial.class ||
+				 material.getClass() == MeshPhongMaterial.class ||
+				 material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null 
+			) {
+
+				if ( m_uniforms.get("cameraPosition").getLocation() != null ) 
+				{
+					_vector3.setFromMatrixPosition( camera.getMatrixWorld() );
+					getGL().uniform3f( m_uniforms.get("cameraPosition").getLocation(), _vector3.getX(), _vector3.getY(), _vector3.getZ() );
+				}
+			}
+
+			if ( material.getClass() == MeshPhongMaterial.class ||
+				 material.getClass() == MeshLambertMaterial.class ||
+				 material.getClass() == MeshBasicMaterial.class ||
+				 material.getClass() == ShaderMaterial.class ||
+				 material instanceof HasSkinning && ((HasSkinning)material).isSkinning() 
+			) {
+
+				if ( m_uniforms.get("viewMatrix").getLocation() != null ) 
+				{
+					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera.getMatrixWorldInverse().getArray() );
+				}
+			}
 		}
 
 		// skinning uniforms must be set even if material didn't change
@@ -2508,11 +2545,17 @@ public class WebGLRenderer implements HasEventBus
 
 				if (this._lightsNeedUpdate ) 
 				{
+					refreshLights = true;
 					this._lights.setupLights( lights, this.gammaInput );
 					this._lightsNeedUpdate = false;
 				}
 
-				this._lights.refreshUniformsLights( m_uniforms );
+				if ( refreshLights ) {
+					this._lights.refreshUniformsLights( m_uniforms );
+//					markUniformsLightsNeedsUpdate( m_uniforms, true );
+				} else {
+//					markUniformsLightsNeedsUpdate( m_uniforms, false );
+				}
 			}
 
 			material.refreshUniforms(camera, this.gammaInput);
@@ -2523,30 +2566,6 @@ public class WebGLRenderer implements HasEventBus
 			// load common uniforms
 			loadUniformsGeneric( m_uniforms );
 
-			// load material specific uniforms
-			// (shader material also gets them for the sake of genericity)
-			if ( material.getClass() == ShaderMaterial.class ||
-				 material.getClass() == MeshPhongMaterial.class ||
-				 material instanceof HasEnvMap 
-			) {
-
-				if ( m_uniforms.get("cameraPosition").getLocation() != null ) 
-				{
-					Vector3 position = new Vector3();
-					position.setFromMatrixPosition( camera.getMatrixWorld() );
-					getGL().uniform3f( m_uniforms.get("cameraPosition").getLocation(), position.getX(), position.getY(), position.getZ() );
-				}
-			}
-
-			if ( material.getClass() == MeshPhongMaterial.class ||
-				 material.getClass() == MeshLambertMaterial.class ||
-				 material.getClass() == ShaderMaterial.class ||
-				 material instanceof HasSkinning && ((HasSkinning)material).isSkinning() 
-			) {
-
-				if ( m_uniforms.get("viewMatrix").getLocation() != null ) 
-					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera.getMatrixWorldInverse().getArray() );
-			}
 		}
 
 		loadUniformsMatrices( m_uniforms, object );
@@ -2604,6 +2623,8 @@ public class WebGLRenderer implements HasEventBus
 	@SuppressWarnings("unchecked")
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
+		WebGLRenderingContext gl = getGL();
+		
 		for ( Uniform uniform : materialUniforms.values() ) 
 		{
 //			for ( String key: materialUniforms.keySet() ) 
@@ -2618,11 +2639,7 @@ public class WebGLRenderer implements HasEventBus
 			
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
-
-			//Log.debug("loadUniformsGeneric() " + uniform);
-			
-			WebGLRenderingContext gl = getGL();
-
+		
 			if(type == TYPE.I) // single integer
 			{
 				gl.uniform1i( location, (value instanceof Boolean) ? ((Boolean)value) ? 1 : 0 : (Integer) value );
