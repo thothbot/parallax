@@ -29,7 +29,7 @@ Parallax supports WebGL-canvas renderer only.
 
 ### Download - new Parallax v1.5 ###
 
-[Download JAR](http://github.com/thothbot/parallax/wiki/Download) | [Change log](http://github.com/thothbot/parallax/wiki/Change-log)
+[Download JAR](http://github.com/thothbot/parallax/wiki/Download) | [Change log](https://github.com/thothbot/parallax/releases)
 
 ### Examples ###
 
