@@ -317,7 +317,7 @@ public final class Color
 
 	public String getHexString() 
 	{
-		return ( "000000" + Integer.toString(this.getHex(), 16).substring(-6));
+		return Integer.toHexString(this.getHex()).toUpperCase();
 	}
 
 	public Color.HSL getHSL() 
