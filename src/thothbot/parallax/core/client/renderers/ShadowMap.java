@@ -285,7 +285,7 @@ public final class ShadowMap extends Plugin
 			if ( light.isShadowCameraVisible() && light.getCameraHelper() == null ) 
 			{
 				light.setCameraHelper( new CameraHelper( light.getShadowCamera() ));
-				light.getShadowCamera().add( light.getCameraHelper() );
+				getScene().add( light.getCameraHelper() );
 			}
 
 			if ( light instanceof VirtualLight && ((VirtualLight)light).getOriginalCamera() == camera ) 
