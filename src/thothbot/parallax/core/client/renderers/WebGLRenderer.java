@@ -2329,8 +2329,11 @@ public class WebGLRenderer implements HasEventBus
 
 		parameters.supportsVertexTextures = this._supportsVertexTextures;
 		
-		parameters.useFog  = (fog != null);
-		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
+		if(fog != null) 
+		{
+			parameters.useFog  = true;
+			parameters.useFog2 = (fog instanceof FogExp2);
+		}
 		
 		parameters.logarithmicDepthBuffer = this._logarithmicDepthBuffer;
 		
@@ -2784,7 +2787,7 @@ public class WebGLRenderer implements HasEventBus
 
 					setTexture( texture, textureUnit );
 				}
-			}
+			}			
 		}
 	}
 	
