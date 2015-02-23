@@ -25,11 +25,11 @@ import thothbot.parallax.core.shared.core.BufferGeometry;
 
 public class PlaneBufferGeometry extends BufferGeometry {
 
-	public PlaneBufferGeometry(int width, int height) {
+	public PlaneBufferGeometry(double width, double height) {
 		this(width, height, 1, 1);
 	}
 	
-	public PlaneBufferGeometry(int width, int height, int widthSegments, int heightSegments) {
+	public PlaneBufferGeometry(double width, double height, int widthSegments, int heightSegments) {
 		
 		double width_half = width / 2.0;
 		double height_half = height / 2.0;
@@ -40,8 +40,8 @@ public class PlaneBufferGeometry extends BufferGeometry {
 		int gridX1 = gridX + 1;
 		int gridY1 = gridY + 1;
 
-		int segment_width = width / gridX;
-		int segment_height = height / gridY;
+		int segment_width = (int) (width / gridX);
+		int segment_height = (int) (height / gridY);
 
 		Float32Array vertices = Float32Array.create( gridX1 * gridY1 * 3 );
 		Float32Array normals = Float32Array.create( gridX1 * gridY1 * 3 );

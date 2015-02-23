@@ -30,12 +30,12 @@ import thothbot.parallax.core.shared.core.Geometry;
  */
 public final class PlaneGeometry extends Geometry
 {
-	public PlaneGeometry(int width, int height) 
+	public PlaneGeometry(double width, double height) 
 	{
 		this(width, height, 1, 1);
 	}
 
-	public PlaneGeometry(int width, int height, int widthSegments, int heightSegments) 
+	public PlaneGeometry(double width, double height, int widthSegments, int heightSegments) 
 	{
 		super();
 
