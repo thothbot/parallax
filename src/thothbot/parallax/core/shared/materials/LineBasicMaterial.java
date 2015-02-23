@@ -32,7 +32,7 @@ import thothbot.parallax.core.shared.math.Color;
  * @author thothbot
  *
  */
-public final class LineBasicMaterial extends Material 
+public class LineBasicMaterial extends Material 
 	implements HasFog, HasColor, HasVertexColors
 {
 

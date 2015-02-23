@@ -51,12 +51,8 @@ public abstract class ShadowLight extends Light
 	private RenderTargetTexture shadowMap;
 	private Vector2 shadowMapSize;
 	private Matrix4 shadowMatrix;
-	
-
-		
+			
 	private CameraHelper cameraHelper;
-	
-	
 	
 	public ShadowLight(int hex) 
 	{
@@ -64,9 +60,6 @@ public abstract class ShadowLight extends Light
 		
 		this.position = new Vector3(0, 1.0, 0);
 		this.target   = new Object3D();
-		
-		
-//		this.shadowMatrix = new Matrix4();
 	}
 
 	/**
