@@ -69,7 +69,9 @@ public abstract class XHRLoader
 		request.send( null );
 		
 		loadHandlers.add(modelLoadHandler);
-		XHRLoader.loaderProgressHandler.onProgressUpdate(loadHandlers.size());
+		
+		if(XHRLoader.loaderProgressHandler != null)
+			XHRLoader.loaderProgressHandler.onProgressUpdate(loadHandlers.size());
 
 		request.setOnReadyStateChange(new ReadyStateChangeHandler() {
 			
