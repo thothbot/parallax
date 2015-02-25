@@ -25,7 +25,6 @@ import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.HasNearFar;
-import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 
 /**
  * A material for drawing geometry by depth. Depth is based off of the camera near and far plane. White is nearest, black is farthest.

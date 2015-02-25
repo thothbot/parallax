@@ -73,8 +73,6 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.HasNearFar;
-import thothbot.parallax.core.shared.cameras.OrthographicCamera;
-import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
@@ -587,7 +585,7 @@ public class WebGLRenderer implements HasEventBus
 		return this.gl;
 	}
 
-	private void setDefaultGLState () 
+	private void setDefaultGLState() 
 	{
 		getGL().clearColor( 0.0, 0.0, 0.0, 1.0 );
 		getGL().clearDepth( 1 );
@@ -1920,9 +1918,10 @@ public class WebGLRenderer implements HasEventBus
 		{			
 			Material material = scene.getOverrideMaterial();
 			
-			this.setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
-			this.setDepthTest( material.isDepthTest() );
-			this.setDepthWrite( material.isDepthWrite() );
+			setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
+			setDepthTest( material.isDepthTest() );
+			setDepthWrite( material.isDepthWrite() );
+			
 			setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits() );
 
 			renderObjects( opaqueObjects, camera, lights, fog, true, material );
@@ -2112,7 +2111,8 @@ public class WebGLRenderer implements HasEventBus
 
 				if ( material == null ) continue;
 
-				if ( useBlending ) setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
+				if ( useBlending ) 
+					setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
 
 				setDepthTest( material.isDepthTest() );
 				setDepthWrite( material.isDepthWrite() );
@@ -2873,7 +2873,7 @@ public class WebGLRenderer implements HasEventBus
 		}
 	}
 
-	public void setBlending( Material.BLENDING blending) 
+	public void setBlending( Material.BLENDING blending ) 
 	{
 		if ( blending != this._oldBlending ) 
 		{
@@ -2884,6 +2884,7 @@ public class WebGLRenderer implements HasEventBus
 			} 
 			else if( blending == Material.BLENDING.ADDITIVE) 
 			{
+				
 				getGL().enable( EnableCap.BLEND );
 				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 				getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE );
@@ -2910,6 +2911,7 @@ public class WebGLRenderer implements HasEventBus
 				getGL().enable( EnableCap.BLEND );
 
 			} 
+			// NORMAL
 			else 
 			{
 				getGL().enable( EnableCap.BLEND );
@@ -2922,10 +2924,6 @@ public class WebGLRenderer implements HasEventBus
 
 			this._oldBlending = blending;
 		}
-		
-		this._oldBlendEquation = null;
-		this._oldBlendSrc = null;
-		this._oldBlendDst = null;
 	}
 
 	private void setBlending( Material.BLENDING blending, BlendEquationMode blendEquation, BlendingFactorSrc blendSrc, BlendingFactorDest blendDst ) 
@@ -2947,6 +2945,12 @@ public class WebGLRenderer implements HasEventBus
 				this._oldBlendSrc = blendSrc;
 				this._oldBlendDst = blendDst;
 			}
+		} 
+		else 
+		{
+			this._oldBlendEquation = null;
+			this._oldBlendSrc = null;
+			this._oldBlendDst = null;
 		}
 	}
 

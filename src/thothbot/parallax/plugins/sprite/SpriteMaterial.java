@@ -23,7 +23,6 @@ import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.materials.HasColor;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Color;
-import thothbot.parallax.plugins.sprite.shaders.SpriteShader;
 
 public class SpriteMaterial extends Material implements HasColor {
 
