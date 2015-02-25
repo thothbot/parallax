@@ -29,6 +29,7 @@ import thothbot.parallax.core.client.renderers.WebGLGeometry;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Raycaster;
@@ -79,12 +80,12 @@ public class Line extends GeometryObject
 		this(new Geometry());
 	}
 	
-	public Line(Geometry geometry) 
+	public Line(AbstractGeometry geometry) 
 	{
 		this(geometry, Line.defaultMaterial, Line.MODE.STRIPS);
 	}
 
-	public Line(Geometry geometry, LineBasicMaterial material) 
+	public Line(AbstractGeometry geometry, LineBasicMaterial material) 
 	{
 		this(geometry, material, Line.MODE.STRIPS);
 	}
@@ -96,7 +97,7 @@ public class Line extends GeometryObject
 	 * @param material Material for the line. Default is {@link LineBasicMaterial}.
 	 * @param mode Connection type between vertices. Default is {@link Line.MODE}.STRIPS.
 	 */
-	public Line(Geometry geometry, LineBasicMaterial material, Line.MODE mode) 
+	public Line(AbstractGeometry geometry, LineBasicMaterial material, Line.MODE mode) 
 	{
 		super(geometry, material);
 
