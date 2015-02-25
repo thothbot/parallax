@@ -417,7 +417,7 @@ public final class Color
 		return this;
 	}
 
-	public Color multiply( int s ) 
+	public Color multiply( double s ) 
 	{
 
 		this.r *= s;
