@@ -328,6 +328,32 @@ public class Texture
 		this.image = image;
 	}
 
+    /**
+     * Gets texture width.
+     * 
+     * @return the texture width.
+     */
+	public int getWidth() {
+	    int width = image.getOffsetWidth();
+	    if (width == 0) {
+	        width = image.getPropertyInt("width");
+	    }
+	    return width;
+	}
+
+    /**
+     * Gets texture height.
+     * 
+     * @return the texture height.
+     */
+    public int getHeight() {
+        int height = image.getOffsetHeight();
+        if (height == 0) {
+            height = image.getPropertyInt("height");
+        }
+        return height;
+    }
+    
 	/**
 	 * Gets texture offset.
 	 * 
