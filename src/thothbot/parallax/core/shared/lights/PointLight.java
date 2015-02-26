@@ -23,6 +23,7 @@ import java.util.Map;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.renderers.RendererLights;
 import thothbot.parallax.core.client.shaders.Uniform;
+import thothbot.parallax.core.shared.helpers.HasRaytracingPhysicalAttenuation;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.math.Vector3;
@@ -41,7 +42,7 @@ import thothbot.parallax.core.shared.math.Vector3;
  * @author thothbot
  *
  */
-public class PointLight extends Light
+public class PointLight extends Light implements HasRaytracingPhysicalAttenuation
 {
 	public static class UniformPoint implements Light.UniformLight 
 	{
@@ -71,14 +72,21 @@ public class PointLight extends Light
 	private double intensity;
 	private double distance;
 	
+	private boolean isPhysicalAttenuation;
+	
 	public PointLight(int hex) 
 	{
 		this(hex, 1.0, 0.0);
 	}
 	
-	public PointLight(int color, double intensity, double distance ) 
+	public PointLight(int hex, double intensity) 
 	{
-		super(color);
+		this(hex, intensity, 0.0);
+	}
+	
+	public PointLight(int hex, double intensity, double distance ) 
+	{
+		super(hex);
 		this.intensity = intensity;
 		this.distance = distance;
 	}
@@ -97,6 +105,16 @@ public class PointLight extends Light
 
 	public double getDistance() {
 		return distance;
+	}
+
+	@Override
+	public boolean isPhysicalAttenuation() {
+		return isPhysicalAttenuation;
+	}
+
+	@Override
+	public void setPhysicalAttenuation(boolean isPhysicalAttenuation) {
+		this.isPhysicalAttenuation = isPhysicalAttenuation;
 	}
 	
 	public PointLight clone() {
@@ -137,4 +155,5 @@ public class PointLight extends Light
 
 		pointDistances.set( pointOffset / 3, distance );
 	}
+
 }

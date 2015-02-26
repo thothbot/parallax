@@ -36,7 +36,11 @@ import thothbot.parallax.core.shared.math.Vector3;
  */
 public final class MeshPhongMaterial extends Material 
 	implements HasMaterialMap, HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
-	HasSkinning, HasAmbientEmissiveColor, HasShading
+	HasSkinning, HasAmbientEmissiveColor, HasShading,
+	
+	//Raytracing
+	HasRaytracingMirror, HasRaytracingGlass
+	
 {
 	
 	private Color color;
@@ -83,6 +87,9 @@ public final class MeshPhongMaterial extends Material
 	
 	private int numSupportedMorphTargets;
 	private int numSupportedMorphNormals;	
+	
+	private boolean isMirror;
+	private boolean isGlass;
 	
 	public MeshPhongMaterial()
 	{	
@@ -413,6 +420,26 @@ public final class MeshPhongMaterial extends Material
 		this.shading = shading;
 	}
 	
+	@Override
+	public boolean isGlass() {
+		return isGlass;
+	}
+
+	@Override
+	public void setGlass(boolean isGlass) {
+		this.isGlass = isGlass;
+	}
+
+	@Override
+	public boolean isMirror() {
+		return isMirror;
+	}
+
+	@Override
+	public void setMirror(boolean isMirror) {
+		this.isMirror = isMirror;
+	}
+	
 	public MeshPhongMaterial clone() {
 
 		MeshPhongMaterial material = new MeshPhongMaterial();
@@ -490,4 +517,5 @@ public final class MeshPhongMaterial extends Material
 		if ( isWrapAround() ) 
 			((Vector3) uniforms.get("wrapRGB").getValue()).copy( getWrapRGB() );
 	}
+	
 }
