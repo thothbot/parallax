@@ -134,10 +134,6 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 	private WebGlRendererInfo info;
 					
-	// Default Color and alpha
-	private Color _clearColor = new Color(0x000000);
-	private double _clearAlpha = 1.0;
-	
 	private List<Light> lights = new ArrayList<Light>();
 	
 	public Map<String, List<WebGLObject>> _webglObjects = GWT.isScript() ? 
@@ -549,8 +545,6 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		this.gammaOutput = isGammaOutput;
 	}
 
-
-
 	/**
 	 * Defines whether the renderer should auto update the scene.
 	 * Default is true.
@@ -603,7 +597,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
 		
 		getGL().viewport( _viewportX, _viewportY, _viewportWidth, _viewportHeight );
-		getGL().clearColor( _clearColor.getR(), _clearColor.getG(), _clearColor.getB(), _clearAlpha );
+		getGL().clearColor( clearColor.getR(), clearColor.getG(), clearColor.getB(), clearAlpha );
 	}
 
 	/**
@@ -673,59 +667,14 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		else
 			getGL().disable(EnableCap.SCISSOR_TEST);
 	}
-		
-	public void setClearColor( int hex )
-	{
-		setClearColor(new Color(hex));
-	}
-	
-	public void setClearColor( Color color )
-	{
-		setClearColor(color, 1.0);
-	}
 
-	/**
-	 * Sets the the background color, using hex for the color.<br>
-	 * 
-	 * @param hex the clear color value.
-	 */
-	public void setClearColor( int hex, double alpha )
-	{
-		setClearColor(new Color(hex), alpha);
-	}
-
-	/**
-	 * Sets the the background color, using {@link Color} for the color and alpha for the opacity.
-	 * 
-	 * @param color the {@link Color} instance.
-	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
-	 */
+	@Override
 	public void setClearColor( Color color, double alpha ) 
 	{
-		this._clearColor.copy(color);
-		this._clearAlpha = alpha;
+		this.clearColor.copy(color);
+		this.clearAlpha = alpha;
 
-		getGL().clearColor( this._clearColor.getR(), this._clearColor.getG(), this._clearColor.getB(), this._clearAlpha );
-	}
-
-	/**
-	 * Returns the background color.
-	 * 
-	 * @return the {@link Color} instance. 
-	 */
-	public Color getClearColor() 
-	{
-		return this._clearColor;
-	}
-
-	/**
-	 * Returns the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque)
-	 * 
-	 * @return the value in range &#60;0,1&#62;.
-	 */
-	public double getClearAlpha() 
-	{
-		return this._clearAlpha;
+		getGL().clearColor( this.clearColor.getR(), this.clearColor.getG(), this.clearColor.getB(), this.clearAlpha );
 	}
 
 	public void clear() 

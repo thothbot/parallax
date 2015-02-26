@@ -18,7 +18,15 @@
 
 package thothbot.parallax.core.client.renderers;
 
+import thothbot.parallax.core.shared.math.Color;
+
 public class RaytracingRenderer extends AbstractRenderer 
 {
+
+	@Override
+	public void setClearColor(Color color, double alpha) 
+	{
+		this.clearColor.copy(color);
+	}
 
 }
