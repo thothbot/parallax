@@ -156,7 +156,6 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	public Shader.PRECISION _precision = Shader.PRECISION.HIGHP;
 	
 	// clearing
-	private boolean autoClear = true;
 	private boolean autoClearColor = true;
 	private boolean autoClearDepth = true;
 	private boolean autoClearStencil = true;
@@ -420,23 +419,6 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	}
 	
 	/**
-	 * Gets {@link #setAutoClear(boolean)} flag.
-	 */
-	public boolean isAutoClear() {
-		return autoClear;
-	}
-
-	/**
-	 * Defines whether the renderer should automatically clear its output before rendering.
-	 * Default is true.
-	 * 
-	 * @param isAutoClear false or true
-	 */
-	public void setAutoClear(boolean isAutoClear) {
-		this.autoClear = isAutoClear;
-	}
-
-	/**
 	 * Gets {@link #setAutoClearColor(boolean)} flag.
 	 */
 	public boolean isAutoClearColor() {
@@ -677,6 +659,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		getGL().clearColor( this.clearColor.getR(), this.clearColor.getG(), this.clearColor.getB(), this.clearAlpha );
 	}
 
+	@Override
 	public void clear() 
 	{
 		clear(true, true, true);

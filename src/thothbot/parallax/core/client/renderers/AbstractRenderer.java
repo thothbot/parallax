@@ -25,6 +25,9 @@ public abstract class AbstractRenderer
 	// Default Color and alpha
 	protected Color clearColor = new Color(0x000000);
 	protected double clearAlpha = 1.0;
+	
+	// Clearing
+	protected boolean autoClear = true;
 
 	public void setClearColor( int hex )
 	{
@@ -73,4 +76,23 @@ public abstract class AbstractRenderer
 	{
 		return this.clearAlpha;
 	}
+	
+	/**
+	 * Gets {@link #setAutoClear(boolean)} flag.
+	 */
+	public boolean isAutoClear() {
+		return autoClear;
+	}
+
+	/**
+	 * Defines whether the renderer should automatically clear its output before rendering.
+	 * Default is true.
+	 * 
+	 * @param isAutoClear false or true
+	 */
+	public void setAutoClear(boolean isAutoClear) {
+		this.autoClear = isAutoClear;
+	}
+
+	public abstract void clear();
 }

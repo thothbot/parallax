@@ -29,4 +29,10 @@ public class RaytracingRenderer extends AbstractRenderer
 		this.clearColor.copy(color);
 	}
 
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
