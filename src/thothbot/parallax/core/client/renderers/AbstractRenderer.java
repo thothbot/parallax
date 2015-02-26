@@ -18,7 +18,7 @@
 
 package thothbot.parallax.core.client.renderers;
 
-public class RaytracingRenderer extends AbstractRenderer 
+public abstract class AbstractRenderer 
 {
 
 }

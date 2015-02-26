@@ -127,7 +127,7 @@ import com.google.gwt.dom.client.ImageElement;
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
-public class WebGLRenderer implements HasEventBus
+public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 {
 	// The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
 	private WebGLRenderingContext gl;
