@@ -23,6 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.CanvasPixelArray;
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.GWT;
 
 import thothbot.parallax.core.shared.cameras.Camera;
@@ -59,6 +63,7 @@ public class RaytracingRenderer extends AbstractRenderer
 {
 	
 	private static final int maxRecursionDepth = 3;
+	private static final int blockSize = 64;
 	
 	private static class RaycastingGeometryObject extends Object3D 
 	{
@@ -71,6 +76,9 @@ public class RaytracingRenderer extends AbstractRenderer
 			this.inverseMatrix = new Matrix4();
 		}
 	}
+	
+	Canvas canvas;
+    Context2d context;
 
 	Vector3 origin = new Vector3();
 	Vector3 direction = new Vector3();
@@ -80,6 +88,7 @@ public class RaytracingRenderer extends AbstractRenderer
 	Raycaster raycaster = new Raycaster( origin, direction );
 	Raycaster raycasterLight = new Raycaster();
 	
+	double perspective;
 	Matrix4 modelViewMatrix = new Matrix4();
 	Matrix3 cameraNormalMatrix = new Matrix3();
 
@@ -87,7 +96,23 @@ public class RaytracingRenderer extends AbstractRenderer
 	List<Light> lights = new ArrayList<Light>();
 	
 	Map<String, RaycastingGeometryObject> cache = GWT.isScript() ? 
-			new FastMap<RaycastingGeometryObject>() : new HashMap<String, RaycastingGeometryObject>();	
+			new FastMap<RaycastingGeometryObject>() : new HashMap<String, RaycastingGeometryObject>();
+			
+	public RaytracingRenderer(int width, int height) {
+		canvas = Canvas.createIfSupported();
+	    context = canvas.getContext2d();
+	    context.setFillStyle( "white" );
+
+	    setSize(width, height);
+	}
+	
+	@Override
+	public void setSize(int width, int height) {
+		super.setSize(width, height);
+		
+		canvas.setCoordinateSpaceWidth(width);
+		canvas.setCoordinateSpaceHeight(height);
+	}
 
 	@Override
 	public void setClearColor(Color color, double alpha) 
@@ -124,7 +149,7 @@ public class RaytracingRenderer extends AbstractRenderer
 		cameraNormalMatrix.getNormalMatrix( camera.getMatrixWorld() );
 		origin.copy( cameraPosition );
 
-		double perspective = 0.5 / Math.tan( Mathematics.degToRad( ((PerspectiveCamera)camera).getFov() * 0.5 ) ) * getAbsoluteHeight();
+		perspective = 0.5 / Math.tan( Mathematics.degToRad( ((PerspectiveCamera)camera).getFov() * 0.5 ) ) * getAbsoluteHeight();
 
 		List<Object3D> objects = scene.getChildren();
 
@@ -158,7 +183,75 @@ public class RaytracingRenderer extends AbstractRenderer
 			}
 		});
 		
-//		renderBlock( 0, 0 );
+		renderBlock( 0, 0 );
+
+	}
+
+	ImageData imagedata = null;
+	CanvasPixelArray data = null;
+	Color pixelColor = new Color();
+
+	private void renderBlock(int blockX, int blockY) {
+
+		if(imagedata == null) 
+		{
+			Canvas canvasBlock = Canvas.createIfSupported();
+			
+			canvasBlock.setCoordinateSpaceWidth(blockSize);
+			canvasBlock.setCoordinateSpaceHeight(blockSize);
+		    Context2d contextBlock = canvasBlock.getContext2d();
+		    
+			this.imagedata = contextBlock.getImageData( 0, 0, blockSize, blockSize );
+			this.data = imagedata.getData();
+		}
+
+		//
+		
+		int index = 0;
+
+		for ( int y = 0; y < blockSize; y ++ ) {
+
+			for ( int x = 0; x < blockSize; x ++, index += 4 ) {
+
+				// spawn primary ray at pixel position
+
+				origin.copy( cameraPosition );
+
+				direction.set( x + blockX - getAbsoluteWidth()/2, - ( y + blockY - getAbsoluteHeight()/2 ), - perspective );
+				direction.apply( cameraNormalMatrix ).normalize();
+
+				spawnRay( origin, direction, pixelColor, 0 );
+
+				// convert from linear to gamma
+
+				data.set( index , (int)(Math.sqrt( pixelColor.getR() ) * 255) );
+				data.set( index + 1 , (int)(Math.sqrt( pixelColor.getG() ) * 255) );
+				data.set( index + 2 , (int)(Math.sqrt( pixelColor.getB() ) * 255) );
+
+			}
+
+		}
+
+		context.putImageData( imagedata, blockX, blockY );
+
+		blockX += blockSize;
+
+		if ( blockX >= getAbsoluteWidth() ) {
+
+			blockX = 0;
+			blockY += blockSize;
+
+			if ( blockY >= getAbsoluteHeight() ) return;
+
+		}
+
+		context.fillRect( blockX, blockY, blockSize, blockSize );
+
+//		animationFrameId = requestAnimationFrame( function () {
+
+			renderBlock( blockX, blockY );
+
+//		} );
 
 	}
 
