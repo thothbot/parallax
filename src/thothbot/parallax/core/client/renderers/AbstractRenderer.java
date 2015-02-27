@@ -18,16 +18,39 @@
 
 package thothbot.parallax.core.client.renderers;
 
+import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.scenes.Scene;
 
 public abstract class AbstractRenderer 
 {
+	private int absoluteWidth = 0;
+	private int absoluteHeight = 0;
+	
 	// Default Color and alpha
 	protected Color clearColor = new Color(0x000000);
 	protected double clearAlpha = 1.0;
 	
 	// Clearing
 	protected boolean autoClear = true;
+
+	public void setSize(int width, int height)
+	{
+		this.absoluteWidth = width;
+		this.absoluteHeight = height;
+	}
+	
+	public int getAbsoluteWidth() {
+		return this.absoluteWidth;
+	}
+	
+	public int getAbsoluteHeight() {
+		return this.absoluteHeight;
+	}
+	
+	public double getAbsoluteAspectRation() {
+		return getAbsoluteWidth() / (double)getAbsoluteHeight();
+	}
 
 	public void setClearColor( int hex )
 	{
@@ -95,4 +118,6 @@ public abstract class AbstractRenderer
 	}
 
 	public abstract void clear();
+	
+	public abstract void render( Scene scene, Camera camera );
 }

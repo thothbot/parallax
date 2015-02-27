@@ -215,8 +215,6 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	
 //	_oldLineWidth = null,
 
-	private int absoluteWidth = 0;
-	private int absoluteHeight = 0;
 	private int _viewportX = 0;
 	private int _viewportY = 0;
 	private int _viewportWidth = 0;
@@ -592,11 +590,11 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	 * @param width  the {@link Canvas3d} width.
 	 * @param height the {@link Canvas3d} height.
 	 */
+	@Override
 	public void setSize(int width, int height)
 	{
-		this.absoluteWidth = width;
-		this.absoluteHeight = height;
-		
+		super.setSize(width, height);
+
 		setViewport(0, 0, width, height);
 		
 		EVENT_BUS.fireEvent(new ViewportResizeEvent(this));
@@ -617,18 +615,6 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		getGL().viewport(this._viewportX, this._viewportY, this._viewportWidth, this._viewportHeight);
 	}
 	
-	public int getAbsoluteWidth() {
-		return this.absoluteWidth;
-	}
-	
-	public int getAbsoluteHeight() {
-		return this.absoluteHeight;
-	}
-
-	public double getAbsoluteAspectRation() {
-		return getAbsoluteWidth() / (double)getAbsoluteHeight();
-	}
-
 	/**
 	 * Sets the scissor area from (x, y) to (x + absoluteWidth, y + absoluteHeight).
 	 */
@@ -1712,6 +1698,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 	}
 
+	@Override
 	public void render( Scene scene, Camera camera )
 	{
 		render(scene, camera, null);

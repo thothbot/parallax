@@ -25,11 +25,14 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 
+import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Object3D;
+import thothbot.parallax.core.shared.core.Object3D.Traverse;
 import thothbot.parallax.core.shared.core.Raycaster;
 import thothbot.parallax.core.shared.core.Raycaster.Intersect;
 import thothbot.parallax.core.shared.helpers.HasRaytracingPhysicalAttenuation;
@@ -45,10 +48,12 @@ import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
 import thothbot.parallax.core.shared.math.Color;
+import thothbot.parallax.core.shared.math.Mathematics;
 import thothbot.parallax.core.shared.math.Matrix3;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Ray;
 import thothbot.parallax.core.shared.math.Vector3;
+import thothbot.parallax.core.shared.scenes.Scene;
 
 public class RaytracingRenderer extends AbstractRenderer 
 {
@@ -59,14 +64,25 @@ public class RaytracingRenderer extends AbstractRenderer
 	{
 		public Matrix3 normalMatrix;
 		public Matrix4 inverseMatrix;
+		
+		public RaycastingGeometryObject() 
+		{
+			this.normalMatrix = new Matrix3();
+			this.inverseMatrix = new Matrix4();
+		}
 	}
 
 	Vector3 origin = new Vector3();
 	Vector3 direction = new Vector3();
+	
+	Vector3 cameraPosition = new Vector3();
 
 	Raycaster raycaster = new Raycaster( origin, direction );
 	Raycaster raycasterLight = new Raycaster();
 	
+	Matrix4 modelViewMatrix = new Matrix4();
+	Matrix3 cameraNormalMatrix = new Matrix3();
+
 	List<GeometryObject> objects;
 	List<Light> lights = new ArrayList<Light>();
 	
@@ -83,6 +99,67 @@ public class RaytracingRenderer extends AbstractRenderer
 	public void clear() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void render( Scene scene, final Camera camera ) {
+
+		if ( isAutoClear() == true ) this.clear();
+
+//		cancelAnimationFrame( animationFrameId );
+
+		// update scene graph
+
+		if ( scene.isAutoUpdate() == true ) scene.updateMatrixWorld(false);
+
+		// update camera matrices
+
+		if ( camera.getParent() == null ) camera.updateMatrixWorld(false);
+
+		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
+		cameraPosition.setFromMatrixPosition( camera.getMatrixWorld() );
+
+		//
+
+		cameraNormalMatrix.getNormalMatrix( camera.getMatrixWorld() );
+		origin.copy( cameraPosition );
+
+		double perspective = 0.5 / Math.tan( Mathematics.degToRad( ((PerspectiveCamera)camera).getFov() * 0.5 ) ) * getAbsoluteHeight();
+
+		List<Object3D> objects = scene.getChildren();
+
+		// collect lights and set up object matrices
+
+		lights = new ArrayList<Light>();
+
+		scene.traverse(new Traverse() {
+			
+			@Override
+			public void callback(Object3D object) {
+				if ( object instanceof Light ) {
+
+					lights.add( (Light) object );
+
+				}
+
+				if ( !cache.containsKey( object.getId() + "" ) ) 
+				{
+					cache.put( object.getId() + "", new RaycastingGeometryObject());
+				}
+
+				modelViewMatrix.multiply( camera.getMatrixWorldInverse(), object.getMatrixWorld() );
+
+				RaycastingGeometryObject _object = cache.get( object.getId() + "" );
+				
+				_object.normalMatrix.getNormalMatrix( modelViewMatrix );
+				_object.inverseMatrix.getInverse( object.getMatrixWorld() );
+
+				
+			}
+		});
+		
+//		renderBlock( 0, 0 );
+
 	}
 
 	Color diffuseColor = new Color();
