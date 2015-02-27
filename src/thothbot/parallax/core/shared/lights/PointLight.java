@@ -42,7 +42,7 @@ import thothbot.parallax.core.shared.math.Vector3;
  * @author thothbot
  *
  */
-public class PointLight extends Light implements HasRaytracingPhysicalAttenuation
+public class PointLight extends Light implements HasRaytracingPhysicalAttenuation, HasIntensity
 {
 	public static class UniformPoint implements Light.UniformLight 
 	{

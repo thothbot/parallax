@@ -26,9 +26,9 @@ import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector3;
 
-public final class HemisphereLight extends Light 
+public final class HemisphereLight extends Light implements HasIntensity
 {
-	public static class UniformHemisphere implements Light.UniformLight 
+	public static class UniformHemisphere implements Light.UniformLight
 	{
 		public Float32Array skyColors;
 		public Float32Array groundColors;

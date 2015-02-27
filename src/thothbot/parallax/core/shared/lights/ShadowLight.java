@@ -25,7 +25,7 @@ import thothbot.parallax.core.shared.helpers.CameraHelper;
 import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
-public abstract class ShadowLight extends Light
+public abstract class ShadowLight extends Light implements HasIntensity
 {
 	protected Object3D target;
 	
