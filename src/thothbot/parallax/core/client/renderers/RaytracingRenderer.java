@@ -65,12 +65,12 @@ public class RaytracingRenderer extends AbstractRenderer
 	private static final int maxRecursionDepth = 3;
 	private static final int blockSize = 64;
 	
-	private static class RaycastingGeometryObject extends Object3D 
+	private static class ObjectMatrixes
 	{
 		public Matrix3 normalMatrix;
 		public Matrix4 inverseMatrix;
 		
-		public RaycastingGeometryObject() 
+		public ObjectMatrixes() 
 		{
 			this.normalMatrix = new Matrix3();
 			this.inverseMatrix = new Matrix4();
@@ -95,8 +95,8 @@ public class RaytracingRenderer extends AbstractRenderer
 	List<GeometryObject> objects;
 	List<Light> lights = new ArrayList<Light>();
 	
-	Map<String, RaycastingGeometryObject> cache = GWT.isScript() ? 
-			new FastMap<RaycastingGeometryObject>() : new HashMap<String, RaycastingGeometryObject>();
+	Map<String, ObjectMatrixes> cache = GWT.isScript() ? 
+			new FastMap<ObjectMatrixes>() : new HashMap<String, ObjectMatrixes>();
 			
 	public RaytracingRenderer(int width, int height) {
 		canvas = Canvas.createIfSupported();
@@ -169,12 +169,12 @@ public class RaytracingRenderer extends AbstractRenderer
 
 				if ( !cache.containsKey( object.getId() + "" ) ) 
 				{
-					cache.put( object.getId() + "", new RaycastingGeometryObject());
+					cache.put( object.getId() + "", new ObjectMatrixes());
 				}
 
 				modelViewMatrix.multiply( camera.getMatrixWorldInverse(), object.getMatrixWorld() );
 
-				RaycastingGeometryObject _object = cache.get( object.getId() + "" );
+				ObjectMatrixes _object = cache.get( object.getId() + "" );
 				
 				_object.normalMatrix.getNormalMatrix( modelViewMatrix );
 				_object.inverseMatrix.getInverse( object.getMatrixWorld() );
@@ -323,7 +323,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		//
 
-		RaycastingGeometryObject _object = cache.get( object.getId() + "" );
+		ObjectMatrixes _object = cache.get( object.getId() + "" );
 
 		localPoint.copy( point ).apply( _object.inverseMatrix );
 		eyeVector.sub( raycaster.getRay().getOrigin(), point ).normalize();

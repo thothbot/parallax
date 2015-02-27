@@ -24,8 +24,8 @@ import thothbot.parallax.core.shared.scenes.Scene;
 
 public abstract class AbstractRenderer 
 {
-	private int absoluteWidth = 0;
-	private int absoluteHeight = 0;
+	protected int absoluteWidth = 0;
+	protected int absoluteHeight = 0;
 	
 	// Default Color and alpha
 	protected Color clearColor = new Color(0x000000);
