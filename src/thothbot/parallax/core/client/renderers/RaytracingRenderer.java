@@ -23,12 +23,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.animation.client.AnimationScheduler;
+import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
+import com.google.gwt.animation.client.AnimationScheduler.AnimationHandle;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.CanvasPixelArray;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.RootPanel;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.PerspectiveCamera;
 import thothbot.parallax.core.shared.core.Face3;
@@ -89,21 +94,43 @@ public class RaytracingRenderer extends AbstractRenderer
 	Raycaster raycasterLight = new Raycaster();
 	
 	double perspective;
-	Matrix4 modelViewMatrix = new Matrix4();
+	Matrix4 modelViewMatrix = new Matrix4();	
 	Matrix3 cameraNormalMatrix = new Matrix3();
 
-	List<GeometryObject> objects;
+	List<Object3D> objects;
 	List<Light> lights = new ArrayList<Light>();
+	
+	AnimationHandle animationHandler;
 	
 	Map<String, ObjectMatrixes> cache = GWT.isScript() ? 
 			new FastMap<ObjectMatrixes>() : new HashMap<String, ObjectMatrixes>();
 			
+			
+	Canvas canvasBlock;
+	ImageData imagedata = null;
+
 	public RaytracingRenderer(int width, int height) {
 		canvas = Canvas.createIfSupported();
+		canvas.ensureDebugId("canvas2d");
+		
+		setSize(width, height);
+		
 	    context = canvas.getContext2d();
-	    context.setFillStyle( "white" );
+	    context.setFillStyle( "#FFFFFF" );
+	    
+	    
+	    canvasBlock = Canvas.createIfSupported();
+		canvasBlock.setCoordinateSpaceWidth(blockSize);
+		canvasBlock.setCoordinateSpaceHeight(blockSize);
 
-	    setSize(width, height);
+		RootPanel.get().add(canvasBlock, -10000, 0);
+
+		Context2d contextBlock = canvasBlock.getContext2d();
+		imagedata = contextBlock.getImageData( 0, 0, blockSize, blockSize );
+	}
+	
+	public Canvas getCanvas() {
+		return this.canvas;
 	}
 	
 	@Override
@@ -151,7 +178,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		perspective = 0.5 / Math.tan( Mathematics.degToRad( ((PerspectiveCamera)camera).getFov() * 0.5 ) ) * getAbsoluteHeight();
 
-		List<Object3D> objects = scene.getChildren();
+		objects = scene.getChildren();
 
 		// collect lights and set up object matrices
 
@@ -183,28 +210,14 @@ public class RaytracingRenderer extends AbstractRenderer
 			}
 		});
 		
-		renderBlock( 0, 0 );
-
+		renderBlock(0, 0);
 	}
 
-	ImageData imagedata = null;
-	CanvasPixelArray data = null;
-	Color pixelColor = new Color();
-
-	private void renderBlock(int blockX, int blockY) {
-
-		if(imagedata == null) 
-		{
-			Canvas canvasBlock = Canvas.createIfSupported();
-			
-			canvasBlock.setCoordinateSpaceWidth(blockSize);
-			canvasBlock.setCoordinateSpaceHeight(blockSize);
-		    Context2d contextBlock = canvasBlock.getContext2d();
-		    
-			this.imagedata = contextBlock.getImageData( 0, 0, blockSize, blockSize );
-			this.data = imagedata.getData();
-		}
-
+	private void renderBlock(int blockX, int blockY) 
+	{
+		Log.debug("Raytracing -- Render block: " + blockX + ", " + blockY);
+		Color pixelColor = new Color();
+		
 		//
 		
 		int index = 0;
@@ -220,14 +233,15 @@ public class RaytracingRenderer extends AbstractRenderer
 				direction.set( x + blockX - getAbsoluteWidth()/2, - ( y + blockY - getAbsoluteHeight()/2 ), - perspective );
 				direction.apply( cameraNormalMatrix ).normalize();
 
-				spawnRay( origin, direction, pixelColor, 0 );
+				spawnRay( origin, direction, pixelColor, 0 );		
 
 				// convert from linear to gamma
 
-				data.set( index , (int)(Math.sqrt( pixelColor.getR() ) * 255) );
-				data.set( index + 1 , (int)(Math.sqrt( pixelColor.getG() ) * 255) );
-				data.set( index + 2 , (int)(Math.sqrt( pixelColor.getB() ) * 255) );
+				imagedata.getData().set( index , (int)(Math.sqrt( pixelColor.getR() ) * 255) );
+				imagedata.getData().set( index + 1 , (int)(Math.sqrt( pixelColor.getG() ) * 255) );
+				imagedata.getData().set( index + 2 , (int)(Math.sqrt( pixelColor.getB() ) * 255) );
 
+				imagedata.getData().set( index + 3 , 255 ); // alpha
 			}
 
 		}
@@ -247,11 +261,18 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		context.fillRect( blockX, blockY, blockSize, blockSize );
 
-//		animationFrameId = requestAnimationFrame( function () {
-
-			renderBlock( blockX, blockY );
-
-//		} );
+		final int _blockX = blockX;
+		final int _blockY = blockY;
+		
+		animationHandler = AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
+						
+			@Override
+			public void execute(double timestamp) {
+				
+				renderBlock( _blockX, _blockY );
+								
+			}
+		});
 
 	}
 
@@ -277,7 +298,7 @@ public class RaytracingRenderer extends AbstractRenderer
 	private void spawnRay(Vector3 rayOrigin, Vector3 rayDirection, Color outputColor, int recursionDepth) 
 	{
 		// Init the tmp array
-		if(tmpColor.length < maxRecursionDepth)
+		if(tmpColor == null)
 		{
 			tmpColor = new Color[maxRecursionDepth];
 			for ( int i = 0; i < maxRecursionDepth; i ++ )
@@ -286,8 +307,8 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		Ray ray = raycaster.getRay();
 
-		ray.setOrigin(  rayOrigin );
-		ray.setDirection(rayDirection);;
+		ray.setOrigin( rayOrigin );
+		ray.setDirection( rayDirection );
 
 		//
 
@@ -346,7 +367,7 @@ public class RaytracingRenderer extends AbstractRenderer
 		{
 			diffuseColor.multiply( face.getColor() );
 		}
-
+		
 		// compute light shading
 
 		rayLight.getOrigin().copy( point );
@@ -460,8 +481,8 @@ public class RaytracingRenderer extends AbstractRenderer
 
 					lightContribution.multiply( lightColor );
 					lightContribution.multiply( specularNormalization * specularIntensity * attenuation );
-					outputColor.add( lightContribution );
 
+					outputColor.add( lightContribution );
 				}
 
 			}
@@ -527,10 +548,10 @@ public class RaytracingRenderer extends AbstractRenderer
 			}
 
 			zColor.multiply( weight );
-			outputColor.multiply( 1 - weight );
+			outputColor.multiply( 1.0 - weight );
 			outputColor.add( zColor );
-
 		}
+		
 	}
 	
 	Vector3 tmpVec1 = new Vector3();

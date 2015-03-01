@@ -466,7 +466,7 @@ public final class Color
 	 */
 	public String toString()
 	{
-		return getStyle();
+		return "{r:" + this.r + ", g:" + this.g + ", b:" + this.b + "}";
 	}
 
 	private double hue2rgb( double p, double q, double t ) 

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.math.Ray;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Line;
@@ -151,23 +152,6 @@ public class Raycaster
 
 	}
 	
-	public List<Raycaster.Intersect> intersectObjects ( List<Object3D> objects ) {
-
-		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
-
-		for ( int i = 0, l = objects.size(); i < l; i ++ ) {
-
-			if(objects instanceof GeometryObject)
-			intersectObject( (GeometryObject)objects.get( i ), this, intersects, false );
-
-		}
-
-		Collections.sort(intersects);
-
-		return intersects;
-
-	}
-	
 	/**
 	 * Checks all intersection between the ray and the objects with or without the descendants. 
 	 * Intersections are returned sorted by distance, closest first. Intersections are of the same form as 
@@ -176,13 +160,15 @@ public class Raycaster
 	 * @param recursive If set, it also checks all descendants of the objects. Otherwise it only checks intersecton with the objects.
 	 * @return
 	 */
-	public List<Raycaster.Intersect> intersectObjects ( List<GeometryObject> objects, boolean recursive ) {
+	public List<Raycaster.Intersect> intersectObjects ( List<? extends Object3D> objects, boolean recursive ) {
 
 		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
 
 		for ( int i = 0, l = objects.size(); i < l; i ++ ) {
 
-			intersectObject( objects.get( i ), this, intersects, recursive );
+			Object3D object = objects.get(i);
+			if(object instanceof GeometryObject)
+				intersectObject( (GeometryObject)object, this, intersects, recursive );
 
 		}
 
