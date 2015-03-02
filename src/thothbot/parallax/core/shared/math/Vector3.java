@@ -37,7 +37,14 @@ public class Vector3 extends Vector2
 	 * The Z-coordinate
 	 */
 	protected double z;
-
+	
+	// Temporary variables
+	static Quaternion _quaternion = new Quaternion();
+	static Matrix4 _matrix = new Matrix4();
+	static Vector3 _min = new Vector3();
+	static Vector3 _max = new Vector3();
+	static Vector3 _v1 = new Vector3();
+	
 	/**
 	 * This default constructor will initialize vector (0, 0, 0); 
 	 */
@@ -219,7 +226,6 @@ public class Vector3 extends Vector2
 		return this;
 	}
 	
-	static Quaternion _quaternion = new Quaternion();
 	public Vector3 applyEuler( Euler euler) 
 	{		
 		this.apply( _quaternion.setFromEuler( euler ) );
@@ -314,7 +320,6 @@ public class Vector3 extends Vector2
 
 	}
 
-	static Matrix4 _matrix = new Matrix4();
 	public Vector3 project(Camera camera) 
 	{
 		_matrix.multiply( camera.getProjectionMatrix(), _matrix.getInverse( camera.getMatrixWorld() ) );
@@ -465,8 +470,6 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
-	static Vector3 _min = new Vector3();
-	static Vector3 _max = new Vector3();
 	public Vector3 clamp(double minVal, double maxVal) 
 	{
 		_min.set( minVal, minVal, minVal );
@@ -644,7 +647,6 @@ public class Vector3 extends Vector2
 	 * @param normal
 	 * @return
 	 */
-	static Vector3 _v1 = new Vector3();
 	public Vector3 reflect(Vector3 normal) 
 	{
 		return this.sub( _v1.copy( normal ).multiply( 2 * this.dot( normal ) ) );

@@ -23,6 +23,10 @@ public class Line3
 
 	private Vector3 start;
 	private Vector3 end;
+	
+	//Temporary variables
+	static Vector3 _startP = new Vector3();
+	static Vector3 _startEnd = new Vector3();
 		
 	public Line3()
 	{
@@ -114,14 +118,11 @@ public class Line3
 	
 	public double closestPointToPointParameter( Vector3 point, boolean clampToLine ) 
 	{
-		Vector3 startP = new Vector3();
-		Vector3 startEnd = new Vector3();
+		_startP.sub( point, this.start );
+		_startEnd.sub( this.end, this.start );
 
-		startP.sub( point, this.start );
-		startEnd.sub( this.end, this.start );
-
-		double startEnd2 = startEnd.dot( startEnd );
-		double startEnd_startP = startEnd.dot( startP );
+		double startEnd2 = _startEnd.dot( _startEnd );
+		double startEnd_startP = _startEnd.dot( _startP );
 
 		double t = startEnd_startP / startEnd2;
 

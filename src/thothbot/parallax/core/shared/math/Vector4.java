@@ -37,6 +37,10 @@ public class Vector4 extends Vector3
 	 */
 	protected double w;
 
+	// Temporary variables
+	static Vector4 _min = new Vector4();
+	static Vector4 _max = new Vector4();
+
 	/**
 	 * This default constructor will initialize vector (0, 0, 0, 1); 
 	 */
@@ -582,8 +586,6 @@ public class Vector4 extends Vector3
 		return this;
 	}
 
-	static Vector4 _min = new Vector4();
-	static Vector4 _max = new Vector4();
 	public Vector4 clamp( double minVal, double maxVal ) 
 	{
 		_min.set( minVal, minVal, minVal, minVal );

@@ -37,6 +37,14 @@ public class Ray
 	// A vector pointing in the direction the ray goes. Default is 0, 0, 0.
 	private Vector3 direction;
 	
+	//Temporary variables
+	static Vector3 _v1 = new Vector3();
+	static Vector3 _v2 = new Vector3();
+	static Vector3 _diff = new Vector3();
+	static Vector3 _edge1 = new Vector3();
+	static Vector3 _edge2 = new Vector3();
+	static Vector3 _normal = new Vector3();
+	
 	public Ray()
 	{
 		this(new Vector3(), new Vector3());
@@ -92,8 +100,7 @@ public class Ray
 
 	public Ray recast( double t ) 
 	{
-		Vector3 v1 = new Vector3();
-		this.origin.copy( this.at( t, v1 ) );
+		this.origin.copy( this.at( t, _v1 ) );
 
 		return this;
 	}
@@ -118,11 +125,8 @@ public class Ray
 	}
 
 	public double distanceToPoint( Vector3 point ) 
-	{
-		
-		Vector3 v1 = new Vector3();
-		
-		double directionDistance = v1.sub( point, this.origin ).dot( this.direction );
+	{		
+		double directionDistance = _v1.sub( point, this.origin ).dot( this.direction );
 
 		// point behind the ray
 
@@ -132,14 +136,14 @@ public class Ray
 
 		}
 
-		v1.copy( this.direction ).multiply( directionDistance ).add( this.origin );
+		_v1.copy( this.direction ).multiply( directionDistance ).add( this.origin );
 
-		return v1.distanceTo( point );
+		return _v1.distanceTo( point );
 
 	}
 	
-	public double distanceSqToSegment( Vector3 v0, Vector3 v1, Vector3 optionalPointOnRay, Vector3 optionalPointOnSegment ) {
-
+	public double distanceSqToSegment( Vector3 v0, Vector3 v1, Vector3 optionalPointOnRay, Vector3 optionalPointOnSegment ) 
+	{
 		// from http://www.geometrictools.com/LibMathematics/Distance/Wm5DistRay3Segment3.cpp
 		// It returns the min distance between the ray and the segment
 		// defined by v0 and v1
@@ -261,7 +265,8 @@ public class Ray
 		return ( this.distanceToPoint( sphere.getCenter() ) <= sphere.getRadius() );
 	}
 	
-	public Vector3 intersectSphere( Sphere sphere ) {
+	public Vector3 intersectSphere( Sphere sphere ) 
+	{
 		return intersectSphere(sphere, null);
 	}
 
@@ -271,7 +276,6 @@ public class Ray
 	 * @param optionalTarget
 	 * @return
 	 */
-	static Vector3 _v1 = new Vector3();
 	public Vector3 intersectSphere( Sphere sphere, Vector3 optionalTarget ) 
 	{
 		_v1.sub( sphere.getCenter(), this.getOrigin() );
@@ -373,7 +377,6 @@ public class Ray
 		return this.at( t, optionalTarget );
 	}
 	
-	static Vector3 _v2 = new Vector3();
 	public boolean isIntersectionBox(Box3 box) 
 	{
 		return this.intersectBox( box, _v2 ) != null;
@@ -462,10 +465,6 @@ public class Ray
 	 * @param optionalTarget
 	 * @return
 	 */
-	static Vector3 _diff = new Vector3();
-	static Vector3 _edge1 = new Vector3();
-	static Vector3 _edge2 = new Vector3();
-	static Vector3 _normal = new Vector3();
 	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling, Vector3 optionalTarget) {
 
 		// Compute the offset origin, edges, and normal.

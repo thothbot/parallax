@@ -26,6 +26,9 @@ public class Sphere
 	private Vector3 center;
 	private double radius;
 	
+	// Temporary variables
+	static Box3 _box = new Box3();
+	
 	public Sphere() 
 	{
 		this(new Vector3(), 0);
@@ -71,7 +74,6 @@ public class Sphere
 		return setFromPoints(points.toArray(new Vector3[points.size()]), optionalCenter);
 	}
 
-	static Box3 _box = new Box3();
 	public Sphere setFromPoints(Vector3[] points, Vector3 optionalCenter) 
 	{
 		if ( optionalCenter != null ) 

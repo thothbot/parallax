@@ -39,6 +39,9 @@ import thothbot.parallax.core.shared.Log;
 public class Matrix3
 {
 	private Float32Array elements;
+	
+	// Temporary variables
+	static Vector3 _v1 = new Vector3();
 
 	/**
 	 * Default constructor will make empty three-dimensional matrix.
@@ -107,25 +110,25 @@ public class Matrix3
 		return this;
 	}
 	
-	public Float32Array applyToVector3Array (Float32Array array) {
+	public Float32Array applyToVector3Array (Float32Array array) 
+	{
 		return applyToVector3Array(array, 0, array.getLength());
 	}
 	
-	public Float32Array applyToVector3Array (Float32Array array, int offset, int length) {
-
-		Vector3 v1 = new Vector3();
+	public Float32Array applyToVector3Array (Float32Array array, int offset, int length) 
+	{
 
 		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
 
-			v1.x = array.get( j );
-			v1.y = array.get( j + 1 );
-			v1.z = array.get( j + 2 );
+			_v1.x = array.get( j );
+			_v1.y = array.get( j + 1 );
+			_v1.z = array.get( j + 2 );
 
-			v1.apply( this );
+			_v1.apply( this );
 
-			array.set( j , v1.x );
-			array.set( j + 1 , v1.y );
-			array.set( j + 2 , v1.z );
+			array.set( j , _v1.x );
+			array.set( j + 1 , _v1.y );
+			array.set( j + 2 , _v1.z );
 
 		}
 

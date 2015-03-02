@@ -38,6 +38,11 @@ public class Frustum
 	 * Panes of the Frustum of a rectangular pyramid
 	 */
 	private List<Plane> planes;
+	
+	// Temporary variables
+	static Sphere _sphere = new Sphere();
+	static Vector3 _p1 = new Vector3();
+	static Vector3 _p2 = new Vector3();
 
 	/**
 	 * Default constructor will make Frustum of a rectangular pyramid 
@@ -104,18 +109,16 @@ public class Frustum
 	}
 
 	public boolean isIntersectsObject( GeometryObject object ) 
-	{
-		Sphere sphere = new Sphere();
-		
+	{		
 		AbstractGeometry geometry = object.getGeometry();
 
 		if ( geometry.getBoundingSphere() == null ) 
 			geometry.computeBoundingSphere();
 
-		sphere.copy( geometry.getBoundingSphere() );
-		sphere.apply( object.getMatrixWorld() );
+		_sphere.copy( geometry.getBoundingSphere() );
+		_sphere.apply( object.getMatrixWorld() );
 
-		return this.isIntersectsSphere( sphere );		
+		return this.isIntersectsSphere( _sphere );		
 	}
 
 	public boolean isIntersectsSphere( Sphere sphere ) 
@@ -136,24 +139,22 @@ public class Frustum
 		return true;
 	}
 	
-	public boolean isIntersectsBox(Box3 box) {
-
-		Vector3 p1 = new Vector3(),
-			p2 = new Vector3();
+	public boolean isIntersectsBox(Box3 box) 
+	{
 
 		for ( int i = 0; i < 6 ; i ++ ) {
 
 			Plane plane = planes.get( i );
 
-			p1.x = plane.getNormal().x > 0 ? box.getMin().x : box.getMax().x;
-			p2.x = plane.getNormal().x > 0 ? box.getMax().x : box.getMin().x;
-			p1.y = plane.getNormal().y > 0 ? box.getMin().y : box.getMax().y;
-			p2.y = plane.getNormal().y > 0 ? box.getMax().y : box.getMin().y;
-			p1.z = plane.getNormal().z > 0 ? box.getMin().z : box.getMax().z;
-			p2.z = plane.getNormal().z > 0 ? box.getMax().z : box.getMin().z;
+			_p1.x = plane.getNormal().x > 0 ? box.getMin().x : box.getMax().x;
+			_p2.x = plane.getNormal().x > 0 ? box.getMax().x : box.getMin().x;
+			_p1.y = plane.getNormal().y > 0 ? box.getMin().y : box.getMax().y;
+			_p2.y = plane.getNormal().y > 0 ? box.getMax().y : box.getMin().y;
+			_p1.z = plane.getNormal().z > 0 ? box.getMin().z : box.getMax().z;
+			_p2.z = plane.getNormal().z > 0 ? box.getMax().z : box.getMin().z;
 
-			double d1 = plane.distanceToPoint( p1 );
-			double d2 = plane.distanceToPoint( p2 );
+			double d1 = plane.distanceToPoint( _p1 );
+			double d2 = plane.distanceToPoint( _p2 );
 
 			// if both outside plane, no intersection
 

@@ -39,6 +39,10 @@ public class Vector2
 	 * The Y-coordinate
 	 */
 	protected double y;
+	
+	// Temporary variables
+	static Vector2 _min = new Vector2();
+	static Vector2 _max = new Vector2();
 
 	/**
 	 * This default constructor will initialize vector (0, 0); 
@@ -314,9 +318,6 @@ public class Vector2
 
 		return this;
 	}
-
-	static Vector2 _min = new Vector2();
-	static Vector2 _max = new Vector2();
 
 	public Vector2 clamp(double minVal, double maxVal) 
 	{

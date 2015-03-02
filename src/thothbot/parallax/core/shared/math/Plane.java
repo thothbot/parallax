@@ -23,6 +23,11 @@ public class Plane
 	private Vector3 normal;
 	private double constant;
 	
+	// Temporary variables
+	static Vector3 _v1 = new Vector3();
+	static Vector3 _v2 = new Vector3();
+	static Matrix3 _m1 = new Matrix3();
+	
 	public Plane()
 	{
 		this(new Vector3(1, 0, 0), 0);
@@ -76,10 +81,7 @@ public class Plane
 	
 	public Plane setFromCoplanarPoints( Vector3 a, Vector3 b, Vector3 c ) 
 	{
-		Vector3 v1 = new Vector3();
-		Vector3 v2 = new Vector3();
-
-		Vector3 normal = v1.sub( c, b ).cross( v2.sub( a, b ) ).normalize();
+		Vector3 normal = _v1.sub( c, b ).cross( _v2.sub( a, b ) ).normalize();
 
 		// Q: should an error be thrown if normal is zero (e.g. degenerate plane)?
 
@@ -162,10 +164,7 @@ public class Plane
 	
 	public Vector3 intersectLine( Line3 line, Vector3 optionalTarget ) 
 	{
-
-		Vector3 v1 = new Vector3();
-
-		Vector3 direction = line.delta( v1 );
+		Vector3 direction = line.delta( _v1 );
 
 		double denominator = this.normal.dot( direction );
 
@@ -206,22 +205,17 @@ public class Plane
 	}
 
 	public Plane apply( Matrix4 matrix )
-	{
-		Matrix3 m1 = new Matrix3();
-		
-		return apply(matrix, m1.getNormalMatrix( matrix ));
+	{		
+		return apply(matrix, _m1.getNormalMatrix( matrix ));
 	}
 	
 	public Plane apply( Matrix4 matrix, Matrix3 normalMatrix ) 
 	{
-		Vector3 v1 = new Vector3();
-		Vector3 v2 = new Vector3();
-
 		// compute new normal based on theory here:
 		// http://www.songho.ca/opengl/gl_normaltransform.html
-		Vector3 newNormal = v1.copy( this.normal ).apply( normalMatrix );
+		Vector3 newNormal = _v1.copy( this.normal ).apply( normalMatrix );
 
-		Vector3 newCoplanarPoint = this.coplanarPoint( v2 );
+		Vector3 newCoplanarPoint = this.coplanarPoint( _v2 );
 		newCoplanarPoint.apply( matrix );
 
 		this.setFromNormalAndCoplanarPoint( newNormal, newCoplanarPoint );

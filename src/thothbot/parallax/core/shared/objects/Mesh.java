@@ -85,6 +85,15 @@ public class Mesh extends GeometryObject
 		defaultMaterial.setWireframe( true );
 	};
 	
+	// Temporary variables
+	static Matrix4 _inverseMatrix = new Matrix4();
+	static Ray _ray = new Ray();
+	static Sphere _sphere = new Sphere();
+
+	static Vector3 _vA = new Vector3();
+	static Vector3 _vB = new Vector3();
+	static Vector3 _vC = new Vector3();
+
 	public Mesh() {
 		this(new Geometry());
 	}
@@ -125,15 +134,6 @@ public class Mesh extends GeometryObject
 		}
 
 	}
-
-	
-	Matrix4 _inverseMatrix = new Matrix4();
-	Ray _ray = new Ray();
-	Sphere _sphere = new Sphere();
-
-	Vector3 _vA = new Vector3();
-	Vector3 _vB = new Vector3();
-	Vector3 _vC = new Vector3();
 
 	public void raycast( Raycaster raycaster, List<Raycaster.Intersect> intersects) {
 

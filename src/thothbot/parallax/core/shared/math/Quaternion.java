@@ -66,6 +66,9 @@ public class Quaternion
 	public double w;
 	
 	private QuaternionChangeHandler handler;
+	
+	// Temporary variables
+	static Vector3 _v1  = new Vector3();
 
 	/**
 	 * Default constructor will make Quaternion (0.0, 0.0, 0.0, 1.0)
@@ -113,11 +116,13 @@ public class Quaternion
 		this.z = z;
 	}
 	
-	public void setHandler(QuaternionChangeHandler handler) {
+	public void setHandler(QuaternionChangeHandler handler) 
+	{
 		this.handler = handler;
 	}
 	
-	private void onChange() {
+	private void onChange() 
+	{
 		if(this.handler != null)
 			this.handler.onChange(Quaternion.this);
 	}
@@ -196,7 +201,8 @@ public class Quaternion
 		return setFromEuler(euler, false);
 	}
 	
-	public Quaternion setFromEuler( Euler euler, boolean update ) {
+	public Quaternion setFromEuler( Euler euler, boolean update ) 
+	{
 
 		// http://www.mathworks.com/matlabcentral/fileexchange/
 		// 	20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
@@ -279,11 +285,15 @@ public class Quaternion
 		return this;
 	}
 
-	public Quaternion setFromRotationMatrix( Matrix4 m ) {
-
-		// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
-
-		// assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
+	/**
+	 * http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+	 * assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
+	 * 
+	 * @param m
+	 * @return
+	 */
+	public Quaternion setFromRotationMatrix( Matrix4 m ) 
+	{
 
 		Float32Array te = m.getArray();
 
@@ -338,19 +348,16 @@ public class Quaternion
 
 	}
 
-//	public void calculateW()
-//	{
-//		this.w = -Math.sqrt(Math.abs(1.0 - this.x * this.x - this.y * this.y - this.z * this.z));
-//	}
-	
-	public Quaternion setFromUnitVectors(Vector3 vFrom, Vector3 vTo ) {
-
-		// http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
-
-		// assumes direction vectors vFrom and vTo are normalized
-
-		Vector3 v1  = new Vector3();
-
+	/**
+	 * http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
+	 * assumes direction vectors vFrom and vTo are normalized
+	 * 
+	 * @param vFrom
+	 * @param vTo
+	 * @return
+	 */
+	public Quaternion setFromUnitVectors(Vector3 vFrom, Vector3 vTo ) 
+	{
 		double EPS = 0.000001;
 
 		double r = vFrom.dot( vTo ) + 1;
@@ -361,23 +368,23 @@ public class Quaternion
 
 			if ( Math.abs( vFrom.x ) > Math.abs( vFrom.z ) ) {
 
-				v1.set( - vFrom.y, vFrom.x, 0 );
+				_v1.set( - vFrom.y, vFrom.x, 0 );
 
 			} else {
 
-				v1.set( 0, - vFrom.z, vFrom.y );
+				_v1.set( 0, - vFrom.z, vFrom.y );
 
 			}
 
 		} else {
 
-			v1.cross( vFrom, vTo );
+			_v1.cross( vFrom, vTo );
 
 		}
 
-		this.x = v1.x;
-		this.y = v1.y;
-		this.z = v1.z;
+		this.x = _v1.x;
+		this.y = _v1.y;
+		this.z = _v1.z;
 		this.w = r;
 
 		this.normalize();
@@ -408,10 +415,9 @@ public class Quaternion
 		return this;
 	}
 	
-	public double dot( Quaternion v ) {
-
+	public double dot( Quaternion v ) 
+	{
 		return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
-
 	}
 
 	public double lengthSq() 
@@ -579,10 +585,9 @@ public class Quaternion
 		return this;
 	}
 	
-	public static Quaternion slerp(Quaternion qa, Quaternion qb, Quaternion qm, double t ) {
-
+	public static Quaternion slerp(Quaternion qa, Quaternion qb, Quaternion qm, double t ) 
+	{
 		return qm.copy( qa ).slerp( qb, t );
-
 	}
 
 	public boolean equals( Quaternion quaternion ) 
