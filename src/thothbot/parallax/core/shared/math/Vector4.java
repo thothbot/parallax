@@ -30,7 +30,7 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
  * 
  * @author thothbot
  */
-public class Vector4 extends Vector3 implements Vector
+public class Vector4 extends Vector3
 {
 	/**
 	 * The W-coordinate
@@ -125,7 +125,8 @@ public class Vector4 extends Vector3 implements Vector
 		return this;
 	}
 	
-	public void setComponent( int index, double value ) {
+	public void setComponent( int index, double value ) 
+	{
 
 		switch ( index ) {
 
@@ -139,7 +140,8 @@ public class Vector4 extends Vector3 implements Vector
 		
 	}
 
-	public double getComponent( int index ) {
+	public double getComponent( int index ) 
+	{
 
 		switch ( index ) {
 
@@ -162,7 +164,7 @@ public class Vector4 extends Vector3 implements Vector
 	 */
 	public Vector4 copy(Vector4 v)
 	{
-		return this.set(v.getX(), v.getY(), v.getZ(), v.getW());
+		return this.set(v.x, v.y, v.z, v.w);
 	}
 	
 	/**
@@ -174,12 +176,7 @@ public class Vector4 extends Vector3 implements Vector
 	 */
 	public Vector4 copy(Vector3 v)
 	{
-		return this.set(v.getX(), v.getY(), v.getZ(), 1.0);
-	}
-	
-	public Vector4 add(Vector4 v)
-	{
-		return this.add(this, v);
+		return this.set(v.x, v.y, v.z, 1.0);
 	}
 	
 	/**
@@ -205,10 +202,9 @@ public class Vector4 extends Vector3 implements Vector
 	 * @param v
 	 *            the other vector
 	 */
-	@Override
-	public Vector4 add(Vector v)
+	public Vector4 add(Vector4 v)
 	{
-		return this.add(this, (Vector4) v);
+		return this.add(this, v);
 	}
 
 	public Vector4 add(double s)
@@ -218,11 +214,6 @@ public class Vector4 extends Vector3 implements Vector
 		this.z += s;
 		this.w += s;
 		return this;
-	}
-	
-	public Vector4 sub(Vector4 v)
-	{
-		return this.sub(this, v);
 	}
 	
 	/**
@@ -250,10 +241,9 @@ public class Vector4 extends Vector3 implements Vector
 	 * @param v
 	 *            the other vector
 	 */
-	@Override
-	public Vector4 sub(Vector v)
+	public Vector4 sub(Vector4 v)
 	{
-		return this.sub(this, (Vector4)v);
+		return this.sub(this, v);
 	}
 
 	public Vector4 multiply(Vector4 v)
@@ -351,7 +341,7 @@ public class Vector4 extends Vector3 implements Vector
 	 */
 	public Vector4 setAxisAngleFromQuaternion( Quaternion q ) 
 	{
-		this.w = 2 * Math.acos( q.w );
+		this.w = 2.0 * Math.acos( q.w );
 
 		double s = Math.sqrt( 1 - q.w * q.w );
 
@@ -591,18 +581,19 @@ public class Vector4 extends Vector3 implements Vector
 
 		return this;
 	}
-	
-	public Vector4 clamp( double minVal, double maxVal ) {
 
-		Vector4 min = new Vector4(), max = new Vector4();
+	static Vector4 _min = new Vector4();
+	static Vector4 _max = new Vector4();
+	public Vector4 clamp( double minVal, double maxVal ) 
+	{
+		_min.set( minVal, minVal, minVal, minVal );
+		_max.set( maxVal, maxVal, maxVal, maxVal );
 
-		min.set( minVal, minVal, minVal, minVal );
-		max.set( maxVal, maxVal, maxVal, maxVal );
-
-		return this.clamp( min, max );
+		return this.clamp( _min, _max );
 	}
 	
-    public Vector4 floor() {
+    public Vector4 floor() 
+    {
 
         this.x = Math.floor( this.x );
         this.y = Math.floor( this.y );
@@ -613,7 +604,8 @@ public class Vector4 extends Vector3 implements Vector
 
     }
 
-    public Vector4 ceil() {
+    public Vector4 ceil() 
+    {
 
         this.x = Math.ceil( this.x );
         this.y = Math.ceil( this.y );
@@ -624,7 +616,8 @@ public class Vector4 extends Vector3 implements Vector
 
     }
 
-    public Vector4 round() {
+    public Vector4 round() 
+    {
 
         this.x = Math.round( this.x );
         this.y = Math.round( this.y );
@@ -635,7 +628,8 @@ public class Vector4 extends Vector3 implements Vector
 
     }
 
-    public Vector4 roundToZero() {
+    public Vector4 roundToZero()
+    {
 
         this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
         this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
@@ -694,7 +688,7 @@ public class Vector4 extends Vector3 implements Vector
 	
 	public double lengthManhattan() 
 	{
-		return Math.abs( getX() ) + Math.abs( getY() ) + Math.abs( getZ() ) + Math.abs( getW() );
+		return Math.abs( this.x ) + Math.abs( this.y ) + Math.abs( this.z ) + Math.abs( this.w );
 	}
 
 	/**
@@ -736,33 +730,13 @@ public class Vector4 extends Vector3 implements Vector
 		return ( ( v.x == this.x ) && ( v.y == this.y ) && ( v.z == this.z ) && ( v.w == this.w ) );
 	}
 
-	@Override
 	public Vector4 clone() 
 	{
 		return new Vector4(this.x, this.y, this.z, this.w);
 	}
 	
-	@Override
 	public String toString() 
 	{
 		return "(" + this.x + ", " + this.y + ", " + this.z +  ", " + this.w + ")";
 	}
-
-//	/**
-//	 * This method is not implemented yet.
-//	 */
-//	@Override
-//	public double distanceToSquared(Vector v1)
-//	{
-//		return 0;
-//	}
-//
-//	/**
-//	 * This method is not implemented yet.
-//	 */
-//	@Override
-//	public double distanceTo(Vector v)
-//	{
-//		return 0;
-//	}
 }

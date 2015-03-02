@@ -31,7 +31,7 @@ import thothbot.parallax.core.shared.cameras.Camera;
  * 
  * @author thothbot
  */
-public class Vector3 extends Vector2 implements Vector
+public class Vector3 extends Vector2
 {
 	/**
 	 * The Z-coordinate
@@ -155,21 +155,21 @@ public class Vector3 extends Vector2 implements Vector
 	public Vector3 copy(Vector3 v)
 	{
 		this.set(v.getX(), v.getY(), v.getZ());
+
 		return this;
 	}
 	
-	@Override
-	public Vector3 add(Vector v)
+	public Vector3 add(Vector3 v)
 	{
 		return this.add(this, v);
 	}
 	
-	@Override
-	public Vector3 add(Vector v1, Vector v2)
+	public Vector3 add(Vector3 v1, Vector3 v2)
 	{
-		this.setX(((Vector3)v1).getX() + ((Vector3)v2).getX());
-		this.setY(((Vector3)v1).getY() + ((Vector3)v2).getY());
-		this.setZ(((Vector3)v1).getZ() + ((Vector3)v2).getZ());
+		this.x = v1.x + v2.x;
+		this.y = v1.y + v2.y;
+		this.z = v1.z + v2.z;
+		
 		return this;
 	}
 
@@ -179,40 +179,38 @@ public class Vector3 extends Vector2 implements Vector
 		this.addX(s);
 		this.addY(s);
 		this.addZ(s);
+
 		return this;
 	}
 	
-	@Override
-	public Vector3 sub(Vector v)
+	public Vector3 sub(Vector3 v)
 	{
 		return this.sub(this, v);
 	}
 	
-	@Override
-	public Vector3 sub(Vector v1, Vector v2)
+	public Vector3 sub(Vector3 v1, Vector3 v2)
 	{
-		this.setX(((Vector3)v1).getX() - ((Vector3)v2).getX());
-		this.setY(((Vector3)v1).getY() - ((Vector3)v2).getY());
-		this.setZ(((Vector3)v1).getZ() - ((Vector3)v2).getZ());
+		this.x = v1.x - v2.x;
+		this.y = v1.y - v2.y;
+		this.z = v1.z - v2.z;
+
 		return this;
 	}
 	
-	@Override
-	public Vector3 multiply(Vector v)
+	public Vector3 multiply(Vector3 v)
 	{
 		return this.multiply(this, v);
 	}
 	
-	@Override
-	public Vector3 multiply(Vector v1, Vector v2)
+	public Vector3 multiply(Vector3 v1, Vector3 v2)
 	{
-		this.setX(((Vector3)v1).getX() * ((Vector3)v2).getX());
-		this.setY(((Vector3)v1).getY() * ((Vector3)v2).getY());
-		this.setZ(((Vector3)v1).getZ() * ((Vector3)v2).getZ());
+		this.x = v1.x * v2.x;
+		this.y = v1.y * v2.y;
+		this.z = v1.z * v2.z;
+		
 		return this;
 	}
 
-	@Override
 	public Vector3 multiply(double s)
 	{
 		this.x *= s;
@@ -221,20 +219,17 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 	}
 	
+	static Quaternion _quaternion = new Quaternion();
 	public Vector3 applyEuler( Euler euler) 
-	{
-		Quaternion quaternion = new Quaternion();
-		
-		this.apply( quaternion.setFromEuler( euler ) );
+	{		
+		this.apply( _quaternion.setFromEuler( euler ) );
 
 		return this;
 	}
 	
 	public Vector3 applyAxisAngle(Vector3 axis, double angle) 
 	{
-		Quaternion quaternion = new Quaternion();
-
-		this.apply( quaternion.setFromAxisAngle( axis, angle ) );
+		this.apply( _quaternion.setFromAxisAngle( axis, angle ) );
 
 		return this;
 	}
@@ -254,11 +249,13 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param m Matrix4 affine matrix
+	 * @return
+	 */
 	public Vector3 apply( Matrix4 m ) 
 	{
-
-		// input: THREE.Matrix4 affine matrix
-
 		double x = this.x, y = this.y, z = this.z;
 
 		Float32Array e = m.getArray();
@@ -316,22 +313,19 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 
 	}
-	
-	public Vector3 project(Camera camera) {
 
-		Matrix4 matrix = new Matrix4();
-
-		matrix.multiply( camera.getProjectionMatrix(), matrix.getInverse( camera.getMatrixWorld() ) );
-		return this.applyProjection( matrix );
+	static Matrix4 _matrix = new Matrix4();
+	public Vector3 project(Camera camera) 
+	{
+		_matrix.multiply( camera.getProjectionMatrix(), _matrix.getInverse( camera.getMatrixWorld() ) );
+		return this.applyProjection( _matrix );
 
 	}
 	
-	public Vector3 unproject(Camera camera) {
-
-		Matrix4 matrix = new Matrix4();
-
-		matrix.multiply( camera.getMatrixWorld(), matrix.getInverse( camera.getProjectionMatrix() ) );
-		return this.applyProjection( matrix );
+	public Vector3 unproject(Camera camera) 
+	{
+		_matrix.multiply( camera.getMatrixWorld(), _matrix.getInverse( camera.getProjectionMatrix() ) );
+		return this.applyProjection( _matrix );
 	}
 	
 	/**
@@ -354,18 +348,17 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 	}
 	
-	@Override
-	public Vector3 divide(Vector v)
+	public Vector3 divide(Vector3 v)
 	{
 		return this.divide(this, v);
 	}
 	
-	@Override
-	public Vector3 divide(Vector v1, Vector v2)
+	public Vector3 divide(Vector3 v1, Vector3 v2)
 	{
-		this.setX(((Vector3)v1).getX() / ((Vector3)v2).getX());
-		this.setY(((Vector3)v1).getY() / ((Vector3)v2).getY());
-		this.setZ(((Vector3)v1).getZ() / ((Vector3)v2).getZ());
+		this.x = v1.x / v2.x;
+		this.y = v1.y / v2.y;
+		this.z = v1.z / v2.z;
+
 		return this;
 	}
 
@@ -471,18 +464,19 @@ public class Vector3 extends Vector2 implements Vector
 
 		return this;
 	}
-	
-	public Vector3 clamp(double minVal, double maxVal) {
 
-		Vector3 min = new Vector3(), max = new Vector3();
+	static Vector3 _min = new Vector3();
+	static Vector3 _max = new Vector3();
+	public Vector3 clamp(double minVal, double maxVal) 
+	{
+		_min.set( minVal, minVal, minVal );
+		_max.set( maxVal, maxVal, maxVal );
 
-		min.set( minVal, minVal, minVal );
-		max.set( maxVal, maxVal, maxVal );
-
-		return this.clamp( min, max );
+		return this.clamp( _min, _max );
 	}
 
-	public Vector3 floor() {
+	public Vector3 floor() 
+	{
 
 		this.x = Math.floor( this.x );
 		this.y = Math.floor( this.y );
@@ -492,7 +486,8 @@ public class Vector3 extends Vector2 implements Vector
 
 	}
 
-	public Vector3 ceil() {
+	public Vector3 ceil() 
+	{
 
 		this.x = Math.ceil( this.x );
 		this.y = Math.ceil( this.y );
@@ -502,7 +497,8 @@ public class Vector3 extends Vector2 implements Vector
 
 	}
 
-	public Vector3 round() {
+	public Vector3 round() 
+	{
 
 		this.x = Math.round( this.x );
 		this.y = Math.round( this.y );
@@ -512,7 +508,8 @@ public class Vector3 extends Vector2 implements Vector
 
 	}
 
-	public Vector3 roundToZero() {
+	public Vector3 roundToZero() 
+	{
 
 		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
 		this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
@@ -624,25 +621,20 @@ public class Vector3 extends Vector2 implements Vector
 		return cross(this, v);
 	}
 	
-	
 	public Vector3 projectOnVector(Vector3 vector) 
 	{
-		Vector3 v1 = new Vector3();
+		_v1.copy( vector ).normalize();
 
-		v1.copy( vector ).normalize();
+		double dot = this.dot( _v1 );
 
-		double dot = this.dot( v1 );
-
-		return this.copy( v1 ).multiply( dot );
+		return this.copy( _v1 ).multiply( dot );
 	}
 
 	public Vector3 projectOnPlane(Vector3 planeNormal) 
 	{
-		Vector3 v1 = new Vector3();
+		_v1.copy( this ).projectOnVector( planeNormal );
 
-		v1.copy( this ).projectOnVector( planeNormal );
-
-		return this.sub( v1 );
+		return this.sub( _v1 );
 	}
 	
 
@@ -667,22 +659,21 @@ public class Vector3 extends Vector2 implements Vector
 		return Math.acos( Mathematics.clamp( theta, - 1, 1 ) );
 	}
 
-	@Override
-	public double distanceTo(Vector v1)
+	public double distanceTo(Vector3 v1)
 	{
 		return Math.sqrt(distanceToSquared(v1));
 	}
-	
-	@Override
-	public double distanceToSquared(Vector v1)
+
+	public double distanceToSquared(Vector3 v1)
 	{
-		double dx = this.getX() - ((Vector3)v1).getX();
-		double dy = this.getY() - ((Vector3)v1).getY();
-		double dz = this.getZ() - ((Vector3)v1).getZ();
+		double dx = this.x - v1.x;
+		double dy = this.y - v1.y;
+		double dz = this.z - v1.z;
 		return (dx * dx + dy * dy + dz * dz);
 	}
 	
-	public Vector3 setFromMatrixPosition( Matrix4 m ) {
+	public Vector3 setFromMatrixPosition( Matrix4 m )
+	{
 
 		this.x = m.getArray().get( 12 );
 		this.y = m.getArray().get( 13 );
@@ -691,7 +682,8 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 	}
 	
-	public Vector3 setFromMatrixScale( Matrix4 m ) {
+	public Vector3 setFromMatrixScale( Matrix4 m ) 
+	{
 
 		double sx = this.set( m.getArray().get( 0 ), m.getArray().get( 1 ), m.getArray().get(  2 ) ).length();
 		double sy = this.set( m.getArray().get( 4 ), m.getArray().get( 5 ), m.getArray().get(  6 ) ).length();
@@ -704,7 +696,8 @@ public class Vector3 extends Vector2 implements Vector
 		return this;
 	}
 	
-	public Vector3 setFromMatrixColumn( int index, Matrix4 matrix ) {
+	public Vector3 setFromMatrixColumn( int index, Matrix4 matrix ) 
+	{
 
 		int offset = index * 4;
 
@@ -731,11 +724,13 @@ public class Vector3 extends Vector2 implements Vector
 		return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
 	}
 	
-	public Vector3 fromArray ( Float32Array array ) {
+	public Vector3 fromArray ( Float32Array array )
+	{
 		return fromArray(array, 0);
 	}
 	
-	public Vector3 fromArray ( Float32Array array, int offset ) {
+	public Vector3 fromArray ( Float32Array array, int offset ) 
+	{
 
 		this.x = array.get( offset );
 		this.y = array.get( offset + 1 );
@@ -745,11 +740,13 @@ public class Vector3 extends Vector2 implements Vector
 
 	}
 	
-	public Float32Array toArray() {
+	public Float32Array toArray() 
+	{
 		return toArray(Float32Array.create(3), 0);
 	}
 
-	public Float32Array toArray( Float32Array array, int offset ) {
+	public Float32Array toArray( Float32Array array, int offset ) 
+	{
 
 		array.set( offset , this.x);
 		array.set( offset + 1 , this.y);
@@ -758,13 +755,11 @@ public class Vector3 extends Vector2 implements Vector
 		return array;
 	}
 	
-	@Override
 	public Vector3 clone()
 	{
 		return new Vector3(this.getX(), this.getY(), this.getZ());
 	}
 	
-	@Override
 	public String toString() 
 	{
 		return "(" + this.x + ", " + this.y + ", " + this.z + ")";
