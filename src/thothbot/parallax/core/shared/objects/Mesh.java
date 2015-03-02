@@ -125,50 +125,49 @@ public class Mesh extends GeometryObject
 		}
 
 	}
+
 	
+	Matrix4 _inverseMatrix = new Matrix4();
+	Ray _ray = new Ray();
+	Sphere _sphere = new Sphere();
+
+	Vector3 _vA = new Vector3();
+	Vector3 _vB = new Vector3();
+	Vector3 _vC = new Vector3();
+
 	public void raycast( Raycaster raycaster, List<Raycaster.Intersect> intersects) {
-
-		Matrix4 inverseMatrix = new Matrix4();
-		Ray ray = new Ray();
-		Sphere sphere = new Sphere();
-
-		Vector3 vA = new Vector3();
-		Vector3 vB = new Vector3();
-		Vector3 vC = new Vector3();
 
 		// Checking boundingSphere distance to ray
 		AbstractGeometry geometry = this.getGeometry();
 
-		if ( geometry.getBoundingSphere() == null ) geometry.computeBoundingSphere();
+		if ( geometry.getBoundingSphere() == null ) 
+			geometry.computeBoundingSphere();
 
-		sphere.copy( geometry.getBoundingSphere() );
-		sphere.apply( this.matrixWorld );
+		_sphere.copy( geometry.getBoundingSphere() );
+		_sphere.apply( this.matrixWorld );
 
-		if ( raycaster.getRay().isIntersectionSphere( sphere ) == false ) {
-
+		if ( raycaster.getRay().isIntersectionSphere( _sphere ) == false ) 
+		{
 			return;
-
 		}
 
 		// Check boundingBox before continuing
 
-		inverseMatrix.getInverse( this.matrixWorld );
-		ray.copy( raycaster.getRay() ).apply( inverseMatrix );
+		_inverseMatrix.getInverse( this.matrixWorld );
+		_ray.copy( raycaster.getRay() ).apply( _inverseMatrix );
 
-		if ( geometry.getBoundingBox() != null ) {
-
-			if ( ray.isIntersectionBox( geometry.getBoundingBox() ) == false )  {
-
+		if ( geometry.getBoundingBox() != null ) 
+		{
+			if ( _ray.isIntersectionBox( geometry.getBoundingBox() ) == false )  
+			{
 				return;
-
 			}
-
 		}
 
 		double precision = Raycaster.PRECISION;
 
-		if ( geometry instanceof BufferGeometry ) {
-
+		if ( geometry instanceof BufferGeometry ) 
+		{
 			Material material = this.getMaterial();
 
 			if ( material == null ) return;
@@ -181,38 +180,37 @@ public class Mesh extends GeometryObject
 				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 				List<BufferGeometry.DrawCall> offsets = bGeometry.getDrawcalls();
 
-				if ( offsets.size() == 0 ) {
-
+				if ( offsets.size() == 0 ) 
+				{
 					offsets.add(new BufferGeometry.DrawCall(0, indices.getLength(), 0));
-
 				}
 
-				for ( int oi = 0, ol = offsets.size(); oi < ol; ++oi ) {
-
+				for ( int oi = 0, ol = offsets.size(); oi < ol; ++oi ) 
+				{
 					int start = offsets.get( oi ).start;
 					int count = offsets.get( oi ).count;
 					int index = offsets.get( oi ).index;
 
-					for ( int i = start, il = start + count; i < il; i += 3 ) {
+					for ( int i = start, il = start + count; i < il; i += 3 ) 
+					{
 
 						int a = index + (int)indices.get( i );
 						int b = index + (int)indices.get( i + 1 );
 						int c = index + (int)indices.get( i + 2 );
 
-						vA.fromArray( positions, a * 3 );
-						vB.fromArray( positions, b * 3 );
-						vC.fromArray( positions, c * 3 );
+						_vA.fromArray( positions, a * 3 );
+						_vB.fromArray( positions, b * 3 );
+						_vC.fromArray( positions, c * 3 );
 
 						Vector3 intersectionPoint;
 						
-						if ( material.getSides() == Material.SIDE.BACK ) {
-
-							intersectionPoint = ray.intersectTriangle( vC, vB, vA, true);
-
-						} else {
-
-							intersectionPoint = ray.intersectTriangle( vA, vB, vC, material.getSides() != Material.SIDE.DOUBLE );
-
+						if ( material.getSides() == Material.SIDE.BACK ) 
+						{
+							intersectionPoint = _ray.intersectTriangle( _vC, _vB, _vA, true);
+						} 
+						else 
+						{
+							intersectionPoint = _ray.intersectTriangle( _vA, _vB, _vC, material.getSides() != Material.SIDE.DOUBLE );
 						}
 
 						if ( intersectionPoint == null ) continue;
@@ -226,7 +224,7 @@ public class Mesh extends GeometryObject
 						Raycaster.Intersect intersect = new Raycaster.Intersect();
 						intersect.distance = distance;
 						intersect.point = intersectionPoint;
-						intersect.face = new Face3( a, b, c, Triangle.normal( vA, vB, vC ) );
+						intersect.face = new Face3( a, b, c, Triangle.normal( _vA, _vB, _vC ) );
 						intersect.object = this;
 						intersects.add( intersect );
 						
@@ -244,19 +242,19 @@ public class Mesh extends GeometryObject
 					int b = i + 1;
 					int c = i + 2;
 
-					vA.fromArray( positions, j );
-					vB.fromArray( positions, j + 3 );
-					vC.fromArray( positions, j + 6 );
+					_vA.fromArray( positions, j );
+					_vB.fromArray( positions, j + 3 );
+					_vC.fromArray( positions, j + 6 );
 
 					Vector3 intersectionPoint;
 					
 					if ( material.getSides() == Material.SIDE.BACK ) {
 
-						intersectionPoint = ray.intersectTriangle( vC, vB, vA, true, null );
+						intersectionPoint = _ray.intersectTriangle( _vC, _vB, _vA, true, null );
 
 					} else {
 
-						intersectionPoint = ray.intersectTriangle( vA, vB, vC, material.getSides() != Material.SIDE.DOUBLE, null );
+						intersectionPoint = _ray.intersectTriangle( _vA, _vB, _vC, material.getSides() != Material.SIDE.DOUBLE, null );
 
 					}
 
@@ -271,7 +269,7 @@ public class Mesh extends GeometryObject
 					Raycaster.Intersect intersect = new Raycaster.Intersect();
 					intersect.distance = distance;
 					intersect.point = intersectionPoint;
-					intersect.face = new Face3( a, b, c, Triangle.normal( vA, vB, vC ) );
+					intersect.face = new Face3( a, b, c, Triangle.normal( _vA, _vB, _vC ) );
 					intersect.object = this;
 					intersects.add( intersect );
 
@@ -304,9 +302,9 @@ public class Mesh extends GeometryObject
 
 					List<MorphTarget> morphTargets = aGeometry.getMorphTargets();
 
-					vA.set( 0, 0, 0 );
-					vB.set( 0, 0, 0 );
-					vC.set( 0, 0, 0 );
+					_vA.set( 0, 0, 0 );
+					_vB.set( 0, 0, 0 );
+					_vC.set( 0, 0, 0 );
 
 					for ( int t = 0, tl = morphTargets.size(); t < tl; t ++ ) {
 
@@ -316,27 +314,27 @@ public class Mesh extends GeometryObject
 
 						List<Vector3> targets = morphTargets.get( t ).vertices;
 
-						vA.setX( vA.getX() + ( targets.get( face.getA() ).getX() - a.getX() ) * influence );
-						vA.setY( vA.getY() + ( targets.get( face.getA() ).getY() - a.getY() ) * influence );
-						vA.setZ( vA.getZ() + ( targets.get( face.getA() ).getZ() - a.getZ() ) * influence );
+						_vA.setX( _vA.getX() + ( targets.get( face.getA() ).getX() - a.getX() ) * influence );
+						_vA.setY( _vA.getY() + ( targets.get( face.getA() ).getY() - a.getY() ) * influence );
+						_vA.setZ( _vA.getZ() + ( targets.get( face.getA() ).getZ() - a.getZ() ) * influence );
 
-						vB.setX( vB.getX() + ( targets.get( face.getB() ).getX() - b.getX() ) * influence );
-						vB.setY( vB.getY() + ( targets.get( face.getB() ).getY() - b.getY() ) * influence );
-						vB.setZ( vB.getZ() + ( targets.get( face.getB() ).getZ() - b.getZ() ) * influence );
+						_vB.setX( _vB.getX() + ( targets.get( face.getB() ).getX() - b.getX() ) * influence );
+						_vB.setY( _vB.getY() + ( targets.get( face.getB() ).getY() - b.getY() ) * influence );
+						_vB.setZ( _vB.getZ() + ( targets.get( face.getB() ).getZ() - b.getZ() ) * influence );
 
-						vC.setX( vC.getX() + ( targets.get( face.getC() ).getX() - c.getX() ) * influence );
-						vC.setY( vC.getY() + ( targets.get( face.getC() ).getY() - c.getY() ) * influence );
-						vC.setZ( vC.getZ() + ( targets.get( face.getC() ).getZ() - c.getZ() ) * influence );
+						_vC.setX( _vC.getX() + ( targets.get( face.getC() ).getX() - c.getX() ) * influence );
+						_vC.setY( _vC.getY() + ( targets.get( face.getC() ).getY() - c.getY() ) * influence );
+						_vC.setZ( _vC.getZ() + ( targets.get( face.getC() ).getZ() - c.getZ() ) * influence );
 
 					}
 
-					vA.add( a );
-					vB.add( b );
-					vC.add( c );
+					_vA.add( a );
+					_vB.add( b );
+					_vC.add( c );
 
-					a = vA;
-					b = vB;
-					c = vC;
+					a = _vA;
+					b = _vB;
+					c = _vC;
 
 				}
 
@@ -344,11 +342,11 @@ public class Mesh extends GeometryObject
 				
 				if ( material.getSides() == Material.SIDE.BACK ) {
 
-					intersectionPoint = ray.intersectTriangle( c, b, a, true );
+					intersectionPoint = _ray.intersectTriangle( c, b, a, true );
 
 				} else {
 
-					intersectionPoint = ray.intersectTriangle( a, b, c, material.getSides() != Material.SIDE.DOUBLE );
+					intersectionPoint = _ray.intersectTriangle( a, b, c, material.getSides() != Material.SIDE.DOUBLE );
 
 				}
 

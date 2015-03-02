@@ -646,13 +646,16 @@ public class Vector3 extends Vector2 implements Vector
 	}
 	
 
+	/**
+	 * reflect incident vector off plane orthogonal to normal
+	 * normal is assumed to have unit length
+	 * @param normal
+	 * @return
+	 */
+	static Vector3 _v1 = new Vector3();
 	public Vector3 reflect(Vector3 normal) 
 	{
-		// reflect incident vector off plane orthogonal to normal
-		// normal is assumed to have unit length
-		
-		Vector3 v1 = new Vector3();
-		return this.sub( v1.copy( normal ).multiply( 2 * this.dot( normal ) ) );
+		return this.sub( _v1.copy( normal ).multiply( 2 * this.dot( normal ) ) );
 	}
 	
 	public double angleTo( Vector3 v ) 

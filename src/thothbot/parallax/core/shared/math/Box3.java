@@ -78,10 +78,9 @@ public class Box3
 	{
 		this.makeEmpty();
 
-		for ( int i = 0, il = points.length; i < il; i ++ ) {
-
+		for ( int i = 0, il = points.length; i < il; i ++ ) 
+		{
 			this.expandByPoint( points[ i ] );
-
 		}
 
 		return this;
