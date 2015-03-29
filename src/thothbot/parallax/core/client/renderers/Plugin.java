@@ -53,6 +53,10 @@ public abstract class Plugin
 		return this.scene;
 	}
 	
+	public boolean isMulty() {
+		return false;
+	}
+	
 	public boolean isEnabled() {
 		return isEnabled;
 	}

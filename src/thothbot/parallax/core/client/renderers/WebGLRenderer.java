@@ -115,7 +115,6 @@ import thothbot.parallax.core.shared.objects.SkinnedMesh;
 import thothbot.parallax.core.shared.scenes.AbstractFog;
 import thothbot.parallax.core.shared.scenes.FogExp2;
 import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugins.postprocessing.Postprocessing;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
@@ -1956,7 +1955,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			if( ! plugin.isEnabled() 
 					|| plugin.isRendering() 
 					|| plugin.getType() != type 
-					|| ( !(plugin instanceof Postprocessing) && !plugin.getScene().equals(scene)))
+					|| ( !(plugin.isMulty()) && !plugin.getScene().equals(scene)))
 				continue;
 			
 			plugin.setRendering(true);

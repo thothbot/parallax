@@ -97,6 +97,11 @@ public class Postprocessing extends Plugin
 		getScene().add( camera );
 	}
 	
+	@Override
+	public boolean isMulty() {
+		return true;
+	}
+	
 	public Plugin.TYPE getType() {
 		return Plugin.TYPE.POST_RENDER;
 	}
