@@ -24,8 +24,10 @@ which is Java to JavaScript cross-compiler. GWT allows developers to write Java 
 Parallax based on [three.js](http://github.com/mrdoob/three.js) project. The most methods and objects are equivalent three.js for the back compatibility.
 
 The aim of the project is to use GWT which helps maintaining complex pieces of code, and provides better design-time support in IDEs like refactoring, validation, etc...<br/>
-Parallax supports WebGL-canvas renderer only.
 
+Parallax includes:
+* WebGL renderer
+* Raytracing renderer.
 
 ### Download - new Parallax v1.6 ###
 
