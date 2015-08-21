@@ -38,10 +38,48 @@ public final class ArrayBuffer extends JavaScriptObject {
 		return new $wnd.ArrayBuffer(length);		
 	}-*/;
 	
+	public static native ArrayBuffer copy(com.google.gwt.typedarrays.shared.ArrayBuffer origin) /*-{
+		if (!ArrayBuffer.prototype.slice)
+  		{
+			ArrayBuffer.prototype.slice = function (start, end) {
+		        var that = new Uint8Array(this);
+		        if (end == undefined) end = that.length;
+		        var result = new ArrayBuffer(end - start);
+		        var resultArray = new Uint8Array(result);
+		        for (var i = 0; i < resultArray.length; i++)
+		           resultArray[i] = that[i + start];
+		        return result;
+		    }
+  		}
+
+		return origin.slice(0);
+	}-*/;
+	
+	public static native ArrayBuffer slice(int start, int end) /*-{
+		if (!ArrayBuffer.prototype.slice)
+		{
+			ArrayBuffer.prototype.slice = function (start, end) {
+		        var that = new Uint8Array(this);
+		        if (end == undefined) end = that.length;
+		        var result = new ArrayBuffer(end - start);
+		        var resultArray = new Uint8Array(result);
+		        for (var i = 0; i < resultArray.length; i++)
+		           resultArray[i] = that[i + start];
+		        return result;
+		    }
+		}
+
+		return this.slice(start, end);
+	}-*/;
+	
 	/**
 	 * The length of the ArrayBuffer in bytes, as fixed at construction time.
 	 */
 	public native int getByteLength() /*-{
 		return this.byteLength;
+	}-*/;
+	
+    public native byte get(int index) /*-{
+	  	return this[index];
 	}-*/;
 }

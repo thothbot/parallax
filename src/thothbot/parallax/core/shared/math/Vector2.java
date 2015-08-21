@@ -28,7 +28,7 @@ import thothbot.parallax.core.client.gl2.arrays.Float32Array;
  * 
  * @author thothbot
  */
-public class Vector2 implements Vector
+public class Vector2
 {
 	/**
 	 * The X-coordinate
@@ -39,6 +39,10 @@ public class Vector2 implements Vector
 	 * The Y-coordinate
 	 */
 	protected double y;
+	
+	// Temporary variables
+	static Vector2 _min = new Vector2();
+	static Vector2 _max = new Vector2();
 
 	/**
 	 * This default constructor will initialize vector (0, 0); 
@@ -170,25 +174,24 @@ public class Vector2 implements Vector
 	 */
 	public Vector2 copy(Vector2 v)
 	{
-		this.set(v.getX(), v.getY());
+		this.set(v.x, v.y);
+
 		return this;
 	}
 
-	@Override
-	public Vector2 add(Vector v)
+	public Vector2 add(Vector2 v)
 	{
 		return this.add(this, v);
 	}
 	
-	@Override
-	public Vector2 add(Vector v1, Vector v2)
+	public Vector2 add(Vector2 v1, Vector2 v2)
 	{
-		this.setX(((Vector2)v1).getX() + ((Vector2)v2).getX());
-		this.setY(((Vector2)v1).getY() + ((Vector2)v2).getY());
+		this.x = v1.x + v2.x;
+		this.y = v1.y + v2.y;
+
 		return this;
 	}
 	
-	@Override
 	public Vector2 add(double s)
 	{
 		this.addX(s);
@@ -197,37 +200,32 @@ public class Vector2 implements Vector
 		return this;
 	}
 
-	@Override
-	public Vector2 sub(Vector v)
+	public Vector2 sub(Vector2 v)
 	{
 		return this.sub(this, v);
 	}
 	
-	@Override
-	public Vector2 sub(Vector v1, Vector v2)
+	public Vector2 sub(Vector2 v1, Vector2 v2)
 	{
-		this.setX(((Vector2)v1).getX() - ((Vector2)v2).getX());
-		this.setY(((Vector2)v1).getY() - ((Vector2)v2).getY());
-		
+		this.x = v1.x - v2.x;
+		this.y = v1.y - v2.y;
+				
 		return this;
 	}
 
-	@Override
-	public Vector2 multiply(Vector v)
+	public Vector2 multiply(Vector2 v)
 	{
 		return this.multiply(this, v);
 	}
 	
-	@Override
-	public Vector2 multiply(Vector v1, Vector v2)
+	public Vector2 multiply(Vector2 v1, Vector2 v2)
 	{
-		this.setX(((Vector2)v1).getX() * ((Vector2)v2).getX());
-		this.setY(((Vector2)v1).getY() * ((Vector2)v2).getY());
-
+		this.x = v1.x * v2.x;
+		this.y = v1.y * v2.y;
+		
 		return this;
 	}
 
-	@Override
 	public Vector2 multiply(double s)
 	{
 		this.x *= s;
@@ -236,22 +234,19 @@ public class Vector2 implements Vector
 		return this;
 	}
 
-	@Override
-	public Vector2 divide(Vector v)
+	public Vector2 divide(Vector2 v)
 	{
 		return this.divide(this, v);
 	}
 	
-	@Override
-	public Vector2 divide(Vector v1, Vector v2)
+	public Vector2 divide(Vector2 v1, Vector2 v2)
 	{
-		this.setX(((Vector2)v1).getX() / ((Vector2)v2).getX());
-		this.setY(((Vector2)v1).getY() / ((Vector2)v2).getY());
-
+		this.x = v1.x / v2.x;
+		this.y = v1.y / v2.y;
+		
 		return this;
 	}
 	
-	@Override
 	public Vector2 divide(double s)
 	{
 		if (s != 0) 
@@ -323,16 +318,13 @@ public class Vector2 implements Vector
 
 		return this;
 	}
-	
-	public Vector2 clamp (double minVal, double maxVal) {
 
-		Vector2 min = new Vector2();
-		Vector2 max = new Vector2();
+	public Vector2 clamp(double minVal, double maxVal) 
+	{
+		_min.set( minVal, minVal );
+		_max.set( maxVal, maxVal );
 
-		min.set( minVal, minVal );
-		max.set( maxVal, maxVal );
-
-		return this.clamp( min, max );
+		return this.clamp( _min, _max );
 	} 
 	
 	public Vector2 floor() {
@@ -416,7 +408,6 @@ public class Vector2 implements Vector
 	/**
 	 * Normalizes this vector in place.
 	 */
-	@Override
 	public Vector2 normalize()
 	{
 		this.divide(length());
@@ -427,11 +418,10 @@ public class Vector2 implements Vector
 	 * (non-Javadoc)
 	 * @see thothbot.parallax.core.shared.core.Vector#distanceToSquared(thothbot.parallax.core.shared.core.Vector)
 	 */
-	@Override
-	public double distanceToSquared(Vector v)
+	public double distanceToSquared(Vector2 v)
 	{
-		double dx = this.getX() - ((Vector2) v).getX();
-		double dy = this.getY() - ((Vector2) v).getY();
+		double dx = this.x - v.x;
+		double dy = this.y - v.y;
 		return (dx * dx + dy * dy);
 	}
 
@@ -439,8 +429,7 @@ public class Vector2 implements Vector
 	 * (non-Javadoc)
 	 * @see thothbot.parallax.core.shared.core.Vector#distanceTo(thothbot.parallax.core.shared.core.Vector)
 	 */
-	@Override
-	public double distanceTo(Vector v1)
+	public double distanceTo(Vector2 v1)
 	{
 		return Math.sqrt(distanceToSquared(v1));
 	}
@@ -483,20 +472,20 @@ public class Vector2 implements Vector
 
 	}
 	
-	public Float32Array toArray() {
+	public Float32Array toArray()
+	{
 		return toArray(Float32Array.create(2), 0);
 	}
 
-	public Float32Array toArray( Float32Array array, int offset ) {
+	public Float32Array toArray( Float32Array array, int offset ) 
+	{
 
 		array.set( offset , this.x);
 		array.set( offset + 1 , this.y);
 
 		return array;
-
 	}
 
-	@Override
 	public Vector2 clone()
 	{
 		return new Vector2(this.x, this.y);

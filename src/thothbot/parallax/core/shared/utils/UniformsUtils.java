@@ -21,10 +21,10 @@ package thothbot.parallax.core.shared.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
-
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.core.FastMap;
+
+import com.google.gwt.core.client.GWT;
 
 /**
  * The class implements some Uniform related helper methods 

@@ -18,12 +18,11 @@
 
 package thothbot.parallax.core.shared.geometries;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.Matrix4;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 
@@ -37,50 +36,72 @@ public final class LatheGeometry extends Geometry
 	
 	public LatheGeometry ( List<Vector3> points, int steps)
 	{
-		this(points, steps, 2.0 * Math.PI);
+		this(points, steps, 0, 2.0 * Math.PI);
 	}
 
-	public LatheGeometry ( List<Vector3> points, int steps, double angle ) 
+	public LatheGeometry ( List<Vector3> points, int segments, double phiStart, double phiLength ) 
 	{
 		super();
 
-		List<Vector3> newV = new ArrayList<Vector3>();
+		double inversePointLength = 1.0 / ( points.size() - 1 );
+		double inverseSegments = 1.0 / segments;
 
-		Matrix4 matrix = new Matrix4().makeRotationZ( angle / steps );
-		for ( int j = 0; j < points.size(); j ++ ) 
+		for ( int i = 0; i <= segments; i ++ ) 
 		{
-			newV.add( j , points.get( j ).clone());
-			getVertices().add( newV.get( j ) );
-		}
+			double phi = phiStart + i * inverseSegments * phiLength;
 
-		for ( int i = 0; i <= steps; i ++ ) 
-		{
-			for ( int j = 0; j < newV.size(); j ++ ) 
+			double c = Math.cos( phi ),
+				s = Math.sin( phi );
+
+			for ( int j = 0; j < points.size(); j ++ ) 
 			{
-//				newV.set( j , (Vector3) matrix.multiply( newV.get( j ).clone() ));
-				getVertices().add( newV.get( j ) );
+				Vector3 pt = points.get( j );
+
+				Vector3 vertex = new Vector3();
+
+				vertex.setX( c * pt.getX() - s * pt.getY() );
+				vertex.setY( s * pt.getX() + c * pt.getY() );
+				vertex.setZ( pt.getZ() );
+
+				getVertices().add( vertex );
 			}
 		}
+		
+		int np = points.size();
 
-		for ( int i = 0; i < steps; i ++ ) 
+		for ( int i = 0; i < segments; i ++ ) 
 		{
-			for ( int k = 0, kl = points.size(); k < kl - 1; k ++ ) 
+			for ( int j = 0, jl = points.size(); j < jl - 1; j ++ ) 
 			{
-				int a = i * kl + k;
-				int b = ( ( i + 1 ) % (steps + 1) ) * kl + k;
-				int c = ( ( i + 1 ) % (steps + 1) ) * kl + ( k + 1 ) % kl;
-				int d = i * kl + ( k + 1 ) % kl;
+				int base = j + np * i;
+				int a = base;
+				int b = base + np;
+				int c = base + 1 + np;
+				int d = base + 1;
+				
+				double u0 = i * inverseSegments;
+				double v0 = j * inversePointLength;
+				double u1 = u0 + inverseSegments;
+				double v1 = v0 + inversePointLength;
 
-//				getFaces().add( new Face4( a, b, c, d ) );
+				getFaces().add( new Face3( a, b, d ) );
 
-				double stepsf = steps / 1.0;
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 
-					new Vector2( (1.0 - i / (double)stepsf),                     k / (double)kl ),
-					new Vector2( (1.0 - ( i + 1.0 ) / (double)stepsf),           k / (double)kl ),
-					new Vector2( (1.0 - ( i + 1.0 ) / (double)stepsf), ( k + 1.0 ) / (double)kl ),
-					new Vector2( (1.0 - i / (double)stepsf),           ( k + 1.0 ) / (double)kl )
-					
+						new Vector2( u0, v0 ),
+				        new Vector2( u1, v0 ),
+				        new Vector2( u0, v1 )
+
+				) );
+
+				getFaces().add( new Face3( b, c, d ) );
+
+				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
+
+						new Vector2( u1, v0 ),
+				        new Vector2( u1, v1 ),
+				        new Vector2( u0, v1 )
+
 				) );
 			}
 		}

@@ -29,6 +29,7 @@ import thothbot.parallax.core.client.renderers.WebGLGeometry;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.core.Raycaster;
@@ -72,24 +73,31 @@ public class Line extends GeometryObject
 	
 	private static LineBasicMaterial defaultMaterial = new LineBasicMaterial();
 	static {
-		defaultMaterial.setColor( new Color((int)Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 	};
 
 	public Line() {
 		this(new Geometry());
 	}
 	
-	public Line(Geometry geometry) 
+	public Line(AbstractGeometry geometry) 
 	{
 		this(geometry, Line.defaultMaterial, Line.MODE.STRIPS);
 	}
 
-	public Line(Geometry geometry, LineBasicMaterial material) 
+	public Line(AbstractGeometry geometry, LineBasicMaterial material) 
 	{
 		this(geometry, material, Line.MODE.STRIPS);
 	}
 
-	public Line(Geometry geometry, LineBasicMaterial material, Line.MODE mode) 
+	/**
+	 * If no material is supplied, a randomized line material will be created and assigned to the object.
+	 * Also, if no type is supplied, the default {@link Line.MODE}.STRIPS will be used).
+	 * @param geometry  Vertices representing the line segment(s).
+	 * @param material Material for the line. Default is {@link LineBasicMaterial}.
+	 * @param mode Connection type between vertices. Default is {@link Line.MODE}.STRIPS.
+	 */
+	public Line(AbstractGeometry geometry, LineBasicMaterial material, Line.MODE mode) 
 	{
 		super(geometry, material);
 
@@ -116,7 +124,7 @@ public class Line extends GeometryObject
 		Ray ray = new Ray();
 		Sphere sphere = new Sphere();
 
-		double precision = Raycaster.linePrecision;
+		double precision = Raycaster.LINE_PRECISION;
 		double precisionSq = precision * precision;
 
 		Geometry geometry = (Geometry) this.getGeometry();
@@ -275,9 +283,9 @@ public class Line extends GeometryObject
 		Float32Array colorArray = geometry.__colorArray;
 		Float32Array lineDistanceArray = geometry.__lineDistanceArray;
 
-		boolean dirtyVertices = geometry.verticesNeedUpdate;
-		boolean dirtyColors = geometry.colorsNeedUpdate;
-		boolean dirtyLineDistances = geometry.lineDistancesNeedUpdate;
+		boolean dirtyVertices = geometry.isVerticesNeedUpdate();
+		boolean dirtyColors = geometry.isColorsNeedUpdate();
+		boolean dirtyLineDistances = geometry.isLineDistancesNeedUpdate();
 
 		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
 

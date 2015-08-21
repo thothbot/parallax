@@ -41,6 +41,11 @@ public final class TorusKnotGeometry extends Geometry
 		this(200, 40, 64, 8);
 	}
 	
+	public TorusKnotGeometry(int radius)
+	{
+		this(radius, 40, 64, 8);
+	}
+	
 	public TorusKnotGeometry(int radius, int tube, int segmentsR, int segmentsT)
 	{
 		this(radius, tube, segmentsR, segmentsT, 2, 3, 1);

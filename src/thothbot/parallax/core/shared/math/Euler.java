@@ -20,7 +20,6 @@ package thothbot.parallax.core.shared.math;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.math.Quaternion.QuaternionChangeHandler;
 
 public class Euler {
 	
@@ -51,26 +50,34 @@ public class Euler {
 	
 	private EulerChangeHandler handler;
 	
-	public Euler() {
+	// Temporary variables
+	static Quaternion _q = new Quaternion();
+	
+	public Euler() 
+	{
 		this(0.0,0.0,0.0);
 	}
 	
-	public Euler (double x, double y, double z) {
+	public Euler (double x, double y, double z) 
+	{
 		this(x, y, z, DefaultOrder);
 	}
 	
-	public Euler (double x, double y, double z, String order) {
+	public Euler (double x, double y, double z, String order) 
+	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.order = order;
 	}
 	
-	public void setHandler(EulerChangeHandler handler) {
+	public void setHandler(EulerChangeHandler handler)
+	{
 		this.handler = handler;
 	}
 	
-	private void onChange() {
+	private void onChange() 
+	{
 		if(this.handler != null)
 			this.handler.onChange(Euler.this);
 	}
@@ -126,7 +133,8 @@ public class Euler {
 		return this.y;
 	}
 
-	public void setY ( double value ) {
+	public void setY ( double value ) 
+	{
 		this.y = value;
 		
 		this.onChange();
@@ -136,27 +144,32 @@ public class Euler {
 		return this.z;
 	}
 
-	public void setZ ( double value ) {
+	public void setZ ( double value ) 
+	{
 		this.z = value;
 		
 		this.onChange();
 	}
 
-	public String getOrder () {
+	public String getOrder () 
+	{
 		return this.order;
 	}
 
-	public void setOrder ( String value ) {
+	public void setOrder ( String value ) 
+	{
 		this.order = value;
 		
 		this.onChange();
 	}
 	
-	public Euler set( double x, double y, double z) {
+	public Euler set( double x, double y, double z)
+	{
 		return set(x, y, z, DefaultOrder);
 	}
 
-	public Euler set( double x, double y, double z, String order ) {
+	public Euler set( double x, double y, double z, String order ) 
+	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -167,7 +180,8 @@ public class Euler {
 		return this;
 	}
 
-	public Euler copy ( Euler euler ) {
+	public Euler copy ( Euler euler )
+	{
 
 		this.x = euler.x;
 		this.y = euler.y;
@@ -179,11 +193,13 @@ public class Euler {
 		return this;
 	}
 	
-	public Euler setFromRotationMatrix( Matrix4 m ) {
+	public Euler setFromRotationMatrix( Matrix4 m ) 
+	{
 		return setFromRotationMatrix(m, this.order);
 	}
 
-	public Euler setFromRotationMatrix( Matrix4 m, String order ) {
+	public Euler setFromRotationMatrix( Matrix4 m, String order ) 
+	{
 
 		// assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
@@ -371,37 +387,19 @@ public class Euler {
 		return this;
 	}
 
-	public Euler reorder(String newOrder) {
+	public Euler reorder(String newOrder) 
+	{
 
 		// WARNING: this discards revolution information -bhouston
 
-		Quaternion q = new Quaternion();
-		q.setFromEuler( this );
-		return this.setFromQuaternion( q, newOrder );
+		_q.setFromEuler( this );
+		return this.setFromQuaternion( _q, newOrder );
 	}
 
-	public boolean equals( Euler euler ) {
-
+	public boolean equals( Euler euler ) 
+	{
 		return ( euler.x == this.x ) && ( euler.y == this.y ) && ( euler.z == this.z ) && ( euler.order.equals(this.order) );
-
 	}
-
-//	public Euler fromArray ( Object[] array ) {
-//
-//		this.x = array[ 0 ];
-//		this.y = array[ 1 ];
-//		this.z = array[ 2 ];
-//		if ( array[ 3 ] !== undefined ) this.order = array[ 3 ];
-//
-//		return this;
-//	}
-//
-//	toArray: function () {
-//
-//		return [ this.x, this.y, this.z, this.order ];
-//
-//	},
-
 
 	public Euler clone() {
 

@@ -32,7 +32,7 @@ import thothbot.parallax.core.shared.math.Color;
  * @author thothbot
  *
  */
-public final class LineBasicMaterial extends Material 
+public class LineBasicMaterial extends Material 
 	implements HasFog, HasColor, HasVertexColors
 {
 
@@ -61,10 +61,20 @@ public final class LineBasicMaterial extends Material
 		return new BasicShader();
 	}
 
+	/**
+	 * Line thickness. Default is 1.
+	 * @return
+	 */
 	public double getLinewidth() {
 		return this.linewidth;
 	}
 	
+	/**
+	 * Controls line thickness. Default is 1. 
+	 * <p>
+	 * Due to limitations in the <a href="https://code.google.com/p/angleproject/">ANGLE layer</a>, on Windows platforms linewidth will always be 1 regardless of the set value.
+	 * @param linewidth
+	 */
 	public void setLinewidth(double linewidth) {
 		this.linewidth = linewidth;
 	}
@@ -79,6 +89,9 @@ public final class LineBasicMaterial extends Material
 		this.isFog = fog;
 	}
 	
+	/**
+	 * Line color in hexadecimal. Default is 0xffffff.
+	 */
 	@Override
 	public Color getColor() {
 		return color;

@@ -28,7 +28,6 @@ import thothbot.parallax.core.client.gl2.enums.PixelFormat;
 import thothbot.parallax.core.client.gl2.enums.StencilFunction;
 import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
 import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.client.renderers.Plugin;
 import thothbot.parallax.core.client.renderers.WebGLRenderer;
 import thothbot.parallax.core.client.textures.RenderTargetTexture;
@@ -36,6 +35,7 @@ import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.cameras.OrthographicCamera;
 import thothbot.parallax.core.shared.geometries.PlaneGeometry;
+import thothbot.parallax.core.shared.lights.Light;
 import thothbot.parallax.core.shared.objects.Mesh;
 import thothbot.parallax.core.shared.scenes.Scene;
 import thothbot.parallax.plugins.postprocessing.shaders.CopyShader;
@@ -97,6 +97,11 @@ public class Postprocessing extends Plugin
 		getScene().add( camera );
 	}
 	
+	@Override
+	public boolean isMulty() {
+		return true;
+	}
+	
 	public Plugin.TYPE getType() {
 		return Plugin.TYPE.POST_RENDER;
 	}
@@ -140,12 +145,14 @@ public class Postprocessing extends Plugin
 
 		double delta = 0;
 		WebGLRenderingContext gl = getRenderer().getGL();
-		
+
 		for ( Pass pass : this.passes ) 
 		{	
-			Log.error("Called pass", pass.getClass().getName() );
-
 			if ( !pass.isEnabled() ) continue;
+			
+			Log.info(" ----> Postprocessing.render(): pass " + pass.getClass().getSimpleName() 
+					+ (pass.getClass().equals(ShaderPass.class) ? 
+							"(" + ((ShaderPass)pass).getMaterial().getShader().getClass().getSimpleName() + ")" : "") );
 
 			pass.render( this, delta, maskActive );
 

@@ -20,6 +20,7 @@ package thothbot.parallax.core.client.renderers;
 
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry;
+import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
@@ -77,7 +78,7 @@ public class WebGLObject implements Comparable<WebGLObject>
 
 		if ( material instanceof MeshFaceMaterial ) 
 		{
-			int materialIndex = geometry instanceof BufferGeometry ? 0 : 0; //((BufferGeometry)buffer).;
+			int materialIndex = geometry instanceof BufferGeometry ? 0 : ((GeometryGroup)buffer).getMaterialIndex();
 
 			material = ((MeshFaceMaterial)material).getMaterials().get( materialIndex );
 

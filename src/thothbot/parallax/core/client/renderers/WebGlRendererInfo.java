@@ -19,6 +19,8 @@
 package thothbot.parallax.core.client.renderers;
 
 import thothbot.parallax.core.client.debugger.Debugger;
+import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.core.client.Duration;
 

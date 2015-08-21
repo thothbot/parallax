@@ -18,20 +18,30 @@
 
 package thothbot.parallax.loader.shared;
 
+import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.loader.shared.collada.DaeDocument;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 
-public class ColladaLoader extends Loader
+public class ColladaLoader extends XHRLoader
 {
 	private DaeDocument daeDocument;
 	private Document document;
+	
+	public ColladaLoader(String url, ModelLoadHandler modelLoadHandler) 
+	{
+		super(url, modelLoadHandler);
+		
+		load();
+	} 
 
-	public void parse(String xmlString) 
+	protected AbstractGeometry parse(String xmlString) 
 	{
 		document = XMLParser.parse(xmlString);
 		daeDocument = new DaeDocument(document);
+		
+		return null;
 	}
 
 	public DaeDocument getDaeDocument() {

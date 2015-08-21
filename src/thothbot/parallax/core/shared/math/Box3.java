@@ -18,7 +18,6 @@
 
 package thothbot.parallax.core.shared.math;
 
-import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
@@ -33,6 +32,9 @@ public class Box3
 {
 	private Vector3 min;
 	private Vector3 max;
+	
+	// Temporary variables
+	static Vector3 _v1 = new Vector3();
 		
 	public Box3() 
 	{
@@ -79,20 +81,17 @@ public class Box3
 	{
 		this.makeEmpty();
 
-		for ( int i = 0, il = points.length; i < il; i ++ ) {
-
+		for ( int i = 0, il = points.length; i < il; i ++ ) 
+		{
 			this.expandByPoint( points[ i ] );
-
 		}
 
 		return this;
 	}
 
 	public Box3 setFromCenterAndSize( Vector3 center, Vector3 size ) 
-	{
-		Vector3 v1 = new Vector3();
-		
-		Vector3 halfSize = v1.copy( size ).multiply( 0.5 );
+	{		
+		Vector3 halfSize = _v1.copy( size ).multiply( 0.5 );
 
 		this.min.copy( center ).sub( halfSize );
 		this.max.copy( center ).add( halfSize );
@@ -101,7 +100,8 @@ public class Box3
 
 	}
 	
-	public Box3 setFromObject(Object3D object) {
+	public Box3 setFromObject(Object3D object) 
+	{
 
 		// Computes the world-axis-aligned bounding box of an object (including its children),
 		// accounting for both the object's, and childrens', world transforms
@@ -291,8 +291,7 @@ public class Box3
 
 	public double distanceToPoint( Vector3 point ) 
 	{
-		Vector3 v1 = new Vector3();
-		Vector3 clampedPoint = v1.copy( point ).clamp( this.min, this.max );
+		Vector3 clampedPoint = _v1.copy( point ).clamp( this.min, this.max );
 		return clampedPoint.sub( point ).length();
 	}
 
@@ -303,13 +302,10 @@ public class Box3
 	
 	public Sphere getBoundingSphere( Sphere optionalTarget ) 
 	{
-		Vector3 v1 = new Vector3();
-
 		optionalTarget.setCenter( this.center() );
-		optionalTarget.setRadius( this.size( v1 ).length() * 0.5 );
+		optionalTarget.setRadius( this.size( _v1 ).length() * 0.5 );
 
 		return optionalTarget;
-
 	}
 
     public Box3 intersect( Box3 box ) 

@@ -26,6 +26,11 @@ public class Triangle
 	private Vector3 b;
 	private Vector3 c;
 	
+	// Temporary variables
+	static Vector3 _v0 = new Vector3();
+	static Vector3 _v1 = new Vector3();
+	static Vector3 _v2 = new Vector3();
+	
 	public Triangle()
 	{
 		this(new Vector3(), new Vector3(), new Vector3());
@@ -69,12 +74,10 @@ public class Triangle
 	}
 
 	public static Vector3 normal( Vector3 a, Vector3 b, Vector3 c, Vector3 optionalTarget ) 
-	{
-		Vector3 v0 = new Vector3();
-		
+	{		
 		optionalTarget.sub( c, b );
-		v0.sub( a, b );
-		optionalTarget.cross( v0 );
+		_v0.sub( a, b );
+		optionalTarget.cross( _v0 );
 
 		double resultLengthSq = optionalTarget.lengthSq();
 		if ( resultLengthSq > 0 ) {
@@ -98,20 +101,15 @@ public class Triangle
 	
 	public static Vector3 barycoordFromPoint( Vector3 point, Vector3 a, Vector3 b, Vector3 c, Vector3 optionalTarget ) 
 	{
+		_v0.sub( c, a );
+		_v1.sub( b, a );
+		_v2.sub( point, a );
 
-		Vector3 v0 = new Vector3();
-		Vector3 v1 = new Vector3();
-		Vector3 v2 = new Vector3();
-
-		v0.sub( c, a );
-		v1.sub( b, a );
-		v2.sub( point, a );
-
-		double dot00 = v0.dot( v0 );
-		double dot01 = v0.dot( v1 );
-		double dot02 = v0.dot( v2 );
-		double dot11 = v1.dot( v1 );
-		double dot12 = v1.dot( v2 );
+		double dot00 = _v0.dot( _v0 );
+		double dot01 = _v0.dot( _v1 );
+		double dot02 = _v0.dot( _v2 );
+		double dot11 = _v1.dot( _v1 );
+		double dot12 = _v1.dot( _v2 );
 
 		double denom = ( dot00 * dot11 - dot01 * dot01 );
 
@@ -132,10 +130,8 @@ public class Triangle
 	}
 
 	public static boolean containsPoint( Vector3 point, Vector3 a, Vector3 b, Vector3 c ) 
-	{
-		Vector3 v1 = new Vector3();
-		
-		Vector3 result = Triangle.barycoordFromPoint( point, a, b, c, v1 );
+	{	
+		Vector3 result = Triangle.barycoordFromPoint( point, a, b, c, _v1 );
 
 		return ( result.x >= 0 ) && ( result.y >= 0 ) && ( ( result.x + result.y ) <= 1 );
 	}
@@ -169,13 +165,10 @@ public class Triangle
 
 	public double area() 
 	{
-		Vector3 v0 = new Vector3();
-		Vector3 v1 = new Vector3();
+		_v0.sub( this.c, this.b );
+		_v1.sub( this.a, this.b );
 
-		v0.sub( this.c, this.b );
-		v1.sub( this.a, this.b );
-
-		return v0.cross( v1 ).length() * 0.5;
+		return _v0.cross( _v1 ).length() * 0.5;
 	}
 
 	public Vector3 midpoint()

@@ -36,7 +36,7 @@ import thothbot.parallax.core.client.events.ViewportResizeEvent;
  * @author thothbot
  *
  */
-public class OrthographicCamera extends Camera
+public class OrthographicCamera extends Camera implements HasNearFar
 {
 
 	protected double zoom = 1.0;
@@ -46,7 +46,7 @@ public class OrthographicCamera extends Camera
 	protected double bottom;
 
 	protected double near = 0.1;
-	protected double far = 200.0;
+	protected double far = 2000.0;
 
 	/**
 	 * Orthographic Camera constructor.
@@ -204,10 +204,10 @@ public class OrthographicCamera extends Camera
 	 */
 	public void updateProjectionMatrix() {
 
-		double dx = ( this.right - this.left ) / ( 2 * this.zoom );
-		double dy = ( this.top - this.bottom ) / ( 2 * this.zoom );
-		double cx = ( this.right + this.left ) / 2;
-		double cy = ( this.top + this.bottom ) / 2;
+		double dx = ( this.right - this.left ) / ( 2.0 * this.zoom );
+		double dy = ( this.top - this.bottom ) / ( 2.0 * this.zoom );
+		double cx = ( this.right + this.left ) / 2.0;
+		double cy = ( this.top + this.bottom ) / 2.0;
 
 		this.projectionMatrix.makeOrthographic( cx - dx, cx + dx, cy + dy, cy - dy, this.near, this.far );
 
@@ -232,5 +232,14 @@ public class OrthographicCamera extends Camera
 		camera.projectionMatrix.copy( this.projectionMatrix );
 
 		return camera;
+	}
+	
+	public String toString() 
+	{
+		return OrthographicCamera.class.getSimpleName()  
+				+ " {left: " + this.left
+				+ ", right: " + this.right 
+				+ ", top: " + this.top
+				+ ", bottom: " + this.bottom + " }";				
 	}
 }

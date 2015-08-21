@@ -52,6 +52,12 @@ public final class CubeCamera extends Object3D
 
 	private RenderTargetCubeTexture renderTarget;
 
+	/**
+	 * Constructs a CubeCamera that contains 6 {@link PerspectiveCamera}s that then render to a {@link RenderTargetCubeTexture}
+	 * @param near The near clipping distance. 
+	 * @param far The far clipping distance 
+	 * @param cubeResolution  Sets the width of the cube.
+	 */
 	public CubeCamera(double near, double far, int cubeResolution)
 	{
 		this.cameraPX = new PerspectiveCamera( fov, aspect, near, far );
@@ -90,11 +96,20 @@ public final class CubeCamera extends Object3D
 		this.renderTarget.setMinFilter(TextureMinFilter.LINEAR);
 	}
 	
+	/**
+	 * The cube texture that gets generated.
+	 * @return
+	 */
 	public RenderTargetCubeTexture getRenderTarget()
 	{
 		return this.renderTarget;
 	}
 	
+	/**
+	 * Call this to update the renderTarget.
+	 * @param renderer The current WebGL renderer 
+	 * @param scene The current scene
+	 */
 	public void updateCubeMap( WebGLRenderer renderer, Scene scene ) 
 	{
 		RenderTargetCubeTexture renderTarget = this.renderTarget;

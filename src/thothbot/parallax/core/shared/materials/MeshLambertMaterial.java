@@ -29,6 +29,10 @@ import thothbot.parallax.core.shared.cameras.Camera;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Vector3;
 
+/**
+ * A material for non-shiny (Lambertian) surfaces, evaluated per vertex.
+ *
+ */
 public final class MeshLambertMaterial extends Material 
 	implements HasMaterialMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
 	HasSkinning, HasAmbientEmissiveColor, HasShading

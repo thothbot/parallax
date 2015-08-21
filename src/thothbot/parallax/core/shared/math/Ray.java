@@ -37,6 +37,14 @@ public class Ray
 	// A vector pointing in the direction the ray goes. Default is 0, 0, 0.
 	private Vector3 direction;
 	
+	//Temporary variables
+	static Vector3 _v1 = new Vector3();
+	static Vector3 _v2 = new Vector3();
+	static Vector3 _diff = new Vector3();
+	static Vector3 _edge1 = new Vector3();
+	static Vector3 _edge2 = new Vector3();
+	static Vector3 _normal = new Vector3();
+	
 	public Ray()
 	{
 		this(new Vector3(), new Vector3());
@@ -92,8 +100,7 @@ public class Ray
 
 	public Ray recast( double t ) 
 	{
-		Vector3 v1 = new Vector3();
-		this.origin.copy( this.at( t, v1 ) );
+		this.origin.copy( this.at( t, _v1 ) );
 
 		return this;
 	}
@@ -118,11 +125,8 @@ public class Ray
 	}
 
 	public double distanceToPoint( Vector3 point ) 
-	{
-		
-		Vector3 v1 = new Vector3();
-		
-		double directionDistance = v1.sub( point, this.origin ).dot( this.direction );
+	{		
+		double directionDistance = _v1.sub( point, this.origin ).dot( this.direction );
 
 		// point behind the ray
 
@@ -132,14 +136,14 @@ public class Ray
 
 		}
 
-		v1.copy( this.direction ).multiply( directionDistance ).add( this.origin );
+		_v1.copy( this.direction ).multiply( directionDistance ).add( this.origin );
 
-		return v1.distanceTo( point );
+		return _v1.distanceTo( point );
 
 	}
 	
-	public double distanceSqToSegment( Vector3 v0, Vector3 v1, Vector3 optionalPointOnRay, Vector3 optionalPointOnSegment ) {
-
+	public double distanceSqToSegment( Vector3 v0, Vector3 v1, Vector3 optionalPointOnRay, Vector3 optionalPointOnSegment ) 
+	{
 		// from http://www.geometrictools.com/LibMathematics/Distance/Wm5DistRay3Segment3.cpp
 		// It returns the min distance between the ray and the segment
 		// defined by v0 and v1
@@ -261,21 +265,24 @@ public class Ray
 		return ( this.distanceToPoint( sphere.getCenter() ) <= sphere.getRadius() );
 	}
 	
-	public Vector3 intersectSphere( Sphere sphere ) {
+	public Vector3 intersectSphere( Sphere sphere ) 
+	{
 		return intersectSphere(sphere, null);
 	}
-	
-	public Vector3 intersectSphere( Sphere sphere, Vector3 optionalTarget ) {
 
-		// from http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-sphere-intersection/
+	/**
+	 * from http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-sphere-intersection/
+	 * @param sphere
+	 * @param optionalTarget
+	 * @return
+	 */
+	public Vector3 intersectSphere( Sphere sphere, Vector3 optionalTarget ) 
+	{
+		_v1.sub( sphere.getCenter(), this.getOrigin() );
 
-		Vector3 v1 = new Vector3();
+		double tca = _v1.dot( this.direction );
 
-		v1.sub( sphere.getCenter(), this.getOrigin() );
-
-		double tca = v1.dot( this.direction );
-
-		double d2 = v1.dot( v1 ) - tca * tca;
+		double d2 = _v1.dot( _v1 ) - tca * tca;
 
 		double radius2 = sphere.getRadius() * sphere.getRadius();
 
@@ -370,17 +377,19 @@ public class Ray
 		return this.at( t, optionalTarget );
 	}
 	
-	public boolean isIntersectionBox(Box3 box) {
-
-		Vector3 v = new Vector3();
-
-		return this.intersectBox( box, v ) != null;
+	public boolean isIntersectionBox(Box3 box) 
+	{
+		return this.intersectBox( box, _v2 ) != null;
 	}
 
-	public Vector3 intersectBox( Box3 box, Vector3 optionalTarget ) {
-
-		// http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-box-intersection/
-
+	/**
+	 * http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-box-intersection/
+	 * @param box
+	 * @param optionalTarget
+	 * @return
+	 */
+	public Vector3 intersectBox( Box3 box, Vector3 optionalTarget ) 
+	{
 		double tmin,tmax,tymin,tymax,tzmin,tzmax;
 
 		double invdirx = 1.0 / this.direction.x,
@@ -442,30 +451,34 @@ public class Ray
 		return this.at( tmin >= 0 ? tmin : tmax, optionalTarget );
 	}
 	
-	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling) {
+	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling) 
+	{
 		return intersectTriangle(a,b,c, backfaceCulling, new Vector3());
 	}
 	
+	/**
+	 * from http://www.geometrictools.com/LibMathematics/Intersection/Wm5IntrRay3Triangle3.cpp
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param backfaceCulling
+	 * @param optionalTarget
+	 * @return
+	 */
 	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling, Vector3 optionalTarget) {
 
 		// Compute the offset origin, edges, and normal.
-		Vector3 diff = new Vector3();
-		Vector3 edge1 = new Vector3();
-		Vector3 edge2 = new Vector3();
-		Vector3 normal = new Vector3();
 
-		// from http://www.geometrictools.com/LibMathematics/Intersection/Wm5IntrRay3Triangle3.cpp
-
-		edge1.sub( b, a );
-		edge2.sub( c, a );
-		normal.cross( edge1, edge2 );
+		_edge1.sub( b, a );
+		_edge2.sub( c, a );
+		_normal.cross( _edge1, _edge2 );
 
 		// Solve Q + t*D = b1*E1 + b2*E2 (Q = kDiff, D = ray direction,
 		// E1 = kEdge1, E2 = kEdge2, N = Cross(E1,E2)) by
 		//   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
 		//   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
 		//   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)
-		double DdN = this.direction.dot( normal );
+		double DdN = this.direction.dot( _normal );
 		double sign;
 
 		if ( DdN > 0 ) {
@@ -484,8 +497,8 @@ public class Ray
 
 		}
 
-		diff.sub( this.origin, a );
-		double DdQxE2 = sign * this.direction.dot( edge2.cross( diff, edge2 ) );
+		_diff.sub( this.origin, a );
+		double DdQxE2 = sign * this.direction.dot( _edge2.cross( _diff, _edge2 ) );
 
 		// b1 < 0, no intersection
 		if ( DdQxE2 < 0 ) {
@@ -494,7 +507,7 @@ public class Ray
 
 		}
 
-		double DdE1xQ = sign * this.direction.dot( edge1.cross( diff ) );
+		double DdE1xQ = sign * this.direction.dot( _edge1.cross( _diff ) );
 
 		// b2 < 0, no intersection
 		if ( DdE1xQ < 0 ) {
@@ -511,7 +524,7 @@ public class Ray
 		}
 
 		// Line intersects triangle, check if ray does.
-		double QdN = - sign * diff.dot( normal );
+		double QdN = - sign * _diff.dot( _normal );
 
 		// t < 0, no intersection
 		if ( QdN < 0 ) {

@@ -36,7 +36,6 @@ import thothbot.parallax.core.client.textures.RenderTargetCubeTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.GeometryGroup;
 import thothbot.parallax.core.shared.core.GeometryObject;
 import thothbot.parallax.core.shared.math.Color;
@@ -483,12 +482,13 @@ public abstract class Material
 
 	public void updateProgramParameters(ProgramParameters parameters)
 	{
-		parameters.map       = (this instanceof HasMap && ((HasMap)this).getMap() != null);
-		parameters.envMap    = (this instanceof HasEnvMap && ((HasEnvMap)this).getEnvMap() != null);
-		parameters.lightMap  = (this instanceof HasLightMap &&  ((HasLightMap)this).getLightMap() != null);
-		parameters.bumpMap   = (this instanceof HasBumpMap &&  ((HasBumpMap)this).getBumpMap() != null);
-		parameters.normalMap = (this instanceof HasNormalMap &&  ((HasNormalMap)this).getNormalMap() != null);
+		parameters.map          = (this instanceof HasMap         && ((HasMap)this).getMap() != null);
+		parameters.envMap       = (this instanceof HasEnvMap      && ((HasEnvMap)this).getEnvMap() != null);
+		parameters.lightMap     = (this instanceof HasLightMap    &&  ((HasLightMap)this).getLightMap() != null);
+		parameters.bumpMap      = (this instanceof HasBumpMap     &&  ((HasBumpMap)this).getBumpMap() != null);
+		parameters.normalMap    = (this instanceof HasNormalMap   &&  ((HasNormalMap)this).getNormalMap() != null);
 		parameters.specularMap  = (this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null);
+		parameters.alphaMap     = (this instanceof HasAlphaMap    &&  ((HasAlphaMap)this).getAlphaMap() != null);
 
 		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
 
@@ -505,7 +505,6 @@ public abstract class Material
 		if(this instanceof MeshPhongMaterial)
 		{
 			parameters.metal = ((MeshPhongMaterial)this).isMetal();
-//			parameters.perPixel = ((MeshPhongMaterial)this).isPerPixel();
 		}
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
@@ -819,7 +818,7 @@ public abstract class Material
 			uvScaleMap = ((HasNormalMap)this).getNormalMap();
 		else if(this instanceof HasBumpMap)
 			uvScaleMap = ((HasBumpMap)this).getBumpMap();
-		else if(this instanceof HasBumpMap)
+		else if(this instanceof HasAlphaMap)
 			uvScaleMap = ((HasAlphaMap)this).getAlphaMap();
 		
 		if(uvScaleMap != null)
@@ -857,16 +856,7 @@ public abstract class Material
 		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == Material.SHADING.SMOOTH;
 	}
 
-	public Material.SHADING bufferGuessNormalType () 
-	{
-		// only MeshBasicMaterial and MeshDepthMaterial don't need normals
-		if (materialNeedsSmoothNormals())
-			return Material.SHADING.SMOOTH;
-		else
-			return Material.SHADING.FLAT;
-	}
-	
-	public Material.COLORS bufferGuessVertexColorType () 
+	public Material.COLORS bufferGuessVertexColorType() 
 	{
 		if(this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO)
 			return ((HasVertexColors)this).isVertexColors();
@@ -874,7 +864,7 @@ public abstract class Material
 		return null;
 	}
 	
-	public boolean bufferGuessUVType () 
+	public boolean bufferGuessUVType() 
 	{
 		if(this instanceof HasMap && ((HasMap)this).getMap() != null)
 			return true;
@@ -899,9 +889,9 @@ public abstract class Material
 		Material material = null;
 		if ( object.getMaterial() instanceof MeshFaceMaterial )
 		{
-			material = ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.materialIndex );
+			material = ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.getMaterialIndex() );
 		}
-		else if ( geometryGroup.materialIndex >= 0 )
+		else if ( geometryGroup.getMaterialIndex() >= 0 )
 		{
 			material = object.getMaterial();	
 		}
@@ -915,8 +905,12 @@ public abstract class Material
 		WebGLProgram program = getShader().getProgram();
 		if ( program == null ) return;
 		
-		getShader().setPrecision(null);
-				
+//		getShader().setPrecision(null);
+		
+		// only deallocate GL program if this was the last use of shared program
+		// assumed there is only single copy of any program in the _programs list
+		// (that's how it's constructed)
+
 		boolean deleteProgram = false;
 
 		for ( String key: renderer._programs.keySet()) 
@@ -925,38 +919,24 @@ public abstract class Material
 			
 			if ( shader == getShader() ) 
 			{
-				renderer.getInfo().getMemory().programs --;
 				renderer._programs.remove(key);
 				deleteProgram = true;
 				break;
 			}
 		}
 		
-		if ( deleteProgram == true ) {
-
-			// avoid using array.splice, this is costlier than creating new array from scratch
-
-//			var newPrograms = [];
-//
-//			for ( int i = 0, il = renderer._programs.length; i < il; i ++ ) {
-//
-//				programInfo = _programs[ i ];
-//
-//				if ( programInfo.program != program ) {
-//
-//					newPrograms.push( programInfo );
-//
-//				}
-//
-//			}
-
-//			renderer._programs = newPrograms;
+		if ( deleteProgram == true ) 
+		{
 
 			renderer.getGL().deleteProgram( program );
 
 			renderer.getInfo().getMemory().programs --;
-
 		}
 
+	}
+
+	public String toString() 
+	{
+		return this.getClass().getSimpleName() + " { id=" + this.getId() + " }";
 	}
 }

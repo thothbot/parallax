@@ -28,9 +28,11 @@ import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.client.textures.CompressedTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
+import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.Face3;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphColor;
+import thothbot.parallax.core.shared.materials.HasAlphaMap;
 import thothbot.parallax.core.shared.materials.HasAmbientEmissiveColor;
 import thothbot.parallax.core.shared.materials.HasBumpMap;
 import thothbot.parallax.core.shared.materials.HasColor;
@@ -66,31 +68,34 @@ import com.google.gwt.json.client.JSONException;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 
-public class JsonLoader extends Loader 
+public class JsonLoader extends XHRLoader 
 {
-
 	private JsoObject object;
-	private Geometry geometry;
 	
 	private List<Material> materials;
 	
+	public JsonLoader(String url, ModelLoadHandler modelLoadHandler) 
+	{
+		super(url, modelLoadHandler);
+		
+		load();
+	}
+	
 	@Override
-	public void parse(String string) 
+	protected AbstractGeometry parse(String string) 
 	{		 
 		if(!isThisJsonStringValid(string))
-			return;
+			return null;
 		
 		Log.debug("JSON parse()");
 		
-		geometry = new Geometry();
-
-		double scale = object.getScale() > 0 ? 1.0 / object.getScale() : 1.0;
+		Geometry geometry = new Geometry();
 
 		parseMaterials();
-		parseModel(scale);
+		parseModel(geometry);
 
-		parseSkin();
-		parseMorphing(scale);
+		parseSkin(geometry);
+		parseMorphing(geometry);
 
 		geometry.computeFaceNormals();
 		geometry.computeBoundingSphere();
@@ -99,18 +104,15 @@ public class JsonLoader extends Loader
 			geometry.computeTangents();
 		
 		geometry.computeMorphNormals();
+		
+		return geometry;
 	}
-	
-	public Geometry getGeometry() 
-	{
-		return this.geometry;
-	}
-	
+
 	public List<Material> getMaterials() {
 		return this.materials;
 	}
 	
-	public void morphColorsToFaceColors() 
+	public void morphColorsToFaceColors(Geometry geometry) 
 	{
 		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
 		{
@@ -214,7 +216,6 @@ public class JsonLoader extends Loader
 			}
 			else if(material instanceof HasColor)
 			{
-
 				((HasColor) material).setColor(diffuseColor);
 			}
 		}
@@ -244,6 +245,20 @@ public class JsonLoader extends Loader
 			else if( material instanceof HasAmbientEmissiveColor)
 			{
 				((HasAmbientEmissiveColor)material).setAmbient(color);	
+			}
+		}
+		
+		if(jsonMaterial.getColorEmissive() != null )
+		{
+			Color color = getColor(jsonMaterial.getColorEmissive());
+			if(material instanceof ShaderMaterial)
+			{
+				Map<String, Uniform> uniforms = material.getShader().getUniforms();
+				uniforms.get( "emissive" ).setValue(color);
+			}
+			else if( material instanceof HasAmbientEmissiveColor)
+			{
+				((HasAmbientEmissiveColor)material).setEmissive(color);	
 			}
 		}
 		
@@ -316,26 +331,6 @@ public class JsonLoader extends Loader
 			}
 		}
 		
-		if ( jsonMaterial.getMapSpecular() != null) 
-		{
-			Texture texture = create_texture(jsonMaterial.getMapSpecular(),
-					jsonMaterial.getMapSpecularRepeat(),
-					jsonMaterial.getMapSpecularOffset(),
-					jsonMaterial.getMapSpecularWrap(),
-					jsonMaterial.getMapSpecularAnisotropy());
-			
-			if(material instanceof ShaderMaterial)
-			{
-				Map<String, Uniform> uniforms = material.getShader().getUniforms();
-				uniforms.get( "tSpecular" ).setValue(texture);
-				uniforms.get( "enableSpecular" ).setValue(true);
-			}
-			else if( material instanceof HasSpecularMap )
-			{
-				((HasSpecularMap)material).setSpecularMap(texture);
-			}
-		}
-
 		if ( jsonMaterial.getMapBump() != null && material instanceof HasBumpMap) 
 		{
 			((HasBumpMap)material).setBumpMap(
@@ -367,6 +362,40 @@ public class JsonLoader extends Loader
 						jsonMaterial.getMapNormalFactor(), jsonMaterial.getMapNormalFactor() );
 			}
 		}
+		
+		if ( jsonMaterial.getMapSpecular() != null) 
+		{
+			Texture texture = create_texture(jsonMaterial.getMapSpecular(),
+					jsonMaterial.getMapSpecularRepeat(),
+					jsonMaterial.getMapSpecularOffset(),
+					jsonMaterial.getMapSpecularWrap(),
+					jsonMaterial.getMapSpecularAnisotropy());
+
+			if(material instanceof ShaderMaterial)
+			{
+				Map<String, Uniform> uniforms = material.getShader().getUniforms();
+				uniforms.get( "tSpecular" ).setValue(texture);
+				uniforms.get( "enableSpecular" ).setValue(true);
+			}
+			else if( material instanceof HasSpecularMap )
+			{
+				((HasSpecularMap)material).setSpecularMap(texture);
+			}
+		}
+		
+		if ( jsonMaterial.getMapAlpha() != null) 
+		{
+			Texture texture = create_texture(jsonMaterial.getMapAlpha(),
+					jsonMaterial.getMapAlphaRepeat(),
+					jsonMaterial.getMapAlphaOffset(),
+					jsonMaterial.getMapAlphaWrap(),
+					jsonMaterial.getMapAlphaAnisotropy());
+			
+			if( material instanceof HasAlphaMap )
+			{
+				((HasAlphaMap)material).setAlphaMap(texture);
+			}
+		}
 
 		if(jsonMaterial.getDbgName() != null)
 		{
@@ -376,12 +405,14 @@ public class JsonLoader extends Loader
 		return material;
 	}
 	
-	private void parseModel(double scale)
+	private void parseModel(Geometry geometry)
 	{
 		if(object.getFaces() == null) 
 			return;
 
 		Log.debug("JSON parseFaces()");
+		
+		double scale = object.getScale() > 0 ? 1.0 / object.getScale() : 1.0;
 
 		List<Integer> faces = object.getFaces();
 		List<Double> vertices = object.getVertices();
@@ -644,7 +675,7 @@ public class JsonLoader extends Loader
 		}
 	}
 	
-	private void parseSkin() 
+	private void parseSkin(Geometry geometry) 
 	{
 		int influencesPerVertex = ( object.getInfluencesPerVertex() > 0 ) ? object.getInfluencesPerVertex() : 2;
 		
@@ -684,9 +715,11 @@ public class JsonLoader extends Loader
 //		geometry.animation = json.animation;
 	}
 
-	private void parseMorphing(double scale) 
+	private void parseMorphing(Geometry geometry) 
 	{
 		Log.debug("JSON parseMorphing()");
+		
+		double scale = object.getScale() > 0 ? 1.0 / object.getScale() : 1.0;
 				
 		if ( object.getMorphTargets() != null) 
 		{

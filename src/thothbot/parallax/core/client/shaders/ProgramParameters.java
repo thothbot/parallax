@@ -72,12 +72,28 @@ public class ProgramParameters
 	public String toString() 
 	{
 		String retval = "";
-		retval += maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + ", " + maxHemiLights + "-1-"
-				+ maxShadows + ", " + maxBones + ", " + useVertexTexture + "-2-"
-				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + normalMap + ", " + specularMap + ", " + vertexColors + ", " + skinning + ", " + morphTargets + "-3-"
-				+ morphNormals + ", " + wrapAround + ", " + doubleSided + ", " + flipSided + "-4-"
-				+ shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + ", " + sizeAttenuation + "-5-"
-				+ alphaTest + ", " + useFog + ", " + useFog2 + ", " + metal + ", " + maxMorphTargets + ", " + maxMorphNormals + ", " + supportsVertexTextures;
+		retval += supportsVertexTextures + "-1-" 
+				
+				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + normalMap + ", " + specularMap + ", " + alphaMap + "-2-" 
+
+				+ vertexColors + "-3-" 
+				
+				+ useFog + ", " + useFog2 + "-4-" 
+				
+				+ sizeAttenuation + ", " + logarithmicDepthBuffer + "-5-" 
+				
+				+ skinning + ", " + maxBones + ", " + useVertexTexture + "-6-" 
+				
+				+ morphTargets + morphNormals + ", " + maxMorphTargets + ", " + maxMorphNormals + "-7-"  				 
+								
+				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + ", " + maxHemiLights + "-8-"
+				
+				+ maxShadows + ", " + shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + "-9-"  
+				
+				+ alphaTest + ", "  + metal + ", " + wrapAround + ", " + doubleSided + ", " + flipSided + "-10-"
+				
+				+ gammaInput + ", " + gammaOutput + "-11-";
+
 		return retval;
 	}
 }

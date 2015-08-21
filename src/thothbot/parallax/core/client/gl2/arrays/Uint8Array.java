@@ -217,6 +217,23 @@ public final class Uint8Array extends TypeArray {
    * @param end
    */
   public native Uint8Array slice(int begin, int end) /*-{
-  	return this.slice(begin, end);
+  	// ArrayBuffer is supposed to support slice
+  	// which works in Chrome 18 but not Firefox 10 or 11. As for Firefox, you need to copy it manually.
+  	if (!Uint8Array.prototype.slice)
+  	{
+    	var that = new Uint8Array(this);
+//    	if (end == undefined) end = that.length;
+//    	var result = new ArrayBuffer(end - begin);
+    	var resultArray = new Uint8Array(end - begin);
+    	for (var i = 0; i < resultArray.length; i++)
+       		resultArray[i] = that[i + begin];
+    	return resultArray;
+
+  	} else {
+
+		return this.slice(begin, end);
+		
+  	}
+
   }-*/;
 }

@@ -54,7 +54,6 @@ import thothbot.parallax.core.client.gl2.enums.StencilOp;
 import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
 import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
-import thothbot.parallax.core.shared.Log;
 
 import com.google.gwt.canvas.dom.client.Context;
 import com.google.gwt.canvas.dom.client.ImageData;
@@ -1583,7 +1582,7 @@ public final class WebGLRenderingContext extends JavaScriptObject implements Con
 	  texImage2D(target.getValue() + slot, level, format.getValue(), 
 			  width, height, border, format.getValue(), type.getValue(), pixels);
   }
-  
+
   private native void texImage2D(int target, int level, int internalformat, int width, int height,
 		  int border, int format, int type, ArrayBufferView pixels) /*-{
 				this.texImage2D(target, level, internalformat, width, height, border,

@@ -20,8 +20,6 @@ package thothbot.parallax.loader.shared.json;
 
 import java.util.List;
 
-import thothbot.parallax.core.shared.objects.Bone;
-
 public interface JsoObject 
 {
 	JsoMetadata getMetadata();
