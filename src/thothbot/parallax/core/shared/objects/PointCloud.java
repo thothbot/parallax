@@ -20,8 +20,6 @@ package thothbot.parallax.core.shared.objects;
 
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Console;
-
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
@@ -34,7 +32,6 @@ import thothbot.parallax.core.client.renderers.WebGlRendererInfo;
 import thothbot.parallax.core.client.shaders.Attribute;
 import thothbot.parallax.core.client.shaders.Attribute.BOUND_TO;
 import thothbot.parallax.core.client.shaders.Attribute.TYPE;
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry;
 import thothbot.parallax.core.shared.core.BufferGeometry.DrawCall;
@@ -59,7 +56,7 @@ public class PointCloud extends GeometryObject
 	
 	private static PointCloudMaterial defaultMaterial = new PointCloudMaterial();
 	static {
-		defaultMaterial.setColor( new Color((int)Math.random() * 0xffffff) );
+		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 	};
 	
 	public PointCloud() {
@@ -114,7 +111,7 @@ public class PointCloud extends GeometryObject
 			if ( bGeometry.getAttribute("index") != null ) {
 
 				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
-				List<DrawCall> offsets = bGeometry.getOffsets();
+				List<DrawCall> offsets = bGeometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
@@ -263,9 +260,9 @@ public class PointCloud extends GeometryObject
 
 //		Float32Array sortArray = geometry.__sortArray;
 
-		boolean dirtyVertices = geometry.verticesNeedUpdate;
-		boolean dirtyElements = geometry.elementsNeedUpdate;
-		boolean dirtyColors = geometry.colorsNeedUpdate;
+		boolean dirtyVertices = geometry.isVerticesNeedUpdate();
+		boolean dirtyElements = geometry.isElementsNeedUpdate();
+		boolean dirtyColors = geometry.isColorsNeedUpdate();
 
 		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
 

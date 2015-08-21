@@ -27,14 +27,16 @@ import thothbot.parallax.core.shared.scenes.Scene;
 public abstract class Plugin 
 {
 	public enum TYPE {
+		BASIC_RENDER,
 		PRE_RENDER,
 		POST_RENDER,
 	};
 
 	private boolean isEnabled = true;
-	private WebGLRenderer renderer;
-	private Scene scene;
 	private boolean isRendering;
+	
+	protected WebGLRenderer renderer;
+	protected Scene scene;
 
 	public Plugin(WebGLRenderer renderer, Scene scene) 
 	{
@@ -49,6 +51,10 @@ public abstract class Plugin
 
 	public Scene getScene() {
 		return this.scene;
+	}
+	
+	public boolean isMulty() {
+		return false;
 	}
 	
 	public boolean isEnabled() {
@@ -70,4 +76,8 @@ public abstract class Plugin
 	public abstract Plugin.TYPE getType();
 
 	public abstract void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight );
+
+	public void deallocate() {
+		
+	}
 }

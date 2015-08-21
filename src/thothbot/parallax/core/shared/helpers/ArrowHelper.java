@@ -25,17 +25,15 @@ import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Matrix4;
-import thothbot.parallax.core.shared.math.Quaternion;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
 
 public class ArrowHelper extends Object3D
 {
+	private Line line;
+	private Mesh cone;
 
-	public Line line;
-	public Mesh cone;
-		
 	public ArrowHelper ( Vector3 dir, Vector3 origin)
 	{
 		this(dir, origin, 1);

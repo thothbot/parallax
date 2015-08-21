@@ -317,7 +317,10 @@ public final class Color
 
 	public String getHexString() 
 	{
-		return ( "000000" + Integer.toString(this.getHex(), 16).substring(-6));
+		String hexString = Integer.toHexString(this.getHex()).toUpperCase();
+		while(hexString.length() < 6)
+		    hexString = "0" + hexString;
+		return hexString;
 	}
 
 	public Color.HSL getHSL() 
@@ -414,7 +417,7 @@ public final class Color
 		return this;
 	}
 
-	public Color multiply( int s ) 
+	public Color multiply( double s ) 
 	{
 
 		this.r *= s;
@@ -463,7 +466,7 @@ public final class Color
 	 */
 	public String toString()
 	{
-		return getStyle();
+		return "{r:" + this.r + ", g:" + this.g + ", b:" + this.b + "}";
 	}
 
 	private double hue2rgb( double p, double q, double t ) 

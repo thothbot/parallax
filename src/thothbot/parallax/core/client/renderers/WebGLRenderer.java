@@ -19,7 +19,6 @@
 package thothbot.parallax.core.client.renderers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -73,6 +72,7 @@ import thothbot.parallax.core.client.textures.RenderTargetTexture;
 import thothbot.parallax.core.client.textures.Texture;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.cameras.Camera;
+import thothbot.parallax.core.shared.cameras.HasNearFar;
 import thothbot.parallax.core.shared.core.AbstractGeometry;
 import thothbot.parallax.core.shared.core.BufferAttribute;
 import thothbot.parallax.core.shared.core.BufferGeometry;
@@ -95,6 +95,7 @@ import thothbot.parallax.core.shared.materials.HasSkinning;
 import thothbot.parallax.core.shared.materials.HasWireframe;
 import thothbot.parallax.core.shared.materials.LineBasicMaterial;
 import thothbot.parallax.core.shared.materials.Material;
+import thothbot.parallax.core.shared.materials.MeshBasicMaterial;
 import thothbot.parallax.core.shared.materials.MeshFaceMaterial;
 import thothbot.parallax.core.shared.materials.MeshLambertMaterial;
 import thothbot.parallax.core.shared.materials.MeshPhongMaterial;
@@ -125,17 +126,13 @@ import com.google.gwt.dom.client.ImageElement;
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
-public class WebGLRenderer implements HasEventBus
+public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 {
 	// The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
 	private WebGLRenderingContext gl;
 
 	private WebGlRendererInfo info;
 					
-	// Default Color and alpha
-	private Color _clearColor = new Color(0x000000);
-	private double _clearAlpha = 1.0;
-	
 	private List<Light> lights = new ArrayList<Light>();
 	
 	public Map<String, List<WebGLObject>> _webglObjects = GWT.isScript() ? 
@@ -158,7 +155,6 @@ public class WebGLRenderer implements HasEventBus
 	public Shader.PRECISION _precision = Shader.PRECISION.HIGHP;
 	
 	// clearing
-	private boolean autoClear = true;
 	private boolean autoClearColor = true;
 	private boolean autoClearDepth = true;
 	private boolean autoClearStencil = true;
@@ -218,8 +214,8 @@ public class WebGLRenderer implements HasEventBus
 	
 //	_oldLineWidth = null,
 
-	private int absoluteWidth = 0;
-	private int absoluteHeight = 0;
+	private int _viewportX = 0;
+	private int _viewportY = 0;
 	private int _viewportWidth = 0;
 	private int _viewportHeight = 0;
 	private int _currentWidth = 0;
@@ -245,11 +241,7 @@ public class WebGLRenderer implements HasEventBus
 
 	private RendererLights _lights;
 		
-	// An array with render plugins to be applied before rendering.
-	private List<Plugin> renderPluginsPre;
-	
-	//An array with render plugins to be applied after rendering.
-	private List<Plugin> renderPluginsPost;
+	private List<Plugin> plugins;
 		
 //	var sprites = [];
 //	var lensFlares = [];
@@ -363,27 +355,25 @@ public class WebGLRenderer implements HasEventBus
 		setDefaultGLState();
 		
 		// default plugins (order is important)
-		this.renderPluginsPre = new ArrayList<Plugin>();
-		this.renderPluginsPost = new ArrayList<Plugin>();
+		this.plugins = new ArrayList<Plugin>();
 	}
 
 	public void addPlugin(Plugin plugin)
 	{
-		if(plugin.getType() == Plugin.TYPE.PRE_RENDER)
-		{
-			this.renderPluginsPre.add( plugin );
-		}
-		else if(plugin.getType() == Plugin.TYPE.POST_RENDER)
-		{
-			this.renderPluginsPost.add( plugin );
-		}
-		else
-		{
-			Log.error("Unknown plugin type: " + plugin.getType());
-			return;
-		}
+		deletePlugin(plugin);
+		this.plugins.add( plugin );
 	}
 	
+	public void deletePlugin(Plugin plugin)
+	{
+		if(plugin == null)
+			return;
+
+		if(this.plugins.remove( plugin )) {
+			plugin.deallocate();
+		}
+	}
+
 	public boolean supportsVertexTextures()
 	{
 		return this._maxVertexTextures > 0;
@@ -425,23 +415,6 @@ public class WebGLRenderer implements HasEventBus
 		return this._precision;
 	}
 	
-	/**
-	 * Gets {@link #setAutoClear(boolean)} flag.
-	 */
-	public boolean isAutoClear() {
-		return autoClear;
-	}
-
-	/**
-	 * Defines whether the renderer should automatically clear its output before rendering.
-	 * Default is true.
-	 * 
-	 * @param isAutoClear false or true
-	 */
-	public void setAutoClear(boolean isAutoClear) {
-		this.autoClear = isAutoClear;
-	}
-
 	/**
 	 * Gets {@link #setAutoClearColor(boolean)} flag.
 	 */
@@ -551,8 +524,6 @@ public class WebGLRenderer implements HasEventBus
 		this.gammaOutput = isGammaOutput;
 	}
 
-
-
 	/**
 	 * Defines whether the renderer should auto update the scene.
 	 * Default is true.
@@ -587,7 +558,7 @@ public class WebGLRenderer implements HasEventBus
 		return this.gl;
 	}
 
-	private void setDefaultGLState () 
+	private void setDefaultGLState() 
 	{
 		getGL().clearColor( 0.0, 0.0, 0.0, 1.0 );
 		getGL().clearDepth( 1 );
@@ -603,6 +574,9 @@ public class WebGLRenderer implements HasEventBus
 		getGL().enable( EnableCap.BLEND );
 		getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 		getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
+		
+		getGL().viewport( _viewportX, _viewportY, _viewportWidth, _viewportHeight );
+		getGL().clearColor( clearColor.getR(), clearColor.getG(), clearColor.getB(), clearAlpha );
 	}
 
 	/**
@@ -615,11 +589,11 @@ public class WebGLRenderer implements HasEventBus
 	 * @param width  the {@link Canvas3d} width.
 	 * @param height the {@link Canvas3d} height.
 	 */
+	@Override
 	public void setSize(int width, int height)
 	{
-		this.absoluteWidth = width;
-		this.absoluteHeight = height;
-		
+		super.setSize(width, height);
+
 		setViewport(0, 0, width, height);
 		
 		EVENT_BUS.fireEvent(new ViewportResizeEvent(this));
@@ -631,24 +605,15 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public void setViewport(int x, int y, int width, int height)
 	{
+		this._viewportX = x;
+		this._viewportY = y;
+
 		this._viewportWidth = width;
 		this._viewportHeight = height;
 
-		getGL().viewport(x, y, this._viewportWidth, this._viewportHeight);
+		getGL().viewport(this._viewportX, this._viewportY, this._viewportWidth, this._viewportHeight);
 	}
 	
-	public int getAbsoluteWidth() {
-		return this.absoluteWidth;
-	}
-	
-	public int getAbsoluteHeight() {
-		return this.absoluteHeight;
-	}
-
-	public double getAbsoluteAspectRation() {
-		return getAbsoluteWidth() / (double)getAbsoluteHeight();
-	}
-
 	/**
 	 * Sets the scissor area from (x, y) to (x + absoluteWidth, y + absoluteHeight).
 	 */
@@ -669,57 +634,17 @@ public class WebGLRenderer implements HasEventBus
 		else
 			getGL().disable(EnableCap.SCISSOR_TEST);
 	}
-	
 
-	public void setClearColor( int hex )
-	{
-		setClearColor(new Color(hex), 1.0);
-	}
-
-	/**
-	 * Sets the the background color, using hex for the color.<br>
-	 * 
-	 * @param hex the clear color value.
-	 */
-	public void setClearColor( int hex, double alpha )
-	{
-		setClearColor(new Color(hex), alpha);
-	}
-
-	/**
-	 * Sets the the background color, using {@link Color} for the color and alpha for the opacity.
-	 * 
-	 * @param color the {@link Color} instance.
-	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
-	 */
+	@Override
 	public void setClearColor( Color color, double alpha ) 
 	{
-		this._clearColor.copy(color);
-		this._clearAlpha = alpha;
+		this.clearColor.copy(color);
+		this.clearAlpha = alpha;
 
-		getGL().clearColor( this._clearColor.getR(), this._clearColor.getG(), this._clearColor.getB(), this._clearAlpha );
+		getGL().clearColor( this.clearColor.getR(), this.clearColor.getG(), this.clearColor.getB(), this.clearAlpha );
 	}
 
-	/**
-	 * Returns the background color.
-	 * 
-	 * @return the {@link Color} instance. 
-	 */
-	public Color getClearColor() 
-	{
-		return this._clearColor;
-	}
-
-	/**
-	 * Returns the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque)
-	 * 
-	 * @return the value in range &#60;0,1&#62;.
-	 */
-	public double getClearAlpha() 
-	{
-		return this._clearAlpha;
-	}
-
+	@Override
 	public void clear() 
 	{
 		clear(true, true, true);
@@ -832,7 +757,7 @@ public class WebGLRenderer implements HasEventBus
 		// set base
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		Map<String, Uniform> uniforms = material.getShader().getUniforms();
-		Log.error(attributes);
+
 		if ( object.morphTargetBase != - 1 && attributes.get("position") >= 0) 
 		{
 			getGL().bindBuffer( BufferTarget.ARRAY_BUFFER, geometrybuffer.__webglMorphTargetsBuffers.get( object.morphTargetBase ) );
@@ -1095,7 +1020,7 @@ public class WebGLRenderer implements HasEventBus
 
 					int size = geometryAttribute.getItemSize();
 
-					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryAttribute.buffer );
+					gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryAttribute.getBuffer() );
 
 					enableAttribute( programAttribute );
 
@@ -1167,7 +1092,7 @@ public class WebGLRenderer implements HasEventBus
 				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
 				int size = 2;
 
-				List<BufferGeometry.DrawCall> offsets = geometry.offsets;
+				List<BufferGeometry.DrawCall> offsets = geometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
@@ -1175,7 +1100,7 @@ public class WebGLRenderer implements HasEventBus
 
 						setupVertexAttributes( material, program, geometry, 0 );
 
-						getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
+						getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.getBuffer() );
 
 					}
 
@@ -1200,7 +1125,7 @@ public class WebGLRenderer implements HasEventBus
 						if ( updateBuffers ) {
 
 							setupVertexAttributes( material, program, geometry, startIndex );
-							getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
+							getGL().bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.getBuffer() );
 
 						}
 
@@ -1283,14 +1208,14 @@ public class WebGLRenderer implements HasEventBus
 
 //				}
 
-				List<DrawCall> offsets = geometry.getOffsets();
+				List<DrawCall> drawcalls = geometry.getDrawcalls();
 
-				if ( offsets.size() == 0 ) {
+				if ( drawcalls.size() == 0 ) {
 
 					if ( updateBuffers ) {
 
 						setupVertexAttributes( material, program, geometry, 0 );
-						gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
+						gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.getBuffer() );
 
 					}
 
@@ -1305,25 +1230,25 @@ public class WebGLRenderer implements HasEventBus
 					// must set attribute pointers to use new offsets for each chunk
 					// even if geometry and materials didn't change
 
-					if ( offsets.size() > 1 ) updateBuffers = true;
+					if ( drawcalls.size() > 1 ) updateBuffers = true;
 
-					for ( int i = 0, il = offsets.size(); i < il; i ++ ) {
+					for ( int i = 0, il = drawcalls.size(); i < il; i ++ ) {
 
-						int startIndex = offsets.get( i ).index;
+						int startIndex = drawcalls.get( i ).index;
 
 						if ( updateBuffers ) {
 
 							setupVertexAttributes( material, program, geometry, startIndex );
-							gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.buffer );
+							gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, index.getBuffer() );
 
 						}
 
 						// render indexed lines
 
-						gl.drawElements( mode, offsets.get( i ).count, type, offsets.get( i ).start * size ); // 2 bytes per Uint16Array
+						gl.drawElements( mode, drawcalls.get( i ).count, type, drawcalls.get( i ).start * size ); // 2 bytes per Uint16Array
 
 						this.info.getRender().calls ++;
-						this.info.getRender().vertices += offsets.get( i ).count; // not really true, here vertices can be shared
+						this.info.getRender().vertices += drawcalls.get( i ).count; // not really true, here vertices can be shared
 
 					}
 
@@ -1390,7 +1315,7 @@ public class WebGLRenderer implements HasEventBus
 
 			}
 
-			if ( groups.get( groupHash ).vertices + 3 > maxVerticesInGroup ) {
+			if ( groups.get( groupHash ).getVertices() + 3 > maxVerticesInGroup ) {
 
 				hash_map.put( materialIndex.toString(), hash_map.get( materialIndex ) + 1 );
 				groupHash = materialIndex + "_" + hash_map.get( materialIndex );
@@ -1405,8 +1330,8 @@ public class WebGLRenderer implements HasEventBus
 
 			}
 
-			groups.get( groupHash ).faces3.add( f );
-			groups.get( groupHash ).vertices += 3;
+			groups.get( groupHash ).getFaces3().add( f );
+			groups.get( groupHash ).setVertices(groups.get( groupHash ).getVertices() + 3);
 
 		}
 
@@ -1419,13 +1344,13 @@ public class WebGLRenderer implements HasEventBus
 		Material material = object.getMaterial();
 		boolean addBuffers = false;
 
-		if ( GeometryGroup.geometryGroups.get( geometry.getId() + "" ) == null || geometry.groupsNeedUpdate == true ) {
+		if ( GeometryGroup.geometryGroups.get( geometry.getId() + "" ) == null || geometry.isGroupsNeedUpdate() ) {
 
 			this._webglObjects.put(object.getId() + "", new ArrayList<WebGLObject>());
 
 			GeometryGroup.geometryGroups.put( geometry.getId() + "", makeGroups( geometry, material instanceof MeshFaceMaterial ));
 
-			geometry.groupsNeedUpdate = false;
+			geometry.setGroupsNeedUpdate( false );
 
 		}
 
@@ -1444,13 +1369,13 @@ public class WebGLRenderer implements HasEventBus
 				((Mesh)object).createBuffers(this, geometryGroup);
 				((Mesh)object).initBuffers(gl, geometryGroup);
 
-				geometry.verticesNeedUpdate = true;
-				geometry.morphTargetsNeedUpdate = true;
-				geometry.elementsNeedUpdate = true;
-				geometry.uvsNeedUpdate = true;
-				geometry.normalsNeedUpdate = true;
-				geometry.tangentsNeedUpdate = true;
-				geometry.colorsNeedUpdate = true;
+				geometry.setVerticesNeedUpdate( true );
+				geometry.setMorphTargetsNeedUpdate( true );
+				geometry.setElementsNeedUpdate( true );
+				geometry.setUvsNeedUpdate( true );
+				geometry.setNormalsNeedUpdate( true );
+				geometry.setTangentsNeedUpdate( true );
+				geometry.setColorsNeedUpdate( true );
 
 				addBuffers = true;
 
@@ -1508,9 +1433,9 @@ public class WebGLRenderer implements HasEventBus
 					((Line)object).createBuffers(this);
 					((Line)object).initBuffers(gl);
 
-					geometry.verticesNeedUpdate = true;
-					geometry.colorsNeedUpdate = true;
-					geometry.lineDistancesNeedUpdate = true;
+					geometry.setVerticesNeedUpdate( true );
+					geometry.setColorsNeedUpdate( true );
+					geometry.setLineDistancesNeedUpdate( true );
 
 				}
 
@@ -1521,8 +1446,8 @@ public class WebGLRenderer implements HasEventBus
 					((PointCloud)object).createBuffers(this);
 					((PointCloud)object).initBuffers(gl);
 
-					geometry.verticesNeedUpdate = true;
-					geometry.colorsNeedUpdate = true;
+					geometry.setVerticesNeedUpdate( true );
+					geometry.setColorsNeedUpdate( true );
 
 				}
 
@@ -1623,9 +1548,9 @@ public class WebGLRenderer implements HasEventBus
 
 						if ( this.sortObjects == true ) {
 
-							if ( object.renderDepth > 0 ) {
+							if ( object.getRenderDepth() > 0 ) {
 
-								webglObject.z = object.renderDepth;
+								webglObject.z = object.getRenderDepth();
 
 							} else {
 
@@ -1654,10 +1579,11 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 	
-	public Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) {
+	public Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup ) 
+	{
 
 		return object.getMaterial() instanceof MeshFaceMaterial
-			 ? ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.materialIndex )
+			 ? ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.getMaterialIndex() )
 			 : object.getMaterial();
 
 	}
@@ -1683,7 +1609,7 @@ public class WebGLRenderer implements HasEventBus
 
 			// check all geometry groups
 
-			if ( geometry.groupsNeedUpdate == true ) {
+			if ( geometry.isGroupsNeedUpdate() ) {
 
 				initGeometryGroups( scene, (Mesh)object, (Geometry)geometry );
 
@@ -1697,7 +1623,7 @@ public class WebGLRenderer implements HasEventBus
 
 				material = getBufferMaterial( object, geometryGroup );
 
-				if ( geometry.groupsNeedUpdate == true ) {
+				if ( geometry.isGroupsNeedUpdate() ) {
 
 					((Mesh)object).initBuffers( gl, geometryGroup );
 
@@ -1705,23 +1631,23 @@ public class WebGLRenderer implements HasEventBus
 
 				boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
-				if ( geometry.verticesNeedUpdate || geometry.morphTargetsNeedUpdate || geometry.elementsNeedUpdate ||
-					 geometry.uvsNeedUpdate || geometry.normalsNeedUpdate ||
-					 geometry.colorsNeedUpdate || geometry.tangentsNeedUpdate || customAttributesDirty ) {
+				if ( geometry.isVerticesNeedUpdate() || geometry.isMorphTargetsNeedUpdate() || geometry.isElementsNeedUpdate() ||
+					 geometry.isUvsNeedUpdate() || geometry.isNormalsNeedUpdate() ||
+					 geometry.isColorsNeedUpdate() || geometry.isTangentsNeedUpdate() || customAttributesDirty ) {
 
-					((Mesh)object).setBuffers( gl, geometryGroup, BufferUsage.DYNAMIC_DRAW, ! geometry.dynamic, material );
+					((Mesh)object).setBuffers( gl, geometryGroup, BufferUsage.DYNAMIC_DRAW, ! ((Geometry)geometry).isDynamic(), material );
 
 				}
 
 			}
 
-			geometry.verticesNeedUpdate = false;
-			geometry.morphTargetsNeedUpdate = false;
-			geometry.elementsNeedUpdate = false;
-			geometry.uvsNeedUpdate = false;
-			geometry.normalsNeedUpdate = false;
-			geometry.colorsNeedUpdate = false;
-			geometry.tangentsNeedUpdate = false;
+			geometry.setVerticesNeedUpdate( false );
+			geometry.setMorphTargetsNeedUpdate( false );
+			geometry.setElementsNeedUpdate( false );
+			geometry.setUvsNeedUpdate( false );
+			geometry.setNormalsNeedUpdate( false );
+			geometry.setColorsNeedUpdate( false );
+			geometry.setTangentsNeedUpdate( false );
 
 			if(material instanceof ShaderMaterial ) {
 				((ShaderMaterial)material).getShader().clearCustomAttributes();
@@ -1733,15 +1659,15 @@ public class WebGLRenderer implements HasEventBus
 
 			boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
-			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || geometry.lineDistancesNeedUpdate || customAttributesDirty ) {
+			if ( geometry.isVerticesNeedUpdate() || geometry.isColorsNeedUpdate() || geometry.isLineDistancesNeedUpdate() || customAttributesDirty ) {
 
 				((Line)object).setBuffers( gl, BufferUsage.DYNAMIC_DRAW );
 
 			}
 
-			geometry.verticesNeedUpdate = false;
-			geometry.colorsNeedUpdate = false;
-			geometry.lineDistancesNeedUpdate = false;
+			geometry.setVerticesNeedUpdate( false );
+			geometry.setColorsNeedUpdate( false );
+			geometry.setLineDistancesNeedUpdate( false );
 
 			if(material instanceof ShaderMaterial ) {
 				((ShaderMaterial)material).getShader().clearCustomAttributes();
@@ -1754,14 +1680,14 @@ public class WebGLRenderer implements HasEventBus
 
 			boolean customAttributesDirty = (material instanceof ShaderMaterial) && ((ShaderMaterial)material).getShader().areCustomAttributesDirty();
 
-			if ( geometry.verticesNeedUpdate || geometry.colorsNeedUpdate || ((PointCloud)object).isSortParticles() || customAttributesDirty ) {
+			if ( geometry.isVerticesNeedUpdate() || geometry.isColorsNeedUpdate() || ((PointCloud)object).isSortParticles() || customAttributesDirty ) {
 
 				((PointCloud)object).setBuffers( this, BufferUsage.DYNAMIC_DRAW );
 
 			}
 
-			geometry.verticesNeedUpdate = false;
-			geometry.colorsNeedUpdate = false;
+			geometry.setVerticesNeedUpdate( false );
+			geometry.setColorsNeedUpdate( false );
 
 			if(material instanceof ShaderMaterial ) {
 				((ShaderMaterial)material).getShader().clearCustomAttributes();
@@ -1771,6 +1697,7 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 
+	@Override
 	public void render( Scene scene, Camera camera )
 	{
 		render(scene, camera, null);
@@ -1780,7 +1707,7 @@ public class WebGLRenderer implements HasEventBus
 	{
 		render(scene, camera, renderTarget, false);
 	}
-
+	
 	/**
 	 * Rendering.
 	 * 
@@ -1789,9 +1716,13 @@ public class WebGLRenderer implements HasEventBus
 	 * @param forceClear   optional
 	 */
 	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear ) 
-	{
-		Log.debug("Called render()");
+	{		
+		// Render basic plugins
+		if(renderPlugins( this.plugins, scene, camera, Plugin.TYPE.BASIC_RENDER ))
+			return;
 		
+		Log.debug("Called render()");
+				
 		AbstractFog fog = scene.getFog();
 
 		// reset caching for this frame
@@ -1815,18 +1746,57 @@ public class WebGLRenderer implements HasEventBus
 		
 		_projScreenMatrix.multiply( camera.getProjectionMatrix(), camera.getMatrixWorldInverse() );
 		_frustum.setFromMatrix( _projScreenMatrix );
-		
+
 		this.lights = new ArrayList<Light>();
 		this.opaqueObjects = new ArrayList<WebGLObject>();
 		this.transparentObjects = new ArrayList<WebGLObject>();
 
 		projectObject( scene, scene );
+
+		if ( this.isSortObjects() ) {
+			
+			Collections.sort(opaqueObjects, new Comparator<WebGLObject>() {
+
+				@Override
+				public int compare(WebGLObject a, WebGLObject b) {
+					if ( a.z != b.z ) {
+					
+						return (int)(b.z - a.z);
 		
-//		if ( this.isSortObjects() )
-//		Collections.sort(renderList);
+					} else {
+		
+						return a.id - b.id;
+		
+					}
+			
+				}
+			});
+			
+			Collections.sort(transparentObjects, new Comparator<WebGLObject>() {
+
+				@Override
+				public int compare(WebGLObject a, WebGLObject b) {
+					if ( a.material.getId() != b.material.getId() ) {
+				
+						return a.material.getId() - b.material.getId();
+		
+					} else if ( a.z != b.z ) {
+		
+						return (int)(a.z - b.z);
+		
+					} else {
+		
+						return a.id - b.id;
+		
+					}
+			
+				}
+			});
+
+		}
 
 		// custom render plugins (pre pass)
-		renderPlugins( this.renderPluginsPre, camera );
+		renderPlugins( this.plugins, scene, camera, Plugin.TYPE.PRE_RENDER );
 
 		this.getInfo().getRender().calls = 0;
 		this.getInfo().getRender().vertices = 0;
@@ -1857,16 +1827,19 @@ public class WebGLRenderer implements HasEventBus
 
 		}
 
-		Log.error("render", opaqueObjects.size(), transparentObjects.size(), this._webglObjects, _webglObjectsImmediate.size());
-		if ( scene.overrideMaterial != null ) 
-		{
-			Log.error("render(): override material");
+		Log.debug("  -- render() overrideMaterial : " + (scene.getOverrideMaterial() != null)
+				+ ", lights: " + lights.size()
+				+ ", opaqueObjects: " + opaqueObjects.size()
+				+ ", transparentObjects: " + transparentObjects.size() );
+		
+		if ( scene.getOverrideMaterial() != null ) 
+		{			
+			Material material = scene.getOverrideMaterial();
 			
-			Material material = scene.overrideMaterial;
+			setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
+			setDepthTest( material.isDepthTest() );
+			setDepthWrite( material.isDepthWrite() );
 			
-			this.setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
-			this.setDepthTest( material.isDepthTest() );
-			this.setDepthWrite( material.isDepthWrite() );
 			setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits() );
 
 			renderObjects( opaqueObjects, camera, lights, fog, true, material );
@@ -1874,9 +1847,7 @@ public class WebGLRenderer implements HasEventBus
 			renderObjectsImmediate( _webglObjectsImmediate, null, camera, lights, fog, false, material );
 		} 
 		else 
-		{
-			Log.debug("render(): NON override material");
-			
+		{		
 			Material material = null;
 			
 			// opaque pass (front-to-back order)
@@ -1891,7 +1862,7 @@ public class WebGLRenderer implements HasEventBus
 		}
 
 		// custom render plugins (post pass)
-		renderPlugins( this.renderPluginsPost, camera );
+		renderPlugins( this.plugins, scene, camera, Plugin.TYPE.POST_RENDER );
 
 		// Generate mipmap if we're using any kind of mipmap filtering
 		if ( renderTarget != null && renderTarget.isGenerateMipmaps() 
@@ -1971,17 +1942,22 @@ public class WebGLRenderer implements HasEventBus
 
 	}
 
-	private void renderPlugins( List<Plugin> plugins, Camera camera ) 
-	{
-		if ( plugins.size() == 0 ) return;
+	private boolean renderPlugins( List<Plugin> plugins, Scene scene, Camera camera, Plugin.TYPE type ) 
+	{		
+		if ( plugins.size() == 0 ) 
+			return false;
 
+		boolean retval = false;
 		for ( int i = 0, il = plugins.size(); i < il; i ++ ) 
 		{
 			Plugin plugin = plugins.get( i );
 
-			if( ! plugin.isEnabled() || plugin.isRendering() )
-				return;
-
+			if( ! plugin.isEnabled() 
+					|| plugin.isRendering() 
+					|| plugin.getType() != type 
+					|| ( !(plugin.isMulty()) && !plugin.getScene().equals(scene)))
+				continue;
+			
 			plugin.setRendering(true);
 			Log.debug("Called renderPlugins(): " + plugin.getClass().getName());
 
@@ -2017,7 +1993,11 @@ public class WebGLRenderer implements HasEventBus
 			this._lightsNeedUpdate = true;
 			
 			plugin.setRendering(false);
+			
+			retval = true;
 		}
+		
+		return retval;
 	}
 
 	private void renderObjects (List<WebGLObject> renderList, Camera camera, List<Light> lights, AbstractFog fog, boolean useBlending ) 
@@ -2027,9 +2007,7 @@ public class WebGLRenderer implements HasEventBus
 
 	//renderList, camera, lights, fog, useBlending, overrideMaterial
 	private void renderObjects (List<WebGLObject> renderList, Camera camera, List<Light> lights, AbstractFog fog, boolean useBlending, Material overrideMaterial ) 
-	{
-		Log.debug("Called renderObjects() render list contains = " + renderList.size());
-		
+	{		
 		Material material = null;
 		
 		for ( int i = renderList.size() - 1; i != - 1; i -- ) {
@@ -2051,7 +2029,8 @@ public class WebGLRenderer implements HasEventBus
 
 				if ( material == null ) continue;
 
-				if ( useBlending ) setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
+				if ( useBlending ) 
+					setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
 
 				setDepthTest( material.isDepthTest() );
 				setDepthWrite( material.isDepthWrite() );
@@ -2094,11 +2073,11 @@ public class WebGLRenderer implements HasEventBus
 
 		int geometryGroupHash = ( geometry.getId() * 0xffffff ) + ( material.getShader().getId() * 2 ) + wireframeBit;
 
-//		GWT.log("--- renderBuffer() geometryGroupHash=" + geometryGroupHash 
+//		Log.error("--- renderBuffer() geometryGroupHash=" + geometryGroupHash 
 //				+ ", _currentGeometryGroupHash=" +  this._currentGeometryGroupHash
-//				+ ", program.id=" + program.id
-//				+ ", geometryGroup.id=" + geometryBuffer.getId()
-//				+ ", __webglLineCount=" + geometryBuffer.__webglLineCount
+//				+ ", program.id=" + program.getId()
+////				+ ", geometryGroup.id=" + geometryBuffer.getId()
+////				+ ", __webglLineCount=" + geometryBuffer.__webglLineCount
 //				+ ", object.id=" + object.getId()
 //				+ ", wireframeBit=" + wireframeBit);
 
@@ -2244,7 +2223,7 @@ public class WebGLRenderer implements HasEventBus
 		
 		disableUnusedAttributes();
 
-		Log.debug(" -> renderBuffer() ID " + object.getId() + " = " + object.getClass().getName());
+		Log.debug("  ----> renderBuffer() ID " + object.getId() + " (" + object.getClass().getSimpleName() + ")");
 
 		// Render object's buffers
 		object.renderBuffer(this, geometry, updateBuffers);
@@ -2268,8 +2247,11 @@ public class WebGLRenderer implements HasEventBus
 
 		parameters.supportsVertexTextures = this._supportsVertexTextures;
 		
-		parameters.useFog  = (fog != null);
-		parameters.useFog2 = (fog != null && fog.getClass() == FogExp2.class);
+		if(fog != null) 
+		{
+			parameters.useFog  = true;
+			parameters.useFog2 = (fog instanceof FogExp2);
+		}
 		
 		parameters.logarithmicDepthBuffer = this._logarithmicDepthBuffer;
 		
@@ -2290,13 +2272,14 @@ public class WebGLRenderer implements HasEventBus
 		
 		parameters.maxShadows = maxShadows;
 		
-		for(Plugin plugin: this.renderPluginsPre)
+		for(Plugin plugin: this.plugins)
 		if(plugin instanceof ShadowMap && ((ShadowMap)plugin).isEnabled() && object.isReceiveShadow())
 		{
 			parameters.shadowMapEnabled = object.isReceiveShadow() && maxShadows > 0;
 			parameters.shadowMapSoft    = ((ShadowMap)plugin).isSoft();
 			parameters.shadowMapDebug   = ((ShadowMap)plugin).isDebugEnabled();
 			parameters.shadowMapCascade = ((ShadowMap)plugin).isCascade();
+			break;
 		}
 
 		material.updateProgramParameters(parameters);
@@ -2387,7 +2370,7 @@ public class WebGLRenderer implements HasEventBus
 		WebGLProgram program = shader.getProgram();
 		Map<String, Uniform> m_uniforms = shader.getUniforms();
 
-		if ( program != _currentProgram )
+		if ( !program.equals(_currentProgram) )
 		{
 			getGL().useProgram( program );
 			this._currentProgram = program;
@@ -2395,22 +2378,55 @@ public class WebGLRenderer implements HasEventBus
 			refreshProgram = true;
 			refreshMaterial = true;
 			refreshLights = true;
-
-			Log.error("program != _currentProgram");
 		}
 
 		if ( material.getId() != this._currentMaterialId ) 
 		{
+			if(_currentMaterialId == -1) refreshLights = true;
+			
 			this._currentMaterialId = material.getId();
 			refreshMaterial = true;
 		}
 
-		if ( refreshMaterial || camera != this._currentCamera ) 
+		if ( refreshProgram || !camera.equals( this._currentCamera) ) 
 		{
 			getGL().uniformMatrix4fv( m_uniforms.get("projectionMatrix").getLocation(), false, camera.getProjectionMatrix().getArray() );
 
-			if ( camera != this._currentCamera ) 
+			if ( _logarithmicDepthBuffer ) {
+
+				gl.uniform1f( m_uniforms.get("logDepthBufFC").getLocation(), 2.0 / ( Math.log( ((HasNearFar)camera).getFar() + 1.0 ) / 0.6931471805599453 /*Math.LN2*/ ) );
+
+			}
+
+			if ( !camera.equals( this._currentCamera) ) 
 				this._currentCamera = camera;
+			
+			// load material specific uniforms
+			// (shader material also gets them for the sake of genericity)
+			if ( material.getClass() == ShaderMaterial.class ||
+				 material.getClass() == MeshPhongMaterial.class ||
+				 material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null 
+			) {
+
+				if ( m_uniforms.get("cameraPosition").getLocation() != null ) 
+				{
+					_vector3.setFromMatrixPosition( camera.getMatrixWorld() );
+					getGL().uniform3f( m_uniforms.get("cameraPosition").getLocation(), _vector3.getX(), _vector3.getY(), _vector3.getZ() );
+				}
+			}
+
+			if ( material.getClass() == MeshPhongMaterial.class ||
+				 material.getClass() == MeshLambertMaterial.class ||
+				 material.getClass() == MeshBasicMaterial.class ||
+				 material.getClass() == ShaderMaterial.class ||
+				 material instanceof HasSkinning && ((HasSkinning)material).isSkinning() 
+			) {
+
+				if ( m_uniforms.get("viewMatrix").getLocation() != null ) 
+				{
+					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera.getMatrixWorldInverse().getArray() );
+				}
+			}
 		}
 
 		// skinning uniforms must be set even if material didn't change
@@ -2450,11 +2466,17 @@ public class WebGLRenderer implements HasEventBus
 
 				if (this._lightsNeedUpdate ) 
 				{
+					refreshLights = true;
 					this._lights.setupLights( lights, this.gammaInput );
 					this._lightsNeedUpdate = false;
 				}
 
-				this._lights.refreshUniformsLights( m_uniforms );
+				if ( refreshLights ) {
+					this._lights.refreshUniformsLights( m_uniforms );
+//					markUniformsLightsNeedsUpdate( m_uniforms, true );
+				} else {
+//					markUniformsLightsNeedsUpdate( m_uniforms, false );
+				}
 			}
 
 			material.refreshUniforms(camera, this.gammaInput);
@@ -2465,30 +2487,6 @@ public class WebGLRenderer implements HasEventBus
 			// load common uniforms
 			loadUniformsGeneric( m_uniforms );
 
-			// load material specific uniforms
-			// (shader material also gets them for the sake of genericity)
-			if ( material.getClass() == ShaderMaterial.class ||
-				 material.getClass() == MeshPhongMaterial.class ||
-				 material instanceof HasEnvMap 
-			) {
-
-				if ( m_uniforms.get("cameraPosition").getLocation() != null ) 
-				{
-					Vector3 position = new Vector3();
-					position.setFromMatrixPosition( camera.getMatrixWorld() );
-					getGL().uniform3f( m_uniforms.get("cameraPosition").getLocation(), position.getX(), position.getY(), position.getZ() );
-				}
-			}
-
-			if ( material.getClass() == MeshPhongMaterial.class ||
-				 material.getClass() == MeshLambertMaterial.class ||
-				 material.getClass() == ShaderMaterial.class ||
-				 material instanceof HasSkinning && ((HasSkinning)material).isSkinning() 
-			) {
-
-				if ( m_uniforms.get("viewMatrix").getLocation() != null ) 
-					getGL().uniformMatrix4fv( m_uniforms.get("viewMatrix").getLocation(), false, camera.getMatrixWorldInverse().getArray() );
-			}
 		}
 
 		loadUniformsMatrices( m_uniforms, object );
@@ -2546,6 +2544,8 @@ public class WebGLRenderer implements HasEventBus
 	@SuppressWarnings("unchecked")
 	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms ) 
 	{
+		WebGLRenderingContext gl = getGL();
+		
 		for ( Uniform uniform : materialUniforms.values() ) 
 		{
 //			for ( String key: materialUniforms.keySet() ) 
@@ -2560,11 +2560,7 @@ public class WebGLRenderer implements HasEventBus
 			
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
-
-			//Log.debug("loadUniformsGeneric() " + uniform);
-			
-			WebGLRenderingContext gl = getGL();
-
+		
 			if(type == TYPE.I) // single integer
 			{
 				gl.uniform1i( location, (value instanceof Boolean) ? ((Boolean)value) ? 1 : 0 : (Integer) value );
@@ -2709,7 +2705,7 @@ public class WebGLRenderer implements HasEventBus
 
 					setTexture( texture, textureUnit );
 				}
-			}
+			}			
 		}
 	}
 	
@@ -2795,7 +2791,7 @@ public class WebGLRenderer implements HasEventBus
 		}
 	}
 
-	public void setBlending( Material.BLENDING blending) 
+	public void setBlending( Material.BLENDING blending ) 
 	{
 		if ( blending != this._oldBlending ) 
 		{
@@ -2806,6 +2802,7 @@ public class WebGLRenderer implements HasEventBus
 			} 
 			else if( blending == Material.BLENDING.ADDITIVE) 
 			{
+				
 				getGL().enable( EnableCap.BLEND );
 				getGL().blendEquation( BlendEquationMode.FUNC_ADD );
 				getGL().blendFunc( BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE );
@@ -2832,6 +2829,7 @@ public class WebGLRenderer implements HasEventBus
 				getGL().enable( EnableCap.BLEND );
 
 			} 
+			// NORMAL
 			else 
 			{
 				getGL().enable( EnableCap.BLEND );
@@ -2844,10 +2842,6 @@ public class WebGLRenderer implements HasEventBus
 
 			this._oldBlending = blending;
 		}
-		
-		this._oldBlendEquation = null;
-		this._oldBlendSrc = null;
-		this._oldBlendDst = null;
 	}
 
 	private void setBlending( Material.BLENDING blending, BlendEquationMode blendEquation, BlendingFactorSrc blendSrc, BlendingFactorDest blendDst ) 
@@ -2869,6 +2863,12 @@ public class WebGLRenderer implements HasEventBus
 				this._oldBlendSrc = blendSrc;
 				this._oldBlendDst = blendDst;
 			}
+		} 
+		else 
+		{
+			this._oldBlendEquation = null;
+			this._oldBlendSrc = null;
+			this._oldBlendDst = null;
 		}
 	}
 
@@ -3059,31 +3059,43 @@ public class WebGLRenderer implements HasEventBus
 	 */
 	public void setRenderTarget( RenderTargetTexture renderTarget ) 
 	{
-		Log.debug("Called setRenderTarget(params)");
+		Log.debug("  ----> Called setRenderTarget(params)");
 		WebGLFramebuffer framebuffer = null;
+		
+		int width, height, vx, vy;
 		
 		if(renderTarget != null) 
 		{
 			renderTarget.setRenderTarget(getGL());
 		    framebuffer = renderTarget.getWebGLFramebuffer();
 
-			this._currentWidth = renderTarget.getWidth();
-			this._currentHeight = renderTarget.getHeight();
+		    width = renderTarget.getWidth();
+		    height = renderTarget.getHeight();
+		    
+			vx = 0;
+			vy = 0;
 
 		} 
 		else 
 		{
-			this._currentWidth = this._viewportWidth;
-			this._currentHeight = this._viewportHeight;
+			width = this._viewportWidth;
+			height = this._viewportHeight;
+			
+			vx = _viewportX;
+			vy = _viewportY;
+
 		}
 
 		if ( framebuffer != this._currentFramebuffer ) 
 		{
 			getGL().bindFramebuffer( framebuffer );
-			getGL().viewport( 0, 0, this._currentWidth, this._currentHeight );
+			getGL().viewport( vx, vy, width, height);
 
 			this._currentFramebuffer = framebuffer;
 		}
+
+		_currentWidth = width;
+		_currentHeight = height;
 	}
 
 	/**

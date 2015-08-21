@@ -30,7 +30,6 @@ import thothbot.parallax.core.shared.curves.FrenetFrames;
 import thothbot.parallax.core.shared.curves.Shape;
 import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Color;
-import thothbot.parallax.core.shared.math.Vector;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
@@ -127,7 +126,7 @@ public class ExtrudeGeometry extends Geometry
 	{
 		Log.debug("ExtrudeGeometry: Called addShape() shape=" + shape);
 
-		List<Vector> extrudePts = null;
+		List<Vector2> extrudePts = null;
 		boolean extrudeByPath = false;
 		
 		Vector3 binormal  = new Vector3();
@@ -375,10 +374,10 @@ public class ExtrudeGeometry extends Geometry
 		buildSideFaces(contour);
 	}
 	
-	private Vector2 getBevelVec( Vector pt_i, Vector pt_j, Vector pt_k ) 
+	private Vector2 getBevelVec( Vector2 pt_i, Vector2 pt_j, Vector2 pt_k ) 
 	{
 		// Algorithm 2
-		return getBevelVec2( (Vector2)pt_i, (Vector2)pt_j, (Vector2)pt_k );
+		return getBevelVec2( pt_i, pt_j, pt_k );
 	}
 
 	private Vector2 getBevelVec1( Vector2 pt_i, Vector2 pt_j, Vector2 pt_k ) 
@@ -397,7 +396,7 @@ public class ExtrudeGeometry extends Geometry
 		return new Vector2( x, y ); //.normalize();
 	}
 	
-	private Vector2 scalePt2 ( Vector pt, Vector vec, double size ) 
+	private Vector2 scalePt2 ( Vector2 pt, Vector2 vec, double size ) 
 	{
 		return (Vector2) vec.clone().multiply( size ).add( pt );
 	}

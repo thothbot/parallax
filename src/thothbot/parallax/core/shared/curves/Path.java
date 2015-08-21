@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import thothbot.parallax.core.shared.core.Geometry;
-import thothbot.parallax.core.shared.math.Vector;
 import thothbot.parallax.core.shared.math.Vector2;
 import thothbot.parallax.core.shared.math.Vector3;
 import thothbot.parallax.core.shared.utils.ShapeUtils;
@@ -208,14 +207,14 @@ public class Path extends CurvePath
 
 
 	
-	public List<Vector> getSpacedPoints( boolean closedPath )
+	public List<Vector2> getSpacedPoints( boolean closedPath )
 	{
 		return getSpacedPoints(40, closedPath);
 	}
 
-	public List<Vector> getSpacedPoints( int divisions, boolean closedPath ) 
+	public List<Vector2> getSpacedPoints( int divisions, boolean closedPath ) 
 	{
-		List<Vector> points = new ArrayList<Vector>();
+		List<Vector2> points = new ArrayList<Vector2>();
 
 		for ( int i = 0; i < divisions; i ++ )
 			points.add( this.getPoint( i / (double)divisions ) );
@@ -229,17 +228,17 @@ public class Path extends CurvePath
 	/* 
 	 * @return an List of {@link Vector2} based on contour of the path
 	 */
-	public List<Vector> getPoints( boolean closedPath ) 
+	public List<Vector2> getPoints( boolean closedPath ) 
 	{
 		return getPoints(12, closedPath);
 	}
 
-	public List<Vector> getPoints( int divisions, boolean closedPath ) 
+	public List<Vector2> getPoints( int divisions, boolean closedPath ) 
 	{
 		if (this.useSpacedPoints)
 			return this.getSpacedPoints( divisions, closedPath );
 
-		List<Vector> points = new ArrayList<Vector>();
+		List<Vector2> points = new ArrayList<Vector2>();
 
 		double cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0;
 
@@ -273,10 +272,10 @@ public class Path extends CurvePath
 
 				if ( points.size() > 0 ) 
 				{
-					Vector laste = points.get( points.size() - 1 );
+					Vector2 laste = points.get( points.size() - 1 );
 
-					cpx0 = ((Vector2)laste).getX();
-					cpy0 = ((Vector2)laste).getY();
+					cpx0 = laste.getX();
+					cpy0 = laste.getY();
 				} 
 				else 
 				{
@@ -311,10 +310,10 @@ public class Path extends CurvePath
 
 				if ( points.size() > 0 ) 
 				{
-					Vector laste = points.get( points.size() - 1 );
+					Vector2 laste = points.get( points.size() - 1 );
 
-					cpx0 = ((Vector2)laste).getX();
-					cpy0 = ((Vector2)laste).getY();
+					cpx0 = laste.getX();
+					cpy0 = laste.getY();
 				} 
 				else 
 				{
@@ -598,7 +597,7 @@ public class Path extends CurvePath
 		return createGeometry( getSpacedPoints( divisions, true ) );
 	}
 
-	private Geometry createGeometry(List<Vector> points)
+	private Geometry createGeometry(List<Vector2> points)
 	{
 		Geometry geometry = new Geometry();
 

@@ -24,33 +24,20 @@ import thothbot.parallax.core.client.shaders.DashedShader;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.math.Color;
 
-public class LineDashedMaterial extends Material implements 
-	HasFog, HasColor, HasVertexColors
+/**
+ * A material for drawing wireframe-style geometries with dashed lines.
+ *
+ */
+public class LineDashedMaterial extends LineBasicMaterial
 {
-
-	private boolean isFog;
-	
-	private Color color;
-	
-	private Material.COLORS vertexColors;
-	
-	private double linewidth;
-	
 	private double scale;
 	private double dashSize;
 	private double gapSize;
 	
 	public LineDashedMaterial()
 	{
-		setFog(true);
-		
-		setColor(new Color(0xffffff));
-		
-		setLinewidth(1.0);
-		
-		setVertexColors(Material.COLORS.NO);
+		super();
 		
 		setScale(1.0);
 		setDashSize(3.0);
@@ -58,7 +45,7 @@ public class LineDashedMaterial extends Material implements
 	}
 
 	@Override
-	protected Shader getAssociatedShader() 
+	public Shader getAssociatedShader() 
 	{
 		return new DashedShader();
 	}
@@ -71,6 +58,10 @@ public class LineDashedMaterial extends Material implements
 		this.scale = scale;
 	}
 
+	/**
+	 * The size of the dash. This is both the gap with the stroke. Default is 3.
+	 * @return
+	 */
 	public double getDashSize() {
 		return dashSize;
 	}
@@ -79,6 +70,10 @@ public class LineDashedMaterial extends Material implements
 		this.dashSize = dashSize;
 	}
 
+	/**
+	 * The size of the gap. Default is 1.
+	 * @return
+	 */
 	public double getGapSize() {
 		return gapSize;
 	}
@@ -87,61 +82,15 @@ public class LineDashedMaterial extends Material implements
 		this.gapSize = gapSize;
 	}
 	
-	public double getLinewidth() {
-		return this.linewidth;
-	}
-	
-	public void setLinewidth(double linewidth) {
-		this.linewidth = linewidth;
-	}
-
-	@Override
-	public boolean isFog() {
-		return this.isFog;
-	}
-
-	@Override
-	public void setFog(boolean fog) {
-		this.isFog = fog;
-	}
-	
-	@Override
-	public Color getColor() {
-		return color;
-	}
-	
-	@Override
-	public void setColor(Color color) {
-		this.color = color;
-	}
-	
-	@Override
-	public Material.COLORS isVertexColors() {
-		return this.vertexColors;
-	}
-
-	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
-		this.vertexColors = vertexColors;
-	}
-	
 	public LineDashedMaterial clone() {
 
 		LineDashedMaterial material = new LineDashedMaterial();
 		
 		super.clone(material);
 
-		material.color.copy( this.color );
-
-		material.linewidth = this.linewidth;
-
 		material.scale = this.scale;
 		material.dashSize = this.dashSize;
 		material.gapSize = this.gapSize;
-
-		material.vertexColors = this.vertexColors;
-
-		material.isFog = this.isFog;
 
 		return material;
 
@@ -152,7 +101,7 @@ public class LineDashedMaterial extends Material implements
 	{
 		super.refreshUniforms(camera, isGammaInput);
 		Map<String, Uniform> uniforms = getShader().getUniforms();
-		
+			
 		uniforms.get("dashSize").setValue( getDashSize() );
 		uniforms.get("totalSize").setValue( getDashSize() + getGapSize() );
 		uniforms.get("scale").setValue( getScale() );

@@ -23,7 +23,6 @@ import java.util.List;
 
 import thothbot.parallax.core.shared.Log;
 
-import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 

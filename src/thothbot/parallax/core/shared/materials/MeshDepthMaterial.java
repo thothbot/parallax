@@ -24,8 +24,12 @@ import thothbot.parallax.core.client.shaders.DepthShader;
 import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.client.shaders.Uniform;
 import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.cameras.OrthographicCamera;
+import thothbot.parallax.core.shared.cameras.HasNearFar;
 
+/**
+ * A material for drawing geometry by depth. Depth is based off of the camera near and far plane. White is nearest, black is farthest.
+ *
+ */
 public class MeshDepthMaterial extends Material implements HasWireframe
 {
 //	private boolean isMorphTargets = false;
@@ -89,10 +93,10 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 		super.refreshUniforms(camera, isGammaInput);
 		Map<String, Uniform> uniforms = getShader().getUniforms();
 		
-		if(camera.getClass() == OrthographicCamera.class) 
+		if(camera instanceof HasNearFar) 
 		{
-			uniforms.get("mNear").setValue( ((OrthographicCamera) camera).getNear() );
-			uniforms.get("mFar").setValue( ((OrthographicCamera) camera).getFar() );
+			uniforms.get("mNear").setValue( ((HasNearFar) camera).getNear() );
+			uniforms.get("mFar").setValue( ((HasNearFar) camera).getFar() );
 		}
 		
 		uniforms.get("opacity").setValue( getOpacity() );

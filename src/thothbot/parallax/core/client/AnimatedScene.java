@@ -44,7 +44,7 @@ public abstract class AnimatedScene extends Animation
 		/**
 		 * Called when {@link #onUpdate()} called.
 		 */
-		public void onUpdate();
+		public void onUpdate(double duration);
 	}
 
 	private RenderingPanel renderingPanel;
@@ -98,6 +98,6 @@ public abstract class AnimatedScene extends Animation
 		getRenderer().getInfo().getTimer().render = new Duration();
 		onUpdate(duration);
 		
-		animationUpdateHandler.onUpdate();
+		animationUpdateHandler.onUpdate(duration);
 	}
 }

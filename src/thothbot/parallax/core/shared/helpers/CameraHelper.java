@@ -49,12 +49,8 @@ import com.google.gwt.core.client.GWT;
 public class CameraHelper extends Line
 {
 	private Camera camera;
-//	
+	
 	private Map<String, List<Integer>> pointMap;
-//	
-//	private static Projector __projector = new Projector();
-//	private static Vector3 __v = new Vector3();
-//	private static Camera __c = new Camera();
 	
 	public CameraHelper(Camera camera)
 	{
@@ -149,6 +145,9 @@ public class CameraHelper extends Line
 		
 		this.pointMap.get( id ).add(((Geometry)getGeometry()).getVertices().size() - 1 );
 	}
+	
+	Vector3 _vector = new Vector3();
+	Camera _camera = new Camera();
 
 	public void update() 
 	{
@@ -158,8 +157,7 @@ public class CameraHelper extends Line
 		// we need just camera projection matrix
 		// world matrix must be identity
 
-		Camera camera = new Camera();
-		camera.getProjectionMatrix().copy( this.camera.getProjectionMatrix() );
+		_camera.getProjectionMatrix().copy( this.camera.getProjectionMatrix() );
 
 		// center / target
 
@@ -198,13 +196,12 @@ public class CameraHelper extends Line
 		setPoint( "cn3",  0, -h, -1 );
 		setPoint( "cn4",  0,  h, -1 );
 
-		((Geometry)getGeometry()).verticesNeedUpdate = true;
+		((Geometry)getGeometry()).setVerticesNeedUpdate( true );
 	}
 	
 	private void setPoint( String point, double x, double y, double z ) 
 	{
-		Vector3 vector = new Vector3();
-		vector.set( x, y, z ).unproject( camera );
+		_vector.set( x, y, z ).unproject( _camera );
 
 		List<Integer> points = this.pointMap.get( point );
 
@@ -213,7 +210,7 @@ public class CameraHelper extends Line
 			for ( int i = 0, il = points.size(); i < il; i ++ ) 
 			{
 				int j = points.get( i );
-				((Geometry)getGeometry()).getVertices().get( j ).copy( vector );
+				((Geometry)getGeometry()).getVertices().get( j ).copy( _vector );
 			}
 		}
 	}	

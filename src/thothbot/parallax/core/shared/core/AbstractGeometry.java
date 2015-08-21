@@ -24,7 +24,7 @@ import thothbot.parallax.core.shared.math.Sphere;
 
 public abstract class AbstractGeometry extends WebGLGeometry
 {
-	public static int Counter = 0;
+	private static int Counter = 0;
 	
 	private int id = 0;
 	
@@ -37,30 +37,35 @@ public abstract class AbstractGeometry extends WebGLGeometry
 	protected Sphere boundingSphere = null;
 	
 	// update flags
-	
-	public boolean verticesNeedUpdate = false;
-	public boolean elementsNeedUpdate = false;
-	public boolean normalsNeedUpdate = false;
-	public boolean colorsNeedUpdate = false;
-	public boolean uvsNeedUpdate = false;
-	public boolean tangentsNeedUpdate = false;
-	public boolean morphTargetsNeedUpdate = false;
-	public boolean lineDistancesNeedUpdate = false;
+	protected boolean verticesNeedUpdate = false;
+	protected boolean elementsNeedUpdate = false;
+	protected boolean normalsNeedUpdate = false;
+	protected boolean colorsNeedUpdate = false;
+	protected boolean uvsNeedUpdate = false;
+	protected boolean tangentsNeedUpdate = false;
+	protected boolean morphTargetsNeedUpdate = false;
+	protected boolean lineDistancesNeedUpdate = false;
 
-	public boolean groupsNeedUpdate = false;
+	protected boolean groupsNeedUpdate = false;
 	
-	public boolean dynamic = false;
-			
 	public AbstractGeometry() {
-		this.id = BufferGeometry.Counter++;
-		
+		this.id = Counter++;
+
 		this.name = "";
 	}
 	
+	/**
+	 * Name for this geometry. Default is an empty string.
+	 * @return Name
+	 */
 	public String getName() {
 		return this.name;
 	}
 	
+	/**
+	 * Set name for this geometry.
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -77,6 +82,78 @@ public abstract class AbstractGeometry extends WebGLGeometry
 	public int getId() 
 	{
 		return id;
+	}
+	
+	public boolean isVerticesNeedUpdate() {
+		return verticesNeedUpdate;
+	}
+
+	public void setVerticesNeedUpdate(boolean verticesNeedUpdate) {
+		this.verticesNeedUpdate = verticesNeedUpdate;
+	}
+
+	public boolean isElementsNeedUpdate() {
+		return elementsNeedUpdate;
+	}
+
+	public void setElementsNeedUpdate(boolean elementsNeedUpdate) {
+		this.elementsNeedUpdate = elementsNeedUpdate;
+	}
+
+	public boolean isNormalsNeedUpdate() {
+		return normalsNeedUpdate;
+	}
+
+	public void setNormalsNeedUpdate(boolean normalsNeedUpdate) {
+		this.normalsNeedUpdate = normalsNeedUpdate;
+	}
+
+	public boolean isColorsNeedUpdate() {
+		return colorsNeedUpdate;
+	}
+
+	public void setColorsNeedUpdate(boolean colorsNeedUpdate) {
+		this.colorsNeedUpdate = colorsNeedUpdate;
+	}
+
+	public boolean isUvsNeedUpdate() {
+		return uvsNeedUpdate;
+	}
+
+	public void setUvsNeedUpdate(boolean uvsNeedUpdate) {
+		this.uvsNeedUpdate = uvsNeedUpdate;
+	}
+
+	public boolean isTangentsNeedUpdate() {
+		return tangentsNeedUpdate;
+	}
+
+	public void setTangentsNeedUpdate(boolean tangentsNeedUpdate) {
+		this.tangentsNeedUpdate = tangentsNeedUpdate;
+	}
+
+	public boolean isMorphTargetsNeedUpdate() {
+		return morphTargetsNeedUpdate;
+	}
+
+	public void setMorphTargetsNeedUpdate(boolean morphTargetsNeedUpdate) {
+		this.morphTargetsNeedUpdate = morphTargetsNeedUpdate;
+	}
+
+	public boolean isLineDistancesNeedUpdate() {
+		return lineDistancesNeedUpdate;
+	}
+
+	public void setLineDistancesNeedUpdate(boolean lineDistancesNeedUpdate) {
+		this.lineDistancesNeedUpdate = lineDistancesNeedUpdate;
+	}
+
+	public boolean isGroupsNeedUpdate() {
+		return groupsNeedUpdate;
+	}
+
+	public void setGroupsNeedUpdate(boolean groupsNeedUpdate) {
+		this.groupsNeedUpdate = groupsNeedUpdate;
 	}
 	
 	public Box3 getBoundingBox() {

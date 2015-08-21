@@ -24,6 +24,9 @@ public class Box2
 {
 	private Vector2 min;
 	private Vector2 max;
+	
+	// Temporary variables
+	static Vector2 _v1 = new Vector2();
 
 	public Box2()
 	{
@@ -36,17 +39,21 @@ public class Box2
 		this.max = max;
 	}
 
-	public Vector2 getMin() {
+	public Vector2 getMin() 
+	{
 		return min;
 	}
-	public Vector2 getMax() {
+	public Vector2 getMax() 
+	{
 		return max;
 	}
 	
-	public void setMin(Vector2 min) {
+	public void setMin(Vector2 min) 
+	{
 		this.min = min;
 	}
-	public void setMax(Vector2 max) {
+	public void setMax(Vector2 max) 
+	{
 		this.max = max;
 	}
 
@@ -73,10 +80,8 @@ public class Box2
 	}
 
 	public Box2 setFromCenterAndSize( Vector2 center, Vector2 size ) 
-	{
-		Vector2 v1 = new Vector2();
-		
-		Vector2 halfSize = v1.copy( size ).multiply( 0.5 );
+	{		
+		Vector2 halfSize = _v1.copy( size ).multiply( 0.5 );
 		this.min.copy( center ).sub( halfSize );
 		this.max.copy( center ).add( halfSize );
 

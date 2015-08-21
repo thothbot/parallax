@@ -21,20 +21,17 @@ package thothbot.parallax.core.shared.objects;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.regexp.shared.MatchResult;
-import com.google.gwt.regexp.shared.RegExp;
-
-import thothbot.parallax.core.client.shaders.Shader;
 import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.FastMap;
 import thothbot.parallax.core.shared.core.Geometry;
 import thothbot.parallax.core.shared.core.Geometry.MorphTarget;
 import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Mathematics;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 
 public class MorphAnimMesh extends Mesh
 {
@@ -120,10 +117,10 @@ public class MorphAnimMesh extends Mesh
 		{
 			MorphTarget morph = geometry.getMorphTargets().get(i);
 			
-			MatchResult matcher = pattern.exec(morph.name);
-			for (int j=0; i<=matcher.getGroupCount(); i++) {
-			    String label = matcher.getGroup(1);
-			    String num = matcher.getGroup(2);
+			for (MatchResult result = pattern.exec(morph.name); result != null; result = pattern.exec(morph.name)) 
+			{
+			    String label = result.getGroup(1);
+			    String num = result.getGroup(2);
 
 				if ( ! this.animations.containsKey( label ) ) {
 					Animation animation = new Animation();
@@ -177,13 +174,11 @@ public class MorphAnimMesh extends Mesh
 		}
 	}
 
-	public void updateAnimation( int delta ) 
+	public void updateAnimation( double delta ) 
 	{
-//		if(this.getGeometry() == null)
-//			return;
+		if(this.getGeometry() == null)
+			return;
 		
-//		delta = 8;
-
 		double frameTime = (double)this.duration / this.length;
 
 		this.time += this.direction * delta;

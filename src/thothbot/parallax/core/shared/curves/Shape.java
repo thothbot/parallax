@@ -21,9 +21,7 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.shared.Log;
 import thothbot.parallax.core.shared.core.ExtrudeGeometry;
-import thothbot.parallax.core.shared.math.Vector;
 import thothbot.parallax.core.shared.math.Vector2;
 
 /**

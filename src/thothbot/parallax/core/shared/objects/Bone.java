@@ -18,52 +18,38 @@
 
 package thothbot.parallax.core.shared.objects;
 
-import thothbot.parallax.core.shared.core.DimensionalObject;
 import thothbot.parallax.core.shared.core.Object3D;
-import thothbot.parallax.core.shared.math.Matrix4;
 
+/**
+ * A bone which is part of a SkinnedMesh.
+ *
+ */
 public class Bone extends Object3D
 {
 
-	public Object3D skin;
-//	public Matrix4 skinMatrix;
-//	public Matrix4 identityMatrix;
-//
-//	public Bone() 
-//	{
-//		this.skinMatrix = new Matrix4();
-//	}
+	private SkinnedMesh skin;
 
-	public Bone(Object3D belongsToSkin) 
+	/**
+	 * 
+	 * @param belongsToSkin An instance of {@link SkinnedMesh}.
+	 */
+	public Bone(SkinnedMesh belongsToSkin) 
 	{
-//		this();
-		this.skin = belongsToSkin;		
+		this.setSkin(belongsToSkin);		
 	}
 
-//	public void update( Matrix4 parentSkinMatrix, boolean forceUpdate ) 
-//	{
-//		// update local
-//		if ( this.matrixAutoUpdate )
-//			this.updateMatrix();
-//
-//		// update skin matrix
-//		if ( forceUpdate || this.matrixWorldNeedsUpdate ) 
-//		{
-//
-//			if( parentSkinMatrix != null )
-//				this.skinMatrix.multiply( parentSkinMatrix, this.matrix );
-//			else
-//				this.skinMatrix.copy( this.matrix );
-//
-//			this.matrixWorldNeedsUpdate = false;
-//			forceUpdate = true;
-//		}
-//
-//		// update children 
-//		for ( DimensionalObject children : this.getChildren()) 
-//		{
-//			Bone bone = (Bone) children;
-//			bone.update( this.skinMatrix, forceUpdate );
-//		}
-//	}
+	/**
+	 * @return the skin
+	 */
+	public SkinnedMesh getSkin() {
+		return skin;
+	}
+
+	/**
+	 * @param skin the skin to set
+	 */
+	public void setSkin(SkinnedMesh skin) {
+		this.skin = skin;
+	}
+
 }

@@ -18,7 +18,6 @@
 
 package thothbot.parallax.core.shared.math;
 
-import java.lang.reflect.Array;
 
 /**
  * Class implements some mathematical helpers methods.

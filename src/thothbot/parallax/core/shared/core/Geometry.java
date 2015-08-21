@@ -26,8 +26,6 @@ import java.util.Map;
 
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.materials.Material;
 import thothbot.parallax.core.shared.math.Box3;
 import thothbot.parallax.core.shared.math.Color;
 import thothbot.parallax.core.shared.math.Matrix3;
@@ -39,11 +37,13 @@ import thothbot.parallax.core.shared.math.Vector4;
 import thothbot.parallax.core.shared.objects.Bone;
 import thothbot.parallax.core.shared.objects.Line;
 import thothbot.parallax.core.shared.objects.Mesh;
+import thothbot.parallax.core.shared.objects.PointCloud;
 
 import com.google.gwt.core.client.GWT;
 
 /**
- * Base class for geometries
+ * Base class for geometries. A geometry holds all data necessary to describe a 3D model.
+ * 
  * <pre>
  * {@code
  * Geometry geometry = new Geometry();
@@ -103,41 +103,24 @@ public class Geometry extends AbstractGeometry
 	private List<Vector4> skinWeights;
 	private List<Vector4> skinIndices;
 
+	/*
+	 * An array containing distances between vertices for Line geometries. 
+	 * This is required for LinePieces/LineDashedMaterial to render correctly.
+	 * Line distances can also be generated with computeLineDistances.
+	 */
 	private List<Double> lineDistances;
 	
-	public boolean hasTangents = false;
+	/*
+	 * True if geometry has tangents. Set in Geometry.computeTangents.
+	 */
+	private boolean hasTangents = false;
 
-	public boolean dynamic = true; // the intermediate typed arrays will be deleted when set to false
-	
-//	//
-//	
-//	// one-to-one vertex normals, used in Ribbon
-//	private List<Vector3> normals;
-//
-//	
-//	private List<List<Vector2>> faceUvs;	
-//
-//
-//	private boolean isLineDistancesNeedUpdate;
-	
-	// Array of materials.
-//	public List<Material> materials;
-//	
-//	private List<Vector3> skinVerticesA;
-//	private List<Vector3> skinVerticesB;
-//
+	/*
+	 * The intermediate typed arrays will be deleted when set to false
+	 */
+	private boolean dynamic = true; 
+
 	private List<Bone> bones;
-//
-//	public List<List<Integer>> sortArray;
-//	
-//	private boolean isMorphTargetsNeedUpdate;
-//	
-//	private List<GeometryGroup> geometryGroups;
-//	private Map<String, GeometryGroup> geometryGroupsCache;
-//		
-//	private Object3D debug;
-//	
-//	private ArrayList<Vector3> __tmpVertices;
 	
 	public Geometry() 
 	{
@@ -159,35 +142,22 @@ public class Geometry extends AbstractGeometry
 		this.skinIndices = new ArrayList<Vector4>();
 		
 		this.lineDistances = new ArrayList<Double>();
-		//
-
-//		this.faceUvs = new ArrayList<List<Vector2>>();
-//
-//
-//
-//		this.debug = new Object3D();
 	}
-		
-//	public Map<String, GeometryGroup> getGeometryGroupsCache() {
-//		return this.geometryGroupsCache;
-//	}
-//	
-//	public void setGeometryGroupsCache(Map<String, GeometryGroup> geometryGroups) {
-//		this.geometryGroupsCache = geometryGroups;
-//	}
-//	
-//	public List<GeometryGroup> getGeometryGroups() {
-//		return this.geometryGroups;
-//	}
-//	
-//	public void setGeometryGroups(List<GeometryGroup> geometryGroupsList) {
-//		this.geometryGroups = geometryGroupsList;
-//	}
-//	
-//	public Object3D getDebug() {
-//		return this.debug;
-//	}
-//	
+	
+	/**
+	 * Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
+	 * Unless set to true internal typed arrays corresponding to buffers will be deleted once sent to GPU.
+	 * Defaults to true.
+	 * @return
+	 */
+	public boolean isDynamic() {
+		return dynamic;
+	}
+
+	public void setDynamic(boolean dynamic) {
+		this.dynamic = dynamic;
+	}
+
 	/**
 	 * Gets the List of skinning weights, matching number and order of vertices.
 	 */
@@ -202,44 +172,6 @@ public class Geometry extends AbstractGeometry
 		return this.skinIndices;
 	}
 	
-	
-	
-//	public List<Vector3> getSkinVerticesA() {
-//		return this.skinVerticesA;
-//	}
-//	
-//	public void setSkinVerticesA(List<Vector3> skinVerticesA) {
-//		this.skinVerticesA = skinVerticesA;
-//	}
-//	
-//	public List<Vector3> getSkinVerticesB() {
-//		return this.skinVerticesB;
-//	}
-//	
-//	public void setSkinVerticesB(List<Vector3>  skinVerticesB) {
-//		this.skinVerticesB = skinVerticesB;
-//	}
-//
-//	public boolean isMorphTargetsNeedUpdate() {
-//		return isMorphTargetsNeedUpdate;
-//	}
-//
-//	public void setMorphTargetsNeedUpdate(boolean isMorphTargetsNeedUpdate) {
-//		this.isMorphTargetsNeedUpdate = isMorphTargetsNeedUpdate;
-//	}
-//
-//	public void setFaceUvs(List<List<Vector2>> faceUvs) {
-//		this.faceUvs = faceUvs;
-//	}
-
-//	/**
-//	 * Gets the List of face {@link UV} layers.
-//	 * Each UV layer is an List of {@link UV} matching order and number of faces.
-//	 */
-//	public List<List<Vector2>> getFaceUvs() {
-//		return faceUvs;
-//	}
-
 	public List<Double> getLineDistances() {
 		return lineDistances;
 	}
@@ -251,8 +183,9 @@ public class Geometry extends AbstractGeometry
 	/**
 	 * Gets List of vertex {@link Color}s, matching number and order of vertices.
 	 * <p>
-	 * Used in {@link ParticleSystem}, {@link Line} and {@link Ribbon}.<br>
+	 * Used in {@link PointCloud}, {@link Line}.<br>
 	 * {@link Mesh}es use per-face-use-of-vertex colors embedded directly in faces.
+	 * To signal an update in this array, Geometry.colorsNeedUpdate needs to be set to true.
 	 */
 	public List<Color> getColors() {
 		return colors;
@@ -263,24 +196,12 @@ public class Geometry extends AbstractGeometry
 	}
 
 	/**
-	 * Gets the List of triangles: {@link Face3} or/and quads: {@link Face4}
+	 * Gets the List of triangles: {@link Face3}. The array of faces describe how each vertex in the model is connected with each other.
+	 * To signal an update in this array, Geometry.elementsNeedUpdate needs to be set to true.
 	 */
 	public List<Face3> getFaces() {
 		return faces;
 	}
-	
-//	/**
-//	 * Gets the List of {@link Material}s.
-//	 */
-//	public List<Material> getMaterials() 
-//	{
-//		return this.materials;
-//	}
-//	
-//	public void setMaterials(List<Material> materials) 
-//	{
-//		this.materials = materials;
-//	}
 	
 	public void setVertices(List<Vector3> vertices) 
 	{
@@ -288,7 +209,8 @@ public class Geometry extends AbstractGeometry
 	}
 
 	/**
-	 * Gets List of {@link Vector3}.
+	 * Gets List of {@link Vector3}. The array of vertices holds every position of points in the model.
+	 * To signal an update in this array, Geometry.verticesNeedUpdate needs to be set to true.
 	 */
 	public List<Vector3> getVertices() 
 	{
@@ -303,6 +225,11 @@ public class Geometry extends AbstractGeometry
 		return morphTargets;
 	}
 
+	/**
+	 * Get the List of {@link Geometry.MorphNormal}.
+	 * Morph normals have similar structure as morph targets 
+	 * @return
+	 */
 	public List<MorphNormal> getMorphNormals() {
 		return morphNormals;
 	}
@@ -317,7 +244,8 @@ public class Geometry extends AbstractGeometry
 	
 	/**
 	 * Gets the List of face {@link UV} layers.
-	 * Each UV layer is an List of UV matching order and number of vertices in faces.
+	 * Each UV layer is an array of UVs matching the order and number of vertices in faces.
+	 * To signal an update in this array, Geometry.uvsNeedUpdate needs to be set to true.
 	 */
 	public List<List<List<Vector2>>> getFaceVertexUvs(){
 		return this.faceVertexUvs;
@@ -334,9 +262,23 @@ public class Geometry extends AbstractGeometry
 	public void setBones(List<Bone> bones) {
 		this.bones = bones;
 	}
+	
+	/**
+	 * @return the hasTangents
+	 */
+	public boolean isHasTangents() {
+		return hasTangents;
+	}
 
 	/**
-	 * Makes matrix transform directly into vertex coordinates.	
+	 * @param hasTangents the hasTangents to set
+	 */
+	public void setHasTangents(boolean hasTangents) {
+		this.hasTangents = hasTangents;
+	}
+
+	/**
+	 * Bakes matrix transform directly into vertex coordinates.
 	 */
 	public void applyMatrix(Matrix4 matrix)
 	{
@@ -367,9 +309,8 @@ public class Geometry extends AbstractGeometry
 		this.computeBoundingSphere();
 	}
 	
-	public Geometry fromBufferGeometry( BufferGeometry geometry ) {
-
-		Map<String, BufferAttribute> attributes = geometry.getAttributes();
+	public Geometry fromBufferGeometry( BufferGeometry geometry ) 
+	{
 
 		Float32Array vertices = (Float32Array)geometry.getAttribute("position").getArray();
 		Uint16Array indices = geometry.getAttribute("index") != null 
@@ -452,7 +393,8 @@ public class Geometry extends AbstractGeometry
 
 	}
 	
-	public Vector3 center() {
+	public Vector3 center() 
+	{
 
 		this.computeBoundingBox();
 
@@ -468,6 +410,9 @@ public class Geometry extends AbstractGeometry
 
 	}
 	
+	/**
+	 * Computes face normals.
+	 */
 	public void computeFaceNormals() {
 
 		Vector3 cb = new Vector3(), ab = new Vector3();
@@ -517,9 +462,8 @@ public class Geometry extends AbstractGeometry
 			// vertex normals weighted by triangle areas
 			// http://www.iquilezles.org/www/articles/normals/normals.htm
 
-			Vector3 vA, vB, vC, vD;
-			Vector3 cb = new Vector3(), ab = new Vector3(),
-				db = new Vector3(), dc = new Vector3(), bc = new Vector3();
+			Vector3 vA, vB, vC;
+			Vector3 cb = new Vector3(), ab = new Vector3();
 
 			for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
 
@@ -576,7 +520,11 @@ public class Geometry extends AbstractGeometry
 		}
 	}
 
-	public void computeMorphNormals() {
+	/**
+	 * Computes morph normals.
+	 */
+	public void computeMorphNormals() 
+	{
 
 		Face3 face;
 
@@ -753,9 +701,12 @@ public class Geometry extends AbstractGeometry
 			}
 		}
 
-		this.hasTangents = true;
+		this.setHasTangents(true);
 	}
 	
+	/**
+	 * Compute distances between vertices for Line geometries.
+	 */
 	public void computeLineDistances( ) 
 	{
 		double d = 0;
@@ -770,7 +721,6 @@ public class Geometry extends AbstractGeometry
 			this.lineDistances.add( i, d );
 		}
 	}
-	
 
 	/**
 	 * Computes bounding box of the geometry.
@@ -805,13 +755,22 @@ public class Geometry extends AbstractGeometry
 
 	}
 	
-	public void merge( Geometry geometry, Matrix4 matrix ) {
+	public void merge( Geometry geometry, Matrix4 matrix ) 
+	{
 		
 		merge(geometry, matrix, 0);
 		
 	}
 
-	public void merge( Geometry geometry, Matrix4 matrix, int materialIndexOffset ) {
+	/**
+	 * Merge two geometries or geometry and geometry from object (using object's transform)
+	 * 
+	 * @param geometry
+	 * @param matrix
+	 * @param materialIndexOffset
+	 */
+	public void merge( Geometry geometry, Matrix4 matrix, int materialIndexOffset ) 
+	{
 
 		Matrix3 normalMatrix = null;
 		
@@ -964,15 +923,12 @@ public class Geometry extends AbstractGeometry
 
 			int[] indices = { face.getA(), face.getB(), face.getC() };
 
-			int dupIndex = -1;
-
 			// if any duplicate vertices are found in a Face3
 			// we have to remove the face as nothing can be saved
 			for ( int n = 0; n < 3; n ++ ) 
 			{
 				if ( indices[ n ] == indices[ ( n + 1 ) % 3 ] ) 
 				{
-					dupIndex = n;
 					faceIndicesToRemove.add( i );
 					break;
 				}
@@ -996,6 +952,9 @@ public class Geometry extends AbstractGeometry
 		return diff;
 	}
 	
+	/**
+	 * Creates a new clone of the Geometry.
+	 */
 	public Geometry clone() {
 
 		Geometry geometry = new Geometry();

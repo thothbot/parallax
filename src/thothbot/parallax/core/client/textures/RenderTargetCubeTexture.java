@@ -21,7 +21,6 @@ package thothbot.parallax.core.client.textures;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.client.gl2.WebGLConstants;
 import thothbot.parallax.core.client.gl2.WebGLFramebuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderbuffer;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -56,11 +55,16 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			return;
 	
 		gl.deleteTexture(this.getWebGlTexture());
+		this.setWebGlTexture(null);
+		
 		for (int i = 0; i < 6; i++) 
 		{
 			gl.deleteFramebuffer(this.webglFramebuffer.get(i));
 			gl.deleteRenderbuffer(this.webglRenderbuffer.get(i));
 		}
+		
+		this.webglFramebuffer = null;
+		this.webglRenderbuffer = null;
 	}
 	
 	@Override

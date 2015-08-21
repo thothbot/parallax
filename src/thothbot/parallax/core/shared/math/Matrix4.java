@@ -18,8 +18,6 @@
 
 package thothbot.parallax.core.shared.math;
 
-import com.google.gwt.core.client.JsArrayNumber;
-
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.shared.Log;
 
@@ -42,6 +40,14 @@ import thothbot.parallax.core.shared.Log;
 public class Matrix4
 {
 	private Float32Array elements;
+	
+	// Temporary variables
+	static Vector3 _x = new Vector3();
+	static Vector3 _y = new Vector3();
+	static Vector3 _z = new Vector3();
+	static Vector3 _v1 = new Vector3();
+	static Vector3 _vector = new Vector3();
+	static Matrix4 _matrix = new Matrix4();
 
 	/**
 	 * Default constructor will make identity four-dimensional matrix.
@@ -398,35 +404,31 @@ public class Matrix4
 	 */
 	public Matrix4 lookAt(Vector3 eye, Vector3 target, Vector3 up)
 	{
-		Vector3 x = new Vector3();
-		Vector3 y = new Vector3();
-		Vector3 z = new Vector3();
-
 		Float32Array te = this.elements;
 
-		z.sub( eye, target ).normalize();
+		_z.sub( eye, target ).normalize();
 
-		if ( z.length() == 0 ) {
+		if ( _z.length() == 0 ) {
 
-			z.z = 1.0;
-
-		}
-
-		x.cross( up, z ).normalize();
-
-		if ( x.length() == 0 ) {
-
-			z.x += 0.0001;
-			x.cross( up, z ).normalize();
+			_z.z = 1.0;
 
 		}
 
-		y.cross( z, x );
+		_x.cross( up, _z ).normalize();
+
+		if ( _x.length() == 0 ) {
+
+			_z.x += 0.0001;
+			_x.cross( up, _z ).normalize();
+
+		}
+
+		_y.cross( _z, _x );
 
 
-		te.set(0,  x.getX()); te.set(4,  y.getX()); te.set(8,  z.getX());
-		te.set(1,  x.getY()); te.set(5,  y.getY()); te.set(9,  z.getY());
-		te.set(2,  x.getZ()); te.set(6,  y.getZ()); te.set(10,  z.getZ());
+		te.set(0,  _x.getX()); te.set(4,  _y.getX()); te.set(8,  _z.getX());
+		te.set(1,  _x.getY()); te.set(5,  _y.getY()); te.set(9,  _z.getY());
+		te.set(2,  _x.getZ()); te.set(6,  _y.getZ()); te.set(10,  _z.getZ());
 
 		return this;
 
@@ -523,25 +525,24 @@ public class Matrix4
 		return this;
 	}
 	
-	public Float32Array applyToVector3Array (Float32Array array) {
+	public Float32Array applyToVector3Array (Float32Array array) 
+	{
 		return applyToVector3Array(array, 0, array.getLength());
 	}
 	
-	public Float32Array applyToVector3Array (Float32Array array, int offset, int length) {
-
-		Vector3 v1 = new Vector3();
-
+	public Float32Array applyToVector3Array (Float32Array array, int offset, int length) 
+	{
 		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
 
-			v1.x = array.get( j );
-			v1.y = array.get( j + 1 );
-			v1.z = array.get( j + 2 );
+			_v1.x = array.get( j );
+			_v1.y = array.get( j + 1 );
+			_v1.z = array.get( j + 2 );
 
-			v1.apply( this );
+			_v1.apply( this );
 
-			array.set( j , v1.x);
-			array.set( j + 1 , v1.y);
-			array.set( j + 2 , v1.z);
+			array.set( j , _v1.x);
+			array.set( j + 1 , _v1.y);
+			array.set( j + 2 , _v1.z);
 
 		}
 
@@ -718,22 +719,22 @@ public class Matrix4
 		double n31 = me.get(2), n32 = me.get(6), n33 = me.get(10), n34 = me.get(14);
 		double n41 = me.get(3), n42 = me.get(7), n43 = me.get(11), n44 = me.get(15);
 
-		te.set(0, n23*n34*n42 - n24*n33*n42 + n24*n32*n43 - n22*n34*n43 - n23*n32*n44 + n22*n33*n44);
-		te.set(4, n14*n33*n42 - n13*n34*n42 - n14*n32*n43 + n12*n34*n43 + n13*n32*n44 - n12*n33*n44);
-		te.set(8, n13*n24*n42 - n14*n23*n42 + n14*n22*n43 - n12*n24*n43 - n13*n22*n44 + n12*n23*n44);
-		te.set(12, n14*n23*n32 - n13*n24*n32 - n14*n22*n33 + n12*n24*n33 + n13*n22*n34 - n12*n23*n34);
-		te.set(1, n24*n33*n41 - n23*n34*n41 - n24*n31*n43 + n21*n34*n43 + n23*n31*n44 - n21*n33*n44);
-		te.set(5, n13*n34*n41 - n14*n33*n41 + n14*n31*n43 - n11*n34*n43 - n13*n31*n44 + n11*n33*n44);
-		te.set(9, n14*n23*n41 - n13*n24*n41 - n14*n21*n43 + n11*n24*n43 + n13*n21*n44 - n11*n23*n44);
-		te.set(13, n13*n24*n31 - n14*n23*n31 + n14*n21*n33 - n11*n24*n33 - n13*n21*n34 + n11*n23*n34);
-		te.set(2, n22*n34*n41 - n24*n32*n41 + n24*n31*n42 - n21*n34*n42 - n22*n31*n44 + n21*n32*n44);
-		te.set(6, n14*n32*n41 - n12*n34*n41 - n14*n31*n42 + n11*n34*n42 + n12*n31*n44 - n11*n32*n44);
-		te.set(10, n12*n24*n41 - n14*n22*n41 + n14*n21*n42 - n11*n24*n42 - n12*n21*n44 + n11*n22*n44);
-		te.set(14, n14*n22*n31 - n12*n24*n31 - n14*n21*n32 + n11*n24*n32 + n12*n21*n34 - n11*n22*n34);
-		te.set(3, n23*n32*n41 - n22*n33*n41 - n23*n31*n42 + n21*n33*n42 + n22*n31*n43 - n21*n32*n43);
-		te.set(7, n12*n33*n41 - n13*n32*n41 + n13*n31*n42 - n11*n33*n42 - n12*n31*n43 + n11*n32*n43);
-		te.set(11, n13*n22*n41 - n12*n23*n41 - n13*n21*n42 + n11*n23*n42 + n12*n21*n43 - n11*n22*n43);
-		te.set(15, n12*n23*n31 - n13*n22*n31 + n13*n21*n32 - n11*n23*n32 - n12*n21*n33 + n11*n22*n33);
+		te.set(0,  n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44);
+		te.set(4,  n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44);
+		te.set(8,  n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44);
+		te.set(12, n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34);
+		te.set(1,  n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 + n23 * n31 * n44 - n21 * n33 * n44);
+		te.set(5,  n13 * n34 * n41 - n14 * n33 * n41 + n14 * n31 * n43 - n11 * n34 * n43 - n13 * n31 * n44 + n11 * n33 * n44);
+		te.set(9,  n14 * n23 * n41 - n13 * n24 * n41 - n14 * n21 * n43 + n11 * n24 * n43 + n13 * n21 * n44 - n11 * n23 * n44);
+		te.set(13, n13 * n24 * n31 - n14 * n23 * n31 + n14 * n21 * n33 - n11 * n24 * n33 - n13 * n21 * n34 + n11 * n23 * n34);
+		te.set(2,  n22 * n34 * n41 - n24 * n32 * n41 + n24 * n31 * n42 - n21 * n34 * n42 - n22 * n31 * n44 + n21 * n32 * n44);
+		te.set(6,  n14 * n32 * n41 - n12 * n34 * n41 - n14 * n31 * n42 + n11 * n34 * n42 + n12 * n31 * n44 - n11 * n32 * n44);
+		te.set(10, n12 * n24 * n41 - n14 * n22 * n41 + n14 * n21 * n42 - n11 * n24 * n42 - n12 * n21 * n44 + n11 * n22 * n44);
+		te.set(14, n14 * n22 * n31 - n12 * n24 * n31 - n14 * n21 * n32 + n11 * n24 * n32 + n12 * n21 * n34 - n11 * n22 * n34);
+		te.set(3,  n23 * n32 * n41 - n22 * n33 * n41 - n23 * n31 * n42 + n21 * n33 * n42 + n22 * n31 * n43 - n21 * n32 * n43);
+		te.set(7,  n12 * n33 * n41 - n13 * n32 * n41 + n13 * n31 * n42 - n11 * n33 * n42 - n12 * n31 * n43 + n11 * n32 * n43);
+		te.set(11, n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 + n12 * n21 * n43 - n11 * n22 * n43);
+		te.set(15, n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 - n12 * n21 * n33 + n11 * n22 * n33);
 		
 		double det = n11 * te.get( 0 ) + n21 * te.get( 4 ) + n31 * te.get( 8 ) + n41 * te.get( 12 );
 
@@ -930,14 +931,11 @@ public class Matrix4
 
 	public Matrix4 decompose(Vector3 position, Quaternion quaternion, Vector3 scale)
 	{
-		Vector3 vector = new Vector3();
-		Matrix4 matrix = new Matrix4();
-
 		Float32Array te = this.elements;
 
-		double sx = vector.set( te.get( 0 ), te.get( 1 ), te.get( 2 ) ).length();
-		double sy = vector.set( te.get( 4 ), te.get( 5 ), te.get( 6 ) ).length();
-		double sz = vector.set( te.get( 8 ), te.get( 9 ), te.get( 10 ) ).length();
+		double sx = _vector.set( te.get( 0 ), te.get( 1 ), te.get( 2 ) ).length();
+		double sy = _vector.set( te.get( 4 ), te.get( 5 ), te.get( 6 ) ).length();
+		double sz = _vector.set( te.get( 8 ), te.get( 9 ), te.get( 10 ) ).length();
 
 		// if determine is negative, we need to invert one scale
 		double det = this.determinant();
@@ -951,25 +949,25 @@ public class Matrix4
 
 		// scale the rotation part
 
-		matrix.elements.set( this.elements ); // at this point matrix is incomplete so we can't use .copy()
+		_matrix.elements.set( this.elements ); // at this point matrix is incomplete so we can't use .copy()
 
 		double invSX = 1.0 / sx;
 		double invSY = 1.0 / sy;
 		double invSZ = 1.0 / sz;
 
-		matrix.elements.set( 0, matrix.elements.get( 0 ) * invSX );
-		matrix.elements.set( 1, matrix.elements.get( 1 ) * invSX );
-		matrix.elements.set( 2, matrix.elements.get( 2 ) * invSX );
+		_matrix.elements.set( 0, _matrix.elements.get( 0 ) * invSX );
+		_matrix.elements.set( 1, _matrix.elements.get( 1 ) * invSX );
+		_matrix.elements.set( 2, _matrix.elements.get( 2 ) * invSX );
 
-		matrix.elements.set( 4, matrix.elements.get( 4 ) * invSY );
-		matrix.elements.set( 5, matrix.elements.get( 5 ) * invSY );
-		matrix.elements.set( 6, matrix.elements.get( 6 ) * invSY );
+		_matrix.elements.set( 4, _matrix.elements.get( 4 ) * invSY );
+		_matrix.elements.set( 5, _matrix.elements.get( 5 ) * invSY );
+		_matrix.elements.set( 6, _matrix.elements.get( 6 ) * invSY );
 
-		matrix.elements.set( 8, matrix.elements.get( 8 ) * invSZ );
-		matrix.elements.set( 9, matrix.elements.get( 9 ) * invSZ );
-		matrix.elements.set( 10, matrix.elements.get( 10 ) * invSZ );
+		_matrix.elements.set( 8, _matrix.elements.get( 8 ) * invSZ );
+		_matrix.elements.set( 9, _matrix.elements.get( 9 ) * invSZ );
+		_matrix.elements.set( 10, _matrix.elements.get( 10 ) * invSZ );
 
-		quaternion.setFromRotationMatrix( matrix );
+		quaternion.setFromRotationMatrix( _matrix );
 
 		scale.x = sx;
 		scale.y = sy;

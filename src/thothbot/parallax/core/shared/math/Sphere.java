@@ -26,6 +26,9 @@ public class Sphere
 	private Vector3 center;
 	private double radius;
 	
+	// Temporary variables
+	static Box3 _box = new Box3();
+	
 	public Sphere() 
 	{
 		this(new Vector3(), 0);
@@ -66,30 +69,27 @@ public class Sphere
 		return this;
 	}
 	
-	public Sphere setFromPoints(List<Vector3> points, Vector3 optionalCenter) {
+	public Sphere setFromPoints(List<Vector3> points, Vector3 optionalCenter) 
+	{
 		return setFromPoints(points.toArray(new Vector3[points.size()]), optionalCenter);
 	}
-	
-	public Sphere setFromPoints(Vector3[] points, Vector3 optionalCenter) {
 
-		Box3 box = new Box3();
-
-		if ( optionalCenter != null ) {
-
+	public Sphere setFromPoints(Vector3[] points, Vector3 optionalCenter) 
+	{
+		if ( optionalCenter != null ) 
+		{
 			center.copy( optionalCenter );
-
-		} else {
-
-			box.setFromPoints( points ).center( center );
-
+		} 
+		else 
+		{
+			_box.setFromPoints( points ).center( center );
 		}
 
 		double maxRadiusSq = 0;
 
-		for ( int i = 0, il = points.length; i < il; i ++ ) {
-
+		for ( int i = 0, il = points.length; i < il; i ++ ) 
+		{
 			maxRadiusSq = Math.max( maxRadiusSq, center.distanceToSquared( points[ i ] ) );
-
 		}
 
 		this.radius = Math.sqrt( maxRadiusSq );

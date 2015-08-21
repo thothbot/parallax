@@ -86,15 +86,6 @@ public class MeshBasicMaterial extends Material
 	{
 		return new BasicShader();
 	}
-	
-	public Material.SHADING bufferGuessNormalType () 
-	{
-		// only MeshBasicMaterial and MeshDepthMaterial don't need normals
-		if (this.envMap == null)
-			return null;
-
-		return super.bufferGuessNormalType();
-	}
 
 	@Override
 	public boolean isWireframe() {

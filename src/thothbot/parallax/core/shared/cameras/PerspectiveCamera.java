@@ -31,9 +31,9 @@ import thothbot.parallax.core.shared.math.Mathematics;
  * @author thothbot
  *
  */
-public class PerspectiveCamera extends Camera
+public class PerspectiveCamera extends Camera implements HasNearFar
 {
-	protected double zoom = 1.0;
+	public double zoom = 1.0;
 	
 	protected double fov;
 	protected double aspect;

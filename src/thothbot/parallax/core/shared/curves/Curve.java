@@ -21,7 +21,6 @@ package thothbot.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.shared.math.Vector;
 import thothbot.parallax.core.shared.math.Vector2;
 
 // Abstract Curve base class
@@ -35,19 +34,19 @@ public abstract class Curve
 	/*
 	 * Virtual base class method to overwrite and implement in subclasses - t [0 .. 1]
 	 */
-	public abstract Vector getPoint(double t);
+	public abstract Vector2 getPoint(double t);
 
 	/*
 	 * Get point at relative position in curve according to arc length - u [0 .. 1]
 	 */
-	public Vector getPointAt(double u)
+	public Vector2 getPointAt(double u)
 	{
 		double t = getUtoTmapping(u);
 
 		return getPoint(t);
 	}
 
-	public List<Vector> getPoints()
+	public List<Vector2> getPoints()
 	{
 		return getPoints(5);
 	}
@@ -55,16 +54,16 @@ public abstract class Curve
 	/*
 	 * Get sequence of points using getPoint( t )
 	 */
-	public List<Vector> getPoints(int divisions)
+	public List<Vector2> getPoints(int divisions)
 	{
-		List<Vector> pts = new ArrayList<Vector>();
+		List<Vector2> pts = new ArrayList<Vector2>();
 		for (int d = 0; d <= divisions; d++)
 			pts.add(this.getPoint(d / (double)divisions));
 
 		return pts;
 	}
 
-	public List<Vector> getSpacedPoints()
+	public List<Vector2> getSpacedPoints()
 	{
 		return getSpacedPoints(5);
 	}
@@ -72,9 +71,9 @@ public abstract class Curve
 	/*
 	 * Get sequence of points using getPointAt( u )
 	 */
-	public List<Vector> getSpacedPoints(int divisions)
+	public List<Vector2> getSpacedPoints(int divisions)
 	{
-		List<Vector> pts = new ArrayList<Vector>();
+		List<Vector2> pts = new ArrayList<Vector2>();
 
 		for (int d = 0; d <= divisions; d++)
 			pts.add(this.getPointAt(d / (double)divisions));
@@ -116,11 +115,11 @@ public abstract class Curve
 		List<Double> cache = new ArrayList<Double>(); 
 		cache.add(0.0);
 
-		Vector last = this.getPoint(0.0);
+		Vector2 last = this.getPoint(0.0);
 		double sum = 0;
 		for (int p = 1; p <= divisions; p++) 
 		{
-			Vector current = getPoint(p / (double)divisions);
+			Vector2 current = getPoint(p / (double)divisions);
 			sum += current.distanceTo(last);
 
 			last = current;
@@ -224,7 +223,7 @@ public abstract class Curve
 	 * delta and find a gradient of the 2 points which seems to make a
 	 * reasonable approximation
 	 */
-	public Vector getTangent(double t)
+	public Vector2 getTangent(double t)
 	{
 		double delta = 0.0001;
 		double t1 = t - delta;
@@ -236,16 +235,16 @@ public abstract class Curve
 		if (t2 > 1)
 			t2 = 1;
 
-		Vector pt1 = this.getPoint(t1);
-		Vector pt2 = this.getPoint(t2);
+		Vector2 pt1 = this.getPoint(t1);
+		Vector2 pt2 = this.getPoint(t2);
 
-		Vector vec = pt2.clone();
+		Vector2 vec = pt2.clone();
 		vec.sub(pt1);
 		vec.normalize();
 		return vec;
 	}
 
-	public Vector getTangentAt(double u)
+	public Vector2 getTangentAt(double u)
 	{
 		return this.getTangent(this.getUtoTmapping(u));
 	}
