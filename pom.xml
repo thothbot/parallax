@@ -4,7 +4,7 @@
     <groupId>thothbot.parallax</groupId>
     <artifactId>parallax</artifactId>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
     <name>parallax3d</name>
 
     <properties>
@@ -28,6 +28,23 @@
 
     <build>
         <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <includes>
+                    <include>**/*.java</include>
+                    <include>**/*.gwt.xml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.txt</include>
+                    <include>**/*.json</include>
+                    <include>**/*.vm</include>
+                    <include>**/*.png</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.css</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
