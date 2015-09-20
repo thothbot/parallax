@@ -311,7 +311,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	 * @param width  the new width of the {@link Canvas3d}.
 	 * @param height the new height of the {@link Canvas3d}.
 	 */
-	private void setSize(int width, int height) 
+	protected void setSize(int width, int height) 
 	{
 		Log.debug("RenderingPanel: set size: W=" + width + ", H=" + height); 
 
