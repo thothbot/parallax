@@ -108,6 +108,14 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	{
 		return this.renderer;
 	}
+	
+	/**
+	 * Check to see if the scene is loaded and rendered
+	 * @return true if the screne is loaded, false otherwise
+	 */
+	public boolean isLoaded() {
+		return isLoaded;
+	}
 
 	/**
 	 * Gets {@link AnimatedScene} instance associated with the widget.
