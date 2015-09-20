@@ -113,7 +113,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	 * Check to see if the scene is loaded and rendered
 	 * @return true if the screne is loaded, false otherwise
 	 */
-	public boolean isLoaded() {
+	public boolean isReady() {
 		return isLoaded;
 	}
 
