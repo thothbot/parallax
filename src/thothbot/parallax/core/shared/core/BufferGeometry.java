@@ -489,7 +489,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			if ( getAttribute("index") != null ) {
 
-				Uint16Array indices = (Uint16Array) getAttribute("normal").getArray();
+				Uint16Array indices = (Uint16Array) getAttribute("index").getArray();
 
 				List<BufferGeometry.DrawCall> offsets = this.drawcalls.size() > 0 
 						? this.drawcalls 
