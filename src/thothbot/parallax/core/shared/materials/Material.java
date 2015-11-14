@@ -673,10 +673,12 @@ public abstract class Material
   
 	private String getExtensionsFragment(ProgramParameters parameters)
 	{
+		String s = "";
+		if (parameters.logarithmicDepthBuffer)
+			s += "#extension GL_EXT_frag_depth : enable\n\n";
 		if (parameters.bumpMap || parameters.normalMap)
-			return "#extension GL_OES_standard_derivatives : enable\n\n";
-		else
-			return "";
+			s += "#extension GL_OES_standard_derivatives : enable\n\n";
+		return s;
 	}
 
 	private String getPrefixFragment(ProgramParameters parameters)
