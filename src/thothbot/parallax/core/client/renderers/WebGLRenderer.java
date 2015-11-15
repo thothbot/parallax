@@ -340,7 +340,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		
 		if ( _logarithmicDepthBuffer ) 
 		{
-			WebGLExtensions.get(gl, WebGLExtensions.Id.EXT_frag_depth);
+			_logarithmicDepthBuffer = WebGLExtensions.get(gl, WebGLExtensions.Id.EXT_frag_depth);
 		}
 		
 		WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
