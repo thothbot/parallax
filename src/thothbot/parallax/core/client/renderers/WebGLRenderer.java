@@ -507,7 +507,15 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	public boolean isAutoUpdateScene() {
 		return isAutoUpdateScene;
 	}
-	
+
+	public boolean isLogarithmicDepthBufferEnabled(){
+		return _logarithmicDepthBuffer;
+	}
+
+	public void setLogarithmicDepthBuffer(boolean enable){
+		this._logarithmicDepthBuffer = enable;
+	}
+
 	public boolean isGammaInput() {
 		return this.gammaInput;
 	}
@@ -515,7 +523,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	public void setGammaInput(boolean isGammaInput) {
 		this.gammaInput = isGammaInput;
 	}
-	
+
 	public boolean isGammaOutput() {
 		return this.gammaOutput;
 	}
