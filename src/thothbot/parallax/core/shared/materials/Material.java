@@ -827,13 +827,13 @@ public abstract class Material
 		
 		if(this instanceof HasMap)
 			uvScaleMap = ((HasMap) this).getMap();
-		else if(this instanceof HasSpecularMap)
+		if(uvScaleMap == null && this instanceof HasSpecularMap)
 			uvScaleMap = ((HasSpecularMap)this).getSpecularMap();
-		else if(this instanceof HasNormalMap)
+		if(uvScaleMap == null && this instanceof HasNormalMap)
 			uvScaleMap = ((HasNormalMap)this).getNormalMap();
-		else if(this instanceof HasBumpMap)
+		if(uvScaleMap == null && this instanceof HasBumpMap)
 			uvScaleMap = ((HasBumpMap)this).getBumpMap();
-		else if(this instanceof HasAlphaMap)
+		if(uvScaleMap == null && this instanceof HasAlphaMap)
 			uvScaleMap = ((HasAlphaMap)this).getAlphaMap();
 		
 		if(uvScaleMap != null)
