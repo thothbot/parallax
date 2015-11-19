@@ -108,6 +108,14 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	{
 		return this.renderer;
 	}
+	
+	/**
+	 * Check to see if the scene is loaded and rendered
+	 * @return true if the screne is loaded, false otherwise
+	 */
+	public boolean isReady() {
+		return isLoaded;
+	}
 
 	/**
 	 * Gets {@link AnimatedScene} instance associated with the widget.
@@ -311,7 +319,7 @@ public class RenderingPanel extends LayoutPanel implements IsWidget, HasWidgets,
 	 * @param width  the new width of the {@link Canvas3d}.
 	 * @param height the new height of the {@link Canvas3d}.
 	 */
-	private void setSize(int width, int height) 
+	protected void setSize(int width, int height) 
 	{
 		Log.debug("RenderingPanel: set size: W=" + width + ", H=" + height); 
 
