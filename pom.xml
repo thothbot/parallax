@@ -4,7 +4,7 @@
     <groupId>thothbot.parallax</groupId>
     <artifactId>parallax</artifactId>
     <packaging>jar</packaging>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.7-SNAPSHOT</version>
     <name>parallax3d</name>
 
     <properties>
