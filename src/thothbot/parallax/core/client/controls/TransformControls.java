@@ -511,11 +511,11 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 	}
 
 	private void setGeometry(String mode) {
-		if(MyTransformControls.Mode.TRANSLATE.equals(mode)) {
+		if(TransformControls.Mode.TRANSLATE.equals(mode)) {
 //			this.gizmoTranslate.show();
-		} else if(MyTransformControls.Mode.ROTATE.equals(mode)) {
+		} else if(TransformControls.Mode.ROTATE.equals(mode)) {
 //			this.gizmoRotate.show();
-		} else if(MyTransformControls.Mode.SCALE.equals(mode)) {
+		} else if(TransformControls.Mode.SCALE.equals(mode)) {
 			this.geometry=this.gizmoScale.getGeometry();
 		}
 	}
