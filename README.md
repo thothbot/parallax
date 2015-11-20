@@ -1,6 +1,6 @@
 Parallax 
 =============
-##### master [![Build Status](https://travis-ci.org/svv2014/parallax.svg?branch=master)](https://travis-ci.org/svv2014/parallax) dev [![Build Status](https://travis-ci.org/svv2014/parallax.svg?branch=dev)](https://travis-ci.org/svv2014/parallax)
+##### master [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=master)](https://travis-ci.org/thothbot/parallax) dev [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=dev)](https://travis-ci.org/thothbot/parallax)
 
 #### Google Web Toolkit 3D library ####
 
