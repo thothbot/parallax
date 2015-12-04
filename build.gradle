@@ -1,0 +1,67 @@
+ext {
+    GROUPID = "org.parallax3d.parallax"
+    VERSION = "2.0-SNAPSHOT"
+    robovmVersion = "1.9.0"
+    androidVersion = "4.4"
+    gwtVersion = "2.7.0"
+    jglfwVersion = "1.1"
+    lwjglVersion = "2.9.2"
+    jorbisVersion = "0.0.17"
+    junitVersion = "4.11"
+}
+
+buildscript {
+    repositories { mavenCentral() }
+    dependencies {
+        classpath "com.android.tools.build:gradle:1.2.3"
+        classpath "org.robovm:robovm-gradle-plugin:1.5.0"
+    }
+}
+
+// apply the following to all projects, except the
+// Android test project, that one has its own
+// build.gradle file cause Android is special...
+configure(allprojects) {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+    apply plugin: "java"
+
+    compileJava.options.encoding = 'UTF-8';
+
+    repositories {
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+
+    group = GROUPID
+    version = VERSION
+
+    // set source Java version
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+    sourceSets.main.java.srcDirs = ["src"]
+    sourceSets.main.resources.srcDirs = ["src"]
+
+    // create a custom configuration for local dependencies such as Android runtime
+    configurations {
+        optional
+        compile.extendsFrom optional
+    }
+}
+
+project(":core") {
+
+    sourceSets.test.java.srcDirs = ["test"]
+
+    dependencies {
+        testCompile "junit:junit:$junitVersion"
+    }
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption("Xdoclint:none", "-quiet")
+        }
+    }
+}

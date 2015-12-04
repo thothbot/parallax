@@ -27,7 +27,7 @@ public class FrustumTest extends GWTTestCase
 	
 	@Override
 	public String getModuleName() {
-		return "thothbot.parallax.core.Core";
+		return "org.parallax3d.parallax.core.Core";
 	}
 	
 	public void testFrustum()
