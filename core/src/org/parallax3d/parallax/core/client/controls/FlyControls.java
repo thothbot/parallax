@@ -19,8 +19,8 @@
 package org.parallax3d.parallax.core.client.controls;
 
 import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.math.Quaternion;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.math.Quaternion;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
@@ -37,9 +37,6 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.math.Quaternion;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public final class FlyControls extends Controls implements 
 	MouseMoveHandler, MouseDownHandler, MouseUpHandler, 

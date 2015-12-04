@@ -23,9 +23,6 @@ import java.util.List;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.lights.Light;
 import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 public abstract class Plugin 
 {
@@ -76,7 +73,7 @@ public abstract class Plugin
 		this.isRendering = isRendering;
 	}
 
-	public abstract Plugin.TYPE getType();
+	public abstract TYPE getType();
 
 	public abstract void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight );
 

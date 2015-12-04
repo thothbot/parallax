@@ -72,7 +72,7 @@ public class FontUtils
 				//throw ( "Warning, unable to triangulate polygon!" );
 				//return null;
 				// Sometimes warning is fine, especially polygons are triangulated in reverse.
-				Log.warn("FontUtils: triangulate() - Warning, unable to triangulate polygon!" );
+				Log.warn("FontUtils: triangulate() - Warning, unable to triangulate polygon!");
 
 				return;
 			}

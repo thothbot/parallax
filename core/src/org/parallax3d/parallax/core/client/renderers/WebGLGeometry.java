@@ -21,9 +21,8 @@ package org.parallax3d.parallax.core.client.renderers;
 import java.util.List;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.WebGLBuffer;
 import org.parallax3d.parallax.core.client.shaders.Attribute;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.core.client.gl2.WebGLBuffer;
 
 public abstract class WebGLGeometry {
 

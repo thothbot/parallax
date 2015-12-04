@@ -24,12 +24,8 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.core.Face3;
-import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/torus.gif" />

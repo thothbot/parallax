@@ -23,22 +23,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.core.FastMap;
 import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.objects.Line;
 import org.parallax3d.parallax.core.shared.materials.Material;
+import org.parallax3d.parallax.core.shared.math.Color;
+import org.parallax3d.parallax.core.shared.objects.Line;
 
 import com.google.gwt.core.client.GWT;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.core.FastMap;
-import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.objects.Line;
 
 /**
  * 
@@ -68,7 +62,7 @@ public class CameraHelper extends Line
 		lbm.setColor( new Color(0xffffff) );
 		lbm.setVertexColors( Material.COLORS.FACE );
 		setMaterial(lbm);
-		setMode(Line.MODE.PIECES);
+		setMode(MODE.PIECES);
 		
 		setMatrix(camera.getMatrixWorld());
 		setMatrixAutoUpdate(false);

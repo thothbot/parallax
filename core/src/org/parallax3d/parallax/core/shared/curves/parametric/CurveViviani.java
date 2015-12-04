@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.core.shared.curves.parametric;
 
-import org.parallax3d.parallax.core.shared.curves.Curve;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.curves.Curve;
 
 public final class CurveViviani extends Curve 
 {
@@ -32,7 +32,7 @@ public final class CurveViviani extends Curve
 	}
 
 	@Override
-	public Vector3 getPoint(double t) 
+	public Vector3 getPoint(double t)
 	{
 		t = t * 4.0 * Math.PI; // Normalized to 0..1
 		double a = this.radius / 2.0;

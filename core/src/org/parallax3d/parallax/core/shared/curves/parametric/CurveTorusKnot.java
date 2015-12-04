@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.core.shared.curves.parametric;
 
-import org.parallax3d.parallax.core.shared.curves.Curve;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.curves.Curve;
 
 public final class CurveTorusKnot extends Curve 
 {
@@ -37,7 +37,7 @@ public final class CurveTorusKnot extends Curve
 	}
 
 	@Override
-	public Vector3 getPoint(double t) 
+	public Vector3 getPoint(double t)
 	{
 		double p = 3, q = 4;
 		t *= Math.PI * 2.0;

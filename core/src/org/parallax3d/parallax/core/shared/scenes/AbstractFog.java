@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 /**
  * Abstract realization of FogAbstract. This class implements color

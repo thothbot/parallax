@@ -22,18 +22,15 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.shared.core.*;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
 import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.BufferAttribute;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
-import org.parallax3d.parallax.core.shared.core.Raycaster.Intersect;
+import org.parallax3d.parallax.core.shared.core.Raycaster;
 import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.shared.core.BufferAttribute;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
+import org.parallax3d.parallax.core.shared.core.BufferGeometry;
 
 public class Sprite extends GeometryObject implements Comparable<Sprite>
 {
@@ -86,7 +83,7 @@ public class Sprite extends GeometryObject implements Comparable<Sprite>
 	}
 		
 	@Override
-	public void raycast(Raycaster raycaster, List<Intersect> intersects) {
+	public void raycast(Raycaster raycaster, List<Raycaster.Intersect> intersects) {
 		Vector3 matrixPosition = new Vector3();
 		
 		matrixPosition.setFromMatrixPosition( this.matrixWorld );

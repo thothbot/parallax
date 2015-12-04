@@ -18,21 +18,15 @@
 
 package org.parallax3d.parallax.core.shared.cameras;
 
-import org.parallax3d.parallax.core.client.events.HasEventBus;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
 import org.parallax3d.parallax.core.shared.core.Object3D;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.client.events.HasEventBus;
+import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Quaternion;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 import com.google.gwt.event.shared.HandlerRegistration;
-import org.parallax3d.parallax.core.client.events.HasEventBus;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * Abstract base class for cameras.
@@ -60,7 +54,7 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 	
 	public HandlerRegistration addViewportResizeHandler(ViewportResizeHandler handler) 
 	{
-		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler);
+		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler); 
 	}
 	
 	@Override

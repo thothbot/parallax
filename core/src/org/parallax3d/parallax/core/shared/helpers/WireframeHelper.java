@@ -23,27 +23,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.core.shared.core.*;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint32Array;
 import org.parallax3d.parallax.core.shared.core.BufferAttribute;
+import org.parallax3d.parallax.core.shared.core.GeometryObject;
+import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
+import org.parallax3d.parallax.core.client.gl2.arrays.Uint32Array;
 import org.parallax3d.parallax.core.shared.core.BufferGeometry;
 import org.parallax3d.parallax.core.shared.core.BufferGeometry.DrawCall;
+import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.FastMap;
 import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
 import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
+import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.objects.Line;
 
 import com.google.gwt.core.client.GWT;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.shared.core.BufferAttribute;
-import org.parallax3d.parallax.core.shared.core.FastMap;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
 
 public class WireframeHelper extends Line {
 	
@@ -52,9 +47,9 @@ public class WireframeHelper extends Line {
 		this(object, new Color(0xffffff));
 	}
 	
-	public WireframeHelper(GeometryObject object, Color color)
+	public WireframeHelper(GeometryObject object, Color color) 
 	{
-		super(new BufferGeometry(), new LineBasicMaterial(), Line.MODE.PIECES);
+		super(new BufferGeometry(), new LineBasicMaterial(), MODE.PIECES);
 
 		LineBasicMaterial material = (LineBasicMaterial) getMaterial();
 		material.setColor( color );
@@ -72,7 +67,7 @@ public class WireframeHelper extends Line {
 			int numEdges = 0;
 			
 			// allocate maximal size
-			Uint32Array edges = Uint32Array.create(6 * faces.size());
+			Uint32Array edges = Uint32Array.create( 6 * faces.size() );
 		
 			for ( int i = 0, l = faces.size(); i < l; i ++ ) {
 

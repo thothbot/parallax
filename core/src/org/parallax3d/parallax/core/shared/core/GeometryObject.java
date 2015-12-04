@@ -22,16 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
 import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
+import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
 import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.shaders.Attribute;
 import org.parallax3d.parallax.core.shared.materials.Material;
 import org.parallax3d.parallax.core.shared.objects.Line;
+import org.parallax3d.parallax.core.shared.objects.Mesh;
 import org.parallax3d.parallax.core.shared.objects.PointCloud;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 
 public abstract class GeometryObject extends Object3D
 {
@@ -142,7 +141,7 @@ public abstract class GeometryObject extends Object3D
 
 					attribute.size = size;
 
-					attribute.array = Float32Array.create(nvertices * size);
+					attribute.array = Float32Array.create( nvertices * size );
 
 					attribute.buffer = gl.createBuffer();
 					attribute.belongsToAttribute = a;

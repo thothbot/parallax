@@ -21,16 +21,11 @@ package org.parallax3d.parallax.core.shared.lights;
 import java.util.Map;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.client.renderers.RendererLights;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.materials.MeshPhongMaterial;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.renderers.RendererLights;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * A point light that can cast shadow in one direction.
@@ -59,7 +54,7 @@ import org.parallax3d.parallax.core.shared.math.Vector3;
  */
 public class SpotLight extends ShadowLight
 {
-	public static class UniformSport implements Light.UniformLight 
+	public static class UniformSport implements UniformLight
 	{
 		public Float32Array distances;
 		public Float32Array colors;
@@ -82,7 +77,7 @@ public class SpotLight extends ShadowLight
 		}
 
 		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms)
+		public void refreshUniform(Map<String, Uniform> uniforms) 
 		{
 			uniforms.get("spotLightColor").setValue( colors );
 			uniforms.get("spotLightPosition").setValue( positions );
@@ -163,7 +158,7 @@ public class SpotLight extends ShadowLight
 	}
 	
 	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput)
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
 	{
 		Float32Array spotColors     = zlights.spot.colors;
 		Float32Array spotPositions  = zlights.spot.positions;

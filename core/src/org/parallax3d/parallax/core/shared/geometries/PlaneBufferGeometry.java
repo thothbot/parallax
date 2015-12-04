@@ -22,9 +22,6 @@ import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
 import org.parallax3d.parallax.core.shared.core.BufferAttribute;
 import org.parallax3d.parallax.core.shared.core.BufferGeometry;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.shared.core.BufferAttribute;
 
 public class PlaneBufferGeometry extends BufferGeometry {
 

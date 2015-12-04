@@ -18,10 +18,8 @@
 
 package org.parallax3d.parallax.core.shared.geometries.parametric;
 
-import org.parallax3d.parallax.core.shared.geometries.ParametricGeometry;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.geometries.ParametricGeometry;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/klein_bottle.gif" />
@@ -35,7 +33,7 @@ public class KleinParametricGeometry extends ParametricGeometry
 {
 	public KleinParametricGeometry(int slices, int stacks) 
 	{
-		super(new ParametricGeometry.ParametricFunction() 
+		super(new ParametricFunction()
 		{	
 			@Override
 			public Vector3 run(double u, double v)

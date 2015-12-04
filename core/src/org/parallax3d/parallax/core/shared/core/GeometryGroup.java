@@ -28,8 +28,6 @@ import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
 import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
 
 import com.google.gwt.core.client.GWT;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
 
 public class GeometryGroup extends WebGLGeometry
 {

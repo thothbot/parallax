@@ -21,9 +21,6 @@ package org.parallax3d.parallax.core.shared.core;
 import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
 import org.parallax3d.parallax.core.shared.math.Box3;
 import org.parallax3d.parallax.core.shared.math.Sphere;
-import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
-import org.parallax3d.parallax.core.shared.math.Box3;
-import org.parallax3d.parallax.core.shared.math.Sphere;
 
 public abstract class AbstractGeometry extends WebGLGeometry
 {

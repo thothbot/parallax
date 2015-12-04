@@ -19,31 +19,27 @@
 package org.parallax3d.parallax.core.shared.helpers;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.BufferAttribute;
 import org.parallax3d.parallax.core.shared.core.BufferGeometry;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
-import org.parallax3d.parallax.core.shared.objects.Line;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.shared.core.BufferAttribute;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.objects.Line;
+import org.parallax3d.parallax.core.shared.objects.Mesh;
 
 public class BoxHelper extends Line 
 {
-	public BoxHelper(Mesh object)
+	public BoxHelper(Mesh object) 
 	{
-		super(new BufferGeometry(), new LineBasicMaterial(), Line.MODE.PIECES);
+		super(new BufferGeometry(), new LineBasicMaterial(), MODE.PIECES);
 		
 		BufferGeometry geometry = (BufferGeometry) getGeometry();
 		LineBasicMaterial material = (LineBasicMaterial) getMaterial();
 		material.setColor(new Color(0xffff00));
 		
 		
-		geometry.addAttribute( "position", new BufferAttribute( Float32Array.create(72), 3 ) );
+		geometry.addAttribute( "position", new BufferAttribute( Float32Array.create( 72 ), 3 ) );
 
 		update( object );
 

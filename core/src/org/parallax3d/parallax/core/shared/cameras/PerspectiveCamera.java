@@ -81,7 +81,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	}
 	
 	@Override
-	public void onResize(ViewportResizeEvent event) 
+	public void onResize(ViewportResizeEvent event)
 	{
 		setAspect(event.getRenderer().getAbsoluteAspectRation());	
 	}
@@ -231,7 +231,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 */
 	public void setLens(int focalLength, int frameHeight)
 	{
-		this.fov = 2.0 * Mathematics.radToDeg( Math.atan( frameHeight / ( focalLength * 2.0 ) ) );
+		this.fov = 2.0 * Mathematics.radToDeg(Math.atan(frameHeight / (focalLength * 2.0)));
 		this.updateProjectionMatrix();
 	}
 	

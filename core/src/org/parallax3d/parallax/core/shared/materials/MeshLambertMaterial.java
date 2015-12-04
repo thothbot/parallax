@@ -20,14 +20,14 @@ package org.parallax3d.parallax.core.shared.materials;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.core.client.shaders.Uniform;
+import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.client.shaders.LambertShader;
 import org.parallax3d.parallax.core.client.shaders.Shader;
+import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.client.textures.Texture;
 import org.parallax3d.parallax.core.client.textures.Texture.OPERATIONS;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 /**
  * A material for non-shiny (Lambertian) surfaces, evaluated per vertex.
@@ -50,18 +50,18 @@ public final class MeshLambertMaterial extends Material
 	private Texture alphaMap;
 	
 	private Texture envMap;
-	private Texture.OPERATIONS combine;
+	private OPERATIONS combine;
 	private double reflectivity;
 	private double refractionRatio;
 		
 	private boolean isFog;
 	
-	private Material.SHADING shading;
+	private SHADING shading;
 	
 	private boolean isWireframe;
 	private int wireframeLineWidth;
 
-	private Material.COLORS vertexColors;
+	private COLORS vertexColors;
 	
 	private boolean isSkinning;
 	private boolean isMorphTargets;
@@ -84,13 +84,13 @@ public final class MeshLambertMaterial extends Material
 		
 		setFog(true);
 		
-		setShading(Material.SHADING.SMOOTH);
+		setShading(SHADING.SMOOTH);
 		
 		setColor(new Color(0xffffff)); // diffuse
 		setAmbient(new Color(0xffffff));
 		setEmissive(new Color( 0x000000 ));
 		
-		setVertexColors(Material.COLORS.NO);
+		setVertexColors(COLORS.NO);
 	}
 
 	@Override
@@ -230,12 +230,12 @@ public final class MeshLambertMaterial extends Material
 	}
 	
 	@Override
-	public Material.COLORS isVertexColors() {
+	public COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public void setVertexColors(COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
 	
@@ -319,11 +319,11 @@ public final class MeshLambertMaterial extends Material
 		this.specularMap = specularMap;
 	}
 	
-	public Material.SHADING getShading() {
+	public SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public void setShading(SHADING shading) {
 		this.shading = shading;
 	}
 	
@@ -374,7 +374,7 @@ public final class MeshLambertMaterial extends Material
 	public void refreshUniforms(Camera camera, boolean isGammaInput) 
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		Map<String, Uniform> uniforms = getShader().getUniforms();
+		Map<String, Uniform> uniforms = getShader().getUniforms(); 
 		
 		if ( isGammaInput ) 
 		{

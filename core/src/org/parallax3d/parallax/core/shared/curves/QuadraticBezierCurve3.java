@@ -20,7 +20,6 @@ package org.parallax3d.parallax.core.shared.curves;
 
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.utils.ShapeUtils;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public class QuadraticBezierCurve3 extends Curve
 {

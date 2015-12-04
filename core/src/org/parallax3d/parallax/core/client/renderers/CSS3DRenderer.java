@@ -22,15 +22,10 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.core.CSS3DObject;
-import org.parallax3d.parallax.core.shared.core.CSS3DSprite;
 import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.core.shared.core.CSS3DObject;
 import org.parallax3d.parallax.core.shared.core.CSS3DSprite;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 

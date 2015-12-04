@@ -26,9 +26,6 @@ import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.event.shared.HandlerRegistration;
-import org.parallax3d.parallax.core.client.events.HasEventBus;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
 
 public abstract class Effect extends Plugin implements HasEventBus, ViewportResizeHandler {
 
@@ -40,7 +37,7 @@ public abstract class Effect extends Plugin implements HasEventBus, ViewportResi
 
 	@Override
 	public TYPE getType() {
-		return Plugin.TYPE.BASIC_RENDER;
+		return TYPE.BASIC_RENDER;
 	}
 	
 	public HandlerRegistration addViewportResizeHandler(ViewportResizeHandler handler) 

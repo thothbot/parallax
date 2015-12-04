@@ -23,7 +23,6 @@ import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 /**
  * Two pass Gaussian blur filter (horizontal and vertical blur shaders)

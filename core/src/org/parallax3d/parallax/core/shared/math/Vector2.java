@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.shared.math;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 
 /**
  * This class is realization of (X, Y) vector. 
@@ -417,7 +416,7 @@ public class Vector2
 
 	/*
 	 * (non-Javadoc)
-	 * @see thothbot.org.parallax3d.parallax.core.shared.core.Vector#distanceToSquared(thothbot.org.parallax3d.parallax.core.shared.core.Vector)
+	 * @see thothbot.parallax.core.shared.core.Vector#distanceToSquared(thothbot.parallax.core.shared.core.Vector)
 	 */
 	public double distanceToSquared(Vector2 v)
 	{
@@ -428,7 +427,7 @@ public class Vector2
 
 	/*
 	 * (non-Javadoc)
-	 * @see thothbot.org.parallax3d.parallax.core.shared.core.Vector#distanceTo(thothbot.org.parallax3d.parallax.core.shared.core.Vector)
+	 * @see thothbot.parallax.core.shared.core.Vector#distanceTo(thothbot.parallax.core.shared.core.Vector)
 	 */
 	public double distanceTo(Vector2 v1)
 	{

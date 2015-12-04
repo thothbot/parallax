@@ -31,11 +31,11 @@ import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;
 import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;
 import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;
 import org.parallax3d.parallax.core.client.gl2.enums.DrawElementsType;
-import org.parallax3d.parallax.core.client.shaders.Attribute;
-import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
 import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.renderers.WebGlRendererInfo;
+import org.parallax3d.parallax.core.client.shaders.Attribute;
+import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.BufferGeometry;
 import org.parallax3d.parallax.core.shared.core.Face3;
@@ -59,7 +59,7 @@ import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.math.Vector4;
 
-import com.google.gwt.core.client.GWT;import org.parallax3d.parallax.core.client.gl2.WebGLBuffer;import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;import org.parallax3d.parallax.core.client.gl2.enums.DrawElementsType;import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;import org.parallax3d.parallax.core.client.renderers.WebGlRendererInfo;import org.parallax3d.parallax.core.client.shaders.Attribute;import org.parallax3d.parallax.core.shared.Log;import org.parallax3d.parallax.core.shared.core.*;import org.parallax3d.parallax.core.shared.materials.*;import org.parallax3d.parallax.core.shared.math.*;
+import com.google.gwt.core.client.GWT;
 
 /**
  * Base class for Mesh objects.
@@ -101,7 +101,7 @@ public class Mesh extends GeometryObject
 		this(geometry, Mesh.defaultMaterial);
 	}
 	
-	public Mesh(AbstractGeometry geometry, Material material) 
+	public Mesh(AbstractGeometry geometry, Material material)
 	{
 		super(geometry, material);
 		
@@ -110,7 +110,7 @@ public class Mesh extends GeometryObject
 	
 	public void updateMorphTargets() {
 		
-		if(this.getGeometry() instanceof  BufferGeometry
+		if(this.getGeometry() instanceof BufferGeometry)
 			return;
 
 		if ( ((Geometry)this.getGeometry()).getMorphTargets() != null && ((Geometry)this.getGeometry()).getMorphTargets().size() > 0 ) {
@@ -119,7 +119,7 @@ public class Mesh extends GeometryObject
 			this.morphTargetForcedOrder = new ArrayList<Integer>();
 			this.morphTargetInfluences = new ArrayList<Double>();
 			this.morphTargetDictionary = GWT.isScript() ? 
-					new  FastMap<Integer>) : new HashMap<String, Integer>();
+					new FastMap<Integer>() : new HashMap<String, Integer>();
 
 			List<Geometry.MorphTarget> morphTargets = ((Geometry)this.getGeometry()).getMorphTargets();
 			for ( int m = 0, ml = ((Geometry)this.getGeometry()).getMorphTargets().size(); m < ml; m ++ ) {
@@ -174,7 +174,7 @@ public class Mesh extends GeometryObject
 
 			if ( bGeometry.getAttribute("index") != null ) {
 
-				UUint16Array ndices = (Uint16Array)bGeometry.getAttribute("index").getArray();
+				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
 				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 				List<BufferGeometry.DrawCall> offsets = bGeometry.getDrawcalls();
 
@@ -277,7 +277,7 @@ public class Mesh extends GeometryObject
 
 		} else if ( geometry instanceof Geometry ) {
 
-			boolean isFaceMaterial = this.getMaterial() instanceof  MeshFaceMaterial
+			boolean isFaceMaterial = this.getMaterial() instanceof MeshFaceMaterial;
 			List<Material> objectMaterials = isFaceMaterial == true ? ((MeshFaceMaterial)this.getMaterial()).getMaterials() : null;
 
 			Geometry aGeometry = ((Geometry) geometry);
@@ -296,7 +296,7 @@ public class Mesh extends GeometryObject
 				Vector3 b = vertices.get( face.getB() );
 				Vector3 c = vertices.get( face.getC() );
 
-				if ( material instanceof  HasSkinning & ((HasSkinning)material).isMorphTargets() == true ) {
+				if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphTargets() == true ) {
 
 					List<Geometry.MorphTarget> morphTargets = aGeometry.getMorphTargets();
 
@@ -422,20 +422,20 @@ public class Mesh extends GeometryObject
 //	}
 
 	@Override
-	public void renderBuffer(WebGLRenderer renderer, WWebGLGeometry eometryGroup, boolean updateBuffers)
+	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryGroup, boolean updateBuffers)
 	{
-		WWebGLRenderingContext l = renderer.getGL();
-		WWebGlRendererInfo nfo = renderer.getInfo();
+		WebGLRenderingContext gl = renderer.getGL();
+		WebGlRendererInfo info = renderer.getInfo();
 
 		// wireframe
-		if ( getMaterial() instanceof  HasWireframe & ((HasWireframe)getMaterial()).isWireframe() )
+		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() )
 		{
 			setLineWidth( gl, ((HasWireframe)getMaterial()).getWireframeLineWidth() );
 
 			if ( updateBuffers ) 
-				gl.bindBuffer( BuBufferTargetLEMENT_ARRAY_BUFFER, geometryGroup.__webglLineBuffer );
+				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglLineBuffer );
 			
-			gl.drawElements( BeBeginModeINES, geometryGroup.__webglLineCount, DrDrawElementsTypeNSIGNED_SHORT, 0 );
+			gl.drawElements( BeginMode.LINES, geometryGroup.__webglLineCount, DrawElementsType.UNSIGNED_SHORT, 0 );
 
 			// triangles
 
@@ -570,7 +570,7 @@ public class Mesh extends GeometryObject
 
 		// custom attributes
 
-		Map<String, A Attributeattributes = material.getShader().getAttributes();
+		Map<String, Attribute> attributes = material.getShader().getAttributes();
 
 		if (attributes != null) 
 		{
@@ -641,7 +641,7 @@ public class Mesh extends GeometryObject
 		geometryGroup.__webglLineBuffer = gl.createBuffer();
 
 		if (geometryGroup.getNumMorphTargets() != 0) {
-			geometryGroup.__webglMorphTargetsBuffers = new ArrayList<WeWebGLBuffer);
+			geometryGroup.__webglMorphTargetsBuffers = new ArrayList<WebGLBuffer>();
 
 			for (int m = 0; m < geometryGroup.getNumMorphTargets(); m++) {
 				geometryGroup.__webglMorphTargetsBuffers.add(gl.createBuffer());
@@ -715,9 +715,9 @@ public class Mesh extends GeometryObject
 //	}
 
 	// setMeshBuffers
-	public void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BuBufferUsage nt, boolean dispose, Material material)
+	public void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
 	{
-		LoLogebug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
+		Log.debug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
 
 		if ( ! geometryGroup.__inittedArrays )
 			 return;
@@ -970,7 +970,7 @@ public class Mesh extends GeometryObject
 				 Color faceColor = face.getColor();
 				 Color c1, c2, c3;
 
-				 if ( vertexColors.size() == 3 && ((HaHasVertexColorsaterial).isVertexColors() == Material.COLORS.VERTEX)
+				 if ( vertexColors.size() == 3 && ((HasVertexColors)material).isVertexColors() == Material.COLORS.VERTEX) 
 				 {
 					 c1 = vertexColors.get(0);
 					 c2 = vertexColors.get(1);

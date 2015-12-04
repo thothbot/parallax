@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
-import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
 
 public enum ErrorCode implements GLEnum
 {

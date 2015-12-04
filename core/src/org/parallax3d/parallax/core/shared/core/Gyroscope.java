@@ -18,10 +18,8 @@
 
 package org.parallax3d.parallax.core.shared.core;
 
-import org.parallax3d.parallax.core.shared.math.Quaternion;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.math.Quaternion;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public class Gyroscope extends Object3D 
 {

@@ -31,14 +31,14 @@ public final class MeshNormalMaterial extends Material implements HasWireframe, 
 	private boolean isWireframe;
 	private int wireframeLineWidth;
 	
-	private Material.SHADING shading;
+	private SHADING shading;
 	
 	public MeshNormalMaterial()
 	{
 		setWireframe(false);
 		setWireframeLineWidth(1);
 		
-		setShading(Material.SHADING.FLAT);
+		setShading(SHADING.FLAT);
 	}
 
 	public Shader getAssociatedShader()
@@ -66,11 +66,11 @@ public final class MeshNormalMaterial extends Material implements HasWireframe, 
 		this.wireframeLineWidth = wireframeLineWidth;
 	}
 	
-	public Material.SHADING getShading() {
+	public SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public void setShading(SHADING shading) {
 		this.shading = shading;
 	}
 	
@@ -90,7 +90,7 @@ public final class MeshNormalMaterial extends Material implements HasWireframe, 
 	}
 	
 	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput) 
+	public void refreshUniforms(Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(camera, isGammaInput);
 		

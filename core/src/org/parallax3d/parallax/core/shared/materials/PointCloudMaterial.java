@@ -20,18 +20,9 @@ package org.parallax3d.parallax.core.shared.materials;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
 import org.parallax3d.parallax.core.client.events.HasEventBus;
 import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.core.client.shaders.ParticleBasicShader;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.client.events.HasEventBus;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
 import org.parallax3d.parallax.core.client.shaders.ParticleBasicShader;
 import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
@@ -47,7 +38,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 
 	private Texture map;
 
-	private Material.COLORS vertexColors;
+	private COLORS vertexColors;
 
 	private double size;
 
@@ -62,7 +53,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 		setSize(1.0);
 		setSizeAttenuation(true);
 
-		setVertexColors(Material.COLORS.NO);
+		setVertexColors(COLORS.NO);
 
 	}
 
@@ -118,12 +109,12 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public Material.COLORS isVertexColors() {
+	public COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public void setVertexColors(COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
 	

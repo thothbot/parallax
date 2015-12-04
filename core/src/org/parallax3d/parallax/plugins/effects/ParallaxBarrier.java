@@ -20,25 +20,22 @@ package org.parallax3d.parallax.plugins.effects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.core.shared.geometries.PlaneBufferGeometry;
-import org.parallax3d.parallax.core.shared.math.Mathematics;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
-import org.parallax3d.parallax.core.shared.lights.Light;
 import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
 import org.parallax3d.parallax.plugins.effects.shaders.ParallaxBarrierShader;
 import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
+import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
+import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
+import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
+import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.core.shared.geometries.PlaneBufferGeometry;
+import org.parallax3d.parallax.core.shared.lights.Light;
+import org.parallax3d.parallax.core.shared.math.Mathematics;
+import org.parallax3d.parallax.core.shared.math.Matrix4;
+import org.parallax3d.parallax.core.shared.objects.Mesh;
+import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 public class ParallaxBarrier extends Effect {
 	
@@ -77,7 +74,7 @@ public class ParallaxBarrier extends Effect {
 	}
 	
 	@Override
-	public void onResize(ViewportResizeEvent event)
+	public void onResize(ViewportResizeEvent event) 
 	{
 		int width = event.getRenderer().getAbsoluteWidth();
 		int height = event.getRenderer().getAbsoluteHeight();
@@ -113,7 +110,7 @@ public class ParallaxBarrier extends Effect {
 	 *
 	 * Each camera is offset by the eye seperation and its projection matrix is
 	 * also skewed asymetrically back to converge on the same projection plane.
-	 * Added a focal length parameter to, this is where the org.parallax3d.parallax is equal to 0.
+	 * Added a focal length parameter to, this is where the parallax is equal to 0.
 	 */
 	@Override
 	public void render(Camera sceneCamera, List<Light> lights, int currentWidth,	int currentHeight)
@@ -141,7 +138,7 @@ public class ParallaxBarrier extends Effect {
 			Matrix4 projectionMatrix = camera.getProjectionMatrix().clone();
 			double eyeSep = focalLength / 30.0 * 0.5;
 			double eyeSepOnProjection = eyeSep * _near / focalLength;
-			double ymax = _near * Math.tan( Mathematics.degToRad(_fov * 0.5) );
+			double ymax = _near * Math.tan( Mathematics.degToRad( _fov * 0.5 ) );
 			double xmin, xmax;
 
 			// translate xOffset

@@ -21,12 +21,12 @@ package org.parallax3d.parallax.core.shared.lights;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.renderers.RendererLights;
+import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.core.shared.materials.MeshPhongMaterial;
-import org.parallax3d.parallax.core.shared.math.Vector3;import org.parallax3d.parallax.core.client.shaders.Uniform;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.client.renderers.RendererLights;
 
 /**
  * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
@@ -45,7 +45,7 @@ import org.parallax3d.parallax.core.shared.math.Vector3;import org.parallax3d.pa
  */
 public class DirectionalLight extends ShadowLight
 {	
-	public static class UniformDirectional implements Light.UniformLight 
+	public static class UniformDirectional implements UniformLight
 	{
 		public Float32Array colors;
 		public Float32Array positions;

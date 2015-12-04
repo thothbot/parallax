@@ -24,10 +24,6 @@ import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.renderers.RendererLights;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.renderers.RendererLights;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.math.Color;
 
 /**
  * This light's color gets applied to all the objects in the scene globally.
@@ -44,7 +40,7 @@ import org.parallax3d.parallax.core.shared.math.Color;
  */
 public final class AmbientLight extends Light
 {
-	public static class UniformAmbient implements Light.UniformLight 
+	public static class UniformAmbient implements UniformLight
 	{
 		public Float32Array colors;
 		
@@ -58,7 +54,7 @@ public final class AmbientLight extends Light
 		}
 
 		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms)
+		public void refreshUniform(Map<String, Uniform> uniforms) 
 		{
 			uniforms.get("ambientLightColor").setValue( colors );
 		}
@@ -79,7 +75,7 @@ public final class AmbientLight extends Light
 	}
 	
 	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput)
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
 	{
 		Float32Array colors = zlights.ambient.colors;
 	

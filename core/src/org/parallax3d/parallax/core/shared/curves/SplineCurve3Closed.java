@@ -55,7 +55,7 @@ public class SplineCurve3Closed extends Curve
 		int c2 = ( intPoint + 1 ) % points.size();
 		int c3 = ( intPoint + 2 ) % points.size();
 
-		v.setX( CurveUtils.interpolate( points.get(c0).getX(), points.get(c1).getX(), points.get(c2).getX(), points.get(c3).getX(), weight) );
+		v.setX( CurveUtils.interpolate(points.get(c0).getX(), points.get(c1).getX(), points.get(c2).getX(), points.get(c3).getX(), weight) );
 		v.setY( CurveUtils.interpolate( points.get(c0).getY(), points.get(c1).getY(), points.get(c2).getY(), points.get(c3).getY(), weight) );
 		v.setZ( CurveUtils.interpolate( points.get(c0).getZ(), points.get(c1).getZ(), points.get(c2).getZ(), points.get(c3).getZ(), weight) );
 

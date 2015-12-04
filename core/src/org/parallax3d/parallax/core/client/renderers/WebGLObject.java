@@ -18,14 +18,12 @@
 
 package org.parallax3d.parallax.core.client.renderers;
 
+import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.GeometryGroup;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
 import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
-import org.parallax3d.parallax.core.shared.core.BufferGeometry;
 import org.parallax3d.parallax.core.shared.materials.MeshFaceMaterial;
-import org.parallax3d.parallax.core.shared.core.GeometryGroup;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
+import org.parallax3d.parallax.core.shared.core.BufferGeometry;
 
 public class WebGLObject implements Comparable<WebGLObject>
 {
@@ -46,7 +44,7 @@ public class WebGLObject implements Comparable<WebGLObject>
 		this(buffer, object, null, null);
 	}
 	
-	public WebGLObject(WebGLGeometry buffer, GeometryObject object, Material opaque, Material transparent)
+	public WebGLObject(WebGLGeometry buffer, GeometryObject object, Material opaque, Material transparent) 
 	{
 		this.buffer = buffer;
 		this.object = object;
@@ -78,7 +76,7 @@ public class WebGLObject implements Comparable<WebGLObject>
 		AbstractGeometry geometry = object.getGeometry();
 		Material material = object.getMaterial();
 
-		if ( material instanceof MeshFaceMaterial ) 
+		if ( material instanceof MeshFaceMaterial)
 		{
 			int materialIndex = geometry instanceof BufferGeometry ? 0 : ((GeometryGroup)buffer).getMaterialIndex();
 

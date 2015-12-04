@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.client.gl2.enums;
 
 import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
-import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
 
 /**
  * The texture minifying function is used whenever the pixel being textured 

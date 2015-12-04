@@ -38,8 +38,6 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import org.parallax3d.parallax.core.client.AnimatedScene;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * The control implements control from a first person.
@@ -169,7 +167,7 @@ public class FirstPersonControls extends Controls
 		{
 			if ( this.heightSpeed ) 
 			{
-				double y = Mathematics.clamp( getObject().getPosition().getY(), this.heightMin, this.heightMax );
+				double y = Mathematics.clamp(getObject().getPosition().getY(), this.heightMin, this.heightMax);
 				double heightDelta = y - this.heightMin;
 
 				this.autoSpeedFactor = delta * ( heightDelta * this.heightCoef );

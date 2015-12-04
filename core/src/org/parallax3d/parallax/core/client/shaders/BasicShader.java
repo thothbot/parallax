@@ -97,7 +97,7 @@ public final class BasicShader extends Shader
 			ChunksVertexShader.SHADOWMAP
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main1, mainEnv, main2));
+		super.updateVertexSource(updateShaderSource(src, vars, main1, mainEnv, main2));
 	}
 	
 	@Override
@@ -129,6 +129,6 @@ public final class BasicShader extends Shader
 			ChunksFragmentShader.FOG
 		);
 		
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));		
+		super.updateFragmentSource(updateShaderSource(src, vars, main));
 	}
 }

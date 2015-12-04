@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.shared.curves.parametric;
 
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public final class CurveDecoratedTorusKnot5c extends CurveDecoratedTorusKnot4a 
 {

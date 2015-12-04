@@ -21,15 +21,10 @@ package org.parallax3d.parallax.plugins.lensflare;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.core.shared.core.Object3D;
 import org.parallax3d.parallax.core.client.textures.Texture;
 import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.core.Object3D;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 
@@ -94,7 +89,7 @@ public final class LensFlare extends Object3D
 	public LensFlare(Texture texture, Integer size, double distance, Material.BLENDING blending, Color color) 
 	{
 		this.positionScreen = new Vector3();
-		this.lensFlares = new ArrayList<LensFlare.LensSprite>();
+		this.lensFlares = new ArrayList<LensSprite>();
 
 		setUpdateCallback(new Callback() {
 			
@@ -158,11 +153,11 @@ public final class LensFlare extends Object3D
 		return this.positionScreen;
 	}
 	
-	public LensFlare.Callback getUpdateCallback() {
+	public Callback getUpdateCallback() {
 		return this.updateCallback;
 	}
 
-	public void setUpdateCallback(LensFlare.Callback callback) {
+	public void setUpdateCallback(Callback callback) {
 		this.updateCallback = callback;
 	}
 }

@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.plugins.postprocessing;
 
 import org.parallax3d.parallax.core.client.gl2.enums.EnableCap;
-import org.parallax3d.parallax.core.client.gl2.enums.EnableCap;
 
 public class ClearMaskPass extends Pass 
 {	

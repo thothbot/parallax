@@ -23,7 +23,6 @@ import org.parallax3d.parallax.core.client.RenderingPanel;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import org.parallax3d.parallax.core.client.renderers.WebGlRendererInfo;
 
 /**
  * Debugger widget which is shown in the {@link RenderingPanel} widget.

@@ -25,21 +25,14 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.curves.Curve;
+import org.parallax3d.parallax.core.shared.curves.CurvePath;
 import org.parallax3d.parallax.core.shared.curves.FrenetFrames;
 import org.parallax3d.parallax.core.shared.curves.Shape;
-import org.parallax3d.parallax.core.shared.curves.CurvePath;
 import org.parallax3d.parallax.core.shared.math.Box3;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.utils.ShapeUtils;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.curves.Curve;
-import org.parallax3d.parallax.core.shared.curves.FrenetFrames;
-import org.parallax3d.parallax.core.shared.curves.Shape;
-import org.parallax3d.parallax.core.shared.math.Box3;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.math.Vector2;
 
 
 /**
@@ -175,7 +168,7 @@ public class ExtrudeGeometry extends Geometry
 
 		this.holes = shape.getPointsHoles();
 
-		boolean reverse = ! ShapeUtils.isClockWise( vertices ) ;
+		boolean reverse = ! ShapeUtils.isClockWise(vertices) ;
 
 		if ( reverse ) 
 		{

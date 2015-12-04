@@ -21,7 +21,6 @@ package org.parallax3d.parallax.loader.shared.collada;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 
 import com.google.gwt.xml.client.Node;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 
 public class DaeTransformMatrix extends DaeTransform 
 {

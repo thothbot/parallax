@@ -21,39 +21,41 @@ package org.parallax3d.parallax.core.client.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.gl2.enums.*;
+import org.parallax3d.parallax.core.client.gl2.enums.CullFaceMode;
+import org.parallax3d.parallax.core.client.shaders.DepthRGBAShader;
 import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
 import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.core.*;
-import org.parallax3d.parallax.core.shared.lights.*;
-import org.parallax3d.parallax.core.shared.math.*;
+import org.parallax3d.parallax.core.shared.cameras.Camera;
+import org.parallax3d.parallax.core.shared.core.GeometryObject;
+import org.parallax3d.parallax.core.shared.core.Gyroscope;
+import org.parallax3d.parallax.core.shared.core.Object3D;
+import org.parallax3d.parallax.core.shared.helpers.CameraHelper;
+import org.parallax3d.parallax.core.shared.lights.SpotLight;
+import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.objects.SkinnedMesh;
 import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.client.gl2.enums.CullFaceMode;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
 import org.parallax3d.parallax.core.client.gl2.enums.EnableCap;
+import org.parallax3d.parallax.core.client.gl2.enums.FrontFaceDirection;
 import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.core.client.shaders.DepthRGBAShader;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
+import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
 import org.parallax3d.parallax.core.shared.cameras.OrthographicCamera;
 import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.core.shared.core.BufferGeometry;
 import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
-import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.helpers.CameraHelper;
 import org.parallax3d.parallax.core.shared.lights.DirectionalLight;
 import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.lights.SpotLight;
+import org.parallax3d.parallax.core.shared.lights.ShadowLight;
 import org.parallax3d.parallax.core.shared.lights.VirtualLight;
 import org.parallax3d.parallax.core.shared.materials.HasSkinning;
 import org.parallax3d.parallax.core.shared.materials.Material;
 import org.parallax3d.parallax.core.shared.materials.MeshFaceMaterial;
-import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
 import org.parallax3d.parallax.core.shared.math.Color;
+import org.parallax3d.parallax.core.shared.math.Frustum;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.objects.SkinnedMesh;import org.parallax3d.parallax.core.client.gl2.enums.CullFaceMode;import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;import org.parallax3d.parallax.core.shared.Log;import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;import org.parallax3d.parallax.core.shared.core.GeometryObject;import org.parallax3d.parallax.core.shared.lights.DirectionalLight;import org.parallax3d.parallax.core.shared.materials.HasSkinning;import org.parallax3d.parallax.core.shared.math.Frustum;
+import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 public final class ShadowMap extends Plugin 
 {
@@ -75,7 +77,7 @@ public final class ShadowMap extends Plugin
 	
 	List<WebGLObject> _renderList = new ArrayList<WebGLObject>();
 		
-	public ShadowMap(WebGLRenderer renderer, Scene scene)
+	public ShadowMap(WebGLRenderer renderer, Scene scene) 
 	{
 		super(renderer, scene);
 
@@ -150,7 +152,7 @@ public final class ShadowMap extends Plugin
 	@Override
 	public TYPE getType() 
 	{
-		return Plugin.TYPE.PRE_RENDER;
+		return TYPE.PRE_RENDER;
 	}
 
 	@Override
@@ -170,7 +172,7 @@ public final class ShadowMap extends Plugin
 
 		if ( isCullFrontFaces() ) 
 		{
-			gl.cullFace( CuCullFaceModeRONT );
+			gl.cullFace( CullFaceMode.FRONT );
 		} 
 		else 
 		{
@@ -191,7 +193,7 @@ public final class ShadowMap extends Plugin
 
 			if ( ! sceneLight.isCastShadow() ) continue;
 						
-			if ( ( sceneLight instanceof D DirectionalLight&& ((DirectionalLight)sceneLight).isShadowCascade() )
+			if ( ( sceneLight instanceof DirectionalLight ) && ((DirectionalLight)sceneLight).isShadowCascade() ) 
 			{
 				DirectionalLight dirLight = (DirectionalLight)sceneLight;
 
@@ -215,7 +217,7 @@ public final class ShadowMap extends Plugin
 
 						shadowCascadeArray.add( n, virtualLight );
 
-						LogLogbug("Shadowmap plugin: Created virtualLight");
+						Log.debug("Shadowmap plugin: Created virtualLight");
 					} 
 					else 
 					{
@@ -240,7 +242,7 @@ public final class ShadowMap extends Plugin
 			{
 				RenderTargetTexture map = new RenderTargetTexture(light.getShadowMapWidth(), light.getShadowMapHeight());
 				map.setMinFilter(TextureMinFilter.NEAREST);
-				map.setMagFilter(TexTextureMagFilterAREST);
+				map.setMagFilter(TextureMagFilter.NEAREST);
 				map.setFormat(PixelFormat.RGBA);
 				light.setShadowMap(map);
 
@@ -252,7 +254,8 @@ public final class ShadowMap extends Plugin
 			{
 				if ( light instanceof SpotLight)
 				{
-					light.setShadowCamera(new Pe PerspectiveCamera						((SpotLight)light).getShadowCameraFov(),
+					light.setShadowCamera(new PerspectiveCamera( 
+							((SpotLight)light).getShadowCameraFov(), 
 							light.getShadowMapWidth() / light.getShadowMapHeight(), 
 							light.getShadowCameraNear(), 
 							light.getShadowCameraFar() ));
@@ -337,7 +340,7 @@ public final class ShadowMap extends Plugin
 
 				WebGLObject webglObject = _renderList.get( j );
 
-				GeomGeometryObject ct = webglObject.object;
+				GeometryObject object = webglObject.object;
 				WebGLGeometry buffer = webglObject.buffer;
 
 				// culling is overriden globally for all objects
@@ -352,10 +355,10 @@ public final class ShadowMap extends Plugin
 				Material objectMaterial = getObjectMaterial( object );
 
 				boolean useMorphing = ((Geometry)object.getGeometry()).getMorphTargets() != null 
-						&& ((Geometry)object.getGeometry()).getMorphTargets().size() > 0
-						&& objectMaterial instanceof HasS HasSkinning HasSkinning)objectMaterial).isMorphTargets();
+						&& ((Geometry)object.getGeometry()).getMorphTargets().size() > 0 
+						&& objectMaterial instanceof HasSkinning && ((HasSkinning)objectMaterial).isMorphTargets();
 						
-				boolean  useSkinning = object instanceof SkinnedMesh 
+				boolean  useSkinning = object instanceof SkinnedMesh
 						&& objectMaterial instanceof HasSkinning && ((HasSkinning)objectMaterial).isSkinning();
 
 				Material material = null;
@@ -381,7 +384,7 @@ public final class ShadowMap extends Plugin
 
 				getRenderer().setMaterialFaces( objectMaterial );
 
-				if ( buffer instanceof BufferGeometry) {
+				if ( buffer instanceof BufferGeometry ) {
 
 					getRenderer().renderBufferDirect( shadowCamera, sceneLights, null, material, (BufferGeometry)buffer, object );
 

@@ -20,7 +20,6 @@ package org.parallax3d.parallax.plugins.postprocessing;
 
 import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
 import org.parallax3d.parallax.plugins.postprocessing.shaders.FilmShader;
-import org.parallax3d.parallax.plugins.postprocessing.shaders.FilmShader;
 
 public class FilmPass extends Pass
 {

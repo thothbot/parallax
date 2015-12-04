@@ -21,8 +21,6 @@ package org.parallax3d.parallax.core.shared.scenes;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.core.Object3D;
 import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.core.Object3D;
 
 /**
  * 3D Scene. The basic class for rendering.

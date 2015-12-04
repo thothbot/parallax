@@ -24,14 +24,11 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.math.Euler;
+import org.parallax3d.parallax.core.shared.math.Euler.EulerChangeHandler;
 import org.parallax3d.parallax.core.shared.math.Matrix3;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Quaternion;
 import org.parallax3d.parallax.core.shared.math.Quaternion.QuaternionChangeHandler;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.math.Euler;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
@@ -129,7 +126,7 @@ public class Object3D
 		});
 		
 		this.rotation = new Euler();
-		this.rotation.setHandler(new Euler.EulerChangeHandler() {
+		this.rotation.setHandler(new EulerChangeHandler() {
 			
 			@Override
 			public void onChange(Euler rotation) {

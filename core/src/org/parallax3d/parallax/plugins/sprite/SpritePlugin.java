@@ -23,29 +23,31 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.client.gl2.enums.*;
 import org.parallax3d.parallax.core.client.renderers.Plugin;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.scenes.FogExp2;
 import org.parallax3d.parallax.plugins.sprite.shaders.SpriteShader;
 import org.parallax3d.parallax.core.client.gl2.WebGLBuffer;
 import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;
 import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
+import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;
+import org.parallax3d.parallax.core.client.gl2.enums.DataType;
+import org.parallax3d.parallax.core.client.gl2.enums.DrawElementsType;
+import org.parallax3d.parallax.core.client.gl2.enums.EnableCap;
+import org.parallax3d.parallax.core.client.gl2.enums.TextureUnit;
+import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.lights.Light;
 import org.parallax3d.parallax.core.shared.math.Quaternion;
 import org.parallax3d.parallax.core.shared.scenes.AbstractFog;
 import org.parallax3d.parallax.core.shared.scenes.Fog;
+import org.parallax3d.parallax.core.shared.scenes.FogExp2;
 import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 
-public final class SpritePlugin extends Plugin 
+public final class SpritePlugin extends Plugin
 {
 	private List<Sprite> objects;
 	
@@ -63,7 +65,7 @@ public final class SpritePlugin extends Plugin
 	Quaternion spriteRotation = new Quaternion();
 	Vector3 spriteScale = new Vector3();
 		
-	public SpritePlugin(WebGLRenderer renderer, Scene scene) 
+	public SpritePlugin(WebGLRenderer renderer, Scene scene)
 	{
 		super(renderer, scene);
 
@@ -94,9 +96,9 @@ public final class SpritePlugin extends Plugin
 	}
 	
 	@Override
-	public Plugin.TYPE getType()
+	public TYPE getType()
 	{
-		return Plugin.TYPE.POST_RENDER;
+		return TYPE.POST_RENDER;
 	}
 	
 	public List<Sprite> getObjects() 

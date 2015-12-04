@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.core.shared.helpers;
 
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.objects.Line;
 import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
 import org.parallax3d.parallax.core.shared.materials.Material;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.objects.Line;
 
 // port from three.js r70 GridHelper.js
 /**
@@ -37,7 +37,7 @@ public class GridHelper extends Line {
     private Color color2;
 
     public GridHelper(double size, double step) {
-        super(new Geometry(), new LineBasicMaterial(), Line.MODE.PIECES);
+        super(new Geometry(), new LineBasicMaterial(), MODE.PIECES);
         Geometry geometry = (Geometry) getGeometry();
         
         LineBasicMaterial material = (LineBasicMaterial) getMaterial();

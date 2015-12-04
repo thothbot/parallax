@@ -20,7 +20,6 @@ package org.parallax3d.parallax.core.shared.geometries.parametric;
 
 import org.parallax3d.parallax.core.shared.geometries.ParametricGeometry;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.geometries.ParametricGeometry;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/mobius_strip.gif" />
@@ -35,7 +34,7 @@ public class MobiusParametricGeometry extends ParametricGeometry
 
 	public MobiusParametricGeometry(int slices, int stacks) 
 	{
-		super(new ParametricGeometry.ParametricFunction() {
+		super(new ParametricFunction() {
 			
 			@Override
 			public Vector3 run(double u, double t)

@@ -18,14 +18,13 @@
 
 package org.parallax3d.parallax.plugins.sprite.shaders;
 
+import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.shared.math.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 public final class SpriteShader extends Shader 
 {

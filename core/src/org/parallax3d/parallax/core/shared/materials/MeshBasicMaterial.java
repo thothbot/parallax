@@ -19,9 +19,8 @@
 package org.parallax3d.parallax.core.shared.materials;
 
 import org.parallax3d.parallax.core.client.shaders.BasicShader;
-import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.client.textures.Texture.OPERATIONS;
+import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.shared.math.Color;
 
 /**
@@ -49,12 +48,12 @@ public class MeshBasicMaterial extends Material
 	
 	private boolean isFog;
 	
-	private Material.SHADING shading;
+	private SHADING shading;
 	
 	private boolean isWireframe = false;
 	private int wireframeLineWidth;
 		
-	private Material.COLORS vertexColors;
+	private COLORS vertexColors;
 	
 	private boolean isSkinning;
 	private boolean isMorphTargets;
@@ -68,17 +67,17 @@ public class MeshBasicMaterial extends Material
 		setWireframe(false);
 		setWireframeLineWidth(1);
 		
-		setCombine(OPERATIONS.MULTIPLY);
+		setCombine(Texture.OPERATIONS.MULTIPLY);
 		setReflectivity(1.0);
 		setRefractionRatio(0.98);
 		
-		setShading(Material.SHADING.SMOOTH);
+		setShading(SHADING.SMOOTH);
 		
 		setFog(true);
 		
 		setColor(new Color(0xffffff));
 		
-		setVertexColors(Material.COLORS.NO);
+		setVertexColors(COLORS.NO);
 	}
 
 	@Override
@@ -128,12 +127,12 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public OPERATIONS getCombine() {
+	public Texture.OPERATIONS getCombine() {
 		return this.combine;
 	}
 
 	@Override
-	public void setCombine(OPERATIONS combine) {
+	public void setCombine(Texture.OPERATIONS combine) {
 		this.combine = combine;
 	}
 
@@ -188,12 +187,12 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public Material.COLORS isVertexColors() {
+	public COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public void setVertexColors(COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
 	
@@ -268,11 +267,11 @@ public class MeshBasicMaterial extends Material
 		this.specularMap = specularMap;
 	}
 	
-	public Material.SHADING getShading() {
+	public SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public void setShading(SHADING shading) {
 		this.shading = shading;
 	}
 	

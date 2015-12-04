@@ -18,25 +18,15 @@
 
 package org.parallax3d.parallax.core.shared.helpers;
 
-import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.core.Object3D;
 import org.parallax3d.parallax.core.shared.geometries.CylinderGeometry;
-import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
 import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.objects.Line;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
 import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.geometries.CylinderGeometry;
 import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
-import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
-import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.objects.Line;
 import org.parallax3d.parallax.core.shared.objects.Mesh;
 
 public class ArrowHelper extends Object3D

@@ -19,18 +19,15 @@
 package org.parallax3d.parallax.plugins.postprocessing;
 
 import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.plugins.postprocessing.shaders.DotScreenShader;
-import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.plugins.postprocessing.shaders.DotScreenShader;
 
 public class DotScreenPass extends Pass
 {
 	private ShaderMaterial material;
 	private boolean isRenderToScreen = false;
 	
-	public DotScreenPass( Vector2 center, double angle, double scale )
+	public DotScreenPass( Vector2 center, double angle, double scale ) 
 	{
 		this.material = new ShaderMaterial(new DotScreenShader());
 		((Vector2) this.material.getShader().getUniforms().get("center").getValue()).copy( center );

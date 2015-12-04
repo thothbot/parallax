@@ -26,8 +26,6 @@ import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.shared.Log;
 
 /**
  * A canvas with WebGL support.
@@ -37,7 +35,7 @@ public class Canvas3d extends FocusWidget
 	// "webkit-3d", "opera-3d", "moz-glweb20", "moz-webgl", "3d" 
 	private static final String[] CONTEXT_IDS = { "webgl", "experimental-webgl" };
 
-	private WebGLRenderingContext gl;
+	private WebGLRenderingContext gl;	
 	private final CanvasElement canvas;
 	
 	/**

@@ -20,13 +20,10 @@ package org.parallax3d.parallax.core.shared.materials;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.client.shaders.BasicShader;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
+import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.math.Color;
 
 /**
@@ -43,7 +40,7 @@ public class LineBasicMaterial extends Material
 	
 	private Color color;
 	
-	private Material.COLORS vertexColors;
+	private COLORS vertexColors;
 	
 	private double linewidth;
 	
@@ -55,7 +52,7 @@ public class LineBasicMaterial extends Material
 		
 		setLinewidth(1.0);
 		
-		setVertexColors(Material.COLORS.NO);
+		setVertexColors(COLORS.NO);
 	}
 	
 	@Override
@@ -106,12 +103,12 @@ public class LineBasicMaterial extends Material
 	}
 	
 	@Override
-	public Material.COLORS isVertexColors() {
+	public COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public void setVertexColors(COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
 	
@@ -134,7 +131,7 @@ public class LineBasicMaterial extends Material
 	}
 	
 	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput) 
+	public void refreshUniforms(Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(camera, isGammaInput);
 		Map<String, Uniform> uniforms = getShader().getUniforms();

@@ -18,12 +18,11 @@
 
 package org.parallax3d.parallax.loader.shared;
 
-import org.parallax3d.parallax.loader.shared.collada.DaeDocument;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
+import org.parallax3d.parallax.loader.shared.collada.DaeDocument;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
-import org.parallax3d.parallax.loader.shared.collada.DaeDocument;
 
 public class ColladaLoader extends XHRLoader
 {
@@ -37,7 +36,7 @@ public class ColladaLoader extends XHRLoader
 		load();
 	} 
 
-	protected AbstractGeometry parse(String xmlString) 
+	protected AbstractGeometry parse(String xmlString)
 	{
 		document = XMLParser.parse(xmlString);
 		daeDocument = new DaeDocument(document);

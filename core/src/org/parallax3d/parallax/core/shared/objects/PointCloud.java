@@ -20,30 +20,32 @@ package org.parallax3d.parallax.core.shared.objects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;
-import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;
 import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;
-import org.parallax3d.parallax.core.client.shaders.Attribute;
-import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.shared.materials.PointCloudMaterial;
-import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
-import org.parallax3d.parallax.core.shared.core.BufferGeometry;
-import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
 import org.parallax3d.parallax.core.shared.core.Raycaster;
-import org.parallax3d.parallax.core.shared.core.Raycaster.Intersect;
+import org.parallax3d.parallax.core.shared.materials.PointCloudMaterial;
+import org.parallax3d.parallax.core.shared.math.Ray;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
+import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;
+import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;
+import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
+import org.parallax3d.parallax.core.client.shaders.Attribute;
+import org.parallax3d.parallax.core.client.shaders.Attribute.BOUND_TO;
+import org.parallax3d.parallax.core.client.shaders.Attribute.TYPE;
+import org.parallax3d.parallax.core.shared.core.BufferGeometry;
+import org.parallax3d.parallax.core.shared.core.BufferGeometry.DrawCall;
+import org.parallax3d.parallax.core.shared.core.Geometry;
+import org.parallax3d.parallax.core.shared.materials.Material;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Ray;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.math.Vector4;import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;import org.parallax3d.parallax.core.client.renderers.WebGlRendererInfo;import org.parallax3d.parallax.core.client.shaders.Attribute;import org.parallax3d.parallax.core.shared.core.AbstractGeometry;import org.parallax3d.parallax.core.shared.core.BufferGeometry;import org.parallax3d.parallax.core.shared.core.Geometry;import org.parallax3d.parallax.core.shared.core.GeometryObject;import org.parallax3d.parallax.core.shared.materials.Material;import org.parallax3d.parallax.core.shared.materials.PointCloudMaterial;import org.parallax3d.parallax.core.shared.math.*;
+import org.parallax3d.parallax.core.shared.math.Vector4;
 
 public class PointCloud extends GeometryObject
 {
@@ -65,7 +67,7 @@ public class PointCloud extends GeometryObject
 		this(geometry, PointCloud.defaultMaterial);
 	}
 
-	public PointCloud(AbstractGeometry geometry, MMaterial aterial)
+	public PointCloud(AbstractGeometry geometry, Material material) 
 	{
 		super(geometry, material);
 	}
@@ -79,9 +81,9 @@ public class PointCloud extends GeometryObject
 	}
 
 	@Override
-	public void raycast(Raycaster raycaster, List<Intersect> intersects) {
-		MaMatrix4 verseMatrix = new Matrix4();
-		RaRay y = new Ray();
+	public void raycast(Raycaster raycaster, List<Raycaster.Intersect> intersects) {
+		Matrix4 inverseMatrix = new Matrix4();
+		Ray ray = new Ray();
 
 		AbstractGeometry geometry = getGeometry();
 
@@ -98,21 +100,21 @@ public class PointCloud extends GeometryObject
 
 		}
 
-		VeVector3 sition = new Vector3();
+		Vector3 position = new Vector3();
 
-		if ( geometry instanceof B BufferGeometry{
+		if ( geometry instanceof BufferGeometry ) {
 
 			BufferGeometry bGeometry = (BufferGeometry)geometry;
-			FlFloat32Array sitions = (Float32Array)bGeometry.getAttribute("position").getArray();
+			Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 
 			if ( bGeometry.getAttribute("index") != null ) {
 
-				UiUint16Array dices = (Uint16Array)bGeometry.getAttribute("index").getArray();
-				List<BufferGeometry.DrawCall> offsets = bGeometry.getDrawcalls();
+				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
+				List<DrawCall> offsets = bGeometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
-					BufferGeometry.DrawCall offset = new BufferGeometry.DrawCall(0, indices.getLength(), 0 );
+					DrawCall offset = new DrawCall(0, indices.getLength(), 0 );
 
 					offsets.add( offset );
 
@@ -167,7 +169,7 @@ public class PointCloud extends GeometryObject
 		}
 	}
 	
-	private void testPoint(Raycaster raycaster, List<Intersect> intersects, Ray ray, Vector3 point, int index ) {
+	private void testPoint(Raycaster raycaster, List<Raycaster.Intersect> intersects, Ray ray, Vector3 point, int index ) {
 
 		double rayPointDistance = ray.distanceToPoint( point );
 		double localThreshold = RAYCASTER_THRESHOLD / ( ( this.scale.getX() + this.scale.getY() + this.scale.getZ() ) / 3.0 );
@@ -203,12 +205,12 @@ public class PointCloud extends GeometryObject
 	}
 	
 	@Override
-	public void renderBuffer(WebGLRenderer renderer, WeWebGLGeometry ometryBuffer, boolean updateBuffers)
+	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers)
 	{
-		WeWebGLRenderingContext  = renderer.getGL();
-		WeWebGlRendererInfo fo = renderer.getInfo();
+		WebGLRenderingContext gl = renderer.getGL();
+		WebGlRendererInfo info = renderer.getInfo();
 
-		gl.drawArrays( BeBeginModeOINTS, 0, geometryBuffer.__webglParticleCount );
+		gl.drawArrays( BeginMode.POINTS, 0, geometryBuffer.__webglParticleCount );
 
 		info.getRender().calls ++;
 		info.getRender().points += geometryBuffer.__webglParticleCount;
@@ -239,7 +241,7 @@ public class PointCloud extends GeometryObject
 		info.getMemory().geometries ++;
 	}
 	
-	public void setBuffers(WebGLRenderer renderer, BuBufferUsage nt)
+	public void setBuffers(WebGLRenderer renderer, BufferUsage hint)
 	{
 
 		WebGLRenderingContext gl = renderer.getGL();
@@ -261,7 +263,7 @@ public class PointCloud extends GeometryObject
 		boolean dirtyElements = geometry.isElementsNeedUpdate();
 		boolean dirtyColors = geometry.isColorsNeedUpdate();
 
-		List<AttAttributeustomAttributes = geometry.__webglCustomAttributesList;
+		List<Attribute> customAttributes = geometry.__webglCustomAttributesList;
 
 		if ( this.sortParticles ) {
 
@@ -313,7 +315,7 @@ public class PointCloud extends GeometryObject
 
 					Attribute customAttribute = customAttributes.get( i );
 
-					if ( ! ( customAttribute.getBoundTo() == null || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) ) continue;
+					if ( ! ( customAttribute.getBoundTo() == null || customAttribute.getBoundTo() == BOUND_TO.VERTICES ) ) continue;
 
 					int offset = 0;
 
@@ -337,7 +339,7 @@ public class PointCloud extends GeometryObject
 //							index = sortArray[ ca ][ 1 ];
 							int index = ca;
 
-							VecVector2 ue = (Vector2)customAttribute.getValue().get( index );
+							Vector2 value = (Vector2)customAttribute.getValue().get( index );
 
 							customAttribute.array.set( offset , value.getX());
 							customAttribute.array.set( offset + 1 , value.getY());
@@ -348,7 +350,7 @@ public class PointCloud extends GeometryObject
 
 					} else if ( customAttribute.size == 3 ) {
 
-						if ( customAttribute.type == Attribute.TYPE.C) {
+						if ( customAttribute.type == TYPE.C) {
 
 							for ( int ca = 0; ca < cal; ca ++ ) {
 
@@ -450,7 +452,7 @@ public class PointCloud extends GeometryObject
 
 					if ( customAttribute.needsUpdate &&
 						 ( customAttribute.getBoundTo() == null ||
-							 customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) ) {
+							 customAttribute.getBoundTo() == BOUND_TO.VERTICES ) ) {
 
 						int cal = customAttribute.getValue().size();
 
@@ -479,7 +481,7 @@ public class PointCloud extends GeometryObject
 
 						} else if ( customAttribute.size == 3 ) {
 
-							if ( customAttribute.type == Attribute.TYPE.C ) {
+							if ( customAttribute.type == TYPE.C ) {
 
 								for ( int ca = 0; ca < cal; ca ++ ) {
 
@@ -536,7 +538,7 @@ public class PointCloud extends GeometryObject
 
 		if ( dirtyVertices || this.sortParticles ) {
 
-			gl.bindBuffer( BufBufferTargetRAY_BUFFER, geometry.__webglVertexBuffer );
+			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer );
 			gl.bufferData( BufferTarget.ARRAY_BUFFER, vertexArray, hint );
 
 		}

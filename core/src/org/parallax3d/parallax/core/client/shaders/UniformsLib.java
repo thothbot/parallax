@@ -26,9 +26,8 @@ import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.textures.Texture;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector4;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.core.shared.math.Vector2;
 
 /**
  * Some common uniforms used by shaders.

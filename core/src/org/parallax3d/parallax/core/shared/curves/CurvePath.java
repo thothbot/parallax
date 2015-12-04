@@ -23,8 +23,6 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.shared.math.Box3;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Box3;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 
 
 /*
@@ -160,7 +158,7 @@ public class CurvePath extends Curve
 	/*
 	 * Returns min and max coordinates, as well as centroid
 	 */
-	public Box3 getBoundingBox()
+	public Box3 getBoundingBox() 
 	{
 		List<Vector2> points = (ArrayList)this.getPoints();
 

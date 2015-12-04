@@ -26,10 +26,6 @@ import org.parallax3d.parallax.core.shared.math.Ray;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.objects.Line;
 import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.math.Ray;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.objects.Line;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
 
 /**
  * This class makes raycasting easier. Raycasting is used for picking and more.
@@ -163,9 +159,9 @@ public class Raycaster
 	 * @param recursive If set, it also checks all descendants of the objects. Otherwise it only checks intersecton with the objects.
 	 * @return
 	 */
-	public List<Raycaster.Intersect> intersectObjects ( List<? extends Object3D> objects, boolean recursive ) {
+	public List<Intersect> intersectObjects ( List<? extends Object3D> objects, boolean recursive ) {
 
-		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
+		List<Intersect>  intersects = new ArrayList<Intersect>();
 
 		for ( int i = 0, l = objects.size(); i < l; i ++ ) {
 
@@ -189,9 +185,9 @@ public class Raycaster
 	 * @param recursive If set, it also checks all descendants. Otherwise it only checks intersecton with the object.
 	 * @return
 	 */
-	public List<Raycaster.Intersect> intersectObject( GeometryObject object, boolean recursive ) {
+	public List<Intersect> intersectObject( GeometryObject object, boolean recursive ) {
 
-		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
+		List<Intersect>  intersects = new ArrayList<Intersect>();
 
 		intersectObject( object, this, intersects, recursive );
 

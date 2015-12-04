@@ -20,11 +20,8 @@ package org.parallax3d.parallax.plugins.sprite;
 
 import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.materials.HasColor;
 import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.textures.Texture;
 import org.parallax3d.parallax.core.shared.math.Color;
 
 public class SpriteMaterial extends Material implements HasColor {

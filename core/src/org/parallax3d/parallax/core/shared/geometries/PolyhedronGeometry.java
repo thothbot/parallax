@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.core.shared.math.Sphere;
+import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.math.Sphere;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public abstract class PolyhedronGeometry extends Geometry
 {
@@ -81,7 +81,7 @@ public abstract class PolyhedronGeometry extends Geometry
 
 		this.computeFaceNormals();
 
-		setBoundingSphere(new Sphere(new Vector3(), radius)); 
+		setBoundingSphere(new Sphere(new Vector3(), radius));
 	}
 	
 	/**

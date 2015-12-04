@@ -21,7 +21,6 @@ package org.parallax3d.parallax.core.client;
 import com.google.gwt.user.client.ui.Widget;
 import org.parallax3d.parallax.core.client.renderers.CSS3DRenderer;
 import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.client.renderers.CSS3DRenderer;
 
 
 /**

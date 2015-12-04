@@ -23,8 +23,6 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.utils.CurveUtils;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.utils.CurveUtils;
 
 
 public class SplineCurve3 extends Curve

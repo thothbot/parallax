@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.shared.math;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 
 /**
  * Implementation of Quaternion which provide a convenient mathematical notation 

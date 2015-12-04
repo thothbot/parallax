@@ -22,15 +22,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.core.client.textures.CompressedTexture;
+import org.parallax3d.parallax.core.shared.Log;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.loader.shared.json.JsoMorphColors;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureWrapMode;
 import org.parallax3d.parallax.core.client.shaders.NormalMapShader;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.client.textures.CompressedTexture;
 import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.Geometry;
+import org.parallax3d.parallax.core.shared.core.Geometry.MorphColor;
 import org.parallax3d.parallax.core.shared.materials.HasAlphaMap;
 import org.parallax3d.parallax.core.shared.materials.HasAmbientEmissiveColor;
 import org.parallax3d.parallax.core.shared.materials.HasBumpMap;
@@ -41,6 +44,7 @@ import org.parallax3d.parallax.core.shared.materials.HasNormalMap;
 import org.parallax3d.parallax.core.shared.materials.HasSpecularMap;
 import org.parallax3d.parallax.core.shared.materials.HasVertexColors;
 import org.parallax3d.parallax.core.shared.materials.Material;
+import org.parallax3d.parallax.core.shared.materials.Material.COLORS;
 import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.core.shared.materials.MeshPhongMaterial;
@@ -48,10 +52,8 @@ import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Mathematics;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.math.Vector4;
 import org.parallax3d.parallax.loader.shared.json.JsoMaterial;
-import org.parallax3d.parallax.loader.shared.json.JsoMorphColors;
 import org.parallax3d.parallax.loader.shared.json.JsoMorphTargets;
 import org.parallax3d.parallax.loader.shared.json.JsoObject;
 import org.parallax3d.parallax.loader.shared.json.JsoObjectFactory;
@@ -62,20 +64,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ImageElement;
-//import com.google.gwt.json.client.JSONException;
+import com.google.gwt.json.client.JSONException;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
-import org.parallax3d.parallax.core.client.shaders.NormalMapShader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.client.textures.CompressedTexture;
-import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
-import org.parallax3d.parallax.core.shared.core.Face3;
-import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.materials.*;
-import org.parallax3d.parallax.core.shared.math.*;
-import org.parallax3d.parallax.loader.shared.json.*;
 
 public class JsonLoader extends XHRLoader 
 {
@@ -91,7 +82,7 @@ public class JsonLoader extends XHRLoader
 	}
 	
 	@Override
-	protected AbstractGeometry parse(String string)
+	protected AbstractGeometry parse(String string) 
 	{		 
 		if(!isThisJsonStringValid(string))
 			return null;
@@ -125,7 +116,7 @@ public class JsonLoader extends XHRLoader
 	{
 		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
 		{
-			Geometry.MorphColor colorMap = geometry.getMorphColors().get( 0 );
+			MorphColor colorMap = geometry.getMorphColors().get( 0 );
 
 			for ( int i = 0; i < colorMap.colors.size(); i ++ ) 
 			{
@@ -144,7 +135,7 @@ public class JsonLoader extends XHRLoader
 			AutoBean<JsoObject> bean = AutoBeanCodex.decode(factory, JsoObject.class, iJSonString);
 			object = bean.as();
 		} 
-		catch ( Exception e)
+		catch ( JSONException e) 
 		{
 			Log.error("Could not parser JSON data");
 			return false;
@@ -208,7 +199,7 @@ public class JsonLoader extends XHRLoader
 		
 		if(jsonMaterial.getVertexColors() && material instanceof HasVertexColors)
 		{
-			((HasVertexColors) material).setVertexColors(Material.COLORS.VERTEX);
+			((HasVertexColors) material).setVertexColors(COLORS.VERTEX);
 		}
 			
 		Color diffuseColor = 
@@ -355,7 +346,7 @@ public class JsonLoader extends XHRLoader
 			}
 		}
 		
-		if ( jsonMaterial.getMapNormal() != null && material instanceof HasNormalMap) 
+		if ( jsonMaterial.getMapNormal() != null && material instanceof HasNormalMap)
 		{
 			Map<String, Uniform> uniforms = material.getShader().getUniforms();
 
@@ -367,7 +358,7 @@ public class JsonLoader extends XHRLoader
 
 			if ( jsonMaterial.getMapNormalFactor() > 0 ) 
 			{
-				((Vector2)uniforms.get( "uNormalScale" ).getValue()).set(
+				((Vector2)uniforms.get( "uNormalScale" ).getValue()).set( 
 						jsonMaterial.getMapNormalFactor(), jsonMaterial.getMapNormalFactor() );
 			}
 		}
@@ -386,7 +377,7 @@ public class JsonLoader extends XHRLoader
 				uniforms.get( "tSpecular" ).setValue(texture);
 				uniforms.get( "enableSpecular" ).setValue(true);
 			}
-			else if( material instanceof HasSpecularMap )
+			else if( material instanceof HasSpecularMap)
 			{
 				((HasSpecularMap)material).setSpecularMap(texture);
 			}
@@ -760,7 +751,7 @@ public class JsonLoader extends XHRLoader
 			
 			for ( int i = 0, l = morphColors.size(); i < l; i++ ) 
 			{
-				Geometry.MorphColor morphColor = geometry.new MorphColor();
+				MorphColor morphColor = geometry.new MorphColor();
 				morphColor.name = morphColors.get(i).getName();
 				morphColor.colors = new ArrayList<Color>();
 								
@@ -803,7 +794,7 @@ public class JsonLoader extends XHRLoader
 					int oWidth =  texture.getImage().getOffsetWidth();
 					int oHeight = texture.getImage().getOffsetHeight();
 							
-					if ( !Mathematics.isPowerOfTwo(oWidth) || !Mathematics.isPowerOfTwo( oHeight ) )
+					if ( !Mathematics.isPowerOfTwo( oWidth ) || !Mathematics.isPowerOfTwo( oHeight ) ) 
 					{
 						CanvasElement canvas = Document.get().createElement("canvas").cast();
 						int width = Mathematics.getNextHighestPowerOfTwo(oWidth);

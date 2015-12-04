@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.core.shared.lights;
 
-import org.parallax3d.parallax.core.client.renderers.RendererLights;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.client.renderers.RendererLights;
 
 public class AreaLight extends Light implements HasIntensity 
 {

@@ -20,13 +20,12 @@ package org.parallax3d.parallax.core.shared.utils;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.core.Object3D;
 import org.parallax3d.parallax.core.shared.materials.Material;
+import org.parallax3d.parallax.core.shared.core.Geometry;
+import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.objects.Mesh;
 import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 
 /**
  * The class implements some 3D Scene related helper methods
@@ -49,7 +48,7 @@ public class SceneUtils
 	 * 
 	 * @return the new instance of {@link Object3D}
 	 */
-	public static Object3D createMultiMaterialObject( Geometry geometry, List<? extends Material> materials ) 
+	public static Object3D createMultiMaterialObject( Geometry geometry, List<? extends Material> materials )
 	{
 		Object3D group = new Object3D();
 

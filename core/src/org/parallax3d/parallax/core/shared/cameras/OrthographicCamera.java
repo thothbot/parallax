@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.shared.cameras;
 
 import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
 
 /**
  * Camera with orthographic projection
@@ -87,7 +86,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	}
 	
 	@Override
-	public void onResize(ViewportResizeEvent event)
+	public void onResize(ViewportResizeEvent event) 
 	{
 		setSize( event.getRenderer().getAbsoluteWidth(), event.getRenderer().getAbsoluteHeight() );
 	}

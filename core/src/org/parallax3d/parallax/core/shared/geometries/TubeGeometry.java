@@ -22,15 +22,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.core.shared.core.Face3;
-import org.parallax3d.parallax.core.shared.curves.Curve;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.curves.Curve;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * Creates a tube which extrudes along a 3d spline.

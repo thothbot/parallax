@@ -20,8 +20,6 @@ package org.parallax3d.parallax.core.shared.math;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.shared.Log;
 
 /**
  * This class implements three-dimensional matrix. NxN, where N=4.

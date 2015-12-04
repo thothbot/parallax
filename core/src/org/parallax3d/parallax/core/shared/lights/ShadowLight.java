@@ -22,12 +22,9 @@ import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.core.Object3D;
 import org.parallax3d.parallax.core.shared.helpers.CameraHelper;
+import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public abstract class ShadowLight extends Light implements HasIntensity
 {

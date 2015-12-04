@@ -28,9 +28,6 @@ import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
-import org.parallax3d.parallax.core.client.gl2.arrays.ArrayBuffer;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 
 public abstract class XHRLoader 
 {

@@ -18,11 +18,10 @@
 
 package org.parallax3d.parallax.core.shared.geometries;
 
+import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
-public class AsteriskGeometry extends Geometry
+public class AsteriskGeometry extends Geometry 
 {
 
 	public AsteriskGeometry(double innerRadius, double outerRadius )

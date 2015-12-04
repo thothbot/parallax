@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.shared.materials;
 
 import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.client.textures.Texture;
 
 public interface HasBumpMap 
 {

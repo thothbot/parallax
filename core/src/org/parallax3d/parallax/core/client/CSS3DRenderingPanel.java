@@ -26,9 +26,6 @@ import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.core.client.events.*;
 import org.parallax3d.parallax.core.client.renderers.CSS3DRenderer;
 import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.client.events.AnimationReadyEvent;
-import org.parallax3d.parallax.core.client.events.AnimationReadyHandler;
-import org.parallax3d.parallax.core.client.events.Context3dErrorEvent;
 
 /**
  * Widget which manages {@link CSS3DAnimatedScene} and {@link CSS3DRenderer}

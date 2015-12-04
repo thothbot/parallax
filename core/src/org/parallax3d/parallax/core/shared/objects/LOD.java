@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.math.Matrix4;import org.parallax3d.parallax.core.shared.cameras.Camera;import org.parallax3d.parallax.core.shared.core.Object3D;import org.parallax3d.parallax.core.shared.math.Matrix4;
+import org.parallax3d.parallax.core.shared.math.Matrix4;
 
 
 public class LOD extends Object3D
@@ -60,13 +60,13 @@ public class LOD extends Object3D
 		this.add( object3D );
 	}
 
-	public void update ( CCamera amera )
+	public void update ( Camera camera )
 	{
 		if(this.getLODs().size() <= 1) return;
 
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
 
-		MaMatrix4 verse  = camera.getMatrixWorldInverse();
+		Matrix4 inverse  = camera.getMatrixWorldInverse();
 		double distance = -( inverse.getArray().get(2) 
 				* this.matrixWorld.getArray().get(12) + inverse.getArray().get(6) 
 				* this.matrixWorld.getArray().get(13) + inverse.getArray().get(10) 

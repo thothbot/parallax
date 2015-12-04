@@ -23,7 +23,7 @@ import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.math.Vector2;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;import org.parallax3d.parallax.core.client.shaders.Uniform;
+import com.google.gwt.resources.client.TextResource;
 
 /**
  * Triangle blur shader
@@ -39,7 +39,7 @@ import com.google.gwt.resources.client.TextResource;import org.parallax3d.parall
  * @author thothbot
  * 
  */
-public final class TriangleBlurShader extends Shader
+public final class TriangleBlurShader extends Shader 
 {
 
 	interface Resources extends DefaultResources
@@ -61,7 +61,7 @@ public final class TriangleBlurShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("texture", new  UniformUniform.TYPE.T ));
+		this.addUniform("texture", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("delta", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 )));
 	}
 

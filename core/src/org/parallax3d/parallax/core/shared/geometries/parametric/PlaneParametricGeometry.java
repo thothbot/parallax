@@ -20,8 +20,6 @@ package org.parallax3d.parallax.core.shared.geometries.parametric;
 
 import org.parallax3d.parallax.core.shared.geometries.ParametricGeometry;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.geometries.ParametricGeometry;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public class PlaneParametricGeometry extends ParametricGeometry
 {

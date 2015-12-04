@@ -73,7 +73,7 @@ public final class DepthShader extends Shader
 			ChunksVertexShader.LOGDEPTHBUF
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main1));	
+		super.updateVertexSource(updateShaderSource(src, vars, main1));
 	}
 	
 	@Override
@@ -87,6 +87,6 @@ public final class DepthShader extends Shader
 			ChunksFragmentShader.LOGDEPTHBUF
 		);
 			
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
+		super.updateFragmentSource(updateShaderSource(src, vars, main));
 	}
 }

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;import org.parallax3d.parallax.core.client.shaders.Uniform;
+import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
 
 public class ShaderPass extends Pass
 {
@@ -33,7 +33,7 @@ public class ShaderPass extends Pass
 
 	private boolean isClear = false;
 	
-	public ShaderPass( Shader shader)
+	public ShaderPass( Shader shader) 
 	{
 		this(shader, "tDiffuse");
 	}
@@ -53,7 +53,7 @@ public class ShaderPass extends Pass
 		this.isRenderToScreen = isRenderToScreen;
 	}
 	
-	public Map<String,  Uniform getUniforms() {
+	public Map<String, Uniform> getUniforms() {
 		return this.material.getShader().getUniforms();
 	}
 	

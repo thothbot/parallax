@@ -25,18 +25,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.client.gl2.WebGLShader;
+import org.parallax3d.parallax.core.client.gl2.WebGLProgram;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.enums.ProgramParameter;
 import org.parallax3d.parallax.core.shared.Log;
+import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
+import org.parallax3d.parallax.core.client.gl2.WebGLShader;
 import org.parallax3d.parallax.core.shared.core.FastMap;
-import org.parallax3d.parallax.core.client.gl2.WebGLProgram;
 import org.parallax3d.parallax.core.shared.math.Mathematics;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;import org.parallax3d.parallax.core.client.gl2.WebGLConstants;import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;import org.parallax3d.parallax.core.client.gl2.WebGLShader;import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;import org.parallax3d.parallax.core.client.gl2.enums.ProgramParameter;import org.parallax3d.parallax.core.shared.Log;import org.parallax3d.parallax.core.shared.core.FastMap;
+import com.google.gwt.resources.client.TextResource;
 
 /**
  * Basic abstract shader.
@@ -92,7 +92,7 @@ public abstract class Shader
 	/**
 	 * This constructor will create new Shader instance. 
 	 * 
-	 * @param resource the {@link Shader.DefaultResources} instance.
+	 * @param resource the {@link DefaultResources} instance.
 	 */
 	public Shader(DefaultResources resource)
 	{
@@ -134,14 +134,14 @@ public abstract class Shader
 	}
 	
 	// Called in renderer plugins
-	public Shader buildProgram(WebGLRenderingContext gl)
+	public Shader buildProgram(WebGLRenderingContext gl) 
 	{
 		return buildProgram(gl, false, 0, 0);
 	}
 	
 	public Shader buildProgram(WebGLRenderingContext gl, boolean useVertexTexture, int maxMorphTargets, int maxMorphNormals) 
 	{
-		LLogdebug("Building new program...");
+		Log.debug("Building new program...");
 
 		initShaderProgram(gl);
 
@@ -212,14 +212,14 @@ public abstract class Shader
 		String vertex = vertexExtensions + getShaderPrecisionDefinition() + "\n" + getVertexSource();
 		String fragment = fragmentExtensions + getShaderPrecisionDefinition() + "\n" + getFragmentSource();
 		
-		WWebGLShader lVertexShader = getShaderProgram(gl, ChunksVertexShader.class, vertex);
+		WebGLShader glVertexShader = getShaderProgram(gl, ChunksVertexShader.class, vertex);
 		WebGLShader glFragmentShader = getShaderProgram(gl, ChunksFragmentShader.class, fragment); 
 		gl.attachShader(this.program, glVertexShader);
 		gl.attachShader(this.program, glFragmentShader);
 
 		gl.linkProgram(this.program);
 
-		if (!gl.getProgramParameterb(this.program, PProgramParameterLINK_STATUS))
+		if (!gl.getProgramParameterb(this.program, ProgramParameter.LINK_STATUS))
 			Log.error("Could not initialise shader\n"
 					+ "GL error: " + gl.getProgramInfoLog(program)
 					+ "Shader: " + this.getClass().getName()
@@ -235,7 +235,7 @@ public abstract class Shader
 		gl.deleteShader( glFragmentShader );
 	}
 	
-	public void setPrecision(Shader.PRECISION precision) {
+	public void setPrecision(PRECISION precision) {
 		this.precision = precision;
 	}
 
@@ -252,7 +252,7 @@ public abstract class Shader
 		WebGLShader shader = null;
 
 		if (type == ChunksFragmentShader.class)
-			shader = gl.createShader(WWebGLConstantsFRAGMENT_SHADER);
+			shader = gl.createShader(WebGLConstants.FRAGMENT_SHADER);
 
 		else if (type == ChunksVertexShader.class)
 			shader = gl.createShader(WebGLConstants.VERTEX_SHADER);
@@ -443,7 +443,7 @@ public abstract class Shader
 		return src;
 	}
 
-	public static  Float32Array uildKernel( double sigma )
+	public static Float32Array buildKernel( double sigma )
 	{ 
 		int kMaxKernelSize = 25; 
 		int kernelSize = (int) (2 * Math.ceil( sigma * 3 ) + 1);

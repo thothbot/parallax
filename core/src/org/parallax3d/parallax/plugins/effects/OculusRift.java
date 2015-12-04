@@ -20,35 +20,28 @@ package org.parallax3d.parallax.plugins.effects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
+import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
+import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.plugins.effects.shaders.OculusRiftShader;
+import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
+import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
 import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
+import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.cameras.OrthographicCamera;
 import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.core.shared.geometries.PlaneBufferGeometry;
 import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Mathematics;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.math.Vector4;
 import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.plugins.effects.shaders.OculusRiftShader;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
-import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 public class OculusRift extends Effect {
 	
@@ -86,7 +79,7 @@ public class OculusRift extends Effect {
 
 	// worldFactor indicates how many units is 1 meter
 	private double worldFactor = 1.0;
-	private OculusRift.HMD hdm;
+	private HMD hdm;
 	
 	// Perspective camera
 	PerspectiveCamera pCamera = new PerspectiveCamera();
@@ -131,7 +124,7 @@ public class OculusRift extends Effect {
 		});
 				
 		RTMaterial = new ShaderMaterial(new OculusRiftShader());
-		setHMD(new OculusRift.HMD());
+		setHMD(new HMD());
 
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), RTMaterial );
 		
@@ -164,11 +157,11 @@ public class OculusRift extends Effect {
 		RTMaterial.getShader().getUniforms().get( "texid" ).setValue( renderTarget );
 	}
 	
-	public OculusRift.HMD getHDM() {
+	public HMD getHDM() {
 		return this.hdm;
 	}
 		
-	public void setHMD(OculusRift.HMD hdm) {
+	public void setHMD(HMD hdm) {
 	
 		this.hdm = hdm;
 
@@ -216,7 +209,7 @@ public class OculusRift extends Effect {
 	}
 
 	@Override
-	public void render(Camera sceneCamera, List<Light> lights, int currentWidth,	int currentHeight)
+	public void render(Camera sceneCamera, List<Light> lights, int currentWidth,	int currentHeight) 
 	{
 		if(!(sceneCamera instanceof PerspectiveCamera))
 			return;

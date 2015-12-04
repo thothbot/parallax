@@ -23,18 +23,14 @@ import java.util.Map;
 
 import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.lights.*;
+import org.parallax3d.parallax.core.shared.lights.AmbientLight;
 import org.parallax3d.parallax.core.shared.lights.DirectionalLight;
 import org.parallax3d.parallax.core.shared.lights.HemisphereLight;
+import org.parallax3d.parallax.core.shared.lights.SpotLight;
 import org.parallax3d.parallax.core.shared.lights.Light;
 import org.parallax3d.parallax.core.shared.lights.PointLight;
 import org.parallax3d.parallax.core.shared.lights.ShadowLight;
-import org.parallax3d.parallax.core.shared.lights.SpotLight;
 import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.lights.DirectionalLight;
-import org.parallax3d.parallax.core.shared.lights.ShadowLight;
 
 /**
  * Lights used in the {@link Scene}.
@@ -72,7 +68,7 @@ public class RendererLights
 		
 		for ( Light light: lights) 
 		{
-			if ( (light instanceof ShadowLight && ((ShadowLight)light).isOnlyShadow()) || ! light.isVisible())
+			if ( (light instanceof ShadowLight && ((ShadowLight)light).isOnlyShadow()) || ! light.isVisible()) 
 				continue;
 
 			light.setupRendererLights(this, isGammaInput);

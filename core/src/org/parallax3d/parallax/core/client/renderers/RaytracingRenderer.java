@@ -27,6 +27,7 @@ import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationHandle;
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.CanvasPixelArray;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.GWT;
@@ -38,37 +39,28 @@ import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.core.shared.helpers.HasRaytracingPhysicalAttenuation;
 import org.parallax3d.parallax.core.shared.lights.HasIntensity;
 import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.materials.*;
-import org.parallax3d.parallax.core.shared.math.*;
 import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.FastMap;
 import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
 import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.core.Object3D.Traverse;
 import org.parallax3d.parallax.core.shared.core.Raycaster;
-import org.parallax3d.parallax.core.shared.core.Raycaster.Intersect;
 import org.parallax3d.parallax.core.shared.materials.HasColor;
 import org.parallax3d.parallax.core.shared.materials.HasRaytracingGlass;
 import org.parallax3d.parallax.core.shared.materials.HasRaytracingMirror;
+import org.parallax3d.parallax.core.shared.materials.HasShading;
 import org.parallax3d.parallax.core.shared.materials.HasVertexColors;
 import org.parallax3d.parallax.core.shared.materials.Material;
 import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.core.shared.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.core.shared.math.Color;
+import org.parallax3d.parallax.core.shared.math.Mathematics;
 import org.parallax3d.parallax.core.shared.math.Matrix3;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Ray;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.core.shared.core.FastMap;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
-import org.parallax3d.parallax.core.shared.materials.HasRaytracingMirror;
-import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 
 public class RaytracingRenderer extends AbstractRenderer 
 {
@@ -148,7 +140,7 @@ public class RaytracingRenderer extends AbstractRenderer
 	}
 
 	@Override
-	public void setClearColor(Color color, double alpha) 
+	public void setClearColor(Color color, double alpha)
 	{
 		this.clearColor.copy(color);
 	}
@@ -182,7 +174,7 @@ public class RaytracingRenderer extends AbstractRenderer
 		cameraNormalMatrix.getNormalMatrix( camera.getMatrixWorld() );
 		origin.copy( cameraPosition );
 
-		perspective = 0.5 / Math.tan( Mathematics.degToRad( ((PerspectiveCamera)camera).getFov() * 0.5 ) ) * getAbsoluteHeight();
+		perspective = 0.5 / Math.tan( Mathematics.degToRad(((PerspectiveCamera) camera).getFov() * 0.5) ) * getAbsoluteHeight();
 
 		objects = scene.getChildren();
 
@@ -190,7 +182,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		lights = new ArrayList<Light>();
 
-		scene.traverse(new Traverse() {
+		scene.traverse(new Object3D.Traverse() {
 			
 			@Override
 			public void callback(Object3D object) {
@@ -326,7 +318,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		//
 
-		List<Intersect> intersections = raycaster.intersectObjects( objects, true );
+		List<Raycaster.Intersect> intersections = raycaster.intersectObjects( objects, true );
 
 		// ray didn't find anything
 		// (here should come setting of background color?)
@@ -339,7 +331,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		// ray hit
 
-		Intersect intersection = intersections.get( 0 );
+		Raycaster.Intersect intersection = intersections.get( 0 );
 
 		Vector3 point = intersection.point;
 		GeometryObject object = intersection.object;
@@ -359,7 +351,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		if ( material instanceof MeshLambertMaterial ||
 			 material instanceof MeshPhongMaterial ||
-			 material instanceof MeshBasicMaterial ) 
+			 material instanceof MeshBasicMaterial)
 		{
 			diffuseColor.copyGammaToLinear( ((HasColor)material).getColor() );
 		} 
@@ -390,7 +382,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 				rayLight.getDirection().copy( lightVector ).normalize();
 
-				List<Intersect> intersections2 = raycasterLight.intersectObjects( objects, true );
+				List<Raycaster.Intersect> intersections2 = raycasterLight.intersectObjects( objects, true );
 
 				// point in shadow
 
@@ -418,7 +410,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 				rayLight.getDirection().copy( lightVector ).normalize();
 
-				List<Intersect> intersections3 = raycasterLight.intersectObjects( objects, true );
+				List<Raycaster.Intersect> intersections3 = raycasterLight.intersectObjects( objects, true );
 
 				// point in shadow
 
@@ -499,7 +491,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		double reflectivity = ((MeshPhongMaterial)material).getReflectivity();
 
-		if ( ( ((HasRaytracingMirror)material).isMirror() || ((HasRaytracingGlass)material).isGlass() )
+		if ( ( ((HasRaytracingMirror)material).isMirror() || ((HasRaytracingGlass)material).isGlass() ) 
 				&& reflectivity > 0 
 				&& recursionDepth < maxRecursionDepth ) 
 		{

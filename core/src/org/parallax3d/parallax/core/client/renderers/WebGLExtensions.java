@@ -18,11 +18,9 @@
 
 package org.parallax3d.parallax.core.client.renderers;
 
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.client.gl2.WebGLExtension;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.core.shared.Log;
+import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
 
 public final class WebGLExtensions {
 	

@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.client.gl2.enums;
 
 import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
-import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
 
 /**
  * Specifies the primitive or primitives that will be created from vertices presented

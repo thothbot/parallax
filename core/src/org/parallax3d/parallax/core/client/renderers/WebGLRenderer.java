@@ -27,32 +27,26 @@ import java.util.Map;
 
 import org.parallax3d.parallax.core.client.context.Canvas3d;
 import org.parallax3d.parallax.core.client.events.HasEventBus;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
+import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
+import org.parallax3d.parallax.core.client.gl2.WebGLFramebuffer;
+import org.parallax3d.parallax.core.client.gl2.WebGLShaderPrecisionFormat;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint8Array;
-import org.parallax3d.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
 import org.parallax3d.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;
 import org.parallax3d.parallax.core.client.shaders.Attribute;
-import org.parallax3d.parallax.core.client.shaders.ProgramParameters;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.cameras.HasNearFar;
+import org.parallax3d.parallax.core.shared.lights.SpotLight;
+import org.parallax3d.parallax.core.shared.math.Frustum;
+import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.objects.Line;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
 import org.parallax3d.parallax.core.shared.objects.PointCloud;
 import org.parallax3d.parallax.core.shared.objects.SkinnedMesh;
-import org.parallax3d.parallax.core.shared.scenes.AbstractFog;
-import org.parallax3d.parallax.core.shared.scenes.FogExp2;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
+import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.core.client.gl2.WebGLExtension;
-import org.parallax3d.parallax.core.client.gl2.WebGLFramebuffer;
 import org.parallax3d.parallax.core.client.gl2.WebGLProgram;
 import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.client.gl2.WebGLShaderPrecisionFormat;
 import org.parallax3d.parallax.core.client.gl2.WebGLUniformLocation;
+import org.parallax3d.parallax.core.client.gl2.arrays.Uint8Array;
 import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;
 import org.parallax3d.parallax.core.client.gl2.enums.BlendEquationMode;
 import org.parallax3d.parallax.core.client.gl2.enums.BlendingFactorDest;
@@ -72,15 +66,23 @@ import org.parallax3d.parallax.core.client.gl2.enums.Shaders;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureTarget;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureUnit;
+import org.parallax3d.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
+import org.parallax3d.parallax.core.client.renderers.WebGLExtensions.Id;
+import org.parallax3d.parallax.core.client.shaders.ProgramParameters;
+import org.parallax3d.parallax.core.client.shaders.Shader;
+import org.parallax3d.parallax.core.client.shaders.Uniform;
+import org.parallax3d.parallax.core.client.shaders.Uniform.TYPE;
 import org.parallax3d.parallax.core.client.textures.CompressedTexture;
 import org.parallax3d.parallax.core.client.textures.CubeTexture;
 import org.parallax3d.parallax.core.client.textures.DataTexture;
 import org.parallax3d.parallax.core.client.textures.RenderTargetCubeTexture;
 import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
 import org.parallax3d.parallax.core.client.textures.Texture;
+import org.parallax3d.parallax.core.shared.cameras.HasNearFar;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.BufferAttribute;
 import org.parallax3d.parallax.core.shared.core.BufferGeometry;
+import org.parallax3d.parallax.core.shared.core.BufferGeometry.DrawCall;
 import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.FastMap;
 import org.parallax3d.parallax.core.shared.core.Geometry;
@@ -92,7 +94,6 @@ import org.parallax3d.parallax.core.shared.lights.HemisphereLight;
 import org.parallax3d.parallax.core.shared.lights.Light;
 import org.parallax3d.parallax.core.shared.lights.PointLight;
 import org.parallax3d.parallax.core.shared.lights.ShadowLight;
-import org.parallax3d.parallax.core.shared.lights.SpotLight;
 import org.parallax3d.parallax.core.shared.materials.HasEnvMap;
 import org.parallax3d.parallax.core.shared.materials.HasFog;
 import org.parallax3d.parallax.core.shared.materials.HasSkinning;
@@ -105,20 +106,22 @@ import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.core.shared.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Frustum;
 import org.parallax3d.parallax.core.shared.math.Mathematics;
 import org.parallax3d.parallax.core.shared.math.Matrix3;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.math.Vector4;
+import org.parallax3d.parallax.core.shared.objects.Mesh;
+import org.parallax3d.parallax.core.shared.scenes.AbstractFog;
+import org.parallax3d.parallax.core.shared.scenes.FogExp2;
+import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;import org.parallax3d.parallax.core.client.context.Canvas3d;import org.parallax3d.parallax.core.client.events.HasEventBus;import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;import org.parallax3d.parallax.core.client.gl2.*;import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;import org.parallax3d.parallax.core.client.gl2.arrays.Uint8Array;import org.parallax3d.parallax.core.client.gl2.enums.*;import org.parallax3d.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;import org.parallax3d.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;import org.parallax3d.parallax.core.client.shaders.Attribute;import org.parallax3d.parallax.core.client.shaders.ProgramParameters;import org.parallax3d.parallax.core.client.shaders.Shader;import org.parallax3d.parallax.core.client.shaders.Uniform;import org.parallax3d.parallax.core.client.textures.*;import org.parallax3d.parallax.core.shared.Log;import org.parallax3d.parallax.core.shared.cameras.Camera;import org.parallax3d.parallax.core.shared.cameras.HasNearFar;import org.parallax3d.parallax.core.shared.core.*;import org.parallax3d.parallax.core.shared.lights.*;import org.parallax3d.parallax.core.shared.materials.*;import org.parallax3d.parallax.core.shared.math.*;import org.parallax3d.parallax.core.shared.objects.Line;import org.parallax3d.parallax.core.shared.objects.Mesh;import org.parallax3d.parallax.core.shared.objects.PointCloud;import org.parallax3d.parallax.core.shared.objects.SkinnedMesh;import org.parallax3d.parallax.core.shared.scenes.AbstractFog;import org.parallax3d.parallax.core.shared.scenes.FogExp2;import org.parallax3d.parallax.core.shared.scenes.Scene;
+import com.google.gwt.dom.client.ImageElement;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
@@ -133,7 +136,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	private List<Light> lights = new ArrayList<Light>();
 	
 	public Map<String, List<WebGLObject>> _webglObjects = GWT.isScript() ? 
-			new FastMap<List<WebGLObject>>() : new HashMap<String, List<WebGLObject>>();
+			new FastMap<List<WebGLObject>>() : new HashMap<String, List<WebGLObject>>();	
 
 	public List<WebGLObject> _webglObjectsImmediate  = new ArrayList<WebGLObject>();
 
@@ -149,7 +152,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 	// ---- Properties ------------------------------------
 	
-	public  Shader.PRECISION precision = Shader.PRECISION.HIGHP;
+	public Shader.PRECISION _precision = Shader.PRECISION.HIGHP;
 	
 	// clearing
 	private boolean autoClearColor = true;
@@ -167,7 +170,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 //	private boolean shadowMapEnabled = false;
 //	shadowMapType = PCFShadowMap;
-	private  CullFaceMode hadowMapCullFace = CullFaceMode.FRONT;
+	private CullFaceMode shadowMapCullFace = CullFaceMode.FRONT;
 	private boolean shadowMapDebug = false;
 	private boolean shadowMapCascade = false;
 	
@@ -182,25 +185,25 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	
 	public Map<String, Shader> _programs;
 	
-	private  WebGLProgram currentProgram = null;
-	private  WebGLFramebuffer currentFramebuffer = null;
+	private WebGLProgram _currentProgram = null;
+	private WebGLFramebuffer _currentFramebuffer = null;
 	private int _currentMaterialId = -1;
 	private int _currentGeometryGroupHash = -1;
-	private  Camera currentCamera = null;
+	private Camera _currentCamera = null;
 	
 	private int _usedTextureUnits = 0;
 	
 	// GL state cache
 	
-	private M Material.SIDE ldDoubleSided = null;
+	private Material.SIDE _oldDoubleSided = null;
 	private Material.SIDE _oldFlipSided = null;
 	private Material.SIDE cache_oldMaterialSided = null;
 
 	private Material.BLENDING _oldBlending = null;
 	
-	private B BlendEquationMode ldBlendEquation = null;
-	private B BlendingFactorSrc ldBlendSrc = null;
-	private B BlendingFactorDest ldBlendDst = null;
+	private BlendEquationMode _oldBlendEquation = null;
+	private BlendingFactorSrc _oldBlendSrc = null;
+	private BlendingFactorDest _oldBlendDst = null;
 	
 	private Boolean _oldDepthTest = null;
 	private Boolean _oldDepthWrite = null;
@@ -218,18 +221,18 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	private int _currentWidth = 0;
 	private int _currentHeight = 0;
 
-	private U Uint8Array ewAttributes = Uint8Array.create( 16 );
+	private Uint8Array _newAttributes = Uint8Array.create( 16 );
 	private Uint8Array _enabledAttributes = Uint8Array.create( 16 );
 
 	// frustum
-	public F Frustum rustum = new Frustum();
+	public Frustum _frustum = new Frustum();
 
 	 // camera matrices cache
 
-	public M Matrix4 rojScreenMatrix = new Matrix4();
+	public Matrix4 _projScreenMatrix = new Matrix4();
 	public Matrix4 _projScreenMatrixPS = new Matrix4();
 
-	public V Vector3 ector3 = new Vector3();
+	public Vector3 _vector3 = new Vector3();
 	
 	// light arrays cache
 	private Vector3 _direction = new Vector3();
@@ -252,7 +255,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	private boolean _supportsVertexTextures;
 	private boolean _supportsBoneTextures;
 	
-	private W WebGLShaderPrecisionFormat ertexShaderPrecisionHighpFloat;
+	private WebGLShaderPrecisionFormat _vertexShaderPrecisionHighpFloat;
 	private WebGLShaderPrecisionFormat _vertexShaderPrecisionMediumpFloat;
 	private WebGLShaderPrecisionFormat _vertexShaderPrecisionLowpFloat;
 
@@ -273,7 +276,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	private boolean isAutoUpdateScene = true;
 
 	/**
-	 * The constructor will create renderer for the {@link C Canvas3dwidget.
+	 * The constructor will create renderer for the {@link Canvas3d} widget.
 	 * 
 	 * @param gl     the {@link WebGLRenderingContext}
 	 * @param width  the viewport width
@@ -289,15 +292,15 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		this._programs         = GWT.isScript() ? 
 				new FastMap<Shader>() : new HashMap<String, Shader>();
 			
-		this._maxTextures       = gl.getParameteri(WeWebGLConstantsAX_TEXTURE_IMAGE_UNITS);
+		this._maxTextures       = gl.getParameteri(WebGLConstants.MAX_TEXTURE_IMAGE_UNITS);
 		this._maxVertexTextures = gl.getParameteri(WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
 		this._maxTextureSize    = gl.getParameteri(WebGLConstants.MAX_TEXTURE_SIZE);
 		this._maxCubemapSize    = gl.getParameteri(WebGLConstants.MAX_CUBE_MAP_TEXTURE_SIZE);
 
 		this._supportsVertexTextures = ( this._maxVertexTextures > 0 ); 
-		this._supportsBoneTextures = this._supportsVertexTextures && WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float) != null ;
+		this._supportsBoneTextures = this._supportsVertexTextures && WebGLExtensions.get(gl, Id.OES_texture_float) != null ;
 		
-		this._vertexShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( ShShadersERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT );
+		this._vertexShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT );
 		this._vertexShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT );
 		this._vertexShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT );
 
@@ -313,7 +316,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			if ( mediumpAvailable ) {
 
 				this._precision = Shader.PRECISION.MEDIUMP;
-				LoLogarn("WebGLRenderer: highp not supported, using mediump.");
+				Log.warn("WebGLRenderer: highp not supported, using mediump.");
 
 			} else {
 
@@ -331,16 +334,16 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		}
 
 				
-		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float);
-		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float_linear);
-		WebGLExtensions.get(gl, WebGLExtensions.Id.OES_standard_derivatives);
+		WebGLExtensions.get(gl, Id.OES_texture_float);
+		WebGLExtensions.get(gl, Id.OES_texture_float_linear);
+		WebGLExtensions.get(gl, Id.OES_standard_derivatives);
 		
 		if ( _logarithmicDepthBuffer ) 
 		{
-			WebGLExtensions.get(gl, WebGLExtensions.Id.EXT_frag_depth);
+			WebGLExtensions.get(gl, Id.EXT_frag_depth);
 		}
 		
-		WeWebGLCompressedTextureS3tc ExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
+		WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
 		if(GLExtensionCompressedTextureS3TC == null)
 			GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
 		if(GLExtensionCompressedTextureS3TC == null)
@@ -378,34 +381,34 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	
 	public boolean supportsFloatTextures() 
 	{
-		return WebGLExtensions.get( this.gl, WebGLExtensions.Id.OES_texture_float ) != null;
+		return WebGLExtensions.get( this.gl, Id.OES_texture_float ) != null;
 	}
 
 	public boolean supportsStandardDerivatives() 
 	{
-		return WebGLExtensions.get( this.gl, WebGLExtensions.Id.OES_standard_derivatives ) != null;
+		return WebGLExtensions.get( this.gl, Id.OES_standard_derivatives ) != null;
 	}
 
 	public boolean supportsCompressedTextureS3TC() 
 	{
-		return WebGLExtensions.get( this.gl, WebGLExtensions.Id.WEBGL_compressed_texture_s3tc ) != null;
+		return WebGLExtensions.get( this.gl, Id.WEBGL_compressed_texture_s3tc ) != null;
 	}
 
 	public boolean supportsCompressedTexturePVRTC() 
 	{
-		return WebGLExtensions.get( this.gl, WebGLExtensions.Id.WEBGL_compressed_texture_pvrtc ) != null;
+		return WebGLExtensions.get( this.gl, Id.WEBGL_compressed_texture_pvrtc ) != null;
 	}
 
 	public boolean supportsBlendMinMax() 
 	{
-		return WebGLExtensions.get( this.gl, WebGLExtensions.Id.EXT_blend_minmax ) != null;
+		return WebGLExtensions.get( this.gl, Id.EXT_blend_minmax ) != null;
 	}
 
 	public int getMaxAnisotropy() 
 	{
-		WebGLExtension extension = WebGLExtensions.get( this.gl, WebGLExtensions.Id.EXT_texture_filter_anisotropic );
+		WebGLExtension extension = WebGLExtensions.get( this.gl, Id.EXT_texture_filter_anisotropic ); 
 
-		return extension != null ? getGL().getParameteri(ExtExtTextureFilterAnisotropicX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
+		return extension != null ? getGL().getParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
 	}
 
 	public Shader.PRECISION getPrecision() {
@@ -601,7 +604,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 		setViewport(0, 0, width, height);
 		
-		EVENT_BUS.fireEvent(new Vi ViewportResizeEventis));
+		EVENT_BUS.fireEvent(new ViewportResizeEvent(this));
 	}
 
 	/**
@@ -641,7 +644,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	}
 
 	@Override
-	public void setClearColor( ColColor or, double alpha )
+	public void setClearColor( Color color, double alpha ) 
 	{
 		this.clearColor.copy(color);
 		this.clearAlpha = alpha;
@@ -690,7 +693,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	}
 
 	/**
-	 * Clear {@link Ren RenderTargetTextured GL buffers.
+	 * Clear {@link RenderTargetTexture} and GL buffers.
 	 */
 	public void clearTarget( RenderTargetTexture renderTarget, boolean color, boolean depth, boolean stencil ) 
 	{
@@ -756,12 +759,12 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	/**
 	 * Morph Targets Buffer initialization
 	 */
-	private void setupMorphTargets ( Material material, WebGLGeometry geometrybuffer, MeshMesh ct )
+	private void setupMorphTargets ( Material material, WebGLGeometry geometrybuffer, Mesh object ) 
 	{
 
 		// set base
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
-		Map<String, Unif Uniformforms = material.getShader().getUniforms();
+		Map<String, Uniform> uniforms = material.getShader().getUniforms();
 
 		if ( object.morphTargetBase != - 1 && attributes.get("position") >= 0) 
 		{
@@ -785,7 +788,8 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			List<Integer> order = object.morphTargetForcedOrder;
 			List<Double> influences = object.morphTargetInfluences;
 
-			while ( material instanceof HasS HasSkinning	&& m < ((HasSkinning)material).getNumSupportedMorphTargets()
+			while ( material instanceof HasSkinning 
+					&& m < ((HasSkinning)material).getNumSupportedMorphTargets() 
 					&& m < order.size() 
 			) {
 				if ( attributes.get("morphTarget" + m )  >= 0 ) 
@@ -903,12 +907,12 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		// load updated influences uniform
 		if( uniforms.get("morphTargetInfluences").getLocation() != null ) 
 		{
-			Float3Float32Array  object.__webglMorphTargetInfluences;
+			Float32Array vals = object.__webglMorphTargetInfluences;
 			getGL().uniform1fv( uniforms.get("morphTargetInfluences").getLocation(), vals );
 		}
 	}
 	
-	public void renderBufferImmediate( GeometGeometryObject , Shader program, Material material ) {
+	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
 
 		initAttributes();
 //
@@ -1006,9 +1010,9 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 	}
 	
-	private void setupVertexAttributes( Material material, Shader program, BufferBufferGeometry ry, int startIndex ) {
+	private void setupVertexAttributes( Material material, Shader program, BufferGeometry geometry, int startIndex ) {
 
-		Map<String, Buffe BufferAttributeetryAttributes = geometry.getAttributes();
+		Map<String, BufferAttribute> geometryAttributes = geometry.getAttributes();
 
 		Map<String, Integer> programAttributes = program.getAttributesLocations();
 
@@ -1055,7 +1059,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 	
 	//camera, lights, fog, material, geometry, object
-	public void renderBufferDirect( Camera camera, List<Light> lights, AbstraAbstractFog aterial material, BufferGeometry geometry, GeometryObject object )
+	public void renderBufferDirect( Camera camera, List<Light> lights, AbstractFog fog, Material material, BufferGeometry geometry, GeometryObject object ) 
 	{
 		if ( ! material.isVisible() ) 
 			return;
@@ -1065,7 +1069,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		Map<String, Integer> attributes = material.getShader().getAttributesLocations();
 		
 		boolean updateBuffers = false;
-		int wireframeBit = material instanceof HasWir HasWireframe sWireframe)material).isWireframe() ? 1 : 0;
+		int wireframeBit = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? 1 : 0;
 
 		int geometryGroupHash = ( geometry.getId() * 0xffffff ) + ( material.getShader().getId() * 2 ) + wireframeBit;
 
@@ -1096,7 +1100,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
 				int size = 2;
 
-				List<BufferGeometry.DrawCall> offsets = geometry.getDrawcalls();
+				List<DrawCall> offsets = geometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
@@ -1167,7 +1171,9 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			}
 			
 		} 
-		else if ( object instanceof PointC PointCloud		// render particles
+		else if ( object instanceof PointCloud)
+		{
+			// render particles
 
 			if ( updateBuffers ) {
 
@@ -1185,8 +1191,10 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			this.info.getRender().points += position.getArray().getLength() / 3;
 		} 
 		else if ( object instanceof Line)
-	 Line		BeginMode mode = ( ((Line)object).getMode() == Line.MODE.STRIPS ) ? BeginMode.LINE_STRIP : BeginMode.LINES;
-			object.setLineWidth(gl, ((LineBasicLineBasicMaterial).getLinewidth());
+		{
+
+			BeginMode mode = ( ((Line)object).getMode() == Line.MODE.STRIPS ) ? BeginMode.LINE_STRIP : BeginMode.LINES;
+			object.setLineWidth(gl, ((LineBasicMaterial)material).getLinewidth());
 
 			BufferAttribute index = geometry.getAttribute("index");
 
@@ -1208,7 +1216,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 //				}
 
-				List<BufferGeometry.DrawCall> drawcalls = geometry.getDrawcalls();
+				List<DrawCall> drawcalls = geometry.getDrawcalls();
 
 				if ( drawcalls.size() == 0 ) {
 
@@ -1276,9 +1284,9 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		}
 	}
 	
-	public List<GeometryGGeometryGroupups( Geometry geometry, boolean usesFaceMaterial ) {
+	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {
 		
-		long maxVerticesInGroup = WebGLExtensions.get(gl, WebGLExtensions.Id.OES_element_index_uint) != null ? 4294967296L : 65535L;
+		long maxVerticesInGroup = WebGLExtensions.get(gl, Id.OES_element_index_uint) != null ? 4294967296L : 65535L;
 		
 		int numMorphTargets = geometry.getMorphTargets().size();
 		int numMorphNormals = geometry.getMorphNormals().size();
@@ -1348,7 +1356,9 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 			this._webglObjects.put(object.getId() + "", new ArrayList<WebGLObject>());
 
-			GeometryGroup.geometryGroups.put( geometry.getId() + "", makeGroups( geometry, material instanceof MeshFace MeshFaceMaterialeometry.setGroupsNeedUpdate( false );
+			GeometryGroup.geometryGroups.put( geometry.getId() + "", makeGroups( geometry, material instanceof MeshFaceMaterial ));
+
+			geometry.setGroupsNeedUpdate( false );
 
 		}
 
@@ -1401,7 +1411,10 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 			object.__webglInit = true;
 			object._modelViewMatrix = new Matrix4();
-			object._normalMatrix = new Matrix3( Matrix3
+			object._normalMatrix = new Matrix3();
+
+		}
+
 		AbstractGeometry geometry = object instanceof GeometryObject ? ((GeometryObject)object).getGeometry() : null;
 
 		if ( geometry == null ) {
@@ -2115,7 +2128,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			{
 				for ( int i = 0; i < geometry.__webglCustomAttributesList.size(); i ++ ) 
 				{
-					AttributeAttribute  = geometry.__webglCustomAttributesList.get( i );
+					Attribute attribute = geometry.__webglCustomAttributesList.get( i );
 
 					if( attributes.get( attribute.belongsToAttribute ) >= 0 ) 
 					{
@@ -2233,7 +2246,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		Map<String, Integer> maxLightCount = allocateLights( lights );
 		int maxShadows = allocateShadows( lights );
 
-		ProgramPaProgramParameters s = new ProgramParameters();
+		ProgramParameters parameters = new ProgramParameters();
 		
 		parameters.gammaInput = this.isGammaInput();
 		parameters.gammaOutput = this.isGammaOutput();
@@ -2245,12 +2258,16 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		if(fog != null) 
 		{
 			parameters.useFog  = true;
-			parameters.useFog2 = (fog instanceof FogExp2) FogExp2
+			parameters.useFog2 = (fog instanceof FogExp2);
+		}
+		
 		parameters.logarithmicDepthBuffer = this._logarithmicDepthBuffer;
 		
 		parameters.maxBones = allocateBones( object );
 
-		if(object instanceof SkinnedM SkinnedMeshparameters.useVertexTexture = this._supportsBoneTextures;// && ((SkinnedMesh)object).useVertexTexture;
+		if(object instanceof SkinnedMesh)
+		{
+			parameters.useVertexTexture = this._supportsBoneTextures;// && ((SkinnedMesh)object).useVertexTexture;
 		}
 
 		parameters.maxMorphTargets = this.maxMorphTargets;
@@ -2385,7 +2402,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 			if ( _logarithmicDepthBuffer ) {
 
-				gl.uniform1f( m_uniforms.get("logDepthBufFC").getLocation(), 2.0 / ( Math.log( ((HasNearFaHasNearFargetFar() + 1.0 ) / 0.6931471805599453 /*Math.LN2*/ ) );
+				gl.uniform1f( m_uniforms.get("logDepthBufFC").getLocation(), 2.0 / ( Math.log( ((HasNearFar)camera).getFar() + 1.0 ) / 0.6931471805599453 /*Math.LN2*/ ) );
 
 			}
 
@@ -2493,7 +2510,8 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		if ( uniforms.containsKey("shadowMatrix") ) 
 		{
 			// Make them zero
-			uniforms.get("shadowMap").setValue(new ArrayList<Texture>(Textureuniforms.get("shadowMapSize").setValue(new ArrayList<Vector2>());
+			uniforms.get("shadowMap").setValue(new ArrayList<Texture>());
+			uniforms.get("shadowMapSize").setValue(new ArrayList<Vector2>());
 			uniforms.get("shadowMatrix").setValue(new ArrayList<Matrix4>());
 			List<Texture> shadowMap = (List<Texture>)uniforms.get("shadowMap").getValue();
 			List<Vector2> shadowMapSize = (List<Vector2>)uniforms.get("shadowMapSize").getValue();
@@ -2504,7 +2522,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			{
 				if ( ! light.isCastShadow() ) continue;
 
-				if ( light instanceof ShadowLi ShadowLight adowLight)light).isShadowCascade() )
+				if ( light instanceof ShadowLight && ! ((ShadowLight)light).isShadowCascade() )  
 				{
 					ShadowLight shadowLight = (ShadowLight) light;
 
@@ -2546,44 +2564,44 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			if ( location == null ) continue;
 
 			Object value = uniform.getValue();
-			Uniform.TYPE type = uniform.getType();
+			TYPE type = uniform.getType();
 			
 			// Up textures also for undefined values
-			if ( type != Uniform.TYPE.T && value == null ) continue;
+			if ( type != TYPE.T && value == null ) continue;
 		
-			if(type == Uniform.TYPE.I) // single integer
+			if(type == TYPE.I) // single integer
 			{
 				gl.uniform1i( location, (value instanceof Boolean) ? ((Boolean)value) ? 1 : 0 : (Integer) value );
 			}
-			else if(type == Uniform.TYPE.F) // single double
+			else if(type == TYPE.F) // single double
 			{
 				gl.uniform1f( location, (Double)value );
 			}
-			else if(type == Uniform.TYPE.V2) // single Vector2
+			else if(type == TYPE.V2) // single Vector2
 			{ 
 				gl.uniform2f( location, ((Vector2)value).getX(), ((Vector2)value).getX() );
 			}
-			else if(type == Uniform.TYPE.V3) // single Vector3
+			else if(type == TYPE.V3) // single Vector3
 			{ 
 				gl.uniform3f( location, ((Vector3)value).getX(), ((Vector3)value).getY(), ((Vector3)value).getZ() );
 			}
-			else if(type == Uniform.TYPE.V4) // single Vector4
+			else if(type == TYPE.V4) // single Vector4
 			{
 				gl.uniform4f( location, ((Vector4)value).getX(), ((Vector4)value).getY(), ((Vector4)value).getZ(), ((Vector4)value).getW() );
 			}
-			else if(type == Uniform.TYPE.C) // single Color
+			else if(type == TYPE.C) // single Color
 			{
 				gl.uniform3f( location, ((Color)value).getR(), ((Color)value).getG(), ((Color)value).getB() );
 			}
-			else if(type == Uniform.TYPE.FV1) // flat array of floats (JS or typed array)
+			else if(type == TYPE.FV1) // flat array of floats (JS or typed array)
 			{
 				gl.uniform1fv( location, (Float32Array)value );
 			}
-			else if(type == Uniform.TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
+			else if(type == TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
 			{ 
 				gl.uniform3fv( location, (Float32Array) value );
 			}
-			else if(type == Uniform.TYPE.V2V) // List of Vector2
+			else if(type == TYPE.V2V) // List of Vector2
 			{ 
 				List<Vector2> listVector2f = (List<Vector2>) value;
 				if ( uniform.getCacheArray() == null )
@@ -2599,7 +2617,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 				gl.uniform2fv( location, uniform.getCacheArray() );
 			}
-			else if(type == Uniform.TYPE.V3V) // List of Vector3
+			else if(type == TYPE.V3V) // List of Vector3
 			{
 				List<Vector3> listVector3f = (List<Vector3>) value;
 				if ( uniform.getCacheArray() == null )
@@ -2616,7 +2634,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 				gl.uniform3fv( location, uniform.getCacheArray() );
 			}
-			else if(type == Uniform.TYPE.V4V) // List of Vector4
+			else if(type == TYPE.V4V) // List of Vector4
 			{
 				List<Vector4> listVector4f = (List<Vector4>) value;
 				if ( uniform.getCacheArray() == null)
@@ -2635,7 +2653,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 				gl.uniform4fv( location, uniform.getCacheArray() );
 			}
-			else if(type == Uniform.TYPE.M4) // single Matrix4
+			else if(type == TYPE.M4) // single Matrix4
 			{
 				Matrix4 matrix4 = (Matrix4) value;
 				if ( uniform.getCacheArray() == null )
@@ -2644,7 +2662,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 				matrix4.flattenToArrayOffset( uniform.getCacheArray() );
 				gl.uniformMatrix4fv( location, false, uniform.getCacheArray() );
 			}
-			else if(type == Uniform.TYPE.M4V) // List of Matrix4
+			else if(type == TYPE.M4V) // List of Matrix4
 			{
 				List<Matrix4> listMatrix4f = (List<Matrix4>) value;
 				if ( uniform.getCacheArray() == null )
@@ -2655,7 +2673,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 				gl.uniformMatrix4fv( location, false, uniform.getCacheArray() );
 			}
-			else if(type == Uniform.TYPE.T) // single Texture (2d or cube)
+			else if(type == TYPE.T) // single Texture (2d or cube)
 			{
 				Texture texture = (Texture)value;
 				int textureUnit = getTextureUnit();
@@ -2664,15 +2682,17 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 				if ( texture != null )
 				{
-					if ( texture.getClass() == CubeTextureCubeTexture				setCubeTexture( (CubeTexture) texture, textureUnit );
+					if ( texture.getClass() == CubeTexture.class )
+						setCubeTexture( (CubeTexture) texture, textureUnit );
 
-					else if ( texture.getClass() == RenderTargeRenderTargetCubeTexture				setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
+					else if ( texture.getClass() == RenderTargetCubeTexture.class )
+						setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
 
 					else
 						setTexture( texture, textureUnit );
 				}
 			}
-			else if(type == Uniform.TYPE.TV) //List of Texture (2d)
+			else if(type == TYPE.TV) //List of Texture (2d)
 			{
 				List<Texture> textureList = (List<Texture>)value;
 				int[] units = new int[textureList.size()];
@@ -2892,7 +2912,9 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 
 			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
-			if ( texture instanceof Compressed CompressedTextureList<DataTexture> mipmaps = ((CompressedTexture) texture).getMipmaps();
+			if ( texture instanceof CompressedTexture)
+			{
+				List<DataTexture> mipmaps = ((CompressedTexture) texture).getMipmaps();
 
 				for( int i = 0, il = mipmaps.size(); i < il; i ++ ) 
 				{
@@ -3138,9 +3160,9 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 		{
 			if ( light instanceof ShadowLight && ((ShadowLight)light).isOnlyShadow() ) continue;
 
-			if ( light instanceof Directional DirectionalLight++;
-			if ( light instanceof PointLight) PointLights ++;
-			if ( light instanceof SpotLight)  SpotLight ++;
+			if ( light instanceof DirectionalLight ) dirLights ++;
+			if ( light instanceof PointLight ) pointLights ++;
+			if ( light instanceof SpotLight) spotLights ++;
 			if ( light instanceof HemisphereLight ) hemiLights ++;
 		}
 

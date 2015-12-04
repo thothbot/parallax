@@ -25,7 +25,7 @@ import java.util.List;
 import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.utils.ShapeUtils;import org.parallax3d.parallax.core.shared.core.Geometry;import org.parallax3d.parallax.core.shared.math.Vector2;import org.parallax3d.parallax.core.shared.math.Vector3;import org.parallax3d.parallax.core.shared.utils.ShapeUtils;
+import org.parallax3d.parallax.core.shared.utils.ShapeUtils;
 
 public class Path extends CurvePath
 {
@@ -62,10 +62,10 @@ public class Path extends CurvePath
 	public Path() 
 	{
 		super();
-		this.actions = new ArrayList<Path.Action>();
+		this.actions = new ArrayList<Action>();
 	}
 	
-	public Path( List<Vector2> points )
+	public Path( List<Vector2> points ) 
 	{
 		this();
 		this.fromPoints( points );
@@ -151,7 +151,7 @@ public class Path extends CurvePath
 		
 		//---
 		List<Vector2> npts = new ArrayList<Vector2>();
-		npts.add(new  Vector3 x0, y0, 0 ));
+		npts.add(new Vector3( x0, y0, 0 ));
 		npts.addAll(pts);
 	
 		SplineCurve curve = new SplineCurve( npts );
@@ -289,7 +289,7 @@ public class Path extends CurvePath
 				{
 					double t = j / (double)divisions;
 
-					double tx = SShapeUtilsb2(t, cpx0, cpx1, cpx);
+					double tx = ShapeUtils.b2( t, cpx0, cpx1, cpx );
 					double ty = ShapeUtils.b2( t, cpy0, cpy1, cpy );
 
 					points.add( new Vector2( tx, ty ) );
@@ -574,7 +574,7 @@ public class Path extends CurvePath
 	/*
 	 * Generate geometry from path points (for Line or ParticleSystem objects)
 	 */
-	public  Geometry reatePointsGeometry()
+	public Geometry createPointsGeometry()
 	{
 		return createGeometry( getPoints(true) );
 	}

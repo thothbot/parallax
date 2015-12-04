@@ -23,9 +23,8 @@ import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 
-public class ParallaxBarrierShader extends Shader
+public class ParallaxBarrierShader extends Shader 
 {
 
 	interface Resources extends DefaultResources

@@ -26,25 +26,20 @@ import java.util.Map;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.shared.objects.Bone;
-import org.parallax3d.parallax.core.shared.objects.Line;
 import org.parallax3d.parallax.core.shared.math.Box3;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Matrix3;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Sphere;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.math.Vector4;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.objects.PointCloud;
-
-import com.google.gwt.core.client.GWT;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.shared.math.*;
 import org.parallax3d.parallax.core.shared.objects.Bone;
 import org.parallax3d.parallax.core.shared.objects.Line;
+import org.parallax3d.parallax.core.shared.objects.PointCloud;
+import org.parallax3d.parallax.core.shared.math.Matrix3;
+import org.parallax3d.parallax.core.shared.math.Matrix4;
+import org.parallax3d.parallax.core.shared.math.Vector2;
+import org.parallax3d.parallax.core.shared.math.Vector4;
+import org.parallax3d.parallax.core.shared.objects.Mesh;
+
+import com.google.gwt.core.client.GWT;
 
 /**
  * Base class for geometries. A geometry holds all data necessary to describe a 3D model.
@@ -223,7 +218,7 @@ public class Geometry extends AbstractGeometry
 	}
 
 	/**
-	 * Gets the List of {@link Geometry.MorphTarget}. 
+	 * Gets the List of {@link MorphTarget}.
 	 * Morph vertices match number and order of primary vertices.
 	 */
 	public List<MorphTarget> getMorphTargets() {
@@ -231,7 +226,7 @@ public class Geometry extends AbstractGeometry
 	}
 
 	/**
-	 * Get the List of {@link Geometry.MorphNormal}.
+	 * Get the List of {@link MorphNormal}.
 	 * Morph normals have similar structure as morph targets 
 	 * @return
 	 */
@@ -240,7 +235,7 @@ public class Geometry extends AbstractGeometry
 	}
 	
 	/**
-	 * Gets the List of {@link Geometry.MorphColor}. Morph colors have similar structure as {@link Geometry.MorphTarget}.
+	 * Gets the List of {@link MorphColor}. Morph colors have similar structure as {@link MorphTarget}.
 	 * Morph colors can match either number and order of faces (face colors) or number of vertices (vertex colors).
 	 */
 	public List<MorphColor> getMorphColors() {
@@ -581,9 +576,9 @@ public class Geometry extends AbstractGeometry
 
 			if ( this.morphNormals.size() <= i || this.morphNormals.get( i ) == null ) {
 
-				Geometry.MorphNormal morphNormal = new MorphNormal();
+				MorphNormal morphNormal = new MorphNormal();
 				morphNormal.faceNormals = new ArrayList<Vector3>();
-				morphNormal.vertexNormals = new ArrayList<Geometry.VertextNormal>();
+				morphNormal.vertexNormals = new ArrayList<VertextNormal>();
 
 				List<Vector3> dstNormalsFace = morphNormal.faceNormals;
 				List<VertextNormal> dstNormalsVertex = morphNormal.vertexNormals;

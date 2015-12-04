@@ -21,19 +21,14 @@ package org.parallax3d.parallax.core.shared.lights;
 import java.util.Map;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.renderers.RendererLights;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.renderers.RendererLights;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public final class HemisphereLight extends Light implements HasIntensity
 {
-	public static class UniformHemisphere implements Light.UniformLight
+	public static class UniformHemisphere implements UniformLight
 	{
 		public Float32Array skyColors;
 		public Float32Array groundColors;
@@ -107,7 +102,7 @@ public final class HemisphereLight extends Light implements HasIntensity
 	}
 	
 	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput)
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
 	{
 		Float32Array hemiSkyColors    = zlights.hemi.skyColors;
 		Float32Array hemiGroundColors = zlights.hemi.groundColors;

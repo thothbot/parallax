@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.loader.shared.json;
 
 import org.parallax3d.parallax.core.client.gl2.enums.TextureWrapMode;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureWrapMode;
 
 public enum JsoTextureWrapMode 
 {

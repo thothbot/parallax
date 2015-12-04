@@ -23,9 +23,6 @@ import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.core.Object3D;
 
 import com.google.gwt.user.client.ui.Widget;
-import org.parallax3d.parallax.core.client.context.Canvas3d;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.core.Object3D;
 
 /**
  * The abstract control implementation.

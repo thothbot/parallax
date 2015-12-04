@@ -66,9 +66,6 @@ import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.VideoElement;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.JsArrayUtil;
-import org.parallax3d.parallax.core.client.gl2.enums.*;
 
 /**
  * 

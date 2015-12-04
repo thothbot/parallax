@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.shared.math;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 
 /**
  * This class is realization of (X, Y, Z, W) vector. 

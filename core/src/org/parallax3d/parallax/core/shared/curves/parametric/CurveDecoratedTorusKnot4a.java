@@ -21,7 +21,7 @@ package org.parallax3d.parallax.core.shared.curves.parametric;
 import org.parallax3d.parallax.core.shared.curves.Curve;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 
-public class CurveDecoratedTorusKnot4a extends Curve 
+public class CurveDecoratedTorusKnot4a extends Curve
 {
 
 	protected double scale;
@@ -37,7 +37,7 @@ public class CurveDecoratedTorusKnot4a extends Curve
 	}
 	
 	@Override
-	public Vector3 getPoint(double t) 
+	public Vector3 getPoint(double t)
 	{
 		t *= Math.PI * 2.0;
 		

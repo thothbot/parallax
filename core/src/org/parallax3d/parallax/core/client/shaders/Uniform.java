@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.core.client.shaders;
 
-import org.parallax3d.parallax.core.client.gl2.WebGLUniformLocation;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.core.client.gl2.WebGLUniformLocation;
 
 /**
  * Shader's uniforms.
@@ -47,23 +47,23 @@ public class Uniform
 		TV // array of Texture (2d)
 	};
 
-	private Uniform.TYPE type;
+	private TYPE type;
 	private Object value;
 	private Float32Array cache_array;
 	private WebGLUniformLocation location;
 
-	public Uniform(Uniform.TYPE type) 
+	public Uniform(TYPE type)
 	{
 		this(type, null);
 	}
 
-	public Uniform(Uniform.TYPE type, Object value) 
+	public Uniform(TYPE type, Object value)
 	{
 		this.type = type;
 		this.value = value;
 	}
 		
-	public Uniform.TYPE getType() {
+	public TYPE getType() {
 		return this.type;
 	}
 	

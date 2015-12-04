@@ -24,10 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.core.client.gl2.WebGLProgram;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.client.gl2.enums.BlendEquationMode;
-import org.parallax3d.parallax.core.client.gl2.enums.BlendingFactorDest;
-import org.parallax3d.parallax.core.client.gl2.enums.BlendingFactorSrc;
 import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.textures.RenderTargetCubeTexture;
 import org.parallax3d.parallax.core.client.textures.Texture;
@@ -35,24 +31,13 @@ import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.core.GeometryGroup;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector4;
-import org.parallax3d.parallax.core.client.shaders.ProgramParameters;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.client.gl2.WebGLProgram;
 import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.core.client.gl2.enums.BlendEquationMode;
 import org.parallax3d.parallax.core.client.gl2.enums.BlendingFactorDest;
 import org.parallax3d.parallax.core.client.gl2.enums.BlendingFactorSrc;
+import org.parallax3d.parallax.core.client.shaders.ProgramParameters;
 import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.client.textures.RenderTargetCubeTexture;
-import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.core.GeometryGroup;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Vector4;
 
@@ -163,7 +148,7 @@ public abstract class Material
 	private double opacity;
 	private boolean isTransparent;
 		
-	private Material.BLENDING blending;
+	private BLENDING blending;
 	private BlendingFactorSrc blendSrc;
 	private BlendingFactorDest blendDst;
 	private BlendEquationMode blendEquation;
@@ -193,7 +178,7 @@ public abstract class Material
 		setOpacity(1.0);
 		setTransparent(false);
 				
-		setBlending( Material.BLENDING.NORMAL );
+		setBlending( BLENDING.NORMAL );
 		setBlendSrc( BlendingFactorSrc.SRC_ALPHA );
 		setBlendDst( BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
 		setBlendEquation( BlendEquationMode.FUNC_ADD );
@@ -248,7 +233,7 @@ public abstract class Material
 	 * <p>
 	 * Default is {@link SIDE#FRONT}
 	 * 
-	 * @param side see options {@link Material.SIDE}.
+	 * @param side see options {@link SIDE}.
 	 */
 	public void setSide(SIDE side) {
 		this.side = side;
@@ -296,16 +281,16 @@ public abstract class Material
 		this.isTransparent = transparent;
 	}
 
-	public Material.BLENDING getBlending() {
+	public BLENDING getBlending() {
 		return blending;
 	}
 
 	/**
 	 * Sets which blending to use when displaying objects with this material.
 	 * <p>
-	 * Default is {@link Material.BLENDING#NORMAL}.
+	 * Default is {@link BLENDING#NORMAL}.
 	 */
-	public void setBlending(Material.BLENDING blending) {
+	public void setBlending(BLENDING blending) {
 		this.blending = blending;
 	}
 	
@@ -505,7 +490,7 @@ public abstract class Material
 		parameters.specularMap  = (this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null);
 		parameters.alphaMap     = (this instanceof HasAlphaMap    &&  ((HasAlphaMap)this).getAlphaMap() != null);
 
-		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
+		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != COLORS.NO);
 
 		parameters.sizeAttenuation = this instanceof PointCloudMaterial && ((PointCloudMaterial)this).isSizeAttenuation();
 
@@ -523,8 +508,8 @@ public abstract class Material
 		}
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
-		parameters.doubleSided = this.getSides() == Material.SIDE.DOUBLE;
-		parameters.flipSided = this.getSides() == Material.SIDE.BACK;
+		parameters.doubleSided = this.getSides() == SIDE.DOUBLE;
+		parameters.flipSided = this.getSides() == SIDE.BACK;
 	}
 
 	public Shader buildShader(WebGLRenderingContext gl, ProgramParameters parameters)
@@ -855,7 +840,7 @@ public abstract class Material
 		
 		if(uvScaleMap != null)
 		{
-			((Vector4)uniforms.get("offsetRepeat").getValue()).set(
+			((Vector4)uniforms.get("offsetRepeat").getValue()).set( 
 					uvScaleMap.getOffset().getX(), 
 					uvScaleMap.getOffset().getY(), 
 					uvScaleMap.getRepeat().getX(), 
@@ -885,12 +870,12 @@ public abstract class Material
 
 	public boolean materialNeedsSmoothNormals() 
 	{
-		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == Material.SHADING.SMOOTH;
+		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == SHADING.SMOOTH;
 	}
 
-	public Material.COLORS bufferGuessVertexColorType() 
+	public COLORS bufferGuessVertexColorType()
 	{
-		if(this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO)
+		if(this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != COLORS.NO)
 			return ((HasVertexColors)this).isVertexColors();
 
 		return null;

@@ -21,10 +21,8 @@ package org.parallax3d.parallax.core.shared.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /*
  * For computing of Frenet frames, exposing the tangents, normals and binormals the spline

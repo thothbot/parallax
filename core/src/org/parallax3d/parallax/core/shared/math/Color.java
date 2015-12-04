@@ -323,7 +323,7 @@ public final class Color
 		return hexString;
 	}
 
-	public Color.HSL getHSL() 
+	public HSL getHSL()
 	{
 		// h,s,l ranges are in 0.0 - 1.0
 
@@ -335,7 +335,7 @@ public final class Color
 		double hue = 0, saturation = 0;
 		double lightness = ( min + max ) / 2.0;
 
-		Color.HSL hsl = new Color.HSL();
+		HSL hsl = new HSL();
 		
 		if ( min == max ) 
 		{
@@ -371,7 +371,7 @@ public final class Color
 
 	public Color offsetHSL( double h, double s, double l ) 
 	{
-		Color.HSL hsl = this.getHSL();
+		HSL hsl = this.getHSL();
 
 		hsl.hue += h; hsl.saturation += s; hsl.lightness += l;
 

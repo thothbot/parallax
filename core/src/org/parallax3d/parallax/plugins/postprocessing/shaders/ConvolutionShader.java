@@ -25,10 +25,6 @@ import org.parallax3d.parallax.core.shared.math.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 
 /**
  * Convolution shader

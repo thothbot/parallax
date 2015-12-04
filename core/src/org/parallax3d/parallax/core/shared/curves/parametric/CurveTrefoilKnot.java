@@ -20,8 +20,6 @@ package org.parallax3d.parallax.core.shared.curves.parametric;
 
 import org.parallax3d.parallax.core.shared.curves.Curve;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.curves.Curve;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public final class CurveTrefoilKnot extends Curve
 {

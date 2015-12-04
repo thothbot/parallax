@@ -18,11 +18,8 @@
 
 package org.parallax3d.parallax.core.shared.curves;
 
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.utils.CurveUtils;
-import org.parallax3d.parallax.core.shared.utils.ShapeUtils;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.utils.CurveUtils;
 import org.parallax3d.parallax.core.shared.utils.ShapeUtils;
 
 public class QuadraticBezierCurve extends Curve
@@ -41,7 +38,7 @@ public class QuadraticBezierCurve extends Curve
 	@Override
 	public Vector2 getPoint(double t)
 	{
-		double tx = ShapeUtils.b2(t, this.v0.getX(), this.v1.getX(), this.v2.getX());
+		double tx = ShapeUtils.b2( t, this.v0.getX(), this.v1.getX(), this.v2.getX() );
 		double ty = ShapeUtils.b2( t, this.v0.getY(), this.v1.getY(), this.v2.getY() );
 
 		return new Vector2( tx, ty );

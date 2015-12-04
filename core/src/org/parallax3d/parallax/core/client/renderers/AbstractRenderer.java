@@ -18,10 +18,9 @@
 
 package org.parallax3d.parallax.core.client.renderers;
 
-import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
 import org.parallax3d.parallax.core.shared.math.Color;
+import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 public abstract class AbstractRenderer 
 {

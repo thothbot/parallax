@@ -26,25 +26,24 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.parallax3d.parallax.core.shared.cameras.Camera;
+import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
 import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
-import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Euler;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.core.Raycaster;
-import org.parallax3d.parallax.core.shared.objects.Line;
-import org.parallax3d.parallax.core.shared.core.Raycaster.Intersect;
 import org.parallax3d.parallax.core.shared.geometries.BoxGeometry;
 import org.parallax3d.parallax.core.shared.geometries.CylinderGeometry;
 import org.parallax3d.parallax.core.shared.geometries.OctahedronGeometry;
 import org.parallax3d.parallax.core.shared.geometries.PlaneGeometry;
-import org.parallax3d.parallax.core.shared.geometries.TorusGeometry;
-import org.parallax3d.parallax.core.shared.materials.Material.SIDE;
+import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
+import org.parallax3d.parallax.core.shared.materials.Material;
+import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
+import org.parallax3d.parallax.core.shared.math.Color;
+import org.parallax3d.parallax.core.shared.math.Euler;
 import org.parallax3d.parallax.core.shared.math.Quaternion;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.objects.Line;
+import org.parallax3d.parallax.core.shared.geometries.TorusGeometry;
+import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.objects.Mesh;
 
 import com.google.gwt.core.shared.GWT;
@@ -58,17 +57,6 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Widget;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
-import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.geometries.BoxGeometry;
-import org.parallax3d.parallax.core.shared.geometries.OctahedronGeometry;
-import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
-import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Euler;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public class TransformControls extends Object3D implements MouseDownHandler, MouseMoveHandler, MouseUpHandler, MouseOverHandler /*, MouseOutHandler */ {
 
@@ -78,7 +66,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 	TransformGizmoScale gizmoScale;
 
 	boolean _dragging = false;
-	String _mode = TransformControls.Mode.TRANSLATE;
+	String _mode = Mode.TRANSLATE;
 	String _plane = "XY";
 
 	Object3D object = null;
@@ -163,7 +151,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 		this.gizmoScale.hide();
 
 		_dragging = false;
-		_mode = TransformControls.Mode.TRANSLATE;
+		_mode = Mode.TRANSLATE;
 		_plane = "XY";
 
 		changeEvent = new LocalEvent("change",null);
@@ -207,7 +195,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 
 		MouseEvent pointer = event;
 
-		Intersect intersect = intersectObjects(pointer,this.getTransformGizmo(_mode).pickers.getChildren());
+		Raycaster.Intersect intersect = intersectObjects(pointer,this.getTransformGizmo(_mode).pickers.getChildren());
 
 		String axis="";
 		if(intersect!=null && intersect.object!=null) {
@@ -249,13 +237,13 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 
 		List<Object3D> tmpList=new ArrayList<Object3D>();
 		tmpList.add(this.getTransformGizmo(_mode).activePlane);
-		Intersect planeIntersect = intersectObjects(pointer,tmpList);
+		Raycaster.Intersect planeIntersect = intersectObjects(pointer,tmpList);
 
 		if(planeIntersect==null ||  planeIntersect.point==null) 
 			return;
 		this.point.copy(planeIntersect.point);
 
-		if(TransformControls.Mode.TRANSLATE.equals(_mode)) {
+		if(Mode.TRANSLATE.equals(_mode)) {
 			this.point.sub(this.offset);
 			this.point.multiply(this.parentScale);
 
@@ -296,7 +284,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 				if(!this.axis.contains("Z"))
 					this.object.getPosition().setZ(Math.round(this.getPosition().getZ()/this.snap.doubleValue())*this.snap.doubleValue());
 			}
-		} else if(TransformControls.Mode.SCALE.equals(_mode)) {
+		} else if(Mode.SCALE.equals(_mode)) {
 			this.point.sub(this.offset);
 			this.point.multiply(this.parentScale);
 
@@ -318,7 +306,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 						this.object.getScale().setZ(this.oldScale.getZ()*(1+this.point.getZ()*this.scaleFactor));
 				}
 			}
-		} else if(TransformControls.Mode.ROTATE.equals(_mode)) {
+		} else if(Mode.ROTATE.equals(_mode)) {
 			this.point.sub(this.worldPosition);
 			this.point.multiply(this.parentScale);
 			this.tempVector.copy(this.offset).sub(this.worldPosition);
@@ -410,7 +398,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 		MouseDownEvent pointer = event;
 
 		if(pointer.getNativeButton()==com.google.gwt.dom.client.NativeEvent.BUTTON_LEFT) {
-			Intersect intersect = this.intersectObjects(pointer, this.getTransformGizmo(_mode).pickers.getChildren());
+			Raycaster.Intersect intersect = this.intersectObjects(pointer, this.getTransformGizmo(_mode).pickers.getChildren());
 			if(intersect!=null && intersect.object!=null) {
 				this.axis=intersect.object.getName();
 
@@ -422,7 +410,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 
 				List<Object3D> tmpList=new ArrayList<Object3D>();
 				tmpList.add(this.getTransformGizmo(_mode).activePlane);
-				Intersect planeIntersect = this.intersectObjects(pointer,tmpList);
+				Raycaster.Intersect planeIntersect = this.intersectObjects(pointer,tmpList);
 
 				this.oldPosition.copy(this.object.getPosition());
 				this.oldScale.copy(this.object.getScale());
@@ -440,7 +428,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 		this._dragging=true;
 	}
 
-	private Intersect intersectObjects(MouseEvent<?> pointer,List<Object3D> objects ) {
+	private Raycaster.Intersect intersectObjects(MouseEvent<?> pointer,List<Object3D> objects ) {
 		
 		double posX = (pointer.getX() / (double) this.domElement.getOffsetWidth() ) * 2.0 - 1.0; 
 		double posY = - (pointer.getY() / (double) this.domElement.getOffsetHeight() ) * 2.0 + 1.0;
@@ -448,7 +436,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 		this.pointerVector.set(posX, posY,0.5);
 		this.pointerVector.unproject(this.camera);
 		this.ray.set(this.camera.getPosition(), this.pointerVector.sub(this.camera.getPosition()).normalize());
-		List<Intersect> intersections = this.ray.intersectObjects(objects,true);
+		List<Raycaster.Intersect> intersections = this.ray.intersectObjects(objects,true);
 		if(intersections!=null) {
 			if(intersections.size()>0)
 				return intersections.get(0);
@@ -481,9 +469,9 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 	}
 
 	public TransformGizmo getTransformGizmo(String mode) {
-		if(TransformControls.Mode.TRANSLATE.equals(mode)) {
+		if(Mode.TRANSLATE.equals(mode)) {
 			return this.gizmoTranslate;
-		} else if(TransformControls.Mode.ROTATE.equals(mode)) {
+		} else if(Mode.ROTATE.equals(mode)) {
 			return this.gizmoRotate;
 		} else /*if("scale".equals(mode))*/ {
 			return this.gizmoScale;
@@ -507,7 +495,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 	public void setMode (String mode ) {
 		_mode = mode!=null ? mode : _mode;
 		GWT.log("mode: "+mode+"  _mode: "+_mode);
-		if (TransformControls.Mode.SCALE.equals(_mode)) 
+		if (Mode.SCALE.equals(_mode))
 			this.space = "local";
 
 		this.gizmoTranslate.hide();
@@ -522,21 +510,21 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 	}
 
 	private void setGeometry(String mode) {
-		if(TransformControls.Mode.TRANSLATE.equals(mode)) {
+		if(Mode.TRANSLATE.equals(mode)) {
 //			this.gizmoTranslate.show();
-		} else if(TransformControls.Mode.ROTATE.equals(mode)) {
+		} else if(Mode.ROTATE.equals(mode)) {
 //			this.gizmoRotate.show();
-		} else if(TransformControls.Mode.SCALE.equals(mode)) {
+		} else if(Mode.SCALE.equals(mode)) {
 			this.geometry=this.gizmoScale.getGeometry();
 		}
 	}
 
 	private void showMode(String mode) {
-		if(TransformControls.Mode.TRANSLATE.equals(mode)) {
+		if(Mode.TRANSLATE.equals(mode)) {
 			this.gizmoTranslate.show();
-		} else if(TransformControls.Mode.ROTATE.equals(mode)) {
+		} else if(Mode.ROTATE.equals(mode)) {
 			this.gizmoRotate.show();
-		} else if(TransformControls.Mode.SCALE.equals(mode)) {
+		} else if(Mode.SCALE.equals(mode)) {
 			this.gizmoScale.show();
 		}
 	}
@@ -987,7 +975,7 @@ public class TransformControls extends Object3D implements MouseDownHandler, Mou
 			PlaneGeometry planeGeometry = new PlaneGeometry( 50, 50, 2, 2 );
 			MeshBasicMaterial planeMaterial = new MeshBasicMaterial();
 			planeMaterial.setWireframe(true);
-			planeMaterial.setSide(SIDE.DOUBLE);
+			planeMaterial.setSide(Material.SIDE.DOUBLE);
 
 			Map<String,Mesh> planesLocal = new HashMap<String,Mesh>();
 

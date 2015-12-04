@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Shader;
 
 /**
  * A Material to define multiple materials for the same geometry.

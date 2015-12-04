@@ -20,10 +20,8 @@ package org.parallax3d.parallax.core.shared.curves.parametric;
 
 import org.parallax3d.parallax.core.shared.curves.Curve;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.curves.Curve;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
-public final class CurveCinquefoilKnot extends Curve
+public final class CurveCinquefoilKnot extends Curve 
 {
 
 	private double scale;
@@ -39,7 +37,7 @@ public final class CurveCinquefoilKnot extends Curve
 	}
 	
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(double t) 
 	{
 		double p = 2, q = 5;
 		t *= Math.PI * 2.0;

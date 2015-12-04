@@ -20,12 +20,11 @@ package org.parallax3d.parallax.core.shared.materials;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.client.shaders.DepthShader;
 import org.parallax3d.parallax.core.client.shaders.Shader;
+import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.cameras.HasNearFar;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 /**
  * A material for drawing geometry by depth. Depth is based off of the camera near and far plane. White is nearest, black is farthest.
@@ -43,7 +42,7 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 		setWireframeLineWidth(1);
 	}
 		
-	public Material.SHADING bufferGuessNormalType () 
+	public SHADING bufferGuessNormalType ()
 	{
 		// only MeshBasicMaterial and MeshDepthMaterial don't need normals
 		return null;

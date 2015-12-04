@@ -18,17 +18,18 @@
 
 package org.parallax3d.parallax.core.client.textures;
 
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderbuffer;
-import org.parallax3d.parallax.core.client.gl2.enums.*;
 import org.parallax3d.parallax.core.client.gl2.WebGLFramebuffer;
+import org.parallax3d.parallax.core.client.gl2.WebGLRenderbuffer;
 import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
+import org.parallax3d.parallax.core.client.gl2.enums.FramebufferSlot;
+import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.PixelType;
+import org.parallax3d.parallax.core.client.gl2.enums.RenderbufferInternalFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
+import org.parallax3d.parallax.core.client.gl2.enums.TextureTarget;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureWrapMode;
 import org.parallax3d.parallax.core.shared.math.Mathematics;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderbuffer;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
 
 public class RenderTargetTexture extends Texture
 {
@@ -52,7 +53,7 @@ public class RenderTargetTexture extends Texture
 	}
 
 	public RenderTargetTexture(int width, int height, 
-			TextureWrapMode wrapS,      TextureWrapMode wrapT,
+			TextureWrapMode wrapS,      TextureWrapMode wrapT, 
 			TextureMagFilter magFilter, TextureMinFilter minFilter,
 			PixelFormat format,         PixelType type) 
 	{

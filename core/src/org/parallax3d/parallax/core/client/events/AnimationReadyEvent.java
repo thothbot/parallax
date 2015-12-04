@@ -19,8 +19,8 @@
 package org.parallax3d.parallax.core.client.events;
 
 import org.parallax3d.parallax.core.client.AnimatedScene;
-import org.parallax3d.parallax.core.client.RenderingPanel;
 import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
+import org.parallax3d.parallax.core.client.RenderingPanel;
 
 import com.google.gwt.event.shared.GwtEvent;
 

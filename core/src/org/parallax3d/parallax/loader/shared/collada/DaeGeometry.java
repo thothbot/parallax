@@ -26,7 +26,6 @@ import org.parallax3d.parallax.core.shared.Log;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
-import org.parallax3d.parallax.core.shared.Log;
 
 public class DaeGeometry extends DaeIdElement
 {

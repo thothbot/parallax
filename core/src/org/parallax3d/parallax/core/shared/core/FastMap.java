@@ -33,7 +33,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 @SuppressWarnings("serial")
 public class FastMap<V> extends AbstractMap<String, V> implements Serializable {
-  private static class FastMapEntry<V> implements Map.Entry<String, V> {
+  private static class FastMapEntry<V> implements Entry<String, V> {
 
     private String key;
 
@@ -46,8 +46,8 @@ public class FastMap<V> extends AbstractMap<String, V> implements Serializable {
 
     @Override
     public boolean equals(Object a) {
-      if (a instanceof Map.Entry) {
-        Map.Entry<?, ?> s = (Map.Entry<?, ?>) a;
+      if (a instanceof Entry) {
+        Entry<?, ?> s = (Entry<?, ?>) a;
         if (equalsWithNullCheck(key, s.getKey()) && equalsWithNullCheck(value, s.getValue())) {
           return true;
         }
@@ -95,7 +95,7 @@ public class FastMap<V> extends AbstractMap<String, V> implements Serializable {
 
   private static class JsMap<V> extends JavaScriptObject {
 
-    public static FastMap.JsMap<?> create() {
+    public static JsMap<?> create() {
       return JavaScriptObject.createObject().cast();
     }
 
@@ -150,7 +150,7 @@ public class FastMap<V> extends AbstractMap<String, V> implements Serializable {
   }
 
   private transient HashMap<String, V> javaMap;
-  private transient FastMap.JsMap<V> map;
+  private transient JsMap<V> map;
 
   public FastMap() {
     if (GWT.isScript()) {
@@ -184,13 +184,13 @@ public class FastMap<V> extends AbstractMap<String, V> implements Serializable {
   }
 
   @Override
-  public Set<java.util.Map.Entry<String, V>> entrySet() {
+  public Set<Entry<String, V>> entrySet() {
     if (GWT.isScript()) {
-      return new AbstractSet<Map.Entry<String, V>>() {
+      return new AbstractSet<Entry<String, V>>() {
 
         @Override
         public boolean contains(Object key) {
-          Map.Entry<?, ?> s = (Map.Entry<?, ?>) key;
+          Entry<?, ?> s = (Entry<?, ?>) key;
           Object value = get(s.getKey());
           if (value == null) {
             return value == s.getValue();
@@ -200,16 +200,16 @@ public class FastMap<V> extends AbstractMap<String, V> implements Serializable {
         }
 
         @Override
-        public Iterator<Map.Entry<String, V>> iterator() {
+        public Iterator<Entry<String, V>> iterator() {
 
-          Iterator<Map.Entry<String, V>> custom = new Iterator<Map.Entry<String, V>>() {
+          Iterator<Entry<String, V>> custom = new Iterator<Entry<String, V>>() {
             Iterator<String> keys = keySet().iterator();
 
             public boolean hasNext() {
               return keys.hasNext();
             }
 
-            public Map.Entry<String, V> next() {
+            public Entry<String, V> next() {
               String key = keys.next();
               return new FastMapEntry<V>(key, get(key));
             }

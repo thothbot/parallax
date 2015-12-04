@@ -31,8 +31,6 @@ import com.google.gwt.typedarrays.shared.Int32Array;
 import com.google.gwt.typedarrays.shared.Uint8Array;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
-import org.parallax3d.parallax.core.client.gl2.extension.WebGLCompressedTextureS3tc;
-import org.parallax3d.parallax.core.shared.Log;
 
 public class CompressedTexture extends Texture 
 {
@@ -164,7 +162,7 @@ public class CompressedTexture extends Texture
 
         if ( header.get( off_magic ) != DDS_MAGIC ) 
         {
-            Log.error("ImageUtils.parseDDS(): Invalid magic number in DDS header");
+            Log.error( "ImageUtils.parseDDS(): Invalid magic number in DDS header" );
             return;
         }
 

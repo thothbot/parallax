@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.shared.materials;
 
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Color;
 
 /**
  * The Material has both an Ambient and Emissive colors.

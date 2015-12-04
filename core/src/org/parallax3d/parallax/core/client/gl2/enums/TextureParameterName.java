@@ -20,7 +20,6 @@ package org.parallax3d.parallax.core.client.gl2.enums;
 
 import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
 import org.parallax3d.parallax.core.client.gl2.extension.ExtTextureFilterAnisotropic;
-import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
 
 /**
  * GL2 Texture Parameter name flags.

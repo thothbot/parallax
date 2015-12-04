@@ -27,11 +27,6 @@ import org.parallax3d.parallax.core.shared.helpers.HasRaytracingPhysicalAttenuat
 import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.core.shared.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.renderers.RendererLights;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.materials.MeshLambertMaterial;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
@@ -49,7 +44,7 @@ import org.parallax3d.parallax.core.shared.math.Vector3;
  */
 public class PointLight extends Light implements HasRaytracingPhysicalAttenuation, HasIntensity
 {
-	public static class UniformPoint implements Light.UniformLight 
+	public static class UniformPoint implements UniformLight
 	{
 		public Float32Array distances;
 		public Float32Array colors;

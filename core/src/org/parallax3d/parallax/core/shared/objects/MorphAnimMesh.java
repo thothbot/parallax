@@ -25,12 +25,13 @@ import java.util.Map;
 import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.core.FastMap;
 import org.parallax3d.parallax.core.shared.core.Geometry;
+import org.parallax3d.parallax.core.shared.core.Geometry.MorphTarget;
 import org.parallax3d.parallax.core.shared.materials.Material;
 import org.parallax3d.parallax.core.shared.math.Mathematics;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.regexp.shared.MatchResult;
-import com.google.gwt.regexp.shared.RegExp;import org.parallax3d.parallax.core.shared.Log;import org.parallax3d.parallax.core.shared.core.FastMap;import org.parallax3d.parallax.core.shared.core.Geometry;import org.parallax3d.parallax.core.shared.materials.Material;import org.parallax3d.parallax.core.shared.math.Mathematics;
+import com.google.gwt.regexp.shared.RegExp;
 
 public class MorphAnimMesh extends Mesh
 {
@@ -58,7 +59,7 @@ public class MorphAnimMesh extends Mesh
 	
 	private String firstAnimation;
 	
-	public MorphAnimMesh(Geometry geometry, Material material)
+	public MorphAnimMesh(Geometry geometry, Material material) 
 	{			
 		super(geometry, material);
 		// internals
@@ -105,7 +106,7 @@ public class MorphAnimMesh extends Mesh
 
 		if ( this.animations == null) {
 			this.animations = GWT.isScript() ? 
-				new  FastMap<Animation>) : new HashMap<String, Animation>();
+				new FastMap<Animation>() : new HashMap<String, Animation>();
 		}
 
 		String firstAnimation = null;
@@ -114,7 +115,7 @@ public class MorphAnimMesh extends Mesh
 		
 		for ( int i = 0, il = geometry.getMorphTargets().size(); i < il; i ++ ) 
 		{
-			Geometry.MorphTarget morph = geometry.getMorphTargets().get(i);
+			MorphTarget morph = geometry.getMorphTargets().get(i);
 			
 			for (MatchResult result = pattern.exec(morph.name); result != null; result = pattern.exec(morph.name)) 
 			{
@@ -169,7 +170,7 @@ public class MorphAnimMesh extends Mesh
 		} 
 		else 
 		{
-			LLogerror("animation[" + label + "] undefined");
+			Log.error( "animation[" + label + "] undefined" );
 		}
 	}
 
@@ -211,8 +212,8 @@ public class MorphAnimMesh extends Mesh
 				this.time += this.duration;
 		}
 
-		int keyframe = this.startKeyframe + (int) MMathematicsclamp(
-				(int) Math.floor(this.time / frameTime), 0, this.length - 1);
+		int keyframe = this.startKeyframe + (int)Mathematics.clamp( 
+				(int)Math.floor( this.time / frameTime ), 0, this.length - 1 );
 
 		if ( keyframe != this.currentKeyframe ) 
 		{

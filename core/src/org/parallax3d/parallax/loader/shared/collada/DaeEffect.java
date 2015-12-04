@@ -42,7 +42,7 @@ public class DaeEffect extends DaeIdElement
 	{
 		super(node);
 		
-		Log.debug("DaeEffect() " + toString()); 
+		Log.debug("DaeEffect() " + toString());
 	}
 	
 	public DaeShader getShader() {

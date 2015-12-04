@@ -21,13 +21,11 @@ package org.parallax3d.parallax.core.client.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.math.Color;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * Phong shading - lighting model three-dimensional objects, 
@@ -113,7 +111,7 @@ public final class PhongShader extends Shader
 			ChunksVertexShader.SHADOWMAP
 		);
 
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main, main2, main3));
+		super.updateVertexSource(updateShaderSource(src, vars, main, main2, main3));
 	}
 	
 	@Override
@@ -153,7 +151,7 @@ public final class PhongShader extends Shader
 			ChunksFragmentShader.FOG
 		);
 		
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));		
+		super.updateFragmentSource(updateShaderSource(src, vars, main));
 	}
 
 }

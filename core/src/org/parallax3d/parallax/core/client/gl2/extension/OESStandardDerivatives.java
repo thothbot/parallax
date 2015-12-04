@@ -20,7 +20,7 @@ package org.parallax3d.parallax.core.client.gl2.extension;
 
 import org.parallax3d.parallax.core.client.gl2.WebGLExtension;
 
-public class OESStandardDerivatives extends WebGLExtension 
+public class OESStandardDerivatives extends WebGLExtension
 {
 	public static final int FRAGMENT_SHADER_DERIVATIVE_HINT_OES = 0x8B8B;
 	

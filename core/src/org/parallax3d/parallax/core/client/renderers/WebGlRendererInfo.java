@@ -102,7 +102,7 @@ public class WebGlRendererInfo
 	}
 
 	/**
-	 * Gets {@link WebGlRendererInfo.WebGLRenderInfoRender} information.
+	 * Gets {@link WebGLRenderInfoRender} information.
 	 */
 	public WebGLRenderInfoRender getRender()
 	{
@@ -110,7 +110,7 @@ public class WebGlRendererInfo
 	}
 
 	/**
-	 * Gets {@link WebGlRendererInfo.WebGLRenderInfoMemory} information.
+	 * Gets {@link WebGLRenderInfoMemory} information.
 	 */
 	public WebGLRenderInfoMemory getMemory()
 	{
@@ -118,7 +118,7 @@ public class WebGlRendererInfo
 	}
 
 	/**
-	 * Gets {@link WebGlRendererInfo.WebGLRenderTimer} information.
+	 * Gets {@link WebGLRenderTimer} information.
 	 */
 	public WebGLRenderTimer getTimer()
 	{

@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.core.shared.curves;
 
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.utils.CurveUtils;
+import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.utils.ShapeUtils;
 
 public class CubicBezierCurve extends Curve
@@ -48,7 +48,7 @@ public class CubicBezierCurve extends Curve
 	@Override
 	public Vector2 getTangent( double t ) 
 	{
-		double tx = CurveUtils.tangentCubicBezier( t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX() );
+		double tx = CurveUtils.tangentCubicBezier(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
 		double ty = CurveUtils.tangentCubicBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY() );
 
 		// returns unit vector

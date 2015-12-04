@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.WebGLBuffer;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 
 public class Attribute
 {
@@ -42,7 +41,7 @@ public class Attribute
 
 	public WebGLBuffer buffer;
 	public boolean createUniqueBuffers;
-	public Attribute.TYPE type;
+	public TYPE type;
 	// TODO: remove = change to type (initCustomAttributes)
 	public int size;
 	private List<?> value;
@@ -60,7 +59,7 @@ public class Attribute
 		//
 	}
 
-	public Attribute(Attribute.TYPE type, List<?> value)
+	public Attribute(TYPE type, List<?> value)
 	{
 		this.type = type;
 		this.value = value;

@@ -23,8 +23,6 @@ import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 /**
  * Brightness and contrast adjustment
@@ -40,7 +38,7 @@ import org.parallax3d.parallax.core.client.shaders.Uniform;
  * @author thothbot
  * 
  */
-public final class BrightnessContrastShader extends Shader
+public final class BrightnessContrastShader extends Shader 
 {
 
 	interface Resources extends DefaultResources

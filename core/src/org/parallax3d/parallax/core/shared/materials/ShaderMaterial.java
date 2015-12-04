@@ -20,8 +20,6 @@ package org.parallax3d.parallax.core.shared.materials;
 
 import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.shared.math.Color;
 
 public class ShaderMaterial extends Material 
 	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning, HasShading
@@ -47,11 +45,11 @@ public class ShaderMaterial extends Material
 	// set to use scene fog
 	private boolean isFog;
 	
-	private Material.SHADING shading;
+	private SHADING shading;
 	
 	private Color color;
 	
-	private Material.COLORS vertexColors;
+	private COLORS vertexColors;
 	
 	// set to use skinning attribute streams
 	private boolean isSkinning;
@@ -92,11 +90,11 @@ public class ShaderMaterial extends Material
 		
 		setFog(false);
 		
-		setShading(Material.SHADING.SMOOTH);
+		setShading(SHADING.SMOOTH);
 		
 		setColor(new Color(0xffffff));
 		
-		setVertexColors(Material.COLORS.NO);
+		setVertexColors(COLORS.NO);
 	}
 	
 	public boolean bufferGuessUVType () 
@@ -161,12 +159,12 @@ public class ShaderMaterial extends Material
 	}
 	
 	@Override
-	public Material.COLORS isVertexColors() {
+	public COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public void setVertexColors(COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
 
@@ -216,11 +214,11 @@ public class ShaderMaterial extends Material
 		this.numSupportedMorphNormals = num;
 	}
 	
-	public Material.SHADING getShading() {
+	public SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public void setShading(SHADING shading) {
 		this.shading = shading;
 	}
 	

@@ -28,8 +28,6 @@ import org.parallax3d.parallax.core.shared.math.Matrix4;
 
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 
 public class DaeSkin extends DaeElement 
 {

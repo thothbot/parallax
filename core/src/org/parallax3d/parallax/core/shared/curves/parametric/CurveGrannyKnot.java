@@ -18,14 +18,14 @@
 
 package org.parallax3d.parallax.core.shared.curves.parametric;
 
-import org.parallax3d.parallax.core.shared.curves.Curve;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.curves.Curve;
 
 public final class CurveGrannyKnot extends Curve 
 {
 
 	@Override
-	public Vector3 getPoint(double t) 
+	public Vector3 getPoint(double t)
 	{
 		t = 2.0 * Math.PI * t;
 

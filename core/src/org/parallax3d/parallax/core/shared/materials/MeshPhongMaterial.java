@@ -20,22 +20,14 @@ package org.parallax3d.parallax.core.shared.materials;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.core.client.shaders.PhongShader;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.client.textures.Texture;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.client.shaders.PhongShader;
 import org.parallax3d.parallax.core.client.shaders.Shader;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * A material for shiny surfaces, evaluated per pixel.
@@ -81,12 +73,12 @@ public final class MeshPhongMaterial extends Material
 	
 	private boolean isFog;
 	
-	private Material.SHADING shading;
+	private SHADING shading;
 	
 	private boolean isWireframe;
 	private int wireframeLineWidth;
 	
-	private Material.COLORS vertexColors;
+	private COLORS vertexColors;
 	
 	private boolean isSkinning;
 	private boolean isMorphTargets;
@@ -114,14 +106,14 @@ public final class MeshPhongMaterial extends Material
 		
 		setFog(true);
 		
-		setShading(Material.SHADING.SMOOTH);
+		setShading(SHADING.SMOOTH);
 		
 		setColor(new Color(0xffffff));
 		setAmbient(new Color(0xffffff));
 		setEmissive(new Color(0x000000));
 		setSpecular(new Color(0x111111));
 		
-		setVertexColors(Material.COLORS.NO);
+		setVertexColors(COLORS.NO);
 		
 		setShininess(30);
 		
@@ -290,12 +282,12 @@ public final class MeshPhongMaterial extends Material
 	}
 	
 	@Override
-	public Material.COLORS isVertexColors() {
+	public COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public void setVertexColors(COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
 	
@@ -419,11 +411,11 @@ public final class MeshPhongMaterial extends Material
 		this.normalScale = normalScale;
 	}
 	
-	public Material.SHADING getShading() {
+	public SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public void setShading(SHADING shading) {
 		this.shading = shading;
 	}
 	
@@ -505,7 +497,7 @@ public final class MeshPhongMaterial extends Material
 	{
 		super.refreshUniforms(camera, isGammaInput);
 		
-		Map<String, Uniform> uniforms = getShader().getUniforms();
+		Map<String, Uniform> uniforms = getShader().getUniforms(); 
 		uniforms.get("shininess").setValue( getShininess() );
 
 		if ( isGammaInput ) 

@@ -20,11 +20,10 @@ package org.parallax3d.parallax.core.shared.materials;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.client.shaders.DashedShader;
 import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
+import org.parallax3d.parallax.core.shared.cameras.Camera;
 
 /**
  * A material for drawing wireframe-style geometries with dashed lines.

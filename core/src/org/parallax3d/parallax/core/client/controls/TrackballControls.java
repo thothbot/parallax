@@ -21,8 +21,8 @@ package org.parallax3d.parallax.core.client.controls;
 import org.parallax3d.parallax.core.client.AnimatedScene;
 import org.parallax3d.parallax.core.shared.core.Object3D;
 import org.parallax3d.parallax.core.shared.math.Quaternion;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.math.Vector2;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
@@ -100,7 +100,7 @@ KeyDownHandler, KeyUpHandler, ContextMenuHandler
 	private Vector2 panStart;
 	private Vector2 panEnd;
 	
-	public TrackballControls(Object3D object, Widget widget) 
+	public TrackballControls(Object3D object, Widget widget)
 	{
 		super(object, widget);
 		

@@ -42,14 +42,6 @@ import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
 
 import com.google.gwt.core.client.GWT;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Int32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;
-import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.math.*;
 
 /**
  * This class is an efficient alternative to {@link Geometry}, because it stores all data, including vertex positions, 
@@ -96,7 +88,7 @@ public class BufferGeometry extends AbstractGeometry
 	private Map<String, BufferAttribute> attributes;
 	private Set<String> attributesKeys;
 	
-	private List<BufferGeometry.DrawCall> drawcalls;
+	private List<DrawCall> drawcalls;
 
 	public BufferGeometry() 
 	{
@@ -105,7 +97,7 @@ public class BufferGeometry extends AbstractGeometry
 		this.attributes  = GWT.isScript() ? 
 				new FastMap<BufferAttribute>() : new HashMap<String, BufferAttribute>();
 					
-		this.setDrawcalls(new ArrayList<BufferGeometry.DrawCall>());
+		this.setDrawcalls(new ArrayList<DrawCall>());
 
 		this.boundingBox = null;
 		this.boundingSphere = null;
@@ -157,14 +149,14 @@ public class BufferGeometry extends AbstractGeometry
 	 * This may be necessary if, for instance, you have more than 65535 vertices in your object.
 	 * @return
 	 */
-	public List<BufferGeometry.DrawCall> getDrawcalls() {
+	public List<DrawCall> getDrawcalls() {
 		return drawcalls;
 	}
 
 	/**
 	 * @param drawcalls the drawcalls to set
 	 */
-	public void setDrawcalls(List<BufferGeometry.DrawCall> drawcalls) {
+	public void setDrawcalls(List<DrawCall> drawcalls) {
 		this.drawcalls = drawcalls;
 	}
 
@@ -499,9 +491,9 @@ public class BufferGeometry extends AbstractGeometry
 
 				Uint16Array indices = (Uint16Array) getAttribute("index").getArray();
 
-				List<BufferGeometry.DrawCall> offsets = this.drawcalls.size() > 0 
+				List<DrawCall> offsets = this.drawcalls.size() > 0
 						? this.drawcalls 
-						: Arrays.asList( new BufferGeometry.DrawCall(0, indices.getLength(), 0 ) ) ;
+						: Arrays.asList( new DrawCall(0, indices.getLength(), 0 ) ) ;
 
 				for ( int j = 0, jl = offsets.size(); j < jl; ++ j ) {
 
@@ -669,7 +661,7 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 	
-	public List<BufferGeometry.DrawCall> computeOffsets() {
+	public List<DrawCall> computeOffsets() {
 	    //WebGL limits type of index buffer values to 16-bit.
 		return computeOffsets(65535);
 	}
@@ -681,7 +673,7 @@ public class BufferGeometry extends AbstractGeometry
 	 * @param size Defaults to 65535, but allows for larger or smaller chunks.
 	 * @return
 	 */
-	public List<BufferGeometry.DrawCall> computeOffsets( int size /* indexBufferSize */ ) {
+	public List<DrawCall> computeOffsets( int size /* indexBufferSize */ ) {
 
 //		var s = Date.now();
 
@@ -695,8 +687,8 @@ public class BufferGeometry extends AbstractGeometry
 		int indexPtr = 0;
 		int vertexPtr = 0;
 
-		List<BufferGeometry.DrawCall> offsets = Arrays.asList(new BufferGeometry.DrawCall(0, 0, 0));
-		BufferGeometry.DrawCall offset = offsets.get( 0 );
+		List<DrawCall> offsets = Arrays.asList(new DrawCall(0, 0, 0));
+		DrawCall offset = offsets.get( 0 );
 
 		int duplicatedVertices = 0;
 		int newVerticeMaps = 0;
@@ -736,7 +728,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			int faceMax = vertexPtr + newVerticeMaps;
 			if ( faceMax > ( offset.index + size ) ) {
-				BufferGeometry.DrawCall new_offset = new BufferGeometry.DrawCall(indexPtr, 0, vertexPtr );
+				DrawCall new_offset = new DrawCall(indexPtr, 0, vertexPtr );
 				offsets.add( new_offset );
 				offset = new_offset;
 

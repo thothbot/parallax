@@ -24,7 +24,7 @@ import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.renderers.RendererLights;
 import org.parallax3d.parallax.core.client.shaders.Uniform;
 import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.math.Color;import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;import org.parallax3d.parallax.core.client.renderers.RendererLights;import org.parallax3d.parallax.core.client.shaders.Uniform;
+import org.parallax3d.parallax.core.shared.math.Color;
 
 /**
  * Abstract base class for lights.

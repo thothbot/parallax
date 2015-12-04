@@ -18,12 +18,11 @@
 
 package org.parallax3d.parallax.core.client.textures;
 
+import org.parallax3d.parallax.core.client.gl2.enums.DataType;
+import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
 import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.core.client.gl2.WebGLTexture;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.client.gl2.enums.DataType;
 import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.PixelType;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
@@ -31,6 +30,7 @@ import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureParameterName;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureTarget;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureWrapMode;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.shared.math.Vector2;
 
 import com.google.gwt.dom.client.Element;
@@ -40,7 +40,7 @@ import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.RootPanel;import org.parallax3d.parallax.core.client.gl2.WebGLConstants;import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;import org.parallax3d.parallax.core.client.gl2.WebGLTexture;import org.parallax3d.parallax.core.client.gl2.enums.PixelType;import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;import org.parallax3d.parallax.core.client.gl2.enums.TextureParameterName;import org.parallax3d.parallax.core.client.gl2.enums.TextureTarget;import org.parallax3d.parallax.core.shared.Log;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Basic implementation of texture.
@@ -93,7 +93,7 @@ public class Texture
 	private Vector2 offset;
 	private Vector2 repeat;
 
-	private Texture.MAPPING_MODE mapping;
+	private MAPPING_MODE mapping;
 
 	private TextureWrapMode wrapS;
 	private TextureWrapMode wrapT;
@@ -139,7 +139,7 @@ public class Texture
 	 * Constructor
 	 * 
 	 * @param image              the Image
-	 * @param imageLoadHandler   the {@link Texture.ImageLoadHandler}. Not necessary.
+	 * @param imageLoadHandler   the {@link ImageLoadHandler}. Not necessary.
 	 */
 	public Texture(Image image, final ImageLoadHandler imageLoadHandler)
 	{
@@ -165,7 +165,7 @@ public class Texture
 	public Texture(Element image) 
 	{
 		this(image, 
-				Texture.MAPPING_MODE.UV, 
+				MAPPING_MODE.UV,
 				TextureWrapMode.CLAMP_TO_EDGE, 
 				TextureWrapMode.CLAMP_TO_EDGE,
 				TextureMagFilter.LINEAR, 
@@ -188,7 +188,7 @@ public class Texture
 	 * @param type      the {@link DataType} value.
 	 * @param anisotropy the anisotropy value.
 	 */
-	public Texture(Element image, Texture.MAPPING_MODE mapping, TextureWrapMode wrapS,
+	public Texture(Element image, MAPPING_MODE mapping, TextureWrapMode wrapS,
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
 			PixelFormat format, PixelType type, int anisotropy) 
 	{	
@@ -219,14 +219,14 @@ public class Texture
 	/**
 	 * Get the @{link Texture.MAPPING_MODE} value.
 	 */
-	public Texture.MAPPING_MODE getMapping() {
+	public MAPPING_MODE getMapping() {
 		return this.mapping;
 	}
 	
 	/**
 	 * Sets the @{link Texture.MAPPING_MODE} value.
 	 */
-	public void setMapping(Texture.MAPPING_MODE mapping) {
+	public void setMapping(MAPPING_MODE mapping) {
 		this.mapping = mapping;
 	}
 
@@ -511,7 +511,7 @@ public class Texture
 	 * Releases a texture from the GL context.
 	 * texture � an instance of Texture
 	 */
-	public void deallocate( WebGLRenderer renderer )
+	public void deallocate( WebGLRenderer renderer ) 
 	{
 		if ( getWebGlTexture() == null ) return;
 
@@ -568,7 +568,7 @@ public class Texture
 			@Override
 			public void onError(ErrorEvent event)
 			{
-				LLogerror("An error occurred while loading image: " + image.getUrl());
+				Log.error("An error occurred while loading image: " + image.getUrl());
 			}
 		});
 

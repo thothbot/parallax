@@ -23,12 +23,12 @@ import org.parallax3d.parallax.core.shared.materials.Material.BLENDING;
 
 public enum JsoBlending
 {
-	NormalBlending        { @Override public BLENDING getValue() { return Material.BLENDING.NORMAL; }},
-	AdditiveBlending      { @Override public BLENDING getValue() { return Material.BLENDING.ADDITIVE; }},
-	SubtractiveBlending   { @Override public BLENDING getValue() { return Material.BLENDING.SUBTRACTIVE; }},
-	MultiplyBlending      { @Override public BLENDING getValue() { return Material.BLENDING.MULTIPLY; }},
-	AdditiveAlphaBlending { @Override public BLENDING getValue() { return Material.BLENDING.ADDITIVE_ALPHA; }},
-	CustomBlending        { @Override public BLENDING getValue() { return Material.BLENDING.CUSTOM; }};
+	NormalBlending        { @Override public BLENDING getValue() { return BLENDING.NORMAL; }},
+	AdditiveBlending      { @Override public BLENDING getValue() { return BLENDING.ADDITIVE; }},
+	SubtractiveBlending   { @Override public BLENDING getValue() { return BLENDING.SUBTRACTIVE; }},
+	MultiplyBlending      { @Override public BLENDING getValue() { return BLENDING.MULTIPLY; }},
+	AdditiveAlphaBlending { @Override public BLENDING getValue() { return BLENDING.ADDITIVE_ALPHA; }},
+	CustomBlending        { @Override public BLENDING getValue() { return BLENDING.CUSTOM; }};
 	
-	public abstract Material.BLENDING getValue();
+	public abstract BLENDING getValue();
 }

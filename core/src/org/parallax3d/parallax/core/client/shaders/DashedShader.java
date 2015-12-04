@@ -69,7 +69,7 @@ public class DashedShader extends Shader
 			ChunksVertexShader.LOGDEPTHBUF
 		);
 		
-		super.updateVertexSource(updateShaderSource(src, vars, main1, main2));
+		super.updateVertexSource(Shader.updateShaderSource(src, vars, main1, main2));	
 	}
 	
 	@Override
@@ -87,6 +87,6 @@ public class DashedShader extends Shader
 			ChunksFragmentShader.FOG
 		);
 			
-		super.updateFragmentSource(updateShaderSource(src, vars, main));
+		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
 	}
 }

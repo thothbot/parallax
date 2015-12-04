@@ -24,7 +24,6 @@ import java.util.List;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 
 /**
  * This class implements three-dimensional region which is visible on the screen.

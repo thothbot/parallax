@@ -18,13 +18,13 @@
 
 package org.parallax3d.parallax.loader.shared;
 
-import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.client.gl2.arrays.ArrayBuffer;
 import org.parallax3d.parallax.core.client.gl2.arrays.DataView;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint8Array;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.BufferAttribute;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.client.gl2.arrays.Uint8Array;
 import org.parallax3d.parallax.core.shared.core.BufferGeometry;
 import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.Geometry;
@@ -32,11 +32,6 @@ import org.parallax3d.parallax.core.shared.core.Geometry;
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
-import org.parallax3d.parallax.core.client.gl2.arrays.DataView;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint8Array;
-import org.parallax3d.parallax.core.shared.core.*;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public class STLLoader extends XHRLoader {
 

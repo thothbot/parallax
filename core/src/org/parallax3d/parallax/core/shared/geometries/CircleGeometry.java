@@ -26,7 +26,7 @@ import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.math.Sphere;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector3;import org.parallax3d.parallax.core.shared.core.Face3;import org.parallax3d.parallax.core.shared.core.Geometry;import org.parallax3d.parallax.core.shared.math.Sphere;import org.parallax3d.parallax.core.shared.math.Vector2;import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/circle.gif" />
@@ -37,7 +37,7 @@ import org.parallax3d.parallax.core.shared.math.Vector3;import org.parallax3d.pa
  * @author thothbot
  *
  */
-public final class CircleGeometry extends Geometry
+public final class CircleGeometry extends Geometry 
 {
 	public CircleGeometry()
 	{
@@ -53,8 +53,8 @@ public final class CircleGeometry extends Geometry
 	{
 	    segments = Math.max( 3, segments );
 
-   		VVector3 enter = new Vector3();
-   		VVector2 enterUV = new Vector2( 0.5, 0.5 );
+   		Vector3 center = new Vector3();
+   		Vector2 centerUV = new Vector2( 0.5, 0.5 );
 	    List<Vector2> uvs = new ArrayList<Vector2>();
 
 	    this.getVertices().add(center);
@@ -79,12 +79,12 @@ public final class CircleGeometry extends Geometry
 	        int v2 = i + 1 ;
 	        int v3 = 0;
 
-	        this.getFaces().add( new  Face3 v1, v2, v3, Arrays.asList( n, n, n ) ) );
+	        this.getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n, n, n ) ) );
 	        this.getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( i ), uvs.get( i + 1 ), centerUV ) );
 	    }
 
 	    this.computeFaceNormals();
 
-	    setBoundingSphere( new  Sphereradius) );
+	    setBoundingSphere( new Sphere(radius) );
 	}
 }

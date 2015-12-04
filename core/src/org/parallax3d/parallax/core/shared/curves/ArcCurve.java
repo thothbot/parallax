@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.shared.curves;
 
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 
 public class ArcCurve extends Curve
 {

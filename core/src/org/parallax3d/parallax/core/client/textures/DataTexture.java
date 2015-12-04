@@ -21,7 +21,6 @@ package org.parallax3d.parallax.core.client.textures;
 import org.parallax3d.parallax.core.client.gl2.arrays.Uint8Array;
 import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint8Array;
 
 /**
  * Implementation of data texture.
@@ -80,7 +79,7 @@ public class DataTexture extends Texture
 		this.height = height;
 	}
 	
-	public void generateDataTexture( Color color )
+	public void generateDataTexture( Color color ) 
 	{
 		int size = width * height;
 		Uint8Array data = Uint8Array.create( 3 * size );

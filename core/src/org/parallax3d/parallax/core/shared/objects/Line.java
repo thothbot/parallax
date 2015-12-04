@@ -20,39 +20,27 @@ package org.parallax3d.parallax.core.shared.objects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;
-import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;
 import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;
-import org.parallax3d.parallax.core.client.shaders.Attribute;
-import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
-import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
-import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
 import org.parallax3d.parallax.core.shared.core.Raycaster;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.core.shared.math.Ray;
 import org.parallax3d.parallax.core.shared.math.Sphere;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.math.Vector4;
 import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;
 import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;
-import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;
 import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
-import org.parallax3d.parallax.core.client.renderers.WebGlRendererInfo;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.shaders.Attribute;
-import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
+import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
-import org.parallax3d.parallax.core.shared.math.*;
+import org.parallax3d.parallax.core.shared.math.Color;
+import org.parallax3d.parallax.core.shared.math.Matrix4;
+import org.parallax3d.parallax.core.shared.math.Vector2;
+import org.parallax3d.parallax.core.shared.math.Vector4;
 
 /**
  * A line or a series of lines.
@@ -94,22 +82,22 @@ public class Line extends GeometryObject
 	
 	public Line(AbstractGeometry geometry)
 	{
-		this(geometry, Line.defaultMaterial, Line.MODE.STRIPS);
+		this(geometry, Line.defaultMaterial, MODE.STRIPS);
 	}
 
 	public Line(AbstractGeometry geometry, LineBasicMaterial material) 
 	{
-		this(geometry, material, Line.MODE.STRIPS);
+		this(geometry, material, MODE.STRIPS);
 	}
 
 	/**
 	 * If no material is supplied, a randomized line material will be created and assigned to the object.
-	 * Also, if no type is supplied, the default {@link Line.MODE}.STRIPS will be used).
+	 * Also, if no type is supplied, the default {@link MODE}.STRIPS will be used).
 	 * @param geometry  Vertices representing the line segment(s).
 	 * @param material Material for the line. Default is {@link LineBasicMaterial}.
-	 * @param mode Connection type between vertices. Default is {@link Line.MODE}.STRIPS.
+	 * @param mode Connection type between vertices. Default is {@link MODE}.STRIPS.
 	 */
-	public Line(AbstractGeometry geometry, LineBasicMaterial material, Line.MODE mode) 
+	public Line(AbstractGeometry geometry, LineBasicMaterial material, MODE mode)
 	{
 		super(geometry, material);
 
@@ -120,12 +108,12 @@ public class Line extends GeometryObject
 		return mode;
 	}
 
-	public void setMode(Line.MODE mode)
+	public void setMode(MODE mode)
 	{
 		this.mode = mode;
 	}
 
-	public Line.MODE getType()
+	public MODE getType()
 	{
 		return mode;
 	}
@@ -162,7 +150,7 @@ public class Line extends GeometryObject
 		int nbVertices = vertices.size();
 		Vector3 interSegment = new Vector3();
 		Vector3 interRay = new Vector3();
-		int step = this.mode == Line.MODE.STRIPS ? 1 : 2;
+		int step = this.mode == MODE.STRIPS ? 1 : 2;
 
 		for ( int i = 0; i < nbVertices - 1; i = i + step ) {
 
@@ -202,7 +190,7 @@ public class Line extends GeometryObject
 		WebGLRenderingContext gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 		
-		BeginMode primitives = ( this.getType() == Line.MODE.STRIPS)
+		BeginMode primitives = ( this.getType() == MODE.STRIPS)
 				? BeginMode.LINE_STRIP 
 				: BeginMode.LINES;
 

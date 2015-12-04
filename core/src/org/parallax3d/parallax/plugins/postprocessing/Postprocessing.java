@@ -23,25 +23,22 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
+import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.StencilFunction;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
 import org.parallax3d.parallax.core.client.renderers.Plugin;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
 import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.plugins.postprocessing.shaders.CopyShader;
-import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.cameras.OrthographicCamera;
 import org.parallax3d.parallax.core.shared.geometries.PlaneGeometry;
+import org.parallax3d.parallax.plugins.postprocessing.shaders.CopyShader;
+import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.core.shared.lights.Light;
+import org.parallax3d.parallax.core.shared.objects.Mesh;
 import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
 
 public class Postprocessing extends Plugin
 {
@@ -105,8 +102,8 @@ public class Postprocessing extends Plugin
 		return true;
 	}
 	
-	public Plugin.TYPE getType() {
-		return Plugin.TYPE.POST_RENDER;
+	public TYPE getType() {
+		return TYPE.POST_RENDER;
 	}
 	
 	public RenderTargetTexture getRenderTarget1() {
@@ -139,7 +136,7 @@ public class Postprocessing extends Plugin
 	}
 
 	@Override
-	public void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight ) 
+	public void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight )
 	{
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;

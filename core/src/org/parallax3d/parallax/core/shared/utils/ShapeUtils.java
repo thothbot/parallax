@@ -28,7 +28,7 @@ import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.core.FastMap;
 import org.parallax3d.parallax.core.shared.math.Vector2;
 
-import com.google.gwt.core.client.GWT;import org.parallax3d.parallax.core.shared.Log;import org.parallax3d.parallax.core.shared.core.FastMap;import org.parallax3d.parallax.core.shared.math.Vector2;
+import com.google.gwt.core.client.GWT;
 
 
 /**
@@ -51,7 +51,7 @@ public class ShapeUtils
 	 * @param allpoints 
 	 * @param verts   the list of vertices, where will be created isolated faces
      */
-	public static void removeHoles( List<Vector2> contour, List<List<Vector2>> holes,
+	public static void removeHoles( List<Vector2> contour, List<List<Vector2>> holes, 
 			List<Vector2> shape, List<Vector2> allpoints, List<List<Vector2>> verts ) 
 	{
 		for(Vector2 vector: contour)
@@ -179,7 +179,7 @@ public class ShapeUtils
 			} 
 			else 
 			{
-				LLogerror("ShapeUtils: removeHoles() ERROR");
+				Log.error("ShapeUtils: removeHoles() ERROR");
 			}
 
 			List<Vector2> tmpShape1 = new ArrayList<Vector2>(shape.subList(0, shapeIndex));
@@ -240,7 +240,7 @@ public class ShapeUtils
 
 		// prepare all points map
 		Map<String, Integer> allPointsMap = GWT.isScript() ? 
-				new  FastMap<Integer>) : new HashMap<String, Integer>();
+				new FastMap<Integer>() : new HashMap<String, Integer>();
 
 		for ( int i = 0, il = allpoints.size(); i < il; i ++ ) 
 		{

@@ -43,11 +43,6 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import org.parallax3d.parallax.core.client.context.Canvas3d;
-import org.parallax3d.parallax.core.client.context.Canvas3dAttributes;
-import org.parallax3d.parallax.core.client.context.Canvas3dException;
-import org.parallax3d.parallax.core.client.events.*;
-import org.parallax3d.parallax.core.shared.Log;
 
 /**
  * Widget which manages {@link WebGLRenderer} and {@link Canvas3d}

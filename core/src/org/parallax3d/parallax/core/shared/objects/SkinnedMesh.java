@@ -24,18 +24,13 @@ import java.util.List;
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.client.textures.Texture;
 import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.core.Geometry;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
+import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.shared.math.Quaternion;
-import org.parallax3d.parallax.core.shared.math.Vector4;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.Log;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
+import org.parallax3d.parallax.core.shared.math.Quaternion;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.math.Vector4;
 
 public class SkinnedMesh extends Mesh {
 	
@@ -187,7 +182,7 @@ public class SkinnedMesh extends Mesh {
 
 		} else {
 
-			Log.warn("SkinnedMesh unreckognized bindMode: " + this.bindMode);
+			Log.warn( "SkinnedMesh unreckognized bindMode: " + this.bindMode );
 
 		}
 

@@ -27,7 +27,6 @@ import org.parallax3d.parallax.core.shared.math.Color;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
-import org.parallax3d.parallax.core.shared.Log;
 
 public class DaeColorOrTexture extends DaeElement 
 {

@@ -20,28 +20,24 @@ package org.parallax3d.parallax.plugins.effects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
-import org.parallax3d.parallax.core.shared.cameras.OrthographicCamera;
-import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.shared.geometries.PlaneBufferGeometry;
-import org.parallax3d.parallax.core.shared.lights.Light;
 import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
-import org.parallax3d.parallax.core.shared.math.Mathematics;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
 import org.parallax3d.parallax.plugins.effects.shaders.AnaglyphShader;
 import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
+import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
+import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
+import org.parallax3d.parallax.core.shared.cameras.Camera;
+import org.parallax3d.parallax.core.shared.cameras.OrthographicCamera;
 import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.core.shared.geometries.PlaneBufferGeometry;
+import org.parallax3d.parallax.core.shared.lights.Light;
+import org.parallax3d.parallax.core.shared.math.Mathematics;
+import org.parallax3d.parallax.core.shared.math.Matrix4;
+import org.parallax3d.parallax.core.shared.objects.Mesh;
+import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 public class Anaglyph extends Effect
 {
@@ -122,7 +118,7 @@ public class Anaglyph extends Effect
 	 *
 	 * Each camera is offset by the eye seperation and its projection matrix is
 	 * also skewed asymetrically back to converge on the same projection plane.
-	 * Added a focal length parameter to, this is where the org.parallax3d.parallax is equal to 0.
+	 * Added a focal length parameter to, this is where the parallax is equal to 0.
 	 */
 
 	@Override

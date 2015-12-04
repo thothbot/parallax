@@ -20,8 +20,6 @@ package org.parallax3d.parallax.core.shared.materials;
 
 import org.parallax3d.parallax.core.client.textures.Texture;
 import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.math.Vector2;
 
 public interface HasNormalMap 
 {

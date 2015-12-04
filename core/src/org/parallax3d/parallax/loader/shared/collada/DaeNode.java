@@ -24,7 +24,7 @@ import java.util.List;
 import org.parallax3d.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;import org.parallax3d.parallax.core.shared.Log;
+import com.google.gwt.xml.client.NodeList;
 
 public class DaeNode extends DaeIdElement 
 {
@@ -36,7 +36,7 @@ public class DaeNode extends DaeIdElement
 	{
 		super(node);
 		
-		Log.debug("DaeNode() " + toString());
+		Log.debug("DaeNode() " + toString()); 
 	}
 	
 	public List<DaeNode> getNodes() {

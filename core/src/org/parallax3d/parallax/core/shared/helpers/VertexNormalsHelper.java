@@ -21,18 +21,15 @@ package org.parallax3d.parallax.core.shared.helpers;
 import java.util.Arrays;
 import java.util.List;
 
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.objects.Line;
 import org.parallax3d.parallax.core.shared.core.Face3;
 import org.parallax3d.parallax.core.shared.core.Geometry;
 import org.parallax3d.parallax.core.shared.materials.LineBasicMaterial;
 import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Matrix3;
 import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.objects.Line;
 import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.core.Face3;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 public class VertexNormalsHelper extends Line
 {
@@ -57,7 +54,7 @@ public class VertexNormalsHelper extends Line
 	
 	public VertexNormalsHelper(Mesh object, double size, int hex, int linewidth ) 
 	{
-		super(new Geometry(), new LineBasicMaterial(), Line.MODE.PIECES);
+		super(new Geometry(), new LineBasicMaterial(), MODE.PIECES);
 		
 		this.object = object;
 		this.size = size;

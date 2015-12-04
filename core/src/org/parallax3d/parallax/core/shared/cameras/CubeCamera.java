@@ -20,12 +20,12 @@ package org.parallax3d.parallax.core.shared.cameras;
 
 import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.client.textures.RenderTargetCubeTexture;
 import org.parallax3d.parallax.core.shared.core.Object3D;
 import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.scenes.Scene;import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
+import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 /**
  * Camera for rendering cube maps
@@ -36,7 +36,7 @@ import org.parallax3d.parallax.core.shared.scenes.Scene;import org.parallax3d.pa
  * @author thothbot
  *
  */
-public final class CubeCamera extends Object3D 
+public final class CubeCamera extends Object3D
 {
 	private double fov = 90.0;
 	private double aspect = 1.0;

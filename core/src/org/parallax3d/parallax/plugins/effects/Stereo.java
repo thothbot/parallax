@@ -21,19 +21,19 @@ package org.parallax3d.parallax.plugins.effects;
 import java.util.List;
 
 import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
+import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.shared.cameras.Camera;
 import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
 import org.parallax3d.parallax.core.shared.math.Mathematics;
 import org.parallax3d.parallax.core.shared.math.Quaternion;
-import org.parallax3d.parallax.core.shared.math.Vector3;import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;import org.parallax3d.parallax.core.shared.cameras.Camera;import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;import org.parallax3d.parallax.core.shared.lights.Light;import org.parallax3d.parallax.core.shared.math.Mathematics;import org.parallax3d.parallax.core.shared.math.Vector3;import org.parallax3d.parallax.core.shared.scenes.Scene;
+import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.scenes.Scene;
 
 public class Stereo extends Effect {
 	
 	private double eyeSeparation = 3.0;
-	// Distance to the non-org.parallax3d.parallax or projection plane
+	// Distance to the non-parallax or projection plane
 	private double focalLength = 15.0;
 	
 	// internals
@@ -66,7 +66,7 @@ public class Stereo extends Effect {
 	}
 
 	@Override
-	public void render(CCamera ceneCamera, List<LLight lights, int currentWidth, int currentHeight)
+	public void render(Camera sceneCamera, List<Light> lights, int currentWidth, int currentHeight)
 	{
 		if(!(sceneCamera instanceof PerspectiveCamera))
 			return;
@@ -82,7 +82,7 @@ public class Stereo extends Effect {
 
 		// Effective fov of the camera
 
-		_fov = MaMathematicsadToDeg(2.0 * Math.atan(Math.tan(Mathematics.degToRad(camera.getFov()) * 0.5) / camera.zoom));
+		_fov = Mathematics.radToDeg(2.0 * Math.atan(Math.tan(Mathematics.degToRad(camera.getFov()) * 0.5) / camera.zoom));
 
 		_ndfl = camera.getNear() / this.focalLength;
 		_halfFocalHeight = Math.tan( Mathematics.degToRad( _fov ) * 0.5 ) * this.focalLength;

@@ -21,13 +21,11 @@ package org.parallax3d.parallax.core.shared.math;
 import java.util.List;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.shared.core.*;
 import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
 import org.parallax3d.parallax.core.shared.core.GeometryObject;
 import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.shared.core.Object3D.Traverse;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
+import org.parallax3d.parallax.core.shared.core.BufferGeometry;
+import org.parallax3d.parallax.core.shared.core.Geometry;
 
 public class Box3 
 {
@@ -101,7 +99,7 @@ public class Box3
 
 	}
 	
-	public Box3 setFromObject(Object3D object) 
+	public Box3 setFromObject(Object3D object)
 	{
 
 		// Computes the world-axis-aligned bounding box of an object (including its children),
@@ -111,7 +109,7 @@ public class Box3
 
 		this.makeEmpty();
 		
-		object.traverse(new Traverse() {
+		object.traverse(new Object3D.Traverse() {
 			
 			@Override
 			public void callback(Object3D node) {

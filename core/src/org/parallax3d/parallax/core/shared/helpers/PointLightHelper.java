@@ -18,11 +18,10 @@
 
 package org.parallax3d.parallax.core.shared.helpers;
 
+import org.parallax3d.parallax.core.shared.geometries.SphereGeometry;
 import org.parallax3d.parallax.core.shared.lights.PointLight;
 import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
-import org.parallax3d.parallax.core.shared.geometries.SphereGeometry;
 import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.materials.MeshBasicMaterial;
 
 public class PointLightHelper extends Mesh {
 	

@@ -21,12 +21,11 @@ package org.parallax3d.parallax.core.client.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.core.shared.math.Color;
 import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.shared.math.Color;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
-import org.parallax3d.parallax.core.shared.math.Vector3;
 
 /**
  * Lambert shader. This is the simplest model of light - a pure diffuse lighting. 

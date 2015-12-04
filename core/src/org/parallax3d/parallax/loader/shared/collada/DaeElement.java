@@ -21,7 +21,6 @@ package org.parallax3d.parallax.loader.shared.collada;
 import org.parallax3d.parallax.core.shared.Log;
 
 import com.google.gwt.xml.client.Node;
-import org.parallax3d.parallax.core.shared.Log;
 
 public abstract class DaeElement 
 {

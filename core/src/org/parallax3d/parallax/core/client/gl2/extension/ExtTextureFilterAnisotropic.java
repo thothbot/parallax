@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.core.client.gl2.extension;
 
 import org.parallax3d.parallax.core.client.gl2.WebGLExtension;
-import org.parallax3d.parallax.core.client.gl2.WebGLExtension;
 
 public class ExtTextureFilterAnisotropic extends WebGLExtension
 {

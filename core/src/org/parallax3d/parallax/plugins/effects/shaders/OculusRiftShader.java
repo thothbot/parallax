@@ -25,12 +25,8 @@ import org.parallax3d.parallax.core.shared.math.Vector4;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.math.Vector4;
 
-public class OculusRiftShader extends Shader
+public class OculusRiftShader extends Shader 
 {
 
 	interface Resources extends DefaultResources

@@ -21,7 +21,6 @@ package org.parallax3d.parallax.core.shared.scenes;
 import java.util.Map;
 
 import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
 
 /**
  * This class implements simple fog with near and far options.
