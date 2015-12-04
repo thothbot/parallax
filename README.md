@@ -13,8 +13,8 @@ The main features of Parallax 2.0 will be:
 * Parallax will be a cross-platform library, i.e. ability to run Parallax projects everywhere.
 * Still be able to make WebGL project (GWT), but also be able to make projects for desktop (Windows, Linux, OS X), mobile(Android, iOS)
 * Full three.js back compatibility.
-
-
+* Package `thothbot` will be renamed to `org.parallax3d`
+* Parallax will use a Gradle based setup application
 
 # Parallax 1.x
 
