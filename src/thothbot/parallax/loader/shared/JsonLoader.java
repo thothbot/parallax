@@ -64,7 +64,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.json.client.JSONException;
+//import com.google.gwt.json.client.JSONException;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 
@@ -135,7 +135,7 @@ public class JsonLoader extends XHRLoader
 			AutoBean<JsoObject> bean = AutoBeanCodex.decode(factory, JsoObject.class, iJSonString);
 			object = bean.as();
 		} 
-		catch ( JSONException e) 
+		catch ( Exception e)
 		{
 			Log.error("Could not parser JSON data");
 			return false;

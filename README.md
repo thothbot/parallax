@@ -2,14 +2,21 @@
 <img src="http://parallax3d.org/static/images/logo.png" alt="Parallax" align="top"/>
 
 master [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=master)](https://travis-ci.org/thothbot/parallax)
-
 dev [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=dev)](https://travis-ci.org/thothbot/parallax)
 
-Parallax 2.0
-=============
+## Parallax 2.0
+
+This is development version of Parallax library. List of features and development progress will be placed here.
+
+The main features of Parallax 2.0 will be:
+
+* Parallax will be a cross-platform library, i.e. ability to run Parallax projects everywhere.
+* Still be able to make WebGL project (GWT), but also be able to make projects for desktop (Windows, Linux, OS X), mobile(Android, iOS)
+* Full three.js back compatibility.
 
 
-## Parallax 1.x
+
+# Parallax 1.x
 
 #### Google Web Toolkit 3D library ####
 

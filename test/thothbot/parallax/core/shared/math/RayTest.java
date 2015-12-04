@@ -187,28 +187,28 @@ public class RayTest extends GWTTestCase
 		assertNull( a.intersectPlane( f ) );
 	}
 
-	public void testTransform()
-	{
-		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
-		Matrix4 m = new Matrix4().identity();
-
-		assertTrue( a.clone().apply( m ).equals( a ));
-
-		a = new Ray( zero3.clone(), new Vector3( 0, 0, 1 ) );
-		m.rotateByAxis( new Vector3( 0, 0, 1 ), Math.PI );
-		assertTrue( a.clone().apply( m ).equals( a ));
-
-		m.identity().rotateX( Math.PI );
-		Ray b = a.clone();
-		b.getDirection().negate();
-		Ray a2 = a.clone().apply( m );
-		assertTrue( a2.getOrigin().distanceTo( b.getOrigin() ) < 0.0001);
-		assertTrue( a2.getDirection().distanceTo( b.getDirection() ) < 0.0001);
-
-		a.setOrigin( new Vector3( 0, 0, 1 ) );
-		b.setOrigin( new Vector3( 0, 0, -1 ) );
-		Ray a3 = a.clone().apply( m );
-		assertTrue( a3.getOrigin().distanceTo( b.getOrigin() ) < 0.0001);
-		assertTrue( a3.getDirection().distanceTo( b.getDirection() ) < 0.0001);
-	}
+//	public void testTransform()
+//	{
+//		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
+//		Matrix4 m = new Matrix4().identity();
+//
+//		assertTrue( a.clone().apply( m ).equals( a ));
+//
+//		a = new Ray( zero3.clone(), new Vector3( 0, 0, 1 ) );
+//		m.rotateByAxis( new Vector3( 0, 0, 1 ), Math.PI );
+//		assertTrue( a.clone().apply( m ).equals( a ));
+//
+//		m.identity().rotateX( Math.PI );
+//		Ray b = a.clone();
+//		b.getDirection().negate();
+//		Ray a2 = a.clone().apply( m );
+//		assertTrue( a2.getOrigin().distanceTo( b.getOrigin() ) < 0.0001);
+//		assertTrue( a2.getDirection().distanceTo( b.getDirection() ) < 0.0001);
+//
+//		a.setOrigin( new Vector3( 0, 0, 1 ) );
+//		b.setOrigin( new Vector3( 0, 0, -1 ) );
+//		Ray a3 = a.clone().apply( m );
+//		assertTrue( a3.getOrigin().distanceTo( b.getOrigin() ) < 0.0001);
+//		assertTrue( a3.getDirection().distanceTo( b.getDirection() ) < 0.0001);
+//	}
 }
