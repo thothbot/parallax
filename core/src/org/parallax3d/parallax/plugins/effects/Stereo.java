@@ -20,15 +20,15 @@ package org.parallax3d.parallax.plugins.effects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.math.Mathematics;
-import org.parallax3d.parallax.core.shared.math.Quaternion;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
+import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
+import org.parallax3d.parallax.renderers.WebGLRenderer;
+import org.parallax3d.parallax.cameras.Camera;
+import org.parallax3d.parallax.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.lights.Light;
+import org.parallax3d.parallax.math.Mathematics;
+import org.parallax3d.parallax.math.Quaternion;
+import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.scenes.Scene;
 
 public class Stereo extends Effect {
 	

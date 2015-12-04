@@ -18,16 +18,16 @@
 
 package org.parallax3d.parallax.plugins.postprocessing;
 
-import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
-import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
-import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMagFilter;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMinFilter;
+import org.parallax3d.parallax.textures.RenderTargetTexture;
+import org.parallax3d.parallax.materials.Material;
+import org.parallax3d.parallax.materials.ShaderMaterial;
 import org.parallax3d.parallax.plugins.postprocessing.shaders.ConvolutionShader;
-import org.parallax3d.parallax.core.client.gl2.enums.EnableCap;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.shared.math.Vector2;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.EnableCap;
+import org.parallax3d.parallax.shaders.Shader;
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.plugins.postprocessing.shaders.CopyShader;
 
 public class BloomPass extends Pass

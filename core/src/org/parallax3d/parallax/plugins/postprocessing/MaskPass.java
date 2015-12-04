@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.plugins.postprocessing;
 
-import org.parallax3d.parallax.core.client.gl2.enums.EnableCap;
-import org.parallax3d.parallax.core.client.gl2.enums.StencilFunction;
-import org.parallax3d.parallax.core.client.gl2.enums.StencilOp;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.EnableCap;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.StencilFunction;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.StencilOp;
+import org.parallax3d.parallax.cameras.Camera;
+import org.parallax3d.parallax.scenes.Scene;
 
 public class MaskPass extends Pass
 {

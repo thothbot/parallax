@@ -18,10 +18,10 @@
 
 package org.parallax3d.parallax.plugins.postprocessing;
 
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
+import org.parallax3d.parallax.cameras.Camera;
+import org.parallax3d.parallax.materials.Material;
+import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.scenes.Scene;
 
 public class RenderPass extends Pass
 {

@@ -20,17 +20,17 @@ package org.parallax3d.parallax.plugins.sprite;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.shared.core.AbstractGeometry;
-import org.parallax3d.parallax.core.shared.core.BufferAttribute;
-import org.parallax3d.parallax.core.shared.core.GeometryObject;
-import org.parallax3d.parallax.core.shared.core.Raycaster;
-import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.client.renderers.WebGLGeometry;
-import org.parallax3d.parallax.core.shared.core.BufferGeometry;
+import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
+import org.parallax3d.parallax.renderers.WebGLRenderer;
+import org.parallax3d.parallax.core.AbstractGeometry;
+import org.parallax3d.parallax.core.BufferAttribute;
+import org.parallax3d.parallax.core.GeometryObject;
+import org.parallax3d.parallax.core.Raycaster;
+import org.parallax3d.parallax.materials.Material;
+import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.renderers.WebGLGeometry;
+import org.parallax3d.parallax.core.BufferGeometry;
 
 public class Sprite extends GeometryObject implements Comparable<Sprite>
 {

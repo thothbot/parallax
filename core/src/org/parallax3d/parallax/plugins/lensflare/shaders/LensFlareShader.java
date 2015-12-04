@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.plugins.lensflare.shaders;
 
-import org.parallax3d.parallax.core.shared.math.Vector3;
-import org.parallax3d.parallax.core.client.shaders.Shader;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector2;
+import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.shaders.Shader;
+import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.math.Vector2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.TextResource;

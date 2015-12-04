@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.plugins.postprocessing;
 
-import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
+import org.parallax3d.parallax.materials.ShaderMaterial;
 import org.parallax3d.parallax.plugins.postprocessing.shaders.DotScreenShader;
-import org.parallax3d.parallax.core.shared.math.Vector2;
+import org.parallax3d.parallax.math.Vector2;
 
 public class DotScreenPass extends Pass
 {

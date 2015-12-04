@@ -23,37 +23,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.core.client.gl2.WebGLBuffer;
-import org.parallax3d.parallax.core.client.gl2.WebGLConstants;
-import org.parallax3d.parallax.core.client.gl2.WebGLTexture;
-import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.core.client.renderers.Plugin;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.client.shaders.Attribute;
-import org.parallax3d.parallax.core.client.shaders.Uniform;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLBuffer;
+import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLConstants;
+import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLTexture;
+import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
+import org.parallax3d.parallax.renderers.Plugin;
+import org.parallax3d.parallax.renderers.WebGLRenderer;
+import org.parallax3d.parallax.shaders.Attribute;
+import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.cameras.Camera;
+import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.plugins.lensflare.shaders.LensFlareShader;
 import org.parallax3d.parallax.plugins.lensflare.shaders.LensFlareVertexTextureShader;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.client.gl2.enums.BeginMode;
-import org.parallax3d.parallax.core.client.gl2.enums.BufferTarget;
-import org.parallax3d.parallax.core.client.gl2.enums.BufferUsage;
-import org.parallax3d.parallax.core.client.gl2.enums.DataType;
-import org.parallax3d.parallax.core.client.gl2.enums.DrawElementsType;
-import org.parallax3d.parallax.core.client.gl2.enums.EnableCap;
-import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.core.client.gl2.enums.PixelType;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureParameterName;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureTarget;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureUnit;
-import org.parallax3d.parallax.core.shared.core.FastMap;
-import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.math.Vector2;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
-
-import com.google.gwt.core.client.GWT;
+import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BeginMode;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferTarget;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferUsage;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DataType;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DrawElementsType;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.EnableCap;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelType;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureParameterName;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureTarget;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureUnit;
+import org.parallax3d.parallax.core.FastMap;
+import org.parallax3d.parallax.lights.Light;
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.scenes.Scene;
 
 public final class LensFlarePlugin extends Plugin
 {
@@ -147,8 +145,7 @@ public final class LensFlarePlugin extends Plugin
 			lensFlare.shader = new LensFlareVertexTextureShader();
 		}
 
-		Map<String, Attribute> attributes = GWT.isScript() ?
-				new FastMap<Attribute>() : new HashMap<String, Attribute>();
+		Map<String, Attribute> attributes = new FastMap<Attribute>();
 		attributes.put("position", new Attribute(Attribute.TYPE.V3, null));
 		attributes.put("uv", new Attribute(Attribute.TYPE.V3, null));
 		lensFlare.shader.setAttributes(attributes);

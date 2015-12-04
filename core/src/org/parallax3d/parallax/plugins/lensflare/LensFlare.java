@@ -21,12 +21,12 @@ package org.parallax3d.parallax.plugins.lensflare;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.core.shared.core.Object3D;
-import org.parallax3d.parallax.core.client.textures.Texture;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.materials.Material;
-import org.parallax3d.parallax.core.shared.math.Color;
-import org.parallax3d.parallax.core.shared.math.Vector3;
+import org.parallax3d.parallax.core.Object3D;
+import org.parallax3d.parallax.textures.Texture;
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.materials.Material;
+import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.math.Vector3;
 
 
 public final class LensFlare extends Object3D

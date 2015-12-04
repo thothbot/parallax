@@ -20,22 +20,22 @@ package org.parallax3d.parallax.plugins.effects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.core.shared.materials.ShaderMaterial;
+import org.parallax3d.parallax.materials.ShaderMaterial;
 import org.parallax3d.parallax.plugins.effects.shaders.ParallaxBarrierShader;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.core.shared.geometries.PlaneBufferGeometry;
-import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.math.Mathematics;
-import org.parallax3d.parallax.core.shared.math.Matrix4;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
+import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMagFilter;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMinFilter;
+import org.parallax3d.parallax.renderers.WebGLRenderer;
+import org.parallax3d.parallax.textures.RenderTargetTexture;
+import org.parallax3d.parallax.cameras.Camera;
+import org.parallax3d.parallax.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.geometries.PlaneBufferGeometry;
+import org.parallax3d.parallax.lights.Light;
+import org.parallax3d.parallax.math.Mathematics;
+import org.parallax3d.parallax.math.Matrix4;
+import org.parallax3d.parallax.objects.Mesh;
+import org.parallax3d.parallax.scenes.Scene;
 
 public class ParallaxBarrier extends Effect {
 	

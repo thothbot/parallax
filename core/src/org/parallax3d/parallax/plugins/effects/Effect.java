@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.plugins.effects;
 
-import org.parallax3d.parallax.core.client.events.HasEventBus;
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.core.client.renderers.Plugin;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
+import org.parallax3d.parallax.backends.gwt.client.events.HasEventBus;
+import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
+import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeHandler;
+import org.parallax3d.parallax.renderers.Plugin;
+import org.parallax3d.parallax.renderers.WebGLRenderer;
+import org.parallax3d.parallax.scenes.Scene;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 

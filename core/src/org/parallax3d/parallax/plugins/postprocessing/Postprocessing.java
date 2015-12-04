@@ -21,24 +21,24 @@ package org.parallax3d.parallax.plugins.postprocessing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.core.client.events.ViewportResizeEvent;
-import org.parallax3d.parallax.core.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.core.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.core.client.gl2.enums.StencilFunction;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.core.client.gl2.enums.TextureMinFilter;
-import org.parallax3d.parallax.core.client.renderers.Plugin;
-import org.parallax3d.parallax.core.client.renderers.WebGLRenderer;
-import org.parallax3d.parallax.core.client.textures.RenderTargetTexture;
-import org.parallax3d.parallax.core.shared.Log;
-import org.parallax3d.parallax.core.shared.cameras.Camera;
-import org.parallax3d.parallax.core.shared.cameras.OrthographicCamera;
-import org.parallax3d.parallax.core.shared.geometries.PlaneGeometry;
+import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
+import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeHandler;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.StencilFunction;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMagFilter;
+import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMinFilter;
+import org.parallax3d.parallax.renderers.Plugin;
+import org.parallax3d.parallax.renderers.WebGLRenderer;
+import org.parallax3d.parallax.textures.RenderTargetTexture;
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.cameras.Camera;
+import org.parallax3d.parallax.cameras.OrthographicCamera;
+import org.parallax3d.parallax.geometries.PlaneGeometry;
 import org.parallax3d.parallax.plugins.postprocessing.shaders.CopyShader;
-import org.parallax3d.parallax.core.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.core.shared.lights.Light;
-import org.parallax3d.parallax.core.shared.objects.Mesh;
-import org.parallax3d.parallax.core.shared.scenes.Scene;
+import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
+import org.parallax3d.parallax.lights.Light;
+import org.parallax3d.parallax.objects.Mesh;
+import org.parallax3d.parallax.scenes.Scene;
 
 public class Postprocessing extends Plugin
 {
