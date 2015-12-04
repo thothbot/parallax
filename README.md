@@ -1,6 +1,15 @@
-Parallax 
+
+<img src="http://parallax3d.org/static/images/logo.png" alt="Parallax" align="top"/>
+
+master [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=master)](https://travis-ci.org/thothbot/parallax)
+
+dev [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=dev)](https://travis-ci.org/thothbot/parallax)
+
+Parallax 2.0
 =============
-##### master [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=master)](https://travis-ci.org/thothbot/parallax) dev [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=dev)](https://travis-ci.org/thothbot/parallax)
+
+
+## Parallax 1.x
 
 #### Google Web Toolkit 3D library ####
 
