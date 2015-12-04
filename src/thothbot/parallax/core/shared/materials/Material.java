@@ -516,6 +516,8 @@ public abstract class Material
 	{
 		Shader shader = getShader();
 
+		shader.setPrecision(parameters.precision);
+
 		shader.setVertexExtensions(getExtensionsVertex(parameters));
 		shader.setFragmentExtensions(getExtensionsFragment(parameters));
 
