@@ -18,18 +18,14 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class FrustumTest extends GWTTestCase 
+public class FrustumTest
 {
-
 	private static Vector3 unit3 = new Vector3( 1, 0, 0 );
-	
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+
+	@Test
 	public void testFrustum()
 	{
 		Frustum a = new Frustum();
@@ -57,6 +53,7 @@ public class FrustumTest extends GWTTestCase
 		assertTrue( b.getPlanes().get(5).equals( p5 ));
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Plane p0 = new Plane( FrustumTest.unit3, -1 );
@@ -80,6 +77,7 @@ public class FrustumTest extends GWTTestCase
 		assertTrue( a.getPlanes().get(0).equals( p0 ));
 	}
 
+	@Test
 	public void testSetFromMatrixMakeOrthographicisContainsPoint()
 	{
 		Matrix4 m = new Matrix4().makeOrthographic( -1, 1, -1, 1, 1, 100 );
@@ -100,7 +98,8 @@ public class FrustumTest extends GWTTestCase
 		assertTrue( ! a.isContainsPoint( new Vector3( 0, 0, -101 ) ));
 
 	}
-	
+
+	@Test
 	public void testSetFromMatrixMakeFrustumisContainsPoint()
 	{
 		Matrix4 m = new Matrix4().makeFrustum( -1, 1, -1, 1, 1, 100 );
@@ -120,7 +119,8 @@ public class FrustumTest extends GWTTestCase
 		assertTrue( ! a.isContainsPoint( new Vector3( 100.1, 100.1, -100.1 ) ));
 		assertTrue( ! a.isContainsPoint( new Vector3( 0, 0, -101 ) ));
 	}
-	
+
+	@Test
 	public void testSetFromMatrixMakeFrustumisIntersectsSphere()
 	{
 		Matrix4 m = new Matrix4().makeFrustum( -1, 1, -1, 1, 1, 100 );
@@ -148,6 +148,7 @@ public class FrustumTest extends GWTTestCase
 		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -101 ), 1.1 ) ));
 	}
 
+	@Test
 	public void testClone()
 	{
 		Plane p0 = new Plane( FrustumTest.unit3, -1 );

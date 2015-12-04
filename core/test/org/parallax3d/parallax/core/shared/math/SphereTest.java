@@ -18,20 +18,17 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class SphereTest extends GWTTestCase 
+public class SphereTest
 {
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 	private static Vector3 two3 = new Vector3( 2, 2, 2 );
 
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+	@Test
 	public void testSphere()
 	{
 		Sphere a = new Sphere();
@@ -43,6 +40,7 @@ public class SphereTest extends GWTTestCase
 		assertEquals( 1.0, b.getRadius() );
 	}
 
+	@Test
 	public void testSet()
 	{
 		Sphere a = new Sphere();
@@ -54,6 +52,7 @@ public class SphereTest extends GWTTestCase
 		assertEquals( 1.0, a.getRadius() );
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Sphere a = new Sphere( one3, 1 );
@@ -69,6 +68,7 @@ public class SphereTest extends GWTTestCase
 		assertEquals( 1.0, b.getRadius() );
 	}
 
+	@Test
 	public void testIsEmpty()
 	{
 		Sphere a = new Sphere();
@@ -78,6 +78,7 @@ public class SphereTest extends GWTTestCase
 		assertTrue( ! a.isEmpty());
 	}
 
+	@Test
 	public void testIsContainsPoint()
 	{
 		Sphere a = new Sphere( one3, 1 );
@@ -86,6 +87,7 @@ public class SphereTest extends GWTTestCase
 		assertTrue( a.isContainsPoint( one3 ));
 	}
 
+	@Test
 	public void testDistanceToPoint()
 	{
 		Sphere a = new Sphere( one3, 1 );
@@ -94,6 +96,7 @@ public class SphereTest extends GWTTestCase
 		assertEquals( -1.0, a.distanceToPoint( one3 ) );
 	}
 
+	@Test
 	public void testIsIntersectsSphere()
 	{
 		Sphere a = new Sphere( one3, 1 );
@@ -104,6 +107,7 @@ public class SphereTest extends GWTTestCase
 		assertTrue( ! a.isIntersectsSphere( c ) );
 	}
 
+	@Test
 	public void testClampPoint()
 	{
 		Sphere a = new Sphere( one3, 1 );
@@ -112,6 +116,7 @@ public class SphereTest extends GWTTestCase
 		assertTrue( a.clampPoint( new Vector3( 1, 1, -3 ) ).equals( new Vector3( 1, 1, 0 ) ));
 	}
 
+	@Test
 	public void testGetBoundingBox()
 	{
 		Sphere a = new Sphere( one3, 1 );
@@ -122,6 +127,7 @@ public class SphereTest extends GWTTestCase
 		assertTrue( a.getBoundingBox().equals( new Box3( zero3, zero3 ) ));
 	}
 
+	@Test
 	public void testTransform()
 	{
 		Sphere a = new Sphere( one3, 1 );
@@ -131,6 +137,7 @@ public class SphereTest extends GWTTestCase
 		assertTrue( a.clone().apply( m ).getBoundingBox().equals( a.getBoundingBox().apply( m ) ));
 	}
 
+	@Test
 	public void testTranslate()
 	{
 		Sphere a = new Sphere( one3, 1 );

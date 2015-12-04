@@ -18,9 +18,10 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class PlaneTest extends GWTTestCase  
+public class PlaneTest
 {
 
 	private static Vector3 zero3 = new Vector3();
@@ -31,12 +32,7 @@ public class PlaneTest extends GWTTestCase
 	private static double Z = 4;
 	private static double W = 5;
 
-	
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+	@Test
 	public void testPlane()
 	{
 		Plane a = new Plane();
@@ -58,6 +54,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( 1.0, a.getConstant());
 	}
 
+	@Test
 	public void testSet()
 	{
 		Plane a = new Plane();
@@ -73,6 +70,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( W, b.getConstant());
 	}
 
+	@Test
 	public void testSetComponents()
 	{
 		Plane a = new Plane();
@@ -88,6 +86,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( W, b.getConstant());
 	}
 
+	@Test
 	public void testSetFromNormalAndCoplanarPoint()
 	{
 		Vector3 normal = one3.clone().normalize();
@@ -97,6 +96,7 @@ public class PlaneTest extends GWTTestCase
 		assertTrue( a.getConstant() == 0.0);
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Plane a = new Plane( new Vector3( X, Y, Z ), W );
@@ -117,6 +117,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( W, b.getConstant());
 	}
 
+	@Test
 	public void testNormalize()
 	{
 		Plane a = new Plane( new Vector3( 2, 0, 0 ), 2 );
@@ -127,6 +128,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( 1.0, a.getConstant(), 1.0);
 	}
 
+	@Test
 	public void testNegate()
 	{
 		Plane a = new Plane( new Vector3( 2, 0, 0 ), -2 );
@@ -140,6 +142,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( 0.0, a.distanceToPoint( new Vector3( 1, 0, 0 ) ) );
 	}
 
+	@Test
 	public void testDistanceToPoint()
 	{
 		Plane a = new Plane( new Vector3( 2, 0, 0 ), -2 );
@@ -149,6 +152,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( 3.0, a.distanceToPoint( new Vector3( 4, 0, 0 ) ) );
 	}
 
+	@Test
 	public void testDistanceToSphere()
 	{
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
@@ -163,6 +167,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( -1.0, a.distanceToSphere( b ) );
 	}
 
+	@Test
 	public void testProjectPoint()
 	{
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
@@ -175,6 +180,7 @@ public class PlaneTest extends GWTTestCase
 		assertTrue( b.projectPoint( new Vector3( 0, 1, 0 ) ).equals( new Vector3( 0, 1, 0 ) ));
 	}
 
+	@Test
 	public void testOrthoPoint()
 	{
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
@@ -183,6 +189,7 @@ public class PlaneTest extends GWTTestCase
 		assertTrue( a.orthoPoint( new Vector3( -10, 0, 0 ) ).equals( new Vector3( -10, 0, 0 ) ));
 	}
 
+	@Test
 	public void testIntersectLine()
 	{
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
@@ -207,6 +214,7 @@ public class PlaneTest extends GWTTestCase
 		assertNull( d.intersectLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) )));
 	}
 
+	@Test
 	public void testCoplanarPoint()
 	{
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
@@ -216,6 +224,7 @@ public class PlaneTest extends GWTTestCase
 		assertEquals( 0.0, b.distanceToPoint( b.coplanarPoint() ) );
 	}
 
+	@Test
 	public void testTransform()
 	{
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
@@ -232,6 +241,7 @@ public class PlaneTest extends GWTTestCase
 		assertTrue( comparePlane( a.clone().apply( m ), a.clone().translate( new Vector3( 1, 1, 1 ) ) ));
 	}
 
+	@Test
 	private boolean comparePlane( Plane a, Plane b ) 
 	{
 		double threshold = 0.0001;

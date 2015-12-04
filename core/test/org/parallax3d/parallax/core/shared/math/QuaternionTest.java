@@ -18,9 +18,10 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class QuaternionTest extends GWTTestCase
+public class QuaternionTest
 {
 
 	private static double X = 2;
@@ -30,12 +31,8 @@ public class QuaternionTest extends GWTTestCase
 
 	private static Vector3 eulerAngles = new Vector3( 0.1, -0.3, 0.25 );
 //	private static List<Euler> orders = Arrays.asList( Euler.XYZ, Euler.YXZ, Euler.ZXY, Euler.ZYX, Euler.YZX, Euler.XZY );
-	
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+
+	@Test
 	public void testQuaternion()
 	{
 		Quaternion a = new Quaternion();
@@ -51,6 +48,7 @@ public class QuaternionTest extends GWTTestCase
 		assertEquals( W, a.w );
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Quaternion a = new Quaternion( X, Y, Z, W );
@@ -69,6 +67,7 @@ public class QuaternionTest extends GWTTestCase
 		assertEquals( Y, b.y );
 	}
 
+	@Test
 	public void testSet()
 	{
 		Quaternion a = new Quaternion();
@@ -84,6 +83,7 @@ public class QuaternionTest extends GWTTestCase
 		assertEquals( W, a.w );
 	}
 
+//	@Test
 //	public void testSetFromEulerSetEulerFromQuaternion()
 //	{
 //		List<Vector3> angles = Arrays.asList( new Vector3( 1, 0, 0 ), new Vector3( 0, 1, 0 ), new Vector3( 0, 0, 1 ) );
@@ -101,6 +101,7 @@ public class QuaternionTest extends GWTTestCase
 //
 //	}
 //
+//  @Test
 //	public void testSetFromEulerSetFromRotationMatrix()
 //	{
 //		// ensure euler conversion for Quaternion matches that of Matrix4
@@ -114,6 +115,7 @@ public class QuaternionTest extends GWTTestCase
 //		}
 //	}
 
+	@Test
 	public void testSetFromAxisAngle()
 	{
 		// TODO: find cases to validate.
@@ -137,6 +139,7 @@ public class QuaternionTest extends GWTTestCase
 		assertTrue( a.equals( b1 ));
 	}
 
+	@Test
 	public void testNormalize()
 	{
 		Quaternion a = new Quaternion( X, Y, Z, W );
@@ -157,6 +160,7 @@ public class QuaternionTest extends GWTTestCase
 		assertEquals( 1.0, b.length() );
 	}
 
+	@Test
 	public void testInverse()
 	{
 		Quaternion a = new Quaternion( X, Y, Z, W );
@@ -170,7 +174,8 @@ public class QuaternionTest extends GWTTestCase
 		assertEquals( -b.z, a.z );
 		assertEquals( b.w, a.w );	
 	}
-	
+
+//	@Test
 //	public void testMultiplyQuaternion()
 //	{
 //		List<Vector3> angles = Arrays.asList( new Vector3( 1, 0, 0 ), new Vector3( 0, 1, 0 ), new Vector3( 0, 0, 1 ) );
@@ -192,6 +197,7 @@ public class QuaternionTest extends GWTTestCase
 //		assertTrue( qSub( q, qFromM ).length() < 0.001);
 //	}
 //
+//	@Test
 //	public void testMultiplyVector3Vector3()
 //	{
 //		List<Vector3> angles = Arrays.asList( new Vector3( 1, 0, 0 ), new Vector3( 0, 1, 0 ), new Vector3( 0, 0, 1 ) );
@@ -212,7 +218,8 @@ public class QuaternionTest extends GWTTestCase
 //			}
 //		}
 //	}
-	
+
+	@Test
 	public void testEquals()
 	{
 		Quaternion a = new Quaternion( X, Y, Z, W );
@@ -231,7 +238,8 @@ public class QuaternionTest extends GWTTestCase
 		assertTrue( a.equals( b ));
 		assertTrue( b.equals( a ));
 	}
-	
+
+	@Test
 	private Quaternion qSub( Quaternion a, Quaternion b ) 
 	{
 		Quaternion result = new Quaternion();

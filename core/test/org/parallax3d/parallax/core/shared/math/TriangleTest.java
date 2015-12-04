@@ -21,20 +21,17 @@ package org.parallax3d.parallax.core.shared.math;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class TriangleTest extends GWTTestCase 
+public class TriangleTest
 {
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 	private static Vector3 two3 = new Vector3( 2, 2, 2 );
-	
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+
+	@Test
 	public void testTriangle()
 	{
 		Triangle a = new Triangle();
@@ -48,6 +45,7 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( a.getC().equals( two3 ));
 	}
 
+	@Test
 	public void testSet()
 	{
 		Triangle a = new Triangle();
@@ -58,6 +56,7 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( a.getC().equals( two3 ));
 	}
 
+	@Test
 	public void testSetFromPointsAndIndices()
 	{
 		Triangle a = new Triangle();
@@ -69,6 +68,7 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( a.getC().equals( two3 ));
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Triangle a = new Triangle( one3.clone().negate(), one3, two3 );
@@ -86,6 +86,7 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( b.getC().equals( two3 ));
 	}
 
+	@Test
 	public void testArea()
 	{
 		Triangle a = new Triangle();
@@ -103,6 +104,7 @@ public class TriangleTest extends GWTTestCase
 		assertEquals( 0.0, a.area() );
 	}
 
+	@Test
 	public void testMidpoint()
 	{
 		Triangle a = new Triangle();
@@ -116,6 +118,7 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( a.midpoint().equals( new Vector3( 2.0/3, 0, 2.0/3 ) ));
 	}
 
+	@Test
 	public void testNormal()
 	{
 		Triangle a = new Triangle();
@@ -129,6 +132,7 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( a.normal().equals( new Vector3( 0, 1, 0 ) ));
 	}
 
+	@Test
 	public void testPlane()
 	{
 		Triangle a = new Triangle();
@@ -152,6 +156,7 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( a.plane().getNormal().clone().normalize().equals( a.normal() ));
 	}
 
+	@Test
 	public void testBarycoordFromPointVector3Vector3()
 	{
 		Triangle a = new Triangle();
@@ -175,6 +180,7 @@ public class TriangleTest extends GWTTestCase
 		assertTrue( a.barycoordFromPoint( a.midpoint() ).distanceTo( new Vector3( 1.0/3, 1.0/3, 1.0/3 ) ) < 0.0001);
 	}
 
+	@Test
 	public void testContainsPoint()
 	{
 		Triangle a = new Triangle();

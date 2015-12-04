@@ -18,22 +18,19 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Box3Test extends GWTTestCase
+public class Box3Test
 {
-
 	private static Vector3 negInf3 = new Vector3( Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY );
 	private static Vector3 posInf3 = new Vector3( Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY );
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 		
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+
+	@Test
 	public void testBox3()
 	{
 		Box3 a = new Box3();
@@ -49,6 +46,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( c.getMax().equals( one3 ));
 	}
 
+	@Test
 	public void testSet()
 	{
 		Box3 a = new Box3();
@@ -58,6 +56,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( a.getMax().equals( one3 ));
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Box3 a = new Box3( zero3.clone(), one3.clone() );
@@ -72,6 +71,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( b.getMax().equals( one3 ));
 	}
 
+	@Test
 	public void testMakeEmpty()
 	{
 		Box3 a = new Box3();
@@ -85,6 +85,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( b.isEmpty());
 	}
 
+	@Test
 	public void testCenter()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -96,6 +97,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( a.center().equals( midpoint ));
 	}
 
+	@Test
 	public void testSize()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -106,6 +108,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( a.size().equals( one3 ));
 	}
 
+	@Test
 	public void testExpandByPoint()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -121,6 +124,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( a.center().equals( zero3 ));
 	}
 
+	@Test
 	public void testExpandByVector()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -133,6 +137,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( a.center().equals( zero3 ));
 	}
 
+	@Test
 	public void testExpandByScalar()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -145,6 +150,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( a.center().equals( zero3 ));
 	}
 
+	@Test
 	public void testIsContainsPoint()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -158,6 +164,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( a.isContainsPoint( one3.clone().negate() ));
 	}
 
+	@Test
 	public void testIsContainsBox()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -173,6 +180,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( ! b.isContainsBox( c ));
 	}
 
+	@Test
 	public void testGetParameter()
 	{
 		Box3 a = new Box3( zero3.clone(), one3.clone() );
@@ -186,6 +194,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( b.getParameter( new Vector3( 1, 1, 1 ) ).equals( new Vector3( 1, 1, 1 ) ));
 	}
 
+	@Test
 	public void testIsIntersectionBox()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -206,6 +215,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( ! b.isIntersectionBox( c ));
 	}
 
+	@Test
 	public void testClampPoint()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -222,6 +232,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( b.clampPoint( new Vector3( -2, -2, -2 ) ).equals( new Vector3( -1, -1, -1 ) ));
 	}
 
+	@Test
 	public void testDistanceToPoint()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -238,6 +249,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( b.distanceToPoint( new Vector3( -2, -2, -2 ) ) == Math.sqrt( 3 ));
 	}
 
+	@Test
 	public void testGetBoundingSphere()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -249,6 +261,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( c.getBoundingSphere().equals( new Sphere( zero3, Math.sqrt( 12 ) * 0.5 ) ));
 	}
 
+	@Test
 	public void testIntersect()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -263,6 +276,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( c.clone().intersect( c ).equals( c ));
 	}
 
+	@Test
 	public void testUnion()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -275,6 +289,7 @@ public class Box3Test extends GWTTestCase
 		assertTrue( b.clone().union( c ).equals( c ));
 	}
 
+	@Test
 	public void testTransform()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
@@ -290,7 +305,8 @@ public class Box3Test extends GWTTestCase
 		assertTrue( compareBox( c.clone().apply( m ), c.clone().translate( t1 ) ));
 		assertTrue( compareBox( d.clone().apply( m ), d.clone().translate( t1 ) ));
 	}
-	
+
+	@Test
 	private boolean compareBox( Box3 a, Box3 b ) 
 	{
 		double threshold = 0.0001;
@@ -298,6 +314,7 @@ public class Box3Test extends GWTTestCase
 		a.getMax().distanceTo( b.getMax() ) < threshold );
 	};
 
+	@Test
 	public void testTranslate()
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );

@@ -18,20 +18,17 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Line3Test extends GWTTestCase
+public class Line3Test
 {
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 	private static Vector3 two3 = new Vector3( 2, 2, 2 );
 
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+	@Test
 	public void testLine3()
 	{
 		Line3 a = new Line3();
@@ -43,6 +40,7 @@ public class Line3Test extends GWTTestCase
 		assertTrue( b.getEnd().equals( one3 ));
 	}
 
+	@Test
 	public void testSet()
 	{
 		Line3 a = new Line3();
@@ -52,6 +50,7 @@ public class Line3Test extends GWTTestCase
 		assertTrue( a.getEnd().equals( one3 ));
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Line3 a = new Line3( zero3.clone(), one3.clone() );
@@ -66,6 +65,7 @@ public class Line3Test extends GWTTestCase
 		assertTrue( b.getEnd().equals( one3 ));
 	}
 
+	@Test
 	public void testAtDouble()
 	{
 		Line3 a = new Line3( one3.clone(), new Vector3( 1, 1, 2 ) );
@@ -76,6 +76,7 @@ public class Line3Test extends GWTTestCase
 		assertTrue( a.at( 2 ).distanceTo( new Vector3( 1, 1, 3 ) ) < 0.0001);
 	}
 
+	@Test
 	public void testClosestPointToPointParameterVector3()
 	{
 		Line3 a = new Line3( one3.clone(), new Vector3( 1, 1, 2 ) );

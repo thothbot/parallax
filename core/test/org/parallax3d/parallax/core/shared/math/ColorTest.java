@@ -18,17 +18,13 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import org.parallax3d.parallax.core.shared.Log;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
-public class ColorTest extends GWTTestCase
+public class ColorTest
 {
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+
+	@Test
 	public void testColor()
 	{
 		Color c = new Color();
@@ -37,6 +33,7 @@ public class ColorTest extends GWTTestCase
 	    assertEquals( 1.0, c.getB() );
 	}
 
+	@Test
 	public void testCopyHex()
 	{
 		Color c = new Color();
@@ -44,14 +41,15 @@ public class ColorTest extends GWTTestCase
 	    c.copy(c2);
 	    assertEquals(c.getHex(), c2.getHex());
 	}
-	
+
+	@Test
 	public void testGetHex()
 	{
 		Color c = new Color(0xFF000);
-		Log.error(c.toString());
 	    assertEquals( 0xFF0000, c.getHex() );
 	}
 
+	@Test
 	public void testSetRGB()
 	{
 		Color c = new Color();
@@ -60,14 +58,16 @@ public class ColorTest extends GWTTestCase
 	    assertEquals( 0.25, c.getG() );
 	    assertEquals( 0.1, c.getB() );
 	}
-	
+
+	@Test
 	public void testSetHex()
 	{
 		Color c = new Color();
 	    c.setHex(0xFA8072);
 	    assertEquals( 0xFA8072, c.getHex() );
 	}
-	
+
+	@Test
 	public void testCopyGammaToLinear()
 	{
 		Color c = new Color();
@@ -79,6 +79,7 @@ public class ColorTest extends GWTTestCase
 	    assertEquals( 64.0, c.getB() );
 	}
 
+	@Test
 	public void testCopyLinearToGamma()
 	{
 		Color c = new Color();
@@ -90,6 +91,7 @@ public class ColorTest extends GWTTestCase
 	    assertEquals( 4.0, c.getB() );
 	}
 
+	@Test
 	public void testConvertGammaToLinear()
 	{
 		Color c = new Color();
@@ -100,6 +102,7 @@ public class ColorTest extends GWTTestCase
 	    assertEquals( 64.0, c.getB() );
 	}
 
+	@Test
 	public void testConvertLinearToGamma()
 	{
 		Color c = new Color();
@@ -109,7 +112,8 @@ public class ColorTest extends GWTTestCase
 	    assertEquals( 3.0, c.getG() );
 	    assertEquals( 4.0, c.getB() );
 	}
-	
+
+	@Test
 	public void testSetWithNum()
 	{
 		Color c = new Color();
@@ -118,14 +122,16 @@ public class ColorTest extends GWTTestCase
 	    assertEquals( 0.0, c.getG() );
 	    assertEquals( 0.0, c.getB() );
 	}
-	
+
+	@Test
 	public void testClone()
 	{
 	    Color c = new Color(0xFF5544);
 	    Color c2 = c.clone();
 	    assertEquals(0xFF5544, c2.getHex());
 	}
-	
+
+	@Test
 	public void testLerp()
 	{
 	    Color c = new Color();

@@ -23,16 +23,14 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.client.gl2.arrays.Float32Array;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Matrix3Test extends GWTTestCase  
+public class Matrix3Test
 {
 
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+
+	@Test
 	public void testMatrix3()
 	{
 		Matrix3 a = new Matrix3();
@@ -52,7 +50,8 @@ public class Matrix3Test extends GWTTestCase
 		assertTrue( ! matrixEquals3( a, b ) );
 
 	}
-	
+
+	@Test
 	public void testCopy()
 	{
 		Matrix3 a = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
@@ -65,6 +64,7 @@ public class Matrix3Test extends GWTTestCase
 		assertTrue( ! matrixEquals3( a, b ));
 	}
 
+	@Test
 	public void testSet()
 	{
 		Matrix3 b = new Matrix3();
@@ -82,6 +82,7 @@ public class Matrix3Test extends GWTTestCase
 		assertEquals( 8.0, b.getArray().get(8) );
 	}
 
+	@Test
 	public void testIdentity()
 	{
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
@@ -102,6 +103,7 @@ public class Matrix3Test extends GWTTestCase
 		assertTrue( matrixEquals3( a, b ));
 	}
 
+	@Test
 	public void testMultiplyScalar()
 	{
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
@@ -118,6 +120,7 @@ public class Matrix3Test extends GWTTestCase
 		assertEquals( 8.0 * 2, b.getArray().get(8) );
 	};
 
+	@Test
 	public void testDeterminant()
 	{
 		Matrix3 a = new Matrix3();
@@ -134,6 +137,7 @@ public class Matrix3Test extends GWTTestCase
 		assertEquals( -73.0, a.determinant());
 	}
 
+	@Test
 	public void testGetInverse()
 	{
 		Matrix3 identity = new Matrix3();
@@ -173,6 +177,7 @@ public class Matrix3Test extends GWTTestCase
 		}
 	}
 
+	@Test
 	public void testTranspose()
 	{
 		Matrix3 a = new Matrix3();
@@ -186,6 +191,7 @@ public class Matrix3Test extends GWTTestCase
 		assertTrue( matrixEquals3( b, c )); 
 	}
 
+	@Test
 	public void testClone()
 	{
 		Matrix3 a = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
@@ -198,6 +204,7 @@ public class Matrix3Test extends GWTTestCase
 		assertTrue( ! matrixEquals3( a, b ));
 	}
 
+	@Test
 	private boolean matrixEquals3( Matrix3 a, Matrix3 b) 
 	{
 		double tolerance = 0.0001;
@@ -216,7 +223,8 @@ public class Matrix3Test extends GWTTestCase
 		}
 		return true;
 	}
-	
+
+	@Test
 	private Matrix4 toMatrix4( Matrix3 m3 ) 
 	{
 		Matrix4 result = new Matrix4();

@@ -21,16 +21,13 @@ package org.parallax3d.parallax.core.shared.math;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Matrix4Test extends GWTTestCase 
+public class Matrix4Test
 {
 
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-
+	@Test
 	public void testMatrix4()
 	{
 		Matrix4 a = new Matrix4();
@@ -57,6 +54,7 @@ public class Matrix4Test extends GWTTestCase
 		assertTrue( ! matrixEquals4( a, b ));
 	}
 
+	@Test
 	public void testSet()
 	{
 		Matrix4 b = new Matrix4();
@@ -81,6 +79,7 @@ public class Matrix4Test extends GWTTestCase
 		assertEquals( 15.0, b.getArray().get(15) );		
 	}
 
+	@Test
 	public void testIdentity()
 	{
 		Matrix4 b = new Matrix4( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
@@ -108,6 +107,7 @@ public class Matrix4Test extends GWTTestCase
 		assertTrue( matrixEquals4( a, b ));
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Matrix4 a = new Matrix4( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
@@ -120,6 +120,7 @@ public class Matrix4Test extends GWTTestCase
 		assertTrue( ! matrixEquals4( a, b ));
 	}
 
+	@Test
 	public void testMultiply()
 	{
 		Matrix4 b = new Matrix4( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
@@ -160,6 +161,7 @@ public class Matrix4Test extends GWTTestCase
 		assertEquals( 15.0 * 2, b.getArray().get(15) );		
 	}
 
+	@Test
 	public void testDeterminant()
 	{
 		Matrix4 a = new Matrix4();
@@ -176,6 +178,7 @@ public class Matrix4Test extends GWTTestCase
 		assertEquals( 76.0, a.determinant() );
 	}
 
+	@Test
 	public void testTranspose()
 	{
 		Matrix4 a = new Matrix4();
@@ -189,6 +192,7 @@ public class Matrix4Test extends GWTTestCase
 		assertTrue( matrixEquals4( b, c )); 
 	}
 
+	@Test
 	public void testGetInverse()
 	{
 		Matrix4 identity = new Matrix4();
@@ -232,6 +236,7 @@ public class Matrix4Test extends GWTTestCase
 		}
 	}
 
+	@Test
 	public void testClone()
 	{
 		Matrix4 a = new Matrix4( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
@@ -243,7 +248,8 @@ public class Matrix4Test extends GWTTestCase
 		a.getArray().set(0, 2);
 		assertTrue( ! matrixEquals4( a, b ));
 	}
-	
+
+	@Test
 	private boolean matrixEquals4( Matrix4 a, Matrix4 b) 
 	{
 		double tolerance = 0.0001;

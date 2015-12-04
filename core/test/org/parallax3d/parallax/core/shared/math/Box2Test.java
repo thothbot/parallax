@@ -18,22 +18,18 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Box2Test extends GWTTestCase 
+public class Box2Test
 {
-
 	private static Vector2 negInf2 = new Vector2( Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY );
 	private static Vector2 posInf2 = new Vector2( Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY );
 
 	private static Vector2 zero2 = new Vector2();
 	private static Vector2 one2 = new Vector2( 1, 1 );
 
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-
+	@Test
 	public void testBox2()
 	{
 		Box2 a = new Box2();
@@ -47,6 +43,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.getMax().equals( Box2Test.one2 ));
 	}
 
+	@Test
 	public void testSet()
 	{
 		Box2 a = new Box2();
@@ -56,6 +53,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( a.getMax().equals( one2 ));
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Box2 a = new Box2( zero2.clone(), one2.clone() );
@@ -70,6 +68,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.getMax().equals( one2 ));
 	}
 
+	@Test
 	public void testEmpty()
 	{
 		Box2 a = new Box2();
@@ -83,6 +82,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.isEmpty());
 	}
 
+	@Test
 	public void testCenter()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -94,6 +94,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.center().equals( midpoint ));
 	}
 
+	@Test
 	public void testSize()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -104,6 +105,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.size().equals( one2 ));
 	}
 
+	@Test
 	public void testExpandByPoint()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -119,6 +121,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( a.center().equals( zero2 ));
 	}
 
+	@Test
 	public void testExpandByVector()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -131,6 +134,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( a.center().equals( zero2 ));
 	}
 
+	@Test
 	public void testExpandByScalar()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -143,6 +147,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( a.center().equals( zero2 ));
 	}
 
+	@Test
 	public void testIsContainsPoint()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -156,6 +161,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( a.isContainsPoint( one2.clone().negate() ));
 	}
 
+	@Test
 	public void testIsContainsBox()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -172,6 +178,7 @@ public class Box2Test extends GWTTestCase
 
 	}
 
+	@Test
 	public void testGetParameter()
 	{
 		Box2 a = new Box2( zero2.clone(), one2.clone() );
@@ -185,6 +192,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.getParameter( new Vector2( 1, 1 ) ).equals( new Vector2( 1, 1 ) ));
 	}
 
+	@Test
 	public void testIsIntersectionBox()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -205,6 +213,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( ! b.isIntersectionBox( c ));
 	}
 
+	@Test
 	public void testClampPoint()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -221,6 +230,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.clampPoint( new Vector2( -2, -2 ) ).equals( new Vector2( -1, -1 ) ));
 	}
 
+	@Test
 	public void testDistanceToPoint()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -237,6 +247,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.distanceToPoint( new Vector2( -2, -2 ) ) == Math.sqrt( 2 ));
 	}
 
+	@Test
 	public void testIntersect()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -251,6 +262,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( c.clone().intersect( c ).equals( c ));
 	}
 
+	@Test
 	public void testUnion()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
@@ -263,6 +275,7 @@ public class Box2Test extends GWTTestCase
 		assertTrue( b.clone().union( c ).equals( c ));
 	}
 
+	@Test
 	public void testTranslate()
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );

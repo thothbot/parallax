@@ -18,20 +18,17 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Vector3Test extends GWTTestCase
+public class Vector3Test
 {
 
 	private static double X = 2;
 	private static double Y = 3;
 	private static double Z = 4;
-	
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
 
+	@Test
 	public void testVector3()
 	{
 		Vector3 a = new Vector3();
@@ -44,7 +41,8 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( Y, a.y );
 		assertEquals( Z, a.z );
 	}
-	
+
+	@Test
 	public void testLength()
 	{
 		Vector3 a = new Vector3( X, 0, 0 );
@@ -66,6 +64,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( ( X*X + Y*Y + Z*Z ), a.lengthSq() );
 	}
 
+	@Test
 	public void testDistanceTo()
 	{
 		Vector3 a = new Vector3( X, 0, 0 );
@@ -83,6 +82,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( Z * Z, c.distanceToSquared( d ) );
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Vector3 a = new Vector3( X, Y, Z );
@@ -100,6 +100,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( Z, b.z );
 	}
 
+	@Test
 	public void testSet()
 	{
 		Vector3 a = new Vector3();
@@ -113,6 +114,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( Z, a.z );
 	}
 
+	@Test
 	public void testAdd()
 	{
 		Vector3 a = new Vector3( X, Y, Z );
@@ -129,6 +131,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( -2*Z, c.z );
 	}
 
+	@Test
 	public void testSub()
 	{
 		Vector3 a = new Vector3( X, Y, Z );
@@ -145,6 +148,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( 0.0, c.z );
 	}
 
+	@Test
 	public void testMultiplyDivide()
 	{
 		Vector3 a = new Vector3( X, Y, Z );
@@ -171,6 +175,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( -Z, b.z );
 	}
 
+	@Test
 	public void testNegate()
 	{
 		Vector3 a = new Vector3( X, Y, Z );
@@ -181,6 +186,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( -Z, a.z );
 	}
 
+	@Test
 	public void testDot()
 	{
 		Vector3 a = new Vector3( X, Y, Z );
@@ -194,6 +200,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( 0.0, result );
 	}
 
+	@Test
 	public void testNormalize()
 	{
 		Vector3 a = new Vector3( X, 0, 0 );
@@ -213,6 +220,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( 1.0, c.z );
 	}
 
+	@Test
 	public void testSetLength()
 	{
 		Vector3 a = new Vector3( X, 0, 0 );
@@ -227,6 +235,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( 0.0, a.length() );
 	}
 
+	@Test
 	public void testLerpClone()
 	{
 		Vector3 a = new Vector3( X, 0, Z );
@@ -244,6 +253,7 @@ public class Vector3Test extends GWTTestCase
 		assertTrue( a.clone().lerp( b, 1 ).equals( b ));
 	}
 
+	@Test
 	public void testEquals()
 	{
 		Vector3 a = new Vector3( X, 0, Z );
@@ -265,6 +275,7 @@ public class Vector3Test extends GWTTestCase
 		assertTrue( b.equals( a ));
 	}
 
+	@Test
 	public void testMinMaxClamp()
 	{
 		Vector3 a = new Vector3( X, Y, Z );
@@ -288,6 +299,7 @@ public class Vector3Test extends GWTTestCase
 		assertEquals( -Z, c.z );
 	}
 
+	@Test
 	public void testSetXYZ()
 	{
 		Vector3 a = new Vector3();

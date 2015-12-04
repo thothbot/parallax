@@ -18,9 +18,10 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Vector4Test extends GWTTestCase 
+public class Vector4Test
 {
 
 	private static double X = 2;
@@ -28,11 +29,7 @@ public class Vector4Test extends GWTTestCase
 	private static double Z = 4;
 	private static double W = 5;
 
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-
+	@Test
 	public void testVector4()
 	{
 		Vector4 a = new Vector4();
@@ -47,7 +44,8 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( Z, a.z );
 		assertEquals( W, a.w );
 	}
-	
+
+	@Test
 	public void testLength()
 	{
 		Vector4 a = new Vector4( X, 0, 0, 0 );
@@ -72,6 +70,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( ( X*X + Y*Y + Z*Z + W*W ), a.lengthSq() );
 	}
 
+	@Test
 	public void testSetXYZW()
 	{
 		Vector4 a = new Vector4();
@@ -91,6 +90,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( W, a.w );
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Vector4 a = new Vector4( X, Y, Z, W );
@@ -111,6 +111,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( W, b.w );
 	}
 
+	@Test
 	public void testSet()
 	{
 		Vector4 a = new Vector4();
@@ -126,6 +127,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( W, a.w );
 	}
 
+	@Test
 	public void testAdd()
 	{
 		Vector4 a = new Vector4( X, Y, Z, W );
@@ -144,6 +146,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( -2 * W, c.w );
 	}
 
+	@Test
 	public void testSub()
 	{
 		Vector4 a = new Vector4( X, Y, Z, W );
@@ -162,6 +165,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( 0.0, c.w );
 	}
 
+	@Test
 	public void testMultiplyDivide()
 	{
 		Vector4 a = new Vector4( X, Y, Z, W );
@@ -192,6 +196,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( -W, b.w );
 	}
 
+	@Test
 	public void testNegate()
 	{
 		Vector4 a = new Vector4( X, Y, Z, W );
@@ -203,6 +208,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( -W, a.w );
 	}
 
+	@Test
 	public void testDot()
 	{
 		Vector4 a = new Vector4( X, Y, Z, W );
@@ -216,6 +222,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( 0.0, result );
 	}
 
+	@Test
 	public void testNormalize()
 	{
 		Vector4 a = new Vector4( X, 0, 0, 0 );
@@ -240,6 +247,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( -1.0, d.w );
 	}
 
+	@Test
 	public void testSetLength()
 	{
 		Vector4 a = new Vector4( X, 0, 0, 0 );
@@ -254,6 +262,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( 0.0, a.length() );
 	}
 
+	@Test
 	public void testLerpClone()
 	{
 		Vector4 a = new Vector4( X, 0, Z, 0 );
@@ -272,6 +281,7 @@ public class Vector4Test extends GWTTestCase
 		assertTrue( a.clone().lerp( b, 1 ).equals( b ));
 	}
 
+	@Test
 	public void testMinMaxClamp()
 	{
 		Vector4 a = new Vector4( X, Y, Z, W );
@@ -298,6 +308,7 @@ public class Vector4Test extends GWTTestCase
 		assertEquals( W, c.w );
 	}
 
+	@Test
 	public void testEquals()
 	{
 		Vector4 a = new Vector4( X, 0, Z, 0 );

@@ -18,21 +18,17 @@
 
 package org.parallax3d.parallax.core.shared.math;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class RayTest extends GWTTestCase  
+public class RayTest
 {
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 	private static Vector3 two3 = new Vector3( 2, 2, 2 );
 
-	
-	@Override
-	public String getModuleName() {
-		return "org.parallax3d.parallax.core.Core";
-	}
-	
+	@Test
 	public void testRay()
 	{
 		Ray a = new Ray();
@@ -44,6 +40,7 @@ public class RayTest extends GWTTestCase
 		assertTrue( a.getDirection().equals( one3 ));
 	}
 
+	@Test
 	public void testSet()
 	{
 		Ray a = new Ray();
@@ -53,6 +50,7 @@ public class RayTest extends GWTTestCase
 		assertTrue( a.getDirection().equals( one3 ));
 	}
 
+	@Test
 	public void testCopy()
 	{
 		Ray a = new Ray( zero3.clone(), one3.clone() );
@@ -67,6 +65,7 @@ public class RayTest extends GWTTestCase
 		assertTrue( b.getDirection().equals( one3 ));
 	}
 
+	@Test
 	public void testAt()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
@@ -76,6 +75,7 @@ public class RayTest extends GWTTestCase
 		assertTrue( a.at( 1 ).equals( new Vector3( 1, 1, 2 ) ));
 	}
 
+	@Test
 	public void testRecast()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
@@ -95,6 +95,7 @@ public class RayTest extends GWTTestCase
 		assertTrue( e.equals( c ));
 	}
 
+	@Test
 	public void testClosestPointToPoint()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
@@ -108,6 +109,7 @@ public class RayTest extends GWTTestCase
 		assertTrue( c.equals( one3 ));
 	}
 
+	@Test
 	public void testDistanceToPoint()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
@@ -121,6 +123,7 @@ public class RayTest extends GWTTestCase
 		assertEquals( 0.0, c );
 	}
 
+	@Test
 	public void testIsIntersectionSphere()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
@@ -137,6 +140,7 @@ public class RayTest extends GWTTestCase
 		assertTrue( ! a.isIntersectionSphere( f ));
 	}
 
+	@Test
 	public void testIsIntersectionPlane()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
@@ -162,6 +166,7 @@ public class RayTest extends GWTTestCase
 		assertTrue( ! a.isIntersectionPlane( f ));
 	}
 
+	@Test
 	public void testIntersectPlane()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
@@ -187,6 +192,7 @@ public class RayTest extends GWTTestCase
 		assertNull( a.intersectPlane( f ) );
 	}
 
+//	@Test
 //	public void testTransform()
 //	{
 //		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
