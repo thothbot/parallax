@@ -2907,8 +2907,8 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 			getGL().pixelStorei( PixelStoreParameter.UNPACK_ALIGNMENT, texture.getUnpackAlignment() );
 
 			Element image = texture.getImage();
-			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() ) 
-					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
+			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( texture.getWidth() ) 
+					&& Mathematics.isPowerOfTwo( texture.getHeight() );
 
 			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
@@ -2955,6 +2955,10 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	{
 		int width = image.getOffsetWidth();
 		int height = image.getOffsetHeight();
+        if (width == 0 && height == 0) {
+            width = image.getPropertyInt("width");
+            height = image.getPropertyInt("height");
+        }
 		
 		CanvasElement canvas = Document.get().createElement("canvas").cast();
 		
@@ -2981,6 +2985,10 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	{
 		int imgWidth = image.getOffsetWidth();
 		int imgHeight = image.getOffsetHeight();
+        if (imgWidth == 0 && imgHeight == 0) {
+            imgWidth = image.getPropertyInt("width");
+            imgHeight = image.getPropertyInt("height");
+        }
 
 		if ( imgWidth <= maxSize && imgHeight <= maxSize )
 			return image;
