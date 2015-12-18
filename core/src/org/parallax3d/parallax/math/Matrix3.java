@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.ThreeJsObject;
 
 /**
  * This class implements three-dimensional matrix. MxM, where M=3.
@@ -36,10 +36,11 @@ import org.parallax3d.parallax.Log;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.Matrix3")
 public class Matrix3
 {
-	private Float32Array elements;
-	
+	final float[] elements = new float[9];
+
 	// Temporary variables
 	static Vector3 _v1 = new Vector3();
 
@@ -48,42 +49,34 @@ public class Matrix3
 	 */
 	public Matrix3() 
 	{
-		this.elements = Float32Array.create(9);
 		identity();
 	}
 	
-	public Matrix3( double n11, double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33 ) 
+	public Matrix3( float n11, float n12, float n13, float n21, float n22, float n23, float n31, float n32, float n33 ) 
 	{
 		this();
 		set(n11, n12, n13, n21, n22, n23, n31, n32, n33 );
 	}
 	
-	public Matrix3 set( double n11, double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33 ) 
+	public Matrix3 set( float n11, float n12, float n13, float n21, float n22, float n23, float n31, float n32, float n33 ) 
 	{
-		Float32Array te = this.getArray();
-
-		te.set(0, n11); te.set(3, n12); te.set(6, n13);
-		te.set(1, n21); te.set(4, n22); te.set(7, n23);
-		te.set(2, n31); te.set(5, n32); te.set(8, n33);
+		float[] val = this.elements;
+		val[0] = n11;
+		val[1] = n21;
+		val[2] = n31;
+		val[3] = n12;
+		val[4] = n22;
+		val[5] = n32;
+		val[6] = n13;
+		val[7] = n23;
+		val[8] = n33;
 
 		return this;
 	}
 
-	/**
-	 * get the current Matrix which is represented 
-	 * by Array[9] which the following indexes:
-	 * 
-	 * <pre> {@code
-	 * 0 3 6
-	 * 1 4 7
-	 * 2 5 8
-	 * } </pre>
-	 * 
-	 * @return the Array
-	 */
-	public Float32Array getArray() 
+	public float[] getArray()
 	{
-		return elements;
+		return this.elements;
 	}
 	
 	public Matrix3 identity() 
@@ -99,60 +92,61 @@ public class Matrix3
 
 	public Matrix3 copy( Matrix3 m ) 
 	{
-		Float32Array me = m.getArray();
+
+		float[] me = m.getArray();
 
 		this.set(
-			me.get(0), me.get(3), me.get(6),
-			me.get(1), me.get(4), me.get(7),
-			me.get(2), me.get(5), me.get(8)
+			me[0], me[3], me[6],
+			me[1], me[4], me[7],
+			me[2], me[5], me[8]
 		);
 
 		return this;
 	}
-	
-	public Float32Array applyToVector3Array (Float32Array array) 
+//
+//	public Float32Array applyToVector3Array (Float32Array array)
+//	{
+//		return applyToVector3Array(array, 0, array.getLength());
+//	}
+//
+//	public Float32Array applyToVector3Array (Float32Array array, int offset, int length)
+//	{
+//
+//		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
+//
+//			_v1.x = array.get( j );
+//			_v1.y = array.get( j + 1 );
+//			_v1.z = array.get( j + 2 );
+//
+//			_v1.apply( this );
+//
+//			array.set( j , _v1.x );
+//			array.set( j + 1 , _v1.y );
+//			array.set( j + 2 , _v1.z );
+//
+//		}
+//
+//		return array;
+//	}
+
+	public Matrix3 multiply( float s ) 
 	{
-		return applyToVector3Array(array, 0, array.getLength());
-	}
-	
-	public Float32Array applyToVector3Array (Float32Array array, int offset, int length) 
-	{
+		float[] te = this.elements;
 
-		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
-
-			_v1.x = array.get( j );
-			_v1.y = array.get( j + 1 );
-			_v1.z = array.get( j + 2 );
-
-			_v1.apply( this );
-
-			array.set( j , _v1.x );
-			array.set( j + 1 , _v1.y );
-			array.set( j + 2 , _v1.z );
-
-		}
-
-		return array;
-	}
-
-	public Matrix3 multiply( double s ) 
-	{
-		Float32Array te = this.getArray();
-
-		te.set(0, te.get(0) * s); te.set(3, te.get(3) * s); te.set(6, te.get(6) * s);
-		te.set(1, te.get(1) * s); te.set(4, te.get(4) * s); te.set(7, te.get(7) * s);
-		te.set(2, te.get(2) * s); te.set(5, te.get(5) * s); te.set(8, te.get(8) * s);
+		te[0] *= s; te[3] *= s; te[6] *= s;
+		te[1] *= s; te[4] *= s; te[7] *= s;
+		te[2] *= s; te[5] *= s; te[8] *= s;
 
 		return this;
 	}
 
-	public double determinant() 
+	public float determinant() 
 	{
-		Float32Array te = this.getArray();
+		float[] te = this.elements;
 
-		double a = te.get(0), b = te.get(1), c = te.get(2),
-			d = te.get(3), e = te.get(4), f = te.get(5),
-			g = te.get(6), h = te.get(7), i = te.get(8);
+		float a = te[0], b = te[1], c = te[2],
+			  d = te[3], e = te[4], f = te[5],
+			  g = te[6], h = te[7], i = te[8];
 
 		return a*e*i - a*f*h - b*d*i + b*f*g + c*d*h - c*e*g;
 	}
@@ -167,20 +161,20 @@ public class Matrix3
 	{
 		// input: THREE.Matrix4
 		// ( based on http://code.google.com/p/webgl-mjs/ )
-		Float32Array me = m.getArray();
-		Float32Array te = this.getArray();
+		float[] me = m.getArray();
+		float[] te = this.elements;
 
-		te.set(0, me.get(10) * me.get(5) - me.get(6) * me.get(9));
-		te.set(1, -me.get(10) * me.get(1) + me.get(2) * me.get(9));
-		te.set(2,  me.get(6) * me.get(1) - me.get(2) * me.get(5));
-		te.set(3, -me.get(10) * me.get(4) + me.get(6) * me.get(8));
-		te.set(4, me.get(10) * me.get(0) - me.get(2) * me.get(8));
-		te.set(5, -me.get(6) * me.get(0) + me.get(2) * me.get(4));
-		te.set(6, me.get(9) * me.get(4) - me.get(5) * me.get(8));
-		te.set(7, -me.get(9) * me.get(0) + me.get(1) * me.get(8));
-		te.set(8, me.get(5) * me.get(0) - me.get(1) * me.get(4));
+		te[0] = me[10] * me[5] - me[6] * me[9];
+		te[1] = -me[10] * me[1] + me[2] * me[9];
+		te[2] = me[6] * me[1] - me[2] * me[5];
+		te[3] = -me[10] * me[4] + me[6] * me[8];
+		te[4] = me[10] * me[0] - me[2] * me[8];
+		te[5] = -me[6] * me[0] + me[2] * me[4];
+		te[6] = me[9] * me[4] - me[5] * me[8];
+		te[7] = -me[9] * me[0] + me[1] * me[8];
+		te[8] = me[5] * me[0] - me[1] * me[4];
 
-		double det = me.get(0) * te.get(0) + me.get(1) * te.get(3) + me.get(2) * te.get(6);
+		float det = me[0] * te[0] + me[1] * te[3] + me[2] * te[6];
 
 		// no inverse
 
@@ -191,7 +185,7 @@ public class Matrix3
 		}
 		else
 		{
-			this.multiply( 1.0 / det );	
+			this.multiply( 1.0f / det );
 		}
 
 		return this;
@@ -203,21 +197,21 @@ public class Matrix3
 	 */
 	public Matrix3 transpose()
 	{
-		double tmp;
-		Float32Array m = this.getArray();
+		float tmp;
+		float[] m = this.elements;
 
-		tmp = m.get(1);
-		m.set(1, m.get(3));
-		m.set(3, tmp);
+		tmp = m[1];
+		m[1] = m[3];
+		m[3] = tmp;
 
-		tmp = m.get(2);
-		m.set(2, m.get(6));
-		m.set(6, tmp);
+		tmp = m[2];
+		m[2] = m[6];
+		m[6] = tmp;
 
-		tmp = m.get(5);
-		m.set(5, m.get(7));
-		m.set(7, tmp);
-		
+		tmp = m[5];
+		m[5] = m[7];
+		m[7] = tmp;
+
 		return this;
 	}
 	
@@ -239,20 +233,20 @@ public class Matrix3
 	 * 
 	 * @return an array of new transposed matrix.
 	 */
-	public Float32Array transposeIntoArray()
+	public float[] transposeIntoArray()
 	{
-		Float32Array r = Float32Array.create(9);
-		Float32Array m = this.getArray();
+		float[] r = new float[9];
+		float[] m = this.elements;
 
-		r.set(0, m.get(0));
-		r.set(1, m.get(3));
-		r.set(2, m.get(6));
-		r.set(3, m.get(1));
-		r.set(4, m.get(4));
-		r.set(5, m.get(7));
-		r.set(6, m.get(2));
-		r.set(7, m.get(5));
-		r.set(8, m.get(8));
+		r[0] = m[0];
+		r[1] = m[3];
+		r[2] = m[6];
+		r[3] = m[1];
+		r[4] = m[4];
+		r[5] = m[7];
+		r[6] = m[2];
+		r[7] = m[5];
+		r[8] = m[8];
 
 		return r;
 	}
@@ -265,21 +259,20 @@ public class Matrix3
 	{
 		String retval = "[";
 		
-		for(int i = 0; i < this.getArray().getLength(); i++)
-			retval += this.getArray().get(i) + ", ";
+		for(int i = 0; i < this.elements.length; i++)
+			retval += this.elements[i] + ", ";
 		
 		return retval + "]";
 	}
 	
 	public Matrix3 clone() 
 	{
-		Float32Array te = this.getArray();
+		float[] te = this.elements;
 
 		return new Matrix3(
-
-			te.get(0), te.get(3), te.get(6),
-			te.get(1), te.get(4), te.get(7),
-			te.get(2), te.get(5), te.get(8)
+			te[0], te[3], te[6],
+			te[1], te[4], te[7],
+			te[2], te[5], te[8]
 		);
 	}
 }

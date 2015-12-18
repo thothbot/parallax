@@ -19,12 +19,15 @@
 package org.parallax3d.parallax.math;
 
 
+import org.parallax3d.parallax.ThreeJsObject;
+
 /**
  * Class implements some mathematical helpers methods.
  * 
  * @author thothbot
  */
-		
+
+@ThreeJsObject("THREE.Math")
 public class Mathematics
 {
 	/**
@@ -36,7 +39,7 @@ public class Mathematics
 	 * 
 	 * @return a clamped scalar by range &#60;a, b&#62;
 	 */
-	public static double clamp(double x, double a, double b)
+	public static float clamp(float x, float a, float b)
 	{
 		return ( x < a ) ? a : ( ( x > b ) ? b : x );
 	}
@@ -49,7 +52,7 @@ public class Mathematics
 	 * 
 	 * @return a clamped scalar by range &#60;a, inf).
 	 */
-	public static double clampBottom(double x, double a)
+	public static float clampBottom(float x, float a)
 	{
 		return x < a ? a : x;
 	}
@@ -65,7 +68,7 @@ public class Mathematics
 	 * 
 	 * @return a mapped value
 	 */
-	public static double mapLinear(double x, double a1, double a2, double b1, double b2)
+	public static float mapLinear(float x, float a1, float a2, float b1, float b2)
 	{
 		return b1 + ( x - a1 ) * ( b2 - b1 ) / ( a2 - a1 );
 	}
@@ -78,37 +81,37 @@ public class Mathematics
 	 * @param max
 	 * @return
 	 */
-	public static double smoothstep( double x, double min, double max ) 
+	public static float smoothstep( float x, float min, float max ) 
 	{
-		if ( x <= min ) return 0.0;
-		if ( x >= max ) return 1.0;
+		if ( x <= min ) return 0.0f;
+		if ( x >= max ) return 1.0f;
 
 		x = ( x - min ) / ( max - min );
 
-		return x * x * ( 3.0 - 2.0 * x );
+		return x * x * ( 3.0f - 2.0f * x );
 	}
 
-	public static double smootherstep( double x, double min, double max ) 
+	public static float smootherstep( float x, float min, float max ) 
 	{
-		if ( x <= min ) return 0.0;
-		if ( x >= max ) return 1.0;
+		if ( x <= min ) return 0.0f;
+		if ( x >= max ) return 1.0f;
 
 		x = ( x - min ) / ( max - min );
 
-		return x * x * x * ( x * ( x * 6.0 - 15.0 ) + 10.0 );
+		return x * x * x * ( x * ( x * 6.0f - 15.0f ) + 10.0f );
 	}
 
 	/**
-	 * The method generates random double value in the range &#60;0, 1&#62; with 
+	 * The method generates random float value in the range &#60;0, 1&#62; with 
 	 * 16 bits of randomness (standard Math.random() creates repetitive 
 	 * patterns when applied over larger space).
 	 * 
 	 * @return a random Float value.
 	 */
-	public static double random16()
+	public static float random16()
 	{
 
-		return (65280.0 * Math.random() + 255.0 * Math.random()) / 65535.0;
+		return (float)(65280.0 * Math.random() + 255.0 * Math.random()) / 65535.0f;
 	}
 
 	/**
@@ -125,39 +128,39 @@ public class Mathematics
 	}
 
 	/**
-	 * The method generates random double value in the range &#60;low, high&#62;.
+	 * The method generates random float value in the range &#60;low, high&#62;.
 	 * 
 	 * @param low  the start value of the range.
 	 * @param high the end value of the range
 	 * 
 	 * @return a random Float value.
 	 */
-	public static double randFloat(double low, double high)
+	public static float randFloat(float low, float high)
 	{
-		return low + Math.random() * (high - low);
+		return low + (float)Math.random() * (high - low);
 	}
 
 	/**
-	 * The method generates random double value in the interval 
+	 * The method generates random float value in the interval 
 	 * &#60;-range/2, range/2&#62;.
 	 * 
 	 * @param range the value used to build the interval
 	 * 
 	 * @return a random Float value.
 	 */
-	public static double randFloatSpread(double range)
+	public static float randFloatSpread(float range)
 	{
-		return range * (0.5 - Math.random());
+		return (float)(range * (0.5 - Math.random()));
 	}
 	
-	public static double degToRad ( double degrees ) 
+	public static float degToRad ( float degrees ) 
 	{
-		return degrees * Math.PI / 180;
+		return (float)(degrees * Math.PI / 180);
 	}
 
-	public static double radToDeg( double radians ) 
+	public static float radToDeg( float radians ) 
 	{
-		return radians * 180 / Math.PI;
+		return (float)(radians * 180 / Math.PI);
 	}
 	
 	/**
@@ -197,9 +200,9 @@ public class Mathematics
 	 * 
 	 * @return 1 or -1
 	 */
-	public static double sign(double x)
+	public static float sign(float x)
 	{
-		return (x < 0) ? -1.0 : ((x > 0) ? 1.0 : 0);
+		return (float)((x < 0) ? -1.0 : ((x > 0) ? 1.0 : 0));
 	}
 	
 	/**
@@ -210,8 +213,8 @@ public class Mathematics
 	 * 
 	 * @return a Gaussian function value
 	 */
-	public static double gauss( double x, double sigma ) 
+	public static float gauss( float x, float sigma ) 
 	{
-		return Math.exp( - ( x * x ) / ( 2.0 * sigma * sigma ) );
+		return (float)Math.exp( - ( x * x ) / ( 2.0 * sigma * sigma ) );
 	}	
 }

@@ -18,11 +18,14 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
+@ThreeJsObject("THREE.Spline")
 public class Spline {
 
 	private Vector3[] points;
 	
-	public static Spline initFromArray( double[][] a ) {
+	public static Spline initFromArray( float[][] a ) {
 
 		Spline spline = new Spline();
 		
@@ -82,12 +85,12 @@ public class Spline {
 
 	}
 	
-	private double interpolate( double p0, double p1, double p2, double p3, double t, double t2, double t3 ) {
+	private float interpolate( float p0, float p1, float p2, float p3, float t, float t2, float t3 ) {
 
-		double v0 = ( p2 - p0 ) * 0.5,
-			v1 = ( p3 - p1 ) * 0.5;
+		float v0 = ( p2 - p0 ) * 0.5f,
+			  v1 = ( p3 - p1 ) * 0.5f;
 
-		return ( 2.0 * ( p1 - p2 ) + v0 + v1 ) * t3 + ( - 3.0 * ( p1 - p2 ) - 2.0 * v0 - v1 ) * t2 + v0 * t + p1;
+		return ( 2.0f * ( p1 - p2 ) + v0 + v1 ) * t3 + ( - 3.0f * ( p1 - p2 ) - 2.0f * v0 - v1 ) * t2 + v0 * t + p1;
 
 	}
 }

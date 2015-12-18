@@ -21,7 +21,7 @@ package org.parallax3d.parallax.math;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.AbstractGeometry;
 import org.parallax3d.parallax.core.GeometryObject;
 
@@ -32,6 +32,7 @@ import org.parallax3d.parallax.core.GeometryObject;
  * 
  * @author thothbot
  */
+@ThreeJsObject("THREE.Frustum")
 public class Frustum
 {
 	/**
@@ -92,11 +93,11 @@ public class Frustum
 
 	public Frustum setFromMatrix( Matrix4 m ) 
 	{
-		Float32Array me = m.getArray();
-		double me0 = me.get(0), me1 = me.get(1), me2 = me.get(2), me3 = me.get(3);
-		double me4 = me.get(4), me5 = me.get(5), me6 = me.get(6), me7 = me.get(7);
-		double me8 = me.get(8), me9 = me.get(9), me10 = me.get(10), me11 = me.get(11);
-		double me12 = me.get(12), me13 = me.get(13), me14 = me.get(14), me15 = me.get(15);
+		float[] me = m.getArray();
+		float me0 = me[0], me1 = me[1], me2 = me[2], me3 = me[3];
+		float me4 = me[4], me5 = me[5], me6 = me[6], me7 = me[7];
+		float me8 = me[8], me9 = me[9], me10 = me[10], me11 = me[11];
+		float me12 = me[12], me13 = me[13], me14 = me[14], me15 = me[15];
 
 		this.planes.get(0).setComponents( me3 - me0, me7 - me4, me11 - me8, me15 - me12 ).normalize();
 		this.planes.get(1).setComponents( me3 + me0, me7 + me4, me11 + me8, me15 + me12 ).normalize();
@@ -124,11 +125,11 @@ public class Frustum
 	public boolean isIntersectsSphere( Sphere sphere ) 
 	{
 		Vector3 center = sphere.getCenter();
-		double negRadius = -sphere.getRadius();
+		float negRadius = -sphere.getRadius();
 
 		for ( int i = 0; i < 6; i ++ ) 
 		{
-			double distance = planes.get( i ).distanceToPoint( center );
+			float distance = planes.get( i ).distanceToPoint( center );
 
 			if( distance < negRadius ) 
 			{
@@ -153,8 +154,8 @@ public class Frustum
 			_p1.z = plane.getNormal().z > 0 ? box.getMin().z : box.getMax().z;
 			_p2.z = plane.getNormal().z > 0 ? box.getMax().z : box.getMin().z;
 
-			double d1 = plane.distanceToPoint( _p1 );
-			double d2 = plane.distanceToPoint( _p2 );
+			float d1 = plane.distanceToPoint( _p1 );
+			float d2 = plane.distanceToPoint( _p2 );
 
 			// if both outside plane, no intersection
 

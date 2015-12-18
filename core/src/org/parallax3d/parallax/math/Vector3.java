@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.cameras.Camera;
 
 
@@ -31,12 +31,13 @@ import org.parallax3d.parallax.cameras.Camera;
  * 
  * @author thothbot
  */
+@ThreeJsObject("THREE.Vector3")
 public class Vector3 extends Vector2
 {
 	/**
 	 * The Z-coordinate
 	 */
-	protected double z;
+	protected float z;
 	
 	// Temporary variables
 	static Quaternion _quaternion = new Quaternion();
@@ -61,7 +62,7 @@ public class Vector3 extends Vector2
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector3(double x, double y, double z) 
+	public Vector3(float x, float y, float z) 
 	{
 		super(x, y);
 		this.z = z;
@@ -72,7 +73,7 @@ public class Vector3 extends Vector2
 	 * 
 	 * @return a Z coordinate
 	 */
-	public double getZ()
+	public float getZ()
 	{
 		return this.z;
 	}
@@ -83,7 +84,7 @@ public class Vector3 extends Vector2
 	 * 
 	 * @param z the Y coordinate
 	 */
-	public void addZ(double z)
+	public void addZ(float z)
 	{
 		this.z += z;
 	}
@@ -93,7 +94,7 @@ public class Vector3 extends Vector2
 	 * 
 	 * @param z the Z coordinate
 	 */
-	public void setZ(double z)
+	public void setZ(float z)
 	{
 		this.z = z;
 	}
@@ -105,7 +106,7 @@ public class Vector3 extends Vector2
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector3 set(double x, double y, double z)
+	public Vector3 set(float x, float y, float z)
 	{
 		this.x = x;
 		this.y = y;
@@ -118,7 +119,7 @@ public class Vector3 extends Vector2
 	 * 
 	 * @param a the X, Y and Z coordinate
 	 */
-	public Vector3 set(double a)
+	public Vector3 set(float a)
 	{
 		this.x = a;
 		this.y = a;
@@ -126,7 +127,7 @@ public class Vector3 extends Vector2
 		return this;
 	}
 	
-	public void setComponent ( int index, double value ) {
+	public void setComponent ( int index, float value ) {
 
 		switch ( index ) {
 
@@ -139,7 +140,7 @@ public class Vector3 extends Vector2
 
 	}
 
-	public double getComponent( int index ) {
+	public float getComponent( int index ) {
 
 		switch ( index ) {
 
@@ -181,7 +182,7 @@ public class Vector3 extends Vector2
 	}
 
 	@Override
-	public Vector3 add(double s)
+	public Vector3 add(float s)
 	{
 		this.addX(s);
 		this.addY(s);
@@ -218,7 +219,7 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
-	public Vector3 multiply(double s)
+	public Vector3 multiply(float s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -233,7 +234,7 @@ public class Vector3 extends Vector2
 		return this;
 	}
 	
-	public Vector3 applyAxisAngle(Vector3 axis, double angle) 
+	public Vector3 applyAxisAngle(Vector3 axis, float angle) 
 	{
 		this.apply( _quaternion.setFromAxisAngle( axis, angle ) );
 
@@ -242,15 +243,15 @@ public class Vector3 extends Vector2
 	
 	public Vector3 apply( Matrix3 m ) 
 	{
-		double x = this.x;
-		double y = this.y;
-		double z = this.z;
+		float x = this.x;
+		float y = this.y;
+		float z = this.z;
 
-		Float32Array e = m.getArray();
+		float[] e = m.getArray();
 
-		this.x = e.get(0) * x + e.get(3) * y + e.get(6) * z;
-		this.y = e.get(1) * x + e.get(4) * y + e.get(7) * z;
-		this.z = e.get(2) * x + e.get(5) * y + e.get(8) * z;
+		this.x = e[0] * x + e[3] * y + e[6] * z;
+		this.y = e[1] * x + e[4] * y + e[7] * z;
+		this.z = e[2] * x + e[5] * y + e[8] * z;
 
 		return this;
 	}
@@ -262,13 +263,13 @@ public class Vector3 extends Vector2
 	 */
 	public Vector3 apply( Matrix4 m ) 
 	{
-		double x = this.x, y = this.y, z = this.z;
+		float x = this.x, y = this.y, z = this.z;
 
-		Float32Array e = m.getArray();
+		float[] e = m.getArray();
 
-		this.x = e.get(0) * x + e.get(4) * y + e.get(8)  * z + e.get(12);
-		this.y = e.get(1) * x + e.get(5) * y + e.get(9)  * z + e.get(13);
-		this.z = e.get(2) * x + e.get(6) * y + e.get(10) * z + e.get(14);
+		this.x = e[0] * x + e[4] * y + e[8]  * z + e[12];
+		this.y = e[1] * x + e[5] * y + e[9]  * z + e[13];
+		this.z = e[2] * x + e[6] * y + e[10] * z + e[14];
 
 		return this;
 	}
@@ -280,35 +281,35 @@ public class Vector3 extends Vector2
 	 */
 	public Vector3 applyProjection( Matrix4 m ) 
 	{
-		double x = this.x, y = this.y, z = this.z;
+		float x = this.x, y = this.y, z = this.z;
 
-		Float32Array e = m.getArray();
-		double d = 1.0 / ( e.get(3) * x + e.get(7) * y + e.get(11) * z + e.get(15) ); // perspective divide
+		float[] e = m.getArray();
+		float d = 1.0f / ( e[3] * x + e[7] * y + e[11] * z + e[15] ); // perspective divide
 
-		this.x = ( e.get(0) * x + e.get(4) * y + e.get(8)  * z + e.get(12) ) * d;
-		this.y = ( e.get(1) * x + e.get(5) * y + e.get(9)  * z + e.get(13) ) * d;
-		this.z = ( e.get(2) * x + e.get(6) * y + e.get(10) * z + e.get(14) ) * d;
+		this.x = ( e[0] * x + e[4] * y + e[8]  * z + e[12] ) * d;
+		this.y = ( e[1] * x + e[5] * y + e[9]  * z + e[13] ) * d;
+		this.z = ( e[2] * x + e[6] * y + e[10] * z + e[14] ) * d;
 
 		return this;
 	}
 	
 	public Vector3 apply( Quaternion q ) 
 	{
-		double x = this.x;
-		double y = this.y;
-		double z = this.z;
+		float x = this.x;
+		float y = this.y;
+		float z = this.z;
 
-		double qx = q.x;
-		double qy = q.y;
-		double qz = q.z;
-		double qw = q.w;
+		float qx = q.x;
+		float qy = q.y;
+		float qz = q.z;
+		float qw = q.w;
 
 		// calculate quat * vector
 
-		double ix =  qw * x + qy * z - qz * y;
-		double iy =  qw * y + qz * x - qx * z;
-		double iz =  qw * z + qx * y - qy * x;
-		double iw = - qx * x - qy * y - qz * z;
+		float ix =  qw * x + qy * z - qz * y;
+		float iy =  qw * y + qz * x - qx * z;
+		float iz =  qw * z + qx * y - qy * x;
+		float iw = - qx * x - qy * y - qz * z;
 
 		// calculate result * inverse quat
 
@@ -340,13 +341,13 @@ public class Vector3 extends Vector2
 	 */
 	public Vector3 transformDirection( Matrix4 m ) 
 	{
-		double x = this.x, y = this.y, z = this.z;
+		float x = this.x, y = this.y, z = this.z;
 
-		Float32Array e = m.getArray();
+		float[] e = m.getArray();
 
-		this.x = e.get(0) * x + e.get(4) * y + e.get(8)  * z;
-		this.y = e.get(1) * x + e.get(5) * y + e.get(9)  * z;
-		this.z = e.get(2) * x + e.get(6) * y + e.get(10) * z;
+		this.x = e[0] * x + e[4] * y + e[8]  * z;
+		this.y = e[1] * x + e[5] * y + e[9]  * z;
+		this.z = e[2] * x + e[6] * y + e[10] * z;
 
 		this.normalize();
 
@@ -368,11 +369,11 @@ public class Vector3 extends Vector2
 	}
 
 	@Override
-	public Vector3 divide(double scalar)
+	public Vector3 divide(float scalar)
 	{
 		if ( scalar != 0 ) {
 
-			double invScalar = 1.0 / scalar;
+			float invScalar = 1.0f / scalar;
 
 			this.x *= invScalar;
 			this.y *= invScalar;
@@ -470,7 +471,7 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
-	public Vector3 clamp(double minVal, double maxVal) 
+	public Vector3 clamp(float minVal, float maxVal) 
 	{
 		_min.set( minVal, minVal, minVal );
 		_max.set( maxVal, maxVal, maxVal );
@@ -481,9 +482,9 @@ public class Vector3 extends Vector2
 	public Vector3 floor() 
 	{
 
-		this.x = Math.floor( this.x );
-		this.y = Math.floor( this.y );
-		this.z = Math.floor( this.z );
+		this.x = (float)Math.floor( this.x );
+		this.y = (float)Math.floor( this.y );
+		this.z = (float)Math.floor( this.z );
 
 		return this;
 
@@ -492,9 +493,9 @@ public class Vector3 extends Vector2
 	public Vector3 ceil() 
 	{
 
-		this.x = Math.ceil( this.x );
-		this.y = Math.ceil( this.y );
-		this.z = Math.ceil( this.z );
+		this.x = (float)Math.ceil( this.x );
+		this.y = (float)Math.ceil( this.y );
+		this.z = (float)Math.ceil( this.z );
 
 		return this;
 
@@ -514,9 +515,9 @@ public class Vector3 extends Vector2
 	public Vector3 roundToZero() 
 	{
 
-		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
-		this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
-		this.z = ( this.z < 0 ) ? Math.ceil( this.z ) : Math.floor( this.z );
+		this.x = ( this.x < 0 ) ? (float)Math.ceil( this.x ) : (float)Math.floor( this.x );
+		this.y = ( this.y < 0 ) ? (float)Math.ceil( this.y ) : (float)Math.floor( this.y );
+		this.z = ( this.z < 0 ) ? (float)Math.ceil( this.z ) : (float)Math.floor( this.z );
 
 		return this;
 
@@ -539,7 +540,7 @@ public class Vector3 extends Vector2
 	 *            the other vector
 	 * @return the dot product of this vector and v1
 	 */
-	public double dot(Vector3 v1)
+	public float dot(Vector3 v1)
 	{
 		return (this.x * v1.x + this.y * v1.y + this.z * v1.z);
 	}
@@ -549,7 +550,7 @@ public class Vector3 extends Vector2
 	 * 
 	 * @return the squared length of this vector
 	 */
-	public double lengthSq()
+	public float lengthSq()
 	{
 		return dot(this);
 	}
@@ -559,12 +560,12 @@ public class Vector3 extends Vector2
 	 * 
 	 * @return the length of this vector
 	 */
-	public double length()
+	public float length()
 	{
-		return Math.sqrt(lengthSq());
+		return (float)Math.sqrt(lengthSq());
 	}
 
-	public double lengthManhattan()
+	public float lengthManhattan()
 	{
 		return Math.abs(this.x) + Math.abs(this.y) + Math.abs(this.z);
 	}
@@ -578,9 +579,9 @@ public class Vector3 extends Vector2
 		return this.divide( this.length() );
 	}
 
-	public Vector3 setLength(double l)
+	public Vector3 setLength(float l)
 	{
-		double oldLength = this.length();
+		float oldLength = this.length();
 
 		if ( oldLength != 0 && l != oldLength  ) {
 
@@ -590,7 +591,7 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
-	public Vector3 lerp(Vector3 v1, double alpha)
+	public Vector3 lerp(Vector3 v1, float alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
@@ -609,8 +610,8 @@ public class Vector3 extends Vector2
 	 */
 	public Vector3 cross(Vector3 a, Vector3 b)
 	{
-		double ax = a.x, ay = a.y, az = a.z;
-		double bx = b.x, by = b.y, bz = b.z;
+		float ax = a.x, ay = a.y, az = a.z;
+		float bx = b.x, by = b.y, bz = b.z;
 
 		this.x = ay * bz - az * by;
 		this.y = az * bx - ax * bz;
@@ -628,7 +629,7 @@ public class Vector3 extends Vector2
 	{
 		_v1.copy( vector ).normalize();
 
-		double dot = this.dot( _v1 );
+		float dot = this.dot( _v1 );
 
 		return this.copy( _v1 ).multiply( dot );
 	}
@@ -652,34 +653,34 @@ public class Vector3 extends Vector2
 		return this.sub( _v1.copy( normal ).multiply( 2 * this.dot( normal ) ) );
 	}
 	
-	public double angleTo( Vector3 v ) 
+	public float angleTo( Vector3 v ) 
 	{
-		double theta = this.dot( v ) / ( this.length() * v.length() );
+		float theta = this.dot( v ) / ( this.length() * v.length() );
 
 		// clamp, to handle numerical problems
 
-		return Math.acos( Mathematics.clamp( theta, - 1, 1 ) );
+		return (float)Math.acos( Mathematics.clamp( theta, - 1, 1 ) );
 	}
 
-	public double distanceTo(Vector3 v1)
+	public float distanceTo(Vector3 v1)
 	{
-		return Math.sqrt(distanceToSquared(v1));
+		return (float)Math.sqrt(distanceToSquared(v1));
 	}
 
-	public double distanceToSquared(Vector3 v1)
+	public float distanceToSquared(Vector3 v1)
 	{
-		double dx = this.x - v1.x;
-		double dy = this.y - v1.y;
-		double dz = this.z - v1.z;
+		float dx = this.x - v1.x;
+		float dy = this.y - v1.y;
+		float dz = this.z - v1.z;
 		return (dx * dx + dy * dy + dz * dz);
 	}
 	
 	public Vector3 setFromMatrixPosition( Matrix4 m )
 	{
 
-		this.x = m.getArray().get( 12 );
-		this.y = m.getArray().get( 13 );
-		this.z = m.getArray().get( 14 );
+		this.x = m.getArray()[ 12 ];
+		this.y = m.getArray()[ 13 ];
+		this.z = m.getArray()[ 14 ];
 
 		return this;
 	}
@@ -687,9 +688,11 @@ public class Vector3 extends Vector2
 	public Vector3 setFromMatrixScale( Matrix4 m ) 
 	{
 
-		double sx = this.set( m.getArray().get( 0 ), m.getArray().get( 1 ), m.getArray().get(  2 ) ).length();
-		double sy = this.set( m.getArray().get( 4 ), m.getArray().get( 5 ), m.getArray().get(  6 ) ).length();
-		double sz = this.set( m.getArray().get( 8 ), m.getArray().get( 9 ), m.getArray().get( 10 ) ).length();
+		float[] el = m.getArray();
+
+		float sx = this.set( el[ 0 ], el[ 1 ], el[ 2 ] ).length();
+		float sy = this.set( el[ 4 ], el[ 5 ], el[ 6 ] ).length();
+		float sz = this.set( el[ 8 ], el[ 9 ], el[ 10 ] ).length();
 
 		this.x = sx;
 		this.y = sy;
@@ -703,11 +706,11 @@ public class Vector3 extends Vector2
 
 		int offset = index * 4;
 
-		Float32Array me = matrix.getArray();
+		float[] me = matrix.getArray();
 
-		this.x = me.get( offset );
-		this.y = me.get( offset + 1 );
-		this.z = me.get( offset + 2 );
+		this.x = me[ offset ];
+		this.y = me[ offset + 1 ];
+		this.z = me[ offset + 2 ];
 
 		return this;
 
@@ -726,36 +729,36 @@ public class Vector3 extends Vector2
 		return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
 	}
 	
-	public Vector3 fromArray ( Float32Array array )
-	{
-		return fromArray(array, 0);
-	}
+//	public Vector3 fromArray ( Float32Array array )
+//	{
+//		return fromArray(array, 0);
+//	}
+//
+//	public Vector3 fromArray ( Float32Array array, int offset )
+//	{
+//
+//		this.x = array.get( offset );
+//		this.y = array.get( offset + 1 );
+//		this.z = array.get( offset + 2 );
+//
+//		return this;
+//
+//	}
 	
-	public Vector3 fromArray ( Float32Array array, int offset ) 
-	{
-
-		this.x = array.get( offset );
-		this.y = array.get( offset + 1 );
-		this.z = array.get( offset + 2 );
-
-		return this;
-
-	}
-	
-	public Float32Array toArray() 
-	{
-		return toArray(Float32Array.create(3), 0);
-	}
-
-	public Float32Array toArray( Float32Array array, int offset ) 
-	{
-
-		array.set( offset , this.x);
-		array.set( offset + 1 , this.y);
-		array.set( offset + 2 , this.z);
-
-		return array;
-	}
+//	public Float32Array toArray()
+//	{
+//		return toArray(Float32Array.create(3), 0);
+//	}
+//
+//	public Float32Array toArray( Float32Array array, int offset )
+//	{
+//
+//		array.set( offset , this.x);
+//		array.set( offset + 1 , this.y);
+//		array.set( offset + 2 , this.z);
+//
+//		return array;
+//	}
 	
 	public Vector3 clone()
 	{

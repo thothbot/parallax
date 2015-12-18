@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.ThreeJsObject;
 
 /**
  * This class is realization of (X, Y, Z, W) vector. 
@@ -30,12 +30,13 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
  * 
  * @author thothbot
  */
+@ThreeJsObject("THREE.Vector4")
 public class Vector4 extends Vector3
 {
 	/**
 	 * The W-coordinate
 	 */
-	protected double w;
+	protected float w;
 
 	// Temporary variables
 	static Vector4 _min = new Vector4();
@@ -46,7 +47,7 @@ public class Vector4 extends Vector3
 	 */
 	public Vector4() 
 	{
-		this(0, 0, 0, 1.0);
+		this(0, 0, 0, 1.0f);
 	}
 
 	/**
@@ -57,9 +58,9 @@ public class Vector4 extends Vector3
 	 * @param y the Y coordinate
 	 * @param z the Z coordinate
 	 */
-	public Vector4(double x, double y, double z) 
+	public Vector4(float x, float y, float z) 
 	{
-		this(x, y, z, 1.0);
+		this(x, y, z, 1.0f);
 	}
 
 	/**
@@ -71,7 +72,7 @@ public class Vector4 extends Vector3
 	 * @param z the Z coordinate
 	 * @param w the W coordinate
 	 */
-	public Vector4(double x, double y, double z, double w) 
+	public Vector4(float x, float y, float z, float w) 
 	{
 		super(x, y, z);
 		this.w = w;
@@ -82,7 +83,7 @@ public class Vector4 extends Vector3
 	 * 
 	 * @return a W coordinate
 	 */
-	public double getW() 
+	public float getW() 
 	{
 		return w;
 	}
@@ -93,7 +94,7 @@ public class Vector4 extends Vector3
 	 * 
 	 * @param w the W coordinate
 	 */
-	public void addW(double w)
+	public void addW(float w)
 	{
 		this.w += w;
 	}
@@ -103,7 +104,7 @@ public class Vector4 extends Vector3
 	 * 
 	 * @param w the W coordinate
 	 */
-	public void setW(double w) 
+	public void setW(float w) 
 	{
 		this.w = w;
 	}
@@ -120,7 +121,7 @@ public class Vector4 extends Vector3
 	 * @param w
 	 *            the w coordinate
 	 */
-	public Vector4 set(double x, double y, double z, double w)
+	public Vector4 set(float x, float y, float z, float w)
 	{
 		this.x = x;
 		this.y = y;
@@ -129,7 +130,7 @@ public class Vector4 extends Vector3
 		return this;
 	}
 	
-	public void setComponent( int index, double value ) 
+	public void setComponent( int index, float value ) 
 	{
 
 		switch ( index ) {
@@ -144,7 +145,7 @@ public class Vector4 extends Vector3
 		
 	}
 
-	public double getComponent( int index ) 
+	public float getComponent( int index ) 
 	{
 
 		switch ( index ) {
@@ -180,7 +181,7 @@ public class Vector4 extends Vector3
 	 */
 	public Vector4 copy(Vector3 v)
 	{
-		return this.set(v.x, v.y, v.z, 1.0);
+		return this.set(v.x, v.y, v.z, 1.0f);
 	}
 	
 	/**
@@ -211,7 +212,7 @@ public class Vector4 extends Vector3
 		return this.add(this, v);
 	}
 
-	public Vector4 add(double s)
+	public Vector4 add(float s)
 	{
 		this.x += s;
 		this.y += s;
@@ -263,7 +264,7 @@ public class Vector4 extends Vector3
 	 *            the scalar value
 	 */
 	@Override
-	public Vector4 multiply(double s)
+	public Vector4 multiply(float s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -284,17 +285,17 @@ public class Vector4 extends Vector3
 	
 	public Vector4 applyMatrix4( Matrix4 m ) {
 
-		double x = this.x;
-		double y = this.y;
-		double z = this.z;
-		double w = this.w;
+		float x = this.x;
+		float y = this.y;
+		float z = this.z;
+		float w = this.w;
 
-		Float32Array e = m.getArray();
+		float[] e = m.getArray();
 
-		this.x = e.get( 0 ) * x + e.get( 4 ) * y + e.get( 8 ) * z + e.get( 12 ) * w;
-		this.y = e.get( 1 ) * x + e.get( 5 ) * y + e.get( 9 ) * z + e.get( 13 ) * w;
-		this.z = e.get( 2 ) * x + e.get( 6 ) * y + e.get( 10 ) * z + e.get( 14 ) * w;
-		this.w = e.get( 3 ) * x + e.get( 7 ) * y + e.get( 11 ) * z + e.get( 15 ) * w;
+		this.x = e[0] * x + e[4] * y + e[8] * z + e[12] * w;
+		this.y = e[1] * x + e[5] * y + e[9] * z + e[13] * w;
+		this.z = e[2] * x + e[6] * y + e[10] * z + e[14] * w;
+		this.w = e[3] * x + e[7] * y + e[11] * z + e[15] * w;
 
 		return this;
 
@@ -314,11 +315,11 @@ public class Vector4 extends Vector3
 		return this.divide(this, v);
 	}
 	
-	public Vector4 divide(double scalar)
+	public Vector4 divide(float scalar)
 	{
 		if ( scalar != 0 ) {
 
-			double invScalar = 1.0 / scalar;
+			float invScalar = 1.0f / scalar;
 
 			this.x *= invScalar;
 			this.y *= invScalar;
@@ -345,9 +346,9 @@ public class Vector4 extends Vector3
 	 */
 	public Vector4 setAxisAngleFromQuaternion( Quaternion q ) 
 	{
-		this.w = 2.0 * Math.acos( q.w );
+		this.w = 2.0f * (float)Math.acos( q.w );
 
-		double s = Math.sqrt( 1 - q.w * q.w );
+		float s = (float)Math.sqrt( 1f - q.w * q.w );
 
 		if ( s < 0.0001 ) 
 		{
@@ -373,17 +374,17 @@ public class Vector4 extends Vector3
 	public Vector4 setAxisAngleFromRotationMatrix( Matrix4 m ) 
 	{
 		// variables for result
-		double angle, x, y, z;
+		float angle, x, y, z;
 		// margin to allow for rounding errors
-		double epsilon = 0.01;	
+		float epsilon = 0.01f;
 		// margin to distinguish between 0 and 180 degrees
-		double epsilon2 = 0.1;		
+		float epsilon2 = 0.1f;
 
-		Float32Array te = m.getArray();
+		float[] te = m.getArray();
 
-		double m11 = te.get(0), m12 = te.get(4), m13 = te.get(8);
-		double m21 = te.get(1), m22 = te.get(5), m23 = te.get(9);
-		double m31 = te.get(2), m32 = te.get(6), m33 = te.get(10);
+		float m11 = te[0], m12 = te[4], m13 = te[8];
+		float m21 = te[1], m22 = te[5], m23 = te[9];
+		float m31 = te[2], m32 = te[6], m33 = te[10];
 
 		if ( ( Math.abs( m12 - m21 ) < epsilon )
 		  && ( Math.abs( m13 - m31 ) < epsilon )
@@ -410,14 +411,14 @@ public class Vector4 extends Vector3
 
 			// otherwise this singularity is angle = 180
 
-			angle = Math.PI;
+			angle = (float)Math.PI;
 
-			double xx = ( m11 + 1.0 ) / 2.0;
-			double yy = ( m22 + 1.0 ) / 2.0;
-			double zz = ( m33 + 1.0 ) / 2.0;
-			double xy = ( m12 + m21 ) / 4.0;
-			double xz = ( m13 + m31 ) / 4.0;
-			double yz = ( m23 + m32 ) / 4.0;
+			float xx = ( m11 + 1.0f ) / 2.0f;
+			float yy = ( m22 + 1.0f ) / 2.0f;
+			float zz = ( m33 + 1.0f ) / 2.0f;
+			float xy = ( m12 + m21 ) / 4.0f;
+			float xz = ( m13 + m31 ) / 4.0f;
+			float yz = ( m23 + m32 ) / 4.0f;
 
 			// m11 is the largest diagonal term
 			if ( ( xx > yy ) && ( xx > zz ) ) 
@@ -425,12 +426,12 @@ public class Vector4 extends Vector3
 				if ( xx < epsilon ) 
 				{
 					x = 0;
-					y = 0.707106781;
-					z = 0.707106781;
+					y = 0.707106781f;
+					z = 0.707106781f;
 				} 
 				else 
 				{
-					x = Math.sqrt( xx );
+					x = (float)Math.sqrt( xx );
 					y = xy / x;
 					z = xz / x;
 				}
@@ -440,13 +441,13 @@ public class Vector4 extends Vector3
 			{ 
 				if ( yy < epsilon ) 
 				{
-					x = 0.707106781;
+					x = 0.707106781f;
 					y = 0;
-					z = 0.707106781;
+					z = 0.707106781f;
 				} 
 				else 
 				{
-					y = Math.sqrt( yy );
+					y = (float)Math.sqrt( yy );
 					x = xy / y;
 					z = yz / y;
 				}
@@ -456,13 +457,13 @@ public class Vector4 extends Vector3
 			{ 
 				if ( zz < epsilon ) 
 				{
-					x = 0.707106781;
-					y = 0.707106781;
+					x = 0.707106781f;
+					y = 0.707106781f;
 					z = 0;
 				} 
 				else 
 				{
-					z = Math.sqrt( zz );
+					z = (float)Math.sqrt( zz );
 					x = xz / z;
 					y = yz / z;
 				}
@@ -475,7 +476,7 @@ public class Vector4 extends Vector3
 
 		// as we have reached here there are no singularities so we can handle normally
 
-		double s = Math.sqrt( ( m32 - m23 ) * ( m32 - m23 )
+		float s = (float)Math.sqrt( ( m32 - m23 ) * ( m32 - m23 )
 						 + ( m13 - m31 ) * ( m13 - m31 )
 						 + ( m21 - m12 ) * ( m21 - m12 ) ); // used to normalize
 
@@ -487,7 +488,7 @@ public class Vector4 extends Vector3
 		this.x = ( m32 - m23 ) / s;
 		this.y = ( m13 - m31 ) / s;
 		this.z = ( m21 - m12 ) / s;
-		this.w = Math.acos( ( m11 + m22 + m33 - 1.0 ) / 2.0 );
+		this.w = (float)Math.acos( ( m11 + m22 + m33 - 1.0f ) / 2.0f );
 
 		return this;
 	}
@@ -586,7 +587,7 @@ public class Vector4 extends Vector3
 		return this;
 	}
 
-	public Vector4 clamp( double minVal, double maxVal ) 
+	public Vector4 clamp( float minVal, float maxVal ) 
 	{
 		_min.set( minVal, minVal, minVal, minVal );
 		_max.set( maxVal, maxVal, maxVal, maxVal );
@@ -597,10 +598,10 @@ public class Vector4 extends Vector3
     public Vector4 floor() 
     {
 
-        this.x = Math.floor( this.x );
-        this.y = Math.floor( this.y );
-        this.z = Math.floor( this.z );
-        this.w = Math.floor( this.w );
+        this.x = (float)Math.floor( this.x );
+        this.y = (float)Math.floor( this.y );
+        this.z = (float)Math.floor( this.z );
+        this.w = (float)Math.floor( this.w );
 
         return this;
 
@@ -609,10 +610,10 @@ public class Vector4 extends Vector3
     public Vector4 ceil() 
     {
 
-        this.x = Math.ceil( this.x );
-        this.y = Math.ceil( this.y );
-        this.z = Math.ceil( this.z );
-        this.w = Math.ceil( this.w );
+        this.x = (float)Math.ceil( this.x );
+        this.y = (float)Math.ceil( this.y );
+        this.z = (float)Math.ceil( this.z );
+        this.w = (float)Math.ceil( this.w );
 
         return this;
 
@@ -633,10 +634,10 @@ public class Vector4 extends Vector3
     public Vector4 roundToZero()
     {
 
-        this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
-        this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
-        this.z = ( this.z < 0 ) ? Math.ceil( this.z ) : Math.floor( this.z );
-        this.w = ( this.w < 0 ) ? Math.ceil( this.w ) : Math.floor( this.w );
+        this.x = ( this.x < 0 ) ? (float)Math.ceil( this.x ) : (float)Math.floor( this.x );
+        this.y = ( this.y < 0 ) ? (float)Math.ceil( this.y ) : (float)Math.floor( this.y );
+        this.z = ( this.z < 0 ) ? (float)Math.ceil( this.z ) : (float)Math.floor( this.z );
+        this.w = ( this.w < 0 ) ? (float)Math.ceil( this.w ) : (float)Math.floor( this.w );
 
         return this;
 
@@ -663,7 +664,7 @@ public class Vector4 extends Vector3
 	 *            the other vector
 	 * @return the dot product of this vector and v1
 	 */
-	public double dot(Vector4 v1)
+	public float dot(Vector4 v1)
 	{
 		return (this.x * v1.x + this.y * v1.y + this.z * v1.z + this.w * v1.w);
 	}
@@ -671,24 +672,24 @@ public class Vector4 extends Vector3
 	/**
 	 * Returns the length of this vector.
 	 * 
-	 * @return the length of this vector as a double
+	 * @return the length of this vector as a float
 	 */
-	public double length()
+	public float length()
 	{
-		return Math.sqrt(lengthSq());
+		return (float)Math.sqrt(lengthSq());
 	}
 
 	/**
 	 * Returns the squared length of this vector
 	 * 
-	 * @return the squared length of this vector as a double
+	 * @return the squared length of this vector as a float
 	 */
-	public double lengthSq()
+	public float lengthSq()
 	{
 		return dot(this);
 	}
 	
-	public double lengthManhattan() 
+	public float lengthManhattan() 
 	{
 		return Math.abs( this.x ) + Math.abs( this.y ) + Math.abs( this.z ) + Math.abs( this.w );
 	}
@@ -703,9 +704,9 @@ public class Vector4 extends Vector3
 	}
 	
 
-	public Vector4 setLength(double l)
+	public Vector4 setLength(float l)
 	{
-		double oldLength = this.length();
+		float oldLength = this.length();
 
 		if ( oldLength != 0 && l != oldLength ) {
 
@@ -717,7 +718,7 @@ public class Vector4 extends Vector3
 
 	}
 	
-	public Vector4 lerp(Vector4 v1, double alpha)
+	public Vector4 lerp(Vector4 v1, float alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;

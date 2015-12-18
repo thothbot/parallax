@@ -18,10 +18,13 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
+@ThreeJsObject("THREE.Plane")
 public class Plane 
 {
 	private Vector3 normal;
-	private double constant;
+	private float constant;
 	
 	// Temporary variables
 	static Vector3 _v1 = new Vector3();
@@ -33,7 +36,7 @@ public class Plane
 		this(new Vector3(1, 0, 0), 0);
 	}
 
-	public Plane ( Vector3 normal, double constant ) 
+	public Plane ( Vector3 normal, float constant ) 
 	{
 		this.normal = normal;
 		this.constant = constant;
@@ -47,15 +50,15 @@ public class Plane
 		this.normal = normal;
 	}
 
-	public double getConstant() {
+	public float getConstant() {
 		return constant;
 	}
 
-	public void setConstant(double constant) {
+	public void setConstant(float constant) {
 		this.constant = constant;
 	}
 	
-	public Plane set( Vector3 normal, double constant ) 
+	public Plane set( Vector3 normal, float constant ) 
 	{
 		this.normal.copy( normal );
 		this.constant = constant;
@@ -63,7 +66,7 @@ public class Plane
 		return this;
 	}
 	
-	public Plane setComponents( double x, double y, double z, double w ) {
+	public Plane setComponents( float x, float y, float z, float w ) {
 
 		this.normal.set( x, y, z );
 		this.constant = w;
@@ -102,7 +105,7 @@ public class Plane
 	{
 		// Note: will lead to a divide by zero if the plane is invalid.
 
-		double inverseNormalLength = 1.0 / this.normal.length();
+		float inverseNormalLength = 1.0f / this.normal.length();
 		this.normal.multiply( inverseNormalLength );
 		this.constant *= inverseNormalLength;
 
@@ -117,12 +120,12 @@ public class Plane
 		return this;
 	}
 
-	public double distanceToPoint( Vector3 point ) 
+	public float distanceToPoint( Vector3 point ) 
 	{
 		return this.normal.dot( point ) + this.constant;
 	}
 
-	public double distanceToSphere( Sphere sphere ) 
+	public float distanceToSphere( Sphere sphere ) 
 	{
 		return this.distanceToPoint( sphere.getCenter() ) - sphere.getRadius();
 	}
@@ -139,7 +142,7 @@ public class Plane
 	
 	public Vector3 orthoPoint( Vector3 point, Vector3 optionalTarget ) 
 	{
-		double perpendicularMagnitude = this.distanceToPoint( point );
+		float perpendicularMagnitude = this.distanceToPoint( point );
 
 		return optionalTarget.copy( this.normal ).multiply( perpendicularMagnitude );
 	}
@@ -151,8 +154,8 @@ public class Plane
 	{
 		// Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
 
-		double startSign = this.distanceToPoint( line.getStart() );
-		double endSign = this.distanceToPoint( line.getEnd() );
+		float startSign = this.distanceToPoint( line.getStart() );
+		float endSign = this.distanceToPoint( line.getEnd() );
 
 		return ( startSign < 0 && endSign > 0 ) || ( endSign < 0 && startSign > 0 );
 	}
@@ -166,7 +169,7 @@ public class Plane
 	{
 		Vector3 direction = line.delta( _v1 );
 
-		double denominator = this.normal.dot( direction );
+		float denominator = this.normal.dot( direction );
 
 		if ( denominator == 0 ) {
 
@@ -182,7 +185,7 @@ public class Plane
 
 		}
 
-		double t = - ( line.getStart().dot( this.normal ) + this.constant ) / denominator;
+		float t = - ( line.getStart().dot( this.normal ) + this.constant ) / denominator;
 
 		if ( t < 0 || t > 1 ) {
 

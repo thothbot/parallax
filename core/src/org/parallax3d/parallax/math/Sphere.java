@@ -18,13 +18,16 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
 import java.util.List;
 
+@ThreeJsObject("THREE.Sphere")
 public class Sphere 
 {
 
 	private Vector3 center;
-	private double radius;
+	private float radius;
 	
 	// Temporary variables
 	static Box3 _box = new Box3();
@@ -34,12 +37,12 @@ public class Sphere
 		this(new Vector3(), 0);
 	}
 	
-	public Sphere(double radius)
+	public Sphere(float radius)
 	{
 		this(new Vector3(), radius);
 	}
 
-	public Sphere(Vector3 center, double radius)
+	public Sphere(Vector3 center, float radius)
 	{
 		this.center = center;
 		this.radius = radius;
@@ -53,15 +56,15 @@ public class Sphere
 		this.center = center;
 	}
 
-	public double getRadius() {
+	public float getRadius() {
 		return radius;
 	}
 
-	public void setRadius(double radius) {
+	public void setRadius(float radius) {
 		this.radius = radius;
 	}
 	
-	public Sphere set( Vector3 center, double radius ) 
+	public Sphere set( Vector3 center, float radius ) 
 	{
 		this.center.copy( center );
 		this.radius = radius;
@@ -85,14 +88,14 @@ public class Sphere
 			_box.setFromPoints( points ).center( center );
 		}
 
-		double maxRadiusSq = 0;
+		float maxRadiusSq = 0;
 
 		for ( int i = 0, il = points.length; i < il; i ++ ) 
 		{
 			maxRadiusSq = Math.max( maxRadiusSq, center.distanceToSquared( points[ i ] ) );
 		}
 
-		this.radius = Math.sqrt( maxRadiusSq );
+		this.radius = (float)Math.sqrt( maxRadiusSq );
 
 		return this;
 
@@ -116,7 +119,7 @@ public class Sphere
 		return ( point.distanceToSquared( this.center ) <= ( this.radius * this.radius ) );
 	}
 	
-	public double distanceToPoint( Vector3 point ) 
+	public float distanceToPoint( Vector3 point ) 
 	{
 		return ( point.distanceTo( this.center ) - this.radius );
 
@@ -124,7 +127,7 @@ public class Sphere
 
 	public boolean isIntersectsSphere( Sphere sphere ) 
 	{
-		double radiusSum = this.radius + sphere.radius;
+		float radiusSum = this.radius + sphere.radius;
 
 		return sphere.center.distanceToSquared( this.center ) <= ( radiusSum * radiusSum );
 	}
@@ -136,7 +139,7 @@ public class Sphere
 	
 	public Vector3 clampPoint( Vector3 point, Vector3 optionalTarget ) 
 	{
-		double deltaLengthSq = this.center.distanceToSquared( point );
+		float deltaLengthSq = this.center.distanceToSquared( point );
 
 		optionalTarget.copy( point );
 

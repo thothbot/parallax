@@ -20,14 +20,16 @@ package org.parallax3d.parallax.math;
 
 import java.util.List;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.BufferGeometry;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.core.GeometryObject;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.core.AbstractGeometry;
 
-public class Box3 
+@ThreeJsObject("THREE.Box3")
+public class Box3
 {
 	private Vector3 min;
 	private Vector3 max;
@@ -37,8 +39,8 @@ public class Box3
 		
 	public Box3() 
 	{
-		this(new Vector3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
-				new Vector3(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
+		this(new Vector3(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
+				new Vector3(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY));
 	}
 	
 	public Box3(Vector3 min, Vector3 max) 
@@ -90,7 +92,7 @@ public class Box3
 
 	public Box3 setFromCenterAndSize( Vector3 center, Vector3 size ) 
 	{		
-		Vector3 halfSize = _v1.copy( size ).multiply( 0.5 );
+		Vector3 halfSize = _v1.copy( size ).multiply( 0.5f );
 
 		this.min.copy( center ).sub( halfSize );
 		this.max.copy( center ).add( halfSize );
@@ -137,17 +139,18 @@ public class Box3
 
 					} else if ( geometry instanceof BufferGeometry && ((BufferGeometry)geometry).getAttribute("position") != null ) {
 
-						Float32Array positions = (Float32Array)((BufferGeometry)geometry).getAttribute("position").getArray();
-
-						for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {
-
-							v1.set( positions.get( i ), positions.get( i + 1 ), positions.get( i + 2 ) );
-
-							v1.apply( node.getMatrixWorld() );
-
-							expandByPoint( v1 );
-
-						}
+						Log.error("Temporary disabled");
+//						Float32Array positions = (Float32Array)((BufferGeometry)geometry).getAttribute("position").getArray();
+//
+//						for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {
+//
+//							v1.set( positions.get( i ), positions.get( i + 1 ), positions.get( i + 2 ) );
+//
+//							v1.apply( node.getMatrixWorld() );
+//
+//							expandByPoint( v1 );
+//
+//						}
 					}
 				}
 			}
@@ -167,8 +170,8 @@ public class Box3
 
 	public Box3 makeEmpty() 
 	{
-		this.min.x = this.min.y = this.min.z = Double.POSITIVE_INFINITY;
-		this.max.x = this.max.y = this.max.z = Double.NEGATIVE_INFINITY;
+		this.min.x = this.min.y = this.min.z = Float.POSITIVE_INFINITY;
+		this.max.x = this.max.y = this.max.z = Float.NEGATIVE_INFINITY;
 
 		return this;
 	}
@@ -188,7 +191,7 @@ public class Box3
 	
 	public Vector3 center( Vector3 optionalTarget ) 
 	{
-		return optionalTarget.add( this.min, this.max ).multiply( 0.5 );
+		return optionalTarget.add( this.min, this.max ).multiply( 0.5f );
 	}
 
 	public Vector3 size()
@@ -217,7 +220,7 @@ public class Box3
 		return this;
 	}
 
-	public Box3 expandByScalar( double scalar ) 
+	public Box3 expandByScalar( float scalar ) 
 	{
 		this.min.add( -scalar );
 		this.max.add( scalar );
@@ -288,7 +291,7 @@ public class Box3
 		return optionalTarget.copy( point ).clamp( this.min, this.max );
 	}
 
-	public double distanceToPoint( Vector3 point ) 
+	public float distanceToPoint( Vector3 point ) 
 	{
 		Vector3 clampedPoint = _v1.copy( point ).clamp( this.min, this.max );
 		return clampedPoint.sub( point ).length();
@@ -302,7 +305,7 @@ public class Box3
 	public Sphere getBoundingSphere( Sphere optionalTarget ) 
 	{
 		optionalTarget.setCenter( this.center() );
-		optionalTarget.setRadius( this.size( _v1 ).length() * 0.5 );
+		optionalTarget.setRadius( this.size( _v1 ).length() * 0.5f );
 
 		return optionalTarget;
 	}

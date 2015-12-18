@@ -18,6 +18,9 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
+@ThreeJsObject("THREE.Line3")
 public class Line3 
 {
 
@@ -78,7 +81,7 @@ public class Line3
 	
 	public Vector3 center( Vector3 optionalTarget ) 
 	{
-		return optionalTarget.add( this.start, this.end ).multiply( 0.5 );
+		return optionalTarget.add( this.start, this.end ).multiply( 0.5f );
 	}
 
 	public Vector3 delta()
@@ -91,40 +94,40 @@ public class Line3
 		return optionalTarget.sub( this.end, this.start );
 	}
 
-	public double distanceSq() 
+	public float distanceSq() 
 	{
 		return this.start.distanceToSquared( this.end );
 	}
 
-	public double distance() 
+	public float distance() 
 	{
 		return this.start.distanceTo( this.end );
 	}
 
-	public Vector3 at( double t )
+	public Vector3 at( float t )
 	{
 		return at(t, new Vector3());
 	}
 	
-	public Vector3 at( double t, Vector3 optionalTarget ) 
+	public Vector3 at( float t, Vector3 optionalTarget ) 
 	{
 		return this.delta( optionalTarget ).multiply( t ).add( this.start );
 	}
 
-	public double closestPointToPointParameter( Vector3 point ) 
+	public float closestPointToPointParameter( Vector3 point ) 
 	{
 		return closestPointToPointParameter(point, false);
 	}
 	
-	public double closestPointToPointParameter( Vector3 point, boolean clampToLine ) 
+	public float closestPointToPointParameter( Vector3 point, boolean clampToLine ) 
 	{
 		_startP.sub( point, this.start );
 		_startEnd.sub( this.end, this.start );
 
-		double startEnd2 = _startEnd.dot( _startEnd );
-		double startEnd_startP = _startEnd.dot( _startP );
+		float startEnd2 = _startEnd.dot( _startEnd );
+		float startEnd_startP = _startEnd.dot( _startP );
 
-		double t = startEnd_startP / startEnd2;
+		float t = startEnd_startP / startEnd2;
 
 		if ( clampToLine ) {
 
@@ -142,7 +145,7 @@ public class Line3
 	
 	public Vector3 closestPointToPoint( Vector3 point, boolean clampToLine, Vector3 optionalTarget ) 
 	{
-		double t = this.closestPointToPointParameter( point, clampToLine );
+		float t = this.closestPointToPointParameter( point, clampToLine );
 
         return this.delta( optionalTarget ).multiply( t ).add( this.start );
 	}

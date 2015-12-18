@@ -18,9 +18,10 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.ThreeJsObject;
 
+@ThreeJsObject("THREE.Euler")
 public class Euler {
 	
 	public static interface EulerChangeHandler 
@@ -34,17 +35,17 @@ public class Euler {
 	/**
 	 * The X coordinate.
 	 */
-	private double x;
+	private float x;
 
 	/**
 	 * The Y coordinate.
 	 */
-	private double y;
+	private float y;
 
 	/**
 	 * The Z coordinate.
 	 */
-	private double z;
+	private float z;
 	
 	private String order;
 	
@@ -55,15 +56,15 @@ public class Euler {
 	
 	public Euler() 
 	{
-		this(0.0,0.0,0.0);
+		this(0.0f, 0.0f, 0.0f);
 	}
 	
-	public Euler (double x, double y, double z) 
+	public Euler (float x, float y, float z) 
 	{
 		this(x, y, z, DefaultOrder);
 	}
 	
-	public Euler (double x, double y, double z, String order) 
+	public Euler (float x, float y, float z, String order) 
 	{
 		this.x = x;
 		this.y = y;
@@ -89,7 +90,7 @@ public class Euler {
 	 * 
 	 * @param x the X coordinate
 	 */
-	public void addX(double x)
+	public void addX(float x)
 	{
 		this.x += x;
 		this.onChange();
@@ -101,7 +102,7 @@ public class Euler {
 	 * 
 	 * @param y the Y coordinate
 	 */
-	public void addY(double y)
+	public void addY(float y)
 	{
 		this.y += y;
 		this.onChange();
@@ -113,38 +114,38 @@ public class Euler {
 	 * 
 	 * @param z the Z coordinate
 	 */
-	public void addZ(double z)
+	public void addZ(float z)
 	{
 		this.z += z;
 		this.onChange();
 	}
 	
-	public double getX () {
+	public float getX () {
 		return this.x;
 	}
 
-	public void setX ( double value ) {
+	public void setX ( float value ) {
 		this.x = value;
 		
 		this.onChange();
 	}
 
-	public double getY() {
+	public float getY() {
 		return this.y;
 	}
 
-	public void setY ( double value ) 
+	public void setY ( float value ) 
 	{
 		this.y = value;
 		
 		this.onChange();
 	}
 
-	public double getZ() {
+	public float getZ() {
 		return this.z;
 	}
 
-	public void setZ ( double value ) 
+	public void setZ ( float value ) 
 	{
 		this.z = value;
 		
@@ -163,12 +164,12 @@ public class Euler {
 		this.onChange();
 	}
 	
-	public Euler set( double x, double y, double z)
+	public Euler set( float x, float y, float z)
 	{
 		return set(x, y, z, DefaultOrder);
 	}
 
-	public Euler set( double x, double y, double z, String order ) 
+	public Euler set( float x, float y, float z, String order ) 
 	{
 		this.x = x;
 		this.y = y;
@@ -203,103 +204,103 @@ public class Euler {
 
 		// assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
-		Float32Array te = m.getArray();
-		double m11 = te.get( 0 ), m12 = te.get( 4 ), m13 = te.get( 8 );
-		double m21 = te.get( 1 ), m22 = te.get( 5 ), m23 = te.get( 9 );
-		double m31 = te.get( 2 ), m32 = te.get( 6 ), m33 = te.get( 10 );
+		float[] te = m.getArray();
+		float m11 = te[0], m12 = te[4], m13 = te[8];
+		float m21 = te[1], m22 = te[5], m23 = te[9];
+		float m31 = te[2], m32 = te[6], m33 = te[10];
 
 		if ( order.equals("XYZ") ) {
 
-			this.y = Math.asin( Mathematics.clamp( m13, - 1, 1 ) );
+			this.y = (float)Math.asin( Mathematics.clamp( m13, - 1, 1 ) );
 
 			if ( Math.abs( m13 ) < 0.99999 ) {
 
-				this.x = Math.atan2( - m23, m33 );
-				this.z = Math.atan2( - m12, m11 );
+				this.x = (float)Math.atan2( - m23, m33 );
+				this.z = (float)Math.atan2( - m12, m11 );
 
 			} else {
 
-				this.x = Math.atan2( m32, m22 );
+				this.x = (float)Math.atan2( m32, m22 );
 				this.z = 0;
 
 			}
 
 		} else if ( order.equals("YXZ") ) {
 
-			this.x = Math.asin( - Mathematics.clamp( m23, - 1, 1 ) );
+			this.x = (float)Math.asin( - Mathematics.clamp( m23, - 1, 1 ) );
 
 			if ( Math.abs( m23 ) < 0.99999 ) {
 
-				this.y = Math.atan2( m13, m33 );
-				this.z = Math.atan2( m21, m22 );
+				this.y = (float)Math.atan2( m13, m33 );
+				this.z = (float)Math.atan2( m21, m22 );
 
 			} else {
 
-				this.y = Math.atan2( - m31, m11 );
+				this.y = (float)Math.atan2( - m31, m11 );
 				this.z = 0;
 
 			}
 
 		} else if ( order.equals("ZXY") ) {
 
-			this.x = Math.asin( Mathematics.clamp( m32, - 1, 1 ) );
+			this.x = (float)Math.asin( Mathematics.clamp( m32, - 1, 1 ) );
 
 			if ( Math.abs( m32 ) < 0.99999 ) {
 
-				this.y = Math.atan2( - m31, m33 );
-				this.z = Math.atan2( - m12, m22 );
+				this.y = (float)Math.atan2( - m31, m33 );
+				this.z = (float)Math.atan2( - m12, m22 );
 
 			} else {
 
 				this.y = 0;
-				this.z = Math.atan2( m21, m11 );
+				this.z = (float)Math.atan2( m21, m11 );
 
 			}
 
 		} else if ( order.equals("ZYX") ) {
 
-			this.y = Math.asin( - Mathematics.clamp( m31, - 1, 1 ) );
+			this.y = (float)Math.asin( - Mathematics.clamp( m31, - 1, 1 ) );
 
 			if ( Math.abs( m31 ) < 0.99999 ) {
 
-				this.x = Math.atan2( m32, m33 );
-				this.z = Math.atan2( m21, m11 );
+				this.x = (float)Math.atan2( m32, m33 );
+				this.z = (float)Math.atan2( m21, m11 );
 
 			} else {
 
 				this.x = 0;
-				this.z = Math.atan2( - m12, m22 );
+				this.z = (float)Math.atan2( - m12, m22 );
 
 			}
 
 		} else if ( order.equals("YZX") ) {
 
-			this.z = Math.asin( Mathematics.clamp( m21, - 1, 1 ) );
+			this.z = (float)Math.asin( Mathematics.clamp( m21, - 1, 1 ) );
 
 			if ( Math.abs( m21 ) < 0.99999 ) {
 
-				this.x = Math.atan2( - m23, m22 );
-				this.y = Math.atan2( - m31, m11 );
+				this.x = (float)Math.atan2( - m23, m22 );
+				this.y = (float)Math.atan2( - m31, m11 );
 
 			} else {
 
 				this.x = 0;
-				this.y = Math.atan2( m13, m33 );
+				this.y = (float)Math.atan2( m13, m33 );
 
 			}
 
 		} else if ( order.equals("XZY") ) {
 
-			this.z = Math.asin( - Mathematics.clamp( m12, - 1, 1 ) );
+			this.z = (float)Math.asin( - Mathematics.clamp( m12, - 1, 1 ) );
 
 			if ( Math.abs( m12 ) < 0.99999 ) {
 
-				this.x = Math.atan2( m32, m22 );
-				this.y = Math.atan2( m13, m11 );
+				this.x = (float)Math.atan2( m32, m22 );
+				this.y = (float)Math.atan2( m13, m11 );
 
 			} else {
 
-				this.x = Math.atan2( - m23, m33 );
+				this.x = (float)Math.atan2( - m23, m33 );
 				this.y = 0;
 
 			}
@@ -333,46 +334,46 @@ public class Euler {
 
 		// http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m
 
-		double sqx = q.x * q.x;
-		double sqy = q.y * q.y;
-		double sqz = q.z * q.z;
-		double sqw = q.w * q.w;
+		float sqx = q.x * q.x;
+		float sqy = q.y * q.y;
+		float sqz = q.z * q.z;
+		float sqw = q.w * q.w;
 
 		if ( order.equals("XYZ") ) {
 
-			this.x = Math.atan2( 2 * ( q.x * q.w - q.y * q.z ), ( sqw - sqx - sqy + sqz ) );
-			this.y = Math.asin(  Mathematics.clamp( 2 * ( q.x * q.z + q.y * q.w ), - 1, 1 ) );
-			this.z = Math.atan2( 2 * ( q.z * q.w - q.x * q.y ), ( sqw + sqx - sqy - sqz ) );
+			this.x = (float)Math.atan2( 2 * ( q.x * q.w - q.y * q.z ), ( sqw - sqx - sqy + sqz ) );
+			this.y = (float)Math.asin(  Mathematics.clamp( 2 * ( q.x * q.z + q.y * q.w ), - 1, 1 ) );
+			this.z = (float)Math.atan2( 2 * ( q.z * q.w - q.x * q.y ), ( sqw + sqx - sqy - sqz ) );
 
 		} else if ( order.equals("YXZ") ) {
 
-			this.x = Math.asin(  Mathematics.clamp( 2 * ( q.x * q.w - q.y * q.z ), - 1, 1 ) );
-			this.y = Math.atan2( 2 * ( q.x * q.z + q.y * q.w ), ( sqw - sqx - sqy + sqz ) );
-			this.z = Math.atan2( 2 * ( q.x * q.y + q.z * q.w ), ( sqw - sqx + sqy - sqz ) );
+			this.x = (float)Math.asin(  Mathematics.clamp( 2 * ( q.x * q.w - q.y * q.z ), - 1, 1 ) );
+			this.y = (float)Math.atan2( 2 * ( q.x * q.z + q.y * q.w ), ( sqw - sqx - sqy + sqz ) );
+			this.z = (float)Math.atan2( 2 * ( q.x * q.y + q.z * q.w ), ( sqw - sqx + sqy - sqz ) );
 
 		} else if ( order.equals("ZXY") ) {
 
-			this.x = Math.asin(  Mathematics.clamp( 2 * ( q.x * q.w + q.y * q.z ), - 1, 1 ) );
-			this.y = Math.atan2( 2 * ( q.y * q.w - q.z * q.x ), ( sqw - sqx - sqy + sqz ) );
-			this.z = Math.atan2( 2 * ( q.z * q.w - q.x * q.y ), ( sqw - sqx + sqy - sqz ) );
+			this.x = (float)Math.asin(  Mathematics.clamp( 2 * ( q.x * q.w + q.y * q.z ), - 1, 1 ) );
+			this.y = (float)Math.atan2( 2 * ( q.y * q.w - q.z * q.x ), ( sqw - sqx - sqy + sqz ) );
+			this.z = (float)Math.atan2( 2 * ( q.z * q.w - q.x * q.y ), ( sqw - sqx + sqy - sqz ) );
 
 		} else if ( order.equals("ZYX") ) {
 
-			this.x = Math.atan2( 2 * ( q.x * q.w + q.z * q.y ), ( sqw - sqx - sqy + sqz ) );
-			this.y = Math.asin(  Mathematics.clamp( 2 * ( q.y * q.w - q.x * q.z ), - 1, 1 ) );
-			this.z = Math.atan2( 2 * ( q.x * q.y + q.z * q.w ), ( sqw + sqx - sqy - sqz ) );
+			this.x = (float)Math.atan2( 2 * ( q.x * q.w + q.z * q.y ), ( sqw - sqx - sqy + sqz ) );
+			this.y = (float)Math.asin(  Mathematics.clamp( 2 * ( q.y * q.w - q.x * q.z ), - 1, 1 ) );
+			this.z = (float)Math.atan2( 2 * ( q.x * q.y + q.z * q.w ), ( sqw + sqx - sqy - sqz ) );
 
 		} else if ( order.equals("YZX") ) {
 
-			this.x = Math.atan2( 2 * ( q.x * q.w - q.z * q.y ), ( sqw - sqx + sqy - sqz ) );
-			this.y = Math.atan2( 2 * ( q.y * q.w - q.x * q.z ), ( sqw + sqx - sqy - sqz ) );
-			this.z = Math.asin(  Mathematics.clamp( 2 * ( q.x * q.y + q.z * q.w ), - 1, 1 ) );
+			this.x = (float)Math.atan2( 2 * ( q.x * q.w - q.z * q.y ), ( sqw - sqx + sqy - sqz ) );
+			this.y = (float)Math.atan2( 2 * ( q.y * q.w - q.x * q.z ), ( sqw + sqx - sqy - sqz ) );
+			this.z = (float)Math.asin(  Mathematics.clamp( 2 * ( q.x * q.y + q.z * q.w ), - 1, 1 ) );
 
 		} else if ( order.equals("XZY") ) {
 
-			this.x = Math.atan2( 2 * ( q.x * q.w + q.y * q.z ), ( sqw - sqx + sqy - sqz ) );
-			this.y = Math.atan2( 2 * ( q.x * q.z + q.y * q.w ), ( sqw + sqx - sqy - sqz ) );
-			this.z = Math.asin(  Mathematics.clamp( 2 * ( q.z * q.w - q.x * q.y ), - 1, 1 ) );
+			this.x = (float)Math.atan2( 2 * ( q.x * q.w + q.y * q.z ), ( sqw - sqx + sqy - sqz ) );
+			this.y = (float)Math.atan2( 2 * ( q.x * q.z + q.y * q.w ), ( sqw + sqx - sqy - sqz ) );
+			this.z = (float)Math.asin(  Mathematics.clamp( 2 * ( q.z * q.w - q.x * q.y ), - 1, 1 ) );
 
 		} else {
 

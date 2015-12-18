@@ -16,18 +16,15 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.core;
+package org.parallax3d.parallax;
 
-import com.google.gwt.dom.client.Element;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-/**
- * gwt version of tree.js CSS3DObject
- *
- * @author svv2014
- */
-public class CSS3DSprite extends CSS3DObject{
-
-    public CSS3DSprite(Element element) {
-        super(element);
-    }
+@Target(value = ElementType.TYPE)
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface ThreeJsObject {
+    String value();
 }

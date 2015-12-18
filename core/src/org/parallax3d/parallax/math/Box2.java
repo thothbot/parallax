@@ -18,8 +18,11 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
 import java.util.List;
 
+@ThreeJsObject("THREE.Box2")
 public class Box2 
 {
 	private Vector2 min;
@@ -30,8 +33,8 @@ public class Box2
 
 	public Box2()
 	{
-		this(new Vector2(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY), 
-				new Vector2(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
+		this(new Vector2(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
+				new Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY));
 	}
 	public Box2( Vector2 min, Vector2 max ) 
 	{
@@ -81,7 +84,7 @@ public class Box2
 
 	public Box2 setFromCenterAndSize( Vector2 center, Vector2 size ) 
 	{		
-		Vector2 halfSize = _v1.copy( size ).multiply( 0.5 );
+		Vector2 halfSize = _v1.copy( size ).multiply( 0.5f );
 		this.min.copy( center ).sub( halfSize );
 		this.max.copy( center ).add( halfSize );
 
@@ -98,8 +101,8 @@ public class Box2
 
 	public Box2 makeEmpty()
 	{
-		this.min.x = this.min.y = Double.POSITIVE_INFINITY;
-		this.max.x = this.max.y = Double.NEGATIVE_INFINITY;
+		this.min.x = this.min.y = Float.POSITIVE_INFINITY;
+		this.max.x = this.max.y = Float.NEGATIVE_INFINITY;
 
 		return this;
 	}
@@ -117,7 +120,7 @@ public class Box2
 	
 	public Vector2 center( Vector2 optionalTarget ) 
 	{
-		return optionalTarget.add( this.min, this.max ).multiply( 0.5 );
+		return optionalTarget.add( this.min, this.max ).multiply( 0.5f );
 	}
 
 	public Vector2 size()
@@ -146,7 +149,7 @@ public class Box2
 		return this;
 	}
 
-	public Box2 expandByScalar( double scalar ) 
+	public Box2 expandByScalar( float scalar )
 	{
 		this.min.add( -scalar );
 		this.max.add( scalar );
@@ -216,7 +219,7 @@ public class Box2
 		return optionalTarget.copy( point ).clamp( this.min, this.max );
 	}
 
-	public double distanceToPoint( Vector2 point ) 
+	public float distanceToPoint( Vector2 point )
 	{
 		Vector2 v1 = new Vector2();
 		

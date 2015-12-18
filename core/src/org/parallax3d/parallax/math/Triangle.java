@@ -18,8 +18,11 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
 import java.util.List;
 
+@ThreeJsObject("THREE.Triangle")
 public class Triangle 
 {
 	private Vector3 a;
@@ -79,10 +82,10 @@ public class Triangle
 		_v0.sub( a, b );
 		optionalTarget.cross( _v0 );
 
-		double resultLengthSq = optionalTarget.lengthSq();
+		float resultLengthSq = optionalTarget.lengthSq();
 		if ( resultLengthSq > 0 ) {
 
-			return optionalTarget.multiply( 1.0 / Math.sqrt( resultLengthSq ) );
+			return optionalTarget.multiply( 1.0f / (float)Math.sqrt( resultLengthSq ) );
 
 		}
 
@@ -105,27 +108,27 @@ public class Triangle
 		_v1.sub( b, a );
 		_v2.sub( point, a );
 
-		double dot00 = _v0.dot( _v0 );
-		double dot01 = _v0.dot( _v1 );
-		double dot02 = _v0.dot( _v2 );
-		double dot11 = _v1.dot( _v1 );
-		double dot12 = _v1.dot( _v2 );
+		float dot00 = _v0.dot( _v0 );
+		float dot01 = _v0.dot( _v1 );
+		float dot02 = _v0.dot( _v2 );
+		float dot11 = _v1.dot( _v1 );
+		float dot12 = _v1.dot( _v2 );
 
-		double denom = ( dot00 * dot11 - dot01 * dot01 );
+		float denom = ( dot00 * dot11 - dot01 * dot01 );
 
 		// colinear or singular triangle
 		if ( denom == 0 ) {
 			// arbitrary location outside of triangle?
 			// not sure if this is the best idea, maybe should be returning undefined
-			return optionalTarget.set( - 2.0, - 1.0, - 1.0 );
+			return optionalTarget.set( - 2.0f, - 1.0f, - 1.0f );
 		}
 
-		double invDenom = 1.0 / denom;
-		double u = ( dot11 * dot02 - dot01 * dot12 ) * invDenom;
-		double v = ( dot00 * dot12 - dot01 * dot02 ) * invDenom;
+		float invDenom = 1.0f / denom;
+		float u = ( dot11 * dot02 - dot01 * dot12 ) * invDenom;
+		float v = ( dot00 * dot12 - dot01 * dot02 ) * invDenom;
 
 		// barycoordinates must always sum to 1
-		return optionalTarget.set( 1.0 - u - v, v, u );
+		return optionalTarget.set( 1.0f - u - v, v, u );
 
 	}
 
@@ -163,12 +166,12 @@ public class Triangle
 		return this;
 	}
 
-	public double area() 
+	public float area()
 	{
 		_v0.sub( this.c, this.b );
 		_v1.sub( this.a, this.b );
 
-		return _v0.cross( _v1 ).length() * 0.5;
+		return _v0.cross( _v1 ).length() * 0.5f;
 	}
 
 	public Vector3 midpoint()
@@ -178,7 +181,7 @@ public class Triangle
 	
 	public Vector3 midpoint( Vector3 optionalTarget ) 
 	{
-		return optionalTarget.add( this.a, this.b ).add( this.c ).multiply( 1.0 / 3 );
+		return optionalTarget.add( this.a, this.b ).add( this.c ).multiply( 1.0f / 3 );
 
 	}
 
