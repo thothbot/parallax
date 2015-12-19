@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.BufferAttribute;
 import org.parallax3d.parallax.core.GeometryObject;

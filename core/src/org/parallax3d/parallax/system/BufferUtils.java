@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.ParallaxRuntimeException;
 import org.parallax3d.parallax.math.Matrix3;
 import org.parallax3d.parallax.math.Matrix4;
 

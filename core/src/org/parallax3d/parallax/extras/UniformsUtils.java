@@ -21,7 +21,7 @@ package org.parallax3d.parallax.extras;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.core.FastMap;
 
 /**

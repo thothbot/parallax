@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.extras.helpers;
 
-import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.AbstractGeometry;
 import org.parallax3d.parallax.core.BufferGeometry;

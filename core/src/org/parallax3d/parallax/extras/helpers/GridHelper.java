@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.extras.helpers;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.objects.Line;

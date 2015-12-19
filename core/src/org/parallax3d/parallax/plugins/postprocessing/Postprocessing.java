@@ -29,7 +29,7 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMagFilter;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMinFilter;
 import org.parallax3d.parallax.renderers.Plugin;
 import org.parallax3d.parallax.renderers.WebGLRenderer;
-import org.parallax3d.parallax.textures.RenderTargetTexture;
+import org.parallax3d.parallax.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.cameras.OrthographicCamera;

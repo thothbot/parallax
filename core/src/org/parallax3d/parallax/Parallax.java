@@ -18,9 +18,13 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.files.Files;
+import org.parallax3d.parallax.system.files.Files;
+import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.GL30;
 
 public class Parallax {
+    public static Application app;
+    public static Graphics graphics;
     public static Files files;
 
     public static GL20 gl;

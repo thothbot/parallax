@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.extras;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * This class implements some helpers methods for Curve instances

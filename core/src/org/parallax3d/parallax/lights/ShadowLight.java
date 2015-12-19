@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.lights;
 
-import org.parallax3d.parallax.ThreeJsObject;
-import org.parallax3d.parallax.textures.RenderTargetTexture;
+import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.extras.helpers.CameraHelper;

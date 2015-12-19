@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.cameras.Camera;

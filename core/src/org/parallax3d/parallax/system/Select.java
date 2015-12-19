@@ -16,8 +16,6 @@
 
 package org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.ParallaxRuntimeException;
-
 import java.util.Comparator;
 
 /** This class is for selecting a ranked element (kth ordered statistic) from an unordered list in faster time than sorting the

@@ -20,7 +20,7 @@ package org.parallax3d.parallax.extras.geometries;
 
 import java.util.Arrays;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.Face3;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.math.Vector2;

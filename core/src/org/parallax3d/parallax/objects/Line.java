@@ -20,7 +20,6 @@ package org.parallax3d.parallax.objects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferUsage;
 import org.parallax3d.parallax.renderers.WebGlRendererInfo;
@@ -36,7 +35,7 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BeginMode;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferTarget;
 import org.parallax3d.parallax.renderers.WebGLGeometry;
 import org.parallax3d.parallax.renderers.WebGLRenderer;
-import org.parallax3d.parallax.shaders.Attribute;
+import org.parallax3d.parallax.renderers.shaders.Attribute;
 import org.parallax3d.parallax.materials.LineBasicMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;

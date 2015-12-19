@@ -26,7 +26,7 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.renderers.WebGLGeometry;
 import org.parallax3d.parallax.renderers.WebGLRenderer;
-import org.parallax3d.parallax.shaders.Attribute;
+import org.parallax3d.parallax.renderers.shaders.Attribute;
 import org.parallax3d.parallax.materials.Material;
 import org.parallax3d.parallax.objects.Line;
 import org.parallax3d.parallax.objects.Mesh;

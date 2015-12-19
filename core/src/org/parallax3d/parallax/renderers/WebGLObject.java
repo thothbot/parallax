@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.renderers;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.AbstractGeometry;
 import org.parallax3d.parallax.core.GeometryGroup;
 import org.parallax3d.parallax.core.GeometryObject;

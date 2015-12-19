@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.textures;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint8Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.math.Color;

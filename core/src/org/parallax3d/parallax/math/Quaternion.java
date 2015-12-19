@@ -18,8 +18,6 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.ThreeJsObject;
-
 /**
  * Implementation of Quaternion which provide a convenient mathematical notation 
  * for representing orientations and rotations of objects in three dimensions.

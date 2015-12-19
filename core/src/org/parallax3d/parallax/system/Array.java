@@ -16,7 +16,6 @@
 
 package org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.ParallaxRuntimeException;
 import org.parallax3d.parallax.math.MathUtils;
 import org.parallax3d.parallax.system.reflect.ArrayReflection;
 

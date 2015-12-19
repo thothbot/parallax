@@ -18,10 +18,10 @@
 
 package org.parallax3d.parallax.materials;
 
-import org.parallax3d.parallax.ThreeJsObject;
-import org.parallax3d.parallax.shaders.BasicShader;
+import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.renderers.shaders.BasicShader;
 import org.parallax3d.parallax.textures.Texture;
-import org.parallax3d.parallax.shaders.Shader;
+import org.parallax3d.parallax.renderers.shaders.Shader;
 import org.parallax3d.parallax.math.Color;
 
 /**

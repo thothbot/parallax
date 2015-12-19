@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.core;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLBuffer;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.TypeArray;

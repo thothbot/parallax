@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.extras.helpers;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.lights.PointLight;
 import org.parallax3d.parallax.materials.MeshBasicMaterial;

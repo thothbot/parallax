@@ -20,7 +20,7 @@ package org.parallax3d.parallax.extras;
 
 import java.util.List;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.materials.Material;

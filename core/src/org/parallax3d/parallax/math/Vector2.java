@@ -18,8 +18,6 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.ThreeJsObject;
-
 /**
  * This class is realization of (X, Y) vector. 
  * Where:

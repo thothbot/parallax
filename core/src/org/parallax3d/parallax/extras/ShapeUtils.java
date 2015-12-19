@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.FastMap;
 import org.parallax3d.parallax.math.Vector2;
 

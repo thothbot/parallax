@@ -20,8 +20,8 @@ package org.parallax3d.parallax.plugins.postprocessing;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.shaders.Shader;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.Shader;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.materials.ShaderMaterial;
 
 public class ShaderPass extends Pass

@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.extras.curves;
 
-import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.extras.ShapeUtils;

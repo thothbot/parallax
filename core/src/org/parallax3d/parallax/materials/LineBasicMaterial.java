@@ -20,10 +20,9 @@ package org.parallax3d.parallax.materials;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.ThreeJsObject;
-import org.parallax3d.parallax.shaders.BasicShader;
-import org.parallax3d.parallax.shaders.Shader;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.BasicShader;
+import org.parallax3d.parallax.renderers.shaders.Shader;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
 

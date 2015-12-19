@@ -20,11 +20,9 @@ package org.parallax3d.parallax.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
 import org.parallax3d.parallax.math.*;

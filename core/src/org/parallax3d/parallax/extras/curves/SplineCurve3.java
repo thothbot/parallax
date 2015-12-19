@@ -21,7 +21,7 @@ package org.parallax3d.parallax.extras.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.extras.CurveUtils;

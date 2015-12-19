@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.plugins.sprite;
 
-import org.parallax3d.parallax.shaders.Shader;
+import org.parallax3d.parallax.renderers.shaders.Shader;
 import org.parallax3d.parallax.textures.Texture;
 import org.parallax3d.parallax.materials.HasColor;
 import org.parallax3d.parallax.materials.Material;

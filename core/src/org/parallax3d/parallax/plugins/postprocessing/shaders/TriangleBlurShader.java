@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.plugins.postprocessing.shaders;
 
-import org.parallax3d.parallax.shaders.Shader;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.Shader;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Vector2;
 
 import com.google.gwt.core.client.GWT;

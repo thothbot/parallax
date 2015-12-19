@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.extras.geometries;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/tetrahedron.gif" />

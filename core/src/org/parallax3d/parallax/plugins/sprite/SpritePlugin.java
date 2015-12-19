@@ -39,7 +39,7 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DataType;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DrawElementsType;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.EnableCap;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureUnit;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.lights.Light;
 import org.parallax3d.parallax.math.Quaternion;
 import org.parallax3d.parallax.scenes.AbstractFog;

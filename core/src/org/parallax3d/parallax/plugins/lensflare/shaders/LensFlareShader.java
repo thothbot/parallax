@@ -19,8 +19,8 @@
 package org.parallax3d.parallax.plugins.lensflare.shaders;
 
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.shaders.Shader;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.Shader;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 

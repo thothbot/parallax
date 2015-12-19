@@ -16,8 +16,6 @@
 
 package org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.ParallaxRuntimeException;
-
 import java.util.Iterator;
 
 /** Interface used to select items within an iterator against a predicate.

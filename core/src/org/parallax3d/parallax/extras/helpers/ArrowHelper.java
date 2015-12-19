@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.extras.helpers;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.extras.geometries.CylinderGeometry;

@@ -20,9 +20,9 @@ package org.parallax3d.parallax.renderers;
 
 import java.util.List;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLBuffer;
-import org.parallax3d.parallax.shaders.Attribute;
+import org.parallax3d.parallax.renderers.shaders.Attribute;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 
 @ThreeJsObject("THREE.WebGLGeometries")

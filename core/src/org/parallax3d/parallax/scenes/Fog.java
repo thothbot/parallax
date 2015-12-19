@@ -20,8 +20,8 @@ package org.parallax3d.parallax.scenes;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.ThreeJsObject;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 
 /**
  * This class implements simple fog with near and far options.

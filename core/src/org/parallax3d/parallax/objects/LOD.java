@@ -21,7 +21,7 @@ package org.parallax3d.parallax.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.math.Matrix4;

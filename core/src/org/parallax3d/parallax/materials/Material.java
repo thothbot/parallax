@@ -24,10 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLProgram;
 import org.parallax3d.parallax.renderers.WebGLRenderer;
-import org.parallax3d.parallax.textures.RenderTargetCubeTexture;
+import org.parallax3d.parallax.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.textures.Texture;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.core.GeometryGroup;
@@ -36,9 +35,9 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BlendEquationMode;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BlendingFactorDest;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BlendingFactorSrc;
-import org.parallax3d.parallax.shaders.ProgramParameters;
-import org.parallax3d.parallax.shaders.Shader;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.ProgramParameters;
+import org.parallax3d.parallax.renderers.shaders.Shader;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
 

@@ -21,7 +21,7 @@ package org.parallax3d.parallax.renderers;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.lights.AmbientLight;
 import org.parallax3d.parallax.lights.DirectionalLight;

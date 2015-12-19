@@ -21,9 +21,9 @@ package org.parallax3d.parallax.lights;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;

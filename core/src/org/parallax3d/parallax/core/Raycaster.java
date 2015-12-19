@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.objects.Line;

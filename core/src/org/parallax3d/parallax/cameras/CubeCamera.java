@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.cameras;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMagFilter;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMinFilter;
 import org.parallax3d.parallax.renderers.WebGLRenderer;
-import org.parallax3d.parallax.textures.RenderTargetCubeTexture;
+import org.parallax3d.parallax.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.scenes.Scene;

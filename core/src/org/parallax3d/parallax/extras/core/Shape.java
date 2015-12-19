@@ -21,7 +21,7 @@ package org.parallax3d.parallax.extras.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.ExtrudeGeometry;
 import org.parallax3d.parallax.math.Vector2;
 

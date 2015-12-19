@@ -21,7 +21,7 @@ package org.parallax3d.parallax.plugins.effects;
 import java.util.List;
 
 import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.textures.RenderTargetTexture;
+import org.parallax3d.parallax.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.materials.ShaderMaterial;
 import org.parallax3d.parallax.plugins.effects.shaders.AnaglyphShader;
 import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;

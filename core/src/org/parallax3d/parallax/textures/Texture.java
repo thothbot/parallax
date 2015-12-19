@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.textures;
 
-import org.parallax3d.parallax.GL20;
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DataType;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelType;
 import org.parallax3d.parallax.Log;

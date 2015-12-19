@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.plugins.lensflare;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +29,8 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
 import org.parallax3d.parallax.renderers.Plugin;
 import org.parallax3d.parallax.renderers.WebGLRenderer;
-import org.parallax3d.parallax.shaders.Attribute;
-import org.parallax3d.parallax.shaders.Uniform;
+import org.parallax3d.parallax.renderers.shaders.Attribute;
+import org.parallax3d.parallax.renderers.shaders.Uniform;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.plugins.lensflare.shaders.LensFlareShader;

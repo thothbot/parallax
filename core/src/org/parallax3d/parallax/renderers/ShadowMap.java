@@ -21,11 +21,10 @@ package org.parallax3d.parallax.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.FrontFaceDirection;
-import org.parallax3d.parallax.shaders.DepthRGBAShader;
+import org.parallax3d.parallax.renderers.shaders.DepthRGBAShader;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.CullFaceMode;
-import org.parallax3d.parallax.textures.RenderTargetTexture;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.core.GeometryObject;
