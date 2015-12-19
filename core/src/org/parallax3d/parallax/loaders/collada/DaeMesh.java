@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.core.Geometry;
+import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
 
 import com.google.gwt.xml.client.Node;

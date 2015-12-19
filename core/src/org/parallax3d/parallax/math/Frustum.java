@@ -21,8 +21,8 @@ package org.parallax3d.parallax.math;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.core.AbstractGeometry;
-import org.parallax3d.parallax.core.GeometryObject;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**

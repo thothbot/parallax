@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.loaders.json;
 
-import org.parallax3d.parallax.materials.Material.BLENDING;
+import org.parallax3d.parallax.graphics.materials.Material.BLENDING;
 
 public enum JsoBlending
 {

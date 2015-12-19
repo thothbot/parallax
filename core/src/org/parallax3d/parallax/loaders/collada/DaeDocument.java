@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.core.Object3D;
+import org.parallax3d.parallax.graphics.core.Object3D;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.NodeList;

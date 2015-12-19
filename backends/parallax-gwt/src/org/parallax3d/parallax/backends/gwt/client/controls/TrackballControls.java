@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.backends.gwt.client.controls;
 
 import org.parallax3d.parallax.backends.gwt.client.AnimatedScene;
-import org.parallax3d.parallax.core.Object3D;
+import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Quaternion;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector2;

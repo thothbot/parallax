@@ -22,11 +22,11 @@ import java.util.List;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.core.BufferGeometry;
-import org.parallax3d.parallax.core.Geometry;
-import org.parallax3d.parallax.core.GeometryObject;
-import org.parallax3d.parallax.core.Object3D;
-import org.parallax3d.parallax.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.graphics.core.GeometryObject;
+import org.parallax3d.parallax.graphics.core.Object3D;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 
 @ThreeJsObject("THREE.Box3")
 public class Box3

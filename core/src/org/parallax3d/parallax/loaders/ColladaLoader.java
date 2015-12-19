@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.loaders;
 
-import org.parallax3d.parallax.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.loaders.collada.DaeDocument;
 
 import com.google.gwt.xml.client.Document;

@@ -22,11 +22,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.materials.HasShading;
-import org.parallax3d.parallax.materials.Material;
-import org.parallax3d.parallax.materials.MeshBasicMaterial;
-import org.parallax3d.parallax.materials.MeshLambertMaterial;
-import org.parallax3d.parallax.materials.MeshPhongMaterial;
+import org.parallax3d.parallax.graphics.materials.HasShading;
+import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
+import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
+import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;

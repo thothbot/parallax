@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.backends.gwt.client.debugger;
 
-import org.parallax3d.parallax.renderers.WebGlRendererInfo;
+import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.backends.gwt.client.RenderingPanel;
 
 import com.google.gwt.user.client.ui.FlowPanel;

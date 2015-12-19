@@ -19,8 +19,8 @@
 package org.parallax3d.parallax.backends.gwt.client.controls;
 
 import org.parallax3d.parallax.backends.gwt.client.context.Canvas3d;
-import org.parallax3d.parallax.cameras.Camera;
-import org.parallax3d.parallax.core.Object3D;
+import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.graphics.core.Object3D;
 
 import com.google.gwt.user.client.ui.Widget;
 

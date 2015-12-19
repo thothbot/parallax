@@ -22,7 +22,7 @@ import java.beans.Beans;
 
 import org.parallax3d.parallax.backends.gwt.client.context.Canvas3d;
 import org.parallax3d.parallax.backends.gwt.client.context.Canvas3dException;
-import org.parallax3d.parallax.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.backends.gwt.client.context.Canvas3dAttributes;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.backends.gwt.client.events.AnimationReadyEvent;

@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.ArrayBuffer;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;

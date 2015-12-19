@@ -21,13 +21,13 @@ package org.parallax3d.parallax.loaders;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.ArrayBuffer;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.DataView;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.core.AbstractGeometry;
-import org.parallax3d.parallax.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint8Array;
-import org.parallax3d.parallax.core.BufferGeometry;
-import org.parallax3d.parallax.core.Face3;
-import org.parallax3d.parallax.core.Geometry;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.core.Face3;
+import org.parallax3d.parallax.graphics.core.Geometry;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;

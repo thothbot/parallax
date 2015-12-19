@@ -24,7 +24,7 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.shared.*;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.backends.gwt.client.events.*;
-import org.parallax3d.parallax.renderers.CSS3DRenderer;
+import org.parallax3d.parallax.graphics.renderers.CSS3DRenderer;
 import org.parallax3d.parallax.Log;
 
 /**

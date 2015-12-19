@@ -19,8 +19,8 @@ package org.parallax3d.parallax.backends.gwt.client;
  */
 
 import com.google.gwt.user.client.ui.Widget;
-import org.parallax3d.parallax.renderers.CSS3DRenderer;
-import org.parallax3d.parallax.scenes.Scene;
+import org.parallax3d.parallax.graphics.renderers.CSS3DRenderer;
+import org.parallax3d.parallax.graphics.scenes.Scene;
 
 
 /**

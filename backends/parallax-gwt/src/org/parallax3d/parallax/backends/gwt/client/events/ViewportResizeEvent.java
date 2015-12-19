@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.backends.gwt.client.events;
 
-import org.parallax3d.parallax.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 
 import com.google.gwt.event.shared.GwtEvent;
 

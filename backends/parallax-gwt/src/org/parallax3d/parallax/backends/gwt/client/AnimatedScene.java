@@ -19,8 +19,8 @@
 package org.parallax3d.parallax.backends.gwt.client;
 
 import org.parallax3d.parallax.backends.gwt.client.context.Canvas3d;
-import org.parallax3d.parallax.renderers.WebGLRenderer;
-import org.parallax3d.parallax.scenes.Scene;
+import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.scenes.Scene;
 
 import com.google.gwt.core.client.Duration;
 
