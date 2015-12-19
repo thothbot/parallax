@@ -18,6 +18,8 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.system.ThreeJsObject;
+
 import java.util.List;
 
 @ThreeJsObject("THREE.Box2")

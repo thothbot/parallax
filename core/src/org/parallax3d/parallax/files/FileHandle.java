@@ -14,11 +14,11 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.system.files;
+package org.parallax3d.parallax.files;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
-import org.parallax3d.parallax.system.files.Files.FileType;
+import org.parallax3d.parallax.files.Files.FileType;
 import org.parallax3d.parallax.system.StreamUtils;
 
 import java.io.*;

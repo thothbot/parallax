@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.system.files;
+package org.parallax3d.parallax.files;
 
 /** Provides standard access to the filesystem, classpath, Android SD card, and Android assets directory.
  * @author mzechner

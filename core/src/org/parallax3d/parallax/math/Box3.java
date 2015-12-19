@@ -20,7 +20,7 @@ package org.parallax3d.parallax.math;
 
 import java.util.List;
 
-import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.core.BufferGeometry;
 import org.parallax3d.parallax.core.Geometry;
@@ -139,7 +139,7 @@ public class Box3
 
 					} else if ( geometry instanceof BufferGeometry && ((BufferGeometry)geometry).getAttribute("position") != null ) {
 
-						Log.error("Temporary disabled");
+						Parallax.app.error("Box3", "Temporary disabled");
 //						Float32Array positions = (Float32Array)((BufferGeometry)geometry).getAttribute("position").getArray();
 //
 //						for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {

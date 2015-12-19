@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.system.files;
+package org.parallax3d.parallax.files;
 
 
 import java.io.File;

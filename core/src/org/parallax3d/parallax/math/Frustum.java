@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.parallax3d.parallax.core.AbstractGeometry;
 import org.parallax3d.parallax.core.GeometryObject;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * This class implements three-dimensional region which is visible on the screen.

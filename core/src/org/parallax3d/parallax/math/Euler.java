@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 @ThreeJsObject("THREE.Euler")
@@ -307,7 +307,7 @@ public class Euler {
 
 		} else {
 
-			Log.warn("Euler: .setFromRotationMatrix() given unsupported order: " + order);
+			Parallax.app.error("Euler", "Euler: .setFromRotationMatrix() given unsupported order: " + order);
 
 		}
 
@@ -377,7 +377,7 @@ public class Euler {
 
 		} else {
 
-			Log.warn( "Euler: .setFromQuaternion() given unsupported order: " + order );
+			Parallax.app.error("Euler", "Euler: .setFromQuaternion() given unsupported order: " + order );
 
 		}
 

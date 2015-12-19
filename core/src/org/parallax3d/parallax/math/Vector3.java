@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.math;
 
 import org.parallax3d.parallax.cameras.Camera;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 
 /**

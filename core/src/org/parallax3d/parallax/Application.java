@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.system.files.Files;
+import org.parallax3d.parallax.files.Files;
 
 public interface Application {
     /** Enumeration of possible {@link Application} types

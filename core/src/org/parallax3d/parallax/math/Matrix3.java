@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -180,7 +180,7 @@ public class Matrix3
 
 		if (det == 0)
 		{
-			Log.error("Matrix3.invert(): determinant == 0");
+			Parallax.app.error("Matrix3", "Matrix3.invert(): determinant == 0");
 			this.identity();
 		}
 		else

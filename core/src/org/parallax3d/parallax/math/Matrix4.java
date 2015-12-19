@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -739,9 +739,7 @@ public class Matrix4
 
 		if ( det == 0 ) {
 
-			String msg = "Matrix4.getInverse(): can't invert matrix, determinant is 0";
-
-			Log.error(msg);
+			Parallax.app.error("Matrix4", "Matrix4.getInverse(): can't invert matrix, determinant is 0");
 			
 			this.identity();
 			return this;
