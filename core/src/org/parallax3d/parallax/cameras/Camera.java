@@ -19,15 +19,15 @@
 package org.parallax3d.parallax.cameras;
 
 import org.parallax3d.parallax.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeHandler;
+//import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeHandler;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.backends.gwt.client.events.HasEventBus;
-import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
+//import org.parallax3d.parallax.backends.gwt.client.events.HasEventBus;
+//import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Quaternion;
 
-import com.google.gwt.event.shared.HandlerRegistration;
+//import com.google.gwt.event.shared.HandlerRegistration;
 
 /**
  * Abstract base class for cameras.
@@ -36,7 +36,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
  *
  */
 @ThreeJsObject("THREE.Camera")
-public class Camera extends Object3D implements HasEventBus, ViewportResizeHandler
+public class Camera extends Object3D// implements HasEventBus, ViewportResizeHandler
 {
 	protected Matrix4 matrixWorldInverse;
 	protected Matrix4 projectionMatrix;
@@ -51,18 +51,18 @@ public class Camera extends Object3D implements HasEventBus, ViewportResizeHandl
 		this.matrixWorldInverse = new Matrix4();
 		this.projectionMatrix = new Matrix4();
 
-		addViewportResizeHandler(this);
+//		addViewportResizeHandler(this);
 	}
 	
-	public HandlerRegistration addViewportResizeHandler(ViewportResizeHandler handler) 
-	{
-		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler); 
-	}
-	
-	@Override
-	public void onResize(ViewportResizeEvent event) {
-		//  Empty for capability
-	}
+//	public HandlerRegistration addViewportResizeHandler(ViewportResizeHandler handler)
+//	{
+//		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler);
+//	}
+//
+//	@Override
+//	public void onResize(ViewportResizeEvent event) {
+//		//  Empty for capability
+//	}
 
 	/**
 	 * This is the inverse of matrixWorld. MatrixWorld contains the Matrix which has the world transform of the Camera.

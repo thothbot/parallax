@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.cameras;
 
 import org.parallax3d.parallax.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
+//import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.math.Mathematics;
 
 /**
@@ -35,17 +35,17 @@ import org.parallax3d.parallax.math.Mathematics;
 @ThreeJsObject("THREE.PerspectiveCamera")
 public class PerspectiveCamera extends Camera implements HasNearFar
 {
-	public double zoom = 1.0;
+	public float zoom = 1.0f;
 	
-	protected double fov;
-	protected double aspect;
-	protected double near;
-	protected double far;
+	protected float fov;
+	protected float aspect;
+	protected float near;
+	protected float far;
 	
 	protected int fullWidth;
 	protected int fullHeight;
-	protected double x;
-	protected double y;
+	protected float x;
+	protected float y;
 	protected int width;
 	protected int height;
 
@@ -61,7 +61,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 */
 	public PerspectiveCamera() 
 	{
-		this(50, 1, 0.1, 2000);
+		this(50, 1, 0.1f, 2000);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 * @param near        Camera frustum near plane.
 	 * @param far         Camera frustum far plane.
 	 */
-	public PerspectiveCamera(double fieldOfView, double aspectRatio, double near, double far) 
+	public PerspectiveCamera(float fieldOfView, float aspectRatio, float near, float far) 
 	{
 		super();
 		this.fov = fieldOfView;
@@ -82,16 +82,16 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 		updateProjectionMatrix();
 	}
 	
-	@Override
-	public void onResize(ViewportResizeEvent event)
-	{
-		setAspect(event.getRenderer().getAbsoluteAspectRation());	
-	}
+//	@Override
+//	public void onResize(ViewportResizeEvent event)
+//	{
+//		setAspect(event.getRenderer().getAbsoluteAspectRation());	
+//	}
 
 	/**
 	 * Gets Camera frustum vertical field of view.
 	 */
-	public double getFov()
+	public float getFov()
 	{
 		return fov;
 	}
@@ -99,7 +99,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum vertical field of view.
 	 */
-	public void setFov(double fov)
+	public void setFov(float fov)
 	{
 		this.fov = fov;
 	}
@@ -107,7 +107,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum aspect ratio.
 	 */
-	public double getAspect()
+	public float getAspect()
 	{
 		return aspect;
 	}
@@ -115,7 +115,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum aspect ratio.
 	 */
-	public void setAspect(double aspect)
+	public void setAspect(float aspect)
 	{
 		this.aspect = aspect;
 		this.updateProjectionMatrix();
@@ -124,7 +124,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum near plane.
 	 */
-	public double getNear()
+	public float getNear()
 	{
 		return near;
 	}
@@ -132,7 +132,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum near plane.
 	 */
-	public void setNear(double near)
+	public void setNear(float near)
 	{
 		this.near = near;
 	}
@@ -140,7 +140,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum far plane.
 	 */
-	public double getFar()
+	public float getFar()
 	{
 		return far;
 	}
@@ -148,7 +148,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum far plane.
 	 */
-	public void setFar(double far)
+	public void setFar(float far)
 	{
 		this.far = far;
 	}
@@ -173,22 +173,22 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 		this.fullHeight = fullHeight;
 	}
 
-	public double getX()
+	public float getX()
 	{
 		return x;
 	}
 
-	public void setX(double x)
+	public void setX(float x)
 	{
 		this.x = x;
 	}
 
-	public double getY()
+	public float getY()
 	{
 		return y;
 	}
 
-	public void setY(double y)
+	public void setY(float y)
 	{
 		this.y = y;
 	}
@@ -233,7 +233,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 */
 	public void setLens(int focalLength, int frameHeight)
 	{
-		this.fov = 2.0 * Mathematics.radToDeg(Math.atan(frameHeight / (focalLength * 2.0)));
+		this.fov = 2.0f * Mathematics.radToDeg((float)Math.atan(frameHeight / (focalLength * 2.0f)));
 		this.updateProjectionMatrix();
 	}
 	
@@ -259,10 +259,10 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 *<pre>
 	 *{@code
 	 *
-	 *   double w = 1920;
-	 *   double h = 1080;
-	 *   double fullWidth = w * 3;
-	 *   double fullHeight = h * 2;
+	 *   float w = 1920;
+	 *   float h = 1080;
+	 *   float fullWidth = w * 3;
+	 *   float fullHeight = h * 2;
 	 *
 	 *   --A--
 	 *   camera.setOffset( fullWidth, fullHeight, w * 0, h * 0, w, h );
@@ -288,7 +288,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 * @param width      the width of subcamera
 	 * @param height     the height of subcamera
 	 */
-	public void setViewOffset( int fullWidth, int fullHeight, double x, double y, int width, int height ) 
+	public void setViewOffset( int fullWidth, int fullHeight, float x, float y, int width, int height ) 
 	{
 		this.fullWidth = fullWidth;
 		this.fullHeight = fullHeight;
@@ -307,17 +307,17 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 */
 	public void updateProjectionMatrix() 
 	{
-		double fov = Mathematics.radToDeg( 2 * Math.atan( Math.tan( Mathematics.degToRad( this.fov ) * 0.5 ) / this.zoom ) );
+		float fov = Mathematics.radToDeg( 2 * (float)Math.atan( Math.tan( Mathematics.degToRad( this.fov ) * 0.5f ) / this.zoom ) );
 
 		if ( this.fullWidth > 0 ) {
 
-			double aspect = (double)this.fullWidth / (double)this.fullHeight;
-			double top = Math.tan( Mathematics.degToRad( fov * 0.5 ) ) * this.near;
-			double bottom = - top;
-			double left = aspect * bottom;
-			double right = aspect * top;
-			double width = Math.abs( right - left );
-			double height = Math.abs( top - bottom );
+			float aspect = (float)this.fullWidth / (float)this.fullHeight;
+			float top = (float)Math.tan( Mathematics.degToRad( fov * 0.5f ) ) * this.near;
+			float bottom = - top;
+			float left = aspect * bottom;
+			float right = aspect * top;
+			float width = Math.abs( right - left );
+			float height = Math.abs( top - bottom );
 
 			this.projectionMatrix.makeFrustum(
 				left + this.x * width / this.fullWidth,

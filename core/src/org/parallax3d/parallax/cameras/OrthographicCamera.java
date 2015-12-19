@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.cameras;
 
 import org.parallax3d.parallax.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
+//import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
 
 /**
  * Camera with orthographic projection
@@ -41,14 +41,14 @@ import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
 public class OrthographicCamera extends Camera implements HasNearFar
 {
 
-	protected double zoom = 1.0;
-	protected double left;
-	protected double right;
-	protected double top;
-	protected double bottom;
+	protected float zoom = 1.0f;
+	protected float left;
+	protected float right;
+	protected float top;
+	protected float bottom;
 
-	protected double near = 0.1;
-	protected double far = 2000.0;
+	protected float near = 0.1f;
+	protected float far = 2000.0f;
 
 	/**
 	 * Orthographic Camera constructor.
@@ -58,9 +58,9 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	 * @param near   Camera frustum near plane
 	 * @param far    Camera frustum far plane.
 	 */
-	public OrthographicCamera(double width, double height, double near, double far)
+	public OrthographicCamera(float width, float height, float near, float far)
 	{
-		this(width / -2.0, width / 2.0, height / 2.0, height / -2.0, near, far);
+		this(width / -2.0f, width / 2.0f, height / 2.0f, height / -2.0f, near, far);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	 * @param near   Camera frustum near plane
 	 * @param far    Camera frustum far plane.
 	 */
-	public OrthographicCamera(double left, double right, double top, double bottom, double near, double far) 
+	public OrthographicCamera(float left, float right, float top, float bottom, float near, float far) 
 	{
 		super();
 		this.left = left;
@@ -87,18 +87,18 @@ public class OrthographicCamera extends Camera implements HasNearFar
 		updateProjectionMatrix();
 	}
 	
-	@Override
-	public void onResize(ViewportResizeEvent event) 
-	{
-		setSize( event.getRenderer().getAbsoluteWidth(), event.getRenderer().getAbsoluteHeight() );
-	}
+//	@Override
+//	public void onResize(ViewportResizeEvent event) 
+//	{
+//		setSize( event.getRenderer().getAbsoluteWidth(), event.getRenderer().getAbsoluteHeight() );
+//	}
 	
-	public void setSize(double width, double height)
+	public void setSize(float width, float height)
 	{
-		this.left = width / -2.0;
-		this.right = width / 2.0;
-		this.top = height / 2.0;
-		this.bottom = height / -2.0;
+		this.left = width / -2.0f;
+		this.right = width / 2.0f;
+		this.top = height / 2.0f;
+		this.bottom = height / -2.0f;
 
 		updateProjectionMatrix();
 	}
@@ -106,7 +106,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum left plane.
 	 */
-	public double getLeft()
+	public float getLeft()
 	{
 		return left;
 	}
@@ -114,7 +114,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum left plane.
 	 */
-	public void setLeft(double left)
+	public void setLeft(float left)
 	{
 		this.left = left;
 	}
@@ -122,7 +122,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum right plane.
 	 */
-	public double getRight()
+	public float getRight()
 	{
 		return right;
 	}
@@ -130,7 +130,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum right plane.
 	 */
-	public void setRight(double right)
+	public void setRight(float right)
 	{
 		this.right = right;
 	}
@@ -138,7 +138,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum top plane.
 	 */
-	public double getTop()
+	public float getTop()
 	{
 		return top;
 	}
@@ -146,7 +146,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum top plane.
 	 */
-	public void setTop(double top)
+	public void setTop(float top)
 	{
 		this.top = top;
 	}
@@ -154,7 +154,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum bottom plane.
 	 */
-	public double getBottom()
+	public float getBottom()
 	{
 		return bottom;
 	}
@@ -162,7 +162,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum bottom plane.
 	 */
-	public void setBottom(double bottom)
+	public void setBottom(float bottom)
 	{
 		this.bottom = bottom;
 	}
@@ -170,7 +170,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum near plane.
 	 */
-	public double getNear()
+	public float getNear()
 	{
 		return near;
 	}
@@ -178,7 +178,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum near plane.
 	 */
-	public void setNear(double near)
+	public void setNear(float near)
 	{
 		this.near = near;
 	}
@@ -186,7 +186,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum far plane.
 	 */
-	public double getFar()
+	public float getFar()
 	{
 		return far;
 	}
@@ -194,7 +194,7 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum far plane.
 	 */
-	public void setFar(double far)
+	public void setFar(float far)
 	{
 		this.far = far;
 	}
@@ -206,10 +206,10 @@ public class OrthographicCamera extends Camera implements HasNearFar
 	 */
 	public void updateProjectionMatrix() {
 
-		double dx = ( this.right - this.left ) / ( 2.0 * this.zoom );
-		double dy = ( this.top - this.bottom ) / ( 2.0 * this.zoom );
-		double cx = ( this.right + this.left ) / 2.0;
-		double cy = ( this.top + this.bottom ) / 2.0;
+		float dx = ( this.right - this.left ) / ( 2.0f * this.zoom );
+		float dy = ( this.top - this.bottom ) / ( 2.0f * this.zoom );
+		float cx = ( this.right + this.left ) / 2.0f;
+		float cy = ( this.top + this.bottom ) / 2.0f;
 
 		this.projectionMatrix.makeOrthographic( cx - dx, cx + dx, cy + dy, cy - dy, this.near, this.far );
 

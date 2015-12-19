@@ -24,20 +24,20 @@ public interface HasNearFar {
 	/**
 	 * Gets Camera frustum near plane.
 	 */
-	public double getNear();
+	public float getNear();
 
 	/**
 	 * Sets Camera frustum near plane.
 	 */
-	public void setNear(double near);
+	public void setNear(float near);
 	
 	/**
 	 * Gets Camera frustum far plane.
 	 */
-	public double getFar();
+	public float getFar();
 
 	/**
 	 * Sets Camera frustum far plane.
 	 */
-	public void setFar(double far);
+	public void setFar(float far);
 }

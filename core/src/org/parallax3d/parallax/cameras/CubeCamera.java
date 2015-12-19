@@ -40,8 +40,8 @@ import org.parallax3d.parallax.scenes.Scene;
 @ThreeJsObject("THREE.CubeCamera")
 public final class CubeCamera extends Object3D
 {
-	private double fov = 90.0;
-	private double aspect = 1.0;
+	private float fov = 90.0f;
+	private float aspect = 1.0f;
 
 	private PerspectiveCamera cameraPX;
 	private PerspectiveCamera cameraNX;
@@ -60,36 +60,36 @@ public final class CubeCamera extends Object3D
 	 * @param far The far clipping distance 
 	 * @param cubeResolution  Sets the width of the cube.
 	 */
-	public CubeCamera(double near, double far, int cubeResolution)
+	public CubeCamera(float near, float far, int cubeResolution)
 	{
 		this.cameraPX = new PerspectiveCamera( fov, aspect, near, far );
-		cameraPX.getUp().set( 0.0, -1.0, 0.0 );
-		cameraPX.lookAt( new Vector3( 1.0, 0.0, 0.0 ) );
+		cameraPX.getUp().set( 0.0f, -1.0f, 0.0f );
+		cameraPX.lookAt( new Vector3( 1.0f, 0.0f, 0.0f ) );
 		this.add( cameraPX );
 
 		this.cameraNX = new PerspectiveCamera( fov, aspect, near, far );
-		cameraNX.getUp().set( 0.0, -1.0, 0.0 );
-		cameraNX.lookAt( new Vector3( -1.0, 0.0, 0.0 ) );
+		cameraNX.getUp().set( 0.0f, -1.0f, 0.0f );
+		cameraNX.lookAt( new Vector3( -1.0f, 0.0f, 0.0f ) );
 		this.add( cameraNX );
 
 		this.cameraPY = new PerspectiveCamera( fov, aspect, near, far );
-		cameraPY.getUp().set( 0.0, 0.0, 1.0 );
-		cameraPY.lookAt( new Vector3( 0.0, 1.0, 0.0 ) );
+		cameraPY.getUp().set( 0.0f, 0.0f, 1.0f );
+		cameraPY.lookAt( new Vector3( 0.0f, 1.0f, 0.0f ) );
 		this.add( cameraPY );
 
 		this.cameraNY = new PerspectiveCamera( fov, aspect, near, far );
-		cameraNY.getUp().set( 0.0, 0.0, -1.0 );
-		cameraNY.lookAt( new Vector3( 0.0, -1.0, 0.0 ) );
+		cameraNY.getUp().set( 0.0f, 0.0f, -1.0f );
+		cameraNY.lookAt( new Vector3( 0.0f, -1.0f, 0.0f ) );
 		this.add( cameraNY );
 
 		this.cameraPZ = new PerspectiveCamera( fov, aspect, near, far );
-		cameraPZ.getUp().set( 0.0, -1.0, 0.0 );
-		cameraPZ.lookAt( new Vector3( 0.0, 0.0, 1.0 ) );
+		cameraPZ.getUp().set( 0.0f, -1.0f, 0.0f );
+		cameraPZ.lookAt( new Vector3( 0.0f, 0.0f, 1.0f ) );
 		this.add( cameraPZ );
 
 		this.cameraNZ = new PerspectiveCamera( fov, aspect, near, far );
-		cameraNZ.getUp().set( 0.0, -1.0, 0.0 );
-		cameraNZ.lookAt( new Vector3( 0.0, 0.0, -1.0 ) );
+		cameraNZ.getUp().set( 0.0f, -1.0f, 0.0f );
+		cameraNZ.lookAt( new Vector3( 0.0f, 0.0f, -1.0f ) );
 		this.add( cameraNZ );
 
 		this.renderTarget = new RenderTargetCubeTexture( cubeResolution, cubeResolution );

@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.textures;
 
+import org.parallax3d.parallax.GL20;
 import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DataType;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelType;
@@ -54,6 +55,40 @@ import com.google.gwt.user.client.ui.RootPanel;
 @ThreeJsObject("THREE.Texture")
 public class Texture
 {
+	public enum TextureFilter {
+		Nearest(GL20.GL_NEAREST), Linear(GL20.GL_LINEAR), MipMap(GL20.GL_LINEAR_MIPMAP_LINEAR), MipMapNearestNearest(
+				GL20.GL_NEAREST_MIPMAP_NEAREST), MipMapLinearNearest(GL20.GL_LINEAR_MIPMAP_NEAREST), MipMapNearestLinear(
+				GL20.GL_NEAREST_MIPMAP_LINEAR), MipMapLinearLinear(GL20.GL_LINEAR_MIPMAP_LINEAR);
+
+		final int glEnum;
+
+		TextureFilter (int glEnum) {
+			this.glEnum = glEnum;
+		}
+
+		public boolean isMipMap () {
+			return glEnum != GL20.GL_NEAREST && glEnum != GL20.GL_LINEAR;
+		}
+
+		public int getGLEnum () {
+			return glEnum;
+		}
+	}
+
+	public enum TextureWrap {
+		MirroredRepeat(GL20.GL_MIRRORED_REPEAT), ClampToEdge(GL20.GL_CLAMP_TO_EDGE), Repeat(GL20.GL_REPEAT);
+
+		final int glEnum;
+
+		TextureWrap (int glEnum) {
+			this.glEnum = glEnum;
+		}
+
+		public int getGLEnum () {
+			return glEnum;
+		}
+	}
+
 	/**
 	 * This callback will be called when the image has been loaded.
 	 */
