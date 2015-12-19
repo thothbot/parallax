@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.math.Euler;
 import org.parallax3d.parallax.math.Matrix3;
 import org.parallax3d.parallax.math.Matrix4;
@@ -72,7 +72,7 @@ public class Object3D
 	
 	protected Vector3 scale;
 	
-	private double renderDepth;
+	private float renderDepth;
 	
 	protected boolean rotationAutoUpdate;
 
@@ -323,14 +323,14 @@ public class Object3D
 	/**
 	 * @return the renderDepth
 	 */
-	public double getRenderDepth() {
+	public float getRenderDepth() {
 		return renderDepth;
 	}
 
 	/**
 	 * @param renderDepth the renderDepth to set
 	 */
-	public void setRenderDepth(double renderDepth) {
+	public void setRenderDepth(float renderDepth) {
 		this.renderDepth = renderDepth;
 	}
 
@@ -430,7 +430,7 @@ public class Object3D
 		this.matrix.decompose( this.position, this.quaternion, this.scale );
 	}
 	
-	public void setRotationFromAxisAngle ( Vector3 axis, double angle ) {
+	public void setRotationFromAxisAngle ( Vector3 axis, float angle ) {
 
 		// assumes axis is normalized
 
@@ -466,7 +466,7 @@ public class Object3D
 	 * @param angle The angle in radians.
 	 * @return
 	 */
-	public Object3D rotateOnAxis(Vector3 axis, double angle) {
+	public Object3D rotateOnAxis(Vector3 axis, float angle) {
 
 		Quaternion q1 = new Quaternion();
 
@@ -478,25 +478,25 @@ public class Object3D
 
 	}
 
-	public Object3D rotateX(double angle) {
+	public Object3D rotateX(float angle) {
 
-		Vector3 v1 = new Vector3( 1.0, 0, 0 );
-
-		return this.rotateOnAxis( v1, angle );
-
-	}
-
-	public Object3D rotateY(double angle) {
-
-		Vector3 v1 = new Vector3( 0, 1.0, 0 );
+		Vector3 v1 = new Vector3( 1.0f, 0, 0 );
 
 		return this.rotateOnAxis( v1, angle );
 
 	}
 
-	public Object3D rotateZ(double angle) {
+	public Object3D rotateY(float angle) {
 
-		Vector3 v1 = new Vector3( 0, 0, 1.0 );
+		Vector3 v1 = new Vector3( 0, 1.0f, 0 );
+
+		return this.rotateOnAxis( v1, angle );
+
+	}
+
+	public Object3D rotateZ(float angle) {
+
+		Vector3 v1 = new Vector3( 0, 0, 1.0f );
 
 		return this.rotateOnAxis( v1, angle );
 
@@ -508,7 +508,7 @@ public class Object3D
 	 * @param distance The distance to translate.
 	 * @return
 	 */
-	public Object3D translateOnAxis ( Vector3 axis, double distance ) {
+	public Object3D translateOnAxis ( Vector3 axis, float distance ) {
 
 		Vector3 v1 = new Vector3();
 
@@ -525,9 +525,9 @@ public class Object3D
 	 * @param distance
 	 * @return
 	 */
-	public Object3D translateX(double distance) {
+	public Object3D translateX(float distance) {
 
-		Vector3 v1 = new Vector3( 1.0, 0, 0 );
+		Vector3 v1 = new Vector3( 1.0f, 0, 0 );
 
 		return this.translateOnAxis( v1, distance );
 
@@ -538,9 +538,9 @@ public class Object3D
 	 * @param distance
 	 * @return
 	 */
-	public Object3D translateY(double distance) {
+	public Object3D translateY(float distance) {
 
-		Vector3 v1 = new Vector3( 0, 1.0, 0 );
+		Vector3 v1 = new Vector3( 0, 1.0f, 0 );
 
 		return this.translateOnAxis( v1, distance );
 
@@ -551,9 +551,9 @@ public class Object3D
 	 * @param distance
 	 * @return
 	 */
-	public Object3D translateZ(double distance) {
+	public Object3D translateZ(float distance) {
 
-		Vector3 v1 = new Vector3( 0, 0, 1.0 );
+		Vector3 v1 = new Vector3( 0, 0, 1.0f );
 
 		return this.translateOnAxis( v1, distance );
 
@@ -608,13 +608,12 @@ public class Object3D
 	public Object3D add(Object3D object)
 	{
 		if(object.equals(this)) {
-			Log.error("Object3D.add: " + object + " can't be added as a child of itself.");
+			Parallax.app.error("Object3D.add", object + " can't be added as a child of itself.");
 			return this;
 		}
 			  
-		Log.info("Adding for ID " + this.getId() + " = " + this.getClass().getName() 
+		Parallax.app.debug("Object3D", "Adding for ID " + this.getId() + " = " + this.getClass().getName()
 				+ " child ID " + object.getId() + " = " + object.getClass().getName());
-				
 
 		if ( object.parent != null ) {
 
@@ -774,7 +773,7 @@ public class Object3D
 
 		this.getWorldQuaternion( quaternion );
 
-		return optionalTarget.set( 0, 0, 1.0 ).apply( quaternion );
+		return optionalTarget.set( 0, 0, 1.0f ).apply( quaternion );
 
 	}
 	
