@@ -24,7 +24,7 @@ import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.renderers.RendererLights;
 import org.parallax3d.parallax.shaders.Uniform;
-import org.parallax3d.parallax.helpers.HasRaytracingPhysicalAttenuation;
+import org.parallax3d.parallax.extras.helpers.HasRaytracingPhysicalAttenuation;
 import org.parallax3d.parallax.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;

@@ -24,13 +24,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.curves.Curve;
-import org.parallax3d.parallax.curves.CurvePath;
-import org.parallax3d.parallax.curves.FrenetFrames;
-import org.parallax3d.parallax.curves.Shape;
+import org.parallax3d.parallax.extras.core.Curve;
+import org.parallax3d.parallax.extras.core.CurvePath;
+import org.parallax3d.parallax.extras.curves.FrenetFrames;
+import org.parallax3d.parallax.extras.core.Shape;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.*;
-import org.parallax3d.parallax.utils.ShapeUtils;
+import org.parallax3d.parallax.extras.ShapeUtils;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 

@@ -33,7 +33,7 @@ import org.parallax3d.parallax.textures.RenderTargetTexture;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.cameras.OrthographicCamera;
-import org.parallax3d.parallax.geometries.PlaneGeometry;
+import org.parallax3d.parallax.extras.geometries.PlaneGeometry;
 import org.parallax3d.parallax.plugins.postprocessing.shaders.CopyShader;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.lights.Light;

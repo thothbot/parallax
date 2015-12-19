@@ -33,7 +33,7 @@ import org.parallax3d.parallax.renderers.WebGLRenderer;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.cameras.OrthographicCamera;
 import org.parallax3d.parallax.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.geometries.PlaneBufferGeometry;
+import org.parallax3d.parallax.extras.geometries.PlaneBufferGeometry;
 import org.parallax3d.parallax.lights.Light;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;

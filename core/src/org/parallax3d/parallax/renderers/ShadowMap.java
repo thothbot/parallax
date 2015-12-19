@@ -31,7 +31,7 @@ import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.core.GeometryObject;
 import org.parallax3d.parallax.core.Gyroscope;
 import org.parallax3d.parallax.core.Object3D;
-import org.parallax3d.parallax.helpers.CameraHelper;
+import org.parallax3d.parallax.extras.helpers.CameraHelper;
 import org.parallax3d.parallax.lights.SpotLight;
 import org.parallax3d.parallax.materials.ShaderMaterial;
 import org.parallax3d.parallax.math.Vector3;
