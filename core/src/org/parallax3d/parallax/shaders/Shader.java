@@ -20,23 +20,13 @@ package org.parallax3d.parallax.shaders;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLConstants;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLProgram;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLShader;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.ProgramParameter;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.core.FastMap;
 import org.parallax3d.parallax.math.Mathematics;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
 
 /**
  * Basic abstract shader.
@@ -55,16 +45,7 @@ public abstract class Shader
 		MEDIUMP,
 		LOWP
 	}
-	
-	public interface DefaultResources extends ClientBundle
-	{
-		@Source("source/default.vs")
-		TextResource getVertexShader();
 
-		@Source("source/default.fs")
-		TextResource getFragmentShader();
-	}
-	
 	// shader precision. Can be "highp", "mediump" or "lowp".
 	private PRECISION precision = PRECISION.HIGHP;
 
@@ -91,12 +72,12 @@ public abstract class Shader
 
 	/**
 	 * This constructor will create new Shader instance. 
-	 * 
-	 * @param resource the {@link DefaultResources} instance.
+	 *
 	 */
-	public Shader(DefaultResources resource)
+	public Shader()
 	{
-		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
+		this(Parallax.files.classpath("org/parallax3d/parallax/shaders/default.vs").readString(),
+		     Parallax.files.classpath("org/parallax3d/parallax/shaders/default.fs").readString());
 	}
 
 	public Shader(String vertexShader, String fragmentShader)
