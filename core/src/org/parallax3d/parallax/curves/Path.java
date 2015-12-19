@@ -22,11 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.utils.ShapeUtils;
 
+@ThreeJsObject("THREE.Path")
 public class Path extends CurvePath
 {
 	public static enum PATH_ACTIONS {

@@ -20,6 +20,7 @@ package org.parallax3d.parallax.materials;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.shaders.LambertShader;
 import org.parallax3d.parallax.shaders.Shader;
@@ -33,6 +34,7 @@ import org.parallax3d.parallax.math.Color;
  * A material for non-shiny (Lambertian) surfaces, evaluated per vertex.
  *
  */
+@ThreeJsObject("THREE.MeshLambertMaterial")
 public final class MeshLambertMaterial extends Material 
 	implements HasMaterialMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
 	HasSkinning, HasAmbientEmissiveColor, HasShading

@@ -18,12 +18,14 @@
 
 package org.parallax3d.parallax.objects;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.Object3D;
 
 /**
  * A bone which is part of a SkinnedMesh.
  *
  */
+@ThreeJsObject("THREE.Bone")
 public class Bone extends Object3D
 {
 

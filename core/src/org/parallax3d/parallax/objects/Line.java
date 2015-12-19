@@ -20,6 +20,7 @@ package org.parallax3d.parallax.objects;
 
 import java.util.List;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferUsage;
 import org.parallax3d.parallax.renderers.WebGlRendererInfo;
@@ -48,6 +49,7 @@ import org.parallax3d.parallax.math.Vector4;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.Line")
 public class Line extends GeometryObject
 {
 	/**

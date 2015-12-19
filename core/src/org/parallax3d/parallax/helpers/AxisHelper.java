@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.helpers;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.geometries.CylinderGeometry;
@@ -28,6 +29,7 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.objects.Line;
 import org.parallax3d.parallax.objects.Mesh;
 
+@ThreeJsObject("THREE.AxisHelper")
 public class AxisHelper extends Object3D
 {
 

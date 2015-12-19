@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLProgram;
 import org.parallax3d.parallax.renderers.WebGLRenderer;
 import org.parallax3d.parallax.textures.RenderTargetCubeTexture;
@@ -47,6 +48,7 @@ import org.parallax3d.parallax.math.Vector4;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.Material")
 public abstract class Material
 {
 	private static int MaterialCount;

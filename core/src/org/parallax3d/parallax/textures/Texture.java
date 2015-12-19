@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.textures;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DataType;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelType;
 import org.parallax3d.parallax.Log;
@@ -50,6 +51,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.Texture")
 public class Texture
 {
 	/**

@@ -21,6 +21,7 @@ package org.parallax3d.parallax.textures;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.extension.WebGLCompressedTextureS3tc;
 import org.parallax3d.parallax.Log;
 
@@ -32,6 +33,7 @@ import com.google.gwt.typedarrays.shared.Uint8Array;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 
+@ThreeJsObject("THREE.CompressedTexture")
 public class CompressedTexture extends Texture 
 {
 	private int compressedFormat;

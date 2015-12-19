@@ -18,6 +18,8 @@
 
 package org.parallax3d.parallax.utils;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
 /**
  * This class implements some helpers methods for Curve instances
  * 
@@ -27,6 +29,7 @@ package org.parallax3d.parallax.utils;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.CurveUtils")
 public class CurveUtils
 {
 	/**

@@ -18,10 +18,12 @@
 
 package org.parallax3d.parallax.curves;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.utils.CurveUtils;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.utils.ShapeUtils;
 
+@ThreeJsObject("THREE.QuadraticBezierCurve")
 public class QuadraticBezierCurve extends Curve
 {
 	private Vector2 v0;

@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.cameras;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.math.Mathematics;
 
@@ -31,6 +32,7 @@ import org.parallax3d.parallax.math.Mathematics;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.PerspectiveCamera")
 public class PerspectiveCamera extends Camera implements HasNearFar
 {
 	public double zoom = 1.0;

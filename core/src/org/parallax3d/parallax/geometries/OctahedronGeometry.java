@@ -18,6 +18,8 @@
 
 package org.parallax3d.parallax.geometries;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/octahedron.gif" />
  * <p>
@@ -26,6 +28,7 @@ package org.parallax3d.parallax.geometries;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.OctahedronGeometry")
 public final class OctahedronGeometry extends PolyhedronGeometry
 {
 	public OctahedronGeometry( double radius, int detail ) 

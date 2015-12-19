@@ -20,6 +20,7 @@ package org.parallax3d.parallax.materials;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.shaders.BasicShader;
 import org.parallax3d.parallax.shaders.Shader;
 import org.parallax3d.parallax.shaders.Uniform;
@@ -32,6 +33,7 @@ import org.parallax3d.parallax.math.Color;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.LineBasicMaterial")
 public class LineBasicMaterial extends Material 
 	implements HasFog, HasColor, HasVertexColors
 {

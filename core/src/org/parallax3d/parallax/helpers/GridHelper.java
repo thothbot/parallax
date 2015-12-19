@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.helpers;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.objects.Line;
@@ -31,6 +32,7 @@ import org.parallax3d.parallax.math.Color;
  * @author bartolomiew 
  *
  */
+@ThreeJsObject("THREE.GridHelper")
 public class GridHelper extends Line {
 
     private Color color1;

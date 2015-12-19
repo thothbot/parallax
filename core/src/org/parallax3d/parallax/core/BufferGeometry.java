@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Int32Array;
@@ -67,6 +68,7 @@ import org.parallax3d.parallax.math.Vector3;
  * geometry.addAttribute( "position", new BufferAttribute( positions, 3 ) );
  *</pre>
  */
+@ThreeJsObject("THREE.BufferGeometry")
 public class BufferGeometry extends AbstractGeometry
 {
 	public static class DrawCall 

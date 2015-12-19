@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.FastMap;
 import org.parallax3d.parallax.math.Vector2;
 
@@ -36,6 +37,7 @@ import org.parallax3d.parallax.math.Vector2;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.ShapeUtils")
 public class ShapeUtils
 {
 	

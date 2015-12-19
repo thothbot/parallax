@@ -21,6 +21,7 @@ package org.parallax3d.parallax.textures;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderbuffer;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLFramebuffer;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
@@ -28,6 +29,7 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.enums.FramebufferSlot;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureTarget;
 import org.parallax3d.parallax.math.Mathematics;
 
+@ThreeJsObject("THREE.WebGLRenderTargetCube")
 public class RenderTargetCubeTexture extends RenderTargetTexture
 {
 	private int activeCubeFace = 0;

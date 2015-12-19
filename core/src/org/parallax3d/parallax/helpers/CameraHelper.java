@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.cameras.Camera;
@@ -44,6 +45,7 @@ import org.parallax3d.parallax.objects.Line;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.CameraHelper")
 public class CameraHelper extends Line
 {
 	private Camera camera;

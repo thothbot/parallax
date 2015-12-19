@@ -18,11 +18,13 @@
 
 package org.parallax3d.parallax.helpers;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.geometries.SphereGeometry;
 import org.parallax3d.parallax.lights.PointLight;
 import org.parallax3d.parallax.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.objects.Mesh;
 
+@ThreeJsObject("THREE.PointLightHelper")
 public class PointLightHelper extends Mesh {
 	
 	PointLight light;

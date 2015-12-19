@@ -20,6 +20,7 @@ package org.parallax3d.parallax.materials;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.textures.Texture;
 import org.parallax3d.parallax.cameras.Camera;
 import org.parallax3d.parallax.shaders.PhongShader;
@@ -33,6 +34,7 @@ import org.parallax3d.parallax.math.Vector3;
  * A material for shiny surfaces, evaluated per pixel.
  *
  */
+@ThreeJsObject("THREE.MeshPhongMaterial")
 public final class MeshPhongMaterial extends Material 
 	implements HasMaterialMap, HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
 	HasSkinning, HasAmbientEmissiveColor, HasShading,

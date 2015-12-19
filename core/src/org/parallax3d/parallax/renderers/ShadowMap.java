@@ -21,6 +21,7 @@ package org.parallax3d.parallax.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.FrontFaceDirection;
 import org.parallax3d.parallax.shaders.DepthRGBAShader;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.CullFaceMode;
@@ -57,6 +58,7 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.scenes.Scene;
 
+@ThreeJsObject("THREE.WebGLExtensions")
 public final class ShadowMap extends Plugin 
 {
 	private boolean isAutoUpdate = true;

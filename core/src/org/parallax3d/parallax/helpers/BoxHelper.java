@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.helpers;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.AbstractGeometry;
 import org.parallax3d.parallax.core.BufferGeometry;
@@ -28,6 +29,7 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.objects.Line;
 import org.parallax3d.parallax.objects.Mesh;
 
+@ThreeJsObject("THREE.BoxHelper")
 public class BoxHelper extends Line 
 {
 	public BoxHelper(Mesh object)

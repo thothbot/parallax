@@ -20,6 +20,7 @@ package org.parallax3d.parallax.materials;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.shaders.DepthShader;
 import org.parallax3d.parallax.shaders.Shader;
 import org.parallax3d.parallax.shaders.Uniform;
@@ -30,6 +31,7 @@ import org.parallax3d.parallax.cameras.HasNearFar;
  * A material for drawing geometry by depth. Depth is based off of the camera near and far plane. White is nearest, black is farthest.
  *
  */
+@ThreeJsObject("THREE.MeshDepthMaterial")
 public class MeshDepthMaterial extends Material implements HasWireframe
 {
 //	private boolean isMorphTargets = false;

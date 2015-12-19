@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.cameras;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
 
 /**
@@ -36,6 +37,7 @@ import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.OrthographicCamera")
 public class OrthographicCamera extends Camera implements HasNearFar
 {
 

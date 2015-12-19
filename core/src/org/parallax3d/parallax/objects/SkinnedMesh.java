@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.textures.Texture;
 import org.parallax3d.parallax.core.AbstractGeometry;
@@ -32,6 +33,7 @@ import org.parallax3d.parallax.math.Quaternion;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
 
+@ThreeJsObject("THREE.SkinnedMesh")
 public class SkinnedMesh extends Mesh {
 	
 	public Texture boneTexture;

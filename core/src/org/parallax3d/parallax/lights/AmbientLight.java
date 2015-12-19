@@ -20,6 +20,7 @@ package org.parallax3d.parallax.lights;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.renderers.RendererLights;
 import org.parallax3d.parallax.shaders.Uniform;
@@ -38,6 +39,7 @@ import org.parallax3d.parallax.math.Color;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.AmbientLight")
 public final class AmbientLight extends Light
 {
 	public static class UniformAmbient implements UniformLight

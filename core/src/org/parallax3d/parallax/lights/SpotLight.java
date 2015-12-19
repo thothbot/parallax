@@ -20,6 +20,7 @@ package org.parallax3d.parallax.lights;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
@@ -52,6 +53,7 @@ import org.parallax3d.parallax.materials.MeshLambertMaterial;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.SpotLight")
 public class SpotLight extends ShadowLight
 {
 	public static class UniformSport implements UniformLight

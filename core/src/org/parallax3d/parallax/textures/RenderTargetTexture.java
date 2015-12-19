@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.textures;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLFramebuffer;
 import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderbuffer;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
@@ -31,6 +32,7 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureTarget;
 import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureWrapMode;
 import org.parallax3d.parallax.math.Mathematics;
 
+@ThreeJsObject("THREE.WebGLRenderTarget")
 public class RenderTargetTexture extends Texture
 {
 	private int width;

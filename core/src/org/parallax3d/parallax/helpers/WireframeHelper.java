@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.core.BufferAttribute;
 import org.parallax3d.parallax.core.GeometryObject;
@@ -38,6 +39,7 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.objects.Line;
 
+@ThreeJsObject("THREE.WireframeHelper")
 public class WireframeHelper extends Line {
 	
 	public WireframeHelper(GeometryObject object)

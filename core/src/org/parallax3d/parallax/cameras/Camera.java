@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.cameras;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeHandler;
 import org.parallax3d.parallax.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
@@ -34,6 +35,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.Camera")
 public class Camera extends Object3D implements HasEventBus, ViewportResizeHandler
 {
 	protected Matrix4 matrixWorldInverse;

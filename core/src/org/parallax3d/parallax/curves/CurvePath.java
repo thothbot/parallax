@@ -21,6 +21,7 @@ package org.parallax3d.parallax.curves;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Vector2;
 
@@ -29,6 +30,7 @@ import org.parallax3d.parallax.math.Vector2;
  *	Curved Path - a curve path is simply a array of connected
  *  curves, but retains the api of a curve
  */
+@ThreeJsObject("THREE.CurvePath")
 public class CurvePath extends Curve
 {
 

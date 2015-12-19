@@ -18,11 +18,13 @@
 
 package org.parallax3d.parallax.geometries;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
 import org.parallax3d.parallax.core.BufferAttribute;
 import org.parallax3d.parallax.core.BufferGeometry;
 
+@ThreeJsObject("THREE.PlaneBufferGeometry")
 public class PlaneBufferGeometry extends BufferGeometry {
 
 	public PlaneBufferGeometry(double width, double height) {

@@ -20,6 +20,7 @@ package org.parallax3d.parallax.scenes;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.shaders.Uniform;
 
 /**
@@ -28,6 +29,7 @@ import org.parallax3d.parallax.shaders.Uniform;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.FogExp2")
 public final class FogExp2 extends AbstractFog
 {
 	private double density;

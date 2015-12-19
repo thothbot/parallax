@@ -18,6 +18,8 @@
 
 package org.parallax3d.parallax.geometries;
 
+import org.parallax3d.parallax.ThreeJsObject;
+
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/icosahedron.gif" />
  * <p>
@@ -26,6 +28,7 @@ package org.parallax3d.parallax.geometries;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.IcosahedronGeometry")
 public final class IcosahedronGeometry extends PolyhedronGeometry
 {
 	public IcosahedronGeometry( double radius, int detail ) 

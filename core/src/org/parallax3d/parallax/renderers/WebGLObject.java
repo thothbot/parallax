@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.renderers;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.core.AbstractGeometry;
 import org.parallax3d.parallax.core.GeometryGroup;
 import org.parallax3d.parallax.core.GeometryObject;
@@ -25,6 +26,7 @@ import org.parallax3d.parallax.materials.Material;
 import org.parallax3d.parallax.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.core.BufferGeometry;
 
+@ThreeJsObject("THREE.WebGLObjects")
 public class WebGLObject implements Comparable<WebGLObject>
 {
 	public int id;

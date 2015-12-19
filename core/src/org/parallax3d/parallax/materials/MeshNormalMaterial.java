@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.materials;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.shaders.NormalShader;
 import org.parallax3d.parallax.shaders.Shader;
 import org.parallax3d.parallax.cameras.Camera;
@@ -26,6 +27,7 @@ import org.parallax3d.parallax.cameras.Camera;
  * A material that maps the normal vectors to RGB colors.
  *
  */
+@ThreeJsObject("THREE.MeshNormalMaterial")
 public final class MeshNormalMaterial extends Material implements HasWireframe, HasShading
 {
 	private boolean isWireframe;

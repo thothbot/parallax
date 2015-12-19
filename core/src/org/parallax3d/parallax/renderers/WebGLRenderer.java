@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.context.Canvas3d;
 import org.parallax3d.parallax.backends.gwt.client.events.HasEventBus;
 import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
@@ -123,6 +124,7 @@ import com.google.gwt.dom.client.ImageElement;
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
+@ThreeJsObject("THREE.WebGLRenderer")
 public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 {
 	// The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.

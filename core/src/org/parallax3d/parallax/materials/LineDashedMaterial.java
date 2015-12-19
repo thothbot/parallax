@@ -20,6 +20,7 @@ package org.parallax3d.parallax.materials;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.ThreeJsObject;
 import org.parallax3d.parallax.shaders.DashedShader;
 import org.parallax3d.parallax.shaders.Shader;
 import org.parallax3d.parallax.shaders.Uniform;
@@ -29,6 +30,7 @@ import org.parallax3d.parallax.cameras.Camera;
  * A material for drawing wireframe-style geometries with dashed lines.
  *
  */
+@ThreeJsObject("THREE.LineDashedMaterial")
 public class LineDashedMaterial extends LineBasicMaterial
 {
 	private double scale;
