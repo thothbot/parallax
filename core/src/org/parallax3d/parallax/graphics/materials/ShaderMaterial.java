@@ -18,7 +18,9 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 @ThreeJsObject("THREE.ShaderMaterial")
 public class ShaderMaterial extends Material 
@@ -65,11 +67,11 @@ public class ShaderMaterial extends Material
 	private boolean isLights;
 	
 	private Shader shader;
-	
-	public ShaderMaterial(Shader.DefaultResources resource) 
-	{
-		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
-	}
+//
+//	public ShaderMaterial(Shader.DefaultResources resource)
+//	{
+//		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
+//	}
 
 	public ShaderMaterial(String vertexShader, String fragmentShader) 
 	{		

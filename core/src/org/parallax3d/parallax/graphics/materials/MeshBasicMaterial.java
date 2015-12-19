@@ -18,6 +18,8 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.BasicShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Color;
@@ -81,7 +83,7 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public Shader getAssociatedShader() 
+	public Shader getAssociatedShader()
 	{
 		return new BasicShader();
 	}

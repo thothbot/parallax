@@ -22,6 +22,10 @@ import java.util.Map;
 
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.HasNearFar;
+import org.parallax3d.parallax.graphics.renderers.shaders.DepthShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * A material for drawing geometry by depth. Depth is based off of the camera near and far plane. White is nearest, black is farthest.

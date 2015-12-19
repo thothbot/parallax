@@ -23,20 +23,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLProgram;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
+import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.GeometryGroup;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BlendEquationMode;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BlendingFactorDest;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BlendingFactorSrc;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
+import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
+import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
+import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
 
 /**
  * Materials describe the appearance of objects. 
@@ -433,7 +435,7 @@ public abstract class Material
 	{
 		if(shader == null)
 		{
-			Log.debug("Called Material.setMaterialShaders()");
+			Parallax.app.debug("Material.getShader()", "Called");
 
 			this.shader = getAssociatedShader();
 		}
@@ -534,7 +536,7 @@ public abstract class Material
 
 	private String getPrefixVertex(ProgramParameters parameters)
 	{
-		Log.debug("Called getPrefixVertex()");
+		Parallax.app.debug("Shader.getPrefixVertex()", "Called");
 		List<String> options = new ArrayList<String>();
 
 		options.add("");
@@ -683,7 +685,7 @@ public abstract class Material
 
 	private String getPrefixFragment(ProgramParameters parameters)
 	{
-		Log.debug("Called getPrefixFragment()");
+		Parallax.app.debug("Material.getPrefixFragment()", "Called");
 		List<String> options = new ArrayList<String>();
 
 		options.add("");

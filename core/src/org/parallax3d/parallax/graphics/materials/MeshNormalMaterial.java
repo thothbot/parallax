@@ -19,6 +19,9 @@
 package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.graphics.renderers.shaders.NormalShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * A material that maps the normal vectors to RGB colors.

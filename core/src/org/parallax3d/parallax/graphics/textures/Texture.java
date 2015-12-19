@@ -20,29 +20,8 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DataType;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelType;
-import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLConstants;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLTexture;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMinFilter;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureParameterName;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureTarget;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureWrapMode;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.math.Vector2;
-
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ErrorEvent;
-import com.google.gwt.event.dom.client.ErrorHandler;
-import com.google.gwt.event.dom.client.LoadEvent;
-import com.google.gwt.event.dom.client.LoadHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Basic implementation of texture.

@@ -18,6 +18,8 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -20,6 +20,9 @@ package org.parallax3d.parallax.graphics.materials;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.LambertShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.textures.Texture;
@@ -373,7 +376,7 @@ public final class MeshLambertMaterial extends Material
 	public void refreshUniforms(Camera camera, boolean isGammaInput) 
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		Map<String, Uniform> uniforms = getShader().getUniforms(); 
+		Map<String, Uniform> uniforms = getShader().getUniforms();
 		
 		if ( isGammaInput ) 
 		{

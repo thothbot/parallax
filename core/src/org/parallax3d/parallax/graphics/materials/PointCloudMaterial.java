@@ -20,15 +20,15 @@ package org.parallax3d.parallax.graphics.materials;
 
 import java.util.Map;
 
-import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeHandler;
-import org.parallax3d.parallax.backends.gwt.client.events.HasEventBus;
-import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
+import org.parallax3d.parallax.graphics.renderers.shaders.ParticleBasicShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
 
 public final class PointCloudMaterial extends Material implements HasFog,
-		HasColor, HasMap, HasVertexColors, HasEventBus {
+		HasColor, HasMap, HasVertexColors {
 	private boolean isFog;
 
 	private Color color;
@@ -145,15 +145,15 @@ public final class PointCloudMaterial extends Material implements HasFog,
 		uniforms.get("opacity").setValue(getOpacity());
 		uniforms.get("size").setValue(getSize());
 
-		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE,
-				new ViewportResizeHandler() {
-
-					@Override
-					public void onResize(ViewportResizeEvent event) {
-						uniforms.get("scale").setValue(
-								event.getRenderer().getAbsoluteHeight() / 2.0);
-					}
-				});
+//		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE,
+//				new ViewportResizeHandler() {
+//
+//					@Override
+//					public void onResize(ViewportResizeEvent event) {
+//						uniforms.get("scale").setValue(
+//								event.getRenderer().getAbsoluteHeight() / 2.0);
+//					}
+//				});
 
 		// Default
 		uniforms.get("scale").setValue(500 / 2.0);

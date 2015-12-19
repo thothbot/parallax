@@ -20,11 +20,15 @@ package org.parallax3d.parallax.graphics.materials;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.PhongShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * A material for shiny surfaces, evaluated per pixel.
@@ -495,7 +499,7 @@ public final class MeshPhongMaterial extends Material
 	{
 		super.refreshUniforms(camera, isGammaInput);
 		
-		Map<String, Uniform> uniforms = getShader().getUniforms(); 
+		Map<String, Uniform> uniforms = getShader().getUniforms();
 		uniforms.get("shininess").setValue( getShininess() );
 
 		if ( isGammaInput ) 
