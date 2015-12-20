@@ -46,7 +46,7 @@ public class SceneUtils
 	 * one of material of materials list.
 	 * 
 	 * @param geometry  the input geometry.
-	 * @param list the list of materials.
+	 * @param materials the list of materials.
 	 * 
 	 * @return the new instance of {@link Object3D}
 	 */

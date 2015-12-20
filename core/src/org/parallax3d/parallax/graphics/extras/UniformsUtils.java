@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.parallax3d.parallax.graphics.core.FastMap;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 
 /**
  * The class implements some Uniform related helper methods 
@@ -39,7 +40,7 @@ public class UniformsUtils
 	 * 
 	 * @return new instance of Uniform Map
 	 */
-	public static Map<String, Uniform> merge( Map<String, Uniform> uniforms1, Map<String, Uniform> uniforms2 ) 
+	public static Map<String, Uniform> merge( Map<String, Uniform> uniforms1, Map<String, Uniform> uniforms2 )
 	{
 		Map<String, Uniform> result = new FastMap<Uniform>();
 		

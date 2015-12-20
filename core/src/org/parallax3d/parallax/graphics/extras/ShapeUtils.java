@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.core.FastMap;
 import org.parallax3d.parallax.math.Vector2;
@@ -177,7 +177,7 @@ public class ShapeUtils
 			} 
 			else 
 			{
-				Log.error("ShapeUtils: removeHoles() ERROR");
+				Parallax.app.error("ShapeUtils", "removeHoles() ERROR");
 			}
 
 			List<Vector2> tmpShape1 = new ArrayList<Vector2>(shape.subList(0, shapeIndex));
@@ -244,7 +244,7 @@ public class ShapeUtils
 			String key = allpoints.get( i ).getX() + ":" + allpoints.get( i ).getY();
 
 			if ( allPointsMap.containsKey(key))
-				Log.warn( "ShapeUtils: triangulateShape() - Duplicate point " + key );
+				Parallax.app.error( "ShapeUtils", "triangulateShape() - Duplicate point " + key );
 
 			allPointsMap.put(key, i);
 		}
