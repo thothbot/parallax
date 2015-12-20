@@ -21,8 +21,8 @@ package org.parallax3d.parallax.graphics.renderers;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.lights.HemisphereLight;
@@ -57,7 +57,7 @@ public class RendererLights
 				
 	public void setupLights ( List<Light> lights, boolean  isGammaInput) 
 	{
-		Log.debug("Called setupLights()");
+		Parallax.app.debug("setupLights()", "Called");
 		
 		// Reset uniforms
 		ambient.reset();

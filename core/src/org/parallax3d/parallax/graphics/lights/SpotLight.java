@@ -18,11 +18,12 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
+import java.nio.FloatBuffer;
 import java.util.Map;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
@@ -58,24 +59,24 @@ public class SpotLight extends ShadowLight
 {
 	public static class UniformSport implements UniformLight
 	{
-		public Float32Array distances;
-		public Float32Array colors;
-		public Float32Array positions;
+		public FloatBuffer distances;
+		public FloatBuffer colors;
+		public FloatBuffer positions;
 		
-		public Float32Array directions;
-		public Float32Array angles;
-		public Float32Array exponents;
+		public FloatBuffer directions;
+		public FloatBuffer angles;
+		public FloatBuffer exponents;
 		
 		@Override
 		public void reset() 
 		{
-			this.colors    = (Float32Array) Float32Array.createArray();
-			this.distances = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
+			this.colors    = BufferUtils.newFloatBuffer(3);
+			this.distances = BufferUtils.newFloatBuffer(3);
+			this.positions = BufferUtils.newFloatBuffer(3);
 			
-			this.directions = (Float32Array) Float32Array.createArray();
-			this.angles     = (Float32Array) Float32Array.createArray();
-			this.exponents  = (Float32Array) Float32Array.createArray();
+			this.directions = BufferUtils.newFloatBuffer(3);
+			this.angles     = BufferUtils.newFloatBuffer(3);
+			this.exponents  = BufferUtils.newFloatBuffer(3);
 		}
 
 		@Override
@@ -162,17 +163,17 @@ public class SpotLight extends ShadowLight
 	@Override
 	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
 	{
-		Float32Array spotColors     = zlights.spot.colors;
-		Float32Array spotPositions  = zlights.spot.positions;
-		Float32Array spotDistances  = zlights.spot.distances;
-		Float32Array spotDirections = zlights.spot.directions;
-		Float32Array spotAngles     = zlights.spot.angles;
-		Float32Array spotExponents  = zlights.spot.exponents;
+		FloatBuffer spotColors     = zlights.spot.colors;
+		FloatBuffer spotPositions  = zlights.spot.positions;
+		FloatBuffer spotDistances  = zlights.spot.distances;
+		FloatBuffer spotDirections = zlights.spot.directions;
+		FloatBuffer spotAngles     = zlights.spot.angles;
+		FloatBuffer spotExponents  = zlights.spot.exponents;
 		
 		float intensity = getIntensity();
 		float distance =  getDistance();
 
-		int spotOffset = spotColors.getLength();
+		int spotOffset = spotColors.arrayOffset();
 
 		if ( isGammaInput ) 
 			setColorGamma( spotColors, spotOffset, getColor(), intensity ); 
@@ -182,22 +183,22 @@ public class SpotLight extends ShadowLight
 		Vector3 position = new Vector3();
 		position.setFromMatrixPosition( getMatrixWorld() );
 
-		spotPositions.set(spotOffset,     position.getX());
-		spotPositions.set(spotOffset + 1, position.getY());
-		spotPositions.set(spotOffset + 2, position.getZ());
+		spotPositions.put(spotOffset,     position.getX());
+		spotPositions.put(spotOffset + 1, position.getY());
+		spotPositions.put(spotOffset + 2, position.getZ());
 
-		spotDistances.set(spotOffset / 3, distance);
+		spotDistances.put(spotOffset / 3, distance);
 
 		Vector3 vector3 = new Vector3();
 		vector3.setFromMatrixPosition( getTarget().getMatrixWorld() );
 		position.sub( vector3 );
 		position.normalize();
 
-		spotDirections.set(spotOffset,    position.getX());
-		spotDirections.set(spotOffset + 1, position.getY());
-		spotDirections.set(spotOffset + 2, position.getZ());
+		spotDirections.put(spotOffset,    position.getX());
+		spotDirections.put(spotOffset + 1, position.getY());
+		spotDirections.put(spotOffset + 2, position.getZ());
 
-		spotAngles.set(spotOffset / 3, Math.cos( getAngle() ));
-		spotExponents.set( spotOffset / 3, getExponent());
+		spotAngles.put(spotOffset / 3, (float)Math.cos( getAngle() ));
+		spotExponents.put( spotOffset / 3, getExponent());
 	}
 }

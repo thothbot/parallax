@@ -18,11 +18,12 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
+import java.nio.FloatBuffer;
 import java.util.Map;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
@@ -32,16 +33,16 @@ public final class HemisphereLight extends Light implements HasIntensity
 {
 	public static class UniformHemisphere implements UniformLight
 	{
-		public Float32Array skyColors;
-		public Float32Array groundColors;
-		public Float32Array positions;
+		public FloatBuffer skyColors;
+		public FloatBuffer groundColors;
+		public FloatBuffer positions;
 		
 		@Override
 		public void reset() 
 		{
-			this.skyColors    = (Float32Array) Float32Array.createArray();
-			this.groundColors = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
+			this.skyColors    = (FloatBuffer) BufferUtils.newFloatBuffer(3);
+			this.groundColors = (FloatBuffer) BufferUtils.newFloatBuffer(3);
+			this.positions = (FloatBuffer) BufferUtils.newFloatBuffer(3);
 			
 		}
 
@@ -56,20 +57,20 @@ public final class HemisphereLight extends Light implements HasIntensity
 	}
 	
 	private Color groundColor;
-	private double intensity;
+	private float intensity;
 	
 	public HemisphereLight(int skyColorHex, int groundColorHex)
 	{
-		this(skyColorHex, groundColorHex, 1.0);
+		this(skyColorHex, groundColorHex, 1.0f);
 	}
 	
-	public HemisphereLight(int skyColorHex, int groundColorHex, double intensity)
+	public HemisphereLight(int skyColorHex, int groundColorHex, float intensity)
 	{
 		super(skyColorHex);
 		
 		this.groundColor = new Color( groundColorHex );
 
-		this.position = new Vector3( 0, 100.0, 0 );
+		this.position = new Vector3( 0, 100.0f, 0 );
 
 		this.intensity = intensity;
 	}
@@ -82,11 +83,11 @@ public final class HemisphereLight extends Light implements HasIntensity
 		this.groundColor = groundColor;
 	}
 
-	public double getIntensity() {
+	public float getIntensity() {
 		return intensity;
 	}
 
-	public void setIntensity(double intensity) {
+	public void setIntensity(float intensity) {
 		this.intensity = intensity;
 	}
 	
@@ -106,15 +107,15 @@ public final class HemisphereLight extends Light implements HasIntensity
 	@Override
 	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
 	{
-		Float32Array hemiSkyColors    = zlights.hemi.skyColors;
-		Float32Array hemiGroundColors = zlights.hemi.groundColors;
-		Float32Array hemiPositions    = zlights.hemi.positions;
+		FloatBuffer hemiSkyColors    = zlights.hemi.skyColors;
+		FloatBuffer hemiGroundColors = zlights.hemi.groundColors;
+		FloatBuffer hemiPositions    = zlights.hemi.positions;
 		
 		Color skyColor = getColor();
 		Color groundColor = getGroundColor();
-		double intensity = getIntensity();
+		float intensity = getIntensity();
 
-		int hemiOffset = hemiSkyColors.getLength() * 3;
+		int hemiOffset = hemiSkyColors.array().length * 3;
 
 		if (  isGammaInput ) 
 		{
@@ -132,8 +133,8 @@ public final class HemisphereLight extends Light implements HasIntensity
 		_direction.setFromMatrixPosition( getMatrixWorld() );
 		_direction.normalize();
 
-		hemiPositions.set( hemiOffset,     _direction.getX() );
-		hemiPositions.set( hemiOffset + 1, _direction.getY() );
-		hemiPositions.set( hemiOffset + 2, _direction.getZ() );
+		hemiPositions.put( hemiOffset,     _direction.getX() );
+		hemiPositions.put(hemiOffset + 1, _direction.getY());
+		hemiPositions.put(hemiOffset + 2, _direction.getZ());
 	}
 }

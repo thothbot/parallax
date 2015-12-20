@@ -18,12 +18,13 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
+import java.nio.FloatBuffer;
 import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
@@ -49,14 +50,14 @@ public class DirectionalLight extends ShadowLight
 {	
 	public static class UniformDirectional implements UniformLight
 	{
-		public Float32Array colors;
-		public Float32Array positions;
+		public FloatBuffer colors;
+		public FloatBuffer positions;
 
 		@Override
 		public void reset() 
 		{
-			this.colors    = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
+			this.colors    = BufferUtils.newFloatBuffer(3);
+			this.positions = BufferUtils.newFloatBuffer(3);
 			
 		}
 
@@ -91,7 +92,7 @@ public class DirectionalLight extends ShadowLight
 
 	public DirectionalLight(int hex) 
 	{
-		this(hex, 1.0);
+		this(hex, 1.0f);
 	}
 
 	public DirectionalLight(int hex, float intensity)
@@ -251,12 +252,12 @@ public class DirectionalLight extends ShadowLight
 	@Override
 	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
 	{
-		Float32Array dirColors     = zlights.directional.colors;
-		Float32Array dirPositions  = zlights.directional.positions;
+		FloatBuffer dirColors     = zlights.directional.colors;
+		FloatBuffer dirPositions  = zlights.directional.positions;
 
 		float intensity = getIntensity();
 
-		int dirOffset = dirColors.getLength();
+		int dirOffset = dirColors.array().length;
 
 		if ( isGammaInput )
 			setColorGamma( dirColors, dirOffset, getColor(), intensity ); 
@@ -270,8 +271,8 @@ public class DirectionalLight extends ShadowLight
 		position.sub( _vector3 );
 		position.normalize();
 
-		dirPositions.set( dirOffset, position.getX());
-		dirPositions.set( dirOffset + 1, position.getY());
-		dirPositions.set( dirOffset + 2, position.getZ());
+		dirPositions.put( dirOffset, position.getX());
+		dirPositions.put(dirOffset + 1, position.getY());
+		dirPositions.put(dirOffset + 2, position.getZ());
 	}
 }

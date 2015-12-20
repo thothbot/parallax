@@ -18,12 +18,13 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
+import java.nio.FloatBuffer;
 import java.util.Map;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -44,14 +45,14 @@ public final class AmbientLight extends Light
 {
 	public static class UniformAmbient implements UniformLight
 	{
-		public Float32Array colors;
+		public FloatBuffer colors;
 		
 		@Override
 		public void reset() 
 		{
-			this.colors = (Float32Array) Float32Array.createArray();
+			this.colors = (FloatBuffer) BufferUtils.newFloatBuffer(3);
 			for(int i = 0; i < 3; i++)
-				this.colors.set(i, 0.0);
+				this.colors.put(i, 0.0f);
 			
 		}
 
@@ -79,11 +80,11 @@ public final class AmbientLight extends Light
 	@Override
 	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
 	{
-		Float32Array colors = zlights.ambient.colors;
+		FloatBuffer colors = zlights.ambient.colors;
 	
 		Color color = getColor();
 		float r = 0, g = 0, b = 0;
-		if(colors.getLength() == 3)
+		if(colors.array().length == 3)
 		{
 			r = colors.get(0);
 			g = colors.get(1);
@@ -103,9 +104,9 @@ public final class AmbientLight extends Light
 			b += color.getB();
 		}
 
-		colors.set( 0, r );
-		colors.set( 1, g );
-		colors.set( 2, b ); 
+		colors.put( 0, r );
+		colors.put( 1, g );
+		colors.put( 2, b );
 	}
 
 }

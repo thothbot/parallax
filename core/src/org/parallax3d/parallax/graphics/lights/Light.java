@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
+import java.nio.FloatBuffer;
 import java.util.Map;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
@@ -69,17 +69,17 @@ public abstract class Light extends Object3D
 	
 	public abstract void setupRendererLights(RendererLights zlights, boolean isGammaInput);
 
-	protected void setColorGamma( Float32Array array, int offset, Color color, float intensity )
+	protected void setColorGamma( FloatBuffer array, int offset, Color color, float intensity )
 	{
-		array.set( offset,     color.getR() * color.getR() * intensity * intensity);
-		array.set( offset + 1, color.getG() * color.getG() * intensity * intensity);
-		array.set( offset + 2, color.getB() * color.getB() * intensity * intensity);
+		array.put(offset, color.getR() * color.getR() * intensity * intensity);
+		array.put(offset + 1, color.getG() * color.getG() * intensity * intensity);
+		array.put(offset + 2, color.getB() * color.getB() * intensity * intensity);
 	}
 
-	protected void  setColorLinear( Float32Array array, int offset, Color color, float intensity ) 
+	protected void  setColorLinear( FloatBuffer array, int offset, Color color, float intensity )
 	{
-		array.set( offset,     color.getR() * intensity);
-		array.set( offset + 1, color.getG() * intensity);
-		array.set( offset + 2, color.getB() * intensity);
+		array.put(offset, color.getR() * intensity);
+		array.put(offset + 1, color.getG() * intensity);
+		array.put( offset + 2, color.getB() * intensity);
 	}
 }
