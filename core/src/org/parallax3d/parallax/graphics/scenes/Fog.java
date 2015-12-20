@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.scenes;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -31,8 +32,8 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.Fog")
 public final class Fog extends AbstractFog 
 {
-	private double near;
-	private double far;
+	private float near;
+	private float far;
 
 	/**
 	 * This default constructor will make simple fog with 
@@ -52,7 +53,7 @@ public final class Fog extends AbstractFog
 	 * @param near the near scalar value
 	 * @param far  the far scala value
 	 */
-	public Fog(int hex, double near, double far) 
+	public Fog(int hex, float near, float far) 
 	{
 		super(hex);
 		this.near = near;
@@ -64,7 +65,7 @@ public final class Fog extends AbstractFog
 	 * 
 	 * @param near the near scalar value
 	 */
-	public void setNear(double near)
+	public void setNear(float near)
 	{
 		this.near = near;
 	}
@@ -74,7 +75,7 @@ public final class Fog extends AbstractFog
 	 * 
 	 * @return the near fog parameter
 	 */
-	public double getNear()
+	public float getNear()
 	{
 		return near;
 	}
@@ -84,7 +85,7 @@ public final class Fog extends AbstractFog
 	 * 
 	 * @param far the far fog parameter
 	 */
-	public void setFar(double far)
+	public void setFar(float far)
 	{
 		this.far = far;
 	}
@@ -94,7 +95,7 @@ public final class Fog extends AbstractFog
 	 * 
 	 * @return the far fog parameter
 	 */
-	public double getFar()
+	public float getFar()
 	{
 		return far;
 	}

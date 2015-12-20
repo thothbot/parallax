@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.scenes;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -31,7 +32,7 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.FogExp2")
 public final class FogExp2 extends AbstractFog
 {
-	private double density;
+	private float density;
 
 	/**
 	 * This default constructor will make fog with 
@@ -41,7 +42,7 @@ public final class FogExp2 extends AbstractFog
 	 */
 	public FogExp2(int hex) 
 	{
-		this(hex, 0.00025);
+		this(hex, 0.00025f);
 	}
 
 	/**
@@ -50,7 +51,7 @@ public final class FogExp2 extends AbstractFog
 	 * @param hex     the color in HEX format
 	 * @param density the density value in range <0.0, 1.0>
 	 */
-	public FogExp2(int hex, double density) 
+	public FogExp2(int hex, float density) 
 	{
 		super(hex);
 		this.density = density;
@@ -61,7 +62,7 @@ public final class FogExp2 extends AbstractFog
 	 * 
 	 * @param density the density value in range <0.0, 1.0>
 	 */
-	public void setDensity(double density)
+	public void setDensity(float density)
 	{
 		this.density = density;
 	}
@@ -71,7 +72,7 @@ public final class FogExp2 extends AbstractFog
 	 * 
 	 * @return the density value
 	 */
-	public double getDensity()
+	public float getDensity()
 	{
 		return this.density;
 	}

@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.scenes;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 
 /**

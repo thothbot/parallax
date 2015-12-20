@@ -66,7 +66,7 @@ public final class Scene extends Object3D
 	/**
 	 * Set the fogAbstract to the Scene.
 	 * 
-	 * @param fogAbstract the FogAbstract
+	 * @param fog the FogAbstract
 	 */
 	public void setFog(AbstractFog fog)
 	{
