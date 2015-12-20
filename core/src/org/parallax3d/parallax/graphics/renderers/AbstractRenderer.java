@@ -29,7 +29,7 @@ public abstract class AbstractRenderer
 	
 	// Default Color and alpha
 	protected Color clearColor = new Color(0x000000);
-	protected double clearAlpha = 1.0;
+	protected float clearAlpha = 1.0f;
 	
 	// Clearing
 	protected boolean autoClear = true;
@@ -48,8 +48,8 @@ public abstract class AbstractRenderer
 		return this.absoluteHeight;
 	}
 	
-	public double getAbsoluteAspectRation() {
-		return getAbsoluteWidth() / (double)getAbsoluteHeight();
+	public float getAbsoluteAspectRation() {
+		return getAbsoluteWidth() / (float)getAbsoluteHeight();
 	}
 
 	public void setClearColor( int hex )
@@ -59,7 +59,7 @@ public abstract class AbstractRenderer
 	
 	public void setClearColor( Color color )
 	{
-		setClearColor(color, 1.0);
+		setClearColor(color, 1.0f);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public abstract class AbstractRenderer
 	 * 
 	 * @param hex the clear color value.
 	 */
-	public void setClearColor( int hex, double alpha )
+	public void setClearColor( int hex, float alpha )
 	{
 		setClearColor(new Color(hex), alpha);
 	}
@@ -78,7 +78,7 @@ public abstract class AbstractRenderer
 	 * @param color the {@link Color} instance.
 	 * @param alpha the opacity of the scene's background color, range 0.0 (invisible) to 1.0 (opaque).
 	 */
-	public abstract void setClearColor( Color color, double alpha );	
+	public abstract void setClearColor( Color color, float alpha );	
 
 	/**
 	 * Returns the background color.
@@ -95,7 +95,7 @@ public abstract class AbstractRenderer
 	 * 
 	 * @return the value in range &#60;0,1&#62;.
 	 */
-	public double getClearAlpha() 
+	public float getClearAlpha() 
 	{
 		return this.clearAlpha;
 	}

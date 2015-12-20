@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.textures;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
 
 /**
@@ -93,7 +94,7 @@ public class Texture
 
 	private boolean isNeedsUpdate = false;
 	
-	private WebGLTexture webglTexture;
+	private Integer webglTexture; //WebGLTexture
 	
 	private int anisotropy;
 	
@@ -128,10 +129,10 @@ public class Texture
 		this(image.getElement());
 
 		loadImage(image, new Loader() {
-			
+
 			@Override
 			public void onLoad() {
-				
+
 				setNeedsUpdate(true);
 				if (imageLoadHandler != null)
 					imageLoadHandler.onImageLoad(Texture.this);
@@ -146,14 +147,14 @@ public class Texture
 	 */
 	public Texture(Element image) 
 	{
-		this(image, 
+		this(image,
 				MAPPING_MODE.UV,
-				TextureWrapMode.CLAMP_TO_EDGE, 
 				TextureWrapMode.CLAMP_TO_EDGE,
-				TextureMagFilter.LINEAR, 
+				TextureWrapMode.CLAMP_TO_EDGE,
+				TextureMagFilter.LINEAR,
 				TextureMinFilter.LINEAR_MIPMAP_LINEAR,
-				PixelFormat.RGBA, 
-				PixelType.UNSIGNED_BYTE, 
+				PixelFormat.RGBA,
+				PixelType.UNSIGNED_BYTE,
 				1);
 	}
 	
@@ -438,41 +439,41 @@ public class Texture
 		this.unpackAlignment = unpackAlignment;
 	}
 
-	public WebGLTexture getWebGlTexture() {
+	public Integer getWebGlTexture() {
 		return webglTexture;
 	}
 
-	public void setWebGlTexture(WebGLTexture webglTexture) {
+	public void setWebGlTexture(Integer webglTexture) {
 		this.webglTexture = webglTexture;
 	}
 
-	public void setTextureParameters (WebGLRenderingContext gl, TextureTarget textureType, boolean isImagePowerOfTwo )
+	public void setTextureParameters (GL20 gl, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
 	{
 		setTextureParameters(gl, 0, textureType, isImagePowerOfTwo);
 	}
 
-	public void setTextureParameters (WebGLRenderingContext gl, int maxAnisotropy, TextureTarget textureType, boolean isImagePowerOfTwo ) 
+	public void setTextureParameters (GL20 gl, int maxAnisotropy, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
 	{	
 		if ( isImagePowerOfTwo ) 
 		{
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_S, this.wrapS.getValue() );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_T, this.wrapT.getValue() );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MAG_FILTER, this.magFilter.getValue() );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MIN_FILTER, this.minFilter.getValue() );
+			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue());
+			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue());
+			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
+			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue());
 		} 
 		else 
 		{
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_S, WebGLConstants.CLAMP_TO_EDGE );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_WRAP_T, WebGLConstants.CLAMP_TO_EDGE );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MAG_FILTER, filterFallback( this.magFilter.getValue() ) );
-			gl.texParameteri( textureType, TextureParameterName.TEXTURE_MIN_FILTER, filterFallback( this.minFilter.getValue() ) );
+			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_S.getValue(), GL20.GL_CLAMP_TO_EDGE);
+			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_T.getValue(), GL20.GL_CLAMP_TO_EDGE);
+			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MAG_FILTER.getValue(), filterFallback(this.magFilter.getValue()));
+			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MIN_FILTER.getValue(), filterFallback(this.minFilter.getValue()));
 		}
 		
 		if ( maxAnisotropy > 0 ) 
 		{
 			if ( this.anisotropy > 1 || this.cache_oldAnisotropy > 1 ) 
 			{
-				gl.texParameterf( textureType, TextureParameterName.TEXTURE_MAX_ANISOTROPY_EXT, Math.min( this.anisotropy, maxAnisotropy ) );
+				gl.glTexParameterf(textureType, TextureParameterName.TEXTURE_MAX_ANISOTROPY_EXT.getValue(), Math.min(this.anisotropy, maxAnisotropy));
 				this.cache_oldAnisotropy = this.anisotropy;
 			}
 		}
@@ -483,10 +484,10 @@ public class Texture
 	 */
 	private int filterFallback ( int f ) 
 	{
-		if(f == WebGLConstants.NEAREST || f == WebGLConstants.NEAREST_MIPMAP_NEAREST || f == WebGLConstants.NEAREST_MIPMAP_LINEAR)
-			return WebGLConstants.NEAREST;
+		if(f == GL20.GL_NEAREST || f == GL20.GL_NEAREST_MIPMAP_NEAREST || f == GL20.GL_NEAREST_MIPMAP_LINEAR)
+			return GL20.GL_NEAREST;
 
-		return WebGLConstants.LINEAR;
+		return GL20.GL_LINEAR;
 	}
 	
 	/**
@@ -497,7 +498,7 @@ public class Texture
 	{
 		if ( getWebGlTexture() == null ) return;
 
-		renderer.getGL().deleteTexture( getWebGlTexture() );
+		renderer.getGL().glDeleteTexture( getWebGlTexture() );
 
 		renderer.getInfo().getMemory().textures--;
 	}
