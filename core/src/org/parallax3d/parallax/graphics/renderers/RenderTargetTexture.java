@@ -200,15 +200,17 @@ public class RenderTargetTexture extends Texture
 			gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
 
 		// Release everything
-		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, null);
-		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, null);
+		Integer nullval = null;
+		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, nullval);
+		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, nullval);
 	}
 
 	public void updateRenderTargetMipmap(GL20 gl)
 	{	
 		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), this.getWebGlTexture());
 		gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
-		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), null);
+		Integer nullval = null;
+		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), nullval);
 	}
 
 	public void setupFrameBuffer(GL20 gl, Integer framebuffer, Integer textureTarget)

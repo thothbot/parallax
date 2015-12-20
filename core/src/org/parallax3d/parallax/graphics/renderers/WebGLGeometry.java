@@ -36,19 +36,19 @@ public abstract class WebGLGeometry {
 	public FloatBuffer __lineDistanceArray;
 
 	// WebGLBuffer
-	public int __webglColorBuffer;
-	public int __webglVertexBuffer;
-	public int __webglNormalBuffer;
-	public int __webglTangentBuffer;
-	public int __webglUVBuffer;
-	public int __webglUV2Buffer;
-	public int __webglLineDistanceBuffer;
+	public Integer __webglColorBuffer;
+	public Integer __webglVertexBuffer;
+	public Integer __webglNormalBuffer;
+	public Integer __webglTangentBuffer;
+	public Integer __webglUVBuffer;
+	public Integer __webglUV2Buffer;
+	public Integer __webglLineDistanceBuffer;
 	
-	public int __webglSkinIndicesBuffer;
-	public int __webglSkinWeightsBuffer;
+	public Integer __webglSkinIndicesBuffer;
+	public Integer __webglSkinWeightsBuffer;
 		
-	public int __webglFaceBuffer;
-	public int __webglLineBuffer;
+	public Integer __webglFaceBuffer;
+	public Integer __webglLineBuffer;
 	
 	public List<Integer> __webglMorphTargetsBuffers; // WebGLBuffer
 	

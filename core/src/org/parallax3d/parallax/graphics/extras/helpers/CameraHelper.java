@@ -22,11 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.cameras.Camera;
-import org.parallax3d.parallax.graphics.core.FastMap;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Color;
@@ -49,7 +49,7 @@ public class CameraHelper extends Line
 {
 	private Camera camera;
 	
-	private Map<String, List<Integer>> pointMap;
+	private ObjectMap<String, List<Integer>> pointMap;
 	
 	public CameraHelper(Camera camera)
 	{
@@ -66,7 +66,7 @@ public class CameraHelper extends Line
 		setMatrix(camera.getMatrixWorld());
 		setMatrixAutoUpdate(false);
 		
-		this.pointMap = new FastMap<List<Integer>>();
+		this.pointMap = new ObjectMap<String, List<Integer>>();
 
 		// colors
 

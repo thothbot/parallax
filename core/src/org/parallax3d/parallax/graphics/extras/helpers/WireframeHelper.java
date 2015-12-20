@@ -25,13 +25,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.system.BufferUtils;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawCall;
 import org.parallax3d.parallax.graphics.core.Face3;
-import org.parallax3d.parallax.graphics.core.FastMap;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.math.Color;
@@ -56,7 +56,7 @@ public class WireframeHelper extends Line {
 		BufferGeometry geometry = (BufferGeometry) getGeometry();
 
 		int[] edge = new int[]{ 0, 0 };
-		Map<String, Boolean> hash = new FastMap<Boolean>();
+		ObjectMap<String, Boolean> hash = new ObjectMap<String, Boolean>();
 
 		if(object.getGeometry() instanceof Geometry)
 		{

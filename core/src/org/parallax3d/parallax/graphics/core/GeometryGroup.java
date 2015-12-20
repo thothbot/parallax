@@ -24,11 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
-import org.parallax3d.parallax.system.ArrayMap;
+import org.parallax3d.parallax.system.ObjectMap;
 
 public class GeometryGroup extends WebGLGeometry
 {
-	public static ArrayMap<String, List<GeometryGroup>> geometryGroups = new ArrayMap<String, List<GeometryGroup>>();
+	public static ObjectMap<String, List<GeometryGroup>> geometryGroups = new ObjectMap<String, List<GeometryGroup>>();
 	
 	private static int Counter = 0;
 	

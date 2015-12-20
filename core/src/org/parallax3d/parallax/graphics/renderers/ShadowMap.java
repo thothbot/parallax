@@ -21,11 +21,9 @@ package org.parallax3d.parallax.graphics.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.FrontFaceDirection;
 import org.parallax3d.parallax.graphics.renderers.shaders.DepthRGBAShader;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.CullFaceMode;
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.Gyroscope;
@@ -35,11 +33,6 @@ import org.parallax3d.parallax.graphics.lights.SpotLight;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.objects.SkinnedMesh;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.EnableCap;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMagFilter;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.TextureMinFilter;
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
@@ -56,6 +49,8 @@ import org.parallax3d.parallax.math.Frustum;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.enums.*;
 
 @ThreeJsObject("THREE.WebGLExtensions")
 public final class ShadowMap extends Plugin 
@@ -161,23 +156,23 @@ public final class ShadowMap extends Plugin
 	{
 		if ( ! ( isEnabled() && isAutoUpdate() ) ) return;
 
-		WebGLRenderingContext gl = getRenderer().getGL();
+		GL20 gl = getRenderer().getGL();
 		
 		// set GL state for depth map
 
-		gl.clearColor( 1, 1, 1, 1 );
-		gl.disable( EnableCap.BLEND );
+		gl.glClearColor(1, 1, 1, 1);
+		gl.glDisable(EnableCap.BLEND.getValue());
 
-		gl.enable( EnableCap.CULL_FACE );
-		gl.frontFace( FrontFaceDirection.CCW );
+		gl.glEnable(EnableCap.CULL_FACE.getValue());
+		gl.glFrontFace(FrontFaceDirection.CCW.getValue());
 
 		if ( isCullFrontFaces() ) 
 		{
-			gl.cullFace( CullFaceMode.FRONT );
+			gl.glCullFace(CullFaceMode.FRONT.getValue());
 		} 
 		else 
 		{
-			gl.cullFace( CullFaceMode.BACK );
+			gl.glCullFace(CullFaceMode.BACK.getValue());
 		}
 
 		getRenderer().setDepthTest( true );
@@ -218,7 +213,7 @@ public final class ShadowMap extends Plugin
 
 						shadowCascadeArray.add( n, virtualLight );
 
-						Log.debug("Shadowmap plugin: Created virtualLight");
+						Parallax.app.debug("Shadowmap", "Created virtualLight");
 					} 
 					else 
 					{
@@ -273,7 +268,7 @@ public final class ShadowMap extends Plugin
 				} 
 				else 
 				{
-					Log.error( "Shadowmap plugin: Unsupported light class for shadow: " + light.getClass().getName() );
+					Parallax.app.error("ShadowMap", "Unsupported light class for shadow: " + light.getClass().getName());
 					continue;
 				}
 
@@ -310,10 +305,10 @@ public final class ShadowMap extends Plugin
 			
 			// compute shadow matrix
 			Matrix4 shadowMatrix = light.getShadowMatrix();
-			shadowMatrix.set( 0.5, 0.0, 0.0, 0.5,
-							  0.0, 0.5, 0.0, 0.5,
-							  0.0, 0.0, 0.5, 0.5,
-							  0.0, 0.0, 0.0, 1.0 );
+			shadowMatrix.set( 0.5f, 0.0f, 0.0f, 0.5f,
+							  0.0f, 0.5f, 0.0f, 0.5f,
+							  0.0f, 0.0f, 0.5f, 0.5f,
+							  0.0f, 0.0f, 0.0f, 1.0f );
 
 			shadowMatrix.multiply( shadowCamera.getProjectionMatrix() );
 			shadowMatrix.multiply( shadowCamera.getMatrixWorldInverse() );
@@ -419,14 +414,14 @@ public final class ShadowMap extends Plugin
 		// restore GL state
 
 		Color clearColor = getRenderer().getClearColor();
-		double clearAlpha = getRenderer().getClearAlpha();
+		float clearAlpha = getRenderer().getClearAlpha();
 
-		gl.clearColor( clearColor.getR(), clearColor.getG(), clearColor.getB(), clearAlpha );
-		gl.enable( EnableCap.BLEND );
+		gl.glClearColor(clearColor.getR(), clearColor.getG(), clearColor.getB(), clearAlpha);
+		gl.glEnable(EnableCap.BLEND.getValue());
 
 		if ( isCullFrontFaces() ) 
 		{
-			gl.cullFace( CullFaceMode.BACK );
+			gl.glCullFace(CullFaceMode.BACK.getValue());
 		}
 		
 		getRenderer().resetGLState();
@@ -484,8 +479,8 @@ public final class ShadowMap extends Plugin
 		virtualLight.setShadowMapWidth( light.getShadowCascadeWidth()[ cascade ] );
 		virtualLight.setShadowMapHeight( light.getShadowCascadeHeight()[ cascade ] );
 
-		double nearZ = light.getShadowCascadeNearZ()[ cascade ];
-		double farZ = light.getShadowCascadeFarZ()[ cascade ];
+		float nearZ = light.getShadowCascadeNearZ()[ cascade ];
+		float farZ = light.getShadowCascadeFarZ()[ cascade ];
 
 		List<Vector3> pointsFrustum = virtualLight.getPointsFrustum();
 		
@@ -518,8 +513,8 @@ public final class ShadowMap extends Plugin
 
 		virtualLight.setShadowBias( light.getShadowCascadeBias()[ cascade ] );
 
-		double nearZ = light.getShadowCascadeNearZ()[ cascade ];
-		double farZ = light.getShadowCascadeFarZ()[ cascade ];
+		float nearZ = light.getShadowCascadeNearZ()[ cascade ];
+		float farZ = light.getShadowCascadeFarZ()[ cascade ];
 
 		List<Vector3> pointsFrustum = virtualLight.getPointsFrustum();
 
@@ -543,8 +538,8 @@ public final class ShadowMap extends Plugin
 		List<Vector3> pointsFrustum = light.getPointsFrustum();
 		List<Vector3> pointsWorld = light.getPointsWorld();
 
-		this.min.set( Double.POSITIVE_INFINITY );
-		this.max.set( Double.NEGATIVE_INFINITY );
+		this.min.set( Float.POSITIVE_INFINITY );
+		this.max.set( Float.NEGATIVE_INFINITY );
 
 		for ( int i = 0; i < 8; i ++ ) 
 		{

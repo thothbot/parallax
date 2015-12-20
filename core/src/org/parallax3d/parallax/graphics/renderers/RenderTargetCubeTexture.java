@@ -100,7 +100,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			gl.glTexImage2D(TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue(), i, 0, getWidth(), getHeight(), 0,
 					getFormat().getValue(), getType().getValue(), null);
 
-			this.setupFrameBuffer(gl, this.webglFramebuffer.get( i ), TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i);
+			this.setupFrameBuffer(gl, this.webglFramebuffer.get( i ), TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue(), i);
 			this.setupRenderBuffer(gl, this.webglRenderbuffer.get( i ));
 		}
 
@@ -108,9 +108,10 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			gl.glGenerateMipmap(TextureTarget.TEXTURE_CUBE_MAP.getValue());
 
 		// Release everything
-		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), null);
-		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, null);
-		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, null);
+		Integer nullval = null;
+		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), nullval);
+		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, nullval);
+		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, nullval);
 	}
 	
 	public void setupFrameBuffer(GL20 gl, Integer /*WebGLFramebuffer*/ framebuffer, Integer /*TextureTarget*/ textureTarget, int slot)
@@ -124,6 +125,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	{	
 		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), this.getWebGlTexture());
 		gl.glGenerateMipmap(TextureTarget.TEXTURE_CUBE_MAP.getValue());
-		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), null);
+		Integer nullval = null;
+		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), nullval);
 	}
 }

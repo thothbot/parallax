@@ -18,10 +18,9 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLExtension;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.system.gl.GL20;
 
 @ThreeJsObject("THREE.WebGLExtensions")
 public final class WebGLExtensions {
@@ -38,67 +37,27 @@ public final class WebGLExtensions {
 		EXT_frag_depth
 	};
 
-	public static WebGLExtension get(WebGLRenderingContext gl, Id id) {
+	public static boolean get(GL20 gl, Id id) {
 		
-		WebGLExtension extension = null;
-		
-		switch ( id ) {
-		
-			case OES_texture_float:
-				extension = gl.getExtension( "OES_texture_float" );
-				break;
-	
-			case OES_texture_float_linear:
-				extension = gl.getExtension( "OES_texture_float_linear" );
-				break;
-	
-			case OES_standard_derivatives:
-				extension = gl.getExtension( "OES_standard_derivatives" );
-				break;
-	
-			case EXT_texture_filter_anisotropic:
-				extension = gl.getExtension( "EXT_texture_filter_anisotropic" );
-				if(extension == null)
-					extension = gl.getExtension( "MOZ_EXT_texture_filter_anisotropic" ); 
-				if(extension == null)
-					extension = gl.getExtension( "WEBKIT_EXT_texture_filter_anisotropic" );
-				break;
-	
-			case WEBGL_compressed_texture_s3tc:
-				extension = gl.getExtension( "WEBGL_compressed_texture_s3tc" );
-				if(extension == null)
-					extension = gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
-				if(extension == null)
-					extension = gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
-				break;
-	
-			case WEBGL_compressed_texture_pvrtc:
-				extension = gl.getExtension( "WEBGL_compressed_texture_pvrtc" );
-				if(extension == null)
-					extension = gl.getExtension( "WEBKIT_WEBGL_compressed_texture_pvrtc" );
-				break;
-	
-			case OES_element_index_uint:
-				extension = gl.getExtension( "OES_element_index_uint" );
-				break;
-	
-			case EXT_blend_minmax:
-				extension = gl.getExtension( "EXT_blend_minmax" );
-				break;
-	
-			case EXT_frag_depth:
-				extension = gl.getExtension( "EXT_frag_depth" );
-				break;
-	
-		}
-		
-		if ( extension == null ) {
+		String[] extensions = gl.glGetString(GL20.GL_EXTENSIONS).split(" ");
 
-			Log.warn("WebGLRenderer: " + id.toString() + " extension not supported.");
+		boolean retval = false;
+		for(int i = 0, len = extensions.length; i < len; i++)
+		{
+			if(extensions[i] == id.name())
+			{
+				retval = true;
+				break;
+			}
+		}
+
+		if ( retval == false ) {
+
+			Parallax.app.error("WebGLRenderer", id.toString() + " extension not supported.");
 
 		}
 		
-		return extension;
+		return retval;
 
 	}
 	

@@ -49,7 +49,7 @@ public class Uniform
 	private TYPE type;
 	private Object value;
 	private FloatBuffer cache_array;
-	private int location; //WebGLUniformLocation
+	private Integer location; //WebGLUniformLocation
 
 	public Uniform(TYPE type)
 	{
@@ -82,7 +82,7 @@ public class Uniform
 		this.cache_array = array;
 	}
 	
-	public int getLocation() {
+	public Integer getLocation() {
 		return this.location;
 	}
 	

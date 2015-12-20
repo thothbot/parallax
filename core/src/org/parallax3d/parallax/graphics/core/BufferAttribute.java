@@ -26,7 +26,7 @@ import java.nio.FloatBuffer;
 @ThreeJsObject("THREE.BufferAttribute")
 public class BufferAttribute {
 	
-	private FloatBuffer array;
+	private Buffer array;
 	private int itemSize;
 	
 	// TODO: Fix it (BufferGeometry)
@@ -112,7 +112,7 @@ public class BufferAttribute {
 
 	public BufferAttribute set( FloatBuffer value ) {
 
-		this.array.put(value);
+		((FloatBuffer)this.array).put(value);
 
 		return this;
 

@@ -26,8 +26,7 @@ import java.util.Map;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.math.Mathematics;
-import org.parallax3d.parallax.system.BufferUtils;
-import org.parallax3d.parallax.system.ObjectIntMap;
+import org.parallax3d.parallax.system.BufferUtils;;
 import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.ProgramParameter;
@@ -60,7 +59,7 @@ public abstract class Shader
 	// Should be null by default. Think how we can merge two maps.
 	private ObjectMap<String, Attribute> attributes;
 	// Store locations
-	private ObjectIntMap<String> attributesLocations;
+	private ObjectMap<String, Integer> attributesLocations;
 
 	private String vertexShaderSource = "";
 	private String fragmentShaderSource = "";
@@ -93,7 +92,7 @@ public abstract class Shader
 
 		this.uniforms = new ObjectMap<String, Uniform>();
 
-		this.attributesLocations = new ObjectIntMap<String>();
+		this.attributesLocations = new ObjectMap<String, Integer>();
 
 		initUniforms();
 	}
@@ -170,7 +169,7 @@ public abstract class Shader
 			for (String a : attributes.keys())
 				attributesIds.add(a);
 
-		ObjectIntMap<String> attributesLocations = getAttributesLocations();
+		ObjectMap<String, Integer> attributesLocations = getAttributesLocations();
 		for (String id : attributesIds)
 			attributesLocations.put(id, gl.glGetAttribLocation(this.program, id));
 		
@@ -317,7 +316,7 @@ public abstract class Shader
 	}
 
 	@Deprecated
-	public ObjectIntMap<String> getAttributesLocations() {
+	public ObjectMap<String, Integer> getAttributesLocations() {
 		return this.attributesLocations;
 	}
 

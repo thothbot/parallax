@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.graphics.core.FastMap;
 import org.parallax3d.parallax.math.Vector2;
 
 /**
@@ -237,7 +237,7 @@ public class ShapeUtils
 		// to do the first.
 
 		// prepare all points map
-		Map<String, Integer> allPointsMap = new FastMap<Integer>();
+		ObjectMap<String, Integer> allPointsMap = new ObjectMap<String, Integer>();
 
 		for ( int i = 0, il = allpoints.size(); i < il; i ++ ) 
 		{

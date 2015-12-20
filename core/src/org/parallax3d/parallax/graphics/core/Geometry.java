@@ -34,7 +34,7 @@ import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.ObjectIntMap;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -880,7 +880,7 @@ public class Geometry extends AbstractGeometry
 	public int mergeVertices() 
 	{
 		// Hashmap for looking up vertice by position coordinates (and making sure they are unique)
-		ObjectIntMap<String> verticesMap = new ObjectIntMap<String>();
+		ObjectMap<String, Integer> verticesMap = new ObjectMap<String, Integer>();
 		List<Vector3> unique = new ArrayList<Vector3>();
 		List<Integer> changes = new ArrayList<Integer>();
 
@@ -900,7 +900,7 @@ public class Geometry extends AbstractGeometry
 			} 
 			else 
 			{
-				changes.add( i , changes.get( verticesMap.get( key, 0 ) ));
+				changes.add( i , changes.get( verticesMap.get( key ) ));
 			}
 		}
 

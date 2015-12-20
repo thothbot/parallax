@@ -27,12 +27,10 @@ import java.util.Map;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.BufferUtils;
-import org.parallax3d.parallax.system.ObjectIntMap;
 import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
-import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Face3;
@@ -72,7 +70,7 @@ public class Mesh extends GeometryObject
 	public Integer morphTargetBase = null;
 	public List<Float> morphTargetInfluences;
 	public List<Integer> morphTargetForcedOrder;
-	private ObjectIntMap<String> morphTargetDictionary;
+	private ObjectMap<String, Integer> morphTargetDictionary;
 	
 	public FloatBuffer __webglMorphTargetInfluences;
 
@@ -117,7 +115,7 @@ public class Mesh extends GeometryObject
 			this.morphTargetBase = -1;
 			this.morphTargetForcedOrder = new ArrayList<Integer>();
 			this.morphTargetInfluences = new ArrayList<Float>();
-			this.morphTargetDictionary = new ObjectIntMap<String>();
+			this.morphTargetDictionary = new ObjectMap<String, Integer>();
 
 			List<Geometry.MorphTarget> morphTargets = ((Geometry)this.getGeometry()).getMorphTargets();
 			for ( int m = 0, ml = ((Geometry)this.getGeometry()).getMorphTargets().size(); m < ml; m ++ ) {
@@ -423,7 +421,7 @@ public class Mesh extends GeometryObject
 	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryGroup, boolean updateBuffers)
 	{
 		GL20 gl = renderer.getGL();
-		WebGlRendererInfo info = renderer.getInfo();
+//		WebGlRendererInfo info = renderer.getInfo();
 
 		// wireframe
 		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() )
@@ -446,9 +444,9 @@ public class Mesh extends GeometryObject
 			gl.glDrawElements(BeginMode.TRIANGLES.getValue(), geometryGroup.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
 		}
 		
-		info.getRender().calls ++;
-		info.getRender().vertices += geometryGroup.__webglFaceCount;
-		info.getRender().faces += geometryGroup.__webglFaceCount / 3;
+//		info.getRender().calls ++;
+//		info.getRender().vertices += geometryGroup.__webglFaceCount;
+//		info.getRender().faces += geometryGroup.__webglFaceCount / 3;
 	}
 
 //	/*
@@ -623,7 +621,7 @@ public class Mesh extends GeometryObject
 	public void createBuffers(WebGLRenderer renderer, GeometryGroup geometryGroup)
 	{
 		GL20 gl = renderer.getGL();
-		WebGlRendererInfo info = renderer.getInfo();
+//		WebGlRendererInfo info = renderer.getInfo();
 
 		geometryGroup.__webglVertexBuffer = gl.glGenBuffer();
 		geometryGroup.__webglNormalBuffer = gl.glGenBuffer();
@@ -654,7 +652,7 @@ public class Mesh extends GeometryObject
 			}
 		}
 		
-		info.getMemory().geometries ++;
+//		info.getMemory().geometries ++;
 	}
 
 //	@Override

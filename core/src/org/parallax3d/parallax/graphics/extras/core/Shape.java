@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.graphics.core.ExtrudeGeometry;
 import org.parallax3d.parallax.math.Vector2;
 
 /**

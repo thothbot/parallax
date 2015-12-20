@@ -22,7 +22,6 @@ import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.util.List;
 
-import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
@@ -192,7 +191,7 @@ public class Line extends GeometryObject
 	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers)
 	{
 		GL20 gl = renderer.getGL();
-		WebGlRendererInfo info = renderer.getInfo();
+//		WebGlRendererInfo info = renderer.getInfo();
 		
 		BeginMode primitives = ( this.getType() == MODE.STRIPS)
 				? BeginMode.LINE_STRIP 
@@ -202,7 +201,7 @@ public class Line extends GeometryObject
 
 		gl.glDrawArrays(primitives.getValue(), 0, geometryBuffer.__webglLineCount);
 
-		info.getRender().calls ++;
+//		info.getRender().calls ++;
 	}
 	
 //	@Override
@@ -225,13 +224,13 @@ public class Line extends GeometryObject
 		Geometry geometry = (Geometry)getGeometry();
 		
 		GL20 gl = renderer.getGL();
-		WebGlRendererInfo info = renderer.getInfo();
+//		WebGlRendererInfo info = renderer.getInfo();
 		
 		geometry.__webglVertexBuffer = gl.glGenBuffer();
 		geometry.__webglColorBuffer = gl.glGenBuffer();
 		geometry.__webglLineDistanceBuffer = gl.glGenBuffer();
 
-		info.getMemory().geometries ++;
+//		info.getMemory().geometries ++;
 	}
 
 	public void initBuffers (GL20 gl)
