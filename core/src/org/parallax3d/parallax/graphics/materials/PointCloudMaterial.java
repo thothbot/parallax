@@ -26,6 +26,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ObjectMap;
 
 public final class PointCloudMaterial extends Material implements HasFog,
 		HasColor, HasMap, HasVertexColors {
@@ -37,7 +38,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 
 	private COLORS vertexColors;
 
-	private double size;
+	private float size;
 
 	private boolean sizeAttenuation;
 
@@ -47,18 +48,18 @@ public final class PointCloudMaterial extends Material implements HasFog,
 
 		setColor(new Color(0xffffff));
 
-		setSize(1.0);
+		setSize(1.0f);
 		setSizeAttenuation(true);
 
 		setVertexColors(COLORS.NO);
 
 	}
 
-	public double getSize() {
+	public float getSize() {
 		return this.size;
 	}
 
-	public void setSize(double size) {
+	public void setSize(float size) {
 		this.size = size;
 		;
 	}
@@ -139,7 +140,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	@Override
 	public void refreshUniforms(Camera camera, boolean isGammaInput) {
 		super.refreshUniforms(camera, isGammaInput);
-		final Map<String, Uniform> uniforms = getShader().getUniforms();
+		final ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
 
 		uniforms.get("psColor").setValue(getColor());
 		uniforms.get("opacity").setValue(getOpacity());

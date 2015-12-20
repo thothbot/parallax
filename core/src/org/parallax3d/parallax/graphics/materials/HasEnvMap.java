@@ -50,22 +50,22 @@ public interface HasEnvMap
 	 * 
 	 * @return the reflectivity value
 	 */
-	public double getReflectivity();
+	public float getReflectivity();
 	
 	/**
 	 * Sets reflectivity
 	 * 
 	 * @param reflectivity the reflectivity value
 	 */
-	public void setReflectivity(double reflectivity);
+	public void setReflectivity(float reflectivity);
 	
 	/**
 	 * Gets Refraction Ratio
 	 */
-	public double getRefractionRatio();
+	public float getRefractionRatio();
 	
 	/**
 	 * Sets Refraction Ratio
 	 */
-	public void setRefractionRatio(double refractionRatio);
+	public void setRefractionRatio(float refractionRatio);
 }

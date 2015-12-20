@@ -45,8 +45,8 @@ public class MeshBasicMaterial extends Material
 	
 	private Texture envMap;
 	private Texture.OPERATIONS combine;
-	private double reflectivity;
-	private double refractionRatio;
+	private float reflectivity;
+	private float refractionRatio;
 	
 	private boolean isFog;
 	
@@ -70,8 +70,8 @@ public class MeshBasicMaterial extends Material
 		setWireframeLineWidth(1);
 		
 		setCombine(Texture.OPERATIONS.MULTIPLY);
-		setReflectivity(1.0);
-		setRefractionRatio(0.98);
+		setReflectivity(1.0f);
+		setRefractionRatio(0.98f);
 		
 		setShading(SHADING.SMOOTH);
 		
@@ -139,22 +139,22 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public double getReflectivity() {
+	public float getReflectivity() {
 		return this.reflectivity;
 	}
 
 	@Override
-	public void setReflectivity(double reflectivity) {
+	public void setReflectivity(float reflectivity) {
 		this.reflectivity = reflectivity;
 	}
 
 	@Override
-	public double getRefractionRatio() {
+	public float getRefractionRatio() {
 		return this.refractionRatio;
 	}
 
 	@Override
-	public void setRefractionRatio(double refractionRatio) {
+	public void setRefractionRatio(float refractionRatio) {
 		this.refractionRatio = refractionRatio;
 	}
 

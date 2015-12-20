@@ -23,6 +23,7 @@ import java.util.Map;
 import org.parallax3d.parallax.graphics.renderers.shaders.LambertShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.textures.Texture;
@@ -53,8 +54,8 @@ public final class MeshLambertMaterial extends Material
 	
 	private Texture envMap;
 	private OPERATIONS combine;
-	private double reflectivity;
-	private double refractionRatio;
+	private float reflectivity;
+	private float refractionRatio;
 		
 	private boolean isFog;
 	
@@ -81,8 +82,8 @@ public final class MeshLambertMaterial extends Material
 		setWireframeLineWidth(1);
 		
 		setCombine(OPERATIONS.MULTIPLY);
-		setReflectivity(1.0);
-		setRefractionRatio(0.98);
+		setReflectivity(1.0f);
+		setRefractionRatio(0.98f);
 		
 		setFog(true);
 		
@@ -172,22 +173,22 @@ public final class MeshLambertMaterial extends Material
 	}
 
 	@Override
-	public double getReflectivity() {
+	public float getReflectivity() {
 		return this.reflectivity;
 	}
 
 	@Override
-	public void setReflectivity(double reflectivity) {
+	public void setReflectivity(float reflectivity) {
 		this.reflectivity = reflectivity;
 	}
 
 	@Override
-	public double getRefractionRatio() {
+	public float getRefractionRatio() {
 		return this.refractionRatio;
 	}
 
 	@Override
-	public void setRefractionRatio(double refractionRatio) {
+	public void setRefractionRatio(float refractionRatio) {
 		this.refractionRatio = refractionRatio;
 	}
 	
@@ -376,7 +377,7 @@ public final class MeshLambertMaterial extends Material
 	public void refreshUniforms(Camera camera, boolean isGammaInput) 
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		Map<String, Uniform> uniforms = getShader().getUniforms();
+		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
 		
 		if ( isGammaInput ) 
 		{

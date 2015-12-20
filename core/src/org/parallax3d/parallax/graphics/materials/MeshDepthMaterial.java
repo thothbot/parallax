@@ -25,6 +25,7 @@ import org.parallax3d.parallax.graphics.cameras.HasNearFar;
 import org.parallax3d.parallax.graphics.renderers.shaders.DepthShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -93,7 +94,7 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	public void refreshUniforms(Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		Map<String, Uniform> uniforms = getShader().getUniforms();
+		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
 		
 		if(camera instanceof HasNearFar)
 		{

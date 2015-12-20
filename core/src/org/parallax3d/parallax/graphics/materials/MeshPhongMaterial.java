@@ -28,6 +28,7 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -48,7 +49,7 @@ public final class MeshPhongMaterial extends Material
 	private Color ambient;
 	private Color emissive;
 	private Color specular;	
-	private double shininess;
+	private float shininess;
 	
 	private boolean isMetal;
 	
@@ -59,7 +60,7 @@ public final class MeshPhongMaterial extends Material
 	private Texture lightMap;
 	
 	private Texture bumpMap;
-	private double bumpScale;
+	private float bumpScale;
 	
 	private Texture normalMap;
 	private Vector2 normalScale;
@@ -70,8 +71,8 @@ public final class MeshPhongMaterial extends Material
 	
 	private Texture envMap;
 	private Texture.OPERATIONS combine;
-	private double reflectivity;
-	private double refractionRatio;
+	private float reflectivity;
+	private float refractionRatio;
 	
 	private boolean isFog;
 	
@@ -101,8 +102,8 @@ public final class MeshPhongMaterial extends Material
 		setWireframeLineWidth(1);
 		
 		setCombine(Texture.OPERATIONS.MULTIPLY);
-		setReflectivity(1.0);
-		setRefractionRatio(0.98);
+		setReflectivity(1.0f);
+		setRefractionRatio(0.98f);
 		
 		setNormalScale(new Vector2(1, 1));
 		
@@ -119,7 +120,7 @@ public final class MeshPhongMaterial extends Material
 		
 		setShininess(30);
 		
-		setBumpScale(1.0);
+		setBumpScale(1.0f);
 	}
 
 	@Override
@@ -137,11 +138,11 @@ public final class MeshPhongMaterial extends Material
 		this.specular = specular;
 	}
 	
-	public double getShininess() {
+	public float getShininess() {
 		return shininess;
 	}
 	
-	public void setShininess(double shininess) {
+	public void setShininess(float shininess) {
 		this.shininess = shininess;
 	}
 	
@@ -214,22 +215,22 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public double getReflectivity() {
+	public float getReflectivity() {
 		return this.reflectivity;
 	}
 
 	@Override
-	public void setReflectivity(double reflectivity) {
+	public void setReflectivity(float reflectivity) {
 		this.reflectivity = reflectivity;
 	}
 
 	@Override
-	public double getRefractionRatio() {
+	public float getRefractionRatio() {
 		return this.refractionRatio;
 	}
 
 	@Override
-	public void setRefractionRatio(double refractionRatio) {
+	public void setRefractionRatio(float refractionRatio) {
 		this.refractionRatio = refractionRatio;
 	}
 	
@@ -384,12 +385,12 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public double getBumpScale() {
+	public float getBumpScale() {
 		return this.bumpScale;
 	}
 
 	@Override
-	public void setBumpScale(double bumpScale) {
+	public void setBumpScale(float bumpScale) {
 		this.bumpScale = bumpScale;
 	}
 	
@@ -499,7 +500,7 @@ public final class MeshPhongMaterial extends Material
 	{
 		super.refreshUniforms(camera, isGammaInput);
 		
-		Map<String, Uniform> uniforms = getShader().getUniforms();
+		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
 		uniforms.get("shininess").setValue( getShininess() );
 
 		if ( isGammaInput ) 

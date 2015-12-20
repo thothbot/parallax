@@ -132,7 +132,7 @@ public abstract class Material
 			return "#define " + this.name() + " " + param;
 		}
 		
-		public String getValue(double param)
+		public String getValue(float param)
 		{
 			return "#define " + this.name() + " " + param;
 		}
@@ -147,7 +147,7 @@ public abstract class Material
 
 	private SIDE side = SIDE.FRONT;
 
-	private double opacity;
+	private float opacity;
 	private boolean isTransparent;
 		
 	private BLENDING blending;
@@ -159,12 +159,12 @@ public abstract class Material
 	private boolean isDepthWrite;
 	
 	private boolean isPolygonOffset;
-	private double polygonOffsetFactor;
-	private double polygonOffsetUnits;
+	private float polygonOffsetFactor;
+	private float polygonOffsetUnits;
 	
-	private double alphaTest;
+	private float alphaTest;
 	
-	private double overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
+	private float overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
 	
 	private boolean isVisible = true;
 	private boolean isNeedsUpdate = true;
@@ -177,7 +177,7 @@ public abstract class Material
 	{
 		this.id = Material.MaterialCount++;
 		
-		setOpacity(1.0);
+		setOpacity(1.0f);
 		setTransparent(false);
 				
 		setBlending( BLENDING.NORMAL );
@@ -189,8 +189,8 @@ public abstract class Material
 		setDepthWrite(true);
 		
 		setPolygonOffset(false);
-		setPolygonOffsetFactor(0.0);
-		setPolygonOffsetUnits(0.0);
+		setPolygonOffsetFactor(0.0f);
+		setPolygonOffsetUnits(0.0f);
 		
 		setAlphaTest(0);
 	}
@@ -258,14 +258,14 @@ public abstract class Material
 	/**
 	 * Gets opacity. Default is 1.
 	 */
-	public double getOpacity() {
+	public float getOpacity() {
 		return opacity;
 	}
 
 	/**
 	 * Sets opacity. Default is 1.
 	 */
-	public void setOpacity(double opacity) {
+	public void setOpacity(float opacity) {
 		this.opacity = opacity;
 	}
 
@@ -386,7 +386,7 @@ public abstract class Material
 		this.isPolygonOffset = polygonOffset;
 	}
 
-	public double getPolygonOffsetFactor() {
+	public float getPolygonOffsetFactor() {
 		return polygonOffsetFactor;
 	}
 
@@ -395,11 +395,11 @@ public abstract class Material
 	 * <p> 
 	 * Default is 0.
 	 */
-	public void setPolygonOffsetFactor(double polygonOffsetFactor) {
+	public void setPolygonOffsetFactor(float polygonOffsetFactor) {
 		this.polygonOffsetFactor = polygonOffsetFactor;
 	}
 
-	public double getPolygonOffsetUnits() {
+	public float getPolygonOffsetUnits() {
 		return polygonOffsetUnits;
 	}
 
@@ -408,11 +408,11 @@ public abstract class Material
 	 * <p> 
 	 * Default is 0.
 	 */
-	public void setPolygonOffsetUnits(double polygonOffsetUnits) {
+	public void setPolygonOffsetUnits(float polygonOffsetUnits) {
 		this.polygonOffsetUnits = polygonOffsetUnits;
 	}
 
-	public double getAlphaTest() {
+	public float getAlphaTest() {
 		return alphaTest;
 	}
 
@@ -421,7 +421,7 @@ public abstract class Material
 	 * <p> 
 	 * Default is 0.
 	 */
-	public void setAlphaTest(double alphaTest) {
+	public void setAlphaTest(float alphaTest) {
 		this.alphaTest = alphaTest;
 	}
 	
@@ -510,7 +510,7 @@ public abstract class Material
 		}
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
-		parameters.doubleSided = this.getSides() == SIDE.DOUBLE;
+		parameters.floatSided = this.getSides() == SIDE.DOUBLE;
 		parameters.flipSided = this.getSides() == SIDE.BACK;
 	}
 
@@ -589,7 +589,7 @@ public abstract class Material
 			options.add(SHADER_DEFINE.USE_MORPHNORMALS.getValue());
 		if (parameters.wrapAround)
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
-		if (parameters.doubleSided)
+		if (parameters.floatSided)
 			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
 		if (parameters.flipSided)
 			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
@@ -733,7 +733,7 @@ public abstract class Material
 			options.add(SHADER_DEFINE.METAL.getValue());
 		if (parameters.wrapAround)
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
-		if (parameters.doubleSided)
+		if (parameters.floatSided)
 			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
 		if (parameters.flipSided)
 			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());

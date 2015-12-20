@@ -21,7 +21,12 @@ package org.parallax3d.parallax.graphics.materials;
 import java.util.Map;
 
 import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.graphics.renderers.shaders.BasicShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * A material for drawing wireframe-style geometries.
@@ -40,7 +45,7 @@ public class LineBasicMaterial extends Material
 	
 	private COLORS vertexColors;
 	
-	private double linewidth;
+	private float linewidth;
 	
 	public LineBasicMaterial()
 	{	
@@ -48,7 +53,7 @@ public class LineBasicMaterial extends Material
 		
 		this.color = new Color(0xffffff);
 		
-		setLinewidth(1.0);
+		setLinewidth(1.0f);
 		
 		setVertexColors(COLORS.NO);
 	}
@@ -63,7 +68,7 @@ public class LineBasicMaterial extends Material
 	 * Line thickness. Default is 1.
 	 * @return
 	 */
-	public double getLinewidth() {
+	public float getLinewidth() {
 		return this.linewidth;
 	}
 	
@@ -73,7 +78,7 @@ public class LineBasicMaterial extends Material
 	 * Due to limitations in the <a href="https://code.google.com/p/angleproject/">ANGLE layer</a>, on Windows platforms linewidth will always be 1 regardless of the set value.
 	 * @param linewidth
 	 */
-	public void setLinewidth(double linewidth) {
+	public void setLinewidth(float linewidth) {
 		this.linewidth = linewidth;
 	}
 
@@ -132,7 +137,7 @@ public class LineBasicMaterial extends Material
 	public void refreshUniforms(Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		Map<String, Uniform> uniforms = getShader().getUniforms();
+		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
 		
 		uniforms.get("diffuse").setValue( getColor() );
 		uniforms.get("opacity").setValue( getOpacity() );
