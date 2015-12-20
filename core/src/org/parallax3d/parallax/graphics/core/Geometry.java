@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ObjectIntMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -103,7 +105,7 @@ public class Geometry extends AbstractGeometry
 	 * This is required for LinePieces/LineDashedMaterial to render correctly.
 	 * Line distances can also be generated with computeLineDistances.
 	 */
-	private List<Double> lineDistances;
+	private List<Float> lineDistances;
 	
 	/*
 	 * True if geometry has tangents. Set in Geometry.computeTangents.
@@ -136,7 +138,7 @@ public class Geometry extends AbstractGeometry
 		this.skinWeights = new ArrayList<Vector4>();
 		this.skinIndices = new ArrayList<Vector4>();
 		
-		this.lineDistances = new ArrayList<Double>();
+		this.lineDistances = new ArrayList<Float>();
 	}
 	
 	/**
@@ -167,7 +169,7 @@ public class Geometry extends AbstractGeometry
 		return this.skinIndices;
 	}
 	
-	public List<Double> getLineDistances() {
+	public List<Float> getLineDistances() {
 		return lineDistances;
 	}
 
@@ -304,77 +306,77 @@ public class Geometry extends AbstractGeometry
 		this.computeBoundingSphere();
 	}
 	
-	public Geometry fromBufferGeometry( BufferGeometry geometry ) 
-	{
-
-		Float32Array vertices = (Float32Array)geometry.getAttribute("position").getArray();
-		Uint16Array indices = geometry.getAttribute("index") != null
-				? (Uint16Array)geometry.getAttribute("index").getArray() : null;
-		Float32Array normals = geometry.getAttribute("normal") != null 
-				? (Float32Array)geometry.getAttribute("normal").getArray() : null;
-		Float32Array colors = geometry.getAttribute("color") != null 
-				? (Float32Array)geometry.getAttribute("color").getArray() : null;
-		Float32Array uvs = geometry.getAttribute("uv") != null
-				? (Float32Array)geometry.getAttribute("uv").getArray() : null;
-
-		List<Vector3> tempNormals = new ArrayList<Vector3>();
-		List<Vector2> tempUVs = new ArrayList<Vector2>();
-
-		for ( int i = 0, j = 0; i < vertices.getLength(); i += 3, j += 2 ) {
-
-			this.vertices.add( new Vector3( vertices.get( i ), vertices.get( i + 1 ), vertices.get( i + 2 ) ) );
-
-			if ( normals != null ) {
-
-				tempNormals.add( new Vector3( normals.get( i ), normals.get( i + 1 ), normals.get( i + 2 ) ) );
-
-			}
-
-			if ( colors != null ) {
-
-				Color color = new Color();
-				this.colors.add( color.setRGB( colors.get( i ), colors.get( i + 1 ), colors.get( i + 2 ) ) );
-
-			}
-
-			if ( uvs != null ) {
-
-				tempUVs.add( new Vector2( uvs.get( j ), uvs.get( j + 1 ) ) );
-
-			}
-
-		}
-
-		if ( indices != null ) {
-
-			for ( int i = 0; i < indices.getLength(); i += 3 ) {
-
-				addFace( normals, colors, tempNormals, tempUVs, (int)indices.get( i ), (int)indices.get( i + 1 ), (int)indices.get( i + 2 ) );
-
-			}
-
-		} else {
-
-			for ( int i = 0; i < vertices.getLength() / 3; i += 3 ) {
-
-				addFace( normals, colors, tempNormals, tempUVs, i, i + 1, i + 2 );
-
-			}
-
-		}
-		
-		this.computeFaceNormals();
-
-		if(geometry.boundingBox != null)
-			this.boundingBox = geometry.boundingBox.clone();
-		
-		if(geometry.boundingSphere != null)
-			this.boundingSphere = geometry.boundingSphere.clone();
-
-		return this;
-	}
+//	public Geometry fromBufferGeometry( BufferGeometry geometry )
+//	{
+//
+//		Float32Array vertices = (Float32Array)geometry.getAttribute("position").getArray();
+//		Uint16Array indices = geometry.getAttribute("index") != null
+//				? (Uint16Array)geometry.getAttribute("index").getArray() : null;
+//		Float32Array normals = geometry.getAttribute("normal") != null
+//				? (Float32Array)geometry.getAttribute("normal").getArray() : null;
+//		Float32Array colors = geometry.getAttribute("color") != null
+//				? (Float32Array)geometry.getAttribute("color").getArray() : null;
+//		Float32Array uvs = geometry.getAttribute("uv") != null
+//				? (Float32Array)geometry.getAttribute("uv").getArray() : null;
+//
+//		List<Vector3> tempNormals = new ArrayList<Vector3>();
+//		List<Vector2> tempUVs = new ArrayList<Vector2>();
+//
+//		for ( int i = 0, j = 0; i < vertices.getLength(); i += 3, j += 2 ) {
+//
+//			this.vertices.add( new Vector3( vertices.get( i ), vertices.get( i + 1 ), vertices.get( i + 2 ) ) );
+//
+//			if ( normals != null ) {
+//
+//				tempNormals.add( new Vector3( normals.get( i ), normals.get( i + 1 ), normals.get( i + 2 ) ) );
+//
+//			}
+//
+//			if ( colors != null ) {
+//
+//				Color color = new Color();
+//				this.colors.add( color.setRGB( colors.get( i ), colors.get( i + 1 ), colors.get( i + 2 ) ) );
+//
+//			}
+//
+//			if ( uvs != null ) {
+//
+//				tempUVs.add( new Vector2( uvs.get( j ), uvs.get( j + 1 ) ) );
+//
+//			}
+//
+//		}
+//
+//		if ( indices != null ) {
+//
+//			for ( int i = 0; i < indices.getLength(); i += 3 ) {
+//
+//				addFace( normals, colors, tempNormals, tempUVs, (int)indices.get( i ), (int)indices.get( i + 1 ), (int)indices.get( i + 2 ) );
+//
+//			}
+//
+//		} else {
+//
+//			for ( int i = 0; i < vertices.getLength() / 3; i += 3 ) {
+//
+//				addFace( normals, colors, tempNormals, tempUVs, i, i + 1, i + 2 );
+//
+//			}
+//
+//		}
+//
+//		this.computeFaceNormals();
+//
+//		if(geometry.boundingBox != null)
+//			this.boundingBox = geometry.boundingBox.clone();
+//
+//		if(geometry.boundingSphere != null)
+//			this.boundingSphere = geometry.boundingSphere.clone();
+//
+//		return this;
+//	}
 	
-	private void addFace(Float32Array normals, Float32Array colors, List<Vector3> tempNormals, List<Vector2> tempUVs, int a, int b, int c ) 
+	private void addFace(FloatBuffer normals, FloatBuffer colors, List<Vector3> tempNormals, List<Vector2> tempUVs, int a, int b, int c )
 	{
 		List<Vector3> vertexNormals = normals != null 
 				? Arrays.asList( tempNormals.get( a ).clone(), tempNormals.get( b ).clone(), tempNormals.get( c ).clone() ) 
@@ -396,7 +398,7 @@ public class Geometry extends AbstractGeometry
 		Vector3 offset = new Vector3();
 
 		offset.add( this.boundingBox.getMin(), this.boundingBox.getMax() );
-		offset.multiply( - 0.5 );
+		offset.multiply( - 0.5f );
 
 		this.applyMatrix( new Matrix4().makeTranslation( offset.getX(), offset.getY(), offset.getZ() ) );
 		this.computeBoundingBox();
@@ -412,7 +414,7 @@ public class Geometry extends AbstractGeometry
 
 		Vector3 cb = new Vector3(), ab = new Vector3();
 
-		for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
+		for( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
 
 			Face3 face = this.faces.get( f );
 
@@ -640,7 +642,7 @@ public class Geometry extends AbstractGeometry
 	 * Computes vertex tangents.<br>
 	 * Based on <a href="http://www.terathon.com/code/tangent.html">terathon.com</a>
 	 * <p>
-	 * Geometry must have vertex {@link UV}s (layer 0 will be used).
+	 * Geometry must have vertex UVs (layer 0 will be used).
 	 */
 	@Override
 	public void computeTangents()
@@ -689,8 +691,8 @@ public class Geometry extends AbstractGeometry
 				// Calculate handedness
 
 				tmp2.cross(face.getVertexNormals().get(i), t);
-				double test = tmp2.dot(tan2.get(vertexIndex));
-				double w = (test < 0.0) ? -1.0 : 1.0;
+				float test = tmp2.dot(tan2.get(vertexIndex));
+				float w = (test < 0.0) ? -1.0f : 1.0f;
 				
 				face.getVertexTangents().add(i, new Vector4(tmp.getX(),tmp.getY(),tmp.getZ(), w));
 			}
@@ -704,7 +706,7 @@ public class Geometry extends AbstractGeometry
 	 */
 	public void computeLineDistances( ) 
 	{
-		double d = 0;
+		float d = 0.0f;
 
 		for ( int i = 0, il = vertices.size(); i < il; i ++ ) 
 		{
@@ -878,12 +880,12 @@ public class Geometry extends AbstractGeometry
 	public int mergeVertices() 
 	{
 		// Hashmap for looking up vertice by position coordinates (and making sure they are unique)
-		Map<String, Integer> verticesMap = new FastMap<Integer>();
+		ObjectIntMap<String> verticesMap = new ObjectIntMap<String>();
 		List<Vector3> unique = new ArrayList<Vector3>();
 		List<Integer> changes = new ArrayList<Integer>();
 
 		int precisionPoints = 4; // number of decimal points, eg. 4 for epsilon of 0.0001
-		double precision = Math.pow( 10, precisionPoints );
+		float precision = (float)Math.pow( 10, precisionPoints );
 
 		for ( int i = 0, il = this.vertices.size(); i < il; i ++ ) 
 		{
@@ -898,7 +900,7 @@ public class Geometry extends AbstractGeometry
 			} 
 			else 
 			{
-				changes.add( i , changes.get( verticesMap.get( key ) ));
+				changes.add( i , changes.get( verticesMap.get( key, 0 ) ));
 			}
 		}
 
@@ -996,19 +998,19 @@ public class Geometry extends AbstractGeometry
 		Vector2 uvB = uv[ub];
 		Vector2 uvC = uv[uc];
 		
-		double x1 = vB.getX() - vA.getX();
-		double x2 = vC.getX() - vA.getX();
-		double y1 = vB.getY() - vA.getY();
-		double y2 = vC.getY() - vA.getY();
-		double z1 = vB.getZ() - vA.getZ();
-		double z2 = vC.getZ() - vA.getZ();
+		float x1 = vB.getX() - vA.getX();
+		float x2 = vC.getX() - vA.getX();
+		float y1 = vB.getY() - vA.getY();
+		float y2 = vC.getY() - vA.getY();
+		float z1 = vB.getZ() - vA.getZ();
+		float z2 = vC.getZ() - vA.getZ();
 		
-		double s1 = uvB.getX() - uvA.getX();
-		double s2 = uvC.getX() - uvA.getX();
-		double t1 = uvB.getY() - uvA.getY();
-		double t2 = uvC.getY() - uvA.getY();
+		float s1 = uvB.getX() - uvA.getX();
+		float s2 = uvC.getX() - uvA.getX();
+		float t1 = uvB.getY() - uvA.getY();
+		float t2 = uvC.getY() - uvA.getY();
 		
-		double r = 1.0 / (s1 * t2 - s2 * t1);
+		float r = 1.0f / (s1 * t2 - s2 * t1);
 		
 		Vector3 sdir = new Vector3();
 		sdir.set((t2*x1-t1*x2)*r,

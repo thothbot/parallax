@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.graphics.materials.Material;
@@ -31,6 +29,9 @@ import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
+import org.parallax3d.parallax.system.BufferUtils;
+import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.gl.GL20;
 
 public abstract class GeometryObject extends Object3D
 {
@@ -98,34 +99,34 @@ public abstract class GeometryObject extends Object3D
 	
 	public void deleteBuffers(WebGLRenderer renderer) 
 	{
-		renderer.getGL().deleteBuffer( geometry.__webglVertexBuffer );
-		renderer.getGL().deleteBuffer( geometry.__webglColorBuffer );
+		renderer.getGL().glDeleteBuffer(geometry.__webglVertexBuffer);
+		renderer.getGL().glDeleteBuffer(geometry.__webglColorBuffer);
 
 		renderer.getInfo().getMemory().geometries --;
 	}
 
-	public void setLineWidth (WebGLRenderingContext gl, double width ) 
+	public void setLineWidth (GL20 gl, float width )
 	{
 		if ( width != this._oldLineWidth ) 
 		{
-			gl.lineWidth( width );
+			gl.glLineWidth(width);
 			this._oldLineWidth = width;
 		}
 	}
 		
-	protected void initCustomAttributes (WebGLRenderingContext gl, Geometry geometry ) 
+	protected void initCustomAttributes (GL20 gl, Geometry geometry )
 	{		
 		int nvertices = geometry.getVertices().size();
 		Material material = this.getMaterial();
 
-		Map<String, Attribute> attributes = material.getShader().getAttributes();
+		ObjectMap<String, Attribute> attributes = material.getShader().getAttributes();
 		
 		if ( attributes != null) 
 		{
 			if ( geometry.__webglCustomAttributesList == null ) 
 				geometry.__webglCustomAttributesList = new ArrayList<Attribute>();
 
-			for ( String a : attributes.keySet() ) 
+			for ( String a : attributes.keys() )
 			{
 				Attribute attribute = attributes.get( a );
 				if( ! attribute.__webglInitialized || attribute.createUniqueBuffers ) 
@@ -141,9 +142,9 @@ public abstract class GeometryObject extends Object3D
 
 					attribute.size = size;
 
-					attribute.array = Float32Array.create( nvertices * size );
+					attribute.array = BufferUtils.newFloatBuffer( nvertices * size );
 
-					attribute.buffer = gl.createBuffer();
+					attribute.buffer = gl.glGenBuffer();
 					attribute.belongsToAttribute = a;
 
 					attribute.needsUpdate = true;

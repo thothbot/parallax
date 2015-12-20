@@ -18,17 +18,17 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
+import org.parallax3d.parallax.system.ArrayMap;
 
 public class GeometryGroup extends WebGLGeometry
 {
-	public static Map<String, List<GeometryGroup>> geometryGroups = new FastMap<List<GeometryGroup>>();
+	public static ArrayMap<String, List<GeometryGroup>> geometryGroups = new ArrayMap<String, List<GeometryGroup>>();
 	
 	private static int Counter = 0;
 	
@@ -43,14 +43,14 @@ public class GeometryGroup extends WebGLGeometry
 	private int numMorphTargets;
 	private int numMorphNormals;
 
-	public Float32Array __skinIndexArray;
-	public Float32Array __skinWeightArray;
+	public FloatBuffer __skinIndexArray;
+	public FloatBuffer __skinWeightArray;
 	
-	public Uint16Array __faceArray;
-	public Uint16Array __lineArray;
+	public IntBuffer __faceArray;
+	public IntBuffer __lineArray;
 	
-	public List<Float32Array> __morphTargetsArrays;
-	public List<Float32Array> __morphNormalsArrays;
+	public List<FloatBuffer> __morphTargetsArrays;
+	public List<FloatBuffer> __morphNormalsArrays;
 	
 	public boolean __inittedArrays;
 

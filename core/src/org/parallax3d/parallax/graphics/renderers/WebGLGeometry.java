@@ -18,41 +18,41 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
+import java.nio.FloatBuffer;
 import java.util.List;
 
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLBuffer;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 
 @ThreeJsObject("THREE.WebGLGeometries")
 public abstract class WebGLGeometry {
 
-	public Float32Array __colorArray;
-	public Float32Array __vertexArray;
-	public Float32Array __normalArray;
-	public Float32Array __tangentArray;
-	public Float32Array __uvArray;
-	public Float32Array __uv2Array;
-	public Float32Array __lineDistanceArray;
+	public FloatBuffer __colorArray;
+	public FloatBuffer __vertexArray;
+	public FloatBuffer __normalArray;
+	public FloatBuffer __tangentArray;
+	public FloatBuffer __uvArray;
+	public FloatBuffer __uv2Array;
+	public FloatBuffer __lineDistanceArray;
+
+	// WebGLBuffer
+	public int __webglColorBuffer;
+	public int __webglVertexBuffer;
+	public int __webglNormalBuffer;
+	public int __webglTangentBuffer;
+	public int __webglUVBuffer;
+	public int __webglUV2Buffer;
+	public int __webglLineDistanceBuffer;
 	
-	public WebGLBuffer __webglColorBuffer;
-	public WebGLBuffer __webglVertexBuffer;
-	public WebGLBuffer __webglNormalBuffer;
-	public WebGLBuffer __webglTangentBuffer;
-	public WebGLBuffer __webglUVBuffer;
-	public WebGLBuffer __webglUV2Buffer;
-	public WebGLBuffer __webglLineDistanceBuffer;
-	
-	public WebGLBuffer __webglSkinIndicesBuffer;
-	public WebGLBuffer __webglSkinWeightsBuffer;
+	public int __webglSkinIndicesBuffer;
+	public int __webglSkinWeightsBuffer;
 		
-	public WebGLBuffer __webglFaceBuffer;
-	public WebGLBuffer __webglLineBuffer;
+	public int __webglFaceBuffer;
+	public int __webglLineBuffer;
 	
-	public List<WebGLBuffer> __webglMorphTargetsBuffers;
+	public List<Integer> __webglMorphTargetsBuffers;
 	
-	public List<WebGLBuffer> __webglMorphNormalsBuffers;
+	public List<Integer> __webglMorphNormalsBuffers;
 	
 	public List<Attribute> __webglCustomAttributesList;
 	
