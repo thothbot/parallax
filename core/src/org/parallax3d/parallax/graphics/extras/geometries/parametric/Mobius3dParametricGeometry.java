@@ -36,20 +36,20 @@ public class Mobius3dParametricGeometry extends ParametricGeometry
 		super(new ParametricFunction() {
 			
 			@Override
-			public Vector3 run(double u, double t)
+			public Vector3 run(float u, float t)
 			{
 				// volumetric mobius strip
 				u *= Math.PI;
 				t *= 2.0 * Math.PI;
 
-				u = u * 2.0;
-				double phi = u / 2.0;
-				double  major = 2.25, a = 0.125, b = 0.65;
+				u = u * 2.0f;
+				float phi = u / 2.0f;
+				float major = 2.25f, a = 0.125f, b = 0.65f;
 
-				double x = a * Math.cos(t) * Math.cos(phi) - b * Math.sin(t) * Math.sin(phi);
-				double z = a * Math.cos(t) * Math.sin(phi) + b * Math.sin(t) * Math.cos(phi);
-				double y = (major + x) * Math.sin(u);
-				x = (major + x) * Math.cos(u);
+				float x = (float)(a * Math.cos(t) * Math.cos(phi) - b * Math.sin(t) * Math.sin(phi));
+				float z = (float)(a * Math.cos(t) * Math.sin(phi) + b * Math.sin(t) * Math.cos(phi));
+				float y = (float)((major + x) * Math.sin(u));
+				x = (major + x) * (float)Math.cos(u);
 				return new Vector3(x, y, z);
 			}
 		}, slices, stacks);

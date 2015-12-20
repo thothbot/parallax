@@ -37,16 +37,16 @@ public class MobiusParametricGeometry extends ParametricGeometry
 		super(new ParametricFunction() {
 			
 			@Override
-			public Vector3 run(double u, double t)
+			public Vector3 run(float u, float t)
 			{
-				u = u - 0.5;
-				double v = 2.0 * Math.PI * t;
+				u = u - 0.5f;
+				float v = (float)(2.0 * Math.PI * t);
 
-				double a = 2.0;
+				float a = 2.0f;
 	
-				double x = Math.cos(v) * (a + u * Math.cos(v/2.0));
-				double y = Math.sin(v) * (a + u * Math.cos(v/2.0));
-				double z = u * Math.sin(v/2.0);
+				float x = (float)(Math.cos(v) * (a + u * Math.cos(v/2.0)));
+				float y = (float)(Math.sin(v) * (a + u * Math.cos(v/2.0)));
+				float z = (float)(u * Math.sin(v/2.0));
 				return new Vector3(x, y, z);
 			}
 		}, 

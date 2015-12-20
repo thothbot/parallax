@@ -29,11 +29,11 @@ public class PlaneParametricGeometry extends ParametricGeometry
 		super(new ParametricFunction() {
 			
 			@Override
-			public Vector3 run(double u, double v)
+			public Vector3 run(float u, float v)
 			{
-				double x = u * (double)width;
-				double y = 0.0;
-				double z = v * (double)height;
+				float x = u * (float)width;
+				float y = 0.0f;
+				float z = v * (float)height;
 
 				return new Vector3(x, y, z);
 			}
