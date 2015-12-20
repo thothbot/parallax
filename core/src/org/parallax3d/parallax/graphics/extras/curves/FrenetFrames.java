@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.extras.curves;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Matrix4;
 
@@ -29,7 +30,7 @@ import org.parallax3d.parallax.math.Matrix4;
  */
 public class FrenetFrames
 {
-	private static double epsilon = 0.0001;
+	private static float epsilon = 0.0001f;
 
 	// expose internals
 	private List<Vector3> tangents;
@@ -53,7 +54,7 @@ public class FrenetFrames
 		// compute the tangent vectors for each segment on the path
 		for ( int i = 0; i < numpoints; i++ ) 
 		{
-			double u = i / (double)( numpoints - 1 );
+			float u = i / (float)( numpoints - 1 );
 
 			Vector3 vec = (Vector3) path.getTangentAt( u ); 
 			tangents.add(vec.normalize());
@@ -75,8 +76,8 @@ public class FrenetFrames
 			if ( vec.length() > epsilon ) 
 			{
 				vec.normalize();
-				double aCos =  tangents.get( i - 1 ).dot( tangents.get( i ) );
-				double theta = Math.acos( aCos > 1 ? 1.0 : aCos );
+				float aCos =  tangents.get( i - 1 ).dot( tangents.get( i ) );
+				float theta = (float)Math.acos( aCos > 1 ? 1.0 : aCos );
 			
 				normals.get( i ).apply( mat.makeRotationAxis( vec, theta ) );
 			}
@@ -88,8 +89,8 @@ public class FrenetFrames
 		// if the curve is closed, postprocess the vectors so the first and last normal vectors are the same
 		if ( closed ) 
 		{
-			double theta = Math.acos( normals.get( 0 ).dot( normals.get( numpoints - 1 ) ) );
-			theta /= (double)( numpoints - 1 );
+			float theta = (float)Math.acos( normals.get( 0 ).dot( normals.get( numpoints - 1 ) ) );
+			theta /= (float)( numpoints - 1 );
 
 			if ( tangents.get( 0 ).dot( vec.cross( normals.get( 0 ), normals.get( numpoints - 1 ) ) ) > 0 )
 				theta = -theta;
@@ -154,11 +155,11 @@ public class FrenetFrames
 	{
 		normals.add( 0, new Vector3() );
 		binormals.add( 0, new Vector3() );
-		double smallest = Double.MAX_VALUE;
+		float smallest = Float.MAX_VALUE;
 
-		double tx = Math.abs( tangents.get( 0 ).getX() );
-		double ty = Math.abs( tangents.get( 0 ).getY() );
-		double tz = Math.abs( tangents.get( 0 ).getZ() );
+		float tx = Math.abs( tangents.get( 0 ).getX() );
+		float ty = Math.abs( tangents.get( 0 ).getY() );
+		float tz = Math.abs( tangents.get( 0 ).getZ() );
 
 		Vector3 normal = new Vector3();
 		if ( tx <= smallest ) 

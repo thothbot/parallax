@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.extras.curves;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.extras.CurveUtils;
 
@@ -39,15 +40,15 @@ public class SplineCurve3Closed extends Curve
 	}
 
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
 		Vector3 v = new Vector3();
 		
 		 // This needs to be from 0-length +1
-		double point = points.size() * t;
+		float point = points.size() * t;
 		int intPoint = (int) Math.floor( point );
 		
-		double weight = point - intPoint;
+		float weight = point - intPoint;
 		intPoint += intPoint > 0 ? 0 : ( Math.floor( Math.abs( intPoint ) / points.size() ) + 1 ) * points.size();
 		
 		int c0 = ( intPoint - 1 ) % points.size();

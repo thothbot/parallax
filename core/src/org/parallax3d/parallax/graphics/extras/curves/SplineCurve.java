@@ -43,14 +43,14 @@ public class SplineCurve extends Curve
 	}
 
 	@Override
-	public Vector2 getPoint(double t)
+	public Vector2 getPoint(float t)
 	{
 		Vector2 v = new Vector2();
 		
-		double point = ( points.size() - 1.0 ) * t;
+		float point = ( points.size() - 1.0f ) * t;
 		int intPoint = (int) Math.floor( point );
 		
-		double weight = point - intPoint;
+		float weight = point - intPoint;
 
 		int c0 = intPoint == 0 ? intPoint : intPoint - 1;
 		int c1 = intPoint;

@@ -27,7 +27,7 @@ import org.parallax3d.parallax.math.Vector2;
 
 public class FontUtils
 {
-	public static final double EPSILON = 0.0000000001;
+	public static final float EPSILON = 0.0000000001f;
 
 	/*
 	 * @param contour
@@ -116,42 +116,42 @@ public class FontUtils
 	/*
 	 * calculate area of the contour polygon
 	 */
-	public static double TriangulateArea(List<Vector2> contour)
+	public static float TriangulateArea(List<Vector2> contour)
 	{
 		int n = contour.size();
-		double a = 0.0;
+		float a = 0.0f;
 
 		for( int p = n - 1, q = 0; q < n; p = q++ )
 			a += contour.get( p ).getX() * contour.get( q ).getY() - contour.get( q ).getX() * contour.get( p ).getY();
 
-		return a * 0.5;
+		return a * 0.5f;
 	}
 
 	/*
 	 * Calculate area of the contour polygon
 	 */
-	private static double area( List<Vector2> contour ) 
+	private static float area( List<Vector2> contour ) 
 	{
 
 		int n = contour.size();
-		double a = 0.0;
+		float a = 0.0f;
 
 		for( int p = n - 1, q = 0; q < n; p = q++ )
 			a += contour.get( p ).getX() * contour.get( q ).getY() - contour.get( q ).getX() * contour.get( p ).getY();
 
-		return a * 0.5;
+		return a * 0.5f;
 	}
 	
 	private static boolean snip( List<Vector2> contour, int u, int v, int w, int n, List<Integer> verts ) 
 	{
-		double ax = contour.get( verts.get( u ) ).getX();
-		double ay = contour.get( verts.get( u ) ).getY();
+		float ax = contour.get( verts.get( u ) ).getX();
+		float ay = contour.get( verts.get( u ) ).getY();
 
-		double bx = contour.get( verts.get( v ) ).getX();
-		double by = contour.get( verts.get( v ) ).getY();
+		float bx = contour.get( verts.get( v ) ).getX();
+		float by = contour.get( verts.get( v ) ).getY();
 
-		double cx = contour.get( verts.get( w ) ).getX();
-		double cy = contour.get( verts.get( w ) ).getY();
+		float cx = contour.get( verts.get( w ) ).getX();
+		float cy = contour.get( verts.get( w ) ).getY();
 
 		if ( EPSILON > (((bx - ax) * (cy - ay)) - ((by - ay) * (cx - ax))) ) 
 			return false;
@@ -161,8 +161,8 @@ public class FontUtils
 			if( (p == u) || (p == v) || (p == w) ) 
 				continue;
 
-			double px = contour.get( verts.get( p ) ).getX();
-			double py = contour.get( verts.get( p ) ).getY();
+			float px = contour.get( verts.get( p ) ).getX();
+			float py = contour.get( verts.get( p ) ).getY();
 
 			if ( insideTriangle( ax, ay, bx, by, cx, cy, px, py ) ) 
 				return false;
@@ -173,21 +173,21 @@ public class FontUtils
 	/*
 	 * see if p is inside triangle abc
 	 */
-	public static boolean insideTriangle( double ax, double ay,
-			double bx, double by,
-			double cx, double cy,
-			double px, double py 
+	public static boolean insideTriangle( float ax, float ay,
+			float bx, float by,
+			float cx, float cy,
+			float px, float py 
 	) {
-		  double aX = cx - bx;  double aY = cy - by;
-		  double bX = ax - cx;  double bY = ay - cy;
-		  double cX = bx - ax;  double cY = by - ay;
-		  double apx= px  -ax;  double apy= py - ay;
-		  double bpx= px - bx;  double bpy= py - by;
-		  double cpx= px - cx;  double cpy= py - cy;
+		  float aX = cx - bx;  float aY = cy - by;
+		  float bX = ax - cx;  float bY = ay - cy;
+		  float cX = bx - ax;  float cY = by - ay;
+		  float apx= px  -ax;  float apy= py - ay;
+		  float bpx= px - bx;  float bpy= py - by;
+		  float cpx= px - cx;  float cpy= py - cy;
 
-		  double aCROSSbp = aX * bpy - aY * bpx;
-		  double cCROSSap = cX * apy - cY * apx;
-		  double bCROSScp = bX * cpy - bY * cpx;
+		  float aCROSSbp = aX * bpy - aY * bpx;
+		  float cCROSSap = cX * apy - cY * apx;
+		  float bCROSScp = bX * cpy - bY * cpx;
 
 		  return ( (aCROSSbp >= 0.0) && (bCROSScp >= 0.0) && (cCROSSap >= 0.0) );
 	}

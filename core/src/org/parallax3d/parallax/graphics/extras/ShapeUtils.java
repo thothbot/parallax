@@ -67,7 +67,7 @@ public class ShapeUtils
 			List<Vector2> hole = holes.get( h );
 			allpoints.addAll(hole);
 			
-			double shortest = Double.POSITIVE_INFINITY;
+			float shortest = Float.POSITIVE_INFINITY;
 
 			// Find the shortest pair of pts between shape and hole
 			// Note: Actually, I'm not sure now if we could optimize this to be faster than O(m*n)
@@ -77,12 +77,12 @@ public class ShapeUtils
 			for ( int h2 = 0; h2 < hole.size(); h2 ++ ) 
 			{
 				Vector2 pts1 = hole.get( h2 );
-				List<Double> dist = new ArrayList<Double>();
+				List<Float> dist = new ArrayList<Float>();
 
 				for ( int p = 0; p < shape.size(); p++ ) 
 				{
 					Vector2 pts2 = shape.get( p );
-					double d = pts1.distanceToSquared( pts2 );
+					float d = pts1.distanceToSquared( pts2 );
 					dist.add( d );
 					
 					if ( d < shortest ) 
@@ -107,7 +107,7 @@ public class ShapeUtils
 				shape.get( prevShapeVert )
 			);
 
-			double areaa = FontUtils.TriangulateArea(areaapts);
+			float areaa = FontUtils.TriangulateArea(areaapts);
 
 			List<Vector2> areabpts = Arrays.asList(
 				hole.get( holeIndex ),
@@ -115,7 +115,7 @@ public class ShapeUtils
 				shape.get( shapeIndex )
 			);
 
-			double areab = FontUtils.TriangulateArea( areabpts );
+			float areab = FontUtils.TriangulateArea( areabpts );
 
 			int shapeOffset = 1;
 			int holeOffset = -1;
@@ -145,7 +145,7 @@ public class ShapeUtils
 				shape.get( prevShapeVert )
 			);
 
-			double areaa2 = FontUtils.TriangulateArea( areaapts );
+			float areaa2 = FontUtils.TriangulateArea( areaapts );
 
 			areabpts = Arrays.asList(
 				hole.get( holeIndex ),
@@ -153,7 +153,7 @@ public class ShapeUtils
 				shape.get( shapeIndex )
 			);
 
-			double areab2 = FontUtils.TriangulateArea( areabpts );
+			float areab2 = FontUtils.TriangulateArea( areabpts );
 
 			if ( ( areaa + areab ) > ( areaa2 + areab2 ) ) 
 			{
@@ -244,7 +244,7 @@ public class ShapeUtils
 			String key = allpoints.get( i ).getX() + ":" + allpoints.get( i ).getY();
 
 			if ( allPointsMap.containsKey(key))
-				Parallax.app.error( "ShapeUtils", "triangulateShape() - Duplicate point " + key );
+				Parallax.app.error("ShapeUtils", "triangulateShape() - Duplicate point " + key);
 
 			allPointsMap.put(key, i);
 		}
@@ -295,25 +295,25 @@ public class ShapeUtils
 	 * Bezier Curves formulas obtained from
 	 * http://en.wikipedia.org/wiki/B%C3%A9zier_curve 
 	 */
-	public static double b2( double t, double p0, double p1, double p2 ) 
+	public static float b2( float t, float p0, float p1, float p2 ) 
 	{
 		return b2p0( t, p0 ) + b2p1( t, p1 ) + b2p2( t, p2 );
 	}
 
-	private static double b2p0( double t, double p ) 
+	private static float b2p0( float t, float p ) 
 	{
-		double k = 1.0 - t;
+		float k = 1.0f - t;
 		return k * k * p;
 	}
 
-	private static double b2p1( double t, double p ) 
+	private static float b2p1( float t, float p ) 
 	{
 
-		return 2.0 * ( 1.0 - t ) * t * p;
+		return 2.0f * ( 1.0f - t ) * t * p;
 
 	}
 
-	private static double b2p2( double t, double p  ) 
+	private static float b2p2( float t, float p  ) 
 	{
 		return t * t * p;
 	}
@@ -330,30 +330,30 @@ public class ShapeUtils
 	 * @param p3
 	 * 		X or Y coordinate of vector 4
 	 */
-	public static double  b3( double t, double p0, double p1, double p2, double p3 ) 
+	public static float  b3( float t, float p0, float p1, float p2, float p3 ) 
 	{
 		return b3p0( t, p0 ) + b3p1( t, p1 ) + b3p2( t, p2 ) +  b3p3( t, p3 );
 	}
 
-	private static double b3p0( double t, double p ) 
+	private static float b3p0( float t, float p ) 
 	{
-		double k = 1.0 - t;
+		float k = 1.0f - t;
 		return k * k * k * p;
 	}
 
-	private static double b3p1( double t, double p )
+	private static float b3p1( float t, float p )
 	{
-		double k = 1.0 - t;
-		return 3.0 * k * k * t * p;
+		float k = 1.0f - t;
+		return 3.0f * k * k * t * p;
 	}
 
-	private static double b3p2( double t, double p ) 
+	private static float b3p2( float t, float p ) 
 	{
-		double k = 1.0 - t;
-		return 3.0 * k * t * t * p;
+		float k = 1.0f - t;
+		return 3.0f * k * t * t * p;
 	}
 
-	private static double b3p3( double t, double p ) 
+	private static float b3p3( float t, float p ) 
 	{
 		return t * t * t * p;
 	}

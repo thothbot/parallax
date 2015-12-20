@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.extras.curves;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 @ThreeJsObject("THREE.CubicBezierCurve3")
 public class CubicBezierCurve3 extends Curve
@@ -40,11 +41,11 @@ public class CubicBezierCurve3 extends Curve
 	}
 
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
-		double tx = ShapeUtils.b3(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
-		double ty = ShapeUtils.b3(t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY());
-		double tz = ShapeUtils.b3(t, this.v0.getZ(), this.v1.getZ(), this.v2.getZ(), this.v3.getZ());
+		float tx = ShapeUtils.b3(t, this.v0.getX(), this.v1.getX(), this.v2.getX(), this.v3.getX());
+		float ty = ShapeUtils.b3(t, this.v0.getY(), this.v1.getY(), this.v2.getY(), this.v3.getY());
+		float tz = ShapeUtils.b3(t, this.v0.getZ(), this.v1.getZ(), this.v2.getZ(), this.v3.getZ());
 
 		return new Vector3(tx, ty, tz);
 	}

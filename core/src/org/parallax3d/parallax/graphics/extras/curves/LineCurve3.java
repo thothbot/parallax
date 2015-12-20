@@ -36,7 +36,7 @@ public class LineCurve3 extends Curve
 	}
 
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
 		Vector3 point = this.v2.clone();
 		point.sub(this.v1);

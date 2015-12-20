@@ -36,7 +36,7 @@ public class LineCurve extends Curve
 	}
 
 	@Override
-	public Vector2 getPoint(double t)
+	public Vector2 getPoint(float t)
 	{
 		Vector2 point = this.v2.clone();
 		point.sub(this.v1);
@@ -50,13 +50,13 @@ public class LineCurve extends Curve
 	 * Line curve is linear, so we can overwrite default getPointAt
 	 */
 	@Override
-	public Vector2 getPointAt(double u)
+	public Vector2 getPointAt(float u)
 	{
 		return this.getPoint(u);
 	}
 
 	@Override
-	public Vector2 getTangent(double t)
+	public Vector2 getTangent(float t)
 	{
 		Vector2 tangent = this.v2.clone();
 		tangent.sub(this.v1);

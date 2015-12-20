@@ -26,17 +26,17 @@ import org.parallax3d.parallax.math.Vector2;
 public class ArcCurve extends Curve
 {
 	
-	public double aX;
-	public double aY;
+	public float aX;
+	public float aY;
 
-	public double aRadius;
+	public float aRadius;
 
-	public double aStartAngle;
-	public double aEndAngle;
+	public float aStartAngle;
+	public float aEndAngle;
 
 	public boolean aClockwise;
 
-	public ArcCurve(double aX, double aY, double aRadius, double aStartAngle, double aEndAngle,
+	public ArcCurve(float aX, float aY, float aRadius, float aStartAngle, float aEndAngle,
 			boolean aClockwise) 
 	{
 		this.aX = aX;
@@ -48,17 +48,17 @@ public class ArcCurve extends Curve
 	}
 
 	@Override
-	public Vector2 getPoint(double t)
+	public Vector2 getPoint(float t)
 	{
-		double deltaAngle = this.aEndAngle - this.aStartAngle;
+		float deltaAngle = this.aEndAngle - this.aStartAngle;
 
 		if ( !this.aClockwise )
 			t = 1 - t;
 		
-		double angle = this.aStartAngle + t * deltaAngle;
+		float angle = this.aStartAngle + t * deltaAngle;
 
-		double tx = this.aX + this.aRadius * Math.cos( angle );
-		double ty = this.aY + this.aRadius * Math.sin( angle );
+		float tx = this.aX + this.aRadius * (float)Math.cos( angle );
+		float ty = this.aY + this.aRadius * (float)Math.sin( angle );
 
 		return new Vector2( tx, ty );
 	}

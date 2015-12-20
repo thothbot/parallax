@@ -21,8 +21,10 @@ package org.parallax3d.parallax.graphics.extras.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.graphics.extras.curves.LineCurve;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 
 /*
@@ -36,7 +38,7 @@ public class CurvePath extends Curve
 	private List<Curve> curves;
 	private List<CurvePath> bends;
 	
-	private List<Double> cacheLengths;
+	private List<Float> cacheLengths;
 	
 	// Automatically closes the path
 	public boolean autoClose = false; 
@@ -95,10 +97,10 @@ public class CurvePath extends Curve
 	 * 4. Return curve.getPointAt(t')
 	 */
 	@Override
-	public Vector2 getPoint(double t)
+	public Vector2 getPoint(float t)
 	{
-		double d = t * this.getLength();
-		List<Double> curveLengths = this.getCurveLengths();
+		float d = t * this.getLength();
+		List<Float> curveLengths = this.getCurveLengths();
 		int i = 0;
 
 		// To think about boundaries points.
@@ -106,10 +108,10 @@ public class CurvePath extends Curve
 		{
 			if ( curveLengths.get( i ) >= d ) 
 			{
-				double diff = curveLengths.get( i ) - d;
+				float diff = curveLengths.get( i ) - d;
 				Curve curve = getCurves().get( i );
 
-				double u = 1.0 - diff / curve.getLength();
+				float u = 1.0f - diff / curve.getLength();
 
 				return (Vector2) curve.getPointAt( u );
 			}
@@ -127,9 +129,9 @@ public class CurvePath extends Curve
 	 * Curve, getLength() depends on getPoint() but in THREE.CurvePath
 	 * getPoint() depends on getLength
 	 */
-	public double getLength() 
+	public float getLength() 
 	{
-		List<Double> lens = this.getCurveLengths();
+		List<Float> lens = this.getCurveLengths();
 		return lens.get( lens.size() - 1 );
 	}
 
@@ -137,7 +139,7 @@ public class CurvePath extends Curve
 	 * Compute lengths and cache them
 	 * We cannot overwrite getLengths() because UtoT mapping uses it.
 	 */
-	public List<Double> getCurveLengths() 
+	public List<Float> getCurveLengths()
 	{
 		// We use cache values if curves and cache array are same length
 		if ( this.cacheLengths != null && this.cacheLengths.size() == this.curves.size() )
@@ -145,8 +147,8 @@ public class CurvePath extends Curve
 
 		// Get length of subsurve
 		// Push sums into cached array
-		this.cacheLengths = new ArrayList<Double>();
-		double sums = 0.0;
+		this.cacheLengths = new ArrayList<Float>();
+		float sums = 0.0f;
 		for ( int i = 0; i < this.curves.size(); i ++ ) 
 		{
 			sums += this.curves.get( i ).getLength();
@@ -163,11 +165,11 @@ public class CurvePath extends Curve
 	{
 		List<Vector2> points = (ArrayList)this.getPoints();
 
-		double maxX, maxY;
-		double minX, minY;
+		float maxX, maxY;
+		float minX, minY;
 
-		maxX = maxY = Double.NEGATIVE_INFINITY;
-		minX = minY = Double.POSITIVE_INFINITY;
+		maxX = maxY = Float.NEGATIVE_INFINITY;
+		minX = minY = Float.POSITIVE_INFINITY;
 
 		Vector2 sum = new Vector2();
 		int il = points.size();
@@ -220,10 +222,10 @@ public class CurvePath extends Curve
 		{
 			Vector2 p = oldPts.get( i );
 
-			double oldX = p.getX();
-			double oldY = p.getY();
+			float oldX = p.getX();
+			float oldY = p.getY();
 
-			double xNorm = oldX / bounds.getMax().getX();
+			float xNorm = oldX / bounds.getMax().getX();
 
 			// If using actual distance, for length > path, requires line extrusions
 			//xNorm = path.getUtoTmapping(xNorm, oldX); // 3 styles. 1) wrap stretched. 2) wrap stretch by arc length 3) warp by actual distance

@@ -23,9 +23,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.graphics.extras.curves.*;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 @ThreeJsObject("THREE.Path")
 public class Path extends CurvePath
@@ -88,17 +90,17 @@ public class Path extends CurvePath
 			lineTo( vectors.get( v ).getX(), vectors.get( v ).getY() );
 	}
 	
-	public void moveTo( double x, double y ) 
+	public void moveTo( float x, float y ) 
 	{
 		this.actions.add( new Action(PATH_ACTIONS.MOVE_TO, x, y));
 	}
 	
-	public void lineTo( double x, double y ) 
+	public void lineTo( float x, float y ) 
 	{	
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 
-		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
-		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
+		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
+		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
 
 		LineCurve curve = new LineCurve( new Vector2( x0, y0 ), new Vector2( x, y ) );
 		add(curve);
@@ -106,14 +108,14 @@ public class Path extends CurvePath
 		this.actions.add( new Action( PATH_ACTIONS.LINE_TO, x, y ) );
 	}
 	
-	public void quadraticCurveTo(double aCPx, double aCPy, double aX, double aY ) 
+	public void quadraticCurveTo(float aCPx, float aCPy, float aX, float aY ) 
 	{		
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 				
-		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
-		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
+		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
+		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
 
-		QuadraticBezierCurve curve = new QuadraticBezierCurve( 
+		QuadraticBezierCurve curve = new QuadraticBezierCurve(
 				new Vector2( x0, y0 ),
 				new Vector2( aCPx, aCPy ),
 				new Vector2( aX, aY ) );
@@ -122,13 +124,13 @@ public class Path extends CurvePath
 		this.actions.add( new Action( PATH_ACTIONS.QUADRATIC_CURVE_TO, aCPx, aCPy, aX, aY ) );
 	}
 	
-	public void bezierCurveTo( double aCP1x, double aCP1y, double aCP2x, double aCP2y, double aX, double aY ) 
+	public void bezierCurveTo( float aCP1x, float aCP1y, float aCP2x, float aCP2y, float aX, float aY ) 
 	{
 
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 
-		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
-		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
+		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
+		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
 
 		CubicBezierCurve curve = new CubicBezierCurve( new Vector2( x0, y0 ),
 				new Vector2( aCP1x, aCP1y ),
@@ -147,8 +149,8 @@ public class Path extends CurvePath
 	{	
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 
-		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
-		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
+		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
+		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
 		
 		//---
 		List<Vector2> npts = new ArrayList<Vector2>();
@@ -164,35 +166,35 @@ public class Path extends CurvePath
 	/*
 	 * FUTURE: Change the API or follow canvas API?
 	 */
-	public void arc( double aX, double aY, double aRadius, 
-			double aStartAngle, double aEndAngle, boolean aClockwise ) 
+	public void arc( float aX, float aY, float aRadius, 
+			float aStartAngle, float aEndAngle, boolean aClockwise ) 
 	{
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
 		
-		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
-		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
+		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
+		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
 		
 		absarc(aX + x0, aY + y0, aRadius, aStartAngle, aEndAngle, aClockwise );
 	}
 
-	public void absarc( double aX, double aY, double aRadius, 
-			double aStartAngle, double aEndAngle, boolean aClockwise ) 
+	public void absarc( float aX, float aY, float aRadius, 
+			float aStartAngle, float aEndAngle, boolean aClockwise ) 
 	{		
 		absellipse(aX, aY, aRadius, aRadius, aStartAngle, aEndAngle, aClockwise);
 	}
 	
-	public void ellipse( double aX, double aY, double xRadius, double yRadius,
-			double aStartAngle, double aEndAngle, boolean aClockwise ) 
+	public void ellipse( float aX, float aY, float xRadius, float yRadius,
+			float aStartAngle, float aEndAngle, boolean aClockwise ) 
 	{
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
-		double x0 = (Double) lastargs.get( lastargs.size() - 2 );
-		double y0 = (Double) lastargs.get( lastargs.size() - 1 );
+		float x0 = (Float) lastargs.get( lastargs.size() - 2 );
+		float y0 = (Float) lastargs.get( lastargs.size() - 1 );
 
 		absellipse(aX + x0, aY + y0, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise );
 	}
 	
-	public void absellipse(double aX, double aY, double xRadius, double yRadius,
-			double aStartAngle, double aEndAngle, boolean aClockwise ) 
+	public void absellipse(float aX, float aY, float xRadius, float yRadius,
+			float aStartAngle, float aEndAngle, boolean aClockwise ) 
 	{
 
 		List<Object> lastargs = this.actions.get( this.actions.size() - 1 ).args;
@@ -218,7 +220,7 @@ public class Path extends CurvePath
 		List<Vector2> points = new ArrayList<Vector2>();
 
 		for ( int i = 0; i < divisions; i ++ )
-			points.add( this.getPoint( i / (double)divisions ) );
+			points.add( this.getPoint( i / (float)divisions ) );
 
 //		if ( closedPath )
 //			points.add( points.get(0) );
@@ -241,7 +243,7 @@ public class Path extends CurvePath
 
 		List<Vector2> points = new ArrayList<Vector2>();
 
-		double cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0;
+		float cpx, cpy, cpx2, cpy2, cpx1, cpy1, cpx0, cpy0;
 
 		for ( int i = 0, il = this.actions.size(); i < il; i ++ ) 
 		{
@@ -255,21 +257,21 @@ public class Path extends CurvePath
 
 			case MOVE_TO:
 
-				points.add( new Vector2( (Double)args.get( 0 ), (Double)args.get( 1 ) ) );
+				points.add( new Vector2( (Float)args.get( 0 ), (Float)args.get( 1 ) ) );
 				break;
 
 			case LINE_TO:
 
-				points.add( new Vector2( (Double)args.get( 0 ), (Double)args.get( 1 ) ) );
+				points.add( new Vector2( (Float)args.get( 0 ), (Float)args.get( 1 ) ) );
 				break;
 
 			case QUADRATIC_CURVE_TO:
 
-				cpx  = (Double)args.get( 2 );
-				cpy  = (Double)args.get( 3 );
+				cpx  = (Float)args.get( 2 );
+				cpy  = (Float)args.get( 3 );
 
-				cpx1 = (Double)args.get( 0 );
-				cpy1 = (Double)args.get( 1 );
+				cpx1 = (Float)args.get( 0 );
+				cpy1 = (Float)args.get( 1 );
 
 				if ( points.size() > 0 ) 
 				{
@@ -282,16 +284,16 @@ public class Path extends CurvePath
 				{
 					List<Object> laste = this.actions.get( i - 1 ).args;
 
-					cpx0 = (Double) laste.get( laste.size() - 2 );
-					cpy0 = (Double) laste.get( laste.size() - 1 );
+					cpx0 = (Float) laste.get( laste.size() - 2 );
+					cpy0 = (Float) laste.get( laste.size() - 1 );
 				}
 
 				for ( int j = 1; j <= divisions; j ++ ) 
 				{
-					double t = j / (double)divisions;
+					float t = j / (float)divisions;
 
-					double tx = ShapeUtils.b2(t, cpx0, cpx1, cpx);
-					double ty = ShapeUtils.b2( t, cpy0, cpy1, cpy );
+					float tx = ShapeUtils.b2(t, cpx0, cpx1, cpx);
+					float ty = ShapeUtils.b2( t, cpy0, cpy1, cpy );
 
 					points.add( new Vector2( tx, ty ) );
 			  	}
@@ -300,14 +302,14 @@ public class Path extends CurvePath
 
 			case BEZIER_CURVE_TO:
 
-				cpx  = (Double)args.get( 4 );
-				cpy  = (Double)args.get( 5 );
+				cpx  = (Float)args.get( 4 );
+				cpy  = (Float)args.get( 5 );
 
-				cpx1 = (Double)args.get( 0 );
-				cpy1 = (Double)args.get( 1 );
+				cpx1 = (Float)args.get( 0 );
+				cpy1 = (Float)args.get( 1 );
 
-				cpx2 = (Double)args.get( 2 );
-				cpy2 = (Double)args.get( 3 );
+				cpx2 = (Float)args.get( 2 );
+				cpy2 = (Float)args.get( 3 );
 
 				if ( points.size() > 0 ) 
 				{
@@ -320,17 +322,17 @@ public class Path extends CurvePath
 				{
 					List<Object> laste = this.actions.get( i - 1 ).args;
 
-					cpx0 = (Double) laste.get( laste.size() - 2 );
-					cpy0 = (Double) laste.get( laste.size() - 1 );
+					cpx0 = (Float) laste.get( laste.size() - 2 );
+					cpy0 = (Float) laste.get( laste.size() - 1 );
 				}
 
 
 				for ( int j = 1; j <= divisions; j ++ ) 
 				{
-					double t = j / (double)divisions;
+					float t = j / (float)divisions;
 
-					double tx = ShapeUtils.b3( t, cpx0, cpx1, cpx2, cpx );
-					double ty = ShapeUtils.b3( t, cpy0, cpy1, cpy2, cpy );
+					float tx = ShapeUtils.b3( t, cpx0, cpx1, cpx2, cpx );
+					float ty = ShapeUtils.b3( t, cpy0, cpy1, cpy2, cpy );
 
 					points.add( new Vector2( tx, ty ) );
 				}
@@ -341,12 +343,12 @@ public class Path extends CurvePath
 
 				List<Object> laste = this.actions.get( i - 1 ).args;
 
-				Vector2 last = new Vector2( (Double)laste.get( laste.size() - 2 ), (Double)laste.get( laste.size() - 1 ) );
+				Vector2 last = new Vector2( (Float)laste.get( laste.size() - 2 ), (Float)laste.get( laste.size() - 1 ) );
 				List<Vector2> spts = new ArrayList<Vector2>();
 				spts.add(last);
 
 				List<Vector3> v = (List<Vector3>) args.get( 0 );
-				double n = divisions * v.size();
+				float n = divisions * v.size();
 
 				spts.addAll(v);
 
@@ -359,29 +361,29 @@ public class Path extends CurvePath
 
 			case ARC:
 
-				double aX = (Double)args.get( 0 );
-				double aY = (Double)args.get( 1 );
-				double aRadius = (Double)args.get( 2 );
-				double aStartAngle = (Double)args.get( 3 ); 
-				double aEndAngle = (Double)args.get( 4 );
+				float aX = (Float)args.get( 0 );
+				float aY = (Float)args.get( 1 );
+				float aRadius = (Float)args.get( 2 );
+				float aStartAngle = (Float)args.get( 3 );
+				float aEndAngle = (Float)args.get( 4 );
 				boolean aClockwise = !!(Boolean)args.get( 5 );
 
-				double deltaAngle = aEndAngle - aStartAngle;
+				float deltaAngle = aEndAngle - aStartAngle;
 				int tdivisions = divisions * 2;
 
 				for ( int j = 1; j <= tdivisions; j ++ ) 
 				{
-					double t = j / (double)tdivisions;
+					float t = j / (float)tdivisions;
 
 					if ( !aClockwise ) 
 					{
-						t = 1.0 - t;
+						t = 1.0f - t;
 					}
 
-					double angle = aStartAngle + t * deltaAngle;
+					float angle = aStartAngle + t * deltaAngle;
 
-					double tx = aX + aRadius * Math.cos( angle );
-					double ty = aY + aRadius * Math.sin( angle );
+					float tx = aX + aRadius * (float)Math.cos( angle );
+					float ty = aY + aRadius * (float)Math.sin( angle );
 
 					points.add( new Vector2( tx, ty ) );
 				}
@@ -393,30 +395,30 @@ public class Path extends CurvePath
 			  
 			case ELLIPSE:
 
-				double aXE = (Double)args.get( 0 );
-				double aYE = (Double)args.get( 1 );
-				double xRadiusE = (Double)args.get( 2 );
-				double yRadiusE = (Double)args.get( 3 );
-				double aStartAngleE = (Double)args.get( 4 ); 
-				double aEndAngleE = (Double)args.get( 5 );
+				float aXE = (Float)args.get( 0 );
+				float aYE = (Float)args.get( 1 );
+				float xRadiusE = (Float)args.get( 2 );
+				float yRadiusE = (Float)args.get( 3 );
+				float aStartAngleE = (Float)args.get( 4 );
+				float aEndAngleE = (Float)args.get( 5 );
 				boolean aClockwiseE = !!(Boolean)args.get( 6 );
 				
-				double deltaAngleE = aEndAngleE - aStartAngleE;
-				double tdivisionsE = divisions * 2;
+				float deltaAngleE = aEndAngleE - aStartAngleE;
+				float tdivisionsE = divisions * 2;
 
 				for ( int j = 1; j <= tdivisionsE; j ++ ) 
 				{
-					double t = j / (double)tdivisionsE;
+					float t = j / (float)tdivisionsE;
 
 					if ( ! aClockwiseE ) 
 					{
 						t = 1 - t;
 					}
 
-					double angle = aStartAngleE + t * deltaAngleE;
+					float angle = aStartAngleE + t * deltaAngleE;
 
-					double tx = aXE + xRadiusE * Math.cos( angle );
-					double ty = aYE + yRadiusE * Math.sin( angle );
+					float tx = aXE + xRadiusE * (float)Math.cos( angle );
+					float ty = aYE + yRadiusE * (float)Math.sin( angle );
 
 					points.add( new Vector2( tx, ty ) );
 

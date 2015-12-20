@@ -38,11 +38,11 @@ public class QuadraticBezierCurve3 extends Curve
 	}
 
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
-		double tx = ShapeUtils.b2(t, this.v0.getX(), this.v1.getX(), this.v2.getX());
-		double ty = ShapeUtils.b2(t, this.v0.getY(), this.v1.getY(), this.v2.getY());
-		double tz = ShapeUtils.b2(t, this.v0.getZ(), this.v1.getZ(), this.v2.getZ());
+		float tx = ShapeUtils.b2(t, this.v0.getX(), this.v1.getX(), this.v2.getX());
+		float ty = ShapeUtils.b2(t, this.v0.getY(), this.v1.getY(), this.v2.getY());
+		float tz = ShapeUtils.b2(t, this.v0.getZ(), this.v1.getZ(), this.v2.getZ());
 
 		return new Vector3(tx, ty, tz);
 	}
