@@ -51,12 +51,12 @@ public class AxisHelper extends Object3D
 		mbmX.setColor( new Color(0xff0000) );
 		
 		Line line1 = new Line( lineGeometry, lbmX );
-		line1.getRotation().setZ( - Math.PI / 2.0 );
+		line1.getRotation().setZ( - (float)(Math.PI / 2.0) );
 		this.add(line1 );
 		
 		Mesh cone1 = new Mesh( coneGeometry, mbmX );
 		cone1.getPosition().setX(100);
-		cone1.getRotation().setZ(- Math.PI / 2.0 );
+		cone1.getRotation().setZ( - (float)(Math.PI / 2.0) );
 		this.add( cone1 );
 
 		// y
@@ -81,12 +81,12 @@ public class AxisHelper extends Object3D
 		mbmZ.setColor( new Color(0x0000ff) );
 
 		Line line3 = new Line( lineGeometry, lbmZ );
-		line3.getRotation().setX( Math.PI / 2.0 );
+		line3.getRotation().setX( (float)(Math.PI / 2.0) );
 		this.add( line3 );
 
 		Mesh cone3 = new Mesh( coneGeometry, mbmZ );
 		cone3.getPosition().setZ(100);
-		cone3.getRotation().setX( Math.PI / 2.0 );
+		cone3.getRotation().setX( (float)(Math.PI / 2.0) );
 		this.add( cone3 );
 	}
 }

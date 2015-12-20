@@ -29,7 +29,7 @@ public class PointLightHelper extends Mesh {
 	
 	PointLight light;
 	
-	public PointLightHelper(PointLight light, double sphereSize) 
+	public PointLightHelper(PointLight light, float sphereSize) 
 	{
 		super(new SphereGeometry( sphereSize, 4, 2 ),  new MeshBasicMaterial());
 		

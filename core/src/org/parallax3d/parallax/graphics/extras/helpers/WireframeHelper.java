@@ -18,16 +18,16 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint32Array;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawCall;
 import org.parallax3d.parallax.graphics.core.Face3;
@@ -65,7 +65,7 @@ public class WireframeHelper extends Line {
 			int numEdges = 0;
 			
 			// allocate maximal size
-			Uint32Array edges = Uint32Array.create( 6 * faces.size() );
+			IntBuffer edges = BufferUtils.newIntBuffer(6 * faces.size());
 		
 			for ( int i = 0, l = faces.size(); i < l; i ++ ) {
 
@@ -81,8 +81,8 @@ public class WireframeHelper extends Line {
 
 					if ( !hash.containsKey(key) ) 
 					{
-						edges.set( 2 * numEdges, edge[ 0 ]);
-						edges.set( 2 * numEdges + 1, edge[ 1 ]);
+						edges.put(2 * numEdges, edge[0]);
+						edges.put(2 * numEdges + 1, edge[1]);
 						hash.put(key, true);
 						numEdges ++;
 					}
@@ -91,7 +91,7 @@ public class WireframeHelper extends Line {
 
 			}
 			
-			Float32Array coords = Float32Array.create( numEdges * 2 * 3 );
+			FloatBuffer coords = BufferUtils.newFloatBuffer(numEdges * 2 * 3);
 
 			for ( int i = 0, l = numEdges; i < l; i ++ ) {
 
@@ -100,9 +100,9 @@ public class WireframeHelper extends Line {
 					Vector3 vertex = vertices.get( edges.get( 2 * i + j ) );
 
 					int index = 6 * i + 3 * j;
-					coords.set( index + 0 , vertex.getX());
-					coords.set( index + 1 , vertex.getY());
-					coords.set( index + 2 , vertex.getZ());
+					coords.put(index + 0, vertex.getX());
+					coords.put(index + 1, vertex.getY());
+					coords.put(index + 2, vertex.getZ());
 
 				}
 
@@ -119,18 +119,18 @@ public class WireframeHelper extends Line {
 			 // Indexed BufferGeometry
 			if ( ((BufferGeometry)object.getGeometry()).getAttribute("index") != null ) {
 
-				Float32Array vertices = (Float32Array) ((BufferGeometry)object.getGeometry()).getAttribute("position").getArray();
-				Uint16Array indices = (Uint16Array) ((BufferGeometry)object.getGeometry()).getAttribute("index").getArray();
+				FloatBuffer vertices = (FloatBuffer) ((BufferGeometry)object.getGeometry()).getAttribute("position").getArray();
+				IntBuffer indices = (IntBuffer) ((BufferGeometry)object.getGeometry()).getAttribute("index").getArray();
 				List<DrawCall> drawcalls = ((BufferGeometry)object.getGeometry()).getDrawcalls();
 				int numEdges = 0;
 
 				if ( drawcalls.size() == 0 ) 
 				{
-					drawcalls = Arrays.asList( new DrawCall(0, indices.getLength(), 9) );
+					drawcalls = Arrays.asList( new DrawCall(0, indices.array().length, 9) );
 				}
 
 				// allocate maximal size
-				Uint32Array edges = Uint32Array.create( 2 * indices.getLength() );
+				IntBuffer edges = BufferUtils.newIntBuffer(2 * indices.array().length);
 
 				for ( int o = 0, ol = drawcalls.size(); o < ol; ++ o ) {
 
@@ -150,8 +150,8 @@ public class WireframeHelper extends Line {
 
 							if (  !hash.containsKey(key) ) 
 							{
-								edges.set( 2 * numEdges, edge[ 0 ]);
-								edges.set( 2 * numEdges + 1, edge[ 1 ]);
+								edges.put(2 * numEdges, edge[0]);
+								edges.put(2 * numEdges + 1, edge[1]);
 								hash.put(key, true);
 								numEdges ++;
 							}
@@ -162,7 +162,7 @@ public class WireframeHelper extends Line {
 
 				}
 
-				Float32Array coords = Float32Array.create( numEdges * 2 * 3 );
+				FloatBuffer coords = BufferUtils.newFloatBuffer(numEdges * 2 * 3);
 
 				for ( int i = 0, l = numEdges; i < l; i ++ ) {
 
@@ -170,9 +170,9 @@ public class WireframeHelper extends Line {
 
 						int index = 6 * i + 3 * j;
 						int index2 = 3 * edges.get( 2 * i + j);
-						coords.set( index + 0 , vertices.get( index2 ) );
-						coords.set( index + 1 , vertices.get( index2 + 1 ) );
-						coords.set( index + 2 , vertices.get( index2 + 2 ) );
+						coords.put(index + 0, vertices.get(index2));
+						coords.put(index + 1, vertices.get(index2 + 1));
+						coords.put(index + 2, vertices.get(index2 + 2));
 
 					}
 
@@ -185,11 +185,11 @@ public class WireframeHelper extends Line {
 			else 
 			{
 
-				Float32Array vertices = (Float32Array) ((BufferGeometry)object.getGeometry()).getAttribute("position").getArray();
-				int numEdges = vertices.getLength() / 3;
+				FloatBuffer vertices = (FloatBuffer) ((BufferGeometry)object.getGeometry()).getAttribute("position").getArray();
+				int numEdges = vertices.array().length / 3;
 				int numTris = numEdges / 3;
 
-				Float32Array coords = Float32Array.create( numEdges * 2 * 3 );
+				FloatBuffer coords = BufferUtils.newFloatBuffer(numEdges * 2 * 3);
 
 				for ( int i = 0, l = numTris; i < l; i ++ ) {
 
@@ -198,14 +198,14 @@ public class WireframeHelper extends Line {
 						int index = 18 * i + 6 * j;
 
 						int index1 = 9 * i + 3 * j;
-						coords.set( index + 0 , vertices.get( index1 ) );
-						coords.set( index + 1 , vertices.get( index1 + 1 ) );
-						coords.set( index + 2 , vertices.get( index1 + 2 ) );
+						coords.put(index + 0, vertices.get(index1));
+						coords.put(index + 1, vertices.get(index1 + 1));
+						coords.put(index + 2, vertices.get(index1 + 2));
 
 						int index2 = 9 * i + 3 * ( ( j + 1 ) % 3 );
-						coords.set( index + 3 , vertices.get( index2 ) );
-						coords.set( index + 4 , vertices.get( index2 + 1 ) );
-						coords.set( index + 5 , vertices.get( index2 + 2 ) );
+						coords.put(index + 3, vertices.get(index2));
+						coords.put(index + 4, vertices.get(index2 + 1));
+						coords.put( index + 5 , vertices.get( index2 + 2 ) );
 
 					}
 

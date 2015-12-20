@@ -37,25 +37,25 @@ public class FaceNormalsHelper extends Line
 {
 	
 	Mesh object;
-	double size;
+	float size;
 	Matrix3 normalMatrix;
 	
 	public FaceNormalsHelper(Mesh object) 
 	{
-		this(object, 1.0);
+		this(object, 1.0f);
 	}
 	
-	public FaceNormalsHelper(Mesh object, double size ) 
+	public FaceNormalsHelper(Mesh object, float size ) 
 	{
 		this(object, size, 0xffff00);
 	}
 	
-	public FaceNormalsHelper(Mesh object, double size, int hex ) 
+	public FaceNormalsHelper(Mesh object, float size, int hex ) 
 	{
 		this(object, size, hex, 1);
 	}
 	
-	public FaceNormalsHelper(Mesh object, double size, int hex, int linewidth ) 
+	public FaceNormalsHelper(Mesh object, float size, int hex, int linewidth ) 
 	{
 		super(new Geometry(), new LineBasicMaterial(), MODE.PIECES);
 		

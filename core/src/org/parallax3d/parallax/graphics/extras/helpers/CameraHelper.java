@@ -149,8 +149,8 @@ public class CameraHelper extends Line
 
 	public void update() 
 	{
-		double w = 1.0;
-		double h = 1.0;
+		float w = 1.0f;
+		float h = 1.0f;
 
 		// we need just camera projection matrix
 		// world matrix must be identity
@@ -178,8 +178,8 @@ public class CameraHelper extends Line
 
 		// up
 
-		setPoint( "u1",  w * 0.7, h * 1.1, -1 );
-		setPoint( "u2", -w * 0.7, h * 1.1, -1 );
+		setPoint( "u1",  w * 0.7f, h * 1.1f, -1 );
+		setPoint( "u2", -w * 0.7f, h * 1.1f, -1 );
 		setPoint( "u3",        0, h * 2,   -1 );
 
 		// cross
@@ -197,7 +197,7 @@ public class CameraHelper extends Line
 		((Geometry)getGeometry()).setVerticesNeedUpdate( true );
 	}
 	
-	private void setPoint( String point, double x, double y, double z ) 
+	private void setPoint( String point, float x, float y, float z ) 
 	{
 		_vector.set( x, y, z ).unproject( _camera );
 

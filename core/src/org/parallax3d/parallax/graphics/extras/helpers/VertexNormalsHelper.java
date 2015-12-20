@@ -36,25 +36,25 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 public class VertexNormalsHelper extends Line
 {
 	Mesh object;
-	double size;
+	float size;
 	Matrix3 normalMatrix;
 	
 	public VertexNormalsHelper(Mesh object) 
 	{
-		this(object, 1.0);
+		this(object, 1.0f);
 	}
 	
-	public VertexNormalsHelper(Mesh object, double size ) 
+	public VertexNormalsHelper(Mesh object, float size ) 
 	{
 		this(object, size, 0xff0000);
 	}
 	
-	public VertexNormalsHelper(Mesh object, double size, int hex ) 
+	public VertexNormalsHelper(Mesh object, float size, int hex ) 
 	{
 		this(object, size, hex, 1);
 	}
 	
-	public VertexNormalsHelper(Mesh object, double size, int hex, int linewidth ) 
+	public VertexNormalsHelper(Mesh object, float size, int hex, int linewidth ) 
 	{
 		super(new Geometry(), new LineBasicMaterial(), MODE.PIECES);
 		

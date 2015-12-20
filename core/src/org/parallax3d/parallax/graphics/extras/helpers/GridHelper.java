@@ -38,7 +38,7 @@ public class GridHelper extends Line {
     private Color color1;
     private Color color2;
 
-    public GridHelper(double size, double step) {
+    public GridHelper(float size, float step) {
         super(new Geometry(), new LineBasicMaterial(), MODE.PIECES);
         Geometry geometry = (Geometry) getGeometry();
         
@@ -48,7 +48,7 @@ public class GridHelper extends Line {
         color1 = new Color(0x444444);
         color2 = new Color(0x888888);
 
-        for (double i = -size; i <= size; i += step) {
+        for (float i = -size; i <= size; i += step) {
 
             geometry.getVertices().add(new Vector3(-size, 0, i));
             geometry.getVertices().add(new Vector3(size, 0, i));
