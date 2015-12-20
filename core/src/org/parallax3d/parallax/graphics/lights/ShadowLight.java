@@ -32,19 +32,19 @@ public abstract class ShadowLight extends Light implements HasIntensity
 {
 	protected Object3D target;
 	
-	protected double intensity;
+	protected float intensity;
 
 	protected boolean onlyShadow = false;
 	
 	private Camera shadowCamera;
-	protected double shadowCameraNear = 50;
-	protected double shadowCameraFar = 5000;
+	protected float shadowCameraNear = 50;
+	protected float shadowCameraFar = 5000;
 	protected boolean shadowCameraVisible = false;
 
 	//
 	
-	protected double shadowBias = 0.0;
-	protected double shadowDarkness = 0.5;
+	protected float shadowBias = 0.0f;
+	protected float shadowDarkness = 0.5f;
 
 	protected int shadowMapWidth = 512;
 	protected int shadowMapHeight = 512;
@@ -61,7 +61,7 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	{
 		super(hex);
 		
-		this.position = new Vector3(0, 1.0, 0);
+		this.position = new Vector3(0, 1.0f, 0);
 		this.target   = new Object3D();
 	}
 
@@ -83,14 +83,14 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	/**
 	 * Gets Light's intensity.
 	 */
-	public double getIntensity() {
+	public float getIntensity() {
 		return this.intensity;
 	}
 
 	/**
 	 * Sets Light's intensity.
 	 */
-	public void setIntensity(double intensity) {
+	public void setIntensity(float intensity) {
 		this.intensity = intensity;
 	}
 	
@@ -139,19 +139,19 @@ public abstract class ShadowLight extends Light implements HasIntensity
 		this.shadowCamera = shadowCamera;
 	}
 	
-	public double getShadowCameraNear() {
+	public float getShadowCameraNear() {
 		return shadowCameraNear;
 	}
 
-	public void setShadowCameraNear(double shadowCameraNear) {
+	public void setShadowCameraNear(float shadowCameraNear) {
 		this.shadowCameraNear = shadowCameraNear;
 	}
 
-	public double getShadowCameraFar() {
+	public float getShadowCameraFar() {
 		return shadowCameraFar;
 	}
 
-	public void setShadowCameraFar(double shadowCameraFar) {
+	public void setShadowCameraFar(float shadowCameraFar) {
 		this.shadowCameraFar = shadowCameraFar;
 	}
 
@@ -163,19 +163,19 @@ public abstract class ShadowLight extends Light implements HasIntensity
 		this.shadowCameraVisible = shadowCameraVisible;
 	}
 
-	public double getShadowBias() {
+	public float getShadowBias() {
 		return shadowBias;
 	}
 
-	public void setShadowBias(double shadowBias) {
+	public void setShadowBias(float shadowBias) {
 		this.shadowBias = shadowBias;
 	}
 
-	public double getShadowDarkness() {
+	public float getShadowDarkness() {
 		return shadowDarkness;
 	}
 
-	public void setShadowDarkness(double shadowDarkness) {
+	public void setShadowDarkness(float shadowDarkness) {
 		this.shadowDarkness = shadowDarkness;
 	}
 

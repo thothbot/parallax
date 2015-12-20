@@ -22,7 +22,9 @@ import java.util.Map;
 
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * This light's color gets applied to all the objects in the scene globally.
@@ -80,7 +82,7 @@ public final class AmbientLight extends Light
 		Float32Array colors = zlights.ambient.colors;
 	
 		Color color = getColor();
-		double r = 0, g = 0, b = 0;
+		float r = 0, g = 0, b = 0;
 		if(colors.getLength() == 3)
 		{
 			r = colors.get(0);

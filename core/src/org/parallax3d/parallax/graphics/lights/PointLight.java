@@ -27,6 +27,7 @@ import org.parallax3d.parallax.graphics.extras.helpers.HasRaytracingPhysicalAtte
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
@@ -70,41 +71,41 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 		}
 	}
 	
-	private double intensity;
-	private double distance;
+	private float intensity;
+	private float distance;
 	
 	private boolean isPhysicalAttenuation;
 	
 	public PointLight(int hex) 
 	{
-		this(hex, 1.0, 0.0);
+		this(hex, 1.0f, 0.0f);
 	}
 	
-	public PointLight(int hex, double intensity) 
+	public PointLight(int hex, float intensity) 
 	{
-		this(hex, intensity, 0.0);
+		this(hex, intensity, 0.0f);
 	}
 	
-	public PointLight(int hex, double intensity, double distance ) 
+	public PointLight(int hex, float intensity, float distance ) 
 	{
 		super(hex);
 		this.intensity = intensity;
 		this.distance = distance;
 	}
 
-	public double getIntensity() {
+	public float getIntensity() {
 		return this.intensity;
 	}
 
-	public void setIntensity(double intensity) {
+	public void setIntensity(float intensity) {
 		this.intensity = intensity;
 	}
 
-	public void setDistance(double distance) {
+	public void setDistance(float distance) {
 		this.distance = distance;
 	}
 
-	public double getDistance() {
+	public float getDistance() {
 		return distance;
 	}
 
@@ -138,8 +139,8 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 		Float32Array pointPositions  = zlights.point.positions;
 		Float32Array pointDistances  = zlights.point.distances;
 		
-		double intensity = getIntensity();
-		double distance = getDistance();
+		float intensity = getIntensity();
+		float distance = getDistance();
 		int pointOffset = pointColors.getLength();
 
 		if ( isGammaInput ) 

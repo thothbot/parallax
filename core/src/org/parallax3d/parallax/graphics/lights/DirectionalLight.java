@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.lights;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
@@ -79,12 +80,12 @@ public class DirectionalLight extends ShadowLight
 	private Vector3 shadowCascadeOffset;
 	private int shadowCascadeCount = 2;
 
-	private double[] shadowCascadeBias = { 0.0, 0.0, 0.0};
+	private float[] shadowCascadeBias = { 0.0f, 0.0f, 0.0f};
 	private int[] shadowCascadeWidth = { 512, 512, 512 };
 	private int[] shadowCascadeHeight = { 512, 512, 512 };
 
-	private double[] shadowCascadeNearZ = { -1.000, 0.990, 0.998 };
-	private double[] shadowCascadeFarZ = { 0.990, 0.998, 1.000 };
+	private float[] shadowCascadeNearZ = { -1.000f, 0.990f, 0.998f };
+	private float[] shadowCascadeFarZ = { 0.990f, 0.998f, 1.000f };
 
 	private List<VirtualLight> shadowCascadeArray;
 
@@ -93,7 +94,7 @@ public class DirectionalLight extends ShadowLight
 		this(hex, 1.0);
 	}
 
-	public DirectionalLight(int hex, double intensity)
+	public DirectionalLight(int hex, float intensity)
 	{		
 		super(hex);
 
@@ -118,11 +119,11 @@ public class DirectionalLight extends ShadowLight
 		this.shadowCascadeCount = shadowCascadeCount;
 	}
 
-	public double[] getShadowCascadeBias() {
+	public float[] getShadowCascadeBias() {
 		return shadowCascadeBias;
 	}
 
-	public void setShadowCascadeBias(double[] shadowCascadeBias) {
+	public void setShadowCascadeBias(float[] shadowCascadeBias) {
 		this.shadowCascadeBias = shadowCascadeBias;
 	}
 
@@ -142,19 +143,19 @@ public class DirectionalLight extends ShadowLight
 		this.shadowCascadeHeight = shadowCascadeHeight;
 	}
 	
-	public double[] getShadowCascadeNearZ() {
+	public float[] getShadowCascadeNearZ() {
 		return shadowCascadeNearZ;
 	}
 
-	public void setShadowCascadeNearZ(double[] shadowCascadeNearZ) {
+	public void setShadowCascadeNearZ(float[] shadowCascadeNearZ) {
 		this.shadowCascadeNearZ = shadowCascadeNearZ;
 	}
 
-	public double[] getShadowCascadeFarZ() {
+	public float[] getShadowCascadeFarZ() {
 		return shadowCascadeFarZ;
 	}
 
-	public void setShadowCascadeFarZ(double[] shadowCascadeFarZ) {
+	public void setShadowCascadeFarZ(float[] shadowCascadeFarZ) {
 		this.shadowCascadeFarZ = shadowCascadeFarZ;
 	}
 
@@ -253,7 +254,7 @@ public class DirectionalLight extends ShadowLight
 		Float32Array dirColors     = zlights.directional.colors;
 		Float32Array dirPositions  = zlights.directional.positions;
 
-		double intensity = getIntensity();
+		float intensity = getIntensity();
 
 		int dirOffset = dirColors.getLength();
 

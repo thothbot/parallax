@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.lights;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.math.Color;

@@ -27,20 +27,20 @@ public class AreaLight extends Light implements HasIntensity
 	public Vector3 normal;
 	public Vector3 right;
 
-	private double intensity;
+	private float intensity;
 
-	public double width = 1.0;
-	public double height = 1.0;
+	public float width = 1.0f;
+	public float height = 1.0f;
 
-	public double constantAttenuation = 1.5;
-	public double linearAttenuation = 0.5;
-	public double quadraticAttenuation = 0.1;
+	public float constantAttenuation = 1.5f;
+	public float linearAttenuation = 0.5f;
+	public float quadraticAttenuation = 0.1f;
 	
 	public AreaLight ( int color) {
-		this(color, 1.0);
+		this(color, 1.0f);
 	}
 	
-	public AreaLight ( int color, double intensity ) {
+	public AreaLight ( int color, float intensity ) {
 
 		super(color);
 
@@ -59,14 +59,14 @@ public class AreaLight extends Light implements HasIntensity
 	/**
 	 * Gets Light's intensity.
 	 */
-	public double getIntensity() {
+	public float getIntensity() {
 		return this.intensity;
 	}
 
 	/**
 	 * Sets Light's intensity.
 	 */
-	public void setIntensity(double intensity) {
+	public void setIntensity(float intensity) {
 		this.intensity = intensity;
 	}
 }

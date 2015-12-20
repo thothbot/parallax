@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.lights;
 
 import java.util.Map;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
@@ -78,7 +79,7 @@ public class SpotLight extends ShadowLight
 		}
 
 		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms) 
+		public void refreshUniform(Map<String, Uniform> uniforms)
 		{
 			uniforms.get("spotLightColor").setValue( colors );
 			uniforms.get("spotLightPosition").setValue( positions );
@@ -90,23 +91,23 @@ public class SpotLight extends ShadowLight
 		}
 	}
 	
-	private double distance;
-	private double angle;
-	private double exponent;
+	private float distance;
+	private float angle;
+	private float exponent;
 
-	private double shadowCameraFov = 50;
+	private float shadowCameraFov = 50;
 	
 	public SpotLight(int hex) 
 	{
-		this(hex, 1.0);
+		this(hex, 1.0f);
 	}
 
-	public SpotLight(int hex, double intensity)
+	public SpotLight(int hex, float intensity)
 	{
-		this(hex, intensity, 0, Math.PI / 2.0, 10);
+		this(hex, intensity, 0, (float)Math.PI / 2.0f, 10);
 	}
 
-	public SpotLight(int hex, double intensity, double distance, double angle, double exponent) 
+	public SpotLight(int hex, float intensity, float distance, float angle, float exponent) 
 	{
 		super(hex);
 		this.exponent = exponent;
@@ -121,7 +122,7 @@ public class SpotLight extends ShadowLight
 	/**
 	 * Gets the distance. Default � 0.0.
 	 */
-	public double getDistance() {
+	public float getDistance() {
 		return this.distance;
 	}
 
@@ -130,31 +131,31 @@ public class SpotLight extends ShadowLight
 	 * <p>
 	 * If non-zero, light will attenuate linearly from maximum intensity at light position down to zero at distance.
 	 */
-	public void setDistance(double distance) {
+	public void setDistance(float distance) {
 		this.distance = distance;
 	}
 	
-	public double getExponent() {
+	public float getExponent() {
 		return exponent;
 	}
 
-	public void setExponent(double exponent) {
+	public void setExponent(float exponent) {
 		this.exponent = exponent;
 	}
 
-	public double getAngle() {
+	public float getAngle() {
 		return angle;
 	}
 
-	public void setAngle(double angle) {
+	public void setAngle(float angle) {
 		this.angle = angle;
 	}
 
-	public double getShadowCameraFov() {
+	public float getShadowCameraFov() {
 		return shadowCameraFov;
 	}
 
-	public void setShadowCameraFov(double shadowCameraFov) {
+	public void setShadowCameraFov(float shadowCameraFov) {
 		this.shadowCameraFov = shadowCameraFov;
 	}
 	
@@ -168,8 +169,8 @@ public class SpotLight extends ShadowLight
 		Float32Array spotAngles     = zlights.spot.angles;
 		Float32Array spotExponents  = zlights.spot.exponents;
 		
-		double intensity = getIntensity();
-		double distance =  getDistance();
+		float intensity = getIntensity();
+		float distance =  getDistance();
 
 		int spotOffset = spotColors.getLength();
 
