@@ -18,8 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLUniformLocation;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
+import java.nio.FloatBuffer;
 
 /**
  * Shader's uniforms.
@@ -49,8 +48,8 @@ public class Uniform
 
 	private TYPE type;
 	private Object value;
-	private Float32Array cache_array;
-	private WebGLUniformLocation location;
+	private FloatBuffer cache_array;
+	private int location; //WebGLUniformLocation
 
 	public Uniform(TYPE type)
 	{
@@ -75,19 +74,19 @@ public class Uniform
 		this.value = value;
 	}
 	
-	public Float32Array getCacheArray() {
+	public FloatBuffer getCacheArray() {
 		return this.cache_array;
 	}
 	
-	public void setCacheArray(Float32Array array) {
+	public void setCacheArray(FloatBuffer array) {
 		this.cache_array = array;
 	}
 	
-	public WebGLUniformLocation getLocation() {
+	public int getLocation() {
 		return this.location;
 	}
 	
-	public void setLocation(WebGLUniformLocation location) {
+	public void setLocation(int location) {
 		this.location = location;
 	}
 	

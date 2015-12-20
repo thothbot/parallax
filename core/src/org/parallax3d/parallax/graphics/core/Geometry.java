@@ -23,8 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector3;
@@ -35,6 +33,7 @@ import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * Base class for geometries. A geometry holds all data necessary to describe a 3D model.
@@ -239,7 +238,7 @@ public class Geometry extends AbstractGeometry
 	}
 	
 	/**
-	 * Gets the List of face {@link UV} layers.
+	 * Gets the List of face UV layers.
 	 * Each UV layer is an array of UVs matching the order and number of vertices in faces.
 	 * To signal an update in this array, Geometry.uvsNeedUpdate needs to be set to true.
 	 */

@@ -35,7 +35,9 @@ import org.parallax3d.parallax.graphics.core.GeometryGroup;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
@@ -512,7 +514,7 @@ public abstract class Material
 		parameters.flipSided = this.getSides() == SIDE.BACK;
 	}
 
-	public Shader buildShader(WebGLRenderingContext gl, ProgramParameters parameters)
+	public Shader buildShader(GL20 gl, ProgramParameters parameters)
 	{
 		Shader shader = getShader();
 
@@ -776,7 +778,7 @@ public abstract class Material
 		if ( ! (this instanceof HasMaterialMap) )
 			return;
 
-		Map<String, Uniform> uniforms = getShader().getUniforms();
+		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
 		
 		uniforms.get("opacity").setValue( getOpacity() );
 
@@ -919,7 +921,7 @@ public abstract class Material
 	
 	public void deallocate( WebGLRenderer renderer )
 	{
-		WebGLProgram program = getShader().getProgram();
+		Integer program = getShader().getProgram();
 		if ( program == null ) return;
 		
 //		getShader().setPrecision(null);
@@ -945,7 +947,7 @@ public abstract class Material
 		if ( deleteProgram == true ) 
 		{
 
-			renderer.getGL().deleteProgram( program );
+			renderer.getGL().glDeleteProgram(program);
 
 			renderer.getInfo().getMemory().programs --;
 		}

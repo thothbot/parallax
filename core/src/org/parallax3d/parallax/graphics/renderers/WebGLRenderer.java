@@ -116,6 +116,7 @@ import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
+import org.parallax3d.parallax.system.gl.GL20;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
@@ -554,7 +555,7 @@ public class WebGLRenderer extends AbstractRenderer implements HasEventBus
 	 * @return the underlying context implementation for drawing onto the
 	 *         {@link Canvas3d}.
 	 */
-	public WebGLRenderingContext getGL()
+	public GL20 getGL()
 	{
 		return this.gl;
 	}
