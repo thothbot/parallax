@@ -18,26 +18,24 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLBuffer;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.TypeArray;
-
 import java.nio.Buffer;
+import java.nio.FloatBuffer;
 
 @ThreeJsObject("THREE.BufferAttribute")
 public class BufferAttribute {
 	
-	private Buffer array;
+	private FloatBuffer array;
 	private int itemSize;
 	
 	// TODO: Fix it (BufferGeometry)
 	private int numItems;
 	
 	private boolean needsUpdate = false;
-	private WebGLBuffer buffer;
+	private int buffer; //WebGLBuffer
 	
-	public BufferAttribute(Buffer array, int itemSize) {
+	public BufferAttribute(FloatBuffer array, int itemSize) {
 		this.array = array;
 		this.itemSize = itemSize;
 	}
@@ -56,7 +54,7 @@ public class BufferAttribute {
 		return this.array;
 	}
 	
-	public void setArray(Buffer array) {
+	public void setArray(FloatBuffer array) {
 		this.array = array;
 	}
 	
@@ -88,14 +86,14 @@ public class BufferAttribute {
 	/**
 	 * @return the buffer
 	 */
-	public WebGLBuffer getBuffer() {
+	public int  getBuffer() {
 		return buffer;
 	}
 
 	/**
 	 * @param buffer the buffer to set
 	 */
-	public void setBuffer(WebGLBuffer buffer) {
+	public void setBuffer(int buffer) {
 		this.buffer = buffer;
 	}
 		
@@ -106,88 +104,88 @@ public class BufferAttribute {
 
 		for ( int i = 0, l = this.itemSize; i < l; i ++ ) {
 
-			((Float32Array)this.array).set( index1 + i , ((Float32Array)attribute.array).get( index2 + i ) );
+			((FloatBuffer)this.array).put(index1 + i, ((FloatBuffer) attribute.array).get(index2 + i));
 
 		}
 
 	}
 
-	public BufferAttribute set( Float32Array value ) {
+	public BufferAttribute set( FloatBuffer value ) {
 
-		this.array.set( value );
+		this.array.put(value);
 
 		return this;
 
 	}
 	
-	public BufferAttribute setX( int index, double x ) {
+	public BufferAttribute setX( int index, float x ) {
 
-		((Float32Array)this.array).set( index * this.itemSize , x );
-
-		return this;
-
-	}
-
-	public BufferAttribute setY( int index, double y ) {
-
-		((Float32Array)this.array).set( index * this.itemSize + 1 , y );
+		((FloatBuffer)this.array).put(index * this.itemSize, x);
 
 		return this;
 
 	}
 
-	public BufferAttribute setZ( int index, double z ) {
+	public BufferAttribute setY( int index, float y ) {
 
-		((Float32Array)this.array).set( index * this.itemSize + 2 , z );
+		((FloatBuffer)this.array).put(index * this.itemSize + 1, y);
 
 		return this;
 
 	}
 
-	public BufferAttribute setXY( int index, double x, double y ) {
+	public BufferAttribute setZ( int index, float z ) {
+
+		((FloatBuffer)this.array).put(index * this.itemSize + 2, z);
+
+		return this;
+
+	}
+
+	public BufferAttribute setXY( int index, float x, float y ) {
 
 		index *= this.itemSize;
 
-		((Float32Array)this.array).set( index     , x);
-		((Float32Array)this.array).set( index + 1 , y );
+		((FloatBuffer)this.array).put(index, x);
+		((FloatBuffer)this.array).put(index + 1, y);
 
 		return this;
 
 	}
 
-	public BufferAttribute setXYZ ( int index, double x, double y, double z ) {
+	public BufferAttribute setXYZ ( int index, float x, float y, float z ) {
 
 		index *= this.itemSize;
 
-		((Float32Array)this.array).set( index     , x );	
-		((Float32Array)this.array).set( index + 1 , y );
-		((Float32Array)this.array).set( index + 2 , z );
+		((FloatBuffer)this.array).put(index, x);	
+		((FloatBuffer)this.array).put(index + 1, y);
+		((FloatBuffer)this.array).put(index + 2, z);
 
 		return this;
 
 	}
 
-	public BufferAttribute setXYZW ( int index, double x, double y, double z, double w ) {
+	public BufferAttribute setXYZW ( int index, float x, float y, float z, float w ) {
 
 		index *= this.itemSize;
 
-		((Float32Array)this.array).set( index     , x );
-		((Float32Array)this.array).set( index + 1 , y );
-		((Float32Array)this.array).set( index + 2 , z );
-		((Float32Array)this.array).set( index + 3 , w );
+		((FloatBuffer)this.array).put(index, x);
+		((FloatBuffer)this.array).put(index + 1, y);
+		((FloatBuffer)this.array).put(index + 2, z);
+		((FloatBuffer)this.array).put(index + 3, w);
 
 		return this;
 
 	}
 
-	public BufferAttribute clone() {
-
-		return new BufferAttribute( Float32Array.create(this.array),  this.itemSize );
-
-	}
+//	public BufferAttribute clone() {
+//
+//		return new BufferAttribute( FloatBuffer.create(this.array),  this.itemSize );
+//
+//	}
 
 	public String toString() {
-		return "{array: " + this.array.getLength() 
+		return "{array: " + this.array.arrayOffset() 
 				+ ", itemSize: " + this.itemSize 
 				+ ", needsUpdate: " + this.isNeedsUpdate() 
 				+ ", buffer: " + this.getBuffer() + "}";

@@ -18,10 +18,8 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
+import java.nio.FloatBuffer;
 import java.util.List;
-
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLBuffer;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 
 public class Attribute
 {
@@ -39,7 +37,7 @@ public class Attribute
 		FACE_VERTICES
 	};
 
-	public WebGLBuffer buffer;
+	public int buffer; //WebGLBuffer
 	public boolean createUniqueBuffers;
 	public TYPE type;
 	// TODO: remove = change to type (initCustomAttributes)
@@ -47,7 +45,7 @@ public class Attribute
 	private List<?> value;
 	private BOUND_TO boundTo;
 	
-	public Float32Array array;
+	public FloatBuffer array;
 	public boolean needsUpdate;
 	public String belongsToAttribute;
 	public Attribute __original;

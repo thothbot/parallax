@@ -30,6 +30,7 @@ import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 
 public abstract class GeometryObject extends Object3D
 {
