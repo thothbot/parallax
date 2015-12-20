@@ -21,6 +21,8 @@ package org.parallax3d.parallax.math;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
+import java.nio.FloatBuffer;
+
 /**
  * This class implements three-dimensional matrix. NxN, where N=4.
  * 
@@ -524,29 +526,29 @@ public class Matrix4
 		return this;
 	}
 	
-//	public Float32Array applyToVector3Array (Float32Array array)
-//	{
-//		return applyToVector3Array(array, 0, array.getLength());
-//	}
-//
-//	public Float32Array applyToVector3Array (Float32Array array, int offset, int length)
-//	{
-//		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
-//
-//			_v1.x = array.get( j );
-//			_v1.y = array.get( j + 1 );
-//			_v1.z = array.get( j + 2 );
-//
-//			_v1.apply( this );
-//
-//			array.set( j , _v1.x);
-//			array.set( j + 1 , _v1.y);
-//			array.set( j + 2 , _v1.z);
-//
-//		}
-//
-//		return array;
-//	}
+	public FloatBuffer applyToVector3Array (FloatBuffer array)
+	{
+		return applyToVector3Array(array, 0, array.array().length);
+	}
+
+	public FloatBuffer applyToVector3Array (FloatBuffer array, int offset, int length)
+	{
+		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
+
+			_v1.x = array.get( j );
+			_v1.y = array.get( j + 1 );
+			_v1.z = array.get( j + 2 );
+
+			_v1.apply( this );
+
+			array.put( j , _v1.x);
+			array.put( j + 1 , _v1.y);
+			array.put( j + 2 , _v1.z);
+
+		}
+
+		return array;
+	}
 
 	/**
 	 * get the current matrix determinant.
@@ -621,67 +623,67 @@ public class Matrix4
 
 		return this;
 	}
-//
-//	/**
-//	 * Sets the value of input array to the values of the current matrix.
-//	 * The indexes in the array will be the following:
-//	 *
-//	 * <pre>{@code
-//	 * 0 4  8 12
-//     * 1 5  9 13
-//     * 2 6 10 14
-//     * 3 7 11 15
-//     * }</pre>
-//     *
-//	 * @param flat the array for storing matrix values
-//	 *
-//	 * @return the modified input vector
-//	 */
-//	public Float32Array flattenToArrayOffset(Float32Array flat)
-//	{
-//		return flattenToArrayOffset(flat, 0);
-//	}
-//
-//	/**
-//	 * Sets the value of input array to the values of the current matrix.
-//	 * The indexes in the array will be the following:
-//	 *
-//	 * <pre>{@code
-//	 * 0 4  8 12
-//     * 1 5  9 13
-//     * 2 6 10 14
-//     * 3 7 11 15
-//     * }</pre>
-//     *
-//	 * @param flat the array for storing matrix values
-//	 * @param offset the offset value
-//	 *
-//	 * @return the modified input vector
-//	 */
-//	public Float32Array flattenToArrayOffset(Float32Array flat, int offset)
-//	{
-//		flat.set(offset, this.getArray().get(0));
-//		flat.set(offset + 1, this.getArray().get(1));
-//		flat.set(offset + 2, this.getArray().get(2));
-//		flat.set(offset + 3, this.getArray().get(3));
-//
-//		flat.set(offset + 4, this.getArray().get(4));
-//		flat.set(offset + 5, this.getArray().get(5));
-//		flat.set(offset + 6, this.getArray().get(6));
-//		flat.set(offset + 7, this.getArray().get(7));
-//
-//		flat.set(offset + 8, this.getArray().get(8));
-//		flat.set(offset + 9, this.getArray().get(9));
-//		flat.set(offset + 10, this.getArray().get(10));
-//		flat.set(offset + 11, this.getArray().get(11));
-//
-//		flat.set(offset + 12, this.getArray().get(12));
-//		flat.set(offset + 13, this.getArray().get(13));
-//		flat.set(offset + 14, this.getArray().get(14));
-//		flat.set(offset + 15, this.getArray().get(15));
-//
-//		return flat;
-//	}
+
+	/**
+	 * Sets the value of input array to the values of the current matrix.
+	 * The indexes in the array will be the following:
+	 *
+	 * <pre>{@code
+	 * 0 4  8 12
+     * 1 5  9 13
+     * 2 6 10 14
+     * 3 7 11 15
+     * }</pre>
+     *
+	 * @param flat the array for storing matrix values
+	 *
+	 * @return the modified input vector
+	 */
+	public FloatBuffer flattenToArrayOffset(FloatBuffer flat)
+	{
+		return flattenToArrayOffset(flat, 0);
+	}
+
+	/**
+	 * Sets the value of input array to the values of the current matrix.
+	 * The indexes in the array will be the following:
+	 *
+	 * <pre>{@code
+	 * 0 4  8 12
+     * 1 5  9 13
+     * 2 6 10 14
+     * 3 7 11 15
+     * }</pre>
+     *
+	 * @param flat the array for storing matrix values
+	 * @param offset the offset value
+	 *
+	 * @return the modified input vector
+	 */
+	public FloatBuffer flattenToArrayOffset(FloatBuffer flat, int offset)
+	{
+		flat.put(offset, this.elements[0]);
+		flat.put(offset + 1, this.elements[1]);
+		flat.put(offset + 2, this.elements[2]);
+		flat.put(offset + 3, this.elements[3]);
+
+		flat.put(offset + 4, this.elements[4]);
+		flat.put(offset + 5, this.elements[5]);
+		flat.put(offset + 6, this.elements[6]);
+		flat.put(offset + 7, this.elements[7]);
+
+		flat.put(offset + 8, this.elements[8]);
+		flat.put(offset + 9, this.elements[9]);
+		flat.put(offset + 10, this.elements[10]);
+		flat.put(offset + 11, this.elements[11]);
+
+		flat.put(offset + 12, this.elements[12]);
+		flat.put(offset + 13, this.elements[13]);
+		flat.put(offset + 14, this.elements[14]);
+		flat.put(offset + 15, this.elements[15]);
+
+		return flat;
+	}
 
 	/**
 	 * Setting position values of the current matrix to the values of

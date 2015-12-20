@@ -50,9 +50,9 @@ public abstract class WebGLGeometry {
 	public int __webglFaceBuffer;
 	public int __webglLineBuffer;
 	
-	public List<Integer> __webglMorphTargetsBuffers;
+	public List<Integer> __webglMorphTargetsBuffers; // WebGLBuffer
 	
-	public List<Integer> __webglMorphNormalsBuffers;
+	public List<Integer> __webglMorphNormalsBuffers; // WebGLBuffer
 	
 	public List<Attribute> __webglCustomAttributesList;
 	

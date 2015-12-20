@@ -18,28 +18,24 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
+import org.parallax3d.parallax.system.BufferUtils;
+import org.parallax3d.parallax.system.ObjectIntMap;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLBuffer;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BeginMode;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferTarget;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferUsage;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.DrawElementsType;
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
-import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.core.Face3;
-import org.parallax3d.parallax.graphics.core.FastMap;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.Raycaster;
@@ -57,6 +53,11 @@ import org.parallax3d.parallax.graphics.materials.HasWireframe;
 import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.enums.BeginMode;
+import org.parallax3d.parallax.system.gl.enums.BufferTarget;
+import org.parallax3d.parallax.system.gl.enums.BufferUsage;
+import org.parallax3d.parallax.system.gl.enums.DrawElementsType;
 
 /**
  * Base class for Mesh objects.
@@ -69,11 +70,11 @@ public class Mesh extends GeometryObject
 {
 //	private Boolean overdraw;
 	public Integer morphTargetBase = null;
-	public List<Double> morphTargetInfluences;
+	public List<Float> morphTargetInfluences;
 	public List<Integer> morphTargetForcedOrder;
-	private Map<String, Integer> morphTargetDictionary;
+	private ObjectIntMap<String> morphTargetDictionary;
 	
-	public Float32Array __webglMorphTargetInfluences;
+	public FloatBuffer __webglMorphTargetInfluences;
 
 	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {
@@ -115,13 +116,13 @@ public class Mesh extends GeometryObject
 
 			this.morphTargetBase = -1;
 			this.morphTargetForcedOrder = new ArrayList<Integer>();
-			this.morphTargetInfluences = new ArrayList<Double>();
-			this.morphTargetDictionary = new FastMap<Integer>();
+			this.morphTargetInfluences = new ArrayList<Float>();
+			this.morphTargetDictionary = new ObjectIntMap<String>();
 
 			List<Geometry.MorphTarget> morphTargets = ((Geometry)this.getGeometry()).getMorphTargets();
 			for ( int m = 0, ml = ((Geometry)this.getGeometry()).getMorphTargets().size(); m < ml; m ++ ) {
 
-				this.morphTargetInfluences.add( 0.0 );
+				this.morphTargetInfluences.add( 0.0f );
 				this.morphTargetDictionary.put(morphTargets.get(m).name, m);
 
 			}
@@ -159,7 +160,7 @@ public class Mesh extends GeometryObject
 			}
 		}
 
-		double precision = Raycaster.PRECISION;
+		float precision = Raycaster.PRECISION;
 
 		if ( geometry instanceof BufferGeometry ) 
 		{
@@ -171,13 +172,13 @@ public class Mesh extends GeometryObject
 
 			if ( bGeometry.getAttribute("index") != null ) {
 
-				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
-				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
+				IntBuffer indices = (IntBuffer)bGeometry.getAttribute("index").getArray();
+				FloatBuffer positions = (FloatBuffer)bGeometry.getAttribute("position").getArray();
 				List<BufferGeometry.DrawCall> offsets = bGeometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) 
 				{
-					offsets.add(new BufferGeometry.DrawCall(0, indices.getLength(), 0));
+					offsets.add(new BufferGeometry.DrawCall(0, indices.array().length, 0));
 				}
 
 				for ( int oi = 0, ol = offsets.size(); oi < ol; ++oi ) 
@@ -212,7 +213,7 @@ public class Mesh extends GeometryObject
 
 						intersectionPoint.apply( this.matrixWorld );
 
-						double distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
+						float distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
 
 						if ( distance < precision || distance < raycaster.getNear() || distance > raycaster.getFar() ) continue;
 
@@ -229,9 +230,9 @@ public class Mesh extends GeometryObject
 
 			} else {
 
-				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
+				FloatBuffer positions = (FloatBuffer)bGeometry.getAttribute("position").getArray();
 
-				for ( int i = 0, j = 0, il = positions.getLength(); i < il; i += 3, j += 9 ) {
+				for ( int i = 0, j = 0, il = positions.array().length; i < il; i += 3, j += 9 ) {
 
 					int a = i;
 					int b = i + 1;
@@ -257,7 +258,7 @@ public class Mesh extends GeometryObject
 
 					intersectionPoint.apply( this.matrixWorld );
 
-					double distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
+					float distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
 
 					if ( distance < precision || distance < raycaster.getNear() || distance > raycaster.getFar() ) continue;
 
@@ -303,7 +304,7 @@ public class Mesh extends GeometryObject
 
 					for ( int t = 0, tl = morphTargets.size(); t < tl; t ++ ) {
 
-						double influence = this.morphTargetInfluences.get( t );
+						float influence = this.morphTargetInfluences.get( t );
 
 						if ( influence == 0 ) continue;
 
@@ -349,7 +350,7 @@ public class Mesh extends GeometryObject
 
 				intersectionPoint.apply( this.matrixWorld );
 
-				double distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
+				float distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
 
 				if ( distance < precision || distance < raycaster.getNear() || distance > raycaster.getFar() ) continue;
 
@@ -410,7 +411,7 @@ public class Mesh extends GeometryObject
 //		return morphTargetBase;
 //	}
 //	
-//	public List<Double> getMorphTargetInfluences() {
+//	public List<Float> getMorphTargetInfluences() {
 //		return this.morphTargetInfluences;
 //	}
 //	
@@ -421,7 +422,7 @@ public class Mesh extends GeometryObject
 	@Override
 	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryGroup, boolean updateBuffers)
 	{
-		WebGLRenderingContext gl = renderer.getGL();
+		GL20 gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 
 		// wireframe
@@ -430,9 +431,9 @@ public class Mesh extends GeometryObject
 			setLineWidth( gl, ((HasWireframe)getMaterial()).getWireframeLineWidth() );
 
 			if ( updateBuffers ) 
-				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglLineBuffer );
+				gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer);
 			
-			gl.drawElements( BeginMode.LINES, geometryGroup.__webglLineCount, DrawElementsType.UNSIGNED_SHORT, 0 );
+			gl.glDrawElements(BeginMode.LINES.getValue(), geometryGroup.__webglLineCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
 
 			// triangles
 
@@ -440,9 +441,9 @@ public class Mesh extends GeometryObject
 		else 
 		{
 			if ( updateBuffers ) 
-				gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglFaceBuffer );
+				gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer);
 			
-			gl.drawElements( BeginMode.TRIANGLES, geometryGroup.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT, 0 );
+			gl.glDrawElements(BeginMode.TRIANGLES.getValue(), geometryGroup.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
 		}
 		
 		info.getRender().calls ++;
@@ -494,7 +495,7 @@ public class Mesh extends GeometryObject
 //	}
 //
 	// initMeshBuffers
-	public void initBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup)
+	public void initBuffers(GL20 gl, GeometryGroup geometryGroup)
 	{
 		Geometry geometry = (Geometry) this.getGeometry();
 
@@ -506,27 +507,27 @@ public class Mesh extends GeometryObject
 
 		Material material = Material.getBufferMaterial(this, geometryGroup);
 		
-		geometryGroup.__vertexArray = Float32Array.create( nvertices * 3 );
-		geometryGroup.__normalArray =  Float32Array.create( nvertices * 3 );
-		geometryGroup.__colorArray = Float32Array.create( nvertices * 3 );
-		geometryGroup.__uvArray = Float32Array.create( nvertices * 2 );
+		geometryGroup.__vertexArray = BufferUtils.newFloatBuffer( nvertices * 3 );
+		geometryGroup.__normalArray =  BufferUtils.newFloatBuffer(nvertices * 3);
+		geometryGroup.__colorArray = BufferUtils.newFloatBuffer(nvertices * 3);
+		geometryGroup.__uvArray = BufferUtils.newFloatBuffer(nvertices * 2);
 		
 		if ( geometry.getFaceVertexUvs().size() > 1 ) {
 
-			geometryGroup.__uv2Array = Float32Array.create( nvertices * 2 );
+			geometryGroup.__uv2Array = BufferUtils.newFloatBuffer(nvertices * 2);
 
 		}
 
 		if ( geometry.isHasTangents() ) {
 
-			geometryGroup.__tangentArray = Float32Array.create( nvertices * 4 );
+			geometryGroup.__tangentArray = BufferUtils.newFloatBuffer(nvertices * 4);
 
 		}
 
 		if ( geometry.getSkinWeights().size() > 0 && geometry.getSkinIndices().size() > 0 ) {
 
-			geometryGroup.__skinIndexArray = Float32Array.create( nvertices * 4 );
-			geometryGroup.__skinWeightArray = Float32Array.create( nvertices * 4 );
+			geometryGroup.__skinIndexArray = BufferUtils.newFloatBuffer(nvertices * 4);
+			geometryGroup.__skinWeightArray = BufferUtils.newFloatBuffer(nvertices * 4);
 
 		}
 
@@ -534,16 +535,16 @@ public class Mesh extends GeometryObject
 //				? Uint32Array.class : Uint16Array; // 65535 / 3
 
 //		geometryGroup.__typeArray = UintArray;
-		geometryGroup.__faceArray = Uint16Array.create( ntris * 3 );
-		geometryGroup.__lineArray = Uint16Array.create( nlines * 2 );
+		geometryGroup.__faceArray = BufferUtils.newIntBuffer( ntris * 3);
+		geometryGroup.__lineArray = BufferUtils.newIntBuffer( nlines * 2 );
 
 		if ( geometryGroup.getNumMorphTargets() > 0 ) {
 
-			geometryGroup.__morphTargetsArrays = new ArrayList<Float32Array>();
+			geometryGroup.__morphTargetsArrays = new ArrayList<FloatBuffer>();
 
 			for ( int m = 0, ml = geometryGroup.getNumMorphTargets(); m < ml; m ++ ) {
 
-				geometryGroup.__morphTargetsArrays.add( Float32Array.create( nvertices * 3 ) );
+				geometryGroup.__morphTargetsArrays.add( BufferUtils.newFloatBuffer(nvertices * 3) );
 
 			}
 
@@ -551,11 +552,11 @@ public class Mesh extends GeometryObject
 
 		if ( geometryGroup.getNumMorphNormals() > 0 ) {
 
-			geometryGroup.__morphNormalsArrays  = new ArrayList<Float32Array>();
+			geometryGroup.__morphNormalsArrays  = new ArrayList<FloatBuffer>();
 
 			for ( int m = 0, ml = geometryGroup.getNumMorphNormals(); m < ml; m ++ ) {
 
-				geometryGroup.__morphNormalsArrays.add( Float32Array.create( nvertices * 3 ) );
+				geometryGroup.__morphNormalsArrays.add( BufferUtils.newFloatBuffer(nvertices * 3) );
 
 			}
 
@@ -567,7 +568,7 @@ public class Mesh extends GeometryObject
 
 		// custom attributes
 
-		Map<String, Attribute> attributes = material.getShader().getAttributes();
+		ObjectMap<String, Attribute> attributes = material.getShader().getAttributes();
 
 		if (attributes != null) 
 		{
@@ -576,7 +577,7 @@ public class Mesh extends GeometryObject
 				geometryGroup.__webglCustomAttributesList = new ArrayList<Attribute>();
 		
 
-			for (String a : attributes.keySet()) 
+			for (String a : attributes.keys())
 			{
 				Attribute originalAttribute = attributes.get(a);
 
@@ -602,9 +603,9 @@ public class Mesh extends GeometryObject
 
 					attribute.size = size;
 
-					attribute.array = Float32Array.create(nvertices * size);
+					attribute.array = BufferUtils.newFloatBuffer(nvertices * size);
 
-					attribute.buffer = gl.createBuffer();
+					attribute.buffer = gl.glGenBuffer();
 					attribute.belongsToAttribute = a;
 
 					originalAttribute.needsUpdate = true;
@@ -621,35 +622,35 @@ public class Mesh extends GeometryObject
 	// createMeshBuffers
 	public void createBuffers(WebGLRenderer renderer, GeometryGroup geometryGroup)
 	{
-		WebGLRenderingContext gl = renderer.getGL();
+		GL20 gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 
-		geometryGroup.__webglVertexBuffer = gl.createBuffer();
-		geometryGroup.__webglNormalBuffer = gl.createBuffer();
-		geometryGroup.__webglTangentBuffer = gl.createBuffer();
-		geometryGroup.__webglColorBuffer = gl.createBuffer();
-		geometryGroup.__webglUVBuffer = gl.createBuffer();
-		geometryGroup.__webglUV2Buffer = gl.createBuffer();
+		geometryGroup.__webglVertexBuffer = gl.glGenBuffer();
+		geometryGroup.__webglNormalBuffer = gl.glGenBuffer();
+		geometryGroup.__webglTangentBuffer = gl.glGenBuffer();
+		geometryGroup.__webglColorBuffer = gl.glGenBuffer();
+		geometryGroup.__webglUVBuffer = gl.glGenBuffer();
+		geometryGroup.__webglUV2Buffer = gl.glGenBuffer();
 
-		geometryGroup.__webglSkinIndicesBuffer = gl.createBuffer();
-		geometryGroup.__webglSkinWeightsBuffer = gl.createBuffer();
+		geometryGroup.__webglSkinIndicesBuffer = gl.glGenBuffer();
+		geometryGroup.__webglSkinWeightsBuffer = gl.glGenBuffer();
 
-		geometryGroup.__webglFaceBuffer = gl.createBuffer();
-		geometryGroup.__webglLineBuffer = gl.createBuffer();
+		geometryGroup.__webglFaceBuffer = gl.glGenBuffer();
+		geometryGroup.__webglLineBuffer = gl.glGenBuffer();
 
 		if (geometryGroup.getNumMorphTargets() != 0) {
-			geometryGroup.__webglMorphTargetsBuffers = new ArrayList<WebGLBuffer>();
+			geometryGroup.__webglMorphTargetsBuffers = new ArrayList<Integer>();
 
 			for (int m = 0; m < geometryGroup.getNumMorphTargets(); m++) {
-				geometryGroup.__webglMorphTargetsBuffers.add(gl.createBuffer());
+				geometryGroup.__webglMorphTargetsBuffers.add(gl.glGenBuffer());
 			}
 		}
 
 		if (geometryGroup.getNumMorphNormals() != 0) {
-			geometryGroup.__webglMorphNormalsBuffers = new ArrayList<WebGLBuffer>();
+			geometryGroup.__webglMorphNormalsBuffers = new ArrayList<Integer>();
 
 			for (int m = 0; m < geometryGroup.getNumMorphNormals(); m++) {
-				geometryGroup.__webglMorphNormalsBuffers.add(gl.createBuffer());
+				geometryGroup.__webglMorphNormalsBuffers.add(gl.glGenBuffer());
 			}
 		}
 		
@@ -712,9 +713,9 @@ public class Mesh extends GeometryObject
 //	}
 
 	// setMeshBuffers
-	public void setBuffers(WebGLRenderingContext gl, GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
+	public void setBuffers(GL20 gl, GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
 	{
-		Log.debug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
+		Parallax.app.debug("Mesh", "Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
 
 		if ( ! geometryGroup.__inittedArrays )
 			 return;
@@ -736,7 +737,7 @@ public class Mesh extends GeometryObject
 		offset_custom = 0,
 		offset_customSrc = 0;
 		
-		Float32Array vertexArray = geometryGroup.__vertexArray,
+		FloatBuffer vertexArray = geometryGroup.__vertexArray,
 				uvArray = geometryGroup.__uvArray,
 				uv2Array = geometryGroup.__uv2Array,
 				normalArray = geometryGroup.__normalArray,
@@ -746,12 +747,12 @@ public class Mesh extends GeometryObject
 				skinIndexArray = geometryGroup.__skinIndexArray,
 				skinWeightArray = geometryGroup.__skinWeightArray;
 
-		List<Float32Array> morphTargetsArrays = geometryGroup.__morphTargetsArrays,
+		List<FloatBuffer> morphTargetsArrays = geometryGroup.__morphTargetsArrays,
 				morphNormalsArrays = geometryGroup.__morphNormalsArrays;
 
 		List<Attribute> customAttributes = geometryGroup.__webglCustomAttributesList;
 
-		Uint16Array faceArray = geometryGroup.__faceArray,
+		IntBuffer faceArray = geometryGroup.__faceArray,
 				lineArray = geometryGroup.__lineArray;
 
 		Geometry geometry = (Geometry)this.getGeometry(); // this is shared for all chunks
@@ -792,23 +793,23 @@ public class Mesh extends GeometryObject
 				 Vector3 v2 = vertices.get( face.getB() );
 				 Vector3 v3 = vertices.get( face.getC() );
 
-				 vertexArray.set(offset,  v1.getX());
-				 vertexArray.set(offset + 1, v1.getY());
-				 vertexArray.set(offset + 2, v1.getZ());
+				 vertexArray.put(offset, v1.getX());
+				 vertexArray.put(offset + 1, v1.getY());
+				 vertexArray.put(offset + 2, v1.getZ());
 
-				 vertexArray.set(offset + 3, v2.getX());
-				 vertexArray.set(offset + 4, v2.getY());
-				 vertexArray.set(offset + 5, v2.getZ());
+				 vertexArray.put(offset + 3, v2.getX());
+				 vertexArray.put(offset + 4, v2.getY());
+				 vertexArray.put(offset + 5, v2.getZ());
 
-				 vertexArray.set(offset + 6, v3.getX());
-				 vertexArray.set(offset + 7, v3.getY());
-				 vertexArray.set(offset + 8, v3.getZ());
+				 vertexArray.put(offset + 6, v3.getX());
+				 vertexArray.put(offset + 7, v3.getY());
+				 vertexArray.put(offset + 8, v3.getZ());
 
 				 offset += 9;
 			 }
 			 
-			 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglVertexBuffer);
-			 gl.bufferData( BufferTarget.ARRAY_BUFFER, vertexArray, hint );
+			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglVertexBuffer);
+			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.limit(), vertexArray, hint.getValue() );
 		}
 		 
 		if ( dirtyMorphTargets ) 
@@ -829,19 +830,19 @@ public class Mesh extends GeometryObject
 					 Vector3 v2 = morphTargets.get( vk ).vertices.get( face.getB() );
 					 Vector3 v3 = morphTargets.get( vk ).vertices.get( face.getC() );
 
-					 Float32Array vka = morphTargetsArrays.get(vk);
+					 FloatBuffer vka = morphTargetsArrays.get(vk);
 
-					 vka.set(offset_morphTarget, v1.getX());
-					 vka.set(offset_morphTarget + 1, v1.getY());
-					 vka.set(offset_morphTarget + 2, v1.getZ());
+					 vka.put(offset_morphTarget, v1.getX());
+					 vka.put(offset_morphTarget + 1, v1.getY());
+					 vka.put(offset_morphTarget + 2, v1.getZ());
 
-					 vka.set(offset_morphTarget + 3, v2.getX());
-					 vka.set(offset_morphTarget + 4, v2.getY());
-					 vka.set(offset_morphTarget + 5, v2.getZ());
+					 vka.put(offset_morphTarget + 3, v2.getX());
+					 vka.put(offset_morphTarget + 4, v2.getY());
+					 vka.put(offset_morphTarget + 5, v2.getZ());
 
-					 vka.set(offset_morphTarget + 6, v3.getX());
-					 vka.set(offset_morphTarget + 7, v3.getY());
-					 vka.set(offset_morphTarget + 8, v3.getZ());
+					 vka.put(offset_morphTarget + 6, v3.getX());
+					 vka.put(offset_morphTarget + 7, v3.getY());
+					 vka.put(offset_morphTarget + 8, v3.getZ());
 
 					 // morph normals
 
@@ -863,19 +864,19 @@ public class Mesh extends GeometryObject
 							 n3 = n1;
 						 }
 
-						 Float32Array nka = morphNormalsArrays.get( vk );
+						 FloatBuffer nka = morphNormalsArrays.get( vk );
 
-						 nka.set(offset_morphTarget, n1.getX());
-						 nka.set(offset_morphTarget + 1, n1.getY());
-						 nka.set(offset_morphTarget + 2, n1.getZ());
+						 nka.put(offset_morphTarget, n1.getX());
+						 nka.put(offset_morphTarget + 1, n1.getY());
+						 nka.put(offset_morphTarget + 2, n1.getZ());
 
-						 nka.set(offset_morphTarget + 3, n2.getX());
-						 nka.set(offset_morphTarget + 4, n2.getY());
-						 nka.set(offset_morphTarget + 5, n2.getZ());
+						 nka.put(offset_morphTarget + 3, n2.getX());
+						 nka.put(offset_morphTarget + 4, n2.getY());
+						 nka.put(offset_morphTarget + 5, n2.getZ());
 
-						 nka.set(offset_morphTarget + 6, n3.getX());
-						 nka.set(offset_morphTarget + 7, n3.getY());
-						 nka.set(offset_morphTarget + 8, n3.getZ());
+						 nka.put(offset_morphTarget + 6, n3.getX());
+						 nka.put(offset_morphTarget + 7, n3.getY());
+						 nka.put(offset_morphTarget + 8, n3.getZ());
 					 }
 
 					 //
@@ -884,13 +885,13 @@ public class Mesh extends GeometryObject
 
 				 }
 
-				 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglMorphTargetsBuffers.get( vk ) );
-				 gl.bufferData( BufferTarget.ARRAY_BUFFER, morphTargetsArrays.get( vk ), hint );
+				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get(vk));
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphTargetsArrays.get(vk).limit(), morphTargetsArrays.get( vk ), hint.getValue() );
 
 				 if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
 				 {
-					 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglMorphNormalsBuffers.get( vk ) );
-					 gl.bufferData( BufferTarget.ARRAY_BUFFER, morphNormalsArrays.get( vk ), hint );
+					 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get(vk));
+					 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphNormalsArrays.get(vk).limit(), morphNormalsArrays.get( vk ), hint.getValue() );
 				 }
 			 }
 		}
@@ -907,20 +908,20 @@ public class Mesh extends GeometryObject
 				 Vector4 sw2 = obj_skinWeights.get( face.getB() );
 				 Vector4 sw3 = obj_skinWeights.get( face.getC() );
 
-				 skinWeightArray.set(offset_skin, sw1.getX());
-				 skinWeightArray.set(offset_skin + 1, sw1.getY());
-				 skinWeightArray.set(offset_skin + 2, sw1.getZ());
-				 skinWeightArray.set(offset_skin + 3, sw1.getW());
+				 skinWeightArray.put(offset_skin, sw1.getX());
+				 skinWeightArray.put(offset_skin + 1, sw1.getY());
+				 skinWeightArray.put(offset_skin + 2, sw1.getZ());
+				 skinWeightArray.put(offset_skin + 3, sw1.getW());
 
-				 skinWeightArray.set(offset_skin + 4, sw2.getX());
-				 skinWeightArray.set(offset_skin + 5, sw2.getY());
-				 skinWeightArray.set(offset_skin + 6, sw2.getZ());
-				 skinWeightArray.set(offset_skin + 7, sw2.getW());
+				 skinWeightArray.put(offset_skin + 4, sw2.getX());
+				 skinWeightArray.put(offset_skin + 5, sw2.getY());
+				 skinWeightArray.put(offset_skin + 6, sw2.getZ());
+				 skinWeightArray.put(offset_skin + 7, sw2.getW());
 
-				 skinWeightArray.set(offset_skin + 8, sw3.getX());
-				 skinWeightArray.set(offset_skin + 9, sw3.getY());
-				 skinWeightArray.set(offset_skin + 10, sw3.getZ());
-				 skinWeightArray.set(offset_skin + 11, sw3.getW());
+				 skinWeightArray.put(offset_skin + 8, sw3.getX());
+				 skinWeightArray.put(offset_skin + 9, sw3.getY());
+				 skinWeightArray.put(offset_skin + 10, sw3.getZ());
+				 skinWeightArray.put(offset_skin + 11, sw3.getW());
 
 				 // indices
 
@@ -928,20 +929,20 @@ public class Mesh extends GeometryObject
 				 Vector4 si2 = obj_skinIndices.get(face.getB());
 				 Vector4 si3 = obj_skinIndices.get(face.getC());
 
-				 skinIndexArray.set(offset_skin, si1.getX());
-				 skinIndexArray.set(offset_skin + 1, si1.getY());
-				 skinIndexArray.set(offset_skin + 2, si1.getZ());
-				 skinIndexArray.set(offset_skin + 3, si1.getW());
+				 skinIndexArray.put(offset_skin, si1.getX());
+				 skinIndexArray.put(offset_skin + 1, si1.getY());
+				 skinIndexArray.put(offset_skin + 2, si1.getZ());
+				 skinIndexArray.put(offset_skin + 3, si1.getW());
 
-				 skinIndexArray.set(offset_skin + 4, si2.getX());
-				 skinIndexArray.set(offset_skin + 5, si2.getY());
-				 skinIndexArray.set(offset_skin + 6, si2.getZ());
-				 skinIndexArray.set(offset_skin + 7, si2.getW());
+				 skinIndexArray.put(offset_skin + 4, si2.getX());
+				 skinIndexArray.put(offset_skin + 5, si2.getY());
+				 skinIndexArray.put(offset_skin + 6, si2.getZ());
+				 skinIndexArray.put(offset_skin + 7, si2.getW());
 
-				 skinIndexArray.set(offset_skin + 8, si3.getX());
-				 skinIndexArray.set(offset_skin + 9, si3.getY());
-				 skinIndexArray.set(offset_skin + 10, si3.getZ());
-				 skinIndexArray.set(offset_skin + 11, si3.getW());
+				 skinIndexArray.put(offset_skin + 8, si3.getX());
+				 skinIndexArray.put(offset_skin + 9, si3.getY());
+				 skinIndexArray.put(offset_skin + 10, si3.getZ());
+				 skinIndexArray.put(offset_skin + 11, si3.getW());
 
 				 offset_skin += 12;
 
@@ -949,11 +950,11 @@ public class Mesh extends GeometryObject
 
 			 if ( offset_skin > 0 ) 
 			 {
-				 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglSkinIndicesBuffer );
-				 gl.bufferData( BufferTarget.ARRAY_BUFFER, skinIndexArray, hint );
+				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinIndicesBuffer);
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinIndexArray.limit(), skinIndexArray, hint.getValue());
 
-				 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglSkinWeightsBuffer );
-				 gl.bufferData( BufferTarget.ARRAY_BUFFER, skinWeightArray, hint );
+				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinWeightsBuffer);
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinWeightArray.limit(), skinWeightArray, hint.getValue() );
 			 }
 		 }
 
@@ -980,17 +981,17 @@ public class Mesh extends GeometryObject
 					 c3 = faceColor;
 				 }
 
-				 colorArray.set(offset_color, c1.getR());
-				 colorArray.set(offset_color + 1, c1.getG());
-				 colorArray.set(offset_color + 2, c1.getB());
+				 colorArray.put(offset_color, c1.getR());
+				 colorArray.put(offset_color + 1, c1.getG());
+				 colorArray.put(offset_color + 2, c1.getB());
 
-				 colorArray.set(offset_color + 3, c2.getR());
-				 colorArray.set(offset_color + 4, c2.getG());
-				 colorArray.set(offset_color + 5, c2.getB());
+				 colorArray.put(offset_color + 3, c2.getR());
+				 colorArray.put(offset_color + 4, c2.getG());
+				 colorArray.put(offset_color + 5, c2.getB());
 
-				 colorArray.set(offset_color + 6, c3.getR());
-				 colorArray.set(offset_color + 7, c3.getG());
-				 colorArray.set(offset_color + 8, c3.getB());
+				 colorArray.put(offset_color + 6, c3.getR());
+				 colorArray.put(offset_color + 7, c3.getG());
+				 colorArray.put(offset_color + 8, c3.getB());
 
 				 offset_color += 9;
 
@@ -998,8 +999,8 @@ public class Mesh extends GeometryObject
 
 			 if ( offset_color > 0 ) 
 			 {
-				 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglColorBuffer );
-				 gl.bufferData( BufferTarget.ARRAY_BUFFER, colorArray, hint );
+				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglColorBuffer);
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.limit(),  colorArray, hint.getValue() );
 			 }
 		 }
 
@@ -1016,27 +1017,27 @@ public class Mesh extends GeometryObject
 				 Vector4 t2 = vertexTangents.get(1);
 				 Vector4 t3 = vertexTangents.get(2);
 
-				 tangentArray.set(offset_tangent, t1.getX());
-				 tangentArray.set(offset_tangent + 1, t1.getY());
-				 tangentArray.set(offset_tangent + 2, t1.getZ());
-				 tangentArray.set(offset_tangent + 3, t1.getW());
+				 tangentArray.put(offset_tangent, t1.getX());
+				 tangentArray.put(offset_tangent + 1, t1.getY());
+				 tangentArray.put(offset_tangent + 2, t1.getZ());
+				 tangentArray.put(offset_tangent + 3, t1.getW());
 
-				 tangentArray.set(offset_tangent + 4, t2.getX());
-				 tangentArray.set(offset_tangent + 5, t2.getY());
-				 tangentArray.set(offset_tangent + 6, t2.getZ());
-				 tangentArray.set(offset_tangent + 7, t2.getW());
+				 tangentArray.put(offset_tangent + 4, t2.getX());
+				 tangentArray.put(offset_tangent + 5, t2.getY());
+				 tangentArray.put(offset_tangent + 6, t2.getZ());
+				 tangentArray.put(offset_tangent + 7, t2.getW());
 
-				 tangentArray.set(offset_tangent + 8, t3.getX());
-				 tangentArray.set(offset_tangent + 9, t3.getY());
-				 tangentArray.set(offset_tangent + 10, t3.getZ());
-				 tangentArray.set(offset_tangent + 11, t3.getW());
+				 tangentArray.put(offset_tangent + 8, t3.getX());
+				 tangentArray.put(offset_tangent + 9, t3.getY());
+				 tangentArray.put(offset_tangent + 10, t3.getZ());
+				 tangentArray.put(offset_tangent + 11, t3.getW());
 
 				 offset_tangent += 12;
 
 			 }
 
-			 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglTangentBuffer );
-			 gl.bufferData( BufferTarget.ARRAY_BUFFER, tangentArray, hint );
+			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglTangentBuffer);
+			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), tangentArray.limit(), tangentArray, hint.getValue() );
 
 		 }
 
@@ -1058,9 +1059,9 @@ public class Mesh extends GeometryObject
 
 						 Vector3 vn = vertexNormals.get(i);
 
-						 normalArray.set(offset_normal, vn.getX());
-						 normalArray.set(offset_normal + 1, vn.getY());
-						 normalArray.set(offset_normal + 2, vn.getZ());
+						 normalArray.put(offset_normal, vn.getX());
+						 normalArray.put(offset_normal + 1, vn.getY());
+						 normalArray.put(offset_normal + 2, vn.getZ());
 
 						 offset_normal += 3;
 					 }
@@ -1072,17 +1073,17 @@ public class Mesh extends GeometryObject
 					 for ( int i = 0; i < 3; i ++ ) 
 					 {
 
-						 normalArray.set(offset_normal, faceNormal.getX());
-						 normalArray.set(offset_normal + 1, faceNormal.getY());
-						 normalArray.set(offset_normal + 2, faceNormal.getZ());
+						 normalArray.put(offset_normal, faceNormal.getX());
+						 normalArray.put(offset_normal + 1, faceNormal.getY());
+						 normalArray.put(offset_normal + 2, faceNormal.getZ());
 
 						 offset_normal += 3;
 					 }
 				 }
 			 }
 
-			 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglNormalBuffer);
-			 gl.bufferData( BufferTarget.ARRAY_BUFFER, normalArray, hint );
+			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglNormalBuffer);
+			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), normalArray.limit(),  normalArray, hint.getValue() );
 
 		 }
 
@@ -1103,8 +1104,8 @@ public class Mesh extends GeometryObject
 
 					 Vector2 uvi = uv.get(i);
 
-					 uvArray.set(offset_uv, uvi.getX());
-					 uvArray.set(offset_uv + 1, uvi.getY());
+					 uvArray.put(offset_uv, uvi.getX());
+					 uvArray.put(offset_uv + 1, uvi.getY());
 
 					 offset_uv += 2;
 				 }
@@ -1112,8 +1113,8 @@ public class Mesh extends GeometryObject
 
 			 if ( offset_uv > 0 ) 
 			 {
-				 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglUVBuffer );
-				 gl.bufferData( BufferTarget.ARRAY_BUFFER, uvArray, hint );
+				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglUVBuffer);
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uvArray.limit(), uvArray, hint.getValue() );
 			 }
 		 }
 
@@ -1132,8 +1133,8 @@ public class Mesh extends GeometryObject
 				 {
 					 Vector2 uv2i = uv2.get(i);
 
-					 uv2Array.set(offset_uv2, uv2i.getX());
-					 uv2Array.set(offset_uv2 + 1, uv2i.getY());
+					 uv2Array.put(offset_uv2, uv2i.getX());
+					 uv2Array.put(offset_uv2 + 1, uv2i.getY());
 
 					 offset_uv2 += 2;
 				 }
@@ -1141,8 +1142,8 @@ public class Mesh extends GeometryObject
 
 			 if ( offset_uv2 > 0 ) 
 			 {
-				 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometryGroup.__webglUV2Buffer );
-				 gl.bufferData( BufferTarget.ARRAY_BUFFER, uv2Array, hint );
+				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglUV2Buffer);
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uv2Array.limit(), uv2Array, hint.getValue() );
 			 }
 		 }
 
@@ -1150,31 +1151,31 @@ public class Mesh extends GeometryObject
 		 {			 
 			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 			 {
-				 faceArray.set(offset_face, vertexIndex);
-				 faceArray.set(offset_face + 1, vertexIndex + 1);
-				 faceArray.set(offset_face + 2, vertexIndex + 2);
+				 faceArray.put(offset_face, vertexIndex);
+				 faceArray.put(offset_face + 1, vertexIndex + 1);
+				 faceArray.put(offset_face + 2, vertexIndex + 2);
 
 				 offset_face += 3;
 
-				 lineArray.set(offset_line, vertexIndex);
-				 lineArray.set(offset_line + 1, vertexIndex + 1);
+				 lineArray.put(offset_line, vertexIndex);
+				 lineArray.put(offset_line + 1, vertexIndex + 1);
 
-				 lineArray.set(offset_line + 2, vertexIndex);
-				 lineArray.set(offset_line + 3, vertexIndex + 2);
+				 lineArray.put(offset_line + 2, vertexIndex);
+				 lineArray.put(offset_line + 3, vertexIndex + 2);
 
-				 lineArray.set(offset_line + 4, vertexIndex + 1);
-				 lineArray.set(offset_line + 5, vertexIndex + 2);
+				 lineArray.put(offset_line + 4, vertexIndex + 1);
+				 lineArray.put(offset_line + 5, vertexIndex + 2);
 
 				 offset_line += 6;
 
 				 vertexIndex += 3;
 			 }
 			 
-			 gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglFaceBuffer );
-			 gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, faceArray, hint );
+			 gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer);
+			 gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), faceArray.limit(), faceArray, hint.getValue());
 
-			 gl.bindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER, geometryGroup.__webglLineBuffer );
-			 gl.bufferData( BufferTarget.ELEMENT_ARRAY_BUFFER, lineArray, hint );
+			 gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer);
+			 gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lineArray.limit(), lineArray, hint.getValue() );
 
 		 }
 
@@ -1198,9 +1199,9 @@ public class Mesh extends GeometryObject
 						 {
 							 Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-							 customAttribute.array.set(offset_custom, (Double)customAttribute.getValue().get(face.getA()));
-							 customAttribute.array.set(offset_custom + 1, (Double)customAttribute.getValue().get(face.getB()));
-							 customAttribute.array.set(offset_custom + 2, (Double)customAttribute.getValue().get(face.getC()));
+							 customAttribute.array.put(offset_custom, (Float) customAttribute.getValue().get(face.getA()));
+							 customAttribute.array.put(offset_custom + 1, (Float) customAttribute.getValue().get(face.getB()));
+							 customAttribute.array.put(offset_custom + 2, (Float) customAttribute.getValue().get(face.getC()));
 
 							 offset_custom += 3;
 						 }
@@ -1209,11 +1210,11 @@ public class Mesh extends GeometryObject
 					 {
 						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
 						 {
-							 double value = (Double) customAttribute.getValue().get(chunk_faces3.get(f));
+							 float value = (Float) customAttribute.getValue().get(chunk_faces3.get(f));
 
-							 customAttribute.array.set(offset_custom, value);
-							 customAttribute.array.set(offset_custom + 1, value);
-							 customAttribute.array.set(offset_custom + 2, value);
+							 customAttribute.array.put(offset_custom, value);
+							 customAttribute.array.put(offset_custom + 1, value);
+							 customAttribute.array.put(offset_custom + 2, value);
 
 							 offset_custom += 3;
 
@@ -1233,14 +1234,14 @@ public class Mesh extends GeometryObject
 							 Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
 							 Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
 
-							 customAttribute.array.set(offset_custom, v1.getX());
-							 customAttribute.array.set(offset_custom + 1, v1.getY());
+							 customAttribute.array.put(offset_custom, v1.getX());
+							 customAttribute.array.put(offset_custom + 1, v1.getY());
 
-							 customAttribute.array.set(offset_custom + 2, v2.getX());
-							 customAttribute.array.set(offset_custom + 3, v2.getY());
+							 customAttribute.array.put(offset_custom + 2, v2.getX());
+							 customAttribute.array.put(offset_custom + 3, v2.getY());
 
-							 customAttribute.array.set(offset_custom + 4, v3.getX());
-							 customAttribute.array.set(offset_custom + 5, v3.getY());
+							 customAttribute.array.put(offset_custom + 4, v3.getX());
+							 customAttribute.array.put(offset_custom + 5, v3.getY());
 
 							 offset_custom += 6;
 
@@ -1256,14 +1257,14 @@ public class Mesh extends GeometryObject
 							 Vector3 v2 = value;
 							 Vector3 v3 = value;
 
-							 customAttribute.array.set(offset_custom, v1.getX());
-							 customAttribute.array.set(offset_custom + 1, v1.getY());
+							 customAttribute.array.put(offset_custom, v1.getX());
+							 customAttribute.array.put(offset_custom + 1, v1.getY());
 
-							 customAttribute.array.set(offset_custom + 2, v2.getX());
-							 customAttribute.array.set(offset_custom + 3, v2.getY());
+							 customAttribute.array.put(offset_custom + 2, v2.getX());
+							 customAttribute.array.put(offset_custom + 3, v2.getY());
 
-							 customAttribute.array.set(offset_custom + 4, v3.getX());
-							 customAttribute.array.set(offset_custom + 5, v3.getY());
+							 customAttribute.array.put(offset_custom + 4, v3.getX());
+							 customAttribute.array.put(offset_custom + 5, v3.getY());
 
 							 offset_custom += 6;
 
@@ -1287,17 +1288,17 @@ public class Mesh extends GeometryObject
 								 Color v2 = (Color) customAttribute.getValue().get(face.getB());
 								 Color v3 = (Color) customAttribute.getValue().get(face.getC());
 
-								 customAttribute.array.set(offset_custom, v1.getR());
-								 customAttribute.array.set(offset_custom + 1, v1.getG());
-								 customAttribute.array.set(offset_custom + 2, v1.getB());
+								 customAttribute.array.put(offset_custom, v1.getR());
+								 customAttribute.array.put(offset_custom + 1, v1.getG());
+								 customAttribute.array.put(offset_custom + 2, v1.getB());
 
-								 customAttribute.array.set(offset_custom + 3, v2.getR());
-								 customAttribute.array.set(offset_custom + 4, v2.getG());
-								 customAttribute.array.set(offset_custom + 5, v2.getB());
+								 customAttribute.array.put(offset_custom + 3, v2.getR());
+								 customAttribute.array.put(offset_custom + 4, v2.getG());
+								 customAttribute.array.put(offset_custom + 5, v2.getB());
 
-								 customAttribute.array.set(offset_custom + 6, v3.getR());
-								 customAttribute.array.set(offset_custom + 7, v3.getG());
-								 customAttribute.array.set(offset_custom + 8, v3.getB());
+								 customAttribute.array.put(offset_custom + 6, v3.getR());
+								 customAttribute.array.put(offset_custom + 7, v3.getG());
+								 customAttribute.array.put(offset_custom + 8, v3.getB());
 							 }
 							 else
 							 {
@@ -1305,17 +1306,17 @@ public class Mesh extends GeometryObject
 								 Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
 								 Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
 
-								 customAttribute.array.set(offset_custom, v1.getX());
-								 customAttribute.array.set(offset_custom + 1, v1.getY());
-								 customAttribute.array.set(offset_custom + 2, v1.getZ());
+								 customAttribute.array.put(offset_custom, v1.getX());
+								 customAttribute.array.put(offset_custom + 1, v1.getY());
+								 customAttribute.array.put(offset_custom + 2, v1.getZ());
 
-								 customAttribute.array.set(offset_custom + 3, v2.getX());
-								 customAttribute.array.set(offset_custom + 4, v2.getY());
-								 customAttribute.array.set(offset_custom + 5, v2.getZ());
+								 customAttribute.array.put(offset_custom + 3, v2.getX());
+								 customAttribute.array.put(offset_custom + 4, v2.getY());
+								 customAttribute.array.put(offset_custom + 5, v2.getZ());
 
-								 customAttribute.array.set(offset_custom + 6, v3.getX());
-								 customAttribute.array.set(offset_custom + 7, v3.getY());
-								 customAttribute.array.set(offset_custom + 8, v3.getZ());
+								 customAttribute.array.put(offset_custom + 6, v3.getX());
+								 customAttribute.array.put(offset_custom + 7, v3.getY());
+								 customAttribute.array.put(offset_custom + 8, v3.getZ());
 							 }
 
 							 offset_custom += 9;
@@ -1335,17 +1336,17 @@ public class Mesh extends GeometryObject
 								 Color v2 = value;
 								 Color v3 = value;
 
-								 customAttribute.array.set(offset_custom, v1.getR());
-								 customAttribute.array.set(offset_custom + 1, v1.getG());
-								 customAttribute.array.set(offset_custom + 2, v1.getB());
+								 customAttribute.array.put(offset_custom, v1.getR());
+								 customAttribute.array.put(offset_custom + 1, v1.getG());
+								 customAttribute.array.put(offset_custom + 2, v1.getB());
 
-								 customAttribute.array.set(offset_custom + 3, v2.getR());
-								 customAttribute.array.set(offset_custom + 4, v2.getG());
-								 customAttribute.array.set(offset_custom + 5, v2.getB());
+								 customAttribute.array.put(offset_custom + 3, v2.getR());
+								 customAttribute.array.put(offset_custom + 4, v2.getG());
+								 customAttribute.array.put(offset_custom + 5, v2.getB());
 
-								 customAttribute.array.set(offset_custom + 6, v3.getR());
-								 customAttribute.array.set(offset_custom + 7, v3.getG());
-								 customAttribute.array.set(offset_custom + 8, v3.getB());
+								 customAttribute.array.put(offset_custom + 6, v3.getR());
+								 customAttribute.array.put(offset_custom + 7, v3.getG());
+								 customAttribute.array.put(offset_custom + 8, v3.getB());
 							 }
 							 else
 							 {
@@ -1354,17 +1355,17 @@ public class Mesh extends GeometryObject
 								 Vector3 v2 = value;
 								 Vector3 v3 = value;
 
-								 customAttribute.array.set(offset_custom, v1.getX());
-								 customAttribute.array.set(offset_custom + 1, v1.getY());
-								 customAttribute.array.set(offset_custom + 2, v1.getZ());
+								 customAttribute.array.put(offset_custom, v1.getX());
+								 customAttribute.array.put(offset_custom + 1, v1.getY());
+								 customAttribute.array.put(offset_custom + 2, v1.getZ());
 
-								 customAttribute.array.set(offset_custom + 3, v2.getX());
-								 customAttribute.array.set(offset_custom + 4, v2.getY());
-								 customAttribute.array.set(offset_custom + 5, v2.getZ());
+								 customAttribute.array.put(offset_custom + 3, v2.getX());
+								 customAttribute.array.put(offset_custom + 4, v2.getY());
+								 customAttribute.array.put(offset_custom + 5, v2.getZ());
 
-								 customAttribute.array.set(offset_custom + 6, v3.getX());
-								 customAttribute.array.set(offset_custom + 7, v3.getY());
-								 customAttribute.array.set(offset_custom + 8, v3.getZ());
+								 customAttribute.array.put(offset_custom + 6, v3.getX());
+								 customAttribute.array.put(offset_custom + 7, v3.getY());
+								 customAttribute.array.put(offset_custom + 8, v3.getZ());
 							 }
 
 							 offset_custom += 9;
@@ -1382,17 +1383,17 @@ public class Mesh extends GeometryObject
 								 Color v2 = value.get(1);
 								 Color v3 = value.get(2);
 
-								 customAttribute.array.set(offset_custom, v1.getR());
-								 customAttribute.array.set(offset_custom + 1, v1.getG());
-								 customAttribute.array.set(offset_custom + 2, v1.getB());
+								 customAttribute.array.put(offset_custom, v1.getR());
+								 customAttribute.array.put(offset_custom + 1, v1.getG());
+								 customAttribute.array.put(offset_custom + 2, v1.getB());
 
-								 customAttribute.array.set(offset_custom + 3, v2.getR());
-								 customAttribute.array.set(offset_custom + 4, v2.getG());
-								 customAttribute.array.set(offset_custom + 5, v2.getB());
+								 customAttribute.array.put(offset_custom + 3, v2.getR());
+								 customAttribute.array.put(offset_custom + 4, v2.getG());
+								 customAttribute.array.put(offset_custom + 5, v2.getB());
 
-								 customAttribute.array.set(offset_custom + 6, v3.getR());
-								 customAttribute.array.set(offset_custom + 7, v3.getG());
-								 customAttribute.array.set(offset_custom + 8, v3.getB());
+								 customAttribute.array.put(offset_custom + 6, v3.getR());
+								 customAttribute.array.put(offset_custom + 7, v3.getG());
+								 customAttribute.array.put(offset_custom + 8, v3.getB());
 							 }
 							 else
 							 {
@@ -1401,17 +1402,17 @@ public class Mesh extends GeometryObject
 								 Vector3 v2 = value.get(1);
 								 Vector3 v3 = value.get(2);
 
-								 customAttribute.array.set(offset_custom, v1.getX());
-								 customAttribute.array.set(offset_custom + 1, v1.getY());
-								 customAttribute.array.set(offset_custom + 2, v1.getZ());
+								 customAttribute.array.put(offset_custom, v1.getX());
+								 customAttribute.array.put(offset_custom + 1, v1.getY());
+								 customAttribute.array.put(offset_custom + 2, v1.getZ());
 
-								 customAttribute.array.set(offset_custom + 3, v2.getX());
-								 customAttribute.array.set(offset_custom + 4, v2.getY());
-								 customAttribute.array.set(offset_custom + 5, v2.getZ());
+								 customAttribute.array.put(offset_custom + 3, v2.getX());
+								 customAttribute.array.put(offset_custom + 4, v2.getY());
+								 customAttribute.array.put(offset_custom + 5, v2.getZ());
 
-								 customAttribute.array.set(offset_custom + 6, v3.getX());
-								 customAttribute.array.set(offset_custom + 7, v3.getY());
-								 customAttribute.array.set(offset_custom + 8, v3.getZ());
+								 customAttribute.array.put(offset_custom + 6, v3.getX());
+								 customAttribute.array.put(offset_custom + 7, v3.getY());
+								 customAttribute.array.put(offset_custom + 8, v3.getZ());
 							 }
 
 							 offset_custom += 9;
@@ -1432,20 +1433,20 @@ public class Mesh extends GeometryObject
 							 Vector4 v2 = (Vector4) customAttribute.getValue().get(face.getB());
 							 Vector4 v3 = (Vector4) customAttribute.getValue().get(face.getC());
 
-							 customAttribute.array.set(offset_custom, v1.getX());
-							 customAttribute.array.set(offset_custom + 1, v1.getY());
-							 customAttribute.array.set(offset_custom + 2, v1.getZ());
-							 customAttribute.array.set(offset_custom + 3, v1.getW());
+							 customAttribute.array.put(offset_custom, v1.getX());
+							 customAttribute.array.put(offset_custom + 1, v1.getY());
+							 customAttribute.array.put(offset_custom + 2, v1.getZ());
+							 customAttribute.array.put(offset_custom + 3, v1.getW());
 
-							 customAttribute.array.set(offset_custom + 4, v2.getX());
-							 customAttribute.array.set(offset_custom + 5, v2.getY());
-							 customAttribute.array.set(offset_custom + 6, v2.getZ());
-							 customAttribute.array.set(offset_custom + 7, v2.getW());
+							 customAttribute.array.put(offset_custom + 4, v2.getX());
+							 customAttribute.array.put(offset_custom + 5, v2.getY());
+							 customAttribute.array.put(offset_custom + 6, v2.getZ());
+							 customAttribute.array.put(offset_custom + 7, v2.getW());
 
-							 customAttribute.array.set(offset_custom + 8, v3.getX());
-							 customAttribute.array.set(offset_custom + 9, v3.getY());
-							 customAttribute.array.set(offset_custom + 10, v3.getZ());
-							 customAttribute.array.set(offset_custom + 11, v3.getW());
+							 customAttribute.array.put(offset_custom + 8, v3.getX());
+							 customAttribute.array.put(offset_custom + 9, v3.getY());
+							 customAttribute.array.put(offset_custom + 10, v3.getZ());
+							 customAttribute.array.put(offset_custom + 11, v3.getW());
 
 							 offset_custom += 12;
 
@@ -1462,20 +1463,20 @@ public class Mesh extends GeometryObject
 							 Vector4 v2 = value;
 							 Vector4 v3 = value;
 
-							 customAttribute.array.set(offset_custom, v1.getX());
-							 customAttribute.array.set(offset_custom + 1, v1.getY());
-							 customAttribute.array.set(offset_custom + 2, v1.getZ());
-							 customAttribute.array.set(offset_custom + 3, v1.getW());
+							 customAttribute.array.put(offset_custom, v1.getX());
+							 customAttribute.array.put(offset_custom + 1, v1.getY());
+							 customAttribute.array.put(offset_custom + 2, v1.getZ());
+							 customAttribute.array.put(offset_custom + 3, v1.getW());
 
-							 customAttribute.array.set(offset_custom + 4, v2.getX());
-							 customAttribute.array.set(offset_custom + 5, v2.getY());
-							 customAttribute.array.set(offset_custom + 6, v2.getZ());
-							 customAttribute.array.set(offset_custom + 7, v2.getW());
+							 customAttribute.array.put(offset_custom + 4, v2.getX());
+							 customAttribute.array.put(offset_custom + 5, v2.getY());
+							 customAttribute.array.put(offset_custom + 6, v2.getZ());
+							 customAttribute.array.put(offset_custom + 7, v2.getW());
 
-							 customAttribute.array.set(offset_custom + 8, v3.getX());
-							 customAttribute.array.set(offset_custom + 9, v3.getY());
-							 customAttribute.array.set(offset_custom + 10, v3.getZ());
-							 customAttribute.array.set(offset_custom + 11, v3.getW());
+							 customAttribute.array.put(offset_custom + 8, v3.getX());
+							 customAttribute.array.put(offset_custom + 9, v3.getY());
+							 customAttribute.array.put(offset_custom + 10, v3.getZ());
+							 customAttribute.array.put(offset_custom + 11, v3.getW());
 
 							 offset_custom += 12;
 
@@ -1491,28 +1492,28 @@ public class Mesh extends GeometryObject
 							 Vector4 v2 = value.get(1);
 							 Vector4 v3 = value.get(2);
 
-							 customAttribute.array.set(offset_custom, v1.getX());
-							 customAttribute.array.set(offset_custom + 1, v1.getY());
-							 customAttribute.array.set(offset_custom + 2, v1.getZ());
-							 customAttribute.array.set(offset_custom + 3, v1.getW());
+							 customAttribute.array.put(offset_custom, v1.getX());
+							 customAttribute.array.put(offset_custom + 1, v1.getY());
+							 customAttribute.array.put(offset_custom + 2, v1.getZ());
+							 customAttribute.array.put(offset_custom + 3, v1.getW());
 
-							 customAttribute.array.set(offset_custom + 4, v2.getX());
-							 customAttribute.array.set(offset_custom + 5, v2.getY());
-							 customAttribute.array.set(offset_custom + 6, v2.getZ());
-							 customAttribute.array.set(offset_custom + 7, v2.getW());
+							 customAttribute.array.put(offset_custom + 4, v2.getX());
+							 customAttribute.array.put(offset_custom + 5, v2.getY());
+							 customAttribute.array.put(offset_custom + 6, v2.getZ());
+							 customAttribute.array.put(offset_custom + 7, v2.getW());
 
-							 customAttribute.array.set(offset_custom + 8, v3.getX());
-							 customAttribute.array.set(offset_custom + 9, v3.getY());
-							 customAttribute.array.set(offset_custom + 10, v3.getZ());
-							 customAttribute.array.set(offset_custom + 11, v3.getW());
+							 customAttribute.array.put(offset_custom + 8, v3.getX());
+							 customAttribute.array.put(offset_custom + 9, v3.getY());
+							 customAttribute.array.put(offset_custom + 10, v3.getZ());
+							 customAttribute.array.put(offset_custom + 11, v3.getW());
 
 							 offset_custom += 12;
 						 }
 					 }
 				 }
 
-				 gl.bindBuffer( BufferTarget.ARRAY_BUFFER, customAttribute.buffer );
-				 gl.bufferData( BufferTarget.ARRAY_BUFFER, customAttribute.array, hint );
+				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.limit(), customAttribute.array, hint.getValue() );
 			 }
 		 }
 

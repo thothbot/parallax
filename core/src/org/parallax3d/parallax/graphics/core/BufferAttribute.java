@@ -86,7 +86,7 @@ public class BufferAttribute {
 	/**
 	 * @return the buffer
 	 */
-	public int  getBuffer() {
+	public Integer  getBuffer() {
 		return buffer;
 	}
 

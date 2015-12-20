@@ -21,6 +21,8 @@ package org.parallax3d.parallax.math;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
+import java.nio.FloatBuffer;
+
 /**
  * This class implements three-dimensional matrix. MxM, where M=3.
  * 
@@ -103,31 +105,31 @@ public class Matrix3
 
 		return this;
 	}
-//
-//	public Float32Array applyToVector3Array (Float32Array array)
-//	{
-//		return applyToVector3Array(array, 0, array.getLength());
-//	}
-//
-//	public Float32Array applyToVector3Array (Float32Array array, int offset, int length)
-//	{
-//
-//		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
-//
-//			_v1.x = array.get( j );
-//			_v1.y = array.get( j + 1 );
-//			_v1.z = array.get( j + 2 );
-//
-//			_v1.apply( this );
-//
-//			array.set( j , _v1.x );
-//			array.set( j + 1 , _v1.y );
-//			array.set( j + 2 , _v1.z );
-//
-//		}
-//
-//		return array;
-//	}
+
+	public FloatBuffer applyToVector3Array (FloatBuffer array)
+	{
+		return applyToVector3Array(array, 0, array.array().length);
+	}
+
+	public FloatBuffer applyToVector3Array (FloatBuffer array, int offset, int length)
+	{
+
+		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
+
+			_v1.x = array.get( j );
+			_v1.y = array.get( j + 1 );
+			_v1.z = array.get( j + 2 );
+
+			_v1.apply( this );
+
+			array.put(j, _v1.x);
+			array.put(j + 1, _v1.y);
+			array.put( j + 2 , _v1.z );
+
+		}
+
+		return array;
+	}
 
 	public Matrix3 multiply( float s ) 
 	{

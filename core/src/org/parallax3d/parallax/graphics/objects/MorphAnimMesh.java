@@ -21,14 +21,11 @@ package org.parallax3d.parallax.graphics.objects;
 import java.util.List;
 import java.util.Map;
 
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.graphics.core.Geometry;
-import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.graphics.core.FastMap;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Mathematics;
-
-import com.google.gwt.regexp.shared.MatchResult;
-import com.google.gwt.regexp.shared.RegExp;
+import org.parallax3d.parallax.system.ObjectMap;
 
 public class MorphAnimMesh extends Mesh
 {
@@ -52,7 +49,7 @@ public class MorphAnimMesh extends Mesh
 	private int endKeyframe;
 	private int length;
 		
-	private Map<String, Animation> animations;
+	private ObjectMap<String, Animation> animations;
 	
 	private String firstAnimation;
 	
@@ -97,52 +94,52 @@ public class MorphAnimMesh extends Mesh
 		this.directionBackwards = true;
 	}
 		
-	public void parseAnimations() 
-	{
-		Geometry geometry = (Geometry) this.getGeometry();
-
-		if ( this.animations == null) {
-			this.animations = new FastMap<Animation>();
-		}
-
-		String firstAnimation = null;
-
-		RegExp pattern = RegExp.compile("([a-z]+)(\\d+)");
-		
-		for ( int i = 0, il = geometry.getMorphTargets().size(); i < il; i ++ ) 
-		{
-			Geometry.MorphTarget morph = geometry.getMorphTargets().get(i);
-			
-			for (MatchResult result = pattern.exec(morph.name); result != null; result = pattern.exec(morph.name)) 
-			{
-			    String label = result.getGroup(1);
-			    String num = result.getGroup(2);
-
-				if ( ! this.animations.containsKey( label ) ) {
-					Animation animation = new Animation();
-					animation.start = Integer.MAX_VALUE;
-					animation.end = Integer.MIN_VALUE;
-					this.animations.put(label, animation);
-				}
-
-				Animation animation = this.animations.get( label );
-
-				if ( i < animation.start ) animation.start = i;
-				if ( i > animation.end ) animation.end = i;
-
-				if ( firstAnimation == null ) 
-					firstAnimation = label;
-
-			}
-		}
-
-		this.firstAnimation = firstAnimation;
-	}
+//	public void parseAnimations()
+//	{
+//		Geometry geometry = (Geometry) this.getGeometry();
+//
+//		if ( this.animations == null) {
+//			this.animations = new ObjectMap<String, Animation>();
+//		}
+//
+//		String firstAnimation = null;
+//
+//		RegExp pattern = RegExp.compile("([a-z]+)(\\d+)");
+//
+//		for ( int i = 0, il = geometry.getMorphTargets().size(); i < il; i ++ )
+//		{
+//			Geometry.MorphTarget morph = geometry.getMorphTargets().get(i);
+//
+//			for (MatchResult result = pattern.exec(morph.name); result != null; result = pattern.exec(morph.name))
+//			{
+//			    String label = result.getGroup(1);
+//			    String num = result.getGroup(2);
+//
+//				if ( ! this.animations.containsKey( label ) ) {
+//					Animation animation = new Animation();
+//					animation.start = Integer.MAX_VALUE;
+//					animation.end = Integer.MIN_VALUE;
+//					this.animations.put(label, animation);
+//				}
+//
+//				Animation animation = this.animations.get( label );
+//
+//				if ( i < animation.start ) animation.start = i;
+//				if ( i > animation.end ) animation.end = i;
+//
+//				if ( firstAnimation == null )
+//					firstAnimation = label;
+//
+//			}
+//		}
+//
+//		this.firstAnimation = firstAnimation;
+//	}
 	
 	public void setAnimationLabel( String label, int start, int end ) 
 	{
 		if ( this.animations == null) {
-			this.animations = new FastMap<Animation>();
+			this.animations = new ObjectMap<String, Animation>();
 		}
 		
 		Animation animation = new Animation();
@@ -165,7 +162,7 @@ public class MorphAnimMesh extends Mesh
 		} 
 		else 
 		{
-			Log.error( "animation[" + label + "] undefined" );
+			Parallax.app.error("MorphanimMesh", "animation[" + label + "] undefined");
 		}
 	}
 

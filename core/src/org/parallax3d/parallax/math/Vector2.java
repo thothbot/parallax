@@ -18,7 +18,10 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
+
+import java.nio.FloatBuffer;
 
 /**
  * This class is realization of (X, Y) vector. 
@@ -460,32 +463,31 @@ public class Vector2
 		return (this.lengthSq() < 0.0001 /* almostZero */);
 	}
 	
-//	public Vector2 fromArray( Float32Array array) {
-//		return fromArray(array, 0);
-//	}
-//
-//	public Vector2 fromArray( Float32Array array, int offset ) {
-//
-//		this.x = array.get( offset );
-//		this.y = array.get( offset + 1 );
-//
-//		return this;
-//
-//	}
-//
-//	public Float32Array toArray()
-//	{
-//		return toArray(Float32Array.create(2), 0);
-//	}
-//
-//	public Float32Array toArray( Float32Array array, int offset )
-//	{
-//
-//		array.set( offset , this.x);
-//		array.set( offset + 1 , this.y);
-//
-//		return array;
-//	}
+	public Vector2 fromArray( FloatBuffer array) {
+		return fromArray(array, 0);
+	}
+
+	public Vector2 fromArray( FloatBuffer array, int offset ) {
+
+		this.x = array.get( offset );
+		this.y = array.get( offset + 1 );
+
+		return this;
+
+	}
+
+	public FloatBuffer toArray()
+	{
+		return toArray(BufferUtils.newFloatBuffer(2), 0);
+	}
+
+	public FloatBuffer toArray( FloatBuffer array, int offset )
+	{
+		array.put( offset , this.x);
+		array.put( offset + 1 , this.y);
+
+		return array;
+	}
 
 	public Vector2 clone()
 	{

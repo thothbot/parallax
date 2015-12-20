@@ -38,7 +38,7 @@ public class Raycaster
 	/**
 	 * The precision factor of the raycaster when intersecting {@link Mesh} objects.
 	 */
-	public static final double PRECISION = 0.0001;
+	public static final float PRECISION = 0.0001f;
 	/**
 	 * The precision factor of the raycaster when intersecting {@link Line} objects.
 	 */

@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -37,7 +37,7 @@ import org.parallax3d.parallax.math.Vector4;
 public class SkinnedMesh extends Mesh {
 	
 	public Texture boneTexture;
-	public Float32Array boneMatrices = (Float32Array) Float32Array.createArray();
+//	public float[] boneMatrices = new float[];
 	
 	private String bindMode = "attached";
 	private Matrix4 bindMatrix = new Matrix4();
@@ -132,13 +132,13 @@ public class SkinnedMesh extends Mesh {
 		this.boneTexture = boneTexture;
 	}
 
-	public Float32Array getBoneMatrices() {
-		return boneMatrices;
-	}
-
-	public void setBoneMatrices(Float32Array boneMatrices) {
-		this.boneMatrices = boneMatrices;
-	}
+//	public float[] getBoneMatrices() {
+//		return boneMatrices;
+//	}
+//
+//	public void setBoneMatrices(float[] boneMatrices) {
+//		this.boneMatrices = boneMatrices;
+//	}
 
 	public void normalizeSkinWeights () {
 
@@ -148,7 +148,7 @@ public class SkinnedMesh extends Mesh {
 
 				Vector4 sw = ((Geometry)getGeometry()).getSkinWeights().get( i );
 
-				double scale = 1.0 / sw.lengthManhattan();
+				float scale = 1.0f / sw.lengthManhattan();
 
 				if ( scale != Double.POSITIVE_INFINITY ) {
 
@@ -184,7 +184,7 @@ public class SkinnedMesh extends Mesh {
 
 		} else {
 
-			Log.warn("SkinnedMesh unreckognized bindMode: " + this.bindMode);
+			Parallax.app.error("SkinnedMesh", "SkinnedMesh unreckognized bindMode: " + this.bindMode);
 
 		}
 

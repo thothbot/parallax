@@ -18,21 +18,19 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
+import java.nio.Buffer;
+import java.nio.FloatBuffer;
 import java.util.List;
 
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferUsage;
 import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.Raycaster;
+import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLRenderingContext;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BeginMode;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.BufferTarget;
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
@@ -40,6 +38,12 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector4;
+import org.parallax3d.parallax.system.BufferUtils;
+import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.enums.BeginMode;
+import org.parallax3d.parallax.system.gl.enums.BufferTarget;
+import org.parallax3d.parallax.system.gl.enums.BufferUsage;
 
 /**
  * A line or a series of lines.
@@ -187,7 +191,7 @@ public class Line extends GeometryObject
 	@Override
 	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers)
 	{
-		WebGLRenderingContext gl = renderer.getGL();
+		GL20 gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 		
 		BeginMode primitives = ( this.getType() == MODE.STRIPS)
@@ -196,7 +200,7 @@ public class Line extends GeometryObject
 
 		setLineWidth( gl, ((LineBasicMaterial)getMaterial()).getLinewidth() );
 
-		gl.drawArrays( primitives, 0, geometryBuffer.__webglLineCount );
+		gl.glDrawArrays(primitives.getValue(), 0, geometryBuffer.__webglLineCount);
 
 		info.getRender().calls ++;
 	}
@@ -220,25 +224,25 @@ public class Line extends GeometryObject
 	{
 		Geometry geometry = (Geometry)getGeometry();
 		
-		WebGLRenderingContext gl = renderer.getGL();
+		GL20 gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 		
-		geometry.__webglVertexBuffer = gl.createBuffer();
-		geometry.__webglColorBuffer = gl.createBuffer();
-		geometry.__webglLineDistanceBuffer = gl.createBuffer();
+		geometry.__webglVertexBuffer = gl.glGenBuffer();
+		geometry.__webglColorBuffer = gl.glGenBuffer();
+		geometry.__webglLineDistanceBuffer = gl.glGenBuffer();
 
 		info.getMemory().geometries ++;
 	}
 
-	public void initBuffers (WebGLRenderingContext gl) 
+	public void initBuffers (GL20 gl)
 	{
 		Geometry geometry = (Geometry)getGeometry();
 		
 		int nvertices = geometry.getVertices().size();
 
-		geometry.__vertexArray = Float32Array.create(nvertices * 3);
-		geometry.__colorArray = Float32Array.create( nvertices * 3 );
-		geometry.__lineDistanceArray = Float32Array.create( nvertices * 3 );
+		geometry.__vertexArray = BufferUtils.newFloatBuffer(nvertices * 3);
+		geometry.__colorArray = BufferUtils.newFloatBuffer(nvertices * 3);
+		geometry.__lineDistanceArray = BufferUtils.newFloatBuffer(nvertices * 3);
 
 		geometry.__webglLineCount = nvertices;
 
@@ -267,21 +271,21 @@ public class Line extends GeometryObject
 //	}
 
 	// setLineBuffers
-	public void setBuffers(WebGLRenderingContext gl, BufferUsage hint)
+	public void setBuffers(GL20 gl, BufferUsage hint)
 	{		
 		Geometry geometry = (Geometry)this.getGeometry();
 		
 		List<Vector3> vertices = geometry.getVertices();
 		List<Color> colors = geometry.getColors();
-		List<Double> lineDistances = geometry.getLineDistances();
+		List<Float> lineDistances = geometry.getLineDistances();
 		
 		int vl = vertices.size();
 		int cl = colors.size();
 		int dl = lineDistances.size();
 
-		Float32Array vertexArray = geometry.__vertexArray;
-		Float32Array colorArray = geometry.__colorArray;
-		Float32Array lineDistanceArray = geometry.__lineDistanceArray;
+		FloatBuffer vertexArray = geometry.__vertexArray;
+		FloatBuffer colorArray = geometry.__colorArray;
+		FloatBuffer lineDistanceArray = geometry.__lineDistanceArray;
 
 		boolean dirtyVertices = geometry.isVerticesNeedUpdate();
 		boolean dirtyColors = geometry.isColorsNeedUpdate();
@@ -295,13 +299,13 @@ public class Line extends GeometryObject
 			{
 				Vector3 vertex = vertices.get(v);
 				int offset = v * 3;
-				vertexArray.set(offset, vertex.getX());
-				vertexArray.set(offset + 1, vertex.getY());
-				vertexArray.set(offset + 2, vertex.getZ());
+				vertexArray.put(offset, vertex.getX());
+				vertexArray.put(offset + 1, vertex.getY());
+				vertexArray.put(offset + 2, vertex.getZ());
 			}
 
-			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglVertexBuffer);
-			gl.bufferData(BufferTarget.ARRAY_BUFFER, vertexArray, hint);
+			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.limit(), vertexArray, hint.getValue());
 		}
 
 		if (dirtyColors) 
@@ -311,25 +315,25 @@ public class Line extends GeometryObject
 				Color color = colors.get(c);
 				int offset = c * 3;
 
-				colorArray.set(offset, color.getR());
-				colorArray.set(offset + 1, color.getG());
-				colorArray.set(offset + 2, color.getB());
+				colorArray.put(offset, color.getR());
+				colorArray.put(offset + 1, color.getG());
+				colorArray.put(offset + 2, color.getB());
 			}
 
-			gl.bindBuffer(BufferTarget.ARRAY_BUFFER, geometry.__webglColorBuffer);
-			gl.bufferData(BufferTarget.ARRAY_BUFFER, colorArray, hint);
+			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.limit(), colorArray, hint.getValue());
 		}
 		
 		if ( dirtyLineDistances ) {
 
 			for ( int d = 0; d < dl; d ++ ) {
 
-				lineDistanceArray.set( d, lineDistances.get( d ));
+				lineDistanceArray.put(d, lineDistances.get( d ));
 
 			}
 
-			gl.bindBuffer( BufferTarget.ARRAY_BUFFER, geometry.__webglLineDistanceBuffer );
-			gl.bufferData( BufferTarget.ARRAY_BUFFER, lineDistanceArray, hint );
+			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglLineDistanceBuffer );
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), lineDistanceArray.limit(), lineDistanceArray, hint.getValue() );
 
 		}
 
@@ -349,7 +353,7 @@ public class Line extends GeometryObject
 					if (customAttribute.size == 1) 
 					{
 						for (int ca = 0; ca < customAttribute.getValue().size(); ca++)
-							customAttribute.array.set(ca, (Double)customAttribute.getValue().get(ca));
+							customAttribute.array.put(ca, (Float) customAttribute.getValue().get(ca));
 
 					}
 					else if (customAttribute.size == 2) 
@@ -359,8 +363,8 @@ public class Line extends GeometryObject
 
 							Vector2 value = (Vector2) customAttribute.getValue().get(ca);
 
-							customAttribute.array.set(offset, value.getX());
-							customAttribute.array.set(offset + 1, value.getY());
+							customAttribute.array.put(offset, value.getX());
+							customAttribute.array.put(offset + 1, value.getY());
 
 							offset += 2;
 						}
@@ -375,9 +379,9 @@ public class Line extends GeometryObject
 
 								Color value = (Color) customAttribute.getValue().get(ca);
 
-								customAttribute.array.set(offset, value.getR());
-								customAttribute.array.set(offset + 1, value.getG());
-								customAttribute.array.set(offset + 2, value.getB());
+								customAttribute.array.put(offset, value.getR());
+								customAttribute.array.put(offset + 1, value.getG());
+								customAttribute.array.put(offset + 2, value.getB());
 
 								offset += 3;
 							}
@@ -389,9 +393,9 @@ public class Line extends GeometryObject
 							{
 								Vector3 value = (Vector3) customAttribute.getValue().get(ca);
 
-								customAttribute.array.set(offset, value.getX());
-								customAttribute.array.set(offset + 1, value.getY());
-								customAttribute.array.set(offset + 2, value.getZ());
+								customAttribute.array.put(offset, value.getX());
+								customAttribute.array.put(offset + 1, value.getY());
+								customAttribute.array.put(offset + 2, value.getZ());
 
 								offset += 3;
 							}
@@ -404,17 +408,17 @@ public class Line extends GeometryObject
 						{
 							Vector4 value = (Vector4) customAttribute.getValue().get(ca);
 
-							customAttribute.array.set(offset, value.getX());
-							customAttribute.array.set(offset + 1, value.getY());
-							customAttribute.array.set(offset + 2, value.getZ());
-							customAttribute.array.set(offset + 3, value.getW());
+							customAttribute.array.put(offset, value.getX());
+							customAttribute.array.put(offset + 1, value.getY());
+							customAttribute.array.put(offset + 2, value.getZ());
+							customAttribute.array.put(offset + 3, value.getW());
 
 							offset += 4;
 						}
 					}
 
-					gl.bindBuffer(BufferTarget.ARRAY_BUFFER, customAttribute.buffer);
-					gl.bufferData(BufferTarget.ARRAY_BUFFER, customAttribute.array, hint);
+					gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
+					gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.limit(), customAttribute.array, hint.getValue());
 				}
 			}
 		}

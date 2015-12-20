@@ -19,7 +19,10 @@
 package org.parallax3d.parallax.math;
 
 import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
+
+import java.nio.FloatBuffer;
 
 
 /**
@@ -729,36 +732,36 @@ public class Vector3 extends Vector2
 		return (this.x == v1.x && this.y == v1.y && this.z == v1.z);
 	}
 	
-//	public Vector3 fromArray ( Float32Array array )
-//	{
-//		return fromArray(array, 0);
-//	}
-//
-//	public Vector3 fromArray ( Float32Array array, int offset )
-//	{
-//
-//		this.x = array.get( offset );
-//		this.y = array.get( offset + 1 );
-//		this.z = array.get( offset + 2 );
-//
-//		return this;
-//
-//	}
+	public Vector3 fromArray ( FloatBuffer array )
+	{
+		return fromArray(array, 0);
+	}
+
+	public Vector3 fromArray ( FloatBuffer array, int offset )
+	{
+
+		this.x = array.get( offset );
+		this.y = array.get( offset + 1 );
+		this.z = array.get( offset + 2 );
+
+		return this;
+
+	}
 	
-//	public Float32Array toArray()
-//	{
-//		return toArray(Float32Array.create(3), 0);
-//	}
-//
-//	public Float32Array toArray( Float32Array array, int offset )
-//	{
-//
-//		array.set( offset , this.x);
-//		array.set( offset + 1 , this.y);
-//		array.set( offset + 2 , this.z);
-//
-//		return array;
-//	}
+	public FloatBuffer toArray()
+	{
+		return toArray(BufferUtils.newFloatBuffer(3), 0);
+	}
+
+	public FloatBuffer toArray( FloatBuffer array, int offset )
+	{
+
+		array.put(offset, this.x);
+		array.put(offset + 1, this.y);
+		array.put( offset + 2 , this.z);
+
+		return array;
+	}
 	
 	public Vector3 clone()
 	{

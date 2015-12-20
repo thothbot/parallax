@@ -60,10 +60,10 @@ public class ProgramParameters
 	public boolean shadowMapDebug;
 	public boolean shadowMapCascade;
 
-	public double alphaTest;
+	public float alphaTest;
 	public boolean metal;
 	public boolean wrapAround;
-	public boolean doubleSided;
+	public boolean floatSided;
 	public boolean flipSided;
 	
 	public boolean gammaInput;
@@ -90,7 +90,7 @@ public class ProgramParameters
 				
 				+ maxShadows + ", " + shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + "-9-"  
 				
-				+ alphaTest + ", "  + metal + ", " + wrapAround + ", " + doubleSided + ", " + flipSided + "-10-"
+				+ alphaTest + ", "  + metal + ", " + wrapAround + ", " + floatSided + ", " + flipSided + "-10-"
 				
 				+ gammaInput + ", " + gammaOutput + "-11-";
 
