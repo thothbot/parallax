@@ -31,16 +31,16 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.OctahedronGeometry")
 public final class OctahedronGeometry extends PolyhedronGeometry
 {
-	public OctahedronGeometry( double radius, int detail ) 
+	public OctahedronGeometry( float radius, int detail )
 	{
 		super( radius, detail );
 	}
 
 	@Override
-	protected double[][] getGeometryVertices() 
+	protected float[][] getGeometryVertices()
 	{
-		double[][] vertices = {
-				{ 1.0, 0.0, 0.0 }, { -1.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, -1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, -1.0 }
+		float[][] vertices = {
+				{ 1.0f, 0.0f, 0.0f }, { -1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, -1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, -1.0f }
 		};
 
 		return vertices;

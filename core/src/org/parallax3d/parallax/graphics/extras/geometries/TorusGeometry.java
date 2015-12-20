@@ -45,12 +45,12 @@ public final class TorusGeometry extends Geometry
 		this(100, 40, 8, 6);
 	}
 	
-	public TorusGeometry(double radius, double tube, int segmentsR, int segmentsT) 
+	public TorusGeometry(float radius, float tube, int segmentsR, int segmentsT) 
 	{
-		this(radius, tube, segmentsR, segmentsT, Math.PI * 2.0);
+		this(radius, tube, segmentsR, segmentsT, (float)(Math.PI * 2.0));
 	}
 	
-	public TorusGeometry(double radius, double tube, int segmentsR, int segmentsT, double arc) 
+	public TorusGeometry(float radius, float tube, int segmentsR, int segmentsT, float arc) 
 	{
 		super();
 		
@@ -62,20 +62,20 @@ public final class TorusGeometry extends Geometry
 		{
 			for ( int i = 0; i <= segmentsT; i ++ ) 
 			{
-				double u = i / (double)segmentsT * arc;
-				double v = j / (double)segmentsR * Math.PI * 2.0;
+				float u = i / (float)segmentsT * arc;
+				float v = j / (float)segmentsR * (float)(Math.PI * 2.0);
 
-				center.setX(radius * Math.cos( u ));
-				center.setY(radius * Math.sin( u ));
+				center.setX(radius * (float)Math.cos( u ));
+				center.setY(radius * (float)Math.sin( u ));
 
 				Vector3 vertex = new Vector3();
-				vertex.setX(( radius + tube * Math.cos( v ) ) * Math.cos( u ));
-				vertex.setY(( radius + tube * Math.cos( v ) ) * Math.sin( u ));
-				vertex.setZ(tube * Math.sin( v ));
+				vertex.setX(( radius + tube * (float)Math.cos( v ) ) * (float)Math.cos( u ));
+				vertex.setY(( radius + tube * (float)Math.cos( v ) ) * (float)Math.sin( u ));
+				vertex.setZ(tube * (float)Math.sin( v ));
 
 				getVertices().add( vertex );
 
-				uvs.add( new Vector2( i / (double)segmentsT, j / (double)segmentsR ) );
+				uvs.add( new Vector2( i / (float)segmentsT, j / (float)segmentsR ) );
 				normals.add( vertex.clone().sub( center ).normalize() );
 			}
 		}

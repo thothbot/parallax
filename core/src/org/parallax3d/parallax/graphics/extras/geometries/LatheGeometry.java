@@ -38,22 +38,22 @@ public final class LatheGeometry extends Geometry
 	
 	public LatheGeometry ( List<Vector3> points, int steps)
 	{
-		this(points, steps, 0, 2.0 * Math.PI);
+		this(points, steps, 0, (float)(2.0 * Math.PI));
 	}
 
-	public LatheGeometry ( List<Vector3> points, int segments, double phiStart, double phiLength ) 
+	public LatheGeometry ( List<Vector3> points, int segments, float phiStart, float phiLength ) 
 	{
 		super();
 
-		double inversePointLength = 1.0 / ( points.size() - 1 );
-		double inverseSegments = 1.0 / segments;
+		float inversePointLength = 1.0f / ( points.size() - 1 );
+		float inverseSegments = 1.0f / segments;
 
 		for ( int i = 0; i <= segments; i ++ ) 
 		{
-			double phi = phiStart + i * inverseSegments * phiLength;
+			float phi = phiStart + i * inverseSegments * phiLength;
 
-			double c = Math.cos( phi ),
-				s = Math.sin( phi );
+			float c = (float)Math.cos( phi ),
+				s = (float)Math.sin( phi );
 
 			for ( int j = 0; j < points.size(); j ++ ) 
 			{
@@ -81,10 +81,10 @@ public final class LatheGeometry extends Geometry
 				int c = base + 1 + np;
 				int d = base + 1;
 				
-				double u0 = i * inverseSegments;
-				double v0 = j * inversePointLength;
-				double u1 = u0 + inverseSegments;
-				double v1 = v0 + inversePointLength;
+				float u0 = i * inverseSegments;
+				float v0 = j * inversePointLength;
+				float u1 = u0 + inverseSegments;
+				float v1 = v0 + inversePointLength;
 
 				getFaces().add( new Face3( a, b, d ) );
 

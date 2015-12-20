@@ -29,6 +29,7 @@ import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 @ThreeJsObject("THREE.PolyhedronGeometry")
 public abstract class PolyhedronGeometry extends Geometry
@@ -42,7 +43,7 @@ public abstract class PolyhedronGeometry extends Geometry
 		public int index;
 		public Vector2 uv;
 		
-		public ContainerOfVector(double x, double y, double z)
+		public ContainerOfVector(float x, float y, float z)
 		{
 			this.vector = new Vector3(x, y, z);
 		}
@@ -50,16 +51,16 @@ public abstract class PolyhedronGeometry extends Geometry
 
 	public PolyhedronGeometry() 
 	{
-		this(1.0, 0);
+		this(1.0f, 0);
 	}
 	
-	public PolyhedronGeometry(double radius, int detail) 
+	public PolyhedronGeometry(float radius, int detail) 
 	{
 		super();
 		this.containers = new ArrayList<ContainerOfVector>();
 		this.midpoints = new HashMap<Integer, Map<Integer,ContainerOfVector>>();
 
-		double[][] vertices = getGeometryVertices();
+		float[][] vertices = getGeometryVertices();
 		for ( int i = 0, l = vertices.length; i < l; i ++ )
 			prepare( new ContainerOfVector( vertices[ i ][ 0 ], vertices[ i ][ 1 ], vertices[ i ][2 ] ) );
 
@@ -88,7 +89,7 @@ public abstract class PolyhedronGeometry extends Geometry
 	/**
 	 * Gets geometry vertices.
 	 */
-	protected abstract double[][] getGeometryVertices();
+	protected abstract float[][] getGeometryVertices();
 	
 	/**
 	 * Gets geometry faces.
@@ -106,8 +107,8 @@ public abstract class PolyhedronGeometry extends Geometry
 		container.index = getVertices().size() - 1;
 
 		// Texture coords are equivalent to map coords, calculate angle and convert to fraction of a circle.
-		double u = azimuth( container.vector ) / 2.0 / Math.PI + 0.5;
-		double v = inclination( container.vector ) / Math.PI + 0.5;
+		float u = azimuth( container.vector ) / 2.0f / (float)Math.PI + 0.5f;
+		float v = inclination( container.vector ) / (float)Math.PI + 0.5f;
 		container.uv = new Vector2( u, v );
 
 		return container;
@@ -123,11 +124,11 @@ public abstract class PolyhedronGeometry extends Geometry
 			Face3 face = new Face3( c1.index, c2.index, c3.index, Arrays.asList(c1.vector.clone(), c2.vector.clone(), c3.vector.clone()) );
 			
 			Vector3 centroid = new Vector3();
-			centroid.copy( c1.vector ).add( c2.vector ).add( c3.vector ).divide( 3.0 );
+			centroid.copy( c1.vector ).add( c2.vector ).add( c3.vector ).divide( 3.0f );
 			
 			getFaces().add( face );
 
-			double azi = azimuth( centroid );
+			float azi = azimuth( centroid );
 			getFaceVertexUvs().get( 0 ).add( Arrays.asList( 
 				correctUV( c1.uv, c1.vector, azi ),
 				correctUV( c2.uv, c2.vector, azi ),
@@ -176,29 +177,29 @@ public abstract class PolyhedronGeometry extends Geometry
 	/**
 	 * Angle around the Y axis, counter-clockwise when looking from above.
 	 */
-	protected double azimuth( Vector3 vector ) 
+	protected float azimuth( Vector3 vector ) 
 	{
-		return Math.atan2( vector.getZ(), -vector.getX() );
+		return (float)Math.atan2( vector.getZ(), -vector.getX() );
 	}
 
 	/**
 	 * Angle above the XZ plane.
 	 */
-	protected double inclination( Vector3 vector ) 
+	protected float inclination( Vector3 vector ) 
 	{
-		return Math.atan2( -vector.getY(), Math.sqrt( ( vector.getX() * vector.getX() ) + ( vector.getZ() * vector.getZ() ) ) );
+		return (float)Math.atan2( -vector.getY(), Math.sqrt( ( vector.getX() * vector.getX() ) + ( vector.getZ() * vector.getZ() ) ) );
 	}
 
 	/**
 	 * Texture fixing helper. Spheres have some odd behaviours.
 	 */
-	protected Vector2 correctUV( Vector2 uv, Vector3 vector, double azimuth )
+	protected Vector2 correctUV( Vector2 uv, Vector3 vector, float azimuth )
 	{
 		if ( (azimuth < 0) && (uv.getX() == 1) ) 
-			uv = new Vector2( uv.getX() - 1.0, uv.getY() );
+			uv = new Vector2( uv.getX() - 1.0f, uv.getY() );
 		
 		if ( (vector.getX() == 0) && (vector.getZ() == 0) ) 
-			uv = new Vector2( azimuth / 2.0 / Math.PI + 0.5, uv.getY() );
+			uv = new Vector2( (float)(azimuth / 2.0 / Math.PI + 0.5), uv.getY() );
 		
 		return uv.clone();
 	}

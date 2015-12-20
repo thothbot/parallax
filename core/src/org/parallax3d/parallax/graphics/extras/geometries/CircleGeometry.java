@@ -46,17 +46,17 @@ public final class CircleGeometry extends Geometry
 		this(50, 8);
 	}
 	
-	public CircleGeometry(double radius, int segments)
+	public CircleGeometry(float radius, int segments)
 	{
-		this(radius, segments, 0, Math.PI * 2.0);
+		this(radius, segments, 0, (float)(Math.PI * 2.0));
 	}
 
-	public CircleGeometry(double radius, int segments, double thetaStart, double thetaLength)
+	public CircleGeometry(float radius, int segments, float thetaStart, float thetaLength)
 	{
 	    segments = Math.max( 3, segments );
 
    		Vector3 center = new Vector3();
-   		Vector2 centerUV = new Vector2( 0.5, 0.5 );
+   		Vector2 centerUV = new Vector2( 0.5f, 0.5f );
 	    List<Vector2> uvs = new ArrayList<Vector2>();
 
 	    this.getVertices().add(center);
@@ -66,11 +66,11 @@ public final class CircleGeometry extends Geometry
 	    {
 	    	Vector3 vertex = new Vector3();
 
-	        vertex.setX(radius * Math.cos( thetaStart + (double)i / segments * thetaLength ));
-	        vertex.setY(radius * Math.sin( thetaStart + (double)i / segments * thetaLength ));
+	        vertex.setX(radius * (float)Math.cos( thetaStart + (float)i / segments * thetaLength ));
+	        vertex.setY(radius * (float)Math.sin( thetaStart + (float)i / segments * thetaLength ));
 
 	        this.getVertices().add( vertex );
-	        uvs.add( new Vector2( ( vertex.getX() / radius + 1.0 ) / 2.0, - ( vertex.getY() / radius + 1.0 ) / 2.0 + 1.0 ) );
+	        uvs.add( new Vector2( ( vertex.getX() / radius + 1.0f ) / 2.0f, - ( vertex.getY() / radius + 1.0f ) / 2.0f + 1.0f ) );
 	    }
 
 	    Vector3 n = new Vector3( 0, 0, -1 );

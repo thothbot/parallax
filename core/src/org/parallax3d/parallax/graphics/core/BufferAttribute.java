@@ -23,10 +23,12 @@ import org.parallax3d.parallax.backends.gwt.client.gl2.WebGLBuffer;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
 import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.TypeArray;
 
+import java.nio.Buffer;
+
 @ThreeJsObject("THREE.BufferAttribute")
 public class BufferAttribute {
 	
-	private TypeArray array;
+	private Buffer array;
 	private int itemSize;
 	
 	// TODO: Fix it (BufferGeometry)
@@ -35,14 +37,14 @@ public class BufferAttribute {
 	private boolean needsUpdate = false;
 	private WebGLBuffer buffer;
 	
-	public BufferAttribute(TypeArray array, int itemSize) {
+	public BufferAttribute(Buffer array, int itemSize) {
 		this.array = array;
 		this.itemSize = itemSize;
 	}
 	
 	public int 	getLength () {
 
-		return this.array.getLength();
+		return this.array.arrayOffset();
 
 	}
 	
@@ -50,11 +52,11 @@ public class BufferAttribute {
 		return this.itemSize;
 	}
 	
-	public TypeArray getArray() {
+	public Buffer getArray() {
 		return this.array;
 	}
 	
-	public void setArray(Float32Array array) {
+	public void setArray(Buffer array) {
 		this.array = array;
 	}
 	

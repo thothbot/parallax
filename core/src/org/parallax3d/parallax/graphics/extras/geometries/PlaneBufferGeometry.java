@@ -18,23 +18,25 @@
 
 package org.parallax3d.parallax.graphics.extras.geometries;
 
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Float32Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint16Array;
 import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 @ThreeJsObject("THREE.PlaneBufferGeometry")
 public class PlaneBufferGeometry extends BufferGeometry {
 
-	public PlaneBufferGeometry(double width, double height) {
+	public PlaneBufferGeometry(float width, float height) {
 		this(width, height, 1, 1);
 	}
 	
-	public PlaneBufferGeometry(double width, double height, int widthSegments, int heightSegments) {
+	public PlaneBufferGeometry(float width, float height, int widthSegments, int heightSegments) {
 		
-		double width_half = width / 2.0;
-		double height_half = height / 2.0;
+		float width_half = width / 2.0f;
+		float height_half = height / 2.0f;
 
 		int gridX = widthSegments;
 		int gridY = heightSegments;
@@ -45,28 +47,28 @@ public class PlaneBufferGeometry extends BufferGeometry {
 		int segment_width = (int) (width / gridX);
 		int segment_height = (int) (height / gridY);
 
-		Float32Array vertices = Float32Array.create( gridX1 * gridY1 * 3 );
-		Float32Array normals = Float32Array.create( gridX1 * gridY1 * 3 );
-		Float32Array uvs = Float32Array.create( gridX1 * gridY1 * 2 );
+		FloatBuffer vertices = BufferUtils.newFloatBuffer(gridX1 * gridY1 * 3);
+		FloatBuffer normals = BufferUtils.newFloatBuffer(gridX1 * gridY1 * 3);
+		FloatBuffer uvs = BufferUtils.newFloatBuffer(gridX1 * gridY1 * 2);
 
 		int offset = 0;
 		int offset2 = 0;
 
 		for ( int iy = 0; iy < gridY1; iy ++ ) {
 
-			double y = iy * segment_height - height_half;
+			float y = iy * segment_height - height_half;
 
 			for ( int ix = 0; ix < gridX1; ix ++ ) {
 
-				double x = (double)(ix * segment_width) - width_half;
+				float x = (float)(ix * segment_width) - width_half;
 
-				vertices.set( offset,       x);
-				vertices.set( offset + 1, - y);
+				vertices.put(offset, x);
+				vertices.put(offset + 1, -y);
 				
-				normals.set( offset + 2, 1.0);
+				normals.put(offset + 2, 1.0f);
 
-				uvs.set( offset2, ix / (double)gridX);
-				uvs.set( offset2 + 1, 1.0 - ( iy / (double)gridY ));
+				uvs.put(offset2, ix / (float) gridX);
+				uvs.put(offset2 + 1, 1.0f - (iy / (float) gridY));
 
 				offset += 3;
 				offset2 += 2;
@@ -77,7 +79,7 @@ public class PlaneBufferGeometry extends BufferGeometry {
 
 		offset = 0;
 
-		Uint16Array indices = Uint16Array.create( gridX * gridY * 6 );
+		IntBuffer indices = BufferUtils.newIntBuffer(gridX * gridY * 6);
 
 		for ( int iy = 0; iy < gridY; iy ++ ) {
 
@@ -88,13 +90,13 @@ public class PlaneBufferGeometry extends BufferGeometry {
 				int c = ( ix + 1 ) + gridX1 * ( iy + 1 );
 				int d = ( ix + 1 ) + gridX1 * iy;
 
-				indices.set( offset     , a );
-				indices.set( offset + 1 , b );
-				indices.set( offset + 2 , d );
+				indices.put(offset, a);
+				indices.put(offset + 1, b);
+				indices.put(offset + 2, d);
 
-				indices.set( offset + 3 , b );
-				indices.set( offset + 4 , c );
-				indices.set( offset + 5 , d );
+				indices.put( offset + 3 , b );
+				indices.put(offset + 4, c);
+				indices.put(offset + 5, d);
 
 				offset += 6;
 

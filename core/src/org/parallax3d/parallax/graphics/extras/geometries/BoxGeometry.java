@@ -47,12 +47,12 @@ public final class BoxGeometry extends Geometry
 		this(100, 100, 100, 1, 1, 1);
 	}
 
-	public BoxGeometry( double width, double height, double depth) 
+	public BoxGeometry( float width, float height, float depth) 
 	{
 		this(width, height, depth, 1, 1, 1);
 	}
 	
-	public BoxGeometry( double width, double height, double depth, int segmentsWidth, int segmentsHeight, int segmentsDepth) 
+	public BoxGeometry( float width, float height, float depth, int segmentsWidth, int segmentsHeight, int segmentsDepth) 
 	{
 		super();
 		
@@ -60,9 +60,9 @@ public final class BoxGeometry extends Geometry
 		this.heightSegments = segmentsHeight;
 		this.depthSegments = segmentsDepth;
 
-		double width_half = width / 2.0;
-		double height_half = height / 2.0;
-		double depth_half = depth / 2.0;
+		float width_half = width / 2.0f;
+		float height_half = height / 2.0f;
+		float depth_half = depth / 2.0f;
 
 		buildPlane( "z", "y", - 1, - 1, depth, height, width_half, 0 );   // px 
 		buildPlane( "z", "y",   1, - 1, depth, height, - width_half, 1 ); // nx
@@ -74,12 +74,12 @@ public final class BoxGeometry extends Geometry
 		this.mergeVertices();
 	}
 	
-	private void buildPlane( String u, String v, int udir, int vdir, double width, double height, double depth, int materialIndex ) 
+	private void buildPlane( String u, String v, int udir, int vdir, float width, float height, float depth, int materialIndex ) 
 	{
 		int gridX = this.widthSegments;
 		int gridY = this.heightSegments;
-		double width_half = width / 2.0;
-		double height_half = height / 2.0;
+		float width_half = width / 2.0f;
+		float height_half = height / 2.0f;
 		
 		int offset = this.getVertices().size();
 
@@ -103,8 +103,8 @@ public final class BoxGeometry extends Geometry
 
 		int gridX1 = gridX + 1;
 		int gridY1 = gridY + 1;
-		double segment_width = width / (double)gridX;
-		double segment_height = height / (double)gridY;
+		float segment_width = width / (float)gridX;
+		float segment_height = height / (float)gridY;
 		Vector3 normal = new Vector3();
 
 		int normalValue = (depth > 0) ? 1 : - 1;
@@ -121,7 +121,7 @@ public final class BoxGeometry extends Geometry
 			{
 				Vector3 vector = new Vector3();
 				
-				double u1 = (double)( ix * segment_width - width_half ) * udir;
+				float u1 = (float)( ix * segment_width - width_half ) * udir;
 				if(u.equals("x"))
 					vector.setX(u1);
 				else if(u.equals("y"))
@@ -129,7 +129,7 @@ public final class BoxGeometry extends Geometry
 				else if(u.equals("z"))
 					vector.setZ(u1);
 
-				double v1 = (double)( iy * segment_height - height_half ) * vdir;
+				float v1 = (float)( iy * segment_height - height_half ) * vdir;
 				if(v.equals("x"))
 					vector.setX(v1);
 				else if(v.equals("y"))
@@ -157,10 +157,10 @@ public final class BoxGeometry extends Geometry
 				int c = ( ix + 1 ) + gridX1 * ( iy + 1 );
 				int d = ( ix + 1 ) + gridX1 * iy;
 				
-				Vector2 uva = new Vector2( ix / (double)gridX, 1.0 - iy / (double)gridY );
-				Vector2 uvb = new Vector2( ix / (double)gridX, 1.0 - ( iy + 1.0 ) / (double)gridY );
-				Vector2 uvc = new Vector2( ( ix + 1.0 ) / (double)gridX, 1.0 - ( iy + 1.0 ) / (double)gridY );
-				Vector2 uvd = new Vector2( ( ix + 1.0 ) / (double)gridX, 1.0 - iy / (double)gridY );
+				Vector2 uva = new Vector2( ix / (float)gridX, 1.0f - iy / (float)gridY );
+				Vector2 uvb = new Vector2( ix / (float)gridX, 1.0f - ( iy + 1.0f ) / (float)gridY );
+				Vector2 uvc = new Vector2( ( ix + 1.0f ) / (float)gridX, 1.0f - ( iy + 1.0f ) / (float)gridY );
+				Vector2 uvd = new Vector2( ( ix + 1.0f ) / (float)gridX, 1.0f - iy / (float)gridY );
 
 				Face3 face = new Face3( a + offset, b + offset, d + offset );
 				face.getNormal().copy( normal );

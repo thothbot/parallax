@@ -20,21 +20,21 @@ package org.parallax3d.parallax.graphics.extras.geometries;
 
 public final class Icosahedron2Geometry extends PolyhedronGeometry 
 {
-	public Icosahedron2Geometry( double radius, int detail ) 
+	public Icosahedron2Geometry( float radius, int detail ) 
 	{
 		super(radius, detail );
 	}	
 	
 	@Override
-	protected double[][] getGeometryVertices() 
+	protected float[][] getGeometryVertices() 
 	{
-		double a = 4 / Math.sqrt( 2 * (5 + Math.sqrt(5)) ) / 2;
-		double b = Math.sqrt(1 - a*a);
+		float a = (float)(4 / Math.sqrt( 2 * (5 + Math.sqrt(5)) ) / 2);
+		float b = (float)Math.sqrt(1 - a*a);
 		
-		double[][] vertices = {
-				{-a, 0.0, b}, {a, 0.0, b}, {-a, 0.0, -b}, {a, 0.0, -b},
-				{0.0, b, a}, {0.0, b, -a}, {0.0, -b, a}, {0.0, -b, -a},
-				{b, a, 0.0}, {-b, a, 0.0}, {b, -a, 0.0}, {-b, -a, 0.0}
+		float[][] vertices = {
+				{-a, 0.0f, b}, {a, 0.0f, b}, {-a, 0.0f, -b}, {a, 0.0f, -b},
+				{0.0f, b, a}, {0.0f, b, -a}, {0.0f, -b, a}, {0.0f, -b, -a},
+				{b, a, 0.0f}, {-b, a, 0.0f}, {b, -a, 0.0f}, {-b, -a, 0.0f}
 		};
 		
 		return vertices;

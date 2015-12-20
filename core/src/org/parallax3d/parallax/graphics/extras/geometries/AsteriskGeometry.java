@@ -24,15 +24,15 @@ import org.parallax3d.parallax.math.Vector3;
 public class AsteriskGeometry extends Geometry
 {
 
-	public AsteriskGeometry(double innerRadius, double outerRadius )
+	public AsteriskGeometry(float innerRadius, float outerRadius )
 	{
-		double sd = innerRadius;
-		double ed = outerRadius;
+		float sd = innerRadius;
+		float ed = outerRadius;
 
-		double sd2 = 0.707 * sd;
-		double ed2 = 0.707 * ed;
+		float sd2 = 0.707f * sd;
+		float ed2 = 0.707f * ed;
 
-		double[][] rays = { { sd, 0, 0 }, { ed, 0, 0 }, { -sd, 0, 0 }, { -ed, 0, 0 },
+		float[][] rays = { { sd, 0, 0 }, { ed, 0, 0 }, { -sd, 0, 0 }, { -ed, 0, 0 },
 					 { 0, sd, 0 }, { 0, ed, 0 }, { 0, -sd, 0 }, { 0, -ed, 0 },
 					 { 0, 0, sd }, { 0, 0, ed }, { 0, 0, -sd }, { 0, 0, -ed },
 					 { sd2, sd2, 0 }, { ed2, ed2, 0 }, { -sd2, -sd2, 0 }, { -ed2, -ed2, 0 },
@@ -45,9 +45,9 @@ public class AsteriskGeometry extends Geometry
 
 		for ( int i = 0, il = rays.length; i < il; i ++ ) 
 		{
-			double x = rays[ i ][ 0 ];
-			double y = rays[ i ][ 1 ];
-			double z = rays[ i ][ 2 ];
+			float x = rays[ i ][ 0 ];
+			float y = rays[ i ][ 1 ];
+			float z = rays[ i ][ 2 ];
 
 			this.getVertices().add( new Vector3( x, y, z ) );
 		}

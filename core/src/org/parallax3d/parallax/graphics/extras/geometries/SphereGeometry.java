@@ -45,22 +45,22 @@ public final class SphereGeometry extends Geometry
 		this(50);
 	}
 
-	public SphereGeometry(double radius) 
+	public SphereGeometry(float radius) 
 	{
 		this(radius, 8, 6);
 	}
 	
-	public SphereGeometry(double radius, int segmentsWidth, int segmentsHeight) 
+	public SphereGeometry(float radius, int segmentsWidth, int segmentsHeight) 
 	{
-		this(radius, segmentsWidth, segmentsHeight, 0.0, Math.PI * 2.0 );
+		this(radius, segmentsWidth, segmentsHeight, 0.0f, (float)(Math.PI * 2.0) );
 	}
 	
-	public SphereGeometry(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength)
+	public SphereGeometry(float radius, int segmentsWidth, int segmentsHeight, float phiStart, float phiLength)
 	{
-		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0, Math.PI);
+		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0f, (float)Math.PI);
 	}
 
-	public SphereGeometry(double radius, int widthSegments, int heightSegments, double phiStart, double phiLength, double thetaStart, double thetaLength) 
+	public SphereGeometry(float radius, int widthSegments, int heightSegments, float phiStart, float phiLength, float thetaStart, float thetaLength) 
 	{
 		super();
 		
@@ -75,13 +75,13 @@ public final class SphereGeometry extends Geometry
 			for (int x = 0; x <= widthSegments; x++) 
 			{
 
-				double u = x / (double)widthSegments;
-				double v = y / (double)heightSegments;
+				float u = x / (float)widthSegments;
+				float v = y / (float)heightSegments;
 
 				Vector3 vertex = new Vector3();
-				vertex.setX(- radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
-				vertex.setY(radius * Math.cos( thetaStart + v * thetaLength ));
-				vertex.setZ(radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
+				vertex.setX(- radius * (float)Math.cos( phiStart + u * phiLength ) * (float)Math.sin( thetaStart + v * thetaLength ));
+				vertex.setY(radius * (float)Math.cos( thetaStart + v * thetaLength ));
+				vertex.setZ(radius * (float)Math.sin( phiStart + u * phiLength ) * (float)Math.sin( thetaStart + v * thetaLength ));
 				
 				getVertices().add( vertex );
 
@@ -114,13 +114,13 @@ public final class SphereGeometry extends Geometry
 
 				if ( Math.abs( getVertices().get( v1 ).getY() ) == radius ) 
 				{
-					uv1.setX( ( uv1.getX() + uv2.getX() ) / 2.0 );
+					uv1.setX( ( uv1.getX() + uv2.getX() ) / 2.0f );
 					getFaces().add( new Face3( v1, v3, v4, Arrays.asList( n1, n3, n4 ) ) );
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv3, uv4 ) );
 				} 
 				else if ( Math.abs( getVertices().get( v3 ).getY() ) ==  radius ) 
 				{
-					uv3.setX( ( uv3.getX() + uv4.getX() ) / 2.0 );
+					uv3.setX( ( uv3.getX() + uv4.getX() ) / 2.0f );
 					getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
 

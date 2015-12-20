@@ -39,7 +39,7 @@ public class ParametricGeometry extends Geometry
 {
 	public static interface ParametricFunction 
 	{
-		Vector3 run(double u, double v);
+		Vector3 run(float u, float v);
 	}
 
 	public ParametricGeometry(final ParametricFunction function, int slices, int stacks)
@@ -50,11 +50,11 @@ public class ParametricGeometry extends Geometry
 		
 		for ( int i = 0; i <= stacks; i ++ ) 
 		{
-			double v = i / (double)stacks;
+			float v = i / (float)stacks;
 
 			for ( int j = 0; j <= slices; j ++ ) 
 			{
-				double u = j / (double)slices;
+				float u = j / (float)slices;
 
 				Vector3 p = function.run( u, v );
 				this.getVertices().add( p );
@@ -71,10 +71,10 @@ public class ParametricGeometry extends Geometry
 				int c = (i + 1) * sliceCount + j;
 				int d = (i + 1) * sliceCount + j + 1;
 
-				Vector2 uva = new Vector2( i / (double)slices,                      j / (double)stacks );
-				Vector2 uvb = new Vector2( i / (double)slices,            ( j + 1.0 ) / (double)stacks );
-				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)slices,            j / (double)stacks );
-				Vector2 uvd = new Vector2( ( i + 1.0 ) / (double)slices,  ( j + 1.0 ) / (double)stacks );
+				Vector2 uva = new Vector2( i / (float)slices,                      j / (float)stacks );
+				Vector2 uvb = new Vector2( i / (float)slices,            ( j + 1.0f ) / (float)stacks );
+				Vector2 uvc = new Vector2( ( i + 1.0f ) / (float)slices,            j / (float)stacks );
+				Vector2 uvd = new Vector2( ( i + 1.0f ) / (float)slices,  ( j + 1.0f ) / (float)stacks );
 
 				this.getFaces().add( new Face3( a, b, c ) );
 				this.getFaces().add( new Face3( b, d, c ) );

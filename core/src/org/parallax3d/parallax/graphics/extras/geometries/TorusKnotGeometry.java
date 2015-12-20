@@ -24,6 +24,7 @@ import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/torus_knot.gif" />
@@ -65,9 +66,9 @@ public final class TorusKnotGeometry extends Geometry
 		for ( int i = 0; i < radialSegments; ++ i )  	
 		{
 			grid[ i ] = new int[tubularSegments];
-			double u = i / (double)radialSegments * 2.0 * p * Math.PI;
+			float u = i / (float)radialSegments * 2.0f * p * (float)Math.PI;
 			Vector3 p1 = getPos( u,        q, p, radius, heightScale );
-			Vector3 p2 = getPos( u + 0.01, q, p, radius, heightScale );
+			Vector3 p2 = getPos( u + 0.01f, q, p, radius, heightScale );
 			tang.sub( p2, p1 );
 			n.add( p2, p1 );
 			bitan.cross( tang, n );
@@ -77,9 +78,9 @@ public final class TorusKnotGeometry extends Geometry
 			
 			for ( int j = 0; j < tubularSegments; ++ j ) 
 			{
-				double v = j / (double)tubularSegments * 2.0 * Math.PI;
-				double cx = -tube * Math.cos( v ); // TODO: Hack: Negating it so it faces outside.
-				double cy = tube * Math.sin( v );
+				float v = j / (float)tubularSegments * 2.0f * (float)Math.PI;
+				float cx = -tube * (float)Math.cos( v ); // TODO: Hack: Negating it so it faces outside.
+				float cy = tube * (float)Math.sin( v );
 
 				Vector3 pos = new Vector3();
 				pos.setX( p1.getX() + cx * n.getX() + cy * bitan.getX() );
@@ -102,10 +103,10 @@ public final class TorusKnotGeometry extends Geometry
 				int c = grid[ ip ][ jp ];
 				int d = grid[ i ][ jp ];
 
-				Vector2 uva = new Vector2(           i / (double)radialSegments,           j / (double)tubularSegments );
-				Vector2 uvb = new Vector2( ( i + 1.0 ) / (double)radialSegments,           j / (double)tubularSegments );
-				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)radialSegments, ( j + 1.0 ) / (double)tubularSegments );
-				Vector2 uvd = new Vector2(           i / (double)radialSegments, ( j + 1.0 ) / (double)tubularSegments );
+				Vector2 uva = new Vector2(           i / (float)radialSegments,           j / (float)tubularSegments );
+				Vector2 uvb = new Vector2( ( i + 1.0f ) / (float)radialSegments,           j / (float)tubularSegments );
+				Vector2 uvc = new Vector2( ( i + 1.0f ) / (float)radialSegments, ( j + 1.0f ) / (float)tubularSegments );
+				Vector2 uvd = new Vector2(           i / (float)radialSegments, ( j + 1.0f ) / (float)tubularSegments );
 		
 				getFaces().add( new Face3( a, b, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvd ) );
@@ -126,17 +127,17 @@ public final class TorusKnotGeometry extends Geometry
 		return getVertices().size() - 1;
 	}
 
-	private Vector3 getPos( double u, int in_q, int in_p, int radius, int heightScale ) 
+	private Vector3 getPos( float u, int in_q, int in_p, int radius, int heightScale ) 
 	{
-		double cu = Math.cos( u );
-		double su = Math.sin( u );
-		double quOverP = in_q / (double)in_p * u;
-		double cs = Math.cos( quOverP );
+		float cu = (float)Math.cos( u );
+		float su = (float)Math.sin( u );
+		float quOverP = in_q / (float)in_p * u;
+		float cs = (float)Math.cos( quOverP );
 
 		return new Vector3( 
-			radius * ( 2.0 + cs ) * cu * 0.5,
-			radius * ( 2.0 + cs ) * su * 0.5,
-			heightScale * radius * Math.sin( quOverP ) * 0.5
+			radius * ( 2.0f + cs ) * cu * 0.5f,
+			radius * ( 2.0f + cs ) * su * 0.5f,
+			heightScale * radius * (float)Math.sin( quOverP ) * 0.5f
 		);
 	}
 }
