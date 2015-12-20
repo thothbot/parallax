@@ -110,7 +110,7 @@ public abstract class Shader
 	/**
 	 * Gets the shader program.
 	 */
-	public int getProgram()
+	public Integer getProgram()
 	{
 		return this.program;
 	}
