@@ -18,9 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 /**
  * Source for all chunks.
@@ -28,163 +26,213 @@ import com.google.gwt.resources.client.TextResource;
  * @author thothbot
  *
  */
-public interface Chunks extends ClientBundle
+public class Chunks
 {
-	Chunks INSTANCE = GWT.create(Chunks.class);
-
-	@Source("chunk/alphamap_fragment.glsl")
-	TextResource getAlphamapFragment();
+	public static String getAlphamapFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/alphamap_fragment.glsl").readString();
+	}
 	
-	@Source("chunk/alphamap_pars_fragment.glsl")
-	TextResource getAlphamapParsFragment();
+	public static String getAlphamapParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/alphamap_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/alphatest_fragment.glsl")
-	TextResource getAlphatestFragment();
+	public static String getAlphatestFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/alphatest_fragment.glsl").readString();
+	}
 	
-	@Source("chunk/bumpmap_pars_fragment.glsl")
-	TextResource getBumpmapParsFragment();
+	public static String getBumpmapParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/bumpmap_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/color_fragment.glsl")
-	TextResource getColorFragment();
+	public static String getColorFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/color_fragment.glsl").readString();
+	}
 
-	@Source("chunk/color_pars_fragment.glsl")
-	TextResource getColorParsFragment();
+	public static String getColorParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/color_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/color_pars_vertex.glsl")
-	TextResource getColorParsVertex();
+	public static String getColorParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/color_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/color_vertex.glsl")
-	TextResource getColorVertex();
+	public static String getColorVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/color_vertex.glsl").readString();
+	}
 
-	@Source("chunk/defaultnormal_vertex.glsl")
-	TextResource getDefaultNormalVertex();
+	public static String getDefaultNormalVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/defaultnormal_vertex.glsl").readString();
+	}
 		
-	@Source("chunk/default_vertex.glsl")
-	TextResource getDefaultVertex();
+	public static String getDefaultVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/default_vertex.glsl").readString();
+	}
 
-	@Source("chunk/envmap_fragment.glsl")
-	TextResource getEnvmapFragment();
+	public static String getEnvmapFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/envmap_fragment.glsl").readString();
+	}
 
-	@Source("chunk/envmap_pars_fragment.glsl")
-	TextResource getEnvmapParsFragment();
+	public static String getEnvmapParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/envmap_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/envmap_pars_vertex.glsl")
-	TextResource getEnvmapParsVertex();
+	public static String getEnvmapParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/envmap_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/envmap_vertex.glsl")
-	TextResource getEnvmapVertex();
+	public static String getEnvmapVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/envmap_vertex.glsl").readString();
+	}
 
-	@Source("chunk/fog_fragment.glsl")
-	TextResource getFogFragment();
+	public static String getFogFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/fog_fragment.glsl").readString();
+	}
 
-	@Source("chunk/fog_pars_fragment.glsl")
-	TextResource getFogParsFragment();
+	public static String getFogParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/fog_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/lightmap_fragment.glsl")
-	TextResource getLightmapFragment();
+	public static String getLightmapFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lightmap_fragment.glsl").readString();
+	}
 
-	@Source("chunk/lightmap_pars_fragment.glsl")
-	TextResource getLightmapParsFragment();
+	public static String getLightmapParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lightmap_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/lightmap_pars_vertex.glsl")
-	TextResource getLightmapParsVertex();
+	public static String getLightmapParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lightmap_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/lightmap_vertex.glsl")
-	TextResource getLightmapVertex();
+	public static String getLightmapVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lightmap_vertex.glsl").readString();
+	}
 
-	@Source("chunk/lights_lambert_pars_vertex.glsl")
-	TextResource getLightsLambertParsVertex();
+	public static String getLightsLambertParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_lambert_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/lights_lambert_vertex.glsl")
-	TextResource getLightsLambertVertex();
+	public static String getLightsLambertVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_lambert_vertex.glsl").readString();
+	}
 
-	@Source("chunk/lights_phong_fragment.glsl")
-	TextResource getLightsPhongFragment();
+	public static String getLightsPhongFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_phong_fragment.glsl").readString();
+	}
 
-	@Source("chunk/lights_phong_pars_fragment.glsl")
-	TextResource getLightsPhongParsFragment();
+	public static String getLightsPhongParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_phong_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/lights_phong_pars_vertex.glsl")
-	TextResource getLightsPhongParsVertex();
+	public static String getLightsPhongParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_phong_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/lights_phong_vertex.glsl")
-	TextResource getLightsPhongVertex();
+	public static String getLightsPhongVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_phong_vertex.glsl").readString();
+	}
 
-	@Source("chunk/linear_to_gamma_fragment.glsl")
-	TextResource getLinearToGammaFragment();
+	public static String getLinearToGammaFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/linear_to_gamma_fragment.glsl").readString();
+	}
 	
-	@Source("chunk/logdepthbuf_fragment.glsl")
-	TextResource getLogdepthbufFragment();
+	public static String getLogdepthbufFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/logdepthbuf_fragment.glsl").readString();
+	}
 	
-	@Source("chunk/logdepthbuf_par_fragment.glsl")
-	TextResource getLogdepthbufParFragment();
+	public static String getLogdepthbufParFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/logdepthbuf_par_fragment.glsl").readString();
+	}
 	
-	@Source("chunk/logdepthbuf_par_vertex.glsl")
-	TextResource getLogdepthbufParVertex();
+	public static String getLogdepthbufParVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/logdepthbuf_par_vertex.glsl").readString();
+	}
 	
-	@Source("chunk/logdepthbuf_vertex.glsl")
-	TextResource getLogdepthbufVertex();
+	public static String getLogdepthbufVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/logdepthbuf_vertex.glsl").readString();
+	}
 
-	@Source("chunk/map_fragment.glsl")
-	TextResource getMapFragment();
+	public static String getMapFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_fragment.glsl").readString();
+	}
 
-	@Source("chunk/map_pars_fragment.glsl")
-	TextResource getMapParsFragment();
+	public static String getMapParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/map_pars_vertex.glsl")
-	TextResource getMapParsVertex();
+	public static String getMapParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/map_particle_fragment.glsl")
-	TextResource getMapParticleFragment();
+	public static String getMapParticleFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_particle_fragment.glsl").readString();
+	}
 
-	@Source("chunk/map_particle_pars_fragment.glsl")
-	TextResource getMapParticleParsFragment();
+	public static String getMapParticleParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_particle_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/map_vertex.glsl")
-	TextResource getMapVertex();
+	public static String getMapVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_vertex.glsl").readString();
+	}
 
-	@Source("chunk/morphnormal_vertex.glsl")
-	TextResource getMorphnormalVertex();
+	public static String getMorphnormalVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/morphnormal_vertex.glsl").readString();
+	}
 
-	@Source("chunk/morphtarget_pars_vertex.glsl")
-	TextResource getMorphtargetParsVertex();
+	public static String getMorphtargetParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/morphtarget_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/morphtarget_vertex.glsl")
-	TextResource getMorphtargetVertex();
+	public static String getMorphtargetVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/morphtarget_vertex.glsl").readString();
+	}
 	
-	@Source("chunk/normalmap_pars_fragment.glsl")
-	TextResource getNormalmapParsFragment();
+	public static String getNormalmapParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/normalmap_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/shadowmap_fragment.glsl")
-	TextResource getShadowmapFragment();
+	public static String getShadowmapFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/shadowmap_fragment.glsl").readString();
+	}
 
-	@Source("chunk/shadowmap_pars_fragment.glsl")
-	TextResource getShadowmapParsFragment();
+	public static String getShadowmapParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/shadowmap_pars_fragment.glsl").readString();
+	}
 
-	@Source("chunk/shadowmap_pars_vertex.glsl")
-	TextResource getShadowmapParsVertex();
+	public static String getShadowmapParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/shadowmap_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/shadowmap_vertex.glsl")
-	TextResource getShadowmapVertex();
+	public static String getShadowmapVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/shadowmap_vertex.glsl").readString();
+	}
 
-	@Source("chunk/skinning_pars_vertex.glsl")
-	TextResource getSkinningParsVertex();
+	public static String getSkinningParsVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/skinning_pars_vertex.glsl").readString();
+	}
 
-	@Source("chunk/skinning_vertex.glsl")
-	TextResource getSkinningVertex();
+	public static String getSkinningVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/skinning_vertex.glsl").readString();
+	}
 	
-	@Source("chunk/skinbase_vertex.glsl")
-	TextResource getSkinBaseVertex();
+	public static String getSkinBaseVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/skinbase_vertex.glsl").readString();
+	}
 	
-	@Source("chunk/skinnormal_vertex.glsl")
-	TextResource getSkinNormalVertex();
+	public static String getSkinNormalVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/skinnormal_vertex.glsl").readString();
+	}
 	
-	@Source("chunk/specularmap_fragment.glsl")
-	TextResource getSpecularmapFragment();
+	public static String getSpecularmapFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/specularmap_fragment.glsl").readString();
+	}
 	
-	@Source("chunk/specularmap_pars_fragment.glsl")
-	TextResource getSpecularmapParsFragment();
+	public static String getSpecularmapParsFragment(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/specularmap_pars_fragment.glsl").readString();
+	}
 	
-	@Source("chunk/worldpos_vertex.glsl")
-	TextResource getWorldposVertex();
+	public static String getWorldposVertex(){
+		return Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/chunk/worldpos_vertex.glsl").readString();
+	}
 }

@@ -21,12 +21,10 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
 
 /**
  * Normal map shader<br>
@@ -41,21 +39,10 @@ import com.google.gwt.resources.client.TextResource;
  */
 public final class NormalMapShader extends Shader 
 {
-
-	interface Resources extends DefaultResources
+	public NormalMapShader()
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("source/normalmap.vs")
-		TextResource getVertexShader();
-
-		@Source("source/normalmap.fs")
-		TextResource getFragmentShader();
-	}
-
-	public NormalMapShader() 
-	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normalmap.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normalmap.fs").readString());
 	}
 	
 	@Override
@@ -81,23 +68,23 @@ public final class NormalMapShader extends Shader
 		
 		this.addUniform("uNormalScale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 ) ));
 		
-		this.addUniform("uDisplacementBias",  new Uniform(Uniform.TYPE.F, 0.0 ));
-		this.addUniform("uDisplacementScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("uDisplacementBias",  new Uniform(Uniform.TYPE.F, 0.0f ));
+		this.addUniform("uDisplacementScale", new Uniform(Uniform.TYPE.F, 1.0f ));
 		
 		this.addUniform("diffuse",  new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
 		this.addUniform("ambient",  new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
-		this.addUniform("shininess",     new Uniform(Uniform.TYPE.F, 30.0  ));
-		this.addUniform("opacity",       new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("shininess",     new Uniform(Uniform.TYPE.F, 30.0f  ));
+		this.addUniform("opacity",       new Uniform(Uniform.TYPE.F, 1.0f ));
 		
 		this.addUniform("useRefract", new Uniform(Uniform.TYPE.I, false ));
-		this.addUniform("refractionRatio", new Uniform(Uniform.TYPE.F, 0.98 ));
-		this.addUniform("reflectivity", new Uniform(Uniform.TYPE.F, 0.5 ));
+		this.addUniform("refractionRatio", new Uniform(Uniform.TYPE.F, 0.98f ));
+		this.addUniform("reflectivity", new Uniform(Uniform.TYPE.F, 0.5f ));
 		
-		this.addUniform("uOffset", new Uniform(Uniform.TYPE.V2, new Vector2( 0.0, 0.0 ) ));
-		this.addUniform("uRepeat", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 ) ));
+		this.addUniform("uOffset", new Uniform(Uniform.TYPE.V2, new Vector2( 0.0f, 0.0f ) ));
+		this.addUniform("uRepeat", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0f, 1.0f ) ));
 		
-		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0, 1.0, 1.0 ) ));
+		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0f, 1.0f, 1.0f ) ));
 	}
 	
 	@Override

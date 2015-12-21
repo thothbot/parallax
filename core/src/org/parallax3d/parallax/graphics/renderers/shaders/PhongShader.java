@@ -21,11 +21,9 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
 
 /**
  * Phong shading - lighting model three-dimensional objects, 
@@ -39,20 +37,10 @@ import com.google.gwt.resources.client.TextResource;
 public final class PhongShader extends Shader
 {
 
-	interface Resources extends DefaultResources
-	{
-		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/phong.vs")
-		TextResource getVertexShader();
-
-		@Source("source/phong.fs")
-		TextResource getFragmentShader();
-	}
-	
 	public PhongShader() 
 	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/phong.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/phong.fs").readString());
 	}
 
 	@Override
@@ -67,7 +55,7 @@ public final class PhongShader extends Shader
 		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
 		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
-		this.addUniform("shininess", new Uniform(Uniform.TYPE.F, 30.0 ));
+		this.addUniform("shininess", new Uniform(Uniform.TYPE.F, 30.0f ));
 		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1, 1, 1 ) ));
 	}
 	

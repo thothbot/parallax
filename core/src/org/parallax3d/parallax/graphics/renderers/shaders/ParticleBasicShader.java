@@ -21,8 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 /**
  * Simple Particle shader.
@@ -34,20 +33,11 @@ import com.google.gwt.resources.client.TextResource;
  */
 public final class ParticleBasicShader extends Shader
 {
-	interface Resources extends DefaultResources
-	{
-		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/particle_basic.vs")
-		TextResource getVertexShader();
 
-		@Source("source/particle_basic.fs")
-		TextResource getFragmentShader();
-	}
-	
 	public ParticleBasicShader() 
 	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/particle_basic.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/particle_basic.fs").readString());
 	}
 
 	@Override

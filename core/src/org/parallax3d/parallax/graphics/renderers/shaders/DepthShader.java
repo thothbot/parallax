@@ -21,8 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 /**
  * Simple depth shader.
@@ -34,29 +33,19 @@ import com.google.gwt.resources.client.TextResource;
  */
 public final class DepthShader extends Shader
 {
-	interface Resources extends DefaultResources
-	{
-		Resources INSTANCE = GWT.create(Resources.class);
 
-		@Source("source/depth.vs")
-		TextResource getVertexShader();
-		
-		@Source("source/depth.fs")
-		TextResource getFragmentShader();
-		
-	}
-	
 	public DepthShader() 
 	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depth.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depth.fs").readString());
 	}
 
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0 ));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0f ));
+		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0f ));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0f ));
 	}
 	
 	@Override

@@ -21,8 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 /**
  * CubeGeometry map shader.
@@ -34,27 +33,17 @@ import com.google.gwt.resources.client.TextResource;
  */
 public final class CubeShader extends Shader 
 {
-	interface Resources extends DefaultResources
+	public CubeShader()
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("source/cube.vs")
-		TextResource getVertexShader();
-
-		@Source("source/cube.fs")
-		TextResource getFragmentShader();
-	}
-
-	public CubeShader() 
-	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/cube.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/cube.fs").readString());
 	}
 
 	@Override
 	protected void initUniforms()
 	{
 		this.addUniform("tCube", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0 ));
+		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0f ));
 	}
 	
 	@Override

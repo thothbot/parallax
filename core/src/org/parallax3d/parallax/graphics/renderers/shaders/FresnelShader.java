@@ -18,8 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 /**
  * Fresnel shader.
@@ -32,29 +31,19 @@ import com.google.gwt.resources.client.TextResource;
 public final class FresnelShader extends Shader 
 {
 
-	interface Resources extends DefaultResources
-	{
-		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("source/fresnel.vs")
-		TextResource getVertexShader();
-
-		@Source("source/fresnel.fs")
-		TextResource getFragmentShader();
-	}
-
 	public FresnelShader() 
 	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/fresnel.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/fresnel.fs").readString());
 	}
 
 	@Override
 	protected void initUniforms() 
 	{
-		this.addUniform("mRefractionRatio", new Uniform(Uniform.TYPE.F, 1.02 ));
-		this.addUniform("mFresnelBias", new Uniform(Uniform.TYPE.F, .1 ));
-		this.addUniform("mFresnelPower", new Uniform(Uniform.TYPE.F, 2.0 ));
-		this.addUniform("mFresnelScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("mRefractionRatio", new Uniform(Uniform.TYPE.F, 1.02f ));
+		this.addUniform("mFresnelBias", new Uniform(Uniform.TYPE.F, .1f ));
+		this.addUniform("mFresnelPower", new Uniform(Uniform.TYPE.F, 2.0f ));
+		this.addUniform("mFresnelScale", new Uniform(Uniform.TYPE.F, 1.0f ));
 		this.addUniform("tCube", new Uniform(Uniform.TYPE.T ));
 	}
 }

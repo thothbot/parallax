@@ -21,26 +21,15 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 public class DashedShader extends Shader 
 {
 
-	interface Resources extends DefaultResources
-	{
-		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("source/dashed.vs")
-		TextResource getVertexShader();
-
-		@Source("source/dashed.fs")
-		TextResource getFragmentShader();
-	}
-
 	public DashedShader() 
 	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/dashed.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/dashed.fs").readString());
 	}
 
 	@Override
@@ -48,9 +37,9 @@ public class DashedShader extends Shader
 	{
 		this.setUniforms(UniformsLib.getCommon());
 		this.setUniforms(UniformsLib.getFog());
-		this.addUniform("scale",     new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("totalSize", new Uniform(Uniform.TYPE.F, 2.0 ));
+		this.addUniform("scale",     new Uniform(Uniform.TYPE.F, 1.0f ));
+		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F, 1.0f ));
+		this.addUniform("totalSize", new Uniform(Uniform.TYPE.F, 2.0f ));
 	}
 	
 	@Override

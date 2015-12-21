@@ -21,8 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 /**
  * Normal shader.
@@ -34,26 +33,17 @@ import com.google.gwt.resources.client.TextResource;
  */
 public final class NormalShader extends Shader
 {
-	interface Resources extends DefaultResources
-	{
-		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/normal.vs")
-		TextResource getVertexShader();
-
-		@Source("source/normal.fs")
-		TextResource getFragmentShader();
-	}
 
 	public NormalShader() 
 	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normal.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normal.fs").readString());
 	}
 
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0f ));
 	}
 	
 	@Override

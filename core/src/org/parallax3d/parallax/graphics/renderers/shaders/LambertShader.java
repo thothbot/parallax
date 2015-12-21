@@ -21,11 +21,9 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
 
 /**
  * Lambert shader. This is the simplest model of light - a pure diffuse lighting. 
@@ -40,21 +38,10 @@ import com.google.gwt.resources.client.TextResource;
  */
 public final class LambertShader extends Shader
 {
-
-	interface Resources extends DefaultResources
+	public LambertShader()
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/lambert.vs")
-		TextResource getVertexShader();
-
-		@Source("source/lambert.fs")
-		TextResource getFragmentShader();
-	}
-
-	public LambertShader() 
-	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/lambert.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/lambert.fs").readString());
 	}
 
 	@Override
@@ -66,7 +53,7 @@ public final class LambertShader extends Shader
 		this.setUniforms(UniformsLib.getShadowmap());
 		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
-		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0, 1.0, 1.0 ) ));
+		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0f, 1.0f, 1.0f ) ));
 	}
 	
 	@Override

@@ -21,8 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 /**
  * Depth encoding into RGBA texture.
@@ -35,20 +34,11 @@ import com.google.gwt.resources.client.TextResource;
  */
 public final class DepthRGBAShader extends Shader
 {
-	interface Resources extends DefaultResources
-	{
-		Resources INSTANCE = GWT.create(Resources.class);
-		
-		@Source("source/depthRGBA.vs")
-		TextResource getVertexShader();
-
-		@Source("source/depthRGBA.fs")
-		TextResource getFragmentShader();
-	}
 
 	public DepthRGBAShader() 
 	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depthRGBA.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depthRGBA.fs").readString());
 	}
 
 	@Override

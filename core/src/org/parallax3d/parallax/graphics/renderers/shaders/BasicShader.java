@@ -21,8 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.Parallax;
 
 /**
  * Basic shader.
@@ -34,21 +33,10 @@ import com.google.gwt.resources.client.TextResource;
  */
 public final class BasicShader extends Shader
 {
-
-	interface Resources extends DefaultResources
+	public BasicShader()
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
-
-		@Source("source/basic.vs")
-		TextResource getVertexShader();
-
-		@Source("source/basic.fs")
-		TextResource getFragmentShader();
-	}
-
-	public BasicShader() 
-	{
-		super(Resources.INSTANCE);
+		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/basic.vs").readString(),
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/basic.fs").readString());
 	}
 
 	@Override
