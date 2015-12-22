@@ -45,8 +45,8 @@
     </properties>
 
     <modules>
-        <module>core</module>
-        <module>backends/parallax-gwt</module>
+        <module>parallax</module>
+        <module>backends/parallax-backend-gwt</module>
     </modules>
 
     <build>

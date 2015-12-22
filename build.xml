@@ -50,7 +50,7 @@
 				Copyright &copy; 2012-2015 Alex Usachev (thothbot@gmail.com)
 				</i></div>
 			]]></bottom>
-            <fileset dir="core/src" defaultexcludes="yes">
+            <fileset dir="parallax/src" defaultexcludes="yes">
                 <include name="org/parallax3d/parallax/**" />
                 <exclude name="org/parallax3d/parallax/**/*.glsl"/>
             </fileset>

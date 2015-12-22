@@ -30,7 +30,6 @@ configure(allprojects) {
 
     repositories {
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
     group = GROUPID
@@ -49,12 +48,22 @@ configure(allprojects) {
     }
 }
 
-project(":core") {
+project(":parallax") {
 
     sourceSets.test.java.srcDirs = ["test"]
 
     dependencies {
         testCompile "junit:junit:$junitVersion"
+    }
+}
+
+project(":backends:parallax-backend-gwt") {
+    sourceSets.main.java.exclude "**/System.java"
+
+    dependencies {
+        compile project(":parallax")
+        optional "com.google.gwt:gwt-user:$gwtVersion"
+        optional "com.google.gwt:gwt-dev:$gwtVersion"
     }
 }
 
