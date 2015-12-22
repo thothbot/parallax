@@ -8,7 +8,9 @@
 
 	<public path="resources" />
 
+	<super-source path="gwt/jre" />
 	<source path="gwt">
+		<exclude name="**/jre/**" />
 	</source>
 
 </module>
