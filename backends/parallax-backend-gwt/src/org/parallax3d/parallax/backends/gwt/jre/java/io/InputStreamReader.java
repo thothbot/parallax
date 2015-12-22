@@ -10,7 +10,7 @@
 
 package java.io;
 
-import com.badlogic.gdx.utils.Utf8Decoder;
+import org.parallax3d.parallax.system.Utf8Decoder;
 
 public class InputStreamReader extends Reader {
 	private final InputStream in;
