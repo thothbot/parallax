@@ -24,6 +24,8 @@ import static org.junit.Assert.*;
 public class Vector4Test
 {
 
+	private static float DELTA = 0.01f;
+
 	private static float X = 2;
 	private static float Y = 3;
 	private static float Z = 4;
@@ -33,16 +35,16 @@ public class Vector4Test
 	public void testVector4()
 	{
 		Vector4 a = new Vector4();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
-		assertEquals( 1.0, a.w );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
+		assertEquals( 0.0, a.z, DELTA);
+		assertEquals( 1.0, a.w, DELTA);
 
 		a = new Vector4( X, Y, Z, W );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
-		assertEquals( W, a.w );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
+		assertEquals( Z, a.z, DELTA);
+		assertEquals( W, a.w, DELTA);
 	}
 
 	@Test
@@ -74,20 +76,20 @@ public class Vector4Test
 	public void testSetXYZW()
 	{
 		Vector4 a = new Vector4();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
-		assertEquals( 1.0, a.w );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
+		assertEquals( 0.0, a.z, DELTA);
+		assertEquals( 1.0, a.w, DELTA);
 
 		a.setX( X );
 		a.setY( Y );
 		a.setZ( Z );
 		a.setW( W );
 
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
-		assertEquals( W, a.w );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
+		assertEquals( Z, a.z, DELTA);
+		assertEquals( W, a.w, DELTA);
 	}
 
 	@Test
@@ -95,36 +97,36 @@ public class Vector4Test
 	{
 		Vector4 a = new Vector4( X, Y, Z, W );
 		Vector4 b = new Vector4().copy( a );
-		assertEquals( X, b.x );
-		assertEquals( Y, b.y );
-		assertEquals( Z, b.z );
-		assertEquals( W, b.w );
+		assertEquals( X, b.x, DELTA);
+		assertEquals( Y, b.y, DELTA);
+		assertEquals( Z, b.z, DELTA);
+		assertEquals( W, b.w, DELTA);
 
 		// ensure that it is a true copy
 		a.x = 0;
 		a.y = -1;
 		a.z = -2;
 		a.w = -3;
-		assertEquals( X, b.x );
-		assertEquals( Y, b.y );
-		assertEquals( Z, b.z );
-		assertEquals( W, b.w );
+		assertEquals( X, b.x, DELTA);
+		assertEquals( Y, b.y, DELTA);
+		assertEquals( Z, b.z, DELTA);
+		assertEquals( W, b.w, DELTA);
 	}
 
 	@Test
 	public void testSet()
 	{
 		Vector4 a = new Vector4();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
-		assertEquals( 1.0, a.w );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
+		assertEquals( 0.0, a.z, DELTA);
+		assertEquals( 1.0, a.w, DELTA);
 
 		a.set( X, Y, Z, W );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
-		assertEquals( W, a.w );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
+		assertEquals( Z, a.z, DELTA);
+		assertEquals( W, a.w, DELTA);
 	}
 
 	@Test
@@ -134,16 +136,16 @@ public class Vector4Test
 		Vector4 b = new Vector4( -X, -Y, -Z, -W );
 
 		a.add( b );
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
-		assertEquals( 0.0, a.w );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
+		assertEquals( 0.0, a.z, DELTA);
+		assertEquals( 0.0, a.w, DELTA);
 
 		Vector4 c = new Vector4().add( b, b );
-		assertEquals( -2 * X, c.x );
-		assertEquals( -2 * Y, c.y );
-		assertEquals( -2 * Z, c.z );
-		assertEquals( -2 * W, c.w );
+		assertEquals( -2 * X, c.x, DELTA);
+		assertEquals( -2 * Y, c.y, DELTA);
+		assertEquals( -2 * Z, c.z, DELTA);
+		assertEquals( -2 * W, c.w, DELTA);
 	}
 
 	@Test
@@ -153,16 +155,16 @@ public class Vector4Test
 		Vector4 b = new Vector4( -X, -Y, -Z, -W );
 
 		a.sub( b );
-		assertEquals( 2 * X, a.x );
-		assertEquals( 2 * Y, a.y );
-		assertEquals( 2 * Z, a.z );
-		assertEquals( 2 * W, a.w );
+		assertEquals( 2 * X, a.x, DELTA);
+		assertEquals( 2 * Y, a.y, DELTA);
+		assertEquals( 2 * Z, a.z, DELTA);
+		assertEquals( 2 * W, a.w, DELTA);
 
 		Vector4 c = new Vector4().sub( a, a );
-		assertEquals( 0.0, c.x );
-		assertEquals( 0.0, c.y );
-		assertEquals( 0.0, c.z );
-		assertEquals( 0.0, c.w );
+		assertEquals( 0.0, c.x, DELTA);
+		assertEquals( 0.0, c.y, DELTA);
+		assertEquals( 0.0, c.z, DELTA);
+		assertEquals( 0.0, c.w, DELTA);
 	}
 
 	@Test
@@ -172,28 +174,28 @@ public class Vector4Test
 		Vector4 b = new Vector4( -X, -Y, -Z, -W );
 
 		a.multiply( -2 );
-		assertEquals( -2 * X, a.x );
-		assertEquals( -2 * Y, a.y );
-		assertEquals( -2 * Z, a.z );
-		assertEquals( -2 * W, a.w );
+		assertEquals( -2 * X, a.x, DELTA);
+		assertEquals( -2 * Y, a.y, DELTA);
+		assertEquals( -2 * Z, a.z, DELTA);
+		assertEquals( -2 * W, a.w, DELTA);
 
 		b.multiply( -2 );
-		assertEquals( 2 * X, b.x );
-		assertEquals( 2 * Y, b.y );
-		assertEquals( 2 * Z, b.z );
-		assertEquals( 2 * W, b.w );
+		assertEquals( 2 * X, b.x, DELTA);
+		assertEquals( 2 * Y, b.y, DELTA);
+		assertEquals( 2 * Z, b.z, DELTA);
+		assertEquals( 2 * W, b.w, DELTA);
 
 		a.divide( -2 );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
-		assertEquals( W, a.w );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
+		assertEquals( Z, a.z, DELTA);
+		assertEquals( W, a.w, DELTA);
 
 		b.divide( -2 );
-		assertEquals( -X, b.x );
-		assertEquals( -Y, b.y );
-		assertEquals( -Z, b.z );
-		assertEquals( -W, b.w );
+		assertEquals( -X, b.x, DELTA);
+		assertEquals( -Y, b.y, DELTA);
+		assertEquals( -Z, b.z, DELTA);
+		assertEquals( -W, b.w, DELTA);
 	}
 
 	@Test
@@ -202,10 +204,10 @@ public class Vector4Test
 		Vector4 a = new Vector4( X, Y, Z, W );
 
 		a.negate();
-		assertEquals( -X, a.x );
-		assertEquals( -Y, a.y );
-		assertEquals( -Z, a.z );
-		assertEquals( -W, a.w );
+		assertEquals( -X, a.x, DELTA);
+		assertEquals( -Y, a.y, DELTA);
+		assertEquals( -Z, a.z, DELTA);
+		assertEquals( -W, a.w, DELTA);
 	}
 
 	@Test
@@ -219,7 +221,7 @@ public class Vector4Test
 		assertEquals( (-X*X-Y*Y-Z*Z-W*W), result );
 
 		result = a.dot( c );
-		assertEquals( 0.0, result );
+		assertEquals( 0.0, result, DELTA);
 	}
 
 	@Test
@@ -232,19 +234,19 @@ public class Vector4Test
 		
 		a.normalize();
 		assertEquals( 1.0, a.length() );
-		assertEquals( 1.0, a.x );
+		assertEquals( 1.0, a.x, DELTA);
 
 		b.normalize();
 		assertEquals( 1.0, b.length() );
-		assertEquals( -1.0, b.y);
+		assertEquals( -1.0, b.y, DELTA);
 
 		c.normalize();
 		assertEquals( 1.0, c.length() );
-		assertEquals( 1.0, c.z );
+		assertEquals( 1.0, c.z, DELTA);
 
 		d.normalize();
 		assertEquals( 1.0, d.length() );
-		assertEquals( -1.0, d.w );
+		assertEquals( -1.0, d.w, DELTA);
 	}
 
 	@Test
@@ -289,23 +291,23 @@ public class Vector4Test
 		Vector4 c = new Vector4();
 
 		c.copy( a ).min( b );
-		assertEquals( -X, c.x );
-		assertEquals( -Y, c.y );
-		assertEquals( -Z, c.z );
-		assertEquals( -W, c.w );
+		assertEquals( -X, c.x, DELTA);
+		assertEquals( -Y, c.y, DELTA);
+		assertEquals( -Z, c.z, DELTA);
+		assertEquals( -W, c.w, DELTA);
 
 		c.copy( a ).max( b );
-		assertEquals( X, c.x );
-		assertEquals( Y, c.y );
-		assertEquals( Z, c.z );
-		assertEquals( W, c.w );
+		assertEquals( X, c.x, DELTA);
+		assertEquals( Y, c.y, DELTA);
+		assertEquals( Z, c.z, DELTA);
+		assertEquals( W, c.w, DELTA);
 
 		c.set( -2*X, 2*Y, -2*Z, 2*W );
 		c.clamp( b, a );
-		assertEquals( -X, c.x );
-		assertEquals( Y, c.y );
-		assertEquals( -Z, c.z );
-		assertEquals( W, c.w );
+		assertEquals( -X, c.x, DELTA);
+		assertEquals( Y, c.y, DELTA);
+		assertEquals( -Z, c.z, DELTA);
+		assertEquals( W, c.w, DELTA);
 	}
 
 	@Test
@@ -323,10 +325,10 @@ public class Vector4Test
 		assertTrue( ! b.equals( a ));
 
 		a.copy( b );
-		assertEquals( b.x, a.x);
-		assertEquals( b.y, a.y);
-		assertEquals( b.z, a.z);
-		assertEquals( b.w, a.w);
+		assertEquals( b.x, a.x, DELTA);
+		assertEquals( b.y, a.y, DELTA);
+		assertEquals( b.z, a.z, DELTA);
+		assertEquals( b.w, a.w, DELTA);
 
 		assertTrue( a.equals( b ));
 		assertTrue( b.equals( a ));

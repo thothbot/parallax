@@ -24,6 +24,8 @@ import static org.junit.Assert.*;
 public class Vector2Test
 {
 
+	private static float DELTA = 0.01f;
+
 	private static float X = 2;
 	private static float Y = 3;
 
@@ -31,25 +33,25 @@ public class Vector2Test
 	public void testVector2()
 	{
 		Vector2 a = new Vector2();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
 
 		a = new Vector2( X, Y );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
 	}
 
 	@Test
 	public void testSetXSetY()
 	{
 		Vector2 a = new Vector2();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
 
 		a.setX( X );
 		a.setY( Y );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
 	}
 
 	@Test
@@ -57,26 +59,26 @@ public class Vector2Test
 	{
 		Vector2 a = new Vector2( X, Y );
 		Vector2 b = new Vector2().copy( a );
-		assertEquals( X, b.x );
-		assertEquals( Y, b.y );
+		assertEquals( X, b.x, DELTA);
+		assertEquals( Y, b.y, DELTA);
 
 		// ensure that it is a true copy
 		a.x = 0;
 		a.y = -1;
-		assertEquals( X, b.x );
-		assertEquals( Y, b.y );
+		assertEquals( X, b.x, DELTA);
+		assertEquals( Y, b.y, DELTA);
 	}
 
 	@Test
 	public void testSet()
 	{
 		Vector2 a = new Vector2();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
 
 		a.set( X, Y );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
 	}
 
 	@Test
@@ -86,12 +88,12 @@ public class Vector2Test
 		Vector2 b = new Vector2( -X, -Y );
 
 		a.add( b );
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
 
 		Vector2 c = new Vector2().add( b, b );
-		assertEquals( -2.0 * X, c.x );
-		assertEquals( -2.0 * Y, c.y );
+		assertEquals( -2.0 * X, c.x, DELTA);
+		assertEquals( -2.0 * Y, c.y, DELTA);
 	}
 
 	@Test
@@ -101,12 +103,12 @@ public class Vector2Test
 		Vector2 b = new Vector2( -X, -Y );
 
 		a.sub( b );
-		assertEquals( 2.0 * X, a.x );
-		assertEquals( 2.0 * Y, a.y );
+		assertEquals( 2.0 * X, a.x, DELTA);
+		assertEquals( 2.0 * Y, a.y, DELTA);
 
 		Vector2 c = new Vector2().sub( a, a );
-		assertEquals( 0.0, c.x );
-		assertEquals( 0.0, c.y );
+		assertEquals( 0.0, c.x, DELTA);
+		assertEquals( 0.0, c.y, DELTA);
 	}
 
 	@Test
@@ -116,20 +118,20 @@ public class Vector2Test
 		Vector2 b = new Vector2( -X, -Y );
 
 		a.multiply( -2 );
-		assertEquals( X *-2.0, a.x );
-		assertEquals( Y *-2.0, a.y );
+		assertEquals( X *-2.0, a.x, DELTA);
+		assertEquals( Y *-2.0, a.y, DELTA);
 
 		b.multiply( -2 );
-		assertEquals( 2.0 * X, b.x );
-		assertEquals( 2.0 * Y, b.y );
+		assertEquals( 2.0 * X, b.x, DELTA);
+		assertEquals( 2.0 * Y, b.y, DELTA);
 
 		a.divide( -2 );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
 
 		b.divide( -2 );
-		assertEquals( -X, b.x );
-		assertEquals( -Y, b.y );
+		assertEquals( -X, b.x, DELTA);
+		assertEquals( -Y, b.y, DELTA);
 	}
 
 	@Test
@@ -138,8 +140,8 @@ public class Vector2Test
 		Vector2 a = new Vector2( X, Y );
 
 		a.negate();
-		assertEquals( -X, a.x );
-		assertEquals( -Y, a.y );
+		assertEquals( -X, a.x, DELTA);
+		assertEquals( -Y, a.y, DELTA);
 	}
 
 	@Test
@@ -150,10 +152,10 @@ public class Vector2Test
 		Vector2 c = new Vector2();
 
 		float result = a.dot( b );
-		assertEquals( (-X * X - Y * Y), result );
+		assertEquals( (-X * X - Y * Y), result, DELTA);
 
 		result = a.dot( c );
-		assertEquals( 0.0, result );
+		assertEquals( 0.0, result, DELTA);
 	}
 
 	@Test
@@ -183,11 +185,11 @@ public class Vector2Test
 
 		a.normalize();
 		assertEquals( 1.0, a.length() );
-		assertEquals( 1.0, a.x );
+		assertEquals( 1.0, a.x, DELTA);
 
 		b.normalize();
 		assertEquals( 1.0, b.length() );
-		assertEquals( -1.0, b.y);
+		assertEquals( -1.0, b.y, DELTA);
 	}
 
 	@Test
@@ -244,17 +246,17 @@ public class Vector2Test
 		Vector2 c = new Vector2();
 
 		c.copy( a ).min( b );
-		assertEquals( -X, c.x );
-		assertEquals( -Y, c.y );
+		assertEquals( -X, c.x, DELTA);
+		assertEquals( -Y, c.y, DELTA);
 
 		c.copy( a ).max( b );
-		assertEquals( X, c.x );
-		assertEquals( Y, c.y );
+		assertEquals( X, c.x, DELTA);
+		assertEquals( Y, c.y, DELTA);
 
 		c.set( -2*X, 2*Y );
 		c.clamp( b, a );
-		assertEquals( -X, c.x);
-		assertEquals( Y, c.y );
+		assertEquals( -X, c.x, DELTA);
+		assertEquals( Y, c.y, DELTA);
 	}
 
 	@Test
@@ -270,8 +272,8 @@ public class Vector2Test
 		assertTrue( ! b.equals( a ));
 
 		a.copy( b );
-		assertEquals( b.x, a.x );
-		assertEquals( b.y, a.y );
+		assertEquals( b.x, a.x, DELTA);
+		assertEquals( b.y, a.y, DELTA);
 
 		assertTrue( a.equals( b ));
 		assertTrue( b.equals( a ));

@@ -24,6 +24,8 @@ import static org.junit.Assert.*;
 public class Vector3Test
 {
 
+	private static float DELTA = 0.01f;
+
 	private static float X = 2;
 	private static float Y = 3;
 	private static float Z = 4;
@@ -32,14 +34,14 @@ public class Vector3Test
 	public void testVector3()
 	{
 		Vector3 a = new Vector3();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
+		assertEquals( 0.0, a.z, DELTA);
 
 		a = new Vector3( X, Y, Z );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
+		assertEquals( Z, a.z, DELTA);
 	}
 
 	@Test
@@ -87,31 +89,31 @@ public class Vector3Test
 	{
 		Vector3 a = new Vector3( X, Y, Z );
 		Vector3 b = new Vector3().copy( a );
-		assertEquals( X, b.x );
-		assertEquals( Y, b.y );
-		assertEquals( Z, b.z );
+		assertEquals( X, b.x, DELTA);
+		assertEquals( Y, b.y, DELTA);
+		assertEquals( Z, b.z, DELTA);
 
 		// ensure that it is a true copy
 		a.x = 0;
 		a.y = -1;
 		a.z = -2;
-		assertEquals( X, b.x );
-		assertEquals( Y, b.y );
-		assertEquals( Z, b.z );
+		assertEquals( X, b.x, DELTA);
+		assertEquals( Y, b.y, DELTA);
+		assertEquals( Z, b.z, DELTA);
 	}
 
 	@Test
 	public void testSet()
 	{
 		Vector3 a = new Vector3();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
+		assertEquals( 0.0, a.z, DELTA);
 
 		a.set( X, Y, Z );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
+		assertEquals( Z, a.z, DELTA);
 	}
 
 	@Test
@@ -126,9 +128,9 @@ public class Vector3Test
 		assertEquals( 0.0, a.z, 0.0);
 
 		Vector3 c = new Vector3().add( b, b );
-		assertEquals( -2*X, c.x );
-		assertEquals( -2*Y, c.y );
-		assertEquals( -2*Z, c.z );
+		assertEquals( -2*X, c.x, DELTA);
+		assertEquals( -2*Y, c.y, DELTA);
+		assertEquals( -2*Z, c.z, DELTA);
 	}
 
 	@Test
@@ -138,14 +140,14 @@ public class Vector3Test
 		Vector3 b = new Vector3( -X, -Y, -Z );
 
 		a.sub( b );
-		assertEquals( 2 * X, a.x );
-		assertEquals( 2 * Y, a.y );
-		assertEquals( 2 * Z, a.z );
+		assertEquals( 2 * X, a.x, DELTA);
+		assertEquals( 2 * Y, a.y, DELTA);
+		assertEquals( 2 * Z, a.z, DELTA);
 
 		Vector3 c = new Vector3().sub( a, a );
-		assertEquals( 0.0, c.x );
-		assertEquals( 0.0, c.y );
-		assertEquals( 0.0, c.z );
+		assertEquals( 0.0, c.x, DELTA);
+		assertEquals( 0.0, c.y, DELTA);
+		assertEquals( 0.0, c.z, DELTA);
 	}
 
 	@Test
@@ -155,24 +157,24 @@ public class Vector3Test
 		Vector3 b = new Vector3( -X, -Y, -Z );
 
 		a.multiply( -2 );
-		assertEquals( X * -2, a.x );
-		assertEquals( Y * -2, a.y );
-		assertEquals( Z * -2, a.z );
+		assertEquals( X * -2, a.x, DELTA);
+		assertEquals( Y * -2, a.y, DELTA);
+		assertEquals( Z * -2, a.z, DELTA);
 
 		b.multiply( -2 );
-		assertEquals( 2 * X, b.x );
-		assertEquals( 2 * Y, b.y );
-		assertEquals( 2 * Z, b.z );
+		assertEquals( 2 * X, b.x, DELTA);
+		assertEquals( 2 * Y, b.y, DELTA);
+		assertEquals( 2 * Z, b.z, DELTA);
 
 		a.divide( -2 );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
+		assertEquals( Z, a.z, DELTA);
 
 		b.divide( -2 );
-		assertEquals( -X, b.x );
-		assertEquals( -Y, b.y );
-		assertEquals( -Z, b.z );
+		assertEquals( -X, b.x, DELTA);
+		assertEquals( -Y, b.y, DELTA);
+		assertEquals( -Z, b.z, DELTA);
 	}
 
 	@Test
@@ -181,9 +183,9 @@ public class Vector3Test
 		Vector3 a = new Vector3( X, Y, Z );
 
 		a.negate();
-		assertEquals( -X, a.x );
-		assertEquals( -Y, a.y );
-		assertEquals( -Z, a.z );
+		assertEquals( -X, a.x, DELTA);
+		assertEquals( -Y, a.y, DELTA);
+		assertEquals( -Z, a.z, DELTA);
 	}
 
 	@Test
@@ -194,10 +196,10 @@ public class Vector3Test
 		Vector3 c = new Vector3();
 
 		float result = a.dot( b );
-		assertEquals( (-X*X-Y*Y-Z*Z), result );
+		assertEquals( (-X*X-Y*Y-Z*Z), result, DELTA);
 
 		result = a.dot( c );
-		assertEquals( 0.0, result );
+		assertEquals( 0.0, result, DELTA);
 	}
 
 	@Test
@@ -209,15 +211,15 @@ public class Vector3Test
 
 		a.normalize();
 		assertEquals( 1.0, a.length() );
-		assertEquals( 1.0, a.x );
+		assertEquals( 1.0, a.x, DELTA);
 
 		b.normalize();
 		assertEquals( 1.0, b.length() );
-		assertEquals( -1.0, b.y );
+		assertEquals( -1.0, b.y, DELTA);
 
 		c.normalize();
 		assertEquals( 1.0, c.length() );
-		assertEquals( 1.0, c.z );
+		assertEquals( 1.0, c.z, DELTA);
 	}
 
 	@Test
@@ -267,9 +269,9 @@ public class Vector3Test
 		assertTrue( ! b.equals( a ));
 
 		a.copy( b );
-		assertEquals( b.x, a.x);
-		assertEquals( b.y, a.y);
-		assertEquals( b.z, a.z);
+		assertEquals( b.x, a.x, DELTA);
+		assertEquals( b.y, a.y, DELTA);
+		assertEquals( b.z, a.z, DELTA);
 
 		assertTrue( a.equals( b ));
 		assertTrue( b.equals( a ));
@@ -283,36 +285,36 @@ public class Vector3Test
 		Vector3 c = new Vector3();
 
 		c.copy( a ).min( b );
-		assertEquals( -X, c.x );
-		assertEquals( -Y, c.y );
-		assertEquals( -Z, c.z );
+		assertEquals( -X, c.x, DELTA);
+		assertEquals( -Y, c.y, DELTA);
+		assertEquals( -Z, c.z, DELTA);
 
 		c.copy( a ).max( b );
-		assertEquals( X, c.x );
-		assertEquals( Y, c.y );
-		assertEquals( Z, c.z );
+		assertEquals( X, c.x, DELTA);
+		assertEquals( Y, c.y, DELTA);
+		assertEquals( Z, c.z, DELTA);
 
 		c.set( -2*X, 2*Y, -2*Z );
 		c.clamp( b, a );
-		assertEquals( -X, c.x );
-		assertEquals( Y, c.y );
-		assertEquals( -Z, c.z );
+		assertEquals( -X, c.x, DELTA);
+		assertEquals( Y, c.y, DELTA);
+		assertEquals( -Z, c.z, DELTA);
 	}
 
 	@Test
 	public void testSetXYZ()
 	{
 		Vector3 a = new Vector3();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
+		assertEquals( 0.0, a.x, DELTA);
+		assertEquals( 0.0, a.y, DELTA);
+		assertEquals( 0.0, a.z, DELTA);
 
 		a.setX( X );
 		a.setY( Y );
 		a.setZ( Z );
 
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
+		assertEquals( X, a.x, DELTA);
+		assertEquals( Y, a.y, DELTA);
+		assertEquals( Z, a.z, DELTA);
 	}
 }
