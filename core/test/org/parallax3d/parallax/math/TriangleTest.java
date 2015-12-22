@@ -112,10 +112,10 @@ public class TriangleTest
 		assertTrue( a.midpoint().equals( new Vector3( 0, 0, 0 ) ));
 
 		a = new Triangle( new Vector3( 0, 0, 0 ), new Vector3( 1, 0, 0 ), new Vector3( 0, 1, 0 ) );
-		assertTrue( a.midpoint().equals( new Vector3( 1.0/3, 1.0/3, 0 ) ));
+		assertTrue( a.midpoint().equals( new Vector3( 1.0f/3, 1.0f/3, 0 ) ));
 
 		a = new Triangle( new Vector3( 2, 0, 0 ), new Vector3( 0, 0, 0 ), new Vector3( 0, 0, 2 ) );
-		assertTrue( a.midpoint().equals( new Vector3( 2.0/3, 0, 2.0/3 ) ));
+		assertTrue( a.midpoint().equals( new Vector3( 2.0f/3, 0, 2.0f/3 ) ));
 	}
 
 	@Test
@@ -171,13 +171,13 @@ public class TriangleTest
 		assertTrue( a.barycoordFromPoint( a.getA() ).equals( new Vector3( 1, 0, 0 ) ));
 		assertTrue( a.barycoordFromPoint( a.getB() ).equals( new Vector3( 0, 1, 0 ) ));
 		assertTrue( a.barycoordFromPoint( a.getC() ).equals( new Vector3( 0, 0, 1 ) ));
-		assertTrue( a.barycoordFromPoint( a.midpoint() ).distanceTo( new Vector3( 1.0/3, 1.0/3, 1.0/3 ) ) < 0.0001);
+		assertTrue( a.barycoordFromPoint( a.midpoint() ).distanceTo( new Vector3( 1.0f/3, 1.0f/3, 1.0f/3 ) ) < 0.0001);
 
 		a = new Triangle( new Vector3( 2, 0, 0 ), new Vector3( 0, 0, 0 ), new Vector3( 0, 0, 2 ) );
 		assertTrue( a.barycoordFromPoint( a.getA() ).equals( new Vector3( 1, 0, 0 ) ));
 		assertTrue( a.barycoordFromPoint( a.getB() ).equals( new Vector3( 0, 1, 0 ) ));
 		assertTrue( a.barycoordFromPoint( a.getC() ).equals( new Vector3( 0, 0, 1 ) ));
-		assertTrue( a.barycoordFromPoint( a.midpoint() ).distanceTo( new Vector3( 1.0/3, 1.0/3, 1.0/3 ) ) < 0.0001);
+		assertTrue( a.barycoordFromPoint( a.midpoint() ).distanceTo( new Vector3( 1.0f/3, 1.0f/3, 1.0f/3 ) ) < 0.0001);
 	}
 
 	@Test

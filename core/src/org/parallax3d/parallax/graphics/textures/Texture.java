@@ -18,11 +18,14 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
+
+import java.nio.Buffer;
 
 /**
  * Basic implementation of texture.
@@ -71,7 +74,7 @@ public class Texture
 
 	private int id;
 
-	private Element image;
+	private Buffer image;
 
 	private Vector2 offset;
 	private Vector2 repeat;
@@ -105,7 +108,7 @@ public class Texture
 	 */
 	public Texture()
 	{
-		this((Element)Element.createObject());
+		this( null );
 	}
 	
 //	public Texture(String url)
@@ -140,23 +143,23 @@ public class Texture
 //		});
 //	}
 
-//	/**
-//	 * Constructor will create a texture instance.
-//	 *
-//	 * @param image the media element.
-//	 */
-//	public Texture(Element image)
-//	{
-//		this(image,
-//				MAPPING_MODE.UV,
-//				TextureWrapMode.CLAMP_TO_EDGE,
-//				TextureWrapMode.CLAMP_TO_EDGE,
-//				TextureMagFilter.LINEAR,
-//				TextureMinFilter.LINEAR_MIPMAP_LINEAR,
-//				PixelFormat.RGBA,
-//				PixelType.UNSIGNED_BYTE,
-//				1);
-//	}
+	/**
+	 * Constructor will create a texture instance.
+	 *
+	 * @param image the media element.
+	 */
+	public Texture(Buffer image)
+	{
+		this(image,
+				MAPPING_MODE.UV,
+				TextureWrapMode.CLAMP_TO_EDGE,
+				TextureWrapMode.CLAMP_TO_EDGE,
+				TextureMagFilter.LINEAR,
+				TextureMinFilter.LINEAR_MIPMAP_LINEAR,
+				PixelFormat.RGBA,
+				PixelType.UNSIGNED_BYTE,
+				1);
+	}
 	
 	/**
 	 * Constructor will create a texture instance.
@@ -171,7 +174,7 @@ public class Texture
 	 * @param type      the {@link DataType} value.
 	 * @param anisotropy the anisotropy value.
 	 */
-	public Texture(Element image, MAPPING_MODE mapping, TextureWrapMode wrapS,
+	public Texture(Buffer image, MAPPING_MODE mapping, TextureWrapMode wrapS,
 			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
 			PixelFormat format, PixelType type, int anisotropy) 
 	{	
@@ -300,14 +303,14 @@ public class Texture
 	 * 
 	 * @return the media element: image or canvas.
 	 */
-	public Element getImage() {
+	public Buffer getImage() {
 		return this.image;
 	}
 	
 	/**
 	 * Sets texture media element.
 	 */
-	public void setImage(Element image) {
+	public void setImage(Buffer image) {
 		this.image = image;
 	}
 

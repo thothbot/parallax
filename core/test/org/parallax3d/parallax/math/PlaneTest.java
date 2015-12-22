@@ -27,10 +27,10 @@ public class PlaneTest
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 	
-	private static double X = 2;
-	private static double Y = 3;
-	private static double Z = 4;
-	private static double W = 5;
+	private static float X = 2;
+	private static float Y = 3;
+	private static float Z = 4;
+	private static float W = 5;
 
 	@Test
 	public void testPlane()
@@ -230,7 +230,7 @@ public class PlaneTest
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
 
 		Matrix4 m = new Matrix4();
-		m.makeRotationZ( Math.PI * 0.5 );
+		m.makeRotationZ( (float)(Math.PI * 0.5) );
 
 		assertTrue( comparePlane( a.clone().apply( m ), new Plane( new Vector3( 0, 1, 0 ), 0 ) ));
 
@@ -244,7 +244,7 @@ public class PlaneTest
 	@Test
 	private boolean comparePlane( Plane a, Plane b ) 
 	{
-		double threshold = 0.0001;
+		float threshold = 0.0001f;
 		return ( a.getNormal().distanceTo( b.getNormal() ) < threshold &&
 				Math.abs( a.getConstant() - b.getConstant() ) < threshold );
 	};

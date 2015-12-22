@@ -24,8 +24,8 @@ import static org.junit.Assert.*;
 public class Vector2Test
 {
 
-	private static double X = 2;
-	private static double Y = 3;
+	private static float X = 2;
+	private static float Y = 3;
 
 	@Test
 	public void testVector2()
@@ -149,7 +149,7 @@ public class Vector2Test
 		Vector2 b = new Vector2( -X, -Y );
 		Vector2 c = new Vector2();
 
-		double result = a.dot( b );
+		float result = a.dot( b );
 		assertEquals( (-X * X - Y * Y), result );
 
 		result = a.dot( c );
@@ -225,13 +225,13 @@ public class Vector2Test
 		Vector2 a = new Vector2( X, 0 );
 		Vector2 b = new Vector2( 0, -Y );
 
-		assertTrue( a.lerp( a, 0 ).equals( a.lerp( a, 0.5 ) ));
+		assertTrue( a.lerp( a, 0 ).equals( a.lerp( a, 0.5f ) ));
 		assertTrue( a.lerp( a, 0 ).equals( a.lerp( a, 1 ) ));
 
 		assertTrue( a.clone().lerp( b, 0 ).equals( a ));
 
-		assertEquals( X * 0.5, a.clone().lerp( b, 0.5 ).x );
-		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5 ).y );
+		assertEquals( X * 0.5, a.clone().lerp( b, 0.5f ).x );
+		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5f ).y );
 
 		assertTrue( a.clone().lerp( b, 1 ).equals( b ));
 	}

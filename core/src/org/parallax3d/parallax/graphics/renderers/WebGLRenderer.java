@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -2868,9 +2869,9 @@ public class WebGLRenderer extends AbstractRenderer
 //			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? 1 : 0);
 			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_ALIGNMENT.getValue(), texture.getUnpackAlignment());
 
-			Element image = texture.getImage();
-			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() )
-					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
+			Buffer image = texture.getImage();
+			boolean isImagePowerOfTwo = true; //Mathematics.isPowerOfTwo( image.getOffsetWidth() )
+					//&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
 			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_2D.getValue(), isImagePowerOfTwo );
 
@@ -2899,7 +2900,7 @@ public class WebGLRenderer extends AbstractRenderer
 			}
 			else
 			{
-				this.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0, texture.getFormat().getValue(), texture.getType().getValue(), (ImageElement) image);
+				this.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0, texture.getFormat().getValue(), 0, 0, 0, texture.getFormat().getValue(), texture.getType().getValue(), image);
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )

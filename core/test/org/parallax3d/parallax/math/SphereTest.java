@@ -35,7 +35,7 @@ public class SphereTest
 		assertTrue( a.getCenter().equals( zero3 ));
 		assertEquals( 0.0, a.getRadius() );
 
-		Sphere b = new Sphere( one3, 1.0 );
+		Sphere b = new Sphere( one3, 1.0f );
 		assertTrue( b.getCenter().equals( one3 ));
 		assertEquals( 1.0, b.getRadius() );
 	}
@@ -101,7 +101,7 @@ public class SphereTest
 	{
 		Sphere a = new Sphere( one3, 1 );
 		Sphere b = new Sphere( zero3, 1 );
-		Sphere c = new Sphere( zero3, 0.25 );
+		Sphere c = new Sphere( zero3, 0.25f );
 
 		assertTrue( a.isIntersectsSphere( b ) );
 		assertTrue( ! a.isIntersectsSphere( c ) );
@@ -123,7 +123,7 @@ public class SphereTest
 
 		assertTrue( a.getBoundingBox().equals( new Box3( zero3, two3 ) ));
 
-		a.set( zero3, 0.0 );
+		a.set( zero3, 0.0f );
 		assertTrue( a.getBoundingBox().equals( new Box3( zero3, zero3 ) ));
 	}
 

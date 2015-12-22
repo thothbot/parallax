@@ -34,22 +34,22 @@ public class Matrix4Test
 		assertEquals( a.determinant(), 1.0);
 
 		Matrix4 b = new Matrix4( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
-		assertEquals( 0.0, b.getArray().get(0) );
-		assertEquals( 4.0, b.getArray().get(1) );
-		assertEquals( 8.0, b.getArray().get(2) );
-		assertEquals( 12.0, b.getArray().get(3) );
-		assertEquals( 1.0, b.getArray().get(4) );
-		assertEquals( 5.0, b.getArray().get(5) );
-		assertEquals( 9.0, b.getArray().get(6) );
-		assertEquals( 13.0, b.getArray().get(7) );
-		assertEquals( 2.0, b.getArray().get(8) );
-		assertEquals( 6.0, b.getArray().get(9) );
-		assertEquals( 10.0, b.getArray().get(10) );
-		assertEquals( 14.0, b.getArray().get(11) );
-		assertEquals( 3.0, b.getArray().get(12) );
-		assertEquals( 7.0, b.getArray().get(13) );
-		assertEquals( 11.0, b.getArray().get(14) );
-		assertEquals( 15.0, b.getArray().get(15) );
+		assertEquals( 0.0, b.getArray()[0] );
+		assertEquals( 4.0, b.getArray()[1] );
+		assertEquals( 8.0, b.getArray()[2] );
+		assertEquals( 12.0, b.getArray()[3] );
+		assertEquals( 1.0, b.getArray()[4] );
+		assertEquals( 5.0, b.getArray()[5] );
+		assertEquals( 9.0, b.getArray()[6] );
+		assertEquals( 13.0, b.getArray()[7] );
+		assertEquals( 2.0, b.getArray()[8] );
+		assertEquals( 6.0, b.getArray()[9] );
+		assertEquals( 10.0, b.getArray()[10] );
+		assertEquals( 14.0, b.getArray()[11] );
+		assertEquals( 3.0, b.getArray()[12] );
+		assertEquals( 7.0, b.getArray()[13] );
+		assertEquals( 11.0, b.getArray()[14] );
+		assertEquals( 15.0, b.getArray()[15] );
 
 		assertTrue( ! matrixEquals4( a, b ));
 	}
@@ -61,44 +61,44 @@ public class Matrix4Test
 		assertEquals( b.determinant(), 1.0);
 
 		b.set( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
-		assertEquals( 0.0, b.getArray().get(0) );
-		assertEquals( 4.0, b.getArray().get(1) );
-		assertEquals( 8.0, b.getArray().get(2) );
-		assertEquals( 12.0, b.getArray().get(3) );
-		assertEquals( 1.0, b.getArray().get(4) );
-		assertEquals( 5.0, b.getArray().get(5) );
-		assertEquals( 9.0, b.getArray().get(6) );
-		assertEquals( 13.0, b.getArray().get(7) );
-		assertEquals( 2.0, b.getArray().get(8) );
-		assertEquals( 6.0, b.getArray().get(9) );
-		assertEquals( 10.0, b.getArray().get(10) );
-		assertEquals( 14.0, b.getArray().get(11) );
-		assertEquals( 3.0, b.getArray().get(12) );
-		assertEquals( 7.0, b.getArray().get(13) );
-		assertEquals( 11.0, b.getArray().get(14) );
-		assertEquals( 15.0, b.getArray().get(15) );		
+		assertEquals( 0.0, b.getArray()[0] );
+		assertEquals( 4.0, b.getArray()[1] );
+		assertEquals( 8.0, b.getArray()[2] );
+		assertEquals( 12.0, b.getArray()[3] );
+		assertEquals( 1.0, b.getArray()[4] );
+		assertEquals( 5.0, b.getArray()[5] );
+		assertEquals( 9.0, b.getArray()[6] );
+		assertEquals( 13.0, b.getArray()[7] );
+		assertEquals( 2.0, b.getArray()[8] );
+		assertEquals( 6.0, b.getArray()[9] );
+		assertEquals( 10.0, b.getArray()[10] );
+		assertEquals( 14.0, b.getArray()[11] );
+		assertEquals( 3.0, b.getArray()[12] );
+		assertEquals( 7.0, b.getArray()[13] );
+		assertEquals( 11.0, b.getArray()[14] );
+		assertEquals( 15.0, b.getArray()[15] );		
 	}
 
 	@Test
 	public void testIdentity()
 	{
 		Matrix4 b = new Matrix4( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
-		assertEquals( 0.0, b.getArray().get(0) );
-		assertEquals( 4.0, b.getArray().get(1) );
-		assertEquals( 8.0, b.getArray().get(2) );
-		assertEquals( 12.0, b.getArray().get(3) );
-		assertEquals( 1.0, b.getArray().get(4) );
-		assertEquals( 5.0, b.getArray().get(5) );
-		assertEquals( 9.0, b.getArray().get(6) );
-		assertEquals( 13.0, b.getArray().get(7) );
-		assertEquals( 2.0, b.getArray().get(8) );
-		assertEquals( 6.0, b.getArray().get(9) );
-		assertEquals( 10.0, b.getArray().get(10) );
-		assertEquals( 14.0, b.getArray().get(11) );
-		assertEquals( 3.0, b.getArray().get(12) );
-		assertEquals( 7.0, b.getArray().get(13) );
-		assertEquals( 11.0, b.getArray().get(14) );
-		assertEquals( 15.0, b.getArray().get(15) );
+		assertEquals( 0.0, b.getArray()[0] );
+		assertEquals( 4.0, b.getArray()[1] );
+		assertEquals( 8.0, b.getArray()[2] );
+		assertEquals( 12.0, b.getArray()[3] );
+		assertEquals( 1.0, b.getArray()[4] );
+		assertEquals( 5.0, b.getArray()[5] );
+		assertEquals( 9.0, b.getArray()[6] );
+		assertEquals( 13.0, b.getArray()[7] );
+		assertEquals( 2.0, b.getArray()[8] );
+		assertEquals( 6.0, b.getArray()[9] );
+		assertEquals( 10.0, b.getArray()[10] );
+		assertEquals( 14.0, b.getArray()[11] );
+		assertEquals( 3.0, b.getArray()[12] );
+		assertEquals( 7.0, b.getArray()[13] );
+		assertEquals( 11.0, b.getArray()[14] );
+		assertEquals( 15.0, b.getArray()[15] );
 
 		Matrix4 a = new Matrix4();
 		assertTrue( ! matrixEquals4( a, b ));
@@ -116,7 +116,7 @@ public class Matrix4Test
 		assertTrue( matrixEquals4( a, b ));
 
 		// ensure that it is a true copy
-		a.getArray().set(0, 2);
+		a.getArray()[0] = 2;
 		assertTrue( ! matrixEquals4( a, b ));
 	}
 
@@ -124,41 +124,41 @@ public class Matrix4Test
 	public void testMultiply()
 	{
 		Matrix4 b = new Matrix4( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
-		assertEquals( 0.0, b.getArray().get(0) );
-		assertEquals( 4.0, b.getArray().get(1) );
-		assertEquals( 8.0, b.getArray().get(2) );
-		assertEquals( 12.0, b.getArray().get(3) );
-		assertEquals( 1.0, b.getArray().get(4) );
-		assertEquals( 5.0, b.getArray().get(5) );
-		assertEquals( 9.0, b.getArray().get(6) );
-		assertEquals( 13.0, b.getArray().get(7) );
-		assertEquals( 2.0, b.getArray().get(8) );
-		assertEquals( 6.0, b.getArray().get(9) );
-		assertEquals( 10.0, b.getArray().get(10) );
-		assertEquals( 14.0, b.getArray().get(11) );
-		assertEquals( 3.0, b.getArray().get(12) );
-		assertEquals( 7.0, b.getArray().get(13) );
-		assertEquals( 11.0, b.getArray().get(14) );
-		assertEquals( 15.0, b.getArray().get(15) );
+		assertEquals( 0.0, b.getArray()[0] );
+		assertEquals( 4.0, b.getArray()[1] );
+		assertEquals( 8.0, b.getArray()[2] );
+		assertEquals( 12.0, b.getArray()[3] );
+		assertEquals( 1.0, b.getArray()[4] );
+		assertEquals( 5.0, b.getArray()[5] );
+		assertEquals( 9.0, b.getArray()[6] );
+		assertEquals( 13.0, b.getArray()[7] );
+		assertEquals( 2.0, b.getArray()[8] );
+		assertEquals( 6.0, b.getArray()[9] );
+		assertEquals( 10.0, b.getArray()[10] );
+		assertEquals( 14.0, b.getArray()[11] );
+		assertEquals( 3.0, b.getArray()[12] );
+		assertEquals( 7.0, b.getArray()[13] );
+		assertEquals( 11.0, b.getArray()[14] );
+		assertEquals( 15.0, b.getArray()[15] );
 		
 
 		b.multiply( 2 );
-		assertEquals( 0.0 * 2, b.getArray().get(0) );
-		assertEquals( 4.0 * 2, b.getArray().get(1) );
-		assertEquals( 8.0 * 2, b.getArray().get(2) );
-		assertEquals( 12.0 * 2, b.getArray().get(3) );
-		assertEquals( 1.0 * 2, b.getArray().get(4) );
-		assertEquals( 5.0 * 2, b.getArray().get(5) );
-		assertEquals( 9.0 * 2, b.getArray().get(6) );
-		assertEquals( 13.0 * 2, b.getArray().get(7) );
-		assertEquals( 2.0 * 2, b.getArray().get(8) );
-		assertEquals( 6.0 * 2, b.getArray().get(9) );
-		assertEquals( 10.0 * 2, b.getArray().get(10) );
-		assertEquals( 14.0 * 2, b.getArray().get(11) );
-		assertEquals( 3.0 * 2, b.getArray().get(12) );
-		assertEquals( 7.0 * 2, b.getArray().get(13) );
-		assertEquals( 11.0 * 2, b.getArray().get(14) );
-		assertEquals( 15.0 * 2, b.getArray().get(15) );		
+		assertEquals( 0.0 * 2, b.getArray()[0] );
+		assertEquals( 4.0 * 2, b.getArray()[1] );
+		assertEquals( 8.0 * 2, b.getArray()[2] );
+		assertEquals( 12.0 * 2, b.getArray()[3] );
+		assertEquals( 1.0 * 2, b.getArray()[4] );
+		assertEquals( 5.0 * 2, b.getArray()[5] );
+		assertEquals( 9.0 * 2, b.getArray()[6] );
+		assertEquals( 13.0 * 2, b.getArray()[7] );
+		assertEquals( 2.0 * 2, b.getArray()[8] );
+		assertEquals( 6.0 * 2, b.getArray()[9] );
+		assertEquals( 10.0 * 2, b.getArray()[10] );
+		assertEquals( 14.0 * 2, b.getArray()[11] );
+		assertEquals( 3.0 * 2, b.getArray()[12] );
+		assertEquals( 7.0 * 2, b.getArray()[13] );
+		assertEquals( 11.0 * 2, b.getArray()[14] );
+		assertEquals( 15.0 * 2, b.getArray()[15] );		
 	}
 
 	@Test
@@ -167,10 +167,10 @@ public class Matrix4Test
 		Matrix4 a = new Matrix4();
 		assertEquals( 1.0, a.determinant());
 
-		a.getArray().set(0, 2);
+		a.getArray()[0] = 2;
 		assertEquals( 2.0, a.determinant());
 
-		a.getArray().set(0, 0);
+		a.getArray()[0] = 0;
 		assertEquals( 0.0, a.determinant());
 
 		// calculated via http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/fourD/index.htm
@@ -206,16 +206,16 @@ public class Matrix4Test
 		assertTrue( matrixEquals4( b, new Matrix4() ));
 
 		List<Matrix4> testMatrices = Arrays.asList(
-			new Matrix4().makeRotationX( 0.3 ),
-			new Matrix4().makeRotationX( -0.3 ),
-			new Matrix4().makeRotationY( 0.3 ),
-			new Matrix4().makeRotationY( -0.3 ),
-			new Matrix4().makeRotationZ( 0.3 ),
-			new Matrix4().makeRotationZ( -0.3 ),
+			new Matrix4().makeRotationX( 0.3f ),
+			new Matrix4().makeRotationX( -0.3f ),
+			new Matrix4().makeRotationY( 0.3f ),
+			new Matrix4().makeRotationY( -0.3f ),
+			new Matrix4().makeRotationZ( 0.3f ),
+			new Matrix4().makeRotationZ( -0.3f ),
 			new Matrix4().makeScale( 1, 2, 3 ),
-			new Matrix4().makeScale( 1.0/8, 1.0/2, 1.0/3 ),
+			new Matrix4().makeScale( 1.0f/8, 1.0f/2, 1.0f/3 ),
 			new Matrix4().makeFrustum( -1, 1, -1, 1, 1, 1000 ),
-			new Matrix4().makeFrustum( -16, 16, -9, 9, 0.1, 10000 ),
+			new Matrix4().makeFrustum( -16, 16, -9, 9, 0.1f, 10000 ),
 			new Matrix4().makeTranslation( 1, 2, 3 )
 		);
 
@@ -245,7 +245,7 @@ public class Matrix4Test
 		assertTrue( matrixEquals4( a, b ));
 
 		// ensure that it is a true copy
-		a.getArray().set(0, 2);
+		a.getArray()[0] = 2;
 		assertTrue( ! matrixEquals4( a, b ));
 	}
 
@@ -253,14 +253,14 @@ public class Matrix4Test
 	private boolean matrixEquals4( Matrix4 a, Matrix4 b) 
 	{
 		double tolerance = 0.0001;
-		if( a.getArray().getLength() != b.getArray().getLength() ) 
+		if( a.getArray().length != b.getArray().length )
 		{
 			return false;
 		}
 		
-		for( int i = 0, il = a.getArray().getLength(); i < il; i ++ ) 
+		for( int i = 0, il = a.getArray().length; i < il; i ++ )
 		{
-			double delta = a.getArray().get(i) - b.getArray().get(i);
+			double delta = a.getArray()[i] - b.getArray()[i];
 			if( delta > tolerance ) 
 			{
 				return false;

@@ -68,7 +68,7 @@ public class Plane
 	
 	public Plane setComponents( float x, float y, float z, float w ) {
 
-		this.normal.set( x, y, z );
+		this.normal.set(x, y, z);
 		this.constant = w;
 
 		return this;
@@ -76,7 +76,7 @@ public class Plane
 	
 	public Plane setFromNormalAndCoplanarPoint(Vector3 normal, Vector3 point ) 
 	{
-		this.normal.copy( normal );
+		this.normal.copy(normal);
 		this.constant = - point.dot( this.normal );	// must be this.normal, not normal, as this.normal is normalized
 
 		return this;
@@ -106,7 +106,7 @@ public class Plane
 		// Note: will lead to a divide by zero if the plane is invalid.
 
 		float inverseNormalLength = 1.0f / this.normal.length();
-		this.normal.multiply( inverseNormalLength );
+		this.normal.multiply(inverseNormalLength);
 		this.constant *= inverseNormalLength;
 
 		return this;
@@ -127,7 +127,12 @@ public class Plane
 
 	public float distanceToSphere( Sphere sphere ) 
 	{
-		return this.distanceToPoint( sphere.getCenter() ) - sphere.getRadius();
+		return this.distanceToPoint(sphere.getCenter()) - sphere.getRadius();
+	}
+
+	public Vector3 projectPoint( Vector3 point )
+	{
+		return this.orthoPoint( point, new Vector3() ).sub( point ).negate();
 	}
 
 	public Vector3 projectPoint( Vector3 point, Vector3 optionalTarget ) 

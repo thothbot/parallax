@@ -53,7 +53,7 @@ public class ColorTest
 	public void testSetRGB()
 	{
 		Color c = new Color();
-	    c.setRGB(1.0, 0.25, 0.1);
+	    c.setRGB(1.0f, 0.25f, 0.1f);
 	    assertEquals( 1.0, c.getR() );
 	    assertEquals( 0.25, c.getG() );
 	    assertEquals( 0.1, c.getB() );

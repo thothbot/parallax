@@ -127,10 +127,10 @@ public class RayTest
 	public void testIsIntersectionSphere()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
-		Sphere b = new Sphere( zero3, 0.5 );
-		Sphere c = new Sphere( zero3, 1.5 );
-		Sphere d = new Sphere( one3, 0.1 );
-		Sphere e = new Sphere( two3, 0.1 );
+		Sphere b = new Sphere( zero3, 0.5f );
+		Sphere c = new Sphere( zero3, 1.5f );
+		Sphere d = new Sphere( one3, 0.1f );
+		Sphere e = new Sphere( two3, 0.1f );
 		Sphere f = new Sphere( two3, 1 );
 
 		assertTrue( ! a.isIntersectionSphere( b ));

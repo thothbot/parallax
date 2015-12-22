@@ -23,8 +23,8 @@ import static org.junit.Assert.*;
 
 public class Box3Test
 {
-	private static Vector3 negInf3 = new Vector3( Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY );
-	private static Vector3 posInf3 = new Vector3( Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY );
+	private static Vector3 negInf3 = new Vector3( Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY );
+	private static Vector3 posInf3 = new Vector3( Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY );
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
@@ -93,7 +93,7 @@ public class Box3Test
 		assertTrue( a.center().equals( zero3 ));
 
 		a = new Box3( zero3.clone(), one3.clone() );
-		Vector3 midpoint = one3.clone().multiply( 0.5 );
+		Vector3 midpoint = one3.clone().multiply( 0.5f );
 		assertTrue( a.center().equals( midpoint ));
 	}
 
@@ -190,7 +190,7 @@ public class Box3Test
 		assertTrue( a.getParameter( new Vector3( 1, 1, 1 ) ).equals( new Vector3( 1, 1, 1 ) ));
 
 		assertTrue( b.getParameter( new Vector3( -1, -1, -1 ) ).equals( new Vector3( 0, 0, 0 ) ));
-		assertTrue( b.getParameter( new Vector3( 0, 0, 0 ) ).equals( new Vector3( 0.5, 0.5, 0.5 ) ));
+		assertTrue( b.getParameter( new Vector3( 0, 0, 0 ) ).equals( new Vector3( 0.5f, 0.5f, 0.5f ) ));
 		assertTrue( b.getParameter( new Vector3( 1, 1, 1 ) ).equals( new Vector3( 1, 1, 1 ) ));
 	}
 
@@ -257,8 +257,8 @@ public class Box3Test
 		Box3 c = new Box3( one3.clone().negate(), one3.clone() );
 
 		assertTrue( a.getBoundingSphere().equals( new Sphere( zero3, 0 ) ));
-		assertTrue( b.getBoundingSphere().equals( new Sphere( one3.clone().multiply( 0.5 ), Math.sqrt( 3 ) * 0.5 ) ));
-		assertTrue( c.getBoundingSphere().equals( new Sphere( zero3, Math.sqrt( 12 ) * 0.5 ) ));
+		assertTrue( b.getBoundingSphere().equals( new Sphere( one3.clone().multiply( 0.5f ), (float)(Math.sqrt( 3 ) * 0.5) ) ));
+		assertTrue( c.getBoundingSphere().equals( new Sphere( zero3, (float)(Math.sqrt( 12 ) * 0.5f) ) ));
 	}
 
 	@Test
