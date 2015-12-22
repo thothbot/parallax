@@ -35,7 +35,7 @@ public class BufferAttribute {
 	private boolean needsUpdate = false;
 	private int buffer; //WebGLBuffer
 	
-	public BufferAttribute(FloatBuffer array, int itemSize) {
+	public BufferAttribute(Buffer array, int itemSize) {
 		this.array = array;
 		this.itemSize = itemSize;
 	}

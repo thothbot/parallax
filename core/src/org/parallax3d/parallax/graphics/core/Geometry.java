@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.graphics.core;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -306,75 +307,75 @@ public class Geometry extends AbstractGeometry
 		this.computeBoundingSphere();
 	}
 	
-//	public Geometry fromBufferGeometry( BufferGeometry geometry )
-//	{
-//
-//		Float32Array vertices = (Float32Array)geometry.getAttribute("position").getArray();
-//		Uint16Array indices = geometry.getAttribute("index") != null
-//				? (Uint16Array)geometry.getAttribute("index").getArray() : null;
-//		Float32Array normals = geometry.getAttribute("normal") != null
-//				? (Float32Array)geometry.getAttribute("normal").getArray() : null;
-//		Float32Array colors = geometry.getAttribute("color") != null
-//				? (Float32Array)geometry.getAttribute("color").getArray() : null;
-//		Float32Array uvs = geometry.getAttribute("uv") != null
-//				? (Float32Array)geometry.getAttribute("uv").getArray() : null;
-//
-//		List<Vector3> tempNormals = new ArrayList<Vector3>();
-//		List<Vector2> tempUVs = new ArrayList<Vector2>();
-//
-//		for ( int i = 0, j = 0; i < vertices.getLength(); i += 3, j += 2 ) {
-//
-//			this.vertices.add( new Vector3( vertices.get( i ), vertices.get( i + 1 ), vertices.get( i + 2 ) ) );
-//
-//			if ( normals != null ) {
-//
-//				tempNormals.add( new Vector3( normals.get( i ), normals.get( i + 1 ), normals.get( i + 2 ) ) );
-//
-//			}
-//
-//			if ( colors != null ) {
-//
-//				Color color = new Color();
-//				this.colors.add( color.setRGB( colors.get( i ), colors.get( i + 1 ), colors.get( i + 2 ) ) );
-//
-//			}
-//
-//			if ( uvs != null ) {
-//
-//				tempUVs.add( new Vector2( uvs.get( j ), uvs.get( j + 1 ) ) );
-//
-//			}
-//
-//		}
-//
-//		if ( indices != null ) {
-//
-//			for ( int i = 0; i < indices.getLength(); i += 3 ) {
-//
-//				addFace( normals, colors, tempNormals, tempUVs, (int)indices.get( i ), (int)indices.get( i + 1 ), (int)indices.get( i + 2 ) );
-//
-//			}
-//
-//		} else {
-//
-//			for ( int i = 0; i < vertices.getLength() / 3; i += 3 ) {
-//
-//				addFace( normals, colors, tempNormals, tempUVs, i, i + 1, i + 2 );
-//
-//			}
-//
-//		}
-//
-//		this.computeFaceNormals();
-//
-//		if(geometry.boundingBox != null)
-//			this.boundingBox = geometry.boundingBox.clone();
-//
-//		if(geometry.boundingSphere != null)
-//			this.boundingSphere = geometry.boundingSphere.clone();
-//
-//		return this;
-//	}
+	public Geometry fromBufferGeometry( BufferGeometry geometry )
+	{
+
+		FloatBuffer vertices = (FloatBuffer)geometry.getAttribute("position").getArray();
+		IntBuffer indices = geometry.getAttribute("index") != null
+				? (IntBuffer)geometry.getAttribute("index").getArray() : null;
+		FloatBuffer normals = geometry.getAttribute("normal") != null
+				? (FloatBuffer)geometry.getAttribute("normal").getArray() : null;
+		FloatBuffer colors = geometry.getAttribute("color") != null
+				? (FloatBuffer)geometry.getAttribute("color").getArray() : null;
+		FloatBuffer uvs = geometry.getAttribute("uv") != null
+				? (FloatBuffer)geometry.getAttribute("uv").getArray() : null;
+
+		List<Vector3> tempNormals = new ArrayList<Vector3>();
+		List<Vector2> tempUVs = new ArrayList<Vector2>();
+
+		for ( int i = 0, j = 0; i < vertices.array().length; i += 3, j += 2 ) {
+
+			this.vertices.add( new Vector3( vertices.get( i ), vertices.get( i + 1 ), vertices.get( i + 2 ) ) );
+
+			if ( normals != null ) {
+
+				tempNormals.add( new Vector3( normals.get( i ), normals.get( i + 1 ), normals.get( i + 2 ) ) );
+
+			}
+
+			if ( colors != null ) {
+
+				Color color = new Color();
+				this.colors.add( color.setRGB( colors.get( i ), colors.get( i + 1 ), colors.get( i + 2 ) ) );
+
+			}
+
+			if ( uvs != null ) {
+
+				tempUVs.add( new Vector2( uvs.get( j ), uvs.get( j + 1 ) ) );
+
+			}
+
+		}
+
+		if ( indices != null ) {
+
+			for ( int i = 0; i < indices.array().length; i += 3 ) {
+
+				addFace( normals, colors, tempNormals, tempUVs, (int)indices.get( i ), (int)indices.get( i + 1 ), (int)indices.get( i + 2 ) );
+
+			}
+
+		} else {
+
+			for ( int i = 0; i < vertices.array().length / 3; i += 3 ) {
+
+				addFace( normals, colors, tempNormals, tempUVs, i, i + 1, i + 2 );
+
+			}
+
+		}
+
+		this.computeFaceNormals();
+
+		if(geometry.boundingBox != null)
+			this.boundingBox = geometry.boundingBox.clone();
+
+		if(geometry.boundingSphere != null)
+			this.boundingSphere = geometry.boundingSphere.clone();
+
+		return this;
+	}
 	
 	private void addFace(FloatBuffer normals, FloatBuffer colors, List<Vector3> tempNormals, List<Vector2> tempUVs, int a, int b, int c )
 	{

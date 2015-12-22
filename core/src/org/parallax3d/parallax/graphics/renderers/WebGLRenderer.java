@@ -260,16 +260,16 @@ public class WebGLRenderer extends AbstractRenderer
 		this._supportsVertexTextures = ( this._maxVertexTextures > 0 );
 		this._supportsBoneTextures = this._supportsVertexTextures && WebGLExtensions.get(gl, WebGLExtensions.Id.OES_texture_float);
 
-		this._vertexShaderPrecisionHighpFloat = gl.glGetShaderPrecisionFormat(Shaders.VERTEX_SHADER.getValue(), ShaderPrecisionSpecifiedTypes.HIGH_FLOAT.getValue());
-		this._vertexShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT );
-		this._vertexShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT );
+//		this._vertexShaderPrecisionHighpFloat = gl.glGetShaderPrecisionFormat(Shaders.VERTEX_SHADER.getValue(), ShaderPrecisionSpecifiedTypes.HIGH_FLOAT.getValue());
+//		this._vertexShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT );
+//		this._vertexShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT );
+//
+//		this._fragmentShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT );
+//		this._fragmentShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT );
+//		this._fragmentShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT );
 
-		this._fragmentShaderPrecisionHighpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT );
-		this._fragmentShaderPrecisionMediumpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT );
-		this._fragmentShaderPrecisionLowpFloat = gl.getShaderPrecisionFormat( Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT );
-
-		this.highpAvailable = _vertexShaderPrecisionHighpFloat.getPrecision() > 0 && _fragmentShaderPrecisionHighpFloat.getPrecision() > 0;
-		this.mediumpAvailable = _vertexShaderPrecisionMediumpFloat.getPrecision() > 0 && _fragmentShaderPrecisionMediumpFloat.getPrecision() > 0;
+		this.highpAvailable = true; //_vertexShaderPrecisionHighpFloat.getPrecision() > 0 && _fragmentShaderPrecisionHighpFloat.getPrecision() > 0;
+		this.mediumpAvailable = true; //_vertexShaderPrecisionMediumpFloat.getPrecision() > 0 && _fragmentShaderPrecisionMediumpFloat.getPrecision() > 0;
 
 		if ( this._precision == Shader.PRECISION.HIGHP && ! highpAvailable ) {
 
@@ -303,13 +303,13 @@ public class WebGLRenderer extends AbstractRenderer
 			WebGLExtensions.get(gl, WebGLExtensions.Id.EXT_frag_depth);
 		}
 
-		WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
-		if(GLExtensionCompressedTextureS3TC == null)
-			GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
-		if(GLExtensionCompressedTextureS3TC == null)
-			GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
-		if(GLExtensionCompressedTextureS3TC == null)
-			Log.warn( "WebGLRenderer: S3TC compressed textures not supported." );
+//		WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBGL_compressed_texture_s3tc" );
+//		if(GLExtensionCompressedTextureS3TC == null)
+//			GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "MOZ_WEBGL_compressed_texture_s3tc" );
+//		if(GLExtensionCompressedTextureS3TC == null)
+//			GLExtensionCompressedTextureS3TC = (WebGLCompressedTextureS3tc) gl.getExtension( "WEBKIT_WEBGL_compressed_texture_s3tc" );
+//		if(GLExtensionCompressedTextureS3TC == null)
+			Parallax.app.error( "WebGlRenderer", "WebGLRenderer: S3TC compressed textures not supported." );
 
 		setSize(width, height);
 		setDefaultGLState();
@@ -375,7 +375,8 @@ public class WebGLRenderer extends AbstractRenderer
 	{
 		boolean extension = WebGLExtensions.get( this.gl, WebGLExtensions.Id.EXT_texture_filter_anisotropic );
 
-		return extension ? this.gl.glgetParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
+		return 0;
+//		return extension ? this.gl.glGetParameteri(ExtTextureFilterAnisotropic.MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0;
 	}
 
 	public Shader.PRECISION getPrecision() {
@@ -874,7 +875,7 @@ public class WebGLRenderer extends AbstractRenderer
 		if( uniforms.get("morphTargetInfluences").getLocation() != null )
 		{
 			FloatBuffer vals = object.__webglMorphTargetInfluences;
-			this.gl.glUniform1fv(uniforms.get("morphTargetInfluences").getLocation(), vals);
+			this.gl.glUniform1fv(uniforms.get("morphTargetInfluences").getLocation(), 1, vals);
 		}
 	}
 

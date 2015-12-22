@@ -19,13 +19,14 @@
 package org.parallax3d.parallax.system.gl.enums;
 
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.GL30;
 
 public enum FramebufferSlot implements GLEnum
 {
 	COLOR_ATTACHMENT0(GL20.GL_COLOR_ATTACHMENT0),
 	DEPTH_ATTACHMENT(GL20.GL_DEPTH_ATTACHMENT),
 	STENCIL_ATTACHMENT(GL20.GL_STENCIL_ATTACHMENT),
-	DEPTH_STENCIL_ATTACHMENT(GL20.GL_DEPTH_STENCIL_ATTACHMENT);
+	DEPTH_STENCIL_ATTACHMENT(GL30.GL_DEPTH_STENCIL_ATTACHMENT);
 
 	private final int value;
 

@@ -166,12 +166,12 @@ public class MorphAnimMesh extends Mesh
 		}
 	}
 
-	public void updateAnimation( double delta ) 
+	public void updateAnimation( float delta ) 
 	{
 		if(this.getGeometry() == null)
 			return;
 		
-		double frameTime = (double)this.duration / this.length;
+		float frameTime = (float)this.duration / this.length;
 
 		this.time += this.direction * delta;
 
@@ -209,35 +209,35 @@ public class MorphAnimMesh extends Mesh
 
 		if ( keyframe != this.currentKeyframe ) 
 		{
-			this.morphTargetInfluences.set( this.lastKeyframe, 0.0);
-			this.morphTargetInfluences.set( this.currentKeyframe, 1.0);
+			this.morphTargetInfluences.set( this.lastKeyframe, 0.0f);
+			this.morphTargetInfluences.set( this.currentKeyframe, 1.0f);
 
-			this.morphTargetInfluences.set( keyframe, 0.0 );
+			this.morphTargetInfluences.set( keyframe, 0.0f );
 
 			this.lastKeyframe = this.currentKeyframe;
 			this.currentKeyframe = keyframe;
 		}
 
-		double mix = ( this.time % frameTime ) / frameTime;
+		float mix = ( this.time % frameTime ) / frameTime;
 		
 		if ( this.directionBackwards )
 			mix = 1 - mix;
 
 		this.morphTargetInfluences.set( this.currentKeyframe, mix);
-		this.morphTargetInfluences.set( this.lastKeyframe, 1.0 - mix);
+		this.morphTargetInfluences.set( this.lastKeyframe, 1.0f - mix);
 	}
 	
-	public void interpolateTargets ( int a, int b, double t ) {
+	public void interpolateTargets ( int a, int b, float t ) {
 
-		List<Double> influences = this.morphTargetInfluences;
+		List<Float> influences = this.morphTargetInfluences;
 
 		for ( int i = 0, l = influences.size(); i < l; i ++ ) {
 
-			influences.set( i, 0.0 );
+			influences.set( i, 0.0f );
 
 		}
 
-		if ( a > -1 ) influences.set( a, 1.0 - t);
+		if ( a > -1 ) influences.set( a, 1.0f - t);
 		if ( b > -1 ) influences.set( b, t);
 
 	}

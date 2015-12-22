@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.system.gl.enums;
 
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.GL30;
 
 public enum RenderbufferInternalFormat implements GLEnum
 {
@@ -27,7 +28,7 @@ public enum RenderbufferInternalFormat implements GLEnum
 	RGB565(GL20.GL_RGB565),
 	DEPTH_COMPONENT16(GL20.GL_DEPTH_COMPONENT16),
 	STENCIL_INDEX8(GL20.GL_STENCIL_INDEX8),
-	DEPTH_STENCIL(GL20.GL_DEPTH_STENCIL);
+	DEPTH_STENCIL(GL30.GL_DEPTH_STENCIL);
 
 	private final int value;
 
