@@ -81,6 +81,7 @@ import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.GL30;
 import org.parallax3d.parallax.system.gl.enums.*;
 import sun.rmi.runtime.Log;
 
@@ -2203,7 +2204,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
-		Map<String, Integer> maxLightCount = allocateLights( lights );
+		ObjectMap<String, Integer> maxLightCount = allocateLights( lights );
 		int maxShadows = allocateShadows( lights );
 
 		ProgramParameters parameters = new ProgramParameters();
@@ -2631,7 +2632,7 @@ public class WebGLRenderer extends AbstractRenderer
 				for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
 					listMatrix4f.get( i ).flattenToArrayOffset( uniform.getCacheArray(), i * 16 );
 
-				gl.glUniformMatrix4fv(location, false, uniform.getCacheArray());
+				gl.glUniformMatrix4fv(location, 1, false, uniform.getCacheArray());
 			}
 			else if(type == Uniform.TYPE.T) // single Texture (2d or cube)
 			{
@@ -2663,7 +2664,7 @@ public class WebGLRenderer extends AbstractRenderer
 					units[ i ] = getTextureUnit();
 				}
 
-				gl.glUniform1iv(location, units);
+				gl.glUniform1iv(location, 1, units, 0);
 
 				for( int i = 0, il = textureList.size(); i < il; i ++ )
 				{
@@ -2845,7 +2846,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 	private void setCubeTextureDynamic(RenderTargetCubeTexture texture, int slot)
 	{
-		this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue(), slot);
+		this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
 		this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
 	}
 
@@ -2860,11 +2861,11 @@ public class WebGLRenderer extends AbstractRenderer
 //				this.getInfo().getMemory().textures ++;
 			}
 
-			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue(), slot);
+			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
 			this.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
 
-			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0);
-			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? 1 : 0);
+//			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0);
+//			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? 1 : 0);
 			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_ALIGNMENT.getValue(), texture.getUnpackAlignment());
 
 			Element image = texture.getImage();
@@ -2888,6 +2889,7 @@ public class WebGLRenderer extends AbstractRenderer
 			if ( texture instanceof DataTexture )
 			{
 				this.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0,
+						texture.getFormat().getValue(),
 						((DataTexture) texture).getWidth(),
 						((DataTexture) texture).getHeight(),
 						0,
@@ -2908,7 +2910,7 @@ public class WebGLRenderer extends AbstractRenderer
 		// Needed to check webgl texture in case deferred loading
 		else if(texture.getWebGlTexture() != null)
 		{
-			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue(), slot);
+			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
 			this.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
 		}
 	}
@@ -2974,7 +2976,7 @@ public class WebGLRenderer extends AbstractRenderer
 ////				this.getInfo().getMemory().textures += 6;
 //			}
 //
-//			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue(), slot);
+//			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
 //			this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
 //			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0);
 //
@@ -3016,7 +3018,7 @@ public class WebGLRenderer extends AbstractRenderer
 //		}
 //		else
 //		{
-//			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue(), slot);
+//			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
 //			this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
 //		}
 //
@@ -3027,10 +3029,9 @@ public class WebGLRenderer extends AbstractRenderer
 	 *
 	 * @param renderTarget the render target
 	 */
-	public void setRenderTarget( RenderTargetTexture renderTarget )
-	{
-		Log.debug("  ----> Called setRenderTarget(params)");
-		WebGLFramebuffer framebuffer = null;
+	public void setRenderTarget( RenderTargetTexture renderTarget) {
+		Parallax.app.debug("WebGlRenderer", "  ----> Called setRenderTarget(params)");
+		Integer framebuffer = null;
 
 		int width, height, vx, vy;
 
@@ -3058,8 +3059,8 @@ public class WebGLRenderer extends AbstractRenderer
 
 		if ( framebuffer != this._currentFramebuffer )
 		{
-			this.gl.glbindFramebuffer(framebuffer);
-			this.gl.glviewport(vx, vy, width, height);
+			this.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
+			this.gl.glViewport(vx, vy, width, height);
 
 			this._currentFramebuffer = framebuffer;
 		}
@@ -3094,7 +3095,7 @@ public class WebGLRenderer extends AbstractRenderer
 			//  - limit here is ANGLE's 254 max uniform vectors
 			//    (up to 54 should be safe)
 
-			int nVertexUniforms = this.gl.glgetParameteri(WebGLConstants.MAX_VERTEX_UNIFORM_VECTORS);
+			int nVertexUniforms = this.getIntGlParam(this.gl, GL20.GL_MAX_VERTEX_UNIFORM_VECTORS);
 			int nVertexMatrices = (int) Math.floor( ( nVertexUniforms - 20 ) / 4 );
 
 			int maxBones = nVertexMatrices;
@@ -3105,8 +3106,8 @@ public class WebGLRenderer extends AbstractRenderer
 
 				if ( maxBones < ((SkinnedMesh)object).getBones().size() )
 				{
-					Log.warn( "WebGLRenderer: too many bones - " + ((SkinnedMesh)object).getBones().size() 
-							+ ", this GPU supports just " + maxBones + " (try OpenGL instead of ANGLE)" );
+					Parallax.app.error( "WebGLRenderer", "WebGLRenderer: too many bones - " + ((SkinnedMesh) object).getBones().size()
+							+ ", this GPU supports just " + maxBones + " (try OpenGL instead of ANGLE)");
 				}
 			}
 
@@ -3114,7 +3115,7 @@ public class WebGLRenderer extends AbstractRenderer
 		}
 	}
 
-	private Map<String, Integer> allocateLights ( List<Light> lights ) 
+	private ObjectMap<String, Integer> allocateLights ( List<Light> lights )
 	{
 		int dirLights = 0, pointLights = 0, spotLights = 0, hemiLights = 0;
 				
@@ -3128,7 +3129,7 @@ public class WebGLRenderer extends AbstractRenderer
 			if ( light instanceof HemisphereLight ) hemiLights ++;
 		}
 
-		Map<String, Integer> retval = new FastMap<Integer>();
+		ObjectMap<String, Integer> retval = new ObjectMap<String, Integer>();
 		retval.put("directional", dirLights);
 		retval.put("point", pointLights);
 		retval.put("spot", spotLights);

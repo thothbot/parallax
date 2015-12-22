@@ -103,60 +103,60 @@ public class Texture
 	/**
 	 * Default constructor will create new instance of texture.
 	 */
-	public Texture() 
+	public Texture()
 	{
 		this((Element)Element.createObject());
 	}
 	
-	public Texture(String url)
-	{
-		this(url, null);
-	}
+//	public Texture(String url)
+//	{
+//		this(url, null);
+//	}
 
-	public Texture(String url, final ImageLoadHandler imageLoadHandler)
-	{
-		this(new Image(url), imageLoadHandler);
-	}
+//	public Texture(String url, final ImageLoadHandler imageLoadHandler)
+//	{
+//		this(new Image(url), imageLoadHandler);
+//	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param image              the Image
-	 * @param imageLoadHandler   the {@link ImageLoadHandler}. Not necessary.
-	 */
-	public Texture(Image image, final ImageLoadHandler imageLoadHandler)
-	{
-		this(image.getElement());
+//	/**
+//	 * Constructor
+//	 *
+//	 * @param image              the Image
+//	 * @param imageLoadHandler   the {@link ImageLoadHandler}. Not necessary.
+//	 */
+//	public Texture(Image image, final ImageLoadHandler imageLoadHandler)
+//	{
+//		this(image.getElement());
+//
+//		loadImage(image, new Loader() {
+//
+//			@Override
+//			public void onLoad() {
+//
+//				setNeedsUpdate(true);
+//				if (imageLoadHandler != null)
+//					imageLoadHandler.onImageLoad(Texture.this);
+//			}
+//		});
+//	}
 
-		loadImage(image, new Loader() {
-
-			@Override
-			public void onLoad() {
-
-				setNeedsUpdate(true);
-				if (imageLoadHandler != null)
-					imageLoadHandler.onImageLoad(Texture.this);
-			}
-		});
-	}
-
-	/**
-	 * Constructor will create a texture instance.
-	 *  
-	 * @param image the media element.
-	 */
-	public Texture(Element image) 
-	{
-		this(image,
-				MAPPING_MODE.UV,
-				TextureWrapMode.CLAMP_TO_EDGE,
-				TextureWrapMode.CLAMP_TO_EDGE,
-				TextureMagFilter.LINEAR,
-				TextureMinFilter.LINEAR_MIPMAP_LINEAR,
-				PixelFormat.RGBA,
-				PixelType.UNSIGNED_BYTE,
-				1);
-	}
+//	/**
+//	 * Constructor will create a texture instance.
+//	 *
+//	 * @param image the media element.
+//	 */
+//	public Texture(Element image)
+//	{
+//		this(image,
+//				MAPPING_MODE.UV,
+//				TextureWrapMode.CLAMP_TO_EDGE,
+//				TextureWrapMode.CLAMP_TO_EDGE,
+//				TextureMagFilter.LINEAR,
+//				TextureMinFilter.LINEAR_MIPMAP_LINEAR,
+//				PixelFormat.RGBA,
+//				PixelType.UNSIGNED_BYTE,
+//				1);
+//	}
 	
 	/**
 	 * Constructor will create a texture instance.

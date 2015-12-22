@@ -19,12 +19,13 @@
 package org.parallax3d.parallax.system.gl.enums;
 
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.GL30;
 
 public enum PixelStoreParameter implements GLEnum
 {
 	PACK_ALIGNMENT(GL20.GL_PACK_ALIGNMENT),
 	UNPACK_ALIGNMENT(GL20.GL_UNPACK_ALIGNMENT);
-//	UNPACK_FLIP_Y_WEBGL(GL20.GL_UNPACK_FLIP_Y_WEBGL),
+//	UNPACK_FLIP_Y_WEBGL(GL30.GL_UNPACK_FLIP_Y_WEBGL),
 //	UNPACK_PREMULTIPLY_ALPHA_WEBGL(GL20.GL_UNPACK_PREMULTIPLY_ALPHA_WEBGL);
 
 	private final int value;
