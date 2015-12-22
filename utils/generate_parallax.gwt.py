@@ -16,7 +16,7 @@ MODULE = 'org.parallax3d.parallax'
 STATIC_REWRITE = 'parallax.files.classpath'
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-CORE_DIR = os.path.join(SCRIPT_DIR, os.pardir, 'core', 'src')
+CORE_DIR = os.path.join(SCRIPT_DIR, os.pardir, 'parallax', 'src')
 OUTPUT_FILE = os.path.join(CORE_DIR, 'org', 'parallax3d', 'parallax.gwt.xml')
 
 includes = ['*.java','*.fs','*.vs','*.glsl']

@@ -8,9 +8,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>parallax-backend-gwt</artifactId>
+    <artifactId>parallax-platform-gwt</artifactId>
     <packaging>jar</packaging>
-    <name>Parallax GWT Backend</name>
+    <name>Parallax GWT Platform</name>
 
     <dependencies>
         <dependency>

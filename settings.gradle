@@ -1,2 +1,2 @@
 include ":parallax"
-include ":backends:parallax-backend-gwt"
+include ":platforms:parallax-platform-gwt"

@@ -46,7 +46,7 @@
 
     <modules>
         <module>parallax</module>
-        <module>backends/parallax-backend-gwt</module>
+        <module>platforms/parallax-platform-gwt</module>
     </modules>
 
     <build>

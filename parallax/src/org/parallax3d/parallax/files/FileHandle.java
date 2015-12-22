@@ -39,7 +39,7 @@ public class FileHandle {
 	protected FileHandle () {
 	}
 
-	/** Creates a new absolute FileHandle for the file name. Use this for tools on the desktop that don't need any of the backends.
+	/** Creates a new absolute FileHandle for the file name. Use this for tools on the desktop that don't need any of the platform.
 	 * Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
 	 * @param fileName the filename. */
 	public FileHandle (String fileName) {
@@ -48,7 +48,7 @@ public class FileHandle {
 	}
 
 	/** Creates a new absolute FileHandle for the {@link File}. Use this for tools on the desktop that don't need any of the
-	 * backends. Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
+	 * platform. Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
 	 * @param file the file. */
 	public FileHandle (File file) {
 		this.file = file;

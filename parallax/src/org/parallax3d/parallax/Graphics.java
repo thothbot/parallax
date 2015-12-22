@@ -153,7 +153,7 @@ public interface Graphics {
 	/** @return the display mode of the primary graphics adapter. */
 	public DisplayMode getDesktopDisplayMode();
 
-	/** Sets the current {@link DisplayMode}. Returns false in case the operation failed. Not all backends support this method. See
+	/** Sets the current {@link DisplayMode}. Returns false in case the operation failed. Not all platform support this method. See
 	 * {@link Graphics#supportsDisplayModeChange()}.
 	 * 
 	 * @param displayMode the display mode.

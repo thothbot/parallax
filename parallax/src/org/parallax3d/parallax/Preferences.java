@@ -30,7 +30,7 @@ import java.util.Map;
  * </p>
  * 
  * <p>
- * Use {@link Application#getPreferences(String)} to look up a specific preferences instance. Note that on several backends the
+ * Use {@link Application#getPreferences(String)} to look up a specific preferences instance. Note that on several platform the
  * preferences name will be used as the filename, so make sure the name is valid for a filename.
  * </p>
  * 

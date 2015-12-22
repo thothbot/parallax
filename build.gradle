@@ -57,7 +57,7 @@ project(":parallax") {
     }
 }
 
-project(":backends:parallax-backend-gwt") {
+project(":platforms:parallax-platform-gwt") {
     sourceSets.main.java.exclude "**/System.java"
 
     dependencies {
