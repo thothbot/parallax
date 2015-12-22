@@ -102,7 +102,7 @@ public abstract class GeometryObject extends Object3D
 		renderer.getGL().glDeleteBuffer(geometry.__webglVertexBuffer);
 		renderer.getGL().glDeleteBuffer(geometry.__webglColorBuffer);
 
-		renderer.getInfo().getMemory().geometries --;
+//		renderer.getInfo().getMemory().geometries --;
 	}
 
 	public void setLineWidth (GL20 gl, float width )

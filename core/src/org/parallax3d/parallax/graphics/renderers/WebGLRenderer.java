@@ -38,8 +38,6 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
 import org.parallax3d.parallax.graphics.objects.SkinnedMesh;
-import org.parallax3d.parallax.graphics.textures.CompressedTexture;
-import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.graphics.textures.DataTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.cameras.HasNearFar;
@@ -1000,7 +998,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 					enableAttribute( programAttribute );
 
-					gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT, false, 0, startIndex * size * 4); // 4 bytes per Float32
+					gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false, 0, startIndex * size * 4); // 4 bytes per Float32
 
 				}
 //				else if ( material.defaultAttributeValues != null ) {
@@ -1080,7 +1078,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 					}
 
-					this.gl.glDrawElements(mode, index.getArray().array().length, type, 0);
+					this.gl.glDrawElements(mode.getValue(), ((IntBuffer)index.getArray()).array().length, type.getValue(), 0);
 
 //					this.info.getRender().calls ++;
 //					this.info.getRender().vertices += index.getArray().getLength(); // not really true, here vertices can be shared
@@ -1130,7 +1128,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 				// render non-indexed triangles
 
-				gl.glDrawArrays( mode.getValue(), 0, position.getArray().array().length / 3 );
+				gl.glDrawArrays( mode.getValue(), 0, ((FloatBuffer)position.getArray()).array().length / 3 );
 
 //				this.info.getRender().calls ++;
 //				this.info.getRender().vertices += position.getArray().getLength() / 3;
@@ -1153,7 +1151,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 			// render particles
 
-			gl.glDrawArrays( BeginMode.POINTS.getValue(), 0, position.getArray().array().length / 3 );
+			gl.glDrawArrays( BeginMode.POINTS.getValue(), 0, ((FloatBuffer)position.getArray()).array().length / 3 );
 
 //			this.info.getRender().calls ++;
 //			this.info.getRender().points += position.getArray().getLength() / 3;
@@ -1195,7 +1193,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 					}
 
-					gl.glDrawElements( mode.getValue(), index.getArray().array().length, type.getValue(), 0 ); // 2 bytes per Uint16Array
+					gl.glDrawElements( mode.getValue(), ((IntBuffer)index.getArray()).array().length, type.getValue(), 0 ); // 2 bytes per Uint16Array
 //
 //					this.info.getRender().calls ++;
 //					this.info.getRender().vertices += index.getArray().getLength(); // not really true, here vertices can be shared
@@ -1242,7 +1240,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 				BufferAttribute position = geometry.getAttribute("position");
 
-				gl.glDrawArrays( mode.getValue(), 0, position.getArray().array().length / 3 );
+				gl.glDrawArrays( mode.getValue(), 0, ((FloatBuffer)position.getArray()).array().length / 3 );
 
 //				this.info.getRender().calls ++;
 //				this.info.getRender().points += position.getArray().getLength() / 3;
@@ -1254,7 +1252,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {
 
-		long maxVerticesInGroup = WebGLExtensions.get(gl, WebGLExtensions.Id.OES_element_index_uint) != null ? 4294967296L : 65535L;
+		long maxVerticesInGroup = WebGLExtensions.get(gl, WebGLExtensions.Id.OES_element_index_uint) ? 4294967296L : 65535L;
 
 		int numMorphTargets = geometry.getMorphTargets().size();
 		int numMorphNormals = geometry.getMorphNormals().size();
@@ -2359,7 +2357,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 		if ( refreshProgram || !camera.equals( this._currentCamera) )
 		{
-			this.gl.glUniformMatrix4fv(m_uniforms.get("projectionMatrix").getLocation(), false, camera.getProjectionMatrix().getArray());
+			this.gl.glUniformMatrix4fv(m_uniforms.get("projectionMatrix").getLocation(), 1, false, camera.getProjectionMatrix().getArray(), 0);
 
 			if ( _logarithmicDepthBuffer ) {
 
@@ -2393,7 +2391,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 				if ( m_uniforms.get("viewMatrix").getLocation() != null )
 				{
-					this.gl.glUniformMatrix4fv(m_uniforms.get("viewMatrix").getLocation(), false, camera.getMatrixWorldInverse().getArray());
+					this.gl.glUniformMatrix4fv(m_uniforms.get("viewMatrix").getLocation(), 1, false, camera.getMatrixWorldInverse().getArray(), 0);
 				}
 			}
 		}
@@ -2417,7 +2415,7 @@ public class WebGLRenderer extends AbstractRenderer
 			{
 				if ( m_uniforms.get("boneGlobalMatrices").getLocation() != null )
 				{
-					this.gl.glUniformMatrix4fv(m_uniforms.get("boneGlobalMatrices").getLocation(), false, ((SkinnedMesh) object).boneMatrices);
+					this.gl.glUniformMatrix4fv(m_uniforms.get("boneGlobalMatrices").getLocation(), 1, false, ((SkinnedMesh) object).boneMatrices, 0);
 				}
 			}
 		}
@@ -2461,12 +2459,12 @@ public class WebGLRenderer extends AbstractRenderer
 		loadUniformsMatrices( m_uniforms, object );
 
 		if ( m_uniforms.get("modelMatrix").getLocation() != null )
-			this.gl.glUniformMatrix4fv(m_uniforms.get("modelMatrix").getLocation(), false, object.getMatrixWorld().getArray());
+			this.gl.glUniformMatrix4fv(m_uniforms.get("modelMatrix").getLocation(), 1, false, object.getMatrixWorld().getArray(), 0);
 
 		return shader;
 	}
 
-	private void refreshUniformsShadow( Map<String, Uniform> uniforms, List<Light> lights )
+	private void refreshUniformsShadow( ObjectMap<String, Uniform> uniforms, List<Light> lights )
 	{
 		if ( uniforms.containsKey("shadowMatrix") )
 		{
@@ -2501,17 +2499,17 @@ public class WebGLRenderer extends AbstractRenderer
 
 	// Uniforms (load to GPU)
 
-	private void loadUniformsMatrices ( Map<String, Uniform> uniforms, GeometryObject object )
+	private void loadUniformsMatrices ( ObjectMap<String, Uniform> uniforms, GeometryObject object )
 	{
 		GeometryObject objectImpl = (GeometryObject) object;
-		this.gl.glUniformMatrix4fv(uniforms.get("modelViewMatrix").getLocation(), false, objectImpl._modelViewMatrix.getArray());
+		this.gl.glUniformMatrix4fv(uniforms.get("modelViewMatrix").getLocation(), 1, false, objectImpl._modelViewMatrix.getArray(), 0);
 
 		if ( uniforms.containsKey("normalMatrix") )
-			this.gl.glUniformMatrix3fv(uniforms.get("normalMatrix").getLocation(), false, objectImpl._normalMatrix.getArray());
+			this.gl.glUniformMatrix3fv(uniforms.get("normalMatrix").getLocation(), 1, false, objectImpl._normalMatrix.getArray(), 0);
 	}
 
 	@SuppressWarnings("unchecked")
-	private void loadUniformsGeneric( Map<String, Uniform> materialUniforms )
+	private void loadUniformsGeneric( ObjectMap<String, Uniform> materialUniforms )
 	{
 		GL20 gl = getGL();
 
@@ -2643,11 +2641,12 @@ public class WebGLRenderer extends AbstractRenderer
 
 				if ( texture != null )
 				{
-					if ( texture.getClass() == CubeTexture.class )
-						setCubeTexture( (CubeTexture) texture, textureUnit );
-
-					else if ( texture.getClass() == RenderTargetCubeTexture.class )
-						setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
+//					if ( texture.getClass() == CubeTexture.class )
+//						setCubeTexture( (CubeTexture) texture, textureUnit );
+//
+//					else
+					if ( texture.getClass() == RenderTargetCubeTexture.class )
+						setCubeTextureDynamic((RenderTargetCubeTexture) texture, textureUnit);
 
 					else
 						setTexture( texture, textureUnit );
@@ -2860,8 +2859,8 @@ public class WebGLRenderer extends AbstractRenderer
 //				this.getInfo().getMemory().textures ++;
 			}
 
-			this.gl.glactiveTexture(TextureUnit.TEXTURE0, slot);
-			this.gl.glbindTexture(TextureTarget.TEXTURE_2D, texture.getWebGlTexture());
+			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue(), slot);
+			this.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
 
 			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0);
 			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.getValue(), texture.isPremultiplyAlpha() ? 1 : 0);
@@ -2871,20 +2870,21 @@ public class WebGLRenderer extends AbstractRenderer
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() )
 					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
 
-			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
+			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_2D.getValue(), isImagePowerOfTwo );
 
-			if ( texture instanceof CompressedTexture)
-			{
-				List<DataTexture> mipmaps = ((CompressedTexture) texture).getMipmaps();
-
-				for( int i = 0, il = mipmaps.size(); i < il; i ++ )
-				{
-					DataTexture mipmap = mipmaps.get( i );
-					this.gl.glCompressedTexImage2D(TextureTarget.TEXTURE_2D.getValue(), i, ((CompressedTexture) texture).getCompressedFormat(),
-							mipmap.getWidth(), mipmap.getHeight(), 0, mipmap.getData());
-				}
-			}
-			else if ( texture instanceof DataTexture )
+//			if ( texture instanceof CompressedTexture)
+//			{
+//				List<DataTexture> mipmaps = ((CompressedTexture) texture).getMipmaps();
+//
+//				for( int i = 0, il = mipmaps.size(); i < il; i ++ )
+//				{
+//					DataTexture mipmap = mipmaps.get( i );
+//					this.gl.glCompressedTexImage2D(TextureTarget.TEXTURE_2D.getValue(), i, ((CompressedTexture) texture).getCompressedFormat(),
+//							mipmap.getWidth(), mipmap.getHeight(), 0, mipmap.getData());
+//				}
+//			}
+//			else
+			if ( texture instanceof DataTexture )
 			{
 				this.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0,
 						((DataTexture) texture).getWidth(),
@@ -2896,7 +2896,7 @@ public class WebGLRenderer extends AbstractRenderer
 			}
 			else
 			{
-				this.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0, texture.getFormat(), texture.getType(), (ImageElement) image);
+				this.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0, texture.getFormat().getValue(), texture.getType().getValue(), (ImageElement) image);
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )
@@ -2959,67 +2959,67 @@ public class WebGLRenderer extends AbstractRenderer
 //
 //		return canvas;
 //	}
-
-	private void setCubeTexture ( CubeTexture texture, int slot )
-	{
-		if ( !texture.isValid() )
-			return;
-
-		if ( texture.isNeedsUpdate() )
-		{
-			if ( texture.getWebGlTexture() == null )
-			{
-				texture.setWebGlTexture(this.gl.glcreateTexture());
-				this.getInfo().getMemory().textures += 6;
-			}
-
-			this.gl.glactiveTexture(TextureUnit.TEXTURE0, slot);
-			this.gl.glbindTexture(TextureTarget.TEXTURE_CUBE_MAP, texture.getWebGlTexture());
-			this.gl.glpixelStorei(PixelStoreParameter.UNPACK_FLIP_Y_WEBGL, texture.isFlipY() ? 1 : 0);
-
-			List<Element> cubeImage = new ArrayList<Element>();
-
-			for ( int i = 0; i < 6; i ++ )
-			{
-				if ( this.autoScaleCubemaps )
-					cubeImage.add(clampToMaxSize( texture.getImage( i ), this._maxCubemapSize ));
-
-				else
-					cubeImage.add(texture.getImage( i ));
-			}
-
-			Element image = cubeImage.get( 0 );
-			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() )
-					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
-
-			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP, true /*power of two*/ );
-
-			for ( int i = 0; i < 6; i ++ )
-			{
-				if(!isImagePowerOfTwo)
-				{
-					this.gl.gltexImage2D(TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i, 0,
-							texture.getFormat(), texture.getType(), createPowerOfTwoImage(cubeImage.get(i)));
-				}
-				else
-				{
-					this.gl.gltexImage2D(TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X, i, 0,
-							texture.getFormat(), texture.getType(), (ImageElement) cubeImage.get(i));
-				}
-			}
-
-			if ( texture.isGenerateMipmaps() )
-				this.gl.glgenerateMipmap(TextureTarget.TEXTURE_CUBE_MAP);
-
-			texture.setNeedsUpdate(false);
-		}
-		else
-		{
-			this.gl.glactiveTexture(TextureUnit.TEXTURE0, slot);
-			this.gl.glbindTexture(TextureTarget.TEXTURE_CUBE_MAP, texture.getWebGlTexture());
-		}
-
-	}
+//
+//	private void setCubeTexture ( CubeTexture texture, int slot )
+//	{
+//		if ( !texture.isValid() )
+//			return;
+//
+//		if ( texture.isNeedsUpdate() )
+//		{
+//			if ( texture.getWebGlTexture() == null )
+//			{
+//				texture.setWebGlTexture(this.gl.glGenTexture());
+////				this.getInfo().getMemory().textures += 6;
+//			}
+//
+//			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue(), slot);
+//			this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
+//			this.gl.glPixelStorei(PixelStoreParameter.UNPACK_FLIP_Y_WEBGL.getValue(), texture.isFlipY() ? 1 : 0);
+//
+//			List<Element> cubeImage = new ArrayList<Element>();
+//
+//			for ( int i = 0; i < 6; i ++ )
+//			{
+//				if ( this.autoScaleCubemaps )
+//					cubeImage.add(clampToMaxSize( texture.getImage( i ), this._maxCubemapSize ));
+//
+//				else
+//					cubeImage.add(texture.getImage( i ));
+//			}
+//
+//			Element image = cubeImage.get( 0 );
+//			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getOffsetWidth() )
+//					&& Mathematics.isPowerOfTwo( image.getOffsetHeight() );
+//
+//			texture.setTextureParameters( getGL(), getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP.getValue(), true /*power of two*/ );
+//
+//			for ( int i = 0; i < 6; i ++ )
+//			{
+//				if(!isImagePowerOfTwo)
+//				{
+//					this.gl.glTexImage2D(TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue(), i, 0,
+//							texture.getFormat(), texture.getType(), createPowerOfTwoImage(cubeImage.get(i)));
+//				}
+//				else
+//				{
+//					this.gl.glTexImage2D(TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue(), i, 0,
+//							texture.getFormat(), texture.getType(), (ImageElement) cubeImage.get(i));
+//				}
+//			}
+//
+//			if ( texture.isGenerateMipmaps() )
+//				this.gl.glGenerateMipmap(TextureTarget.TEXTURE_CUBE_MAP.getValue());
+//
+//			texture.setNeedsUpdate(false);
+//		}
+//		else
+//		{
+//			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue(), slot);
+//			this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
+//		}
+//
+//	}
 
 	/**
 	 * Setup render target

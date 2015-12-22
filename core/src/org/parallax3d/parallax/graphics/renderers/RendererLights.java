@@ -31,6 +31,7 @@ import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.lights.PointLight;
 import org.parallax3d.parallax.graphics.lights.ShadowLight;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.system.ObjectMap;
 
 /**
  * Lights used in the {@link Scene}.
@@ -75,7 +76,7 @@ public class RendererLights
 		}
 	}
 	
-	public void refreshUniformsLights ( Map<String, Uniform> uniforms )
+	public void refreshUniformsLights ( ObjectMap<String, Uniform> uniforms )
 	{
 		ambient.refreshUniform(uniforms);
 		directional.refreshUniform(uniforms);

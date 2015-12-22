@@ -25,14 +25,14 @@ public final class CurveHelix extends Curve
 {
 
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
-		double a = 30; // radius
-		double b = 150; //height
-		double t2 = 2.0 * Math.PI * t * b / 30.0;
-		double tx = Math.cos(t2) * a;
-		double	ty = Math.sin(t2) * a;
-		double	tz = b * t;
+		float a = 30; // radius
+		float b = 150; //height
+		float t2 = (float)(2.0 * Math.PI * t * b / 30.0);
+		float tx = (float)(Math.cos(t2) * a);
+		float ty = (float)(Math.sin(t2) * a);
+		float tz = b * t;
 
 		return new Vector3(tx, ty, tz);
 	}

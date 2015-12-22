@@ -37,7 +37,7 @@ import org.parallax3d.parallax.math.Vector4;
 public class SkinnedMesh extends Mesh {
 	
 	public Texture boneTexture;
-//	public float[] boneMatrices = new float[];
+	public float[] boneMatrices;
 	
 	private String bindMode = "attached";
 	private Matrix4 bindMatrix = new Matrix4();
@@ -132,13 +132,13 @@ public class SkinnedMesh extends Mesh {
 		this.boneTexture = boneTexture;
 	}
 
-//	public float[] getBoneMatrices() {
-//		return boneMatrices;
-//	}
-//
-//	public void setBoneMatrices(float[] boneMatrices) {
-//		this.boneMatrices = boneMatrices;
-//	}
+	public float[] getBoneMatrices() {
+		return boneMatrices;
+	}
+
+	public void setBoneMatrices(float[] boneMatrices) {
+		this.boneMatrices = boneMatrices;
+	}
 
 	public void normalizeSkinWeights () {
 

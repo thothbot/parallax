@@ -24,25 +24,25 @@ import org.parallax3d.parallax.math.Vector3;
 public final class CurveTrefoilKnot extends Curve
 {
 
-	private double scale;
+	private float scale;
 	
 	public CurveTrefoilKnot()
 	{
 		this(10);
 	}
 	
-	public CurveTrefoilKnot(double scale)
+	public CurveTrefoilKnot(float scale)
 	{
 		this.scale = scale;
 	}
 	
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
 		t *= Math.PI * 2.0;
-		double tx = (2.0 + Math.cos(3.0 * t)) * Math.cos(2.0 * t);
-		double ty = (2.0 + Math.cos(3.0 * t)) * Math.sin(2.0 * t);
-		double tz = Math.sin(3.0 * t);
+		float tx = (float)((2.0 + Math.cos(3.0 * t)) * Math.cos(2.0 * t));
+		float ty = (float)((2.0 + Math.cos(3.0 * t)) * Math.sin(2.0 * t));
+		float tz = (float)(Math.sin(3.0 * t));
 
 		return new Vector3(tx, ty, tz).multiply(this.scale);
 	}

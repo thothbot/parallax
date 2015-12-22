@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ObjectMap;
 
 /**
  * Abstract realization of FogAbstract. This class implements color
@@ -89,7 +90,7 @@ public abstract class AbstractFog
 	 * 
 	 * @param uniforms the map of uniforms
 	 */
-	public void refreshUniforms(Map<String, Uniform> uniforms)
+	public void refreshUniforms(ObjectMap<String, Uniform> uniforms)
 	{
 		uniforms.get("fogColor").setValue( getColor() );
 	}

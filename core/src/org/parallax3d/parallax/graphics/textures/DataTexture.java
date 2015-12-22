@@ -18,10 +18,12 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
+import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.backends.gwt.client.gl2.arrays.Uint8Array;
-import org.parallax3d.parallax.backends.gwt.client.gl2.enums.PixelFormat;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.gl.enums.PixelFormat;
+
+import java.nio.IntBuffer;
 
 /**
  * Implementation of data texture.
@@ -32,7 +34,7 @@ import org.parallax3d.parallax.math.Color;
 @ThreeJsObject("THREE.DataTexture")
 public class DataTexture extends Texture
 {
-	private Uint8Array data;
+	private IntBuffer data;
 	private int width;
 	private int height;
 
@@ -57,11 +59,11 @@ public class DataTexture extends Texture
 		generateDataTexture(color);
 	}
 	
-	public Uint8Array getData() {
+	public IntBuffer getData() {
 		return data;
 	}
 
-	public void setData(Uint8Array data) {
+	public void setData(IntBuffer data) {
 		this.data = data;
 	}
 
@@ -84,7 +86,7 @@ public class DataTexture extends Texture
 	public void generateDataTexture( Color color ) 
 	{
 		int size = width * height;
-		Uint8Array data = Uint8Array.create( 3 * size );
+		IntBuffer data = BufferUtils.newIntBuffer(3 * size);
 
 		int r = (int)Math.floor( color.getR() * 255 );
 		int g = (int)Math.floor( color.getG() * 255 );
@@ -92,9 +94,9 @@ public class DataTexture extends Texture
 
 		for ( int i = 0; i < size; i ++ ) 
 		{
-			data.set( i * 3, r);
-			data.set( i * 3 + 1, g);
-			data.set( i * 3 + 2, b);
+			data.put(i * 3, r);
+			data.put(i * 3 + 1, g);
+			data.put(i * 3 + 2, b);
 
 		}
 

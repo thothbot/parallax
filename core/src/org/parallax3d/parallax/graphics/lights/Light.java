@@ -25,6 +25,7 @@ import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -39,7 +40,7 @@ public abstract class Light extends Object3D
 	public interface UniformLight 
 	{
 		public void reset();
-		public void refreshUniform(Map<String, Uniform> uniforms);
+		public void refreshUniform(ObjectMap<String, Uniform> uniforms);
 	}
 	
 	private Color color;

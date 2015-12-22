@@ -28,6 +28,7 @@ import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.BufferUtils;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -63,7 +64,7 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 		}
 
 		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms)
+		public void refreshUniform(ObjectMap<String, Uniform> uniforms)
 		{
 			uniforms.get("pointLightColor").setValue( colors );
 			uniforms.get("pointLightPosition").setValue( positions );

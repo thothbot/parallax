@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.scenes;
 import java.util.Map;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -111,7 +112,7 @@ public final class Fog extends AbstractFog
 	}
 	
 	@Override
-	public void refreshUniforms(Map<String, Uniform> uniforms)
+	public void refreshUniforms(ObjectMap<String, Uniform> uniforms)
 	{
 		super.refreshUniforms(uniforms);
 		

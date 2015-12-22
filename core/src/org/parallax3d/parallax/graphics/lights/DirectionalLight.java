@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.BufferUtils;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
@@ -62,7 +63,7 @@ public class DirectionalLight extends ShadowLight
 		}
 
 		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms)
+		public void refreshUniform(ObjectMap<String, Uniform> uniforms)
 		{
 			uniforms.get("directionalLightColor").setValue( colors );
 			uniforms.get("directionalLightDirection").setValue( positions );

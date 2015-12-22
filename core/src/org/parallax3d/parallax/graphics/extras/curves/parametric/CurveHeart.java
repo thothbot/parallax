@@ -24,25 +24,25 @@ import org.parallax3d.parallax.math.Vector3;
 public final class CurveHeart extends Curve
 {
 
-	private double scale;
+	private float scale;
 	
 	public CurveHeart()
 	{
-		this(5.0);
+		this(5.0f);
 	}
 
-	public CurveHeart(double scale)
+	public CurveHeart(float scale)
 	{
 		this.scale = scale;
 	}
 
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
-		t = 2.0 * Math.PI * t;
+		t = (float)(2.0 * Math.PI * t);
 
-		double tx = 16.0 * Math.pow(Math.sin(t), 3.0);
-		double ty = 13.0 * Math.cos(t) - 5.0 * Math.cos(2.0 * t) - 2.0 * Math.cos(3.0 * t) - Math.cos(4.0 * t);
+		float tx = (float)(16.0 * Math.pow(Math.sin(t), 3.0));
+		float ty = (float)(13.0 * Math.cos(t) - 5.0 * Math.cos(2.0 * t) - 2.0 * Math.cos(3.0 * t) - Math.cos(4.0 * t));
 
 		return new Vector3(tx, ty, 0).multiply(this.scale);
 	}

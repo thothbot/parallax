@@ -932,7 +932,7 @@ public abstract class Material
 
 		boolean deleteProgram = false;
 
-		for ( String key: renderer._programs.keySet()) 
+		for ( String key: renderer._programs.keys())
 		{
 			Shader shader = renderer._programs.get(key);
 			
@@ -949,7 +949,7 @@ public abstract class Material
 
 			renderer.getGL().glDeleteProgram(program);
 
-			renderer.getInfo().getMemory().programs --;
+//			renderer.getInfo().getMemory().programs --;
 		}
 
 	}

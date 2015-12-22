@@ -500,7 +500,7 @@ public class Texture
 
 		renderer.getGL().glDeleteTexture( getWebGlTexture() );
 
-		renderer.getInfo().getMemory().textures--;
+//		renderer.getInfo().getMemory().textures--;
 	}
 
 	public Texture clone(Texture texture)
@@ -525,44 +525,44 @@ public class Texture
 				this.magFilter, this.minFilter, this.format, this.type, this.anisotropy));
 	}
 	
-	private static FlowPanel loadingArea = new FlowPanel();
-	static {
-		loadingArea.getElement().getStyle().setProperty("visibility", "hidden");
-        loadingArea.getElement().getStyle().setProperty("position", "absolute");
-        loadingArea.getElement().getStyle().setProperty("width", "1px");
-        loadingArea.getElement().getStyle().setProperty("height", "1px");
-        loadingArea.getElement().getStyle().setProperty("overflow", "hidden");
-        RootPanel.get().add(loadingArea);
-	}
-	
-	protected interface Loader 
-	{
-		void onLoad();
-	}
-	
-	protected void loadImage(final Image image, final Loader loader)
-	{		
-		loadingArea.add(image);
-		
-	    // Hook up an error handler, so that we can be informed if the image fails
-	    // to load.
-		image.addErrorHandler(new ErrorHandler() {
-			
-			@Override
-			public void onError(ErrorEvent event)
-			{
-				Log.error("An error occurred while loading image: " + image.getUrl());
-			}
-		});
-
-		image.addLoadHandler(new LoadHandler() {
-
-			@Override
-			public void onLoad(LoadEvent event) 
-			{			
-				Log.info("Loaded image: " + image.getUrl());
-				loader.onLoad();
-			}
-		});
-	}
+//	private static FlowPanel loadingArea = new FlowPanel();
+//	static {
+//		loadingArea.getElement().getStyle().setProperty("visibility", "hidden");
+//        loadingArea.getElement().getStyle().setProperty("position", "absolute");
+//        loadingArea.getElement().getStyle().setProperty("width", "1px");
+//        loadingArea.getElement().getStyle().setProperty("height", "1px");
+//        loadingArea.getElement().getStyle().setProperty("overflow", "hidden");
+//        RootPanel.get().add(loadingArea);
+//	}
+//
+//	protected interface Loader
+//	{
+//		void onLoad();
+//	}
+//
+//	protected void loadImage(final Image image, final Loader loader)
+//	{
+//		loadingArea.add(image);
+//
+//	    // Hook up an error handler, so that we can be informed if the image fails
+//	    // to load.
+//		image.addErrorHandler(new ErrorHandler() {
+//
+//			@Override
+//			public void onError(ErrorEvent event)
+//			{
+//				Log.error("An error occurred while loading image: " + image.getUrl());
+//			}
+//		});
+//
+//		image.addLoadHandler(new LoadHandler() {
+//
+//			@Override
+//			public void onLoad(LoadEvent event)
+//			{
+//				Log.info("Loaded image: " + image.getUrl());
+//				loader.onLoad();
+//			}
+//		});
+//	}
 }

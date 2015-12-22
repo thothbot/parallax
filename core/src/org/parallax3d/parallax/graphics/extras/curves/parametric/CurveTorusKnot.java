@@ -24,26 +24,26 @@ import org.parallax3d.parallax.graphics.extras.core.Curve;
 public final class CurveTorusKnot extends Curve
 {
 
-	private double scale;
+	private float scale;
 	
 	public CurveTorusKnot()
 	{
 		this(10);
 	}
 	
-	public CurveTorusKnot(double scale)
+	public CurveTorusKnot(float scale)
 	{
 		this.scale = scale;
 	}
 
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
-		double p = 3, q = 4;
+		float p = 3, q = 4;
 		t *= Math.PI * 2.0;
-		double tx = (2.0 + Math.cos(q * t)) * Math.cos(p * t);
-		double ty = (2.0 + Math.cos(q * t)) * Math.sin(p * t);
-		double tz = Math.sin(q * t);
+		float tx = (float)((2.0 + Math.cos(q * t)) * Math.cos(p * t));
+		float ty = (float)((2.0 + Math.cos(q * t)) * Math.sin(p * t));
+		float tz = (float)(Math.sin(q * t));
 
 		return new Vector3(tx, ty, tz).multiply(this.scale);
 	}

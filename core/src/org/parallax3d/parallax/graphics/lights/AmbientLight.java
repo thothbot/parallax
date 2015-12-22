@@ -25,6 +25,7 @@ import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.BufferUtils;
+import org.parallax3d.parallax.system.ObjectMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -57,7 +58,7 @@ public final class AmbientLight extends Light
 		}
 
 		@Override
-		public void refreshUniform(Map<String, Uniform> uniforms) 
+		public void refreshUniform(ObjectMap<String, Uniform> uniforms)
 		{
 			uniforms.get("ambientLightColor").setValue( colors );
 		}

@@ -24,21 +24,21 @@ import org.parallax3d.parallax.graphics.extras.core.Curve;
 public final class CurveViviani extends Curve
 {
 
-	private double radius;
+	private float radius;
 	
-	public CurveViviani(double radius)
+	public CurveViviani(float radius)
 	{
 		this.radius = radius;
 	}
 
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
-		t = t * 4.0 * Math.PI; // Normalized to 0..1
-		double a = this.radius / 2.0;
-		double tx = a * (1.0 + Math.cos(t));
-		double ty = a * Math.sin(t);
-		double tz = 2.0 * a * Math.sin(t / 2.0);
+		t = (float)(t * 4.0 * Math.PI); // Normalized to 0..1
+		float a = this.radius / 2.0f;
+		float tx = (float)(a * (1.0 + Math.cos(t)));
+		float ty = (float)(a * Math.sin(t));
+		float tz = (float)(2.0 * a * Math.sin(t / 2.0));
 
 		return new Vector3(tx, ty, tz);
 	}

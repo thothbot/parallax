@@ -24,25 +24,25 @@ import org.parallax3d.parallax.math.Vector3;
 public final class CurveTrefoilPolynomialKnot extends Curve
 {
 
-	private double scale;
+	private float scale;
 	
 	public CurveTrefoilPolynomialKnot()
 	{
 		this(10);
 	}
 	
-	public CurveTrefoilPolynomialKnot(double scale)
+	public CurveTrefoilPolynomialKnot(float scale)
 	{
 		this.scale = scale;
 	}
 	
 	@Override
-	public Vector3 getPoint(double t)
+	public Vector3 getPoint(float t)
 	{
-		t = t * 4.0 - 2.0;
-		double tx = Math.pow(t, 3.0) - 3.0 * t;
-		double	ty = Math.pow(t, 4.0) - 4.0 * t * t;
-		double	tz = 1 / 5.0 * Math.pow(t, 5.0) - 2.0 * t;
+		t = t * 4.0f - 2.0f;
+		float tx = (float)(Math.pow(t, 3.0) - 3.0 * t);
+		float ty = (float)(Math.pow(t, 4.0) - 4.0 * t * t);
+		float tz = (float)(1 / 5.0 * Math.pow(t, 5.0) - 2.0 * t);
 
 		return new Vector3(tx, ty, tz).multiply(this.scale);
 	}
