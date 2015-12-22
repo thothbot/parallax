@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 
 public class Line3Test
 {
+	private static float DELTA = 0.0f;
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
@@ -82,22 +83,22 @@ public class Line3Test
 		Line3 a = new Line3( one3.clone(), new Vector3( 1, 1, 2 ) );
 
 		// nearby the ray
-		assertEquals( 0.0, a.closestPointToPointParameter( zero3.clone(), true ));
+		assertEquals( 0.0, a.closestPointToPointParameter( zero3.clone(), true ), DELTA );
 		Vector3 b1 = a.closestPointToPoint( zero3.clone(), true );
 		assertTrue( b1.distanceTo( new Vector3( 1, 1, 1 ) ) < 0.0001);
 
 		// nearby the ray
-		assertEquals( -1.0, a.closestPointToPointParameter( zero3.clone(), false ));
+		assertEquals( -1.0, a.closestPointToPointParameter( zero3.clone(), false ), DELTA );
 		Vector3 b2 = a.closestPointToPoint( zero3.clone(), false );
 		assertTrue( b2.distanceTo( new Vector3( 1, 1, 0 ) ) < 0.0001);
 
 		// nearby the ray
-		assertEquals( 1.0, a.closestPointToPointParameter( new Vector3( 1, 1, 5 ), true ));
+		assertEquals( 1.0, a.closestPointToPointParameter( new Vector3( 1, 1, 5 ), true ), DELTA );
 		Vector3 b = a.closestPointToPoint( new Vector3( 1, 1, 5 ), true );
 		assertTrue( b.distanceTo( new Vector3( 1, 1, 2 ) ) < 0.0001);
 
 		// exactly on the ray
-		assertEquals( 0.0, a.closestPointToPointParameter( one3.clone(), true ) );
+		assertEquals( 0.0, a.closestPointToPointParameter( one3.clone(), true ), DELTA );
 		Vector3 c = a.closestPointToPoint( one3.clone(), true );
 		assertTrue( c.distanceTo( one3.clone() ) < 0.0001);
 	}

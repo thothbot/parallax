@@ -23,14 +23,15 @@ import static org.junit.Assert.*;
 
 public class ColorTest
 {
+	private static float DELTA = 0.0f;
 
 	@Test
 	public void testColor()
 	{
 		Color c = new Color();
-	    assertEquals( 1.0, c.getR() );
-	    assertEquals( 1.0, c.getG() );
-	    assertEquals( 1.0, c.getB() );
+	    assertEquals( 1.0, c.getR(), DELTA );
+	    assertEquals( 1.0, c.getG(), DELTA );
+	    assertEquals( 1.0, c.getB(), DELTA );
 	}
 
 	@Test
@@ -54,9 +55,9 @@ public class ColorTest
 	{
 		Color c = new Color();
 	    c.setRGB(1.0f, 0.25f, 0.1f);
-	    assertEquals( 1.0, c.getR() );
-	    assertEquals( 0.25, c.getG() );
-	    assertEquals( 0.1, c.getB() );
+	    assertEquals( 1.0, c.getR(), DELTA );
+	    assertEquals( 0.25, c.getG(), DELTA );
+	    assertEquals( 0.1, c.getB(), DELTA );
 	}
 
 	@Test
@@ -74,9 +75,9 @@ public class ColorTest
 		Color c2 = new Color();
 	    c2.setRGB(2, 4, 8);
 	    c.copyGammaToLinear(c2);
-	    assertEquals( 4.0, c.getR() );
-	    assertEquals( 16.0, c.getG() );
-	    assertEquals( 64.0, c.getB() );
+	    assertEquals( 4.0, c.getR(), DELTA );
+	    assertEquals( 16.0, c.getG(), DELTA );
+	    assertEquals( 64.0, c.getB(), DELTA );
 	}
 
 	@Test
@@ -86,9 +87,9 @@ public class ColorTest
 		Color c2 = new Color();
 	    c2.setRGB(4, 9, 16);
 	    c.copyLinearToGamma(c2);
-	    assertEquals( 2.0, c.getR() );
-	    assertEquals( 3.0, c.getG() );
-	    assertEquals( 4.0, c.getB() );
+	    assertEquals( 2.0, c.getR(), DELTA );
+	    assertEquals( 3.0, c.getG(), DELTA );
+	    assertEquals( 4.0, c.getB(), DELTA );
 	}
 
 	@Test
@@ -97,9 +98,9 @@ public class ColorTest
 		Color c = new Color();
 	    c.setRGB(2, 4, 8);
 	    c.convertGammaToLinear();
-	    assertEquals( 4.0, c.getR() );
-	    assertEquals( 16.0, c.getG() );
-	    assertEquals( 64.0, c.getB() );
+	    assertEquals( 4.0, c.getR(), DELTA );
+	    assertEquals( 16.0, c.getG(), DELTA );
+	    assertEquals( 64.0, c.getB(), DELTA );
 	}
 
 	@Test
@@ -108,9 +109,9 @@ public class ColorTest
 		Color c = new Color();
 	    c.setRGB(4, 9, 16);
 	    c.convertLinearToGamma();
-	    assertEquals( 2.0, c.getR() );
-	    assertEquals( 3.0, c.getG() );
-	    assertEquals( 4.0, c.getB() );
+	    assertEquals( 2.0, c.getR(), DELTA );
+	    assertEquals( 3.0, c.getG(), DELTA );
+	    assertEquals( 4.0, c.getB(), DELTA );
 	}
 
 	@Test
@@ -118,9 +119,9 @@ public class ColorTest
 	{
 		Color c = new Color();
 	    c.setHex(0xFF0000);
-	    assertEquals( 1.0, c.getR() );
-	    assertEquals( 0.0, c.getG() );
-	    assertEquals( 0.0, c.getB() );
+	    assertEquals( 1.0, c.getR(), DELTA );
+	    assertEquals( 0.0, c.getG(), DELTA );
+	    assertEquals( 0.0, c.getB(), DELTA );
 	}
 
 	@Test
@@ -138,8 +139,8 @@ public class ColorTest
 	    Color c2 = new Color();
 	    c.setRGB(0, 0, 0);
 	    c.lerp(c2, 2);
-	    assertEquals( 2.0, c.getR() );
-	    assertEquals( 2.0, c.getG() );
-	    assertEquals( 2.0, c.getB() );
+	    assertEquals( 2.0, c.getR(), DELTA );
+	    assertEquals( 2.0, c.getG(), DELTA );
+	    assertEquals( 2.0, c.getB(), DELTA );
 	}
 }

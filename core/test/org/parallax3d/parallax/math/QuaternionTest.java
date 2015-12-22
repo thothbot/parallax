@@ -24,6 +24,8 @@ import static org.junit.Assert.*;
 public class QuaternionTest
 {
 
+	private static float DELTA = 0.0f;
+
 	private static float X = 2;
 	private static float Y = 3;
 	private static float Z = 4;
@@ -36,16 +38,16 @@ public class QuaternionTest
 	public void testQuaternion()
 	{
 		Quaternion a = new Quaternion();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
-		assertEquals( 1.0, a.w );
+		assertEquals( 0.0, a.x, DELTA );
+		assertEquals( 0.0, a.y, DELTA );
+		assertEquals( 0.0, a.z, DELTA );
+		assertEquals( 1.0, a.w, DELTA );
 
 		a = new Quaternion( X, Y, Z, W );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
-		assertEquals( W, a.w );
+		assertEquals( X, a.x, DELTA );
+		assertEquals( Y, a.y, DELTA );
+		assertEquals( Z, a.z, DELTA );
+		assertEquals( W, a.w, DELTA );
 	}
 
 	@Test
@@ -53,34 +55,34 @@ public class QuaternionTest
 	{
 		Quaternion a = new Quaternion( X, Y, Z, W );
 		Quaternion b = new Quaternion().copy( a );
-		assertEquals( X, b.x );
-		assertEquals( Y, b.y );
-		assertEquals( Z, b.z );
-		assertEquals( W, b.w );
+		assertEquals( X, b.x, DELTA );
+		assertEquals( Y, b.y, DELTA );
+		assertEquals( Z, b.z, DELTA );
+		assertEquals( W, b.w, DELTA );
 
 		// ensure that it is a true copy
 		a.x = 0;
 		a.y = -1;
 		a.z = 0;
 		a.w = -1;
-		assertEquals( X, b.x );
-		assertEquals( Y, b.y );
+		assertEquals( X, b.x, DELTA );
+		assertEquals( Y, b.y, DELTA );
 	}
 
 	@Test
 	public void testSet()
 	{
 		Quaternion a = new Quaternion();
-		assertEquals( 0.0, a.x );
-		assertEquals( 0.0, a.y );
-		assertEquals( 0.0, a.z );
-		assertEquals( 1.0, a.w );
+		assertEquals( 0.0, a.x, DELTA );
+		assertEquals( 0.0, a.y, DELTA );
+		assertEquals( 0.0, a.z, DELTA );
+		assertEquals( 1.0, a.w, DELTA );
 
 		a.set( X, Y, Z, W );
-		assertEquals( X, a.x );
-		assertEquals( Y, a.y );
-		assertEquals( Z, a.z );
-		assertEquals( W, a.w );
+		assertEquals( X, a.x, DELTA );
+		assertEquals( Y, a.y, DELTA );
+		assertEquals( Z, a.z, DELTA );
+		assertEquals( W, a.w, DELTA );
 	}
 
 //	@Test
@@ -148,16 +150,16 @@ public class QuaternionTest
 		assertTrue( a.length() != 1.0);
 		assertTrue( a.lengthSq() != 1.0);
 		a.normalize();
-		assertEquals( 1.0, a.length() );
-		assertEquals( 1.0, a.lengthSq() );
+		assertEquals( 1.0, a.length(), DELTA );
+		assertEquals( 1.0, a.lengthSq(), DELTA );
 
 		a.set( 0, 0, 0, 0 );
-		assertEquals( 0.0, a.lengthSq() );
-		assertEquals( 0.0, a.length() );
+		assertEquals( 0.0, a.lengthSq(), DELTA );
+		assertEquals( 0.0, a.length(), DELTA );
 
 		b.normalize();
-		assertEquals( 1.0, b.lengthSq() );
-		assertEquals( 1.0, b.length() );
+		assertEquals( 1.0, b.lengthSq(), DELTA );
+		assertEquals( 1.0, b.length(), DELTA );
 	}
 
 	@Test
@@ -169,10 +171,10 @@ public class QuaternionTest
 
 		Quaternion b = a.clone().conjugate();
 
-		assertEquals( -b.x, a.x );
-		assertEquals( -b.y, a.y );
-		assertEquals( -b.z, a.z );
-		assertEquals( b.w, a.w );	
+		assertEquals( -b.x, a.x, DELTA );
+		assertEquals( -b.y, a.y, DELTA );
+		assertEquals( -b.z, a.z, DELTA );
+		assertEquals( b.w, a.w, DELTA );
 	}
 
 //	@Test
@@ -232,8 +234,8 @@ public class QuaternionTest
 		assertTrue( ! b.equals( a ));
 
 		a.copy( b );
-		assertEquals( b.x, a.x );
-		assertEquals( b.y, a.y );
+		assertEquals( b.x, a.x, DELTA );
+		assertEquals( b.y, a.y, DELTA );
 
 		assertTrue( a.equals( b ));
 		assertTrue( b.equals( a ));

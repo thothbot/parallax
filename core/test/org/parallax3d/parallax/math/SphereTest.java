@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 
 public class SphereTest
 {
+	private static float DELTA = 0.0f;
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
@@ -33,11 +34,11 @@ public class SphereTest
 	{
 		Sphere a = new Sphere();
 		assertTrue( a.getCenter().equals( zero3 ));
-		assertEquals( 0.0, a.getRadius() );
+		assertEquals( 0.0, a.getRadius(), DELTA );
 
 		Sphere b = new Sphere( one3, 1.0f );
 		assertTrue( b.getCenter().equals( one3 ));
-		assertEquals( 1.0, b.getRadius() );
+		assertEquals( 1.0, b.getRadius(), DELTA );
 	}
 
 	@Test
@@ -45,11 +46,11 @@ public class SphereTest
 	{
 		Sphere a = new Sphere();
 		assertTrue( a.getCenter().equals( zero3 ));
-		assertEquals( 0.0, a.getRadius() );
+		assertEquals( 0.0, a.getRadius(), DELTA );
 
 		a.set( one3, 1 );
 		assertTrue( a.getCenter().equals( one3 ));
-		assertEquals( 1.0, a.getRadius() );
+		assertEquals( 1.0, a.getRadius(), DELTA );
 	}
 
 	@Test
@@ -59,13 +60,13 @@ public class SphereTest
 		Sphere b = new Sphere().copy( a );
 
 		assertTrue( b.getCenter().equals( one3 ));
-		assertEquals( 1.0, b.getRadius() );
+		assertEquals( 1.0, b.getRadius(), DELTA );
 
 		// ensure that it is a true copy
 		a.setCenter( zero3 );
 		a.setRadius( 0 );
 		assertTrue( b.getCenter().equals( one3 ));
-		assertEquals( 1.0, b.getRadius() );
+		assertEquals( 1.0, b.getRadius(), DELTA );
 	}
 
 	@Test
@@ -93,7 +94,7 @@ public class SphereTest
 		Sphere a = new Sphere( one3, 1 );
 
 		assertTrue( ( a.distanceToPoint( zero3 ) - 0.7320 ) < 0.001);
-		assertEquals( -1.0, a.distanceToPoint( one3 ) );
+		assertEquals( -1.0, a.distanceToPoint( one3 ), DELTA );
 	}
 
 	@Test

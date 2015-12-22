@@ -24,6 +24,8 @@ import static org.junit.Assert.*;
 public class RayTest
 {
 
+	private static float DELTA = 0.0f;
+
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 	private static Vector3 two3 = new Vector3( 2, 2, 2 );
@@ -116,11 +118,11 @@ public class RayTest
 
 		// nearby the ray
 		double b = a.distanceToPoint( zero3 );
-		assertEquals( Math.sqrt( 2 ), b );
+		assertEquals( Math.sqrt( 2 ), b, DELTA );
 
 		// exactly on the ray
 		double c = a.distanceToPoint( one3 );
-		assertEquals( 0.0, c );
+		assertEquals( 0.0, c, DELTA );
 	}
 
 	@Test

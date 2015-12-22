@@ -26,24 +26,24 @@ import static org.junit.Assert.*;
 
 public class Matrix3Test
 {
-
+	private static float DELTA = 0.0f;
 
 	@Test
 	public void testMatrix3()
 	{
 		Matrix3 a = new Matrix3();
-		assertEquals( a.determinant(), 1.0);
+		assertEquals( a.determinant(), 1.0, DELTA );
 
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( 0.0, b.getArray()[0] );
-		assertEquals( 3.0, b.getArray()[1] );
-		assertEquals( 6.0, b.getArray()[2] );
-		assertEquals( 1.0, b.getArray()[3] );
-		assertEquals( 4.0, b.getArray()[4] );
-		assertEquals( 7.0, b.getArray()[5] );
-		assertEquals( 2.0, b.getArray()[6] );
-		assertEquals( 5.0, b.getArray()[7] );
-		assertEquals( 8.0, b.getArray()[8] );
+		assertEquals( 0.0, b.getArray()[0], DELTA );
+		assertEquals( 3.0, b.getArray()[1], DELTA );
+		assertEquals( 6.0, b.getArray()[2], DELTA );
+		assertEquals( 1.0, b.getArray()[3], DELTA );
+		assertEquals( 4.0, b.getArray()[4], DELTA );
+		assertEquals( 7.0, b.getArray()[5], DELTA );
+		assertEquals( 2.0, b.getArray()[6], DELTA );
+		assertEquals( 5.0, b.getArray()[7], DELTA );
+		assertEquals( 8.0, b.getArray()[8], DELTA );
 
 		assertTrue( ! matrixEquals3( a, b ) );
 
@@ -66,33 +66,33 @@ public class Matrix3Test
 	public void testSet()
 	{
 		Matrix3 b = new Matrix3();
-		assertEquals( b.determinant(), 1.0);
+		assertEquals( b.determinant(), 1.0, DELTA);
 
 		b.set( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( 0.0, b.getArray()[0] );
-		assertEquals( 3.0, b.getArray()[1] );
-		assertEquals( 6.0, b.getArray()[2] );
-		assertEquals( 1.0, b.getArray()[3] );
-		assertEquals( 4.0, b.getArray()[4] );
-		assertEquals( 7.0, b.getArray()[5] );
-		assertEquals( 2.0, b.getArray()[6] );
-		assertEquals( 5.0, b.getArray()[7] );
-		assertEquals( 8.0, b.getArray()[8] );
+		assertEquals( 0.0, b.getArray()[0], DELTA );
+		assertEquals( 3.0, b.getArray()[1], DELTA );
+		assertEquals( 6.0, b.getArray()[2], DELTA );
+		assertEquals( 1.0, b.getArray()[3], DELTA );
+		assertEquals( 4.0, b.getArray()[4], DELTA );
+		assertEquals( 7.0, b.getArray()[5], DELTA );
+		assertEquals( 2.0, b.getArray()[6], DELTA );
+		assertEquals( 5.0, b.getArray()[7], DELTA );
+		assertEquals( 8.0, b.getArray()[8], DELTA );
 	}
 
 	@Test
 	public void testIdentity()
 	{
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( 0.0, b.getArray()[0] );
-		assertEquals( 3.0, b.getArray()[1] );
-		assertEquals( 6.0, b.getArray()[2] );
-		assertEquals( 1.0, b.getArray()[3] );
-		assertEquals( 4.0, b.getArray()[4] );
-		assertEquals( 7.0, b.getArray()[5] );
-		assertEquals( 2.0, b.getArray()[6] );
-		assertEquals( 5.0, b.getArray()[7] );
-		assertEquals( 8.0, b.getArray()[8] );
+		assertEquals( 0.0, b.getArray()[0], DELTA );
+		assertEquals( 3.0, b.getArray()[1], DELTA );
+		assertEquals( 6.0, b.getArray()[2], DELTA );
+		assertEquals( 1.0, b.getArray()[3], DELTA );
+		assertEquals( 4.0, b.getArray()[4], DELTA );
+		assertEquals( 7.0, b.getArray()[5], DELTA );
+		assertEquals( 2.0, b.getArray()[6], DELTA );
+		assertEquals( 5.0, b.getArray()[7], DELTA );
+		assertEquals( 8.0, b.getArray()[8], DELTA );
 		
 		Matrix3 a = new Matrix3();
 		assertTrue( ! matrixEquals3( a, b ));
@@ -107,32 +107,32 @@ public class Matrix3Test
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
 
 		b.multiply( 2 );
-		assertEquals( 0.0 * 2, b.getArray()[0] );
-		assertEquals( 3.0 * 2, b.getArray()[1] );
-		assertEquals( 6.0 * 2, b.getArray()[2] );
-		assertEquals( 1.0 * 2, b.getArray()[3] );
-		assertEquals( 4.0 * 2, b.getArray()[4] );
-		assertEquals( 7.0 * 2, b.getArray()[5] );
-		assertEquals( 2.0 * 2, b.getArray()[6] );
-		assertEquals( 5.0 * 2, b.getArray()[7] );
-		assertEquals( 8.0 * 2, b.getArray()[8] );
+		assertEquals( 0.0 * 2, b.getArray()[0], DELTA );
+		assertEquals( 3.0 * 2, b.getArray()[1], DELTA );
+		assertEquals( 6.0 * 2, b.getArray()[2], DELTA );
+		assertEquals( 1.0 * 2, b.getArray()[3], DELTA );
+		assertEquals( 4.0 * 2, b.getArray()[4], DELTA );
+		assertEquals( 7.0 * 2, b.getArray()[5], DELTA );
+		assertEquals( 2.0 * 2, b.getArray()[6], DELTA );
+		assertEquals( 5.0 * 2, b.getArray()[7], DELTA );
+		assertEquals( 8.0 * 2, b.getArray()[8], DELTA );
 	};
 
 	@Test
 	public void testDeterminant()
 	{
 		Matrix3 a = new Matrix3();
-		assertEquals( 1.0, a.determinant());
+		assertEquals( 1.0, a.determinant(), DELTA );
 
 		a.getArray()[0] = 2;
-		assertEquals( 2.0, a.determinant());
+		assertEquals( 2.0, a.determinant(), DELTA );
 
 		a.getArray()[0] = 0;
-		assertEquals( 0.0, a.determinant());
+		assertEquals( 0.0, a.determinant(), DELTA );
 
 		// calculated via http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/threeD/index.htm
 		a.set( 2, 3, 4, 5, 13, 7, 8, 9, 11 );
-		assertEquals( -73.0, a.determinant());
+		assertEquals( -73.0, a.determinant(), DELTA );
 	}
 
 	@Test

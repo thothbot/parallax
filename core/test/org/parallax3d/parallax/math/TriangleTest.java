@@ -27,6 +27,8 @@ import static org.junit.Assert.*;
 public class TriangleTest
 {
 
+	private static float DELTA = 0.0f;
+
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 	private static Vector3 two3 = new Vector3( 2, 2, 2 );
@@ -91,17 +93,17 @@ public class TriangleTest
 	{
 		Triangle a = new Triangle();
 
-		assertEquals( 0.0, a.area() );
+		assertEquals( 0.0, a.area(), DELTA );
 
 		a = new Triangle( new Vector3( 0, 0, 0 ), new Vector3( 1, 0, 0 ), new Vector3( 0, 1, 0 ) );
-		assertEquals( 0.5, a.area() );
+		assertEquals( 0.5, a.area(), DELTA );
 
 		a = new Triangle( new Vector3( 2, 0, 0 ), new Vector3( 0, 0, 0 ), new Vector3( 0, 0, 2 ) );
-		assertEquals( 2.0, a.area() );
+		assertEquals( 2.0, a.area(), DELTA );
 
 		// colinear triangle.
 		a = new Triangle( new Vector3( 2, 0, 0 ), new Vector3( 0, 0, 0 ), new Vector3( 3, 0, 0 ) );
-		assertEquals( 0.0, a.area() );
+		assertEquals( 0.0, a.area(), DELTA );
 	}
 
 	@Test
@@ -138,21 +140,21 @@ public class TriangleTest
 		Triangle a = new Triangle();
 
 		// artificial normal is created in this case.
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ) );
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ) );
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ), DELTA );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ), DELTA );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ), DELTA );
 		assertTrue( a.plane().getNormal().equals( a.normal() ));
 
 		a = new Triangle( new Vector3( 0, 0, 0 ), new Vector3( 1, 0, 0 ), new Vector3( 0, 1, 0 ) );
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ) );
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ) );
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ), DELTA );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ), DELTA );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ), DELTA );
 		assertTrue( a.plane().getNormal().equals( a.normal() ));
 
 		a = new Triangle( new Vector3( 2, 0, 0 ), new Vector3( 0, 0, 0 ), new Vector3( 0, 0, 2 ) );
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ) );
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ) );
-		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ) );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getA() ), DELTA );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getB() ), DELTA );
+		assertEquals( 0.0, a.plane().distanceToPoint( a.getC() ), DELTA );
 		assertTrue( a.plane().getNormal().clone().normalize().equals( a.normal() ));
 	}
 

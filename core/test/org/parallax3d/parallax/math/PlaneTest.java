@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 
 public class PlaneTest
 {
+	private static float DELTA = 0.0f;
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
@@ -36,54 +37,54 @@ public class PlaneTest
 	public void testPlane()
 	{
 		Plane a = new Plane();
-		assertEquals( 1.0, a.getNormal().x);
-		assertEquals( 0.0, a.getNormal().y);
-		assertEquals( 0.0, a.getNormal().z);
-		assertEquals( 0.0, a.getConstant());
+		assertEquals( 1.0, a.getNormal().x, DELTA );
+		assertEquals( 0.0, a.getNormal().y, DELTA );
+		assertEquals( 0.0, a.getNormal().z, DELTA );
+		assertEquals( 0.0, a.getConstant(), DELTA );
 
 		a = new Plane( one3.clone(), 0);
-		assertEquals( 1.0, a.getNormal().x);
-		assertEquals( 1.0, a.getNormal().y);
-		assertEquals( 1.0, a.getNormal().z);
-		assertEquals( 0.0, a.getConstant());
+		assertEquals( 1.0, a.getNormal().x, DELTA );
+		assertEquals( 1.0, a.getNormal().y, DELTA );
+		assertEquals( 1.0, a.getNormal().z, DELTA );
+		assertEquals( 0.0, a.getConstant(), DELTA );
 
 		a = new Plane( one3.clone(), 1 );
-		assertEquals( 1.0, a.getNormal().x);
-		assertEquals( 1.0, a.getNormal().y);
-		assertEquals( 1.0, a.getNormal().z);
-		assertEquals( 1.0, a.getConstant());
+		assertEquals( 1.0, a.getNormal().x, DELTA );
+		assertEquals( 1.0, a.getNormal().y, DELTA );
+		assertEquals( 1.0, a.getNormal().z, DELTA );
+		assertEquals( 1.0, a.getConstant(), DELTA );
 	}
 
 	@Test
 	public void testSet()
 	{
 		Plane a = new Plane();
-		assertEquals( 1.0, a.getNormal().x);
-		assertEquals( 0.0, a.getNormal().y);
-		assertEquals( 0.0, a.getNormal().z);
-		assertEquals( 0.0, a.getConstant());
+		assertEquals( 1.0, a.getNormal().x, DELTA );
+		assertEquals( 0.0, a.getNormal().y, DELTA );
+		assertEquals( 0.0, a.getNormal().z, DELTA );
+		assertEquals( 0.0, a.getConstant(), DELTA );
 
 		Plane b = a.clone().set( new Vector3( X, Y, Z ), W );
-		assertEquals( X, b.getNormal().x);
-		assertEquals( Y, b.getNormal().y);
-		assertEquals( Z, b.getNormal().z);
-		assertEquals( W, b.getConstant());
+		assertEquals( X, b.getNormal().x, DELTA );
+		assertEquals( Y, b.getNormal().y, DELTA );
+		assertEquals( Z, b.getNormal().z, DELTA );
+		assertEquals( W, b.getConstant(), DELTA );
 	}
 
 	@Test
 	public void testSetComponents()
 	{
 		Plane a = new Plane();
-		assertEquals( 1.0, a.getNormal().x);
-		assertEquals( 0.0, a.getNormal().y);
-		assertEquals( 0.0, a.getNormal().z);
-		assertEquals( 0.0, a.getConstant());
+		assertEquals( 1.0, a.getNormal().x, DELTA );
+		assertEquals( 0.0, a.getNormal().y, DELTA );
+		assertEquals( 0.0, a.getNormal().z, DELTA );
+		assertEquals( 0.0, a.getConstant(), DELTA );
 
 		Plane b = a.clone().setComponents( X, Y, Z , W );
-		assertEquals( X, b.getNormal().x);
-		assertEquals( Y, b.getNormal().y);
-		assertEquals( Z, b.getNormal().z);
-		assertEquals( W, b.getConstant());
+		assertEquals( X, b.getNormal().x, DELTA );
+		assertEquals( Y, b.getNormal().y, DELTA );
+		assertEquals( Z, b.getNormal().z, DELTA );
+		assertEquals( W, b.getConstant(), DELTA );
 	}
 
 	@Test
@@ -101,20 +102,20 @@ public class PlaneTest
 	{
 		Plane a = new Plane( new Vector3( X, Y, Z ), W );
 		Plane b = new Plane().copy( a );
-		assertEquals( X, b.getNormal().x);
-		assertEquals( Y, b.getNormal().y);
-		assertEquals( Z, b.getNormal().z);
-		assertEquals( W, b.getConstant());
+		assertEquals( X, b.getNormal().x, DELTA );
+		assertEquals( Y, b.getNormal().y, DELTA );
+		assertEquals( Z, b.getNormal().z, DELTA );
+		assertEquals( W, b.getConstant(), DELTA );
 
 		// ensure that it is a true copy
 		a.getNormal().x = 0;
 		a.getNormal().y = -1;
 		a.getNormal().z = -2;
 		a.setConstant( -3 );
-		assertEquals( X, b.getNormal().x);
-		assertEquals( Y, b.getNormal().y);
-		assertEquals( Z, b.getNormal().z);
-		assertEquals( W, b.getConstant());
+		assertEquals( X, b.getNormal().x, DELTA );
+		assertEquals( Y, b.getNormal().y, DELTA );
+		assertEquals( Z, b.getNormal().z, DELTA );
+		assertEquals( W, b.getConstant(), DELTA );
 	}
 
 	@Test
@@ -123,7 +124,7 @@ public class PlaneTest
 		Plane a = new Plane( new Vector3( 2, 0, 0 ), 2 );
 		
 		a.normalize();
-		assertEquals( 1.0, a.getNormal().length() );
+		assertEquals( 1.0, a.getNormal().length(), DELTA );
 		assertTrue( a.getNormal().equals( new Vector3( 1, 0, 0 ) ));
 		assertEquals( 1.0, a.getConstant(), 1.0);
 	}
@@ -134,12 +135,12 @@ public class PlaneTest
 		Plane a = new Plane( new Vector3( 2, 0, 0 ), -2 );
 		
 		a.normalize();
-		assertEquals( 3.0, a.distanceToPoint( new Vector3( 4, 0, 0 ) ) );
-		assertEquals( 0.0, a.distanceToPoint( new Vector3( 1, 0, 0 ) ) );
+		assertEquals( 3.0, a.distanceToPoint( new Vector3( 4, 0, 0 ) ), DELTA );
+		assertEquals( 0.0, a.distanceToPoint( new Vector3( 1, 0, 0 ) ), DELTA );
 
 		a.negate();
-		assertEquals( -3.0, a.distanceToPoint( new Vector3( 4, 0, 0 ) ) );
-		assertEquals( 0.0, a.distanceToPoint( new Vector3( 1, 0, 0 ) ) );
+		assertEquals( -3.0, a.distanceToPoint( new Vector3( 4, 0, 0 ) ), DELTA );
+		assertEquals( 0.0, a.distanceToPoint( new Vector3( 1, 0, 0 ) ), DELTA );
 	}
 
 	@Test
@@ -148,8 +149,8 @@ public class PlaneTest
 		Plane a = new Plane( new Vector3( 2, 0, 0 ), -2 );
 		
 		a.normalize();
-		assertEquals( 0.0, a.distanceToPoint( a.projectPoint( zero3.clone() ) ) );
-		assertEquals( 3.0, a.distanceToPoint( new Vector3( 4, 0, 0 ) ) );
+		assertEquals( 0.0, a.distanceToPoint( a.projectPoint( zero3.clone() ) ), DELTA );
+		assertEquals( 3.0, a.distanceToPoint( new Vector3( 4, 0, 0 ) ), DELTA );
 	}
 
 	@Test
@@ -159,12 +160,12 @@ public class PlaneTest
 
 		Sphere b = new Sphere( new Vector3( 2, 0, 0 ), 1 );
 		
-		assertEquals( 1.0, a.distanceToSphere( b ) );
+		assertEquals( 1.0, a.distanceToSphere( b ), DELTA );
 
 		a.set( new Vector3( 1, 0, 0 ), 2 );
-		assertEquals( 3.0, a.distanceToSphere( b ) );
+		assertEquals( 3.0, a.distanceToSphere( b ), DELTA );
 		a.set( new Vector3( 1, 0, 0 ), -2 );
-		assertEquals( -1.0, a.distanceToSphere( b ) );
+		assertEquals( -1.0, a.distanceToSphere( b ), DELTA );
 	}
 
 	@Test
@@ -218,10 +219,10 @@ public class PlaneTest
 	public void testCoplanarPoint()
 	{
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
-		assertEquals( 0.0, a.distanceToPoint( a.coplanarPoint() ) );
+		assertEquals( 0.0, a.distanceToPoint( a.coplanarPoint() ), DELTA );
 
 		Plane b = new Plane( new Vector3( 0, 1, 0 ), -1 );
-		assertEquals( 0.0, b.distanceToPoint( b.coplanarPoint() ) );
+		assertEquals( 0.0, b.distanceToPoint( b.coplanarPoint() ), DELTA );
 	}
 
 	@Test

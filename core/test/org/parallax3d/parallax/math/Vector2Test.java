@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 public class Vector2Test
 {
 
-	private static float DELTA = 0.01f;
+	private static float DELTA = 0.0f;
 
 	private static float X = 2;
 	private static float Y = 3;
@@ -165,16 +165,16 @@ public class Vector2Test
 		Vector2 b = new Vector2( 0, -Y );
 		Vector2 c = new Vector2();
 
-		assertEquals( X, a.length() );
-		assertEquals( X * X, a.lengthSq() );
-		assertEquals( Y, b.length() );
-		assertEquals( Y * Y, b.lengthSq() );
-		assertEquals( 0.0, c.length() );
-		assertEquals( 0.0, c.lengthSq() );
+		assertEquals( X, a.length(), DELTA );
+		assertEquals( X * X, a.lengthSq(), DELTA );
+		assertEquals( Y, b.length(), DELTA );
+		assertEquals( Y * Y, b.lengthSq(), DELTA );
+		assertEquals( 0.0, c.length(), DELTA );
+		assertEquals( 0.0, c.lengthSq(), DELTA );
 
 		a.set( X, Y );
-		assertEquals( Math.sqrt( X*X + Y*Y ), a.length() );
-		assertEquals( ( X*X + Y*Y ), a.lengthSq() );
+		assertEquals( Math.sqrt( X*X + Y*Y ), a.length(), DELTA );
+		assertEquals( ( X*X + Y*Y ), a.lengthSq(), DELTA );
 	}
 
 	@Test
@@ -184,11 +184,11 @@ public class Vector2Test
 		Vector2 b = new Vector2( 0, -Y );
 
 		a.normalize();
-		assertEquals( 1.0, a.length() );
+		assertEquals( 1.0, a.length(), DELTA );
 		assertEquals( 1.0, a.x, DELTA);
 
 		b.normalize();
-		assertEquals( 1.0, b.length() );
+		assertEquals( 1.0, b.length(), DELTA );
 		assertEquals( -1.0, b.y, DELTA);
 	}
 
@@ -199,11 +199,11 @@ public class Vector2Test
 		Vector2 b = new Vector2( 0, -Y );
 		Vector2 c = new Vector2();
 
-		assertEquals( X, a.distanceTo( c ) );
-		assertEquals( X * X, a.distanceToSquared( c ) );
+		assertEquals( X, a.distanceTo( c ), DELTA );
+		assertEquals( X * X, a.distanceToSquared( c ), DELTA );
 
-		assertEquals( Y, b.distanceTo( c ) );
-		assertEquals( Y * Y, b.distanceToSquared( c ) );
+		assertEquals( Y, b.distanceTo( c ), DELTA );
+		assertEquals( Y * Y, b.distanceToSquared( c ), DELTA );
 	}
 
 	@Test
@@ -211,14 +211,14 @@ public class Vector2Test
 	{
 		Vector2 a = new Vector2( X, 0 );
 
-		assertEquals( X, a.length() );
+		assertEquals( X, a.length(), DELTA );
 		a.setLength( Y );
-		assertEquals( Y, a.length() );
+		assertEquals( Y, a.length(), DELTA );
 
 		a = new Vector2( 0, 0 );
-		assertEquals( 0.0, a.length() );
+		assertEquals( 0.0, a.length(), DELTA );
 		a.setLength( Y );
-		assertEquals( 0.0, a.length() );
+		assertEquals( 0.0, a.length(), DELTA );
 	}
 
 	@Test
@@ -232,8 +232,8 @@ public class Vector2Test
 
 		assertTrue( a.clone().lerp( b, 0 ).equals( a ));
 
-		assertEquals( X * 0.5, a.clone().lerp( b, 0.5f ).x );
-		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5f ).y );
+		assertEquals( X * 0.5, a.clone().lerp( b, 0.5f ).x, DELTA );
+		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5f ).y, DELTA );
 
 		assertTrue( a.clone().lerp( b, 1 ).equals( b ));
 	}

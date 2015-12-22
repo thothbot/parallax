@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 public class Vector3Test
 {
 
-	private static float DELTA = 0.01f;
+	private static float DELTA = 0.0f;
 
 	private static float X = 2;
 	private static float Y = 3;
@@ -52,18 +52,18 @@ public class Vector3Test
 		Vector3 c = new Vector3( 0, 0, Z );
 		Vector3 d = new Vector3();
 
-		assertEquals( X, a.length() );
-		assertEquals( X * X, a.lengthSq() );
-		assertEquals( Y, b.length() );
-		assertEquals( Y * Y, b.lengthSq() );
-		assertEquals( Z, c.length() );
-		assertEquals( Z * Z, c.lengthSq() );
-		assertEquals( 0.0, d.length() );
-		assertEquals( 0.0, d.lengthSq() );
+		assertEquals( X, a.length(), DELTA );
+		assertEquals( X * X, a.lengthSq(), DELTA );
+		assertEquals( Y, b.length(), DELTA );
+		assertEquals( Y * Y, b.lengthSq(), DELTA );
+		assertEquals( Z, c.length(), DELTA );
+		assertEquals( Z * Z, c.lengthSq(), DELTA );
+		assertEquals( 0.0, d.length(), DELTA );
+		assertEquals( 0.0, d.lengthSq(), DELTA );
 
 		a.set( X, Y, Z );
-		assertEquals( Math.sqrt( X*X + Y*Y + Z*Z ), a.length() );
-		assertEquals( ( X*X + Y*Y + Z*Z ), a.lengthSq() );
+		assertEquals( Math.sqrt( X*X + Y*Y + Z*Z ), a.length(), DELTA );
+		assertEquals( ( X*X + Y*Y + Z*Z ), a.lengthSq(), DELTA );
 	}
 
 	@Test
@@ -74,14 +74,14 @@ public class Vector3Test
 		Vector3 c = new Vector3( 0, 0, Z );
 		Vector3 d = new Vector3();
 
-		assertEquals( X, a.distanceTo( d ) );
-		assertEquals( X * X, a.distanceToSquared( d ) );
+		assertEquals( X, a.distanceTo( d ), DELTA );
+		assertEquals( X * X, a.distanceToSquared( d ), DELTA );
 
-		assertEquals( Y, b.distanceTo( d ) );
-		assertEquals( Y * Y, b.distanceToSquared( d ) );
+		assertEquals( Y, b.distanceTo( d ), DELTA );
+		assertEquals( Y * Y, b.distanceToSquared( d ), DELTA );
 
-		assertEquals( Z, c.distanceTo( d ) );
-		assertEquals( Z * Z, c.distanceToSquared( d ) );
+		assertEquals( Z, c.distanceTo( d ), DELTA );
+		assertEquals( Z * Z, c.distanceToSquared( d ), DELTA );
 	}
 
 	@Test
@@ -210,15 +210,15 @@ public class Vector3Test
 		Vector3 c = new Vector3( 0, 0, Z );
 
 		a.normalize();
-		assertEquals( 1.0, a.length() );
+		assertEquals( 1.0, a.length(), DELTA );
 		assertEquals( 1.0, a.x, DELTA);
 
 		b.normalize();
-		assertEquals( 1.0, b.length() );
+		assertEquals( 1.0, b.length(), DELTA );
 		assertEquals( -1.0, b.y, DELTA);
 
 		c.normalize();
-		assertEquals( 1.0, c.length() );
+		assertEquals( 1.0, c.length(), DELTA );
 		assertEquals( 1.0, c.z, DELTA);
 	}
 
@@ -227,14 +227,14 @@ public class Vector3Test
 	{
 		Vector3 a = new Vector3( X, 0, 0 );
 
-		assertEquals( X, a.length() );
+		assertEquals( X, a.length(), DELTA );
 		a.setLength( Y );
-		assertEquals( Y, a.length() );
+		assertEquals( Y, a.length(), DELTA );
 
 		a = new Vector3( 0, 0, 0 );
-		assertEquals( 0.0, a.length() );
+		assertEquals( 0.0, a.length(), DELTA );
 		a.setLength( Y );
-		assertEquals( 0.0, a.length() );
+		assertEquals( 0.0, a.length(), DELTA );
 	}
 
 	@Test
@@ -248,9 +248,9 @@ public class Vector3Test
 
 		assertTrue( a.clone().lerp( b, 0 ).equals( a ));
 
-		assertEquals( X * 0.5, a.clone().lerp( b, 0.5f ).x );
-		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5f ).y );
-		assertEquals( Z * 0.5, a.clone().lerp( b, 0.5f ).z );
+		assertEquals( X * 0.5, a.clone().lerp( b, 0.5f ).x, DELTA );
+		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5f ).y, DELTA );
+		assertEquals( Z * 0.5, a.clone().lerp( b, 0.5f ).z, DELTA );
 
 		assertTrue( a.clone().lerp( b, 1 ).equals( b ));
 	}

@@ -315,7 +315,6 @@ public abstract class Shader
 		this.uniforms.put(id, uniform);
 	}
 
-	@Deprecated
 	public ObjectMap<String, Integer> getAttributesLocations() {
 		return this.attributesLocations;
 	}
