@@ -242,7 +242,6 @@ public class PlaneTest
 		assertTrue( comparePlane( a.clone().apply( m ), a.clone().translate( new Vector3( 1, 1, 1 ) ) ));
 	}
 
-	@Test
 	private boolean comparePlane( Plane a, Plane b ) 
 	{
 		float threshold = 0.0001f;

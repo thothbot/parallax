@@ -247,7 +247,6 @@ public class Matrix4Test
 		assertTrue( ! matrixEquals4( a, b ));
 	}
 
-	@Test
 	private boolean matrixEquals4( Matrix4 a, Matrix4 b) 
 	{
 		double tolerance = 0.0001;

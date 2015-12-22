@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
 
 public class Box3Test
 {
+	private static float DELTA = 0.0001f;
+
 	private static Vector3 negInf3 = new Vector3( Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY );
 	private static Vector3 posInf3 = new Vector3( Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY );
 
@@ -66,7 +68,7 @@ public class Box3Test
 
 		// ensure that it is a true copy
 		a.setMin( zero3 );
-		a.setMax( one3 );
+		a.setMax(one3);
 		assertTrue( b.getMin().equals( zero3 ));
 		assertTrue( b.getMax().equals( one3 ));
 	}
@@ -76,10 +78,10 @@ public class Box3Test
 	{
 		Box3 a = new Box3();
 
-		assertTrue( a.isEmpty());
+		assertTrue(a.isEmpty());
 
 		Box3 b = new Box3( zero3.clone(), one3.clone() );
-		assertTrue( ! b.isEmpty());
+		assertTrue(!b.isEmpty());
 
 		b.makeEmpty();
 		assertTrue( b.isEmpty());
@@ -94,7 +96,7 @@ public class Box3Test
 
 		a = new Box3( zero3.clone(), one3.clone() );
 		Vector3 midpoint = one3.clone().multiply( 0.5f );
-		assertTrue( a.center().equals( midpoint ));
+		assertTrue( a.center().equals(midpoint));
 	}
 
 	@Test
@@ -119,7 +121,7 @@ public class Box3Test
 		a.expandByPoint( one3 );
 		assertTrue( a.size().equals( one3 ));
 
-		a.expandByPoint( one3.clone().negate() );
+		a.expandByPoint(one3.clone().negate());
 		assertTrue( a.size().equals( one3.clone().multiply( 2 ) ));
 		assertTrue( a.center().equals( zero3 ));
 	}
@@ -129,10 +131,10 @@ public class Box3Test
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
 
-		a.expandByVector( zero3 );
+		a.expandByVector(zero3);
 		assertTrue( a.size().equals( zero3 ));
 
-		a.expandByVector( one3 );
+		a.expandByVector(one3);
 		assertTrue( a.size().equals( one3.clone().multiply( 2 ) ));
 		assertTrue( a.center().equals( zero3 ));
 	}
@@ -142,10 +144,10 @@ public class Box3Test
 	{
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
 
-		a.expandByScalar( 0 );
+		a.expandByScalar(0);
 		assertTrue( a.size().equals( zero3 ));
 
-		a.expandByScalar( 1 );
+		a.expandByScalar(1);
 		assertTrue( a.size().equals( one3.clone().multiply( 2 ) ));
 		assertTrue( a.center().equals( zero3 ));
 	}
@@ -156,12 +158,12 @@ public class Box3Test
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
 
 		assertTrue( a.isContainsPoint( zero3 ));
-		assertTrue( ! a.isContainsPoint( one3 ));
+		assertTrue(!a.isContainsPoint(one3));
 
-		a.expandByScalar( 1 );
-		assertTrue( a.isContainsPoint( zero3 ));
-		assertTrue( a.isContainsPoint( one3 ));
-		assertTrue( a.isContainsPoint( one3.clone().negate() ));
+		a.expandByScalar(1);
+		assertTrue(a.isContainsPoint(zero3));
+		assertTrue( a.isContainsPoint(one3));
+		assertTrue( a.isContainsPoint(one3.clone().negate()));
 	}
 
 	@Test
@@ -171,12 +173,12 @@ public class Box3Test
 		Box3 b = new Box3( zero3.clone(), one3.clone() );
 		Box3 c = new Box3( one3.clone().negate(), one3.clone() );
 
-		assertTrue( a.isContainsBox( a ));
-		assertTrue( ! a.isContainsBox( b ));
-		assertTrue( ! a.isContainsBox( c ));
+		assertTrue( a.isContainsBox(a));
+		assertTrue( ! a.isContainsBox(b));
+		assertTrue(!a.isContainsBox(c));
 
-		assertTrue( b.isContainsBox( a ));
-		assertTrue( c.isContainsBox( a ));
+		assertTrue( b.isContainsBox(a));
+		assertTrue( c.isContainsBox(a));
 		assertTrue( ! b.isContainsBox( c ));
 	}
 
@@ -189,8 +191,8 @@ public class Box3Test
 		assertTrue( a.getParameter( new Vector3( 0, 0, 0 ) ).equals( new Vector3( 0, 0, 0 ) ));
 		assertTrue( a.getParameter( new Vector3( 1, 1, 1 ) ).equals( new Vector3( 1, 1, 1 ) ));
 
-		assertTrue( b.getParameter( new Vector3( -1, -1, -1 ) ).equals( new Vector3( 0, 0, 0 ) ));
-		assertTrue( b.getParameter( new Vector3( 0, 0, 0 ) ).equals( new Vector3( 0.5f, 0.5f, 0.5f ) ));
+		assertTrue( b.getParameter( new Vector3( -1, -1, -1 ) ).equals(new Vector3(0, 0, 0)));
+		assertTrue( b.getParameter( new Vector3( 0, 0, 0 ) ).equals(new Vector3(0.5f, 0.5f, 0.5f)));
 		assertTrue( b.getParameter( new Vector3( 1, 1, 1 ) ).equals( new Vector3( 1, 1, 1 ) ));
 	}
 
@@ -207,9 +209,9 @@ public class Box3Test
 
 		assertTrue( b.isIntersectionBox( a ));
 		assertTrue( c.isIntersectionBox( a ));
-		assertTrue( b.isIntersectionBox( c ));
+		assertTrue( b.isIntersectionBox(c));
 
-		b.translate( new Vector3( 2, 2, 2 ) );
+		b.translate(new Vector3(2, 2, 2));
 		assertTrue( ! a.isIntersectionBox( b ));
 		assertTrue( ! b.isIntersectionBox( a ));
 		assertTrue( ! b.isIntersectionBox( c ));
@@ -221,12 +223,12 @@ public class Box3Test
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
 		Box3 b = new Box3( one3.clone().negate(), one3.clone() );
 
-		assertTrue( a.clampPoint( new Vector3( 0, 0, 0 ) ).equals( new Vector3( 0, 0, 0 ) ));
-		assertTrue( a.clampPoint( new Vector3( 1, 1, 1 ) ).equals( new Vector3( 0, 0, 0 ) ));
-		assertTrue( a.clampPoint( new Vector3( -1, -1, -1 ) ).equals( new Vector3( 0, 0, 0 ) ));
+		assertTrue( a.clampPoint( new Vector3( 0, 0, 0 ) ).equals(new Vector3(0, 0, 0)));
+		assertTrue( a.clampPoint( new Vector3( 1, 1, 1 ) ).equals(new Vector3(0, 0, 0)));
+		assertTrue( a.clampPoint( new Vector3( -1, -1, -1 ) ).equals(new Vector3(0, 0, 0)));
 
-		assertTrue( b.clampPoint( new Vector3( 2, 2, 2 ) ).equals( new Vector3( 1, 1, 1 ) ));
-		assertTrue( b.clampPoint( new Vector3( 1, 1, 1 ) ).equals( new Vector3( 1, 1, 1 ) ));
+		assertTrue( b.clampPoint( new Vector3( 2, 2, 2 ) ).equals(new Vector3(1, 1, 1)));
+		assertTrue(b.clampPoint(new Vector3(1, 1, 1)).equals(new Vector3(1, 1, 1)));
 		assertTrue( b.clampPoint( new Vector3( 0, 0, 0 ) ).equals( new Vector3( 0, 0, 0 ) ));
 		assertTrue( b.clampPoint( new Vector3( -1, -1, -1 ) ).equals( new Vector3( -1, -1, -1 ) ));
 		assertTrue( b.clampPoint( new Vector3( -2, -2, -2 ) ).equals( new Vector3( -1, -1, -1 ) ));
@@ -238,15 +240,15 @@ public class Box3Test
 		Box3 a = new Box3( zero3.clone(), zero3.clone() );
 		Box3 b = new Box3( one3.clone().negate(), one3.clone() );
 
-		assertTrue( a.distanceToPoint( new Vector3( 0, 0, 0 ) ) == 0);
-		assertTrue( a.distanceToPoint( new Vector3( 1, 1, 1 ) ) == Math.sqrt( 3 ));
-		assertTrue( a.distanceToPoint( new Vector3( -1, -1, -1 ) ) == Math.sqrt( 3 ));
+		assertEquals(a.distanceToPoint(new Vector3(0, 0, 0)), 0, DELTA);
+		assertEquals(a.distanceToPoint(new Vector3(1, 1, 1)), Math.sqrt(3), DELTA);
+		assertEquals(a.distanceToPoint(new Vector3(-1, -1, -1)), Math.sqrt(3), DELTA);
 
-		assertTrue( b.distanceToPoint( new Vector3( 2, 2, 2 ) ) == Math.sqrt( 3 ));
-		assertTrue( b.distanceToPoint( new Vector3( 1, 1, 1 ) ) == 0);
-		assertTrue( b.distanceToPoint( new Vector3( 0, 0, 0 ) ) == 0);
-		assertTrue( b.distanceToPoint( new Vector3( -1, -1, -1 ) ) == 0);
-		assertTrue( b.distanceToPoint( new Vector3( -2, -2, -2 ) ) == Math.sqrt( 3 ));
+		assertEquals(b.distanceToPoint(new Vector3(2, 2, 2)), Math.sqrt(3), DELTA);
+		assertEquals(b.distanceToPoint(new Vector3(1, 1, 1)), 0, DELTA);
+		assertEquals(b.distanceToPoint(new Vector3(0, 0, 0)), 0, DELTA);
+		assertEquals(b.distanceToPoint(new Vector3(-1, -1, -1)), 0, DELTA);
+		assertEquals(b.distanceToPoint(new Vector3(-2, -2, -2)), Math.sqrt( 3 ), DELTA);
 	}
 
 	@Test
@@ -271,9 +273,9 @@ public class Box3Test
 		assertTrue( a.clone().intersect( a ).equals( a ));
 		assertTrue( a.clone().intersect( b ).equals( a ));
 		assertTrue( b.clone().intersect( b ).equals( b ));
-		assertTrue( a.clone().intersect( c ).equals( a ));
-		assertTrue( b.clone().intersect( c ).equals( b ));
-		assertTrue( c.clone().intersect( c ).equals( c ));
+		assertTrue( a.clone().intersect(c).equals( a ));
+		assertTrue( b.clone().intersect(c).equals( b ));
+		assertTrue( c.clone().intersect(c).equals( c ));
 	}
 
 	@Test
@@ -283,10 +285,10 @@ public class Box3Test
 		Box3 b = new Box3( zero3.clone(), one3.clone() );
 		Box3 c = new Box3( one3.clone().negate(), one3.clone() );
 
-		assertTrue( a.clone().union( a ).equals( a ));
-		assertTrue( a.clone().union( b ).equals( b ));
-		assertTrue( a.clone().union( c ).equals( c ));
-		assertTrue( b.clone().union( c ).equals( c ));
+		assertTrue( a.clone().union(a).equals( a ));
+		assertTrue( a.clone().union(b).equals( b ));
+		assertTrue( a.clone().union(c).equals( c ));
+		assertTrue( b.clone().union(c).equals( c ));
 	}
 
 	@Test
@@ -300,19 +302,18 @@ public class Box3Test
 		Matrix4 m = new Matrix4().makeTranslation( 1, -2, 1 );
 		Vector3 t1 = new Vector3( 1, -2, 1 );
 
-		assertTrue( compareBox( a.clone().apply( m ), a.clone().translate( t1 ) ));
-		assertTrue( compareBox( b.clone().apply( m ), b.clone().translate( t1 ) ));
-		assertTrue( compareBox( c.clone().apply( m ), c.clone().translate( t1 ) ));
-		assertTrue( compareBox( d.clone().apply( m ), d.clone().translate( t1 ) ));
+		assertTrue( compareBox(a.clone().apply(m), a.clone().translate(t1)));
+		assertTrue( compareBox(b.clone().apply(m), b.clone().translate(t1)));
+		assertTrue( compareBox(c.clone().apply(m), c.clone().translate(t1)));
+		assertTrue( compareBox(d.clone().apply(m), d.clone().translate(t1)));
 	}
 
-	@Test
-	private boolean compareBox( Box3 a, Box3 b ) 
+	private boolean compareBox( Box3 a, Box3 b )
 	{
 		double threshold = 0.0001;
 		return ( a.getMin().distanceTo( b.getMin() ) < threshold &&
-		a.getMax().distanceTo( b.getMax() ) < threshold );
-	};
+				a.getMax().distanceTo( b.getMax() ) < threshold );
+	}
 
 	@Test
 	public void testTranslate()
@@ -322,10 +323,9 @@ public class Box3Test
 		Box3 c = new Box3( one3.clone().negate(), one3.clone() );
 		Box3 d = new Box3( one3.clone().negate(), zero3.clone() );
 
-		assertTrue( a.clone().translate( one3 ).equals( new Box3( one3, one3 ) ));
-		assertTrue( a.clone().translate( one3 ).translate( one3.clone().negate() ).equals( a ));
-		assertTrue( d.clone().translate( one3 ).equals( b ));
-		assertTrue( b.clone().translate( one3.clone().negate() ).equals( d ));
+		assertTrue( a.clone().translate( one3 ).equals(new Box3(one3, one3)));
+		assertTrue( a.clone().translate( one3 ).translate( one3.clone().negate() ).equals(a));
+		assertTrue( d.clone().translate( one3 ).equals(b));
+		assertTrue( b.clone().translate( one3.clone().negate() ).equals(d));
 	}
-
 }

@@ -241,7 +241,6 @@ public class QuaternionTest
 		assertTrue( b.equals( a ));
 	}
 
-	@Test
 	private Quaternion qSub( Quaternion a, Quaternion b ) 
 	{
 		Quaternion result = new Quaternion();

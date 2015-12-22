@@ -46,8 +46,8 @@ public class ColorTest
 	@Test
 	public void testGetHex()
 	{
-		Color c = new Color(0xFF000);
-	    assertEquals( 0xFF0000, c.getHex() );
+		Color c = new Color(0xFF0000);
+	    assertEquals(0xFF0000, c.getHex() );
 	}
 
 	@Test
@@ -55,9 +55,9 @@ public class ColorTest
 	{
 		Color c = new Color();
 	    c.setRGB(1.0f, 0.25f, 0.1f);
-	    assertEquals( 1.0, c.getR(), DELTA );
-	    assertEquals( 0.25, c.getG(), DELTA );
-	    assertEquals( 0.1, c.getB(), DELTA );
+	    assertEquals( 1.0f, c.getR(), DELTA );
+	    assertEquals( 0.25f, c.getG(), DELTA );
+	    assertEquals( 0.1f, c.getB(), DELTA );
 	}
 
 	@Test

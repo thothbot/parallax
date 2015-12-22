@@ -202,7 +202,6 @@ public class Matrix3Test
 		assertTrue( ! matrixEquals3( a, b ));
 	}
 
-	@Test
 	private boolean matrixEquals3( Matrix3 a, Matrix3 b) 
 	{
 		double tolerance = 0.0001;
@@ -222,7 +221,6 @@ public class Matrix3Test
 		return true;
 	}
 
-	@Test
 	private Matrix4 toMatrix4( Matrix3 m3 ) 
 	{
 		Matrix4 result = new Matrix4();

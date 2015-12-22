@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
 
 public class Box2Test
 {
+	private static float DELTA = 0.0001f;
+
 	private static Vector2 negInf2 = new Vector2( Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY );
 	private static Vector2 posInf2 = new Vector2( Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY );
 
@@ -236,15 +238,15 @@ public class Box2Test
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
 		Box2 b = new Box2( one2.clone().negate(), one2.clone() );
 
-		assertTrue( a.distanceToPoint( new Vector2( 0, 0 ) ) == 0);
-		assertTrue( a.distanceToPoint( new Vector2( 1, 1 ) ) == Math.sqrt( 2 ));
-		assertTrue( a.distanceToPoint( new Vector2( -1, -1 ) ) == Math.sqrt( 2 ));
+		assertEquals(a.distanceToPoint(new Vector2(0, 0)), 0, DELTA);
+		assertEquals(a.distanceToPoint(new Vector2(1, 1)), Math.sqrt(2), DELTA);
+		assertEquals(a.distanceToPoint(new Vector2(-1, -1)), Math.sqrt(2), DELTA);
 
-		assertTrue( b.distanceToPoint( new Vector2( 2, 2 ) ) == Math.sqrt( 2 ));
-		assertTrue( b.distanceToPoint( new Vector2( 1, 1 ) ) == 0);
-		assertTrue( b.distanceToPoint( new Vector2( 0, 0 ) ) == 0);
-		assertTrue( b.distanceToPoint( new Vector2( -1, -1 ) ) == 0);
-		assertTrue( b.distanceToPoint( new Vector2( -2, -2 ) ) == Math.sqrt( 2 ));
+		assertEquals(b.distanceToPoint(new Vector2(2, 2)), Math.sqrt(2), DELTA);
+		assertEquals(b.distanceToPoint(new Vector2(1, 1)), 0, DELTA);
+		assertEquals(b.distanceToPoint(new Vector2(0, 0)), 0, DELTA);
+		assertEquals(b.distanceToPoint(new Vector2(-1, -1)), 0, DELTA);
+		assertEquals(b.distanceToPoint(new Vector2(-2, -2)), Math.sqrt( 2 ), DELTA);
 	}
 
 	@Test

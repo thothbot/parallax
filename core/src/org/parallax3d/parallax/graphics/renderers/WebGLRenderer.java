@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
@@ -84,7 +83,6 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GL30;
 import org.parallax3d.parallax.system.gl.enums.*;
-import sun.rmi.runtime.Log;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.

@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 public class Vector4Test
 {
 
-	private static float DELTA = 0.0f;
+	private static float DELTA = 0.00001f;
 
 	private static float X = 2;
 	private static float Y = 3;
