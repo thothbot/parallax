@@ -67,6 +67,13 @@ project(":platforms:parallax-gwt") {
     }
 }
 
+project(":platforms:parallax-android") {
+    dependencies {
+        compile project(":parallax")
+        optional fileTree(dir: 'libs', include: ['*.jar'])
+    }
+}
+
 if (JavaVersion.current().isJava8Compatible()) {
     allprojects {
         tasks.withType(Javadoc) {

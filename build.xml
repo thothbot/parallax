@@ -25,12 +25,22 @@
         </ant>
     </target>
 
-    <target name="parallax-platform-gwt" depends="parallax-core">
+    <target name="parallax-gwt" depends="parallax-core">
         <path id="classpath">
             <pathelement location="${distDir}/gdx.jar"/>
         </path>
-        <ant antfile="../../build-template.xml" dir="platforms/parallax-platform-gwt">
-            <property name="jar" value="parallax-platform-gwt"/>
+        <ant antfile="../../build-template.xml" dir="platforms/parallax-gwt">
+            <property name="jar" value="parallax-gwt"/>
+            <reference refid="classpath"/>
+        </ant>
+    </target>
+
+    <target name="parallax-android" depends="parallax-core">
+        <path id="classpath">
+            <pathelement location="${distDir}/gdx.jar"/>
+        </path>
+        <ant antfile="../../build-template.xml" dir="platforms/parallax-android">
+            <property name="jar" value="parallax-android"/>
             <reference refid="classpath"/>
         </ant>
     </target>
@@ -69,7 +79,7 @@
     </target>
 
     <target name="jars"
-            depends="clean,parallax-core,parallax-platform-gwt"/>
+            depends="clean,parallax-core,parallax-gwt,parallax-android"/>
 
     <target name="all" depends="jars,docs">
         <!-- copy distribution files (licences etc.) -->

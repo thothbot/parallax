@@ -8,7 +8,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>parallax-platform-gwt</artifactId>
+    <artifactId>parallax-gwt</artifactId>
     <packaging>jar</packaging>
     <name>Parallax GWT Platform</name>
 

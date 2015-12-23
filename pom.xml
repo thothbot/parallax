@@ -47,6 +47,7 @@
     <modules>
         <module>parallax</module>
         <module>platforms/parallax-gwt</module>
+        <module>platforms/parallax-android</module>
     </modules>
 
     <build>
