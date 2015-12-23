@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
 import static org.junit.Assert.*;
 
 public class Matrix3Test
@@ -35,15 +37,15 @@ public class Matrix3Test
 		assertEquals( a.determinant(), 1.0, DELTA );
 
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( 0.0, b.getArray()[0], DELTA );
-		assertEquals( 3.0, b.getArray()[1], DELTA );
-		assertEquals( 6.0, b.getArray()[2], DELTA );
-		assertEquals( 1.0, b.getArray()[3], DELTA );
-		assertEquals( 4.0, b.getArray()[4], DELTA );
-		assertEquals( 7.0, b.getArray()[5], DELTA );
-		assertEquals( 2.0, b.getArray()[6], DELTA );
-		assertEquals( 5.0, b.getArray()[7], DELTA );
-		assertEquals( 8.0, b.getArray()[8], DELTA );
+		assertEquals( 0.0, b.getArray().get(0), DELTA );
+		assertEquals( 3.0, b.getArray().get(1), DELTA );
+		assertEquals( 6.0, b.getArray().get(2), DELTA );
+		assertEquals( 1.0, b.getArray().get(3), DELTA );
+		assertEquals( 4.0, b.getArray().get(4), DELTA );
+		assertEquals( 7.0, b.getArray().get(5), DELTA );
+		assertEquals( 2.0, b.getArray().get(6), DELTA );
+		assertEquals( 5.0, b.getArray().get(7), DELTA );
+		assertEquals( 8.0, b.getArray().get(8), DELTA );
 
 		assertTrue( ! matrixEquals3( a, b ) );
 
@@ -58,7 +60,7 @@ public class Matrix3Test
 		assertTrue( matrixEquals3( a, b ));
 
 		// ensure that it is a true copy
-		a.getArray()[0]= 2;
+		a.getArray().set(0, 2);
 		assertTrue( ! matrixEquals3( a, b ));
 	}
 
@@ -69,30 +71,30 @@ public class Matrix3Test
 		assertEquals( b.determinant(), 1.0, DELTA);
 
 		b.set( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( 0.0, b.getArray()[0], DELTA );
-		assertEquals( 3.0, b.getArray()[1], DELTA );
-		assertEquals( 6.0, b.getArray()[2], DELTA );
-		assertEquals( 1.0, b.getArray()[3], DELTA );
-		assertEquals( 4.0, b.getArray()[4], DELTA );
-		assertEquals( 7.0, b.getArray()[5], DELTA );
-		assertEquals( 2.0, b.getArray()[6], DELTA );
-		assertEquals( 5.0, b.getArray()[7], DELTA );
-		assertEquals( 8.0, b.getArray()[8], DELTA );
+		assertEquals( 0.0, b.getArray().get(0), DELTA );
+		assertEquals( 3.0, b.getArray().get(1), DELTA );
+		assertEquals( 6.0, b.getArray().get(2), DELTA );
+		assertEquals( 1.0, b.getArray().get(3), DELTA );
+		assertEquals( 4.0, b.getArray().get(4), DELTA );
+		assertEquals( 7.0, b.getArray().get(5), DELTA );
+		assertEquals( 2.0, b.getArray().get(6), DELTA );
+		assertEquals( 5.0, b.getArray().get(7), DELTA );
+		assertEquals( 8.0, b.getArray().get(8), DELTA );
 	}
 
 	@Test
 	public void testIdentity()
 	{
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
-		assertEquals( 0.0, b.getArray()[0], DELTA );
-		assertEquals( 3.0, b.getArray()[1], DELTA );
-		assertEquals( 6.0, b.getArray()[2], DELTA );
-		assertEquals( 1.0, b.getArray()[3], DELTA );
-		assertEquals( 4.0, b.getArray()[4], DELTA );
-		assertEquals( 7.0, b.getArray()[5], DELTA );
-		assertEquals( 2.0, b.getArray()[6], DELTA );
-		assertEquals( 5.0, b.getArray()[7], DELTA );
-		assertEquals( 8.0, b.getArray()[8], DELTA );
+		assertEquals( 0.0, b.getArray().get(0), DELTA );
+		assertEquals( 3.0, b.getArray().get(1), DELTA );
+		assertEquals( 6.0, b.getArray().get(2), DELTA );
+		assertEquals( 1.0, b.getArray().get(3), DELTA );
+		assertEquals( 4.0, b.getArray().get(4), DELTA );
+		assertEquals( 7.0, b.getArray().get(5), DELTA );
+		assertEquals( 2.0, b.getArray().get(6), DELTA );
+		assertEquals( 5.0, b.getArray().get(7), DELTA );
+		assertEquals( 8.0, b.getArray().get(8), DELTA );
 		
 		Matrix3 a = new Matrix3();
 		assertTrue( ! matrixEquals3( a, b ));
@@ -107,15 +109,15 @@ public class Matrix3Test
 		Matrix3 b = new Matrix3( 0, 1, 2, 3, 4, 5, 6, 7, 8 );
 
 		b.multiply( 2 );
-		assertEquals( 0.0 * 2, b.getArray()[0], DELTA );
-		assertEquals( 3.0 * 2, b.getArray()[1], DELTA );
-		assertEquals( 6.0 * 2, b.getArray()[2], DELTA );
-		assertEquals( 1.0 * 2, b.getArray()[3], DELTA );
-		assertEquals( 4.0 * 2, b.getArray()[4], DELTA );
-		assertEquals( 7.0 * 2, b.getArray()[5], DELTA );
-		assertEquals( 2.0 * 2, b.getArray()[6], DELTA );
-		assertEquals( 5.0 * 2, b.getArray()[7], DELTA );
-		assertEquals( 8.0 * 2, b.getArray()[8], DELTA );
+		assertEquals( 0.0 * 2, b.getArray().get(0), DELTA );
+		assertEquals( 3.0 * 2, b.getArray().get(1), DELTA );
+		assertEquals( 6.0 * 2, b.getArray().get(2), DELTA );
+		assertEquals( 1.0 * 2, b.getArray().get(3), DELTA );
+		assertEquals( 4.0 * 2, b.getArray().get(4), DELTA );
+		assertEquals( 7.0 * 2, b.getArray().get(5), DELTA );
+		assertEquals( 2.0 * 2, b.getArray().get(6), DELTA );
+		assertEquals( 5.0 * 2, b.getArray().get(7), DELTA );
+		assertEquals( 8.0 * 2, b.getArray().get(8), DELTA );
 	};
 
 	@Test
@@ -124,10 +126,10 @@ public class Matrix3Test
 		Matrix3 a = new Matrix3();
 		assertEquals( 1.0, a.determinant(), DELTA );
 
-		a.getArray()[0] = 2;
+		a.getArray().set(0, 2);
 		assertEquals( 2.0, a.determinant(), DELTA );
 
-		a.getArray()[0] = 0;
+		a.getArray().set(0, 0);
 		assertEquals( 0.0, a.determinant(), DELTA );
 
 		// calculated via http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/threeD/index.htm
@@ -198,21 +200,21 @@ public class Matrix3Test
 		assertTrue( matrixEquals3( a, b ));
 
 		// ensure that it is a true copy
-		a.getArray()[0] = 2;
+		a.getArray().set(0, 2);
 		assertTrue( ! matrixEquals3( a, b ));
 	}
 
 	private boolean matrixEquals3( Matrix3 a, Matrix3 b) 
 	{
 		double tolerance = 0.0001;
-		if( a.getArray().length != b.getArray().length ) 
+		if( a.getArray().getLength() != b.getArray().getLength() ) 
 		{
 			return false;
 		}
 		
-		for( int i = 0, il = a.getArray().length; i < il; i ++ ) 
+		for( int i = 0, il = a.getArray().getLength(); i < il; i ++ ) 
 		{
-			double delta = a.getArray()[i] - b.getArray()[i];
+			double delta = a.getArray().get(i) - b.getArray().get(i);
 			if( delta > tolerance ) 
 			{
 				return false;
@@ -224,17 +226,17 @@ public class Matrix3Test
 	private Matrix4 toMatrix4( Matrix3 m3 ) 
 	{
 		Matrix4 result = new Matrix4();
-		double[] re = result.getArray();
-		double[] me = m3.getArray();
-		re[0] = me[0];
-		re[1] = me[1];
-		re[2] = me[2];
-		re[4] = me[3];
-		re[5] = me[4];
-		re[6] = me[5];
-		re[8] = me[6];
-		re[9] = me[7];
-		re[10] = me[8];
+		Float32Array re = result.getArray();
+		Float32Array me = m3.getArray();
+		re.set(0, me.get(0));
+		re.set(1, me.get(1));
+		re.set(2, me.get(2));
+		re.set(4, me.get(3));
+		re.set(5, me.get(4));
+		re.set(6, me.get(5));
+		re.set(8, me.get(6));
+		re.set(9, me.get(7));
+		re.set(10, me.get(8));
 
 		return result;
 	}
