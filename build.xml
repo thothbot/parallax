@@ -1,0 +1,83 @@
+<project name="org.parallax3d.parallax" default="all" basedir=".">
+    <description>Parallax distribution build file</description>
+    <property environment="env" />
+
+    <!-- library version -->
+    <property name="version" value="2.0-SNAPSHOT"/>
+
+    <!-- define distribution/output directory -->
+    <property name="distDir" value="${basedir}/dist"/>
+
+    <!-- should we build natives? -->
+    <property name="build-natives" value="false"/>
+
+    <!-- clean distribution/output directory -->
+    <target name="clean">
+        <delete dir="${distDir}"/>
+    </target>
+
+    <!-- build the core of the library -->
+
+    <!-- parallax core -->
+    <target name="parallax-core">
+        <ant antfile="../build-template.xml" dir="parallax">
+            <property name="jar" value="parallax"/>
+        </ant>
+    </target>
+
+    <target name="parallax-platform-gwt" depends="parallax-core">
+        <path id="classpath">
+            <pathelement location="${distDir}/gdx.jar"/>
+        </path>
+        <ant antfile="../../build-template.xml" dir="platforms/parallax-platform-gwt">
+            <property name="jar" value="parallax-platform-gwt"/>
+            <reference refid="classpath"/>
+        </ant>
+    </target>
+
+    <!-- generates the javadoc for the core api and the application implementations -->
+    <target name="docs" depends="clean">
+        <javadoc destdir="${distDir}/docs/api" author="true" version="true" use="true"
+                 windowtitle="Parallax API" doctitle="Parallax API" footer="Parallax API" useexternalfile="true">
+            <header><![CDATA[
+				Parallax API
+				<style>
+				body, td, th { font-family:Helvetica, Tahoma, Arial, sans-serif; font-size:10pt }
+				pre, code, tt { font-size:9pt; font-family:Lucida Console, Courier New, sans-serif }
+				h1, h2, h3, .FrameTitleFont, .FrameHeadingFont, .TableHeadingColor font { font-size:105%;  font-weight:bold }
+				.TableHeadingColor { background:#EEEEFF; }
+				a { text-decoration:none }
+				a:hover { text-decoration:underline }
+				a:link, a:visited { color:blue }
+				table { border:0px }
+				.TableRowColor td:first-child { border-left:1px solid black }
+				.TableRowColor td { border:0px; border-bottom:1px solid black; border-right:1px solid black }
+				hr { border:0px; border-bottom:1px solid #333366; }
+				</style>
+			]]></header>
+            <bottom><![CDATA[
+				<div style="font-size:9pt"><i>
+				Copyright &copy; 2012-2015 Alex Usachev (thothbot@gmail.com)
+				</i></div>
+			]]></bottom>
+            <fileset dir="parallax/src" defaultexcludes="yes">
+                <include name="org/parallax3d/parallax/**" />
+                <exclude name="org/parallax3d/parallax/**/*.glsl"/>
+            </fileset>
+
+        </javadoc>
+    </target>
+
+    <target name="jars"
+            depends="clean,parallax-core,parallax-platform-gwt"/>
+
+    <target name="all" depends="jars,docs">
+        <!-- copy distribution files (licences etc.) -->
+        <copy tofile="${distDir}/README" file="README.md"/>
+        <copy tofile="${distDir}/COPYING" file="COPYING"/>
+
+        <!-- zip dist dir -->
+        <zip destfile="parallax-${version}.zip" basedir="${distDir}"/>
+        <checksum file="parallax-${version}.zip" forceOverwrite="yes" />
+    </target>
+</project>

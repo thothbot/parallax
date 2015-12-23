@@ -1,0 +1,2 @@
+include ":parallax"
+include ":platforms:parallax-gwt"
