@@ -33,19 +33,19 @@ public class LOD extends Object3D
 	private List<LOD> LODs;
 	private double visibleAtDistance;
 	private Object3D  object3D;
-	
-	public LOD() 
+
+	public LOD()
 	{
 		this.setLODs(new ArrayList<LOD>());
 	}
-	
-	public void addLevel ( Object3D object3D) 
+
+	public void addLevel ( Object3D object3D)
 	{
 		addLevel(object3D, 0);
 	}
 
 	// TODO: What is this?
-	public void addLevel ( Object3D object3D, double visibleAtDistance ) 
+	public void addLevel ( Object3D object3D, double visibleAtDistance )
 	{
 		visibleAtDistance = Math.abs( visibleAtDistance );
 
@@ -68,28 +68,28 @@ public class LOD extends Object3D
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
 
 		Matrix4 inverse  = camera.getMatrixWorldInverse();
-		double distance = -( inverse.getArray()[2]
-				* this.matrixWorld.getArray()[12] + inverse.getArray()[6]
-				* this.matrixWorld.getArray()[13] + inverse.getArray()[10]
-				* this.matrixWorld.getArray()[14] + inverse.getArray()[14] );
+		double distance = -( inverse.getArray().get(2)
+				* this.matrixWorld.getArray().get(12) + inverse.getArray().get(6)
+				* this.matrixWorld.getArray().get(13) + inverse.getArray().get(10)
+				* this.matrixWorld.getArray().get(14) + inverse.getArray().get(14) );
 
-			this.getLODs().get(0).getObject3D().setVisible(true);
+		this.getLODs().get(0).getObject3D().setVisible(true);
 
-			for ( int l = 1; l < this.getLODs().size(); l ++ ) 
+		for ( int l = 1; l < this.getLODs().size(); l ++ )
+		{
+			if( distance >= this.getLODs().get( l ).getVisibleAtDistance() )
 			{
-				if( distance >= this.getLODs().get( l ).getVisibleAtDistance() ) 
-				{
-					this.getLODs().get( l - 1 ).getObject3D().setVisible(false);
-					this.getLODs().get( l     ).getObject3D().setVisible(true);
-				} 
-				else 
-				{
-					break;
-				}
+				this.getLODs().get( l - 1 ).getObject3D().setVisible(false);
+				this.getLODs().get( l     ).getObject3D().setVisible(true);
 			}
+			else
+			{
+				break;
+			}
+		}
 
-			for(LOD lod: this.getLODs())
-				lod.getObject3D().setVisible(false);
+		for(LOD lod: this.getLODs())
+			lod.getObject3D().setVisible(false);
 	}
 
 	/**
@@ -132,5 +132,4 @@ public class LOD extends Object3D
 	 */
 	public void setLODs(List<LOD> lODs) {
 		LODs = lODs;
-	}
-}
+	}}

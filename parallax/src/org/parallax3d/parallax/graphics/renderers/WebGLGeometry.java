@@ -18,22 +18,22 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import java.nio.FloatBuffer;
 import java.util.List;
 
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 @ThreeJsObject("THREE.WebGLGeometries")
 public abstract class WebGLGeometry {
 
-	public FloatBuffer __colorArray;
-	public FloatBuffer __vertexArray;
-	public FloatBuffer __normalArray;
-	public FloatBuffer __tangentArray;
-	public FloatBuffer __uvArray;
-	public FloatBuffer __uv2Array;
-	public FloatBuffer __lineDistanceArray;
+	public Float32Array __colorArray;
+	public Float32Array __vertexArray;
+	public Float32Array __normalArray;
+	public Float32Array __tangentArray;
+	public Float32Array __uvArray;
+	public Float32Array __uv2Array;
+	public Float32Array __lineDistanceArray;
 
 	// WebGLBuffer
 	public Integer __webglColorBuffer;
@@ -43,30 +43,30 @@ public abstract class WebGLGeometry {
 	public Integer __webglUVBuffer;
 	public Integer __webglUV2Buffer;
 	public Integer __webglLineDistanceBuffer;
-	
+
 	public Integer __webglSkinIndicesBuffer;
 	public Integer __webglSkinWeightsBuffer;
-		
+
 	public Integer __webglFaceBuffer;
 	public Integer __webglLineBuffer;
-	
+
 	public List<Integer> __webglMorphTargetsBuffers; // WebGLBuffer
-	
+
 	public List<Integer> __webglMorphNormalsBuffers; // WebGLBuffer
-	
+
 	public List<Attribute> __webglCustomAttributesList;
-	
+
 	public int __webglParticleCount;
 	public int __webglLineCount;
 	public int __webglVertexCount;
 	public int __webglFaceCount;
-	
+
 	public boolean __webglInit;
-		
+
 	public abstract int getId();
-	
-	public void dispose() 
-	{	
+
+	public void dispose()
+	{
 		__colorArray = null;
 		__normalArray = null;
 		__tangentArray = null;
@@ -74,4 +74,7 @@ public abstract class WebGLGeometry {
 		__uv2Array = null;
 		__vertexArray = null;
 	}
+
+	// static would be better for GC efficiency but worse for thread safety
+	private final int[] tmpBufArray = { 0 };
 }

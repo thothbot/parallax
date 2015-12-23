@@ -23,12 +23,12 @@ import org.parallax3d.parallax.math.Vector3;
 public final class CurveDecoratedTorusKnot4b extends CurveDecoratedTorusKnot4a 
 {
 	@Override
-	public Vector3 getPoint(float t)
+	public Vector3 getPoint(double t)
 	{
-		float fi = (float)(t * Math.PI * 2);
-		float x = (float)(Math.cos(2.0 * fi) * (1.0 + 0.45 * Math.cos(3.0 * fi) + 0.4 * Math.cos(9.0 * fi)));
-		float y = (float)(Math.sin(2.0 * fi) * (1.0 + 0.45 * Math.cos(3.0 * fi) + 0.4 * Math.cos(9.0 * fi)));
-		float z = (float)(0.2 * Math.sin(9.0 * fi));
+		double fi = t * Math.PI * 2;
+		double x = Math.cos(2.0 * fi) * (1.0 + 0.45 * Math.cos(3.0 * fi) + 0.4 * Math.cos(9.0 * fi));
+		double y = Math.sin(2.0 * fi) * (1.0 + 0.45 * Math.cos(3.0 * fi) + 0.4 * Math.cos(9.0 * fi));
+		double z = 0.2 * Math.sin(9.0 * fi);
 
 		return new Vector3(x, y, z).multiply(this.scale);
 	}

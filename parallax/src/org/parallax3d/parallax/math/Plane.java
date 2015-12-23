@@ -24,24 +24,24 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 public class Plane 
 {
 	private Vector3 normal;
-	private float constant;
-	
+	private double constant;
+
 	// Temporary variables
 	static Vector3 _v1 = new Vector3();
 	static Vector3 _v2 = new Vector3();
 	static Matrix3 _m1 = new Matrix3();
-	
+
 	public Plane()
 	{
 		this(new Vector3(1, 0, 0), 0);
 	}
 
-	public Plane ( Vector3 normal, float constant ) 
+	public Plane ( Vector3 normal, double constant )
 	{
 		this.normal = normal;
 		this.constant = constant;
 	}
-	
+
 	public Vector3 getNormal() {
 		return normal;
 	}
@@ -50,39 +50,39 @@ public class Plane
 		this.normal = normal;
 	}
 
-	public float getConstant() {
+	public double getConstant() {
 		return constant;
 	}
 
-	public void setConstant(float constant) {
+	public void setConstant(double constant) {
 		this.constant = constant;
 	}
-	
-	public Plane set( Vector3 normal, float constant ) 
+
+	public Plane set( Vector3 normal, double constant )
 	{
-		this.normal.copy( normal );
+		this.normal.copy(normal);
 		this.constant = constant;
 
 		return this;
 	}
-	
-	public Plane setComponents( float x, float y, float z, float w ) {
+
+	public Plane setComponents( double x, double y, double z, double w ) {
 
 		this.normal.set(x, y, z);
 		this.constant = w;
 
 		return this;
 	}
-	
-	public Plane setFromNormalAndCoplanarPoint(Vector3 normal, Vector3 point ) 
+
+	public Plane setFromNormalAndCoplanarPoint(Vector3 normal, Vector3 point )
 	{
 		this.normal.copy(normal);
 		this.constant = - point.dot( this.normal );	// must be this.normal, not normal, as this.normal is normalized
 
 		return this;
 	}
-	
-	public Plane setFromCoplanarPoints( Vector3 a, Vector3 b, Vector3 c ) 
+
+	public Plane setFromCoplanarPoints( Vector3 a, Vector3 b, Vector3 c )
 	{
 		Vector3 normal = _v1.sub( c, b ).cross( _v2.sub( a, b ) ).normalize();
 
@@ -93,26 +93,26 @@ public class Plane
 		return this;
 	}
 
-	public Plane copy( Plane plane ) 
+	public Plane copy( Plane plane )
 	{
-		this.normal.copy( plane.normal );
+		this.normal.copy(plane.normal);
 		this.constant = plane.constant;
-		
+
 		return this;
 	}
 
-	public Plane normalize() 
+	public Plane normalize()
 	{
 		// Note: will lead to a divide by zero if the plane is invalid.
 
-		float inverseNormalLength = 1.0f / this.normal.length();
+		double inverseNormalLength = 1.0 / this.normal.length();
 		this.normal.multiply(inverseNormalLength);
 		this.constant *= inverseNormalLength;
 
 		return this;
 	}
 
-	public Plane negate() 
+	public Plane negate()
 	{
 		this.constant *= - 1;
 		this.normal.negate();
@@ -120,12 +120,12 @@ public class Plane
 		return this;
 	}
 
-	public float distanceToPoint( Vector3 point ) 
+	public double distanceToPoint( Vector3 point )
 	{
-		return this.normal.dot( point ) + this.constant;
+		return this.normal.dot(point) + this.constant;
 	}
 
-	public float distanceToSphere( Sphere sphere ) 
+	public double distanceToSphere( Sphere sphere )
 	{
 		return this.distanceToPoint(sphere.getCenter()) - sphere.getRadius();
 	}
@@ -135,19 +135,19 @@ public class Plane
 		return this.orthoPoint( point, new Vector3() ).sub( point ).negate();
 	}
 
-	public Vector3 projectPoint( Vector3 point, Vector3 optionalTarget ) 
+	public Vector3 projectPoint( Vector3 point, Vector3 optionalTarget )
 	{
 		return this.orthoPoint( point, optionalTarget ).sub( point ).negate();
 	}
-	
+
 	public Vector3 orthoPoint( Vector3 point )
 	{
 		return orthoPoint(point, new Vector3());
 	}
-	
-	public Vector3 orthoPoint( Vector3 point, Vector3 optionalTarget ) 
+
+	public Vector3 orthoPoint( Vector3 point, Vector3 optionalTarget )
 	{
-		float perpendicularMagnitude = this.distanceToPoint( point );
+		double perpendicularMagnitude = this.distanceToPoint( point );
 
 		return optionalTarget.copy( this.normal ).multiply( perpendicularMagnitude );
 	}
@@ -155,12 +155,12 @@ public class Plane
 	/**
 	 * Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
 	 */
-	public boolean isIntersectionLine( Line3 line ) 
+	public boolean isIntersectionLine( Line3 line )
 	{
 		// Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
 
-		float startSign = this.distanceToPoint( line.getStart() );
-		float endSign = this.distanceToPoint( line.getEnd() );
+		double startSign = this.distanceToPoint( line.getStart() );
+		double endSign = this.distanceToPoint( line.getEnd() );
 
 		return ( startSign < 0 && endSign > 0 ) || ( endSign < 0 && startSign > 0 );
 	}
@@ -169,12 +169,12 @@ public class Plane
 	{
 		return intersectLine(line, new Vector3());
 	}
-	
-	public Vector3 intersectLine( Line3 line, Vector3 optionalTarget ) 
+
+	public Vector3 intersectLine( Line3 line, Vector3 optionalTarget )
 	{
 		Vector3 direction = line.delta( _v1 );
 
-		float denominator = this.normal.dot( direction );
+		double denominator = this.normal.dot( direction );
 
 		if ( denominator == 0 ) {
 
@@ -190,7 +190,7 @@ public class Plane
 
 		}
 
-		float t = - ( line.getStart().dot( this.normal ) + this.constant ) / denominator;
+		double t = - ( line.getStart().dot( this.normal ) + this.constant ) / denominator;
 
 		if ( t < 0 || t > 1 ) {
 
@@ -206,18 +206,18 @@ public class Plane
 	{
 		return coplanarPoint(new Vector3());
 	}
-	
-	public Vector3 coplanarPoint( Vector3 optionalTarget ) 
+
+	public Vector3 coplanarPoint( Vector3 optionalTarget )
 	{
 		return optionalTarget.copy( this.normal ).multiply( - this.constant );
 	}
 
 	public Plane apply( Matrix4 matrix )
-	{		
+	{
 		return apply(matrix, _m1.getNormalMatrix( matrix ));
 	}
-	
-	public Plane apply( Matrix4 matrix, Matrix3 normalMatrix ) 
+
+	public Plane apply( Matrix4 matrix, Matrix3 normalMatrix )
 	{
 		// compute new normal based on theory here:
 		// http://www.songho.ca/opengl/gl_normaltransform.html
@@ -231,19 +231,19 @@ public class Plane
 		return this;
 	}
 
-	public Plane translate( Vector3 offset ) 
+	public Plane translate( Vector3 offset )
 	{
 		this.constant = this.constant - offset.dot( this.normal );
 
 		return this;
 	}
 
-	public boolean equals( Plane plane ) 
+	public boolean equals( Plane plane )
 	{
 		return plane.normal.equals( this.normal ) && ( plane.constant == this.constant );
 	}
 
-	public Plane clone() 
+	public Plane clone()
 	{
 		return new Plane().copy( this );
 	}

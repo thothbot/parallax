@@ -24,32 +24,32 @@ import org.parallax3d.parallax.graphics.extras.core.Curve;
 public final class CurveFigureEightPolynomialKnot extends Curve
 {
 
-	private float scale;
+	private double scale;
 	
 	public CurveFigureEightPolynomialKnot()
 	{
 		this(1);
 	}
 	
-	public CurveFigureEightPolynomialKnot(float scale)
+	public CurveFigureEightPolynomialKnot(double scale)
 	{
 		this.scale = scale;
 	}
 	
 	@Override
-	public Vector3 getPoint(float t)
+	public Vector3 getPoint(double t)
 	{
 		t = scaleTo(-4, 4, t);
-		float tx = (float)(2 / 5.0 * t * (t * t - 7.0) * (t * t - 10.0));
-		float ty = (float)(Math.pow(t, 4.0) - 13.0 * t * t);
-		float tz = (float)(1 / 10.0 * t * (t * t - 4.0) * (t * t - 9.0) * (t * t - 12.0));
+		double tx = 2 / 5.0 * t * (t * t - 7.0) * (t * t - 10.0);
+		double ty = Math.pow(t, 4.0) - 13.0 * t * t;
+		double tz = 1 / 10.0 * t * (t * t - 4.0) * (t * t - 9.0) * (t * t - 12.0);
 
 		return new Vector3(tx, ty, tz).multiply(this.scale);
 	}
 	
-	private float scaleTo(float x, float y, float t) 
+	private double scaleTo(double x, double y, double t) 
 	{
-		float r = y - x;
+		double r = y - x;
 		return t * r + x;
 	}
 

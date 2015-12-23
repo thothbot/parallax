@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 
 public class Matrix4Test
 {
-	private static float DELTA = 0.0f;
+	private static double DELTA = 0.0;
 
 	@Test
 	public void testMatrix4()
@@ -207,16 +207,16 @@ public class Matrix4Test
 		assertTrue( matrixEquals4( b, new Matrix4() ));
 
 		List<Matrix4> testMatrices = Arrays.asList(
-			new Matrix4().makeRotationX( 0.3f ),
-			new Matrix4().makeRotationX( -0.3f ),
-			new Matrix4().makeRotationY( 0.3f ),
-			new Matrix4().makeRotationY( -0.3f ),
-			new Matrix4().makeRotationZ( 0.3f ),
-			new Matrix4().makeRotationZ( -0.3f ),
+			new Matrix4().makeRotationX( 0.3 ),
+			new Matrix4().makeRotationX( -0.3 ),
+			new Matrix4().makeRotationY( 0.3 ),
+			new Matrix4().makeRotationY( -0.3 ),
+			new Matrix4().makeRotationZ( 0.3 ),
+			new Matrix4().makeRotationZ( -0.3 ),
 			new Matrix4().makeScale( 1, 2, 3 ),
-			new Matrix4().makeScale( 1.0f/8, 1.0f/2, 1.0f/3 ),
+			new Matrix4().makeScale( 1.0/8, 1.0/2, 1.0/3 ),
 			new Matrix4().makeFrustum( -1, 1, -1, 1, 1, 1000 ),
-			new Matrix4().makeFrustum( -16, 16, -9, 9, 0.1f, 10000 ),
+			new Matrix4().makeFrustum( -16, 16, -9, 9, 0.1, 10000 ),
 			new Matrix4().makeTranslation( 1, 2, 3 )
 		);
 

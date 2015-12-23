@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 public class ProgramParameters 
 {
 	public Shader.PRECISION precision;
-	
+
 	public boolean supportsVertexTextures;
 
 	public boolean map;
@@ -31,19 +31,19 @@ public class ProgramParameters
 	public boolean normalMap;
 	public boolean specularMap;
 	public boolean alphaMap;
-	
+
 	public boolean vertexColors;
 
 	public boolean useFog;
 	public boolean useFog2;
-	
+
 	public boolean sizeAttenuation;
 	public boolean logarithmicDepthBuffer;
-	
+
 	public boolean skinning;
 	public int maxBones;
 	public boolean useVertexTexture;
-	
+
 	public boolean morphTargets;
 	public boolean morphNormals;
 	public int maxMorphTargets;
@@ -60,38 +60,38 @@ public class ProgramParameters
 	public boolean shadowMapDebug;
 	public boolean shadowMapCascade;
 
-	public float alphaTest;
+	public double alphaTest;
 	public boolean metal;
 	public boolean wrapAround;
-	public boolean floatSided;
+	public boolean doubleSided;
 	public boolean flipSided;
-	
+
 	public boolean gammaInput;
 	public boolean gammaOutput;
-	
-	public String toString() 
+
+	public String toString()
 	{
 		String retval = "";
-		retval += supportsVertexTextures + "-1-" 
-				
-				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + normalMap + ", " + specularMap + ", " + alphaMap + "-2-" 
+		retval += supportsVertexTextures + "-1-"
 
-				+ vertexColors + "-3-" 
-				
-				+ useFog + ", " + useFog2 + "-4-" 
-				
-				+ sizeAttenuation + ", " + logarithmicDepthBuffer + "-5-" 
-				
-				+ skinning + ", " + maxBones + ", " + useVertexTexture + "-6-" 
-				
-				+ morphTargets + morphNormals + ", " + maxMorphTargets + ", " + maxMorphNormals + "-7-"  				 
-								
+				+ map + ", " + envMap + ", " + lightMap + ", " + bumpMap + ", " + normalMap + ", " + specularMap + ", " + alphaMap + "-2-"
+
+				+ vertexColors + "-3-"
+
+				+ useFog + ", " + useFog2 + "-4-"
+
+				+ sizeAttenuation + ", " + logarithmicDepthBuffer + "-5-"
+
+				+ skinning + ", " + maxBones + ", " + useVertexTexture + "-6-"
+
+				+ morphTargets + morphNormals + ", " + maxMorphTargets + ", " + maxMorphNormals + "-7-"
+
 				+ maxDirLights + ", " + maxPointLights + ", " + maxSpotLights + ", " + maxHemiLights + "-8-"
-				
-				+ maxShadows + ", " + shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + "-9-"  
-				
-				+ alphaTest + ", "  + metal + ", " + wrapAround + ", " + floatSided + ", " + flipSided + "-10-"
-				
+
+				+ maxShadows + ", " + shadowMapEnabled + ", " + shadowMapSoft + ", " + shadowMapDebug  + ", " + shadowMapCascade + "-9-"
+
+				+ alphaTest + ", "  + metal + ", " + wrapAround + ", " + doubleSided + ", " + flipSided + "-10-"
+
 				+ gammaInput + ", " + gammaOutput + "-11-";
 
 		return retval;

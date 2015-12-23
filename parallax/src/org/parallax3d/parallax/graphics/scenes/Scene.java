@@ -39,11 +39,11 @@ public final class Scene extends Object3D
 	 * Here is stored fog
 	 */
 	private AbstractFog fog;
-	
+
 	private Material overrideMaterial;
-	
+
 	private boolean isAutoUpdate = true;
-	
+
 	/**
 	 * This default constructor will create new Scene instance.
 	 */
@@ -51,28 +51,28 @@ public final class Scene extends Object3D
 	{
 		super();
 	}
-	
+
 
 	/**
 	 * Get fogAbstract associated with the Scene.
-	 * 
+	 *
 	 * @return the fogAbstract
 	 */
 	public AbstractFog getFog()
 	{
 		return this.fog;
 	}
-	
+
 	/**
 	 * Set the fogAbstract to the Scene.
-	 * 
-	 * @param fog the FogAbstract
+	 *
+	 * @param fog	the AbstractFog
 	 */
 	public void setFog(AbstractFog fog)
 	{
 		this.fog = fog;
 	}
-	
+
 	public Material getOverrideMaterial() {
 		return overrideMaterial;
 	}
@@ -95,14 +95,14 @@ public final class Scene extends Object3D
 	public Scene clone() {
 		return clone(new Scene());
 	}
-	
+
 	public Scene clone(Scene object ) {
 
 		super.clone(object);
 
-		if ( this.fog != null ) 
+		if ( this.fog != null )
 			object.fog = this.fog.clone();
-		if ( this.overrideMaterial != null ) 
+		if ( this.overrideMaterial != null )
 			object.overrideMaterial = this.overrideMaterial.clone();
 
 		object.isAutoUpdate = this.isAutoUpdate;

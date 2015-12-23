@@ -35,17 +35,17 @@ import org.parallax3d.parallax.math.Mathematics;
 @ThreeJsObject("THREE.PerspectiveCamera")
 public class PerspectiveCamera extends Camera implements HasNearFar
 {
-	public float zoom = 1.0f;
-	
-	protected float fov;
-	protected float aspect;
-	protected float near;
-	protected float far;
-	
+	public double zoom = 1.0;
+
+	protected double fov;
+	protected double aspect;
+	protected double near;
+	protected double far;
+
 	protected int fullWidth;
 	protected int fullHeight;
-	protected float x;
-	protected float y;
+	protected double x;
+	protected double y;
 	protected int width;
 	protected int height;
 
@@ -57,11 +57,11 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 * <li>near - 0.1</li>
 	 * <li>far - 2000</li>
 	 * </ul>
-	 * 
+	 *
 	 */
-	public PerspectiveCamera() 
+	public PerspectiveCamera()
 	{
-		this(50, 1, 0.1f, 2000);
+		this(50, 1, 0.1, 2000);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 * @param near        Camera frustum near plane.
 	 * @param far         Camera frustum far plane.
 	 */
-	public PerspectiveCamera(float fieldOfView, float aspectRatio, float near, float far) 
+	public PerspectiveCamera(double fieldOfView, double aspectRatio, double near, double far)
 	{
 		super();
 		this.fov = fieldOfView;
@@ -81,17 +81,17 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 
 		updateProjectionMatrix();
 	}
-	
-//	@Override
-//	public void onResize(ViewportResizeEvent event)
-//	{
-//		setAspect(event.getRenderer().getAbsoluteAspectRation());	
-//	}
+
+	@Override
+	public void onViewportResize(int width, int height)
+	{
+		setAspect((double) width / (double) height);
+	}
 
 	/**
 	 * Gets Camera frustum vertical field of view.
 	 */
-	public float getFov()
+	public double getFov()
 	{
 		return fov;
 	}
@@ -99,7 +99,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum vertical field of view.
 	 */
-	public void setFov(float fov)
+	public void setFov(double fov)
 	{
 		this.fov = fov;
 	}
@@ -107,7 +107,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum aspect ratio.
 	 */
-	public float getAspect()
+	public double getAspect()
 	{
 		return aspect;
 	}
@@ -115,7 +115,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum aspect ratio.
 	 */
-	public void setAspect(float aspect)
+	public void setAspect(double aspect)
 	{
 		this.aspect = aspect;
 		this.updateProjectionMatrix();
@@ -124,7 +124,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum near plane.
 	 */
-	public float getNear()
+	public double getNear()
 	{
 		return near;
 	}
@@ -132,7 +132,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum near plane.
 	 */
-	public void setNear(float near)
+	public void setNear(double near)
 	{
 		this.near = near;
 	}
@@ -140,7 +140,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Gets Camera frustum far plane.
 	 */
-	public float getFar()
+	public double getFar()
 	{
 		return far;
 	}
@@ -148,7 +148,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	/**
 	 * Sets Camera frustum far plane.
 	 */
-	public void setFar(float far)
+	public void setFar(double far)
 	{
 		this.far = far;
 	}
@@ -173,22 +173,22 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 		this.fullHeight = fullHeight;
 	}
 
-	public float getX()
+	public double getX()
 	{
 		return x;
 	}
 
-	public void setX(float x)
+	public void setX(double x)
 	{
 		this.x = x;
 	}
 
-	public float getY()
+	public double getY()
 	{
 		return y;
 	}
 
-	public void setY(float y)
+	public void setY(double y)
 	{
 		this.y = y;
 	}
@@ -215,7 +215,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 
 	/**
 	 * @see #setLens(int, int)
-	 * 
+	 *
 	 * @param focalLength the focal length
 	 */
 	public void setLens(int focalLength)
@@ -227,16 +227,16 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 * Uses Focal Length (in mm) to estimate and set FOV 35mm (fullframe) camera
 	 * is used if frame size is not specified.<br>
 	 * Formula based on <a href="http://www.bobatkins.com/photography/technical/field_of_view.html">bobatkins.com</a>
-	 * 
+	 *
 	 * @param focalLength the focal length
 	 * @param frameHeight the frame size
 	 */
 	public void setLens(int focalLength, int frameHeight)
 	{
-		this.fov = 2.0f * Mathematics.radToDeg((float)Math.atan(frameHeight / (focalLength * 2.0f)));
+		this.fov = 2.0 * Mathematics.radToDeg( Math.atan( frameHeight / ( focalLength * 2.0 ) ) );
 		this.updateProjectionMatrix();
 	}
-	
+
 	/**
 	 * Sets an offset in a larger frustum. This is useful for multi-window or
 	 * multi-monitor/multi-machine setups.
@@ -259,10 +259,10 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 *<pre>
 	 *{@code
 	 *
-	 *   float w = 1920;
-	 *   float h = 1080;
-	 *   float fullWidth = w * 3;
-	 *   float fullHeight = h * 2;
+	 *   double w = 1920;
+	 *   double h = 1080;
+	 *   double fullWidth = w * 3;
+	 *   double fullHeight = h * 2;
 	 *
 	 *   --A--
 	 *   camera.setOffset( fullWidth, fullHeight, w * 0, h * 0, w, h );
@@ -280,7 +280,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 *</pre>
 	 *
 	 *   Note there is no reason monitors have to be the same size or in a grid.
-	 * 
+	 *
 	 * @param fullWidth  the full width of multiview setup
 	 * @param fullHeight the full height of multiview setup
 	 * @param x          the horizontal offset of subcamera
@@ -288,7 +288,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 * @param width      the width of subcamera
 	 * @param height     the height of subcamera
 	 */
-	public void setViewOffset( int fullWidth, int fullHeight, float x, float y, int width, int height ) 
+	public void setViewOffset( int fullWidth, int fullHeight, double x, double y, int width, int height )
 	{
 		this.fullWidth = fullWidth;
 		this.fullHeight = fullHeight;
@@ -299,33 +299,33 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 
 		this.updateProjectionMatrix();
 	}
-	
+
 	/**
 	 * Updates the camera projection matrix.
 	 * <p>
 	 * Must be called after change of parameters.
 	 */
-	public void updateProjectionMatrix() 
+	public void updateProjectionMatrix()
 	{
-		float fov = Mathematics.radToDeg( 2 * (float)Math.atan( Math.tan( Mathematics.degToRad( this.fov ) * 0.5f ) / this.zoom ) );
+		double fov = Mathematics.radToDeg( 2 * Math.atan( Math.tan( Mathematics.degToRad( this.fov ) * 0.5 ) / this.zoom ) );
 
 		if ( this.fullWidth > 0 ) {
 
-			float aspect = (float)this.fullWidth / (float)this.fullHeight;
-			float top = (float)Math.tan( Mathematics.degToRad( fov * 0.5f ) ) * this.near;
-			float bottom = - top;
-			float left = aspect * bottom;
-			float right = aspect * top;
-			float width = Math.abs( right - left );
-			float height = Math.abs( top - bottom );
+			double aspect = (double)this.fullWidth / (double)this.fullHeight;
+			double top = Math.tan( Mathematics.degToRad( fov * 0.5 ) ) * this.near;
+			double bottom = - top;
+			double left = aspect * bottom;
+			double right = aspect * top;
+			double width = Math.abs( right - left );
+			double height = Math.abs( top - bottom );
 
 			this.projectionMatrix.makeFrustum(
-				left + this.x * width / this.fullWidth,
-				left + ( this.x + this.width ) * width / this.fullWidth,
-				top - ( this.y + this.height ) * height / this.fullHeight,
-				top - this.y * height / this.fullHeight,
-				this.near,
-				this.far
+					left + this.x * width / this.fullWidth,
+					left + ( this.x + this.width ) * width / this.fullWidth,
+					top - ( this.y + this.height ) * height / this.fullHeight,
+					top - this.y * height / this.fullHeight,
+					this.near,
+					this.far
 			);
 
 		} else {
@@ -335,11 +335,11 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 		}
 
 	}
-	
+
 	public PerspectiveCamera clone () {
 
 		PerspectiveCamera camera = new PerspectiveCamera();
-		
+
 		super.clone(camera);
 
 		camera.zoom = this.zoom;

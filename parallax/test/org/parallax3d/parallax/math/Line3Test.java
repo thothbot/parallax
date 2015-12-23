@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 
 public class Line3Test
 {
-	private static float DELTA = 0.0f;
+	private static double DELTA = 0.0;
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );

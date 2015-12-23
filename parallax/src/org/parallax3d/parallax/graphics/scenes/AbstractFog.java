@@ -18,11 +18,9 @@
 
 package org.parallax3d.parallax.graphics.scenes;
 
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 
 /**
  * Abstract realization of FogAbstract. This class implements color
@@ -35,11 +33,11 @@ public abstract class AbstractFog
 {
 	private String name;
 	private Color color;
-	
+
 	/**
 	 * This default constructor will make abstract FogAbstract with
 	 * defined color
-	 *  
+	 *
 	 * @param hex the color in HEX format
 	 */
 	public AbstractFog(int hex)
@@ -50,7 +48,7 @@ public abstract class AbstractFog
 
 	/**
 	 * Set color for the FogAbstract
-	 * 
+	 *
 	 * @param color the color instance
 	 */
 	public void setColor(Color color)
@@ -60,14 +58,14 @@ public abstract class AbstractFog
 
 	/**
 	 * Get color of the FogAbstract
-	 * 
+	 *
 	 * @return the color instance
 	 */
 	public Color getColor()
 	{
 		return color;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -75,22 +73,22 @@ public abstract class AbstractFog
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public abstract AbstractFog clone();
-	
+
 	public AbstractFog clone(AbstractFog fog) {
 		fog.name = this.name;
 		fog.color = this.color.clone();
-		
+
 		return fog;
 	}
 
 	/**
 	 * The method refreshes uniforms for the fog
-	 * 
+	 *
 	 * @param uniforms the map of uniforms
 	 */
-	public void refreshUniforms(ObjectMap<String, Uniform> uniforms)
+	public void refreshUniforms(FastMap<Uniform> uniforms)
 	{
 		uniforms.get("fogColor").setValue( getColor() );
 	}

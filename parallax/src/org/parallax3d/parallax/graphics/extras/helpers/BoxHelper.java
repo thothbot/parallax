@@ -26,8 +26,8 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 import java.nio.FloatBuffer;
 
@@ -36,20 +36,20 @@ public class BoxHelper extends Line
 {
 	public BoxHelper(Mesh object)
 	{
-		super(new BufferGeometry(), new LineBasicMaterial(), MODE.PIECES);
-		
+		super(new BufferGeometry(), new LineBasicMaterial(), Line.MODE.PIECES);
+
 		BufferGeometry geometry = (BufferGeometry) getGeometry();
 		LineBasicMaterial material = (LineBasicMaterial) getMaterial();
 		material.setColor(new Color(0xffff00));
-		
-		
-		geometry.addAttribute( "position", new BufferAttribute(BufferUtils.newFloatBuffer(72), 3 ) );
+
+
+		geometry.addAttribute( "position", new BufferAttribute( Float32Array.create(72), 3 ) );
 
 		update( object );
 
 	}
-	
-	public void update( Mesh object ) 
+
+	public void update( Mesh object )
 	{
 
 		AbstractGeometry geometry = object.getGeometry();
@@ -79,47 +79,47 @@ public class BoxHelper extends Line
 		7: max.x, min.y, min.z
 		*/
 
-		FloatBuffer vertices = (FloatBuffer) ((BufferGeometry)this.geometry).getAttribute("position").getArray();
+		Float32Array vertices = (Float32Array) ((BufferGeometry)this.geometry).getAttribute("position").getArray();
 
-		vertices.put(  0 , max.getX() ); vertices.put(  1 , max.getY() ); vertices.put(  2 , max.getZ() );
-		vertices.put(  3 , min.getX() ); vertices.put(  4 , max.getY() ); vertices.put(  5 , max.getZ() );
+		vertices.set(0, max.getX()); vertices.set(1, max.getY()); vertices.set(2, max.getZ());
+		vertices.set(3, min.getX()); vertices.set(4, max.getY()); vertices.set(5, max.getZ());
 
-		vertices.put(  6 , min.getX() ); vertices.put(  7 , max.getY() ); vertices.put(  8 , max.getZ() );
-		vertices.put(  9 , min.getX() ); vertices.put( 10 , min.getY() ); vertices.put( 11 , max.getZ() );
+		vertices.set(6, min.getX()); vertices.set(7, max.getY()); vertices.set(8, max.getZ());
+		vertices.set(9, min.getX()); vertices.set(10, min.getY()); vertices.set(11, max.getZ());
 
-		vertices.put( 12 , min.getX() ); vertices.put( 13 , min.getY() ); vertices.put( 14 , max.getZ() );
-		vertices.put( 15 , max.getX() ); vertices.put( 16 , min.getY() ); vertices.put( 17 , max.getZ() );
+		vertices.set(12, min.getX()); vertices.set(13, min.getY()); vertices.set(14, max.getZ());
+		vertices.set(15, max.getX()); vertices.set(16, min.getY()); vertices.set(17, max.getZ());
 
-		vertices.put( 18 , max.getX() ); vertices.put( 19 , min.getY() ); vertices.put( 20 , max.getZ() );
-		vertices.put( 21 , max.getX() ); vertices.put( 22 , max.getY() ); vertices.put( 23 , max.getZ() );
-
-		//
-
-		vertices.put( 24 , max.getX() ); vertices.put( 25 , max.getY() ); vertices.put( 26 , min.getZ() );
-		vertices.put( 27 , min.getX() ); vertices.put( 28 , max.getY() ); vertices.put( 29 , min.getZ() );
-
-		vertices.put( 30 , min.getX() ); vertices.put( 31 , max.getY() ); vertices.put( 32 , min.getZ() );
-		vertices.put( 33 , min.getX() ); vertices.put( 34 , min.getY() ); vertices.put( 35 , min.getZ() );
-
-		vertices.put( 36 , min.getX() ); vertices.put( 37 , min.getY() ); vertices.put( 38 , min.getZ() );
-		vertices.put( 39 , max.getX() ); vertices.put( 40 , min.getY() ); vertices.put( 41 , min.getZ() );
-
-		vertices.put( 42 , max.getX() ); vertices.put( 43 , min.getY() ); vertices.put( 44 , min.getZ() );
-		vertices.put( 45 , max.getX() ); vertices.put( 46 , max.getY() ); vertices.put( 47 , min.getZ() );
+		vertices.set(18, max.getX()); vertices.set(19, min.getY()); vertices.set(20, max.getZ());
+		vertices.set(21, max.getX()); vertices.set(22, max.getY()); vertices.set(23, max.getZ());
 
 		//
 
-		vertices.put( 48 , max.getX() ); vertices.put( 49 , max.getY() ); vertices.put( 50 , max.getZ() );
-		vertices.put( 51 , max.getX() ); vertices.put( 52 , max.getY() ); vertices.put( 53 , min.getZ() );
+		vertices.set(24, max.getX()); vertices.set(25, max.getY()); vertices.set(26, min.getZ());
+		vertices.set(27, min.getX()); vertices.set(28, max.getY()); vertices.set(29, min.getZ());
 
-		vertices.put( 54 , min.getX() ); vertices.put( 55 , max.getY() ); vertices.put( 56 , max.getZ() );
-		vertices.put( 57 , min.getX() ); vertices.put( 58 , max.getY() ); vertices.put( 59 , min.getZ() );
+		vertices.set(30, min.getX()); vertices.set(31, max.getY()); vertices.set(32, min.getZ());
+		vertices.set(33, min.getX()); vertices.set(34, min.getY()); vertices.set(35, min.getZ());
 
-		vertices.put( 60 , min.getX() ); vertices.put( 61 , min.getY() ); vertices.put( 62 , max.getZ() );
-		vertices.put( 63 , min.getX() ); vertices.put( 64 , min.getY() ); vertices.put( 65 , min.getZ() );
+		vertices.set(36, min.getX()); vertices.set(37, min.getY()); vertices.set(38, min.getZ());
+		vertices.set(39, max.getX()); vertices.set(40, min.getY()); vertices.set(41, min.getZ());
 
-		vertices.put( 66 , max.getX() ); vertices.put( 67 , min.getY() ); vertices.put( 68 , max.getZ() );
-		vertices.put( 69 , max.getX() ); vertices.put( 70 , min.getY() ); vertices.put( 71 , min.getZ() );
+		vertices.set(42, max.getX()); vertices.set(43, min.getY()); vertices.set(44, min.getZ());
+		vertices.set(45, max.getX()); vertices.set(46, max.getY()); vertices.set(47, min.getZ());
+
+		//
+
+		vertices.set(48, max.getX()); vertices.set(49, max.getY()); vertices.set(50, max.getZ());
+		vertices.set(51, max.getX()); vertices.set(52, max.getY()); vertices.set(53, min.getZ());
+
+		vertices.set(54, min.getX()); vertices.set(55, max.getY()); vertices.set(56, max.getZ());
+		vertices.set(57, min.getX()); vertices.set(58, max.getY()); vertices.set(59, min.getZ());
+
+		vertices.set(60, min.getX()); vertices.set(61, min.getY()); vertices.set(62, max.getZ());
+		vertices.set(63, min.getX()); vertices.set(64, min.getY()); vertices.set(65, min.getZ());
+
+		vertices.set(66, max.getX()); vertices.set(67, min.getY()); vertices.set(68, max.getZ());
+		vertices.set(69, max.getX()); vertices.set(70, min.getY()); vertices.set(71, min.getZ());
 
 		((BufferGeometry)this.geometry).getAttribute("position").setNeedsUpdate(true);
 

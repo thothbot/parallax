@@ -29,8 +29,8 @@ public class Gyroscope extends Object3D
 	private Quaternion rotationObject;
 	private Vector3 scaleWorld;
 	private Vector3 scaleObject;
-	
-	public Gyroscope() 
+
+	public Gyroscope()
 	{
 		this.translationWorld = new Vector3();
 		this.translationObject = new Vector3();
@@ -41,16 +41,16 @@ public class Gyroscope extends Object3D
 	}
 
 	@Override
-	public void updateMatrixWorld( boolean force ) 
+	public void updateMatrixWorld( boolean force )
 	{
 		if(this.matrixAutoUpdate)
 			this.updateMatrix();
 
 		// update matrixWorld
 
-		if ( this.matrixWorldNeedsUpdate || force ) 
+		if ( this.matrixWorldNeedsUpdate || force )
 		{
-			if ( this.parent != null ) 
+			if ( this.parent != null )
 			{
 				this.matrixWorld.multiply( this.parent.getMatrixWorld(), this.matrix );
 
@@ -58,8 +58,8 @@ public class Gyroscope extends Object3D
 				this.matrix.decompose( this.translationObject, this.rotationObject, this.scaleObject );
 
 				this.matrixWorld.compose( this.translationWorld, this.rotationObject, this.scaleWorld );
-			} 
-			else 
+			}
+			else
 			{
 				this.matrixWorld.copy( this.matrix );
 			}
@@ -71,7 +71,7 @@ public class Gyroscope extends Object3D
 
 		// update children
 
-		for ( int i = 0, l = this.children.size(); i < l; i ++ ) 
+		for ( int i = 0, l = this.children.size(); i < l; i ++ )
 		{
 			this.children.get( i ).updateMatrixWorld( force );
 		}

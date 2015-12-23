@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 
 public class Matrix3Test
 {
-	private static float DELTA = 0.0f;
+	private static double DELTA = 0.0;
 
 	@Test
 	public void testMatrix3()
@@ -148,14 +148,14 @@ public class Matrix3Test
 		assertTrue( matrixEquals3( b, new Matrix3() ));
 
 		List<Matrix4> testMatrices = Arrays.asList(
-			new Matrix4().makeRotationX( 0.3f ),
-			new Matrix4().makeRotationX( -0.3f ),
-			new Matrix4().makeRotationY( 0.3f ),
-			new Matrix4().makeRotationY( -0.3f ),
-			new Matrix4().makeRotationZ( 0.3f ),
-			new Matrix4().makeRotationZ( -0.3f ),
+			new Matrix4().makeRotationX( 0.3 ),
+			new Matrix4().makeRotationX( -0.3 ),
+			new Matrix4().makeRotationY( 0.3 ),
+			new Matrix4().makeRotationY( -0.3 ),
+			new Matrix4().makeRotationZ( 0.3 ),
+			new Matrix4().makeRotationZ( -0.3 ),
 			new Matrix4().makeScale( 1, 2, 3 ),
-			new Matrix4().makeScale( 1.0f/8, 1.0f/2, 1.0f/3 )
+			new Matrix4().makeScale( 1.0/8, 1.0/2, 1.0/3 )
 		);
 
 		for( int i = 0, il = testMatrices.size(); i < il; i ++ ) 
@@ -224,8 +224,8 @@ public class Matrix3Test
 	private Matrix4 toMatrix4( Matrix3 m3 ) 
 	{
 		Matrix4 result = new Matrix4();
-		float[] re = result.getArray();
-		float[] me = m3.getArray();
+		double[] re = result.getArray();
+		double[] me = m3.getArray();
 		re[0] = me[0];
 		re[1] = me[1];
 		re[2] = me[2];

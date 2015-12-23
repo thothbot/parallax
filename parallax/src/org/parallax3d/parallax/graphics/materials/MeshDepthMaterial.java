@@ -18,14 +18,12 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.HasNearFar;
 import org.parallax3d.parallax.graphics.renderers.shaders.DepthShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -35,28 +33,28 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.MeshDepthMaterial")
 public class MeshDepthMaterial extends Material implements HasWireframe
 {
-//	private boolean isMorphTargets = false;
+	//	private boolean isMorphTargets = false;
 	private boolean isWireframe;
 	private int wireframeLineWidth;
 
 	public MeshDepthMaterial()
-	{	
+	{
 		setWireframe(false);
 		setWireframeLineWidth(1);
 	}
-		
-	public SHADING bufferGuessNormalType ()
+
+	public Material.SHADING bufferGuessNormalType ()
 	{
 		// only MeshBasicMaterial and MeshDepthMaterial don't need normals
 		return null;
 	}
-	
+
 	@Override
 	public Shader getAssociatedShader()
 	{
 		return new DepthShader();
 	}
-	
+
 	@Override
 	public boolean isWireframe() {
 		return this.isWireframe;
@@ -76,11 +74,11 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	public void setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
 	}
-	
+
 	public MeshDepthMaterial clone () {
 
 		MeshDepthMaterial material = new MeshDepthMaterial();
-		
+
 		super.clone(material);
 
 		material.isWireframe = this.isWireframe;
@@ -89,19 +87,19 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 		return material;
 
 	}
-	
+
 	@Override
 	public void refreshUniforms(Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
-		
+		FastMap<Uniform> uniforms = getShader().getUniforms();
+
 		if(camera instanceof HasNearFar)
 		{
 			uniforms.get("mNear").setValue( ((HasNearFar) camera).getNear() );
 			uniforms.get("mFar").setValue( ((HasNearFar) camera).getFar() );
 		}
-		
+
 		uniforms.get("opacity").setValue( getOpacity() );
 	}
 }

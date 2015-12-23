@@ -25,6 +25,16 @@
         </ant>
     </target>
 
+    <target name="parallax-platform-gwt" depends="parallax-core">
+        <path id="classpath">
+            <pathelement location="${distDir}/gdx.jar"/>
+        </path>
+        <ant antfile="../../build-template.xml" dir="platforms/parallax-platform-gwt">
+            <property name="jar" value="parallax-platform-gwt"/>
+            <reference refid="classpath"/>
+        </ant>
+    </target>
+
     <!-- generates the javadoc for the core api and the application implementations -->
     <target name="docs" depends="clean">
         <javadoc destdir="${distDir}/docs/api" author="true" version="true" use="true"
@@ -59,7 +69,7 @@
     </target>
 
     <target name="jars"
-            depends="clean,parallax-core"/>
+            depends="clean,parallax-core,parallax-platform-gwt"/>
 
     <target name="all" depends="jars,docs">
         <!-- copy distribution files (licences etc.) -->

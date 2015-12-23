@@ -23,15 +23,15 @@ import static org.junit.Assert.*;
 
 public class PlaneTest
 {
-	private static float DELTA = 0.0f;
+	private static double DELTA = 0.0;
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
 	
-	private static float X = 2;
-	private static float Y = 3;
-	private static float Z = 4;
-	private static float W = 5;
+	private static double X = 2;
+	private static double Y = 3;
+	private static double Z = 4;
+	private static double W = 5;
 
 	@Test
 	public void testPlane()
@@ -231,7 +231,7 @@ public class PlaneTest
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
 
 		Matrix4 m = new Matrix4();
-		m.makeRotationZ( (float)(Math.PI * 0.5) );
+		m.makeRotationZ( (double)(Math.PI * 0.5) );
 
 		assertTrue( comparePlane( a.clone().apply( m ), new Plane( new Vector3( 0, 1, 0 ), 0 ) ));
 
@@ -244,7 +244,7 @@ public class PlaneTest
 
 	private boolean comparePlane( Plane a, Plane b ) 
 	{
-		float threshold = 0.0001f;
+		double threshold = 0.0001;
 		return ( a.getNormal().distanceTo( b.getNormal() ) < threshold &&
 				Math.abs( a.getConstant() - b.getConstant() ) < threshold );
 	};

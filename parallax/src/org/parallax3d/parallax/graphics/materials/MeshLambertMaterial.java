@@ -18,12 +18,10 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.renderers.shaders.LambertShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.textures.Texture;
@@ -51,49 +49,49 @@ public final class MeshLambertMaterial extends Material
 	private Texture lightMap;
 	private Texture specularMap;
 	private Texture alphaMap;
-	
+
 	private Texture envMap;
-	private OPERATIONS combine;
-	private float reflectivity;
-	private float refractionRatio;
-		
+	private Texture.OPERATIONS combine;
+	private double reflectivity;
+	private double refractionRatio;
+
 	private boolean isFog;
-	
-	private SHADING shading;
-	
+
+	private Material.SHADING shading;
+
 	private boolean isWireframe;
 	private int wireframeLineWidth;
 
-	private COLORS vertexColors;
-	
+	private Material.COLORS vertexColors;
+
 	private boolean isSkinning;
 	private boolean isMorphTargets;
 	private boolean isMorphNormals;
-	
+
 	private int numSupportedMorphTargets;
 	private int numSupportedMorphNormals;
-	
-	public MeshLambertMaterial() 
+
+	public MeshLambertMaterial()
 	{
 		setWrapRGB(new Vector3( 1, 1, 1 ));
 		setWrapAround(false);
-		
+
 		setWireframe(false);
 		setWireframeLineWidth(1);
-		
+
 		setCombine(OPERATIONS.MULTIPLY);
-		setReflectivity(1.0f);
-		setRefractionRatio(0.98f);
-		
+		setReflectivity(1.0);
+		setRefractionRatio(0.98);
+
 		setFog(true);
-		
-		setShading(SHADING.SMOOTH);
-		
+
+		setShading(Material.SHADING.SMOOTH);
+
 		setColor(new Color(0xffffff)); // diffuse
 		setAmbient(new Color(0xffffff));
 		setEmissive(new Color( 0x000000 ));
-		
-		setVertexColors(COLORS.NO);
+
+		setVertexColors(Material.COLORS.NO);
 	}
 
 	@Override
@@ -116,12 +114,12 @@ public final class MeshLambertMaterial extends Material
 	public Vector3 getWrapRGB() {
 		return this.wrapRGB;
 	}
-	
+
 	@Override
 	public void setWrapRGB(Vector3 wrapRGB) {
 		this.wrapRGB = wrapRGB;
 	}
-	
+
 	@Override
 	public boolean isWireframe() {
 		return this.isWireframe;
@@ -141,7 +139,7 @@ public final class MeshLambertMaterial extends Material
 	public void setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
 	}
-	
+
 	@Override
 	public Texture getEnvMap() {
 		return this.envMap;
@@ -151,7 +149,7 @@ public final class MeshLambertMaterial extends Material
 	public void setEnvMap(Texture envMap) {
 		this.envMap = envMap;
 	}
-	
+
 	@Override
 	public Texture getAlphaMap() {
 		return this.alphaMap;
@@ -173,25 +171,25 @@ public final class MeshLambertMaterial extends Material
 	}
 
 	@Override
-	public float getReflectivity() {
+	public double getReflectivity() {
 		return this.reflectivity;
 	}
 
 	@Override
-	public void setReflectivity(float reflectivity) {
+	public void setReflectivity(double reflectivity) {
 		this.reflectivity = reflectivity;
 	}
 
 	@Override
-	public float getRefractionRatio() {
+	public double getRefractionRatio() {
 		return this.refractionRatio;
 	}
 
 	@Override
-	public void setRefractionRatio(float refractionRatio) {
+	public void setRefractionRatio(double refractionRatio) {
 		this.refractionRatio = refractionRatio;
 	}
-	
+
 	@Override
 	public Texture getLightMap() {
 		return this.lightMap;
@@ -201,7 +199,7 @@ public final class MeshLambertMaterial extends Material
 	public void setLightMap(Texture lightMap) {
 		this.lightMap = lightMap;
 	}
-	
+
 	@Override
 	public boolean isFog() {
 		return this.isFog;
@@ -211,17 +209,17 @@ public final class MeshLambertMaterial extends Material
 	public void setFog(boolean fog) {
 		this.isFog = fog;
 	}
-	
+
 	@Override
 	public Color getColor() {
 		return color;
 	}
-	
+
 	@Override
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	
+
 	@Override
 	public Texture getMap() {
 		return this.map;
@@ -231,17 +229,17 @@ public final class MeshLambertMaterial extends Material
 	public void setMap(Texture map) {
 		this.map = map;
 	}
-	
+
 	@Override
-	public COLORS isVertexColors() {
+	public Material.COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(COLORS vertexColors) {
+	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
-	
+
 	@Override
 	public boolean isSkinning() {
 		return this.isSkinning;
@@ -271,7 +269,7 @@ public final class MeshLambertMaterial extends Material
 	public void setMorphNormals(boolean isMorphNormals) {
 		this.isMorphNormals = isMorphNormals;
 	}
-	
+
 	@Override
 	public Color getAmbient() {
 		return this.ambient;
@@ -291,27 +289,27 @@ public final class MeshLambertMaterial extends Material
 	public void setEmissive(Color emissive) {
 		this.emissive = emissive;
 	}
-	
+
 	@Override
 	public int getNumSupportedMorphTargets() {
 		return this.numSupportedMorphTargets;
 	}
-	
+
 	@Override
 	public void setNumSupportedMorphTargets(int num) {
 		this.numSupportedMorphTargets = num;
 	}
-	
+
 	@Override
 	public int getNumSupportedMorphNormals() {
 		return this.numSupportedMorphNormals;
 	}
-	
+
 	@Override
 	public void setNumSupportedMorphNormals(int num) {
 		this.numSupportedMorphNormals = num;
 	}
-	
+
 	@Override
 	public Texture getSpecularMap() {
 		return this.specularMap;
@@ -321,19 +319,19 @@ public final class MeshLambertMaterial extends Material
 	public void setSpecularMap(Texture specularMap) {
 		this.specularMap = specularMap;
 	}
-	
-	public SHADING getShading() {
+
+	public Material.SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(SHADING shading) {
+	public void setShading(Material.SHADING shading) {
 		this.shading = shading;
 	}
-	
+
 	public MeshLambertMaterial clone() {
 
 		MeshLambertMaterial material = new MeshLambertMaterial();
-		
+
 		super.clone(material);
 
 		material.color.copy( this.color );
@@ -372,25 +370,25 @@ public final class MeshLambertMaterial extends Material
 		return material;
 
 	}
-	
+
 	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput) 
+	public void refreshUniforms(Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
-		
-		if ( isGammaInput ) 
+		FastMap<Uniform> uniforms = getShader().getUniforms();
+
+		if ( isGammaInput )
 		{
 			((Color) uniforms.get("ambient").getValue()).copyGammaToLinear( getAmbient() );
 			((Color) uniforms.get("emissive").getValue()).copyGammaToLinear( getEmissive() );
-		} 
-		else 
+		}
+		else
 		{
 			uniforms.get("ambient").setValue( getAmbient() );
 			uniforms.get("emissive").setValue( getEmissive() );
 		}
 
-		if ( isWrapAround() ) 
+		if ( isWrapAround() )
 		{
 			((Vector3) uniforms.get("wrapRGB").getValue()).copy( getWrapRGB() );
 		}

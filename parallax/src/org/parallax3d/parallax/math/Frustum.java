@@ -24,6 +24,7 @@ import java.util.List;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * This class implements three-dimensional region which is visible on the screen.
@@ -39,7 +40,7 @@ public class Frustum
 	 * Panes of the Frustum of a rectangular pyramid
 	 */
 	private List<Plane> planes;
-	
+
 	// Temporary variables
 	static Sphere _sphere = new Sphere();
 	static Vector3 _p1 = new Vector3();
@@ -49,14 +50,14 @@ public class Frustum
 	 * Default constructor will make Frustum of a rectangular pyramid 
 	 * with 6 planes. 
 	 */
-	public Frustum() 
+	public Frustum()
 	{
 		this.planes = new ArrayList<Plane>();
 		for(int i = 0; i < 6; i++)
 			this.planes.add(new Plane());
 	}
-	
-	public Frustum(Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5) 
+
+	public Frustum(Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5)
 	{
 		this.planes = new ArrayList<Plane>();
 		this.planes.add(p0);
@@ -67,7 +68,7 @@ public class Frustum
 		this.planes.add(p5);
 	}
 
-	public Frustum set( Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5 ) 
+	public Frustum set( Plane p0, Plane p1, Plane p2, Plane p3, Plane p4, Plane p5 )
 	{
 		this.planes.get(0).copy( p0 );
 		this.planes.get(1).copy( p1 );
@@ -78,12 +79,12 @@ public class Frustum
 
 		return this;
 	}
-	
+
 	public List<Plane> getPlanes() {
 		return planes;
 	}
 
-	public Frustum copy( Frustum frustum ) 
+	public Frustum copy( Frustum frustum )
 	{
 		for(int i = 0; i < 6; i++)
 			this.planes.get(i).copy(frustum.planes.get(i));
@@ -91,13 +92,13 @@ public class Frustum
 		return this;
 	}
 
-	public Frustum setFromMatrix( Matrix4 m ) 
+	public Frustum setFromMatrix( Matrix4 m )
 	{
-		float[] me = m.getArray();
-		float me0 = me[0], me1 = me[1], me2 = me[2], me3 = me[3];
-		float me4 = me[4], me5 = me[5], me6 = me[6], me7 = me[7];
-		float me8 = me[8], me9 = me[9], me10 = me[10], me11 = me[11];
-		float me12 = me[12], me13 = me[13], me14 = me[14], me15 = me[15];
+		Float32Array me = m.getArray();
+		double me0 = me.get(0), me1 = me.get(1), me2 = me.get(2), me3 = me.get(3);
+		double me4 = me.get(4), me5 = me.get(5), me6 = me.get(6), me7 = me.get(7);
+		double me8 = me.get(8), me9 = me.get(9), me10 = me.get(10), me11 = me.get(11);
+		double me12 = me.get(12), me13 = me.get(13), me14 = me.get(14), me15 = me.get(15);
 
 		this.planes.get(0).setComponents( me3 - me0, me7 - me4, me11 - me8, me15 - me12 ).normalize();
 		this.planes.get(1).setComponents( me3 + me0, me7 + me4, me11 + me8, me15 + me12 ).normalize();
@@ -110,28 +111,28 @@ public class Frustum
 	}
 
 	public boolean isIntersectsObject( GeometryObject object )
-	{		
+	{
 		AbstractGeometry geometry = object.getGeometry();
 
-		if ( geometry.getBoundingSphere() == null ) 
+		if ( geometry.getBoundingSphere() == null )
 			geometry.computeBoundingSphere();
 
 		_sphere.copy( geometry.getBoundingSphere() );
 		_sphere.apply( object.getMatrixWorld() );
 
-		return this.isIntersectsSphere( _sphere );		
+		return this.isIntersectsSphere( _sphere );
 	}
 
-	public boolean isIntersectsSphere( Sphere sphere ) 
+	public boolean isIntersectsSphere( Sphere sphere )
 	{
 		Vector3 center = sphere.getCenter();
-		float negRadius = -sphere.getRadius();
+		double negRadius = -sphere.getRadius();
 
-		for ( int i = 0; i < 6; i ++ ) 
+		for ( int i = 0; i < 6; i ++ )
 		{
-			float distance = planes.get( i ).distanceToPoint( center );
+			double distance = planes.get( i ).distanceToPoint( center );
 
-			if( distance < negRadius ) 
+			if( distance < negRadius )
 			{
 				return false;
 			}
@@ -139,8 +140,8 @@ public class Frustum
 
 		return true;
 	}
-	
-	public boolean isIntersectsBox(Box3 box) 
+
+	public boolean isIntersectsBox(Box3 box)
 	{
 
 		for ( int i = 0; i < 6 ; i ++ ) {
@@ -154,8 +155,8 @@ public class Frustum
 			_p1.z = plane.getNormal().z > 0 ? box.getMin().z : box.getMax().z;
 			_p2.z = plane.getNormal().z > 0 ? box.getMax().z : box.getMin().z;
 
-			float d1 = plane.distanceToPoint( _p1 );
-			float d2 = plane.distanceToPoint( _p2 );
+			double d1 = plane.distanceToPoint( _p1 );
+			double d2 = plane.distanceToPoint( _p2 );
 
 			// if both outside plane, no intersection
 
@@ -170,11 +171,11 @@ public class Frustum
 	}
 
 
-	public boolean isContainsPoint( Vector3 point ) 
+	public boolean isContainsPoint( Vector3 point )
 	{
-		for ( int i = 0; i < 6; i ++ ) 
+		for ( int i = 0; i < 6; i ++ )
 		{
-			if( planes.get( i ).distanceToPoint( point ) < 0 ) 
+			if( planes.get( i ).distanceToPoint( point ) < 0 )
 			{
 				return false;
 			}
@@ -183,7 +184,7 @@ public class Frustum
 		return true;
 	}
 
-	public Frustum clone() 
+	public Frustum clone()
 	{
 		return new Frustum().copy( this );
 	}

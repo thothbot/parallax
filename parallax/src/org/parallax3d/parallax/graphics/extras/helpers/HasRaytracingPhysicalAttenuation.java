@@ -22,6 +22,6 @@ public interface HasRaytracingPhysicalAttenuation
 {
 
 	public boolean isPhysicalAttenuation();
-	
+
 	public void setPhysicalAttenuation(boolean isPhysicalAttenuation);
 }

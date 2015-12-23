@@ -32,24 +32,24 @@ import org.parallax3d.parallax.math.Vector3;
 public class MobiusParametricGeometry extends ParametricGeometry
 {
 
-	public MobiusParametricGeometry(int slices, int stacks) 
+	public MobiusParametricGeometry(int slices, int stacks)
 	{
-		super(new ParametricFunction() {
-			
-			@Override
-			public Vector3 run(float u, float t)
-			{
-				u = u - 0.5f;
-				float v = (float)(2.0 * Math.PI * t);
+		super(new ParametricGeometry.ParametricFunction() {
 
-				float a = 2.0f;
-	
-				float x = (float)(Math.cos(v) * (a + u * Math.cos(v/2.0)));
-				float y = (float)(Math.sin(v) * (a + u * Math.cos(v/2.0)));
-				float z = (float)(u * Math.sin(v/2.0));
-				return new Vector3(x, y, z);
-			}
-		}, 
-		slices, stacks);
+				  @Override
+				  public Vector3 run(double u, double t)
+				  {
+					  u = u - 0.5;
+					  double v = 2.0 * Math.PI * t;
+
+					  double a = 2.0;
+
+					  double x = Math.cos(v) * (a + u * Math.cos(v/2.0));
+					  double y = Math.sin(v) * (a + u * Math.cos(v/2.0));
+					  double z = u * Math.sin(v/2.0);
+					  return new Vector3(x, y, z);
+				  }
+			  },
+				slices, stacks);
 	}
 }

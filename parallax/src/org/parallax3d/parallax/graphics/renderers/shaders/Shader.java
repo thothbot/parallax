@@ -26,9 +26,9 @@ import java.util.Map;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.math.Mathematics;
-import org.parallax3d.parallax.system.BufferUtils;;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.ProgramParameter;
 
 /**
@@ -40,9 +40,9 @@ import org.parallax3d.parallax.system.gl.enums.ProgramParameter;
 public abstract class Shader
 {
 	/**
-	 * Sets the Shaders precision value.
+	 * Sets the Shader's precision value.
 	 */
-	public static enum PRECISION 
+	public static enum PRECISION
 	{
 		HIGHP,
 		MEDIUMP,
@@ -52,14 +52,14 @@ public abstract class Shader
 	// shader precision. Can be "highp", "mediump" or "lowp".
 	private PRECISION precision = PRECISION.HIGHP;
 
-	private int program; //WebGLProgram
+	private int program;
 
-	// Store uniforms and locations 
-	private ObjectMap<String, Uniform> uniforms;
+	// Store uniforms and locations
+	private FastMap<Uniform> uniforms;
 	// Should be null by default. Think how we can merge two maps.
-	private ObjectMap<String, Attribute> attributes;
+	private FastMap<Attribute> attributes;
 	// Store locations
-	private ObjectMap<String, Integer> attributesLocations;
+	private FastMap<Integer> attributesLocations;
 
 	private String vertexShaderSource = "";
 	private String fragmentShaderSource = "";
@@ -73,14 +73,16 @@ public abstract class Shader
 
 	private static int shaderCounter;
 
+	private int[] tmpArray = {0};
+
 	/**
-	 * This constructor will create new Shader instance. 
+	 * This constructor will create new Shader instance.
 	 *
 	 */
 	public Shader()
 	{
 		this(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.vs").readString(),
-		     Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.fs").readString());
+				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.fs").readString());
 	}
 
 	public Shader(String vertexShader, String fragmentShader)
@@ -90,16 +92,16 @@ public abstract class Shader
 		updateVertexSource(vertexShader);
 		updateFragmentSource(fragmentShader);
 
-		this.uniforms = new ObjectMap<String, Uniform>();
+		this.uniforms = new FastMap<Uniform>();
 
-		this.attributesLocations = new ObjectMap<String, Integer>();
+		this.attributesLocations = new FastMap<Integer>();
 
 		initUniforms();
 	}
 
 	/**
 	 * Gets program ID
-	 * 
+	 *
 	 * @return ID
 	 */
 	public int getId()
@@ -110,17 +112,17 @@ public abstract class Shader
 	/**
 	 * Gets the shader program.
 	 */
-	public Integer getProgram()
+	public int getProgram()
 	{
 		return this.program;
 	}
-	
-	// Called in renderer plugins
+
+	// Called in renderer org.parallax3d.plugins
 	public Shader buildProgram(GL20 gl)
 	{
 		return buildProgram(gl, false, 0, 0);
 	}
-	
+
 	public Shader buildProgram(GL20 gl, boolean useVertexTexture, int maxMorphTargets, int maxMorphNormals)
 	{
 		Parallax.app.debug("Shader", "Building new program...");
@@ -137,21 +139,21 @@ public abstract class Shader
 		addUniform("morphTargetInfluences", new Uniform(Uniform.TYPE.FV1 ));
 		addUniform("bindMatrix",            new Uniform(Uniform.TYPE.FV1 ));
 		addUniform("bindMatrixInverse",     new Uniform(Uniform.TYPE.FV1 ));
-				
-		if ( useVertexTexture ) 
+
+		if ( useVertexTexture )
 		{
 			addUniform("boneTexture", new Uniform(Uniform.TYPE.FV1, null));
 			addUniform("boneTextureWidth", new Uniform(Uniform.TYPE.F, null));
 			addUniform("boneTextureHeight", new Uniform(Uniform.TYPE.F, null));
-		} 
-		else 
+		}
+		else
 		{
 			addUniform("boneGlobalMatrices", new Uniform(Uniform.TYPE.FV1, null));
 		}
-		
+
 		// Cache location
-		ObjectMap<String, Uniform> uniforms = getUniforms();
-		for (String id : uniforms.keys())
+		FastMap<Uniform> uniforms = getUniforms();
+		for (String id : uniforms.keySet())
 			uniforms.get(id).setLocation( gl.glGetUniformLocation(this.program, id) );
 
 		// cache attributes locations
@@ -164,18 +166,18 @@ public abstract class Shader
 		for (int i = 0; i < maxMorphNormals; i++)
 			attributesIds.add("morphNormal" + i);
 
-		ObjectMap<String, Attribute> attributes = getAttributes();
+		FastMap<Attribute> attributes = getAttributes();
 		if(attributes != null)
-			for (String a : attributes.keys())
+			for (String a : attributes.keySet())
 				attributesIds.add(a);
 
-		ObjectMap<String, Integer> attributesLocations = getAttributesLocations();
+		FastMap<Integer> attributesLocations = getAttributesLocations();
 		for (String id : attributesIds)
 			attributesLocations.put(id, gl.glGetAttribLocation(this.program, id));
-		
+
 		return this;
 	}
-	
+
 
 	/**
 	 * Initializes this shader with the given vertex shader source and fragment
@@ -190,7 +192,7 @@ public abstract class Shader
 
 		String vertex = vertexExtensions + getShaderPrecisionDefinition() + "\n" + getVertexSource();
 		String fragment = fragmentExtensions + getShaderPrecisionDefinition() + "\n" + getFragmentSource();
-		
+
 		int glVertexShader = getShaderProgram(gl, ChunksVertexShader.class, vertex);
 		int glFragmentShader = getShaderProgram(gl, ChunksFragmentShader.class, fragment);
 		gl.glAttachShader(this.program, glVertexShader);
@@ -213,8 +215,8 @@ public abstract class Shader
 		gl.glDeleteShader(glVertexShader);
 		gl.glDeleteShader(glFragmentShader);
 	}
-	
-	public void setPrecision(PRECISION precision) {
+
+	public void setPrecision(Shader.PRECISION precision) {
 		this.precision = precision;
 	}
 
@@ -225,7 +227,7 @@ public abstract class Shader
 	/**
 	 * Gets the shader.
 	 */
-	private int /*WebGLShader*/ getShaderProgram(GL20 gl, Class<?> type, String string)
+	private int getShaderProgram(GL20 gl, Class<?> type, String string)
 	{
 		Parallax.app.debug("Shader", "Called getShaderProgram() for type " + type.getName());
 		Integer shader = null;
@@ -250,7 +252,7 @@ public abstract class Shader
 
 	/**
 	 * Gets source of the Vertex shader.
-	 * 
+	 *
 	 * @return the string with Vertex shader code.
 	 */
 	public String getVertexSource() {
@@ -262,25 +264,30 @@ public abstract class Shader
 		this.vertexExtensions = vertexExtensions;
 	}
 
+	public String getVertexExtensions()
+	{
+		return vertexExtensions;
+	}
+
 	public void setVertexSource(String src) {
 		this.vertexShaderSource = src;
 	}
-	
+
 	protected void updateVertexSource(String src) {
-		setVertexSource(src);		
+		setVertexSource(src);
 	}
 
 	/**
 	 * Gets source of the Fragment shader.
-	 * 
+	 *
 	 * @return the string with Fragment shader code.
 	 */
 	public String getFragmentSource() {
-		return this.fragmentShaderSource;		
+		return this.fragmentShaderSource;
 	}
-	
+
 	public void setFragmentSource(String src) {
-		this.fragmentShaderSource = src;		
+		this.fragmentShaderSource = src;
 	}
 
 	public void setFragmentExtensions(String fragmentExtensions)
@@ -288,24 +295,29 @@ public abstract class Shader
 		this.fragmentExtensions = fragmentExtensions;
 	}
 
+	public String getFragmentExtensions()
+	{
+		return fragmentExtensions;
+	}
+
 	protected void updateFragmentSource(String src) {
-		setFragmentSource(src);		
+		setFragmentSource(src);
 	}
 
 	// Uniforms
 	protected abstract void initUniforms();
-	
+
 	/**
 	 * Gets shader's uniforms.
-	 * 
-	 * @return the map of name-uniform 
+	 *
+	 * @return the map of name-uniform
 	 */
-	public ObjectMap<String, Uniform> getUniforms()
+	public FastMap<Uniform> getUniforms()
 	{
 		return this.uniforms;
 	}
-	
-	public void setUniforms(ObjectMap<String, Uniform> uniforms)
+
+	public void setUniforms(FastMap<Uniform> uniforms)
 	{
 		this.uniforms.putAll(uniforms);
 	}
@@ -315,35 +327,36 @@ public abstract class Shader
 		this.uniforms.put(id, uniform);
 	}
 
-	public ObjectMap<String, Integer> getAttributesLocations() {
+	@Deprecated
+	public FastMap<Integer> getAttributesLocations() {
 		return this.attributesLocations;
 	}
 
-	public ObjectMap<String, Attribute> getAttributes() {
+	public FastMap<Attribute> getAttributes() {
 		return this.attributes;
 	}
 
-	public void setAttributes(ObjectMap<String, Attribute> attributes) {
+	public void setAttributes(FastMap< Attribute> attributes) {
 		this.attributes = attributes;
 	}
-	
-	public void addAttributes(String id, Attribute attribute) 
+
+	public void addAttributes(String id, Attribute attribute)
 	{
 		if(this.attributes == null)
 		{
-			this.attributes = new ObjectMap<String, Attribute>();
+			this.attributes = new FastMap<Attribute>();
 		}
 		this.attributes.put(id, attribute);
 	}
 
-	public boolean areCustomAttributesDirty() 
+	public boolean areCustomAttributesDirty()
 	{
 		if(this.cache_areCustomAttributesDirty)
 			return true;
 
 		if(getAttributes() == null)
 			return false;
- 
+
 		for ( Attribute attribute: getAttributes().values() )
 		{
 			if ( attribute.needsUpdate )
@@ -356,7 +369,7 @@ public abstract class Shader
 		return false;
 	}
 
-	public void clearCustomAttributes() 
+	public void clearCustomAttributes()
 	{
 		if(!this.cache_areCustomAttributesDirty)
 			return;
@@ -370,12 +383,12 @@ public abstract class Shader
 			this.cache_areCustomAttributesDirty = false;
 		}
 	}
-	
+
 	public String toString()
 	{
-		return "{id=" + this.id + ", class=" + getClass().getName() + ", uniforms=" + getUniforms() + "}";		
+		return "{id=" + this.id + ", class=" + getClass().getName() + ", uniforms=" + getUniforms() + "}";
 	}
-		
+
 	// Methods
 	public static String updateShaderSource(String src, List<String> ... allMods)
 	{
@@ -395,7 +408,7 @@ public abstract class Shader
 
 	private static String SHADER_REPLACE_ARG = "[*]";
 	public static String updateShaderSource(String src, String ... allMods)
-	{	
+	{
 		if(src.indexOf(SHADER_REPLACE_ARG) >= 0)
 		{
 			StringBuffer result = new StringBuffer();
@@ -420,29 +433,29 @@ public abstract class Shader
 		return src;
 	}
 
-	public static FloatBuffer buildKernel( float sigma )
-	{ 
-		int kMaxKernelSize = 25; 
+	public static Float32Array buildKernel( double sigma )
+	{
+		int kMaxKernelSize = 25;
 		int kernelSize = (int) (2 * Math.ceil( sigma * 3 ) + 1);
 
-		if ( kernelSize > kMaxKernelSize ) 
+		if ( kernelSize > kMaxKernelSize )
 			kernelSize = kMaxKernelSize;
-		
-		float halfWidth = ( kernelSize - 1.0f ) * 0.5f;
 
-		FloatBuffer values = BufferUtils.newFloatBuffer(kernelSize);
+		double halfWidth = ( kernelSize - 1.0 ) * 0.5;
 
-		float sum = 0.0f;
-		for ( int i = 0; i < kernelSize; ++i ) 
+		Float32Array values = Float32Array.create(kernelSize);
+
+		double sum = 0.0;
+		for ( int i = 0; i < kernelSize; ++i )
 		{
-			float result = Mathematics.gauss( i - halfWidth, sigma );
-			values.put(i, result);
+			double result = Mathematics.gauss( i - halfWidth, sigma );
+			values.set(i, result);
 			sum += result;
 		}
 
 		// normalize the kernel
-		for ( int i = 0; i < kernelSize; ++i ) 
-			values.put(i, values.get(i) / sum);
+		for ( int i = 0; i < kernelSize; ++i )
+			values.set( i, values.get(i) / sum);
 
 		return values;
 	}

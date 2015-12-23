@@ -20,28 +20,28 @@ package org.parallax3d.parallax.graphics.extras.geometries;
 
 public final class Icosahedron2Geometry extends PolyhedronGeometry 
 {
-	public Icosahedron2Geometry( float radius, int detail ) 
+	public Icosahedron2Geometry( double radius, int detail )
 	{
 		super(radius, detail );
-	}	
-	
+	}
+
 	@Override
-	protected float[][] getGeometryVertices() 
+	protected double[][] getGeometryVertices()
 	{
-		float a = (float)(4 / Math.sqrt( 2 * (5 + Math.sqrt(5)) ) / 2);
-		float b = (float)Math.sqrt(1 - a*a);
-		
-		float[][] vertices = {
-				{-a, 0.0f, b}, {a, 0.0f, b}, {-a, 0.0f, -b}, {a, 0.0f, -b},
-				{0.0f, b, a}, {0.0f, b, -a}, {0.0f, -b, a}, {0.0f, -b, -a},
-				{b, a, 0.0f}, {-b, a, 0.0f}, {b, -a, 0.0f}, {-b, -a, 0.0f}
+		double a = 4 / Math.sqrt( 2 * (5 + Math.sqrt(5)) ) / 2;
+		double b = Math.sqrt(1 - a*a);
+
+		double[][] vertices = {
+				{-a, 0.0, b}, {a, 0.0, b}, {-a, 0.0, -b}, {a, 0.0, -b},
+				{0.0, b, a}, {0.0, b, -a}, {0.0, -b, a}, {0.0, -b, -a},
+				{b, a, 0.0}, {-b, a, 0.0}, {b, -a, 0.0}, {-b, -a, 0.0}
 		};
-		
+
 		return vertices;
 	}
 
 	@Override
-	protected int[][] getGeometryFaces() 
+	protected int[][] getGeometryFaces()
 	{
 		int[][] faces = {
 				{0,4,1}, {0,9,4}, {9,5,4},{4,5,8}, {4,8,1},

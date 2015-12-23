@@ -18,14 +18,12 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.renderers.shaders.BasicShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -40,24 +38,24 @@ public class LineBasicMaterial extends Material
 {
 
 	private boolean isFog = true;
-	
+
 	private Color color;
-	
-	private COLORS vertexColors;
-	
+
+	private Material.COLORS vertexColors;
+
 	private float linewidth;
-	
+
 	public LineBasicMaterial()
-	{	
+	{
 		this.isFog = true;
-		
+
 		this.color = new Color(0xffffff);
-		
+
 		setLinewidth(1.0f);
-		
-		setVertexColors(COLORS.NO);
+
+		setVertexColors(Material.COLORS.NO);
 	}
-	
+
 	@Override
 	public Shader getAssociatedShader()
 	{
@@ -71,9 +69,9 @@ public class LineBasicMaterial extends Material
 	public float getLinewidth() {
 		return this.linewidth;
 	}
-	
+
 	/**
-	 * Controls line thickness. Default is 1. 
+	 * Controls line thickness. Default is 1.
 	 * <p>
 	 * Due to limitations in the <a href="https://code.google.com/p/angleproject/">ANGLE layer</a>, on Windows platforms linewidth will always be 1 regardless of the set value.
 	 * @param linewidth
@@ -91,7 +89,7 @@ public class LineBasicMaterial extends Material
 	public void setFog(boolean fog) {
 		this.isFog = fog;
 	}
-	
+
 	/**
 	 * Line color in hexadecimal. Default is 0xffffff.
 	 */
@@ -99,22 +97,22 @@ public class LineBasicMaterial extends Material
 	public Color getColor() {
 		return color;
 	}
-	
+
 	@Override
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	
+
 	@Override
-	public COLORS isVertexColors() {
+	public Material.COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(COLORS vertexColors) {
+	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
-	
+
 	public LineBasicMaterial clone() {
 
 		LineBasicMaterial material = new LineBasicMaterial();
@@ -132,13 +130,13 @@ public class LineBasicMaterial extends Material
 		return material;
 
 	}
-	
+
 	@Override
 	public void refreshUniforms(Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
-		
+		FastMap<Uniform> uniforms = getShader().getUniforms();
+
 		uniforms.get("diffuse").setValue( getColor() );
 		uniforms.get("opacity").setValue( getOpacity() );
 	}

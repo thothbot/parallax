@@ -85,16 +85,16 @@ public class FrustumTest
 
 		assertTrue( ! a.isContainsPoint( new Vector3( 0, 0, 0 ) ));
 		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -50 ) ));
-		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -1.001f ) ));
-		assertTrue( a.isContainsPoint( new Vector3( -1, -1, -1.001f ) ));
-		assertTrue( ! a.isContainsPoint( new Vector3( -1.1f, -1.1f, -1.001f ) ));
-		assertTrue( a.isContainsPoint( new Vector3( 1, 1, -1.001f ) ));
-		assertTrue( ! a.isContainsPoint( new Vector3( 1.1f, 1.1f, -1.001f ) ));
+		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -1.001 ) ));
+		assertTrue( a.isContainsPoint( new Vector3( -1, -1, -1.001 ) ));
+		assertTrue( ! a.isContainsPoint( new Vector3( -1.1, -1.1, -1.001 ) ));
+		assertTrue( a.isContainsPoint( new Vector3( 1, 1, -1.001 ) ));
+		assertTrue( ! a.isContainsPoint( new Vector3( 1.1, 1.1, -1.001 ) ));
 		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -100 ) ));
 		assertTrue( a.isContainsPoint( new Vector3( -1, -1, -100 ) ));
-		assertTrue( ! a.isContainsPoint( new Vector3( -1.1f, -1.1f, -100.1f ) ));
+		assertTrue( ! a.isContainsPoint( new Vector3( -1.1, -1.1, -100.1 ) ));
 		assertTrue( a.isContainsPoint( new Vector3( 1, 1, -100 ) ));
-		assertTrue( ! a.isContainsPoint( new Vector3( 1.1f, 1.1f, -100.1f ) ));
+		assertTrue( ! a.isContainsPoint( new Vector3( 1.1, 1.1, -100.1 ) ));
 		assertTrue( ! a.isContainsPoint( new Vector3( 0, 0, -101 ) ));
 
 	}
@@ -107,16 +107,16 @@ public class FrustumTest
 
 		assertTrue( ! a.isContainsPoint( new Vector3( 0, 0, 0 ) ));
 		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -50 ) ));
-		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -1.001f ) ));
-		assertTrue( a.isContainsPoint( new Vector3( -1, -1, -1.001f ) ));
-		assertTrue( ! a.isContainsPoint( new Vector3( -1.1f, -1.1f, -1.001f ) ));
-		assertTrue( a.isContainsPoint( new Vector3( 1, 1, -1.001f ) ));
-		assertTrue( ! a.isContainsPoint( new Vector3( 1.1f, 1.1f, -1.001f ) ));
-		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -99.999f ) ));
-		assertTrue( a.isContainsPoint( new Vector3( -99.999f, -99.999f, -99.999f ) ));
-		assertTrue( ! a.isContainsPoint( new Vector3( -100.1f, -100.1f, -100.1f ) ));
-		assertTrue( a.isContainsPoint( new Vector3( 99.999f, 99.999f, -99.999f ) ));
-		assertTrue( ! a.isContainsPoint( new Vector3( 100.1f, 100.1f, -100.1f ) ));
+		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -1.001 ) ));
+		assertTrue( a.isContainsPoint( new Vector3( -1, -1, -1.001 ) ));
+		assertTrue( ! a.isContainsPoint( new Vector3( -1.1, -1.1, -1.001 ) ));
+		assertTrue( a.isContainsPoint( new Vector3( 1, 1, -1.001 ) ));
+		assertTrue( ! a.isContainsPoint( new Vector3( 1.1, 1.1, -1.001 ) ));
+		assertTrue( a.isContainsPoint( new Vector3( 0, 0, -99.999 ) ));
+		assertTrue( a.isContainsPoint( new Vector3( -99.999, -99.999, -99.999 ) ));
+		assertTrue( ! a.isContainsPoint( new Vector3( -100.1, -100.1, -100.1 ) ));
+		assertTrue( a.isContainsPoint( new Vector3( 99.999, 99.999, -99.999 ) ));
+		assertTrue( ! a.isContainsPoint( new Vector3( 100.1, 100.1, -100.1 ) ));
 		assertTrue( ! a.isContainsPoint( new Vector3( 0, 0, -101 ) ));
 	}
 
@@ -127,25 +127,25 @@ public class FrustumTest
 		Frustum a = new Frustum().setFromMatrix( m );
 
 		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, 0 ), 0 ) ));
-		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, 0 ), 0.9f ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, 0 ), 1.1f ) ));
+		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, 0 ), 0.9 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, 0 ), 1.1 ) ));
 		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -50 ), 0 ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -1.001f ), 0 ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( -1, -1, -1.001f ), 0 ) ));
-		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( -1.1f, -1.1f, -1.001f ), 0 ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( -1.1f, -1.1f, -1.001f ), 0.5f ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 1, 1, -1.001f ), 0 ) ));
-		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( 1.1f, 1.1f, -1.001f ), 0 ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 1.1f, 1.1f, -1.001f ), 0.5f ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -99.999f ), 0 ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( -99.999f, -99.999f, -99.999f ), 0 ) ));
-		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( -100.1f, -100.1f, -100.1f ), 0 ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( -100.1f, -100.1f, -100.1f ), 0.5f ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 99.999f, 99.999f, -99.999f ), 0 ) ));
-		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( 100.1f, 100.1f, -100.1f ), 0 ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 100.1f, 100.1f, -100.1f ), 0.2f ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -1.001 ), 0 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( -1, -1, -1.001 ), 0 ) ));
+		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( -1.1, -1.1, -1.001 ), 0 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( -1.1, -1.1, -1.001 ), 0.5 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 1, 1, -1.001 ), 0 ) ));
+		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( 1.1, 1.1, -1.001 ), 0 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 1.1, 1.1, -1.001 ), 0.5 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -99.999 ), 0 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( -99.999, -99.999, -99.999 ), 0 ) ));
+		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( -100.1, -100.1, -100.1 ), 0 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( -100.1, -100.1, -100.1 ), 0.5 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 99.999, 99.999, -99.999 ), 0 ) ));
+		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( 100.1, 100.1, -100.1 ), 0 ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 100.1, 100.1, -100.1 ), 0.2 ) ));
 		assertTrue( ! a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -101 ), 0 ) ));
-		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -101 ), 1.1f ) ));
+		assertTrue( a.isIntersectsSphere( new Sphere( new Vector3( 0, 0, -101 ), 1.1 ) ));
 	}
 
 	@Test

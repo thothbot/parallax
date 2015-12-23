@@ -18,43 +18,43 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 
 public class GeometryGroup extends WebGLGeometry
 {
-	public static ObjectMap<String, List<GeometryGroup>> geometryGroups = new ObjectMap<String, List<GeometryGroup>>();
-	
+	public static FastMap<List<GeometryGroup>> geometryGroups = new FastMap<List<GeometryGroup>>();
+
 	private static int Counter = 0;
-	
+
 	private int id = 0;
-	
+
 	private List<Integer> faces3;
 
 	private int materialIndex = -1;
 
 	private int vertices;
-	
+
 	private int numMorphTargets;
 	private int numMorphNormals;
 
-	public FloatBuffer __skinIndexArray;
-	public FloatBuffer __skinWeightArray;
-	
-	public IntBuffer __faceArray;
-	public IntBuffer __lineArray;
-	
-	public List<FloatBuffer> __morphTargetsArrays;
-	public List<FloatBuffer> __morphNormalsArrays;
-	
+	public Float32Array __skinIndexArray;
+	public Float32Array __skinWeightArray;
+
+	public Uint16Array __faceArray;
+	public Uint16Array __lineArray;
+
+	public List<Float32Array> __morphTargetsArrays;
+	public List<Float32Array> __morphNormalsArrays;
+
 	public boolean __inittedArrays;
 
-	public GeometryGroup(int materialIndex, int numMorphTargets, int numMorphNormals) 
+	public GeometryGroup(int materialIndex, int numMorphTargets, int numMorphNormals)
 	{
 		super();
 
@@ -65,7 +65,7 @@ public class GeometryGroup extends WebGLGeometry
 		this.setNumMorphTargets(numMorphTargets);
 		this.setNumMorphNormals(numMorphNormals);
 	}
-	
+
 	public int getId() {
 		return this.id;
 	}
@@ -140,12 +140,12 @@ public class GeometryGroup extends WebGLGeometry
 	public void setNumMorphNormals(int numMorphNormals) {
 		this.numMorphNormals = numMorphNormals;
 	}
-	
+
 	@Override
-	public void dispose() 
+	public void dispose()
 	{
 		super.dispose();
-		
+
 		__inittedArrays = false;
 		__faceArray = null;
 		__lineArray = null;

@@ -32,12 +32,12 @@ import org.parallax3d.parallax.graphics.core.Geometry;
 @ThreeJsObject("THREE.PlaneGeometry")
 public final class PlaneGeometry extends Geometry
 {
-	public PlaneGeometry(float width, float height) 
+	public PlaneGeometry(double width, double height)
 	{
 		this(width, height, 1, 1);
 	}
 
-	public PlaneGeometry(float width, float height, int widthSegments, int heightSegments) 
+	public PlaneGeometry(double width, double height, int widthSegments, int heightSegments)
 	{
 		super();
 

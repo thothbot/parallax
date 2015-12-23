@@ -32,12 +32,12 @@ public class Bone extends Object3D
 	private SkinnedMesh skin;
 
 	/**
-	 * 
+	 *
 	 * @param belongsToSkin An instance of {@link SkinnedMesh}.
 	 */
-	public Bone(SkinnedMesh belongsToSkin) 
+	public Bone(SkinnedMesh belongsToSkin)
 	{
-		this.setSkin(belongsToSkin);		
+		this.setSkin(belongsToSkin);
 	}
 
 	/**

@@ -37,9 +37,9 @@ import org.parallax3d.parallax.math.Vector3;
 @ThreeJsObject("THREE.ParametricGeometry")
 public class ParametricGeometry extends Geometry
 {
-	public static interface ParametricFunction 
+	public static interface ParametricFunction
 	{
-		Vector3 run(float u, float v);
+		Vector3 run(double u, double v);
 	}
 
 	public ParametricGeometry(final ParametricFunction function, int slices, int stacks)
@@ -47,14 +47,14 @@ public class ParametricGeometry extends Geometry
 		super();
 
 		int sliceCount = slices + 1;
-		
-		for ( int i = 0; i <= stacks; i ++ ) 
-		{
-			float v = i / (float)stacks;
 
-			for ( int j = 0; j <= slices; j ++ ) 
+		for ( int i = 0; i <= stacks; i ++ )
+		{
+			double v = i / (double)stacks;
+
+			for ( int j = 0; j <= slices; j ++ )
 			{
-				float u = j / (float)slices;
+				double u = j / (double)slices;
 
 				Vector3 p = function.run( u, v );
 				this.getVertices().add( p );
@@ -62,19 +62,19 @@ public class ParametricGeometry extends Geometry
 			}
 		}
 
-		for ( int i = 0; i < stacks; i ++ ) 
+		for ( int i = 0; i < stacks; i ++ )
 		{
-			for ( int j = 0; j < slices; j ++ ) 
+			for ( int j = 0; j < slices; j ++ )
 			{
 				int a = i * sliceCount + j;
 				int b = i * sliceCount + j + 1;
 				int c = (i + 1) * sliceCount + j;
 				int d = (i + 1) * sliceCount + j + 1;
 
-				Vector2 uva = new Vector2( i / (float)slices,                      j / (float)stacks );
-				Vector2 uvb = new Vector2( i / (float)slices,            ( j + 1.0f ) / (float)stacks );
-				Vector2 uvc = new Vector2( ( i + 1.0f ) / (float)slices,            j / (float)stacks );
-				Vector2 uvd = new Vector2( ( i + 1.0f ) / (float)slices,  ( j + 1.0f ) / (float)stacks );
+				Vector2 uva = new Vector2( i / (double)slices,                      j / (double)stacks );
+				Vector2 uvb = new Vector2( i / (double)slices,            ( j + 1.0 ) / (double)stacks );
+				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)slices,            j / (double)stacks );
+				Vector2 uvd = new Vector2( ( i + 1.0 ) / (double)slices,  ( j + 1.0 ) / (double)stacks );
 
 				this.getFaces().add( new Face3( a, b, c ) );
 				this.getFaces().add( new Face3( b, d, c ) );
@@ -84,7 +84,7 @@ public class ParametricGeometry extends Geometry
 
 			}
 		}
-		
+
 		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}

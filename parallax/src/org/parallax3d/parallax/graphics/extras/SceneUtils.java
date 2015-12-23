@@ -44,10 +44,10 @@ public class SceneUtils
 	 * This method creates multi-material 3D object which contains Mesh objects
 	 * in amount of the materials list size. Here are every Mesh object will use
 	 * one of material of materials list.
-	 * 
+	 *
 	 * @param geometry  the input geometry.
 	 * @param materials the list of materials.
-	 * 
+	 *
 	 * @return the new instance of {@link Object3D}
 	 */
 	public static Object3D createMultiMaterialObject( Geometry geometry, List<? extends Material> materials )
@@ -62,7 +62,7 @@ public class SceneUtils
 
 		return group;
 	}
-	
+
 	public static void detach( Object3D child, Object3D parent, Scene scene ) {
 
 		child.applyMatrix( parent.getMatrixWorld() );
@@ -81,5 +81,6 @@ public class SceneUtils
 		parent.add( child );
 
 	}
+
 
 }

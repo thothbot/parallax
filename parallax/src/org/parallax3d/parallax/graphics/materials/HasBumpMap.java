@@ -26,7 +26,7 @@ public interface HasBumpMap
 
 	public void setBumpMap(Texture bumpMap); 
 
-	public float getBumpScale();
+	public double getBumpScale();
 
-	public void setBumpScale(float bumpScale);
+	public void setBumpScale(double bumpScale);
 }

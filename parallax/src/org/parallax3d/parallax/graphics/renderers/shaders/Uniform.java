@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.nio.FloatBuffer;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * Shader's uniforms.
@@ -46,57 +46,57 @@ public class Uniform
 		TV // array of Texture (2d)
 	};
 
-	private TYPE type;
+	private Uniform.TYPE type;
 	private Object value;
-	private FloatBuffer cache_array;
-	private Integer location; //WebGLUniformLocation
+	private Float32Array cache_array;
+	private int location = -1;
 
-	public Uniform(TYPE type)
+	public Uniform(Uniform.TYPE type)
 	{
 		this(type, null);
 	}
 
-	public Uniform(TYPE type, Object value)
+	public Uniform(Uniform.TYPE type, Object value)
 	{
 		this.type = type;
 		this.value = value;
 	}
-		
-	public TYPE getType() {
+
+	public Uniform.TYPE getType() {
 		return this.type;
 	}
-	
+
 	public Object getValue() {
 		return this.value;
 	}
-	
+
 	public void setValue(Object value) {
 		this.value = value;
 	}
-	
-	public FloatBuffer getCacheArray() {
+
+	public Float32Array getCacheArray() {
 		return this.cache_array;
 	}
-	
-	public void setCacheArray(FloatBuffer array) {
+
+	public void setCacheArray(Float32Array array) {
 		this.cache_array = array;
 	}
-	
+
 	public Integer getLocation() {
 		return this.location;
 	}
-	
+
 	public void setLocation(int location) {
 		this.location = location;
 	}
-	
+
 	public String toString()
 	{
-		return "{type=" + type.name() 
-				+ ", value=" + value 
+		return "{type=" + type.name()
+				+ ", value=" + value
 				+ ", location=" + location + "}\n";
 	}
-	
+
 	public Uniform clone()
 	{
 		Uniform result = new Uniform(this.type, this.value);
@@ -104,4 +104,5 @@ public class Uniform
 
 		return result;
 	}
+
 }

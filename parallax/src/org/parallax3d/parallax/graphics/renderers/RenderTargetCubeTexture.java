@@ -35,15 +35,15 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	private List<Integer> webglFramebuffer; //WebGLFramebuffer
 	private List<Integer> webglRenderbuffer; //WebGLRenderbuffer
 
-	public RenderTargetCubeTexture(int width, int height ) 
+	public RenderTargetCubeTexture(int width, int height )
 	{
 		super(width, height);
 	}
-	
+
 	public int getActiveCubeFace() {
 		return this.activeCubeFace;
 	}
-	
+
 	public void setActiveCubeFace(int activeCubeFace) {
 		this.activeCubeFace = activeCubeFace;
 	}
@@ -53,26 +53,26 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	{
 		if (this.getWebGlTexture() == null)
 			return;
-	
+
 		gl.glDeleteTexture(this.getWebGlTexture());
 		this.setWebGlTexture(null);
-		
-		for (int i = 0; i < 6; i++) 
+
+		for (int i = 0; i < 6; i++)
 		{
 			gl.glDeleteFramebuffer(this.webglFramebuffer.get(i));
 			gl.glDeleteRenderbuffer(this.webglRenderbuffer.get(i));
 		}
-		
+
 		this.webglFramebuffer = null;
 		this.webglRenderbuffer = null;
 	}
-	
+
 	@Override
 	public Integer getWebGLFramebuffer()
 	{
 		return this.webglFramebuffer.get( getActiveCubeFace() );
 	}
-	
+
 	@Override
 	public void setRenderTarget(GL20 gl)
 	{
@@ -92,7 +92,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 
 		setTextureParameters( gl, TextureTarget.TEXTURE_CUBE_MAP.getValue(), isTargetPowerOfTwo );
 
-		for ( int i = 0; i < 6; i ++ ) 
+		for ( int i = 0; i < 6; i ++ )
 		{
 			this.webglFramebuffer.add( gl.glGenFramebuffer() );
 			this.webglRenderbuffer.add( gl.glGenRenderbuffer() );
@@ -104,7 +104,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			this.setupRenderBuffer(gl, this.webglRenderbuffer.get( i ));
 		}
 
-		if ( isTargetPowerOfTwo ) 
+		if ( isTargetPowerOfTwo )
 			gl.glGenerateMipmap(TextureTarget.TEXTURE_CUBE_MAP.getValue());
 
 		// Release everything
@@ -113,16 +113,16 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, nullval);
 		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, nullval);
 	}
-	
+
 	public void setupFrameBuffer(GL20 gl, Integer /*WebGLFramebuffer*/ framebuffer, Integer /*TextureTarget*/ textureTarget, int slot)
-	{	
+	{
 		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
 		gl.glFramebufferTexture2D(FramebufferSlot.COLOR_ATTACHMENT0.getValue(), textureTarget, slot, this.getWebGlTexture(), 0);
 	}
-	
+
 	@Override
 	public void updateRenderTargetMipmap(GL20 gl)
-	{	
+	{
 		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), this.getWebGlTexture());
 		gl.glGenerateMipmap(TextureTarget.TEXTURE_CUBE_MAP.getValue());
 		Integer nullval = null;

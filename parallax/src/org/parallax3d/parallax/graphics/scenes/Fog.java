@@ -18,10 +18,8 @@
 
 package org.parallax3d.parallax.graphics.scenes;
 
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -33,28 +31,28 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.Fog")
 public final class Fog extends AbstractFog 
 {
-	private float near;
-	private float far;
+	private double near;
+	private double far;
 
 	/**
-	 * This default constructor will make simple fog with 
+	 * This default constructor will make simple fog with
 	 * near parameter 1.0 and far 1000
-	 * 
+	 *
 	 * @param hex the color in HEX format
 	 */
-	public Fog(int hex) 
+	public Fog(int hex)
 	{
 		this(hex, 1, 1000);
 	}
 
 	/**
 	 * This constructor will make simple fog with defined parameters.
-	 * 
+	 *
 	 * @param hex  the color in HEX format
 	 * @param near the near scalar value
 	 * @param far  the far scala value
 	 */
-	public Fog(int hex, float near, float far) 
+	public Fog(int hex, double near, double far)
 	{
 		super(hex);
 		this.near = near;
@@ -63,59 +61,59 @@ public final class Fog extends AbstractFog
 
 	/**
 	 * Set near fog parameter
-	 * 
+	 *
 	 * @param near the near scalar value
 	 */
-	public void setNear(float near)
+	public void setNear(double near)
 	{
 		this.near = near;
 	}
 
 	/**
 	 * Get near fog parameter
-	 * 
+	 *
 	 * @return the near fog parameter
 	 */
-	public float getNear()
+	public double getNear()
 	{
 		return near;
 	}
 
 	/**
 	 * Set far fog parameter
-	 * 
+	 *
 	 * @param far the far fog parameter
 	 */
-	public void setFar(float far)
+	public void setFar(double far)
 	{
 		this.far = far;
 	}
 
 	/**
 	 * Get far fog parameter
-	 * 
+	 *
 	 * @return the far fog parameter
 	 */
-	public float getFar()
+	public double getFar()
 	{
 		return far;
 	}
-	
+
 	public Fog clone() {
 		Fog fog = new Fog(0x000000);
 		super.clone(fog);
-		
+
 		fog.near = this.near;
 		fog.far = this.far;
-		
+
 		return fog;
 	}
-	
+
 	@Override
-	public void refreshUniforms(ObjectMap<String, Uniform> uniforms)
+	public void refreshUniforms(FastMap<Uniform> uniforms)
 	{
 		super.refreshUniforms(uniforms);
-		
+
 		uniforms.get("fogNear").setValue( getNear() );
 		uniforms.get("fogFar").setValue( getFar() );
 	}

@@ -38,18 +38,18 @@ public class Raycaster
 	/**
 	 * The precision factor of the raycaster when intersecting {@link Mesh} objects.
 	 */
-	public static final float PRECISION = 0.0001f;
+	public static final double PRECISION = 0.0001;
 	/**
 	 * The precision factor of the raycaster when intersecting {@link Line} objects.
 	 */
 	public static final double LINE_PRECISION = 1;
-	
+
 	public static class Intersect implements Comparable
 	{
 		/**
 		 * distance between the origin of the ray and the intersection
 		 */
-		public double distance;	
+		public double distance;
 		/**
 		 * point of intersection, in world coordinates
 		 */
@@ -67,20 +67,20 @@ public class Raycaster
 		 * the intersected object
 		 */
 		public GeometryObject object;
-		
+
 		@Override
-		public int compareTo(Object arg0) 
+		public int compareTo(Object arg0)
 		{
 			Intersect b = (Intersect)arg0;
-			return (this.distance == b.distance) 
+			return (this.distance == b.distance)
 					? 0 : this.distance < b.distance ? -1 : 1;
 		}
 	}
-	
+
 	private Ray ray;
 	private double near;
 	private double far;
-		
+
 	public Raycaster()
 	{
 		this(new Vector3(), new Vector3());
@@ -90,7 +90,7 @@ public class Raycaster
 	{
 		this(origin, direction, 0, Double.POSITIVE_INFINITY);
 	}
-	
+
 	/**
 	 * This creates a new raycaster object.
 	 * @param origin The origin vector where the ray casts from.
@@ -98,14 +98,14 @@ public class Raycaster
 	 * @param near All results returned are further away than near. Near can't be negative. Default value is 0.
 	 * @param far All results returned are closer then far. Far can't be lower then near . Default value is Infinity.
 	 */
-	public Raycaster( Vector3 origin, Vector3 direction, double near, double far ) 
+	public Raycaster( Vector3 origin, Vector3 direction, double near, double far )
 	{
 
 		this.ray = new Ray( origin, direction );
 		this.near = near;
 		this.far = far;
 	}
-		
+
 	/**
 	 * The Ray used for the raycasting.
 	 * @return
@@ -119,7 +119,7 @@ public class Raycaster
 	}
 
 	/**
-	 * The near factor of the raycaster. 
+	 * The near factor of the raycaster.
 	 * This value indicates which objects can be discarded based on the distance.
 	 * This value shouldn't be negative and should be smaller than the far property.
 	 * @return
@@ -133,7 +133,7 @@ public class Raycaster
 	}
 
 	/**
-	 * The far factor of the raycaster. 
+	 * The far factor of the raycaster.
 	 * This value indicates which objects can be discarded based on the distance.
 	 * This value shouldn't be negative and should be larger than the near property.
 	 * @return
@@ -152,18 +152,18 @@ public class Raycaster
 		// direction is assumed to be normalized (for accurate distance calculations)
 
 	}
-	
+
 	/**
-	 * Checks all intersection between the ray and the objects with or without the descendants. 
-	 * Intersections are returned sorted by distance, closest first. Intersections are of the same form as 
+	 * Checks all intersection between the ray and the objects with or without the descendants.
+	 * Intersections are returned sorted by distance, closest first. Intersections are of the same form as
 	 * those returned by {@link Raycaster#intersectObject(GeometryObject, boolean)}
 	 * @param objects The objects to check for intersection with the ray.
 	 * @param recursive If set, it also checks all descendants of the objects. Otherwise it only checks intersecton with the objects.
 	 * @return
 	 */
-	public List<Intersect> intersectObjects ( List<? extends Object3D> objects, boolean recursive ) {
+	public List<Raycaster.Intersect> intersectObjects ( List<? extends Object3D> objects, boolean recursive ) {
 
-		List<Intersect>  intersects = new ArrayList<Intersect>();
+		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
 
 		for ( int i = 0, l = objects.size(); i < l; i ++ ) {
 
@@ -178,18 +178,18 @@ public class Raycaster
 		return intersects;
 
 	}
-	
+
 
 	/**
-	 * Checks all intersection between the ray and the object with or without the descendants. Intersections are returned sorted by distance, 
+	 * Checks all intersection between the ray and the object with or without the descendants. Intersections are returned sorted by distance,
 	 * closest first. An array of intersections is returned...
 	 * @param object The object to check for intersection with the ray.
 	 * @param recursive If set, it also checks all descendants. Otherwise it only checks intersecton with the object.
 	 * @return
 	 */
-	public List<Intersect> intersectObject( GeometryObject object, boolean recursive ) {
+	public List<Raycaster.Intersect> intersectObject( GeometryObject object, boolean recursive ) {
 
-		List<Intersect>  intersects = new ArrayList<Intersect>();
+		List<Raycaster.Intersect>  intersects = new ArrayList<Raycaster.Intersect>();
 
 		intersectObject( object, this, intersects, recursive );
 
@@ -198,7 +198,7 @@ public class Raycaster
 		return intersects;
 
 	}
-	
+
 	private void intersectObject ( GeometryObject object, Raycaster raycaster, List<Intersect> intersects, boolean recursive ) {
 
 		object.raycast( raycaster, intersects );

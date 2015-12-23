@@ -24,11 +24,11 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 public class Spline {
 
 	private Vector3[] points;
-	
-	public static Spline initFromArray( float[][] a ) {
+
+	public static Spline initFromArray( double[][] a ) {
 
 		Spline spline = new Spline();
-		
+
 		spline.points = new Vector3[ a.length ];
 
 		for ( int i = 0; i < a.length; i ++ ) {
@@ -36,10 +36,10 @@ public class Spline {
 			spline.points[ i ] = new Vector3( a[ i ][ 0 ], a[ i ][ 1 ], a[ i ][ 2 ] );
 
 		}
-		
+
 		return spline;
 	}
-	
+
 	public Vector3 getPoint(int k) {
 		int point = ( this.points.length - 1 ) * k;
 		int intPoint = (int)Math.floor( point );
@@ -67,11 +67,11 @@ public class Spline {
 		return v3;
 
 	}
-	
+
 	public Vector3[] getControlPointsArray() {
 
 		int l = this.points.length;
-		
+
 		Vector3[] coords = new Vector3[l];
 
 		for ( int i = 0; i < l; i ++ ) {
@@ -84,13 +84,13 @@ public class Spline {
 		return coords;
 
 	}
-	
-	private float interpolate( float p0, float p1, float p2, float p3, float t, float t2, float t3 ) {
 
-		float v0 = ( p2 - p0 ) * 0.5f,
-			  v1 = ( p3 - p1 ) * 0.5f;
+	private double interpolate( double p0, double p1, double p2, double p3, double t, double t2, double t3 ) {
 
-		return ( 2.0f * ( p1 - p2 ) + v0 + v1 ) * t3 + ( - 3.0f * ( p1 - p2 ) - 2.0f * v0 - v1 ) * t2 + v0 * t + p1;
+		double v0 = ( p2 - p0 ) * 0.5,
+				v1 = ( p3 - p1 ) * 0.5;
+
+		return ( 2.0 * ( p1 - p2 ) + v0 + v1 ) * t3 + ( - 3.0 * ( p1 - p2 ) - 2.0 * v0 - v1 ) * t2 + v0 * t + p1;
 
 	}
 }

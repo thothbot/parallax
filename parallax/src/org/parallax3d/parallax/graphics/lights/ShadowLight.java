@@ -31,37 +31,37 @@ import org.parallax3d.parallax.math.Vector2;
 public abstract class ShadowLight extends Light implements HasIntensity
 {
 	protected Object3D target;
-	
-	protected float intensity;
+
+	protected double intensity;
 
 	protected boolean onlyShadow = false;
-	
+
 	private Camera shadowCamera;
-	protected float shadowCameraNear = 50;
-	protected float shadowCameraFar = 5000;
+	protected double shadowCameraNear = 50;
+	protected double shadowCameraFar = 5000;
 	protected boolean shadowCameraVisible = false;
 
 	//
-	
-	protected float shadowBias = 0.0f;
-	protected float shadowDarkness = 0.5f;
+
+	protected double shadowBias = 0.0;
+	protected double shadowDarkness = 0.5;
 
 	protected int shadowMapWidth = 512;
 	protected int shadowMapHeight = 512;
 
 	protected boolean shadowCascade = false;
-	
+
 	private RenderTargetTexture shadowMap;
 	private Vector2 shadowMapSize;
 	private Matrix4 shadowMatrix;
-			
+
 	private CameraHelper cameraHelper;
-	
-	public ShadowLight(int hex) 
+
+	public ShadowLight(int hex)
 	{
 		super(hex);
-		
-		this.position = new Vector3(0, 1.0f, 0);
+
+		this.position = new Vector3(0, 1.0, 0);
 		this.target   = new Object3D();
 	}
 
@@ -71,29 +71,29 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	public Object3D getTarget() {
 		return this.target;
 	}
-	
+
 	/**
 	 * Sets Target used for shadow camera orientation.
 	 */
 	public void setTarget(Object3D target) {
 		this.target = target;
 	}
-	
+
 
 	/**
 	 * Gets Light's intensity.
 	 */
-	public float getIntensity() {
+	public double getIntensity() {
 		return this.intensity;
 	}
 
 	/**
 	 * Sets Light's intensity.
 	 */
-	public void setIntensity(float intensity) {
+	public void setIntensity(double intensity) {
 		this.intensity = intensity;
 	}
-	
+
 	public boolean isOnlyShadow() {
 		return onlyShadow;
 	}
@@ -130,7 +130,7 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	public void setShadowMapHeight(int shadowMapHeight) {
 		this.shadowMapHeight = shadowMapHeight;
 	}
-	
+
 	public Camera getShadowCamera() {
 		return shadowCamera;
 	}
@@ -138,20 +138,20 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	public void setShadowCamera(Camera shadowCamera) {
 		this.shadowCamera = shadowCamera;
 	}
-	
-	public float getShadowCameraNear() {
+
+	public double getShadowCameraNear() {
 		return shadowCameraNear;
 	}
 
-	public void setShadowCameraNear(float shadowCameraNear) {
+	public void setShadowCameraNear(double shadowCameraNear) {
 		this.shadowCameraNear = shadowCameraNear;
 	}
 
-	public float getShadowCameraFar() {
+	public double getShadowCameraFar() {
 		return shadowCameraFar;
 	}
 
-	public void setShadowCameraFar(float shadowCameraFar) {
+	public void setShadowCameraFar(double shadowCameraFar) {
 		this.shadowCameraFar = shadowCameraFar;
 	}
 
@@ -163,19 +163,19 @@ public abstract class ShadowLight extends Light implements HasIntensity
 		this.shadowCameraVisible = shadowCameraVisible;
 	}
 
-	public float getShadowBias() {
+	public double getShadowBias() {
 		return shadowBias;
 	}
 
-	public void setShadowBias(float shadowBias) {
+	public void setShadowBias(double shadowBias) {
 		this.shadowBias = shadowBias;
 	}
 
-	public float getShadowDarkness() {
+	public double getShadowDarkness() {
 		return shadowDarkness;
 	}
 
-	public void setShadowDarkness(float shadowDarkness) {
+	public void setShadowDarkness(double shadowDarkness) {
 		this.shadowDarkness = shadowDarkness;
 	}
 
@@ -183,7 +183,7 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	{
 		return isCastShadow() && !isShadowCascade();
 	}
-	
+
 	public Matrix4 getShadowMatrix() {
 		return shadowMatrix;
 	}
@@ -191,7 +191,7 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	public void setShadowMatrix(Matrix4 shadowMatrix) {
 		this.shadowMatrix = shadowMatrix;
 	}
-	
+
 	public RenderTargetTexture getShadowMap() {
 		return shadowMap;
 	}
@@ -207,7 +207,7 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	public void setShadowMapSize(Vector2 shadowMapSize) {
 		this.shadowMapSize = shadowMapSize;
 	}
-	
+
 	public CameraHelper getCameraHelper() {
 		return cameraHelper;
 	}

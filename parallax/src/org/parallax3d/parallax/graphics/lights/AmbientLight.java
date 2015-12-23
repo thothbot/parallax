@@ -18,15 +18,12 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
-import java.nio.FloatBuffer;
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.BufferUtils;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * This light's color gets applied to all the objects in the scene globally.
@@ -44,70 +41,70 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.AmbientLight")
 public final class AmbientLight extends Light
 {
-	public static class UniformAmbient implements UniformLight
+	public static class UniformAmbient implements Light.UniformLight
 	{
-		public FloatBuffer colors;
-		
+		public Float32Array colors;
+
 		@Override
-		public void reset() 
+		public void reset()
 		{
-			this.colors = (FloatBuffer) BufferUtils.newFloatBuffer(3);
+			this.colors = (Float32Array) Float32Array.createArray();
 			for(int i = 0; i < 3; i++)
-				this.colors.put(i, 0.0f);
-			
+				this.colors.set(i, 0.0);
+
 		}
 
 		@Override
-		public void refreshUniform(ObjectMap<String, Uniform> uniforms)
+		public void refreshUniform(FastMap<Uniform> uniforms)
 		{
 			uniforms.get("ambientLightColor").setValue( colors );
 		}
 	}
-	
+
 	public AmbientLight(int hex) {
 		super(hex);
 	}
-	
+
 	public AmbientLight clone() {
 
 		AmbientLight light = new AmbientLight(0x000000);
-		
+
 		super.clone(light);
 
 		return light;
 
 	}
-	
+
 	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput)
 	{
-		FloatBuffer colors = zlights.ambient.colors;
-	
+		Float32Array colors = zlights.ambient.colors;
+
 		Color color = getColor();
-		float r = 0, g = 0, b = 0;
-		if(colors.array().length == 3)
+		double r = 0, g = 0, b = 0;
+		if(colors.getLength() == 3)
 		{
 			r = colors.get(0);
 			g = colors.get(1);
 			b = colors.get(2);
 		}
-		
-		if ( isGammaInput ) 
+
+		if ( isGammaInput )
 		{
 			r += color.getR() * color.getR();
 			g += color.getG() * color.getG();
 			b += color.getB() * color.getB();
-		} 
-		else 
+		}
+		else
 		{
 			r += color.getR();
 			g += color.getG();
 			b += color.getB();
 		}
 
-		colors.put( 0, r );
-		colors.put( 1, g );
-		colors.put( 2, b );
+		colors.set(0, r);
+		colors.set(1, g);
+		colors.set(2, b);
 	}
 
 }

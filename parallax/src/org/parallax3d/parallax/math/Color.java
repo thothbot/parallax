@@ -36,144 +36,144 @@ public final class Color
 	/**
 	 * HSL presentation of color
 	 */
-	public static class HSL 
+	public static class HSL
 	{
-		public float hue;
-		public float saturation;
-		public float lightness;
-		
-		public HSL() 
+		public double hue;
+		public double saturation;
+		public double lightness;
+
+		public HSL()
 		{
-			this.hue = 0.0f;
-			this.saturation = 0.0f;
-			this.lightness = 0.0f;
+			this.hue = 0.0;
+			this.saturation = 0.0;
+			this.lightness = 0.0;
 		}
 	}
-	
+
 	/**
 	 * The R-component of the color. &#60;0.0-1.0&#62;
 	 */
-	private float r;
+	private double r;
 
 	/**
 	 * The G-component of the color. &#60;0.0-1.0&#62;
 	 */
-	private float g;
+	private double g;
 
 	/**
 	 * The B-component of the color. &#60;0.0-1.0&#62;
 	 */
-	private float b;
+	private double b;
 
 	/**
 	 * This default constructor will create color where R=1.0, G=1.0, B=1.0
 	 * ie (255, 255, 255) or 0xFFFFFF in HEX.
 	 */
-	public Color() 
-	{		
+	public Color()
+	{
 		setHex(0xFFFFFF);
 	}
 
 	/**
 	 * This constructor will create Color instance by defined HEX value.
 	 * For example 0xFFFFFF will create a color in RGB(255, 255, 255), which
-	 * means completely white. 
-	 * 
+	 * means completely white.
+	 *
 	 * @param hex Color in HEX format
 	 */
-	public Color(int hex) 
+	public Color(int hex)
 	{
 		setHex(hex);
 	}
 
 	/**
-	 * get R-component of the color. 
-	 * 
+	 * get R-component of the color.
+	 *
 	 * @return a value in range &#60;0.0, 1.0&#62;
 	 */
-	public float getR()
+	public double getR()
 	{
 		return r;
 	}
 
 	/**
-	 * get G-component of the color. 
-	 * 
-	 * @return a value in range &#60;0.0, 1.0&#62; 
+	 * get G-component of the color.
+	 *
+	 * @return a value in range &#60;0.0, 1.0&#62;
 	 */
-	public float getG()
+	public double getG()
 	{
 		return g;
 	}
-	
+
 	/**
-	 * get B-component of the color. 
-	 * 
+	 * get B-component of the color.
+	 *
 	 * @return a value in range &#60;0.0, 1.0&#62;
 	 */
-	public float getB()
+	public double getB()
 	{
 		return b;
 	}
-	
+
 	/**
 	 * Setting R-component of the color.
-	 * 
-	 * @param r the value in range &#60;0.0, 1.0&#62; 
+	 *
+	 * @param r the value in range &#60;0.0, 1.0&#62;
 	 */
-	public void setR(float r)
+	public void setR(double r)
 	{
 		this.r = r;
 	}
 
 	/**
 	 * Setting G-component of the color.
-	 * 
-	 * @param g the value in range &#60;0.0, 1.0&#62; 
+	 *
+	 * @param g the value in range &#60;0.0, 1.0&#62;
 	 */
-	public void setG(float g)
+	public void setG(double g)
 	{
 		this.g = g;
 	}
 
 	/**
 	 * Setting B-component of the color.
-	 * 
-	 * @param b the value in range &#60;0.0, 1.0&#62; 
+	 *
+	 * @param b the value in range &#60;0.0, 1.0&#62;
 	 */
-	public void setB(float b)
+	public void setB(double b)
 	{
 		this.b = b;
 	}
-	
+
 	/**
-	 * Setting color in HEX format. For example 0xFFFFFF will create 
+	 * Setting color in HEX format. For example 0xFFFFFF will create
 	 * a color in RGB(255, 255, 255), which means completely white.
-	 * 
+	 *
 	 * @param hex Color in HEX format
-	 */	
-	public Color setHex( int hex ) 
+	 */
+	public Color setHex( int hex )
 	{
 		hex = (~~hex) & 0xffffff;
 
-		this.r = ( hex >> 16 & 255 ) / 255.0f;
-		this.g = ( hex >> 8 & 255 ) / 255.0f;
-		this.b = ( hex & 255 ) / 255.0f;
+		this.r = ( hex >> 16 & 255 ) / 255.0;
+		this.g = ( hex >> 8 & 255 ) / 255.0;
+		this.b = ( hex & 255 ) / 255.0;
 
 		return this;
 	}
-	
+
 	/**
-	 * Setting color in RGB mode. Each of R, G, B should be in 
-	 * range <0.0, 1.0>. 
-	 * 
+	 * Setting color in RGB mode. Each of R, G, B should be in
+	 * range <0.0, 1.0>.
+	 *
 	 * @param r the R-component of Color.
 	 * @param g the G-component of Color.
 	 * @param b the B-component of Color.
-	 * 
+	 *
 	 * @return a current color
 	 */
-	public Color setRGB( float r, float g, float b ) 
+	public Color setRGB( double r, double g, double b )
 	{
 		this.r = r;
 		this.g = g;
@@ -185,29 +185,29 @@ public final class Color
 	/**
 	 * Setting color based on HSV color model. Each input values H, S, V
 	 * should be in range <0.0, 1.0>.
-	 * 
+	 *
 	 * This method based on MochiKit implementation by Bob Ippolito
-	 * 
+	 *
 	 * @param h the hue
 	 * @param s the saturation
 	 * @param v the value
-	 * 
+	 *
 	 * @return a current color
 	 */
-//	public Color setHSV( float h, float s, float v ) 
+//	public Color setHSV( double h, double s, double v )
 //	{
 //		return this.setHSL(h,s*v/((h=(2-s)*v)<1?h:2-h),h/2); // https://gist.github.com/xpansive/1337890
 //	}
 
 	/**
 	 * h,s,l ranges are in <0.0 - 1.0>
-	 * 
+	 *
 	 * @param h Hue
 	 * @param s Saturation
 	 * @param l Lightness (Intensity)
 	 * @return
 	 */
-	public Color setHSL( float h, float s, float l ) 
+	public Color setHSL( double h, double s, double l )
 	{
 		// h,s,l ranges are in 0.0 - 1.0
 
@@ -217,25 +217,25 @@ public final class Color
 
 		} else {
 
-			float p = l <= 0.5 ? l * ( 1.0f + s ) : l + s - ( l * s );
-			float q = ( 2.0f * l ) - p;
+			double p = l <= 0.5 ? l * ( 1.0 + s ) : l + s - ( l * s );
+			double q = ( 2.0 * l ) - p;
 
-			this.r = hue2rgb( q, p, h + 1.0f / 3.0f );
+			this.r = hue2rgb( q, p, h + 1.0 / 3.0 );
 			this.g = hue2rgb( q, p, h );
-			this.b = hue2rgb( q, p, h - 1.0f / 3.0f );
+			this.b = hue2rgb( q, p, h - 1.0 / 3.0 );
 
 		}
 
 		return this;
 
 	}
-	
+
 	/**
 	 * Set value of the color from another color.
-	 * 
+	 *
 	 * @param color the other color
 	 */
-	public Color copy( Color color ) 
+	public Color copy( Color color )
 	{
 		this.r = color.r;
 		this.g = color.g;
@@ -246,12 +246,12 @@ public final class Color
 
 	/**
 	 * Set value of color from gamma.
-	 * 
+	 *
 	 * @param color the gamma
-	 * 
+	 *
 	 * @return the current color
 	 */
-	public Color copyGammaToLinear ( Color color ) 
+	public Color copyGammaToLinear ( Color color )
 	{
 		this.r = color.r * color.r;
 		this.g = color.g * color.g;
@@ -262,28 +262,28 @@ public final class Color
 
 	/**
 	 * Set value of the gamma from color.
-	 * 
+	 *
 	 * @param color the color
-	 * 
+	 *
 	 * @return a gamma
 	 */
-	public Color copyLinearToGamma ( Color color ) 
+	public Color copyLinearToGamma ( Color color )
 	{
-		this.r = (float)Math.sqrt( color.r );
-		this.g = (float)Math.sqrt( color.g );
-		this.b = (float)Math.sqrt( color.b );
+		this.r = Math.sqrt( color.r );
+		this.g = Math.sqrt( color.g );
+		this.b = Math.sqrt( color.b );
 
 		return this;
 	}
 
 	/**
 	 * This method will convert gamma to color
-	 * 
+	 *
 	 * @return a current color
 	 */
-	public Color convertGammaToLinear() 
+	public Color convertGammaToLinear()
 	{
-		float r = this.r, g = this.g, b = this.b;
+		double r = this.r, g = this.g, b = this.b;
 
 		this.r = r * r;
 		this.g = g * g;
@@ -294,14 +294,14 @@ public final class Color
 
 	/**
 	 * This method will convert color to gamma
-	 * 
+	 *
 	 * @return a current gamma
 	 */
-	public Color convertLinearToGamma() 
+	public Color convertLinearToGamma()
 	{
-		this.r = (float)Math.sqrt( this.r );
-		this.g = (float)Math.sqrt( this.g );
-		this.b = (float)Math.sqrt( this.b );
+		this.r = Math.sqrt( this.r );
+		this.g = Math.sqrt( this.g );
+		this.b = Math.sqrt( this.b );
 
 		return this;
 	}
@@ -309,52 +309,52 @@ public final class Color
 	/**
 	 * Gets HEX value.
 	 */
-	public int getHex() 
+	public int getHex()
 	{
 		return ~~((int) Math.floor(this.r * 255)) << 16
-				^ ~~((int) Math.floor(this.g * 255)) << 8 
+				^ ~~((int) Math.floor(this.g * 255)) << 8
 				^ ~~((int) Math.floor(this.b * 255)) << 0;
-		
+
 //		return ( this.r * 255 ) << 16 ^ ( this.g * 255 ) << 8 ^ ( this.b * 255 ) << 0;
 	}
 
-	public String getHexString() 
+	public String getHexString()
 	{
 		String hexString = Integer.toHexString(this.getHex()).toUpperCase();
 		while(hexString.length() < 6)
-		    hexString = "0" + hexString;
+			hexString = "0" + hexString;
 		return hexString;
 	}
 
-	public HSL getHSL()
+	public Color.HSL getHSL()
 	{
 		// h,s,l ranges are in 0.0 - 1.0
 
-		float r = this.r, g = this.g, b = this.b;
+		double r = this.r, g = this.g, b = this.b;
 
-		float max = Math.max(Math.max( r, g), b );
-		float min = Math.min(Math.min( r, g), b );
+		double max = Math.max(Math.max( r, g), b );
+		double min = Math.min(Math.min( r, g), b );
 
-		float hue = 0, saturation = 0;
-		float lightness = ( min + max ) / 2.0f;
+		double hue = 0, saturation = 0;
+		double lightness = ( min + max ) / 2.0;
 
-		HSL hsl = new HSL();
-		
-		if ( min == max ) 
+		Color.HSL hsl = new Color.HSL();
+
+		if ( min == max )
 		{
 			hue = 0;
 			saturation = 0;
-		} 
-		else 
+		}
+		else
 		{
-			float delta = max - min;
+			double delta = max - min;
 
-			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2.0f - max - min );
+			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2.0 - max - min );
 
 			if( max == r) hue = ( g - b ) / delta + ( g < b ? 6 : 0 );
-			else if(max == g) hue = ( b - r ) / delta + 2.0f;
-			else if(max == b) hue = ( r - g ) / delta + 4.0f;
-			
+			else if(max == g) hue = ( b - r ) / delta + 2.0;
+			else if(max == b) hue = ( r - g ) / delta + 4.0;
+
 			hue /= 6.0;
 		}
 
@@ -365,16 +365,16 @@ public final class Color
 		return hsl;
 	}
 
-	public String getStyle() 
+	public String getStyle()
 	{
-		return "rgb(" + ( ( (int)(this.r * 255) ) | 0 ) 
-				+ "," + ( ( (int)(this.g * 255) ) | 0 ) 
+		return "rgb(" + ( ( (int)(this.r * 255) ) | 0 )
+				+ "," + ( ( (int)(this.g * 255) ) | 0 )
 				+ "," + ( ( (int)(this.b * 255) | 0) ) + ")";
 	}
 
-	public Color offsetHSL( float h, float s, float l ) 
+	public Color offsetHSL( double h, double s, double l )
 	{
-		HSL hsl = this.getHSL();
+		Color.HSL hsl = this.getHSL();
 
 		hsl.hue += h; hsl.saturation += s; hsl.lightness += l;
 
@@ -383,7 +383,7 @@ public final class Color
 		return this;
 	}
 
-	public Color add( Color color ) 
+	public Color add( Color color )
 	{
 
 		this.r += color.r;
@@ -393,7 +393,7 @@ public final class Color
 		return this;
 	}
 
-	public Color add( Color color1, Color color2 ) 
+	public Color add( Color color1, Color color2 )
 	{
 		this.r = color1.r + color2.r;
 		this.g = color1.g + color2.g;
@@ -402,7 +402,7 @@ public final class Color
 		return this;
 	}
 
-	public Color add( int s ) 
+	public Color add( int s )
 	{
 		this.r += s;
 		this.g += s;
@@ -411,7 +411,7 @@ public final class Color
 		return this;
 	}
 
-	public Color multiply( Color color ) 
+	public Color multiply( Color color )
 	{
 		this.r *= color.r;
 		this.g *= color.g;
@@ -420,7 +420,7 @@ public final class Color
 		return this;
 	}
 
-	public Color multiply( float s ) 
+	public Color multiply( double s )
 	{
 
 		this.r *= s;
@@ -432,11 +432,11 @@ public final class Color
 
 	/**
 	 * Linearly interpolates between the current color and input color.
-	 * 
+	 *
 	 * @param color the input color
 	 * @param alpha the alpha value in range <0.0, 1.0>
 	 */
-	public Color lerp( Color color, float alpha ) 
+	public Color lerp( Color color, double alpha )
 	{
 		this.r += ( color.r - this.r ) * alpha;
 		this.g += ( color.g - this.g ) * alpha;
@@ -444,7 +444,7 @@ public final class Color
 
 		return this;
 	}
-	
+
 	public boolean equals( Color c ) {
 
 		return ( c.r == this.r ) && ( c.g == this.g ) && ( c.b == this.b );
@@ -454,32 +454,33 @@ public final class Color
 	/**
 	 * Clone the current color class.
 	 * (color.clone() != color).
-	 * 
+	 *
 	 * @return a new color instance, based on the current color class
 	 */
-	public Color clone() 
+	public Color clone()
 	{
 		return new Color().setRGB( this.r, this.g, this.b );
 	}
-	
-	
+
+
 	/**
-	 * get Color class description by multiplying each value by 255. 
-	 * Please not this is not real used values. This is just for readability. 
+	 * get Color class description by multiplying each value by 255.
+	 * Please not this is not real used values. This is just for readability.
 	 */
 	public String toString()
 	{
 		return "{r:" + this.r + ", g:" + this.g + ", b:" + this.b + "}";
 	}
 
-	private float hue2rgb( float p, float q, float t ) 
+	private double hue2rgb( double p, double q, double t )
 	{
 		if ( t < 0 ) t += 1.0;
 		if ( t > 1 ) t -= 1.0;
-		if ( t < 1 / 6.0 ) return p + ( q - p ) * 6.0f * t;
+		if ( t < 1 / 6.0 ) return p + ( q - p ) * 6.0 * t;
 		if ( t < 1 / 2.0 ) return q;
-		if ( t < 2 / 3.0 ) return p + ( q - p ) * 6.0f * ( 2.0f / 3.0f - t );
-		
+		if ( t < 2 / 3.0 ) return p + ( q - p ) * 6.0 * ( 2.0 / 3.0 - t );
+
 		return p;
 	}
+
 }

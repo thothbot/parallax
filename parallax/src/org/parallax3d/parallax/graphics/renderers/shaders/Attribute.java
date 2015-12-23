@@ -18,7 +18,8 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.nio.FloatBuffer;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
 import java.util.List;
 
 public class Attribute
@@ -30,39 +31,39 @@ public class Attribute
 		C,
 		F
 	};
-	
+
 	public static enum BOUND_TO {
 		FACES,
 		VERTICES,
 		FACE_VERTICES
 	};
 
-	public int buffer; //WebGLBuffer
+	public int buffer;
 	public boolean createUniqueBuffers;
-	public TYPE type;
+	public Attribute.TYPE type;
 	// TODO: remove = change to type (initCustomAttributes)
 	public int size;
 	private List<?> value;
 	private BOUND_TO boundTo;
-	
-	public FloatBuffer array;
+
+	public Float32Array array;
 	public boolean needsUpdate;
 	public String belongsToAttribute;
 	public Attribute __original;
 
 	public boolean __webglInitialized;
-	
+
 	public Attribute()
 	{
 		//
 	}
 
-	public Attribute(TYPE type, List<?> value)
+	public Attribute(Attribute.TYPE type, List<?> value)
 	{
 		this.type = type;
 		this.value = value;
 	}
-	
+
 	public List<?> getValue() {
 		return value;
 	}
@@ -70,16 +71,16 @@ public class Attribute
 	public void setValue(List<Object> value) {
 		this.value = value;
 	}
-	
+
 	public BOUND_TO getBoundTo() {
 		return this.boundTo;
 	}
-	
+
 	public void setBoundTo(BOUND_TO boundTo) {
 		this.boundTo = boundTo;
 	}
-	
-	public Attribute clone() 
+
+	public Attribute clone()
 	{
 		Attribute att = new Attribute(this.type, this.value);
 		att.buffer = this.buffer;
@@ -91,17 +92,17 @@ public class Attribute
 		att.boundTo = this.boundTo;
 		att.__webglInitialized = this.__webglInitialized;
 		att.__original = this;
-		
+
 		return att;
 	}
-	
+
 	public String toString()
 	{
-		return "{ type=" + this.type.name() 
+		return "{ type=" + this.type.name()
 				+ ", boundTo=" + this.boundTo
-				+ ", needsUpdate=" + this.needsUpdate 
+				+ ", needsUpdate=" + this.needsUpdate
 				+ ", belongsToAttribute=" + this.belongsToAttribute
-				+ ", valueSize=" + (this.value == null ? "null" : this.value.size() ) 
+				+ ", valueSize=" + (this.value == null ? "null" : this.value.size() )
 				+ ", value=" + this.value + "}";
 	}
 }

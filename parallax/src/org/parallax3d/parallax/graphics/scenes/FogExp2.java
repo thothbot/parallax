@@ -18,10 +18,8 @@
 
 package org.parallax3d.parallax.graphics.scenes;
 
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
 /**
@@ -33,26 +31,26 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.FogExp2")
 public final class FogExp2 extends AbstractFog
 {
-	private float density;
+	private double density;
 
 	/**
-	 * This default constructor will make fog with 
+	 * This default constructor will make fog with
 	 * density parameter 0.00025.
-	 * 
+	 *
 	 * @param hex the color in HEX format
 	 */
-	public FogExp2(int hex) 
+	public FogExp2(int hex)
 	{
-		this(hex, 0.00025f);
+		this(hex, 0.00025);
 	}
 
 	/**
 	 * This constructor will make fog with defined density.
-	 * 
+	 *
 	 * @param hex     the color in HEX format
 	 * @param density the density value in range <0.0, 1.0>
 	 */
-	public FogExp2(int hex, float density) 
+	public FogExp2(int hex, double density)
 	{
 		super(hex);
 		this.density = density;
@@ -60,35 +58,35 @@ public final class FogExp2 extends AbstractFog
 
 	/**
 	 * Set density parameter
-	 * 
+	 *
 	 * @param density the density value in range <0.0, 1.0>
 	 */
-	public void setDensity(float density)
+	public void setDensity(double density)
 	{
 		this.density = density;
 	}
 
 	/**
 	 * Get density parameter
-	 * 
+	 *
 	 * @return the density value
 	 */
-	public float getDensity()
+	public double getDensity()
 	{
 		return this.density;
 	}
-	
+
 	public FogExp2 clone() {
 		FogExp2 fog = new FogExp2(0x000000);
 		super.clone(fog);
-		
+
 		fog.density = this.density;
-		
+
 		return fog;
 	}
-	
+
 	@Override
-	public void refreshUniforms(ObjectMap<String, Uniform> uniforms)
+	public void refreshUniforms(FastMap<Uniform> uniforms)
 	{
 		super.refreshUniforms(uniforms);
 		uniforms.get("fogDensity").setValue( getDensity() );

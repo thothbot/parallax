@@ -40,30 +40,30 @@ public class ArrowHelper extends Object3D
 	{
 		this(dir, origin, 1);
 	}
-	
-	public ArrowHelper ( Vector3 dir, Vector3 origin, float length)
+
+	public ArrowHelper ( Vector3 dir, Vector3 origin, double length)
 	{
 		this(dir, origin, length, 0xffff00);
 	}
-	
-	public ArrowHelper ( Vector3 dir, Vector3 origin, float length, int color) 
-	{	
-		this(dir, origin, length, color, 0.2f * length, 0.2f * 0.2f * length);
+
+	public ArrowHelper ( Vector3 dir, Vector3 origin, double length, int color)
+	{
+		this(dir, origin, length, color, 0.2 * length, 0.2 * 0.2 * length);
 	}
 
-	public ArrowHelper ( Vector3 dir, Vector3 origin, float length, int color, float headLength, float headWidth ) 
+	public ArrowHelper ( Vector3 dir, Vector3 origin, double length, int color, double headLength, double headWidth )
 	{
 		super();
-		
+
 		this.getPosition().copy(origin);
-		
+
 		Geometry lineGeometry = new Geometry();
 		lineGeometry.getVertices().add( new Vector3( 0, 0, 0 ) );
 		lineGeometry.getVertices().add( new Vector3( 0, 1, 0 ) );
 
-		CylinderGeometry coneGeometry = new CylinderGeometry( 0, 0.5f, 1, 5, 1 );
-		coneGeometry.applyMatrix( new Matrix4().makeTranslation( 0, - 0.5f, 0 ) );
-		
+		CylinderGeometry coneGeometry = new CylinderGeometry( 0, 0.5, 1, 5, 1 );
+		coneGeometry.applyMatrix( new Matrix4().makeTranslation( 0, - 0.5, 0 ) );
+
 		LineBasicMaterial lbm = new LineBasicMaterial();
 		lbm.setColor(new Color(color));
 		this.line = new Line( lineGeometry, lbm );
@@ -79,11 +79,11 @@ public class ArrowHelper extends Object3D
 		setDirection( dir );
 		setLength( length, headLength, headWidth );
 	}
-	
-	public void setDirection( Vector3 dir ) 
+
+	public void setDirection( Vector3 dir )
 	{
 		Vector3 axis = new Vector3();
-		float radians;
+		double radians;
 
 		// dir is assumed to be normalized
 
@@ -99,23 +99,23 @@ public class ArrowHelper extends Object3D
 
 			axis.set( dir.getZ(), 0, - dir.getX() ).normalize();
 
-			radians = (float)Math.acos( dir.getY() );
+			radians = Math.acos( dir.getY() );
 
 			this.quaternion.setFromAxisAngle( axis, radians );
 
 		}
 
 	}
-	
-	public void setLength ( float length ) {
-		
-		float headLength = 0.2f * length;
-		float headWidth = 0.2f * headLength;
-		
+
+	public void setLength ( double length ) {
+
+		double headLength = 0.2 * length;
+		double headWidth = 0.2 * headLength;
+
 		setLength(length, headLength, headWidth);
 	}
-	
-	public void setLength ( float length, float headLength, float headWidth ) {
+
+	public void setLength ( double length, double headLength, double headWidth ) {
 
 		this.line.getScale().set( 1, length, 1 );
 		this.line.updateMatrix();
@@ -126,7 +126,7 @@ public class ArrowHelper extends Object3D
 
 	}
 
-	public void setColor( int hex ) 
+	public void setColor( int hex )
 	{
 		LineBasicMaterial lMaterial = (LineBasicMaterial) this.line.getMaterial();
 		lMaterial.getColor().setHex( hex );

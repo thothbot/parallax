@@ -1,4 +1,4 @@
-package org.parallax3d.parallax.system;/*
+/*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
  *
  * This file is part of Parallax project.
@@ -15,6 +15,8 @@ package org.parallax3d.parallax.system;/*
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
+
+package org.parallax3d.parallax.system;
 
 public interface Disposable {
 

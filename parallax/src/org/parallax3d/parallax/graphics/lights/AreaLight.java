@@ -27,20 +27,20 @@ public class AreaLight extends Light implements HasIntensity
 	public Vector3 normal;
 	public Vector3 right;
 
-	private float intensity;
+	private double intensity;
 
-	public float width = 1.0f;
-	public float height = 1.0f;
+	public double width = 1.0;
+	public double height = 1.0;
 
-	public float constantAttenuation = 1.5f;
-	public float linearAttenuation = 0.5f;
-	public float quadraticAttenuation = 0.1f;
-	
+	public double constantAttenuation = 1.5;
+	public double linearAttenuation = 0.5;
+	public double quadraticAttenuation = 0.1;
+
 	public AreaLight ( int color) {
-		this(color, 1.0f);
+		this(color, 1.0);
 	}
-	
-	public AreaLight ( int color, float intensity ) {
+
+	public AreaLight ( int color, double intensity ) {
 
 		super(color);
 
@@ -53,20 +53,20 @@ public class AreaLight extends Light implements HasIntensity
 	@Override
 	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	/**
 	 * Gets Light's intensity.
 	 */
-	public float getIntensity() {
+	public double getIntensity() {
 		return this.intensity;
 	}
 
 	/**
 	 * Sets Light's intensity.
 	 */
-	public void setIntensity(float intensity) {
+	public void setIntensity(double intensity) {
 		this.intensity = intensity;
 	}
 }

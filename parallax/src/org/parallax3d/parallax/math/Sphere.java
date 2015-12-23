@@ -25,29 +25,28 @@ import java.util.List;
 @ThreeJsObject("THREE.Sphere")
 public class Sphere 
 {
-
 	private Vector3 center;
-	private float radius;
-	
+	private double radius;
+
 	// Temporary variables
 	static Box3 _box = new Box3();
-	
-	public Sphere() 
+
+	public Sphere()
 	{
 		this(new Vector3(), 0);
 	}
-	
-	public Sphere(float radius)
+
+	public Sphere(double radius)
 	{
 		this(new Vector3(), radius);
 	}
 
-	public Sphere(Vector3 center, float radius)
+	public Sphere(Vector3 center, double radius)
 	{
 		this.center = center;
 		this.radius = radius;
 	}
-	
+
 	public Vector3 getCenter() {
 		return center;
 	}
@@ -56,52 +55,52 @@ public class Sphere
 		this.center = center;
 	}
 
-	public float getRadius() {
+	public double getRadius() {
 		return radius;
 	}
 
-	public void setRadius(float radius) {
+	public void setRadius(double radius) {
 		this.radius = radius;
 	}
-	
-	public Sphere set( Vector3 center, float radius ) 
+
+	public Sphere set( Vector3 center, double radius )
 	{
 		this.center.copy( center );
 		this.radius = radius;
 
 		return this;
 	}
-	
-	public Sphere setFromPoints(List<Vector3> points, Vector3 optionalCenter) 
+
+	public Sphere setFromPoints(List<Vector3> points, Vector3 optionalCenter)
 	{
 		return setFromPoints(points.toArray(new Vector3[points.size()]), optionalCenter);
 	}
 
-	public Sphere setFromPoints(Vector3[] points, Vector3 optionalCenter) 
+	public Sphere setFromPoints(Vector3[] points, Vector3 optionalCenter)
 	{
-		if ( optionalCenter != null ) 
+		if ( optionalCenter != null )
 		{
 			center.copy( optionalCenter );
-		} 
-		else 
+		}
+		else
 		{
 			_box.setFromPoints( points ).center( center );
 		}
 
-		float maxRadiusSq = 0;
+		double maxRadiusSq = 0;
 
-		for ( int i = 0, il = points.length; i < il; i ++ ) 
+		for ( int i = 0, il = points.length; i < il; i ++ )
 		{
 			maxRadiusSq = Math.max( maxRadiusSq, center.distanceToSquared( points[ i ] ) );
 		}
 
-		this.radius = (float)Math.sqrt( maxRadiusSq );
+		this.radius = Math.sqrt( maxRadiusSq );
 
 		return this;
 
 	}
 
-	public Sphere copy( Sphere sphere ) 
+	public Sphere copy( Sphere sphere )
 	{
 		this.center.copy( sphere.center );
 		this.radius = sphere.radius;
@@ -109,25 +108,25 @@ public class Sphere
 		return this;
 	}
 
-	public boolean isEmpty() 
+	public boolean isEmpty()
 	{
 		return ( this.radius <= 0 );
 	}
 
-	public boolean isContainsPoint( Vector3 point ) 
+	public boolean isContainsPoint( Vector3 point )
 	{
 		return ( point.distanceToSquared( this.center ) <= ( this.radius * this.radius ) );
 	}
-	
-	public float distanceToPoint( Vector3 point ) 
+
+	public double distanceToPoint( Vector3 point )
 	{
 		return ( point.distanceTo( this.center ) - this.radius );
 
 	}
 
-	public boolean isIntersectsSphere( Sphere sphere ) 
+	public boolean isIntersectsSphere( Sphere sphere )
 	{
-		float radiusSum = this.radius + sphere.radius;
+		double radiusSum = this.radius + sphere.radius;
 
 		return sphere.center.distanceToSquared( this.center ) <= ( radiusSum * radiusSum );
 	}
@@ -136,14 +135,14 @@ public class Sphere
 	{
 		return clampPoint(point, new Vector3());
 	}
-	
-	public Vector3 clampPoint( Vector3 point, Vector3 optionalTarget ) 
+
+	public Vector3 clampPoint( Vector3 point, Vector3 optionalTarget )
 	{
-		float deltaLengthSq = this.center.distanceToSquared( point );
+		double deltaLengthSq = this.center.distanceToSquared( point );
 
 		optionalTarget.copy( point );
 
-		if ( deltaLengthSq > ( this.radius * this.radius ) ) 
+		if ( deltaLengthSq > ( this.radius * this.radius ) )
 		{
 			optionalTarget.sub( this.center ).normalize();
 			optionalTarget.multiply( this.radius ).add( this.center );
@@ -151,21 +150,21 @@ public class Sphere
 
 		return optionalTarget;
 	}
-	
+
 	public Box3 getBoundingBox()
 	{
 		return getBoundingBox(new Box3());
 	}
-	
-	public Box3 getBoundingBox( Box3 optionalTarget ) 
+
+	public Box3 getBoundingBox( Box3 optionalTarget )
 	{
 		optionalTarget.set( this.center, this.center );
 		optionalTarget.expandByScalar( this.radius );
 
 		return optionalTarget;
 	}
-	
-	public Sphere apply( Matrix4 matrix ) 
+
+	public Sphere apply( Matrix4 matrix )
 	{
 		this.center.apply( matrix );
 		this.radius = this.radius * matrix.getMaxScaleOnAxis();
@@ -173,19 +172,19 @@ public class Sphere
 		return this;
 	}
 
-	public Sphere translate( Vector3 offset ) 
+	public Sphere translate( Vector3 offset )
 	{
 		this.center.add( offset );
 
 		return this;
 	}
 
-	public boolean equals( Sphere sphere ) 
+	public boolean equals( Sphere sphere )
 	{
 		return sphere.center.equals( this.center ) && ( sphere.radius == this.radius );
 	}
 
-	public Sphere clone() 
+	public Sphere clone()
 	{
 		return new Sphere().copy( this );
 	}

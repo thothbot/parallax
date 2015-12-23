@@ -36,10 +36,10 @@ public class Ray
 {
 	// Where does the ray start. Default is 0, 0, 0.
 	private Vector3 origin;
-	
+
 	// A vector pointing in the direction the ray goes. Default is 0, 0, 0.
 	private Vector3 direction;
-	
+
 	//Temporary variables
 	static Vector3 _v1 = new Vector3();
 	static Vector3 _v2 = new Vector3();
@@ -47,18 +47,18 @@ public class Ray
 	static Vector3 _edge1 = new Vector3();
 	static Vector3 _edge2 = new Vector3();
 	static Vector3 _normal = new Vector3();
-	
+
 	public Ray()
 	{
 		this(new Vector3(), new Vector3());
 	}
 
-	public Ray( Vector3 origin, Vector3 direction ) 
+	public Ray( Vector3 origin, Vector3 direction )
 	{
 		this.origin = origin;
 		this.direction = direction;
 	}
-	
+
 	public Vector3 getOrigin() {
 		return origin;
 	}
@@ -74,8 +74,8 @@ public class Ray
 	public void setDirection(Vector3 direction) {
 		this.direction = direction;
 	}
-	
-	public Ray set( Vector3 origin, Vector3 direction ) 
+
+	public Ray set( Vector3 origin, Vector3 direction )
 	{
 		this.origin.copy( origin );
 		this.direction.copy( direction );
@@ -83,7 +83,7 @@ public class Ray
 		return this;
 	}
 
-	public Ray copy( Ray ray ) 
+	public Ray copy( Ray ray )
 	{
 		this.origin.copy( ray.origin );
 		this.direction.copy( ray.direction );
@@ -91,17 +91,17 @@ public class Ray
 		return this;
 	}
 
-	public Vector3 at( float t)
+	public Vector3 at( double t)
 	{
 		return at(t, new Vector3());
 	}
-	
-	public Vector3 at( float t, Vector3 optionalTarget ) 
+
+	public Vector3 at( double t, Vector3 optionalTarget )
 	{
 		return optionalTarget.copy( this.direction ).multiply( t ).add( this.origin );
 	}
 
-	public Ray recast( float t ) 
+	public Ray recast( double t )
 	{
 		this.origin.copy( this.at( t, _v1 ) );
 
@@ -112,12 +112,12 @@ public class Ray
 	{
 		return closestPointToPoint(point, new Vector3());
 	}
-	
-	public Vector3 closestPointToPoint( Vector3 point, Vector3 optionalTarget ) 
+
+	public Vector3 closestPointToPoint( Vector3 point, Vector3 optionalTarget )
 	{
 		optionalTarget.sub( point, this.origin );
-		float directionDistance = optionalTarget.dot( this.direction );
-		
+		double directionDistance = optionalTarget.dot( this.direction );
+
 		if ( directionDistance < 0 ) {
 
 			return optionalTarget.copy( this.origin );
@@ -127,9 +127,9 @@ public class Ray
 		return optionalTarget.copy( this.direction ).multiply( directionDistance ).add( this.origin );
 	}
 
-	public float distanceToPoint( Vector3 point ) 
-	{		
-		float directionDistance = _v1.sub( point, this.origin ).dot( this.direction );
+	public double distanceToPoint( Vector3 point )
+	{
+		double directionDistance = _v1.sub( point, this.origin ).dot( this.direction );
 
 		// point behind the ray
 
@@ -144,8 +144,8 @@ public class Ray
 		return _v1.distanceTo( point );
 
 	}
-	
-	public float distanceSqToSegment( Vector3 v0, Vector3 v1, Vector3 optionalPointOnRay, Vector3 optionalPointOnSegment ) 
+
+	public double distanceSqToSegment( Vector3 v0, Vector3 v1, Vector3 optionalPointOnRay, Vector3 optionalPointOnSegment )
 	{
 		// from http://www.geometrictools.com/LibMathematics/Distance/Wm5DistRay3Segment3.cpp
 		// It returns the min distance between the ray and the segment
@@ -154,16 +154,16 @@ public class Ray
 		// - The closest point on the ray
 		// - The closest point on the segment
 
-		Vector3 segCenter = v0.clone().add( v1 ).multiply( 0.5f );
+		Vector3 segCenter = v0.clone().add( v1 ).multiply( 0.5 );
 		Vector3 segDir = v1.clone().sub( v0 ).normalize();
-		float segExtent = v0.distanceTo( v1 ) * 0.5f;
+		double segExtent = v0.distanceTo( v1 ) * 0.5;
 		Vector3 diff = this.origin.clone().sub( segCenter );
-		float a01 = - this.direction.dot( segDir );
-		float b0 = diff.dot( this.direction );
-		float b1 = - diff.dot( segDir );
-		float c = diff.lengthSq();
-		float det = Math.abs( 1 - a01 * a01 );
-		float s0, s1, sqrDist, extDet;
+		double a01 = - this.direction.dot( segDir );
+		double b0 = diff.dot( this.direction );
+		double b1 = - diff.dot( segDir );
+		double c = diff.lengthSq();
+		double det = Math.abs( 1 - a01 * a01 );
+		double s0, s1, sqrDist, extDet;
 
 		if ( det >= 0 ) {
 
@@ -182,10 +182,10 @@ public class Ray
 						// region 0
 						// Minimum at interior points of ray and segment.
 
-						float invDet = 1.0f / det;
+						double invDet = 1.0 / det;
 						s0 *= invDet;
 						s1 *= invDet;
-						sqrDist = s0 * ( s0 + a01 * s1 + 2.0f * b0 ) + s1 * ( a01 * s0 + s1 + 2.0f * b1 ) + c;
+						sqrDist = s0 * ( s0 + a01 * s1 + 2.0 * b0 ) + s1 * ( a01 * s0 + s1 + 2.0 * b1 ) + c;
 
 					} else {
 
@@ -203,7 +203,7 @@ public class Ray
 
 					s1 = - segExtent;
 					s0 = Math.max( 0, - ( a01 * s1 + b0 ) );
-					sqrDist = - s0 * s0 + s1 * ( s1 + 2.0f * b1 ) + c;
+					sqrDist = - s0 * s0 + s1 * ( s1 + 2.0 * b1 ) + c;
 
 				}
 
@@ -223,7 +223,7 @@ public class Ray
 
 					s0 = 0;
 					s1 = Math.min( Math.max( - segExtent, - b1 ), segExtent );
-					sqrDist = s1 * ( s1 + 2.0f * b1 ) + c;
+					sqrDist = s1 * ( s1 + 2.0 * b1 ) + c;
 
 				} else {
 
@@ -231,7 +231,7 @@ public class Ray
 
 					s0 = Math.max( 0, - ( a01 * segExtent + b0 ) );
 					s1 = ( s0 > 0 ) ? segExtent : Math.min( Math.max( - segExtent, - b1 ), segExtent );
-					sqrDist = - s0 * s0 + s1 * ( s1 + 2.0f * b1 ) + c;
+					sqrDist = - s0 * s0 + s1 * ( s1 + 2.0 * b1 ) + c;
 
 				}
 
@@ -243,7 +243,7 @@ public class Ray
 
 			s1 = ( a01 > 0 ) ? - segExtent : segExtent;
 			s0 = Math.max( 0, - ( a01 * s1 + b0 ) );
-			sqrDist = - s0 * s0 + s1 * ( s1 + 2.0f * b1 ) + c;
+			sqrDist = - s0 * s0 + s1 * ( s1 + 2.0 * b1 ) + c;
 
 		}
 
@@ -263,12 +263,12 @@ public class Ray
 
 	}
 
-	public boolean isIntersectionSphere( Sphere sphere ) 
+	public boolean isIntersectionSphere( Sphere sphere )
 	{
 		return ( this.distanceToPoint( sphere.getCenter() ) <= sphere.getRadius() );
 	}
-	
-	public Vector3 intersectSphere( Sphere sphere ) 
+
+	public Vector3 intersectSphere( Sphere sphere )
 	{
 		return intersectSphere(sphere, null);
 	}
@@ -279,25 +279,25 @@ public class Ray
 	 * @param optionalTarget
 	 * @return
 	 */
-	public Vector3 intersectSphere( Sphere sphere, Vector3 optionalTarget ) 
+	public Vector3 intersectSphere( Sphere sphere, Vector3 optionalTarget )
 	{
 		_v1.sub( sphere.getCenter(), this.getOrigin() );
 
-		float tca = _v1.dot( this.direction );
+		double tca = _v1.dot( this.direction );
 
-		float d2 = _v1.dot( _v1 ) - tca * tca;
+		double d2 = _v1.dot( _v1 ) - tca * tca;
 
-		float radius2 = sphere.getRadius() * sphere.getRadius();
+		double radius2 = sphere.getRadius() * sphere.getRadius();
 
 		if ( d2 > radius2 ) return null;
 
-		float thc = (float)Math.sqrt( radius2 - d2 );
+		double thc = Math.sqrt( radius2 - d2 );
 
 		// t0 = first intersect point - entrance on front of sphere
-		float t0 = tca - thc;
+		double t0 = tca - thc;
 
 		// t1 = second intersect point - exit point on back of sphere
-		float t1 = tca + thc;
+		double t1 = tca + thc;
 
 		// test to see if both t0 and t1 are behind the ray - if so, return null
 		if ( t0 < 0 && t1 < 0 ) return null;
@@ -307,15 +307,15 @@ public class Ray
 		// in order to always return an intersect point that is in front of the ray.
 		if ( t0 < 0 ) return this.at( t1, optionalTarget );
 
-		// else t0 is in front of the ray, so return the first collision point scaled by t0 
+		// else t0 is in front of the ray, so return the first collision point scaled by t0
 		return this.at( t0, optionalTarget );
 	}
 
-	public boolean isIntersectionPlane( Plane plane ) 
+	public boolean isIntersectionPlane( Plane plane )
 	{
 		// check if the ray lies on the plane first
 
-		float distToPoint = plane.distanceToPoint( this.origin );
+		double distToPoint = plane.distanceToPoint( this.origin );
 
 		if ( distToPoint == 0 ) {
 
@@ -323,7 +323,7 @@ public class Ray
 
 		}
 
-		float denominator = plane.getNormal().dot( this.direction );
+		double denominator = plane.getNormal().dot( this.direction );
 
 		if ( denominator * distToPoint < 0 ) {
 
@@ -337,15 +337,15 @@ public class Ray
 
 	}
 
-	public Float distanceToPlane( Plane plane )
+	public Double distanceToPlane( Plane plane )
 	{
-		float denominator = plane.getNormal().dot( this.direction );
+		double denominator = plane.getNormal().dot( this.direction );
 		if ( denominator == 0 ) {
 
 			// line is coplanar, return origin
 			if ( plane.distanceToPoint( this.origin ) == 0 ) {
 
-				return 0.0f;
+				return 0.0;
 
 			}
 
@@ -355,7 +355,7 @@ public class Ray
 
 		}
 
-		float t = - ( this.origin.dot( plane.getNormal() ) + plane.getConstant() ) / denominator;
+		double t = - ( this.origin.dot( plane.getNormal() ) + plane.getConstant() ) / denominator;
 
 		// Return if the ray never intersects the plane
 
@@ -368,19 +368,19 @@ public class Ray
 		return intersectPlane(plane, new Vector3());
 	}
 
-	public Vector3 intersectPlane( Plane plane, Vector3 optionalTarget ) 
+	public Vector3 intersectPlane( Plane plane, Vector3 optionalTarget )
 	{
-		Float t = this.distanceToPlane( plane );
+		Double t = this.distanceToPlane( plane );
 
-		if( t == null ) 
+		if( t == null )
 		{
 			return null;
 		}
 
 		return this.at( t, optionalTarget );
 	}
-	
-	public boolean isIntersectionBox(Box3 box) 
+
+	public boolean isIntersectionBox(Box3 box)
 	{
 		return this.intersectBox( box, _v2 ) != null;
 	}
@@ -391,13 +391,13 @@ public class Ray
 	 * @param optionalTarget
 	 * @return
 	 */
-	public Vector3 intersectBox( Box3 box, Vector3 optionalTarget ) 
+	public Vector3 intersectBox( Box3 box, Vector3 optionalTarget )
 	{
-		float tmin,tmax,tymin,tymax,tzmin,tzmax;
+		double tmin,tmax,tymin,tymax,tzmin,tzmax;
 
-		float invdirx = 1.0f / this.direction.x,
-			invdiry = 1.0f / this.direction.y,
-			invdirz = 1.0f / this.direction.z;
+		double invdirx = 1.0 / this.direction.x,
+				invdiry = 1.0 / this.direction.y,
+				invdirz = 1.0 / this.direction.z;
 
 		if ( invdirx >= 0 ) {
 
@@ -453,12 +453,12 @@ public class Ray
 
 		return this.at( tmin >= 0 ? tmin : tmax, optionalTarget );
 	}
-	
-	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling) 
+
+	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling)
 	{
 		return intersectTriangle(a,b,c, backfaceCulling, new Vector3());
 	}
-	
+
 	/**
 	 * from http://www.geometrictools.com/LibMathematics/Intersection/Wm5IntrRay3Triangle3.cpp
 	 * @param a
@@ -481,17 +481,17 @@ public class Ray
 		//   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
 		//   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
 		//   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)
-		float DdN = this.direction.dot( _normal );
-		float sign;
+		double DdN = this.direction.dot( _normal );
+		double sign;
 
 		if ( DdN > 0 ) {
 
 			if ( backfaceCulling ) return null;
-			sign = 1.0f;
+			sign = 1.0;
 
 		} else if ( DdN < 0 ) {
 
-			sign = - 1.0f;
+			sign = - 1.0;
 			DdN = - DdN;
 
 		} else {
@@ -501,7 +501,7 @@ public class Ray
 		}
 
 		_diff.sub( this.origin, a );
-		float DdQxE2 = sign * this.direction.dot( _edge2.cross( _diff, _edge2 ) );
+		double DdQxE2 = sign * this.direction.dot( _edge2.cross( _diff, _edge2 ) );
 
 		// b1 < 0, no intersection
 		if ( DdQxE2 < 0 ) {
@@ -510,7 +510,7 @@ public class Ray
 
 		}
 
-		float DdE1xQ = sign * this.direction.dot( _edge1.cross( _diff ) );
+		double DdE1xQ = sign * this.direction.dot( _edge1.cross( _diff ) );
 
 		// b2 < 0, no intersection
 		if ( DdE1xQ < 0 ) {
@@ -527,7 +527,7 @@ public class Ray
 		}
 
 		// Line intersects triangle, check if ray does.
-		float QdN = - sign * _diff.dot( _normal );
+		double QdN = - sign * _diff.dot( _normal );
 
 		// t < 0, no intersection
 		if ( QdN < 0 ) {
@@ -541,7 +541,7 @@ public class Ray
 
 	}
 
-	public Ray apply( Matrix4 matrix4 ) 
+	public Ray apply( Matrix4 matrix4 )
 	{
 		this.direction.add( this.origin ).apply( matrix4 );
 		this.origin.apply( matrix4 );
@@ -551,12 +551,12 @@ public class Ray
 		return this;
 	}
 
-	public boolean equals( Ray ray ) 
+	public boolean equals( Ray ray )
 	{
 		return ray.origin.equals( this.origin ) && ray.direction.equals( this.direction );
 	}
 
-	public Ray clone() 
+	public Ray clone()
 	{
 		return new Ray().copy( this );
 	}

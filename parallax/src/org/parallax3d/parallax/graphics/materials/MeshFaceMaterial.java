@@ -33,26 +33,26 @@ import java.util.List;
 public final class MeshFaceMaterial extends Material 
 {
 	List<Material> materials;
-	
-	public MeshFaceMaterial() 
+
+	public MeshFaceMaterial()
 	{
 		this.materials = new ArrayList<Material>();
 	}
-	
+
 	/**
 	 * Creates a MeshFaceMaterial with the correct materials.
 	 * @param materials  The materials for the geometry.
 	 */
-	public MeshFaceMaterial(List<Material> materials) 
+	public MeshFaceMaterial(List<Material> materials)
 	{
 		this.materials = materials;
 	}
-	
+
 	/**
 	 * Get or set the materials for the geometry.
 	 * @return
 	 */
-	public List<Material> getMaterials() 
+	public List<Material> getMaterials()
 	{
 		return this.materials;
 	}
@@ -62,7 +62,7 @@ public final class MeshFaceMaterial extends Material
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public MeshFaceMaterial clone() {
 
 		MeshFaceMaterial material = new MeshFaceMaterial();

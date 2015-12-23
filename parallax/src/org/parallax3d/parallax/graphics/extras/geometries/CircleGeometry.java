@@ -45,48 +45,48 @@ public final class CircleGeometry extends Geometry
 	{
 		this(50, 8);
 	}
-	
-	public CircleGeometry(float radius, int segments)
+
+	public CircleGeometry(double radius, int segments)
 	{
-		this(radius, segments, 0, (float)(Math.PI * 2.0));
+		this(radius, segments, 0, Math.PI * 2.0);
 	}
 
-	public CircleGeometry(float radius, int segments, float thetaStart, float thetaLength)
+	public CircleGeometry(double radius, int segments, double thetaStart, double thetaLength)
 	{
-	    segments = Math.max( 3, segments );
+		segments = Math.max( 3, segments );
 
-   		Vector3 center = new Vector3();
-   		Vector2 centerUV = new Vector2( 0.5f, 0.5f );
-	    List<Vector2> uvs = new ArrayList<Vector2>();
+		Vector3 center = new Vector3();
+		Vector2 centerUV = new Vector2( 0.5, 0.5 );
+		List<Vector2> uvs = new ArrayList<Vector2>();
 
-	    this.getVertices().add(center);
-	    uvs.add( centerUV );
+		this.getVertices().add(center);
+		uvs.add( centerUV );
 
-	    for ( int i = 0; i <= segments; i ++ ) 
-	    {
-	    	Vector3 vertex = new Vector3();
+		for ( int i = 0; i <= segments; i ++ )
+		{
+			Vector3 vertex = new Vector3();
 
-	        vertex.setX(radius * (float)Math.cos( thetaStart + (float)i / segments * thetaLength ));
-	        vertex.setY(radius * (float)Math.sin( thetaStart + (float)i / segments * thetaLength ));
+			vertex.setX(radius * Math.cos( thetaStart + (double)i / segments * thetaLength ));
+			vertex.setY(radius * Math.sin( thetaStart + (double)i / segments * thetaLength ));
 
-	        this.getVertices().add( vertex );
-	        uvs.add( new Vector2( ( vertex.getX() / radius + 1.0f ) / 2.0f, - ( vertex.getY() / radius + 1.0f ) / 2.0f + 1.0f ) );
-	    }
+			this.getVertices().add( vertex );
+			uvs.add( new Vector2( ( vertex.getX() / radius + 1.0 ) / 2.0, - ( vertex.getY() / radius + 1.0 ) / 2.0 + 1.0 ) );
+		}
 
-	    Vector3 n = new Vector3( 0, 0, -1 );
+		Vector3 n = new Vector3( 0, 0, -1 );
 
-	    for ( int i = 1; i <= segments; i ++ ) 
-	    {
-	        int v1 = i;
-	        int v2 = i + 1 ;
-	        int v3 = 0;
+		for ( int i = 1; i <= segments; i ++ )
+		{
+			int v1 = i;
+			int v2 = i + 1 ;
+			int v3 = 0;
 
-	        this.getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n, n, n ) ) );
-	        this.getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( i ), uvs.get( i + 1 ), centerUV ) );
-	    }
+			this.getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n, n, n ) ) );
+			this.getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( i ), uvs.get( i + 1 ), centerUV ) );
+		}
 
-	    this.computeFaceNormals();
+		this.computeFaceNormals();
 
-	    setBoundingSphere( new Sphere(radius) );
+		setBoundingSphere( new Sphere(radius) );
 	}
 }

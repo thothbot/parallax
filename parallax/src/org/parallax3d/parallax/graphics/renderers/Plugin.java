@@ -34,11 +34,11 @@ public abstract class Plugin
 
 	private boolean isEnabled = true;
 	private boolean isRendering;
-	
+
 	protected WebGLRenderer renderer;
 	protected Scene scene;
 
-	public Plugin(WebGLRenderer renderer, Scene scene) 
+	public Plugin(WebGLRenderer renderer, Scene scene)
 	{
 		this.renderer = renderer;
 		this.scene = scene;
@@ -52,11 +52,11 @@ public abstract class Plugin
 	public Scene getScene() {
 		return this.scene;
 	}
-	
+
 	public boolean isMulty() {
 		return false;
 	}
-	
+
 	public boolean isEnabled() {
 		return isEnabled;
 	}
@@ -64,20 +64,20 @@ public abstract class Plugin
 	public void setEnabled(boolean isEnabled) {
 		this.isEnabled = isEnabled;
 	}
-	
+
 	public boolean isRendering() {
 		return this.isRendering;
 	}
-	
+
 	public void setRendering(boolean isRendering) {
 		this.isRendering = isRendering;
 	}
 
-	public abstract TYPE getType();
+	public abstract Plugin.TYPE getType();
 
 	public abstract void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight );
 
 	public void deallocate() {
-		
+
 	}
 }

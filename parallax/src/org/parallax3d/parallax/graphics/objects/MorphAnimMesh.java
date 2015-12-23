@@ -25,7 +25,7 @@ import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Mathematics;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 
 public class MorphAnimMesh extends Mesh
 {
@@ -33,7 +33,7 @@ public class MorphAnimMesh extends Mesh
 		public int start;
 		public int end;
 	}
-	
+
 	private int duration = 1000; // milliseconds
 	private boolean mirroredLoop = false;
 	private int time = 0;
@@ -43,37 +43,37 @@ public class MorphAnimMesh extends Mesh
 
 	private int direction = 1;
 	private boolean directionBackwards = false;
-	
+
 	//
 	private int startKeyframe;
 	private int endKeyframe;
 	private int length;
-		
-	private ObjectMap<String, Animation> animations;
-	
+
+	private FastMap<Animation> animations;
+
 	private String firstAnimation;
-	
+
 	public MorphAnimMesh(Geometry geometry, Material material)
-	{			
+	{
 		super(geometry, material);
 		// internals
 		this.setFrameRange( 0, geometry.getMorphTargets().size() - 1 );
 
 	}
-	
+
 	/**
 	 * Sets animation duration. Default: 1000ms.
-	 * 
+	 *
 	 * @param duration the millisecond value.
 	 */
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-	
+
 	public int getDuration() {
 		return this.duration;
 	}
-	
+
 	public int getTime() {
 		return time;
 	}
@@ -81,39 +81,40 @@ public class MorphAnimMesh extends Mesh
 	public void setTime(int time) {
 		this.time = time;
 	}
-		
-	public void setDirectionForward() 
+
+	public void setDirectionForward()
 	{
 		this.direction = 1;
 		this.directionBackwards = false;
 	}
-	
-	public void setDirectionBackward() 
+
+	public void setDirectionBackward()
 	{
 		this.direction = -1;
 		this.directionBackwards = true;
 	}
-		
+
 //	public void parseAnimations()
 //	{
 //		Geometry geometry = (Geometry) this.getGeometry();
 //
 //		if ( this.animations == null) {
-//			this.animations = new ObjectMap<String, Animation>();
+//			this.animations = new FastMap<Animation>();
 //		}
 //
 //		String firstAnimation = null;
 //
-//		RegExp pattern = RegExp.compile("([a-z]+)(\\d+)");
+//		Pattern pattern = Pattern.compile("([a-z]+)(\\d+)");
 //
 //		for ( int i = 0, il = geometry.getMorphTargets().size(); i < il; i ++ )
 //		{
-//			Geometry.MorphTarget morph = geometry.getMorphTargets().get(i);
+//			MorphTarget morph = geometry.getMorphTargets().get(i);
+//			Matcher result = pattern.matcher(morph.name);
 //
-//			for (MatchResult result = pattern.exec(morph.name); result != null; result = pattern.exec(morph.name))
+//			while (result.find())
 //			{
-//			    String label = result.getGroup(1);
-//			    String num = result.getGroup(2);
+//				String label = result.group(1);
+//				String num = result.group(2);
 //
 //				if ( ! this.animations.containsKey( label ) ) {
 //					Animation animation = new Animation();
@@ -135,121 +136,121 @@ public class MorphAnimMesh extends Mesh
 //
 //		this.firstAnimation = firstAnimation;
 //	}
-	
-	public void setAnimationLabel( String label, int start, int end ) 
+
+	public void setAnimationLabel( String label, int start, int end )
 	{
 		if ( this.animations == null) {
-			this.animations = new ObjectMap<String, Animation>();
+			this.animations = new FastMap<Animation>();
 		}
-		
+
 		Animation animation = new Animation();
 		animation.start = start;
 		animation.end = end;
-		
+
 		this.animations.put(label, animation);
 	}
 
-	public void playAnimation( String label, int fps ) 
+	public void playAnimation( String label, int fps )
 	{
 		Animation animation = this.animations.get( label );
 
-		if ( animation != null ) 
+		if ( animation != null )
 		{
 			this.setFrameRange( animation.start, animation.end );
 			this.duration = 1000 * ( ( animation.end - animation.start ) / fps );
 			this.time = 0;
 
-		} 
-		else 
+		}
+		else
 		{
 			Parallax.app.error("MorphanimMesh", "animation[" + label + "] undefined");
 		}
 	}
 
-	public void updateAnimation( float delta ) 
+	public void updateAnimation( double delta )
 	{
 		if(this.getGeometry() == null)
 			return;
-		
-		float frameTime = (float)this.duration / this.length;
+
+		double frameTime = (double)this.duration / this.length;
 
 		this.time += this.direction * delta;
 
-		if ( this.mirroredLoop ) 
+		if ( this.mirroredLoop )
 		{
-			if ( this.time > this.duration || this.time < 0 ) 
+			if ( this.time > this.duration || this.time < 0 )
 			{
 
 				this.direction *= -1;
 
-				if ( this.time > this.duration ) 
+				if ( this.time > this.duration )
 				{
 					this.time = this.duration;
 					this.directionBackwards = true;
 				}
 
-				if ( this.time < 0 ) 
+				if ( this.time < 0 )
 				{
 					this.time = 0;
 					this.directionBackwards = false;
 				}
 			}
 
-		} 
-		else 
+		}
+		else
 		{
 			this.time = this.time % this.duration;
 
-			if ( this.time < 0 ) 
+			if ( this.time < 0 )
 				this.time += this.duration;
 		}
 
-		int keyframe = this.startKeyframe + (int) Mathematics.clamp(
-				(int) Math.floor(this.time / frameTime), 0, this.length - 1);
+		int keyframe = this.startKeyframe + (int)Mathematics.clamp(
+				(int)Math.floor( this.time / frameTime ), 0, this.length - 1 );
 
-		if ( keyframe != this.currentKeyframe ) 
+		if ( keyframe != this.currentKeyframe )
 		{
-			this.morphTargetInfluences.set( this.lastKeyframe, 0.0f);
-			this.morphTargetInfluences.set( this.currentKeyframe, 1.0f);
+			this.morphTargetInfluences.set( this.lastKeyframe, 0.0);
+			this.morphTargetInfluences.set( this.currentKeyframe, 1.0);
 
-			this.morphTargetInfluences.set( keyframe, 0.0f );
+			this.morphTargetInfluences.set( keyframe, 0.0 );
 
 			this.lastKeyframe = this.currentKeyframe;
 			this.currentKeyframe = keyframe;
 		}
 
-		float mix = ( this.time % frameTime ) / frameTime;
-		
+		double mix = ( this.time % frameTime ) / frameTime;
+
 		if ( this.directionBackwards )
 			mix = 1 - mix;
 
 		this.morphTargetInfluences.set( this.currentKeyframe, mix);
-		this.morphTargetInfluences.set( this.lastKeyframe, 1.0f - mix);
+		this.morphTargetInfluences.set( this.lastKeyframe, 1.0 - mix);
 	}
-	
-	public void interpolateTargets ( int a, int b, float t ) {
 
-		List<Float> influences = this.morphTargetInfluences;
+	public void interpolateTargets ( int a, int b, double t ) {
+
+		List<Double> influences = this.morphTargetInfluences;
 
 		for ( int i = 0, l = influences.size(); i < l; i ++ ) {
 
-			influences.set( i, 0.0f );
+			influences.set( i, 0.0 );
 
 		}
 
-		if ( a > -1 ) influences.set( a, 1.0f - t);
+		if ( a > -1 ) influences.set( a, 1.0 - t);
 		if ( b > -1 ) influences.set( b, t);
 
 	}
-	
+
 	public MorphAnimMesh clone() {
 		return clone(new MorphAnimMesh((Geometry) getGeometry(), getMaterial()));
 	}
-	
+
 	public MorphAnimMesh clone( MorphAnimMesh object ) {
 
 		super.clone(object);
-		
+
 		object.duration = this.duration;
 		object.mirroredLoop = this.mirroredLoop;
 		object.time = this.time;
@@ -259,11 +260,11 @@ public class MorphAnimMesh extends Mesh
 
 		object.direction = this.direction;
 		object.directionBackwards = this.directionBackwards;
-		
+
 		return object;
 	}
-	
-	private void setFrameRange(int start, int end ) 
+
+	private void setFrameRange(int start, int end )
 	{
 		this.startKeyframe = start;
 		this.endKeyframe = end;

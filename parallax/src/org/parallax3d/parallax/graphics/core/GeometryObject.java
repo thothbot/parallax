@@ -20,7 +20,6 @@ package org.parallax3d.parallax.graphics.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
@@ -29,17 +28,19 @@ import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
-import org.parallax3d.parallax.system.BufferUtils;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 public abstract class GeometryObject extends Object3D
 {
 	protected AbstractGeometry geometry;
 	protected Material material;
-	
-	private double _oldLineWidth = -1;
-	
+
+	private float _oldLineWidth = -1;
+
+	private int[] tmpBufArray = {0};
+
 	public GeometryObject(AbstractGeometry geometry, Material material) {
 		this.geometry = geometry;
 		this.material = material;
@@ -64,24 +65,24 @@ public abstract class GeometryObject extends Object3D
 	{
 		this.material = material;
 	}
-	
+
 	/**
-	 * Abstract method to get intersections between a casted ray and this object. 
+	 * Abstract method to get intersections between a casted ray and this object.
 	 * Subclasses such as {@link Mesh}, {@link Line}, and {@link PointCloud} implement this method in order to participate in raycasting.
 	 * @param raycaster
 	 * @param intersects
 	 */
 	public abstract void raycast( Raycaster raycaster, List<Raycaster.Intersect> intersects);
-	
+
 	public abstract void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers);
-	
+
 //	/**
 //	 * object � an instance of Object3D
-//	 * Removes an object from the GL context and releases all the data (geometry, matrices...) 
-//	 * that the GL context keeps about the object, but it doesn't release textures or affect any 
+//	 * Removes an object from the GL context and releases all the data (geometry, matrices...)
+//	 * that the GL context keeps about the object, but it doesn't release textures or affect any
 //	 * JavaScript data.
 //	 */
-//	public void deallocate(WebGLRenderer renderer) 
+//	public void deallocate(WebGLRenderer renderer)
 //	{
 //		if ( ! isWebglInit ) return;
 //
@@ -96,40 +97,40 @@ public abstract class GeometryObject extends Object3D
 //
 //		deleteBuffers(renderer);
 //	}
-	
-	public void deleteBuffers(WebGLRenderer renderer) 
+
+	public void deleteBuffers(WebGLRenderer renderer)
 	{
 		renderer.getGL().glDeleteBuffer(geometry.__webglVertexBuffer);
 		renderer.getGL().glDeleteBuffer(geometry.__webglColorBuffer);
 
-//		renderer.getInfo().getMemory().geometries --;
+		renderer.getInfo().getMemory().geometries --;
 	}
 
-	public void setLineWidth (GL20 gl, float width )
+	public void setLineWidth ( GL20 gl, float width )
 	{
-		if ( width != this._oldLineWidth ) 
+		if ( width != this._oldLineWidth )
 		{
 			gl.glLineWidth(width);
 			this._oldLineWidth = width;
 		}
 	}
-		
+
 	protected void initCustomAttributes (GL20 gl, Geometry geometry )
-	{		
+	{
 		int nvertices = geometry.getVertices().size();
 		Material material = this.getMaterial();
 
-		ObjectMap<String, Attribute> attributes = material.getShader().getAttributes();
-		
-		if ( attributes != null) 
+		FastMap<Attribute> attributes = material.getShader().getAttributes();
+
+		if ( attributes != null)
 		{
-			if ( geometry.__webglCustomAttributesList == null ) 
+			if ( geometry.__webglCustomAttributesList == null )
 				geometry.__webglCustomAttributesList = new ArrayList<Attribute>();
 
-			for ( String a : attributes.keys() )
+			for ( String a : attributes.keySet() )
 			{
 				Attribute attribute = attributes.get( a );
-				if( ! attribute.__webglInitialized || attribute.createUniqueBuffers ) 
+				if( ! attribute.__webglInitialized || attribute.createUniqueBuffers )
 				{
 					attribute.__webglInitialized = true;
 
@@ -142,7 +143,7 @@ public abstract class GeometryObject extends Object3D
 
 					attribute.size = size;
 
-					attribute.array = BufferUtils.newFloatBuffer( nvertices * size );
+					attribute.array = Float32Array.create(nvertices * size);
 
 					attribute.buffer = gl.glGenBuffer();
 					attribute.belongsToAttribute = a;

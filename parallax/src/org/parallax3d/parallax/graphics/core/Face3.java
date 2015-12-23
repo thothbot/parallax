@@ -54,7 +54,7 @@ public class Face3 {
 	// protected List<Material> materials;
 	protected int materialIndex = 0;
 	protected List<Vector4> vertexTangents;
-	
+
 	// Special case used in Geometry.computeMorphNormals()
 	public Vector3 __originalFaceNormal;
 	public List<Vector3> __originalVertexNormals;
@@ -65,10 +65,10 @@ public class Face3 {
 		this.normal = normal;
 	}
 
-	
+
 	/**
 	 * Face3 constructor
-	 * 
+	 *
 	 * @param a
 	 *            the Vertex A index.
 	 * @param b
@@ -86,7 +86,7 @@ public class Face3 {
 
 	/**
 	 * Face3 constructor
-	 * 
+	 *
 	 * @param a
 	 *            the Vertex A index.
 	 * @param b
@@ -104,7 +104,7 @@ public class Face3 {
 
 	/**
 	 * Face3 constructor
-	 * 
+	 *
 	 * @param a
 	 *            the Vertex A index.
 	 * @param b
@@ -126,7 +126,7 @@ public class Face3 {
 
 	/**
 	 * Face3 constructor
-	 * 
+	 *
 	 * @param a
 	 *            the Vertex A index.
 	 * @param b
@@ -141,7 +141,7 @@ public class Face3 {
 	 *            the Material index.
 	 */
 	public Face3(int a, int b, int c, List<Vector3> normals,
-			List<Color> colors, int materialIndex) {
+				 List<Color> colors, int materialIndex) {
 		this(a, b, c);
 
 		this.setVertexNormals(normals);
@@ -152,7 +152,7 @@ public class Face3 {
 
 	/**
 	 * Face3 constructor
-	 * 
+	 *
 	 * @param a
 	 *            the Vertex A index.
 	 * @param b
@@ -167,7 +167,7 @@ public class Face3 {
 	 *            the Material index.
 	 */
 	public Face3(int a, int b, int c, Vector3 normal, Color color,
-			int materialIndex) {
+				 int materialIndex) {
 		this(a, b, c);
 
 		this.setNormal(normal instanceof Vector3 ? normal : new Vector3());

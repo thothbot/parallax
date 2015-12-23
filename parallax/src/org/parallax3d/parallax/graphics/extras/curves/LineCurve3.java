@@ -29,14 +29,14 @@ public class LineCurve3 extends Curve
 	public Vector3 v1;
 	public Vector3 v2;
 
-	public LineCurve3(Vector3 v1, Vector3 v2) 
+	public LineCurve3(Vector3 v1, Vector3 v2)
 	{
 		this.v1 = v1;
 		this.v2 = v2;
 	}
 
 	@Override
-	public Vector3 getPoint(float t)
+	public Vector3 getPoint(double t)
 	{
 		Vector3 point = this.v2.clone();
 		point.sub(this.v1);

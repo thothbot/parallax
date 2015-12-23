@@ -31,23 +31,23 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.TetrahedronGeometry")
 public class TetrahedronGeometry extends PolyhedronGeometry
 {
-	public TetrahedronGeometry( float radius, int detail )
+	public TetrahedronGeometry( double radius, int detail )
 	{
 		super( radius, detail );
 	}
 
 	@Override
-	protected float[][] getGeometryVertices()
+	protected double[][] getGeometryVertices()
 	{
-		float[][] vertices = {
-				{ 1.0f,  1.0f,  1.0f }, { -1.0f, -1.0f, 1.0f }, { -1.0f, 1.0f, -1.0f }, { 1.0f, -1.0f, -1.0f }
+		double[][] vertices = {
+				{ 1.0,  1.0,  1.0 }, { -1.0, -1.0, 1.0 }, { -1.0, 1.0, -1.0 }, { 1.0, -1.0, -1.0 }
 		};
 
 		return vertices;
 	}
 
 	@Override
-	protected int[][] getGeometryFaces() 
+	protected int[][] getGeometryFaces()
 	{
 		int[][] faces = {
 				{ 2, 1, 0 }, { 0, 3, 2 }, { 1, 3, 0 }, { 2, 3, 1 }

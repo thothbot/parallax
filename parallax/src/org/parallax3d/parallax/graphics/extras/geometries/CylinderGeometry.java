@@ -40,46 +40,46 @@ import org.parallax3d.parallax.math.Vector3;
 public final class CylinderGeometry extends Geometry
 {
 
-	public CylinderGeometry() 
+	public CylinderGeometry()
 	{
 		this(20, 20, 100, 8, 1);
 	}
-	
-	public CylinderGeometry(float radiusTop, float radiusBottom, float height, int segmentsRadius, int segmentsHeight)
+
+	public CylinderGeometry(double radiusTop, double radiusBottom, double height, int segmentsRadius, int segmentsHeight)
 	{
-		this(radiusTop, radiusBottom, height, segmentsRadius, segmentsHeight, false, 0, (float)(Math.PI * 2.0));
+		this(radiusTop, radiusBottom, height, segmentsRadius, segmentsHeight, false, 0, Math.PI * 2);
 	}
 
-	public CylinderGeometry(float radiusTop, float radiusBottom, float height, int radialSegments, int heightSegments, boolean openEnded, float thetaStart, float thetaLength) 
+	public CylinderGeometry(double radiusTop, double radiusBottom, double height, int radialSegments, int heightSegments, boolean openEnded, double thetaStart, double thetaLength)
 	{
 		super();
 
-		float heightHalf = height / 2.0f;
+		double heightHalf = height / 2.0;
 //		int segmentsX = radialSegments;
 //		int segmentsY = heightSegments;
 
-		int x = 0, y = 0; 
-		
+		int x = 0, y = 0;
+
 		List<List<Integer>> vertices = new ArrayList<List<Integer>>();
 		List<List<Vector2>> uvs = new ArrayList<List<Vector2>>();
 
-		for ( y = 0; y <= heightSegments; y ++ ) 
+		for ( y = 0; y <= heightSegments; y ++ )
 		{
 			List<Integer> verticesRow = new ArrayList<Integer>();
 			List<Vector2> uvsRow = new ArrayList<Vector2>();
 
-			float v = (float)y / (float)heightSegments;
-			float radius = v * ( radiusBottom - radiusTop ) + radiusTop;
+			double v = (double)y / (double)heightSegments;
+			double radius = v * ( radiusBottom - radiusTop ) + radiusTop;
 
-			for ( x = 0; x <= radialSegments; x ++ ) 
+			for ( x = 0; x <= radialSegments; x ++ )
 			{
-				float u = (float)x / (float)radialSegments;
+				double u = (double)x / (double)radialSegments;
 
 				Vector3 vertex = new Vector3();
-				
-				vertex.setX(radius * (float)Math.sin( u * thetaLength + thetaStart ));
+
+				vertex.setX(radius * Math.sin( u * thetaLength + thetaStart ));
 				vertex.setY(- v * height + heightHalf);
-				vertex.setZ(radius * (float)Math.cos( u * thetaLength + thetaStart ));
+				vertex.setZ(radius * Math.cos( u * thetaLength + thetaStart ));
 
 				getVertices().add( vertex );
 
@@ -92,28 +92,28 @@ public final class CylinderGeometry extends Geometry
 			uvs.add( uvsRow );
 		}
 
-		float tanTheta = ( radiusBottom - radiusTop ) / height;
+		double tanTheta = ( radiusBottom - radiusTop ) / height;
 		Vector3 na, nb;
 
-		for ( x = 0; x < radialSegments; x ++ ) 
+		for ( x = 0; x < radialSegments; x ++ )
 		{
-			if ( radiusTop != 0 ) 
+			if ( radiusTop != 0 )
 			{
 				na = getVertices().get( vertices.get( 0 ).get( x ) ).clone();
 				nb = getVertices().get( vertices.get( 0 ).get( x + 1 ) ).clone();
-			} 
-			else 
+			}
+			else
 			{
 				na = getVertices().get( vertices.get( 1 ).get( x ) ).clone();
 				nb = getVertices().get( vertices.get( 1 ).get( x + 1 ) ).clone();
 			}
 
-			na.setY( (float)Math.sqrt( na.getX() * na.getX() + na.getZ() * na.getZ() ) * tanTheta );
+			na.setY( Math.sqrt( na.getX() * na.getX() + na.getZ() * na.getZ() ) * tanTheta );
 			na.normalize();
-			nb.setY( (float)Math.sqrt( nb.getX() * nb.getX() + nb.getZ() * nb.getZ() ) * tanTheta );
+			nb.setY( Math.sqrt( nb.getX() * nb.getX() + nb.getZ() * nb.getZ() ) * tanTheta );
 			nb.normalize();
 
-			for ( y = 0; y < heightSegments; y ++ ) 
+			for ( y = 0; y < heightSegments; y ++ )
 			{
 				int v1 = vertices.get( y ).get( x );
 				int v2 = vertices.get( y + 1 ).get( x );
@@ -129,7 +129,7 @@ public final class CylinderGeometry extends Geometry
 				Vector2 uv2 = uvs.get( y + 1 ).get( x ).clone();
 				Vector2 uv3 = uvs.get( y + 1 ).get( x + 1 ).clone();
 				Vector2 uv4 = uvs.get( y ).get( x + 1 ).clone();
-				
+
 				this.getFaces().add( new Face3( v1, v2, v4, Arrays.asList( n1, n2, n4 ) ) );
 				this.getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv4 ) );
 
@@ -142,11 +142,11 @@ public final class CylinderGeometry extends Geometry
 
 		// top cap
 
-		if ( !openEnded && radiusTop > 0 ) 
+		if ( !openEnded && radiusTop > 0 )
 		{
-			getVertices().add( new Vector3( 0.0f, heightHalf, 0.0f ) );
+			getVertices().add( new Vector3( 0.0, heightHalf, 0.0 ) );
 
-			for ( x = 0; x < radialSegments; x ++ ) 
+			for ( x = 0; x < radialSegments; x ++ )
 			{
 				int v1 = vertices.get( 0 ).get( x );
 				int v2 = vertices.get( 0 ).get( x + 1 );
@@ -167,19 +167,19 @@ public final class CylinderGeometry extends Geometry
 
 		// bottom cap
 
-		if ( !openEnded && radiusBottom > 0 ) 
+		if ( !openEnded && radiusBottom > 0 )
 		{
 			getVertices().add( new Vector3( 0, - heightHalf, 0 ) );
 
-			for ( x = 0; x < radialSegments; x ++ ) 
+			for ( x = 0; x < radialSegments; x ++ )
 			{
 				int v1 = vertices.get( y ).get( x + 1 );
 				int v2 = vertices.get( y ).get( x );
 				int v3 = getVertices().size() - 1;
 
-				Vector3 n1 = new Vector3( 0.0f, - 1.0f, 0.0f );
-				Vector3 n2 = new Vector3( 0.0f, - 1.0f, 0.0f );
-				Vector3 n3 = new Vector3( 0.0f, - 1.0f, 0.0f );
+				Vector3 n1 = new Vector3( 0.0, - 1.0, 0.0 );
+				Vector3 n2 = new Vector3( 0.0, - 1.0, 0.0 );
+				Vector3 n3 = new Vector3( 0.0, - 1.0, 0.0 );
 
 				Vector2 uv1 = uvs.get( y ).get( x + 1 ).clone();
 				Vector2 uv2 = uvs.get( y ).get( x ).clone();

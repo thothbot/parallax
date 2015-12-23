@@ -30,7 +30,7 @@ import org.parallax3d.parallax.math.Matrix4;
  */
 public class FrenetFrames
 {
-	private static float epsilon = 0.0001f;
+	private static double epsilon = 0.0001;
 
 	// expose internals
 	private List<Vector3> tangents;
@@ -52,11 +52,11 @@ public class FrenetFrames
 		int numpoints = segments + 1;
 
 		// compute the tangent vectors for each segment on the path
-		for ( int i = 0; i < numpoints; i++ ) 
+		for ( int i = 0; i < numpoints; i++ )
 		{
-			float u = i / (float)( numpoints - 1 );
+			double u = i / (double)( numpoints - 1 );
 
-			Vector3 vec = (Vector3) path.getTangentAt( u ); 
+			Vector3 vec = (Vector3) path.getTangentAt( u );
 			tangents.add(vec.normalize());
 		}
 
@@ -66,19 +66,19 @@ public class FrenetFrames
 		Vector3 vec = new Vector3();
 
 		// compute the slowly-varying normal and binormal vectors for each segment on the path
-		for ( int i = 1; i < numpoints; i++ ) 
+		for ( int i = 1; i < numpoints; i++ )
 		{
 			normals.add( i, normals.get( i - 1 ).clone() );
 
 			binormals.add( i, binormals.get( i - 1 ).clone() );
 			vec.cross( tangents.get( i - 1 ), tangents.get( i ) );
 
-			if ( vec.length() > epsilon ) 
+			if ( vec.length() > epsilon )
 			{
 				vec.normalize();
-				float aCos =  tangents.get( i - 1 ).dot( tangents.get( i ) );
-				float theta = (float)Math.acos( aCos > 1 ? 1.0 : aCos );
-			
+				double aCos =  tangents.get( i - 1 ).dot( tangents.get( i ) );
+				double theta = Math.acos( aCos > 1 ? 1.0 : aCos );
+
 				normals.get( i ).apply( mat.makeRotationAxis( vec, theta ) );
 			}
 
@@ -87,15 +87,15 @@ public class FrenetFrames
 		}
 
 		// if the curve is closed, postprocess the vectors so the first and last normal vectors are the same
-		if ( closed ) 
+		if ( closed )
 		{
-			float theta = (float)Math.acos( normals.get( 0 ).dot( normals.get( numpoints - 1 ) ) );
-			theta /= (float)( numpoints - 1 );
+			double theta = Math.acos( normals.get( 0 ).dot( normals.get( numpoints - 1 ) ) );
+			theta /= (double)( numpoints - 1 );
 
 			if ( tangents.get( 0 ).dot( vec.cross( normals.get( 0 ), normals.get( numpoints - 1 ) ) ) > 0 )
 				theta = -theta;
 
-			for ( int i = 1; i < numpoints; i++ ) 
+			for ( int i = 1; i < numpoints; i++ )
 			{
 				// twist a little...
 				normals.get( i ) .apply( mat.makeRotationAxis( tangents.get( i ), theta * i ) );
@@ -124,7 +124,7 @@ public class FrenetFrames
 		initialNormal1(new Vector3( 0, 0, 1 ));
 	}
 
-	private void initialNormal1(Vector3 lastBinormal) 
+	private void initialNormal1(Vector3 lastBinormal)
 	{
 		// fixed start binormal. Has dangers of 0 vectors
 		normals.add( 0, new Vector3() );
@@ -134,7 +134,7 @@ public class FrenetFrames
 		binormals.get( 0 ).cross( tangents.get( 0 ), normals.get( 0 ) ).normalize();
 	}
 
-	private void initialNormal2() 
+	private void initialNormal2()
 	{
 		// This uses the Frenet-Serret formula for deriving binormal
 		Vector3 t2 = (Vector3) path.getTangentAt( epsilon );
@@ -151,18 +151,18 @@ public class FrenetFrames
 	 * select an initial normal vector perpenicular to the first tangent vector,
 	 * and in the direction of the smallest tangent xyz component
 	 */
-	private void initialNormal3() 
+	private void initialNormal3()
 	{
 		normals.add( 0, new Vector3() );
 		binormals.add( 0, new Vector3() );
-		float smallest = Float.MAX_VALUE;
+		double smallest = Double.MAX_VALUE;
 
-		float tx = Math.abs( tangents.get( 0 ).getX() );
-		float ty = Math.abs( tangents.get( 0 ).getY() );
-		float tz = Math.abs( tangents.get( 0 ).getZ() );
+		double tx = Math.abs( tangents.get( 0 ).getX() );
+		double ty = Math.abs( tangents.get( 0 ).getY() );
+		double tz = Math.abs( tangents.get( 0 ).getZ() );
 
 		Vector3 normal = new Vector3();
-		if ( tx <= smallest ) 
+		if ( tx <= smallest )
 		{
 			smallest = tx;
 			normal.set( 1, 0, 0 );

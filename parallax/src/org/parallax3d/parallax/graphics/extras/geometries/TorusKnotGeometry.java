@@ -38,49 +38,49 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 public final class TorusKnotGeometry extends Geometry
 {
 
-	public TorusKnotGeometry() 
+	public TorusKnotGeometry()
 	{
 		this(200, 40, 64, 8);
 	}
-	
+
 	public TorusKnotGeometry(int radius)
 	{
 		this(radius, 40, 64, 8);
 	}
-	
+
 	public TorusKnotGeometry(int radius, int tube, int segmentsR, int segmentsT)
 	{
 		this(radius, tube, segmentsR, segmentsT, 2, 3, 1);
 	}
-			
-	public TorusKnotGeometry(int radius, int tube, int radialSegments, int tubularSegments, int p, int q, int heightScale ) 
+
+	public TorusKnotGeometry(int radius, int tube, int radialSegments, int tubularSegments, int p, int q, int heightScale )
 	{
 		super();
-		
+
 		int[][] grid = new int[radialSegments][];
 
 		Vector3 tang = new Vector3();
 		Vector3 n = new Vector3();
 		Vector3 bitan = new Vector3();
 
-		for ( int i = 0; i < radialSegments; ++ i )  	
+		for ( int i = 0; i < radialSegments; ++ i )
 		{
 			grid[ i ] = new int[tubularSegments];
-			float u = i / (float)radialSegments * 2.0f * p * (float)Math.PI;
+			double u = i / (double)radialSegments * 2.0 * p * Math.PI;
 			Vector3 p1 = getPos( u,        q, p, radius, heightScale );
-			Vector3 p2 = getPos( u + 0.01f, q, p, radius, heightScale );
+			Vector3 p2 = getPos( u + 0.01, q, p, radius, heightScale );
 			tang.sub( p2, p1 );
 			n.add( p2, p1 );
 			bitan.cross( tang, n );
 			n.cross( bitan, tang );
 			bitan.normalize();
 			n.normalize();
-			
-			for ( int j = 0; j < tubularSegments; ++ j ) 
+
+			for ( int j = 0; j < tubularSegments; ++ j )
 			{
-				float v = j / (float)tubularSegments * 2.0f * (float)Math.PI;
-				float cx = -tube * (float)Math.cos( v ); // TODO: Hack: Negating it so it faces outside.
-				float cy = tube * (float)Math.sin( v );
+				double v = j / (double)tubularSegments * 2.0 * Math.PI;
+				double cx = -tube * Math.cos( v ); // TODO: Hack: Negating it so it faces outside.
+				double cy = tube * Math.sin( v );
 
 				Vector3 pos = new Vector3();
 				pos.setX( p1.getX() + cx * n.getX() + cy * bitan.getX() );
@@ -90,10 +90,10 @@ public final class TorusKnotGeometry extends Geometry
 				grid[ i ][ j ] = vert( pos );
 			}
 		}
-		
-		for ( int i = 0; i < radialSegments; ++ i ) 
+
+		for ( int i = 0; i < radialSegments; ++ i )
 		{
-			for ( int j = 0; j < tubularSegments; ++ j ) 
+			for ( int j = 0; j < tubularSegments; ++ j )
 			{
 				int ip = ( i + 1 ) % radialSegments;
 				int jp = ( j + 1 ) % tubularSegments;
@@ -103,11 +103,11 @@ public final class TorusKnotGeometry extends Geometry
 				int c = grid[ ip ][ jp ];
 				int d = grid[ i ][ jp ];
 
-				Vector2 uva = new Vector2(           i / (float)radialSegments,           j / (float)tubularSegments );
-				Vector2 uvb = new Vector2( ( i + 1.0f ) / (float)radialSegments,           j / (float)tubularSegments );
-				Vector2 uvc = new Vector2( ( i + 1.0f ) / (float)radialSegments, ( j + 1.0f ) / (float)tubularSegments );
-				Vector2 uvd = new Vector2(           i / (float)radialSegments, ( j + 1.0f ) / (float)tubularSegments );
-		
+				Vector2 uva = new Vector2(           i / (double)radialSegments,           j / (double)tubularSegments );
+				Vector2 uvb = new Vector2( ( i + 1.0 ) / (double)radialSegments,           j / (double)tubularSegments );
+				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)radialSegments, ( j + 1.0 ) / (double)tubularSegments );
+				Vector2 uvd = new Vector2(           i / (double)radialSegments, ( j + 1.0 ) / (double)tubularSegments );
+
 				getFaces().add( new Face3( a, b, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvd ) );
 
@@ -120,24 +120,24 @@ public final class TorusKnotGeometry extends Geometry
 		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}
-	
-	private int vert( Vector3 pos ) 
+
+	private int vert( Vector3 pos )
 	{
 		getVertices().add( pos );
 		return getVertices().size() - 1;
 	}
 
-	private Vector3 getPos( float u, int in_q, int in_p, int radius, int heightScale ) 
+	private Vector3 getPos( double u, int in_q, int in_p, int radius, int heightScale )
 	{
-		float cu = (float)Math.cos( u );
-		float su = (float)Math.sin( u );
-		float quOverP = in_q / (float)in_p * u;
-		float cs = (float)Math.cos( quOverP );
+		double cu = Math.cos( u );
+		double su = Math.sin( u );
+		double quOverP = in_q / (double)in_p * u;
+		double cs = Math.cos( quOverP );
 
-		return new Vector3( 
-			radius * ( 2.0f + cs ) * cu * 0.5f,
-			radius * ( 2.0f + cs ) * su * 0.5f,
-			heightScale * radius * (float)Math.sin( quOverP ) * 0.5f
+		return new Vector3(
+				radius * ( 2.0 + cs ) * cu * 0.5,
+				radius * ( 2.0 + cs ) * su * 0.5,
+				heightScale * radius * Math.sin( quOverP ) * 0.5
 		);
 	}
 }

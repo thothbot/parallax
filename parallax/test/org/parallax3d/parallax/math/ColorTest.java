@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 
 public class ColorTest
 {
-	private static float DELTA = 0.0f;
+	private static double DELTA = 0.0;
 
 	@Test
 	public void testColor()
@@ -54,10 +54,10 @@ public class ColorTest
 	public void testSetRGB()
 	{
 		Color c = new Color();
-	    c.setRGB(1.0f, 0.25f, 0.1f);
-	    assertEquals( 1.0f, c.getR(), DELTA );
-	    assertEquals( 0.25f, c.getG(), DELTA );
-	    assertEquals( 0.1f, c.getB(), DELTA );
+	    c.setRGB(1.0, 0.25, 0.1);
+	    assertEquals( 1.0, c.getR(), DELTA );
+	    assertEquals( 0.25, c.getG(), DELTA );
+	    assertEquals( 0.1, c.getB(), DELTA );
 	}
 
 	@Test

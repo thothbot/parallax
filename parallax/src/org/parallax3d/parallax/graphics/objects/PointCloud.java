@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
+import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Vector3;
@@ -35,8 +36,9 @@ import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
 import org.parallax3d.parallax.system.gl.enums.BufferTarget;
 import org.parallax3d.parallax.system.gl.enums.BufferUsage;
@@ -44,18 +46,18 @@ import org.parallax3d.parallax.system.gl.enums.BufferUsage;
 public class PointCloud extends GeometryObject
 {
 	public static double RAYCASTER_THRESHOLD = 1.0;
-	
+
 	private boolean sortParticles = false;
-	
+
 	private static PointCloudMaterial defaultMaterial = new PointCloudMaterial();
 	static {
 		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 	};
-	
+
 	public PointCloud() {
 		this(new Geometry());
 	}
-	
+
 	public PointCloud(AbstractGeometry geometry)
 	{
 		this(geometry, PointCloud.defaultMaterial);
@@ -65,7 +67,7 @@ public class PointCloud extends GeometryObject
 	{
 		super(geometry, material);
 	}
-		
+
 	public boolean isSortParticles() {
 		return sortParticles;
 	}
@@ -96,19 +98,19 @@ public class PointCloud extends GeometryObject
 
 		Vector3 position = new Vector3();
 
-		if ( geometry instanceof BufferGeometry) {
+		if ( geometry instanceof BufferGeometry ) {
 
 			BufferGeometry bGeometry = (BufferGeometry)geometry;
-			FloatBuffer positions = (FloatBuffer)bGeometry.getAttribute("position").getArray();
+			Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 
 			if ( bGeometry.getAttribute("index") != null ) {
 
-				IntBuffer indices = (IntBuffer)bGeometry.getAttribute("index").getArray();
+				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
 				List<DrawCall> offsets = bGeometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
-					DrawCall offset = new DrawCall(0, indices.array().length, 0 );
+					BufferGeometry.DrawCall offset = new BufferGeometry.DrawCall(0, indices.getLength(), 0 );
 
 					offsets.add( offset );
 
@@ -134,14 +136,14 @@ public class PointCloud extends GeometryObject
 
 			} else {
 
-				int pointCount = positions.array().length / 3;
+				int pointCount = positions.getLength() / 3;
 
 				for ( int i = 0; i < pointCount; i ++ ) {
 
 					position.set(
-						positions.get( 3 * i ),
-						positions.get( 3 * i + 1 ),
-						positions.get( 3 * i + 2 )
+							positions.get( 3 * i ),
+							positions.get( 3 * i + 1 ),
+							positions.get( 3 * i + 2 )
 					);
 
 					testPoint( raycaster, intersects, ray, position, i );
@@ -162,7 +164,7 @@ public class PointCloud extends GeometryObject
 
 		}
 	}
-	
+
 	private void testPoint(Raycaster raycaster, List<Raycaster.Intersect> intersects, Ray ray, Vector3 point, int index ) {
 
 		double rayPointDistance = ray.distanceToPoint( point );
@@ -180,16 +182,16 @@ public class PointCloud extends GeometryObject
 			intersect.distanceToRay = rayPointDistance;
 			intersect.point = intersectPoint.clone();
 			intersect.object = this;
-			intersects.add( intersect );			
+			intersects.add( intersect );
 		}
 	}
-	
+
 	public PointCloud clone() {
 		return clone(new PointCloud( (Geometry) this.getGeometry(), (PointCloudMaterial) this.getMaterial() ));
 	}
-	
+
 	public PointCloud clone( PointCloud object ) {
-		
+
 		super.clone(object);
 
 		object.sortParticles = this.sortParticles;
@@ -197,59 +199,59 @@ public class PointCloud extends GeometryObject
 		return object;
 
 	}
-	
+
 	@Override
 	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers)
 	{
 		GL20 gl = renderer.getGL();
-//		WebGlRendererInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 
 		gl.glDrawArrays(BeginMode.POINTS.getValue(), 0, geometryBuffer.__webglParticleCount);
 
-//		info.getRender().calls ++;
-//		info.getRender().points += geometryBuffer.__webglParticleCount;
+		info.getRender().calls ++;
+		info.getRender().points += geometryBuffer.__webglParticleCount;
 	}
-	
+
 	public void initBuffers (GL20 gl)
 	{
 		Geometry geometry = (Geometry)getGeometry();
 		int nvertices = geometry.getVertices().size();
 
-		geometry.__vertexArray = BufferUtils.newFloatBuffer( nvertices * 3 );
-		geometry.__colorArray = BufferUtils.newFloatBuffer(nvertices * 3);
-	
+		geometry.__vertexArray = Float32Array.create(nvertices * 3);
+		geometry.__colorArray = Float32Array.create(nvertices * 3);
+
 		geometry.__webglParticleCount = nvertices;
 
 		initCustomAttributes ( gl, geometry );
 	}
-	
-	public void createBuffers ( WebGLRenderer renderer) 
+
+	public void createBuffers ( WebGLRenderer renderer)
 	{
 		Geometry geometry = (Geometry)getGeometry();
+		WebGlRendererInfo info = renderer.getInfo();
 		GL20 gl = renderer.getGL();
-//		WebGlRendererInfo info = renderer.getInfo();
-		
+
 		geometry.__webglVertexBuffer = gl.glGenBuffer();
 		geometry.__webglColorBuffer = gl.glGenBuffer();
 
-//		info.getMemory().geometries ++;
+		info.getMemory().geometries ++;
 	}
-	
+
 	public void setBuffers(WebGLRenderer renderer, BufferUsage hint)
 	{
 
 		GL20 gl = renderer.getGL();
 
 		Geometry geometry = (Geometry)getGeometry();
-		
+
 		List<Vector3> vertices = geometry.getVertices();
 		int vl = vertices.size();
 
 		List<Color> colors = geometry.getColors();
 		int cl = colors.size();
 
-		FloatBuffer vertexArray = geometry.__vertexArray;
-		FloatBuffer colorArray = geometry.__colorArray;
+		Float32Array vertexArray = geometry.__vertexArray;
+		Float32Array colorArray = geometry.__colorArray;
 
 //		Float32Array sortArray = geometry.__sortArray;
 
@@ -284,9 +286,9 @@ public class PointCloud extends GeometryObject
 
 				int offset = v * 3;
 
-				vertexArray.put(offset, vertex.getX());
-				vertexArray.put(offset + 1, vertex.getY());
-				vertexArray.put(offset + 2, vertex.getZ());
+				vertexArray.set(offset, vertex.getX());
+				vertexArray.set(offset + 1, vertex.getY());
+				vertexArray.set(offset + 2, vertex.getZ());
 
 			}
 
@@ -297,9 +299,9 @@ public class PointCloud extends GeometryObject
 //				Color color = colors[ sortArray[ c ][ 1 ] ];
 				Color color = colors.get(c);
 
-				colorArray.put(offset, color.getR());
-				colorArray.put(offset + 1, color.getG());
-				colorArray.put(offset + 2, color.getB());
+				colorArray.set(offset, color.getR());
+				colorArray.set(offset + 1, color.getG());
+				colorArray.set(offset + 2, color.getB());
 
 			}
 
@@ -322,7 +324,7 @@ public class PointCloud extends GeometryObject
 //							index = sortArray[ ca ][ 1 ];
 							int index = ca;
 
-							customAttribute.array.put(ca, (Float) customAttribute.getValue().get(index));
+							customAttribute.array.set(ca, (Double) customAttribute.getValue().get(index));
 
 						}
 
@@ -335,8 +337,8 @@ public class PointCloud extends GeometryObject
 
 							Vector2 value = (Vector2)customAttribute.getValue().get( index );
 
-							customAttribute.array.put(offset, value.getX());
-							customAttribute.array.put(offset + 1, value.getY());
+							customAttribute.array.set(offset, value.getX());
+							customAttribute.array.set(offset + 1, value.getY());
 
 							offset += 2;
 
@@ -353,9 +355,9 @@ public class PointCloud extends GeometryObject
 
 								Color value = (Color)customAttribute.getValue().get( index );
 
-								customAttribute.array.put(offset, value.getR());
-								customAttribute.array.put(offset + 1, value.getG());
-								customAttribute.array.put(offset + 2, value.getB());
+								customAttribute.array.set(offset, value.getR());
+								customAttribute.array.set(offset + 1, value.getG());
+								customAttribute.array.set(offset + 2, value.getB());
 
 								offset += 3;
 
@@ -370,9 +372,9 @@ public class PointCloud extends GeometryObject
 
 								Vector3 value = (Vector3)customAttribute.getValue().get( index );
 
-								customAttribute.array.put(offset, value.getX());
-								customAttribute.array.put(offset + 1, value.getY());
-								customAttribute.array.put(offset + 2, value.getZ());
+								customAttribute.array.set(offset, value.getX());
+								customAttribute.array.set(offset + 1, value.getY());
+								customAttribute.array.set(offset + 2, value.getZ());
 
 								offset += 3;
 
@@ -389,10 +391,10 @@ public class PointCloud extends GeometryObject
 
 							Vector4 value = (Vector4)customAttribute.getValue().get( index );
 
-							customAttribute.array.put(offset, value.getX());
-							customAttribute.array.put(offset + 1, value.getY());
-							customAttribute.array.put(offset + 2, value.getZ());
-							customAttribute.array.put(offset + 3, value.getW());
+							customAttribute.array.set(offset, value.getX());
+							customAttribute.array.set(offset + 1, value.getY());
+							customAttribute.array.set(offset + 2, value.getZ());
+							customAttribute.array.set(offset + 3, value.getW());
 
 							offset += 4;
 
@@ -414,9 +416,9 @@ public class PointCloud extends GeometryObject
 
 					int offset = v * 3;
 
-					vertexArray.put(offset, vertex.getX());
-					vertexArray.put(offset + 1, vertex.getY());
-					vertexArray.put(offset + 2, vertex.getZ());
+					vertexArray.set(offset, vertex.getX());
+					vertexArray.set(offset + 1, vertex.getY());
+					vertexArray.set(offset + 2, vertex.getZ());
 
 				}
 
@@ -430,9 +432,9 @@ public class PointCloud extends GeometryObject
 
 					int offset = c * 3;
 
-					colorArray.put(offset, color.getR());
-					colorArray.put(offset + 1, color.getG());
-					colorArray.put(offset + 2, color.getB());
+					colorArray.set(offset, color.getR());
+					colorArray.set(offset + 1, color.getG());
+					colorArray.set(offset + 2, color.getB());
 
 				}
 
@@ -456,7 +458,7 @@ public class PointCloud extends GeometryObject
 
 							for ( int ca = 0; ca < cal; ca ++ ) {
 
-								customAttribute.array.put(ca, (Float) customAttribute.getValue().get(ca));
+								customAttribute.array.set(ca, (Double) customAttribute.getValue().get(ca));
 
 							}
 
@@ -466,8 +468,8 @@ public class PointCloud extends GeometryObject
 
 								Vector2 value = (Vector2)customAttribute.getValue().get( ca );
 
-								customAttribute.array.put(offset, value.getX());
-								customAttribute.array.put(offset + 1, value.getY());
+								customAttribute.array.set(offset, value.getX());
+								customAttribute.array.set(offset + 1, value.getY());
 
 								offset += 2;
 
@@ -481,9 +483,9 @@ public class PointCloud extends GeometryObject
 
 									Color value = (Color)customAttribute.getValue().get( ca );
 
-									customAttribute.array.put(offset, value.getR());
-									customAttribute.array.put(offset + 1, value.getG());
-									customAttribute.array.put(offset + 2, value.getB());
+									customAttribute.array.set(offset, value.getR());
+									customAttribute.array.set(offset + 1, value.getG());
+									customAttribute.array.set(offset + 2, value.getB());
 
 									offset += 3;
 
@@ -495,9 +497,9 @@ public class PointCloud extends GeometryObject
 
 									Vector3 value = (Vector3)customAttribute.getValue().get( ca );
 
-									customAttribute.array.put(offset, value.getX());
-									customAttribute.array.put(offset + 1, value.getY());
-									customAttribute.array.put(offset + 2, value.getZ());
+									customAttribute.array.set(offset, value.getX());
+									customAttribute.array.set(offset + 1, value.getY());
+									customAttribute.array.set(offset + 2, value.getZ());
 
 									offset += 3;
 
@@ -511,10 +513,10 @@ public class PointCloud extends GeometryObject
 
 								Vector4 value = (Vector4)customAttribute.getValue().get( ca );
 
-								customAttribute.array.put(offset, value.getX());
-								customAttribute.array.put(offset + 1, value.getY());
-								customAttribute.array.put(offset + 2, value.getZ());
-								customAttribute.array.put(offset + 3, value.getW());
+								customAttribute.array.set(offset, value.getX());
+								customAttribute.array.set(offset + 1, value.getY());
+								customAttribute.array.set(offset + 2, value.getZ());
+								customAttribute.array.set(offset + 3, value.getW());
 
 								offset += 4;
 
@@ -533,14 +535,13 @@ public class PointCloud extends GeometryObject
 		if ( dirtyVertices || this.sortParticles ) {
 
 			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
-			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.limit(), vertexArray, hint.getValue());
 
 		}
 
 		if ( dirtyColors || this.sortParticles ) {
 
 			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.limit(), colorArray, hint.getValue());
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getBuffer(), hint.getValue());
 
 		}
 
@@ -553,7 +554,7 @@ public class PointCloud extends GeometryObject
 				if ( customAttribute.needsUpdate || this.sortParticles ) {
 
 					gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-					gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.limit(), customAttribute.array, hint.getValue());
+					gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue());
 
 				}
 
@@ -562,6 +563,5 @@ public class PointCloud extends GeometryObject
 		}
 
 	}
-
 
 }

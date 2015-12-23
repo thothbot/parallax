@@ -27,13 +27,13 @@ public class PlaneParametricGeometry extends ParametricGeometry
 	public PlaneParametricGeometry(final int width, final int height, int slices, int stacks)
 	{
 		super(new ParametricFunction() {
-			
+
 			@Override
-			public Vector3 run(float u, float v)
+			public Vector3 run(double u, double v)
 			{
-				float x = u * (float)width;
-				float y = 0.0f;
-				float z = v * (float)height;
+				double x = u * (double)width;
+				double y = 0.0;
+				double z = v * (double)height;
 
 				return new Vector3(x, y, z);
 			}

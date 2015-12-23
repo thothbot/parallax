@@ -20,8 +20,7 @@ package org.parallax3d.parallax.math;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.ThreeJsObject;
-
-import java.nio.FloatBuffer;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * This class implements three-dimensional matrix. MxM, where M=3.
@@ -41,7 +40,7 @@ import java.nio.FloatBuffer;
 @ThreeJsObject("THREE.Matrix3")
 public class Matrix3
 {
-	final float[] elements = new float[9];
+	private Float32Array elements;
 
 	// Temporary variables
 	static Vector3 _v1 = new Vector3();
@@ -49,69 +48,76 @@ public class Matrix3
 	/**
 	 * Default constructor will make empty three-dimensional matrix.
 	 */
-	public Matrix3() 
+	public Matrix3()
 	{
+		this.elements = Float32Array.create(9);
 		identity();
 	}
-	
-	public Matrix3( float n11, float n12, float n13, float n21, float n22, float n23, float n31, float n32, float n33 ) 
+
+	public Matrix3( double n11, double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33 )
 	{
 		this();
 		set(n11, n12, n13, n21, n22, n23, n31, n32, n33 );
 	}
-	
-	public Matrix3 set( float n11, float n12, float n13, float n21, float n22, float n23, float n31, float n32, float n33 ) 
+
+	public Matrix3 set( double n11, double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33 )
 	{
-		float[] val = this.elements;
-		val[0] = n11;
-		val[1] = n21;
-		val[2] = n31;
-		val[3] = n12;
-		val[4] = n22;
-		val[5] = n32;
-		val[6] = n13;
-		val[7] = n23;
-		val[8] = n33;
+		Float32Array te = this.getArray();
+
+		te.set(0, n11); te.set(3, n12); te.set(6, n13);
+		te.set(1, n21); te.set(4, n22); te.set(7, n23);
+		te.set(2, n31); te.set(5, n32); te.set(8, n33);
 
 		return this;
 	}
 
-	public float[] getArray()
+	/**
+	 * get the current Matrix which is represented
+	 * by Array[9] which the following indexes:
+	 *
+	 * <pre> {@code
+	 * 0 3 6
+	 * 1 4 7
+	 * 2 5 8
+	 * } </pre>
+	 *
+	 * @return the Array
+	 */
+	public Float32Array getArray()
 	{
-		return this.elements;
+		return elements;
 	}
-	
-	public Matrix3 identity() 
+
+	public Matrix3 identity()
 	{
 		set(
-			1, 0, 0,
-			0, 1, 0,
-			0, 0, 1
+				1, 0, 0,
+				0, 1, 0,
+				0, 0, 1
 		);
 
 		return this;
 	}
 
-	public Matrix3 copy( Matrix3 m ) 
+	public Matrix3 copy( Matrix3 m )
 	{
-
-		float[] me = m.getArray();
+		Float32Array me = m.getArray();
 
 		this.set(
-			me[0], me[3], me[6],
-			me[1], me[4], me[7],
-			me[2], me[5], me[8]
+				me.get(0), me.get(3), me.get(6),
+				me.get(1), me.get(4), me.get(7),
+				me.get(2), me.get(5), me.get(8)
 		);
 
 		return this;
 	}
 
-	public FloatBuffer applyToVector3Array (FloatBuffer array)
+	public Float32Array applyToVector3Array (Float32Array array)
 	{
-		return applyToVector3Array(array, 0, array.array().length);
+		return applyToVector3Array(array, 0, array.getLength());
 	}
 
-	public FloatBuffer applyToVector3Array (FloatBuffer array, int offset, int length)
+	public Float32Array applyToVector3Array (Float32Array array, int offset, int length)
 	{
 
 		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
@@ -122,33 +128,33 @@ public class Matrix3
 
 			_v1.apply( this );
 
-			array.put(j, _v1.x);
-			array.put(j + 1, _v1.y);
-			array.put( j + 2 , _v1.z );
+			array.set( j , _v1.x );
+			array.set( j + 1 , _v1.y );
+			array.set( j + 2 , _v1.z );
 
 		}
 
 		return array;
 	}
 
-	public Matrix3 multiply( float s ) 
+	public Matrix3 multiply( double s )
 	{
-		float[] te = this.elements;
+		Float32Array te = this.getArray();
 
-		te[0] *= s; te[3] *= s; te[6] *= s;
-		te[1] *= s; te[4] *= s; te[7] *= s;
-		te[2] *= s; te[5] *= s; te[8] *= s;
+		te.set(0, te.get(0) * s); te.set(3, te.get(3) * s); te.set(6, te.get(6) * s);
+		te.set(1, te.get(1) * s); te.set(4, te.get(4) * s); te.set(7, te.get(7) * s);
+		te.set(2, te.get(2) * s); te.set(5, te.get(5) * s); te.set(8, te.get(8) * s);
 
 		return this;
 	}
 
-	public float determinant() 
+	public double determinant()
 	{
-		float[] te = this.elements;
+		Float32Array te = this.getArray();
 
-		float a = te[0], b = te[1], c = te[2],
-			  d = te[3], e = te[4], f = te[5],
-			  g = te[6], h = te[7], i = te[8];
+		double a = te.get(0), b = te.get(1), c = te.get(2),
+				d = te.get(3), e = te.get(4), f = te.get(5),
+				g = te.get(6), h = te.get(7), i = te.get(8);
 
 		return a*e*i - a*f*h - b*d*i + b*f*g + c*d*h - c*e*g;
 	}
@@ -156,73 +162,73 @@ public class Matrix3
 	/**
 	 * Sets the value of this matrix to the matrix inverse of the passed matrix
 	 * m.
-	 * 
+	 *
 	 * @param m the matrix to be inverted
 	 */
 	public Matrix3 getInverse(Matrix4 m)
 	{
 		// input: THREE.Matrix4
 		// ( based on http://code.google.com/p/webgl-mjs/ )
-		float[] me = m.getArray();
-		float[] te = this.elements;
+		Float32Array me = m.getArray();
+		Float32Array te = this.getArray();
 
-		te[0] = me[10] * me[5] - me[6] * me[9];
-		te[1] = -me[10] * me[1] + me[2] * me[9];
-		te[2] = me[6] * me[1] - me[2] * me[5];
-		te[3] = -me[10] * me[4] + me[6] * me[8];
-		te[4] = me[10] * me[0] - me[2] * me[8];
-		te[5] = -me[6] * me[0] + me[2] * me[4];
-		te[6] = me[9] * me[4] - me[5] * me[8];
-		te[7] = -me[9] * me[0] + me[1] * me[8];
-		te[8] = me[5] * me[0] - me[1] * me[4];
+		te.set(0, me.get(10) * me.get(5) - me.get(6) * me.get(9));
+		te.set(1, -me.get(10) * me.get(1) + me.get(2) * me.get(9));
+		te.set(2,  me.get(6) * me.get(1) - me.get(2) * me.get(5));
+		te.set(3, -me.get(10) * me.get(4) + me.get(6) * me.get(8));
+		te.set(4, me.get(10) * me.get(0) - me.get(2) * me.get(8));
+		te.set(5, -me.get(6) * me.get(0) + me.get(2) * me.get(4));
+		te.set(6, me.get(9) * me.get(4) - me.get(5) * me.get(8));
+		te.set(7, -me.get(9) * me.get(0) + me.get(1) * me.get(8));
+		te.set(8, me.get(5) * me.get(0) - me.get(1) * me.get(4));
 
-		float det = me[0] * te[0] + me[1] * te[3] + me[2] * te[6];
+		double det = me.get(0) * te.get(0) + me.get(1) * te.get(3) + me.get(2) * te.get(6);
 
 		// no inverse
 
 		if (det == 0)
 		{
-			Parallax.app.error("Matrix3", "Matrix3.invert(): determinant == 0");
+			Parallax.app.error("Matrix3.invert()", "determinant == 0");
 			this.identity();
 		}
 		else
 		{
-			this.multiply( 1.0f / det );
+			this.multiply( 1.0 / det );
 		}
 
 		return this;
 	}
 
 	/**
-	 * Transpose the current matrix where its rows will be the 
+	 * Transpose the current matrix where its rows will be the
 	 * columns or its columns are the rows of the current matrix.
 	 */
 	public Matrix3 transpose()
 	{
-		float tmp;
-		float[] m = this.elements;
+		double tmp;
+		Float32Array m = this.getArray();
 
-		tmp = m[1];
-		m[1] = m[3];
-		m[3] = tmp;
+		tmp = m.get(1);
+		m.set(1, m.get(3));
+		m.set(3, tmp);
 
-		tmp = m[2];
-		m[2] = m[6];
-		m[6] = tmp;
+		tmp = m.get(2);
+		m.set(2, m.get(6));
+		m.set(6, tmp);
 
-		tmp = m[5];
-		m[5] = m[7];
-		m[7] = tmp;
+		tmp = m.get(5);
+		m.set(5, m.get(7));
+		m.set(7, tmp);
 
 		return this;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param m Matrix4
 	 * @return
 	 */
-	public Matrix3 getNormalMatrix( Matrix4 m ) 
+	public Matrix3 getNormalMatrix( Matrix4 m )
 	{
 		this.getInverse( m ).transpose();
 
@@ -230,51 +236,52 @@ public class Matrix3
 	}
 
 	/**
-	 * Transpose the current matrix into new Matrix which is represented 
-	 * by Array[9] 
-	 * 
+	 * Transpose the current matrix into new Matrix which is represented
+	 * by Array[9]
+	 *
 	 * @return an array of new transposed matrix.
 	 */
-	public float[] transposeIntoArray()
+	public Float32Array transposeIntoArray()
 	{
-		float[] r = new float[9];
-		float[] m = this.elements;
+		Float32Array r = Float32Array.create(9);
+		Float32Array m = this.getArray();
 
-		r[0] = m[0];
-		r[1] = m[3];
-		r[2] = m[6];
-		r[3] = m[1];
-		r[4] = m[4];
-		r[5] = m[7];
-		r[6] = m[2];
-		r[7] = m[5];
-		r[8] = m[8];
+		r.set(0, m.get(0));
+		r.set(1, m.get(3));
+		r.set(2, m.get(6));
+		r.set(3, m.get(1));
+		r.set(4, m.get(4));
+		r.set(5, m.get(7));
+		r.set(6, m.get(2));
+		r.set(7, m.get(5));
+		r.set(8, m.get(8));
 
 		return r;
 	}
-	
+
 	/**
-	 * get information of the current Matrix 
+	 * get information of the current Matrix
 	 * which is represented as list of it values.
 	 */
-	public String toString() 
+	public String toString()
 	{
 		String retval = "[";
-		
-		for(int i = 0; i < this.elements.length; i++)
-			retval += this.elements[i] + ", ";
-		
+
+		for(int i = 0; i < this.getArray().getLength(); i++)
+			retval += this.getArray().get(i) + ", ";
+
 		return retval + "]";
 	}
-	
-	public Matrix3 clone() 
+
+	public Matrix3 clone()
 	{
-		float[] te = this.elements;
+		Float32Array te = this.getArray();
 
 		return new Matrix3(
-			te[0], te[3], te[6],
-			te[1], te[4], te[7],
-			te[2], te[5], te[8]
+
+				te.get(0), te.get(3), te.get(6),
+				te.get(1), te.get(4), te.get(7),
+				te.get(2), te.get(5), te.get(8)
 		);
 	}
 }

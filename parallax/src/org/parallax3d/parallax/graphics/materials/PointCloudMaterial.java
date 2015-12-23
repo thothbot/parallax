@@ -18,27 +18,28 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
-import java.util.Map;
-
+import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.events.ViewportResizeBus;
+import org.parallax3d.parallax.events.ViewportResizeListener;
 import org.parallax3d.parallax.graphics.renderers.shaders.ParticleBasicShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 
 public final class PointCloudMaterial extends Material implements HasFog,
-		HasColor, HasMap, HasVertexColors {
+		HasColor, HasMap, HasVertexColors, ViewportResizeListener {
 	private boolean isFog;
 
 	private Color color;
 
 	private Texture map;
 
-	private COLORS vertexColors;
+	private Material.COLORS vertexColors;
 
-	private float size;
+	private double size;
 
 	private boolean sizeAttenuation;
 
@@ -48,20 +49,21 @@ public final class PointCloudMaterial extends Material implements HasFog,
 
 		setColor(new Color(0xffffff));
 
-		setSize(1.0f);
+		setSize(1.0);
 		setSizeAttenuation(true);
 
-		setVertexColors(COLORS.NO);
+		setVertexColors(Material.COLORS.NO);
+
+		ViewportResizeBus.addViewportResizeListener(this);
 
 	}
 
-	public float getSize() {
+	public double getSize() {
 		return this.size;
 	}
 
-	public void setSize(float size) {
+	public void setSize(double size) {
 		this.size = size;
-		;
 	}
 
 	public boolean isSizeAttenuation() {
@@ -107,19 +109,19 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public COLORS isVertexColors() {
+	public Material.COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(COLORS vertexColors) {
+	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
-	
+
 	public PointCloudMaterial clone () {
 
 		PointCloudMaterial material = new PointCloudMaterial();
-		
+
 		super.clone(material);
 
 		material.color.copy( this.color );
@@ -140,25 +142,33 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	@Override
 	public void refreshUniforms(Camera camera, boolean isGammaInput) {
 		super.refreshUniforms(camera, isGammaInput);
-		final ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
+		final FastMap<Uniform> uniforms = getShader().getUniforms();
 
 		uniforms.get("psColor").setValue(getColor());
 		uniforms.get("opacity").setValue(getOpacity());
 		uniforms.get("size").setValue(getSize());
 
-//		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE,
-//				new ViewportResizeHandler() {
-//
-//					@Override
-//					public void onResize(ViewportResizeEvent event) {
-//						uniforms.get("scale").setValue(
-//								event.getRenderer().getAbsoluteHeight() / 2.0);
-//					}
-//				});
-
 		// Default
 		uniforms.get("scale").setValue(500 / 2.0);
 
 		uniforms.get("map").setValue(getMap());
+	}
+
+	@Override
+	public void onViewportResize(int newWidth, int newHeight) {
+		final FastMap<Uniform> uniforms = getShader().getUniforms();
+
+		uniforms.get("scale").setValue(newHeight / 2.0);
+
+	}
+
+	@Override
+	public void finalize() {
+		ViewportResizeBus.removeViewportResizeListener(this);
+		try {
+			super.finalize();
+		} catch (Throwable throwable) {
+			Parallax.app.error("PointCloud", "Exception in PointCloudMaterial.finalize:", throwable);
+		}
 	}
 }

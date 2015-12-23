@@ -46,26 +46,26 @@ public final class TubeGeometry extends Geometry
 	private List<Vector3> normals;
 	private List<Vector3> binormals;
 	private Curve path;
-	
+
 	private List<List<Integer>> grid;
-	
+
 	public TubeGeometry( Curve path )
 	{
-		this(path, 64, 1.0f, 8, false, true);
+		this(path, 64, 1.0, 8, false, true);
 	}
-	
-	public TubeGeometry( Curve path, int segments, float radius, int segmentsRadius, boolean closed, boolean debug ) 
+
+	public TubeGeometry( Curve path, int segments, double radius, int segmentsRadius, boolean closed, boolean debug )
 	{
 		super();
-		
+
 		this.path = path;
-		
+
 		this.grid = new ArrayList<List<Integer>>();
 
 		int numpoints = segments + 1;
 
 		FrenetFrames frames = new FrenetFrames(path, segments, closed);
-		
+
 		// proxy internals
 		this.tangents  = frames.getTangents();
 		this.normals   = frames.getNormals();
@@ -73,45 +73,45 @@ public final class TubeGeometry extends Geometry
 
 		// consruct the grid
 
-		for ( int i = 0; i < numpoints; i++ ) 
+		for ( int i = 0; i < numpoints; i++ )
 		{
 			this.grid.add( i, new ArrayList<Integer>());
 
-			float u = i / (float)( numpoints - 1 );
+			double u = i / (double)( numpoints - 1 );
 
 			Vector3 pos = (Vector3) path.getPointAt( u );
 //
-//			if ( debug ) 
+//			if ( debug )
 //			{
-//				getDebug().add( new ArrowHelper( tangents.get( i ),  pos, radius, 0x0000ff ) );	
+//				getDebug().add( new ArrowHelper( tangents.get( i ),  pos, radius, 0x0000ff ) );
 //				getDebug().add( new ArrowHelper( normals.get( i ),   pos, radius, 0xff0000 ) );
 //				getDebug().add( new ArrowHelper( binormals.get( i ), pos, radius, 0x00ff00 ) );
 //			}
 
-			for ( int j = 0; j < segmentsRadius; j++ ) 
+			for ( int j = 0; j < segmentsRadius; j++ )
 			{
-				float v = j / (float)segmentsRadius * 2.0f * (float)Math.PI;
+				double v = j / (double)segmentsRadius * 2.0 * Math.PI;
 
 				// TODO: Hack: Negating it so it faces outside.
-				float cx = - radius * (float)Math.cos( v );
-				float cy = radius * (float)Math.sin( v );
+				double cx = - radius * Math.cos( v );
+				double cy = radius * Math.sin( v );
 
 				Vector3 pos2 = new Vector3();
-	            pos2.copy( pos );
-	            pos2.addX( cx * normals.get(i).getX() + cy * binormals.get(i).getX() );
-	            pos2.addY( cx * normals.get(i).getY() + cy * binormals.get(i).getY() );
-	            pos2.addZ( cx * normals.get(i).getZ() + cy * binormals.get(i).getZ() );
+				pos2.copy( pos );
+				pos2.addX( cx * normals.get(i).getX() + cy * binormals.get(i).getX() );
+				pos2.addY( cx * normals.get(i).getY() + cy * binormals.get(i).getY() );
+				pos2.addZ( cx * normals.get(i).getZ() + cy * binormals.get(i).getZ() );
 
-	            this.grid.get( i ).add( j, vert( pos2.getX(), pos2.getY(), pos2.getZ() ) );
+				this.grid.get( i ).add( j, vert( pos2.getX(), pos2.getY(), pos2.getZ() ) );
 			}
 		}
 
 
 		// construct the mesh
 
-		for ( int i = 0; i < segments; i++ ) 
+		for ( int i = 0; i < segments; i++ )
 		{
-			for ( int j = 0; j < segmentsRadius; j++ ) 
+			for ( int j = 0; j < segmentsRadius; j++ )
 			{
 				int ip = ( closed ) ? (i + 1) % segments : i + 1;
 				int jp = (j + 1) % segmentsRadius;
@@ -121,10 +121,10 @@ public final class TubeGeometry extends Geometry
 				int c = this.grid.get( ip ).get( jp );
 				int d = this.grid.get( i ).get( jp );
 
-				Vector2 uva = new Vector2( i / (float)segments,                     j / (float)segmentsRadius );
-				Vector2 uvb = new Vector2( ( i + 1.0f ) / (float)segments,           j / (float)segmentsRadius );
-				Vector2 uvc = new Vector2( ( i + 1.0f ) / (float)segments, ( j + 1.0f ) / (float)segmentsRadius );
-				Vector2 uvd = new Vector2( i / (float)segments,           ( j + 1.0f ) / (float)segmentsRadius );
+				Vector2 uva = new Vector2( i / (double)segments,                     j / (double)segmentsRadius );
+				Vector2 uvb = new Vector2( ( i + 1.0 ) / (double)segments,           j / (double)segmentsRadius );
+				Vector2 uvc = new Vector2( ( i + 1.0 ) / (double)segments, ( j + 1.0 ) / (double)segmentsRadius );
+				Vector2 uvd = new Vector2( i / (double)segments,           ( j + 1.0 ) / (double)segmentsRadius );
 
 				getFaces().add( new Face3( a, b, d ) );
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList( uva, uvb, uvd ) );
@@ -137,31 +137,31 @@ public final class TubeGeometry extends Geometry
 		this.computeFaceNormals();
 		this.computeVertexNormals();
 	}
-	
+
 	public List<Vector3> getTangents()
 	{
 		return this.tangents;
 	}
-	
+
 	public List<Vector3> getNormals()
 	{
 		return this.normals;
 	}
-	
+
 	public List<Vector3> getBinormals()
 	{
 		return this.binormals;
 	}
-	
+
 	public Curve getPath()
 	{
 		return this.path;
 	}
 
-	private int vert( float x, float y, float z ) 
+	private int vert( double x, double y, double z )
 	{
 		this.getVertices().add( new Vector3( x, y, z ) );
-		
+
 		return  this.getVertices().size() - 1;
 	}
 }

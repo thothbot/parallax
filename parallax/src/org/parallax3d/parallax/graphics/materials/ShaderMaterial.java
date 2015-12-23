@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.ThreeJsObject;
@@ -25,11 +26,11 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.ShaderMaterial")
 public class ShaderMaterial extends Material 
 	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning, HasShading
-{ 
+{
 	class ShaderMaterialShader extends Shader
 	{
 
-		public ShaderMaterialShader(String vertexShader, String fragmentShader) 
+		public ShaderMaterialShader(String vertexShader, String fragmentShader)
 		{
 			super(vertexShader, fragmentShader);
 		}
@@ -38,88 +39,104 @@ public class ShaderMaterial extends Material
 		protected void initUniforms() {
 
 		}
-		
+
 	}
-	
+
 	private boolean isWireframe;
 	private int wireframeLineWidth;
-	
+
 	// set to use scene fog
 	private boolean isFog;
-	
-	private SHADING shading;
-	
+
+	private Material.SHADING shading;
+
 	private Color color;
-	
-	private COLORS vertexColors;
-	
+
+	private Material.COLORS vertexColors;
+
 	// set to use skinning attribute streams
 	private boolean isSkinning;
 	// set to use morph targets
 	private boolean isMorphTargets;
 	// set to use morph normals
 	private boolean isMorphNormals;
-	
+
 	private int numSupportedMorphTargets;
 	private int numSupportedMorphNormals;
-	
+
 	// set to use scene lights
 	private boolean isLights;
-	
-	private Shader shader;
-//
-//	public ShaderMaterial(Shader.DefaultResources resource)
-//	{
-//		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
-//	}
 
-	public ShaderMaterial(String vertexShader, String fragmentShader) 
-	{		
+	private Shader shader;
+
+	private String vertexExtensions;
+	private String fragmentExtensions;
+
+	public ShaderMaterial(String vertexShader, String fragmentShader)
+	{
+		this(vertexShader, fragmentShader, null, null);
+	}
+
+	public ShaderMaterial(String vertexShader, String fragmentShader,
+						  String vertexExtensions, String fragmentExtensions)
+	{
 		this();
 		this.shader = new ShaderMaterialShader(vertexShader, fragmentShader);
+		this.vertexExtensions = vertexExtensions;
+		this.fragmentExtensions = fragmentExtensions;
 	}
-	
+
+	/**
+	 * If shader already has extensions at this point they will override the
+	 * ones created dynamically from ProgramParameters.
+	 *
+	 * @param shader
+	 */
 	public ShaderMaterial(Shader shader)
 	{
 		this();
 		this.shader = shader;
+		if (shader.getVertexExtensions() != null)
+			this.vertexExtensions = shader.getVertexExtensions();
+		if (shader.getFragmentExtensions() != null)
+			this.fragmentExtensions = shader.getFragmentExtensions();
 	}
-	
+
 	private ShaderMaterial()
 	{
 		setWireframe(false);
 		setWireframeLineWidth(1);
-		
+
 		setFog(false);
-		
-		setShading(SHADING.SMOOTH);
-		
+
+		setShading(Material.SHADING.SMOOTH);
+
 		setColor(new Color(0xffffff));
-		
-		setVertexColors(COLORS.NO);
+
+		setVertexColors(Material.COLORS.NO);
 	}
-	
-	public boolean bufferGuessUVType () 
+
+	public boolean bufferGuessUVType ()
 	{
 		return true;
 	}
-	
+
 	@Override
 	public Shader getAssociatedShader() {
 		return shader;
 	}
-		
+
 	public boolean isLights() {
 		return this.isLights;
 	}
-	
+
 	/**
 	 * Enable/Disable scene lights
 	 */
 	public void setLights(boolean isLights) {
 		this.isLights = isLights;
 	}
-	
+
 	@Override
 	public boolean isWireframe() {
 		return this.isWireframe;
@@ -139,7 +156,7 @@ public class ShaderMaterial extends Material
 	public void setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
 	}
-	
+
 	@Override
 	public boolean isFog() {
 		return this.isFog;
@@ -149,24 +166,24 @@ public class ShaderMaterial extends Material
 	public void setFog(boolean fog) {
 		this.isFog = fog;
 	}
-	
+
 	@Override
 	public Color getColor() {
 		return color;
 	}
-	
+
 	@Override
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	
+
 	@Override
-	public COLORS isVertexColors() {
+	public Material.COLORS isVertexColors() {
 		return this.vertexColors;
 	}
 
 	@Override
-	public void setVertexColors(COLORS vertexColors) {
+	public void setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 	}
 
@@ -199,35 +216,49 @@ public class ShaderMaterial extends Material
 	public void setMorphNormals(boolean isMorphNormals) {
 		this.isMorphNormals = isMorphNormals;
 	}
-	
+
 	public int getNumSupportedMorphTargets() {
 		return this.numSupportedMorphTargets;
 	}
-	
+
 	public void setNumSupportedMorphTargets(int num) {
 		this.numSupportedMorphTargets = num;
 	}
-	
+
 	public int getNumSupportedMorphNormals() {
 		return this.numSupportedMorphNormals;
 	}
-	
+
 	public void setNumSupportedMorphNormals(int num) {
 		this.numSupportedMorphNormals = num;
 	}
-	
-	public SHADING getShading() {
+
+	public Material.SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(SHADING shading) {
+	public void setShading(Material.SHADING shading) {
 		this.shading = shading;
 	}
-	
+
+	@Override
+	protected String getExtensionsVertex(ProgramParameters params)
+	{
+		return vertexExtensions == null ?
+				super.getExtensionsVertex(params) : vertexExtensions;
+	}
+
+	@Override
+	protected String getExtensionsFragment(ProgramParameters params)
+	{
+		return fragmentExtensions == null ?
+				super.getExtensionsFragment(params) : fragmentExtensions;
+	}
+
 	public ShaderMaterial clone() {
 
 		ShaderMaterial material = new ShaderMaterial();
-		
+
 		super.clone(material);
 
 		material.shader = this.shader;

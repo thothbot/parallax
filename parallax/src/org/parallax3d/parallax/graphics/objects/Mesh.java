@@ -18,16 +18,13 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
-import org.parallax3d.parallax.system.BufferUtils;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
@@ -52,6 +49,8 @@ import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
 import org.parallax3d.parallax.system.gl.enums.BufferTarget;
 import org.parallax3d.parallax.system.gl.enums.BufferUsage;
@@ -66,20 +65,20 @@ import org.parallax3d.parallax.system.gl.enums.DrawElementsType;
 @ThreeJsObject("THREE.Mesh")
 public class Mesh extends GeometryObject
 {
-//	private Boolean overdraw;
+	//	private Boolean overdraw;
 	public Integer morphTargetBase = null;
-	public List<Float> morphTargetInfluences;
+	public List<Double> morphTargetInfluences;
 	public List<Integer> morphTargetForcedOrder;
-	private ObjectMap<String, Integer> morphTargetDictionary;
-	
-	public FloatBuffer __webglMorphTargetInfluences;
+	private FastMap<Integer> morphTargetDictionary;
+
+	public Float32Array __webglMorphTargetInfluences;
 
 	private static MeshBasicMaterial defaultMaterial = new MeshBasicMaterial();
 	static {
 		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 		defaultMaterial.setWireframe( true );
 	};
-	
+
 	// Temporary variables
 	static Matrix4 _inverseMatrix = new Matrix4();
 	static Ray _ray = new Ray();
@@ -97,16 +96,16 @@ public class Mesh extends GeometryObject
 	{
 		this(geometry, Mesh.defaultMaterial);
 	}
-	
+
 	public Mesh(AbstractGeometry geometry, Material material)
 	{
 		super(geometry, material);
-		
+
 		this.updateMorphTargets();
 	}
-	
+
 	public void updateMorphTargets() {
-		
+
 		if(this.getGeometry() instanceof BufferGeometry)
 			return;
 
@@ -114,13 +113,13 @@ public class Mesh extends GeometryObject
 
 			this.morphTargetBase = -1;
 			this.morphTargetForcedOrder = new ArrayList<Integer>();
-			this.morphTargetInfluences = new ArrayList<Float>();
-			this.morphTargetDictionary = new ObjectMap<String, Integer>();
+			this.morphTargetInfluences = new ArrayList<Double>();
+			this.morphTargetDictionary = new FastMap<Integer>();
 
 			List<Geometry.MorphTarget> morphTargets = ((Geometry)this.getGeometry()).getMorphTargets();
 			for ( int m = 0, ml = ((Geometry)this.getGeometry()).getMorphTargets().size(); m < ml; m ++ ) {
 
-				this.morphTargetInfluences.add( 0.0f );
+				this.morphTargetInfluences.add( 0.0 );
 				this.morphTargetDictionary.put(morphTargets.get(m).name, m);
 
 			}
@@ -134,13 +133,13 @@ public class Mesh extends GeometryObject
 		// Checking boundingSphere distance to ray
 		AbstractGeometry geometry = this.getGeometry();
 
-		if ( geometry.getBoundingSphere() == null ) 
+		if ( geometry.getBoundingSphere() == null )
 			geometry.computeBoundingSphere();
 
 		_sphere.copy( geometry.getBoundingSphere() );
 		_sphere.apply( this.matrixWorld );
 
-		if ( raycaster.getRay().isIntersectionSphere( _sphere ) == false ) 
+		if ( raycaster.getRay().isIntersectionSphere( _sphere ) == false )
 		{
 			return;
 		}
@@ -150,42 +149,42 @@ public class Mesh extends GeometryObject
 		_inverseMatrix.getInverse( this.matrixWorld );
 		_ray.copy( raycaster.getRay() ).apply( _inverseMatrix );
 
-		if ( geometry.getBoundingBox() != null ) 
+		if ( geometry.getBoundingBox() != null )
 		{
-			if ( _ray.isIntersectionBox( geometry.getBoundingBox() ) == false )  
+			if ( _ray.isIntersectionBox( geometry.getBoundingBox() ) == false )
 			{
 				return;
 			}
 		}
 
-		float precision = Raycaster.PRECISION;
+		double precision = Raycaster.PRECISION;
 
-		if ( geometry instanceof BufferGeometry ) 
+		if ( geometry instanceof BufferGeometry )
 		{
 			Material material = this.getMaterial();
 
 			if ( material == null ) return;
-			
+
 			BufferGeometry bGeometry = ((BufferGeometry) geometry);
 
 			if ( bGeometry.getAttribute("index") != null ) {
 
-				IntBuffer indices = (IntBuffer)bGeometry.getAttribute("index").getArray();
-				FloatBuffer positions = (FloatBuffer)bGeometry.getAttribute("position").getArray();
+				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
+				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 				List<BufferGeometry.DrawCall> offsets = bGeometry.getDrawcalls();
 
-				if ( offsets.size() == 0 ) 
+				if ( offsets.size() == 0 )
 				{
-					offsets.add(new BufferGeometry.DrawCall(0, indices.array().length, 0));
+					offsets.add(new BufferGeometry.DrawCall(0, indices.getLength(), 0));
 				}
 
-				for ( int oi = 0, ol = offsets.size(); oi < ol; ++oi ) 
+				for ( int oi = 0, ol = offsets.size(); oi < ol; ++oi )
 				{
 					int start = offsets.get( oi ).start;
 					int count = offsets.get( oi ).count;
 					int index = offsets.get( oi ).index;
 
-					for ( int i = start, il = start + count; i < il; i += 3 ) 
+					for ( int i = start, il = start + count; i < il; i += 3 )
 					{
 
 						int a = index + (int)indices.get( i );
@@ -197,12 +196,12 @@ public class Mesh extends GeometryObject
 						_vC.fromArray( positions, c * 3 );
 
 						Vector3 intersectionPoint;
-						
-						if ( material.getSides() == Material.SIDE.BACK ) 
+
+						if ( material.getSides() == Material.SIDE.BACK )
 						{
 							intersectionPoint = _ray.intersectTriangle( _vC, _vB, _vA, true);
-						} 
-						else 
+						}
+						else
 						{
 							intersectionPoint = _ray.intersectTriangle( _vA, _vB, _vC, material.getSides() != Material.SIDE.DOUBLE );
 						}
@@ -211,7 +210,7 @@ public class Mesh extends GeometryObject
 
 						intersectionPoint.apply( this.matrixWorld );
 
-						float distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
+						double distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
 
 						if ( distance < precision || distance < raycaster.getNear() || distance > raycaster.getFar() ) continue;
 
@@ -221,16 +220,16 @@ public class Mesh extends GeometryObject
 						intersect.face = new Face3( a, b, c, Triangle.normal( _vA, _vB, _vC ) );
 						intersect.object = this;
 						intersects.add( intersect );
-						
+
 					}
 
 				}
 
 			} else {
 
-				FloatBuffer positions = (FloatBuffer)bGeometry.getAttribute("position").getArray();
+				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 
-				for ( int i = 0, j = 0, il = positions.array().length; i < il; i += 3, j += 9 ) {
+				for ( int i = 0, j = 0, il = positions.getLength(); i < il; i += 3, j += 9 ) {
 
 					int a = i;
 					int b = i + 1;
@@ -241,7 +240,7 @@ public class Mesh extends GeometryObject
 					_vC.fromArray( positions, j + 6 );
 
 					Vector3 intersectionPoint;
-					
+
 					if ( material.getSides() == Material.SIDE.BACK ) {
 
 						intersectionPoint = _ray.intersectTriangle( _vC, _vB, _vA, true, null );
@@ -256,7 +255,7 @@ public class Mesh extends GeometryObject
 
 					intersectionPoint.apply( this.matrixWorld );
 
-					float distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
+					double distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
 
 					if ( distance < precision || distance < raycaster.getNear() || distance > raycaster.getFar() ) continue;
 
@@ -277,7 +276,7 @@ public class Mesh extends GeometryObject
 			List<Material> objectMaterials = isFaceMaterial == true ? ((MeshFaceMaterial)this.getMaterial()).getMaterials() : null;
 
 			Geometry aGeometry = ((Geometry) geometry);
-			
+
 			List<Vector3> vertices = aGeometry.getVertices();
 
 			for ( int f = 0, fl = aGeometry.getFaces().size(); f < fl; f ++ ) {
@@ -302,7 +301,7 @@ public class Mesh extends GeometryObject
 
 					for ( int t = 0, tl = morphTargets.size(); t < tl; t ++ ) {
 
-						float influence = this.morphTargetInfluences.get( t );
+						double influence = this.morphTargetInfluences.get( t );
 
 						if ( influence == 0 ) continue;
 
@@ -333,7 +332,7 @@ public class Mesh extends GeometryObject
 				}
 
 				Vector3 intersectionPoint;
-				
+
 				if ( material.getSides() == Material.SIDE.BACK ) {
 
 					intersectionPoint = _ray.intersectTriangle( c, b, a, true );
@@ -348,7 +347,7 @@ public class Mesh extends GeometryObject
 
 				intersectionPoint.apply( this.matrixWorld );
 
-				float distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
+				double distance = raycaster.getRay().getOrigin().distanceTo( intersectionPoint );
 
 				if ( distance < precision || distance < raycaster.getNear() || distance > raycaster.getFar() ) continue;
 
@@ -359,21 +358,21 @@ public class Mesh extends GeometryObject
 				intersect.faceIndex = f;
 				intersect.object = this;
 				intersects.add( intersect );
-				
+
 			}
 
 		}
 
 	}
-	
+
 	public Mesh clone() {
 		return clone(false);
 	}
-	
+
 	public Mesh clone( boolean recursive ) {
 		return clone(new Mesh( this.getGeometry(), this.getMaterial() ), recursive);
 	}
-	
+
 	public Mesh clone( Mesh object, boolean recursive ) {
 
 		super.clone(object, recursive);
@@ -381,7 +380,7 @@ public class Mesh extends GeometryObject
 		return object;
 
 	}
-	
+
 //	public boolean getOverdraw()
 //	{
 //		return this.overdraw;
@@ -408,11 +407,11 @@ public class Mesh extends GeometryObject
 //	public Integer getMorphTargetBase() {
 //		return morphTargetBase;
 //	}
-//	
-//	public List<Float> getMorphTargetInfluences() {
+//
+//	public List<Double> getMorphTargetInfluences() {
 //		return this.morphTargetInfluences;
 //	}
-//	
+//
 //	public List<Integer> getMorphTargetForcedOrder() {
 //		return this.morphTargetForcedOrder;
 //	}
@@ -421,59 +420,59 @@ public class Mesh extends GeometryObject
 	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryGroup, boolean updateBuffers)
 	{
 		GL20 gl = renderer.getGL();
-//		WebGlRendererInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 
 		// wireframe
 		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() )
 		{
 			setLineWidth( gl, ((HasWireframe)getMaterial()).getWireframeLineWidth() );
 
-			if ( updateBuffers ) 
+			if ( updateBuffers )
 				gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer);
-			
+
 			gl.glDrawElements(BeginMode.LINES.getValue(), geometryGroup.__webglLineCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
 
 			// triangles
 
 		}
-		else 
+		else
 		{
-			if ( updateBuffers ) 
+			if ( updateBuffers )
 				gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer);
-			
+
 			gl.glDrawElements(BeginMode.TRIANGLES.getValue(), geometryGroup.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
 		}
-		
-//		info.getRender().calls ++;
-//		info.getRender().vertices += geometryGroup.__webglFaceCount;
-//		info.getRender().faces += geometryGroup.__webglFaceCount / 3;
+
+		info.getRender().calls ++;
+		info.getRender().vertices += geometryGroup.__webglFaceCount;
+		info.getRender().faces += geometryGroup.__webglFaceCount / 3;
 	}
 
-//	/*
+	//	/*
 //	 * Returns geometry quantities
 //	 */
 //	@Override
-//	public void initBuffer(WebGLRenderer renderer) 
+//	public void initBuffer(WebGLRenderer renderer)
 //	{
 //		WebGlRendererInfo info = renderer.getInfo();
-//	
+//
 //		Geometry geometry = this.getGeometry();
 //
 //		if(geometryBuffer != null)
 //		{
 //			createBuffers(renderer, geometryBuffer );
 //		}
-//		else if(geometry instanceof Geometry) 
+//		else if(geometry instanceof Geometry)
 //		{
 //			Log.debug("addObject() geometry.geometryGroups is null: " + ( geometry.getGeometryGroups() == null ));
 //			if ( geometry.getGeometryGroups() == null )
 //				sortFacesByMaterial( this.getGeometry() );
 //
 //			// create separate VBOs per geometry chunk
-//			for ( GeometryGroup geometryGroup : geometry.getGeometryGroups() ) 
+//			for ( GeometryGroup geometryGroup : geometry.getGeometryGroups() )
 //			{
 //				// initialise VBO on the first access
-//				if ( geometryGroup.__webglVertexBuffer == null ) 
+//				if ( geometryGroup.__webglVertexBuffer == null )
 //				{
 //					createBuffers(renderer, geometryGroup );
 //					initBuffers(renderer.getGL(), geometryGroup );
@@ -489,7 +488,7 @@ public class Mesh extends GeometryObject
 //				}
 //			}
 //		}
-//			
+//
 //	}
 //
 	// initMeshBuffers
@@ -504,45 +503,45 @@ public class Mesh extends GeometryObject
 		int nlines = faces3.size() * 3;
 
 		Material material = Material.getBufferMaterial(this, geometryGroup);
-		
-		geometryGroup.__vertexArray = BufferUtils.newFloatBuffer( nvertices * 3 );
-		geometryGroup.__normalArray =  BufferUtils.newFloatBuffer(nvertices * 3);
-		geometryGroup.__colorArray = BufferUtils.newFloatBuffer(nvertices * 3);
-		geometryGroup.__uvArray = BufferUtils.newFloatBuffer(nvertices * 2);
-		
+
+		geometryGroup.__vertexArray = Float32Array.create(nvertices * 3);
+		geometryGroup.__normalArray =  Float32Array.create(nvertices * 3);
+		geometryGroup.__colorArray = Float32Array.create(nvertices * 3);
+		geometryGroup.__uvArray = Float32Array.create(nvertices * 2);
+
 		if ( geometry.getFaceVertexUvs().size() > 1 ) {
 
-			geometryGroup.__uv2Array = BufferUtils.newFloatBuffer(nvertices * 2);
+			geometryGroup.__uv2Array = Float32Array.create(nvertices * 2);
 
 		}
 
 		if ( geometry.isHasTangents() ) {
 
-			geometryGroup.__tangentArray = BufferUtils.newFloatBuffer(nvertices * 4);
+			geometryGroup.__tangentArray = Float32Array.create(nvertices * 4);
 
 		}
 
 		if ( geometry.getSkinWeights().size() > 0 && geometry.getSkinIndices().size() > 0 ) {
 
-			geometryGroup.__skinIndexArray = BufferUtils.newFloatBuffer(nvertices * 4);
-			geometryGroup.__skinWeightArray = BufferUtils.newFloatBuffer(nvertices * 4);
+			geometryGroup.__skinIndexArray = Float32Array.create(nvertices * 4);
+			geometryGroup.__skinWeightArray = Float32Array.create(nvertices * 4);
 
 		}
 
-//		Class UintArray = WebGLExtensions.get( gl, WebGLExtensions.Id.OES_element_index_uint ) != null && ntris > 21845 
+//		Class UintArray = WebGLExtensions.get( gl, WebGLExtensions.Id.OES_element_index_uint ) != null && ntris > 21845
 //				? Uint32Array.class : Uint16Array; // 65535 / 3
 
 //		geometryGroup.__typeArray = UintArray;
-		geometryGroup.__faceArray = BufferUtils.newIntBuffer( ntris * 3);
-		geometryGroup.__lineArray = BufferUtils.newIntBuffer( nlines * 2 );
+		geometryGroup.__faceArray = Uint16Array.create(ntris * 3);
+		geometryGroup.__lineArray = Uint16Array.create(nlines * 2);
 
 		if ( geometryGroup.getNumMorphTargets() > 0 ) {
 
-			geometryGroup.__morphTargetsArrays = new ArrayList<FloatBuffer>();
+			geometryGroup.__morphTargetsArrays = new ArrayList<Float32Array>();
 
 			for ( int m = 0, ml = geometryGroup.getNumMorphTargets(); m < ml; m ++ ) {
 
-				geometryGroup.__morphTargetsArrays.add( BufferUtils.newFloatBuffer(nvertices * 3) );
+				geometryGroup.__morphTargetsArrays.add( Float32Array.create(nvertices * 3) );
 
 			}
 
@@ -550,11 +549,11 @@ public class Mesh extends GeometryObject
 
 		if ( geometryGroup.getNumMorphNormals() > 0 ) {
 
-			geometryGroup.__morphNormalsArrays  = new ArrayList<FloatBuffer>();
+			geometryGroup.__morphNormalsArrays  = new ArrayList<Float32Array>();
 
 			for ( int m = 0, ml = geometryGroup.getNumMorphNormals(); m < ml; m ++ ) {
 
-				geometryGroup.__morphNormalsArrays.add( BufferUtils.newFloatBuffer(nvertices * 3) );
+				geometryGroup.__morphNormalsArrays.add( Float32Array.create(nvertices * 3) );
 
 			}
 
@@ -566,16 +565,16 @@ public class Mesh extends GeometryObject
 
 		// custom attributes
 
-		ObjectMap<String, Attribute> attributes = material.getShader().getAttributes();
+		FastMap<Attribute> attributes = material.getShader().getAttributes();
 
-		if (attributes != null) 
+		if (attributes != null)
 		{
 
 			if (geometryGroup.__webglCustomAttributesList == null)
 				geometryGroup.__webglCustomAttributesList = new ArrayList<Attribute>();
-		
 
-			for (String a : attributes.keys())
+
+			for (String a : attributes.keySet())
 			{
 				Attribute originalAttribute = attributes.get(a);
 
@@ -584,7 +583,7 @@ public class Mesh extends GeometryObject
 
 				Attribute attribute = originalAttribute.clone();
 
-				if (!attribute.__webglInitialized || attribute.createUniqueBuffers) 
+				if (!attribute.__webglInitialized || attribute.createUniqueBuffers)
 				{
 					attribute.__webglInitialized = true;
 
@@ -601,7 +600,7 @@ public class Mesh extends GeometryObject
 
 					attribute.size = size;
 
-					attribute.array = BufferUtils.newFloatBuffer(nvertices * size);
+					attribute.array = Float32Array.create(nvertices * size);
 
 					attribute.buffer = gl.glGenBuffer();
 					attribute.belongsToAttribute = a;
@@ -621,7 +620,7 @@ public class Mesh extends GeometryObject
 	public void createBuffers(WebGLRenderer renderer, GeometryGroup geometryGroup)
 	{
 		GL20 gl = renderer.getGL();
-//		WebGlRendererInfo info = renderer.getInfo();
+		WebGlRendererInfo info = renderer.getInfo();
 
 		geometryGroup.__webglVertexBuffer = gl.glGenBuffer();
 		geometryGroup.__webglNormalBuffer = gl.glGenBuffer();
@@ -651,20 +650,20 @@ public class Mesh extends GeometryObject
 				geometryGroup.__webglMorphNormalsBuffers.add(gl.glGenBuffer());
 			}
 		}
-		
-//		info.getMemory().geometries ++;
+
+		info.getMemory().geometries ++;
 	}
 
 //	@Override
-//	public void setBuffer(WebGLRenderer renderer) 
+//	public void setBuffer(WebGLRenderer renderer)
 //	{
 //		WebGLRenderingContext gl = renderer.getGL();
 //
-//		if ( geometryBuffer != null ) 
+//		if ( geometryBuffer != null )
 //		{
 //			if ( geometryBuffer.isVerticesNeedUpdate() || geometryBuffer.isElementsNeedUpdate() ||
 //				geometryBuffer.isUvsNeedUpdate() || geometryBuffer.isNormalsNeedUpdate() ||
-//				geometryBuffer.isColorsNeedUpdate() || geometryBuffer.isTangentsNeedUpdate() ) 
+//				geometryBuffer.isColorsNeedUpdate() || geometryBuffer.isTangentsNeedUpdate() )
 //			{
 //				((BufferGeometry)geometryBuffer).setDirectBuffers( renderer.getGL(), BufferUsage.DYNAMIC_DRAW, !geometryBuffer.isDynamic() );
 //			}
@@ -675,24 +674,24 @@ public class Mesh extends GeometryObject
 //			geometryBuffer.setNormalsNeedUpdate(false);
 //			geometryBuffer.setColorsNeedUpdate(false);
 //			geometryBuffer.setTangentsNeedUpdate(false);
-//		} 
-//		else 
+//		}
+//		else
 //		{
 //			// check all geometry groups
 //
-//			for( GeometryGroup geometryGroup : geometry.getGeometryGroups() ) 
+//			for( GeometryGroup geometryGroup : geometry.getGeometryGroups() )
 //			{
 //				// TODO: try to make object's material
 //				Material material = Material.getBufferMaterial( this, geometryGroup );
 //
 //				boolean areCustomAttributesDirty = material.getShader().areCustomAttributesDirty();
-//				if ( geometry.isVerticesNeedUpdate() 
+//				if ( geometry.isVerticesNeedUpdate()
 //						|| geometry.isMorphTargetsNeedUpdate()
-//						|| geometry.isElementsNeedUpdate() 
-//						|| geometry.isUvsNeedUpdate()      
-//						|| geometry.isNormalsNeedUpdate()      
-//						|| geometry.isColorsNeedUpdate()   
-//						|| geometry.isTangentsNeedUpdate()      
+//						|| geometry.isElementsNeedUpdate()
+//						|| geometry.isUvsNeedUpdate()
+//						|| geometry.isNormalsNeedUpdate()
+//						|| geometry.isColorsNeedUpdate()
+//						|| geometry.isTangentsNeedUpdate()
 //						|| areCustomAttributesDirty
 //				) {
 //					setBuffers( gl, geometryGroup, BufferUsage.DYNAMIC_DRAW, material);
@@ -713,29 +712,29 @@ public class Mesh extends GeometryObject
 	// setMeshBuffers
 	public void setBuffers(GL20 gl, GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
 	{
-		Parallax.app.debug("Mesh", "Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
+		//Log.debug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
 
 		if ( ! geometryGroup.__inittedArrays )
-			 return;
-		
+			return;
+
 		boolean needsSmoothNormals = material.materialNeedsSmoothNormals();
 
 		int vertexIndex = 0,
 
-		offset = 0,
-		offset_uv = 0,
-		offset_uv2 = 0,
-		offset_face = 0,
-		offset_normal = 0,
-		offset_tangent = 0,
-		offset_line = 0,
-		offset_color = 0,
-		offset_skin = 0,
-		offset_morphTarget = 0,
-		offset_custom = 0,
-		offset_customSrc = 0;
-		
-		FloatBuffer vertexArray = geometryGroup.__vertexArray,
+				offset = 0,
+				offset_uv = 0,
+				offset_uv2 = 0,
+				offset_face = 0,
+				offset_normal = 0,
+				offset_tangent = 0,
+				offset_line = 0,
+				offset_color = 0,
+				offset_skin = 0,
+				offset_morphTarget = 0,
+				offset_custom = 0,
+				offset_customSrc = 0;
+
+		Float32Array vertexArray = geometryGroup.__vertexArray,
 				uvArray = geometryGroup.__uvArray,
 				uv2Array = geometryGroup.__uv2Array,
 				normalArray = geometryGroup.__normalArray,
@@ -745,12 +744,12 @@ public class Mesh extends GeometryObject
 				skinIndexArray = geometryGroup.__skinIndexArray,
 				skinWeightArray = geometryGroup.__skinWeightArray;
 
-		List<FloatBuffer> morphTargetsArrays = geometryGroup.__morphTargetsArrays,
+		List<Float32Array> morphTargetsArrays = geometryGroup.__morphTargetsArrays,
 				morphNormalsArrays = geometryGroup.__morphNormalsArrays;
 
 		List<Attribute> customAttributes = geometryGroup.__webglCustomAttributesList;
 
-		IntBuffer faceArray = geometryGroup.__faceArray,
+		Uint16Array faceArray = geometryGroup.__faceArray,
 				lineArray = geometryGroup.__lineArray;
 
 		Geometry geometry = (Geometry)this.getGeometry(); // this is shared for all chunks
@@ -781,746 +780,746 @@ public class Mesh extends GeometryObject
 		List<Geometry.MorphTarget> morphTargets = geometry.getMorphTargets();
 		List<Geometry.MorphNormal> morphNormals = geometry.getMorphNormals();
 
-		if ( dirtyVertices ) 
-		{			 
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-			 {
-				 Face3 face = obj_faces.get( chunk_faces3.get( f ) );
-				 
-				 Vector3 v1 = vertices.get( face.getA() );
-				 Vector3 v2 = vertices.get( face.getB() );
-				 Vector3 v3 = vertices.get( face.getC() );
+		if ( dirtyVertices )
+		{
+			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+			{
+				Face3 face = obj_faces.get( chunk_faces3.get( f ) );
 
-				 vertexArray.put(offset, v1.getX());
-				 vertexArray.put(offset + 1, v1.getY());
-				 vertexArray.put(offset + 2, v1.getZ());
+				Vector3 v1 = vertices.get( face.getA() );
+				Vector3 v2 = vertices.get( face.getB() );
+				Vector3 v3 = vertices.get( face.getC() );
 
-				 vertexArray.put(offset + 3, v2.getX());
-				 vertexArray.put(offset + 4, v2.getY());
-				 vertexArray.put(offset + 5, v2.getZ());
+				vertexArray.set(offset, v1.getX());
+				vertexArray.set(offset + 1, v1.getY());
+				vertexArray.set(offset + 2, v1.getZ());
 
-				 vertexArray.put(offset + 6, v3.getX());
-				 vertexArray.put(offset + 7, v3.getY());
-				 vertexArray.put(offset + 8, v3.getZ());
+				vertexArray.set(offset + 3, v2.getX());
+				vertexArray.set(offset + 4, v2.getY());
+				vertexArray.set(offset + 5, v2.getZ());
+
+				vertexArray.set(offset + 6, v3.getX());
+				vertexArray.set(offset + 7, v3.getY());
+				vertexArray.set(offset + 8, v3.getZ());
 
 				 offset += 9;
 			 }
-			 
+
 			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglVertexBuffer);
-			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.limit(), vertexArray, hint.getValue() );
+			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getBuffer(), hint.getValue() );
 		}
-		 
-		if ( dirtyMorphTargets ) 
+
+		if ( dirtyMorphTargets )
 		{
-			 
-			 for ( int vk = 0, vkl = morphTargets.size(); vk < vkl; vk ++ ) 
-			 {
-				 offset_morphTarget = 0;
 
-				 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-				 {
-					 int chf = chunk_faces3.get( f );
-					 Face3 face = obj_faces.get( chf );
+			for ( int vk = 0, vkl = morphTargets.size(); vk < vkl; vk ++ )
+			{
+				offset_morphTarget = 0;
 
-					 // morph positions
+				for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+				{
+					int chf = chunk_faces3.get( f );
+					Face3 face = obj_faces.get( chf );
 
-					 Vector3 v1 = morphTargets.get( vk ).vertices.get( face.getA() );
-					 Vector3 v2 = morphTargets.get( vk ).vertices.get( face.getB() );
-					 Vector3 v3 = morphTargets.get( vk ).vertices.get( face.getC() );
+					// morph positions
 
-					 FloatBuffer vka = morphTargetsArrays.get(vk);
+					Vector3 v1 = morphTargets.get( vk ).vertices.get( face.getA() );
+					Vector3 v2 = morphTargets.get( vk ).vertices.get( face.getB() );
+					Vector3 v3 = morphTargets.get( vk ).vertices.get( face.getC() );
 
-					 vka.put(offset_morphTarget, v1.getX());
-					 vka.put(offset_morphTarget + 1, v1.getY());
-					 vka.put(offset_morphTarget + 2, v1.getZ());
+					Float32Array vka = morphTargetsArrays.get(vk);
 
-					 vka.put(offset_morphTarget + 3, v2.getX());
-					 vka.put(offset_morphTarget + 4, v2.getY());
-					 vka.put(offset_morphTarget + 5, v2.getZ());
+					vka.set(offset_morphTarget, v1.getX());
+					vka.set(offset_morphTarget + 1, v1.getY());
+					vka.set(offset_morphTarget + 2, v1.getZ());
 
-					 vka.put(offset_morphTarget + 6, v3.getX());
-					 vka.put(offset_morphTarget + 7, v3.getY());
-					 vka.put(offset_morphTarget + 8, v3.getZ());
+					vka.set(offset_morphTarget + 3, v2.getX());
+					vka.set(offset_morphTarget + 4, v2.getY());
+					vka.set(offset_morphTarget + 5, v2.getZ());
 
-					 // morph normals
+					vka.set(offset_morphTarget + 6, v3.getX());
+					vka.set(offset_morphTarget + 7, v3.getY());
+					vka.set(offset_morphTarget + 8, v3.getZ());
 
-					 if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
-					 {
-						 Vector3 n1, n2, n3;
-						 if ( needsSmoothNormals ) 
-						 {
-							 Geometry.VertextNormal faceVertexNormals = morphNormals.get( vk ).vertexNormals.get( chf );
+					// morph normals
 
-							 n1 = faceVertexNormals.a;
-							 n2 = faceVertexNormals.b;
-							 n3 = faceVertexNormals.c;
-						 } 
-						 else 
-						 {
-							 n1 = morphNormals.get( vk ).faceNormals.get( chf );
-							 n2 = n1;
-							 n3 = n1;
-						 }
+					if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() )
+					{
+						Vector3 n1, n2, n3;
+						if ( needsSmoothNormals )
+						{
+							Geometry.VertextNormal faceVertexNormals = morphNormals.get( vk ).vertexNormals.get( chf );
 
-						 FloatBuffer nka = morphNormalsArrays.get( vk );
+							n1 = faceVertexNormals.a;
+							n2 = faceVertexNormals.b;
+							n3 = faceVertexNormals.c;
+						}
+						else
+						{
+							n1 = morphNormals.get( vk ).faceNormals.get( chf );
+							n2 = n1;
+							n3 = n1;
+						}
 
-						 nka.put(offset_morphTarget, n1.getX());
-						 nka.put(offset_morphTarget + 1, n1.getY());
-						 nka.put(offset_morphTarget + 2, n1.getZ());
+						Float32Array nka = morphNormalsArrays.get( vk );
 
-						 nka.put(offset_morphTarget + 3, n2.getX());
-						 nka.put(offset_morphTarget + 4, n2.getY());
-						 nka.put(offset_morphTarget + 5, n2.getZ());
+						nka.set(offset_morphTarget, n1.getX());
+						nka.set(offset_morphTarget + 1, n1.getY());
+						nka.set(offset_morphTarget + 2, n1.getZ());
 
-						 nka.put(offset_morphTarget + 6, n3.getX());
-						 nka.put(offset_morphTarget + 7, n3.getY());
-						 nka.put(offset_morphTarget + 8, n3.getZ());
-					 }
+						nka.set(offset_morphTarget + 3, n2.getX());
+						nka.set(offset_morphTarget + 4, n2.getY());
+						nka.set(offset_morphTarget + 5, n2.getZ());
 
-					 //
+						nka.set(offset_morphTarget + 6, n3.getX());
+						nka.set(offset_morphTarget + 7, n3.getY());
+						nka.set(offset_morphTarget + 8, n3.getZ());
+					}
 
-					 offset_morphTarget += 9;
+					//
 
-				 }
+					offset_morphTarget += 9;
+
+				}
 
 				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get(vk));
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphTargetsArrays.get(vk).limit(), morphTargetsArrays.get( vk ), hint.getValue() );
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphTargetsArrays.get(vk).getByteLength(), morphTargetsArrays.get( vk ).getBuffer(), hint.getValue() );
 
-				 if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() ) 
+				 if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() )
 				 {
 					 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get(vk));
-					 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphNormalsArrays.get(vk).limit(), morphNormalsArrays.get( vk ), hint.getValue() );
+					 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphNormalsArrays.get(vk).getByteLength(), morphNormalsArrays.get( vk ).getBuffer(), hint.getValue() );
 				 }
 			 }
 		}
 
-		if ( obj_skinWeights.size() > 0 ) 
-		{			 
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-			 {
-				 Face3 face = obj_faces.get( chunk_faces3.get( f ) );
+		if ( obj_skinWeights.size() > 0 )
+		{
+			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+			{
+				Face3 face = obj_faces.get( chunk_faces3.get( f ) );
 
-				 // weights
+				// weights
 
-				 Vector4 sw1 = obj_skinWeights.get( face.getA() );
-				 Vector4 sw2 = obj_skinWeights.get( face.getB() );
-				 Vector4 sw3 = obj_skinWeights.get( face.getC() );
+				Vector4 sw1 = obj_skinWeights.get( face.getA() );
+				Vector4 sw2 = obj_skinWeights.get( face.getB() );
+				Vector4 sw3 = obj_skinWeights.get( face.getC() );
 
-				 skinWeightArray.put(offset_skin, sw1.getX());
-				 skinWeightArray.put(offset_skin + 1, sw1.getY());
-				 skinWeightArray.put(offset_skin + 2, sw1.getZ());
-				 skinWeightArray.put(offset_skin + 3, sw1.getW());
+				skinWeightArray.set(offset_skin, sw1.getX());
+				skinWeightArray.set(offset_skin + 1, sw1.getY());
+				skinWeightArray.set(offset_skin + 2, sw1.getZ());
+				skinWeightArray.set(offset_skin + 3, sw1.getW());
 
-				 skinWeightArray.put(offset_skin + 4, sw2.getX());
-				 skinWeightArray.put(offset_skin + 5, sw2.getY());
-				 skinWeightArray.put(offset_skin + 6, sw2.getZ());
-				 skinWeightArray.put(offset_skin + 7, sw2.getW());
+				skinWeightArray.set(offset_skin + 4, sw2.getX());
+				skinWeightArray.set(offset_skin + 5, sw2.getY());
+				skinWeightArray.set(offset_skin + 6, sw2.getZ());
+				skinWeightArray.set(offset_skin + 7, sw2.getW());
 
-				 skinWeightArray.put(offset_skin + 8, sw3.getX());
-				 skinWeightArray.put(offset_skin + 9, sw3.getY());
-				 skinWeightArray.put(offset_skin + 10, sw3.getZ());
-				 skinWeightArray.put(offset_skin + 11, sw3.getW());
+				skinWeightArray.set(offset_skin + 8, sw3.getX());
+				skinWeightArray.set(offset_skin + 9, sw3.getY());
+				skinWeightArray.set(offset_skin + 10, sw3.getZ());
+				skinWeightArray.set(offset_skin + 11, sw3.getW());
 
-				 // indices
+				// indices
 
-				 Vector4 si1 = obj_skinIndices.get(face.getA());
-				 Vector4 si2 = obj_skinIndices.get(face.getB());
-				 Vector4 si3 = obj_skinIndices.get(face.getC());
+				Vector4 si1 = obj_skinIndices.get(face.getA());
+				Vector4 si2 = obj_skinIndices.get(face.getB());
+				Vector4 si3 = obj_skinIndices.get(face.getC());
 
-				 skinIndexArray.put(offset_skin, si1.getX());
-				 skinIndexArray.put(offset_skin + 1, si1.getY());
-				 skinIndexArray.put(offset_skin + 2, si1.getZ());
-				 skinIndexArray.put(offset_skin + 3, si1.getW());
+				skinIndexArray.set(offset_skin, si1.getX());
+				skinIndexArray.set(offset_skin + 1, si1.getY());
+				skinIndexArray.set(offset_skin + 2, si1.getZ());
+				skinIndexArray.set(offset_skin + 3, si1.getW());
 
-				 skinIndexArray.put(offset_skin + 4, si2.getX());
-				 skinIndexArray.put(offset_skin + 5, si2.getY());
-				 skinIndexArray.put(offset_skin + 6, si2.getZ());
-				 skinIndexArray.put(offset_skin + 7, si2.getW());
+				skinIndexArray.set(offset_skin + 4, si2.getX());
+				skinIndexArray.set(offset_skin + 5, si2.getY());
+				skinIndexArray.set(offset_skin + 6, si2.getZ());
+				skinIndexArray.set(offset_skin + 7, si2.getW());
 
-				 skinIndexArray.put(offset_skin + 8, si3.getX());
-				 skinIndexArray.put(offset_skin + 9, si3.getY());
-				 skinIndexArray.put(offset_skin + 10, si3.getZ());
-				 skinIndexArray.put(offset_skin + 11, si3.getW());
+				skinIndexArray.set(offset_skin + 8, si3.getX());
+				skinIndexArray.set(offset_skin + 9, si3.getY());
+				skinIndexArray.set(offset_skin + 10, si3.getZ());
+				skinIndexArray.set(offset_skin + 11, si3.getW());
 
-				 offset_skin += 12;
+				offset_skin += 12;
 
-			 }
+			}
 
-			 if ( offset_skin > 0 ) 
+			 if ( offset_skin > 0 )
 			 {
 				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinIndicesBuffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinIndexArray.limit(), skinIndexArray, hint.getValue());
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinIndexArray.getByteLength(), skinIndexArray.getBuffer(), hint.getValue());
 
 				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinWeightsBuffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinWeightArray.limit(), skinWeightArray, hint.getValue() );
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinWeightArray.getByteLength(), skinWeightArray.getBuffer(), hint.getValue() );
 			 }
 		 }
 
-		 if ( dirtyColors ) 
-		 {		 
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-			 {
-				 Face3 face = obj_faces.get(chunk_faces3.get(f));
+		if ( dirtyColors )
+		{
+			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+			{
+				Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-				 List<Color> vertexColors = face.getVertexColors();
-				 Color faceColor = face.getColor();
-				 Color c1, c2, c3;
+				List<Color> vertexColors = face.getVertexColors();
+				Color faceColor = face.getColor();
+				Color c1, c2, c3;
 
-				 if ( vertexColors.size() == 3 && ((HasVertexColors)material).isVertexColors() == Material.COLORS.VERTEX) 
-				 {
-					 c1 = vertexColors.get(0);
-					 c2 = vertexColors.get(1);
-					 c3 = vertexColors.get(2);
-				 }
-				 else 
-				 {
-					 c1 = faceColor;
-					 c2 = faceColor;
-					 c3 = faceColor;
-				 }
+				if ( vertexColors.size() == 3 && ((HasVertexColors)material).isVertexColors() == Material.COLORS.VERTEX)
+				{
+					c1 = vertexColors.get(0);
+					c2 = vertexColors.get(1);
+					c3 = vertexColors.get(2);
+				}
+				else
+				{
+					c1 = faceColor;
+					c2 = faceColor;
+					c3 = faceColor;
+				}
 
-				 colorArray.put(offset_color, c1.getR());
-				 colorArray.put(offset_color + 1, c1.getG());
-				 colorArray.put(offset_color + 2, c1.getB());
+				colorArray.set(offset_color, c1.getR());
+				colorArray.set(offset_color + 1, c1.getG());
+				colorArray.set(offset_color + 2, c1.getB());
 
-				 colorArray.put(offset_color + 3, c2.getR());
-				 colorArray.put(offset_color + 4, c2.getG());
-				 colorArray.put(offset_color + 5, c2.getB());
+				colorArray.set(offset_color + 3, c2.getR());
+				colorArray.set(offset_color + 4, c2.getG());
+				colorArray.set(offset_color + 5, c2.getB());
 
-				 colorArray.put(offset_color + 6, c3.getR());
-				 colorArray.put(offset_color + 7, c3.getG());
-				 colorArray.put(offset_color + 8, c3.getB());
+				colorArray.set(offset_color + 6, c3.getR());
+				colorArray.set(offset_color + 7, c3.getG());
+				colorArray.set(offset_color + 8, c3.getB());
 
-				 offset_color += 9;
+				offset_color += 9;
 
-			 }
+			}
 
-			 if ( offset_color > 0 ) 
+			 if ( offset_color > 0 )
 			 {
 				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglColorBuffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.limit(),  colorArray, hint.getValue() );
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(),  colorArray.getBuffer(), hint.getValue() );
 			 }
 		 }
 
-		 if ( dirtyTangents && geometry.isHasTangents()) 
-		 {			 
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-			 {
+		if ( dirtyTangents && geometry.isHasTangents())
+		{
+			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+			{
 
-				 Face3 face = obj_faces.get(chunk_faces3.get(f));
+				Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-				 List<Vector4> vertexTangents = face.getVertexTangents();
+				List<Vector4> vertexTangents = face.getVertexTangents();
 
-				 Vector4 t1 = vertexTangents.get(0);
-				 Vector4 t2 = vertexTangents.get(1);
-				 Vector4 t3 = vertexTangents.get(2);
+				Vector4 t1 = vertexTangents.get(0);
+				Vector4 t2 = vertexTangents.get(1);
+				Vector4 t3 = vertexTangents.get(2);
 
-				 tangentArray.put(offset_tangent, t1.getX());
-				 tangentArray.put(offset_tangent + 1, t1.getY());
-				 tangentArray.put(offset_tangent + 2, t1.getZ());
-				 tangentArray.put(offset_tangent + 3, t1.getW());
+				tangentArray.set(offset_tangent, t1.getX());
+				tangentArray.set(offset_tangent + 1, t1.getY());
+				tangentArray.set(offset_tangent + 2, t1.getZ());
+				tangentArray.set(offset_tangent + 3, t1.getW());
 
-				 tangentArray.put(offset_tangent + 4, t2.getX());
-				 tangentArray.put(offset_tangent + 5, t2.getY());
-				 tangentArray.put(offset_tangent + 6, t2.getZ());
-				 tangentArray.put(offset_tangent + 7, t2.getW());
+				tangentArray.set(offset_tangent + 4, t2.getX());
+				tangentArray.set(offset_tangent + 5, t2.getY());
+				tangentArray.set(offset_tangent + 6, t2.getZ());
+				tangentArray.set(offset_tangent + 7, t2.getW());
 
-				 tangentArray.put(offset_tangent + 8, t3.getX());
-				 tangentArray.put(offset_tangent + 9, t3.getY());
-				 tangentArray.put(offset_tangent + 10, t3.getZ());
-				 tangentArray.put(offset_tangent + 11, t3.getW());
+				tangentArray.set(offset_tangent + 8, t3.getX());
+				tangentArray.set(offset_tangent + 9, t3.getY());
+				tangentArray.set(offset_tangent + 10, t3.getZ());
+				tangentArray.set(offset_tangent + 11, t3.getW());
 
-				 offset_tangent += 12;
+				offset_tangent += 12;
 
-			 }
+			}
 
 			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglTangentBuffer);
-			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), tangentArray.limit(), tangentArray, hint.getValue() );
+			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), tangentArray.getByteLength(), tangentArray.getBuffer(), hint.getValue() );
 
-		 }
+		}
 
-		 if ( dirtyNormals ) 
-		 {
-			 
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-			 {
+		if ( dirtyNormals )
+		{
 
-				 Face3 face = obj_faces.get(chunk_faces3.get(f));
+			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+			{
 
-				 List<Vector3> vertexNormals = face.getVertexNormals();
-				 Vector3 faceNormal = face.getNormal();
+				Face3 face = obj_faces.get(chunk_faces3.get(f));
 
-				 if ( vertexNormals.size() == 3 && needsSmoothNormals ) 
-				 {
-					 for ( int i = 0; i < 3; i ++ ) 
-					 {
+				List<Vector3> vertexNormals = face.getVertexNormals();
+				Vector3 faceNormal = face.getNormal();
 
-						 Vector3 vn = vertexNormals.get(i);
+				if ( vertexNormals.size() == 3 && needsSmoothNormals )
+				{
+					for ( int i = 0; i < 3; i ++ )
+					{
 
-						 normalArray.put(offset_normal, vn.getX());
-						 normalArray.put(offset_normal + 1, vn.getY());
-						 normalArray.put(offset_normal + 2, vn.getZ());
+						Vector3 vn = vertexNormals.get(i);
 
-						 offset_normal += 3;
-					 }
+						normalArray.set(offset_normal, vn.getX());
+						normalArray.set(offset_normal + 1, vn.getY());
+						normalArray.set(offset_normal + 2, vn.getZ());
 
-				 } 
-				 else 
-				 {
+						offset_normal += 3;
+					}
 
-					 for ( int i = 0; i < 3; i ++ ) 
-					 {
+				}
+				else
+				{
 
-						 normalArray.put(offset_normal, faceNormal.getX());
-						 normalArray.put(offset_normal + 1, faceNormal.getY());
-						 normalArray.put(offset_normal + 2, faceNormal.getZ());
+					for ( int i = 0; i < 3; i ++ )
+					{
 
-						 offset_normal += 3;
-					 }
-				 }
-			 }
+						normalArray.set(offset_normal, faceNormal.getX());
+						normalArray.set(offset_normal + 1, faceNormal.getY());
+						normalArray.set(offset_normal + 2, faceNormal.getZ());
+
+						offset_normal += 3;
+					}
+				}
+			}
 
 			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglNormalBuffer);
-			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), normalArray.limit(),  normalArray, hint.getValue() );
+			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), normalArray.getByteLength(),  normalArray.getBuffer(), hint.getValue() );
 
-		 }
+		}
 
-		 if ( dirtyUvs && obj_uvs != null &&  obj_uvs.size() > 0 ) 
-		 {
-			 for (int  f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-			 {
+		if ( dirtyUvs && obj_uvs != null &&  obj_uvs.size() > 0 )
+		{
+			for (int  f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+			{
 
-				 int fi = chunk_faces3.get(f);
+				int fi = chunk_faces3.get(f);
 
-				 if(obj_uvs.size() <= fi) continue;
+				if(obj_uvs.size() <= fi) continue;
 
-				 List<Vector2> uv = obj_uvs.get(fi);
+				List<Vector2> uv = obj_uvs.get(fi);
 
-				 if ( uv == null ) continue;
+				if ( uv == null ) continue;
 
-				 for ( int i = 0; i < 3; i ++ ) {
+				for ( int i = 0; i < 3; i ++ ) {
 
-					 Vector2 uvi = uv.get(i);
+					Vector2 uvi = uv.get(i);
 
-					 uvArray.put(offset_uv, uvi.getX());
-					 uvArray.put(offset_uv + 1, uvi.getY());
+					uvArray.set(offset_uv, uvi.getX());
+					uvArray.set(offset_uv + 1, uvi.getY());
 
-					 offset_uv += 2;
-				 }
-			 }
+					offset_uv += 2;
+				}
+			}
 
-			 if ( offset_uv > 0 ) 
+			 if ( offset_uv > 0 )
 			 {
 				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglUVBuffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uvArray.limit(), uvArray, hint.getValue() );
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uvArray.getByteLength(), uvArray.getBuffer(), hint.getValue() );
 			 }
 		 }
 
-		 if (dirtyUvs && obj_uvs2 != null && obj_uvs2.size() > 0 ) 
-		 {
-			 
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-			 {
-				 int fi = chunk_faces3.get(f);
+		if (dirtyUvs && obj_uvs2 != null && obj_uvs2.size() > 0 )
+		{
 
-				 List<Vector2> uv2 = obj_uvs2.get(fi);
+			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+			{
+				int fi = chunk_faces3.get(f);
 
-				 if ( uv2 == null ) continue;
+				List<Vector2> uv2 = obj_uvs2.get(fi);
 
-				 for ( int i = 0; i < 3; i ++ ) 
-				 {
-					 Vector2 uv2i = uv2.get(i);
+				if ( uv2 == null ) continue;
 
-					 uv2Array.put(offset_uv2, uv2i.getX());
-					 uv2Array.put(offset_uv2 + 1, uv2i.getY());
+				for ( int i = 0; i < 3; i ++ )
+				{
+					Vector2 uv2i = uv2.get(i);
 
-					 offset_uv2 += 2;
-				 }
-			 }
+					uv2Array.set(offset_uv2, uv2i.getX());
+					uv2Array.set(offset_uv2 + 1, uv2i.getY());
 
-			 if ( offset_uv2 > 0 ) 
+					offset_uv2 += 2;
+				}
+			}
+
+			 if ( offset_uv2 > 0 )
 			 {
 				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglUV2Buffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uv2Array.limit(), uv2Array, hint.getValue() );
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uv2Array.getByteLength(), uv2Array.getBuffer(), hint.getValue() );
 			 }
 		 }
 
-		 if (  dirtyElements ) 
-		 {			 
-			 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-			 {
-				 faceArray.put(offset_face, vertexIndex);
-				 faceArray.put(offset_face + 1, vertexIndex + 1);
-				 faceArray.put(offset_face + 2, vertexIndex + 2);
+		if (  dirtyElements )
+		{
+			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+			{
+				faceArray.set(offset_face, vertexIndex);
+				faceArray.set(offset_face + 1, vertexIndex + 1);
+				faceArray.set(offset_face + 2, vertexIndex + 2);
 
-				 offset_face += 3;
+				offset_face += 3;
 
-				 lineArray.put(offset_line, vertexIndex);
-				 lineArray.put(offset_line + 1, vertexIndex + 1);
+				lineArray.set(offset_line, vertexIndex);
+				lineArray.set(offset_line + 1, vertexIndex + 1);
 
-				 lineArray.put(offset_line + 2, vertexIndex);
-				 lineArray.put(offset_line + 3, vertexIndex + 2);
+				lineArray.set(offset_line + 2, vertexIndex);
+				lineArray.set(offset_line + 3, vertexIndex + 2);
 
-				 lineArray.put(offset_line + 4, vertexIndex + 1);
-				 lineArray.put(offset_line + 5, vertexIndex + 2);
+				lineArray.set(offset_line + 4, vertexIndex + 1);
+				lineArray.set(offset_line + 5, vertexIndex + 2);
 
-				 offset_line += 6;
+				offset_line += 6;
 
 				 vertexIndex += 3;
 			 }
-			 
+
 			 gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer);
-			 gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), faceArray.limit(), faceArray, hint.getValue());
+			 gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), faceArray.getByteLength(), faceArray.getBuffer(), hint.getValue());
 
 			 gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer);
-			 gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lineArray.limit(), lineArray, hint.getValue() );
-
-		 }
-
-		 if ( customAttributes != null ) 
-		 {
-			 for ( int i = 0, il = customAttributes.size(); i < il; i ++ ) 
-			 {
-				 Attribute customAttribute = geometryGroup.__webglCustomAttributesList.get(i);
-
-				 if ( ! customAttribute.__original.needsUpdate ) continue;
-
-				 offset_custom = 0;
-				 offset_customSrc = 0;
-
-				 if ( customAttribute.size == 1 ) 
-				 {
-					 if ( customAttribute.getBoundTo() == null 
-							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
-					 {
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 Face3 face = obj_faces.get(chunk_faces3.get(f));
-
-							 customAttribute.array.put(offset_custom, (Float) customAttribute.getValue().get(face.getA()));
-							 customAttribute.array.put(offset_custom + 1, (Float) customAttribute.getValue().get(face.getB()));
-							 customAttribute.array.put(offset_custom + 2, (Float) customAttribute.getValue().get(face.getC()));
-
-							 offset_custom += 3;
-						 }
-					 }
-					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES ) 
-					 {
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 float value = (Float) customAttribute.getValue().get(chunk_faces3.get(f));
-
-							 customAttribute.array.put(offset_custom, value);
-							 customAttribute.array.put(offset_custom + 1, value);
-							 customAttribute.array.put(offset_custom + 2, value);
-
-							 offset_custom += 3;
-
-						 }
-					 }
-				 } 
-				 else if ( customAttribute.size == 2 ) 
-				 {
-					 if ( customAttribute.getBoundTo() == null 
-							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
-					 {
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 Face3 face = obj_faces.get(chunk_faces3.get(f));
-
-							 Vector3 v1 = (Vector3) customAttribute.getValue().get(face.getA());
-							 Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
-							 Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
-
-							 customAttribute.array.put(offset_custom, v1.getX());
-							 customAttribute.array.put(offset_custom + 1, v1.getY());
-
-							 customAttribute.array.put(offset_custom + 2, v2.getX());
-							 customAttribute.array.put(offset_custom + 3, v2.getY());
-
-							 customAttribute.array.put(offset_custom + 4, v3.getX());
-							 customAttribute.array.put(offset_custom + 5, v3.getY());
-
-							 offset_custom += 6;
-
-						 }
-					 } 
-					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES ) 
-					 {
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 Vector3 value = (Vector3) customAttribute.getValue().get(chunk_faces3.get(f));
-
-							 Vector3 v1 = value;
-							 Vector3 v2 = value;
-							 Vector3 v3 = value;
-
-							 customAttribute.array.put(offset_custom, v1.getX());
-							 customAttribute.array.put(offset_custom + 1, v1.getY());
-
-							 customAttribute.array.put(offset_custom + 2, v2.getX());
-							 customAttribute.array.put(offset_custom + 3, v2.getY());
-
-							 customAttribute.array.put(offset_custom + 4, v3.getX());
-							 customAttribute.array.put(offset_custom + 5, v3.getY());
-
-							 offset_custom += 6;
-
-						 }
-
-					 }
-
-				 } 
-				 else if ( customAttribute.size == 3 ) 
-				 {
-					 if ( customAttribute.getBoundTo() == null 
-							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
-					 {
-
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
-
-							 Face3 face = obj_faces.get(chunk_faces3.get(f));
-
-							 if(customAttribute.type == Attribute.TYPE.C) {
-								 Color v1 = (Color) customAttribute.getValue().get(face.getA());
-								 Color v2 = (Color) customAttribute.getValue().get(face.getB());
-								 Color v3 = (Color) customAttribute.getValue().get(face.getC());
-
-								 customAttribute.array.put(offset_custom, v1.getR());
-								 customAttribute.array.put(offset_custom + 1, v1.getG());
-								 customAttribute.array.put(offset_custom + 2, v1.getB());
-
-								 customAttribute.array.put(offset_custom + 3, v2.getR());
-								 customAttribute.array.put(offset_custom + 4, v2.getG());
-								 customAttribute.array.put(offset_custom + 5, v2.getB());
-
-								 customAttribute.array.put(offset_custom + 6, v3.getR());
-								 customAttribute.array.put(offset_custom + 7, v3.getG());
-								 customAttribute.array.put(offset_custom + 8, v3.getB());
-							 }
-							 else
-							 {
-								 Vector3 v1 = (Vector3) customAttribute.getValue().get(face.getA());
-								 Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
-								 Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
-
-								 customAttribute.array.put(offset_custom, v1.getX());
-								 customAttribute.array.put(offset_custom + 1, v1.getY());
-								 customAttribute.array.put(offset_custom + 2, v1.getZ());
-
-								 customAttribute.array.put(offset_custom + 3, v2.getX());
-								 customAttribute.array.put(offset_custom + 4, v2.getY());
-								 customAttribute.array.put(offset_custom + 5, v2.getZ());
-
-								 customAttribute.array.put(offset_custom + 6, v3.getX());
-								 customAttribute.array.put(offset_custom + 7, v3.getY());
-								 customAttribute.array.put(offset_custom + 8, v3.getZ());
-							 }
-
-							 offset_custom += 9;
-
-						 }
-
-					 } 
-					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES ) 
-					 {
-
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 if(customAttribute.type == Attribute.TYPE.C) 
-							 {
-								 Color value = (Color) customAttribute.getValue().get(chunk_faces3.get(f));
-								 Color v1 = value;
-								 Color v2 = value;
-								 Color v3 = value;
-
-								 customAttribute.array.put(offset_custom, v1.getR());
-								 customAttribute.array.put(offset_custom + 1, v1.getG());
-								 customAttribute.array.put(offset_custom + 2, v1.getB());
-
-								 customAttribute.array.put(offset_custom + 3, v2.getR());
-								 customAttribute.array.put(offset_custom + 4, v2.getG());
-								 customAttribute.array.put(offset_custom + 5, v2.getB());
-
-								 customAttribute.array.put(offset_custom + 6, v3.getR());
-								 customAttribute.array.put(offset_custom + 7, v3.getG());
-								 customAttribute.array.put(offset_custom + 8, v3.getB());
-							 }
-							 else
-							 {
-								 Vector3 value = (Vector3) customAttribute.getValue().get(chunk_faces3.get(f));
-								 Vector3 v1 = value;
-								 Vector3 v2 = value;
-								 Vector3 v3 = value;
-
-								 customAttribute.array.put(offset_custom, v1.getX());
-								 customAttribute.array.put(offset_custom + 1, v1.getY());
-								 customAttribute.array.put(offset_custom + 2, v1.getZ());
-
-								 customAttribute.array.put(offset_custom + 3, v2.getX());
-								 customAttribute.array.put(offset_custom + 4, v2.getY());
-								 customAttribute.array.put(offset_custom + 5, v2.getZ());
-
-								 customAttribute.array.put(offset_custom + 6, v3.getX());
-								 customAttribute.array.put(offset_custom + 7, v3.getY());
-								 customAttribute.array.put(offset_custom + 8, v3.getZ());
-							 }
-
-							 offset_custom += 9;
-
-						 }
-					 }
-					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACE_VERTICES) 
-					 {
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 if(customAttribute.type == Attribute.TYPE.C) 
-							 {
-								 List<Color> value = (List<Color>) customAttribute.getValue().get(chunk_faces3.get(f));
-								 Color v1 = value.get(0);
-								 Color v2 = value.get(1);
-								 Color v3 = value.get(2);
-
-								 customAttribute.array.put(offset_custom, v1.getR());
-								 customAttribute.array.put(offset_custom + 1, v1.getG());
-								 customAttribute.array.put(offset_custom + 2, v1.getB());
-
-								 customAttribute.array.put(offset_custom + 3, v2.getR());
-								 customAttribute.array.put(offset_custom + 4, v2.getG());
-								 customAttribute.array.put(offset_custom + 5, v2.getB());
-
-								 customAttribute.array.put(offset_custom + 6, v3.getR());
-								 customAttribute.array.put(offset_custom + 7, v3.getG());
-								 customAttribute.array.put(offset_custom + 8, v3.getB());
-							 }
-							 else
-							 {
-								 List<Vector3> value = (List<Vector3>) customAttribute.getValue().get(chunk_faces3.get(f));
-								 Vector3 v1 = value.get(0);
-								 Vector3 v2 = value.get(1);
-								 Vector3 v3 = value.get(2);
-
-								 customAttribute.array.put(offset_custom, v1.getX());
-								 customAttribute.array.put(offset_custom + 1, v1.getY());
-								 customAttribute.array.put(offset_custom + 2, v1.getZ());
-
-								 customAttribute.array.put(offset_custom + 3, v2.getX());
-								 customAttribute.array.put(offset_custom + 4, v2.getY());
-								 customAttribute.array.put(offset_custom + 5, v2.getZ());
-
-								 customAttribute.array.put(offset_custom + 6, v3.getX());
-								 customAttribute.array.put(offset_custom + 7, v3.getY());
-								 customAttribute.array.put(offset_custom + 8, v3.getZ());
-							 }
-
-							 offset_custom += 9;
-						 }
-					 }
-				 }
-				 else if ( customAttribute.size == 4 ) 
-				 {
-					 if ( customAttribute.getBoundTo() == null 
-							 || customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES ) 
-					 {
-
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 Face3 face = obj_faces.get(chunk_faces3.get(f));
-
-							 Vector4 v1 = (Vector4) customAttribute.getValue().get(face.getA());
-							 Vector4 v2 = (Vector4) customAttribute.getValue().get(face.getB());
-							 Vector4 v3 = (Vector4) customAttribute.getValue().get(face.getC());
-
-							 customAttribute.array.put(offset_custom, v1.getX());
-							 customAttribute.array.put(offset_custom + 1, v1.getY());
-							 customAttribute.array.put(offset_custom + 2, v1.getZ());
-							 customAttribute.array.put(offset_custom + 3, v1.getW());
-
-							 customAttribute.array.put(offset_custom + 4, v2.getX());
-							 customAttribute.array.put(offset_custom + 5, v2.getY());
-							 customAttribute.array.put(offset_custom + 6, v2.getZ());
-							 customAttribute.array.put(offset_custom + 7, v2.getW());
-
-							 customAttribute.array.put(offset_custom + 8, v3.getX());
-							 customAttribute.array.put(offset_custom + 9, v3.getY());
-							 customAttribute.array.put(offset_custom + 10, v3.getZ());
-							 customAttribute.array.put(offset_custom + 11, v3.getW());
-
-							 offset_custom += 12;
-
-						 }
-
-					 } 
-					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES) 
-					 {
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 Vector4 value = (Vector4) customAttribute.getValue().get(chunk_faces3.get(f));
-
-							 Vector4 v1 = value;
-							 Vector4 v2 = value;
-							 Vector4 v3 = value;
-
-							 customAttribute.array.put(offset_custom, v1.getX());
-							 customAttribute.array.put(offset_custom + 1, v1.getY());
-							 customAttribute.array.put(offset_custom + 2, v1.getZ());
-							 customAttribute.array.put(offset_custom + 3, v1.getW());
-
-							 customAttribute.array.put(offset_custom + 4, v2.getX());
-							 customAttribute.array.put(offset_custom + 5, v2.getY());
-							 customAttribute.array.put(offset_custom + 6, v2.getZ());
-							 customAttribute.array.put(offset_custom + 7, v2.getW());
-
-							 customAttribute.array.put(offset_custom + 8, v3.getX());
-							 customAttribute.array.put(offset_custom + 9, v3.getY());
-							 customAttribute.array.put(offset_custom + 10, v3.getZ());
-							 customAttribute.array.put(offset_custom + 11, v3.getW());
-
-							 offset_custom += 12;
-
-						 }
-					 }
-					 else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACE_VERTICES ) 
-					 {
-						 for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) 
-						 {
-							 List<Vector4> value = (List<Vector4>) customAttribute.getValue().get(chunk_faces3.get(f));
-
-							 Vector4 v1 = value.get(0);
-							 Vector4 v2 = value.get(1);
-							 Vector4 v3 = value.get(2);
-
-							 customAttribute.array.put(offset_custom, v1.getX());
-							 customAttribute.array.put(offset_custom + 1, v1.getY());
-							 customAttribute.array.put(offset_custom + 2, v1.getZ());
-							 customAttribute.array.put(offset_custom + 3, v1.getW());
-
-							 customAttribute.array.put(offset_custom + 4, v2.getX());
-							 customAttribute.array.put(offset_custom + 5, v2.getY());
-							 customAttribute.array.put(offset_custom + 6, v2.getZ());
-							 customAttribute.array.put(offset_custom + 7, v2.getW());
-
-							 customAttribute.array.put(offset_custom + 8, v3.getX());
-							 customAttribute.array.put(offset_custom + 9, v3.getY());
-							 customAttribute.array.put(offset_custom + 10, v3.getZ());
-							 customAttribute.array.put(offset_custom + 11, v3.getW());
-
-							 offset_custom += 12;
-						 }
-					 }
-				 }
+			 gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lineArray.getByteLength(), lineArray.getBuffer(), hint.getValue() );
+
+		}
+
+		if ( customAttributes != null )
+		{
+			for ( int i = 0, il = customAttributes.size(); i < il; i ++ )
+			{
+				Attribute customAttribute = geometryGroup.__webglCustomAttributesList.get(i);
+
+				if ( ! customAttribute.__original.needsUpdate ) continue;
+
+				offset_custom = 0;
+				offset_customSrc = 0;
+
+				if ( customAttribute.size == 1 )
+				{
+					if ( customAttribute.getBoundTo() == null
+							|| customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES )
+					{
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							Face3 face = obj_faces.get(chunk_faces3.get(f));
+
+							customAttribute.array.set(offset_custom, (Double) customAttribute.getValue().get(face.getA()));
+							customAttribute.array.set(offset_custom + 1, (Double) customAttribute.getValue().get(face.getB()));
+							customAttribute.array.set(offset_custom + 2, (Double) customAttribute.getValue().get(face.getC()));
+
+							offset_custom += 3;
+						}
+					}
+					else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES )
+					{
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							double value = (Double) customAttribute.getValue().get(chunk_faces3.get(f));
+
+							customAttribute.array.set(offset_custom, value);
+							customAttribute.array.set(offset_custom + 1, value);
+							customAttribute.array.set(offset_custom + 2, value);
+
+							offset_custom += 3;
+
+						}
+					}
+				}
+				else if ( customAttribute.size == 2 )
+				{
+					if ( customAttribute.getBoundTo() == null
+							|| customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES )
+					{
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							Face3 face = obj_faces.get(chunk_faces3.get(f));
+
+							Vector3 v1 = (Vector3) customAttribute.getValue().get(face.getA());
+							Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
+							Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
+
+							customAttribute.array.set(offset_custom, v1.getX());
+							customAttribute.array.set(offset_custom + 1, v1.getY());
+
+							customAttribute.array.set(offset_custom + 2, v2.getX());
+							customAttribute.array.set(offset_custom + 3, v2.getY());
+
+							customAttribute.array.set(offset_custom + 4, v3.getX());
+							customAttribute.array.set(offset_custom + 5, v3.getY());
+
+							offset_custom += 6;
+
+						}
+					}
+					else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES )
+					{
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							Vector3 value = (Vector3) customAttribute.getValue().get(chunk_faces3.get(f));
+
+							Vector3 v1 = value;
+							Vector3 v2 = value;
+							Vector3 v3 = value;
+
+							customAttribute.array.set(offset_custom, v1.getX());
+							customAttribute.array.set(offset_custom + 1, v1.getY());
+
+							customAttribute.array.set(offset_custom + 2, v2.getX());
+							customAttribute.array.set(offset_custom + 3, v2.getY());
+
+							customAttribute.array.set(offset_custom + 4, v3.getX());
+							customAttribute.array.set(offset_custom + 5, v3.getY());
+
+							offset_custom += 6;
+
+						}
+
+					}
+
+				}
+				else if ( customAttribute.size == 3 )
+				{
+					if ( customAttribute.getBoundTo() == null
+							|| customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES )
+					{
+
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ ) {
+
+							Face3 face = obj_faces.get(chunk_faces3.get(f));
+
+							if(customAttribute.type == Attribute.TYPE.C) {
+								Color v1 = (Color) customAttribute.getValue().get(face.getA());
+								Color v2 = (Color) customAttribute.getValue().get(face.getB());
+								Color v3 = (Color) customAttribute.getValue().get(face.getC());
+
+								customAttribute.array.set(offset_custom, v1.getR());
+								customAttribute.array.set(offset_custom + 1, v1.getG());
+								customAttribute.array.set(offset_custom + 2, v1.getB());
+
+								customAttribute.array.set(offset_custom + 3, v2.getR());
+								customAttribute.array.set(offset_custom + 4, v2.getG());
+								customAttribute.array.set(offset_custom + 5, v2.getB());
+
+								customAttribute.array.set(offset_custom + 6, v3.getR());
+								customAttribute.array.set(offset_custom + 7, v3.getG());
+								customAttribute.array.set(offset_custom + 8, v3.getB());
+							}
+							else
+							{
+								Vector3 v1 = (Vector3) customAttribute.getValue().get(face.getA());
+								Vector3 v2 = (Vector3) customAttribute.getValue().get(face.getB());
+								Vector3 v3 = (Vector3) customAttribute.getValue().get(face.getC());
+
+								customAttribute.array.set(offset_custom, v1.getX());
+								customAttribute.array.set(offset_custom + 1, v1.getY());
+								customAttribute.array.set(offset_custom + 2, v1.getZ());
+
+								customAttribute.array.set(offset_custom + 3, v2.getX());
+								customAttribute.array.set(offset_custom + 4, v2.getY());
+								customAttribute.array.set(offset_custom + 5, v2.getZ());
+
+								customAttribute.array.set(offset_custom + 6, v3.getX());
+								customAttribute.array.set(offset_custom + 7, v3.getY());
+								customAttribute.array.set(offset_custom + 8, v3.getZ());
+							}
+
+							offset_custom += 9;
+
+						}
+
+					}
+					else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES )
+					{
+
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							if(customAttribute.type == Attribute.TYPE.C)
+							{
+								Color value = (Color) customAttribute.getValue().get(chunk_faces3.get(f));
+								Color v1 = value;
+								Color v2 = value;
+								Color v3 = value;
+
+								customAttribute.array.set(offset_custom, v1.getR());
+								customAttribute.array.set(offset_custom + 1, v1.getG());
+								customAttribute.array.set(offset_custom + 2, v1.getB());
+
+								customAttribute.array.set(offset_custom + 3, v2.getR());
+								customAttribute.array.set(offset_custom + 4, v2.getG());
+								customAttribute.array.set(offset_custom + 5, v2.getB());
+
+								customAttribute.array.set(offset_custom + 6, v3.getR());
+								customAttribute.array.set(offset_custom + 7, v3.getG());
+								customAttribute.array.set(offset_custom + 8, v3.getB());
+							}
+							else
+							{
+								Vector3 value = (Vector3) customAttribute.getValue().get(chunk_faces3.get(f));
+								Vector3 v1 = value;
+								Vector3 v2 = value;
+								Vector3 v3 = value;
+
+								customAttribute.array.set(offset_custom, v1.getX());
+								customAttribute.array.set(offset_custom + 1, v1.getY());
+								customAttribute.array.set(offset_custom + 2, v1.getZ());
+
+								customAttribute.array.set(offset_custom + 3, v2.getX());
+								customAttribute.array.set(offset_custom + 4, v2.getY());
+								customAttribute.array.set(offset_custom + 5, v2.getZ());
+
+								customAttribute.array.set(offset_custom + 6, v3.getX());
+								customAttribute.array.set(offset_custom + 7, v3.getY());
+								customAttribute.array.set(offset_custom + 8, v3.getZ());
+							}
+
+							offset_custom += 9;
+
+						}
+					}
+					else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACE_VERTICES)
+					{
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							if(customAttribute.type == Attribute.TYPE.C)
+							{
+								List<Color> value = (List<Color>) customAttribute.getValue().get(chunk_faces3.get(f));
+								Color v1 = value.get(0);
+								Color v2 = value.get(1);
+								Color v3 = value.get(2);
+
+								customAttribute.array.set(offset_custom, v1.getR());
+								customAttribute.array.set(offset_custom + 1, v1.getG());
+								customAttribute.array.set(offset_custom + 2, v1.getB());
+
+								customAttribute.array.set(offset_custom + 3, v2.getR());
+								customAttribute.array.set(offset_custom + 4, v2.getG());
+								customAttribute.array.set(offset_custom + 5, v2.getB());
+
+								customAttribute.array.set(offset_custom + 6, v3.getR());
+								customAttribute.array.set(offset_custom + 7, v3.getG());
+								customAttribute.array.set(offset_custom + 8, v3.getB());
+							}
+							else
+							{
+								List<Vector3> value = (List<Vector3>) customAttribute.getValue().get(chunk_faces3.get(f));
+								Vector3 v1 = value.get(0);
+								Vector3 v2 = value.get(1);
+								Vector3 v3 = value.get(2);
+
+								customAttribute.array.set(offset_custom, v1.getX());
+								customAttribute.array.set(offset_custom + 1, v1.getY());
+								customAttribute.array.set(offset_custom + 2, v1.getZ());
+
+								customAttribute.array.set(offset_custom + 3, v2.getX());
+								customAttribute.array.set(offset_custom + 4, v2.getY());
+								customAttribute.array.set(offset_custom + 5, v2.getZ());
+
+								customAttribute.array.set(offset_custom + 6, v3.getX());
+								customAttribute.array.set(offset_custom + 7, v3.getY());
+								customAttribute.array.set(offset_custom + 8, v3.getZ());
+							}
+
+							offset_custom += 9;
+						}
+					}
+				}
+				else if ( customAttribute.size == 4 )
+				{
+					if ( customAttribute.getBoundTo() == null
+							|| customAttribute.getBoundTo() == Attribute.BOUND_TO.VERTICES )
+					{
+
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							Face3 face = obj_faces.get(chunk_faces3.get(f));
+
+							Vector4 v1 = (Vector4) customAttribute.getValue().get(face.getA());
+							Vector4 v2 = (Vector4) customAttribute.getValue().get(face.getB());
+							Vector4 v3 = (Vector4) customAttribute.getValue().get(face.getC());
+
+							customAttribute.array.set(offset_custom, v1.getX());
+							customAttribute.array.set(offset_custom + 1, v1.getY());
+							customAttribute.array.set(offset_custom + 2, v1.getZ());
+							customAttribute.array.set(offset_custom + 3, v1.getW());
+
+							customAttribute.array.set(offset_custom + 4, v2.getX());
+							customAttribute.array.set(offset_custom + 5, v2.getY());
+							customAttribute.array.set(offset_custom + 6, v2.getZ());
+							customAttribute.array.set(offset_custom + 7, v2.getW());
+
+							customAttribute.array.set(offset_custom + 8, v3.getX());
+							customAttribute.array.set(offset_custom + 9, v3.getY());
+							customAttribute.array.set(offset_custom + 10, v3.getZ());
+							customAttribute.array.set(offset_custom + 11, v3.getW());
+
+							offset_custom += 12;
+
+						}
+
+					}
+					else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACES)
+					{
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							Vector4 value = (Vector4) customAttribute.getValue().get(chunk_faces3.get(f));
+
+							Vector4 v1 = value;
+							Vector4 v2 = value;
+							Vector4 v3 = value;
+
+							customAttribute.array.set(offset_custom, v1.getX());
+							customAttribute.array.set(offset_custom + 1, v1.getY());
+							customAttribute.array.set(offset_custom + 2, v1.getZ());
+							customAttribute.array.set(offset_custom + 3, v1.getW());
+
+							customAttribute.array.set(offset_custom + 4, v2.getX());
+							customAttribute.array.set(offset_custom + 5, v2.getY());
+							customAttribute.array.set(offset_custom + 6, v2.getZ());
+							customAttribute.array.set(offset_custom + 7, v2.getW());
+
+							customAttribute.array.set(offset_custom + 8, v3.getX());
+							customAttribute.array.set(offset_custom + 9, v3.getY());
+							customAttribute.array.set(offset_custom + 10, v3.getZ());
+							customAttribute.array.set(offset_custom + 11, v3.getW());
+
+							offset_custom += 12;
+
+						}
+					}
+					else if ( customAttribute.getBoundTo() == Attribute.BOUND_TO.FACE_VERTICES )
+					{
+						for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
+						{
+							List<Vector4> value = (List<Vector4>) customAttribute.getValue().get(chunk_faces3.get(f));
+
+							Vector4 v1 = value.get(0);
+							Vector4 v2 = value.get(1);
+							Vector4 v3 = value.get(2);
+
+							customAttribute.array.set(offset_custom, v1.getX());
+							customAttribute.array.set(offset_custom + 1, v1.getY());
+							customAttribute.array.set(offset_custom + 2, v1.getZ());
+							customAttribute.array.set(offset_custom + 3, v1.getW());
+
+							customAttribute.array.set(offset_custom + 4, v2.getX());
+							customAttribute.array.set(offset_custom + 5, v2.getY());
+							customAttribute.array.set(offset_custom + 6, v2.getZ());
+							customAttribute.array.set(offset_custom + 7, v2.getW());
+
+							customAttribute.array.set(offset_custom + 8, v3.getX());
+							customAttribute.array.set(offset_custom + 9, v3.getY());
+							customAttribute.array.set(offset_custom + 10, v3.getZ());
+							customAttribute.array.set(offset_custom + 11, v3.getW());
+
+							offset_custom += 12;
+						}
+					}
+				}
 
 				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.limit(), customAttribute.array, hint.getValue() );
+				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue() );
 			 }
 		 }
 
-		 if ( dispose ) 
-			 geometryGroup.dispose();
+		if ( dispose )
+			geometryGroup.dispose();
 	}
-	
+
 	@Override
-	public void deleteBuffers(WebGLRenderer renderer) 
+	public void deleteBuffers(WebGLRenderer renderer)
 	{
 //		for ( GeometryGroup geometryGroup : ((Geometry)getGeometry()).getGeometryGroupsCache().values() )
 //		{
@@ -1537,26 +1536,26 @@ public class Mesh extends GeometryObject
 //			renderer.getGL().deleteBuffer( geometryGroup.__webglFaceBuffer );
 //			renderer.getGL().deleteBuffer( geometryGroup.__webglLineBuffer );
 //
-//			if ( geometryGroup.numMorphTargets != 0) 
+//			if ( geometryGroup.numMorphTargets != 0)
 //			{
-//				for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ ) 
+//				for ( int m = 0; m < geometryGroup.numMorphTargets; m ++ )
 //				{
 //					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphTargetsBuffers.get( m ) );
 //				}
 //			}
 //
-//			if ( geometryGroup.numMorphNormals != 0 ) 
+//			if ( geometryGroup.numMorphNormals != 0 )
 //			{
-//				for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ ) 
+//				for ( int m = 0; m <  geometryGroup.numMorphNormals; m ++ )
 //				{
 //					renderer.getGL().deleteBuffer( geometryGroup.__webglMorphNormalsBuffers.get( m ) );
 //				}
 //			}
 //
 //
-//			if ( geometryGroup.__webglCustomAttributesList != null) 
+//			if ( geometryGroup.__webglCustomAttributesList != null)
 //			{
-//				for ( Attribute att : geometryGroup.__webglCustomAttributesList ) 
+//				for ( Attribute att : geometryGroup.__webglCustomAttributesList )
 //				{
 //					renderer.getGL().deleteBuffer( att.buffer );
 //				}
@@ -1566,7 +1565,7 @@ public class Mesh extends GeometryObject
 //		}
 	}
 //
-//	private void sortFacesByMaterial ( Geometry geometry ) 
+//	private void sortFacesByMaterial ( Geometry geometry )
 //	{
 //		Log.debug("Called sortFacesByMaterial() for geometry: " + geometry.getClass().getName());
 //
@@ -1575,12 +1574,12 @@ public class Mesh extends GeometryObject
 //
 //		geometry.setGeometryGroupsCache( new HashMap<String, GeometryGroup>() );
 //
-//		Map<String, Integer> hash_map = GWT.isScript() ? 
+//		Map<String, Integer> hash_map = GWT.isScript() ?
 //				new FastMap<Integer>() : new HashMap<String, Integer>();
 //
 //		Log.debug("sortFacesByMaterial() geometry faces count: " + geometry.getFaces().size());
 //
-//		for ( int f = 0, fl = geometry.getFaces().size(); f < fl; f ++ ) 
+//		for ( int f = 0, fl = geometry.getFaces().size(); f < fl; f ++ )
 //		{
 //			Face3 face = geometry.getFaces().get(f);
 //
@@ -1592,13 +1591,13 @@ public class Mesh extends GeometryObject
 //				hash_map.put(materialHash, 0);
 //
 //			String groupHash = materialHash + '_' + hash_map.get(materialHash);
-//			
+//
 //			if( ! geometry.getGeometryGroupsCache().containsKey(groupHash))
 //				geometry.getGeometryGroupsCache().put(groupHash, new GeometryGroup(materialIndex, numMorphTargets, numMorphNormals));
 //
 //			int vertices = face.getClass() == Face3.class ? 3 : 4;
 //
-//			if ( geometry.getGeometryGroupsCache().get(groupHash).vertices + vertices > 65535 ) 
+//			if ( geometry.getGeometryGroupsCache().get(groupHash).vertices + vertices > 65535 )
 //			{
 //				hash_map.put(materialHash, hash_map.get(materialHash) + 1);
 //				groupHash = materialHash + '_' + hash_map.get( materialHash );
@@ -1618,7 +1617,7 @@ public class Mesh extends GeometryObject
 //
 //		geometry.setGeometryGroups( new ArrayList<GeometryGroup>() );
 //
-//		for ( GeometryGroup g : geometry.getGeometryGroupsCache().values() ) 
+//		for ( GeometryGroup g : geometry.getGeometryGroupsCache().values() )
 //		{
 //			geometry.getGeometryGroups().add( g );
 //		}

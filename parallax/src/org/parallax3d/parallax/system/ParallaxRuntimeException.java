@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.system;
 
 public class ParallaxRuntimeException extends RuntimeException {
-    private static final long serialVersionUID = 6735854402467673117L;
 
     public ParallaxRuntimeException (String message) {
         super(message);

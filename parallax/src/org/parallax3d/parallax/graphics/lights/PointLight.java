@@ -18,18 +18,15 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
-import java.nio.FloatBuffer;
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.extras.helpers.HasRaytracingPhysicalAttenuation;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.BufferUtils;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
@@ -48,66 +45,66 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.PointLight")
 public class PointLight extends Light implements HasRaytracingPhysicalAttenuation, HasIntensity
 {
-	public static class UniformPoint implements UniformLight
+	public static class UniformPoint implements Light.UniformLight
 	{
-		public FloatBuffer distances;
-		public FloatBuffer colors;
-		public FloatBuffer positions;
-		
+		public Float32Array distances;
+		public Float32Array colors;
+		public Float32Array positions;
+
 		@Override
-		public void reset() 
+		public void reset()
 		{
-			this.distances = BufferUtils.newFloatBuffer(3);
-			this.colors    = BufferUtils.newFloatBuffer(3);
-			this.positions = BufferUtils.newFloatBuffer(3);
-			
+			this.distances = (Float32Array) Float32Array.createArray();
+			this.colors    = (Float32Array) Float32Array.createArray();
+			this.positions = (Float32Array) Float32Array.createArray();
+
 		}
 
 		@Override
-		public void refreshUniform(ObjectMap<String, Uniform> uniforms)
+		public void refreshUniform(FastMap<Uniform> uniforms)
 		{
 			uniforms.get("pointLightColor").setValue( colors );
 			uniforms.get("pointLightPosition").setValue( positions );
 			uniforms.get("pointLightDistance").setValue( distances );
-			
+
 		}
 	}
-	
-	private float intensity;
-	private float distance;
-	
+
+	private double intensity;
+	private double distance;
+
 	private boolean isPhysicalAttenuation;
-	
-	public PointLight(int hex) 
+
+	public PointLight(int hex)
 	{
-		this(hex, 1.0f, 0.0f);
+		this(hex, 1.0, 0.0);
 	}
-	
-	public PointLight(int hex, float intensity) 
+
+	public PointLight(int hex, double intensity)
 	{
-		this(hex, intensity, 0.0f);
+		this(hex, intensity, 0.0);
 	}
-	
-	public PointLight(int hex, float intensity, float distance ) 
+
+	public PointLight(int hex, double intensity, double distance )
 	{
 		super(hex);
 		this.intensity = intensity;
 		this.distance = distance;
 	}
 
-	public float getIntensity() {
+	public double getIntensity() {
 		return this.intensity;
 	}
 
-	public void setIntensity(float intensity) {
+	public void setIntensity(double intensity) {
 		this.intensity = intensity;
 	}
 
-	public void setDistance(float distance) {
+	public void setDistance(double distance) {
 		this.distance = distance;
 	}
 
-	public float getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 
@@ -120,11 +117,11 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 	public void setPhysicalAttenuation(boolean isPhysicalAttenuation) {
 		this.isPhysicalAttenuation = isPhysicalAttenuation;
 	}
-	
+
 	public PointLight clone() {
 
 		PointLight light = new PointLight(0x000000);
-		
+
 		super.clone(light);
 
 		light.intensity = this.intensity;
@@ -133,31 +130,30 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 		return light;
 
 	}
-	
+
 	@Override
 	public void setupRendererLights(RendererLights zlights, boolean isGammaInput)
 	{
-		FloatBuffer pointColors     = zlights.point.colors;
-		FloatBuffer pointPositions  = zlights.point.positions;
-		FloatBuffer pointDistances  = zlights.point.distances;
-		
-		float intensity = getIntensity();
-		float distance = getDistance();
-		int pointOffset = pointColors.arrayOffset();
+		Float32Array pointColors     = zlights.point.colors;
+		Float32Array pointPositions  = zlights.point.positions;
+		Float32Array pointDistances  = zlights.point.distances;
 
-		if ( isGammaInput ) 
-			setColorGamma( pointColors, pointOffset, getColor(), intensity ); 
-		else 
+		double intensity = getIntensity();
+		double distance = getDistance();
+		int pointOffset = pointColors.getLength();
+
+		if ( isGammaInput )
+			setColorGamma( pointColors, pointOffset, getColor(), intensity );
+		else
 			setColorLinear( pointColors, pointOffset, getColor(), intensity );
 
 		Vector3 position = new Vector3();
 		position.setFromMatrixPosition( getMatrixWorld() );
 
-		pointPositions.put(pointOffset, position.getX());
-		pointPositions.put(pointOffset + 1, position.getY());
-		pointPositions.put(pointOffset + 2, position.getZ());
+		pointPositions.set(pointOffset, position.getX());
+		pointPositions.set(pointOffset + 1, position.getY());
+		pointPositions.set(pointOffset + 2, position.getZ());
 
-		pointDistances.put( pointOffset / 3, distance );
+		pointDistances.set(pointOffset / 3, distance);
 	}
-
 }

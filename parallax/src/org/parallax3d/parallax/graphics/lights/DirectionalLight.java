@@ -20,16 +20,15 @@ package org.parallax3d.parallax.graphics.lights;
 
 import java.nio.FloatBuffer;
 import java.util.List;
-import java.util.Map;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.BufferUtils;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
@@ -48,63 +47,63 @@ import org.parallax3d.parallax.graphics.renderers.RendererLights;
  */
 @ThreeJsObject("THREE.DirectionalLight")
 public class DirectionalLight extends ShadowLight
-{	
-	public static class UniformDirectional implements UniformLight
+{
+	public static class UniformDirectional implements Light.UniformLight
 	{
-		public FloatBuffer colors;
-		public FloatBuffer positions;
+		public Float32Array colors;
+		public Float32Array positions;
 
 		@Override
-		public void reset() 
+		public void reset()
 		{
-			this.colors    = BufferUtils.newFloatBuffer(3);
-			this.positions = BufferUtils.newFloatBuffer(3);
-			
+			this.colors    = (Float32Array) Float32Array.createArray();
+			this.positions = (Float32Array) Float32Array.createArray();
+
 		}
 
 		@Override
-		public void refreshUniform(ObjectMap<String, Uniform> uniforms)
+		public void refreshUniform(FastMap<Uniform> uniforms)
 		{
 			uniforms.get("directionalLightColor").setValue( colors );
 			uniforms.get("directionalLightDirection").setValue( positions );
 		}
 	}
-	
+
 	//
-	
+
 	private int shadowCameraLeft = -500;
 	private int shadowCameraRight = 500;
 	private int shadowCameraTop = 500;
 	private int shadowCameraBottom = -500;
 
 	//
-	
+
 	private Vector3 shadowCascadeOffset;
 	private int shadowCascadeCount = 2;
 
-	private float[] shadowCascadeBias = { 0.0f, 0.0f, 0.0f};
+	private double[] shadowCascadeBias = { 0.0, 0.0, 0.0};
 	private int[] shadowCascadeWidth = { 512, 512, 512 };
 	private int[] shadowCascadeHeight = { 512, 512, 512 };
 
-	private float[] shadowCascadeNearZ = { -1.000f, 0.990f, 0.998f };
-	private float[] shadowCascadeFarZ = { 0.990f, 0.998f, 1.000f };
+	private double[] shadowCascadeNearZ = { -1.000, 0.990, 0.998 };
+	private double[] shadowCascadeFarZ = { 0.990, 0.998, 1.000 };
 
 	private List<VirtualLight> shadowCascadeArray;
 
-	public DirectionalLight(int hex) 
+	public DirectionalLight(int hex)
 	{
-		this(hex, 1.0f);
+		this(hex, 1.0);
 	}
 
-	public DirectionalLight(int hex, float intensity)
-	{		
+	public DirectionalLight(int hex, double intensity)
+	{
 		super(hex);
 
 		setIntensity(intensity);
 
 		this.shadowCascadeOffset = new Vector3(0, 0, -1000);
 	}
-		
+
 	public Vector3 getShadowCascadeOffset() {
 		return shadowCascadeOffset;
 	}
@@ -116,16 +115,16 @@ public class DirectionalLight extends ShadowLight
 	public int getShadowCascadeCount() {
 		return shadowCascadeCount;
 	}
-	
+
 	public void setShadowCascadeCount(int shadowCascadeCount) {
 		this.shadowCascadeCount = shadowCascadeCount;
 	}
 
-	public float[] getShadowCascadeBias() {
+	public double[] getShadowCascadeBias() {
 		return shadowCascadeBias;
 	}
 
-	public void setShadowCascadeBias(float[] shadowCascadeBias) {
+	public void setShadowCascadeBias(double[] shadowCascadeBias) {
 		this.shadowCascadeBias = shadowCascadeBias;
 	}
 
@@ -144,20 +143,20 @@ public class DirectionalLight extends ShadowLight
 	public void setShadowCascadeHeight(int[] shadowCascadeHeight) {
 		this.shadowCascadeHeight = shadowCascadeHeight;
 	}
-	
-	public float[] getShadowCascadeNearZ() {
+
+	public double[] getShadowCascadeNearZ() {
 		return shadowCascadeNearZ;
 	}
 
-	public void setShadowCascadeNearZ(float[] shadowCascadeNearZ) {
+	public void setShadowCascadeNearZ(double[] shadowCascadeNearZ) {
 		this.shadowCascadeNearZ = shadowCascadeNearZ;
 	}
 
-	public float[] getShadowCascadeFarZ() {
+	public double[] getShadowCascadeFarZ() {
 		return shadowCascadeFarZ;
 	}
 
-	public void setShadowCascadeFarZ(float[] shadowCascadeFarZ) {
+	public void setShadowCascadeFarZ(double[] shadowCascadeFarZ) {
 		this.shadowCascadeFarZ = shadowCascadeFarZ;
 	}
 
@@ -200,11 +199,11 @@ public class DirectionalLight extends ShadowLight
 	public void setShadowCameraBottom(int shadowCameraBottom) {
 		this.shadowCameraBottom = shadowCameraBottom;
 	}
-	
+
 	public DirectionalLight clone() {
 
 		DirectionalLight light = new DirectionalLight(0x000000);
-		
+
 		super.clone(light);
 
 		light.setTarget(  this.getTarget().clone() );
@@ -249,20 +248,20 @@ public class DirectionalLight extends ShadowLight
 		return light;
 
 	}
-	
+
 	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput) 
+	public void setupRendererLights(RendererLights zlights, boolean isGammaInput)
 	{
-		FloatBuffer dirColors     = zlights.directional.colors;
-		FloatBuffer dirPositions  = zlights.directional.positions;
+		Float32Array dirColors     = zlights.directional.colors;
+		Float32Array dirPositions  = zlights.directional.positions;
 
-		float intensity = getIntensity();
+		double intensity = getIntensity();
 
-		int dirOffset = dirColors.array().length;
+		int dirOffset = dirColors.getLength();
 
 		if ( isGammaInput )
-			setColorGamma( dirColors, dirOffset, getColor(), intensity ); 
-		else 
+			setColorGamma( dirColors, dirOffset, getColor(), intensity );
+		else
 			setColorLinear( dirColors, dirOffset, getColor(), intensity );
 
 		Vector3 position = new Vector3();
@@ -272,8 +271,8 @@ public class DirectionalLight extends ShadowLight
 		position.sub( _vector3 );
 		position.normalize();
 
-		dirPositions.put( dirOffset, position.getX());
-		dirPositions.put(dirOffset + 1, position.getY());
-		dirPositions.put(dirOffset + 2, position.getZ());
+		dirPositions.set(dirOffset, position.getX());
+		dirPositions.set(dirOffset + 1, position.getY());
+		dirPositions.set(dirOffset + 2, position.getZ());
 	}
 }

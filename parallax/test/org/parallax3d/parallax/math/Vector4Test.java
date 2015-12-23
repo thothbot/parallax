@@ -24,12 +24,12 @@ import static org.junit.Assert.*;
 public class Vector4Test
 {
 
-	private static float DELTA = 0.00001f;
+	private static double DELTA = 0.00001;
 
-	private static float X = 2;
-	private static float Y = 3;
-	private static float Z = 4;
-	private static float W = 5;
+	private static double X = 2;
+	private static double Y = 3;
+	private static double Z = 4;
+	private static double W = 5;
 
 	@Test
 	public void testVector4()
@@ -217,7 +217,7 @@ public class Vector4Test
 		Vector4 b = new Vector4( -X, -Y, -Z, -W );
 		Vector4 c = new Vector4( 0, 0, 0, 0 );
 
-		float result = a.dot( b );
+		double result = a.dot( b );
 		assertEquals( (-X*X-Y*Y-Z*Z-W*W), result, DELTA );
 
 		result = a.dot( c );
@@ -270,15 +270,15 @@ public class Vector4Test
 		Vector4 a = new Vector4( X, 0, Z, 0 );
 		Vector4 b = new Vector4( 0, -Y, 0, -W );
 
-		assertTrue( a.lerp( a, 0 ).equals( a.lerp( a, 0.5f ) ));
+		assertTrue( a.lerp( a, 0 ).equals( a.lerp( a, 0.5 ) ));
 		assertTrue( a.lerp( a, 0 ).equals( a.lerp( a, 1 ) ));
 
 		assertTrue( a.clone().lerp( b, 0 ).equals( a ));
 
-		assertEquals( X * 0.5, a.clone().lerp( b, 0.5f ).x, DELTA );
-		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5f ).y, DELTA );
-		assertEquals( Z * 0.5, a.clone().lerp( b, 0.5f ).z, DELTA );
-		assertEquals( -W * 0.5, a.clone().lerp( b, 0.5f ).w, DELTA );
+		assertEquals( X * 0.5, a.clone().lerp( b, 0.5 ).x, DELTA );
+		assertEquals( -Y * 0.5, a.clone().lerp( b, 0.5 ).y, DELTA );
+		assertEquals( Z * 0.5, a.clone().lerp( b, 0.5 ).z, DELTA );
+		assertEquals( -W * 0.5, a.clone().lerp( b, 0.5 ).w, DELTA );
 
 		assertTrue( a.clone().lerp( b, 1 ).equals( b ));
 	}

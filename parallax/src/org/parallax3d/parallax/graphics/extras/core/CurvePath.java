@@ -37,29 +37,29 @@ public class CurvePath extends Curve
 
 	private List<Curve> curves;
 	private List<CurvePath> bends;
-	
-	private List<Float> cacheLengths;
-	
+
+	private List<Double> cacheLengths;
+
 	// Automatically closes the path
-	public boolean autoClose = false; 
-	
-	public CurvePath() 
+	public boolean autoClose = false;
+
+	public CurvePath()
 	{
 		this.curves = new ArrayList<Curve>();
 		this.bends = new ArrayList<CurvePath>();
 	}
-	
+
 	public List<CurvePath> getBends()
 	{
 		return this.bends;
 	}
-	
+
 	public List<Curve> getCurves()
 	{
 		return this.curves;
 	}
 
-	public void add( Curve curve ) 
+	public void add( Curve curve )
 	{
 		this.curves.add( curve );
 	}
@@ -69,27 +69,27 @@ public class CurvePath extends Curve
 	 * If the ending of curve is not connected to the starting
 	 * or the next curve, then, this is not a real path
 	 */
-	public void checkConnection() 
+	public void checkConnection()
 	{
 	}
-	
-	public void closePath() 
+
+	public void closePath()
 	{
 		// TODO Test
 		// and verify for vector3 (needs to implement equals)
 		// Add a line curve if start and end of lines are not connected
 		Vector2 startPoint = (Vector2) getCurves().get(0).getPoint(0);
 		Vector2 endPoint = (Vector2) getCurves().get(this.curves.size() - 1 ).getPoint(1);
-		
+
 		if (!startPoint.equals(endPoint))
 			this.curves.add( new LineCurve(endPoint, startPoint) );
 	}
-	
+
 	/*
 	 * To get accurate point with reference to
 	 * entire path distance at time t,
 	 * To get accurate point with reference to
-	 * 
+	 *
 	 * following has to be done:
 	 * 1. Length of each sub path have to be known
 	 * 2. Locate and identify type of curve
@@ -97,21 +97,21 @@ public class CurvePath extends Curve
 	 * 4. Return curve.getPointAt(t')
 	 */
 	@Override
-	public Vector2 getPoint(float t)
+	public Vector2 getPoint(double t)
 	{
-		float d = t * this.getLength();
-		List<Float> curveLengths = this.getCurveLengths();
+		double d = t * this.getLength();
+		List<Double> curveLengths = this.getCurveLengths();
 		int i = 0;
 
 		// To think about boundaries points.
-		while ( i < curveLengths.size() ) 
+		while ( i < curveLengths.size() )
 		{
-			if ( curveLengths.get( i ) >= d ) 
+			if ( curveLengths.get( i ) >= d )
 			{
-				float diff = curveLengths.get( i ) - d;
+				double diff = curveLengths.get( i ) - d;
 				Curve curve = getCurves().get( i );
 
-				float u = 1.0f - diff / curve.getLength();
+				double u = 1.0 - diff / curve.getLength();
 
 				return (Vector2) curve.getPointAt( u );
 			}
@@ -123,15 +123,15 @@ public class CurvePath extends Curve
 
 		// loop where sum != 0, sum > d , sum+1 <d
 	}
-	
+
 	/*
 	 * We cannot use the default THREE.Curve getPoint() with getLength() because in
 	 * Curve, getLength() depends on getPoint() but in THREE.CurvePath
 	 * getPoint() depends on getLength
 	 */
-	public float getLength() 
+	public double getLength()
 	{
-		List<Float> lens = this.getCurveLengths();
+		List<Double> lens = this.getCurveLengths();
 		return lens.get( lens.size() - 1 );
 	}
 
@@ -139,7 +139,7 @@ public class CurvePath extends Curve
 	 * Compute lengths and cache them
 	 * We cannot overwrite getLengths() because UtoT mapping uses it.
 	 */
-	public List<Float> getCurveLengths()
+	public List<Double> getCurveLengths()
 	{
 		// We use cache values if curves and cache array are same length
 		if ( this.cacheLengths != null && this.cacheLengths.size() == this.curves.size() )
@@ -147,9 +147,9 @@ public class CurvePath extends Curve
 
 		// Get length of subsurve
 		// Push sums into cached array
-		this.cacheLengths = new ArrayList<Float>();
-		float sums = 0.0f;
-		for ( int i = 0; i < this.curves.size(); i ++ ) 
+		this.cacheLengths = new ArrayList<Double>();
+		double sums = 0.0;
+		for ( int i = 0; i < this.curves.size(); i ++ )
 		{
 			sums += this.curves.get( i ).getLength();
 			this.cacheLengths.add( sums );
@@ -157,7 +157,7 @@ public class CurvePath extends Curve
 
 		return this.cacheLengths;
 	}
-	
+
 	/*
 	 * Returns min and max coordinates, as well as centroid
 	 */
@@ -165,27 +165,27 @@ public class CurvePath extends Curve
 	{
 		List<Vector2> points = (ArrayList)this.getPoints();
 
-		float maxX, maxY;
-		float minX, minY;
+		double maxX, maxY;
+		double minX, minY;
 
-		maxX = maxY = Float.NEGATIVE_INFINITY;
-		minX = minY = Float.POSITIVE_INFINITY;
+		maxX = maxY = Double.NEGATIVE_INFINITY;
+		minX = minY = Double.POSITIVE_INFINITY;
 
 		Vector2 sum = new Vector2();
 		int il = points.size();
 
-		for ( int i = 0; i < il; i ++ ) 
+		for ( int i = 0; i < il; i ++ )
 		{
 			Vector2 p = points.get( i );
 
-			if ( p.getX() > maxX ) 
+			if ( p.getX() > maxX )
 				maxX = p.getX();
-			else if ( p.getX() < minX ) 
+			else if ( p.getX() < minX )
 				minX = p.getX();
 
-			if ( p.getY() > maxY ) 
+			if ( p.getY() > maxY )
 				maxY = p.getY();
-			else if ( p.getY() < maxY ) 
+			else if ( p.getY() < maxY )
 				minY = p.getY();
 
 			sum.add( p );
@@ -194,10 +194,10 @@ public class CurvePath extends Curve
 		Box3 boundingBox = new Box3();
 		boundingBox.getMin().set(minX, minY, 0);
 		boundingBox.getMax().set(maxX, maxY, 0);
-		
+
 		return boundingBox;
 	}
-	
+
 	/**************************************************************
 	 *	Bend / Wrap Helper Methods
 	 **************************************************************/
@@ -205,27 +205,27 @@ public class CurvePath extends Curve
 	/*
 	 * Wrap path / Bend modifiers?
 	 */
-	public void addWrapPath( CurvePath bendpath ) 
+	public void addWrapPath( CurvePath bendpath )
 	{
 		this.bends.add( bendpath );
 	}
-		
+
 	/*
 	 * This returns getPoints() bend/wrapped around the contour of a path.
 	 * Read http://www.planetclegg.com/projects/WarpingTextToSplines.html
 	 */
-	protected List<Vector2> getWrapPoints(  List<Vector2> oldPts, CurvePath path ) 
+	protected List<Vector2> getWrapPoints(  List<Vector2> oldPts, CurvePath path )
 	{
 		Box3 bounds = this.getBoundingBox();
 
-		for ( int i = 0, il = oldPts.size(); i < il; i ++ ) 
+		for ( int i = 0, il = oldPts.size(); i < il; i ++ )
 		{
 			Vector2 p = oldPts.get( i );
 
-			float oldX = p.getX();
-			float oldY = p.getY();
+			double oldX = p.getX();
+			double oldY = p.getY();
 
-			float xNorm = oldX / bounds.getMax().getX();
+			double xNorm = oldX / bounds.getMax().getX();
 
 			// If using actual distance, for length > path, requires line extrusions
 			//xNorm = path.getUtoTmapping(xNorm, oldX); // 3 styles. 1) wrap stretched. 2) wrap stretch by arc length 3) warp by actual distance

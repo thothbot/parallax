@@ -28,18 +28,18 @@ public final class VirtualLight extends DirectionalLight
 {
 
 	private Camera originalCamera;
-	
+
 	private List<Vector3> pointsWorld;
 	private List<Vector3> pointsFrustum;
-	
-	public VirtualLight(int hex) 
+
+	public VirtualLight(int hex)
 	{
 		super(hex);
-		
+
 		pointsWorld = new ArrayList<Vector3>();
 		pointsFrustum = new ArrayList<Vector3>();
-		
-		for ( int i = 0; i < 8; i ++ ) 
+
+		for ( int i = 0; i < 8; i ++ )
 		{
 			getPointsWorld().set( i, new Vector3() );
 			getPointsFrustum().set( i, new Vector3() );

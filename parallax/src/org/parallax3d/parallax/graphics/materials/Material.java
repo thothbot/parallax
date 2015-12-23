@@ -21,7 +21,6 @@ package org.parallax3d.parallax.graphics.materials;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
@@ -35,7 +34,7 @@ import org.parallax3d.parallax.graphics.core.GeometryGroup;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
@@ -51,6 +50,7 @@ import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
 @ThreeJsObject("THREE.Material")
 public abstract class Material
 {
+
 	private static int MaterialCount;
 
 	/**
@@ -66,7 +66,7 @@ public abstract class Material
 	/**
 	 * Shading
 	 */
-	public static enum SHADING 
+	public static enum SHADING
 	{
 		NO, // NoShading = 0;
 		FLAT, // FlatShading = 1;
@@ -76,7 +76,7 @@ public abstract class Material
 	/**
 	 * Colors
 	 */
-	public static enum COLORS 
+	public static enum COLORS
 	{
 		NO, // NoColors = 0;
 		FACE, // FaceColors = 1;
@@ -86,7 +86,7 @@ public abstract class Material
 	/**
 	 * Blending modes
 	 */
-	public static enum BLENDING 
+	public static enum BLENDING
 	{
 		NO, // NoBlending = 0;
 		NORMAL, // NormalBlending = 1;
@@ -96,7 +96,7 @@ public abstract class Material
 		ADDITIVE_ALPHA, // AdditiveAlphaBlending = 5;
 		CUSTOM // CustomBlending = 6;
 	}
-	
+
 	private static enum SHADER_DEFINE {
 		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT,
 
@@ -115,7 +115,7 @@ public abstract class Material
 		USE_SHADOWMAP, SHADOWMAP_TYPE_BASIC, SHADOWMAP_TYPE_PCF, SHADOWMAP_TYPE_PCF_SOFT, SHADOWMAP_DEBUG, SHADOWMAP_CASCADE,
 
 		USE_SIZEATTENUATION,
-		
+
 		USE_LOGDEPTHBUF,
 
 		ALPHATEST,
@@ -131,25 +131,25 @@ public abstract class Material
 		{
 			return "#define " + this.name() + " " + param;
 		}
-		
-		public String getValue(float param)
+
+		public String getValue(double param)
 		{
 			return "#define " + this.name() + " " + param;
 		}
 	}
 
 	private int id;
-	
+
 	private String name;
-	
+
 	// Store shader associated to the material
 	private Shader shader;
 
 	private SIDE side = SIDE.FRONT;
 
-	private float opacity;
+	private double opacity;
 	private boolean isTransparent;
-		
+
 	private BLENDING blending;
 	private BlendingFactorSrc blendSrc;
 	private BlendingFactorDest blendDst;
@@ -157,96 +157,96 @@ public abstract class Material
 
 	private boolean isDepthTest;
 	private boolean isDepthWrite;
-	
+
 	private boolean isPolygonOffset;
-	private float polygonOffsetFactor;
-	private float polygonOffsetUnits;
-	
-	private float alphaTest;
-	
-	private float overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
-	
+	private double polygonOffsetFactor;
+	private double polygonOffsetUnits;
+
+	private double alphaTest;
+
+	private double overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
+
 	private boolean isVisible = true;
 	private boolean isNeedsUpdate = true;
-	
+
 	//
-		
+
 	private boolean isShadowPass;
-		
+
 	public Material()
 	{
 		this.id = Material.MaterialCount++;
-		
-		setOpacity(1.0f);
+
+		setOpacity(1.0);
 		setTransparent(false);
-				
+
 		setBlending( BLENDING.NORMAL );
 		setBlendSrc( BlendingFactorSrc.SRC_ALPHA );
 		setBlendDst( BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
 		setBlendEquation( BlendEquationMode.FUNC_ADD );
-		
+
 		setDepthTest(true);
 		setDepthWrite(true);
-		
+
 		setPolygonOffset(false);
-		setPolygonOffsetFactor(0.0f);
-		setPolygonOffsetUnits(0.0f);
-		
+		setPolygonOffsetFactor(0.0);
+		setPolygonOffsetUnits(0.0);
+
 		setAlphaTest(0);
 	}
-	
+
 	/**
 	 * Gets unique number of this material instance.
 	 */
 	public int getId() {
 		return id;
 	}
-	
+
 	/**
 	 * Gets material name. Default is an empty string.
 	 */
 	public String getName() {
 		return this.name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public boolean isVisible() {
 		return this.isVisible;
 	}
-	
+
 	/**
 	 * Defines whether this material is visible.
-	 * <p> 
+	 * <p>
 	 * Default is true.
 	 */
 	public void setVisible(boolean visible) {
 		this.isVisible = visible;
 	}
-	
+
 	public SIDE getSides() {
 		return this.side;
 	}
-	
+
 	/**
 	 * Defines which of the face sides will be rendered - front, back or both.
 	 * <p>
 	 * Default is {@link SIDE#FRONT}
-	 * 
-	 * @param side see options {@link SIDE}.
+	 *
+	 * @param side see options {@link Material.SIDE}.
 	 */
 	public void setSide(SIDE side) {
 		this.side = side;
 	}
-	
+
 	public boolean isNeedsUpdate() {
 		return this.isNeedsUpdate;
 	}
-	
+
 	/**
-	 * Specifies that the material needs to be updated, WebGL wise. 
+	 * Specifies that the material needs to be updated, WebGL wise.
 	 * Set it to true if you made changes that need to be reflected in WebGL.
 	 * <p>
 	 * This property is automatically set to true when instancing a new material.
@@ -258,14 +258,14 @@ public abstract class Material
 	/**
 	 * Gets opacity. Default is 1.
 	 */
-	public float getOpacity() {
+	public double getOpacity() {
 		return opacity;
 	}
 
 	/**
 	 * Sets opacity. Default is 1.
 	 */
-	public void setOpacity(float opacity) {
+	public void setOpacity(double opacity) {
 		this.opacity = opacity;
 	}
 
@@ -274,37 +274,37 @@ public abstract class Material
 	}
 
 	/**
-	 * Defines whether this material is transparent. 
+	 * Defines whether this material is transparent.
 	 * <p>
-	 * This has an effect on rendering, as transparent objects need an special treatment, 
-	 * and are rendered after the opaque (i.e. non transparent) objects. 
+	 * This has an effect on rendering, as transparent objects need an special treatment,
+	 * and are rendered after the opaque (i.e. non transparent) objects.
 	 */
 	public void setTransparent(boolean transparent) {
 		this.isTransparent = transparent;
 	}
 
-	public BLENDING getBlending() {
+	public Material.BLENDING getBlending() {
 		return blending;
 	}
 
 	/**
 	 * Sets which blending to use when displaying objects with this material.
 	 * <p>
-	 * Default is {@link BLENDING#NORMAL}.
+	 * Default is {@link Material.BLENDING#NORMAL}.
 	 */
 	public void setBlending(BLENDING blending) {
 		this.blending = blending;
 	}
-	
+
 	public BlendingFactorSrc getBlendSrc() {
 		return blendSrc;
 	}
 
 	/**
-	 * Sets blending source. It's one of the {@link BlendingFactorSrc} constants. 
+	 * Sets blending source. It's one of the {@link BlendingFactorSrc} constants.
 	 * <p>
 	 * Default is {@link BlendingFactorSrc#SRC_ALPHA}.
-	 * 
+	 *
 	 * @param blendSrc
 	 */
 	public void setBlendSrc(BlendingFactorSrc blendSrc) {
@@ -316,10 +316,10 @@ public abstract class Material
 	}
 
 	/**
-	 * Sets blending destination. It's one of the {@link BlendingFactorDest} constants. 
+	 * Sets blending destination. It's one of the {@link BlendingFactorDest} constants.
 	 * <p>
 	 * Default is {@link BlendingFactorDest#ONE_MINUS_SRC_ALPHA}.
-	 * 
+	 *
 	 * @param blendDst
 	 */
 	public void setBlendDst(BlendingFactorDest blendDst) {
@@ -331,23 +331,23 @@ public abstract class Material
 	}
 
 	/**
-	 * Sets blending equation to use when applying blending. 
+	 * Sets blending equation to use when applying blending.
 	 * It's one of the {@link BlendEquationMode} constants.
 	 * <p>
 	 * Default is {@link BlendEquationMode#FUNC_ADD}.
-	 * 
+	 *
 	 * @param blendEquation
 	 */
 	public void setBlendEquation(BlendEquationMode blendEquation) {
 		this.blendEquation = blendEquation;
 	}
-	
+
 	public boolean isDepthTest() {
 		return isDepthTest;
 	}
 
 	/**
-	 * Whether to have depth test enabled when rendering this material. 
+	 * Whether to have depth test enabled when rendering this material.
 	 * <p>
 	 * Default is true.
 	 */
@@ -361,10 +361,10 @@ public abstract class Material
 
 	/**
 	 * Whether rendering this material has any effect on the depth buffer.
-	 * <p> 
+	 * <p>
 	 * Default is true.
 	 * <p>
-	 * When drawing 2D overlays it can be useful to disable the depth writing in order 
+	 * When drawing 2D overlays it can be useful to disable the depth writing in order
 	 * to layer several things together without creating z-index artifacts.
 	 */
 	public void setDepthWrite(boolean depthWrite) {
@@ -376,55 +376,55 @@ public abstract class Material
 	}
 
 	/**
-	 * Whether to use polygon offset. 
+	 * Whether to use polygon offset.
 	 * <p>
 	 * Default is false.
-	 * <p> 
+	 * <p>
 	 * This corresponds to the POLYGON_OFFSET_FILL WebGL feature.
 	 */
 	public void setPolygonOffset(boolean polygonOffset) {
 		this.isPolygonOffset = polygonOffset;
 	}
 
-	public float getPolygonOffsetFactor() {
+	public double getPolygonOffsetFactor() {
 		return polygonOffsetFactor;
 	}
 
 	/**
 	 * Sets the polygon offset factor.
-	 * <p> 
+	 * <p>
 	 * Default is 0.
 	 */
-	public void setPolygonOffsetFactor(float polygonOffsetFactor) {
+	public void setPolygonOffsetFactor(double polygonOffsetFactor) {
 		this.polygonOffsetFactor = polygonOffsetFactor;
 	}
 
-	public float getPolygonOffsetUnits() {
+	public double getPolygonOffsetUnits() {
 		return polygonOffsetUnits;
 	}
 
 	/**
 	 * Sets the polygon offset units.
-	 * <p> 
+	 * <p>
 	 * Default is 0.
 	 */
-	public void setPolygonOffsetUnits(float polygonOffsetUnits) {
+	public void setPolygonOffsetUnits(double polygonOffsetUnits) {
 		this.polygonOffsetUnits = polygonOffsetUnits;
 	}
 
-	public float getAlphaTest() {
+	public double getAlphaTest() {
 		return alphaTest;
 	}
 
 	/**
 	 * Sets the alpha value to be used when running an alpha test.
-	 * <p> 
+	 * <p>
 	 * Default is 0.
 	 */
-	public void setAlphaTest(float alphaTest) {
+	public void setAlphaTest(double alphaTest) {
 		this.alphaTest = alphaTest;
 	}
-	
+
 	public boolean isShadowPass() {
 		return isShadowPass;
 	}
@@ -433,7 +433,7 @@ public abstract class Material
 		this.isShadowPass = isShadowPass;
 	}
 
-	public Shader getShader() 
+	public Shader getShader()
 	{
 		if(shader == null)
 		{
@@ -444,12 +444,12 @@ public abstract class Material
 
 		return this.shader;
 	}
-	
+
 	// Must be overwriten
 	protected abstract Shader getAssociatedShader();
-	
+
 	public abstract Material clone();
-	
+
 	public Material clone( Material material ) {
 
 		material.name = this.name;
@@ -492,7 +492,7 @@ public abstract class Material
 		parameters.specularMap  = (this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null);
 		parameters.alphaMap     = (this instanceof HasAlphaMap    &&  ((HasAlphaMap)this).getAlphaMap() != null);
 
-		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != COLORS.NO);
+		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
 
 		parameters.sizeAttenuation = this instanceof PointCloudMaterial && ((PointCloudMaterial)this).isSizeAttenuation();
 
@@ -510,8 +510,8 @@ public abstract class Material
 		}
 
 		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
-		parameters.floatSided = this.getSides() == SIDE.DOUBLE;
-		parameters.flipSided = this.getSides() == SIDE.BACK;
+		parameters.doubleSided = this.getSides() == Material.SIDE.DOUBLE;
+		parameters.flipSided = this.getSides() == Material.SIDE.BACK;
 	}
 
 	public Shader buildShader(GL20 gl, ProgramParameters parameters)
@@ -531,7 +531,7 @@ public abstract class Material
 		return this.shader;
 	}
 
-	private String getExtensionsVertex(ProgramParameters parameters)
+	protected String getExtensionsVertex(ProgramParameters parameters)
 	{
 		return "";
 	}
@@ -542,7 +542,7 @@ public abstract class Material
 		List<String> options = new ArrayList<String>();
 
 		options.add("");
-		
+
 		if (parameters.supportsVertexTextures)
 			options.add(SHADER_DEFINE.VERTEX_TEXTURES.getValue());
 
@@ -582,14 +582,14 @@ public abstract class Material
 			options.add(SHADER_DEFINE.USE_SKINNING.getValue());
 		if (parameters.useVertexTexture)
 			options.add(SHADER_DEFINE.BONE_TEXTURE.getValue());
-				
+
 		if (parameters.morphTargets)
 			options.add(SHADER_DEFINE.USE_MORPHTARGETS.getValue());
 		if (parameters.morphNormals)
 			options.add(SHADER_DEFINE.USE_MORPHNORMALS.getValue());
 		if (parameters.wrapAround)
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
-		if (parameters.floatSided)
+		if (parameters.doubleSided)
 			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
 		if (parameters.flipSided)
 			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
@@ -609,7 +609,7 @@ public abstract class Material
 
 		if (parameters.sizeAttenuation)
 			options.add(SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
-		
+
 		if (parameters.logarithmicDepthBuffer)
 			options.add(SHADER_DEFINE.USE_LOGDEPTHBUF.getValue());
 
@@ -618,7 +618,7 @@ public abstract class Material
 		String retval = "";
 		for(String opt: options)
 			retval += opt + "\n";
-		
+
 		List<String> extra = Arrays.asList("uniform mat4 modelMatrix;",
 				"uniform mat4 modelViewMatrix;",
 				"uniform mat4 projectionMatrix;",
@@ -668,14 +668,14 @@ public abstract class Material
 				"	attribute vec4 skinWeight;",
 
 				"#endif");
-		
+
 		for(String opt: extra)
 			retval += opt + "\n";
 
 		return retval;
 	}
-  
-	private String getExtensionsFragment(ProgramParameters parameters)
+
+	protected String getExtensionsFragment(ProgramParameters parameters)
 	{
 		String s = "";
 		if (parameters.logarithmicDepthBuffer)
@@ -687,18 +687,17 @@ public abstract class Material
 
 	private String getPrefixFragment(ProgramParameters parameters)
 	{
-		Parallax.app.debug("Material.getPrefixFragment()", "Called");
 		List<String> options = new ArrayList<String>();
 
 		options.add("");
-		
+
 		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
 		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
 		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
 		options.add(SHADER_DEFINE.MAX_HEMI_LIGHTS.getValue(parameters.maxHemiLights));
 
 		options.add(SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
-		
+
 		if (parameters.alphaTest > 0)
 			options.add(SHADER_DEFINE.ALPHATEST.getValue(parameters.alphaTest));
 
@@ -706,7 +705,7 @@ public abstract class Material
 			options.add(SHADER_DEFINE.GAMMA_INPUT.getValue());
 		if (parameters.gammaOutput)
 			options.add(SHADER_DEFINE.GAMMA_OUTPUT.getValue());
-		
+
 		if (parameters.useFog)
 			options.add(SHADER_DEFINE.USE_FOG.getValue());
 		if (parameters.useFog2)
@@ -733,11 +732,11 @@ public abstract class Material
 			options.add(SHADER_DEFINE.METAL.getValue());
 		if (parameters.wrapAround)
 			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
-		if (parameters.floatSided)
+		if (parameters.doubleSided)
 			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
 		if (parameters.flipSided)
 			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
-		
+
 		if (parameters.shadowMapEnabled) {
 			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
 			if (parameters.shadowMapSoft)
@@ -745,7 +744,7 @@ public abstract class Material
 			else
 				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_BASIC.getValue());
 		}
-		
+
 		if (parameters.shadowMapDebug)
 			options.add(SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
 		if (parameters.shadowMapCascade)
@@ -753,7 +752,7 @@ public abstract class Material
 
 		if (parameters.logarithmicDepthBuffer)
 			options.add(SHADER_DEFINE.USE_LOGDEPTHBUF.getValue());
-		
+
 		options.add("");
 		String retval = "";
 		for(String opt: options)
@@ -762,10 +761,10 @@ public abstract class Material
 		List<String> extra = Arrays.asList(
 				"uniform mat4 viewMatrix;",
 				"uniform vec3 cameraPosition;");
-		
+
 		for(String opt: extra)
 			retval += opt + "\n";
-		
+
 		return retval;
 	}
 
@@ -778,49 +777,49 @@ public abstract class Material
 		if ( ! (this instanceof HasMaterialMap) )
 			return;
 
-		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
-		
+		FastMap< Uniform> uniforms = getShader().getUniforms();
+
 		uniforms.get("opacity").setValue( getOpacity() );
 
 		if(this instanceof HasColor)
 		{
-			if ( isGammaInput ) 
+			if ( isGammaInput )
 				((Color) uniforms.get("diffuse").getValue()).copyGammaToLinear( ((HasColor)this).getColor() );
- 
+
 			else
 				uniforms.get("diffuse").setValue( ((HasColor)this).getColor() );
 		}
-		
+
 		if(this instanceof HasMap)
 		{
 			uniforms.get("map").setValue( ((HasMap) this).getMap() );
 		}
 
 		if(this instanceof HasLightMap)
-			uniforms.get("lightMap").setValue( ((HasLightMap)this).getLightMap() );	
-		
+			uniforms.get("lightMap").setValue( ((HasLightMap)this).getLightMap() );
+
 		if(this instanceof HasSpecularMap)
 		{
 			uniforms.get("specularMap").setValue( ((HasSpecularMap)this).getSpecularMap() );
 		}
-		
+
 		if(this instanceof HasAlphaMap)
 		{
 			uniforms.get("alphaMap").setValue( ((HasAlphaMap)this).getAlphaMap() );
 		}
-		
+
 		if(this instanceof HasBumpMap)
 		{
 			uniforms.get("bumpMap").setValue( ((HasBumpMap)this).getBumpMap() );
 			uniforms.get("bumpScale").setValue( ((HasBumpMap)this).getBumpScale() );
-		}	
-		
+		}
+
 		if(this instanceof HasNormalMap)
 		{
 			uniforms.get("normalMap").setValue( ((HasNormalMap)this).getNormalMap() );
 			uniforms.get("normalScale").setValue( ((HasNormalMap)this).getNormalScale() );
-		}	
-		
+		}
+
 		// uv repeat and offset setting priorities
 		//  1. color map
 		//  2. specular map
@@ -828,7 +827,7 @@ public abstract class Material
 		//  4. bump map
 		//  5. alpha map
 		Texture uvScaleMap = null;
-		
+
 		if(this instanceof HasMap)
 			uvScaleMap = ((HasMap) this).getMap();
 		if(uvScaleMap == null && this instanceof HasSpecularMap)
@@ -839,67 +838,67 @@ public abstract class Material
 			uvScaleMap = ((HasBumpMap)this).getBumpMap();
 		if(uvScaleMap == null && this instanceof HasAlphaMap)
 			uvScaleMap = ((HasAlphaMap)this).getAlphaMap();
-		
+
 		if(uvScaleMap != null)
 		{
 			((Vector4)uniforms.get("offsetRepeat").getValue()).set(
-					uvScaleMap.getOffset().getX(), 
-					uvScaleMap.getOffset().getY(), 
-					uvScaleMap.getRepeat().getX(), 
+					uvScaleMap.getOffset().getX(),
+					uvScaleMap.getOffset().getY(),
+					uvScaleMap.getRepeat().getX(),
 					uvScaleMap.getRepeat().getY() );
 		}
-		
+
 		if(this instanceof HasEnvMap)
 		{
 			HasEnvMap envMapMaterial = (HasEnvMap)this;
 
 			uniforms.get("envMap").setValue( envMapMaterial.getEnvMap() );
-			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null 
+			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null
 					&& envMapMaterial.getEnvMap().getClass() == RenderTargetCubeTexture.class ) ? 1.0 : -1.0 );
 
-			if ( isGammaInput ) 
+			if ( isGammaInput )
 				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
- 
+
 			else
 				uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
-			
+
 			uniforms.get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
 			uniforms.get("combine").setValue( envMapMaterial.getCombine().getValue() );
-			uniforms.get("useRefract").setValue( ( envMapMaterial.getEnvMap() != null 
+			uniforms.get("useRefract").setValue( ( envMapMaterial.getEnvMap() != null
 					&& envMapMaterial.getEnvMap().getMapping() == Texture.MAPPING_MODE.CUBE_REFRACTION ) ? 1 : 0 );
 		}
 	}
 
-	public boolean materialNeedsSmoothNormals() 
+	public boolean materialNeedsSmoothNormals()
 	{
-		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == SHADING.SMOOTH;
+		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == Material.SHADING.SMOOTH;
 	}
 
-	public COLORS bufferGuessVertexColorType()
+	public Material.COLORS bufferGuessVertexColorType()
 	{
-		if(this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != COLORS.NO)
+		if(this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO)
 			return ((HasVertexColors)this).isVertexColors();
 
 		return null;
 	}
-	
-	public boolean bufferGuessUVType() 
+
+	public boolean bufferGuessUVType()
 	{
 		if(this instanceof HasMap && ((HasMap)this).getMap() != null)
 			return true;
-		
+
 		if(this instanceof HasLightMap && ((HasLightMap)this).getLightMap() != null)
 			return true;
-		
+
 		if(this instanceof HasBumpMap && ((HasBumpMap)this).getBumpMap() != null)
 			return true;
-		
+
 		if(this instanceof HasNormalMap && ((HasNormalMap)this).getNormalMap() != null)
 			return true;
-		
+
 		if(this instanceof HasSpecularMap && ((HasSpecularMap)this).getSpecularMap() != null)
 			return true;
-		
+
 		return false;
 	}
 
@@ -912,49 +911,49 @@ public abstract class Material
 		}
 		else if ( geometryGroup.getMaterialIndex() >= 0 )
 		{
-			material = object.getMaterial();	
+			material = object.getMaterial();
 		}
-		
+
 		return material;
 	}
-	
-	
+
+
 	public void deallocate( WebGLRenderer renderer )
 	{
-		Integer program = getShader().getProgram();
-		if ( program == null ) return;
-		
+		int program = getShader().getProgram();
+		if ( program == 0 ) return;
+
 //		getShader().setPrecision(null);
-		
+
 		// only deallocate GL program if this was the last use of shared program
 		// assumed there is only single copy of any program in the _programs list
 		// (that's how it's constructed)
 
 		boolean deleteProgram = false;
 
-		for ( String key: renderer._programs.keys())
+		for ( String key: renderer._programs.keySet())
 		{
 			Shader shader = renderer._programs.get(key);
-			
-			if ( shader == getShader() ) 
+
+			if ( shader == getShader() )
 			{
 				renderer._programs.remove(key);
 				deleteProgram = true;
 				break;
 			}
 		}
-		
-		if ( deleteProgram == true ) 
+
+		if ( deleteProgram == true )
 		{
 
 			renderer.getGL().glDeleteProgram(program);
 
-//			renderer.getInfo().getMemory().programs --;
+			renderer.getInfo().getMemory().programs --;
 		}
 
 	}
 
-	public String toString() 
+	public String toString()
 	{
 		return this.getClass().getSimpleName() + " { id=" + this.getId() + " }";
 	}

@@ -18,11 +18,8 @@
 
 package org.parallax3d.parallax.graphics.extras;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 
 /**
  * The class implements some Uniform related helper methods 
@@ -34,16 +31,16 @@ public class UniformsUtils
 {
 	/**
 	 * Merge two uniforms into one new result uniform.
-	 * 
+	 *
 	 * @param uniforms1 the map of first uniforms
 	 * @param uniforms2 the map of second uniforms
-	 * 
+	 *
 	 * @return new instance of Uniform Map
 	 */
-	public static ObjectMap<String, Uniform> merge( ObjectMap<String, Uniform> uniforms1, ObjectMap<String, Uniform> uniforms2 )
+	public static FastMap<Uniform> merge( FastMap<Uniform> uniforms1, FastMap<Uniform> uniforms2 )
 	{
-		ObjectMap<String, Uniform> result = new ObjectMap<String, Uniform>();
-		
+		FastMap<Uniform> result = new FastMap<Uniform>();
+
 		result.putAll(uniforms1);
 		result.putAll(uniforms2);
 
@@ -52,15 +49,15 @@ public class UniformsUtils
 
 	/**
 	 * Clone uniforms and create new instance of uniforms.
-	 *  
+	 *
 	 * @param uniforms the uniforms to clone
-	 * 
+	 *
 	 * @return the new instance of Uniform map
 	 */
-	public static Map<String, Uniform> clone ( Map<String, Uniform> uniforms ) 
+	public static FastMap<Uniform> clone ( FastMap<Uniform> uniforms )
 	{
-		Map<String, Uniform> result = new HashMap<String, Uniform>();
-		
+		FastMap<Uniform> result = new FastMap<Uniform>();
+
 		for(String u : uniforms.keySet())
 			result.put(u, uniforms.get(u).clone());
 

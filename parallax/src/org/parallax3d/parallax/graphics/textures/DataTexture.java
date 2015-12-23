@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
-import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 
 import java.nio.IntBuffer;
@@ -34,7 +34,7 @@ import java.nio.IntBuffer;
 @ThreeJsObject("THREE.DataTexture")
 public class DataTexture extends Texture
 {
-	private IntBuffer data;
+	private Uint8Array data;
 	private int width;
 	private int height;
 
@@ -46,7 +46,7 @@ public class DataTexture extends Texture
 
 	/**
 	 * Constructor which can be used to generate random data texture.
-	 * 
+	 *
 	 * @param width
 	 * @param height
 	 * @param color
@@ -58,12 +58,12 @@ public class DataTexture extends Texture
 
 		generateDataTexture(color);
 	}
-	
-	public IntBuffer getData() {
+
+	public Uint8Array getData() {
 		return data;
 	}
 
-	public void setData(IntBuffer data) {
+	public void setData(Uint8Array data) {
 		this.data = data;
 	}
 
@@ -82,21 +82,21 @@ public class DataTexture extends Texture
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
-	public void generateDataTexture( Color color ) 
+
+	public void generateDataTexture( Color color )
 	{
 		int size = width * height;
-		IntBuffer data = BufferUtils.newIntBuffer(3 * size);
+		Uint8Array data = Uint8Array.create(3 * size);
 
 		int r = (int)Math.floor( color.getR() * 255 );
 		int g = (int)Math.floor( color.getG() * 255 );
 		int b = (int)Math.floor( color.getB() * 255 );
 
-		for ( int i = 0; i < size; i ++ ) 
+		for ( int i = 0; i < size; i ++ )
 		{
-			data.put(i * 3, r);
-			data.put(i * 3 + 1, g);
-			data.put(i * 3 + 2, b);
+			data.set(i * 3, r);
+			data.set(i * 3 + 1, g);
+			data.set(i * 3 + 2, b);
 
 		}
 

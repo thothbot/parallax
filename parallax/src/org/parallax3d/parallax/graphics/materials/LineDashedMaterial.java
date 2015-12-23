@@ -18,12 +18,10 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
-import java.util.Map;
-
 import org.parallax3d.parallax.graphics.renderers.shaders.DashedShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 
@@ -34,17 +32,17 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 @ThreeJsObject("THREE.LineDashedMaterial")
 public class LineDashedMaterial extends LineBasicMaterial
 {
-	private float scale;
-	private float dashSize;
-	private float gapSize;
-	
+	private double scale;
+	private double dashSize;
+	private double gapSize;
+
 	public LineDashedMaterial()
 	{
 		super();
-		
-		setScale(1.0f);
-		setDashSize(3.0f);
-		setGapSize(1.0f);
+
+		setScale(1.0);
+		setDashSize(3.0);
+		setGapSize(1.0);
 	}
 
 	@Override
@@ -52,12 +50,12 @@ public class LineDashedMaterial extends LineBasicMaterial
 	{
 		return new DashedShader();
 	}
-	
-	public float getScale() {
+
+	public double getScale() {
 		return scale;
 	}
 
-	public void setScale(float scale) {
+	public void setScale(double scale) {
 		this.scale = scale;
 	}
 
@@ -65,11 +63,11 @@ public class LineDashedMaterial extends LineBasicMaterial
 	 * The size of the dash. This is both the gap with the stroke. Default is 3.
 	 * @return
 	 */
-	public float getDashSize() {
+	public double getDashSize() {
 		return dashSize;
 	}
 
-	public void setDashSize(float dashSize) {
+	public void setDashSize(double dashSize) {
 		this.dashSize = dashSize;
 	}
 
@@ -77,18 +75,18 @@ public class LineDashedMaterial extends LineBasicMaterial
 	 * The size of the gap. Default is 1.
 	 * @return
 	 */
-	public float getGapSize() {
+	public double getGapSize() {
 		return gapSize;
 	}
 
-	public void setGapSize(float gapSize) {
+	public void setGapSize(double gapSize) {
 		this.gapSize = gapSize;
 	}
-	
+
 	public LineDashedMaterial clone() {
 
 		LineDashedMaterial material = new LineDashedMaterial();
-		
+
 		super.clone(material);
 
 		material.scale = this.scale;
@@ -98,13 +96,13 @@ public class LineDashedMaterial extends LineBasicMaterial
 		return material;
 
 	}
-	
+
 	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput) 
+	public void refreshUniforms(Camera camera, boolean isGammaInput)
 	{
 		super.refreshUniforms(camera, isGammaInput);
-		ObjectMap<String, Uniform> uniforms = getShader().getUniforms();
-			
+		FastMap<Uniform> uniforms = getShader().getUniforms();
+
 		uniforms.get("dashSize").setValue( getDashSize() );
 		uniforms.get("totalSize").setValue( getDashSize() + getGapSize() );
 		uniforms.get("scale").setValue( getScale() );

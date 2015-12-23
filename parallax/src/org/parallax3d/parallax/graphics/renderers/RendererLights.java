@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.graphics.renderers;
 
 import java.util.List;
-import java.util.Map;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
@@ -31,7 +30,7 @@ import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.lights.PointLight;
 import org.parallax3d.parallax.graphics.lights.ShadowLight;
 import org.parallax3d.parallax.graphics.scenes.Scene;
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 
 /**
  * Lights used in the {@link Scene}.
@@ -46,8 +45,8 @@ public class RendererLights
 	public PointLight.UniformPoint point;
 	public SpotLight.UniformSport spot;
 	public HemisphereLight.UniformHemisphere hemi;
-	
-	public RendererLights() 
+
+	public RendererLights()
 	{
 		ambient = new AmbientLight.UniformAmbient();
 		directional = new DirectionalLight.UniformDirectional();
@@ -55,28 +54,26 @@ public class RendererLights
 		spot = new SpotLight.UniformSport();
 		hemi = new HemisphereLight.UniformHemisphere();
 	}
-				
-	public void setupLights ( List<Light> lights, boolean  isGammaInput) 
+
+	public void setupLights ( List<Light> lights, boolean  isGammaInput)
 	{
-		Parallax.app.debug("setupLights()", "Called");
-		
 		// Reset uniforms
 		ambient.reset();
 		directional.reset();
 		point.reset();
 		spot.reset();
 		hemi.reset();
-		
-		for ( Light light: lights) 
+
+		for ( Light light: lights)
 		{
-			if ( (light instanceof ShadowLight && ((ShadowLight)light).isOnlyShadow()) || ! light.isVisible()) 
+			if ( (light instanceof ShadowLight && ((ShadowLight)light).isOnlyShadow()) || ! light.isVisible())
 				continue;
 
 			light.setupRendererLights(this, isGammaInput);
 		}
 	}
-	
-	public void refreshUniformsLights ( ObjectMap<String, Uniform> uniforms )
+
+	public void refreshUniformsLights ( FastMap<Uniform> uniforms )
 	{
 		ambient.refreshUniform(uniforms);
 		directional.refreshUniform(uniforms);

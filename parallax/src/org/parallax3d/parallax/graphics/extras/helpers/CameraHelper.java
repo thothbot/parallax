@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.system.ObjectMap;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
@@ -48,25 +48,25 @@ import org.parallax3d.parallax.graphics.objects.Line;
 public class CameraHelper extends Line
 {
 	private Camera camera;
-	
-	private ObjectMap<String, List<Integer>> pointMap;
-	
+
+	private FastMap<List<Integer>> pointMap;
+
 	public CameraHelper(Camera camera)
 	{
 		super(new Geometry());
 
 		this.camera = camera;
-		
+
 		LineBasicMaterial lbm = new LineBasicMaterial();
 		lbm.setColor( new Color(0xffffff) );
 		lbm.setVertexColors( Material.COLORS.FACE );
 		setMaterial(lbm);
-		setMode(MODE.PIECES);
-		
+		setMode(Line.MODE.PIECES);
+
 		setMatrix(camera.getMatrixWorld());
 		setMatrixAutoUpdate(false);
-		
-		this.pointMap = new ObjectMap<String, List<Integer>>();
+
+		this.pointMap = new FastMap<List<Integer>>();
 
 		// colors
 
@@ -122,35 +122,35 @@ public class CameraHelper extends Line
 
 		addLine( "cf1", "cf2", hexCross );
 		addLine( "cf3", "cf4", hexCross );
-	
+
 		update();
 	}
-	
-	private void addLine( String a, String b, int hex ) 
+
+	private void addLine( String a, String b, int hex )
 	{
 		addPoint( a, hex );
 		addPoint( b, hex );
 
 	}
 
-	private void addPoint( String id, int hex ) 
+	private void addPoint( String id, int hex )
 	{
 		((Geometry)getGeometry()).getVertices().add( new Vector3() );
 		((Geometry)getGeometry()).getColors().add( new Color( hex ) );
 
-		if ( !this.pointMap.containsKey(id) ) 
+		if ( !this.pointMap.containsKey(id) )
 			this.pointMap.put( id, new ArrayList<Integer>() );
-		
+
 		this.pointMap.get( id ).add(((Geometry)getGeometry()).getVertices().size() - 1 );
 	}
-	
+
 	Vector3 _vector = new Vector3();
 	Camera _camera = new Camera();
 
-	public void update() 
+	public void update()
 	{
-		float w = 1.0f;
-		float h = 1.0f;
+		double w = 1.0;
+		double h = 1.0;
 
 		// we need just camera projection matrix
 		// world matrix must be identity
@@ -178,8 +178,8 @@ public class CameraHelper extends Line
 
 		// up
 
-		setPoint( "u1",  w * 0.7f, h * 1.1f, -1 );
-		setPoint( "u2", -w * 0.7f, h * 1.1f, -1 );
+		setPoint( "u1",  w * 0.7, h * 1.1, -1 );
+		setPoint( "u2", -w * 0.7, h * 1.1, -1 );
 		setPoint( "u3",        0, h * 2,   -1 );
 
 		// cross
@@ -196,20 +196,20 @@ public class CameraHelper extends Line
 
 		((Geometry)getGeometry()).setVerticesNeedUpdate( true );
 	}
-	
-	private void setPoint( String point, float x, float y, float z ) 
+
+	private void setPoint( String point, double x, double y, double z )
 	{
 		_vector.set( x, y, z ).unproject( _camera );
 
 		List<Integer> points = this.pointMap.get( point );
 
-		if ( points != null ) 
+		if ( points != null )
 		{
-			for ( int i = 0, il = points.size(); i < il; i ++ ) 
+			for ( int i = 0, il = points.size(); i < il; i ++ )
 			{
 				int j = points.get( i );
 				((Geometry)getGeometry()).getVertices().get( j ).copy( _vector );
 			}
 		}
-	}	
+	}
 }

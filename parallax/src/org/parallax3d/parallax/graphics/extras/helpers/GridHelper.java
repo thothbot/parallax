@@ -38,17 +38,17 @@ public class GridHelper extends Line {
     private Color color1;
     private Color color2;
 
-    public GridHelper(float size, float step) {
-        super(new Geometry(), new LineBasicMaterial(), MODE.PIECES);
+    public GridHelper(double size, double step) {
+        super(new Geometry(), new LineBasicMaterial(), Line.MODE.PIECES);
         Geometry geometry = (Geometry) getGeometry();
-        
+
         LineBasicMaterial material = (LineBasicMaterial) getMaterial();
         material.setVertexColors(Material.COLORS.VERTEX);
 
         color1 = new Color(0x444444);
         color2 = new Color(0x888888);
 
-        for (float i = -size; i <= size; i += step) {
+        for (double i = -size; i <= size; i += step) {
 
             geometry.getVertices().add(new Vector3(-size, 0, i));
             geometry.getVertices().add(new Vector3(size, 0, i));
@@ -65,12 +65,12 @@ public class GridHelper extends Line {
         }
     }
 
-    public void setColors(int colorCenterLine, int colorGrid) 
+    public void setColors(int colorCenterLine, int colorGrid)
     {
-    	setColors(new Color(colorCenterLine), new Color(colorGrid));
+        setColors(new Color(colorCenterLine), new Color(colorGrid));
     }
-    
-    public void setColors(Color colorCenterLine, Color colorGrid) 
+
+    public void setColors(Color colorCenterLine, Color colorGrid)
     {
 
         color1.copy( colorCenterLine );

@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.graphics.cameras;
 
+import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.events.ViewportResizeBus;
+import org.parallax3d.parallax.events.ViewportResizeListener;
 import org.parallax3d.parallax.system.ThreeJsObject;
-//import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeHandler;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
-//import org.parallax3d.parallax.backends.gwt.client.events.HasEventBus;
-//import org.parallax3d.parallax.backends.gwt.client.events.ViewportResizeEvent;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Quaternion;
 
@@ -36,33 +36,23 @@ import org.parallax3d.parallax.math.Quaternion;
  *
  */
 @ThreeJsObject("THREE.Camera")
-public class Camera extends Object3D// implements HasEventBus, ViewportResizeHandler
+public class Camera extends Object3D implements ViewportResizeListener
 {
 	protected Matrix4 matrixWorldInverse;
 	protected Matrix4 projectionMatrix;
-	
+
 	/**
 	 * This constructor sets the following properties to the correct type: matrixWorldInverse and projectionMatrix.
 	 */
-	public Camera() 
+	public Camera()
 	{
 		super();
 
+		ViewportResizeBus.addViewportResizeListener(this);
+
 		this.matrixWorldInverse = new Matrix4();
 		this.projectionMatrix = new Matrix4();
-
-//		addViewportResizeHandler(this);
 	}
-	
-//	public HandlerRegistration addViewportResizeHandler(ViewportResizeHandler handler)
-//	{
-//		return EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, handler);
-//	}
-//
-//	@Override
-//	public void onResize(ViewportResizeEvent event) {
-//		//  Empty for capability
-//	}
 
 	/**
 	 * This is the inverse of matrixWorld. MatrixWorld contains the Matrix which has the world transform of the Camera.
@@ -91,7 +81,7 @@ public class Camera extends Object3D// implements HasEventBus, ViewportResizeHan
 	{
 		this.projectionMatrix = projectionMatrix;
 	}
-	
+
 	@Override
 	public Vector3 getWorldDirection() {
 		return getWorldDirection(new Vector3());
@@ -104,12 +94,12 @@ public class Camera extends Object3D// implements HasEventBus, ViewportResizeHan
 
 		this.getWorldQuaternion( quaternion );
 
-		return optionalTarget.set( 0, 0, - 1 ).apply( quaternion );
+		return optionalTarget.set( 0, 0, - 1 ).apply(quaternion);
 
 	}
-	
+
 	/**
-	 * This makes the camera look at the vector position in the global space as long as the parent 
+	 * This makes the camera look at the vector position in the global space as long as the parent
 	 * of this camera is the scene or at position (0,0,0).
 	 */
 	@Override
@@ -121,20 +111,38 @@ public class Camera extends Object3D// implements HasEventBus, ViewportResizeHan
 
 		m1.lookAt( this.position, vector, this.up );
 
-		this.quaternion.setFromRotationMatrix( m1 );
+		this.quaternion.setFromRotationMatrix(m1);
 	}
-	
+
 	public Camera clone() {
 		return clone(new Camera());
 	}
-	
+
 	public Camera clone ( Camera camera ) {
 
 		super.clone(camera);
 
-		camera.matrixWorldInverse.copy( this.matrixWorldInverse );
-		camera.projectionMatrix.copy( this.projectionMatrix );
+		camera.matrixWorldInverse.copy(this.matrixWorldInverse);
+		camera.projectionMatrix.copy(this.projectionMatrix);
 
 		return camera;
 	};
+
+	@Override
+	public void onViewportResize(int newWidth, int newHeight) {
+
+	}
+
+	@Override
+	public void finalize() {
+		ViewportResizeBus.removeViewportResizeListener(this);
+		try
+		{
+			super.finalize();
+		}
+		catch (Throwable throwable)
+		{
+			Parallax.app.error("Camera", "Exception in Camera.finalize:", throwable);
+		}
+	}
 }

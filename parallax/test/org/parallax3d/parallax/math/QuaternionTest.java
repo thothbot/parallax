@@ -24,14 +24,14 @@ import static org.junit.Assert.*;
 public class QuaternionTest
 {
 
-	private static float DELTA = 0.0f;
+	private static double DELTA = 0.0;
 
-	private static float X = 2;
-	private static float Y = 3;
-	private static float Z = 4;
-	private static float W = 5;
+	private static double X = 2;
+	private static double Y = 3;
+	private static double Z = 4;
+	private static double W = 5;
 
-	private static Vector3 eulerAngles = new Vector3( 0.1f, -0.3f, 0.25f );
+	private static Vector3 eulerAngles = new Vector3( 0.1, -0.3, 0.25 );
 //	private static List<Euler> orders = Arrays.asList( Euler.XYZ, Euler.YXZ, Euler.ZXY, Euler.ZYX, Euler.YZX, Euler.XZY );
 
 	@Test
@@ -132,9 +132,9 @@ public class QuaternionTest
 		a = new Quaternion().setFromAxisAngle( new Vector3( 0, 0, 1 ), 0 );
 		assertTrue( a.equals( zero ));
 
-		Quaternion b1 = new Quaternion().setFromAxisAngle( new Vector3( 1, 0, 0 ), (float)Math.PI );
+		Quaternion b1 = new Quaternion().setFromAxisAngle( new Vector3( 1, 0, 0 ), (double)Math.PI );
 		assertTrue( ! a.equals( b1 ));
-		Quaternion b2 = new Quaternion().setFromAxisAngle( new Vector3( 1, 0, 0 ), (float)-Math.PI );
+		Quaternion b2 = new Quaternion().setFromAxisAngle( new Vector3( 1, 0, 0 ), (double)-Math.PI );
 		assertTrue( ! a.equals( b2 ));
 
 		b1.multiply( b2 );

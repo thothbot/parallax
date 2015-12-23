@@ -25,15 +25,15 @@ public final class CurveKnot extends Curve
 {
 
 	@Override
-	public Vector3 getPoint(float t)
+	public Vector3 getPoint(double t)
 	{
 		t *= 2.0 * Math.PI;
 
-		float R = 10;
-		float s = 50;
-		float tx = (float)(s * Math.sin(t));
-		float ty = (float)(Math.cos(t) * (R + s * Math.cos(t)));
-		float tz = (float)(Math.sin(t) * (R + s * Math.cos(t)));
+		double R = 10;
+		double s = 50;
+		double tx = s * Math.sin(t);
+		double ty = Math.cos(t) * (R + s * Math.cos(t));
+		double tz = Math.sin(t) * (R + s * Math.cos(t));
 
 		return new Vector3(tx, ty, tz);
 	}

@@ -30,42 +30,42 @@ public interface HasEnvMap
 {
 	/**
 	 * Gets environmental texture
-	 * 
+	 *
 	 * @return the texture
 	 */
 	public Texture getEnvMap();
-	
+
 	/**
 	 * Sets environmental texture
-	 * 
+	 *
 	 * @param envMap the texture
 	 */
 	public void setEnvMap(Texture envMap);
-	
+
 	public Texture.OPERATIONS getCombine();
 	public void setCombine(Texture.OPERATIONS combine);
-	
+
 	/**
 	 * Gets reflectivity
-	 * 
+	 *
 	 * @return the reflectivity value
 	 */
-	public float getReflectivity();
-	
+	public double getReflectivity();
+
 	/**
 	 * Sets reflectivity
-	 * 
+	 *
 	 * @param reflectivity the reflectivity value
 	 */
-	public void setReflectivity(float reflectivity);
-	
+	public void setReflectivity(double reflectivity);
+
 	/**
 	 * Gets Refraction Ratio
 	 */
-	public float getRefractionRatio();
-	
+	public double getRefractionRatio();
+
 	/**
 	 * Sets Refraction Ratio
 	 */
-	public void setRefractionRatio(float refractionRatio);
+	public void setRefractionRatio(double refractionRatio);
 }

@@ -26,19 +26,19 @@ import org.parallax3d.parallax.math.Vector2;
 public final class EllipseCurve extends Curve
 {
 
-	private float aX;
-	private float aY;
+	private double aX;
+	private double aY;
 
-	private float xRadius;
-	private float yRadius;
+	private double xRadius;
+	private double yRadius;
 
-	private float aStartAngle;
-	private float aEndAngle;
+	private double aStartAngle;
+	private double aEndAngle;
 
 	private boolean aClockwise;
 
-	public EllipseCurve( float aX, float aY, float xRadius, float yRadius,
-			float aStartAngle, float aEndAngle, boolean aClockwise ) 
+	public EllipseCurve( double aX, double aY, double xRadius, double yRadius,
+						 double aStartAngle, double aEndAngle, boolean aClockwise )
 	{
 		this.aX = aX;
 		this.aY = aY;
@@ -53,19 +53,19 @@ public final class EllipseCurve extends Curve
 	}
 
 	@Override
-	public Vector2 getPoint(float t)
+	public Vector2 getPoint(double t)
 	{
-		float deltaAngle = this.aEndAngle - this.aStartAngle;
+		double deltaAngle = this.aEndAngle - this.aStartAngle;
 
-		if ( !this.aClockwise ) 
+		if ( !this.aClockwise )
 		{
 			t = 1 - t;
 		}
 
-		float angle = this.aStartAngle + t * deltaAngle;
+		double angle = this.aStartAngle + t * deltaAngle;
 
-		float tx = this.aX + this.xRadius * (float)Math.cos( angle );
-		float ty = this.aY + this.yRadius * (float)Math.sin( angle );
+		double tx = this.aX + this.xRadius * Math.cos( angle );
+		double ty = this.aY + this.yRadius * Math.sin( angle );
 
 		return new Vector2( tx, ty );
 	}

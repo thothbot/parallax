@@ -23,10 +23,10 @@ public interface HasIntensity {
 	/**
 	 * Gets Light's intensity.
 	 */
-	public float getIntensity();
+	public double getIntensity();
 
 	/**
 	 * Sets Light's intensity.
 	 */
-	public void setIntensity(float intensity);
+	public void setIntensity(double intensity);
 }

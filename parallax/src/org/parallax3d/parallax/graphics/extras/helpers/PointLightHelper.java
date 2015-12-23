@@ -26,31 +26,32 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 
 @ThreeJsObject("THREE.PointLightHelper")
 public class PointLightHelper extends Mesh {
-	
+
 	PointLight light;
-	
-	public PointLightHelper(PointLight light, float sphereSize) 
+
+	public PointLightHelper(PointLight light, double sphereSize)
 	{
 		super(new SphereGeometry( sphereSize, 4, 2 ),  new MeshBasicMaterial());
-		
+
 		this.light = light;
 		this.light.updateMatrixWorld(false);
-		
+
 		MeshBasicMaterial material = (MeshBasicMaterial) getMaterial();
 		material.setWireframe(true);
 		material.setFog(false);
 		material.getColor().copy( this.light.getColor() ).multiply( this.light.getIntensity() );
-		
+
 		setMatrix( this.light.getMatrixWorld() );
 		setMatrixAutoUpdate(false);
 
 
 	}
-	
+
 	public void update () {
 
 		((MeshBasicMaterial)getMaterial()).getColor()
-			.copy( this.light.getColor() )
-			.multiply( this.light.getIntensity() );
+				.copy( this.light.getColor() )
+				.multiply( this.light.getIntensity() );
 	}
+
 }

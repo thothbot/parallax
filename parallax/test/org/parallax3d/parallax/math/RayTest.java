@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 public class RayTest
 {
 
-	private static float DELTA = 0.001f;
+	private static double DELTA = 0.001;
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
@@ -117,11 +117,11 @@ public class RayTest
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
 
 		// nearby the ray
-//		float b = a.distanceToPoint( zero3 );
+//		double b = a.distanceToPoint( zero3 );
 //		assertEquals( Math.sqrt( 2 ), b, DELTA );
 
 		// exactly on the ray
-		float c = a.distanceToPoint( one3 );
+		double c = a.distanceToPoint( one3 );
 		assertEquals( 0.0, c, DELTA );
 	}
 
@@ -129,10 +129,10 @@ public class RayTest
 	public void testIsIntersectionSphere()
 	{
 		Ray a = new Ray( one3.clone(), new Vector3( 0, 0, 1 ) );
-		Sphere b = new Sphere( zero3, 0.5f );
-		Sphere c = new Sphere( zero3, 1.5f );
-		Sphere d = new Sphere( one3, 0.1f );
-		Sphere e = new Sphere( two3, 0.1f );
+		Sphere b = new Sphere( zero3, 0.5 );
+		Sphere c = new Sphere( zero3, 1.5 );
+		Sphere d = new Sphere( one3, 0.1 );
+		Sphere e = new Sphere( two3, 0.1 );
 		Sphere f = new Sphere( two3, 1 );
 
 		assertTrue( ! a.isIntersectionSphere( b ));

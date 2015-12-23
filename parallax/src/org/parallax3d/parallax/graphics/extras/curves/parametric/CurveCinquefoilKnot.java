@@ -24,26 +24,26 @@ import org.parallax3d.parallax.math.Vector3;
 public final class CurveCinquefoilKnot extends Curve
 {
 
-	private float scale;
+	private double scale;
 	
 	public CurveCinquefoilKnot()
 	{
 		this(10);
 	}
 
-	public CurveCinquefoilKnot(float scale)
+	public CurveCinquefoilKnot(double scale)
 	{
 		this.scale = scale;
 	}
 	
 	@Override
-	public Vector3 getPoint(float t)
+	public Vector3 getPoint(double t)
 	{
-		float p = 2, q = 5;
+		double p = 2, q = 5;
 		t *= Math.PI * 2.0;
-		float tx = (float)((2.0 + Math.cos(q * t)) * Math.cos(p * t));
-		float ty = (float)((2.0 + Math.cos(q * t)) * Math.sin(p * t));
-		float tz = (float)(Math.sin(q * t));
+		double tx = (2.0 + Math.cos(q * t)) * Math.cos(p * t);
+		double ty = (2.0 + Math.cos(q * t)) * Math.sin(p * t);
+		double tz = Math.sin(q * t);
 
 		return new Vector3(tx, ty, tz).multiply(this.scale);
 	}

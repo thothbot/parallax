@@ -31,27 +31,27 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 @ThreeJsObject("THREE.IcosahedronGeometry")
 public final class IcosahedronGeometry extends PolyhedronGeometry
 {
-	public IcosahedronGeometry( float radius, int detail ) 
+	public IcosahedronGeometry( double radius, int detail )
 	{
 		super(radius, detail );
-	}	
+	}
 
 	@Override
-	protected float[][] getGeometryVertices() 
+	protected double[][] getGeometryVertices()
 	{
-		float t = ( 1.0f + (float)Math.sqrt( 5 ) ) / 2.0f;
+		double t = ( 1.0 + Math.sqrt( 5 ) ) / 2.0;
 
-		float[][] vertices = {
-				{ -1.0f,  t,  0.0f }, {  1.0f, t, 0.0f }, { -1.0f, -t,  0.0f }, {  1.0f, -t,  0.0f },
-				{  0.0f, -1.0f,  t }, {  0.0f, 1.0f, t }, {  0.0f, -1.0f, -t }, {  0.0f,  1.0f, -t },
-				{  t,  0.0f, -1.0f }, {  t, 0.0f, 1.0f }, { -t,  0.0f, -1.0f }, { -t,  0.0f,  1.0f }
+		double[][] vertices = {
+				{ -1.0,  t,  0.0 }, {  1.0, t, 0.0 }, { -1.0, -t,  0.0 }, {  1.0, -t,  0.0 },
+				{  0.0, -1.0,  t }, {  0.0, 1.0, t }, {  0.0, -1.0, -t }, {  0.0,  1.0, -t },
+				{  t,  0.0, -1.0 }, {  t, 0.0, 1.0 }, { -t,  0.0, -1.0 }, { -t,  0.0,  1.0 }
 		};
 
 		return vertices;
 	}
 
 	@Override
-	protected int[][] getGeometryFaces() 
+	protected int[][] getGeometryFaces()
 	{
 		int[][] faces = {
 				{ 0, 11,  5 }, { 0,  5,  1 }, {  0,  1,  7 }, {  0,  7, 10 }, {  0, 10, 11 },

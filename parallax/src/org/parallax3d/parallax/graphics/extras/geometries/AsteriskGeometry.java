@@ -24,30 +24,30 @@ import org.parallax3d.parallax.math.Vector3;
 public class AsteriskGeometry extends Geometry
 {
 
-	public AsteriskGeometry(float innerRadius, float outerRadius )
+	public AsteriskGeometry(double innerRadius, double outerRadius )
 	{
-		float sd = innerRadius;
-		float ed = outerRadius;
+		double sd = innerRadius;
+		double ed = outerRadius;
 
-		float sd2 = 0.707f * sd;
-		float ed2 = 0.707f * ed;
+		double sd2 = 0.707 * sd;
+		double ed2 = 0.707 * ed;
 
-		float[][] rays = { { sd, 0, 0 }, { ed, 0, 0 }, { -sd, 0, 0 }, { -ed, 0, 0 },
-					 { 0, sd, 0 }, { 0, ed, 0 }, { 0, -sd, 0 }, { 0, -ed, 0 },
-					 { 0, 0, sd }, { 0, 0, ed }, { 0, 0, -sd }, { 0, 0, -ed },
-					 { sd2, sd2, 0 }, { ed2, ed2, 0 }, { -sd2, -sd2, 0 }, { -ed2, -ed2, 0 },
-					 { sd2, -sd2, 0 }, { ed2, -ed2, 0 }, { -sd2, sd2, 0 }, { -ed2, ed2, 0 },
-					 { sd2, 0, sd2 }, { ed2, 0, ed2 }, { -sd2, 0, -sd2 }, { -ed2, 0, -ed2 },
-					 { sd2, 0, -sd2 }, { ed2, 0, -ed2 }, { -sd2, 0, sd2 }, { -ed2, 0, ed2 },
-					 { 0, sd2, sd2 }, { 0, ed2, ed2 }, { 0, -sd2, -sd2 }, { 0, -ed2, -ed2 },
-					 { 0, sd2, -sd2 }, { 0, ed2, -ed2 }, { 0, -sd2, sd2 }, { 0, -ed2, ed2 }
+		double[][] rays = { { sd, 0, 0 }, { ed, 0, 0 }, { -sd, 0, 0 }, { -ed, 0, 0 },
+				{ 0, sd, 0 }, { 0, ed, 0 }, { 0, -sd, 0 }, { 0, -ed, 0 },
+				{ 0, 0, sd }, { 0, 0, ed }, { 0, 0, -sd }, { 0, 0, -ed },
+				{ sd2, sd2, 0 }, { ed2, ed2, 0 }, { -sd2, -sd2, 0 }, { -ed2, -ed2, 0 },
+				{ sd2, -sd2, 0 }, { ed2, -ed2, 0 }, { -sd2, sd2, 0 }, { -ed2, ed2, 0 },
+				{ sd2, 0, sd2 }, { ed2, 0, ed2 }, { -sd2, 0, -sd2 }, { -ed2, 0, -ed2 },
+				{ sd2, 0, -sd2 }, { ed2, 0, -ed2 }, { -sd2, 0, sd2 }, { -ed2, 0, ed2 },
+				{ 0, sd2, sd2 }, { 0, ed2, ed2 }, { 0, -sd2, -sd2 }, { 0, -ed2, -ed2 },
+				{ 0, sd2, -sd2 }, { 0, ed2, -ed2 }, { 0, -sd2, sd2 }, { 0, -ed2, ed2 }
 		};
 
-		for ( int i = 0, il = rays.length; i < il; i ++ ) 
+		for ( int i = 0, il = rays.length; i < il; i ++ )
 		{
-			float x = rays[ i ][ 0 ];
-			float y = rays[ i ][ 1 ];
-			float z = rays[ i ][ 2 ];
+			double x = rays[ i ][ 0 ];
+			double y = rays[ i ][ 1 ];
+			double z = rays[ i ][ 2 ];
 
 			this.getVertices().add( new Vector3( x, y, z ) );
 		}

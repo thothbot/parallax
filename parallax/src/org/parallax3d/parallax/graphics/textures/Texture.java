@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
-import org.parallax3d.parallax.system.BufferUtils;
+import org.parallax3d.parallax.system.Image;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.math.Vector2;
@@ -38,17 +38,7 @@ import java.nio.Buffer;
 @ThreeJsObject("THREE.Texture")
 public class Texture
 {
-	/**
-	 * This callback will be called when the image has been loaded.
-	 */
-	public static interface ImageLoadHandler 
-	{
-		void onImageLoad(Texture texture);
-	}
-
-	private static int TextureCount = 0;
-	
-	public static enum OPERATIONS 
+	public static enum OPERATIONS
 	{
 		MULTIPLY(0), // MultiplyOperation
 		MIX(1); // MixOperation
@@ -61,20 +51,22 @@ public class Texture
 	/**
 	 * Mapping modes
 	 */
-	public static enum MAPPING_MODE 
+	public static enum MAPPING_MODE
 	{
-		UV, // UVMapping = function () {};
+		UV,
 
-		CUBE_REFLECTION, // CubeReflectionMapping = function () {};
-		CUBE_REFRACTION, // CubeRefractionMapping = function () {};
+		CUBE_REFLECTION,
+		CUBE_REFRACTION,
 
-		SPHERICAL_REFLECTION, // SphericalReflectionMapping = function () {};
-		SPHERICAL_REFRACTION // SphericalRefractionMapping = function () {};
+		SPHERICAL_REFLECTION,
+		SPHERICAL_REFRACTION
 	};
 
-	private int id;
+	private static int TextureCount = 0;
 
-	private Buffer image;
+	private Image image;
+
+	private int id;
 
 	private Vector2 offset;
 	private Vector2 repeat;
@@ -95,12 +87,12 @@ public class Texture
 	private boolean isFlipY = true;
 	private int unpackAlignment = 4; // valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
 
-	private boolean isNeedsUpdate = false;
-	
-	private Integer webglTexture; //WebGLTexture
-	
+	private boolean isNeedsUpdate = true;
+
+	protected Integer webglTexture; //WebGLTexture
+
 	private int anisotropy;
-	
+
 	private int cache_oldAnisotropy;
 
 	/**
@@ -108,47 +100,15 @@ public class Texture
 	 */
 	public Texture()
 	{
-		this( null );
+		this(null);
 	}
-	
-//	public Texture(String url)
-//	{
-//		this(url, null);
-//	}
-
-//	public Texture(String url, final ImageLoadHandler imageLoadHandler)
-//	{
-//		this(new Image(url), imageLoadHandler);
-//	}
-
-//	/**
-//	 * Constructor
-//	 *
-//	 * @param image              the Image
-//	 * @param imageLoadHandler   the {@link ImageLoadHandler}. Not necessary.
-//	 */
-//	public Texture(Image image, final ImageLoadHandler imageLoadHandler)
-//	{
-//		this(image.getElement());
-//
-//		loadImage(image, new Loader() {
-//
-//			@Override
-//			public void onLoad() {
-//
-//				setNeedsUpdate(true);
-//				if (imageLoadHandler != null)
-//					imageLoadHandler.onImageLoad(Texture.this);
-//			}
-//		});
-//	}
 
 	/**
 	 * Constructor will create a texture instance.
 	 *
-	 * @param image the media element.
+	 * @param image the Image.
 	 */
-	public Texture(Buffer image)
+	public Texture(Image image)
 	{
 		this(image,
 				MAPPING_MODE.UV,
@@ -160,27 +120,27 @@ public class Texture
 				PixelType.UNSIGNED_BYTE,
 				1);
 	}
-	
+
 	/**
 	 * Constructor will create a texture instance.
-	 * 
+	 *
 	 * @param image     the media element
 	 * @param mapping   the @{link Texture.MAPPING_MODE} value
-	 * @param wrapS     the wrap parameter for texture coordinate S. @see {@link TextureWrapMode}.
-	 * @param wrapT     the wrap parameter for texture coordinate T. @see {@link TextureWrapMode}.
-	 * @param magFilter the texture magnification function. @see {@link TextureMagFilter}.
-	 * @param minFilter the texture minifying function. @see {@link TextureMinFilter}.
-	 * @param format    the {@link PixelFormat} value.
-	 * @param type      the {@link DataType} value.
+	 * @param wrapS     the wrap parameter for texture coordinate S.
+	 * @param wrapT     the wrap parameter for texture coordinate T
+	 * @param magFilter the texture magnification function.
+	 * @param minFilter the texture minifying function.
+	 * @param format    the PixelFormat value.
+	 * @param type      the DataType value.
 	 * @param anisotropy the anisotropy value.
 	 */
-	public Texture(Buffer image, MAPPING_MODE mapping, TextureWrapMode wrapS,
-			TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
-			PixelFormat format, PixelType type, int anisotropy) 
-	{	
-		this.image = image;		
+	public Texture(Image image, MAPPING_MODE mapping, TextureWrapMode wrapS,
+				   TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
+				   PixelFormat format, PixelType type, int anisotropy)
+	{
+		this.image = image;
 		this.mapping = mapping;
-		
+
 		this.wrapS = wrapS;
 		this.wrapT = wrapT;
 
@@ -189,12 +149,12 @@ public class Texture
 
 		this.format = format;
 		this.type = type;
-		
+
 		this.id = Texture.TextureCount++;
 		this.offset = new Vector2(0, 0);
 		this.repeat = new Vector2(1, 1);
 	}
-	
+
 	/**
 	 * Gets texture ID.
 	 */
@@ -205,21 +165,21 @@ public class Texture
 	/**
 	 * Get the @{link Texture.MAPPING_MODE} value.
 	 */
-	public MAPPING_MODE getMapping() {
+	public Texture.MAPPING_MODE getMapping() {
 		return this.mapping;
 	}
-	
+
 	/**
 	 * Sets the @{link Texture.MAPPING_MODE} value.
 	 */
-	public void setMapping(MAPPING_MODE mapping) {
+	public void setMapping(Texture.MAPPING_MODE mapping) {
 		this.mapping = mapping;
 	}
 
 	/**
 	 * Sets the wrap parameter for texture coordinate S.
-	 * 
-	 * @param wrapS the wrap parameter 
+	 *
+	 * @param wrapS the wrap parameter
 	 */
 	public void setWrapS(TextureWrapMode wrapS)	{
 		this.wrapS = wrapS;
@@ -227,8 +187,8 @@ public class Texture
 
 	/**
 	 * Gets the wrap parameter for texture coordinate S.
-	 * 
-	 * @return the wrap parameter. 
+	 *
+	 * @return the wrap parameter.
 	 */
 	public TextureWrapMode getWrapS(){
 		return this.wrapS;
@@ -236,17 +196,17 @@ public class Texture
 
 	/**
 	 * Sets the wrap parameter for texture coordinate T.
-	 * 
-	 * @param wrapT the wrap parameter 
+	 *
+	 * @param wrapT the wrap parameter
 	 */
 	public void setWrapT(TextureWrapMode wrapT) {
 		this.wrapT = wrapT;
 	}
-	
+
 	/**
 	 * Gets the wrap parameter for texture coordinate T.
-	 * 
-	 * @return the wrap parameter. 
+	 *
+	 * @return the wrap parameter.
 	 */
 	public TextureWrapMode getWrapT() {
 		return this.wrapT;
@@ -254,13 +214,13 @@ public class Texture
 
 	/**
 	 * Gets the texture magnification function.
-	 * 
+	 *
 	 * @return the texture magnification function.
 	 */
 	public TextureMagFilter getMagFilter() {
 		return this.magFilter;
 	}
-	
+
 	/**
 	 * Sets the texture magnification function.
 	 */
@@ -270,53 +230,53 @@ public class Texture
 
 	/**
 	 * Gets the texture minifying function.
-	 * 
+	 *
 	 * @return the texture minifying function.
 	 */
 	public TextureMinFilter getMinFilter() {
 		return this.minFilter;
 	}
-	
+
 	/**
 	 * Sets the texture minifying function.
 	 */
 	public void setMinFilter(TextureMinFilter minFilter) {
 		this.minFilter = minFilter;
 	}
-	
+
 	/**
 	 * Checks if the texture needs to be updated.
 	 */
 	public Boolean isNeedsUpdate()	{
 		return this.isNeedsUpdate;
 	}
-		
+
 	/**
 	 * Sets flag to updated the texture.
 	 */
 	public void setNeedsUpdate(Boolean needsUpdate) {
 		this.isNeedsUpdate = needsUpdate;
 	}
-	
+
 	/**
 	 * Gets texture media element.
-	 * 
+	 *
 	 * @return the media element: image or canvas.
 	 */
-	public Buffer getImage() {
+	public Image getImage() {
 		return this.image;
 	}
-	
+
 	/**
 	 * Sets texture media element.
 	 */
-	public void setImage(Buffer image) {
+	public void setImage(Image image) {
 		this.image = image;
 	}
 
 	/**
 	 * Gets texture offset.
-	 * 
+	 *
 	 * @return the offset vector.
 	 */
 	public Vector2 getOffset() {
@@ -325,7 +285,7 @@ public class Texture
 
 	/**
 	 * Set texture offset vector.
-	 * 
+	 *
 	 * @param offset the offset vector.
 	 */
 	public void setOffset(Vector2 offset) {
@@ -334,7 +294,7 @@ public class Texture
 
 	/**
 	 * Gets repeat vector.
-	 * 
+	 *
 	 * @return the repeat vector.
 	 */
 	public Vector2 getRepeat() {
@@ -343,7 +303,7 @@ public class Texture
 
 	/**
 	 * Sets the repeat vector.
-	 * 
+	 *
 	 * @param repeat the repeat vector.
 	 */
 	public void setRepeat(Vector2 repeat) {
@@ -351,9 +311,9 @@ public class Texture
 	}
 
 	/**
-	 * Gets the {@link PixelFormat} value.
-	 * 
-	 * @return the {@link PixelFormat} value.
+	 * Gets the PixelFormat value.
+	 *
+	 * @return the PixelFormat value.
 	 */
 	public PixelFormat getFormat() {
 		return format;
@@ -361,7 +321,7 @@ public class Texture
 
 	/**
 	 * Sets the {@link PixelFormat} value.
-	 * 
+	 *
 	 * @param format the {@link PixelFormat} value.
 	 */
 	public void setFormat(PixelFormat format) {
@@ -369,9 +329,9 @@ public class Texture
 	}
 
 	/**
-	 * Sets the {@link PixelType} value.
-	 * 
-	 * @return the {@link PixelType} value.
+	 * Sets the PixelType value.
+	 *
+	 * @return the PixelType value.
 	 */
 	public PixelType getType() {
 		return type;
@@ -379,7 +339,7 @@ public class Texture
 
 	/**
 	 * Sets the {@link PixelType} value.
-	 * 
+	 *
 	 * @param type the {@link PixelType} value.
 	 */
 	public void setType(PixelType type) {
@@ -406,13 +366,13 @@ public class Texture
 	public boolean isPremultiplyAlpha() {
 		return isPremultiplyAlpha;
 	}
-	
+
 	public int getAnisotropy() {
 		return this.anisotropy;
 	}
-	
+
 	/**
-	 * Method of enhancing the image quality of texture on surfaces 
+	 * Method of enhancing the image quality of texture on surfaces
 	 * that are at oblique viewing angles.
 	 */
 	public void setAnisotropy(int anisotropy) {
@@ -425,15 +385,15 @@ public class Texture
 	public void setPremultiplyAlpha(boolean premultiplyAlpha) {
 		this.isPremultiplyAlpha = premultiplyAlpha;
 	}
-	
+
 	public boolean isFlipY() {
 		return this.isFlipY;
 	}
-	
+
 	public void setFlipY(boolean isFlipY) {
 		this.isFlipY = isFlipY;
 	}
-	
+
 	public int getUnpackAlignment() {
 		return unpackAlignment;
 	}
@@ -456,61 +416,60 @@ public class Texture
 	}
 
 	public void setTextureParameters (GL20 gl, int maxAnisotropy, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
-	{	
-		if ( isImagePowerOfTwo ) 
+	{
+		if ( isImagePowerOfTwo )
 		{
 			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue());
 			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue());
 			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
 			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue());
-		} 
-		else 
+		}
+		else
 		{
 			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_S.getValue(), GL20.GL_CLAMP_TO_EDGE);
 			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_T.getValue(), GL20.GL_CLAMP_TO_EDGE);
 			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MAG_FILTER.getValue(), filterFallback(this.magFilter.getValue()));
 			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MIN_FILTER.getValue(), filterFallback(this.minFilter.getValue()));
 		}
-		
-		if ( maxAnisotropy > 0 ) 
+
+		if ( maxAnisotropy > 0 )
 		{
-			if ( this.anisotropy > 1 || this.cache_oldAnisotropy > 1 ) 
+			if ( this.anisotropy > 1 || this.cache_oldAnisotropy > 1 )
 			{
 				gl.glTexParameterf(textureType, TextureParameterName.TEXTURE_MAX_ANISOTROPY_EXT.getValue(), Math.min(this.anisotropy, maxAnisotropy));
 				this.cache_oldAnisotropy = this.anisotropy;
 			}
 		}
 	}
-	
+
 	/**
 	 * Fallback filters for non-power-of-2 textures.
 	 */
-	private int filterFallback ( int f ) 
+	private int filterFallback ( int f )
 	{
 		if(f == GL20.GL_NEAREST || f == GL20.GL_NEAREST_MIPMAP_NEAREST || f == GL20.GL_NEAREST_MIPMAP_LINEAR)
 			return GL20.GL_NEAREST;
 
 		return GL20.GL_LINEAR;
 	}
-	
+
 	/**
 	 * Releases a texture from the GL context.
-	 * texture � an instance of Texture
 	 */
-	public void deallocate( WebGLRenderer renderer ) 
+	public void deallocate( WebGLRenderer renderer )
 	{
 		if ( getWebGlTexture() == null ) return;
 
 		renderer.getGL().glDeleteTexture( getWebGlTexture() );
 
-//		renderer.getInfo().getMemory().textures--;
+		renderer.getInfo().getMemory().textures--;
 	}
 
 	public Texture clone(Texture texture)
 	{
 		texture.offset.copy(this.offset);
 		texture.repeat.copy(this.repeat);
-		
+
 		texture.setGenerateMipmaps(this.isGenerateMipmaps);
 		texture.setPremultiplyAlpha(this.isPremultiplyAlpha);
 		texture.setFlipY(this.isFlipY);
@@ -527,45 +486,5 @@ public class Texture
 		return clone(new Texture(this.image, this.mapping, this.wrapS, this.wrapT,
 				this.magFilter, this.minFilter, this.format, this.type, this.anisotropy));
 	}
-	
-//	private static FlowPanel loadingArea = new FlowPanel();
-//	static {
-//		loadingArea.getElement().getStyle().setProperty("visibility", "hidden");
-//        loadingArea.getElement().getStyle().setProperty("position", "absolute");
-//        loadingArea.getElement().getStyle().setProperty("width", "1px");
-//        loadingArea.getElement().getStyle().setProperty("height", "1px");
-//        loadingArea.getElement().getStyle().setProperty("overflow", "hidden");
-//        RootPanel.get().add(loadingArea);
-//	}
-//
-//	protected interface Loader
-//	{
-//		void onLoad();
-//	}
-//
-//	protected void loadImage(final Image image, final Loader loader)
-//	{
-//		loadingArea.add(image);
-//
-//	    // Hook up an error handler, so that we can be informed if the image fails
-//	    // to load.
-//		image.addErrorHandler(new ErrorHandler() {
-//
-//			@Override
-//			public void onError(ErrorEvent event)
-//			{
-//				Log.error("An error occurred while loading image: " + image.getUrl());
-//			}
-//		});
-//
-//		image.addLoadHandler(new LoadHandler() {
-//
-//			@Override
-//			public void onLoad(LoadEvent event)
-//			{
-//				Log.info("Loaded image: " + image.getUrl());
-//				loader.onLoad();
-//			}
-//		});
-//	}
+
 }

@@ -40,62 +40,62 @@ import org.parallax3d.parallax.math.Vector2;
 @ThreeJsObject("THREE.SphereGeometry")
 public final class SphereGeometry extends Geometry
 {
-	public SphereGeometry() 
+	public SphereGeometry()
 	{
 		this(50);
 	}
 
-	public SphereGeometry(float radius) 
+	public SphereGeometry(double radius)
 	{
 		this(radius, 8, 6);
 	}
-	
-	public SphereGeometry(float radius, int segmentsWidth, int segmentsHeight) 
+
+	public SphereGeometry(double radius, int segmentsWidth, int segmentsHeight)
 	{
-		this(radius, segmentsWidth, segmentsHeight, 0.0f, (float)(Math.PI * 2.0) );
-	}
-	
-	public SphereGeometry(float radius, int segmentsWidth, int segmentsHeight, float phiStart, float phiLength)
-	{
-		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0f, (float)Math.PI);
+		this(radius, segmentsWidth, segmentsHeight, 0.0, Math.PI * 2.0 );
 	}
 
-	public SphereGeometry(float radius, int widthSegments, int heightSegments, float phiStart, float phiLength, float thetaStart, float thetaLength) 
+	public SphereGeometry(double radius, int segmentsWidth, int segmentsHeight, double phiStart, double phiLength)
+	{
+		this(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, 0.0, Math.PI);
+	}
+
+	public SphereGeometry(double radius, int widthSegments, int heightSegments, double phiStart, double phiLength, double thetaStart, double thetaLength)
 	{
 		super();
-		
+
 		List<List<Integer>> vertices = new ArrayList<List<Integer>>();
 		List<List<Vector2>> uvs = new ArrayList<List<Vector2>>();
-		
-		for (int y = 0; y <= heightSegments; y++) 
+
+		for (int y = 0; y <= heightSegments; y++)
 		{
 			List<Integer> verticesRow = new ArrayList<Integer>();
 			List<Vector2> uvsRow = new ArrayList<Vector2>();
-			
-			for (int x = 0; x <= widthSegments; x++) 
+
+			for (int x = 0; x <= widthSegments; x++)
 			{
 
-				float u = x / (float)widthSegments;
-				float v = y / (float)heightSegments;
+				double u = x / (double)widthSegments;
+				double v = y / (double)heightSegments;
 
 				Vector3 vertex = new Vector3();
-				vertex.setX(- radius * (float)Math.cos( phiStart + u * phiLength ) * (float)Math.sin( thetaStart + v * thetaLength ));
-				vertex.setY(radius * (float)Math.cos( thetaStart + v * thetaLength ));
-				vertex.setZ(radius * (float)Math.sin( phiStart + u * phiLength ) * (float)Math.sin( thetaStart + v * thetaLength ));
-				
+				vertex.setX(- radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
+				vertex.setY(radius * Math.cos( thetaStart + v * thetaLength ));
+				vertex.setZ(radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength ));
+
 				getVertices().add( vertex );
 
 				verticesRow.add( getVertices().size() - 1 );
 				uvsRow.add( new Vector2( u, 1- v ) );
 			}
-			
+
 			vertices.add( verticesRow );
 			uvs.add( uvsRow );
 		}
 
-		for ( int y = 0; y < heightSegments; y ++ ) 
+		for ( int y = 0; y < heightSegments; y ++ )
 		{
-			for ( int x = 0; x < widthSegments; x ++ ) 
+			for ( int x = 0; x < widthSegments; x ++ )
 			{
 				int v1 = vertices.get( y ).get( x + 1 );
 				int v2 = vertices.get( y ).get( x );
@@ -112,20 +112,20 @@ public final class SphereGeometry extends Geometry
 				Vector2 uv3 = uvs.get( y + 1 ).get( x ).clone();
 				Vector2 uv4 = uvs.get( y + 1 ).get( x + 1 ).clone();
 
-				if ( Math.abs( getVertices().get( v1 ).getY() ) == radius ) 
+				if ( Math.abs( getVertices().get( v1 ).getY() ) == radius )
 				{
-					uv1.setX( ( uv1.getX() + uv2.getX() ) / 2.0f );
+					uv1.setX( ( uv1.getX() + uv2.getX() ) / 2.0 );
 					getFaces().add( new Face3( v1, v3, v4, Arrays.asList( n1, n3, n4 ) ) );
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv3, uv4 ) );
-				} 
-				else if ( Math.abs( getVertices().get( v3 ).getY() ) ==  radius ) 
+				}
+				else if ( Math.abs( getVertices().get( v3 ).getY() ) ==  radius )
 				{
-					uv3.setX( ( uv3.getX() + uv4.getX() ) / 2.0f );
+					uv3.setX( ( uv3.getX() + uv4.getX() ) / 2.0 );
 					getFaces().add( new Face3( v1, v2, v3, Arrays.asList( n1, n2, n3 ) ) );
 					getFaceVertexUvs().get( 0 ).add( Arrays.asList( uv1, uv2, uv3 ) );
 
-				} 
-				else 
+				}
+				else
 				{
 					getFaces().add( new Face3( v1, v2, v4,  Arrays.asList( n1, n2, n4 ) ) );
 					getFaceVertexUvs().get( 0 ).add(  Arrays.asList( uv1, uv2, uv4 ) );

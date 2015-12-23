@@ -22,20 +22,19 @@ import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Sphere;
 
-public abstract class AbstractGeometry extends WebGLGeometry
-{
+public abstract class AbstractGeometry extends WebGLGeometry {
 	private static int Counter = 0;
-	
+
 	private int id = 0;
-	
+
 	private String name;
-	
+
 	// Bounding box.		
 	protected Box3 boundingBox = null;
 
 	// Bounding sphere.
 	protected Sphere boundingSphere = null;
-	
+
 	// update flags
 	protected boolean verticesNeedUpdate = false;
 	protected boolean elementsNeedUpdate = false;
@@ -47,43 +46,43 @@ public abstract class AbstractGeometry extends WebGLGeometry
 	protected boolean lineDistancesNeedUpdate = false;
 
 	protected boolean groupsNeedUpdate = false;
-	
+
 	public AbstractGeometry() {
 		this.id = Counter++;
 
 		this.name = "";
 	}
-	
+
 	/**
 	 * Name for this geometry. Default is an empty string.
+	 *
 	 * @return Name
 	 */
 	public String getName() {
 		return this.name;
 	}
-	
+
 	/**
 	 * Set name for this geometry.
+	 *
 	 * @param name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-	public void setId(int id) 
-	{
+
+
+	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * Gets the Unique number of this geometry instance
 	 */
-	public int getId() 
-	{
+	public int getId() {
 		return id;
 	}
-	
+
 	public boolean isVerticesNeedUpdate() {
 		return verticesNeedUpdate;
 	}
@@ -155,32 +154,33 @@ public abstract class AbstractGeometry extends WebGLGeometry
 	public void setGroupsNeedUpdate(boolean groupsNeedUpdate) {
 		this.groupsNeedUpdate = groupsNeedUpdate;
 	}
-	
+
 	public Box3 getBoundingBox() {
 		return this.boundingBox;
 	}
-	
+
 	public void setBoundingBox(Box3 boundingBox) {
 		this.boundingBox = boundingBox;
 	}
-	
+
 	public Sphere getBoundingSphere() {
 		return this.boundingSphere;
 	}
-	
+
 	public void setBoundingSphere(Sphere boundingSphere) {
 		this.boundingSphere = boundingSphere;
 	}
 
 	public abstract void computeBoundingBox();
-	
+
 	public abstract void computeBoundingSphere();
-	
+
 	public abstract void computeVertexNormals();
-	
+
 	public abstract void computeTangents();
-	
+
 	public String toString() {
 		return getClass().getSimpleName();
 	}
 }
+

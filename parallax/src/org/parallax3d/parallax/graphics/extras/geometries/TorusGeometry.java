@@ -39,50 +39,50 @@ import org.parallax3d.parallax.math.Vector2;
 @ThreeJsObject("THREE.TorusGeometry")
 public final class TorusGeometry extends Geometry
 {
-	
-	public TorusGeometry() 
+
+	public TorusGeometry()
 	{
 		this(100, 40, 8, 6);
 	}
-	
-	public TorusGeometry(float radius, float tube, int segmentsR, int segmentsT) 
+
+	public TorusGeometry(double radius, double tube, int segmentsR, int segmentsT)
 	{
-		this(radius, tube, segmentsR, segmentsT, (float)(Math.PI * 2.0));
+		this(radius, tube, segmentsR, segmentsT, Math.PI * 2.0);
 	}
-	
-	public TorusGeometry(float radius, float tube, int segmentsR, int segmentsT, float arc) 
+
+	public TorusGeometry(double radius, double tube, int segmentsR, int segmentsT, double arc)
 	{
 		super();
-		
+
 		Vector3 center = new Vector3();
 		List<Vector2> uvs = new ArrayList<Vector2>();
 		List<Vector3> normals = new ArrayList<Vector3>();
-		
-		for ( int j = 0; j <= segmentsR; j ++ ) 
-		{
-			for ( int i = 0; i <= segmentsT; i ++ ) 
-			{
-				float u = i / (float)segmentsT * arc;
-				float v = j / (float)segmentsR * (float)(Math.PI * 2.0);
 
-				center.setX(radius * (float)Math.cos( u ));
-				center.setY(radius * (float)Math.sin( u ));
+		for ( int j = 0; j <= segmentsR; j ++ )
+		{
+			for ( int i = 0; i <= segmentsT; i ++ )
+			{
+				double u = i / (double)segmentsT * arc;
+				double v = j / (double)segmentsR * Math.PI * 2.0;
+
+				center.setX(radius * Math.cos( u ));
+				center.setY(radius * Math.sin( u ));
 
 				Vector3 vertex = new Vector3();
-				vertex.setX(( radius + tube * (float)Math.cos( v ) ) * (float)Math.cos( u ));
-				vertex.setY(( radius + tube * (float)Math.cos( v ) ) * (float)Math.sin( u ));
-				vertex.setZ(tube * (float)Math.sin( v ));
+				vertex.setX(( radius + tube * Math.cos( v ) ) * Math.cos( u ));
+				vertex.setY(( radius + tube * Math.cos( v ) ) * Math.sin( u ));
+				vertex.setZ(tube * Math.sin( v ));
 
 				getVertices().add( vertex );
 
-				uvs.add( new Vector2( i / (float)segmentsT, j / (float)segmentsR ) );
+				uvs.add( new Vector2( i / (double)segmentsT, j / (double)segmentsR ) );
 				normals.add( vertex.clone().sub( center ).normalize() );
 			}
 		}
 
-		for ( int j = 1; j <= segmentsR; j ++ ) 
+		for ( int j = 1; j <= segmentsR; j ++ )
 		{
-			for ( int i = 1; i <= segmentsT; i ++ ) 
+			for ( int i = 1; i <= segmentsT; i ++ )
 			{
 				int a = ( segmentsT + 1 ) * j + i - 1;
 				int b = ( segmentsT + 1 ) * ( j - 1 ) + i - 1;

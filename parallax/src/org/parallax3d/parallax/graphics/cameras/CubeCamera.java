@@ -24,6 +24,7 @@ import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
@@ -40,8 +41,8 @@ import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 @ThreeJsObject("THREE.CubeCamera")
 public final class CubeCamera extends Object3D
 {
-	private float fov = 90.0f;
-	private float aspect = 1.0f;
+	private double fov = 90.0;
+	private double aspect = 1.0;
 
 	private PerspectiveCamera cameraPX;
 	private PerspectiveCamera cameraNX;
@@ -56,40 +57,40 @@ public final class CubeCamera extends Object3D
 
 	/**
 	 * Constructs a CubeCamera that contains 6 {@link PerspectiveCamera}s that then render to a {@link RenderTargetCubeTexture}
-	 * @param near The near clipping distance. 
-	 * @param far The far clipping distance 
+	 * @param near The near clipping distance.
+	 * @param far The far clipping distance
 	 * @param cubeResolution  Sets the width of the cube.
 	 */
-	public CubeCamera(float near, float far, int cubeResolution)
+	public CubeCamera(double near, double far, int cubeResolution)
 	{
 		this.cameraPX = new PerspectiveCamera( fov, aspect, near, far );
-		cameraPX.getUp().set( 0.0f, -1.0f, 0.0f );
-		cameraPX.lookAt( new Vector3( 1.0f, 0.0f, 0.0f ) );
+		cameraPX.getUp().set( 0.0, -1.0, 0.0 );
+		cameraPX.lookAt( new Vector3( 1.0, 0.0, 0.0 ) );
 		this.add( cameraPX );
 
 		this.cameraNX = new PerspectiveCamera( fov, aspect, near, far );
-		cameraNX.getUp().set( 0.0f, -1.0f, 0.0f );
-		cameraNX.lookAt( new Vector3( -1.0f, 0.0f, 0.0f ) );
+		cameraNX.getUp().set( 0.0, -1.0, 0.0 );
+		cameraNX.lookAt( new Vector3( -1.0, 0.0, 0.0 ) );
 		this.add( cameraNX );
 
 		this.cameraPY = new PerspectiveCamera( fov, aspect, near, far );
-		cameraPY.getUp().set( 0.0f, 0.0f, 1.0f );
-		cameraPY.lookAt( new Vector3( 0.0f, 1.0f, 0.0f ) );
+		cameraPY.getUp().set( 0.0, 0.0, 1.0 );
+		cameraPY.lookAt( new Vector3( 0.0, 1.0, 0.0 ) );
 		this.add( cameraPY );
 
 		this.cameraNY = new PerspectiveCamera( fov, aspect, near, far );
-		cameraNY.getUp().set( 0.0f, 0.0f, -1.0f );
-		cameraNY.lookAt( new Vector3( 0.0f, -1.0f, 0.0f ) );
+		cameraNY.getUp().set( 0.0, 0.0, -1.0 );
+		cameraNY.lookAt( new Vector3( 0.0, -1.0, 0.0 ) );
 		this.add( cameraNY );
 
 		this.cameraPZ = new PerspectiveCamera( fov, aspect, near, far );
-		cameraPZ.getUp().set( 0.0f, -1.0f, 0.0f );
-		cameraPZ.lookAt( new Vector3( 0.0f, 0.0f, 1.0f ) );
+		cameraPZ.getUp().set( 0.0, -1.0, 0.0 );
+		cameraPZ.lookAt( new Vector3( 0.0, 0.0, 1.0 ) );
 		this.add( cameraPZ );
 
 		this.cameraNZ = new PerspectiveCamera( fov, aspect, near, far );
-		cameraNZ.getUp().set( 0.0f, -1.0f, 0.0f );
-		cameraNZ.lookAt( new Vector3( 0.0f, 0.0f, -1.0f ) );
+		cameraNZ.getUp().set( 0.0, -1.0, 0.0 );
+		cameraNZ.lookAt( new Vector3( 0.0, 0.0, -1.0 ) );
 		this.add( cameraNZ );
 
 		this.renderTarget = new RenderTargetCubeTexture( cubeResolution, cubeResolution );
@@ -97,7 +98,7 @@ public final class CubeCamera extends Object3D
 		this.renderTarget.setMagFilter(TextureMagFilter.LINEAR);
 		this.renderTarget.setMinFilter(TextureMinFilter.LINEAR);
 	}
-	
+
 	/**
 	 * The cube texture that gets generated.
 	 * @return
@@ -106,10 +107,10 @@ public final class CubeCamera extends Object3D
 	{
 		return this.renderTarget;
 	}
-	
+
 	/**
 	 * Call this to update the renderTarget.
-	 * @param renderer The current WebGL renderer 
+	 * @param renderer The current WebGL renderer
 	 * @param scene The current scene
 	 */
 	public void updateCubeMap( WebGLRenderer renderer, Scene scene )

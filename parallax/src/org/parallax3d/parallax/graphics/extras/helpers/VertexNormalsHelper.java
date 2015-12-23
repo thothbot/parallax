@@ -36,46 +36,46 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 public class VertexNormalsHelper extends Line
 {
 	Mesh object;
-	float size;
+	double size;
 	Matrix3 normalMatrix;
-	
-	public VertexNormalsHelper(Mesh object) 
+
+	public VertexNormalsHelper(Mesh object)
 	{
-		this(object, 1.0f);
+		this(object, 1.0);
 	}
-	
-	public VertexNormalsHelper(Mesh object, float size ) 
+
+	public VertexNormalsHelper(Mesh object, double size )
 	{
 		this(object, size, 0xff0000);
 	}
-	
-	public VertexNormalsHelper(Mesh object, float size, int hex ) 
+
+	public VertexNormalsHelper(Mesh object, double size, int hex )
 	{
 		this(object, size, hex, 1);
 	}
-	
-	public VertexNormalsHelper(Mesh object, float size, int hex, int linewidth ) 
+
+	public VertexNormalsHelper(Mesh object, double size, int hex, int linewidth )
 	{
-		super(new Geometry(), new LineBasicMaterial(), MODE.PIECES);
-		
+		super(new Geometry(), new LineBasicMaterial(), Line.MODE.PIECES);
+
 		this.object = object;
 		this.size = size;
-		
+
 		LineBasicMaterial material = (LineBasicMaterial) getMaterial();
 		material.setColor(new Color(hex));
 		material.setLinewidth(linewidth);
-		
+
 		Geometry geometry = (Geometry) getGeometry();
 
 		List<Face3> faces = ((Geometry)this.object.getGeometry()).getFaces();
-	
+
 		for ( int i = 0, l = faces.size(); i < l; i ++ ) {
 
 			Face3 face = faces.get( i );
 
-			for ( int j = 0, jl = face.getVertexNormals().size(); j < jl; j ++ ) 
+			for ( int j = 0, jl = face.getVertexNormals().size(); j < jl; j ++ )
 			{
-				
+
 				geometry.getVertices().addAll( Arrays.asList( new Vector3(), new Vector3() ) );
 
 			}
@@ -89,9 +89,9 @@ public class VertexNormalsHelper extends Line
 		this.update();
 
 	}
-	
+
 	Vector3 v1 = new Vector3();
-	public void update() 
+	public void update()
 	{
 
 		this.object.updateMatrixWorld( true );
@@ -99,7 +99,7 @@ public class VertexNormalsHelper extends Line
 		this.normalMatrix.getNormalMatrix( this.object.getMatrixWorld() );
 
 		List<Vector3> vertices = ((Geometry)this.getGeometry()).getVertices();
-		
+
 		List<Vector3> verts = ((Geometry)object.getGeometry()).getVertices();
 		List<Face3> faces = ((Geometry)object.getGeometry()).getFaces();
 		Matrix4 worldMatrix = object.getMatrixWorld();
@@ -121,12 +121,12 @@ public class VertexNormalsHelper extends Line
 				if(vsize > idx)
 				{
 					vertices.get( idx ).copy( vertex ).apply( worldMatrix );
-		
+
 					v1.copy( normal ).apply( this.normalMatrix ).normalize().multiply( this.size );
-		
+
 					v1.add( vertices.get( idx ) );
 					idx = idx + 1;
-		
+
 					vertices.get( idx ).copy( v1 );
 					idx = idx + 1;
 				}

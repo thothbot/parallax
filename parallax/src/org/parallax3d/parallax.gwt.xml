@@ -4,10 +4,11 @@
 		<include name="Application.java" />
 		<include name="ApplicationAdapter.java" />
 		<include name="ApplicationListener.java" />
-		<include name="Graphics.java" />
 		<include name="LifecycleListener.java" />
 		<include name="Parallax.java" />
 		<include name="Preferences.java" />
+		<include name="events/ViewportResizeBus.java" />
+		<include name="events/ViewportResizeListener.java" />
 		<include name="files/FileHandle.java" />
 		<include name="files/FileHandleStream.java" />
 		<include name="files/Files.java" />
@@ -163,6 +164,7 @@
 		<include name="graphics/renderers/WebGLGeometry.java" />
 		<include name="graphics/renderers/WebGLObject.java" />
 		<include name="graphics/renderers/WebGLRenderer.java" />
+		<include name="graphics/renderers/WebGlRendererInfo.java" />
 		<include name="graphics/renderers/shaders/Attribute.java" />
 		<include name="graphics/renderers/shaders/BasicShader.java" />
 		<include name="graphics/renderers/shaders/Chunks.java" />
@@ -188,6 +190,8 @@
 		<include name="graphics/scenes/FogExp2.java" />
 		<include name="graphics/scenes/package-info.java" />
 		<include name="graphics/scenes/Scene.java" />
+		<include name="graphics/textures/CompressedTexture.java" />
+		<include name="graphics/textures/CubeTexture.java" />
 		<include name="graphics/textures/DataTexture.java" />
 		<include name="graphics/textures/package-info.java" />
 		<include name="graphics/textures/Texture.java" />
@@ -198,13 +202,11 @@
 		<include name="math/Frustum.java" />
 		<include name="math/Line3.java" />
 		<include name="math/Mathematics.java" />
-		<include name="math/MathUtils.java" />
 		<include name="math/Matrix3.java" />
 		<include name="math/Matrix4.java" />
 		<include name="math/package-info.java" />
 		<include name="math/Plane.java" />
 		<include name="math/Quaternion.java" />
-		<include name="math/RandomXS128.java" />
 		<include name="math/Ray.java" />
 		<include name="math/Sphere.java" />
 		<include name="math/Spline.java" />
@@ -212,22 +214,28 @@
 		<include name="math/Vector2.java" />
 		<include name="math/Vector3.java" />
 		<include name="math/Vector4.java" />
-		<include name="system/Array.java" />
-		<include name="system/BufferUtils.java" />
-		<include name="system/ComparableTimSort.java" />
 		<include name="system/Disposable.java" />
-		<include name="system/IntArray.java" />
-		<include name="system/ObjectMap.java" />
+		<include name="system/DummyImage.java" />
+		<include name="system/Duration.java" />
+		<include name="system/FastMap.java" />
+		<include name="system/Image.java" />
 		<include name="system/ParallaxRuntimeException.java" />
-		<include name="system/Predicate.java" />
-		<include name="system/QuickSelect.java" />
-		<include name="system/Select.java" />
-		<include name="system/Sort.java" />
 		<include name="system/StreamUtils.java" />
 		<include name="system/ThreeJsObject.java" />
-		<include name="system/TimSort.java" />
 		<include name="system/gl/GL20.java" />
 		<include name="system/gl/GL30.java" />
+		<include name="system/gl/GLES20Ext.java" />
+		<include name="system/gl/WebGLShaderPrecisionFormat.java" />
+		<include name="system/gl/arrays/Float32Array.java" />
+		<include name="system/gl/arrays/Float64Array.java" />
+		<include name="system/gl/arrays/IndexTypeArray.java" />
+		<include name="system/gl/arrays/Int16Array.java" />
+		<include name="system/gl/arrays/Int32Array.java" />
+		<include name="system/gl/arrays/Int8Array.java" />
+		<include name="system/gl/arrays/TypeArray.java" />
+		<include name="system/gl/arrays/Uint16Array.java" />
+		<include name="system/gl/arrays/Uint32Array.java" />
+		<include name="system/gl/arrays/Uint8Array.java" />
 		<include name="system/gl/enums/AlphaFunction.java" />
 		<include name="system/gl/enums/BeginMode.java" />
 		<include name="system/gl/enums/BlendEquationMode.java" />
@@ -275,13 +283,6 @@
 		<include name="system/gl/enums/TextureWrapMode.java" />
 		<include name="system/gl/enums/UniformTypes.java" />
 		<include name="system/gl/enums/VertexArrays.java" />
-		<include name="system/reflect/Annotation.java" />
-		<include name="system/reflect/ArrayReflection.java" />
-		<include name="system/reflect/ClassReflection.java" />
-		<include name="system/reflect/Constructor.java" />
-		<include name="system/reflect/Field.java" />
-		<include name="system/reflect/Method.java" />
-		<include name="system/reflect/ReflectionException.java" />
 	</source>
 
 	<define-configuration-property name="parallax.files.classpath" is-multi-valued="true" />

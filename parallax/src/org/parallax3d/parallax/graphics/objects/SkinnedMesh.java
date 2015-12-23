@@ -32,22 +32,23 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Quaternion;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 @ThreeJsObject("THREE.SkinnedMesh")
 public class SkinnedMesh extends Mesh {
-	
+
 	public Texture boneTexture;
-	public float[] boneMatrices;
-	
+	public Float32Array boneMatrices = (Float32Array) Float32Array.createArray();
+
 	private String bindMode = "attached";
 	private Matrix4 bindMatrix = new Matrix4();
 	private Matrix4 bindMatrixInverse = new Matrix4();
 	private boolean useVertexTexture;
-	List<Bone> bones = new ArrayList<Bone>();	
-	
+	List<Bone> bones = new ArrayList<Bone>();
+
 	public SkinnedMesh(AbstractGeometry geometry, Material material, boolean useVertexTexture) {
 		super(geometry, material);
-		
+
 		// init bones
 
 		// TODO: remove bone creation as there is no reason (other than
@@ -62,7 +63,7 @@ public class SkinnedMesh extends Mesh {
 				Vector3 p = gbone.getPosition();
 				Quaternion q = gbone.getQuaternion();
 				Vector3 s = gbone.getScale();
- 
+
 				Bone bone = new Bone( this );
 				bones.add( bone );
 
@@ -107,7 +108,7 @@ public class SkinnedMesh extends Mesh {
 //		this.bind( new THREE.Skeleton( bones, undefined, useVertexTexture ) );
 
 	}
-		
+
 	public List<Bone> getBones() {
 		return bones;
 	}
@@ -123,7 +124,7 @@ public class SkinnedMesh extends Mesh {
 	public void setUseVertexTexture(boolean useVertexTexture) {
 		this.useVertexTexture = useVertexTexture;
 	}
-	
+
 	public Texture getBoneTexture() {
 		return boneTexture;
 	}
@@ -132,11 +133,11 @@ public class SkinnedMesh extends Mesh {
 		this.boneTexture = boneTexture;
 	}
 
-	public float[] getBoneMatrices() {
+	public Float32Array getBoneMatrices() {
 		return boneMatrices;
 	}
 
-	public void setBoneMatrices(float[] boneMatrices) {
+	public void setBoneMatrices(Float32Array boneMatrices) {
 		this.boneMatrices = boneMatrices;
 	}
 
@@ -148,7 +149,7 @@ public class SkinnedMesh extends Mesh {
 
 				Vector4 sw = ((Geometry)getGeometry()).getSkinWeights().get( i );
 
-				float scale = 1.0f / sw.lengthManhattan();
+				double scale = 1.0 / sw.lengthManhattan();
 
 				if ( scale != Double.POSITIVE_INFINITY ) {
 
@@ -169,7 +170,7 @@ public class SkinnedMesh extends Mesh {
 		}
 
 	}
-	
+
 	public void updateMatrixWorld( boolean force ) {
 
 		super.updateMatrixWorld( true );
@@ -189,11 +190,11 @@ public class SkinnedMesh extends Mesh {
 		}
 
 	}
-	
+
 	public SkinnedMesh clone() {
 		return clone(new SkinnedMesh( getGeometry(), getMaterial(), this.useVertexTexture ));
 	}
-	
+
 	public SkinnedMesh clone( SkinnedMesh object ) {
 
 		super.clone(object);
@@ -201,5 +202,6 @@ public class SkinnedMesh extends Mesh {
 		return object;
 
 	}
+
 
 }

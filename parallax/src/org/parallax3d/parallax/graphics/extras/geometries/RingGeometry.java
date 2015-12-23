@@ -31,21 +31,21 @@ import org.parallax3d.parallax.math.Vector3;
 
 @ThreeJsObject("THREE.RingGeometry")
 public class RingGeometry extends Geometry {
-	
-	public RingGeometry(float innerRadius, float outerRadius) {
-		this(innerRadius, outerRadius, 8, 8, 0, (float)(Math.PI * 2.0));
+
+	public RingGeometry(double innerRadius, double outerRadius) {
+		this(innerRadius, outerRadius, 8, 8, 0, Math.PI * 2.0);
 	}
 
-	public RingGeometry( float innerRadius, float outerRadius, int thetaSegments, int phiSegments, float thetaStart, float thetaLength ) {
+	public RingGeometry( double innerRadius, double outerRadius, int thetaSegments, int phiSegments, double thetaStart, double thetaLength ) {
 
 		super();
 
 		thetaSegments = Math.max( 3, thetaSegments );
 		phiSegments = Math.max( 1, phiSegments );
 
-		float radius = innerRadius;
-		float radiusStep = ( ( outerRadius - innerRadius ) / phiSegments );
-		
+		double radius = innerRadius;
+		double radiusStep = ( ( outerRadius - innerRadius ) / phiSegments );
+
 		List<Vector2> uvs = new ArrayList<Vector2>();
 
 		for ( int i = 0; i < phiSegments + 1; i ++ ) { // concentric circles inside ring
@@ -53,12 +53,12 @@ public class RingGeometry extends Geometry {
 			for ( int o = 0; o < thetaSegments + 1; o ++ ) { // number of segments per circle
 
 				Vector3 vertex = new Vector3();
-				float segment = thetaStart + (float)o / thetaSegments * thetaLength;
-				vertex.setX( radius * (float)Math.cos( segment ) );
-				vertex.setY( radius * (float)Math.sin( segment ) );
+				double segment = thetaStart + (double)o / thetaSegments * thetaLength;
+				vertex.setX( radius * Math.cos( segment ) );
+				vertex.setY( radius * Math.sin( segment ) );
 
 				this.getVertices().add( vertex );
-				uvs.add( new Vector2( ( vertex.getX() / outerRadius + 1.0f ) / 2.0f, ( vertex.getY() / outerRadius + 1.0f ) / 2.0f ) );
+				uvs.add( new Vector2( ( vertex.getX() / outerRadius + 1.0 ) / 2.0, ( vertex.getY() / outerRadius + 1.0 ) / 2.0 ) );
 			}
 
 			radius += radiusStep;

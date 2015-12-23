@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.BufferUtils;
 import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 import java.nio.FloatBuffer;
 
@@ -37,33 +37,33 @@ public class Vector2
 	/**
 	 * The X-coordinate
 	 */
-	protected float x;
-	
+	protected double x;
+
 	/**
 	 * The Y-coordinate
 	 */
-	protected float y;
-	
+	protected double y;
+
 	// Temporary variables
 	static Vector2 _min = new Vector2();
 	static Vector2 _max = new Vector2();
 
 	/**
-	 * This default constructor will initialize vector (0, 0); 
+	 * This default constructor will initialize vector (0, 0);
 	 */
-	public Vector2() 
+	public Vector2()
 	{
 		this(0, 0);
 	}
 
 	/**
-	 * This constructor will initialize vector (X, Y) from the specified 
+	 * This constructor will initialize vector (X, Y) from the specified
 	 * X, Y coordinates.
-	 *  
+	 *
 	 * @param x the X coordinate
 	 * @param y the Y coordinate
 	 */
-	public Vector2(float x, float y) 
+	public Vector2(double x, double y)
 	{
 		this.x = x;
 		this.y = y;
@@ -71,81 +71,81 @@ public class Vector2
 
 	/**
 	 * get X coordinate from the vector
-	 * 
+	 *
 	 * @return a X coordinate
 	 */
-	public float getX()
+	public double getX()
 	{
 		return x;
 	}
-	
+
 	/**
 	 * get Y coordinate from the vector
-	 * 
+	 *
 	 * @return a Y coordinate
 	 */
-	public float getY()
+	public double getY()
 	{
 		return y;
 	}
-		
+
 	/**
 	 * This method will add specified value to X coordinate of the vector.
 	 * In another words: x += value.
-	 * 
+	 *
 	 * @param x the X coordinate
 	 */
-	public void addX(float x)
+	public void addX(double x)
 	{
 		this.x += x;
 	}
-	
+
 	/**
 	 * This method will add specified value to Y coordinate of the vector.
 	 * In another words: y += value.
-	 * 
+	 *
 	 * @param y the Y coordinate
 	 */
-	public void addY(float y)
+	public void addY(double y)
 	{
 		this.y += y;
 	}
 
 	/**
 	 * This method sets X coordinate of the vector.
-	 * 
+	 *
 	 * @param x the X coordinate
 	 */
-	public void setX(float x)
+	public void setX(double x)
 	{
 		this.x = x;
 	}
 
 	/**
 	 * This method sets Y coordinate of the vector.
-	 * 
+	 *
 	 * @param y the Y coordinate
 	 */
-	public void setY(float y)
+	public void setY(double y)
 	{
 		this.y = y;
 	}
 
 	/**
 	 * Set value of the vector to the specified (X, Y, Z) coordinates.
-	 * 
+	 *
 	 * @param x the X coordinate
 	 * @param y the Y coordinate
 	 */
-	public Vector2 set(float x, float y)
+	public Vector2 set(double x, double y)
 	{
 		this.x = x;
 		this.y = y;
-		
+
 		return this;
 	}
-	
-	public void setComponent( int index, float value ) {
+
+	public void setComponent( int index, double value ) {
 
 		switch ( index ) {
 
@@ -157,7 +157,7 @@ public class Vector2
 
 	}
 
-	public float getComponent ( int index ) {
+	public double getComponent ( int index ) {
 
 		switch ( index ) {
 
@@ -171,9 +171,9 @@ public class Vector2
 
 	/**
 	 * Set value of the vector from another vector.
-	 * 
+	 *
 	 * @param v the other vector
-	 * 
+	 *
 	 * @return the current vector
 	 */
 	public Vector2 copy(Vector2 v)
@@ -187,7 +187,7 @@ public class Vector2
 	{
 		return this.add(this, v);
 	}
-	
+
 	public Vector2 add(Vector2 v1, Vector2 v2)
 	{
 		this.x = v1.x + v2.x;
@@ -195,12 +195,12 @@ public class Vector2
 
 		return this;
 	}
-	
-	public Vector2 add(float s)
+
+	public Vector2 add(double s)
 	{
 		this.addX(s);
 		this.addY(s);
-		
+
 		return this;
 	}
 
@@ -208,12 +208,12 @@ public class Vector2
 	{
 		return this.sub(this, v);
 	}
-	
+
 	public Vector2 sub(Vector2 v1, Vector2 v2)
 	{
 		this.x = v1.x - v2.x;
 		this.y = v1.y - v2.y;
-				
+
 		return this;
 	}
 
@@ -221,16 +221,16 @@ public class Vector2
 	{
 		return this.multiply(this, v);
 	}
-	
+
 	public Vector2 multiply(Vector2 v1, Vector2 v2)
 	{
 		this.x = v1.x * v2.x;
 		this.y = v1.y * v2.y;
-		
+
 		return this;
 	}
 
-	public Vector2 multiply(float s)
+	public Vector2 multiply(double s)
 	{
 		this.x *= s;
 		this.y *= s;
@@ -242,38 +242,38 @@ public class Vector2
 	{
 		return this.divide(this, v);
 	}
-	
+
 	public Vector2 divide(Vector2 v1, Vector2 v2)
 	{
 		this.x = v1.x / v2.x;
 		this.y = v1.y / v2.y;
-		
+
 		return this;
 	}
-	
-	public Vector2 divide(float s)
+
+	public Vector2 divide(double s)
 	{
-		if (s != 0) 
+		if (s != 0)
 		{
 			this.x /= s;
 			this.y /= s;
-		} 
+		}
 		else
 		{
 			this.set(0, 0);
 		}
-	
+
 		return this;
 	}
-		
-	public Vector2 min( Vector2 v ) 
+
+	public Vector2 min( Vector2 v )
 	{
-		if ( this.x > v.x ) 
+		if ( this.x > v.x )
 		{
 			this.x = v.x;
 		}
 
-		if ( this.y > v.y ) 
+		if ( this.y > v.y )
 		{
 			this.y = v.y;
 		}
@@ -281,41 +281,41 @@ public class Vector2
 		return this;
 	}
 
-	public Vector2 max( Vector2 v ) 
+	public Vector2 max( Vector2 v )
 	{
-		if ( this.x < v.x ) 
+		if ( this.x < v.x )
 		{
 			this.x = v.x;
 		}
 
-		if ( this.y < v.y ) 
+		if ( this.y < v.y )
 		{
 			this.y = v.y;
 		}
 
 		return this;
 	}
-	
+
 	/**
 	 * This function assumes min &#60; max, if this assumption isn't true it will not operate correctly
-	 * 
+	 *
 	 */
-	public Vector2 clamp( Vector2 min, Vector2 max ) 
+	public Vector2 clamp( Vector2 min, Vector2 max )
 	{
-		if ( this.x < min.x ) 
+		if ( this.x < min.x )
 		{
 			this.x = min.x;
-		} 
-		else if ( this.x > max.x ) 
+		}
+		else if ( this.x > max.x )
 		{
 			this.x = max.x;
 		}
 
-		if ( this.y < min.y ) 
+		if ( this.y < min.y )
 		{
 			this.y = min.y;
-		} 
-		else if ( this.y > max.y ) 
+		}
+		else if ( this.y > max.y )
 		{
 			this.y = max.y;
 		}
@@ -323,32 +323,32 @@ public class Vector2
 		return this;
 	}
 
-	public Vector2 clamp(float minVal, float maxVal) 
+	public Vector2 clamp(double minVal, double maxVal)
 	{
 		_min.set( minVal, minVal );
 		_max.set( maxVal, maxVal );
 
 		return this.clamp( _min, _max );
-	} 
-	
+	}
+
 	public Vector2 floor() {
 
-		this.x = (float)Math.floor( this.x );
-		this.y = (float)Math.floor( this.y );
+		this.x = Math.floor( this.x );
+		this.y = Math.floor( this.y );
 
 		return this;
 
 	}
-	
+
 	public Vector2 ceil() {
 
-		this.x = (float)Math.ceil( this.x );
-		this.y = (float)Math.ceil( this.y );
+		this.x = Math.ceil( this.x );
+		this.y = Math.ceil( this.y );
 
 		return this;
 
 	}
-	
+
 	public Vector2 round() {
 
 		this.x = Math.round( this.x );
@@ -360,13 +360,13 @@ public class Vector2
 
 	public Vector2 roundToZero() {
 
-		this.x = ( this.x < 0 ) ? (float)Math.ceil( this.x ) : (float)Math.floor( this.x );
-		this.y = ( this.y < 0 ) ? (float)Math.ceil( this.y ) : (float)Math.floor( this.y );
+		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
+		this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
 
 		return this;
 
 	}
-	
+
 	/**
 	 * Negates the value of this vector in place.
 	 */
@@ -380,33 +380,33 @@ public class Vector2
 
 	/**
 	 * Computes the dot product of the this vector and vector v1.
-	 * 
+	 *
 	 * @param v
 	 *            the other vector
 	 */
-	public float dot(Vector2 v)
+	public double dot(Vector2 v)
 	{
 		return (this.x * v.x + this.y * v.y);
 	}
 
 	/**
 	 * Returns the squared length of this vector.
-	 * 
+	 *
 	 * @return the squared length of this vector
 	 */
-	public float lengthSq()
+	public double lengthSq()
 	{
 		return dot(this);
 	}
 
 	/**
 	 * Returns the length of this vector.
-	 * 
+	 *
 	 * @return the length of this vector
 	 */
-	public float length()
+	public double length()
 	{
-		return (float)Math.sqrt(lengthSq());
+		return Math.sqrt(lengthSq());
 	}
 
 	/**
@@ -422,10 +422,10 @@ public class Vector2
 	 * (non-Javadoc)
 	 * @see thothbot.parallax.core.shared.core.Vector#distanceToSquared(thothbot.parallax.core.shared.core.Vector)
 	 */
-	public float distanceToSquared(Vector2 v)
+	public double distanceToSquared(Vector2 v)
 	{
-		float dx = this.x - v.x;
-		float dy = this.y - v.y;
+		double dx = this.x - v.x;
+		double dy = this.y - v.y;
 		return (dx * dx + dy * dy);
 	}
 
@@ -433,16 +433,16 @@ public class Vector2
 	 * (non-Javadoc)
 	 * @see thothbot.parallax.core.shared.core.Vector#distanceTo(thothbot.parallax.core.shared.core.Vector)
 	 */
-	public float distanceTo(Vector2 v1)
+	public double distanceTo(Vector2 v1)
 	{
-		return (float)Math.sqrt(distanceToSquared(v1));
+		return Math.sqrt(distanceToSquared(v1));
 	}
 
-	public Vector2 setLength(float l)
+	public Vector2 setLength(double l)
 	{
-		float oldLength = this.length();
+		double oldLength = this.length();
 
-		if ( oldLength != 0 && l != oldLength ) 
+		if ( oldLength != 0 && l != oldLength )
 		{
 			this.multiply( l / oldLength );
 		}
@@ -450,11 +450,11 @@ public class Vector2
 		return this;
 	}
 
-	public Vector2 lerp(Vector2 v1, float alpha)
+	public Vector2 lerp(Vector2 v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
-		
+
 		return this;
 	}
 
@@ -462,12 +462,12 @@ public class Vector2
 	{
 		return (this.lengthSq() < 0.0001 /* almostZero */);
 	}
-	
-	public Vector2 fromArray( FloatBuffer array) {
+
+	public Vector2 fromArray( Float32Array array) {
 		return fromArray(array, 0);
 	}
 
-	public Vector2 fromArray( FloatBuffer array, int offset ) {
+	public Vector2 fromArray( Float32Array array, int offset ) {
 
 		this.x = array.get( offset );
 		this.y = array.get( offset + 1 );
@@ -476,15 +476,16 @@ public class Vector2
 
 	}
 
-	public FloatBuffer toArray()
+	public Float32Array toArray()
 	{
-		return toArray(BufferUtils.newFloatBuffer(2), 0);
+		return toArray(Float32Array.create(2), 0);
 	}
 
-	public FloatBuffer toArray( FloatBuffer array, int offset )
+	public Float32Array toArray( Float32Array array, int offset )
 	{
-		array.put( offset , this.x);
-		array.put( offset + 1 , this.y);
+
+		array.set(offset, this.x);
+		array.set(offset + 1, this.y);
 
 		return array;
 	}
@@ -497,18 +498,18 @@ public class Vector2
 	/**
 	 * Returns true if all of the data members of Tuple2f t1 are equal to the
 	 * corresponding data members in this Tuple2f.
-	 * 
+	 *
 	 * @param v		the vector with which the comparison is made
-	 * 
+	 *
 	 * @return true or false
 	 */
 	public boolean equals(Vector2 v)
 	{
 		return ( ( v.x == this.x ) && ( v.y == this.y ) );
 	}
-	
+
 	@Override
-	public String toString() 
+	public String toString()
 	{
 		return "(" + this.x + ", " + this.y + ")";
 	}

@@ -30,32 +30,32 @@ import org.parallax3d.parallax.math.Vector3;
 @ThreeJsObject("THREE.LatheGeometry")
 public final class LatheGeometry extends Geometry
 {
-	
+
 	public LatheGeometry ( List<Vector3> points)
 	{
 		this(points, 12);
 	}
-	
+
 	public LatheGeometry ( List<Vector3> points, int steps)
 	{
-		this(points, steps, 0, (float)(2.0 * Math.PI));
+		this(points, steps, 0, 2.0 * Math.PI);
 	}
 
-	public LatheGeometry ( List<Vector3> points, int segments, float phiStart, float phiLength ) 
+	public LatheGeometry ( List<Vector3> points, int segments, double phiStart, double phiLength )
 	{
 		super();
 
-		float inversePointLength = 1.0f / ( points.size() - 1 );
-		float inverseSegments = 1.0f / segments;
+		double inversePointLength = 1.0 / ( points.size() - 1 );
+		double inverseSegments = 1.0 / segments;
 
-		for ( int i = 0; i <= segments; i ++ ) 
+		for ( int i = 0; i <= segments; i ++ )
 		{
-			float phi = phiStart + i * inverseSegments * phiLength;
+			double phi = phiStart + i * inverseSegments * phiLength;
 
-			float c = (float)Math.cos( phi ),
-				s = (float)Math.sin( phi );
+			double c = Math.cos( phi ),
+					s = Math.sin( phi );
 
-			for ( int j = 0; j < points.size(); j ++ ) 
+			for ( int j = 0; j < points.size(); j ++ )
 			{
 				Vector3 pt = points.get( j );
 
@@ -68,31 +68,31 @@ public final class LatheGeometry extends Geometry
 				getVertices().add( vertex );
 			}
 		}
-		
+
 		int np = points.size();
 
-		for ( int i = 0; i < segments; i ++ ) 
+		for ( int i = 0; i < segments; i ++ )
 		{
-			for ( int j = 0, jl = points.size(); j < jl - 1; j ++ ) 
+			for ( int j = 0, jl = points.size(); j < jl - 1; j ++ )
 			{
 				int base = j + np * i;
 				int a = base;
 				int b = base + np;
 				int c = base + 1 + np;
 				int d = base + 1;
-				
-				float u0 = i * inverseSegments;
-				float v0 = j * inversePointLength;
-				float u1 = u0 + inverseSegments;
-				float v1 = v0 + inversePointLength;
+
+				double u0 = i * inverseSegments;
+				double v0 = j * inversePointLength;
+				double u1 = u0 + inverseSegments;
+				double v1 = v0 + inversePointLength;
 
 				getFaces().add( new Face3( a, b, d ) );
 
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 
 						new Vector2( u0, v0 ),
-				        new Vector2( u1, v0 ),
-				        new Vector2( u0, v1 )
+						new Vector2( u1, v0 ),
+						new Vector2( u0, v1 )
 
 				) );
 
@@ -101,8 +101,8 @@ public final class LatheGeometry extends Geometry
 				getFaceVertexUvs().get( 0 ).add( Arrays.asList(
 
 						new Vector2( u1, v0 ),
-				        new Vector2( u1, v1 ),
-				        new Vector2( u0, v1 )
+						new Vector2( u1, v1 ),
+						new Vector2( u0, v1 )
 
 				) );
 			}

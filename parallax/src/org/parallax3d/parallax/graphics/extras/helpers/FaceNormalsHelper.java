@@ -35,37 +35,37 @@ import org.parallax3d.parallax.math.Color;
 @ThreeJsObject("THREE.FaceNormalsHelper")
 public class FaceNormalsHelper extends Line
 {
-	
+
 	Mesh object;
-	float size;
+	double size;
 	Matrix3 normalMatrix;
-	
-	public FaceNormalsHelper(Mesh object) 
+
+	public FaceNormalsHelper(Mesh object)
 	{
-		this(object, 1.0f);
+		this(object, 1.0);
 	}
-	
-	public FaceNormalsHelper(Mesh object, float size ) 
+
+	public FaceNormalsHelper(Mesh object, double size )
 	{
 		this(object, size, 0xffff00);
 	}
-	
-	public FaceNormalsHelper(Mesh object, float size, int hex ) 
+
+	public FaceNormalsHelper(Mesh object, double size, int hex )
 	{
 		this(object, size, hex, 1);
 	}
-	
-	public FaceNormalsHelper(Mesh object, float size, int hex, int linewidth ) 
+
+	public FaceNormalsHelper(Mesh object, double size, int hex, int linewidth )
 	{
-		super(new Geometry(), new LineBasicMaterial(), MODE.PIECES);
-		
+		super(new Geometry(), new LineBasicMaterial(), Line.MODE.PIECES);
+
 		this.object = object;
 		this.size = size;
-		
+
 		LineBasicMaterial material = (LineBasicMaterial) getMaterial();
 		material.setColor(new Color(hex));
 		material.setLinewidth(linewidth);
-		
+
 		Geometry geometry = (Geometry) getGeometry();
 
 		List<Face3> faces = ((Geometry)this.object.getGeometry()).getFaces();
@@ -83,8 +83,8 @@ public class FaceNormalsHelper extends Line
 		this.update();
 
 	}
-	
-	public void update() 
+
+	public void update()
 	{
 
 		List<Vector3> vertices = ((Geometry)this.getGeometry()).getVertices();
@@ -102,16 +102,16 @@ public class FaceNormalsHelper extends Line
 			Face3 face = objectFaces.get( i );
 
 			vertices.get( i2 ).copy( objectVertices.get( face.getA() ) )
-				.add( objectVertices.get( face.getB() ) )
-				.add( objectVertices.get( face.getC() ) )
-				.divide( 3 )
-				.apply( objectWorldMatrix );
+					.add( objectVertices.get( face.getB() ) )
+					.add( objectVertices.get( face.getC() ) )
+					.divide( 3 )
+					.apply( objectWorldMatrix );
 
 			vertices.get( i2 + 1 ).copy( face.getNormal() )
-				.apply( this.normalMatrix )
-				.normalize()
-				.multiply( this.size )
-				.add( vertices.get( i2 ) );
+					.apply( this.normalMatrix )
+					.normalize()
+					.multiply( this.size )
+					.add( vertices.get( i2 ) );
 
 		}
 

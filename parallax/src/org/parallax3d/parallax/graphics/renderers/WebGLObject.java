@@ -33,9 +33,9 @@ public class WebGLObject implements Comparable<WebGLObject>
 	public GeometryObject object;
 	public WebGLGeometry buffer;
 	public boolean render;
-	
+
 	public Material material;
-	
+
 	public Material opaque;
 	public Material transparent;
 	// render depth
@@ -45,15 +45,15 @@ public class WebGLObject implements Comparable<WebGLObject>
 	{
 		this(buffer, object, null, null);
 	}
-	
-	public WebGLObject(WebGLGeometry buffer, GeometryObject object, Material opaque, Material transparent) 
+
+	public WebGLObject(WebGLGeometry buffer, GeometryObject object, Material opaque, Material transparent)
 	{
 		this.buffer = buffer;
 		this.object = object;
 		this.opaque = opaque;
 		this.transparent = transparent;
 	}
-	
+
 	public void unrollImmediateBufferMaterial() {
 		Material material = object.getMaterial();
 
@@ -69,8 +69,8 @@ public class WebGLObject implements Comparable<WebGLObject>
 
 		}
 	}
-	
-	public void unrollBufferMaterial(WebGLRenderer renderer) 
+
+	public void unrollBufferMaterial(WebGLRenderer renderer)
 	{
 		GeometryObject object = this.object;
 		WebGLGeometry buffer = this.buffer;
@@ -78,7 +78,7 @@ public class WebGLObject implements Comparable<WebGLObject>
 		AbstractGeometry geometry = object.getGeometry();
 		Material material = object.getMaterial();
 
-		if ( material instanceof MeshFaceMaterial)
+		if ( material instanceof MeshFaceMaterial )
 		{
 			int materialIndex = geometry instanceof BufferGeometry ? 0 : ((GeometryGroup)buffer).getMaterialIndex();
 
@@ -95,13 +95,13 @@ public class WebGLObject implements Comparable<WebGLObject>
 				renderer.opaqueObjects.add( this );
 
 			}
-		} 
-		else 
+		}
+		else
 		{
 
 			this.material = material;
 
-			if ( material != null) 
+			if ( material != null)
 			{
 				if ( material.isTransparent() ) {
 
@@ -116,20 +116,19 @@ public class WebGLObject implements Comparable<WebGLObject>
 			}
 		}
 	}
-	
+
 	@Override
 	public int compareTo(WebGLObject o)
 	{
-		double result = o.z - this.z; 
-		return (result == 0) ? 0 
+		double result = o.z - this.z;
+		return (result == 0) ? 0
 				: (result > 0) ? 1 : -1;
 	}
-	
+
 	public String toString() {
-		return "{id: " + this.id 
-				+ ", material: " + (this.material != null ? this.material.getClass().getSimpleName() : "null") 
+		return "{id: " + this.id
+				+ ", material: " + (this.material != null ? this.material.getClass().getSimpleName() : "null")
 				+ ", object: " + (this.object != null ? this.object.getClass().getSimpleName() : "null")
 				+ ", render: " + this.render
 				+ ", z: " + this.z + "}";
-	}
-}
+	}}

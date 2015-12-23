@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
+import org.parallax3d.parallax.system.DummyImage;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.graphics.textures.Texture;
@@ -35,42 +36,45 @@ public class RenderTargetTexture extends Texture
 
 	private Integer webglFramebuffer; // WebGLFramebuffer
 	private Integer webglRenderbuffer; //WebGLRenderbuffer
-	
+
 	public RenderTargetTexture shareDepthFrom;
 
-	public RenderTargetTexture(int width, int height) 
+	public RenderTargetTexture(int width, int height)
 	{
-		this(width, height, 
+		this(width, height,
 				TextureWrapMode.CLAMP_TO_EDGE, TextureWrapMode.CLAMP_TO_EDGE,
 				TextureMagFilter.LINEAR,       TextureMinFilter.LINEAR_MIPMAP_LINEAR,
 				PixelFormat.RGBA,              PixelType.UNSIGNED_BYTE);
 	}
 
-	public RenderTargetTexture(int width, int height, 
-			TextureWrapMode wrapS,      TextureWrapMode wrapT, 
+	public RenderTargetTexture(int width, int height,
+			TextureWrapMode wrapS,      TextureWrapMode wrapT,
 			TextureMagFilter magFilter, TextureMinFilter minFilter,
-			PixelFormat format,         PixelType type) 
+			PixelFormat format,         PixelType type)
 	{
-		super(); // call super Texture
+		// Create a dummy Image so that WebGLRenderer can get size
+		super(new DummyImage(width, height));
 
 		this.width = width;
 		this.height = height;
 
 		setWrapS( wrapS );
 		setWrapT( wrapT );
-		
+
 		setMagFilter( magFilter );
 		setMinFilter( minFilter );
-		
+
 		setFormat( format );
 		setType( type );
 	}
-	
+
 	public void setSize(int width, int height) {
 		setWidth(width);
 		setHeight(height);
+		((DummyImage) getImage()).setWidth(width);
+		((DummyImage) getImage()).setHeight(height);
 	}
-	
+
 	public int getWidth() {
 		return width;
 	}
@@ -90,19 +94,19 @@ public class RenderTargetTexture extends Texture
 	public boolean getDepthBuffer() {
 		return this.isDepthBuffer;
 	}
-	
+
 	public void setDepthBuffer(boolean depthBuffer) {
 		this.isDepthBuffer = depthBuffer;
 	}
-	
+
 	public boolean getStencilBuffer() {
 		return this.isStencilBuffer;
 	}
-	
+
 	public void setStencilBuffer(boolean stencilBuffer) {
 		this.isStencilBuffer = stencilBuffer;
 	}
-	
+
 	public Integer getWebGLFramebuffer() {
 		return this.webglFramebuffer;
 	}
@@ -114,10 +118,10 @@ public class RenderTargetTexture extends Texture
 
 		gl.glDeleteTexture(this.getWebGlTexture());
 		this.setWebGlTexture(null);
-		
+
 		gl.glDeleteFramebuffer(this.webglFramebuffer);
 		gl.glDeleteRenderbuffer(this.webglRenderbuffer);
-		
+
 		this.webglFramebuffer = null;
 		this.webglRenderbuffer = null;
 	}
@@ -127,7 +131,7 @@ public class RenderTargetTexture extends Texture
 		RenderTargetTexture tmp = new RenderTargetTexture(this.width, this.height);
 
 		super.clone(tmp);
-		
+
 		tmp.setWrapS( getWrapS() );
 		tmp.setWrapT( getWrapT() );
 
@@ -145,27 +149,27 @@ public class RenderTargetTexture extends Texture
 
 		return tmp;
 	}
-	
+
 	public void setRenderTarget(GL20 gl)
 	{
 		if (this.webglFramebuffer != null)
 			return;
-		
+
 		this.deallocate(gl);
 		this.setWebGlTexture(gl.glGenTexture());
-		
+
 		// Setup texture, create render and frame buffers
 
 		boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo(this.width)
 				&& Mathematics.isPowerOfTwo(this.height);
 
 		this.webglFramebuffer = gl.glGenFramebuffer();
-		
-		if ( this.shareDepthFrom != null ) 
+
+		if ( this.shareDepthFrom != null )
 		{
 			this.webglRenderbuffer = this.shareDepthFrom.webglRenderbuffer;
-		} 
-		else 
+		}
+		else
 		{
 			this.webglRenderbuffer = gl.glGenRenderbuffer();
 		}
@@ -176,8 +180,8 @@ public class RenderTargetTexture extends Texture
 		gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,  getFormat().getValue(), getType().getValue(), null);
 
 		setupFrameBuffer(gl, this.webglFramebuffer, TextureTarget.TEXTURE_2D.getValue());
-		
-		if ( this.shareDepthFrom != null ) 
+
+		if ( this.shareDepthFrom != null )
 		{
 
 			if ( this.isDepthBuffer && ! this.isStencilBuffer ) {
@@ -206,7 +210,7 @@ public class RenderTargetTexture extends Texture
 	}
 
 	public void updateRenderTargetMipmap(GL20 gl)
-	{	
+	{
 		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), this.getWebGlTexture());
 		gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
 		Integer nullval = null;
@@ -214,16 +218,16 @@ public class RenderTargetTexture extends Texture
 	}
 
 	public void setupFrameBuffer(GL20 gl, Integer framebuffer, Integer textureTarget)
-	{	
+	{
 		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
 		gl.glFramebufferTexture2D(GL20.GL_FRAMEBUFFER, FramebufferSlot.COLOR_ATTACHMENT0.getValue(), textureTarget, this.getWebGlTexture(), 0);
 	}
 
 	public void setupRenderBuffer(GL20 gl, Integer renderbuffer)
-	{	
+	{
 		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, renderbuffer);
 
-		if (this.isDepthBuffer && !this.isStencilBuffer) 
+		if (this.isDepthBuffer && !this.isStencilBuffer)
 		{
 			gl.glRenderbufferStorage(GL20.GL_RENDERBUFFER, RenderbufferInternalFormat.DEPTH_COMPONENT16.getValue(), this.width, this.height);
 			gl.glFramebufferRenderbuffer(GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_ATTACHMENT.getValue(), GL20.GL_RENDERBUFFER, renderbuffer);
@@ -231,20 +235,20 @@ public class RenderTargetTexture extends Texture
 			/*
 			 * For some reason this is not working. Defaulting to RGBA4. } else
 			 * if( ! this.depthBuffer && this.stencilBuffer ) {
-			 * 
+			 *
 			 * _gl.renderbufferStorage( WebGLConstants.RENDERBUFFER,
 			 * WebGLConstants.STENCIL_INDEX8, this.width, this.height );
 			 * _gl.framebufferRenderbuffer( WebGLConstants.FRAMEBUFFER,
 			 * WebGLConstants.STENCIL_ATTACHMENT,
 			 * WebGLConstants.RENDERBUFFER, renderbuffer );
 			 */
-		} 
-		else if (this.isDepthBuffer && this.isStencilBuffer) 
+		}
+		else if (this.isDepthBuffer && this.isStencilBuffer)
 		{
 			gl.glRenderbufferStorage(GL20.GL_RENDERBUFFER, RenderbufferInternalFormat.DEPTH_STENCIL.getValue(), this.width, this.height);
 			gl.glFramebufferRenderbuffer(GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_STENCIL_ATTACHMENT.getValue(), GL20.GL_FRAMEBUFFER,renderbuffer);
-		} 
-		else 
+		}
+		else
 		{
 			gl.glRenderbufferStorage(GL20.GL_RENDERBUFFER, RenderbufferInternalFormat.RGBA4.getValue(), this.width, this.height);
 		}

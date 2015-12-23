@@ -1,20 +1,18 @@
-/*
- * Copyright 2012 Alex Usachev, thothbot@gmail.com
+/*******************************************************************************
+ * Copyright 2011 See AUTHORS file.
  *
- * This file is part of Parallax project.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Parallax is free software: you can redistribute it and/or modify it
- * under the terms of the Creative Commons Attribution 3.0 Unported License.
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Parallax is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the Creative Commons Attribution
- * 3.0 Unported License. for more details.
- *
- * You should have received a copy of the the Creative Commons Attribution
- * 3.0 Unported License along with Parallax.
- * If not, see http://creativecommons.org/licenses/by/3.0/.
- */
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 
 package org.parallax3d.parallax.system;
 
@@ -44,34 +42,6 @@ public final class StreamUtils {
         while ((bytesRead = input.read(buffer)) != -1) {
             output.write(buffer, 0, bytesRead);
         }
-    }
-
-    /** Allocates a {@value #DEFAULT_BUFFER_SIZE} byte[] for use as a temporary buffer and calls
-     * {@link #copyStream(InputStream, OutputStream, byte[])}. */
-    public static void copyStream (InputStream input, ByteBuffer output) throws IOException {
-        copyStream(input, output, new byte[DEFAULT_BUFFER_SIZE]);
-    }
-
-    /** Allocates a byte[] of the specified size for use as a temporary buffer and calls
-     * {@link #copyStream(InputStream, ByteBuffer, byte[])}. */
-    public static void copyStream (InputStream input, ByteBuffer output, int bufferSize) throws IOException {
-        copyStream(input, output, new byte[bufferSize]);
-    }
-
-    /** Copy the data from an {@link InputStream} to a {@link ByteBuffer}, using the specified byte[] as a temporary buffer. The
-     * buffer's limit is increased by the number of bytes copied, the position is left unchanged. The stream is not closed.
-     * @param output Must be a direct Buffer with native byte order and the buffer MUST be large enough to hold all the bytes in
-     *           the stream. No error checking is performed.
-     * @return the number of bytes copied. */
-    public static int copyStream (InputStream input, ByteBuffer output, byte[] buffer) throws IOException {
-        int startPosition = output.position(), total = 0, bytesRead;
-        while ((bytesRead = input.read(buffer)) != -1) {
-            BufferUtils.copy(buffer, 0, output, bytesRead);
-            total += bytesRead;
-            output.position(startPosition + total);
-        }
-        output.position(startPosition);
-        return total;
     }
 
     /** Copy the data from an {@link InputStream} to a byte array. The stream is not closed. */

@@ -38,17 +38,17 @@ import org.parallax3d.parallax.math.Vector2;
 public class Shape extends Path
 {
 	private List<Path> holes = new ArrayList<Path>();
-	
-	public Shape() 
+
+	public Shape()
 	{
 		super();
 	}
-	
-	public Shape(List<Vector2> points) 
+
+	public Shape(List<Vector2> points)
 	{
-		super(points);		
+		super(points);
 	}
-	
+
 	public List<Path> getHoles()
 	{
 		return this.holes;
@@ -57,7 +57,7 @@ public class Shape extends Path
 	/*
 	 * Convenience method to return ExtrudeGeometry
 	 */
-	public ExtrudeGeometry extrude( ExtrudeGeometry.ExtrudeGeometryParameters options ) 
+	public ExtrudeGeometry extrude( ExtrudeGeometry.ExtrudeGeometryParameters options )
 	{
 		return new ExtrudeGeometry( this, options );
 	}
@@ -70,7 +70,7 @@ public class Shape extends Path
 		return getPointsHoles(false);
 	}
 
-	public List<List<Vector2>> getPointsHoles( boolean closedPath ) 
+	public List<List<Vector2>> getPointsHoles( boolean closedPath )
 	{
 		int il = this.holes.size();
 		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
@@ -84,7 +84,7 @@ public class Shape extends Path
 	/*
 	 * Get points of holes (spaced by regular distance)
 	 */
-	public List<List<Vector2>> getSpacedPointsHoles( boolean closedPath ) 
+	public List<List<Vector2>> getSpacedPointsHoles( boolean closedPath )
 	{
 		int il = this.holes.size();
 		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
@@ -94,7 +94,7 @@ public class Shape extends Path
 
 		return holesPts;
 	}
-	
+
 	public String toString()
 	{
 		return this.getActions().toString();

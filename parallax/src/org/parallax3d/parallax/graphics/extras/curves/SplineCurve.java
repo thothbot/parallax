@@ -31,33 +31,33 @@ public class SplineCurve extends Curve
 {
 
 	public List<Vector2> points;
-	
-	public SplineCurve() 
+
+	public SplineCurve()
 	{
 		this.points = new ArrayList<Vector2>();
 	}
 
-	public SplineCurve(List<Vector2> points) 
+	public SplineCurve(List<Vector2> points)
 	{
 		this.points = points;
 	}
 
 	@Override
-	public Vector2 getPoint(float t)
+	public Vector2 getPoint(double t)
 	{
 		Vector2 v = new Vector2();
-		
-		float point = ( points.size() - 1.0f ) * t;
+
+		double point = ( points.size() - 1.0 ) * t;
 		int intPoint = (int) Math.floor( point );
-		
-		float weight = point - intPoint;
+
+		double weight = point - intPoint;
 
 		int c0 = intPoint == 0 ? intPoint : intPoint - 1;
 		int c1 = intPoint;
 		int c2 = intPoint  > points.size() - 2 ? points.size() -1 : intPoint + 1;
 		int c3 = intPoint  > points.size() - 3 ? points.size() -1 : intPoint + 2;
 
-		v.setX( CurveUtils.interpolate(points.get(c0).getX(), points.get(c1).getX(), points.get(c2).getX(), points.get(c3).getX(), weight) );
+		v.setX( CurveUtils.interpolate( points.get(c0).getX(), points.get(c1).getX(), points.get(c2).getX(), points.get(c3).getX(), weight ) );
 		v.setY( CurveUtils.interpolate( points.get(c0).getY(), points.get(c1).getY(), points.get(c2).getY(), points.get(c3).getY(), weight ) );
 
 		return v;

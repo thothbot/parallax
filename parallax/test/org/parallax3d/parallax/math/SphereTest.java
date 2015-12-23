@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 
 public class SphereTest
 {
-	private static float DELTA = 0.0f;
+	private static double DELTA = 0.0;
 
 	private static Vector3 zero3 = new Vector3();
 	private static Vector3 one3 = new Vector3( 1, 1, 1 );
@@ -36,7 +36,7 @@ public class SphereTest
 		assertTrue( a.getCenter().equals( zero3 ));
 		assertEquals( 0.0, a.getRadius(), DELTA );
 
-		Sphere b = new Sphere( one3, 1.0f );
+		Sphere b = new Sphere( one3, 1.0 );
 		assertTrue( b.getCenter().equals( one3 ));
 		assertEquals( 1.0, b.getRadius(), DELTA );
 	}
@@ -102,7 +102,7 @@ public class SphereTest
 	{
 		Sphere a = new Sphere( one3, 1 );
 		Sphere b = new Sphere( zero3, 1 );
-		Sphere c = new Sphere( zero3, 0.25f );
+		Sphere c = new Sphere( zero3, 0.25 );
 
 		assertTrue( a.isIntersectsSphere( b ) );
 //		assertTrue( ! a.isIntersectsSphere( c ) );
@@ -124,7 +124,7 @@ public class SphereTest
 
 		assertTrue( a.getBoundingBox().equals( new Box3( zero3, two3 ) ));
 
-		a.set( zero3, 0.0f );
+		a.set( zero3, 0.0 );
 		assertTrue( a.getBoundingBox().equals( new Box3( zero3, zero3 ) ));
 	}
 
