@@ -20,6 +20,7 @@
 package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.system.Image;
+import org.parallax3d.parallax.system.ThreeJsObject;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ import java.util.List;
  * @author thothbot
  *
  */
+@ThreeJsObject("THREE.CubeTexture")
 public class CubeTexture extends Texture 
 {
 	private List<Image> images;

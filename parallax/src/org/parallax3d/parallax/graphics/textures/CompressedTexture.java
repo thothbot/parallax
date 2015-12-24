@@ -21,12 +21,14 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.system.DummyImage;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 
 import java.nio.ByteBuffer;
 import java.util.List;
 
+@ThreeJsObject("THREE.CompressedTexture")
 public class CompressedTexture extends Texture
 {
 
