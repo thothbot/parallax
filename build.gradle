@@ -4,9 +4,6 @@ ext {
     robovmVersion = "1.9.0"
     androidVersion = "4.4"
     gwtVersion = "2.7.0"
-    jglfwVersion = "1.1"
-    lwjglVersion = "2.9.2"
-    jorbisVersion = "0.0.17"
     junitVersion = "4.11"
 }
 
