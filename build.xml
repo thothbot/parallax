@@ -8,9 +8,6 @@
     <!-- define distribution/output directory -->
     <property name="distDir" value="${basedir}/dist"/>
 
-    <!-- should we build natives? -->
-    <property name="build-natives" value="false"/>
-
     <!-- clean distribution/output directory -->
     <target name="clean">
         <delete dir="${distDir}"/>
