@@ -58,19 +58,19 @@ public final class StreamUtils {
     }
 
     /** Calls {@link #copyStreamToString(InputStream, int, String)} using the input's {@link InputStream#available() available} size
-     * and the platform's default charset. */
+     * and the platforms's default charset. */
     public static String copyStreamToString (InputStream input) throws IOException {
         return copyStreamToString(input, input.available(), null);
     }
 
-    /** Calls {@link #copyStreamToString(InputStream, int, String)} using the platform's default charset. */
+    /** Calls {@link #copyStreamToString(InputStream, int, String)} using the platforms's default charset. */
     public static String copyStreamToString (InputStream input, int estimatedSize) throws IOException {
         return copyStreamToString(input, estimatedSize, null);
     }
 
     /** Copy the data from an {@link InputStream} to a string using the specified charset.
      * @param estimatedSize Used to allocate the output buffer to possibly avoid an array copy.
-     * @param charset May be null to use the platform's default charset. */
+     * @param charset May be null to use the platforms's default charset. */
     public static String copyStreamToString (InputStream input, int estimatedSize, String charset) throws IOException {
         InputStreamReader reader = charset == null ? new InputStreamReader(input) : new InputStreamReader(input, charset);
         StringWriter writer = new StringWriter(Math.max(0, estimatedSize));

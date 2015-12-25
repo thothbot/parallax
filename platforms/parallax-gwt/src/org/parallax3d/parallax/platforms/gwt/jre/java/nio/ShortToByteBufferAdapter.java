@@ -17,9 +17,9 @@
 package java.nio;
 
 //import org.apache.harmony.nio.internal.DirectBuffer;
-//import org.apache.harmony.luni.platform.PlatformAddress;
+//import org.apache.harmony.luni.platforms.PlatformAddress;
 
-/** This class wraps a byte buffer to be a int buffer.
+/** This class wraps a byte buffer to be a short buffer.
  * <p>
  * Implementation notice:
  * <ul>
@@ -29,17 +29,17 @@ package java.nio;
  * and limit.</li>
  * </ul>
  * </p> */
-final class IntToByteBufferAdapter extends IntBuffer implements ByteBufferWrapper {
+final class ShortToByteBufferAdapter extends ShortBuffer implements ByteBufferWrapper {
 // implements DirectBuffer {
 
-	static IntBuffer wrap (ByteBuffer byteBuffer) {
-		return new IntToByteBufferAdapter(byteBuffer.slice());
+	static ShortBuffer wrap (ByteBuffer byteBuffer) {
+		return new ShortToByteBufferAdapter(byteBuffer.slice());
 	}
 
 	private final ByteBuffer byteBuffer;
 
-	IntToByteBufferAdapter (ByteBuffer byteBuffer) {
-		super((byteBuffer.capacity() >> 2));
+	ShortToByteBufferAdapter (ByteBuffer byteBuffer) {
+		super((byteBuffer.capacity() >> 1));
 		this.byteBuffer = byteBuffer;
 		this.byteBuffer.clear();
 	}
@@ -93,8 +93,8 @@ final class IntToByteBufferAdapter extends IntBuffer implements ByteBufferWrappe
 // }
 
 	@Override
-	public IntBuffer asReadOnlyBuffer () {
-		IntToByteBufferAdapter buf = new IntToByteBufferAdapter(byteBuffer.asReadOnlyBuffer());
+	public ShortBuffer asReadOnlyBuffer () {
+		ShortToByteBufferAdapter buf = new ShortToByteBufferAdapter(byteBuffer.asReadOnlyBuffer());
 		buf.limit = limit;
 		buf.position = position;
 		buf.mark = mark;
@@ -102,12 +102,12 @@ final class IntToByteBufferAdapter extends IntBuffer implements ByteBufferWrappe
 	}
 
 	@Override
-	public IntBuffer compact () {
+	public ShortBuffer compact () {
 		if (byteBuffer.isReadOnly()) {
 			throw new ReadOnlyBufferException();
 		}
-		byteBuffer.limit(limit << 2);
-		byteBuffer.position(position << 2);
+		byteBuffer.limit(limit << 1);
+		byteBuffer.position(position << 1);
 		byteBuffer.compact();
 		byteBuffer.clear();
 		position = limit - position;
@@ -117,8 +117,8 @@ final class IntToByteBufferAdapter extends IntBuffer implements ByteBufferWrappe
 	}
 
 	@Override
-	public IntBuffer duplicate () {
-		IntToByteBufferAdapter buf = new IntToByteBufferAdapter(byteBuffer.duplicate());
+	public ShortBuffer duplicate () {
+		ShortToByteBufferAdapter buf = new ShortToByteBufferAdapter(byteBuffer.duplicate());
 		buf.limit = limit;
 		buf.position = position;
 		buf.mark = mark;
@@ -126,19 +126,19 @@ final class IntToByteBufferAdapter extends IntBuffer implements ByteBufferWrappe
 	}
 
 	@Override
-	public int get () {
+	public short get () {
 		if (position == limit) {
 			throw new BufferUnderflowException();
 		}
-		return byteBuffer.getInt(position++ << 2);
+		return byteBuffer.getShort(position++ << 1);
 	}
 
 	@Override
-	public int get (int index) {
+	public short get (int index) {
 		if (index < 0 || index >= limit) {
 			throw new IndexOutOfBoundsException();
 		}
-		return byteBuffer.getInt(index << 2);
+		return byteBuffer.getShort(index << 1);
 	}
 
 	@Override
@@ -157,7 +157,7 @@ final class IntToByteBufferAdapter extends IntBuffer implements ByteBufferWrappe
 	}
 
 	@Override
-	protected int[] protectedArray () {
+	protected short[] protectedArray () {
 		throw new UnsupportedOperationException();
 	}
 
@@ -172,28 +172,28 @@ final class IntToByteBufferAdapter extends IntBuffer implements ByteBufferWrappe
 	}
 
 	@Override
-	public IntBuffer put (int c) {
+	public ShortBuffer put (short c) {
 		if (position == limit) {
 			throw new BufferOverflowException();
 		}
-		byteBuffer.putInt(position++ << 2, c);
+		byteBuffer.putShort(position++ << 1, c);
 		return this;
 	}
 
 	@Override
-	public IntBuffer put (int index, int c) {
+	public ShortBuffer put (int index, short c) {
 		if (index < 0 || index >= limit) {
 			throw new IndexOutOfBoundsException();
 		}
-		byteBuffer.putInt(index << 2, c);
+		byteBuffer.putShort(index << 1, c);
 		return this;
 	}
 
 	@Override
-	public IntBuffer slice () {
-		byteBuffer.limit(limit << 2);
-		byteBuffer.position(position << 2);
-		IntBuffer result = new IntToByteBufferAdapter(byteBuffer.slice());
+	public ShortBuffer slice () {
+		byteBuffer.limit(limit << 1);
+		byteBuffer.position(position << 1);
+		ShortBuffer result = new ShortToByteBufferAdapter(byteBuffer.slice());
 		byteBuffer.clear();
 		return result;
 	}

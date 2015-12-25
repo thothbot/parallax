@@ -17,93 +17,94 @@
 
 package java.nio;
 
-/** A buffer of longs.
+/** A buffer of floats.
  * <p>
- * A long buffer can be created in either of the following ways:
+ * A float buffer can be created in either of the following ways:
  * </p>
  * <ul>
- * <li>{@link #allocate(int) Allocate} a new long array and create a buffer based on it;</li>
- * <li>{@link #wrap(long[]) Wrap} an existing long array to create a new buffer;</li>
- * <li>Use {@link java.nio.ByteBuffer#asLongBuffer() ByteBuffer.asLongBuffer} to create a long buffer based on a byte buffer.</li>
+ * <li>{@link #allocate(int) Allocate} a new float array and create a buffer based on it;</li>
+ * <li>{@link #wrap(float[]) Wrap} an existing float array to create a new buffer;</li>
+ * <li>Use {@link java.nio.ByteBuffer#asFloatBuffer() ByteBuffer.asFloatBuffer} to create a float buffer based on a byte buffer.</li>
  * </ul>
  * 
  * @since Android 1.0 */
-public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer> {
+public abstract class FloatBuffer extends Buffer implements Comparable<FloatBuffer> {
 
-	/** Creates a long buffer based on a newly allocated long array.
+	/** Creates a float buffer based on a newly allocated float array.
 	 * 
 	 * @param capacity the capacity of the new buffer.
-	 * @return the created long buffer.
+	 * @return the created float buffer.
 	 * @throws IllegalArgumentException if {@code capacity} is less than zero.
 	 * @since Android 1.0 */
-	public static LongBuffer allocate (int capacity) {
+	public static FloatBuffer allocate (int capacity) {
 		if (capacity < 0) {
 			throw new IllegalArgumentException();
 		}
-		return BufferFactory.newLongBuffer(capacity);
+		return BufferFactory.newFloatBuffer(capacity);
 	}
 
-	/** Creates a new long buffer by wrapping the given long array.
+	/** Creates a new float buffer by wrapping the given float array.
 	 * <p>
 	 * Calling this method has the same effect as {@code wrap(array, 0, array.length)}.
 	 * </p>
 	 * 
-	 * @param array the long array which the new buffer will be based on.
-	 * @return the created long buffer.
+	 * @param array the float array which the new buffer will be based on.
+	 * @return the created float buffer.
 	 * @since Android 1.0 */
-	public static LongBuffer wrap (long[] array) {
+	public static FloatBuffer wrap (float[] array) {
 		return wrap(array, 0, array.length);
 	}
 
-	/** Creates a new long buffer by wrapping the given long array.
+	/** Creates a new float buffer by wrapping the given float array.
 	 * <p>
 	 * The new buffer's position will be {@code start}, limit will be {@code start + len}, capacity will be the length of the array.
 	 * </p>
 	 * 
-	 * @param array the long array which the new buffer will be based on.
+	 * @param array the float array which the new buffer will be based on.
 	 * @param start the start index, must not be negative and not greater than {@code array.length}.
 	 * @param len the length, must not be negative and not greater than {@code array.length - start}.
-	 * @return the created long buffer.
+	 * @return the created float buffer.
 	 * @exception IndexOutOfBoundsException if either {@code start} or {@code len} is invalid.
+	 * @exception NullPointerException if {@code array} is null.
 	 * @since Android 1.0 */
-	public static LongBuffer wrap (long[] array, int start, int len) {
+	public static FloatBuffer wrap (float[] array, int start, int len) {
 		if (array == null) {
 			throw new NullPointerException();
 		}
-		if (start < 0 || len < 0 || (long)len + (long)start > array.length) {
+		if (start < 0 || len < 0 || (long)start + (long)len > array.length) {
 			throw new IndexOutOfBoundsException();
 		}
 
-		LongBuffer buf = BufferFactory.newLongBuffer(array);
+		FloatBuffer buf = BufferFactory.newFloatBuffer(array);
 		buf.position = start;
 		buf.limit = start + len;
 
 		return buf;
 	}
 
-	/** Constructs a {@code LongBuffer} with given capacity.
+	/** Constructs a {@code FloatBuffer} with given capacity.
 	 * 
 	 * @param capacity The capacity of the buffer */
-	LongBuffer (int capacity) {
+	FloatBuffer (int capacity) {
 		super(capacity);
 	}
 
-	/** Returns the long array which this buffer is based on, if there is one.
+	/** Returns the float array which this buffer is based on, if there is one.
 	 * 
-	 * @return the long array which this buffer is based on.
+	 * @return the float array which this buffer is based on.
 	 * @exception ReadOnlyBufferException if this buffer is based on an array, but it is read-only.
 	 * @exception UnsupportedOperationException if this buffer is not based on an array.
 	 * @since Android 1.0 */
-	public final long[] array () {
+	public final float[] array () {
 		return protectedArray();
 	}
 
-	/** Returns the offset of the long array which this buffer is based on, if there is one.
+	/** Returns the offset of the float array which this buffer is based on, if there is one.
 	 * <p>
 	 * The offset is the index of the array and corresponds to the zero position of the buffer.
 	 * </p>
 	 * 
-	 * @return the offset of the long array which this buffer is based on.
+	 * @return the offset of the float array which this buffer is based on.
 	 * @exception ReadOnlyBufferException if this buffer is based on an array, but it is read-only.
 	 * @exception UnsupportedOperationException if this buffer is not based on an array.
 	 * @since Android 1.0 */
@@ -114,7 +115,7 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 	/** Returns a read-only buffer that shares its content with this buffer.
 	 * <p>
 	 * The returned buffer is guaranteed to be a new instance, even if this buffer is read-only itself. The new buffer's position,
-	 * limit, capacity and mark are the same as this buffer's.
+	 * limit, capacity and mark are the same as this buffer.
 	 * </p>
 	 * <p>
 	 * The new buffer shares its content with this buffer, which means this buffer's change of content will be visible to the new
@@ -123,37 +124,38 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 	 * 
 	 * @return a read-only version of this buffer.
 	 * @since Android 1.0 */
-	public abstract LongBuffer asReadOnlyBuffer ();
+	public abstract FloatBuffer asReadOnlyBuffer ();
 
-	/** Compacts this long buffer.
+	/** Compacts this float buffer.
 	 * <p>
-	 * The remaining longs will be moved to the head of the buffer, staring from position zero. Then the position is set to
+	 * The remaining floats will be moved to the head of the buffer, starting from position zero. Then the position is set to
 	 * {@code remaining()}; the limit is set to capacity; the mark is cleared.
 	 * </p>
 	 * 
 	 * @return this buffer.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public abstract LongBuffer compact ();
+	public abstract FloatBuffer compact ();
 
-	/** Compare the remaining longs of this buffer to another long buffer's remaining longs.
+	/** Compare the remaining floats of this buffer to another float buffer's remaining floats.
 	 * 
-	 * @param otherBuffer another long buffer.
+	 * @param otherBuffer another float buffer.
 	 * @return a negative value if this is less than {@code otherBuffer}; 0 if this equals to {@code otherBuffer}; a positive value
-	 *         if this is greater than {@code otherBuffer}
-	 * @exception ClassCastException if {@code otherBuffer} is not a long buffer.
+	 *         if this is greater than {@code otherBuffer}.
+	 * @exception ClassCastException if {@code otherBuffer} is not a float buffer.
 	 * @since Android 1.0 */
-	public int compareTo (LongBuffer otherBuffer) {
+	public int compareTo (FloatBuffer otherBuffer) {
 		int compareRemaining = (remaining() < otherBuffer.remaining()) ? remaining() : otherBuffer.remaining();
 		int thisPos = position;
 		int otherPos = otherBuffer.position;
 		// BEGIN android-changed
-		long thisLong, otherLong;
+		float thisFloat, otherFloat;
 		while (compareRemaining > 0) {
-			thisLong = get(thisPos);
-			otherLong = otherBuffer.get(otherPos);
-			if (thisLong != otherLong) {
-				return thisLong < otherLong ? -1 : 1;
+			thisFloat = get(thisPos);
+			otherFloat = otherBuffer.get(otherPos);
+			// checks for float and NaN inequality
+			if ((thisFloat != otherFloat) && ((thisFloat == thisFloat) || (otherFloat == otherFloat))) {
+				return thisFloat < otherFloat ? -1 : 1;
 			}
 			thisPos++;
 			otherPos++;
@@ -166,7 +168,7 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 	/** Returns a duplicated buffer that shares its content with this buffer.
 	 * <p>
 	 * The duplicated buffer's position, limit, capacity and mark are the same as this buffer. The duplicated buffer's read-only
-	 * property and byte order are same as this buffer's, too.
+	 * property and byte order are same as this buffer too.
 	 * </p>
 	 * <p>
 	 * The new buffer shares its content with this buffer, which means either buffer's change of content will be visible to the
@@ -175,22 +177,22 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 	 * 
 	 * @return a duplicated buffer that shares its content with this buffer.
 	 * @since Android 1.0 */
-	public abstract LongBuffer duplicate ();
+	public abstract FloatBuffer duplicate ();
 
-	/** Checks whether this long buffer is equal to another object.
+	/** Checks whether this float buffer is equal to another object.
 	 * <p>
-	 * If {@code other} is not a long buffer then {@code false} is returned. Two long buffers are equal if and only if their
-	 * remaining longs are exactly the same. Position, limit, capacity and mark are not considered.
+	 * If {@code other} is not a float buffer then {@code false} is returned. Two float buffers are equal if and only if their
+	 * remaining floats are exactly the same. Position, limit, capacity and mark are not considered.
 	 * </p>
 	 * 
-	 * @param other the object to compare with this long buffer.
-	 * @return {@code true} if this long buffer is equal to {@code other}, {@code false} otherwise.
+	 * @param other the object to compare with this float buffer.
+	 * @return {@code true} if this float buffer is equal to {@code other}, {@code false} otherwise.
 	 * @since Android 1.0 */
 	public boolean equals (Object other) {
-		if (!(other instanceof LongBuffer)) {
+		if (!(other instanceof FloatBuffer)) {
 			return false;
 		}
-		LongBuffer otherBuffer = (LongBuffer)other;
+		FloatBuffer otherBuffer = (FloatBuffer)other;
 
 		if (remaining() != otherBuffer.remaining()) {
 			return false;
@@ -206,39 +208,40 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 		return equalSoFar;
 	}
 
-	/** Returns the long at the current position and increase the position by 1.
+	/** Returns the float at the current position and increases the position by 1.
 	 * 
-	 * @return the long at the current position.
+	 * @return the float at the current position.
 	 * @exception BufferUnderflowException if the position is equal or greater than limit.
 	 * @since Android 1.0 */
-	public abstract long get ();
+	public abstract float get ();
 
-	/** Reads longs from the current position into the specified long array and increases the position by the number of longs read.
+	/** Reads floats from the current position into the specified float array and increases the position by the number of floats
+	 * read.
 	 * <p>
 	 * Calling this method has the same effect as {@code get(dest, 0, dest.length)}.
 	 * </p>
 	 * 
-	 * @param dest the destination long array.
+	 * @param dest the destination float array.
 	 * @return this buffer.
 	 * @exception BufferUnderflowException if {@code dest.length} is greater than {@code remaining()}.
 	 * @since Android 1.0 */
-	public LongBuffer get (long[] dest) {
+	public FloatBuffer get (float[] dest) {
 		return get(dest, 0, dest.length);
 	}
 
-	/** Reads longs from the current position into the specified long array, starting from the specified offset, and increase the
-	 * position by the number of longs read.
+	/** Reads floats from the current position into the specified float array, starting from the specified offset, and increases the
+	 * position by the number of floats read.
 	 * 
-	 * @param dest the target long array.
-	 * @param off the offset of the long array, must not be negative and not greater than {@code dest.length}.
-	 * @param len the number of longs to read, must be no less than zero and not greater than {@code dest.length - off}.
+	 * @param dest the target float array.
+	 * @param off the offset of the float array, must not be negative and no greater than {@code dest.length}.
+	 * @param len the number of floats to read, must be no less than zero and no greater than {@code dest.length - off}.
 	 * @return this buffer.
 	 * @exception IndexOutOfBoundsException if either {@code off} or {@code len} is invalid.
 	 * @exception BufferUnderflowException if {@code len} is greater than {@code remaining()}.
 	 * @since Android 1.0 */
-	public LongBuffer get (long[] dest, int off, int len) {
+	public FloatBuffer get (float[] dest, int off, int len) {
 		int length = dest.length;
-		if (off < 0 || len < 0 || (long)len + (long)off > length) {
+		if (off < 0 || len < 0 || (long)off + (long)len > length) {
 			throw new IndexOutOfBoundsException();
 		}
 
@@ -251,61 +254,61 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 		return this;
 	}
 
-	/** Returns the long at the specified index; the position is not changed.
+	/** Returns a float at the specified index; the position is not changed.
 	 * 
 	 * @param index the index, must not be negative and less than limit.
-	 * @return the long at the specified index.
+	 * @return a float at the specified index.
 	 * @exception IndexOutOfBoundsException if index is invalid.
 	 * @since Android 1.0 */
-	public abstract long get (int index);
+	public abstract float get (int index);
 
-	/** Indicates whether this buffer is based on a long array and is read/write.
+	/** Indicates whether this buffer is based on a float array and is read/write.
 	 * 
-	 * @return {@code true} if this buffer is based on a long array and provides read/write access, {@code false} otherwise.
+	 * @return {@code true} if this buffer is based on a float array and provides read/write access, {@code false} otherwise.
 	 * @since Android 1.0 */
 	public final boolean hasArray () {
 		return protectedHasArray();
 	}
 
-	/** Calculates this buffer's hash code from the remaining chars. The position, limit, capacity and mark don't affect the hash
-	 * code.
-	 * 
-	 * @return the hash code calculated from the remaining longs.
-	 * @since Android 1.0 */
-	public int hashCode () {
-		int myPosition = position;
-		int hash = 0;
-		long l;
-		while (myPosition < limit) {
-			l = get(myPosition++);
-			hash = hash + ((int)l) ^ ((int)(l >> 32));
-		}
-		return hash;
-	}
+// /**
+// * Calculates this buffer's hash code from the remaining chars. The
+// * position, limit, capacity and mark don't affect the hash code.
+// *
+// * @return the hash code calculated from the remaining floats.
+// * @since Android 1.0
+// */
+// public int hashCode() {
+// int myPosition = position;
+// int hash = 0;
+// while (myPosition < limit) {
+// hash = hash + Float.floatToIntBits(get(myPosition++));
+// }
+// return hash;
+// }
 
 	/** Indicates whether this buffer is direct. A direct buffer will try its best to take advantage of native memory APIs and it
 	 * may not stay in the Java heap, so it is not affected by garbage collection.
 	 * <p>
-	 * A long buffer is direct if it is based on a byte buffer and the byte buffer is direct.
+	 * A float buffer is direct if it is based on a byte buffer and the byte buffer is direct.
 	 * </p>
 	 * 
 	 * @return {@code true} if this buffer is direct, {@code false} otherwise.
 	 * @since Android 1.0 */
 	public abstract boolean isDirect ();
 
-	/** Returns the byte order used by this buffer when converting longs from/to bytes.
+	/** Returns the byte order used by this buffer when converting floats from/to bytes.
 	 * <p>
-	 * If this buffer is not based on a byte buffer, then always return the platform's native byte order.
+	 * If this buffer is not based on a byte buffer, then always return the platforms's native byte order.
 	 * </p>
 	 * 
-	 * @return the byte order used by this buffer when converting longs from/to bytes.
+	 * @return the byte order used by this buffer when converting floats from/to bytes.
 	 * @since Android 1.0 */
 	public abstract ByteOrder order ();
 
 	/** Child class implements this method to realize {@code array()}.
 	 * 
 	 * @return see {@code array()} */
-	abstract long[] protectedArray ();
+	abstract float[] protectedArray ();
 
 	/** Child class implements this method to realize {@code arrayOffset()}.
 	 * 
@@ -317,43 +320,43 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 	 * @return see {@code hasArray()} */
 	abstract boolean protectedHasArray ();
 
-	/** Writes the given long to the current position and increases the position by 1.
+	/** Writes the given float to the current position and increases the position by 1.
 	 * 
-	 * @param l the long to write.
+	 * @param f the float to write.
 	 * @return this buffer.
 	 * @exception BufferOverflowException if position is equal or greater than limit.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public abstract LongBuffer put (long l);
+	public abstract FloatBuffer put (float f);
 
-	/** Writes longs from the given long array to the current position and increases the position by the number of longs written.
+	/** Writes floats from the given float array to the current position and increases the position by the number of floats written.
 	 * <p>
 	 * Calling this method has the same effect as {@code put(src, 0, src.length)}.
 	 * </p>
 	 * 
-	 * @param src the source long array.
+	 * @param src the source float array.
 	 * @return this buffer.
 	 * @exception BufferOverflowException if {@code remaining()} is less than {@code src.length}.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public final LongBuffer put (long[] src) {
+	public final FloatBuffer put (float[] src) {
 		return put(src, 0, src.length);
 	}
 
-	/** Writes longs from the given long array, starting from the specified offset, to the current position and increases the
-	 * position by the number of longs written.
+	/** Writes floats from the given float array, starting from the specified offset, to the current position and increases the
+	 * position by the number of floats written.
 	 * 
-	 * @param src the source long array.
-	 * @param off the offset of long array, must not be negative and not greater than {@code src.length}.
-	 * @param len the number of longs to write, must be no less than zero and not greater than {@code src.length - off}.
+	 * @param src the source float array.
+	 * @param off the offset of float array, must not be negative and not greater than {@code src.length}.
+	 * @param len the number of floats to write, must be no less than zero and no greater than {@code src.length - off}.
 	 * @return this buffer.
 	 * @exception BufferOverflowException if {@code remaining()} is less than {@code len}.
 	 * @exception IndexOutOfBoundsException if either {@code off} or {@code len} is invalid.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public LongBuffer put (long[] src, int off, int len) {
+	public FloatBuffer put (float[] src, int off, int len) {
 		int length = src.length;
-		if (off < 0 || len < 0 || (long)len + (long)off > length) {
+		if (off < 0 || len < 0 || (long)off + (long)len > length) {
 			throw new IndexOutOfBoundsException();
 		}
 
@@ -366,37 +369,37 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 		return this;
 	}
 
-	/** Writes all the remaining longs of the {@code src} long buffer to this buffer's current position, and increases both buffers'
-	 * position by the number of longs copied.
+	/** Writes all the remaining floats of the {@code src} float buffer to this buffer's current position, and increases both
+	 * buffers' position by the number of floats copied.
 	 * 
-	 * @param src the source long buffer.
+	 * @param src the source float buffer.
 	 * @return this buffer.
 	 * @exception BufferOverflowException if {@code src.remaining()} is greater than this buffer's {@code remaining()}.
 	 * @exception IllegalArgumentException if {@code src} is this buffer.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public LongBuffer put (LongBuffer src) {
+	public FloatBuffer put (FloatBuffer src) {
 		if (src == this) {
 			throw new IllegalArgumentException();
 		}
 		if (src.remaining() > remaining()) {
 			throw new BufferOverflowException();
 		}
-		long[] contents = new long[src.remaining()];
+		float[] contents = new float[src.remaining()];
 		src.get(contents);
 		put(contents);
 		return this;
 	}
 
-	/** Writes a long to the specified index of this buffer; the position is not changed.
+	/** Writes a float to the specified index of this buffer; the position is not changed.
 	 * 
 	 * @param index the index, must not be negative and less than the limit.
-	 * @param l the long to write.
+	 * @param f the float to write.
 	 * @return this buffer.
 	 * @exception IndexOutOfBoundsException if index is invalid.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public abstract LongBuffer put (int index, long l);
+	public abstract FloatBuffer put (int index, float f);
 
 	/** Returns a sliced buffer that shares its content with this buffer.
 	 * <p>
@@ -411,11 +414,11 @@ public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer
 	 * 
 	 * @return a sliced buffer that shares its content with this buffer.
 	 * @since Android 1.0 */
-	public abstract LongBuffer slice ();
+	public abstract FloatBuffer slice ();
 
-	/** Returns a string representing the state of this long buffer.
+	/** Returns a string representing the state of this float buffer.
 	 * 
-	 * @return a string representing the state of this long buffer.
+	 * @return a string representing the state of this float buffer.
 	 * @since Android 1.0 */
 	public String toString () {
 		StringBuffer buf = new StringBuffer();

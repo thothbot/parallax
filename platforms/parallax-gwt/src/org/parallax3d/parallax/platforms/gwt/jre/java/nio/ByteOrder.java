@@ -16,7 +16,7 @@
 
 package java.nio;
 
-//import org.apache.harmony.luni.platform.Platform;
+//import org.apache.harmony.luni.platforms.Platform;
 
 /** Defines byte order constants.
  * 
@@ -43,7 +43,7 @@ public final class ByteOrder {
 // }
 	}
 
-	/** Returns the current platform byte order.
+	/** Returns the current platforms byte order.
 	 * 
 	 * @return the byte order object, which is either LITTLE_ENDIAN or BIG_ENDIAN.
 	 * @since Android 1.0 */

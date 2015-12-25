@@ -17,56 +17,56 @@
 
 package java.nio;
 
-/** A buffer of ints.
+/** A buffer of longs.
  * <p>
- * A int buffer can be created in either of the following ways:
+ * A long buffer can be created in either of the following ways:
  * </p>
  * <ul>
- * <li>{@link #allocate(int) Allocate} a new int array and create a buffer based on it;</li>
- * <li>{@link #wrap(int[]) Wrap} an existing int array to create a new buffer;</li>
- * <li>Use {@link java.nio.ByteBuffer#asIntBuffer() ByteBuffer.asIntBuffer} to create a int buffer based on a byte buffer.</li>
+ * <li>{@link #allocate(int) Allocate} a new long array and create a buffer based on it;</li>
+ * <li>{@link #wrap(long[]) Wrap} an existing long array to create a new buffer;</li>
+ * <li>Use {@link java.nio.ByteBuffer#asLongBuffer() ByteBuffer.asLongBuffer} to create a long buffer based on a byte buffer.</li>
  * </ul>
  * 
  * @since Android 1.0 */
-public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> {
+public abstract class LongBuffer extends Buffer implements Comparable<LongBuffer> {
 
-	/** Creates an int buffer based on a newly allocated int array.
+	/** Creates a long buffer based on a newly allocated long array.
 	 * 
 	 * @param capacity the capacity of the new buffer.
-	 * @return the created int buffer.
+	 * @return the created long buffer.
 	 * @throws IllegalArgumentException if {@code capacity} is less than zero.
 	 * @since Android 1.0 */
-	public static IntBuffer allocate (int capacity) {
+	public static LongBuffer allocate (int capacity) {
 		if (capacity < 0) {
 			throw new IllegalArgumentException();
 		}
-		return BufferFactory.newIntBuffer(capacity);
+		return BufferFactory.newLongBuffer(capacity);
 	}
 
-	/** Creates a new int buffer by wrapping the given int array.
+	/** Creates a new long buffer by wrapping the given long array.
 	 * <p>
 	 * Calling this method has the same effect as {@code wrap(array, 0, array.length)}.
 	 * </p>
 	 * 
-	 * @param array the int array which the new buffer will be based on.
-	 * @return the created int buffer.
+	 * @param array the long array which the new buffer will be based on.
+	 * @return the created long buffer.
 	 * @since Android 1.0 */
-	public static IntBuffer wrap (int[] array) {
+	public static LongBuffer wrap (long[] array) {
 		return wrap(array, 0, array.length);
 	}
 
-	/** Creates a new int buffer by wrapping the given int array.
+	/** Creates a new long buffer by wrapping the given long array.
 	 * <p>
 	 * The new buffer's position will be {@code start}, limit will be {@code start + len}, capacity will be the length of the array.
 	 * </p>
 	 * 
-	 * @param array the int array which the new buffer will be based on.
-	 * @param start the start index, must not be negative and not greater than {@code array.length}
+	 * @param array the long array which the new buffer will be based on.
+	 * @param start the start index, must not be negative and not greater than {@code array.length}.
 	 * @param len the length, must not be negative and not greater than {@code array.length - start}.
-	 * @return the created int buffer.
+	 * @return the created long buffer.
 	 * @exception IndexOutOfBoundsException if either {@code start} or {@code len} is invalid.
 	 * @since Android 1.0 */
-	public static IntBuffer wrap (int[] array, int start, int len) {
+	public static LongBuffer wrap (long[] array, int start, int len) {
 		if (array == null) {
 			throw new NullPointerException();
 		}
@@ -74,36 +74,36 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 			throw new IndexOutOfBoundsException();
 		}
 
-		IntBuffer buf = BufferFactory.newIntBuffer(array);
+		LongBuffer buf = BufferFactory.newLongBuffer(array);
 		buf.position = start;
 		buf.limit = start + len;
 
 		return buf;
 	}
 
-	/** Constructs a {@code IntBuffer} with given capacity.
+	/** Constructs a {@code LongBuffer} with given capacity.
 	 * 
-	 * @param capacity the capacity of the buffer. */
-	IntBuffer (int capacity) {
+	 * @param capacity The capacity of the buffer */
+	LongBuffer (int capacity) {
 		super(capacity);
 	}
 
-	/** Returns the int array which this buffer is based on, if there is one.
+	/** Returns the long array which this buffer is based on, if there is one.
 	 * 
-	 * @return the int array which this buffer is based on.
+	 * @return the long array which this buffer is based on.
 	 * @exception ReadOnlyBufferException if this buffer is based on an array, but it is read-only.
 	 * @exception UnsupportedOperationException if this buffer is not based on an array.
 	 * @since Android 1.0 */
-	public final int[] array () {
+	public final long[] array () {
 		return protectedArray();
 	}
 
-	/** Returns the offset of the int array which this buffer is based on, if there is one.
+	/** Returns the offset of the long array which this buffer is based on, if there is one.
 	 * <p>
-	 * The offset is the index of the array corresponds to the zero position of the buffer.
+	 * The offset is the index of the array and corresponds to the zero position of the buffer.
 	 * </p>
 	 * 
-	 * @return the offset of the int array which this buffer is based on.
+	 * @return the offset of the long array which this buffer is based on.
 	 * @exception ReadOnlyBufferException if this buffer is based on an array, but it is read-only.
 	 * @exception UnsupportedOperationException if this buffer is not based on an array.
 	 * @since Android 1.0 */
@@ -113,7 +113,7 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 
 	/** Returns a read-only buffer that shares its content with this buffer.
 	 * <p>
-	 * The returned buffer is guaranteed to be a new instance, even this buffer is read-only itself. The new buffer's position,
+	 * The returned buffer is guaranteed to be a new instance, even if this buffer is read-only itself. The new buffer's position,
 	 * limit, capacity and mark are the same as this buffer's.
 	 * </p>
 	 * <p>
@@ -123,37 +123,37 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 	 * 
 	 * @return a read-only version of this buffer.
 	 * @since Android 1.0 */
-	public abstract IntBuffer asReadOnlyBuffer ();
+	public abstract LongBuffer asReadOnlyBuffer ();
 
-	/** Compacts this int buffer.
+	/** Compacts this long buffer.
 	 * <p>
-	 * The remaining ints will be moved to the head of the buffer, starting from position zero. Then the position is set to
+	 * The remaining longs will be moved to the head of the buffer, staring from position zero. Then the position is set to
 	 * {@code remaining()}; the limit is set to capacity; the mark is cleared.
 	 * </p>
 	 * 
 	 * @return this buffer.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public abstract IntBuffer compact ();
+	public abstract LongBuffer compact ();
 
-	/** Compares the remaining ints of this buffer to another int buffer's remaining ints.
+	/** Compare the remaining longs of this buffer to another long buffer's remaining longs.
 	 * 
-	 * @param otherBuffer another int buffer.
-	 * @return a negative value if this is less than {@code other}; 0 if this equals to {@code other}; a positive value if this is
-	 *         greater than {@code other}.
-	 * @exception ClassCastException if {@code other} is not an int buffer.
+	 * @param otherBuffer another long buffer.
+	 * @return a negative value if this is less than {@code otherBuffer}; 0 if this equals to {@code otherBuffer}; a positive value
+	 *         if this is greater than {@code otherBuffer}
+	 * @exception ClassCastException if {@code otherBuffer} is not a long buffer.
 	 * @since Android 1.0 */
-	public int compareTo (IntBuffer otherBuffer) {
+	public int compareTo (LongBuffer otherBuffer) {
 		int compareRemaining = (remaining() < otherBuffer.remaining()) ? remaining() : otherBuffer.remaining();
 		int thisPos = position;
 		int otherPos = otherBuffer.position;
 		// BEGIN android-changed
-		int thisInt, otherInt;
+		long thisLong, otherLong;
 		while (compareRemaining > 0) {
-			thisInt = get(thisPos);
-			otherInt = otherBuffer.get(otherPos);
-			if (thisInt != otherInt) {
-				return thisInt < otherInt ? -1 : 1;
+			thisLong = get(thisPos);
+			otherLong = otherBuffer.get(otherPos);
+			if (thisLong != otherLong) {
+				return thisLong < otherLong ? -1 : 1;
 			}
 			thisPos++;
 			otherPos++;
@@ -166,7 +166,7 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 	/** Returns a duplicated buffer that shares its content with this buffer.
 	 * <p>
 	 * The duplicated buffer's position, limit, capacity and mark are the same as this buffer. The duplicated buffer's read-only
-	 * property and byte order are the same as this buffer's.
+	 * property and byte order are same as this buffer's, too.
 	 * </p>
 	 * <p>
 	 * The new buffer shares its content with this buffer, which means either buffer's change of content will be visible to the
@@ -175,22 +175,22 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 	 * 
 	 * @return a duplicated buffer that shares its content with this buffer.
 	 * @since Android 1.0 */
-	public abstract IntBuffer duplicate ();
+	public abstract LongBuffer duplicate ();
 
-	/** Checks whether this int buffer is equal to another object.
+	/** Checks whether this long buffer is equal to another object.
 	 * <p>
-	 * If {@code other} is not a int buffer then {@code false} is returned. Two int buffers are equal if and only if their remaining
-	 * ints are exactly the same. Position, limit, capacity and mark are not considered.
+	 * If {@code other} is not a long buffer then {@code false} is returned. Two long buffers are equal if and only if their
+	 * remaining longs are exactly the same. Position, limit, capacity and mark are not considered.
 	 * </p>
 	 * 
-	 * @param other the object to compare with this int buffer.
-	 * @return {@code true} if this int buffer is equal to {@code other}, {@code false} otherwise.
+	 * @param other the object to compare with this long buffer.
+	 * @return {@code true} if this long buffer is equal to {@code other}, {@code false} otherwise.
 	 * @since Android 1.0 */
 	public boolean equals (Object other) {
-		if (!(other instanceof IntBuffer)) {
+		if (!(other instanceof LongBuffer)) {
 			return false;
 		}
-		IntBuffer otherBuffer = (IntBuffer)other;
+		LongBuffer otherBuffer = (LongBuffer)other;
 
 		if (remaining() != otherBuffer.remaining()) {
 			return false;
@@ -206,41 +206,42 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 		return equalSoFar;
 	}
 
-	/** Returns the int at the current position and increases the position by 1.
+	/** Returns the long at the current position and increase the position by 1.
 	 * 
-	 * @return the int at the current position.
+	 * @return the long at the current position.
 	 * @exception BufferUnderflowException if the position is equal or greater than limit.
 	 * @since Android 1.0 */
-	public abstract int get ();
+	public abstract long get ();
 
-	/** Reads ints from the current position into the specified int array and increases the position by the number of ints read.
+	/** Reads longs from the current position into the specified long array and increases the position by the number of longs read.
 	 * <p>
 	 * Calling this method has the same effect as {@code get(dest, 0, dest.length)}.
 	 * </p>
 	 * 
-	 * @param dest the destination int array.
+	 * @param dest the destination long array.
 	 * @return this buffer.
 	 * @exception BufferUnderflowException if {@code dest.length} is greater than {@code remaining()}.
 	 * @since Android 1.0 */
-	public IntBuffer get (int[] dest) {
+	public LongBuffer get (long[] dest) {
 		return get(dest, 0, dest.length);
 	}
 
-	/** Reads ints from the current position into the specified int array, starting from the specified offset, and increases the
-	 * position by the number of ints read.
+	/** Reads longs from the current position into the specified long array, starting from the specified offset, and increase the
+	 * position by the number of longs read.
 	 * 
-	 * @param dest the target int array.
-	 * @param off the offset of the int array, must not be negative and not greater than {@code dest.length}.
-	 * @param len the number of ints to read, must be no less than zero and not greater than {@code dest.length - off}.
+	 * @param dest the target long array.
+	 * @param off the offset of the long array, must not be negative and not greater than {@code dest.length}.
+	 * @param len the number of longs to read, must be no less than zero and not greater than {@code dest.length - off}.
 	 * @return this buffer.
 	 * @exception IndexOutOfBoundsException if either {@code off} or {@code len} is invalid.
 	 * @exception BufferUnderflowException if {@code len} is greater than {@code remaining()}.
 	 * @since Android 1.0 */
-	public IntBuffer get (int[] dest, int off, int len) {
+	public LongBuffer get (long[] dest, int off, int len) {
 		int length = dest.length;
 		if (off < 0 || len < 0 || (long)len + (long)off > length) {
 			throw new IndexOutOfBoundsException();
 		}
+
 		if (len > remaining()) {
 			throw new BufferUnderflowException();
 		}
@@ -250,17 +251,17 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 		return this;
 	}
 
-	/** Returns an int at the specified index; the position is not changed.
+	/** Returns the long at the specified index; the position is not changed.
 	 * 
 	 * @param index the index, must not be negative and less than limit.
-	 * @return an int at the specified index.
+	 * @return the long at the specified index.
 	 * @exception IndexOutOfBoundsException if index is invalid.
 	 * @since Android 1.0 */
-	public abstract int get (int index);
+	public abstract long get (int index);
 
-	/** Indicates whether this buffer is based on a int array and is read/write.
+	/** Indicates whether this buffer is based on a long array and is read/write.
 	 * 
-	 * @return {@code true} if this buffer is based on a int array and provides read/write access, {@code false} otherwise.
+	 * @return {@code true} if this buffer is based on a long array and provides read/write access, {@code false} otherwise.
 	 * @since Android 1.0 */
 	public final boolean hasArray () {
 		return protectedHasArray();
@@ -269,13 +270,15 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 	/** Calculates this buffer's hash code from the remaining chars. The position, limit, capacity and mark don't affect the hash
 	 * code.
 	 * 
-	 * @return the hash code calculated from the remaining ints.
+	 * @return the hash code calculated from the remaining longs.
 	 * @since Android 1.0 */
 	public int hashCode () {
 		int myPosition = position;
 		int hash = 0;
+		long l;
 		while (myPosition < limit) {
-			hash = hash + get(myPosition++);
+			l = get(myPosition++);
+			hash = hash + ((int)l) ^ ((int)(l >> 32));
 		}
 		return hash;
 	}
@@ -283,72 +286,72 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 	/** Indicates whether this buffer is direct. A direct buffer will try its best to take advantage of native memory APIs and it
 	 * may not stay in the Java heap, so it is not affected by garbage collection.
 	 * <p>
-	 * An int buffer is direct if it is based on a byte buffer and the byte buffer is direct.
+	 * A long buffer is direct if it is based on a byte buffer and the byte buffer is direct.
 	 * </p>
 	 * 
 	 * @return {@code true} if this buffer is direct, {@code false} otherwise.
 	 * @since Android 1.0 */
 	public abstract boolean isDirect ();
 
-	/** Returns the byte order used by this buffer when converting ints from/to bytes.
+	/** Returns the byte order used by this buffer when converting longs from/to bytes.
 	 * <p>
-	 * If this buffer is not based on a byte buffer, then always return the platform's native byte order.
+	 * If this buffer is not based on a byte buffer, then always return the platforms's native byte order.
 	 * </p>
 	 * 
-	 * @return the byte order used by this buffer when converting ints from/to bytes.
+	 * @return the byte order used by this buffer when converting longs from/to bytes.
 	 * @since Android 1.0 */
 	public abstract ByteOrder order ();
 
 	/** Child class implements this method to realize {@code array()}.
 	 * 
 	 * @return see {@code array()} */
-	protected abstract int[] protectedArray ();
+	abstract long[] protectedArray ();
 
 	/** Child class implements this method to realize {@code arrayOffset()}.
 	 * 
 	 * @return see {@code arrayOffset()} */
-	protected abstract int protectedArrayOffset ();
+	abstract int protectedArrayOffset ();
 
 	/** Child class implements this method to realize {@code hasArray()}.
 	 * 
 	 * @return see {@code hasArray()} */
-	protected abstract boolean protectedHasArray ();
+	abstract boolean protectedHasArray ();
 
-	/** Writes the given int to the current position and increases the position by 1.
+	/** Writes the given long to the current position and increases the position by 1.
 	 * 
-	 * @param i the int to write.
+	 * @param l the long to write.
 	 * @return this buffer.
 	 * @exception BufferOverflowException if position is equal or greater than limit.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public abstract IntBuffer put (int i);
+	public abstract LongBuffer put (long l);
 
-	/** Writes ints from the given int array to the current position and increases the position by the number of ints written.
+	/** Writes longs from the given long array to the current position and increases the position by the number of longs written.
 	 * <p>
 	 * Calling this method has the same effect as {@code put(src, 0, src.length)}.
 	 * </p>
 	 * 
-	 * @param src the source int array.
+	 * @param src the source long array.
 	 * @return this buffer.
 	 * @exception BufferOverflowException if {@code remaining()} is less than {@code src.length}.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public final IntBuffer put (int[] src) {
+	public final LongBuffer put (long[] src) {
 		return put(src, 0, src.length);
 	}
 
-	/** Writes ints from the given int array, starting from the specified offset, to the current position and increases the position
-	 * by the number of ints written.
+	/** Writes longs from the given long array, starting from the specified offset, to the current position and increases the
+	 * position by the number of longs written.
 	 * 
-	 * @param src the source int array.
-	 * @param off the offset of int array, must not be negative and not greater than {@code src.length}.
-	 * @param len the number of ints to write, must be no less than zero and not greater than {@code src.length - off}.
+	 * @param src the source long array.
+	 * @param off the offset of long array, must not be negative and not greater than {@code src.length}.
+	 * @param len the number of longs to write, must be no less than zero and not greater than {@code src.length - off}.
 	 * @return this buffer.
 	 * @exception BufferOverflowException if {@code remaining()} is less than {@code len}.
 	 * @exception IndexOutOfBoundsException if either {@code off} or {@code len} is invalid.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public IntBuffer put (int[] src, int off, int len) {
+	public LongBuffer put (long[] src, int off, int len) {
 		int length = src.length;
 		if (off < 0 || len < 0 || (long)len + (long)off > length) {
 			throw new IndexOutOfBoundsException();
@@ -363,37 +366,37 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 		return this;
 	}
 
-	/** Writes all the remaining ints of the {@code src} int buffer to this buffer's current position, and increases both buffers'
-	 * position by the number of ints copied.
+	/** Writes all the remaining longs of the {@code src} long buffer to this buffer's current position, and increases both buffers'
+	 * position by the number of longs copied.
 	 * 
-	 * @param src the source int buffer.
+	 * @param src the source long buffer.
 	 * @return this buffer.
 	 * @exception BufferOverflowException if {@code src.remaining()} is greater than this buffer's {@code remaining()}.
 	 * @exception IllegalArgumentException if {@code src} is this buffer.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public IntBuffer put (IntBuffer src) {
+	public LongBuffer put (LongBuffer src) {
 		if (src == this) {
 			throw new IllegalArgumentException();
 		}
 		if (src.remaining() > remaining()) {
 			throw new BufferOverflowException();
 		}
-		int[] contents = new int[src.remaining()];
+		long[] contents = new long[src.remaining()];
 		src.get(contents);
 		put(contents);
 		return this;
 	}
 
-	/** Write a int to the specified index of this buffer; the position is not changed.
+	/** Writes a long to the specified index of this buffer; the position is not changed.
 	 * 
 	 * @param index the index, must not be negative and less than the limit.
-	 * @param i the int to write.
+	 * @param l the long to write.
 	 * @return this buffer.
 	 * @exception IndexOutOfBoundsException if index is invalid.
 	 * @exception ReadOnlyBufferException if no changes may be made to the contents of this buffer.
 	 * @since Android 1.0 */
-	public abstract IntBuffer put (int index, int i);
+	public abstract LongBuffer put (int index, long l);
 
 	/** Returns a sliced buffer that shares its content with this buffer.
 	 * <p>
@@ -408,11 +411,11 @@ public abstract class IntBuffer extends Buffer implements Comparable<IntBuffer> 
 	 * 
 	 * @return a sliced buffer that shares its content with this buffer.
 	 * @since Android 1.0 */
-	public abstract IntBuffer slice ();
+	public abstract LongBuffer slice ();
 
-	/** Returns a string represents of the state of this int buffer.
+	/** Returns a string representing the state of this long buffer.
 	 * 
-	 * @return a string represents of the state of this int buffer.
+	 * @return a string representing the state of this long buffer.
 	 * @since Android 1.0 */
 	public String toString () {
 		StringBuffer buf = new StringBuffer();

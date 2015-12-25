@@ -40,6 +40,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/gwt/jre/java/lang/System.java</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <plugin>

@@ -17,9 +17,9 @@
 package java.nio;
 
 //import org.apache.harmony.nio.internal.DirectBuffer;
-//import org.apache.harmony.luni.platform.PlatformAddress;
+//import org.apache.harmony.luni.platforms.PlatformAddress;
 
-/** This class wraps a byte buffer to be a char buffer.
+/** This class wraps a byte buffer to be a int buffer.
  * <p>
  * Implementation notice:
  * <ul>
@@ -29,16 +29,17 @@ package java.nio;
  * and limit.</li>
  * </ul>
  * </p> */
-final class CharToByteBufferAdapter extends CharBuffer { // implements DirectBuffer {
+final class IntToByteBufferAdapter extends IntBuffer implements ByteBufferWrapper {
+// implements DirectBuffer {
 
-	static CharBuffer wrap (ByteBuffer byteBuffer) {
-		return new CharToByteBufferAdapter(byteBuffer.slice());
+	static IntBuffer wrap (ByteBuffer byteBuffer) {
+		return new IntToByteBufferAdapter(byteBuffer.slice());
 	}
 
 	private final ByteBuffer byteBuffer;
 
-	CharToByteBufferAdapter (ByteBuffer byteBuffer) {
-		super((byteBuffer.capacity() >> 1));
+	IntToByteBufferAdapter (ByteBuffer byteBuffer) {
+		super((byteBuffer.capacity() >> 2));
 		this.byteBuffer = byteBuffer;
 		this.byteBuffer.clear();
 	}
@@ -92,8 +93,8 @@ final class CharToByteBufferAdapter extends CharBuffer { // implements DirectBuf
 // }
 
 	@Override
-	public CharBuffer asReadOnlyBuffer () {
-		CharToByteBufferAdapter buf = new CharToByteBufferAdapter(byteBuffer.asReadOnlyBuffer());
+	public IntBuffer asReadOnlyBuffer () {
+		IntToByteBufferAdapter buf = new IntToByteBufferAdapter(byteBuffer.asReadOnlyBuffer());
 		buf.limit = limit;
 		buf.position = position;
 		buf.mark = mark;
@@ -101,12 +102,12 @@ final class CharToByteBufferAdapter extends CharBuffer { // implements DirectBuf
 	}
 
 	@Override
-	public CharBuffer compact () {
+	public IntBuffer compact () {
 		if (byteBuffer.isReadOnly()) {
 			throw new ReadOnlyBufferException();
 		}
-		byteBuffer.limit(limit << 1);
-		byteBuffer.position(position << 1);
+		byteBuffer.limit(limit << 2);
+		byteBuffer.position(position << 2);
 		byteBuffer.compact();
 		byteBuffer.clear();
 		position = limit - position;
@@ -116,8 +117,8 @@ final class CharToByteBufferAdapter extends CharBuffer { // implements DirectBuf
 	}
 
 	@Override
-	public CharBuffer duplicate () {
-		CharToByteBufferAdapter buf = new CharToByteBufferAdapter(byteBuffer.duplicate());
+	public IntBuffer duplicate () {
+		IntToByteBufferAdapter buf = new IntToByteBufferAdapter(byteBuffer.duplicate());
 		buf.limit = limit;
 		buf.position = position;
 		buf.mark = mark;
@@ -125,19 +126,19 @@ final class CharToByteBufferAdapter extends CharBuffer { // implements DirectBuf
 	}
 
 	@Override
-	public char get () {
+	public int get () {
 		if (position == limit) {
 			throw new BufferUnderflowException();
 		}
-		return byteBuffer.getChar(position++ << 1);
+		return byteBuffer.getInt(position++ << 2);
 	}
 
 	@Override
-	public char get (int index) {
+	public int get (int index) {
 		if (index < 0 || index >= limit) {
 			throw new IndexOutOfBoundsException();
 		}
-		return byteBuffer.getChar(index << 1);
+		return byteBuffer.getInt(index << 2);
 	}
 
 	@Override
@@ -156,7 +157,7 @@ final class CharToByteBufferAdapter extends CharBuffer { // implements DirectBuf
 	}
 
 	@Override
-	protected char[] protectedArray () {
+	protected int[] protectedArray () {
 		throw new UnsupportedOperationException();
 	}
 
@@ -171,41 +172,34 @@ final class CharToByteBufferAdapter extends CharBuffer { // implements DirectBuf
 	}
 
 	@Override
-	public CharBuffer put (char c) {
+	public IntBuffer put (int c) {
 		if (position == limit) {
 			throw new BufferOverflowException();
 		}
-		byteBuffer.putChar(position++ << 1, c);
+		byteBuffer.putInt(position++ << 2, c);
 		return this;
 	}
 
 	@Override
-	public CharBuffer put (int index, char c) {
+	public IntBuffer put (int index, int c) {
 		if (index < 0 || index >= limit) {
 			throw new IndexOutOfBoundsException();
 		}
-		byteBuffer.putChar(index << 1, c);
+		byteBuffer.putInt(index << 2, c);
 		return this;
 	}
 
 	@Override
-	public CharBuffer slice () {
-		byteBuffer.limit(limit << 1);
-		byteBuffer.position(position << 1);
-		CharBuffer result = new CharToByteBufferAdapter(byteBuffer.slice());
+	public IntBuffer slice () {
+		byteBuffer.limit(limit << 2);
+		byteBuffer.position(position << 2);
+		IntBuffer result = new IntToByteBufferAdapter(byteBuffer.slice());
 		byteBuffer.clear();
 		return result;
 	}
 
-	@Override
-	public CharSequence subSequence (int start, int end) {
-		if (start < 0 || end < start || end > remaining()) {
-			throw new IndexOutOfBoundsException();
-		}
-
-		CharBuffer result = duplicate();
-		result.limit(position + end);
-		result.position(position + start);
-		return result;
+	public ByteBuffer getByteBuffer () {
+		return byteBuffer;
 	}
+
 }

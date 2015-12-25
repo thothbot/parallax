@@ -28,7 +28,7 @@ import java.io.*;
  * 
  * Because some of the file types are backed by composite files and may be compressed (for example, if they are in an Android .apk
  * or are found via the classpath), the methods for extracting a {@link #path()} or {@link #file()} may not be appropriate for all
- * types. Use the Reader or Stream methods here to hide these dependencies from your platform independent code.
+ * types. Use the Reader or Stream methods here to hide these dependencies from your platforms independent code.
  * 
  * @author mzechner
  * @author Nathan Sweet */
@@ -39,8 +39,8 @@ public class FileHandle {
 	protected FileHandle () {
 	}
 
-	/** Creates a new absolute FileHandle for the file name. Use this for tools on the desktop that don't need any of the platform.
-	 * Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
+	/** Creates a new absolute FileHandle for the file name. Use this for tools on the desktop that don't need any of the platforms.
+	 * Do not use this constructor in case you write something cross-platforms. Use the {@link Files} interface instead.
 	 * @param fileName the filename. */
 	public FileHandle (String fileName) {
 		this.file = new File(fileName);
@@ -48,7 +48,7 @@ public class FileHandle {
 	}
 
 	/** Creates a new absolute FileHandle for the {@link File}. Use this for tools on the desktop that don't need any of the
-	 * platform. Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
+	 * platforms. Do not use this constructor in case you write something cross-platforms. Use the {@link Files} interface instead.
 	 * @param file the file. */
 	public FileHandle (File file) {
 		this.file = file;
@@ -168,7 +168,7 @@ public class FileHandle {
 		}
 	}
 
-	/** Reads the entire file into a string using the platform's default charset.
+	/** Reads the entire file into a string using the platforms's default charset.
 	 * @throws ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
 	public String readString () {
 		return readString(null);

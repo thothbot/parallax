@@ -17,7 +17,7 @@
 package java.nio;
 
 //import org.apache.harmony.nio.internal.DirectBuffer;
-//import org.apache.harmony.luni.platform.PlatformAddress;
+//import org.apache.harmony.luni.platforms.PlatformAddress;
 
 /** This class wraps a byte buffer to be a float buffer.
  * <p>

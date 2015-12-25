@@ -17,9 +17,9 @@
 package java.nio;
 
 //import org.apache.harmony.nio.internal.DirectBuffer;
-//import org.apache.harmony.luni.platform.PlatformAddress;
+//import org.apache.harmony.luni.platforms.PlatformAddress;
 
-/** This class wraps a byte buffer to be a short buffer.
+/** This class wraps a byte buffer to be a long buffer.
  * <p>
  * Implementation notice:
  * <ul>
@@ -29,17 +29,16 @@ package java.nio;
  * and limit.</li>
  * </ul>
  * </p> */
-final class ShortToByteBufferAdapter extends ShortBuffer implements ByteBufferWrapper {
-// implements DirectBuffer {
+final class LongToByteBufferAdapter extends LongBuffer {// implements DirectBuffer {
 
-	static ShortBuffer wrap (ByteBuffer byteBuffer) {
-		return new ShortToByteBufferAdapter(byteBuffer.slice());
+	static LongBuffer wrap (ByteBuffer byteBuffer) {
+		return new LongToByteBufferAdapter(byteBuffer.slice());
 	}
 
 	private final ByteBuffer byteBuffer;
 
-	ShortToByteBufferAdapter (ByteBuffer byteBuffer) {
-		super((byteBuffer.capacity() >> 1));
+	LongToByteBufferAdapter (ByteBuffer byteBuffer) {
+		super((byteBuffer.capacity() >> 3));
 		this.byteBuffer = byteBuffer;
 		this.byteBuffer.clear();
 	}
@@ -93,8 +92,8 @@ final class ShortToByteBufferAdapter extends ShortBuffer implements ByteBufferWr
 // }
 
 	@Override
-	public ShortBuffer asReadOnlyBuffer () {
-		ShortToByteBufferAdapter buf = new ShortToByteBufferAdapter(byteBuffer.asReadOnlyBuffer());
+	public LongBuffer asReadOnlyBuffer () {
+		LongToByteBufferAdapter buf = new LongToByteBufferAdapter(byteBuffer.asReadOnlyBuffer());
 		buf.limit = limit;
 		buf.position = position;
 		buf.mark = mark;
@@ -102,12 +101,12 @@ final class ShortToByteBufferAdapter extends ShortBuffer implements ByteBufferWr
 	}
 
 	@Override
-	public ShortBuffer compact () {
+	public LongBuffer compact () {
 		if (byteBuffer.isReadOnly()) {
 			throw new ReadOnlyBufferException();
 		}
-		byteBuffer.limit(limit << 1);
-		byteBuffer.position(position << 1);
+		byteBuffer.limit(limit << 3);
+		byteBuffer.position(position << 3);
 		byteBuffer.compact();
 		byteBuffer.clear();
 		position = limit - position;
@@ -117,8 +116,8 @@ final class ShortToByteBufferAdapter extends ShortBuffer implements ByteBufferWr
 	}
 
 	@Override
-	public ShortBuffer duplicate () {
-		ShortToByteBufferAdapter buf = new ShortToByteBufferAdapter(byteBuffer.duplicate());
+	public LongBuffer duplicate () {
+		LongToByteBufferAdapter buf = new LongToByteBufferAdapter(byteBuffer.duplicate());
 		buf.limit = limit;
 		buf.position = position;
 		buf.mark = mark;
@@ -126,19 +125,19 @@ final class ShortToByteBufferAdapter extends ShortBuffer implements ByteBufferWr
 	}
 
 	@Override
-	public short get () {
+	public long get () {
 		if (position == limit) {
 			throw new BufferUnderflowException();
 		}
-		return byteBuffer.getShort(position++ << 1);
+		return byteBuffer.getLong(position++ << 3);
 	}
 
 	@Override
-	public short get (int index) {
+	public long get (int index) {
 		if (index < 0 || index >= limit) {
 			throw new IndexOutOfBoundsException();
 		}
-		return byteBuffer.getShort(index << 1);
+		return byteBuffer.getLong(index << 3);
 	}
 
 	@Override
@@ -157,7 +156,7 @@ final class ShortToByteBufferAdapter extends ShortBuffer implements ByteBufferWr
 	}
 
 	@Override
-	protected short[] protectedArray () {
+	protected long[] protectedArray () {
 		throw new UnsupportedOperationException();
 	}
 
@@ -172,34 +171,30 @@ final class ShortToByteBufferAdapter extends ShortBuffer implements ByteBufferWr
 	}
 
 	@Override
-	public ShortBuffer put (short c) {
+	public LongBuffer put (long c) {
 		if (position == limit) {
 			throw new BufferOverflowException();
 		}
-		byteBuffer.putShort(position++ << 1, c);
+		byteBuffer.putLong(position++ << 3, c);
 		return this;
 	}
 
 	@Override
-	public ShortBuffer put (int index, short c) {
+	public LongBuffer put (int index, long c) {
 		if (index < 0 || index >= limit) {
 			throw new IndexOutOfBoundsException();
 		}
-		byteBuffer.putShort(index << 1, c);
+		byteBuffer.putLong(index << 3, c);
 		return this;
 	}
 
 	@Override
-	public ShortBuffer slice () {
-		byteBuffer.limit(limit << 1);
-		byteBuffer.position(position << 1);
-		ShortBuffer result = new ShortToByteBufferAdapter(byteBuffer.slice());
+	public LongBuffer slice () {
+		byteBuffer.limit(limit << 3);
+		byteBuffer.position(position << 3);
+		LongBuffer result = new LongToByteBufferAdapter(byteBuffer.slice());
 		byteBuffer.clear();
 		return result;
-	}
-
-	public ByteBuffer getByteBuffer () {
-		return byteBuffer;
 	}
 
 }

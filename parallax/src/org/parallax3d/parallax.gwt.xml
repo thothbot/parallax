@@ -39,6 +39,7 @@
 		<include name="graphics/extras/core/ExtrudeGeometry.java" />
 		<include name="graphics/extras/core/Path.java" />
 		<include name="graphics/extras/core/Shape.java" />
+		<include name="graphics/extras/core/ShapeGeometry.java" />
 		<include name="graphics/extras/curves/ArcCurve.java" />
 		<include name="graphics/extras/curves/CubicBezierCurve.java" />
 		<include name="graphics/extras/curves/CubicBezierCurve3.java" />

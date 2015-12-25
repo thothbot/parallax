@@ -354,7 +354,7 @@ public abstract class CharBuffer extends Buffer implements Comparable<CharBuffer
 
 	/** Returns the byte order used by this buffer when converting chars from/to bytes.
 	 * <p>
-	 * If this buffer is not based on a byte buffer, then this always returns the platform's native byte order.
+	 * If this buffer is not based on a byte buffer, then this always returns the platforms's native byte order.
 	 * </p>
 	 * 
 	 * @return the byte order used by this buffer when converting chars from/to bytes.
