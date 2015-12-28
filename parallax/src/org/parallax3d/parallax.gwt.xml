@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to="org.parallax3d.parallax">
 	<source path="parallax">
+		<include name="Act.java" />
+		<include name="ActAdapter.java" />
 		<include name="Application.java" />
-		<include name="ApplicationAdapter.java" />
-		<include name="ApplicationListener.java" />
-		<include name="LifecycleListener.java" />
+		<include name="Files.java" />
 		<include name="Parallax.java" />
 		<include name="Preferences.java" />
+		<include name="Rendering.java" />
 		<include name="events/ViewportResizeBus.java" />
 		<include name="events/ViewportResizeListener.java" />
 		<include name="files/FileHandle.java" />
 		<include name="files/FileHandleStream.java" />
-		<include name="files/Files.java" />
 		<include name="graphics/cameras/Camera.java" />
 		<include name="graphics/cameras/CubeCamera.java" />
 		<include name="graphics/cameras/HasNearFar.java" />

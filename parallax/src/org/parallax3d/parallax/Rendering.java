@@ -21,14 +21,38 @@ package org.parallax3d.parallax;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GL30;
 
-public class Parallax {
+public interface Rendering {
 
-    public static Application app;
-    public static Rendering rendering;
-    public static Files files;
+    public boolean isGL30Available ();
 
-    public static GL20 gl;
-    public static GL20 gl20;
-    public static GL30 gl30;
+    public GL20 getGL20 ();
 
+    public GL30 getGL30 ();
+
+    public int getWidth ();
+
+    public int getHeight ();
+
+    public long getFrameId ();
+
+    public float getDeltaTime ();
+
+    public float getRawDeltaTime ();
+
+    public int getFramesPerSecond ();
+
+    /** @return the pixels per inch on the x-axis */
+    public float getPpiX ();
+
+    /** @return the pixels per inch on the y-axis */
+    public float getPpiY ();
+
+    /** @param extension the extension name
+     * @return whether the extension is supported */
+    public boolean supportsExtension (String extension);
+
+    public boolean supportsDisplayModeChange ();
+
+    /** Whether the app is fullscreen or not */
+    public boolean isFullscreen ();
 }

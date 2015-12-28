@@ -18,17 +18,18 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.system.gl.GL20;
-import org.parallax3d.parallax.system.gl.GL30;
+public interface Act {
 
-public class Parallax {
+    public void onCreate();
 
-    public static Application app;
-    public static Rendering rendering;
-    public static Files files;
+    public void onResize(int width, int height);
 
-    public static GL20 gl;
-    public static GL20 gl20;
-    public static GL30 gl30;
+    public void onRender();
+
+    public void onPause();
+
+    public void onResume();
+
+    public void onDispose();
 
 }

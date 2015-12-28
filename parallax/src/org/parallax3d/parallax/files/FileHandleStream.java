@@ -17,6 +17,8 @@
 package org.parallax3d.parallax.files;
 
 
+import org.parallax3d.parallax.Files;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;

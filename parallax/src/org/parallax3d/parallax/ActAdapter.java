@@ -18,17 +18,30 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.system.gl.GL20;
-import org.parallax3d.parallax.system.gl.GL30;
+public abstract class ActAdapter implements Act {
 
-public class Parallax {
+    public void onCreate() {
 
-    public static Application app;
-    public static Rendering rendering;
-    public static Files files;
+    }
 
-    public static GL20 gl;
-    public static GL20 gl20;
-    public static GL30 gl30;
+    public void onResize(int width, int height) {
+
+    }
+
+    public void onRender() {
+
+    }
+
+    public void onPause() {
+
+    }
+
+    public void onResume() {
+
+    }
+
+    public void onDispose() {
+
+    }
 
 }
