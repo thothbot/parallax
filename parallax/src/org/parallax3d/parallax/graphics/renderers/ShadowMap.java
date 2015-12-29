@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.shaders.DepthRGBAShader;
 import org.parallax3d.parallax.graphics.cameras.Camera;
@@ -49,7 +49,6 @@ import org.parallax3d.parallax.math.Frustum;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
 
 @ThreeJsObject("THREE.WebGLExtensions")
@@ -158,23 +157,21 @@ public final class ShadowMap extends Plugin
 	{
 		if ( ! ( isEnabled() && isAutoUpdate() ) ) return;
 
-		GL20 gl = getRenderer().getGL();
-
 		// set GL state for depth map
 
-		gl.glClearColor(1, 1, 1, 1);
-		gl.glDisable(EnableCap.BLEND.getValue());
+		App.gl.glClearColor(1, 1, 1, 1);
+		App.gl.glDisable(EnableCap.BLEND.getValue());
 
-		gl.glEnable(EnableCap.CULL_FACE.getValue());
-		gl.glFrontFace(FrontFaceDirection.CCW.getValue());
+		App.gl.glEnable(EnableCap.CULL_FACE.getValue());
+		App.gl.glFrontFace(FrontFaceDirection.CCW.getValue());
 
 		if ( isCullFrontFaces() )
 		{
-			gl.glCullFace(CullFaceMode.FRONT.getValue());
+			App.gl.glCullFace(CullFaceMode.FRONT.getValue());
 		}
 		else
 		{
-			gl.glCullFace(CullFaceMode.BACK.getValue());
+			App.gl.glCullFace(CullFaceMode.BACK.getValue());
 		}
 
 		getRenderer().setDepthTest( true );
@@ -216,7 +213,7 @@ public final class ShadowMap extends Plugin
 
 						shadowCascadeArray.add( n, virtualLight );
 
-						Parallax.app.debug("Shadowmap", "Created virtualLight");
+						App.app.debug("Shadowmap", "Created virtualLight");
 					}
 					else
 					{
@@ -272,7 +269,7 @@ public final class ShadowMap extends Plugin
 				}
 				else
 				{
-					Parallax.app.error("ShadowMap", "Unsupported light class for shadow: " + light.getClass().getName());
+					App.app.error("ShadowMap", "Unsupported light class for shadow: " + light.getClass().getName());
 					continue;
 				}
 
@@ -427,13 +424,13 @@ public final class ShadowMap extends Plugin
 		Color clearColor = getRenderer().getClearColor();
 		double clearAlpha = getRenderer().getClearAlpha();
 
-		gl.glClearColor((float) clearColor.getR(), (float) clearColor.getG(),
+		App.gl.glClearColor((float) clearColor.getR(), (float) clearColor.getG(),
 				(float) clearColor.getB(), (float) clearAlpha);
-		gl.glEnable(EnableCap.BLEND.getValue());
+		App.gl.glEnable(EnableCap.BLEND.getValue());
 
 		if ( isCullFrontFaces() )
 		{
-			gl.glCullFace(CullFaceMode.BACK.getValue());
+			App.gl.glCullFace(CullFaceMode.BACK.getValue());
 		}
 
 		getRenderer().resetGLState();

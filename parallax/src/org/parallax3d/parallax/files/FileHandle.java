@@ -17,7 +17,7 @@
 package org.parallax3d.parallax.files;
 
 import org.parallax3d.parallax.Files;
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.Files.FileType;
 import org.parallax3d.parallax.system.StreamUtils;
@@ -108,7 +108,7 @@ public class FileHandle {
 	/** Returns a java.io.File that represents this file handle. Note the returned file will only be usable for
 	 * {@link FileType#Absolute} and {@link FileType#External} file handles. */
 	public File file () {
-		if (type == FileType.External) return new File(Parallax.files.getExternalStoragePath(), file.getPath());
+		if (type == FileType.External) return new File(App.files.getExternalStoragePath(), file.getPath());
 		return file;
 	}
 

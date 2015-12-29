@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.extras.core;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
@@ -122,7 +122,7 @@ public class ExtrudeGeometry extends Geometry
 
 	public void addShape( Shape shape, ExtrudeGeometryParameters options )
 	{
-		Parallax.app.debug("ExtrudeGeometry", "Called addShape() shape=" + shape);
+		App.app.debug("ExtrudeGeometry", "Called addShape() shape=" + shape);
 
 		List<Vector2> extrudePts = null;
 		boolean extrudeByPath = false;
@@ -443,13 +443,13 @@ public class ExtrudeGeometry extends Geometry
 
 		if ( v_dot_w_hat == 0 )
 		{
-			Parallax.app.debug("ExtrudeGeometry", "getBevelVec2() Either infinite or no solutions!");
+			App.app.debug("ExtrudeGeometry", "getBevelVec2() Either infinite or no solutions!");
 
 			if ( q_sub_p_dot_w_hat == 0 )
-				Parallax.app.debug("ExtrudeGeometry", "getBevelVec2() Its finite solutions.");
+				App.app.debug("ExtrudeGeometry", "getBevelVec2() Its finite solutions.");
 
 			else
-				Parallax.app.error("ExtrudeGeometry", "getBevelVec2() Too bad, no solutions.");
+				App.app.error("ExtrudeGeometry", "getBevelVec2() Too bad, no solutions.");
 		}
 
 		double s = q_sub_p_dot_w_hat / v_dot_w_hat;
@@ -467,7 +467,7 @@ public class ExtrudeGeometry extends Geometry
 	private void buildLidFaces()
 	{
 		int flen = this.localFaces.size();
-		Parallax.app.debug( "ExtrudeGeometry", "buildLidFaces() faces=" + flen);
+		App.app.debug( "ExtrudeGeometry", "buildLidFaces() faces=" + flen);
 
 		if ( this.options.bevelEnabled )
 		{

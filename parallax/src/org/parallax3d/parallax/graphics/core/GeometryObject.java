@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.graphics.materials.Material;
@@ -29,7 +30,6 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 public abstract class GeometryObject extends Object3D
@@ -100,22 +100,22 @@ public abstract class GeometryObject extends Object3D
 
 	public void deleteBuffers(WebGLRenderer renderer)
 	{
-		renderer.getGL().glDeleteBuffer(geometry.__webglVertexBuffer);
-		renderer.getGL().glDeleteBuffer(geometry.__webglColorBuffer);
+		App.gl.glDeleteBuffer(geometry.__webglVertexBuffer);
+		App.gl.glDeleteBuffer(geometry.__webglColorBuffer);
 
 		renderer.getInfo().getMemory().geometries --;
 	}
 
-	public void setLineWidth ( GL20 gl, float width )
+	public void setLineWidth (float width )
 	{
 		if ( width != this._oldLineWidth )
 		{
-			gl.glLineWidth(width);
+			App.gl.glLineWidth(width);
 			this._oldLineWidth = width;
 		}
 	}
 
-	protected void initCustomAttributes (GL20 gl, Geometry geometry )
+	protected void initCustomAttributes (Geometry geometry )
 	{
 		int nvertices = geometry.getVertices().size();
 		Material material = this.getMaterial();
@@ -145,7 +145,7 @@ public abstract class GeometryObject extends Object3D
 
 					attribute.array = Float32Array.create(nvertices * size);
 
-					attribute.buffer = gl.glGenBuffer();
+					attribute.buffer = App.gl.glGenBuffer();
 					attribute.belongsToAttribute = a;
 
 					attribute.needsUpdate = true;

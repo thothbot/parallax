@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.FastMap;
@@ -48,7 +48,6 @@ import org.parallax3d.parallax.graphics.materials.HasWireframe;
 import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
@@ -419,18 +418,17 @@ public class Mesh extends GeometryObject
 	@Override
 	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryGroup, boolean updateBuffers)
 	{
-		GL20 gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 
 		// wireframe
 		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() )
 		{
-			setLineWidth( gl, ((HasWireframe)getMaterial()).getWireframeLineWidth() );
+			setLineWidth( ((HasWireframe)getMaterial()).getWireframeLineWidth() );
 
 			if ( updateBuffers )
-				gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer);
+				App.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer);
 
-			gl.glDrawElements(BeginMode.LINES.getValue(), geometryGroup.__webglLineCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
+			App.gl.glDrawElements(BeginMode.LINES.getValue(), geometryGroup.__webglLineCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
 
 			// triangles
 
@@ -438,9 +436,9 @@ public class Mesh extends GeometryObject
 		else
 		{
 			if ( updateBuffers )
-				gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer);
+				App.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer);
 
-			gl.glDrawElements(BeginMode.TRIANGLES.getValue(), geometryGroup.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
+			App.gl.glDrawElements(BeginMode.TRIANGLES.getValue(), geometryGroup.__webglFaceCount, DrawElementsType.UNSIGNED_SHORT.getValue(), 0);
 		}
 
 		info.getRender().calls ++;
@@ -492,7 +490,7 @@ public class Mesh extends GeometryObject
 //	}
 //
 	// initMeshBuffers
-	public void initBuffers(GL20 gl, GeometryGroup geometryGroup)
+	public void initBuffers(GeometryGroup geometryGroup)
 	{
 		Geometry geometry = (Geometry) this.getGeometry();
 
@@ -602,7 +600,7 @@ public class Mesh extends GeometryObject
 
 					attribute.array = Float32Array.create(nvertices * size);
 
-					attribute.buffer = gl.glGenBuffer();
+					attribute.buffer = App.gl.glGenBuffer();
 					attribute.belongsToAttribute = a;
 
 					originalAttribute.needsUpdate = true;
@@ -619,27 +617,26 @@ public class Mesh extends GeometryObject
 	// createMeshBuffers
 	public void createBuffers(WebGLRenderer renderer, GeometryGroup geometryGroup)
 	{
-		GL20 gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 
-		geometryGroup.__webglVertexBuffer = gl.glGenBuffer();
-		geometryGroup.__webglNormalBuffer = gl.glGenBuffer();
-		geometryGroup.__webglTangentBuffer = gl.glGenBuffer();
-		geometryGroup.__webglColorBuffer = gl.glGenBuffer();
-		geometryGroup.__webglUVBuffer = gl.glGenBuffer();
-		geometryGroup.__webglUV2Buffer = gl.glGenBuffer();
+		geometryGroup.__webglVertexBuffer = App.gl.glGenBuffer();
+		geometryGroup.__webglNormalBuffer = App.gl.glGenBuffer();
+		geometryGroup.__webglTangentBuffer = App.gl.glGenBuffer();
+		geometryGroup.__webglColorBuffer = App.gl.glGenBuffer();
+		geometryGroup.__webglUVBuffer = App.gl.glGenBuffer();
+		geometryGroup.__webglUV2Buffer = App.gl.glGenBuffer();
 
-		geometryGroup.__webglSkinIndicesBuffer = gl.glGenBuffer();
-		geometryGroup.__webglSkinWeightsBuffer = gl.glGenBuffer();
+		geometryGroup.__webglSkinIndicesBuffer = App.gl.glGenBuffer();
+		geometryGroup.__webglSkinWeightsBuffer = App.gl.glGenBuffer();
 
-		geometryGroup.__webglFaceBuffer = gl.glGenBuffer();
-		geometryGroup.__webglLineBuffer = gl.glGenBuffer();
+		geometryGroup.__webglFaceBuffer = App.gl.glGenBuffer();
+		geometryGroup.__webglLineBuffer = App.gl.glGenBuffer();
 
 		if (geometryGroup.getNumMorphTargets() != 0) {
 			geometryGroup.__webglMorphTargetsBuffers = new ArrayList<Integer>();
 
 			for (int m = 0; m < geometryGroup.getNumMorphTargets(); m++) {
-				geometryGroup.__webglMorphTargetsBuffers.add(gl.glGenBuffer());
+				geometryGroup.__webglMorphTargetsBuffers.add(App.gl.glGenBuffer());
 			}
 		}
 
@@ -647,7 +644,7 @@ public class Mesh extends GeometryObject
 			geometryGroup.__webglMorphNormalsBuffers = new ArrayList<Integer>();
 
 			for (int m = 0; m < geometryGroup.getNumMorphNormals(); m++) {
-				geometryGroup.__webglMorphNormalsBuffers.add(gl.glGenBuffer());
+				geometryGroup.__webglMorphNormalsBuffers.add(App.gl.glGenBuffer());
 			}
 		}
 
@@ -710,7 +707,7 @@ public class Mesh extends GeometryObject
 //	}
 
 	// setMeshBuffers
-	public void setBuffers(GL20 gl, GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
+	public void setBuffers(GeometryGroup geometryGroup, BufferUsage hint, boolean dispose, Material material)
 	{
 		//Log.debug("Called Mesh.setBuffers() - material=" + material.getId() + ", " + material.getClass().getName());
 
@@ -805,8 +802,8 @@ public class Mesh extends GeometryObject
 				 offset += 9;
 			 }
 
-			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglVertexBuffer);
-			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getBuffer(), hint.getValue() );
+			 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglVertexBuffer);
+			 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getBuffer(), hint.getValue() );
 		}
 
 		if ( dirtyMorphTargets )
@@ -882,13 +879,13 @@ public class Mesh extends GeometryObject
 
 				}
 
-				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get(vk));
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphTargetsArrays.get(vk).getByteLength(), morphTargetsArrays.get( vk ).getBuffer(), hint.getValue() );
+				 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphTargetsBuffers.get(vk));
+				 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphTargetsArrays.get(vk).getByteLength(), morphTargetsArrays.get( vk ).getBuffer(), hint.getValue() );
 
 				 if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() )
 				 {
-					 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get(vk));
-					 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphNormalsArrays.get(vk).getByteLength(), morphNormalsArrays.get( vk ).getBuffer(), hint.getValue() );
+					 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglMorphNormalsBuffers.get(vk));
+					 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), morphNormalsArrays.get(vk).getByteLength(), morphNormalsArrays.get( vk ).getBuffer(), hint.getValue() );
 				 }
 			 }
 		}
@@ -947,11 +944,11 @@ public class Mesh extends GeometryObject
 
 			 if ( offset_skin > 0 )
 			 {
-				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinIndicesBuffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinIndexArray.getByteLength(), skinIndexArray.getBuffer(), hint.getValue());
+				 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinIndicesBuffer);
+				 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinIndexArray.getByteLength(), skinIndexArray.getBuffer(), hint.getValue());
 
-				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinWeightsBuffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinWeightArray.getByteLength(), skinWeightArray.getBuffer(), hint.getValue() );
+				 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglSkinWeightsBuffer);
+				 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), skinWeightArray.getByteLength(), skinWeightArray.getBuffer(), hint.getValue() );
 			 }
 		 }
 
@@ -996,8 +993,8 @@ public class Mesh extends GeometryObject
 
 			 if ( offset_color > 0 )
 			 {
-				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglColorBuffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(),  colorArray.getBuffer(), hint.getValue() );
+				 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglColorBuffer);
+				 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(),  colorArray.getBuffer(), hint.getValue() );
 			 }
 		 }
 
@@ -1033,8 +1030,8 @@ public class Mesh extends GeometryObject
 
 			}
 
-			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglTangentBuffer);
-			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), tangentArray.getByteLength(), tangentArray.getBuffer(), hint.getValue() );
+			 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglTangentBuffer);
+			 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), tangentArray.getByteLength(), tangentArray.getBuffer(), hint.getValue() );
 
 		}
 
@@ -1079,8 +1076,8 @@ public class Mesh extends GeometryObject
 				}
 			}
 
-			 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglNormalBuffer);
-			 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), normalArray.getByteLength(),  normalArray.getBuffer(), hint.getValue() );
+			 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglNormalBuffer);
+			 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), normalArray.getByteLength(),  normalArray.getBuffer(), hint.getValue() );
 
 		}
 
@@ -1110,8 +1107,8 @@ public class Mesh extends GeometryObject
 
 			 if ( offset_uv > 0 )
 			 {
-				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglUVBuffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uvArray.getByteLength(), uvArray.getBuffer(), hint.getValue() );
+				 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglUVBuffer);
+				 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uvArray.getByteLength(), uvArray.getBuffer(), hint.getValue() );
 			 }
 		 }
 
@@ -1139,8 +1136,8 @@ public class Mesh extends GeometryObject
 
 			 if ( offset_uv2 > 0 )
 			 {
-				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglUV2Buffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uv2Array.getByteLength(), uv2Array.getBuffer(), hint.getValue() );
+				 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryGroup.__webglUV2Buffer);
+				 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), uv2Array.getByteLength(), uv2Array.getBuffer(), hint.getValue() );
 			 }
 		 }
 
@@ -1168,11 +1165,11 @@ public class Mesh extends GeometryObject
 				 vertexIndex += 3;
 			 }
 
-			 gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer);
-			 gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), faceArray.getByteLength(), faceArray.getBuffer(), hint.getValue());
+			 App.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglFaceBuffer);
+			 App.gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), faceArray.getByteLength(), faceArray.getBuffer(), hint.getValue());
 
-			 gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer);
-			 gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lineArray.getByteLength(), lineArray.getBuffer(), hint.getValue() );
+			 App.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), geometryGroup.__webglLineBuffer);
+			 App.gl.glBufferData(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lineArray.getByteLength(), lineArray.getBuffer(), hint.getValue() );
 
 		}
 
@@ -1509,8 +1506,8 @@ public class Mesh extends GeometryObject
 					}
 				}
 
-				 gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-				 gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue() );
+				 App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
+				 App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue() );
 			 }
 		 }
 

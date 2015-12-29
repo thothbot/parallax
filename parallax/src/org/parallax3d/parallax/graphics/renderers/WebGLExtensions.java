@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 
@@ -37,9 +37,9 @@ public final class WebGLExtensions {
 		EXT_frag_depth
 	};
 
-	public static boolean get(GL20 gl, Id id) {
+	public static boolean get(Id id) {
 		
-		String[] extensions = gl.glGetString(GL20.GL_EXTENSIONS).split(" ");
+		String[] extensions = App.gl.glGetString(GL20.GL_EXTENSIONS).split(" ");
 
 		boolean retval = false;
 		for(int i = 0, len = extensions.length; i < len; i++)
@@ -53,7 +53,7 @@ public final class WebGLExtensions {
 
 		if ( retval == false ) {
 
-			Parallax.app.error("WebGLRenderer", id.toString() + " extension not supported.");
+			App.app.error("WebGLRenderer", id.toString() + " extension not supported.");
 
 		}
 		

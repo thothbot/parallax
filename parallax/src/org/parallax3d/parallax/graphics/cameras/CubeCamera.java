@@ -24,7 +24,6 @@ import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.scenes.Scene;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;

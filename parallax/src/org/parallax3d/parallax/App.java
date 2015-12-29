@@ -18,9 +18,18 @@
 
 package org.parallax3d.parallax;
 
+import org.parallax3d.parallax.system.gl.GL20;
+
 import java.awt.event.ActionListener;
 
-public interface Application {
+public abstract class App {
+
+    public static App app;
+    public static Rendering rendering;
+    public static Files files;
+
+    public static GL20 gl;
+    public static GL20 gl20;
 
     public enum ApplicationType {
         Android, Desktop, WebGL
@@ -31,26 +40,26 @@ public interface Application {
     public static final int LOG_INFO = 2;
     public static final int LOG_ERROR = 1;
 
-    public Files getFiles ();
+    public abstract Files getFiles ();
 
-    public Rendering getRendering ();
+    public abstract Rendering getRendering ();
 
-    public void log (String tag, String message);
-    public void log (String tag, String message, Throwable exception);
+    public abstract void log (String tag, String message);
+    public abstract void log (String tag, String message, Throwable exception);
 
-    public void error (String tag, String message);
-    public void error (String tag, String message, Throwable exception);
+    public abstract void error (String tag, String message);
+    public abstract void error (String tag, String message, Throwable exception);
 
-    public void debug (String tag, String message);
-    public void debug (String tag, String message, Throwable exception);
+    public abstract void debug (String tag, String message);
+    public abstract void debug (String tag, String message, Throwable exception);
 
-    public void setLogLevel (int logLevel);
-    public int getLogLevel ();
+    public abstract void setLogLevel (int logLevel);
+    public abstract int getLogLevel ();
 
-    public ApplicationType getType ();
+    public abstract ApplicationType getType ();
 
-    public Preferences getPreferences (String name);
+    public abstract Preferences getPreferences (String name);
 
-    public void exit ();
+    public abstract void exit ();
 }
 

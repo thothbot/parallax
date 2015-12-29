@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 
 /**
  * CubeGeometry map shader.
@@ -35,8 +35,8 @@ public final class CubeShader extends Shader
 {
 	public CubeShader()
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/cube.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/cube.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/cube.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/cube.fs").readString());
 	}
 
 	@Override

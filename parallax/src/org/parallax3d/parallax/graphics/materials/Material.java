@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
@@ -36,7 +36,6 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
@@ -437,7 +436,7 @@ public abstract class Material
 	{
 		if(shader == null)
 		{
-			Parallax.app.debug("Material.getShader()", "Called");
+			App.app.debug("Material.getShader()", "Called");
 
 			this.shader = getAssociatedShader();
 		}
@@ -514,7 +513,7 @@ public abstract class Material
 		parameters.flipSided = this.getSides() == Material.SIDE.BACK;
 	}
 
-	public Shader buildShader(GL20 gl, ProgramParameters parameters)
+	public Shader buildShader(ProgramParameters parameters)
 	{
 		Shader shader = getShader();
 
@@ -526,7 +525,7 @@ public abstract class Material
 		shader.setVertexSource(getPrefixVertex(parameters) + "\n" + shader.getVertexSource());
 		shader.setFragmentSource(getPrefixFragment(parameters) + "\n" + shader.getFragmentSource());
 
-		this.shader = shader.buildProgram(gl, parameters.useVertexTexture, parameters.maxMorphTargets, parameters.maxMorphNormals);
+		this.shader = shader.buildProgram(parameters.useVertexTexture, parameters.maxMorphTargets, parameters.maxMorphNormals);
 
 		return this.shader;
 	}
@@ -538,7 +537,7 @@ public abstract class Material
 
 	private String getPrefixVertex(ProgramParameters parameters)
 	{
-		Parallax.app.debug("Shader.getPrefixVertex()", "Called");
+		App.app.debug("Shader.getPrefixVertex()", "Called");
 		List<String> options = new ArrayList<String>();
 
 		options.add("");
@@ -946,7 +945,7 @@ public abstract class Material
 		if ( deleteProgram == true )
 		{
 
-			renderer.getGL().glDeleteProgram(program);
+			App.gl.glDeleteProgram(program);
 
 			renderer.getInfo().getMemory().programs --;
 		}

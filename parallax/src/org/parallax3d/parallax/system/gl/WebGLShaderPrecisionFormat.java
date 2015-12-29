@@ -19,6 +19,7 @@
 
 package org.parallax3d.parallax.system.gl;
 
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.gl.arrays.Int16Array;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.arrays.Int8Array;
@@ -29,8 +30,8 @@ public final class WebGLShaderPrecisionFormat {
 
 	Int32Array precision = Int32Array.create(3);
 
-	public WebGLShaderPrecisionFormat(GL20 gl, Shaders shaderType, ShaderPrecisionSpecifiedTypes precisionType) {
-		gl.glGetShaderPrecisionFormat(shaderType.getValue(), precisionType.getValue(), precision.getBuffer().asIntBuffer(), precision.getBuffer().asIntBuffer());
+	public WebGLShaderPrecisionFormat(Shaders shaderType, ShaderPrecisionSpecifiedTypes precisionType) {
+		App.gl.glGetShaderPrecisionFormat(shaderType.getValue(), precisionType.getValue(), precision.getBuffer().asIntBuffer(), precision.getBuffer().asIntBuffer());
 	}
 	
 	public int getRangeMin() {

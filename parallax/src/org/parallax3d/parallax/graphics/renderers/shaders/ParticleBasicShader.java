@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 
 /**
  * Simple Particle shader.
@@ -36,8 +36,8 @@ public final class ParticleBasicShader extends Shader
 
 	public ParticleBasicShader() 
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/particle_basic.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/particle_basic.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/particle_basic.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/particle_basic.fs").readString());
 	}
 
 	@Override

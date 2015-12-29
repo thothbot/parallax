@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 
 /**
  * Basic shader.
@@ -35,8 +35,8 @@ public final class BasicShader extends Shader
 {
 	public BasicShader()
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/basic.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/basic.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/basic.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/basic.fs").readString());
 	}
 
 	@Override

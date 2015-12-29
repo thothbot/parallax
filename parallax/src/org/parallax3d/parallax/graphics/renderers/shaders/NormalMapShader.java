@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
@@ -41,8 +41,8 @@ public final class NormalMapShader extends Shader
 {
 	public NormalMapShader()
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normalmap.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normalmap.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normalmap.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normalmap.fs").readString());
 	}
 	
 	@Override

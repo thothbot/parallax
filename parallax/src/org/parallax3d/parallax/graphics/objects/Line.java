@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.objects;
 
 import java.util.List;
 
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
@@ -37,7 +38,6 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
 import org.parallax3d.parallax.system.gl.enums.BufferTarget;
@@ -189,16 +189,15 @@ public class Line extends GeometryObject
 	@Override
 	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers)
 	{
-		GL20 gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 
 		BeginMode primitives = ( this.getType() == MODE.STRIPS)
 				? BeginMode.LINE_STRIP
 				: BeginMode.LINES;
 
-		setLineWidth( gl, ((LineBasicMaterial)getMaterial()).getLinewidth() );
+		setLineWidth(((LineBasicMaterial)getMaterial()).getLinewidth() );
 
-		gl.glDrawArrays(primitives.getValue(), 0, geometryBuffer.__webglLineCount);
+		App.gl.glDrawArrays(primitives.getValue(), 0, geometryBuffer.__webglLineCount);
 
 		info.getRender().calls ++;
 	}
@@ -222,17 +221,16 @@ public class Line extends GeometryObject
 	{
 		Geometry geometry = (Geometry)getGeometry();
 
-		GL20 gl = renderer.getGL();
 		WebGlRendererInfo info = renderer.getInfo();
 
-		geometry.__webglVertexBuffer = gl.glGenBuffer();
-		geometry.__webglColorBuffer = gl.glGenBuffer();
-		geometry.__webglLineDistanceBuffer = gl.glGenBuffer();
+		geometry.__webglVertexBuffer = App.gl.glGenBuffer();
+		geometry.__webglColorBuffer = App.gl.glGenBuffer();
+		geometry.__webglLineDistanceBuffer = App.gl.glGenBuffer();
 
 		info.getMemory().geometries ++;
 	}
 
-	public void initBuffers (GL20 gl)
+	public void initBuffers ()
 	{
 		Geometry geometry = (Geometry)getGeometry();
 
@@ -244,7 +242,7 @@ public class Line extends GeometryObject
 
 		geometry.__webglLineCount = nvertices;
 
-		initCustomAttributes ( gl, geometry );
+		initCustomAttributes ( geometry );
 	}
 
 //	@Override
@@ -269,7 +267,7 @@ public class Line extends GeometryObject
 //	}
 
 	// setLineBuffers
-	public void setBuffers(GL20 gl, BufferUsage hint)
+	public void setBuffers(BufferUsage hint)
 	{
 		Geometry geometry = (Geometry)this.getGeometry();
 
@@ -302,8 +300,8 @@ public class Line extends GeometryObject
 				vertexArray.set(offset + 2, vertex.getZ());
 			}
 
-			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
-			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getBuffer(), hint.getValue());
+			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+			App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getBuffer(), hint.getValue());
 		}
 
 		if (dirtyColors)
@@ -318,8 +316,8 @@ public class Line extends GeometryObject
 				colorArray.set(offset + 2, color.getB());
 			}
 
-			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getBuffer(), hint.getValue());
+			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
+			App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getBuffer(), hint.getValue());
 		}
 
 		if ( dirtyLineDistances ) {
@@ -330,8 +328,8 @@ public class Line extends GeometryObject
 
 			}
 
-			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglLineDistanceBuffer );
-			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), lineDistanceArray.getByteLength(), lineDistanceArray.getBuffer(), hint.getValue() );
+			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglLineDistanceBuffer );
+			App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), lineDistanceArray.getByteLength(), lineDistanceArray.getBuffer(), hint.getValue() );
 
 		}
 
@@ -415,8 +413,8 @@ public class Line extends GeometryObject
 						}
 					}
 
-					gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-					gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue());
+					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
+					App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue());
 				}
 			}
 		}

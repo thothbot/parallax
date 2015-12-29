@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.system.gl.enums;
 
 import org.parallax3d.parallax.system.gl.GL20;
-import org.parallax3d.parallax.system.gl.GL30;
 
 public enum PixelStoreParameter implements GLEnum
 {

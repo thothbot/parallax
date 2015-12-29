@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
@@ -188,7 +188,7 @@ public class Matrix3
 
 		if (det == 0)
 		{
-			Parallax.app.error("Matrix3.invert()", "determinant == 0");
+			App.app.error("Matrix3.invert()", "determinant == 0");
 			this.identity();
 		}
 		else

@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 
 /**
  * Depth encoding into RGBA texture.
@@ -37,8 +37,8 @@ public final class DepthRGBAShader extends Shader
 
 	public DepthRGBAShader() 
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depthRGBA.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depthRGBA.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depthRGBA.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depthRGBA.fs").readString());
 	}
 
 	@Override

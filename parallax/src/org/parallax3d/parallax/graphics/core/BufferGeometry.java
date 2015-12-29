@@ -18,12 +18,11 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.IndexTypeArray;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
@@ -582,7 +581,7 @@ public class BufferGeometry extends AbstractGeometry
 				getAttribute("normal") == null ||
 				getAttribute("uv") == null ) {
 
-			Parallax.app.error("BufferGeometry", "Missing required attributes (index, position, normal or uv) in BufferGeometry.computeTangents()");
+			App.app.error("BufferGeometry", "Missing required attributes (index, position, normal or uv) in BufferGeometry.computeTangents()");
 			return;
 
 		}
@@ -959,7 +958,8 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 
-	public void setDirectBuffers(GL20 gl) {
+	public void setDirectBuffers()
+	{
 
 		for ( int i = 0, l = this.attributesKeys.size(); i < l; i ++ ) {
 
@@ -968,7 +968,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			if ( attribute.getBuffer() == null ) {
 
-				attribute.setBuffer(gl.glGenBuffer());
+				attribute.setBuffer(App.gl.glGenBuffer());
 				attribute.setNeedsUpdate(true);
 
 			}
@@ -979,8 +979,8 @@ public class BufferGeometry extends AbstractGeometry
 				ByteBuffer buf = attribute.getArray().getBuffer();
 				buf.rewind();
 
-				gl.glBindBuffer(bufferType.getValue(), attribute.getBuffer());
-				gl.glBufferData(bufferType.getValue(), buf.limit(), buf, BufferUsage.STATIC_DRAW.getValue() );
+				App.gl.glBindBuffer(bufferType.getValue(), attribute.getBuffer());
+				App.gl.glBufferData(bufferType.getValue(), buf.limit(), buf, BufferUsage.STATIC_DRAW.getValue() );
 
 				attribute.setNeedsUpdate(false);
 

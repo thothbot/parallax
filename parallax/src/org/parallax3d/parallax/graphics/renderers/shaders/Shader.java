@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
@@ -33,9 +33,9 @@ import org.parallax3d.parallax.system.gl.enums.ProgramParameter;
 
 /**
  * Basic abstract shader.
- * 
+ *
  * @author thothbot
- * 
+ *
  */
 public abstract class Shader
 {
@@ -81,8 +81,8 @@ public abstract class Shader
 	 */
 	public Shader()
 	{
-		this(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.fs").readString());
+		this(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.fs").readString());
 	}
 
 	public Shader(String vertexShader, String fragmentShader)
@@ -118,16 +118,16 @@ public abstract class Shader
 	}
 
 	// Called in renderer org.parallax3d.plugins
-	public Shader buildProgram(GL20 gl)
+	public Shader buildProgram()
 	{
-		return buildProgram(gl, false, 0, 0);
+		return buildProgram(false, 0, 0);
 	}
 
-	public Shader buildProgram(GL20 gl, boolean useVertexTexture, int maxMorphTargets, int maxMorphNormals)
+	public Shader buildProgram(boolean useVertexTexture, int maxMorphTargets, int maxMorphNormals)
 	{
-		Parallax.app.debug("Shader", "Building new program...");
+		App.app.debug("Shader", "Building new program...");
 
-		initShaderProgram(gl);
+		initShaderProgram();
 
 		// Adds default uniforms
 		addUniform("viewMatrix",            new Uniform(Uniform.TYPE.FV1 ));
@@ -154,7 +154,7 @@ public abstract class Shader
 		// Cache location
 		FastMap<Uniform> uniforms = getUniforms();
 		for (String id : uniforms.keySet())
-			uniforms.get(id).setLocation( gl.glGetUniformLocation(this.program, id) );
+			uniforms.get(id).setLocation( App.gl.glGetUniformLocation(this.program, id) );
 
 		// cache attributes locations
 		List<String> attributesIds = new ArrayList<String>(Arrays.asList("position", "normal",
@@ -173,7 +173,7 @@ public abstract class Shader
 
 		FastMap<Integer> attributesLocations = getAttributesLocations();
 		for (String id : attributesIds)
-			attributesLocations.put(id, gl.glGetAttribLocation(this.program, id));
+			attributesLocations.put(id, App.gl.glGetAttribLocation(this.program, id));
 
 		return this;
 	}
@@ -184,21 +184,21 @@ public abstract class Shader
 	 * shader source. This should be called within GL to ensure
 	 * that the shader is correctly initialized.
 	 */
-	private void initShaderProgram(GL20 gl)
+	private void initShaderProgram()
 	{
-		Parallax.app.debug("Shader", "Called initProgram()");
+		App.app.debug("Shader", "Called initProgram()");
 
-		this.program = gl.glCreateProgram();
+		this.program = App.gl.glCreateProgram();
 
 		String vertex = vertexExtensions + getShaderPrecisionDefinition() + "\n" + getVertexSource();
 		String fragment = fragmentExtensions + getShaderPrecisionDefinition() + "\n" + getFragmentSource();
 
-		int glVertexShader = getShaderProgram(gl, ChunksVertexShader.class, vertex);
-		int glFragmentShader = getShaderProgram(gl, ChunksFragmentShader.class, fragment);
-		gl.glAttachShader(this.program, glVertexShader);
-		gl.glAttachShader(this.program, glFragmentShader);
+		int glVertexShader = getShaderProgram(ChunksVertexShader.class, vertex);
+		int glFragmentShader = getShaderProgram(ChunksFragmentShader.class, fragment);
+		App.gl.glAttachShader(this.program, glVertexShader);
+		App.gl.glAttachShader(this.program, glFragmentShader);
 
-		gl.glLinkProgram(this.program);
+		App.gl.glLinkProgram(this.program);
 
 //		if (!gl.getProgramParameterb(this.program, ProgramParameter.LINK_STATUS))
 //			Log.error("Could not initialise shader\n"
@@ -209,11 +209,11 @@ public abstract class Shader
 //			);
 //
 //		else
-			Parallax.app.debug("Shader", "initProgram(): shaders has been initialised");
+			App.app.debug("Shader", "initProgram(): shaders has been initialised");
 
 		// clean up
-		gl.glDeleteShader(glVertexShader);
-		gl.glDeleteShader(glFragmentShader);
+		App.gl.glDeleteShader(glVertexShader);
+		App.gl.glDeleteShader(glFragmentShader);
 	}
 
 	public void setPrecision(Shader.PRECISION precision) {
@@ -227,23 +227,23 @@ public abstract class Shader
 	/**
 	 * Gets the shader.
 	 */
-	private int getShaderProgram(GL20 gl, Class<?> type, String string)
+	private int getShaderProgram(Class<?> type, String string)
 	{
-		Parallax.app.debug("Shader", "Called getShaderProgram() for type " + type.getName());
+		App.app.debug("Shader", "Called getShaderProgram() for type " + type.getName());
 		Integer shader = null;
 
 		if (type == ChunksFragmentShader.class)
-			shader = gl.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+			shader = App.gl.glCreateShader(GL20.GL_FRAGMENT_SHADER);
 
 		else if (type == ChunksVertexShader.class)
-			shader = gl.glCreateShader(GL20.GL_VERTEX_SHADER);
+			shader = App.gl.glCreateShader(GL20.GL_VERTEX_SHADER);
 
-		gl.glShaderSource(shader, string);
-		gl.glCompileShader(shader);
+		App.gl.glShaderSource(shader, string);
+		App.gl.glCompileShader(shader);
 
-//		if (!gl.glGetShaderParameterb(shader, GL20.GL_COMPILE_STATUS))
+//		if (!App.gl.glGetShaderParameterb(shader, GL20.GL_COMPILE_STATUS))
 //		{
-//			Log.error(gl.getShaderInfoLog(shader));
+//			Log.error(App.gl.getShaderInfoLog(shader));
 //			return null;
 //		}
 
@@ -327,7 +327,6 @@ public abstract class Shader
 		this.uniforms.put(id, uniform);
 	}
 
-	@Deprecated
 	public FastMap<Integer> getAttributesLocations() {
 		return this.attributesLocations;
 	}

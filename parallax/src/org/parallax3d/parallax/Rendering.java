@@ -19,15 +19,12 @@
 package org.parallax3d.parallax;
 
 import org.parallax3d.parallax.system.gl.GL20;
-import org.parallax3d.parallax.system.gl.GL30;
 
 public abstract class Rendering {
 
     public abstract boolean isGL30Available();
 
     public abstract GL20 getGL20();
-
-    public abstract GL30 getGL30();
 
     public abstract int getWidth();
 

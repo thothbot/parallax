@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 
 /**
  * Simple depth shader.
@@ -36,8 +36,8 @@ public final class DepthShader extends Shader
 
 	public DepthShader() 
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depth.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depth.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depth.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depth.fs").readString());
 	}
 
 	@Override

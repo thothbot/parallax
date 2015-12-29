@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.math.Euler;
 import org.parallax3d.parallax.math.Matrix3;
 import org.parallax3d.parallax.math.Matrix4;
@@ -609,11 +609,11 @@ public class Object3D
 	public Object3D add(Object3D object)
 	{
 		if(object.equals(this)) {
-			Parallax.app.error("Object3D.add", object + " can't be added as a child of itself.");
+			App.app.error("Object3D.add", object + " can't be added as a child of itself.");
 			return this;
 		}
 
-		Parallax.app.debug("Object3D", "Adding for ID " + this.getId() + " = " + this.getClass().getName()
+		App.app.debug("Object3D", "Adding for ID " + this.getId() + " = " + this.getClass().getName()
 				+ " child ID " + object.getId() + " = " + object.getClass().getName());
 
 

@@ -23,11 +23,10 @@ import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
-import org.parallax3d.parallax.system.gl.GL30;
 
 public class GwtRendering extends Rendering {
 	CanvasElement canvas;
@@ -236,7 +235,7 @@ public class GwtRendering extends Rendering {
 
 	@Override
 	public boolean supportsExtension (String extension) {
-		if (extensions == null) extensions = Parallax.gl.glGetString(GL20.GL_EXTENSIONS);
+		if (extensions == null) extensions = App.gl.glGetString(GL20.GL_EXTENSIONS);
 		return extensions.contains(extension);
 	}
 
@@ -266,10 +265,5 @@ public class GwtRendering extends Rendering {
 	@Override
 	public boolean isGL30Available () {
 		return false;
-	}
-
-	@Override
-	public GL30 getGL30 () {
-		return null;
 	}
 }

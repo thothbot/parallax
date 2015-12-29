@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 
 /**
  * Normal shader.
@@ -36,8 +36,8 @@ public final class NormalShader extends Shader
 
 	public NormalShader() 
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normal.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normal.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normal.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normal.fs").readString());
 	}
 
 	@Override

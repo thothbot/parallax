@@ -27,11 +27,10 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.Animation;
-import org.parallax3d.parallax.Application;
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
 
-public abstract class GwtApplication implements EntryPoint, Application {
+public abstract class GwtApplication extends App implements EntryPoint {
 
 	private Animation listener;
 
@@ -107,11 +106,11 @@ public abstract class GwtApplication implements EntryPoint, Application {
 
 		lastWidth = rendering.getWidth();
 		lastHeight = rendering.getHeight();
-		Parallax.app = this;
+		App.app = this;
 
-		Parallax.gl20 = rendering.getGL20();
-		Parallax.gl = Parallax.gl20;
-		Parallax.files = new GwtFiles();
+		App.gl20 = rendering.getGL20();
+		App.gl = App.gl20;
+		App.files = new GwtFiles();
 
 		AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
 			@Override
@@ -129,12 +128,12 @@ public abstract class GwtApplication implements EntryPoint, Application {
 
 	void mainLoop() {
 		rendering.update();
-		if (Parallax.rendering.getWidth() != lastWidth || Parallax.rendering.getHeight() != lastHeight)
+		if (App.rendering.getWidth() != lastWidth || App.rendering.getHeight() != lastHeight)
 		{
-			GwtApplication.this.listener.onResize(Parallax.rendering.getWidth(), Parallax.rendering.getHeight());
+			GwtApplication.this.listener.onResize(App.rendering.getWidth(), App.rendering.getHeight());
 			lastWidth = rendering.getWidth();
 			lastHeight = rendering.getHeight();
-			Parallax.gl.glViewport(0, 0, lastWidth, lastHeight);
+			App.gl.glViewport(0, 0, lastWidth, lastHeight);
 		}
 
 		rendering.frameId++;
@@ -147,7 +146,7 @@ public abstract class GwtApplication implements EntryPoint, Application {
 
 	@Override
 	public Files getFiles() {
-		return Parallax.files;
+		return App.files;
 	}
 
 	private void checkLogLabel () {

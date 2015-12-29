@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 
 /**
  * Fresnel shader.
@@ -33,8 +33,8 @@ public final class FresnelShader extends Shader
 
 	public FresnelShader() 
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/fresnel.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/fresnel.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/fresnel.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/fresnel.fs").readString());
 	}
 
 	@Override

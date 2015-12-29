@@ -21,15 +21,15 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 
 public class DashedShader extends Shader 
 {
 
 	public DashedShader() 
 	{
-		super(Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/dashed.vs").readString(),
-				Parallax.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/dashed.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/dashed.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/dashed.fs").readString());
 	}
 
 	@Override

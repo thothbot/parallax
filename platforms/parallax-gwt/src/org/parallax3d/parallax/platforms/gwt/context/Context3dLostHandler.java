@@ -16,26 +16,22 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.system.gl.enums;
+package org.parallax3d.parallax.platforms.gwt.context;
 
-import org.parallax3d.parallax.system.gl.GL20;
-import org.parallax3d.parallax.system.gl.GLES20Ext;
+import com.google.gwt.event.shared.EventHandler;
 
-public enum FramebufferSlot implements GLEnum
+/**
+ * Handler interface for {@link Context3dLostEvent} events.
+ *
+ * @author hao1300@gmail.com
+ */
+public interface Context3dLostHandler extends EventHandler 
 {
-	COLOR_ATTACHMENT0(GL20.GL_COLOR_ATTACHMENT0),
-	DEPTH_ATTACHMENT(GL20.GL_DEPTH_ATTACHMENT),
-	STENCIL_ATTACHMENT(GL20.GL_STENCIL_ATTACHMENT),
-	DEPTH_STENCIL_ATTACHMENT(GLES20Ext.GL_DEPTH_STENCIL_ATTACHMENT);
 
-	private final int value;
-
-	private FramebufferSlot(int value) {
-		this.value = value;
-	}
-
-	@Override
-	public int getValue() {
-		return value;
-	}
+  /**
+   * Called when a {@link Context3dLostEvent} is fired.
+   * 
+   * @param event the {@link Context3dLostEvent} that was fired
+   */
+  void onContextLost(Context3dLostEvent event);
 }

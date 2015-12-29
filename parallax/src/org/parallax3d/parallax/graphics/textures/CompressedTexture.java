@@ -19,7 +19,7 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.DummyImage;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
@@ -134,13 +134,13 @@ public class CompressedTexture extends Texture
 
         if ( buffer.getInt(off_magic) != DDS_MAGIC )
         {
-            Parallax.app.error("CompressedTexture", "ImageUtils.parseDDS(): Invalid magic number in DDS header");
+            App.app.error("CompressedTexture", "ImageUtils.parseDDS(): Invalid magic number in DDS header");
             return;
         }
 
         if ( (buffer.getInt(off_pfFlags) & DDPF_FOURCC) == 0 )
         {
-			Parallax.app.error("CompressedTexture", "ImageUtils.parseDDS(): Unsupported format, must contain a FourCC code");
+			App.app.error("CompressedTexture", "ImageUtils.parseDDS(): Unsupported format, must contain a FourCC code");
             return;
         }
 
@@ -165,7 +165,7 @@ public class CompressedTexture extends Texture
 		}
 		else
 		{
-			Parallax.app.error("CompressedTexture","ImageUtils.parseDDS(): Unsupported FourCC code: " + int32ToFourCC( fourCC ) );
+			App.app.error("CompressedTexture","ImageUtils.parseDDS(): Unsupported FourCC code: " + int32ToFourCC( fourCC ) );
 			return;
 		}
 

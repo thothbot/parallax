@@ -20,7 +20,7 @@ package org.parallax3d.parallax.math;
 
 import java.util.List;
 
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
