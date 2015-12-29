@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to="org.parallax3d.parallax">
 	<source path="parallax">
-		<include name="Act.java" />
-		<include name="ActAdapter.java" />
+		<include name="Animation.java" />
+		<include name="AnimationAdapter.java" />
 		<include name="Application.java" />
 		<include name="Files.java" />
 		<include name="Parallax.java" />

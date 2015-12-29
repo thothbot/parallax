@@ -21,38 +21,42 @@ package org.parallax3d.parallax;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GL30;
 
-public interface Rendering {
+public abstract class Rendering {
 
-    public boolean isGL30Available ();
+    public abstract boolean isGL30Available();
 
-    public GL20 getGL20 ();
+    public abstract GL20 getGL20();
 
-    public GL30 getGL30 ();
+    public abstract GL30 getGL30();
 
-    public int getWidth ();
+    public abstract int getWidth();
 
-    public int getHeight ();
+    public abstract int getHeight();
 
-    public long getFrameId ();
+    public double getAbsoluteAspectRation() {
+        return getWidth() / (double)getHeight();
+    }
 
-    public float getDeltaTime ();
+    public abstract long getFrameId();
 
-    public float getRawDeltaTime ();
+    public abstract float getDeltaTime();
 
-    public int getFramesPerSecond ();
+    public abstract float getRawDeltaTime();
+
+    public abstract int getFramesPerSecond();
 
     /** @return the pixels per inch on the x-axis */
-    public float getPpiX ();
+    public abstract float getPpiX();
 
     /** @return the pixels per inch on the y-axis */
-    public float getPpiY ();
+    public abstract float getPpiY();
 
     /** @param extension the extension name
      * @return whether the extension is supported */
-    public boolean supportsExtension (String extension);
+    public abstract boolean supportsExtension(String extension);
 
-    public boolean supportsDisplayModeChange ();
+    public abstract boolean supportsDisplayModeChange();
 
     /** Whether the app is fullscreen or not */
-    public boolean isFullscreen ();
+    public abstract boolean isFullscreen();
 }

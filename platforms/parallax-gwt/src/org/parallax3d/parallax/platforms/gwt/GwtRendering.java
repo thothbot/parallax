@@ -29,7 +29,7 @@ import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GL30;
 
-public class GwtRendering implements Rendering {
+public class GwtRendering extends Rendering {
 	CanvasElement canvas;
 	WebGLRenderingContext context;
 	GL20 gl;

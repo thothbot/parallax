@@ -18,30 +18,18 @@
 
 package org.parallax3d.parallax;
 
-public abstract class ActAdapter implements Act {
+public interface Animation {
 
-    public void onCreate() {
+    public void onStart();
 
-    }
+    public void onUpdate();
 
-    public void onResize(int width, int height) {
+    public void onResize(int width, int height);
 
-    }
+    public void onPause();
 
-    public void onRender() {
+    public void onResume();
 
-    }
-
-    public void onPause() {
-
-    }
-
-    public void onResume() {
-
-    }
-
-    public void onDispose() {
-
-    }
+    public void onDispose();
 
 }

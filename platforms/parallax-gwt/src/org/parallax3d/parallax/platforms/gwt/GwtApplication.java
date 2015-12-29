@@ -26,14 +26,14 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.*;
-import org.parallax3d.parallax.Act;
+import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.Application;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.Files;
 
 public abstract class GwtApplication implements EntryPoint, Application {
 
-	private Act listener;
+	private Animation listener;
 
 	private Panel root = null;
 	private TextArea log = null;
@@ -138,7 +138,7 @@ public abstract class GwtApplication implements EntryPoint, Application {
 		}
 
 		rendering.frameId++;
-		listener.onRender();
+		listener.onUpdate();
 	}
 	
 	public Panel getRootPanel () {
