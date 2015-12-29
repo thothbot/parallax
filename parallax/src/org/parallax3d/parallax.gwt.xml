@@ -157,10 +157,10 @@
 		<include name="graphics/renderers/GLExtensions.java" />
 		<include name="graphics/renderers/GLGeometry.java" />
 		<include name="graphics/renderers/GLObject.java" />
+		<include name="graphics/renderers/GLRenderer.java" />
+		<include name="graphics/renderers/GLRendererInfo.java" />
 		<include name="graphics/renderers/package-info.java" />
 		<include name="graphics/renderers/Plugin.java" />
-		<include name="graphics/renderers/Renderer.java" />
-		<include name="graphics/renderers/RendererInfo.java" />
 		<include name="graphics/renderers/RendererLights.java" />
 		<include name="graphics/renderers/RenderTargetCubeTexture.java" />
 		<include name="graphics/renderers/RenderTargetTexture.java" />

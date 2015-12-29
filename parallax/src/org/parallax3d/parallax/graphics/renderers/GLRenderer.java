@@ -94,9 +94,9 @@ import org.parallax3d.parallax.system.gl.enums.*;
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
 @ThreeJsObject("THREE.WebGLRenderer")
-public class Renderer extends AbstractRenderer
+public class GLRenderer extends AbstractRenderer
 {
-	private RendererInfo info;
+	private GLRendererInfo info;
 
 	private List<Light> lights = new ArrayList<Light>();
 
@@ -240,9 +240,9 @@ public class Renderer extends AbstractRenderer
 	 * @param width  the viewport width
 	 * @param height the viewport height
 	 */
-	public Renderer(int width, int height)
+	public GLRenderer(int width, int height)
 	{
-		this.setInfo(new RendererInfo());
+		this.setInfo(new GLRendererInfo());
 
 		this._lights           = new RendererLights();
 		this._programs         = new FastMap<Shader>();
@@ -509,15 +509,15 @@ public class Renderer extends AbstractRenderer
 	}
 
 	/**
-	 * Gets {@link RendererInfo} instance with debug information.
+	 * Gets {@link GLRendererInfo} instance with debug information.
 	 *
-	 * @return the {@link RendererInfo} instance
+	 * @return the {@link GLRendererInfo} instance
 	 */
-	public RendererInfo getInfo() {
+	public GLRendererInfo getInfo() {
 		return info;
 	}
 
-	private void setInfo(RendererInfo info) {
+	private void setInfo(GLRendererInfo info) {
 		this.info = info;
 	}
 

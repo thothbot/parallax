@@ -73,7 +73,7 @@ public final class ShadowMap extends Plugin
 
 	List<GLObject> _renderList = new ArrayList<GLObject>();
 
-	public ShadowMap(Renderer renderer, Scene scene)
+	public ShadowMap(GLRenderer renderer, Scene scene)
 	{
 		super(renderer, scene);
 

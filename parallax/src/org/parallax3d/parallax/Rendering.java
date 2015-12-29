@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.graphics.renderers.Renderer;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.gl.GL20;
 
 public abstract class Rendering {
@@ -27,7 +27,7 @@ public abstract class Rendering {
 
     public abstract GL20 getGL20();
 
-    public abstract Renderer getRenderer();
+    public abstract GLRenderer getRenderer();
 
     public abstract int getWidth();
 

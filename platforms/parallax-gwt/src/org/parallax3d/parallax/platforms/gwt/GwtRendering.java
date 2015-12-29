@@ -25,7 +25,7 @@ import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Rendering;
-import org.parallax3d.parallax.graphics.renderers.Renderer;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 
@@ -33,7 +33,7 @@ public class GwtRendering extends Rendering {
 
 	CanvasElement canvas;
 	WebGLRenderingContext context;
-	Renderer renderer;
+	GLRenderer renderer;
 	GL20 gl;
 
 	String extensions;
@@ -67,14 +67,14 @@ public class GwtRendering extends Rendering {
 		context.viewport(0, 0, config.width, config.height);
 		this.gl = new GwtGL20(context);
 
-		renderer = new Renderer(config.width, config.height);
+		renderer = new GLRenderer(config.width, config.height);
 	}
 
 	public WebGLRenderingContext getContext () {
 		return context;
 	}
 
-	public Renderer getRenderer() {
+	public GLRenderer getRenderer() {
 		return renderer;
 	}
 

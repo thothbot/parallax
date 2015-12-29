@@ -70,7 +70,7 @@ public class GLObject implements Comparable<GLObject>
 		}
 	}
 
-	public void unrollBufferMaterial(Renderer renderer)
+	public void unrollBufferMaterial(GLRenderer renderer)
 	{
 		GeometryObject object = this.object;
 		GLGeometry buffer = this.buffer;

@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.textures;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.Image;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.graphics.renderers.Renderer;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
@@ -455,7 +455,7 @@ public class Texture
 	/**
 	 * Releases a texture from the GL context.
 	 */
-	public void deallocate( Renderer renderer )
+	public void deallocate( GLRenderer renderer )
 	{
 		if ( getWebGlTexture() == null ) return;
 

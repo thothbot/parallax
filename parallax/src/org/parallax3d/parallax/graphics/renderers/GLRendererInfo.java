@@ -30,7 +30,7 @@ import org.parallax3d.parallax.system.Duration;
  * @author thothbot
  *
  */
-public class RendererInfo
+public class GLRendererInfo
 {
 
 	/**
@@ -39,7 +39,7 @@ public class RendererInfo
 	public class WebGLRenderTimer
 	{
 		/**
-		 * {@link Renderer#render(Scene, Camera)} duration.
+		 * {@link GLRenderer#render(Scene, Camera)} duration.
 		 */
 		public Duration render = new Duration();
 	}
@@ -50,7 +50,7 @@ public class RendererInfo
 	public class WebGLRenderInfoRender
 	{
 		/**
-		 * How many types {@link Renderer#render(Scene, Camera)} was called.
+		 * How many types {@link GLRenderer#render(Scene, Camera)} was called.
 		 */
 		public int calls = 0;
 		/**
@@ -91,9 +91,9 @@ public class RendererInfo
 	private WebGLRenderTimer timer;
 	
 	/**
-	 * Default constructor for {@link RendererInfo} initialization.
+	 * Default constructor for {@link GLRendererInfo} initialization.
 	 */
-	public RendererInfo()
+	public GLRendererInfo()
 	{
 		this.render = new WebGLRenderInfoRender();
 		this.memory = new WebGLRenderInfoMemory();
@@ -101,7 +101,7 @@ public class RendererInfo
 	}
 
 	/**
-	 * Gets {@link RendererInfo.WebGLRenderInfoRender} information.
+	 * Gets {@link GLRendererInfo.WebGLRenderInfoRender} information.
 	 */
 	public WebGLRenderInfoRender getRender()
 	{
@@ -109,7 +109,7 @@ public class RendererInfo
 	}
 
 	/**
-	 * Gets {@link RendererInfo.WebGLRenderInfoMemory} information.
+	 * Gets {@link GLRendererInfo.WebGLRenderInfoMemory} information.
 	 */
 	public WebGLRenderInfoMemory getMemory()
 	{
@@ -117,7 +117,7 @@ public class RendererInfo
 	}
 
 	/**
-	 * Gets {@link RendererInfo.WebGLRenderTimer} information.
+	 * Gets {@link GLRendererInfo.WebGLRenderTimer} information.
 	 */
 	public WebGLRenderTimer getTimer()
 	{

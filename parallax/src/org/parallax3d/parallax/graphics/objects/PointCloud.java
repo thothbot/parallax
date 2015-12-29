@@ -23,12 +23,12 @@ import java.util.List;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
-import org.parallax3d.parallax.graphics.renderers.RendererInfo;
+import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
-import org.parallax3d.parallax.graphics.renderers.Renderer;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawCall;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
@@ -199,9 +199,9 @@ public class PointCloud extends GeometryObject
 	}
 
 	@Override
-	public void renderBuffer(Renderer renderer, GLGeometry geometryBuffer, boolean updateBuffers)
+	public void renderBuffer(GLRenderer renderer, GLGeometry geometryBuffer, boolean updateBuffers)
 	{
-		RendererInfo info = renderer.getInfo();
+		GLRendererInfo info = renderer.getInfo();
 
 		App.gl.glDrawArrays(BeginMode.POINTS.getValue(), 0, geometryBuffer.__webglParticleCount);
 
@@ -222,10 +222,10 @@ public class PointCloud extends GeometryObject
 		initCustomAttributes ( geometry );
 	}
 
-	public void createBuffers ( Renderer renderer)
+	public void createBuffers ( GLRenderer renderer)
 	{
 		Geometry geometry = (Geometry)getGeometry();
-		RendererInfo info = renderer.getInfo();
+		GLRendererInfo info = renderer.getInfo();
 
 		geometry.__webglVertexBuffer = App.gl.glGenBuffer();
 		geometry.__webglColorBuffer = App.gl.glGenBuffer();
@@ -233,7 +233,7 @@ public class PointCloud extends GeometryObject
 		info.getMemory().geometries ++;
 	}
 
-	public void setBuffers(Renderer renderer, BufferUsage hint)
+	public void setBuffers(GLRenderer renderer, BufferUsage hint)
 	{
 		Geometry geometry = (Geometry)getGeometry();
 

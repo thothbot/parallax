@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
-import org.parallax3d.parallax.graphics.renderers.Renderer;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
@@ -74,7 +74,7 @@ public abstract class GeometryObject extends Object3D
 	 */
 	public abstract void raycast( Raycaster raycaster, List<Raycaster.Intersect> intersects);
 
-	public abstract void renderBuffer(Renderer renderer, GLGeometry geometryBuffer, boolean updateBuffers);
+	public abstract void renderBuffer(GLRenderer renderer, GLGeometry geometryBuffer, boolean updateBuffers);
 
 //	/**
 //	 * object � an instance of Object3D
@@ -98,7 +98,7 @@ public abstract class GeometryObject extends Object3D
 //		deleteBuffers(renderer);
 //	}
 
-	public void deleteBuffers(Renderer renderer)
+	public void deleteBuffers(GLRenderer renderer)
 	{
 		App.gl.glDeleteBuffer(geometry.__webglVertexBuffer);
 		App.gl.glDeleteBuffer(geometry.__webglColorBuffer);
