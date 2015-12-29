@@ -21,12 +21,12 @@ package org.parallax3d.parallax.graphics.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
+import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 
-public class GeometryGroup extends WebGLGeometry
+public class GeometryGroup extends GLGeometry
 {
 	public static FastMap<List<GeometryGroup>> geometryGroups = new FastMap<List<GeometryGroup>>();
 

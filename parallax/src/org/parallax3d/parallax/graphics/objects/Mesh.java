@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
-import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
+import org.parallax3d.parallax.graphics.renderers.RendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
-import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.renderers.GLGeometry;
+import org.parallax3d.parallax.graphics.renderers.Renderer;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Face3;
@@ -416,9 +416,9 @@ public class Mesh extends GeometryObject
 //	}
 
 	@Override
-	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryGroup, boolean updateBuffers)
+	public void renderBuffer(Renderer renderer, GLGeometry geometryGroup, boolean updateBuffers)
 	{
-		WebGlRendererInfo info = renderer.getInfo();
+		RendererInfo info = renderer.getInfo();
 
 		// wireframe
 		if ( getMaterial() instanceof HasWireframe && ((HasWireframe)getMaterial()).isWireframe() )
@@ -615,9 +615,9 @@ public class Mesh extends GeometryObject
 	}
 
 	// createMeshBuffers
-	public void createBuffers(WebGLRenderer renderer, GeometryGroup geometryGroup)
+	public void createBuffers(Renderer renderer, GeometryGroup geometryGroup)
 	{
-		WebGlRendererInfo info = renderer.getInfo();
+		RendererInfo info = renderer.getInfo();
 
 		geometryGroup.__webglVertexBuffer = App.gl.glGenBuffer();
 		geometryGroup.__webglNormalBuffer = App.gl.glGenBuffer();
@@ -1516,7 +1516,7 @@ public class Mesh extends GeometryObject
 	}
 
 	@Override
-	public void deleteBuffers(WebGLRenderer renderer)
+	public void deleteBuffers(Renderer renderer)
 	{
 //		for ( GeometryGroup geometryGroup : ((Geometry)getGeometry()).getGeometryGroupsCache().values() )
 //		{

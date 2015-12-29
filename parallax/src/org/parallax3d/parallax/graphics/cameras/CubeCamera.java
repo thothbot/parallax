@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.graphics.cameras;
 
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.renderers.Renderer;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
@@ -112,7 +112,7 @@ public final class CubeCamera extends Object3D
 	 * @param renderer The current WebGL renderer
 	 * @param scene The current scene
 	 */
-	public void updateCubeMap( WebGLRenderer renderer, Scene scene )
+	public void updateCubeMap( Renderer renderer, Scene scene )
 	{
 		RenderTargetCubeTexture renderTarget = this.renderTarget;
 		boolean generateMipmaps = renderTarget.isGenerateMipmaps();

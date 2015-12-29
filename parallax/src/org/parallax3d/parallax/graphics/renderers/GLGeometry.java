@@ -25,7 +25,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 @ThreeJsObject("THREE.WebGLGeometries")
-public abstract class WebGLGeometry {
+public abstract class GLGeometry {
 
 	public Float32Array __colorArray;
 	public Float32Array __vertexArray;

@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
-import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.renderers.Renderer;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
@@ -917,7 +917,7 @@ public abstract class Material
 	}
 
 
-	public void deallocate( WebGLRenderer renderer )
+	public void deallocate( Renderer renderer )
 	{
 		int program = getShader().getProgram();
 		if ( program == 0 ) return;

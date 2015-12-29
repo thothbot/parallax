@@ -23,7 +23,7 @@ import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 
 @ThreeJsObject("THREE.WebGLExtensions")
-public final class WebGLExtensions {
+public final class GLExtensions {
 	
 	public static enum Id {
 		OES_texture_float,

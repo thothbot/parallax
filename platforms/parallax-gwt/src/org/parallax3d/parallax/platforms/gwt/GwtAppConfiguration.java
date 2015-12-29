@@ -21,7 +21,7 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextArea;
 
-public class GwtApplicationConfiguration {
+public class GwtAppConfiguration {
 
     /**
      * Width of the drawing area in pixels
@@ -81,10 +81,5 @@ public class GwtApplicationConfiguration {
      * whether to use premultipliedalpha, may have performance impact
      */
     public boolean premultipliedAlpha = false;
-
-    public GwtApplicationConfiguration (int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
 
 }

@@ -58,7 +58,7 @@ public abstract class App {
 
     public abstract ApplicationType getType ();
 
-    public abstract Preferences getPreferences (String name);
+//    public abstract Preferences getPreferences (String name);
 
     public abstract void exit ();
 }

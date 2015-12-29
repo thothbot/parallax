@@ -71,9 +71,9 @@ public final class ShadowMap extends Plugin
 	private Vector3 min;
 	private Vector3 max;
 
-	List<WebGLObject> _renderList = new ArrayList<WebGLObject>();
+	List<GLObject> _renderList = new ArrayList<GLObject>();
 
-	public ShadowMap(WebGLRenderer renderer, Scene scene)
+	public ShadowMap(Renderer renderer, Scene scene)
 	{
 		super(renderer, scene);
 
@@ -327,7 +327,7 @@ public final class ShadowMap extends Plugin
 
 			// set object matrices & frustum culling
 
-			this._renderList = new ArrayList<WebGLObject>();
+			this._renderList = new ArrayList<GLObject>();
 
 			projectObject( getScene(), getScene(), shadowCamera );
 
@@ -336,10 +336,10 @@ public final class ShadowMap extends Plugin
 
 			for ( int j = 0, jl = _renderList.size(); j < jl; j ++ ) {
 
-				WebGLObject webglObject = _renderList.get( j );
+				GLObject webglObject = _renderList.get( j );
 
 				GeometryObject object = webglObject.object;
-				WebGLGeometry buffer = webglObject.buffer;
+				GLGeometry buffer = webglObject.buffer;
 
 				// culling is overriden globally for all objects
 				// while rendering depth map
@@ -402,7 +402,7 @@ public final class ShadowMap extends Plugin
 			for ( int j = 0, jl = getRenderer()._webglObjectsImmediate.size();
 				  j < jl; j ++ ) {
 
-				WebGLObject webglObject = getRenderer()._webglObjectsImmediate.get( j );
+				GLObject webglObject = getRenderer()._webglObjectsImmediate.get( j );
 				GeometryObject object = webglObject.object;
 
 				if ( object.isVisible() && object.isCastShadow() ) {
@@ -440,7 +440,7 @@ public final class ShadowMap extends Plugin
 
 		if ( object.isVisible() ) {
 
-			List<WebGLObject> webglObjects = getRenderer()._webglObjects.get( object.getId() + "" );
+			List<GLObject> webglObjects = getRenderer()._webglObjects.get( object.getId() + "" );
 
 			if ( webglObjects != null && object.isCastShadow() &&
 					(object.isFrustumCulled() == false ||
@@ -449,7 +449,7 @@ public final class ShadowMap extends Plugin
 
 				for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
 
-					WebGLObject webglObject = webglObjects.get( i );
+					GLObject webglObject = webglObjects.get( i );
 
 					object._modelViewMatrix.multiply( shadowCamera.getMatrixWorldInverse(),
 							object.getMatrixWorld() );

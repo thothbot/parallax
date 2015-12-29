@@ -25,13 +25,17 @@ import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.graphics.renderers.Renderer;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 
 public class GwtRendering extends Rendering {
+
 	CanvasElement canvas;
 	WebGLRenderingContext context;
+	Renderer renderer;
 	GL20 gl;
+
 	String extensions;
 	float fps = 0;
 	long lastTimeStamp = System.currentTimeMillis();
@@ -40,9 +44,9 @@ public class GwtRendering extends Rendering {
 	float time = 0;
 	int frames;
 
-	GwtApplicationConfiguration config;
+	GwtAppConfiguration config;
 
-	public GwtRendering(Panel root, GwtApplicationConfiguration config) {
+	public GwtRendering(Panel root, GwtAppConfiguration config) {
 		Canvas canvasWidget = Canvas.createIfSupported();
 		if (canvasWidget == null)
 			throw new ParallaxRuntimeException("Canvas not supported");
@@ -62,10 +66,16 @@ public class GwtRendering extends Rendering {
 		context = WebGLRenderingContext.getContext(canvas, attributes);
 		context.viewport(0, 0, config.width, config.height);
 		this.gl = new GwtGL20(context);
+
+		renderer = new Renderer(config.width, config.height);
 	}
 
 	public WebGLRenderingContext getContext () {
 		return context;
+	}
+
+	public Renderer getRenderer() {
+		return renderer;
 	}
 
 	@Override

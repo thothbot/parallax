@@ -27,11 +27,11 @@ import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 
 @ThreeJsObject("THREE.WebGLObjects")
-public class WebGLObject implements Comparable<WebGLObject>
+public class GLObject implements Comparable<GLObject>
 {
 	public int id;
 	public GeometryObject object;
-	public WebGLGeometry buffer;
+	public GLGeometry buffer;
 	public boolean render;
 
 	public Material material;
@@ -41,12 +41,12 @@ public class WebGLObject implements Comparable<WebGLObject>
 	// render depth
 	public double z;
 
-	public WebGLObject(WebGLGeometry buffer, GeometryObject object)
+	public GLObject(GLGeometry buffer, GeometryObject object)
 	{
 		this(buffer, object, null, null);
 	}
 
-	public WebGLObject(WebGLGeometry buffer, GeometryObject object, Material opaque, Material transparent)
+	public GLObject(GLGeometry buffer, GeometryObject object, Material opaque, Material transparent)
 	{
 		this.buffer = buffer;
 		this.object = object;
@@ -70,10 +70,10 @@ public class WebGLObject implements Comparable<WebGLObject>
 		}
 	}
 
-	public void unrollBufferMaterial(WebGLRenderer renderer)
+	public void unrollBufferMaterial(Renderer renderer)
 	{
 		GeometryObject object = this.object;
-		WebGLGeometry buffer = this.buffer;
+		GLGeometry buffer = this.buffer;
 
 		AbstractGeometry geometry = object.getGeometry();
 		Material material = object.getMaterial();
@@ -118,7 +118,7 @@ public class WebGLObject implements Comparable<WebGLObject>
 	}
 
 	@Override
-	public int compareTo(WebGLObject o)
+	public int compareTo(GLObject o)
 	{
 		double result = o.z - this.z;
 		return (result == 0) ? 0

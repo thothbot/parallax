@@ -19,7 +19,6 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -95,18 +94,18 @@ import org.parallax3d.parallax.system.gl.enums.*;
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
 @ThreeJsObject("THREE.WebGLRenderer")
-public class WebGLRenderer extends AbstractRenderer
+public class Renderer extends AbstractRenderer
 {
-	private WebGlRendererInfo info;
+	private RendererInfo info;
 
 	private List<Light> lights = new ArrayList<Light>();
 
-	public FastMap<List<WebGLObject>> _webglObjects =  new FastMap<List<WebGLObject>>();
+	public FastMap<List<GLObject>> _webglObjects =  new FastMap<List<GLObject>>();
 
-	public List<WebGLObject> _webglObjectsImmediate  = new ArrayList<WebGLObject>();
+	public List<GLObject> _webglObjectsImmediate  = new ArrayList<GLObject>();
 
-	public List<WebGLObject> opaqueObjects = new ArrayList<WebGLObject>();
-	public List<WebGLObject> transparentObjects = new ArrayList<WebGLObject>();
+	public List<GLObject> opaqueObjects = new ArrayList<GLObject>();
+	public List<GLObject> transparentObjects = new ArrayList<GLObject>();
 
 	public boolean _logarithmicDepthBuffer = false;
 
@@ -241,9 +240,9 @@ public class WebGLRenderer extends AbstractRenderer
 	 * @param width  the viewport width
 	 * @param height the viewport height
 	 */
-	public WebGLRenderer(int width, int height)
+	public Renderer(int width, int height)
 	{
-		this.setInfo(new WebGlRendererInfo());
+		this.setInfo(new RendererInfo());
 
 		this._lights           = new RendererLights();
 		this._programs         = new FastMap<Shader>();
@@ -254,7 +253,7 @@ public class WebGLRenderer extends AbstractRenderer
 		this._maxCubemapSize    = this.getIntGlParam(GL20.GL_MAX_CUBE_MAP_TEXTURE_SIZE);
 
 		this._supportsVertexTextures = ( this._maxVertexTextures > 0 );
-		this._supportsBoneTextures = this._supportsVertexTextures && WebGLExtensions.get(WebGLExtensions.Id.OES_texture_float);
+		this._supportsBoneTextures = this._supportsVertexTextures && GLExtensions.get(GLExtensions.Id.OES_texture_float);
 
 		this._vertexShaderPrecisionHighpFloat = new
 				WebGLShaderPrecisionFormat(Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
@@ -298,16 +297,16 @@ public class WebGLRenderer extends AbstractRenderer
 		}
 
 
-		WebGLExtensions.get(WebGLExtensions.Id.OES_texture_float);
-		WebGLExtensions.get(WebGLExtensions.Id.OES_texture_float_linear);
-		WebGLExtensions.get(WebGLExtensions.Id.OES_standard_derivatives);
+		GLExtensions.get(GLExtensions.Id.OES_texture_float);
+		GLExtensions.get(GLExtensions.Id.OES_texture_float_linear);
+		GLExtensions.get(GLExtensions.Id.OES_standard_derivatives);
 
 		if ( _logarithmicDepthBuffer )
 		{
-			_logarithmicDepthBuffer = WebGLExtensions.get(WebGLExtensions.Id.EXT_frag_depth);
+			_logarithmicDepthBuffer = GLExtensions.get(GLExtensions.Id.EXT_frag_depth);
 		}
 
-		WebGLExtensions.get(WebGLExtensions.Id.WEBGL_compressed_texture_s3tc);
+		GLExtensions.get(GLExtensions.Id.WEBGL_compressed_texture_s3tc);
 
 		setSize(width, height);
 		setDefaultGLState();
@@ -346,32 +345,32 @@ public class WebGLRenderer extends AbstractRenderer
 
 	public boolean supportsFloatTextures()
 	{
-		return WebGLExtensions.get( WebGLExtensions.Id.OES_texture_float );
+		return GLExtensions.get(GLExtensions.Id.OES_texture_float);
 	}
 
 	public boolean supportsStandardDerivatives()
 	{
-		return WebGLExtensions.get( WebGLExtensions.Id.OES_standard_derivatives );
+		return GLExtensions.get(GLExtensions.Id.OES_standard_derivatives);
 	}
 
 	public boolean supportsCompressedTextureS3TC()
 	{
-		return WebGLExtensions.get( WebGLExtensions.Id.WEBGL_compressed_texture_s3tc );
+		return GLExtensions.get(GLExtensions.Id.WEBGL_compressed_texture_s3tc);
 	}
 
 	public boolean supportsCompressedTexturePVRTC()
 	{
-		return WebGLExtensions.get( WebGLExtensions.Id.WEBGL_compressed_texture_pvrtc );
+		return GLExtensions.get(GLExtensions.Id.WEBGL_compressed_texture_pvrtc);
 	}
 
 	public boolean supportsBlendMinMax()
 	{
-		return WebGLExtensions.get( WebGLExtensions.Id.EXT_blend_minmax );
+		return GLExtensions.get(GLExtensions.Id.EXT_blend_minmax);
 	}
 
 	public int getMaxAnisotropy()
 	{
-		if (WebGLExtensions.get( WebGLExtensions.Id.EXT_texture_filter_anisotropic )) {
+		if (GLExtensions.get(GLExtensions.Id.EXT_texture_filter_anisotropic)) {
 			return this.getIntGlParam(GLES20Ext.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 		} else {
 			return 0;
@@ -510,15 +509,15 @@ public class WebGLRenderer extends AbstractRenderer
 	}
 
 	/**
-	 * Gets {@link WebGlRendererInfo} instance with debug information.
+	 * Gets {@link RendererInfo} instance with debug information.
 	 *
-	 * @return the {@link WebGlRendererInfo} instance
+	 * @return the {@link RendererInfo} instance
 	 */
-	public WebGlRendererInfo getInfo() {
+	public RendererInfo getInfo() {
 		return info;
 	}
 
-	private void setInfo(WebGlRendererInfo info) {
+	private void setInfo(RendererInfo info) {
 		this.info = info;
 	}
 
@@ -712,7 +711,7 @@ public class WebGLRenderer extends AbstractRenderer
 	/**
 	 * Morph Targets Buffer initialization
 	 */
-	private void setupMorphTargets ( Material material, WebGLGeometry geometrybuffer,
+	private void setupMorphTargets ( Material material, GLGeometry geometrybuffer,
 									 Mesh object )
 	{
 
@@ -1249,7 +1248,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {
 
-		long maxVerticesInGroup = WebGLExtensions.get(WebGLExtensions.Id.OES_element_index_uint) ? 4294967296L : 65535L;
+		long maxVerticesInGroup = GLExtensions.get(GLExtensions.Id.OES_element_index_uint) ? 4294967296L : 65535L;
 
 		int numMorphTargets = geometry.getMorphTargets().size();
 		int numMorphNormals = geometry.getMorphNormals().size();
@@ -1318,7 +1317,7 @@ public class WebGLRenderer extends AbstractRenderer
 		if ( GeometryGroup.geometryGroups.get( geometry.getId() + "" ) == null ||
 				geometry.isGroupsNeedUpdate() ) {
 
-			this._webglObjects.put(object.getId() + "", new ArrayList<WebGLObject>());
+			this._webglObjects.put(object.getId() + "", new ArrayList<GLObject>());
 
 			GeometryGroup.geometryGroups.put( geometry.getId() + "",
 					makeGroups( geometry, material instanceof MeshFaceMaterial ));
@@ -1468,16 +1467,16 @@ public class WebGLRenderer extends AbstractRenderer
 
 	}
 
-	private void addBuffer( WebGLGeometry buffer, GeometryObject object ) {
+	private void addBuffer( GLGeometry buffer, GeometryObject object ) {
 
 		int id = object.getId();
-		List<WebGLObject> list = _webglObjects.get(id + "");
+		List<GLObject> list = _webglObjects.get(id + "");
 		if(list == null) {
-			list = new ArrayList<WebGLObject>();
+			list = new ArrayList<GLObject>();
 			_webglObjects.put(id + "", list);
 		}
 
-		WebGLObject webGLObject = new WebGLObject(buffer, object);
+		GLObject webGLObject = new GLObject(buffer, object);
 		webGLObject.id = id;
 		list.add(webGLObject);
 	}
@@ -1509,7 +1508,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 			} */else {
 
-				List<WebGLObject> webglObjects = this._webglObjects.get( object.getId() + "" );
+				List<GLObject> webglObjects = this._webglObjects.get( object.getId() + "" );
 
 				if ( webglObjects != null && ( object.isFrustumCulled() == false ||
 						_frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
@@ -1518,7 +1517,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 					for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
 
-						WebGLObject webglObject = webglObjects.get(i);
+						GLObject webglObject = webglObjects.get(i);
 
 						webglObject.unrollBufferMaterial(this);
 
@@ -1736,17 +1735,17 @@ public class WebGLRenderer extends AbstractRenderer
 		_frustum.setFromMatrix( _projScreenMatrix );
 
 		this.lights = new ArrayList<Light>();
-		this.opaqueObjects = new ArrayList<WebGLObject>();
-		this.transparentObjects = new ArrayList<WebGLObject>();
+		this.opaqueObjects = new ArrayList<GLObject>();
+		this.transparentObjects = new ArrayList<GLObject>();
 
 		projectObject( scene, scene );
 
 		if ( this.isSortObjects() ) {
 
-			Collections.sort(opaqueObjects, new Comparator<WebGLObject>() {
+			Collections.sort(opaqueObjects, new Comparator<GLObject>() {
 
 				@Override
-				public int compare(WebGLObject a, WebGLObject b) {
+				public int compare(GLObject a, GLObject b) {
 					if ( a.z != b.z ) {
 
 						return (int)(b.z - a.z);
@@ -1760,10 +1759,10 @@ public class WebGLRenderer extends AbstractRenderer
 				}
 			});
 
-			Collections.sort(transparentObjects, new Comparator<WebGLObject>() {
+			Collections.sort(transparentObjects, new Comparator<GLObject>() {
 
 				@Override
-				public int compare(WebGLObject a, WebGLObject b) {
+				public int compare(GLObject a, GLObject b) {
 					if ( a.material.getId() != b.material.getId() ) {
 
 						return a.material.getId() - b.material.getId();
@@ -1802,7 +1801,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 		for ( int i = 0, il = this._webglObjectsImmediate.size(); i < il; i ++ )
 		{
-			WebGLObject webglObject = this._webglObjectsImmediate.get( i );
+			GLObject webglObject = this._webglObjectsImmediate.get( i );
 			Object3D object = webglObject.object;
 
 			if ( object.isVisible() ) {
@@ -1872,7 +1871,7 @@ public class WebGLRenderer extends AbstractRenderer
 //		 GLES20.glFinish();
 	}
 
-	public void renderObjectsImmediate ( List<WebGLObject> renderList,
+	public void renderObjectsImmediate ( List<GLObject> renderList,
 										 Boolean isTransparentMaterial, Camera camera,
 										 List<Light> lights, AbstractFog fog,
 										 boolean useBlending, Material overrideMaterial ) {
@@ -1881,7 +1880,7 @@ public class WebGLRenderer extends AbstractRenderer
 
 		for ( int i = 0, il = renderList.size(); i < il; i ++ ) {
 
-			WebGLObject webglObject = renderList.get( i );
+			GLObject webglObject = renderList.get( i );
 			GeometryObject object = webglObject.object;
 
 			if ( object.isVisible() ) {
@@ -1998,14 +1997,14 @@ public class WebGLRenderer extends AbstractRenderer
 		return retval;
 	}
 
-	private void renderObjects (List<WebGLObject> renderList, Camera camera,
+	private void renderObjects (List<GLObject> renderList, Camera camera,
 								List<Light> lights, AbstractFog fog, boolean useBlending )
 	{
 		renderObjects ( renderList, camera, lights, fog, useBlending, null);
 	}
 
 	//renderList, camera, lights, fog, useBlending, overrideMaterial
-	private void renderObjects (List<WebGLObject> renderList, Camera camera,
+	private void renderObjects (List<GLObject> renderList, Camera camera,
 								List<Light> lights, AbstractFog fog, boolean useBlending,
 								Material overrideMaterial )
 	{
@@ -2013,10 +2012,10 @@ public class WebGLRenderer extends AbstractRenderer
 
 		for ( int i = renderList.size() - 1; i != - 1; i -- ) {
 
-			WebGLObject webglObject = renderList.get( i );
+			GLObject webglObject = renderList.get( i );
 
 			GeometryObject object = webglObject.object;
-			WebGLGeometry buffer = webglObject.buffer;
+			GLGeometry buffer = webglObject.buffer;
 
 			setupMatrices( object, camera );
 
@@ -2064,7 +2063,7 @@ public class WebGLRenderer extends AbstractRenderer
 	 */
 	//camera, lights, fog, material, geometryGroup, object
 	public void renderBuffer( Camera camera, List<Light> lights, AbstractFog fog,
-							  Material material, WebGLGeometry geometry, GeometryObject object )
+							  Material material, GLGeometry geometry, GeometryObject object )
 	{
 		if ( ! material.isVisible() )
 			return;

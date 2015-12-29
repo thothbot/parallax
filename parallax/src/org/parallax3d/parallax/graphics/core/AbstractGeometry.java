@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
+import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Sphere;
 
-public abstract class AbstractGeometry extends WebGLGeometry {
+public abstract class AbstractGeometry extends GLGeometry {
 	private static int Counter = 0;
 
 	private int id = 0;

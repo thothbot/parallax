@@ -29,8 +29,9 @@ import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
+import org.parallax3d.parallax.Rendering;
 
-public abstract class GwtApplication extends App implements EntryPoint {
+public abstract class GwtApp extends App implements EntryPoint {
 
 	private Animation listener;
 
@@ -38,7 +39,7 @@ public abstract class GwtApplication extends App implements EntryPoint {
 	private TextArea log = null;
 	private int logLevel = LOG_ERROR;
 
-	GwtApplicationConfiguration config;
+	GwtAppConfiguration config;
 	GwtRendering rendering;
 
 	private int lastWidth;
@@ -48,50 +49,59 @@ public abstract class GwtApplication extends App implements EntryPoint {
 
 	LoadingListener loadingListener;
 
-	public abstract GwtApplicationConfiguration getConfig ();
+	// Default configuration
+	public GwtAppConfiguration getConfig () {
+
+		return new GwtAppConfiguration();
+
+	};
+
+	public abstract void onInit();
 
 	@Override
 	public void onModuleLoad () {
-		GwtApplication.agentInfo = computeAgentInfo();
+		GwtApp.agentInfo = computeAgentInfo();
 		this.config = getConfig();
 		this.log = config.log;
 
 		addEventListeners();
 
-		if (config.rootPanel != null) {
-			this.root = config.rootPanel;
-		} else {
-			Element element = Document.get().getElementById("embed-" + GWT.getModuleName());
-			if (element == null) {
-				VerticalPanel panel = new VerticalPanel();
-				panel.setWidth("" + config.width + "px");
-				panel.setHeight("" + config.height + "px");
-				panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-				panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-				RootPanel.get().add(panel);
-				RootPanel.get().setWidth("" + config.width + "px");
-				RootPanel.get().setHeight("" + config.height + "px");
-				this.root = panel;
-			} else {
-				VerticalPanel panel = new VerticalPanel();
-				panel.setWidth("" + config.width + "px");
-				panel.setHeight("" + config.height + "px");
-				panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-				panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-				element.appendChild(panel.getElement());
-				root = panel;
-			}
-		}
+//		if (config.rootPanel != null) {
+//			this.root = config.rootPanel;
+//		} else {
+//			Element element = Document.get().getElementById("embed-" + GWT.getModuleName());
+//			if (element == null) {
+//				VerticalPanel panel = new VerticalPanel();
+//				panel.setWidth("" + config.width + "px");
+//				panel.setHeight("" + config.height + "px");
+//				panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+//				panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+//				RootPanel.get().add(panel);
+//				RootPanel.get().setWidth("" + config.width + "px");
+//				RootPanel.get().setHeight("" + config.height + "px");
+//				this.root = panel;
+//			} else {
+//				VerticalPanel panel = new VerticalPanel();
+//				panel.setWidth("" + config.width + "px");
+//				panel.setHeight("" + config.height + "px");
+//				panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+//				panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+//				element.appendChild(panel.getElement());
+//				root = panel;
+//			}
+//		}
+//
+//		getRootPanel().clear();
+//
+//		if(loadingListener != null)
+//			loadingListener.beforeSetup();
+//
+//		setupLoop();
+//
+//		if(loadingListener != null)
+//			loadingListener.afterSetup();
 
-		getRootPanel().clear();
-
-		if(loadingListener != null)
-			loadingListener.beforeSetup();
-
-		setupLoop();
-
-		if(loadingListener != null)
-			loadingListener.afterSetup();
+		onInit();
 	}
 
 	void setupLoop () {
@@ -130,7 +140,7 @@ public abstract class GwtApplication extends App implements EntryPoint {
 		rendering.update();
 		if (App.rendering.getWidth() != lastWidth || App.rendering.getHeight() != lastHeight)
 		{
-			GwtApplication.this.listener.onResize(App.rendering.getWidth(), App.rendering.getHeight());
+			GwtApp.this.listener.onResize(App.rendering.getWidth(), App.rendering.getHeight());
 			lastWidth = rendering.getWidth();
 			lastHeight = rendering.getHeight();
 			App.gl.glViewport(0, 0, lastWidth, lastHeight);
@@ -142,6 +152,11 @@ public abstract class GwtApplication extends App implements EntryPoint {
 	
 	public Panel getRootPanel () {
 		return root;
+	}
+
+	@Override
+	public Rendering getRendering () {
+		return rendering;
 	}
 
 	@Override
@@ -341,7 +356,7 @@ public abstract class GwtApplication extends App implements EntryPoint {
 	private native void addEventListeners () /*-{
 		var self = this;
 		$doc.addEventListener('visibilitychange', function (e) {
-			self.@org.parallax3d.parallax.platforms.gwt.GwtApplication::onVisibilityChange(Z)($doc['hidden'] !== true);
+			self.@org.parallax3d.parallax.platforms.gwt.GwtApp::onVisibilityChange(Z)($doc['hidden'] !== true);
 		});
 	}-*/;
 
@@ -349,7 +364,7 @@ public abstract class GwtApplication extends App implements EntryPoint {
 	}
 	
 	/**
-	 * LoadingListener interface main purpose is to do some things before or after {@link GwtApplication#setupLoop()}
+	 * LoadingListener interface main purpose is to do some things before or after {@link GwtApp#setupLoop()}
 	 */
 	public interface LoadingListener{
 		/**

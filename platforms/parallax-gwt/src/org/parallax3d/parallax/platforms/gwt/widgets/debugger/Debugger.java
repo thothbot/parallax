@@ -20,7 +20,7 @@ package org.parallax3d.parallax.platforms.gwt.widgets.debugger;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
+import org.parallax3d.parallax.graphics.renderers.RendererInfo;
 
 /**
  * Debugger widget.
@@ -30,7 +30,7 @@ import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
  */
 public class Debugger extends FlowPanel
 {
-	private WebGlRendererInfo info;
+	private org.parallax3d.parallax.graphics.renderers.RendererInfo info;
 	
 	VisualGraph graph;
 	FlowPanel renderingInfo;
@@ -38,7 +38,7 @@ public class Debugger extends FlowPanel
 	private Label string1;
 	private Label string2;
 	
-	public Debugger(WebGlRendererInfo info)
+	public Debugger(RendererInfo info)
 	{
 		super();
 		this.setStyleName("debug-panel");

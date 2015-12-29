@@ -21,12 +21,10 @@ package org.parallax3d.parallax.graphics.textures;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.Image;
 import org.parallax3d.parallax.system.ThreeJsObject;
-import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.renderers.Renderer;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
-
-import java.nio.Buffer;
 
 /**
  * Basic implementation of texture.
@@ -457,11 +455,11 @@ public class Texture
 	/**
 	 * Releases a texture from the GL context.
 	 */
-	public void deallocate( WebGLRenderer renderer )
+	public void deallocate( Renderer renderer )
 	{
 		if ( getWebGlTexture() == null ) return;
 
-		App.gl.glDeleteTexture( getWebGlTexture() );
+		App.gl.glDeleteTexture(getWebGlTexture());
 
 		renderer.getInfo().getMemory().textures--;
 	}

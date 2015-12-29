@@ -25,13 +25,13 @@ import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.Raycaster;
-import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
+import org.parallax3d.parallax.graphics.renderers.RendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
-import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.renderers.GLGeometry;
+import org.parallax3d.parallax.graphics.renderers.Renderer;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;
@@ -187,9 +187,9 @@ public class Line extends GeometryObject
 	}
 
 	@Override
-	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers)
+	public void renderBuffer(Renderer renderer, GLGeometry geometryBuffer, boolean updateBuffers)
 	{
-		WebGlRendererInfo info = renderer.getInfo();
+		RendererInfo info = renderer.getInfo();
 
 		BeginMode primitives = ( this.getType() == MODE.STRIPS)
 				? BeginMode.LINE_STRIP
@@ -217,11 +217,11 @@ public class Line extends GeometryObject
 //		}
 //	}
 
-	public void createBuffers ( WebGLRenderer renderer )
+	public void createBuffers ( Renderer renderer )
 	{
 		Geometry geometry = (Geometry)getGeometry();
 
-		WebGlRendererInfo info = renderer.getInfo();
+		RendererInfo info = renderer.getInfo();
 
 		geometry.__webglVertexBuffer = App.gl.glGenBuffer();
 		geometry.__webglColorBuffer = App.gl.glGenBuffer();

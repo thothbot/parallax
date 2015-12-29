@@ -35,17 +35,17 @@ public abstract class Plugin
 	private boolean isEnabled = true;
 	private boolean isRendering;
 
-	protected WebGLRenderer renderer;
+	protected Renderer renderer;
 	protected Scene scene;
 
-	public Plugin(WebGLRenderer renderer, Scene scene)
+	public Plugin(Renderer renderer, Scene scene)
 	{
 		this.renderer = renderer;
 		this.scene = scene;
 		renderer.addPlugin(this);
 	}
 
-	public WebGLRenderer getRenderer() {
+	public Renderer getRenderer() {
 		return this.renderer;
 	}
 

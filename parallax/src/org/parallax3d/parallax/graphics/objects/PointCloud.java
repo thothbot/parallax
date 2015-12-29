@@ -18,19 +18,17 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
-import org.parallax3d.parallax.graphics.renderers.WebGlRendererInfo;
+import org.parallax3d.parallax.graphics.renderers.RendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.renderers.WebGLGeometry;
-import org.parallax3d.parallax.graphics.renderers.WebGLRenderer;
+import org.parallax3d.parallax.graphics.renderers.GLGeometry;
+import org.parallax3d.parallax.graphics.renderers.Renderer;
 import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawCall;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
@@ -201,9 +199,9 @@ public class PointCloud extends GeometryObject
 	}
 
 	@Override
-	public void renderBuffer(WebGLRenderer renderer, WebGLGeometry geometryBuffer, boolean updateBuffers)
+	public void renderBuffer(Renderer renderer, GLGeometry geometryBuffer, boolean updateBuffers)
 	{
-		WebGlRendererInfo info = renderer.getInfo();
+		RendererInfo info = renderer.getInfo();
 
 		App.gl.glDrawArrays(BeginMode.POINTS.getValue(), 0, geometryBuffer.__webglParticleCount);
 
@@ -224,10 +222,10 @@ public class PointCloud extends GeometryObject
 		initCustomAttributes ( geometry );
 	}
 
-	public void createBuffers ( WebGLRenderer renderer)
+	public void createBuffers ( Renderer renderer)
 	{
 		Geometry geometry = (Geometry)getGeometry();
-		WebGlRendererInfo info = renderer.getInfo();
+		RendererInfo info = renderer.getInfo();
 
 		geometry.__webglVertexBuffer = App.gl.glGenBuffer();
 		geometry.__webglColorBuffer = App.gl.glGenBuffer();
@@ -235,7 +233,7 @@ public class PointCloud extends GeometryObject
 		info.getMemory().geometries ++;
 	}
 
-	public void setBuffers(WebGLRenderer renderer, BufferUsage hint)
+	public void setBuffers(Renderer renderer, BufferUsage hint)
 	{
 		Geometry geometry = (Geometry)getGeometry();
 
