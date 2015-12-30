@@ -736,6 +736,22 @@ public class WebGLRenderingContext extends JavaScriptObject {
 																														return this.getActiveUniform(program, index);
 																														}-*/;
 
+	public final native WebGLShaderPrecisionFormat getShaderPrecisionFormat(int shader, int precisionType) /*-{
+        if ( this.getShaderPrecisionFormat === undefined )
+        {
+            this.getShaderPrecisionFormat = function () {
+
+                return {
+                    'rangeMin': 1,
+                    'rangeMax': 1,
+                    'precision': 1
+                };
+            }
+        }
+
+        return this.getShaderPrecisionFormat(shader, precisionType);
+    }-*/;
+
 	public final native JsArray<WebGLShader> getAttachedShaders (WebGLProgram program) /*-{
 																													return this.getAttachedShaders(program);
 																													}-*/;

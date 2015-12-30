@@ -69,7 +69,8 @@ public class GwtRendering extends Rendering {
 
 		context = WebGLRenderingContext.getContext(canvas, attributes);
 		context.viewport(0, 0, width, height);
-		this.gl = new GwtGL20(context);
+
+		App.gl = gl = new GwtGL20(context);
 
 		renderer = new GLRenderer(width, height);
 	}

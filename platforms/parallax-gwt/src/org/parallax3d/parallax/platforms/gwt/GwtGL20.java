@@ -815,7 +815,9 @@ public class GwtGL20 implements GL20 {
 
 	@Override
 	public void glGetShaderPrecisionFormat (int shadertype, int precisiontype, IntBuffer range, IntBuffer precision) {
-		throw new ParallaxRuntimeException("glGetShaderPrecisionFormat not supported by GWT WebGL backend");
+		WebGLShaderPrecisionFormat format = gl.getShaderPrecisionFormat(shadertype, precisiontype);
+		range.put(format.getRangeMin());
+		precision.put(format.getPrecision());
 	}
 
 	@Override

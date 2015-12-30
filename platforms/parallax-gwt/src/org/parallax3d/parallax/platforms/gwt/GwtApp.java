@@ -40,7 +40,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	private Animation listener;
 
-	private Panel root = null;
 	private TextArea log = null;
 	private int logLevel = LOG_ERROR;
 
@@ -102,12 +101,36 @@ public abstract class GwtApp extends App implements EntryPoint {
 //		if(loadingListener != null)
 //			loadingListener.beforeSetup();
 //
-		setupLoop();
+
 //
 //		if(loadingListener != null)
 //			loadingListener.afterSetup();
 
+		App.app = this;
+		App.files = new GwtFiles();
+
 		onInit();
+	}
+
+	public void setRendering(Panel root, GwtAppConfiguration config) {
+
+		root.clear();
+
+		// setup modules
+		try {
+			rendering = new GwtRendering(root, config);
+		} catch (Throwable e) {
+			root.clear();
+			String msg = "Sorry, your browser doesn't seem to support WebGL";
+			root.add(new Label(msg));
+			App.app.error("setRendering", msg, e);
+			return;
+		}
+
+		lastWidth = rendering.getWidth();
+		lastHeight = rendering.getHeight();
+
+		setupLoop();
 	}
 
 	void setupLoop () {
@@ -120,14 +143,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 //			return;
 //		}
 
-//		lastWidth = rendering.getWidth();
-//		lastHeight = rendering.getHeight();
-		App.app = this;
-
-//		App.gl20 = rendering.getGL20();
-		App.gl = App.gl20;
-		App.files = new GwtFiles();
-//
 //		AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
 //			@Override
 //			public void execute(double timestamp) {
@@ -154,10 +169,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 		rendering.frameId++;
 		listener.onUpdate();
-	}
-	
-	public Panel getRootPanel () {
-		return root;
 	}
 
 	@Override
