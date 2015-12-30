@@ -248,12 +248,6 @@ public class GwtRendering extends Rendering {
 			$doc.webkitCancelFullScreen();
 	}-*/;
 
-	@Override
-	public boolean supportsExtension (String extension) {
-		if (extensions == null) extensions = App.gl.glGetString(GL20.GL_EXTENSIONS);
-		return extensions.contains(extension);
-	}
-
 	public void update () {
 		long currTimeStamp = System.currentTimeMillis();
 		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0f;

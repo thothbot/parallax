@@ -51,10 +51,6 @@ public abstract class Rendering {
     /** @return the pixels per inch on the y-axis */
     public abstract float getPpiY();
 
-    /** @param extension the extension name
-     * @return whether the extension is supported */
-    public abstract boolean supportsExtension(String extension);
-
     public abstract boolean supportsDisplayModeChange();
 
     /** Whether the app is fullscreen or not */

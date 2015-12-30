@@ -38,26 +38,10 @@ public final class GLExtensions {
 	};
 
 	public static boolean get(Id id) {
-		
-		String[] extensions = App.gl.glGetString(GL20.GL_EXTENSIONS).split(" ");
 
-		boolean retval = false;
-		for(int i = 0, len = extensions.length; i < len; i++)
-		{
-			if(extensions[i] == id.name())
-			{
-				retval = true;
-				break;
-			}
-		}
+		String extensions = App.gl.glGetString(GL20.GL_EXTENSIONS);
 
-		if ( retval == false ) {
-
-			App.app.error("WebGLRenderer", id.toString() + " extension not supported.");
-
-		}
-		
-		return retval;
+		return extensions != null && extensions.contains(id.name());
 
 	}
 	

@@ -261,7 +261,7 @@ public class GLRenderer extends AbstractRenderer
 				new WebGLShaderPrecisionFormat(Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
 		this._vertexShaderPrecisionLowpFloat = new
 				WebGLShaderPrecisionFormat(Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
-
+		App.app.error("WebGLRenderer", "2");
 		this._fragmentShaderPrecisionHighpFloat = new
 				WebGLShaderPrecisionFormat(Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
 		this._fragmentShaderPrecisionMediumpFloat =
@@ -295,7 +295,6 @@ public class GLRenderer extends AbstractRenderer
 			this._precision = Shader.PRECISION.LOWP;
 			App.app.debug("WebGLRenderer", "mediump not supported, using lowp.");
 		}
-
 
 		GLExtensions.get(GLExtensions.Id.OES_texture_float);
 		GLExtensions.get(GLExtensions.Id.OES_texture_float_linear);
