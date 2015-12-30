@@ -24,16 +24,6 @@ import com.google.gwt.user.client.ui.TextArea;
 public class GwtAppConfiguration {
 
     /**
-     * Width of the drawing area in pixels
-     */
-    public int width = 200;
-
-    /**
-     * Height of the drawing area in pixels
-     */
-    public int height = 200;
-
-    /**
      * whether to use a stencil buffer
      */
     public boolean stencil = false;

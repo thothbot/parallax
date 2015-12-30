@@ -50,10 +50,14 @@ public class GwtRendering extends Rendering {
 		Canvas canvasWidget = Canvas.createIfSupported();
 		if (canvasWidget == null)
 			throw new ParallaxRuntimeException("Canvas not supported");
+
+		int width  = root.getOffsetWidth();
+		int height = root.getOffsetHeight();
+
 		canvas = canvasWidget.getCanvasElement();
 		root.add(canvasWidget);
-		canvas.setWidth(config.width);
-		canvas.setHeight(config.height);
+		canvas.setWidth(width);
+		canvas.setHeight(height);
 		this.config = config;
 
 		WebGLContextAttributes attributes = WebGLContextAttributes.create();
@@ -64,10 +68,10 @@ public class GwtRendering extends Rendering {
 		attributes.setPreserveDrawingBuffer(config.preserveDrawingBuffer);
 
 		context = WebGLRenderingContext.getContext(canvas, attributes);
-		context.viewport(0, 0, config.width, config.height);
+		context.viewport(0, 0, width, height);
 		this.gl = new GwtGL20(context);
 
-		renderer = new GLRenderer(config.width, config.height);
+		renderer = new GLRenderer(width, height);
 	}
 
 	public WebGLRenderingContext getContext () {
@@ -174,8 +178,8 @@ public class GwtRendering extends Rendering {
 
 	private void fullscreenChanged () {
 		if (!isFullscreen()) {
-			canvas.setWidth(config.width);
-			canvas.setHeight(config.height);
+//			canvas.setWidth(config.width);
+//			canvas.setHeight(config.height);
 		}
 	}
 
