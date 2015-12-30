@@ -26,12 +26,12 @@ public class GwtAppConfiguration {
     /**
      * Width of the drawing area in pixels
      */
-    public int width;
+    public int width = 200;
 
     /**
      * Height of the drawing area in pixels
      */
-    public int height;
+    public int height = 200;
 
     /**
      * whether to use a stencil buffer
@@ -60,11 +60,6 @@ public class GwtAppConfiguration {
      * of the DOM.
      */
     public TextArea log;
-
-    /**
-     * whether SoundManager2 should prefer to use flash instead of html5 audio (it should fall back if not available)
-     */
-    public boolean preferFlash = true;
 
     /**
      * preserve the back buffer, needed if you fetch a screenshot via canvas#toDataUrl, may have performance impact

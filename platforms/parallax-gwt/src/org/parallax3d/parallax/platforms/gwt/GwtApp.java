@@ -31,7 +31,12 @@ import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.Rendering;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public abstract class GwtApp extends App implements EntryPoint {
+
+	public final static Logger logger = Logger.getLogger("");
 
 	private Animation listener;
 
@@ -60,6 +65,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	@Override
 	public void onModuleLoad () {
+
 		GwtApp.agentInfo = computeAgentInfo();
 		this.config = getConfig();
 		this.log = config.log;
@@ -96,7 +102,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 //		if(loadingListener != null)
 //			loadingListener.beforeSetup();
 //
-//		setupLoop();
+		setupLoop();
 //
 //		if(loadingListener != null)
 //			loadingListener.afterSetup();
@@ -105,35 +111,35 @@ public abstract class GwtApp extends App implements EntryPoint {
 	}
 
 	void setupLoop () {
-		// setup modules
-		try {			
-			rendering = new GwtRendering(root, config);
-		} catch (Throwable e) {
-			root.clear();
-			root.add(new Label("Sorry, your browser doesn't seem to support WebGL"));
-			return;
-		}
+//		// setup modules
+//		try {
+//			rendering = new GwtRendering(root, config);
+//		} catch (Throwable e) {
+//			root.clear();
+//			root.add(new Label("Sorry, your browser doesn't seem to support WebGL"));
+//			return;
+//		}
 
-		lastWidth = rendering.getWidth();
-		lastHeight = rendering.getHeight();
+//		lastWidth = rendering.getWidth();
+//		lastHeight = rendering.getHeight();
 		App.app = this;
 
-		App.gl20 = rendering.getGL20();
+//		App.gl20 = rendering.getGL20();
 		App.gl = App.gl20;
 		App.files = new GwtFiles();
-
-		AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
-			@Override
-			public void execute(double timestamp) {
-				try {
-					mainLoop();
-				} catch (Throwable t) {
-					error("GwtApplication", "exception: " + t.getMessage(), t);
-					throw new RuntimeException(t);
-				}
-				AnimationScheduler.get().requestAnimationFrame(this, rendering.canvas);
-			}
-		}, rendering.canvas);
+//
+//		AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
+//			@Override
+//			public void execute(double timestamp) {
+//				try {
+//					mainLoop();
+//				} catch (Throwable t) {
+//					error("GwtApplication", "exception: " + t.getMessage(), t);
+//					throw new RuntimeException(t);
+//				}
+//				AnimationScheduler.get().requestAnimationFrame(this, rendering.canvas);
+//			}
+//		}, rendering.canvas);
 	}
 
 	void mainLoop() {
@@ -164,32 +170,22 @@ public abstract class GwtApp extends App implements EntryPoint {
 		return App.files;
 	}
 
-	private void checkLogLabel () {
-		if (log == null) {
-			log = new TextArea();
-			log.setSize(rendering.getWidth() + "px", "200px");
-			log.setReadOnly(true);
-			root.add(log);
-		}
-	}
-
 	@Override
 	public void log (String tag, String message) {
 		if (logLevel >= LOG_INFO) {
-			checkLogLabel();
-			log.setText(log.getText() + "\n" + tag + ": " + message);
-			log.setCursorPos(log.getText().length() - 1);
-			System.out.println(tag + ": " + message);
+			String msg = tag + ": " + message;
+			GwtApp.logger.log(Level.INFO, msg);
+			System.out.println(msg);
 		}
 	}
 
 	@Override
 	public void log(String tag, String message, Throwable exception) {
 		if (logLevel >= LOG_INFO) {
-			checkLogLabel();
-			log.setText(log.getText() + "\n" + tag + ": " + message + "\n" + getMessages(exception) + "\n");
-			log.setCursorPos(log.getText().length() - 1);
-			System.out.println(tag + ": " + message + "\n" + exception.getMessage());
+			String msg = tag + ": " + message;
+			GwtApp.logger.log(Level.INFO, msg, exception);
+
+			System.out.println(msg + "\n" + exception.getMessage());
 			System.out.println(getStackTrace(exception));
 		}
 	}
@@ -197,20 +193,20 @@ public abstract class GwtApp extends App implements EntryPoint {
 	@Override
 	public void error(String tag, String message) {
 		if (logLevel >= LOG_ERROR) {
-			checkLogLabel();
-			log.setText(log.getText() + "\n" + tag + ": " + message + "\n");
-			log.setCursorPos(log.getText().length() - 1);
-			System.err.println(tag + ": " + message);
+			String msg = tag + ": " + message;
+			GwtApp.logger.log(Level.SEVERE, msg);
+
+			System.err.println(msg);
 		}
 	}
 
 	@Override
 	public void error(String tag, String message, Throwable exception) {
 		if (logLevel >= LOG_ERROR) {
-			checkLogLabel();
-			log.setText(log.getText() + "\n" + tag + ": " + message + "\n" + getMessages(exception) + "\n");
-			log.setCursorPos(log.getText().length() - 1);
-			System.err.println(tag + ": " + message + "\n" + exception.getMessage() + "\n");
+			String msg = tag + ": " + message;
+			GwtApp.logger.log(Level.SEVERE, msg, exception);
+
+			System.err.println(msg + "\n" + exception.getMessage() + "\n");
 			System.out.println(getStackTrace(exception));
 		}
 	}
@@ -218,20 +214,19 @@ public abstract class GwtApp extends App implements EntryPoint {
 	@Override
 	public void debug(String tag, String message) {
 		if (logLevel >= LOG_DEBUG) {
-			checkLogLabel();
-			log.setText(log.getText() + "\n" + tag + ": " + message + "\n");
-			log.setCursorPos(log.getText().length() - 1);
-			System.out.println(tag + ": " + message + "\n");
+			String msg = tag + ": " + message;
+			GwtApp.logger.log(Level.FINE, msg);
+			System.out.println( msg + "\n");
 		}
 	}
 
 	@Override
 	public void debug (String tag, String message, Throwable exception) {
 		if (logLevel >= LOG_DEBUG) {
-			checkLogLabel();
-			log.setText(log.getText() + "\n" + tag + ": " + message + "\n" + getMessages(exception) + "\n");
-			log.setCursorPos(log.getText().length() - 1);
-			System.out.println(tag + ": " + message + "\n" + exception.getMessage());
+			String msg = tag + ": " + message;
+			GwtApp.logger.log(Level.FINE, msg, exception);
+
+			System.out.println(msg + "\n" + exception.getMessage());
 			System.out.println(getStackTrace(exception));
 		}
 	}

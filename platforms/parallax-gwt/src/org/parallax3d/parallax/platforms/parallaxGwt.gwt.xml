@@ -9,6 +9,17 @@
 
 	<public path="resources" />
 
+	<!--   Logging -->
+	<inherits name="com.google.gwt.logging.Logging"/>
+	<set-property name="gwt.logging.enabled" value="TRUE"/>
+	<set-property name="gwt.logging.logLevel" value="ALL"/>
+
+	<set-property name="gwt.logging.consoleHandler" value="ENABLED" />
+
+	<!-- Enable debug ID. -->
+	<inherits name="com.google.gwt.user.Debug"/>
+	<set-property name="gwt.enableDebugId" value="true"/>
+
 	<super-source path="gwt/jre" />
 	<source path="gwt">
 		<exclude name="**/jre/**" />
