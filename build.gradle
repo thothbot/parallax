@@ -8,8 +8,12 @@ ext {
 }
 
 buildscript {
-    repositories { mavenCentral() }
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
     dependencies {
+        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
         classpath "com.android.tools.build:gradle:1.2.3"
         classpath "org.robovm:robovm-gradle-plugin:1.5.0"
     }
@@ -18,7 +22,7 @@ buildscript {
 // apply the following to all projects, except the
 // Android test project, that one has its own
 // build.gradle file cause Android is special...
-configure(allprojects) {
+configure(allprojects - project(':tests:parallax-tests-android')) {
     apply plugin: "eclipse"
     apply plugin: "idea"
     apply plugin: "java"
@@ -68,6 +72,34 @@ project(":platforms:parallax-android") {
     dependencies {
         compile project(":parallax")
         optional fileTree(dir: 'libs', include: ['*.jar'])
+    }
+}
+
+project(":tests:parallax-tests") {
+    dependencies {
+        compile project(":parallax")
+    }
+}
+
+project(":tests:parallax-tests-android") {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+    apply plugin: "android"
+
+    dependencies {
+        compile project(":tests:parallax-tests")
+        compile project(":platforms:parallax-android")
+        compile "com.android.support:support-v4:+"
+    }
+}
+
+project(":tests:parallax-tests-gwt") {
+    apply plugin: "gwt"
+    apply plugin: "war"
+
+    dependencies {
+        compile project(":tests:parallax-tests")
+        compile project(":platforms:parallax-gwt")
     }
 }
 
