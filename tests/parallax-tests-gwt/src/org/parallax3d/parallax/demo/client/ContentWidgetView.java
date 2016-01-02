@@ -35,7 +35,6 @@ import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
-import org.parallax3d.parallax.graphics.renderers.Renderer;
 import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 
 /**

@@ -55,7 +55,9 @@ draftWar {
 }
 
 task addSource << {
-    sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
+    sourceSets.main.compileClasspath += files(project(':parallax').sourceSets.main.allJava.srcDirs)
+    sourceSets.main.compileClasspath += files(project(':platforms:parallax-gwt').sourceSets.main.allJava.srcDirs)
+    sourceSets.main.compileClasspath += files(project(':tests:parallax-tests').sourceSets.main.allJava.srcDirs)
 }
 
 tasks.compileGwt.dependsOn(addSource)
@@ -63,3 +65,4 @@ tasks.draftCompileGwt.dependsOn(addSource)
 
 sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
+

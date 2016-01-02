@@ -23,7 +23,7 @@ import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.UniformsUtils;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
-import org.parallax3d.parallax.graphics.renderers.Renderer;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
@@ -51,7 +51,7 @@ public class Water extends Mirror {
 
 	private Scene scene;
 	
-	public Water(Renderer renderer, Camera camera, Scene scene) {
+	public Water(GLRenderer renderer, Camera camera, Scene scene) {
 		
 		this.setName("water_" + this.getId());
 		

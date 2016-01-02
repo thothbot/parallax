@@ -12,14 +12,6 @@
 	
 	<set-configuration-property name="parallax.assetpath" value="../android/assets" />
 
-	<!--<generate-with class="SourceGenerator">-->
-		<!--<when-type-assignable class="WebApp.GenerateSourceSignal" />-->
-	<!--</generate-with>-->
-
-	<!--<generate-with class="FacebookGenerator">-->
-		<!--<when-type-assignable class="WebApp.GenerateFacebookSignal" />-->
-	<!--</generate-with>-->
-
 	<source path='client'/>
 	<source path='resources'/>
 	<source path="generator">

@@ -76,6 +76,8 @@ project(":platforms:parallax-android") {
 }
 
 project(":tests:parallax-tests") {
+    apply plugin: "java"
+
     dependencies {
         compile project(":parallax")
     }

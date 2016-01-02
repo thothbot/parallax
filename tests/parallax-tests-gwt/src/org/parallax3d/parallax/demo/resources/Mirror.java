@@ -28,7 +28,7 @@ import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
-import org.parallax3d.parallax.graphics.renderers.Renderer;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.*;
@@ -49,7 +49,7 @@ public class Mirror extends Object3D {
 	public boolean debugMode = false;
 	
 	
-	protected Renderer renderer;
+	protected GLRenderer renderer;
 	protected PerspectiveCamera camera;
 	protected PerspectiveCamera mirrorCamera;
 	protected Plane mirrorPlane = new Plane();
@@ -73,7 +73,7 @@ public class Mirror extends Object3D {
 		this.setName("mirror_ " + this.getId());
 	}
 
-	public Mirror(Renderer renderer, Camera camera) {
+	public Mirror(GLRenderer renderer, Camera camera) {
 				
 		this();
 		
