@@ -1,1 +1,9 @@
 language: java
+
+env:
+  global:
+    - ANDROID_HOME=${TRAVIS_BUILD_DIR}/android-sdk
+    - PATH=${ANDROID_HOME}/:${ANDROID_HOME}/tools/:${ANDROID_HOME}/platform-tools/:${PATH}
+
+before_install:
+  - cp -R /usr/local/android-sdk-20.0.0 ./android-sdk

@@ -6,6 +6,8 @@
 .classpath
 /.idea
 *.iml
+*.ipr
+*.iws
 
 .gradle/
 build/
