@@ -1,13 +1,39 @@
 language: java
 
+env:
+  global:
+    - ANDROID_SDK_VERSION="r20"
+
 before_install:
-  # Install base Android SDK
+  # environment info
+  - gradle -v
+  - uname -a
+
+  # required libs for android build tools
+  # Update a system for ia32 libraries
   - sudo apt-get update -qq
-  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch > /dev/null; fi
-  - wget http://dl.google.com/android/android-sdk_r20-linux.tgz
-  - tar xzf android-sdk_r20-linux.tgz
-  - export ANDROID_HOME=$PWD/android-sdk-linux
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get update; fi
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
+
+  # for gradle output style
+  - export TERM=dumb
+
+  # just to test gradle version, against our provided one
+  - gradle -v
+
+  # newest android SDK
+  - wget http://dl.google.com/android/android-sdk_${ANDROID_SDK_VERSION}-linux.tgz
+  - tar -zxf android-sdk_${ANDROID_SDK_VERSION}-linux.tgz
+  - export ANDROID_HOME=`pwd`/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
-  # Install required Android components.
-  - android update sdk --filter platform-tools,android-20,extra-android-support,$ANDROID_SDKS --no-ui --force
+  # manually set sdk.dir variable, according to local paths
+  - echo "sdk.dir=$ANDROID_HOME" > local.properties
+
+  # Install required components.
+  # For a full list, run `android list sdk -a --extended`
+  - echo yes | android update sdk --filter platform-tools --no-ui --force > /dev/null
+  - echo yes | android update sdk --all --filter build-tools-20.0.0 --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter android-20 --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter extra-android-support --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter extra-android-m2repository --no-ui --force > /dev/null
