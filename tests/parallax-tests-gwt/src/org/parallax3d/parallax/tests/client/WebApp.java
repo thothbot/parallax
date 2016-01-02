@@ -40,8 +40,6 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import org.parallax3d.parallax.tests.generator.FacebookGenerator;
-import org.parallax3d.parallax.tests.generator.SourceGenerator;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
@@ -51,20 +49,6 @@ import java.util.Set;
 
 public class WebApp extends GwtApp
 {
-	/**
-	 * The type passed into the
-	 * {@link SourceGenerator}.
-	 */
-	private static final class GenerateSourceSignal 
-	{}
-
-	/**
-	 * The type passed into the
-	 * {@link FacebookGenerator}.
-	 */
-	private static final class GenerateFacebookSignal 
-	{}
-
 	/**
 	 * The static resources used throughout the Demo.
 	 */
@@ -115,12 +99,6 @@ public class WebApp extends GwtApp
 				}
 			}
 		});
-
-		// Generate the source code for examples
-		GWT.create(GenerateSourceSignal.class);
-
-		// Generate the tests file
-		GWT.create(GenerateFacebookSignal.class);
 
 		resources.css().ensureInjected();
 

@@ -19,7 +19,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CORE_DIR = os.path.join(SCRIPT_DIR, os.pardir, 'parallax', 'src')
 OUTPUT_FILE = os.path.join(CORE_DIR, 'org', 'parallax3d', 'parallax.gwt.xml')
 
-includes = ['*.java','*.fs','*.vs','*.glsl']
+includes = ['*.fs','*.vs','*.glsl']
 excludes = ['']
 
 includes = r'|'.join([fnmatch.translate(x) for x in includes])
@@ -50,10 +50,10 @@ f = open(OUTPUT_FILE,'w')
 
 f.write('<?xml version="1.0" encoding="UTF-8"?>\n<module rename-to="' + MODULE + '">\n')
 
-f.write('\t<source path="parallax">\n')
-for val in listJava:
-    f.write('\t\t<include name="' + val + '" />\n')
-f.write('\t</source>\n\n')
+f.write('\t<source path="parallax" />\n\n')
+# for val in listJava:
+#     f.write('\t\t<include name="' + val + '" />\n')
+# f.write('\t</source>\n\n')
 
 if len(listStatic):
     f.write('\t<define-configuration-property name="' + STATIC_REWRITE +'" is-multi-valued="true" />\n')

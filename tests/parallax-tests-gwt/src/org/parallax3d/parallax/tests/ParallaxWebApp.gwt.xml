@@ -4,7 +4,7 @@
 
 	<inherits name='org.parallax3d.parallax.platforms.parallaxGwt' />
 
-	<inherits name='Demo' />
+	<inherits name='org.parallax3d.parallax.parallaxTests' />
 
 	<inherits name="com.google.gwt.user.theme.standard.Standard"/>
 
@@ -14,8 +14,5 @@
 
 	<source path='client'/>
 	<source path='resources'/>
-	<source path="generator">
-		<exclude name="**" />
-	</source>
 
 </module>

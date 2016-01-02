@@ -3,7 +3,7 @@
 <module rename-to="gwt">
 	<inherits name='org.parallax3d.parallax.platforms.parallaxGwt' />
 
-    <inherits name='org.parallax3d.parallax.demo.ParallaxWebApp' />
+    <inherits name='org.parallax3d.parallax.tests.ParallaxWebApp' />
     
     <collapse-all-properties />
     
