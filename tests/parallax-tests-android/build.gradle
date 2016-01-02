@@ -1,6 +1,10 @@
+repositories {
+    mavenCentral()
+}
+
 android {
-    buildToolsVersion "23.0.1"
-    compileSdkVersion 23
+    buildToolsVersion "20.0.0"
+    compileSdkVersion 20
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -11,31 +15,7 @@ android {
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
         }
-
-        instrumentTest.setRoot('tests')
     }
-}
-
-task run(type: Exec) {
-    def path
-    def localProperties = project.file("../local.properties")
-    if (localProperties.exists()) {
-        Properties properties = new Properties()
-        localProperties.withInputStream { instr ->
-            properties.load(instr)
-        }
-        def sdkDir = properties.getProperty('sdk.dir')
-        if (sdkDir) {
-            path = sdkDir
-        } else {
-            path = "$System.env.ANDROID_HOME"
-        }
-    } else {
-        path = "$System.env.ANDROID_HOME"
-    }
-
-    def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'rg.parallax3d.parallax.tests.android/AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.
@@ -54,8 +34,8 @@ eclipse {
     }
 
     classpath {
-        plusConfigurations += [ project.configurations.compile ]        
-        containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'       
+        plusConfigurations += [ project.configurations.compile ]
+        containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'
     }
 
     project {
@@ -72,7 +52,7 @@ eclipse {
 idea {
     module {
         sourceDirs += file("src");
-        scopes = [ COMPILE: [plus:[project.configurations.compile]]]        
+        scopes = [ COMPILE: [plus:[project.configurations.compile]]]
 
         iml {
             withXml {
@@ -90,3 +70,59 @@ idea {
         }
     }
 }
+
+// used to create obb file
+task copyAssets << {
+    def assets = fileTree('assets')
+    copy {
+        from assets
+        into "build/obbassets"
+        rename { fileName ->
+            fileName = "obbasset-" + fileName
+        }
+    }
+}
+
+task zipAssets(type: Zip) {
+    destinationDir = file("build/obb")
+    entryCompression = ZipEntryCompression.STORED
+    from "build/obbassets"
+    baseName = "main.1.org.parallax3d.parallax.tests.android"
+    extension = "obb"
+}
+
+def getADBPath() {
+    def path
+    def localProperties = new File("local.properties")
+    if (localProperties.exists()) {
+        Properties properties = new Properties()
+        localProperties.withInputStream { instr ->
+            properties.load(instr)
+        }
+        def sdkDir = properties.getProperty('sdk.dir')
+        if (sdkDir) {
+            path = sdkDir
+        } else {
+            path = "$System.env.ANDROID_HOME"
+        }
+    } else {
+        path = "$System.env.ANDROID_HOME"
+    }
+
+    def adb = path + "/platform-tools/adb"
+    adb
+}
+
+task createOBBDir(type: Exec) {
+    def adb = getADBPath();
+    commandLine "$adb", 'shell', 'mkdir', '-p', '/mnt/sdcard/Android/obb/org.parallax3d.parallax.tests.android'
+}
+task uploadOBB(type: Exec) {
+    def adb = getADBPath();
+    commandLine "$adb", 'push', 'build/obb/main.1.org.parallax3d.parallax.tests.android.obb', '/mnt/sdcard/Android/obb/org.parallax3d.parallax.tests.android'
+}
+
+copyAssets.dependsOn clean
+zipAssets.dependsOn copyAssets
+createOBBDir.dependsOn zipAssets
+uploadOBB.dependsOn createOBBDir
