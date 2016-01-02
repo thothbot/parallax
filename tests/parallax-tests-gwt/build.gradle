@@ -7,8 +7,8 @@ gwt {
     minHeapSize="1G"
 
     src = files(file("src/")) // Needs to be in front of "modules" below.
-    modules 'org.parallax3d.parallax.demo.ParallaxWebApp'
-    devModules 'org.parallax3d.parallax.demo.ParallaxWebAppSuperdev'
+    modules 'org.parallax3d.parallax.tests.ParallaxWebApp'
+    devModules 'org.parallax3d.parallax.tests.ParallaxWebAppSuperdev'
     project.webAppDirName = 'webapp'
 
     compiler {
