@@ -8,3 +8,6 @@ before_install:
   - tar xzf android-sdk_r20-linux.tgz
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+
+  # Install required Android components.
+  - android update sdk --filter platform-tools,android-20,extra-android-support,$ANDROID_SDKS --no-ui --force
