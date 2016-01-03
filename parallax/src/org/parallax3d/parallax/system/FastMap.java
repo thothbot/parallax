@@ -30,65 +30,6 @@ import java.util.Set;
 
 @SuppressWarnings("serial")
 public class FastMap<V> extends AbstractMap<String, V> implements Serializable {
-  private static class FastMapEntry<V> implements Entry<String, V> {
-
-    private String key;
-
-    private V value;
-
-    FastMapEntry(String key, V value) {
-      this.key = key;
-      this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object a) {
-      if (a instanceof Entry) {
-        Entry<?, ?> s = (Entry<?, ?>) a;
-        if (equalsWithNullCheck(key, s.getKey()) && equalsWithNullCheck(value, s.getValue())) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    public String getKey() {
-      return key;
-    }
-
-    public V getValue() {
-      return value;
-    }
-
-    @Override
-    public int hashCode() {
-      int keyHash = 0;
-      int valueHash = 0;
-      if (key != null) {
-        keyHash = key.hashCode();
-      }
-      if (value != null) {
-        valueHash = value.hashCode();
-      }
-      return keyHash ^ valueHash;
-    }
-
-    public V setValue(V object) {
-      V old = value;
-      value = object;
-      return old;
-    }
-
-    private boolean equalsWithNullCheck(Object a, Object b) {
-      if (a == b) {
-        return true;
-      } else if (a == null) {
-        return false;
-      } else {
-        return a.equals(b);
-      }
-    }
-  }
 
   private transient HashMap<String, V> javaMap;
 
