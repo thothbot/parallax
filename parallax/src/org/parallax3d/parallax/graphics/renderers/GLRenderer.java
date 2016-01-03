@@ -1329,18 +1329,15 @@ public class GLRenderer extends AbstractRenderer
 				GeometryGroup.geometryGroups.get( geometry.getId() + "" );
 
 		// create separate VBOs per geometry chunk
-
 		for ( int i = 0, il = geometryGroupsList.size(); i < il; i ++ ) {
 
 			GeometryGroup geometryGroup = geometryGroupsList.get( i );
 
 			// initialise VBO on the first access
-
-			if ( geometryGroup.__webglVertexBuffer == 0 ) {
-
+			if ( geometryGroup.__webglVertexBuffer == 0 )
+			{
 				((Mesh)object).createBuffers(this, geometryGroup);
 				((Mesh)object).initBuffers(geometryGroup);
-
 				geometry.setVerticesNeedUpdate( true );
 				geometry.setMorphTargetsNeedUpdate( true );
 				geometry.setElementsNeedUpdate( true );

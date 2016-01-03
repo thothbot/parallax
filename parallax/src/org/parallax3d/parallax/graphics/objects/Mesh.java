@@ -620,6 +620,7 @@ public class Mesh extends GeometryObject
 		GLRendererInfo info = renderer.getInfo();
 
 		geometryGroup.__webglVertexBuffer = App.gl.glGenBuffer();
+
 		geometryGroup.__webglNormalBuffer = App.gl.glGenBuffer();
 		geometryGroup.__webglTangentBuffer = App.gl.glGenBuffer();
 		geometryGroup.__webglColorBuffer = App.gl.glGenBuffer();
