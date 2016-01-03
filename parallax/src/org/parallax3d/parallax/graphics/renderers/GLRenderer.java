@@ -96,6 +96,8 @@ import org.parallax3d.parallax.system.gl.enums.*;
 @ThreeJsObject("THREE.WebGLRenderer")
 public class GLRenderer extends AbstractRenderer
 {
+	public GL20 gl;
+
 	private GLRendererInfo info;
 
 	private List<Light> lights = new ArrayList<Light>();
@@ -240,8 +242,10 @@ public class GLRenderer extends AbstractRenderer
 	 * @param width  the viewport width
 	 * @param height the viewport height
 	 */
-	public GLRenderer(int width, int height)
+	public GLRenderer(GL20 gl, int width, int height)
 	{
+		this.gl = gl;
+
 		this.setInfo(new GLRendererInfo());
 
 		this._lights           = new RendererLights();
@@ -253,21 +257,21 @@ public class GLRenderer extends AbstractRenderer
 		this._maxCubemapSize    = this.getIntGlParam(GL20.GL_MAX_CUBE_MAP_TEXTURE_SIZE);
 
 		this._supportsVertexTextures = ( this._maxVertexTextures > 0 );
-		this._supportsBoneTextures = this._supportsVertexTextures && GLExtensions.get(GLExtensions.Id.OES_texture_float);
+		this._supportsBoneTextures = this._supportsVertexTextures && GLExtensions.get(gl, GLExtensions.Id.OES_texture_float);
 
 		this._vertexShaderPrecisionHighpFloat = new
-				WebGLShaderPrecisionFormat(Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
+				WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
 		this._vertexShaderPrecisionMediumpFloat =
-				new WebGLShaderPrecisionFormat(Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
+				new WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
 		this._vertexShaderPrecisionLowpFloat = new
-				WebGLShaderPrecisionFormat(Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
+				WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
 
 		this._fragmentShaderPrecisionHighpFloat = new
-				WebGLShaderPrecisionFormat(Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
+				WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
 		this._fragmentShaderPrecisionMediumpFloat =
-				new WebGLShaderPrecisionFormat(Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
+				new WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
 		this._fragmentShaderPrecisionLowpFloat = new
-				WebGLShaderPrecisionFormat(Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
+				WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
 
 		this.highpAvailable = _vertexShaderPrecisionHighpFloat.getPrecision() > 0 &&
 				_fragmentShaderPrecisionHighpFloat.getPrecision() > 0;
@@ -296,16 +300,16 @@ public class GLRenderer extends AbstractRenderer
 			App.app.debug("WebGLRenderer", "mediump not supported, using lowp.");
 		}
 
-		GLExtensions.get(GLExtensions.Id.OES_texture_float);
-		GLExtensions.get(GLExtensions.Id.OES_texture_float_linear);
-		GLExtensions.get(GLExtensions.Id.OES_standard_derivatives);
+		GLExtensions.get(gl, GLExtensions.Id.OES_texture_float);
+		GLExtensions.get(gl, GLExtensions.Id.OES_texture_float_linear);
+		GLExtensions.get(gl, GLExtensions.Id.OES_standard_derivatives);
 
 		if ( _logarithmicDepthBuffer )
 		{
-			_logarithmicDepthBuffer = GLExtensions.get(GLExtensions.Id.EXT_frag_depth);
+			_logarithmicDepthBuffer = GLExtensions.get(gl, GLExtensions.Id.EXT_frag_depth);
 		}
 
-		GLExtensions.get(GLExtensions.Id.WEBGL_compressed_texture_s3tc);
+		GLExtensions.get(gl, GLExtensions.Id.WEBGL_compressed_texture_s3tc);
 
 		setSize(width, height);
 		setDefaultGLState();
@@ -317,7 +321,7 @@ public class GLRenderer extends AbstractRenderer
 	private int getIntGlParam(int param)
 	{
 		Int32Array buffer = Int32Array.create(1);
-		App.gl.glGetIntegerv(param, buffer.getBuffer().asIntBuffer());
+		this.gl.glGetIntegerv(param, buffer.getBuffer().asIntBuffer());
 		return buffer.get(0);
 	}
 
@@ -344,32 +348,32 @@ public class GLRenderer extends AbstractRenderer
 
 	public boolean supportsFloatTextures()
 	{
-		return GLExtensions.get(GLExtensions.Id.OES_texture_float);
+		return GLExtensions.get(this.gl, GLExtensions.Id.OES_texture_float);
 	}
 
 	public boolean supportsStandardDerivatives()
 	{
-		return GLExtensions.get(GLExtensions.Id.OES_standard_derivatives);
+		return GLExtensions.get(this.gl, GLExtensions.Id.OES_standard_derivatives);
 	}
 
 	public boolean supportsCompressedTextureS3TC()
 	{
-		return GLExtensions.get(GLExtensions.Id.WEBGL_compressed_texture_s3tc);
+		return GLExtensions.get(this.gl, GLExtensions.Id.WEBGL_compressed_texture_s3tc);
 	}
 
 	public boolean supportsCompressedTexturePVRTC()
 	{
-		return GLExtensions.get(GLExtensions.Id.WEBGL_compressed_texture_pvrtc);
+		return GLExtensions.get(this.gl, GLExtensions.Id.WEBGL_compressed_texture_pvrtc);
 	}
 
 	public boolean supportsBlendMinMax()
 	{
-		return GLExtensions.get(GLExtensions.Id.EXT_blend_minmax);
+		return GLExtensions.get(this.gl, GLExtensions.Id.EXT_blend_minmax);
 	}
 
 	public int getMaxAnisotropy()
 	{
-		if (GLExtensions.get(GLExtensions.Id.EXT_texture_filter_anisotropic)) {
+		if (GLExtensions.get(this.gl, GLExtensions.Id.EXT_texture_filter_anisotropic)) {
 			return this.getIntGlParam(GLES20Ext.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 		} else {
 			return 0;
@@ -522,23 +526,23 @@ public class GLRenderer extends AbstractRenderer
 
 	private void setDefaultGLState()
 	{
-		App.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		App.gl.glClearDepthf(1.0f);
-		App.gl.glClearStencil(0);
+		this.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		this.gl.glClearDepthf(1.0f);
+		this.gl.glClearStencil(0);
 
-		App.gl.glEnable(EnableCap.DEPTH_TEST.getValue());
-		App.gl.glDepthFunc(DepthFunction.LEQUAL.getValue());
+		this.gl.glEnable(EnableCap.DEPTH_TEST.getValue());
+		this.gl.glDepthFunc(DepthFunction.LEQUAL.getValue());
 
-		App.gl.glFrontFace(FrontFaceDirection.CCW.getValue());
-		App.gl.glCullFace(CullFaceMode.BACK.getValue());
-		App.gl.glEnable(EnableCap.CULL_FACE.getValue());
+		this.gl.glFrontFace(FrontFaceDirection.CCW.getValue());
+		this.gl.glCullFace(CullFaceMode.BACK.getValue());
+		this.gl.glEnable(EnableCap.CULL_FACE.getValue());
 
-		App.gl.glEnable(EnableCap.BLEND.getValue());
-		App.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
-		App.gl.glBlendFunc(BlendingFactorSrc.SRC_ALPHA.getValue(), BlendingFactorDest.ONE_MINUS_SRC_ALPHA.getValue());
+		this.gl.glEnable(EnableCap.BLEND.getValue());
+		this.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
+		this.gl.glBlendFunc(BlendingFactorSrc.SRC_ALPHA.getValue(), BlendingFactorDest.ONE_MINUS_SRC_ALPHA.getValue());
 
-		App.gl.glViewport(_viewportX, _viewportY, _viewportWidth, _viewportHeight);
-		App.gl.glClearColor((float)clearColor.getR(), (float)clearColor.getG(), (float)clearColor.getB(), (float)clearAlpha);
+		this.gl.glViewport(_viewportX, _viewportY, _viewportWidth, _viewportHeight);
+		this.gl.glClearColor((float)clearColor.getR(), (float)clearColor.getG(), (float)clearColor.getB(), (float)clearAlpha);
 	}
 
 	/**
@@ -568,7 +572,7 @@ public class GLRenderer extends AbstractRenderer
 		this._viewportWidth = width;
 		this._viewportHeight = height;
 
-		App.gl.glViewport(this._viewportX, this._viewportY, this._viewportWidth, this._viewportHeight);
+		this.gl.glViewport(this._viewportX, this._viewportY, this._viewportWidth, this._viewportHeight);
 
 		fireViewportResizeEvent(width, height);
 	}
@@ -578,7 +582,7 @@ public class GLRenderer extends AbstractRenderer
 	 */
 	public void setScissor(int x, int y, int width, int height)
 	{
-		App.gl.glScissor(x, y, width, height);
+		this.gl.glScissor(x, y, width, height);
 	}
 
 	/**
@@ -589,9 +593,9 @@ public class GLRenderer extends AbstractRenderer
 	public void enableScissorTest(boolean enable)
 	{
 		if (enable)
-			App.gl.glEnable(EnableCap.SCISSOR_TEST.getValue());
+			this.gl.glEnable(EnableCap.SCISSOR_TEST.getValue());
 		else
-			App.gl.glDisable(EnableCap.SCISSOR_TEST.getValue());
+			this.gl.glDisable(EnableCap.SCISSOR_TEST.getValue());
 	}
 
 	@Override
@@ -600,7 +604,7 @@ public class GLRenderer extends AbstractRenderer
 		this.clearColor.copy(color);
 		this.clearAlpha = alpha;
 
-		App.gl.glClearColor((float)this.clearColor.getR(), (float)this.clearColor.getG(), (float)this.clearColor.getB(), (float)this.clearAlpha);
+		this.gl.glClearColor((float) this.clearColor.getR(), (float) this.clearColor.getG(), (float) this.clearColor.getB(), (float) this.clearAlpha);
 	}
 
 	@Override
@@ -625,22 +629,22 @@ public class GLRenderer extends AbstractRenderer
 		if ( depth ) bits |= ClearBufferMask.DEPTH_BUFFER_BIT.getValue();
 		if ( stencil ) bits |= ClearBufferMask.STENCIL_BUFFER_BIT.getValue();
 
-		App.gl.glClear(bits);
+		this.gl.glClear(bits);
 	}
 
 	public void clearColor()
 	{
-		App.gl.glClear(ClearBufferMask.COLOR_BUFFER_BIT.getValue());
+		this.gl.glClear(ClearBufferMask.COLOR_BUFFER_BIT.getValue());
 	}
 
 	public void clearDepth()
 	{
-		App.gl.glClear(ClearBufferMask.DEPTH_BUFFER_BIT.getValue());
+		this.gl.glClear(ClearBufferMask.DEPTH_BUFFER_BIT.getValue());
 	}
 
 	public void clearStencil()
 	{
-		App.gl.glClear(ClearBufferMask.STENCIL_BUFFER_BIT.getValue());
+		this.gl.glClear(ClearBufferMask.STENCIL_BUFFER_BIT.getValue());
 	}
 
 	/**
@@ -685,7 +689,7 @@ public class GLRenderer extends AbstractRenderer
 
 		if ( _enabledAttributes.get( attribute ) == 0 ) {
 
-			App.gl.glEnableVertexAttribArray(attribute);
+			this.gl.glEnableVertexAttribArray(attribute);
 			_enabledAttributes.set(attribute, 1);
 
 		}
@@ -698,7 +702,7 @@ public class GLRenderer extends AbstractRenderer
 
 			if ( _enabledAttributes.get( i ) != _newAttributes.get( i ) ) {
 
-				App.gl.glDisableVertexAttribArray(i);
+				this.gl.glDisableVertexAttribArray(i);
 				_enabledAttributes.set(i, 0);
 
 			}
@@ -720,16 +724,16 @@ public class GLRenderer extends AbstractRenderer
 
 		if ( object.morphTargetBase != - 1 && attributes.get("position") >= 0)
 		{
-			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(object.morphTargetBase));
+			this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(object.morphTargetBase));
 			enableAttribute( attributes.get("position") );
-			App.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+			this.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 		}
 		else if ( attributes.get("position") >= 0 )
 		{
-			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglVertexBuffer);
+			this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglVertexBuffer);
 			enableAttribute( attributes.get("position") );
-			App.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+			this.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
 		}
 
 		if ( object.morphTargetForcedOrder.size() > 0 )
@@ -746,18 +750,18 @@ public class GLRenderer extends AbstractRenderer
 					) {
 				if ( attributes.get("morphTarget" + m )  >= 0 )
 				{
-					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(order.get(m)));
+					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(order.get(m)));
 					enableAttribute( attributes.get("morphTarget" + m ) );
-					App.gl.glVertexAttribPointer(attributes.get("morphTarget" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
+					this.gl.glVertexAttribPointer(attributes.get("morphTarget" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 				}
 
 				if (  attributes.get("morphNormal" + m )  >= 0 &&
 						material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals())
 				{
-					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get(order.get(m)));
+					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get(order.get(m)));
 					enableAttribute( attributes.get("morphNormal" + m ));
-					App.gl.glVertexAttribPointer(attributes.get("morphNormal" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
+					this.gl.glVertexAttribPointer(attributes.get("morphNormal" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
 				}
 
 				object.__webglMorphTargetInfluences.set( m , influences.get( order.get( m ) ));
@@ -821,18 +825,18 @@ public class GLRenderer extends AbstractRenderer
 
 					if ( attributes.get( "morphTarget" + m ) >= 0 ) {
 
-						App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(influenceIndex));
+						this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(influenceIndex));
 						enableAttribute( attributes.get( "morphTarget" + m ) );
-						App.gl.glVertexAttribPointer(attributes.get("morphTarget" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
+						this.gl.glVertexAttribPointer(attributes.get("morphTarget" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 					}
 
 					if ( attributes.get( "morphNormal" + m ) >= 0 &&
 							((HasSkinning)material).isMorphNormals() ) {
 
-						App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get(influenceIndex));
+						this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get(influenceIndex));
 						enableAttribute( attributes.get( "morphNormal" + m ) );
-						App.gl.glVertexAttribPointer(attributes.get("morphNormal" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
+						this.gl.glVertexAttribPointer(attributes.get("morphNormal" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 					}
 
@@ -864,7 +868,7 @@ public class GLRenderer extends AbstractRenderer
 		if( uniforms.get("morphTargetInfluences").getLocation() != -1 )
 		{
 			Float32Array vals = object.__webglMorphTargetInfluences;
-			App.gl.glUniform1fv(uniforms.get("morphTargetInfluences").getLocation(), 1, vals.getFloatBuffer());
+			this.gl.glUniform1fv(uniforms.get("morphTargetInfluences").getLocation(), 1, vals.getFloatBuffer());
 		}
 	}
 
@@ -984,11 +988,11 @@ public class GLRenderer extends AbstractRenderer
 
 					int size = geometryAttribute.getItemSize();
 
-					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryAttribute.getBuffer());
+					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryAttribute.getBuffer());
 
 					enableAttribute( programAttribute );
 
-					App.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false, 0, startIndex * size * 4); // 4 bytes per Float32
+					this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false, 0, startIndex * size * 4); // 4 bytes per Float32
 
 				}
 //				else if ( material.defaultAttributeValues != null ) {
@@ -1065,11 +1069,11 @@ public class GLRenderer extends AbstractRenderer
 
 						setupVertexAttributes( material, program, geometry, 0 );
 
-						App.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
+						this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
 
 					}
 
-					App.gl.glDrawElements(mode.getValue(), index.getArray().getLength(), type.getValue(), 0);
+					this.gl.glDrawElements(mode.getValue(), index.getArray().getLength(), type.getValue(), 0);
 
 					this.info.getRender().calls ++;
 					this.info.getRender().vertices +=
@@ -1091,11 +1095,11 @@ public class GLRenderer extends AbstractRenderer
 						if ( updateBuffers ) {
 
 							setupVertexAttributes( material, program, geometry, startIndex );
-							App.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
+							this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
 
 						}
 
-						App.gl.glDrawElements( mode.getValue(), offsets.get( i ).count, type.getValue(), offsets.get( i ).start * size  );
+						this.gl.glDrawElements( mode.getValue(), offsets.get( i ).count, type.getValue(), offsets.get( i ).start * size  );
 
 						getInfo().getRender().calls ++;
 						getInfo().getRender().vertices +=
@@ -1121,7 +1125,7 @@ public class GLRenderer extends AbstractRenderer
 
 				// render non-indexed triangles
 
-				App.gl.glDrawArrays( mode.getValue(), 0, position.getArray().getLength() / 3 );
+				this.gl.glDrawArrays( mode.getValue(), 0, position.getArray().getLength() / 3 );
 
 				this.info.getRender().calls ++;
 				this.info.getRender().vertices += position.getArray().getLength() / 3;
@@ -1144,7 +1148,7 @@ public class GLRenderer extends AbstractRenderer
 
 			// render particles
 
-			App.gl.glDrawArrays( BeginMode.POINTS.getValue(), 0, position.getArray().getLength() / 3 );
+			this.gl.glDrawArrays( BeginMode.POINTS.getValue(), 0, position.getArray().getLength() / 3 );
 
 			this.info.getRender().calls ++;
 			this.info.getRender().points += position.getArray().getLength() / 3;
@@ -1153,7 +1157,7 @@ public class GLRenderer extends AbstractRenderer
 		{
 
 			BeginMode mode = ( ((Line)object).getMode() == Line.MODE.STRIPS ) ? BeginMode.LINE_STRIP : BeginMode.LINES;
-			object.setLineWidth(((LineBasicMaterial)material).getLinewidth());
+			object.setLineWidth(this.gl, ((LineBasicMaterial)material).getLinewidth());
 
 			BufferAttribute index = geometry.getAttribute("index");
 
@@ -1182,11 +1186,11 @@ public class GLRenderer extends AbstractRenderer
 					if ( updateBuffers ) {
 
 						setupVertexAttributes( material, program, geometry, 0 );
-						App.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
+						this.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
 
 					}
 
-					App.gl.glDrawElements( mode.getValue(), index.getArray().getLength(), type.getValue(), 0 ); // 2 bytes per Uint16Array
+					this.gl.glDrawElements( mode.getValue(), index.getArray().getLength(), type.getValue(), 0 ); // 2 bytes per Uint16Array
 
 					this.info.getRender().calls ++;
 					this.info.getRender().vertices +=
@@ -1207,13 +1211,13 @@ public class GLRenderer extends AbstractRenderer
 						if ( updateBuffers ) {
 
 							setupVertexAttributes( material, program, geometry, startIndex );
-							App.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
+							this.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
 
 						}
 
 						// render indexed lines
 
-						App.gl.glDrawElements( mode.getValue(), drawcalls.get( i ).count, type.getValue(), drawcalls.get( i ).start * size ); // 2 bytes per Uint16Array
+						this.gl.glDrawElements( mode.getValue(), drawcalls.get( i ).count, type.getValue(), drawcalls.get( i ).start * size ); // 2 bytes per Uint16Array
 
 						this.info.getRender().calls ++;
 						this.info.getRender().vertices +=
@@ -1235,7 +1239,7 @@ public class GLRenderer extends AbstractRenderer
 
 				BufferAttribute position = geometry.getAttribute("position");
 
-				App.gl.glDrawArrays( mode.getValue(), 0,  position.getArray().getLength() / 3 );
+				this.gl.glDrawArrays( mode.getValue(), 0,  position.getArray().getLength() / 3 );
 
 				this.info.getRender().calls ++;
 				this.info.getRender().points += position.getArray().getLength() / 3;
@@ -1247,7 +1251,7 @@ public class GLRenderer extends AbstractRenderer
 
 	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {
 
-		long maxVerticesInGroup = GLExtensions.get(GLExtensions.Id.OES_element_index_uint) ? 4294967296L : 65535L;
+		long maxVerticesInGroup = GLExtensions.get(this.gl, GLExtensions.Id.OES_element_index_uint) ? 4294967296L : 65535L;
 
 		int numMorphTargets = geometry.getMorphTargets().size();
 		int numMorphNormals = geometry.getMorphNormals().size();
@@ -1337,7 +1341,7 @@ public class GLRenderer extends AbstractRenderer
 			if ( geometryGroup.__webglVertexBuffer == 0 )
 			{
 				((Mesh)object).createBuffers(this, geometryGroup);
-				((Mesh)object).initBuffers(geometryGroup);
+				((Mesh)object).initBuffers(this.gl, geometryGroup);
 				geometry.setVerticesNeedUpdate( true );
 				geometry.setMorphTargetsNeedUpdate( true );
 				geometry.setElementsNeedUpdate( true );
@@ -1401,7 +1405,7 @@ public class GLRenderer extends AbstractRenderer
 				if ( geometry.__webglVertexBuffer == 0 ) {
 
 					((Line)object).createBuffers(this);
-					((Line)object).initBuffers();
+					((Line)object).initBuffers(this.gl);
 
 					geometry.setVerticesNeedUpdate( true );
 					geometry.setColorsNeedUpdate( true );
@@ -1414,7 +1418,7 @@ public class GLRenderer extends AbstractRenderer
 				if ( geometry.__webglVertexBuffer == 0 ) {
 
 					((PointCloud)object).createBuffers(this);
-					((PointCloud)object).initBuffers();
+					((PointCloud)object).initBuffers(this.gl);
 
 					geometry.setVerticesNeedUpdate( true );
 					geometry.setColorsNeedUpdate( true );
@@ -1576,7 +1580,7 @@ public class GLRenderer extends AbstractRenderer
 
 		if ( geometry instanceof BufferGeometry ) {
 
-			((BufferGeometry)geometry).setDirectBuffers();
+			((BufferGeometry)geometry).setDirectBuffers(this.gl);
 
 		} else if ( object instanceof Mesh ) {
 
@@ -1599,7 +1603,7 @@ public class GLRenderer extends AbstractRenderer
 
 				if ( geometry.isGroupsNeedUpdate() ) {
 
-					((Mesh)object).initBuffers( geometryGroup );
+					((Mesh)object).initBuffers( this.gl, geometryGroup );
 
 				}
 
@@ -1612,7 +1616,7 @@ public class GLRenderer extends AbstractRenderer
 						geometry.isColorsNeedUpdate() || geometry.isTangentsNeedUpdate() ||
 						customAttributesDirty ) {
 
-					((Mesh)object).setBuffers( geometryGroup, BufferUsage.DYNAMIC_DRAW, ! ((Geometry)geometry).isDynamic(), material );
+					((Mesh)object).setBuffers( this.gl, geometryGroup, BufferUsage.DYNAMIC_DRAW, ! ((Geometry)geometry).isDynamic(), material );
 
 				}
 
@@ -1640,7 +1644,7 @@ public class GLRenderer extends AbstractRenderer
 			if ( geometry.isVerticesNeedUpdate() || geometry.isColorsNeedUpdate() ||
 					geometry.isLineDistancesNeedUpdate() || customAttributesDirty ) {
 
-				((Line)object).setBuffers( BufferUsage.DYNAMIC_DRAW );
+				((Line)object).setBuffers( this.gl, BufferUsage.DYNAMIC_DRAW );
 
 			}
 
@@ -1856,7 +1860,7 @@ public class GLRenderer extends AbstractRenderer
 				&& renderTarget.getMinFilter() != TextureMinFilter.NEAREST
 				&& renderTarget.getMinFilter() != TextureMinFilter.LINEAR)
 		{
-			renderTarget.updateRenderTargetMipmap();
+			renderTarget.updateRenderTargetMipmap(this.gl);
 		}
 
 		// Ensure depth buffer writing is enabled so it can be cleared on next render
@@ -1968,7 +1972,7 @@ public class GLRenderer extends AbstractRenderer
 
 			this._lightsNeedUpdate = true;
 
-			plugin.render( camera, lights, _currentWidth, _currentHeight );
+			plugin.render( this.gl, camera, lights, _currentWidth, _currentHeight );
 
 			// reset state after plugin (anything could have changed)
 
@@ -2101,9 +2105,9 @@ public class GLRenderer extends AbstractRenderer
 		{
 			if ( updateBuffers )
 			{
-				App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+				this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
 				enableAttribute( attributes.get("position") );
-				App.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+				this.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
 			}
 
 		}
@@ -2127,9 +2131,9 @@ public class GLRenderer extends AbstractRenderer
 
 					if( attributes.get( attribute.belongsToAttribute ) >= 0 )
 					{
-						App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), attribute.buffer);
+						this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), attribute.buffer);
 						enableAttribute( attributes.get( attribute.belongsToAttribute ) );
-						App.gl.glVertexAttribPointer(attributes.get(attribute.belongsToAttribute), attribute.size, DataType.FLOAT.getValue(), false, 0, 0);
+						this.gl.glVertexAttribPointer(attributes.get(attribute.belongsToAttribute), attribute.size, DataType.FLOAT.getValue(), false, 0, 0);
 					}
 				}
 			}
@@ -2140,13 +2144,13 @@ public class GLRenderer extends AbstractRenderer
 				if ( ((Geometry)object.getGeometry()).getColors().size() > 0 ||
 						((Geometry)object.getGeometry()).getFaces().size() > 0 ) {
 
-					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
+					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
 					enableAttribute( attributes.get("color") );
-					App.gl.glVertexAttribPointer(attributes.get("color"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+					this.gl.glVertexAttribPointer(attributes.get("color"), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 				} else {
 
-					App.gl.glVertexAttrib3f(attributes.get("color"), 1.0f, 1.0f, 1.0f);
+					this.gl.glVertexAttrib3f(attributes.get("color"), 1.0f, 1.0f, 1.0f);
 
 				}
 			}
@@ -2154,17 +2158,17 @@ public class GLRenderer extends AbstractRenderer
 			// normals
 			if ( attributes.get("normal") >= 0 )
 			{
-				App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglNormalBuffer);
+				this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglNormalBuffer);
 				enableAttribute( attributes.get("normal") );
-				App.gl.glVertexAttribPointer(attributes.get("normal"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+				this.gl.glVertexAttribPointer(attributes.get("normal"), 3, DataType.FLOAT.getValue(), false, 0, 0);
 			}
 
 			// tangents
 			if ( attributes.get("tangent") >= 0 )
 			{
-				App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglTangentBuffer);
+				this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglTangentBuffer);
 				enableAttribute( attributes.get("tangent") );
-				App.gl.glVertexAttribPointer(attributes.get("tangent"), 4, DataType.FLOAT.getValue(), false, 0, 0);
+				this.gl.glVertexAttribPointer(attributes.get("tangent"), 4, DataType.FLOAT.getValue(), false, 0, 0);
 			}
 
 			// uvs
@@ -2172,13 +2176,13 @@ public class GLRenderer extends AbstractRenderer
 			{
 				if ( ((Geometry)object.getGeometry()).getFaceVertexUvs().get( 0 ) != null )
 				{
-					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglUVBuffer);
+					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglUVBuffer);
 					enableAttribute( attributes.get("uv") );
-					App.gl.glVertexAttribPointer(attributes.get("uv"), 2, DataType.FLOAT.getValue(), false, 0, 0);
+					this.gl.glVertexAttribPointer(attributes.get("uv"), 2, DataType.FLOAT.getValue(), false, 0, 0);
 
 				} else {
 
-					App.gl.glVertexAttrib2f(attributes.get("uv"), 0.0f, 0.0f);
+					this.gl.glVertexAttrib2f(attributes.get("uv"), 0.0f, 0.0f);
 				}
 			}
 
@@ -2186,35 +2190,35 @@ public class GLRenderer extends AbstractRenderer
 			{
 				if ( ((Geometry)object.getGeometry()).getFaceVertexUvs().get( 1 ) != null )
 				{
-					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglUV2Buffer);
+					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglUV2Buffer);
 					enableAttribute( attributes.get("uv2") );
-					App.gl.glVertexAttribPointer(attributes.get("uv2"), 2, DataType.FLOAT.getValue(), false, 0, 0);
+					this.gl.glVertexAttribPointer(attributes.get("uv2"), 2, DataType.FLOAT.getValue(), false, 0, 0);
 
 				} else {
 
-					App.gl.glVertexAttrib2f(attributes.get("uv2"), 0.0f, 0.0f);
+					this.gl.glVertexAttrib2f(attributes.get("uv2"), 0.0f, 0.0f);
 				}
 			}
 
 			if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() &&
 					attributes.get("skinIndex") >= 0 && attributes.get("skinWeight") >= 0 )
 			{
-				App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglSkinIndicesBuffer);
+				this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglSkinIndicesBuffer);
 				enableAttribute( attributes.get("skinIndex") );
-				App.gl.glVertexAttribPointer(attributes.get("skinIndex"), 4, DataType.FLOAT.getValue(), false, 0, 0);
+				this.gl.glVertexAttribPointer(attributes.get("skinIndex"), 4, DataType.FLOAT.getValue(), false, 0, 0);
 
-				App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglSkinWeightsBuffer);
+				this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglSkinWeightsBuffer);
 				enableAttribute( attributes.get("skinWeight") );
-				App.gl.glVertexAttribPointer(attributes.get("skinWeight"), 4, DataType.FLOAT.getValue(), false, 0, 0);
+				this.gl.glVertexAttribPointer(attributes.get("skinWeight"), 4, DataType.FLOAT.getValue(), false, 0, 0);
 			}
 
 			// line distances
 
 			if ( attributes.get("lineDistance") != null && attributes.get("lineDistance") >= 0 ) {
 
-				App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglLineDistanceBuffer);
+				this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglLineDistanceBuffer);
 				enableAttribute( attributes.get("lineDistance") );
-				App.gl.glVertexAttribPointer(attributes.get("lineDistance"), 1, DataType.FLOAT.getValue(), false, 0, 0);
+				this.gl.glVertexAttribPointer(attributes.get("lineDistance"), 1, DataType.FLOAT.getValue(), false, 0, 0);
 
 			}
 
@@ -2298,7 +2302,7 @@ public class GLRenderer extends AbstractRenderer
 		}
 		else
 		{
-			Shader shader = material.buildShader(parameters);
+			Shader shader = material.buildShader(this.gl, parameters);
 
 			this._programs.put(cashKey, shader);
 
@@ -2376,7 +2380,7 @@ public class GLRenderer extends AbstractRenderer
 
 		if ( program != _currentProgram )
 		{
-			App.gl.glUseProgram(program);
+			this.gl.glUseProgram(program);
 			this._currentProgram = program;
 
 			refreshProgram = true;
@@ -2394,11 +2398,11 @@ public class GLRenderer extends AbstractRenderer
 
 		if ( refreshProgram || !camera.equals( this._currentCamera) )
 		{
-			App.gl.glUniformMatrix4fv(m_uniforms.get("projectionMatrix").getLocation(), 1, false, camera.getProjectionMatrix().getArray().getFloatBuffer());
+			this.gl.glUniformMatrix4fv(m_uniforms.get("projectionMatrix").getLocation(), 1, false, camera.getProjectionMatrix().getArray().getFloatBuffer());
 
 			if ( _logarithmicDepthBuffer ) {
 
-				App.gl.glUniform1f(m_uniforms.get("logDepthBufFC").getLocation(), (float) (2.0 / (Math.log(((HasNearFar) camera).getFar() + 1.0) / 0.6931471805599453 /*Math.LN2*/)));
+				this.gl.glUniform1f(m_uniforms.get("logDepthBufFC").getLocation(), (float) (2.0 / (Math.log(((HasNearFar) camera).getFar() + 1.0) / 0.6931471805599453 /*Math.LN2*/)));
 
 			}
 
@@ -2415,7 +2419,7 @@ public class GLRenderer extends AbstractRenderer
 				if ( m_uniforms.get("cameraPosition").getLocation() != -1 )
 				{
 					_vector3.setFromMatrixPosition( camera.getMatrixWorld() );
-					App.gl.glUniform3f(m_uniforms.get("cameraPosition").getLocation(), (float)_vector3.getX(), (float)_vector3.getY(), (float)_vector3.getZ());
+					this.gl.glUniform3f(m_uniforms.get("cameraPosition").getLocation(), (float)_vector3.getX(), (float)_vector3.getY(), (float)_vector3.getZ());
 				}
 			}
 
@@ -2428,7 +2432,7 @@ public class GLRenderer extends AbstractRenderer
 
 				if ( m_uniforms.get("viewMatrix").getLocation() != -1 )
 				{
-					App.gl.glUniformMatrix4fv(m_uniforms.get("viewMatrix").getLocation(), 1, false, camera.getMatrixWorldInverse().getArray().getFloatBuffer());
+					this.gl.glUniformMatrix4fv(m_uniforms.get("viewMatrix").getLocation(), 1, false, camera.getMatrixWorldInverse().getArray().getFloatBuffer());
 				}
 			}
 		}
@@ -2445,7 +2449,7 @@ public class GLRenderer extends AbstractRenderer
 				{
 					int textureUnit = getTextureUnit();
 
-					App.gl.glUniform1i(m_uniforms.get("boneTexture").getLocation(), textureUnit);
+					this.gl.glUniform1i(m_uniforms.get("boneTexture").getLocation(), textureUnit);
 					setTexture( ((SkinnedMesh)object).boneTexture, textureUnit );
 				}
 			}
@@ -2453,7 +2457,7 @@ public class GLRenderer extends AbstractRenderer
 			{
 				if ( m_uniforms.get("boneGlobalMatrices").getLocation() != -1 )
 				{
-					App.gl.glUniformMatrix4fv(m_uniforms.get("boneGlobalMatrices").getLocation(), 1, false, ((SkinnedMesh) object).boneMatrices.getFloatBuffer());
+					this.gl.glUniformMatrix4fv(m_uniforms.get("boneGlobalMatrices").getLocation(), 1, false, ((SkinnedMesh) object).boneMatrices.getFloatBuffer());
 				}
 			}
 		}
@@ -2497,7 +2501,7 @@ public class GLRenderer extends AbstractRenderer
 		loadUniformsMatrices( m_uniforms, object );
 
 		if ( m_uniforms.get("modelMatrix").getLocation() != null )
-			App.gl.glUniformMatrix4fv(m_uniforms.get("modelMatrix").getLocation(), 1, false, object.getMatrixWorld().getArray().getFloatBuffer());
+			this.gl.glUniformMatrix4fv(m_uniforms.get("modelMatrix").getLocation(), 1, false, object.getMatrixWorld().getArray().getFloatBuffer());
 
 		return shader;
 	}
@@ -2542,10 +2546,10 @@ public class GLRenderer extends AbstractRenderer
 	private void loadUniformsMatrices ( FastMap<Uniform> uniforms, GeometryObject object )
 	{
 		GeometryObject objectImpl = (GeometryObject) object;
-		App.gl.glUniformMatrix4fv(uniforms.get("modelViewMatrix").getLocation(), 1, false, objectImpl._modelViewMatrix.getArray().getFloatBuffer());
+		this.gl.glUniformMatrix4fv(uniforms.get("modelViewMatrix").getLocation(), 1, false, objectImpl._modelViewMatrix.getArray().getFloatBuffer());
 
 		if ( uniforms.containsKey("normalMatrix") )
-			App.gl.glUniformMatrix3fv(uniforms.get("normalMatrix").getLocation(), 1, false, objectImpl._normalMatrix.getArray().getFloatBuffer());
+			this.gl.glUniformMatrix3fv(uniforms.get("normalMatrix").getLocation(), 1, false, objectImpl._normalMatrix.getArray().getFloatBuffer());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -2568,35 +2572,35 @@ public class GLRenderer extends AbstractRenderer
 
 			if(type == Uniform.TYPE.I) // single integer
 			{
-				App.gl.glUniform1i(location, (value instanceof Boolean) ? ((Boolean) value) ? 1 : 0 : (Integer) value);
+				this.gl.glUniform1i(location, (value instanceof Boolean) ? ((Boolean) value) ? 1 : 0 : (Integer) value);
 			}
 			else if(type == Uniform.TYPE.F) // single float
 			{
-				App.gl.glUniform1f(location, ((Double) value).floatValue());
+				this.gl.glUniform1f(location, ((Double) value).floatValue());
 			}
 			else if(type == Uniform.TYPE.V2) // single Vector2
 			{
-				App.gl.glUniform2f(location, (float)((Vector2) value).getX(), (float)((Vector2) value).getX());
+				this.gl.glUniform2f(location, (float)((Vector2) value).getX(), (float)((Vector2) value).getX());
 			}
 			else if(type == Uniform.TYPE.V3) // single Vector3
 			{
-				App.gl.glUniform3f(location, (float)((Vector3) value).getX(), (float)((Vector3) value).getY(), (float)((Vector3) value).getZ());
+				this.gl.glUniform3f(location, (float)((Vector3) value).getX(), (float)((Vector3) value).getY(), (float)((Vector3) value).getZ());
 			}
 			else if(type == Uniform.TYPE.V4) // single Vector4
 			{
-				App.gl.glUniform4f(location, (float)((Vector4) value).getX(), (float)((Vector4) value).getY(), (float)((Vector4) value).getZ(), (float)((Vector4) value).getW());
+				this.gl.glUniform4f(location, (float)((Vector4) value).getX(), (float)((Vector4) value).getY(), (float)((Vector4) value).getZ(), (float)((Vector4) value).getW());
 			}
 			else if(type == Uniform.TYPE.C) // single Color
 			{
-				App.gl.glUniform3f(location, (float)((Color) value).getR(), (float)((Color) value).getG(), (float)((Color) value).getB());
+				this.gl.glUniform3f(location, (float)((Color) value).getR(), (float)((Color) value).getG(), (float)((Color) value).getB());
 			}
 			else if(type == Uniform.TYPE.FV1) // flat array of floats (JS or typed array)
 			{
-				App.gl.glUniform1fv(location, ((Float32Array) value).getLength(),((Float32Array) value).getFloatBuffer());
+				this.gl.glUniform1fv(location, ((Float32Array) value).getLength(),((Float32Array) value).getFloatBuffer());
 			}
 			else if(type == Uniform.TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
 			{
-				App.gl.glUniform3fv(location, ((Float32Array) value).getLength() / 3, ((Float32Array) value).getFloatBuffer());
+				this.gl.glUniform3fv(location, ((Float32Array) value).getLength() / 3, ((Float32Array) value).getFloatBuffer());
 			}
 			else if(type == Uniform.TYPE.V2V) // List of Vector2
 			{
@@ -2613,7 +2617,7 @@ public class GLRenderer extends AbstractRenderer
 					cacheArray.set(offset + 1, listVector2f.get(i).getY());
 				}
 
-				App.gl.glUniform2fv(location, uniform.getCacheArray().getLength() / 2,
+				this.gl.glUniform2fv(location, uniform.getCacheArray().getLength() / 2,
 						cacheArray.getFloatBuffer());
 			}
 			else if(type == Uniform.TYPE.V3V) // List of Vector3
@@ -2632,7 +2636,7 @@ public class GLRenderer extends AbstractRenderer
 					uniform.getCacheArray().set(offset + 2 , listVector3f.get( i ).getZ());
 				}
 
-				App.gl.glUniform3fv(location, cacheArray.getLength() / 3,
+				this.gl.glUniform3fv(location, cacheArray.getLength() / 3,
 						cacheArray.getFloatBuffer());
 			}
 			else if(type == Uniform.TYPE.V4V) // List of Vector4
@@ -2653,7 +2657,7 @@ public class GLRenderer extends AbstractRenderer
 					uniform.getCacheArray().set(offset + 3, listVector4f.get( i ).getW());
 				}
 
-				App.gl.glUniform4fv(location, cacheArray.getLength() / 4,
+				this.gl.glUniform4fv(location, cacheArray.getLength() / 4,
 						cacheArray.getFloatBuffer() );
 			}
 			else if(type == Uniform.TYPE.M4) // single Matrix4
@@ -2664,7 +2668,7 @@ public class GLRenderer extends AbstractRenderer
 					uniform.setCacheArray(cacheArray = Float32Array.create( 16 ) );
 
 				matrix4.flattenToArrayOffset( cacheArray );
-				App.gl.glUniformMatrix4fv(location, 1, false, cacheArray.getFloatBuffer());
+				this.gl.glUniformMatrix4fv(location, 1, false, cacheArray.getFloatBuffer());
 			}
 			else if(type == Uniform.TYPE.M4V) // List of Matrix4
 			{
@@ -2676,7 +2680,7 @@ public class GLRenderer extends AbstractRenderer
 				for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
 					listMatrix4f.get( i ).flattenToArrayOffset( cacheArray, i * 16 );
 
-				App.gl.glUniformMatrix4fv(location, cacheArray.getLength() / 16,
+				this.gl.glUniformMatrix4fv(location, cacheArray.getLength() / 16,
 						false, cacheArray.getFloatBuffer());
 			}
 			else if(type == Uniform.TYPE.T) // single Texture (2d or cube)
@@ -2684,7 +2688,7 @@ public class GLRenderer extends AbstractRenderer
 				Texture texture = (Texture)value;
 				int textureUnit = getTextureUnit();
 
-				App.gl.glUniform1i(location, textureUnit);
+				this.gl.glUniform1i(location, textureUnit);
 
 				if ( texture != null )
 				{
@@ -2708,7 +2712,7 @@ public class GLRenderer extends AbstractRenderer
 					units[ i ] = getTextureUnit();
 				}
 
-				App.gl.glUniform1iv(location, 1, units, 0);
+				this.gl.glUniform1iv(location, 1, units, 0);
 
 				for( int i = 0, il = textureList.size(); i < il; i ++ )
 				{
@@ -2746,14 +2750,14 @@ public class GLRenderer extends AbstractRenderer
 		if ( this.cache_oldMaterialSided == null || this.cache_oldMaterialSided != material.getSides() )
 		{
 			if(material.getSides() == Material.SIDE.DOUBLE)
-				App.gl.glDisable(EnableCap.CULL_FACE.getValue());
+				this.gl.glDisable(EnableCap.CULL_FACE.getValue());
 			else
-				App.gl.glEnable(EnableCap.CULL_FACE.getValue());
+				this.gl.glEnable(EnableCap.CULL_FACE.getValue());
 
 			if ( material.getSides() == Material.SIDE.BACK )
-				App.gl.glFrontFace(FrontFaceDirection.CW.getValue());
+				this.gl.glFrontFace(FrontFaceDirection.CW.getValue());
 			else
-				App.gl.glFrontFace(FrontFaceDirection.CCW.getValue());
+				this.gl.glFrontFace(FrontFaceDirection.CCW.getValue());
 
 			this.cache_oldMaterialSided = material.getSides();
 		}
@@ -2764,9 +2768,9 @@ public class GLRenderer extends AbstractRenderer
 		if ( this._oldDepthTest == null || this._oldDepthTest != depthTest )
 		{
 			if ( depthTest )
-				App.gl.glEnable(EnableCap.DEPTH_TEST.getValue());
+				this.gl.glEnable(EnableCap.DEPTH_TEST.getValue());
 			else
-				App.gl.glDisable(EnableCap.DEPTH_TEST.getValue());
+				this.gl.glDisable(EnableCap.DEPTH_TEST.getValue());
 
 			this._oldDepthTest = depthTest;
 		}
@@ -2776,7 +2780,7 @@ public class GLRenderer extends AbstractRenderer
 	{
 		if ( this._oldDepthWrite == null || this._oldDepthWrite != depthWrite )
 		{
-			App.gl.glDepthMask(depthWrite);
+			this.gl.glDepthMask(depthWrite);
 			_oldDepthWrite = depthWrite;
 		}
 	}
@@ -2786,9 +2790,9 @@ public class GLRenderer extends AbstractRenderer
 		if ( this._oldPolygonOffset == null || this._oldPolygonOffset != polygonoffset )
 		{
 			if ( polygonoffset )
-				App.gl.glEnable(EnableCap.POLYGON_OFFSET_FILL.getValue());
+				this.gl.glEnable(EnableCap.POLYGON_OFFSET_FILL.getValue());
 			else
-				App.gl.glDisable(EnableCap.POLYGON_OFFSET_FILL.getValue());
+				this.gl.glDisable(EnableCap.POLYGON_OFFSET_FILL.getValue());
 
 			this._oldPolygonOffset = polygonoffset;
 		}
@@ -2798,7 +2802,7 @@ public class GLRenderer extends AbstractRenderer
 				_oldPolygonOffsetFactor != factor ||
 				_oldPolygonOffsetUnits != units )
 		) {
-			App.gl.glPolygonOffset((float)factor, (float)units);
+			this.gl.glPolygonOffset((float)factor, (float)units);
 
 			this._oldPolygonOffsetFactor = factor;
 			this._oldPolygonOffsetUnits = units;
@@ -2811,44 +2815,44 @@ public class GLRenderer extends AbstractRenderer
 		{
 			if( blending == Material.BLENDING.NO)
 			{
-				App.gl.glDisable(EnableCap.BLEND.getValue());
+				this.gl.glDisable(EnableCap.BLEND.getValue());
 
 			}
 			else if( blending == Material.BLENDING.ADDITIVE)
 			{
 
-				App.gl.glEnable(EnableCap.BLEND.getValue());
-				App.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
-				App.gl.glBlendFunc(BlendingFactorSrc.SRC_ALPHA.getValue(), BlendingFactorDest.ONE.getValue());
+				this.gl.glEnable(EnableCap.BLEND.getValue());
+				this.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
+				this.gl.glBlendFunc(BlendingFactorSrc.SRC_ALPHA.getValue(), BlendingFactorDest.ONE.getValue());
 
 				// TODO: Find blendFuncSeparate() combination
 			}
 			else if( blending == Material.BLENDING.SUBTRACTIVE)
 			{
-				App.gl.glEnable(EnableCap.BLEND.getValue());
-				App.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
-				App.gl.glBlendFunc(BlendingFactorSrc.ZERO.getValue(), BlendingFactorDest.ONE_MINUS_SRC_COLOR.getValue());
+				this.gl.glEnable(EnableCap.BLEND.getValue());
+				this.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
+				this.gl.glBlendFunc(BlendingFactorSrc.ZERO.getValue(), BlendingFactorDest.ONE_MINUS_SRC_COLOR.getValue());
 
 				// TODO: Find blendFuncSeparate() combination
 			}
 			else if( blending == Material.BLENDING.MULTIPLY)
 			{
-				App.gl.glEnable(EnableCap.BLEND.getValue());
-				App.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
-				App.gl.glBlendFunc(BlendingFactorSrc.ZERO.getValue(), BlendingFactorDest.SRC_COLOR.getValue());
+				this.gl.glEnable(EnableCap.BLEND.getValue());
+				this.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
+				this.gl.glBlendFunc(BlendingFactorSrc.ZERO.getValue(), BlendingFactorDest.SRC_COLOR.getValue());
 
 			}
 			else if( blending == Material.BLENDING.CUSTOM)
 			{
-				App.gl.glEnable(EnableCap.BLEND.getValue());
+				this.gl.glEnable(EnableCap.BLEND.getValue());
 
 			}
 			// NORMAL
 			else
 			{
-				App.gl.glEnable(EnableCap.BLEND.getValue());
-				App.gl.glBlendEquationSeparate(BlendEquationMode.FUNC_ADD.getValue(), BlendEquationMode.FUNC_ADD.getValue());
-				App.gl.glBlendFuncSeparate(BlendingFactorSrc.SRC_ALPHA.getValue(),
+				this.gl.glEnable(EnableCap.BLEND.getValue());
+				this.gl.glBlendEquationSeparate(BlendEquationMode.FUNC_ADD.getValue(), BlendEquationMode.FUNC_ADD.getValue());
+				this.gl.glBlendFuncSeparate(BlendingFactorSrc.SRC_ALPHA.getValue(),
 						BlendingFactorDest.ONE_MINUS_SRC_ALPHA.getValue(),
 						BlendingFactorSrc.ONE.getValue(),
 						BlendingFactorDest.ONE_MINUS_SRC_ALPHA.getValue());
@@ -2866,13 +2870,13 @@ public class GLRenderer extends AbstractRenderer
 		{
 			if ( blendEquation != this._oldBlendEquation )
 			{
-				App.gl.glBlendEquation(blendEquation.getValue());
+				this.gl.glBlendEquation(blendEquation.getValue());
 				this._oldBlendEquation = blendEquation;
 			}
 
 			if ( blendSrc != _oldBlendSrc || blendDst != _oldBlendDst )
 			{
-				App.gl.glBlendFunc(blendSrc.getValue(), blendDst.getValue());
+				this.gl.glBlendFunc(blendSrc.getValue(), blendDst.getValue());
 
 				this._oldBlendSrc = blendSrc;
 				this._oldBlendDst = blendDst;
@@ -2890,8 +2894,8 @@ public class GLRenderer extends AbstractRenderer
 
 	private void setCubeTextureDynamic(RenderTargetCubeTexture texture, int slot)
 	{
-		App.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
-		App.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
+		this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
+		this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
 	}
 
 	public void setTexture( Texture texture, int slot )
@@ -2900,26 +2904,26 @@ public class GLRenderer extends AbstractRenderer
 		{
 			if ( texture.getWebGlTexture() == null )
 			{
-				texture.setWebGlTexture( App.gl.glGenTexture() );
+				texture.setWebGlTexture( this.gl.glGenTexture() );
 
 				this.getInfo().getMemory().textures ++;
 			}
 
-			App.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
-			App.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
+			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
+			this.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
 
             /*
 			GLES20.glPixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL, texture.isFlipY() ? 1 : 0 );
 			GLES20.glPixelStorei( PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL,
                     texture.isPremultiplyAlpha() ? 1 : 0 );
             */
-			App.gl.glPixelStorei( PixelStoreParameter.UNPACK_ALIGNMENT.getValue(), texture.getUnpackAlignment() );
+			this.gl.glPixelStorei( PixelStoreParameter.UNPACK_ALIGNMENT.getValue(), texture.getUnpackAlignment() );
 
 			Image image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
 					&& Mathematics.isPowerOfTwo( image.getHeight() );
 
-			texture.setTextureParameters( getMaxAnisotropy(),
+			texture.setTextureParameters( this.gl, getMaxAnisotropy(),
 					TextureTarget.TEXTURE_2D.getValue(), isImagePowerOfTwo );
 
 			if ( texture instanceof CompressedTexture )
@@ -2929,7 +2933,7 @@ public class GLRenderer extends AbstractRenderer
 				for( int i = 0, il = mipmaps.size(); i < il; i ++ )
 				{
 					DataTexture mipmap = mipmaps.get( i );
-					App.gl.glCompressedTexImage2D(TextureTarget.TEXTURE_2D.getValue(), i,
+					this.gl.glCompressedTexImage2D(TextureTarget.TEXTURE_2D.getValue(), i,
 							((CompressedTexture) texture).getCompressedFormat(),
 							mipmap.getWidth(), mipmap.getHeight(), 0,
 							mipmap.getData().getByteLength(),
@@ -2939,7 +2943,7 @@ public class GLRenderer extends AbstractRenderer
 			else if ( texture instanceof DataTexture )
 			{
 				TypeArray texData = ((DataTexture) texture).getData();
-				App.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0,
+				this.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0,
 						((DataTexture) texture).getWidth(),
 						((DataTexture) texture).getHeight(),
 						0,
@@ -2955,15 +2959,15 @@ public class GLRenderer extends AbstractRenderer
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )
-				App.gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
+				this.gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
 
 			texture.setNeedsUpdate(false);
 		}
 		// Needed to check webgl texture in case deferred loading
 		else if (texture.getWebGlTexture() != 0)
 		{
-			App.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
-			App.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
+			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
+			this.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
 		}
 	}
 
@@ -3010,12 +3014,12 @@ public class GLRenderer extends AbstractRenderer
 		{
 			if ( texture.getWebGlTexture() == 0 )
 			{
-				texture.setWebGlTexture(App.gl.glGenTexture());
+				texture.setWebGlTexture(this.gl.glGenTexture());
 				this.getInfo().getMemory().textures += 6;
 			}
 
-			App.gl.glActiveTexture( TextureUnit.TEXTURE0.getValue() + slot );
-			App.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
+			this.gl.glActiveTexture( TextureUnit.TEXTURE0.getValue() + slot );
+			this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
 			//GLES20.glPixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL,
 			// texture.isFlipY() ? 1 : 0 );
 
@@ -3040,7 +3044,7 @@ public class GLRenderer extends AbstractRenderer
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
 					&& Mathematics.isPowerOfTwo( image.getHeight() );
 
-			texture.setTextureParameters( getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP.getValue(),
+			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP.getValue(),
 					true /*power of two*/ );
 
 			for ( int i = 0; i < 6; i ++ )
@@ -3061,14 +3065,14 @@ public class GLRenderer extends AbstractRenderer
 			}
 
 			if ( texture.isGenerateMipmaps() )
-				App.gl.glGenerateMipmap( TextureTarget.TEXTURE_CUBE_MAP.getValue() );
+				this.gl.glGenerateMipmap( TextureTarget.TEXTURE_CUBE_MAP.getValue() );
 
 			texture.setNeedsUpdate(false);
 		}
 		else
 		{
-			App.gl.glActiveTexture( TextureUnit.TEXTURE0.getValue() + slot );
-			App.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
+			this.gl.glActiveTexture( TextureUnit.TEXTURE0.getValue() + slot );
+			this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
 		}
 
 	}
@@ -3086,7 +3090,7 @@ public class GLRenderer extends AbstractRenderer
 
 		if(renderTarget != null)
 		{
-			renderTarget.setRenderTarget();
+			renderTarget.setRenderTarget(this.gl);
 		    framebuffer = renderTarget.getWebGLFramebuffer();
 
 			width = renderTarget.getWidth();
@@ -3108,8 +3112,8 @@ public class GLRenderer extends AbstractRenderer
 
 		if ( framebuffer != this._currentFramebuffer )
 		{
-			App.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
-			App.gl.glViewport(vx, vy, width, height);
+			this.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
+			this.gl.glViewport(vx, vy, width, height);
 
 			this._currentFramebuffer = framebuffer;
 		}

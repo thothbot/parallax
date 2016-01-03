@@ -37,9 +37,9 @@ public final class GLExtensions {
 		EXT_frag_depth
 	};
 
-	public static boolean get(Id id) {
+	public static boolean get(GL20 gl, Id id) {
 
-		String extensions = App.gl.glGetString(GL20.GL_EXTENSIONS);
+		String extensions = gl.glGetString(GL20.GL_EXTENSIONS);
 
 		return extensions != null && extensions.contains(id.name());
 

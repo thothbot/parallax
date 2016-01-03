@@ -118,16 +118,16 @@ public abstract class Shader
 	}
 
 	// Called in renderer org.parallax3d.plugins
-	public Shader buildProgram()
+	public Shader buildProgram(GL20 gl)
 	{
-		return buildProgram(false, 0, 0);
+		return buildProgram(gl, false, 0, 0);
 	}
 
-	public Shader buildProgram(boolean useVertexTexture, int maxMorphTargets, int maxMorphNormals)
+	public Shader buildProgram(GL20 gl, boolean useVertexTexture, int maxMorphTargets, int maxMorphNormals)
 	{
 		App.app.debug("Shader", "Building new program...");
 
-		initShaderProgram();
+		initShaderProgram(gl);
 
 		// Adds default uniforms
 		addUniform("viewMatrix",            new Uniform(Uniform.TYPE.FV1 ));
@@ -154,7 +154,7 @@ public abstract class Shader
 		// Cache location
 		FastMap<Uniform> uniforms = getUniforms();
 		for (String id : uniforms.keySet())
-			uniforms.get(id).setLocation( App.gl.glGetUniformLocation(this.program, id) );
+			uniforms.get(id).setLocation(gl.glGetUniformLocation(this.program, id));
 
 		// cache attributes locations
 		List<String> attributesIds = new ArrayList<String>(Arrays.asList("position", "normal",
@@ -173,7 +173,7 @@ public abstract class Shader
 
 		FastMap<Integer> attributesLocations = getAttributesLocations();
 		for (String id : attributesIds)
-			attributesLocations.put(id, App.gl.glGetAttribLocation(this.program, id));
+			attributesLocations.put(id, gl.glGetAttribLocation(this.program, id));
 
 		return this;
 	}
@@ -184,21 +184,21 @@ public abstract class Shader
 	 * shader source. This should be called within GL to ensure
 	 * that the shader is correctly initialized.
 	 */
-	private void initShaderProgram()
+	private void initShaderProgram(GL20 gl)
 	{
 		App.app.debug("Shader", "Called initProgram()");
 
-		this.program = App.gl.glCreateProgram();
+		this.program = gl.glCreateProgram();
 
 		String vertex = vertexExtensions + getShaderPrecisionDefinition() + "\n" + getVertexSource();
 		String fragment = fragmentExtensions + getShaderPrecisionDefinition() + "\n" + getFragmentSource();
 
-		int glVertexShader = getShaderProgram(ChunksVertexShader.class, vertex);
-		int glFragmentShader = getShaderProgram(ChunksFragmentShader.class, fragment);
-		App.gl.glAttachShader(this.program, glVertexShader);
-		App.gl.glAttachShader(this.program, glFragmentShader);
+		int glVertexShader = getShaderProgram(gl, ChunksVertexShader.class, vertex);
+		int glFragmentShader = getShaderProgram(gl, ChunksFragmentShader.class, fragment);
+		gl.glAttachShader(this.program, glVertexShader);
+		gl.glAttachShader(this.program, glFragmentShader);
 
-		App.gl.glLinkProgram(this.program);
+		gl.glLinkProgram(this.program);
 
 //		if (!gl.getProgramParameterb(this.program, ProgramParameter.LINK_STATUS))
 //			Log.error("Could not initialise shader\n"
@@ -212,8 +212,8 @@ public abstract class Shader
 			App.app.debug("Shader", "initProgram(): shaders has been initialised");
 
 		// clean up
-		App.gl.glDeleteShader(glVertexShader);
-		App.gl.glDeleteShader(glFragmentShader);
+		gl.glDeleteShader(glVertexShader);
+		gl.glDeleteShader(glFragmentShader);
 	}
 
 	public void setPrecision(Shader.PRECISION precision) {
@@ -227,19 +227,19 @@ public abstract class Shader
 	/**
 	 * Gets the shader.
 	 */
-	private int getShaderProgram(Class<?> type, String string)
+	private int getShaderProgram(GL20 gl, Class<?> type, String string)
 	{
 		App.app.debug("Shader", "Called getShaderProgram() for type " + type.getName());
 		Integer shader = null;
 
 		if (type == ChunksFragmentShader.class)
-			shader = App.gl.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+			shader = gl.glCreateShader(GL20.GL_FRAGMENT_SHADER);
 
 		else if (type == ChunksVertexShader.class)
-			shader = App.gl.glCreateShader(GL20.GL_VERTEX_SHADER);
+			shader = gl.glCreateShader(GL20.GL_VERTEX_SHADER);
 
-		App.gl.glShaderSource(shader, string);
-		App.gl.glCompileShader(shader);
+		gl.glShaderSource(shader, string);
+		gl.glCompileShader(shader);
 
 //		if (!App.gl.glGetShaderParameterb(shader, GL20.GL_COMPILE_STATUS))
 //		{

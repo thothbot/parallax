@@ -49,6 +49,7 @@ import org.parallax3d.parallax.math.Frustum;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
 
 @ThreeJsObject("THREE.WebGLExtensions")
@@ -152,26 +153,26 @@ public final class ShadowMap extends Plugin
 	}
 
 	@Override
-	public void render(Camera camera, List<Light> sceneLights,
+	public void render(GL20 gl, Camera camera, List<Light> sceneLights,
 					   int currentWidth, int currentHeight)
 	{
 		if ( ! ( isEnabled() && isAutoUpdate() ) ) return;
 
 		// set GL state for depth map
 
-		App.gl.glClearColor(1, 1, 1, 1);
-		App.gl.glDisable(EnableCap.BLEND.getValue());
+		gl.glClearColor(1, 1, 1, 1);
+		gl.glDisable(EnableCap.BLEND.getValue());
 
-		App.gl.glEnable(EnableCap.CULL_FACE.getValue());
-		App.gl.glFrontFace(FrontFaceDirection.CCW.getValue());
+		gl.glEnable(EnableCap.CULL_FACE.getValue());
+		gl.glFrontFace(FrontFaceDirection.CCW.getValue());
 
 		if ( isCullFrontFaces() )
 		{
-			App.gl.glCullFace(CullFaceMode.FRONT.getValue());
+			gl.glCullFace(CullFaceMode.FRONT.getValue());
 		}
 		else
 		{
-			App.gl.glCullFace(CullFaceMode.BACK.getValue());
+			gl.glCullFace(CullFaceMode.BACK.getValue());
 		}
 
 		getRenderer().setDepthTest( true );
@@ -424,13 +425,13 @@ public final class ShadowMap extends Plugin
 		Color clearColor = getRenderer().getClearColor();
 		double clearAlpha = getRenderer().getClearAlpha();
 
-		App.gl.glClearColor((float) clearColor.getR(), (float) clearColor.getG(),
+		gl.glClearColor((float) clearColor.getR(), (float) clearColor.getG(),
 				(float) clearColor.getB(), (float) clearAlpha);
-		App.gl.glEnable(EnableCap.BLEND.getValue());
+		gl.glEnable(EnableCap.BLEND.getValue());
 
 		if ( isCullFrontFaces() )
 		{
-			App.gl.glCullFace(CullFaceMode.BACK.getValue());
+			gl.glCullFace(CullFaceMode.BACK.getValue());
 		}
 
 		getRenderer().resetGLState();

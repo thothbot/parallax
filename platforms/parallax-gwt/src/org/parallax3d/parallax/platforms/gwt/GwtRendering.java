@@ -83,9 +83,9 @@ public class GwtRendering implements Rendering {
 		context = WebGLRenderingContext.getContext(canvas, attributes);
 		context.viewport(0, 0, width, height);
 
-		App.gl = gl = new GwtGL20(context);
+		gl = new GwtGL20(context);
 
-		renderer = new GLRenderer(width, height);
+		renderer = new GLRenderer(gl, width, height);
 	}
 
 	@Override

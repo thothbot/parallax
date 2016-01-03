@@ -38,6 +38,7 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
 import org.parallax3d.parallax.system.gl.enums.BufferTarget;
@@ -195,9 +196,9 @@ public class Line extends GeometryObject
 				? BeginMode.LINE_STRIP
 				: BeginMode.LINES;
 
-		setLineWidth(((LineBasicMaterial)getMaterial()).getLinewidth() );
+		setLineWidth(renderer.gl, ((LineBasicMaterial)getMaterial()).getLinewidth() );
 
-		App.gl.glDrawArrays(primitives.getValue(), 0, geometryBuffer.__webglLineCount);
+		renderer.gl.glDrawArrays(primitives.getValue(), 0, geometryBuffer.__webglLineCount);
 
 		info.getRender().calls ++;
 	}
@@ -223,14 +224,14 @@ public class Line extends GeometryObject
 
 		GLRendererInfo info = renderer.getInfo();
 
-		geometry.__webglVertexBuffer = App.gl.glGenBuffer();
-		geometry.__webglColorBuffer = App.gl.glGenBuffer();
-		geometry.__webglLineDistanceBuffer = App.gl.glGenBuffer();
+		geometry.__webglVertexBuffer = renderer.gl.glGenBuffer();
+		geometry.__webglColorBuffer = renderer.gl.glGenBuffer();
+		geometry.__webglLineDistanceBuffer = renderer.gl.glGenBuffer();
 
 		info.getMemory().geometries ++;
 	}
 
-	public void initBuffers ()
+	public void initBuffers (GL20 gl)
 	{
 		Geometry geometry = (Geometry)getGeometry();
 
@@ -242,7 +243,7 @@ public class Line extends GeometryObject
 
 		geometry.__webglLineCount = nvertices;
 
-		initCustomAttributes ( geometry );
+		initCustomAttributes ( gl, geometry );
 	}
 
 //	@Override
@@ -267,7 +268,7 @@ public class Line extends GeometryObject
 //	}
 
 	// setLineBuffers
-	public void setBuffers(BufferUsage hint)
+	public void setBuffers(GL20 gl, BufferUsage hint)
 	{
 		Geometry geometry = (Geometry)this.getGeometry();
 
@@ -300,8 +301,8 @@ public class Line extends GeometryObject
 				vertexArray.set(offset + 2, vertex.getZ());
 			}
 
-			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
-			App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getBuffer(), hint.getValue());
+			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getBuffer(), hint.getValue());
 		}
 
 		if (dirtyColors)
@@ -316,8 +317,8 @@ public class Line extends GeometryObject
 				colorArray.set(offset + 2, color.getB());
 			}
 
-			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-			App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getBuffer(), hint.getValue());
+			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getBuffer(), hint.getValue());
 		}
 
 		if ( dirtyLineDistances ) {
@@ -328,8 +329,8 @@ public class Line extends GeometryObject
 
 			}
 
-			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglLineDistanceBuffer );
-			App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), lineDistanceArray.getByteLength(), lineDistanceArray.getBuffer(), hint.getValue() );
+			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglLineDistanceBuffer );
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), lineDistanceArray.getByteLength(), lineDistanceArray.getBuffer(), hint.getValue() );
 
 		}
 
@@ -413,8 +414,8 @@ public class Line extends GeometryObject
 						}
 					}
 
-					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-					App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue());
+					gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
+					gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue());
 				}
 			}
 		}

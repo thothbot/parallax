@@ -35,6 +35,7 @@ import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
@@ -203,13 +204,13 @@ public class PointCloud extends GeometryObject
 	{
 		GLRendererInfo info = renderer.getInfo();
 
-		App.gl.glDrawArrays(BeginMode.POINTS.getValue(), 0, geometryBuffer.__webglParticleCount);
+		renderer.gl.glDrawArrays(BeginMode.POINTS.getValue(), 0, geometryBuffer.__webglParticleCount);
 
 		info.getRender().calls ++;
 		info.getRender().points += geometryBuffer.__webglParticleCount;
 	}
 
-	public void initBuffers()
+	public void initBuffers(GL20 gl)
 	{
 		Geometry geometry = (Geometry)getGeometry();
 		int nvertices = geometry.getVertices().size();
@@ -219,7 +220,7 @@ public class PointCloud extends GeometryObject
 
 		geometry.__webglParticleCount = nvertices;
 
-		initCustomAttributes ( geometry );
+		initCustomAttributes ( gl, geometry );
 	}
 
 	public void createBuffers ( GLRenderer renderer)
@@ -227,8 +228,8 @@ public class PointCloud extends GeometryObject
 		Geometry geometry = (Geometry)getGeometry();
 		GLRendererInfo info = renderer.getInfo();
 
-		geometry.__webglVertexBuffer = App.gl.glGenBuffer();
-		geometry.__webglColorBuffer = App.gl.glGenBuffer();
+		geometry.__webglVertexBuffer = renderer.gl.glGenBuffer();
+		geometry.__webglColorBuffer = renderer.gl.glGenBuffer();
 
 		info.getMemory().geometries ++;
 	}
@@ -527,14 +528,14 @@ public class PointCloud extends GeometryObject
 
 		if ( dirtyVertices || this.sortParticles ) {
 
-			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+			renderer.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
 
 		}
 
 		if ( dirtyColors || this.sortParticles ) {
 
-			App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-			App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getBuffer(), hint.getValue());
+			renderer.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
+			renderer.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getBuffer(), hint.getValue());
 
 		}
 
@@ -546,8 +547,8 @@ public class PointCloud extends GeometryObject
 
 				if ( customAttribute.needsUpdate || this.sortParticles ) {
 
-					App.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-					App.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue());
+					renderer.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
+					renderer.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getBuffer(), hint.getValue());
 
 				}
 

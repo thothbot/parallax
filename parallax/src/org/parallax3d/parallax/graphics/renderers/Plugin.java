@@ -23,6 +23,7 @@ import java.util.List;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.system.gl.GL20;
 
 public abstract class Plugin 
 {
@@ -75,7 +76,7 @@ public abstract class Plugin
 
 	public abstract Plugin.TYPE getType();
 
-	public abstract void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight );
+	public abstract void render( GL20 gl, Camera camera, List<Light> lights, int currentWidth, int currentHeight );
 
 	public void deallocate() {
 

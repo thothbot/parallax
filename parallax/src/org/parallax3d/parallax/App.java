@@ -28,8 +28,6 @@ public abstract class App {
     public static App app;
     public static Files files;
 
-    public static GL20 gl;
-
     public enum ApplicationType {
         Android, Desktop, WebGL
     }

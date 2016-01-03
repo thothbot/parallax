@@ -36,6 +36,7 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
@@ -513,7 +514,7 @@ public abstract class Material
 		parameters.flipSided = this.getSides() == Material.SIDE.BACK;
 	}
 
-	public Shader buildShader(ProgramParameters parameters)
+	public Shader buildShader(GL20 gl, ProgramParameters parameters)
 	{
 		Shader shader = getShader();
 
@@ -525,7 +526,7 @@ public abstract class Material
 		shader.setVertexSource(getPrefixVertex(parameters) + "\n" + shader.getVertexSource());
 		shader.setFragmentSource(getPrefixFragment(parameters) + "\n" + shader.getFragmentSource());
 
-		this.shader = shader.buildProgram(parameters.useVertexTexture, parameters.maxMorphTargets, parameters.maxMorphNormals);
+		this.shader = shader.buildProgram(gl, parameters.useVertexTexture, parameters.maxMorphTargets, parameters.maxMorphNormals);
 
 		return this.shader;
 	}
@@ -945,7 +946,7 @@ public abstract class Material
 		if ( deleteProgram == true )
 		{
 
-			App.gl.glDeleteProgram(program);
+			renderer.gl.glDeleteProgram(program);
 
 			renderer.getInfo().getMemory().programs --;
 		}
