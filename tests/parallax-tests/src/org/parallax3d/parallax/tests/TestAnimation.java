@@ -20,22 +20,15 @@ package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.AnimationAdapter;
 
-public abstract class DemoAnimation extends AnimationAdapter {
+public abstract class TestAnimation extends AnimationAdapter {
 
     /**
      * The name of the example.
      */
-    private final String name;
+    public abstract String getName();
 
     /**
      * A description of an example.
      */
-    private final String description;
-
-    public DemoAnimation(String name, String description) {
-
-        this.name = name;
-        this.description = description;
-
-    }
+    public abstract String getDescription();
 }

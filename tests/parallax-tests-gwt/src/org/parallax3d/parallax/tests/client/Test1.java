@@ -21,7 +21,7 @@ package org.parallax3d.parallax.tests.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import org.parallax3d.parallax.tests.DemoAnimation;
+import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.geometries.GeometryCube;
 
 public class Test1 extends ContentWidget  {
@@ -32,7 +32,7 @@ public class Test1 extends ContentWidget  {
     }
 
     @Override
-    public DemoAnimation onInitialize()
+    public TestAnimation onInitialize()
     {
         return new GeometryCube();
     }
@@ -43,7 +43,7 @@ public class Test1 extends ContentWidget  {
     }
 
     @Override
-    protected void asyncOnInitialize(final AsyncCallback<DemoAnimation> callback)
+    protected void asyncOnInitialize(final AsyncCallback<TestAnimation> callback)
     {
         GWT.runAsync(Test1.class, new RunAsyncCallback() {
             public void onFailure(Throwable caught) {

@@ -26,7 +26,7 @@ import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.Plugin;
-import org.parallax3d.parallax.tests.DemoAnimation;
+import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 
 import com.google.gwt.core.client.GWT;
@@ -114,9 +114,9 @@ public abstract class ContentWidget extends SimpleLayoutPanel
 	 * This is called when the example is first initialized.
 	 * 
 	 */
-	protected abstract DemoAnimation onInitialize();
+	protected abstract TestAnimation onInitialize();
 
-	protected abstract void asyncOnInitialize(final AsyncCallback<DemoAnimation> callback);
+	protected abstract void asyncOnInitialize(final AsyncCallback<TestAnimation> callback);
 
 	/**
 	 * Get the simple filename of a class (name without dots).
@@ -340,14 +340,14 @@ public abstract class ContentWidget extends SimpleLayoutPanel
 
 		widgetInitializing = true;
 
-		asyncOnInitialize(new AsyncCallback<DemoAnimation>() {
+		asyncOnInitialize(new AsyncCallback<TestAnimation>() {
 			public void onFailure(Throwable reason)
 			{
 				widgetInitializing = false;
 				Window.alert("Failed to download code for this widget (" + reason + ")");
 			}
 
-			public void onSuccess(DemoAnimation demoAnimatedScene)
+			public void onSuccess(TestAnimation demoAnimatedScene)
 			{
 				widgetInitializing = false;
 				widgetInitialized = true;

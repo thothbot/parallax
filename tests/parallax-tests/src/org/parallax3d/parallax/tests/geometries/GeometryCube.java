@@ -19,25 +19,20 @@
 package org.parallax3d.parallax.tests.geometries;
 
 import org.parallax3d.parallax.App;
-import org.parallax3d.parallax.tests.DemoAnimation;
+import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 
-public class GeometryCube extends DemoAnimation
+public class GeometryCube extends TestAnimation
 {
 	private static final String texture = "./static/textures/crate.gif";
 	PerspectiveCamera camera;
 
 	private Mesh mesh;
 	private Scene scene;
-
-	public GeometryCube()
-	{
-		super("Cube and texture", "Here are used cube geometry and mesh basic material with simple texture. This example based on the three.js example.");
-	}
 
 	@Override
 	public void onStart()
@@ -67,5 +62,15 @@ public class GeometryCube extends DemoAnimation
 		this.mesh.getRotation().addY(0.01);
 
 		App.app.getRendering().getRenderer().render(scene, camera);
+	}
+
+	@Override
+	public String getName() {
+		return "Cube and texture";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Here are used cube geometry and mesh basic material with simple texture. This example based on the three.js example.";
 	}
 }
