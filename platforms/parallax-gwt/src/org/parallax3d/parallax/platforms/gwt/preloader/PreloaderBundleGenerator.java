@@ -19,6 +19,7 @@ package org.parallax3d.parallax.platforms.gwt.preloader;
 import com.google.gwt.core.ext.*;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.File;
@@ -81,7 +82,7 @@ public class PreloaderBundleGenerator extends Generator {
 
 		// Now collect classpath files and copy to assets
 		List<String> classpathFiles = getClasspathFiles(context);
-		for (String classpathFile : classpathFiles) {			
+		for (String classpathFile : classpathFiles) {
 			if (assetFilter.accept(classpathFile, false)) {
 				try {
 					InputStream is = context.getClass().getClassLoader().getResourceAsStream(classpathFile);
@@ -237,7 +238,7 @@ public class PreloaderBundleGenerator extends Generator {
 	private List<String> getClasspathFiles(GeneratorContext context) {
 		List<String> classpathFiles = new ArrayList<String>();
 		try {
-			ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty("parallax.files.classpath");
+			ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty("app.files.classpath");
 			for (String value : prop.getValues()) {
 				classpathFiles.add(value);
 			}

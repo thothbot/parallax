@@ -40,8 +40,8 @@ public final class LambertShader extends Shader
 {
 	public LambertShader()
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/lambert.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/lambert.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/lambert.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/lambert.fs").readString());
 	}
 
 	@Override

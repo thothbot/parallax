@@ -18,6 +18,7 @@ package org.parallax3d.parallax.platforms.gwt.preloader;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;
@@ -111,7 +112,7 @@ public class Preloader {
 
 	public void preload (final String assetFileUrl, final PreloaderCallback callback) {
 		final AssetDownloader loader = new AssetDownloader();
-		
+
 		loader.loadText(baseUrl + assetFileUrl, new AssetDownloader.AssetLoaderListener<String>() {
 			@Override
 			public void onProgress (double amount) {
@@ -166,7 +167,7 @@ public class Preloader {
 						public void onSuccess (Object result) {
 							switch (asset.type) {
 							case Text:
-								texts.put(asset.url, (String) result);					
+								texts.put(asset.url, (String) result);
 								break;
 							case Image:
 								images.put(asset.url, (ImageElement) result);

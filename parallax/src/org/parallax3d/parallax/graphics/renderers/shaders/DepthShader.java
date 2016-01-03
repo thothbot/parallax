@@ -36,8 +36,8 @@ public final class DepthShader extends Shader
 
 	public DepthShader() 
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depth.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depth.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/depth.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/depth.fs").readString());
 	}
 
 	@Override

@@ -36,8 +36,8 @@ public final class NormalShader extends Shader
 
 	public NormalShader() 
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normal.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normal.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/normal.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/normal.fs").readString());
 	}
 
 	@Override

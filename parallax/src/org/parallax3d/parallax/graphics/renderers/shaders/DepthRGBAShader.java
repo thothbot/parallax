@@ -37,8 +37,8 @@ public final class DepthRGBAShader extends Shader
 
 	public DepthRGBAShader() 
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depthRGBA.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/depthRGBA.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/depthRGBA.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/depthRGBA.fs").readString());
 	}
 
 	@Override

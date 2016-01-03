@@ -33,8 +33,8 @@ public final class FresnelShader extends Shader
 
 	public FresnelShader() 
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/fresnel.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/fresnel.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/fresnel.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/fresnel.fs").readString());
 	}
 
 	@Override

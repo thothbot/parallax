@@ -39,8 +39,8 @@ public final class PhongShader extends Shader
 
 	public PhongShader() 
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/phong.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/phong.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/phong.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/phong.fs").readString());
 	}
 
 	@Override

@@ -63,6 +63,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 	@Override
 	public void onModuleLoad () {
 
+		App.app = GwtApp.this;
 		GwtApp.agentInfo = computeAgentInfo();
 		this.config = getConfig();
 
@@ -70,6 +71,8 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 		final Preloader.PreloaderCallback callback = getPreloaderCallback();
 		preloader = createPreloader();
+		App.files = new GwtFiles(preloader);
+
 		preloader.preload("assets.txt", new Preloader.PreloaderCallback() {
 			@Override
 			public void error(String file) {
@@ -84,17 +87,15 @@ public abstract class GwtApp extends App implements EntryPoint {
 					if (loadingListener != null)
 						loadingListener.beforeSetup();
 
-					App.app = GwtApp.this;
-					App.files = new GwtFiles(preloader);
+					onInit();
 
 					if (loadingListener != null)
 						loadingListener.afterSetup();
 				}
 			}
 		});
-
-		onInit();
 	}
+
 	public String getBaseUrl () {
 		return preloader.baseUrl;
 	}

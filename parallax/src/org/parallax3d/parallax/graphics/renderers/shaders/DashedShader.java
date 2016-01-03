@@ -28,8 +28,8 @@ public class DashedShader extends Shader
 
 	public DashedShader() 
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/dashed.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/dashed.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/dashed.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/dashed.fs").readString());
 	}
 
 	@Override

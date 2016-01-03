@@ -81,8 +81,8 @@ public abstract class Shader
 	 */
 	public Shader()
 	{
-		this(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/default.fs").readString());
+		this(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/default.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/default.fs").readString());
 	}
 
 	public Shader(String vertexShader, String fragmentShader)

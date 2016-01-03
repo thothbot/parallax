@@ -36,8 +36,8 @@ public final class BasicShader extends Shader
 {
 	public BasicShader()
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/basic.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/basic.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/basic.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/basic.fs").readString());
 	}
 
 	@Override

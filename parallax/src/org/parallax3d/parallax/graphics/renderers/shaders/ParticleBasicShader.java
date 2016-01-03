@@ -36,8 +36,8 @@ public final class ParticleBasicShader extends Shader
 
 	public ParticleBasicShader() 
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/particle_basic.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/particle_basic.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/particle_basic.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/particle_basic.fs").readString());
 	}
 
 	@Override

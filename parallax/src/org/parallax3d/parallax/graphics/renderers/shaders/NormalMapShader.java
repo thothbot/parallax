@@ -41,8 +41,8 @@ public final class NormalMapShader extends Shader
 {
 	public NormalMapShader()
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normalmap.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/normalmap.fs").readString());
+		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/normalmap.vs").readString(),
+				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/normalmap.fs").readString());
 	}
 	
 	@Override
