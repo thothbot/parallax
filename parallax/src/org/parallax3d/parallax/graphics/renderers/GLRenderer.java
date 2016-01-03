@@ -2721,7 +2721,6 @@ public class GLRenderer extends AbstractRenderer
 				}
 			}
 		}
-		App.app.error("---", "end");
 	}
 
 	public int getTextureUnit()
