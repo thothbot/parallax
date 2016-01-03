@@ -3079,7 +3079,7 @@ public class GLRenderer extends AbstractRenderer
 	 * @param renderTarget the render target
 	 */
 	public void setRenderTarget( RenderTargetTexture renderTarget) {
-		App.app.debug("WebGlRenderer", "  ----> Called setRenderTarget(params)");
+//		App.app.debug("WebGlRenderer", "  ----> Called setRenderTarget(params)");
 		int framebuffer = 0;
 
 		int width, height, vx, vy;

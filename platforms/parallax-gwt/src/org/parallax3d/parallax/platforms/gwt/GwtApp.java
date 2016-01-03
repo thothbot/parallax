@@ -18,31 +18,21 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-import com.google.gwt.animation.client.AnimationScheduler;
-import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.*;
-import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class GwtApp extends App implements EntryPoint {
 
 	public final static Logger logger = Logger.getLogger("");
-
-	private int logLevel = LOG_ERROR;
 
 	GwtAppConfiguration config;
 	GwtRendering rendering;
@@ -52,6 +42,14 @@ public abstract class GwtApp extends App implements EntryPoint {
 	private static AgentInfo agentInfo;
 
 	LoadingListener loadingListener;
+
+	public void setLogLevel (Level logLevel) {
+		logger.setLevel(logLevel);
+	}
+
+	public Level getLogLevel (){
+		return logger.getLevel();
+	}
 
 	// Default configuration
 	public GwtAppConfiguration getConfig () {
@@ -161,62 +159,50 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	@Override
 	public void log (String tag, String message) {
-		if (logLevel >= LOG_INFO) {
-			String msg = tag + ": " + message;
-			GwtApp.logger.log(Level.INFO, msg);
-			System.out.println(msg);
-		}
+		String msg = tag + ": " + message;
+		GwtApp.logger.log(Level.INFO, msg);
+		System.out.println(msg);
 	}
 
 	@Override
 	public void log(String tag, String message, Throwable exception) {
-		if (logLevel >= LOG_INFO) {
-			String msg = tag + ": " + message;
-			GwtApp.logger.log(Level.INFO, msg, exception);
+		String msg = tag + ": " + message;
+		GwtApp.logger.log(Level.INFO, msg, exception);
 
-			System.out.println(msg + "\n" + exception.getMessage());
-			System.out.println(getStackTrace(exception));
-		}
+		System.out.println(msg + "\n" + exception.getMessage());
+		System.out.println(getStackTrace(exception));
 	}
 
 	@Override
 	public void error(String tag, String message) {
-		if (logLevel >= LOG_ERROR) {
-			String msg = tag + ": " + message;
-			GwtApp.logger.log(Level.SEVERE, msg);
+		String msg = tag + ": " + message;
+		GwtApp.logger.log(Level.SEVERE, msg);
 
-			System.err.println(msg);
-		}
+		System.err.println(msg);
 	}
 
 	@Override
 	public void error(String tag, String message, Throwable exception) {
-		if (logLevel >= LOG_ERROR) {
-			String msg = tag + ": " + message;
+		String msg = tag + ": " + message;
 
-			GwtApp.logger.log(Level.SEVERE, msg, exception);
+		GwtApp.logger.log(Level.SEVERE, msg, exception);
 
-			System.err.println(msg);
-		}
+		System.err.println(msg);
 	}
 
 	@Override
 	public void debug(String tag, String message) {
-		if (logLevel >= LOG_DEBUG) {
-			String msg = tag + ": " + message;
-			GwtApp.logger.log(Level.FINE, msg);
-			System.out.println( msg + "\n");
-		}
+		String msg = tag + ": " + message;
+		GwtApp.logger.log(Level.FINE, msg);
+		System.out.println( msg + "\n");
 	}
 
 	@Override
 	public void debug (String tag, String message, Throwable exception) {
-		if (logLevel >= LOG_DEBUG) {
-			String msg = tag + ": " + message;
-			GwtApp.logger.log(Level.FINE, msg, exception);
+		String msg = tag + ": " + message;
+		GwtApp.logger.log(Level.FINE, msg, exception);
 
-			System.out.println(msg);
-		}
+		System.out.println(msg);
 	}
 	
 	private String getMessages (Throwable e) {
@@ -234,16 +220,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 			buffer.append(trace.toString() + "\n");
 		}
 		return buffer.toString();
-	}
-
-	@Override
-	public void setLogLevel (int logLevel) {
-		this.logLevel = logLevel;
-	}
-
-	@Override
-	public int getLogLevel() {
-		return logLevel;
 	}
 
 	@Override

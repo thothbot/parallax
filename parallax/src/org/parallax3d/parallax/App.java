@@ -21,6 +21,7 @@ package org.parallax3d.parallax;
 import org.parallax3d.parallax.system.gl.GL20;
 
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
 
 public abstract class App {
 
@@ -32,11 +33,6 @@ public abstract class App {
     public enum ApplicationType {
         Android, Desktop, WebGL
     }
-
-    public static final int LOG_NONE = 0;
-    public static final int LOG_DEBUG = 3;
-    public static final int LOG_INFO = 2;
-    public static final int LOG_ERROR = 1;
 
     public abstract Files getFiles ();
 
@@ -51,8 +47,8 @@ public abstract class App {
     public abstract void debug (String tag, String message);
     public abstract void debug (String tag, String message, Throwable exception);
 
-    public abstract void setLogLevel (int logLevel);
-    public abstract int getLogLevel ();
+    public abstract void setLogLevel (Level logLevel);
+    public abstract Level getLogLevel ();
 
     public abstract ApplicationType getType ();
 
