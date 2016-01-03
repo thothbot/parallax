@@ -45,7 +45,7 @@ public class GeometryCube extends DemoAnimation
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				70, // fov
-				App.rendering.getAbsoluteAspectRation(), // aspect
+				App.app.getRendering().getRenderer().getAbsoluteAspectRation(), // aspect
 				1, // near
 				1000 // far
 		);
@@ -66,6 +66,6 @@ public class GeometryCube extends DemoAnimation
 		this.mesh.getRotation().addX(0.005);
 		this.mesh.getRotation().addY(0.01);
 
-		App.rendering.getRenderer().render(scene, camera);
+		App.app.getRendering().getRenderer().render(scene, camera);
 	}
 }

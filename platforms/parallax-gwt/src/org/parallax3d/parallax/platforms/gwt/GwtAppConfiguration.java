@@ -18,9 +18,6 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.TextArea;
-
 public class GwtAppConfiguration {
 
     /**
@@ -32,24 +29,6 @@ public class GwtAppConfiguration {
      * whether to enable antialiasing
      */
     public boolean antialiasing = false;
-
-    /**
-     * the Panel to add the WebGL canvas to, can be null in which case a Panel is added automatically to the body
-     * element of the DOM
-     */
-    public Panel rootPanel;
-
-    /**
-     * the id of a canvas element to be used as the drawing area, can be null in which case a Panel and Canvas
-     * are added to the body element of the DOM
-     */
-    public String canvasId;
-
-    /**
-     * a TextArea to log messages to, can be null in which case a TextArea will be added to the body element
-     * of the DOM.
-     */
-    public TextArea log;
 
     /**
      * preserve the back buffer, needed if you fetch a screenshot via canvas#toDataUrl, may have performance impact

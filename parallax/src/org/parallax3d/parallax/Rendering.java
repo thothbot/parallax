@@ -18,41 +18,47 @@
 
 package org.parallax3d.parallax;
 
+import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.gl.GL20;
 
-public abstract class Rendering {
+public interface Rendering {
 
-    public abstract boolean isGL30Available();
+    boolean isGL30Available();
 
-    public abstract GL20 getGL20();
+    GL20 getGL20();
 
-    public abstract GLRenderer getRenderer();
+    GLRenderer getRenderer();
 
-    public abstract int getWidth();
+    int getWidth();
 
-    public abstract int getHeight();
+    int getHeight();
 
-    public double getAbsoluteAspectRation() {
-        return getWidth() / (double)getHeight();
-    }
+    long getFrameId();
 
-    public abstract long getFrameId();
+    float getDeltaTime();
 
-    public abstract float getDeltaTime();
+    float getRawDeltaTime();
 
-    public abstract float getRawDeltaTime();
+    int getFramesPerSecond();
 
-    public abstract int getFramesPerSecond();
+    void setAnimation(Animation animation);
 
     /** @return the pixels per inch on the x-axis */
-    public abstract float getPpiX();
+    float getPpiX();
 
     /** @return the pixels per inch on the y-axis */
-    public abstract float getPpiY();
+    float getPpiY();
 
-    public abstract boolean supportsDisplayModeChange();
+    boolean supportsDisplayModeChange();
 
     /** Whether the app is fullscreen or not */
-    public abstract boolean isFullscreen();
+    boolean isFullscreen();
+
+    void setAnimationReadyListener(AnimationReadyListener animationReadyListener);
+
+    void pause();
+
+    void resume();
+
 }

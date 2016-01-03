@@ -18,25 +18,34 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
+import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
+import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 
-public class GwtRendering extends Rendering {
+public class GwtRendering implements Rendering {
 
 	CanvasElement canvas;
 	WebGLRenderingContext context;
 	GLRenderer renderer;
 	GL20 gl;
 
-	String extensions;
+	Animation listener;
+
+	AnimationReadyListener animationReadyListener;
+
+	int lastWidth;
+	int lastHeight;
+
 	float fps = 0;
 	long lastTimeStamp = System.currentTimeMillis();
 	long frameId = -1;
@@ -53,6 +62,10 @@ public class GwtRendering extends Rendering {
 
 		int width  = root.getOffsetWidth();
 		int height = root.getOffsetHeight();
+
+
+		lastWidth = width;
+		lastHeight = height;
 
 		canvas = canvasWidget.getCanvasElement();
 		root.add(canvasWidget);
@@ -73,6 +86,75 @@ public class GwtRendering extends Rendering {
 		App.gl = gl = new GwtGL20(context);
 
 		renderer = new GLRenderer(width, height);
+	}
+
+	@Override
+	public void setAnimation(Animation animation) {
+		this.listener = animation;
+
+		setupLoop();
+	}
+
+	void setupLoop () {
+
+		// tell listener about app creation
+		try {
+			listener.onStart();
+			listener.onResize(this.getWidth(), this.getHeight());
+
+			if(animationReadyListener != null)
+				animationReadyListener.onAnimationReady();
+
+		} catch (Throwable t) {
+			App.app.error("GwtRendering", "exception: " + t.getMessage(), t);
+			t.printStackTrace();
+			throw new ParallaxRuntimeException(t);
+		}
+
+		AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
+			@Override
+			public void execute(double timestamp) {
+				try {
+					mainLoop();
+				} catch (Throwable t) {
+					App.app.error("GwtApplication", "exception: " + t.getMessage(), t);
+					throw new ParallaxRuntimeException(t);
+				}
+				AnimationScheduler.get().requestAnimationFrame(this, GwtRendering.this.canvas);
+			}
+		}, this.canvas);
+
+	}
+
+	void mainLoop() {
+
+		update();
+		if (App.app.getRendering().getWidth() != lastWidth || App.app.getRendering().getHeight() != lastHeight)
+		{
+			this.renderer.setSize(lastWidth, lastHeight);
+			this.listener.onResize(App.app.getRendering().getWidth(), App.app.getRendering().getHeight());
+			lastWidth = getWidth();
+			lastHeight = getHeight();
+		}
+
+		frameId++;
+		this.listener.onUpdate();
+
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void resume() {
+
+	}
+
+	@Override
+	public void setAnimationReadyListener(AnimationReadyListener animationReadyListener) {
+		this.animationReadyListener = animationReadyListener;
 	}
 
 	public WebGLRenderingContext getContext () {

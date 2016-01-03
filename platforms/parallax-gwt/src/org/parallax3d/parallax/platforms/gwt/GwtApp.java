@@ -38,16 +38,10 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	public final static Logger logger = Logger.getLogger("");
 
-	private Animation listener;
-
-	private TextArea log = null;
 	private int logLevel = LOG_ERROR;
 
 	GwtAppConfiguration config;
 	GwtRendering rendering;
-
-	private int lastWidth;
-	private int lastHeight;
 
 	private static AgentInfo agentInfo;
 
@@ -67,44 +61,8 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 		GwtApp.agentInfo = computeAgentInfo();
 		this.config = getConfig();
-		this.log = config.log;
 
 		addEventListeners();
-
-//		if (config.rootPanel != null) {
-//			this.root = config.rootPanel;
-//		} else {
-//			Element element = Document.get().getElementById("embed-" + GWT.getModuleName());
-//			if (element == null) {
-//				VerticalPanel panel = new VerticalPanel();
-//				panel.setWidth("" + config.width + "px");
-//				panel.setHeight("" + config.height + "px");
-//				panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-//				panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-//				RootPanel.get().add(panel);
-//				RootPanel.get().setWidth("" + config.width + "px");
-//				RootPanel.get().setHeight("" + config.height + "px");
-//				this.root = panel;
-//			} else {
-//				VerticalPanel panel = new VerticalPanel();
-//				panel.setWidth("" + config.width + "px");
-//				panel.setHeight("" + config.height + "px");
-//				panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-//				panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-//				element.appendChild(panel.getElement());
-//				root = panel;
-//			}
-//		}
-//
-//		getRootPanel().clear();
-//
-//		if(loadingListener != null)
-//			loadingListener.beforeSetup();
-//
-
-//
-//		if(loadingListener != null)
-//			loadingListener.afterSetup();
 
 		App.app = this;
 		App.files = new GwtFiles();
@@ -126,49 +84,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 			App.app.error("setRendering", msg, e);
 			return;
 		}
-
-		lastWidth = rendering.getWidth();
-		lastHeight = rendering.getHeight();
-
-		setupLoop();
-	}
-
-	void setupLoop () {
-//		// setup modules
-//		try {
-//			rendering = new GwtRendering(root, config);
-//		} catch (Throwable e) {
-//			root.clear();
-//			root.add(new Label("Sorry, your browser doesn't seem to support WebGL"));
-//			return;
-//		}
-
-//		AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
-//			@Override
-//			public void execute(double timestamp) {
-//				try {
-//					mainLoop();
-//				} catch (Throwable t) {
-//					error("GwtApplication", "exception: " + t.getMessage(), t);
-//					throw new RuntimeException(t);
-//				}
-//				AnimationScheduler.get().requestAnimationFrame(this, rendering.canvas);
-//			}
-//		}, rendering.canvas);
-	}
-
-	void mainLoop() {
-		rendering.update();
-		if (App.rendering.getWidth() != lastWidth || App.rendering.getHeight() != lastHeight)
-		{
-			GwtApp.this.listener.onResize(App.rendering.getWidth(), App.rendering.getHeight());
-			lastWidth = rendering.getWidth();
-			lastHeight = rendering.getHeight();
-			App.gl.glViewport(0, 0, lastWidth, lastHeight);
-		}
-
-		rendering.frameId++;
-		listener.onUpdate();
 	}
 
 	@Override

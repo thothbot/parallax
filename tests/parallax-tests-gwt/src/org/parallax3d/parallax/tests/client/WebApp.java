@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
@@ -72,20 +73,17 @@ public class WebApp extends GwtApp
 	public void onInit()
 	{
 		GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
-			public void onUncaughtException(Throwable throwable)
-			{
-//				Log.error("Uncaught exception", throwable);
-				if (!GWT.isScript()) 
-				{
+			public void onUncaughtException(Throwable throwable) {
+				App.app.error("WebApp", "Uncaught exception", throwable);
+				if (!GWT.isScript()) {
 					String text = "Uncaught exception: ";
-					while (throwable != null) 
-					{
+					while (throwable != null) {
 						StackTraceElement[] stackTraceElements = throwable.getStackTrace();
 						text += throwable.toString() + "\n";
 
 						for (int i = 0; i < stackTraceElements.length; i++)
 							text += "    at " + stackTraceElements[i] + "\n";
-						
+
 						throwable = throwable.getCause();
 						if (throwable != null)
 							text += "Caused by: ";
@@ -181,12 +179,9 @@ public class WebApp extends GwtApp
 						break;
 					}
 				}
-				
+
 				// Display the content widget.
 				displayContentWidget(contentWidget);
-				
-				//Add GA statistics
-				trackPageview(Window.Location.getHref());
 
 				// Select the node in the tree.
 				selectionModel.setSelected(contentWidget, true);
@@ -248,9 +243,4 @@ public class WebApp extends GwtApp
 		index.setContentWidget(indexWidget);
 		Window.setTitle("Parallax: All Examples");
 	}
-	
-	private static native void trackPageview(String url) /*-{
-		$wnd._gaq.push(['_trackPageview', url.replace(/^.*\/\/[^\/]+/, '')]);
-	}-*/;
-
 }

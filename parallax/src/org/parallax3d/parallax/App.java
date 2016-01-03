@@ -25,7 +25,6 @@ import java.awt.event.ActionListener;
 public abstract class App {
 
     public static App app;
-    public static Rendering rendering;
     public static Files files;
 
     public static GL20 gl;
