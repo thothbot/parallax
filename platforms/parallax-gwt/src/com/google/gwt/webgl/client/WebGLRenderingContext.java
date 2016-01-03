@@ -942,8 +942,8 @@ public class WebGLRenderingContext extends JavaScriptObject {
 	}
 
 	private final native void uniform1fv (WebGLUniformLocation location, JavaScriptObject v) /*-{
-																															this.uniform1fv(location, v);
-																															}-*/;
+		this.uniform1fv(location, v);
+	}-*/;
 
 	public final native void uniform1i (WebGLUniformLocation location, int x) /*-{
 																										this.uniform1i(location, x);

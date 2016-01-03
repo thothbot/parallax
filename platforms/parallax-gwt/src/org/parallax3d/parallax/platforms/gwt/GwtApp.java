@@ -33,6 +33,8 @@ import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -191,10 +193,10 @@ public abstract class GwtApp extends App implements EntryPoint {
 	public void error(String tag, String message, Throwable exception) {
 		if (logLevel >= LOG_ERROR) {
 			String msg = tag + ": " + message;
+
 			GwtApp.logger.log(Level.SEVERE, msg, exception);
 
-			System.err.println(msg + "\n" + exception.getMessage() + "\n");
-			System.out.println(getStackTrace(exception));
+			System.err.println(msg);
 		}
 	}
 
@@ -213,8 +215,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 			String msg = tag + ": " + message;
 			GwtApp.logger.log(Level.FINE, msg, exception);
 
-			System.out.println(msg + "\n" + exception.getMessage());
-			System.out.println(getStackTrace(exception));
+			System.out.println(msg);
 		}
 	}
 	

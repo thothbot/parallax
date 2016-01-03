@@ -19,9 +19,13 @@
 package org.parallax3d.parallax.platforms.gwt;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.typedarrays.client.Float32ArrayNative;
+import com.google.gwt.typedarrays.client.Int16ArrayNative;
+import com.google.gwt.typedarrays.client.Int32ArrayNative;
 import com.google.gwt.typedarrays.client.Uint8ArrayNative;
 import com.google.gwt.typedarrays.shared.*;
 import com.google.gwt.webgl.client.*;
+import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 
@@ -77,6 +81,8 @@ public class GwtGL20 implements GL20 {
 	}
 
 	public Float32Array copy (FloatBuffer buffer) {
+		if(buffer == null) return Float32ArrayNative.create(0);
+
 		if (GWT.isProdMode()) {
 			return ((Float32Array)((HasArrayBufferView)buffer).getTypedArray()).subarray(buffer.position(), buffer.remaining());
 		} else {
@@ -89,6 +95,8 @@ public class GwtGL20 implements GL20 {
 	}
 
 	public Int16Array copy (ShortBuffer buffer) {
+		if(buffer == null) return Int16ArrayNative.create(0);
+
 		if (GWT.isProdMode()) {
 			return ((Int16Array)((HasArrayBufferView)buffer).getTypedArray()).subarray(buffer.position(), buffer.remaining());
 		} else {
@@ -101,6 +109,8 @@ public class GwtGL20 implements GL20 {
 	}
 
 	public Int32Array copy (IntBuffer buffer) {
+		if(buffer == null) return Int32ArrayNative.create(0);
+
 		if (GWT.isProdMode()) {
 			return ((Int32Array)((HasArrayBufferView)buffer).getTypedArray()).subarray(buffer.position(), buffer.remaining());
 		} else {

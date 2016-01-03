@@ -144,8 +144,8 @@ public class GLRenderer extends AbstractRenderer
 
 	public FastMap<Shader> _programs;
 
-	private Integer _currentProgram = null; //WebGLProgram
-	private Integer _currentFramebuffer = null; //WebGLFramebuffer
+	private int _currentProgram = 0; //WebGLProgram
+	private int _currentFramebuffer = 0; //WebGLFramebuffer
 	private int _currentMaterialId = -1;
 	private int _currentGeometryGroupHash = -1;
 	private Camera _currentCamera = null;
@@ -655,7 +655,7 @@ public class GLRenderer extends AbstractRenderer
 
 	public void resetGLState()
 	{
-		_currentProgram = null;
+		_currentProgram = 0;
 		_currentCamera = null;
 
 		_oldBlending = null;
@@ -2572,7 +2572,7 @@ public class GLRenderer extends AbstractRenderer
 			}
 			else if(type == Uniform.TYPE.F) // single float
 			{
-				App.gl.glUniform1f(location, (Float) value);
+				App.gl.glUniform1f(location, ((Double) value).floatValue());
 			}
 			else if(type == Uniform.TYPE.V2) // single Vector2
 			{
@@ -2721,6 +2721,7 @@ public class GLRenderer extends AbstractRenderer
 				}
 			}
 		}
+		App.app.error("---", "end");
 	}
 
 	public int getTextureUnit()
@@ -3080,7 +3081,7 @@ public class GLRenderer extends AbstractRenderer
 	 */
 	public void setRenderTarget( RenderTargetTexture renderTarget) {
 		App.app.debug("WebGlRenderer", "  ----> Called setRenderTarget(params)");
-		Integer framebuffer = null;
+		int framebuffer = 0;
 
 		int width, height, vx, vy;
 
