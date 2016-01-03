@@ -10,7 +10,7 @@
 
 	<entry-point class='org.parallax3d.parallax.tests.client.WebApp' />
 	
-	<set-configuration-property name="parallax.assetpath" value="../android/assets" />
+	<set-configuration-property name="parallax.assetpath" value="../parallax-tests/assets" />
 
 	<source path='client'/>
 	<source path='resources'/>

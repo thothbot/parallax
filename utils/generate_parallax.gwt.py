@@ -13,7 +13,7 @@ import collections
 import urllib
 
 MODULE = 'org.parallax3d.parallax'
-STATIC_REWRITE = 'parallax.files.classpath'
+STATIC_REWRITE = 'app.files.classpath'
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CORE_DIR = os.path.join(SCRIPT_DIR, os.pardir, 'parallax', 'src')

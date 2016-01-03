@@ -25,11 +25,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +44,8 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	GwtAppConfiguration config;
 	GwtRendering rendering;
+
+	Preloader preloader;
 
 	private static AgentInfo agentInfo;
 
@@ -64,10 +68,66 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 		addEventListeners();
 
-		App.app = this;
-		App.files = new GwtFiles();
+		final Preloader.PreloaderCallback callback = getPreloaderCallback();
+		preloader = createPreloader();
+		preloader.preload("assets.txt", new Preloader.PreloaderCallback() {
+			@Override
+			public void error(String file) {
+				callback.error(file);
+			}
+
+			@Override
+			public void update(Preloader.PreloaderState state) {
+				callback.update(state);
+				if (state.hasEnded()) {
+
+					if (loadingListener != null)
+						loadingListener.beforeSetup();
+
+					App.app = GwtApp.this;
+					App.files = new GwtFiles(preloader);
+
+					if (loadingListener != null)
+						loadingListener.afterSetup();
+				}
+			}
+		});
 
 		onInit();
+	}
+	public String getBaseUrl () {
+		return preloader.baseUrl;
+	}
+
+	public Preloader getPreloader () {
+		return preloader;
+	}
+
+
+	public String getPreloaderBaseURL()
+	{
+		return GWT.getHostPageBaseURL() + "assets/";
+	}
+
+	public Preloader createPreloader() {
+		return new Preloader(getPreloaderBaseURL());
+	}
+
+	public Preloader.PreloaderCallback getPreloaderCallback () {
+
+		return new Preloader.PreloaderCallback() {
+
+			@Override
+			public void error (String file) {
+				App.app.error("Preloader", "error: " + file);
+			}
+
+			@Override
+			public void update (Preloader.PreloaderState state) {
+
+			}
+
+		};
 	}
 
 	public void setRendering(Panel root, GwtAppConfiguration config) {
@@ -283,10 +343,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	private void onVisibilityChange (boolean visible) {
 	}
-	
-	/**
-	 * LoadingListener interface main purpose is to do some things before or after {@link GwtApp#setupLoop()}
-	 */
+
 	public interface LoadingListener{
 		/**
 		 * Method called before the setup
