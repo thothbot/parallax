@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.resources.DemoResources;
@@ -143,6 +144,7 @@ public class WebApp extends GwtApp
 				int childCount = node.getChildCount();
 				for (int i = 0; i < childCount; i++) 
 				{
+					App.app.log("", Boolean.toString(node.getChildValue(i) == category));
 					if (node.getChildValue(i) == category) 
 					{
 						node.setChildOpen(i, true, true);
