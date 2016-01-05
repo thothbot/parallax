@@ -31,6 +31,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
+import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.geometries.GeometryCube;
 
 /**
  * The {@link TreeViewModel} used by the main menu.
@@ -53,10 +55,10 @@ public class DataModel implements TreeViewModel
 	/**
 	 * The cell used to render examples.
 	 */
-	private static class ContentWidgetCell extends AbstractCell<ContentWidget>
+	private static class ContentWidgetCell extends AbstractCell<TestAnimation>
 	{    
 		@Override
-		public void render(Context context, ContentWidget value, SafeHtmlBuilder sb) 
+		public void render(Context context, TestAnimation value, SafeHtmlBuilder sb)
 		{
 			if (value != null) 
 			{
@@ -71,28 +73,24 @@ public class DataModel implements TreeViewModel
 	 */
 	public class Category 
 	{
-		private final ListDataProvider<ContentWidget> examples = new ListDataProvider<ContentWidget>();
+		private final ListDataProvider<TestAnimation> examples = new ListDataProvider<TestAnimation>();
 		private final String name;
-		private NodeInfo<ContentWidget> nodeInfo;
-		private final List<RunAsyncCode> splitPoints = new ArrayList<RunAsyncCode>();
+		private NodeInfo<TestAnimation> nodeInfo;
 
 		public Category(String name) 
 		{
 			this.name = name;
 		}
 
-		public void addExample(ContentWidget example, RunAsyncCode splitPoint) 
+		public void addExample(TestAnimation example)
 		{
 			examples.getList().add(example);
-			
-			if (splitPoint != null)
-				splitPoints.add(splitPoint);
 
 			contentCategory.put(example, this);
 			contentToken.put(example.getContentWidgetToken(), example);
 		}
 		
-		public ListDataProvider<ContentWidget> getExamples()
+		public ListDataProvider<TestAnimation> getExamples()
 		{
 			return this.examples;
 		}
@@ -107,22 +105,12 @@ public class DataModel implements TreeViewModel
 		 * 
 		 * @return the node info
 		 */
-		public NodeInfo<ContentWidget> getNodeInfo() 
+		public NodeInfo<TestAnimation> getNodeInfo()
 		{
 			if (nodeInfo == null)
-				nodeInfo = new DefaultNodeInfo<ContentWidget>(getExamples(), contentWidgetCell, selectionModel, null);
+				nodeInfo = new DefaultNodeInfo<TestAnimation>(getExamples(), contentWidgetCell, selectionModel, null);
 			
 			return nodeInfo;
-		}
-
-		/**
-		 * Get the list of split points to prefetch for this category.
-		 * 
-		 * @return the list of classes in this category
-		 */
-		public Iterable<RunAsyncCode> getSplitPoints() 
-		{
-			return splitPoints;
 		}
 	}
 
@@ -134,7 +122,7 @@ public class DataModel implements TreeViewModel
 	/**
 	 * A mapping of {@link ContentWidget}s to their associated categories.
 	 */
-	private final Map<ContentWidget, Category> contentCategory = new HashMap<ContentWidget, Category>();
+	private final Map<TestAnimation, Category> contentCategory = new HashMap<TestAnimation, Category>();
 
 	/**
 	 * The cell used to render examples.
@@ -144,20 +132,20 @@ public class DataModel implements TreeViewModel
 	/**
 	 * A mapping of history tokens to their associated {@link ContentWidget}.
 	 */
-	private final Map<String, ContentWidget> contentToken = new HashMap<String, ContentWidget>();
+	private final Map<String, TestAnimation> contentToken = new HashMap<String, TestAnimation>();
 
 	/**
 	 * The selection model used to select examples.
 	 */
-	private final SelectionModel<ContentWidget> selectionModel;
+	private final SelectionModel<TestAnimation> selectionModel;
 
-	public DataModel(SelectionModel<ContentWidget> selectionModel) 
+	public DataModel(SelectionModel<TestAnimation> selectionModel)
 	{
 		this.selectionModel = selectionModel;
 		initializeTree();
 	}
 
-	public  SelectionModel<ContentWidget> getSelectionModel()
+	public  SelectionModel<TestAnimation> getSelectionModel()
 	{
 		return this.selectionModel;
 	}
@@ -179,7 +167,7 @@ public class DataModel implements TreeViewModel
 	 * @param token the history token
 	 * @return the associated {@link ContentWidget}
 	 */
-	public ContentWidget getContentWidgetForToken(String token) 
+	public TestAnimation getContentWidgetForToken(String token)
 	{
 		return contentToken.get(token);
 	}
@@ -214,12 +202,12 @@ public class DataModel implements TreeViewModel
 	 * 
 	 * @return the {@link ContentWidget}s
 	 */
-	public Set<ContentWidget> getAllContentWidgets() 
+	public Set<TestAnimation> getAllContentWidgets()
 	{
-		Set<ContentWidget> widgets = new HashSet<ContentWidget>();
+		Set<TestAnimation> widgets = new HashSet<TestAnimation>();
 		for (Category category : getCategories()) 
 		{
-			for (ContentWidget example : category.examples.getList())
+			for (TestAnimation example : category.examples.getList())
 				widgets.add(example);
 		}
 
@@ -237,8 +225,7 @@ public class DataModel implements TreeViewModel
 		{
 			Category category = new Category("Geometries");
 			categoriesList.add(category);
-			category.addExample(new Test1(),
-			RunAsyncCode.runAsyncCode(Test1.class));
+			category.addExample(new GeometryCube());
 
 //			category.addExample(new CopyOfGeometryCube(), 
 //					RunAsyncCode.runAsyncCode(CopyOfGeometryCube.class));

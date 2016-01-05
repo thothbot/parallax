@@ -32,7 +32,39 @@ public abstract class TestAnimation extends AnimationAdapter {
      */
     public abstract String getDescription();
 
-    protected boolean isEnabledEffectSwitch() {
+    public boolean isEnabledEffectSwitch() {
         return true;
+    }
+
+    /**
+     * Get an image of an example to show on the index page
+     *
+     * @return ImageResource
+     */
+    public String getIconUrl() {
+        String icon = getSimpleName(this.getClass()) + ".jpg";
+        return "static/thumbs/" + icon;
+    }
+
+    /**
+     * Get the token for a given content widget.
+     *
+     * @return the content widget token.
+     */
+    public String getContentWidgetToken()
+    {
+        return getSimpleName(this.getClass());
+    }
+
+    /**
+     * Get the simple filename of a class (name without dots).
+     *
+     * @param c
+     *            the class
+     */
+    protected static String getSimpleName(Class<?> c)
+    {
+        String name = c.getName();
+        return name.substring(name.lastIndexOf(".") + 1);
     }
 }
