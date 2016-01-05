@@ -24,20 +24,16 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.resources.DemoResources;
@@ -139,12 +135,11 @@ public class WebApp extends GwtApp
 					return;
 
 				// Expand the tree node associated with the content.
-				DataModel.Category category = treeModel.getCategoryForContentWidget(contentWidget);
+				DataModel.Category category = treeModel.getCategoryForTest(contentWidget);
 				TreeNode node = mainMenu.getRootTreeNode();
 				int childCount = node.getChildCount();
 				for (int i = 0; i < childCount; i++) 
 				{
-					App.app.log("", Boolean.toString(node.getChildValue(i) == category));
 					if (node.getChildValue(i) == category) 
 					{
 						node.setChildOpen(i, true, true);

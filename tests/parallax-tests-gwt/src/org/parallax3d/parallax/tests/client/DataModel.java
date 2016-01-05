@@ -80,7 +80,7 @@ public class DataModel implements TreeViewModel
 			this.name = entry.getKey();
 
 			List<? extends TestAnimation> values = entry.getValue();
-			examples.getList().addAll( values );
+			examples.getList().addAll(values);
 
 			for(TestAnimation value : values) {
 				contentToken.put(value.getContentWidgetToken(), value);
@@ -157,7 +157,7 @@ public class DataModel implements TreeViewModel
 	 * @param widget the {@link PanelExample}
 	 * @return the associated {@link Category}
 	 */
-	public Category getCategoryForContentWidget(TestAnimation widget)
+	public Category getCategoryForTest(TestAnimation widget)
 	{
 		return contentCategory.get(widget);
 	}
