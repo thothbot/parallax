@@ -56,11 +56,6 @@ public class DemoShell extends ResizeComposite
 	 */
 	@UiField(provided = true)
 	CellTree mainMenu;
-	
-	/**
-	 * The button used to show the example.
-	 */
-	Anchor linkExample;
 
 //	/**
 //	 * The current {@link ContentWidget} being displayed.
@@ -93,8 +88,6 @@ public class DemoShell extends ResizeComposite
 		AbstractImagePrototype proto = AbstractImagePrototype.create(WebApp.resources.loading());
 		loadingHtml = proto.getHTML();
 
-		linkExample = index.linkExample;
-		
 		// Create the cell tree.
 		mainMenu = new CellTree(treeModel, null);
 		mainMenu.setAnimationEnabled(true);
@@ -104,23 +97,10 @@ public class DemoShell extends ResizeComposite
 		// Initialize the ui binder.
 		initWidget(uiBinder.createAndBindUi(this));
 
-		// Handle events from the tabs.
-		linkExample.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				showExample();
-			}
-		});
-
 		// Default to no content.
 		contentPanel.ensureDebugId("contentPanel");
 
 		setContent(null);
-	}
-	
-	public Anchor getTabExample()
-	{
-		return this.linkExample;
 	}
 
 //	/**
@@ -164,13 +144,9 @@ public class DemoShell extends ResizeComposite
 //		this.content = content;
 		if (content == null) 
 		{
-			linkExample.setVisible(false);
 			contentPanel.setWidget(null);
 			return;
 		}
-
-		// Setup the options bar.
-		linkExample.setVisible(true);
 
 		// Show the widget.
 		showExample();
@@ -183,9 +159,6 @@ public class DemoShell extends ResizeComposite
 	{
 //		if (content == null)
 //			return;
-
-		// Set the highlighted tab.
-		linkExample.getElement().getStyle().setColor(DemoResources.SELECTED_TAB_COLOR);
 
 //		contentPanel.setWidget(content);
 	}

@@ -54,19 +54,7 @@ public class Index extends ResizeComposite
 	 */
 	@UiField(provided=true)
 	SimpleLayoutPanel contentWidget;
-	
-	/**
-	 * See {@linkDemoShell}
-	 */
-	@UiField
-	Anchor linkExample;
-	
-	/**
-	 * See {@linkDemoShell}
-	 */
-	@UiField
-	Anchor linkSource;
-		
+
 	public Index() 
 	{
 		bottonPanel = new HorizontalPanel();

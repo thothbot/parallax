@@ -12,7 +12,7 @@
       border-bottom: 1px solid #c3c3c3;
       padding: 0px 10px;
     }
-    
+
     .contentButton {
       margin-left: 10px;
       color: #AAAAAA;
@@ -23,17 +23,17 @@
       vertical-align: middle;
       text-decoration: none;
     }
-        
+
     .contentButton:hover {
       color: #EEEEEE;
       text-decoration: none;
     }
-    
+
     .contentButton:visited {
       color: #AAAAAA;
       text-decoration: none;
     }
-    
+
     .fbPanel {
 		padding: 3px 10px;
 	}
@@ -52,14 +52,6 @@
 			</g:lineStart>
 			<g:center>
 				<g:HorizontalPanel ui:field='bottonPanel'>
-					<g:FlowPanel>
-						<g:Anchor ui:field='linkExample' addStyleNames='{style.contentButton}'>
-							<ui:msg key='contentWidgetExample'>Example</ui:msg>
-						</g:Anchor>
-						<g:Anchor ui:field='linkSource' addStyleNames='{style.contentButton}'>
-							<ui:msg key='contentWidgetSource'>Source Code</ui:msg>
-						</g:Anchor>
-					</g:FlowPanel>
 					<g:HTMLPanel addStyleNames='{style.fbPanel}'>
 						<div id="fb-share-button" class="fb-share-button" data-layout="button_count"></div>
 					</g:HTMLPanel>

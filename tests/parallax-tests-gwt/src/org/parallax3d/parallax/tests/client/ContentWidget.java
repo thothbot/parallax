@@ -215,8 +215,8 @@ public abstract class ContentWidget extends SimpleLayoutPanel
 		if (view == null) 
 		{		
 			view = new ContentWidgetView();
-			view.setName(getName());
-			view.setDescription(getDescription());
+//			view.setName(getName());
+//			view.setDescription(getDescription());
 			setWidget(view);
 		}
 

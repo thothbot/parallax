@@ -182,7 +182,7 @@ public class WebApp extends GwtApp
 				}
 
 				// Display the content widget.
-				displayContentWidget(contentWidget);
+//				displayContentWidget(contentWidget);
 
 				// Select the node in the tree.
 				selectionModel.setSelected(contentWidget, true);
@@ -223,20 +223,20 @@ public class WebApp extends GwtApp
 		RootPanel.get().add(siteMap, 0, 0);
 	}
 
-	/**
-	 * Set the content to the {@link ContentWidget}.
-	 * 
-	 * @param content
-	 *            the {@link ContentWidget} to display
-	 */
-	private void displayContentWidget(final ContentWidget content)
-	{
-		if (content == null)
-			return;
-		
-		shell.setContent(content);
-		Window.setTitle("Parallax tests: " + content.getName());
-	}
+//	/**
+//	 * Set the content to the {@link ContentWidget}.
+//	 *
+//	 * @param content
+//	 *            the {@link ContentWidget} to display
+//	 */
+//	private void displayContentWidget(final ContentWidget content)
+//	{
+//		if (content == null)
+//			return;
+//
+//		shell.setContent(content);
+//		Window.setTitle("Parallax tests: " + content.getName());
+//	}
 
 	private void displayIndex()
 	{
