@@ -18,33 +18,23 @@
 
 package org.parallax3d.parallax.tests.client;
 
-import org.parallax3d.parallax.tests.resources.DemoResources;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ResizeComposite;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.TreeViewModel;
 
 public class DemoShell extends ResizeComposite
 {
-	interface DemoShellUiBinder extends UiBinder<Widget, DemoShell> {
-	}
-
 	private static DemoShellUiBinder uiBinder = GWT.create(DemoShellUiBinder.class);
-
+	/**
+	 * The unique ID assigned to the next callback.
+	 */
+	private static int nextCallbackId = 0;
 	/**
 	 * The panel that holds the content.
 	 */
@@ -57,37 +47,14 @@ public class DemoShell extends ResizeComposite
 	@UiField(provided = true)
 	CellTree mainMenu;
 
-//	/**
-//	 * The current {@link ContentWidget} being displayed.
-//	 */
-//	private ContentWidget content;
-
-	/**
-	 * The handler used to handle user requests to view raw source.
-	 */
-	private HandlerRegistration contentSourceHandler;
-
-	/**
-	 * The html used to show a loading icon.
-	 */
-	private final String loadingHtml;
-
-	/**
-	 * The unique ID assigned to the next callback.
-	 */
-	private static int nextCallbackId = 0;
-	
 	/**
 	 * Construct the ShowcaseShell.
-	 * 
+	 *
 	 * @param treeModel
 	 *            the treeModel that backs the main menu
 	 */
 	public DemoShell(TreeViewModel treeModel, Index index)
 	{
-		AbstractImagePrototype proto = AbstractImagePrototype.create(WebApp.resources.loading());
-		loadingHtml = proto.getHTML();
-
 		// Create the cell tree.
 		mainMenu = new CellTree(treeModel, null);
 		mainMenu.setAnimationEnabled(true);
@@ -102,18 +69,10 @@ public class DemoShell extends ResizeComposite
 
 		setContent(null);
 	}
-
-//	/**
-//	 * Returns the currently displayed content. (Used by tests.)
-//	 */
-//	public ContentWidget getContent()
-//	{
-//		return content;
-//	}
-
+	
 	/**
 	 * Get the main menu used to select examples.
-	 * 
+	 *
 	 * @return the main menu
 	 */
 	public CellTree getMainMenu()
@@ -128,21 +87,13 @@ public class DemoShell extends ResizeComposite
 
 	/**
 	 * Set the content to display.
-	 * 
+	 *
 	 * @param content
 	 *            the content
 	 */
-	public void setContent(final ContentWidget content)
+	public void setContent(final WidgetContent content)
 	{
-		// Clear the old handler.
-		if (contentSourceHandler != null) 
-		{
-			contentSourceHandler.removeHandler();
-			contentSourceHandler = null;
-		}
-
-//		this.content = content;
-		if (content == null) 
+		if (content == null)
 		{
 			contentPanel.setWidget(null);
 			return;
@@ -151,7 +102,7 @@ public class DemoShell extends ResizeComposite
 		// Show the widget.
 		showExample();
 	}
-	
+
 	/**
 	 * Show a example.
 	 */
@@ -161,5 +112,8 @@ public class DemoShell extends ResizeComposite
 //			return;
 
 //		contentPanel.setWidget(content);
+	}
+	
+	interface DemoShellUiBinder extends UiBinder<Widget, DemoShell> {
 	}
 }

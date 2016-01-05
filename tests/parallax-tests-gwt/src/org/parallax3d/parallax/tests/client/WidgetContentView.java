@@ -38,15 +38,15 @@ import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 
 /**
- * A view of a {@link ContentWidget}.
+ * A view of a {@link WidgetContent}.
  */
-public class ContentWidgetView extends ResizeComposite
+public class WidgetContentView extends ResizeComposite
 {
 
-	interface ContentWidgetViewUiBinder extends UiBinder<Widget, ContentWidgetView>{
+	interface WidgetContentViewUiBinder extends UiBinder<Widget, WidgetContentView>{
 	}
 
-	private static ContentWidgetViewUiBinder uiBinder = GWT.create(ContentWidgetViewUiBinder.class);
+	private static WidgetContentViewUiBinder uiBinder = GWT.create(WidgetContentViewUiBinder.class);
 
 	/**
 	 * Used to show description of an example
@@ -111,7 +111,7 @@ public class ContentWidgetView extends ResizeComposite
         }
     };
 
-	public ContentWidgetView()
+	public WidgetContentView()
 	{
 		this.examplePanel = new SimpleLayoutPanel();
 		this.debuggerPanel = new SimpleLayoutPanel();

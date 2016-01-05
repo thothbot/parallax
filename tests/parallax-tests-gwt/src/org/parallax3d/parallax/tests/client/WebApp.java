@@ -64,7 +64,7 @@ public class WebApp extends GwtApp
 	/**
 	 * The index widget.
 	 */
-	private IndexWidget indexWidget;
+	private WidgetIndex indexWidget;
 	
 	/**
 	 * The main application.
@@ -102,7 +102,7 @@ public class WebApp extends GwtApp
 		resources.css().ensureInjected();
 
 		// Create the application shell.
-		final SingleSelectionModel<TestAnimation> selectionModel = new SingleSelectionModel<TestAnimation>();
+		final SingleSelectionModel<TestAnimation> selectionModel = new SingleSelectionModel<>();
 		final DataModel treeModel = new DataModel(selectionModel);
 		Set<TestAnimation> contentWidgets = treeModel.getAllContentWidgets();
 		
@@ -119,7 +119,7 @@ public class WebApp extends GwtApp
 			}
 		});
 
-		indexWidget = new IndexWidget(treeModel);
+		indexWidget = new WidgetIndex(treeModel);
 		shell = new DemoShell(treeModel, index);
 
 		// Prefetch examples when opening the Category tree nodes.
@@ -206,7 +206,7 @@ public class WebApp extends GwtApp
 	/**
 	 * Create a hidden site map for crawlability.
 	 * 
-	 * @param contentWidgets the {@link ContentWidget}s used in Demo
+	 * @param contentWidgets the {@link WidgetContent}s used in Demo
 	 */
 	private void createSiteMap(Set<TestAnimation> contentWidgets)
 	{

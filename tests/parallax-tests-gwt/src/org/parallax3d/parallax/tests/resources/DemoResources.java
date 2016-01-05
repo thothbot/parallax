@@ -37,8 +37,6 @@ public interface DemoResources extends ClientBundle
 	 */
 	String DST_SOURCE = "demoSource/";
 	
-	String DST_FACEBOOK = "fb/";
-
 	/**
 	 * The destination folder for parsed source code from examples.
 	 */
@@ -46,10 +44,7 @@ public interface DemoResources extends ClientBundle
 	
 	@Source("images/logo.png")
 	ImageResource logo();
-	
-	@Source("images/loading.gif")
-	ImageResource loading();
-	
+
 	@Source("images/s_fullscreen.png")
 	ImageResource switchFullscreen();
 	
