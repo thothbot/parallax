@@ -33,11 +33,11 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Main view of the application
  */
-public class Index extends ResizeComposite
+public class PanelTop extends ResizeComposite
 {
-	private static IndexUiBinder uiBinder = GWT.create(IndexUiBinder.class);
+	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-	interface IndexUiBinder extends UiBinder<Widget, Index> {
+	interface PanelUiBinder extends UiBinder<Widget, PanelTop> {
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class Index extends ResizeComposite
 	@UiField(provided=true)
 	SimpleLayoutPanel contentWidget;
 
-	public Index() 
+	public PanelTop()
 	{
 		bottonPanel = new HorizontalPanel();
 		contentWidget = new SimpleLayoutPanel();
@@ -76,7 +76,7 @@ public class Index extends ResizeComposite
 		this.contentWidget.setWidget(content);
 	}
 
-	public void setContentWidget(DemoShell content)
+	public void setContentWidget(PanelMain content)
 	{
 		linkIndex.getElement().getStyle().clearColor();
 		bottonPanel.setVisible(true);

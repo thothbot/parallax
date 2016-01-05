@@ -118,7 +118,7 @@ public class DataModel implements TreeViewModel
 	private final ListDataProvider<Category> categories = new ListDataProvider<Category>();
 
 	/**
-	 * A mapping of {@link WidgetContent}s to their associated categories.
+	 * A mapping of {@link PageExample}s to their associated categories.
 	 */
 	private final Map<TestAnimation, Category> contentCategory = new HashMap<TestAnimation, Category>();
 
@@ -128,7 +128,7 @@ public class DataModel implements TreeViewModel
 	private final ContentWidgetCell contentWidgetCell = new ContentWidgetCell();
 
 	/**
-	 * A mapping of history tokens to their associated {@link WidgetContent}.
+	 * A mapping of history tokens to their associated {@link PageExample}.
 	 */
 	private final Map<String, TestAnimation> contentToken = new HashMap<String, TestAnimation>();
 
@@ -151,7 +151,7 @@ public class DataModel implements TreeViewModel
 	/**
 	 * Get the {@link Category} associated with a widget.
 	 * 
-	 * @param widget the {@link WidgetContent}
+	 * @param widget the {@link PageExample}
 	 * @return the associated {@link Category}
 	 */
 	public Category getCategoryForContentWidget(TestAnimation widget)
@@ -163,7 +163,7 @@ public class DataModel implements TreeViewModel
 	 * Get the content widget associated with the specified history token.
 	 * 
 	 * @param token the history token
-	 * @return the associated {@link WidgetContent}
+	 * @return the associated {@link PageExample}
 	 */
 	public TestAnimation getContentWidgetForToken(String token)
 	{
@@ -196,9 +196,9 @@ public class DataModel implements TreeViewModel
 		return categories.getList();
 	}
 	/**
-	 * Get the set of all {@link WidgetContent}s used in the model.
+	 * Get the set of all {@link PageExample}s used in the model.
 	 * 
-	 * @return the {@link WidgetContent}s
+	 * @return the {@link PageExample}s
 	 */
 	public Set<TestAnimation> getAllContentWidgets()
 	{

@@ -18,23 +18,20 @@
 
 package org.parallax3d.parallax.tests.client;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
- * The annotations used in Parallax WebApp.
+ * Simple loading widget. 
+ * 
+ * @author thothbot
+ *
  */
-public class DemoAnnotations 
+public class AlertLoading extends Alert
 {
-	/**
-	 * Indicates that a inner class should be included as source code in
-	 * the example. All source must have a JavaDoc style comment.
-	 */
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ElementType.TYPE, ElementType.METHOD})
-	public @interface DemoSource 
-	{}
-
+	@Override
+	public Widget getContent()
+	{
+		return new Label("Loading scene...");
+	}
 }

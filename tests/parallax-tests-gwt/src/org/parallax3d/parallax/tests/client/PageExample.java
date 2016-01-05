@@ -39,7 +39,7 @@ import org.parallax3d.parallax.platforms.gwt.GwtApp;
 /**
  * A widget used to show Parallax examples.
  */
-public abstract class WidgetContent extends SimpleLayoutPanel
+public abstract class PageExample extends SimpleLayoutPanel
 	implements AnimationReadyListener
 {
 
@@ -59,7 +59,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 //	 */
 //	protected RenderingPanel renderingPanel;
 	
-	private InfoLoadingPanel loadingPanel;
+	private AlertLoading loadingPanel;
 	private boolean isSceneHasObjects = false;
 	/**
 	 * A description of an example.
@@ -79,7 +79,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 	/**
 	 * The view that holds the name, description, and example.
 	 */
-	private WidgetContentView view;
+	private PanelButtons view;
 
 	/**
 	 * Whether the tests widget has been initialized.
@@ -101,7 +101,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 	 * @param description
 	 *            a text description of an example
 	 */
-	public WidgetContent(String name, String description)
+	public PageExample(String name, String description)
 	{
 		this.name = name;
 		this.description = new HTML(description);
@@ -148,7 +148,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 
     	view.switchEffectAnaglyph.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(WidgetContent.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
 //    			if (view.switchEffectAnaglyph.isDown())
 //					ContentWidget.this.effectPlugin = new Anaglyph(
 //							ContentWidget.this.renderingPanel.getRenderer(),
@@ -158,7 +158,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 
     	view.switchEffectStereo.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(WidgetContent.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
 //				if (view.switchEffectStereo.isDown())
 //					ContentWidget.this.effectPlugin = new Stereo(
 //							ContentWidget.this.renderingPanel.getRenderer(),
@@ -168,7 +168,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 
     	view.switchEffectParallaxBarrier.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(WidgetContent.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
 //				if (view.switchEffectParallaxBarrier.isDown())
 //					ContentWidget.this.effectPlugin = new ParallaxBarrier(
 //							ContentWidget.this.renderingPanel.getRenderer(),
@@ -178,7 +178,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 
     	view.switchEffectOculusRift.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(WidgetContent.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
 //				if (view.switchEffectOculusRift.isDown())
 //					ContentWidget.this.effectPlugin = new OculusRift(
 //							ContentWidget.this.renderingPanel.getRenderer(),
@@ -188,7 +188,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 
     	view.switchEffectNone.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(WidgetContent.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
     		}
     	});
 
@@ -214,7 +214,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 	{
 		if (view == null) 
 		{		
-			view = new WidgetContentView();
+			view = new PanelButtons();
 //			view.setName(getName());
 //			view.setDescription(getDescription());
 			setWidget(view);
@@ -265,7 +265,7 @@ public abstract class WidgetContent extends SimpleLayoutPanel
 
 //		    		renderingPanel.addSceneLoadingHandler(ContentWidget.this);
 //		    		renderingPanel.addCanvas3dErrorHandler(ContentWidget.this);
-					App.app.getRendering().setAnimationReadyListener(WidgetContent.this);
+					App.app.getRendering().setAnimationReadyListener(PageExample.this);
 		        }
 			}
 		});

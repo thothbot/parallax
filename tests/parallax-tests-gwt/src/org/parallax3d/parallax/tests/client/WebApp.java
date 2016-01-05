@@ -59,17 +59,17 @@ public class WebApp extends GwtApp
 	/**
 	 * The main application shell.
 	 */
-	private DemoShell shell;
+	private PanelMain shell;
 	
 	/**
 	 * The index widget.
 	 */
-	private WidgetIndex indexWidget;
+	private PageExamples indexWidget;
 	
 	/**
 	 * The main application.
 	 */
-	private Index index;
+	private PanelTop index;
 
 	public void onInit()
 	{
@@ -106,7 +106,7 @@ public class WebApp extends GwtApp
 		final DataModel treeModel = new DataModel(selectionModel);
 		Set<TestAnimation> contentWidgets = treeModel.getAllContentWidgets();
 		
-		index = new Index();
+		index = new PanelTop();
 		// Hide loading panel
 		RootPanel.get("loading").getElement().getStyle().setVisibility(Visibility.HIDDEN);
 		// Attach index panel
@@ -119,8 +119,8 @@ public class WebApp extends GwtApp
 			}
 		});
 
-		indexWidget = new WidgetIndex(treeModel);
-		shell = new DemoShell(treeModel, index);
+		indexWidget = new PageExamples(treeModel);
+		shell = new PanelMain(treeModel, index);
 
 		// Prefetch examples when opening the Category tree nodes.
 		final List<DataModel.Category> prefetched = new ArrayList<DataModel.Category>();
@@ -206,7 +206,7 @@ public class WebApp extends GwtApp
 	/**
 	 * Create a hidden site map for crawlability.
 	 * 
-	 * @param contentWidgets the {@link WidgetContent}s used in Demo
+	 * @param contentWidgets the {@link PageExample}s used in Demo
 	 */
 	private void createSiteMap(Set<TestAnimation> contentWidgets)
 	{

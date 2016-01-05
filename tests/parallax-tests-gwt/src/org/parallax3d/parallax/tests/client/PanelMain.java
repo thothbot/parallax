@@ -28,9 +28,12 @@ import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.TreeViewModel;
 
-public class DemoShell extends ResizeComposite
+public class PanelMain extends ResizeComposite
 {
-	private static DemoShellUiBinder uiBinder = GWT.create(DemoShellUiBinder.class);
+	interface PanelUiBinder extends UiBinder<Widget, PanelMain> {
+	}
+
+	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 	/**
 	 * The unique ID assigned to the next callback.
 	 */
@@ -53,7 +56,7 @@ public class DemoShell extends ResizeComposite
 	 * @param treeModel
 	 *            the treeModel that backs the main menu
 	 */
-	public DemoShell(TreeViewModel treeModel, Index index)
+	public PanelMain(TreeViewModel treeModel, PanelTop index)
 	{
 		// Create the cell tree.
 		mainMenu = new CellTree(treeModel, null);
@@ -91,7 +94,7 @@ public class DemoShell extends ResizeComposite
 	 * @param content
 	 *            the content
 	 */
-	public void setContent(final WidgetContent content)
+	public void setContent(final PageExample content)
 	{
 		if (content == null)
 		{
@@ -112,8 +115,5 @@ public class DemoShell extends ResizeComposite
 //			return;
 
 //		contentPanel.setWidget(content);
-	}
-	
-	interface DemoShellUiBinder extends UiBinder<Widget, DemoShell> {
 	}
 }
