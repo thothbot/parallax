@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author thothbot
  *
  */
-public class LoadingPanel extends InfoPanel
+public class InfoLoadingPanel extends InfoPanel
 {
 	@Override
 	public Widget getContent()

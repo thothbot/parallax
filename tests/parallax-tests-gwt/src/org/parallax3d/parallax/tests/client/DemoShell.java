@@ -62,15 +62,10 @@ public class DemoShell extends ResizeComposite
 	 */
 	Anchor linkExample;
 
-	/**
-	 * The button used to show the source code.
-	 */
-	Anchor linkSource;
-		
-	/**
-	 * The current {@link ContentWidget} being displayed.
-	 */
-	private ContentWidget content;
+//	/**
+//	 * The current {@link ContentWidget} being displayed.
+//	 */
+//	private ContentWidget content;
 
 	/**
 	 * The handler used to handle user requests to view raw source.
@@ -81,37 +76,6 @@ public class DemoShell extends ResizeComposite
 	 * The html used to show a loading icon.
 	 */
 	private final String loadingHtml;
-
-	/**
-	 * The widget that holds CSS or source code for an example.
-	 */
-	private HTML contentSource = new HTML();
-
-	/**
-	 * The callback used when retrieving source code.
-	 */
-	private class CustomCallback implements ContentWidget.Callback<String>
-	{
-		private int id;
-
-		public CustomCallback() {
-			id = ++nextCallbackId;
-		}
-
-		public void onError()
-		{
-			if (id == nextCallbackId)
-				contentSource.setHTML("Cannot find resource");
-		}
-
-		public void onSuccess(String value)
-		{
-			if (id == nextCallbackId) {
-				contentSource.setHTML(value);				
-			}
-			highlightSourcecode(contentSource.getElement().getFirstChildElement().getFirstChildElement());
-		}
-	}
 
 	/**
 	 * The unique ID assigned to the next callback.
@@ -130,7 +94,6 @@ public class DemoShell extends ResizeComposite
 		loadingHtml = proto.getHTML();
 
 		linkExample = index.linkExample;
-		linkSource = index.linkSource;
 		
 		// Create the cell tree.
 		mainMenu = new CellTree(treeModel, null);
@@ -149,13 +112,6 @@ public class DemoShell extends ResizeComposite
 			}
 		});
 
-		linkSource.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				showSourceFile();
-			}
-		});
-
 		// Default to no content.
 		contentPanel.ensureDebugId("contentPanel");
 
@@ -166,19 +122,14 @@ public class DemoShell extends ResizeComposite
 	{
 		return this.linkExample;
 	}
-	
-	public Anchor getTabSource()
-	{
-		return this.linkSource;
-	}
 
-	/**
-	 * Returns the currently displayed content. (Used by tests.)
-	 */
-	public ContentWidget getContent()
-	{
-		return content;
-	}
+//	/**
+//	 * Returns the currently displayed content. (Used by tests.)
+//	 */
+//	public ContentWidget getContent()
+//	{
+//		return content;
+//	}
 
 	/**
 	 * Get the main menu used to select examples.
@@ -210,18 +161,16 @@ public class DemoShell extends ResizeComposite
 			contentSourceHandler = null;
 		}
 
-		this.content = content;
+//		this.content = content;
 		if (content == null) 
 		{
 			linkExample.setVisible(false);
-			linkSource.setVisible(false);
 			contentPanel.setWidget(null);
 			return;
 		}
 
 		// Setup the options bar.
 		linkExample.setVisible(true);
-		linkSource.setVisible(true);
 
 		// Show the widget.
 		showExample();
@@ -232,35 +181,12 @@ public class DemoShell extends ResizeComposite
 	 */
 	private void showExample()
 	{
-		if (content == null)
-			return;
+//		if (content == null)
+//			return;
 
 		// Set the highlighted tab.
 		linkExample.getElement().getStyle().setColor(DemoResources.SELECTED_TAB_COLOR);
-		linkSource.getElement().getStyle().clearColor();
 
-		contentPanel.setWidget(content);
+//		contentPanel.setWidget(content);
 	}
-
-	/**
-	 * Show a source file based on the selection in the source list.
-	 */
-	private void showSourceFile()
-	{
-		if (content == null)
-			return;
-
-		// Set the highlighted tab.
-		linkExample.getElement().getStyle().clearColor();
-		linkSource.getElement().getStyle().setColor(DemoResources.SELECTED_TAB_COLOR);
-
-		contentSource.setHTML(loadingHtml);
-		contentPanel.setWidget(new ScrollPanel(contentSource));
-
-		content.getSource(new CustomCallback());
-	}
-	
-	private static native void highlightSourcecode(Element element) /*-{
-		$wnd.hljs.highlightBlock(element);
-	}-*/;
 }

@@ -27,14 +27,11 @@ import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.Plugin;
 import org.parallax3d.parallax.tests.TestAnimation;
-import org.parallax3d.parallax.tests.resources.DemoResources;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
@@ -62,7 +59,7 @@ public abstract class ContentWidget extends SimpleLayoutPanel
 //	 */
 //	protected RenderingPanel renderingPanel;
 	
-	private LoadingPanel loadingPanel;
+	private InfoLoadingPanel loadingPanel;
 	private boolean isSceneHasObjects = false;
 	/**
 	 * A description of an example.
