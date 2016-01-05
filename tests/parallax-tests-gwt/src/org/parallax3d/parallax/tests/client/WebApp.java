@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
@@ -101,9 +102,9 @@ public class WebApp extends GwtApp
 		resources.css().ensureInjected();
 
 		// Create the application shell.
-		final SingleSelectionModel<ContentWidget> selectionModel = new SingleSelectionModel<ContentWidget>();
+		final SingleSelectionModel<TestAnimation> selectionModel = new SingleSelectionModel<TestAnimation>();
 		final DataModel treeModel = new DataModel(selectionModel);
-		Set<ContentWidget> contentWidgets = treeModel.getAllContentWidgets();
+		Set<TestAnimation> contentWidgets = treeModel.getAllContentWidgets();
 		
 		index = new Index();
 		// Hide loading panel
@@ -132,12 +133,12 @@ public class WebApp extends GwtApp
 				if (!(value instanceof DataModel.Category))
 					return;
 
-				DataModel.Category category = (DataModel.Category) value;
-				if (!prefetched.contains(category)) 
-				{
-					prefetched.add(category);
-					Prefetcher.prefetch(category.getSplitPoints());
-				}
+//				DataModel.Category category = (DataModel.Category) value;
+//				if (!prefetched.contains(category))
+//				{
+//					prefetched.add(category);
+//					Prefetcher.prefetch(category.getSplitPoints());
+//				}
 			}
 		});
 
@@ -148,7 +149,7 @@ public class WebApp extends GwtApp
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event)
 			{
-				ContentWidget selected = selectionModel.getSelectedObject();
+				TestAnimation selected = selectionModel.getSelectedObject();
 				if (selected != null) 
 				{
 					index.setContentWidget(shell);
@@ -162,7 +163,7 @@ public class WebApp extends GwtApp
 			public void onValueChange(ValueChangeEvent<String> event)
 			{
 				// Get the content widget associated with the history token.
-				ContentWidget contentWidget = treeModel.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
+				TestAnimation contentWidget = treeModel.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
 				if (contentWidget == null)
 					return;
@@ -207,10 +208,10 @@ public class WebApp extends GwtApp
 	 * 
 	 * @param contentWidgets the {@link ContentWidget}s used in Demo
 	 */
-	private void createSiteMap(Set<ContentWidget> contentWidgets)
+	private void createSiteMap(Set<TestAnimation> contentWidgets)
 	{
 		SafeHtmlBuilder sb = new SafeHtmlBuilder();
-		for (ContentWidget cw : contentWidgets) 
+		for (TestAnimation cw : contentWidgets)
 		{
 			String token = cw.getContentWidgetToken();
 			sb.append(SafeHtmlUtils.fromTrustedString("<a href=\"#" + token + "\">" + token + "</a>"));
@@ -236,7 +237,7 @@ public class WebApp extends GwtApp
 		shell.setContent(content);
 		Window.setTitle("Parallax tests: " + content.getName());
 	}
-		
+
 	private void displayIndex()
 	{
 		History.newItem("", true);

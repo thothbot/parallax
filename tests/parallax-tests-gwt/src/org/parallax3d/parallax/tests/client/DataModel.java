@@ -156,7 +156,7 @@ public class DataModel implements TreeViewModel
 	 * @param widget the {@link ContentWidget}
 	 * @return the associated {@link Category}
 	 */
-	public Category getCategoryForContentWidget(ContentWidget widget) 
+	public Category getCategoryForContentWidget(TestAnimation widget)
 	{
 		return contentCategory.get(widget);
 	}

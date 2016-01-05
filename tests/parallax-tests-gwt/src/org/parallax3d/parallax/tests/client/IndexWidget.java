@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.tests.client;
 
+import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.client.DataModel.Category;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -77,7 +78,7 @@ public class IndexWidget extends ScrollPanel
 
 		this.categoriesInfo.add(examplesInfo);
 
-		for (ContentWidget example : category.getExamples().getList())
+		for (TestAnimation example : category.getExamples().getList())
 			addItem(example, examplesInfo);
 	}
 	
@@ -88,7 +89,7 @@ public class IndexWidget extends ScrollPanel
 	 * @param example content Widget
 	 * @param examplesInfo panel where render this view 
 	 */
-	public void addItem(final ContentWidget example, FlowPanel examplesInfo) 
+	public void addItem(final TestAnimation example, FlowPanel examplesInfo)
 	{
 
 		final FlowPanel examplePanel = new FlowPanel();

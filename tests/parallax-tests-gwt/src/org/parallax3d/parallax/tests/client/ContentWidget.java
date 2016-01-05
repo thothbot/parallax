@@ -110,103 +110,10 @@ public abstract class ContentWidget extends SimpleLayoutPanel
 		this.description = new HTML(description);
 	}
 
-	/**
-	 * This is called when the example is first initialized.
-	 * 
-	 */
-	protected abstract TestAnimation onInitialize();
-
 	protected abstract void asyncOnInitialize(final AsyncCallback<TestAnimation> callback);
-
-	/**
-	 * Get the simple filename of a class (name without dots).
-	 * 
-	 * @param c
-	 *            the class
-	 */
-	protected static String getSimpleName(Class<?> c)
-	{
-		String name = c.getName();
-		return name.substring(name.lastIndexOf(".") + 1);
-	}
-	
-	/**
-	 * Get the token for a given content widget.
-	 * 
-	 * @return the content widget token.
-	 */
-	public String getContentWidgetToken()
-	{
-		return getSimpleName(this.getClass());
-	}
-	
-	/**
-	 * Get a name of an example to use as a title.
-	 * 
-	 * @return a name for this example
-	 */
-	public final String getName()
-	{
-		return name;
-	}
-
-	/**
-	 * Get a description of an example.
-	 * 
-	 * @return a description for an example
-	 */
-	public final HTML getDescription()
-	{
-		return description;
-	}
-
-	/**
-	 * Get an image of an example to show on the index page
-	 *  
-	 * @return ImageResource
-	 */
-	public String getIconUrl() {
-		String icon = getSimpleName(this.getClass()) + ".jpg";
-		return "static/thumbs/" + icon;
-	}
-
-	/**
-	 * Request the source code associated with an example.
-	 * 
-	 * @param callback
-	 *            the callback used when the source become available
-	 */
-	public void getSource(final Callback<String> callback)
-	{
-		if (sourceCode != null) 
-		{
-			callback.onSuccess(sourceCode);
-		} 
-		else 
-		{
-			RequestCallback rc = new RequestCallback() 
-			{
-				public void onError(Request request, Throwable exception)
-				{
-					callback.onError();
-				}
-
-				public void onResponseReceived(Request request, Response response)
-				{
-					sourceCode = response.getText();
-					callback.onSuccess(sourceCode);
-				}
-			};
-
-			String className = this.getClass().getName();
-			className = className.substring(className.lastIndexOf(".") + 1);
-			sendSourceRequest(rc, DemoResources.DST_SOURCE_EXAMPLE + className + ".html");
-		}
-	}
 
 	public void onAnimationReady()
 	{
-		ShareFaceBook.prepareFBShareButton(getContentWidgetToken());
 		final Rendering rendering = App.app.getRendering();
 
 		view.setDebugger(rendering.getRenderer());
