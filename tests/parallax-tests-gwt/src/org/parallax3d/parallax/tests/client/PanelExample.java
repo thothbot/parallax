@@ -18,213 +18,180 @@
 
 package org.parallax3d.parallax.tests.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.CellTree;
+import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
+import com.google.gwt.user.client.ui.ResizeComposite;
+import com.google.gwt.user.client.ui.SimpleLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.TreeViewModel;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.Plugin;
+import org.parallax3d.parallax.platforms.gwt.GwtApp;
+import org.parallax3d.parallax.tests.TestAnimation;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.user.client.ui.SimpleLayoutPanel;
-
-/**
- * A widget used to show Parallax examples.
- */
-public abstract class PanelExample extends SimpleLayoutPanel
-	implements AnimationReadyListener
+public class PanelExample extends ResizeComposite implements AnimationReadyListener
 {
+	interface PanelUiBinder extends UiBinder<Widget, PanelExample> {
+	}
+
+	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
+
 	/**
-	 * The view that holds the name, description, and example.
+	 * The main menu used to navigate to examples.
 	 */
-	private LayoutButtons view;
+	@UiField(provided = true)
+	CellTree menu;
+
+	@UiField(provided = true)
+	PanelButtons buttons;
+
+	/**
+	 * The panel that holds the content.
+	 */
+	@UiField
+	SimpleLayoutPanel content;
+
 
 	private Plugin effectPlugin;
+
+	private Rendering rendering;
+
+	/**
+	 * Construct the ShowcaseShell.
+	 *
+	 * @param treeModel
+	 *            the treeModel that backs the main menu
+	 */
+	public PanelExample(TreeViewModel treeModel)
+	{
+		// Create the cell tree.
+		menu = new CellTree(treeModel, null);
+		menu.setAnimationEnabled(true);
+		menu.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
+		menu.ensureDebugId("menu");
+
+		buttons = new PanelButtons();
+
+		// Initialize the ui binder.
+		initWidget(uiBinder.createAndBindUi(this));
+
+		// Default to no content.
+		content.ensureDebugId("content");
+	}
+
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+
+		((GwtApp)App.app).setRendering(content, ((GwtApp) App.app).getConfig());
+		rendering = App.app.getRendering();
+	}
+
+	/**
+	 * Get the main menu used to select examples.
+	 *
+	 * @return the main menu
+	 */
+	public CellTree getMenu()
+	{
+		return menu;
+	}
+
+	public void setAnimation(final TestAnimation animation)
+	{
+		App.app.getRendering().setAnimation(animation);
+		App.app.getRendering().setAnimationReadyListener(PanelExample.this);
+	}
 
 	public void onAnimationReady()
 	{
 		final Rendering rendering = App.app.getRendering();
 
-		view.setDebugger(rendering.getRenderer());
+		buttons.setDebugger(rendering.getRenderer());
 //
 //		this.renderingPanel.setAnimationUpdateHandler(new RenderingPanel.AnimationUpdateHandler() {
 //
 //			@Override
 //			public void onUpdate(double duration) {
-//				view.getDebugger().update();
+//				buttons.getDebugger().update();
 //			}
 //		});
 
-    	view.switchAnimation.setEnabled(true);
-    	view.switchAnimation.setDown(true);
-    	view.switchAnimation.addClickHandler(new ClickHandler() {
-    		public void onClick(ClickEvent event) {
-    			if (view.switchAnimation.isDown())
+		buttons.switchAnimation.setEnabled(true);
+		buttons.switchAnimation.setDown(true);
+		buttons.switchAnimation.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if (buttons.switchAnimation.isDown())
 					rendering.resume();
-    			else
+				else
 					rendering.pause();
-    		}
-    	});
+			}
+		});
 
-    	view.switchFullScreen.setEnabled(rendering.supportsDisplayModeChange());
-    	view.switchFullScreen.addClickHandler(new ClickHandler() {
-    		public void onClick(ClickEvent event) {
-    			if (view.switchFullScreen.isDown()) {
+		buttons.switchFullScreen.setEnabled(rendering.supportsDisplayModeChange());
+		buttons.switchFullScreen.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if (buttons.switchFullScreen.isDown()) {
 //    				ContentWidget.this.renderingPanel.toFullScreen();
-    				view.switchFullScreen.setDown(false);
-    			}
-    		}
-    	});
+					buttons.switchFullScreen.setDown(false);
+				}
+			}
+		});
 
-    	view.setEnableEffectSwitch(this.isEnabledEffectSwitch());
+//		buttons.setEnableEffectSwitch(this.isEnabledEffectSwitch());
 
-    	view.switchEffectAnaglyph.addClickHandler(new ClickHandler() {
-    		public void onClick(ClickEvent event) {
+		buttons.switchEffectAnaglyph.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
-//    			if (view.switchEffectAnaglyph.isDown())
+//    			if (buttons.switchEffectAnaglyph.isDown())
 //					ContentWidget.this.effectPlugin = new Anaglyph(
 //							ContentWidget.this.renderingPanel.getRenderer(),
 //							ContentWidget.this.renderingPanel.getAnimatedScene().getScene());
-    		}
-    	});
+			}
+		});
 
-    	view.switchEffectStereo.addClickHandler(new ClickHandler() {
-    		public void onClick(ClickEvent event) {
+		buttons.switchEffectStereo.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
-//				if (view.switchEffectStereo.isDown())
+//				if (buttons.switchEffectStereo.isDown())
 //					ContentWidget.this.effectPlugin = new Stereo(
 //							ContentWidget.this.renderingPanel.getRenderer(),
 //							ContentWidget.this.renderingPanel.getAnimatedScene().getScene());
-    		}
-    	});
+			}
+		});
 
-    	view.switchEffectParallaxBarrier.addClickHandler(new ClickHandler() {
-    		public void onClick(ClickEvent event) {
+		buttons.switchEffectParallaxBarrier.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
-//				if (view.switchEffectParallaxBarrier.isDown())
+//				if (buttons.switchEffectParallaxBarrier.isDown())
 //					ContentWidget.this.effectPlugin = new ParallaxBarrier(
 //							ContentWidget.this.renderingPanel.getRenderer(),
 //							ContentWidget.this.renderingPanel.getAnimatedScene().getScene());
-    		}
-    	});
+			}
+		});
 
-    	view.switchEffectOculusRift.addClickHandler(new ClickHandler() {
-    		public void onClick(ClickEvent event) {
+		buttons.switchEffectOculusRift.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
-//				if (view.switchEffectOculusRift.isDown())
+//				if (buttons.switchEffectOculusRift.isDown())
 //					ContentWidget.this.effectPlugin = new OculusRift(
 //							ContentWidget.this.renderingPanel.getRenderer(),
 //							ContentWidget.this.renderingPanel.getAnimatedScene().getScene());
-    		}
-    	});
+			}
+		});
 
-    	view.switchEffectNone.addClickHandler(new ClickHandler() {
-    		public void onClick(ClickEvent event) {
+		buttons.switchEffectNone.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
-    		}
-    	});
+			}
+		});
 
-	}
-
-//
-//	@Override
-//	public void onContextError(Context3dErrorEvent event)
-//	{
-//		if(this.loadingPanel != null && this.loadingPanel.isVisible())
-//		{
-//			this.loadingPanel.hide();
-//		}
-//
-//		this.renderingPanel.add(new BadCanvasPanel(event.getMessage()));
-//	}
-
-	/**
-	 * Called when an example attached with parent Widget.
-	 */
-	@Override
-	protected void onLoad()
-	{
-		if (view == null) 
-		{		
-			view = new LayoutButtons();
-//			view.setName(getName());
-//			view.setDescription(getDescription());
-			setWidget(view);
-		}
-
-		ensureWidgetInitialized();
-		super.onLoad();
-	}
-	
-	@Override
-	protected void onUnload() 
-	{
-		view = null;
-		super.onUnload();
-	}
-	
-	/**
-	 * Ensure that an example has been initialized. Note that
-	 * initialization can fail if there is a network failure.
-	 */
-	private void ensureWidgetInitialized()
-	{
-
-//		asyncOnInitialize(new AsyncCallback<TestAnimation>() {
-//			public void onFailure(Throwable reason)
-//			{
-//				Window.alert("Failed to download code for this widget (" + reason + ")");
-//			}
-//
-//			public void onSuccess(TestAnimation demoAnimatedScene)
-//			{
-//
-//				// Finally setup RenderingPanel attached to the loaded example
-//		        if (demoAnimatedScene != null)
-//		        {
-//
-//					((GwtApp)App.app).setRendering(view.getRenderingPanel(), ((GwtApp) App.app).getConfig());
-//					App.app.getRendering().setAnimation(demoAnimatedScene);
-//
-////		    		renderingPanel.addSceneLoadingHandler(ContentWidget.this);
-////		    		renderingPanel.addCanvas3dErrorHandler(ContentWidget.this);
-//					App.app.getRendering().setAnimationReadyListener(PageExample.this);
-//		        }
-//			}
-//		});
-	}
-	
-	protected boolean isEnabledEffectSwitch() {
-		return true;
-	}
-
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel)
-//	{
-//		/* Empty */
-//	}
-
-	/**
-	 * Send a request for source code.
-	 * 
-	 * @param callback
-	 *            the {@link RequestCallback} to send
-	 * @param url
-	 *            the URL to target
-	 */
-	private void sendSourceRequest(RequestCallback callback, String url)
-	{
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, GWT.getModuleBaseURL() + url);
-		builder.setCallback(callback);
-		try 
-		{
-			builder.send();
-		} 
-		catch (RequestException e) 
-		{
-			callback.onError(null, e);
-		}
 	}
 }

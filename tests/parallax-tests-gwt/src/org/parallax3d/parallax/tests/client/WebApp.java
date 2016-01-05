@@ -53,7 +53,7 @@ public class WebApp extends GwtApp
 	 */
 	public static final DemoResources resources = GWT.create(DemoResources.class);
 
-	private LayoutExample layoutExample;
+	private PanelExample panelExample;
 	
 	private PanelExamples panelExamples;
 	
@@ -89,7 +89,7 @@ public class WebApp extends GwtApp
 
 		resources.css().ensureInjected();
 
-		// Create the application layoutExample.
+		// Create the application panelExample.
 		final SingleSelectionModel<TestAnimation> selectionModel = new SingleSelectionModel<>();
 		final DataModel treeModel = new DataModel(selectionModel);
 		Set<TestAnimation> contentWidgets = treeModel.getAllContentWidgets();
@@ -108,11 +108,11 @@ public class WebApp extends GwtApp
 		});
 
 		panelExamples = new PanelExamples(treeModel);
-		layoutExample = new LayoutExample(treeModel);
+		panelExample = new PanelExample(treeModel);
 
 		// Prefetch examples when opening the Category tree nodes.
 		final List<DataModel.Category> prefetched = new ArrayList<DataModel.Category>();
-		final CellTree mainMenu = layoutExample.getMenu();
+		final CellTree mainMenu = panelExample.getMenu();
 
 		// Change the history token when a main menu item is selected.
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
@@ -121,7 +121,7 @@ public class WebApp extends GwtApp
 				TestAnimation selected = selectionModel.getSelectedObject();
 				if (selected != null) 
 				{
-					layoutMain.setContentWidget(layoutExample);
+					layoutMain.setContentWidget(panelExample);
 					History.newItem("!"+selected.getContentWidgetToken(), true);
 				}
 			}
@@ -197,7 +197,7 @@ public class WebApp extends GwtApp
 		if (content == null)
 			return;
 
-//		layoutExample.setContent(content);
+		panelExample.setAnimation(content);
 		Window.setTitle("Parallax tests: " + content.getName());
 	}
 

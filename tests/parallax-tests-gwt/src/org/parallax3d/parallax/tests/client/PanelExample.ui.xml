@@ -3,6 +3,7 @@
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:c="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:m="urn:import:org.parallax3d.parallax.tests.client"
   ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
   ui:generateLocales='default'>
 
@@ -23,8 +24,17 @@
 
 		<!-- Main content area. -->
 		<g:center>
-			<g:SimpleLayoutPanel ui:field='content'/>
+			<g:DockLayoutPanel unit='PX'>
+				<g:north size="65">
+					<m:PanelButtons ui:field='buttons' />
+				</g:north>
+
+				<g:center>
+					<g:SimpleLayoutPanel ui:field='content' />
+				</g:center>
+
+			</g:DockLayoutPanel>
 		</g:center>
 	</g:DockLayoutPanel>
 
-</ui:UiBinder> 
+</ui:UiBinder>

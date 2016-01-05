@@ -76,7 +76,7 @@ public class LayoutMain extends ResizeComposite
 		this.contentWidget.setWidget(content);
 	}
 
-	public void setContentWidget(LayoutExample content)
+	public void setContentWidget(PanelExample content)
 	{
 		linkIndex.getElement().getStyle().clearColor();
 		buttonPanel.setVisible(true);

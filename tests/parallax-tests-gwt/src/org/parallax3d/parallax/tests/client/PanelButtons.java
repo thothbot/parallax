@@ -40,10 +40,10 @@ import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 /**
  * A view of a {@link PanelExample}.
  */
-public class LayoutButtons extends ResizeComposite
+public class PanelButtons extends ResizeComposite
 {
 
-	interface PanelUiBinder extends UiBinder<Widget, LayoutButtons>{
+	interface PanelUiBinder extends UiBinder<Widget, PanelButtons>{
 	}
 
 	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
@@ -53,12 +53,6 @@ public class LayoutButtons extends ResizeComposite
 	 */
 	@UiField
 	Element descriptionField;
-
-	/**
-	 * Main panel where will be RenderingPanel located
-	 */
-	@UiField(provided = true)
-	SimpleLayoutPanel examplePanel;
 
 	@UiField(provided = true)
 	SimpleLayoutPanel debuggerPanel;
@@ -111,9 +105,8 @@ public class LayoutButtons extends ResizeComposite
         }
     };
 
-	public LayoutButtons()
+	public PanelButtons()
 	{
-		this.examplePanel = new SimpleLayoutPanel();
 		this.debuggerPanel = new SimpleLayoutPanel();
 		this.nameField = new SimpleLayoutPanel();
 		
@@ -148,11 +141,6 @@ public class LayoutButtons extends ResizeComposite
 	public void setEnableEffectSwitch(boolean enabled) {
 		for(ToggleButton button: this.effectButtons)
 			button.setEnabled(enabled);
-	}
-
-	public SimpleLayoutPanel getRenderingPanel()
-	{
-		return this.examplePanel;
 	}
 
 	public void setDebugger(GLRenderer renderer)
