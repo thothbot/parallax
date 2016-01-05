@@ -20,94 +20,29 @@ package org.parallax3d.parallax.tests.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.Plugin;
-import org.parallax3d.parallax.tests.TestAnimation;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
-import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
 /**
  * A widget used to show Parallax examples.
  */
-public abstract class PageExample extends SimpleLayoutPanel
+public abstract class PanelExample extends SimpleLayoutPanel
 	implements AnimationReadyListener
 {
-
-	/**
-	 * Generic callback used for asynchronously loaded data.
-	 * 
-	 * @param <T> the data type
-	 */
-	public static interface Callback<T>
-	{
-		void onError();
-		void onSuccess(T value);
-	}
-
-//	/**
-//	 * {@link RenderingPanel} where example will be shown
-//	 */
-//	protected RenderingPanel renderingPanel;
-	
-	private AlertLoading loadingPanel;
-	private boolean isSceneHasObjects = false;
-	/**
-	 * A description of an example.
-	 */
-	private final HTML description;
-
-	/**
-	 * The name of the example.
-	 */
-	private final String name;
-
-	/**
-	 * The source code associated with an example.
-	 */
-	private String sourceCode;
-
 	/**
 	 * The view that holds the name, description, and example.
 	 */
-	private PanelButtons view;
+	private LayoutButtons view;
 
-	/**
-	 * Whether the tests widget has been initialized.
-	 */
-	private boolean widgetInitialized;
-
-	/**
-	 * Whether the tests widget is (asynchronously) initializing.
-	 */
-	private boolean widgetInitializing;
-	
 	private Plugin effectPlugin;
-
-	/**
-	 * Default constructor should be called in an example (daughter) class
-	 * 
-	 * @param name
-	 *            a text name of an example
-	 * @param description
-	 *            a text description of an example
-	 */
-	public PageExample(String name, String description)
-	{
-		this.name = name;
-		this.description = new HTML(description);
-	}
-
-	protected abstract void asyncOnInitialize(final AsyncCallback<TestAnimation> callback);
 
 	public void onAnimationReady()
 	{
@@ -148,7 +83,7 @@ public abstract class PageExample extends SimpleLayoutPanel
 
     	view.switchEffectAnaglyph.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
 //    			if (view.switchEffectAnaglyph.isDown())
 //					ContentWidget.this.effectPlugin = new Anaglyph(
 //							ContentWidget.this.renderingPanel.getRenderer(),
@@ -158,7 +93,7 @@ public abstract class PageExample extends SimpleLayoutPanel
 
     	view.switchEffectStereo.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
 //				if (view.switchEffectStereo.isDown())
 //					ContentWidget.this.effectPlugin = new Stereo(
 //							ContentWidget.this.renderingPanel.getRenderer(),
@@ -168,7 +103,7 @@ public abstract class PageExample extends SimpleLayoutPanel
 
     	view.switchEffectParallaxBarrier.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
 //				if (view.switchEffectParallaxBarrier.isDown())
 //					ContentWidget.this.effectPlugin = new ParallaxBarrier(
 //							ContentWidget.this.renderingPanel.getRenderer(),
@@ -178,7 +113,7 @@ public abstract class PageExample extends SimpleLayoutPanel
 
     	view.switchEffectOculusRift.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
 //				if (view.switchEffectOculusRift.isDown())
 //					ContentWidget.this.effectPlugin = new OculusRift(
 //							ContentWidget.this.renderingPanel.getRenderer(),
@@ -188,7 +123,7 @@ public abstract class PageExample extends SimpleLayoutPanel
 
     	view.switchEffectNone.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-				rendering.getRenderer().deletePlugin(PageExample.this.effectPlugin);
+				rendering.getRenderer().deletePlugin(PanelExample.this.effectPlugin);
     		}
     	});
 
@@ -214,7 +149,7 @@ public abstract class PageExample extends SimpleLayoutPanel
 	{
 		if (view == null) 
 		{		
-			view = new PanelButtons();
+			view = new LayoutButtons();
 //			view.setName(getName());
 //			view.setDescription(getDescription());
 			setWidget(view);
@@ -228,8 +163,6 @@ public abstract class PageExample extends SimpleLayoutPanel
 	protected void onUnload() 
 	{
 		view = null;
-//		renderingPanel = null;
-		widgetInitializing = widgetInitialized = false;
 		super.onUnload();
 	}
 	
@@ -239,36 +172,29 @@ public abstract class PageExample extends SimpleLayoutPanel
 	 */
 	private void ensureWidgetInitialized()
 	{
-		if (widgetInitializing || widgetInitialized)
-			return;
 
-		widgetInitializing = true;
-
-		asyncOnInitialize(new AsyncCallback<TestAnimation>() {
-			public void onFailure(Throwable reason)
-			{
-				widgetInitializing = false;
-				Window.alert("Failed to download code for this widget (" + reason + ")");
-			}
-
-			public void onSuccess(TestAnimation demoAnimatedScene)
-			{
-				widgetInitializing = false;
-				widgetInitialized = true;
-
-				// Finally setup RenderingPanel attached to the loaded example
-		        if (demoAnimatedScene != null)
-		        {
-
-					((GwtApp)App.app).setRendering(view.getRenderingPanel(), ((GwtApp) App.app).getConfig());
-					App.app.getRendering().setAnimation(demoAnimatedScene);
-
-//		    		renderingPanel.addSceneLoadingHandler(ContentWidget.this);
-//		    		renderingPanel.addCanvas3dErrorHandler(ContentWidget.this);
-					App.app.getRendering().setAnimationReadyListener(PageExample.this);
-		        }
-			}
-		});
+//		asyncOnInitialize(new AsyncCallback<TestAnimation>() {
+//			public void onFailure(Throwable reason)
+//			{
+//				Window.alert("Failed to download code for this widget (" + reason + ")");
+//			}
+//
+//			public void onSuccess(TestAnimation demoAnimatedScene)
+//			{
+//
+//				// Finally setup RenderingPanel attached to the loaded example
+//		        if (demoAnimatedScene != null)
+//		        {
+//
+//					((GwtApp)App.app).setRendering(view.getRenderingPanel(), ((GwtApp) App.app).getConfig());
+//					App.app.getRendering().setAnimation(demoAnimatedScene);
+//
+////		    		renderingPanel.addSceneLoadingHandler(ContentWidget.this);
+////		    		renderingPanel.addCanvas3dErrorHandler(ContentWidget.this);
+//					App.app.getRendering().setAnimationReadyListener(PageExample.this);
+//		        }
+//			}
+//		});
 	}
 	
 	protected boolean isEnabledEffectSwitch() {

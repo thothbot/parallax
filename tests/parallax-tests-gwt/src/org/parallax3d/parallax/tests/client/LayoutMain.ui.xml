@@ -51,7 +51,7 @@
 				</g:HTMLPanel>
 			</g:lineStart>
 			<g:center>
-				<g:HorizontalPanel ui:field='bottonPanel'>
+				<g:HorizontalPanel ui:field='buttonPanel'>
 					<g:HTMLPanel addStyleNames='{style.fbPanel}'>
 						<div id="fb-share-button" class="fb-share-button" data-layout="button_count"></div>
 					</g:HTMLPanel>

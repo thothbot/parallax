@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * This widget used to show all available examples
  */
-public class WidgetIndex extends ScrollPanel
+public class PanelExamples extends ScrollPanel
 {
 	
 	/**
@@ -47,7 +47,7 @@ public class WidgetIndex extends ScrollPanel
 	 */
 	DataModel treeModel;
 		
-	public WidgetIndex(DataModel treeModel)
+	public PanelExamples(DataModel treeModel)
 	{
 		this.treeModel = treeModel;
 		

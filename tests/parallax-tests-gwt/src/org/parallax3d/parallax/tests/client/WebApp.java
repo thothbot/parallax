@@ -19,12 +19,9 @@
 package org.parallax3d.parallax.tests.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.prefetch.Prefetcher;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -56,20 +53,11 @@ public class WebApp extends GwtApp
 	 */
 	public static final DemoResources resources = GWT.create(DemoResources.class);
 
-	/**
-	 * The main application shell.
-	 */
-	private PanelMain shell;
+	private LayoutExample layoutExample;
 	
-	/**
-	 * The index widget.
-	 */
-	private PageExamples indexWidget;
+	private PanelExamples panelExamples;
 	
-	/**
-	 * The main application.
-	 */
-	private PanelTop index;
+	private LayoutMain layoutMain;
 
 	public void onInit()
 	{
@@ -101,49 +89,30 @@ public class WebApp extends GwtApp
 
 		resources.css().ensureInjected();
 
-		// Create the application shell.
+		// Create the application layoutExample.
 		final SingleSelectionModel<TestAnimation> selectionModel = new SingleSelectionModel<>();
 		final DataModel treeModel = new DataModel(selectionModel);
 		Set<TestAnimation> contentWidgets = treeModel.getAllContentWidgets();
 		
-		index = new PanelTop();
+		layoutMain = new LayoutMain();
 		// Hide loading panel
 		RootPanel.get("loading").getElement().getStyle().setVisibility(Visibility.HIDDEN);
-		// Attach index panel
-		RootLayoutPanel.get().add(index);
+		// Attach layoutMain panel
+		RootLayoutPanel.get().add(layoutMain);
 		
-		index.getTabIndex().addClickHandler(new ClickHandler() {
+		layoutMain.getLinkAllExamples().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
 				displayIndex();
 			}
 		});
 
-		indexWidget = new PageExamples(treeModel);
-		shell = new PanelMain(treeModel, index);
+		panelExamples = new PanelExamples(treeModel);
+		layoutExample = new LayoutExample(treeModel);
 
 		// Prefetch examples when opening the Category tree nodes.
 		final List<DataModel.Category> prefetched = new ArrayList<DataModel.Category>();
-		final CellTree mainMenu = shell.getMainMenu();
-		
-		mainMenu.addOpenHandler(new OpenHandler<TreeNode>() {
-			public void onOpen(OpenEvent<TreeNode> event)
-			{
-				Object value = event.getTarget().getValue();
-				if (!(value instanceof DataModel.Category))
-					return;
-
-//				DataModel.Category category = (DataModel.Category) value;
-//				if (!prefetched.contains(category))
-//				{
-//					prefetched.add(category);
-//					Prefetcher.prefetch(category.getSplitPoints());
-//				}
-			}
-		});
-
-		// Always prefetch.
-		Prefetcher.start();
+		final CellTree mainMenu = layoutExample.getMenu();
 
 		// Change the history token when a main menu item is selected.
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
@@ -152,12 +121,12 @@ public class WebApp extends GwtApp
 				TestAnimation selected = selectionModel.getSelectedObject();
 				if (selected != null) 
 				{
-					index.setContentWidget(shell);
+					layoutMain.setContentWidget(layoutExample);
 					History.newItem("!"+selected.getContentWidgetToken(), true);
 				}
 			}
 		});
-		
+
 		// Setup a history handler to reselect the associate menu item.
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event)
@@ -182,7 +151,7 @@ public class WebApp extends GwtApp
 				}
 
 				// Display the content widget.
-//				displayContentWidget(contentWidget);
+				displayContentWidget(contentWidget);
 
 				// Select the node in the tree.
 				selectionModel.setSelected(contentWidget, true);
@@ -206,12 +175,12 @@ public class WebApp extends GwtApp
 	/**
 	 * Create a hidden site map for crawlability.
 	 * 
-	 * @param contentWidgets the {@link PageExample}s used in Demo
+	 * @param animations
 	 */
-	private void createSiteMap(Set<TestAnimation> contentWidgets)
+	private void createSiteMap(Set<TestAnimation> animations)
 	{
 		SafeHtmlBuilder sb = new SafeHtmlBuilder();
-		for (TestAnimation cw : contentWidgets)
+		for (TestAnimation cw : animations)
 		{
 			String token = cw.getContentWidgetToken();
 			sb.append(SafeHtmlUtils.fromTrustedString("<a href=\"#" + token + "\">" + token + "</a>"));
@@ -223,25 +192,19 @@ public class WebApp extends GwtApp
 		RootPanel.get().add(siteMap, 0, 0);
 	}
 
-//	/**
-//	 * Set the content to the {@link ContentWidget}.
-//	 *
-//	 * @param content
-//	 *            the {@link ContentWidget} to display
-//	 */
-//	private void displayContentWidget(final ContentWidget content)
-//	{
-//		if (content == null)
-//			return;
-//
-//		shell.setContent(content);
-//		Window.setTitle("Parallax tests: " + content.getName());
-//	}
+	private void displayContentWidget(final TestAnimation content)
+	{
+		if (content == null)
+			return;
+
+//		layoutExample.setContent(content);
+		Window.setTitle("Parallax tests: " + content.getName());
+	}
 
 	private void displayIndex()
 	{
 		History.newItem("", true);
-		index.setContentWidget(indexWidget);
+		layoutMain.setContentWidget(panelExamples);
 		Window.setTitle("Parallax: All Examples");
 	}
 }

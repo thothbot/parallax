@@ -28,27 +28,24 @@ import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.TreeViewModel;
 
-public class PanelMain extends ResizeComposite
+public class LayoutExample extends ResizeComposite
 {
-	interface PanelUiBinder extends UiBinder<Widget, PanelMain> {
+	interface PanelUiBinder extends UiBinder<Widget, LayoutExample> {
 	}
 
 	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
-	/**
-	 * The unique ID assigned to the next callback.
-	 */
-	private static int nextCallbackId = 0;
+
 	/**
 	 * The panel that holds the content.
 	 */
 	@UiField
-	SimpleLayoutPanel contentPanel;
+	SimpleLayoutPanel content;
 
 	/**
 	 * The main menu used to navigate to examples.
 	 */
 	@UiField(provided = true)
-	CellTree mainMenu;
+	CellTree menu;
 
 	/**
 	 * Construct the ShowcaseShell.
@@ -56,19 +53,19 @@ public class PanelMain extends ResizeComposite
 	 * @param treeModel
 	 *            the treeModel that backs the main menu
 	 */
-	public PanelMain(TreeViewModel treeModel, PanelTop index)
+	public LayoutExample(TreeViewModel treeModel)
 	{
 		// Create the cell tree.
-		mainMenu = new CellTree(treeModel, null);
-		mainMenu.setAnimationEnabled(true);
-		mainMenu.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
-		mainMenu.ensureDebugId("mainMenu");
+		menu = new CellTree(treeModel, null);
+		menu.setAnimationEnabled(true);
+		menu.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
+		menu.ensureDebugId("menu");
 
 		// Initialize the ui binder.
 		initWidget(uiBinder.createAndBindUi(this));
 
 		// Default to no content.
-		contentPanel.ensureDebugId("contentPanel");
+		content.ensureDebugId("content");
 
 		setContent(null);
 	}
@@ -78,14 +75,9 @@ public class PanelMain extends ResizeComposite
 	 *
 	 * @return the main menu
 	 */
-	public CellTree getMainMenu()
+	public CellTree getMenu()
 	{
-		return mainMenu;
-	}
-
-	public void setIndex(Widget content)
-	{
-		contentPanel.setWidget(content);
+		return menu;
 	}
 
 	/**
@@ -94,26 +86,13 @@ public class PanelMain extends ResizeComposite
 	 * @param content
 	 *            the content
 	 */
-	public void setContent(final PageExample content)
+	public void setContent(final PanelExample content)
 	{
 		if (content == null)
 		{
-			contentPanel.setWidget(null);
+			this.content.setWidget(null);
 			return;
 		}
-
-		// Show the widget.
-		showExample();
 	}
 
-	/**
-	 * Show a example.
-	 */
-	private void showExample()
-	{
-//		if (content == null)
-//			return;
-
-//		contentPanel.setWidget(content);
-	}
 }

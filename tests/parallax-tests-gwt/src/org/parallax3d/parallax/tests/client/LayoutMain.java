@@ -33,11 +33,11 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Main view of the application
  */
-public class PanelTop extends ResizeComposite
+public class LayoutMain extends ResizeComposite
 {
 	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-	interface PanelUiBinder extends UiBinder<Widget, PanelTop> {
+	interface PanelUiBinder extends UiBinder<Widget, LayoutMain> {
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class PanelTop extends ResizeComposite
 	Anchor linkIndex;
 	
 	@UiField(provided=true)
-	HorizontalPanel bottonPanel;
+	HorizontalPanel buttonPanel;
 	
 	/**
 	 * The page content
@@ -55,15 +55,15 @@ public class PanelTop extends ResizeComposite
 	@UiField(provided=true)
 	SimpleLayoutPanel contentWidget;
 
-	public PanelTop()
+	public LayoutMain()
 	{
-		bottonPanel = new HorizontalPanel();
+		buttonPanel = new HorizontalPanel();
 		contentWidget = new SimpleLayoutPanel();
 		
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	public Anchor getTabIndex()
+	public Anchor getLinkAllExamples()
 	{
 		return this.linkIndex;
 	}
@@ -71,15 +71,15 @@ public class PanelTop extends ResizeComposite
 	public void setContentWidget(SimplePanel content)
 	{
 		linkIndex.getElement().getStyle().setColor(DemoResources.SELECTED_TAB_COLOR);
-		bottonPanel.setVisible(false);
+		buttonPanel.setVisible(false);
 		
 		this.contentWidget.setWidget(content);
 	}
 
-	public void setContentWidget(PanelMain content)
+	public void setContentWidget(LayoutExample content)
 	{
 		linkIndex.getElement().getStyle().clearColor();
-		bottonPanel.setVisible(true);
+		buttonPanel.setVisible(true);
 
 		this.contentWidget.setWidget(content);	
 	}	
