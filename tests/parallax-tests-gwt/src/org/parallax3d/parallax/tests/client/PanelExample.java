@@ -25,6 +25,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -53,9 +54,9 @@ public class PanelExample extends ResizeComposite implements AnimationReadyListe
 	PanelButtons buttons;
 
 	/**
-	 * The panel that holds the content.
+	 * Main panel where will be RenderingPanel located
 	 */
-	@UiField
+	@UiField(provided = true)
 	SimpleLayoutPanel content;
 
 
@@ -79,6 +80,8 @@ public class PanelExample extends ResizeComposite implements AnimationReadyListe
 
 		buttons = new PanelButtons();
 
+		content = new SimpleLayoutPanel();
+
 		// Initialize the ui binder.
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -88,10 +91,22 @@ public class PanelExample extends ResizeComposite implements AnimationReadyListe
 
 	@Override
 	protected void onLoad() {
-		super.onLoad();
 
-		((GwtApp)App.app).setRendering(content, ((GwtApp) App.app).getConfig());
-		rendering = App.app.getRendering();
+		super.onLoad();
+		Timer timer = new Timer() {
+			@Override
+			public void run() {
+				App.app.log("", Integer.toString(content.getOffsetHeight()));
+				((GwtApp)App.app).setRendering(content, ((GwtApp) App.app).getConfig());
+				rendering = App.app.getRendering();
+			}
+		};
+		timer.schedule(1000);
+	}
+
+	@Override
+	protected void onUnload() {
+		super.onUnload();
 	}
 
 	/**
@@ -106,8 +121,8 @@ public class PanelExample extends ResizeComposite implements AnimationReadyListe
 
 	public void setAnimation(final TestAnimation animation)
 	{
-		App.app.getRendering().setAnimation(animation);
-		App.app.getRendering().setAnimationReadyListener(PanelExample.this);
+//		App.app.getRendering().setAnimation(animation);
+//		App.app.getRendering().setAnimationReadyListener(PanelExample.this);
 	}
 
 	public void onAnimationReady()

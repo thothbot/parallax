@@ -43,7 +43,7 @@ public abstract class TestAnimation extends AnimationAdapter {
      */
     public String getIconUrl() {
         String icon = getSimpleName(this.getClass()) + ".jpg";
-        return "static/thumbs/" + icon;
+        return "assets/thumbs/" + icon;
     }
 
     /**
