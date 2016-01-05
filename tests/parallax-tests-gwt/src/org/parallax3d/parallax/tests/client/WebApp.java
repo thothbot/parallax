@@ -167,29 +167,6 @@ public class WebApp extends GwtApp
 		// Use the first token available.
 		else
 			displayIndex();
-
-		// Generate a site map.
-		createSiteMap(contentWidgets);
-	}
-
-	/**
-	 * Create a hidden site map for crawlability.
-	 * 
-	 * @param animations
-	 */
-	private void createSiteMap(Set<TestAnimation> animations)
-	{
-		SafeHtmlBuilder sb = new SafeHtmlBuilder();
-		for (TestAnimation cw : animations)
-		{
-			String token = cw.getContentWidgetToken();
-			sb.append(SafeHtmlUtils.fromTrustedString("<a href=\"#" + token + "\">" + token + "</a>"));
-		}
-
-		// Add the site map to the page.
-		HTML siteMap = new HTML(sb.toSafeHtml());
-		siteMap.setVisible(false);
-		RootPanel.get().add(siteMap, 0, 0);
 	}
 
 	private void displayContentWidget(final TestAnimation content)
