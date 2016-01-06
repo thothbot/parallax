@@ -55,7 +55,7 @@ public interface Rendering {
     /** Whether the app is fullscreen or not */
     boolean isFullscreen();
 
-    void setAnimationReadyListener(AnimationReadyListener animationReadyListener);
+    void addAnimationReadyListener(AnimationReadyListener animationReadyListener);
 
     void pause();
 

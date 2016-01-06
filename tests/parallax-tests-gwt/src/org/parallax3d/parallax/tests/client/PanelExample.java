@@ -26,6 +26,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,6 +36,8 @@ import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.Plugin;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
+import org.parallax3d.parallax.platforms.gwt.GwtRendering;
+import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.tests.TestAnimation;
 
 public class PanelExample extends ResizeComposite implements AnimationReadyListener
@@ -62,7 +65,9 @@ public class PanelExample extends ResizeComposite implements AnimationReadyListe
 
 	private Plugin effectPlugin;
 
-	private Rendering rendering;
+	private GwtRendering rendering;
+
+	private TestAnimation animation;
 
 	/**
 	 * Construct the ShowcaseShell.
@@ -96,12 +101,31 @@ public class PanelExample extends ResizeComposite implements AnimationReadyListe
 		Timer timer = new Timer() {
 			@Override
 			public void run() {
-				App.app.log("", Integer.toString(content.getOffsetHeight()));
-				((GwtApp)App.app).setRendering(content, ((GwtApp) App.app).getConfig());
-				rendering = App.app.getRendering();
+
+				try {
+
+					rendering = new GwtRendering(content, ((GwtApp) App.app).getConfig(), new GwtRendering.RenderingReadyListener() {
+						@Override
+						public void onRenderingReady(Rendering rendering) {
+							rendering.setAnimation(animation);
+						}
+					});
+
+				}
+				catch (Throwable e)
+				{
+					PanelExample.this.content.clear();
+					String msg = "Sorry, your browser doesn't seem to support WebGL";
+					App.app.error("setRendering", msg, e);
+					PanelExample.this.content.add(new AlertBadCanvas(msg));
+				}
+
+				((GwtApp)App.app).setRendering(rendering);
+				rendering = (GwtRendering) App.app.getRendering();
+				rendering.addAnimationReadyListener(PanelExample.this);
 			}
 		};
-		timer.schedule(1000);
+		timer.schedule(100);
 	}
 
 	@Override
@@ -121,8 +145,7 @@ public class PanelExample extends ResizeComposite implements AnimationReadyListe
 
 	public void setAnimation(final TestAnimation animation)
 	{
-//		App.app.getRendering().setAnimation(animation);
-//		App.app.getRendering().setAnimationReadyListener(PanelExample.this);
+		this.animation = animation;
 	}
 
 	public void onAnimationReady()

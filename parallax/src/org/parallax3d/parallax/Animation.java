@@ -20,16 +20,16 @@ package org.parallax3d.parallax;
 
 public interface Animation {
 
-    public void onStart();
+    void onStart(Rendering rendering);
 
-    public void onUpdate();
+    void onUpdate(Rendering rendering);
 
-    public void onResize(int width, int height);
+    void onResize(Rendering rendering);
 
-    public void onPause();
+    void onPause(Rendering rendering);
 
-    public void onResume();
+    void onResume(Rendering rendering);
 
-    public void onDispose();
+    void onDispose(Rendering rendering);
 
 }

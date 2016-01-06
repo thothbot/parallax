@@ -131,20 +131,9 @@ public abstract class GwtApp extends App implements EntryPoint {
 		};
 	}
 
-	public void setRendering(Panel root, GwtAppConfiguration config) {
+	public void setRendering(GwtRendering rendering) {
 
-		root.clear();
-
-		// setup modules
-		try {
-			rendering = new GwtRendering(root, config);
-		} catch (Throwable e) {
-			root.clear();
-			String msg = "Sorry, your browser doesn't seem to support WebGL";
-			root.add(new Label(msg));
-			App.app.error("setRendering", msg, e);
-			return;
-		}
+		this.rendering = rendering;
 	}
 
 	@Override

@@ -32,7 +32,16 @@ import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GwtRendering implements Rendering {
+
+	public interface RenderingReadyListener {
+
+		void onRenderingReady(Rendering rendering);
+
+	}
 
 	CanvasElement canvas;
 	WebGLRenderingContext context;
@@ -41,7 +50,7 @@ public class GwtRendering implements Rendering {
 
 	Animation listener;
 
-	AnimationReadyListener animationReadyListener;
+	List<AnimationReadyListener> animationReadyListener = new ArrayList<>();
 
 	int lastWidth;
 	int lastHeight;
@@ -56,13 +65,18 @@ public class GwtRendering implements Rendering {
 	GwtAppConfiguration config;
 
 	public GwtRendering(Panel root, GwtAppConfiguration config) {
+		this(root, config, null);
+	}
+
+	public GwtRendering(Panel root, GwtAppConfiguration config, RenderingReadyListener onReady) throws ParallaxRuntimeException {
+		root.clear();
+
 		Canvas canvasWidget = Canvas.createIfSupported();
 		if (canvasWidget == null)
 			throw new ParallaxRuntimeException("Canvas not supported");
 
 		int width  = root.getOffsetWidth();
 		int height = root.getOffsetHeight();
-
 
 		lastWidth = width;
 		lastHeight = height;
@@ -86,24 +100,26 @@ public class GwtRendering implements Rendering {
 		gl = new GwtGL20(context);
 
 		renderer = new GLRenderer(gl, width, height);
+
+		if(onReady != null)
+			onReady.onRenderingReady(this);
 	}
 
 	@Override
 	public void setAnimation(Animation animation) {
 		this.listener = animation;
-
 		setupLoop();
+
 	}
 
 	void setupLoop () {
-
 		// tell listener about app creation
 		try {
-			listener.onStart();
-			listener.onResize(this.getWidth(), this.getHeight());
+			listener.onStart( this );
+			listener.onResize( this );
 
-			if(animationReadyListener != null)
-				animationReadyListener.onAnimationReady();
+			for(AnimationReadyListener ready: animationReadyListener)
+				ready.onAnimationReady();
 
 		} catch (Throwable t) {
 			App.app.error("GwtRendering", "exception: " + t.getMessage(), t);
@@ -132,13 +148,13 @@ public class GwtRendering implements Rendering {
 		if (App.app.getRendering().getWidth() != lastWidth || App.app.getRendering().getHeight() != lastHeight)
 		{
 			this.renderer.setSize(lastWidth, lastHeight);
-			this.listener.onResize(App.app.getRendering().getWidth(), App.app.getRendering().getHeight());
+			this.listener.onResize( this );
 			lastWidth = getWidth();
 			lastHeight = getHeight();
 		}
 
 		frameId++;
-		this.listener.onUpdate();
+		this.listener.onUpdate( this );
 
 	}
 
@@ -153,8 +169,8 @@ public class GwtRendering implements Rendering {
 	}
 
 	@Override
-	public void setAnimationReadyListener(AnimationReadyListener animationReadyListener) {
-		this.animationReadyListener = animationReadyListener;
+	public void addAnimationReadyListener(AnimationReadyListener animationReadyListener) {
+		this.animationReadyListener.add( animationReadyListener );
 	}
 
 	public WebGLRenderingContext getContext () {
