@@ -16,24 +16,11 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.renderers.shaders;
+package org.parallax3d.parallax.platforms.gwt.jre.org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.App;
+import com.google.gwt.resources.client.TextResource;
 
-public class TextResource {
+public interface SourceTextResource extends TextResource{
 
-    String path;
-
-    public TextResource(String path) {
-        this.path = path;
-    }
-
-    public String getText() {
-        return App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/" + path).readString();
-    }
-
-    public static TextResource create(String path) {
-        return new TextResource(path);
-
-    }
 }
+

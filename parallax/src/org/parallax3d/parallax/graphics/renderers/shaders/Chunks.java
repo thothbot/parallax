@@ -18,7 +18,9 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundle;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Source for all chunks.
@@ -26,215 +28,163 @@ import org.parallax3d.parallax.App;
  * @author thothbot
  *
  */
-public class Chunks
+public interface Chunks extends SourceBundle
 {
-	public static Chunks INSTANCE = new Chunks();
+	Chunks INSTANCE = ClassUtils.newProxyInstance( Chunks.class );
 
-	public TextResource getAlphamapFragment() {
-		return TextResource.create( "chunk/alphamap_fragment.glsl" );
-	};
-	
-	public TextResource getAlphamapParsFragment() {
-		return TextResource.create( "chunk/alphamap_pars_fragment.glsl" );
-	};
+    @Source("chunk/alphamap_fragment.glsl")
+    SourceTextResource getAlphamapFragment();
 
-	public TextResource getAlphatestFragment() {
-		return TextResource.create( "chunk/alphatest_fragment.glsl" );
-	};
-	
-	public TextResource getBumpmapParsFragment() {
-		return TextResource.create( "chunk/bumpmap_pars_fragment.glsl" );
-	};
+    @Source("chunk/alphamap_pars_fragment.glsl")
+    SourceTextResource getAlphamapParsFragment();
 
-	public TextResource getColorFragment() {
-		return TextResource.create( "chunk/color_fragment.glsl" );
-	};
+    @Source("chunk/alphatest_fragment.glsl")
+    SourceTextResource getAlphatestFragment();
 
-	public TextResource getColorParsFragment() {
-		return TextResource.create( "chunk/color_pars_fragment.glsl" );
-	};
+    @Source("chunk/bumpmap_pars_fragment.glsl")
+    SourceTextResource getBumpmapParsFragment();
 
-	public TextResource getColorParsVertex() {
-		return TextResource.create( "chunk/color_pars_vertex.glsl" );
-	};
+    @Source("chunk/color_fragment.glsl")
+    SourceTextResource getColorFragment();
 
-	public TextResource getColorVertex() {
-		return TextResource.create( "chunk/color_vertex.glsl" );
-	};
+    @Source("chunk/color_pars_fragment.glsl")
+    SourceTextResource getColorParsFragment();
 
-	public TextResource getDefaultNormalVertex() {
-		return TextResource.create( "chunk/defaultnormal_vertex.glsl" );
-	};
-		
-	public TextResource getDefaultVertex() {
-		return TextResource.create( "chunk/default_vertex.glsl" );
-	};
+    @Source("chunk/color_pars_vertex.glsl")
+    SourceTextResource getColorParsVertex();
 
-	public TextResource getEnvmapFragment() {
-		return TextResource.create( "chunk/envmap_fragment.glsl" );
-	};
+    @Source("chunk/color_vertex.glsl")
+    SourceTextResource getColorVertex();
 
-	public TextResource getEnvmapParsFragment() {
-		return TextResource.create( "chunk/envmap_pars_fragment.glsl" );
-	};
+    @Source("chunk/defaultnormal_vertex.glsl")
+    SourceTextResource getDefaultNormalVertex();
 
-	public TextResource getEnvmapParsVertex() {
-		return TextResource.create( "chunk/envmap_pars_vertex.glsl" );
-	};
+    @Source("chunk/default_vertex.glsl")
+    SourceTextResource getDefaultVertex();
 
-	public TextResource getEnvmapVertex() {
-		return TextResource.create( "chunk/envmap_vertex.glsl" );
-	};
+    @Source("chunk/envmap_fragment.glsl")
+    SourceTextResource getEnvmapFragment();
 
-	public TextResource getFogFragment() {
-		return TextResource.create( "chunk/fog_fragment.glsl" );
-	};
+    @Source("chunk/envmap_pars_fragment.glsl")
+    SourceTextResource getEnvmapParsFragment();
 
-	public TextResource getFogParsFragment() {
-		return TextResource.create( "chunk/fog_pars_fragment.glsl" );
-	};
+    @Source("chunk/envmap_pars_vertex.glsl")
+    SourceTextResource getEnvmapParsVertex();
 
-	public TextResource getLightmapFragment() {
-		return TextResource.create( "chunk/lightmap_fragment.glsl" );
-	};
+    @Source("chunk/envmap_vertex.glsl")
+    SourceTextResource getEnvmapVertex();
 
-	public TextResource getLightmapParsFragment() {
-		return TextResource.create( "chunk/lightmap_pars_fragment.glsl" );
-	};
+    @Source("chunk/fog_fragment.glsl")
+    SourceTextResource getFogFragment();
 
-	public TextResource getLightmapParsVertex() {
-		return TextResource.create( "chunk/lightmap_pars_vertex.glsl" );
-	};
+    @Source("chunk/fog_pars_fragment.glsl")
+    SourceTextResource getFogParsFragment();
 
-	public TextResource getLightmapVertex() {
-		return TextResource.create( "chunk/lightmap_vertex.glsl" );
-	};
+    @Source("chunk/lightmap_fragment.glsl")
+    SourceTextResource getLightmapFragment();
 
-	public TextResource getLightsLambertParsVertex() {
-		return TextResource.create( "chunk/lights_lambert_pars_vertex.glsl" );
-	};
+    @Source("chunk/lightmap_pars_fragment.glsl")
+    SourceTextResource getLightmapParsFragment();
 
-	public TextResource getLightsLambertVertex() {
-		return TextResource.create( "chunk/lights_lambert_vertex.glsl" );
-	};
+    @Source("chunk/lightmap_pars_vertex.glsl")
+    SourceTextResource getLightmapParsVertex();
 
-	public TextResource getLightsPhongFragment() {
-		return TextResource.create( "chunk/lights_phong_fragment.glsl" );
-	};
+    @Source("chunk/lightmap_vertex.glsl")
+    SourceTextResource getLightmapVertex();
 
-	public TextResource getLightsPhongParsFragment() {
-		return TextResource.create( "chunk/lights_phong_pars_fragment.glsl" );
-	};
+    @Source("chunk/lights_lambert_pars_vertex.glsl")
+    SourceTextResource getLightsLambertParsVertex();
 
-	public TextResource getLightsPhongParsVertex() {
-		return TextResource.create( "chunk/lights_phong_pars_vertex.glsl" );
-	};
+    @Source("chunk/lights_lambert_vertex.glsl")
+    SourceTextResource getLightsLambertVertex();
 
-	public TextResource getLightsPhongVertex() {
-		return TextResource.create( "chunk/lights_phong_vertex.glsl" );
-	};
+    @Source("chunk/lights_phong_fragment.glsl")
+    SourceTextResource getLightsPhongFragment();
 
-	public TextResource getLinearToGammaFragment() {
-		return TextResource.create( "chunk/linear_to_gamma_fragment.glsl" );
-	};
-	
-	public TextResource getLogdepthbufFragment() {
-		return TextResource.create( "chunk/logdepthbuf_fragment.glsl" );
-	};
-	
-	public TextResource getLogdepthbufParFragment() {
-		return TextResource.create( "chunk/logdepthbuf_par_fragment.glsl" );
-	};
-	
-	public TextResource getLogdepthbufParVertex() {
-		return TextResource.create( "chunk/logdepthbuf_par_vertex.glsl" );
-	};
-	
-	public TextResource getLogdepthbufVertex() {
-		return TextResource.create( "chunk/logdepthbuf_vertex.glsl" );
-	};
+    @Source("chunk/lights_phong_pars_fragment.glsl")
+    SourceTextResource getLightsPhongParsFragment();
 
-	public TextResource getMapFragment() {
-		return TextResource.create( "chunk/map_fragment.glsl" );
-	};
+    @Source("chunk/lights_phong_pars_vertex.glsl")
+    SourceTextResource getLightsPhongParsVertex();
 
-	public TextResource getMapParsFragment() {
-		return TextResource.create( "chunk/map_pars_fragment.glsl" );
-	};
+    @Source("chunk/lights_phong_vertex.glsl")
+    SourceTextResource getLightsPhongVertex();
 
-	public TextResource getMapParsVertex() {
-		return TextResource.create( "chunk/map_pars_vertex.glsl" );
-	};
+    @Source("chunk/linear_to_gamma_fragment.glsl")
+    SourceTextResource getLinearToGammaFragment();
 
-	public TextResource getMapParticleFragment() {
-		return TextResource.create( "chunk/map_particle_fragment.glsl" );
-	};
+    @Source("chunk/logdepthbuf_fragment.glsl")
+    SourceTextResource getLogdepthbufFragment();
 
-	public TextResource getMapParticleParsFragment() {
-		return TextResource.create( "chunk/map_particle_pars_fragment.glsl" );
-	};
+    @Source("chunk/logdepthbuf_par_fragment.glsl")
+    SourceTextResource getLogdepthbufParFragment();
 
-	public TextResource getMapVertex() {
-		return TextResource.create( "chunk/map_vertex.glsl" );
-	};
+    @Source("chunk/logdepthbuf_par_vertex.glsl")
+    SourceTextResource getLogdepthbufParVertex();
 
-	public TextResource getMorphnormalVertex() {
-		return TextResource.create( "chunk/morphnormal_vertex.glsl" );
-	};
+    @Source("chunk/logdepthbuf_vertex.glsl")
+    SourceTextResource getLogdepthbufVertex();
 
-	public TextResource getMorphtargetParsVertex() {
-		return TextResource.create( "chunk/morphtarget_pars_vertex.glsl" );
-	};
+    @Source("chunk/map_fragment.glsl")
+    SourceTextResource getMapFragment();
 
-	public TextResource getMorphtargetVertex() {
-		return TextResource.create( "chunk/morphtarget_vertex.glsl" );
-	};
-	
-	public TextResource getNormalmapParsFragment() {
-		return TextResource.create( "chunk/normalmap_pars_fragment.glsl" );
-	};
+    @Source("chunk/map_pars_fragment.glsl")
+    SourceTextResource getMapParsFragment();
 
-	public TextResource getShadowmapFragment() {
-		return TextResource.create( "chunk/shadowmap_fragment.glsl" );
-	};
+    @Source("chunk/map_pars_vertex.glsl")
+    SourceTextResource getMapParsVertex();
 
-	public TextResource getShadowmapParsFragment() {
-		return TextResource.create( "chunk/shadowmap_pars_fragment.glsl" );
-	};
+    @Source("chunk/map_particle_fragment.glsl")
+    SourceTextResource getMapParticleFragment();
 
-	public TextResource getShadowmapParsVertex() {
-		return TextResource.create( "chunk/shadowmap_pars_vertex.glsl" );
-	};
+    @Source("chunk/map_particle_pars_fragment.glsl")
+    SourceTextResource getMapParticleParsFragment();
 
-	public TextResource getShadowmapVertex() {
-		return TextResource.create( "chunk/shadowmap_vertex.glsl" );
-	};
+    @Source("chunk/map_vertex.glsl")
+    SourceTextResource getMapVertex();
 
-	public TextResource getSkinningParsVertex() {
-		return TextResource.create( "chunk/skinning_pars_vertex.glsl" );
-	};
+    @Source("chunk/morphnormal_vertex.glsl")
+    SourceTextResource getMorphnormalVertex();
 
-	public TextResource getSkinningVertex() {
-		return TextResource.create( "chunk/skinning_vertex.glsl" );
-	};
-	
-	public TextResource getSkinBaseVertex() {
-		return TextResource.create( "chunk/skinbase_vertex.glsl" );
-	};
-	
-	public TextResource getSkinNormalVertex() {
-		return TextResource.create( "chunk/skinnormal_vertex.glsl" );
-	};
-	
-	public TextResource getSpecularmapFragment() {
-		return TextResource.create( "chunk/specularmap_fragment.glsl" );
-	};
-	
-	public TextResource getSpecularmapParsFragment() {
-		return TextResource.create( "chunk/specularmap_pars_fragment.glsl" );
-	};
-	
-	public TextResource getWorldposVertex() {
-		return TextResource.create( "chunk/worldpos_vertex.glsl" );
-	};
+    @Source("chunk/morphtarget_pars_vertex.glsl")
+    SourceTextResource getMorphtargetParsVertex();
+
+    @Source("chunk/morphtarget_vertex.glsl")
+    SourceTextResource getMorphtargetVertex();
+
+    @Source("chunk/normalmap_pars_fragment.glsl")
+    SourceTextResource getNormalmapParsFragment();
+
+    @Source("chunk/shadowmap_fragment.glsl")
+    SourceTextResource getShadowmapFragment();
+
+    @Source("chunk/shadowmap_pars_fragment.glsl")
+    SourceTextResource getShadowmapParsFragment();
+
+    @Source("chunk/shadowmap_pars_vertex.glsl")
+    SourceTextResource getShadowmapParsVertex();
+
+    @Source("chunk/shadowmap_vertex.glsl")
+    SourceTextResource getShadowmapVertex();
+
+    @Source("chunk/skinning_pars_vertex.glsl")
+    SourceTextResource getSkinningParsVertex();
+
+    @Source("chunk/skinning_vertex.glsl")
+    SourceTextResource getSkinningVertex();
+
+    @Source("chunk/skinbase_vertex.glsl")
+    SourceTextResource getSkinBaseVertex();
+
+    @Source("chunk/skinnormal_vertex.glsl")
+    SourceTextResource getSkinNormalVertex();
+
+    @Source("chunk/specularmap_fragment.glsl")
+    SourceTextResource getSpecularmapFragment();
+
+    @Source("chunk/specularmap_pars_fragment.glsl")
+    SourceTextResource getSpecularmapParsFragment();
+
+    @Source("chunk/worldpos_vertex.glsl")
+    SourceTextResource getWorldposVertex();
 }
