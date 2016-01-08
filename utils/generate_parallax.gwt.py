@@ -19,7 +19,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CORE_DIR = os.path.join(SCRIPT_DIR, os.pardir, 'parallax', 'src')
 OUTPUT_FILE = os.path.join(CORE_DIR, 'org', 'parallax3d', 'parallax.gwt.xml')
 
-includes = ['*.fs','*.vs','*.glsl']
+includes = ['*.fs','*.vs']
 excludes = ['']
 
 includes = r'|'.join([fnmatch.translate(x) for x in includes])

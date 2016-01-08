@@ -3,58 +3,6 @@
 	<source path="parallax" />
 
 	<define-configuration-property name="app.files.classpath" is-multi-valued="true" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/alphamap_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/alphamap_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/alphatest_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/bumpmap_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/color_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/color_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/color_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/color_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/defaultnormal_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/default_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/envmap_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/envmap_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/envmap_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/envmap_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/fog_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/fog_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lightmap_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lightmap_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lightmap_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lightmap_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_lambert_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_lambert_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_phong_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_phong_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_phong_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/lights_phong_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/linear_to_gamma_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/logdepthbuf_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/logdepthbuf_par_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/logdepthbuf_par_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/logdepthbuf_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_particle_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_particle_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/map_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/morphnormal_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/morphtarget_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/morphtarget_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/normalmap_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/shadowmap_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/shadowmap_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/shadowmap_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/shadowmap_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/skinbase_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/skinning_pars_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/skinning_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/skinnormal_vertex.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/specularmap_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/specularmap_pars_fragment.glsl" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/chunk/worldpos_vertex.glsl" />
 	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/basic.fs" />
 	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/basic.vs" />
 	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/cube.fs" />
