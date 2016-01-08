@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.Duration;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.objects.Mesh;
@@ -274,9 +273,9 @@ public class Cloth
 
 		// Ball Constrains
 
-		double time = Duration.currentTimeMillis();
-		ballPosition.setZ( -Math.sin(time / 600) * 90 ) ; //+ 40;
-		ballPosition.setX( Math.cos(time / 400) * 70 );
+//		double time = Duration.currentTimeMillis();
+//		ballPosition.setZ( -Math.sin(time / 600) * 90 ) ; //+ 40;
+//		ballPosition.setX( Math.cos(time / 400) * 70 );
 
 		if (ball != null && ball.isVisible())
 		{

@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.system;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dev.jjs.ast.JClassLiteral;
 import org.parallax3d.parallax.system.SourceBundle;
 
 import java.lang.reflect.InvocationHandler;
@@ -27,9 +28,9 @@ import java.lang.reflect.Proxy;
 
 public class ClassUtils {
 
-    public static <T> T newProxyInstance(Class<? extends SourceBundle> classLiteral) {
+    public static <T> T newProxyInstance(Class<?> classLiteral) {
 
-        return GWT.create(classLiteral);
+        return GWT.create( classLiteral );
 
     }
 
