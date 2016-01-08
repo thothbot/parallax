@@ -16,12 +16,11 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.resources;
+package org.parallax3d.parallax.resources;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Beckmann distribution function
@@ -37,20 +36,20 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
  */
 public final class BeckmannShader extends Shader
 {
-	interface Resources
+	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@ClientBundle.Source("shaders/beckmann.vs")
-		TextResource getVertexShader();
+		@Source("shaders/beckmann.vs")
+		SourceTextResource getVertexShader();
 
-		@ClientBundle.Source("shaders/beckmann.fs")
-		TextResource getFragmentShader();
+		@Source("shaders/beckmann.fs")
+		SourceTextResource getFragmentShader();
 	}
 
-	public BeckmannShader() 
+	public BeckmannShader()
 	{
-		super(Resources.INSTANCE.getVertexShader().getText(), Resources.INSTANCE.getFragmentShader().getText());
+		super(Resources.INSTANCE);
 	}
 
 	@Override

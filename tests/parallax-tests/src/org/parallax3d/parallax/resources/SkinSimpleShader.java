@@ -16,18 +16,17 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.resources;
+package org.parallax3d.parallax.resources;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
 import org.parallax3d.parallax.graphics.renderers.shaders.*;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Simple skin shader
@@ -48,20 +47,20 @@ import org.parallax3d.parallax.math.Vector4;
  */
 public final class SkinSimpleShader extends Shader
 {
-	interface Resources
+	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@ClientBundle.Source("shaders/skin_simple.vs")
-		TextResource getVertexShader();
+		@Source("shaders/skin_simple.vs")
+		SourceTextResource getVertexShader();
 
-		@ClientBundle.Source("shaders/skin_simple.fs")
-		TextResource getFragmentShader();
+		@Source("shaders/skin_simple.fs")
+		SourceTextResource getFragmentShader();
 	}
 
 	public SkinSimpleShader() 
 	{
-		super(Resources.INSTANCE.getVertexShader().getText(), Resources.INSTANCE.getFragmentShader().getText());
+		super(Resources.INSTANCE);
 	}
 	
 	@Override

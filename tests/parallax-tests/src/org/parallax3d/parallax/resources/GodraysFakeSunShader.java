@@ -16,46 +16,46 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.resources;
+package org.parallax3d.parallax.resources;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
- * Additively applies god rays from texture tGodRays to a background (tColors).
- * fGodRayIntensity attenuates the god rays.
+ * A dodgy sun/sky shader. Makes a bright spot at the sun location. Would be
+ * cheaper/faster/simpler to implement this as a simple sun sprite.
  * <p>
  * The code from three.js code
  */
-public final class GodRaysCombineShader extends Shader
+public final class GodraysFakeSunShader extends Shader
 {
 
-	interface Resources
+	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@ClientBundle.Source("shaders/godrays.vs")
-		TextResource getVertexShader();
+		@Source("shaders/godrays.vs")
+		SourceTextResource getVertexShader();
 
-		@ClientBundle.Source("shaders/godraysCombine.fs")
-		TextResource getFragmentShader();
+		@Source("shaders/godraysFakeSun.fs")
+		SourceTextResource getFragmentShader();
 	}
 	
-	public GodRaysCombineShader() 
+	public GodraysFakeSunShader() 
 	{
-		super(Resources.INSTANCE.getVertexShader().getText(), Resources.INSTANCE.getFragmentShader().getText());
+		super(Resources.INSTANCE);
 	}
 
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tColors", new Uniform(Uniform.TYPE.T));
-		this.addUniform("tGodRays", new Uniform(Uniform.TYPE.T));
-		this.addUniform("fGodRayIntensity", new Uniform(Uniform.TYPE.F, 0.69));
 		this.addUniform("vSunPositionScreenSpace", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
+		this.addUniform("fAspect", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("sunColor", new Uniform(Uniform.TYPE.C, new Color(0xffee00)));
+		this.addUniform("bgColor", new Uniform(Uniform.TYPE.C, new Color(0x000000)));
 	}
 }

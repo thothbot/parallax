@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.resources;
+package org.parallax3d.parallax.resources;
 
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;

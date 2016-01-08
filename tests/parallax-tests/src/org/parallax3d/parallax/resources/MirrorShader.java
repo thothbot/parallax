@@ -16,33 +16,32 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.resources;
+package org.parallax3d.parallax.resources;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 public class MirrorShader extends Shader
 {
 
-	interface Resources
+	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@ClientBundle.Source("shaders/mirror.vs")
-		TextResource getVertexShader();
+		@Source("shaders/mirror.vs")
+		SourceTextResource getVertexShader();
 
-		@ClientBundle.Source("shaders/mirror.fs")
-		TextResource getFragmentShader();
+		@Source("shaders/mirror.fs")
+		SourceTextResource getFragmentShader();
 	}
 
 	public MirrorShader() 
 	{
-		super(Resources.INSTANCE.getVertexShader().getText(), Resources.INSTANCE.getFragmentShader().getText());
+		super(Resources.INSTANCE);
 	}
 
 	@Override

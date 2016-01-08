@@ -13,6 +13,5 @@
 	<set-configuration-property name="parallax.assetpath" value="../parallax-tests/assets" />
 
 	<source path='client'/>
-	<source path='resources'/>
 
 </module>

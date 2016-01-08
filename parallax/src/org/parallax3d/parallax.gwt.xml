@@ -1,30 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to="org.parallax3d.parallax">
 	<source path="parallax" />
-
-	<define-configuration-property name="app.files.classpath" is-multi-valued="true" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/basic.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/basic.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/cube.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/cube.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/dashed.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/dashed.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/default.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/default.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/depth.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/depth.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/depthRGBA.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/depthRGBA.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/fresnel.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/fresnel.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/lambert.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/lambert.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/normal.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/normal.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/normalmap.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/normalmap.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/particle_basic.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/particle_basic.vs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/phong.fs" />
-	<extend-configuration-property name="app.files.classpath" value="org/parallax3d/parallax/graphics/renderers/shaders/source/phong.vs" />
 </module>

@@ -16,32 +16,31 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.resources;
+package org.parallax3d.parallax.resources;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 public final class MonjoriShader extends Shader
 {
 
-	interface Resources
+	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@ClientBundle.Source("shaders/monjori.vs")
-		TextResource getVertexShader();
+		@Source("shaders/monjori.vs")
+		SourceTextResource getVertexShader();
 
-		@ClientBundle.Source("shaders/monjori.fs")
-		TextResource getFragmentShader();
+		@Source("shaders/monjori.fs")
+		SourceTextResource getFragmentShader();
 	}
 
 	public MonjoriShader() 
 	{
-		super(Resources.INSTANCE.getVertexShader().getText(), Resources.INSTANCE.getFragmentShader().getText());
+		super(Resources.INSTANCE);
 	}
 	
 	@Override
