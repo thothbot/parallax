@@ -26,7 +26,7 @@ import java.lang.reflect.Proxy;
 
 public class ClassUtils {
 
-    public static <T> T newProxyInstance(Class<? extends SourceBundle> classLiteral) {
+    public static <T> T newProxyInstance(final Class<? extends SourceBundle> classLiteral) {
 
         return (T) Proxy.newProxyInstance(classLiteral.getClassLoader(),
                 new Class[]{classLiteral},
@@ -34,7 +34,7 @@ public class ClassUtils {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         SourceBundle.Source source = method.getAnnotation(SourceBundle.Source.class);
-                        return App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/" + source).readString();
+                        return App.files.classpath(classLiteral.getPackage().getName().replace(".", "/") + source).readString();
                     }
                 });
 
