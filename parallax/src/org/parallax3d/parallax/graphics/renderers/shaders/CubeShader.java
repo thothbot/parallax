@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * CubeGeometry map shader.
@@ -33,10 +35,20 @@ import org.parallax3d.parallax.App;
  */
 public final class CubeShader extends Shader 
 {
+	interface Resources extends DefaultResources
+	{
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/cube.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/cube.fs")
+		SourceTextResource getFragmentShader();
+	}
+
 	public CubeShader()
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/cube.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/cube.fs").readString());
+		super(Resources.INSTANCE);
 	}
 
 	@Override

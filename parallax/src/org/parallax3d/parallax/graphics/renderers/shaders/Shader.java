@@ -27,6 +27,8 @@ import java.util.Map;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.system.SourceBundle;
+import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.ProgramParameter;
@@ -47,6 +49,15 @@ public abstract class Shader
 		HIGHP,
 		MEDIUMP,
 		LOWP
+	}
+
+	public interface DefaultResources extends SourceBundle
+	{
+		@Source("source/default.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/default.fs")
+		SourceTextResource getFragmentShader();
 	}
 
 	// shader precision. Can be "highp", "mediump" or "lowp".
@@ -78,11 +89,11 @@ public abstract class Shader
 	/**
 	 * This constructor will create new Shader instance.
 	 *
+	 * @param resource the {@link Shader.DefaultResources} instance.
 	 */
-	public Shader()
+	public Shader(DefaultResources resource)
 	{
-		this(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/default.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/default.fs").readString());
+		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
 	}
 
 	public Shader(String vertexShader, String fragmentShader)

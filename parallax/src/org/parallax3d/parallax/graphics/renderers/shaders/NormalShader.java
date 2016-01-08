@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Normal shader.
@@ -34,10 +36,20 @@ import org.parallax3d.parallax.App;
 public final class NormalShader extends Shader
 {
 
-	public NormalShader() 
+	interface Resources extends DefaultResources
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/normal.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/normal.fs").readString());
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/normal.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/normal.fs")
+		SourceTextResource getFragmentShader();
+	}
+
+	public NormalShader()
+	{
+		super(Resources.INSTANCE);
 	}
 
 	@Override

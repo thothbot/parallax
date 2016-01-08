@@ -25,6 +25,8 @@ import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Normal map shader<br>
@@ -39,10 +41,20 @@ import org.parallax3d.parallax.math.Vector2;
  */
 public final class NormalMapShader extends Shader 
 {
+	interface Resources extends DefaultResources
+	{
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/normalmap.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/normalmap.fs")
+		SourceTextResource getFragmentShader();
+	}
+
 	public NormalMapShader()
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/normalmap.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/normalmap.fs").readString());
+		super(Resources.INSTANCE);
 	}
 	
 	@Override

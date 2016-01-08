@@ -22,14 +22,26 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 public class DashedShader extends Shader 
 {
 
-	public DashedShader() 
+	interface Resources extends DefaultResources
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/dashed.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/dashed.fs").readString());
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/dashed.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/dashed.fs")
+		SourceTextResource getFragmentShader();
+	}
+
+	public DashedShader()
+	{
+		super(Resources.INSTANCE);
 	}
 
 	@Override

@@ -24,6 +24,8 @@ import java.util.List;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Lambert shader. This is the simplest model of light - a pure diffuse lighting. 
@@ -38,10 +40,20 @@ import org.parallax3d.parallax.math.Color;
  */
 public final class LambertShader extends Shader
 {
+	interface Resources extends DefaultResources
+	{
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/lambert.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/lambert.fs")
+		SourceTextResource getFragmentShader();
+	}
+
 	public LambertShader()
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/lambert.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/lambert.fs").readString());
+		super(Resources.INSTANCE);
 	}
 
 	@Override

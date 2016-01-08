@@ -24,6 +24,8 @@ import java.util.List;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Phong shading - lighting model three-dimensional objects, 
@@ -37,12 +39,21 @@ import org.parallax3d.parallax.math.Color;
 public final class PhongShader extends Shader
 {
 
-	public PhongShader() 
+	interface Resources extends DefaultResources
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/phong.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/phong.fs").readString());
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/phong.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/phong.fs")
+		SourceTextResource getFragmentShader();
 	}
 
+	public PhongShader()
+	{
+		super(Resources.INSTANCE);
+	}
 	@Override
 	protected void initUniforms()
 	{

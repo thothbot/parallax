@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Simple Particle shader.
@@ -34,10 +36,20 @@ import org.parallax3d.parallax.App;
 public final class ParticleBasicShader extends Shader
 {
 
-	public ParticleBasicShader() 
+	interface Resources extends DefaultResources
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/particle_basic.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/particle_basic.fs").readString());
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/particle_basic.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/particle_basic.fs")
+		SourceTextResource getFragmentShader();
+	}
+
+	public ParticleBasicShader()
+	{
+		super(Resources.INSTANCE);
 	}
 
 	@Override

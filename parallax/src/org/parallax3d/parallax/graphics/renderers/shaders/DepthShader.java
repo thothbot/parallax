@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Simple depth shader.
@@ -34,10 +36,21 @@ import org.parallax3d.parallax.App;
 public final class DepthShader extends Shader
 {
 
-	public DepthShader() 
+	interface Resources extends DefaultResources
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/depth.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/depth.fs").readString());
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/depth.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/depth.fs")
+		SourceTextResource getFragmentShader();
+
+	}
+
+	public DepthShader()
+	{
+		super(Resources.INSTANCE);
 	}
 
 	@Override

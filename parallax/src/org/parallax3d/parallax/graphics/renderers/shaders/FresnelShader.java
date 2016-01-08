@@ -19,6 +19,8 @@
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Fresnel shader.
@@ -31,10 +33,20 @@ import org.parallax3d.parallax.App;
 public final class FresnelShader extends Shader 
 {
 
-	public FresnelShader() 
+	interface Resources extends DefaultResources
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/fresnel.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/fresnel.fs").readString());
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/fresnel.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/fresnel.fs")
+		SourceTextResource getFragmentShader();
+	}
+
+	public FresnelShader()
+	{
+		super(Resources.INSTANCE);
 	}
 
 	@Override

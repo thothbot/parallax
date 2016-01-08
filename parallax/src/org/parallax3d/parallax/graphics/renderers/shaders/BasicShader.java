@@ -23,6 +23,8 @@ import java.util.List;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Basic shader.
@@ -34,10 +36,20 @@ import org.parallax3d.parallax.App;
  */
 public final class BasicShader extends Shader
 {
+	interface Resources extends DefaultResources
+	{
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+
+		@Source("source/basic.vs")
+		SourceTextResource getVertexShader();
+
+		@Source("source/basic.fs")
+		SourceTextResource getFragmentShader();
+	}
+
 	public BasicShader()
 	{
-		super(App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/basic.vs").readString(),
-				App.files.classpath("org/parallax3d/parallax/graphics/renderers/shaders/source/basic.fs").readString());
+		super(Resources.INSTANCE);
 	}
 
 	@Override
