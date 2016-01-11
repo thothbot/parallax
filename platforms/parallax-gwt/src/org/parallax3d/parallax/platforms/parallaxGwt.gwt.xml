@@ -23,7 +23,8 @@
 	<source path="gwt">
 		<exclude name="**/jre/**" />
 		<exclude name="**/PreloaderBundleGenerator.java"/>
-		<exclude name="**/SourceBundlesGenerator.java"/>
+		<exclude name="**/SourceBundleFactoryGenerator.java"/>
+		<exclude name="**/SourceTextResourceGenerator.java"/>
 		<exclude name="**/FileWrapper.java"/>
 	</source>
 
