@@ -26,11 +26,14 @@ import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
+import org.parallax3d.parallax.system.SourceBundles;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class GwtApp extends App implements EntryPoint {
+
+//	public final static SourceBundles bundles = GWT.create( SourceBundles.class );
 
 	public final static Logger logger = Logger.getLogger("");
 

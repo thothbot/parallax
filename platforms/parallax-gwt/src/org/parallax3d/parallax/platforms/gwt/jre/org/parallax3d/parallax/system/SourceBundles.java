@@ -18,23 +18,7 @@
 
 package org.parallax3d.parallax.system;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dev.jjs.ast.JClassLiteral;
-import com.google.gwt.junit.client.impl.GWTTestAccessor;
-import org.parallax3d.parallax.platforms.gwt.GwtApp;
-import org.parallax3d.parallax.system.SourceBundle;
+public interface SourceBundles {
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
-public class ClassUtils {
-
-    public static <T> T newProxyInstance(Class<? extends SourceBundle> classLiteral) {
-
-        SourceBundles bundles = GWT.create( SourceBundles.class );
-        return (T) bundles.get(classLiteral);
-
-    }
-
+    <T> T get(Class<? extends SourceBundle> classLiteral);
 }

@@ -23,6 +23,7 @@
 	<source path="gwt">
 		<exclude name="**/jre/**" />
 		<exclude name="**/PreloaderBundleGenerator.java"/>
+		<exclude name="**/SourceBundlesGenerator.java"/>
 		<exclude name="**/FileWrapper.java"/>
 	</source>
 
@@ -32,6 +33,10 @@
 
 	<generate-with class="org.parallax3d.parallax.platforms.gwt.preloader.PreloaderBundleGenerator">
 		<when-type-assignable class="org.parallax3d.parallax.platforms.gwt.preloader.PreloaderBundle"/>
+	</generate-with>
+
+	<generate-with class="org.parallax3d.parallax.platforms.gwt.preloader.SourceBundlesGenerator">
+		<when-type-assignable class="org.parallax3d.parallax.system.SourceBundles"/>
 	</generate-with>
 
 </module>
