@@ -35,8 +35,8 @@
 		<when-type-assignable class="org.parallax3d.parallax.platforms.gwt.preloader.PreloaderBundle"/>
 	</generate-with>
 
-	<generate-with class="org.parallax3d.parallax.platforms.gwt.preloader.SourceBundlesGenerator">
-		<when-type-assignable class="org.parallax3d.parallax.system.SourceBundles"/>
+	<generate-with class="org.parallax3d.parallax.platforms.gwt.preloader.SourceBundleFactoryGenerator">
+		<when-type-assignable class="org.parallax3d.parallax.system.SourceBundleFactory"/>
 	</generate-with>
 
 </module>

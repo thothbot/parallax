@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.system;
 
-public interface SourceBundles {
+public interface SourceBundleFactory {
 
     <T> T get(Class<? extends SourceBundle> classLiteral);
 }

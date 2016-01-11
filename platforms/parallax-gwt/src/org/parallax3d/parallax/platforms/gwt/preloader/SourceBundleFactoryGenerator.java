@@ -37,21 +37,21 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.Map;
 
-public class SourceBundlesGenerator extends Generator {
+public class SourceBundleFactoryGenerator extends Generator {
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
 
         PrintWriter pw = context.tryCreate(logger,
                 "org.parallax3d.parallax.platforms.gwt.preloader",
-                "SourceBundlesImpl");
+                "SourceBundleFactoryImpl");
 
         if (pw != null)
         {
             // write package, imports, whatever
             pw.append("package org.parallax3d.parallax.platforms.gwt.preloader;");
-            pw.append("import org.parallax3d.parallax.system.SourceBundles;");
             pw.append("import org.parallax3d.parallax.system.SourceBundle;");
+            pw.append("import org.parallax3d.parallax.system.SourceBundleFactory;");
             pw.append("import com.google.gwt.core.client.GWT;");
             pw.append("import org.parallax3d.parallax.system.FastMap;");
 
@@ -82,7 +82,7 @@ public class SourceBundlesGenerator extends Generator {
                 pw.append("import " + genClass + ";");
 
             // the class
-            pw.append("public class SourceBundlesImpl implements SourceBundles {");
+            pw.append("public class SourceBundleFactoryImpl implements SourceBundleFactory {");
 
             pw.append("   private static final FastMap<SourceBundle> MAP = new FastMap<SourceBundle>(){{");
 
@@ -104,7 +104,7 @@ public class SourceBundlesGenerator extends Generator {
         }
 
         // return the name of the generated class
-        return "org.parallax3d.parallax.platforms.gwt.preloader.SourceBundlesImpl";
+        return "org.parallax3d.parallax.platforms.gwt.preloader.SourceBundleFactoryImpl";
     }
 
     private String generateStaticInstance(TypeOracle oracle, TreeLogger logger, GeneratorContext context, JClassType classtype) throws UnableToCompleteException {

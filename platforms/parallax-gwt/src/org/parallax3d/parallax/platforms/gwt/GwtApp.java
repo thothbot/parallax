@@ -21,12 +21,10 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
-import org.parallax3d.parallax.system.SourceBundles;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

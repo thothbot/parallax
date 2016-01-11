@@ -19,8 +19,12 @@
 package org.parallax3d.parallax.system;
 
 import com.google.gwt.resources.client.TextResource;
+import com.google.gwt.resources.ext.ResourceGeneratorType;
+import com.google.gwt.resources.rg.TextResourceGenerator;
+import org.parallax3d.parallax.platforms.gwt.preloader.SourceTextResourceGenerator;
 
-public interface SourceTextResource extends TextResource{
+@ResourceGeneratorType(SourceTextResourceGenerator.class)
+public interface SourceTextResource extends TextResource {
 
 }
 
