@@ -25,15 +25,10 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JPackage;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.dev.jjs.ast.JTypeOracle;
-import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.resources.rebind.context.InlineClientBundleGenerator;
-import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceBundle;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.PrintWriter;
 import java.util.Map;
 

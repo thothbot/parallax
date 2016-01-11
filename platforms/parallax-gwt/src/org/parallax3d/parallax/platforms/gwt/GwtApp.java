@@ -31,8 +31,6 @@ import java.util.logging.Logger;
 
 public abstract class GwtApp extends App implements EntryPoint {
 
-//	public final static SourceBundles bundles = GWT.create( SourceBundles.class );
-
 	public final static Logger logger = Logger.getLogger("");
 
 	GwtAppConfiguration config;
