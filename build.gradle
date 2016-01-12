@@ -4,7 +4,6 @@ ext {
     robovmVersion = "1.9.0"
     androidVersion = "4.4"
     gwtVersion = "2.7.0"
-    gwtMaterialVersion = "1.4"
     junitVersion = "4.11"
 }
 
@@ -103,7 +102,6 @@ project(":tests:parallax-tests-gwt") {
     dependencies {
         compile project(":tests:parallax-tests")
         compile project(":platforms:parallax-gwt")
-        optional "com.github.gwtmaterialdesign:gwt-material:$gwtMaterialVersion"
     }
 }
 

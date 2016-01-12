@@ -7,10 +7,7 @@
 	<inherits name='org.parallax3d.parallax.parallaxTests' />
 
 	<!--Theme-->
-	<inherits name='com.google.gwt.user.theme.clean.Clean'/>
-
-	<!--GWT Material-->
-	<inherits name="gwt.material.design.GwtMaterialDesign" />
+	<inherits name="com.google.gwt.user.theme.standard.Standard"/>
 
 	<entry-point class='org.parallax3d.parallax.tests.client.WebApp' />
 	
