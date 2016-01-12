@@ -80,7 +80,7 @@ project(":tests:parallax-tests") {
 
     dependencies {
         compile project(":parallax")
-        optional "com.github.gwtmaterialdesign:gwt-material:1.3.3"
+        optional "com.github.gwtmaterialdesign:gwt-material:1.4.0"
     }
 }
 

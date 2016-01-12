@@ -6,7 +6,8 @@
     <inherits name='org.parallax3d.parallax.tests.ParallaxWebApp' />
     
     <collapse-all-properties />
-    
+
+	<!-- allow Super Dev Mode -->
 	<add-linker name="xsiframe"/>	
 	<set-configuration-property name="devModeRedirectEnabled" value="true"/>
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>	
