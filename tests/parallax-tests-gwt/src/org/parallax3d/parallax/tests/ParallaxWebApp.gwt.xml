@@ -11,7 +11,6 @@
 
 	<!--GWT Material-->
 	<inherits name="gwt.material.design.GwtMaterialDesign" />
-	<inherits name="gwt.material.design.themes.GwtMaterialThemeBlue"/>
 
 	<entry-point class='org.parallax3d.parallax.tests.client.WebApp' />
 	
