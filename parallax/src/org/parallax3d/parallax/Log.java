@@ -18,8 +18,6 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.App;
-
 public class Log {
 
     public static void info(String msg)
