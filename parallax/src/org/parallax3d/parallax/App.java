@@ -36,14 +36,14 @@ public abstract class App {
 
     public abstract Rendering getRendering ();
 
-    public abstract void log (String tag, String message);
-    public abstract void log (String tag, String message, Throwable exception);
+    public abstract void info (String message);
 
-    public abstract void error (String tag, String message);
-    public abstract void error (String tag, String message, Throwable exception);
+    public abstract void debug (String message);
 
-    public abstract void debug (String tag, String message);
-    public abstract void debug (String tag, String message, Throwable exception);
+    public abstract void warn (String message);
+
+    public abstract void error (String message);
+    public abstract void error (String message, Throwable exception);
 
     public abstract void setLogLevel (Level logLevel);
     public abstract Level getLogLevel ();

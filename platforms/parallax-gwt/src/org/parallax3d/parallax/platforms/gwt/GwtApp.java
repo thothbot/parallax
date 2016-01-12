@@ -146,53 +146,35 @@ public abstract class GwtApp extends App implements EntryPoint {
 	}
 
 	@Override
-	public void log (String tag, String message) {
-		String msg = tag + ": " + message;
-		GwtApp.logger.log(Level.INFO, msg);
-		System.out.println(msg);
+	public void info (String message) {
+		GwtApp.logger.log(Level.INFO, message);
+		System.out.println( message );
 	}
 
 	@Override
-	public void log(String tag, String message, Throwable exception) {
-		String msg = tag + ": " + message;
-		GwtApp.logger.log(Level.INFO, msg, exception);
-
-		System.out.println(msg + "\n" + exception.getMessage());
-		System.out.println(getStackTrace(exception));
+	public void debug(String message) {
+		GwtApp.logger.log(Level.FINE, message);
+		System.out.println( message );
 	}
 
 	@Override
-	public void error(String tag, String message) {
-		String msg = tag + ": " + message;
-		GwtApp.logger.log(Level.SEVERE, msg);
-
-		System.err.println(msg);
+	public void warn(String message) {
+		GwtApp.logger.log(Level.WARNING, message);
+		System.err.println( message );
 	}
 
 	@Override
-	public void error(String tag, String message, Throwable exception) {
-		String msg = tag + ": " + message;
-
-		GwtApp.logger.log(Level.SEVERE, msg, exception);
-
-		System.err.println(msg);
+	public void error(String message) {
+		GwtApp.logger.log(Level.SEVERE, message);
+		System.err.println( message );
 	}
 
 	@Override
-	public void debug(String tag, String message) {
-		String msg = tag + ": " + message;
-		GwtApp.logger.log(Level.FINE, msg);
-		System.out.println( msg + "\n");
+	public void error(String message, Throwable exception) {
+		GwtApp.logger.log(Level.SEVERE, message, exception);
+		System.err.println(message);
 	}
 
-	@Override
-	public void debug (String tag, String message, Throwable exception) {
-		String msg = tag + ": " + message;
-		GwtApp.logger.log(Level.FINE, msg, exception);
-
-		System.out.println(msg);
-	}
-	
 	private String getMessages (Throwable e) {
 		StringBuffer buffer = new StringBuffer();
 		while (e != null) {
