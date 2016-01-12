@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.math.Vector2;
 
 public class FontUtils
@@ -72,7 +72,7 @@ public class FontUtils
 				//throw ( "Warning, unable to triangulate polygon!" );
 				//return null;
 				// Sometimes warning is fine, especially polygons are triangulated in reverse.
-				App.app.error("FontUtils", "triangulate() - Warning, unable to triangulate polygon!");
+				Log.warn("FontUtils.triangulate() - Warning, unable to triangulate polygon!");
 
 				return;
 			}

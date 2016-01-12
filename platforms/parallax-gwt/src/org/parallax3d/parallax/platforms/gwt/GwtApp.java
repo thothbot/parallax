@@ -23,6 +23,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 
@@ -119,7 +120,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 			@Override
 			public void error (String file) {
-				App.app.error("Preloader", "error: " + file);
+				Log.error("Preloader: error: " + file);
 			}
 
 			@Override

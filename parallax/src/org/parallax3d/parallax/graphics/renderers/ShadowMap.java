@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.shaders.DepthRGBAShader;
 import org.parallax3d.parallax.graphics.cameras.Camera;
@@ -214,7 +214,7 @@ public final class ShadowMap extends Plugin
 
 						shadowCascadeArray.add( n, virtualLight );
 
-						App.app.debug("Shadowmap", "Created virtualLight");
+						Log.debug("Shadowmap: Created virtualLight");
 					}
 					else
 					{
@@ -270,7 +270,7 @@ public final class ShadowMap extends Plugin
 				}
 				else
 				{
-					App.app.error("ShadowMap", "Unsupported light class for shadow: " + light.getClass().getName());
+					Log.warn("ShadowMap: Unsupported light class for shadow: " + light.getClass().getName());
 					continue;
 				}
 

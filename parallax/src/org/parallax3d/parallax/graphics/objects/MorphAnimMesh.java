@@ -19,9 +19,8 @@
 package org.parallax3d.parallax.graphics.objects;
 
 import java.util.List;
-import java.util.Map;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Mathematics;
@@ -163,7 +162,7 @@ public class MorphAnimMesh extends Mesh
 		}
 		else
 		{
-			App.app.error("MorphanimMesh", "animation[" + label + "] undefined");
+			Log.warn("MorphanimMesh: animation[" + label + "] undefined");
 		}
 	}
 

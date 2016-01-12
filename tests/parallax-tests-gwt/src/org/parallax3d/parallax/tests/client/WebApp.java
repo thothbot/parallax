@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
@@ -60,7 +60,7 @@ public class WebApp extends GwtApp
 	{
 		GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
 			public void onUncaughtException(Throwable throwable) {
-				App.app.error("WebApp", "Uncaught exception", throwable);
+				Log.error("Uncaught exception", throwable);
 				if (!GWT.isScript()) {
 					String text = "Uncaught exception: ";
 					while (throwable != null) {

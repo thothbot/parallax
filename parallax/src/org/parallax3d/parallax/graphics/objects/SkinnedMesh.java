@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
@@ -185,7 +186,7 @@ public class SkinnedMesh extends Mesh {
 
 		} else {
 
-			App.app.error("SkinnedMesh", "SkinnedMesh unreckognized bindMode: " + this.bindMode);
+			Log.warn("SkinnedMesh unreckognized bindMode: " + this.bindMode);
 
 		}
 

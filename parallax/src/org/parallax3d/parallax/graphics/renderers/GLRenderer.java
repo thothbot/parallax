@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.events.ViewportResizeBus;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
@@ -283,12 +283,12 @@ public class GLRenderer extends AbstractRenderer
 			if ( mediumpAvailable ) {
 
 				this._precision = Shader.PRECISION.MEDIUMP;
-				App.app.error("WebGLRenderer", "highp not supported, using mediump.");
+				Log.warn("WebGLRenderer: highp not supported, using mediump.");
 
 			} else {
 
 				this._precision = Shader.PRECISION.LOWP;
-				App.app.error("WebGLRenderer", "highp and mediump not supported, using lowp.");
+				Log.warn("WebGLRenderer: highp and mediump not supported, using lowp.");
 
 			}
 
@@ -297,7 +297,7 @@ public class GLRenderer extends AbstractRenderer
 		if ( this._precision == Shader.PRECISION.MEDIUMP && ! mediumpAvailable ) {
 
 			this._precision = Shader.PRECISION.LOWP;
-			App.app.debug("WebGLRenderer", "mediump not supported, using lowp.");
+			Log.warn("WebGLRenderer: mediump not supported, using lowp.");
 		}
 
 		GLExtensions.get(gl, GLExtensions.Id.OES_texture_float);
@@ -2236,7 +2236,7 @@ public class GLRenderer extends AbstractRenderer
 	private void initMaterial ( Material material, List<Light> lights,
 								AbstractFog fog, GeometryObject object )
 	{
-		App.app.debug("WebGlRender", "Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
+		Log.debug("WebGlRender: Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
@@ -2290,7 +2290,7 @@ public class GLRenderer extends AbstractRenderer
 			}
 
 		material.updateProgramParameters(parameters);
-		App.app.debug("WebGlRender", "initMaterial() called new Program");
+		Log.debug("WebGlRender: initMaterial() called new Program");
 
 		String cashKey = material.getShader().getFragmentSource()
 				+ material.getShader().getVertexSource()
@@ -2733,7 +2733,7 @@ public class GLRenderer extends AbstractRenderer
 
 		if ( textureUnit >= this._maxTextures )
 		{
-			App.app.debug("WebGlRenderer", "Trying to use " + textureUnit + " texture units while this GPU supports only " + this._maxTextures);
+			Log.debug("WebGlRenderer: Trying to use " + textureUnit + " texture units while this GPU supports only " + this._maxTextures);
 		}
 
 		return textureUnit;
@@ -3160,7 +3160,7 @@ public class GLRenderer extends AbstractRenderer
 
 				if ( maxBones < ((SkinnedMesh)object).getBones().size() )
 				{
-					App.app.error("WebGLRenderer", "WebGLRenderer: too many bones - " + ((SkinnedMesh) object).getBones().size()
+					Log.warn("WebGLRenderer: too many bones - " + ((SkinnedMesh) object).getBones().size()
 							+ ", this GPU supports just " + maxBones + " (try OpenGL instead of ANGLE)");
 				}
 			}

@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.FastMap;
@@ -32,8 +32,6 @@ import org.parallax3d.parallax.system.gl.enums.BufferTarget;
 import org.parallax3d.parallax.system.gl.enums.BufferUsage;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -582,7 +580,7 @@ public class BufferGeometry extends AbstractGeometry
 				getAttribute("normal") == null ||
 				getAttribute("uv") == null ) {
 
-			App.app.error("BufferGeometry", "Missing required attributes (index, position, normal or uv) in BufferGeometry.computeTangents()");
+			Log.error("Missing required attributes (index, position, normal or uv) in BufferGeometry.computeTangents()");
 			return;
 
 		}

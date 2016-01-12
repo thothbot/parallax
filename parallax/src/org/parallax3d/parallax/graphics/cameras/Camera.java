@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.cameras;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.events.ViewportResizeBus;
 import org.parallax3d.parallax.events.ViewportResizeListener;
 import org.parallax3d.parallax.system.ThreeJsObject;
@@ -26,8 +26,6 @@ import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Quaternion;
-
-//import com.google.gwt.event.shared.HandlerRegistration;
 
 /**
  * Abstract base class for cameras.
@@ -142,7 +140,7 @@ public class Camera extends Object3D implements ViewportResizeListener
 		}
 		catch (Throwable throwable)
 		{
-			App.app.error("Camera", "Exception in Camera.finalize:", throwable);
+			Log.error("Exception in Camera.finalize:", throwable);
 		}
 	}
 }

@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.TreeViewModel;
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.Plugin;
@@ -116,7 +117,7 @@ public class PanelExample extends ResizeComposite implements AnimationReadyListe
 				{
 					PanelExample.this.content.clear();
 					String msg = "Sorry, your browser doesn't seem to support WebGL";
-					App.app.error("setRendering", msg, e);
+					Log.error("setRendering: " + msg, e);
 					PanelExample.this.content.add(new AlertBadCanvas(msg));
 				}
 

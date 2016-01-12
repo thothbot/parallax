@@ -26,6 +26,7 @@ import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
 import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
@@ -122,7 +123,7 @@ public class GwtRendering implements Rendering {
 				ready.onAnimationReady();
 
 		} catch (Throwable t) {
-			App.app.error("GwtRendering", "exception: " + t.getMessage(), t);
+			Log.error("GwtRendering: exception: " + t.getMessage(), t);
 			t.printStackTrace();
 			throw new ParallaxRuntimeException(t);
 		}
@@ -133,7 +134,7 @@ public class GwtRendering implements Rendering {
 				try {
 					mainLoop();
 				} catch (Throwable t) {
-					App.app.error("GwtApplication", "exception: " + t.getMessage(), t);
+					Log.error("GwtApplication: exception: " + t.getMessage(), t);
 					throw new ParallaxRuntimeException(t);
 				}
 				AnimationScheduler.get().requestAnimationFrame(this, GwtRendering.this.canvas);
