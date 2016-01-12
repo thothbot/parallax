@@ -18,20 +18,17 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceBundle;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-import org.parallax3d.parallax.system.gl.enums.ProgramParameter;
 
 /**
  * Basic abstract shader.
@@ -136,7 +133,7 @@ public abstract class Shader
 
 	public Shader buildProgram(GL20 gl, boolean useVertexTexture, int maxMorphTargets, int maxMorphNormals)
 	{
-		App.app.debug("Shader", "Building new program...");
+		Log.debug("Shader: Building new program...");
 
 		initShaderProgram(gl);
 
@@ -197,7 +194,7 @@ public abstract class Shader
 	 */
 	private void initShaderProgram(GL20 gl)
 	{
-		App.app.debug("Shader", "Called initProgram()");
+		Log.debug("Shader: Called initProgram()");
 
 		this.program = gl.glCreateProgram();
 
@@ -220,7 +217,7 @@ public abstract class Shader
 //			);
 //
 //		else
-			App.app.debug("Shader", "initProgram(): shaders has been initialised");
+			Log.debug("Shader.initProgram(): shaders has been initialised");
 
 		// clean up
 		gl.glDeleteShader(glVertexShader);
@@ -240,7 +237,7 @@ public abstract class Shader
 	 */
 	private int getShaderProgram(GL20 gl, Class<?> type, String string)
 	{
-		App.app.debug("Shader", "Called getShaderProgram() for type " + type.getName());
+		Log.debug("Called getShaderProgram() for type " + type.getName());
 		Integer shader = null;
 
 		if (type == ChunksFragmentShader.class)

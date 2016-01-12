@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
@@ -437,7 +437,7 @@ public abstract class Material
 	{
 		if(shader == null)
 		{
-			App.app.debug("Material.getShader()", "Called");
+			Log.debug("Material.getShader() Called");
 
 			this.shader = getAssociatedShader();
 		}
@@ -538,7 +538,7 @@ public abstract class Material
 
 	private String getPrefixVertex(ProgramParameters parameters)
 	{
-		App.app.debug("Shader.getPrefixVertex()", "Called");
+		Log.debug("Shader.getPrefixVertex() Called");
 		List<String> options = new ArrayList<String>();
 
 		options.add("");
