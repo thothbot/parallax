@@ -27,6 +27,7 @@ import org.parallax3d.parallax.tests.resources.DemoResources;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import org.parallax3d.parallax.tests.resources.GwtCellTreeResources;
 
 /**
  * Main view of the application
@@ -56,7 +57,9 @@ public class LayoutMain extends ResizeComposite
 	public LayoutMain(TreeViewModel treeModel)
 	{
 		// Create the cell tree.
-		menu = new CellTree(treeModel, null);
+		GwtCellTreeResources resource = GWT.create(GwtCellTreeResources.class);
+
+		menu = new CellTree(treeModel, null, resource);
 		menu.setAnimationEnabled(true);
 		menu.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
 		menu.ensureDebugId("menu");
