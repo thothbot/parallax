@@ -15,14 +15,18 @@
 
 	<g:DockLayoutPanel unit='PX'>
 		<!-- Main menu tree. -->
-		<g:lineStart size='225'>
-			<g:VerticalPanel ui:field='bottonPanel'>
-				<m:LayoutDock ui:field='docked' />
-				<g:ScrollPanel styleName='{style.menu}'>
-					<c:CellTree ui:field='menu' />
-				</g:ScrollPanel>
-			</g:VerticalPanel>
-		</g:lineStart>
+		<g:west size='225'>
+			<g:DockLayoutPanel>
+				<g:north size='225'>
+					<m:LayoutDock ui:field='docked' />
+				</g:north>
+				<g:center>
+					<g:ScrollPanel styleName='{style.menu}'>
+						<c:CellTree ui:field='menu' />
+					</g:ScrollPanel>
+				</g:center>
+			</g:DockLayoutPanel>
+		</g:west>
 
 		<!-- Main content area. -->
 		<g:center>

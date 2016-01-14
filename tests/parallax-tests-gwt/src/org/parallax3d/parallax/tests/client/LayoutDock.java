@@ -20,11 +20,13 @@ package org.parallax3d.parallax.tests.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.TreeViewModel;
 
-public class LayoutDock extends ResizeComposite {
+public class LayoutDock extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 

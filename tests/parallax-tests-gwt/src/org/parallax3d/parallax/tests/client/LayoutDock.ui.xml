@@ -32,17 +32,10 @@
 
     </ui:style>
 
-    <g:DockLayoutPanel unit='PT'>
-        <g:north size='20'>
-            <g:HTMLPanel>
-                <a href='http://github.com/thothbot/parallax' class='{style.contentButton}'>
-                    <g:Image resource='{resource.logo}' />
-                </a>
-            </g:HTMLPanel>
-        </g:north>
-        <g:center>
-            <g:HTMLPanel />
-        </g:center>
-    </g:DockLayoutPanel>
+    <g:HTMLPanel>
+        <a href='http://github.com/thothbot/parallax' class='{style.contentButton}'>
+            <g:Image resource='{resource.logo}' />
+        </a>
+    </g:HTMLPanel>
 
 </ui:UiBinder>
