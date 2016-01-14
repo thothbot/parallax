@@ -1,5 +1,14 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700);
+
+* html, body, table td, select, button {
+	line-height: 1.5;
+	font-family: "Roboto", sans-serif;
+	font-weight: normal;
+	color: rgba(0, 0, 0, 0.87);
+}
+
 pre {
-	margin: 0;	
+	margin: 0;
 }
 
 .gwt-PopupPanel {
