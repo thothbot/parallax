@@ -71,6 +71,6 @@ public class GeometryCube extends TestAnimation
 
 	@Override
 	public String getDescription() {
-		return "Here are used cube geometry and mesh basic material with simple texture. This example based on the three.js example.";
+		return "Here are used cube geometry and mesh basic material with simple texture.";
 	}
 }

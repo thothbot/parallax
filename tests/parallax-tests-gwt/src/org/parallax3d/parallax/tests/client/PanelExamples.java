@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.tests.client;
 
+import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.client.DataModel.Category;
 
@@ -25,11 +26,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * This widget used to show all available examples
@@ -95,11 +91,18 @@ public class PanelExamples extends ScrollPanel
 		final FlowPanel examplePanel = new FlowPanel();
 		examplePanel.setStyleName("indexExamplePanel");
 		examplePanel.ensureDebugId("examplePanel");
+
+		final SimplePanel img = new SimplePanel();
+		img.setStyleName("indexExampleImage");
 		examplePanel.add(new Image(example.getIconUrl()));
-		
+
 		Label name = new Label(example.getName());
 		name.setStyleName("text");
 		examplePanel.add(name);
+
+		Label description = new Label(example.getDescription());
+		description.setStyleName("description");
+		examplePanel.add(description);
 
 		examplesInfo.add(examplePanel);
 		examplePanel.sinkEvents(Event.ONCLICK);

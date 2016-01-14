@@ -30,6 +30,10 @@ public class TestList {
     public static final FastMap<List<? extends TestAnimation>> DATA = new FastMap<List<? extends TestAnimation>>(){{
         put("Geometries", Arrays.asList(
                 new GeometryCube()
+                ,new GeometryCube()
+                ,new GeometryCube()
+                ,new GeometryCube()
+                ,new GeometryCube()
 //            , new CopyOfGeometryCube()
 //            , new GeometryColors()
 //            , new Geometries()
