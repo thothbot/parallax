@@ -1,0 +1,48 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:org.parallax3d.parallax.tests.client"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+    <ui:with
+            field='resource'
+            type='org.parallax3d.parallax.tests.resources.DemoResources' />
+
+    <ui:style>
+
+        .contentButton {
+            margin-left: 10px;
+            color: #AAAAAA;
+            font-weight: bold;
+            cursor: hand;
+            cursor: pointer;
+            line-height: 20pt;
+            vertical-align: middle;
+            text-decoration: none;
+        }
+
+        .contentButton:hover {
+            color: #EEEEEE;
+            text-decoration: none;
+        }
+
+        .contentButton:visited {
+            color: #AAAAAA;
+            text-decoration: none;
+        }
+
+    </ui:style>
+
+    <g:DockLayoutPanel unit='PT'>
+        <g:north size='20'>
+            <g:HTMLPanel>
+                <a href='http://github.com/thothbot/parallax' class='{style.contentButton}'>
+                    <g:Image resource='{resource.logo}' />
+                </a>
+            </g:HTMLPanel>
+        </g:north>
+        <g:center>
+            <g:HTMLPanel />
+        </g:center>
+    </g:DockLayoutPanel>
+
+</ui:UiBinder>

@@ -91,25 +91,25 @@ public class WebApp extends GwtApp
 		final DataModel treeModel = new DataModel(selectionModel);
 		Set<TestAnimation> contentWidgets = treeModel.getAllContentWidgets();
 		
-		layoutMain = new LayoutMain();
+		layoutMain = new LayoutMain(treeModel);
 		// Hide loading panel
 		RootPanel.get("loading").getElement().getStyle().setVisibility(Visibility.HIDDEN);
 		// Attach layoutMain panel
 		RootLayoutPanel.get().add(layoutMain);
 		
-		layoutMain.getLinkAllExamples().addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				displayIndex();
-			}
-		});
+//		layoutMain.getLinkAllExamples().addClickHandler(new ClickHandler() {
+//			public void onClick(ClickEvent event)
+//			{
+//				displayIndex();
+//			}
+//		});
 
 		panelExamples = new PanelExamples(treeModel);
-		panelExample = new PanelExample(treeModel);
+		panelExample = new PanelExample();
 
 		// Prefetch examples when opening the Category tree nodes.
 		final List<DataModel.Category> prefetched = new ArrayList<DataModel.Category>();
-		final CellTree mainMenu = panelExample.getMenu();
+		final CellTree mainMenu = layoutMain.getMenu();
 
 		// Change the history token when a main menu item is selected.
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {

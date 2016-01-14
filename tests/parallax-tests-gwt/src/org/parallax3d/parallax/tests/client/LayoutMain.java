@@ -18,6 +18,9 @@
 
 package org.parallax3d.parallax.tests.client;
 
+import com.google.gwt.user.cellview.client.CellTree;
+import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
+import com.google.gwt.view.client.TreeViewModel;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 
 import com.google.gwt.core.client.GWT;
@@ -41,46 +44,56 @@ public class LayoutMain extends ResizeComposite
 	}
 
 	/**
-	 * The button used to show index widget.
+	 * The main menu used to navigate to examples.
 	 */
-	@UiField
-	Anchor linkIndex;
-	
-	@UiField(provided=true)
-	HorizontalPanel buttonPanel;
-	
+	@UiField(provided = true)
+	CellTree menu;
+
+	@UiField(provided = true)
+	LayoutDock docked;
+
 	/**
-	 * The page content
+	 * Main panel where will be RenderingPanel located
 	 */
-	@UiField(provided=true)
-	SimpleLayoutPanel contentWidget;
-
-	public LayoutMain()
-	{
-		buttonPanel = new HorizontalPanel();
-		contentWidget = new SimpleLayoutPanel();
-		
-		initWidget(uiBinder.createAndBindUi(this));
-	}
-
-	public Anchor getLinkAllExamples()
-	{
-		return this.linkIndex;
-	}
+	@UiField(provided = true)
+	SimpleLayoutPanel content;
 	
+	public LayoutMain(TreeViewModel treeModel)
+	{
+		// Create the cell tree.
+		menu = new CellTree(treeModel, null);
+		menu.setAnimationEnabled(true);
+		menu.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
+		menu.ensureDebugId("menu");
+
+		content = new SimpleLayoutPanel();
+
+		docked = new LayoutDock();
+
+		// Initialize the ui binder.
+		initWidget(uiBinder.createAndBindUi(this));
+
+		// Default to no content.
+		content.ensureDebugId("content");
+	}
+
+	/**
+	 * Get the main menu used to select examples.
+	 *
+	 * @return the main menu
+	 */
+	public CellTree getMenu()
+	{
+		return menu;
+	}
+
 	public void setContentWidget(SimplePanel content)
 	{
-		linkIndex.getElement().getStyle().setColor(DemoResources.SELECTED_TAB_COLOR);
-		buttonPanel.setVisible(false);
-		
-		this.contentWidget.setWidget(content);
+		this.content.setWidget(content);
 	}
 
 	public void setContentWidget(PanelExample content)
 	{
-		linkIndex.getElement().getStyle().clearColor();
-		buttonPanel.setVisible(true);
-
-		this.contentWidget.setWidget(content);	
+		this.content.setWidget(content);
 	}	
 }
