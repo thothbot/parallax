@@ -20,10 +20,8 @@ package org.parallax3d.parallax.tests.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.ResizeComposite;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.TreeViewModel;
 
 public class LayoutDock extends Composite {
@@ -33,10 +31,20 @@ public class LayoutDock extends Composite {
     interface PanelUiBinder extends UiBinder<Widget, LayoutDock> {
     }
 
+    /**
+     * The button used to show index widget.
+     */
+    @UiField
+    Anchor linkIndex;
+
     public LayoutDock()
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
     }
 
+    public Anchor getLinkIndex()
+    {
+        return this.linkIndex;
+    }
 }

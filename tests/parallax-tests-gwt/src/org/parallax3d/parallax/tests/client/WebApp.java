@@ -97,12 +97,12 @@ public class WebApp extends GwtApp
 		// Attach layoutMain panel
 		RootLayoutPanel.get().add(layoutMain);
 		
-//		layoutMain.getLinkAllExamples().addClickHandler(new ClickHandler() {
-//			public void onClick(ClickEvent event)
-//			{
-//				displayIndex();
-//			}
-//		});
+		layoutMain.getDock().getLinkIndex().addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event)
+			{
+				displayIndex();
+			}
+		});
 
 		panelExamples = new PanelExamples(treeModel);
 		panelExample = new PanelExample();

@@ -82,6 +82,10 @@ public class LayoutMain extends ResizeComposite
 		return menu;
 	}
 
+	public LayoutDock getDock() {
+		return docked;
+	}
+
 	public void setContentWidget(SimplePanel content)
 	{
 		this.content.setWidget(content);
