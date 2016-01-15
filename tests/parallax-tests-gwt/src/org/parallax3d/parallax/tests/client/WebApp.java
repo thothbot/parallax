@@ -43,10 +43,8 @@ public class WebApp extends GwtApp
 	 */
 	public static final DemoResources resources = GWT.create(DemoResources.class);
 
-	private PanelExample panelExample;
-	
 	private PanelExamples panelExamples;
-	
+
 	private LayoutMain layoutMain;
 
 	public void onInit()
@@ -79,21 +77,18 @@ public class WebApp extends GwtApp
 
 		resources.css().ensureInjected();
 
+		panelExamples = new PanelExamples();
 		layoutMain = new LayoutMain();
+
 		// Hide loading panel
 		RootPanel.get("loading").getElement().getStyle().setVisibility(Visibility.HIDDEN);
-		// Attach layoutMain panel
-		RootLayoutPanel.get().add(layoutMain);
-		
+
 		layoutMain.getDock().getLinkIndex().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
 				displayIndex();
 			}
 		});
-
-		panelExamples = new PanelExamples();
-		panelExample = new PanelExample();
 
 		// Setup a history handler to reselect the associate menu item.
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
@@ -103,8 +98,6 @@ public class WebApp extends GwtApp
 
 				if (contentWidget == null)
 					return;
-
-				layoutMain.setContentWidget(panelExample);
 
 				// Display the content widget.
 				displayContentWidget(contentWidget);
@@ -127,6 +120,12 @@ public class WebApp extends GwtApp
 		if (content == null)
 			return;
 
+		RootLayoutPanel.get().clear();
+		RootLayoutPanel.get().add(layoutMain);
+
+		PanelExample panelExample = new PanelExample();
+		layoutMain.setContentWidget(panelExample);
+
 		panelExample.setAnimation(content);
 		Window.setTitle("Parallax tests: " + content.getName());
 	}
@@ -134,7 +133,11 @@ public class WebApp extends GwtApp
 	private void displayIndex()
 	{
 		History.newItem("", true);
-		layoutMain.setContentWidget(panelExamples);
+
+		// Attach layoutMain panel
+		RootLayoutPanel.get().clear();
+		RootLayoutPanel.get().add(panelExamples);
+
 		Window.setTitle("Parallax: All Examples");
 	}
 }
