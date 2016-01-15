@@ -26,6 +26,7 @@ import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.TestList;
 import org.parallax3d.parallax.tests.client.widgets.WidgetCategorySmall;
+import org.parallax3d.parallax.tests.client.widgets.WidgetItemInfo;
 import org.parallax3d.parallax.tests.client.widgets.WidgetLogo;
 
 import java.util.List;
@@ -48,20 +49,20 @@ public class LayoutMain extends ResizeComposite
 	VerticalPanel menu;
 
 	@UiField
-	SimplePanel logo;
+	WidgetLogo logo;
 
 	/**
 	 * Main panel where will be RenderingPanel located
 	 */
 	@UiField
 	SimplePanel content;
+
+	PanelExample panelExample;
 	
 	public LayoutMain()
 	{
 		// Initialize the ui binder.
 		initWidget(uiBinder.createAndBindUi(this));
-
-		logo.add( new WidgetLogo() );
 
 		// Default to no content.
 		content.ensureDebugId("content");
@@ -72,13 +73,23 @@ public class LayoutMain extends ResizeComposite
 		}
 	}
 
-	public void setContentWidget(SimplePanel content)
-	{
-		this.content.setWidget(content);
+	@Override
+	protected void onLoad() {
+
+		if(panelExample == null)
+		{
+			panelExample = new PanelExample();
+			content.add(panelExample);
+		}
+
+		super.onLoad();
 	}
 
-	public void setContentWidget(PanelExample content)
+	public void setAnimation(final TestAnimation animation)
 	{
-		this.content.setWidget(content);
-	}	
+		logo.setInfoPanel(new WidgetItemInfo(animation));
+		panelExample.setAnimation(animation);
+	}
+
+
 }

@@ -25,40 +25,34 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
+import org.parallax3d.parallax.tests.TestAnimation;
 
-public class WidgetLogo extends Composite {
+public class WidgetItemInfo extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, WidgetLogo> {
+    interface PanelUiBinder extends UiBinder<Widget, WidgetItemInfo> {
     }
 
-    /**
-     * The button used to show index widget.
-     */
     @UiField
-    Anchor linkIndex;
+    Label name;
 
     @UiField
-    FlowPanel info;
+    Label description;
 
-    public WidgetLogo()
+    @UiField
+    Image image;
+
+    public WidgetItemInfo(TestAnimation animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        linkIndex.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event)
-            {
-                History.newItem("", true);
-            }
-        });
-    }
+        name.setText(animation.getName());
 
-    public void setInfoPanel(WidgetItemInfo info)
-    {
-        this.info.clear();
-        this.info.add(info);
+        description.setText(animation.getDescription());
+
+        image.setUrl(animation.getIconUrl());
     }
 
 }

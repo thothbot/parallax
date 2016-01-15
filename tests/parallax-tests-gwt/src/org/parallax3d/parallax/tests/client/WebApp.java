@@ -112,19 +112,17 @@ public class WebApp extends GwtApp
 			displayIndex();
 	}
 
-	private void displayContentWidget(final TestAnimation content)
+	private void displayContentWidget(final TestAnimation animation)
 	{
-		if (content == null)
+		if (animation == null)
 			return;
 
 		RootLayoutPanel.get().clear();
 		RootLayoutPanel.get().add(layoutMain);
 
-		PanelExample panelExample = new PanelExample();
-		layoutMain.setContentWidget(panelExample);
+		layoutMain.setAnimation(animation);
 
-		panelExample.setAnimation(content);
-		Window.setTitle("Parallax tests: " + content.getName());
+		Window.setTitle("Parallax tests: " + animation.getName());
 	}
 
 	private void displayIndex()

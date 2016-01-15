@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-			 xmlns:g="urn:import:com.google.gwt.user.client.ui">
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui"
+			 xmlns:w="urn:import:org.parallax3d.parallax.tests.client.widgets">
 
 	<ui:style>
 
@@ -14,7 +15,7 @@
 		<!-- Main menu tree. -->
 		<g:west size='340'>
 			<g:FlowPanel>
-				<g:SimplePanel ui:field='logo' />
+				<w:WidgetLogo ui:field='logo' />
 				<g:ScrollPanel height="90%">
 					<g:VerticalPanel ui:field='menu' styleName="{style.menu}"/>
 				</g:ScrollPanel>
