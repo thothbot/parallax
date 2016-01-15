@@ -16,19 +16,21 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.client;
+package org.parallax3d.parallax.tests.client.widgets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.TreeViewModel;
 
-public class LayoutDock extends Composite {
+public class ItemInfo extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, LayoutDock> {
+    interface PanelUiBinder extends UiBinder<Widget, ItemInfo> {
     }
 
     /**
@@ -37,10 +39,17 @@ public class LayoutDock extends Composite {
     @UiField
     Anchor linkIndex;
 
-    public LayoutDock()
+    public ItemInfo()
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
+
+        linkIndex.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event)
+            {
+                History.newItem("", true);
+            }
+        });
     }
 
     public Anchor getLinkIndex()

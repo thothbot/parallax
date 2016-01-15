@@ -18,10 +18,6 @@
 
 package org.parallax3d.parallax.tests.client;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 
 import com.google.gwt.core.client.GWT;
@@ -30,7 +26,7 @@ import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.TestList;
 import org.parallax3d.parallax.tests.client.widgets.CategorySmall;
-import org.parallax3d.parallax.tests.client.widgets.ItemSmall;
+import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -51,23 +47,21 @@ public class LayoutMain extends ResizeComposite
 	@UiField
 	VerticalPanel menu;
 
-	@UiField(provided = true)
-	LayoutDock docked;
+	@UiField
+	SimplePanel docked;
 
 	/**
 	 * Main panel where will be RenderingPanel located
 	 */
-	@UiField(provided = true)
-	SimpleLayoutPanel content;
+	@UiField
+	SimplePanel content;
 	
 	public LayoutMain()
 	{
-		content = new SimpleLayoutPanel();
-
-		docked = new LayoutDock();
-
 		// Initialize the ui binder.
 		initWidget(uiBinder.createAndBindUi(this));
+
+		docked.add( new ItemInfo() );
 
 		// Default to no content.
 		content.ensureDebugId("content");
@@ -76,10 +70,6 @@ public class LayoutMain extends ResizeComposite
 		for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet()) {
 			this.menu.add(new CategorySmall(entry.getKey(), entry.getValue()));
 		}
-	}
-
-	public LayoutDock getDock() {
-		return docked;
 	}
 
 	public void setContentWidget(SimplePanel content)

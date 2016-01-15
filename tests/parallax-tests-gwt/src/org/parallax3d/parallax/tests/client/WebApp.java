@@ -20,8 +20,6 @@ package org.parallax3d.parallax.tests.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Visibility;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
@@ -84,24 +82,22 @@ public class WebApp extends GwtApp
 		// Hide loading panel
 		RootPanel.get("loading").getElement().getStyle().setVisibility(Visibility.HIDDEN);
 
-		layoutMain.getDock().getLinkIndex().addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				displayIndex();
-			}
-		});
-
 		// Setup a history handler to reselect the associate menu item.
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event)
 			{
 				TestAnimation contentWidget = TestList.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
-				if (contentWidget == null)
-					return;
+				if (contentWidget != null)
+				{
+					// Display the content widget.
+					displayContentWidget(contentWidget);
 
-				// Display the content widget.
-				displayContentWidget(contentWidget);
+				}
+				else
+				{
+					displayIndex();
+				}
 			}
 		};
 
