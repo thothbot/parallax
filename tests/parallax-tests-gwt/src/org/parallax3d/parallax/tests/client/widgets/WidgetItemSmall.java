@@ -19,34 +19,42 @@
 package org.parallax3d.parallax.tests.client.widgets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Widget;
 import org.parallax3d.parallax.tests.TestAnimation;
 
-import java.util.List;
-
-public class CategoryLarge extends Composite {
+public class WidgetItemSmall extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, CategoryLarge> {
+    interface PanelUiBinder extends UiBinder<Widget, WidgetItemSmall> {
     }
 
     @UiField
-    Label name;
+    Image image;
 
-    @UiField
-    FlowPanel items;
-
-    public CategoryLarge(String name, List<? extends TestAnimation> animations)
+    public WidgetItemSmall(final TestAnimation animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        this.name.setText(name);
+        image.setUrl(animation.getIconUrl());
 
-        for (TestAnimation animation : animations)
-            items.add(new ItemLarge(animation));
+        this.sinkEvents(Event.ONCLICK);
+        this.addHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event)
+            {
+                History.newItem("!"+animation.getContentWidgetToken(), true);
+            }
+        }, ClickEvent.getType());
     }
 }

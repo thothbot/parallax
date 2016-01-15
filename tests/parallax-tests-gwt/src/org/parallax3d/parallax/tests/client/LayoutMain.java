@@ -25,8 +25,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.TestList;
-import org.parallax3d.parallax.tests.client.widgets.CategorySmall;
-import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
+import org.parallax3d.parallax.tests.client.widgets.WidgetCategorySmall;
+import org.parallax3d.parallax.tests.client.widgets.WidgetLogo;
 
 import java.util.List;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class LayoutMain extends ResizeComposite
 	VerticalPanel menu;
 
 	@UiField
-	SimplePanel docked;
+	SimplePanel logo;
 
 	/**
 	 * Main panel where will be RenderingPanel located
@@ -61,14 +61,14 @@ public class LayoutMain extends ResizeComposite
 		// Initialize the ui binder.
 		initWidget(uiBinder.createAndBindUi(this));
 
-		docked.add( new ItemInfo() );
+		logo.add( new WidgetLogo() );
 
 		// Default to no content.
 		content.ensureDebugId("content");
 		menu.ensureDebugId("menu");
 
 		for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet()) {
-			this.menu.add(new CategorySmall(entry.getKey(), entry.getValue()));
+			this.menu.add(new WidgetCategorySmall(entry.getKey(), entry.getValue()));
 		}
 	}
 

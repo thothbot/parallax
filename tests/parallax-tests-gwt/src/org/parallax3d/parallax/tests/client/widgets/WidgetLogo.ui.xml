@@ -1,13 +1,16 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:m="urn:import:org.parallax3d.parallax.tests.client"
-             xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
     <ui:with
             field='resource'
             type='org.parallax3d.parallax.tests.resources.DemoResources' />
 
     <ui:style>
+
+        .panel {
+            padding: 20px;
+            background-color: #2196F3 !important;
+        }
 
         .contentButton, .contentButton:visited {
             border: none;
@@ -44,9 +47,18 @@
             box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
         }
 
+        .info {
+            margin-top: 20px;
+            height: 200px;
+            background-color: white;
+            -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+        }
+
     </ui:style>
 
-    <g:FlowPanel>
+    <g:FlowPanel addStyleNames='{style.panel}'>
         <g:HTMLPanel>
             <a href='http://github.com/thothbot/parallax'>
                 <g:Image resource='{resource.logo}' />
@@ -60,6 +72,7 @@
                 <ui:msg key='apiLink'>API Reference</ui:msg>
             </a>
         </g:HTMLPanel>
+        <g:FlowPanel ui:field='info' addStyleNames='{style.info}'/>
     </g:FlowPanel>
 
 </ui:UiBinder>

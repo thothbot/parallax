@@ -8,18 +8,13 @@
 			padding: 20px;
 		}
 
-		.dock {
-			background-color: #2196F3 !important;
-			padding: 20px;
-		}
-
 	</ui:style>
 
 	<g:DockLayoutPanel unit='PX'>
 		<!-- Main menu tree. -->
 		<g:west size='340'>
 			<g:FlowPanel>
-				<g:SimplePanel ui:field='docked' styleName="{style.dock}" />
+				<g:SimplePanel ui:field='logo' />
 				<g:ScrollPanel height="90%">
 					<g:VerticalPanel ui:field='menu' styleName="{style.menu}"/>
 				</g:ScrollPanel>

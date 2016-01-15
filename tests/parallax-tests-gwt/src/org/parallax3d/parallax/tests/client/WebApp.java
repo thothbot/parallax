@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.TestList;
-import org.parallax3d.parallax.tests.client.widgets.Index;
+import org.parallax3d.parallax.tests.client.widgets.WidgetIndex;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
@@ -42,7 +42,7 @@ public class WebApp extends GwtApp
 	 */
 	public static final DemoResources resources = GWT.create(DemoResources.class);
 
-	private Index indexWidget;
+	private WidgetIndex indexWidget;
 
 	private LayoutMain layoutMain;
 
@@ -76,7 +76,7 @@ public class WebApp extends GwtApp
 
 		resources.css().ensureInjected();
 
-		indexWidget = new Index(TestList.DATA);
+		indexWidget = new WidgetIndex(TestList.DATA);
 		layoutMain = new LayoutMain();
 
 		// Hide loading panel

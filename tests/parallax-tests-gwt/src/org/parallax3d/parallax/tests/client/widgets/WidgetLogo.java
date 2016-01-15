@@ -19,37 +19,44 @@
 package org.parallax3d.parallax.tests.client.widgets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
-import org.parallax3d.parallax.tests.TestAnimation;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.*;
 
-import java.util.List;
-
-public class CategorySmall extends Composite {
+public class WidgetLogo extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, CategorySmall> {
+    interface PanelUiBinder extends UiBinder<Widget, WidgetLogo> {
     }
 
+    /**
+     * The button used to show index widget.
+     */
     @UiField
-    Label name;
+    Anchor linkIndex;
 
     @UiField
-    FlowPanel items;
+    FlowPanel info;
 
-    public CategorySmall(String name, List<? extends TestAnimation> animations)
+    public WidgetLogo()
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        this.name.setText(name);
+        linkIndex.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event)
+            {
+                History.newItem("", true);
+            }
+        });
+    }
 
-        for (TestAnimation animation : animations)
-            items.add(new ItemSmall(animation));
+    public Anchor getLinkIndex()
+    {
+        return this.linkIndex;
     }
 }

@@ -19,43 +19,32 @@
 package org.parallax3d.parallax.tests.client.widgets;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.TestAnimation;
 
-public class ItemSmall extends Composite {
+import java.util.List;
+import java.util.Map;
+
+public class WidgetIndex extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, ItemSmall> {
+    interface PanelUiBinder extends UiBinder<Widget, WidgetIndex> {
     }
 
     @UiField
-    Image image;
+    FlowPanel categories;
 
-    public ItemSmall(final TestAnimation animation)
+    public WidgetIndex(FastMap<List<? extends TestAnimation>> animations)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        image.setUrl(animation.getIconUrl());
-
-        this.sinkEvents(Event.ONCLICK);
-        this.addHandler(new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event)
-            {
-                History.newItem("!"+animation.getContentWidgetToken(), true);
-            }
-        }, ClickEvent.getType());
+        for(Map.Entry<String, List<? extends TestAnimation>> entry: animations.entrySet()) {
+            categories.add(new WidgetCategoryLarge(entry.getKey(), entry.getValue()));
+        }
     }
 }

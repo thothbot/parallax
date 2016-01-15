@@ -22,30 +22,31 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
-import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.TestAnimation;
-import org.parallax3d.parallax.tests.TestList;
 
 import java.util.List;
-import java.util.Map;
 
-public class Index extends Composite {
+public class WidgetCategoryLarge extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, Index> {
+    interface PanelUiBinder extends UiBinder<Widget, WidgetCategoryLarge> {
     }
 
     @UiField
-    FlowPanel categories;
+    Label name;
 
-    public Index(FastMap<List<? extends TestAnimation>> animations)
+    @UiField
+    FlowPanel items;
+
+    public WidgetCategoryLarge(String name, List<? extends TestAnimation> animations)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        for(Map.Entry<String, List<? extends TestAnimation>> entry: animations.entrySet()) {
-            categories.add(new CategoryLarge(entry.getKey(), entry.getValue()));
-        }
+        this.name.setText(name);
+
+        for (TestAnimation animation : animations)
+            items.add(new WidgetItemLarge(animation));
     }
 }

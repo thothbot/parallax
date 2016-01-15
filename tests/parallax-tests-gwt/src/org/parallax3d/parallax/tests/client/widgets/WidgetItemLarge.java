@@ -23,37 +23,44 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
+import org.parallax3d.parallax.tests.TestAnimation;
 
-public class ItemInfo extends Composite {
+public class WidgetItemLarge extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, ItemInfo> {
+    interface PanelUiBinder extends UiBinder<Widget, WidgetItemLarge> {
     }
 
-    /**
-     * The button used to show index widget.
-     */
     @UiField
-    Anchor linkIndex;
+    Image image;
 
-    public ItemInfo()
+    @UiField
+    Label name;
+
+    @UiField
+    Label description;
+
+    public WidgetItemLarge(final TestAnimation animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        linkIndex.addClickHandler(new ClickHandler() {
+        image.setUrl(animation.getIconUrl());
+        name.setText(animation.getName());
+        description.setText(animation.getDescription());
+
+        this.sinkEvents(Event.ONCLICK);
+        this.addHandler(new ClickHandler() {
+
+            @Override
             public void onClick(ClickEvent event)
             {
-                History.newItem("", true);
+                History.newItem("!"+animation.getContentWidgetToken(), true);
             }
-        });
-    }
-
-    public Anchor getLinkIndex()
-    {
-        return this.linkIndex;
+        }, ClickEvent.getType());
     }
 }
