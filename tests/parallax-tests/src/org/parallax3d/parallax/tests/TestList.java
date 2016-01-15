@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.tests.geometries.GeometryCube;
+import org.parallax3d.parallax.tests.animation.geometries.GeometryCube;
 
 import java.util.*;
 

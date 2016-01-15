@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.geometries;
+package org.parallax3d.parallax.tests.animation.geometries;
 
 import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.tests.TestAnimation;

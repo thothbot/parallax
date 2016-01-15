@@ -16,45 +16,44 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.resources;
+package org.parallax3d.parallax.tests.resources;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
- * Additively applies god rays from texture tGodRays to a background (tColors).
- * fGodRayIntensity attenuates the god rays.
+ * Beckmann distribution function
  * <p>
- * The code from three.js code
+ * - to be used in specular term of skin shader<br>
+ * - render a screen-aligned quad to precompute a 512 x 512 texture
+ * - from <a href="http://developer.nvidia.com/node/171">nvidia.com</a>
+ * <p>
+ * Based on three.js.code
+ * 
+ * @author thothbot
+ *
  */
-public final class GodRaysCombineShader extends Shader
+public final class BeckmannShader extends Shader
 {
-
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
-
-		@Source("shaders/godrays.vs")
+		
+		@Source("shaders/beckmann.vs")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/godraysCombine.fs")
+		@Source("shaders/beckmann.fs")
 		SourceTextResource getFragmentShader();
 	}
-	
-	public GodRaysCombineShader() 
+
+	public BeckmannShader()
 	{
 		super(Resources.INSTANCE);
 	}
 
 	@Override
-	protected void initUniforms()
-	{
-		this.addUniform("tColors", new Uniform(Uniform.TYPE.T));
-		this.addUniform("tGodRays", new Uniform(Uniform.TYPE.T));
-		this.addUniform("fGodRayIntensity", new Uniform(Uniform.TYPE.F, 0.69));
-		this.addUniform("vSunPositionScreenSpace", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
+	protected void initUniforms() {
+
 	}
 }

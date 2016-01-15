@@ -16,46 +16,57 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.resources;
+package org.parallax3d.parallax.tests.resources;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-public final class LavaShader extends Shader
+/**
+ * The god-ray generation shader.
+ * <p>
+ * First pass:
+ * <p>
+ * The input is the depth map. I found that the output from the
+ * THREE.MeshDepthMaterial material was directly suitable without
+ * requiring any treatment whatsoever.
+ * <p>
+ * The depth map is blurred along radial lines towards the "sun". The
+ * output is written to a temporary render target (I used a 1/4 sized
+ * target).
+ * <p>
+ * Pass two & three:
+ * <p>
+ * The results of the previous pass are re-blurred, each time with a
+ * decreased distance between samples.
+ * <p>
+ * The code from three.js project
+ */
+public final class GodRaysGenerateShader extends Shader
 {
-
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
-		
-		@Source("shaders/lava.vs")
+
+		@Source("shaders/godrays.vs")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/lava.fs")
+		@Source("shaders/godraysGenerate.fs")
 		SourceTextResource getFragmentShader();
 	}
-
-	public LavaShader() 
+	
+	public GodRaysGenerateShader() 
 	{
 		super(Resources.INSTANCE);
 	}
-	
+
 	@Override
-	protected void initUniforms() 
+	protected void initUniforms()
 	{
-
-		this.addUniform("fogDensity", new Uniform(Uniform.TYPE.F, 0.45 ));
-		this.addUniform("fogColor", new Uniform(Uniform.TYPE.V3, new Vector3( 0, 0, 0 ) ));
-		
-		this.addUniform("time", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2() ));
-
-		this.addUniform("uvScale", new Uniform(Uniform.TYPE.V2, new Vector2( 3.0, 1.0 ) ));
-		this.addUniform("texture1", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("texture2", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tInput", new Uniform(Uniform.TYPE.T));
+		this.addUniform("fStepSize", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("vSunPositionScreenSpace", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
 	}
 }

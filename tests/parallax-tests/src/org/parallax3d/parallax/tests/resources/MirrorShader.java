@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Copyright 2014 Alex Usachev, thothbot@gmail.com
  * 
  * This file is part of Parallax project.
  * 
@@ -16,44 +16,39 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.resources;
+package org.parallax3d.parallax.tests.resources;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-/**
- * Beckmann distribution function
- * <p>
- * - to be used in specular term of skin shader<br>
- * - render a screen-aligned quad to precompute a 512 x 512 texture
- * - from <a href="http://developer.nvidia.com/node/171">nvidia.com</a>
- * <p>
- * Based on three.js.code
- * 
- * @author thothbot
- *
- */
-public final class BeckmannShader extends Shader
+public class MirrorShader extends Shader
 {
+
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
-		
-		@Source("shaders/beckmann.vs")
+
+		@Source("shaders/mirror.vs")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/beckmann.fs")
+		@Source("shaders/mirror.fs")
 		SourceTextResource getFragmentShader();
 	}
 
-	public BeckmannShader()
+	public MirrorShader() 
 	{
 		super(Resources.INSTANCE);
 	}
 
 	@Override
-	protected void initUniforms() {
-
+	protected void initUniforms()
+	{
+		this.addUniform("mirrorColor", new Uniform(Uniform.TYPE.C, new Color(0x7F7F7F)));
+		this.addUniform("mirrorSampler",  new Uniform(Uniform.TYPE.T, null ));
+		this.addUniform("textureMatrix", new Uniform(Uniform.TYPE.M4, new Matrix4() ));
 	}
 }

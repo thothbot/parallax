@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Alex Usachev, thothbot@gmail.com
+ * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
  * This file is part of Parallax project.
  * 
@@ -16,31 +16,35 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.resources;
+package org.parallax3d.parallax.tests.resources;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Matrix4;
-import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-public class WaterShader extends Shader
+/**
+ * Additively applies god rays from texture tGodRays to a background (tColors).
+ * fGodRayIntensity attenuates the god rays.
+ * <p>
+ * The code from three.js code
+ */
+public final class GodRaysCombineShader extends Shader
 {
 
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("shaders/water.vs")
+		@Source("shaders/godrays.vs")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/water.fs")
+		@Source("shaders/godraysCombine.fs")
 		SourceTextResource getFragmentShader();
 	}
-
-	public WaterShader() 
+	
+	public GodRaysCombineShader() 
 	{
 		super(Resources.INSTANCE);
 	}
@@ -48,15 +52,9 @@ public class WaterShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("normalSampler", new Uniform(Uniform.TYPE.T, null ));
-		this.addUniform("mirrorSampler",  new Uniform(Uniform.TYPE.T, null ));
-		this.addUniform("alpha", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("time", new Uniform(Uniform.TYPE.F, 0.0 ));
-		this.addUniform("distortionScale", new Uniform(Uniform.TYPE.F, 20.0 ));
-		this.addUniform("textureMatrix", new Uniform(Uniform.TYPE.M4, new Matrix4() ));
-		this.addUniform("sunColor", new Uniform(Uniform.TYPE.C, new Color( 0x7F7F7F ) ));
-		this.addUniform("sunDirection", new Uniform(Uniform.TYPE.V3, new Vector3( 0.70707, 0.70707, 0 ) ));
-		this.addUniform("eye", new Uniform(Uniform.TYPE.V3, new Vector3( 0, 0, 0 ) ));
-		this.addUniform("waterColor", new Uniform(Uniform.TYPE.C, new Color( 0x555555 ) ));
+		this.addUniform("tColors", new Uniform(Uniform.TYPE.T));
+		this.addUniform("tGodRays", new Uniform(Uniform.TYPE.T));
+		this.addUniform("fGodRayIntensity", new Uniform(Uniform.TYPE.F, 0.69));
+		this.addUniform("vSunPositionScreenSpace", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
 	}
 }

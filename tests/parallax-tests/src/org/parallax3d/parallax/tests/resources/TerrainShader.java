@@ -16,82 +16,81 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.resources;
+package org.parallax3d.parallax.tests.resources;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.*;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.math.Vector4;
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
- * Simple skin shader
- * <p>
- * - per-pixel Blinn-Phong diffuse term mixed with half-Lambert wrap-around term (per color component)<br>
- * - physically based specular term (Kelemen/Szirmay-Kalos specular reflectance)<br>
- * - diffuse map<br>
- * - bump map<br>
- * - specular map<br>
+ * Dynamic terrain shader<br>
+ * - Blinn-Phong<br>
+ * - height + normal + diffuse1 + diffuse2 + specular + detail maps<br>
  * - point, directional and hemisphere lights (use with "lights: true" material option)<br>
- * - fog (use with "fog: true" material option)<br>
- * - shadow maps
+ * - shadow maps receiving
  * <p>
- * Based on three,js code.
- *  
+ * Based on three.js code
+ * 
  * @author thothbot
  *
  */
-public final class SkinSimpleShader extends Shader
+public final class TerrainShader extends Shader
 {
+
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("shaders/skin_simple.vs")
+		@Source("shaders/terrain.vs")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/skin_simple.fs")
+		@Source("shaders/terrain.fs")
 		SourceTextResource getFragmentShader();
 	}
 
-	public SkinSimpleShader() 
+	public TerrainShader() 
 	{
 		super(Resources.INSTANCE);
 	}
-	
+
 	@Override
-	protected void initUniforms() 
+	protected void initUniforms()
 	{
 		this.setUniforms(UniformsLib.getFog());
 		this.setUniforms(UniformsLib.getLights());
 		this.setUniforms(UniformsLib.getShadowmap());
-		
-		this.addUniform("enableBump", new Uniform(Uniform.TYPE.I, 0 ));
-		this.addUniform("enableSpecular", new Uniform(Uniform.TYPE.I, 0 ));
-		
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("tBeckmann", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("enableDiffuse1", new Uniform(Uniform.TYPE.I, false ));
+		this.addUniform("enableDiffuse2", new Uniform(Uniform.TYPE.I, false ));
+		this.addUniform("enableSpecular", new Uniform(Uniform.TYPE.I, false ));
+		this.addUniform("enableReflection", new Uniform(Uniform.TYPE.I, false ));
 
-		this.addUniform("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee ) ));
-		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
-		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0x050505 ) ));
+		this.addUniform("tDiffuse1", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tDiffuse2", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tDetail", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tNormal", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tSpecular", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("tDisplacement", new Uniform(Uniform.TYPE.T ));
 		
+		this.addUniform("uNormalScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+		
+		this.addUniform("uDisplacementBias", new Uniform(Uniform.TYPE.F, 0.0 ));
+		this.addUniform("uDisplacementScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+
+		this.addUniform("diffuse", new Uniform(Uniform.TYPE.C, new Color(0xeeeeee) ));
+		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color(0x111111) ));
+		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color(0x050505) ));
+		this.addUniform("shininess", new Uniform(Uniform.TYPE.F, 30.0 ));
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
 		
-		this.addUniform("uRoughness", new Uniform(Uniform.TYPE.F, 0.15 ));
-		this.addUniform("uSpecularBrightness", new Uniform(Uniform.TYPE.F, 0.75 ));
+		this.addUniform("uRepeatBase", new Uniform(Uniform.TYPE.V2, new Vector2(1, 1) ));
+		this.addUniform("uRepeatOverlay", new Uniform(Uniform.TYPE.V2, new Vector2(1, 1) ));
 
-		this.addUniform("bumpMap", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("bumpScale", new Uniform(Uniform.TYPE.F, 1.0 ));
-		
-		this.addUniform("specularMap", new Uniform(Uniform.TYPE.T ));
-		
-		this.addUniform("offsetRepeat", new Uniform(Uniform.TYPE.V4, new Vector4( 0, 0, 1, 1 ) ));
-		this.addUniform("uWrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 0.75, 0.375, 0.1875 ) ));
+		this.addUniform("uOffset", new Uniform(Uniform.TYPE.V2, new Vector2(0, 0) ));
 	}
 	
 	@Override
@@ -99,16 +98,15 @@ public final class SkinSimpleShader extends Shader
 	{
 		List<String> vars = Arrays.asList(
 				ChunksFragmentShader.SHADOWMAP_PARS,
-				ChunksFragmentShader.FOG_PARS,
-				ChunksFragmentShader.BUMPMAP_PARS
+				ChunksFragmentShader.FOG_PARS
 		);
-
+			
 		List<String> main = Arrays.asList(
 				ChunksFragmentShader.SHADOWMAP,
 				ChunksFragmentShader.LINEAR_TO_GAMMA,
 				ChunksFragmentShader.FOG
 		);
-
+					
 		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));		
 	}
 	
@@ -118,7 +116,7 @@ public final class SkinSimpleShader extends Shader
 		List<String> vars = Arrays.asList(
 				ChunksVertexShader.SHADOWMAP_PARS
 		);
-				
+			
 		List<String> main = Arrays.asList(
 				ChunksVertexShader.SHADOWMAP
 		);

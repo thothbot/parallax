@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Alex Usachev, thothbot@gmail.com
+ * Copyright 2012 Alex Usachev, thothbot@gmail.com
  * 
  * This file is part of Parallax project.
  * 
@@ -16,39 +16,46 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.resources;
+package org.parallax3d.parallax.tests.resources;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Matrix4;
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-public class MirrorShader extends Shader
+public final class LavaShader extends Shader
 {
 
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
-
-		@Source("shaders/mirror.vs")
+		
+		@Source("shaders/lava.vs")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/mirror.fs")
+		@Source("shaders/lava.fs")
 		SourceTextResource getFragmentShader();
 	}
 
-	public MirrorShader() 
+	public LavaShader() 
 	{
 		super(Resources.INSTANCE);
 	}
-
+	
 	@Override
-	protected void initUniforms()
+	protected void initUniforms() 
 	{
-		this.addUniform("mirrorColor", new Uniform(Uniform.TYPE.C, new Color(0x7F7F7F)));
-		this.addUniform("mirrorSampler",  new Uniform(Uniform.TYPE.T, null ));
-		this.addUniform("textureMatrix", new Uniform(Uniform.TYPE.M4, new Matrix4() ));
+
+		this.addUniform("fogDensity", new Uniform(Uniform.TYPE.F, 0.45 ));
+		this.addUniform("fogColor", new Uniform(Uniform.TYPE.V3, new Vector3( 0, 0, 0 ) ));
+		
+		this.addUniform("time", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2() ));
+
+		this.addUniform("uvScale", new Uniform(Uniform.TYPE.V2, new Vector2( 3.0, 1.0 ) ));
+		this.addUniform("texture1", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("texture2", new Uniform(Uniform.TYPE.T ));
 	}
 }

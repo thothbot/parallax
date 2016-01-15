@@ -19,7 +19,9 @@
 					<m:LayoutDock ui:field='docked' />
 				</g:north>
 				<g:center>
-					<g:VerticalPanel ui:field='menu' />
+					<g:ScrollPanel>
+						<g:VerticalPanel ui:field='menu'/>
+					</g:ScrollPanel>
 				</g:center>
 			</g:DockLayoutPanel>
 		</g:west>
