@@ -17,7 +17,7 @@
 
 	<g:DockLayoutPanel unit='PX'>
 		<!-- Main menu tree. -->
-		<g:west size='280'>
+		<g:west size='340'>
 			<g:FlowPanel>
 				<g:SimplePanel ui:field='docked' styleName="{style.dock}" />
 				<g:ScrollPanel height="90%">
