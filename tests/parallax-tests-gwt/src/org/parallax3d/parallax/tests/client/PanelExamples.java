@@ -66,7 +66,7 @@ public class PanelExamples extends ScrollPanel
 
 		this.categoriesInfo.add(examplesInfo);
 
-		for (TestAnimation example : entry.getValue())
-			examplesInfo.add(new ItemLarge(example));
+		for (TestAnimation animation : entry.getValue())
+			examplesInfo.add(new ItemLarge(animation));
 	}
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:style>
+
+        .panel {
+            height: 67px;
+            width: 100px;
+            display: inline;
+            float: left;
+            position: relative;
+            margin: 0.25rem 0.5em 0.5rem 0;
+            border-radius: 2px;
+        }
+
+        .panel:hover {
+            cursor: pointer;
+        }
+
+        .image {
+            border-radius: 2px 2px 0 0;
+            position: relative;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+    </ui:style>
+
+    <g:FlowPanel stylePrimaryName='{style.panel}'>
+
+        <g:Image ui:field="image" stylePrimaryName='{style.image}'/>
+
+    </g:FlowPanel>
+
+</ui:UiBinder>
