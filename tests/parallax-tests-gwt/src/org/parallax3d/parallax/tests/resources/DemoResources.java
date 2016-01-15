@@ -66,7 +66,7 @@ public interface DemoResources extends ClientBundle
 	@Source("images/s_noeffects.png")
 	ImageResource switchEffectNone();
 
-	@Source("css/demoView.css")
+	@Source("css/common.css")
 	@CssResource.NotStrict
 	CssResource css();
 }

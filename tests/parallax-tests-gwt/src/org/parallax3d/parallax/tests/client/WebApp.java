@@ -36,10 +36,6 @@ import org.parallax3d.parallax.tests.TestList;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 public class WebApp extends GwtApp
 {
 	/**

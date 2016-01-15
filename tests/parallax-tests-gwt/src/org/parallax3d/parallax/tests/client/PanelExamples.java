@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
 import org.parallax3d.parallax.tests.TestList;
+import org.parallax3d.parallax.tests.client.widgets.ItemLarge;
 
 import java.util.List;
 import java.util.Map;
@@ -66,45 +67,6 @@ public class PanelExamples extends ScrollPanel
 		this.categoriesInfo.add(examplesInfo);
 
 		for (TestAnimation example : entry.getValue())
-			addItem(example, examplesInfo);
-	}
-	
-	/**
-	 * Used to generate view of the examples. On click will be updated
-	 * selection model.
-	 * 
-	 * @param example content Widget
-	 * @param examplesInfo panel where render this view 
-	 */
-	public void addItem(final TestAnimation example, FlowPanel examplesInfo)
-	{
-
-		final FlowPanel examplePanel = new FlowPanel();
-		examplePanel.setStyleName("indexExamplePanel");
-		examplePanel.ensureDebugId("examplePanel");
-
-		final SimplePanel img = new SimplePanel();
-		img.setStyleName("indexExampleImage");
-		examplePanel.add(new Image(example.getIconUrl()));
-
-		Label name = new Label(example.getName());
-		name.setStyleName("text");
-		examplePanel.add(name);
-
-		Label description = new Label(example.getDescription());
-		description.setStyleName("description");
-		examplePanel.add(description);
-
-		examplesInfo.add(examplePanel);
-		examplePanel.sinkEvents(Event.ONCLICK);
-		
-		examplePanel.addHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event)
-			{
-				History.newItem("!"+example.getContentWidgetToken(), true);
-			}
-		}, ClickEvent.getType());
+			examplesInfo.add(new ItemLarge(example));
 	}
 }

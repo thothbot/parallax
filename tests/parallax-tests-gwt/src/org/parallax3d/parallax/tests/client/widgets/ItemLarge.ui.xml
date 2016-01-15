@@ -1,0 +1,66 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:style>
+
+        .panel {
+            height: 250px;
+            width: 200px;
+            display: inline;
+            float: left;
+            position: relative;
+            margin: 0.5rem 1em 1rem 0;
+            background-color: #fff;
+            border-radius: 2px;
+            -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+            -moz-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+            box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .panel:hover {
+            cursor: pointer;
+        }
+
+        .image {
+            border-radius: 2px 2px 0 0;
+            position: relative;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .name {
+            position: absolute;
+            top: 90px;
+            left: 20px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 300;
+        }
+
+        .description {
+            padding: 20px;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .indexExamplePanel:HOVER .text {
+
+        }
+
+
+    </ui:style>
+
+    <g:FlowPanel stylePrimaryName='{style.panel}'>
+
+        <g:SimplePanel>
+            <g:Image ui:field="image" stylePrimaryName='{style.image}'/>
+        </g:SimplePanel>
+        <g:Label ui:field="name" stylePrimaryName='{style.name}'/>
+        <g:Label ui:field="description" stylePrimaryName='{style.description}'/>
+
+    </g:FlowPanel>
+
+</ui:UiBinder>
