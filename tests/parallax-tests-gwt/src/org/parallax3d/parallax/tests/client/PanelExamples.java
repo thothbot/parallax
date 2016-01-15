@@ -45,8 +45,8 @@ public class PanelExamples extends ScrollPanel
 	public PanelExamples()
 	{
 		categoriesInfo = new VerticalPanel();
-		categoriesInfo.getElement().getStyle().setMarginLeft(10.0, Unit.PX);
-		categoriesInfo.getElement().getStyle().setMarginRight(10.0, Unit.PX);
+		categoriesInfo.getElement().getStyle().setMarginLeft(20.0, Unit.PX);
+		categoriesInfo.getElement().getStyle().setMarginRight(20.0, Unit.PX);
 		this.add(categoriesInfo);
 
 		for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet()) {
