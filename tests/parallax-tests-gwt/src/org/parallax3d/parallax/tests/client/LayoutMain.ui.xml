@@ -6,24 +6,28 @@
 
 	<ui:style>
 
-		.sideNav {
+		.menu {
+			padding: 20px;
+		}
+
+		.dock {
+			background-color: #2196F3 !important;
+			padding: 20px;
 		}
 
 	</ui:style>
 
 	<g:DockLayoutPanel unit='PX'>
 		<!-- Main menu tree. -->
-		<g:west size='250'>
-			<g:DockLayoutPanel styleName="{style.sideNav}">
-				<g:north size='225'>
-					<m:LayoutDock ui:field='docked' />
-				</g:north>
-				<g:center>
-					<g:ScrollPanel>
-						<g:VerticalPanel ui:field='menu'/>
-					</g:ScrollPanel>
-				</g:center>
-			</g:DockLayoutPanel>
+		<g:west size='280'>
+			<g:FlowPanel>
+				<g:SimplePanel>
+					<m:LayoutDock ui:field='docked' styleName="{style.dock}"/>
+				</g:SimplePanel>
+				<g:ScrollPanel height="90%">
+					<g:VerticalPanel ui:field='menu' styleName="{style.menu}"/>
+				</g:ScrollPanel>
+			</g:FlowPanel>
 		</g:west>
 
 		<!-- Main content area. -->

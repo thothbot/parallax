@@ -32,24 +32,20 @@
 
     </ui:style>
 
-    <g:DockLayoutPanel unit='PT'>
-        <g:north size='20'>
-            <g:HTMLPanel>
-                <a href='http://github.com/thothbot/parallax' class='{style.contentButton}'>
-                    <g:Image resource='{resource.logo}' />
-                </a>
-            </g:HTMLPanel>
-        </g:north>
-        <g:center>
-            <g:HTMLPanel>
-                <g:Anchor ui:field='linkIndex' addStyleNames='{style.contentButton}'>
-                    <ui:msg key='allExamples'>All examples</ui:msg>
-                </g:Anchor>
-                <a href='http://thothbot.github.com/parallax/docs' class='{style.contentButton}'>
-                    <ui:msg key='apiLink'>API Reference</ui:msg>
-                </a>
-            </g:HTMLPanel>
-        </g:center>
-    </g:DockLayoutPanel>
+    <g:FlowPanel>
+        <g:HTMLPanel>
+            <a href='http://github.com/thothbot/parallax' class='{style.contentButton}'>
+                <g:Image resource='{resource.logo}' />
+            </a>
+        </g:HTMLPanel>
+        <g:HTMLPanel>
+            <g:Anchor ui:field='linkIndex' addStyleNames='{style.contentButton}'>
+                <ui:msg key='allExamples'>All examples</ui:msg>
+            </g:Anchor>
+            <a href='http://thothbot.github.com/parallax/docs' class='{style.contentButton}'>
+                <ui:msg key='apiLink'>API Reference</ui:msg>
+            </a>
+        </g:HTMLPanel>
+    </g:FlowPanel>
 
 </ui:UiBinder>
