@@ -24,18 +24,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.cellview.client.CellTree;
-import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.TestList;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
@@ -86,12 +83,7 @@ public class WebApp extends GwtApp
 
 		resources.css().ensureInjected();
 
-		// Create the application panelExample.
-		final SingleSelectionModel<TestAnimation> selectionModel = new SingleSelectionModel<>();
-		final DataModel treeModel = new DataModel(selectionModel);
-		Set<TestAnimation> contentWidgets = treeModel.getAllContentWidgets();
-		
-		layoutMain = new LayoutMain(treeModel);
+		layoutMain = new LayoutMain();
 		// Hide loading panel
 		RootPanel.get("loading").getElement().getStyle().setVisibility(Visibility.HIDDEN);
 		// Attach layoutMain panel
@@ -104,54 +96,22 @@ public class WebApp extends GwtApp
 			}
 		});
 
-		panelExamples = new PanelExamples(treeModel);
+		panelExamples = new PanelExamples();
 		panelExample = new PanelExample();
-
-		// Prefetch examples when opening the Category tree nodes.
-		final List<DataModel.Category> prefetched = new ArrayList<DataModel.Category>();
-		final CellTree mainMenu = layoutMain.getMenu();
-
-		// Change the history token when a main menu item is selected.
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-			public void onSelectionChange(SelectionChangeEvent event)
-			{
-				TestAnimation selected = selectionModel.getSelectedObject();
-				if (selected != null) 
-				{
-					layoutMain.setContentWidget(panelExample);
-					History.newItem("!"+selected.getContentWidgetToken(), true);
-				}
-			}
-		});
 
 		// Setup a history handler to reselect the associate menu item.
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event)
 			{
-				// Get the content widget associated with the history token.
-				TestAnimation contentWidget = treeModel.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
+				TestAnimation contentWidget = TestList.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
 				if (contentWidget == null)
 					return;
 
-				// Expand the tree node associated with the content.
-				DataModel.Category category = treeModel.getCategoryForTest(contentWidget);
-				TreeNode node = mainMenu.getRootTreeNode();
-				int childCount = node.getChildCount();
-				for (int i = 0; i < childCount; i++) 
-				{
-					if (node.getChildValue(i) == category) 
-					{
-						node.setChildOpen(i, true, true);
-						break;
-					}
-				}
+				layoutMain.setContentWidget(panelExample);
 
 				// Display the content widget.
 				displayContentWidget(contentWidget);
-
-				// Select the node in the tree.
-				selectionModel.setSelected(contentWidget, true);
 			}
 		};
 

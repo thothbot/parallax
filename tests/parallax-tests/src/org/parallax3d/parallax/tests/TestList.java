@@ -21,9 +21,7 @@ package org.parallax3d.parallax.tests;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.geometries.GeometryCube;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class TestList {
 
@@ -126,4 +124,20 @@ public class TestList {
         ));
     }};
 
+    private static final FastMap<TestAnimation> contentToken = new FastMap<>();
+
+    static {
+        for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet())
+        {
+            for(TestAnimation animation: entry.getValue())
+            {
+                contentToken.put(animation.getContentWidgetToken(), animation);
+            }
+        }
+    }
+
+    public static TestAnimation getContentWidgetForToken(String token)
+    {
+        return contentToken.get(token);
+    }
 }

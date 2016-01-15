@@ -22,12 +22,10 @@ import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.TreeViewModel;
-import org.parallax3d.parallax.tests.resources.DemoResources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import org.parallax3d.parallax.tests.resources.GwtCellTreeResources;
 
 /**
  * Main view of the application
@@ -42,8 +40,8 @@ public class LayoutMain extends ResizeComposite
 	/**
 	 * The main menu used to navigate to examples.
 	 */
-	@UiField(provided = true)
-	CellTree menu;
+	@UiField
+	ScrollPanel menu;
 
 	@UiField(provided = true)
 	LayoutDock docked;
@@ -54,16 +52,8 @@ public class LayoutMain extends ResizeComposite
 	@UiField(provided = true)
 	SimpleLayoutPanel content;
 	
-	public LayoutMain(TreeViewModel treeModel)
+	public LayoutMain()
 	{
-		// Create the cell tree.
-		GwtCellTreeResources resource = GWT.create(GwtCellTreeResources.class);
-
-		menu = new CellTree(treeModel, null, resource);
-		menu.setAnimationEnabled(true);
-		menu.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
-		menu.ensureDebugId("menu");
-
 		content = new SimpleLayoutPanel();
 
 		docked = new LayoutDock();
@@ -73,16 +63,6 @@ public class LayoutMain extends ResizeComposite
 
 		// Default to no content.
 		content.ensureDebugId("content");
-	}
-
-	/**
-	 * Get the main menu used to select examples.
-	 *
-	 * @return the main menu
-	 */
-	public CellTree getMenu()
-	{
-		return menu;
 	}
 
 	public LayoutDock getDock() {

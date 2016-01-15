@@ -19,9 +19,7 @@
 					<m:LayoutDock ui:field='docked' />
 				</g:north>
 				<g:center>
-					<g:ScrollPanel>
-						<c:CellTree ui:field='menu' />
-					</g:ScrollPanel>
+					<g:ScrollPanel ui:field='menu' />
 				</g:center>
 			</g:DockLayoutPanel>
 		</g:west>

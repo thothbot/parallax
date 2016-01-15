@@ -112,10 +112,9 @@ pre {
 }
 
 .menuIcon {
-	width: 30px;
-	height: 20px;
-	vertical-align:middle;
+	width: 80px;
+	height: 53px;
+	vertical-align: middle;
 	margin-right: 4px;
 	margin-left: -25px;
-	border: 1px solid #999;
 }

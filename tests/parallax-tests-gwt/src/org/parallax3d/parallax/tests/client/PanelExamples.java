@@ -18,14 +18,18 @@
 
 package org.parallax3d.parallax.tests.client;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.tests.TestAnimation;
-import org.parallax3d.parallax.tests.client.DataModel.Category;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
+import org.parallax3d.parallax.tests.TestList;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * This widget used to show all available examples
@@ -37,35 +41,22 @@ public class PanelExamples extends ScrollPanel
 	 * Used to show content of the all tree categories
 	 */
 	VerticalPanel categoriesInfo;
-	
-	/**
-	 * Three model, which data used to generate the page
-	 */
-	DataModel treeModel;
-		
-	public PanelExamples(DataModel treeModel)
+
+	public PanelExamples()
 	{
-		this.treeModel = treeModel;
-		
 		categoriesInfo = new VerticalPanel();
 		categoriesInfo.getElement().getStyle().setMarginLeft(10.0, Unit.PX);
 		categoriesInfo.getElement().getStyle().setMarginRight(10.0, Unit.PX);
 		this.add(categoriesInfo);
 
-		for (Category category : treeModel.getCategories()) 
-		{
-			addCategory(category);
+		for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet()) {
+			addCategory(entry);
 		}
 	}
-	
-	/**
-	 * Generate the view of the top level Category
-	 * 
-	 * @param category top-level category
-	 */
-	public void addCategory(Category category)
+
+	public void addCategory(Map.Entry<String, List<? extends TestAnimation>> entry)
 	{
-		Label name = new Label(category.getName());
+		Label name = new Label(entry.getKey());
 		name.setStyleName("indexGroupName");
 		
 		this.categoriesInfo.add(name);
@@ -74,7 +65,7 @@ public class PanelExamples extends ScrollPanel
 
 		this.categoriesInfo.add(examplesInfo);
 
-		for (TestAnimation example : category.getExamples().getList())
+		for (TestAnimation example : entry.getValue())
 			addItem(example, examplesInfo);
 	}
 	
@@ -112,8 +103,7 @@ public class PanelExamples extends ScrollPanel
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				treeModel.getSelectionModel().setSelected(example, true);
-				
+				History.newItem("!"+example.getContentWidgetToken(), true);
 			}
 		}, ClickEvent.getType());
 	}
