@@ -18,16 +18,12 @@
 
 package org.parallax3d.parallax.tests.client;
 
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.tests.TestAnimation;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Event;
 import org.parallax3d.parallax.tests.TestList;
-import org.parallax3d.parallax.tests.client.widgets.ItemLarge;
+import org.parallax3d.parallax.tests.client.widgets.CategoryLarge;
 
 import java.util.List;
 import java.util.Map;
@@ -51,22 +47,7 @@ public class PanelExamples extends ScrollPanel
 		this.add(categoriesInfo);
 
 		for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet()) {
-			addCategory(entry);
+			this.categoriesInfo.add(new CategoryLarge(entry.getKey(), entry.getValue()));
 		}
-	}
-
-	public void addCategory(Map.Entry<String, List<? extends TestAnimation>> entry)
-	{
-		Label name = new Label(entry.getKey());
-		name.setStyleName("indexGroupName");
-		
-		this.categoriesInfo.add(name);
-		FlowPanel examplesInfo = new FlowPanel();
-		examplesInfo.ensureDebugId("examplesInfo");
-
-		this.categoriesInfo.add(examplesInfo);
-
-		for (TestAnimation animation : entry.getValue())
-			examplesInfo.add(new ItemLarge(animation));
 	}
 }

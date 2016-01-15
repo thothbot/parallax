@@ -29,6 +29,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.tests.TestAnimation;
 import org.parallax3d.parallax.tests.TestList;
+import org.parallax3d.parallax.tests.client.widgets.CategorySmall;
 import org.parallax3d.parallax.tests.client.widgets.ItemSmall;
 
 import java.util.List;
@@ -73,24 +74,8 @@ public class LayoutMain extends ResizeComposite
 		menu.ensureDebugId("menu");
 
 		for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet()) {
-			addCategory(entry);
+			this.menu.add(new CategorySmall(entry.getKey(), entry.getValue()));
 		}
-
-	}
-
-	private void addCategory(Map.Entry<String, List<? extends TestAnimation>> entry)
-	{
-		Label name = new Label(entry.getKey());
-		name.setStyleName("indexGroupName");
-
-		this.menu.add(name);
-		FlowPanel examplesInfo = new FlowPanel();
-		examplesInfo.ensureDebugId("examplesInfo");
-
-		this.menu.add(examplesInfo);
-
-		for (TestAnimation animation : entry.getValue())
-			examplesInfo.add(new ItemSmall(animation));
 	}
 
 	public LayoutDock getDock() {
