@@ -18,6 +18,10 @@
             background-color: #2196F3 !important;
         }
 
+        .logo {
+            width: 300px;
+        }
+
         .footer {
             background-color: #2196F3 !important;
             padding-top: 0!important;
@@ -61,7 +65,9 @@
         <g:FlowPanel>
 
             <g:HTMLPanel stylePrimaryName='{style.header}'/>
-            <g:HTMLPanel stylePrimaryName='{style.top}'/>
+            <g:HTMLPanel stylePrimaryName='{style.top}'>
+                <g:Image ui:field='logo' stylePrimaryName='{style.logo}'/>
+            </g:HTMLPanel>
 
             <g:FlowPanel ui:field="categories" stylePrimaryName='{style.categories}'/>
 

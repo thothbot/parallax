@@ -12,6 +12,11 @@
             background-color: #2196F3 !important;
         }
 
+        .logo {
+            width: 160px;
+            padding-bottom: 10px;
+        }
+
         .contentButton, .contentButton:visited {
             border: none;
             border-radius: 2px;
@@ -61,7 +66,7 @@
     <g:FlowPanel addStyleNames='{style.panel}'>
         <g:HTMLPanel>
             <a href='http://github.com/thothbot/parallax'>
-                <g:Image resource='{resource.logo}' />
+                <g:Image ui:field='logo' addStyleNames='{style.logo}'/>
             </a>
         </g:HTMLPanel>
         <g:HTMLPanel>

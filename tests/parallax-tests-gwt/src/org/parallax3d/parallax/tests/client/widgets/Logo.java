@@ -25,6 +25,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
+import org.parallax3d.parallax.platforms.gwt.GwtApp;
+import org.parallax3d.parallax.tests.client.WebApp;
 
 public class Logo extends Composite {
 
@@ -33,9 +35,9 @@ public class Logo extends Composite {
     interface PanelUiBinder extends UiBinder<Widget, Logo> {
     }
 
-    /**
-     * The button used to show index widget.
-     */
+    @UiField
+    Image logo;
+
     @UiField
     Anchor linkIndex;
 
@@ -46,6 +48,8 @@ public class Logo extends Composite {
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
+
+        logo.setUrl(WebApp.resources.logo().getSafeUri());
 
         linkIndex.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event)

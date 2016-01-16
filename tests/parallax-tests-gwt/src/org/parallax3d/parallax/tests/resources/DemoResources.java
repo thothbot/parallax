@@ -20,6 +20,7 @@ package org.parallax3d.parallax.tests.resources;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.DataResource;
 import com.google.gwt.resources.client.ImageResource;
 
 /**
@@ -41,13 +42,11 @@ public interface DemoResources extends ClientBundle
 	 * The destination folder for parsed source code from examples.
 	 */
 	String DST_SOURCE_EXAMPLE = DST_SOURCE + "java/";
-	
-	@Source("images/logo.png")
-	ImageResource logo();
 
-	@Source("images/s_fullscreen.png")
-	ImageResource switchFullscreen();
-	
+	@Source("images/logo.svg")
+	@DataResource.MimeType("image/svg+xml")
+	DataResource logo();
+
 	@Source("images/s_animation.png")
 	ImageResource switchAnimation();
 	
