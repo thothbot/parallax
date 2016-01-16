@@ -65,7 +65,7 @@
 
     <g:FlowPanel addStyleNames='{style.panel}'>
         <g:HTMLPanel>
-            <a href='http://github.com/thothbot/parallax'>
+            <a href='http://parallax3d.org/'>
                 <g:Image ui:field='logo' addStyleNames='{style.logo}'/>
             </a>
         </g:HTMLPanel>
