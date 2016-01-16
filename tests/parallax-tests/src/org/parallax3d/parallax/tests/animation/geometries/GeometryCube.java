@@ -73,4 +73,9 @@ public class GeometryCube extends TestAnimation
 	public String getDescription() {
 		return "Here are used cube geometry and mesh basic material with simple texture.";
 	}
+
+	@Override
+	public String getAuthor() {
+		return "<a href=\"http://threejs.org\">threejs</a>";
+	}
 }

@@ -45,6 +45,14 @@
             outline: none;
         }
 
+        .author {
+            padding-top: 5px;
+        }
+
+        .author a {
+            color: black;
+        }
+
     </ui:style>
 
     <g:FlowPanel>
@@ -53,6 +61,8 @@
             <g:Label ui:field="name" stylePrimaryName="{style.name}"/>
 
             <g:Label ui:field="description"/>
+
+            <g:HTMLPanel ui:field="author" stylePrimaryName="{style.author}"/>
         </g:FlowPanel>
 
         <g:FlowPanel stylePrimaryName="{style.buttonPanel}">

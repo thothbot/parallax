@@ -32,6 +32,8 @@ public abstract class TestAnimation extends AnimationAdapter {
      */
     public abstract String getDescription();
 
+    public abstract String getAuthor();
+
     public boolean isEnabledEffectSwitch() {
         return true;
     }

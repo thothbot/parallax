@@ -37,6 +37,9 @@ public class ItemInfo extends Composite {
     @UiField
     Label description;
 
+    @UiField
+    HTMLPanel author;
+
     public ItemInfo(TestAnimation animation)
     {
         // Initialize the ui binder.
@@ -45,6 +48,8 @@ public class ItemInfo extends Composite {
         name.setText(animation.getName());
 
         description.setText(animation.getDescription());
+
+        author.add(new HTML(animation.getAuthor()));
     }
 
 }
