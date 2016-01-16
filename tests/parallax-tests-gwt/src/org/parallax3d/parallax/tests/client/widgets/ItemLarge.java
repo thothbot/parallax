@@ -25,27 +25,33 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.tests.TestAnimation;
 
-public class WidgetItemSmall extends Composite {
+public class ItemLarge extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, WidgetItemSmall> {
+    interface PanelUiBinder extends UiBinder<Widget, ItemLarge> {
     }
 
     @UiField
     Image image;
 
-    public WidgetItemSmall(final TestAnimation animation)
+    @UiField
+    Label name;
+
+    @UiField
+    Label description;
+
+    public ItemLarge(final TestAnimation animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
         image.setUrl(animation.getIconUrl());
+        name.setText(animation.getName());
+        description.setText(animation.getDescription());
 
         this.sinkEvents(Event.ONCLICK);
         this.addHandler(new ClickHandler() {

@@ -26,11 +26,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 
-public class WidgetLogo extends Composite {
+public class Logo extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, WidgetLogo> {
+    interface PanelUiBinder extends UiBinder<Widget, Logo> {
     }
 
     /**
@@ -42,7 +42,7 @@ public class WidgetLogo extends Composite {
     @UiField
     FlowPanel info;
 
-    public WidgetLogo()
+    public Logo()
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
@@ -55,7 +55,7 @@ public class WidgetLogo extends Composite {
         });
     }
 
-    public void setInfoPanel(WidgetItemInfo info)
+    public void setInfoPanel(ItemInfo info)
     {
         this.info.clear();
         this.info.add(info);

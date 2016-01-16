@@ -29,11 +29,11 @@ import org.parallax3d.parallax.tests.TestAnimation;
 
 import java.util.List;
 
-public class WidgetCategorySmall extends Composite {
+public class CategorySmall extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, WidgetCategorySmall> {
+    interface PanelUiBinder extends UiBinder<Widget, CategorySmall> {
     }
 
     @UiField
@@ -42,7 +42,7 @@ public class WidgetCategorySmall extends Composite {
     @UiField
     FlowPanel items;
 
-    public WidgetCategorySmall(String name, List<? extends TestAnimation> animations)
+    public CategorySmall(String name, List<? extends TestAnimation> animations)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
@@ -50,6 +50,6 @@ public class WidgetCategorySmall extends Composite {
         this.name.setText(name);
 
         for (TestAnimation animation : animations)
-            items.add(new WidgetItemSmall(animation));
+            items.add(new ItemSmall(animation));
     }
 }

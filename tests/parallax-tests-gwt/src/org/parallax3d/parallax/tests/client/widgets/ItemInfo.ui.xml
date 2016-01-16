@@ -11,10 +11,8 @@
 
     <g:FlowPanel>
 
-        <g:SimplePanel>
-            <g:Image ui:field="image"/>
-        </g:SimplePanel>
         <g:Label ui:field="name"/>
+
         <g:Label ui:field="description"/>
 
     </g:FlowPanel>

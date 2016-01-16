@@ -15,7 +15,7 @@
 		<!-- Main menu tree. -->
 		<g:west size='340'>
 			<g:FlowPanel>
-				<w:WidgetLogo ui:field='logo' />
+				<w:Logo ui:field='logo' />
 				<g:ScrollPanel height="90%">
 					<g:VerticalPanel ui:field='menu' styleName="{style.menu}"/>
 				</g:ScrollPanel>

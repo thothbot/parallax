@@ -24,29 +24,27 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.tests.TestAnimation;
 
-import java.util.List;
-
-public class WidgetCategoryLarge extends Composite {
+public class ItemInfo extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, WidgetCategoryLarge> {
+    interface PanelUiBinder extends UiBinder<Widget, ItemInfo> {
     }
 
     @UiField
     Label name;
 
     @UiField
-    FlowPanel items;
+    Label description;
 
-    public WidgetCategoryLarge(String name, List<? extends TestAnimation> animations)
+    public ItemInfo(TestAnimation animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        this.name.setText(name);
+        name.setText(animation.getName());
 
-        for (TestAnimation animation : animations)
-            items.add(new WidgetItemLarge(animation));
+        description.setText(animation.getDescription());
     }
+
 }
