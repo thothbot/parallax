@@ -23,7 +23,7 @@ import org.parallax3d.parallax.tests.animation.geometries.GeometryCube;
 
 import java.util.*;
 
-public class TestList {
+public class Tests {
 
     public static final FastMap<List<? extends ParallaxTest>> DATA = new FastMap<List<? extends ParallaxTest>>(){{
         put("Geometries", Arrays.asList(
@@ -127,7 +127,7 @@ public class TestList {
     private static final FastMap<ParallaxTest> contentToken = new FastMap<>();
 
     static {
-        for(Map.Entry<String, List<? extends ParallaxTest>> entry: TestList.DATA.entrySet())
+        for(Map.Entry<String, List<? extends ParallaxTest>> entry: Tests.DATA.entrySet())
         {
             for(ParallaxTest animation: entry.getValue())
             {

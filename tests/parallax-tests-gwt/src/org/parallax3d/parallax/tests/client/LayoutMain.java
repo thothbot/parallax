@@ -24,7 +24,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.tests.ParallaxTest;
-import org.parallax3d.parallax.tests.TestList;
+import org.parallax3d.parallax.tests.Tests;
 import org.parallax3d.parallax.tests.client.widgets.CategorySmall;
 import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
 import org.parallax3d.parallax.tests.client.widgets.Logo;
@@ -68,7 +68,7 @@ public class LayoutMain extends ResizeComposite
 		content.ensureDebugId("content");
 		menu.ensureDebugId("menu");
 
-		for(Map.Entry<String, List<? extends ParallaxTest>> entry: TestList.DATA.entrySet()) {
+		for(Map.Entry<String, List<? extends ParallaxTest>> entry: Tests.DATA.entrySet()) {
 			this.menu.add(new CategorySmall(entry.getKey(), entry.getValue()));
 		}
 	}

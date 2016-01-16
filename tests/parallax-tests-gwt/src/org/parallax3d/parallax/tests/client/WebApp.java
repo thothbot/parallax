@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.tests.ParallaxTest;
-import org.parallax3d.parallax.tests.TestList;
+import org.parallax3d.parallax.tests.Tests;
 import org.parallax3d.parallax.tests.client.widgets.Index;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
@@ -76,7 +76,7 @@ public class WebApp extends GwtApp
 
 		resources.css().ensureInjected();
 
-		indexWidget = new Index(TestList.DATA);
+		indexWidget = new Index(Tests.DATA);
 		layoutMain = new LayoutMain();
 
 		// Hide loading panel
@@ -86,7 +86,7 @@ public class WebApp extends GwtApp
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event)
 			{
-				ParallaxTest contentWidget = TestList.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
+				ParallaxTest contentWidget = Tests.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
 				if (contentWidget != null)
 				{
