@@ -7,13 +7,58 @@
 
     <ui:style>
 
+        .dataPanel {
+            padding: 20px;
+        }
+
+        .name {
+            font-size: 20px;
+            font-weight: 500;
+            padding-bottom: 10px;
+        }
+
+        .buttonPanel {
+            border-top: 1px solid rgba(160, 160, 160, 0.2);
+            padding: 20px;
+        }
+
+        .button {
+            background: none !important;
+            border: none;
+            cursor: pointer;
+            color: #ffab40;
+            margin-right: 20px;
+            text-transform: uppercase;
+
+            -webkit-transition: color 0.3s ease;
+            -moz-transition: color 0.3s ease;
+            -o-transition: color 0.3s ease;
+            -ms-transition: color 0.3s ease;
+            transition: color 0.3s ease;
+        }
+
+        .button:hover {
+            color: #ffd8a6;
+        }
+
+        .button:focus {
+            outline: none;
+        }
+
     </ui:style>
 
     <g:FlowPanel>
 
-        <g:Label ui:field="name"/>
+        <g:FlowPanel stylePrimaryName="{style.dataPanel}">
+            <g:Label ui:field="name" stylePrimaryName="{style.name}"/>
 
-        <g:Label ui:field="description"/>
+            <g:Label ui:field="description"/>
+        </g:FlowPanel>
+
+        <g:FlowPanel stylePrimaryName="{style.buttonPanel}">
+            <g:Button ui:field='switchAnimation' stylePrimaryName="{style.button}">Pause</g:Button>
+            <g:Button ui:field='switchFullScreen' stylePrimaryName="{style.button}">Fullscreen</g:Button>
+        </g:FlowPanel>
 
     </g:FlowPanel>
 
