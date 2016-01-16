@@ -23,7 +23,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 
 import java.util.List;
 import java.util.Map;
@@ -38,12 +38,12 @@ public class Index extends Composite {
     @UiField
     FlowPanel categories;
 
-    public Index(FastMap<List<? extends TestAnimation>> animations)
+    public Index(FastMap<List<? extends ParallaxTest>> animations)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        for(Map.Entry<String, List<? extends TestAnimation>> entry: animations.entrySet()) {
+        for(Map.Entry<String, List<? extends ParallaxTest>> entry: animations.entrySet()) {
             categories.add(new CategoryLarge(entry.getKey(), entry.getValue()));
         }
     }

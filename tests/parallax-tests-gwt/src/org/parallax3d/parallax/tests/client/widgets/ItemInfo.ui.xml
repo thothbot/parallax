@@ -45,12 +45,12 @@
             outline: none;
         }
 
-        .author {
+        .author  {
             padding-top: 5px;
         }
 
-        .author a {
-            color: black;
+        .author, .author a {
+            color: rgba(0, 0, 0, 0.5);
         }
 
     </ui:style>

@@ -22,7 +22,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 
 import java.util.List;
 
@@ -39,14 +39,14 @@ public class CategoryLarge extends Composite {
     @UiField
     FlowPanel items;
 
-    public CategoryLarge(String name, List<? extends TestAnimation> animations)
+    public CategoryLarge(String name, List<? extends ParallaxTest> animations)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
         this.name.setText(name);
 
-        for (TestAnimation animation : animations)
+        for (ParallaxTest animation : animations)
             items.add(new ItemLarge(animation));
     }
 }

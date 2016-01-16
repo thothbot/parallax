@@ -18,19 +18,8 @@
 
 package org.parallax3d.parallax.tests.client;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.CellTree;
-import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.TreeViewModel;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Rendering;
@@ -38,8 +27,7 @@ import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.Plugin;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 import org.parallax3d.parallax.platforms.gwt.GwtRendering;
-import org.parallax3d.parallax.system.ParallaxRuntimeException;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 
 public class PanelExample extends SimpleLayoutPanel implements AnimationReadyListener
 {
@@ -47,7 +35,7 @@ public class PanelExample extends SimpleLayoutPanel implements AnimationReadyLis
 
 	private GwtRendering rendering;
 
-	private TestAnimation animation;
+	private ParallaxTest animation;
 
 	public PanelExample()
 	{
@@ -92,7 +80,7 @@ public class PanelExample extends SimpleLayoutPanel implements AnimationReadyLis
 		super.onUnload();
 	}
 
-	public void setAnimation(final TestAnimation animation)
+	public void setAnimation(final ParallaxTest animation)
 	{
 		this.animation = animation;
 	}

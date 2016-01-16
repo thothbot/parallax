@@ -28,7 +28,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 
 public class ItemSmall extends Composite {
 
@@ -40,7 +40,7 @@ public class ItemSmall extends Composite {
     @UiField
     Image image;
 
-    public ItemSmall(final TestAnimation animation)
+    public ItemSmall(final ParallaxTest animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));

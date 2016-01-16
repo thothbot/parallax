@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.TestList;
 import org.parallax3d.parallax.tests.client.widgets.Index;
 import org.parallax3d.parallax.tests.resources.DemoResources;
@@ -86,7 +86,7 @@ public class WebApp extends GwtApp
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event)
 			{
-				TestAnimation contentWidget = TestList.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
+				ParallaxTest contentWidget = TestList.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
 				if (contentWidget != null)
 				{
@@ -112,7 +112,7 @@ public class WebApp extends GwtApp
 			displayIndex();
 	}
 
-	private void displayContentWidget(final TestAnimation animation)
+	private void displayContentWidget(final ParallaxTest animation)
 	{
 		if (animation == null)
 			return;

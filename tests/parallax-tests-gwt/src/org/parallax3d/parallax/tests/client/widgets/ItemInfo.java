@@ -22,7 +22,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 
 public class ItemInfo extends Composite {
 
@@ -40,7 +40,7 @@ public class ItemInfo extends Composite {
     @UiField
     HTMLPanel author;
 
-    public ItemInfo(TestAnimation animation)
+    public ItemInfo(ParallaxTest animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));

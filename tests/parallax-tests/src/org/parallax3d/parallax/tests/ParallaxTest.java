@@ -20,7 +20,7 @@ package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.AnimationAdapter;
 
-public abstract class TestAnimation extends AnimationAdapter {
+public abstract class ParallaxTest extends AnimationAdapter {
 
     /**
      * The name of the example.

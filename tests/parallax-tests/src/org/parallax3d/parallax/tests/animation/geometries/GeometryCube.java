@@ -19,14 +19,14 @@
 package org.parallax3d.parallax.tests.animation.geometries;
 
 import org.parallax3d.parallax.Rendering;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 
-public class GeometryCube extends TestAnimation
+public class GeometryCube extends ParallaxTest
 {
 	private static final String texture = "./static/textures/crate.gif";
 	PerspectiveCamera camera;

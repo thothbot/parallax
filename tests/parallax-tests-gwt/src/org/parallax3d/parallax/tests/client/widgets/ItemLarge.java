@@ -26,7 +26,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 
 public class ItemLarge extends Composite {
 
@@ -44,7 +44,7 @@ public class ItemLarge extends Composite {
     @UiField
     Label description;
 
-    public ItemLarge(final TestAnimation animation)
+    public ItemLarge(final ParallaxTest animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));

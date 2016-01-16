@@ -25,7 +25,7 @@ import java.util.*;
 
 public class TestList {
 
-    public static final FastMap<List<? extends TestAnimation>> DATA = new FastMap<List<? extends TestAnimation>>(){{
+    public static final FastMap<List<? extends ParallaxTest>> DATA = new FastMap<List<? extends ParallaxTest>>(){{
         put("Geometries", Arrays.asList(
                 new GeometryCube()
                 ,new GeometryCube()
@@ -124,19 +124,19 @@ public class TestList {
         ));
     }};
 
-    private static final FastMap<TestAnimation> contentToken = new FastMap<>();
+    private static final FastMap<ParallaxTest> contentToken = new FastMap<>();
 
     static {
-        for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet())
+        for(Map.Entry<String, List<? extends ParallaxTest>> entry: TestList.DATA.entrySet())
         {
-            for(TestAnimation animation: entry.getValue())
+            for(ParallaxTest animation: entry.getValue())
             {
                 contentToken.put(animation.getContentWidgetToken(), animation);
             }
         }
     }
 
-    public static TestAnimation getContentWidgetForToken(String token)
+    public static ParallaxTest getContentWidgetForToken(String token)
     {
         return contentToken.get(token);
     }

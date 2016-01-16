@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 
 import java.util.List;
 
@@ -42,14 +42,14 @@ public class CategorySmall extends Composite {
     @UiField
     FlowPanel items;
 
-    public CategorySmall(String name, List<? extends TestAnimation> animations)
+    public CategorySmall(String name, List<? extends ParallaxTest> animations)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
         this.name.setText(name);
 
-        for (TestAnimation animation : animations)
+        for (ParallaxTest animation : animations)
             items.add(new ItemSmall(animation));
     }
 }

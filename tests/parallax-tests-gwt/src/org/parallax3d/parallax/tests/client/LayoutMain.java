@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.*;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import org.parallax3d.parallax.tests.TestAnimation;
+import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.TestList;
 import org.parallax3d.parallax.tests.client.widgets.CategorySmall;
 import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
@@ -68,7 +68,7 @@ public class LayoutMain extends ResizeComposite
 		content.ensureDebugId("content");
 		menu.ensureDebugId("menu");
 
-		for(Map.Entry<String, List<? extends TestAnimation>> entry: TestList.DATA.entrySet()) {
+		for(Map.Entry<String, List<? extends ParallaxTest>> entry: TestList.DATA.entrySet()) {
 			this.menu.add(new CategorySmall(entry.getKey(), entry.getValue()));
 		}
 	}
@@ -85,7 +85,7 @@ public class LayoutMain extends ResizeComposite
 		super.onLoad();
 	}
 
-	public void setAnimation(final TestAnimation animation)
+	public void setAnimation(final ParallaxTest animation)
 	{
 		logo.setInfoPanel(new ItemInfo(animation));
 		panelExample.setAnimation(animation);
