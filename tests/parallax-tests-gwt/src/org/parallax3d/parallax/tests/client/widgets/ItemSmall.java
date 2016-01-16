@@ -27,6 +27,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import org.parallax3d.parallax.tests.ParallaxTest;
 
@@ -40,12 +41,21 @@ public class ItemSmall extends Composite {
     @UiField
     Image image;
 
-    public ItemSmall(final ParallaxTest animation)
+    @UiField
+    Label name;
+
+    @UiField
+    Label category;
+
+    public ItemSmall(String category, final ParallaxTest animation)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
-        image.setUrl(animation.getIconUrl());
+        this.name.setText(animation.getName());
+        this.category.setText(category);
+
+        this.image.setUrl(animation.getIconUrl());
 
         this.sinkEvents(Event.ONCLICK);
         this.addHandler(new ClickHandler() {

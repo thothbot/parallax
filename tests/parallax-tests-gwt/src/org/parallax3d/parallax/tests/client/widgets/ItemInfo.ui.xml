@@ -28,6 +28,7 @@
             cursor: pointer;
             color: #ffab40;
             margin-right: 20px;
+            padding: 0;
             text-transform: uppercase;
 
             -webkit-transition: color 0.3s ease;

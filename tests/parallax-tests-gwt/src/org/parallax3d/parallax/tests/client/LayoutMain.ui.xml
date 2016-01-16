@@ -6,7 +6,7 @@
 	<ui:style>
 
 		.menu {
-			padding: 20px;
+			padding: 15px 0;
 		}
 
 	</ui:style>
@@ -17,7 +17,7 @@
 			<g:FlowPanel>
 				<w:Logo ui:field='logo' />
 				<g:ScrollPanel height="90%">
-					<g:VerticalPanel ui:field='menu' styleName="{style.menu}"/>
+					<g:FlowPanel ui:field='menu' stylePrimaryName='{style.menu}'/>
 				</g:ScrollPanel>
 			</g:FlowPanel>
 		</g:west>

@@ -25,8 +25,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
-import org.parallax3d.parallax.tests.client.widgets.CategorySmall;
 import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
+import org.parallax3d.parallax.tests.client.widgets.ItemSmall;
 import org.parallax3d.parallax.tests.client.widgets.Logo;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class LayoutMain extends ResizeComposite
 	 * The main menu used to navigate to examples.
 	 */
 	@UiField
-	VerticalPanel menu;
+	FlowPanel menu;
 
 	@UiField
 	Logo logo;
@@ -68,9 +68,9 @@ public class LayoutMain extends ResizeComposite
 		content.ensureDebugId("content");
 		menu.ensureDebugId("menu");
 
-		for(Map.Entry<String, List<? extends ParallaxTest>> entry: Tests.DATA.entrySet()) {
-			this.menu.add(new CategorySmall(entry.getKey(), entry.getValue()));
-		}
+		for(Map.Entry<String, List<? extends ParallaxTest>> entry: Tests.DATA.entrySet())
+			for (ParallaxTest test : entry.getValue())
+				this.menu.add(new ItemSmall(entry.getKey(), test));
 	}
 
 	@Override
