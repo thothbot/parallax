@@ -127,7 +127,7 @@ public class GwtRendering implements Rendering {
 			listener.onResize( this );
 
 			for(AnimationReadyListener ready: animationReadyListener)
-				ready.onAnimationReady();
+				ready.onAnimationReady( listener );
 
 		} catch (Throwable t) {
 			Log.error("GwtRendering: exception: " + t.getMessage(), t);

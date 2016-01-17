@@ -18,8 +18,10 @@
 
 package org.parallax3d.parallax.events;
 
+import org.parallax3d.parallax.Animation;
+
 public interface AnimationReadyListener {
 
-	public void onAnimationReady();
+	public void onAnimationReady(Animation animation );
 
 }

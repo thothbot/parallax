@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.*;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Rendering;
@@ -97,13 +98,12 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 						rendering = new GwtRendering(PageExample.this.content, ((GwtApp) App.app).getConfig(), new GwtRendering.RenderingReadyListener() {
 							@Override
 							public void onRenderingReady(Rendering rendering) {
-								if(PageExample.this.gwtReady != null)
-									PageExample.this.gwtReady.onRenderingReady(rendering);
+								if(gwtReady != null)
+									gwtReady.onRenderingReady(rendering);
 							}
 						});
 
 						((GwtApp)App.app).setRendering(rendering);
-						rendering = (GwtRendering) App.app.getRendering();
 						rendering.addAnimationReadyListener(PageExample.this);
 					}
 					catch (Throwable e)
@@ -118,8 +118,8 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 		}
 		else
 		{
-			if(PageExample.this.gwtReady != null)
-				PageExample.this.gwtReady.onRenderingReady(rendering);
+			if(gwtReady != null)
+				gwtReady.onRenderingReady(rendering);
 		}
 
 		super.onLoad();
@@ -131,14 +131,9 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	}
 
 	@Override
-	public void onAnimationReady() {
-
-	}
-
-	public void setAnimation(final ParallaxTest animation)
+	public void onAnimationReady(Animation animation)
 	{
-		logo.setInfoPanel(new ItemInfo(animation));
-		rendering.setAnimation(animation);
+		logo.setInfoPanel(new ItemInfo((ParallaxTest) animation));
 	}
 
 }

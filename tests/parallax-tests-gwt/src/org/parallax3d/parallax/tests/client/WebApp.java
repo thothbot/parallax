@@ -80,20 +80,20 @@ public class WebApp extends GwtApp {
         // Setup a history handler to reselect the associate menu item.
         final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
             public void onValueChange(ValueChangeEvent<String> event) {
-                final ParallaxTest contentWidget = Tests.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
+                final ParallaxTest test = Tests.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
                 RootLayoutPanel.get().clear();
 
-                if (contentWidget != null) {
+                if (test != null) {
                     RootLayoutPanel.get().add(pageExample);
                     pageExample.addGwtReadyListener(new GwtRendering.RenderingReadyListener() {
                         @Override
                         public void onRenderingReady(Rendering rendering) {
-                            pageExample.setAnimation(contentWidget);
+                            rendering.setAnimation(test);
                         }
                     });
 
-                    Window.setTitle("Parallax: " + contentWidget.getName());
+                    Window.setTitle("Parallax: " + test.getName());
                 } else {
                     RootLayoutPanel.get().add(pageIndex);
 
