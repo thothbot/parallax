@@ -29,11 +29,11 @@ import org.parallax3d.parallax.tests.client.WebApp;
 import java.util.List;
 import java.util.Map;
 
-public class Index extends Composite {
+public class PageIndex extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-    interface PanelUiBinder extends UiBinder<Widget, Index> {
+    interface PanelUiBinder extends UiBinder<Widget, PageIndex> {
     }
 
     @UiField
@@ -42,7 +42,7 @@ public class Index extends Composite {
     @UiField
     FlowPanel categories;
 
-    public Index(FastMap<List<? extends ParallaxTest>> animations)
+    public PageIndex(FastMap<List<? extends ParallaxTest>> animations)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));

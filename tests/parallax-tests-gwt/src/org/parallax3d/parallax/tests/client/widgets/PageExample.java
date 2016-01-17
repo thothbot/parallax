@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.client;
+package org.parallax3d.parallax.tests.client.widgets;
 
 import com.google.gwt.user.client.ui.*;
 
@@ -25,6 +25,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
+import org.parallax3d.parallax.tests.client.PanelExample;
 import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
 import org.parallax3d.parallax.tests.client.widgets.ItemSmall;
 import org.parallax3d.parallax.tests.client.widgets.Logo;
@@ -35,11 +36,11 @@ import java.util.Map;
 /**
  * Main view of the application
  */
-public class LayoutMain extends ResizeComposite
+public class PageExample extends ResizeComposite
 {
 	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
-	interface PanelUiBinder extends UiBinder<Widget, LayoutMain> {
+	interface PanelUiBinder extends UiBinder<Widget, PageExample> {
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class LayoutMain extends ResizeComposite
 
 	PanelExample panelExample;
 	
-	public LayoutMain()
+	public PageExample()
 	{
 		// Initialize the ui binder.
 		initWidget(uiBinder.createAndBindUi(this));

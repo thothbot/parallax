@@ -19,7 +19,6 @@
 package org.parallax3d.parallax.tests.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
@@ -31,7 +30,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
-import org.parallax3d.parallax.tests.client.widgets.Index;
+import org.parallax3d.parallax.tests.client.widgets.PageExample;
+import org.parallax3d.parallax.tests.client.widgets.PageIndex;
 import org.parallax3d.parallax.tests.resources.DemoResources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
@@ -42,9 +42,8 @@ public class WebApp extends GwtApp
 	 */
 	public static final DemoResources resources = GWT.create(DemoResources.class);
 
-	private Index indexWidget;
-
-	private LayoutMain layoutMain;
+	private PageIndex pageIndex;
+	private PageExample pageExample;
 
 	public void onInit()
 	{
@@ -76,11 +75,8 @@ public class WebApp extends GwtApp
 
 		resources.css().ensureInjected();
 
-		indexWidget = new Index(Tests.DATA);
-		layoutMain = new LayoutMain();
-
-		// Hide loading panel
-		RootPanel.get("loading").getElement().getStyle().setVisibility(Visibility.HIDDEN);
+		pageIndex = new PageIndex(Tests.DATA);
+		pageExample = new PageExample();
 
 		// Setup a history handler to reselect the associate menu item.
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
@@ -88,51 +84,29 @@ public class WebApp extends GwtApp
 			{
 				ParallaxTest contentWidget = Tests.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
+				RootLayoutPanel.get().clear();
+
 				if (contentWidget != null)
 				{
-					// Display the content widget.
-					displayContentWidget(contentWidget);
+					RootLayoutPanel.get().add(pageExample);
+					pageExample.setAnimation(contentWidget);
 
+					Window.setTitle("Parallax: " + contentWidget.getName());
 				}
 				else
 				{
-					displayIndex();
+					RootLayoutPanel.get().add(pageIndex);
+
+					History.newItem("", true);
+					Window.setTitle("Parallax: Cross-platform Java 3D library");
 				}
 			}
 		};
 
 		History.addValueChangeHandler(historyHandler);
+		History.fireCurrentHistoryState();
 
-		// Show the initial example.
-		if (History.getToken().length() > 0)
-			History.fireCurrentHistoryState();
-
-		// Use the first token available.
-		else
-			displayIndex();
-	}
-
-	private void displayContentWidget(final ParallaxTest animation)
-	{
-		if (animation == null)
-			return;
-
-		RootLayoutPanel.get().clear();
-		RootLayoutPanel.get().add(layoutMain);
-
-		layoutMain.setAnimation(animation);
-
-		Window.setTitle("Parallax tests: " + animation.getName());
-	}
-
-	private void displayIndex()
-	{
-		History.newItem("", true);
-
-		// Attach layoutMain panel
-		RootLayoutPanel.get().clear();
-		RootLayoutPanel.get().add(indexWidget);
-
-		Window.setTitle("Parallax: All Examples");
+		// Remove loading panel
+		RootPanel.get("loading").getElement().removeFromParent();
 	}
 }
