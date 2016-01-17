@@ -104,7 +104,7 @@ public class WebApp extends GwtApp
 		History.addValueChangeHandler(historyHandler);
 
 		// Show the initial example.
-		if (History.getToken().length() > 0) 
+		if (History.getToken().length() > 0)
 			History.fireCurrentHistoryState();
 
 		// Use the first token available.

@@ -7,11 +7,14 @@
 	<style type="text/css">
 		@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700);
 
-		* html,body {
+		* html, body {
+			padding: 0;
+			margin: 0;
 			line-height: 1.5;
 			font-family: "Roboto", sans-serif;
 			font-weight: normal;
-			color: rgba(0, 0, 0, 0.87);
+			color: white;
+			background-color: #2196F3 !important;
 		}
 
 		.noscript {
@@ -21,30 +24,46 @@
 		}
 
 		div#loading {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			margin-left: -64px;
-			margin-top: -64px;
-			text-align: center;
-			border: 1px solid #AAAAAA;
-			padding: 10px;
+			position:absolute;
+			width:300px;
+			top:50%;
+			left:50%;
+			margin:-100px 0 0 -150px;
+			font-size: 21px;
 		}
 
-		div#loading img,span {
-			vertical-align: middle;
-		}
+		.progress {
+			position: relative;
+			height: 5px;
+			display: block;
+			width: 100%;
+			background-color: white;
+			overflow: hidden; }
+
+		.progress .indeterminate { background-color: #42A5F5; }
+		.progress .indeterminate:before{content:'';position:absolute;background-color:inherit;top:0;left:0;bottom:0;will-change:left, right;-webkit-animation:indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;-moz-animation:indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;-ms-animation:indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;-o-animation:indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;animation:indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite}
+		.progress .indeterminate:after{content:'';position:absolute;background-color:inherit;top:0;left:0;bottom:0;will-change:left, right;-webkit-animation:indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;-moz-animation:indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;-ms-animation:indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;-o-animation:indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;animation:indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;-webkit-animation-delay:1.15s;-moz-animation-delay:1.15s;-ms-animation-delay:1.15s;-o-animation-delay:1.15s;animation-delay:1.15s}
+
+		@-webkit-keyframes "indeterminate"{0%{left:-35%;right:100%;}60%{left:100%;right:-90%;}100%{left:100%;right:-90%;}}
+		@-moz-keyframes "indeterminate"{0%{left:-35%;right:100%;}60%{left:100%;right:-90%;}100%{left:100%;right:-90%;}}
+		@keyframes "indeterminate"{0%{left:-35%;right:100%;}60%{left:100%;right:-90%;}100%{left:100%;right:-90%;}}
+		@-webkit-keyframes "indeterminate-short"{0%{left:-200%;right:100%;}60%{left:107%;right:-8%;}100%{left:107%;right:-8%;}}
+		@-moz-keyframes "indeterminate-short"{0%{left:-200%;right:100%;}60%{left:107%;right:-8%;}100%{left:107%;right:-8%;}}
+		@keyframes "indeterminate-short"{0%{left:-200%;right:100%;}60%{left:107%;right:-8%;}100%{left:107%;right:-8%;}}
+
 	</style>
 </head>
 
 <body>
 
+<div class="progress"><div class="indeterminate"></div></div>
+
 <a class="superdev" href="javascript:%7B%20window.__gwt_bookmarklet_params%20%3D%20%7B'server_url'%3A'http%3A%2F%2Flocalhost%3A9876%2F'%7D%3B%20var%20s%20%3D%20document.createElement('script')%3B%20s.src%20%3D%20'http%3A%2F%2Flocalhost%3A9876%2Fdev_mode_on.js'%3B%20void(document.getElementsByTagName('head')%5B0%5D.appendChild(s))%3B%7D">&#8635;</a>
 <script type="text/javascript" src="gwt/gwt.nocache.js"></script>
 
 <div id="loading">
-	<img src="loading.gif" width="64" height="64"/>
-	<span>Loading...</span>
+	<img src="logo.svg" width="300px"/>
+	<div>Cross-platform Java 3D library</div>
 </div>
 
 <noscript>
