@@ -97,14 +97,15 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 
 						rendering = new GwtRendering(PageExample.this.content, ((GwtApp) App.app).getConfig(), new GwtRendering.RenderingReadyListener() {
 							@Override
-							public void onRenderingReady(Rendering rendering) {
+							public void onRenderingReady(GwtRendering rendering) {
+								((GwtApp)App.app).setRendering(rendering);
+								rendering.addAnimationReadyListener(PageExample.this);
+
 								if(gwtReady != null)
 									gwtReady.onRenderingReady(rendering);
 							}
 						});
 
-						((GwtApp)App.app).setRendering(rendering);
-						rendering.addAnimationReadyListener(PageExample.this);
 					}
 					catch (Throwable e)
 					{

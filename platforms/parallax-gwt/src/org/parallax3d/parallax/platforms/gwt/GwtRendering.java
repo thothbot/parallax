@@ -44,7 +44,7 @@ public class GwtRendering implements Rendering {
 
 	public interface RenderingReadyListener {
 
-		void onRenderingReady(Rendering rendering);
+		void onRenderingReady(GwtRendering rendering);
 
 	}
 
