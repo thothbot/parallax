@@ -16,16 +16,23 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.client.widgets;
+package org.parallax3d.parallax.tests.client;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.*;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.events.AnimationReadyListener;
+import org.parallax3d.parallax.platforms.gwt.GwtApp;
+import org.parallax3d.parallax.platforms.gwt.GwtRendering;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
-import org.parallax3d.parallax.tests.client.PanelExample;
+import org.parallax3d.parallax.tests.client.widgets.AlertBadCanvas;
 import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
 import org.parallax3d.parallax.tests.client.widgets.ItemSmall;
 import org.parallax3d.parallax.tests.client.widgets.Logo;
@@ -36,7 +43,7 @@ import java.util.Map;
 /**
  * Main view of the application
  */
-public class PageExample extends ResizeComposite
+public class PageExample extends ResizeComposite implements AnimationReadyListener
 {
 	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
@@ -58,8 +65,10 @@ public class PageExample extends ResizeComposite
 	@UiField
 	SimplePanel content;
 
-	PanelExample panelExample;
-	
+	private GwtRendering rendering;
+
+	GwtRendering.RenderingReadyListener gwtReady;
+
 	public PageExample()
 	{
 		// Initialize the ui binder.
@@ -77,20 +86,59 @@ public class PageExample extends ResizeComposite
 	@Override
 	protected void onLoad() {
 
-		if(panelExample == null)
+		if(rendering == null)
 		{
-			panelExample = new PanelExample();
-			content.add(panelExample);
+			Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+				@Override
+				public void execute()
+				{
+					try {
+
+						rendering = new GwtRendering(PageExample.this.content, ((GwtApp) App.app).getConfig(), new GwtRendering.RenderingReadyListener() {
+							@Override
+							public void onRenderingReady(Rendering rendering) {
+								if(PageExample.this.gwtReady != null)
+									PageExample.this.gwtReady.onRenderingReady(rendering);
+							}
+						});
+
+						((GwtApp)App.app).setRendering(rendering);
+						rendering = (GwtRendering) App.app.getRendering();
+						rendering.addAnimationReadyListener(PageExample.this);
+					}
+					catch (Throwable e)
+					{
+						PageExample.this.content.clear();
+						String msg = "Sorry, your browser doesn't seem to support WebGL";
+						Log.error("setRendering: " + msg, e);
+						PageExample.this.content.add(new AlertBadCanvas(msg));
+					}
+				}
+			});
+		}
+		else
+		{
+			if(PageExample.this.gwtReady != null)
+				PageExample.this.gwtReady.onRenderingReady(rendering);
 		}
 
 		super.onLoad();
 	}
 
+	public void addGwtReadyListener(GwtRendering.RenderingReadyListener gwtReady)
+	{
+		this.gwtReady = gwtReady;
+	}
+
+	@Override
+	public void onAnimationReady() {
+
+	}
+
 	public void setAnimation(final ParallaxTest animation)
 	{
 		logo.setInfoPanel(new ItemInfo(animation));
-		panelExample.setAnimation(animation);
+		rendering.setAnimation(animation);
 	}
-
 
 }

@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.client.widgets;
+package org.parallax3d.parallax.tests.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -24,7 +24,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.Tests;
 import org.parallax3d.parallax.tests.client.WebApp;
+import org.parallax3d.parallax.tests.client.widgets.CategoryLarge;
 
 import java.util.List;
 import java.util.Map;
@@ -42,14 +44,14 @@ public class PageIndex extends Composite {
     @UiField
     FlowPanel categories;
 
-    public PageIndex(FastMap<List<? extends ParallaxTest>> animations)
+    public PageIndex()
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
 
         logo.setUrl(WebApp.resources.logo().getSafeUri());
 
-        for(Map.Entry<String, List<? extends ParallaxTest>> entry: animations.entrySet()) {
+        for(Map.Entry<String, List<? extends ParallaxTest>> entry: Tests.DATA.entrySet()) {
             categories.add(new CategoryLarge(entry.getKey(), entry.getValue()));
         }
     }

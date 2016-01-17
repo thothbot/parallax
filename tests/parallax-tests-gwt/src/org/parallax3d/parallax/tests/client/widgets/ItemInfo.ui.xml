@@ -3,7 +3,7 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
     <ui:with
             field='resource'
-            type='org.parallax3d.parallax.tests.resources.DemoResources' />
+            type='org.parallax3d.parallax.tests.resources.Resources' />
 
     <ui:style>
 

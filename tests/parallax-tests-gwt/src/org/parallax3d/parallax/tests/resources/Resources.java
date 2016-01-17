@@ -26,26 +26,15 @@ import com.google.gwt.resources.client.ImageResource;
 /**
  * The resources and styles used throughout the Demo.
  */
-public interface DemoResources extends ClientBundle
+public interface Resources extends ClientBundle
 {
-	/**
-	 * The text color of the selected link.
-	 */
-	String SELECTED_TAB_COLOR = "#EEEEEE";
-	
-	/**
-	 * The path to source code for examples.
-	 */
-	String DST_SOURCE = "demoSource/";
-	
-	/**
-	 * The destination folder for parsed source code from examples.
-	 */
-	String DST_SOURCE_EXAMPLE = DST_SOURCE + "java/";
-
-	@Source("images/logo.svg")
+	@Source("logo.svg")
 	@DataResource.MimeType("image/svg+xml")
 	DataResource logo();
+
+	@Source("common.css")
+	@CssResource.NotStrict
+	CssResource css();
 
 	@Source("images/s_animation.png")
 	ImageResource switchAnimation();
@@ -64,8 +53,4 @@ public interface DemoResources extends ClientBundle
 	
 	@Source("images/s_noeffects.png")
 	ImageResource switchEffectNone();
-
-	@Source("css/common.css")
-	@CssResource.NotStrict
-	CssResource css();
 }

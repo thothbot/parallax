@@ -28,85 +28,85 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.platforms.gwt.GwtRendering;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
-import org.parallax3d.parallax.tests.client.widgets.PageExample;
-import org.parallax3d.parallax.tests.client.widgets.PageIndex;
-import org.parallax3d.parallax.tests.resources.DemoResources;
+import org.parallax3d.parallax.tests.resources.Resources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
-public class WebApp extends GwtApp
-{
-	/**
-	 * The static resources used throughout the Demo.
-	 */
-	public static final DemoResources resources = GWT.create(DemoResources.class);
+public class WebApp extends GwtApp {
+    /**
+     * The static resources used throughout the Demo.
+     */
+    public static final Resources resources = GWT.create(Resources.class);
 
-	private PageIndex pageIndex;
-	private PageExample pageExample;
+    private PageIndex pageIndex;
+    private PageExample pageExample;
 
-	public void onInit()
-	{
-		GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
-			public void onUncaughtException(Throwable throwable) {
-				Log.error("Uncaught exception", throwable);
-				if (!GWT.isScript()) {
-					String text = "Uncaught exception: ";
-					while (throwable != null) {
-						StackTraceElement[] stackTraceElements = throwable.getStackTrace();
-						text += throwable.toString() + "\n";
+    public void onInit() {
 
-						for (int i = 0; i < stackTraceElements.length; i++)
-							text += "    at " + stackTraceElements[i] + "\n";
+        resources.css().ensureInjected();
 
-						throwable = throwable.getCause();
-						if (throwable != null)
-							text += "Caused by: ";
-					}
+        GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
+            public void onUncaughtException(Throwable throwable) {
+                Log.error("Uncaught exception", throwable);
+                if (!GWT.isScript()) {
+                    String text = "Uncaught exception: ";
+                    while (throwable != null) {
+                        StackTraceElement[] stackTraceElements = throwable.getStackTrace();
+                        text += throwable.toString() + "\n";
 
-					DialogBox dialogBox = new DialogBox(true);
-					DOM.setStyleAttribute(dialogBox.getElement(), "backgroundColor", "#ABCDEF");
-					text = text.replaceAll(" ", "&nbsp;");
-					dialogBox.setHTML("<pre>" + text + "</pre>");
-					dialogBox.center();
-				}
-			}
-		});
+                        for (StackTraceElement stackTraceElement : stackTraceElements)
+                            text += "    at " + stackTraceElement + "\n";
 
-		resources.css().ensureInjected();
+                        throwable = throwable.getCause();
+                        if (throwable != null)
+                            text += "Caused by: ";
+                    }
 
-		pageIndex = new PageIndex(Tests.DATA);
-		pageExample = new PageExample();
+                    DialogBox dialogBox = new DialogBox(true);
+                    DOM.setStyleAttribute(dialogBox.getElement(), "backgroundColor", "#ABCDEF");
+                    text = text.replaceAll(" ", "&nbsp;");
+                    dialogBox.setHTML("<pre>" + text + "</pre>");
+                    dialogBox.center();
+                }
+            }
+        });
 
-		// Setup a history handler to reselect the associate menu item.
-		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
-			public void onValueChange(ValueChangeEvent<String> event)
-			{
-				ParallaxTest contentWidget = Tests.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
+        pageIndex = new PageIndex();
+        pageExample = new PageExample();
 
-				RootLayoutPanel.get().clear();
+        // Setup a history handler to reselect the associate menu item.
+        final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
+            public void onValueChange(ValueChangeEvent<String> event) {
+                final ParallaxTest contentWidget = Tests.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
-				if (contentWidget != null)
-				{
-					RootLayoutPanel.get().add(pageExample);
-					pageExample.setAnimation(contentWidget);
+                RootLayoutPanel.get().clear();
 
-					Window.setTitle("Parallax: " + contentWidget.getName());
-				}
-				else
-				{
-					RootLayoutPanel.get().add(pageIndex);
+                if (contentWidget != null) {
+                    RootLayoutPanel.get().add(pageExample);
+                    pageExample.addGwtReadyListener(new GwtRendering.RenderingReadyListener() {
+                        @Override
+                        public void onRenderingReady(Rendering rendering) {
+                            pageExample.setAnimation(contentWidget);
+                        }
+                    });
 
-					History.newItem("", true);
-					Window.setTitle("Parallax: Cross-platform Java 3D library");
-				}
-			}
-		};
+                    Window.setTitle("Parallax: " + contentWidget.getName());
+                } else {
+                    RootLayoutPanel.get().add(pageIndex);
 
-		History.addValueChangeHandler(historyHandler);
-		History.fireCurrentHistoryState();
+                    History.newItem("", true);
+                    Window.setTitle("Parallax: Cross-platform Java 3D library");
+                }
+            }
+        };
 
-		// Remove loading panel
-		RootPanel.get("loading").getElement().removeFromParent();
-	}
+        History.addValueChangeHandler(historyHandler);
+        History.fireCurrentHistoryState();
+
+        // Remove loading panel
+        RootPanel.get("loading").getElement().removeFromParent();
+    }
 }

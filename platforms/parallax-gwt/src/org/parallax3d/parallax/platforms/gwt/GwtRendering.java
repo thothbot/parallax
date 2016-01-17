@@ -21,6 +21,10 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
@@ -78,6 +82,9 @@ public class GwtRendering implements Rendering {
 
 		int width  = root.getOffsetWidth();
 		int height = root.getOffsetHeight();
+
+		if (width == 0 || height == 0 )
+			new ParallaxRuntimeException("Width or Height of the Panel is 0");
 
 		lastWidth = width;
 		lastHeight = height;

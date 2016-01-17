@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.client;
+package org.parallax3d.parallax.tests.client.widgets;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,9 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class AlertLoading extends Alert
 {
-	@Override
-	public Widget getContent()
-	{
-		return new Label("Loading scene...");
+	public AlertLoading() {
+		super(new Label("Loading scene..."));
 	}
 }

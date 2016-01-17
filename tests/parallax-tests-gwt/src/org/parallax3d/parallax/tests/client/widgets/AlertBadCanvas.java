@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.client;
+package org.parallax3d.parallax.tests.client.widgets;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -30,15 +30,8 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class AlertBadCanvas extends Alert
 {
-	private String msg;
-
 	public AlertBadCanvas(String msg)
 	{
-		this.msg = msg;
+		super(new Label("Can not initialize Canvas: " + msg));
 	}
-	@Override
-	public Widget getContent()
-	{
-		return new Label("Can not initialize Canvas: " + this.msg);
-	}	
 }
