@@ -22,7 +22,7 @@
             padding: 20px;
         }
 
-        .button {
+        .buttonPanel button {
             background: none !important;
             border: none;
             cursor: pointer;
@@ -38,11 +38,11 @@
             transition: color 0.3s ease;
         }
 
-        .button:hover {
+        .buttonPanel button:hover {
             color: #ffd8a6;
         }
 
-        .button:focus {
+        .buttonPanel button:focus {
             outline: none;
         }
 
@@ -66,10 +66,7 @@
             <g:HTMLPanel ui:field="author" stylePrimaryName="{style.author}"/>
         </g:FlowPanel>
 
-        <g:FlowPanel stylePrimaryName="{style.buttonPanel}">
-            <g:Button ui:field='switchAnimation' stylePrimaryName="{style.button}">Pause</g:Button>
-            <g:Button ui:field='switchFullScreen' stylePrimaryName="{style.button}">Fullscreen</g:Button>
-        </g:FlowPanel>
+        <g:FlowPanel ui:field='buttonPanel' stylePrimaryName="{style.buttonPanel}" />
 
     </g:FlowPanel>
 

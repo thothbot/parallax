@@ -37,6 +37,7 @@ import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
 import org.parallax3d.parallax.tests.client.widgets.ItemSmall;
 import org.parallax3d.parallax.tests.client.widgets.Logo;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -133,7 +134,9 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	@Override
 	public void onAnimationReady(Animation animation)
 	{
-		logo.setInfoPanel(new ItemInfo((ParallaxTest) animation));
+		Button switchAnimation = new Button("Pause");
+		Button switchFullScreen = new Button("Fullscreen");
+		logo.setInfoPanel(new ItemInfo((ParallaxTest) animation, Arrays.asList(switchAnimation, switchFullScreen)));
 	}
 
 }

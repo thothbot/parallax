@@ -24,6 +24,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.tests.ParallaxTest;
 
+import java.util.List;
+
 public class ItemInfo extends Composite {
 
     private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
@@ -40,7 +42,10 @@ public class ItemInfo extends Composite {
     @UiField
     HTMLPanel author;
 
-    public ItemInfo(ParallaxTest animation)
+    @UiField
+    FlowPanel buttonPanel;
+
+    public ItemInfo(ParallaxTest animation, List<Button> buttons)
     {
         // Initialize the ui binder.
         initWidget(uiBinder.createAndBindUi(this));
@@ -50,6 +55,9 @@ public class ItemInfo extends Composite {
         description.setText(animation.getDescription());
 
         author.add(new HTML(animation.getAuthor()));
+
+        for(Button button: buttons)
+            buttonPanel.add(button);
     }
 
 }
