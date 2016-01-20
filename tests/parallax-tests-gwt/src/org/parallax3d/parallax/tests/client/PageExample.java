@@ -27,7 +27,6 @@ import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 import org.parallax3d.parallax.platforms.gwt.GwtRendering;
@@ -51,6 +50,9 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	interface PanelUiBinder extends UiBinder<Widget, PageExample> {
 	}
 
+	public interface PanelReady {
+		void onRenderingReady(GwtRendering rendering);
+	}
 	/**
 	 * The main menu used to navigate to examples.
 	 */
@@ -68,7 +70,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 
 	private GwtRendering rendering;
 
-	GwtRendering.RenderingReadyListener gwtReady;
+	PanelReady renderingReady;
 
 	public PageExample()
 	{
@@ -95,16 +97,13 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 				{
 					try {
 
-						rendering = new GwtRendering(PageExample.this.content, ((GwtApp) App.app).getConfig(), new GwtRendering.RenderingReadyListener() {
-							@Override
-							public void onRenderingReady(GwtRendering rendering) {
-								((GwtApp)App.app).setRendering(rendering);
-								rendering.addAnimationReadyListener(PageExample.this);
+						rendering = new GwtRendering(PageExample.this.content, ((GwtApp) App.app).getConfig());
 
-								if(gwtReady != null)
-									gwtReady.onRenderingReady(rendering);
-							}
-						});
+						((GwtApp)App.app).setRendering(rendering);
+						rendering.addAnimationReadyListener(PageExample.this);
+
+						if(renderingReady != null)
+							renderingReady.onRenderingReady(rendering);
 
 					}
 					catch (Throwable e)
@@ -119,16 +118,16 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 		}
 		else
 		{
-			if(gwtReady != null)
-				gwtReady.onRenderingReady(rendering);
+			if(renderingReady != null)
+				renderingReady.onRenderingReady(rendering);
 		}
 
 		super.onLoad();
 	}
 
-	public void addGwtReadyListener(GwtRendering.RenderingReadyListener gwtReady)
+	public void addGwtReadyListener(PanelReady gwtReady)
 	{
-		this.gwtReady = gwtReady;
+		this.renderingReady = gwtReady;
 	}
 
 	@Override

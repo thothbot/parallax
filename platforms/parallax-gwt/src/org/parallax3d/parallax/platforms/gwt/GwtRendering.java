@@ -42,12 +42,6 @@ import java.util.List;
 
 public class GwtRendering implements Rendering {
 
-	public interface RenderingReadyListener {
-
-		void onRenderingReady(GwtRendering rendering);
-
-	}
-
 	CanvasElement canvas;
 	WebGLRenderingContext context;
 	GLRenderer renderer;
@@ -69,11 +63,7 @@ public class GwtRendering implements Rendering {
 
 	GwtAppConfiguration config;
 
-	public GwtRendering(Panel root, GwtAppConfiguration config) {
-		this(root, config, null);
-	}
-
-	public GwtRendering(Panel root, GwtAppConfiguration config, RenderingReadyListener onReady) throws ParallaxRuntimeException {
+	public GwtRendering(Panel root, GwtAppConfiguration config) throws ParallaxRuntimeException {
 		root.clear();
 
 		Canvas canvasWidget = Canvas.createIfSupported();
@@ -108,9 +98,6 @@ public class GwtRendering implements Rendering {
 		gl = new GwtGL20(context);
 
 		renderer = new GLRenderer(gl, width, height);
-
-		if(onReady != null)
-			onReady.onRenderingReady(this);
 	}
 
 	@Override

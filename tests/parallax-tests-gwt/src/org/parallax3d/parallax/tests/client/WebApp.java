@@ -86,7 +86,7 @@ public class WebApp extends GwtApp {
 
                 if (test != null) {
                     RootLayoutPanel.get().add(pageExample);
-                    pageExample.addGwtReadyListener(new GwtRendering.RenderingReadyListener() {
+                    pageExample.addGwtReadyListener(new PageExample.PanelReady() {
                         @Override
                         public void onRenderingReady(GwtRendering rendering) {
                             rendering.setAnimation(test);
