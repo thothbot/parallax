@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.Rendering;
 import org.parallax3d.parallax.platforms.gwt.GwtRendering;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
@@ -36,6 +35,7 @@ import org.parallax3d.parallax.tests.resources.Resources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
 public class WebApp extends GwtApp {
+
     /**
      * The static resources used throughout the Demo.
      */
