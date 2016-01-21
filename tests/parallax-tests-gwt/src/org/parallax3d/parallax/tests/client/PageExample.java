@@ -19,6 +19,8 @@
 package org.parallax3d.parallax.tests.client;
 
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.*;
 
 import com.google.gwt.core.client.GWT;
@@ -134,8 +136,25 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	@Override
 	public void onAnimationReady(Animation animation)
 	{
-		Button switchAnimation = new Button("Pause");
-		Button switchFullScreen = new Button("Fullscreen");
+		final Button switchAnimation = new Button("Pause");
+		final Button switchFullScreen = new Button("Fullscreen");
+
+		switchAnimation.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+//				if (switchAnimation.isDown())
+//					rendering.run();
+//				else
+//					rendering.stop();
+			}
+		});
+
+		switchFullScreen.setEnabled(rendering.supportsDisplayModeChange());
+		switchFullScreen.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+//				rendering.toFullScreen();
+			}
+		});
+
 		logo.setInfoPanel(new ItemInfo((ParallaxTest) animation, Arrays.asList(switchAnimation, switchFullScreen)));
 	}
 

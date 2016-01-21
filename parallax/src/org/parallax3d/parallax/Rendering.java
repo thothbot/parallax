@@ -24,8 +24,6 @@ import org.parallax3d.parallax.system.gl.GL20;
 
 public interface Rendering {
 
-    boolean isGL30Available();
-
     GL20 getGL20();
 
     GLRenderer getRenderer();
@@ -37,6 +35,13 @@ public interface Rendering {
     long getFrameId();
 
     float getDeltaTime();
+
+    /** This is a scaling factor for the Density Independent Pixel unit, following the same conventions as
+     * android.util.DisplayMetrics#density, where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen
+     * this density value will be 1; on a 120 dpi screen it would be .75; etc.
+     *
+     * @return the logical density of the Display. */
+    public float getDensity ();
 
     float getRawDeltaTime();
 

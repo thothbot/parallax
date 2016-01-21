@@ -351,6 +351,11 @@ public class GwtRendering implements Rendering {
 	}
 
 	@Override
+	public float getDensity () {
+		return 96.0f / 160;
+	}
+
+	@Override
 	public float getRawDeltaTime () {
 		return getDeltaTime();
 	}
@@ -358,10 +363,5 @@ public class GwtRendering implements Rendering {
 	@Override
 	public boolean isFullscreen () {
 		return isFullscreenJSNI();
-	}
-
-	@Override
-	public boolean isGL30Available () {
-		return false;
 	}
 }
