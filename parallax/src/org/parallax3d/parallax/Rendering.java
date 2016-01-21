@@ -60,6 +60,8 @@ public interface Rendering {
     /** Whether the app is fullscreen or not */
     boolean isFullscreen();
 
+    public void setFullscreen();
+
     void addAnimationReadyListener(AnimationReadyListener animationReadyListener);
 
     void pause();

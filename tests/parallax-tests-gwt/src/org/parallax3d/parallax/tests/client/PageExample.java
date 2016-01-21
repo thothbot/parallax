@@ -151,7 +151,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 		switchFullScreen.setEnabled(rendering.supportsDisplayModeChange());
 		switchFullScreen.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-//				rendering.toFullScreen();
+				rendering.setFullscreen();
 			}
 		});
 

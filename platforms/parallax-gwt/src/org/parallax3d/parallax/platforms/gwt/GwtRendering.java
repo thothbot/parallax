@@ -268,8 +268,7 @@ public class GwtRendering implements Rendering {
 
 	private void fullscreenChanged () {
 		if (!isFullscreen()) {
-//			canvas.setWidth(config.width);
-//			canvas.setHeight(config.height);
+			renderer.setSize(lastWidth, lastHeight);
 		}
 	}
 
@@ -348,6 +347,14 @@ public class GwtRendering implements Rendering {
 			time = 0;
 			frames = 0;
 		}
+	}
+
+	@Override
+	public void setFullscreen() {
+		if (isFullscreenJSNI())
+			exitFullscreen();
+		else
+			setFullscreenJSNI(this, canvas);
 	}
 
 	@Override
