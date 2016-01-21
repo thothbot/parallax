@@ -20,7 +20,6 @@ package org.parallax3d.parallax.platforms.gwt;
 
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.core.client.Duration;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
@@ -37,34 +36,12 @@ import org.parallax3d.parallax.system.gl.GL20;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GwtRendering implements Rendering {
+public class GwtRendering implements Rendering, AnimationScheduler.AnimationCallback {
 
 	/**
 	 * The ID of the pending animation request.
 	 */
 	private AnimationScheduler.AnimationHandle requestHandle;
-
-	private final AnimationScheduler scheduler = AnimationScheduler.get();
-
-	private final AnimationScheduler.AnimationCallback callback = new AnimationScheduler.AnimationCallback()
-	{
-		@Override
-		public void execute(double timestamp)
-		{
-			try {
-				mainLoop();
-			} catch (Throwable t) {
-				Log.error("GwtApplication: exception: " + t.getMessage(), t);
-				throw new ParallaxRuntimeException(t);
-			}
-
-			// Schedule the next animation frame.
-//			if (refresh(timestamp))
-				requestHandle = scheduler.requestAnimationFrame(callback, canvas);
-//			else
-//				requestHandle = null;
-		}
-	};
 
 	CanvasElement canvas;
 	WebGLRenderingContext context;
@@ -78,11 +55,11 @@ public class GwtRendering implements Rendering {
 	int lastWidth;
 	int lastHeight;
 
-	float fps = 0;
+	double fps = 0;
 	long lastTimeStamp = System.currentTimeMillis();
 	long frameId = -1;
-	float deltaTime = 0;
-	float time = 0;
+	double deltaTime = 0;
+	double time = 0;
 	int frames;
 
 	GwtAppConfiguration config;
@@ -147,7 +124,24 @@ public class GwtRendering implements Rendering {
 		}
 
 		// Execute the first callback.
-		scheduler.requestAnimationFrame(callback, this.canvas);
+		AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
+	}
+
+	@Override
+	public void execute(double timestamp)
+	{
+		try {
+			mainLoop();
+		} catch (Throwable t) {
+			Log.error("GwtApplication: exception: " + t.getMessage(), t);
+			throw new ParallaxRuntimeException(t);
+		}
+
+		// Schedule the next animation frame.
+//			if (refresh(timestamp))
+		requestHandle = AnimationScheduler.get().requestAnimationFrame(this, canvas);
+//			else
+//				requestHandle = null;
 	}
 
 	private void mainLoop() {
@@ -168,7 +162,7 @@ public class GwtRendering implements Rendering {
 
 	private void update () {
 		long currTimeStamp = System.currentTimeMillis();
-		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0f;
+		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0;
 		lastTimeStamp = currTimeStamp;
 		time += deltaTime;
 		frames++;
@@ -223,7 +217,7 @@ public class GwtRendering implements Rendering {
 	}
 
 	@Override
-	public float getDeltaTime () {
+	public double getDeltaTime () {
 		return deltaTime;
 	}
 
@@ -248,7 +242,7 @@ public class GwtRendering implements Rendering {
 	}
 
 	@Override
-	public float getRawDeltaTime () {
+	public double getRawDeltaTime () {
 		return getDeltaTime();
 	}
 

@@ -34,7 +34,7 @@ public interface Rendering {
 
     long getFrameId();
 
-    float getDeltaTime();
+    double getDeltaTime();
 
     /** This is a scaling factor for the Density Independent Pixel unit, following the same conventions as
      * android.util.DisplayMetrics#density, where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen
@@ -43,7 +43,7 @@ public interface Rendering {
      * @return the logical density of the Display. */
     public float getDensity ();
 
-    float getRawDeltaTime();
+    double getRawDeltaTime();
 
     int getFramesPerSecond();
 
