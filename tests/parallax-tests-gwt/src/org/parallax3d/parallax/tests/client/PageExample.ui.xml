@@ -5,6 +5,13 @@
 
 	<ui:style>
 
+		.debugger {
+			position: fixed !important;
+			top: 10px;
+			right: 10px;
+			z-index: 100;
+		}
+
 		.menu {
 			padding: 15px 0;
 		}
@@ -16,6 +23,7 @@
 		<g:west size='340'>
 			<g:FlowPanel>
 				<w:Logo ui:field='logo' />
+				<g:AbsolutePanel ui:field='debuggerPanel' stylePrimaryName='{style.debugger}'/>
 				<g:ScrollPanel height="90%">
 					<g:FlowPanel ui:field='menu' stylePrimaryName='{style.menu}'/>
 				</g:ScrollPanel>

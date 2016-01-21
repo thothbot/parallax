@@ -145,11 +145,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 			throw new ParallaxRuntimeException(t);
 		}
 
-		// Schedule the next animation frame.
-//			if (refresh(timestamp))
 		animationHandle = AnimationScheduler.get().requestAnimationFrame(this, canvas);
-//			else
-//				animationHandle = null;
 	}
 
 	private void mainLoop() {

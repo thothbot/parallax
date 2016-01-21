@@ -32,6 +32,7 @@ import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 import org.parallax3d.parallax.platforms.gwt.GwtRendering;
+import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
 import org.parallax3d.parallax.tests.client.widgets.AlertBadCanvas;
@@ -56,6 +57,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	public interface PanelReady {
 		void onRenderingReady(GwtRendering rendering);
 	}
+
 	/**
 	 * The main menu used to navigate to examples.
 	 */
@@ -65,15 +67,20 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	@UiField
 	Logo logo;
 
+	@UiField
+	AbsolutePanel debuggerPanel;
+
 	/**
 	 * Main panel where will be RenderingPanel located
 	 */
 	@UiField
 	SimplePanel content;
 
-	private GwtRendering rendering;
+	GwtRendering rendering;
 
 	PanelReady renderingReady;
+
+	Debugger debugger;
 
 	public PageExample()
 	{
@@ -101,6 +108,9 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 					try {
 
 						rendering = new GwtRendering(PageExample.this.content, ((GwtApp) App.app).getConfig());
+
+						debugger = new Debugger(rendering.getRenderer().getInfo());
+						debuggerPanel.add(debugger);
 
 						((GwtApp)App.app).setRendering(rendering);
 						rendering.addAnimationReadyListener(PageExample.this);
