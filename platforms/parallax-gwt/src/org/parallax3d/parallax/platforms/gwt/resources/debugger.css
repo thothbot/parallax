@@ -1,16 +1,9 @@
 .debug-panel {
 	display: table;
-	width:100%;
-	padding: 0px;
-	color: white;
-	background-color:#555555;
-	border: 1px solid #999999;
-	opacity: 0.6; 
 }
 
 .debug-panel-element {
 	display: table-cell;
-	padding-left: 3px;
 	font-size: 10px;
 }
 
