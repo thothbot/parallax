@@ -213,10 +213,19 @@ public class GwtRendering implements Rendering {
 	}
 
 	@Override
+	public float getDensity () {
+		return 96.0f / 160;
+	}
+
+	@Override
+	public float getRawDeltaTime () {
+		return getDeltaTime();
+	}
+
+	@Override
 	public boolean supportsDisplayModeChange () {
 		return supportsFullscreenJSNI();
 	}
-
 	private native boolean supportsFullscreenJSNI () /*-{
 		if ("fullscreenEnabled" in $doc) {
 			return $doc.fullscreenEnabled;
@@ -239,88 +248,6 @@ public class GwtRendering implements Rendering {
 
 	private native int getScreenHeightJSNI () /*-{
 		return $wnd.screen.height;
-	}-*/;
-
-	private native boolean isFullscreenJSNI () /*-{
-		// Standards compliant check for fullscreen
-		if ("fullscreenElement" in $doc) {
-			return $doc.fullscreenElement != null;
-		}
-		// Vendor prefixed versions of standard check
-		if ("msFullscreenElement" in $doc) {
-			return $doc.msFullscreenElement != null;
-		}
-		if ("webkitFullscreenElement" in $doc) {
-			return $doc.webkitFullscreenElement != null;
-		}
-		if ("mozFullScreenElement" in $doc) { // Yes, with a capital 'S'
-			return $doc.mozFullScreenElement != null;
-		}
-		// Older, non-standard ways of checking for fullscreen
-		if ("webkitIsFullScreen" in $doc) {
-			return $doc.webkitIsFullScreen;
-		}
-		if ("mozFullScreen" in $doc) {
-			return $doc.mozFullScreen;
-		}
-		return false
-	}-*/;
-
-	private void fullscreenChanged () {
-		if (!isFullscreen()) {
-			renderer.setSize(lastWidth, lastHeight);
-		}
-	}
-
-	private native boolean setFullscreenJSNI (GwtRendering graphics, CanvasElement element) /*-{
-		// Attempt to use the non-prefixed standard API (https://fullscreen.spec.whatwg.org)
-		if (element.requestFullscreen) {
-			element.width = $wnd.screen.width;
-			element.height = $wnd.screen.height;
-			element.requestFullscreen();
-			$doc.addEventListener(
-				"fullscreenchange",
-				function() {
-					graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
-				}, false);
-			return true;
-		}
-		// Attempt to the vendor specific variants of the API
-		if (element.webkitRequestFullScreen) {
-			element.width = $wnd.screen.width;
-			element.height = $wnd.screen.height;
-			element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-			$doc.addEventListener(
-				"webkitfullscreenchange",
-				function() {
-					graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
-				}, false);
-			return true;
-		}
-		if (element.mozRequestFullScreen) {
-			element.width = $wnd.screen.width;
-			element.height = $wnd.screen.height;
-			element.mozRequestFullScreen();
-			$doc.addEventListener(
-				"mozfullscreenchange",
-				function() {
-					graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
-				}, false);
-			return true;
-		}
-		if (element.msRequestFullscreen) {
-			element.width = $wnd.screen.width;
-			element.height = $wnd.screen.height;
-			element.msRequestFullscreen();
-			$doc.addEventListener(
-				"msfullscreenchange",
-				function() {
-					graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
-				}, false);
-			return true;
-		}
-
-		return false;
 	}-*/;
 
 	private native void exitFullscreen () /*-{
@@ -349,6 +276,12 @@ public class GwtRendering implements Rendering {
 		}
 	}
 
+	private void fullscreenChanged () {
+		if (!isFullscreen()) {
+			renderer.setSize(lastWidth, lastHeight);
+		}
+	}
+
 	@Override
 	public void setFullscreen() {
 		if (isFullscreenJSNI())
@@ -356,19 +289,83 @@ public class GwtRendering implements Rendering {
 		else
 			setFullscreenJSNI(this, canvas);
 	}
+	private native boolean setFullscreenJSNI (GwtRendering graphics, CanvasElement element) /*-{
+        // Attempt to use the non-prefixed standard API (https://fullscreen.spec.whatwg.org)
+        if (element.requestFullscreen) {
+            element.width = $wnd.screen.width;
+            element.height = $wnd.screen.height;
+            element.requestFullscreen();
+            $doc.addEventListener(
+                "fullscreenchange",
+                function() {
+                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
+                }, false);
+            return true;
+        }
+        // Attempt to the vendor specific variants of the API
+        if (element.webkitRequestFullScreen) {
+            element.width = $wnd.screen.width;
+            element.height = $wnd.screen.height;
+            element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            $doc.addEventListener(
+                "webkitfullscreenchange",
+                function() {
+                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
+                }, false);
+            return true;
+        }
+        if (element.mozRequestFullScreen) {
+            element.width = $wnd.screen.width;
+            element.height = $wnd.screen.height;
+            element.mozRequestFullScreen();
+            $doc.addEventListener(
+                "mozfullscreenchange",
+                function() {
+                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
+                }, false);
+            return true;
+        }
+        if (element.msRequestFullscreen) {
+            element.width = $wnd.screen.width;
+            element.height = $wnd.screen.height;
+            element.msRequestFullscreen();
+            $doc.addEventListener(
+                "msfullscreenchange",
+                function() {
+                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
+                }, false);
+            return true;
+        }
 
-	@Override
-	public float getDensity () {
-		return 96.0f / 160;
-	}
-
-	@Override
-	public float getRawDeltaTime () {
-		return getDeltaTime();
-	}
+        return false;
+    }-*/;
 
 	@Override
 	public boolean isFullscreen () {
 		return isFullscreenJSNI();
 	}
+	private native boolean isFullscreenJSNI () /*-{
+        // Standards compliant check for fullscreen
+        if ("fullscreenElement" in $doc) {
+            return $doc.fullscreenElement != null;
+        }
+        // Vendor prefixed versions of standard check
+        if ("msFullscreenElement" in $doc) {
+            return $doc.msFullscreenElement != null;
+        }
+        if ("webkitFullscreenElement" in $doc) {
+            return $doc.webkitFullscreenElement != null;
+        }
+        if ("mozFullScreenElement" in $doc) { // Yes, with a capital 'S'
+            return $doc.mozFullScreenElement != null;
+        }
+        // Older, non-standard ways of checking for fullscreen
+        if ("webkitIsFullScreen" in $doc) {
+            return $doc.webkitIsFullScreen;
+        }
+        if ("mozFullScreen" in $doc) {
+            return $doc.mozFullScreen;
+        }
+        return false
+    }-*/;
 }
