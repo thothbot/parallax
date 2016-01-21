@@ -100,9 +100,6 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 
 		renderer = new GLRenderer(gl, width, height);
 
-		// Execute the first callback.
-		AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
-
 	}
 
 	@Override
@@ -122,6 +119,20 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 			throw new ParallaxRuntimeException(t);
 		}
 
+		run();
+	}
+
+	private void refresh() {
+		long currTimeStamp = System.currentTimeMillis();
+		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0;
+		lastTimeStamp = currTimeStamp;
+		time += deltaTime;
+		frames++;
+		if (time > 1) {
+			this.fps = frames;
+			time = 0;
+			frames = 0;
+		}
 	}
 
 	@Override
@@ -157,27 +168,23 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 
 	}
 
-	private void refresh() {
-		long currTimeStamp = System.currentTimeMillis();
-		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0;
-		lastTimeStamp = currTimeStamp;
-		time += deltaTime;
-		frames++;
-		if (time > 1) {
-			this.fps = frames;
-			time = 0;
-			frames = 0;
+	@Override
+	public void stop() {
+		// Cancel the animation request.
+		if (this.requestHandle != null)
+		{
+			this.requestHandle.cancel();
+			this.requestHandle = null;
 		}
 	}
 
 	@Override
-	public void pause() {
+	public void run() {
 
-	}
+		stop();
 
-	@Override
-	public void resume() {
-
+		// Execute the first callback.
+		AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
 	}
 
 	@Override

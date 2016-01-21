@@ -64,8 +64,8 @@ public interface Rendering {
 
     void addAnimationReadyListener(AnimationReadyListener animationReadyListener);
 
-    void pause();
+    void stop();
 
-    void resume();
+    void run();
 
 }
