@@ -99,16 +99,15 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 		gl = new GwtGL20(context);
 
 		renderer = new GLRenderer(gl, width, height);
+
+		// Execute the first callback.
+		AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
+
 	}
 
 	@Override
 	public void setAnimation(Animation animation) {
 		this.listener = animation;
-		setupLoop();
-
-	}
-
-	void setupLoop () {
 		// tell listener about app creation
 		try {
 			listener.onStart( this );
@@ -123,8 +122,6 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 			throw new ParallaxRuntimeException(t);
 		}
 
-		// Execute the first callback.
-		AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
 	}
 
 	@Override
@@ -146,7 +143,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 
 	private void mainLoop() {
 
-		update();
+		refresh();
 		if (App.app.getRendering().getWidth() != lastWidth || App.app.getRendering().getHeight() != lastHeight)
 		{
 			this.renderer.setSize(lastWidth, lastHeight);
@@ -160,7 +157,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 
 	}
 
-	private void update () {
+	private void refresh() {
 		long currTimeStamp = System.currentTimeMillis();
 		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0;
 		lastTimeStamp = currTimeStamp;
