@@ -20,6 +20,7 @@ package org.parallax3d.parallax.platforms.gwt;
 
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.core.client.Duration;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
@@ -37,6 +38,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GwtRendering implements Rendering {
+
+	/**
+	 * The ID of the pending animation request.
+	 */
+	private AnimationScheduler.AnimationHandle requestHandle;
+
+	private final AnimationScheduler scheduler = AnimationScheduler.get();
+
+	private final AnimationScheduler.AnimationCallback callback = new AnimationScheduler.AnimationCallback()
+	{
+		@Override
+		public void execute(double timestamp)
+		{
+			try {
+				mainLoop();
+			} catch (Throwable t) {
+				Log.error("GwtApplication: exception: " + t.getMessage(), t);
+				throw new ParallaxRuntimeException(t);
+			}
+
+			// Schedule the next animation frame.
+//			if (refresh(timestamp))
+				requestHandle = scheduler.requestAnimationFrame(callback, canvas);
+//			else
+//				requestHandle = null;
+		}
+	};
 
 	CanvasElement canvas;
 	WebGLRenderingContext context;
@@ -118,22 +146,11 @@ public class GwtRendering implements Rendering {
 			throw new ParallaxRuntimeException(t);
 		}
 
-		AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
-			@Override
-			public void execute(double timestamp) {
-				try {
-					mainLoop();
-				} catch (Throwable t) {
-					Log.error("GwtApplication: exception: " + t.getMessage(), t);
-					throw new ParallaxRuntimeException(t);
-				}
-				AnimationScheduler.get().requestAnimationFrame(this, GwtRendering.this.canvas);
-			}
-		}, this.canvas);
-
+		// Execute the first callback.
+		scheduler.requestAnimationFrame(callback, this.canvas);
 	}
 
-	void mainLoop() {
+	private void mainLoop() {
 
 		update();
 		if (App.app.getRendering().getWidth() != lastWidth || App.app.getRendering().getHeight() != lastHeight)
@@ -147,6 +164,19 @@ public class GwtRendering implements Rendering {
 		frameId++;
 		this.listener.onUpdate( this );
 
+	}
+
+	private void update () {
+		long currTimeStamp = System.currentTimeMillis();
+		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0f;
+		lastTimeStamp = currTimeStamp;
+		time += deltaTime;
+		frames++;
+		if (time > 1) {
+			this.fps = frames;
+			time = 0;
+			frames = 0;
+		}
 	}
 
 	@Override
@@ -262,19 +292,6 @@ public class GwtRendering implements Rendering {
 		if ($doc.webkitCancelFullScreen) // Old WebKit
 			$doc.webkitCancelFullScreen();
 	}-*/;
-
-	public void update () {
-		long currTimeStamp = System.currentTimeMillis();
-		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0f;
-		lastTimeStamp = currTimeStamp;
-		time += deltaTime;
-		frames++;
-		if (time > 1) {
-			this.fps = frames;
-			time = 0;
-			frames = 0;
-		}
-	}
 
 	private void fullscreenChanged () {
 		if (!isFullscreen()) {
