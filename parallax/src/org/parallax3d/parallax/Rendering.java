@@ -68,4 +68,6 @@ public interface Rendering {
 
     void run();
 
+    boolean isRun();
+
 }

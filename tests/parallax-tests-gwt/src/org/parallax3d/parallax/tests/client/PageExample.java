@@ -141,10 +141,14 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 
 		switchAnimation.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-//				if (switchAnimation.isDown())
-//					rendering.run();
-//				else
-//					rendering.stop();
+				if (rendering.isRun()) {
+					rendering.stop();
+					switchAnimation.setText("Resume");
+				}
+				else {
+					rendering.run();
+					switchAnimation.setText("Pause");
+				}
 			}
 		});
 

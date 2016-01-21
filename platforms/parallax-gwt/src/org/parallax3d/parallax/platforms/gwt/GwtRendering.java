@@ -41,7 +41,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 	/**
 	 * The ID of the pending animation request.
 	 */
-	private AnimationScheduler.AnimationHandle requestHandle;
+	private AnimationScheduler.AnimationHandle animationHandle;
 
 	CanvasElement canvas;
 	WebGLRenderingContext context;
@@ -147,9 +147,9 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 
 		// Schedule the next animation frame.
 //			if (refresh(timestamp))
-		requestHandle = AnimationScheduler.get().requestAnimationFrame(this, canvas);
+		animationHandle = AnimationScheduler.get().requestAnimationFrame(this, canvas);
 //			else
-//				requestHandle = null;
+//				animationHandle = null;
 	}
 
 	private void mainLoop() {
@@ -171,10 +171,10 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 	@Override
 	public void stop() {
 		// Cancel the animation request.
-		if (this.requestHandle != null)
+		if (this.animationHandle != null)
 		{
-			this.requestHandle.cancel();
-			this.requestHandle = null;
+			this.animationHandle.cancel();
+			this.animationHandle = null;
 		}
 	}
 
@@ -185,6 +185,11 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 
 		// Execute the first callback.
 		AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
+	}
+
+	@Override
+	public boolean isRun() {
+		return (this.animationHandle != null);
 	}
 
 	@Override

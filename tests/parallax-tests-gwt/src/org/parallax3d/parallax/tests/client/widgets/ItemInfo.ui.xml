@@ -46,6 +46,10 @@
             outline: none;
         }
 
+        .buttonPanel button:active {
+            border: none;
+        }
+
         .author  {
             padding-top: 5px;
         }
