@@ -38,274 +38,273 @@ import java.util.List;
 
 public class GwtRendering implements Rendering, AnimationScheduler.AnimationCallback {
 
-	/**
-	 * The ID of the pending animation request.
-	 */
-	private AnimationScheduler.AnimationHandle animationHandle;
+    /**
+     * The ID of the pending animation request.
+     */
+    private AnimationScheduler.AnimationHandle animationHandle;
 
-	CanvasElement canvas;
-	WebGLRenderingContext context;
-	GLRenderer renderer;
-	GL20 gl;
+    CanvasElement canvas;
+    WebGLRenderingContext context;
+    GLRenderer renderer;
+    GL20 gl;
 
-	Animation listener;
+    Animation listener;
 
-	List<AnimationReadyListener> animationReadyListener = new ArrayList<>();
+    List<AnimationReadyListener> animationReadyListener = new ArrayList<>();
 
-	int lastWidth;
-	int lastHeight;
+    int lastWidth;
+    int lastHeight;
 
-	double fps = 0;
-	long lastTimeStamp = System.currentTimeMillis();
-	long frameId = -1;
-	double deltaTime = 0;
-	double time = 0;
-	int frames;
+    double fps = 0;
+    long lastTimeStamp = System.currentTimeMillis();
+    long frameId = -1;
+    double deltaTime = 0;
+    double time = 0;
+    int frames;
 
-	GwtAppConfiguration config;
+    GwtAppConfiguration config;
 
-	public GwtRendering(Panel root, GwtAppConfiguration config) throws ParallaxRuntimeException {
-		root.clear();
+    public GwtRendering(Panel root, GwtAppConfiguration config) throws ParallaxRuntimeException {
+        root.clear();
 
-		Canvas canvasWidget = Canvas.createIfSupported();
-		if (canvasWidget == null)
-			throw new ParallaxRuntimeException("Canvas not supported");
+        Canvas canvasWidget = Canvas.createIfSupported();
+        if (canvasWidget == null)
+            throw new ParallaxRuntimeException("Canvas not supported");
 
-		int width  = root.getOffsetWidth();
-		int height = root.getOffsetHeight();
+        int width = root.getOffsetWidth();
+        int height = root.getOffsetHeight();
 
-		if (width == 0 || height == 0 )
-			new ParallaxRuntimeException("Width or Height of the Panel is 0");
+        if (width == 0 || height == 0)
+            new ParallaxRuntimeException("Width or Height of the Panel is 0");
 
-		lastWidth = width;
-		lastHeight = height;
+        lastWidth = width;
+        lastHeight = height;
 
-		canvas = canvasWidget.getCanvasElement();
-		root.add(canvasWidget);
-		canvas.setWidth(width);
-		canvas.setHeight(height);
-		this.config = config;
+        canvas = canvasWidget.getCanvasElement();
+        root.add(canvasWidget);
+        canvas.setWidth(width);
+        canvas.setHeight(height);
+        this.config = config;
 
-		WebGLContextAttributes attributes = WebGLContextAttributes.create();
-		attributes.setAntialias(config.antialiasing);
-		attributes.setStencil(config.stencil);
-		attributes.setAlpha(config.alpha);
-		attributes.setPremultipliedAlpha(config.premultipliedAlpha);
-		attributes.setPreserveDrawingBuffer(config.preserveDrawingBuffer);
+        WebGLContextAttributes attributes = WebGLContextAttributes.create();
+        attributes.setAntialias(config.antialiasing);
+        attributes.setStencil(config.stencil);
+        attributes.setAlpha(config.alpha);
+        attributes.setPremultipliedAlpha(config.premultipliedAlpha);
+        attributes.setPreserveDrawingBuffer(config.preserveDrawingBuffer);
 
-		context = WebGLRenderingContext.getContext(canvas, attributes);
-		context.viewport(0, 0, width, height);
+        context = WebGLRenderingContext.getContext(canvas, attributes);
+        context.viewport(0, 0, width, height);
 
-		gl = new GwtGL20(context);
+        gl = new GwtGL20(context);
 
-		renderer = new GLRenderer(gl, width, height);
+        renderer = new GLRenderer(gl, width, height);
 
-	}
+    }
 
-	@Override
-	public void setAnimation(Animation animation) {
-		this.listener = animation;
-		// tell listener about app creation
-		try {
-			listener.onStart( this );
-			listener.onResize( this );
+    @Override
+    public void setAnimation(Animation animation) {
+        this.listener = animation;
+        // tell listener about app creation
+        try {
+            listener.onStart(this);
+            listener.onResize(this);
 
-			for(AnimationReadyListener ready: animationReadyListener)
-				ready.onAnimationReady( listener );
+            for (AnimationReadyListener ready : animationReadyListener)
+                ready.onAnimationReady(listener);
 
-		} catch (Throwable t) {
-			Log.error("GwtRendering: exception: " + t.getMessage(), t);
-			t.printStackTrace();
-			throw new ParallaxRuntimeException(t);
-		}
+        } catch (Throwable t) {
+            Log.error("GwtRendering: exception: " + t.getMessage(), t);
+            t.printStackTrace();
+            throw new ParallaxRuntimeException(t);
+        }
 
-		run();
-	}
+        run();
+    }
 
-	private void refresh() {
-		long currTimeStamp = System.currentTimeMillis();
-		deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0;
-		lastTimeStamp = currTimeStamp;
-		time += deltaTime;
-		frames++;
-		if (time > 1) {
-			this.fps = frames;
-			time = 0;
-			frames = 0;
-		}
-	}
+    private void refresh() {
+        long currTimeStamp = System.currentTimeMillis();
+        deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0;
+        lastTimeStamp = currTimeStamp;
+        time += deltaTime;
+        frames++;
+        if (time > 1) {
+            this.fps = frames;
+            time = 0;
+            frames = 0;
+        }
+    }
 
-	@Override
-	public void execute(double timestamp)
-	{
-		try {
-			mainLoop();
-		} catch (Throwable t) {
-			Log.error("GwtApplication: exception: " + t.getMessage(), t);
-			throw new ParallaxRuntimeException(t);
-		}
+    @Override
+    public void execute(double timestamp) {
+        try {
+            mainLoop();
+        } catch (Throwable t) {
+            Log.error("GwtApplication: exception: " + t.getMessage(), t);
+            throw new ParallaxRuntimeException(t);
+        }
 
-		animationHandle = AnimationScheduler.get().requestAnimationFrame(this, canvas);
-	}
+        animationHandle = AnimationScheduler.get().requestAnimationFrame(this, canvas);
+    }
 
-	private void mainLoop() {
+    private void mainLoop() {
 
-		refresh();
-		if (App.app.getRendering().getWidth() != lastWidth || App.app.getRendering().getHeight() != lastHeight)
-		{
-			this.renderer.setSize(lastWidth, lastHeight);
-			this.listener.onResize( this );
-			lastWidth = getWidth();
-			lastHeight = getHeight();
-		}
+        refresh();
+        if (App.app.getRendering().getWidth() != lastWidth || App.app.getRendering().getHeight() != lastHeight) {
+            this.renderer.setSize(lastWidth, lastHeight);
+            this.listener.onResize(this);
+            lastWidth = getWidth();
+            lastHeight = getHeight();
+        }
 
-		frameId++;
-		this.listener.onUpdate( this );
+        frameId++;
+        this.listener.onUpdate(this);
 
-	}
+    }
 
-	@Override
-	public void stop() {
-		// Cancel the animation request.
-		if (this.animationHandle != null)
-		{
-			this.animationHandle.cancel();
-			this.animationHandle = null;
-		}
-	}
+    @Override
+    public void stop() {
+        // Cancel the animation request.
+        if (this.animationHandle != null) {
+            this.animationHandle.cancel();
+            this.animationHandle = null;
+        }
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		stop();
+        stop();
 
-		// Execute the first callback.
-		AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
-	}
+        // Execute the first callback.
+        AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
+    }
 
-	@Override
-	public boolean isRun() {
-		return (this.animationHandle != null);
-	}
+    @Override
+    public boolean isRun() {
+        return (this.animationHandle != null);
+    }
 
-	@Override
-	public void addAnimationReadyListener(AnimationReadyListener animationReadyListener) {
-		this.animationReadyListener.add( animationReadyListener );
-	}
+    @Override
+    public void addAnimationReadyListener(AnimationReadyListener animationReadyListener) {
+        this.animationReadyListener.add(animationReadyListener);
+    }
 
-	public WebGLRenderingContext getContext () {
-		return context;
-	}
+    public WebGLRenderingContext getContext() {
+        return context;
+    }
 
-	public GLRenderer getRenderer() {
-		return renderer;
-	}
+    public GLRenderer getRenderer() {
+        return renderer;
+    }
 
-	@Override
-	public GL20 getGL20 () {
-		return gl;
-	}
+    @Override
+    public GL20 getGL20() {
+        return gl;
+    }
 
-	@Override
-	public int getWidth () {
-		return canvas.getWidth();
-	}
+    @Override
+    public int getWidth() {
+        return canvas.getWidth();
+    }
 
-	@Override
-	public int getHeight () {
-		return canvas.getHeight();
-	}
+    @Override
+    public int getHeight() {
+        return canvas.getHeight();
+    }
 
-	@Override
-	public long getFrameId () {
-		return frameId;
-	}
+    @Override
+    public long getFrameId() {
+        return frameId;
+    }
 
-	@Override
-	public double getDeltaTime () {
-		return deltaTime;
-	}
+    @Override
+    public double getDeltaTime() {
+        return deltaTime;
+    }
 
-	@Override
-	public int getFramesPerSecond () {
-		return (int)fps;
-	}
+    @Override
+    public int getFramesPerSecond() {
+        return (int) fps;
+    }
 
-	@Override
-	public float getPpiX () {
-		return 96;
-	}
+    @Override
+    public float getPpiX() {
+        return 96;
+    }
 
-	@Override
-	public float getPpiY () {
-		return 96;
-	}
+    @Override
+    public float getPpiY() {
+        return 96;
+    }
 
-	@Override
-	public float getDensity () {
-		return 96.0f / 160;
-	}
+    @Override
+    public float getDensity() {
+        return 96.0f / 160;
+    }
 
-	@Override
-	public double getRawDeltaTime () {
-		return getDeltaTime();
-	}
+    @Override
+    public double getRawDeltaTime() {
+        return getDeltaTime();
+    }
 
-	@Override
-	public boolean supportsDisplayModeChange () {
-		return supportsFullscreenJSNI();
-	}
-	private native boolean supportsFullscreenJSNI () /*-{
-		if ("fullscreenEnabled" in $doc) {
-			return $doc.fullscreenEnabled;
-		}
-		if ("webkitFullscreenEnabled" in $doc) {
-			return $doc.webkitFullscreenEnabled;
-		}
-		if ("mozFullScreenEnabled" in $doc) {
-			return $doc.mozFullScreenEnabled;
-		}
-		if ("msFullscreenEnabled" in $doc) {
-			return $doc.msFullscreenEnabled;
-		}
-		return false;
-	}-*/;
+    @Override
+    public boolean supportsDisplayModeChange() {
+        return supportsFullscreenJSNI();
+    }
 
-	private native int getScreenWidthJSNI () /*-{
-		return $wnd.screen.width;
-	}-*/;
+    private native boolean supportsFullscreenJSNI() /*-{
+        if ("fullscreenEnabled" in $doc) {
+            return $doc.fullscreenEnabled;
+        }
+        if ("webkitFullscreenEnabled" in $doc) {
+            return $doc.webkitFullscreenEnabled;
+        }
+        if ("mozFullScreenEnabled" in $doc) {
+            return $doc.mozFullScreenEnabled;
+        }
+        if ("msFullscreenEnabled" in $doc) {
+            return $doc.msFullscreenEnabled;
+        }
+        return false;
+    }-*/;
 
-	private native int getScreenHeightJSNI () /*-{
-		return $wnd.screen.height;
-	}-*/;
+    private native int getScreenWidthJSNI() /*-{
+        return $wnd.screen.width;
+    }-*/;
 
-	private native void exitFullscreen () /*-{
-		if ($doc.exitFullscreen)
-			$doc.exitFullscreen();
-		if ($doc.msExitFullscreen)
-			$doc.msExitFullscreen();
-		if ($doc.webkitExitFullscreen)
-			$doc.webkitExitFullscreen();
-		if ($doc.mozExitFullscreen)
-			$doc.mozExitFullscreen();
-		if ($doc.webkitCancelFullScreen) // Old WebKit
-			$doc.webkitCancelFullScreen();
-	}-*/;
+    private native int getScreenHeightJSNI() /*-{
+        return $wnd.screen.height;
+    }-*/;
 
-	private void fullscreenChanged () {
-		if (!isFullscreen()) {
-			renderer.setSize(lastWidth, lastHeight);
-		}
-	}
+    private native void exitFullscreen() /*-{
+        if ($doc.exitFullscreen)
+            $doc.exitFullscreen();
+        if ($doc.msExitFullscreen)
+            $doc.msExitFullscreen();
+        if ($doc.webkitExitFullscreen)
+            $doc.webkitExitFullscreen();
+        if ($doc.mozExitFullscreen)
+            $doc.mozExitFullscreen();
+        if ($doc.webkitCancelFullScreen) // Old WebKit
+            $doc.webkitCancelFullScreen();
+    }-*/;
 
-	@Override
-	public void setFullscreen() {
-		if (isFullscreenJSNI())
-			exitFullscreen();
-		else
-			setFullscreenJSNI(this, canvas);
-	}
-	private native boolean setFullscreenJSNI (GwtRendering graphics, CanvasElement element) /*-{
+    private void fullscreenChanged() {
+        if (!isFullscreen()) {
+            renderer.setSize(lastWidth, lastHeight);
+        }
+    }
+
+    @Override
+    public void setFullscreen() {
+        if (isFullscreenJSNI())
+            exitFullscreen();
+        else
+            setFullscreenJSNI(this, canvas);
+    }
+
+    private native boolean setFullscreenJSNI(GwtRendering graphics, CanvasElement element) /*-{
         // Attempt to use the non-prefixed standard API (https://fullscreen.spec.whatwg.org)
         if (element.requestFullscreen) {
             element.width = $wnd.screen.width;
@@ -313,7 +312,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             element.requestFullscreen();
             $doc.addEventListener(
                 "fullscreenchange",
-                function() {
+                function () {
                     graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
                 }, false);
             return true;
@@ -325,7 +324,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
             $doc.addEventListener(
                 "webkitfullscreenchange",
-                function() {
+                function () {
                     graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
                 }, false);
             return true;
@@ -336,7 +335,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             element.mozRequestFullScreen();
             $doc.addEventListener(
                 "mozfullscreenchange",
-                function() {
+                function () {
                     graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
                 }, false);
             return true;
@@ -347,7 +346,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             element.msRequestFullscreen();
             $doc.addEventListener(
                 "msfullscreenchange",
-                function() {
+                function () {
                     graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
                 }, false);
             return true;
@@ -356,11 +355,12 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
         return false;
     }-*/;
 
-	@Override
-	public boolean isFullscreen () {
-		return isFullscreenJSNI();
-	}
-	private native boolean isFullscreenJSNI () /*-{
+    @Override
+    public boolean isFullscreen() {
+        return isFullscreenJSNI();
+    }
+
+    private native boolean isFullscreenJSNI() /*-{
         // Standards compliant check for fullscreen
         if ("fullscreenElement" in $doc) {
             return $doc.fullscreenElement != null;
