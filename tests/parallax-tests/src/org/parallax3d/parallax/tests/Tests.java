@@ -21,7 +21,7 @@ package org.parallax3d.parallax.tests;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.cases.animation.*;
 import org.parallax3d.parallax.tests.cases.geometries.*;
-import org.parallax3d.parallax.tests.materials.MaterialsBumpmap;
+import org.parallax3d.parallax.tests.cases.materials.*;
 
 import java.util.*;
 
@@ -53,7 +53,7 @@ public class Tests {
 
         put("Materials", Arrays.asList(
               new MaterialsBumpmap()
-//            , new MaterialsBumpmapSkin()
+            , new MaterialsBumpmapSkin()
 //            , new MaterialsLightmap()
 //            , new MaterialsWireframe()
 //            , new MaterialsCanvas2D()
