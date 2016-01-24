@@ -71,7 +71,7 @@ public class Tests {
 //            , new MaterialsShaderLava()
 //            , new MaterialsShaderMonjori()
 //            , new ShaderOcean()
-//            , new MaterialsRenderTarget()
+            , new MaterialsRenderTarget()
         ));
 
         put("Animation", Arrays.asList(
