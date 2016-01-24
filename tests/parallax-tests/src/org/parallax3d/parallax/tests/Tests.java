@@ -57,7 +57,7 @@ public class Tests {
             , new MaterialsLightmap()
 //            , new MaterialsWireframe()
             , new MaterialsCanvas2D()
-//            , new MaterialsTextures()
+            , new MaterialsTextures()
             , new MaterialsTextureCompressed()
             , new MaterialsCubemapFresnel()
             , new MaterialsCubemapBallsReflection()
