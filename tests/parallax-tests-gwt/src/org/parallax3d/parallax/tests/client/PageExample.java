@@ -31,7 +31,7 @@ import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
-import org.parallax3d.parallax.platforms.gwt.GwtRendering;
+import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
@@ -55,7 +55,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	}
 
 	public interface PanelReady {
-		void onRenderingReady(GwtRendering rendering);
+		void onRenderingReady(GwtRenderingContext rendering);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	@UiField
 	SimplePanel content;
 
-	GwtRendering rendering;
+	GwtRenderingContext rendering;
 
 	PanelReady renderingReady;
 
@@ -107,7 +107,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 				{
 					try {
 
-						rendering = new GwtRendering(PageExample.this.content, ((GwtApp) App.app).getConfig());
+						rendering = new GwtRenderingContext(PageExample.this.content, ((GwtApp) App.app).getConfig());
 
 						debugger = new Debugger(rendering.getRenderer().getInfo());
 						debuggerPanel.add(debugger);

@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.tests.animation.geometries;
 
-import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
@@ -36,12 +36,12 @@ public class GeometryCube extends ParallaxTest
 	Scene scene;
 
 	@Override
-	public void onStart(Rendering rendering)
+	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				70, // fov
-				rendering.getRenderer().getAbsoluteAspectRation(), // aspect
+				context.getRenderer().getAbsoluteAspectRation(), // aspect
 				1, // near
 				1000 // far
 		);
@@ -57,12 +57,12 @@ public class GeometryCube extends ParallaxTest
 	}
 
 	@Override
-	public void onUpdate(Rendering rendering)
+	public void onUpdate(RenderingContext context)
 	{
 		this.mesh.getRotation().addX(0.005);
 		this.mesh.getRotation().addY(0.01);
 
-		rendering.getRenderer().render(scene, camera);
+		context.getRenderer().render(scene, camera);
 	}
 
 	@Override

@@ -20,23 +20,23 @@ package org.parallax3d.parallax;
 
 public abstract class AnimationAdapter implements Animation {
 
-    public abstract void onStart(Rendering rendering);
+    public abstract void onStart(RenderingContext context);
 
-    public abstract void onUpdate(Rendering rendering);
+    public abstract void onUpdate(RenderingContext context);
 
-    public void onResize(Rendering rendering) {
-
-    }
-
-    public void onPause(Rendering rendering) {
+    public void onResize(RenderingContext context) {
 
     }
 
-    public void onResume(Rendering rendering) {
+    public void onPause(RenderingContext context) {
 
     }
 
-    public void onDispose(Rendering rendering) {
+    public void onResume(RenderingContext context) {
+
+    }
+
+    public void onDispose(RenderingContext context) {
 
     }
 

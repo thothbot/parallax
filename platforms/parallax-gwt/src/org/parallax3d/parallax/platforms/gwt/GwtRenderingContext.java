@@ -27,7 +27,7 @@ import com.google.gwt.webgl.client.WebGLRenderingContext;
 import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
@@ -36,7 +36,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GwtRendering implements Rendering, AnimationScheduler.AnimationCallback {
+public class GwtRenderingContext implements RenderingContext, AnimationScheduler.AnimationCallback {
 
     /**
      * The ID of the pending animation request.
@@ -64,7 +64,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
 
     GwtAppConfiguration config;
 
-    public GwtRendering(Panel root, GwtAppConfiguration config) throws ParallaxRuntimeException {
+    public GwtRenderingContext(Panel root, GwtAppConfiguration config) throws ParallaxRuntimeException {
         root.clear();
 
         Canvas canvasWidget = Canvas.createIfSupported();
@@ -304,7 +304,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             setFullscreenJSNI(this, canvas);
     }
 
-    private native boolean setFullscreenJSNI(GwtRendering graphics, CanvasElement element) /*-{
+    private native boolean setFullscreenJSNI(GwtRenderingContext graphics, CanvasElement element) /*-{
         // Attempt to use the non-prefixed standard API (https://fullscreen.spec.whatwg.org)
         if (element.requestFullscreen) {
             element.width = $wnd.screen.width;
@@ -313,7 +313,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             $doc.addEventListener(
                 "fullscreenchange",
                 function () {
-                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
+                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRenderingContext::fullscreenChanged()();
                 }, false);
             return true;
         }
@@ -325,7 +325,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             $doc.addEventListener(
                 "webkitfullscreenchange",
                 function () {
-                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
+                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRenderingContext::fullscreenChanged()();
                 }, false);
             return true;
         }
@@ -336,7 +336,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             $doc.addEventListener(
                 "mozfullscreenchange",
                 function () {
-                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
+                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRenderingContext::fullscreenChanged()();
                 }, false);
             return true;
         }
@@ -347,7 +347,7 @@ public class GwtRendering implements Rendering, AnimationScheduler.AnimationCall
             $doc.addEventListener(
                 "msfullscreenchange",
                 function () {
-                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRendering::fullscreenChanged()();
+                    graphics.@org.parallax3d.parallax.platforms.gwt.GwtRenderingContext::fullscreenChanged()();
                 }, false);
             return true;
         }

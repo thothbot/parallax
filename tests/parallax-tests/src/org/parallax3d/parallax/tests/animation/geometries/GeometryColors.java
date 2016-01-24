@@ -21,7 +21,7 @@ package org.parallax3d.parallax.tests.animation.geometries;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -53,11 +53,11 @@ public class GeometryColors extends ParallaxTest
 	public int mouseY;
 
 	@Override
-	public void onStart(Rendering rendering)
+	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera( 20,
-				rendering.getRenderer().getAbsoluteAspectRation(), 
+				context.getRenderer().getAbsoluteAspectRation(), 
 				1, 
 				10000 
 		);
@@ -157,14 +157,14 @@ public class GeometryColors extends ParallaxTest
 	}
 	
 	@Override
-	public void onUpdate(Rendering rendering)
+	public void onUpdate(RenderingContext context)
 	{
 		camera.getPosition().addX(( - mouseX - camera.getPosition().getX()) * 0.05 );
 		camera.getPosition().addY(( mouseY - camera.getPosition().getY()) * 0.05 );
 
 		camera.lookAt( scene.getPosition());
 		
-		rendering.getRenderer().render(scene, camera);
+		context.getRenderer().render(scene, camera);
 	}
 	
 	@Override
@@ -183,10 +183,10 @@ public class GeometryColors extends ParallaxTest
 	}
 	
 //	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel)
+//	protected void loadRenderingPanelAttributes(RenderingPanel contextPanel)
 //	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.setBackground(0xDDDDDD);
+//		super.loadRenderingPanelAttributes(contextPanel);
+//		contextPanel.setBackground(0xDDDDDD);
 //	}
 //
 //	@Override
@@ -194,23 +194,23 @@ public class GeometryColors extends ParallaxTest
 //	{
 //		super.onAnimationReady(event);
 //
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
+//		this.contextPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
 //		      @Override
 //		      public void onMouseMove(MouseMoveEvent event)
 //		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
+//		    	  	DemoScene rs = (DemoScene) contextPanel.getAnimatedScene();
 //		    	  	rs.mouseX = event.getX();
 //		    	  	rs.mouseY = event.getY();
 //		      }
 //
 //		});
 //
-//		this.renderingPanel.getCanvas().addTouchMoveHandler(new TouchMoveHandler() {
+//		this.contextPanel.getCanvas().addTouchMoveHandler(new TouchMoveHandler() {
 //
 //			@Override
 //			public void onTouchMove(TouchMoveEvent event) {
 //
-//					DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
+//					DemoScene rs = (DemoScene) contextPanel.getAnimatedScene();
 //					rs.mouseX = event.getTouches().get(0).getPageX();
 //		    	  	rs.mouseY = event.getTouches().get(0).getPageY();
 //

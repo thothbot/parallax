@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.tests.animation.geometries;
 
-import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
@@ -43,12 +43,12 @@ public final class BufferGeometryDemo extends ParallaxTest
 	Mesh mesh;
 
 	@Override
-	public void onStart(Rendering rendering)
+	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				27, // fov
-				rendering.getRenderer().getAbsoluteAspectRation(), // aspect
+				context.getRenderer().getAbsoluteAspectRation(), // aspect
 				1, // near
 				3500 // far
 		);
@@ -223,20 +223,20 @@ public final class BufferGeometryDemo extends ParallaxTest
 
 		//
 
-		rendering.getRenderer().setClearColor( scene.getFog().getColor(), 1 );
-		rendering.getRenderer().setGammaInput(true);
-		rendering.getRenderer().setGammaOutput(true);
+		context.getRenderer().setClearColor( scene.getFog().getColor(), 1 );
+		context.getRenderer().setGammaInput(true);
+		context.getRenderer().setGammaOutput(true);
 	}
 
 	@Override
-	public void onUpdate(Rendering rendering)
+	public void onUpdate(RenderingContext context)
 	{
-		double time = rendering.getDeltaTime() * 0.001;
+		double time = context.getDeltaTime() * 0.001;
 
 		mesh.getRotation().setX( time * 0.25 );
 		mesh.getRotation().setY( time * 0.5 );
 
-		rendering.getRenderer().render(scene, camera);
+		context.getRenderer().render(scene, camera);
 	}
 
 	@Override

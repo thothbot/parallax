@@ -18,9 +18,6 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.system.gl.GL20;
-
-import java.awt.event.ActionListener;
 import java.util.logging.Level;
 
 public abstract class App {
@@ -34,7 +31,7 @@ public abstract class App {
 
     public abstract Files getFiles ();
 
-    public abstract Rendering getRendering ();
+    public abstract RenderingContext getRendering ();
 
     public abstract void info (String message);
 

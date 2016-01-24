@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.platforms.gwt.GwtRendering;
+import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
 import org.parallax3d.parallax.tests.resources.Resources;
@@ -88,7 +88,7 @@ public class WebApp extends GwtApp {
                     RootLayoutPanel.get().add(pageExample);
                     pageExample.addGwtReadyListener(new PageExample.PanelReady() {
                         @Override
-                        public void onRenderingReady(GwtRendering rendering) {
+                        public void onRenderingReady(GwtRenderingContext rendering) {
                             rendering.setAnimation(test);
                         }
                     });

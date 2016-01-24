@@ -22,7 +22,7 @@ import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.gl.GL20;
 
-public interface Rendering {
+public interface RenderingContext {
 
     GL20 getGL20();
 

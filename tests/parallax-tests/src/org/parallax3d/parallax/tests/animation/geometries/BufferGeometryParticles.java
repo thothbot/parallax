@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.tests.animation.geometries;
 
-import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
@@ -39,12 +39,12 @@ public final class BufferGeometryParticles extends ParallaxTest
 	PointCloud particleSystem;
 
 	@Override
-	public void onStart(Rendering rendering)
+	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				27, // fov
-				rendering.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getRenderer().getAbsoluteAspectRation(), // aspect 
 				5, // near
 				35000 // far 
 		);
@@ -106,17 +106,17 @@ public final class BufferGeometryParticles extends ParallaxTest
 
 		//
 
-		rendering.getRenderer().setClearColor( scene.getFog().getColor(), 1 );
+		context.getRenderer().setClearColor( scene.getFog().getColor(), 1 );
 	}
 	
 	@Override
-	public void onUpdate(Rendering rendering)
+	public void onUpdate(RenderingContext context)
 	{
-		double time = rendering.getDeltaTime() * 0.001;
+		double time = context.getDeltaTime() * 0.001;
 
 		particleSystem.getRotation().setX( time * 0.25 );
 		particleSystem.getRotation().setY( time * 0.5 );
-		rendering.getRenderer().render(scene, camera);
+		context.getRenderer().render(scene, camera);
 	}
 
 	@Override

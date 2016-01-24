@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.tests.animation.geometries;
 
-import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
@@ -55,12 +55,12 @@ public class Cameras extends ParallaxTest
 	Mesh mesh;
 
 	@Override
-	public void onStart(Rendering rendering)
+	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				50,
-				0.5 * rendering.getRenderer().getAbsoluteAspectRation(),
+				0.5 * context.getRenderer().getAbsoluteAspectRation(),
 				1,
 				10000 );
 
@@ -69,32 +69,32 @@ public class Cameras extends ParallaxTest
 //
 //			@Override
 //			public void onResize(ViewportResizeEvent event) {
-//				camera.setAspect(0.5 * event.rendering.getRenderer().getAbsoluteAspectRation());
+//				camera.setAspect(0.5 * event.context.getRenderer().getAbsoluteAspectRation());
 //
 //			}
 //		});
 
 		cameraPerspective = new PerspectiveCamera(
 				50,
-				rendering.getRenderer().getAbsoluteAspectRation() * 0.5,
+				context.getRenderer().getAbsoluteAspectRation() * 0.5,
 				150,
 				1000 );
 //		cameraPerspective.addViewportResizeHandler(new ViewportResizeHandler() {
 //
 //			@Override
 //			public void onResize(ViewportResizeEvent event) {
-//				cameraPerspective.setAspect(0.5 * event.rendering.getRenderer().getAbsoluteAspectRation());
+//				cameraPerspective.setAspect(0.5 * event.context.getRenderer().getAbsoluteAspectRation());
 //
 //			}
 //		});
 
 
-		cameraOrtho = new OrthographicCamera( 0.5 * rendering.getRenderer().getAbsoluteWidth(), rendering.getRenderer().getAbsoluteHeight(), 150, 1000 );
+		cameraOrtho = new OrthographicCamera( 0.5 * context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight(), 150, 1000 );
 //		cameraOrtho.addViewportResizeHandler(new ViewportResizeHandler() {
 //
 //			@Override
 //			public void onResize(ViewportResizeEvent event) {
-//				cameraOrtho.setSize(0.5 * event.rendering.getRenderer().getAbsoluteWidth(), event.rendering.getRenderer().getAbsoluteHeight() );
+//				cameraOrtho.setSize(0.5 * event.context.getRenderer().getAbsoluteWidth(), event.context.getRenderer().getAbsoluteHeight() );
 //
 //			}
 //		});
@@ -166,13 +166,13 @@ public class Cameras extends ParallaxTest
 
 		//
 
-		rendering.getRenderer().setAutoClear(false);
+		context.getRenderer().setAutoClear(false);
 	}
 
 	@Override
-	public void onUpdate(Rendering rendering)
+	public void onUpdate(RenderingContext context)
 	{
-		double r = rendering.getDeltaTime() * 0.0005;
+		double r = context.getDeltaTime() * 0.0005;
 
 		mesh.getPosition().setX(700 * Math.cos( r ));
 		mesh.getPosition().setZ(700 * Math.sin( r ));
@@ -205,18 +205,18 @@ public class Cameras extends ParallaxTest
 
 		cameraRig.lookAt( mesh.getPosition() );
 
-		rendering.getRenderer().clear();
+		context.getRenderer().clear();
 
 		activeHelper.setVisible(false);
 
-		rendering.getRenderer().setViewport( 0, 0, rendering.getRenderer().getAbsoluteWidth() / 2, rendering.getRenderer().getAbsoluteHeight() );
+		context.getRenderer().setViewport( 0, 0, context.getRenderer().getAbsoluteWidth() / 2, context.getRenderer().getAbsoluteHeight() );
 
-		rendering.getRenderer().render( scene, activeCamera );
+		context.getRenderer().render( scene, activeCamera );
 
 		activeHelper.setVisible(true);
 
-		rendering.getRenderer().setViewport( rendering.getRenderer().getAbsoluteWidth() / 2, 0, rendering.getRenderer().getAbsoluteWidth() / 2, rendering.getRenderer().getAbsoluteHeight() );
-		rendering.getRenderer().render(scene, camera);
+		context.getRenderer().setViewport( context.getRenderer().getAbsoluteWidth() / 2, 0, context.getRenderer().getAbsoluteWidth() / 2, context.getRenderer().getAbsoluteHeight() );
+		context.getRenderer().render(scene, camera);
 	}
 
 //	@Override
@@ -229,7 +229,7 @@ public class Cameras extends ParallaxTest
 //			@Override
 //			public void onKeyDown(KeyDownEvent event)
 //			{
-//				DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
+//				DemoScene rs = (DemoScene) contextPanel.getAnimatedScene();
 //				switch(event.getNativeEvent().getKeyCode())
 //				{
 //				case 79: case 111:/*O*/

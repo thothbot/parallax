@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.tests.animation.geometries;
 
-import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.geometries.PlaneGeometry;
@@ -51,12 +51,12 @@ public class GeometryDynamic extends ParallaxTest
 	private double oldTime;
 
 	@Override
-	public void onStart(Rendering rendering)
+	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				60, // fov
-				rendering.getRenderer().getAbsoluteAspectRation(), // aspect
+				context.getRenderer().getAbsoluteAspectRation(), // aspect
 				1, // near
 				20000 // far
 		);
@@ -94,10 +94,10 @@ public class GeometryDynamic extends ParallaxTest
 	}
 
 	@Override
-	public void onUpdate(Rendering rendering)
+	public void onUpdate(RenderingContext context)
 	{
 		for ( int i = 0, l = this.geometry.getVertices().size(); i < l; i ++ )
-			this.geometry.getVertices().get( i ).setY(35.0 * Math.sin( i / 5.0 + ( rendering.getDeltaTime() * 0.01 + i ) / 7.0 ));
+			this.geometry.getVertices().get( i ).setY(35.0 * Math.sin( i / 5.0 + ( context.getDeltaTime() * 0.01 + i ) / 7.0 ));
 
 		((Geometry)this.mesh.getGeometry()).setVerticesNeedUpdate( true );
 
@@ -105,7 +105,7 @@ public class GeometryDynamic extends ParallaxTest
 
 		this.oldTime = Duration.currentTimeMillis();
 
-		rendering.getRenderer().render(scene, camera);
+		context.getRenderer().render(scene, camera);
 	}
 
 	@Override

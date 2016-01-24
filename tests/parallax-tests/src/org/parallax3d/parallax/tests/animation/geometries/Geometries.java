@@ -21,7 +21,7 @@ package org.parallax3d.parallax.tests.animation.geometries;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.geometries.*;
@@ -47,11 +47,11 @@ public class Geometries extends ParallaxTest
 	PerspectiveCamera camera;
 
 	@Override
-	public void onStart(Rendering rendering)
+	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera( 45,
-				rendering.getRenderer().getAbsoluteAspectRation(),
+				context.getRenderer().getAbsoluteAspectRation(),
 				1,
 				2000
 		);
@@ -140,10 +140,10 @@ public class Geometries extends ParallaxTest
 	}
 
 	@Override
-	public void onUpdate(Rendering rendering)
+	public void onUpdate(RenderingContext context)
 	{
-		camera.getPosition().setX(Math.cos( rendering.getDeltaTime() * 0.0001 ) * 800.0);
-		camera.getPosition().setZ(Math.sin( rendering.getDeltaTime() * 0.0001 ) * 800.0);
+		camera.getPosition().setX(Math.cos( context.getDeltaTime() * 0.0001 ) * 800.0);
+		camera.getPosition().setZ(Math.sin( context.getDeltaTime() * 0.0001 ) * 800.0);
 
 		camera.lookAt( scene.getPosition() );
 
@@ -155,7 +155,7 @@ public class Geometries extends ParallaxTest
 			object.getRotation().addY(0.005);
 		}
 
-		rendering.getRenderer().render(scene, camera);
+		context.getRenderer().render(scene, camera);
 	}
 
 	@Override
