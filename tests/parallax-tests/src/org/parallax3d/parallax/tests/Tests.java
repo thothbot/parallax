@@ -37,7 +37,7 @@ public class Tests {
             , new Cameras()
 //            , new LinesSphere()
 //            , new GeometryShapes()
-//            , new GeometryExtrudeSplines()
+            , new GeometryExtrudeSplines()
             , new BufferGeometryDemo()
             , new BufferGeometryParticles()
 //            , new GeometryNormals()
