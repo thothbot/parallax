@@ -34,7 +34,7 @@ public class Tests {
             , new GeometryDynamic()
             , new GeometryHierarchy()
             , new Cameras()
-//            , new LinesSphere()
+            , new LinesSphere()
             , new GeometryShapes()
             , new GeometryExtrudeSplines()
             , new BufferGeometryDemo()
