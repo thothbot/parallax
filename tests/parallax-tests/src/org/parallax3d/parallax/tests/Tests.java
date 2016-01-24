@@ -21,6 +21,7 @@ package org.parallax3d.parallax.tests;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.cases.animation.*;
 import org.parallax3d.parallax.tests.cases.geometries.*;
+import org.parallax3d.parallax.tests.materials.MaterialsBumpmap;
 
 import java.util.*;
 
@@ -43,17 +44,15 @@ public class Tests {
             , new GeometryNormals()
         ));
 
-        put("Interactivity", Arrays.asList(
-                new GeometryCube()
-//              new InteractiveCubes()
-//            , new InteractiveCubesGpu()
-//            , new InteractiveDraggableCubes()
-//            , new InteractiveVoxelPainter()
-        ));
+//        put("Interactivity", Arrays.asList(
+////              new InteractiveCubes()
+////            , new InteractiveCubesGpu()
+////            , new InteractiveDraggableCubes()
+////            , new InteractiveVoxelPainter()
+//        ));
 
         put("Materials", Arrays.asList(
-                new GeometryCube()
-//              new MaterialsBumpmap()
+              new MaterialsBumpmap()
 //            , new MaterialsBumpmapSkin()
 //            , new MaterialsLightmap()
 //            , new MaterialsWireframe()
@@ -81,42 +80,37 @@ public class Tests {
             , new MorphTargetsHorse()
         ));
 
-        put("Custom Attributes", Arrays.asList(
-                new GeometryCube()
-//              new CustomAttributesParticles()
-//            , new CustomAttributesParticles2()
-        ));
+//        put("Custom Attributes", Arrays.asList(
+////              new CustomAttributesParticles()
+////            , new CustomAttributesParticles2()
+//        ));
 
-        put("Loaders", Arrays.asList(
-                new GeometryCube()
-//              new LoaderCollada()
-        ));
+//        put("Loaders", Arrays.asList(
+////              new LoaderCollada()
+//        ));
 
-        put("Plugins", Arrays.asList(
-                new GeometryCube()
-//            , new TerrainDynamic()
-//            , new HilbertCurves()
-//            , new PostprocessingGodrays()
-//            , new PostprocessingMulti()
-//            , new EffectsLensFlares()
-//            , new EffectsSprites()
-//            , new Saturn()
-        ));
+//        put("Plugins", Arrays.asList(
+////            , new TerrainDynamic()
+////            , new HilbertCurves()
+////            , new PostprocessingGodrays()
+////            , new PostprocessingMulti()
+////            , new EffectsLensFlares()
+////            , new EffectsSprites()
+////            , new Saturn()
+//        ));
 
-        put("Miscellaneous", Arrays.asList(
-                new GeometryCube()
-//            , new PerformanceDoubleSided()
-//            , new MiscLookAt()
-//            , new MiscMemoryTestGeometries()
-//            , new MiscMemoryTestShaders()
-//            , new LoaderSTL()
-//            , new Helpers()
-        ));
+//        put("Miscellaneous", Arrays.asList(
+////            , new PerformanceDoubleSided()
+////            , new MiscLookAt()
+////            , new MiscMemoryTestGeometries()
+////            , new MiscMemoryTestShaders()
+////            , new LoaderSTL()
+////            , new Helpers()
+//        ));
 
-        put("Raytracing Rendering", Arrays.asList(
-                new GeometryCube()
-//            , new Raytracing()
-        ));
+//        put("Raytracing Rendering", Arrays.asList(
+////            , new Raytracing()
+//        ));
     }};
 
     private static final FastMap<ParallaxTest> contentToken = new FastMap<>();
