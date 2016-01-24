@@ -27,8 +27,7 @@ public class Tests {
 
     public static final FastMap<List<? extends ParallaxTest>> DATA = new FastMap<List<? extends ParallaxTest>>(){{
         put("Geometries", Arrays.asList(
-                new GeometryCube()
-//            , new CopyOfGeometryCube()
+              new GeometryCube()
             , new GeometryColors()
             , new Geometries()
             , new GeometriesParametric()
@@ -36,7 +35,7 @@ public class Tests {
             , new GeometryHierarchy()
             , new Cameras()
 //            , new LinesSphere()
-//            , new GeometryShapes()
+            , new GeometryShapes()
             , new GeometryExtrudeSplines()
             , new BufferGeometryDemo()
             , new BufferGeometryParticles()
