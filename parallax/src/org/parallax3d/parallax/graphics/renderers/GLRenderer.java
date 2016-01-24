@@ -2955,7 +2955,7 @@ public class GLRenderer extends AbstractRenderer
 			// glTexImage2D does not apply to render target textures
 			else if (!(texture instanceof RenderTargetTexture))
 			{
-				image.glTexImage2D(TextureTarget.TEXTURE_2D.getValue());
+				image.glTexImage2D(this.gl, TextureTarget.TEXTURE_2D.getValue());
 			}
 
 			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )
@@ -3059,7 +3059,7 @@ public class GLRenderer extends AbstractRenderer
 				}
 				else
 				{
-					img.glTexImage2D(TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue());
+					img.glTexImage2D(this.gl, TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue());
 				}
 				img.recycle();
 			}

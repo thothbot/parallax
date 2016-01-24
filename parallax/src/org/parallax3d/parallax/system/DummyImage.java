@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.system;
 
 import org.parallax3d.parallax.graphics.textures.TextureData;
+import org.parallax3d.parallax.system.gl.GL20;
 
 /**
  * Certain types of texture need a dummy Image so that WebGlRenderer can
@@ -36,7 +37,7 @@ public class DummyImage implements TextureData
 	}
 
 	@Override
-	public void glTexImage2D(int target)
+	public void glTexImage2D(GL20 gl, int target)
 	{
 		throw new RuntimeException("glTexImage2D not supported by DummyImage");
 	}
