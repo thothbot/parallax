@@ -19,8 +19,11 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
+import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.system.ThreeJsObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,11 +35,21 @@ import java.util.List;
 @ThreeJsObject("THREE.CubeTexture")
 public class CubeTexture extends Texture 
 {
-	private List<TextureData> images;
-	
-	public CubeTexture(List<TextureData> images)
+	private List<PixmapTextureData> images;
+
+	private int loadedCount;
+
+	public CubeTexture(String url)
+	{
+		this(getImagesFromUrl(url));
+	}
+
+	public CubeTexture(List<PixmapTextureData> images)
 	{
 		this.images = images;
+		setFlipY(false);
+
+		loadedCount = 0;
 	}
 
 	/**
@@ -57,5 +70,22 @@ public class CubeTexture extends Texture
 	public TextureData getImage(int index)
 	{
 		return this.images.get(index);
+	}
+
+	private static List<PixmapTextureData> getImagesFromUrl(String url)
+	{
+		List<PixmapTextureData> images = new ArrayList<PixmapTextureData>();
+
+		String[] parts = {"px", "nx", "py", "ny", "pz", "nz"};
+		String urlStart = url.substring(0, url.indexOf("*"));
+		String urlEnd = url.substring(url.indexOf("*") + 1, url.length());
+
+		for(String part: parts)
+		{
+			FileHandle file = App.files.internal(urlStart + part + urlEnd);
+			images.add(new PixmapTextureData(file));
+		}
+
+		return images;
 	}
 }
