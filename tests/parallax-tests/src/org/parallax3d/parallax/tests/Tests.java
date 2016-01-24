@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.tests.animation.geometries.BufferGeometryDemo;
 import org.parallax3d.parallax.tests.animation.geometries.GeometryCube;
 
 import java.util.*;
@@ -28,10 +29,6 @@ public class Tests {
     public static final FastMap<List<? extends ParallaxTest>> DATA = new FastMap<List<? extends ParallaxTest>>(){{
         put("Geometries", Arrays.asList(
                 new GeometryCube()
-                ,new GeometryCube()
-                ,new GeometryCube()
-                ,new GeometryCube()
-                ,new GeometryCube()
 //            , new CopyOfGeometryCube()
 //            , new GeometryColors()
 //            , new Geometries()
@@ -42,7 +39,7 @@ public class Tests {
 //            , new LinesSphere()
 //            , new GeometryShapes()
 //            , new GeometryExtrudeSplines()
-//            , new BufferGeometryDemo()
+            , new BufferGeometryDemo()
 //            , new BufferGeometryParticles()
 //            , new GeometryNormals()
         ));
