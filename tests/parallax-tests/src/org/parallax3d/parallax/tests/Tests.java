@@ -70,7 +70,7 @@ public class Tests {
 //            , new TrackballEarth()
             , new MaterialsShaderLava()
             , new MaterialsShaderMonjori()
-//            , new ShaderOcean()
+            , new ShaderOcean()
             , new MaterialsRenderTarget()
         ));
 
