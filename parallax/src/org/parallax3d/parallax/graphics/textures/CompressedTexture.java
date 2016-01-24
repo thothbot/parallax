@@ -35,14 +35,13 @@ public class CompressedTexture extends Texture
 	private int compressedFormat;
 	private List<DataTexture> mipmaps;
 
-    public CompressedTexture()
-    {
-		super(new DummyImage(0, 0));
-	}
-	
-    public CompressedTexture ( ByteBuffer buffer, boolean loadMipmaps )
+	public CompressedTexture( String url )
 	{
-		this();
+		this(null, false);
+	}
+
+	public CompressedTexture ( ByteBuffer buffer, boolean loadMipmaps )
+	{
         parseDDS(buffer, loadMipmaps);
 	}
 
