@@ -19,8 +19,8 @@
 package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.tests.animation.animation.*;
-import org.parallax3d.parallax.tests.animation.geometries.*;
+import org.parallax3d.parallax.tests.cases.animation.*;
+import org.parallax3d.parallax.tests.cases.geometries.*;
 
 import java.util.*;
 

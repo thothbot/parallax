@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.animation.geometries;
+package org.parallax3d.parallax.tests.cases.geometries;
 
 import java.util.ArrayList;
 import java.util.List;

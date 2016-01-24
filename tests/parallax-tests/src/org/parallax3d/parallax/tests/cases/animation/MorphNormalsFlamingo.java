@@ -16,22 +16,16 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.tests.animation.animation;
+package org.parallax3d.parallax.tests.cases.animation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.graphics.core.AbstractGeometry;
-import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
-import org.parallax3d.parallax.graphics.materials.Material;
-import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
-import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.MorphAnimMesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.tests.ParallaxTest;
