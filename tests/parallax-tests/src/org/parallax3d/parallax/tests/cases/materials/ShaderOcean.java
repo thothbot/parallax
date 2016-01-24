@@ -30,6 +30,7 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.graphics.renderers.shaders.CubeShader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
