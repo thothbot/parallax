@@ -77,8 +77,8 @@ public class Tests {
 
         put("Animation", Arrays.asList(
 //              new ClothSimulation()
-            new MorphNormalsFlamingo()
-//            , new MorphTargetsHorse()
+              new MorphNormalsFlamingo()
+            , new MorphTargetsHorse()
         ));
 
         put("Custom Attributes", Arrays.asList(
