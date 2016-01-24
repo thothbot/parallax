@@ -34,7 +34,7 @@ public class Tests {
             , new GeometriesParametric()
             , new GeometryDynamic()
 //            , new GeometryHierarchy()
-//            , new Cameras()
+            , new Cameras()
 //            , new LinesSphere()
 //            , new GeometryShapes()
 //            , new GeometryExtrudeSplines()
