@@ -29,7 +29,7 @@ public class Tests {
         put("Geometries", Arrays.asList(
                 new GeometryCube()
 //            , new CopyOfGeometryCube()
-//            , new GeometryColors()
+            , new GeometryColors()
             , new Geometries()
             , new GeometriesParametric()
             , new GeometryDynamic()
