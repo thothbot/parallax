@@ -65,7 +65,7 @@ public class Tests {
             , new MaterialsCubemapDynamicReflection()
             , new MaterialsTextureFilter()
             , new MaterialsTextureAnisotropy()
-//            , new ParticlesTrails()
+            , new ParticlesTrails()
             , new ParticlesRandom()
 //            , new TrackballEarth()
             , new MaterialsShaderLava()
