@@ -19,10 +19,7 @@
 package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.tests.animation.geometries.BufferGeometryDemo;
-import org.parallax3d.parallax.tests.animation.geometries.BufferGeometryParticles;
-import org.parallax3d.parallax.tests.animation.geometries.Geometries;
-import org.parallax3d.parallax.tests.animation.geometries.GeometryCube;
+import org.parallax3d.parallax.tests.animation.geometries.*;
 
 import java.util.*;
 
@@ -34,7 +31,7 @@ public class Tests {
 //            , new CopyOfGeometryCube()
 //            , new GeometryColors()
             , new Geometries()
-//            , new GeometriesParametric()
+            , new GeometriesParametric()
 //            , new GeometryDynamic()
 //            , new GeometryHierarchy()
 //            , new Cameras()
