@@ -43,7 +43,7 @@ public class LineBasicMaterial extends Material
 
 	private Material.COLORS vertexColors;
 
-	private float linewidth;
+	private double linewidth;
 
 	public LineBasicMaterial()
 	{
@@ -66,7 +66,7 @@ public class LineBasicMaterial extends Material
 	 * Line thickness. Default is 1.
 	 * @return
 	 */
-	public float getLinewidth() {
+	public double getLinewidth() {
 		return this.linewidth;
 	}
 
@@ -76,7 +76,7 @@ public class LineBasicMaterial extends Material
 	 * Due to limitations in the <a href="https://code.google.com/p/angleproject/">ANGLE layer</a>, on Windows platforms linewidth will always be 1 regardless of the set value.
 	 * @param linewidth
 	 */
-	public void setLinewidth(float linewidth) {
+	public void setLinewidth(double linewidth) {
 		this.linewidth = linewidth;
 	}
 
