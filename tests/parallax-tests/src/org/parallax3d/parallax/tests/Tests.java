@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.tests.animation.animation.*;
 import org.parallax3d.parallax.tests.animation.geometries.*;
 
 import java.util.*;
@@ -74,17 +75,16 @@ public class Tests {
 //            , new MaterialsRenderTarget()
         ));
 
+        put("Animation", Arrays.asList(
+//              new ClothSimulation()
+            new MorphNormalsFlamingo()
+//            , new MorphTargetsHorse()
+        ));
+
         put("Custom Attributes", Arrays.asList(
                 new GeometryCube()
 //              new CustomAttributesParticles()
 //            , new CustomAttributesParticles2()
-        ));
-
-        put("Animation", Arrays.asList(
-                new GeometryCube()
-//              new ClothSimulation()
-//            , new MorphNormalsFlamingo()
-//            , new MorphTargetsHorse()
         ));
 
         put("Loaders", Arrays.asList(
