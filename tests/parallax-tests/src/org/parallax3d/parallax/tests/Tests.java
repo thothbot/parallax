@@ -40,7 +40,7 @@ public class Tests {
             , new GeometryExtrudeSplines()
             , new BufferGeometryDemo()
             , new BufferGeometryParticles()
-//            , new GeometryNormals()
+            , new GeometryNormals()
         ));
 
         put("Interactivity", Arrays.asList(
