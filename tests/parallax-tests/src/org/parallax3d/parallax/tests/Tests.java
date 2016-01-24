@@ -54,7 +54,7 @@ public class Tests {
         put("Materials", Arrays.asList(
               new MaterialsBumpmap()
             , new MaterialsBumpmapSkin()
-//            , new MaterialsLightmap()
+            , new MaterialsLightmap()
 //            , new MaterialsWireframe()
             , new MaterialsCanvas2D()
 //            , new MaterialsTextures()
