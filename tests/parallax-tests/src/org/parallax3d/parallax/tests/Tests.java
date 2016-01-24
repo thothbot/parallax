@@ -69,7 +69,7 @@ public class Tests {
 //            , new ParticlesRandom()
 //            , new TrackballEarth()
             , new MaterialsShaderLava()
-//            , new MaterialsShaderMonjori()
+            , new MaterialsShaderMonjori()
 //            , new ShaderOcean()
             , new MaterialsRenderTarget()
         ));

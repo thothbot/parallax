@@ -33,8 +33,6 @@ import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.resources.LavaShader;
 
-import java.util.Map;
-
 public final class MaterialsShaderLava extends ParallaxTest
 {
 
