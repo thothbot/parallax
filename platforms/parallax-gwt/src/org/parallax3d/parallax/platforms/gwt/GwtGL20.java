@@ -18,7 +18,11 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
+import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.VideoElement;
 import com.google.gwt.typedarrays.client.Float32ArrayNative;
 import com.google.gwt.typedarrays.client.Int16ArrayNative;
 import com.google.gwt.typedarrays.client.Int32ArrayNative;
@@ -444,6 +448,23 @@ public class GwtGL20 implements GL20 {
 	@Override
 	public void glStencilOp (int fail, int zfail, int zpass) {
 		gl.stencilOp(fail, zfail, zpass);
+	}
+
+
+	public void glTexImage2D(int target, int level, int internalformat, int format, int type, ImageElement pixels) {
+		gl.texImage2D(target, level, internalformat, format, type, pixels);
+	}
+
+	public void glTexImage2D(int target, int level, int internalformat, int format, int type, VideoElement pixels) {
+		gl.texImage2D(target, level, internalformat, format, type, pixels);
+	}
+
+	public void glTexImage2D(int target, int level, int internalformat, int format, int type, CanvasElement pixels) {
+		gl.texImage2D(target, level, internalformat, format, type, pixels);
+	}
+
+	public void glTexImage2D(int target, int level, int internalformat, int format, int type, ImageData pixels) {
+		gl.texImage2D(target, level, internalformat, format, type, pixels);
 	}
 
 	@Override
