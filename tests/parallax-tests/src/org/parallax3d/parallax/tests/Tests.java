@@ -33,7 +33,7 @@ public class Tests {
             , new Geometries()
             , new GeometriesParametric()
             , new GeometryDynamic()
-//            , new GeometryHierarchy()
+            , new GeometryHierarchy()
             , new Cameras()
 //            , new LinesSphere()
 //            , new GeometryShapes()
