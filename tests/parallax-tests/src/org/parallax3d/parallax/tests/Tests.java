@@ -60,7 +60,7 @@ public class Tests {
 //            , new MaterialsTextures()
 //            , new MaterialsTextureCompressed()
 //            , new MaterialsCubemapFresnel()
-//            , new MaterialsCubemapBallsReflection()
+            , new MaterialsCubemapBallsReflection()
 //            , new MaterialsCubemapBallsRefraction()
 //            , new MaterialsCubemapDynamicReflection()
 //            , new MaterialsTextureFilter()
