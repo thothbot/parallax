@@ -32,7 +32,7 @@ public class Tests {
 //            , new GeometryColors()
             , new Geometries()
             , new GeometriesParametric()
-//            , new GeometryDynamic()
+            , new GeometryDynamic()
 //            , new GeometryHierarchy()
 //            , new Cameras()
 //            , new LinesSphere()
