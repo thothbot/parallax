@@ -59,7 +59,7 @@ public class Tests {
             , new MaterialsCanvas2D()
 //            , new MaterialsTextures()
 //            , new MaterialsTextureCompressed()
-//            , new MaterialsCubemapFresnel()
+            , new MaterialsCubemapFresnel()
             , new MaterialsCubemapBallsReflection()
             , new MaterialsCubemapBallsRefraction()
             , new MaterialsCubemapDynamicReflection()
