@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.App;
-import org.parallax3d.parallax.system.Image;
+import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
@@ -63,7 +63,7 @@ public class Texture
 
 	private static int TextureCount = 0;
 
-	private Image image;
+	private TextureData image;
 
 	private int id;
 
@@ -99,7 +99,16 @@ public class Texture
 	 */
 	public Texture()
 	{
-		this(null);
+		this("");
+	}
+
+	public Texture (String internalPath) {
+		this(App.files.internal(internalPath));
+	}
+
+	public Texture (FileHandle file)
+	{
+		this( new PixmapTextureData(file));
 	}
 
 	/**
@@ -107,7 +116,7 @@ public class Texture
 	 *
 	 * @param image the Image.
 	 */
-	public Texture(Image image)
+	public Texture(TextureData image)
 	{
 		this(image,
 				MAPPING_MODE.UV,
@@ -133,7 +142,7 @@ public class Texture
 	 * @param type      the DataType value.
 	 * @param anisotropy the anisotropy value.
 	 */
-	public Texture(Image image, MAPPING_MODE mapping, TextureWrapMode wrapS,
+	public Texture(TextureData image, MAPPING_MODE mapping, TextureWrapMode wrapS,
 				   TextureWrapMode wrapT, TextureMagFilter magFilter, TextureMinFilter minFilter,
 				   PixelFormat format, PixelType type, int anisotropy)
 	{
@@ -262,14 +271,14 @@ public class Texture
 	 *
 	 * @return the media element: image or canvas.
 	 */
-	public Image getImage() {
+	public TextureData getImage() {
 		return this.image;
 	}
 
 	/**
 	 * Sets texture media element.
 	 */
-	public void setImage(Image image) {
+	public void setImage(TextureData image) {
 		this.image = image;
 	}
 

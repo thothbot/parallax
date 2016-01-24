@@ -79,7 +79,7 @@ import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.Image;
+import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
@@ -2919,7 +2919,7 @@ public class GLRenderer extends AbstractRenderer
             */
 			this.gl.glPixelStorei( PixelStoreParameter.UNPACK_ALIGNMENT.getValue(), texture.getUnpackAlignment() );
 
-			Image image = texture.getImage();
+			TextureData image = texture.getImage();
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
 					&& Mathematics.isPowerOfTwo( image.getHeight() );
 
@@ -2971,7 +2971,7 @@ public class GLRenderer extends AbstractRenderer
 		}
 	}
 
-	private Image createPowerOfTwoImage(Image image)
+	private TextureData createPowerOfTwoImage(TextureData image)
 	{
 		int width = image.getWidth();
 		int height = image.getHeight();
@@ -2990,7 +2990,7 @@ public class GLRenderer extends AbstractRenderer
 	 *
 	 * @return a new Image, or the same one if no clamping was necessary
 	 */
-	private Image clampToMaxSize ( Image image, int maxSize )
+	private TextureData clampToMaxSize (TextureData image, int maxSize )
 	{
 		int imgWidth = image.getWidth();
 		int imgHeight = image.getHeight();
@@ -3023,13 +3023,13 @@ public class GLRenderer extends AbstractRenderer
 			//GLES20.glPixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL,
 			// texture.isFlipY() ? 1 : 0 );
 
-			List<Image> cubeImage = new ArrayList<Image>();
+			List<TextureData> cubeImage = new ArrayList<TextureData>();
 
 			for ( int i = 0; i < 6; i ++ )
 			{
 				if ( this.autoScaleCubemaps )
 				{
-					Image clamped = clampToMaxSize(texture.getImage(i),
+					TextureData clamped = clampToMaxSize(texture.getImage(i),
 							this._maxCubemapSize);
 					cubeImage.add(clamped);
 
@@ -3040,7 +3040,7 @@ public class GLRenderer extends AbstractRenderer
 				}
 			}
 
-			Image image = cubeImage.get( 0 );
+			TextureData image = cubeImage.get( 0 );
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
 					&& Mathematics.isPowerOfTwo( image.getHeight() );
 
@@ -3049,11 +3049,11 @@ public class GLRenderer extends AbstractRenderer
 
 			for ( int i = 0; i < 6; i ++ )
 			{
-				Image img = cubeImage.get(i);
+				TextureData img = cubeImage.get(i);
 
 				if (!isImagePowerOfTwo)
 				{
-					Image scaledImg = createPowerOfTwoImage(img);
+					TextureData scaledImg = createPowerOfTwoImage(img);
 					img.recycle();
 					img = scaledImg;
 				}

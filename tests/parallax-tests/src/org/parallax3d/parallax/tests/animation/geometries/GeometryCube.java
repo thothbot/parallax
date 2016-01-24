@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests.animation.geometries;
 
 import org.parallax3d.parallax.Rendering;
+import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
@@ -49,7 +50,7 @@ public class GeometryCube extends ParallaxTest
 		BoxGeometry geometry = new BoxGeometry( 200, 200, 200 );
 
 		MeshBasicMaterial material = new MeshBasicMaterial();
-//		material.setMap(new Texture(texture));
+		material.setMap(new Texture(texture));
 
 		this.mesh = new Mesh(geometry, material);
 		scene.add(mesh);

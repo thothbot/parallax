@@ -16,12 +16,12 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.system;
+package org.parallax3d.parallax.graphics.textures;
 
 /**
  * Representation of an image that can be uploaded as a texture.
  */
-public interface Image
+public interface TextureData
 {
     /**
      * Upload the texture to the GPU.
@@ -47,7 +47,7 @@ public interface Image
      * @param height
      * @return  a new Image which is a scaled copy of this one.
      */
-    public Image createScaledCopy(int width, int height);
+    public TextureData createScaledCopy(int width, int height);
 
     /**
      * Explicitly free the Image's internal resources.

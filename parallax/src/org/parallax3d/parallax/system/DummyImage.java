@@ -18,11 +18,13 @@
 
 package org.parallax3d.parallax.system;
 
+import org.parallax3d.parallax.graphics.textures.TextureData;
+
 /**
  * Certain types of texture need a dummy Image so that WebGlRenderer can
  * get width and height.
  */
-public class DummyImage implements Image
+public class DummyImage implements TextureData
 {
 	private int width;
 	private int height;
@@ -62,7 +64,7 @@ public class DummyImage implements Image
 	}
 
 	@Override
-	public Image createScaledCopy(int width, int height)
+	public TextureData createScaledCopy(int width, int height)
 	{
 		return new DummyImage(width, height);
 	}
