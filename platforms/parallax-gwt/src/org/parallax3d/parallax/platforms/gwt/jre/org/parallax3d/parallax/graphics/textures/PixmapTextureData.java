@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.textures;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.platforms.gwt.GwtGL20;
@@ -33,7 +34,7 @@ public class PixmapTextureData implements TextureData {
     private Element image;
 
     public PixmapTextureData(FileHandle file) {
-        new Image(file.name());
+        image = new Image(file.path()).getElement();
     }
 
     @Override

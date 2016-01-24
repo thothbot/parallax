@@ -29,7 +29,7 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 
 public class GeometryCube extends ParallaxTest
 {
-	private static final String texture = "./static/textures/crate.gif";
+	private static final String texture = "./assets/textures/crate.gif";
 	PerspectiveCamera camera;
 
 	private Mesh mesh;
