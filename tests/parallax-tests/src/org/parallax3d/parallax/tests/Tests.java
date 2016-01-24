@@ -20,6 +20,7 @@ package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.animation.geometries.BufferGeometryDemo;
+import org.parallax3d.parallax.tests.animation.geometries.BufferGeometryParticles;
 import org.parallax3d.parallax.tests.animation.geometries.GeometryCube;
 
 import java.util.*;
@@ -40,7 +41,7 @@ public class Tests {
 //            , new GeometryShapes()
 //            , new GeometryExtrudeSplines()
             , new BufferGeometryDemo()
-//            , new BufferGeometryParticles()
+            , new BufferGeometryParticles()
 //            , new GeometryNormals()
         ));
 

@@ -29,11 +29,11 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 
 public class GeometryCube extends ParallaxTest
 {
-	private static final String texture = "./assets/textures/crate.gif";
+	static final String texture = "./assets/textures/crate.gif";
 	PerspectiveCamera camera;
 
-	private Mesh mesh;
-	private Scene scene;
+	Mesh mesh;
+	Scene scene;
 
 	@Override
 	public void onStart(Rendering rendering)
