@@ -55,7 +55,7 @@ public class Tests {
               new MaterialsBumpmap()
             , new MaterialsBumpmapSkin()
             , new MaterialsLightmap()
-//            , new MaterialsWireframe()
+            , new MaterialsWireframe()
             , new MaterialsCanvas2D()
             , new MaterialsTextures()
             , new MaterialsTextureCompressed()
