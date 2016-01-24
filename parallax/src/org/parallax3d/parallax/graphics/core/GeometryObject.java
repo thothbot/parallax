@@ -38,7 +38,7 @@ public abstract class GeometryObject extends Object3D
 	protected AbstractGeometry geometry;
 	protected Material material;
 
-	private float _oldLineWidth = -1;
+	private double _oldLineWidth = -1;
 
 	private int[] tmpBufArray = {0};
 
@@ -107,11 +107,11 @@ public abstract class GeometryObject extends Object3D
 		renderer.getInfo().getMemory().geometries --;
 	}
 
-	public void setLineWidth (GL20 gl, float width )
+	public void setLineWidth (GL20 gl, double width )
 	{
 		if ( width != this._oldLineWidth )
 		{
-			gl.glLineWidth(width);
+			gl.glLineWidth((float) width);
 			this._oldLineWidth = width;
 		}
 	}
