@@ -31,5 +31,5 @@ public interface HasFog
 	 * @return
 	 */
 	boolean isFog();
-	<T> T setFog(boolean fog);
+	<T extends Material> T setFog(boolean fog);
 }

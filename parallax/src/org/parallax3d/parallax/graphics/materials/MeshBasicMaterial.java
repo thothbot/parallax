@@ -302,6 +302,7 @@ public class MeshBasicMaterial extends Material
 		return this;
 	}
 
+	@Override
 	public MeshBasicMaterial clone() {
 
 		MeshBasicMaterial material = new MeshBasicMaterial();

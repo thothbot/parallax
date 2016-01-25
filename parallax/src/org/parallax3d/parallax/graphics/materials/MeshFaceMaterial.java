@@ -63,6 +63,7 @@ public final class MeshFaceMaterial extends Material
 		return null;
 	}
 
+	@Override
 	public MeshFaceMaterial clone() {
 
 		MeshFaceMaterial material = new MeshFaceMaterial();

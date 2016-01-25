@@ -25,9 +25,9 @@ public interface HasNormalMap
 {
 	Texture getNormalMap();
 
-	<T> T setNormalMap(Texture normalMap);
+	<T extends Material> T setNormalMap(Texture normalMap);
 
 	Vector2 getNormalScale();
 
-	<T> T setNormalScale(Vector2 normalScale);
+	<T extends Material> T setNormalScale(Vector2 normalScale);
 }

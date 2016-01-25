@@ -40,10 +40,10 @@ public interface HasEnvMap
 	 *
 	 * @param envMap the texture
 	 */
-	<T> T setEnvMap(Texture envMap);
+	<T extends Material> T setEnvMap(Texture envMap);
 
 	Texture.OPERATIONS getCombine();
-	<T> T setCombine(Texture.OPERATIONS combine);
+	<T extends Material> T setCombine(Texture.OPERATIONS combine);
 
 	/**
 	 * Gets reflectivity
@@ -57,7 +57,7 @@ public interface HasEnvMap
 	 *
 	 * @param reflectivity the reflectivity value
 	 */
-	<T> T setReflectivity(double reflectivity);
+	<T extends Material> T setReflectivity(double reflectivity);
 
 	/**
 	 * Gets Refraction Ratio
@@ -67,5 +67,5 @@ public interface HasEnvMap
 	/**
 	 * Sets Refraction Ratio
 	 */
-	<T> T setRefractionRatio(double refractionRatio);
+	<T extends Material> T setRefractionRatio(double refractionRatio);
 }

@@ -23,5 +23,5 @@ import org.parallax3d.parallax.graphics.textures.Texture;
 public interface HasAlphaMap {
 
 	Texture getAlphaMap();
-	<T> T setAlphaMap(Texture map);
+	<T extends Material> T setAlphaMap(Texture map);
 }

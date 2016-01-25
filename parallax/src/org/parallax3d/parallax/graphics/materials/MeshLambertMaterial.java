@@ -369,6 +369,7 @@ public final class MeshLambertMaterial extends Material
 		return this;
 	}
 
+	@Override
 	public MeshLambertMaterial clone() {
 
 		MeshLambertMaterial material = new MeshLambertMaterial();

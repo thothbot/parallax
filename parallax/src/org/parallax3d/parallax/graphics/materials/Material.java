@@ -209,8 +209,9 @@ public abstract class Material
 		return this.name;
 	}
 
-	public void setName(String name) {
+	public <T extends Material> T setName(String name) {
 		this.name = name;
+		return (T)this;
 	}
 
 	public boolean isVisible() {
@@ -222,8 +223,9 @@ public abstract class Material
 	 * <p>
 	 * Default is true.
 	 */
-	public void setVisible(boolean visible) {
+	public <T extends Material> T setVisible(boolean visible) {
 		this.isVisible = visible;
+		return (T)this;
 	}
 
 	public SIDE getSides() {
@@ -237,8 +239,9 @@ public abstract class Material
 	 *
 	 * @param side see options {@link Material.SIDE}.
 	 */
-	public void setSide(SIDE side) {
+	public <T extends Material> T setSide(SIDE side) {
 		this.side = side;
+		return (T)this;
 	}
 
 	public boolean isNeedsUpdate() {
@@ -251,8 +254,9 @@ public abstract class Material
 	 * <p>
 	 * This property is automatically set to true when instancing a new material.
 	 */
-	public void setNeedsUpdate(boolean visible) {
+	public <T extends Material> T setNeedsUpdate(boolean visible) {
 		this.isNeedsUpdate = visible;
+		return (T)this;
 	}
 
 	/**
@@ -265,8 +269,9 @@ public abstract class Material
 	/**
 	 * Sets opacity. Default is 1.
 	 */
-	public void setOpacity(double opacity) {
+	public <T extends Material> T setOpacity(double opacity) {
 		this.opacity = opacity;
+		return (T)this;
 	}
 
 	public boolean isTransparent() {
@@ -279,9 +284,10 @@ public abstract class Material
 	 * This has an effect on rendering, as transparent objects need an special treatment,
 	 * and are rendered after the opaque (i.e. non transparent) objects.
 	 */
-	public void setTransparent(boolean transparent) {
+	public <T extends Material> T setTransparent(boolean transparent) {
 		this.isTransparent = transparent;
-	}
+		return (T)this;
+}
 
 	public Material.BLENDING getBlending() {
 		return blending;
@@ -292,8 +298,9 @@ public abstract class Material
 	 * <p>
 	 * Default is {@link Material.BLENDING#NORMAL}.
 	 */
-	public void setBlending(BLENDING blending) {
+	public <T extends Material> T setBlending(BLENDING blending) {
 		this.blending = blending;
+		return (T)this;
 	}
 
 	public BlendingFactorSrc getBlendSrc() {
@@ -307,8 +314,9 @@ public abstract class Material
 	 *
 	 * @param blendSrc
 	 */
-	public void setBlendSrc(BlendingFactorSrc blendSrc) {
+	public <T extends Material> T setBlendSrc(BlendingFactorSrc blendSrc) {
 		this.blendSrc = blendSrc;
+		return (T)this;
 	}
 
 	public BlendingFactorDest getBlendDst() {
@@ -322,8 +330,9 @@ public abstract class Material
 	 *
 	 * @param blendDst
 	 */
-	public void setBlendDst(BlendingFactorDest blendDst) {
+	public <T extends Material> T setBlendDst(BlendingFactorDest blendDst) {
 		this.blendDst = blendDst;
+		return (T)this;
 	}
 
 	public BlendEquationMode getBlendEquation() {
@@ -338,8 +347,9 @@ public abstract class Material
 	 *
 	 * @param blendEquation
 	 */
-	public void setBlendEquation(BlendEquationMode blendEquation) {
+	public <T extends Material> T setBlendEquation(BlendEquationMode blendEquation) {
 		this.blendEquation = blendEquation;
+		return (T)this;
 	}
 
 	public boolean isDepthTest() {
@@ -351,8 +361,9 @@ public abstract class Material
 	 * <p>
 	 * Default is true.
 	 */
-	public void setDepthTest(boolean depthTest) {
+	public <T extends Material> T setDepthTest(boolean depthTest) {
 		this.isDepthTest = depthTest;
+		return (T)this;
 	}
 
 	public boolean isDepthWrite() {
@@ -367,8 +378,9 @@ public abstract class Material
 	 * When drawing 2D overlays it can be useful to disable the depth writing in order
 	 * to layer several things together without creating z-index artifacts.
 	 */
-	public void setDepthWrite(boolean depthWrite) {
+	public <T extends Material> T setDepthWrite(boolean depthWrite) {
 		this.isDepthWrite = depthWrite;
+		return (T)this;
 	}
 
 	public boolean isPolygonOffset() {
@@ -382,8 +394,9 @@ public abstract class Material
 	 * <p>
 	 * This corresponds to the POLYGON_OFFSET_FILL WebGL feature.
 	 */
-	public void setPolygonOffset(boolean polygonOffset) {
+	public <T extends Material> T setPolygonOffset(boolean polygonOffset) {
 		this.isPolygonOffset = polygonOffset;
+		return (T)this;
 	}
 
 	public double getPolygonOffsetFactor() {
@@ -395,8 +408,9 @@ public abstract class Material
 	 * <p>
 	 * Default is 0.
 	 */
-	public void setPolygonOffsetFactor(double polygonOffsetFactor) {
+	public <T extends Material> T setPolygonOffsetFactor(double polygonOffsetFactor) {
 		this.polygonOffsetFactor = polygonOffsetFactor;
+		return (T)this;
 	}
 
 	public double getPolygonOffsetUnits() {
@@ -408,8 +422,9 @@ public abstract class Material
 	 * <p>
 	 * Default is 0.
 	 */
-	public void setPolygonOffsetUnits(double polygonOffsetUnits) {
+	public <T extends Material> T setPolygonOffsetUnits(double polygonOffsetUnits) {
 		this.polygonOffsetUnits = polygonOffsetUnits;
+		return (T)this;
 	}
 
 	public double getAlphaTest() {
@@ -421,16 +436,18 @@ public abstract class Material
 	 * <p>
 	 * Default is 0.
 	 */
-	public void setAlphaTest(double alphaTest) {
+	public <T extends Material> T setAlphaTest(double alphaTest) {
 		this.alphaTest = alphaTest;
+		return (T)this;
 	}
 
 	public boolean isShadowPass() {
 		return isShadowPass;
 	}
 
-	public void setShadowPass(boolean isShadowPass) {
+	public <T extends Material> T setShadowPass(boolean isShadowPass) {
 		this.isShadowPass = isShadowPass;
+		return (T)this;
 	}
 
 	public Shader getShader()

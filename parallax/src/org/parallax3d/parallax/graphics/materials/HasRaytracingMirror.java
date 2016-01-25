@@ -28,5 +28,5 @@ public interface HasRaytracingMirror
 
 	boolean isMirror();
 
-	<T> T setMirror(boolean isMirror);
+	<T extends Material> T setMirror(boolean isMirror);
 }

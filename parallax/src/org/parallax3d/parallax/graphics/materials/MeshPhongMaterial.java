@@ -495,6 +495,7 @@ public final class MeshPhongMaterial extends Material
 		return this;
 	}
 
+	@Override
 	public MeshPhongMaterial clone() {
 
 		MeshPhongMaterial material = new MeshPhongMaterial();

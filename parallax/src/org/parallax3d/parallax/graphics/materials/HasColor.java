@@ -40,6 +40,6 @@ public interface HasColor
 	 * 
 	 * @param color the color
 	 */
-	<T> T setColor(Color color);
-	<T> T setColor(int color);
+	<T extends Material> T setColor(Color color);
+	<T extends Material> T setColor(int color);
 }

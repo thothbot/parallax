@@ -79,6 +79,7 @@ public final class MeshNormalMaterial extends Material implements HasWireframe, 
 		return this;
 	}
 
+	@Override
 	public MeshNormalMaterial clone() {
 
 		MeshNormalMaterial material = new MeshNormalMaterial();

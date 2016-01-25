@@ -278,6 +278,7 @@ public class ShaderMaterial extends Material
 				super.getExtensionsFragment(params) : fragmentExtensions;
 	}
 
+	@Override
 	public ShaderMaterial clone() {
 
 		ShaderMaterial material = new ShaderMaterial();

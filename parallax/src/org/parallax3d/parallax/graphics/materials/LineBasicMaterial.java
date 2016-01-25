@@ -122,6 +122,7 @@ public class LineBasicMaterial extends Material
 		return this;
 	}
 
+	@Override
 	public LineBasicMaterial clone() {
 
 		LineBasicMaterial material = new LineBasicMaterial();

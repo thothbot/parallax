@@ -86,6 +86,7 @@ public class LineDashedMaterial extends LineBasicMaterial
 		return this;
 	}
 
+	@Override
 	public LineDashedMaterial clone() {
 
 		LineDashedMaterial material = new LineDashedMaterial();

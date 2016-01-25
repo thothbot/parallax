@@ -27,8 +27,8 @@ package org.parallax3d.parallax.graphics.materials;
 public interface HasWireframe 
 {
 	boolean isWireframe();
-	<T> T setWireframe(boolean wireframe);
+	<T extends Material> T setWireframe(boolean wireframe);
 	
 	int getWireframeLineWidth();
-	<T> T setWireframeLineWidth(int wireframeLineWidth);
+	<T extends Material> T setWireframeLineWidth(int wireframeLineWidth);
 }

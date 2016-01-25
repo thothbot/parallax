@@ -22,5 +22,5 @@ public interface HasShading
 {
 	Material.SHADING getShading();
 
-	<T> T setShading(Material.SHADING shading);
+	<T extends Material> T setShading(Material.SHADING shading);
 }

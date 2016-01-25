@@ -36,5 +36,5 @@ public interface HasVertexColors
 	 * Define how the vertices gets colored. Possible values in {@link Material.COLORS}.  Default is {@link Material.COLORS} NO.
 	 * @param vertexColors
 	 */
-	<T> T setVertexColors(Material.COLORS vertexColors);
+	<T extends Material> T setVertexColors(Material.COLORS vertexColors);
 }

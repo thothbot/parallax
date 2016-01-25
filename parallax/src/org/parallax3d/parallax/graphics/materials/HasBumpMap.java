@@ -24,9 +24,9 @@ public interface HasBumpMap
 {
 	Texture getBumpMap();
 
-	<T> T setBumpMap(Texture bumpMap);
+	<T extends Material> T setBumpMap(Texture bumpMap);
 
 	double getBumpScale();
 
-	<T> T setBumpScale(double bumpScale);
+	<T extends Material> T setBumpScale(double bumpScale);
 }

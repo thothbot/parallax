@@ -130,6 +130,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 		return this;
 	}
 
+	@Override
 	public PointCloudMaterial clone () {
 
 		PointCloudMaterial material = new PointCloudMaterial();

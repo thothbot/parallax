@@ -28,5 +28,5 @@ public interface HasRaytracingGlass
 
 	boolean isGlass();
 
-	<T> T setGlass(boolean isGlass);
+	<T extends Material> T setGlass(boolean isGlass);
 }

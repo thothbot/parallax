@@ -40,8 +40,8 @@ public interface HasAmbientEmissiveColor
 	 * 
 	 * @param ambient the color.
 	 */
-	<T> T setAmbient(Color ambient);
-	<T> T setAmbient(int ambient);
+	<T extends Material> T setAmbient(Color ambient);
+	<T extends Material> T setAmbient(int ambient);
 	
 	/**
 	 * Gets Emissive color
@@ -55,6 +55,6 @@ public interface HasAmbientEmissiveColor
 	 * 
 	 * @param emissive the color
 	 */
-	<T> T setEmissive(Color emissive);
-	<T> T setEmissive(int emissive);
+	<T extends Material> T setEmissive(Color emissive);
+	<T extends Material> T setEmissive(int emissive);
 }

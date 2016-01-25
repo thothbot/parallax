@@ -77,6 +77,7 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 		return this;
 	}
 
+	@Override
 	public MeshDepthMaterial clone () {
 
 		MeshDepthMaterial material = new MeshDepthMaterial();
