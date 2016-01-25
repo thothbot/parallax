@@ -18,14 +18,11 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
@@ -40,7 +37,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 
-@ThreeJsObject("THREE.WireframeHelper")
+@ThreejsObject("THREE.WireframeHelper")
 public class WireframeHelper extends Line {
 
 	public WireframeHelper(GeometryObject object)

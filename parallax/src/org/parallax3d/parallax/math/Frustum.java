@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
@@ -33,7 +33,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * 
  * @author thothbot
  */
-@ThreeJsObject("THREE.Frustum")
+@ThreejsObject("THREE.Frustum")
 public class Frustum
 {
 	/**

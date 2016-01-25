@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.graphics.extras.curves;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
 
-@ThreeJsObject("THREE.LineCurve3")
+@ThreejsObject("THREE.LineCurve3")
 public class LineCurve3 extends Curve
 {
 

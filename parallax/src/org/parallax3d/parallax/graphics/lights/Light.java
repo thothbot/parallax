@@ -24,7 +24,7 @@ import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
@@ -33,7 +33,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.Light")
+@ThreejsObject("THREE.Light")
 public abstract class Light extends Object3D
 {
 	public interface UniformLight

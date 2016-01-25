@@ -33,7 +33,7 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 
@@ -56,7 +56,7 @@ import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.Geometry")
+@ThreejsObject("THREE.Geometry")
 public class Geometry extends AbstractGeometry
 {
 	public class MorphColor

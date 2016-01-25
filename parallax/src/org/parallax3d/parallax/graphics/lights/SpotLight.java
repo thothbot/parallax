@@ -18,11 +18,9 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
-import java.nio.FloatBuffer;
-
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
@@ -54,7 +52,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.SpotLight")
+@ThreejsObject("THREE.SpotLight")
 public class SpotLight extends ShadowLight
 {
 	public static class UniformSport implements Light.UniformLight

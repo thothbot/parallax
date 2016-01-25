@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.extras;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * The class implements some Uniform related helper methods 
@@ -28,7 +28,7 @@ import org.parallax3d.parallax.system.ThreeJsObject;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.UniformsUtils")
+@ThreejsObject("THREE.UniformsUtils")
 public class UniformsUtils
 {
 	/**

@@ -25,7 +25,7 @@ import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
@@ -42,7 +42,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.PointLight")
+@ThreejsObject("THREE.PointLight")
 public class PointLight extends Light implements HasRaytracingPhysicalAttenuation, HasIntensity
 {
 	public static class UniformPoint implements Light.UniformLight

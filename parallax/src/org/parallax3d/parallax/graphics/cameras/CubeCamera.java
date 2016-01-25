@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.cameras;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.graphics.core.Object3D;
@@ -37,7 +37,7 @@ import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.CubeCamera")
+@ThreejsObject("THREE.CubeCamera")
 public final class CubeCamera extends Object3D
 {
 	private double fov = 90.0;

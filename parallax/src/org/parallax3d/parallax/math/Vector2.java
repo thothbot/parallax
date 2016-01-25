@@ -18,10 +18,8 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-
-import java.nio.FloatBuffer;
 
 /**
  * This class is realization of (X, Y) vector. 
@@ -31,7 +29,7 @@ import java.nio.FloatBuffer;
  * 
  * @author thothbot
  */
-@ThreeJsObject("THREE.Vector2")
+@ThreejsObject("THREE.Vector2")
 public class Vector2
 {
 	/**

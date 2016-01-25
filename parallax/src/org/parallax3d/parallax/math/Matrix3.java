@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.math;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
@@ -37,7 +37,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.Matrix3")
+@ThreejsObject("THREE.Matrix3")
 public class Matrix3
 {
 	private Float32Array elements;

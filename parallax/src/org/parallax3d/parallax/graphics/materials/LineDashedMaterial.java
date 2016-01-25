@@ -22,14 +22,14 @@ import org.parallax3d.parallax.graphics.renderers.shaders.DashedShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 
 /**
  * A material for drawing wireframe-style geometries with dashed lines.
  *
  */
-@ThreeJsObject("THREE.LineDashedMaterial")
+@ThreejsObject("THREE.LineDashedMaterial")
 public class LineDashedMaterial extends LineBasicMaterial
 {
 	private double scale;

@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-@ThreeJsObject("THREE.Plane")
+@ThreejsObject("THREE.Plane")
 public class Plane 
 {
 	private Vector3 normal;

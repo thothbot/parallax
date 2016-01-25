@@ -18,10 +18,10 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Object3D;
 
-@ThreeJsObject("THREE.Group")
+@ThreejsObject("THREE.Group")
 public class Group extends Object3D {
 
 }

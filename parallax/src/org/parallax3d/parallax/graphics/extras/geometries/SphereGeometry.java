@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -37,7 +37,7 @@ import org.parallax3d.parallax.math.Vector2;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.SphereGeometry")
+@ThreejsObject("THREE.SphereGeometry")
 public final class SphereGeometry extends Geometry
 {
 	public SphereGeometry()

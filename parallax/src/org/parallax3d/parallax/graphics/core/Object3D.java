@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.math.Euler;
 import org.parallax3d.parallax.math.Matrix3;
@@ -30,7 +29,7 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Quaternion;
 import org.parallax3d.parallax.math.Quaternion.QuaternionChangeHandler;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Base class for scene objects.
@@ -38,7 +37,7 @@ import org.parallax3d.parallax.system.ThreeJsObject;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.Object3D")
+@ThreejsObject("THREE.Object3D")
 public class Object3D 
 {
 	public static final Vector3 DefaultUp = new Vector3( 0, 1, 0 );

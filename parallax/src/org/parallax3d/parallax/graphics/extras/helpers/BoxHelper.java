@@ -26,12 +26,10 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
-import java.nio.FloatBuffer;
-
-@ThreeJsObject("THREE.BoxHelper")
+@ThreejsObject("THREE.BoxHelper")
 public class BoxHelper extends Line 
 {
 	public BoxHelper(Mesh object)

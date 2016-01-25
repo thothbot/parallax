@@ -18,12 +18,10 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
-
-import java.nio.IntBuffer;
 
 /**
  * Implementation of data texture.
@@ -31,7 +29,7 @@ import java.nio.IntBuffer;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.DataTexture")
+@ThreejsObject("THREE.DataTexture")
 public class DataTexture extends Texture
 {
 	private Uint8Array data;

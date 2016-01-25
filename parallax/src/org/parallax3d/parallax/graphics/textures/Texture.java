@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.gl.GL20;
@@ -34,7 +34,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.Texture")
+@ThreejsObject("THREE.Texture")
 public class Texture
 {
 	public static enum OPERATIONS

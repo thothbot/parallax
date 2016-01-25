@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.math;
 
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * The Color class is used encapsulate colors in the default RGB color space.
@@ -30,7 +30,7 @@ import org.parallax3d.parallax.system.ThreeJsObject;
  * 
  * @author thothbot
  */
-@ThreeJsObject("THREE.Color")
+@ThreejsObject("THREE.Color")
 public final class Color
 {
 	/**

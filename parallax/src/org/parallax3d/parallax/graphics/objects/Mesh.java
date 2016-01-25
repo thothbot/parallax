@@ -21,11 +21,10 @@ package org.parallax3d.parallax.graphics.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.core.*;
@@ -62,7 +61,7 @@ import org.parallax3d.parallax.system.gl.enums.DrawElementsType;
  * @author thothbot
  *
  */
-@ThreeJsObject("THREE.Mesh")
+@ThreejsObject("THREE.Mesh")
 public class Mesh extends GeometryObject
 {
 	//	private Boolean overdraw;

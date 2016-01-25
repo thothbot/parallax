@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 import java.util.List;
 
-@ThreeJsObject("THREE.Box2")
+@ThreejsObject("THREE.Box2")
 public class Box2 
 {
 	private Vector2 min;

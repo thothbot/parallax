@@ -18,13 +18,11 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -35,7 +33,7 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
-@ThreeJsObject("THREE.SkinnedMesh")
+@ThreejsObject("THREE.SkinnedMesh")
 public class SkinnedMesh extends Mesh {
 
 	public Texture boneTexture;

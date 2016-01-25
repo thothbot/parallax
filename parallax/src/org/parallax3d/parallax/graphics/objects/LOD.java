@@ -21,12 +21,12 @@ package org.parallax3d.parallax.graphics.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreeJsObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Matrix4;
 
-@ThreeJsObject("THREE.LOD")
+@ThreejsObject("THREE.LOD")
 public class LOD extends Object3D
 {
 
