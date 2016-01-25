@@ -229,8 +229,8 @@ public final class MaterialsBumpmapSkin extends ParallaxTest
 
 		((Vector4)uniforms.get( "offsetRepeat" ).getValue()).set( 0.001, 0.001, 0.998, 0.998 );
 
-		ShaderMaterial material = new ShaderMaterial( shader );
-		material.setLights(true);
+		ShaderMaterial material = new ShaderMaterial( shader )
+				.setLights(true);
 
 		mesh = new Mesh( geometry, material );
 

@@ -142,14 +142,14 @@ public final class MaterialsBumpmap extends ParallaxTest
 		mapHeight.setWrapT(TextureWrapMode.REPEAT);
 		mapHeight.setFormat(PixelFormat.RGB);
 
-		final MeshPhongMaterial material = new MeshPhongMaterial();
-		material.setAmbient(new Color(0x552811));
-		material.setColor(new Color(0x552811));
-		material.setSpecular(new Color(0x333333));
-		material.setShininess(25);
-		material.setBumpMap(mapHeight);
-		material.setBumpScale(19);
-		material.setMetal(false);
+		final MeshPhongMaterial material = new MeshPhongMaterial()
+			.setAmbient(0x552811)
+			.setColor(0x552811)
+			.setSpecular(0x333333)
+			.setShininess(25)
+			.setBumpMap(mapHeight)
+			.setBumpScale(19)
+			.setMetal(false);
 
 //		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
 //

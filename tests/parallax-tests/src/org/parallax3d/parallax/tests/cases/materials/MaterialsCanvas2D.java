@@ -78,8 +78,8 @@ public final class MaterialsCanvas2D extends ParallaxTest
 			geometry.getVertices().add( new Vector3( i * step - 500, floor,  500 ) );
 		}
 
-		LineBasicMaterial line_material = new LineBasicMaterial();
-		line_material.setColor( new Color( 0x303030) );
+		LineBasicMaterial line_material = new LineBasicMaterial()
+			.setColor( 0x303030 );
 
 		Line line = new Line( geometry, line_material, Line.MODE.PIECES );
 		scene.add( line );
@@ -89,76 +89,66 @@ public final class MaterialsCanvas2D extends ParallaxTest
 		Texture texture = new Texture( generateTexture() );
 		texture.setNeedsUpdate(true);
 
-		this.materials = new ArrayList<Material>();
-		
-		MeshLambertMaterial mlOpt = new MeshLambertMaterial();
-		mlOpt.setMap(texture);
-		mlOpt.setTransparent(true);
-		materials.add( mlOpt );
-		
-		MeshLambertMaterial mlOpt1 = new MeshLambertMaterial();
-		mlOpt1.setColor( new Color(0xdddddd) );
-		mlOpt1.setShading( Material.SHADING.FLAT );
-		materials.add( mlOpt1 );
-		
-		MeshPhongMaterial mpOpt = new MeshPhongMaterial();
-		mpOpt.setAmbient( new Color(0x030303) );
-		mpOpt.setColor( new Color(0xdddddd) );
-		mpOpt.setSpecular( new Color(0x009900) );
-		mpOpt.setShininess( 30 );
-		mpOpt.setShading( Material.SHADING.FLAT );
-		materials.add( mpOpt );
+		this.materials = new ArrayList<>();
+
+		materials.add( new MeshLambertMaterial()
+				.setMap(texture)
+				.setTransparent(true));
+
+		materials.add( new MeshLambertMaterial()
+				.setColor( 0xdddddd )
+				.setShading( Material.SHADING.FLAT ));
+
+		materials.add( new MeshPhongMaterial()
+				.setAmbient( 0x030303 )
+				.setColor( 0xdddddd )
+				.setSpecular( 0x009900 )
+				.setShininess( 30 )
+				.setShading( Material.SHADING.FLAT ));
 		
 		materials.add( new MeshNormalMaterial() );
-		
-		MeshBasicMaterial mbOpt = new MeshBasicMaterial();
-		mbOpt.setColor( new Color(0xffaa00) );
-		mbOpt.setTransparent( true );
-		mbOpt.setBlending( Material.BLENDING.ADDITIVE );
-		materials.add( mbOpt );
 
-		MeshLambertMaterial mlOpt2 = new MeshLambertMaterial();
-		mlOpt2.setColor( new Color(0xdddddd) );
-		mlOpt2.setShading( Material.SHADING.SMOOTH );
-		materials.add( mlOpt2 );
-		
-		MeshPhongMaterial mpOpt2 = new MeshPhongMaterial();
-		mpOpt2.setMap( texture );
-		mpOpt2.setTransparent( true );			
-		materials.add( mpOpt2 );
-		
-		MeshNormalMaterial mnOpt = new MeshNormalMaterial();
-		mnOpt.setShading( Material.SHADING.SMOOTH );
-		materials.add( mnOpt );
-		
-		MeshBasicMaterial mbOpt1 = new MeshBasicMaterial();
-		mbOpt1.setColor( new Color(0x00ffaa) );
-		mbOpt1.setWireframe(true);
-		materials.add( mbOpt1 );
+		materials.add( new MeshBasicMaterial()
+				.setColor( 0xffaa00 )
+				.setTransparent( true )
+				.setBlending( Material.BLENDING.ADDITIVE ));
+
+		materials.add( new MeshLambertMaterial()
+				.setColor( 0xdddddd )
+				.setShading( Material.SHADING.SMOOTH ));
+
+		materials.add( new MeshPhongMaterial()
+				.setMap( texture )
+				.setTransparent( true ));
+
+		materials.add( new MeshNormalMaterial()
+				.setShading( Material.SHADING.SMOOTH ));
+
+		materials.add( new MeshBasicMaterial()
+				.setColor( 0x00ffaa )
+				.setWireframe(true));
 
 		materials.add( new MeshDepthMaterial() );
 
-		MeshLambertMaterial mlOpt3 = new MeshLambertMaterial();
-		mlOpt3.setColor( new Color(0x666666) );
-		mlOpt3.setEmissive( new Color(0xff0000) );
-		mlOpt3.setAmbient( new Color(0x000000) );
-		mlOpt3.setShading( Material.SHADING.SMOOTH );
-		materials.add( mlOpt3 );
-		
-		MeshPhongMaterial mpOpt1 = new MeshPhongMaterial();
-		mpOpt1.setAmbient( new Color(0x000000) );
-		mpOpt1.setEmissive( new Color(0xffff00) );
-		mpOpt1.setColor( new Color(0x000000) );
-		mpOpt1.setSpecular( new Color(0x666666) );
-		mpOpt1.setShininess( 10 );
-		mpOpt1.setShading( Material.SHADING.SMOOTH );
-		mpOpt1.setOpacity( 0.9 );
-		mpOpt1.setTransparent(true);
-		materials.add( mpOpt1 );
+		materials.add( new MeshLambertMaterial()
+				.setColor( 0x666666 )
+				.setEmissive( 0xff0000 )
+				.setAmbient( 0x000000 )
+				.setShading( Material.SHADING.SMOOTH ));
+
+		materials.add( new MeshPhongMaterial()
+				.setAmbient( 0x000000 )
+				.setEmissive( 0xffff00 )
+				.setColor( 0x000000 )
+				.setSpecular( 0x666666 )
+				.setShininess( 10 )
+				.setShading( Material.SHADING.SMOOTH )
+				.setOpacity( 0.9 )
+				.setTransparent(true));
 
 		MeshBasicMaterial mbOpt2 = new MeshBasicMaterial();
-		mbOpt1.setMap( texture );
-		mbOpt1.setTransparent( true );
+		mbOpt2.setMap( texture );
+		mbOpt2.setTransparent( true );
 		materials.add( mbOpt2 );
 
 		// Spheres geometry
@@ -209,10 +199,8 @@ public final class MaterialsCanvas2D extends ParallaxTest
 			scene.add( sphere );
 
 		}
-		
-		MeshBasicMaterial mbOpt3 = new MeshBasicMaterial();
-		mbOpt3.setColor( new Color(0xffffff) );
-		this.particleLight = new Mesh( new SphereGeometry( 4, 8, 8 ), mbOpt3 );
+
+		this.particleLight = new Mesh( new SphereGeometry( 4, 8, 8 ), new MeshBasicMaterial().setColor( 0xffffff ) );
 		scene.add( this.particleLight );
 
 		// Lights
