@@ -22,6 +22,7 @@ import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.cases.animation.*;
 import org.parallax3d.parallax.tests.cases.geometries.*;
 import org.parallax3d.parallax.tests.cases.materials.*;
+import org.parallax3d.parallax.tests.cases.misc.Helpers;
 
 import java.util.*;
 
@@ -99,14 +100,14 @@ public class Tests {
 ////            , new Saturn()
 //        ));
 
-//        put("Miscellaneous", Arrays.asList(
-////            , new PerformanceDoubleSided()
-////            , new MiscLookAt()
-////            , new MiscMemoryTestGeometries()
-////            , new MiscMemoryTestShaders()
-////            , new LoaderSTL()
-////            , new Helpers()
-//        ));
+        put("Miscellaneous", Arrays.asList(
+//            , new PerformanceDoubleSided()
+//            , new MiscLookAt()
+//            , new MiscMemoryTestGeometries()
+//            , new MiscMemoryTestShaders()
+//            , new LoaderSTL()
+            new Helpers()
+        ));
 
 //        put("Raytracing Rendering", Arrays.asList(
 ////            , new Raytracing()
