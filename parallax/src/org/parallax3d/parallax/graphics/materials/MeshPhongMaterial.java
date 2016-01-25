@@ -109,10 +109,10 @@ public final class MeshPhongMaterial extends Material
 
 		setShading(Material.SHADING.SMOOTH);
 
-		setColor(new Color(0xffffff));
-		setAmbient(new Color(0xffffff));
-		setEmissive(new Color(0x000000));
-		setSpecular(new Color(0x111111));
+		setColor(0xffffff);
+		setAmbient(0xffffff);
+		setEmissive(0x000000);
+		setSpecular(0x111111);
 
 		setVertexColors(Material.COLORS.NO);
 
@@ -127,29 +127,36 @@ public final class MeshPhongMaterial extends Material
 		return new PhongShader();
 	}
 
-
 	public Color getSpecular() {
 		return specular;
 	}
 
-	public void setSpecular(Color specular) {
+	public MeshPhongMaterial setSpecular(Color specular) {
 		this.specular = specular;
+		return this;
+	}
+
+	public MeshPhongMaterial setSpecular(int specular) {
+		this.specular = new Color( specular );
+		return this;
 	}
 
 	public double getShininess() {
 		return shininess;
 	}
 
-	public void setShininess(double shininess) {
+	public MeshPhongMaterial setShininess(double shininess) {
 		this.shininess = shininess;
+		return this;
 	}
 
 	public boolean isMetal() {
 		return this.isMetal;
 	}
 
-	public void setMetal(boolean isMetal) {
+	public MeshPhongMaterial setMetal(boolean isMetal) {
 		this.isMetal = isMetal;
+		return this;
 	}
 
 	@Override
@@ -158,8 +165,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setWrapAround(boolean wrapAround) {
+	public MeshPhongMaterial setWrapAround(boolean wrapAround) {
 		this.isWrapAround = wrapAround;
+		return this;
 	}
 
 	@Override
@@ -168,8 +176,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setWrapRGB(Vector3 wrapRGB) {
+	public MeshPhongMaterial setWrapRGB(Vector3 wrapRGB) {
 		this.wrapRGB = wrapRGB;
+		return this;
 	}
 
 	@Override
@@ -178,8 +187,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setWireframe(boolean wireframe) {
+	public MeshPhongMaterial setWireframe(boolean wireframe) {
 		this.isWireframe = wireframe;
+		return this;
 	}
 
 	@Override
@@ -188,8 +198,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setWireframeLineWidth(int wireframeLineWidth) {
+	public MeshPhongMaterial setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+		return this;
 	}
 
 	@Override
@@ -198,8 +209,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setEnvMap(Texture envMap) {
+	public MeshPhongMaterial setEnvMap(Texture envMap) {
 		this.envMap = envMap;
+		return this;
 	}
 
 	@Override
@@ -208,8 +220,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setCombine(Texture.OPERATIONS combine) {
+	public MeshPhongMaterial setCombine(Texture.OPERATIONS combine) {
 		this.combine = combine;
+		return this;
 	}
 
 	@Override
@@ -218,8 +231,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setReflectivity(double reflectivity) {
+	public MeshPhongMaterial setReflectivity(double reflectivity) {
 		this.reflectivity = reflectivity;
+		return this;
 	}
 
 	@Override
@@ -228,8 +242,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setRefractionRatio(double refractionRatio) {
+	public MeshPhongMaterial setRefractionRatio(double refractionRatio) {
 		this.refractionRatio = refractionRatio;
+		return this;
 	}
 
 	@Override
@@ -238,8 +253,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setLightMap(Texture lightMap) {
+	public MeshPhongMaterial setLightMap(Texture lightMap) {
 		this.lightMap = lightMap;
+		return this;
 	}
 
 	@Override
@@ -248,8 +264,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setFog(boolean fog) {
+	public MeshPhongMaterial setFog(boolean fog) {
 		this.isFog = fog;
+		return this;
 	}
 
 	@Override
@@ -258,8 +275,15 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setColor(Color color) {
+	public MeshPhongMaterial setColor(Color color) {
 		this.color = color;
+		return this;
+	}
+
+	@Override
+	public MeshPhongMaterial setColor(int color) {
+		this.color = new Color( color );
+		return this;
 	}
 
 	@Override
@@ -268,8 +292,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setMap(Texture map) {
+	public MeshPhongMaterial setMap(Texture map) {
 		this.map = map;
+		return this;
 	}
 
 	@Override
@@ -278,8 +303,10 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setAlphaMap(Texture alphaMap) {
+	public MeshPhongMaterial setAlphaMap(Texture alphaMap) {
+
 		this.alphaMap = alphaMap;
+		return this;
 	}
 
 	@Override
@@ -288,8 +315,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public MeshPhongMaterial setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
+		return this;
 	}
 
 	@Override
@@ -298,8 +326,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setSkinning(boolean isSkinning) {
+	public MeshPhongMaterial setSkinning(boolean isSkinning) {
 		this.isSkinning = isSkinning;
+		return this;
 	}
 
 	@Override
@@ -308,8 +337,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setMorphTargets(boolean isMorphTargets) {
+	public MeshPhongMaterial setMorphTargets(boolean isMorphTargets) {
 		this.isMorphTargets = isMorphTargets;
+		return this;
 	}
 
 	@Override
@@ -318,8 +348,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setMorphNormals(boolean isMorphNormals) {
+	public MeshPhongMaterial setMorphNormals(boolean isMorphNormals) {
 		this.isMorphNormals = isMorphNormals;
+		return this;
 	}
 
 	@Override
@@ -328,8 +359,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setNumSupportedMorphTargets(int num) {
+	public MeshPhongMaterial setNumSupportedMorphTargets(int num) {
 		this.numSupportedMorphTargets = num;
+		return this;
 	}
 
 	@Override
@@ -338,8 +370,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setNumSupportedMorphNormals(int num) {
+	public MeshPhongMaterial setNumSupportedMorphNormals(int num) {
 		this.numSupportedMorphNormals = num;
+		return this;
 	}
 
 	@Override
@@ -348,8 +381,15 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setAmbient(Color ambient) {
+	public MeshPhongMaterial setAmbient(Color ambient) {
 		this.ambient = ambient;
+		return this;
+	}
+
+	@Override
+	public MeshPhongMaterial setAmbient(int ambient) {
+		this.ambient = new Color( ambient );
+		return this;
 	}
 
 	@Override
@@ -358,8 +398,15 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setEmissive(Color emissive) {
+	public MeshPhongMaterial setEmissive(Color emissive) {
 		this.emissive = emissive;
+		return this;
+	}
+
+	@Override
+	public MeshPhongMaterial setEmissive(int emissive) {
+		this.emissive = new Color( emissive );
+		return this;
 	}
 
 	@Override
@@ -368,8 +415,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setSpecularMap(Texture specularMap) {
+	public MeshPhongMaterial setSpecularMap(Texture specularMap) {
 		this.specularMap = specularMap;
+		return this;
 	}
 
 	@Override
@@ -378,8 +426,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setBumpMap(Texture bumpMap) {
+	public MeshPhongMaterial setBumpMap(Texture bumpMap) {
 		this.bumpMap = bumpMap;
+		return this;
 	}
 
 	@Override
@@ -388,8 +437,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setBumpScale(double bumpScale) {
+	public MeshPhongMaterial setBumpScale(double bumpScale) {
 		this.bumpScale = bumpScale;
+		return this;
 	}
 
 	@Override
@@ -398,8 +448,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setNormalMap(Texture normalMap) {
+	public MeshPhongMaterial setNormalMap(Texture normalMap) {
 		this.normalMap = normalMap;
+		return this;
 	}
 
 	@Override
@@ -408,16 +459,18 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setNormalScale(Vector2 normalScale) {
+	public MeshPhongMaterial setNormalScale(Vector2 normalScale) {
 		this.normalScale = normalScale;
+		return this;
 	}
 
 	public Material.SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public MeshPhongMaterial setShading(Material.SHADING shading) {
 		this.shading = shading;
+		return this;
 	}
 
 	@Override
@@ -426,8 +479,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setGlass(boolean isGlass) {
+	public MeshPhongMaterial setGlass(boolean isGlass) {
 		this.isGlass = isGlass;
+		return this;
 	}
 
 	@Override
@@ -436,8 +490,9 @@ public final class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public void setMirror(boolean isMirror) {
+	public MeshPhongMaterial setMirror(boolean isMirror) {
 		this.isMirror = isMirror;
+		return this;
 	}
 
 	public MeshPhongMaterial clone() {

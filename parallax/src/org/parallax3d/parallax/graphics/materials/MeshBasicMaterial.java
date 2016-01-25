@@ -77,7 +77,7 @@ public class MeshBasicMaterial extends Material
 
 		setFog(true);
 
-		setColor(new Color(0xffffff));
+		setColor(0xffffff);
 
 		setVertexColors(Material.COLORS.NO);
 	}
@@ -94,8 +94,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setWireframe(boolean wireframe) {
+	public MeshBasicMaterial setWireframe(boolean wireframe) {
 		this.isWireframe = wireframe;
+		return this;
 	}
 
 	@Override
@@ -104,8 +105,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setWireframeLineWidth(int wireframeLineWidth) {
+	public MeshBasicMaterial setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+		return this;
 	}
 
 	@Override
@@ -114,8 +116,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setEnvMap(Texture envMap) {
+	public MeshBasicMaterial setEnvMap(Texture envMap) {
 		this.envMap = envMap;
+		return this;
 	}
 
 	@Override
@@ -124,8 +127,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setAlphaMap(Texture alphaMap) {
+	public MeshBasicMaterial setAlphaMap(Texture alphaMap) {
 		this.alphaMap = alphaMap;
+		return this;
 	}
 
 	@Override
@@ -134,8 +138,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setCombine(Texture.OPERATIONS combine) {
+	public MeshBasicMaterial setCombine(Texture.OPERATIONS combine) {
 		this.combine = combine;
+		return this;
 	}
 
 	@Override
@@ -144,8 +149,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setReflectivity(double reflectivity) {
+	public MeshBasicMaterial setReflectivity(double reflectivity) {
 		this.reflectivity = reflectivity;
+		return this;
 	}
 
 	@Override
@@ -154,8 +160,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setRefractionRatio(double refractionRatio) {
+	public MeshBasicMaterial setRefractionRatio(double refractionRatio) {
 		this.refractionRatio = refractionRatio;
+		return this;
 	}
 
 	@Override
@@ -164,8 +171,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setLightMap(Texture lightMap) {
+	public MeshBasicMaterial setLightMap(Texture lightMap) {
 		this.lightMap = lightMap;
+		return this;
 	}
 
 	@Override
@@ -174,8 +182,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setFog(boolean fog) {
+	public MeshBasicMaterial setFog(boolean fog) {
 		this.isFog = fog;
+		return this;
 	}
 
 	@Override
@@ -184,8 +193,15 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setColor(Color color) {
+	public MeshBasicMaterial setColor(Color color) {
 		this.color = color;
+		return this;
+	}
+
+	@Override
+	public MeshBasicMaterial setColor(int color) {
+		this.color = new Color( color );
+		return this;
 	}
 
 	@Override
@@ -194,8 +210,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public MeshBasicMaterial setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
+		return this;
 	}
 
 	@Override
@@ -204,8 +221,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setSkinning(boolean isSkinning) {
+	public MeshBasicMaterial setSkinning(boolean isSkinning) {
 		this.isSkinning = isSkinning;
+		return this;
 	}
 
 	@Override
@@ -214,8 +232,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setMorphTargets(boolean isMorphTargets) {
+	public MeshBasicMaterial setMorphTargets(boolean isMorphTargets) {
 		this.isMorphTargets = isMorphTargets;
+		return this;
 	}
 
 	// Should be false
@@ -225,8 +244,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setMorphNormals(boolean isMorphNormals) {
+	public MeshBasicMaterial setMorphNormals(boolean isMorphNormals) {
 		this.isMorphNormals = isMorphNormals;
+		return this;
 	}
 
 	@Override
@@ -235,8 +255,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setNumSupportedMorphTargets(int num) {
+	public MeshBasicMaterial setNumSupportedMorphTargets(int num) {
 		this.numSupportedMorphTargets = num;
+		return this;
 	}
 
 	@Override
@@ -245,8 +266,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setNumSupportedMorphNormals(int num) {
+	public MeshBasicMaterial setNumSupportedMorphNormals(int num) {
 		this.numSupportedMorphNormals = num;
+		return this;
 	}
 
 	@Override
@@ -255,8 +277,9 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setMap(Texture map) {
+	public MeshBasicMaterial setMap(Texture map) {
 		this.map = map;
+		return this;
 	}
 
 	@Override
@@ -265,16 +288,18 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public void setSpecularMap(Texture specularMap) {
+	public MeshBasicMaterial setSpecularMap(Texture specularMap) {
 		this.specularMap = specularMap;
+		return this;
 	}
 
 	public Material.SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public MeshBasicMaterial setShading(Material.SHADING shading) {
 		this.shading = shading;
+		return this;
 	}
 
 	public MeshBasicMaterial clone() {

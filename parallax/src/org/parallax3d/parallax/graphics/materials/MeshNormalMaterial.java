@@ -54,8 +54,9 @@ public final class MeshNormalMaterial extends Material implements HasWireframe, 
 	}
 
 	@Override
-	public void setWireframe(boolean wireframe) {
+	public MeshNormalMaterial setWireframe(boolean wireframe) {
 		this.isWireframe = wireframe;
+		return this;
 	}
 
 	@Override
@@ -64,16 +65,18 @@ public final class MeshNormalMaterial extends Material implements HasWireframe, 
 	}
 
 	@Override
-	public void setWireframeLineWidth(int wireframeLineWidth) {
+	public MeshNormalMaterial setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+		return this;
 	}
 
 	public Material.SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public MeshNormalMaterial setShading(Material.SHADING shading) {
 		this.shading = shading;
+		return this;
 	}
 
 	public MeshNormalMaterial clone() {

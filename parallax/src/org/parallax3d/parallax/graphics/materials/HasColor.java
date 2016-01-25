@@ -33,12 +33,13 @@ public interface HasColor
 	 * 
 	 * @return the color
 	 */
-	public Color getColor();
+	Color getColor();
 	
 	/**
 	 * Sets material color
 	 * 
 	 * @param color the color
 	 */
-	public void setColor(Color color);
+	<T> T setColor(Color color);
+	<T> T setColor(int color);
 }

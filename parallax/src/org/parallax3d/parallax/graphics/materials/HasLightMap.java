@@ -28,6 +28,6 @@ import org.parallax3d.parallax.graphics.textures.Texture;
  */
 public interface HasLightMap 
 {
-	public Texture getLightMap();
-	public void setLightMap(Texture lightMap);
+	Texture getLightMap();
+	<T> T setLightMap(Texture lightMap);
 }

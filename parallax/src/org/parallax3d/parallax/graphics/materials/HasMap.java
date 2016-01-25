@@ -27,6 +27,6 @@ import org.parallax3d.parallax.graphics.textures.Texture;
  */
 public interface HasMap 
 {
-	public Texture getMap();
-	public void setMap(Texture map);
+	Texture getMap();
+	<T> T setMap(Texture map);
 }

@@ -26,7 +26,7 @@ package org.parallax3d.parallax.graphics.materials;
 public interface HasRaytracingGlass 
 {
 
-	public boolean isGlass();
-	
-	public void setGlass(boolean isGlass);
+	boolean isGlass();
+
+	<T> T setGlass(boolean isGlass);
 }

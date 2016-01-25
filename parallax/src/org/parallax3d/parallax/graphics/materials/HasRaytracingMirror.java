@@ -26,7 +26,7 @@ package org.parallax3d.parallax.graphics.materials;
 public interface HasRaytracingMirror 
 {
 
-	public boolean isMirror();
-	
-	public void setMirror(boolean isMirror);
+	boolean isMirror();
+
+	<T> T setMirror(boolean isMirror);
 }

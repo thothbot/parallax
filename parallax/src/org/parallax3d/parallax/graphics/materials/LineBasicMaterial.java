@@ -49,8 +49,7 @@ public class LineBasicMaterial extends Material
 	{
 		this.isFog = true;
 
-		this.color = new Color(0xffffff);
-
+		setColor(0xffffff);
 		setLinewidth(1.0f);
 
 		setVertexColors(Material.COLORS.NO);
@@ -76,8 +75,9 @@ public class LineBasicMaterial extends Material
 	 * Due to limitations in the <a href="https://code.google.com/p/angleproject/">ANGLE layer</a>, on Windows platforms linewidth will always be 1 regardless of the set value.
 	 * @param linewidth
 	 */
-	public void setLinewidth(double linewidth) {
+	public LineBasicMaterial setLinewidth(double linewidth) {
 		this.linewidth = linewidth;
+		return this;
 	}
 
 	@Override
@@ -86,8 +86,9 @@ public class LineBasicMaterial extends Material
 	}
 
 	@Override
-	public void setFog(boolean fog) {
+	public LineBasicMaterial setFog(boolean fog) {
 		this.isFog = fog;
+		return this;
 	}
 
 	/**
@@ -99,8 +100,15 @@ public class LineBasicMaterial extends Material
 	}
 
 	@Override
-	public void setColor(Color color) {
+	public LineBasicMaterial setColor(Color color) {
 		this.color = color;
+		return this;
+	}
+
+	@Override
+	public LineBasicMaterial setColor(int color) {
+		this.color = new Color( color );
+		return this;
 	}
 
 	@Override
@@ -109,8 +117,9 @@ public class LineBasicMaterial extends Material
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public LineBasicMaterial setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
+		return this;
 	}
 
 	public LineBasicMaterial clone() {

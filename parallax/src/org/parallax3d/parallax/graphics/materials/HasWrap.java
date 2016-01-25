@@ -28,9 +28,9 @@ import org.parallax3d.parallax.math.Vector3;
  */
 public interface HasWrap 
 {
-	public boolean isWrapAround();
-	public void setWrapAround(boolean wrapAround);
-	
-	public Vector3 getWrapRGB();
-	public void setWrapRGB(Vector3 wrapRGB);
+	boolean isWrapAround();
+	<T> T setWrapAround(boolean wrapAround);
+
+	Vector3 getWrapRGB();
+	<T> T setWrapRGB(Vector3 wrapRGB);
 }

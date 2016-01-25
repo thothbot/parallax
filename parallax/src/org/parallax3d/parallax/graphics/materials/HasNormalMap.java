@@ -23,11 +23,11 @@ import org.parallax3d.parallax.math.Vector2;
 
 public interface HasNormalMap 
 {
-	public Texture getNormalMap();
+	Texture getNormalMap();
 
-	public void setNormalMap(Texture normalMap); 
+	<T> T setNormalMap(Texture normalMap);
 
-	public Vector2 getNormalScale();
+	Vector2 getNormalScale();
 
-	public void setNormalScale(Vector2 normalScale);
+	<T> T setNormalScale(Vector2 normalScale);
 }

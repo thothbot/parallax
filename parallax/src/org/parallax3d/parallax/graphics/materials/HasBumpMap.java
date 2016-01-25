@@ -22,11 +22,11 @@ import org.parallax3d.parallax.graphics.textures.Texture;
 
 public interface HasBumpMap 
 {
-	public Texture getBumpMap();
+	Texture getBumpMap();
 
-	public void setBumpMap(Texture bumpMap); 
+	<T> T setBumpMap(Texture bumpMap);
 
-	public double getBumpScale();
+	double getBumpScale();
 
-	public void setBumpScale(double bumpScale);
+	<T> T setBumpScale(double bumpScale);
 }

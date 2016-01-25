@@ -20,18 +20,18 @@ package org.parallax3d.parallax.graphics.materials;
 
 public interface HasSkinning 
 {
-	public boolean isSkinning();
-	public void setSkinning(boolean isSkinning);
+	boolean isSkinning();
+	<T> T setSkinning(boolean isSkinning);
 	
-	public boolean isMorphTargets();
-	public void setMorphTargets(boolean isMorphTargets);
+	boolean isMorphTargets();
+	<T> T setMorphTargets(boolean isMorphTargets);
 	
-	public boolean isMorphNormals();
-	public void setMorphNormals(boolean isMorphNormals);
+	boolean isMorphNormals();
+	<T> T setMorphNormals(boolean isMorphNormals);
 
-	public int getNumSupportedMorphTargets();
-	public void setNumSupportedMorphTargets(int num);
+	int getNumSupportedMorphTargets();
+	<T> T setNumSupportedMorphTargets(int num);
 	
-	public int getNumSupportedMorphNormals();
-	public void setNumSupportedMorphNormals(int num);
+	int getNumSupportedMorphNormals();
+	<T> T setNumSupportedMorphNormals(int num);
 }

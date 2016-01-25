@@ -30,6 +30,6 @@ public interface HasFog
 	 * Define whether the material color is affected by global fog settings. Default is false.
 	 * @return
 	 */
-	public boolean isFog();
-	public void setFog(boolean fog);
+	boolean isFog();
+	<T> T setFog(boolean fog);
 }

@@ -116,7 +116,7 @@ public class ShaderMaterial extends Material
 
 		setShading(Material.SHADING.SMOOTH);
 
-		setColor(new Color(0xffffff));
+		setColor( 0xffffff );
 
 		setVertexColors(Material.COLORS.NO);
 	}
@@ -138,8 +138,9 @@ public class ShaderMaterial extends Material
 	/**
 	 * Enable/Disable scene lights
 	 */
-	public void setLights(boolean isLights) {
+	public ShaderMaterial setLights(boolean isLights) {
 		this.isLights = isLights;
+		return this;
 	}
 
 	@Override
@@ -148,8 +149,9 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	public void setWireframe(boolean wireframe) {
+	public ShaderMaterial setWireframe(boolean wireframe) {
 		this.isWireframe = wireframe;
+		return this;
 	}
 
 	@Override
@@ -158,8 +160,9 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	public void setWireframeLineWidth(int wireframeLineWidth) {
+	public ShaderMaterial setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+		return this;
 	}
 
 	@Override
@@ -168,8 +171,9 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	public void setFog(boolean fog) {
+	public ShaderMaterial setFog(boolean fog) {
 		this.isFog = fog;
+		return this;
 	}
 
 	@Override
@@ -178,8 +182,15 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	public void setColor(Color color) {
+	public ShaderMaterial setColor(Color color) {
 		this.color = color;
+		return this;
+	}
+
+	@Override
+	public ShaderMaterial setColor(int color) {
+		this.color = new Color( color );
+		return this;
 	}
 
 	@Override
@@ -188,8 +199,9 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public ShaderMaterial setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
+		return this;
 	}
 
 	@Override
@@ -198,8 +210,9 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	public void setSkinning(boolean isSkinning) {
+	public ShaderMaterial setSkinning(boolean isSkinning) {
 		this.isSkinning = isSkinning;
+		return this;
 	}
 
 	@Override
@@ -208,8 +221,9 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	public void setMorphTargets(boolean isMorphTargets) {
+	public ShaderMaterial setMorphTargets(boolean isMorphTargets) {
 		this.isMorphTargets = isMorphTargets;
+		return this;
 	}
 
 	@Override
@@ -218,32 +232,36 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	public void setMorphNormals(boolean isMorphNormals) {
+	public ShaderMaterial setMorphNormals(boolean isMorphNormals) {
 		this.isMorphNormals = isMorphNormals;
+		return this;
 	}
 
 	public int getNumSupportedMorphTargets() {
 		return this.numSupportedMorphTargets;
 	}
 
-	public void setNumSupportedMorphTargets(int num) {
+	public ShaderMaterial setNumSupportedMorphTargets(int num) {
 		this.numSupportedMorphTargets = num;
+		return this;
 	}
 
 	public int getNumSupportedMorphNormals() {
 		return this.numSupportedMorphNormals;
 	}
 
-	public void setNumSupportedMorphNormals(int num) {
+	public ShaderMaterial setNumSupportedMorphNormals(int num) {
 		this.numSupportedMorphNormals = num;
+		return this;
 	}
 
 	public Material.SHADING getShading() {
 		return this.shading;
 	}
 
-	public void setShading(Material.SHADING shading) {
+	public ShaderMaterial setShading(Material.SHADING shading) {
 		this.shading = shading;
+		return this;
 	}
 
 	@Override

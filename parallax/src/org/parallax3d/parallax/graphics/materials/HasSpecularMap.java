@@ -22,6 +22,6 @@ import org.parallax3d.parallax.graphics.textures.Texture;
 
 public interface HasSpecularMap 
 {
-	public Texture getSpecularMap();
-	public void setSpecularMap(Texture specularMap);
+	Texture getSpecularMap();
+	<T> T setSpecularMap(Texture specularMap);
 }

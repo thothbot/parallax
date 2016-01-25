@@ -61,8 +61,9 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	}
 
 	@Override
-	public void setWireframe(boolean wireframe) {
+	public MeshDepthMaterial setWireframe(boolean wireframe) {
 		this.isWireframe = wireframe;
+		return this;
 	}
 
 	@Override
@@ -71,8 +72,9 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	}
 
 	@Override
-	public void setWireframeLineWidth(int wireframeLineWidth) {
+	public MeshDepthMaterial setWireframeLineWidth(int wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
+		return this;
 	}
 
 	public MeshDepthMaterial clone () {

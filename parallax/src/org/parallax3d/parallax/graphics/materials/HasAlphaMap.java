@@ -22,6 +22,6 @@ import org.parallax3d.parallax.graphics.textures.Texture;
 
 public interface HasAlphaMap {
 
-	public Texture getAlphaMap();
-	public void setAlphaMap(Texture map);
+	Texture getAlphaMap();
+	<T> T setAlphaMap(Texture map);
 }

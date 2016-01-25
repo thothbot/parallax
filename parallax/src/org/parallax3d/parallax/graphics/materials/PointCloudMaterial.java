@@ -47,7 +47,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 
 		setFog(true);
 
-		setColor(new Color(0xffffff));
+		setColor( 0xffffff );
 
 		setSize(1.0);
 		setSizeAttenuation(true);
@@ -62,16 +62,18 @@ public final class PointCloudMaterial extends Material implements HasFog,
 		return this.size;
 	}
 
-	public void setSize(double size) {
+	public PointCloudMaterial setSize(double size) {
 		this.size = size;
+		return this;
 	}
 
 	public boolean isSizeAttenuation() {
 		return sizeAttenuation;
 	}
 
-	public void setSizeAttenuation(boolean sizeAttenuation) {
+	public PointCloudMaterial setSizeAttenuation(boolean sizeAttenuation) {
 		this.sizeAttenuation = sizeAttenuation;
+		return this;
 	}
 
 	public Shader getAssociatedShader() {
@@ -84,8 +86,9 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public void setFog(boolean fog) {
+	public PointCloudMaterial setFog(boolean fog) {
 		this.isFog = fog;
+		return this;
 	}
 
 	@Override
@@ -94,8 +97,15 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public void setColor(Color color) {
+	public PointCloudMaterial setColor(Color color) {
 		this.color = color;
+		return this;
+	}
+
+	@Override
+	public PointCloudMaterial setColor(int color) {
+		this.color = new Color( color );
+		return this;
 	}
 
 	@Override
@@ -104,8 +114,9 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public void setMap(Texture map) {
+	public PointCloudMaterial setMap(Texture map) {
 		this.map = map;
+		return this;
 	}
 
 	@Override
@@ -114,8 +125,9 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public void setVertexColors(Material.COLORS vertexColors) {
+	public PointCloudMaterial setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
+		return this;
 	}
 
 	public PointCloudMaterial clone () {

@@ -33,26 +33,28 @@ public interface HasAmbientEmissiveColor
 	 * 
 	 * @return the color
 	 */
-	public Color getAmbient();
+	Color getAmbient();
 	
 	/**
 	 * Sets Ambient color
 	 * 
 	 * @param ambient the color.
 	 */
-	public void setAmbient(Color ambient);
+	<T> T setAmbient(Color ambient);
+	<T> T setAmbient(int ambient);
 	
 	/**
 	 * Gets Emissive color
 	 * 
 	 * @return the color
 	 */
-	public Color getEmissive();
+	Color getEmissive();
 	
 	/**
 	 * Sets Emissive color
 	 * 
 	 * @param emissive the color
 	 */
-	public void setEmissive(Color emissive);
+	<T> T setEmissive(Color emissive);
+	<T> T setEmissive(int emissive);
 }

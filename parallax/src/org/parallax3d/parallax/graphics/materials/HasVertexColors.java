@@ -30,11 +30,11 @@ public interface HasVertexColors
 	 * Get how the vertices gets colored. Default is {@link Material.COLORS} NO.
 	 * @return
 	 */
-	public Material.COLORS isVertexColors();
+	Material.COLORS isVertexColors();
 	
 	/**
 	 * Define how the vertices gets colored. Possible values in {@link Material.COLORS}.  Default is {@link Material.COLORS} NO.
 	 * @param vertexColors
 	 */
-	public void setVertexColors(Material.COLORS vertexColors);
+	<T> T setVertexColors(Material.COLORS vertexColors);
 }

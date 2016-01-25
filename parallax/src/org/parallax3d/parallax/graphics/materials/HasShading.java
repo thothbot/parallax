@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.materials;
 
 public interface HasShading 
 {
-	public Material.SHADING getShading();
+	Material.SHADING getShading();
 
-	public void setShading(Material.SHADING shading);
+	<T> T setShading(Material.SHADING shading);
 }

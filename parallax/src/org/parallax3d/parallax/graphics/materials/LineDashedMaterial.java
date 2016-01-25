@@ -55,8 +55,9 @@ public class LineDashedMaterial extends LineBasicMaterial
 		return scale;
 	}
 
-	public void setScale(double scale) {
+	public LineDashedMaterial setScale(double scale) {
 		this.scale = scale;
+		return this;
 	}
 
 	/**
@@ -67,8 +68,9 @@ public class LineDashedMaterial extends LineBasicMaterial
 		return dashSize;
 	}
 
-	public void setDashSize(double dashSize) {
+	public LineDashedMaterial setDashSize(double dashSize) {
 		this.dashSize = dashSize;
+		return this;
 	}
 
 	/**
@@ -79,8 +81,9 @@ public class LineDashedMaterial extends LineBasicMaterial
 		return gapSize;
 	}
 
-	public void setGapSize(double gapSize) {
+	public LineDashedMaterial setGapSize(double gapSize) {
 		this.gapSize = gapSize;
+		return this;
 	}
 
 	public LineDashedMaterial clone() {

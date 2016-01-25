@@ -33,39 +33,39 @@ public interface HasEnvMap
 	 *
 	 * @return the texture
 	 */
-	public Texture getEnvMap();
+	Texture getEnvMap();
 
 	/**
 	 * Sets environmental texture
 	 *
 	 * @param envMap the texture
 	 */
-	public void setEnvMap(Texture envMap);
+	<T> T setEnvMap(Texture envMap);
 
-	public Texture.OPERATIONS getCombine();
-	public void setCombine(Texture.OPERATIONS combine);
+	Texture.OPERATIONS getCombine();
+	<T> T setCombine(Texture.OPERATIONS combine);
 
 	/**
 	 * Gets reflectivity
 	 *
 	 * @return the reflectivity value
 	 */
-	public double getReflectivity();
+	double getReflectivity();
 
 	/**
 	 * Sets reflectivity
 	 *
 	 * @param reflectivity the reflectivity value
 	 */
-	public void setReflectivity(double reflectivity);
+	<T> T setReflectivity(double reflectivity);
 
 	/**
 	 * Gets Refraction Ratio
 	 */
-	public double getRefractionRatio();
+	double getRefractionRatio();
 
 	/**
 	 * Sets Refraction Ratio
 	 */
-	public void setRefractionRatio(double refractionRatio);
+	<T> T setRefractionRatio(double refractionRatio);
 }
