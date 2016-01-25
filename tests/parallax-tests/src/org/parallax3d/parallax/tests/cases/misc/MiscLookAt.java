@@ -29,7 +29,9 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Euler;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("misc_lookat")
 public final class MiscLookAt extends ParallaxTest 
 {
 	Scene scene;

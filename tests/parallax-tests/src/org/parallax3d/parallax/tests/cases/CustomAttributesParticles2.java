@@ -37,10 +37,12 @@ import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ThreejsExample("webgl_custom_attributes_points2")
 public class CustomAttributesParticles2 extends ParallaxTest
 {
 	interface Resources extends Shader.DefaultResources

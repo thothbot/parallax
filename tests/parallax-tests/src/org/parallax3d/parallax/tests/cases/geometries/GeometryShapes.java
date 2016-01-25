@@ -39,11 +39,13 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@ThreejsExample("webgl_geometry_shapes")
 public final class GeometryShapes extends ParallaxTest 
 {
 	Scene scene;

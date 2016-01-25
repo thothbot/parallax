@@ -41,9 +41,11 @@ import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 import org.parallax3d.parallax.tests.resources.BeckmannShader;
 import org.parallax3d.parallax.tests.resources.SkinSimpleShader;
 
+@ThreejsExample("webgl_materials_bumpmap_skin")
 public final class MaterialsBumpmapSkin extends ParallaxTest 
 {
 

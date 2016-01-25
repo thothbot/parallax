@@ -29,10 +29,12 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.ThreeJsObject;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.tests.ParallaxTest;
 
-public final class PerformanceDoubleSided extends ParallaxTest 
+@ThreeJsObject("webgl_performance_doublesided")
+public final class PerformanceDoubleSided extends ParallaxTest
 {
 
 	private static final String textures = "./assets/textures/cube/swedishRoyalCastle/*.jpg";

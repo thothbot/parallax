@@ -26,7 +26,9 @@ import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_geometry_cube")
 public class GeometryCube extends ParallaxTest
 {
 	static final String texture = "./assets/textures/crate.gif";

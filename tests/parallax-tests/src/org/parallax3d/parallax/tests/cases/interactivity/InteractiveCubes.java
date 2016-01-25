@@ -31,9 +31,11 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.List;
 
+@ThreejsExample("webgl_interactive_cubes")
 public final class InteractiveCubes extends ParallaxTest 
 {
 	class Intersect

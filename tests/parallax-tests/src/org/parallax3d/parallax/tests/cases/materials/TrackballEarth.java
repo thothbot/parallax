@@ -40,10 +40,12 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ThreejsExample("misc_controls_fly")
 public final class TrackballEarth extends ParallaxTest 
 {
 

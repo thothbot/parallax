@@ -35,10 +35,12 @@ import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ThreejsExample("webgl_materials")
 public final class MaterialsCanvas2D extends ParallaxTest 
 {
 	Scene scene;

@@ -35,7 +35,9 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_materials_bumpmap")
 public final class MaterialsBumpmap extends ParallaxTest
 {
 

@@ -27,7 +27,9 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_geometry_hierarchy")
 public final class GeometryHierarchy extends ParallaxTest 
 {
 

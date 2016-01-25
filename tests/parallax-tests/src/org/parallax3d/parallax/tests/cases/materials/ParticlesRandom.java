@@ -29,10 +29,12 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ThreejsExample("webgl_points_random")
 public final class ParticlesRandom extends ParallaxTest 
 {
 

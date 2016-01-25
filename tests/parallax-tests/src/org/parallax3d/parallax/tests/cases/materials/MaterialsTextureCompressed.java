@@ -30,11 +30,12 @@ import org.parallax3d.parallax.graphics.textures.CompressedTexture;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@ThreejsExample("webgl_materials_texture_compressed")
 public final class MaterialsTextureCompressed extends ParallaxTest 
 {
 

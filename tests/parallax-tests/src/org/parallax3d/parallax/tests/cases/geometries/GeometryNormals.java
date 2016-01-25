@@ -34,7 +34,9 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_geometry_normals")
 public class GeometryNormals extends ParallaxTest 
 {
 	Scene scene;

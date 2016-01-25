@@ -41,7 +41,9 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_geometry_extrude_splines")
 public final class GeometryExtrudeSplines extends ParallaxTest
 {
 

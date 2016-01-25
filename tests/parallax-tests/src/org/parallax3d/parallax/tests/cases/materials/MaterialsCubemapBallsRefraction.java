@@ -32,10 +32,12 @@ import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ThreejsExample("webgl_materials_cubemap_balls_refraction")
 public final class MaterialsCubemapBallsRefraction extends ParallaxTest 
 {
 

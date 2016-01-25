@@ -31,7 +31,9 @@ import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_materials_texture_filters")
 public final class MaterialsTextureFilter extends ParallaxTest 
 {
 

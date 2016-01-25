@@ -38,16 +38,15 @@ import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@ThreejsExample("webgl_geometry_extrude_shapes")
 public class GeometryExtrudeShapes extends ParallaxTest
 {
-
-	private static final String texture = "./assets/textures/crate.gif";
-
 	Scene scene;
 	PerspectiveCamera camera;
 	Object3D parentObject;

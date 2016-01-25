@@ -31,8 +31,10 @@ import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 import org.parallax3d.parallax.tests.resources.LavaShader;
 
+@ThreejsExample("webgl_shader_lava")
 public final class MaterialsShaderLava extends ParallaxTest
 {
 

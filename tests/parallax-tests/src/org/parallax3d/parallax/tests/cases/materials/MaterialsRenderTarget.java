@@ -40,7 +40,9 @@ import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_rtt")
 public class MaterialsRenderTarget extends ParallaxTest
 {
 	interface ResourcesPass1 extends Shader.DefaultResources

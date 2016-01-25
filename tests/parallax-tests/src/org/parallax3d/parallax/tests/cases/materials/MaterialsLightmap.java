@@ -34,7 +34,9 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_materials_lightmap")
 public final class MaterialsLightmap extends ParallaxTest 
 {
 

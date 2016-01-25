@@ -28,8 +28,10 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 import org.parallax3d.parallax.tests.resources.MonjoriShader;
 
+@ThreejsExample("webgl_shader")
 public final class MaterialsShaderMonjori extends ParallaxTest 
 {
 	Scene scene;

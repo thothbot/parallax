@@ -27,7 +27,9 @@ import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_morphtargets_horse")
 public final class MorphTargetsHorse extends ParallaxTest
 {
 

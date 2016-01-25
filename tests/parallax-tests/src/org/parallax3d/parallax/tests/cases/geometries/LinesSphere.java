@@ -33,7 +33,9 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_lines_sphere")
 public final class LinesSphere extends ParallaxTest 
 {
 

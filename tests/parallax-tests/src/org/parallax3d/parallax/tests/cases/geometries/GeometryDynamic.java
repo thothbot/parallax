@@ -32,7 +32,9 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_geometry_dynamic")
 public class GeometryDynamic extends ParallaxTest
 {
 

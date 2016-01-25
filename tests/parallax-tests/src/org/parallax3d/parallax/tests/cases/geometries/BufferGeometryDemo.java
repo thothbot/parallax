@@ -34,7 +34,9 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_buffergeometry")
 public final class BufferGeometryDemo extends ParallaxTest
 {
 

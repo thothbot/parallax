@@ -35,10 +35,12 @@ import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ThreejsExample("webgl_custom_attributes_points")
 public class CustomAttributesParticles extends ParallaxTest
 {
 	interface Resources extends Shader.DefaultResources

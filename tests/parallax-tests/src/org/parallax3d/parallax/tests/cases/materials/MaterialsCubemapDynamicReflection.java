@@ -31,7 +31,9 @@ import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_materials_cubemap_dynamic2")
 public final class MaterialsCubemapDynamicReflection extends ParallaxTest 
 {
 

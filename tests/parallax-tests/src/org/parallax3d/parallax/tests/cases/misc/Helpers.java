@@ -27,7 +27,9 @@ import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_helpers")
 public final class Helpers extends ParallaxTest {
 
     private static final String model = "./assets/models/obj/leeperrysmith/LeePerrySmith.js";

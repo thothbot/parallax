@@ -29,8 +29,10 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
-public final class MorphNormalsFlamingo extends ParallaxTest 
+@ThreejsExample("webgl_morphnormals")
+public final class MorphNormalsFlamingo extends ParallaxTest
 {
 	static final String model = "./assets/models/animated/flamingo.js";
 	

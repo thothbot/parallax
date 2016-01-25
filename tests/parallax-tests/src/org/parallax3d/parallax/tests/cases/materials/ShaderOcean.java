@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.tests.cases.materials;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
@@ -39,8 +38,10 @@ import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 import org.parallax3d.parallax.tests.resources.Water;
 
+@ThreejsExample("webgl_shaders_ocean")
 public final class ShaderOcean extends ParallaxTest {
 
 	static final String waternormals = "./assets/textures/waternormals.jpg";

@@ -34,7 +34,9 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.tests.ParallaxTest;
+import org.parallax3d.parallax.tests.ThreejsExample;
 
+@ThreejsExample("webgl_materials_cubemap_balls_reflection")
 public final class MaterialsCubemapBallsReflection extends ParallaxTest 
 {
 
