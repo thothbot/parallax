@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.tests.cases.interactivity;
 
-import com.google.gwt.webgl.client.WebGLRenderingContext;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Face3;

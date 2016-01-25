@@ -47,10 +47,10 @@ public class CustomAttributesParticles2 extends ParallaxTest
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("../../resources/shaders/custom_attributes_particles.vs")
+		@Source("../resources/shaders/custom_attributes_particles.vs")
 		SourceTextResource getVertexShader();
 
-		@Source("../../resources/shaders/custom_attributes_particles.fs")
+		@Source("../resources/shaders/custom_attributes_particles.fs")
 		SourceTextResource getFragmentShader();
 	}
 	
