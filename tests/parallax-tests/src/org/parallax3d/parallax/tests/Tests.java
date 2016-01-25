@@ -50,7 +50,7 @@ public class Tests {
               new InteractiveCubes()
             , new InteractiveCubesGpu()
             , new InteractiveDraggableCubes()
-//            , new InteractiveVoxelPainter()
+            , new InteractiveVoxelPainter()
         ));
 
         put("Materials", Arrays.asList(
