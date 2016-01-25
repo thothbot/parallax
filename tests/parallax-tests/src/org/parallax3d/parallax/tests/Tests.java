@@ -23,6 +23,7 @@ import org.parallax3d.parallax.tests.cases.animation.*;
 import org.parallax3d.parallax.tests.cases.geometries.*;
 import org.parallax3d.parallax.tests.cases.materials.*;
 import org.parallax3d.parallax.tests.cases.misc.Helpers;
+import org.parallax3d.parallax.tests.cases.misc.MiscLookAt;
 
 import java.util.*;
 
@@ -102,11 +103,11 @@ public class Tests {
 
         put("Miscellaneous", Arrays.asList(
 //            , new PerformanceDoubleSided()
-//            , new MiscLookAt()
+            new MiscLookAt()
 //            , new MiscMemoryTestGeometries()
 //            , new MiscMemoryTestShaders()
 //            , new LoaderSTL()
-            new Helpers()
+            , new Helpers()
         ));
 
 //        put("Raytracing Rendering", Arrays.asList(
