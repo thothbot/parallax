@@ -93,8 +93,8 @@ public final class MaterialsLightmap extends ParallaxTest
 
 		// SKYDOME
 
-		ShaderMaterial skyMat = new ShaderMaterial(Resources.INSTANCE);
-		skyMat.setSide(Material.SIDE.BACK);
+		ShaderMaterial skyMat = new ShaderMaterial(Resources.INSTANCE)
+			.setSide(Material.SIDE.BACK);
 
 		skyMat.getShader().addUniform("topColor", new Uniform(Uniform.TYPE.C, new Color(0x0077ff)));
 		skyMat.getShader().addUniform("bottomColor", new Uniform(Uniform.TYPE.C, new Color(0xffffff)));

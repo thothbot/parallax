@@ -105,8 +105,8 @@ public final class MaterialsCubemapFresnel extends ParallaxTest
 		CubeShader shaderCube = new CubeShader();
 		shaderCube.getUniforms().get("tCube").setValue(textureCube);
 
-		ShaderMaterial sMaterial = new ShaderMaterial(shaderCube);
-		sMaterial.setSide(Material.SIDE.BACK);
+		ShaderMaterial sMaterial = new ShaderMaterial(shaderCube)
+			.setSide(Material.SIDE.BACK);
 
 		Mesh mesh = new Mesh( new BoxGeometry( 100000, 100000, 100000 ), sMaterial );
 		sceneCube.add( mesh );

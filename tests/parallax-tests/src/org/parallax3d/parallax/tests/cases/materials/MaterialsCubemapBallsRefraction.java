@@ -81,10 +81,10 @@ public final class MaterialsCubemapBallsRefraction extends ParallaxTest
 		CubeTexture textureCube = new CubeTexture( textures );
 		textureCube.setMapping(Texture.MAPPING_MODE.CUBE_REFRACTION);
 //			
-		MeshBasicMaterial material = new MeshBasicMaterial();
-		material.setColor( new Color(0xffffff) );
-		material.setEnvMap( textureCube );
-		material.setRefractionRatio( 0.95 );
+		MeshBasicMaterial material = new MeshBasicMaterial()
+				.setColor( 0xffffff )
+				.setEnvMap( textureCube )
+				.setRefractionRatio( 0.95 );
 
 		this.speres = new ArrayList<Mesh>();
 		
@@ -105,11 +105,11 @@ public final class MaterialsCubemapBallsRefraction extends ParallaxTest
 		}
 
 		// Skybox
-		ShaderMaterial sMaterial = new ShaderMaterial(new CubeShader());
-		sMaterial.getShader().getUniforms().get("tCube").setValue( textureCube ); 
-		sMaterial.setDepthWrite( false );
-		sMaterial.setSide( Material.SIDE.BACK );
-		
+		ShaderMaterial sMaterial = new ShaderMaterial(new CubeShader())
+				.setDepthWrite( false )
+				.setSide( Material.SIDE.BACK );
+		sMaterial.getShader().getUniforms().get("tCube").setValue( textureCube );
+
 		Mesh mesh = new Mesh( new BoxGeometry( 100, 100, 100 ), sMaterial );
 		sceneCube.add( mesh );
 		

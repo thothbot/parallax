@@ -85,20 +85,20 @@ public final class MaterialsTextureCompressed extends ParallaxTest
 		CompressedTexture map4 = new CompressedTexture( dxt5_mip );
 		map4.setAnisotropy(4);
 
-		MeshBasicMaterial material1 = new MeshBasicMaterial();
-		material1.setMap(map1);
-		MeshBasicMaterial material2 = new MeshBasicMaterial();
-		material2.setMap(map2);
-		MeshBasicMaterial material3 = new MeshBasicMaterial();
-		material3.setMap(map3);
-		material3.setAlphaTest(0.3);
-		material3.setSide(Material.SIDE.DOUBLE);
-		MeshBasicMaterial material4 = new MeshBasicMaterial();
-		material4.setMap(map4);
-		material4.setSide(Material.SIDE.DOUBLE);
-		material4.setBlending(Material.BLENDING.ADDITIVE);
-		material4.setDepthTest(false);
-		material4.setTransparent(true);
+		MeshBasicMaterial material1 = new MeshBasicMaterial()
+				.setMap(map1);
+		MeshBasicMaterial material2 = new MeshBasicMaterial()
+				.setMap(map2);
+		MeshBasicMaterial material3 = new MeshBasicMaterial()
+				.setMap(map3)
+				.setAlphaTest(0.3)
+				.setSide(Material.SIDE.DOUBLE);
+		MeshBasicMaterial material4 = new MeshBasicMaterial()
+				.setMap(map4)
+				.setSide(Material.SIDE.DOUBLE)
+				.setBlending(Material.BLENDING.ADDITIVE)
+				.setDepthTest(false)
+				.setTransparent(true);
 
 		meshes = new ArrayList<Mesh>();
 		Mesh mesh1 = new Mesh( geometry, material1 );

@@ -79,9 +79,9 @@ public final class MaterialsTextureAnisotropy extends ParallaxTest
 		// GROUND
 
 		Texture texture1 = new Texture(texture);
-		MeshPhongMaterial material1 = new MeshPhongMaterial();
-		material1.setColor(new Color(0xffffff));
-		material1.setMap(texture1);
+		MeshPhongMaterial material1 = new MeshPhongMaterial()
+				.setColor(0xffffff)
+				.setMap(texture1);
 
 		texture1.setAnisotropy( context.getRenderer().getMaxAnisotropy() );
 		texture1.setWrapS(TextureWrapMode.REPEAT);
@@ -89,9 +89,9 @@ public final class MaterialsTextureAnisotropy extends ParallaxTest
 		texture1.getRepeat().set( 512, 512 );
 
 		Texture texture2 = new Texture(texture);
-		MeshPhongMaterial material2 = new MeshPhongMaterial();
-		material2.setColor(new Color(0xffffff));
-		material2.setMap(texture2);
+		MeshPhongMaterial material2 = new MeshPhongMaterial()
+				.setColor(0xffffff)
+				.setMap(texture2);
 
 		texture2.setAnisotropy( 1 );
 		texture2.setWrapS(TextureWrapMode.REPEAT);

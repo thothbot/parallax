@@ -83,8 +83,8 @@ public final class MaterialsCubemapDynamicReflection extends ParallaxTest
 		this.cubeCamera.getRenderTarget().setMinFilter( TextureMinFilter.LINEAR_MIPMAP_LINEAR );
 		scene.add( cubeCamera );
 
-		MeshBasicMaterial material = new MeshBasicMaterial(); 
-		material.setEnvMap( cubeCamera.getRenderTarget() );
+		MeshBasicMaterial material = new MeshBasicMaterial()
+				.setEnvMap( cubeCamera.getRenderTarget() );
 		
 		sphere = new Mesh( new SphereGeometry( 20, 30, 15 ), material );
 		scene.add( sphere );

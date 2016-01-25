@@ -119,24 +119,24 @@ public class MaterialsRenderTarget extends ParallaxTest
 		material = new ShaderMaterial(ResourcesPass1.INSTANCE);
 		material.getShader().addUniform("time", new Uniform(Uniform.TYPE.F, 0.0 ));
 
-		materialScreen = new ShaderMaterial(ResourcesScreen.INSTANCE);
+		materialScreen = new ShaderMaterial(ResourcesScreen.INSTANCE)
+				.setDepthWrite(false);
 		materialScreen.getShader().addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, rtTexture ));
-		materialScreen.setDepthWrite(false);
 
 		PlaneBufferGeometry plane = new PlaneBufferGeometry(context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() );
 		quad1 = new Mesh( plane, material );
 		quad1.getPosition().setZ( -100 );
 		sceneRTT.add( quad1 );
 
-		MeshPhongMaterial mat2 = new MeshPhongMaterial();
-		mat2.setColor(new Color(0x550000));
-		mat2.setSpecular(new Color(0xff2200));
-		mat2.setShininess(5.0);
+		MeshPhongMaterial mat2 = new MeshPhongMaterial()
+				.setColor(0x550000)
+				.setSpecular(0xff2200)
+				.setShininess(5.0);
 		
-		MeshPhongMaterial mat1 = new MeshPhongMaterial();
-		mat1.setColor(new Color(0x555555));
-		mat1.setSpecular(new Color(0xffaa00));
-		mat1.setShininess(5.0);
+		MeshPhongMaterial mat1 = new MeshPhongMaterial()
+				.setColor(0x555555)
+				.setSpecular(0xffaa00)
+				.setShininess(5.0);
 
 		TorusGeometry geometry = new TorusGeometry( 100, 25, 15, 30 );
 
@@ -156,9 +156,9 @@ public class MaterialsRenderTarget extends ParallaxTest
 
 		int n = 5;
 		SphereGeometry geometry2 = new SphereGeometry( 10, 64, 32 );
-		MeshBasicMaterial material2 = new MeshBasicMaterial();
-		material2.setColor(new Color(0xffffff));
-		material2.setMap(rtTexture);
+		MeshBasicMaterial material2 = new MeshBasicMaterial()
+				.setColor(0xffffff)
+				.setMap(rtTexture);
 
 		for( int j = 0; j < n; j ++ ) {
 
