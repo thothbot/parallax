@@ -25,6 +25,7 @@ import org.parallax3d.parallax.tests.cases.materials.*;
 import org.parallax3d.parallax.tests.cases.misc.Helpers;
 import org.parallax3d.parallax.tests.cases.misc.MiscLookAt;
 import org.parallax3d.parallax.tests.cases.misc.MiscMemoryTestGeometries;
+import org.parallax3d.parallax.tests.cases.misc.MiscMemoryTestShaders;
 
 import java.util.*;
 
@@ -106,7 +107,7 @@ public class Tests {
 //            , new PerformanceDoubleSided()
               new MiscLookAt()
             , new MiscMemoryTestGeometries()
-//            , new MiscMemoryTestShaders()
+            , new MiscMemoryTestShaders()
 //            , new LoaderSTL()
             , new Helpers()
         ));
