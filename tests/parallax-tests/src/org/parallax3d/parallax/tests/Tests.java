@@ -20,6 +20,7 @@ package org.parallax3d.parallax.tests;
 
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.cases.CustomAttributesParticles;
+import org.parallax3d.parallax.tests.cases.CustomAttributesParticles2;
 import org.parallax3d.parallax.tests.cases.animation.*;
 import org.parallax3d.parallax.tests.cases.geometries.*;
 import org.parallax3d.parallax.tests.cases.interactivity.*;
@@ -85,7 +86,7 @@ public class Tests {
 
         put("Custom Attributes", Arrays.asList(
               new CustomAttributesParticles()
-//            , new CustomAttributesParticles2()
+            , new CustomAttributesParticles2()
         ));
 
 //        put("Loaders", Arrays.asList(
