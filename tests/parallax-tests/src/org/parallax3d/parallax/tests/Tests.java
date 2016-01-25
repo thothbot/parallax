@@ -21,6 +21,7 @@ package org.parallax3d.parallax.tests;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.cases.animation.*;
 import org.parallax3d.parallax.tests.cases.geometries.*;
+import org.parallax3d.parallax.tests.cases.interactivity.*;
 import org.parallax3d.parallax.tests.cases.materials.*;
 import org.parallax3d.parallax.tests.cases.misc.*;
 
@@ -45,12 +46,12 @@ public class Tests {
             , new GeometryNormals()
         ));
 
-//        put("Interactivity", Arrays.asList(
-////              new InteractiveCubes()
-////            , new InteractiveCubesGpu()
-////            , new InteractiveDraggableCubes()
-////            , new InteractiveVoxelPainter()
-//        ));
+        put("Interactivity", Arrays.asList(
+              new InteractiveCubes()
+//            , new InteractiveCubesGpu()
+//            , new InteractiveDraggableCubes()
+//            , new InteractiveVoxelPainter()
+        ));
 
         put("Materials", Arrays.asList(
               new MaterialsBumpmap()
