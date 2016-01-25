@@ -49,7 +49,7 @@ public class Tests {
         put("Interactivity", Arrays.asList(
               new InteractiveCubes()
             , new InteractiveCubesGpu()
-//            , new InteractiveDraggableCubes()
+            , new InteractiveDraggableCubes()
 //            , new InteractiveVoxelPainter()
         ));
 
