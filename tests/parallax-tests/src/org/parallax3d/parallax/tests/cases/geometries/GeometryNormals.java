@@ -65,9 +65,9 @@ public class GeometryNormals extends ParallaxTest
 		scene.add( light );
 
 		Geometry geometry = new BoxGeometry(200, 200, 200, 2, 2, 2);
-		MeshBasicMaterial material = new MeshBasicMaterial();
-		material.setColor(new Color((int)(Math.random() * 0xffffff)));
-		material.setWireframe(false);
+		MeshBasicMaterial material = new MeshBasicMaterial()
+				.setColor( (int)(Math.random() * 0xffffff))
+				.setWireframe(false);
 
 		geometry.computeBoundingSphere();
 		
@@ -104,10 +104,10 @@ public class GeometryNormals extends ParallaxTest
 		Group group = new Group();
 		scene.add( group );
 		
-		MeshBasicMaterial meshMaterial = new MeshBasicMaterial();
-		meshMaterial.setColor(new Color(0xfefefe));
-		meshMaterial.setWireframe(true);
-		meshMaterial.setOpacity(0.5);
+		MeshBasicMaterial meshMaterial = new MeshBasicMaterial()
+				.setColor( 0xfefefe )
+				.setWireframe(true)
+				.setOpacity(0.5);
 		Mesh mesh = new Mesh( geometry, meshMaterial );
 		group.add( mesh );
 

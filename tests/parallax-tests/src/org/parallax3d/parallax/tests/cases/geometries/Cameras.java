@@ -126,23 +126,22 @@ public class Cameras extends ParallaxTest
 
 		//
 
-		MeshBasicMaterial bopt0 = new MeshBasicMaterial();
-		bopt0.setColor( new Color(0xffffff) );
-		bopt0.setWireframe(true);
+		MeshBasicMaterial bopt0 = new MeshBasicMaterial()
+				.setColor( 0xffffff )
+				.setWireframe(true);
 
 		this.mesh = new Mesh( new SphereGeometry( 100, 16, 8 ), bopt0);
 		scene.add( mesh );
 
-		MeshBasicMaterial  bopt1 = new MeshBasicMaterial();
-		bopt1.setColor( new Color(0x00ff00) );
-		bopt1.setWireframe(true);
+		MeshBasicMaterial  bopt1 = new MeshBasicMaterial()
+				.setColor( new Color(0x00ff00) )
+				.setWireframe(true);
+
 		Mesh mesh2 = new Mesh( new SphereGeometry( 50, 16, 8 ), bopt1);
 		mesh2.getPosition().setY(150);
 		mesh.add( mesh2 );
 
-		MeshBasicMaterial  bopt2 = new MeshBasicMaterial();
-		bopt2.setColor( new Color(0x0000ff) );
-		Mesh mesh3 = new Mesh( new SphereGeometry( 5, 16, 8 ), bopt2);
+		Mesh mesh3 = new Mesh( new SphereGeometry( 5, 16, 8 ), new MeshBasicMaterial().setColor( 0x0000ff ) );
 		mesh3.getPosition().setZ(150);
 		cameraRig.add( mesh3 );
 
@@ -160,10 +159,7 @@ public class Cameras extends ParallaxTest
 			geometry.getVertices().add( vertex );
 		}
 
-		PointCloudMaterial popt = new PointCloudMaterial();
-		popt.setColor( new Color(0x888888) );
-
-		PointCloud particles = new PointCloud( geometry, popt );
+		PointCloud particles = new PointCloud( geometry, new PointCloudMaterial().setColor( 0x888888 ) );
 		scene.add( particles );
 
 		//

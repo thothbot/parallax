@@ -85,9 +85,9 @@ public class GeometryDynamic extends ParallaxTest
 		texture.setWrapT(TextureWrapMode.REPEAT);
 		texture.getRepeat().set( 5.0, 5.0 );
 
-		MeshBasicMaterial material = new MeshBasicMaterial();
-		material.setColor( new Color(0x0044ff) );
-		material.setMap( texture );
+		MeshBasicMaterial material = new MeshBasicMaterial()
+				.setColor( 0x0044ff )
+				.setMap( texture );
 
 		this.mesh = new Mesh( this.geometry, material );
 		scene.add( this.mesh );

@@ -70,10 +70,10 @@ public class Geometries extends ParallaxTest
 		texture.setWrapT(TextureWrapMode.REPEAT);
 		texture.setAnisotropy(16);
 
-		MeshLambertMaterial material = new MeshLambertMaterial();
-		material.setMap( texture );
-		material.setAmbient( new Color(0xbbbbbb) );
-		material.setSide(Material.SIDE.DOUBLE);
+		MeshLambertMaterial material = new MeshLambertMaterial()
+				.setMap( texture )
+				.setAmbient( 0xbbbbbb )
+				.setSide(Material.SIDE.DOUBLE);
 
 		Object3D object1 = new Mesh( new SphereGeometry( 75, 20, 10 ), material );
 		object1.getPosition().set( -400, 0, 200 );

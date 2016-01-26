@@ -211,14 +211,13 @@ public final class BufferGeometryDemo extends ParallaxTest
 
 		geometry.computeBoundingSphere();
 
-		MeshPhongMaterial material = new MeshPhongMaterial();
-
-		material.setColor(new Color(0xaaaaaa));
-		material.setAmbient(new Color(0xaaaaaa));
-		material.setSpecular(new Color(0xffffff));
-		material.setShininess(250);
-		material.setSide(Material.SIDE.DOUBLE);
-		material.setVertexColors(Material.COLORS.VERTEX);
+		MeshPhongMaterial material = new MeshPhongMaterial()
+				.setColor(0xaaaaaa)
+				.setAmbient(0xaaaaaa)
+				.setSpecular(0xffffff)
+				.setShininess(250)
+				.setVertexColors(Material.COLORS.VERTEX)
+				.setSide(Material.SIDE.DOUBLE);
 
 		mesh = new Mesh( geometry, material );
 		scene.add( mesh );

@@ -49,12 +49,7 @@ public class GeometryCube extends ParallaxTest
 		);
 		camera.getPosition().setZ(400);
 
-		BoxGeometry geometry = new BoxGeometry( 200, 200, 200 );
-
-		MeshBasicMaterial material = new MeshBasicMaterial();
-		material.setMap(new Texture(texture));
-
-		this.mesh = new Mesh(geometry, material);
+		this.mesh = new Mesh(new BoxGeometry( 200, 200, 200 ), new MeshBasicMaterial().setMap(new Texture(texture)));
 		scene.add(mesh);
 	}
 

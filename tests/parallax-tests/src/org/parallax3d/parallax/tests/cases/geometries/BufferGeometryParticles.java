@@ -99,9 +99,9 @@ public final class BufferGeometryParticles extends ParallaxTest
 
 
 		//
-		PointCloudMaterial material = new PointCloudMaterial();
-		material.setVertexColors(Material.COLORS.VERTEX);
-		material.setSize(15.0);
+		PointCloudMaterial material = new PointCloudMaterial()
+				.setVertexColors(Material.COLORS.VERTEX)
+				.setSize(15.0);
 
 		particleSystem = new PointCloud( geometry, material );
 		scene.add( particleSystem );

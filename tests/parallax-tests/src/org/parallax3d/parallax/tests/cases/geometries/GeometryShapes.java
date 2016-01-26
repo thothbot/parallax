@@ -337,13 +337,12 @@ public final class GeometryShapes extends ParallaxTest
 
 		// 3d shape
 
-		MeshLambertMaterial meshMat1 = new MeshLambertMaterial();
-		meshMat1.setColor( color );
+		MeshLambertMaterial meshMat1 = new MeshLambertMaterial().setColor( color );
 
-		MeshBasicMaterial meshMat2 = new MeshBasicMaterial();
-		meshMat2.setColor(color);
-		meshMat2.setWireframe(true);
-		meshMat2.setTransparent(true);
+		MeshBasicMaterial meshMat2 = new MeshBasicMaterial()
+				.setColor(color)
+				.setWireframe(true)
+				.setTransparent(true);
 		
 		Object3D mesh = SceneUtils.createMultiMaterialObject( geometry, Arrays.asList( meshMat1 ) );
 		
@@ -354,9 +353,9 @@ public final class GeometryShapes extends ParallaxTest
 
 		// solid line
 
-		LineBasicMaterial line1Mat = new LineBasicMaterial();
-		line1Mat.setColor(color);
-		line1Mat.setLinewidth(2);
+		LineBasicMaterial line1Mat = new LineBasicMaterial()
+				.setColor(color)
+				.setLinewidth(2);
 
 		Line line1 = new Line( points, line1Mat );
 		line1.getPosition().set( x, y, z + 25.0 );
@@ -366,9 +365,9 @@ public final class GeometryShapes extends ParallaxTest
 
 		// transparent line from real points
 
-		LineBasicMaterial line2Mat = new LineBasicMaterial();
-		line2Mat.setColor(color);
-		line2Mat.setOpacity(0.5);
+		LineBasicMaterial line2Mat = new LineBasicMaterial()
+				.setColor(color)
+				.setOpacity(0.5);
 		
 		Line line2 = new Line( points, line2Mat );
 		line2.getPosition().set( x, y, z + 75.0 );
@@ -378,10 +377,10 @@ public final class GeometryShapes extends ParallaxTest
 
 		// vertices from real points
 
-		PointCloudMaterial particleMat = new PointCloudMaterial();
-		particleMat.setColor(color);
-		particleMat.setSize(2);
-		particleMat.setOpacity(0.75);
+		PointCloudMaterial particleMat = new PointCloudMaterial()
+				.setColor(color)
+				.setSize(2)
+				.setOpacity(0.75);
 		
 		Geometry pgeo1 = points.clone();
 		PointCloud particles = new PointCloud( pgeo1, particleMat );
@@ -392,9 +391,9 @@ public final class GeometryShapes extends ParallaxTest
 
 		// transparent line from equidistance sampled points
 
-		LineBasicMaterial line3Mat = new LineBasicMaterial();
-		line3Mat.setColor(color);
-		line3Mat.setOpacity(0.2);
+		LineBasicMaterial line3Mat = new LineBasicMaterial()
+				.setColor(color)
+				.setOpacity(0.2);
 		
 		Line line3 = new Line( spacedPoints, line3Mat );
 		line3.getPosition().set( x, y, z + 100.0 );
@@ -404,10 +403,10 @@ public final class GeometryShapes extends ParallaxTest
 
 		// equidistance sampled points
 
-		PointCloudMaterial particles2Mat = new PointCloudMaterial();
-		particles2Mat.setColor(color);
-		particles2Mat.setSize(2);
-		particles2Mat.setOpacity(0.5);
+		PointCloudMaterial particles2Mat = new PointCloudMaterial()
+				.setColor(color)
+				.setSize(2)
+				.setOpacity(0.5);
 		
 		Geometry pgeo2 = spacedPoints.clone();
 		PointCloud particles2 = new PointCloud( pgeo2, particles2Mat );

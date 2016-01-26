@@ -148,8 +148,7 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 		addTube();
 
 		// Debug point
-		MeshBasicMaterial pMaterial = new MeshBasicMaterial();
-		pMaterial.setColor(new Color(0xdddddd));
+		MeshBasicMaterial pMaterial = new MeshBasicMaterial().setColor(0xdddddd);
 		cameraEye = new Mesh(new SphereGeometry(5), pMaterial);
 		parent.add(cameraEye);
 
@@ -180,15 +179,15 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 
 	private void addGeometry(Geometry geometry, Color color)
 	{
-		MeshLambertMaterial material1 = new MeshLambertMaterial();
-		material1.setColor(color);
-		material1.setOpacity(this.isDebug ? 0.2 : 0.8);
-		material1.setTransparent(true);
+		MeshLambertMaterial material1 = new MeshLambertMaterial()
+				.setColor(color)
+				.setOpacity(this.isDebug ? 0.2 : 0.8)
+				.setTransparent(true);
 
-		MeshBasicMaterial material2 = new MeshBasicMaterial();
-		material2.setColor(new Color(0x000000));
-		material2.setOpacity(0.5);
-		material2.setWireframe(true);
+		MeshBasicMaterial material2 = new MeshBasicMaterial()
+				.setColor( 0x000000)
+				.setWireframe(true)
+				.setOpacity(0.5);
 
 		// 3d shape
 		this.tubeMesh = (Object3D) SceneUtils.createMultiMaterialObject(geometry, Arrays.asList(material1, material2));

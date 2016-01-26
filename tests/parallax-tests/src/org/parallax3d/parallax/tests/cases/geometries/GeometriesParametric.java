@@ -74,19 +74,19 @@ public class GeometriesParametric extends ParallaxTest
 		texture.setAnisotropy(16);
 
 		List<Material> materials = new ArrayList<Material>();
-		MeshLambertMaterial lmaterial = new MeshLambertMaterial();
-		lmaterial.setMap( texture );
-		lmaterial.setAmbient( new Color(0xbbbbbb) );
-		lmaterial.setSide(Material.SIDE.DOUBLE);
+		MeshLambertMaterial lmaterial = new MeshLambertMaterial()
+				.setMap( texture )
+				.setAmbient( 0xbbbbbb )
+				.setSide(Material.SIDE.DOUBLE);
 		materials.add(lmaterial);
 
 
-		MeshBasicMaterial bmaterial = new MeshBasicMaterial();
-		bmaterial.setColor( new Color(0xffffff) );
-		bmaterial.setWireframe( true );
-		bmaterial.setTransparent(true);
-		bmaterial.setOpacity( 0.1 );
-		bmaterial.setSide(Material.SIDE.DOUBLE);
+		MeshBasicMaterial bmaterial = new MeshBasicMaterial()
+				.setColor( 0xffffff )
+				.setWireframe( true )
+				.setTransparent(true)
+				.setOpacity( 0.1 )
+				.setSide(Material.SIDE.DOUBLE);
 		materials.add(bmaterial);
 
 		// KleinParametricGeometry Bottle

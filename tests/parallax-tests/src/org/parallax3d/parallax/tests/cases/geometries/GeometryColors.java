@@ -70,8 +70,7 @@ public class GeometryColors extends ParallaxTest
 		light.getPosition().set( 0, 0, 1 );
 		scene.add( light );
 		
-		MeshBasicMaterial shadowMaterial = new MeshBasicMaterial();
-		shadowMaterial.setMap( new Texture(texture) );
+		MeshBasicMaterial shadowMaterial = new MeshBasicMaterial().setMap( new Texture(texture) );
 		PlaneBufferGeometry shadowGeo = new PlaneBufferGeometry( 300, 300, 1, 1 );
 		
 		Mesh mesh1 = new Mesh( shadowGeo, shadowMaterial );
@@ -129,18 +128,16 @@ public class GeometryColors extends ParallaxTest
 		}
 
 		List<Material> materials = new ArrayList<Material>();
-		MeshLambertMaterial lmaterial = new MeshLambertMaterial();
-		lmaterial.setColor( new Color(0xffffff) );
-		lmaterial.setShading( Material.SHADING.FLAT );
-		lmaterial.setVertexColors( Material.COLORS.VERTEX );
-		materials.add(lmaterial);
+		materials.add(new MeshLambertMaterial()
+				.setColor( 0xffffff )
+				.setShading( Material.SHADING.FLAT )
+				.setVertexColors( Material.COLORS.VERTEX ));
 
-		MeshBasicMaterial bmaterial = new MeshBasicMaterial();
-		bmaterial.setColor( new Color(0x000000) );
-		bmaterial.setShading( Material.SHADING.FLAT );
-		bmaterial.setWireframe(true);
-		bmaterial.setTransparent( true );
-		materials.add(bmaterial);
+		materials.add(new MeshBasicMaterial()
+				.setColor( 0x000000 )
+				.setShading( Material.SHADING.FLAT )
+				.setWireframe(true)
+				.setTransparent( true ));
 
 		Object3D group1 = SceneUtils.createMultiMaterialObject( geometry, materials );
 		group1.getPosition().setX(-400);

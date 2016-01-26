@@ -112,10 +112,10 @@ public final class LinesSphere extends ParallaxTest
 		{
 			ExampleData p = parameters.get(i);
 
-			LineBasicMaterial material = new LineBasicMaterial();
-			material.setColor(p.color);
-			material.setOpacity(p.opasity);
-			material.setLinewidth(p.lineWidth);
+			LineBasicMaterial material = new LineBasicMaterial()
+					.setColor(p.color)
+					.setLinewidth(p.lineWidth)
+					.setOpacity(p.opasity);
 
 			Line line = new Line( geometry, material, Line.MODE.PIECES );
 			line.getScale().set( p.scale );
