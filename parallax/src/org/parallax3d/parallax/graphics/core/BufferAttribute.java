@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 
-@ThreejsObject("THREE.BufferAttribute")
+@ThreeObject("THREE.BufferAttribute")
 public class BufferAttribute {
 
 	private TypeArray array;

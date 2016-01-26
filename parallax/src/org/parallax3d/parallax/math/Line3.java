@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
-@ThreejsObject("THREE.Line3")
+@ThreeObject("THREE.Line3")
 public class Line3 
 {
 	private Vector3 start;

@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.extras.helpers;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.*;
@@ -32,7 +32,7 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.math.Color;
 
-@ThreejsObject("THREE.FaceNormalsHelper")
+@ThreeObject("THREE.FaceNormalsHelper")
 public class FaceNormalsHelper extends Line
 {
 

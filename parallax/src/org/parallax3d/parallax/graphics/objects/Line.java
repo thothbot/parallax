@@ -36,7 +36,7 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector4;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
@@ -49,7 +49,7 @@ import org.parallax3d.parallax.system.gl.enums.BufferUsage;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.Line")
+@ThreeObject("THREE.Line")
 public class Line extends GeometryObject
 {
 	/**

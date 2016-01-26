@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.math;
 
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
 /**
  * Class implements some mathematical helpers methods.
@@ -27,7 +27,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  * @author thothbot
  */
 
-@ThreejsObject("THREE.Math")
+@ThreeObject("THREE.Math")
 public class Mathematics
 {
 	/**

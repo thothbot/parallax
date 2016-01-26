@@ -18,10 +18,10 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.system.gl.GL20;
 
-@ThreejsObject("THREE.WebGLExtensions")
+@ThreeObject("THREE.WebGLExtensions")
 public final class GLExtensions {
 	
 	public static enum Id {

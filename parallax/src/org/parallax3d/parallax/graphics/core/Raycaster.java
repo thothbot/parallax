@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.objects.Line;
@@ -32,7 +32,7 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
  * This class makes raycasting easier. Raycasting is used for picking and more.
  * 
  */
-@ThreejsObject("THREE.Raycaster")
+@ThreeObject("THREE.Raycaster")
 public class Raycaster 
 {
 	/**

@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.Object3D;
@@ -27,7 +27,7 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 
-@ThreejsObject("THREE.LightShadow")
+@ThreeObject("THREE.LightShadow")
 public abstract class ShadowLight extends Light implements HasIntensity
 {
 	protected Object3D target;

@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.scenes;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
 /**
  * This class implements simple fog with near and far options.
@@ -28,7 +28,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.Fog")
+@ThreeObject("THREE.Fog")
 public final class Fog extends AbstractFog 
 {
 	private double near;

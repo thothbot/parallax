@@ -27,9 +27,9 @@ import org.parallax3d.parallax.graphics.extras.curves.*;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
-@ThreejsObject("THREE.Path")
+@ThreeObject("THREE.Path")
 public class Path extends CurvePath
 {
 	public static enum PATH_ACTIONS {

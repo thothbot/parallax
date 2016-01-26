@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.math;
 
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
 /**
  * Representation of a ray in space.
@@ -31,7 +31,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.Ray")
+@ThreeObject("THREE.Ray")
 public class Ray 
 {
 	// Where does the ray start. Default is 0, 0, 0.

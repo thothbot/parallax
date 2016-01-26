@@ -21,9 +21,9 @@ package org.parallax3d.parallax.graphics.materials;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
-@ThreejsObject("THREE.ShaderMaterial")
+@ThreeObject("THREE.ShaderMaterial")
 public class ShaderMaterial extends Material 
 	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning, HasShading
 {

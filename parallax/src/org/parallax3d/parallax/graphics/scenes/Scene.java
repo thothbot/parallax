@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.scenes;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.materials.Material;
@@ -32,7 +32,7 @@ import org.parallax3d.parallax.graphics.materials.Material;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.Scene")
+@ThreeObject("THREE.Scene")
 public final class Scene extends Object3D
 {
 	/**
