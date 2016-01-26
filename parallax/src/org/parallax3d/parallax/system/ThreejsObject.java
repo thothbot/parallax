@@ -25,6 +25,6 @@ import java.lang.annotation.Target;
 
 @Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface ThreeObject {
+public @interface ThreejsObject {
     String value();
 }

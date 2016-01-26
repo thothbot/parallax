@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.extras.geometries;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 
 /**
@@ -29,7 +29,7 @@ import org.parallax3d.parallax.graphics.core.Geometry;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.PlaneGeometry")
+@ThreejsObject("THREE.PlaneGeometry")
 public final class PlaneGeometry extends Geometry
 {
 	public PlaneGeometry(double width, double height)

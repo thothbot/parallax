@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.geometries.CylinderGeometry;
@@ -29,7 +29,7 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 
-@ThreeObject("THREE.AxisHelper")
+@ThreejsObject("THREE.AxisHelper")
 public class AxisHelper extends Object3D
 {
 

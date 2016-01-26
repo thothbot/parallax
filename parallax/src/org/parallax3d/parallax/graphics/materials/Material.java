@@ -35,7 +35,7 @@ import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
@@ -47,7 +47,7 @@ import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.Material")
+@ThreejsObject("THREE.Material")
 public abstract class Material
 {
 

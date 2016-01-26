@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 import java.util.List;
 
-@ThreeObject("THREE.Triangle")
+@ThreejsObject("THREE.Triangle")
 public class Triangle 
 {
 	private Vector3 a;

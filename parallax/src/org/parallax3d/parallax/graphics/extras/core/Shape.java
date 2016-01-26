@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.extras.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Vector2;
 
 /**
@@ -34,7 +34,7 @@ import org.parallax3d.parallax.math.Vector2;
  * STEP 3a - Extract points from each shape, turn to vertices
  * STEP 3b - Triangulate each shape, add faces.
  **/
-@ThreeObject("THREE.Shape")
+@ThreejsObject("THREE.Shape")
 public class Shape extends Path
 {
 	private List<Path> holes = new ArrayList<Path>();

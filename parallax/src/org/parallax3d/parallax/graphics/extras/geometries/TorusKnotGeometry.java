@@ -24,7 +24,7 @@ import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/torus_knot.gif" />
@@ -34,7 +34,7 @@ import org.parallax3d.parallax.system.ThreeObject;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.TorusKnotGeometry")
+@ThreejsObject("THREE.TorusKnotGeometry")
 public final class TorusKnotGeometry extends Geometry
 {
 

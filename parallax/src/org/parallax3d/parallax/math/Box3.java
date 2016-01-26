@@ -20,7 +20,7 @@ package org.parallax3d.parallax.math;
 
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
@@ -28,7 +28,7 @@ import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
-@ThreeObject("THREE.Box3")
+@ThreejsObject("THREE.Box3")
 public class Box3
 {
 	private Vector3 min;

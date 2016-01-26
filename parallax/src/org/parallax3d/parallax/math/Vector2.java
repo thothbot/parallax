@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
@@ -29,7 +29,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * 
  * @author thothbot
  */
-@ThreeObject("THREE.Vector2")
+@ThreejsObject("THREE.Vector2")
 public class Vector2
 {
 	/**

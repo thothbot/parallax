@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-@ThreeObject("THREE.Spline")
+@ThreejsObject("THREE.Spline")
 public class Spline {
 
 	private Vector3[] points;

@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.extras;
 
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.materials.Material;
@@ -37,7 +37,7 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.SceneUtils")
+@ThreejsObject("THREE.SceneUtils")
 public class SceneUtils
 {
 	/**

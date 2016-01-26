@@ -20,11 +20,11 @@ package org.parallax3d.parallax.graphics.renderers;
 
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
-@ThreeObject("THREE.WebGLGeometries")
+@ThreejsObject("THREE.WebGLGeometries")
 public abstract class GLGeometry {
 
 	public Float32Array __colorArray;
