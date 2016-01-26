@@ -108,10 +108,8 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 		objects = new ArrayList<GeometryObject>();
 		for ( int i = 0; i < 200; i ++ ) 
 		{
-			MeshLambertMaterial material1 = new MeshLambertMaterial();
-			material1.setColor(new Color( (int)(Math.random() * 0xffffff) ));
-			material1.setAmbient(material1.getColor());
-			Mesh object = new Mesh( geometry, material1 );
+			int color = (int)(Math.random() * 0xffffff);
+			Mesh object = new Mesh( geometry, new MeshLambertMaterial().setColor( color ).setAmbient( color ) );
 
 			object.getPosition().setX( Math.random() * 1000 - 500 );
 			object.getPosition().setY( Math.random() * 600 - 300 );
@@ -133,10 +131,10 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 			objects.add( object );
 		}
 
-		MeshBasicMaterial material2 = new MeshBasicMaterial();
-		material2.setColor(new Color(0x000000));
-		material2.setOpacity(0.25);
-		material2.setTransparent(true);
+		MeshBasicMaterial material2 = new MeshBasicMaterial()
+				.setColor( 0x000000 )
+				.setOpacity(0.25)
+				.setTransparent(true);
 		plane = new Mesh( new PlaneBufferGeometry( 2000, 2000, 8, 8 ), material2 );
 		plane.setVisible(false);
 		scene.add( plane );

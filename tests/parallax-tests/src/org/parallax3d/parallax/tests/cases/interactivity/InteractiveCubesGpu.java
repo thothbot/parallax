@@ -108,13 +108,12 @@ public final class InteractiveCubesGpu extends ParallaxTest
 
 		Geometry geometry = new Geometry();
 		Geometry pickingGeometry = new Geometry();
-		MeshBasicMaterial pickingMaterial = new MeshBasicMaterial();
-		pickingMaterial.setVertexColors(Material.COLORS.VERTEX);
+		MeshBasicMaterial pickingMaterial = new MeshBasicMaterial().setVertexColors(Material.COLORS.VERTEX);
 
-		MeshLambertMaterial defaultMaterial = new MeshLambertMaterial();
-		defaultMaterial.setColor(new Color(0xffffff));
-		defaultMaterial.setShading(Material.SHADING.FLAT);
-		defaultMaterial.setVertexColors(Material.COLORS.VERTEX);
+		MeshLambertMaterial defaultMaterial = new MeshLambertMaterial()
+				.setColor( 0xffffff )
+				.setShading(Material.SHADING.FLAT)
+				.setVertexColors(Material.COLORS.VERTEX);
 
 		pickingData = new ArrayList<Picking>();
 		
@@ -169,9 +168,7 @@ public final class InteractiveCubesGpu extends ParallaxTest
 
 		pickingScene.add(new Mesh(pickingGeometry, pickingMaterial));
 
-		MeshLambertMaterial highlightBoxMaterial = new MeshLambertMaterial();
-		highlightBoxMaterial.setColor(new Color(0xffff00));
-		highlightBox = new Mesh( new BoxGeometry(1, 1, 1), highlightBoxMaterial );
+		highlightBox = new Mesh( new BoxGeometry(1, 1, 1), new MeshLambertMaterial().setColor( 0xffff00 ) );
 		scene.add( highlightBox );
 
 		context.getRenderer().setSortObjects(false);

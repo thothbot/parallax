@@ -88,22 +88,22 @@ public final class InteractiveVoxelPainter extends ParallaxTest
 		// roll-over helpers
 
 		BoxGeometry rollOverGeo = new BoxGeometry( 50, 50, 50 );
-		MeshBasicMaterial rollOverMaterial = new MeshBasicMaterial();
-		rollOverMaterial.setColor(new Color(0xff0000));
-		rollOverMaterial.setOpacity(0.5);
-		rollOverMaterial.setTransparent(true);
+		MeshBasicMaterial rollOverMaterial = new MeshBasicMaterial()
+				.setColor( 0xff0000 )
+				.setOpacity(0.5)
+				.setTransparent(true);
 		rollOverMesh = new Mesh( rollOverGeo, rollOverMaterial );
 		scene.add( rollOverMesh );
 
 		// cubes
 
 		cubeGeo = new BoxGeometry( 50, 50, 50 );
-		cubeMaterial = new MeshLambertMaterial();
-		cubeMaterial.setColor(new Color(0xfeb74c));
-		cubeMaterial.setAmbient(new Color(0x00ff80));
-		cubeMaterial.setShading(Material.SHADING.FLAT);
-		cubeMaterial.setMap(new Texture( texture ));
-		cubeMaterial.setAmbient(cubeMaterial.getColor());
+		cubeMaterial = new MeshLambertMaterial()
+				.setColor( 0xfeb74c )
+				.setAmbient( 0x00ff80 )
+				.setShading(Material.SHADING.FLAT)
+				.setMap(new Texture( texture ))
+				.setAmbient(cubeMaterial.getColor());
 
 		// grid
 
@@ -121,10 +121,10 @@ public final class InteractiveVoxelPainter extends ParallaxTest
 
 		}
 
-		LineBasicMaterial material = new LineBasicMaterial();
-		material.setColor(new Color(0x000000));
-		material.setOpacity(0.2);
-		material.setTransparent(true);
+		LineBasicMaterial material = new LineBasicMaterial()
+				.setColor( 0x000000 )
+				.setTransparent(true)
+				.setOpacity(0.2);
 		
 		Line line = new Line( geometry, material, Line.MODE.PIECES );
 		scene.add( line );

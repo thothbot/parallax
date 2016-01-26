@@ -75,8 +75,7 @@ public final class InteractiveCubes extends ParallaxTest
 
 		for ( int i = 0; i < 2000; i ++ ) 
 		{
-			MeshLambertMaterial material = new MeshLambertMaterial();
-			material.setColor(new Color( (int)(Math.random() * 0xffffff) ));
+			MeshLambertMaterial material = new MeshLambertMaterial().setColor( (int)(Math.random() * 0xffffff) );
 			Mesh object = new Mesh( geometry, material );
 
 			object.getPosition().setX( Math.random() * 800 - 400 );
