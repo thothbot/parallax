@@ -82,8 +82,8 @@ public final class MaterialsWireframe extends ParallaxTest
 
 		// wireframe using gl.LINES
 
-		MeshBasicMaterial materialLines = new MeshBasicMaterial();
-		materialLines.setWireframe(true);
+		MeshBasicMaterial materialLines = new MeshBasicMaterial()
+			.setWireframe(true);
 
 		meshLines = new Mesh( geometryLines, materialLines );
 		meshLines.getPosition().setX(-150);

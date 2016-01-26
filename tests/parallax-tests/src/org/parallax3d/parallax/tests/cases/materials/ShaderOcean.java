@@ -125,17 +125,17 @@ public final class ShaderOcean extends ParallaxTest {
 		
 		CubeTexture textureCube = new CubeTexture( textures );
 		
-		MeshBasicMaterial material = new MeshBasicMaterial();
-		material.setColor( new Color(0xffffff) );
-		material.setEnvMap( textureCube );
+		MeshBasicMaterial material = new MeshBasicMaterial()
+				.setColor( 0xffffff )
+				.setEnvMap( textureCube );
 		
 		// Skybox
 
-		ShaderMaterial sMaterial = new ShaderMaterial( new CubeShader() );
+		ShaderMaterial sMaterial = new ShaderMaterial( new CubeShader() )
+				.setDepthWrite( false )
+				.setSide(Material.SIDE.BACK);
 		sMaterial.getShader().getUniforms().get("tCube").setValue( textureCube ); 
-		sMaterial.setDepthWrite( false );
-		sMaterial.setSide(Material.SIDE.BACK);
-		
+
 		Mesh mesh = new Mesh( new BoxGeometry( 1000000, 1000000, 1000000 ), sMaterial );
 		scene.add( mesh );
 
@@ -148,10 +148,10 @@ public final class ShaderOcean extends ParallaxTest {
 
 		}
 
-		MeshPhongMaterial sphereMaterial = new MeshPhongMaterial();
-		sphereMaterial.setVertexColors(Material.COLORS.FACE);
-		sphereMaterial.setEnvMap(textureCube);
-		sphereMaterial.setShininess(100.0);
+		MeshPhongMaterial sphereMaterial = new MeshPhongMaterial()
+				.setVertexColors(Material.COLORS.FACE)
+				.setEnvMap(textureCube)
+				.setShininess(100.0);
 		
 		sphere = new Mesh( geometry, sphereMaterial );
 //			scene.add( sphere );			

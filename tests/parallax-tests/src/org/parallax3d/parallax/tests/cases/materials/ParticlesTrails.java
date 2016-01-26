@@ -67,13 +67,13 @@ public final class ParticlesTrails extends ParallaxTest
 
 		}
 
-		PointCloudMaterial material = new PointCloudMaterial();
-		material.setSize( 1.0 );
-		material.setVertexColors( Material.COLORS.VERTEX );
-		material.setDepthTest( false );
-		material.setOpacity( 0.5 );
-		material.setSizeAttenuation(false);
-		material.setTransparent(true);
+		PointCloudMaterial material = new PointCloudMaterial()
+				.setSize( 1.0 )
+				.setVertexColors( Material.COLORS.VERTEX )
+				.setSizeAttenuation(false)
+				.setDepthTest( false )
+				.setOpacity( 0.5 )
+				.setTransparent(true);
 
 		PointCloud mesh = new PointCloud( geometry, material );
 		scene.add( mesh );

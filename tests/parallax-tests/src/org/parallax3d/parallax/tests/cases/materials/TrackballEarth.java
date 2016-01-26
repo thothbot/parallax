@@ -104,8 +104,8 @@ public final class TrackballEarth extends ParallaxTest
 		Texture specularTexture = new Texture( earthSpecular );
 		Texture moonTexture     = new Texture( moon );
 
-		ShaderMaterial materialNormalMap = new ShaderMaterial( new NormalMapShader() );
-		materialNormalMap.setLights( true );
+		ShaderMaterial materialNormalMap = new ShaderMaterial( new NormalMapShader() )
+			.setLights( true );
 		
 		FastMap<Uniform> uniforms = materialNormalMap.getShader().getUniforms();
 
@@ -137,10 +137,10 @@ public final class TrackballEarth extends ParallaxTest
 
 		// clouds
 
-		MeshLambertMaterial materialClouds = new MeshLambertMaterial();
-		materialClouds.setColor( new Color(0xffffff) );
-		materialClouds.setMap( cloudsTexture );
-		materialClouds.setTransparent(true);
+		MeshLambertMaterial materialClouds = new MeshLambertMaterial()
+				.setColor( 0xffffff )
+				.setMap( cloudsTexture )
+				.setTransparent(true);
 
 		this.meshClouds = new Mesh( geometry, materialClouds );
 		meshClouds.getScale().set( cloudsScale );
@@ -149,9 +149,9 @@ public final class TrackballEarth extends ParallaxTest
 
 
 		// moon
-		MeshPhongMaterial materialMoon = new MeshPhongMaterial();
-		materialMoon.setColor( new Color(0xffffff) );
-		materialMoon.setMap( moonTexture );
+		MeshPhongMaterial materialMoon = new MeshPhongMaterial()
+				.setColor( 0xffffff )
+				.setMap( moonTexture );
 		
 
 		this.meshMoon = new Mesh( geometry, materialMoon );
@@ -184,36 +184,31 @@ public final class TrackballEarth extends ParallaxTest
 		
 		List<PointCloudMaterial> starsMaterials = new ArrayList<PointCloudMaterial>();
 		starsMaterials.add(pbOpt);
-		
-		PointCloudMaterial pbOpt1 = new PointCloudMaterial();
-		pbOpt1.setColor( new Color(0x555555) );
-		pbOpt1.setSize( 1 );
-		pbOpt1.setSizeAttenuation(false);
-		starsMaterials.add(pbOpt1);
-		
-		PointCloudMaterial pbOpt2 = new PointCloudMaterial();
-		pbOpt2.setColor( new Color(0x333333) );
-		pbOpt2.setSize( 2 );
-		pbOpt2.setSizeAttenuation(false);
-		starsMaterials.add(pbOpt2);
-		
-		PointCloudMaterial pbOpt3 = new PointCloudMaterial();
-		pbOpt3.setColor( new Color(0x3a3a3a) );
-		pbOpt3.setSize( 1 );
-		pbOpt3.setSizeAttenuation(false);
-		starsMaterials.add(pbOpt3);
-		
-		PointCloudMaterial pbOpt4 = new PointCloudMaterial();
-		pbOpt4.setColor( new Color(0x1a1a1a) );
-		pbOpt4.setSize( 2 );
-		pbOpt4.setSizeAttenuation(false);
-		starsMaterials.add(pbOpt4);
-		
-		PointCloudMaterial pbOpt5 = new PointCloudMaterial();
-		pbOpt5.setColor( new Color(0x1a1a1a) );
-		pbOpt5.setSize( 1 );
-		pbOpt5.setSizeAttenuation(false);
-		starsMaterials.add(pbOpt5);				
+
+		starsMaterials.add(new PointCloudMaterial()
+				.setColor( 0x555555 )
+				.setSize( 1 )
+				.setSizeAttenuation(false));
+
+		starsMaterials.add(new PointCloudMaterial()
+				.setColor( 0x333333 )
+				.setSize( 2 )
+				.setSizeAttenuation(false));
+
+		starsMaterials.add(new PointCloudMaterial()
+				.setColor( 0x3a3a3a )
+				.setSize( 1 )
+				.setSizeAttenuation(false));
+
+		starsMaterials.add(new PointCloudMaterial()
+				.setColor( 0x1a1a1a )
+				.setSize( 2 )
+				.setSizeAttenuation(false));
+
+		starsMaterials.add( new PointCloudMaterial()
+				.setColor( 0x1a1a1a )
+				.setSize( 1 )
+				.setSizeAttenuation(false));
 
 		for ( int i = 10; i < 30; i ++ ) 
 		{
