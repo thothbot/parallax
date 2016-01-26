@@ -52,8 +52,7 @@ public final class MiscLookAt extends ParallaxTest
 		
 		camera.getPosition().setZ(3200);
 		
-		MeshNormalMaterial material = new MeshNormalMaterial();
-		material.setShading(Material.SHADING.SMOOTH);
+		MeshNormalMaterial material = new MeshNormalMaterial().setShading(Material.SHADING.SMOOTH);
 		sphere = new Mesh( new SphereGeometry( 100, 20, 20 ), material );
 		scene.add( sphere );
 

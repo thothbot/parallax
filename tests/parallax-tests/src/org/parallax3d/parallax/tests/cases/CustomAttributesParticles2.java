@@ -89,10 +89,10 @@ public class CustomAttributesParticles2 extends ParallaxTest
 
 		uniforms.put("texture", new Uniform(Uniform.TYPE.T, texture));
 	
-		ShaderMaterial shaderMaterial = new ShaderMaterial(	Resources.INSTANCE );
+		ShaderMaterial shaderMaterial = new ShaderMaterial(	Resources.INSTANCE )
+				.setTransparent(true);
 		shaderMaterial.getShader().setAttributes(attributes);
 		shaderMaterial.getShader().setUniforms(uniforms);
-		shaderMaterial.setTransparent(true);
 		
 		int radius = 100, segments = 68, rings = 38;
 		

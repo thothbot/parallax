@@ -68,9 +68,9 @@ public final class LoaderCollada extends ParallaxTest
 		
 		// Grid
 
-		LineBasicMaterial line_material = new LineBasicMaterial();
-		line_material.setColor(new Color(0xcccccc));
-		line_material.setOpacity(0.2);
+		LineBasicMaterial line_material = new LineBasicMaterial()
+				.setColor( 0xcccccc )
+				.setOpacity(0.2);
 		
 		Geometry geometry = new Geometry();
 		double floor = -0.04, step = 1.0, size = 14.0;
@@ -89,8 +89,8 @@ public final class LoaderCollada extends ParallaxTest
 		Line line = new Line( geometry, line_material, Line.MODE.PIECES);
 		scene.add( line );
 
-		MeshBasicMaterial sMaterial = new MeshBasicMaterial();
-		sMaterial.setColor(new Color(0xffffff));
+		MeshBasicMaterial sMaterial = new MeshBasicMaterial()
+				.setColor( 0xffffff );
 		
 		this.particleLight = new Mesh( new SphereGeometry( 4, 8, 8 ), sMaterial );
 		scene.add( this.particleLight );

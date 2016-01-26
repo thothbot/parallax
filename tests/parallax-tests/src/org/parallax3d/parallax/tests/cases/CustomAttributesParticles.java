@@ -82,13 +82,13 @@ public class CustomAttributesParticles extends ParallaxTest
 		uniforms.put("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 		uniforms.put("texture", new Uniform(Uniform.TYPE.T, new Texture(texture)));
 
-		ShaderMaterial shaderMaterial = new ShaderMaterial( Resources.INSTANCE );
+		ShaderMaterial shaderMaterial = new ShaderMaterial( Resources.INSTANCE )
+				.setBlending( Material.BLENDING.ADDITIVE )
+				.setDepthTest(false)
+				.setTransparent( true );
+
 		shaderMaterial.getShader().setAttributes(attributes);
 		shaderMaterial.getShader().setUniforms(uniforms);
-
-		shaderMaterial.setBlending( Material.BLENDING.ADDITIVE );
-		shaderMaterial.setDepthTest(false);
-		shaderMaterial.setTransparent( true );
 
 		double radius = 200;
 		Geometry geometry = new Geometry();

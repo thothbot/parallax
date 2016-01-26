@@ -60,9 +60,9 @@ public final class MiscMemoryTestGeometries extends ParallaxTest
 		texture = new Texture( generateTexture() );
 		texture.setNeedsUpdate(true);
 
-		MeshBasicMaterial material = new MeshBasicMaterial();
-		material.setMap(texture);
-		material.setWireframe(true);
+		MeshBasicMaterial material = new MeshBasicMaterial()
+				.setMap(texture)
+				.setWireframe(true);
 
 		mesh = new Mesh( geometry, material );
 

@@ -73,16 +73,16 @@ public final class PerformanceDoubleSided extends ParallaxTest
 		CubeTexture reflectionCube = new CubeTexture( textures );
 		reflectionCube.setFormat(PixelFormat.RGB);
 
-		MeshPhongMaterial material = new MeshPhongMaterial();
-		material.setSpecular( new Color(0xffffff) );
-		material.setShininess( 100 );
-		material.setEnvMap( reflectionCube );
-		material.setCombine( Texture.OPERATIONS.MIX );
-		material.setReflectivity( 0.1 );
-//			material.setPerPixel(true);
-		material.setWrapAround(true); 
+		MeshPhongMaterial material = new MeshPhongMaterial()
+				.setSpecular( 0xffffff )
+				.setShininess( 100 )
+				.setEnvMap( reflectionCube )
+				.setCombine( Texture.OPERATIONS.MIX )
+				.setReflectivity( 0.1 )
+				.setWrapAround(true)
+				.setSide(Material.SIDE.DOUBLE);
 		material.getWrapRGB().set( 0.5, 0.5, 0.5 );
-		material.setSide(Material.SIDE.DOUBLE);
+
 
 		SphereGeometry geometry = new SphereGeometry( 1, 32, 16, 0, (double)Math.PI );
 

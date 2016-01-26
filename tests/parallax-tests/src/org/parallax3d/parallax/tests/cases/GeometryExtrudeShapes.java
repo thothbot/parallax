@@ -213,19 +213,15 @@ public class GeometryExtrudeShapes extends ParallaxTest
 	private void addGeometry(GLRenderer renderer, Geometry geometry, Color color, double x, double y, double z, double rx, double ry, double rz, double s )
 	{
 		// 3d shape
-		MeshLambertMaterial ml = new MeshLambertMaterial();
-		ml.setColor(color);
-		ml.setOpacity( 0.2 );
-		ml.setTransparent(true);
-
-		MeshBasicMaterial mb = new MeshBasicMaterial();
-		mb.setColor( new Color(0x000000) );
-		mb.setWireframe( true );
-		mb.setOpacity( 0.3 );
-
 		List<Material> materials= new ArrayList<Material>();
-		materials.add(ml);
-		materials.add(mb);
+		materials.add(new MeshLambertMaterial()
+				.setColor(color)
+				.setOpacity( 0.2 )
+				.setTransparent(true));
+		materials.add(new MeshBasicMaterial()
+				.setColor( 0x000000 )
+				.setWireframe( true )
+				.setOpacity( 0.3 ));
 		Object3D mesh = SceneUtils.createMultiMaterialObject( geometry, materials );
 
 		mesh.getPosition().set( x, y, z - 75.0 );

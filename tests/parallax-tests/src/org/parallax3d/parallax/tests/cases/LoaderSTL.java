@@ -63,10 +63,10 @@ public class LoaderSTL extends ParallaxTest
 
 		// Ground
 
-		MeshPhongMaterial planeMaterial = new MeshPhongMaterial();
-		planeMaterial.setColor(new Color(0x999999));
-		planeMaterial.setAmbient(new Color(0x999999));
-		planeMaterial.setSpecular(new Color(0x101010));
+		MeshPhongMaterial planeMaterial = new MeshPhongMaterial()
+				.setColor( 0x999999 )
+				.setAmbient( 0x999999 )
+				.setSpecular( 0x101010 );
 
 		Mesh plane = new Mesh( new PlaneBufferGeometry( 40, 40 ), planeMaterial );
 		plane.getRotation().setX( -Math.PI/2 );
@@ -102,11 +102,11 @@ public class LoaderSTL extends ParallaxTest
 //		});
 
 		
-		final MeshPhongMaterial material = new MeshPhongMaterial();
-		material.setAmbient( new Color(0x555555) );
-		material.setColor( new Color(0xAAAAAA) );
-		material.setSpecular( new Color(0x111111) );
-		material.setShininess(200.0);
+		final MeshPhongMaterial material = new MeshPhongMaterial()
+				.setAmbient( 0x555555 )
+				.setColor( 0xAAAAAA )
+				.setSpecular( 0x111111 )
+				.setShininess(200.0);
 
 //		new STLLoader(pr2_head_pan, new XHRLoader.ModelLoadHandler() {
 //
