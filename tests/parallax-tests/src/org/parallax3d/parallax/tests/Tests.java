@@ -99,7 +99,7 @@ public class Tests {
         put("Plugins", Arrays.asList(
 //            , new TerrainDynamic()
              new HilbertCurves()
-//            , new PostprocessingGodrays()
+            , new PostprocessingGodrays()
 //            , new PostprocessingMulti()
             , new EffectsLensFlares()
             , new EffectsSprites()
