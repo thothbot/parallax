@@ -28,6 +28,7 @@ import org.parallax3d.parallax.tests.cases.geometries.*;
 import org.parallax3d.parallax.tests.cases.interactivity.*;
 import org.parallax3d.parallax.tests.cases.materials.*;
 import org.parallax3d.parallax.tests.cases.misc.*;
+import org.parallax3d.parallax.tests.cases.plugins.*;
 
 import java.util.*;
 
@@ -95,15 +96,15 @@ public class Tests {
               new LoaderCollada()
         ));
 
-//        put("Plugins", Arrays.asList(
-////            , new TerrainDynamic()
-////            , new HilbertCurves()
-////            , new PostprocessingGodrays()
-////            , new PostprocessingMulti()
-////            , new EffectsLensFlares()
-////            , new EffectsSprites()
-////            , new Saturn()
-//        ));
+        put("Plugins", Arrays.asList(
+//            , new TerrainDynamic()
+//            , new HilbertCurves()
+//            , new PostprocessingGodrays()
+//            , new PostprocessingMulti()
+             new EffectsLensFlares()
+            , new EffectsSprites()
+//            , new Saturn()
+        ));
 
         put("Miscellaneous", Arrays.asList(
               new PerformanceDoubleSided()

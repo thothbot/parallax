@@ -66,24 +66,27 @@ public class SpriteMaterial extends Material implements HasColor {
 		return map;
 	}
 
-	public void setMap(Texture map) {
+	public SpriteMaterial setMap(Texture map) {
 		this.map = map;
+		return this;
 	}
 
 	public double getRotation() {
 		return rotation;
 	}
 
-	public void setRotation(double rotation) {
+	public SpriteMaterial setRotation(double rotation) {
 		this.rotation = rotation;
+		return this;
 	}
 
 	public boolean isFog() {
 		return isFog;
 	}
 
-	public void setFog(boolean isFog) {
+	public SpriteMaterial setFog(boolean isFog) {
 		this.isFog = isFog;
+		return this;
 	}
 
 	@Override
