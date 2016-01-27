@@ -18,13 +18,13 @@
 
 package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders;
 
-import thothbot.parallax.core.client.gl2.arrays.Float32Array;
-import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.math.Vector2;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.math.Vector2;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * Convolution shader
@@ -39,13 +39,13 @@ public final class ConvolutionShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
 		@Source("source/convolution.vs")
-		TextResource getVertexShader();
+		SourceTextResource getVertexShader();
 
 		@Source("source/convolution.fs")
-		TextResource getFragmentShader();
+		SourceTextResource getFragmentShader();
 	}
 
 	public ConvolutionShader() 

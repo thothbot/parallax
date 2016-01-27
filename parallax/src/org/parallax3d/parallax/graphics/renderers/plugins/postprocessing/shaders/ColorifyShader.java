@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders;
 
-import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.math.Color;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.math.Color;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.TextResource;
+import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
  * Colorify shader
@@ -37,13 +37,13 @@ public final class ColorifyShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = GWT.create(Resources.class);
+		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
 		@Source("source/defaultUv.vs")
-		TextResource getVertexShader();
+		SourceTextResource getVertexShader();
 
 		@Source("source/colorify.fs")
-		TextResource getFragmentShader();
+		SourceTextResource getFragmentShader();
 	}
 
 	public ColorifyShader() 
