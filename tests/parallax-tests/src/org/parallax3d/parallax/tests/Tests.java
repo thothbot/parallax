@@ -100,7 +100,7 @@ public class Tests {
 //            , new TerrainDynamic()
              new HilbertCurves()
             , new PostprocessingGodrays()
-//            , new PostprocessingMulti()
+            , new PostprocessingMulti()
             , new EffectsLensFlares()
             , new EffectsSprites()
 //            , new Saturn()
