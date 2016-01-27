@@ -98,10 +98,10 @@ public class Tests {
 
         put("Plugins", Arrays.asList(
 //            , new TerrainDynamic()
-//            , new HilbertCurves()
+             new HilbertCurves()
 //            , new PostprocessingGodrays()
 //            , new PostprocessingMulti()
-             new EffectsLensFlares()
+            , new EffectsLensFlares()
             , new EffectsSprites()
 //            , new Saturn()
         ));
