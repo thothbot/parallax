@@ -97,8 +97,8 @@ public class Tests {
         ));
 
         put("Plugins", Arrays.asList(
-//            , new TerrainDynamic()
-             new HilbertCurves()
+              new TerrainDynamic()
+            , new HilbertCurves()
             , new PostprocessingGodrays()
             , new PostprocessingMulti()
             , new EffectsLensFlares()
