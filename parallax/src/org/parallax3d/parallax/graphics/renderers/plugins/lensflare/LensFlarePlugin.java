@@ -100,37 +100,37 @@ public final class LensFlarePlugin extends Plugin
 		gl.glBufferData( BufferTarget.ARRAY_BUFFER.getValue(), lensFlare.vertices.getByteLength(), lensFlare.vertices.getFloatBuffer(), BufferUsage.STATIC_DRAW.getValue() );
 
 		gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
-		gl.glBufferData( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.faces.getByteLength(), lensFlare.faces, BufferUsage.STATIC_DRAW.getValue() );
+		gl.glBufferData( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.faces.getByteLength(), lensFlare.faces.getBuffer(), BufferUsage.STATIC_DRAW.getValue() );
 
 		// textures
 
 		lensFlare.tempTexture      = gl.glGenTexture();
 		lensFlare.occlusionTexture = gl.glGenTexture();
 
-		gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.tempTexture );
-		gl.texImage2D( TextureTarget.TEXTURE_2D, 0, 16, 16, 0, PixelFormat.RGB, PixelType.UNSIGNED_BYTE, null );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_S, WebGLConstants.CLAMP_TO_EDGE );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_T, WebGLConstants.CLAMP_TO_EDGE );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MAG_FILTER, WebGLConstants.NEAREST );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MIN_FILTER, WebGLConstants.NEAREST );
+		gl.glBindTexture( TextureTarget.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+		gl.glTexImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, 16, 16, 0, PixelFormat.RGB.getValue(), PixelType.UNSIGNED_BYTE.getValue(), 0, null );
+		gl.glTexParameteri( TextureTarget.TEXTURE_2D.getValue(), TextureParameterName.TEXTURE_WRAP_S.getValue(), GL20.GL_CLAMP_TO_EDGE );
+		gl.glTexParameteri( TextureTarget.TEXTURE_2D.getValue(), TextureParameterName.TEXTURE_WRAP_T.getValue(), GL20.GL_CLAMP_TO_EDGE );
+		gl.glTexParameteri( TextureTarget.TEXTURE_2D.getValue(), TextureParameterName.TEXTURE_MAG_FILTER.getValue(), GL20.GL_NEAREST );
+		gl.glTexParameteri( TextureTarget.TEXTURE_2D.getValue(), TextureParameterName.TEXTURE_MIN_FILTER.getValue(), GL20.GL_NEAREST );
 
-		gl.bindTexture( TextureTarget.TEXTURE_2D, lensFlare.occlusionTexture );
-		gl.texImage2D( TextureTarget.TEXTURE_2D, 0, 16, 16, 0, PixelFormat.RGBA, PixelType.UNSIGNED_BYTE, null );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_S, WebGLConstants.CLAMP_TO_EDGE );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_T, WebGLConstants.CLAMP_TO_EDGE );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MAG_FILTER, WebGLConstants.NEAREST );
-		gl.texParameteri( TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_MIN_FILTER, WebGLConstants.NEAREST );
+		gl.glBindTexture( TextureTarget.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
+		gl.glTexImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, 16, 16, 0, PixelFormat.RGBA.getValue(), PixelType.UNSIGNED_BYTE.getValue(), 0, null );
+		gl.glTexParameteri( TextureTarget.TEXTURE_2D.getValue(), TextureParameterName.TEXTURE_WRAP_S.getValue(), GL20.GL_CLAMP_TO_EDGE );
+		gl.glTexParameteri( TextureTarget.TEXTURE_2D.getValue(), TextureParameterName.TEXTURE_WRAP_T.getValue(), GL20.GL_CLAMP_TO_EDGE );
+		gl.glTexParameteri( TextureTarget.TEXTURE_2D.getValue(), TextureParameterName.TEXTURE_MAG_FILTER.getValue(), GL20.GL_NEAREST );
+		gl.glTexParameteri( TextureTarget.TEXTURE_2D.getValue(), TextureParameterName.TEXTURE_MIN_FILTER.getValue(), GL20.GL_NEAREST );
 
-		if ( gl.getParameteri( WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS ) <= 0 ) 
-		{
-			lensFlare.hasVertexTexture = false;
-			lensFlare.shader = new LensFlareShader();
-		} 
-		else 
-		{
+//		if ( gl.getParameteri( WebGLConstants.MAX_VERTEX_TEXTURE_IMAGE_UNITS ) <= 0 )
+//		{
+//			lensFlare.hasVertexTexture = false;
+//			lensFlare.shader = new LensFlareShader();
+//		}
+//		else
+//		{
 			lensFlare.hasVertexTexture = true;
 			lensFlare.shader = new LensFlareVertexTextureShader();
-		}
+//		}
 
 		FastMap<Attribute> attributes = new FastMap<>();
 		attributes.put("position", new Attribute(Attribute.TYPE.V3, null));
@@ -248,35 +248,35 @@ public final class LensFlarePlugin extends Plugin
 
 				// save current RGB to temp texture
 
-				gl.activeTexture( TextureUnit.TEXTURE1.getValue() );
-				gl.bindTexture( TextureTarget.TEXTURE_2D.getValue(), lensFlare.tempTexture );
-				gl.copyTexImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, PixelFormat.RGB, (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
+				gl.glActiveTexture( TextureUnit.TEXTURE1.getValue() );
+				gl.glBindTexture( TextureTarget.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+				gl.glCopyTexImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, PixelFormat.RGB.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
 				// render pink quad
 
 				gl.glUniform1i( uniforms.get("renderType").getLocation(), 0 );
-				gl.uniform2f( uniforms.get("scale").getLocation(), scale.getX(), scale.getY() );
-				gl.uniform3f( uniforms.get("screenPosition").getLocation(), screenPosition.getX(), screenPosition.getY(), screenPosition.getZ() );
+				gl.glUniform2f( uniforms.get("scale").getLocation(), (float)scale.getX(), (float)scale.getY() );
+				gl.glUniform3f( uniforms.get("screenPosition").getLocation(), (float)screenPosition.getX(), (float)screenPosition.getY(), (float)screenPosition.getZ() );
 
 				gl.glDisable( EnableCap.BLEND.getValue() );
 				gl.glEnable( EnableCap.DEPTH_TEST.getValue() );
 
-				gl.drawElements( BeginMode.TRIANGLES, 6, DrawElementsType.UNSIGNED_SHORT, 0 );
+				gl.glDrawElements( BeginMode.TRIANGLES.getValue(), 6, DrawElementsType.UNSIGNED_SHORT.getValue(), 0 );
 
 				// copy result to occlusionMap
 
-				gl.activeTexture( TextureUnit.TEXTURE0.getValue() );
-				gl.bindTexture( TextureTarget.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
-				gl.copyTexImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, PixelFormat.RGBA.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
+				gl.glActiveTexture( TextureUnit.TEXTURE0.getValue() );
+				gl.glBindTexture( TextureTarget.TEXTURE_2D.getValue(), lensFlare.occlusionTexture );
+				gl.glCopyTexImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, PixelFormat.RGBA.getValue(), (int)screenPositionPixels.getX() - 8, (int)screenPositionPixels.getY() - 8, 16, 16, 0 );
 
 				// restore graphics
 
 				gl.glUniform1i( uniforms.get("renderType").getLocation(), 1 );
 				gl.glDisable( EnableCap.DEPTH_TEST.getValue() );
 
-				gl.activeTexture( TextureUnit.TEXTURE1.getValue() );
-				gl.bindTexture( TextureTarget.TEXTURE_2D.getValue(), lensFlare.tempTexture );
-				gl.drawElements( BeginMode.TRIANGLES.getValue(), 6, DrawElementsType.UNSIGNED_SHORT.getValue(), 0 );
+				gl.glActiveTexture( TextureUnit.TEXTURE1.getValue() );
+				gl.glBindTexture( TextureTarget.TEXTURE_2D.getValue(), lensFlare.tempTexture );
+				gl.glDrawElements( BeginMode.TRIANGLES.getValue(), 6, DrawElementsType.UNSIGNED_SHORT.getValue(), 0 );
 
 				// update object positions
 
@@ -304,18 +304,18 @@ public final class LensFlarePlugin extends Plugin
 						scale.setX( size * invAspect );
 						scale.setY( size );
 
-						gl.uniform3f( uniforms.get("screenPosition").getLocation(), screenPosition.getX(), screenPosition.getY(), screenPosition.getZ() );
-						gl.uniform2f( uniforms.get("scale").getLocation(), scale.getX(), scale.getY() );
-						gl.uniform1f( uniforms.get("rotation").getLocation(), sprite.rotation );
+						gl.glUniform3f( uniforms.get("screenPosition").getLocation(), (float)screenPosition.getX(), (float)screenPosition.getY(), (float)screenPosition.getZ() );
+						gl.glUniform2f( uniforms.get("scale").getLocation(), (float)scale.getX(), (float)scale.getY() );
+						gl.glUniform1f( uniforms.get("rotation").getLocation(), (float)sprite.rotation );
 
-						gl.uniform1f( uniforms.get("opacity").getLocation(), sprite.opacity );
-						gl.uniform3f( uniforms.get("color").getLocation(), sprite.color.getR(), sprite.color.getG(), sprite.color.getB() );
+						gl.glUniform1f( uniforms.get("opacity").getLocation(), (float)sprite.opacity );
+						gl.glUniform3f( uniforms.get("color").getLocation(), (float)sprite.color.getR(), (float)sprite.color.getG(), (float)sprite.color.getB() );
 
 //						getRenderer().setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
 						getRenderer().setBlending( sprite.blending );
 						getRenderer().setTexture( sprite.texture, 1 );
 
-						gl.drawElements( BeginMode.TRIANGLES, 6, DrawElementsType.UNSIGNED_SHORT, 0 );
+						gl.glDrawElements( BeginMode.TRIANGLES.getValue(), 6, DrawElementsType.UNSIGNED_SHORT.getValue(), 0 );
 					}
 				}
 			}
