@@ -103,7 +103,7 @@ public class Tests {
             , new PostprocessingMulti()
             , new EffectsLensFlares()
             , new EffectsSprites()
-//            , new Saturn()
+            , new Saturn()
         ));
 
         put("Miscellaneous", Arrays.asList(
