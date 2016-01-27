@@ -18,11 +18,10 @@
 
 package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 
-import java.util.Map;
-
-import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.shaders.Uniform;
-import thothbot.parallax.core.shared.materials.ShaderMaterial;
+import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.system.FastMap;
 
 public class ShaderPass extends Pass
 {
@@ -33,7 +32,7 @@ public class ShaderPass extends Pass
 
 	private boolean isClear = false;
 	
-	public ShaderPass( Shader shader) 
+	public ShaderPass( Shader shader)
 	{
 		this(shader, "tDiffuse");
 	}
@@ -53,7 +52,7 @@ public class ShaderPass extends Pass
 		this.isRenderToScreen = isRenderToScreen;
 	}
 	
-	public Map<String, Uniform> getUniforms() {
+	public FastMap<Uniform> getUniforms() {
 		return this.material.getShader().getUniforms();
 	}
 	

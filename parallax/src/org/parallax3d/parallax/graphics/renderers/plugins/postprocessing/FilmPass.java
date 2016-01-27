@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 
-import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugins.postprocessing.shaders.FilmShader;
+import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.FilmShader;
 
 public class FilmPass extends Pass
 {

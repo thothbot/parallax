@@ -18,16 +18,16 @@
 
 package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 
-import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.math.Vector2;
-import thothbot.parallax.plugins.postprocessing.shaders.DotScreenShader;
+import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.DotScreenShader;
+import org.parallax3d.parallax.math.Vector2;
 
 public class DotScreenPass extends Pass
 {
 	private ShaderMaterial material;
 	private boolean isRenderToScreen = false;
 	
-	public DotScreenPass( Vector2 center, double angle, double scale ) 
+	public DotScreenPass(Vector2 center, double angle, double scale )
 	{
 		this.material = new ShaderMaterial(new DotScreenShader());
 		((Vector2) this.material.getShader().getUniforms().get("center").getValue()).copy( center );

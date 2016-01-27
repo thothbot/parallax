@@ -18,17 +18,17 @@
 
 package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 
-import thothbot.parallax.core.client.gl2.enums.EnableCap;
-import thothbot.parallax.core.client.gl2.enums.PixelFormat;
-import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
-import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.client.shaders.Shader;
-import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.shared.materials.Material;
-import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.core.shared.math.Vector2;
-import thothbot.parallax.plugins.postprocessing.shaders.ConvolutionShader;
-import thothbot.parallax.plugins.postprocessing.shaders.CopyShader;
+import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
+import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.ConvolutionShader;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.gl.enums.EnableCap;
+import org.parallax3d.parallax.system.gl.enums.PixelFormat;
+import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
+import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 
 public class BloomPass extends Pass
 {
@@ -91,7 +91,7 @@ public class BloomPass extends Pass
 	public void render(Postprocessing postprocessing, double delta, boolean maskActive)
 	{
 		if ( maskActive ) 
-			postprocessing.getRenderer().getGL().disable( EnableCap.STENCIL_TEST );
+			postprocessing.getRenderer().gl.glDisable( EnableCap.STENCIL_TEST.getValue() );
 
 		// Render quad with blured scene into texture (convolution pass 1)
 		postprocessing.getQuad().setMaterial(this.materialConvolution);
@@ -116,7 +116,7 @@ public class BloomPass extends Pass
 		this.materialScreen.getShader().getUniforms().get("tDiffuse").setValue( this.renderTargetY );
 
 		if ( maskActive ) 
-			postprocessing.getRenderer().getGL().enable( EnableCap.STENCIL_TEST );
+			postprocessing.getRenderer().gl.glEnable( EnableCap.STENCIL_TEST.getValue() );
 
 		postprocessing.getRenderer().render( 
 				postprocessing.getScene(), postprocessing.getCamera(), postprocessing.getReadBuffer(), this.clear );

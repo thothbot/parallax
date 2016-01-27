@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 
-import thothbot.parallax.core.client.gl2.enums.PixelFormat;
-import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
-import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.shared.materials.ShaderMaterial;
-import thothbot.parallax.plugins.postprocessing.shaders.CopyShader;
+import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
+import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;
+import org.parallax3d.parallax.system.gl.enums.PixelFormat;
+import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
+import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 
 public class SavePass extends Pass
 {

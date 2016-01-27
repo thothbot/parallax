@@ -21,24 +21,22 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 import java.util.ArrayList;
 import java.util.List;
 
-import thothbot.parallax.core.client.events.ViewportResizeEvent;
-import thothbot.parallax.core.client.events.ViewportResizeHandler;
-import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-import thothbot.parallax.core.client.gl2.enums.PixelFormat;
-import thothbot.parallax.core.client.gl2.enums.StencilFunction;
-import thothbot.parallax.core.client.gl2.enums.TextureMagFilter;
-import thothbot.parallax.core.client.gl2.enums.TextureMinFilter;
-import thothbot.parallax.core.client.renderers.Plugin;
-import thothbot.parallax.core.client.renderers.WebGLRenderer;
-import thothbot.parallax.core.client.textures.RenderTargetTexture;
-import thothbot.parallax.core.shared.Log;
-import thothbot.parallax.core.shared.cameras.Camera;
-import thothbot.parallax.core.shared.cameras.OrthographicCamera;
-import thothbot.parallax.core.shared.geometries.PlaneGeometry;
-import thothbot.parallax.core.shared.lights.Light;
-import thothbot.parallax.core.shared.objects.Mesh;
-import thothbot.parallax.core.shared.scenes.Scene;
-import thothbot.parallax.plugins.postprocessing.shaders.CopyShader;
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
+import org.parallax3d.parallax.graphics.extras.geometries.PlaneGeometry;
+import org.parallax3d.parallax.graphics.lights.Light;
+import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
+import org.parallax3d.parallax.graphics.renderers.Plugin;
+import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;
+import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.enums.PixelFormat;
+import org.parallax3d.parallax.system.gl.enums.StencilFunction;
+import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
+import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 
 public class Postprocessing extends Plugin
 {
@@ -56,7 +54,7 @@ public class Postprocessing extends Plugin
 	private OrthographicCamera camera;
 	private Mesh quad;
 
-	public Postprocessing( WebGLRenderer renderer, Scene scene)
+	public Postprocessing(GLRenderer renderer, Scene scene)
 	{
 		this(renderer, scene, new RenderTargetTexture( renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight() ));
 
@@ -68,7 +66,7 @@ public class Postprocessing extends Plugin
 		this.renderTarget2 = this.renderTarget1.clone();
 	}
 		
-	public Postprocessing( WebGLRenderer renderer, Scene scene, RenderTargetTexture renderTarget ) 
+	public Postprocessing( GLRenderer renderer, Scene scene, RenderTargetTexture renderTarget )
 	{
 		super(renderer, new Scene());
 
@@ -83,13 +81,13 @@ public class Postprocessing extends Plugin
 		this.copyPass = new ShaderPass( new CopyShader() );
 		
 		this.camera = new OrthographicCamera( 2, 2, 0, 1 );
-		this.camera.addViewportResizeHandler(new ViewportResizeHandler() {
-			
-			@Override
-			public void onResize(ViewportResizeEvent event) {
-				camera.setSize(2, 2);
-			}
-		});
+//		this.camera.addViewportResizeHandler(new ViewportResizeHandler() {
+//
+//			@Override
+//			public void onResize(ViewportResizeEvent event) {
+//				camera.setSize(2, 2);
+//			}
+//		});
 
 		this.quad = new Mesh( new PlaneGeometry( 2, 2 ), null );
 		
@@ -136,7 +134,7 @@ public class Postprocessing extends Plugin
 	}
 
 	@Override
-	public void render( Camera camera, List<Light> lights, int currentWidth, int currentHeight ) 
+	public void render(GL20 gl, Camera camera, List<Light> lights, int currentWidth, int currentHeight )
 	{
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
@@ -144,13 +142,12 @@ public class Postprocessing extends Plugin
 		boolean maskActive = false;
 
 		double delta = 0;
-		WebGLRenderingContext gl = getRenderer().getGL();
 
 		for ( Pass pass : this.passes ) 
 		{	
 			if ( !pass.isEnabled() ) continue;
 			
-			Log.info(" ----> Postprocessing.render(): pass " + pass.getClass().getSimpleName() 
+			Log.info(" ----> Postprocessing.render(): pass " + pass.getClass().getSimpleName()
 					+ (pass.getClass().equals(ShaderPass.class) ? 
 							"(" + ((ShaderPass)pass).getMaterial().getShader().getClass().getSimpleName() + ")" : "") );
 
@@ -160,11 +157,11 @@ public class Postprocessing extends Plugin
 			{
 				if ( maskActive ) 
 				{
-					gl.stencilFunc( StencilFunction.NOTEQUAL, 1, 0xffffffff );
+					gl.glStencilFunc( StencilFunction.NOTEQUAL.getValue(), 1, 0xffffffff );
 
 					this.copyPass.render( this, delta, true );
 
-					gl.stencilFunc( StencilFunction.EQUAL, 1, 0xffffffff );
+					gl.glStencilFunc( StencilFunction.EQUAL.getValue(), 1, 0xffffffff );
 				}
 
 				this.swapBuffers();
