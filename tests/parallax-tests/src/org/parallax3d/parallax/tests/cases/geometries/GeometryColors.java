@@ -153,6 +153,8 @@ public class GeometryColors extends ParallaxTest
 		group3.getPosition().setX(0);
 		group3.getRotation().setX(0);
 		scene.add( group3 );
+
+		context.getRenderer().setClearColor(0xDDDDDD);
 	}
 	
 	@Override
@@ -181,13 +183,6 @@ public class GeometryColors extends ParallaxTest
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
 	
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel contextPanel)
-//	{
-//		super.loadRenderingPanelAttributes(contextPanel);
-//		contextPanel.setBackground(0xDDDDDD);
-//	}
-//
 //	@Override
 //	public void onAnimationReady(AnimationReadyEvent event)
 //	{

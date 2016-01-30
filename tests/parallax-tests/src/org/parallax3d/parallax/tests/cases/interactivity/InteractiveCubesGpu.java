@@ -172,6 +172,7 @@ public final class InteractiveCubesGpu extends ParallaxTest
 		scene.add( highlightBox );
 
 		context.getRenderer().setSortObjects(false);
+		context.getRenderer().setClearColor(0xffffff);
 	}
 	
 	private void applyVertexColors(Geometry g, Color c) 
@@ -241,14 +242,7 @@ public final class InteractiveCubesGpu extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel) 
-//	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.setBackground(0xffffff);
-//	}
-//	
+
 //	@Override
 //	public void onAnimationReady(AnimationReadyEvent event)
 //	{

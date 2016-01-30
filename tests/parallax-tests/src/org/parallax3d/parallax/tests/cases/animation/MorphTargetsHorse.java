@@ -87,6 +87,8 @@ public final class MorphTargetsHorse extends ParallaxTest
 //
 //			}
 //		});
+
+		context.getRenderer().setClearColor(0xf0f0f0);
 	}
 
 	@Override
@@ -139,12 +141,5 @@ public final class MorphTargetsHorse extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel)
-//	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.setBackground(0xf0f0f0);
-//	}
 
 }

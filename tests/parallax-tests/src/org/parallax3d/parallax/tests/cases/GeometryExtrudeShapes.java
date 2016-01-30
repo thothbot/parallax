@@ -207,7 +207,9 @@ public class GeometryExtrudeShapes extends ParallaxTest
 //			addGeometry( tubeGeometry, new Color(0x00ff11),  
 //					0, 0, 0,     
 //					0, 0, 0, 
-//					1);  
+//					1);
+
+		context.getRenderer().setClearColor(0xCCCCCC);
 	}
 	
 	private void addGeometry(GLRenderer renderer, Geometry geometry, Color color, double x, double y, double z, double rx, double ry, double rz, double s )
@@ -254,11 +256,5 @@ public class GeometryExtrudeShapes extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel) 
-//	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.setBackground(0xCCCCCC);
-//	}
+
 }

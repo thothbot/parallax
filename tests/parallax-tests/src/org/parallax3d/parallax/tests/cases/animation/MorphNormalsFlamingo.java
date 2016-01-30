@@ -150,6 +150,8 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 		context.getRenderer().setAutoClear(false);
 		
 		this.oldTime = Duration.currentTimeMillis();
+
+		context.getRenderer().setClearColor(0x222222);
 	}
 	
 	@Override
@@ -193,11 +195,5 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel) 
-//	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.setBackground(0x222222);
-//	}
+
 }

@@ -153,6 +153,8 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 		parent.add(cameraEye);
 
 		animateCamera();
+
+		context.getRenderer().setClearColor(0xf0f0f0);
 	}
 
 	private void animateCamera()
@@ -261,13 +263,6 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
 
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel)
-//	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.setBackground(0xf0f0f0);
-//	}
-//
 //	@Override
 //	public void onAnimationReady(AnimationReadyEvent event)
 //	{

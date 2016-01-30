@@ -108,6 +108,7 @@ public final class PerformanceDoubleSided extends ParallaxTest
 
 		context.getRenderer().setGammaInput(true);
 		context.getRenderer().setGammaOutput(true);
+		context.getRenderer().setClearColor(0x050505);
 	}
 			
 	@Override
@@ -135,14 +136,7 @@ public final class PerformanceDoubleSided extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel) 
-//	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.setBackground(0x050505);
-//	}
-//	
+
 //	@Override
 //	public void onAnimationReady(AnimationReadyEvent event)
 //	{

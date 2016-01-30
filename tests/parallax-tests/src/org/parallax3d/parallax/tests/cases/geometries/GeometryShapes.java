@@ -92,6 +92,8 @@ public final class GeometryShapes extends ParallaxTest
 		smile(extrudeSettings);
 		splineShape(extrudeSettings);
 		california(extrudeSettings);
+
+		context.getRenderer().setClearColor(0xf0f0f0);
 	}
 	
 	private void splineShape(ExtrudeGeometry.ExtrudeGeometryParameters extrudeSettings)
@@ -439,14 +441,7 @@ public final class GeometryShapes extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel) 
-//	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.setBackground(0xf0f0f0);
-//	}
-//	
+
 //	@Override
 //	public void onAnimationReady(AnimationReadyEvent event)
 //	{

@@ -178,6 +178,7 @@ public final class PostprocessingGodrays extends ParallaxTest
 		);
 		quad.getPosition().setZ( -9900 );
 		postprocessingScene.add( quad );
+		context.getRenderer().setClearColor(0x000511);
 	}
 			
 	@Override
@@ -324,7 +325,6 @@ public final class PostprocessingGodrays extends ParallaxTest
 //	{
 //		super.loadRenderingPanelAttributes(renderingPanel);
 //		renderingPanel.getCanvas3dAttributes().setAntialiasEnable(false);
-//		renderingPanel.setBackground(0x000511);
 //	}
 //	
 //	@Override
