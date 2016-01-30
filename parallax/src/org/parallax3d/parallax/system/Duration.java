@@ -35,9 +35,14 @@ public final class Duration
         startTime = System.currentTimeMillis();
     }
 
-    public static double currentTimeMillis()
+    public static long currentTimeMillis()
     {
         return System.currentTimeMillis();
+    }
+
+    /** @return The current value of the system timer, in nanoseconds. */
+    public static long nanoTime () {
+        return System.nanoTime();
     }
 
     public int	elapsedMillis()

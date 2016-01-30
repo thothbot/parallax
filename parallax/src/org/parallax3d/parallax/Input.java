@@ -18,19 +18,62 @@
 
 package org.parallax3d.parallax;
 
+import org.parallax3d.parallax.input.InputProcessor;
+
 public interface Input {
 
-    interface TextInputListener {
-        void input (String text);
-
-        void canceled ();
+    enum Orientation {
+        Landscape, Portrait
     }
 
-    public static class Buttons {
+    enum Peripheral {
+        HardwareKeyboard, OnscreenKeyboard, MultitouchScreen, Accelerometer, Compass, Vibrator
+    }
+
+    class Buttons {
         public static final int LEFT = 0;
         public static final int RIGHT = 1;
         public static final int MIDDLE = 2;
         public static final int BACK = 3;
         public static final int FORWARD = 4;
     }
+
+    float getAccelerometerX ();
+
+    float getAccelerometerY ();
+
+    float getAccelerometerZ ();
+
+    int getX ();
+
+    int getX (int pointer);
+
+    int getDeltaX ();
+
+    int getDeltaX (int pointer);
+
+    int getY ();
+
+    int getY (int pointer);
+
+    int getDeltaY ();
+
+    int getDeltaY (int pointer);
+
+    boolean isTouched ();
+
+    boolean isButtonPressed (int button);
+
+    boolean isKeyPressed (int key);
+
+    Orientation getNativeOrientation ();
+
+    boolean isCursorCatched ();
+
+    public void setInputProcessor (InputProcessor processor);
+
+    public InputProcessor getInputProcessor ();
+
+    public boolean isPeripheralAvailable (Peripheral peripheral);
+
 }
