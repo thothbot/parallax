@@ -20,7 +20,6 @@ package org.parallax3d.parallax.platforms.gwt;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
-import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
@@ -30,9 +29,9 @@ import org.parallax3d.parallax.input.InputProcessor;
 import org.parallax3d.parallax.system.Duration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class GwtInput implements Input {
 
@@ -496,7 +495,7 @@ public class GwtInput implements Input {
 
     private static native float getMouseWheelVelocity (NativeEvent evt) /*-{
         var delta = 0.0;
-        var agentInfo = @org.parallax3d.parallax.platforms.gwt.GwtApplication::agentInfo()();
+        var agentInfo = @org.parallax3d.parallax.platforms.gwt.GwtApp::agentInfo()();
 
         if (agentInfo.isFirefox) {
             if (agentInfo.isMacOS) {

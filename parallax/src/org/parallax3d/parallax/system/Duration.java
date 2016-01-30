@@ -18,12 +18,10 @@
 
 package org.parallax3d.parallax.system;
 
-/**
- * Mimics GWT's Duration class.
- */
 public final class Duration
 {
     long startTime;
+    private static final long nanosPerMilli = 1000000;
 
     public Duration()
     {
@@ -40,9 +38,8 @@ public final class Duration
         return System.currentTimeMillis();
     }
 
-    /** @return The current value of the system timer, in nanoseconds. */
     public static long nanoTime () {
-        return System.nanoTime();
+        return System.currentTimeMillis() * nanosPerMilli;
     }
 
     public int	elapsedMillis()

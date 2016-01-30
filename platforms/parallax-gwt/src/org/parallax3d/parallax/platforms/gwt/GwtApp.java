@@ -21,10 +21,7 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import org.parallax3d.parallax.App;
-import org.parallax3d.parallax.Files;
-import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.*;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 
 import java.util.logging.Level;
@@ -36,6 +33,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	GwtAppConfiguration config;
 	GwtRenderingContext rendering;
+	GwtInput input;
 
 	Preloader preloader;
 
@@ -134,6 +132,10 @@ public abstract class GwtApp extends App implements EntryPoint {
 	public void setRendering(GwtRenderingContext rendering) {
 
 		this.rendering = rendering;
+
+		this.input = new GwtInput( rendering.canvas );
+
+		App.input = this.input;
 	}
 
 	@Override
@@ -144,6 +146,10 @@ public abstract class GwtApp extends App implements EntryPoint {
 	@Override
 	public Files getFiles() {
 		return App.files;
+	}
+
+	public Input getInput () {
+		return App.input;
 	}
 
 	@Override
