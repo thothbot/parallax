@@ -22,7 +22,7 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 
-public abstract class AbstractRenderer 
+public abstract class Renderer
 {
 	protected int absoluteWidth = 0;
 	protected int absoluteHeight = 0;

@@ -94,7 +94,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
 @ThreejsObject("THREE.WebGLRenderer")
-public class GLRenderer extends AbstractRenderer
+public class GLRenderer extends Renderer
 {
 	public GL20 gl;
 
@@ -524,10 +524,9 @@ public class GLRenderer extends AbstractRenderer
 		this.info = info;
 	}
 
-	private void setDefaultGLState()
+	public void setDefaultGLState()
 	{
-		this.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		this.gl.glClearDepthf(1.0f);
+		setClearColor(0x00000, 1.0);
 		this.gl.glClearStencil(0);
 
 		this.gl.glEnable(EnableCap.DEPTH_TEST.getValue());

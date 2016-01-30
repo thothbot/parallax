@@ -50,7 +50,7 @@ public class WebApp extends GwtApp {
 
         GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
             public void onUncaughtException(Throwable throwable) {
-                Log.error("Uncaught exception", throwable);
+                Log.error("Uncaught exception ", throwable);
                 if (!GWT.isScript()) {
                     String text = "Uncaught exception: ";
                     while (throwable != null) {
@@ -83,15 +83,14 @@ public class WebApp extends GwtApp {
                 final ParallaxTest test = Tests.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
                 RootLayoutPanel.get().clear();
-
                 if (test != null) {
-                    RootLayoutPanel.get().add(pageExample);
                     pageExample.addGwtReadyListener(new PageExample.PanelReady() {
                         @Override
                         public void onRenderingReady(GwtRenderingContext rendering) {
                             rendering.setAnimation(test);
                         }
                     });
+                    RootLayoutPanel.get().add(pageExample);
 
                     Window.setTitle("Parallax: " + test.getName());
                 } else {

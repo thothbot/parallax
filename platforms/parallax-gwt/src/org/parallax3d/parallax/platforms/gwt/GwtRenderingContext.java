@@ -107,6 +107,8 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
         this.listener = animation;
         // tell listener about app creation
         try {
+            renderer.setDefaultGLState();
+
             listener.onStart(this);
             listener.onResize(this);
 
@@ -150,7 +152,7 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
     private void mainLoop() {
 
         refresh();
-        if (App.app.getRendering().getWidth() != lastWidth || App.app.getRendering().getHeight() != lastHeight) {
+        if (renderer.getAbsoluteHeight() != lastWidth || renderer.getAbsoluteHeight() != lastHeight) {
             this.renderer.setSize(lastWidth, lastHeight);
             this.listener.onResize(this);
             lastWidth = getWidth();
@@ -175,7 +177,6 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
     public void run() {
 
         stop();
-
         // Execute the first callback.
         AnimationScheduler.get().requestAnimationFrame(this, this.canvas);
     }
