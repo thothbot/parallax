@@ -93,6 +93,8 @@ public class GeometryDynamic extends ParallaxTest
 		scene.add( this.mesh );
 
 		this.oldTime = Duration.currentTimeMillis();
+
+		context.getRenderer().setClearColor(0xaaccff);
 	}
 
 	@Override
