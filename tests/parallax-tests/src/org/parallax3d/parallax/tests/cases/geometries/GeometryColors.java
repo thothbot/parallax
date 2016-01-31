@@ -36,14 +36,14 @@ import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.input.TouchDraggedHandler;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 @ThreejsExample("webgl_geometry_colors")
-public class GeometryColors extends ParallaxTest implements TouchDraggedHandler
+public class GeometryColors extends ParallaxTest implements TouchMoveHandler
 {
 
 	static final String texture = "./assets/textures/shadow.png";
@@ -171,7 +171,7 @@ public class GeometryColors extends ParallaxTest implements TouchDraggedHandler
 	}
 
 	@Override
-	public void onTouchDragged(int screenX, int screenY, int pointer) {
+	public void onTouchMove(int screenX, int screenY, int pointer) {
 		mouseX = screenX;
 		mouseY = screenY;
 	}

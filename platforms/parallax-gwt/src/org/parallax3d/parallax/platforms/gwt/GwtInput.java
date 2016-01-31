@@ -68,6 +68,7 @@ public class GwtInput implements Input {
     TouchDownHandler touchDownHandler;
     TouchDraggedHandler touchDraggedHandler;
     TouchUpHandler touchUpHandler;
+    TouchMoveHandler touchMoveHandler;
 
     public GwtInput (CanvasElement canvas) {
         this.canvas = canvas;
@@ -100,6 +101,8 @@ public class GwtInput implements Input {
             touchDraggedHandler = (TouchDraggedHandler) handler;
         else if(handler instanceof TouchUpHandler)
             touchUpHandler = (TouchUpHandler) handler;
+        else if(handler instanceof TouchMoveHandler)
+            touchMoveHandler = (TouchMoveHandler) handler;
         else
             Log.error("Unknown handler: ", handler.getClass());
     }
@@ -295,9 +298,10 @@ public class GwtInput implements Input {
             }
             this.currentEventTimeStamp = Duration.nanoTime();
 
+            if (touchMoveHandler != null)
+                touchMoveHandler.onTouchMove(touchX[0], touchY[0], 0);
             if (touchDraggedHandler != null && touched[0])
                 touchDraggedHandler.onTouchDragged(touchX[0], touchY[0], 0);
-
         }
 
         if (e.getType().equals("mouseup")) {
