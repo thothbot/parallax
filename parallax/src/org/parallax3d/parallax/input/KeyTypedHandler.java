@@ -24,5 +24,5 @@ public interface KeyTypedHandler extends InputHandler {
      * @param character
      * @return
      */
-    boolean keyTyped (char character);
+    void onKeyTyped(char character);
 }

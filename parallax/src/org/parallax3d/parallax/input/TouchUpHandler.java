@@ -28,5 +28,5 @@ public interface TouchUpHandler extends InputHandler {
      * @param button
      * @return
      */
-    boolean touchUp (int screenX, int screenY, int pointer, int button);
+    void onTouchUp(int screenX, int screenY, int pointer, int button);
 }

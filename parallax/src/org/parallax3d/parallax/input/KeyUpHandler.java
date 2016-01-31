@@ -25,5 +25,5 @@ public interface KeyUpHandler extends InputHandler {
      * @param keycode
      * @return
      */
-    boolean keyUp (int keycode);
+    void onKeyUp(int keycode);
 }

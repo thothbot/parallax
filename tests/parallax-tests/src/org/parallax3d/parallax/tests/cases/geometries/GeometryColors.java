@@ -36,13 +36,14 @@ import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.input.TouchDraggedHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 @ThreejsExample("webgl_geometry_colors")
-public class GeometryColors extends ParallaxTest
+public class GeometryColors extends ParallaxTest implements TouchDraggedHandler
 {
 
 	static final String texture = "./assets/textures/shadow.png";
@@ -155,6 +156,7 @@ public class GeometryColors extends ParallaxTest
 		scene.add( group3 );
 
 		context.getRenderer().setClearColor(0xDDDDDD);
+		context.getInput().setInputHandler(this);
 	}
 	
 	@Override
@@ -167,7 +169,13 @@ public class GeometryColors extends ParallaxTest
 		
 		context.getRenderer().render(scene, camera);
 	}
-	
+
+	@Override
+	public void onTouchDragged(int screenX, int screenY, int pointer) {
+		mouseX = screenX;
+		mouseY = screenY;
+	}
+
 	@Override
 	public String getName() {
 		return "Vertices colors";
@@ -182,34 +190,5 @@ public class GeometryColors extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.contextPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) contextPanel.getAnimatedScene();
-//		    	  	rs.mouseX = event.getX();
-//		    	  	rs.mouseY = event.getY();
-//		      }
-//
-//		});
-//
-//		this.contextPanel.getCanvas().addTouchMoveHandler(new TouchMoveHandler() {
-//
-//			@Override
-//			public void onTouchMove(TouchMoveEvent event) {
-//
-//					DemoScene rs = (DemoScene) contextPanel.getAnimatedScene();
-//					rs.mouseX = event.getTouches().get(0).getPageX();
-//		    	  	rs.mouseY = event.getTouches().get(0).getPageY();
-//
-//			}
-//		});
-//	}
 	
 }

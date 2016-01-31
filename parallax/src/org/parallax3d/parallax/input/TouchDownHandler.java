@@ -20,6 +20,6 @@ package org.parallax3d.parallax.input;
 
 public interface TouchDownHandler extends InputHandler {
 
-    boolean touchDown (int screenX, int screenY, int pointer, int button);
+    void onTouchDown(int screenX, int screenY, int pointer, int button);
 
 }

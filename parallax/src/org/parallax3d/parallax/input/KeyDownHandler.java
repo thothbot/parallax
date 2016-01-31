@@ -25,6 +25,6 @@ public interface KeyDownHandler extends InputHandler {
      * @param keycode
      * @return
      */
-    boolean keyDown (int keycode);
+    void onKeyDown(int keycode);
 
 }

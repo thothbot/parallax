@@ -27,6 +27,6 @@ public interface TouchDraggedHandler extends InputHandler {
      * @param pointer
      * @return
      */
-    boolean touchDragged (int screenX, int screenY, int pointer);
+    void onTouchDragged(int screenX, int screenY, int pointer);
 
 }

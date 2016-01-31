@@ -20,9 +20,9 @@ package org.parallax3d.parallax.input;
 
 public interface ScrolledHandler extends InputHandler {
     /**
-     * Called when the mouse wheel was scrolled.
+     * Called when the mouse wheel was onScrolled.
      * @param amount
      * @return
      */
-    boolean scrolled (int amount);
+    void onScrolled(int amount);
 }
