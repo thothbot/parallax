@@ -569,8 +569,10 @@ public class GwtGL20 implements GL20 {
 			gl.bufferData(target, copy((FloatBuffer)data), usage);
 		} else if (data instanceof ShortBuffer) {
 			gl.bufferData(target, copy((ShortBuffer)data), usage);
+		} else if (data instanceof IntBuffer) {
+			gl.bufferData(target, copy((IntBuffer)data), usage);
 		} else {
-			throw new ParallaxRuntimeException("Can only cope with FloatBuffer and ShortBuffer at the moment");
+			throw new ParallaxRuntimeException("Can only cope with FloatBuffer and ShortBuffer at the moment, buffer: " + data.getClass().getCanonicalName());
 		}
 	}
 
@@ -580,8 +582,10 @@ public class GwtGL20 implements GL20 {
 			gl.bufferSubData(target, offset, copy((FloatBuffer)data));
 		} else if (data instanceof ShortBuffer) {
 			gl.bufferSubData(target, offset, copy((ShortBuffer)data));
+		} else if (data instanceof IntBuffer) {
+			gl.bufferSubData(target, offset, copy((IntBuffer)data));
 		} else {
-			throw new ParallaxRuntimeException("Can only cope with FloatBuffer and ShortBuffer at the moment");
+			throw new ParallaxRuntimeException("Can only cope with FloatBuffer and ShortBuffer at the moment, buffer: " + data.getClass().getCanonicalName());
 		}
 	}
 

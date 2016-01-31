@@ -40,6 +40,10 @@ public final class Int32Array extends TypeArray {
 		intBuffer = getBuffer().asIntBuffer();
 	}
 
+	public IntBuffer getIntBuffer() {
+		return intBuffer;
+	}
+
 	@Override
 	public int getElementType() {
 		return GL20.GL_INT;

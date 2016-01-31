@@ -100,7 +100,7 @@ public final class LensFlarePlugin extends Plugin
 		gl.glBufferData( BufferTarget.ARRAY_BUFFER.getValue(), lensFlare.vertices.getByteLength(), lensFlare.vertices.getFloatBuffer(), BufferUsage.STATIC_DRAW.getValue() );
 
 		gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.elementBuffer );
-		gl.glBufferData( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.faces.getByteLength(), lensFlare.faces.getBuffer(), BufferUsage.STATIC_DRAW.getValue() );
+		gl.glBufferData( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), lensFlare.faces.getByteLength(), lensFlare.faces.getShortBuffer(), BufferUsage.STATIC_DRAW.getValue() );
 
 		// textures
 

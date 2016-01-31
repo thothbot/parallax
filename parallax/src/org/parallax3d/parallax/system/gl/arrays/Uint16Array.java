@@ -43,6 +43,10 @@ public final class Uint16Array extends IndexTypeArray {
 		shortBuffer = getBuffer().asShortBuffer();
 	}
 
+	public ShortBuffer getShortBuffer() {
+		return shortBuffer;
+	}
+
 	@Override
 	public int getElementType() {
 		return GL20.GL_UNSIGNED_SHORT;
