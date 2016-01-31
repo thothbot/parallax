@@ -149,7 +149,6 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 		//
 
 		context.getRenderer().setAutoClear(false);
-		context.getInput().setInputHandler(this);
 	}
 
 	@Override

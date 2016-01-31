@@ -51,7 +51,6 @@ public final class GeometryHierarchy extends ParallaxTest implements TouchMoveHa
 	@Override
 	public void onStart(RenderingContext context)
 	{
-		context.getInput().setInputHandler(this);
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				60, // fov

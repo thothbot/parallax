@@ -27,6 +27,7 @@ import com.google.gwt.webgl.client.WebGLRenderingContext;
 import org.parallax3d.parallax.*;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
+import org.parallax3d.parallax.input.InputHandler;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 
@@ -110,6 +111,8 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
         try {
             renderer.setDefaultGLState();
 
+            if(listener instanceof InputHandler)
+                input.setInputHandler((InputHandler) listener);
             listener.onStart(this);
             listener.onResize(this);
 

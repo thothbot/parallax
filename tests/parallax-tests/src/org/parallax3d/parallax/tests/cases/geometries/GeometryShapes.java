@@ -35,6 +35,7 @@ import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
@@ -46,15 +47,21 @@ import java.util.Arrays;
 import java.util.List;
 
 @ThreejsExample("webgl_geometry_shapes")
-public final class GeometryShapes extends ParallaxTest 
+public final class GeometryShapes extends ParallaxTest implements TouchMoveHandler
 {
 	Scene scene;
 	PerspectiveCamera camera ;
 	
 	Object3D parent;
-	
+
+	int width = 0;
 	int mouseX = 0;
-	
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+	}
+
 	@Override
 	public void onStart(RenderingContext context)
 	{
@@ -426,7 +433,11 @@ public final class GeometryShapes extends ParallaxTest
 		context.getRenderer().render(scene, camera);
 	}
 
-	
+	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = (screenX - width / 2 );
+	}
+
 	@Override
 	public String getName() {
 		return "Shapes and curves";
@@ -441,20 +452,5 @@ public final class GeometryShapes extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		    	  	rs.mouseX = (event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ); 
-//		      }
-//		});
-//	}
 
 }

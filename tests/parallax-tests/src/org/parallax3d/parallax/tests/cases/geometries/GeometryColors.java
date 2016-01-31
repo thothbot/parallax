@@ -156,7 +156,6 @@ public class GeometryColors extends ParallaxTest implements TouchMoveHandler
 		scene.add( group3 );
 
 		context.getRenderer().setClearColor(0xDDDDDD);
-		context.getInput().setInputHandler(this);
 	}
 	
 	@Override
