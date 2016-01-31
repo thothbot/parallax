@@ -26,6 +26,8 @@ public interface RenderingContext {
 
     GL20 getGL20();
 
+    Input getInput ();
+
     GLRenderer getRenderer();
 
     int getWidth();

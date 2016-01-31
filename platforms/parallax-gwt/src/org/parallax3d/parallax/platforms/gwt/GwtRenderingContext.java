@@ -24,10 +24,7 @@ import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
-import org.parallax3d.parallax.Animation;
-import org.parallax3d.parallax.App;
-import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.*;
 import org.parallax3d.parallax.events.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
@@ -47,6 +44,8 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
     WebGLRenderingContext context;
     GLRenderer renderer;
     GL20 gl;
+
+    GwtInput input;
 
     Animation listener;
 
@@ -99,6 +98,8 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
         gl = new GwtGL20(context);
 
         renderer = new GLRenderer(gl, width, height);
+
+        input = new GwtInput( canvas );
 
     }
 
@@ -195,8 +196,14 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
         return context;
     }
 
+    @Override
     public GLRenderer getRenderer() {
         return renderer;
+    }
+
+    @Override
+    public Input getInput () {
+        return input;
     }
 
     @Override

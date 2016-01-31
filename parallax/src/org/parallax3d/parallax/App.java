@@ -24,15 +24,12 @@ public abstract class App {
 
     public static App app;
     public static Files files;
-    public static Input input;
 
     public enum ApplicationType {
         Android, Desktop, WebGL
     }
 
     public abstract Files getFiles ();
-
-    public abstract Input getInput ();
 
     public abstract RenderingContext getRendering ();
 

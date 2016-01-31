@@ -18,7 +18,9 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.input.InputProcessor;
+import org.parallax3d.parallax.input.InputHandler;
+
+import java.util.List;
 
 public interface Input {
 
@@ -70,10 +72,8 @@ public interface Input {
 
     boolean isCursorCatched ();
 
-    public void setInputProcessor (InputProcessor processor);
+    void setInputHandler (InputHandler processor);
 
-    public InputProcessor getInputProcessor ();
-
-    public boolean isPeripheralAvailable (Peripheral peripheral);
+    boolean isPeripheralAvailable (Peripheral peripheral);
 
 }

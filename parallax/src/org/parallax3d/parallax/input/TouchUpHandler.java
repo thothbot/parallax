@@ -18,30 +18,7 @@
 
 package org.parallax3d.parallax.input;
 
-public interface InputProcessor {
-
-    /**
-     * Called when key is pressed
-     * @param keycode
-     * @return
-     */
-    boolean keyDown (int keycode);
-
-    /**
-     * Called when key is released
-     * @param keycode
-     * @return
-     */
-    boolean keyUp (int keycode);
-
-    /**
-     * Called when a key was typed
-     * @param character
-     * @return
-     */
-    boolean keyTyped (char character);
-
-    boolean touchDown (int screenX, int screenY, int pointer, int button);
+public interface TouchUpHandler extends InputHandler {
 
     /**
      * Called when a finger was lifted or a mouse button was released.
@@ -52,22 +29,4 @@ public interface InputProcessor {
      * @return
      */
     boolean touchUp (int screenX, int screenY, int pointer, int button);
-
-    /**
-     * Called when a finger or the mouse was dragged.
-     * @param screenX
-     * @param screenY
-     * @param pointer
-     * @return
-     */
-    boolean touchDragged (int screenX, int screenY, int pointer);
-
-    boolean mouseMoved (int screenX, int screenY);
-
-    /**
-     * Called when the mouse wheel was scrolled.
-     * @param amount
-     * @return
-     */
-    boolean scrolled (int amount);
 }

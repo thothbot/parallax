@@ -25,7 +25,8 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Touch;
 import org.parallax3d.parallax.Input;
-import org.parallax3d.parallax.input.InputProcessor;
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.input.*;
 import org.parallax3d.parallax.system.Duration;
 
 import java.util.ArrayList;
@@ -55,11 +56,19 @@ public class GwtInput implements Input {
     private int[] deltaX = new int[MAX_TOUCHES];
     private int[] deltaY = new int[MAX_TOUCHES];
 
-    InputProcessor processor;
-
     long currentEventTimeStamp;
     final CanvasElement canvas;
     boolean hasFocus = true;
+
+    // Handlers
+    KeyDownHandler keyDownHandler;
+    KeyTypedHandler keyTypedHandler;
+    KeyUpHandler keyUpHandler;
+    MouseMovedHandler mouseMovedHandler;
+    ScrolledHandler scrolledHandler;
+    TouchDownHandler touchDownHandler;
+    TouchDraggedHandler touchDraggedHandler;
+    TouchUpHandler touchUpHandler;
 
     public GwtInput (CanvasElement canvas) {
         this.canvas = canvas;
@@ -77,13 +86,25 @@ public class GwtInput implements Input {
     }
 
     @Override
-    public void setInputProcessor (InputProcessor processor) {
-        this.processor = processor;
-    }
-
-    @Override
-    public InputProcessor getInputProcessor () {
-        return processor;
+    public void setInputHandler (InputHandler handler) {
+        if(handler.getClass() == KeyDownHandler.class)
+            keyDownHandler = (KeyDownHandler) handler;
+        else if(handler.getClass() == KeyTypedHandler.class)
+            keyTypedHandler = (KeyTypedHandler) handler;
+        else if(handler.getClass() == KeyUpHandler.class)
+            keyUpHandler = (KeyUpHandler) handler;
+        else if(handler.getClass() == MouseMovedHandler.class)
+            mouseMovedHandler = (MouseMovedHandler) handler;
+        else if(handler.getClass() == ScrolledHandler.class)
+            scrolledHandler = (ScrolledHandler) handler;
+        else if(handler.getClass() == TouchDownHandler.class)
+            touchDownHandler = (TouchDownHandler) handler;
+        else if(handler.getClass() == TouchDraggedHandler.class)
+            touchDraggedHandler = (TouchDraggedHandler) handler;
+        else if(handler.getClass() == TouchUpHandler.class)
+            touchUpHandler = (TouchUpHandler) handler;
+        else
+            Log.error("Unknown handler: ", handler.getClass());
     }
 
     @Override
@@ -259,7 +280,8 @@ public class GwtInput implements Input {
                 this.touchY[0] = getRelativeY(e, canvas);
             }
             this.currentEventTimeStamp = Duration.nanoTime();
-            if (processor != null) processor.touchDown(touchX[0], touchY[0], 0, getButton(e.getButton()));
+            if (touchDownHandler != null)
+                touchDownHandler.touchDown(touchX[0], touchY[0], 0, getButton(e.getButton()));
         }
 
         if (e.getType().equals("mousemove")) {
@@ -275,12 +297,12 @@ public class GwtInput implements Input {
                 this.touchY[0] = getRelativeY(e, canvas);
             }
             this.currentEventTimeStamp = Duration.nanoTime();
-            if (processor != null) {
-                if (touched[0])
-                    processor.touchDragged(touchX[0], touchY[0], 0);
-                else
-                    processor.mouseMoved(touchX[0], touchY[0]);
-            }
+
+            if (touchDraggedHandler != null && touched[0])
+                touchDraggedHandler.touchDragged(touchX[0], touchY[0], 0);
+            else if(mouseMovedHandler != null)
+                mouseMovedHandler.mouseMoved(touchX[0], touchY[0]);
+
         }
 
         if (e.getType().equals("mouseup")) {
@@ -300,11 +322,11 @@ public class GwtInput implements Input {
             }
             this.currentEventTimeStamp = Duration.nanoTime();
             this.touched[0] = false;
-            if (processor != null) processor.touchUp(touchX[0], touchY[0], 0, getButton(e.getButton()));
+            if (touchUpHandler != null) touchUpHandler.touchUp(touchX[0], touchY[0], 0, getButton(e.getButton()));
         }
         if (e.getType().equals(getMouseWheelEvent())) {
-            if (processor != null) {
-                processor.scrolled((int)getMouseWheelVelocity(e));
+            if (scrolledHandler != null) {
+                scrolledHandler.scrolled((int)getMouseWheelVelocity(e));
             }
             this.currentEventTimeStamp = Duration.nanoTime();
             e.preventDefault();
@@ -314,19 +336,16 @@ public class GwtInput implements Input {
             int code = e.getKeyCode();
             if (code == 67) {
                 e.preventDefault();
-                if (processor != null) {
-                    processor.keyDown(code);
-                    processor.keyTyped('\b');
-                }
+                if(keyDownHandler != null) keyDownHandler.keyDown(code);
+                if(keyTypedHandler != null) keyTypedHandler.keyTyped('\b');
             } else {
                 if (!pressedKeys[code]) {
                     pressedKeyCount++;
                     pressedKeys[code] = true;
                     keyJustPressed = true;
                     justPressedKeys[code] = true;
-                    if (processor != null) {
-                        processor.keyDown(code);
-                    }
+                    if (keyDownHandler != null)
+                        keyDownHandler.keyDown(code);
                 }
             }
         }
@@ -334,7 +353,7 @@ public class GwtInput implements Input {
         if (e.getType().equals("keypress") && hasFocus) {
             // System.out.println("keypress");
             char c = (char)e.getCharCode();
-            if (processor != null) processor.keyTyped(c);
+            if (keyTypedHandler != null) keyTypedHandler.keyTyped(c);
         }
 
         if (e.getType().equals("keyup") && hasFocus) {
@@ -344,9 +363,8 @@ public class GwtInput implements Input {
                 pressedKeyCount--;
                 pressedKeys[code] = false;
             }
-            if (processor != null) {
-                processor.keyUp(code);
-            }
+
+            if (keyUpHandler != null) keyUpHandler.keyUp(code);
         }
 
         if (e.getType().equals("touchstart")) {
@@ -362,9 +380,9 @@ public class GwtInput implements Input {
                 touchY[touchId] = getRelativeY(touch, canvas);
                 deltaX[touchId] = 0;
                 deltaY[touchId] = 0;
-                if (processor != null) {
-                    processor.touchDown(touchX[touchId], touchY[touchId], touchId, Buttons.LEFT);
-                }
+
+                if (touchDownHandler != null)
+                    touchDownHandler.touchDown(touchX[touchId], touchY[touchId], touchId, Buttons.LEFT);
             }
             this.currentEventTimeStamp = Duration.nanoTime();
             e.preventDefault();
@@ -379,9 +397,8 @@ public class GwtInput implements Input {
                 deltaY[touchId] = getRelativeY(touch, canvas) - touchY[touchId];
                 touchX[touchId] = getRelativeX(touch, canvas);
                 touchY[touchId] = getRelativeY(touch, canvas);
-                if (processor != null) {
-                    processor.touchDragged(touchX[touchId], touchY[touchId], touchId);
-                }
+                if (touchDraggedHandler != null)
+                    touchDraggedHandler.touchDragged(touchX[touchId], touchY[touchId], touchId);
             }
             this.currentEventTimeStamp = Duration.nanoTime();
             e.preventDefault();
@@ -398,9 +415,8 @@ public class GwtInput implements Input {
                 deltaY[touchId] = getRelativeY(touch, canvas) - touchY[touchId];
                 touchX[touchId] = getRelativeX(touch, canvas);
                 touchY[touchId] = getRelativeY(touch, canvas);
-                if (processor != null) {
-                    processor.touchUp(touchX[touchId], touchY[touchId], touchId, Buttons.LEFT);
-                }
+                if (touchUpHandler != null)
+                    touchUpHandler.touchUp(touchX[touchId], touchY[touchId], touchId, Buttons.LEFT);
             }
             this.currentEventTimeStamp = Duration.nanoTime();
             e.preventDefault();
@@ -417,9 +433,8 @@ public class GwtInput implements Input {
                 deltaY[touchId] = getRelativeY(touch, canvas) - touchY[touchId];
                 touchX[touchId] = getRelativeX(touch, canvas);
                 touchY[touchId] = getRelativeY(touch, canvas);
-                if (processor != null) {
-                    processor.touchUp(touchX[touchId], touchY[touchId], touchId, Buttons.LEFT);
-                }
+                if (touchUpHandler != null)
+                    touchUpHandler.touchUp(touchX[touchId], touchY[touchId], touchId, Buttons.LEFT);
             }
             this.currentEventTimeStamp = Duration.nanoTime();
             e.preventDefault();

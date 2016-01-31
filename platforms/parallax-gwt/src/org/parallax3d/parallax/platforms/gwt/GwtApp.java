@@ -32,8 +32,8 @@ public abstract class GwtApp extends App implements EntryPoint {
 	public final static Logger logger = Logger.getLogger("");
 
 	GwtAppConfiguration config;
+
 	GwtRenderingContext rendering;
-	GwtInput input;
 
 	Preloader preloader;
 
@@ -133,9 +133,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 		this.rendering = rendering;
 
-		this.input = new GwtInput( rendering.canvas );
-
-		App.input = this.input;
 	}
 
 	@Override
@@ -146,10 +143,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 	@Override
 	public Files getFiles() {
 		return App.files;
-	}
-
-	public Input getInput () {
-		return App.input;
 	}
 
 	@Override
