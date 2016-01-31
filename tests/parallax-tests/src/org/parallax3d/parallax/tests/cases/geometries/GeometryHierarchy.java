@@ -26,11 +26,12 @@ import org.parallax3d.parallax.graphics.materials.MeshNormalMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 @ThreejsExample("webgl_geometry_hierarchy")
-public final class GeometryHierarchy extends ParallaxTest 
+public final class GeometryHierarchy extends ParallaxTest implements TouchMoveHandler
 {
 
 	Scene scene;
@@ -38,11 +39,19 @@ public final class GeometryHierarchy extends ParallaxTest
 	
 	Object3D group;
 
+	int width = 0, height = 0;
 	int mouseX = 0, mouseY = 0;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
 	{
+		context.getInput().setInputHandler(this);
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				60, // fov
@@ -102,7 +111,13 @@ public final class GeometryHierarchy extends ParallaxTest
 		
 		context.getRenderer().render(scene, camera);
 	}
-		
+
+	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = (screenX - width / 2 ) * 10;
+		mouseY = (screenY - height / 2) * 10;
+	}
+
 	@Override
 	public String getName() {
 		return "Geometry hierarchy";
@@ -117,21 +132,5 @@ public final class GeometryHierarchy extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		    	  	rs.mouseX = (event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ) * 10; 
-//		    	  	rs.mouseY = (event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2) * 10;
-//		      }
-//		});
-//	}
 
 }
