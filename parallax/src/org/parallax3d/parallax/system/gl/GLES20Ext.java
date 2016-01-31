@@ -18,6 +18,12 @@
 
 package org.parallax3d.parallax.system.gl;
 
+import org.parallax3d.parallax.system.FastMap;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
 public class GLES20Ext {
 
 	public static final int GL_COMPRESSED_RGB_S3TC_DXT1_EXT = 0x83F0;
@@ -30,4 +36,40 @@ public class GLES20Ext {
 
 	public static final int GL_DEPTH_STENCIL = 0x84F9;
 	public static final int GL_DEPTH_STENCIL_ATTACHMENT = 0x821A;
+
+	public enum List {
+		ANGLE_instanced_arrays,
+		EXT_blend_minmax,
+		EXT_color_buffer_half_float,
+		EXT_disjoint_timer_query,
+		EXT_frag_depth,
+		EXT_sRGB,
+		EXT_shader_texture_lod,
+		EXT_texture_filter_anisotropic,
+		OES_element_index_uint,
+		OES_standard_derivatives,
+		OES_texture_float,
+		OES_texture_float_linear,
+		OES_texture_half_float,
+		OES_texture_half_float_linear,
+		OES_vertex_array_object,
+		WEBGL_color_buffer_float,
+		WEBGL_compressed_texture_atc,
+		WEBGL_compressed_texture_etc1,
+		WEBGL_compressed_texture_pvrtc,
+		WEBGL_compressed_texture_s3tc,
+		WEBGL_debug_renderer_info,
+		WEBGL_debug_shaders,
+		WEBGL_depth_texture,
+		WEBGL_draw_buffers,
+		WEBGL_lose_context;
+
+		public static List getValueOf(String test) {
+			for(List val: values())
+				if(test.equals(val.name()))
+					return val;
+
+			return null;
+		}
+	}
 }

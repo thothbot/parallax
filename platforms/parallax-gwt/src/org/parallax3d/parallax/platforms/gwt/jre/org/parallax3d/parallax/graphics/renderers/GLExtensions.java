@@ -18,6 +18,11 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
+import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.webgl.client.WebGLExtension;
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.platforms.gwt.GwtGL20;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 
@@ -32,10 +37,14 @@ public final class GLExtensions {
 
 		if(extensions.size() == 0)
 		{
-			String vals = gl.glGetString(GL20.GL_EXTENSIONS);
-			if(vals != null)
-				for(String val: vals.split(" "))
-					extensions.add(GLES20Ext.List.valueOf(val));
+			JsArrayString supportedExts = ((GwtGL20)gl).getWebGLRenderingContext().getSupportedExtensions();
+			String[] outSupportedExts = new String[supportedExts.length()];
+			Log.error(supportedExts);
+			for (int i = 0; i < outSupportedExts.length; i++) {
+				GLES20Ext.List val = GLES20Ext.List.getValueOf(supportedExts.get(i));
+				if(val != null)
+					extensions.add(val);
+			}
 		}
 
 		return extensions.size() > 0 && extensions.contains( id );

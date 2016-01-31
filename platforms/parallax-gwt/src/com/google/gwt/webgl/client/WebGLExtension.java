@@ -16,28 +16,13 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.renderers;
+package com.google.gwt.webgl.client;
 
-import org.parallax3d.parallax.system.gl.GL20;
-import org.parallax3d.parallax.system.gl.GLES20Ext;
+import com.google.gwt.core.client.JavaScriptObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public final class GLExtensions {
-
-	static final List<GLES20Ext.List> extensions = new ArrayList<>();
-
-	public static boolean isSupported(GL20 gl, GLES20Ext.List id) {
-
-		if(extensions.size() == 0)
-		{
-			String vals = gl.glGetString(GL20.GL_EXTENSIONS);
-			if(vals != null)
-				for(String val: vals.split(" "))
-					extensions.add(GLES20Ext.List.valueOf(val));
-		}
-
-		return extensions.size() > 0 && extensions.contains( id );
-	}
+public abstract class WebGLExtension extends JavaScriptObject 
+{
+	
+	protected WebGLExtension(){}
+	
 }

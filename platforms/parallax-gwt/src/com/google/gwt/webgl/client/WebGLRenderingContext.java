@@ -501,7 +501,7 @@ public class WebGLRenderingContext extends JavaScriptObject {
 																					return this.getSupportedExtensions();
 																					}-*/;
 
-	public final native JavaScriptObject getExtension (String name) /*-{
+	public final native WebGLExtension getExtension (String name) /*-{
 																							return this.getExtension(name);
 																							}-*/;
 
@@ -1182,15 +1182,15 @@ public class WebGLRenderingContext extends JavaScriptObject {
 																																									}-*/;
 
 	public final native void viewport (int x, int y, int width, int height) /*-{
-																									this.viewport(x, y, width, height);
-																									}-*/;
+		this.viewport(x, y, width, height);
+	}-*/;
 
 	/** Return the value for the passed pname.
 	 * 
 	 * @param pname one of RENDERER, SHADING_LANGUAGE_VERSION, VENDOR, VERSION */
 	public final native String getParameterString (int pname) /*-{
-																					return this.getParameter(pname);
-																					}-*/;
+		return this.getParameter(pname);
+	}-*/;
 
 	/** Return the value for the passed pname.
 	 * 

@@ -257,7 +257,7 @@ public class GLRenderer extends Renderer
 		this._maxCubemapSize    = this.getIntGlParam(GL20.GL_MAX_CUBE_MAP_TEXTURE_SIZE);
 
 		this._supportsVertexTextures = ( this._maxVertexTextures > 0 );
-		this._supportsBoneTextures = this._supportsVertexTextures && GLExtensions.get(gl, GLExtensions.Id.OES_texture_float);
+		this._supportsBoneTextures = this._supportsVertexTextures && GLExtensions.isSupported(gl, GLES20Ext.List.OES_texture_float);
 
 		this._vertexShaderPrecisionHighpFloat = new
 				WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
@@ -300,16 +300,16 @@ public class GLRenderer extends Renderer
 			Log.warn("WebGLRenderer: mediump not supported, using lowp.");
 		}
 
-		GLExtensions.get(gl, GLExtensions.Id.OES_texture_float);
-		GLExtensions.get(gl, GLExtensions.Id.OES_texture_float_linear);
-		GLExtensions.get(gl, GLExtensions.Id.OES_standard_derivatives);
+		GLExtensions.isSupported(gl, GLES20Ext.List.OES_texture_float);
+		GLExtensions.isSupported(gl, GLES20Ext.List.OES_texture_float_linear);
+		GLExtensions.isSupported(gl, GLES20Ext.List.OES_standard_derivatives);
 
 		if ( _logarithmicDepthBuffer )
 		{
-			_logarithmicDepthBuffer = GLExtensions.get(gl, GLExtensions.Id.EXT_frag_depth);
+			_logarithmicDepthBuffer = GLExtensions.isSupported(gl, GLES20Ext.List.EXT_frag_depth);
 		}
 
-		GLExtensions.get(gl, GLExtensions.Id.WEBGL_compressed_texture_s3tc);
+		GLExtensions.isSupported(gl, GLES20Ext.List.WEBGL_compressed_texture_s3tc);
 
 		setSize(width, height);
 		setDefaultGLState();
@@ -349,32 +349,32 @@ public class GLRenderer extends Renderer
 
 	public boolean supportsFloatTextures()
 	{
-		return GLExtensions.get(this.gl, GLExtensions.Id.OES_texture_float);
+		return GLExtensions.isSupported(this.gl, GLES20Ext.List.OES_texture_float);
 	}
 
 	public boolean supportsStandardDerivatives()
 	{
-		return GLExtensions.get(this.gl, GLExtensions.Id.OES_standard_derivatives);
+		return GLExtensions.isSupported(this.gl, GLES20Ext.List.OES_standard_derivatives);
 	}
 
 	public boolean supportsCompressedTextureS3TC()
 	{
-		return GLExtensions.get(this.gl, GLExtensions.Id.WEBGL_compressed_texture_s3tc);
+		return GLExtensions.isSupported(this.gl, GLES20Ext.List.WEBGL_compressed_texture_s3tc);
 	}
 
 	public boolean supportsCompressedTexturePVRTC()
 	{
-		return GLExtensions.get(this.gl, GLExtensions.Id.WEBGL_compressed_texture_pvrtc);
+		return GLExtensions.isSupported(this.gl, GLES20Ext.List.WEBGL_compressed_texture_pvrtc);
 	}
 
 	public boolean supportsBlendMinMax()
 	{
-		return GLExtensions.get(this.gl, GLExtensions.Id.EXT_blend_minmax);
+		return GLExtensions.isSupported(this.gl, GLES20Ext.List.EXT_blend_minmax);
 	}
 
 	public int getMaxAnisotropy()
 	{
-		if (GLExtensions.get(this.gl, GLExtensions.Id.EXT_texture_filter_anisotropic)) {
+		if (GLExtensions.isSupported(this.gl, GLES20Ext.List.EXT_texture_filter_anisotropic)) {
 			return this.getIntGlParam(GLES20Ext.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 		} else {
 			return 0;
@@ -1245,13 +1245,12 @@ public class GLRenderer extends Renderer
 				this.info.getRender().points += position.getArray().getLength() / 3;
 
 			}
-
 		}
 	}
 
 	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {
 
-		long maxVerticesInGroup = GLExtensions.get(this.gl, GLExtensions.Id.OES_element_index_uint) ? 4294967296L : 65535L;
+		long maxVerticesInGroup = GLExtensions.isSupported(this.gl, GLES20Ext.List.OES_element_index_uint) ? 4294967296L : 65535L;
 
 		int numMorphTargets = geometry.getMorphTargets().size();
 		int numMorphNormals = geometry.getMorphNormals().size();

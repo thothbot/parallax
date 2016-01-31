@@ -66,6 +66,10 @@ public class GwtGL20 implements GL20 {
 		this.gl.pixelStorei(WebGLRenderingContext.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
 	}
 
+	public WebGLRenderingContext getWebGLRenderingContext() {
+		return gl;
+	}
+
 	private void ensureCapacity (FloatBuffer buffer) {
 		if (buffer.remaining() > floatBuffer.length()) {
 			floatBuffer = TypedArrays.createFloat32Array(buffer.remaining());
