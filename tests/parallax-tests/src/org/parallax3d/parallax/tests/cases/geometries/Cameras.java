@@ -31,14 +31,16 @@ import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.KeyDownHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
+import org.parallax3d.parallax.input.KeyCodes;
 
 @ThreejsExample("webgl_camera")
-public class Cameras extends ParallaxTest
+public class Cameras extends ParallaxTest implements KeyDownHandler
 {
 
 	Scene scene;
@@ -57,6 +59,13 @@ public class Cameras extends ParallaxTest
 	Mesh mesh;
 
 	@Override
+	public void onResize(RenderingContext context) {
+		camera.setAspect(0.5 * context.getRenderer().getAbsoluteAspectRation());
+		cameraPerspective.setAspect(0.5 * context.getRenderer().getAbsoluteAspectRation());
+		cameraOrtho.setSize(0.5 * context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() );
+	}
+
+	@Override
 	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
@@ -67,39 +76,14 @@ public class Cameras extends ParallaxTest
 				10000 );
 
 		camera.getPosition().setZ(2500);
-//		camera.addViewportResizeHandler(new ViewportResizeHandler() {
-//
-//			@Override
-//			public void onResize(ViewportResizeEvent event) {
-//				camera.setAspect(0.5 * event.context.getRenderer().getAbsoluteAspectRation());
-//
-//			}
-//		});
 
 		cameraPerspective = new PerspectiveCamera(
 				50,
 				context.getRenderer().getAbsoluteAspectRation() * 0.5,
 				150,
 				1000 );
-//		cameraPerspective.addViewportResizeHandler(new ViewportResizeHandler() {
-//
-//			@Override
-//			public void onResize(ViewportResizeEvent event) {
-//				cameraPerspective.setAspect(0.5 * event.context.getRenderer().getAbsoluteAspectRation());
-//
-//			}
-//		});
-
 
 		cameraOrtho = new OrthographicCamera( 0.5 * context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight(), 150, 1000 );
-//		cameraOrtho.addViewportResizeHandler(new ViewportResizeHandler() {
-//
-//			@Override
-//			public void onResize(ViewportResizeEvent event) {
-//				cameraOrtho.setSize(0.5 * event.context.getRenderer().getAbsoluteWidth(), event.context.getRenderer().getAbsoluteHeight() );
-//
-//			}
-//		});
 
 		this.cameraPerspectiveHelper = new CameraHelper( this.cameraPerspective );
 		scene.add( this.cameraPerspectiveHelper );
@@ -165,6 +149,7 @@ public class Cameras extends ParallaxTest
 		//
 
 		context.getRenderer().setAutoClear(false);
+		context.getInput().setInputHandler(this);
 	}
 
 	@Override
@@ -217,32 +202,20 @@ public class Cameras extends ParallaxTest
 		context.getRenderer().render(scene, camera);
 	}
 
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		RootPanel.get().addDomHandler(new KeyDownHandler() {
-//
-//			@Override
-//			public void onKeyDown(KeyDownEvent event)
-//			{
-//				DemoScene rs = (DemoScene) contextPanel.getAnimatedScene();
-//				switch(event.getNativeEvent().getKeyCode())
-//				{
-//				case 79: case 111:/*O*/
-//					rs.activeCamera = rs.cameraOrtho;
-//					rs.activeHelper = rs.cameraOrthoHelper;
-//					break;
-//				case 80: case 112:/*P*/
-//					rs.activeCamera = rs.cameraPerspective;
-//					rs.activeHelper = rs.cameraPerspectiveHelper;
-//					break;
-//				}
-//
-//			}
-//		}, KeyDownEvent.getType());
-//	}
+	@Override
+	public void onKeyDown(int keycode) {
+		switch(keycode)
+		{
+			case KeyCodes.KEY_O:
+				activeCamera = cameraOrtho;
+				activeHelper = cameraOrthoHelper;
+				break;
+			case KeyCodes.KEY_P:
+				activeCamera = cameraPerspective;
+				activeHelper = cameraPerspectiveHelper;
+				break;
+		}
+	}
 
 	@Override
 	public String getName() {

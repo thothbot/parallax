@@ -89,22 +89,20 @@ public class GwtInput implements Input {
     public void setInputHandler (InputHandler handler) {
         if(handler instanceof KeyDownHandler)
             keyDownHandler = (KeyDownHandler) handler;
-        else if(handler instanceof KeyTypedHandler)
+        if(handler instanceof KeyTypedHandler)
             keyTypedHandler = (KeyTypedHandler) handler;
-        else if(handler instanceof KeyUpHandler)
+        if(handler instanceof KeyUpHandler)
             keyUpHandler = (KeyUpHandler) handler;
-        else if(handler instanceof ScrolledHandler)
+        if(handler instanceof ScrolledHandler)
             scrolledHandler = (ScrolledHandler) handler;
-        else if(handler instanceof TouchDownHandler)
+        if(handler instanceof TouchDownHandler)
             touchDownHandler = (TouchDownHandler) handler;
-        else if(handler instanceof TouchDraggedHandler)
+        if(handler instanceof TouchDraggedHandler)
             touchDraggedHandler = (TouchDraggedHandler) handler;
-        else if(handler instanceof TouchUpHandler)
+        if(handler instanceof TouchUpHandler)
             touchUpHandler = (TouchUpHandler) handler;
-        else if(handler instanceof TouchMoveHandler)
+        if(handler instanceof TouchMoveHandler)
             touchMoveHandler = (TouchMoveHandler) handler;
-        else
-            Log.error("Unknown handler: ", handler.getClass());
     }
 
     @Override
