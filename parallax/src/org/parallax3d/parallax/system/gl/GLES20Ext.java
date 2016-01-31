@@ -18,12 +18,6 @@
 
 package org.parallax3d.parallax.system.gl;
 
-import org.parallax3d.parallax.system.FastMap;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-
 public class GLES20Ext {
 
 	public static final int GL_COMPRESSED_RGB_S3TC_DXT1_EXT = 0x83F0;

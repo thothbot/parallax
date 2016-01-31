@@ -31,22 +31,9 @@ import java.util.List;
 
 public final class GLExtensions {
 
-	static final List<GLES20Ext.List> extensions = new ArrayList<>();
-
 	public static boolean isSupported(GL20 gl, GLES20Ext.List id) {
 
-		if(extensions.size() == 0)
-		{
-			JsArrayString supportedExts = ((GwtGL20)gl).getWebGLRenderingContext().getSupportedExtensions();
-			String[] outSupportedExts = new String[supportedExts.length()];
-			Log.error(supportedExts);
-			for (int i = 0; i < outSupportedExts.length; i++) {
-				GLES20Ext.List val = GLES20Ext.List.getValueOf(supportedExts.get(i));
-				if(val != null)
-					extensions.add(val);
-			}
-		}
+		return ((GwtGL20)gl).getWebGLRenderingContext().getExtension(id.name()) != null;
 
-		return extensions.size() > 0 && extensions.contains( id );
 	}
 }
