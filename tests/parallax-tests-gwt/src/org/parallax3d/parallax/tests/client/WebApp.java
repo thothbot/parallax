@@ -64,6 +64,7 @@ public class WebApp extends GwtApp {
                             text += "Caused by: ";
                     }
 
+                    History.newItem("", true);
                     text = text.replaceAll("\n", "<br/>");
                     RootLayoutPanel.get().add(new Alert(new HTMLPanel(text)));
 //                }

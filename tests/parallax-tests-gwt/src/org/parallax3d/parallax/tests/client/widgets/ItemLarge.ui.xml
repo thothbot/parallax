@@ -44,16 +44,20 @@
 
         .name {
             position: absolute;
-            top: 90px;
+            bottom: 130px;
             left: 20px;
             color: #fff;
-            font-size: 20px;
+            font-size: 18px;
+            line-height: 18px;
             font-weight: 300;
+            text-shadow: #000 0 0 5px;
+            -webkit-font-smoothing: antialiased;
         }
 
         .description {
-            padding: 20px;
-            border-radius: 0 0 2px 2px;
+            margin: 20px;
+            height: 75px;
+            overflow: hidden;
         }
 
         .indexExamplePanel:HOVER .text {
