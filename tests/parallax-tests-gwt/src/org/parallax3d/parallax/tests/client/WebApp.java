@@ -24,13 +24,12 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.*;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.Tests;
+import org.parallax3d.parallax.tests.client.widgets.Alert;
 import org.parallax3d.parallax.tests.resources.Resources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
@@ -51,7 +50,7 @@ public class WebApp extends GwtApp {
         GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
             public void onUncaughtException(Throwable throwable) {
                 Log.error("Uncaught exception ", throwable);
-                if (!GWT.isScript()) {
+//                if (!GWT.isScript()) {
                     String text = "Uncaught exception: ";
                     while (throwable != null) {
                         StackTraceElement[] stackTraceElements = throwable.getStackTrace();
@@ -65,12 +64,9 @@ public class WebApp extends GwtApp {
                             text += "Caused by: ";
                     }
 
-                    DialogBox dialogBox = new DialogBox(true);
-                    DOM.setStyleAttribute(dialogBox.getElement(), "backgroundColor", "#ABCDEF");
-                    text = text.replaceAll(" ", "&nbsp;");
-                    dialogBox.setHTML("<pre>" + text + "</pre>");
-                    dialogBox.center();
-                }
+                    text = text.replaceAll("\n", "<br/>");
+                    RootLayoutPanel.get().add(new Alert(new HTMLPanel(text)));
+//                }
             }
         });
 

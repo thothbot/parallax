@@ -121,10 +121,9 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 					}
 					catch (Throwable e)
 					{
-						PageExample.this.content.clear();
 						String msg = "Sorry, your browser doesn't seem to support WebGL";
 						Log.error("setRendering: " + msg, e);
-						PageExample.this.content.add(new AlertBadCanvas(msg));
+						RootLayoutPanel.get().add(new AlertBadCanvas(msg));
 					}
 				}
 			});
