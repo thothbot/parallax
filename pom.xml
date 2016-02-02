@@ -49,6 +49,8 @@
         <module>platforms/parallax-gwt</module>
         <module>platforms/parallax-android</module>
         <module>extensions/parallax-renderer-plugins</module>
+        <module>extensions/parallax-controllers/parallax-controllers</module>
+        <module>extensions/parallax-controllers/parallax-controllers-gwt</module>
     </modules>
 
     <build>

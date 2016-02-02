@@ -79,6 +79,18 @@ project(":extensions:parallax-renderer-plugins") {
     dependencies { compile project(":parallax") }
 }
 
+project(":extensions:parallax-controllers:parallax-controllers") {
+    dependencies { compile project(":parallax"); }
+}
+
+project(":extensions:parallax-controllers:parallax-controllers-gwt") {
+    dependencies {
+        compile project(":parallax");
+        compile project(":extensions:parallax-controllers:parallax-controllers");
+        compile project(":platforms:parallax-gwt");
+    }
+}
+
 project(":tests:parallax-tests") {
     apply plugin: "java"
 
