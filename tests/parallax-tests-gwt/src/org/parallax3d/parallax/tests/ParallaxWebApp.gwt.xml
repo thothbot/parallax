@@ -8,6 +8,8 @@
 
 	<inherits name='org.parallax3d.parallax.graphics.renderers.plugins' />
 
+	<inherits name='org.parallax3d.parallax.controllers.controllers-gwt' />
+
 	<!--Theme-->
 	<inherits name="com.google.gwt.user.theme.clean.Clean"/>
 

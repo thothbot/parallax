@@ -97,6 +97,7 @@ project(":tests:parallax-tests") {
     dependencies {
         compile project(":parallax")
         compile project(":extensions:parallax-renderer-plugins")
+        compile project(":extensions:parallax-controllers:parallax-controllers")
     }
 }
 
@@ -119,6 +120,7 @@ project(":tests:parallax-tests-gwt") {
     dependencies {
         compile project(":tests:parallax-tests")
         compile project(":platforms:parallax-gwt")
+        compile project(":extensions:parallax-controllers:parallax-controllers-gwt")
     }
 }
 
