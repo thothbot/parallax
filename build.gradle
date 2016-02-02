@@ -75,11 +75,16 @@ project(":platforms:parallax-android") {
     }
 }
 
+project(":extensions:parallax-renderer-plugins") {
+    dependencies { compile project(":parallax") }
+}
+
 project(":tests:parallax-tests") {
     apply plugin: "java"
 
     dependencies {
         compile project(":parallax")
+        compile project(":extensions:parallax-renderer-plugins")
     }
 }
 

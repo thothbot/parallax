@@ -57,6 +57,7 @@ draftWar {
 task addSource << {
     sourceSets.main.compileClasspath += files(project(':parallax').sourceSets.main.allJava.srcDirs)
     sourceSets.main.compileClasspath += files(project(':platforms:parallax-gwt').sourceSets.main.allJava.srcDirs)
+    sourceSets.main.compileClasspath += files(project(':extensions:parallax-renderer-plugins').sourceSets.main.allJava.srcDirs)
     sourceSets.main.compileClasspath += files(project(':tests:parallax-tests').sourceSets.main.allJava.srcDirs)
 }
 
