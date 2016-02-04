@@ -79,6 +79,10 @@ project(":extensions:parallax-renderer-plugins") {
     dependencies { compile project(":parallax") }
 }
 
+project(":extensions:parallax-loaders") {
+    dependencies { compile project(":parallax") }
+}
+
 project(":extensions:parallax-controllers:parallax-controllers") {
     dependencies { compile project(":parallax"); }
 }
@@ -97,6 +101,7 @@ project(":tests:parallax-tests") {
     dependencies {
         compile project(":parallax")
         compile project(":extensions:parallax-renderer-plugins")
+        compile project(":extensions:parallax-loaders")
         compile project(":extensions:parallax-controllers:parallax-controllers")
     }
 }

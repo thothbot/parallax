@@ -92,13 +92,13 @@ public class FirstPersonController extends Controller implements TouchMoveHandle
 	public FirstPersonController(Object3D object)
 	{
 		super(object);
-		
+
 //		this.viewHalfX = widget.getOffsetWidth() / 2;
 //		this.viewHalfY = widget.getOffsetHeight() / 2;
-		
+
 		this.target = new Vector3();
 	}
-	
+
 	/**
 	 * Sets the movement speed. Default 1.0
 	 * 
