@@ -6,11 +6,11 @@
 
 	<inherits name='org.parallax3d.parallax.parallaxTests' />
 
-	<inherits name='org.parallax3d.parallax.graphics.renderers.plugins' />
+	<inherits name='org.parallax3d.parallax.controllers' />
 
 	<inherits name='org.parallax3d.parallax.loaders' />
 
-	<inherits name='org.parallax3d.parallax.controllers.controllers-gwt' />
+	<inherits name='org.parallax3d.parallax.graphics.renderers.plugins' />
 
 	<!--Theme-->
 	<inherits name="com.google.gwt.user.theme.clean.Clean"/>

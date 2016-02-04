@@ -83,16 +83,8 @@ project(":extensions:parallax-loaders") {
     dependencies { compile project(":parallax") }
 }
 
-project(":extensions:parallax-controllers:parallax-controllers") {
+project(":extensions:parallax-controllers") {
     dependencies { compile project(":parallax"); }
-}
-
-project(":extensions:parallax-controllers:parallax-controllers-gwt") {
-    dependencies {
-        compile project(":parallax");
-        compile project(":extensions:parallax-controllers:parallax-controllers");
-        compile project(":platforms:parallax-gwt");
-    }
 }
 
 project(":tests:parallax-tests") {
@@ -102,7 +94,7 @@ project(":tests:parallax-tests") {
         compile project(":parallax")
         compile project(":extensions:parallax-renderer-plugins")
         compile project(":extensions:parallax-loaders")
-        compile project(":extensions:parallax-controllers:parallax-controllers")
+        compile project(":extensions:parallax-controllers")
     }
 }
 
@@ -125,7 +117,6 @@ project(":tests:parallax-tests-gwt") {
     dependencies {
         compile project(":tests:parallax-tests")
         compile project(":platforms:parallax-gwt")
-        compile project(":extensions:parallax-controllers:parallax-controllers-gwt")
     }
 }
 
