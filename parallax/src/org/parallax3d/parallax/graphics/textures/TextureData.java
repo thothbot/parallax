@@ -30,29 +30,29 @@ public interface TextureData
      *
      * @param target    eg GL_TEXTURE_2D.
      */
-    public void glTexImage2D(GL20 gl, int target);
+    void glTexImage2D(GL20 gl, int target);
 
     /**
      *
      * @return  width of image in pixels.
      */
-    public int getWidth();
+    int getWidth();
 
     /**
      *
      * @return  height of image in pixels.
      */
-    public int getHeight();
+    int getHeight();
 
     /**
      * @param width
      * @param height
      * @return  a new Image which is a scaled copy of this one.
      */
-    public TextureData createScaledCopy(int width, int height);
+    TextureData createScaledCopy(int width, int height);
 
     /**
      * Explicitly free the Image's internal resources.
      */
-    public void recycle();
+    void recycle();
 }
