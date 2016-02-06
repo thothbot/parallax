@@ -18,8 +18,6 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-import org.parallax3d.parallax.App;
-import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.Files.FileType;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;

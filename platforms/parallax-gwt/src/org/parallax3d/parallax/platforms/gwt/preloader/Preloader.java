@@ -33,17 +33,17 @@ public class Preloader {
 	
 	public interface PreloaderCallback {
 		
-		public void update(PreloaderState state);
+		void update(PreloaderState state);
 		
-		public void error(String file);
+		void error(String file);
 		
 	}
 
-	public FastMap<Void> directories = new FastMap<Void>();
-	public FastMap<ImageElement> images = new FastMap<ImageElement>();
-	public FastMap<Void> audio = new FastMap<Void>();
-	public FastMap<String> texts = new FastMap<String>();
-	public FastMap<Blob> binaries = new FastMap<Blob>();
+	public FastMap<Void> directories = new FastMap<>();
+	public FastMap<ImageElement> images = new FastMap<>();
+	public FastMap<Void> audio = new FastMap<>();
+	public FastMap<String> texts = new FastMap<>();
+	public FastMap<Blob> binaries = new FastMap<>();
 
 	public static class Asset {
 		public Asset (String url, AssetFilter.AssetType type, long size, String mimeType) {

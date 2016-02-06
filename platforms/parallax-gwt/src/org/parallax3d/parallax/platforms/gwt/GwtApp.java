@@ -39,8 +39,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	private static AgentInfo agentInfo;
 
-	LoadingListener loadingListener;
-
 	public void setLogLevel (Level logLevel) {
 		logger.setLevel(logLevel);
 	}
@@ -71,6 +69,8 @@ public abstract class GwtApp extends App implements EntryPoint {
 		preloader = createPreloader();
 		App.files = new GwtFiles(preloader);
 
+		onInit();
+
 		preloader.preload("assets.txt", new Preloader.PreloaderCallback() {
 			@Override
 			public void error(String file) {
@@ -82,13 +82,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 				callback.update(state);
 				if (state.hasEnded()) {
 
-					if (loadingListener != null)
-						loadingListener.beforeSetup();
-
-					onInit();
-
-					if (loadingListener != null)
-						loadingListener.afterSetup();
 				}
 			}
 		});
@@ -253,22 +246,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 		}
 	}
 
-//	public String getBaseUrl () {
-//		return preloader.baseUrl;
-//	}
-//
-//	public CanvasElement getCanvasElement(){
-//		return graphics.canvas;
-//	}
-
-	public LoadingListener getLoadingListener () {
-		return loadingListener;
-	}
-
-	public void setLoadingListener (LoadingListener loadingListener) {
-		this.loadingListener = loadingListener;
-	}
-
 	native static public void consoleLog(String message) /*-{
 		console.log( "GWT: " + message );
 	}-*/;
@@ -281,17 +258,5 @@ public abstract class GwtApp extends App implements EntryPoint {
 	}-*/;
 
 	private void onVisibilityChange (boolean visible) {
-	}
-
-	public interface LoadingListener{
-		/**
-		 * Method called before the setup
-		 */
-		public void beforeSetup();
-
-		/**
-		 * Method called after the setup
-		 */
-		public void afterSetup();
 	}
 }
