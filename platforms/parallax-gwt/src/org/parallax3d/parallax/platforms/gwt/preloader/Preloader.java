@@ -19,6 +19,7 @@ package org.parallax3d.parallax.platforms.gwt.preloader;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
 import org.parallax3d.parallax.Files;
+import org.parallax3d.parallax.files.FileFilter;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;
@@ -46,7 +47,7 @@ public class Preloader {
 	public FastMap<Blob> binaries = new FastMap<>();
 
 	public static class Asset {
-		public Asset (String url, AssetFilter.AssetType type, long size, String mimeType) {
+		public Asset (String url, FileFilter.AssetType type, long size, String mimeType) {
 			this.url = url;
 			this.type = type;
 			this.size = size;
@@ -57,7 +58,7 @@ public class Preloader {
 		public boolean failed;
 		public long loaded;
 		public final String url;
-		public final AssetFilter.AssetType type;
+		public final FileFilter.AssetType type;
 		public final long size;
 		public final String mimeType;
 	}
@@ -129,13 +130,13 @@ public class Preloader {
 					if (tokens.length != 4) {
 						throw new ParallaxRuntimeException("Invalid assets description file.");
 					}
-					AssetFilter.AssetType type = AssetFilter.AssetType.Text;
-					if (tokens[0].equals("i")) type = AssetFilter.AssetType.Image;
-					if (tokens[0].equals("b")) type = AssetFilter.AssetType.Binary;
-					if (tokens[0].equals("a")) type = AssetFilter.AssetType.Audio;
-					if (tokens[0].equals("d")) type = AssetFilter.AssetType.Directory;
+					FileFilter.AssetType type = FileFilter.AssetType.Text;
+					if (tokens[0].equals("i")) type = FileFilter.AssetType.Image;
+					if (tokens[0].equals("b")) type = FileFilter.AssetType.Binary;
+					if (tokens[0].equals("a")) type = FileFilter.AssetType.Audio;
+					if (tokens[0].equals("d")) type = FileFilter.AssetType.Directory;
 					long size = Long.parseLong(tokens[2]);
-					if (type == AssetFilter.AssetType.Audio && !loader.isUseBrowserCache()) {
+					if (type == FileFilter.AssetType.Audio && !loader.isUseBrowserCache()) {
 						size = 0;
 					}
 					assets.add(new Asset(tokens[1].trim(), type, size, tokens[3]));
@@ -251,7 +252,7 @@ public class Preloader {
 		return list;
 	}
 
-	public FileHandle[] list (String url, FileFilter filter) {
+	public FileHandle[] list (String url, java.io.FileFilter filter) {
 		List<FileHandle> files = new ArrayList<FileHandle>();
 		for (String path : texts.keySet()) {
 			if (isChild(path, url) && filter.accept(new File(path))) {

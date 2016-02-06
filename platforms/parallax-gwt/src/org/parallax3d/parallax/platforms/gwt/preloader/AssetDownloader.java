@@ -23,6 +23,7 @@ import com.google.gwt.typedarrays.shared.TypedArrays;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
+import org.parallax3d.parallax.files.FileFilter;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
@@ -49,7 +50,7 @@ public class AssetDownloader {
 		return useInlineBase64;
 	}
 
-	public void load (String url, AssetFilter.AssetType type, String mimeType, FileListener<?> listener) {
+	public void load (String url, FileFilter.AssetType type, String mimeType, FileListener<?> listener) {
 		switch (type) {
 		case Text:
 			loadText(url, (FileListener<String>)listener);
