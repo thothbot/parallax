@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.tests.cases.geometries;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
@@ -154,8 +155,7 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		double r = context.getDeltaTime() * 0.0005;
-
+		double r = context.getFrameId() * 0.005;
 		mesh.getPosition().setX(700 * Math.cos( r ));
 		mesh.getPosition().setZ(700 * Math.sin( r ));
 		mesh.getPosition().setY(700 * Math.sin( r ));
