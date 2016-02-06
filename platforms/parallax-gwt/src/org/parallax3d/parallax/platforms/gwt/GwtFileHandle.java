@@ -40,12 +40,6 @@ public class GwtFileHandle extends FileHandle {
         this.type = type;
     }
 
-    public GwtFileHandle (String path) {
-        this.type = FileType.Internal;
-        this.preloader = ((GwtApp) App.app).getPreloader();
-        this.file = fixSlashes(path);
-    }
-
     public String path () {
         return file;
     }

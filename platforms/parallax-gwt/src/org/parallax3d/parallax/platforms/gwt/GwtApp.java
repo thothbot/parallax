@@ -94,15 +94,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 		});
 	}
 
-	public String getBaseUrl () {
-		return preloader.baseUrl;
-	}
-
-	public Preloader getPreloader () {
-		return preloader;
-	}
-
-
 	public String getPreloaderBaseURL()
 	{
 		return GWT.getHostPageBaseURL() + "assets/";
