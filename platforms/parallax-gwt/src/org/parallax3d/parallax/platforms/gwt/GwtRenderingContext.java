@@ -156,7 +156,7 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
     private void mainLoop() {
 
         refresh();
-        if (renderer.getAbsoluteHeight() != lastWidth || renderer.getAbsoluteHeight() != lastHeight) {
+        if (renderer.getAbsoluteWidth() != lastWidth || renderer.getAbsoluteHeight() != lastHeight) {
             this.renderer.setSize(lastWidth, lastHeight);
             this.listener.onResize(this);
             lastWidth = getWidth();
