@@ -22,6 +22,9 @@ import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
@@ -36,7 +39,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GwtRenderingContext implements RenderingContext, AnimationScheduler.AnimationCallback {
+public class GwtRenderingContext implements ResizeHandler, RenderingContext, AnimationScheduler.AnimationCallback {
 
     /**
      * The ID of the pending animation request.
@@ -108,6 +111,8 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
         input = new GwtInput( canvas );
 
         addEventListeners();
+
+        Window.addResizeHandler( this );
     }
 
     @Override
@@ -163,37 +168,39 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
 
         refresh();
 
-        if (getWidth() != lastWidth || getHeight() != lastHeight) {
-
-            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-                 @Override
-                 public void execute() {
-
-                     lastWidth = getWidth();
-                     lastHeight = getHeight();
-
-                     if(lastWidth > 0 && lastHeight > 0) {
-
-                         ViewportResizeBus.onViewportResize(lastWidth, lastHeight);
-
-                         GwtRenderingContext.this.canvas.setWidth(lastWidth);
-                         GwtRenderingContext.this.canvas.setHeight(lastHeight);
-                         GwtRenderingContext.this.renderer.setSize(lastWidth, lastHeight);
-                         GwtRenderingContext.this.listener.onResize(GwtRenderingContext.this);
-
-                     }
-                     else
-                     {
-
-                     }
-                 }
-            });
-
-        }
-
         frameId++;
         this.listener.onUpdate(this);
 
+    }
+
+    @Override
+    public void onResize(ResizeEvent resizeEvent) {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+
+                lastWidth = getWidth();
+                lastHeight = getHeight();
+
+                if(lastWidth > 0 && lastHeight > 0) {
+
+                    if(!GwtRenderingContext.this.isRun())
+                        GwtRenderingContext.this.run();
+
+                    ViewportResizeBus.onViewportResize(lastWidth, lastHeight);
+
+                    GwtRenderingContext.this.canvas.setWidth(lastWidth);
+                    GwtRenderingContext.this.canvas.setHeight(lastHeight);
+                    GwtRenderingContext.this.renderer.setSize(lastWidth, lastHeight);
+                    GwtRenderingContext.this.listener.onResize(GwtRenderingContext.this);
+
+                }
+                else
+                {
+                    GwtRenderingContext.this.stop();
+                }
+            }
+        });
     }
 
     @Override
