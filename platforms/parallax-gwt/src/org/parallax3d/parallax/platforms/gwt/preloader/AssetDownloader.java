@@ -23,6 +23,7 @@ import com.google.gwt.typedarrays.shared.TypedArrays;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 public class AssetDownloader {
@@ -48,29 +49,19 @@ public class AssetDownloader {
 		return useInlineBase64;
 	}
 
-	public interface AssetLoaderListener<T> {
-
-		void onProgress(double amount);
-
-		void onFailure();
-
-		void onSuccess(T result);
-
-	}
-
-	public void load (String url, AssetFilter.AssetType type, String mimeType, AssetLoaderListener<?> listener) {
+	public void load (String url, AssetFilter.AssetType type, String mimeType, FileListener<?> listener) {
 		switch (type) {
 		case Text:
-			loadText(url, (AssetLoaderListener<String>)listener);
+			loadText(url, (FileListener<String>)listener);
 			break;
 		case Image:
-			loadImage(url, mimeType, (AssetLoaderListener<ImageElement>)listener);
+			loadImage(url, mimeType, (FileListener<ImageElement>)listener);
 			break;
 		case Binary:
-			loadBinary(url, (AssetLoaderListener<Blob>)listener);
+			loadBinary(url, (FileListener<Blob>)listener);
 			break;
 		case Audio:
-			loadAudio(url, (AssetLoaderListener<Void>)listener);
+			loadAudio(url, (FileListener<Void>)listener);
 			break;
 		case Directory:
 			listener.onSuccess(null);
@@ -80,7 +71,7 @@ public class AssetDownloader {
 		}
 	}
 
-	public void loadText (String url, final AssetLoaderListener<String> listener) {
+	public void loadText (String url, final FileListener<String> listener) {
 		XMLHttpRequest request = XMLHttpRequest.create();
 		request.setOnReadyStateChange(new ReadyStateChangeHandler() {
 			@Override
@@ -100,7 +91,7 @@ public class AssetDownloader {
 		request.send();
 	}
 
-	public void loadBinary (final String url, final AssetLoaderListener<Blob> listener) {
+	public void loadBinary (final String url, final FileListener<Blob> listener) {
 		XMLHttpRequest request = XMLHttpRequest.create();
 		request.setOnReadyStateChange(new ReadyStateChangeHandler() {
 			@Override
@@ -121,9 +112,9 @@ public class AssetDownloader {
 		request.send();
 	}
 
-	public void loadAudio (String url, final AssetLoaderListener<Void> listener) {
+	public void loadAudio (String url, final FileListener<Void> listener) {
 		if (useBrowserCache) {
-			loadBinary(url, new AssetLoaderListener<Blob>() {
+			loadBinary(url, new FileListener<Blob>() {
 				@Override
 				public void onProgress (double amount) {
 					listener.onProgress(amount);
@@ -145,9 +136,9 @@ public class AssetDownloader {
 		}
 	}
 
-	public void loadImage (final String url, final String mimeType, final AssetLoaderListener<ImageElement> listener) {
+	public void loadImage (final String url, final String mimeType, final FileListener<ImageElement> listener) {
 		if (useBrowserCache || useInlineBase64) {
-			loadBinary(url, new AssetLoaderListener<Blob>() {
+			loadBinary(url, new FileListener<Blob>() {
 				@Override
 				public void onProgress (double amount) {
 					listener.onProgress(amount);
@@ -198,28 +189,26 @@ public class AssetDownloader {
 	}
 
 	static native void hookImgListener (ImageElement img, ImgEventListener h) /*-{
-		img
-				.addEventListener(
-						'load',
-						function(e) {
-							h.@org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
-						}, false);
-		img
-				.addEventListener(
-						'error',
-						function(e) {
-							h.@org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
-						}, false);
+		img.addEventListener(
+			'load',
+			function(e) {
+				h.@org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
+			}, false);
+		img.addEventListener(
+			'error',
+			function(e) {
+				h.@org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
+			}, false);
 	}-*/;
 
 	static native ImageElement createImage () /*-{
 		return new Image();
 	}-*/;
 
-	private native static void setOnProgress (XMLHttpRequest req, AssetLoaderListener listener) /*-{
+	private native static void setOnProgress (XMLHttpRequest req, FileListener listener) /*-{
 		var _this = this;
 		this.onprogress = $entry(function(evt) {
-			listener.@org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader.AssetLoaderListener::onProgress(D)(evt.loaded);
+			listener.@org.parallax3d.parallax.files.FileListener::onProgress(D)(evt.loaded);
 		});
 	}-*/;
 

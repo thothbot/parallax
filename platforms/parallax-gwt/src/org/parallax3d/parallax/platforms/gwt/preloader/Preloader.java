@@ -18,9 +18,9 @@ package org.parallax3d.parallax.platforms.gwt.preloader;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
@@ -112,7 +112,7 @@ public class Preloader {
 	public void preload (final String assetFileUrl, final PreloaderCallback callback) {
 		final AssetDownloader loader = new AssetDownloader();
 
-		loader.loadText(baseUrl + assetFileUrl, new AssetDownloader.AssetLoaderListener<String>() {
+		loader.loadText(baseUrl + assetFileUrl, new FileListener<String>() {
 			@Override
 			public void onProgress (double amount) {
 			}
@@ -150,7 +150,7 @@ public class Preloader {
 						continue;
 					}
 					
-					loader.load(baseUrl + asset.url, asset.type, asset.mimeType, new AssetDownloader.AssetLoaderListener<Object>() {
+					loader.load(baseUrl + asset.url, asset.type, asset.mimeType, new FileListener<Object>() {
 						@Override
 						public void onProgress (double amount) {
 							asset.loaded = (long) amount;
