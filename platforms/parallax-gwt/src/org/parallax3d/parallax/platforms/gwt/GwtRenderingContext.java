@@ -20,6 +20,7 @@ package org.parallax3d.parallax.platforms.gwt;
 
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
@@ -29,6 +30,7 @@ import org.parallax3d.parallax.system.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.input.InputHandler;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
+import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.system.gl.GL20;
 
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
      * The ID of the pending animation request.
      */
     private AnimationScheduler.AnimationHandle animationHandle;
+
+    Panel root;
 
     CanvasElement canvas;
     WebGLRenderingContext context;
@@ -65,6 +69,7 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
     GwtAppConfiguration config;
 
     public GwtRenderingContext(Panel root, GwtAppConfiguration config) throws ParallaxRuntimeException {
+        this.root = root;
         root.clear();
 
         Canvas canvasWidget = Canvas.createIfSupported();
@@ -102,6 +107,7 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
 
         input = new GwtInput( canvas );
 
+        addEventListeners();
     }
 
     @Override
@@ -156,12 +162,33 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
     private void mainLoop() {
 
         refresh();
-//        Log.error(getWidth(), lastWidth);
+
         if (getWidth() != lastWidth || getHeight() != lastHeight) {
-            this.renderer.setSize(lastWidth, lastHeight);
-            this.listener.onResize(this);
-            lastWidth = getWidth();
-            lastHeight = getHeight();
+
+            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                 @Override
+                 public void execute() {
+
+                     lastWidth = getWidth();
+                     lastHeight = getHeight();
+
+                     if(lastWidth > 0 && lastHeight > 0) {
+
+                         ViewportResizeBus.onViewportResize(lastWidth, lastHeight);
+
+                         GwtRenderingContext.this.canvas.setWidth(lastWidth);
+                         GwtRenderingContext.this.canvas.setHeight(lastHeight);
+                         GwtRenderingContext.this.renderer.setSize(lastWidth, lastHeight);
+                         GwtRenderingContext.this.listener.onResize(GwtRenderingContext.this);
+
+                     }
+                     else
+                     {
+
+                     }
+                 }
+            });
+
         }
 
         frameId++;
@@ -232,12 +259,12 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
 
     @Override
     public int getWidth() {
-        return canvas.getWidth();
+        return root.getOffsetWidth();
     }
 
     @Override
     public int getHeight() {
-        return canvas.getHeight();
+        return root.getOffsetHeight();
     }
 
     @Override
