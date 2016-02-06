@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-import org.parallax3d.parallax.Files.FileType;
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileType;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 

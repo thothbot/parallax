@@ -22,6 +22,7 @@ import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
+import org.parallax3d.parallax.files.FileType;
 import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
@@ -244,7 +245,7 @@ public class Preloader {
 		List<FileHandle> files = new ArrayList<FileHandle>();
 		for (String path : texts.keySet()) {
 			if (isChild(path, url)) {
-				files.add(new GwtFileHandle(this, path, Files.FileType.Internal));
+				files.add(new GwtFileHandle(this, path, FileType.Internal));
 			}
 		}
 		FileHandle[] list = new FileHandle[files.size()];
@@ -256,7 +257,7 @@ public class Preloader {
 		List<FileHandle> files = new ArrayList<FileHandle>();
 		for (String path : texts.keySet()) {
 			if (isChild(path, url) && filter.accept(new File(path))) {
-				files.add(new GwtFileHandle(this, path, Files.FileType.Internal));
+				files.add(new GwtFileHandle(this, path, FileType.Internal));
 			}
 		}
 		FileHandle[] list = new FileHandle[files.size()];
@@ -268,7 +269,7 @@ public class Preloader {
 		List<FileHandle> files = new ArrayList<FileHandle>();
 		for (String path : texts.keySet()) {
 			if (isChild(path, url) && filter.accept(new File(url), path.substring(url.length() + 1))) {
-				files.add(new GwtFileHandle(this, path, Files.FileType.Internal));
+				files.add(new GwtFileHandle(this, path, FileType.Internal));
 			}
 		}
 		FileHandle[] list = new FileHandle[files.size()];
@@ -280,7 +281,7 @@ public class Preloader {
 		List<FileHandle> files = new ArrayList<FileHandle>();
 		for (String path : texts.keySet()) {
 			if (isChild(path, url) && path.endsWith(suffix)) {
-				files.add(new GwtFileHandle(this, path, Files.FileType.Internal));
+				files.add(new GwtFileHandle(this, path, FileType.Internal));
 			}
 		}
 		FileHandle[] list = new FileHandle[files.size()];

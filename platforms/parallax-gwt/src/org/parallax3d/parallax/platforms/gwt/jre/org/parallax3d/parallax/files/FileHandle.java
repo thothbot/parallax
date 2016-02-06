@@ -16,7 +16,6 @@
 
 package org.parallax3d.parallax.files;
 
-import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.*;
@@ -42,7 +41,7 @@ public class FileHandle {
 		throw new ParallaxRuntimeException("Stub");
 	}
 
-	public Files.FileType type () {
+	public FileType type () {
 		throw new ParallaxRuntimeException("Stub");
 	}
 
