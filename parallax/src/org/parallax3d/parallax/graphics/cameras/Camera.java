@@ -19,8 +19,8 @@
 package org.parallax3d.parallax.graphics.cameras;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.events.ViewportResizeBus;
-import org.parallax3d.parallax.events.ViewportResizeListener;
+import org.parallax3d.parallax.system.ViewportResizeBus;
+import org.parallax3d.parallax.system.ViewportResizeListener;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;

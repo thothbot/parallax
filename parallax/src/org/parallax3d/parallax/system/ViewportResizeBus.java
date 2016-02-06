@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.events;
+package org.parallax3d.parallax.system;
 
 import java.lang.ref.WeakReference;
 import java.util.Iterator;

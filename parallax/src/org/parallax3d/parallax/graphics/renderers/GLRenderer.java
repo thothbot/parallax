@@ -25,7 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.events.ViewportResizeBus;
+import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;

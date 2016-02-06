@@ -29,7 +29,7 @@ import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.events.AnimationReadyListener;
+import org.parallax3d.parallax.system.AnimationReadyListener;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;

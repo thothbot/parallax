@@ -19,8 +19,8 @@
 package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.events.ViewportResizeBus;
-import org.parallax3d.parallax.events.ViewportResizeListener;
+import org.parallax3d.parallax.system.ViewportResizeBus;
+import org.parallax3d.parallax.system.ViewportResizeListener;
 import org.parallax3d.parallax.graphics.renderers.shaders.ParticleBasicShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;

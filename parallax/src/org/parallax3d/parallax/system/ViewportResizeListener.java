@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.events;
+package org.parallax3d.parallax.system;
 
 public interface ViewportResizeListener {
 

@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
 import org.parallax3d.parallax.*;
-import org.parallax3d.parallax.events.AnimationReadyListener;
+import org.parallax3d.parallax.system.AnimationReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.input.InputHandler;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
