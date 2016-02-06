@@ -101,7 +101,6 @@ public class Preloader {
 
 	public final String baseUrl;
 
-	
 	public Preloader (String newBaseURL) {
 		
 		baseUrl = newBaseURL;

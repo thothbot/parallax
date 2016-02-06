@@ -35,8 +35,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	GwtRenderingContext rendering;
 
-	Preloader preloader;
-
 	private static AgentInfo agentInfo;
 
 	public void setLogLevel (Level logLevel) {
@@ -65,7 +63,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 		addEventListeners();
 
-		preloader = new Preloader( GWT.getHostPageBaseURL() + "assets/" );
+		Preloader preloader = new Preloader( GWT.getHostPageBaseURL() + "assets/" );
 		App.files = new GwtFiles(preloader);
 
 		onInit();

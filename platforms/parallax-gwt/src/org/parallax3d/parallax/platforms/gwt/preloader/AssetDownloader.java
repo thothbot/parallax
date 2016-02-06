@@ -50,11 +50,11 @@ public class AssetDownloader {
 
 	public interface AssetLoaderListener<T> {
 
-		public void onProgress(double amount);
+		void onProgress(double amount);
 
-		public void onFailure();
+		void onFailure();
 
-		public void onSuccess(T result);
+		void onSuccess(T result);
 
 	}
 
