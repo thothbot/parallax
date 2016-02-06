@@ -122,7 +122,7 @@ public class FileHandle {
 		throw new ParallaxRuntimeException("Stub");
 	}
 
-	public FileHandle[] list (FileFilter filter) {
+	public FileHandle[] list (AssetFilter filter) {
 		throw new ParallaxRuntimeException("Stub");
 	}
 

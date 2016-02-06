@@ -14,13 +14,13 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.platforms.gwt.preloader;
+package org.parallax3d.parallax.platforms.gwt.generator;
 
 import com.google.gwt.core.ext.*;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
-import org.parallax3d.parallax.files.FileFilter;
-import org.parallax3d.parallax.files.DefaultFileFilter;
+import org.parallax3d.parallax.files.AssetFilter;
+import org.parallax3d.parallax.files.DefaultAssetFilter;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.File;
@@ -34,15 +34,15 @@ import java.util.List;
 import java.util.Map.Entry;
 
 /** Copies assets from the path specified in the modules parallax.assetpath configuration property to the war/ folder and generates the
- * assets.txt file. The type of a file is determined by an {@link FileFilter}, which is either created by instantiating the class
- * specified in the parallax.assetfilterclass property, or falling back to the {@link DefaultFileFilter}.
+ * assets.txt file. The type of a file is determined by an {@link AssetFilter}, which is either created by instantiating the class
+ * specified in the parallax.assetfilterclass property, or falling back to the {@link DefaultAssetFilter}.
  * @author mzechner */
 public class PreloaderBundleGenerator extends Generator {
 	private class Asset {
 		FileWrapper file;
-		FileFilter.AssetType type;
+		AssetFilter.AssetType type;
 
-		public Asset (FileWrapper file, FileFilter.AssetType type) {
+		public Asset (FileWrapper file, AssetFilter.AssetType type) {
 			this.file = file;
 			this.type = type;
 		}
@@ -56,7 +56,7 @@ public class PreloaderBundleGenerator extends Generator {
 		if ( assetOutputPath == null ){
 			assetOutputPath = "war/";
 		}
-		FileFilter assetFilter = getAssetFilter(context);
+		AssetFilter assetFilter = getAssetFilter(context);
 
 		FileWrapper source = new FileWrapper(assetPath);
 		if (!source.exists()) {
@@ -131,7 +131,7 @@ public class PreloaderBundleGenerator extends Generator {
 		return createDummyClass(logger, context);
 	}
 
-	private void copyFile (FileWrapper source, FileWrapper dest, FileFilter filter, ArrayList<Asset> assets) {
+	private void copyFile (FileWrapper source, FileWrapper dest, AssetFilter filter, ArrayList<Asset> assets) {
 		if (!filter.accept(dest.path(), false)) return;
 		try {
 			assets.add(new Asset(dest, filter.getType(dest.path())));
@@ -142,9 +142,9 @@ public class PreloaderBundleGenerator extends Generator {
 		}
 	}
 
-	private void copyDirectory (FileWrapper sourceDir, FileWrapper destDir, FileFilter filter, ArrayList<Asset> assets) {
+	private void copyDirectory (FileWrapper sourceDir, FileWrapper destDir, AssetFilter filter, ArrayList<Asset> assets) {
 		if (!filter.accept(destDir.path(), true)) return;
-		assets.add(new Asset(destDir, FileFilter.AssetType.Directory));
+		assets.add(new Asset(destDir, AssetFilter.AssetType.Directory));
 		destDir.mkdirs();
 		FileWrapper[] files = sourceDir.list();
 		for (int i = 0, n = files.length; i < n; i++) {
@@ -157,20 +157,20 @@ public class PreloaderBundleGenerator extends Generator {
 		}
 	}
 
-	private FileFilter getAssetFilter (GeneratorContext context) {
+	private AssetFilter getAssetFilter (GeneratorContext context) {
 		ConfigurationProperty assetFilterClassProperty = null;
 		try {
 			assetFilterClassProperty = context.getPropertyOracle().getConfigurationProperty("parallax.assetfilterclass");
 		} catch (BadPropertyValueException e) {
-			return new DefaultFileFilter();
+			return new DefaultAssetFilter();
 		}
 		if (assetFilterClassProperty.getValues().size() == 0) {
-			return new DefaultFileFilter();
+			return new DefaultAssetFilter();
 		}
 		String assetFilterClass = assetFilterClassProperty.getValues().get(0);
-		if (assetFilterClass == null) return new DefaultFileFilter();
+		if (assetFilterClass == null) return new DefaultAssetFilter();
 		try {
-			return (FileFilter)Class.forName(assetFilterClass).newInstance();
+			return (AssetFilter)Class.forName(assetFilterClass).newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException("Couldn't instantiate custom AssetFilter '" + assetFilterClass
 				+ "', make sure the class is public and has a public default constructor", e);

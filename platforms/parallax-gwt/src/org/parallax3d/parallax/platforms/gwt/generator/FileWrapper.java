@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.platforms.gwt.preloader;
+package org.parallax3d.parallax.platforms.gwt.generator;
 
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;

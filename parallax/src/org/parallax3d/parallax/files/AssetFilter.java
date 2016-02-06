@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.platforms.gwt.preloader;
+package org.parallax3d.parallax.files;
 
 /** Interface used by the PreloaderBundleGenerator to decide whether an asset found in the parallax.assetpath should be included in the
  * war/ folder or not. Also used to determine the type of an asset. Default implementation can be found in DefaultAssetFilter, and

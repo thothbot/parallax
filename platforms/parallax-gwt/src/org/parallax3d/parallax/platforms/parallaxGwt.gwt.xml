@@ -22,21 +22,18 @@
 	<super-source path="gwt/jre" />
 	<source path="gwt">
 		<exclude name="**/jre/**" />
-		<exclude name="**/PreloaderBundleGenerator.java"/>
-		<exclude name="**/SourceBundleFactoryGenerator.java"/>
-		<exclude name="**/SourceTextResourceGenerator.java"/>
-		<exclude name="**/FileWrapper.java"/>
+		<exclude name="**/generator/**" />
 	</source>
 
 	<define-configuration-property name="parallax.assetpath" is-multi-valued="false"/>
 	<define-configuration-property name="parallax.assetfilterclass" is-multi-valued="false"/>
 	<define-configuration-property name="parallax.assetoutputpath" is-multi-valued="false"/>
 
-	<generate-with class="org.parallax3d.parallax.platforms.gwt.preloader.PreloaderBundleGenerator">
+	<generate-with class="org.parallax3d.parallax.platforms.gwt.generator.PreloaderBundleGenerator">
 		<when-type-assignable class="org.parallax3d.parallax.platforms.gwt.preloader.PreloaderBundle"/>
 	</generate-with>
 
-	<generate-with class="org.parallax3d.parallax.platforms.gwt.preloader.SourceBundleFactoryGenerator">
+	<generate-with class="org.parallax3d.parallax.platforms.gwt.generator.SourceBundleFactoryGenerator">
 		<when-type-assignable class="org.parallax3d.parallax.system.SourceBundleFactory"/>
 	</generate-with>
 
