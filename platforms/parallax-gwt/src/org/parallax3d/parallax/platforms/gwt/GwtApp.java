@@ -65,8 +65,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 		addEventListeners();
 
-		final Preloader.PreloaderCallback callback = getPreloaderCallback();
-		preloader = createPreloader();
+		preloader = new Preloader( GWT.getHostPageBaseURL() + "assets/" );
 		App.files = new GwtFiles(preloader);
 
 		onInit();
@@ -74,43 +73,14 @@ public abstract class GwtApp extends App implements EntryPoint {
 		preloader.preload("assets.txt", new Preloader.PreloaderCallback() {
 			@Override
 			public void error(String file) {
-				callback.error(file);
+
 			}
 
 			@Override
 			public void update(Preloader.PreloaderState state) {
-				callback.update(state);
-				if (state.hasEnded()) {
 
-				}
 			}
 		});
-	}
-
-	public String getPreloaderBaseURL()
-	{
-		return GWT.getHostPageBaseURL() + "assets/";
-	}
-
-	public Preloader createPreloader() {
-		return new Preloader(getPreloaderBaseURL());
-	}
-
-	public Preloader.PreloaderCallback getPreloaderCallback () {
-
-		return new Preloader.PreloaderCallback() {
-
-			@Override
-			public void error (String file) {
-				Log.error("Preloader: error: " + file);
-			}
-
-			@Override
-			public void update (Preloader.PreloaderState state) {
-
-			}
-
-		};
 	}
 
 	public void setRendering(GwtRenderingContext rendering) {
