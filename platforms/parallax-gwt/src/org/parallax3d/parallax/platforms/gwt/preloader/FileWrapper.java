@@ -42,19 +42,6 @@ public class FileWrapper {
 		this.type = FileType.Absolute;
 	}
 
-	/** Creates a new absolute FileHandle for the {@link File}. Use this for tools on the desktop that don't need any of the
-	 * backends. Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
-	 * @param file the file. */
-	public FileWrapper (File file) {
-		this.file = file;
-		this.type = FileType.Absolute;
-	}
-
-	protected FileWrapper (String fileName, FileType type) {
-		this.type = type;
-		file = new File(fileName);
-	}
-
 	protected FileWrapper (File file, FileType type) {
 		this.file = file;
 		this.type = type;
@@ -66,20 +53,6 @@ public class FileWrapper {
 
 	public String name () {
 		return file.getName();
-	}
-
-	public String extension () {
-		String name = file.getName();
-		int dotIndex = name.lastIndexOf('.');
-		if (dotIndex == -1) return "";
-		return name.substring(dotIndex + 1);
-	}
-
-	public String nameWithoutExtension () {
-		String name = file.getName();
-		int dotIndex = name.lastIndexOf('.');
-		if (dotIndex == -1) return name;
-		return name.substring(0, dotIndex);
 	}
 
 	public FileType type () {
@@ -109,138 +82,6 @@ public class FileWrapper {
 				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
 			throw new ParallaxRuntimeException("Error reading file: " + file + " (" + type + ")", ex);
 		}
-	}
-
-	/** Returns a buffered stream for reading this file as bytes.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
-	public BufferedInputStream read (int bufferSize) {
-		return new BufferedInputStream(read(), bufferSize);
-	}
-
-	/** Returns a reader for reading this file as characters.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
-	public Reader reader () {
-		return new InputStreamReader(read());
-	}
-
-	/** Returns a reader for reading this file as characters.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
-	public Reader reader (String charset) {
-		try {
-			return new InputStreamReader(read(), charset);
-		} catch (UnsupportedEncodingException ex) {
-			throw new ParallaxRuntimeException("Error reading file: " + this, ex);
-		}
-	}
-
-	/** Returns a buffered reader for reading this file as characters.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
-	public BufferedReader reader (int bufferSize) {
-		return new BufferedReader(new InputStreamReader(read()), bufferSize);
-	}
-
-	/** Returns a buffered reader for reading this file as characters.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
-	public BufferedReader reader (int bufferSize, String charset) {
-		try {
-			return new BufferedReader(new InputStreamReader(read(), charset), bufferSize);
-		} catch (UnsupportedEncodingException ex) {
-			throw new ParallaxRuntimeException("Error reading file: " + this, ex);
-		}
-	}
-
-	/** Reads the entire file into a string using the platform's default charset.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
-	public String readString () {
-		return readString(null);
-	}
-
-	/** Reads the entire file into a string using the specified charset.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
-	public String readString (String charset) {
-		int fileLength = (int)length();
-		if (fileLength == 0) fileLength = 512;
-		StringBuilder output = new StringBuilder(fileLength);
-		InputStreamReader reader = null;
-		try {
-			if (charset == null)
-				reader = new InputStreamReader(read());
-			else
-				reader = new InputStreamReader(read(), charset);
-			char[] buffer = new char[256];
-			while (true) {
-				int length = reader.read(buffer);
-				if (length == -1) break;
-				output.append(buffer, 0, length);
-			}
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error reading layout file: " + this, ex);
-		} finally {
-			StreamUtils.closeQuietly(reader);
-		}
-		return output.toString();
-	}
-
-	/** Reads the entire file into a byte array.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
-	public byte[] readBytes () {
-		int length = (int)length();
-		if (length == 0) length = 512;
-		byte[] buffer = new byte[length];
-		int position = 0;
-		InputStream input = read();
-		try {
-			while (true) {
-				int count = input.read(buffer, position, buffer.length - position);
-				if (count == -1) break;
-				position += count;
-				if (position == buffer.length) {
-					// Grow buffer.
-					byte[] newBuffer = new byte[buffer.length * 2];
-					System.arraycopy(buffer, 0, newBuffer, 0, position);
-					buffer = newBuffer;
-				}
-			}
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error reading file: " + this, ex);
-		} finally {
-			try {
-				if (input != null) input.close();
-			} catch (IOException ignored) {
-			}
-		}
-		if (position < buffer.length) {
-			// Shrink buffer.
-			byte[] newBuffer = new byte[position];
-			System.arraycopy(buffer, 0, newBuffer, 0, position);
-			buffer = newBuffer;
-		}
-		return buffer;
-	}
-
-	/** Reads the entire file into the byte array. The byte array must be big enough to hold the file's data.
-	 * @param bytes the array to load the file into
-	 * @param offset the offset to start writing bytes
-	 * @param size the number of bytes to read, see {@link #length()}
-	 * @return the number of read bytes */
-	public int readBytes (byte[] bytes, int offset, int size) {
-		InputStream input = read();
-		int position = 0;
-		try {
-			while (true) {
-				int count = input.read(bytes, offset + position, size - position);
-				if (count <= 0) break;
-				position += count;
-			}
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error reading file: " + this, ex);
-		} finally {
-			try {
-				if (input != null) input.close();
-			} catch (IOException ignored) {
-			}
-		}
-		return position - offset;
 	}
 
 	/** Returns a stream for writing to this file. Parent directories will be created if necessary.
@@ -290,14 +131,6 @@ public class FileWrapper {
 
 	}
 
-	/** Returns a writer for writing to this file using the default charset. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throw GdxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file, or if it could not be written. */
-	public Writer writer (boolean append) {
-		return writer(append, null);
-	}
-
 	/** Returns a writer for writing to this file. Parent directories will be created if necessary.
 	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
 	 * @param charset May be null to use the default charset.
@@ -345,42 +178,6 @@ public class FileWrapper {
 		}
 	}
 
-	/** Writes the specified bytes to the file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throw GdxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file, or if it could not be written. */
-	public void writeBytes (byte[] bytes, boolean append) {
-		OutputStream output = write(append);
-		try {
-			output.write(bytes);
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
-		} finally {
-			try {
-				output.close();
-			} catch (IOException ignored) {
-			}
-		}
-	}
-
-	/** Writes the specified bytes to the file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throw GdxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file, or if it could not be written. */
-	public void writeBytes (byte[] bytes, int offset, int length, boolean append) {
-		OutputStream output = write(append);
-		try {
-			output.write(bytes, offset, length);
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
-		} finally {
-			try {
-				output.close();
-			} catch (IOException ignored) {
-			}
-		}
-	}
-
 	/** Returns the paths to the children of this directory. Returns an empty list if this file handle represents a file and not a
 	 * directory. On the desktop, an {@link FileType#Internal} handle to a directory on the classpath will return a zero length
 	 * array.
@@ -392,30 +189,6 @@ public class FileWrapper {
 		FileWrapper[] handles = new FileWrapper[relativePaths.length];
 		for (int i = 0, n = relativePaths.length; i < n; i++)
 			handles[i] = child(relativePaths[i]);
-		return handles;
-	}
-
-	/** Returns the paths to the children of this directory with the specified suffix. Returns an empty list if this file handle
-	 * represents a file and not a directory. On the desktop, an {@link FileType#Internal} handle to a directory on the classpath
-	 * will return a zero length array.
-	 * @throw GdxRuntimeException if this file is an {@link FileType#Classpath} file. */
-	public FileWrapper[] list (String suffix) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot list a classpath directory: " + file);
-		String[] relativePaths = file().list();
-		if (relativePaths == null) return new FileWrapper[0];
-		FileWrapper[] handles = new FileWrapper[relativePaths.length];
-		int count = 0;
-		for (int i = 0, n = relativePaths.length; i < n; i++) {
-			String path = relativePaths[i];
-			if (!path.endsWith(suffix)) continue;
-			handles[count] = child(path);
-			count++;
-		}
-		if (count < relativePaths.length) {
-			FileWrapper[] newHandles = new FileWrapper[count];
-			System.arraycopy(handles, 0, newHandles, 0, count);
-			handles = newHandles;
-		}
 		return handles;
 	}
 
@@ -523,34 +296,8 @@ public class FileWrapper {
 		return file().length();
 	}
 
-	/** Returns the last modified time in milliseconds for this file. Zero is returned if the file doesn't exist. Zero is returned
-	 * for {@link FileType#Classpath} files. On Android, zero is returned for {@link FileType#Internal} files. On the desktop, zero
-	 * is returned for {@link FileType#Internal} files on the classpath. */
-	public long lastModified () {
-		return file().lastModified();
-	}
-
 	public String toString () {
 		return file.getPath();
-	}
-
-	static public FileWrapper tempFile (String prefix) {
-		try {
-			return new FileWrapper(File.createTempFile(prefix, null));
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Unable to create temp file.", ex);
-		}
-	}
-
-	static public FileWrapper tempDirectory (String prefix) {
-		try {
-			File file = File.createTempFile(prefix, null);
-			if (!file.delete()) throw new IOException("Unable to delete temp file: " + file);
-			if (!file.mkdir()) throw new IOException("Unable to create temp directory: " + file);
-			return new FileWrapper(file);
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Unable to create temp file.", ex);
-		}
 	}
 
 	static private boolean deleteDirectory (File file) {
