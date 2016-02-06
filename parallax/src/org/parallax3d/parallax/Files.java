@@ -19,6 +19,7 @@
 package org.parallax3d.parallax;
 
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.files.FileType;
 
 /** Provides standard access to the filesystem, classpath, Android SD card, and Android assets directory.
@@ -29,35 +30,47 @@ public interface Files {
 	/** Returns a handle representing a file or directory.
 	 * @param type Determines how the path is resolved.
 	 * @see FileType */
-	public FileHandle getFileHandle(String path, FileType type);
+	FileHandle getFileHandle(String path, FileType type);
+
+	FileHandle getFileHandle(String path, FileType type, FileListener<?> listener);
 
 	/** Convenience method that returns a {@link FileType#Classpath} file handle. */
-	public FileHandle classpath(String path);
+	FileHandle classpath(String path);
+
+	FileHandle classpath(String path, FileListener<?> listener);
 
 	/** Convenience method that returns a {@link FileType#Internal} file handle. */
-	public FileHandle internal(String path);
+	FileHandle internal(String path);
+
+	FileHandle internal(String path, FileListener<?> listener);
 
 	/** Convenience method that returns a {@link FileType#External} file handle. */
-	public FileHandle external(String path);
+	FileHandle external(String path);
+
+	FileHandle external(String path, FileListener<?> listener);
 
 	/** Convenience method that returns a {@link FileType#Absolute} file handle. */
-	public FileHandle absolute(String path);
+	FileHandle absolute(String path);
+
+	FileHandle absolute(String path, FileListener<?> listener);
 
 	/** Convenience method that returns a {@link FileType#Local} file handle. */
-	public FileHandle local(String path);
+	FileHandle local(String path);
+
+	FileHandle local(String path, FileListener<?> listener);
 
 	/** Returns the external storage path directory. This is the SD card on Android and the home directory of the current user on
 	 * the desktop. */
-	public String getExternalStoragePath();
+	String getExternalStoragePath();
 
 	/** Returns true if the external storage is ready for file IO. Eg, on Android, the SD card is not available when mounted for use
 	 * with a PC. */
-	public boolean isExternalStorageAvailable();
+	boolean isExternalStorageAvailable();
 
 	/** Returns the local storage path directory. This is the private files directory on Android and the directory of the jar on the
 	 * desktop. */
-	public String getLocalStoragePath();
+	String getLocalStoragePath();
 
 	/** Returns true if the local storage is ready for file IO. */
-	public boolean isLocalStorageAvailable();
+	boolean isLocalStorageAvailable();
 }

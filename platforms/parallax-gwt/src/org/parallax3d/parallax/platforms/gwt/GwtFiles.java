@@ -21,6 +21,7 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.storage.client.Storage;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.files.FileType;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
@@ -37,32 +38,62 @@ public class GwtFiles implements Files {
 
     @Override
     public FileHandle getFileHandle (String path, FileType type) {
+        return getFileHandle(path, type, null);
+    }
+
+    @Override
+    public FileHandle getFileHandle(String path, FileType type, FileListener<?> listener) {
         if (type != FileType.Internal) throw new ParallaxRuntimeException("FileType '" + type + "' not supported in GWT backend");
         return new GwtFileHandle(preloader, path, type);
     }
 
     @Override
     public FileHandle classpath (String path) {
+        return classpath(path, null);
+    }
+
+    @Override
+    public FileHandle classpath(String path, FileListener<?> listener) {
         return new GwtFileHandle(preloader, path, FileType.Classpath);
     }
 
     @Override
     public FileHandle internal (String path) {
+        return internal(path, null);
+    }
+
+    @Override
+    public FileHandle internal(String path, FileListener<?> listener) {
         return new GwtFileHandle(preloader, path, FileType.Internal);
     }
 
     @Override
     public FileHandle external (String path) {
+        return external(path, null);
+    }
+
+    @Override
+    public FileHandle external(String path, FileListener<?> listener) {
         throw new ParallaxRuntimeException("Not supported in GWT backend");
     }
 
     @Override
     public FileHandle absolute (String path) {
+        return absolute(path, null);
+    }
+
+    @Override
+    public FileHandle absolute(String path, FileListener<?> listener) {
         throw new ParallaxRuntimeException("Not supported in GWT backend");
     }
 
     @Override
     public FileHandle local (String path) {
+        return local(path, null);
+    }
+
+    @Override
+    public FileHandle local(String path, FileListener<?> listener) {
         throw new ParallaxRuntimeException("Not supported in GWT backend");
     }
 
