@@ -18,6 +18,9 @@
 
 package org.parallax3d.parallax.platforms.gwt.widgets.debugger;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
@@ -30,6 +33,15 @@ import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
  */
 public class Debugger extends FlowPanel
 {
+	public interface Resources extends ClientBundle
+	{
+		Resources INSTANCE = GWT.create(Resources.class);
+
+		@Source("debugger.css")
+		@CssResource.NotStrict
+		CssResource css();
+	}
+
 	private GLRendererInfo info;
 	
 	VisualGraph graph;
@@ -41,6 +53,9 @@ public class Debugger extends FlowPanel
 	public Debugger(GLRendererInfo info)
 	{
 		super();
+		// Loading specific styles
+		Resources.INSTANCE.css().ensureInjected();
+
 		this.setStyleName("debug-panel");
 		this.info = info;
 		

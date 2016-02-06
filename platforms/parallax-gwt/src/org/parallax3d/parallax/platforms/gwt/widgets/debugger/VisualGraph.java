@@ -24,7 +24,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.ui.FocusWidget;
-import org.parallax3d.parallax.platforms.gwt.resources.CoreResources;
 
 public class VisualGraph extends FocusWidget implements MouseDownHandler
 {
@@ -38,8 +37,6 @@ public class VisualGraph extends FocusWidget implements MouseDownHandler
 		container.setClassName("debugger-graph-container");
 		setElement(container);
 		
-		// Loading specific styles
-		CoreResources.INSTANCE.debuggerCss().ensureInjected();
 		addMouseDownHandler(this);
 		
 		visualGraphFps = new VisualGraphFps();
