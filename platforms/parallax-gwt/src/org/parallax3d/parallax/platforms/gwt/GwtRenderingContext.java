@@ -228,7 +228,7 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
     private native void addEventListeners () /*-{
         var self = this;
         $doc.addEventListener('visibilitychange', function (e) {
-            self.@org.parallax3d.parallax.platforms.gwt.GwtApp::onVisibilityChange(Z)($doc['hidden'] !== true);
+            self.@org.parallax3d.parallax.platforms.gwt.GwtRenderingContext::onVisibilityChange(Z)($doc['hidden'] !== true);
         });
     }-*/;
 
