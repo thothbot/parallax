@@ -156,7 +156,8 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
     private void mainLoop() {
 
         refresh();
-        if (renderer.getAbsoluteWidth() != lastWidth || renderer.getAbsoluteHeight() != lastHeight) {
+//        Log.error(getWidth(), lastWidth);
+        if (getWidth() != lastWidth || getHeight() != lastHeight) {
             this.renderer.setSize(lastWidth, lastHeight);
             this.listener.onResize(this);
             lastWidth = getWidth();
@@ -188,6 +189,21 @@ public class GwtRenderingContext implements RenderingContext, AnimationScheduler
     @Override
     public boolean isRun() {
         return (this.animationHandle != null);
+    }
+
+    private native void addEventListeners () /*-{
+        var self = this;
+        $doc.addEventListener('visibilitychange', function (e) {
+            self.@org.parallax3d.parallax.platforms.gwt.GwtApp::onVisibilityChange(Z)($doc['hidden'] !== true);
+        });
+    }-*/;
+
+    private void onVisibilityChange (boolean visible) {
+        if (visible) {
+            run();
+        } else {
+            stop();
+        }
     }
 
     @Override
