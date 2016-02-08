@@ -61,27 +61,30 @@ public class DataTexture extends Texture
 		return data;
 	}
 
-	public void setData(Uint8Array data) {
+	public DataTexture setData(Uint8Array data) {
 		this.data = data;
+		return this;
 	}
 
 	public int getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public DataTexture setWidth(int width) {
 		this.width = width;
+		return this;
 	}
 
 	public int getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public DataTexture setHeight(int height) {
 		this.height = height;
+		return this;
 	}
 
-	public void generateDataTexture( Color color )
+	public DataTexture generateDataTexture( Color color )
 	{
 		int size = width * height;
 		Uint8Array data = Uint8Array.create(3 * size);
@@ -101,5 +104,7 @@ public class DataTexture extends Texture
 		setData( data );
 		setFormat( PixelFormat.RGB );
 		setNeedsUpdate( true );
+
+		return this;
 	}
 }

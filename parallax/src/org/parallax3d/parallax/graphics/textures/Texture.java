@@ -43,7 +43,7 @@ public class Texture
 		MIX(1); // MixOperation
 
 		private final int value;
-		private OPERATIONS(int value) { this.value = value; }
+		OPERATIONS(int value) { this.value = value; }
 		public int getValue() { return value; }
 	};
 

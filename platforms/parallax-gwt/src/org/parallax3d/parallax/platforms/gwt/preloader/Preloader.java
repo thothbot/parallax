@@ -1,6 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
- * Base on libgdx Preloader.java file
+ * Based on libgdx Preloader.java file
  *
  * This file is part of Parallax project.
  *

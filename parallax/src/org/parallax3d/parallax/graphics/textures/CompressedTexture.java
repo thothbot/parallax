@@ -49,16 +49,18 @@ public class CompressedTexture extends Texture
 		return compressedFormat;
 	}
 
-	public void setCompressedFormat(int compressedFormat) {
+	public CompressedTexture setCompressedFormat(int compressedFormat) {
 		this.compressedFormat = compressedFormat;
+		return this;
 	}
 
 	public List<DataTexture> getMipmaps() {
 		return mipmaps;
 	}
 
-	public void setMipmaps(List<DataTexture> mipmaps) {
+	public CompressedTexture setMipmaps(List<DataTexture> mipmaps) {
 		this.mipmaps = mipmaps;
+		return this;
 	}
 
 	/**
