@@ -37,7 +37,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
 @ThreejsObject("THREE.Texture")
 public class Texture
 {
-	public static enum OPERATIONS
+	public enum OPERATIONS
 	{
 		MULTIPLY(0), // MultiplyOperation
 		MIX(1); // MixOperation
@@ -50,7 +50,7 @@ public class Texture
 	/**
 	 * Mapping modes
 	 */
-	public static enum MAPPING_MODE
+	public enum MAPPING_MODE
 	{
 		UV,
 
@@ -103,7 +103,7 @@ public class Texture
 	}
 
 	public Texture (String internalPath) {
-		this(App.files.internal(internalPath));
+		this( App.files.internal(internalPath) );
 	}
 
 	public Texture (FileHandle file)
@@ -180,8 +180,10 @@ public class Texture
 	/**
 	 * Sets the @{link Texture.MAPPING_MODE} value.
 	 */
-	public void setMapping(Texture.MAPPING_MODE mapping) {
+	public Texture setMapping(Texture.MAPPING_MODE mapping) {
+
 		this.mapping = mapping;
+		return this;
 	}
 
 	/**
@@ -189,8 +191,9 @@ public class Texture
 	 *
 	 * @param wrapS the wrap parameter
 	 */
-	public void setWrapS(TextureWrapMode wrapS)	{
+	public Texture setWrapS(TextureWrapMode wrapS)	{
 		this.wrapS = wrapS;
+		return this;
 	}
 
 	/**
@@ -207,8 +210,9 @@ public class Texture
 	 *
 	 * @param wrapT the wrap parameter
 	 */
-	public void setWrapT(TextureWrapMode wrapT) {
+	public Texture setWrapT(TextureWrapMode wrapT) {
 		this.wrapT = wrapT;
+		return this;
 	}
 
 	/**
@@ -232,8 +236,9 @@ public class Texture
 	/**
 	 * Sets the texture magnification function.
 	 */
-	public void setMagFilter(TextureMagFilter magFilter) {
+	public Texture setMagFilter(TextureMagFilter magFilter) {
 		this.magFilter = magFilter;
+		return this;
 	}
 
 	/**
@@ -248,8 +253,9 @@ public class Texture
 	/**
 	 * Sets the texture minifying function.
 	 */
-	public void setMinFilter(TextureMinFilter minFilter) {
+	public Texture setMinFilter(TextureMinFilter minFilter) {
 		this.minFilter = minFilter;
+		return this;
 	}
 
 	/**
@@ -262,8 +268,9 @@ public class Texture
 	/**
 	 * Sets flag to updated the texture.
 	 */
-	public void setNeedsUpdate(Boolean needsUpdate) {
+	public Texture setNeedsUpdate(Boolean needsUpdate) {
 		this.isNeedsUpdate = needsUpdate;
+		return this;
 	}
 
 	/**
@@ -278,8 +285,9 @@ public class Texture
 	/**
 	 * Sets texture media element.
 	 */
-	public void setImage(TextureData image) {
+	public Texture setImage(TextureData image) {
 		this.image = image;
+		return this;
 	}
 
 	/**
@@ -296,8 +304,9 @@ public class Texture
 	 *
 	 * @param offset the offset vector.
 	 */
-	public void setOffset(Vector2 offset) {
+	public Texture setOffset(Vector2 offset) {
 		this.offset = offset;
+		return this;
 	}
 
 	/**
@@ -314,8 +323,9 @@ public class Texture
 	 *
 	 * @param repeat the repeat vector.
 	 */
-	public void setRepeat(Vector2 repeat) {
+	public Texture setRepeat(Vector2 repeat) {
 		this.repeat = repeat;
+		return this;
 	}
 
 	/**
@@ -332,8 +342,9 @@ public class Texture
 	 *
 	 * @param format the {@link PixelFormat} value.
 	 */
-	public void setFormat(PixelFormat format) {
+	public Texture setFormat(PixelFormat format) {
 		this.format = format;
+		return this;
 	}
 
 	/**
@@ -350,8 +361,9 @@ public class Texture
 	 *
 	 * @param type the {@link PixelType} value.
 	 */
-	public void setType(PixelType type) {
+	public Texture setType(PixelType type) {
 		this.type = type;
+		return this;
 	}
 
 	/**
@@ -364,8 +376,9 @@ public class Texture
 	/**
 	 * Sets generate Mipmaps flag.
 	 */
-	public void setGenerateMipmaps(boolean generateMipmaps) {
+	public Texture setGenerateMipmaps(boolean generateMipmaps) {
 		this.isGenerateMipmaps = generateMipmaps;
+		return this;
 	}
 
 	/**
@@ -383,47 +396,52 @@ public class Texture
 	 * Method of enhancing the image quality of texture on surfaces
 	 * that are at oblique viewing angles.
 	 */
-	public void setAnisotropy(int anisotropy) {
+	public Texture setAnisotropy(int anisotropy) {
 		this.anisotropy = anisotropy;
+		return this;
 	}
 
 	/**
 	 * Sets premultiply alpha flag.
 	 */
-	public void setPremultiplyAlpha(boolean premultiplyAlpha) {
+	public Texture setPremultiplyAlpha(boolean premultiplyAlpha) {
 		this.isPremultiplyAlpha = premultiplyAlpha;
+		return this;
 	}
 
 	public boolean isFlipY() {
 		return this.isFlipY;
 	}
 
-	public void setFlipY(boolean isFlipY) {
+	public Texture setFlipY(boolean isFlipY) {
 		this.isFlipY = isFlipY;
+		return this;
 	}
 
 	public int getUnpackAlignment() {
 		return unpackAlignment;
 	}
 
-	public void setUnpackAlignment(int unpackAlignment) {
+	public Texture setUnpackAlignment(int unpackAlignment) {
 		this.unpackAlignment = unpackAlignment;
+		return this;
 	}
 
 	public Integer getWebGlTexture() {
 		return webglTexture;
 	}
 
-	public void setWebGlTexture(Integer webglTexture) {
+	public Texture setWebGlTexture(Integer webglTexture) {
 		this.webglTexture = webglTexture;
+		return this;
 	}
 
-	public void setTextureParameters ( GL20 gl, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
+	public Texture setTextureParameters ( GL20 gl, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
 	{
-		setTextureParameters( gl, 0, textureType, isImagePowerOfTwo);
+		return setTextureParameters( gl, 0, textureType, isImagePowerOfTwo);
 	}
 
-	public void setTextureParameters ( GL20 gl, int maxAnisotropy, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
+	public Texture setTextureParameters ( GL20 gl, int maxAnisotropy, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
 	{
 		if ( isImagePowerOfTwo )
 		{
@@ -448,6 +466,7 @@ public class Texture
 				this.cache_oldAnisotropy = this.anisotropy;
 			}
 		}
+		return this;
 	}
 
 	/**

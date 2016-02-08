@@ -44,7 +44,7 @@ public class GwtFiles implements Files {
     @Override
     public FileHandle getFileHandle(String path, FileType type, FileListener<?> listener) {
         if (type != FileType.Internal) throw new ParallaxRuntimeException("FileType '" + type + "' not supported in GWT backend");
-        return new GwtFileHandle(preloader, path, type);
+        return new GwtFileHandle(preloader, path, type, listener);
     }
 
     @Override
