@@ -23,8 +23,10 @@ import com.google.gwt.typedarrays.shared.TypedArrays;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.FileListener;
+import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 public class AssetDownloader {
@@ -126,6 +128,12 @@ public class AssetDownloader {
 		} else {
 			listener.onSuccess(null);
 		}
+	}
+
+	public void loadImage (GwtFileHandle file, final FileListener<ImageElement> listener) {
+//		Log.error(file.path());
+//		Log.error( file.preloader.images);
+//		loadImage(file.path(), file.preloader.images.get(file.path()).mimeType, listener);
 	}
 
 	public void loadImage (final String url, final String mimeType, final FileListener<ImageElement> listener) {

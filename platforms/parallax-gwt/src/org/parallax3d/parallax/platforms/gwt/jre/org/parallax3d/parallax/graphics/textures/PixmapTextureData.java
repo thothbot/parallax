@@ -23,8 +23,11 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.graphics.textures.TextureData;
+import org.parallax3d.parallax.files.FileListener;
+import org.parallax3d.parallax.files.FileListenerSuccess;
+import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;
 import org.parallax3d.parallax.platforms.gwt.GwtGL20;
+import org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.PixelType;
@@ -33,8 +36,28 @@ public class PixmapTextureData implements TextureData {
 
     private Element image;
 
-    public PixmapTextureData(FileHandle file) {
+    public PixmapTextureData(final FileHandle file, final FileListenerSuccess listener) {
+
         image = new Image(file.path()).getElement();
+
+        final AssetDownloader loader = new AssetDownloader();
+        loader.loadImage((GwtFileHandle) file, new FileListener<ImageElement>() {
+            @Override
+            public void onSuccess(ImageElement result) {
+                Log.info("Loaded texture: " + file.path());
+                listener.onSuccess(result);
+            }
+
+            @Override
+            public void onProgress(double amount) {
+
+            }
+
+            @Override
+            public void onFailure() {
+                Log.error("An error occurred while loading texture: " + file.path());
+            }
+        });
     }
 
     @Override

@@ -21,6 +21,7 @@ import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import java.io.*;
 
 public class FileHandle {
+
 	public String path () {
 		throw new ParallaxRuntimeException("Stub");
 	}

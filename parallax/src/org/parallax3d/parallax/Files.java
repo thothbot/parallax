@@ -32,32 +32,20 @@ public interface Files {
 	 * @see FileType */
 	FileHandle getFileHandle(String path, FileType type);
 
-	FileHandle getFileHandle(String path, FileType type, FileListener<?> listener);
-
 	/** Convenience method that returns a {@link FileType#Classpath} file handle. */
 	FileHandle classpath(String path);
-
-	FileHandle classpath(String path, FileListener<?> listener);
 
 	/** Convenience method that returns a {@link FileType#Internal} file handle. */
 	FileHandle internal(String path);
 
-	FileHandle internal(String path, FileListener<?> listener);
-
 	/** Convenience method that returns a {@link FileType#External} file handle. */
 	FileHandle external(String path);
-
-	FileHandle external(String path, FileListener<?> listener);
 
 	/** Convenience method that returns a {@link FileType#Absolute} file handle. */
 	FileHandle absolute(String path);
 
-	FileHandle absolute(String path, FileListener<?> listener);
-
 	/** Convenience method that returns a {@link FileType#Local} file handle. */
 	FileHandle local(String path);
-
-	FileHandle local(String path, FileListener<?> listener);
 
 	/** Returns the external storage path directory. This is the SD card on Android and the home directory of the current user on
 	 * the desktop. */

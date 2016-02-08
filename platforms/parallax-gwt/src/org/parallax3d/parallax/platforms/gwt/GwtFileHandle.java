@@ -32,10 +32,6 @@ public class GwtFileHandle extends FileHandle {
     private final FileType type;
 
     public GwtFileHandle(Preloader preloader, String fileName, FileType type) {
-        this(preloader, fileName, type, null);
-    }
-
-    public GwtFileHandle(Preloader preloader, String fileName, FileType type, FileListener<?> listener) {
         if (type != FileType.Internal && type != FileType.Classpath)
             throw new ParallaxRuntimeException("FileType '" + type + "' Not supported in GWT backend");
         this.preloader = preloader;

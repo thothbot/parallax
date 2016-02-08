@@ -20,6 +20,8 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
+import org.parallax3d.parallax.files.FileListenerSuccess;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
@@ -103,12 +105,16 @@ public class Texture
 	}
 
 	public Texture (String internalPath) {
-		this( App.files.internal(internalPath) );
+		this( App.files.internal(internalPath), null );
 	}
 
-	public Texture (FileHandle file)
+	public Texture (String internalPath, final FileListenerSuccess<?> listener) {
+		this( App.files.internal(internalPath), listener );
+	}
+
+	public Texture (FileHandle file, final FileListenerSuccess<?> listener)
 	{
-		this( new PixmapTextureData(file));
+		this( new PixmapTextureData(file, listener));
 	}
 
 	/**
@@ -161,6 +167,8 @@ public class Texture
 		this.id = Texture.TextureCount++;
 		this.offset = new Vector2(0, 0);
 		this.repeat = new Vector2(1, 1);
+
+		this.anisotropy = anisotropy;
 	}
 
 	/**
@@ -181,7 +189,6 @@ public class Texture
 	 * Sets the @{link Texture.MAPPING_MODE} value.
 	 */
 	public Texture setMapping(Texture.MAPPING_MODE mapping) {
-
 		this.mapping = mapping;
 		return this;
 	}

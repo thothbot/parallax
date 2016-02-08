@@ -64,19 +64,20 @@ public class Preloader {
 
 	public final String baseUrl;
 
-	public Preloader (String newBaseURL, String assetFileUrl) {
+	public interface PreloaderCallback {
+
+		void ready(boolean success);
+
+	}
+
+	public Preloader (String newBaseURL, final String assetFileUrl, final PreloaderCallback callback) {
 		
 		baseUrl = newBaseURL;
 	
 		// trigger copying of assets and creation of assets.txt
 		GWT.create(PreloaderBundle.class);
 
-		preload( assetFileUrl );
-	}
-
-	public void preload ( final String assetFileUrl ) {
 		final AssetDownloader loader = new AssetDownloader();
-
 		loader.loadText(baseUrl + assetFileUrl, new FileListener<String>() {
 			@Override
 			public void onProgress (double amount) {
@@ -84,6 +85,7 @@ public class Preloader {
 			@Override
 			public void onFailure () {
 				Log.warn("Can't load asset file: " + baseUrl + assetFileUrl);
+				callback.ready(false);
 			}
 			@Override
 			public void onSuccess (String result) {
@@ -115,10 +117,11 @@ public class Preloader {
 						"[images (" + images.size() + ")], [binaries (" +binaries.size()+ ")], " +
 						"[audio (" +audio.size()+ ")], [directories (" + directories.size() +")]" );
 
+				callback.ready(true);
 			}
 		});
 	}
-	
+
 	public InputStream read (String url) {
 		throw new ParallaxRuntimeException("Not supported in GWT");
 //		if (texts.containsKey(url)) {

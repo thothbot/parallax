@@ -1,18 +1,21 @@
-/*******************************************************************************
- * Copyright 2011 See AUTHORS file.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+/*
+ * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Base on libgdx FileHandle.java file
+ *
+ * This file is part of Parallax project.
+ *
+ * Parallax is free software: you can redistribute it and/or modify it
+ * under the terms of the Creative Commons Attribution 3.0 Unported License.
+ *
+ * Parallax is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the Creative Commons Attribution
+ * 3.0 Unported License. for more details.
+ *
+ * You should have received a copy of the the Creative Commons Attribution
+ * 3.0 Unported License along with Parallax.
+ * If not, see http://creativecommons.org/licenses/by/3.0/.
+ */
 
 package org.parallax3d.parallax.files;
 
@@ -43,21 +46,18 @@ public class FileHandle {
 	 * Do not use this constructor in case you write something cross-platforms. Use the {@link Files} interface instead.
 	 * @param fileName the filename. */
 	public FileHandle (String fileName) {
-		this.file = new File(fileName);
-		this.type = FileType.Absolute;
+		this(new File(fileName), FileType.Absolute);
 	}
 
 	/** Creates a new absolute FileHandle for the {@link File}. Use this for tools on the desktop that don't need any of the
 	 * platforms. Do not use this constructor in case you write something cross-platforms. Use the {@link Files} interface instead.
 	 * @param file the file. */
 	public FileHandle (File file) {
-		this.file = file;
-		this.type = FileType.Absolute;
+		this(file, FileType.Absolute);
 	}
 
 	protected FileHandle (String fileName, FileType type) {
-		this.type = type;
-		file = new File(fileName);
+		this(new File(fileName), type);
 	}
 
 	protected FileHandle (File file, FileType type) {

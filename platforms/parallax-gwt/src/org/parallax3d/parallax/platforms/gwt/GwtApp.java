@@ -56,15 +56,19 @@ public abstract class GwtApp extends App implements EntryPoint {
 	public void onModuleLoad () {
 
 		App.app = GwtApp.this;
+
+		// Preload info about all assets
+		App.files = new GwtFiles( new Preloader(GWT.getHostPageBaseURL() + "assets/", "assets.txt", new Preloader.PreloaderCallback() {
+			@Override
+			public void ready(boolean success) {
+				onInit();
+			}
+		}) );
+
 		GwtApp.agentInfo = computeAgentInfo();
 		this.config = getConfig();
 
 		addEventListeners();
-
-		// Preload info about all assets
-		App.files = new GwtFiles( new Preloader( GWT.getHostPageBaseURL() + "assets/", "assets.txt" ) );
-
-		onInit();
 	}
 
 	@Override
