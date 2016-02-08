@@ -50,24 +50,27 @@ public final class VirtualLight extends DirectionalLight
 		return originalCamera;
 	}
 
-	public void setOriginalCamera(Camera originalCamera) {
+	public VirtualLight setOriginalCamera(Camera originalCamera) {
 		this.originalCamera = originalCamera;
+		return this;
 	}
 
 	public List<Vector3> getPointsWorld() {
 		return pointsWorld;
 	}
 
-	public void setPointsWorld(List<Vector3> pointsWorld) {
+	public VirtualLight setPointsWorld(List<Vector3> pointsWorld) {
 		this.pointsWorld = pointsWorld;
+		return this;
 	}
 
 	public List<Vector3> getPointsFrustum() {
 		return pointsFrustum;
 	}
 
-	public void setPointsFrustum(List<Vector3> pointsFrustum) {
+	public VirtualLight setPointsFrustum(List<Vector3> pointsFrustum) {
 		this.pointsFrustum = pointsFrustum;
+		return this;
 	}
 
 }

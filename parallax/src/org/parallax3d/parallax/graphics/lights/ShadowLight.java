@@ -75,8 +75,9 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	/**
 	 * Sets Target used for shadow camera orientation.
 	 */
-	public void setTarget(Object3D target) {
+	public ShadowLight setTarget(Object3D target) {
 		this.target = target;
+		return this;
 	}
 
 
@@ -90,8 +91,9 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	/**
 	 * Sets Light's intensity.
 	 */
-	public void setIntensity(double intensity) {
+	public ShadowLight setIntensity(double intensity) {
 		this.intensity = intensity;
+		return this;
 	}
 
 	public boolean isOnlyShadow() {
@@ -103,80 +105,90 @@ public abstract class ShadowLight extends Light implements HasIntensity
 	 * <p>
 	 * Default � false.
 	 */
-	public void setOnlyShadow(boolean onlyShadow) {
+	public ShadowLight setOnlyShadow(boolean onlyShadow) {
 		this.onlyShadow = onlyShadow;
+		return this;
 	}
 
 	public boolean isShadowCascade() {
 		return shadowCascade;
 	}
 
-	public void setShadowCascade(boolean shadowCascade) {
+	public ShadowLight setShadowCascade(boolean shadowCascade) {
 		this.shadowCascade = shadowCascade;
+		return this;
 	}
 
 	public int getShadowMapWidth() {
 		return shadowMapWidth;
 	}
 
-	public void setShadowMapWidth(int shadowMapWidth) {
+	public ShadowLight setShadowMapWidth(int shadowMapWidth) {
 		this.shadowMapWidth = shadowMapWidth;
+		return this;
 	}
 
 	public int getShadowMapHeight() {
 		return shadowMapHeight;
 	}
 
-	public void setShadowMapHeight(int shadowMapHeight) {
+	public ShadowLight setShadowMapHeight(int shadowMapHeight) {
 		this.shadowMapHeight = shadowMapHeight;
+		return this;
 	}
 
 	public Camera getShadowCamera() {
 		return shadowCamera;
 	}
 
-	public void setShadowCamera(Camera shadowCamera) {
+	public ShadowLight setShadowCamera(Camera shadowCamera) {
 		this.shadowCamera = shadowCamera;
+		return this;
 	}
 
 	public double getShadowCameraNear() {
 		return shadowCameraNear;
 	}
 
-	public void setShadowCameraNear(double shadowCameraNear) {
+	public ShadowLight setShadowCameraNear(double shadowCameraNear) {
 		this.shadowCameraNear = shadowCameraNear;
+		return this;
 	}
 
 	public double getShadowCameraFar() {
 		return shadowCameraFar;
 	}
 
-	public void setShadowCameraFar(double shadowCameraFar) {
+	public ShadowLight setShadowCameraFar(double shadowCameraFar) {
 		this.shadowCameraFar = shadowCameraFar;
+		return this;
 	}
 
 	public boolean isShadowCameraVisible() {
 		return shadowCameraVisible;
 	}
 
-	public void setShadowCameraVisible(boolean shadowCameraVisible) {
+	public ShadowLight setShadowCameraVisible(boolean shadowCameraVisible) {
 		this.shadowCameraVisible = shadowCameraVisible;
+		return this;
 	}
 
 	public double getShadowBias() {
 		return shadowBias;
 	}
 
-	public void setShadowBias(double shadowBias) {
+	public ShadowLight setShadowBias(double shadowBias) {
 		this.shadowBias = shadowBias;
+		return this;
 	}
 
 	public double getShadowDarkness() {
 		return shadowDarkness;
 	}
 
-	public void setShadowDarkness(double shadowDarkness) {
+	public ShadowLight setShadowDarkness(double shadowDarkness) {
 		this.shadowDarkness = shadowDarkness;
+		return this;
 	}
 
 	public boolean isAllocateShadows()
@@ -188,31 +200,35 @@ public abstract class ShadowLight extends Light implements HasIntensity
 		return shadowMatrix;
 	}
 
-	public void setShadowMatrix(Matrix4 shadowMatrix) {
+	public ShadowLight setShadowMatrix(Matrix4 shadowMatrix) {
 		this.shadowMatrix = shadowMatrix;
+		return this;
 	}
 
 	public RenderTargetTexture getShadowMap() {
 		return shadowMap;
 	}
 
-	public void setShadowMap(RenderTargetTexture shadowMap) {
+	public ShadowLight setShadowMap(RenderTargetTexture shadowMap) {
 		this.shadowMap = shadowMap;
+		return this;
 	}
 
 	public Vector2 getShadowMapSize() {
 		return shadowMapSize;
 	}
 
-	public void setShadowMapSize(Vector2 shadowMapSize) {
+	public ShadowLight setShadowMapSize(Vector2 shadowMapSize) {
 		this.shadowMapSize = shadowMapSize;
+		return this;
 	}
 
 	public CameraHelper getCameraHelper() {
 		return cameraHelper;
 	}
 
-	public void setCameraHelper(CameraHelper cameraHelper) {
+	public ShadowLight setCameraHelper(CameraHelper cameraHelper) {
 		this.cameraHelper = cameraHelper;
+		return this;
 	}
 }

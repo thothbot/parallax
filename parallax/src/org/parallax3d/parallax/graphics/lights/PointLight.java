@@ -96,12 +96,14 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 		return this.intensity;
 	}
 
-	public void setIntensity(double intensity) {
+	public PointLight setIntensity(double intensity) {
 		this.intensity = intensity;
+		return this;
 	}
 
-	public void setDistance(double distance) {
+	public PointLight setDistance(double distance) {
 		this.distance = distance;
+		return this;
 	}
 
 	public double getDistance() {

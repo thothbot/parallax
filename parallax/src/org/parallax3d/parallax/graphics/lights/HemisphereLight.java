@@ -77,16 +77,18 @@ public final class HemisphereLight extends Light implements HasIntensity
 		return groundColor;
 	}
 
-	public void setGroundColor(Color groundColor) {
+	public HemisphereLight setGroundColor(Color groundColor) {
 		this.groundColor = groundColor;
+		return this;
 	}
 
 	public double getIntensity() {
 		return intensity;
 	}
 
-	public void setIntensity(double intensity) {
+	public HemisphereLight setIntensity(double intensity) {
 		this.intensity = intensity;
+		return this;
 	}
 
 	public HemisphereLight clone() {

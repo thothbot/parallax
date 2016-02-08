@@ -38,8 +38,8 @@ public abstract class Light extends Object3D
 {
 	public interface UniformLight
 	{
-		public void reset();
-		public void refreshUniform(FastMap<Uniform> uniforms);
+		void reset();
+		void refreshUniform(FastMap<Uniform> uniforms);
 	}
 
 	private Color color;
@@ -50,8 +50,9 @@ public abstract class Light extends Object3D
 		this.color = new Color(hex);
 	}
 
-	public void setColor(Color color) {
+	public Light setColor(Color color) {
 		this.color = color;
+		return this;
 	}
 
 	public Color getColor() {
@@ -76,7 +77,7 @@ public abstract class Light extends Object3D
 		array.set(offset + 2, color.getB() * color.getB() * intensity * intensity);
 	}
 
-	protected void  setColorLinear( Float32Array array, int offset, Color color, double intensity )
+	protected void setColorLinear( Float32Array array, int offset, Color color, double intensity )
 	{
 		array.set(offset, color.getR() * intensity);
 		array.set(offset + 1, color.getG() * intensity);

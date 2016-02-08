@@ -107,96 +107,108 @@ public class DirectionalLight extends ShadowLight
 		return shadowCascadeOffset;
 	}
 
-	public void setShadowCascadeOffset(Vector3 shadowCascadeOffset) {
+	public DirectionalLight setShadowCascadeOffset(Vector3 shadowCascadeOffset) {
 		this.shadowCascadeOffset = shadowCascadeOffset;
+		return this;
 	}
 
 	public int getShadowCascadeCount() {
 		return shadowCascadeCount;
 	}
 
-	public void setShadowCascadeCount(int shadowCascadeCount) {
+	public DirectionalLight setShadowCascadeCount(int shadowCascadeCount) {
 		this.shadowCascadeCount = shadowCascadeCount;
+		return this;
 	}
 
 	public double[] getShadowCascadeBias() {
 		return shadowCascadeBias;
 	}
 
-	public void setShadowCascadeBias(double[] shadowCascadeBias) {
+	public DirectionalLight setShadowCascadeBias(double[] shadowCascadeBias) {
 		this.shadowCascadeBias = shadowCascadeBias;
+		return this;
 	}
 
 	public int[] getShadowCascadeWidth() {
 		return shadowCascadeWidth;
 	}
 
-	public void setShadowCascadeWidth(int[] shadowCascadeWidth) {
+	public DirectionalLight setShadowCascadeWidth(int[] shadowCascadeWidth) {
 		this.shadowCascadeWidth = shadowCascadeWidth;
+		return this;
 	}
 
 	public int[] getShadowCascadeHeight() {
 		return shadowCascadeHeight;
 	}
 
-	public void setShadowCascadeHeight(int[] shadowCascadeHeight) {
+	public DirectionalLight setShadowCascadeHeight(int[] shadowCascadeHeight) {
 		this.shadowCascadeHeight = shadowCascadeHeight;
+		return this;
 	}
 
 	public double[] getShadowCascadeNearZ() {
 		return shadowCascadeNearZ;
 	}
 
-	public void setShadowCascadeNearZ(double[] shadowCascadeNearZ) {
+	public DirectionalLight setShadowCascadeNearZ(double[] shadowCascadeNearZ) {
 		this.shadowCascadeNearZ = shadowCascadeNearZ;
+		return this;
 	}
 
 	public double[] getShadowCascadeFarZ() {
 		return shadowCascadeFarZ;
 	}
 
-	public void setShadowCascadeFarZ(double[] shadowCascadeFarZ) {
+	public DirectionalLight setShadowCascadeFarZ(double[] shadowCascadeFarZ) {
 		this.shadowCascadeFarZ = shadowCascadeFarZ;
+		return this;
 	}
 
 	public List<VirtualLight> getShadowCascadeArray() {
 		return shadowCascadeArray;
 	}
 
-	public void setShadowCascadeArray(List<VirtualLight> shadowCascadeArray) {
+	public DirectionalLight setShadowCascadeArray(List<VirtualLight> shadowCascadeArray) {
 		this.shadowCascadeArray = shadowCascadeArray;
+		return this;
 	}
 
 	public int getShadowCameraLeft() {
 		return shadowCameraLeft;
 	}
 
-	public void setShadowCameraLeft(int shadowCameraLeft) {
+	public DirectionalLight setShadowCameraLeft(int shadowCameraLeft) {
 		this.shadowCameraLeft = shadowCameraLeft;
+		return this;
 	}
 
 	public int getShadowCameraRight() {
 		return shadowCameraRight;
 	}
 
-	public void setShadowCameraRight(int shadowCameraRight) {
+	public DirectionalLight setShadowCameraRight(int shadowCameraRight) {
 		this.shadowCameraRight = shadowCameraRight;
+		return this;
 	}
 
 	public int getShadowCameraTop() {
 		return shadowCameraTop;
 	}
 
-	public void setShadowCameraTop(int shadowCameraTop) {
+	public DirectionalLight setShadowCameraTop(int shadowCameraTop) {
 		this.shadowCameraTop = shadowCameraTop;
+		return this;
 	}
 
 	public int getShadowCameraBottom() {
 		return shadowCameraBottom;
 	}
 
-	public void setShadowCameraBottom(int shadowCameraBottom) {
+	public DirectionalLight setShadowCameraBottom(int shadowCameraBottom) {
 		this.shadowCameraBottom = shadowCameraBottom;
+		return this;
 	}
 
 	public DirectionalLight clone() {

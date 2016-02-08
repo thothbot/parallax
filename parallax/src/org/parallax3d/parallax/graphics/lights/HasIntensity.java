@@ -23,10 +23,10 @@ public interface HasIntensity {
 	/**
 	 * Gets Light's intensity.
 	 */
-	public double getIntensity();
+	double getIntensity();
 
 	/**
 	 * Sets Light's intensity.
 	 */
-	public void setIntensity(double intensity);
+	<T extends Light> T  setIntensity(double intensity);
 }

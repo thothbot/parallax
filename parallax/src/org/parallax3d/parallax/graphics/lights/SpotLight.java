@@ -130,32 +130,36 @@ public class SpotLight extends ShadowLight
 	 * <p>
 	 * If non-zero, light will attenuate linearly from maximum intensity at light position down to zero at distance.
 	 */
-	public void setDistance(double distance) {
+	public SpotLight setDistance(double distance) {
 		this.distance = distance;
+		return this;
 	}
 
 	public double getExponent() {
 		return exponent;
 	}
 
-	public void setExponent(double exponent) {
+	public SpotLight setExponent(double exponent) {
 		this.exponent = exponent;
+		return this;
 	}
 
 	public double getAngle() {
 		return angle;
 	}
 
-	public void setAngle(double angle) {
+	public SpotLight setAngle(double angle) {
 		this.angle = angle;
+		return this;
 	}
 
 	public double getShadowCameraFov() {
 		return shadowCameraFov;
 	}
 
-	public void setShadowCameraFov(double shadowCameraFov) {
+	public SpotLight setShadowCameraFov(double shadowCameraFov) {
 		this.shadowCameraFov = shadowCameraFov;
+		return this;
 	}
 
 	@Override

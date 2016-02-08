@@ -66,7 +66,8 @@ public class AreaLight extends Light implements HasIntensity
 	/**
 	 * Sets Light's intensity.
 	 */
-	public void setIntensity(double intensity) {
+	public AreaLight setIntensity(double intensity) {
 		this.intensity = intensity;
+		return this;
 	}
 }
