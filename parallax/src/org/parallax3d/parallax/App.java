@@ -31,8 +31,6 @@ public abstract class App {
 
     public abstract Files getFiles ();
 
-    public abstract RenderingContext getRendering ();
-
     public abstract void info (String message);
 
     public abstract void debug (String message);

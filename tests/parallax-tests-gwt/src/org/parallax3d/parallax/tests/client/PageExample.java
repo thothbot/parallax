@@ -111,8 +111,6 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 
 						debugger = new Debugger(rendering.getRenderer().getInfo());
 						debuggerPanel.add(debugger);
-
-						((GwtApp)App.app).setRendering(rendering);
 						rendering.addAnimationReadyListener(PageExample.this);
 
 						if(renderingReady != null)

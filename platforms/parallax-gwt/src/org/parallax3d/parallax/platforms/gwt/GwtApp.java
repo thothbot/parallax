@@ -33,8 +33,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	GwtAppConfiguration config;
 
-	GwtRenderingContext rendering;
-
 	private static AgentInfo agentInfo;
 
 	public void setLogLevel (Level logLevel) {
@@ -79,17 +77,6 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 			}
 		});
-	}
-
-	public void setRendering(GwtRenderingContext rendering) {
-
-		this.rendering = rendering;
-
-	}
-
-	@Override
-	public RenderingContext getRendering () {
-		return rendering;
 	}
 
 	@Override
