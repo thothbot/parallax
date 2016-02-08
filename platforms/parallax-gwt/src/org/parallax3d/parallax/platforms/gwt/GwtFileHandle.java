@@ -191,7 +191,8 @@ public class GwtFileHandle extends FileHandle {
      */
     @Override
     public String readString(String charset) {
-        if (preloader.isText(file)) return preloader.texts.get(file);
+        if (preloader.isText(file))
+            return (String)preloader.texts.get(file).data;
         try {
             return new String(readBytes(), "UTF-8");
         } catch (UnsupportedEncodingException e) {

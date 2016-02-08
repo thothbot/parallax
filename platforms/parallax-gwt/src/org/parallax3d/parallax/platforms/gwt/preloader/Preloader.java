@@ -1,24 +1,28 @@
-/*******************************************************************************
- * Copyright 2011 See AUTHORS file.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+/*
+ * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Base on libgdx Preloader.java file
+ *
+ * This file is part of Parallax project.
+ *
+ * Parallax is free software: you can redistribute it and/or modify it
+ * under the terms of the Creative Commons Attribution 3.0 Unported License.
+ *
+ * Parallax is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the Creative Commons Attribution
+ * 3.0 Unported License. for more details.
+ *
+ * You should have received a copy of the the Creative Commons Attribution
+ * 3.0 Unported License along with Parallax.
+ * If not, see http://creativecommons.org/licenses/by/3.0/.
+ */
 
 package org.parallax3d.parallax.platforms.gwt.preloader;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
 import org.parallax3d.parallax.Files;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
@@ -33,19 +37,11 @@ import java.util.List;
 
 public class Preloader {
 	
-	public interface PreloaderCallback {
-		
-		void update(PreloaderState state);
-		
-		void error(String file);
-		
-	}
-
-	public FastMap<Void> directories = new FastMap<>();
-	public FastMap<ImageElement> images = new FastMap<>();
-	public FastMap<Void> audio = new FastMap<>();
-	public FastMap<String> texts = new FastMap<>();
-	public FastMap<Blob> binaries = new FastMap<>();
+	public FastMap<Asset> directories = new FastMap<>();
+	public FastMap<Asset> images = new FastMap<>();
+	public FastMap<Asset> audio = new FastMap<>();
+	public FastMap<Asset> texts = new FastMap<>();
+	public FastMap<Asset> binaries = new FastMap<>();
 
 	public static class Asset {
 		public Asset (String url, AssetFilter.AssetType type, long size, String mimeType) {
@@ -55,63 +51,30 @@ public class Preloader {
 			this.mimeType = mimeType;
 		}
 
-		public boolean succeed;
-		public boolean failed;
-		public long loaded;
 		public final String url;
 		public final AssetFilter.AssetType type;
 		public final long size;
 		public final String mimeType;
-	}
-	
-	public static class PreloaderState {
-		
-		public PreloaderState(List<Asset> assets) {
-			this.assets = assets;
-		}
-		
-		public long getDownloadedSize() {
-			long size = 0;
-			for (int i = 0; i < assets.size(); i++) {
-				Asset asset = assets.get(i);
-				size += (asset.succeed || asset.failed) ? asset.size : Math.min(asset.size, asset.loaded);
-			}
-			return size;
-		}
-		
-		public long getTotalSize() {
-			long size = 0;
-			for (int i = 0; i < assets.size(); i++) {
-				Asset asset = assets.get(i);
-				size += asset.size;
-			}
-			return size;
-		}
-		
-		public float getProgress() {
-			long total = getTotalSize();
-			return total == 0 ? 1 : (getDownloadedSize() / (float) total);
-		}
-		
-		public boolean hasEnded() {
-			return getDownloadedSize() == getTotalSize();
-		}
-		
-		public final List<Asset> assets;
-		
+
+		// Async loading states
+		public boolean isLoading;
+		public boolean isLoaded;
+		public Object data;
 	}
 
 	public final String baseUrl;
 
-	public Preloader (String newBaseURL) {
+	public Preloader (String newBaseURL, String assetFileUrl) {
 		
 		baseUrl = newBaseURL;
 	
 		// trigger copying of assets and creation of assets.txt
 		GWT.create(PreloaderBundle.class);
+
+		preload( assetFileUrl );
 	}
 
-	public void preload (final String assetFileUrl, final PreloaderCallback callback) {
+	public void preload ( final String assetFileUrl ) {
 		final AssetDownloader loader = new AssetDownloader();
 
 		loader.loadText(baseUrl + assetFileUrl, new FileListener<String>() {
@@ -120,97 +83,60 @@ public class Preloader {
 			}
 			@Override
 			public void onFailure () {
-				callback.error(assetFileUrl);
+				Log.warn("Can't load asset file: " + baseUrl + assetFileUrl);
 			}
 			@Override
 			public void onSuccess (String result) {
 				String[] lines = result.split("\n");
-				List<Asset> assets = new ArrayList<Asset>(lines.length);
+				List<Asset> assets = new ArrayList<>(lines.length);
 				for (String line : lines) {
 					String[] tokens = line.split(":");
 					if (tokens.length != 4) {
 						throw new ParallaxRuntimeException("Invalid assets description file.");
 					}
-					AssetFilter.AssetType type = AssetFilter.AssetType.Text;
-					if (tokens[0].equals("i")) type = AssetFilter.AssetType.Image;
-					if (tokens[0].equals("b")) type = AssetFilter.AssetType.Binary;
-					if (tokens[0].equals("a")) type = AssetFilter.AssetType.Audio;
-					if (tokens[0].equals("d")) type = AssetFilter.AssetType.Directory;
+
+					String url = tokens[1].trim();
 					long size = Long.parseLong(tokens[2]);
-					if (type == AssetFilter.AssetType.Audio && !loader.isUseBrowserCache()) {
-						size = 0;
-					}
-					assets.add(new Asset(tokens[1].trim(), type, size, tokens[3]));
+					String mime = tokens[3];
+
+					if (tokens[0].equals("t"))
+						texts.put(url, new Asset(url, AssetFilter.AssetType.Text, size, mime));
+					if (tokens[0].equals("i"))
+						images.put(url, new Asset(url, AssetFilter.AssetType.Image, size, mime));
+					if (tokens[0].equals("b"))
+						binaries.put(url, new Asset(url, AssetFilter.AssetType.Binary, size, mime));
+					if (tokens[0].equals("a"))
+						audio.put(url, new Asset(url, AssetFilter.AssetType.Audio, size, mime));
+					if (tokens[0].equals("d"))
+						directories.put(url, new Asset(url, AssetFilter.AssetType.Directory, size, mime));
 				}
-				final PreloaderState state = new PreloaderState(assets);
-				for (int i = 0; i < assets.size(); i++) {
-					final Asset asset = assets.get(i);
-					
-					if (contains(asset.url)) {
-						asset.loaded = asset.size;
-						asset.succeed = true;
-						continue;
-					}
-					
-					loader.load(baseUrl + asset.url, asset.type, asset.mimeType, new FileListener<Object>() {
-						@Override
-						public void onProgress (double amount) {
-							asset.loaded = (long) amount;
-							callback.update(state);
-						}
-						@Override
-						public void onFailure () {
-							asset.failed = true;
-							callback.error(asset.url);
-							callback.update(state);
-						}
-						@Override
-						public void onSuccess (Object result) {
-							switch (asset.type) {
-							case Text:
-								texts.put(asset.url, (String) result);
-								break;
-							case Image:
-								images.put(asset.url, (ImageElement) result);
-								break;
-							case Binary:
-								binaries.put(asset.url, (Blob) result);
-								break;
-							case Audio:
-								audio.put(asset.url, null);
-								break;
-							case Directory:
-								directories.put(asset.url, null);
-								break;
-							}
-							asset.succeed = true;
-							callback.update(state);
-						}
-					});
-				}
-				callback.update(state);
+
+				Log.info("Loaded information about assets: [text files (" +texts.size() + ")], " +
+						"[images (" + images.size() + ")], [binaries (" +binaries.size()+ ")], " +
+						"[audio (" +audio.size()+ ")], [directories (" + directories.size() +")]" );
+
 			}
 		});
 	}
 	
 	public InputStream read (String url) {
-		if (texts.containsKey(url)) {
-			try {
-				return new ByteArrayInputStream(texts.get(url).getBytes("UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				return null;
-			}
-		}
-		if (images.containsKey(url)) {
-			return new ByteArrayInputStream(new byte[1]); // FIXME, sensible?
-		}
-		if (binaries.containsKey(url)) {
-			return binaries.get(url).read();
-		}
-		if (audio.containsKey(url)) {
-			return new ByteArrayInputStream(new byte[1]); // FIXME, sensible?
-		}
-		return null;
+		throw new ParallaxRuntimeException("Not supported in GWT");
+//		if (texts.containsKey(url)) {
+//			try {
+//				return new ByteArrayInputStream(texts.get(url).getBytes("UTF-8"));
+//			} catch (UnsupportedEncodingException e) {
+//				return null;
+//			}
+//		}
+//		if (images.containsKey(url)) {
+//			return new ByteArrayInputStream(new byte[1]); // FIXME, sensible?
+//		}
+//		if (binaries.containsKey(url)) {
+//			return binaries.get(url).read();
+//		}
+//		if (audio.containsKey(url)) {
+//			return new ByteArrayInputStream(new byte[1]); // FIXME, sensible?
+//		}
 	}
 
 	public boolean contains (String url) {
@@ -291,21 +217,18 @@ public class Preloader {
 
 	public long length (String url) {
 		if (texts.containsKey(url)) {
-			try {
-				return texts.get(url).getBytes("UTF-8").length;
-			} catch (UnsupportedEncodingException e) {
-				return texts.get(url).getBytes().length;
-			}
+			return texts.get(url).size;
 		}
-		if (images.containsKey(url)) {
-			return 1; // FIXME, sensible?
+		else if (images.containsKey(url)) {
+			return images.get(url).size;
 		}
-		if (binaries.containsKey(url)) {
-			return binaries.get(url).length();
+		else if (binaries.containsKey(url)) {
+			return binaries.get(url).size;
 		}
-		if (audio.containsKey(url)) {
-			return 1; // FIXME sensible?
+		else if (audio.containsKey(url)) {
+			return audio.get(url).size;
 		}
+
 		return 0;
 	}
 

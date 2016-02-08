@@ -30,16 +30,7 @@ import org.parallax3d.parallax.system.ParallaxRuntimeException;
 public class AssetDownloader {
 
 	public AssetDownloader () {
-		useBrowserCache = true;
 		useInlineBase64 = false;
-	}
-
-	public void setUseBrowserCache (boolean useBrowserCache) {
-		this.useBrowserCache = useBrowserCache;
-	}
-
-	public boolean isUseBrowserCache () {
-		return useBrowserCache;
 	}
 
 	public void setUseInlineBase64 (boolean useInlineBase64) {
