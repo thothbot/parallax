@@ -41,10 +41,10 @@ public final class DepthRGBAShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/depthRGBA.vs")
+		@Source("source/depthRGBA.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/depthRGBA.fs")
+		@Source("source/depthRGBA.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

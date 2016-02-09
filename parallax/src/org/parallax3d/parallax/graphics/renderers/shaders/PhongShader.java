@@ -43,10 +43,10 @@ public final class PhongShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/phong.vs")
+		@Source("source/phong.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/phong.fs")
+		@Source("source/phong.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

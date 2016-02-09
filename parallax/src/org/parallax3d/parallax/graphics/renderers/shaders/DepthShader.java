@@ -40,10 +40,10 @@ public final class DepthShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/depth.vs")
+		@Source("source/depth.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/depth.fs")
+		@Source("source/depth.fs.glsl")
 		SourceTextResource getFragmentShader();
 
 	}

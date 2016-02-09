@@ -32,10 +32,10 @@ public class DashedShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/dashed.vs")
+		@Source("source/dashed.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/dashed.fs")
+		@Source("source/dashed.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

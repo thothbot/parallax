@@ -38,10 +38,10 @@ public final class BasicShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/basic.vs")
+		@Source("source/basic.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/basic.fs")
+		@Source("source/basic.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

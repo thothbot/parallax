@@ -45,10 +45,10 @@ public final class NormalMapShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/normalmap.vs")
+		@Source("source/normalmap.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/normalmap.fs")
+		@Source("source/normalmap.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

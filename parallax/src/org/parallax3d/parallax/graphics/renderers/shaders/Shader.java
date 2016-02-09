@@ -50,10 +50,10 @@ public abstract class Shader
 
 	public interface DefaultResources extends SourceBundle
 	{
-		@Source("source/default.vs")
+		@Source("source/default.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/default.fs")
+		@Source("source/default.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

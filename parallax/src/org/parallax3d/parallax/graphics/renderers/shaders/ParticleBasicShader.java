@@ -40,10 +40,10 @@ public final class ParticleBasicShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/particle_basic.vs")
+		@Source("source/particle_basic.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/particle_basic.fs")
+		@Source("source/particle_basic.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

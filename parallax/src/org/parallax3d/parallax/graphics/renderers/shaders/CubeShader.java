@@ -39,10 +39,10 @@ public final class CubeShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/cube.vs")
+		@Source("source/cube.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/cube.fs")
+		@Source("source/cube.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

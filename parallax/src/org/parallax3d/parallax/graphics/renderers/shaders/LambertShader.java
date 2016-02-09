@@ -44,10 +44,10 @@ public final class LambertShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/lambert.vs")
+		@Source("source/lambert.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/lambert.fs")
+		@Source("source/lambert.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

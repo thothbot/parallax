@@ -37,10 +37,10 @@ public final class FresnelShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/fresnel.vs")
+		@Source("source/fresnel.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/fresnel.fs")
+		@Source("source/fresnel.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

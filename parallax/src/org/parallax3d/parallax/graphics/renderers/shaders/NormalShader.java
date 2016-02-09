@@ -40,10 +40,10 @@ public final class NormalShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/normal.vs")
+		@Source("source/normal.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/normal.fs")
+		@Source("source/normal.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
