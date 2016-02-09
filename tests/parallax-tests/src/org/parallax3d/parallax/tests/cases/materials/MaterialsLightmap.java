@@ -44,10 +44,10 @@ public final class MaterialsLightmap extends ParallaxTest
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("../../resources/shaders/skydome.vs")
+		@Source("../../resources/shaders/skydome.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("../../resources/shaders/skydome.fs")
+		@Source("../../resources/shaders/skydome.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

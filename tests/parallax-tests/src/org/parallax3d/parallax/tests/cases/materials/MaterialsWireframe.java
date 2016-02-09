@@ -48,10 +48,10 @@ public final class MaterialsWireframe extends ParallaxTest
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("../../resources/shaders/materials_wireframe.vs")
+		@Source("../../resources/shaders/materials_wireframe.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("../../resources/shaders/materials_wireframe.fs")
+		@Source("../../resources/shaders/materials_wireframe.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

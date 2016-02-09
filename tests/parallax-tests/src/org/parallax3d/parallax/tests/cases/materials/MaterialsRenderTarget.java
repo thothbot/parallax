@@ -49,10 +49,10 @@ public class MaterialsRenderTarget extends ParallaxTest
 	{
 		ResourcesPass1 INSTANCE = ClassUtils.newProxyInstance(ResourcesPass1.class);
 
-		@Source("../../resources/shaders/rtt.vs")
+		@Source("../../resources/shaders/rtt.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("../../resources/shaders/rtt_pass_1.fs")
+		@Source("../../resources/shaders/rtt_pass_1.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
@@ -60,10 +60,10 @@ public class MaterialsRenderTarget extends ParallaxTest
 	{
 		ResourcesScreen INSTANCE = ClassUtils.newProxyInstance(ResourcesScreen.class);
 
-		@Source("../../resources/shaders/rtt.vs")
+		@Source("../../resources/shaders/rtt.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("../../resources/shaders/rtt_screen.fs")
+		@Source("../../resources/shaders/rtt_screen.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 		

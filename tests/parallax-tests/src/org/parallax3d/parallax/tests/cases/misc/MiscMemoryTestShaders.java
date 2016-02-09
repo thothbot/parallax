@@ -40,10 +40,10 @@ public final class MiscMemoryTestShaders extends ParallaxTest
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("../../resources/shaders/misc_memory_test.vs")
+		@Source("../../resources/shaders/misc_memory_test.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("../../resources/shaders/misc_memory_test.fs")
+		@Source("../../resources/shaders/misc_memory_test.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

@@ -71,10 +71,10 @@ public final class TerrainDynamic extends ParallaxTest
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("../../resources/shaders/terrain_dynamic_noise.vs")
+		@Source("../../resources/shaders/terrain_dynamic_noise.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("../../resources/shaders/terrain_dynamic_noise.fs")
+		@Source("../../resources/shaders/terrain_dynamic_noise.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	
