@@ -20,8 +20,6 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.files.FileListenerSuccess;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
@@ -39,6 +37,14 @@ import org.parallax3d.parallax.system.gl.enums.*;
 @ThreejsObject("THREE.Texture")
 public class Texture
 {
+	/**
+	 * This callback will be called when the image has been loaded.
+	 */
+	public static interface ImageLoadHandler
+	{
+		void onImageLoad(Texture texture);
+	}
+
 	public enum OPERATIONS
 	{
 		MULTIPLY(0), // MultiplyOperation
@@ -108,13 +114,23 @@ public class Texture
 		this( App.files.internal(internalPath), null );
 	}
 
-	public Texture (String internalPath, final FileListenerSuccess<?> listener) {
-		this( App.files.internal(internalPath), listener );
+	public Texture (String internalPath, final ImageLoadHandler imageLoadHandler) {
+		this( App.files.internal(internalPath), imageLoadHandler );
 	}
 
-	public Texture (FileHandle file, final FileListenerSuccess<?> listener)
+	public Texture (FileHandle file, final ImageLoadHandler imageLoadHandler)
 	{
-		this( new PixmapTextureData(file, listener));
+		this( new PixmapTextureData() );
+
+		image.load(file, new PixmapTextureData.TextureLoadHandler() {
+
+			@Override
+			public void onLoaded(boolean success) {
+				setNeedsUpdate(true);
+				if (imageLoadHandler != null)
+					imageLoadHandler.onImageLoad(Texture.this);
+			}
+		});
 	}
 
 	/**

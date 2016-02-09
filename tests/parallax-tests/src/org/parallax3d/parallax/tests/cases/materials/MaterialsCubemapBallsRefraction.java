@@ -41,7 +41,7 @@ import java.util.List;
 public final class MaterialsCubemapBallsRefraction extends ParallaxTest 
 {
 
-	static final String textures = "./assets/textures/cube/skybox/*.jpg";
+	static final String textures = "textures/cube/skybox/*.jpg";
 
 	Scene scene;
 	PerspectiveCamera camera;

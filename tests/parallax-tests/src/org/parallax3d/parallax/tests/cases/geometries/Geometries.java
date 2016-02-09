@@ -43,7 +43,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 @ThreejsExample("webgl_geometries")
 public class Geometries extends ParallaxTest
 {
-	static final String image = "./assets/textures/UV_Grid_Sm.jpg";
+	static final String image = "textures/UV_Grid_Sm.jpg";
 
 	Scene scene;
 	PerspectiveCamera camera;

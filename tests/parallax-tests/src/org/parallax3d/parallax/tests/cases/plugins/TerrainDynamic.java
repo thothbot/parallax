@@ -78,13 +78,13 @@ public final class TerrainDynamic extends ParallaxTest
 		SourceTextResource getFragmentShader();
 	}
 	
-	static final String diffuseImage1 = "./assets/textures/terrain/grasslight-big.jpg";
-	static final String diffuseImage2 = "./assets/textures/terrain/backgrounddetailed6.jpg";
-	static final String detailImage = "./assets/textures/terrain/grasslight-big-nm.jpg";
+	static final String diffuseImage1 = "textures/terrain/grasslight-big.jpg";
+	static final String diffuseImage2 = "textures/terrain/backgrounddetailed6.jpg";
+	static final String detailImage = "textures/terrain/grasslight-big-nm.jpg";
 	
-	static final String parrotModel = "./assets/models/animated/parrot.js";
-	static final String flamingoModel = "./assets/models/animated/flamingo.js";
-	static final String storkModel = "./assets/models/animated/stork.js";
+	static final String parrotModel = "models/animated/parrot.js";
+	static final String flamingoModel = "models/animated/flamingo.js";
+	static final String storkModel = "models/animated/stork.js";
 		
 	static final int bluriness = 6;
 

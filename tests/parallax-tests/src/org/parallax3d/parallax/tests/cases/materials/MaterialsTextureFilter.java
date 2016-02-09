@@ -37,7 +37,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class MaterialsTextureFilter extends ParallaxTest 
 {
 
-	private static final String texture = "./assets/textures/caravaggio.jpg";
+	private static final String texture = "textures/caravaggio.jpg";
 	
 	PerspectiveCamera camera;
 	int mouseX = 0, mouseY = 0;

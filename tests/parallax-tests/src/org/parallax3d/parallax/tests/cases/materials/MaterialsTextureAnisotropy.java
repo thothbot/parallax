@@ -38,7 +38,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class MaterialsTextureAnisotropy extends ParallaxTest 
 {
 
-	private static final String texture = "./assets/textures/crate.gif";
+	private static final String texture = "textures/crate.gif";
 
 	Scene scene;
 	PerspectiveCamera camera;

@@ -19,12 +19,17 @@
 package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.files.FileListenerSuccess;
 import org.parallax3d.parallax.system.gl.GL20;
 
 public class PixmapTextureData implements TextureData {
 
-    public PixmapTextureData (FileHandle file, FileListenerSuccess<?> listener) {
+    public PixmapTextureData () {
+
+    }
+
+    @Override
+    public void load(FileHandle file, TextureLoadHandler textureLoadHandler) {
+        textureLoadHandler.onLoaded( true );
     }
 
     @Override

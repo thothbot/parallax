@@ -41,8 +41,8 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class MaterialsTextures extends ParallaxTest 
 {
 	
-	private static final String img = "./assets/textures/lava/lavatile.jpg";
-	private static final String img2 = "./assets/textures/planets/moon_1024.jpg";
+	private static final String img = "textures/lava/lavatile.jpg";
+	private static final String img2 = "textures/planets/moon_1024.jpg";
 
 	Scene scene;
 	PerspectiveCamera camera;

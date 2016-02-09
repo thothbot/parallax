@@ -44,7 +44,7 @@ import java.util.List;
 public class GeometriesParametric extends ParallaxTest
 {
 
-	static final String image = "./assets/textures/UV_Grid_Sm.jpg";
+	static final String image = "textures/UV_Grid_Sm.jpg";
 
 	PerspectiveCamera camera;
 	Scene scene;

@@ -40,7 +40,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class MaterialsCubemapBallsReflection extends ParallaxTest 
 {
 
-	static final String textures = "./assets/textures/cube/pisa/*.png";
+	static final String textures = "textures/cube/pisa/*.png";
 
 	Scene scene;
 	PerspectiveCamera camera;

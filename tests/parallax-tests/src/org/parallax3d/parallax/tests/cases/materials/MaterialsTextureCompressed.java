@@ -39,10 +39,10 @@ import java.util.List;
 public final class MaterialsTextureCompressed extends ParallaxTest 
 {
 
-	private static final String dxt1_nomip = "./assets/textures/compressed/disturb_dxt1_nomip.dds";
-	private static final String dxt1_mip = "./assets/textures/compressed/disturb_dxt1_mip.dds";
-	private static final String dxt3_mip = "./assets/textures/compressed/hepatica_dxt3_mip.dds";
-	private static final String dxt5_mip = "./assets/textures/compressed/explosion_dxt5_mip.dds";
+	private static final String dxt1_nomip = "textures/compressed/disturb_dxt1_nomip.dds";
+	private static final String dxt1_mip = "textures/compressed/disturb_dxt1_mip.dds";
+	private static final String dxt3_mip = "textures/compressed/hepatica_dxt3_mip.dds";
+	private static final String dxt5_mip = "textures/compressed/explosion_dxt5_mip.dds";
 
 	Scene scene;
 	PerspectiveCamera camera;

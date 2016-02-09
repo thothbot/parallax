@@ -49,11 +49,11 @@ import java.util.List;
 public final class TrackballEarth extends ParallaxTest 
 {
 
-	static final String earthAtmos    = "./assets/textures/planets/earth_atmos_2048.jpg";
-	static final String earthClouds   = "./assets/textures/planets/earth_clouds_1024.png";
-	static final String earthNormal   = "./assets/textures/planets/earth_normal_2048.jpg";
-	static final String earthSpecular = "./assets/textures/planets/earth_specular_2048.jpg";
-	static final String moon          = "./assets/textures/planets/moon_1024.jpg";
+	static final String earthAtmos    = "textures/planets/earth_atmos_2048.jpg";
+	static final String earthClouds   = "textures/planets/earth_clouds_1024.png";
+	static final String earthNormal   = "textures/planets/earth_normal_2048.jpg";
+	static final String earthSpecular = "textures/planets/earth_specular_2048.jpg";
+	static final String moon          = "textures/planets/moon_1024.jpg";
 	
 	static final int radius = 6371;
 	static final double tilt = 0.41;

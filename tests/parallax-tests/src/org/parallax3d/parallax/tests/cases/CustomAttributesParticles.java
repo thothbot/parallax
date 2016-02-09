@@ -54,7 +54,7 @@ public class CustomAttributesParticles extends ParallaxTest
 		SourceTextResource getFragmentShader();
 	}
 	
-	static final String texture = "./assets/textures/sprites/spark1.png";
+	static final String texture = "textures/sprites/spark1.png";
 
 	Scene scene;
 	PerspectiveCamera camera;

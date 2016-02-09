@@ -41,8 +41,8 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class MaterialsBumpmap extends ParallaxTest
 {
 
-	static final String texture = "./assets/models/obj/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg";
-	static final String model = "./assets/models/obj/leeperrysmith/LeePerrySmith.js";
+	static final String texture = "models/obj/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg";
+	static final String model = "models/obj/leeperrysmith/LeePerrySmith.js";
 
 	Scene scene;
 	PerspectiveCamera camera;

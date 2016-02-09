@@ -37,7 +37,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class MaterialsCubemapDynamicReflection extends ParallaxTest 
 {
 
-	static final String img = "./assets/textures/ruins.jpg";
+	static final String img = "textures/ruins.jpg";
 
 	Scene scene;
 	PerspectiveCamera camera; 

@@ -51,7 +51,7 @@ public final class MaterialsLightmap extends ParallaxTest
 		SourceTextResource getFragmentShader();
 	}
 
-	static final String model = "./assets/models/obj/lightmap/lightmap.js";
+	static final String model = "models/obj/lightmap/lightmap.js";
 
 	Scene scene;
 	PerspectiveCamera camera;

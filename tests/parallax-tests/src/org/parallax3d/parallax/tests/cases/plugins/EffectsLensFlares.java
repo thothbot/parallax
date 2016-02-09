@@ -42,9 +42,9 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class EffectsLensFlares extends ParallaxTest
 {
 		
-	private Texture textureFlare0 = new Texture( "./assets/textures/lensflare/lensflare0.png" );
-	private Texture textureFlare2 = new Texture( "./assets/textures/lensflare/lensflare2.png" );
-	private Texture textureFlare3 = new Texture( "./assets/textures/lensflare/lensflare3.png" );
+	private Texture textureFlare0 = new Texture( "textures/lensflare/lensflare0.png" );
+	private Texture textureFlare2 = new Texture( "textures/lensflare/lensflare2.png" );
+	private Texture textureFlare3 = new Texture( "textures/lensflare/lensflare3.png" );
 
 	Scene scene;
 	PerspectiveCamera camera;

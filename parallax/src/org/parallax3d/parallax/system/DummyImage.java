@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.system;
 
+import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.system.gl.GL20;
 
@@ -34,6 +35,11 @@ public class DummyImage implements TextureData
 	{
 		this.width = width;
 		this.height = height;
+	}
+
+	@Override
+	public void load(FileHandle file, TextureLoadHandler textureLoadHandler) {
+		textureLoadHandler.onLoaded(true);
 	}
 
 	@Override

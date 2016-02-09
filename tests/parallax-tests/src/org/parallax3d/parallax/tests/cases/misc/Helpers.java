@@ -32,7 +32,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 @ThreejsExample("webgl_helpers")
 public final class Helpers extends ParallaxTest {
 
-    private static final String model = "./assets/models/obj/leeperrysmith/LeePerrySmith.js";
+    private static final String model = "models/obj/leeperrysmith/LeePerrySmith.js";
 
     Scene scene;
     PerspectiveCamera camera;

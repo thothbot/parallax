@@ -57,8 +57,9 @@ public class Preloader {
 		public final String mimeType;
 
 		// Async loading states
-		public boolean isLoading;
+		public long loaded;
 		public boolean isLoaded;
+		public boolean isFailed;
 		public Object data;
 	}
 
@@ -90,7 +91,6 @@ public class Preloader {
 			@Override
 			public void onSuccess (String result) {
 				String[] lines = result.split("\n");
-				List<Asset> assets = new ArrayList<>(lines.length);
 				for (String line : lines) {
 					String[] tokens = line.split(":");
 					if (tokens.length != 4) {
@@ -218,19 +218,27 @@ public class Preloader {
 		return list;
 	}
 
-	public long length (String url) {
+	public Asset get (String url) {
 		if (texts.containsKey(url)) {
-			return texts.get(url).size;
+			return texts.get(url);
 		}
 		else if (images.containsKey(url)) {
-			return images.get(url).size;
+			return images.get(url);
 		}
 		else if (binaries.containsKey(url)) {
-			return binaries.get(url).size;
+			return binaries.get(url);
 		}
 		else if (audio.containsKey(url)) {
-			return audio.get(url).size;
+			return audio.get(url);
 		}
+
+		return null;
+	}
+
+	public long length (String url) {
+		Asset file = this.get(url);
+		if(file != null)
+			return file.size;
 
 		return 0;
 	}

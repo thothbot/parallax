@@ -35,10 +35,10 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 @ThreejsExample("webgl_loader_stl")
 public class LoaderSTL extends ParallaxTest 
 {
-	private static final String slotted_disk = "./assets/models/stl/ascii/slotted_disk.stl";
-	private static final String pr2_head_pan = "./assets/models/stl/binary/pr2_head_pan.stl";
-	private static final String pr2_head_tilt = "./assets/models/stl/binary/pr2_head_tilt.stl";
-	private static final String colored = "./assets/models/stl/binary/colored.stl";
+	private static final String slotted_disk = "models/stl/ascii/slotted_disk.stl";
+	private static final String pr2_head_pan = "models/stl/binary/pr2_head_pan.stl";
+	private static final String pr2_head_tilt = "models/stl/binary/pr2_head_tilt.stl";
+	private static final String colored = "models/stl/binary/colored.stl";
 
 	Scene scene;
 	PerspectiveCamera camera;

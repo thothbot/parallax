@@ -39,7 +39,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class LoaderCollada extends ParallaxTest 
 {
 
-	static final String model = "./assets/collada/monster/monster.dae";
+	static final String model = "collada/monster/monster.dae";
 
 	Scene scene;
 	PerspectiveCamera camera;

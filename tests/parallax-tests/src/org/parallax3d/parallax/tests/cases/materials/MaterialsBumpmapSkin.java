@@ -49,10 +49,10 @@ import org.parallax3d.parallax.tests.resources.SkinSimpleShader;
 public final class MaterialsBumpmapSkin extends ParallaxTest 
 {
 
-	private static final String texture = "./assets/models/obj/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg";
-	private static final String textureSpec = "./assets/models/obj/leeperrysmith/Map-SPEC.jpg";
-	private static final String textureCol = "./assets/models/obj/leeperrysmith/Map-COL.jpg";
-	private static final String model = "./assets/models/obj/leeperrysmith/LeePerrySmith.js";
+	private static final String texture = "models/obj/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg";
+	private static final String textureSpec = "models/obj/leeperrysmith/Map-SPEC.jpg";
+	private static final String textureCol = "models/obj/leeperrysmith/Map-COL.jpg";
+	private static final String model = "models/obj/leeperrysmith/LeePerrySmith.js";
 
 	Scene scene;
 	PerspectiveCamera camera;

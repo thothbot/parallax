@@ -37,7 +37,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class PerformanceDoubleSided extends ParallaxTest
 {
 
-	private static final String textures = "./assets/textures/cube/swedishRoyalCastle/*.jpg";
+	private static final String textures = "textures/cube/swedishRoyalCastle/*.jpg";
 
 	Scene scene;
 	PerspectiveCamera camera;

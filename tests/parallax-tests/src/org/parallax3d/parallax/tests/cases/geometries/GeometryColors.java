@@ -46,7 +46,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public class GeometryColors extends ParallaxTest implements TouchMoveHandler
 {
 
-	static final String texture = "./assets/textures/shadow.png";
+	static final String texture = "textures/shadow.png";
 
 	Scene scene;
 

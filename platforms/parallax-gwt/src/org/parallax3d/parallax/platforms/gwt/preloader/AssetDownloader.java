@@ -130,31 +130,25 @@ public class AssetDownloader {
 		}
 	}
 
-	public void loadImage (GwtFileHandle file, final FileListener<ImageElement> listener) {
-//		Log.error(file.path());
-//		Log.error( file.preloader.images);
-//		loadImage(file.path(), file.preloader.images.get(file.path()).mimeType, listener);
-	}
-
 	public void loadImage (final String url, final String mimeType, final FileListener<ImageElement> listener) {
 		if (useBrowserCache || useInlineBase64) {
 			loadBinary(url, new FileListener<Blob>() {
 				@Override
-				public void onProgress (double amount) {
+				public void onProgress(double amount) {
 					listener.onProgress(amount);
 				}
 
 				@Override
-				public void onFailure () {
+				public void onFailure() {
 					listener.onFailure();
 				}
 
 				@Override
-				public void onSuccess (Blob result) {
+				public void onSuccess(Blob result) {
 					final ImageElement image = createImage();
 					hookImgListener(image, new ImgEventListener() {
 						@Override
-						public void onEvent (NativeEvent event) {
+						public void onEvent(NativeEvent event) {
 							if (event.getType().equals("error"))
 								listener.onFailure();
 							else
@@ -173,7 +167,7 @@ public class AssetDownloader {
 			final ImageElement image = createImage();
 			hookImgListener(image, new ImgEventListener() {
 				@Override
-				public void onEvent (NativeEvent event) {
+				public void onEvent(NativeEvent event) {
 					if (event.getType().equals("error"))
 						listener.onFailure();
 					else
@@ -201,7 +195,7 @@ public class AssetDownloader {
 			}, false);
 	}-*/;
 
-	static native ImageElement createImage () /*-{
+	public static native ImageElement createImage () /*-{
 		return new Image();
 	}-*/;
 

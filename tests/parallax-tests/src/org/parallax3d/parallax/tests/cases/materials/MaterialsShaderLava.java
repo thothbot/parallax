@@ -38,8 +38,8 @@ import org.parallax3d.parallax.tests.resources.LavaShader;
 public final class MaterialsShaderLava extends ParallaxTest
 {
 
-	static final String img1 = "./assets/textures/lava/cloud.png";
-	static final String img2 = "./assets/textures/lava/lavatile.jpg";
+	static final String img1 = "textures/lava/cloud.png";
+	static final String img2 = "textures/lava/lavatile.jpg";
 
 	Scene scene;
 	PerspectiveCamera camera;

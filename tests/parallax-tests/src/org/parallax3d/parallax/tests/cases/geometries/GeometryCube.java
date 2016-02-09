@@ -31,7 +31,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 @ThreejsExample("webgl_geometry_cube")
 public class GeometryCube extends ParallaxTest
 {
-	static final String texture = "./assets/textures/crate.gif";
+	static final String texture = "textures/crate.gif";
 	PerspectiveCamera camera;
 
 	Mesh mesh;

@@ -40,7 +40,7 @@ import java.util.List;
 public final class MaterialsCubemapFresnel extends ParallaxTest 
 {
 
-	private static final String textures = "./assets/textures/cube/park2/*.jpg";
+	private static final String textures = "textures/cube/park2/*.jpg";
 
 	Scene scene;
 	PerspectiveCamera camera;

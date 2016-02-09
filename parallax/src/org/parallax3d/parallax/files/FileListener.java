@@ -18,10 +18,11 @@
 
 package org.parallax3d.parallax.files;
 
-public interface FileListener<T> extends FileListenerSuccess<T> {
+public interface FileListener<T> {
 
     void onProgress(double amount);
 
     void onFailure();
 
+    void onSuccess(T result);
 }

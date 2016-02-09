@@ -47,7 +47,7 @@ import org.parallax3d.parallax.tests.resources.GodraysFakeSunShader;
 public final class PostprocessingGodrays extends ParallaxTest
 {
 
-	private static final String model = "./assets/models/obj/tree/tree.js";
+	private static final String model = "models/obj/tree/tree.js";
 	private static final double orbitRadius = 200.0;
 	
 	private static final int bgColor = 0x000511;

@@ -45,8 +45,8 @@ public final class EffectsSprites extends ParallaxTest
 	
 	Sprite spriteTL, spriteTR, spriteBL, spriteBR, spriteC;
 	
-	Texture mapB = new Texture( "./assets/textures/sprite1.png" );
-	Texture mapC = new Texture( "./assets/textures/sprite2.png" );
+	Texture mapB = new Texture( "textures/sprite1.png" );
+	Texture mapC = new Texture( "textures/sprite2.png" );
 	
 	@Override
 	public void onResize(RenderingContext context) 

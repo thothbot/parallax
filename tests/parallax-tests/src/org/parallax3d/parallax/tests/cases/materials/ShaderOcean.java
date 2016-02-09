@@ -44,8 +44,8 @@ import org.parallax3d.parallax.tests.resources.Water;
 @ThreejsExample("webgl_shaders_ocean")
 public final class ShaderOcean extends ParallaxTest {
 
-	static final String waternormals = "./assets/textures/waternormals.jpg";
-	static final String textures = "./assets/textures/cube/skybox/*.jpg";
+	static final String waternormals = "textures/waternormals.jpg";
+	static final String textures = "textures/cube/skybox/*.jpg";
 	
 	public int width = 2000;
 	public int height = 2000;

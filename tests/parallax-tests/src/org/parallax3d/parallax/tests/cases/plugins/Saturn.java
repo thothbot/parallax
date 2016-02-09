@@ -44,18 +44,18 @@ import org.parallax3d.parallax.tests.ParallaxTest;
 public class Saturn extends ParallaxTest
 {
 
-	static final String skyboxTextures = "./assets/textures/stars_skybox.jpg";
+	static final String skyboxTextures = "textures/stars_skybox.jpg";
 	
-	static final String saturnTextures = "./assets/textures/planets/saturn.jpg";
-	static final String saturnRingsTextures = "./assets/textures/planets/saturnRings.png";
-	static final String saturnCloudsTextures = "./assets/textures/planets/saturnClouds.png";
+	static final String saturnTextures = "textures/planets/saturn.jpg";
+	static final String saturnRingsTextures = "textures/planets/saturnRings.png";
+	static final String saturnCloudsTextures = "textures/planets/saturnClouds.png";
 	
-	Texture titanTexture = new Texture( "./assets/textures/planets/titan.jpg" );
-	Texture moonTexture = new Texture( "./assets/textures/planets/moon_1024.jpg" );
+	Texture titanTexture = new Texture( "textures/planets/titan.jpg" );
+	Texture moonTexture = new Texture( "textures/planets/moon_1024.jpg" );
 	
-	Texture textureFlare0 = new Texture( "./assets/textures/lensflare/lensflare0.png" );
-	Texture textureFlare2 = new Texture( "./assets/textures/lensflare/lensflare2.png" );
-	Texture textureFlare3 = new Texture( "./assets/textures/lensflare/lensflare3.png" );
+	Texture textureFlare0 = new Texture( "textures/lensflare/lensflare0.png" );
+	Texture textureFlare2 = new Texture( "textures/lensflare/lensflare2.png" );
+	Texture textureFlare3 = new Texture( "textures/lensflare/lensflare3.png" );
 	
 	static final double saturnRadius = 120.536;
 	static final double saturnRingsRadius = 265.882;

@@ -48,7 +48,7 @@ import java.util.List;
 public final class InteractiveVoxelPainter extends ParallaxTest
 {
 
-	private static final String texture = "./assets/textures/square-outline-textured.png";
+	private static final String texture = "textures/square-outline-textured.png";
 
 	Scene scene;
 	List<GeometryObject> objects = new ArrayList<GeometryObject>();

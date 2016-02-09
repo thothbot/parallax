@@ -38,7 +38,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public class GeometryDynamic extends ParallaxTest
 {
 
-	static final String img = "./assets/textures/water.jpg";
+	static final String img = "textures/water.jpg";
 
 	Scene scene;
 	PerspectiveCamera camera;

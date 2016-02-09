@@ -44,10 +44,10 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class PostprocessingMulti extends ParallaxTest
 {
 
-	private static final String model = "./assets/models/obj/leeperrysmith/LeePerrySmith.js";
-	private static final String texture = "./assets/models/obj/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg";
-	private static final String textureCol = "./assets/models/obj/leeperrysmith/Map-COL.jpg";
-	private static final String texturebg = "./assets/textures/cube/swedishRoyalCastle/pz.jpg";
+	private static final String model = "models/obj/leeperrysmith/LeePerrySmith.js";
+	private static final String texture = "models/obj/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg";
+	private static final String textureCol = "models/obj/leeperrysmith/Map-COL.jpg";
+	private static final String texturebg = "textures/cube/swedishRoyalCastle/pz.jpg";
 
 	Scene scene;
 	PerspectiveCamera cameraPerspective;

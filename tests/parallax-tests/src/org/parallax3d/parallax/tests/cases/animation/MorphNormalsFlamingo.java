@@ -34,7 +34,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 @ThreejsExample("webgl_morphnormals")
 public final class MorphNormalsFlamingo extends ParallaxTest
 {
-	static final String model = "./assets/models/animated/flamingo.js";
+	static final String model = "models/animated/flamingo.js";
 	
 	static final int radius = 600;
 	PerspectiveCamera camera;

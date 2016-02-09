@@ -33,7 +33,7 @@ import org.parallax3d.parallax.tests.ThreejsExample;
 public final class MorphTargetsHorse extends ParallaxTest
 {
 
-	private static final String model = "./assets/models/animated/horse.js";
+	private static final String model = "models/animated/horse.js";
 
 	static final int radius = 600;
 

@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
+import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.system.gl.GL20;
 
 /**
@@ -25,6 +26,16 @@ import org.parallax3d.parallax.system.gl.GL20;
  */
 public interface TextureData
 {
+    /**
+     * This callback will be called when the image has been loaded.
+     */
+    interface TextureLoadHandler
+    {
+        void onLoaded(boolean success);
+    }
+
+    void load(FileHandle file, TextureLoadHandler textureLoadHandler);
+
     /**
      * Upload the texture to the GPU.
      *

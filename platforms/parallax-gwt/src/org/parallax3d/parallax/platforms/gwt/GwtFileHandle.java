@@ -21,6 +21,7 @@ package org.parallax3d.parallax.platforms.gwt;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.files.FileType;
+import org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
@@ -37,6 +38,40 @@ public class GwtFileHandle extends FileHandle {
         this.preloader = preloader;
         this.file = fixSlashes(fileName);
         this.type = type;
+    }
+
+    public void load(final FileListener callback) {
+        final Preloader.Asset asset = this.preloader.get(this.file);
+
+        if(asset == null)
+        {
+            callback.onFailure();
+            return;
+        }
+
+        if(asset.isLoaded && asset.data != null) {
+            callback.onSuccess(asset.data);
+        }
+
+        final AssetDownloader loader = new AssetDownloader();
+        loader.load(preloader.baseUrl + asset.url, asset.type, asset.mimeType, new FileListener<Object>() {
+            @Override
+            public void onProgress (double amount) {
+                asset.loaded = (long) amount;
+                callback.onProgress(amount);
+            }
+            @Override
+            public void onFailure () {
+                asset.isFailed = true;
+                callback.onFailure();
+            }
+            @Override
+            public void onSuccess (Object result) {
+                asset.data = result;
+                asset.isLoaded = true;
+                callback.onSuccess(result);
+            }
+        });
     }
 
     private static String fixSlashes(String path) {
