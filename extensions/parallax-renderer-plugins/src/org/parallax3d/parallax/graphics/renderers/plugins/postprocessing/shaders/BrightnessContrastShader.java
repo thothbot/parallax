@@ -45,10 +45,10 @@ public final class BrightnessContrastShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/brightnessContrast.fs")
+		@Source("source/brightnessContrast.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

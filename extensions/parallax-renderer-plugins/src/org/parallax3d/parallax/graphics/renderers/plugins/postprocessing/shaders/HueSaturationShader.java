@@ -45,10 +45,10 @@ public final class HueSaturationShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/hueSaturation.fs")
+		@Source("source/hueSaturation.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

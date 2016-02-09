@@ -41,10 +41,10 @@ public final class DOFMipMapShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/dofmipmap.fs")
+		@Source("source/dofmipmap.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

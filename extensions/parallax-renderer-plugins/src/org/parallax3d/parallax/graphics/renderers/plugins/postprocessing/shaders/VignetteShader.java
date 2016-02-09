@@ -40,10 +40,10 @@ public final class VignetteShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/vignette.fs")
+		@Source("source/vignette.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

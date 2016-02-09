@@ -39,10 +39,10 @@ public final class BokehShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/bokeh.fs")
+		@Source("source/bokeh.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

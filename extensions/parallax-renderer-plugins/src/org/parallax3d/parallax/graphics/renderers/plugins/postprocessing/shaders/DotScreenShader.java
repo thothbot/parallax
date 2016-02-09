@@ -40,10 +40,10 @@ public final class DotScreenShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/dotscreen.fs")
+		@Source("source/dotscreen.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

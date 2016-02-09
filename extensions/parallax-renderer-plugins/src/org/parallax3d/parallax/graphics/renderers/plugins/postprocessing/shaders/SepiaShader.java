@@ -40,10 +40,10 @@ public final class SepiaShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/sepia.fs")
+		@Source("source/sepia.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

@@ -46,10 +46,10 @@ public final class TriangleBlurShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/triangleBlur.fs")
+		@Source("source/triangleBlur.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

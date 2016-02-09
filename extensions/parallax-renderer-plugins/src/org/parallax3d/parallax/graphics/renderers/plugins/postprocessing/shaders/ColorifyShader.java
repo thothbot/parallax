@@ -39,10 +39,10 @@ public final class ColorifyShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/colorify.fs")
+		@Source("source/colorify.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

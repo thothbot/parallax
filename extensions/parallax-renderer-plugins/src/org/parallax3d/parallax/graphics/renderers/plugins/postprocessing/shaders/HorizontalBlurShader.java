@@ -47,10 +47,10 @@ public final class HorizontalBlurShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/horizontalBlur.fs")
+		@Source("source/horizontalBlur.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

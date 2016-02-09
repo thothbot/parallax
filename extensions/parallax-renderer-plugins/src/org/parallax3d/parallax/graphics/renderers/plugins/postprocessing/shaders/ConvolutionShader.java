@@ -41,10 +41,10 @@ public final class ConvolutionShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/convolution.vs")
+		@Source("source/convolution.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/convolution.fs")
+		@Source("source/convolution.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

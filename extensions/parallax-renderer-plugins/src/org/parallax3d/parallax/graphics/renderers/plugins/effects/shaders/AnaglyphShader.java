@@ -30,10 +30,10 @@ public class AnaglyphShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/anaglyph.vs")
+		@Source("source/anaglyph.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/anaglyph.fs")
+		@Source("source/anaglyph.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

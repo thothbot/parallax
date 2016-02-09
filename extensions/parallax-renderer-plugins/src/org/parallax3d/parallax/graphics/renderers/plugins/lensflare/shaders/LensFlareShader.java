@@ -32,10 +32,10 @@ public class LensFlareShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/lensFlare.vs")
+		@Source("source/lensFlare.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/lensFlare.fs")
+		@Source("source/lensFlare.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

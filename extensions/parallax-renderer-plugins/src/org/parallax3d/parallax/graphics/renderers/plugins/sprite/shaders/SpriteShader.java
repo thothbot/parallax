@@ -31,10 +31,10 @@ public final class SpriteShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/sprite.vs")
+		@Source("source/sprite.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/sprite.fs")
+		@Source("source/sprite.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

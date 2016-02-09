@@ -30,10 +30,10 @@ public class ParallaxBarrierShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/parallaxBarrier.vs")
+		@Source("source/parallaxBarrier.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/parallaxBarrier.fs")
+		@Source("source/parallaxBarrier.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

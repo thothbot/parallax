@@ -40,10 +40,10 @@ public final class BleachBypassShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/bleachbypass.fs")
+		@Source("source/bleachbypass.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

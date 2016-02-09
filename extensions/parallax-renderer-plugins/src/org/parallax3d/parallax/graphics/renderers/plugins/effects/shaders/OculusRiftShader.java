@@ -32,10 +32,10 @@ public class OculusRiftShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/oculusRift.vs")
+		@Source("source/oculusRift.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/oculusRift.fs")
+		@Source("source/oculusRift.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

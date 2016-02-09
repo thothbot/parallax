@@ -28,10 +28,10 @@ public final class LensFlareVertexTextureShader extends LensFlareShader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("source/lensFlareVertexTexture.vs")
+		@Source("source/lensFlareVertexTexture.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/lensFlareVertexTexture.fs")
+		@Source("source/lensFlareVertexTexture.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

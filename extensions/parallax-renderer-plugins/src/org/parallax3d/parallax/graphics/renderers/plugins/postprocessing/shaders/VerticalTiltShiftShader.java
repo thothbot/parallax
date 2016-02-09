@@ -45,10 +45,10 @@ public final class VerticalTiltShiftShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/verticalTiltShift.fs")
+		@Source("source/verticalTiltShift.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

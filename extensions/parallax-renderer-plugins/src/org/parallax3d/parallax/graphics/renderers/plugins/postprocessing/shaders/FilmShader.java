@@ -46,10 +46,10 @@ public final class FilmShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("source/defaultUv.vs")
+		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/film.fs")
+		@Source("source/film.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
