@@ -46,10 +46,10 @@ public final class TerrainShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("shaders/terrain.vs")
+		@Source("shaders/terrain.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/terrain.fs")
+		@Source("shaders/terrain.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

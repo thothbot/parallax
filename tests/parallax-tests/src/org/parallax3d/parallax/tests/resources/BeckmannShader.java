@@ -40,10 +40,10 @@ public final class BeckmannShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("shaders/beckmann.vs")
+		@Source("shaders/beckmann.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/beckmann.fs")
+		@Source("shaders/beckmann.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

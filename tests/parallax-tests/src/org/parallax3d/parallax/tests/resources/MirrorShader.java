@@ -32,10 +32,10 @@ public class MirrorShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("shaders/mirror.vs")
+		@Source("shaders/mirror.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/mirror.fs")
+		@Source("shaders/mirror.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

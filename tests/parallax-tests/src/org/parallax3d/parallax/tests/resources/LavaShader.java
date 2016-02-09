@@ -32,10 +32,10 @@ public final class LavaShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("shaders/lava.vs")
+		@Source("shaders/lava.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/lava.fs")
+		@Source("shaders/lava.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

@@ -33,10 +33,10 @@ public class WaterShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("shaders/water.vs")
+		@Source("shaders/water.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/water.fs")
+		@Source("shaders/water.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

@@ -38,10 +38,10 @@ public final class GodraysFakeSunShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("shaders/godrays.vs")
+		@Source("shaders/godrays.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/godraysFakeSun.fs")
+		@Source("shaders/godraysFakeSun.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

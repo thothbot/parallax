@@ -31,10 +31,10 @@ public final class MonjoriShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("shaders/monjori.vs")
+		@Source("shaders/monjori.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/monjori.fs")
+		@Source("shaders/monjori.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 

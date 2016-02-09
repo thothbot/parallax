@@ -37,10 +37,10 @@ public final class GodRaysCombineShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("shaders/godrays.vs")
+		@Source("shaders/godrays.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/godraysCombine.fs")
+		@Source("shaders/godraysCombine.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

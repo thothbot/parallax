@@ -50,10 +50,10 @@ public final class GodRaysGenerateShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 
-		@Source("shaders/godrays.vs")
+		@Source("shaders/godrays.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/godraysGenerate.fs")
+		@Source("shaders/godraysGenerate.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 	

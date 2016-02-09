@@ -51,10 +51,10 @@ public final class SkinSimpleShader extends Shader
 	{
 		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
 		
-		@Source("shaders/skin_simple.vs")
+		@Source("shaders/skin_simple.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("shaders/skin_simple.fs")
+		@Source("shaders/skin_simple.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
