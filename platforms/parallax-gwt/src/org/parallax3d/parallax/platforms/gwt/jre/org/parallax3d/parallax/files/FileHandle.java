@@ -42,10 +42,6 @@ public class FileHandle {
 		throw new ParallaxRuntimeException("Stub");
 	}
 
-	public FileType type () {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
 	public InputStream read () {
 		throw new ParallaxRuntimeException("Stub");
 	}
@@ -86,42 +82,6 @@ public class FileHandle {
 		throw new ParallaxRuntimeException("Stub");
 	}
 
-	public OutputStream write (boolean append) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public OutputStream write (boolean append, int bufferSize) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public void write (InputStream input, boolean append) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public Writer writer (boolean append) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public Writer writer (boolean append, String charset) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public void writeString (String string, boolean append) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public void writeString (String string, boolean append, String charset) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public void writeBytes (byte[] bytes, boolean append) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public void writeBytes (byte[] bytes, int offset, int length, boolean append) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
 	public FileHandle[] list (AssetFilter filter) {
 		throw new ParallaxRuntimeException("Stub");
 	}
@@ -154,27 +114,7 @@ public class FileHandle {
 		throw new ParallaxRuntimeException("Stub");
 	}
 
-	public void mkdirs () {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
 	public boolean exists () {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public boolean delete () {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public boolean deleteDirectory () {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public void copyTo (FileHandle dest) {
-		throw new ParallaxRuntimeException("Stub");
-	}
-
-	public void moveTo (FileHandle dest) {
 		throw new ParallaxRuntimeException("Stub");
 	}
 

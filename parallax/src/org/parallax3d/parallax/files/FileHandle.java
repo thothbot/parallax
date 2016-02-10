@@ -37,7 +37,6 @@ import java.io.*;
  * @author Nathan Sweet */
 public class FileHandle {
 	protected File file;
-	protected FileType type;
 
 	protected FileHandle () {
 	}
@@ -46,23 +45,11 @@ public class FileHandle {
 	 * Do not use this constructor in case you write something cross-platforms. Use the {@link Files} interface instead.
 	 * @param fileName the filename. */
 	public FileHandle (String fileName) {
-		this(new File(fileName), FileType.Absolute);
+		this(new File(fileName));
 	}
 
-	/** Creates a new absolute FileHandle for the {@link File}. Use this for tools on the desktop that don't need any of the
-	 * platforms. Do not use this constructor in case you write something cross-platforms. Use the {@link Files} interface instead.
-	 * @param file the file. */
-	public FileHandle (File file) {
-		this(file, FileType.Absolute);
-	}
-
-	protected FileHandle (String fileName, FileType type) {
-		this(new File(fileName), type);
-	}
-
-	protected FileHandle (File file, FileType type) {
+	protected FileHandle (File file) {
 		this.file = file;
-		this.type = type;
 	}
 
 	/** @return the path of the file as specified on construction, e.g. Gdx.files.internal("dir/file.png") -> dir/file.png. backward
@@ -100,31 +87,18 @@ public class FileHandle {
 		return path.substring(0, dotIndex);
 	}
 
-	public FileType type () {
-		return type;
-	}
-
-	/** Returns a java.io.File that represents this file handle. Note the returned file will only be usable for
-	 * {@link FileType#Absolute} and {@link FileType#External} file handles. */
 	public File file () {
-		if (type == FileType.External) return new File(App.files.getExternalStoragePath(), file.getPath());
 		return file;
 	}
 
 	/** Returns a stream for reading this file as bytes.*/
 	public InputStream read () {
-		if (type == FileType.Classpath || (type == FileType.Internal && !file().exists())
-			|| (type == FileType.Local && !file().exists())) {
-			InputStream input = FileHandle.class.getResourceAsStream("/" + file.getPath().replace('\\', '/'));
-			if (input == null) throw new ParallaxRuntimeException("File not found: " + file + " (" + type + ")");
-			return input;
-		}
 		try {
 			return new FileInputStream(file());
 		} catch (Exception ex) {
 			if (file().isDirectory())
-				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
-			throw new ParallaxRuntimeException("Error reading file: " + file + " (" + type + ")", ex);
+				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file , ex);
+			throw new ParallaxRuntimeException("Error reading file: " + file, ex);
 		}
 	}
 
@@ -239,142 +213,7 @@ public class FileHandle {
 		return position - offset;
 	}
 
-	/** Returns a stream for writing to this file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public OutputStream write (boolean append) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot write to a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot write to an internal file: " + file);
-		parent().mkdirs();
-		try {
-			return new FileOutputStream(file(), append);
-		} catch (Exception ex) {
-			if (file().isDirectory())
-				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
-		}
-	}
-
-	/** Returns a buffered stream for writing to this file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @param bufferSize The size of the buffer.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public OutputStream write (boolean append, int bufferSize) {
-		return new BufferedOutputStream(write(append), bufferSize);
-	}
-
-	/** Reads the remaining bytes from the specified stream and writes them to this file. The stream is closed. Parent directories
-	 * will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public void write (InputStream input, boolean append) {
-		OutputStream output = null;
-		try {
-			output = write(append);
-			StreamUtils.copyStream(input, output);
-		} catch (Exception ex) {
-			throw new ParallaxRuntimeException("Error stream writing to file: " + file + " (" + type + ")", ex);
-		} finally {
-			StreamUtils.closeQuietly(input);
-			StreamUtils.closeQuietly(output);
-		}
-
-	}
-
-	/** Returns a writer for writing to this file using the default charset. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public Writer writer (boolean append) {
-		return writer(append, null);
-	}
-
-	/** Returns a writer for writing to this file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @param charset May be null to use the default charset.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public Writer writer (boolean append, String charset) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot write to a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot write to an internal file: " + file);
-		parent().mkdirs();
-		try {
-			FileOutputStream output = new FileOutputStream(file(), append);
-			if (charset == null)
-				return new OutputStreamWriter(output);
-			else
-				return new OutputStreamWriter(output, charset);
-		} catch (IOException ex) {
-			if (file().isDirectory())
-				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
-		}
-	}
-
-	/** Writes the specified string to the file using the default charset. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public void writeString (String string, boolean append) {
-		writeString(string, append, null);
-	}
-
-	/** Writes the specified string to the file using the specified charset. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @param charset May be null to use the default charset.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public void writeString (String string, boolean append, String charset) {
-		Writer writer = null;
-		try {
-			writer = writer(append, charset);
-			writer.write(string);
-		} catch (Exception ex) {
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
-		} finally {
-			StreamUtils.closeQuietly(writer);
-		}
-	}
-
-	/** Writes the specified bytes to the file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public void writeBytes (byte[] bytes, boolean append) {
-		OutputStream output = write(append);
-		try {
-			output.write(bytes);
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
-		} finally {
-			StreamUtils.closeQuietly(output);
-		}
-	}
-
-	/** Writes the specified bytes to the file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throws ParallaxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file, or if it could not be written. */
-	public void writeBytes (byte[] bytes, int offset, int length, boolean append) {
-		OutputStream output = write(append);
-		try {
-			output.write(bytes, offset, length);
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
-		} finally {
-			StreamUtils.closeQuietly(output);
-		}
-	}
-
-	/** Returns the paths to the children of this directory. Returns an empty list if this file handle represents a file and not a
-	 * directory. On the desktop, an {@link FileType#Internal} handle to a directory on the classpath will return a zero length
-	 * array.
-	 * @throws ParallaxRuntimeException if this file is an {@link FileType#Classpath} file. */
 	public FileHandle[] list () {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot list a classpath directory: " + file);
 		String[] relativePaths = file().list();
 		if (relativePaths == null) return new FileHandle[0];
 		FileHandle[] handles = new FileHandle[relativePaths.length];
@@ -383,13 +222,7 @@ public class FileHandle {
 		return handles;
 	}
 
-	/** Returns the paths to the children of this directory that satisfy the specified filter. Returns an empty list if this file
-	 * handle represents a file and not a directory. On the desktop, an {@link FileType#Internal} handle to a directory on the
-	 * classpath will return a zero length array.
-	 * @param filter the {@link FileFilter} to filter files
-	 * @throws ParallaxRuntimeException if this file is an {@link FileType#Classpath} file. */
 	public FileHandle[] list (FileFilter filter) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot list a classpath directory: " + file);
 		File file = file();
 		String[] relativePaths = file.list();
 		if (relativePaths == null) return new FileHandle[0];
@@ -410,13 +243,7 @@ public class FileHandle {
 		return handles;
 	}
 
-	/** Returns the paths to the children of this directory that satisfy the specified filter. Returns an empty list if this file
-	 * handle represents a file and not a directory. On the desktop, an {@link FileType#Internal} handle to a directory on the
-	 * classpath will return a zero length array.
-	 * @param filter the {@link FilenameFilter} to filter files
-	 * @throws ParallaxRuntimeException if this file is an {@link FileType#Classpath} file. */
 	public FileHandle[] list (FilenameFilter filter) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot list a classpath directory: " + file);
 		File file = file();
 		String[] relativePaths = file.list();
 		if (relativePaths == null) return new FileHandle[0];
@@ -436,12 +263,7 @@ public class FileHandle {
 		return handles;
 	}
 
-	/** Returns the paths to the children of this directory with the specified suffix. Returns an empty list if this file handle
-	 * represents a file and not a directory. On the desktop, an {@link FileType#Internal} handle to a directory on the classpath
-	 * will return a zero length array.
-	 * @throws ParallaxRuntimeException if this file is an {@link FileType#Classpath} file. */
 	public FileHandle[] list (String suffix) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot list a classpath directory: " + file);
 		String[] relativePaths = file().list();
 		if (relativePaths == null) return new FileHandle[0];
 		FileHandle[] handles = new FileHandle[relativePaths.length];
@@ -460,128 +282,39 @@ public class FileHandle {
 		return handles;
 	}
 
-	/** Returns true if this file is a directory. Always returns false for classpath files. On Android, an {@link FileType#Internal}
-	 * handle to an empty directory will return false. On the desktop, an {@link FileType#Internal} handle to a directory on the
-	 * classpath will return false. */
 	public boolean isDirectory () {
-		if (type == FileType.Classpath) return false;
 		return file().isDirectory();
 	}
 
 	/** Returns a handle to the child with the specified name. */
 	public FileHandle child (String name) {
-		if (file.getPath().length() == 0) return new FileHandle(new File(name), type);
-		return new FileHandle(new File(file, name), type);
+		if (file.getPath().length() == 0) return new FileHandle(new File(name));
+		return new FileHandle(new File(file, name));
 	}
 
 	/** Returns a handle to the sibling with the specified name.
 	 * @throws ParallaxRuntimeException if this file is the root. */
 	public FileHandle sibling (String name) {
 		if (file.getPath().length() == 0) throw new ParallaxRuntimeException("Cannot get the sibling of the root.");
-		return new FileHandle(new File(file.getParent(), name), type);
+		return new FileHandle(new File(file.getParent(), name));
 	}
 
 	public FileHandle parent () {
 		File parent = file.getParentFile();
 		if (parent == null) {
-			if (type == FileType.Absolute)
-				parent = new File("/");
-			else
 				parent = new File("");
 		}
-		return new FileHandle(parent, type);
+		return new FileHandle(parent);
 	}
 
-	/** @throws ParallaxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
-	public void mkdirs () {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot mkdirs with a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot mkdirs with an internal file: " + file);
-		file().mkdirs();
-	}
-
-	/** Returns true if the file exists. On Android, a {@link FileType#Classpath} or {@link FileType#Internal} handle to a directory
-	 * will always return false. Note that this can be very slow for internal files on Android! */
 	public boolean exists () {
-		switch (type) {
-		case Internal:
-			if (file().exists()) return true;
-			// Fall through.
-		case Classpath:
-			return FileHandle.class.getResource("/" + file.getPath().replace('\\', '/')) != null;
-		}
 		return file().exists();
-	}
-
-	/** Deletes this file or empty directory and returns success. Will not delete a directory that has children.
-	 * @throws ParallaxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
-	public boolean delete () {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot delete a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot delete an internal file: " + file);
-		return file().delete();
-	}
-
-	/** Deletes this file or directory and all children, recursively.
-	 * @throws ParallaxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
-	public boolean deleteDirectory () {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot delete a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot delete an internal file: " + file);
-		return deleteDirectory(file());
-	}
-
-	/** Deletes all children of this directory, recursively.
-	 * @throws ParallaxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
-	public void emptyDirectory () {
-		emptyDirectory(false);
-	}
-
-	/** Deletes all children of this directory, recursively. Optionally preserving the folder structure.
-	 * @throws ParallaxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
-	public void emptyDirectory (boolean preserveTree) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot delete a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot delete an internal file: " + file);
-		emptyDirectory(file(), preserveTree);
-	}
-
-	/** Copies this file or directory to the specified file or directory. If this handle is a file, then 1) if the destination is a
-	 * file, it is overwritten, or 2) if the destination is a directory, this file is copied into it, or 3) if the destination
-	 * doesn't exist, {@link #mkdirs()} is called on the destination's parent and this file is copied into it with a new name. If
-	 * this handle is a directory, then 1) if the destination is a file, ParallaxRuntimeException is thrown, or 2) if the destination is
-	 * a directory, this directory is copied into it recursively, overwriting existing files, or 3) if the destination doesn't
-	 * exist, {@link #mkdirs()} is called on the destination and this directory is copied into it recursively.
-	 * @throws ParallaxRuntimeException if the destination file handle is a {@link FileType#Classpath} or {@link FileType#Internal}
-	 *            file, or copying failed. */
-	public void copyTo (FileHandle dest) {
-		boolean sourceDir = isDirectory();
-		if (!sourceDir) {
-			if (dest.isDirectory()) dest = dest.child(name());
-			copyFile(this, dest);
-			return;
-		}
-		if (dest.exists()) {
-			if (!dest.isDirectory()) throw new ParallaxRuntimeException("Destination exists but is not a directory: " + dest);
-		} else {
-			dest.mkdirs();
-			if (!dest.isDirectory()) throw new ParallaxRuntimeException("Destination directory cannot be created: " + dest);
-		}
-		if (!sourceDir) dest = dest.child(name());
-		copyDirectory(this, dest);
-	}
-
-	/** Moves this file to the specified file, overwriting the file if it already exists.
-	 * @throws ParallaxRuntimeException if the source or destination file handle is a {@link FileType#Classpath} or
-	 *            {@link FileType#Internal} file. */
-	public void moveTo (FileHandle dest) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot move a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot move an internal file: " + file);
-		copyTo(dest);
-		delete();
-		if (exists() && isDirectory()) deleteDirectory();
 	}
 
 	/** Returns the length in bytes of this file, or 0 if this file is a directory, does not exist, or the size cannot otherwise be
 	 * determined. */
 	public long length () {
-		if (type == FileType.Classpath || (type == FileType.Internal && !file.exists())) {
+		if (!file.exists()) {
 			InputStream input = read();
 			try {
 				return input.available();
@@ -594,9 +327,6 @@ public class FileHandle {
 		return file().length();
 	}
 
-	/** Returns the last modified time in milliseconds for this file. Zero is returned if the file doesn't exist. Zero is returned
-	 * for {@link FileType#Classpath} files. On Android, zero is returned for {@link FileType#Internal} files. On the desktop, zero
-	 * is returned for {@link FileType#Internal} files on the classpath. */
 	public long lastModified () {
 		return file().lastModified();
 	}
@@ -605,80 +335,17 @@ public class FileHandle {
 	public boolean equals (Object obj) {
 		if (!(obj instanceof FileHandle)) return false;
 		FileHandle other = (FileHandle)obj;
-		return type == other.type && path().equals(other.path());
+		return path().equals(other.path());
 	}
 
 	@Override
 	public int hashCode () {
 		int hash = 1;
-		hash = hash * 37 + type.hashCode();
 		hash = hash * 67 + path().hashCode();
 		return hash;
 	}
 
 	public String toString () {
 		return file.getPath().replace('\\', '/');
-	}
-
-	static public FileHandle tempFile (String prefix) {
-		try {
-			return new FileHandle(File.createTempFile(prefix, null));
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Unable to create temp file.", ex);
-		}
-	}
-
-	static public FileHandle tempDirectory (String prefix) {
-		try {
-			File file = File.createTempFile(prefix, null);
-			if (!file.delete()) throw new IOException("Unable to delete temp file: " + file);
-			if (!file.mkdir()) throw new IOException("Unable to create temp directory: " + file);
-			return new FileHandle(file);
-		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Unable to create temp file.", ex);
-		}
-	}
-
-	static private void emptyDirectory (File file, boolean preserveTree) {
-		if (file.exists()) {
-			File[] files = file.listFiles();
-			if (files != null) {
-				for (int i = 0, n = files.length; i < n; i++) {
-					if (!files[i].isDirectory())
-						files[i].delete();
-					else if (preserveTree)
-						emptyDirectory(files[i], true);
-					else
-						deleteDirectory(files[i]);
-				}
-			}
-		}
-	}
-
-	static private boolean deleteDirectory (File file) {
-		emptyDirectory(file, false);
-		return file.delete();
-	}
-
-	static private void copyFile (FileHandle source, FileHandle dest) {
-		try {
-			dest.write(source.read(), false);
-		} catch (Exception ex) {
-			throw new ParallaxRuntimeException("Error copying source file: " + source.file + " (" + source.type + ")\n" //
-				+ "To destination: " + dest.file + " (" + dest.type + ")", ex);
-		}
-	}
-
-	static private void copyDirectory (FileHandle sourceDir, FileHandle destDir) {
-		destDir.mkdirs();
-		FileHandle[] files = sourceDir.list();
-		for (int i = 0, n = files.length; i < n; i++) {
-			FileHandle srcFile = files[i];
-			FileHandle destFile = destDir.child(srcFile.name());
-			if (srcFile.isDirectory())
-				copyDirectory(srcFile, destFile);
-			else
-				copyFile(srcFile, destFile);
-		}
 	}
 }

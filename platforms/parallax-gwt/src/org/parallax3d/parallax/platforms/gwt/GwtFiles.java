@@ -21,10 +21,7 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.storage.client.Storage;
 import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.files.FileType;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
-import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 public class GwtFiles implements Files {
 
@@ -37,53 +34,8 @@ public class GwtFiles implements Files {
     }
 
     @Override
-    public FileHandle getFileHandle( String path, FileType type ) {
-        if (type != FileType.Internal) throw new ParallaxRuntimeException("FileType '" + type + "' not supported in GWT backend");
-        return new GwtFileHandle( preloader, path, type );
+    public FileHandle asset( String path ) {
+        return new GwtFileHandle(preloader, path);
     }
 
-    @Override
-    public FileHandle classpath( String path ) {
-        return new GwtFileHandle(preloader, path, FileType.Classpath);
-    }
-
-    @Override
-    public FileHandle internal( String path ) {
-        return new GwtFileHandle(preloader, path, FileType.Internal);
-    }
-
-    @Override
-    public FileHandle external( String path ) {
-        throw new ParallaxRuntimeException("Not supported in GWT backend");
-    }
-
-    @Override
-    public FileHandle absolute( String path ) {
-        throw new ParallaxRuntimeException("Not supported in GWT backend");
-    }
-
-    @Override
-    public FileHandle local( String path ) {
-        throw new ParallaxRuntimeException("Not supported in GWT backend");
-    }
-
-    @Override
-    public String getExternalStoragePath () {
-        return null;
-    }
-
-    @Override
-    public boolean isExternalStorageAvailable () {
-        return false;
-    }
-
-    @Override
-    public String getLocalStoragePath () {
-        return null;
-    }
-
-    @Override
-    public boolean isLocalStorageAvailable () {
-        return false;
-    }
 }

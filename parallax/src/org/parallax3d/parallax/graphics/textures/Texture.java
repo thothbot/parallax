@@ -111,11 +111,11 @@ public class Texture
 	}
 
 	public Texture (String internalPath) {
-		this( App.files.internal(internalPath), null );
+		this( App.files.asset(internalPath), null );
 	}
 
 	public Texture (String internalPath, final ImageLoadHandler imageLoadHandler) {
-		this( App.files.internal(internalPath), imageLoadHandler );
+		this( App.files.asset(internalPath), imageLoadHandler );
 	}
 
 	public Texture (FileHandle file, final ImageLoadHandler imageLoadHandler)

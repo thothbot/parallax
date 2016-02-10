@@ -82,7 +82,7 @@ public class CubeTexture extends Texture
 
 		for(String part: parts)
 		{
-			FileHandle file = App.files.internal(urlStart + part + urlEnd);
+			FileHandle file = App.files.asset(urlStart + part + urlEnd);
 			images.add(new PixmapTextureData());
 		}
 

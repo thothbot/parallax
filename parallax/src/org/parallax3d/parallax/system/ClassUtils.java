@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.system;
 
 import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.files.FileHandle;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -34,7 +35,7 @@ public class ClassUtils {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         SourceBundle.Source source = method.getAnnotation(SourceBundle.Source.class);
-                        return App.files.classpath(classLiteral.getPackage().getName().replace(".", "/") + source).readString();
+                        return new FileHandle(ClassUtils.class.getResource(classLiteral.getPackage().getName().replace(".", "/") + source).getFile());
                     }
                 });
 

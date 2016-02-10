@@ -16,9 +16,7 @@
 
 package org.parallax3d.parallax.platforms.gwt.generator;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.Files;
-import org.parallax3d.parallax.files.FileType;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.StreamUtils;
 
@@ -29,7 +27,6 @@ import java.io.*;
  * @author Nathan Sweet */
 public class FileWrapper {
 	protected File file;
-	protected FileType type;
 
 	protected FileWrapper () {
 	}
@@ -39,12 +36,10 @@ public class FileWrapper {
 	 * @param fileName the filename. */
 	public FileWrapper (String fileName) {
 		this.file = new File(fileName);
-		this.type = FileType.Absolute;
 	}
 
-	protected FileWrapper (File file, FileType type) {
+	protected FileWrapper (File file) {
 		this.file = file;
-		this.type = type;
 	}
 
 	public String path () {
@@ -54,58 +49,31 @@ public class FileWrapper {
 	public String name () {
 		return file.getName();
 	}
-
-	public FileType type () {
-		return type;
-	}
-
-	/** Returns a java.io.File that represents this file handle. Note the returned file will only be usable for
-	 * {@link FileType#Absolute} and {@link FileType#External} file handles. */
 	public File file () {
-		if (type == FileType.External) return new File(App.files.getExternalStoragePath(), file.getPath());
 		return file;
 	}
 
-	/** Returns a stream for reading this file as bytes.
-	 * @throw GdxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read. */
 	public InputStream read () {
-		if (type == FileType.Classpath || (type == FileType.Internal && !file.exists())
-			|| (type == FileType.Local && !file.exists())) {
-			InputStream input = FileWrapper.class.getResourceAsStream("/" + file.getPath().replace('\\', '/'));
-			if (input == null) throw new ParallaxRuntimeException("File not found: " + file + " (" + type + ")");
-			return input;
-		}
 		try {
 			return new FileInputStream(file());
 		} catch (Exception ex) {
 			if (file().isDirectory())
-				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
-			throw new ParallaxRuntimeException("Error reading file: " + file + " (" + type + ")", ex);
+				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file, ex);
+			throw new ParallaxRuntimeException("Error reading file: " + file, ex);
 		}
 	}
 
-	/** Returns a stream for writing to this file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throw GdxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file, or if it could not be written. */
 	public OutputStream write (boolean append) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot write to a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot write to an internal file: " + file);
 		parent().mkdirs();
 		try {
 			return new FileOutputStream(file(), append);
 		} catch (Exception ex) {
 			if (file().isDirectory())
-				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
+				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file, ex);
+			throw new ParallaxRuntimeException("Error writing file: " + file, ex);
 		}
 	}
 
-	/** Reads the remaining bytes from the specified stream and writes them to this file. The stream is closed. Parent directories
-	 * will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throw GdxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file, or if it could not be written. */
 	public void write (InputStream input, boolean append) {
 		OutputStream output = null;
 		try {
@@ -117,7 +85,7 @@ public class FileWrapper {
 				output.write(buffer, 0, length);
 			}
 		} catch (Exception ex) {
-			throw new ParallaxRuntimeException("Error stream writing to file: " + file + " (" + type + ")", ex);
+			throw new ParallaxRuntimeException("Error stream writing to file: " + file, ex);
 		} finally {
 			try {
 				if (input != null) input.close();
@@ -131,14 +99,7 @@ public class FileWrapper {
 
 	}
 
-	/** Returns a writer for writing to this file. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @param charset May be null to use the default charset.
-	 * @throw GdxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file, or if it could not be written. */
 	public Writer writer (boolean append, String charset) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot write to a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot write to an internal file: " + file);
 		parent().mkdirs();
 		try {
 			FileOutputStream output = new FileOutputStream(file(), append);
@@ -148,42 +109,27 @@ public class FileWrapper {
 				return new OutputStreamWriter(output, charset);
 		} catch (IOException ex) {
 			if (file().isDirectory())
-				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
+				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file, ex);
+			throw new ParallaxRuntimeException("Error writing file: " + file, ex);
 		}
 	}
 
-	/** Writes the specified string to the file using the default charset. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @throw GdxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file, or if it could not be written. */
 	public void writeString (String string, boolean append) {
 		writeString(string, append, null);
 	}
-
-	/** Writes the specified string to the file as UTF-8. Parent directories will be created if necessary.
-	 * @param append If false, this file will be overwritten if it exists, otherwise it will be appended.
-	 * @param charset May be null to use the default charset.
-	 * @throw GdxRuntimeException if this file handle represents a directory, if it is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file, or if it could not be written. */
 	public void writeString (String string, boolean append, String charset) {
 		Writer writer = null;
 		try {
 			writer = writer(append, charset);
 			writer.write(string);
 		} catch (Exception ex) {
-			throw new ParallaxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
+			throw new ParallaxRuntimeException("Error writing file: " + file, ex);
 		} finally {
 			StreamUtils.closeQuietly(writer);
 		}
 	}
 
-	/** Returns the paths to the children of this directory. Returns an empty list if this file handle represents a file and not a
-	 * directory. On the desktop, an {@link FileType#Internal} handle to a directory on the classpath will return a zero length
-	 * array.
-	 * @throw GdxRuntimeException if this file is an {@link FileType#Classpath} file. */
 	public FileWrapper[] list () {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot list a classpath directory: " + file);
 		String[] relativePaths = file().list();
 		if (relativePaths == null) return new FileWrapper[0];
 		FileWrapper[] handles = new FileWrapper[relativePaths.length];
@@ -192,77 +138,38 @@ public class FileWrapper {
 		return handles;
 	}
 
-	/** Returns true if this file is a directory. Always returns false for classpath files. On Android, an {@link FileType#Internal}
-	 * handle to an empty directory will return false. On the desktop, an {@link FileType#Internal} handle to a directory on the
-	 * classpath will return false. */
 	public boolean isDirectory () {
-		if (type == FileType.Classpath) return false;
 		return file().isDirectory();
 	}
 
-	/** Returns a handle to the child with the specified name.
-	 * @throw GdxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} and the child
-	 *        doesn't exist. */
 	public FileWrapper child (String name) {
-		if (file.getPath().length() == 0) return new FileWrapper(new File(name), type);
-		return new FileWrapper(new File(file, name), type);
+		if (file.getPath().length() == 0) return new FileWrapper(new File(name));
+		return new FileWrapper(new File(file, name));
 	}
 
 	public FileWrapper parent () {
 		File parent = file.getParentFile();
 		if (parent == null) {
-			if (type == FileType.Absolute)
-				parent = new File("/");
-			else
-				parent = new File("");
+			parent = new File("/");
 		}
-		return new FileWrapper(parent, type);
+		return new FileWrapper(parent);
 	}
-
-	/** @throw GdxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
 	public boolean mkdirs () {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot mkdirs with a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot mkdirs with an internal file: " + file);
 		return file().mkdirs();
 	}
 
-	/** Returns true if the file exists. On Android, a {@link FileType#Classpath} or {@link FileType#Internal} handle to a directory
-	 * will always return false. */
 	public boolean exists () {
-		switch (type) {
-		case Internal:
-			if (file.exists()) return true;
-			// Fall through.
-		case Classpath:
-			return FileWrapper.class.getResource("/" + file.getPath().replace('\\', '/')) != null;
-		}
 		return file().exists();
 	}
 
-	/** Deletes this file or empty directory and returns success. Will not delete a directory that has children.
-	 * @throw GdxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
 	public boolean delete () {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot delete a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot delete an internal file: " + file);
 		return file().delete();
 	}
 
-	/** Deletes this file or directory and all children, recursively.
-	 * @throw GdxRuntimeException if this file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file. */
 	public boolean deleteDirectory () {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot delete a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot delete an internal file: " + file);
 		return deleteDirectory(file());
 	}
 
-	/** Copies this file or directory to the specified file or directory. If this handle is a file, then 1) if the destination is a
-	 * file, it is overwritten, or 2) if the destination is a directory, this file is copied into it, or 3) if the destination
-	 * doesn't exist, {@link #mkdirs()} is called on the destination's parent and this file is copied into it with a new name. If
-	 * this handle is a directory, then 1) if the destination is a file, GdxRuntimeException is thrown, or 2) if the destination is
-	 * a directory, this directory is copied into it recursively, overwriting existing files, or 3) if the destination doesn't
-	 * exist, {@link #mkdirs()} is called on the destination and this directory is copied into it recursively.
-	 * @throw GdxRuntimeException if the destination file handle is a {@link FileType#Classpath} or {@link FileType#Internal} file,
-	 *        or copying failed. */
 	public void copyTo (FileWrapper dest) {
 		boolean sourceDir = isDirectory();
 		if (!sourceDir) {
@@ -280,12 +187,7 @@ public class FileWrapper {
 		copyDirectory(this, dest);
 	}
 
-	/** Moves this file to the specified file, overwriting the file if it already exists.
-	 * @throw GdxRuntimeException if the source or destination file handle is a {@link FileType#Classpath} or
-	 *        {@link FileType#Internal} file. */
 	public void moveTo (FileWrapper dest) {
-		if (type == FileType.Classpath) throw new ParallaxRuntimeException("Cannot move a classpath file: " + file);
-		if (type == FileType.Internal) throw new ParallaxRuntimeException("Cannot move an internal file: " + file);
 		copyTo(dest);
 		delete();
 	}
@@ -319,8 +221,8 @@ public class FileWrapper {
 		try {
 			dest.write(source.read(), false);
 		} catch (Exception ex) {
-			throw new ParallaxRuntimeException("Error copying source file: " + source.file + " (" + source.type + ")\n" //
-				+ "To destination: " + dest.file + " (" + dest.type + ")", ex);
+			throw new ParallaxRuntimeException("Error copying source file: " + source.file + "\n" //
+				+ "To destination: " + dest.file, ex);
 		}
 	}
 
