@@ -21,7 +21,6 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.ClassUtils;

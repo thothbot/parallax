@@ -21,7 +21,6 @@ package org.parallax3d.parallax.graphics.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.materials.Material;

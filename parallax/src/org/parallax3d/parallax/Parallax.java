@@ -20,9 +20,9 @@ package org.parallax3d.parallax;
 
 import java.util.logging.Level;
 
-public abstract class App {
+public abstract class Parallax {
 
-    public static App app;
+    public static Parallax app;
     public static Files files;
 
     public enum ApplicationType {

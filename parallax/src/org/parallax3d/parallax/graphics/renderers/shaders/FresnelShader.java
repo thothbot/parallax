@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
 

@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.files.FileHandle;
 
 import java.lang.reflect.InvocationHandler;

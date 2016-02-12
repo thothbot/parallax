@@ -29,7 +29,6 @@ import com.google.gwt.typedarrays.client.Int32ArrayNative;
 import com.google.gwt.typedarrays.client.Uint8ArrayNative;
 import com.google.gwt.typedarrays.shared.*;
 import com.google.gwt.webgl.client.*;
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 

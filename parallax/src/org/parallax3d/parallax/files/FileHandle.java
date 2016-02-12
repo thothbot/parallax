@@ -20,7 +20,6 @@
 package org.parallax3d.parallax.files;
 
 import org.parallax3d.parallax.Files;
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.StreamUtils;
 

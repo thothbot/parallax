@@ -27,7 +27,7 @@ import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class GwtApp extends App implements EntryPoint {
+public abstract class GwtApp extends Parallax implements EntryPoint {
 
 	public final static Logger logger = Logger.getLogger("");
 
@@ -55,10 +55,10 @@ public abstract class GwtApp extends App implements EntryPoint {
 	@Override
 	public void onModuleLoad () {
 
-		App.app = GwtApp.this;
+		Parallax.app = GwtApp.this;
 
 		// Preload info about all assets
-		App.files = new GwtFiles( new Preloader(GWT.getHostPageBaseURL() + "assets/", "assets.txt", new Preloader.PreloaderCallback() {
+		Parallax.files = new GwtFiles( new Preloader(GWT.getHostPageBaseURL() + "assets/", "assets.txt", new Preloader.PreloaderCallback() {
 			@Override
 			public void ready(boolean success) {
 				onInit();
@@ -73,7 +73,7 @@ public abstract class GwtApp extends App implements EntryPoint {
 
 	@Override
 	public Files getFiles() {
-		return App.files;
+		return Parallax.files;
 	}
 
 	@Override

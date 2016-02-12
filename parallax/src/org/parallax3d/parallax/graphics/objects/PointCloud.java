@@ -20,7 +20,6 @@ package org.parallax3d.parallax.graphics.objects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;

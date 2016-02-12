@@ -27,7 +27,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.Animation;
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.AnimationReadyListener;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
@@ -107,7 +107,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 				{
 					try {
 
-						rendering = new GwtRenderingContext(PageExample.this.content, ((GwtApp) App.app).getConfig());
+						rendering = new GwtRenderingContext(PageExample.this.content, ((GwtApp) Parallax.app).getConfig());
 
 						debugger = new Debugger(rendering.getRenderer().getInfo());
 						debuggerPanel.add(debugger);

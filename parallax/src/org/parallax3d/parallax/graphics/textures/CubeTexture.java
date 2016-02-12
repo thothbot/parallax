@@ -19,7 +19,7 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.system.ThreejsObject;
 
@@ -82,7 +82,7 @@ public class CubeTexture extends Texture
 
 		for(String part: parts)
 		{
-			FileHandle file = App.files.asset(urlStart + part + urlEnd);
+			FileHandle file = Parallax.files.asset(urlStart + part + urlEnd);
 			images.add(new PixmapTextureData());
 		}
 

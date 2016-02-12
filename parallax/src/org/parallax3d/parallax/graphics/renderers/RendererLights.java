@@ -20,7 +20,6 @@ package org.parallax3d.parallax.graphics.renderers;
 
 import java.util.List;
 
-import org.parallax3d.parallax.App;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;

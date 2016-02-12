@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
-import org.parallax3d.parallax.App;
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
@@ -111,11 +111,11 @@ public class Texture
 	}
 
 	public Texture (String internalPath) {
-		this( App.files.asset(internalPath), null );
+		this( Parallax.files.asset(internalPath), null );
 	}
 
 	public Texture (String internalPath, final ImageLoadHandler imageLoadHandler) {
-		this( App.files.asset(internalPath), imageLoadHandler );
+		this( Parallax.files.asset(internalPath), imageLoadHandler );
 	}
 
 	public Texture (FileHandle file, final ImageLoadHandler imageLoadHandler)
