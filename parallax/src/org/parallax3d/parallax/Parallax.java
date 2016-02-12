@@ -18,28 +18,50 @@
 
 package org.parallax3d.parallax;
 
-public abstract class Parallax {
+import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.system.ParallaxRuntimeException;
+
+public class Parallax {
 
     public enum ApplicationType {
         Android, Desktop, WebGL
     }
 
-    protected static Parallax app;
-    protected static Files files;
-    protected static Logger logger;
+    public interface AppListener {
+        void onAppInitialized();
+    }
 
-    public abstract ApplicationType getType ();
+    public interface App {
 
-    public static Parallax getApp() {
+        FileHandle asset(String path);
+        Logger getLogger();
+        ApplicationType getType();
+
+    }
+
+    public static App app;
+
+    public static boolean isAppInitialized() {
+        return app != null;
+    }
+
+    private static void checkAppInitialized() {
+        if(!isAppInitialized())
+            throw new ParallaxRuntimeException("Parallax application is not initialized");
+    }
+
+    public static App app() {
+        checkAppInitialized();
         return app;
     }
 
-    public static Files getFiles() {
-        return files;
+    public static FileHandle asset( String path ) {
+        checkAppInitialized();
+        return app.asset( path );
     }
 
-    public static Logger getLogger() {
-        return logger;
+    public static Logger logger() {
+        checkAppInitialized();
+        return app.getLogger();
     }
 }
-

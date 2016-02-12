@@ -82,7 +82,7 @@ public class CubeTexture extends Texture
 
 		for(String part: parts)
 		{
-			FileHandle file = Parallax.getFiles().asset(urlStart + part + urlEnd);
+			FileHandle file = Parallax.asset(urlStart + part + urlEnd);
 			images.add(new PixmapTextureData());
 		}
 

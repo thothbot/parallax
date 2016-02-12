@@ -22,22 +22,22 @@ public class Log {
 
     public static void info(String msg)
     {
-        Parallax.getLogger().info( msg);
+        Parallax.app().getLogger().info( msg);
     }
 
     public static void debug(String msg)
     {
-        Parallax.getLogger().debug( msg);
+        Parallax.app().getLogger().debug( msg);
     }
 
     public static void warn(String msg)
     {
-        Parallax.getLogger().warn( msg);
+        Parallax.app().getLogger().warn( msg);
     }
 
     public static void error(String msg)
     {
-        Parallax.getLogger().error( msg);
+        Parallax.app().getLogger().error( msg);
     }
 
     public static void error(Object ... all)
@@ -48,11 +48,11 @@ public class Log {
             result.append(mods + " ");
         }
 
-        Parallax.getLogger().error( result.toString());
+        Parallax.app().getLogger().error( result.toString());
     }
 
     public static void error(String msg, Throwable thrown)
     {
-        Parallax.getLogger().error(msg, thrown);
+        Parallax.app().getLogger().error(msg, thrown);
     }
 }

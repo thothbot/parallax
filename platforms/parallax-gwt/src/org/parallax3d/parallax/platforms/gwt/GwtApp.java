@@ -18,58 +18,68 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.storage.client.Storage;
 import org.parallax3d.parallax.*;
+import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+public class GwtApp implements Parallax.App {
 
-public abstract class GwtApp extends Parallax implements EntryPoint {
+	private final Storage LocalStorage = Storage.getLocalStorageIfSupported();
 
+	Preloader preloader;
+
+	AgentInfo agentInfo;
 	GwtAppConfiguration config;
 
-	private static AgentInfo agentInfo;
+	protected GwtApp(){};
+
+	protected GwtApp(final Parallax.AppListener appListener) {
+		preloader = new Preloader(GWT.getHostPageBaseURL() + "assets/", "assets.txt", new Preloader.PreloaderCallback() {
+			@Override
+			public void ready(boolean success) {
+				appListener.onAppInitialized();
+			}
+		});
+
+		config = getConfig();
+		agentInfo = computeAgentInfo();
+	}
 
 	@Override
-	public ApplicationType getType () {
-		return ApplicationType.WebGL;
+	public FileHandle asset(String path) {
+		return new GwtFileHandle(preloader, path);
+	}
+
+	@Override
+	public Logger getLogger() {
+		return new GwtLogger();
+	}
+
+	@Override
+	public Parallax.ApplicationType getType() {
+		return Parallax.ApplicationType.WebGL;
+	}
+
+	public GwtAppConfiguration getConfig () {
+		return new GwtAppConfiguration();
+	};
+
+	public static void init(final Parallax.AppListener appListener) {
+
+		if(Parallax.isAppInitialized())
+			appListener.onAppInitialized();
+		else
+			Parallax.app = new GwtApp(appListener);
 	}
 
 	// Default configuration
-	public GwtAppConfiguration getConfig () {
-
-		return new GwtAppConfiguration();
-
-	};
-
-	public abstract void onInit();
-
-	@Override
-	public void onModuleLoad () {
-
-		Parallax.logger = new GwtLogger();
-		Parallax.app = GwtApp.this;
-
-		// Preload info about all assets
-		Parallax.files = new GwtFiles( new Preloader(GWT.getHostPageBaseURL() + "assets/", "assets.txt", new Preloader.PreloaderCallback() {
-			@Override
-			public void ready(boolean success) {
-				onInit();
-			}
-		}) );
-
-		GwtApp.agentInfo = computeAgentInfo();
-		this.config = getConfig();
-
-		addEventListeners();
-	}
 
 	/** Contains precomputed information on the user-agent. Useful for dealing with browser and OS behavioral differences. Kindly
 	 * borrowed from PlayN */
-	public static AgentInfo agentInfo () {
+	public AgentInfo agentInfo () {
 		return agentInfo;
 	}
 
@@ -126,19 +136,5 @@ public abstract class GwtApp extends Parallax implements EntryPoint {
 
 		protected AgentInfo () {
 		}
-	}
-
-	native static public void consoleLog(String message) /*-{
-		console.log( "GWT: " + message );
-	}-*/;
-	
-	private native void addEventListeners () /*-{
-		var self = this;
-		$doc.addEventListener('visibilitychange', function (e) {
-			self.@org.parallax3d.parallax.platforms.gwt.GwtApp::onVisibilityChange(Z)($doc['hidden'] !== true);
-		});
-	}-*/;
-
-	private void onVisibilityChange (boolean visible) {
 	}
 }
