@@ -18,28 +18,16 @@
 
 package org.parallax3d.parallax;
 
-public abstract class Parallax {
+import java.util.logging.Level;
 
-    public enum ApplicationType {
-        Android, Desktop, WebGL
-    }
+public interface Logger {
 
-    protected static Parallax app;
-    protected static Files files;
-    protected static Logger logger;
+    void info  (String message);
+    void debug (String message);
+    void warn  (String message);
+    void error (String message);
+    void error (String message, Throwable exception);
+    void setLogLevel (Level logLevel);
+    Level getLogLevel ();
 
-    public abstract ApplicationType getType ();
-
-    public static Parallax getApp() {
-        return app;
-    }
-
-    public static Files getFiles() {
-        return files;
-    }
-
-    public static Logger getLogger() {
-        return logger;
-    }
 }
-

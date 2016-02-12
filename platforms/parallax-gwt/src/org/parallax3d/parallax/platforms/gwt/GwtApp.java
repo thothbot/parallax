@@ -29,18 +29,13 @@ import java.util.logging.Logger;
 
 public abstract class GwtApp extends Parallax implements EntryPoint {
 
-	public final static Logger logger = Logger.getLogger("");
-
 	GwtAppConfiguration config;
 
 	private static AgentInfo agentInfo;
 
-	public void setLogLevel (Level logLevel) {
-		logger.setLevel(logLevel);
-	}
-
-	public Level getLogLevel (){
-		return logger.getLevel();
+	@Override
+	public ApplicationType getType () {
+		return ApplicationType.WebGL;
 	}
 
 	// Default configuration
@@ -55,6 +50,7 @@ public abstract class GwtApp extends Parallax implements EntryPoint {
 	@Override
 	public void onModuleLoad () {
 
+		Parallax.logger = new GwtLogger();
 		Parallax.app = GwtApp.this;
 
 		// Preload info about all assets
@@ -69,67 +65,6 @@ public abstract class GwtApp extends Parallax implements EntryPoint {
 		this.config = getConfig();
 
 		addEventListeners();
-	}
-
-	@Override
-	public Files getFiles() {
-		return Parallax.getFiles();
-	}
-
-	@Override
-	public void info (String message) {
-		GwtApp.logger.log(Level.INFO, message);
-		System.out.println( message );
-	}
-
-	@Override
-	public void debug(String message) {
-		GwtApp.logger.log(Level.FINE, message);
-		System.out.println( message );
-	}
-
-	@Override
-	public void warn(String message) {
-		GwtApp.logger.log(Level.WARNING, message);
-		System.err.println( message );
-	}
-
-	@Override
-	public void error(String message) {
-		GwtApp.logger.log(Level.SEVERE, message);
-		System.err.println( message );
-	}
-
-	@Override
-	public void error(String message, Throwable exception) {
-		GwtApp.logger.log(Level.SEVERE, message, exception);
-		System.err.println(message);
-	}
-
-	private String getMessages (Throwable e) {
-		StringBuffer buffer = new StringBuffer();
-		while (e != null) {
-			buffer.append(e.getMessage() + "\n");
-			e = e.getCause();
-		}
-		return buffer.toString();
-	}
-	
-	private String getStackTrace (Throwable e) {
-		StringBuffer buffer = new StringBuffer();
-		for (StackTraceElement trace : e.getStackTrace()) {
-			buffer.append(trace.toString() + "\n");
-		}
-		return buffer.toString();
-	}
-
-	@Override
-	public ApplicationType getType () {
-		return ApplicationType.WebGL;
-	}
-
-	@Override
-	public void exit () {
 	}
 
 	/** Contains precomputed information on the user-agent. Useful for dealing with browser and OS behavioral differences. Kindly
