@@ -19,14 +19,12 @@
 
 package org.parallax3d.parallax.files;
 
-import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.StreamUtils;
 
 import java.io.*;
 
-/** Represents a file or directory on the filesystem, classpath, Android SD card, or Android assets directory. FileHandles are
- * created via a {@link Files} instance.
+/** Represents a file or directory on the filesystem, classpath, Android SD card, or Android assets directory.
  * 
  * Because some of the file types are backed by composite files and may be compressed (for example, if they are in an Android .apk
  * or are found via the classpath), the methods for extracting a {@link #path()} or {@link #file()} may not be appropriate for all
@@ -41,7 +39,7 @@ public class FileHandle {
 	}
 
 	/** Creates a new absolute FileHandle for the file name. Use this for tools on the desktop that don't need any of the platforms.
-	 * Do not use this constructor in case you write something cross-platforms. Use the {@link Files} interface instead.
+	 * Do not use this constructor in case you write something cross-platforms.
 	 * @param fileName the filename. */
 	public FileHandle (String fileName) {
 		this(new File(fileName));

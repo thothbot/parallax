@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
+import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.Preferences;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
@@ -31,10 +32,10 @@ public class GwtPreferences implements Preferences {
         this.prefix = prefix + ":";
         int prefixLength = this.prefix.length();
         try {
-            for (int i = 0; i < GwtFiles.LocalStorage.getLength(); i++) {
-                String key = GwtFiles.LocalStorage.key(i);
+            for (int i = 0; i < ((GwtApp)Parallax.app()).LocalStorage.getLength(); i++) {
+                String key = ((GwtApp)Parallax.app()).LocalStorage.key(i);
                 if (key.startsWith(prefix)) {
-                    String value = GwtFiles.LocalStorage.getItem(key);
+                    String value = ((GwtApp)Parallax.app()).LocalStorage.getItem(key);
                     values.put(key.substring(prefixLength, key.length() - 1), toObject(key, value));
                 }
             }
@@ -139,16 +140,16 @@ public class GwtPreferences implements Preferences {
     public void flush() {
         try {
             // remove all old values
-            for (int i = 0; i < GwtFiles.LocalStorage.getLength(); i++) {
-                String key = GwtFiles.LocalStorage.key(i);
-                if (key.startsWith(prefix)) GwtFiles.LocalStorage.removeItem(key);
+            for (int i = 0; i < ((GwtApp)Parallax.app()).LocalStorage.getLength(); i++) {
+                String key = ((GwtApp)Parallax.app()).LocalStorage.key(i);
+                if (key.startsWith(prefix)) ((GwtApp)Parallax.app()).LocalStorage.removeItem(key);
             }
 
             // push new values to LocalStorage
             for (String key : values.keySet()) {
                 String storageKey = toStorageKey(key, values.get(key));
                 String storageValue = "" + values.get(key).toString();
-                GwtFiles.LocalStorage.setItem(storageKey, storageValue);
+                ((GwtApp)Parallax.app()).LocalStorage.setItem(storageKey, storageValue);
             }
 
         } catch (Exception e) {

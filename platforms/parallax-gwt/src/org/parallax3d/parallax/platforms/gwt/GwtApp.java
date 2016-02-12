@@ -27,11 +27,11 @@ import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 
 public class GwtApp implements Parallax.App {
 
-	private final Storage LocalStorage = Storage.getLocalStorageIfSupported();
+	public final Storage LocalStorage = Storage.getLocalStorageIfSupported();
 
 	Preloader preloader;
 
-	AgentInfo agentInfo;
+	static AgentInfo agentInfo;
 	GwtAppConfiguration config;
 
 	protected GwtApp(){};
@@ -79,7 +79,7 @@ public class GwtApp implements Parallax.App {
 
 	/** Contains precomputed information on the user-agent. Useful for dealing with browser and OS behavioral differences. Kindly
 	 * borrowed from PlayN */
-	public AgentInfo agentInfo () {
+	public static AgentInfo agentInfo() {
 		return agentInfo;
 	}
 

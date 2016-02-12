@@ -16,7 +16,6 @@
 
 package org.parallax3d.parallax.platforms.gwt.generator;
 
-import org.parallax3d.parallax.Files;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.StreamUtils;
 
@@ -28,12 +27,8 @@ import java.io.*;
 public class FileWrapper {
 	protected File file;
 
-	protected FileWrapper () {
-	}
+	protected FileWrapper () {}
 
-	/** Creates a new absolute FileHandle for the file name. Use this for tools on the desktop that don't need any of the backends.
-	 * Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
-	 * @param fileName the filename. */
 	public FileWrapper (String fileName) {
 		this.file = new File(fileName);
 	}
