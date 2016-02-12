@@ -22,14 +22,20 @@ import java.util.logging.Level;
 
 public abstract class Parallax {
 
-    public static Parallax app;
-    public static Files files;
+    private static Parallax app;
+    private static Files files;
+
+    public static Parallax getApp() {
+        return app;
+    }
+
+    public static Files getFiles() {
+        return files;
+    }
 
     public enum ApplicationType {
         Android, Desktop, WebGL
     }
-
-    public abstract Files getFiles ();
 
     public abstract void info (String message);
 

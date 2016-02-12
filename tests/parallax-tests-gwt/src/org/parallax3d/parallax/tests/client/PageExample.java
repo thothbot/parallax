@@ -107,7 +107,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 				{
 					try {
 
-						rendering = new GwtRenderingContext(PageExample.this.content, ((GwtApp) Parallax.app).getConfig());
+						rendering = new GwtRenderingContext(PageExample.this.content, ((GwtApp) Parallax.getApp()).getConfig());
 
 						debugger = new Debugger(rendering.getRenderer().getInfo());
 						debuggerPanel.add(debugger);

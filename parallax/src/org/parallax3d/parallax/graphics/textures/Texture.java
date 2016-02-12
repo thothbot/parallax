@@ -111,11 +111,11 @@ public class Texture
 	}
 
 	public Texture (String internalPath) {
-		this( Parallax.files.asset(internalPath), null );
+		this( Parallax.getFiles().asset(internalPath), null );
 	}
 
 	public Texture (String internalPath, final ImageLoadHandler imageLoadHandler) {
-		this( Parallax.files.asset(internalPath), imageLoadHandler );
+		this( Parallax.getFiles().asset(internalPath), imageLoadHandler );
 	}
 
 	public Texture (FileHandle file, final ImageLoadHandler imageLoadHandler)

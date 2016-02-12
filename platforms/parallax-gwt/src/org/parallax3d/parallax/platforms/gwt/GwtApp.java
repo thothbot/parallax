@@ -73,7 +73,7 @@ public abstract class GwtApp extends Parallax implements EntryPoint {
 
 	@Override
 	public Files getFiles() {
-		return Parallax.files;
+		return Parallax.getFiles();
 	}
 
 	@Override
