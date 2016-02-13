@@ -868,7 +868,7 @@ public class GLRenderer extends Renderer
 		if( uniforms.get("morphTargetInfluences").getLocation() != -1 )
 		{
 			Float32Array vals = object.__webglMorphTargetInfluences;
-			this.gl.glUniform1fv(uniforms.get("morphTargetInfluences").getLocation(), 1, vals.getFloatBuffer());
+			this.gl.glUniform1fv(uniforms.get("morphTargetInfluences").getLocation(), 1, vals.getTypedBuffer());
 		}
 	}
 
@@ -2395,7 +2395,7 @@ public class GLRenderer extends Renderer
 
 		if ( refreshProgram || !camera.equals( this._currentCamera) )
 		{
-			this.gl.glUniformMatrix4fv(m_uniforms.get("projectionMatrix").getLocation(), 1, false, camera.getProjectionMatrix().getArray().getFloatBuffer());
+			this.gl.glUniformMatrix4fv(m_uniforms.get("projectionMatrix").getLocation(), 1, false, camera.getProjectionMatrix().getArray().getTypedBuffer());
 
 			if ( _logarithmicDepthBuffer ) {
 
@@ -2429,7 +2429,7 @@ public class GLRenderer extends Renderer
 
 				if ( m_uniforms.get("viewMatrix").getLocation() != -1 )
 				{
-					this.gl.glUniformMatrix4fv(m_uniforms.get("viewMatrix").getLocation(), 1, false, camera.getMatrixWorldInverse().getArray().getFloatBuffer());
+					this.gl.glUniformMatrix4fv(m_uniforms.get("viewMatrix").getLocation(), 1, false, camera.getMatrixWorldInverse().getArray().getTypedBuffer());
 				}
 			}
 		}
@@ -2454,7 +2454,7 @@ public class GLRenderer extends Renderer
 			{
 				if ( m_uniforms.get("boneGlobalMatrices").getLocation() != -1 )
 				{
-					this.gl.glUniformMatrix4fv(m_uniforms.get("boneGlobalMatrices").getLocation(), 1, false, ((SkinnedMesh) object).boneMatrices.getFloatBuffer());
+					this.gl.glUniformMatrix4fv(m_uniforms.get("boneGlobalMatrices").getLocation(), 1, false, ((SkinnedMesh) object).boneMatrices.getTypedBuffer());
 				}
 			}
 		}
@@ -2498,7 +2498,7 @@ public class GLRenderer extends Renderer
 		loadUniformsMatrices( m_uniforms, object );
 
 		if ( m_uniforms.get("modelMatrix").getLocation() != null )
-			this.gl.glUniformMatrix4fv(m_uniforms.get("modelMatrix").getLocation(), 1, false, object.getMatrixWorld().getArray().getFloatBuffer());
+			this.gl.glUniformMatrix4fv(m_uniforms.get("modelMatrix").getLocation(), 1, false, object.getMatrixWorld().getArray().getTypedBuffer());
 
 		return shader;
 	}
@@ -2543,10 +2543,10 @@ public class GLRenderer extends Renderer
 	private void loadUniformsMatrices ( FastMap<Uniform> uniforms, GeometryObject object )
 	{
 		GeometryObject objectImpl = (GeometryObject) object;
-		this.gl.glUniformMatrix4fv(uniforms.get("modelViewMatrix").getLocation(), 1, false, objectImpl._modelViewMatrix.getArray().getFloatBuffer());
+		this.gl.glUniformMatrix4fv(uniforms.get("modelViewMatrix").getLocation(), 1, false, objectImpl._modelViewMatrix.getArray().getTypedBuffer());
 
 		if ( uniforms.containsKey("normalMatrix") )
-			this.gl.glUniformMatrix3fv(uniforms.get("normalMatrix").getLocation(), 1, false, objectImpl._normalMatrix.getArray().getFloatBuffer());
+			this.gl.glUniformMatrix3fv(uniforms.get("normalMatrix").getLocation(), 1, false, objectImpl._normalMatrix.getArray().getTypedBuffer());
 	}
 
 	private void loadUniformsGeneric( FastMap<Uniform> materialUniforms )
@@ -2592,11 +2592,11 @@ public class GLRenderer extends Renderer
 			}
 			else if(type == Uniform.TYPE.FV1) // flat array of floats (JS or typed array)
 			{
-				this.gl.glUniform1fv(location, ((Float32Array) value).getLength(),((Float32Array) value).getFloatBuffer());
+				this.gl.glUniform1fv(location, ((Float32Array) value).getLength(),((Float32Array) value).getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
 			{
-				this.gl.glUniform3fv(location, ((Float32Array) value).getLength() / 3, ((Float32Array) value).getFloatBuffer());
+				this.gl.glUniform3fv(location, ((Float32Array) value).getLength() / 3, ((Float32Array) value).getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.V2V) // List of Vector2
 			{
@@ -2614,7 +2614,7 @@ public class GLRenderer extends Renderer
 				}
 
 				this.gl.glUniform2fv(location, uniform.getCacheArray().getLength() / 2,
-						cacheArray.getFloatBuffer());
+						cacheArray.getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.V3V) // List of Vector3
 			{
@@ -2633,7 +2633,7 @@ public class GLRenderer extends Renderer
 				}
 
 				this.gl.glUniform3fv(location, cacheArray.getLength() / 3,
-						cacheArray.getFloatBuffer());
+						cacheArray.getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.V4V) // List of Vector4
 			{
@@ -2654,7 +2654,7 @@ public class GLRenderer extends Renderer
 				}
 
 				this.gl.glUniform4fv(location, cacheArray.getLength() / 4,
-						cacheArray.getFloatBuffer() );
+						cacheArray.getTypedBuffer() );
 			}
 			else if(type == Uniform.TYPE.M4) // single Matrix4
 			{
@@ -2664,7 +2664,7 @@ public class GLRenderer extends Renderer
 					uniform.setCacheArray(cacheArray = Float32Array.create( 16 ) );
 
 				matrix4.flattenToArrayOffset( cacheArray );
-				this.gl.glUniformMatrix4fv(location, 1, false, cacheArray.getFloatBuffer());
+				this.gl.glUniformMatrix4fv(location, 1, false, cacheArray.getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.M4V) // List of Matrix4
 			{
@@ -2677,7 +2677,7 @@ public class GLRenderer extends Renderer
 					listMatrix4f.get( i ).flattenToArrayOffset( cacheArray, i * 16 );
 
 				this.gl.glUniformMatrix4fv(location, cacheArray.getLength() / 16,
-						false, cacheArray.getFloatBuffer());
+						false, cacheArray.getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.T) // single Texture (2d or cube)
 			{

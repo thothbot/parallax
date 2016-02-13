@@ -58,10 +58,6 @@ public final class Float32Array extends TypeArray {
 		return floatBuffer;
 	}
 
-	public FloatBuffer getFloatBuffer() {
-		return floatBuffer;
-	}
-
     @Override
     public int getElementType() {
         return GL20.GL_FLOAT;

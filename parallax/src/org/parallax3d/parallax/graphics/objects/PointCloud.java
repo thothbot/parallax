@@ -534,7 +534,7 @@ public class PointCloud extends GeometryObject
 		if ( dirtyColors || this.sortParticles ) {
 
 			renderer.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-			renderer.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getFloatBuffer(), hint.getValue());
+			renderer.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getTypedBuffer(), hint.getValue());
 
 		}
 
@@ -547,7 +547,7 @@ public class PointCloud extends GeometryObject
 				if ( customAttribute.needsUpdate || this.sortParticles ) {
 
 					renderer.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-					renderer.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getFloatBuffer(), hint.getValue());
+					renderer.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getTypedBuffer(), hint.getValue());
 
 				}
 

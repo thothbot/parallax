@@ -301,7 +301,7 @@ public class Line extends GeometryObject
 			}
 
 			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
-			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getFloatBuffer(), hint.getValue());
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getTypedBuffer(), hint.getValue());
 		}
 
 		if (dirtyColors)
@@ -317,7 +317,7 @@ public class Line extends GeometryObject
 			}
 
 			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getFloatBuffer(), hint.getValue());
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), colorArray.getByteLength(), colorArray.getTypedBuffer(), hint.getValue());
 		}
 
 		if ( dirtyLineDistances ) {
@@ -329,7 +329,7 @@ public class Line extends GeometryObject
 			}
 
 			gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglLineDistanceBuffer );
-			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), lineDistanceArray.getByteLength(), lineDistanceArray.getFloatBuffer(), hint.getValue() );
+			gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), lineDistanceArray.getByteLength(), lineDistanceArray.getTypedBuffer(), hint.getValue() );
 
 		}
 
@@ -414,7 +414,7 @@ public class Line extends GeometryObject
 					}
 
 					gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
-					gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getFloatBuffer(), hint.getValue());
+					gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getTypedBuffer(), hint.getValue());
 				}
 			}
 		}

@@ -80,7 +80,7 @@ public final class SpritePlugin extends Plugin
 		elementBuffer = gl.glGenBuffer();
 
 		gl.glBindBuffer( BufferTarget.ARRAY_BUFFER.getValue(), vertexBuffer );
-		gl.glBufferData( BufferTarget.ARRAY_BUFFER.getValue(), vertices.getByteLength(), vertices.getFloatBuffer(), BufferUsage.STATIC_DRAW.getValue() );
+		gl.glBufferData( BufferTarget.ARRAY_BUFFER.getValue(), vertices.getByteLength(), vertices.getTypedBuffer(), BufferUsage.STATIC_DRAW.getValue() );
 
 		gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), elementBuffer );
 		gl.glBufferData( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), faces.getByteLength(), faces.getShortBuffer(), BufferUsage.STATIC_DRAW.getValue() );
@@ -132,7 +132,7 @@ public final class SpritePlugin extends Plugin
 
 		gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), elementBuffer );
 
-		gl.glUniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), 1, false, camera.getProjectionMatrix().getArray().getFloatBuffer() );
+		gl.glUniformMatrix4fv( uniforms.get("projectionMatrix").getLocation(), 1, false, camera.getProjectionMatrix().getArray().getTypedBuffer() );
 
 		gl.glActiveTexture( TextureUnit.TEXTURE0.getValue() );
 		gl.glUniform1i( uniforms.get("map").getLocation(), 0 );
@@ -197,7 +197,7 @@ public final class SpritePlugin extends Plugin
 			if ( ! sprite.isVisible() ) continue;
 
 			gl.glUniform1f( uniforms.get("alphaTest").getLocation(), (float) material.getAlphaTest() );
-			gl.glUniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), 1, false, sprite._modelViewMatrix.getArray().getFloatBuffer());
+			gl.glUniformMatrix4fv( uniforms.get("modelViewMatrix").getLocation(), 1, false, sprite._modelViewMatrix.getArray().getTypedBuffer());
 			
 			sprite.getMatrixWorld().decompose( spritePosition, spriteRotation, spriteScale );
 			
