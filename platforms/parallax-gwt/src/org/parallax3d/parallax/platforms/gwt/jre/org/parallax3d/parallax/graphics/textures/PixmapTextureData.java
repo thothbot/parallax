@@ -40,11 +40,11 @@ public class PixmapTextureData implements TextureData {
 
     @Override
     public void load(final FileHandle file, final TextureLoadHandler textureLoadHandler) {
-        ((GwtFileHandle)file).load(new FileListener<ImageElement>() {
+        ((GwtFileHandle)file).load(new FileListener<GwtFileHandle>() {
             @Override
-            public void onSuccess(ImageElement result) {
+            public void onSuccess(GwtFileHandle result) {
                 Log.info("Loaded texture: " + file.path());
-                image = result;
+                image = (ImageElement)result.file();
                 textureLoadHandler.onLoaded( true );
             }
 

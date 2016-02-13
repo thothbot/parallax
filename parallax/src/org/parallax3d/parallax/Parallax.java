@@ -19,6 +19,7 @@
 package org.parallax3d.parallax;
 
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 public class Parallax {
@@ -34,6 +35,8 @@ public class Parallax {
     public interface App {
 
         FileHandle asset(String path);
+        FileHandle asset(String path, FileListener<? extends FileHandle> listener);
+
         Logger getLogger();
         ApplicationType getType();
 
@@ -56,8 +59,12 @@ public class Parallax {
     }
 
     public static FileHandle asset( String path ) {
+        return asset(path, null);
+    }
+
+    public static FileHandle asset(String path, FileListener<FileHandle> listener) {
         checkAppInitialized();
-        return app.asset( path );
+        return app.asset( path, listener );
     }
 
     public static Logger logger() {

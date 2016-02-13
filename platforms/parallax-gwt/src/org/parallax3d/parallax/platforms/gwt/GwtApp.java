@@ -23,6 +23,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.storage.client.Storage;
 import org.parallax3d.parallax.*;
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
 
 public class GwtApp implements Parallax.App {
@@ -49,8 +50,13 @@ public class GwtApp implements Parallax.App {
 	}
 
 	@Override
-	public FileHandle asset(String path) {
-		return new GwtFileHandle(preloader, path);
+	public GwtFileHandle asset(String path) {
+		return asset(path, null);
+	}
+
+	@Override
+	public GwtFileHandle asset(String path, FileListener<? extends FileHandle> listener) {
+		return ( new GwtFileHandle(preloader, path)).load((FileListener<GwtFileHandle>) listener);
 	}
 
 	@Override

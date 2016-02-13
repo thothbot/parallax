@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
+import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader;
@@ -27,46 +28,12 @@ import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import java.io.*;
 
 public class GwtFileHandle extends FileHandle {
-    public final Preloader preloader;
-    private final String file;
+    final Preloader.Asset asset;
+    final Preloader preloader;
 
     public GwtFileHandle(Preloader preloader, String fileName) {
+        this.asset = preloader.get(fixSlashes(fileName));
         this.preloader = preloader;
-        this.file = fixSlashes(fileName);
-    }
-
-    public void load(final FileListener callback) {
-        final Preloader.Asset asset = this.preloader.get(this.file);
-
-        if(asset == null)
-        {
-            callback.onFailure();
-            return;
-        }
-
-        if(asset.isLoaded && asset.data != null) {
-            callback.onSuccess(asset.data);
-        }
-
-        final AssetDownloader loader = new AssetDownloader();
-        loader.load(preloader.baseUrl + asset.url, asset.type, asset.mimeType, new FileListener<Object>() {
-            @Override
-            public void onProgress (double amount) {
-                asset.loaded = (long) amount;
-                callback.onProgress(amount);
-            }
-            @Override
-            public void onFailure () {
-                asset.isFailed = true;
-                callback.onFailure();
-            }
-            @Override
-            public void onSuccess (Object result) {
-                asset.data = result;
-                asset.isLoaded = true;
-                callback.onSuccess(result);
-            }
-        });
     }
 
     private static String fixSlashes(String path) {
@@ -77,19 +44,53 @@ public class GwtFileHandle extends FileHandle {
         return path;
     }
 
-    @Override
+    public GwtFileHandle load(final FileListener<GwtFileHandle> callback) {
+        if (asset == null && callback != null) {
+            callback.onFailure();
+            return this;
+        }
+
+        if (asset.isLoaded && asset.data != null && callback != null) {
+            callback.onSuccess(this);
+            return this;
+        }
+
+        final AssetDownloader loader = new AssetDownloader();
+        loader.load(preloader.baseUrl + asset.url, asset.type, asset.mimeType, new FileListener<Object>() {
+
+            public void onProgress(double amount) {
+                asset.loaded = (long) amount;
+                if(callback != null)
+                    callback.onProgress(amount);
+            }
+
+            public void onFailure() {
+                asset.isFailed = true;
+                if(callback != null)
+                    callback.onFailure();
+            }
+
+            public void onSuccess(Object result) {
+                asset.data = result;
+                asset.isLoaded = true;
+                if(callback != null)
+                    callback.onSuccess(GwtFileHandle.this);
+            }
+        });
+
+        return this;
+    }
+
     public String path() {
-        return file;
+        return asset.url;
     }
 
-    @Override
     public String name() {
-        int index = file.lastIndexOf('/');
-        if (index < 0) return file;
-        return file.substring(index + 1);
+        int index = asset.url.lastIndexOf('/');
+        if (index < 0) return asset.url;
+        return asset.url.substring(index + 1);
     }
 
-    @Override
     public String extension() {
         String name = name();
         int dotIndex = name.lastIndexOf('.');
@@ -97,7 +98,6 @@ public class GwtFileHandle extends FileHandle {
         return name.substring(dotIndex + 1);
     }
 
-    @Override
     public String nameWithoutExtension() {
         String name = name();
         int dotIndex = name.lastIndexOf('.');
@@ -108,16 +108,15 @@ public class GwtFileHandle extends FileHandle {
     /**
      * @return the path and filename without the extension, e.g. dir/dir2/file.png -> dir/dir2/file
      */
-    @Override
     public String pathWithoutExtension() {
-        String path = file;
+        String path = asset.url;
         int dotIndex = path.lastIndexOf('.');
         if (dotIndex == -1) return path;
         return path.substring(0, dotIndex);
     }
 
-    public File file() {
-        throw new ParallaxRuntimeException("Not supported in GWT backend");
+    public Object file() {
+        return asset.data;
     }
 
     /**
@@ -125,10 +124,9 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public InputStream read() {
-        InputStream in = preloader.read(file);
-        if (in == null) throw new ParallaxRuntimeException(file + " does not exist");
+        InputStream in = preloader.read(asset.url);
+        if (in == null) throw new ParallaxRuntimeException(asset.url + " does not exist");
         return in;
     }
 
@@ -137,7 +135,6 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public BufferedInputStream read(int bufferSize) {
         return new BufferedInputStream(read(), bufferSize);
     }
@@ -147,7 +144,6 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public Reader reader() {
         return new InputStreamReader(read());
     }
@@ -157,7 +153,6 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public Reader reader(String charset) {
         try {
             return new InputStreamReader(read(), charset);
@@ -171,7 +166,6 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public BufferedReader reader(int bufferSize) {
         return new BufferedReader(reader(), bufferSize);
     }
@@ -181,7 +175,6 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public BufferedReader reader(int bufferSize, String charset) {
         return new BufferedReader(reader(charset), bufferSize);
     }
@@ -191,7 +184,6 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public String readString() {
         return readString(null);
     }
@@ -201,10 +193,9 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public String readString(String charset) {
-        if (preloader.isText(file))
-            return (String)preloader.texts.get(file).data;
+        if (preloader.isText(asset.url))
+            return (String) preloader.texts.get(asset.url).data;
         try {
             return new String(readBytes(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -217,7 +208,6 @@ public class GwtFileHandle extends FileHandle {
      *
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
-    @Override
     public byte[] readBytes() {
         int length = (int) length();
         if (length == 0) length = 512;
@@ -261,7 +251,6 @@ public class GwtFileHandle extends FileHandle {
      * @param size   the number of bytes to read, see {@link #length()}
      * @return the number of read bytes
      */
-    @Override
     public int readBytes(byte[] bytes, int offset, int size) {
         InputStream input = read();
         int position = 0;
@@ -282,69 +271,59 @@ public class GwtFileHandle extends FileHandle {
         return position - offset;
     }
 
-    @Override
     public FileHandle[] list() {
-        return preloader.list(file);
+        return preloader.list(asset.url);
     }
 
     public FileHandle[] list(FileFilter filter) {
-        return preloader.list(file, filter);
+        return preloader.list(asset.url, filter);
     }
 
-    @Override
     public FileHandle[] list(FilenameFilter filter) {
-        return preloader.list(file, filter);
+        return preloader.list(asset.url, filter);
     }
 
-    @Override
     public FileHandle[] list(String suffix) {
-        return preloader.list(file, suffix);
+        return preloader.list(asset.url, suffix);
     }
 
-    @Override
     public boolean isDirectory() {
-        return preloader.isDirectory(file);
+        return asset.type == AssetFilter.AssetType.Directory;
     }
 
-    @Override
     public FileHandle child(String name) {
-        return new GwtFileHandle(preloader, (file.isEmpty() ? "" : (file + (file.endsWith("/") ? "" : "/"))) + name);
+        return new GwtFileHandle(preloader, (asset.url.isEmpty() ? "" : (asset.url + (asset.url.endsWith("/") ? "" : "/"))) + name);
     }
 
-    @Override
+
     public FileHandle parent() {
-        int index = file.lastIndexOf("/");
+        int index = asset.url.lastIndexOf("/");
         String dir = "";
-        if (index > 0) dir = file.substring(0, index);
+        if (index > 0) dir = asset.url.substring(0, index);
         return new GwtFileHandle(preloader, dir);
     }
 
-    @Override
     public FileHandle sibling(String name) {
         return parent().child(fixSlashes(name));
     }
 
-    @Override
     public boolean exists() {
-        return preloader.contains(file);
+        return preloader.contains(asset.url);
     }
 
     /**
      * Returns the length in bytes of this file, or 0 if this file is a directory, does not exist, or the size cannot otherwise be
      * determined.
      */
-    @Override
     public long length() {
-        return preloader.length(file);
+        return asset.size;
     }
 
-    @Override
     public long lastModified() {
         return 0;
     }
 
-    @Override
     public String toString() {
-        return file;
+        return asset.url;
     }
 }
