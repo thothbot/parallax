@@ -114,7 +114,7 @@ public final class BufferGeometryParticles extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		double time = context.getDeltaTime() * 0.001;
+		double time = context.getFrameId() * 0.01;
 
 		particleSystem.getRotation().setX( time * 0.25 );
 		particleSystem.getRotation().setY( time * 0.5 );
