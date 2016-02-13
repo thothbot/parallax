@@ -15,6 +15,7 @@ package org.parallax3d.parallax.system.gl.arrays;
 
 import org.parallax3d.parallax.system.gl.GL20;
 
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 /**
@@ -38,6 +39,11 @@ public final class Int32Array extends TypeArray {
 	@Override
 	protected void createTypedBuffer() {
 		intBuffer = getBuffer().asIntBuffer();
+	}
+
+	@Override
+	public IntBuffer getTypedBuffer() {
+		return intBuffer;
 	}
 
 	public IntBuffer getIntBuffer() {

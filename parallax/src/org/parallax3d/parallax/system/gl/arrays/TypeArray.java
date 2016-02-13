@@ -13,6 +13,7 @@
  */
 package org.parallax3d.parallax.system.gl.arrays;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -30,6 +31,10 @@ public abstract class TypeArray  {
 	}
 
     public ByteBuffer getBuffer() {
+        return buffer;
+    }
+
+    public Buffer getTypedBuffer() {
         return buffer;
     }
 

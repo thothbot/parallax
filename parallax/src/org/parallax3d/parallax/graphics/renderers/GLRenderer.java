@@ -987,7 +987,6 @@ public class GLRenderer extends Renderer
 				if ( geometryAttribute != null ) {
 
 					int size = geometryAttribute.getItemSize();
-
 					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryAttribute.getBuffer());
 
 					enableAttribute( programAttribute );
@@ -1014,7 +1013,6 @@ public class GLRenderer extends Renderer
 		}
 
 		disableUnusedAttributes();
-
 	}
 
 
@@ -2551,7 +2549,6 @@ public class GLRenderer extends Renderer
 			this.gl.glUniformMatrix3fv(uniforms.get("normalMatrix").getLocation(), 1, false, objectImpl._normalMatrix.getArray().getFloatBuffer());
 	}
 
-	@SuppressWarnings("unchecked")
 	private void loadUniformsGeneric( FastMap<Uniform> materialUniforms )
 	{
 //		for ( String key: materialUniforms.keySet() )

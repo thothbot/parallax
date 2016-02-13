@@ -15,6 +15,7 @@ package org.parallax3d.parallax.system.gl.arrays;
 
 import org.parallax3d.parallax.system.gl.GL20;
 
+import java.nio.DoubleBuffer;
 import java.nio.ShortBuffer;
 
 /**
@@ -44,6 +45,11 @@ public final class Uint16Array extends IndexTypeArray {
 	}
 
 	public ShortBuffer getShortBuffer() {
+		return shortBuffer;
+	}
+
+	@Override
+	public ShortBuffer getTypedBuffer() {
 		return shortBuffer;
 	}
 

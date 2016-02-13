@@ -68,13 +68,13 @@ public class SpotLight extends ShadowLight
 		@Override
 		public void reset()
 		{
-			this.colors    = (Float32Array) Float32Array.createArray();
-			this.distances = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
+			this.colors    =  Float32Array.createArray();
+			this.distances =  Float32Array.createArray();
+			this.positions =  Float32Array.createArray();
 
-			this.directions = (Float32Array) Float32Array.createArray();
-			this.angles     = (Float32Array) Float32Array.createArray();
-			this.exponents  = (Float32Array) Float32Array.createArray();
+			this.directions =  Float32Array.createArray();
+			this.angles     =  Float32Array.createArray();
+			this.exponents  =  Float32Array.createArray();
 		}
 
 		@Override

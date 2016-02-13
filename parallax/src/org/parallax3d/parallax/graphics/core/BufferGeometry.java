@@ -31,6 +31,7 @@ import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.system.gl.enums.BufferTarget;
 import org.parallax3d.parallax.system.gl.enums.BufferUsage;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -965,17 +966,17 @@ public class BufferGeometry extends AbstractGeometry
 			String key = (String) this.attributesKeys.toArray()[ i ];
 			BufferAttribute attribute = this.attributes.get( key );
 
-			if ( attribute.getBuffer() == null ) {
+			if ( attribute.getBuffer() == 0 ) {
 
 				attribute.setBuffer(gl.glGenBuffer());
 				attribute.setNeedsUpdate(true);
 
 			}
 
-			if ( attribute.isNeedsUpdate() == true ) {
+			if ( attribute.isNeedsUpdate() ) {
 
-				BufferTarget bufferType = ( key == "index" ) ? BufferTarget.ELEMENT_ARRAY_BUFFER : BufferTarget.ARRAY_BUFFER;
-				ByteBuffer buf = attribute.getArray().getBuffer();
+				BufferTarget bufferType = ( key.equals( "index" ) ) ? BufferTarget.ELEMENT_ARRAY_BUFFER : BufferTarget.ARRAY_BUFFER;
+				Buffer buf = attribute.getArray().getTypedBuffer();
 				buf.rewind();
 
 				gl.glBindBuffer(bufferType.getValue(), attribute.getBuffer());
