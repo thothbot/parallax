@@ -83,7 +83,7 @@ public final class SpritePlugin extends Plugin
 		gl.glBufferData( BufferTarget.ARRAY_BUFFER.getValue(), vertices.getByteLength(), vertices.getTypedBuffer(), BufferUsage.STATIC_DRAW.getValue() );
 
 		gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), elementBuffer );
-		gl.glBufferData( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), faces.getByteLength(), faces.getShortBuffer(), BufferUsage.STATIC_DRAW.getValue() );
+		gl.glBufferData( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), faces.getByteLength(), faces.getTypedBuffer(), BufferUsage.STATIC_DRAW.getValue() );
 
 		shader = new SpriteShader();
 		shader.buildProgram(gl);

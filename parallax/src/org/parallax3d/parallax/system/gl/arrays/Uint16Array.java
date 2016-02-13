@@ -44,10 +44,6 @@ public final class Uint16Array extends IndexTypeArray {
 		shortBuffer = getBuffer().asShortBuffer();
 	}
 
-	public ShortBuffer getShortBuffer() {
-		return shortBuffer;
-	}
-
 	@Override
 	public ShortBuffer getTypedBuffer() {
 		return shortBuffer;
