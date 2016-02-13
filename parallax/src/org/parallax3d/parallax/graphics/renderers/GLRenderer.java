@@ -321,7 +321,7 @@ public class GLRenderer extends Renderer
 	private int getIntGlParam(int param)
 	{
 		Int32Array buffer = Int32Array.create(1);
-		this.gl.glGetIntegerv(param, buffer.getIntBuffer());
+		this.gl.glGetIntegerv(param, buffer.getTypedBuffer());
 
 		return buffer.get(0);
 	}

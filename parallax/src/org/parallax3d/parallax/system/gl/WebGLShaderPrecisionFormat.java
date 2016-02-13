@@ -28,7 +28,7 @@ public final class WebGLShaderPrecisionFormat {
 	Int32Array precision = Int32Array.create(3);
 
 	public WebGLShaderPrecisionFormat(GL20 gl, Shaders shaderType, ShaderPrecisionSpecifiedTypes precisionType) {
-		gl.glGetShaderPrecisionFormat(shaderType.getValue(), precisionType.getValue(), precision.getIntBuffer(), precision.getIntBuffer());
+		gl.glGetShaderPrecisionFormat(shaderType.getValue(), precisionType.getValue(), precision.getTypedBuffer(), precision.getTypedBuffer());
 	}
 	
 	public int getRangeMin() {

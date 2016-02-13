@@ -46,10 +46,6 @@ public final class Int32Array extends TypeArray {
 		return intBuffer;
 	}
 
-	public IntBuffer getIntBuffer() {
-		return intBuffer;
-	}
-
 	@Override
 	public int getElementType() {
 		return GL20.GL_INT;
