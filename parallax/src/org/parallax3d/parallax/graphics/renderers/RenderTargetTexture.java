@@ -113,11 +113,11 @@ public class RenderTargetTexture extends Texture
 
 	public void deallocate(GL20 gl)
 	{
-		if (this.getWebGlTexture() == null)
+		if (this.getWebGlTexture() == 0)
 			return;
 
 		gl.glDeleteTexture(this.getWebGlTexture());
-		this.setWebGlTexture(null);
+		this.setWebGlTexture(0);
 
 		gl.glDeleteFramebuffer(this.webglFramebuffer);
 		gl.glDeleteRenderbuffer(this.webglRenderbuffer);

@@ -94,9 +94,9 @@ public class Texture
 	private boolean isFlipY = true;
 	private int unpackAlignment = 4; // valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
 
-	private boolean isNeedsUpdate = true;
+	private boolean isNeedsUpdate = false;
 
-	protected Integer webglTexture; //WebGLTexture
+	protected int webglTexture = 0; //WebGLTexture
 
 	private int anisotropy;
 
@@ -450,11 +450,11 @@ public class Texture
 		return this;
 	}
 
-	public Integer getWebGlTexture() {
+	public int getWebGlTexture() {
 		return webglTexture;
 	}
 
-	public Texture setWebGlTexture(Integer webglTexture) {
+	public Texture setWebGlTexture(int webglTexture) {
 		this.webglTexture = webglTexture;
 		return this;
 	}
@@ -508,7 +508,7 @@ public class Texture
 	 */
 	public void deallocate( GLRenderer renderer )
 	{
-		if ( getWebGlTexture() == null ) return;
+		if ( getWebGlTexture() == 0 ) return;
 
 		renderer.gl.glDeleteTexture(getWebGlTexture());
 

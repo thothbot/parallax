@@ -51,11 +51,11 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	@Override
 	public void deallocate(GL20 gl)
 	{
-		if (this.getWebGlTexture() == null)
+		if (this.getWebGlTexture() == 0)
 			return;
 
 		gl.glDeleteTexture(this.getWebGlTexture());
-		this.setWebGlTexture(null);
+		this.setWebGlTexture(0);
 
 		for (int i = 0; i < 6; i++)
 		{

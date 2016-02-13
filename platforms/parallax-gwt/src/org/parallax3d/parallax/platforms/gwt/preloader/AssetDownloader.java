@@ -178,8 +178,8 @@ public class AssetDownloader {
 		}
 	}
 
-	private static interface ImgEventListener {
-		public void onEvent (NativeEvent event);
+	private interface ImgEventListener {
+		void onEvent (NativeEvent event);
 	}
 
 	static native void hookImgListener (ImageElement img, ImgEventListener h) /*-{

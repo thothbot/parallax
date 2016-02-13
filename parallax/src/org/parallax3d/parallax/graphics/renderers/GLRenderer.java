@@ -2901,7 +2901,7 @@ public class GLRenderer extends Renderer
 	{
 		if ( texture.isNeedsUpdate())
 		{
-			if ( texture.getWebGlTexture() == null )
+			if ( texture.getWebGlTexture() == 0 )
 			{
 				texture.setWebGlTexture( this.gl.glGenTexture() );
 
