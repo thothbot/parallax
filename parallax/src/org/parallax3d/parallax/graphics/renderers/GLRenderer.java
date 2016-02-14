@@ -19,6 +19,8 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
+import java.nio.Buffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -320,9 +322,8 @@ public class GLRenderer extends Renderer
 
 	private int getIntGlParam(int param)
 	{
-		Int32Array buffer = Int32Array.create(1);
-		this.gl.glGetIntegerv(param, buffer.getTypedBuffer());
-
+		IntBuffer buffer = Int32Array.create(3).getTypedBuffer();
+		this.gl.glGetIntegerv(param, buffer);
 		return buffer.get(0);
 	}
 
@@ -2913,10 +2914,8 @@ public class GLRenderer extends Renderer
 			this.gl.glPixelStorei( PixelStoreParameter.UNPACK_ALIGNMENT.getValue(), texture.getUnpackAlignment() );
 
 			TextureData image = texture.getImage();
-			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
-					&& Mathematics.isPowerOfTwo( image.getHeight() );
 
-			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
+			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_2D, image.isPowerOfTwo() );
 
 			if ( texture instanceof CompressedTexture )
 			{
@@ -2950,7 +2949,7 @@ public class GLRenderer extends Renderer
 				image.glTexImage2D(this.gl, TextureTarget.TEXTURE_2D.getValue());
 			}
 
-			if ( texture.isGenerateMipmaps() && isImagePowerOfTwo )
+			if ( texture.isGenerateMipmaps() && image.isPowerOfTwo() )
 				this.gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
 
 			texture.setNeedsUpdate(false);
@@ -2983,28 +2982,20 @@ public class GLRenderer extends Renderer
 
 			List<TextureData> cubeImage = new ArrayList<TextureData>();
 
-			for ( int i = 0; i < 6; i ++ )
+			for ( int i = 0; i < 6; i ++ ) {
 				cubeImage.add(this.autoScaleCubemaps
 						? texture.getImage(i).clampToMaxSize(this._maxCubemapSize)
 						: texture.getImage(i));
+				Log.error(texture.getImage(i).getWidth());
+			}
 
-			TextureData image = cubeImage.get( 0 );
-			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
-					&& Mathematics.isPowerOfTwo( image.getHeight() );
-
-			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP,
-					true /*power of two*/ );
+			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP, true /*power of two*/ );
 
 			for ( int i = 0; i < 6; i ++ )
 			{
 				TextureData img = cubeImage.get(i);
-
-				if (!isImagePowerOfTwo)
-					img.toPowerOfTwo();
-				else
-					img.glTexImage2D(this.gl, TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue());
-
-				img.recycle();
+				img.toPowerOfTwo();
+				img.glTexImage2D(this.gl, TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue());
 			}
 
 			if ( texture.isGenerateMipmaps() )
