@@ -55,9 +55,9 @@ public final class DepthShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0f ));
-		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0f ));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0f ));
+		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0 ));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
 	}
 	
 	@Override

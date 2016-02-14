@@ -2551,18 +2551,15 @@ public class GLRenderer extends Renderer
 
 	private void loadUniformsGeneric( FastMap<Uniform> materialUniforms )
 	{
-//		for ( String key: materialUniforms.keySet() )
-//		{
-//			Uniform uniform = materialUniforms.get(key);
-		for ( Uniform uniform : materialUniforms.values() )
+		for ( String key: materialUniforms.keySet() )
 		{
+			Uniform uniform = materialUniforms.get(key);
 			int location = uniform.getLocation();
 
 			if ( location == -1 ) continue;
 
 			Object value = uniform.getValue();
 			Uniform.TYPE type = uniform.getType();
-
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
 
@@ -2572,7 +2569,7 @@ public class GLRenderer extends Renderer
 			}
 			else if(type == Uniform.TYPE.F) // single float
 			{
-				this.gl.glUniform1f(location, ((Double) value).floatValue());
+				this.gl.glUniform1f(location, value instanceof Float ? (Float) value : ((Double)value).floatValue());
 			}
 			else if(type == Uniform.TYPE.V2) // single Vector2
 			{

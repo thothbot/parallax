@@ -48,9 +48,9 @@ public class DashedShader extends Shader
 	{
 		this.setUniforms(UniformsLib.getCommon());
 		this.setUniforms(UniformsLib.getFog());
-		this.addUniform("scale",     new Uniform(Uniform.TYPE.F, 1.0f ));
-		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F, 1.0f ));
-		this.addUniform("totalSize", new Uniform(Uniform.TYPE.F, 2.0f ));
+		this.addUniform("scale",     new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("totalSize", new Uniform(Uniform.TYPE.F, 2.0 ));
 	}
 	
 	@Override

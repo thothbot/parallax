@@ -40,7 +40,7 @@ public class Texture
 	/**
 	 * This callback will be called when the image has been loaded.
 	 */
-	public static interface ImageLoadHandler
+	public interface ImageLoadHandler
 	{
 		void onImageLoad(Texture texture);
 	}
@@ -102,13 +102,7 @@ public class Texture
 
 	private int cache_oldAnisotropy;
 
-	/**
-	 * Default constructor will create new instance of texture.
-	 */
-	public Texture()
-	{
-		this("");
-	}
+	protected Texture(){}
 
 	public Texture (String internalPath) {
 		this( Parallax.asset(internalPath), null );

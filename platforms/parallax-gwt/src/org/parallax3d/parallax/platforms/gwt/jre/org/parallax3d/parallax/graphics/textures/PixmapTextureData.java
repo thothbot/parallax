@@ -68,12 +68,12 @@ public class PixmapTextureData implements TextureData {
 
     @Override
     public int getWidth() {
-        return 0;
+        return image.getOffsetWidth();
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return image.getOffsetHeight();
     }
 
     @Override

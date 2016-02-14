@@ -35,21 +35,48 @@ import java.util.List;
 @ThreejsObject("THREE.CubeTexture")
 public class CubeTexture extends Texture 
 {
-	private List<PixmapTextureData> images;
-
-	private int loadedCount;
+	private List<TextureData> images = new ArrayList<>();
 
 	public CubeTexture(String url)
 	{
-		this(getImagesFromUrl(url));
+		this(url, null);
 	}
 
-	public CubeTexture(List<PixmapTextureData> images)
+	public CubeTexture(String url, final ImageLoadHandler imageLoadHandler)
+	{
+		String[] parts = {"px", "nx", "py", "ny", "pz", "nz"};
+		String urlStart = url.substring(0, url.indexOf("*"));
+		String urlEnd = url.substring(url.indexOf("*") + 1, url.length());
+
+		for(int i = 0, len = parts.length; i < len; i++)
+		{
+			final boolean last = i == len - 1;
+			String part = parts[i];
+			FileHandle file = Parallax.asset(urlStart + part + urlEnd);
+
+			TextureData image = new PixmapTextureData();
+			images.add(image);
+			image.load(file, new PixmapTextureData.TextureLoadHandler() {
+
+				@Override
+				public void onLoaded(boolean success) {
+					if(last)
+					{
+						setNeedsUpdate(true);
+						if (imageLoadHandler != null)
+							imageLoadHandler.onImageLoad(CubeTexture.this);
+					}
+				}
+			});
+		}
+
+		setFlipY(false);
+	}
+
+	public CubeTexture(List<TextureData> images)
 	{
 		this.images = images;
 		setFlipY(false);
-
-		loadedCount = 0;
 	}
 
 	/**
@@ -70,22 +97,5 @@ public class CubeTexture extends Texture
 	public TextureData getImage(int index)
 	{
 		return this.images.get(index);
-	}
-
-	private static List<PixmapTextureData> getImagesFromUrl(String url)
-	{
-		List<PixmapTextureData> images = new ArrayList<PixmapTextureData>();
-
-		String[] parts = {"px", "nx", "py", "ny", "pz", "nz"};
-		String urlStart = url.substring(0, url.indexOf("*"));
-		String urlEnd = url.substring(url.indexOf("*") + 1, url.length());
-
-		for(String part: parts)
-		{
-			FileHandle file = Parallax.asset(urlStart + part + urlEnd);
-			images.add(new PixmapTextureData());
-		}
-
-		return images;
 	}
 }
