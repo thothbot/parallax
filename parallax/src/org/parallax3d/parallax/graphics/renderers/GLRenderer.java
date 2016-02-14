@@ -2497,7 +2497,7 @@ public class GLRenderer extends Renderer
 
 		loadUniformsMatrices( m_uniforms, object );
 
-		if ( m_uniforms.get("modelMatrix").getLocation() != null )
+		if ( m_uniforms.get("modelMatrix").getLocation() != 0 )
 			this.gl.glUniformMatrix4fv(m_uniforms.get("modelMatrix").getLocation(), 1, false, object.getMatrixWorld().getArray().getTypedBuffer());
 
 		return shader;

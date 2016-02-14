@@ -33,6 +33,7 @@ import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
@@ -43,7 +44,7 @@ import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 @ThreejsExample("webgl_rtt")
-public class MaterialsRenderTarget extends ParallaxTest
+public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHandler
 {
 	interface ResourcesPass1 extends Shader.DefaultResources
 	{
@@ -76,15 +77,22 @@ public class MaterialsRenderTarget extends ParallaxTest
 	ShaderMaterial material;
 	
 	Mesh zmesh1, zmesh2;
-	
-	public int mouseX;
-	public int mouseY;
+
+	int width = 0, height = 0;
+	int mouseX;
+	int mouseY;
 	
 	double delta = 0.01;
 	
 	ShaderMaterial materialScreen;
 	
 	Mesh quad1;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -224,6 +232,13 @@ public class MaterialsRenderTarget extends ParallaxTest
 	}
 
 	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = (screenX - width / 2 );
+		mouseY = (screenY - height / 2);
+	}
+
+
+	@Override
 	public String getName() {
 		return "Render to texture";
 	}
@@ -237,22 +252,6 @@ public class MaterialsRenderTarget extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		    	  	rs.mouseX = (event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ); 
-//		    	  	rs.mouseY = (event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2);
-//		      }
-//		});
-//	}
 
 }
 

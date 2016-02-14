@@ -238,7 +238,7 @@ public abstract class Shader
 	private int getShaderProgram(GL20 gl, Class<?> type, String string)
 	{
 		Log.debug("Called getShaderProgram() for type " + type.getName());
-		Integer shader = null;
+		int shader = 0;
 
 		if (type == ChunksFragmentShader.class)
 			shader = gl.glCreateShader(GL20.GL_FRAGMENT_SHADER);

@@ -82,7 +82,7 @@ public class Uniform
 		this.cache_array = array;
 	}
 
-	public Integer getLocation() {
+	public int getLocation() {
 		return this.location;
 	}
 
