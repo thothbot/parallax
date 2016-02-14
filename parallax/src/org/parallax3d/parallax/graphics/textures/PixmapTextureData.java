@@ -48,8 +48,13 @@ public class PixmapTextureData implements TextureData {
     }
 
     @Override
-    public TextureData createScaledCopy(int width, int height) {
-        return null;
+    public PixmapTextureData clampToMaxSize(int maxSize) {
+        return this;
+    }
+
+    @Override
+    public PixmapTextureData toPowerOfTwo() {
+        return this;
     }
 
     @Override

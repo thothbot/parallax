@@ -195,8 +195,24 @@ public class AssetDownloader {
 			}, false);
 	}-*/;
 
+	// Need to get width and height values
 	public static native ImageElement createImage () /*-{
-		return new Image();
+        var imagestore = document.getElementById("imagestore-wrapper");
+        if(!imagestore)
+        {
+            imagestore = document.createElement('div');
+            imagestore.src= 'http://127.0.0.1:8080/parallax-tests-gwt/assets/textures/lensflare/lensflare3.png';
+            imagestore.id = 'imagestore-wrapper';
+            imagestore.style.visibility =  'hidden';
+            imagestore.style.position =  'absolute';
+            imagestore.style.width =  '1px';
+            imagestore.style.height =  '1px';
+            imagestore.style.overflow =  'hidden';
+            document.body.appendChild(imagestore)
+        }
+        var image = new Image();
+        imagestore.appendChild(image);
+        return image;
 	}-*/;
 
 	private native static void setOnProgress (XMLHttpRequest req, FileListener listener) /*-{

@@ -60,6 +60,16 @@ public class DummyImage implements TextureData
 		return height;
 	}
 
+	@Override
+	public DummyImage clampToMaxSize(int maxSize) {
+		return this;
+	}
+
+	@Override
+	public DummyImage toPowerOfTwo() {
+		return this;
+	}
+
 	public void setWidth(int width)
 	{
 		this.width = width;
@@ -68,12 +78,6 @@ public class DummyImage implements TextureData
 	public void setHeight(int height)
 	{
 		this.height = height;
-	}
-
-	@Override
-	public TextureData createScaledCopy(int width, int height)
-	{
-		return new DummyImage(width, height);
 	}
 
 	@Override

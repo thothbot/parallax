@@ -56,11 +56,16 @@ public interface TextureData
     int getHeight();
 
     /**
-     * @param width
-     * @param height
-     * @return  a new Image which is a scaled copy of this one.
+     * Warning: Scaling through the canvas will only work with images that use
+     * premultiplied alpha.
+     *
+     * @param maxSize  the max size of absoluteWidth or absoluteHeight
+     *
+     * @return a new Image, or the same one if no clamping was necessary
      */
-    TextureData createScaledCopy(int width, int height);
+    TextureData clampToMaxSize ( int maxSize );
+
+    TextureData toPowerOfTwo();
 
     /**
      * Explicitly free the Image's internal resources.

@@ -2963,40 +2963,6 @@ public class GLRenderer extends Renderer
 		}
 	}
 
-	private TextureData createPowerOfTwoImage(TextureData image)
-	{
-		int width = image.getWidth();
-		int height = image.getHeight();
-		int w2 = Mathematics.getNextHighestPowerOfTwo( width );
-		int h2 = Mathematics.getNextHighestPowerOfTwo( height );
-
-		return (w2 != width || h2 != height) ? image.createScaledCopy(w2, h2) : image;
-	}
-
-	/**
-	 * Warning: Scaling through the canvas will only work with images that use
-	 * premultiplied alpha.
-	 *
-	 * @param image    the image element
-	 * @param maxSize  the max size of absoluteWidth or absoluteHeight
-	 *
-	 * @return a new Image, or the same one if no clamping was necessary
-	 */
-	private TextureData clampToMaxSize (TextureData image, int maxSize )
-	{
-		int imgWidth = image.getWidth();
-		int imgHeight = image.getHeight();
-
-		if ( imgWidth <= maxSize && imgHeight <= maxSize )
-			return image;
-
-		int maxDimension = Math.max(imgWidth, imgHeight);
-		int newWidth = (int) Math.floor( imgWidth * maxSize / maxDimension );
-		int newHeight = (int) Math.floor( imgHeight * maxSize / maxDimension );
-
-		return image.createScaledCopy(newWidth, newHeight);
-	}
-
 	private void setCubeTexture ( CubeTexture texture, int slot )
 	{
 		if ( !texture.isValid() )
@@ -3018,20 +2984,9 @@ public class GLRenderer extends Renderer
 			List<TextureData> cubeImage = new ArrayList<TextureData>();
 
 			for ( int i = 0; i < 6; i ++ )
-			{
-				if ( this.autoScaleCubemaps )
-				{
-					Log.warn("Need to fix autoscale of cubemaps");
-//					TextureData clamped = clampToMaxSize(texture.getImage(i),
-//							this._maxCubemapSize);
-					cubeImage.add(texture.getImage(i));
-
-				}
-				else
-				{
-					cubeImage.add(texture.getImage(i));
-				}
-			}
+				cubeImage.add(this.autoScaleCubemaps
+						? texture.getImage(i).clampToMaxSize(this._maxCubemapSize)
+						: texture.getImage(i));
 
 			TextureData image = cubeImage.get( 0 );
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
@@ -3045,15 +3000,10 @@ public class GLRenderer extends Renderer
 				TextureData img = cubeImage.get(i);
 
 				if (!isImagePowerOfTwo)
-				{
-					TextureData scaledImg = createPowerOfTwoImage(img);
-					img.recycle();
-					img = scaledImg;
-				}
+					img.toPowerOfTwo();
 				else
-				{
 					img.glTexImage2D(this.gl, TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue());
-				}
+
 				img.recycle();
 			}
 
