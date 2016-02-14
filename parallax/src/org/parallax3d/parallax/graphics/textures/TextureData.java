@@ -65,6 +65,7 @@ public interface TextureData
      */
     TextureData clampToMaxSize ( int maxSize );
 
+    boolean isPowerOfTwo();
     TextureData toPowerOfTwo();
 
     /**

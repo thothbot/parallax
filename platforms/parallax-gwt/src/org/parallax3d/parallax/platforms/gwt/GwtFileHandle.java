@@ -33,6 +33,9 @@ public class GwtFileHandle extends FileHandle {
 
     public GwtFileHandle(Preloader preloader, String fileName) {
         this.asset = preloader.get(fixSlashes(fileName));
+        if(this.asset == null)
+            throw new ParallaxRuntimeException("File not found: " + fileName);
+
         this.preloader = preloader;
     }
 
@@ -45,8 +48,9 @@ public class GwtFileHandle extends FileHandle {
     }
 
     public GwtFileHandle load(final FileListener<GwtFileHandle> callback) {
-        if (asset == null && callback != null) {
-            callback.onFailure();
+        if (asset == null) {
+            if(callback != null)
+                callback.onFailure();
             return this;
         }
 

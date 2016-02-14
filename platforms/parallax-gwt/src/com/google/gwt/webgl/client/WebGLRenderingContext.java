@@ -21,6 +21,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.VideoElement;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
@@ -882,20 +883,12 @@ public class WebGLRenderingContext extends JavaScriptObject {
 														}-*/;
 
 	public final native void texImage2D (int target, int level, int internalformat, int format, int type, ImageData pixels) /*-{
-																																									this.texImage2D(target, level, internalformat, format, type, pixels);
-																																									}-*/;
+		this.texImage2D(target, level, internalformat, format, type, pixels);
+	}-*/;
 
-	public final native void texImage2D (int target, int level, int internalformat, int format, int type, ImageElement image) /*-{
-																																										this.texImage2D(target, level, internalformat, format, type, image);
-																																										}-*/;
-
-	public final native void texImage2D (int target, int level, int internalformat, int format, int type, CanvasElement canvas) /*-{
-																																											this.texImage2D(target, level, internalformat, format, type, canvas);
-																																											}-*/;
-
-	public final native void texImage2D (int target, int level, int internalformat, int format, int type, VideoElement video) /*-{
-																																										this.texImage2D(target, level, internalformat, format, type, video);
-																																										}-*/;
+	public final native void texImage2D (int target, int level, int internalformat, int format, int type, Element image) /*-{
+		this.texImage2D(target, level, internalformat, format, type, image);
+	}-*/;
 
 	public final native void texParameterf (int target, int pname, float param) /*-{
 																											this.texParameterf(target, pname, param);

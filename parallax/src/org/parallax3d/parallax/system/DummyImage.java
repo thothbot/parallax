@@ -66,6 +66,11 @@ public class DummyImage implements TextureData
 	}
 
 	@Override
+	public boolean isPowerOfTwo() {
+		return false;
+	}
+
+	@Override
 	public DummyImage toPowerOfTwo() {
 		return this;
 	}

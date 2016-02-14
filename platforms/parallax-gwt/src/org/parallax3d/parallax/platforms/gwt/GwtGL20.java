@@ -21,6 +21,7 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.CanvasElement;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.VideoElement;
 import com.google.gwt.typedarrays.client.Float32ArrayNative;
@@ -29,6 +30,7 @@ import com.google.gwt.typedarrays.client.Int32ArrayNative;
 import com.google.gwt.typedarrays.client.Uint8ArrayNative;
 import com.google.gwt.typedarrays.shared.*;
 import com.google.gwt.webgl.client.*;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
 
@@ -433,15 +435,7 @@ public class GwtGL20 implements GL20 {
 	}
 
 
-	public void glTexImage2D(int target, int level, int internalformat, int format, int type, ImageElement pixels) {
-		gl.texImage2D(target, level, internalformat, format, type, pixels);
-	}
-
-	public void glTexImage2D(int target, int level, int internalformat, int format, int type, VideoElement pixels) {
-		gl.texImage2D(target, level, internalformat, format, type, pixels);
-	}
-
-	public void glTexImage2D(int target, int level, int internalformat, int format, int type, CanvasElement pixels) {
+	public void glTexImage2D(int target, int level, int internalformat, int format, int type, Element pixels) {
 		gl.texImage2D(target, level, internalformat, format, type, pixels);
 	}
 

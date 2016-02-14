@@ -2986,7 +2986,6 @@ public class GLRenderer extends Renderer
 				cubeImage.add(this.autoScaleCubemaps
 						? texture.getImage(i).clampToMaxSize(this._maxCubemapSize)
 						: texture.getImage(i));
-				Log.error(texture.getImage(i).getWidth());
 			}
 
 			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP, true /*power of two*/ );

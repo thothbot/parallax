@@ -53,6 +53,11 @@ public class PixmapTextureData implements TextureData {
     }
 
     @Override
+    public boolean isPowerOfTwo() {
+        return false;
+    }
+
+    @Override
     public PixmapTextureData toPowerOfTwo() {
         return this;
     }

@@ -67,7 +67,7 @@ public class PixmapTextureData implements TextureData {
 
     @Override
     public void glTexImage2D(GL20 gl, int target) {
-        ((GwtGL20)gl).glTexImage2D(target, 0, PixelFormat.RGBA.getValue(), PixelFormat.RGBA.getValue(), PixelType.UNSIGNED_BYTE.getValue(), (ImageElement)image);
+        ((GwtGL20)gl).glTexImage2D(target, 0, PixelFormat.RGBA.getValue(), PixelFormat.RGBA.getValue(), PixelType.UNSIGNED_BYTE.getValue(), image);
     }
 
     @Override
@@ -107,12 +107,24 @@ public class PixmapTextureData implements TextureData {
         Context2d context = canvas.getContext2d();
         context.drawImage((ImageElement)image, 0, 0, imgWidth, imgHeight, 0, 0, newWidth, newHeight );
 
+        image.getParentElement().appendChild(canvas);
+        image.removeFromParent();
         image = canvas;
+
         return this;
     }
 
     @Override
+    public boolean isPowerOfTwo() {
+        return  Mathematics.isPowerOfTwo( this.getWidth() )
+                && Mathematics.isPowerOfTwo( this.getHeight() );
+    }
+
+    @Override
     public PixmapTextureData toPowerOfTwo() {
+        if(isPowerOfTwo())
+            return this;
+
         int width = image.getOffsetWidth();
         int height = image.getOffsetHeight();
 
