@@ -34,8 +34,8 @@ public class RenderTargetTexture extends Texture
 	private boolean isDepthBuffer = true;
 	private boolean isStencilBuffer = true;
 
-	private Integer webglFramebuffer; // WebGLFramebuffer
-	private Integer webglRenderbuffer; //WebGLRenderbuffer
+	private int webglFramebuffer; // WebGLFramebuffer
+	private int webglRenderbuffer; //WebGLRenderbuffer
 
 	public RenderTargetTexture shareDepthFrom;
 
@@ -107,7 +107,7 @@ public class RenderTargetTexture extends Texture
 		this.isStencilBuffer = stencilBuffer;
 	}
 
-	public Integer getWebGLFramebuffer() {
+	public int getWebGLFramebuffer() {
 		return this.webglFramebuffer;
 	}
 
@@ -122,8 +122,8 @@ public class RenderTargetTexture extends Texture
 		gl.glDeleteFramebuffer(this.webglFramebuffer);
 		gl.glDeleteRenderbuffer(this.webglRenderbuffer);
 
-		this.webglFramebuffer = null;
-		this.webglRenderbuffer = null;
+		this.webglFramebuffer = 0;
+		this.webglRenderbuffer = 0;
 	}
 
 	public RenderTargetTexture clone()
@@ -152,7 +152,7 @@ public class RenderTargetTexture extends Texture
 
 	public void setRenderTarget(GL20 gl)
 	{
-		if (this.webglFramebuffer != null)
+		if (this.webglFramebuffer > 0)
 			return;
 
 		this.deallocate(gl);
@@ -204,26 +204,24 @@ public class RenderTargetTexture extends Texture
 			gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
 
 		// Release everything
-		Integer nullval = null;
-		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, nullval);
-		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, nullval);
+		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, 0);
+		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, 0);
 	}
 
 	public void updateRenderTargetMipmap(GL20 gl)
 	{
 		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), this.getWebGlTexture());
 		gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
-		Integer nullval = null;
-		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), nullval);
+		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), 0);
 	}
 
-	public void setupFrameBuffer( GL20 gl, Integer framebuffer, Integer textureTarget)
+	public void setupFrameBuffer( GL20 gl, int framebuffer, int textureTarget)
 	{
 		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
 		gl.glFramebufferTexture2D(GL20.GL_FRAMEBUFFER, FramebufferSlot.COLOR_ATTACHMENT0.getValue(), textureTarget, this.getWebGlTexture(), 0);
 	}
 
-	public void setupRenderBuffer( GL20 gl, Integer renderbuffer )
+	public void setupRenderBuffer( GL20 gl, int renderbuffer )
 	{
 		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, renderbuffer);
 

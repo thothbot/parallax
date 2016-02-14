@@ -68,7 +68,7 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	}
 
 	@Override
-	public Integer getWebGLFramebuffer()
+	public int getWebGLFramebuffer()
 	{
 		return this.webglFramebuffer.get( getActiveCubeFace() );
 	}
@@ -108,13 +108,12 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 			gl.glGenerateMipmap(TextureTarget.TEXTURE_CUBE_MAP.getValue());
 
 		// Release everything
-		Integer nullval = null;
-		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), nullval);
-		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, nullval);
-		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, nullval);
+		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), 0);
+		gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, 0);
+		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, 0);
 	}
 
-	public void setupFrameBuffer(GL20 gl, Integer /*WebGLFramebuffer*/ framebuffer, Integer /*TextureTarget*/ textureTarget, int slot)
+	public void setupFrameBuffer(GL20 gl, int /*WebGLFramebuffer*/ framebuffer, int /*TextureTarget*/ textureTarget, int slot)
 	{
 		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
 		gl.glFramebufferTexture2D(FramebufferSlot.COLOR_ATTACHMENT0.getValue(), textureTarget, slot, this.getWebGlTexture(), 0);

@@ -67,9 +67,9 @@ public final class BufferGeometryDemo extends ParallaxTest
 		light1.getPosition().set( 1, 1, 1 );
 		scene.add( light1 );
 
-//		DirectionalLight light2 = new DirectionalLight( 0xffffff, 1.5 );
-//		light2.getPosition().set( 0, -1, 0 );
-//		scene.add( light2 );
+		DirectionalLight light2 = new DirectionalLight( 0xffffff, 1.5 );
+		light2.getPosition().set( 0, -1, 0 );
+		scene.add( light2 );
 
 		//
 
