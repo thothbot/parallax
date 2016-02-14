@@ -2946,7 +2946,7 @@ public class GLRenderer extends Renderer
 			// glTexImage2D does not apply to render target textures
 			else if (!(texture instanceof RenderTargetTexture))
 			{
-				image.glTexImage2D(this.gl, TextureTarget.TEXTURE_2D.getValue());
+				image.glTexImage2D(this.gl, TextureTarget.TEXTURE_2D.getValue(), texture.getFormat(), texture.getType());
 			}
 
 			if ( texture.isGenerateMipmaps() && image.isPowerOfTwo() )
@@ -2994,7 +2994,7 @@ public class GLRenderer extends Renderer
 			{
 				TextureData img = cubeImage.get(i);
 				img.toPowerOfTwo();
-				img.glTexImage2D(this.gl, TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue());
+				img.glTexImage2D(this.gl, TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, texture.getFormat(), texture.getType());
 			}
 
 			if ( texture.isGenerateMipmaps() )

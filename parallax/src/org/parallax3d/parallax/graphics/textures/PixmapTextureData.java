@@ -20,6 +20,8 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.enums.PixelFormat;
+import org.parallax3d.parallax.system.gl.enums.PixelType;
 
 public class PixmapTextureData implements TextureData {
 
@@ -33,7 +35,7 @@ public class PixmapTextureData implements TextureData {
     }
 
     @Override
-    public void glTexImage2D(GL20 gl, int target) {
+    public void glTexImage2D(GL20 gl, int target, PixelFormat pixelFormat, PixelType pixelType) {
 
     }
 

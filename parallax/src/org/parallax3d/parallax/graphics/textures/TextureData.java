@@ -20,6 +20,8 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.enums.PixelFormat;
+import org.parallax3d.parallax.system.gl.enums.PixelType;
 
 /**
  * Representation of an image that can be uploaded as a texture.
@@ -41,7 +43,7 @@ public interface TextureData
      *
      * @param target    eg GL_TEXTURE_2D.
      */
-    void glTexImage2D(GL20 gl, int target);
+    void glTexImage2D(GL20 gl, int target, PixelFormat pixelFormat, PixelType pixelType);
 
     /**
      *

@@ -66,8 +66,8 @@ public class PixmapTextureData implements TextureData {
     }
 
     @Override
-    public void glTexImage2D(GL20 gl, int target) {
-        ((GwtGL20)gl).glTexImage2D(target, 0, PixelFormat.RGBA.getValue(), PixelFormat.RGBA.getValue(), PixelType.UNSIGNED_BYTE.getValue(), image);
+    public void glTexImage2D(GL20 gl, int target, PixelFormat pixelFormat, PixelType pixelType) {
+        ((GwtGL20)gl).glTexImage2D(target, 0, pixelFormat.getValue(), pixelFormat.getValue(), pixelType.getValue(), image);
     }
 
     @Override
