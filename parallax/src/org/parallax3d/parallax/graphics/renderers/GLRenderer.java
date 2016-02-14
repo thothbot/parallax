@@ -2916,8 +2916,7 @@ public class GLRenderer extends Renderer
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
 					&& Mathematics.isPowerOfTwo( image.getHeight() );
 
-			texture.setTextureParameters( this.gl, getMaxAnisotropy(),
-					TextureTarget.TEXTURE_2D.getValue(), isImagePowerOfTwo );
+			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_2D, isImagePowerOfTwo );
 
 			if ( texture instanceof CompressedTexture )
 			{
@@ -3022,9 +3021,10 @@ public class GLRenderer extends Renderer
 			{
 				if ( this.autoScaleCubemaps )
 				{
-					TextureData clamped = clampToMaxSize(texture.getImage(i),
-							this._maxCubemapSize);
-					cubeImage.add(clamped);
+					Log.warn("Need to fix autoscale of cubemaps");
+//					TextureData clamped = clampToMaxSize(texture.getImage(i),
+//							this._maxCubemapSize);
+					cubeImage.add(texture.getImage(i));
 
 				}
 				else
@@ -3037,7 +3037,7 @@ public class GLRenderer extends Renderer
 			boolean isImagePowerOfTwo = Mathematics.isPowerOfTwo( image.getWidth() )
 					&& Mathematics.isPowerOfTwo( image.getHeight() );
 
-			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP.getValue(),
+			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP,
 					true /*power of two*/ );
 
 			for ( int i = 0; i < 6; i ++ )

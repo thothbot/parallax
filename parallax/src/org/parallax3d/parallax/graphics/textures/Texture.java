@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.system.ThreejsObject;
@@ -102,7 +103,9 @@ public class Texture
 
 	private int cache_oldAnisotropy;
 
-	protected Texture(){}
+	protected Texture(){
+		this((TextureData)null);
+	}
 
 	public Texture (String internalPath) {
 		this( Parallax.asset(internalPath), null );
@@ -453,36 +456,37 @@ public class Texture
 		return this;
 	}
 
-	public Texture setTextureParameters ( GL20 gl, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
+	public Texture setTextureParameters ( GL20 gl, TextureTarget textureType, boolean isImagePowerOfTwo )
 	{
 		return setTextureParameters( gl, 0, textureType, isImagePowerOfTwo);
 	}
 
-	public Texture setTextureParameters ( GL20 gl, int maxAnisotropy, Integer /*TextureTarget*/ textureType, boolean isImagePowerOfTwo )
+	public Texture setTextureParameters ( GL20 gl, int maxAnisotropy, TextureTarget textureType, boolean isImagePowerOfTwo )
 	{
 		if ( isImagePowerOfTwo )
 		{
-			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue());
-			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue());
-			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
-			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue());
+			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue());
+			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue());
+			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
+			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue());
 		}
 		else
 		{
-			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_S.getValue(), GL20.GL_CLAMP_TO_EDGE);
-			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_WRAP_T.getValue(), GL20.GL_CLAMP_TO_EDGE);
-			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MAG_FILTER.getValue(), filterFallback(this.magFilter.getValue()));
-			gl.glTexParameteri(textureType, TextureParameterName.TEXTURE_MIN_FILTER.getValue(), filterFallback(this.minFilter.getValue()));
+			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_S.getValue(), GL20.GL_CLAMP_TO_EDGE);
+			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_T.getValue(), GL20.GL_CLAMP_TO_EDGE);
+			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MAG_FILTER.getValue(), filterFallback(this.magFilter.getValue()));
+			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MIN_FILTER.getValue(), filterFallback(this.minFilter.getValue()));
 		}
 
 		if ( maxAnisotropy > 0 )
 		{
 			if ( this.anisotropy > 1 || this.cache_oldAnisotropy > 1 )
 			{
-				gl.glTexParameterf(textureType, TextureParameterName.TEXTURE_MAX_ANISOTROPY_EXT.getValue(), Math.min(this.anisotropy, maxAnisotropy));
+				gl.glTexParameterf(textureType.getValue(), TextureParameterName.TEXTURE_MAX_ANISOTROPY_EXT.getValue(), Math.min(this.anisotropy, maxAnisotropy));
 				this.cache_oldAnisotropy = this.anisotropy;
 			}
 		}
+
 		return this;
 	}
 

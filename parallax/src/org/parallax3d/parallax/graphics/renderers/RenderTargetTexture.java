@@ -175,7 +175,7 @@ public class RenderTargetTexture extends Texture
 		}
 
 		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), this.getWebGlTexture());
-		setTextureParameters(gl, TextureTarget.TEXTURE_2D.getValue(), isTargetPowerOfTwo);
+		setTextureParameters(gl, TextureTarget.TEXTURE_2D, isTargetPowerOfTwo);
 
 		gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,  getFormat().getValue(), getType().getValue(), null);
 

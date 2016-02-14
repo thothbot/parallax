@@ -129,7 +129,7 @@ public final class MaterialsTextureFilter extends ParallaxTest
 //		materialPainting.setColor(new Color(0xffffff));
 //		materialPainting.setMap(texturePainting);
 		
-		texturePainting2 = new Texture();
+		texturePainting2 = new Texture("");
 		materialPainting2 = new MeshBasicMaterial()
 				.setColor(0xffccaa)
 				.setMap(texturePainting2);
