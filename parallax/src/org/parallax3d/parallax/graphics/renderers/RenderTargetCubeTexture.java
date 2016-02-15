@@ -124,7 +124,6 @@ public class RenderTargetCubeTexture extends RenderTargetTexture
 	{
 		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), this.getWebGlTexture());
 		gl.glGenerateMipmap(TextureTarget.TEXTURE_CUBE_MAP.getValue());
-		Integer nullval = null;
-		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), nullval);
+		gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), 0);
 	}
 }
