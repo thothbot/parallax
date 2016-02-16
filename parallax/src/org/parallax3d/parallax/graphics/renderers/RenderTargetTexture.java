@@ -179,18 +179,18 @@ public class RenderTargetTexture extends Texture
 
 		gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0, getFormat().getValue(), this.width, this.height, 0,  getFormat().getValue(), getType().getValue(), null);
 
-		setupFrameBuffer( gl, this.webglFramebuffer, TextureTarget.TEXTURE_2D.getValue());
+		setupFrameBuffer( gl, this.webglFramebuffer, TextureTarget.TEXTURE_2D);
 
 		if ( this.shareDepthFrom != null )
 		{
 
 			if ( this.isDepthBuffer && ! this.isStencilBuffer ) {
 
-				gl.glFramebufferRenderbuffer(GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_ATTACHMENT.getValue(), GL20.GL_FRAMEBUFFER, this.webglRenderbuffer);
+				gl.glFramebufferRenderbuffer(GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_ATTACHMENT.getValue(), GL20.GL_RENDERBUFFER, this.webglRenderbuffer);
 
 			} else if ( this.isDepthBuffer && this.isStencilBuffer ) {
 
-				gl.glFramebufferRenderbuffer(GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_STENCIL_ATTACHMENT.getValue(), GL20.GL_FRAMEBUFFER, this.webglRenderbuffer);
+				gl.glFramebufferRenderbuffer(GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_STENCIL_ATTACHMENT.getValue(), GL20.GL_RENDERBUFFER, this.webglRenderbuffer);
 
 			}
 
@@ -215,10 +215,10 @@ public class RenderTargetTexture extends Texture
 		gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), 0);
 	}
 
-	public void setupFrameBuffer( GL20 gl, int framebuffer, int textureTarget)
+	public void setupFrameBuffer( GL20 gl, int framebuffer, TextureTarget textureTarget)
 	{
 		gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
-		gl.glFramebufferTexture2D(GL20.GL_FRAMEBUFFER, FramebufferSlot.COLOR_ATTACHMENT0.getValue(), textureTarget, this.getWebGlTexture(), 0);
+		gl.glFramebufferTexture2D(GL20.GL_FRAMEBUFFER, FramebufferSlot.COLOR_ATTACHMENT0.getValue(), textureTarget.getValue(), this.getWebGlTexture(), 0);
 	}
 
 	public void setupRenderBuffer( GL20 gl, int renderbuffer )
@@ -244,7 +244,7 @@ public class RenderTargetTexture extends Texture
 		else if (this.isDepthBuffer && this.isStencilBuffer)
 		{
 			gl.glRenderbufferStorage(GL20.GL_RENDERBUFFER, RenderbufferInternalFormat.DEPTH_STENCIL.getValue(), this.width, this.height);
-			gl.glFramebufferRenderbuffer(GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_STENCIL_ATTACHMENT.getValue(), GL20.GL_FRAMEBUFFER,renderbuffer);
+			gl.glFramebufferRenderbuffer(GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_STENCIL_ATTACHMENT.getValue(), GL20.GL_RENDERBUFFER,renderbuffer);
 		}
 		else
 		{
