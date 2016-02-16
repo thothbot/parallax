@@ -134,7 +134,7 @@ public class CustomAttributesParticles2 extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		double time = context.getDeltaTime() * 0.005;
+		double time = context.getFrameId() * 0.05;
 
 		sphere.getRotation().setY(0.02 * time);
 		sphere.getRotation().setZ(0.02 * time);
