@@ -31,6 +31,7 @@ import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.RenderP
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.ShaderPass;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -39,13 +40,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class HilbertCurves extends ParallaxTest 
+public final class HilbertCurves extends ParallaxTest implements TouchMoveHandler
 {
 
 	Scene scene;
 	PerspectiveCamera camera;
-	public int mouseX;
-	public int mouseY;
+
+	int width = 0, height = 0;
+	int mouseX = 0;
+	int mouseY = 0;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -196,7 +205,13 @@ public final class HilbertCurves extends ParallaxTest
 		context.getRenderer().clear();
 		context.getRenderer().render(scene, camera);
 	}
-		
+
+	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = (screenX - width / 2 ) * 3;
+		mouseY = (screenY - height / 2) * 3;
+	}
+
 	@Override
 	public String getName() {
 		return "Hilbert curves";
@@ -211,28 +226,5 @@ public final class HilbertCurves extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel) 
-//	{
-//		super.loadRenderingPanelAttributes(renderingPanel);
-//		renderingPanel.getCanvas3dAttributes().setAntialiasEnable(false);
-//	}
-//	
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		    	  	rs.mouseX = (event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ) * 3; 
-//		    	  	rs.mouseY = (event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2) * 3;
-//		      }
-//		});
-//	}
 
 }

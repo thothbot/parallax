@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.materials.Material;
@@ -125,7 +126,7 @@ public abstract class GeometryObject extends Object3D
 		if ( attributes != null)
 		{
 			if ( geometry.__webglCustomAttributesList == null )
-				geometry.__webglCustomAttributesList = new ArrayList<Attribute>();
+				geometry.__webglCustomAttributesList = new ArrayList<>();
 
 			for ( String a : attributes.keySet() )
 			{
@@ -142,7 +143,6 @@ public abstract class GeometryObject extends Object3D
 					else if ( attribute.type == Attribute.TYPE.C  ) size = 3;
 
 					attribute.size = size;
-
 					attribute.array = Float32Array.create(nvertices * size);
 
 					attribute.buffer = gl.glGenBuffer();

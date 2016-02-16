@@ -147,9 +147,9 @@ public class Postprocessing extends Plugin
 		{	
 			if ( !pass.isEnabled() ) continue;
 			
-			Log.info(" ----> Postprocessing.render(): pass " + pass.getClass().getSimpleName()
-					+ (pass.getClass().equals(ShaderPass.class) ? 
-							"(" + ((ShaderPass)pass).getMaterial().getShader().getClass().getSimpleName() + ")" : "") );
+//			Log.info(" ----> Postprocessing.render(): pass " + pass.getClass().getSimpleName()
+//					+ (pass.getClass().equals(ShaderPass.class) ?
+//							"(" + ((ShaderPass)pass).getMaterial().getShader().getClass().getSimpleName() + ")" : "") );
 
 			pass.render( this, delta, maskActive );
 

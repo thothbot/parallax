@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.objects;
 
 import java.util.List;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
@@ -185,7 +186,7 @@ public class PointCloud extends GeometryObject
 	}
 
 	public PointCloud clone() {
-		return clone(new PointCloud( (Geometry) this.getGeometry(), (PointCloudMaterial) this.getMaterial() ));
+		return clone(new PointCloud( this.getGeometry(), this.getMaterial() ));
 	}
 
 	public PointCloud clone( PointCloud object ) {
@@ -540,11 +541,9 @@ public class PointCloud extends GeometryObject
 
 		if ( customAttributes != null ) {
 
-			for ( int i = 0, il = customAttributes.size(); i < il; i ++ ) {
+			for (Attribute customAttribute : customAttributes) {
 
-				Attribute customAttribute = customAttributes.get( i );
-
-				if ( customAttribute.needsUpdate || this.sortParticles ) {
+				if (customAttribute.needsUpdate || this.sortParticles) {
 
 					renderer.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.buffer);
 					renderer.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), customAttribute.array.getByteLength(), customAttribute.array.getTypedBuffer(), hint.getValue());
