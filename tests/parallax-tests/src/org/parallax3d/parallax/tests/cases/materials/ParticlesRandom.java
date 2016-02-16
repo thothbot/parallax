@@ -26,6 +26,7 @@ import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -35,15 +36,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ThreejsExample("webgl_points_random")
-public final class ParticlesRandom extends ParallaxTest 
+public final class ParticlesRandom extends ParallaxTest implements TouchMoveHandler
 {
 
 	Scene scene;
 	PerspectiveCamera camera;
 	
 	List<PointCloudMaterial> materials;
-	
-	int mouseX = 0, mouseY = 0;
+
+	int width = 0, height = 0;
+	int mouseX = 0;
+	int mouseY = 0;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -122,7 +131,13 @@ public final class ParticlesRandom extends ParallaxTest
 		
 		context.getRenderer().render(scene, camera);
 	}
-	
+
+	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = screenX - width / 2;
+		mouseY = screenY - height / 2;
+	}
+
 	@Override
 	public String getName() {
 		return "Random particles";
@@ -137,21 +152,4 @@ public final class ParticlesRandom extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//
-//		    	  	rs.mouseX = event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2; 
-//		    	  	rs.mouseY = event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2;
-//		      }
-//		});
-//	}
-	
 }
