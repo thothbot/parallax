@@ -529,6 +529,7 @@ public class PointCloud extends GeometryObject
 		if ( dirtyVertices || this.sortParticles ) {
 
 			renderer.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
+			renderer.gl.glBufferData(BufferTarget.ARRAY_BUFFER.getValue(), vertexArray.getByteLength(), vertexArray.getTypedBuffer(), hint.getValue());
 
 		}
 

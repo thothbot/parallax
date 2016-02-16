@@ -93,7 +93,7 @@ public class CustomAttributesParticles extends ParallaxTest
 		double radius = 200;
 		Geometry geometry = new Geometry();
 
-		for ( int i = 0; i < 10000; i++ ) 
+		for ( int i = 0; i < 10000; i++ )
 		{
 			Vector3 vertex = new Vector3();
 			vertex.setX(Math.random() * 2.0 - 1.0);
@@ -127,7 +127,7 @@ public class CustomAttributesParticles extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		double time = context.getDeltaTime() * 0.005;
+		double time = context.getFrameId() * 0.05;
 
 		this.sphere.getRotation().setZ(0.01 * time);
 

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Attribute
 {
-	public static enum TYPE {
+	public enum TYPE {
 		V2,
 		V3,
 		V4,
@@ -32,7 +32,7 @@ public class Attribute
 		F
 	};
 
-	public static enum BOUND_TO {
+	public enum BOUND_TO {
 		FACES,
 		VERTICES,
 		FACE_VERTICES
