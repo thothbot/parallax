@@ -25,19 +25,27 @@ import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.objects.PointCloud;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 @ThreejsExample("webgl_trails")
-public final class ParticlesTrails extends ParallaxTest 
+public final class ParticlesTrails extends ParallaxTest implements TouchMoveHandler
 {
 	Scene scene;
 	PerspectiveCamera camera;
-	
-	public int mouseX;
-	public int mouseY;
+
+	int width = 0, height = 0;
+	int mouseX = 0;
+	int mouseY = 0;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -93,6 +101,12 @@ public final class ParticlesTrails extends ParallaxTest
 	}
 
 	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = (screenX - width / 2) * 10;
+		mouseY = (screenY - height / 2) * 10;
+	}
+
+	@Override
 	public String getName() {
 		return "Particle Trails";
 	}
@@ -106,23 +120,6 @@ public final class ParticlesTrails extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//
-//		    	  	rs.mouseX = (event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ) * 10; 
-//		    	  	rs.mouseY = (event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2) * 10;
-//		      }
-//		});
-//	}
 
 //	@Override
 //	protected void loadRenderingPanelAttributes(RenderingPanel renderingPanel) 
