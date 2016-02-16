@@ -74,7 +74,6 @@ public final class ShaderOcean extends ParallaxTest {
 	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
-//		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, this);
 		
 		camera = new PerspectiveCamera(
 				55, // fov
@@ -101,15 +100,14 @@ public final class ShaderOcean extends ParallaxTest {
 		water.sunColor = new Color(0xffffff);
 		water.waterColor = new Color(0x001e0f);
 
-		Texture waterNormals = new Texture( waternormals );
-//		Texture waterNormals = new Texture( waternormals, new Texture.ImageLoadHandler() {
-//
-//			@Override
-//			public void onImageLoad(Texture texture) {
-//				water.normalSampler = texture;
-//				water.updateUniforms();
-//			}
-//		});
+		Texture waterNormals = new Texture( waternormals, new Texture.ImageLoadHandler() {
+
+			@Override
+			public void onImageLoad(Texture texture) {
+				water.normalSampler = texture;
+				water.updateUniforms();
+			}
+		});
 		
 		waterNormals.setWrapS(TextureWrapMode.REPEAT);
 		waterNormals.setWrapT(TextureWrapMode.REPEAT);
@@ -154,7 +152,7 @@ public final class ShaderOcean extends ParallaxTest {
 				.setShininess(100.0);
 		
 		sphere = new Mesh( geometry, sphereMaterial );
-//			scene.add( sphere );			
+		scene.add( sphere );
 	}
 	
 	@Override
