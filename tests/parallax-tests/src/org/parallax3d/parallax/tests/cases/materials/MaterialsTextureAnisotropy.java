@@ -28,6 +28,7 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
@@ -35,16 +36,25 @@ import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 @ThreejsExample("webgl_materials_texture_anisotropy")
-public final class MaterialsTextureAnisotropy extends ParallaxTest 
+public final class MaterialsTextureAnisotropy extends ParallaxTest implements TouchMoveHandler
 {
 
 	private static final String texture = "textures/crate.gif";
 
 	Scene scene;
 	PerspectiveCamera camera;
-	int mouseX = 0, mouseY = 0;
+
+	int width = 0, height = 0;
+	int mouseX = 0;
+	int mouseY = 0;
 	
 	Scene sceneMaxAnisotropy;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -140,6 +150,12 @@ public final class MaterialsTextureAnisotropy extends ParallaxTest
 	}
 
 	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = screenX - width / 2;
+		mouseY = screenY - height / 2;
+	}
+
+	@Override
 	public String getName() {
 		return "Anisotropic filtering";
 	}
@@ -185,15 +201,6 @@ public final class MaterialsTextureAnisotropy extends ParallaxTest
 //			panelLeft.add(new Label("not supported"));
 //			panelRight.add(new Label("not supported"));
 //		}
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	rs.mouseX = (event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ); 
-//		    	  	rs.mouseY = (event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2);
-//		      }
-//		});
 //	}
 	
 }
