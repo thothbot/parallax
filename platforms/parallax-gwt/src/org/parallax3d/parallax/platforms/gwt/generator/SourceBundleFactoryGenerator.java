@@ -54,6 +54,8 @@ public class SourceBundleFactoryGenerator extends Generator {
             TypeOracle oracle = context.getTypeOracle();
             JPackage[] packages = oracle.getPackages();
 
+            System.out.println(" Start classpath text bundles generation ");
+
             FastMap<JClassType> genClasses = new FastMap<>();
             for (JPackage pack : packages)
             {
@@ -71,6 +73,8 @@ public class SourceBundleFactoryGenerator extends Generator {
                         genClasses.put(cls, classtype);
                 }
             }
+
+            System.out.println("   " + genClasses.size() + " bundles have been generated");
 
             // import generated classes
             for(String genClass: genClasses.keySet())
@@ -106,8 +110,6 @@ public class SourceBundleFactoryGenerator extends Generator {
         if(checkImplementedInterface(oracle, classtype.getImplementedInterfaces()))
         {
             String fullName = classtype.getQualifiedSourceName();
-
-            System.out.println(" Generate Bundle for class " + fullName);
 
             InlineClientBundleGenerator gen = new InlineClientBundleGenerator();
 
