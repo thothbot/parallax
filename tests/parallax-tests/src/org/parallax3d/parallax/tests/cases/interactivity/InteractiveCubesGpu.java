@@ -31,6 +31,7 @@ import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ThreejsExample("webgl_interactive_cubes_gpu")
-public final class InteractiveCubesGpu extends ParallaxTest
+public final class InteractiveCubesGpu extends ParallaxTest implements TouchMoveHandler
 {
 	class Picking
 	{
@@ -64,7 +65,7 @@ public final class InteractiveCubesGpu extends ParallaxTest
 	
 	Mesh highlightBox;
 	List<Picking> pickingData;
-	
+
 	@Override
 	public void onResize(RenderingContext context) 
 	{
@@ -227,7 +228,13 @@ public final class InteractiveCubesGpu extends ParallaxTest
 			highlightBox.setVisible(false);
 		}
 	}
-		
+
+	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = screenX;
+		mouseY = screenY;
+	}
+
 	@Override
 	public String getName() {
 		return "GPU picking";
@@ -243,19 +250,4 @@ public final class InteractiveCubesGpu extends ParallaxTest
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
 
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		    	  	rs.mouseX = event.getX(); 
-//		    	  	rs.mouseY = event.getY();
-//		      }
-//		});
-//	}
 }
