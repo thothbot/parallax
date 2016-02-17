@@ -21,6 +21,7 @@ package org.parallax3d.parallax.tests.cases.interactivity;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
+import org.parallax3d.parallax.graphics.core.Raycaster;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.PlaneBufferGeometry;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
@@ -29,6 +30,10 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.graphics.renderers.ShadowMap;
+import org.parallax3d.parallax.input.TouchDownHandler;
+import org.parallax3d.parallax.input.TouchMoveHandler;
+import org.parallax3d.parallax.input.TouchUpHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.FastMap;
@@ -39,14 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ThreejsExample("webgl_interactive_draggablecubes")
-public final class InteractiveDraggableCubes extends ParallaxTest
+public final class InteractiveDraggableCubes extends ParallaxTest implements TouchDownHandler, TouchUpHandler, TouchMoveHandler
 {
-	class Intersect
-	{
-		public GeometryObject object;
-		public int currentHex;
-	}
-
 	Scene scene;
 	PerspectiveCamera camera;
 	
@@ -62,6 +61,14 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 	GeometryObject selected;
 	
 	FastMap<Integer> currentHex = new FastMap<>();
+
+	int width = 0, height = 0;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -92,7 +99,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 		light.setCastShadow(true);
 
 		light.setShadowCameraNear(200);
-		light.setShadowCameraFar(((PerspectiveCamera)camera).getFar());
+		light.setShadowCameraFar(camera.getFar());
 		light.setShadowCameraFar(50);
 
 		light.setShadowBias(-0.00022);
@@ -105,7 +112,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 
 		BoxGeometry geometry = new BoxGeometry( 40, 40, 40 );
 
-		objects = new ArrayList<GeometryObject>();
+		objects = new ArrayList<>();
 		for ( int i = 0; i < 200; i ++ ) 
 		{
 			int color = (int)(Math.random() * 0xffffff);
@@ -127,7 +134,6 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 			object.setReceiveShadow(true);
 
 			scene.add( object );
-
 			objects.add( object );
 		}
 
@@ -141,6 +147,9 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 
 		context.getRenderer().setClearColor(0xeeeeee);
 		context.getRenderer().setSortObjects(false);
+
+		// Init shadow
+		new ShadowMap(context.getRenderer(), scene);
 	}
 	
 	@Override
@@ -149,7 +158,93 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 //		controls.update();
 		context.getRenderer().render(scene, camera);
 	}
-	
+
+	@Override
+	public void onTouchDown(int screenX, int screenY, int pointer, int button) {
+		Vector3 vector = new Vector3( mouseDeltaX, mouseDeltaY, 0.5 ).unproject(camera);
+
+		Raycaster raycaster = new Raycaster( camera.getPosition(), vector.sub( camera.getPosition() ).normalize() );
+
+		List<Raycaster.Intersect> intersects = raycaster.intersectObjects( objects, false );
+
+		if ( intersects.size() > 0 )
+		{
+//			controls.setEnabled(false);
+
+			selected = intersects.get( 0 ).object;
+
+			List<Raycaster.Intersect>  intersects2 = raycaster.intersectObject( plane, false );
+			offset.copy( intersects2.get( 0 ).point ).sub( plane.getPosition() );
+
+//			getWidget().getElement().getStyle().setCursor(Cursor.MOVE);
+		}
+	}
+
+	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseDeltaX = (screenX / width ) * 2.0 - 1.0;
+		mouseDeltaY = - (screenY / height ) * 2.0 + 1.0;
+
+		//
+
+		Vector3 vector = new Vector3( mouseDeltaX, mouseDeltaY, 0.5 ).unproject( camera );
+
+		Raycaster raycaster = new Raycaster( camera.getPosition(), vector.sub( camera.getPosition() ).normalize() );
+
+		if ( selected != null )
+		{
+			List<Raycaster.Intersect> intersects = raycaster.intersectObject( plane, false );
+			selected.getPosition().copy( intersects.get( 0 ).point.sub( offset ) );
+			return;
+		}
+
+		List<Raycaster.Intersect> intersects = raycaster.intersectObjects( objects, false );
+
+		if ( intersects.size() > 0 )
+		{
+			if ( intersected != intersects.get(0).object )
+			{
+				if ( intersected != null )
+				{
+					((MeshLambertMaterial)intersected.getMaterial()).getColor().setHex( currentHex.get(intersected.getId() + "") );
+				}
+
+				intersected = intersects.get(0).object;
+				currentHex.put(intersected.getId() + "", ((MeshLambertMaterial)intersected.getMaterial()).getColor().getHex());
+
+				plane.getPosition().copy( intersected.getPosition() );
+				plane.lookAt( camera.getPosition() );
+			}
+
+//			getWidget().getElement().getStyle().setCursor(Cursor.POINTER);
+
+		} else {
+
+			if ( intersected != null )
+				((MeshLambertMaterial)intersected.getMaterial()).getColor().setHex(  currentHex.get(intersected.getId() + "") );
+
+			intersected = null;
+
+//			getWidget().getElement().getStyle().setCursor(Cursor.AUTO);
+
+		}
+	}
+
+	@Override
+	public void onTouchUp(int screenX, int screenY, int pointer, int button) {
+//		controls.setEnabled(true);
+
+		if ( intersected != null )
+		{
+			plane.getPosition().copy( intersected.getPosition() );
+
+			selected = null;
+		}
+
+//		getWidget().getElement().getStyle().setCursor(Cursor.AUTO);
+
+	}
+
 	@Override
 	public String getName() {
 		return "Draggable cubes";
@@ -164,113 +259,5 @@ public final class InteractiveDraggableCubes extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		renderingPanel.getCanvas().addDomHandler(this, MouseMoveEvent.getType());
-//		renderingPanel.getCanvas().addDomHandler(this, MouseDownEvent.getType());
-//		renderingPanel.getCanvas().addDomHandler(this, MouseUpEvent.getType());
-//	}
-//	
-//	@Override
-//	public void onMouseUp(MouseUpEvent event) 
-//	{
-//		event.preventDefault();
-//
-//		DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		
-//		rs.controls.setEnabled(true);
-//
-//		if ( rs.intersected != null ) 
-//		{
-//			rs.plane.getPosition().copy( rs.intersected.getPosition() );
-//
-//			rs.selected = null;
-//		}
-//
-//		getWidget().getElement().getStyle().setCursor(Cursor.AUTO);	
-//	}
-//
-//	@Override
-//	public void onMouseDown(MouseDownEvent event) 
-//	{
-//		event.preventDefault();
-//
-//		DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		
-//		Vector3 vector = new Vector3( rs.mouseDeltaX, rs.mouseDeltaY, 0.5 ).unproject(rs.camera);
-//
-//		Raycaster raycaster = new Raycaster( rs.camera.getPosition(), vector.sub( rs.camera.getPosition() ).normalize() );
-//		
-//		List<Raycaster.Intersect> intersects = raycaster.intersectObjects( rs.objects, false );
-//
-//		if ( intersects.size() > 0 ) 
-//		{
-//			rs.controls.setEnabled(false);
-//
-//			rs.selected = intersects.get( 0 ).object; 
-//
-//			List<Raycaster.Intersect>  intersects2 = raycaster.intersectObject( rs.plane, false );
-//			rs.offset.copy( intersects2.get( 0 ).point ).sub( rs.plane.getPosition() );
-//
-//			getWidget().getElement().getStyle().setCursor(Cursor.MOVE);	
-//		}
-//	}
-//
-//	@Override
-//	public void onMouseMove(MouseMoveEvent event) 
-//	{
-//		event.preventDefault();
-//
-//		DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//
-//		rs.mouseDeltaX = (event.getX() / (double)renderingPanel.context.getRenderer().getAbsoluteWidth() ) * 2.0 - 1.0; 
-//		rs.mouseDeltaY = - (event.getY() / (double)renderingPanel.context.getRenderer().getAbsoluteHeight() ) * 2.0 + 1.0;
-//
-//		//
-//
-//		Vector3 vector = new Vector3( rs.mouseDeltaX, rs.mouseDeltaY, 0.5 ).unproject( rs.camera );
-//
-//		Raycaster raycaster = new Raycaster( rs.camera.getPosition(), vector.sub( rs.camera.getPosition() ).normalize() );
-//
-//		if ( rs.selected != null ) 
-//		{
-//			List<Raycaster.Intersect> intersects = raycaster.intersectObject( rs.plane, false );
-//			rs.selected.getPosition().copy( intersects.get( 0 ).point.sub( rs.offset ) );
-//			return;
-//		}
-//
-//		List<Raycaster.Intersect> intersects = raycaster.intersectObjects( rs.objects, false );
-//
-//		if ( intersects.size() > 0 ) 
-//		{
-//			if ( rs.intersected != intersects.get(0).object )
-//			{
-//				if ( rs.intersected != null )
-//				{
-//					((MeshLambertMaterial)rs.intersected.getMaterial()).getColor().setHex( rs.currentHex.get(rs.intersected.getId() + "") );
-//				}
-//
-//				rs.intersected = intersects.get(0).object;
-//				rs.currentHex.put(rs.intersected.getId() + "", ((MeshLambertMaterial)rs.intersected.getMaterial()).getColor().getHex());
-//
-//				rs.plane.getPosition().copy( rs.intersected.getPosition() );
-//				rs.plane.lookAt( rs.camera.getPosition() );
-//			}
-//
-//			getWidget().getElement().getStyle().setCursor(Cursor.POINTER);
-//
-//		} else {
-//
-//			if ( rs.intersected != null ) 
-//				((MeshLambertMaterial)rs.intersected.getMaterial()).getColor().setHex(  rs.currentHex.get(rs.intersected.getId() + "") );
-//
-//			rs.intersected = null;
-//
-//			getWidget().getElement().getStyle().setCursor(Cursor.AUTO);
-//
-//		}
-//	}
+
 }

@@ -317,7 +317,7 @@ public class GLRenderer extends Renderer
 		setDefaultGLState();
 
 		// default org.parallax3d.plugins (order is important)
-		this.plugins = new ArrayList<Plugin>();
+		this.plugins = new ArrayList<>();
 	}
 
 	private int getIntGlParam(int param)
@@ -2276,16 +2276,16 @@ public class GLRenderer extends Renderer
 
 		parameters.maxShadows = maxShadows;
 
-		for(Plugin plugin: this.plugins)
-			if(plugin instanceof ShadowMap && ((ShadowMap)plugin).isEnabled() &&
-					object.isReceiveShadow())
-			{
+		for(Plugin plugin: this.plugins) {
+			if (plugin instanceof ShadowMap && plugin.isEnabled() &&
+					object.isReceiveShadow()) {
 				parameters.shadowMapEnabled = object.isReceiveShadow() && maxShadows > 0;
-				parameters.shadowMapSoft    = ((ShadowMap)plugin).isSoft();
-				parameters.shadowMapDebug   = ((ShadowMap)plugin).isDebugEnabled();
-				parameters.shadowMapCascade = ((ShadowMap)plugin).isCascade();
+				parameters.shadowMapSoft = ((ShadowMap) plugin).isSoft();
+				parameters.shadowMapDebug = ((ShadowMap) plugin).isDebugEnabled();
+				parameters.shadowMapCascade = ((ShadowMap) plugin).isCascade();
 				break;
 			}
+		}
 
 		material.updateProgramParameters(parameters);
 		Log.debug("WebGlRender: initMaterial() called new Program");
@@ -2563,7 +2563,7 @@ public class GLRenderer extends Renderer
 			Uniform.TYPE type = uniform.getType();
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
-
+//Log.error(key, uniform);
 			if(type == Uniform.TYPE.I) // single integer
 			{
 				this.gl.glUniform1i(location, (value instanceof Boolean) ? ((Boolean) value) ? 1 : 0 : (Integer) value);

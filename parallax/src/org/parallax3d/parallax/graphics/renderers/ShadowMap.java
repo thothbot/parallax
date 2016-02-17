@@ -218,7 +218,7 @@ public final class ShadowMap extends Plugin
 					}
 					else
 					{
-						virtualLight = (VirtualLight) shadowCascadeArray.get( n );
+						virtualLight = shadowCascadeArray.get( n );
 					}
 
 					updateVirtualLight( dirLight, n );
@@ -231,7 +231,6 @@ public final class ShadowMap extends Plugin
 		}
 
 		// render depth map
-
 		for ( int i = 0, il = lights.size(); i < il; i ++ ) {
 			ShadowLight light = (ShadowLight) lights.get(i);
 
