@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.lights;
 
 import java.util.List;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
@@ -55,8 +56,8 @@ public class DirectionalLight extends ShadowLight
 		@Override
 		public void reset()
 		{
-			this.colors    = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
+			this.colors    = Float32Array.createArray();
+			this.positions = Float32Array.createArray();
 
 		}
 

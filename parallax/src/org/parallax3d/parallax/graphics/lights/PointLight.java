@@ -54,9 +54,9 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 		@Override
 		public void reset()
 		{
-			this.distances = (Float32Array) Float32Array.createArray();
-			this.colors    = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
+			this.distances = Float32Array.createArray();
+			this.colors    = Float32Array.createArray();
+			this.positions = Float32Array.createArray();
 
 		}
 

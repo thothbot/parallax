@@ -38,9 +38,9 @@ public final class HemisphereLight extends Light implements HasIntensity
 		@Override
 		public void reset()
 		{
-			this.skyColors    = (Float32Array) Float32Array.createArray();
-			this.groundColors = (Float32Array) Float32Array.createArray();
-			this.positions = (Float32Array) Float32Array.createArray();
+			this.skyColors    = Float32Array.createArray();
+			this.groundColors = Float32Array.createArray();
+			this.positions    = Float32Array.createArray();
 
 		}
 
