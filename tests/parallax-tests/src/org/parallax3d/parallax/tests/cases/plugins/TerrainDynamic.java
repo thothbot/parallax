@@ -38,15 +38,14 @@ import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.BloomPa
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.Postprocessing;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.RenderPass;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.ShaderPass;
-import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.BleachBypassShader;
-import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.HorizontalTiltShiftShader;
-import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.NormalMapShader;
-import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.VerticalTiltShiftShader;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.*;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.input.KeyCodes;
+import org.parallax3d.parallax.input.KeyDownHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector2;
@@ -64,7 +63,7 @@ import org.parallax3d.parallax.tests.resources.TerrainShader;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class TerrainDynamic extends ParallaxTest 
+public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler, Texture.ImageLoadHandler
 {
 
 	interface Resources extends Shader.DefaultResources
@@ -136,10 +135,9 @@ public final class TerrainDynamic extends ParallaxTest
 	}
 
 	@Override
-	public void onStart(RenderingContext context)
+	public void onStart(final RenderingContext context)
 	{
 		scene = new Scene();
-//		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, this);
 		camera = new PerspectiveCamera(
 				40, // fov
 				context.getRenderer().getAbsoluteAspectRation(), // aspect 
@@ -224,27 +222,24 @@ public final class TerrainDynamic extends ParallaxTest
 		specularMap.setWrapS(TextureWrapMode.REPEAT);
 		specularMap.setWrapT(TextureWrapMode.REPEAT);
 
-		Texture diffuseTexture1 = new Texture( diffuseImage1 );
-//		Texture diffuseTexture1 = new Texture( diffuseImage1, new Texture.ImageLoadHandler() {
-//
-//			@Override
-//			public void onImageLoad(Texture texture) {
-//				DemoScene.this.onImageLoad(texture);
-//				DemoScene.this.applyShader( new LuminosityShader(), texture, specularMap );
-//			}
-//		});
+		Texture diffuseTexture1 = new Texture( diffuseImage1, new Texture.ImageLoadHandler() {
+
+			@Override
+			public void onImageLoad(Texture texture) {
+				TerrainDynamic.this.onImageLoad(texture);
+				TerrainDynamic.this.applyShader( context.getRenderer(), new LuminosityShader(), texture, specularMap );
+			}
+		});
 
 		diffuseTexture1.setWrapS(TextureWrapMode.REPEAT);
 		diffuseTexture1.setWrapT(TextureWrapMode.REPEAT);
 
-		Texture diffuseTexture2 = new Texture( diffuseImage2 );
-//		Texture diffuseTexture2 = new Texture( diffuseImage2, this);
+		Texture diffuseTexture2 = new Texture( diffuseImage2, this);
 
 		diffuseTexture2.setWrapS(TextureWrapMode.REPEAT);
 		diffuseTexture2.setWrapT(TextureWrapMode.REPEAT);
 
-		Texture detailTexture = new Texture( detailImage );
-//		Texture detailTexture = new Texture( detailImage, this );
+		Texture detailTexture = new Texture( detailImage, this );
 		detailTexture.setWrapS(TextureWrapMode.REPEAT);
 		detailTexture.setWrapT(TextureWrapMode.REPEAT);
 
@@ -507,7 +502,18 @@ public final class TerrainDynamic extends ParallaxTest
 		
 		this.oldTime = Duration.currentTimeMillis();
 	}
-	
+
+	@Override
+	public void onKeyDown(int keycode) {
+		switch(keycode)
+		{
+			case KeyCodes.KEY_N:
+			case KeyCodes.KEY_NUM_PERIOD:
+				lightDir *= -1;
+				break;
+		}
+	}
+
 	@Override
 	public String getName() {
 		return "Dynamic procedural terrain";
@@ -522,25 +528,5 @@ public final class TerrainDynamic extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//		
-//		RootPanel.get().addDomHandler(new KeyDownHandler() { 
-//			
-//			@Override
-//			public void onKeyDown(KeyDownEvent event) 
-//			{
-//				DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//				switch(event.getNativeEvent().getKeyCode())
-//				{
-//				case 78: case 110:/*N*/	
-//					rs.lightDir *= -1;
-//					break;
-//				}
-//			}
-//		}, KeyDownEvent.getType()); 
-//	}
-	
+
 }

@@ -55,11 +55,10 @@ public final class EffectsSprites extends ParallaxTest
 	}
 	
 	@Override
-	public void onStart(RenderingContext context)
+	public void onStart(final RenderingContext context)
 	{
 		scene = new Scene();
-//		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, this);
-		
+
 		camera = new PerspectiveCamera(
 				60, // fov
 				context.getRenderer().getAbsoluteAspectRation(), // aspect 
@@ -82,39 +81,39 @@ public final class EffectsSprites extends ParallaxTest
 		new SpritePlugin(context.getRenderer(), scene);
 		new SpritePlugin(context.getRenderer(), sceneOrtho);
 		
-//		new Texture( "./static/textures/sprite0.png", new Texture.ImageLoadHandler() {
-//
-//			@Override
-//			public void onImageLoad(Texture texture) {
-//				SpriteMaterial material = new SpriteMaterial();
-//				material.setMap(texture);
-//
-//				int width = material.getMap().getImage().getWidth();
-//				int height = material.getMap().getImage().getHeight();
-//
-//				spriteTL = new Sprite( material );
-//				spriteTL.getScale().set( width, height, 1 );
-//				sceneOrtho.add( spriteTL );
-//
-//				spriteTR = new Sprite( material );
-//				spriteTR.getScale().set( width, height, 1 );
-//				sceneOrtho.add( spriteTR );
-//
-//				spriteBL = new Sprite( material );
-//				spriteBL.getScale().set( width, height, 1 );
-//				sceneOrtho.add( spriteBL );
-//
-//				spriteBR = new Sprite( material );
-//				spriteBR.getScale().set( width, height, 1 );
-//				sceneOrtho.add( spriteBR );
-//
-//				spriteC = new Sprite( material );
-//				spriteC.getScale().set( width, height, 1 );
-//				sceneOrtho.add( spriteC );
-//
-//				updateHUDSprites(context);
-//			}
-//		} );
+		new Texture( "textures/sprite0.png", new Texture.ImageLoadHandler() {
+
+			@Override
+			public void onImageLoad(Texture texture) {
+				SpriteMaterial material = new SpriteMaterial();
+				material.setMap(texture);
+
+				int width = material.getMap().getImage().getWidth();
+				int height = material.getMap().getImage().getHeight();
+
+				spriteTL = new Sprite( material );
+				spriteTL.getScale().set( width, height, 1 );
+				sceneOrtho.add( spriteTL );
+
+				spriteTR = new Sprite( material );
+				spriteTR.getScale().set( width, height, 1 );
+				sceneOrtho.add( spriteTR );
+
+				spriteBL = new Sprite( material );
+				spriteBL.getScale().set( width, height, 1 );
+				sceneOrtho.add( spriteBL );
+
+				spriteBR = new Sprite( material );
+				spriteBR.getScale().set( width, height, 1 );
+				sceneOrtho.add( spriteBR );
+
+				spriteC = new Sprite( material );
+				spriteC.getScale().set( width, height, 1 );
+				sceneOrtho.add( spriteC );
+
+				updateHUDSprites(context);
+			}
+		} );
 
 		SpriteMaterial materialC = new SpriteMaterial()
 				.setMap(mapC)
@@ -150,9 +149,10 @@ public final class EffectsSprites extends ParallaxTest
 
 			Sprite sprite = new Sprite( material );
 
-			sprite.getPosition().set( x, y, z );
-			sprite.getPosition().normalize();
-			sprite.getPosition().multiply( radius );
+			sprite.getPosition()
+					.set( x, y, z )
+					.normalize()
+					.multiply( radius );
 
 			group.add( sprite );
 
@@ -168,6 +168,9 @@ public final class EffectsSprites extends ParallaxTest
 
 		int width = context.getRenderer().getAbsoluteWidth() / 2;
 		int height = context.getRenderer().getAbsoluteHeight() / 2;
+
+		if(spriteTL == null)
+			return;
 
 		SpriteMaterial material = (SpriteMaterial) spriteTL.getMaterial();
 

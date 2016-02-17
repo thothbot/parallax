@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.tests.cases.interactivity;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
@@ -224,7 +225,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 				((MeshLambertMaterial)intersected.getMaterial()).getColor().setHex(  currentHex.get(intersected.getId() + "") );
 
 			intersected = null;
-
+			Log.error('n');
 //			getWidget().getElement().getStyle().setCursor(Cursor.AUTO);
 
 		}
