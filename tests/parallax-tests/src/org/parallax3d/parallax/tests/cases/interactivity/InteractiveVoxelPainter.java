@@ -33,9 +33,10 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.input.*;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -45,14 +46,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ThreejsExample("webgl_interactive_voxelpainter")
-public final class InteractiveVoxelPainter extends ParallaxTest
+public final class InteractiveVoxelPainter extends ParallaxTest implements TouchDownHandler, TouchMoveHandler, KeyUpHandler, KeyDownHandler
 {
 
 	private static final String texture = "textures/square-outline-textured.png";
 
 	Scene scene;
 	List<GeometryObject> objects = new ArrayList<GeometryObject>();
-	
+
 	PerspectiveCamera camera;
 	
 	Raycaster raycaster;
@@ -63,13 +64,19 @@ public final class InteractiveVoxelPainter extends ParallaxTest
 	BoxGeometry cubeGeo;
 	MeshLambertMaterial cubeMaterial;
 	
-	Vector3 mouse2D;
-	Vector3 voxelPosition;
 	Vector3 vector;
 	
 	boolean isShiftDown, isCtrlDown;
-	
-	double theta = 45;
+
+	int width = 0, height = 0;
+	GLRenderer renderer;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		renderer = context.getRenderer();
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -103,7 +110,7 @@ public final class InteractiveVoxelPainter extends ParallaxTest
 				.setAmbient( 0x00ff80 )
 				.setShading(Material.SHADING.FLAT)
 				.setMap(new Texture( texture ))
-				.setAmbient(cubeMaterial.getColor());
+				.setAmbient( 0xfeb74c );
 
 		// grid
 
@@ -143,7 +150,6 @@ public final class InteractiveVoxelPainter extends ParallaxTest
 
 		objects.add( plane );
 
-
 		// Lights
 
 		scene.add( new AmbientLight( 0x606060 ) );
@@ -176,122 +182,98 @@ public final class InteractiveVoxelPainter extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-	
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//  	
-//	  	RootPanel.get().addDomHandler(this, KeyDownEvent.getType());
-//		RootPanel.get().addDomHandler(this, KeyUpEvent.getType());
-//		getWidget().addDomHandler(this, MouseMoveEvent.getType());
-//		getWidget().addDomHandler(this, MouseDownEvent.getType());
-//	}
-//	
-//	@Override
-//	public void onMouseDown(MouseDownEvent event) 
-//	{
-//		event.preventDefault();
-//
-//		DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		
-//		rs.vector.set( ( event.getX() / (double) renderingPanel.context.getRenderer().getAbsoluteWidth() ) * 2.0 - 1.0, 
-//				- ( event.getY() / (double) renderingPanel.context.getRenderer().getAbsoluteHeight() ) * 2.0 + 1.0, 0.5 );
-//		
-//		rs.vector.unproject( rs.camera );
-//
-//		rs.raycaster.getRay().set( rs.camera.getPosition(), rs.vector.sub( rs.camera.getPosition() ).normalize() );
-//
-//		List<Intersect> intersects = rs.raycaster.intersectObjects( rs.objects, false );
-//
-//		if ( intersects.size() > 0 ) {
-//
-//			Intersect intersect = intersects.get(0);
-//
-//			// delete cube
-//
-//			if ( rs.isShiftDown ) {
-//
-//				if ( intersect.object != rs.plane ) {
-//
-//					rs.scene.remove( intersect.object );
-//
-//					rs.objects.remove( rs.objects.indexOf( intersect.object ) );
-//
-//				}
-//
-//			// create cube
-//
-//			} else {
-//
-//				Mesh voxel = new Mesh( rs.cubeGeo, rs.cubeMaterial );
-//				voxel.getPosition().copy( intersect.point ).add( intersect.face.getNormal() );
-//				voxel.getPosition().divide( 50.0 ).floor().multiply( 50.0 ).add( 25.0 );
-//				rs.scene.add( voxel );
-//
-//				rs.objects.add( voxel );
-//
-//			}
-//
-//		}
-//		
-//		rs.context.getRenderer().render(rs.scene, rs.camera);
-//	}
-//
-//	@Override
-//	public void onMouseMove(MouseMoveEvent event) 
-//	{
-//		event.preventDefault();
-//		
-//		DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//
-//		rs.vector.set( ( event.getX() /(double) renderingPanel.context.getRenderer().getAbsoluteWidth() ) * 2.0 - 1.0, 
-//				- ( event.getY() /(double) renderingPanel.context.getRenderer().getAbsoluteHeight() ) * 2.0 + 1.0, 0.5 );
-//		rs.vector.unproject( rs.camera );
-//
-//		rs.raycaster.getRay().set( rs.camera.getPosition(), rs.vector.sub( rs.camera.getPosition() ).normalize() );
-//
-//		List<Intersect> intersects = rs.raycaster.intersectObjects( rs.objects, false );
-//
-//		if ( intersects.size() > 0 ) {
-//
-//			Intersect intersect = intersects.get( 0 );
-//
-//			rs.rollOverMesh.getPosition().copy( intersect.point ).add( intersect.face.getNormal() );
-//			rs.rollOverMesh.getPosition().divide( 50.0 ).floor().multiply( 50.0 ).add( 25.0 );
-//
-//		}
-//		
-//		rs.context.getRenderer().render(rs.scene, rs.camera);
-//	}
-//
-//	@Override
-//	public void onKeyUp(KeyUpEvent event) 
-//	{
-//		DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		
-//		if ( event.getNativeKeyCode() == KeyCodes.KEY_SHIFT ) 
-//		{
-//			rs.isShiftDown = false;
-//		} 
-//		else if ( event.getNativeKeyCode() == KeyCodes.KEY_CTRL ) 
-//		{
-//			rs.isCtrlDown = false;
-//		} 
-//	}
-//
-//	@Override
-//	public void onKeyDown(KeyDownEvent event) 
-//	{
-//		DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		
-//		if ( event.getNativeKeyCode() == KeyCodes.KEY_SHIFT ) 
-//		{
-//			rs.isShiftDown = true;
-//		} 
-//		else if ( event.getNativeKeyCode() == KeyCodes.KEY_CTRL ) 
-//		{
-//			rs.isCtrlDown = true;
-//		} 
-//	}
+
+	@Override
+	public void onKeyDown(int keycode) {
+		
+		if ( keycode == KeyCodes.KEY_SHIFT ) 
+		{
+			isShiftDown = true;
+		} 
+		else if ( keycode == KeyCodes.KEY_CTRL ) 
+		{
+			isCtrlDown = true;
+		} 
+	}
+
+	@Override
+	public void onKeyUp(int keycode) {
+		if ( keycode == KeyCodes.KEY_SHIFT ) 
+		{
+			isShiftDown = false;
+		} 
+		else if ( keycode == KeyCodes.KEY_CTRL ) 
+		{
+			isCtrlDown = false;
+		} 
+	}
+
+	@Override
+	public void onTouchDown(int screenX, int screenY, int pointer, int button) {
+
+		vector.set( ( screenX /(double) width ) * 2.0 - 1.0,
+				- ( screenY /(double) height ) * 2.0 + 1.0, 0.5 );
+
+		vector.unproject( camera );
+
+		raycaster.getRay().set( camera.getPosition(), vector.sub( camera.getPosition() ).normalize() );
+
+		List<Raycaster.Intersect> intersects = raycaster.intersectObjects( objects, false );
+
+		if ( intersects.size() > 0 ) {
+
+			Raycaster.Intersect intersect = intersects.get(0);
+
+			// delete cube
+
+			if ( isShiftDown ) {
+
+				if ( intersect.object != plane ) {
+
+					scene.remove( intersect.object );
+
+					objects.remove( objects.indexOf( intersect.object ) );
+
+				}
+
+			// create cube
+
+			} else {
+
+				Mesh voxel = new Mesh( cubeGeo, cubeMaterial );
+				voxel.getPosition().copy( intersect.point ).add( intersect.face.getNormal() );
+				voxel.getPosition().divide( 50.0 ).floor().multiply( 50.0 ).add( 25.0 );
+				scene.add( voxel );
+
+				objects.add( voxel );
+
+			}
+
+		}
+
+		renderer.render(scene, camera);
+	}
+
+	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		vector.set( ( screenX /(double) width ) * 2.0 - 1.0, 
+				- ( screenY /(double) height ) * 2.0 + 1.0, 0.5 );
+		vector.unproject( camera );
+
+		raycaster.getRay().set( camera.getPosition(), vector.sub( camera.getPosition() ).normalize() );
+
+		List<Raycaster.Intersect> intersects = raycaster.intersectObjects( objects, false );
+
+		if ( intersects.size() > 0 ) {
+
+			Raycaster.Intersect intersect = intersects.get( 0 );
+
+			rollOverMesh.getPosition().copy( intersect.point ).add( intersect.face.getNormal() );
+			rollOverMesh.getPosition().divide( 50.0 ).floor().multiply( 50.0 ).add( 25.0 );
+
+		}
+		
+		renderer.render(scene, camera);
+	}
+
 }
