@@ -22,4 +22,8 @@
 	<!-- Specify the paths for translatable code-->
 	<source path='client'/>
 
+	<generate-with class="org.parallax3d.parallax.tests.generator.ParallaxTestCasesGenerator">
+		<when-type-assignable class="org.parallax3d.parallax.tests.ParallaxTestCases"/>
+	</generate-with>
+
 </module>

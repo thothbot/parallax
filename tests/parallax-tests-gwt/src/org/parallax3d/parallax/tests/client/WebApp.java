@@ -30,7 +30,7 @@ import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.tests.ParallaxTest;
-import org.parallax3d.parallax.tests.Tests;
+import org.parallax3d.parallax.tests.ParallaxTestCases;
 import org.parallax3d.parallax.tests.client.widgets.Alert;
 import org.parallax3d.parallax.tests.resources.Resources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
@@ -78,13 +78,14 @@ public class WebApp implements EntryPoint, Parallax.AppListener {
 
     public void onAppInitialized()
     {
-        pageIndex = new PageIndex();
-        pageExample = new PageExample();
+        final ParallaxTestCases testCases = GWT.create(ParallaxTestCases.class);
+        pageIndex = new PageIndex(testCases);
+        pageExample = new PageExample(testCases);
 
         // Setup a history handler to reselect the associate menu item.
         final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
             public void onValueChange(ValueChangeEvent<String> event) {
-                final ParallaxTest test = Tests.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
+                final ParallaxTest test = testCases.getContentWidgetForToken(event.getValue().replaceFirst("!", ""));
 
                 RootLayoutPanel.get().clear();
                 if (test != null) {

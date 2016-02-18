@@ -34,7 +34,7 @@ import org.parallax3d.parallax.platforms.gwt.GwtApp;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 import org.parallax3d.parallax.tests.ParallaxTest;
-import org.parallax3d.parallax.tests.Tests;
+import org.parallax3d.parallax.tests.ParallaxTestCases;
 import org.parallax3d.parallax.tests.client.widgets.AlertBadCanvas;
 import org.parallax3d.parallax.tests.client.widgets.ItemInfo;
 import org.parallax3d.parallax.tests.client.widgets.ItemSmall;
@@ -82,7 +82,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 
 	Debugger debugger;
 
-	public PageExample()
+	public PageExample(ParallaxTestCases testCases)
 	{
 		// Initialize the ui binder.
 		initWidget(uiBinder.createAndBindUi(this));
@@ -91,7 +91,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 		content.ensureDebugId("content");
 		menu.ensureDebugId("menu");
 
-		for(Map.Entry<String, List<? extends ParallaxTest>> entry: Tests.DATA.entrySet())
+		for(Map.Entry<String, List<ParallaxTest>> entry: testCases.getAllTests().entrySet())
 			for (ParallaxTest test : entry.getValue())
 				this.menu.add(new ItemSmall(entry.getKey(), test));
 	}
