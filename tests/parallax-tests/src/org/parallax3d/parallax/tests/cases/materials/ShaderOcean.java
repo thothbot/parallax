@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests.cases.materials;
 
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.controllers.FirstPersonControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.IcosahedronGeometry;
@@ -58,7 +59,7 @@ public final class ShaderOcean extends ParallaxTest {
 	Scene scene;
 	PerspectiveCamera camera;
 	
-//	FirstPersonControls controls;
+	FirstPersonControls controls;
 	
 	Water water;
 	Mesh sphere;
@@ -84,9 +85,9 @@ public final class ShaderOcean extends ParallaxTest {
 		
 		camera.getPosition().set( 2000, 750, 2000 );
 		
-//		this.controls = new FirstPersonControls( camera, getCanvas() );
-//		controls.setMovementSpeed(500);
-//		controls.setLookSpeed(0.1);
+		this.controls = new FirstPersonControls( camera, context );
+		controls.setMovementSpeed(500);
+		controls.setLookSpeed(0.1);
 		
 		HemisphereLight light = new HemisphereLight( 0xffffbb, 0x080820, 1 );
 		light.getPosition().set( - 1, 1, - 1 );
@@ -166,7 +167,7 @@ public final class ShaderOcean extends ParallaxTest {
 
 		water.material.getShader().getUniforms().get("time").setValue(  (Double)water.material.getShader().getUniforms().get("time").getValue() + 1.0 / 60.0 );
 		water.render();
-//		controls.update((Duration.currentTimeMillis() - this.oldTime) * 0.001);
+		controls.update( context.getDeltaTime() );
 		this.oldTime = Duration.currentTimeMillis();
 		context.getRenderer().render(scene, camera);
 	}
