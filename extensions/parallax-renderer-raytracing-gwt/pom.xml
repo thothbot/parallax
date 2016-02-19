@@ -8,9 +8,9 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>parallax-renderer-raytracing</artifactId>
+	<artifactId>parallax-renderer-raytracing-gwt</artifactId>
 	<packaging>jar</packaging>
-	<name>Parallax reaytracing renderer</name>
+	<name>Parallax reaytracing renderer for GWT platform</name>
 
 	<dependencies>
 		<dependency>
