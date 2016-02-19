@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests.cases.materials;
 
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.controllers.TrackballControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
@@ -56,7 +57,7 @@ public final class MaterialsLightmap extends ParallaxTest
 	Scene scene;
 	PerspectiveCamera camera;
 	
-//	TrackballControls controls;
+	TrackballControls controls;
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -75,8 +76,8 @@ public final class MaterialsLightmap extends ParallaxTest
 
 		// CONTROLS
 
-//		controls = new TrackballControls( camera, getCanvas() );
-//		controls.getTarget().setZ( 150 );
+		controls = new TrackballControls( camera, context );
+		controls.getTarget().setZ( 150 );
 
 		// LIGHTS
 
@@ -132,7 +133,7 @@ public final class MaterialsLightmap extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-//		controls.update();
+		controls.update();
 		context.getRenderer().render(scene, camera);
 	}
 
