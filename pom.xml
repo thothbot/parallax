@@ -52,6 +52,7 @@
         <module>extensions/parallax-loaders</module>
         <module>extensions/parallax-renderer-plugins</module>
         <module>extensions/parallax-renderer-raytracing-gwt</module>
+        <module>extensions/parallax-renderer-css-gwt</module>
     </modules>
 
     <build>

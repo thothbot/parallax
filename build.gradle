@@ -87,6 +87,14 @@ project(":extensions:parallax-renderer-raytracing-gwt") {
     }
 }
 
+project(":extensions:parallax-renderer-css-gwt") {
+    dependencies {
+        compile project(":parallax")
+        optional "com.google.gwt:gwt-user:$gwtVersion"
+        optional "com.google.gwt:gwt-dev:$gwtVersion"
+    }
+}
+
 project(":extensions:parallax-loaders") {
     dependencies { compile project(":parallax") }
 }
