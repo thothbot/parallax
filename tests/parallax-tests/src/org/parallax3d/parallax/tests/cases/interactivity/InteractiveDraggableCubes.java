@@ -20,6 +20,7 @@ package org.parallax3d.parallax.tests.cases.interactivity;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.controllers.TrackballControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.Raycaster;
@@ -56,7 +57,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 	List<GeometryObject> objects;
 	Mesh plane;
 	
-//	TrackballControls controls;
+	TrackballControls controls;
 	
 	GeometryObject intersected;
 	GeometryObject selected;
@@ -83,15 +84,15 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 		);
 		camera.getPosition().setZ(1000);
 		
-//		controls = new TrackballControls( camera, renderingPanel.getCanvas() );
-//		controls.setRotateSpeed(1.0);
-//		controls.setZoomSpeed(1.2);
-//		controls.setPanSpeed(0.8);
-//		controls.setZoom(true);
-//		controls.setPan(true);
-//		controls.setStaticMoving(true);
-//		controls.setDynamicDampingFactor(0.3);
-//		controls.setEnabled(false);
+		controls = new TrackballControls( camera, context );
+		controls.setRotateSpeed(1.0);
+		controls.setZoomSpeed(1.2);
+		controls.setPanSpeed(0.8);
+		controls.setZoom(true);
+		controls.setPan(true);
+		controls.setStaticMoving(true);
+		controls.setDynamicDampingFactor(0.3);
+		controls.setEnabled(false);
 
 		scene.add( new AmbientLight( 0x505050 ) );
 
@@ -156,7 +157,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-//		controls.update();
+		controls.update();
 		context.getRenderer().render(scene, camera);
 	}
 
@@ -170,7 +171,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 
 		if ( intersects.size() > 0 )
 		{
-//			controls.setEnabled(false);
+			controls.setEnabled(false);
 
 			selected = intersects.get( 0 ).object;
 
@@ -233,7 +234,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 
 	@Override
 	public void onTouchUp(int screenX, int screenY, int pointer, int button) {
-//		controls.setEnabled(true);
+		controls.setEnabled(true);
 
 		if ( intersected != null )
 		{
