@@ -20,6 +20,7 @@ package org.parallax3d.parallax.tests.cases.geometries;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.controllers.TrackballControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -42,7 +43,7 @@ public class GeometryNormals extends ParallaxTest
 	Scene scene;
 	PerspectiveCamera camera;
 	
-//	private TrackballControls control;
+	private TrackballControls control;
 	
 	@Override
 	public void onStart(RenderingContext context)
@@ -56,9 +57,9 @@ public class GeometryNormals extends ParallaxTest
 		);
 		camera.getPosition().setZ(500);
 		
-//		this.control = new TrackballControls( camera, getCanvas() );
-//		this.control.setPanSpeed(0.2);
-//		this.control.setDynamicDampingFactor(0.3);
+		this.control = new TrackballControls( camera, context );
+		this.control.setPanSpeed(0.2);
+		this.control.setDynamicDampingFactor(0.3);
 		
 		PointLight light = new PointLight( 0xffffff, 1.5, 0.0 );
 		light.getPosition().set( 1000, 1000, 2000 );
@@ -167,7 +168,7 @@ public class GeometryNormals extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-//		this.control.update();
+		this.control.update();
 		context.getRenderer().render(scene, camera);
 	}
 
