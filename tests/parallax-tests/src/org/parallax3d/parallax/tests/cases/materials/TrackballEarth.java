@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests.cases.materials;
 
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.controllers.TrackballControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
@@ -69,7 +70,7 @@ public final class TrackballEarth extends ParallaxTest
 	Mesh meshClouds;
 	Mesh meshMoon;
 	
-//	private TrackballControls control;
+	private TrackballControls control;
 	private double oldTime;
 
 	@Override
@@ -85,11 +86,11 @@ public final class TrackballEarth extends ParallaxTest
 		
 		camera.getPosition().setZ(radius * 5);
 		
-//		this.control = new TrackballControls( camera, getCanvas() );
-//		this.control.setPanSpeed(0.2);
-//		this.control.setDynamicDampingFactor(0.3);
-//		this.control.setMinDistance(radius * 1.1);
-//		this.control.setMaxDistance(radius * 100);
+		this.control = new TrackballControls( camera, context );
+		this.control.setPanSpeed(0.2);
+		this.control.setDynamicDampingFactor(0.3);
+		this.control.setMinDistance(radius * 1.1);
+		this.control.setMaxDistance(radius * 100);
 
 		DirectionalLight dirLight = new DirectionalLight( 0xFFFFFF );
 		dirLight.getPosition().set( -1, 0, 1 ).normalize();
@@ -252,7 +253,7 @@ public final class TrackballEarth extends ParallaxTest
 		));
 		meshMoon.getRotation().addY( - angle );
 
-//		this.control.update();
+		this.control.update();
 
 		context.getRenderer().clear();
 		
