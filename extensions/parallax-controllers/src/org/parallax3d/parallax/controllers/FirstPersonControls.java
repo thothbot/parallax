@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.controllers;
 
 import org.parallax3d.parallax.Input;
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.input.*;
 import org.parallax3d.parallax.math.Mathematics;
@@ -47,7 +48,7 @@ import org.parallax3d.parallax.math.Vector3;
  * @author thothbot
  *
  */
-public class FirstPersonController extends Controller implements TouchMoveHandler, TouchDownHandler, TouchUpHandler, KeyDownHandler, KeyUpHandler
+public class FirstPersonControls extends Controls implements TouchMoveHandler, TouchDownHandler, TouchUpHandler, KeyDownHandler, KeyUpHandler
 {
 	private Vector3 target;
 	private double movementSpeed = 1.0;
@@ -89,14 +90,16 @@ public class FirstPersonController extends Controller implements TouchMoveHandle
 	private int viewHalfX;
 	private int viewHalfY;
 
-	public FirstPersonController(Object3D object)
+	public FirstPersonControls(Object3D object, RenderingContext context)
 	{
 		super(object);
 
-//		this.viewHalfX = widget.getOffsetWidth() / 2;
-//		this.viewHalfY = widget.getOffsetHeight() / 2;
+		this.viewHalfX = context.getWidth() / 2;
+		this.viewHalfY = context.getHeight() / 2;
 
 		this.target = new Vector3();
+
+		context.getInput().setInputHandler(this);
 	}
 
 	/**

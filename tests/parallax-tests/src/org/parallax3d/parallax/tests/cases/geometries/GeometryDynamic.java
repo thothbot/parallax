@@ -27,12 +27,13 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
+
+import org.parallax3d.parallax.controllers.FirstPersonControls;
 
 @ThreejsExample("webgl_geometry_dynamic")
 public class GeometryDynamic extends ParallaxTest
@@ -43,14 +44,12 @@ public class GeometryDynamic extends ParallaxTest
 	Scene scene;
 	PerspectiveCamera camera;
 
-//	FirstPersonControls controls;
+	FirstPersonControls controls;
 	PlaneGeometry geometry;
 	Mesh mesh;
 
 	int worldWidth = 32;
 	int worldDepth = 32;
-
-	private double oldTime;
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -67,9 +66,9 @@ public class GeometryDynamic extends ParallaxTest
 
 		scene.setFog(new FogExp2( 0xAACCFF, 0.0007 ));
 
-//		this.controls = new FirstPersonControls( camera, getCanvas() );
-//		controls.setMovementSpeed(500);
-//		controls.setLookSpeed(0.1);
+		this.controls = new FirstPersonControls( camera, context );
+		controls.setMovementSpeed(500);
+		controls.setLookSpeed(0.1);
 
 		this.geometry = new PlaneGeometry( 20000, 20000, worldWidth - 1, worldDepth - 1 );
 		this.geometry.applyMatrix(new Matrix4().makeRotationX( - Math.PI / 2.0 ));
@@ -92,8 +91,6 @@ public class GeometryDynamic extends ParallaxTest
 		this.mesh = new Mesh( this.geometry, material );
 		scene.add( this.mesh );
 
-		this.oldTime = Duration.currentTimeMillis();
-
 		context.getRenderer().setClearColor(0xaaccff);
 	}
 
@@ -103,11 +100,9 @@ public class GeometryDynamic extends ParallaxTest
 		for ( int i = 0, l = this.geometry.getVertices().size(); i < l; i ++ )
 			this.geometry.getVertices().get( i ).setY(35.0 * Math.sin( i / 5.0 + ( context.getDeltaTime() * 0.01 + i ) / 7.0 ));
 
-		((Geometry)this.mesh.getGeometry()).setVerticesNeedUpdate( true );
+		this.mesh.getGeometry().setVerticesNeedUpdate( true );
 
-//		this.controls.update( (Duration.currentTimeMillis() - this.oldTime) * 0.001);
-
-		this.oldTime = Duration.currentTimeMillis();
+		this.controls.update( context.getDeltaTime() );
 
 		context.getRenderer().render(scene, camera);
 	}

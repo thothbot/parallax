@@ -27,17 +27,17 @@ import org.parallax3d.parallax.graphics.core.Object3D;
  * @author thothbot
  *
  */
-public abstract class Controller
+public abstract class Controls
 {
 	private Object3D object;
 	
 	/**
-	 * The constructor will create a {@link Controller} instance.
+	 * The constructor will create a {@link Controls} instance.
 	 * 
 	 * @param object the {@link Object3D} which will be controlled. 
 	 * 				For example {@link Camera} object.
 	 */
-	public Controller(Object3D object)
+	public Controls(Object3D object)
 	{
 		this.object = object;
 	}
