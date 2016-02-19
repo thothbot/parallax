@@ -10,7 +10,7 @@
 
 	<inherits name='org.parallax3d.parallax.loaders' />
 
-	<inherits name='org.parallax3d.parallax.graphics.renderers.plugins' />
+	<inherits name='org.parallax3d.parallax.renderer-plugins' />
 
 	<!--Theme-->
 	<inherits name="com.google.gwt.user.theme.clean.Clean"/>
