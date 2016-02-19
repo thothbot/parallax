@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests.cases.plugins;
 
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.controllers.TrackballControls;
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -105,7 +106,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 	DirectionalLight directionalLight;
 	PointLight pointLight;
 	
-//	TrackballControls controls;
+	TrackballControls controls;
 	
 	ShaderPass hblur, vblur; 
 	
@@ -159,18 +160,18 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 
 		// CAMERA
 
-//		controls = new TrackballControls( camera, getCanvas() );
-//		controls.getTarget().set( 0 );
-//
-//		controls.setRotateSpeed(1.0);
-//		controls.setZoomSpeed(1.2);
-//		controls.setPanSpeed(0.8);
-//
-//		controls.setZoom(true);
-//		controls.setPan(true);
-//
-//		controls.setStaticMoving(true);
-//		controls.setDynamicDampingFactor(0.15);
+		controls = new TrackballControls( camera, context );
+		controls.getTarget().set( 0 );
+
+		controls.setRotateSpeed(1.0);
+		controls.setZoomSpeed(1.2);
+		controls.setPanSpeed(0.8);
+
+		controls.setZoom(true);
+		controls.setPan(true);
+
+		controls.setStaticMoving(true);
+		controls.setDynamicDampingFactor(0.15);
 
 		// SCENE (FINAL)
 
@@ -449,7 +450,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 
 		if ( terrain.isVisible() ) 
 		{
-//			controls.update();
+			controls.update();
 
 			double fLow = 0.4, fHigh = 0.825;
 
