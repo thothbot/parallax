@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests.cases.interactivity;
 
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.controllers.TrackballControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -60,7 +61,7 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 	int mouseX = 0, mouseY = 0;
 
 	Scene pickingScene;
-//	TrackballControls controls;
+	TrackballControls controls;
 	RenderTargetTexture pickingTexture;
 	
 	Mesh highlightBox;
@@ -76,8 +77,6 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 	@Override
 	public void onStart(RenderingContext context)
 	{
-//		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, this);
-
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				70, // fov
@@ -87,14 +86,14 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 		);
 		camera.getPosition().setZ(1000);
 		
-//		controls = new TrackballControls( camera, getCanvas()  );
-//		controls.setRotateSpeed(1.0);
-//		controls.setZoomSpeed(1.2);
-//		controls.setPanSpeed(0.8);
-//		controls.setZoom(true);
-//		controls.setPan(true);
-//		controls.setStaticMoving(true);
-//		controls.setDynamicDampingFactor(0.3);
+		controls = new TrackballControls( camera, context  );
+		controls.setRotateSpeed(1.0);
+		controls.setZoomSpeed(1.2);
+		controls.setPanSpeed(0.8);
+		controls.setZoom(true);
+		controls.setPan(true);
+		controls.setStaticMoving(true);
+		controls.setDynamicDampingFactor(0.3);
 
 		pickingScene = new Scene();
 
@@ -191,7 +190,7 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-//		controls.update();
+		controls.update();
 
 		pick(context);
 		
