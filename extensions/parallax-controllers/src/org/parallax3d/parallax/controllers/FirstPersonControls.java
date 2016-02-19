@@ -92,7 +92,7 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 
 	public FirstPersonControls(Object3D object, RenderingContext context)
 	{
-		super(object);
+		super(object, context);
 
 		this.viewHalfX = context.getWidth() / 2;
 		this.viewHalfY = context.getHeight() / 2;

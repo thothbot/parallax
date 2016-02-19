@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.controllers;
 
+import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.Object3D;
 
@@ -30,6 +31,7 @@ import org.parallax3d.parallax.graphics.core.Object3D;
 public abstract class Controls
 {
 	private Object3D object;
+	private RenderingContext context;
 	
 	/**
 	 * The constructor will create a {@link Controls} instance.
@@ -37,9 +39,10 @@ public abstract class Controls
 	 * @param object the {@link Object3D} which will be controlled. 
 	 * 				For example {@link Camera} object.
 	 */
-	public Controls(Object3D object)
+	public Controls(Object3D object, RenderingContext context)
 	{
 		this.object = object;
+		this.context = context;
 	}
 	
 	/**
@@ -50,5 +53,9 @@ public abstract class Controls
 	public Object3D getObject()
 	{
 		return this.object;
+	}
+
+	public RenderingContext getContext() {
+		return this.context;
 	}
 }
