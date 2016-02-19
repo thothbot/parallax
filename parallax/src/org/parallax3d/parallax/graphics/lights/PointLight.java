@@ -20,7 +20,6 @@ package org.parallax3d.parallax.graphics.lights;
 
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.graphics.extras.helpers.HasRaytracingPhysicalAttenuation;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
@@ -43,7 +42,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  *
  */
 @ThreejsObject("THREE.PointLight")
-public class PointLight extends Light implements HasRaytracingPhysicalAttenuation, HasIntensity
+public class PointLight extends Light implements HasIntensity
 {
 	public static class UniformPoint implements Light.UniformLight
 	{
@@ -72,8 +71,6 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 
 	private double intensity;
 	private double distance;
-
-	private boolean isPhysicalAttenuation;
 
 	public PointLight(int hex)
 	{
@@ -108,16 +105,6 @@ public class PointLight extends Light implements HasRaytracingPhysicalAttenuatio
 
 	public double getDistance() {
 		return distance;
-	}
-
-	@Override
-	public boolean isPhysicalAttenuation() {
-		return isPhysicalAttenuation;
-	}
-
-	@Override
-	public void setPhysicalAttenuation(boolean isPhysicalAttenuation) {
-		this.isPhysicalAttenuation = isPhysicalAttenuation;
 	}
 
 	public PointLight clone() {

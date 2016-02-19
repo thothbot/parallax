@@ -34,13 +34,9 @@ import org.parallax3d.parallax.system.ThreejsObject;
  *
  */
 @ThreejsObject("THREE.MeshPhongMaterial")
-public final class MeshPhongMaterial extends Material 
+public class MeshPhongMaterial extends Material
 	implements HasMaterialMap, HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
-	HasSkinning, HasAmbientEmissiveColor, HasShading,
-	
-	//Raytracing
-	HasRaytracingMirror, HasRaytracingGlass
-	
+	HasSkinning, HasAmbientEmissiveColor, HasShading
 {
 
 	private Color color;
@@ -87,9 +83,6 @@ public final class MeshPhongMaterial extends Material
 
 	private int numSupportedMorphTargets;
 	private int numSupportedMorphNormals;
-
-	private boolean isMirror;
-	private boolean isGlass;
 
 	public MeshPhongMaterial()
 	{
@@ -470,28 +463,6 @@ public final class MeshPhongMaterial extends Material
 
 	public MeshPhongMaterial setShading(Material.SHADING shading) {
 		this.shading = shading;
-		return this;
-	}
-
-	@Override
-	public boolean isGlass() {
-		return isGlass;
-	}
-
-	@Override
-	public MeshPhongMaterial setGlass(boolean isGlass) {
-		this.isGlass = isGlass;
-		return this;
-	}
-
-	@Override
-	public boolean isMirror() {
-		return isMirror;
-	}
-
-	@Override
-	public MeshPhongMaterial setMirror(boolean isMirror) {
-		this.isMirror = isMirror;
 		return this;
 	}
 

@@ -18,10 +18,27 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gwt.animation.client.AnimationScheduler;
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.ImageData;
+import com.google.gwt.user.client.ui.RootPanel;
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.lights.HasRaytracingPhysicalAttenuation;
+import org.parallax3d.parallax.graphics.lights.HasIntensity;
+import org.parallax3d.parallax.graphics.lights.Light;
+import org.parallax3d.parallax.graphics.materials.*;
+import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.math.*;
+import org.parallax3d.parallax.system.FastMap;
 
-public class RaytracingRenderer extends AbstractRenderer 
+import java.util.ArrayList;
+import java.util.List;
+
+public class RaytracingRenderer extends Renderer
 {
 	
 	private static final int maxRecursionDepth = 3;
@@ -57,10 +74,9 @@ public class RaytracingRenderer extends AbstractRenderer
 	List<Object3D> objects;
 	List<Light> lights = new ArrayList<Light>();
 	
-	AnimationHandle animationHandler;
+	AnimationScheduler.AnimationHandle animationHandler;
 	
-	Map<String, ObjectMatrixes> cache = GWT.isScript() ? 
-			new FastMap<ObjectMatrixes>() : new HashMap<String, ObjectMatrixes>();
+	FastMap<ObjectMatrixes> cache = new FastMap<ObjectMatrixes>();
 			
 			
 	Canvas canvasBlock;
@@ -99,7 +115,7 @@ public class RaytracingRenderer extends AbstractRenderer
 	}
 
 	@Override
-	public void setClearColor(Color color, double alpha) 
+	public void setClearColor(Color color, double alpha)
 	{
 		this.clearColor.copy(color);
 	}
@@ -111,7 +127,7 @@ public class RaytracingRenderer extends AbstractRenderer
 	}
 	
 	@Override
-	public void render( Scene scene, final Camera camera ) {
+	public void render(Scene scene, final Camera camera ) {
 
 		if ( isAutoClear() == true ) this.clear();
 
@@ -141,7 +157,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		lights = new ArrayList<Light>();
 
-		scene.traverse(new Traverse() {
+		scene.traverse(new Object3D.Traverse() {
 			
 			@Override
 			public void callback(Object3D object) {
@@ -221,7 +237,7 @@ public class RaytracingRenderer extends AbstractRenderer
 		final int _blockX = blockX;
 		final int _blockY = blockY;
 		
-		animationHandler = AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
+		animationHandler = AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
 						
 			@Override
 			public void execute(double timestamp) {
@@ -277,7 +293,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		//
 
-		List<Intersect> intersections = raycaster.intersectObjects( objects, true );
+		List<Raycaster.Intersect> intersections = raycaster.intersectObjects( objects, true );
 
 		// ray didn't find anything
 		// (here should come setting of background color?)
@@ -290,7 +306,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		// ray hit
 
-		Intersect intersection = intersections.get( 0 );
+		Raycaster.Intersect intersection = intersections.get( 0 );
 
 		Vector3 point = intersection.point;
 		GeometryObject object = intersection.object;
@@ -310,7 +326,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 		if ( material instanceof MeshLambertMaterial ||
 			 material instanceof MeshPhongMaterial ||
-			 material instanceof MeshBasicMaterial ) 
+			 material instanceof MeshBasicMaterial)
 		{
 			diffuseColor.copyGammaToLinear( ((HasColor)material).getColor() );
 		} 
@@ -341,7 +357,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 				rayLight.getDirection().copy( lightVector ).normalize();
 
-				List<Intersect> intersections2 = raycasterLight.intersectObjects( objects, true );
+				List<Raycaster.Intersect> intersections2 = raycasterLight.intersectObjects( objects, true );
 
 				// point in shadow
 
@@ -369,7 +385,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 				rayLight.getDirection().copy( lightVector ).normalize();
 
-				List<Intersect> intersections3 = raycasterLight.intersectObjects( objects, true );
+				List<Raycaster.Intersect> intersections3 = raycasterLight.intersectObjects( objects, true );
 
 				// point in shadow
 
@@ -393,7 +409,7 @@ public class RaytracingRenderer extends AbstractRenderer
 
 				double attenuation = 1.0;
 
-				if (light instanceof HasRaytracingPhysicalAttenuation 
+				if (light instanceof HasRaytracingPhysicalAttenuation
 						&& ((HasRaytracingPhysicalAttenuation)light).isPhysicalAttenuation() == true ) {
 
 					attenuation = lightVector.length();
