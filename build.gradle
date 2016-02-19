@@ -79,6 +79,10 @@ project(":extensions:parallax-renderer-plugins") {
     dependencies { compile project(":parallax") }
 }
 
+project(":extensions:parallax-renderer-raytracing") {
+    dependencies { compile project(":parallax") }
+}
+
 project(":extensions:parallax-loaders") {
     dependencies { compile project(":parallax") }
 }
