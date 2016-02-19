@@ -129,13 +129,15 @@ public class RaytracingRenderer extends Renderer
 	@Override
 	public void render(Scene scene, final Camera camera ) {
 
-		if ( isAutoClear() == true ) this.clear();
+		if (isAutoClear()) {
+			this.clear();
+		}
 
 //		cancelAnimationFrame( animationFrameId );
 
 		// update scene graph
 
-		if ( scene.isAutoUpdate() == true ) scene.updateMatrixWorld(false);
+		if (scene.isAutoUpdate()) scene.updateMatrixWorld(false);
 
 		// update camera matrices
 
@@ -347,25 +349,22 @@ public class RaytracingRenderer extends Renderer
 
 		if ( material instanceof MeshBasicMaterial ) 
 		{
-			for ( int i = 0, l = lights.size(); i < l; i ++ ) 
-			{
+			for (Light light : lights) {
 
-				Light light = lights.get( i );
+				lightVector.setFromMatrixPosition(light.getMatrixWorld());
+				lightVector.sub(point);
 
-				lightVector.setFromMatrixPosition( light.getMatrixWorld() );
-				lightVector.sub( point );
+				rayLight.getDirection().copy(lightVector).normalize();
 
-				rayLight.getDirection().copy( lightVector ).normalize();
-
-				List<Raycaster.Intersect> intersections2 = raycasterLight.intersectObjects( objects, true );
+				List<Raycaster.Intersect> intersections2 = raycasterLight.intersectObjects(objects, true);
 
 				// point in shadow
 
-				if ( intersections2.size() > 0 ) continue;
+				if (intersections2.size() > 0) continue;
 
 				// point visible
 
-				outputColor.add( diffuseColor );
+				outputColor.add(diffuseColor);
 
 			}
 
@@ -374,32 +373,30 @@ public class RaytracingRenderer extends Renderer
 
 			boolean normalComputed = false;
 
-			for ( int i = 0, l = lights.size(); i < l; i ++ ) {
+			for (Light light : lights) {
 
-				Light light = lights.get( i );
+				lightColor.copyGammaToLinear(light.getColor());
 
-				lightColor.copyGammaToLinear( light.getColor() );
+				lightVector.setFromMatrixPosition(light.getMatrixWorld());
+				lightVector.sub(point);
 
-				lightVector.setFromMatrixPosition( light.getMatrixWorld() );
-				lightVector.sub( point );
+				rayLight.getDirection().copy(lightVector).normalize();
 
-				rayLight.getDirection().copy( lightVector ).normalize();
-
-				List<Raycaster.Intersect> intersections3 = raycasterLight.intersectObjects( objects, true );
+				List<Raycaster.Intersect> intersections3 = raycasterLight.intersectObjects(objects, true);
 
 				// point in shadow
 
-				if ( intersections3.size() > 0 ) continue;
+				if (intersections3.size() > 0) continue;
 
 				// point lit
 
-				if ( normalComputed == false ) {
+				if (!normalComputed) {
 
 					// the same normal can be reused for all lights
 					// (should be possible to cache even more)
 
-					computePixelNormal( normalVector, localPoint, ((HasShading)material).getShading(), face, vertices );
-					normalVector.apply( _object.normalMatrix ).normalize();
+					computePixelNormal(normalVector, localPoint, ((HasShading) material).getShading(), face, vertices);
+					normalVector.apply(_object.normalMatrix).normalize();
 
 					normalComputed = true;
 
@@ -410,10 +407,10 @@ public class RaytracingRenderer extends Renderer
 				double attenuation = 1.0;
 
 				if (light instanceof HasRaytracingPhysicalAttenuation
-						&& ((HasRaytracingPhysicalAttenuation)light).isPhysicalAttenuation() == true ) {
+						&& ((HasRaytracingPhysicalAttenuation) light).isPhysicalAttenuation()) {
 
 					attenuation = lightVector.length();
-					attenuation = 1.0 / ( attenuation * attenuation );
+					attenuation = 1.0 / (attenuation * attenuation);
 
 				}
 
@@ -421,41 +418,40 @@ public class RaytracingRenderer extends Renderer
 
 				// compute diffuse
 
-				double dot = Math.max( normalVector.dot( lightVector ), 0 );
-				double diffuseIntensity = dot * ((HasIntensity)light).getIntensity();
+				double dot = Math.max(normalVector.dot(lightVector), 0);
+				double diffuseIntensity = dot * ((HasIntensity) light).getIntensity();
 
-				lightContribution.copy( diffuseColor );
-				lightContribution.multiply( lightColor );
-				lightContribution.multiply( diffuseIntensity * attenuation );
+				lightContribution.copy(diffuseColor);
+				lightContribution.multiply(lightColor);
+				lightContribution.multiply(diffuseIntensity * attenuation);
 
-				outputColor.add( lightContribution );
+				outputColor.add(lightContribution);
 
 				// compute specular
 
-				if ( material instanceof MeshPhongMaterial ) 
-				{
+				if (material instanceof MeshPhongMaterial) {
 
-					halfVector.add( lightVector, eyeVector ).normalize();
+					halfVector.add(lightVector, eyeVector).normalize();
 
-					double dotNormalHalf = Math.max( normalVector.dot( halfVector ), 0.0 );
-					double specularIntensity = Math.max( Math.pow( dotNormalHalf, ((MeshPhongMaterial) material).getShininess() ), 0.0 ) * diffuseIntensity;
+					double dotNormalHalf = Math.max(normalVector.dot(halfVector), 0.0);
+					double specularIntensity = Math.max(Math.pow(dotNormalHalf, ((MeshPhongMaterial) material).getShininess()), 0.0) * diffuseIntensity;
 
-					double specularNormalization = ( ((MeshPhongMaterial) material).getShininess() + 2.0 ) / 8.0;
+					double specularNormalization = (((MeshPhongMaterial) material).getShininess() + 2.0) / 8.0;
 
-					specularColor.copyGammaToLinear( ((MeshPhongMaterial) material).getSpecular() );
+					specularColor.copyGammaToLinear(((MeshPhongMaterial) material).getSpecular());
 
-					double alpha = Math.pow( Math.max( 1.0 - lightVector.dot( halfVector ), 0.0 ), 5.0 );
+					double alpha = Math.pow(Math.max(1.0 - lightVector.dot(halfVector), 0.0), 5.0);
 
-					schlick.setR( specularColor.getR() + ( 1.0 - specularColor.getR() ) * alpha );
-					schlick.setG( specularColor.getG() + ( 1.0 - specularColor.getG() ) * alpha );
-					schlick.setB( specularColor.getB() + ( 1.0 - specularColor.getB() ) * alpha );
+					schlick.setR(specularColor.getR() + (1.0 - specularColor.getR()) * alpha);
+					schlick.setG(specularColor.getG() + (1.0 - specularColor.getG()) * alpha);
+					schlick.setB(specularColor.getB() + (1.0 - specularColor.getB()) * alpha);
 
-					lightContribution.copy( schlick );
+					lightContribution.copy(schlick);
 
-					lightContribution.multiply( lightColor );
-					lightContribution.multiply( specularNormalization * specularIntensity * attenuation );
+					lightContribution.multiply(lightColor);
+					lightContribution.multiply(specularNormalization * specularIntensity * attenuation);
 
-					outputColor.add( lightContribution );
+					outputColor.add(lightContribution);
 				}
 
 			}
@@ -505,10 +501,8 @@ public class RaytracingRenderer extends Renderer
 			}
 
 			double theta = Math.max( eyeVector.dot( normalVector ), 0.0 );
-			double rf0 = reflectivity;
-			double fresnel = rf0 + ( 1.0 - rf0 ) * Math.pow( ( 1.0 - theta ), 5.0 );
 
-			double weight = fresnel;
+			double weight = reflectivity + ( 1.0 - reflectivity) * Math.pow( ( 1.0 - theta ), 5.0 );
 
 			Color zColor = tmpColor[ recursionDepth ];
 
