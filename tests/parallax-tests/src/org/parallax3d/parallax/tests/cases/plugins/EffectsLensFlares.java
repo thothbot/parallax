@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.tests.cases.plugins;
 
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.controllers.FlyControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
@@ -49,7 +50,7 @@ public final class EffectsLensFlares extends ParallaxTest
 	Scene scene;
 	PerspectiveCamera camera;
 	
-//	private FlyControls controls;
+	private FlyControls controls;
 	
 	private double oldTime;
 
@@ -67,12 +68,13 @@ public final class EffectsLensFlares extends ParallaxTest
 		camera.getPosition().setZ(250);
 		
 		new LensFlarePlugin(context.getRenderer(), scene);
-//		controls = new FlyControls( camera, getCanvas() );
 
-//		controls.setMovementSpeed( 2500 );
-//		controls.setRollSpeed( Math.PI / 6.0 );
-//		controls.setAutoForward( false );
-//		controls.setDragToLook( false );
+		controls = new FlyControls( camera, context );
+
+		controls.setMovementSpeed( 2500 );
+		controls.setRollSpeed( Math.PI / 6.0 );
+		controls.setAutoForward( false );
+		controls.setDragToLook( false );
 		
 		Fog fog = new Fog( 0x000000, 3500, 15000 );
 		fog.getColor().setHSL( 0.51, 0.4, 0.01 );
@@ -185,7 +187,7 @@ public final class EffectsLensFlares extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-//		controls.update( (Duration.currentTimeMillis() - this.oldTime) * 0.001 );
+		controls.update( context.getDeltaTime() );
 		this.oldTime = Duration.currentTimeMillis();
 		
 		context.getRenderer().render(scene, camera);

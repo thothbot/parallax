@@ -101,6 +101,7 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 
 	public void update( double delta ) 
 	{
+		delta *= 0.0001;
 		double moveMult = delta * this.movementSpeed;
 		double rotMult = delta * this.rollSpeed;
 
