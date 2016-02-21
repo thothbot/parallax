@@ -21,16 +21,20 @@ package org.parallax3d.parallax.tests.cases.materials;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.controllers.TrackballControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.ClassUtils;
 import org.parallax3d.parallax.system.SourceTextResource;
@@ -117,16 +121,16 @@ public final class MaterialsLightmap extends ParallaxTest
 
 		// MODEL
 
-//		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//				Mesh mesh = new Mesh( geometry, new MeshFaceMaterial(((JsonLoader)loader).getMaterials()) );
-//				mesh.getPosition().set( 0 );
-//				mesh.getScale().set( 100 );
-//				scene.add( mesh );
-//			}
-//		});
+		new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+				Mesh mesh = new Mesh( geometry, new MeshFaceMaterial(((JsonLoader)loader).getMaterials()) );
+				mesh.getPosition().set( 0 );
+				mesh.getScale().set( 100 );
+				scene.add( mesh );
+			}
+		});
 
 	}
 	
