@@ -21,6 +21,7 @@ package org.parallax3d.parallax.tests.cases.plugins;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.geometries.PlaneBufferGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
@@ -32,6 +33,8 @@ import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.*;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.*;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
@@ -117,13 +120,13 @@ public final class PostprocessingMulti extends ParallaxTest
 		directionalLight.getPosition().set( 0, -0.1, 1 ).normalize();
 		sceneModel.add( directionalLight );
 
-//		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {		
-//				createMesh( (Geometry) geometry, 100 );
-//			}
-//		});
+		new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+				createMesh( (Geometry) geometry, 100 );
+			}
+		});
 		
 		//
 
