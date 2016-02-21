@@ -23,9 +23,17 @@ import java.util.List;
 
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
+import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
+import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.MorphAnimMesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -87,62 +95,62 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 		scene2.add( light22 );
 
 		morphs = new ArrayList<MorphAnimMesh>();
-//		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//				@Override
-//				public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//					((JsonLoader)loader).morphColorsToFaceColors( (Geometry) geometry );
-//					((Geometry)geometry).computeMorphNormals();
-//
-//					MeshLambertMaterial material = new MeshLambertMaterial();
-//					material.setColor(new Color(0xffffff));
-//					material.setMorphTargets(true);
-//					material.setMorphNormals(true);
-//					material.setVertexColors(Material.COLORS.FACE);
-//					material.setShading(Material.SHADING.FLAT);
-//
-//					MorphAnimMesh meshAnim = new MorphAnimMesh( (Geometry) geometry, material );
-//
-//					meshAnim.setDuration(5000);
-//
-//					meshAnim.getScale().set( 1.5 );
-//					meshAnim.getPosition().setY( 150 );
-//
-//					scene.add( meshAnim );
-//					morphs.add( meshAnim );
-//				}
-//
-//		});
-//
-//		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//				@Override
-//				public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//					((JsonLoader)loader).morphColorsToFaceColors( (Geometry) geometry );
-//					((Geometry)geometry).computeMorphNormals();
-//
-//					MeshPhongMaterial material = new MeshPhongMaterial();
-//					material.setColor(new Color(0xffffff));
-//					material.setSpecular(new Color(0xffffff));
-//					material.setShininess(20);
-//					material.setMorphTargets(true);
-//					material.setMorphNormals(true);
-//					material.setVertexColors(Material.COLORS.FACE);
-//					material.setShading(Material.SHADING.SMOOTH);
-//
-//					MorphAnimMesh meshAnim = new MorphAnimMesh( (Geometry) geometry, material );
-//
-//					meshAnim.setDuration(5000);
-//
-//					meshAnim.getScale().set( 1.5 );
-//					meshAnim.getPosition().setY( 150 );
-//
-//					scene2.add( meshAnim );
-//					morphs.add( meshAnim );
-//				}
-//		});
+		new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+				@Override
+				public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+					((JsonLoader)loader).morphColorsToFaceColors( (Geometry) geometry );
+					((Geometry)geometry).computeMorphNormals();
+
+					MeshLambertMaterial material = new MeshLambertMaterial();
+					material.setColor(new Color(0xffffff));
+					material.setMorphTargets(true);
+					material.setMorphNormals(true);
+					material.setVertexColors(Material.COLORS.FACE);
+					material.setShading(Material.SHADING.FLAT);
+
+					MorphAnimMesh meshAnim = new MorphAnimMesh( (Geometry) geometry, material );
+
+					meshAnim.setDuration(5000);
+
+					meshAnim.getScale().set( 1.5 );
+					meshAnim.getPosition().setY( 150 );
+
+					scene.add( meshAnim );
+					morphs.add( meshAnim );
+				}
+
+		});
+
+		new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+				@Override
+				public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+					((JsonLoader)loader).morphColorsToFaceColors( (Geometry) geometry );
+					((Geometry)geometry).computeMorphNormals();
+
+					MeshPhongMaterial material = new MeshPhongMaterial();
+					material.setColor(new Color(0xffffff));
+					material.setSpecular(new Color(0xffffff));
+					material.setShininess(20);
+					material.setMorphTargets(true);
+					material.setMorphNormals(true);
+					material.setVertexColors(Material.COLORS.FACE);
+					material.setShading(Material.SHADING.SMOOTH);
+
+					MorphAnimMesh meshAnim = new MorphAnimMesh( (Geometry) geometry, material );
+
+					meshAnim.setDuration(5000);
+
+					meshAnim.getScale().set( 1.5 );
+					meshAnim.getPosition().setY( 150 );
+
+					scene2.add( meshAnim );
+					morphs.add( meshAnim );
+				}
+		});
 		
 		context.getRenderer().setGammaInput(true);
 		context.getRenderer().setGammaOutput(true);
