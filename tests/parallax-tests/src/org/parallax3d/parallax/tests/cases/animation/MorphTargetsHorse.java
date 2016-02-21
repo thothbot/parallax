@@ -20,9 +20,14 @@ package org.parallax3d.parallax.tests.cases.animation;
 
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
+import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
@@ -72,21 +77,21 @@ public final class MorphTargetsHorse extends ParallaxTest
 		light1.getPosition().set( -1, -1, -1 ).normalize();
 		scene.add( light1 );
 
-//		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//				MeshLambertMaterial material = new MeshLambertMaterial();
-//				material.setColor(new Color(0x606060));
-//				material.setMorphTargets(true);
-//				mesh = new Mesh(geometry, material);
-//				mesh.getScale().set(1.5);
-//
-//				scene.add(mesh);
-//
-//			}
-//		});
+		new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+				MeshLambertMaterial material = new MeshLambertMaterial();
+				material.setColor(new Color(0x606060));
+				material.setMorphTargets(true);
+				mesh = new Mesh(geometry, material);
+				mesh.getScale().set(1.5);
+
+				scene.add(mesh);
+
+			}
+		});
 
 		context.getRenderer().setClearColor(0xf0f0f0);
 	}
