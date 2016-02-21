@@ -31,6 +31,9 @@ import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.input.TouchMoveHandler;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
@@ -44,7 +47,7 @@ import org.parallax3d.parallax.tests.resources.GodRaysGenerateShader;
 import org.parallax3d.parallax.tests.resources.GodraysFakeSunShader;
 
 @ThreejsExample("webgl_postprocessing_godrays")
-public final class PostprocessingGodrays extends ParallaxTest
+public final class PostprocessingGodrays extends ParallaxTest implements TouchMoveHandler
 {
 
 	private static final String model = "models/obj/tree/tree.js";
@@ -55,9 +58,10 @@ public final class PostprocessingGodrays extends ParallaxTest
 
 	Scene scene;
 	PerspectiveCamera camera;
-	
-	public int mouseX;
-	public int mouseY;
+
+	int width = 0, height = 0;
+	int mouseX;
+	int mouseY;
 	
 	Mesh sphereMesh, quad;
 	
@@ -71,7 +75,13 @@ public final class PostprocessingGodrays extends ParallaxTest
 	ShaderMaterial materialGodraysGenerate, materialGodraysCombine, materialGodraysFakeSun;
 	
 	MeshDepthMaterial materialDepth;
-	
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
+
 	@Override
 	public void onStart(RenderingContext context)
 	{
@@ -91,21 +101,21 @@ public final class PostprocessingGodrays extends ParallaxTest
 
 		// tree
 
-//		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {																					
-//				Mesh treeMesh = new Mesh( geometry, materialScene );
-//				treeMesh.getPosition().set( 0, -150, -150 );
-//
-//				treeMesh.getScale().set( 400 );
-//
-//				treeMesh.setMatrixAutoUpdate(false);
-//				treeMesh.updateMatrix();
-//
-//				scene.add( treeMesh );
-//			}
-//		});
+		new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+				Mesh treeMesh = new Mesh( geometry, materialScene );
+				treeMesh.getPosition().set( 0, -150, -150 );
+
+				treeMesh.getScale().set( 400 );
+
+				treeMesh.setMatrixAutoUpdate(false);
+				treeMesh.updateMatrix();
+
+				scene.add( treeMesh );
+			}
+		});
 
 		// sphere
 
@@ -306,6 +316,12 @@ public final class PostprocessingGodrays extends ParallaxTest
 	}
 
 	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = (screenX - width / 2 );
+		mouseY = (screenY - height / 2);
+	}
+
+	@Override
 	public String getName() {
 		return "God-rays";
 	}
@@ -325,22 +341,6 @@ public final class PostprocessingGodrays extends ParallaxTest
 //	{
 //		super.loadRenderingPanelAttributes(renderingPanel);
 //		renderingPanel.getCanvas3dAttributes().setAntialiasEnable(false);
-//	}
-//	
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		    	  	rs.mouseX = (event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ); 
-//		    	  	rs.mouseY = (event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2);
-//		      }
-//		});
 //	}
 	
 }
