@@ -26,6 +26,8 @@ import org.parallax3d.parallax.graphics.lights.PointLight;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
@@ -61,29 +63,29 @@ public final class Helpers extends ParallaxTest {
         helper.getPosition().setY(-150);
         scene.add(helper);
 
-//        new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//            @Override
-//            public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//                MeshLambertMaterial material = new MeshLambertMaterial();
-//
-//                Mesh mesh = new Mesh(geometry, material);
-//                mesh.getScale().multiply(50);
-//                scene.add(mesh);
-//
-//                scene.add(new FaceNormalsHelper(mesh, 10));
-//                scene.add(new VertexNormalsHelper(mesh, 10));
-//
-//                WireframeHelper helper = new WireframeHelper(mesh);
-//                helper.getMaterial().setDepthTest(false);
-//                helper.getMaterial().setOpacity(0.25);
-//                helper.getMaterial().setTransparent(true);
-//                scene.add(helper);
-//
-//                scene.add(new BoxHelper(mesh));
-//
-//            }
-//        });
+        new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+            @Override
+            public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+                MeshLambertMaterial material = new MeshLambertMaterial();
+
+                Mesh mesh = new Mesh(geometry, material);
+                mesh.getScale().multiply(50);
+                scene.add(mesh);
+
+                scene.add(new FaceNormalsHelper(mesh, 10));
+                scene.add(new VertexNormalsHelper(mesh, 10));
+
+                WireframeHelper helper = new WireframeHelper(mesh);
+                helper.getMaterial().setDepthTest(false);
+                helper.getMaterial().setOpacity(0.25);
+                helper.getMaterial().setTransparent(true);
+                scene.add(helper);
+
+                scene.add(new BoxHelper(mesh));
+
+            }
+        });
 
     }
 
