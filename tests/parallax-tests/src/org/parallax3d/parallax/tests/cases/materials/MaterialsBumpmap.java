@@ -20,6 +20,7 @@ package org.parallax3d.parallax.tests.cases.materials;
 
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
@@ -31,6 +32,8 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.ShadowMap;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
@@ -151,13 +154,13 @@ public final class MaterialsBumpmap extends ParallaxTest
 			.setBumpScale(19)
 			.setMetal(false);
 
-//		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//				createScene( (Geometry) geometry, 100, material );
-//			}
-//		});
+		new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+				createScene( (Geometry) geometry, 100, material );
+			}
+		});
 
 		ShadowMap shadowMap = new ShadowMap(context.getRenderer(), scene);
 		shadowMap.setCullFrontFaces(false);
