@@ -37,4 +37,8 @@
 		<when-type-assignable class="org.parallax3d.parallax.system.SourceBundleFactory"/>
 	</generate-with>
 
+	<generate-with class="org.parallax3d.parallax.platforms.gwt.generator.AutoBeanFactoryGenerator">
+		<when-type-assignable class="org.parallax3d.parallax.system.autobean.AutoBeanFactory" />
+	</generate-with>
+
 </module>
