@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
@@ -31,9 +32,15 @@ import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.renderers.ShadowMap;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.Postprocessing;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.ShaderPass;
+import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.input.TouchMoveHandler;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
@@ -46,7 +53,7 @@ import org.parallax3d.parallax.tests.resources.BeckmannShader;
 import org.parallax3d.parallax.tests.resources.SkinSimpleShader;
 
 @ThreejsExample("webgl_materials_bumpmap_skin")
-public final class MaterialsBumpmapSkin extends ParallaxTest 
+public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMoveHandler
 {
 
 	private static final String texture = "models/obj/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg";
@@ -59,11 +66,19 @@ public final class MaterialsBumpmapSkin extends ParallaxTest
 	
 	Mesh mesh;
 	
-//	Postprocessing composerBeckmann;
-	
-	int mouseX = 0, mouseY = 0;
+	Postprocessing composerBeckmann;
+
+	int width = 0, height = 0;
+	int mouseX;
+	int mouseY;
 	
 	boolean firstPass = true;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -144,29 +159,29 @@ public final class MaterialsBumpmapSkin extends ParallaxTest
 		
 		// COMPOSER BECKMANN
 
-//		ShaderPass effectBeckmann = new ShaderPass( new BeckmannShader() );
-//		ShaderPass effectCopy = new ShaderPass( new CopyShader() );
-//
-//		effectCopy.setRenderToScreen(true);
-//
-//		RenderTargetTexture target = new RenderTargetTexture( 512, 512 );
-//		target.setMinFilter(TextureMinFilter.LINEAR);
-//		target.setMagFilter(TextureMagFilter.LINEAR);
-//		target.setFormat(PixelFormat.RGB);
-//		target.setStencilBuffer(false);
-//		composerBeckmann = new Postprocessing( context.getRenderer(), scene, target );
-//			composerBeckmann.addPass( effectBeckmann );
+		ShaderPass effectBeckmann = new ShaderPass( new BeckmannShader() );
+		ShaderPass effectCopy = new ShaderPass( new CopyShader() );
+
+		effectCopy.setRenderToScreen(true);
+
+		RenderTargetTexture target = new RenderTargetTexture( 512, 512 );
+		target.setMinFilter(TextureMinFilter.LINEAR);
+		target.setMagFilter(TextureMagFilter.LINEAR);
+		target.setFormat(PixelFormat.RGB);
+		target.setStencilBuffer(false);
+		composerBeckmann = new Postprocessing( context.getRenderer(), scene, target );
+		composerBeckmann.addPass( effectBeckmann );
 //			composerBeckmann.addPass( effectScreen );
 
 		//
 		
-//		new JsonLoader(model, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//				createScene( (Geometry) geometry, 100 );
-//			}
-//		});
+		new JsonLoader(model, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+				createScene( (Geometry) geometry, 100 );
+			}
+		});
 
 		//
 
@@ -212,7 +227,7 @@ public final class MaterialsBumpmapSkin extends ParallaxTest
 		uniforms.get( "enableBump" ).setValue( true );
 		uniforms.get( "enableSpecular" ).setValue( true );
 
-//		uniforms.get( "tBeckmann" ).setValue( composerBeckmann.getRenderTarget1() );
+		uniforms.get( "tBeckmann" ).setValue( composerBeckmann.getRenderTarget1() );
 		uniforms.get( "tDiffuse" ).setValue( mapColor );
 
 		uniforms.get( "bumpMap" ).setValue( mapHeight );
@@ -254,15 +269,21 @@ public final class MaterialsBumpmapSkin extends ParallaxTest
 			mesh.getRotation().addY( 0.05 * ( targetX - mesh.getRotation().getY() ) );
 			mesh.getRotation().addX( 0.05 * ( targetY - mesh.getRotation().getX() ) );
 		}
-		
-//			if ( firstPass ) 
-//			{
-//				composerBeckmann.render();
-//				firstPass = false;
-//			}
+
+//		if ( firstPass )
+//		{
+//			composerBeckmann.render();
+//			firstPass = false;
+//		}
 
 		context.getRenderer().clear();
 		context.getRenderer().render(scene, camera);
+	}
+
+	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = (screenX - width / 2 );
+		mouseY = (screenY - height / 2);
 	}
 	
 	@Override
@@ -280,21 +301,4 @@ public final class MaterialsBumpmapSkin extends ParallaxTest
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
 
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//
-//		    	  	rs.mouseX = event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ; 
-//		    	  	rs.mouseY = event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2;
-//		      }
-//		});
-//	}
-	
 }
