@@ -15,7 +15,8 @@
  */
 package org.parallax3d.autobean.vm;
 
-import com.google.web.bindery.autobean.shared.AutoBean;
+import org.parallax3d.autobean.AutoBean;
+import org.parallax3d.autobean.AutoBeanFactory;
 
 import java.util.*;
 
@@ -45,7 +46,7 @@ public class Configuration {
 
     /**
      * Equivalent to applying a
-     * {@link com.google.web.bindery.autobean.shared.AutoBeanFactory.Category
+     * {@link AutoBeanFactory.Category
      * Category} annotation to an AutoBeanFactory declaration.
      * 
      * @param categories the category types that should be searched for static
@@ -60,7 +61,7 @@ public class Configuration {
 
     /**
      * Equivalent to applying a
-     * {@link com.google.web.bindery.autobean.shared.AutoBeanFactory.NoWrap
+     * {@link AutoBeanFactory.NoWrap
      * NoWrap} annotation to an AutoBeanFactory declaration.
      * 
      * @param noWrap the types that should be excluded from wrapping
