@@ -22,6 +22,7 @@ import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.controllers.TrackballControls;
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.geometries.PlaneGeometry;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
@@ -47,6 +48,8 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.input.KeyCodes;
 import org.parallax3d.parallax.input.KeyDownHandler;
+import org.parallax3d.parallax.loaders.JsonLoader;
+import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector2;
@@ -357,38 +360,38 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 		final double startX = -3000;
 		morphs = new ArrayList<MorphAnimMesh>();
 
-//		new JsonLoader(parrotModel, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//				((JsonLoader)loader).morphColorsToFaceColors((Geometry) geometry);
-//				addMorph( (Geometry)geometry, 500, startX -500, 500, 700 );
-//				addMorph( (Geometry)geometry, 500, startX - Math.random() * 500, 500, -200 );
-//				addMorph( (Geometry)geometry, 500, startX - Math.random() * 500, 500, 200 );
-//				addMorph( (Geometry)geometry, 500, startX - Math.random() * 500, 500, 1000 );
-//
-//			}
-//		});
-//
-//		new JsonLoader(flamingoModel, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//				((JsonLoader)loader).morphColorsToFaceColors((Geometry) geometry);
-//				addMorph( (Geometry)geometry, 1000, startX - Math.random() * 500, 350, 40 );
-//			}
-//		});
-//
-//		new JsonLoader(storkModel, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//				((JsonLoader)loader).morphColorsToFaceColors((Geometry) geometry);
-//				addMorph( (Geometry)geometry, 1000, startX - Math.random() * 500, 350, 340 );
-//			}
-//		});
+		new JsonLoader(parrotModel, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+				((JsonLoader)loader).morphColorsToFaceColors((Geometry) geometry);
+				addMorph( (Geometry)geometry, 500, startX -500, 500, 700 );
+				addMorph( (Geometry)geometry, 500, startX - Math.random() * 500, 500, -200 );
+				addMorph( (Geometry)geometry, 500, startX - Math.random() * 500, 500, 200 );
+				addMorph( (Geometry)geometry, 500, startX - Math.random() * 500, 500, 1000 );
+
+			}
+		});
+
+		new JsonLoader(flamingoModel, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+				((JsonLoader)loader).morphColorsToFaceColors((Geometry) geometry);
+				addMorph( (Geometry)geometry, 1000, startX - Math.random() * 500, 350, 40 );
+			}
+		});
+
+		new JsonLoader(storkModel, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+				((JsonLoader)loader).morphColorsToFaceColors((Geometry) geometry);
+				addMorph( (Geometry)geometry, 1000, startX - Math.random() * 500, 350, 340 );
+			}
+		});
 	
 		this.oldTime = Duration.currentTimeMillis();
 	}
