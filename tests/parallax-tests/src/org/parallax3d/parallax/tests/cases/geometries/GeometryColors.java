@@ -52,8 +52,8 @@ public class GeometryColors extends ParallaxTest implements TouchMoveHandler
 
 	PerspectiveCamera camera;
 	
-	public int mouseX;
-	public int mouseY;
+	int mouseX;
+	int mouseY;
 
 	@Override
 	public void onStart(RenderingContext context)

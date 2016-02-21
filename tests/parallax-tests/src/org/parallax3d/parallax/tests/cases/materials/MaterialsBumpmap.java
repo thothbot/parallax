@@ -32,6 +32,7 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.ShadowMap;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
@@ -41,7 +42,7 @@ import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 @ThreejsExample("webgl_materials_bumpmap")
-public final class MaterialsBumpmap extends ParallaxTest
+public final class MaterialsBumpmap extends ParallaxTest implements TouchMoveHandler
 {
 
 	static final String texture = "models/obj/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg";
@@ -52,7 +53,15 @@ public final class MaterialsBumpmap extends ParallaxTest
 
 	Mesh mesh;
 
-	int mouseX = 0, mouseY = 0;
+	int width = 0, height = 0;
+	int mouseX;
+	int mouseY;
+
+	@Override
+	public void onResize(RenderingContext context) {
+		width = context.getWidth();
+		height = context.getHeight();
+	}
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -201,6 +210,12 @@ public final class MaterialsBumpmap extends ParallaxTest
 	}
 
 	@Override
+	public void onTouchMove(int screenX, int screenY, int pointer) {
+		mouseX = (screenX - width / 2 );
+		mouseY = (screenY - height / 2);
+	}
+
+	@Override
 	public String getName() {
 		return "Bump mapping";
 	}
@@ -214,21 +229,5 @@ public final class MaterialsBumpmap extends ParallaxTest
 	public String getAuthor() {
 		return "<a href=\"http://threejs.org\">threejs</a>";
 	}
-
-//	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
-//	{
-//		super.onAnimationReady(event);
-//
-//		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
-//		      @Override
-//		      public void onMouseMove(MouseMoveEvent event)
-//		      {
-//		    	  	DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
-//		    	  	rs.mouseX = event.getX() - renderingPanel.context.getRenderer().getAbsoluteWidth() / 2 ;
-//		    	  	rs.mouseY = event.getY() - renderingPanel.context.getRenderer().getAbsoluteHeight() / 2;
-//		      }
-//		});
-//	}
 
 }
