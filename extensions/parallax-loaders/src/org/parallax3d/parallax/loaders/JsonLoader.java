@@ -33,6 +33,8 @@ import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.system.autobean.AutoBean;
+import org.parallax3d.parallax.system.autobean.AutoBeanCodex;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 
 import java.util.ArrayList;
@@ -99,18 +101,18 @@ public class JsonLoader extends Loader
 	
 	private boolean isThisJsonStringValid(String iJSonString) 
 	{ 
-//		JsoObjectFactory factory = GWT.create(JsoObjectFactory.class);
-//
-//		try
-//		{
-//			AutoBean<JsoObject> bean = AutoBeanCodex.decode(factory, JsoObject.class, iJSonString);
-//			object = bean.as();
-//		}
-//		catch ( Exception e)
-//		{
-//			Log.error("Could not parser JSON data");
-//			return false;
-//		}
+		JsoObjectFactory factory = null;//= GWT.create(JsoObjectFactory.class);
+
+		try
+		{
+			AutoBean<JsoObject> bean = AutoBeanCodex.decode(factory, JsoObject.class, iJSonString);
+			object = bean.as();
+		}
+		catch ( Exception e)
+		{
+			Log.error("Could not parser JSON data");
+			return false;
+		}
 
 		return true;
 	}

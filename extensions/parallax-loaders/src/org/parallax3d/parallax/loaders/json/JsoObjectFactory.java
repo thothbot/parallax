@@ -18,15 +18,18 @@
 
 package org.parallax3d.parallax.loaders.json;
 
-public interface JsoObjectFactory
+import org.parallax3d.parallax.system.autobean.AutoBean;
+import org.parallax3d.parallax.system.autobean.AutoBeanFactory;
+
+public interface JsoObjectFactory extends AutoBeanFactory
 {
-	JsoObject file();
-	
-	JsoMaterial material();
-	
-	JsoMetadata metadata();
-	
-	JsoMorphColors morphColors();
-	
-	JsoMorphTargets morphTargets();
+	AutoBean<JsoObject> file();
+
+	AutoBean<JsoMaterial> material();
+
+	AutoBean<JsoMetadata> metadata();
+
+	AutoBean<JsoMorphColors> morphColors();
+
+	AutoBean<JsoMorphTargets> morphTargets();
 }

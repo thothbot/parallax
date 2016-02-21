@@ -28,6 +28,6 @@ public enum JsoBlending
 	MultiplyBlending      { @Override public Material.BLENDING getValue() { return Material.BLENDING.MULTIPLY; }},
 	AdditiveAlphaBlending { @Override public Material.BLENDING getValue() { return Material.BLENDING.ADDITIVE_ALPHA; }},
 	CustomBlending        { @Override public Material.BLENDING getValue() { return Material.BLENDING.CUSTOM; }};
-	
+
 	public abstract Material.BLENDING getValue();
 }

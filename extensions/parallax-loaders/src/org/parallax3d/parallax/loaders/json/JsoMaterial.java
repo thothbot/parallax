@@ -18,19 +18,21 @@
 
 package org.parallax3d.parallax.loaders.json;
 
+import org.parallax3d.parallax.system.autobean.AutoBean;
+
 import java.util.List;
 
 public interface JsoMaterial 
 {
-	//DbgColor
+	@AutoBean.PropertyName("DbgColor")
 	int getDbgColor();
-	//DbgIndex
+	@AutoBean.PropertyName("DbgIndex")
 	int getDbgIndex();
-	//DbgName
+	@AutoBean.PropertyName("DbgName")
 	String getDbgName();
-	
+
 	JsoBlending getBlending();
-	
+
 	/**
 	 * List of R, G, B
 	 */
@@ -40,38 +42,38 @@ public interface JsoMaterial
 	 * List of R, G, B
 	 */
 	List<Double> getColorDiffuse();
-	
+
 	/**
 	 * List of R, G, B
 	 */
 	List<Double> getColorSpecular();
-	
+
 	/**
 	 * List of R, G, B
 	 */
 	List<Double> getColorEmissive();
-	
+
 	double getIllumination();
-	
+
 	double getOpticalDensity();
-	
+
 	boolean getDepthTest();
-	
+
 	boolean getDepthWrite();
 
 	String getShading();
-	
+
 	double getSpecularCoef();
-	
+
 	double getTransparency();
-	
+
 	boolean getTransparent();
-	
+
 	boolean getVertexColors();
 
 	///////////////////////////////////////////////
 	// Textures
-	
+
 	// Diffuse
 	String getMapDiffuse();
 	List<Integer> getMapDiffuseRepeat();
@@ -85,7 +87,7 @@ public interface JsoMaterial
 	List<JsoTextureWrapMode> getMapLightWrap();
 	int getMapLightAnisotropy();
 	List<Double> getMapLightOffset();
-	
+
 	// Bump
 	String getMapBump();
 	List<Integer> getMapBumpRepeat();
@@ -93,7 +95,7 @@ public interface JsoMaterial
 	double getMapBumpScale();
 	int getMapBumpAnisotropy();
 	List<Double> getMapBumpOffset();
-	
+
 	// Normal
 	String getMapNormal();
 	List<Integer> getMapNormalRepeat();
@@ -101,14 +103,14 @@ public interface JsoMaterial
 	int getMapNormalAnisotropy();
 	List<Double> getMapNormalOffset();
 	double getMapNormalFactor();
-	
+
 	// Specular
 	String getMapSpecular();
 	List<Integer> getMapSpecularRepeat();
 	List<JsoTextureWrapMode> getMapSpecularWrap();
 	int getMapSpecularAnisotropy();
 	List<Double> getMapSpecularOffset();
-	
+
 	String getMapAlpha();
 	List<Integer> getMapAlphaRepeat();
 	List<JsoTextureWrapMode> getMapAlphaWrap();
