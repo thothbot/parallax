@@ -29,10 +29,9 @@ import com.google.gwt.user.rebind.SourceWriter;
 import com.google.web.bindery.autobean.gwt.client.impl.AbstractAutoBeanFactory;
 import com.google.web.bindery.autobean.gwt.client.impl.ClientPropertyContext;
 import com.google.web.bindery.autobean.gwt.client.impl.JsniCreatorMap;
-import com.google.web.bindery.autobean.gwt.rebind.model.*;
-import com.google.web.bindery.autobean.shared.*;
-import com.google.web.bindery.autobean.shared.impl.AbstractAutoBean;
-import com.google.web.bindery.autobean.shared.impl.AbstractAutoBean.OneShotContext;
+import org.parallax3d.parallax.platforms.gwt.generator.autobean.*;
+import org.parallax3d.parallax.system.autobean.*;
+import org.parallax3d.parallax.system.autobean.impl.AbstractAutoBean;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -560,7 +559,7 @@ public class AutoBeanFactoryGenerator extends Generator {
   private void writeTraversal(SourceWriter sw, AutoBeanType type) {
     List<AutoBeanMethod> referencedSetters = new ArrayList<AutoBeanMethod>();
     sw.println("@Override protected void traverseProperties(%s visitor, %s ctx) {",
-        AutoBeanVisitor.class.getCanonicalName(), OneShotContext.class.getCanonicalName());
+        AutoBeanVisitor.class.getCanonicalName(), AbstractAutoBean.OneShotContext.class.getCanonicalName());
     sw.indent();
     sw.println("%s bean;", AbstractAutoBean.class.getCanonicalName());
     sw.println("Object value;");

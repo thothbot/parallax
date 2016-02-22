@@ -15,6 +15,8 @@
  */
 package org.parallax3d.parallax.system.autobean.impl;
 
+import org.parallax3d.parallax.system.autobean.*;
+
 import java.util.*;
 
 /**

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.parallax3d.parallax.platforms.gwt.generator.model;
+package org.parallax3d.parallax.platforms.gwt.generator.autobean;
 
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;

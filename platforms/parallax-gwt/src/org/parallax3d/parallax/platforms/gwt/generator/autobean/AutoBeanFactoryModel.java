@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.parallax3d.parallax.platforms.gwt.generator.model;
+package org.parallax3d.parallax.platforms.gwt.generator.autobean;
 
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -21,7 +21,6 @@ import com.google.gwt.core.ext.typeinfo.*;
 import com.google.gwt.editor.rebind.model.ModelUtils;
 import org.parallax3d.parallax.system.autobean.AutoBean;
 import org.parallax3d.parallax.system.autobean.AutoBeanFactory;
-import org.parallax3d.parallax.system.autobean.impl.*;
 import org.parallax3d.parallax.system.autobean.impl.EnumMap;
 
 import java.util.*;
