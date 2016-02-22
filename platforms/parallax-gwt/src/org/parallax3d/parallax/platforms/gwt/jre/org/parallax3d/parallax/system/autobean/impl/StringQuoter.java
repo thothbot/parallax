@@ -19,8 +19,8 @@ import com.google.gwt.core.client.GwtScriptOnly;
 import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.JsDate;
 import com.google.gwt.core.client.JsonUtils;
-import com.google.web.bindery.autobean.gwt.client.impl.JsoSplittable;
-import com.google.web.bindery.autobean.shared.Splittable;
+import org.parallax3d.parallax.platforms.gwt.system.autobean.JsoSplittable;
+import org.parallax3d.parallax.system.autobean.Splittable;
 
 import java.util.Date;
 
