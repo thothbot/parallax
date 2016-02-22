@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.loaders.json;
 
-import org.parallax3d.parallax.system.autobean.AutoBean;
-import org.parallax3d.parallax.system.autobean.AutoBeanFactory;
+import org.parallax3d.parallax.system.jsonbind.AutoBean;
+import org.parallax3d.parallax.system.jsonbind.AutoBeanFactory;
 
 public interface JsoObjectFactory extends AutoBeanFactory
 {

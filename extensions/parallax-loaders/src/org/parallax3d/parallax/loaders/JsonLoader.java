@@ -33,8 +33,8 @@ import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.autobean.AutoBean;
-import org.parallax3d.parallax.system.autobean.AutoBeanCodex;
+import org.parallax3d.parallax.system.jsonbind.AutoBean;
+import org.parallax3d.parallax.system.jsonbind.AutoBeanCodex;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 
 import java.util.ArrayList;

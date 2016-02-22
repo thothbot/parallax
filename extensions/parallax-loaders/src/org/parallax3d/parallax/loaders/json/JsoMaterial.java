@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.loaders.json;
 
-import org.parallax3d.parallax.system.autobean.AutoBean;
+import org.parallax3d.parallax.system.jsonbind.AutoBean;
 
 import java.util.List;
 
