@@ -16,10 +16,17 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.system.jsonbind.json;
+package org.parallax3d.parallax.system.jsonbind;
 
-public class JSONException extends Exception {
-    public JSONException(String var1) {
-        super(var1);
+import com.google.gwt.core.client.GWT;
+
+public class JsonBindProxy {
+
+    public static <T> T create(Class<? extends AutoBeanFactory> classLiteral) {
+
+        JsonBindFactory bundles = GWT.create( JsonBindFactory.class );
+        return (T) bundles.get(classLiteral);
+
     }
+
 }

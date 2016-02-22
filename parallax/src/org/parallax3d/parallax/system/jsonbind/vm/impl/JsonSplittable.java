@@ -19,9 +19,9 @@ import org.parallax3d.parallax.system.jsonbind.Splittable;
 import org.parallax3d.parallax.system.jsonbind.WeakMapping;
 import org.parallax3d.parallax.system.jsonbind.impl.HasSplittable;
 import org.parallax3d.parallax.system.jsonbind.impl.StringQuoter;
-import org.parallax3d.parallax.system.jsonbind.json.JSONArray;
-import org.parallax3d.parallax.system.jsonbind.json.JSONException;
-import org.parallax3d.parallax.system.jsonbind.json.JSONObject;
+import org.parallax3d.parallax.system.jsonbind.vm.json.JSONArray;
+import org.parallax3d.parallax.system.jsonbind.vm.json.JSONException;
+import org.parallax3d.parallax.system.jsonbind.vm.json.JSONObject;
 
 import java.util.*;
 

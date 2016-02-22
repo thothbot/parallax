@@ -36,6 +36,7 @@ import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.jsonbind.AutoBean;
 import org.parallax3d.parallax.system.jsonbind.AutoBeanCodex;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
+import org.parallax3d.parallax.system.jsonbind.JsonBindProxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +102,7 @@ public class JsonLoader extends Loader
 	
 	private boolean isThisJsonStringValid(String iJSonString) 
 	{ 
-		JsoObjectFactory factory = null;//= GWT.create(JsoObjectFactory.class);
+		JsoObjectFactory factory = JsonBindProxy.create(JsoObjectFactory.class);
 
 		try
 		{

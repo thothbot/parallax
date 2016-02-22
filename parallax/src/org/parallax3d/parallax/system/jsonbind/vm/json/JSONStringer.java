@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.system.jsonbind.json;
+package org.parallax3d.parallax.system.jsonbind.vm.json;
 
 import java.util.ArrayList;
 import java.util.Arrays;

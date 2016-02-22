@@ -21,6 +21,7 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.DefaultAssetFilter;
+import org.parallax3d.parallax.platforms.gwt.generator.preloader.FileWrapper;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.File;
@@ -69,10 +70,10 @@ public class PreloaderBundleGenerator extends Generator {
 			throw new RuntimeException("assets path '" + assetPath
 				+ "' is not a directory. Check your parallax.assetpath property in your GWT project's module gwt.xml file");
 		System.out.println("Copying resources from " + assetPath + " to " + assetOutputPath );
-		System.out.println(source.file.getAbsolutePath());
+		System.out.println(source.file().getAbsolutePath());
 		FileWrapper target = new FileWrapper("assets/"); // this should always be the war/ directory of the GWT project.
-		System.out.println(target.file.getAbsolutePath());
-		if (!target.file.getAbsolutePath().replace("\\", "/").endsWith(assetOutputPath + "assets")) {
+		System.out.println(target.file().getAbsolutePath());
+		if (!target.file().getAbsolutePath().replace("\\", "/").endsWith(assetOutputPath + "assets")) {
 			target = new FileWrapper(assetOutputPath + "assets/");
 		}
 		if (target.exists()) {

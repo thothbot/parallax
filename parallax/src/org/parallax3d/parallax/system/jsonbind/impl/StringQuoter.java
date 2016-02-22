@@ -16,7 +16,7 @@
 package org.parallax3d.parallax.system.jsonbind.impl;
 
 import org.parallax3d.parallax.system.jsonbind.Splittable;
-import org.parallax3d.parallax.system.jsonbind.json.JSONObject;
+import org.parallax3d.parallax.system.jsonbind.vm.json.JSONObject;
 import org.parallax3d.parallax.system.jsonbind.vm.impl.JsonSplittable;
 
 import java.text.DateFormat;

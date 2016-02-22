@@ -39,7 +39,7 @@ public final class ClientPropertyContext implements AutoBeanVisitor.PropertyCont
      */
     public static native Setter beanSetter(AbstractAutoBean<?> bean, String key) /*-{
       return function(value) {
-        bean.@com.google.web.bindery.autobean.shared.impl.AbstractAutoBean::setProperty(*)(key, value);
+        bean.@org.parallax3d.parallax.system.jsonbind.impl.AbstractAutoBean::setProperty(*)(key, value);
       };
     }-*/;
 

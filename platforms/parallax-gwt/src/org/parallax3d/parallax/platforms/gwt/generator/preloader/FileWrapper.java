@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.platforms.gwt.generator;
+package org.parallax3d.parallax.platforms.gwt.generator.preloader;
 
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.StreamUtils;
