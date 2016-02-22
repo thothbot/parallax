@@ -22,14 +22,14 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 public final class SpriteShader extends Shader 
 {
 	interface Resources extends Shader.DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("source/sprite.vs.glsl")
 		SourceTextResource getVertexShader();

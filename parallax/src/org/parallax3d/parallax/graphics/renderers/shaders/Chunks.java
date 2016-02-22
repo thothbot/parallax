@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceBundle;
 import org.parallax3d.parallax.system.SourceTextResource;
 
@@ -30,7 +30,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  */
 public interface Chunks extends SourceBundle
 {
-	Chunks INSTANCE = ClassUtils.newProxyInstance( Chunks.class );
+	Chunks INSTANCE = SourceBundleProxy.create( Chunks.class );
 
     @Source("chunk/alphamap_fragment.glsl")
     SourceTextResource getAlphamapFragment();

@@ -31,7 +31,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
@@ -46,7 +46,7 @@ public final class MaterialsWireframe extends ParallaxTest
 
 	interface Resources extends Shader.DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("../../resources/shaders/materials_wireframe.vs.glsl")
 		SourceTextResource getVertexShader();

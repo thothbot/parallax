@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
@@ -34,7 +34,7 @@ public final class FresnelShader extends Shader
 
 	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("source/fresnel.vs.glsl")
 		SourceTextResource getVertexShader();

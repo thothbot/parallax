@@ -20,9 +20,9 @@ package org.parallax3d.parallax.system;
 
 import com.google.gwt.core.client.GWT;
 
-public class ClassUtils {
+public class SourceBundleProxy {
 
-    public static <T> T newProxyInstance(Class<? extends SourceBundle> classLiteral) {
+    public static <T> T create(Class<? extends SourceBundle> classLiteral) {
 
         SourceBundleFactory bundles = GWT.create( SourceBundleFactory.class );
         return (T) bundles.get(classLiteral);

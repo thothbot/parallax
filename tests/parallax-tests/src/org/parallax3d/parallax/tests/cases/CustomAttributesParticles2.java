@@ -32,7 +32,7 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
@@ -47,7 +47,7 @@ public class CustomAttributesParticles2 extends ParallaxTest
 {
 	interface Resources extends Shader.DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("../resources/shaders/custom_attributes_particles.vs.glsl")
 		SourceTextResource getVertexShader();

@@ -36,7 +36,7 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
@@ -47,7 +47,7 @@ public final class MaterialsLightmap extends ParallaxTest
 
 	interface Resources extends Shader.DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("../../resources/shaders/skydome.vs.glsl")
 		SourceTextResource getVertexShader();

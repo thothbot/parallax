@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.tests.resources;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
@@ -38,7 +38,7 @@ public final class BeckmannShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 		
 		@Source("shaders/beckmann.vs.glsl")
 		SourceTextResource getVertexShader();

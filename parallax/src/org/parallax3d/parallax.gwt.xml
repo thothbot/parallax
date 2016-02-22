@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to="org.parallax3d.parallax">
-	<source path="parallax" />
+	<source path="parallax">
+		<exclude name="**/system/jsonbind/vm/**" />
+	</source>
 </module>

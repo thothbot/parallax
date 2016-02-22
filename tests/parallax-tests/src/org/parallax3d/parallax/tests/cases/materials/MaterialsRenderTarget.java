@@ -34,8 +34,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.input.TouchMoveHandler;
-import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
@@ -48,7 +47,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 {
 	interface ResourcesPass1 extends Shader.DefaultResources
 	{
-		ResourcesPass1 INSTANCE = ClassUtils.newProxyInstance(ResourcesPass1.class);
+		ResourcesPass1 INSTANCE = SourceBundleProxy.create(ResourcesPass1.class);
 
 		@Source("../../resources/shaders/rtt.vs.glsl")
 		SourceTextResource getVertexShader();
@@ -59,7 +58,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 
 	interface ResourcesScreen extends Shader.DefaultResources
 	{
-		ResourcesScreen INSTANCE = ClassUtils.newProxyInstance(ResourcesScreen.class);
+		ResourcesScreen INSTANCE = SourceBundleProxy.create(ResourcesScreen.class);
 
 		@Source("../../resources/shaders/rtt.vs.glsl")
 		SourceTextResource getVertexShader();

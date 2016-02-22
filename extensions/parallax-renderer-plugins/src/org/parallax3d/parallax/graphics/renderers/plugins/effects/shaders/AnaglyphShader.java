@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.renderers.plugins.effects.shaders;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 public class AnaglyphShader extends Shader
@@ -28,7 +28,7 @@ public class AnaglyphShader extends Shader
 
 	interface Resources extends Shader.DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("source/anaglyph.vs.glsl")
 		SourceTextResource getVertexShader();

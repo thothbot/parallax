@@ -24,7 +24,7 @@ import java.util.List;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 /**
@@ -42,7 +42,7 @@ public final class NormalMapShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("source/normalmap.vs.glsl")
 		SourceTextResource getVertexShader();

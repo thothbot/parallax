@@ -19,14 +19,14 @@
 package org.parallax3d.parallax.graphics.renderers.plugins.lensflare.shaders;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 public final class LensFlareVertexTextureShader extends LensFlareShader 
 {
 	interface Resources extends Shader.DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("source/lensFlareVertexTexture.vs.glsl")
 		SourceTextResource getVertexShader();

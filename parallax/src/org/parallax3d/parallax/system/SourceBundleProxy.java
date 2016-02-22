@@ -24,9 +24,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-public class ClassUtils {
+public class SourceBundleProxy {
 
-    public static <T> T newProxyInstance(final Class<? extends SourceBundle> classLiteral) {
+    public static <T> T create(final Class<? extends SourceBundle> classLiteral) {
 
         return (T) Proxy.newProxyInstance(classLiteral.getClassLoader(),
                 new Class[]{classLiteral},
@@ -34,7 +34,7 @@ public class ClassUtils {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         SourceBundle.Source source = method.getAnnotation(SourceBundle.Source.class);
-                        return new FileHandle(ClassUtils.class.getResource(classLiteral.getPackage().getName().replace(".", "/") + source).getFile());
+                        return new FileHandle(SourceBundleProxy.class.getResource(classLiteral.getPackage().getName().replace(".", "/") + source).getFile());
                     }
                 });
 

@@ -53,7 +53,7 @@ import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceTextResource;
@@ -72,7 +72,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 
 	interface Resources extends Shader.DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("../../resources/shaders/terrain_dynamic_noise.vs.glsl")
 		SourceTextResource getVertexShader();

@@ -23,7 +23,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ClassUtils;
+import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
 public class WaterShader extends Shader
@@ -31,7 +31,7 @@ public class WaterShader extends Shader
 
 	interface Resources extends DefaultResources
 	{
-		Resources INSTANCE = ClassUtils.newProxyInstance(Resources.class);
+		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
 		@Source("shaders/water.vs.glsl")
 		SourceTextResource getVertexShader();
