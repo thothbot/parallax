@@ -18,6 +18,10 @@
 
 package org.parallax3d.parallax.loaders;
 
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 
 import java.util.ArrayList;
@@ -34,27 +38,47 @@ public abstract class Loader
 
 	public interface LoaderProgressHandler
 	{
-		public void onProgressUpdate(int left);
+		void onProgressUpdate(int left);
 	}
 
 	public interface ModelLoadHandler
 	{
-		public void onModelLoaded(Loader loader, AbstractGeometry geometry);
+		void onModelLoaded(Loader loader, AbstractGeometry geometry);
 	}
 
-	private String url;
-	private String texturePath;
-	private ModelLoadHandler modelLoadHandler;
+	FileHandle file;
+	String texturePath;
+	ModelLoadHandler modelLoadHandler;
 
-	public Loader(String url, ModelLoadHandler modelLoadHandler)
+	public Loader(String url, final ModelLoadHandler modelLoadHandler)
 	{
-		this.url = url;
+		this.file = Parallax.asset(url, new FileListener<FileHandle>() {
+			@Override
+			public void onProgress(double amount) {
+
+			}
+
+			@Override
+			public void onFailure() {
+				Log.error("An error occurred while loading model: " + file.path());
+			}
+
+			@Override
+			public void onSuccess(FileHandle result) {
+				Log.info("Loaded model: " + file.path());
+				AbstractGeometry geometry = Loader.this.parse(result);
+
+				if(modelLoadHandler != null)
+					modelLoadHandler.onModelLoaded(Loader.this, geometry);
+			}
+		});
+
 		this.texturePath = extractUrlBase(url);
 		
 		this.modelLoadHandler = modelLoadHandler;
 	}
 
-	protected abstract AbstractGeometry parse(String string);
+	protected abstract AbstractGeometry parse(FileHandle result);
 
 	public String getTexturePath() {
 		return this.texturePath;

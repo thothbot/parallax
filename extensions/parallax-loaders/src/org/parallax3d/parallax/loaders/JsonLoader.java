@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.loaders;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -51,14 +52,12 @@ public class JsonLoader extends Loader
 	public JsonLoader(String url, ModelLoadHandler modelLoadHandler) 
 	{
 		super(url, modelLoadHandler);
-		
-//		load();
 	}
 	
 	@Override
-	protected AbstractGeometry parse(String string)
+	protected AbstractGeometry parse(FileHandle result)
 	{		 
-		if(!isThisJsonStringValid(string))
+		if(!isThisJsonStringValid(result.readString()))
 			return null;
 		
 		Log.debug("JSON parse()");
