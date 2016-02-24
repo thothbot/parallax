@@ -38,15 +38,8 @@ import java.util.Map;
 
 public class SourceBundleFactoryGenerator extends Generator {
 
-    private GeneratorContext context;
-    private String simpleSourceName;
-    private TreeLogger logger;
-
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
-
-        this.context = context;
-        this.logger = logger;
 
         TypeOracle oracle = context.getTypeOracle();
         JClassType toGenerate = oracle.findType(typeName).isInterface();
@@ -56,7 +49,7 @@ public class SourceBundleFactoryGenerator extends Generator {
         }
 
         String packageName = toGenerate.getPackage().getName();
-        simpleSourceName = toGenerate.getName().replace('.', '_') + "Impl";
+        String simpleSourceName = toGenerate.getName().replace('.', '_') + "Impl";
         PrintWriter pw = context.tryCreate(logger, packageName, simpleSourceName);
         if (pw == null) {
             return packageName + "." + simpleSourceName;
