@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.platforms.gwt.generator;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -26,84 +27,96 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JPackage;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.resources.rebind.context.InlineClientBundleGenerator;
+import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
+import com.google.gwt.user.rebind.SourceWriter;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceBundle;
+import org.parallax3d.parallax.system.SourceBundleFactory;
 
 import java.io.PrintWriter;
 import java.util.Map;
 
 public class SourceBundleFactoryGenerator extends Generator {
 
+    private GeneratorContext context;
+    private String simpleSourceName;
+    private TreeLogger logger;
+
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
 
-        PrintWriter pw = context.tryCreate(logger,
-                "org.parallax3d.parallax.platforms.gwt.preloader",
-                "SourceBundleFactoryImpl");
+        this.context = context;
+        this.logger = logger;
 
-        if (pw != null)
-        {
-            // write package, imports, whatever
-            pw.append("package org.parallax3d.parallax.platforms.gwt.preloader;");
-            pw.append("import org.parallax3d.parallax.system.SourceBundle;");
-            pw.append("import org.parallax3d.parallax.system.SourceBundleFactory;");
-            pw.append("import com.google.gwt.core.client.GWT;");
-            pw.append("import org.parallax3d.parallax.system.FastMap;");
-
-            // iterates over all the classes to find those with EntryPointWidget annotation
-            TypeOracle oracle = context.getTypeOracle();
-            JPackage[] packages = oracle.getPackages();
-
-            System.out.println(" Start classpath text bundles generation ");
-
-            FastMap<JClassType> genClasses = new FastMap<>();
-            for (JPackage pack : packages)
-            {
-                for (JClassType classtype : pack.getTypes())
-                {
-                    for (JClassType nestedClass : classtype.getNestedTypes())
-                    {
-                        String cls = generateStaticInstance(oracle, logger, context, nestedClass);
-                        if(cls != null)
-                            genClasses.put(cls, nestedClass);
-                    }
-
-                    String cls = generateStaticInstance(oracle, logger, context, classtype);
-                    if(cls != null)
-                        genClasses.put(cls, classtype);
-                }
-            }
-
-            System.out.println("   " + genClasses.size() + " bundles have been generated");
-
-            // import generated classes
-            for(String genClass: genClasses.keySet())
-                pw.append("import " + genClass + ";");
-
-            // the class
-            pw.append("public class SourceBundleFactoryImpl implements SourceBundleFactory {");
-
-            pw.append("   private static final FastMap<SourceBundle> MAP = new FastMap<SourceBundle>(){{");
-
-            for(Map.Entry<String,JClassType> entry: genClasses.entrySet())
-                pw.append("      put(\"" + entry.getValue().getQualifiedSourceName() + "\", new " +  entry.getKey() + "() );");
-
-            pw.append("   }};");
-
-            // get method
-            pw.append("   public <T> T get(Class<? extends SourceBundle> classLiteral) {");
-            pw.append("       if (MAP.containsKey(classLiteral.getCanonicalName())) {");
-            pw.append("           return (T) MAP.get(classLiteral.getCanonicalName());");
-            pw.append("       }");
-            pw.append("       return null;");
-            pw.append("   }"); // method
-            pw.append("}"); // class
-
-            context.commit(logger, pw);
+        TypeOracle oracle = context.getTypeOracle();
+        JClassType toGenerate = oracle.findType(typeName).isInterface();
+        if (toGenerate == null) {
+            logger.log(TreeLogger.ERROR, typeName + " is not an interface type");
+            throw new UnableToCompleteException();
         }
 
-        // return the name of the generated class
-        return "org.parallax3d.parallax.platforms.gwt.preloader.SourceBundleFactoryImpl";
+        String packageName = toGenerate.getPackage().getName();
+        simpleSourceName = toGenerate.getName().replace('.', '_') + "Impl";
+        PrintWriter pw = context.tryCreate(logger, packageName, simpleSourceName);
+        if (pw == null) {
+            return packageName + "." + simpleSourceName;
+        }
+
+        ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, simpleSourceName);
+
+        factory.addImplementedInterface(typeName);
+        factory.addImport(SourceBundle.class.getName());
+        factory.addImport(SourceBundleFactory.class.getName());
+        factory.addImport(GWT.class.getName());
+        factory.addImport(FastMap.class.getName());
+
+        System.out.println(" Start classpath text bundles generation ");
+
+        FastMap<JClassType> genClasses = new FastMap<>();
+
+        // iterates over all the classes to find those with EntryPointWidget annotation
+        for (JPackage pack : oracle.getPackages())
+        {
+            for (JClassType classtype : pack.getTypes())
+            {
+                for (JClassType nestedClass : classtype.getNestedTypes())
+                {
+                    String cls = generateStaticInstance(oracle, logger, context, nestedClass);
+                    if(cls != null)
+                        genClasses.put(cls, nestedClass);
+                }
+
+                String cls = generateStaticInstance(oracle, logger, context, classtype);
+                if(cls != null)
+                    genClasses.put(cls, classtype);
+            }
+        }
+
+        System.out.println("   " + genClasses.size() + " bundles have been generated");
+
+        // import generated classes
+        for(String genClass: genClasses.keySet())
+            factory.addImport( genClass );
+
+        SourceWriter sw = factory.createSourceWriter(context, pw);
+
+        sw.println("private static final FastMap<SourceBundle> MAP = new FastMap<SourceBundle>(){{");
+
+        for(Map.Entry<String,JClassType> entry: genClasses.entrySet())
+            sw.println("put(\"%s\", new %s() );", entry.getValue().getQualifiedSourceName(), entry.getKey());
+
+        sw.println("}};");
+
+        // get method
+        sw.println("public <T> T get(Class<? extends SourceBundle> classLiteral) {");
+            sw.println("if (MAP.containsKey(classLiteral.getCanonicalName())) {");
+                sw.println("return (T) MAP.get(classLiteral.getCanonicalName());");
+            sw.println("}");
+            sw.println("return null;");
+        sw.println("}");
+
+        sw.commit(logger);
+        return factory.getCreatedClassName();
     }
 
     private String generateStaticInstance(TypeOracle oracle, TreeLogger logger, GeneratorContext context, JClassType classtype) throws UnableToCompleteException {
