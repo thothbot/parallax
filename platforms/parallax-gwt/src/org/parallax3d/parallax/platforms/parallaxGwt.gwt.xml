@@ -30,7 +30,7 @@
 	<define-configuration-property name="parallax.assetoutputpath" is-multi-valued="false"/>
 
 	<generate-with class="org.parallax3d.parallax.platforms.gwt.generator.PreloaderBundleGenerator">
-		<when-type-assignable class="org.parallax3d.parallax.platforms.gwt.preloader.PreloaderBundle"/>
+		<when-type-assignable class="org.parallax3d.parallax.platforms.gwt.system.preloader.PreloaderBundle"/>
 	</generate-with>
 
 	<generate-with class="org.parallax3d.parallax.platforms.gwt.generator.SourceBundleFactoryGenerator">

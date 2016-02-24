@@ -63,7 +63,7 @@ public class ItemSmall extends Composite {
             @Override
             public void onClick(ClickEvent event)
             {
-                History.newItem("!"+animation.getContentWidgetToken(), true);
+                History.newItem("!"+animation.getTestName(), true);
             }
         }, ClickEvent.getType());
     }

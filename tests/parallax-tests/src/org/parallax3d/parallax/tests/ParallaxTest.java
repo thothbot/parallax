@@ -44,29 +44,26 @@ public abstract class ParallaxTest extends AnimationAdapter {
      * @return ImageResource
      */
     public String getIconUrl() {
-        String icon = getSimpleName(this.getClass()) + ".jpg";
+        String icon = getTestName() + ".jpg";
         return "assets/thumbs/" + icon;
     }
 
-    /**
-     * Get the token for a given content widget.
-     *
-     * @return the content widget token.
-     */
-    public String getContentWidgetToken()
-    {
-        return getSimpleName(this.getClass());
+    public String getTestGroupName() {
+        String cls = this.getClass().getName();
+        String name = cls.substring(0, cls.lastIndexOf(".") ).replace("org.parallax3d.parallax.tests.cases","");
+        if(name.length() == 0)
+            name = "Unspecified";
+        else
+            name = name.substring(1);
+        return Character.toString(name.charAt(0)).toUpperCase() + name.substring(1);
     }
 
     /**
      * Get the simple filename of a class (name without dots).
-     *
-     * @param c
-     *            the class
      */
-    protected static String getSimpleName(Class<?> c)
+    public String getTestName()
     {
-        String name = c.getName();
+        String name = this.getClass().getName();
         return name.substring(name.lastIndexOf(".") + 1);
     }
 }

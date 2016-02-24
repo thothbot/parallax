@@ -82,26 +82,20 @@ public class ParallaxTestCasesGenerator extends Generator {
         sw.println("static final List<ParallaxTest> all = new ArrayList<ParallaxTest>() {{");
 
         for(JClassType cls: classes)
-            sw.println("add( new " + cls.getQualifiedSourceName() + "() );");
+            sw.println("add( new %s() );", cls.getQualifiedSourceName());
 
         sw.println("}};");
 
         sw.println("static {");
             sw.println("for (ParallaxTest test : all) {");
-                sw.println("byToken.put(test.getContentWidgetToken(), test);");
-                sw.println("String group = getProposalGroupName(test.getClass().getName());");
+                sw.println("byToken.put(test.getTestName(), test);");
+                sw.println("String group = test.getTestGroupName();");
                 sw.println("if (byGroup.containsKey(group)) byGroup.get(group).add(test);");
                 sw.println("else { List<ParallaxTest> tests = new ArrayList<>(); tests.add(test); byGroup.put(group, tests);}");
             sw.println("}");
         sw.println("}");
 
         // get method
-        sw.println("private static String getProposalGroupName(String cls) {");
-            sw.println("String name = cls.substring(0, cls.lastIndexOf(\".\") ).replace(\"org.parallax3d.parallax.tests.cases\",\"\");");
-            sw.println("if(name.length() == 0) name = \"Unspecified\";");
-            sw.println("else name = name.substring(1);");
-            sw.println("return Character.toString(name.charAt(0)).toUpperCase() + name.substring(1);");
-        sw.println("}"); // method
         sw.println("public FastMap<List<ParallaxTest>> getAllTests() { return byGroup; }"); // method
         sw.println("public ParallaxTest getContentWidgetForToken(String token) { return byToken.get(token); }"); // method
 

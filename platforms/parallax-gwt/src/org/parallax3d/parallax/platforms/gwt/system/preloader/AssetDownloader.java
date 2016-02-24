@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.platforms.gwt.preloader;
+package org.parallax3d.parallax.platforms.gwt.system.preloader;
 
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.NativeEvent;
@@ -23,10 +23,8 @@ import com.google.gwt.typedarrays.shared.TypedArrays;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 public class AssetDownloader {
@@ -186,12 +184,12 @@ public class AssetDownloader {
 		img.addEventListener(
 			'load',
 			function(e) {
-				h.@org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
+				h.@org.parallax3d.parallax.platforms.gwt.system.preloader.AssetDownloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
 			}, false);
 		img.addEventListener(
 			'error',
 			function(e) {
-				h.@org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
+				h.@org.parallax3d.parallax.platforms.gwt.system.preloader.AssetDownloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
 			}, false);
 	}-*/;
 

@@ -17,7 +17,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.platforms.gwt.preloader;
+package org.parallax3d.parallax.platforms.gwt.system.preloader;
 
 import com.google.gwt.core.client.GWT;
 import org.parallax3d.parallax.Log;

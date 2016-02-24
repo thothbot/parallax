@@ -21,8 +21,8 @@ package org.parallax3d.parallax.platforms.gwt;
 import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.platforms.gwt.preloader.AssetDownloader;
-import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
+import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetDownloader;
+import org.parallax3d.parallax.platforms.gwt.system.preloader.Preloader;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.*;

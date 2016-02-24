@@ -251,7 +251,7 @@ public class PreloaderBundleGenerator extends Generator {
 	}
 	
 	private String createDummyClass (TreeLogger logger, GeneratorContext context) {
-		String packageName = "org.parallax3d.parallax.platforms.gwt.preloader";
+		String packageName = "org.parallax3d.parallax.platforms.gwt.system.preloader";
 		String className = "PreloaderBundleImpl";
 		ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, className);
 		composer.addImplementedInterface(packageName + ".PreloaderBundle");

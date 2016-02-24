@@ -24,7 +24,7 @@ import com.google.gwt.storage.client.Storage;
 import org.parallax3d.parallax.*;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.platforms.gwt.preloader.Preloader;
+import org.parallax3d.parallax.platforms.gwt.system.preloader.Preloader;
 
 public class GwtApp implements Parallax.App {
 
