@@ -23,7 +23,6 @@ import com.google.gwt.typedarrays.shared.TypedArrays;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.google.gwt.xhr.client.XMLHttpRequest.ResponseType;
-import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 

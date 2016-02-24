@@ -21,7 +21,6 @@ package org.parallax3d.parallax.platforms.gwt.system.preloader;
 
 import com.google.gwt.core.client.GWT;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.files.AssetFilter;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;

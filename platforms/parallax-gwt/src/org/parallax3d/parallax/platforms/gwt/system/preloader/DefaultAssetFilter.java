@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.files;
+package org.parallax3d.parallax.platforms.gwt.system.preloader;
 
 public class DefaultAssetFilter implements AssetFilter {
 	private String extension (String file) {

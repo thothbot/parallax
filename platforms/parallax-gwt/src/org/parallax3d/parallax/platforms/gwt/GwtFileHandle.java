@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-import org.parallax3d.parallax.files.AssetFilter;
+import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetFilter;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetDownloader;

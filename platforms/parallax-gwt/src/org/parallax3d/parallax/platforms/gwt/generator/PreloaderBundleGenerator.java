@@ -19,8 +19,8 @@ package org.parallax3d.parallax.platforms.gwt.generator;
 import com.google.gwt.core.ext.*;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
-import org.parallax3d.parallax.files.AssetFilter;
-import org.parallax3d.parallax.files.DefaultAssetFilter;
+import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetFilter;
+import org.parallax3d.parallax.platforms.gwt.system.preloader.DefaultAssetFilter;
 import org.parallax3d.parallax.platforms.gwt.generator.preloader.FileWrapper;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 

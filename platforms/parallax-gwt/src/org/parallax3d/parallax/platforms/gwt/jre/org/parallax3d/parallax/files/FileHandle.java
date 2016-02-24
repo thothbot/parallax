@@ -16,6 +16,7 @@
 
 package org.parallax3d.parallax.files;
 
+import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetFilter;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.*;
