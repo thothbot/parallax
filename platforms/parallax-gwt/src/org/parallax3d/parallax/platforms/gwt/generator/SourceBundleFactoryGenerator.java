@@ -85,11 +85,7 @@ public class SourceBundleFactoryGenerator extends Generator {
             }
         }
 
-        System.out.println("   " + genClasses.size() + " bundles have been generated");
-
-        // import generated classes
-        for(String genClass: genClasses.keySet())
-            factory.addImport( genClass );
+        System.out.printf("   %s bundles have been generated\n", genClasses.size());
 
         SourceWriter sw = factory.createSourceWriter(context, pw);
 

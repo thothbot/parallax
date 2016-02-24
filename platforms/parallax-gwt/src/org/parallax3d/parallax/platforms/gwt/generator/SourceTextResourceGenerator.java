@@ -39,7 +39,7 @@ public class SourceTextResourceGenerator extends AbstractResourceGenerator  impl
     public String createAssignment(TreeLogger logger, ResourceContext context, JMethod method) throws UnableToCompleteException {
         URL[] resources = ResourceGeneratorUtil.findResources(logger, context, method);
         if(resources.length != 1) {
-            logger.log(TreeLogger.ERROR, "Exactly one resource must be specified", (Throwable)null);
+            logger.log(TreeLogger.ERROR, "Exactly one resource must be specified", null);
             throw new UnableToCompleteException();
         } else {
             URL resource = resources[0];

@@ -64,7 +64,6 @@ public class ParallaxTestCasesGenerator extends Generator {
 
         System.out.println(" Start GWT test generation ");
 
-        
         List<JClassType> classes = new ArrayList<>();
         JClassType testClass = oracle.findType(ParallaxTest.class.getName());
         for (JPackage pack : oracle.getPackages())
@@ -72,7 +71,7 @@ public class ParallaxTestCasesGenerator extends Generator {
                 if(classtype != testClass && testClass.isAssignableFrom(classtype))
                     classes.add(classtype);
 
-        System.out.println("   " + classes.size() + " test cases found");
+        System.out.printf("   %s test cases found\n", classes.size());
 
         SourceWriter sw = factory.createSourceWriter(context, pw);
         
