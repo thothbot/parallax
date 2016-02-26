@@ -35,7 +35,7 @@ public class GwtFileHandle extends FileHandle {
     Asset asset;
 
     public GwtFileHandle( String fileName ) {
-        asset = GwtApp.assets.get(fixSlashes(fileName));
+        asset = GwtParallax.assets.get(fixSlashes(fileName));
         if(asset == null)
             throw new ParallaxRuntimeException("File not found: " + fileName);
     }
@@ -290,7 +290,7 @@ public class GwtFileHandle extends FileHandle {
     public FileHandle[] list() {
         String url = asset.getPath();
         List<FileHandle> files = new ArrayList<>();
-        for (Asset asset : GwtApp.assets.getAll()) {
+        for (Asset asset : GwtParallax.assets.getAll()) {
             if (asset instanceof AssetFile && ((AssetFile)asset).isChild(url)) {
                 files.add(new GwtFileHandle(asset.getPath()));
             }
@@ -303,7 +303,7 @@ public class GwtFileHandle extends FileHandle {
     public FileHandle[] list (FileFilter filter) {
         String url = asset.getPath();
         List<FileHandle> files = new ArrayList<FileHandle>();
-        for (Asset asset : GwtApp.assets.getAll()) {
+        for (Asset asset : GwtParallax.assets.getAll()) {
             if (asset instanceof AssetFile && ((AssetFile)asset).isChild(url)  && filter.accept(new File(asset.getPath())) ) {
                 files.add(new GwtFileHandle(asset.getPath()));
             }
@@ -316,7 +316,7 @@ public class GwtFileHandle extends FileHandle {
     public FileHandle[] list (FilenameFilter filter) {
         String url = asset.getPath();
         List<FileHandle> files = new ArrayList<FileHandle>();
-        for (Asset asset : GwtApp.assets.getAll()) {
+        for (Asset asset : GwtParallax.assets.getAll()) {
             if (asset instanceof AssetFile && ((AssetFile)asset).isChild(url) && filter.accept(new File(url), asset.getPath().substring(url.length() + 1))) {
                 files.add(new GwtFileHandle(asset.getPath()));
             }
@@ -329,7 +329,7 @@ public class GwtFileHandle extends FileHandle {
     public FileHandle[] list (String suffix) {
         String url = asset.getPath();
         List<FileHandle> files = new ArrayList<FileHandle>();
-        for (Asset asset : GwtApp.assets.getAll()) {
+        for (Asset asset : GwtParallax.assets.getAll()) {
             if (asset instanceof AssetFile && ((AssetFile)asset).isChild(url) && asset.getPath().endsWith(suffix)) {
                 files.add(new GwtFileHandle(asset.getPath()));
             }
@@ -355,7 +355,7 @@ public class GwtFileHandle extends FileHandle {
     }
 
     public boolean exists() {
-        return GwtApp.assets.contains(asset.getPath());
+        return GwtParallax.assets.contains(asset.getPath());
     }
 
     /**

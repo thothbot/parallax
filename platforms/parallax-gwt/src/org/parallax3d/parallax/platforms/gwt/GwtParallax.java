@@ -21,42 +21,40 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.storage.client.Storage;
-import org.parallax3d.parallax.Application;
 import org.parallax3d.parallax.*;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.platforms.gwt.system.assets.Assets;
 
-public class GwtApp implements Application {
+public class GwtParallax extends Parallax {
 
 	public static final Assets assets = GWT.create(Assets.class);
 	public static final Storage LocalStorage = Storage.getLocalStorageIfSupported();
 
 	static AgentInfo agentInfo;
-	GwtAppConfiguration config;
+	GwtParallaxConfiguration config;
 
-	protected GwtApp() {
+	protected GwtParallax() {
 
 		config = getConfig();
 		agentInfo = computeAgentInfo();
 
-		Parallax.app = this;
 	}
 
-	public static void init(ApplicationListener listener) {
-		if(Parallax.app == null)
-			new GwtApp();
+	public static void init(ParallaxListener listener) {
+		if(Parallax.instance == null)
+			Parallax.instance = new GwtParallax();
 
-		listener.onParallaxApplicationReady( Parallax.app );
-	}
-
-	@Override
-	public GwtFileHandle asset(String path) {
-		return asset(path, null);
+		listener.onParallaxApplicationReady( Parallax.instance );
 	}
 
 	@Override
-	public GwtFileHandle asset(String path, FileListener<? extends FileHandle> listener) {
+	public GwtFileHandle getAsset(String path) {
+		return getAsset(path, null);
+	}
+
+	@Override
+	public GwtFileHandle getAsset(String path, FileListener<? extends FileHandle> listener) {
 		return ( new GwtFileHandle( path )).load((FileListener<GwtFileHandle>) listener);
 	}
 
@@ -66,12 +64,12 @@ public class GwtApp implements Application {
 	}
 
 	@Override
-	public Application.ApplicationType getType() {
-		return Application.ApplicationType.WebGL;
+	public Parallax.Platform getType() {
+		return Parallax.Platform.WebGL;
 	}
 
-	public GwtAppConfiguration getConfig () {
-		return new GwtAppConfiguration();
+	public GwtParallaxConfiguration getConfig () {
+		return new GwtParallaxConfiguration();
 	};
 
 	// Default configuration

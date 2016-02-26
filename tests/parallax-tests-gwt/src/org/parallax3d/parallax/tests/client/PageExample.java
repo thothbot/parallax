@@ -30,7 +30,7 @@ import org.parallax3d.parallax.Animation;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.AnimationReadyListener;
-import org.parallax3d.parallax.platforms.gwt.GwtApp;
+import org.parallax3d.parallax.platforms.gwt.GwtParallax;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -107,7 +107,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 				{
 					try {
 
-						rendering = new GwtRenderingContext(PageExample.this.content, ((GwtApp) Parallax.app()).getConfig());
+						rendering = new GwtRenderingContext(PageExample.this.content, ((GwtParallax) Parallax.getInstance()).getConfig());
 
 						debugger = new Debugger(rendering.getRenderer().getInfo());
 						debuggerPanel.add(debugger);

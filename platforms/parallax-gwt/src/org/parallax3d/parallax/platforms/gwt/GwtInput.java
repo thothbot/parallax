@@ -507,7 +507,7 @@ public class GwtInput implements Input {
 
     private static native float getMouseWheelVelocity (NativeEvent evt) /*-{
         var delta = 0.0;
-        var agentInfo = @org.parallax3d.parallax.platforms.gwt.GwtApp::agentInfo()();
+        var agentInfo = @org.parallax3d.parallax.platforms.gwt.GwtParallax::agentInfo()();
 
         if (agentInfo.isFirefox) {
             if (agentInfo.isMacOS) {

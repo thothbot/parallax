@@ -69,9 +69,9 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
     double time = 0;
     int frames;
 
-    GwtAppConfiguration config;
+    GwtParallaxConfiguration config;
 
-    public GwtRenderingContext(Panel root, GwtAppConfiguration config) throws ParallaxRuntimeException {
+    public GwtRenderingContext(Panel root, GwtParallaxConfiguration config) throws ParallaxRuntimeException {
         this.root = root;
         root.clear();
 

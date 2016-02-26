@@ -32,10 +32,10 @@ public class GwtPreferences implements Preferences {
         this.prefix = prefix + ":";
         int prefixLength = this.prefix.length();
         try {
-            for (int i = 0; i < ((GwtApp)Parallax.app()).LocalStorage.getLength(); i++) {
-                String key = ((GwtApp)Parallax.app()).LocalStorage.key(i);
+            for (int i = 0; i < ((GwtParallax)Parallax.app()).LocalStorage.getLength(); i++) {
+                String key = ((GwtParallax)Parallax.app()).LocalStorage.key(i);
                 if (key.startsWith(prefix)) {
-                    String value = ((GwtApp)Parallax.app()).LocalStorage.getItem(key);
+                    String value = ((GwtParallax)Parallax.app()).LocalStorage.getItem(key);
                     values.put(key.substring(prefixLength, key.length() - 1), toObject(key, value));
                 }
             }
@@ -140,16 +140,16 @@ public class GwtPreferences implements Preferences {
     public void flush() {
         try {
             // remove all old values
-            for (int i = 0; i < ((GwtApp)Parallax.app()).LocalStorage.getLength(); i++) {
-                String key = ((GwtApp)Parallax.app()).LocalStorage.key(i);
-                if (key.startsWith(prefix)) ((GwtApp)Parallax.app()).LocalStorage.removeItem(key);
+            for (int i = 0; i < ((GwtParallax)Parallax.app()).LocalStorage.getLength(); i++) {
+                String key = ((GwtParallax)Parallax.app()).LocalStorage.key(i);
+                if (key.startsWith(prefix)) ((GwtParallax)Parallax.app()).LocalStorage.removeItem(key);
             }
 
             // push new values to LocalStorage
             for (String key : values.keySet()) {
                 String storageKey = toStorageKey(key, values.get(key));
                 String storageValue = "" + values.get(key).toString();
-                ((GwtApp)Parallax.app()).LocalStorage.setItem(storageKey, storageValue);
+                ((GwtParallax)Parallax.app()).LocalStorage.setItem(storageKey, storageValue);
             }
 
         } catch (Exception e) {

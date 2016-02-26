@@ -25,7 +25,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
-import org.parallax3d.parallax.platforms.gwt.GwtApp;
 import org.parallax3d.parallax.tests.client.WebApp;
 
 public class Logo extends Composite {

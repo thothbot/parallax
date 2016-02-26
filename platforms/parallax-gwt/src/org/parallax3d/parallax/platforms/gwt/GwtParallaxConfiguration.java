@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-public class GwtAppConfiguration {
+public class GwtParallaxConfiguration {
 
     /**
      * whether to use a stencil buffer

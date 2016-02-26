@@ -25,17 +25,17 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.parallax3d.parallax.Application;
-import org.parallax3d.parallax.ApplicationListener;
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.Parallax.ParallaxListener;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ParallaxTestCases;
 import org.parallax3d.parallax.tests.client.widgets.Alert;
 import org.parallax3d.parallax.tests.resources.Resources;
-import org.parallax3d.parallax.platforms.gwt.GwtApp;
+import org.parallax3d.parallax.platforms.gwt.GwtParallax;
 
-public class WebApp implements EntryPoint, ApplicationListener {
+public class WebApp implements EntryPoint, ParallaxListener {
 
     /**
      * The static resources used throughout the Demo.
@@ -73,11 +73,11 @@ public class WebApp implements EntryPoint, ApplicationListener {
             }
         });
 
-        GwtApp.init( this );
+        GwtParallax.init( this );
     }
 
     @Override
-    public void onParallaxApplicationReady(Application app)
+    public void onParallaxApplicationReady(Parallax instance)
     {
         final ParallaxTestCases testCases = GWT.create(ParallaxTestCases.class);
         pageIndex = new PageIndex(testCases);

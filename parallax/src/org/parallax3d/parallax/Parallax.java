@@ -22,35 +22,46 @@ import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
-public class Parallax {
+public abstract class Parallax {
 
-    public static Application app;
-
-    public static boolean isAppInitialized() {
-        return app != null;
+    public interface ParallaxListener {
+        void onParallaxApplicationReady(Parallax instance);
     }
 
-    private static void checkAppInitialized() {
-        if(!isAppInitialized())
-            throw new ParallaxRuntimeException("Parallax application is not initialized");
+    public enum Platform {
+        Android, Desktop, WebGL
     }
 
-    public static Application app() {
-        checkAppInitialized();
-        return app;
+    public static Parallax instance;
+
+    public abstract FileHandle getAsset(String path);
+    public abstract FileHandle getAsset(String path, FileListener<? extends FileHandle> listener);
+
+    public abstract Logger getLogger();
+    public abstract Parallax.Platform getType();
+
+    public static Parallax getInstance() {
+        isInit();
+        return instance;
     }
 
     public static FileHandle asset( String path ) {
-        return asset(path, null);
+        isInit();
+        return instance.getAsset(path);
     }
 
     public static FileHandle asset(String path, FileListener<FileHandle> listener) {
-        checkAppInitialized();
-        return app.asset( path, listener );
+        isInit();
+        return instance.getAsset( path, listener );
     }
 
     public static Logger logger() {
-        checkAppInitialized();
-        return app.getLogger();
+        isInit();
+        return instance.getLogger();
+    }
+
+    private static void isInit() {
+        if(instance == null)
+            throw new ParallaxRuntimeException("Parallax application is not initialized");
     }
 }
