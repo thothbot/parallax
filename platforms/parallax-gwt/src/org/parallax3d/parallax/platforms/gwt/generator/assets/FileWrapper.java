@@ -44,8 +44,61 @@ public class FileWrapper {
 	public String name () {
 		return file.getName();
 	}
+
 	public File file () {
 		return file;
+	}
+
+	public boolean isText() {
+		boolean result = false;
+
+		FileReader inputStream = null;
+
+		try {
+			inputStream = new FileReader(file);
+
+			int c;
+			while ((c = inputStream.read()) != -1) {
+
+				Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+
+				if (block == Character.UnicodeBlock.BASIC_LATIN || block == Character.UnicodeBlock.GREEK) {
+//                     (9)Horizontal Tab (10)Line feed  (11)Vertical tab (13)Carriage return (32)Space (126)tilde
+					if (c==9 || c == 10 || c == 11 || c == 13 || (c >= 32 && c <= 126)) {
+						result = true;
+
+//                            (153)Superscript two (160)ϊ  (255) No break space
+					} else if (c == 153 || c >= 160 && c <= 255) {
+						result = true;
+
+//                            (884)ʹ (885)͵ (890)ͺ (894); (900)' (974)ώ
+					} else if (c == 884 || c == 885 || c == 890 || c == 894 || c >= 900 && c <= 1019) {
+						result = true;
+
+					} else {
+						result = false;
+						break;
+					}
+				}
+			}
+		} catch (FileNotFoundException ex) {
+		} catch (IOException ex) {
+		} finally {
+
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException ex) {
+				}
+			}
+		}
+		return result;
+	}
+
+	public String ext () {
+		int dotIndex = name().lastIndexOf('.');
+		if (dotIndex == -1) return "";
+		return name().toLowerCase().substring(dotIndex + 1);
 	}
 
 	public InputStream read () {

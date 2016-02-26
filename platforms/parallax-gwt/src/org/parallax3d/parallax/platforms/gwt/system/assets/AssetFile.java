@@ -31,6 +31,7 @@ import java.io.InputStream;
 
 public class AssetFile implements Asset {
     long size;
+    boolean isText;
     String mimeType;
     String path;
 
@@ -43,9 +44,10 @@ public class AssetFile implements Asset {
     boolean useBrowserCache;
     boolean useInlineBase64;
 
-    public AssetFile(String path, long size, String mimeType) {
+    public AssetFile(String path, long size, boolean isText, String mimeType) {
         this.path = path;
         this.size = size;
+        this.isText = isText;
         this.mimeType = mimeType != null ? mimeType : "application/unknown";
     }
 
@@ -103,7 +105,7 @@ public class AssetFile implements Asset {
     }
 
     public boolean isText() {
-        return mimeType.startsWith("text");
+        return isText;
     }
 
     public boolean isImage() {

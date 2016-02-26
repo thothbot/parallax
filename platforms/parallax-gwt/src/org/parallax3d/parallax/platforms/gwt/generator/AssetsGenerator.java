@@ -25,16 +25,14 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import org.parallax3d.parallax.platforms.gwt.generator.assets.FileWrapper;
+import org.parallax3d.parallax.platforms.gwt.generator.assets.MIME;
 import org.parallax3d.parallax.platforms.gwt.system.assets.Asset;
 import org.parallax3d.parallax.platforms.gwt.system.assets.AssetDirectory;
 import org.parallax3d.parallax.platforms.gwt.system.assets.AssetFile;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -120,14 +118,7 @@ public class AssetsGenerator extends Generator {
 			}
 			else
 			{
-				String mime = null;
-				try {
-					mime = Files.probeContentType(Paths.get(file.path()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				};
-
-				sw.println("put(\"%s\", new AssetFile(\"%s\", %d, \"%s\") );", path, path, file.length(), mime);
+				sw.println("put(\"%s\", new AssetFile(\"%s\", %d, %b, \"%s\") );", path, path, file.length(), file.isText(), MIME.list.get(file.ext()));
 			}
 		}
 
