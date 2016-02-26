@@ -92,7 +92,7 @@ public final class Helpers extends ParallaxTest {
     @Override
     public void onUpdate(RenderingContext context) {
 
-        double time = context.getDeltaTime() * 0.0003;
+        double time = context.getFrameId() * 0.003;
         camera.getPosition().setX(400 * Math.cos(time));
         camera.getPosition().setZ(400 * Math.sin(time));
         camera.lookAt(scene.getPosition());
