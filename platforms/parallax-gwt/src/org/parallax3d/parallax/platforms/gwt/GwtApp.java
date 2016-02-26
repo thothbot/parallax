@@ -21,32 +21,33 @@ package org.parallax3d.parallax.platforms.gwt;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.storage.client.Storage;
+import org.parallax3d.parallax.Application;
 import org.parallax3d.parallax.*;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.platforms.gwt.system.preloader.Preloader;
+import org.parallax3d.parallax.platforms.gwt.system.assets.Assets;
 
-public class GwtApp implements Parallax.App {
+public class GwtApp implements Application {
 
-	public final Storage LocalStorage = Storage.getLocalStorageIfSupported();
-
-	Preloader preloader;
+	public static final Assets assets = GWT.create(Assets.class);
+	public static final Storage LocalStorage = Storage.getLocalStorageIfSupported();
 
 	static AgentInfo agentInfo;
 	GwtAppConfiguration config;
 
-	protected GwtApp(){};
-
-	protected GwtApp(final Parallax.AppListener appListener) {
-		preloader = new Preloader(GWT.getHostPageBaseURL() + "assets/", "assets.txt", new Preloader.PreloaderCallback() {
-			@Override
-			public void ready(boolean success) {
-				appListener.onAppInitialized();
-			}
-		});
+	protected GwtApp() {
 
 		config = getConfig();
 		agentInfo = computeAgentInfo();
+
+		Parallax.app = this;
+	}
+
+	public static void init(ApplicationListener listener) {
+		if(Parallax.app == null)
+			new GwtApp();
+
+		listener.onParallaxApplicationReady( Parallax.app );
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class GwtApp implements Parallax.App {
 
 	@Override
 	public GwtFileHandle asset(String path, FileListener<? extends FileHandle> listener) {
-		return ( new GwtFileHandle(preloader, path)).load((FileListener<GwtFileHandle>) listener);
+		return ( new GwtFileHandle( path )).load((FileListener<GwtFileHandle>) listener);
 	}
 
 	@Override
@@ -65,21 +66,13 @@ public class GwtApp implements Parallax.App {
 	}
 
 	@Override
-	public Parallax.ApplicationType getType() {
-		return Parallax.ApplicationType.WebGL;
+	public Application.ApplicationType getType() {
+		return Application.ApplicationType.WebGL;
 	}
 
 	public GwtAppConfiguration getConfig () {
 		return new GwtAppConfiguration();
 	};
-
-	public static void init(final Parallax.AppListener appListener) {
-
-		if(Parallax.isAppInitialized())
-			appListener.onAppInitialized();
-		else
-			Parallax.app = new GwtApp(appListener);
-	}
 
 	// Default configuration
 

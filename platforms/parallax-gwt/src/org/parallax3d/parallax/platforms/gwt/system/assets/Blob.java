@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.parallax3d.parallax.platforms.gwt.system.preloader;
+package org.parallax3d.parallax.platforms.gwt.system.assets;
 
 import com.google.gwt.typedarrays.shared.Int8Array;
 

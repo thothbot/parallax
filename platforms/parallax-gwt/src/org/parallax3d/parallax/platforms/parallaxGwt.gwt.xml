@@ -29,8 +29,8 @@
 	<define-configuration-property name="parallax.assetfilterclass" is-multi-valued="false"/>
 	<define-configuration-property name="parallax.assetoutputpath" is-multi-valued="false"/>
 
-	<generate-with class="org.parallax3d.parallax.platforms.gwt.generator.PreloaderBundleGenerator">
-		<when-type-assignable class="org.parallax3d.parallax.platforms.gwt.system.preloader.PreloaderBundle"/>
+	<generate-with class="org.parallax3d.parallax.platforms.gwt.generator.AssetsGenerator">
+		<when-type-assignable class="org.parallax3d.parallax.platforms.gwt.system.assets.Assets"/>
 	</generate-with>
 
 	<generate-with class="org.parallax3d.parallax.platforms.gwt.generator.SourceBundleFactoryGenerator">

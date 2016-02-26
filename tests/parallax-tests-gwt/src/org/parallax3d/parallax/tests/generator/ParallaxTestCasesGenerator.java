@@ -71,7 +71,7 @@ public class ParallaxTestCasesGenerator extends Generator {
                 if(classtype != testClass && testClass.isAssignableFrom(classtype))
                     classes.add(classtype);
 
-        System.out.printf("   %s test cases found\n", classes.size());
+        System.out.printf("   %s test cases found%n", classes.size());
 
         SourceWriter sw = factory.createSourceWriter(context, pw);
         

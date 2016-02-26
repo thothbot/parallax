@@ -85,7 +85,7 @@ public class SourceBundleFactoryGenerator extends Generator {
             }
         }
 
-        System.out.printf("   %s bundles have been generated\n", genClasses.size());
+        System.out.printf("   %s bundles have been generated%n", genClasses.size());
 
         SourceWriter sw = factory.createSourceWriter(context, pw);
 

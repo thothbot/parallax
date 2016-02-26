@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * This file is based on libgdx sources.
  *
  * This file is part of Parallax project.
  *
@@ -18,25 +19,25 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetFilter;
+import org.parallax3d.parallax.platforms.gwt.system.assets.Asset;
+import org.parallax3d.parallax.platforms.gwt.system.assets.AssetDirectory;
+import org.parallax3d.parallax.platforms.gwt.system.assets.AssetFile;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetDownloader;
-import org.parallax3d.parallax.platforms.gwt.system.preloader.Preloader;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GwtFileHandle extends FileHandle {
-    final Preloader.Asset asset;
-    final Preloader preloader;
 
-    public GwtFileHandle(Preloader preloader, String fileName) {
-        this.asset = preloader.get(fixSlashes(fileName));
-        if(this.asset == null)
+    Asset asset;
+
+    public GwtFileHandle( String fileName ) {
+        asset = GwtApp.assets.get(fixSlashes(fileName));
+        if(asset == null)
             throw new ParallaxRuntimeException("File not found: " + fileName);
-
-        this.preloader = preloader;
     }
 
     private static String fixSlashes(String path) {
@@ -48,35 +49,36 @@ public class GwtFileHandle extends FileHandle {
     }
 
     public GwtFileHandle load(final FileListener<GwtFileHandle> callback) {
-        if (asset == null) {
+        if (asset == null || !(asset instanceof AssetFile)) {
             if(callback != null)
                 callback.onFailure();
             return this;
         }
 
-        if (asset.isLoaded && asset.data != null && callback != null) {
+        final AssetFile assetFile = (AssetFile)asset;
+
+        if (assetFile.isLoaded && assetFile.data != null && callback != null) {
             callback.onSuccess(this);
             return this;
         }
 
-        final AssetDownloader loader = new AssetDownloader();
-        loader.load(preloader.baseUrl + asset.url, asset.type, asset.mimeType, new FileListener<Object>() {
+        assetFile.load(new FileListener<Object>() {
 
             public void onProgress(double amount) {
-                asset.loaded = (long) amount;
+                assetFile.loaded = (long) amount;
                 if(callback != null)
                     callback.onProgress(amount);
             }
 
             public void onFailure() {
-                asset.isFailed = true;
+                assetFile.isFailed = true;
                 if(callback != null)
                     callback.onFailure();
             }
 
             public void onSuccess(Object result) {
-                asset.data = result;
-                asset.isLoaded = true;
+                assetFile.data = result;
+                assetFile.isLoaded = true;
                 if(callback != null)
                     callback.onSuccess(GwtFileHandle.this);
             }
@@ -85,14 +87,18 @@ public class GwtFileHandle extends FileHandle {
         return this;
     }
 
+    public boolean isDirectory() {
+        return this.asset instanceof AssetDirectory;
+    }
+
     public String path() {
-        return asset.url;
+        return asset.getPath();
     }
 
     public String name() {
-        int index = asset.url.lastIndexOf('/');
-        if (index < 0) return asset.url;
-        return asset.url.substring(index + 1);
+        int index = path().lastIndexOf('/');
+        if (index < 0) return path();
+        return path().substring(index + 1);
     }
 
     public String extension() {
@@ -113,14 +119,16 @@ public class GwtFileHandle extends FileHandle {
      * @return the path and filename without the extension, e.g. dir/dir2/file.png -> dir/dir2/file
      */
     public String pathWithoutExtension() {
-        String path = asset.url;
+        String path = asset.getPath();
         int dotIndex = path.lastIndexOf('.');
         if (dotIndex == -1) return path;
         return path.substring(0, dotIndex);
     }
 
     public Object file() {
-        return asset.data;
+        if(isDirectory()) return null;
+
+        return ((AssetFile)asset).data;
     }
 
     /**
@@ -129,8 +137,10 @@ public class GwtFileHandle extends FileHandle {
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
     public InputStream read() {
-        InputStream in = preloader.read(asset.url);
-        if (in == null) throw new ParallaxRuntimeException(asset.url + " does not exist");
+        if(isDirectory()) return null;
+
+        InputStream in = ((AssetFile)asset).read(path());
+        if (in == null) throw new ParallaxRuntimeException(path() + " does not exist");
         return in;
     }
 
@@ -198,8 +208,10 @@ public class GwtFileHandle extends FileHandle {
      * @throw ParallaxRuntimeException if the file handle represents a directory, doesn't exist, or could not be read.
      */
     public String readString(String charset) {
-        if (preloader.isText(asset.url))
-            return (String) preloader.texts.get(asset.url).data;
+        if(isDirectory()) return null;
+
+        if (((AssetFile)asset).isText())
+            return (String) ((AssetFile)asset).data;
         try {
             return new String(readBytes(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -276,35 +288,66 @@ public class GwtFileHandle extends FileHandle {
     }
 
     public FileHandle[] list() {
-        return preloader.list(asset.url);
+        String url = asset.getPath();
+        List<FileHandle> files = new ArrayList<>();
+        for (Asset asset : GwtApp.assets.getAll()) {
+            if (asset instanceof AssetFile && ((AssetFile)asset).isChild(url)) {
+                files.add(new GwtFileHandle(asset.getPath()));
+            }
+        }
+        FileHandle[] list = new FileHandle[files.size()];
+        System.arraycopy(files.toArray(), 0, list, 0, list.length);
+        return list;
     }
 
-    public FileHandle[] list(FileFilter filter) {
-        return preloader.list(asset.url, filter);
+    public FileHandle[] list (FileFilter filter) {
+        String url = asset.getPath();
+        List<FileHandle> files = new ArrayList<FileHandle>();
+        for (Asset asset : GwtApp.assets.getAll()) {
+            if (asset instanceof AssetFile && ((AssetFile)asset).isChild(url)  && filter.accept(new File(asset.getPath())) ) {
+                files.add(new GwtFileHandle(asset.getPath()));
+            }
+        }
+        FileHandle[] list = new FileHandle[files.size()];
+        System.arraycopy(files.toArray(), 0, list, 0, list.length);
+        return list;
     }
 
-    public FileHandle[] list(FilenameFilter filter) {
-        return preloader.list(asset.url, filter);
+    public FileHandle[] list (FilenameFilter filter) {
+        String url = asset.getPath();
+        List<FileHandle> files = new ArrayList<FileHandle>();
+        for (Asset asset : GwtApp.assets.getAll()) {
+            if (asset instanceof AssetFile && ((AssetFile)asset).isChild(url) && filter.accept(new File(url), asset.getPath().substring(url.length() + 1))) {
+                files.add(new GwtFileHandle(asset.getPath()));
+            }
+        }
+        FileHandle[] list = new FileHandle[files.size()];
+        System.arraycopy(files.toArray(), 0, list, 0, list.length);
+        return list;
     }
 
-    public FileHandle[] list(String suffix) {
-        return preloader.list(asset.url, suffix);
-    }
-
-    public boolean isDirectory() {
-        return asset.type == AssetFilter.AssetType.Directory;
+    public FileHandle[] list (String suffix) {
+        String url = asset.getPath();
+        List<FileHandle> files = new ArrayList<FileHandle>();
+        for (Asset asset : GwtApp.assets.getAll()) {
+            if (asset instanceof AssetFile && ((AssetFile)asset).isChild(url) && asset.getPath().endsWith(suffix)) {
+                files.add(new GwtFileHandle(asset.getPath()));
+            }
+        }
+        FileHandle[] list = new FileHandle[files.size()];
+        System.arraycopy(files.toArray(), 0, list, 0, list.length);
+        return list;
     }
 
     public FileHandle child(String name) {
-        return new GwtFileHandle(preloader, (asset.url.isEmpty() ? "" : (asset.url + (asset.url.endsWith("/") ? "" : "/"))) + name);
+        return new GwtFileHandle((asset.getPath().isEmpty() ? "" : (asset.getPath() + (asset.getPath().endsWith("/") ? "" : "/"))) + name);
     }
 
-
     public FileHandle parent() {
-        int index = asset.url.lastIndexOf("/");
+        int index = asset.getPath().lastIndexOf("/");
         String dir = "";
-        if (index > 0) dir = asset.url.substring(0, index);
-        return new GwtFileHandle(preloader, dir);
+        if (index > 0) dir = asset.getPath().substring(0, index);
+        return new GwtFileHandle( dir );
     }
 
     public FileHandle sibling(String name) {
@@ -312,7 +355,7 @@ public class GwtFileHandle extends FileHandle {
     }
 
     public boolean exists() {
-        return preloader.contains(asset.url);
+        return GwtApp.assets.contains(asset.getPath());
     }
 
     /**
@@ -320,7 +363,9 @@ public class GwtFileHandle extends FileHandle {
      * determined.
      */
     public long length() {
-        return asset.size;
+        if(isDirectory()) return 0;
+
+        return ((AssetFile)asset).getSize();
     }
 
     public long lastModified() {
@@ -328,6 +373,6 @@ public class GwtFileHandle extends FileHandle {
     }
 
     public String toString() {
-        return asset.url;
+        return asset.getPath();
     }
 }

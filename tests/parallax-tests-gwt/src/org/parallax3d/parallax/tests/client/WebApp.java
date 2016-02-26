@@ -22,12 +22,12 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.parallax3d.parallax.Application;
+import org.parallax3d.parallax.ApplicationListener;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ParallaxTestCases;
@@ -35,7 +35,7 @@ import org.parallax3d.parallax.tests.client.widgets.Alert;
 import org.parallax3d.parallax.tests.resources.Resources;
 import org.parallax3d.parallax.platforms.gwt.GwtApp;
 
-public class WebApp implements EntryPoint, Parallax.AppListener {
+public class WebApp implements EntryPoint, ApplicationListener {
 
     /**
      * The static resources used throughout the Demo.
@@ -73,10 +73,11 @@ public class WebApp implements EntryPoint, Parallax.AppListener {
             }
         });
 
-        GwtApp.init(this);
+        GwtApp.init( this );
     }
 
-    public void onAppInitialized()
+    @Override
+    public void onParallaxApplicationReady(Application app)
     {
         final ParallaxTestCases testCases = GWT.create(ParallaxTestCases.class);
         pageIndex = new PageIndex(testCases);

@@ -16,7 +16,6 @@
 
 package org.parallax3d.parallax.files;
 
-import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetFilter;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.*;
@@ -83,7 +82,7 @@ public class FileHandle {
 		throw new ParallaxRuntimeException("Stub");
 	}
 
-	public FileHandle[] list (AssetFilter filter) {
+	public FileHandle[] list (FileFilter filter) {
 		throw new ParallaxRuntimeException("Stub");
 	}
 

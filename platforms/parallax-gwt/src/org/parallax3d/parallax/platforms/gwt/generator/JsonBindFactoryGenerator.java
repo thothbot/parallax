@@ -76,7 +76,7 @@ public class JsonBindFactoryGenerator extends Generator {
             }
         }
 
-        System.out.printf("   %s bindings have been generated\n", genClasses.size());
+        System.out.printf("   %s bindings have been generated%n", genClasses.size());
 
         SourceWriter sw = factory.createSourceWriter(context, pw);
 

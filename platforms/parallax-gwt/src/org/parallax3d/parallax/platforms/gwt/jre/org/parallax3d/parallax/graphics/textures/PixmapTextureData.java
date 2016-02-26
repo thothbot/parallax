@@ -29,7 +29,7 @@ import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.platforms.gwt.GwtFileHandle;
 import org.parallax3d.parallax.platforms.gwt.GwtGL20;
-import org.parallax3d.parallax.platforms.gwt.system.preloader.AssetDownloader;
+import org.parallax3d.parallax.platforms.gwt.system.assets.AssetFile;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.PixelType;
@@ -39,7 +39,7 @@ public class PixmapTextureData implements TextureData {
     private Element image;
 
     public PixmapTextureData() {
-        image = AssetDownloader.createImage();
+        image = AssetFile.createImage();
     }
 
     @Override
