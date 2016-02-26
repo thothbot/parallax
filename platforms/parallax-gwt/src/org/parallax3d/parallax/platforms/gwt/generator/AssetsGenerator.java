@@ -118,7 +118,7 @@ public class AssetsGenerator extends Generator {
 			}
 			else
 			{
-				sw.println("put(\"%s\", new AssetFile(\"%s\", %d, %b, \"%s\") );", path, path, file.length(), file.isText(), MIME.list.get(file.ext()));
+				sw.println("put(\"%s\", new AssetFile(\"%s\", %d, %b, \"%s\") );", path, path, file.length(), file.isText(), MIME.get(file));
 			}
 		}
 
