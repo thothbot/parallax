@@ -31,12 +31,12 @@ import org.parallax3d.parallax.platforms.gwt.system.assets.AssetFile;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class AssetsGenerator extends Generator {
@@ -73,14 +73,11 @@ public class AssetsGenerator extends Generator {
 		factory.addImport(AssetDirectory.class.getName());
 		factory.addImport(AssetFile.class.getName());
 		factory.addImport(Asset.class.getName());
-		factory.addImport(List.class.getName());
+		factory.addImport(Collection.class.getName());
 		factory.addImport(FastMap.class.getName());
-
-		System.out.println(" Start assets generation");
 
 		// ----
 
-		System.out.println(new File(".").getAbsolutePath());
 		String assetPath = getAssetPath();
 
 		FileWrapper source = new FileWrapper(assetPath);
@@ -95,10 +92,9 @@ public class AssetsGenerator extends Generator {
 			throw new RuntimeException("assets path '" + assetPath
 				+ "' is not a directory. Check your parallax.assetpath property in your GWT project's module gwt.xml file");
 
-		System.out.println("Copying resources from " + assetPath + " to " + assetOutputPath );
-		System.out.println(source.file().getAbsolutePath());
+		System.out.printf(" Start assets generation from %s%n", source.file().getAbsolutePath());
+
 		FileWrapper target = new FileWrapper("assets/"); // this should always be the war/ directory of the GWT project.
-		System.out.println(target.file().getAbsolutePath());
 
 		if (!target.file().getAbsolutePath().replace("\\", "/").endsWith(assetOutputPath + "assets"))
 			target = new FileWrapper(assetOutputPath + "assets/");
@@ -110,10 +106,10 @@ public class AssetsGenerator extends Generator {
 
 		// ----
 
-		System.out.printf("   %s assets have been generated%n", files.size());
+		System.out.printf("   %s assets have been copied and generated in %s%n", files.size(), target.file().getAbsolutePath());
 		SourceWriter sw = factory.createSourceWriter(context, pw);
 
-		sw.println("private static final FastMap<SourceBundle> MAP = new FastMap<SourceBundle>(){{");
+		sw.println("private static final FastMap<Asset> MAP = new FastMap<Asset>(){{");
 
 		for(FileWrapper file: files)
 		{
@@ -131,14 +127,14 @@ public class AssetsGenerator extends Generator {
 					e.printStackTrace();
 				};
 
-				sw.println("put(\"%s\", new AssetFile(\"%s\", %d, \"%s\");", path, path, file.length(), mime);
+				sw.println("put(\"%s\", new AssetFile(\"%s\", %d, \"%s\") );", path, path, file.length(), mime);
 			}
 		}
 
 		sw.println("}};");
 
 		// get method
-		sw.println("public List<Asset> getAll() {");
+		sw.println("public Collection<Asset> getAll() {");
 			sw.println("return MAP.values();");
 		sw.println("}");
 
@@ -211,7 +207,6 @@ public class AssetsGenerator extends Generator {
 			ArrayList<String> existingPaths = new ArrayList<String>();
 			String[] tokens = paths.split(",");
 			for(String token: tokens) {
-				System.out.println(token);
 				if(new FileWrapper(token).exists() || new FileWrapper("../" + token).exists()) {
 					return token;
 				}

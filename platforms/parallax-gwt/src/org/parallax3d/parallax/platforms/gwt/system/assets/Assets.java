@@ -20,7 +20,7 @@ package org.parallax3d.parallax.platforms.gwt.system.assets;
 
 import com.google.gwt.core.client.GWT;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Assets {
 
@@ -30,5 +30,5 @@ public interface Assets {
 
     Asset get(String path);
 
-    List<Asset> getAll();
+    Collection<Asset> getAll();
 }

@@ -235,12 +235,12 @@ public class AssetFile implements Asset {
         img.addEventListener(
             'load',
             function(e) {
-                h.@org.parallax3d.parallax.platforms.gwt.system.assets.Downloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
+                h.@org.parallax3d.parallax.platforms.gwt.system.assets.AssetFile.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
             }, false);
         img.addEventListener(
             'error',
             function(e) {
-                h.@org.parallax3d.parallax.platforms.gwt.system.assets.Downloader.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
+                h.@org.parallax3d.parallax.platforms.gwt.system.assets.AssetFile.ImgEventListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
             }, false);
     }-*/;
 
