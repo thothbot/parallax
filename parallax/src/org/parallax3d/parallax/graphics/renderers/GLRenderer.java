@@ -2595,11 +2595,6 @@ public class GLRenderer extends Renderer
 			}
 			else if(type == Uniform.TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
 			{
-				if( ((Float32Array) value).getTypedBuffer() == null)
-				{
-					value = Float32Array.create(new double[]{.0, .0, .0});
-				}
-				Log.error(key);
 				this.gl.glUniform3fv(location, ((Float32Array) value).getLength() / 3, ((Float32Array) value).getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.V2V) // List of Vector2
