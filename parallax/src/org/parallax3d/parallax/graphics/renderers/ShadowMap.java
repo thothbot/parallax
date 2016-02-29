@@ -110,40 +110,45 @@ public final class ShadowMap extends Plugin
 		return isAutoUpdate;
 	}
 
-	public void setAutoUpdate(boolean isAutoUpdate) {
+	public ShadowMap setAutoUpdate(boolean isAutoUpdate) {
 		this.isAutoUpdate = isAutoUpdate;
+		return this;
 	}
 
 	public boolean isSoft() {
 		return isSoft;
 	}
 
-	public void setSoft(boolean isSoft) {
+	public ShadowMap setSoft(boolean isSoft) {
 		this.isSoft = isSoft;
+		return this;
 	}
 
 	public boolean isCullFrontFaces() {
 		return isCullFrontFaces;
 	}
 
-	public void setCullFrontFaces(boolean isCullFrontFaces) {
+	public ShadowMap setCullFrontFaces(boolean isCullFrontFaces) {
 		this.isCullFrontFaces = isCullFrontFaces;
+		return this;
 	}
 
 	public boolean isDebugEnabled() {
 		return isDebugEnabled;
 	}
 
-	public void setDebugEnabled(boolean isDebugEnabled) {
+	public ShadowMap setDebugEnabled(boolean isDebugEnabled) {
 		this.isDebugEnabled = isDebugEnabled;
+		return this;
 	}
 
 	public boolean isCascade() {
 		return isCascade;
 	}
 
-	public void setCascade(boolean isCascade) {
+	public ShadowMap setCascade(boolean isCascade) {
 		this.isCascade = isCascade;
+		return this;
 	}
 
 	@Override
@@ -232,6 +237,7 @@ public final class ShadowMap extends Plugin
 
 		// render depth map
 		for ( int i = 0, il = lights.size(); i < il; i ++ ) {
+
 			ShadowLight light = (ShadowLight) lights.get(i);
 
 			if ( light.getShadowMap() == null )
@@ -352,7 +358,7 @@ public final class ShadowMap extends Plugin
 
 				Material objectMaterial = getObjectMaterial( object );
 
-				boolean useMorphing = ((Geometry)object.getGeometry()).getMorphTargets() != null
+				boolean useMorphing = object.getGeometry() instanceof Geometry && ((Geometry)object.getGeometry()).getMorphTargets() != null
 						&& ((Geometry)object.getGeometry()).getMorphTargets().size() > 0
 						&& objectMaterial instanceof HasSkinning &&
 						((HasSkinning)objectMaterial).isMorphTargets();
