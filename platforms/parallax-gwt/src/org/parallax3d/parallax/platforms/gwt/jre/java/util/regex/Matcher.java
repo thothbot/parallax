@@ -40,9 +40,6 @@ public class Matcher {
 	}
 
 	public boolean find() {
-		if(result == null)
-			result = regExp.exec(input);
-
 		result = regExp.exec(input);
 		return result != null;
 	}

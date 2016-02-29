@@ -20,13 +20,18 @@ package org.parallax3d.parallax.tests.cases;
 
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.PlaneBufferGeometry;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
+import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.graphics.renderers.ShadowMap;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.loaders.STLLoader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -75,110 +80,108 @@ public class LoaderSTL extends ParallaxTest
 
 		plane.setReceiveShadow(true);
 		
-//		// Binary files
-//		new STLLoader(slotted_disk, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//				MeshPhongMaterial material = new MeshPhongMaterial();
-//				material.setAmbient( new Color(0xff5533) );
-//				material.setColor( new Color(0xff5533) );
-//				material.setSpecular( new Color(0x111111) );
-//				material.setShininess(200.0);
-//
-//				Mesh mesh = new Mesh( geometry, material );
-//
-//				mesh.getPosition().set( 0, - 0.25, 0.6 );
-//				mesh.getRotation().set( 0, - Math.PI / 2, 0 );
-//				mesh.getScale().set( 0.5, 0.5, 0.5 );
-//
-//				mesh.setCastShadow(true);
-//				mesh.setReceiveShadow(true);
-//
-//				scene.add( mesh );
-//
-//			}
-//		});
+		// Binary files
+		new STLLoader(slotted_disk, new Loader.ModelLoadHandler() {
 
-		
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+				MeshPhongMaterial material = new MeshPhongMaterial();
+				material.setAmbient( new Color(0xff5533) );
+				material.setColor( new Color(0xff5533) );
+				material.setSpecular( new Color(0x111111) );
+				material.setShininess(200.0);
+
+				Mesh mesh = new Mesh( geometry, material );
+
+				mesh.getPosition().set( 0, - 0.25, 0.6 );
+				mesh.getRotation().set( 0, - Math.PI / 2, 0 );
+				mesh.getScale().set( 0.5, 0.5, 0.5 );
+
+				mesh.setCastShadow(true);
+				mesh.setReceiveShadow(true);
+
+				scene.add( mesh );
+
+			}
+		});
+
 		final MeshPhongMaterial material = new MeshPhongMaterial()
 				.setAmbient( 0x555555 )
 				.setColor( 0xAAAAAA )
 				.setSpecular( 0x111111 )
 				.setShininess(200.0);
 
-//		new STLLoader(pr2_head_pan, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//				Mesh mesh = new Mesh( geometry, material );
-//
-//				mesh.getPosition().set( 0, - 0.37, - 0.6 );
-//				mesh.getRotation().set( - Math.PI / 2, 0, 0 );
-//				mesh.getScale().set( 2, 2, 2 );
-//
-//				mesh.setCastShadow(true);
-//				mesh.setReceiveShadow(true);
-//
-//				scene.add( mesh );
-//
-//			}
-//		});
-		
-		
-//		new STLLoader(pr2_head_tilt, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//				Mesh mesh = new Mesh( geometry, material );
-//
-//				mesh.getPosition().set( 0.136, - 0.37, - 0.6 );
-//				mesh.getRotation().set( - Math.PI / 2, 0.3, 0 );
-//				mesh.getScale().set( 2, 2, 2 );
-//
-//				mesh.setCastShadow(true);
-//				mesh.setReceiveShadow(true);
-//
-//				scene.add( mesh );
-//
-//			}
-//		});
-		
-//		new STLLoader(colored, new XHRLoader.ModelLoadHandler() {
-//
-//			@Override
-//			public void onModelLoaded(XHRLoader loader, AbstractGeometry geometry) {
-//
-//				final MeshPhongMaterial material = new MeshPhongMaterial();
-//				material.setOpacity(((STLLoader)loader).getAlpha());
-//				material.setVertexColors( Material.COLORS.VERTEX );
-//
-//				Mesh mesh = new Mesh( geometry, material );
-//
-//				mesh.getPosition().set( 0.5, 0.2, 0 );
-//				mesh.getRotation().set( - Math.PI / 2, Math.PI / 2, 0 );
-//				mesh.getScale().set( 0.3, 0.3, 0.3 );
-//
-//				mesh.setCastShadow(true);
-//				mesh.setReceiveShadow(true);
-//
-//				scene.add( mesh );
-//
-//			}
-//		});
-//
+		new STLLoader(pr2_head_pan, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+				Mesh mesh = new Mesh( geometry, material );
+
+				mesh.getPosition().set( 0, - 0.37, - 0.6 );
+				mesh.getRotation().set( - Math.PI / 2, 0, 0 );
+				mesh.getScale().set( 2, 2, 2 );
+
+				mesh.setCastShadow(true);
+				mesh.setReceiveShadow(true);
+
+				scene.add( mesh );
+
+			}
+		});
+
+		new STLLoader(pr2_head_tilt, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+				Mesh mesh = new Mesh( geometry, material );
+
+				mesh.getPosition().set( 0.136, - 0.37, - 0.6 );
+				mesh.getRotation().set( - Math.PI / 2, 0.3, 0 );
+				mesh.getScale().set( 2, 2, 2 );
+
+				mesh.setCastShadow(true);
+				mesh.setReceiveShadow(true);
+
+				scene.add( mesh );
+
+			}
+		});
+
+		new STLLoader(colored, new Loader.ModelLoadHandler() {
+
+			@Override
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+
+				final MeshPhongMaterial material = new MeshPhongMaterial();
+				material.setOpacity(((STLLoader)loader).getAlpha());
+				material.setVertexColors( Material.COLORS.VERTEX );
+
+				Mesh mesh = new Mesh( geometry, material );
+
+				mesh.getPosition().set( 0.5, 0.2, 0 );
+				mesh.getRotation().set( - Math.PI / 2, Math.PI / 2, 0 );
+				mesh.getScale().set( 0.3, 0.3, 0.3 );
+
+				mesh.setCastShadow(true);
+				mesh.setReceiveShadow(true);
+
+				scene.add( mesh );
+
+			}
+		});
+
 		
 		scene.add( new AmbientLight( 0x777777 ) );
 		
 		addShadowedLight( 1, 1, 1, 0xffffff, 1.35 );
 		addShadowedLight( 0.5, 1, -1, 0xffaa00, 1 );
 
-//			ShadowMap shadowMap = new ShadowMap(context.getRenderer(), scene);
-//			shadowMap.setCullFrontFaces(false);
-		
+		new ShadowMap(context.getRenderer(), scene)
+				.setCullFrontFaces(false);
+
 		context.getRenderer().setClearColor( scene.getFog().getColor() );
 		context.getRenderer().setGammaInput(true);
 		context.getRenderer().setGammaOutput(true);
@@ -190,10 +193,10 @@ public class LoaderSTL extends ParallaxTest
 		directionalLight.getPosition().set( x, y, z );
 		scene.add( directionalLight );
 
+		int d = 1;
 		directionalLight.setCastShadow(true);
 		// directionalLight.shadowCameraVisible = true;
 
-		int d = 1;
 		directionalLight.setShadowCameraLeft( -d );
 		directionalLight.setShadowCameraRight( d );
 		directionalLight.setShadowCameraTop( d );
@@ -212,10 +215,10 @@ public class LoaderSTL extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		double duration = context.getDeltaTime();
+		double duration = context.getFrameId();
 
-		camera.getPosition().setX( Math.cos( duration * 0.0005 ) * 3 );
-		camera.getPosition().setZ( Math.sin( duration * 0.0005) * 3 );
+		camera.getPosition().setX( Math.cos( duration * 0.005 ) * 3 );
+		camera.getPosition().setZ( Math.sin( duration * 0.005) * 3 );
 
 		camera.lookAt( cameraTarget );
 
