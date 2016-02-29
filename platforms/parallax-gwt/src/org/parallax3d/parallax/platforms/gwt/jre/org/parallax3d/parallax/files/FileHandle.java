@@ -42,6 +42,10 @@ public class FileHandle {
 		throw new ParallaxRuntimeException("Stub");
 	}
 
+	public boolean isText() {
+		throw new ParallaxRuntimeException("Stub");
+	}
+
 	public InputStream read () {
 		throw new ParallaxRuntimeException("Stub");
 	}

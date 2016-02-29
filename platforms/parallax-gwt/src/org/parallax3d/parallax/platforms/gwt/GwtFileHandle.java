@@ -131,6 +131,12 @@ public class GwtFileHandle extends FileHandle {
         return ((AssetFile)asset).data;
     }
 
+    public boolean isText() {
+        if(isDirectory()) return false;
+
+        return ((AssetFile)asset).isText();
+    }
+
     /**
      * Returns a stream for reading this file as bytes.
      *

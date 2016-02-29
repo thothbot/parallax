@@ -88,6 +88,48 @@ public class FileHandle {
 		return file;
 	}
 
+	public boolean isText() {
+		boolean result = false;
+
+		FileReader inputStream = null;
+
+		try {
+			inputStream = new FileReader(file);
+
+			int c;
+			while ((c = inputStream.read()) != -1) {
+
+				Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+
+				if (block == Character.UnicodeBlock.BASIC_LATIN || block == Character.UnicodeBlock.GREEK) {
+					// (9)Horizontal Tab (10)Line feed  (11)Vertical tab (13)Carriage return (32)Space (126)tilde
+					if (c==9 || c == 10 || c == 11 || c == 13 || (c >= 32 && c <= 126)) {
+						result = true;
+
+						// (153)Superscript two (160)ϊ  (255) No break space
+					} else if (c == 153 || c >= 160 && c <= 255) {
+						result = true;
+
+					} else {
+						result = false;
+						break;
+					}
+				}
+			}
+		} catch (FileNotFoundException ex) {
+		} catch (IOException ex) {
+		} finally {
+
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException ex) {
+				}
+			}
+		}
+		return result;
+	}
+
 	/** Returns a stream for reading this file as bytes.*/
 	public InputStream read () {
 		try {
