@@ -27,7 +27,9 @@ import com.google.gwt.xhr.client.XMLHttpRequest;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 public class AssetFile implements Asset {
     long size;
@@ -67,24 +69,23 @@ public class AssetFile implements Asset {
         return getPath().startsWith(url) && (getPath().indexOf('/', url.length() + 1) < 0);
     }
 
-    public InputStream read (String url) {
-        throw new ParallaxRuntimeException("Not supported in GWT");
-//		if (texts.containsKey(url)) {
-//			try {
-//				return new ByteArrayInputStream(texts.get(url).getBytes("UTF-8"));
-//			} catch (UnsupportedEncodingException e) {
-//				return null;
-//			}
-//		}
-//		if (images.containsKey(url)) {
-//			return new ByteArrayInputStream(new byte[1]); // FIXME, sensible?
-//		}
-//		if (binaries.containsKey(url)) {
-//			return binaries.get(url).read();
-//		}
-//		if (audio.containsKey(url)) {
-//			return new ByteArrayInputStream(new byte[1]); // FIXME, sensible?
-//		}
+    public InputStream read ()
+    {
+		if (isText()) {
+			try {
+				return new ByteArrayInputStream(((String)data).getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				return null;
+			}
+		}
+        else if(isBinary())
+        {
+            return ((Blob)data).read();
+        }
+        else
+        {
+            return new ByteArrayInputStream(new byte[1]);
+        }
     }
 
     public void load (FileListener<?> listener) {

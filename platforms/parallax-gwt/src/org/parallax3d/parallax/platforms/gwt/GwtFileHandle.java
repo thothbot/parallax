@@ -139,7 +139,7 @@ public class GwtFileHandle extends FileHandle {
     public InputStream read() {
         if(isDirectory()) return null;
 
-        InputStream in = ((AssetFile)asset).read(path());
+        InputStream in = ((AssetFile)asset).read();
         if (in == null) throw new ParallaxRuntimeException(path() + " does not exist");
         return in;
     }
