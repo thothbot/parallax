@@ -14,10 +14,12 @@
  */
 package org.parallax3d.parallax.system.gl.arrays;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.gl.GL20;
 
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 /**
  * The typed array that holds float (32-bit IEEE floating point) as its element.
@@ -145,19 +147,19 @@ public final class Float32Array extends TypeArray {
 	public void set(int index, float value) {
 		if (resizable)
 		{
-			FloatBuffer oldbuf = floatBuffer;
-
-			if (oldbuf == null || index >= oldbuf.capacity())
+			if (floatBuffer == null || index >= floatBuffer.capacity())
 			{
+				float val[] = new float[getLength()];
+				for(int i = 0, len = getLength(); i < len; i++)
+					val[i] =  floatBuffer.get(i);
+
 				// Usually floats are added in groups of 3, so add spare capacity
-				createBuffer((index + 4) * 4);
+				createBuffer((index + 4) * 12);
 				createTypedBuffer();
-				if (oldbuf != null)
-				{
-					floatBuffer.put(oldbuf);
-				}
 				floatBuffer.limit(index + 1);
-			} else if (index >= floatBuffer.limit())
+				floatBuffer.put(val);
+			}
+			else if (index >= floatBuffer.limit())
 			{
 				floatBuffer.limit(index + 1);
 			}
@@ -183,7 +185,10 @@ public final class Float32Array extends TypeArray {
 		return floatBuffer == null ? 0 : floatBuffer.limit();
 	}
 
-	/**
-     * slice methods were not used.
-     */
+	public String toString() {
+		float val[] = new float[getLength()];
+		for(int i = 0, len = getLength(); i < len; i++)
+			val[i] =  floatBuffer.get(i);
+		return Arrays.toString(val);
+	}
 }

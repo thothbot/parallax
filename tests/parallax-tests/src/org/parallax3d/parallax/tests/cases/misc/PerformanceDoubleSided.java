@@ -94,7 +94,7 @@ public final class PerformanceDoubleSided extends ParallaxTest implements TouchM
 
 		SphereGeometry geometry = new SphereGeometry( 1, 32, 16, 0, (double)Math.PI );
 
-		for ( int i = 0; i < 5000; i ++ ) 
+		for ( int i = 0; i < 5000; i ++ )
 		{
 			Mesh mesh = new Mesh( geometry, material );
 

@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
@@ -53,9 +54,9 @@ public class PointLight extends Light implements HasIntensity
 		@Override
 		public void reset()
 		{
-			this.distances = Float32Array.createArray();
-			this.colors    = Float32Array.createArray();
-			this.positions = Float32Array.createArray();
+			this.distances = Float32Array.createArray(); // 1N
+			this.colors    = Float32Array.createArray(); // 3N
+			this.positions = Float32Array.createArray(); // 3N
 
 		}
 
