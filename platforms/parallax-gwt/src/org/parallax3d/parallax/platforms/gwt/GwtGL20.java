@@ -29,10 +29,15 @@ import com.google.gwt.typedarrays.client.Int16ArrayNative;
 import com.google.gwt.typedarrays.client.Int32ArrayNative;
 import com.google.gwt.typedarrays.client.Uint8ArrayNative;
 import com.google.gwt.typedarrays.shared.*;
+import com.google.gwt.typedarrays.shared.Float32Array;
+import com.google.gwt.typedarrays.shared.Int16Array;
+import com.google.gwt.typedarrays.shared.Int32Array;
+import com.google.gwt.typedarrays.shared.Uint8Array;
 import com.google.gwt.webgl.client.*;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.arrays.*;
 
 import java.nio.*;
 import java.util.HashMap;
@@ -93,7 +98,8 @@ public class GwtGL20 implements GL20 {
 		if(buffer == null) return Float32ArrayNative.create(0);
 
 		if (GWT.isProdMode()) {
-			return ((Float32Array)((HasArrayBufferView)buffer).getTypedArray()).subarray(buffer.position(), buffer.remaining());
+//			return ((Float32Array)((HasArrayBufferView)buffer).getTypedArray()).subarray(buffer.position(), buffer.remaining());
+			return ((Float32Array)((HasArrayBufferView)buffer).getTypedArray()).subarray(0, buffer.limit());
 		} else {
 			ensureCapacity(buffer);
 			for (int i = buffer.position(), j = 0; i < buffer.limit(); i++, j++) {

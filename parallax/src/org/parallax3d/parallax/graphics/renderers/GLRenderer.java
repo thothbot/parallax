@@ -20,6 +20,7 @@
 package org.parallax3d.parallax.graphics.renderers;
 
 import java.nio.Buffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -2238,7 +2239,7 @@ public class GLRenderer extends Renderer
 
 		// heuristics to create shader parameters according to lights in the scene
 		// (not to blow over maxLights budget)
-		FastMap< Integer> maxLightCount = allocateLights( lights );
+		FastMap<Integer> maxLightCount = allocateLights( lights );
 		int maxShadows = allocateShadows( lights );
 
 		ProgramParameters parameters = new ProgramParameters();
@@ -2563,7 +2564,7 @@ public class GLRenderer extends Renderer
 			Uniform.TYPE type = uniform.getType();
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
-//Log.error(key, uniform);
+
 			if(type == Uniform.TYPE.I) // single integer
 			{
 				this.gl.glUniform1i(location, (value instanceof Boolean) ? ((Boolean) value) ? 1 : 0 : (Integer) value);
@@ -2590,10 +2591,15 @@ public class GLRenderer extends Renderer
 			}
 			else if(type == Uniform.TYPE.FV1) // flat array of floats (JS or typed array)
 			{
-				this.gl.glUniform1fv(location, ((Float32Array) value).getLength(),((Float32Array) value).getTypedBuffer());
+				this.gl.glUniform1fv(location, ((Float32Array) value).getLength(), ((Float32Array) value).getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
 			{
+				if( ((Float32Array) value).getTypedBuffer() == null)
+				{
+					value = Float32Array.create(new double[]{.0, .0, .0});
+				}
+				Log.error(key);
 				this.gl.glUniform3fv(location, ((Float32Array) value).getLength() / 3, ((Float32Array) value).getTypedBuffer());
 			}
 			else if(type == Uniform.TYPE.V2V) // List of Vector2
@@ -3117,7 +3123,7 @@ public class GLRenderer extends Renderer
 			if ( light instanceof HemisphereLight ) hemiLights ++;
 		}
 
-		FastMap<Integer> retval =  new FastMap<Integer>();
+		FastMap<Integer> retval =  new FastMap<>();
 		retval.put("directional", dirLights);
 		retval.put("point", pointLights);
 		retval.put("spot", spotLights);
