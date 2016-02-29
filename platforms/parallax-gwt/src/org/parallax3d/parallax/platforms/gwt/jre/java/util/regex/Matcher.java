@@ -17,12 +17,15 @@
 package java.util.regex;
 
 import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.regexp.shared.MatchResult;
 
 /** Emulation of the {@link Matcher} class, uses {@link RegExp} as internal implementation.
  * @author hneuer */
 public class Matcher {
 	private final RegExp regExp;
 	private final String input;
+
+	MatchResult result;
 
 	Matcher (Pattern pattern, CharSequence input) {
 		this.regExp = pattern.regExp;
@@ -31,5 +34,21 @@ public class Matcher {
 
 	public boolean matches () {
 		return regExp.test(input);
+	}
+
+	public boolean find() {
+		MatchResult result = regExp.exec(input);
+		if(result != null) {
+			result = regExp.exec(input);
+			return true;
+		}
+		return false;
+	}
+
+	public String group(int i) {
+		if(result != null)
+			return result.getGroup(i);
+
+		return null;
 	}
 }
