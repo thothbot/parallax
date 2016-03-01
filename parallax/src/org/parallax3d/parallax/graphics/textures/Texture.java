@@ -104,7 +104,7 @@ public class Texture
 	private int cache_oldAnisotropy;
 
 	public Texture(){
-		this(new EmptyTextureData(1,1));
+		this(new EmptyTextureData());
 	}
 
 	public Texture (String internalPath) {

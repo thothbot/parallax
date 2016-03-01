@@ -29,13 +29,8 @@ import org.parallax3d.parallax.system.gl.enums.PixelType;
  */
 public class EmptyTextureData implements TextureData
 {
-	private int width;
-	private int height;
-
-	public EmptyTextureData(int width, int height)
+	public EmptyTextureData()
 	{
-		this.width = width;
-		this.height = height;
 	}
 
 	@Override
@@ -52,13 +47,13 @@ public class EmptyTextureData implements TextureData
 	@Override
 	public int getWidth()
 	{
-		return width;
+		return 1;
 	}
 
 	@Override
 	public int getHeight()
 	{
-		return height;
+		return 1;
 	}
 
 	@Override
@@ -78,12 +73,10 @@ public class EmptyTextureData implements TextureData
 
 	public void setWidth(int width)
 	{
-		this.width = width;
 	}
 
 	public void setHeight(int height)
 	{
-		this.height = height;
 	}
 
 	@Override
