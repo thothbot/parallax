@@ -20,12 +20,16 @@
 package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.system.DummyImage;
+import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.List;
 
 @ThreejsObject("THREE.CompressedTexture")
@@ -35,14 +39,38 @@ public class CompressedTexture extends Texture
 	private int compressedFormat;
 	private List<DataTexture> mipmaps;
 
-	public CompressedTexture( String url )
-	{
-		this(null, false);
+	public CompressedTexture (String internalPath) {
+		this( internalPath, false, null );
 	}
 
-	public CompressedTexture ( ByteBuffer buffer, boolean loadMipmaps )
-	{
-        parseDDS(buffer, loadMipmaps);
+	public CompressedTexture (final String internalPath, final boolean loadMipmaps, final ImageLoadHandler imageLoadHandler) {
+
+		this.mipmaps = new ArrayList<>();
+
+		Parallax.asset(internalPath, new FileListener<FileHandle>() {
+			@Override
+			public void onProgress(double amount) {
+
+			}
+
+			@Override
+			public void onFailure() {
+				Log.error("An error occurred while loading Compressed texture: " + internalPath);
+			}
+
+			@Override
+			public void onSuccess(FileHandle result) {
+				Log.info("Loaded Compressed Texture: " + internalPath);
+				parseDDS(result, loadMipmaps);
+
+				setGenerateMipmaps(false);
+				setNeedsUpdate(true);
+
+				if (imageLoadHandler != null)
+					imageLoadHandler.onImageLoad(CompressedTexture.this);
+			}
+		});
+
 	}
 
 	public int getCompressedFormat() {
@@ -70,14 +98,14 @@ public class CompressedTexture extends Texture
 	 * All values and structures referenced from: 
 	 * <a href="http://msdn.microsoft.com/en-us/library/bb943991.aspx/">msdn.microsoft.com</a>
 	 * 
-	 * @param buffer
+	 * @param file
 	 * @param loadMipmaps
 	 */
-	public void parseDDS( ByteBuffer buffer, boolean loadMipmaps )
+	public void parseDDS( FileHandle file, boolean loadMipmaps )
 	{
 //		var dds = { mipmaps: [], width: 0, height: 0, format: null, mipmapCount: 1 };
 
-		int DDS_MAGIC = 0x20534444;
+		int DDS_MAGIC = 0x20534444; // "DDS "
 
 		int DDSD_CAPS = 0x1,
 			DDSD_HEIGHT = 0x2,
@@ -117,31 +145,32 @@ public class CompressedTexture extends Texture
 
 		// Offsets into the header array
 
-		int off_magic = 0;
+		int off_magic = 0 * 4;
 
-		int off_size = 1;
-		int off_flags = 2;
-		int off_height = 3;
-		int off_width = 4;
+		int off_size = 1 * 4;
+		int off_flags = 2 * 4;
+		int off_height = 3 * 4;
+		int off_width = 4 * 4;
 
-		int off_mipmapCount = 7;
+		int off_mipmapCount = 7 * 4;
 
-		int off_pfFlags = 20;
-		int off_pfFourCC = 21;
+		int off_pfFlags = 20 * 4;
+		int off_pfFourCC = 21 * 4;
 
+		ByteBuffer buffer = ByteBuffer.wrap(file.readBytes());
+		buffer.order(ByteOrder.LITTLE_ENDIAN);
 		buffer.rewind();
 
 		// Parse header
-
         if ( buffer.getInt(off_magic) != DDS_MAGIC )
         {
-            Log.error("CompressedTexture: ImageUtils.parseDDS(): Invalid magic number in DDS header");
+            Log.error("CompressedTexture: Invalid magic number in DDS header");
             return;
         }
 
         if ( (buffer.getInt(off_pfFlags) & DDPF_FOURCC) == 0 )
         {
-			Log.error("CompressedTexture: ImageUtils.parseDDS(): Unsupported format, must contain a FourCC code");
+			Log.error("CompressedTexture: Unsupported format, must contain a FourCC code");
             return;
         }
 
@@ -166,19 +195,16 @@ public class CompressedTexture extends Texture
 		}
 		else
 		{
-			Log.error("CompressedTexture: ImageUtils.parseDDS(): Unsupported FourCC code: " + int32ToFourCC( fourCC ) );
+			Log.error("CompressedTexture: Unsupported FourCC code: " + int32ToFourCC( fourCC ) );
 			return;
 		}
 
 		int mipmapCount = 1;
 
-        if ( ((buffer.getInt(off_flags) & DDSD_MIPMAPCOUNT) != 0) && loadMipmaps != false )
+        if ( ((buffer.getInt(off_flags) & DDSD_MIPMAPCOUNT) != 0) && loadMipmaps)
         {
         	mipmapCount = Math.max( 1, buffer.getInt(off_mipmapCount) );
         }
-
-//        setWidth( buffer.getInt( off_width ) );
-//        setHeight( buffer.getInt( off_height ) );
 
         int dataOffset = buffer.getInt(off_size) + 4;
 
@@ -187,8 +213,8 @@ public class CompressedTexture extends Texture
 		int width = buffer.getInt(off_width) ;
 		int height = buffer.getInt(off_height);
 
-		((DummyImage) getImage()).setWidth(width);
-		((DummyImage) getImage()).setHeight(height);
+		((EmptyTextureData) getImage()).setWidth(width);
+		((EmptyTextureData) getImage()).setHeight(height);
 
 		for ( int i = 0; i < mipmapCount; i ++ ) 
 		{

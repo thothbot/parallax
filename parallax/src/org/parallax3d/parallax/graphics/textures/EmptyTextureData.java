@@ -16,10 +16,9 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.system;
+package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.PixelType;
@@ -28,12 +27,12 @@ import org.parallax3d.parallax.system.gl.enums.PixelType;
  * Certain types of texture need a dummy Image so that WebGlRenderer can
  * get width and height.
  */
-public class DummyImage implements TextureData
+public class EmptyTextureData implements TextureData
 {
 	private int width;
 	private int height;
 
-	public DummyImage(int width, int height)
+	public EmptyTextureData(int width, int height)
 	{
 		this.width = width;
 		this.height = height;
@@ -47,7 +46,7 @@ public class DummyImage implements TextureData
 	@Override
 	public void glTexImage2D(GL20 gl, int target, PixelFormat pixelFormat, PixelType pixelType)
 	{
-		throw new RuntimeException("glTexImage2D not supported by DummyImage");
+		throw new RuntimeException("glTexImage2D not supported by EmptyTextureData");
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class DummyImage implements TextureData
 	}
 
 	@Override
-	public DummyImage clampToMaxSize(int maxSize) {
+	public EmptyTextureData clampToMaxSize(int maxSize) {
 		return this;
 	}
 
@@ -73,7 +72,7 @@ public class DummyImage implements TextureData
 	}
 
 	@Override
-	public DummyImage toPowerOfTwo() {
+	public EmptyTextureData toPowerOfTwo() {
 		return this;
 	}
 

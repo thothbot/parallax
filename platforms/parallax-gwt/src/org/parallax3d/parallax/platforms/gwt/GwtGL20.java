@@ -256,14 +256,31 @@ public class GwtGL20 implements GL20 {
 
 	@Override
 	public void glCompressedTexImage2D (int target, int level, int internalformat, int width, int height, int border,
-		int imageSize, Buffer data) {
-		throw new ParallaxRuntimeException("compressed textures not supported by GWT WebGL backend");
+		int imageSize, Buffer pixels) {
+
+		if (pixels == null) {
+			gl.compressedTexImage2D(target, level, internalformat, width, height, border, null);
+		} else {
+			if (pixels.limit() > 1) {
+				pixels.rewind();
+				HasArrayBufferView arrayHolder = (HasArrayBufferView)pixels;
+
+				ArrayBufferView webGLArray = arrayHolder.getTypedArray();
+				int remainingBytes = pixels.remaining();
+
+				int byteOffset = webGLArray.byteOffset() + pixels.position();
+
+				Uint8Array buffer = Uint8ArrayNative.create(webGLArray.buffer(), byteOffset, remainingBytes);
+
+				gl.compressedTexImage2D(target, level, internalformat, width, height, border, buffer);
+			}
+		}
 	}
 
 	@Override
 	public void glCompressedTexSubImage2D (int target, int level, int xoffset, int yoffset, int width, int height, int format,
-		int imageSize, Buffer data) {
-		throw new ParallaxRuntimeException("compressed textures not supported by GWT WebGL backend");
+		int imageSize, Buffer pixels) {
+		glCompressedTexImage2D(target, level, format, width, height, 0, imageSize, pixels);
 	}
 
 	@Override

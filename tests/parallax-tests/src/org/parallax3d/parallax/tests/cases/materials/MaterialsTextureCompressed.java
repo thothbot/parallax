@@ -130,7 +130,7 @@ public final class MaterialsTextureCompressed extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		double time = context.getDeltaTime() * 0.001;
+		double time = context.getFrameId() * 0.01;
 
 		for ( int i = 0; i < meshes.size(); i ++ ) 
 		{

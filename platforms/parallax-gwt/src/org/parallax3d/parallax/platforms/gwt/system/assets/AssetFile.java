@@ -24,12 +24,14 @@ import com.google.gwt.typedarrays.shared.Int8Array;
 import com.google.gwt.typedarrays.shared.TypedArrays;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class AssetFile implements Asset {
     long size;
@@ -67,6 +69,11 @@ public class AssetFile implements Asset {
 
     public boolean isChild(String url) {
         return getPath().startsWith(url) && (getPath().indexOf('/', url.length() + 1) < 0);
+    }
+
+    @Override
+    public String toString() {
+        return "{path: " + getPath() + ", size: " + getSize() +", MIME: " + getMime() + "}";
     }
 
     public InputStream read ()
@@ -110,7 +117,7 @@ public class AssetFile implements Asset {
     }
 
     public boolean isImage() {
-        return mimeType.startsWith("image");
+        return Arrays.asList("image/bmp", "image/gif", "image/jpeg", "image/png", "image/tiff").contains(getMime());
     }
 
     public boolean isAudio() {

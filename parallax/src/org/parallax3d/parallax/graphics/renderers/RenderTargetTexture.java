@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import org.parallax3d.parallax.system.DummyImage;
+import org.parallax3d.parallax.graphics.textures.EmptyTextureData;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.graphics.textures.Texture;
@@ -53,7 +53,7 @@ public class RenderTargetTexture extends Texture
 			PixelFormat format,         PixelType type)
 	{
 		// Create a dummy Image so that WebGLRenderer can get size
-		super(new DummyImage(width, height));
+		super();
 
 		this.width = width;
 		this.height = height;
@@ -71,8 +71,8 @@ public class RenderTargetTexture extends Texture
 	public void setSize(int width, int height) {
 		setWidth(width);
 		setHeight(height);
-		((DummyImage) getImage()).setWidth(width);
-		((DummyImage) getImage()).setHeight(height);
+		((EmptyTextureData) getImage()).setWidth(width);
+		((EmptyTextureData) getImage()).setHeight(height);
 	}
 
 	public int getWidth() {

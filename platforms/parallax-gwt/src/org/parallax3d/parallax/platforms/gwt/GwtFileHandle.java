@@ -19,6 +19,7 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.platforms.gwt.system.assets.Asset;
 import org.parallax3d.parallax.platforms.gwt.system.assets.AssetDirectory;
 import org.parallax3d.parallax.platforms.gwt.system.assets.AssetFile;
@@ -35,6 +36,7 @@ public class GwtFileHandle extends FileHandle {
     Asset asset;
 
     public GwtFileHandle( String fileName ) {
+
         asset = GwtParallax.assets.get(fixSlashes(fileName));
         if(asset == null)
             throw new ParallaxRuntimeException("File not found: " + fileName);

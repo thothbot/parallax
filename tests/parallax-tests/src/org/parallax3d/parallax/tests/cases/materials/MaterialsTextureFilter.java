@@ -26,8 +26,9 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.graphics.textures.EmptyTextureData;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -116,20 +117,20 @@ public final class MaterialsTextureFilter extends ParallaxTest
 //		meshCanvas2.getRotation().setX( - Math.PI / 2.0 );
 //		meshCanvas2.getScale().set( 1000 );
 
-//		// PAINTING
-//		Texture texturePainting = new Texture(texture, new Texture.ImageLoadHandler() {
-//
-//			@Override
-//			public void onImageLoad(Texture texture) {
-//				callbackPainting(texture);
-//			}
-//		} );
+		// PAINTING
+		Texture texturePainting = new Texture(texture, new Texture.ImageLoadHandler() {
+
+			@Override
+			public void onImageLoad(Texture texture) {
+				callbackPainting(texture);
+			}
+		} );
 		
-//		materialPainting = new MeshBasicMaterial();
-//		materialPainting.setColor(new Color(0xffffff));
-//		materialPainting.setMap(texturePainting);
+		materialPainting = new MeshBasicMaterial();
+		materialPainting.setColor(new Color(0xffffff));
+		materialPainting.setMap(texturePainting);
 		
-		texturePainting2 = new Texture("");
+		texturePainting2 = new Texture();
 		materialPainting2 = new MeshBasicMaterial()
 				.setColor(0xffccaa)
 				.setMap(texturePainting2);
@@ -137,8 +138,8 @@ public final class MaterialsTextureFilter extends ParallaxTest
 		texturePainting2.setMinFilter(TextureMinFilter.NEAREST);
 		texturePainting2.setMagFilter(TextureMagFilter.NEAREST);
 
-//		texturePainting.setMinFilter(TextureMinFilter.LINEAR);
-//		texturePainting.setMagFilter(TextureMagFilter.LINEAR);
+		texturePainting.setMinFilter(TextureMinFilter.LINEAR);
+		texturePainting.setMagFilter(TextureMagFilter.LINEAR);
 
 		context.getRenderer().setClearColor( scene.getFog().getColor(), 1 );
 		context.getRenderer().setAutoClear(false);
@@ -149,56 +150,56 @@ public final class MaterialsTextureFilter extends ParallaxTest
 		texturePainting2.setImage(texture.getImage());
 		texturePainting2.setNeedsUpdate(true);
 
-		scene.add( meshCanvas );
-		scene2.add( meshCanvas2 );
+//		scene.add( meshCanvas );
+//		scene2.add( meshCanvas2 );
 
 		PlaneGeometry geometry = new PlaneGeometry( 100, 100 );
 		Mesh mesh = new Mesh( geometry, materialPainting );
 		Mesh mesh2 = new Mesh( geometry, materialPainting2 );
 
-//		addPainting( texture.getImage(), scene, mesh );
-//		addPainting( texture.getImage(), scene2, mesh2 );
+		addPainting( texture.getImage(), scene, mesh );
+		addPainting( texture.getImage(), scene2, mesh2 );
 	}
 	
-//	private void addPainting( Element image, Scene zscene, Mesh zmesh )
-//	{
-//		zmesh.getScale().setX( image.getOffsetWidth() / 100.0 ) ;
-//		zmesh.getScale().setY( image.getOffsetHeight() / 100.0 );
-//
-//		zscene.add( zmesh );
-//
-//		MeshBasicMaterial mb = new MeshBasicMaterial();
-//		mb.setColor(new Color(0x000000));
-//		mb.setPolygonOffset(true);
-//		mb.setPolygonOffsetFactor(1);
-//		mb.setPolygonOffsetUnits(5);
-//
-//		Mesh meshFrame = new Mesh( geometry,  mb);
-//
-//		meshFrame.getScale().setX( 1.1 * image.getOffsetWidth() / 100 );
-//		meshFrame.getScale().setY( 1.1 * image.getOffsetHeight() / 100 );
-//
-//		zscene.add( meshFrame );
-//
-//		MeshBasicMaterial mb2 = new MeshBasicMaterial();
-//		mb2.setColor(new Color(0x000000));
-//		mb2.setOpacity(0.75);
-//		mb2.setTransparent(true);
-//
-//		Mesh meshShadow = new Mesh( geometry, mb2 );
-//		meshShadow.getPosition().setY( - 1.1 * image.getOffsetHeight()/ 2.0 );
-//		meshShadow.getPosition().setZ( - 1.1 * image.getOffsetHeight()/ 2.0 );
-//		meshShadow.getRotation().setX( - Math.PI / 2 );
-//		meshShadow.getScale().setX( 1.1 * image.getOffsetWidth() / 100.0 );
-//		meshShadow.getScale().setY( 1.1 * image.getOffsetHeight() / 100.0 );
-//		zscene.add( meshShadow );
-//
-//		meshShadow.getPosition().setY( - 1.1 * image.getOffsetHeight() / 2.0 );
-//
-//		double floorHeight = - 1.117 * image.getOffsetHeight() / 2.0;
-//		meshCanvas.getPosition().setY( floorHeight );
-//		meshCanvas2.getPosition().setY( floorHeight );
-//	}
+	private void addPainting(TextureData image, Scene zscene, Mesh zmesh )
+	{
+		zmesh.getScale().setX( image.getWidth() / 100.0 ) ;
+		zmesh.getScale().setY( image.getHeight() / 100.0 );
+
+		zscene.add( zmesh );
+
+		MeshBasicMaterial mb = new MeshBasicMaterial();
+		mb.setColor(new Color(0x000000));
+		mb.setPolygonOffset(true);
+		mb.setPolygonOffsetFactor(1);
+		mb.setPolygonOffsetUnits(5);
+
+		Mesh meshFrame = new Mesh( geometry,  mb);
+
+		meshFrame.getScale().setX( 1.1 * image.getWidth() / 100 );
+		meshFrame.getScale().setY( 1.1 * image.getHeight() / 100 );
+
+		zscene.add( meshFrame );
+
+		MeshBasicMaterial mb2 = new MeshBasicMaterial();
+		mb2.setColor(new Color(0x000000));
+		mb2.setOpacity(0.75);
+		mb2.setTransparent(true);
+
+		Mesh meshShadow = new Mesh( geometry, mb2 );
+		meshShadow.getPosition().setY( - 1.1 * image.getWidth()/ 2.0 );
+		meshShadow.getPosition().setZ( - 1.1 * image.getHeight()/ 2.0 );
+		meshShadow.getRotation().setX( - Math.PI / 2 );
+		meshShadow.getScale().setX( 1.1 * image.getWidth() / 100.0 );
+		meshShadow.getScale().setY( 1.1 * image.getHeight() / 100.0 );
+		zscene.add( meshShadow );
+
+		meshShadow.getPosition().setY( - 1.1 * image.getHeight() / 2.0 );
+
+		double floorHeight = - 1.117 * image.getHeight() / 2.0;
+		meshCanvas.getPosition().setY( floorHeight );
+		meshCanvas2.getPosition().setY( floorHeight );
+	}
 	
 	@Override
 	public void onUpdate(RenderingContext context)

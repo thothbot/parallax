@@ -890,22 +890,27 @@ public class WebGLRenderingContext extends JavaScriptObject {
 		this.texImage2D(target, level, internalformat, format, type, image);
 	}-*/;
 
+	public final native void compressedTexImage2D(int target, int level, int internalformat, int width, int height,
+											 int border, ArrayBufferView pixels) /*-{
+        this.compressedTexImage2D(target, level, internalformat, width, height, border, pixels);
+    }-*/;
+
 	public final native void texParameterf (int target, int pname, float param) /*-{
-																											this.texParameterf(target, pname, param);
-																											}-*/;
+		this.texParameterf(target, pname, param);
+	}-*/;
 
 	public final native void texParameteri (int target, int pname, int param) /*-{
-																										this.texParameteri(target, pname, param);
-																										}-*/;
+		this.texParameteri(target, pname, param);
+	}-*/;
 
 	public final native void texSubImage2D (int target, int level, int xoffset, int yoffset, int width, int height, int format,
 		int type, ArrayBufferView pixels) /*-{
-														this.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
-														}-*/;
+		this.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+	}-*/;
 
 	public final native void texSubImage2D (int target, int level, int xoffset, int yoffset, int format, int type, ImageData pixels) /*-{
-																																												this.texSubImage2D(target, level, xoffset, yoffset, format, type, pixels);
-																																												}-*/;
+		this.texSubImage2D(target, level, xoffset, yoffset, format, type, pixels);
+	}-*/;
 
 	public final native void texSubImage2D (int target, int level, int xoffset, int yoffset, int format, int type,
 		ImageElement image) /*-{
@@ -1206,23 +1211,23 @@ public class WebGLRenderingContext extends JavaScriptObject {
 	 * @param pname one of BLEND, CULL_FACE, DEPTH_TEST, DEPTH_WRITEMASK, DITHER, POLYGON_OFFSET_FILL, SAMPLE_COVERAGE_INVERT,
 	 *           SCISSOR_TEST, STENCIL_TEST, UNPACK_FLIP_Y_WEBGL, UNPACK_PREMULTIPLY_ALPHA_WEBGL */
 	public final native boolean getParameterb (int pname) /*-{
-																			return this.getParameter(pname);
-																			}-*/;
+		return this.getParameter(pname);
+	}-*/;
 
 	/** Return the value for the passed pname.
 	 * 
 	 * @param pname one of DEPTH_CLEAR_VALUE, LINE_WIDTH, POLYGON_OFFSET_FACTOR, POLYGON_OFFSET_UNITS, SAMPLE_COVERAGE_VALUE */
 	public final native float getParameterf (int pname) /*-{
-																			return this.getParameter(pname);
-																			}-*/;
+		return this.getParameter(pname);
+	}-*/;
 
 	/** Return the value for the passed pname.
 	 * 
 	 * @param pname one of ARRAY_BUFFER_BINDING, COMPRESSED_TEXTURE_FORMATS, CURRENT_PROGRAM, ELEMENT_ARRAY_BUFFER_BINDING,
 	 *           FRAMEBUFFER_BINDING, RENDERBUFFER_BINDING, TEXTURE_BINDING_2D, TEXTURE_BINDING_CUBE_MAP */
 	public final native <T extends WebGLObject> T getParametero (int pname) /*-{
-																									return this.getParameter(pname);
-																									}-*/;
+		return this.getParameter(pname);
+	}-*/;
 
 	/** Return the value for the passed pname.
 	 * 
