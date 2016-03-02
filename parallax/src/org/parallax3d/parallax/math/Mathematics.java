@@ -30,6 +30,8 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.Math")
 public class Mathematics
 {
+	public static double EPSILON =  Math.pow( 2.0, -52.0 );
+
 	/**
 	 * The method clamps the scalar x to range &#60;a, b&#62;.
 	 *

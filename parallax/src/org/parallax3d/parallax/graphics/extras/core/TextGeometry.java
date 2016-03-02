@@ -43,7 +43,7 @@ public class TextGeometry extends ExtrudeGeometry {
         this.size = size;
         this.font = font;
 
-        generate();
+        update();
     }
 
     public String getText() {
@@ -76,7 +76,7 @@ public class TextGeometry extends ExtrudeGeometry {
         return this;
     }
 
-    public void generate() {
+    public void update() {
         String[] chars = text.split("");
         int length = chars.length;
 

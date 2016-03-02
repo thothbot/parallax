@@ -45,8 +45,8 @@ public class CurvePath extends Curve
 
 	public CurvePath()
 	{
-		this.curves = new ArrayList<Curve>();
-		this.bends = new ArrayList<CurvePath>();
+		this.curves = new ArrayList<>();
+		this.bends = new ArrayList<>();
 	}
 
 	public List<CurvePath> getBends()
@@ -57,6 +57,10 @@ public class CurvePath extends Curve
 	public List<Curve> getCurves()
 	{
 		return this.curves;
+	}
+
+	public void setCurves(List<Curve> curves) {
+		this.curves = curves;
 	}
 
 	public void add( Curve curve )

@@ -37,7 +37,7 @@ import org.parallax3d.parallax.math.Vector2;
 @ThreejsObject("THREE.Shape")
 public class Shape extends Path
 {
-	private List<Path> holes = new ArrayList<Path>();
+	private List<Path> holes = new ArrayList<>();
 
 	public Shape()
 	{
