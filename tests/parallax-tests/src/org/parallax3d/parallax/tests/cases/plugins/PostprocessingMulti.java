@@ -35,6 +35,7 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
@@ -120,7 +121,7 @@ public final class PostprocessingMulti extends ParallaxTest
 		directionalLight.getPosition().set( 0, -0.1, 1 ).normalize();
 		sceneModel.add( directionalLight );
 
-		new JsonLoader(model, new Loader.ModelLoadHandler() {
+		new JsonLoader(model, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {

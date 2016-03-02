@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.loaders;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.math.Vector3;
@@ -29,14 +28,16 @@ import java.nio.ByteOrder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class STLLoader extends Loader
+public class STLLoader extends ModelLoader
 {
 	FileHandle file;
 
-	private boolean hasColors;
-	private double alpha;
+	AbstractGeometry geometry;
+
+	boolean hasColors;
+	double alpha;
 	
-	public STLLoader(String url, ModelLoadHandler modelLoadHandler) 
+	public STLLoader(String url, ModelLoadHandler modelLoadHandler)
 	{
 		super(url, modelLoadHandler);
 	}
@@ -50,11 +51,16 @@ public class STLLoader extends Loader
 	}
 	
 	@Override
-	protected AbstractGeometry parse(FileHandle result)
+	protected void parse(FileHandle result)
 	{
 		file = result;
 
-		return file.isText() ? parseASCII() : parseBinary();
+		geometry = file.isText() ? parseASCII() : parseBinary();
+	}
+
+	@Override
+	public AbstractGeometry getGeometry() {
+		return geometry;
 	}
 
 	private AbstractGeometry parseBinary()

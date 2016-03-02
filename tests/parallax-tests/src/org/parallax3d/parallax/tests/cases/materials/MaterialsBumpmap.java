@@ -35,7 +35,7 @@ import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
-import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -163,7 +163,7 @@ public final class MaterialsBumpmap extends ParallaxTest implements TouchMoveHan
 			.setBumpScale(19)
 			.setMetal(false);
 
-		new JsonLoader(model, new Loader.ModelLoadHandler() {
+		new JsonLoader(model, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {

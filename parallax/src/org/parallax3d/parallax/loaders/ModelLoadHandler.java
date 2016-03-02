@@ -16,17 +16,11 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.extras.core;
+package org.parallax3d.parallax.loaders;
 
-import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 
-@ThreejsObject("THREE.TextGeometry")
-public class TextGeometry extends ExtrudeGeometry {
-
-    public TextGeometry(String text, FileHandle font, ExtrudeGeometryParameters parameters) {
-        super(parameters);
-
-    }
-
+public interface ModelLoadHandler
+{
+    void onModelLoaded(Loader loader, AbstractGeometry geometry);
 }

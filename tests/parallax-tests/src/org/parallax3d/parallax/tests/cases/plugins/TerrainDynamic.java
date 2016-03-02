@@ -50,6 +50,7 @@ import org.parallax3d.parallax.input.KeyCodes;
 import org.parallax3d.parallax.input.KeyDownHandler;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector2;
@@ -360,7 +361,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 		final double startX = -3000;
 		morphs = new ArrayList<MorphAnimMesh>();
 
-		new JsonLoader(parrotModel, new Loader.ModelLoadHandler() {
+		new JsonLoader(parrotModel, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
@@ -373,7 +374,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 			}
 		});
 
-		new JsonLoader(flamingoModel, new Loader.ModelLoadHandler() {
+		new JsonLoader(flamingoModel, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
@@ -383,7 +384,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 			}
 		});
 
-		new JsonLoader(storkModel, new Loader.ModelLoadHandler() {
+		new JsonLoader(storkModel, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {

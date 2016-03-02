@@ -24,33 +24,11 @@ import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class Loader
 {
-	private static List<ModelLoadHandler> loadHandlers = new ArrayList<ModelLoadHandler>();
-	private static LoaderProgressHandler loaderProgressHandler;
-	public static void addLoaderProgress(LoaderProgressHandler loaderProgressHandler)
-	{
-		Loader.loaderProgressHandler = loaderProgressHandler;
-	}
-
-	public interface LoaderProgressHandler
-	{
-		void onProgressUpdate(int left);
-	}
-
-	public interface ModelLoadHandler
-	{
-		void onModelLoaded(Loader loader, AbstractGeometry geometry);
-	}
-
 	FileHandle file;
-	String texturePath;
-	ModelLoadHandler modelLoadHandler;
 
-	public Loader(String url, final ModelLoadHandler modelLoadHandler)
+	protected Loader(String url)
 	{
 		this.file = Parallax.asset(url, new FileListener<FileHandle>() {
 			@Override
@@ -60,33 +38,21 @@ public abstract class Loader
 
 			@Override
 			public void onFailure() {
-				Log.error("An error occurred while loading model: " + file.path());
+				Log.error("An error occurred while loading file: " + file.path());
 			}
 
 			@Override
 			public void onSuccess(FileHandle result) {
-				Log.info("Loaded model: " + file.path());
-				AbstractGeometry geometry = Loader.this.parse(result);
+				Log.info("Loaded file: " + file.path());
 
-				if(modelLoadHandler != null)
-					modelLoadHandler.onModelLoaded(Loader.this, geometry);
+				parse(result);
+				onReady();
 			}
 		});
 
-		this.texturePath = extractUrlBase(url);
-		
-		this.modelLoadHandler = modelLoadHandler;
 	}
 
-	protected abstract AbstractGeometry parse(FileHandle result);
+	protected abstract void parse(FileHandle result);
+	protected abstract void onReady();
 
-	public String getTexturePath() {
-		return this.texturePath;
-	}
-
-	private String extractUrlBase( String url ) 
-	{
-		int i = url.lastIndexOf('/');
-		return (i >= 0) ? url.substring(0, i) + '/' : "";
-	}
 }

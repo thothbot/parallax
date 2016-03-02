@@ -28,6 +28,7 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
@@ -63,7 +64,7 @@ public final class Helpers extends ParallaxTest {
         helper.getPosition().setY(-150);
         scene.add(helper);
 
-        new JsonLoader(model, new Loader.ModelLoadHandler() {
+        new JsonLoader(model, new ModelLoadHandler() {
 
             @Override
             public void onModelLoaded(Loader loader, AbstractGeometry geometry) {

@@ -43,26 +43,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class JsonLoader extends Loader
+public class JsonLoader extends ModelLoader
 {
 	JsoObject object;
-	
+	Geometry geometry;
+
 	List<Material> materials;
 	
-	public JsonLoader(String url, ModelLoadHandler modelLoadHandler) 
+	public JsonLoader(String url, ModelLoadHandler modelLoadHandler)
 	{
 		super(url, modelLoadHandler);
 	}
 	
 	@Override
-	protected AbstractGeometry parse(FileHandle result)
+	protected void parse(FileHandle result)
 	{		 
 		if(!isThisJsonStringValid(result.readString()))
-			return null;
-		
+			return;
+
 		Log.debug("JsonLoader parse()");
 		
-		Geometry geometry = new Geometry();
+		geometry = new Geometry();
 
 		parseMaterials();
 		parseModel(geometry);
@@ -77,15 +78,18 @@ public class JsonLoader extends Loader
 			geometry.computeTangents();
 		
 		geometry.computeMorphNormals();
-		
-		return geometry;
 	}
 
 	public List<Material> getMaterials() {
 		return this.materials;
 	}
-	
-	public void morphColorsToFaceColors(Geometry geometry) 
+
+	@Override
+	public Geometry getGeometry() {
+		return geometry;
+	}
+
+	public void morphColorsToFaceColors(Geometry geometry)
 	{
 		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
 		{

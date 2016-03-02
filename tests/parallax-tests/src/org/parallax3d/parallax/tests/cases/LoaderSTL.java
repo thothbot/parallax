@@ -31,6 +31,7 @@ import org.parallax3d.parallax.graphics.renderers.ShadowMap;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.loaders.STLLoader;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
@@ -81,7 +82,7 @@ public class LoaderSTL extends ParallaxTest
 		plane.setReceiveShadow(true);
 		
 		// Binary files
-		new STLLoader(slotted_disk, new Loader.ModelLoadHandler() {
+		new STLLoader(slotted_disk, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
@@ -112,7 +113,7 @@ public class LoaderSTL extends ParallaxTest
 				.setSpecular( 0x111111 )
 				.setShininess(200.0);
 
-		new STLLoader(pr2_head_pan, new Loader.ModelLoadHandler() {
+		new STLLoader(pr2_head_pan, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
@@ -131,7 +132,7 @@ public class LoaderSTL extends ParallaxTest
 			}
 		});
 
-		new STLLoader(pr2_head_tilt, new Loader.ModelLoadHandler() {
+		new STLLoader(pr2_head_tilt, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
@@ -150,7 +151,7 @@ public class LoaderSTL extends ParallaxTest
 			}
 		});
 
-		new STLLoader(colored, new Loader.ModelLoadHandler() {
+		new STLLoader(colored, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {

@@ -16,17 +16,22 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.extras.core;
+package org.parallax3d.parallax.loaders;
 
-import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.system.ThreejsObject;
+public abstract class FontLoader extends Loader {
 
-@ThreejsObject("THREE.TextGeometry")
-public class TextGeometry extends ExtrudeGeometry {
+    FontLoadHandler handler;
 
-    public TextGeometry(String text, FileHandle font, ExtrudeGeometryParameters parameters) {
-        super(parameters);
+    public FontLoader(String url, final FontLoadHandler handler) {
+        super(url);
 
+        this.handler = handler;
+    }
+
+    @Override
+    protected void onReady() {
+        if(handler != null)
+            handler.onFontLoaded(FontLoader.this);
     }
 
 }

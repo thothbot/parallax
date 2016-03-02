@@ -27,6 +27,7 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector3;
@@ -77,7 +78,7 @@ public final class MorphTargetsHorse extends ParallaxTest
 		light1.getPosition().set( -1, -1, -1 ).normalize();
 		scene.add( light1 );
 
-		new JsonLoader(model, new Loader.ModelLoadHandler() {
+		new JsonLoader(model, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {

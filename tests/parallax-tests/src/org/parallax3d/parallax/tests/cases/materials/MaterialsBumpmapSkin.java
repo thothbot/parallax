@@ -41,6 +41,7 @@ import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
@@ -175,7 +176,7 @@ public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMov
 
 		//
 		
-		new JsonLoader(model, new Loader.ModelLoadHandler() {
+		new JsonLoader(model, new ModelLoadHandler() {
 
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {

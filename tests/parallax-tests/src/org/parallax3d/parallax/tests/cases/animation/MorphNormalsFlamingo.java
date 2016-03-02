@@ -33,6 +33,7 @@ import org.parallax3d.parallax.graphics.objects.MorphAnimMesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
+import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
@@ -95,7 +96,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 		scene2.add( light22 );
 
 		morphs = new ArrayList<MorphAnimMesh>();
-		new JsonLoader(model, new Loader.ModelLoadHandler() {
+		new JsonLoader(model, new ModelLoadHandler() {
 
 				@Override
 				public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
@@ -123,7 +124,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 
 		});
 
-		new JsonLoader(model, new Loader.ModelLoadHandler() {
+		new JsonLoader(model, new ModelLoadHandler() {
 
 				@Override
 				public void onModelLoaded(Loader loader, AbstractGeometry geometry) {

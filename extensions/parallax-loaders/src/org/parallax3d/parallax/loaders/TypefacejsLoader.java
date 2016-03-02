@@ -20,30 +20,30 @@ package org.parallax3d.parallax.loaders;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.loaders.typefacejs.JsoFont;
 import org.parallax3d.parallax.loaders.typefacejs.JsoFontFactory;
 import org.parallax3d.parallax.system.jsonbind.AutoBean;
 import org.parallax3d.parallax.system.jsonbind.AutoBeanCodex;
 import org.parallax3d.parallax.system.jsonbind.JsonBindProxy;
 
-public class TypefacejsLoader extends Loader {
+public class TypefacejsLoader extends FontLoader {
 
+    String text;
     JsoFont font;
 
-    public TypefacejsLoader(String url, ModelLoadHandler modelLoadHandler)
+    public TypefacejsLoader(String text, String url, FontLoadHandler modelLoadHandler)
     {
         super(url, modelLoadHandler);
+
+        this.text = text;
     }
 
     @Override
-    protected AbstractGeometry parse(FileHandle result) {
+    protected void parse(FileHandle result) {
         if(!isValidTypefacejs(result.readString()))
-            return null;
+            return;
 
         Log.debug("TypefacejsLoader parse()");
-
-        return null;
     }
 
     private boolean isValidTypefacejs(String string)
