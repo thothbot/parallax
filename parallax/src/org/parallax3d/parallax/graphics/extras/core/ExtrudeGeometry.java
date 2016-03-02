@@ -82,13 +82,13 @@ public class ExtrudeGeometry extends Geometry
 	private static Vector2 __v5 = new Vector2();
 	private static Vector2 __v6 = new Vector2();
 
-	private Box3 shapebb;
-	private List<List<Vector2>> holes;
-	private List<List<Integer>> localFaces;
-	private ExtrudeGeometryParameters options;
+	Box3 shapebb;
+	List<List<Vector2>> holes;
+	List<List<Integer>> localFaces;
+	ExtrudeGeometryParameters options;
 
-	private int shapesOffset;
-	private int verticesCount;
+	int shapesOffset;
+	int verticesCount;
 
 	public ExtrudeGeometry(ExtrudeGeometryParameters options)
 	{

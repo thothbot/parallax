@@ -47,7 +47,16 @@ import java.util.List;
  */
 @ThreejsObject("SubdivisionModifier")
 public class SubdivisionModifier extends Modifier {
-    
+
+    class Edge {
+        public Vector3 a;
+        public Vector3 b;
+
+        public int newEdge;
+
+        public List<Face3> faces = new ArrayList<>();
+    }
+
     int subdivisions;
     
     public SubdivisionModifier() {
@@ -70,68 +79,6 @@ public class SubdivisionModifier extends Modifier {
 
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
-    }
-
-    class Edge {
-        public Vector3 a;
-        public Vector3 b;
-
-        public int newEdge;
-
-        public List<Face3> faces = new ArrayList<>();
-    }
-
-    private void processEdge(int a, int b, List<Vector3> vertices, FastMap<Edge> map, Face3 face, List<List<Edge>> metaVertices)
-    {
-        int vertexIndexA = Math.min( a, b );
-        int vertexIndexB = Math.max( a, b );
-
-        String key = vertexIndexA + "_" + vertexIndexB;
-
-        Edge edge;
-
-        if ( map.containsKey( key ) ) {
-
-            edge = map.get( key );
-
-        } else {
-
-            Vector3 vertexA = vertices.get( vertexIndexA );
-            Vector3 vertexB = vertices.get( vertexIndexB );
-
-            edge = new Edge();
-            edge.a = vertexA;
-            edge.b = vertexB;
-
-            map.put( key, edge );
-
-        }
-
-        edge.faces.add( face );
-
-        metaVertices.get( a ).add( edge );
-        metaVertices.get( b ).add( edge );
-
-    }
-
-    private void generateLookups( List<Vector3> vertices, List<Face3> faces, List<List<Edge>> metaVertices,  FastMap<Edge> edges ) {
-
-        for ( int i = 0, il = vertices.size(); i < il; i ++ ) {
-
-            metaVertices.add(new ArrayList<Edge>());
-
-        }
-
-        for ( int i = 0, il = faces.size(); i < il; i ++ ) {
-
-            Face3 face = faces.get( i );
-
-            processEdge( face.getA(), face.getB(), vertices, edges, face, metaVertices );
-            processEdge( face.getB(), face.getC(), vertices, edges, face, metaVertices );
-            processEdge( face.getC(), face.getA(), vertices, edges, face, metaVertices );
-
-        }
-
     }
 
     // Performs one iteration of Subdivision
@@ -349,4 +296,58 @@ public class SubdivisionModifier extends Modifier {
         return map.containsKey(key) ? map.get( key ) : null;
 
     }
+
+    private void processEdge(int a, int b, List<Vector3> vertices, FastMap<Edge> map, Face3 face, List<List<Edge>> metaVertices)
+    {
+        int vertexIndexA = Math.min( a, b );
+        int vertexIndexB = Math.max( a, b );
+
+        String key = vertexIndexA + "_" + vertexIndexB;
+
+        Edge edge;
+
+        if ( map.containsKey( key ) ) {
+
+            edge = map.get( key );
+
+        } else {
+
+            Vector3 vertexA = vertices.get( vertexIndexA );
+            Vector3 vertexB = vertices.get( vertexIndexB );
+
+            edge = new Edge();
+            edge.a = vertexA;
+            edge.b = vertexB;
+
+            map.put( key, edge );
+
+        }
+
+        edge.faces.add( face );
+
+        metaVertices.get( a ).add( edge );
+        metaVertices.get( b ).add( edge );
+
+    }
+
+    private void generateLookups( List<Vector3> vertices, List<Face3> faces, List<List<Edge>> metaVertices,  FastMap<Edge> edges ) {
+
+        for ( int i = 0, il = vertices.size(); i < il; i ++ ) {
+
+            metaVertices.add(new ArrayList<Edge>());
+
+        }
+
+        for ( int i = 0, il = faces.size(); i < il; i ++ ) {
+
+            Face3 face = faces.get( i );
+
+            processEdge( face.getA(), face.getB(), vertices, edges, face, metaVertices );
+            processEdge( face.getB(), face.getC(), vertices, edges, face, metaVertices );
+            processEdge( face.getC(), face.getA(), vertices, edges, face, metaVertices );
+
+        }
+
+    }
+
 }

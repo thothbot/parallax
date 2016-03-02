@@ -33,7 +33,7 @@ public interface JsoFont {
 
     String getFamilyName();
 
-    int getResolution();
+    double getResolution();
 
     int getDescender();
     int getAscender();

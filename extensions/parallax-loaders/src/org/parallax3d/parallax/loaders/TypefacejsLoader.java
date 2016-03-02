@@ -28,14 +28,11 @@ import org.parallax3d.parallax.system.jsonbind.JsonBindProxy;
 
 public class TypefacejsLoader extends FontLoader {
 
-    String text;
     JsoFont font;
 
-    public TypefacejsLoader(String text, String url, FontLoadHandler modelLoadHandler)
+    public TypefacejsLoader(String url, FontLoadHandler modelLoadHandler)
     {
         super(url, modelLoadHandler);
-
-        this.text = text;
     }
 
     @Override
