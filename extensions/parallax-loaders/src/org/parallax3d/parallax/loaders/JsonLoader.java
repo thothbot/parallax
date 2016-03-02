@@ -45,9 +45,9 @@ import java.util.Map;
 
 public class JsonLoader extends Loader
 {
-	private JsoObject object;
+	JsoObject object;
 	
-	private List<Material> materials;
+	List<Material> materials;
 	
 	public JsonLoader(String url, ModelLoadHandler modelLoadHandler) 
 	{
@@ -60,7 +60,7 @@ public class JsonLoader extends Loader
 		if(!isThisJsonStringValid(result.readString()))
 			return null;
 		
-		Log.debug("JSON parse()");
+		Log.debug("JsonLoader parse()");
 		
 		Geometry geometry = new Geometry();
 
