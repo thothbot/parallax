@@ -30,6 +30,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @ThreejsObject("THREE.TessellateModifier")
+
+/**
+ * Break faces with edges longer than maxEdgeLength
+ * - not recursive
+ *
+ * @author alteredq / http://alteredqualia.com/
+ */
 public class TessellateModifier extends Modifier {
     double maxEdgeLength;
     
