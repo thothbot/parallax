@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.extras.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Vector2;
 
@@ -173,12 +174,10 @@ public abstract class Curve
 			if (comparison < 0)
 			{
 				low = i + 1;
-				continue;
 			}
 			else if (comparison > 0)
 			{
 				high = i - 1;
-				continue;
 			}
 			else
 			{

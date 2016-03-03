@@ -58,8 +58,8 @@ public class FontData {
         public String toString() {
             String retval = "";
             for(GliphAction act: actions)
-                retval += ", " + act;
-            return "{" + retval + "}";
+                retval += act + ", ";
+            return "[" + retval + "]";
         }
     }
 

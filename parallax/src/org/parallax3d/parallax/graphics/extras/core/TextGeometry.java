@@ -91,7 +91,6 @@ public class TextGeometry extends ExtrudeGeometry {
             Path path = new Path();
 
             FontData.Glyph glyph = font.gliphs.containsKey(c) ? font.gliphs.get(c) : font.gliphs.get("?");
-            Log.error(glyph);
             for(FontData.GliphAction action : glyph.actions)
             {
                 if(action instanceof FontData.GliphActionMoveTo)

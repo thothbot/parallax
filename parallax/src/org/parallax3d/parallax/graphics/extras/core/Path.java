@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.extras.core;
 
 import java.util.*;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.curves.*;
 import org.parallax3d.parallax.math.Mathematics;
@@ -435,27 +436,25 @@ public class Path extends CurvePath {
 		List<Shape> shapes = new ArrayList<>();
 
 		List<Path> subPaths = extractSubpaths(this.actions);
-		if(subPaths.size() ==0 ) return shapes;
 
-		if(noHoles == true) return toShapesNoHoles(subPaths);
+		if(subPaths.size() ==0 )
+			return shapes;
 
+		if(noHoles)
+			return toShapesNoHoles(subPaths);
 
 		if(subPaths.size() == 1)
 		{
-
 			Path tmpPath = subPaths.get(0);
 			Shape tmpShape = new Shape();
 			tmpShape.setActions( tmpPath.actions );
 			tmpShape.setCurves( tmpPath.getCurves() );
 			shapes.add(tmpShape);
 			return shapes;
-
 		}
 
 		boolean holesFirst = !ShapeUtils.isClockWise(subPaths.get(0).getPoints());
-		holesFirst = isCCW ? !holesFirst : holesFirst;
-
-		int mainIdx = 0;
+		holesFirst = isCCW != holesFirst;
 
 		class ShapeHole {
 			public Shape s;
@@ -483,6 +482,7 @@ public class Path extends CurvePath {
 
 		newShapeHoles.add(new ArrayList<PathHole>());
 
+		int mainIdx = 0;
 		for( int i = 0, l = subPaths.size(); i<l; i++)
 		{
 			Path tmpPath = subPaths.get(i);
@@ -492,21 +492,22 @@ public class Path extends CurvePath {
 
 			if (solid) {
 
-				if ((!holesFirst) && (newShapes.get(mainIdx) != null)) mainIdx++;
+				if ((!holesFirst) && (mainIdx < newShapes.size() && newShapes.get(mainIdx) != null))
+					mainIdx++;
 
 					final Shape s = new Shape();
 					s.setActions( tmpPath.getActions() );
 					s.setCurves( tmpPath.getCurves() );
 
-					newShapes.set(mainIdx, new ShapeHole(s, tmpPoints));
+					newShapes.add(mainIdx, new ShapeHole(s, tmpPoints));
 
-					if (holesFirst) mainIdx++;
-					newShapeHoles.set(mainIdx, new ArrayList<PathHole>());
+					if (holesFirst)
+						mainIdx++;
+
+					newShapeHoles.add(mainIdx, new ArrayList<PathHole>());
 
 			} else {
-
 				newShapeHoles.get(mainIdx).add( new PathHole( tmpPath, tmpPoints.get(0) ));
-
 			}
 
 		}
@@ -601,7 +602,6 @@ public class Path extends CurvePath {
 		for ( int i = 0, l = inActions.size(); i < l; i ++ ) {
 
 			Action item = inActions.get( i );
-
 			List<Object> args = item.args;
 			PATH_ACTIONS action = item.action;
 
@@ -614,9 +614,14 @@ public class Path extends CurvePath {
 				}
 			}
 
-			lastPath.actions.add(item);
-//			lastPath[ action ].apply( lastPath, args );
-
+			if(action == PATH_ACTIONS.MOVE_TO)
+				lastPath.moveTo((Double) args.get(0), (Double) args.get(1));
+			else if(action == PATH_ACTIONS.LINE_TO)
+				lastPath.lineTo((Double) args.get(0), (Double) args.get(1));
+			else if(action == PATH_ACTIONS.QUADRATIC_CURVE_TO)
+				lastPath.quadraticCurveTo((Double) args.get(0), (Double) args.get(1), (Double) args.get(2), (Double) args.get(3));
+			else if(action == PATH_ACTIONS.BEZIER_CURVE_TO)
+				lastPath.bezierCurveTo((Double) args.get(0), (Double) args.get(1), (Double) args.get(2), (Double) args.get(3), (Double) args.get(4), (Double) args.get(5));
 		}
 
 		if ( lastPath.actions.size() != 0 ) {
@@ -625,10 +630,7 @@ public class Path extends CurvePath {
 
 		}
 
-		// console.log(subPaths);
-
 		return	subPaths;
-
 	}
 
 	private List<Shape> toShapesNoHoles( List<Path> inSubpaths )

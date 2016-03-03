@@ -61,6 +61,9 @@ public class TypefacejsLoader extends FontLoader {
             fontData.gliphs = new FastMap<>();
 
             for(Map.Entry<String, JsoGlyph> entry: font.getGlyphs().entrySet()){
+                if(entry.getKey() == null || entry.getValue().getO() == null)
+                    continue;
+
                 FontData.Glyph gliph = new FontData.Glyph();
                 gliph.ha = entry.getValue().getHa();
                 gliph.actions = new ArrayList<>();

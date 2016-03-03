@@ -104,7 +104,9 @@ public class ExtrudeGeometry extends Geometry
 	{
 		super();
 
-		this.shapebb = shapes.get( shapes.size() - 1 ).getBoundingBox();
+		if(shapes.size() > 0)
+			this.shapebb = shapes.get( shapes.size() - 1 ).getBoundingBox();
+
 		this.options = options;
 
 		this.addShape( shapes, options );
