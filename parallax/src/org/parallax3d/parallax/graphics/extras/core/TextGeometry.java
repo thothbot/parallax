@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.extras.core;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.TextGeometry")
@@ -90,8 +91,8 @@ public class TextGeometry extends ExtrudeGeometry {
             Path path = new Path();
 
             FontData.Glyph glyph = font.gliphs.containsKey(c) ? font.gliphs.get(c) : font.gliphs.get("?");
-
-            for(FontData.GliphAction action : glyph.action)
+            Log.error(glyph);
+            for(FontData.GliphAction action : glyph.actions)
             {
                 if(action instanceof FontData.GliphActionMoveTo)
                 {

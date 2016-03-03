@@ -63,7 +63,7 @@ public class TypefacejsLoader extends FontLoader {
             for(Map.Entry<String, JsoGlyph> entry: font.getGlyphs().entrySet()){
                 FontData.Glyph gliph = new FontData.Glyph();
                 gliph.ha = entry.getValue().getHa();
-                gliph.action = new ArrayList<>();
+                gliph.actions = new ArrayList<>();
 
                 String outline[] = entry.getValue().getO().split(" ");
                 for(int i =0; i<outline.length;)
@@ -114,7 +114,7 @@ public class TypefacejsLoader extends FontLoader {
                     }
 
                     if(action != null)
-                        gliph.action.add(action);
+                        gliph.actions.add(action);
                 }
 
                 fontData.gliphs.put(entry.getKey(), gliph);

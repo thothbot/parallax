@@ -52,7 +52,7 @@ public class Path extends CurvePath {
 		}
 
 		public String toString() {
-			return "{action=" + this.action.name() + ", args=" + this.args + "}";
+			return "{actions=" + this.action.name() + ", args=" + this.args + "}";
 		}
 	}
 

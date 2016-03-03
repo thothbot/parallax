@@ -27,6 +27,11 @@ public class FontData {
     public static abstract class GliphAction {
         public double x;
         public double y;
+
+        @Override
+        public String toString() {
+            return " {x=" + x + ", y=" + y + "}";
+        }
     }
 
     public static class GliphActionMoveTo extends GliphAction { }
@@ -46,8 +51,16 @@ public class FontData {
     }
 
     public static class Glyph {
-        public List<GliphAction> action;
+        public List<GliphAction> actions;
         public double ha;
+
+        @Override
+        public String toString() {
+            String retval = "";
+            for(GliphAction act: actions)
+                retval += ", " + act;
+            return "{" + retval + "}";
+        }
     }
 
     public double resolution;
