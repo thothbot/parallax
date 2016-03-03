@@ -95,15 +95,15 @@ public class TextTessellation extends ParallaxTest
 				params.bevelSize = 1;
 				params.bevelEnabled = true;
 
-				TextGeometry geometry = new TextGeometry("P", fontData, 200, params);
+				TextGeometry geometry = new TextGeometry("Parallax3D", fontData, 200, params);
 				geometry.center();
 
 				TessellateModifier tessellateModifier = new TessellateModifier(8);
-				for ( int i = 0; i < 6; i ++ )
-					tessellateModifier.modify( geometry );
-
-				ExplodeModifier explodeModifier = new ExplodeModifier();
-				explodeModifier.modify( geometry );
+//				for ( int i = 0; i < 6; i ++ )
+//					tessellateModifier.modify( geometry );
+//
+//				ExplodeModifier explodeModifier = new ExplodeModifier();
+//				explodeModifier.modify( geometry );
 
 				int numFaces = geometry.getFaces().size();
 				BufferGeometry bufferGeometry = new BufferGeometry().fromGeometry( geometry );
@@ -148,10 +148,12 @@ public class TextTessellation extends ParallaxTest
 				uniforms = new FastMap<Uniform>() {{
 					put("amplitude", new Uniform(Uniform.TYPE.F, 0.0) );
 				}};
+				shaderMaterial.setWireframe(true);
+				shaderMaterial.setColor(0xffffff);
 
 				shaderMaterial.getShader().setUniforms(uniforms);
 
-				scene.add(new Mesh(geometry, shaderMaterial));
+				scene.add(new Mesh(geometry, m));
 			}
 
 		});
