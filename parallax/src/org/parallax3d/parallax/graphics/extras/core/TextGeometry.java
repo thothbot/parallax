@@ -78,7 +78,7 @@ public class TextGeometry extends ExtrudeGeometry {
     }
 
     public void update() {
-        String[] chars = text.split("");
+        char[] chars = text.toCharArray();
         int length = chars.length;
 
         double scale = size / font.resolution;
@@ -87,10 +87,11 @@ public class TextGeometry extends ExtrudeGeometry {
 
         for ( int i = 0; i < length; i ++ ) {
 
-            String c = chars[i];
+            char c = chars[i];
             Path path = new Path();
 
             FontData.Glyph glyph = font.gliphs.containsKey(c) ? font.gliphs.get(c) : font.gliphs.get("?");
+            Log.error(c);
             for(FontData.GliphAction action : glyph.actions)
             {
                 if(action instanceof FontData.GliphActionMoveTo)
@@ -122,7 +123,7 @@ public class TextGeometry extends ExtrudeGeometry {
             }
 
             addShape(path.toShapes(), this.options);
-            offset = glyph.ha * scale;
+            offset += glyph.ha * scale;
 
         }
     }
