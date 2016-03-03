@@ -18,8 +18,10 @@
 
 package org.parallax3d.parallax.loaders;
 
+import org.parallax3d.parallax.graphics.extras.core.FontData;
+
 public interface FontLoadHandler {
 
-    void onFontLoaded(Loader loader);
+    void onFontLoaded(Loader loader, FontData fontData);
 
 }

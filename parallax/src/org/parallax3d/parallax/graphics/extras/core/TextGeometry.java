@@ -26,17 +26,17 @@ public class TextGeometry extends ExtrudeGeometry {
     String text;
     double size;
 
-    Font font;
+    FontData font;
 
-    public TextGeometry(String text, Font font) {
+    public TextGeometry(String text, FontData font) {
         this(text, font, 100);
     }
 
-    public TextGeometry(String text, Font font, double size) {
+    public TextGeometry(String text, FontData font, double size) {
         this(text, font, size, new ExtrudeGeometryParameters());
     }
 
-    public TextGeometry(String text, Font font, double size, ExtrudeGeometryParameters parameters) {
+    public TextGeometry(String text, FontData font, double size, ExtrudeGeometryParameters parameters) {
         super(parameters);
 
         this.text = text;
@@ -56,11 +56,11 @@ public class TextGeometry extends ExtrudeGeometry {
         return this;
     }
 
-    public Font getFont() {
+    public FontData getFont() {
         return font;
     }
 
-    public TextGeometry setFont(Font font) {
+    public TextGeometry setFont(FontData font) {
         this.font = font;
 
         return this;
@@ -80,7 +80,7 @@ public class TextGeometry extends ExtrudeGeometry {
         String[] chars = text.split("");
         int length = chars.length;
 
-        double scale = size / font.getResolution();
+        double scale = size / font.resolution;
 
         double offset = 0;
 
@@ -89,43 +89,41 @@ public class TextGeometry extends ExtrudeGeometry {
             String c = chars[i];
             Path path = new Path();
 
-            Font.Glyph glyph = font.getGlyphs().containsKey(c) ? font.getGlyphs().get(c) : font.getGlyphs().get("?");
+            FontData.Glyph glyph = font.gliphs.containsKey(c) ? font.gliphs.get(c) : font.gliphs.get("?");
 
-            for(Font.Glyph.GliphAction action : glyph.getAction())
+            for(FontData.GliphAction action : glyph.action)
             {
-                if(action instanceof Font.Glyph.GliphActionMoveTo)
+                if(action instanceof FontData.GliphActionMoveTo)
                 {
-                    path.moveTo( action.getX() * scale + offset, action.getY() * scale );
+                    path.moveTo( action.x * scale + offset, action.y * scale );
                 }
-                else if(action instanceof Font.Glyph.GliphActionlineTo)
+                else if(action instanceof FontData.GliphActionlineTo)
                 {
-                    path.lineTo( action.getX() * scale + offset, action.getY() * scale );
+                    path.lineTo( action.x * scale + offset, action.y * scale );
                 }
-                else if(action instanceof Font.Glyph.GliphActionQuadraticCurveTo)
+                else if(action instanceof FontData.GliphActionQuadraticCurveTo)
                 {
                     path.quadraticCurveTo(
-                            ((Font.Glyph.GliphActionQuadraticCurveTo)action).getX1() * scale + offset,
-                            ((Font.Glyph.GliphActionQuadraticCurveTo)action).getY1() * scale ,
-                            action.getX() * scale + offset,
-                            action.getY() * scale );
+                            ((FontData.GliphActionQuadraticCurveTo)action).x1 * scale + offset,
+                            ((FontData.GliphActionQuadraticCurveTo)action).y1 * scale ,
+                            action.x * scale + offset,
+                            action.y * scale );
                 }
-                else if(action instanceof Font.Glyph.GliphActionBezierCurveTo)
+                else if(action instanceof FontData.GliphActionBezierCurveTo)
                 {
                     path.bezierCurveTo(
-                            ((Font.Glyph.GliphActionBezierCurveTo)action).getX1() * scale + offset,
-                            ((Font.Glyph.GliphActionBezierCurveTo)action).getY1() * scale ,
-                            ((Font.Glyph.GliphActionBezierCurveTo)action).getX2() * scale + offset,
-                            ((Font.Glyph.GliphActionBezierCurveTo)action).getY2() * scale ,
-                            action.getX() * scale + offset,
-                            action.getY() * scale );
+                            ((FontData.GliphActionBezierCurveTo)action).x1 * scale + offset,
+                            ((FontData.GliphActionBezierCurveTo)action).y1 * scale ,
+                            ((FontData.GliphActionBezierCurveTo)action).x2 * scale + offset,
+                            ((FontData.GliphActionBezierCurveTo)action).y2 * scale ,
+                            action.x * scale + offset,
+                            action.y * scale );
                 }
             }
 
             addShape(path.toShapes(), this.options);
-            offset = glyph.getHa() * scale;
+            offset = glyph.ha * scale;
 
         }
-
-        double width = offset / 2.0;
     }
 }

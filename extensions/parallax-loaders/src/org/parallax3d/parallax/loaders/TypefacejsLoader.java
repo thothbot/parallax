@@ -20,15 +20,22 @@ package org.parallax3d.parallax.loaders;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.graphics.extras.core.FontData;
 import org.parallax3d.parallax.loaders.typefacejs.JsoFont;
 import org.parallax3d.parallax.loaders.typefacejs.JsoFontFactory;
+import org.parallax3d.parallax.loaders.typefacejs.JsoGlyph;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.jsonbind.AutoBean;
 import org.parallax3d.parallax.system.jsonbind.AutoBeanCodex;
 import org.parallax3d.parallax.system.jsonbind.JsonBindProxy;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class TypefacejsLoader extends FontLoader {
 
     JsoFont font;
+    FontData fontData;
 
     public TypefacejsLoader(String url, FontLoadHandler modelLoadHandler)
     {
@@ -40,7 +47,81 @@ public class TypefacejsLoader extends FontLoader {
         if(!isValidTypefacejs(result.readString()))
             return;
 
+
         Log.debug("TypefacejsLoader parse()");
+    }
+
+    @Override
+    public FontData getFontData()
+    {
+        if(fontData == null)
+        {
+            fontData = new FontData();
+            fontData.resolution = font.getResolution();
+            fontData.gliphs = new FastMap<>();
+
+            for(Map.Entry<String, JsoGlyph> entry: font.getGlyphs().entrySet()){
+                FontData.Glyph gliph = new FontData.Glyph();
+                gliph.ha = entry.getValue().getHa();
+                gliph.action = new ArrayList<>();
+
+                String outline[] = entry.getValue().getO().split(" ");
+                for(int i =0; i<outline.length;)
+                {
+                    String act = outline[ i ++ ];
+                    FontData.GliphAction action = null;
+
+                    switch ( act ) {
+
+                        case "m": // Move To
+                            action = new FontData.GliphActionMoveTo();
+
+                            action.x = Double.parseDouble(outline[ i ++ ]);
+                            action.y = Double.parseDouble(outline[ i ++ ]);
+
+                            break;
+
+                        case "l": // Line To
+                            action = new FontData.GliphActionlineTo();
+
+                            action.x = Double.parseDouble(outline[ i ++ ]);
+                            action.y = Double.parseDouble(outline[ i ++ ]);
+
+                            break;
+
+                        case "q": // QuadraticCurveTo
+                            action = new FontData.GliphActionQuadraticCurveTo();
+
+                            action.x  = Double.parseDouble(outline[ i ++ ]);
+                            action.y  = Double.parseDouble(outline[ i ++ ]);
+                            ((FontData.GliphActionQuadraticCurveTo)action).x1 = Double.parseDouble(outline[ i ++ ]);
+                            ((FontData.GliphActionQuadraticCurveTo)action).y1 = Double.parseDouble(outline[ i ++ ]);
+
+                            break;
+
+                        case "b": // Cubic Bezier Curve
+                            action = new FontData.GliphActionBezierCurveTo();
+
+                            action.x  = Double.parseDouble(outline[ i ++ ]);
+                            action.y  = Double.parseDouble(outline[ i ++ ]);
+                            ((FontData.GliphActionBezierCurveTo)action).x1 = Double.parseDouble(outline[ i ++ ]);
+                            ((FontData.GliphActionBezierCurveTo)action).y1 = Double.parseDouble(outline[ i ++ ]);
+                            ((FontData.GliphActionBezierCurveTo)action).x2 = Double.parseDouble(outline[ i ++ ]);
+                            ((FontData.GliphActionBezierCurveTo)action).y2 = Double.parseDouble(outline[ i ++ ]);
+
+                            break;
+
+                    }
+
+                    if(action != null)
+                        gliph.action.add(action);
+                }
+
+                fontData.gliphs.put(entry.getKey(), gliph);
+            }
+        }
+
+        return fontData;
     }
 
     private boolean isValidTypefacejs(String string)

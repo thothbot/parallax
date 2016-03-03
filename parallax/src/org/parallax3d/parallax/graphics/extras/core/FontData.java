@@ -22,36 +22,36 @@ import org.parallax3d.parallax.system.FastMap;
 
 import java.util.List;
 
-public interface Font {
+public class FontData {
 
-    interface Glyph {
-        interface GliphAction {
-            double getX();
-            double getY();
-        }
-
-        interface GliphActionMoveTo extends GliphAction { }
-
-        interface GliphActionlineTo extends GliphAction { }
-
-        interface GliphActionQuadraticCurveTo extends GliphAction {
-            double getX1();
-            double getY1();
-        }
-
-        interface GliphActionBezierCurveTo extends GliphAction {
-            double getX1();
-            double getY1();
-            double getX2();
-            double getY2();
-        }
-
-        List<GliphAction> getAction();
-        double getHa();
+    public static abstract class GliphAction {
+        public double x;
+        public double y;
     }
 
-    double getResolution();
+    public static class GliphActionMoveTo extends GliphAction { }
 
-    FastMap<Glyph> getGlyphs();
+    public static class GliphActionlineTo extends GliphAction { }
+
+    public static class GliphActionQuadraticCurveTo extends GliphAction {
+        public double x1;
+        public double y1;
+    }
+
+    public static class GliphActionBezierCurveTo extends GliphAction {
+        public double x1;
+        public double y1;
+        public double x2;
+        public double y2;
+    }
+
+    public static class Glyph {
+        public List<GliphAction> action;
+        public double ha;
+    }
+
+    public double resolution;
+
+    public FastMap<Glyph> gliphs;
 
 }

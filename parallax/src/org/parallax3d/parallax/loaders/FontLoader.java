@@ -18,6 +18,8 @@
 
 package org.parallax3d.parallax.loaders;
 
+import org.parallax3d.parallax.graphics.extras.core.FontData;
+
 public abstract class FontLoader extends Loader {
 
     FontLoadHandler handler;
@@ -31,7 +33,8 @@ public abstract class FontLoader extends Loader {
     @Override
     protected void onReady() {
         if(handler != null)
-            handler.onFontLoaded(FontLoader.this);
+            handler.onFontLoaded(FontLoader.this, getFontData());
     }
 
+    public abstract FontData getFontData();
 }
