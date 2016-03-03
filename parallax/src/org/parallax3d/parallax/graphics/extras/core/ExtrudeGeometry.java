@@ -124,8 +124,6 @@ public class ExtrudeGeometry extends Geometry
 
 	public void addShape( Shape shape, ExtrudeGeometryParameters options )
 	{
-		Log.debug("ExtrudeGeometry.Called addShape() shape=" + shape);
-
 		List<Vector2> extrudePts = null;
 		boolean extrudeByPath = false;
 

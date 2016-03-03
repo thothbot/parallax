@@ -70,8 +70,9 @@ public class Uniform
 		return this.value;
 	}
 
-	public void setValue(Object value) {
+	public Uniform setValue(Object value) {
 		this.value = value;
+		return this;
 	}
 
 	public Float32Array getCacheArray() {
