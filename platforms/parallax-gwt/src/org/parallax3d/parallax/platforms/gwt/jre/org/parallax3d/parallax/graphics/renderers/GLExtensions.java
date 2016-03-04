@@ -18,16 +18,9 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import com.google.gwt.core.client.JsArrayString;
-import com.google.gwt.webgl.client.WebGLExtension;
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.platforms.gwt.GwtGL20;
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class GLExtensions {
 
