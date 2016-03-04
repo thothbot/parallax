@@ -24,7 +24,7 @@ The main features of Parallax 2.0 will be:
    <tr>
       <td>
 
-<img src="https://raw.githubusercontent.com/wiki/thothbot/parallax/images/logo.png" alt="Parallax 3D library"/>
+[[https://github.com/thothbot/parallax/wiki/images/logo.png|alt=Parallax 3D library]]
 
       </td>
       <td>
