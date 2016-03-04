@@ -1,5 +1,4 @@
-
-<img src="http://parallax3d.org/static/images/logo.png" alt="Parallax" align="top"/>
+[[https://github.com/thothbot/parallax/wiki/images/logo.png|alt=Parallax 3D library]]
 
 master [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=master)](https://travis-ci.org/thothbot/parallax)
 dev [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=dev)](https://travis-ci.org/thothbot/parallax)
@@ -24,7 +23,7 @@ The main features of Parallax 2.0 will be:
    <tr>
       <td>
 
-[[https://github.com/thothbot/parallax/wiki/images/logo.png|alt=Parallax 3D library]]
+<img src="http://thothbot.github.com/parallax/static/logo.png" alt="Parallax" align="top"/>
 
       </td>
       <td>
