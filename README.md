@@ -1,4 +1,4 @@
-[[https://github.com/thothbot/parallax/wiki/images/logo.png|alt=Parallax 3D library]]
+![Parallax 3D library](https://github.com/thothbot/parallax/wiki/images/logo.png)
 
 master [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=master)](https://travis-ci.org/thothbot/parallax)
 dev [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=dev)](https://travis-ci.org/thothbot/parallax)
