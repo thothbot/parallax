@@ -31,13 +31,9 @@ public class GwtParallax extends Parallax {
 	public static final Assets assets = GWT.create(Assets.class);
 	public static final Storage LocalStorage = Storage.getLocalStorageIfSupported();
 
-	static AgentInfo agentInfo;
-	GwtParallaxConfiguration config;
+	private static final AgentInfo agentInfo = computeAgentInfo();
 
 	protected GwtParallax() {
-
-		config = getConfig();
-		agentInfo = computeAgentInfo();
 
 	}
 
@@ -67,10 +63,6 @@ public class GwtParallax extends Parallax {
 	public Parallax.Platform getType() {
 		return Parallax.Platform.WebGL;
 	}
-
-	public GwtParallaxConfiguration getConfig () {
-		return new GwtParallaxConfiguration();
-	};
 
 	// Default configuration
 

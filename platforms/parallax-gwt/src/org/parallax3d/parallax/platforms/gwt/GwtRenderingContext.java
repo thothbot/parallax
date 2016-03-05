@@ -69,9 +69,13 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
     double time = 0;
     int frames;
 
-    GwtParallaxConfiguration config;
+    GwtRenderingContextConfiguration config;
 
-    public GwtRenderingContext(Panel root, GwtParallaxConfiguration config) throws ParallaxRuntimeException {
+    public GwtRenderingContext(Panel root) throws ParallaxRuntimeException {
+        this(root, new GwtRenderingContextConfiguration());
+    }
+
+    public GwtRenderingContext(Panel root, GwtRenderingContextConfiguration config) throws ParallaxRuntimeException {
         this.root = root;
         root.clear();
 
@@ -95,11 +99,11 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
         this.config = config;
 
         WebGLContextAttributes attributes = WebGLContextAttributes.create();
-        attributes.setAntialias(config.antialiasing);
-        attributes.setStencil(config.stencil);
-        attributes.setAlpha(config.alpha);
-        attributes.setPremultipliedAlpha(config.premultipliedAlpha);
-        attributes.setPreserveDrawingBuffer(config.preserveDrawingBuffer);
+        attributes.setAntialias(config.isAntialiasing());
+        attributes.setStencil(config.isStencil());
+        attributes.setAlpha(config.isAlpha());
+        attributes.setPremultipliedAlpha(config.isPremultipliedAlpha());
+        attributes.setPreserveDrawingBuffer(config.isPreserveDrawingBuffer());
 
         context = WebGLRenderingContext.getContext(canvas, attributes);
         context.viewport(0, 0, width, height);
