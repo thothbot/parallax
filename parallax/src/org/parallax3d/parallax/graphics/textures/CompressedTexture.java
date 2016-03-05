@@ -23,7 +23,7 @@ import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 
@@ -32,7 +32,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
-@ThreeObject("THREE.CompressedTexture")
+@ThreejsObject("THREE.CompressedTexture")
 public class CompressedTexture extends Texture
 {
 

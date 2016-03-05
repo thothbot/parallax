@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
@@ -29,7 +29,7 @@ import org.parallax3d.parallax.system.gl.enums.PixelFormat;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.DataTexture")
+@ThreejsObject("THREE.DataTexture")
 public class DataTexture extends Texture
 {
 	private Uint8Array data;

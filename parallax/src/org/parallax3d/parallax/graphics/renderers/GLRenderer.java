@@ -80,7 +80,7 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.graphics.textures.TextureData;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.WebGLShaderPrecisionFormat;
@@ -93,7 +93,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
-@ThreeObject("THREE.WebGLRenderer")
+@ThreejsObject("THREE.WebGLRenderer")
 public class GLRenderer extends Renderer
 {
 	public GL20 gl;

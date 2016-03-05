@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.extras.geometries;
 
 import java.util.Arrays;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector2;
@@ -35,7 +35,7 @@ import org.parallax3d.parallax.math.Vector3;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.BoxGeometry")
+@ThreejsObject("THREE.BoxGeometry")
 public final class BoxGeometry extends Geometry
 {
 	private int widthSegments;

@@ -21,12 +21,12 @@ package org.parallax3d.parallax.graphics.extras.curves;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.graphics.extras.CurveUtils;
 import org.parallax3d.parallax.math.Vector2;
 
-@ThreeObject("THREE.SplineCurve")
+@ThreejsObject("THREE.SplineCurve")
 public class SplineCurve extends Curve
 {
 

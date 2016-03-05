@@ -24,14 +24,14 @@ import java.util.List;
 import org.parallax3d.parallax.graphics.extras.curves.LineCurve;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 
 /*
  *	Curved Path - a curve path is simply a array of connected
  *  curves, but retains the api of a curve
  */
-@ThreeObject("THREE.CurvePath")
+@ThreejsObject("THREE.CurvePath")
 public class CurvePath extends Curve
 {
 

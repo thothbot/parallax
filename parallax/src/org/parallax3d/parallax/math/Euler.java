@@ -19,10 +19,10 @@
 package org.parallax3d.parallax.math;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
-@ThreeObject("THREE.Euler")
+@ThreejsObject("THREE.Euler")
 public class Euler {
 
 	public static interface EulerChangeHandler

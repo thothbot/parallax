@@ -24,7 +24,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * A material for drawing wireframe-style geometries.
@@ -32,7 +32,7 @@ import org.parallax3d.parallax.system.ThreeObject;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.LineBasicMaterial")
+@ThreejsObject("THREE.LineBasicMaterial")
 public class LineBasicMaterial extends Material 
 	implements HasFog, HasColor, HasVertexColors
 {

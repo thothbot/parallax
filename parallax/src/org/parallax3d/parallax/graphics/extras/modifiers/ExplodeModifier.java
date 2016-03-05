@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.extras.modifiers;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author alteredq / http://alteredqualia.com/
  */
-@ThreeObject("THREE.ExplodeModifier")
+@ThreejsObject("THREE.ExplodeModifier")
 public class ExplodeModifier extends Modifier {
 
     @Override

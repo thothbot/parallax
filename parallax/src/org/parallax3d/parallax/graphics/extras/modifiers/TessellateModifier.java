@@ -23,13 +23,13 @@ import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@ThreeObject("THREE.TessellateModifier")
+@ThreejsObject("THREE.TessellateModifier")
 
 /**
  * Break faces with edges longer than maxEdgeLength

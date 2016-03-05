@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.BasicShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Color;
 
@@ -32,7 +32,7 @@ import org.parallax3d.parallax.math.Color;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.MeshBasicMaterial")
+@ThreejsObject("THREE.MeshBasicMaterial")
 public class MeshBasicMaterial extends Material
 	implements HasMaterialMap, HasWireframe, HasFog, HasVertexColors, HasSkinning, HasShading
 {

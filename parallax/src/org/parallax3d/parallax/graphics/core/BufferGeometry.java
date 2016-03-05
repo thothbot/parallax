@@ -22,7 +22,7 @@ import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.IndexTypeArray;
@@ -66,7 +66,7 @@ import java.util.Set;
  * geometry.addAttribute( "position", new BufferAttribute( positions, 3 ) );
  *</pre>
  */
-@ThreeObject("THREE.BufferGeometry")
+@ThreejsObject("THREE.BufferGeometry")
 public class BufferGeometry extends AbstractGeometry
 {
 	public static class DrawCall

@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.graphics.extras.core;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-@ThreeObject("THREE.TextGeometry")
+@ThreejsObject("THREE.TextGeometry")
 public class TextGeometry extends ExtrudeGeometry {
 
     String text;

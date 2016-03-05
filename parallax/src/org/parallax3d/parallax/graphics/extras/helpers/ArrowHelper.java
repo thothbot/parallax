@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.geometries.CylinderGeometry;
@@ -30,7 +30,7 @@ import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 
-@ThreeObject("THREE.ArrowHelper")
+@ThreejsObject("THREE.ArrowHelper")
 public class ArrowHelper extends Object3D
 {
 	private Line line;

@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.scenes;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreeObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * This class implements fog with density.
@@ -28,7 +28,7 @@ import org.parallax3d.parallax.system.ThreeObject;
  * @author thothbot
  *
  */
-@ThreeObject("THREE.FogExp2")
+@ThreejsObject("THREE.FogExp2")
 public final class FogExp2 extends AbstractFog
 {
 	private double density;
