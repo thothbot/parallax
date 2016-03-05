@@ -19,13 +19,13 @@
 package org.parallax3d.parallax.graphics.renderers;
 
 import org.parallax3d.parallax.graphics.textures.EmptyTextureData;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
 
-@ThreejsObject("THREE.WebGLRenderTarget")
+@ThreeObject("THREE.WebGLRenderTarget")
 public class RenderTargetTexture extends Texture
 {
 	private int width;

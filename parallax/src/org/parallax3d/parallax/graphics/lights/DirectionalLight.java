@@ -20,10 +20,9 @@ package org.parallax3d.parallax.graphics.lights;
 
 import java.util.List;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.math.Vector3;
@@ -45,7 +44,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.DirectionalLight")
+@ThreeObject("THREE.DirectionalLight")
 public class DirectionalLight extends ShadowLight
 {
 	public static class UniformDirectional implements Light.UniformLight

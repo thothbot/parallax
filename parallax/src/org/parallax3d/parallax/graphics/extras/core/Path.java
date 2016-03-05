@@ -20,16 +20,15 @@ package org.parallax3d.parallax.graphics.extras.core;
 
 import java.util.*;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.curves.*;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
-@ThreejsObject("THREE.Path")
+@ThreeObject("THREE.Path")
 public class Path extends CurvePath {
 	public static enum PATH_ACTIONS {
 		MOVE_TO,

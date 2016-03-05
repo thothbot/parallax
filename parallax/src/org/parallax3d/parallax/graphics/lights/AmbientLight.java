@@ -22,7 +22,7 @@ import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
@@ -38,7 +38,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.AmbientLight")
+@ThreeObject("THREE.AmbientLight")
 public final class AmbientLight extends Light
 {
 	public static class UniformAmbient implements Light.UniformLight

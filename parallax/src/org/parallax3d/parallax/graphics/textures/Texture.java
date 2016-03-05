@@ -18,10 +18,9 @@
 
 package org.parallax3d.parallax.graphics.textures;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.gl.GL20;
@@ -35,7 +34,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.Texture")
+@ThreeObject("THREE.Texture")
 public class Texture
 {
 	/**

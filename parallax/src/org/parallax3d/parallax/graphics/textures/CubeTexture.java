@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.CubeTexture")
+@ThreeObject("THREE.CubeTexture")
 public class CubeTexture extends Texture 
 {
 	private List<TextureData> images = new ArrayList<>();

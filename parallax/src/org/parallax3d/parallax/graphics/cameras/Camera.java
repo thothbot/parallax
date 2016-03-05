@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.cameras;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.system.ViewportResizeListener;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Matrix4;
@@ -33,7 +33,7 @@ import org.parallax3d.parallax.math.Quaternion;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.Camera")
+@ThreeObject("THREE.Camera")
 public class Camera extends Object3D implements ViewportResizeListener
 {
 	protected Matrix4 matrixWorldInverse;

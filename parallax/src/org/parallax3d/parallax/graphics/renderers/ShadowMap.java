@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.graphics.renderers.shaders.DepthRGBAShader;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
@@ -52,7 +52,7 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
 
-@ThreejsObject("THREE.WebGLExtensions")
+@ThreeObject("THREE.WebGLExtensions")
 public final class ShadowMap extends Plugin 
 {
 

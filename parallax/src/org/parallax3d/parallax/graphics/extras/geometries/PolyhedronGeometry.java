@@ -29,9 +29,9 @@ import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
-@ThreejsObject("THREE.PolyhedronGeometry")
+@ThreeObject("THREE.PolyhedronGeometry")
 public abstract class PolyhedronGeometry extends Geometry
 {
 	private Map<Integer, Map<Integer, ContainerOfVector>> midpoints;

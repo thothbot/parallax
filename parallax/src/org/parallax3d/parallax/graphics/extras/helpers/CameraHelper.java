@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.cameras.Camera;
@@ -43,7 +43,7 @@ import org.parallax3d.parallax.graphics.objects.Line;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.CameraHelper")
+@ThreeObject("THREE.CameraHelper")
 public class CameraHelper extends Line
 {
 	private Camera camera;

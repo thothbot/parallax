@@ -29,7 +29,7 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Quaternion;
 import org.parallax3d.parallax.math.Quaternion.QuaternionChangeHandler;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
 /**
  * Base class for scene objects.
@@ -37,7 +37,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.Object3D")
+@ThreeObject("THREE.Object3D")
 public class Object3D 
 {
 	public static final Vector3 DefaultUp = new Vector3( 0, 1, 0 );

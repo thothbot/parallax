@@ -19,8 +19,6 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import java.nio.Buffer;
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,7 +69,6 @@ import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Matrix3;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
@@ -83,7 +80,7 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.graphics.textures.TextureData;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.WebGLShaderPrecisionFormat;
@@ -96,7 +93,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
  */
-@ThreejsObject("THREE.WebGLRenderer")
+@ThreeObject("THREE.WebGLRenderer")
 public class GLRenderer extends Renderer
 {
 	public GL20 gl;

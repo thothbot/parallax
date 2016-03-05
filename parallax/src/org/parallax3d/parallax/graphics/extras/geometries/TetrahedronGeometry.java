@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.extras.geometries;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/tetrahedron.gif" />
@@ -28,7 +28,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.TetrahedronGeometry")
+@ThreeObject("THREE.TetrahedronGeometry")
 public class TetrahedronGeometry extends PolyhedronGeometry
 {
 	public TetrahedronGeometry( double radius, int detail )

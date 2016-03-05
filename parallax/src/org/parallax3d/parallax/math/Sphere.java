@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.math;
 
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ThreeObject;
 
 import java.util.List;
 
-@ThreejsObject("THREE.Sphere")
+@ThreeObject("THREE.Sphere")
 public class Sphere 
 {
 	private Vector3 center;
