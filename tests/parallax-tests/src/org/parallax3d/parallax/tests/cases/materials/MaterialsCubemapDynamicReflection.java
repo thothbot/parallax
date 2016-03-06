@@ -66,7 +66,7 @@ public final class MaterialsCubemapDynamicReflection extends ParallaxTest
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				this.fov, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				1000 // far 
 		); 
@@ -171,7 +171,7 @@ public final class MaterialsCubemapDynamicReflection extends ParallaxTest
 //			public void onMouseWheel(MouseWheelEvent event) {
 //				DemoScene rs = (DemoScene) renderingPanel.getAnimatedScene();
 //				rs.fov -= event.getDeltaY() * 1.0;
-//				rs.camera.getProjectionMatrix().makePerspective(rs.fov, rs.context.getRenderer().getAbsoluteAspectRation(), 1, 1100);
+//				rs.camera.getProjectionMatrix().makePerspective(rs.fov, rs.context.getAspectRation(), 1, 1100);
 //			}
 //		});
 //		

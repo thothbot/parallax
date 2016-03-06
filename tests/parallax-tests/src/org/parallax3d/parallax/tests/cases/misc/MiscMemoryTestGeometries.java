@@ -44,7 +44,7 @@ public final class MiscMemoryTestGeometries extends ParallaxTest
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				60, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				10000 // far 
 		); 

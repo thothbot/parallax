@@ -56,7 +56,7 @@ public class GeometryExtrudeShapes extends ParallaxTest
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera( 50,
-				context.getRenderer().getAbsoluteAspectRation(), 
+				context.getAspectRation(),
 				1, 
 				1000 
 			);

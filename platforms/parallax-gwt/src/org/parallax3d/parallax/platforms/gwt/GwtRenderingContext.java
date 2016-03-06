@@ -279,6 +279,11 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
     }
 
     @Override
+    public double getAspectRation() {
+        return getWidth() / (double)getHeight();
+    }
+
+    @Override
     public long getFrameId() {
         return frameId;
     }

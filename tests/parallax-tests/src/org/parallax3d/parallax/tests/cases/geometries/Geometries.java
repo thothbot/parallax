@@ -53,7 +53,7 @@ public class Geometries extends ParallaxTest
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera( 45,
-				context.getRenderer().getAbsoluteAspectRation(),
+				context.getAspectRation(),
 				1,
 				2000
 		);

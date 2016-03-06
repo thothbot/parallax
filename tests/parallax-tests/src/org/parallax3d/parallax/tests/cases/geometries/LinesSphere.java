@@ -77,7 +77,7 @@ public final class LinesSphere extends ParallaxTest implements TouchMoveHandler
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				80, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				3000 // far 
 		);

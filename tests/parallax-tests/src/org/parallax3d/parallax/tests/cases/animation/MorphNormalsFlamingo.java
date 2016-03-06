@@ -62,7 +62,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 		
 		camera = new PerspectiveCamera(
 				40, // fov
-				0.5 * context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				0.5 * context.getAspectRation(), // aspect
 				1, // near
 				10000 // far 
 		);
@@ -72,7 +72,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 //			
 //			@Override
 //			public void onResize(ViewportResizeEvent event) {
-//				camera.setAspect(0.5 * event.context.getRenderer().getAbsoluteAspectRation());
+//				camera.setAspect(0.5 * event.context.getAspectRation());
 //				
 //			}
 //		});

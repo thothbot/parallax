@@ -66,7 +66,7 @@ public final class MaterialsCubemapBallsReflection extends ParallaxTest implemen
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				60, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				100000 // far 
 		);
@@ -74,7 +74,7 @@ public final class MaterialsCubemapBallsReflection extends ParallaxTest implemen
 
 		this.cameraCube = new PerspectiveCamera(
 				60, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				100000 // far 
 		);

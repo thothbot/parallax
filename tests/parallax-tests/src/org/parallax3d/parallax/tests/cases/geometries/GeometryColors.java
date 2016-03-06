@@ -60,7 +60,7 @@ public class GeometryColors extends ParallaxTest implements TouchMoveHandler
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera( 20,
-				context.getRenderer().getAbsoluteAspectRation(), 
+				context.getAspectRation(),
 				1, 
 				10000 
 		);

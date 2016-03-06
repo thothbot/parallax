@@ -34,6 +34,8 @@ public interface RenderingContext {
 
     int getHeight();
 
+    double getAspectRation();
+
     long getFrameId();
 
     double getDeltaTime();

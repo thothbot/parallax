@@ -98,7 +98,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera( 30,
-				context.getRenderer().getAbsoluteAspectRation(), 
+				context.getAspectRation(),
 				1, 
 				10000 
 		);

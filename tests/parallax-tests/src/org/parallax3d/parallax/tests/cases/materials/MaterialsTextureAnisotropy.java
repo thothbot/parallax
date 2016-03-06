@@ -62,7 +62,7 @@ public final class MaterialsTextureAnisotropy extends ParallaxTest implements To
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				35, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				25000 // far 
 		);

@@ -118,7 +118,7 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 		scene = new Scene();
 		mainCamera = new PerspectiveCamera(
 				50, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect
+				context.getAspectRation(), // aspect
 				0.01, // near
 				1000 // far
 		);
@@ -127,7 +127,7 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 
 		splineCamera = new PerspectiveCamera(
 				84, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect
+				context.getAspectRation(), // aspect
 				0.01, // near
 				1000 // far
 		);

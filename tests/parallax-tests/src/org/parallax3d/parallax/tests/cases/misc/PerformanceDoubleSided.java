@@ -59,7 +59,7 @@ public final class PerformanceDoubleSided extends ParallaxTest implements TouchM
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				50, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				20000 // far 
 		); 

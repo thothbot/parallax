@@ -78,7 +78,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				70, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				10000 // far 
 		);

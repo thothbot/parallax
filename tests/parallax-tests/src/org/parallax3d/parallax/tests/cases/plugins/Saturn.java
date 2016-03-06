@@ -83,7 +83,7 @@ public class Saturn extends ParallaxTest
 		scene = new Scene();
 		cameraMain = new PerspectiveCamera(
 				50, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				50, // near
 				1e7 // far 
 		);

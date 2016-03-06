@@ -45,7 +45,7 @@ public final class MiscLookAt extends ParallaxTest
 	{
 		camera = new PerspectiveCamera(
 				50, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				15000 // far 
 		); 

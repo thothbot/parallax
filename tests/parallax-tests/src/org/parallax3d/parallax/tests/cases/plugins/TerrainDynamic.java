@@ -145,7 +145,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				40, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				2, // near
 				4000 // far 
 		); 

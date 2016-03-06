@@ -88,7 +88,7 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera( 70,
-				context.getRenderer().getAbsoluteAspectRation(), 
+				context.getAspectRation(),
 				1, 
 				3000 
 			);

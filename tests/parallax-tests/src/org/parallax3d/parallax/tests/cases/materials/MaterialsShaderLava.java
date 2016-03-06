@@ -62,7 +62,7 @@ public final class MaterialsShaderLava extends ParallaxTest
 
 		camera = new PerspectiveCamera(
 				35, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect
+				context.getAspectRation(), // aspect
 				1, // near
 				3000 // far
 		);

@@ -54,7 +54,7 @@ public final class GeometryHierarchy extends ParallaxTest implements TouchMoveHa
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				60, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				10000 // far 
 		);

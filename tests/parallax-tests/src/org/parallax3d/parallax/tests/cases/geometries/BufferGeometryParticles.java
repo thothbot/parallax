@@ -46,7 +46,7 @@ public final class BufferGeometryParticles extends ParallaxTest
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				27, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				5, // near
 				35000 // far 
 		);

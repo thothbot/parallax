@@ -69,7 +69,7 @@ public final class MaterialsBumpmap extends ParallaxTest implements TouchMoveHan
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				27, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect
+				context.getAspectRation(), // aspect
 				1, // near
 				10000 // far
 		);

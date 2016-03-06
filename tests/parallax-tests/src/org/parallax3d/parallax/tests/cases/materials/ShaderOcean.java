@@ -78,7 +78,7 @@ public final class ShaderOcean extends ParallaxTest {
 		
 		camera = new PerspectiveCamera(
 				55, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				0.5, // near
 				3000000 // far 
 		); 

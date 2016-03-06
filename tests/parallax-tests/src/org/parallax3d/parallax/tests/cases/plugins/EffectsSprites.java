@@ -61,7 +61,7 @@ public final class EffectsSprites extends ParallaxTest
 
 		camera = new PerspectiveCamera(
 				60, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				2100 // far 
 		);

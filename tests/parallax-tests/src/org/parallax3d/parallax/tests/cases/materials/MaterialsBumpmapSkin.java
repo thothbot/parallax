@@ -87,7 +87,7 @@ public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMov
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				27, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				10000 // far 
 		);

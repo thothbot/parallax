@@ -66,7 +66,7 @@ public final class MaterialsCubemapFresnel extends ParallaxTest implements Touch
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				60, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				100000 // far 
 		); 
@@ -75,7 +75,7 @@ public final class MaterialsCubemapFresnel extends ParallaxTest implements Touch
 		
 		this.cameraCube = new PerspectiveCamera(
 				60, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				100000 // far
 			);

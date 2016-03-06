@@ -56,7 +56,7 @@ public final class MaterialsCanvas2D extends ParallaxTest
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				45, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				2000 // far 
 		); 

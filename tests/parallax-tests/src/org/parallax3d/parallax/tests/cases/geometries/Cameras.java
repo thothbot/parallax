@@ -61,8 +61,8 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 
 	@Override
 	public void onResize(RenderingContext context) {
-		camera.setAspect(0.5 * context.getRenderer().getAbsoluteAspectRation());
-		cameraPerspective.setAspect(0.5 * context.getRenderer().getAbsoluteAspectRation());
+		camera.setAspect(0.5 * context.getAspectRation());
+		cameraPerspective.setAspect(0.5 * context.getAspectRation());
 		cameraOrtho.setSize(0.5 * context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() );
 	}
 
@@ -72,7 +72,7 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				50,
-				0.5 * context.getRenderer().getAbsoluteAspectRation(),
+				0.5 * context.getAspectRation(),
 				1,
 				10000 );
 
@@ -80,7 +80,7 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 
 		cameraPerspective = new PerspectiveCamera(
 				50,
-				context.getRenderer().getAbsoluteAspectRation() * 0.5,
+				context.getAspectRation() * 0.5,
 				150,
 				1000 );
 

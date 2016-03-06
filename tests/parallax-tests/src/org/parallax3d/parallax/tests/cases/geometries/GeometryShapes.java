@@ -68,7 +68,7 @@ public final class GeometryShapes extends ParallaxTest implements TouchMoveHandl
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				50, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				1000 // far 
 		);

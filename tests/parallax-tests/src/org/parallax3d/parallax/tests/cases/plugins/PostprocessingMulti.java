@@ -72,7 +72,7 @@ public final class PostprocessingMulti extends ParallaxTest
 		int halfWidth = context.getRenderer().getAbsoluteWidth() / 2;
 		int halfHeight = context.getRenderer().getAbsoluteHeight() / 2;
 		
-		cameraPerspective.setAspectRatio( context.getRenderer().getAbsoluteAspectRation() );
+		cameraPerspective.setAspectRatio( context.getAspectRation() );
 
 		cameraOrtho.setLeft( -halfWidth );
 		cameraOrtho.setRight( halfWidth );
@@ -107,7 +107,7 @@ public final class PostprocessingMulti extends ParallaxTest
 		cameraOrtho = new OrthographicCamera( width, height, -10000, 10000 );
 		cameraOrtho.getPosition().setZ( 100 );
 
-		cameraPerspective = new PerspectiveCamera( 50, context.getRenderer().getAbsoluteAspectRation(), 1, 10000 );
+		cameraPerspective = new PerspectiveCamera( 50, context.getAspectRation(), 1, 10000 );
 		cameraPerspective.getPosition().setZ( 900 );
 
 		//

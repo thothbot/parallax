@@ -79,7 +79,7 @@ public final class TrackballEarth extends ParallaxTest
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				25, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				50, // near
 				1e7f // far 
 		); 

@@ -66,7 +66,7 @@ public class CustomAttributesParticles extends ParallaxTest
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera( 40,
-				context.getRenderer().getAbsoluteAspectRation(), 
+				context.getAspectRation(),
 				1, 
 				10000 
 		);

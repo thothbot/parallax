@@ -60,7 +60,7 @@ public final class EffectsLensFlares extends ParallaxTest
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				40, // fov
-				context.getRenderer().getAbsoluteAspectRation(), // aspect 
+				context.getAspectRation(), // aspect
 				1, // near
 				15000 // far 
 		);
