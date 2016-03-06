@@ -3,64 +3,60 @@
 master [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=master)](https://travis-ci.org/thothbot/parallax)
 dev [![Build Status](https://travis-ci.org/thothbot/parallax.svg?branch=dev)](https://travis-ci.org/thothbot/parallax)
 
-## Parallax 2.0
-
-This is development version of Parallax library. List of features and development progress will be placed here.
-
-The main features of Parallax 2.0 will be:
-
-* Parallax will be a cross-platform library, i.e. ability to run Parallax projects everywhere.
-* Still be able to make WebGL project (GWT), but also be able to make projects for desktop (Windows, Linux, OS X), mobile(Android, iOS)
-* Full three.js back compatibility.
-* Package `thothbot` will be renamed to `org.parallax3d`
-* Parallax will use a Gradle based setup application
-
-# Parallax 1.x
-
-#### Google Web Toolkit 3D library ####
-
-<table border="0">
-   <tr>
-      <td>
-
-<img src="http://thothbot.github.com/parallax/static/logo.png" alt="Parallax" align="top"/>
-
-      </td>
-      <td>
-
-<p>
-Parallax is 3D library for the web. It is written on Java using <a href="https://developers.google.com/web-toolkit/">Google Web Toolkit</a>, 
-which is Java to JavaScript cross-compiler. GWT allows developers to write Java code and convert it to standard JavaScript during compilation.
-</p>
-
-      </td>
-   </tr>
-</table>
-
-Parallax based on [three.js](http://github.com/mrdoob/three.js) project. The most methods and objects are equivalent three.js for the back compatibility.
-
-The aim of the project is to use GWT which helps maintaining complex pieces of code, and provides better design-time support in IDEs like refactoring, validation, etc...<br/>
-
-Parallax includes:
-* WebGL renderer
-* Raytracing renderer.
-
-### Download - new Parallax v1.6 ###
-
-[Download JAR](http://github.com/thothbot/parallax/wiki/Download) | [Change log](https://github.com/thothbot/parallax/releases)
-
-### Examples ###
-
 ![Demo](http://thothbot.github.com/parallax/static/examples_banner.jpg)
 
-[Latest demo](http://thothbot.github.com/parallax/demo/index.html) | [Dev demo](http://thothbot.github.com/parallax/demo/dev/)
+### Cross-platform Java 3D SDK
 
-
-### Documentation ###
-
-Stable version [API Reference](http://thothbot.github.com/parallax/docs/index.html) 
-| Dev [API Reference](http://thothbot.github.com/parallax/docs/dev/) 
-
-[Wiki](https://github.com/thothbot/parallax/wiki) 
+[Wiki](https://github.com/thothbot/parallax/wiki)
 | [Bugs](https://github.com/thothbot/parallax/issues)
 
+**Current status of** `Parallax 2.0` is *beta*
+
+Parallax 2.0 is completely new Java 3D SDK. We wanted to make it as simple as possible.
+If you know how to use [three.js](http://github.com/mrdoob/three.js) you can start quick, because Parallax implements almost all threejs API. But also you have a set of tools and libraries to write cross-platform 3D applications.
+
+Parallax SDK allows you to write 3D application for the following platforms:
+* Browsers (GWT) - *ready*
+* Android - *in the pipeline, should be ready in Parallax 2.0*
+* Desktop Window, Linus, OS X - *future*
+
+#### Quick start
+
+We prepared Parallax SDK application template.
+Go to the [parallax-application-template](https://github.com/thothbot/parallax-application-template) project and just follow the manual to make your first Parallax application.
+
+Parallax 2.0 SDK will be in the [maven central repository](http://search.maven.org), but snapshots are located in the [sonatype repo](https://oss.sonatype.org/content/repositories/snapshots/)
+
+```xml
+<repositories>
+    <repository>
+        <id>oss-sonatype</id>
+        <name>oss-sonatype</name>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+```
+
+Parallax SDK contains the following main packages:
+* **parallax** - Parallax SDK core. should be included to all applications
+* **parallax-gwt** - Parallax for <a href="https://developers.google.com/web-toolkit/">Google Web Toolkit</a> platform, to run your 3D applications in any modern browsers.
+* **parallax-android** - Parallax for Android platform.
+* **parallax-controllers** - Cross-platform *Extension* to use mouse, trackball etc
+* **parallax-loaders** - Cross-platform *Extension* to load models, fonts etc
+* **parallax-renderer-plugins** - Cross-platform *Extension* for post-processing rendering etc
+* **parallax-renderer-raytracing-gwt** - GWT platform *Extension* for experiments in raytracing rendering
+* **parallax-renderer-css-gwt** - GWT platform *Extension* for rendering using CSS.
+
+To run Parallax 2.0 SDK GWT tests:
+
+```
+gradle :tests:parallax-tests-gwt:superDev
+```
+
+[Change log](https://github.com/thothbot/parallax/releases)
+| [1.x Download](http://github.com/thothbot/parallax/wiki/Download)
+| [1.x API Reference](http://thothbot.github.com/parallax/docs/index.html)
+| [1.x Demo](http://thothbot.github.com/parallax/demo/index.html)
