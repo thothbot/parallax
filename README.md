@@ -25,9 +25,10 @@ Parallax SDK allows you to write 3D application for the following platforms:
 We prepared Parallax SDK application template.
 Go to the [parallax-application-template](https://github.com/thothbot/parallax-application-template) project and just follow the manual to make your first Parallax application.
 
-Parallax 2.0 SDK will be in the [maven central repository](http://search.maven.org), but snapshots are located in the [sonatype repo](https://oss.sonatype.org/content/repositories/snapshots/)
+Parallax 2.0 SDK will be in the [maven central repository](http://search.maven.org), but snapshots are located in the [sonatype repo](https://oss.sonatype.org/content/repositories/snapshots/):
 
 ```xml
+<!-- pom.xml example -->
 <repositories>
     <repository>
         <id>oss-sonatype</id>
@@ -41,16 +42,16 @@ Parallax 2.0 SDK will be in the [maven central repository](http://search.maven.o
 ```
 
 Parallax SDK contains the following main packages:
-* **parallax** - Parallax SDK core. should be included to all applications
+* **parallax** - Parallax SDK core. Should be included to all applications
 * **parallax-gwt** - Parallax for <a href="https://developers.google.com/web-toolkit/">Google Web Toolkit</a> platform, to run your 3D applications in any modern browsers.
 * **parallax-android** - Parallax for Android platform.
 * **parallax-controllers** - Cross-platform *Extension* to use mouse, trackball etc
 * **parallax-loaders** - Cross-platform *Extension* to load models, fonts etc
 * **parallax-renderer-plugins** - Cross-platform *Extension* for post-processing rendering etc
-* **parallax-renderer-raytracing-gwt** - GWT platform *Extension* for experiments in raytracing rendering
 * **parallax-renderer-css-gwt** - GWT platform *Extension* for rendering using CSS.
+* **parallax-renderer-raytracing-gwt** - GWT platform *Extension* for experiments in raytracing rendering
 
-To run Parallax 2.0 SDK GWT tests:
+To launch Parallax 2.0 SDK GWT tests run:
 
 ```
 gradle :tests:parallax-tests-gwt:superDev
