@@ -35,6 +35,7 @@ import org.parallax3d.parallax.math.Mathematics;
 @ThreejsObject("THREE.PerspectiveCamera")
 public class PerspectiveCamera extends Camera implements HasNearFar
 {
+	public double focalLength = 10;
 	public double zoom = 1.0;
 
 	protected double fov;
@@ -342,6 +343,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 
 		super.clone(camera);
 
+		camera.focalLength = this.focalLength;
 		camera.zoom = this.zoom;
 
 		camera.fov = this.fov;

@@ -55,45 +55,47 @@ public class Object3D
 
 	private static int Object3DCount = 0;
 
-	protected int id = 0;
+	int id = 0;
 
-	protected String name;
+	String name;
 
-	protected Object3D parent;
+	Object3D parent;
 
-	protected ArrayList<Object3D> children;
+	ArrayList<Object3D> children;
 
-	protected Vector3 up = Object3D.DefaultUp.clone();
+	Vector3 up = Object3D.DefaultUp.clone();
 
-	protected Vector3 position;
+	Vector3 position;
 
-	protected Euler rotation;
+	Euler rotation;
 
-	protected Quaternion quaternion;
+	Quaternion quaternion;
 
-	protected Vector3 scale;
+	Vector3 scale;
 
 	private double renderDepth;
 
-	protected boolean rotationAutoUpdate;
+	boolean rotationAutoUpdate;
 
-	protected Matrix4 matrix;
+	Matrix4 matrix;
 
-	protected Matrix4 matrixWorld;
+	Matrix4 matrixWorld;
 
-	protected boolean matrixAutoUpdate;
+	boolean matrixAutoUpdate;
 
-	protected boolean matrixWorldNeedsUpdate;
+	boolean matrixWorldNeedsUpdate;
 
-	protected boolean visible;
+	Layers layers = new Layers();
 
-	protected boolean isCastShadow = false;
+	boolean visible;
 
-	protected boolean isReceiveShadow = false;
+	boolean isCastShadow = false;
 
-	protected boolean isFrustumCulled = true;
+	boolean isReceiveShadow = false;
 
-	protected ObjectHandler handler;
+	boolean isFrustumCulled = true;
+
+	ObjectHandler handler;
 
 
 	public Matrix3 _normalMatrix;
@@ -406,6 +408,14 @@ public class Object3D
 
 	public void setQuaternion(Quaternion quaternion) {
 		this.quaternion = quaternion;
+	}
+
+	public Layers getLayers() {
+		return layers;
+	}
+
+	public void setLayers(Layers layers) {
+		this.layers = layers;
 	}
 
 	/**
