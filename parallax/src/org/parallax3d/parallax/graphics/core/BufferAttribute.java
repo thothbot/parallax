@@ -25,24 +25,26 @@ import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 @ThreejsObject("THREE.BufferAttribute")
 public class BufferAttribute {
 
-	private TypeArray array;
-	private int itemSize;
-
-	// TODO: Fix it (BufferGeometry)
-	private int numItems;
-
-	private boolean needsUpdate = false;
-	private int buffer;
-
-	public BufferAttribute(TypeArray array, int itemSize) {
-		this.array = array;
-		this.itemSize = itemSize;
+	public static class UpdateRange {
+		public int offset = 0;
+		public int count = -1;
 	}
 
-	public int 	getLength () {
+	TypeArray array;
+	int itemSize;
 
-		return this.array.getLength();
+	boolean dynamic = false;
+	int version = 0;
 
+	UpdateRange updateRange;
+
+//	int buffer;
+
+	public BufferAttribute(TypeArray array, int itemSize)
+	{
+		this.array = array;
+		this.itemSize = itemSize;
+		this.updateRange = new UpdateRange();
 	}
 
 	public int getItemSize() {
@@ -57,44 +59,39 @@ public class BufferAttribute {
 		this.array = array;
 	}
 
-	/**
-	 * @return the numItems
-	 */
-	public int getNumItems() {
-		return numItems;
+	public int getCount() {
+
+		return this.array.getLength()/ this.itemSize;
+
 	}
 
-	/**
-	 * @param numItems the numItems to set
-	 */
-	public void setNumItems(int numItems) {
-		this.numItems = numItems;
+	public void setNeedsUpdate( boolean value ) {
+
+		if ( value ) this.version ++;
+
 	}
 
-	/**
-	 * @return the needsUpdate
-	 */
-	public boolean isNeedsUpdate() {
-		return needsUpdate;
+	public BufferAttribute setDynamic( boolean value ) {
+
+		this.dynamic = value;
+
+		return this;
+
 	}
 
-	public void setNeedsUpdate(boolean needsUpdate) {
-		this.needsUpdate = needsUpdate;
-	}
-
-	/**
-	 * @return the buffer
-	 */
-	public int getBuffer() {
-		return buffer;
-	}
-
-	/**
-	 * @param buffer the buffer to set
-	 */
-	public void setBuffer(int buffer) {
-		this.buffer = buffer;
-	}
+//	/**
+//	 * @return the buffer
+//	 */
+//	public int getBuffer() {
+//		return buffer;
+//	}
+//
+//	/**
+//	 * @param buffer the buffer to set
+//	 */
+//	public void setBuffer(int buffer) {
+//		this.buffer = buffer;
+//	}
 
 	public void copyAt( int index1, BufferAttribute attribute, int index2 ) {
 
@@ -185,8 +182,6 @@ public class BufferAttribute {
 
 	public String toString() {
 		return "{array: " + this.array.getLength()
-				+ ", itemSize: " + this.itemSize
-				+ ", needsUpdate: " + this.isNeedsUpdate()
-				+ ", buffer: " + this.getBuffer() + "}";
+				+ ", itemSize: " + this.itemSize + "}";
 	}
 }
