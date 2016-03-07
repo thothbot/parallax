@@ -91,7 +91,7 @@ public class BufferGeometry extends AbstractGeometry
 	{
 		super();
 
-		this.attributes = new FastMap<BufferAttribute>();
+		this.attributes = new FastMap<>();
 
 		this.setDrawcalls(new ArrayList<BufferGeometry.DrawCall>());
 

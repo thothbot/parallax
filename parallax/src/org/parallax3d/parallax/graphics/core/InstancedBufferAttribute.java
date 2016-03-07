@@ -18,11 +18,13 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 
 /**
  * @author benaadams / https://twitter.com/ben_a_adams
  */
+@ThreejsObject("THREE.InstancedBufferAttribute")
 public class InstancedBufferAttribute extends BufferAttribute {
 
     int meshPerAttribute;
@@ -46,7 +48,7 @@ public class InstancedBufferAttribute extends BufferAttribute {
     }
 
     @Override
-    public BufferAttribute clone() {
+    public InstancedBufferAttribute clone() {
         InstancedBufferAttribute instance = (InstancedBufferAttribute) super.clone();
         instance.setMeshPerAttribute(this.meshPerAttribute);
 
