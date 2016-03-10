@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.sun.prism.RenderTarget;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
@@ -96,145 +97,156 @@ import org.parallax3d.parallax.system.gl.enums.*;
 @ThreejsObject("THREE.WebGLRenderer")
 public class GLRenderer extends Renderer
 {
-	public GL20 gl;
+	GL20 gl;
 
-	private GLRendererInfo info;
+	GLRendererInfo info;
 
-	private List<Light> lights = new ArrayList<Light>();
+	List<Light> lights = new ArrayList<Light>();
 
-	public FastMap<List<GLObject>> _webglObjects =  new FastMap<List<GLObject>>();
+	List<GLObject> opaqueObjects = new ArrayList<GLObject>();
+	int opaqueObjectsLastIndex = - 1;
 
-	public List<GLObject> _webglObjectsImmediate  = new ArrayList<GLObject>();
+	List<GLObject> transparentObjects = new ArrayList<GLObject>();
+	int transparentObjectsLastIndex = - 1;
 
-	public List<GLObject> opaqueObjects = new ArrayList<GLObject>();
-	public List<GLObject> transparentObjects = new ArrayList<GLObject>();
-
-	public boolean _logarithmicDepthBuffer = false;
-
-	// ---- Properties ------------------------------------
-
-	public Shader.PRECISION _precision = Shader.PRECISION.HIGHP;
+	Float32Array morphInfluences = Float32Array.create(8);
 
 	// clearing
-	private boolean autoClearColor = true;
-	private boolean autoClearDepth = true;
-	private boolean autoClearStencil = true;
+	boolean autoClear = true;
+	boolean autoClearColor = true;
+	boolean autoClearDepth = true;
+	boolean autoClearStencil = true;
 
 	// scene graph
-	private boolean sortObjects = true;
+	boolean sortObjects = true;
 
 	// physically based shading
-	private boolean gammaInput = false;
-	private boolean gammaOutput = false;
-
-	// shadow map
-
-	//	private boolean shadowMapEnabled = false;
-//	shadowMapType = PCFShadowMap;
-	private CullFaceMode shadowMapCullFace = CullFaceMode.FRONT;
-	private boolean shadowMapDebug = false;
-	private boolean shadowMapCascade = false;
+	double gammaFactor = 2.0;	// for backwards compatibility
+	boolean gammaInput = false;
+	boolean gammaOutput = false;
 
 	// morphs
-	private int maxMorphTargets = 8;
-	private int maxMorphNormals = 4;
+	int maxMorphTargets = 8;
+	int maxMorphNormals = 4;
 
 	// flags
-	private boolean autoScaleCubemaps = true;
+	boolean autoScaleCubemaps = true;
 
 	// ---- Internal properties ----------------------------
 
-	public FastMap<Shader> _programs;
+	int _currentProgram = 0; //WebGLProgram
+	RenderTarget _currentRenderTarget = null;
+	int _currentFramebuffer = 0; //WebGLFramebuffer
+	int _currentMaterialId = -1;
+	String _currentGeometryProgram = "";
+	Camera _currentCamera = null;
 
-	private int _currentProgram = 0; //WebGLProgram
-	private int _currentFramebuffer = 0; //WebGLFramebuffer
-	private int _currentMaterialId = -1;
-	private int _currentGeometryGroupHash = -1;
-	private Camera _currentCamera = null;
+	Vector4 _currentScissor = new Vector4();
+	boolean _currentScissorTest = false;
 
-	private int _usedTextureUnits = 0;
+	Vector4 _currentViewport = new Vector4();
 
-	// GL state cache
+	int _usedTextureUnits = 0;
 
-	private Material.SIDE _oldDoubleSided = null;
-	private Material.SIDE _oldFlipSided = null;
-	private Material.SIDE cache_oldMaterialSided = null;
-
-	private Material.BLENDING _oldBlending = null;
-
-	private BlendEquationMode _oldBlendEquation = null;
-	private BlendingFactorSrc _oldBlendSrc = null;
-	private BlendingFactorDest _oldBlendDst = null;
-
-	private Boolean _oldDepthTest = null;
-	private Boolean _oldDepthWrite = null;
-
-	private Boolean _oldPolygonOffset = null;
-	private Double _oldPolygonOffsetFactor = null;
-	private Double _oldPolygonOffsetUnits = null;
-
-//	_oldLineWidth = null,
-
-	private int _viewportX = 0;
-	private int _viewportY = 0;
-	private int _viewportWidth = 0;
-	private int _viewportHeight = 0;
-	private int _currentWidth = 0;
-	private int _currentHeight = 0;
-
-	private Uint8Array _newAttributes = Uint8Array.create( 16 );
-	private Uint8Array _enabledAttributes = Uint8Array.create( 16 );
+	double _pixelRatio = 1.0;
 
 	// frustum
 	public Frustum _frustum = new Frustum();
 
-	// camera matrices cache
-
 	public Matrix4 _projScreenMatrix = new Matrix4();
-	public Matrix4 _projScreenMatrixPS = new Matrix4();
+//	public Matrix4 _projScreenMatrixPS = new Matrix4();
 
 	public Vector3 _vector3 = new Vector3();
 
-	// light arrays cache
-	private Vector3 _direction = new Vector3();
-
-	private boolean _lightsNeedUpdate = true;
-
-	private RendererLights _lights;
-
-	private List<Plugin> plugins;
-
-//	var sprites = [];
-//	var lensFlares = [];
-
-	// GPU capabilities
-	private int _maxTextures;
-	private int _maxVertexTextures;
-	private int _maxTextureSize;
-	private int _maxCubemapSize;
-
-	private boolean _supportsVertexTextures;
-	private boolean _supportsBoneTextures;
-
-	private WebGLShaderPrecisionFormat _vertexShaderPrecisionHighpFloat;
-	private WebGLShaderPrecisionFormat _vertexShaderPrecisionMediumpFloat;
-	private WebGLShaderPrecisionFormat _vertexShaderPrecisionLowpFloat;
-
-	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionHighpFloat;
-	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionMediumpFloat;
-	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionLowpFloat;
-
-//	private OESTextureFloat GLExtensionTextureFloat;
-//	private OESStandardDerivatives GLExtensionStandardDerivatives;
-//	private ExtTextureFilterAnisotropic GLExtensionTextureFilterAnisotropic;
-//	private WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC;
-
-	// clamp precision to maximum available
-	private boolean highpAvailable;
-	private boolean mediumpAvailable;
-
-	private boolean isAutoUpdateObjects = true;
-	private boolean isAutoUpdateScene = true;
+//
+//
+//	public FastMap<List<GLObject>> _webglObjects =  new FastMap<List<GLObject>>();
+//
+//	public List<GLObject> _webglObjectsImmediate  = new ArrayList<GLObject>();
+//
+//
+//	public boolean _logarithmicDepthBuffer = false;
+//
+//	public Shader.PRECISION _precision = Shader.PRECISION.HIGHP;
+//
+//	// shadow map
+//
+//	//	private boolean shadowMapEnabled = false;
+////	shadowMapType = PCFShadowMap;
+//	private CullFaceMode shadowMapCullFace = CullFaceMode.FRONT;
+//	private boolean shadowMapDebug = false;
+//	private boolean shadowMapCascade = false;
+//
+//	public FastMap<Shader> _programs;
+//
+//	private int _currentGeometryGroupHash = -1;
+//
+//	// GL state cache
+//
+//	private Material.SIDE _oldDoubleSided = null;
+//	private Material.SIDE _oldFlipSided = null;
+//	private Material.SIDE cache_oldMaterialSided = null;
+//
+//	private Material.BLENDING _oldBlending = null;
+//
+//	private BlendEquationMode _oldBlendEquation = null;
+//	private BlendingFactorSrc _oldBlendSrc = null;
+//	private BlendingFactorDest _oldBlendDst = null;
+//
+//	private Boolean _oldDepthTest = null;
+//	private Boolean _oldDepthWrite = null;
+//
+//	private Boolean _oldPolygonOffset = null;
+//	private Double _oldPolygonOffsetFactor = null;
+//	private Double _oldPolygonOffsetUnits = null;
+//
+////	_oldLineWidth = null,
+//
+//	private int _viewportX = 0;
+//	private int _viewportY = 0;
+//	private int _viewportWidth = 0;
+//	private int _viewportHeight = 0;
+//	private int _currentWidth = 0;
+//	private int _currentHeight = 0;
+//
+//	private Uint8Array _newAttributes = Uint8Array.create( 16 );
+//	private Uint8Array _enabledAttributes = Uint8Array.create( 16 );
+//
+//	// light arrays cache
+//	private Vector3 _direction = new Vector3();
+//
+//	private boolean _lightsNeedUpdate = true;
+//
+//	private RendererLights _lights;
+//
+//	private List<Plugin> plugins;
+//
+////	var sprites = [];
+////	var lensFlares = [];
+//
+//	// GPU capabilities
+//	private int _maxTextures;
+//	private int _maxVertexTextures;
+//	private int _maxTextureSize;
+//	private int _maxCubemapSize;
+//
+//	private boolean _supportsVertexTextures;
+//	private boolean _supportsBoneTextures;
+//
+//	private WebGLShaderPrecisionFormat _vertexShaderPrecisionHighpFloat;
+//	private WebGLShaderPrecisionFormat _vertexShaderPrecisionMediumpFloat;
+//	private WebGLShaderPrecisionFormat _vertexShaderPrecisionLowpFloat;
+//
+//	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionHighpFloat;
+//	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionMediumpFloat;
+//	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionLowpFloat;
+//
+//	// clamp precision to maximum available
+//	private boolean highpAvailable;
+//	private boolean mediumpAvailable;
+//
+//	private boolean isAutoUpdateObjects = true;
+//	private boolean isAutoUpdateScene = true;
 
 	/**
 	 * The constructor will create renderer for the current EGL context.
@@ -382,6 +394,23 @@ public class GLRenderer extends Renderer
 
 	public Shader.PRECISION getPrecision() {
 		return this._precision;
+	}
+
+	/**
+	 * Gets {@link #setAutoClear(boolean)} flag.
+	 */
+	public boolean isAutoClear() {
+		return autoClear;
+	}
+
+	/**
+	 * Defines whether the renderer should automatically clear its output before rendering.
+	 * Default is true.
+	 *
+	 * @param isAutoClear false or true
+	 */
+	public void setAutoClear(boolean isAutoClear) {
+		this.autoClear = isAutoClear;
 	}
 
 	/**
@@ -708,7 +737,6 @@ public class GLRenderer extends Renderer
 
 		}
 	}
-
 
 	/**
 	 * Morph Targets Buffer initialization

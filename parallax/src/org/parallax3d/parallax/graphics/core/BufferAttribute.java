@@ -38,8 +38,6 @@ public class BufferAttribute {
 
 	UpdateRange updateRange;
 
-//	int buffer;
-
 	public BufferAttribute(TypeArray array, int itemSize)
 	{
 		this.array = array;
@@ -78,20 +76,6 @@ public class BufferAttribute {
 		return this;
 
 	}
-
-//	/**
-//	 * @return the buffer
-//	 */
-//	public int getBuffer() {
-//		return buffer;
-//	}
-//
-//	/**
-//	 * @param buffer the buffer to set
-//	 */
-//	public void setBuffer(int buffer) {
-//		this.buffer = buffer;
-//	}
 
 	public void copyAt( int index1, BufferAttribute attribute, int index2 ) {
 
