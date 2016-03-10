@@ -32,6 +32,38 @@ public class Mathematics
 {
 	public static double EPSILON =  Math.pow( 2.0, -52.0 );
 
+	public static String generateUUID() {
+
+		// http://www.broofa.com/Tools/Math.uuid.htm
+
+		String[] chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split( "" );
+		String[] uuid = new String[36];
+		int rnd = 0, r;
+
+		for ( int i = 0; i < 36; i ++ ) {
+
+			if ( i == 8 || i == 13 || i == 18 || i == 23 ) {
+
+				uuid[ i ] = "-";
+
+			} else if ( i == 14 ) {
+
+				uuid[ i ] = "4";
+
+			} else {
+
+				if ( rnd <= 0x02 ) rnd = 0x2000000 + ((int)Math.random() * 0x1000000);
+				r = rnd & 0xf;
+				rnd = rnd >> 4;
+				uuid[ i ] = chars[ ( i == 19 ) ? ( r & 0x3 ) | 0x8 : r ];
+
+			}
+
+		}
+
+		return String.join("", uuid);
+	}
+
 	/**
 	 * The method clamps the scalar x to range &#60;a, b&#62;.
 	 *
