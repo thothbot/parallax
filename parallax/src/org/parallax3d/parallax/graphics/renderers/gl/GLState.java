@@ -345,8 +345,11 @@ public class GLState
     public void setDepthTest( boolean depthTest ) {
 
         if ( depthTest )
+
             this.enable(EnableCap.DEPTH_TEST.getValue());
+
         else
+
             this.disable(EnableCap.DEPTH_TEST.getValue());
 
     }
@@ -412,15 +415,18 @@ public class GLState
     public void setStencilTest( boolean stencilTest ) {
 
         if ( stencilTest )
+
             this.enable(EnableCap.STENCIL_TEST.getValue());
+
         else
+
             this.disable(EnableCap.STENCIL_TEST.getValue());
 
     }
 
     public void setStencilWrite( int stencilWrite ) {
 
-    // TODO: Rename to setStencilMask
+        // TODO: Rename to setStencilMask
 
         if ( currentStencilWrite != stencilWrite ) {
 

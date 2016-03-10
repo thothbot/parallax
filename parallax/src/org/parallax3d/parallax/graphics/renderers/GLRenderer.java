@@ -27,6 +27,8 @@ import java.util.List;
 
 import com.sun.prism.RenderTarget;
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.renderers.gl.GLCapabilities;
+import org.parallax3d.parallax.graphics.renderers.gl.GLState;
 import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
@@ -248,6 +250,10 @@ public class GLRenderer extends Renderer
 //	private boolean isAutoUpdateObjects = true;
 //	private boolean isAutoUpdateScene = true;
 
+	GLCapabilities capabilities;
+
+	GLState state;
+
 	/**
 	 * The constructor will create renderer for the current EGL context.
 	 *
@@ -259,6 +265,9 @@ public class GLRenderer extends Renderer
 		this.gl = gl;
 
 		this.setInfo(new GLRendererInfo());
+
+		this.capabilities = new GLCapabilities(gl);
+		this.state = new GLState(gl);
 
 		this._lights           = new RendererLights();
 		this._programs         = new FastMap<Shader>();
