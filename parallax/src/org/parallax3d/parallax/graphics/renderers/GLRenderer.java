@@ -102,6 +102,16 @@ public class GLRenderer extends Renderer
 
 	GLRendererInfo info;
 
+	List<Plugin> plugins;
+
+	GLCapabilities capabilities;
+
+	GLState state;
+	GLProperties properties;
+	GLObjects objects;
+	GLPrograms programCache;
+	GLLights lightCache;
+
 	List<Light> lights = new ArrayList<Light>();
 
 	List<GLObject> opaqueObjects = new ArrayList<GLObject>();
@@ -159,103 +169,6 @@ public class GLRenderer extends Renderer
 
 	public Vector3 _vector3 = new Vector3();
 
-//
-//
-//	public FastMap<List<GLObject>> _webglObjects =  new FastMap<List<GLObject>>();
-//
-//	public List<GLObject> _webglObjectsImmediate  = new ArrayList<GLObject>();
-//
-//
-//	public boolean _logarithmicDepthBuffer = false;
-//
-//	public Shader.PRECISION _precision = Shader.PRECISION.HIGHP;
-//
-//	// shadow map
-//
-//	//	private boolean shadowMapEnabled = false;
-////	shadowMapType = PCFShadowMap;
-//	private CullFaceMode shadowMapCullFace = CullFaceMode.FRONT;
-//	private boolean shadowMapDebug = false;
-//	private boolean shadowMapCascade = false;
-//
-//	public FastMap<Shader> _programs;
-//
-//	private int _currentGeometryGroupHash = -1;
-//
-//	// GL state cache
-//
-//	private Material.SIDE _oldDoubleSided = null;
-//	private Material.SIDE _oldFlipSided = null;
-//	private Material.SIDE cache_oldMaterialSided = null;
-//
-//	private Material.BLENDING _oldBlending = null;
-//
-//	private BlendEquationMode _oldBlendEquation = null;
-//	private BlendingFactorSrc _oldBlendSrc = null;
-//	private BlendingFactorDest _oldBlendDst = null;
-//
-//	private Boolean _oldDepthTest = null;
-//	private Boolean _oldDepthWrite = null;
-//
-//	private Boolean _oldPolygonOffset = null;
-//	private Double _oldPolygonOffsetFactor = null;
-//	private Double _oldPolygonOffsetUnits = null;
-//
-////	_oldLineWidth = null,
-//
-//	private int _viewportX = 0;
-//	private int _viewportY = 0;
-//	private int _viewportWidth = 0;
-//	private int _viewportHeight = 0;
-//	private int _currentWidth = 0;
-//	private int _currentHeight = 0;
-//
-//	private Uint8Array _newAttributes = Uint8Array.create( 16 );
-//	private Uint8Array _enabledAttributes = Uint8Array.create( 16 );
-//
-//	// light arrays cache
-//	private Vector3 _direction = new Vector3();
-//
-//	private boolean _lightsNeedUpdate = true;
-//
-//	private RendererLights _lights;
-//
-//	private List<Plugin> plugins;
-//
-////	var sprites = [];
-////	var lensFlares = [];
-//
-//	// GPU capabilities
-//	private int _maxTextures;
-//	private int _maxVertexTextures;
-//	private int _maxTextureSize;
-//	private int _maxCubemapSize;
-//
-//	private boolean _supportsVertexTextures;
-//	private boolean _supportsBoneTextures;
-//
-//	private WebGLShaderPrecisionFormat _vertexShaderPrecisionHighpFloat;
-//	private WebGLShaderPrecisionFormat _vertexShaderPrecisionMediumpFloat;
-//	private WebGLShaderPrecisionFormat _vertexShaderPrecisionLowpFloat;
-//
-//	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionHighpFloat;
-//	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionMediumpFloat;
-//	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionLowpFloat;
-//
-//	// clamp precision to maximum available
-//	private boolean highpAvailable;
-//	private boolean mediumpAvailable;
-//
-//	private boolean isAutoUpdateObjects = true;
-//	private boolean isAutoUpdateScene = true;
-
-	GLCapabilities capabilities;
-
-	GLState state;
-	GLProperties properties;
-	GLObjects objects;
-	GLPrograms programCache;
-
 	/**
 	 * The constructor will create renderer for the current EGL context.
 	 *
@@ -266,21 +179,19 @@ public class GLRenderer extends Renderer
 	{
 		this.gl = gl;
 
-		this.setInfo(new GLRendererInfo());
+		this.plugins = new ArrayList<>();
+
+		this.info = new GLRendererInfo();
 
 		this.capabilities = new GLCapabilities(gl);
 		this.state = new GLState(gl);
 		this.properties = new GLProperties();
 		this.objects = new GLObjects(gl, this.properties);
 		this.programCache = new GLPrograms(this, this.capabilities);
+		this.lightCache = new GLLights();
 
 		this._lights           = new RendererLights();
 		this._programs         = new FastMap<Shader>();
-
-		this._maxTextures       = this.getIntGlParam(GL20.GL_MAX_TEXTURE_IMAGE_UNITS);
-		this._maxVertexTextures = this.getIntGlParam(GL20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-		this._maxTextureSize    = this.getIntGlParam(GL20.GL_MAX_TEXTURE_SIZE);
-		this._maxCubemapSize    = this.getIntGlParam(GL20.GL_MAX_CUBE_MAP_TEXTURE_SIZE);
 
 		this._supportsVertexTextures = ( this._maxVertexTextures > 0 );
 		this._supportsBoneTextures = this._supportsVertexTextures && GLExtensions.isSupported(gl, GLES20Ext.List.OES_texture_float);
@@ -561,10 +472,6 @@ public class GLRenderer extends Renderer
 	 */
 	public GLRendererInfo getInfo() {
 		return info;
-	}
-
-	private void setInfo(GLRendererInfo info) {
-		this.info = info;
 	}
 
 	public void setDefaultGLState()
