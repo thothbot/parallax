@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.renderers;
+package org.parallax3d.parallax.graphics.renderers.gl;
 
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;

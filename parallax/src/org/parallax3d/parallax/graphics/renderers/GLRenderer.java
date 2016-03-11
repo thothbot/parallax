@@ -89,7 +89,6 @@ import org.parallax3d.parallax.system.gl.WebGLShaderPrecisionFormat;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
-import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 import org.parallax3d.parallax.system.gl.enums.*;
 
 /**
@@ -111,6 +110,9 @@ public class GLRenderer extends Renderer
 	GLObjects objects;
 	GLPrograms programCache;
 	GLLights lightCache;
+
+	GLBufferRenderer bufferRenderer;
+	GLIndexedBufferRenderer indexedBufferRenderer;
 
 	List<Light> lights = new ArrayList<Light>();
 
@@ -159,13 +161,23 @@ public class GLRenderer extends Renderer
 
 	int _usedTextureUnits = 0;
 
+	Color _clearColor = new Color( 0x000000 );
+	double _clearAlpha = 0.;
+
+	int _width = 0;
+	int _height = 0;
+
 	double _pixelRatio = 1.0;
+
+	Vector4 _scissor;
+	boolean _scissorTest = false;
+
+	Vector4 _viewport;
 
 	// frustum
 	public Frustum _frustum = new Frustum();
 
 	public Matrix4 _projScreenMatrix = new Matrix4();
-//	public Matrix4 _projScreenMatrixPS = new Matrix4();
 
 	public Vector3 _vector3 = new Vector3();
 
@@ -189,6 +201,9 @@ public class GLRenderer extends Renderer
 		this.objects = new GLObjects(gl, this.properties);
 		this.programCache = new GLPrograms(this, this.capabilities);
 		this.lightCache = new GLLights();
+
+		this.bufferRenderer = new GLBufferRenderer(gl, this.info);
+		this.indexedBufferRenderer = new GLIndexedBufferRenderer(gl, this.info);
 
 		this._lights           = new RendererLights();
 		this._programs         = new FastMap<Shader>();
