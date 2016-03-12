@@ -21,13 +21,12 @@ package org.parallax3d.parallax.graphics.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
@@ -69,7 +68,7 @@ public abstract class GeometryObject extends Object3D
 
 	/**
 	 * Abstract method to get intersections between a casted ray and this object.
-	 * Subclasses such as {@link Mesh}, {@link Line}, and {@link PointCloud} implement this method in order to participate in raycasting.
+	 * Subclasses such as {@link Mesh}, {@link Line}, and {@link Points} implement this method in order to participate in raycasting.
 	 * @param raycaster
 	 * @param intersects
 	 */

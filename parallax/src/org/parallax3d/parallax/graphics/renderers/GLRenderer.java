@@ -23,8 +23,10 @@ import java.util.*;
 
 import com.sun.prism.RenderTarget;
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.objects.*;
 import org.parallax3d.parallax.graphics.renderers.gl.*;
-import org.parallax3d.parallax.system.ViewportResizeBus;
+import org.parallax3d.parallax.system.*;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
@@ -35,21 +37,9 @@ import org.parallax3d.parallax.graphics.textures.CompressedTexture;
 import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.math.Frustum;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.objects.Line;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
-import org.parallax3d.parallax.graphics.objects.SkinnedMesh;
 import org.parallax3d.parallax.graphics.textures.DataTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.cameras.HasNearFar;
-import org.parallax3d.parallax.graphics.core.AbstractGeometry;
-import org.parallax3d.parallax.graphics.core.BufferAttribute;
-import org.parallax3d.parallax.graphics.core.BufferGeometry;
-import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawCall;
-import org.parallax3d.parallax.graphics.core.Face3;
-import org.parallax3d.parallax.graphics.core.Geometry;
-import org.parallax3d.parallax.graphics.core.GeometryGroup;
-import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.lights.Light;
@@ -71,14 +61,11 @@ import org.parallax3d.parallax.math.Matrix3;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector4;
-import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.AbstractFog;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 
-import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.graphics.textures.TextureData;
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.GLHelpers;
@@ -219,6 +206,12 @@ public class GLRenderer extends Renderer
 		this.indexedBufferRenderer = new GLIndexedBufferRenderer(gl, this.info);
 
 		setDefaultGLState();
+	}
+
+	public double getTargetPixelRatio() {
+
+		return _currentRenderTarget == null ? _pixelRatio : 1.;
+
 	}
 
 	/**
@@ -717,7 +710,7 @@ public class GLRenderer extends Renderer
 
 		}
 
-		int index = geometry.getIndex();
+		AttributeData index = geometry.getIndex();
 		BufferAttribute position = geometry.getAttribute("position");
 
 		if ( material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ) {
@@ -726,201 +719,100 @@ public class GLRenderer extends Renderer
 
 		}
 
-		if ( object instanceof Mesh )
+		BufferRenderer renderer;
+
+		if(index == null)
 		{
-			BeginMode mode = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? BeginMode.LINES : BeginMode.TRIANGLES;
+			renderer = indexedBufferRenderer;
+			((GLIndexedBufferRenderer)renderer).setIndex( index );
+		}
+		else
+		{
+			renderer = bufferRenderer;
+		}
 
-			BufferAttribute index = geometry.getAttribute("index");
+		if ( updateBuffers ) {
 
-			if(index != null)
-			{
-				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
-				int size = 2;
+			setupVertexAttributes( material, program, geometry );
 
-				List<BufferGeometry.DrawCall> offsets = geometry.getDrawcalls();
+			if ( index != null ) {
 
-				if ( offsets.size() == 0 ) {
-
-					if ( updateBuffers ) {
-
-						setupVertexAttributes( material, program, geometry, 0 );
-
-						this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
-
-					}
-
-					this.gl.glDrawElements(mode.getValue(), index.getArray().getLength(), type.getValue(), 0);
-
-					this.info.getRender().calls ++;
-					this.info.getRender().vertices +=
-							index.getArray().getLength(); // not really true, here vertices can be shared
-					this.info.getRender().faces += index.getArray().getLength() / 3;
-
-				} else {
-					// if there is more than 1 chunk
-					// must set attribute pointers to use new offsets for each chunk
-					// even if geometry and materials didn't change
-
-					updateBuffers = true;
-
-					for ( int i = 0, il = offsets.size(); i < il; ++ i )
-					{
-
-						int startIndex = offsets.get( i ).index;
-
-						if ( updateBuffers ) {
-
-							setupVertexAttributes( material, program, geometry, startIndex );
-							this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
-
-						}
-
-						this.gl.glDrawElements( mode.getValue(), offsets.get( i ).count, type.getValue(), offsets.get( i ).start * size  );
-
-						getInfo().getRender().calls ++;
-						getInfo().getRender().vertices +=
-								offsets.get( i ).count; // not really true, here vertices can be shared
-						getInfo().getRender().faces += offsets.get( i ).count / 3;
-					}
-
-				}
-
-			}
-			else
-			{
-
-				// non-indexed triangles
-
-				if ( updateBuffers ) {
-
-					setupVertexAttributes( material, program, geometry, 0 );
-
-				}
-
-				BufferAttribute position = geometry.getAttribute("position");
-
-				// render non-indexed triangles
-
-				this.gl.glDrawArrays( mode.getValue(), 0, position.getArray().getLength() / 3 );
-
-				this.info.getRender().calls ++;
-				this.info.getRender().vertices += position.getArray().getLength() / 3;
-				this.info.getRender().faces += position.getArray().getLength() / 9;
+				gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), objects.getAttributeBuffer( index ) );
 
 			}
 
 		}
-		else if ( object instanceof PointCloud )
+
+		int dataStart = 0;
+		int dataCount = Integer.MAX_VALUE;
+
+		if ( index != null ) {
+
+			dataCount = index.count;
+
+		} else if ( position != null ) {
+
+			dataCount = position.count;
+
+		}
+
+		int rangeStart = geometry.getDrawRange().start;
+		int rangeCount = geometry.getDrawRange().count;
+
+		int groupStart = group != null ? group.start : 0;
+		int groupCount = group != null ? group.count : Integer.MAX_VALUE;
+
+		int drawStart = Math.max( Math.max( dataStart, rangeStart), groupStart );
+		int drawEnd = Math.min( Math.min( dataStart + dataCount, rangeStart + rangeCount), groupStart + groupCount ) - 1;
+
+		int drawCount = Math.max( 0, drawEnd - drawStart + 1 );
+
+		if ( object instanceof Mesh )
 		{
-			// render particles
+			if ( material instanceof HasWireframe && ((HasWireframe)material).isWireframe())
+			{
 
-			if ( updateBuffers ) {
+				state.setLineWidth( ((HasWireframe)material).getWireframeLineWidth() * getTargetPixelRatio() );
+				renderer.setMode( BeginMode.LINES );
 
-				setupVertexAttributes( material, program, geometry, 0 );
+			} else {
+
+				renderer.setMode( ((Mesh)object).getDrawMode() );
 
 			}
 
-			BufferAttribute position = geometry.getAttribute("position");
-
-			// render particles
-
-			this.gl.glDrawArrays( BeginMode.POINTS.getValue(), 0, position.getArray().getLength() / 3 );
-
-			this.info.getRender().calls ++;
-			this.info.getRender().points += position.getArray().getLength() / 3;
 		}
 		else if ( object instanceof Line )
 		{
 
-			BeginMode mode = ( ((Line)object).getMode() == Line.MODE.STRIPS ) ? BeginMode.LINE_STRIP : BeginMode.LINES;
-			object.setLineWidth(this.gl, ((LineBasicMaterial)material).getLinewidth());
+			double lineWidth = material instanceof LineBasicMaterial
+					? ((LineBasicMaterial)material).getLinewidth() : 1.;
 
-			BufferAttribute index = geometry.getAttribute("index");
+			state.setLineWidth( lineWidth * getTargetPixelRatio() );
 
-			if ( index != null ) {
+			if ( object instanceof LineSegments) {
 
-				// indexed lines
-
-//				var type, size;
-
-//				if ( index.array instanceof Uint32Array ) {
-//
-//					type = _gl.UNSIGNED_INT;
-//					size = 4;
-//
-//				} else {
-
-				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
-				int size = 2;
-
-//				}
-
-				List<DrawCall> drawcalls = geometry.getDrawcalls();
-
-				if ( drawcalls.size() == 0 ) {
-
-					if ( updateBuffers ) {
-
-						setupVertexAttributes( material, program, geometry, 0 );
-						this.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
-
-					}
-
-					this.gl.glDrawElements( mode.getValue(), index.getArray().getLength(), type.getValue(), 0 ); // 2 bytes per Uint16Array
-
-					this.info.getRender().calls ++;
-					this.info.getRender().vertices +=
-							index.getArray().getLength(); // not really true, here vertices can be shared
-
-				} else {
-
-					// if there is more than 1 chunk
-					// must set attribute pointers to use new offsets for each chunk
-					// even if geometry and materials didn't change
-
-					if ( drawcalls.size() > 1 ) updateBuffers = true;
-
-					for ( int i = 0, il = drawcalls.size(); i < il; i ++ ) {
-
-						int startIndex = drawcalls.get( i ).index;
-
-						if ( updateBuffers ) {
-
-							setupVertexAttributes( material, program, geometry, startIndex );
-							this.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
-
-						}
-
-						// render indexed lines
-
-						this.gl.glDrawElements( mode.getValue(), drawcalls.get( i ).count, type.getValue(), drawcalls.get( i ).start * size ); // 2 bytes per Uint16Array
-
-						this.info.getRender().calls ++;
-						this.info.getRender().vertices +=
-								drawcalls.get( i ).count; // not really true, here vertices can be shared
-
-					}
-
-				}
+				renderer.setMode( BeginMode.LINES );
 
 			} else {
 
-				// non-indexed lines
-
-				if ( updateBuffers ) {
-
-					setupVertexAttributes( material, program, geometry, 0 );
-
-				}
-
-				BufferAttribute position = geometry.getAttribute("position");
-
-				this.gl.glDrawArrays( mode.getValue(), 0,  position.getArray().getLength() / 3 );
-
-				this.info.getRender().calls ++;
-				this.info.getRender().points += position.getArray().getLength() / 3;
+				renderer.setMode( BeginMode.LINE_STRIP );
 
 			}
+		}
+		else if ( object instanceof Points)
+		{
+			renderer.setMode( BeginMode.POINTS );
+		}
+
+		if ( geometry instanceof InstancedBufferGeometry && ((InstancedBufferGeometry)geometry).getMaxInstancedCount() > 0 ) {
+
+			renderer.renderInstances((InstancedBufferGeometry) geometry, drawStart, drawCount );
+
+		} else {
+
+			renderer.render( drawStart, drawCount );
+
 		}
 	}
 
@@ -1294,12 +1186,12 @@ public class GLRenderer extends Renderer
 
 				}
 
-			} else if ( object instanceof PointCloud ) {
+			} else if ( object instanceof Points) {
 
 				if ( geometry.__webglVertexBuffer == 0 ) {
 
-					((PointCloud)object).createBuffers(this);
-					((PointCloud)object).initBuffers(this.gl);
+					((Points)object).createBuffers(this);
+					((Points)object).initBuffers(this.gl);
 
 					geometry.setVerticesNeedUpdate( true );
 					geometry.setColorsNeedUpdate( true );
@@ -1333,7 +1225,7 @@ public class GLRenderer extends Renderer
 
 				}
 
-			} else if ( object instanceof Line || object instanceof PointCloud ) {
+			} else if ( object instanceof Line || object instanceof Points) {
 
 				addBuffer( geometry, (GeometryObject) object );
 
@@ -1538,7 +1430,7 @@ public class GLRenderer extends Renderer
 			}
 
 
-		} else if ( object instanceof PointCloud ) {
+		} else if ( object instanceof Points) {
 
 			material = getBufferMaterial( object, (Geometry)geometry );
 
@@ -1546,9 +1438,9 @@ public class GLRenderer extends Renderer
 					material.getShader().areCustomAttributesDirty();
 
 			if ( geometry.isVerticesNeedUpdate() || geometry.isColorsNeedUpdate() ||
-					((PointCloud)object).isSortParticles() || customAttributesDirty ) {
+					((Points)object).isSortParticles() || customAttributesDirty ) {
 
-				((PointCloud)object).setBuffers( this, BufferUsage.DYNAMIC_DRAW );
+				((Points)object).setBuffers( this, BufferUsage.DYNAMIC_DRAW );
 
 			}
 

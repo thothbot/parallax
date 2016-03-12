@@ -27,7 +27,7 @@ import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.objects.Bone;
 import org.parallax3d.parallax.graphics.objects.Line;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 
@@ -180,7 +180,7 @@ public class Geometry extends AbstractGeometry
 	/**
 	 * Gets List of vertex {@link Color}s, matching number and order of vertices.
 	 * <p>
-	 * Used in {@link PointCloud}, {@link Line}.<br>
+	 * Used in {@link Points}, {@link Line}.<br>
 	 * {@link Mesh}es use per-face-use-of-vertex colors embedded directly in faces.
 	 * To signal an update in this array, Geometry.colorsNeedUpdate needs to be set to true.
 	 */

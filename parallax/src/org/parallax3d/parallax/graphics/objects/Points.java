@@ -20,7 +20,6 @@ package org.parallax3d.parallax.graphics.objects;
 
 import java.util.List;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
@@ -29,7 +28,7 @@ import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
-import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawCall;
+import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawRange;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.math.Matrix4;
@@ -42,7 +41,7 @@ import org.parallax3d.parallax.system.gl.enums.BeginMode;
 import org.parallax3d.parallax.system.gl.enums.BufferTarget;
 import org.parallax3d.parallax.system.gl.enums.BufferUsage;
 
-public class PointCloud extends GeometryObject
+public class Points extends GeometryObject
 {
 	public static double RAYCASTER_THRESHOLD = 1.0;
 
@@ -53,16 +52,16 @@ public class PointCloud extends GeometryObject
 		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 	};
 
-	public PointCloud() {
+	public Points() {
 		this(new Geometry());
 	}
 
-	public PointCloud(AbstractGeometry geometry)
+	public Points(AbstractGeometry geometry)
 	{
-		this(geometry, PointCloud.defaultMaterial);
+		this(geometry, Points.defaultMaterial);
 	}
 
-	public PointCloud(AbstractGeometry geometry, Material material)
+	public Points(AbstractGeometry geometry, Material material)
 	{
 		super(geometry, material);
 	}
@@ -105,11 +104,11 @@ public class PointCloud extends GeometryObject
 			if ( bGeometry.getAttribute("index") != null ) {
 
 				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
-				List<DrawCall> offsets = bGeometry.getDrawcalls();
+				List<DrawRange> offsets = bGeometry.getDrawcalls();
 
 				if ( offsets.size() == 0 ) {
 
-					BufferGeometry.DrawCall offset = new BufferGeometry.DrawCall(0, indices.getLength(), 0 );
+					DrawRange offset = new DrawRange(0, indices.getLength(), 0 );
 
 					offsets.add( offset );
 
@@ -185,11 +184,11 @@ public class PointCloud extends GeometryObject
 		}
 	}
 
-	public PointCloud clone() {
-		return clone(new PointCloud( this.getGeometry(), this.getMaterial() ));
+	public Points clone() {
+		return clone(new Points( this.getGeometry(), this.getMaterial() ));
 	}
 
-	public PointCloud clone( PointCloud object ) {
+	public Points clone(Points object ) {
 
 		super.clone(object);
 

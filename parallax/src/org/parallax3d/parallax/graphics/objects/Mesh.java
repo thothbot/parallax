@@ -64,6 +64,8 @@ import org.parallax3d.parallax.system.gl.enums.DrawElementsType;
 @ThreejsObject("THREE.Mesh")
 public class Mesh extends GeometryObject
 {
+	BeginMode drawMode = BeginMode.TRIANGLES;
+
 	//	private Boolean overdraw;
 	public Integer morphTargetBase = null;
 	public List<Double> morphTargetInfluences;
@@ -101,6 +103,10 @@ public class Mesh extends GeometryObject
 		super(geometry, material);
 
 		this.updateMorphTargets();
+	}
+
+	public BeginMode getDrawMode() {
+		return drawMode;
 	}
 
 	public void updateMorphTargets() {
@@ -170,11 +176,11 @@ public class Mesh extends GeometryObject
 
 				Uint16Array indices = (Uint16Array)bGeometry.getAttribute("index").getArray();
 				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
-				List<BufferGeometry.DrawCall> offsets = bGeometry.getDrawcalls();
+				List<BufferGeometry.DrawRange> offsets = bGeometry.getDrawcalls();
 
 				if ( offsets.size() == 0 )
 				{
-					offsets.add(new BufferGeometry.DrawCall(0, indices.getLength(), 0));
+					offsets.add(new BufferGeometry.DrawRange(0, indices.getLength(), 0));
 				}
 
 				for ( int oi = 0, ol = offsets.size(); oi < ol; ++oi )

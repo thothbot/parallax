@@ -30,7 +30,7 @@ import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.renderers.shaders.NormalMapShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -213,7 +213,7 @@ public final class TrackballEarth extends ParallaxTest
 
 		for ( int i = 10; i < 30; i ++ ) 
 		{
-			PointCloud stars = new PointCloud( starsGeometry, starsMaterials.get( i % 6 ) );
+			Points stars = new Points( starsGeometry, starsMaterials.get( i % 6 ) );
 
 			stars.getRotation().setX( Math.random() * 6.0 );
 			stars.getRotation().setY( Math.random() * 6.0 );

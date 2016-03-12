@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.tests.cases.geometries;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
@@ -30,7 +29,7 @@ import org.parallax3d.parallax.graphics.extras.helpers.CameraHelper;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.input.KeyDownHandler;
 import org.parallax3d.parallax.math.Color;
@@ -144,7 +143,7 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 			geometry.getVertices().add( vertex );
 		}
 
-		PointCloud particles = new PointCloud( geometry, new PointCloudMaterial().setColor( 0x888888 ) );
+		Points particles = new Points( geometry, new PointCloudMaterial().setColor( 0x888888 ) );
 		scene.add( particles );
 
 		//

@@ -24,7 +24,7 @@ import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
@@ -61,7 +61,7 @@ public class CustomAttributesParticles2 extends ParallaxTest
 	Scene scene;
 	PerspectiveCamera camera;
 	FastMap<Attribute> attributes;
-	PointCloud sphere;
+	Points sphere;
 	int vc1;
 
 	@Override
@@ -103,7 +103,7 @@ public class CustomAttributesParticles2 extends ParallaxTest
 		BoxGeometry geometry2 = new BoxGeometry( 0.8 * radius, 0.8 * radius, 0.8 * radius, 10, 10, 10 );
 		geometry.merge( geometry2, null );
 	
-		this.sphere = new PointCloud( geometry, shaderMaterial );
+		this.sphere = new Points( geometry, shaderMaterial );
 		this.sphere.setSortParticles(true);
 	
 		List<Vector3> vertices = ((Geometry)sphere.getGeometry()).getVertices();

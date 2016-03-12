@@ -199,7 +199,7 @@ public final class BufferGeometryDemo extends ParallaxTest
 
 		for ( int i = 0; i < offsets; i ++ ) {
 
-			BufferGeometry.DrawCall drawcall = new BufferGeometry.DrawCall(
+			BufferGeometry.DrawRange drawcall = new BufferGeometry.DrawRange(
 					i * chunkSize * 3, // start
 					Math.min( triangles - ( i * chunkSize ), chunkSize ) * 3, // count
 					i * chunkSize * 3 //index

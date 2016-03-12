@@ -33,7 +33,7 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.Color;
@@ -392,7 +392,7 @@ public final class GeometryShapes extends ParallaxTest implements TouchMoveHandl
 				.setOpacity(0.75);
 		
 		Geometry pgeo1 = points.clone();
-		PointCloud particles = new PointCloud( pgeo1, particleMat );
+		Points particles = new Points( pgeo1, particleMat );
 		particles.getPosition().set( x, y, z + 75.0 );
 		particles.getRotation().set( rx, ry, rz );
 		particles.getScale().set( s );
@@ -418,7 +418,7 @@ public final class GeometryShapes extends ParallaxTest implements TouchMoveHandl
 				.setOpacity(0.5);
 		
 		Geometry pgeo2 = spacedPoints.clone();
-		PointCloud particles2 = new PointCloud( pgeo2, particles2Mat );
+		Points particles2 = new Points( pgeo2, particles2Mat );
 		particles2.getPosition().set( x, y, z + 100.0 );
 		particles2.getRotation().set( rx, ry, rz );
 		particles2.getScale().set( s );

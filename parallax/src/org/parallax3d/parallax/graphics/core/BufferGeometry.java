@@ -38,7 +38,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This class is an efficient alternative to {@link Geometry}, because it stores all data, including vertex positions, 
@@ -72,16 +71,14 @@ public class BufferGeometry extends AbstractGeometry
 {
 	public static long MaxIndex = 65535;
 
-	public static class DrawCall
+	public static class DrawRange
 	{
 		public int start;
 		public int count;
-		public int index;
 
-		public DrawCall(int start, int count, int index) {
+		public DrawRange(int start, int count) {
 			this.start = start;
 			this.count = count;
-			this.index = index;
 		}
 	}
 
@@ -89,7 +86,7 @@ public class BufferGeometry extends AbstractGeometry
 	private FastMap<BufferAttribute> attributes = new FastMap<>();
 	private FastMap<List<BufferAttribute>> morphAttributes = new FastMap<>();
 
-	private List<BufferGeometry.DrawCall> drawcalls = new ArrayList<>();
+	private DrawRange drawRange = new DrawRange(0, Integer.MAX_VALUE);
 
 	public BufferGeometry()
 	{
@@ -164,25 +161,19 @@ public class BufferGeometry extends AbstractGeometry
 	 * This may be necessary if, for instance, you have more than 65535 vertices in your object.
 	 * @return
 	 */
-	public List<BufferGeometry.DrawCall> getDrawcalls() {
-		return drawcalls;
+	public DrawRange getDrawRange() {
+		return drawRange;
 	}
 
 	/**
-	 * @param drawcalls the drawcalls to set
+	 * @param drawRange the drawcalls to set
 	 */
-	public void setDrawcalls(List<BufferGeometry.DrawCall> drawcalls) {
-		this.drawcalls = drawcalls;
+	public void setDrawRange(DrawRange drawRange) {
+		this.drawRange = drawRange;
 	}
 
 	public void addDrawCall( int start, int count ) {
-		addDrawCall(start, count, 0);
-	}
-
-	public void addDrawCall( int start, int count, int indexOffset ) {
-
-		DrawCall drawCall = new DrawCall(start, count, indexOffset);
-		this.getDrawcalls().add(drawCall);
+		drawRange = new DrawRange(start, count);
 	}
 
 	/**
@@ -506,9 +497,9 @@ public class BufferGeometry extends AbstractGeometry
 
 				Uint16Array indices = (Uint16Array) getAttribute("index").getArray();
 
-				List<BufferGeometry.DrawCall> offsets = this.drawcalls.size() > 0
-						? this.drawcalls
-						: Arrays.asList( new BufferGeometry.DrawCall(0, indices.getLength(), 0 ) ) ;
+				List<DrawRange> offsets = this.drawRange.size() > 0
+						? this.drawRange
+						: Arrays.asList( new DrawRange(0, indices.getLength(), 0 ) ) ;
 
 				for ( int j = 0, jl = offsets.size(); j < jl; ++ j ) {
 
@@ -628,13 +619,13 @@ public class BufferGeometry extends AbstractGeometry
 
 		Float32Array tangents = (Float32Array)getAttribute("tangent").getArray();
 
-		if ( this.getDrawcalls().size() == 0 ) {
+		if ( this.getDrawRange().size() == 0 ) {
 
 			this.addDrawCall( 0, indices.getLength(), 0 );
 
 		}
 
-		List<DrawCall> drawcalls = this.getDrawcalls();
+		List<DrawRange> drawcalls = this.getDrawRange();
 
 		for ( int j = 0, jl = drawcalls.size(); j < jl; ++ j ) {
 
@@ -676,7 +667,7 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 
-	public List<BufferGeometry.DrawCall> computeOffsets() {
+	public List<DrawRange> computeOffsets() {
 		//WebGL limits type of index buffer values to 16-bit.
 		return computeOffsets(65535);
 	}
@@ -688,7 +679,7 @@ public class BufferGeometry extends AbstractGeometry
 	 * @param size Defaults to 65535, but allows for larger or smaller chunks.
 	 * @return
 	 */
-	public List<BufferGeometry.DrawCall> computeOffsets( int size /* indexBufferSize */ ) {
+	public List<DrawRange> computeOffsets(int size /* indexBufferSize */ ) {
 
 //		var s = Date.now();
 
@@ -702,8 +693,8 @@ public class BufferGeometry extends AbstractGeometry
 		int indexPtr = 0;
 		int vertexPtr = 0;
 
-		List<BufferGeometry.DrawCall> offsets = Arrays.asList(new BufferGeometry.DrawCall(0, 0, 0));
-		BufferGeometry.DrawCall offset = offsets.get( 0 );
+		List<DrawRange> offsets = Arrays.asList(new DrawRange(0, 0, 0));
+		DrawRange offset = offsets.get( 0 );
 
 		int duplicatedVertices = 0;
 		int newVerticeMaps = 0;
@@ -743,7 +734,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			int faceMax = vertexPtr + newVerticeMaps;
 			if ( faceMax > ( offset.index + size ) ) {
-				BufferGeometry.DrawCall new_offset = new BufferGeometry.DrawCall(indexPtr, 0, vertexPtr );
+				DrawRange new_offset = new DrawRange(indexPtr, 0, vertexPtr );
 				offsets.add( new_offset );
 				offset = new_offset;
 
@@ -772,7 +763,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		/* Move all attribute values to map to the new computed indices , also expand the vertice stack to match our new vertexPtr. */
 		this.reorderBuffers( sortedIndices, revVertexMap, vertexPtr );
-		this.drawcalls = offsets;
+		this.drawRange = offsets;
 
 		/*
 		var orderTime = Date.now();
@@ -870,11 +861,11 @@ public class BufferGeometry extends AbstractGeometry
 			geometry.addAttribute( attr, sourceAttr.clone() );
 		}
 
-		for ( int i = 0, il = this.drawcalls.size(); i < il; i ++ ) {
+		for ( int i = 0, il = this.drawRange.size(); i < il; i ++ ) {
 
-			DrawCall offset = this.drawcalls.get( i );
+			DrawRange offset = this.drawRange.get( i );
 
-			geometry.drawcalls.add( new DrawCall(
+			geometry.drawRange.add( new DrawRange(
 
 					offset.start,
 					offset.index,
@@ -1011,7 +1002,6 @@ public class BufferGeometry extends AbstractGeometry
 	public String toString() {
 		return getClass().getSimpleName()
 				+ "{id: " + getId()
-				+ ", offsets: " + this.drawcalls.size()
-				+ ", drawcalls: " + this.getDrawcalls().size() + "}";
+				+ ", drawcalls: " + this.drawRange.size() + "}";
 	}
 }

@@ -18,15 +18,40 @@
 package org.parallax3d.parallax.graphics.renderers.gl;
 
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
+import org.parallax3d.parallax.graphics.renderers.Renderer;
+import org.parallax3d.parallax.system.AttributeData;
+import org.parallax3d.parallax.system.BufferRenderer;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.GLES20Ext;
+import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
+import org.parallax3d.parallax.system.gl.enums.DataType;
 
-public class GLIndexedBufferRenderer {
+public class GLIndexedBufferRenderer extends BufferRenderer {
 
     GL20 gl;
     GLRendererInfo info;
 
+    DataType type;
+    int size;
+
     public GLIndexedBufferRenderer(GL20 gl, GLRendererInfo info) {
         this.gl = gl;
         this.info = info;
+    }
+
+    public void setIndex( AttributeData index ) {
+
+        if ( index.getArray() instanceof Uint32Array && GLExtensions.check( gl, GLES20Ext.List.OES_element_index_uint ) ) {
+
+            type = DataType.UNSIGNED_INT;
+            size = 4;
+
+        } else {
+
+            type = DataType.UNSIGNED_SHORT;
+            size = 2;
+
+        }
+
     }
 }

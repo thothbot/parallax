@@ -26,7 +26,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
-import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawCall;
+import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawRange;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
@@ -120,12 +120,12 @@ public class WireframeHelper extends Line {
 
 				Float32Array vertices = (Float32Array) ((BufferGeometry)object.getGeometry()).getAttribute("position").getArray();
 				Uint16Array indices = (Uint16Array) ((BufferGeometry)object.getGeometry()).getAttribute("index").getArray();
-				List<DrawCall> drawcalls = ((BufferGeometry)object.getGeometry()).getDrawcalls();
+				List<DrawRange> drawcalls = ((BufferGeometry)object.getGeometry()).getDrawcalls();
 				int numEdges = 0;
 
 				if ( drawcalls.size() == 0 )
 				{
-					drawcalls = Arrays.asList( new DrawCall(0, indices.getLength(), 9) );
+					drawcalls = Arrays.asList( new DrawRange(0, indices.getLength(), 9) );
 				}
 
 				// allocate maximal size

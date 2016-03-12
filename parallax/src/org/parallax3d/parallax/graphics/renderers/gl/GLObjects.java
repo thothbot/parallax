@@ -199,4 +199,14 @@ public class GLObjects {
 
     }
 
+    public int getAttributeBuffer( InterleavedBufferAttribute attribute )
+    {
+        return (int) properties.get( attribute.getData() ).get("__webglBuffer");
+    }
+
+    public int getAttributeBuffer( AttributeData attribute )
+    {
+        return (int) properties.get( attribute ).get("__webglBuffer");
+    }
+
 }

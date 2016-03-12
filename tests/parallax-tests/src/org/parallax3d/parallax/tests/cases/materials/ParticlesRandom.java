@@ -23,7 +23,7 @@ import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.input.TouchMoveHandler;
@@ -92,7 +92,7 @@ public final class ParticlesRandom extends ParallaxTest implements TouchMoveHand
 			material.getColor().setHSL( 1.0 - i * 0.05, 1.0, 0.5 );
 			materials.add(material);
 
-			PointCloud particles = new PointCloud( geometry, material );
+			Points particles = new Points( geometry, material );
 
 			particles.getRotation().setX( Math.random() * 6 );
 			particles.getRotation().setY( Math.random() * 6 );
@@ -116,7 +116,7 @@ public final class ParticlesRandom extends ParallaxTest implements TouchMoveHand
 		{
 			Object3D object = scene.getChildren().get(i);
 
-			if ( object instanceof PointCloud ) 
+			if ( object instanceof Points)
 			{
 				object.getRotation().setY( time * ( i < 4 ? i + 1 : - ( i + 1 ) ) );
 			}

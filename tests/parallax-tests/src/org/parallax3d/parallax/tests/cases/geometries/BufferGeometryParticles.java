@@ -24,7 +24,7 @@ import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
-import org.parallax3d.parallax.graphics.objects.PointCloud;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Color;
@@ -38,7 +38,7 @@ public final class BufferGeometryParticles extends ParallaxTest
 	
 	Scene scene;
 	PerspectiveCamera camera;
-	PointCloud particleSystem;
+	Points particleSystem;
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -103,7 +103,7 @@ public final class BufferGeometryParticles extends ParallaxTest
 				.setVertexColors(Material.COLORS.VERTEX)
 				.setSize(15.0);
 
-		particleSystem = new PointCloud( geometry, material );
+		particleSystem = new Points( geometry, material );
 		scene.add( particleSystem );
 
 		//

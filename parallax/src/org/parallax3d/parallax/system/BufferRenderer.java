@@ -15,19 +15,21 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package org.parallax3d.parallax.graphics.renderers.gl;
+package org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
-import org.parallax3d.parallax.system.BufferRenderer;
-import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.graphics.core.InstancedBufferGeometry;
+import org.parallax3d.parallax.system.gl.enums.BeginMode;
 
-public class GLBufferRenderer extends BufferRenderer {
+public abstract class BufferRenderer {
 
-    GL20 gl;
-    GLRendererInfo info;
+    BeginMode mode;
 
-    public GLBufferRenderer(GL20 gl, GLRendererInfo info) {
-        this.gl = gl;
-        this.info = info;
+    public void setMode( BeginMode value ) {
+
+        mode = value;
+
     }
+
+    public abstract void renderInstances(InstancedBufferGeometry geometry, int drawStart, int drawCount);
+    public abstract void render(int drawStart, int drawCount);
 }

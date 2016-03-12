@@ -44,6 +44,11 @@ public class InstancedBufferGeometry extends BufferGeometry {
     }
 
     List<Group> groups = new ArrayList<>();
+    int maxInstancedCount;
+
+    public int getMaxInstancedCount() {
+        return maxInstancedCount;
+    }
 
     public InstancedBufferGeometry addGroup( int start, int count, List<Object> instances )
     {
