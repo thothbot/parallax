@@ -33,6 +33,7 @@ public class GLES20Ext {
 
 	public enum List {
 		ANGLE_instanced_arrays,
+
 		EXT_blend_minmax,
 		EXT_color_buffer_half_float,
 		EXT_disjoint_timer_query,
@@ -40,6 +41,7 @@ public class GLES20Ext {
 		EXT_sRGB,
 		EXT_shader_texture_lod,
 		EXT_texture_filter_anisotropic,
+
 		OES_element_index_uint,
 		OES_standard_derivatives,
 		OES_texture_float,
@@ -47,6 +49,7 @@ public class GLES20Ext {
 		OES_texture_half_float,
 		OES_texture_half_float_linear,
 		OES_vertex_array_object,
+
 		WEBGL_color_buffer_float,
 		WEBGL_compressed_texture_atc,
 		WEBGL_compressed_texture_etc1,
@@ -56,7 +59,33 @@ public class GLES20Ext {
 		WEBGL_debug_shaders,
 		WEBGL_depth_texture,
 		WEBGL_draw_buffers,
-		WEBGL_lose_context;
+		WEBGL_lose_context,
+
+		MOZ_EXT_texture_filter_anisotropic,
+		WEBKIT_EXT_texture_filter_anisotropic,
+
+		MOZ_WEBGL_compressed_texture_s3tc,
+		WEBKIT_WEBGL_compressed_texture_s3tc,
+
+		WEBKIT_WEBGL_compressed_texture_pvrtc;
+
+		static List[][] synonyms = {
+			{ EXT_texture_filter_anisotropic, MOZ_EXT_texture_filter_anisotropic, WEBKIT_EXT_texture_filter_anisotropic },
+			{ WEBGL_compressed_texture_s3tc,  MOZ_WEBGL_compressed_texture_s3tc,  WEBKIT_WEBGL_compressed_texture_s3tc },
+			{ WEBGL_compressed_texture_pvrtc, WEBKIT_WEBGL_compressed_texture_pvrtc }
+		};
+
+		public List[] getSynonyms() {
+
+			for(List[] ss : synonyms) {
+				for(List s: ss)
+					if(s.equals(this))
+						return ss.clone();
+			}
+
+			return new List[]{this};
+
+		}
 
 		public static List getValueOf(String test) {
 			for(List val: values())
