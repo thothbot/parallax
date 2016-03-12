@@ -26,7 +26,9 @@ public final class GLExtensions {
 
 	public static boolean isSupported(GL20 gl, GLES20Ext.List id) {
 
-		return ((GwtGL20)gl).getWebGLRenderingContext().getExtension(id.name()) != null;
+		for(GLES20Ext.List synonym : id.getSynonyms())
+			return ((GwtGL20)gl).getWebGLRenderingContext().getExtension(synonym.name()) != null;
 
+		return false;
 	}
 }

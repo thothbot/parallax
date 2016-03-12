@@ -22,6 +22,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class GLExtensions {
@@ -35,7 +36,7 @@ public final class GLExtensions {
 			String vals = gl.glGetString(GL20.GL_EXTENSIONS);
 			if(vals != null)
 				for(String val: vals.split(" "))
-					extensions.add(GLES20Ext.List.valueOf(val));
+					extensions.addAll(Arrays.asList( GLES20Ext.List.valueOf(val).getSynonyms() ));
 		}
 
 		return extensions.size() > 0 && extensions.contains( id );
