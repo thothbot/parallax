@@ -17,6 +17,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 /**
  * The typed array that holds unsigned int (32-bit unsigned integer) as its element.
@@ -37,6 +38,11 @@ public final class Uint32Array extends TypeArray {
 	protected Uint32Array(int capacity) {
 		super(capacity);
 		createTypedBuffer();
+	}
+
+	@Override
+	public int getBytesPerElement() {
+		return BYTES_PER_ELEMENT;
 	}
 
 	@Override
@@ -116,6 +122,11 @@ public final class Uint32Array extends TypeArray {
 	 */
 	public int get(int index) {
 		return intBuffer.get(index);
+	}
+
+	@Override
+	public Uint32Array getSubarray(int begin, int end) {
+		return create(Arrays.copyOfRange(intBuffer.array(), begin, end));
 	}
 
 	/**

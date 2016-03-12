@@ -51,6 +51,11 @@ public final class Float32Array extends TypeArray {
 	}
 
 	@Override
+	public int getBytesPerElement() {
+		return BYTES_PER_ELEMENT;
+	}
+
+	@Override
 	protected void createTypedBuffer() {
 		floatBuffer = getBuffer().asFloatBuffer();
 	}
@@ -126,6 +131,11 @@ public final class Float32Array extends TypeArray {
 	 */
 	public double get(int index) {
 		return floatBuffer.get(index);
+	}
+
+	@Override
+	public Float32Array getSubarray(int begin, int end) {
+		return create(Arrays.copyOfRange(floatBuffer.array(), begin, end));
 	}
 
 	/**

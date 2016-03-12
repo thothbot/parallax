@@ -111,9 +111,9 @@ public class Mesh extends GeometryObject
 		if ( ((Geometry)this.getGeometry()).getMorphTargets() != null && ((Geometry)this.getGeometry()).getMorphTargets().size() > 0 ) {
 
 			this.morphTargetBase = -1;
-			this.morphTargetForcedOrder = new ArrayList<Integer>();
-			this.morphTargetInfluences = new ArrayList<Double>();
-			this.morphTargetDictionary = new FastMap<Integer>();
+			this.morphTargetForcedOrder = new ArrayList<>();
+			this.morphTargetInfluences = new ArrayList<>();
+			this.morphTargetDictionary = new FastMap<>();
 
 			List<Geometry.MorphTarget> morphTargets = ((Geometry)this.getGeometry()).getMorphTargets();
 			for ( int m = 0, ml = ((Geometry)this.getGeometry()).getMorphTargets().size(); m < ml; m ++ ) {

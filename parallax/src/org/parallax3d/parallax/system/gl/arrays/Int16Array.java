@@ -17,6 +17,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 /**
  * The typed array that holds short (16-bit signed integer) as its element.
@@ -34,6 +35,11 @@ public final class Int16Array extends TypeArray {
 	protected Int16Array(int capacity) {
 		super(capacity);
 		createTypedBuffer();
+	}
+
+	@Override
+	public int getBytesPerElement() {
+		return BYTES_PER_ELEMENT;
 	}
 
 	@Override
@@ -95,6 +101,11 @@ public final class Int16Array extends TypeArray {
 	 */
 	public short get(int index) {
 		return shortBuffer.get(index);
+	}
+
+	@Override
+	public Int16Array getSubarray(int begin, int end) {
+		return create(Arrays.copyOfRange(shortBuffer.array(), begin, end));
 	}
 
 	/**

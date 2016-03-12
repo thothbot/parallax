@@ -16,6 +16,7 @@ package org.parallax3d.parallax.system.gl.arrays;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 /**
  * Wraps Java's ByteBuffer for Parallax3D's API.
@@ -37,6 +38,22 @@ public abstract class TypeArray  {
     public Buffer getTypedBuffer() {
         return buffer;
     }
+
+    public int getBytesPerElement() {
+        return 1;
+    }
+
+    /**
+     * The subarray() method returns a new TypedArray on the same ArrayBuffer
+     * store and with the same element types as for this TypedArray object.
+     * The begin offset is inclusive and the end offset is exclusive. TypedArray is one of the typed array types.
+     *
+     * @param begin Element to begin at. The offset is inclusive.
+     * @param end Element to end at. The offset is exclusive. If not specified, all elements
+     *            from the one specified by begin to the end of the array are included in the new view.
+     * @return
+     */
+    public abstract TypeArray getSubarray(int begin, int end  );
 
     /**
      * Support creation of empty Float32Buffers which can be resized dynamically.

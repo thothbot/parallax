@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.system.UuidObject;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
@@ -25,7 +26,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author benaadams / https://twitter.com/ben_a_adams
  */
 @ThreejsObject("THREE.InterleavedBufferAttribute")
-public class InterleavedBufferAttribute {
+public class InterleavedBufferAttribute extends UuidObject {
 
     InterleavedBuffer data;
     int itemSize;
@@ -37,6 +38,10 @@ public class InterleavedBufferAttribute {
         this.offset = offset;
     }
 
+    public InterleavedBuffer getData() {
+        return this.data;
+    }
+
     public int getCount() {
 
         return this.data.getCount();
@@ -45,7 +50,7 @@ public class InterleavedBufferAttribute {
 
     public InterleavedBufferAttribute setX( int index, double x ) {
 
-        ((Float32Array)this.data.array).set( index * this.data.stride + this.offset, x);
+        ((Float32Array)this.data.getArray()).set( index * this.data.stride + this.offset, x);
 
         return this;
 
@@ -53,7 +58,7 @@ public class InterleavedBufferAttribute {
 
     public InterleavedBufferAttribute setY( int index, double y ) {
 
-        ((Float32Array)this.data.array).set( index * this.data.stride + this.offset + 1 , y );
+        ((Float32Array)this.data.getArray()).set( index * this.data.stride + this.offset + 1 , y );
 
         return this;
 
@@ -61,7 +66,7 @@ public class InterleavedBufferAttribute {
 
     public InterleavedBufferAttribute setZ( int index, double z ) {
 
-        ((Float32Array)this.data.array).set( index * this.data.stride + this.offset + 2 , z);
+        ((Float32Array)this.data.getArray()).set( index * this.data.stride + this.offset + 2 , z);
 
         return this;
 
@@ -69,7 +74,7 @@ public class InterleavedBufferAttribute {
 
     public InterleavedBufferAttribute setW( int index, double w ) {
 
-        ((Float32Array)this.data.array).set( index * this.data.stride + this.offset + 3 , w);
+        ((Float32Array)this.data.getArray()).set( index * this.data.stride + this.offset + 3 , w);
 
         return this;
 
@@ -77,25 +82,25 @@ public class InterleavedBufferAttribute {
 
     public double getX( int index ) {
 
-        return ((Float32Array)this.data.array).get( index * this.data.stride + this.offset );
+        return ((Float32Array)this.data.getArray()).get( index * this.data.stride + this.offset );
 
     }
 
     public double getY( int index ) {
 
-        return ((Float32Array)this.data.array).get( index * this.data.stride + this.offset + 1 );
+        return ((Float32Array)this.data.getArray()).get( index * this.data.stride + this.offset + 1 );
 
     }
 
     public double getZ( int index ) {
 
-        return ((Float32Array)this.data.array).get( index * this.data.stride + this.offset + 2 );
+        return ((Float32Array)this.data.getArray()).get( index * this.data.stride + this.offset + 2 );
 
     }
 
     public double getW( int index ) {
 
-        return ((Float32Array)this.data.array).get( index * this.data.stride + this.offset + 3 );
+        return ((Float32Array)this.data.getArray()).get( index * this.data.stride + this.offset + 3 );
 
     }
 
@@ -103,8 +108,8 @@ public class InterleavedBufferAttribute {
 
         index = index * this.data.stride + this.offset;
 
-        ((Float32Array)this.data.array).set( index + 0 , x );
-        ((Float32Array)this.data.array).set( index + 1 , y );
+        ((Float32Array)this.data.getArray()).set( index + 0 , x );
+        ((Float32Array)this.data.getArray()).set( index + 1 , y );
 
         return this;
 
@@ -114,9 +119,9 @@ public class InterleavedBufferAttribute {
 
         index = index * this.data.stride + this.offset;
 
-        ((Float32Array)this.data.array).set( index + 0 , x );
-        ((Float32Array)this.data.array).set( index + 1 , y );
-        ((Float32Array)this.data.array).set( index + 2 , z );
+        ((Float32Array)this.data.getArray()).set( index + 0 , x );
+        ((Float32Array)this.data.getArray()).set( index + 1 , y );
+        ((Float32Array)this.data.getArray()).set( index + 2 , z );
 
         return this;
 
@@ -126,10 +131,10 @@ public class InterleavedBufferAttribute {
 
         index = index * this.data.stride + this.offset;
 
-        ((Float32Array)this.data.array).set( index + 0 , x );
-        ((Float32Array)this.data.array).set( index + 1 , y );
-        ((Float32Array)this.data.array).set( index + 2 , z );
-        ((Float32Array)this.data.array).set( index + 3 , w );
+        ((Float32Array)this.data.getArray()).set( index + 0 , x );
+        ((Float32Array)this.data.getArray()).set( index + 1 , y );
+        ((Float32Array)this.data.getArray()).set( index + 2 , z );
+        ((Float32Array)this.data.getArray()).set( index + 3 , w );
 
         return this;
 

@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.system.AttributeData;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
@@ -26,16 +27,13 @@ import org.parallax3d.parallax.system.gl.arrays.TypeArray;
  * @author benaadams / https://twitter.com/ben_a_adams
  */
 @ThreejsObject("THREE.InterleavedBuffer")
-public class InterleavedBuffer {
+public class InterleavedBuffer extends AttributeData {
 
-    TypeArray array;
     int stride;
 
-    boolean dynamic = false;
-    int version = 0;
-
-    public InterleavedBuffer(TypeArray array, int stride) {
-        this.array = array;
+    public InterleavedBuffer(TypeArray array, int stride)
+    {
+        super(array);
         this.stride = stride;
     }
 
@@ -48,21 +46,6 @@ public class InterleavedBuffer {
     public int getCount () {
 
         return getLength() / this.stride;
-
-    }
-
-    public InterleavedBuffer setNeedsUpdate( boolean value ) {
-
-        if ( value ) this.version ++;
-
-        return this;
-    }
-
-    public InterleavedBuffer setDynamic( boolean value ) {
-
-        this.dynamic = value;
-
-        return this;
 
     }
 
@@ -106,7 +89,7 @@ public class InterleavedBuffer {
     @Override
     protected InterleavedBuffer clone() {
         InterleavedBuffer instance = new InterleavedBuffer(this.array, this.stride);
-        instance.dynamic = this.dynamic;
+        instance.setDynamic(this.isDynamic());
 
         return this;
     }

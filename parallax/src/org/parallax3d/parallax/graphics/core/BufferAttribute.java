@@ -18,62 +18,30 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.system.AttributeData;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 
 @ThreejsObject("THREE.BufferAttribute")
-public class BufferAttribute {
+public class BufferAttribute extends AttributeData {
 
-	public static class UpdateRange {
-		public int offset = 0;
-		public int count = -1;
-	}
-
-	TypeArray array;
 	int itemSize;
-
-	boolean dynamic = false;
-	int version = 0;
-
-	UpdateRange updateRange;
 
 	public BufferAttribute(TypeArray array, int itemSize)
 	{
-		this.array = array;
+		super(array);
+
 		this.itemSize = itemSize;
-		this.updateRange = new UpdateRange();
 	}
 
 	public int getItemSize() {
 		return this.itemSize;
 	}
 
-	public TypeArray getArray() {
-		return this.array;
-	}
-
-	public void setArray(TypeArray array) {
-		this.array = array;
-	}
-
 	public int getCount() {
 
 		return this.array.getLength()/ this.itemSize;
-
-	}
-
-	public void setNeedsUpdate( boolean value ) {
-
-		if ( value ) this.version ++;
-
-	}
-
-	public BufferAttribute setDynamic( boolean value ) {
-
-		this.dynamic = value;
-
-		return this;
 
 	}
 
@@ -87,14 +55,6 @@ public class BufferAttribute {
 			((Float32Array)this.array).set(index1 + i, ((Float32Array) attribute.array).get(index2 + i));
 
 		}
-
-	}
-
-	public BufferAttribute set( TypeArray value ) {
-
-		this.array.set(value);
-
-		return this;
 
 	}
 

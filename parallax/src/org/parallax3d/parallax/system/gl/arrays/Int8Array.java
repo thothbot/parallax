@@ -15,6 +15,8 @@ package org.parallax3d.parallax.system.gl.arrays;
 
 import org.parallax3d.parallax.system.gl.GL20;
 
+import java.util.Arrays;
+
 /**
  * The typed array that holds byte (8-bit signed integer) as its element.
  * 
@@ -88,6 +90,11 @@ public final class Int8Array extends TypeArray {
 	 */
 	public byte get(int index) {
 		return getBuffer().get(index);
+	}
+
+	@Override
+	public Int8Array getSubarray(int begin, int end) {
+		return create(Arrays.copyOfRange(buffer.array(), begin, end));
 	}
 
 	/**

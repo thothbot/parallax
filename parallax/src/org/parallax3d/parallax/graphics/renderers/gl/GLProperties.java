@@ -18,14 +18,14 @@
 
 package org.parallax3d.parallax.graphics.renderers.gl;
 
-import org.parallax3d.parallax.graphics.core.IDObject;
+import org.parallax3d.parallax.system.UuidObject;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.WebGLProperties")
 public class GLProperties {
 
-    FastMap<Object> properties;
+    FastMap<FastMap<Object>> properties;
 
     public GLProperties() {
 
@@ -33,7 +33,7 @@ public class GLProperties {
 
     }
 
-    public Object get( IDObject object ) {
+    public FastMap<Object> get( UuidObject object ) {
 
         String uuid = object.getUUID();
 
@@ -44,7 +44,7 @@ public class GLProperties {
 
     }
 
-    public void delete( IDObject object ) {
+    public void delete( UuidObject object ) {
 
         String uuid = object.getUUID();
 

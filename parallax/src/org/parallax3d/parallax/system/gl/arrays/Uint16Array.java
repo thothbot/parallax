@@ -17,6 +17,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 
 import java.nio.DoubleBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 /**
  * The typed array that holds unsigned short (16-bit unsigned integer) as its element.
@@ -37,6 +38,11 @@ public final class Uint16Array extends IndexTypeArray {
 	protected Uint16Array(int capacity) {
 		super(capacity);
 		createTypedBuffer();
+	}
+
+	@Override
+	public int getBytesPerElement() {
+		return BYTES_PER_ELEMENT;
 	}
 
 	@Override
@@ -116,6 +122,11 @@ public final class Uint16Array extends IndexTypeArray {
 	 */
 	public int get(int index) {
 		return shortBuffer.get(index);
+	}
+
+	@Override
+	public Uint16Array getSubarray(int begin, int end) {
+		return create(Arrays.copyOfRange(shortBuffer.array(), begin, end));
 	}
 
 	/**

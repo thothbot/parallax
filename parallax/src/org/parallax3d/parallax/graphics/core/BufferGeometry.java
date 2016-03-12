@@ -84,25 +84,36 @@ public class BufferGeometry extends AbstractGeometry
 		}
 	}
 
-	private FastMap<BufferAttribute> attributes;
-	private Set<String> attributesKeys;
+	private Uint16Array index;
+	private FastMap<BufferAttribute> attributes = new FastMap<>();
+	private FastMap<List<BufferAttribute>> morphAttributes = new FastMap<>();
 
-	private List<BufferGeometry.DrawCall> drawcalls;
+	private List<BufferGeometry.DrawCall> drawcalls = new ArrayList<>();
 
 	public BufferGeometry()
 	{
-		super();
-
-		this.attributes = new FastMap<>();
-
-		this.setDrawcalls(new ArrayList<BufferGeometry.DrawCall>());
-
 		this.boundingBox = null;
 		this.boundingSphere = null;
 	}
 
+	public Uint16Array getIndex() {
+
+		return this.index;
+
+	}
+
+	public void setIndex( Uint16Array index ) {
+
+		this.index = index;
+
+	}
+
 	public FastMap<BufferAttribute> getAttributes() {
 		return this.attributes;
+	}
+
+	public FastMap<List<BufferAttribute>> getMorphAttributes() {
+		return this.morphAttributes;
 	}
 
 	/**
@@ -131,7 +142,12 @@ public class BufferGeometry extends AbstractGeometry
 	public void addAttribute( String name, BufferAttribute attribute ) {
 
 		this.attributes.put( name, attribute );
-		this.attributesKeys = this.attributes.keySet();
+
+	}
+
+	public void removeAttribute( String name ) {
+
+		this.attributes.remove( name );
 
 	}
 

@@ -17,6 +17,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 
 /**
  * The typed array that holds int (32-bit signed integer) as its element.
@@ -34,6 +35,11 @@ public final class Int32Array extends TypeArray {
 	protected Int32Array(int capacity) {
 		super(capacity);
 		createTypedBuffer();
+	}
+
+	@Override
+	public int getBytesPerElement() {
+		return BYTES_PER_ELEMENT;
 	}
 
 	@Override
@@ -95,6 +101,11 @@ public final class Int32Array extends TypeArray {
 	 */
 	public int get(int index) {
 		return intBuffer.get(index);
+	}
+
+	@Override
+	public Int32Array getSubarray(int begin, int end) {
+		return create(Arrays.copyOfRange(intBuffer.array(), begin, end));
 	}
 
 	/**

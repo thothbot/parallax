@@ -17,6 +17,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 
 import java.nio.DoubleBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 /**
  * The typed array that holds double (64-bit IEEE floating point) as its element.
@@ -35,6 +36,11 @@ public final class Float64Array extends TypeArray {
 	protected Float64Array(int capacity) {
 		super(capacity);
 		createTypedBuffer();
+	}
+
+	@Override
+	public int getBytesPerElement() {
+		return BYTES_PER_ELEMENT;
 	}
 
 	@Override
@@ -96,6 +102,11 @@ public final class Float64Array extends TypeArray {
 	 */
 	public double get(int index) {
 		return doubleBuffer.get(index);
+	}
+
+	@Override
+	public Float64Array getSubarray(int begin, int end) {
+		return create(Arrays.copyOfRange(doubleBuffer.array(), begin, end));
 	}
 
 	/**

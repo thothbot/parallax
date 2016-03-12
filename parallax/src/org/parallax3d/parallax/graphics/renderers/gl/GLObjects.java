@@ -18,7 +18,16 @@
 
 package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.system.AttributeData;
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.arrays.TypeArray;
+import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
+import org.parallax3d.parallax.system.gl.enums.BufferTarget;
+import org.parallax3d.parallax.system.gl.enums.BufferUsage;
 
 public class GLObjects {
 
@@ -34,4 +43,129 @@ public class GLObjects {
         this.geometries = new GLGeometries(gl, properties);
 
     }
+
+    public BufferAttribute getWireframeAttribute( BufferGeometry geometry )
+    {
+
+        FastMap<Object> property = properties.get( geometry );
+
+        if ( property.containsKey("wireframe") ) {
+
+            return (BufferAttribute) property.get("wireframe");
+
+        }
+
+        int[] indices = new int[0];
+
+        Uint16Array index = geometry.getIndex();
+        FastMap<BufferAttribute> attributes = geometry.getAttributes();
+        BufferAttribute position = attributes.get("position");
+
+        // console.time( 'wireframe' );
+
+        if ( index != null ) {
+
+            var edges = {};
+            var array = index.array;
+
+            for ( int i = 0, l = array.length; i < l; i += 3 ) {
+
+                int a = array[ i + 0 ];
+                int b = array[ i + 1 ];
+                int c = array[ i + 2 ];
+
+                if ( checkEdge( edges, a, b ) ) indices = new int[]{ a, b };
+                if ( checkEdge( edges, b, c ) ) indices = new int[]{ b, c };
+                if ( checkEdge( edges, c, a ) ) indices = new int[]{ c, a };
+
+            }
+
+        } else {
+
+            TypeArray array = position.getArray();
+
+            for ( int i = 0, l = ( array.getLength() / 3 ) - 1; i < l; i += 3 ) {
+
+                int a = i + 0;
+                int b = i + 1;
+                int c = i + 2;
+
+                indices = new int[]{a, b, b, c, c, a};
+
+            }
+
+        }
+
+        BufferAttribute attribute = new BufferAttribute(Uint32Array.create(indices), 1 );
+
+        updateAttribute( attribute, BufferTarget.ELEMENT_ARRAY_BUFFER );
+
+        property.put("wireframe", attribute);
+
+        return attribute;
+
+    }
+
+    public void updateAttribute(InterleavedBufferAttribute attribute, BufferTarget bufferType )
+    {
+        updateAttribute(attribute.getData(), bufferType );
+    }
+
+    public void updateAttribute(AttributeData data, BufferTarget bufferType ) {
+
+        FastMap<Object> attributeProperties = properties.get( data );
+
+        if ( !attributeProperties.containsKey("__webglBuffer")) {
+
+            createBuffer( attributeProperties, data, bufferType );
+
+        } else if ( attributeProperties.get("version") != data.getVersion() ) {
+
+            updateBuffer( attributeProperties, data, bufferType );
+
+        }
+
+    }
+
+    private void createBuffer( FastMap<Object> attributeProperties, AttributeData data, BufferTarget bufferType )
+    {
+        attributeProperties.put("__webglBuffer", gl.glGenBuffer());
+        gl.glBindBuffer( bufferType.getValue(), (Integer) attributeProperties.get("__webglBuffer"));
+
+        BufferUsage usage = data.isDynamic() ? BufferUsage.DYNAMIC_DRAW : BufferUsage.STATIC_DRAW;
+
+        gl.glBufferData( bufferType.getValue(), data.getArray().getByteLength(), data.getArray().getTypedBuffer(), usage.getValue() );
+
+        attributeProperties.put("version", data.getVersion());
+
+    }
+
+    private void updateBuffer( FastMap<Object> attributeProperties, AttributeData data, BufferTarget bufferType )
+    {
+
+        gl.glBindBuffer( bufferType.getValue(), (Integer) attributeProperties.get("__webglBuffer"));
+
+        if ( !data.isDynamic() || data.getUpdateRange().count == - 1 ) {
+
+            // Not using update ranges
+
+            gl.glBufferSubData( bufferType.getValue(), 0, data.getArray().getByteLength(), data.getArray().getTypedBuffer() );
+
+        } else if ( data.getUpdateRange().count == 0 ) {
+
+            Log.error("GLObjects.updateBuffer: dynamic BufferAttribute marked as needsUpdate but updateRange.count is 0, ensure you are using set methods or updating manually.");
+
+        } else {
+
+            TypeArray array = data.getArray().getSubarray( data.getUpdateRange().offset, data.getUpdateRange().offset + data.getUpdateRange().count );
+            gl.glBufferSubData( bufferType.getValue(), data.getUpdateRange().offset * data.getArray().getBytesPerElement(), array.getByteLength(), array.getTypedBuffer());
+
+            data.getUpdateRange().count = 0; // reset range
+
+        }
+
+        attributeProperties.put("version", data.getVersion());
+
+    }
+
 }

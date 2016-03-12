@@ -15,12 +15,15 @@ package org.parallax3d.parallax.system.gl.arrays;
 
 import org.parallax3d.parallax.system.gl.GL20;
 
+import java.util.Arrays;
+
 /**
  * The typed array that holds unsigned byte (8-bit unsigned integer) as its element.
  * 
  * @author h@realh.co.uk
  */
 public final class Uint8Array extends IndexTypeArray {
+
 	public static final int SIGN_OFFSET = 0x10000;
 	public static final int MAX_POSITIVE = 0x7fff;
 	public static final int MAX_NEGATIVE = 0xffff;
@@ -109,6 +112,11 @@ public final class Uint8Array extends IndexTypeArray {
 	 */
 	public int get(int index) {
 		return getBuffer().get(index);
+	}
+
+	@Override
+	public Uint8Array getSubarray(int begin, int end) {
+		return create(Arrays.copyOfRange(buffer.array(), begin, end));
 	}
 
 	/**

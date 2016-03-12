@@ -19,10 +19,7 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import com.sun.prism.RenderTarget;
 import org.parallax3d.parallax.Log;
@@ -418,36 +415,6 @@ public class GLRenderer extends Renderer
 
 	}
 
-	public boolean supportsVertexTextures()
-	{
-		return this._maxVertexTextures > 0;
-	}
-
-	public boolean supportsFloatTextures()
-	{
-		return GLExtensions.check(this.gl, GLES20Ext.List.OES_texture_float);
-	}
-
-	public boolean supportsStandardDerivatives()
-	{
-		return GLExtensions.check(this.gl, GLES20Ext.List.OES_standard_derivatives);
-	}
-
-	public boolean supportsCompressedTextureS3TC()
-	{
-		return GLExtensions.check(this.gl, GLES20Ext.List.WEBGL_compressed_texture_s3tc);
-	}
-
-	public boolean supportsCompressedTexturePVRTC()
-	{
-		return GLExtensions.check(this.gl, GLES20Ext.List.WEBGL_compressed_texture_pvrtc);
-	}
-
-	public boolean supportsBlendMinMax()
-	{
-		return GLExtensions.check(this.gl, GLES20Ext.List.EXT_blend_minmax);
-	}
-
 	/**
 	 * Gets {@link #setAutoClear(boolean)} flag.
 	 */
@@ -534,38 +501,6 @@ public class GLRenderer extends Renderer
 		this.sortObjects = isSortObjects;
 	}
 
-	/**
-	 * Gets {@link #setAutoUpdateObjects(boolean)} flag.
-	 */
-	public boolean isAutoUpdateObjects() {
-		return isAutoUpdateObjects;
-	}
-
-	/**
-	 * Defines whether the renderer should auto update objects.
-	 * Default is true.
-	 *
-	 * @param isAutoUpdateObjects false or true
-	 */
-	public void setAutoUpdateObjects(boolean isAutoUpdateObjects) {
-		this.isAutoUpdateObjects = isAutoUpdateObjects;
-	}
-
-	/**
-	 * Gets {@link #setAutoUpdateScene(boolean)} flag.
-	 */
-	public boolean isAutoUpdateScene() {
-		return isAutoUpdateScene;
-	}
-
-	public boolean isLogarithmicDepthBufferEnabled(){
-		return _logarithmicDepthBuffer;
-	}
-
-	public void setLogarithmicDepthBuffer(boolean enable){
-		this._logarithmicDepthBuffer = enable;
-	}
-
 	public boolean isGammaInput() {
 		return this.gammaInput;
 	}
@@ -583,16 +518,6 @@ public class GLRenderer extends Renderer
 	}
 
 	/**
-	 * Defines whether the renderer should auto update the scene.
-	 * Default is true.
-	 *
-	 * @param isAutoUpdateScene false or true
-	 */
-	public void setAutoUpdateScene(boolean isAutoUpdateScene) {
-		this.isAutoUpdateScene = isAutoUpdateScene;
-	}
-
-	/**
 	 * Gets {@link GLRendererInfo} instance with debug information.
 	 *
 	 * @return the {@link GLRendererInfo} instance
@@ -601,40 +526,401 @@ public class GLRenderer extends Renderer
 		return info;
 	}
 
-	private void initAttributes() {
+	// --- Buffer rendering
 
-		for ( int i = 0, l = _newAttributes.getLength(); i < l; i ++ ) {
+	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
 
-			_newAttributes.set( i, 0);
+		state.initAttributes();
+
+		var buffers = properties.get( object );
+
+		if ( object.hasPositions && ! buffers.position ) buffers.position = _gl.createBuffer();
+		if ( object.hasNormals && ! buffers.normal ) buffers.normal = _gl.createBuffer();
+		if ( object.hasUvs && ! buffers.uv ) buffers.uv = _gl.createBuffer();
+		if ( object.hasColors && ! buffers.color ) buffers.color = _gl.createBuffer();
+
+		var attributes = program.getAttributes();
+
+		if ( object.hasPositions ) {
+
+			_gl.bindBuffer( _gl.ARRAY_BUFFER, buffers.position );
+			_gl.bufferData( _gl.ARRAY_BUFFER, object.positionArray, _gl.DYNAMIC_DRAW );
+
+			state.enableAttribute( attributes.position );
+			_gl.vertexAttribPointer( attributes.position, 3, _gl.FLOAT, false, 0, 0 );
 
 		}
 
-	}
+		if ( object.hasNormals ) {
 
-	private void enableAttribute( Integer attribute ) {
+			_gl.bindBuffer( _gl.ARRAY_BUFFER, buffers.normal );
 
-		_newAttributes.set( attribute,  1);
+			if ( material.type !== 'MeshPhongMaterial' && material.type !== 'MeshStandardMaterial' && material.shading === THREE.FlatShading ) {
 
-		if ( _enabledAttributes.get( attribute ) == 0 ) {
+				for ( var i = 0, l = object.count * 3; i < l; i += 9 ) {
 
-			this.gl.glEnableVertexAttribArray(attribute);
-			_enabledAttributes.set(attribute, 1);
+					var array = object.normalArray;
 
-		}
+					var nx = ( array[ i + 0 ] + array[ i + 3 ] + array[ i + 6 ] ) / 3;
+					var ny = ( array[ i + 1 ] + array[ i + 4 ] + array[ i + 7 ] ) / 3;
+					var nz = ( array[ i + 2 ] + array[ i + 5 ] + array[ i + 8 ] ) / 3;
 
-	}
+					array[ i + 0 ] = nx;
+					array[ i + 1 ] = ny;
+					array[ i + 2 ] = nz;
 
-	private void  disableUnusedAttributes() {
+					array[ i + 3 ] = nx;
+					array[ i + 4 ] = ny;
+					array[ i + 5 ] = nz;
 
-		for ( int i = 0, l = _enabledAttributes.getLength(); i < l; i ++ ) {
+					array[ i + 6 ] = nx;
+					array[ i + 7 ] = ny;
+					array[ i + 8 ] = nz;
 
-			if ( _enabledAttributes.get( i ) != _newAttributes.get( i ) ) {
-
-				this.gl.glDisableVertexAttribArray(i);
-				_enabledAttributes.set(i, 0);
+				}
 
 			}
 
+			_gl.bufferData( _gl.ARRAY_BUFFER, object.normalArray, _gl.DYNAMIC_DRAW );
+
+			state.enableAttribute( attributes.normal );
+
+			_gl.vertexAttribPointer( attributes.normal, 3, _gl.FLOAT, false, 0, 0 );
+
+		}
+
+		if ( object.hasUvs && material.map ) {
+
+			_gl.bindBuffer( _gl.ARRAY_BUFFER, buffers.uv );
+			_gl.bufferData( _gl.ARRAY_BUFFER, object.uvArray, _gl.DYNAMIC_DRAW );
+
+			state.enableAttribute( attributes.uv );
+
+			_gl.vertexAttribPointer( attributes.uv, 2, _gl.FLOAT, false, 0, 0 );
+
+		}
+
+		if ( object.hasColors && material.vertexColors !== THREE.NoColors ) {
+
+			_gl.bindBuffer( _gl.ARRAY_BUFFER, buffers.color );
+			_gl.bufferData( _gl.ARRAY_BUFFER, object.colorArray, _gl.DYNAMIC_DRAW );
+
+			state.enableAttribute( attributes.color );
+
+			_gl.vertexAttribPointer( attributes.color, 3, _gl.FLOAT, false, 0, 0 );
+
+		}
+
+		state.disableUnusedAttributes();
+
+		_gl.drawArrays( _gl.TRIANGLES, 0, object.count );
+
+		object.count = 0;
+
+	}
+
+	//camera, lights, fog, material, geometry, object
+	public void renderBufferDirect( Camera camera, AbstractFog fog, BufferGeometry geometry,
+									Material material, GeometryObject object )
+	{
+		setMaterial( material );
+
+		Shader program = setProgram(camera, fog, material, object);
+
+//		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
+
+		boolean updateBuffers = false;
+		int wireframeBit = material instanceof HasWireframe &&
+				((HasWireframe)material).isWireframe() ? 1 : 0;
+
+		String geometryProgram = geometry.getId() + "_" + program.getId() + "_" + wireframeBit;
+
+		if (!geometryProgram.equals(_currentGeometryProgram)) {
+
+			_currentGeometryProgram = geometryProgram;
+			updateBuffers = true;
+
+		}
+
+		// morph targets
+		List<Double> morphTargetInfluences = object instanceof Mesh ? ((Mesh)object).morphTargetInfluences : null;
+
+		class ActiveInfluences implements Comparable<ActiveInfluences> {
+			public double influence;
+			public int index;
+
+			public  ActiveInfluences(double influence, int index) {
+				this.influence = influence;
+				this.index = index;
+			}
+
+			@Override
+			public int compareTo(ActiveInfluences o) {
+				return (int) (Math.abs( o.influence ) - Math.abs( this.influence ));
+			}
+		}
+		// render mesh
+		if ( morphTargetInfluences != null ) {
+
+			List<ActiveInfluences> activeInfluences = new ArrayList<>();
+
+			for ( int i = 0, l = morphTargetInfluences.size(); i < l; i ++ ) {
+
+				double influence = morphTargetInfluences.get( i );
+				activeInfluences.add( new ActiveInfluences( influence, i ) );
+
+			}
+
+			Collections.sort(activeInfluences);
+
+			if ( activeInfluences.size() > 8 ) {
+
+				activeInfluences = activeInfluences.subList(0, 7);
+
+			}
+
+			FastMap<List<BufferAttribute>> morphAttributes = geometry.getMorphAttributes();
+
+			for ( int i = 0, l = activeInfluences.size(); i < l; i ++ ) {
+
+				ActiveInfluences influence = activeInfluences.get( i );
+				morphInfluences.set( i, influence.influence);
+
+				if ( influence.influence != 0 ) {
+
+					int index = influence.index;
+
+					if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphTargets() && morphAttributes.containsKey("position") )
+						geometry.addAttribute( "morphTarget" + i, morphAttributes.get("position").get( index ) );
+					if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() && morphAttributes.containsKey("normal") )
+						geometry.addAttribute( "morphNormal" + i, morphAttributes.get("normal").get( index ) );
+
+				} else {
+
+					if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphTargets() )
+						geometry.removeAttribute( "morphTarget" + i );
+					if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals() )
+						geometry.removeAttribute( "morphNormal" + i );
+				}
+
+			}
+
+			FastMap<Uniform> uniforms = program.getUniforms();
+
+			if ( uniforms.get("morphTargetInfluences").getLocation() != -1 ) {
+
+				gl.glUniform1fv( uniforms.get("morphTargetInfluences").getLocation(), morphInfluences.getLength(), morphInfluences.getTypedBuffer() );
+
+			}
+
+			updateBuffers = true;
+
+		}
+
+		int index = geometry.getIndex();
+		BufferAttribute position = geometry.getAttribute("position");
+
+		if ( material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ) {
+
+			index = objects.getWireframeAttribute( geometry );
+
+		}
+
+		if ( object instanceof Mesh )
+		{
+			BeginMode mode = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? BeginMode.LINES : BeginMode.TRIANGLES;
+
+			BufferAttribute index = geometry.getAttribute("index");
+
+			if(index != null)
+			{
+				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
+				int size = 2;
+
+				List<BufferGeometry.DrawCall> offsets = geometry.getDrawcalls();
+
+				if ( offsets.size() == 0 ) {
+
+					if ( updateBuffers ) {
+
+						setupVertexAttributes( material, program, geometry, 0 );
+
+						this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
+
+					}
+
+					this.gl.glDrawElements(mode.getValue(), index.getArray().getLength(), type.getValue(), 0);
+
+					this.info.getRender().calls ++;
+					this.info.getRender().vertices +=
+							index.getArray().getLength(); // not really true, here vertices can be shared
+					this.info.getRender().faces += index.getArray().getLength() / 3;
+
+				} else {
+					// if there is more than 1 chunk
+					// must set attribute pointers to use new offsets for each chunk
+					// even if geometry and materials didn't change
+
+					updateBuffers = true;
+
+					for ( int i = 0, il = offsets.size(); i < il; ++ i )
+					{
+
+						int startIndex = offsets.get( i ).index;
+
+						if ( updateBuffers ) {
+
+							setupVertexAttributes( material, program, geometry, startIndex );
+							this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
+
+						}
+
+						this.gl.glDrawElements( mode.getValue(), offsets.get( i ).count, type.getValue(), offsets.get( i ).start * size  );
+
+						getInfo().getRender().calls ++;
+						getInfo().getRender().vertices +=
+								offsets.get( i ).count; // not really true, here vertices can be shared
+						getInfo().getRender().faces += offsets.get( i ).count / 3;
+					}
+
+				}
+
+			}
+			else
+			{
+
+				// non-indexed triangles
+
+				if ( updateBuffers ) {
+
+					setupVertexAttributes( material, program, geometry, 0 );
+
+				}
+
+				BufferAttribute position = geometry.getAttribute("position");
+
+				// render non-indexed triangles
+
+				this.gl.glDrawArrays( mode.getValue(), 0, position.getArray().getLength() / 3 );
+
+				this.info.getRender().calls ++;
+				this.info.getRender().vertices += position.getArray().getLength() / 3;
+				this.info.getRender().faces += position.getArray().getLength() / 9;
+
+			}
+
+		}
+		else if ( object instanceof PointCloud )
+		{
+			// render particles
+
+			if ( updateBuffers ) {
+
+				setupVertexAttributes( material, program, geometry, 0 );
+
+			}
+
+			BufferAttribute position = geometry.getAttribute("position");
+
+			// render particles
+
+			this.gl.glDrawArrays( BeginMode.POINTS.getValue(), 0, position.getArray().getLength() / 3 );
+
+			this.info.getRender().calls ++;
+			this.info.getRender().points += position.getArray().getLength() / 3;
+		}
+		else if ( object instanceof Line )
+		{
+
+			BeginMode mode = ( ((Line)object).getMode() == Line.MODE.STRIPS ) ? BeginMode.LINE_STRIP : BeginMode.LINES;
+			object.setLineWidth(this.gl, ((LineBasicMaterial)material).getLinewidth());
+
+			BufferAttribute index = geometry.getAttribute("index");
+
+			if ( index != null ) {
+
+				// indexed lines
+
+//				var type, size;
+
+//				if ( index.array instanceof Uint32Array ) {
+//
+//					type = _gl.UNSIGNED_INT;
+//					size = 4;
+//
+//				} else {
+
+				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
+				int size = 2;
+
+//				}
+
+				List<DrawCall> drawcalls = geometry.getDrawcalls();
+
+				if ( drawcalls.size() == 0 ) {
+
+					if ( updateBuffers ) {
+
+						setupVertexAttributes( material, program, geometry, 0 );
+						this.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
+
+					}
+
+					this.gl.glDrawElements( mode.getValue(), index.getArray().getLength(), type.getValue(), 0 ); // 2 bytes per Uint16Array
+
+					this.info.getRender().calls ++;
+					this.info.getRender().vertices +=
+							index.getArray().getLength(); // not really true, here vertices can be shared
+
+				} else {
+
+					// if there is more than 1 chunk
+					// must set attribute pointers to use new offsets for each chunk
+					// even if geometry and materials didn't change
+
+					if ( drawcalls.size() > 1 ) updateBuffers = true;
+
+					for ( int i = 0, il = drawcalls.size(); i < il; i ++ ) {
+
+						int startIndex = drawcalls.get( i ).index;
+
+						if ( updateBuffers ) {
+
+							setupVertexAttributes( material, program, geometry, startIndex );
+							this.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
+
+						}
+
+						// render indexed lines
+
+						this.gl.glDrawElements( mode.getValue(), drawcalls.get( i ).count, type.getValue(), drawcalls.get( i ).start * size ); // 2 bytes per Uint16Array
+
+						this.info.getRender().calls ++;
+						this.info.getRender().vertices +=
+								drawcalls.get( i ).count; // not really true, here vertices can be shared
+
+					}
+
+				}
+
+			} else {
+
+				// non-indexed lines
+
+				if ( updateBuffers ) {
+
+					setupVertexAttributes( material, program, geometry, 0 );
+
+				}
+
+				BufferAttribute position = geometry.getAttribute("position");
+
+				this.gl.glDrawArrays( mode.getValue(), 0,  position.getArray().getLength() / 3 );
+
+				this.info.getRender().calls ++;
+				this.info.getRender().points += position.getArray().getLength() / 3;
+
+			}
 		}
 	}
 
@@ -799,104 +1085,6 @@ public class GLRenderer extends Renderer
 		}
 	}
 
-	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
-
-		initAttributes();
-//
-//		if ( object.hasPositions && ! object.__webglVertexBuffer ) object.__webglVertexBuffer = GLES20.glCreateBuffer();
-//		if ( object.hasNormals && ! object.__webglNormalBuffer ) object.__webglNormalBuffer = GLES20.glCreateBuffer();
-//		if ( object.hasUvs && ! object.__webglUvBuffer ) object.__webglUvBuffer = GLES20.glCreateBuffer();
-//		if ( object.hasColors && ! object.__webglColorBuffer ) object.__webglColorBuffer = GLES20.glCreateBuffer();
-//
-//		if ( object.hasPositions )
-//		{
-//
-//			GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, object.__webglVertexBuffer );
-//			GLES20.glBufferData( GLES20.GL_ARRAY_BUFFER, object.positionArray, GLES20.GL_DYNAMIC_DRAW );
-//			enableAttribute( program.attributes.position );
-//			GLES20.glVertexAttribPointer( program.attributes.position, 3, getGL().FLOAT, false, 0, 0 );
-//
-//		}
-//
-//		if ( object.hasNormals ) {
-//
-//			GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, object.__webglNormalBuffer );
-//
-//			if (((HasShading)material).getShading() == Material.SHADING.FLAT ) {
-//
-//				var nx, ny, nz,
-//					nax, nbx, ncx, nay, nby, ncy, naz, nbz, ncz,
-//					normalArray,
-//					i, il = object.count * 3;
-//
-//				for ( int i = 0; i < il; i += 9 ) {
-//
-//					normalArray = object.normalArray;
-//
-//					nax  = normalArray[ i ];
-//					nay  = normalArray[ i + 1 ];
-//					naz  = normalArray[ i + 2 ];
-//
-//					nbx  = normalArray[ i + 3 ];
-//					nby  = normalArray[ i + 4 ];
-//					nbz  = normalArray[ i + 5 ];
-//
-//					ncx  = normalArray[ i + 6 ];
-//					ncy  = normalArray[ i + 7 ];
-//					ncz  = normalArray[ i + 8 ];
-//
-//					nx = ( nax + nbx + ncx ) / 3;
-//					ny = ( nay + nby + ncy ) / 3;
-//					nz = ( naz + nbz + ncz ) / 3;
-//
-//					normalArray[ i ]   = nx;
-//					normalArray[ i + 1 ] = ny;
-//					normalArray[ i + 2 ] = nz;
-//
-//					normalArray[ i + 3 ] = nx;
-//					normalArray[ i + 4 ] = ny;
-//					normalArray[ i + 5 ] = nz;
-//
-//					normalArray[ i + 6 ] = nx;
-//					normalArray[ i + 7 ] = ny;
-//					normalArray[ i + 8 ] = nz;
-//
-//				}
-//
-//			}
-//
-//			GLES20.glBufferData( GLES20.GL_ARRAY_BUFFER, object.normalArray, GLES20.GL_DYNAMIC_DRAW );
-//			enableAttribute( program.attributes.normal );
-//			GLES20.glVertexAttribPointer( program.attributes.normal, 3, getGL().FLOAT, false, 0, 0 );
-//
-//		}
-//
-//		if ( object.hasUvs && material.map ) {
-//
-//			GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, object.__webglUvBuffer );
-//			GLES20.glBufferData( GLES20.GL_ARRAY_BUFFER, object.uvArray, GLES20.GL_DYNAMIC_DRAW );
-//			enableAttribute( program.attributes.uv );
-//			GLES20.glVertexAttribPointer( program.attributes.uv, 2, GLES20.GL_FLOAT, false, 0, 0 );
-//
-//		}
-//
-//		if ( object.hasColors && ((HasVertexColors)material).isVertexColors != Material.COLORS.NO ) {
-//
-//			GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, object.__webglColorBuffer );
-//			GLES20.glBufferData( GLES20.GL_ARRAY_BUFFER, object.colorArray, GLES20.GL_DYNAMIC_DRAW );
-//			enableAttribute( program.attributes.color );
-//			GLES20.glVertexAttribPointer( program.attributes.color, 3, GLES20.GL_FLOAT, false, 0, 0 );
-//
-//		}
-//
-//		disableUnusedAttributes();
-//
-//		GLES20.glDrawArrays( GLES20.GL_TRIANGLES, 0, object.count );
-//
-//		object.count = 0;
-
-	}
-
 	private void setupVertexAttributes( Material material, Shader program, BufferGeometry geometry, int startIndex ) {
 
 		FastMap<BufferAttribute> geometryAttributes = geometry.getAttributes();
@@ -940,237 +1128,6 @@ public class GLRenderer extends Renderer
 		}
 
 		disableUnusedAttributes();
-	}
-
-
-	//camera, lights, fog, material, geometry, object
-	public void renderBufferDirect( Camera camera, List<Light> lights, AbstractFog fog,
-									Material material, BufferGeometry geometry, GeometryObject object )
-	{
-		if ( ! material.isVisible() )
-			return;
-
-		Shader program = setProgram(camera, lights, fog, material, object);
-
-		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
-
-		boolean updateBuffers = false;
-		int wireframeBit = material instanceof HasWireframe &&
-				((HasWireframe)material).isWireframe() ? 1 : 0;
-
-		int geometryGroupHash = ( geometry.getId() * 0xffffff ) +
-				( material.getShader().getId() * 2 ) + wireframeBit;
-
-		if ( geometryGroupHash != this._currentGeometryGroupHash )
-		{
-			this._currentGeometryGroupHash = geometryGroupHash;
-			updateBuffers = true;
-		}
-
-		if ( updateBuffers ) {
-
-			initAttributes();
-
-		}
-
-		// render mesh
-
-		if ( object instanceof Mesh )
-		{
-			BeginMode mode = material instanceof HasWireframe && ((HasWireframe)material).isWireframe() ? BeginMode.LINES : BeginMode.TRIANGLES;
-
-			BufferAttribute index = geometry.getAttribute("index");
-
-			if(index != null)
-			{
-				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
-				int size = 2;
-
-				List<BufferGeometry.DrawCall> offsets = geometry.getDrawcalls();
-
-				if ( offsets.size() == 0 ) {
-
-					if ( updateBuffers ) {
-
-						setupVertexAttributes( material, program, geometry, 0 );
-
-						this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
-
-					}
-
-					this.gl.glDrawElements(mode.getValue(), index.getArray().getLength(), type.getValue(), 0);
-
-					this.info.getRender().calls ++;
-					this.info.getRender().vertices +=
-							index.getArray().getLength(); // not really true, here vertices can be shared
-					this.info.getRender().faces += index.getArray().getLength() / 3;
-
-				} else {
-					// if there is more than 1 chunk
-					// must set attribute pointers to use new offsets for each chunk
-					// even if geometry and materials didn't change
-
-					updateBuffers = true;
-
-					for ( int i = 0, il = offsets.size(); i < il; ++ i )
-					{
-
-						int startIndex = offsets.get( i ).index;
-
-						if ( updateBuffers ) {
-
-							setupVertexAttributes( material, program, geometry, startIndex );
-							this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
-
-						}
-
-						this.gl.glDrawElements( mode.getValue(), offsets.get( i ).count, type.getValue(), offsets.get( i ).start * size  );
-
-						getInfo().getRender().calls ++;
-						getInfo().getRender().vertices +=
-								offsets.get( i ).count; // not really true, here vertices can be shared
-						getInfo().getRender().faces += offsets.get( i ).count / 3;
-					}
-
-				}
-
-			}
-			else
-			{
-
-				// non-indexed triangles
-
-				if ( updateBuffers ) {
-
-					setupVertexAttributes( material, program, geometry, 0 );
-
-				}
-
-				BufferAttribute position = geometry.getAttribute("position");
-
-				// render non-indexed triangles
-
-				this.gl.glDrawArrays( mode.getValue(), 0, position.getArray().getLength() / 3 );
-
-				this.info.getRender().calls ++;
-				this.info.getRender().vertices += position.getArray().getLength() / 3;
-				this.info.getRender().faces += position.getArray().getLength() / 9;
-
-			}
-
-		}
-		else if ( object instanceof PointCloud )
-		{
-			// render particles
-
-			if ( updateBuffers ) {
-
-				setupVertexAttributes( material, program, geometry, 0 );
-
-			}
-
-			BufferAttribute position = geometry.getAttribute("position");
-
-			// render particles
-
-			this.gl.glDrawArrays( BeginMode.POINTS.getValue(), 0, position.getArray().getLength() / 3 );
-
-			this.info.getRender().calls ++;
-			this.info.getRender().points += position.getArray().getLength() / 3;
-		}
-		else if ( object instanceof Line )
-		{
-
-			BeginMode mode = ( ((Line)object).getMode() == Line.MODE.STRIPS ) ? BeginMode.LINE_STRIP : BeginMode.LINES;
-			object.setLineWidth(this.gl, ((LineBasicMaterial)material).getLinewidth());
-
-			BufferAttribute index = geometry.getAttribute("index");
-
-			if ( index != null ) {
-
-				// indexed lines
-
-//				var type, size;
-
-//				if ( index.array instanceof Uint32Array ) {
-//
-//					type = _gl.UNSIGNED_INT;
-//					size = 4;
-//
-//				} else {
-
-					DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
-					int size = 2;
-
-//				}
-
-				List<DrawCall> drawcalls = geometry.getDrawcalls();
-
-				if ( drawcalls.size() == 0 ) {
-
-					if ( updateBuffers ) {
-
-						setupVertexAttributes( material, program, geometry, 0 );
-						this.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
-
-					}
-
-					this.gl.glDrawElements( mode.getValue(), index.getArray().getLength(), type.getValue(), 0 ); // 2 bytes per Uint16Array
-
-					this.info.getRender().calls ++;
-					this.info.getRender().vertices +=
-							index.getArray().getLength(); // not really true, here vertices can be shared
-
-				} else {
-
-					// if there is more than 1 chunk
-					// must set attribute pointers to use new offsets for each chunk
-					// even if geometry and materials didn't change
-
-					if ( drawcalls.size() > 1 ) updateBuffers = true;
-
-					for ( int i = 0, il = drawcalls.size(); i < il; i ++ ) {
-
-						int startIndex = drawcalls.get( i ).index;
-
-						if ( updateBuffers ) {
-
-							setupVertexAttributes( material, program, geometry, startIndex );
-							this.gl.glBindBuffer( BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer() );
-
-						}
-
-						// render indexed lines
-
-						this.gl.glDrawElements( mode.getValue(), drawcalls.get( i ).count, type.getValue(), drawcalls.get( i ).start * size ); // 2 bytes per Uint16Array
-
-						this.info.getRender().calls ++;
-						this.info.getRender().vertices +=
-								drawcalls.get( i ).count; // not really true, here vertices can be shared
-
-					}
-
-				}
-
-			} else {
-
-				// non-indexed lines
-
-				if ( updateBuffers ) {
-
-					setupVertexAttributes( material, program, geometry, 0 );
-
-				}
-
-				BufferAttribute position = geometry.getAttribute("position");
-
-				this.gl.glDrawArrays( mode.getValue(), 0,  position.getArray().getLength() / 3 );
-
-				this.info.getRender().calls ++;
-				this.info.getRender().points += position.getArray().getLength() / 3;
-
-			}
-		}
 	}
 
 	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {

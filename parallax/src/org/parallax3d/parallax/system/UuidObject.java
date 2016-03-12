@@ -16,13 +16,13 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.core;
+package org.parallax3d.parallax.system;
 
 import org.parallax3d.parallax.math.Mathematics;
 
-public abstract class IDObject {
+public abstract class UuidObject {
 
-    String uuid = Mathematics.generateUUID();;
+    String uuid = Mathematics.generateUUID();
 
     public String getUUID() {
         return uuid;
