@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.core;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
+import org.parallax3d.parallax.system.AttributeData;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
@@ -84,7 +85,7 @@ public class BufferGeometry extends AbstractGeometry
 		}
 	}
 
-	private Uint16Array index;
+	private AttributeData index;
 	private FastMap<BufferAttribute> attributes = new FastMap<>();
 	private FastMap<List<BufferAttribute>> morphAttributes = new FastMap<>();
 
@@ -96,13 +97,13 @@ public class BufferGeometry extends AbstractGeometry
 		this.boundingSphere = null;
 	}
 
-	public Uint16Array getIndex() {
+	public AttributeData getIndex() {
 
 		return this.index;
 
 	}
 
-	public void setIndex( Uint16Array index ) {
+	public void setIndex( AttributeData index ) {
 
 		this.index = index;
 

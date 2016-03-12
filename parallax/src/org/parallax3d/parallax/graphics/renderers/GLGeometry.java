@@ -22,10 +22,11 @@ import java.util.List;
 
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
+import org.parallax3d.parallax.system.UuidObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 @ThreejsObject("THREE.WebGLGeometries")
-public abstract class GLGeometry {
+public abstract class GLGeometry extends UuidObject {
 
 	public Float32Array __colorArray;
 	public Float32Array __vertexArray;

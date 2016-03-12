@@ -24,10 +24,14 @@ import org.parallax3d.parallax.system.AttributeData;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
-import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 import org.parallax3d.parallax.system.gl.enums.BufferTarget;
 import org.parallax3d.parallax.system.gl.enums.BufferUsage;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GLObjects {
 
@@ -57,22 +61,20 @@ public class GLObjects {
 
         int[] indices = new int[0];
 
-        Uint16Array index = geometry.getIndex();
+        AttributeData index = geometry.getIndex();
         FastMap<BufferAttribute> attributes = geometry.getAttributes();
         BufferAttribute position = attributes.get("position");
 
-        // console.time( 'wireframe' );
-
         if ( index != null ) {
 
-            var edges = {};
-            var array = index.array;
+            Map<Integer, List<Integer>> edges = new HashMap<>();
+            Uint32Array array = (Uint32Array) index.getArray();
 
-            for ( int i = 0, l = array.length; i < l; i += 3 ) {
+            for ( int i = 0, l = array.getLength(); i < l; i += 3 ) {
 
-                int a = array[ i + 0 ];
-                int b = array[ i + 1 ];
-                int c = array[ i + 2 ];
+                int a = array.get( i + 0 );
+                int b = array.get( i + 1 );
+                int c = array.get( i + 2 );
 
                 if ( checkEdge( edges, a, b ) ) indices = new int[]{ a, b };
                 if ( checkEdge( edges, b, c ) ) indices = new int[]{ b, c };
@@ -86,7 +88,7 @@ public class GLObjects {
 
             for ( int i = 0, l = ( array.getLength() / 3 ) - 1; i < l; i += 3 ) {
 
-                int a = i + 0;
+                int a = i;
                 int b = i + 1;
                 int c = i + 2;
 
@@ -103,6 +105,35 @@ public class GLObjects {
         property.put("wireframe", attribute);
 
         return attribute;
+
+    }
+
+    public boolean checkEdge( Map<Integer, List<Integer>> edges, int a, int b )
+    {
+
+        if ( a > b ) {
+
+            int tmp = a;
+            a = b;
+            b = tmp;
+
+        }
+
+        List<Integer> list = edges.get( a );
+
+        if ( list == null ) {
+
+            edges.put( a , Arrays.asList(b));
+            return true;
+
+        } else if ( list.indexOf( b ) == -1 ) {
+
+            list.add( b );
+            return true;
+
+        }
+
+        return false;
 
     }
 
