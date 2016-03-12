@@ -15,21 +15,27 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package org.parallax3d.parallax.system;
+package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.graphics.core.InstancedBufferGeometry;
-import org.parallax3d.parallax.system.gl.enums.BeginMode;
+import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 
-public abstract class BufferRenderer {
+/**
+ * @author benaadams / https://twitter.com/ben_a_adams
+ */
+@ThreejsObject("THREE.InstancedInterleavedBuffer")
+public class InstancedInterleavedBuffer extends InterleavedBuffer {
 
-    BeginMode mode;
+    int meshPerAttribute;
 
-    public void setMode( BeginMode value ) {
-
-        mode = value;
-
+    public InstancedInterleavedBuffer(TypeArray array, int stride) {
+        this(array, stride, 0);
     }
 
-    public abstract void renderInstances(InstancedBufferGeometry geometry, int drawStart, int drawCount);
-    public abstract void render(int drawStart, int drawCount);
+    public InstancedInterleavedBuffer(TypeArray array, int stride, int meshPerAttribute) {
+        super(array, stride);
+
+        this.meshPerAttribute = meshPerAttribute;
+    }
+
 }

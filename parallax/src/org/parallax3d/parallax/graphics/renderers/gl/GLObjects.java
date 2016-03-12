@@ -20,7 +20,6 @@ package org.parallax3d.parallax.graphics.renderers.gl;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.system.AttributeData;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;

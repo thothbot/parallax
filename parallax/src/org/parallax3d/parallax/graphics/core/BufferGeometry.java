@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.core;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
-import org.parallax3d.parallax.system.AttributeData;
+import org.parallax3d.parallax.graphics.renderers.gl.AttributeData;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
@@ -33,7 +33,6 @@ import org.parallax3d.parallax.system.gl.enums.BufferTarget;
 import org.parallax3d.parallax.system.gl.enums.BufferUsage;
 
 import java.nio.Buffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;

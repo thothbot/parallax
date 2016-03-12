@@ -15,8 +15,9 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package org.parallax3d.parallax.system;
+package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.system.UuidObject;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 
 public abstract class AttributeData extends UuidObject {

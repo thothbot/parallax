@@ -42,6 +42,10 @@ public class InterleavedBufferAttribute extends UuidObject {
         return this.data;
     }
 
+    public int getOffset() {
+        return offset;
+    }
+
     public int getCount() {
 
         return this.data.getCount();

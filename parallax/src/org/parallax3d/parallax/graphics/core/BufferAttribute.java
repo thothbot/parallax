@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.system.AttributeData;
+import org.parallax3d.parallax.graphics.renderers.gl.AttributeData;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;

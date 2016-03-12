@@ -816,6 +816,101 @@ public class GLRenderer extends Renderer
 		}
 	}
 
+	private void setupVertexAttributes( Material material, Shader program, BufferGeometry geometry )
+	{
+		setupVertexAttributes(material, program, geometry, 0);
+	}
+
+	private void setupVertexAttributes( Material material, Shader program, BufferGeometry geometry, int startIndex )
+	{
+
+		if ( geometry instanceof InstancedBufferGeometry ) {
+
+			if ( !GLExtensions.check(gl, GLES20Ext.List.ANGLE_instanced_arrays ) ) {
+
+				Log.error( "WebGLRenderer.setupVertexAttributes: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays." );
+				return;
+
+			}
+
+		}
+
+		state.initAttributes();
+
+		FastMap<BufferAttribute> geometryAttributes = geometry.getAttributes();
+
+		FastMap<Integer> programAttributes = program.getAttributesLocations();
+
+		var materialDefaultAttributeValues = material.defaultAttributeValues;
+
+		for ( String name: programAttributes.keySet()) {
+
+			Integer programAttribute = programAttributes.get(name);
+
+			if ( programAttribute >= 0 ) {
+
+				BufferAttribute geometryAttribute = geometryAttributes.get( name );
+
+				if ( geometryAttribute != null ) {
+
+					int size = geometryAttribute.getItemSize();
+					int buffer = objects.getAttributeBuffer( geometryAttribute );
+
+					if ( geometryAttribute instanceof InterleavedBufferAttribute ) {
+
+						InterleavedBuffer data = ((InterleavedBufferAttribute) geometryAttribute).getData();
+						int stride = data.getStride();
+						int offset = ((InterleavedBufferAttribute)geometryAttribute).getOffset();
+
+						if ( data instanceof InstancedInterleavedBuffer ) {
+
+							state.enableAttributeAndDivisor( programAttribute, data.meshPerAttribute, extension );
+
+							if ( geometry.maxInstancedCount == undefined ) {
+
+								geometry.maxInstancedCount = data.meshPerAttribute * data.count;
+
+							}
+
+						} else {
+
+							state.enableAttribute( programAttribute );
+
+						}
+
+						_gl.bindBuffer( _gl.ARRAY_BUFFER, buffer );
+						_gl.vertexAttribPointer( programAttribute, size, _gl.FLOAT, false, stride * data.array.BYTES_PER_ELEMENT, ( startIndex * stride + offset ) * data.array.BYTES_PER_ELEMENT );
+
+					}
+
+					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryAttribute.getBuffer());
+
+					enableAttribute( programAttribute );
+
+					this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false, 0, startIndex * size * 4); // 4 bytes per Float32
+
+				}
+//				else if ( material.defaultAttributeValues != null ) {
+//
+//					if ( material.defaultAttributeValues[ key ].length === 2 ) {
+//
+//						GLES20.glVertexAttrib2fv( programAttribute, material.defaultAttributeValues[ key ] );
+//
+//					} else if ( material.defaultAttributeValues[ key ].length === 3 ) {
+//
+//						GLES20.glVertexAttrib3fv( programAttribute, material.defaultAttributeValues[ key ] );
+//
+//					}
+//
+//				}
+
+			}
+
+		}
+
+		state.disableUnusedAttributes();
+	}
+
 	/**
 	 * Morph Targets Buffer initialization
 	 */
@@ -975,51 +1070,6 @@ public class GLRenderer extends Renderer
 			Float32Array vals = object.__webglMorphTargetInfluences;
 			this.gl.glUniform1fv(uniforms.get("morphTargetInfluences").getLocation(), 1, vals.getTypedBuffer());
 		}
-	}
-
-	private void setupVertexAttributes( Material material, Shader program, BufferGeometry geometry, int startIndex ) {
-
-		FastMap<BufferAttribute> geometryAttributes = geometry.getAttributes();
-
-		FastMap<Integer> programAttributes = program.getAttributesLocations();
-
-		for ( String key: programAttributes.keySet()) {
-
-			Integer programAttribute = programAttributes.get(key);
-
-			if ( programAttribute >= 0 ) {
-
-				BufferAttribute geometryAttribute = geometryAttributes.get( key );
-
-				if ( geometryAttribute != null ) {
-
-					int size = geometryAttribute.getItemSize();
-					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryAttribute.getBuffer());
-
-					enableAttribute( programAttribute );
-
-					this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false, 0, startIndex * size * 4); // 4 bytes per Float32
-
-				}
-//				else if ( material.defaultAttributeValues != null ) {
-//
-//					if ( material.defaultAttributeValues[ key ].length === 2 ) {
-//
-//						GLES20.glVertexAttrib2fv( programAttribute, material.defaultAttributeValues[ key ] );
-//
-//					} else if ( material.defaultAttributeValues[ key ].length === 3 ) {
-//
-//						GLES20.glVertexAttrib3fv( programAttribute, material.defaultAttributeValues[ key ] );
-//
-//					}
-//
-//				}
-
-			}
-
-		}
-
-		disableUnusedAttributes();
 	}
 
 	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {
