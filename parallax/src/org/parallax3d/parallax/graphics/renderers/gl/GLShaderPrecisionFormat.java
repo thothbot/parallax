@@ -17,17 +17,18 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.system.gl;
+package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.enums.ShaderPrecisionSpecifiedTypes;
 import org.parallax3d.parallax.system.gl.enums.Shaders;
 
-public final class WebGLShaderPrecisionFormat {
+public final class GLShaderPrecisionFormat {
 
 	Int32Array precision = Int32Array.create(3);
 
-	public WebGLShaderPrecisionFormat(GL20 gl, Shaders shaderType, ShaderPrecisionSpecifiedTypes precisionType) {
+	public GLShaderPrecisionFormat(GL20 gl, Shaders shaderType, ShaderPrecisionSpecifiedTypes precisionType) {
 		gl.glGetShaderPrecisionFormat(shaderType.getValue(), precisionType.getValue(), precision.getTypedBuffer(), precision.getTypedBuffer());
 	}
 	

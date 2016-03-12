@@ -24,7 +24,7 @@ import org.parallax3d.parallax.system.gl.GLES20Ext;
 
 public final class GLExtensions {
 
-	public static boolean isSupported(GL20 gl, GLES20Ext.List id) {
+	public static boolean check(GL20 gl, GLES20Ext.List id) {
 
 		for(GLES20Ext.List synonym : id.getSynonyms())
 			return ((GwtGL20)gl).getWebGLRenderingContext().getExtension(synonym.name()) != null;

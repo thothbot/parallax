@@ -18,18 +18,22 @@
 
 package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
-import org.parallax3d.parallax.system.gl.arrays.Int32Array;
-
-import java.nio.IntBuffer;
+import org.parallax3d.parallax.system.gl.GLES20Ext;
+import org.parallax3d.parallax.system.gl.GLHelpers;
+import org.parallax3d.parallax.system.gl.enums.ShaderPrecisionSpecifiedTypes;
+import org.parallax3d.parallax.system.gl.enums.Shaders;
 
 @ThreejsObject("THREE.WebGLCapabilities")
 public class GLCapabilities {
 
     GL20 gl;
 
-    boolean logarithmicDepthBuffer = false;
+    Shader.PRECISION precision;
+
+    boolean logarithmicDepthBuffer;
 
     int maxTextures;
     int maxVertexTextures;
@@ -48,20 +52,27 @@ public class GLCapabilities {
     public GLCapabilities(GL20 gl) {
         this.gl = gl;
 
-        this.maxTextures = getIntGlParam( GL20.GL_MAX_TEXTURE_IMAGE_UNITS );
-        this.maxVertexTextures = getIntGlParam( GL20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS );
-        this.maxTextureSize = getIntGlParam( GL20.GL_MAX_TEXTURE_SIZE );
-        this.maxCubemapSize = getIntGlParam( GL20.GL_MAX_CUBE_MAP_TEXTURE_SIZE );
+        this.maxTextures         = GLHelpers.getParameter(gl, GL20.GL_MAX_TEXTURE_IMAGE_UNITS );
+        this.maxVertexTextures   = GLHelpers.getParameter(gl, GL20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS );
+        this.maxTextureSize      = GLHelpers.getParameter(gl, GL20.GL_MAX_TEXTURE_SIZE );
+        this.maxCubemapSize      = GLHelpers.getParameter(gl, GL20.GL_MAX_CUBE_MAP_TEXTURE_SIZE );
 
-        this.maxAttributes = getIntGlParam( GL20.GL_MAX_VERTEX_ATTRIBS );
-        this.maxVertexUniforms = getIntGlParam( GL20.GL_MAX_VERTEX_UNIFORM_VECTORS );
-        this.maxVaryings = getIntGlParam( GL20.GL_MAX_VARYING_VECTORS );
-        this.maxFragmentUniforms = getIntGlParam( GL20.GL_MAX_FRAGMENT_UNIFORM_VECTORS );
+        this.maxAttributes       = GLHelpers.getParameter(gl, GL20.GL_MAX_VERTEX_ATTRIBS );
+        this.maxVertexUniforms   = GLHelpers.getParameter(gl, GL20.GL_MAX_VERTEX_UNIFORM_VECTORS );
+        this.maxVaryings         = GLHelpers.getParameter(gl, GL20.GL_MAX_VARYING_VECTORS );
+        this.maxFragmentUniforms = GLHelpers.getParameter(gl, GL20.GL_MAX_FRAGMENT_UNIFORM_VECTORS );
 
         this.vertexTextures = this.maxVertexTextures > 0;
-        this.floatFragmentTextures = !! extensions.get( 'OES_texture_float' );
+        this.floatFragmentTextures = GLExtensions.check(gl, GLES20Ext.List.OES_texture_float);
         this.floatVertexTextures = this.vertexTextures && this.floatFragmentTextures;
 
+        this.logarithmicDepthBuffer = GLExtensions.check(gl, GLES20Ext.List.EXT_frag_depth);
+
+        calcPrecision();
+    }
+
+    public Shader.PRECISION getPrecision() {
+        return this.precision;
     }
 
     public boolean isLogarithmicDepthBuffer() {
@@ -112,10 +123,28 @@ public class GLCapabilities {
         return floatVertexTextures;
     }
 
-    private int getIntGlParam(int param)
-    {
-        IntBuffer buffer = Int32Array.create(3).getTypedBuffer();
-        this.gl.glGetIntegerv(param, buffer);
-        return buffer.get(0);
+    private void calcPrecision() {
+        GLShaderPrecisionFormat _vertexShaderPrecisionHighpFloat = new
+                GLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
+        GLShaderPrecisionFormat _vertexShaderPrecisionMediumpFloat =
+                new GLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
+        GLShaderPrecisionFormat _vertexShaderPrecisionLowpFloat = new
+                GLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
+
+        GLShaderPrecisionFormat _fragmentShaderPrecisionHighpFloat = new
+                GLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
+        GLShaderPrecisionFormat _fragmentShaderPrecisionMediumpFloat =
+                new GLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
+        GLShaderPrecisionFormat _fragmentShaderPrecisionLowpFloat = new
+                GLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
+
+        if(_vertexShaderPrecisionHighpFloat.getPrecision() > 0 &&
+                _fragmentShaderPrecisionHighpFloat.getPrecision() > 0)
+            this.precision = Shader.PRECISION.HIGHP;
+        else if(_vertexShaderPrecisionMediumpFloat.getPrecision() > 0 &&
+                _fragmentShaderPrecisionMediumpFloat.getPrecision() > 0)
+            this.precision = Shader.PRECISION.MEDIUMP;
+        else
+            this.precision = Shader.PRECISION.LOWP;
     }
 }

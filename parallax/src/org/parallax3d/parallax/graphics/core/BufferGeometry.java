@@ -69,6 +69,8 @@ import java.util.Set;
 @ThreejsObject("THREE.BufferGeometry")
 public class BufferGeometry extends AbstractGeometry
 {
+	public static long MaxIndex = 65535;
+
 	public static class DrawCall
 	{
 		public int start;

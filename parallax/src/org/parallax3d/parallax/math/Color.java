@@ -116,6 +116,14 @@ public final class Color
 		return b;
 	}
 
+	public void set(Color color) {
+		this.copy(color);
+	}
+
+	public void set(int hex) {
+		this.setHex(hex);
+	}
+
 	/**
 	 * Setting R-component of the color.
 	 *

@@ -29,7 +29,7 @@ public final class GLExtensions {
 
 	static final List<GLES20Ext.List> extensions = new ArrayList<>();
 
-	public static boolean isSupported(GL20 gl, GLES20Ext.List id) {
+	public static boolean check(GL20 gl, GLES20Ext.List id) {
 
 		if(extensions.size() == 0)
 		{

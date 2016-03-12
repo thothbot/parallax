@@ -19,7 +19,6 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -85,9 +84,8 @@ import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
-import org.parallax3d.parallax.system.gl.WebGLShaderPrecisionFormat;
+import org.parallax3d.parallax.system.gl.GLHelpers;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 import org.parallax3d.parallax.system.gl.enums.*;
 
@@ -123,6 +121,8 @@ public class GLRenderer extends Renderer
 	int transparentObjectsLastIndex = - 1;
 
 	Float32Array morphInfluences = Float32Array.create(8);
+
+	boolean premultipliedAlpha = true;
 
 	// clearing
 	boolean autoClear = true;
@@ -191,7 +191,23 @@ public class GLRenderer extends Renderer
 	{
 		this.gl = gl;
 
+		_scissor = new Vector4( 0, 0, _width, _height );
+		_viewport = new Vector4( 0, 0, _width, _height );
+
+		// default org.parallax3d.plugins (order is important)
 		this.plugins = new ArrayList<>();
+
+		GLExtensions.check(gl, GLES20Ext.List.OES_texture_float);
+		GLExtensions.check(gl, GLES20Ext.List.OES_texture_float_linear);
+		GLExtensions.check(gl, GLES20Ext.List.OES_texture_half_float);
+		GLExtensions.check(gl, GLES20Ext.List.OES_texture_half_float_linear);
+		GLExtensions.check(gl, GLES20Ext.List.OES_standard_derivatives);
+		GLExtensions.check(gl, GLES20Ext.List.ANGLE_instanced_arrays);
+
+		if(GLExtensions.check(gl, GLES20Ext.List.OES_element_index_uint))
+		{
+			BufferGeometry.MaxIndex = 4294967296L;
+		}
 
 		this.info = new GLRendererInfo();
 
@@ -205,76 +221,86 @@ public class GLRenderer extends Renderer
 		this.bufferRenderer = new GLBufferRenderer(gl, this.info);
 		this.indexedBufferRenderer = new GLIndexedBufferRenderer(gl, this.info);
 
-		this._lights           = new RendererLights();
-		this._programs         = new FastMap<Shader>();
-
-		this._supportsVertexTextures = ( this._maxVertexTextures > 0 );
-		this._supportsBoneTextures = this._supportsVertexTextures && GLExtensions.isSupported(gl, GLES20Ext.List.OES_texture_float);
-
-		this._vertexShaderPrecisionHighpFloat = new
-				WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
-		this._vertexShaderPrecisionMediumpFloat =
-				new WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
-		this._vertexShaderPrecisionLowpFloat = new
-				WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
-
-		this._fragmentShaderPrecisionHighpFloat = new
-				WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
-		this._fragmentShaderPrecisionMediumpFloat =
-				new WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
-		this._fragmentShaderPrecisionLowpFloat = new
-				WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
-
-		this.highpAvailable = _vertexShaderPrecisionHighpFloat.getPrecision() > 0 &&
-				_fragmentShaderPrecisionHighpFloat.getPrecision() > 0;
-		this.mediumpAvailable = _vertexShaderPrecisionMediumpFloat.getPrecision() > 0 &&
-				_fragmentShaderPrecisionMediumpFloat.getPrecision() > 0;
-
-		if ( this._precision == Shader.PRECISION.HIGHP && ! highpAvailable ) {
-
-			if ( mediumpAvailable ) {
-
-				this._precision = Shader.PRECISION.MEDIUMP;
-				Log.warn("WebGLRenderer: highp not supported, using mediump.");
-
-			} else {
-
-				this._precision = Shader.PRECISION.LOWP;
-				Log.warn("WebGLRenderer: highp and mediump not supported, using lowp.");
-
-			}
-
-		}
-
-		if ( this._precision == Shader.PRECISION.MEDIUMP && ! mediumpAvailable ) {
-
-			this._precision = Shader.PRECISION.LOWP;
-			Log.warn("WebGLRenderer: mediump not supported, using lowp.");
-		}
-
-		GLExtensions.isSupported(gl, GLES20Ext.List.OES_texture_float);
-		GLExtensions.isSupported(gl, GLES20Ext.List.OES_texture_float_linear);
-		GLExtensions.isSupported(gl, GLES20Ext.List.OES_standard_derivatives);
-
-		if ( _logarithmicDepthBuffer )
-		{
-			_logarithmicDepthBuffer = GLExtensions.isSupported(gl, GLES20Ext.List.EXT_frag_depth);
-		}
-
-		GLExtensions.isSupported(gl, GLES20Ext.List.WEBGL_compressed_texture_s3tc);
-
-		setSize(width, height);
 		setDefaultGLState();
-
-		// default org.parallax3d.plugins (order is important)
-		this.plugins = new ArrayList<>();
 	}
 
-	private int getIntGlParam(int param)
+	/**
+	 * Sets the sizes and also sets {@link #setViewport(int, int, int, int)} size.
+	 *
+	 * @param width  the canvas width.
+	 * @param height the canvas height.
+	 */
+	public void setSize(int width, int height)
 	{
-		IntBuffer buffer = Int32Array.create(3).getTypedBuffer();
-		this.gl.glGetIntegerv(param, buffer);
-		return buffer.get(0);
+		this.setViewport( 0, 0, width, height );
+	}
+
+	/**
+	 * Sets the viewport to render from (X, Y) to (X + absoluteWidth, Y + absoluteHeight).
+	 * By default X and Y = 0.
+	 * Also fires ViewportResize event.
+	 */
+	public void setViewport(int x, int y, int width, int height)
+	{
+		state.viewport( _viewport.set( x, y, width, height ) );
+	}
+
+	/**
+	 * Sets the scissor area from (x, y) to (x + absoluteWidth, y + absoluteHeight).
+	 */
+	public void setScissor(int x, int y, int width, int height)
+	{
+		state.scissor( _scissor.set( x, y, width, height ) );
+	}
+
+	/**
+	 * Enable the scissor test. When this is enabled, only the pixels
+	 * within the defined scissor area will be affected by further
+	 * renderer actions.
+	 */
+	public void setScissorTest(boolean enable)
+	{
+		state.setScissorTest( _scissorTest = enable );
+	}
+
+	public void setDefaultGLState()
+	{
+		state.init();
+		state.scissor(_currentScissor.copy( _scissor ).multiply( _pixelRatio ));
+		state.viewport( _currentViewport.copy( _viewport ).multiply( _pixelRatio ) );
+
+		glClearColor( _clearColor.getR(), _clearColor.getG(), _clearColor.getB(), _clearAlpha );
+	}
+
+	public void glClearColor( double r, double g, double  b, double  a )
+	{
+		if ( premultipliedAlpha )
+			r *= a; g *= a; b *= a;
+
+		state.clearColor( r, g, b, a );
+	}
+
+	public int getMaxAnisotropy()
+	{
+		if (GLExtensions.check(this.gl, GLES20Ext.List.EXT_texture_filter_anisotropic)) {
+			return GLHelpers.getParameter(gl, GLES20Ext.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+		} else {
+			return 0;
+		}
+	}
+
+	public Shader.PRECISION getPrecision() {
+		return capabilities.getPrecision();
+	}
+
+	public double getPixelRatio() {
+		return this._pixelRatio;
+	}
+
+	public void setPixelRatio(double value) {
+		_pixelRatio = value;
+
+		this.setSize( (int)_viewport.getZ(), (int)_viewport.getW() );
 	}
 
 	public void addPlugin(Plugin plugin)
@@ -293,6 +319,105 @@ public class GLRenderer extends Renderer
 		}
 	}
 
+	// -- Clearing
+
+	public Color getClearColor() {
+		return this._clearColor;
+	}
+
+
+	public void setClearColor( Color color )
+	{
+		setClearColor( color, 1.0 );
+	}
+
+	public void setClearColor( Color color, double alpha )
+	{
+		_clearColor.set( color );
+
+		_clearAlpha = alpha;
+
+		glClearColor( _clearColor.getR(), _clearColor.getG(), _clearColor.getB(), _clearAlpha );
+	}
+
+	public double getClearAlpha() {
+
+		return this._clearAlpha;
+
+	}
+
+	public void setClearAlpha( double alpha ) {
+
+		_clearAlpha = alpha;
+
+		glClearColor( _clearColor.getR(), _clearColor.getG(), _clearColor.getB(), _clearAlpha );
+
+	}
+
+	@Override
+	public void clear()
+	{
+		clear(true, true, true);
+	}
+
+	/**
+	 * Tells the renderer to clear its color, depth or stencil drawing buffer(s).
+	 * If no parameters are passed, no buffer will be cleared.
+	 *
+	 * @param color   is it should clear color
+	 * @param depth   is it should clear depth
+	 * @param stencil is it should clear stencil
+	 */
+	public void clear( boolean color, boolean depth, boolean stencil )
+	{
+		int bits = 0;
+
+		if ( color ) bits |= ClearBufferMask.COLOR_BUFFER_BIT.getValue();
+		if ( depth ) bits |= ClearBufferMask.DEPTH_BUFFER_BIT.getValue();
+		if ( stencil ) bits |= ClearBufferMask.STENCIL_BUFFER_BIT.getValue();
+
+		this.gl.glClear(bits);
+	}
+
+	public void clearColor()
+	{
+		this.gl.glClear(ClearBufferMask.COLOR_BUFFER_BIT.getValue());
+	}
+
+	public void clearDepth()
+	{
+		this.gl.glClear(ClearBufferMask.DEPTH_BUFFER_BIT.getValue());
+	}
+
+	public void clearStencil()
+	{
+		this.gl.glClear(ClearBufferMask.STENCIL_BUFFER_BIT.getValue());
+	}
+
+	/**
+	 * Clear {@link RenderTargetTexture} and GL buffers.
+	 */
+	public void clearTarget( RenderTargetTexture renderTarget,
+							 boolean color, boolean depth, boolean stencil )
+	{
+		setRenderTarget( renderTarget );
+		clear( color, depth, stencil );
+	}
+
+	// Reset
+
+	public void resetGLState() {
+
+		_currentProgram = 0;
+		_currentCamera = null;
+
+		_currentGeometryProgram = "";
+		_currentMaterialId = - 1;
+
+		state.reset();
+
+	}
+
 	public boolean supportsVertexTextures()
 	{
 		return this._maxVertexTextures > 0;
@@ -300,40 +425,27 @@ public class GLRenderer extends Renderer
 
 	public boolean supportsFloatTextures()
 	{
-		return GLExtensions.isSupported(this.gl, GLES20Ext.List.OES_texture_float);
+		return GLExtensions.check(this.gl, GLES20Ext.List.OES_texture_float);
 	}
 
 	public boolean supportsStandardDerivatives()
 	{
-		return GLExtensions.isSupported(this.gl, GLES20Ext.List.OES_standard_derivatives);
+		return GLExtensions.check(this.gl, GLES20Ext.List.OES_standard_derivatives);
 	}
 
 	public boolean supportsCompressedTextureS3TC()
 	{
-		return GLExtensions.isSupported(this.gl, GLES20Ext.List.WEBGL_compressed_texture_s3tc);
+		return GLExtensions.check(this.gl, GLES20Ext.List.WEBGL_compressed_texture_s3tc);
 	}
 
 	public boolean supportsCompressedTexturePVRTC()
 	{
-		return GLExtensions.isSupported(this.gl, GLES20Ext.List.WEBGL_compressed_texture_pvrtc);
+		return GLExtensions.check(this.gl, GLES20Ext.List.WEBGL_compressed_texture_pvrtc);
 	}
 
 	public boolean supportsBlendMinMax()
 	{
-		return GLExtensions.isSupported(this.gl, GLES20Ext.List.EXT_blend_minmax);
-	}
-
-	public int getMaxAnisotropy()
-	{
-		if (GLExtensions.isSupported(this.gl, GLES20Ext.List.EXT_texture_filter_anisotropic)) {
-			return this.getIntGlParam(GLES20Ext.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-		} else {
-			return 0;
-		}
-	}
-
-	public Shader.PRECISION getPrecision() {
-		return this._precision;
+		return GLExtensions.check(this.gl, GLES20Ext.List.EXT_blend_minmax);
 	}
 
 	/**
@@ -487,154 +599,6 @@ public class GLRenderer extends Renderer
 	 */
 	public GLRendererInfo getInfo() {
 		return info;
-	}
-
-	public void setDefaultGLState()
-	{
-		setClearColor(0x00000, 1.0);
-		this.gl.glClearStencil(0);
-
-		this.gl.glEnable(EnableCap.DEPTH_TEST.getValue());
-		this.gl.glDepthFunc(DepthFunction.LEQUAL.getValue());
-
-		this.gl.glFrontFace(FrontFaceDirection.CCW.getValue());
-		this.gl.glCullFace(CullFaceMode.BACK.getValue());
-		this.gl.glEnable(EnableCap.CULL_FACE.getValue());
-
-		this.gl.glEnable(EnableCap.BLEND.getValue());
-		this.gl.glBlendEquation(BlendEquationMode.FUNC_ADD.getValue());
-		this.gl.glBlendFunc(BlendingFactorSrc.SRC_ALPHA.getValue(), BlendingFactorDest.ONE_MINUS_SRC_ALPHA.getValue());
-
-		this.gl.glViewport(_viewportX, _viewportY, _viewportWidth, _viewportHeight);
-		this.gl.glClearColor((float)clearColor.getR(), (float)clearColor.getG(), (float)clearColor.getB(), (float)clearAlpha);
-	}
-
-	/**
-	 * Sets the sizes and also sets {@link #setViewport(int, int, int, int)} size.
-	 *
-	 * @param width  the canvas width.
-	 * @param height the canvas height.
-	 */
-	@Override
-	public void setSize(int width, int height)
-	{
-		super.setSize(width, height);
-
-		setViewport(0, 0, width, height);
-	}
-
-	/**
-	 * Sets the viewport to render from (X, Y) to (X + absoluteWidth, Y + absoluteHeight).
-	 * By default X and Y = 0.
-	 * Also fires ViewportResize event.
-	 */
-	public void setViewport(int x, int y, int width, int height)
-	{
-		this._viewportX = x;
-		this._viewportY = y;
-
-		this._viewportWidth = width;
-		this._viewportHeight = height;
-
-		this.gl.glViewport(this._viewportX, this._viewportY, this._viewportWidth, this._viewportHeight);
-
-		fireViewportResizeEvent(width, height);
-	}
-
-	/**
-	 * Sets the scissor area from (x, y) to (x + absoluteWidth, y + absoluteHeight).
-	 */
-	public void setScissor(int x, int y, int width, int height)
-	{
-		this.gl.glScissor(x, y, width, height);
-	}
-
-	/**
-	 * Enable the scissor test. When this is enabled, only the pixels
-	 * within the defined scissor area will be affected by further
-	 * renderer actions.
-	 */
-	public void enableScissorTest(boolean enable)
-	{
-		if (enable)
-			this.gl.glEnable(EnableCap.SCISSOR_TEST.getValue());
-		else
-			this.gl.glDisable(EnableCap.SCISSOR_TEST.getValue());
-	}
-
-	@Override
-	public void setClearColor( Color color, double alpha )
-	{
-		this.clearColor.copy(color);
-		this.clearAlpha = alpha;
-
-		this.gl.glClearColor((float) this.clearColor.getR(), (float) this.clearColor.getG(), (float) this.clearColor.getB(), (float) this.clearAlpha);
-	}
-
-	@Override
-	public void clear()
-	{
-		clear(true, true, true);
-	}
-
-	/**
-	 * Tells the renderer to clear its color, depth or stencil drawing buffer(s).
-	 * If no parameters are passed, no buffer will be cleared.
-	 *
-	 * @param color   is it should clear color
-	 * @param depth   is it should clear depth
-	 * @param stencil is it should clear stencil
-	 */
-	public void clear( boolean color, boolean depth, boolean stencil )
-	{
-		int bits = 0;
-
-		if ( color ) bits |= ClearBufferMask.COLOR_BUFFER_BIT.getValue();
-		if ( depth ) bits |= ClearBufferMask.DEPTH_BUFFER_BIT.getValue();
-		if ( stencil ) bits |= ClearBufferMask.STENCIL_BUFFER_BIT.getValue();
-
-		this.gl.glClear(bits);
-	}
-
-	public void clearColor()
-	{
-		this.gl.glClear(ClearBufferMask.COLOR_BUFFER_BIT.getValue());
-	}
-
-	public void clearDepth()
-	{
-		this.gl.glClear(ClearBufferMask.DEPTH_BUFFER_BIT.getValue());
-	}
-
-	public void clearStencil()
-	{
-		this.gl.glClear(ClearBufferMask.STENCIL_BUFFER_BIT.getValue());
-	}
-
-	/**
-	 * Clear {@link RenderTargetTexture} and GL buffers.
-	 */
-	public void clearTarget( RenderTargetTexture renderTarget,
-							 boolean color, boolean depth, boolean stencil )
-	{
-		setRenderTarget( renderTarget );
-		clear( color, depth, stencil );
-	}
-
-	public void resetGLState()
-	{
-		_currentProgram = 0;
-		_currentCamera = null;
-
-		_oldBlending = null;
-		_oldDepthTest = null;
-		_oldDepthWrite = null;
-		_oldDoubleSided = null;
-		_oldFlipSided = null;
-		_currentGeometryGroupHash = -1;
-		_currentMaterialId = -1;
-
-		_lightsNeedUpdate = true;
 	}
 
 	private void initAttributes() {
@@ -1211,7 +1175,7 @@ public class GLRenderer extends Renderer
 
 	public List<GeometryGroup> makeGroups( Geometry geometry, boolean usesFaceMaterial ) {
 
-		long maxVerticesInGroup = GLExtensions.isSupported(this.gl, GLES20Ext.List.OES_element_index_uint) ? 4294967296L : 65535L;
+		long maxVerticesInGroup = GLExtensions.check(this.gl, GLES20Ext.List.OES_element_index_uint) ? 4294967296L : 65535L;
 
 		int numMorphTargets = geometry.getMorphTargets().size();
 		int numMorphNormals = geometry.getMorphNormals().size();

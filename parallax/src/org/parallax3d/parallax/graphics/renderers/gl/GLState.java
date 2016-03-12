@@ -22,6 +22,8 @@ import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.GLES20Ext;
+import org.parallax3d.parallax.system.gl.GLHelpers;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 import org.parallax3d.parallax.system.gl.enums.*;
@@ -43,7 +45,7 @@ public class GLState
 
     Map<Integer, Boolean> capabilities = new HashMap<>();
 
-//    var compressedTextureFormats = null;
+    int[] compressedTextureFormats = null;
 
     Material.BLENDING currentBlending = null;
     BlendEquationMode currentBlendEquation = null;
@@ -96,7 +98,7 @@ public class GLState
     public GLState(GL20 gl) {
         this.gl = gl;
 
-        this.maxTextures = this.getIntGlParam(GL20.GL_MAX_TEXTURE_IMAGE_UNITS);
+        this.maxTextures = GLHelpers.getParameter(gl, GL20.GL_MAX_TEXTURE_IMAGE_UNITS);
     }
 
     public void init() {
@@ -140,16 +142,16 @@ public class GLState
 
         if ( attributeDivisors.get( attribute ) != 0 ) {
 
-            var extension = extensions.get( 'ANGLE_instanced_arrays' );
-
-            extension.vertexAttribDivisorANGLE( attribute, 0 );
+//            var extension = extensions.get( 'ANGLE_instanced_arrays' );
+//
+//            extension.vertexAttribDivisorANGLE( attribute, 0 );
             attributeDivisors.set( attribute , 0);
 
         }
 
     }
 
-    public void enableAttributeAndDivisor( int attribute, int meshPerAttribute, extension ) {
+    public void enableAttributeAndDivisor( int attribute, int meshPerAttribute ) {
 
         newAttributes.set( attribute , 1);
 
@@ -162,7 +164,7 @@ public class GLState
 
         if ( attributeDivisors.get( attribute ) != meshPerAttribute ) {
 
-            extension.vertexAttribDivisorANGLE( attribute, meshPerAttribute );
+//            extension.vertexAttribDivisorANGLE( attribute, meshPerAttribute );
             attributeDivisors.set( attribute , meshPerAttribute);
 
         }
@@ -206,23 +208,21 @@ public class GLState
 
     }
 
-    public void getCompressedTextureFormats() {
+    public int[] getCompressedTextureFormats() {
 
         if ( compressedTextureFormats == null ) {
 
-            compressedTextureFormats = [];
+            int formatCount = GLHelpers.getParameter(gl,GL20.GL_NUM_COMPRESSED_TEXTURE_FORMATS);
+            compressedTextureFormats = new int[formatCount];
 
-            if ( extensions.get( 'WEBGL_compressed_texture_pvrtc' ) ||
-                    extensions.get( 'WEBGL_compressed_texture_s3tc' ) ||
-                    extensions.get( 'WEBGL_compressed_texture_etc1' )) {
+            if(GLExtensions.check(gl, GLES20Ext.List.WEBGL_compressed_texture_pvrtc)
+                || GLExtensions.check(gl, GLES20Ext.List.WEBGL_compressed_texture_s3tc)
+                || GLExtensions.check(gl, GLES20Ext.List.WEBGL_compressed_texture_etc1))
+            {
+                IntBuffer buffer = Int32Array.create(4 * formatCount).getTypedBuffer();
+                gl.glGetIntegerv( gl.GL_COMPRESSED_TEXTURE_FORMATS, buffer );
 
-                var formats = gl.getParameter( gl.GL_COMPRESSED_TEXTURE_FORMATS );
-
-                for ( int i = 0; i < formats.length; i ++ ) {
-
-                    compressedTextureFormats.push( formats[ i ] );
-
-                }
+                compressedTextureFormats = buffer.array();
 
             }
 
@@ -548,7 +548,7 @@ public class GLState
 
         }
 
-    };
+    }
 
     // clear values
 
@@ -636,12 +636,5 @@ public class GLState
 
         currentFlipSided = null;
 
-    }
-
-    private int getIntGlParam(int param)
-    {
-        IntBuffer buffer = Int32Array.create(3).getTypedBuffer();
-        this.gl.glGetIntegerv(param, buffer);
-        return buffer.get(0);
     }
 }
