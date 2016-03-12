@@ -828,7 +828,7 @@ public class GLRenderer extends Renderer
 
 			if ( !GLExtensions.check(gl, GLES20Ext.List.ANGLE_instanced_arrays ) ) {
 
-				Log.error( "WebGLRenderer.setupVertexAttributes: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays." );
+				Log.error( "GLRenderer.setupVertexAttributes: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays." );
 				return;
 
 			}
@@ -864,11 +864,11 @@ public class GLRenderer extends Renderer
 
 						if ( data instanceof InstancedInterleavedBuffer ) {
 
-							state.enableAttributeAndDivisor( programAttribute, data.meshPerAttribute, extension );
+							state.enableAttributeAndDivisor( programAttribute, ((InstancedInterleavedBuffer) data).getMeshPerAttribute(), extension );
 
 							if ( geometry.maxInstancedCount == undefined ) {
 
-								geometry.maxInstancedCount = data.meshPerAttribute * data.count;
+								geometry.maxInstancedCount = ((InstancedInterleavedBuffer) data).getMeshPerAttribute() * data.count;
 
 							}
 
@@ -878,31 +878,15 @@ public class GLRenderer extends Renderer
 
 						}
 
-						_gl.bindBuffer( _gl.ARRAY_BUFFER, buffer );
-						_gl.vertexAttribPointer( programAttribute, size, _gl.FLOAT, false, stride * data.array.BYTES_PER_ELEMENT, ( startIndex * stride + offset ) * data.array.BYTES_PER_ELEMENT );
+						this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(),buffer);
+
+						this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false,
+							stride * data.getArray().getBytesPerElement(),
+							( startIndex * stride + offset ) * data.getArray().getBytesPerElement()); // 4 bytes per Float32
 
 					}
 
-					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometryAttribute.getBuffer());
-
-					enableAttribute( programAttribute );
-
-					this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false, 0, startIndex * size * 4); // 4 bytes per Float32
-
 				}
-//				else if ( material.defaultAttributeValues != null ) {
-//
-//					if ( material.defaultAttributeValues[ key ].length === 2 ) {
-//
-//						GLES20.glVertexAttrib2fv( programAttribute, material.defaultAttributeValues[ key ] );
-//
-//					} else if ( material.defaultAttributeValues[ key ].length === 3 ) {
-//
-//						GLES20.glVertexAttrib3fv( programAttribute, material.defaultAttributeValues[ key ] );
-//
-//					}
-//
-//				}
 
 			}
 

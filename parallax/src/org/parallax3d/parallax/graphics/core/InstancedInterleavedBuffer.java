@@ -38,4 +38,7 @@ public class InstancedInterleavedBuffer extends InterleavedBuffer {
         this.meshPerAttribute = meshPerAttribute;
     }
 
+    public int getMeshPerAttribute() {
+        return meshPerAttribute;
+    }
 }
