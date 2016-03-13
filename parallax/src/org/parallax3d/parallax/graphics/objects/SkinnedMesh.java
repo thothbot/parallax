@@ -176,7 +176,7 @@ public class SkinnedMesh extends Mesh {
 
 		if ( this.bindMode == "attached" ) {
 
-			this.bindMatrixInverse.getInverse( this.matrixWorld );
+			this.bindMatrixInverse.getInverse( this.getMatrixWorld() );
 
 		} else if ( this.bindMode == "detached" ) {
 

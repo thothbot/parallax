@@ -18,6 +18,7 @@
 package org.parallax3d.parallax.graphics.extras.objects;
 
 import org.parallax3d.parallax.graphics.core.GeometryObject;
+import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.core.Raycaster;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
@@ -30,19 +31,15 @@ import java.util.List;
  * @author alteredq / http://alteredqualia.com/
  */
 @ThreejsObject("THREE.ImmediateRenderObject")
-public class ImmediateRenderObject extends GeometryObject {
+public class ImmediateRenderObject extends Object3D {
+
+    Material material;
 
     public ImmediateRenderObject(Material material) {
-        super(null, material);
+        this.material = material;
     }
 
-    @Override
-    public void raycast(Raycaster raycaster, List<Raycaster.Intersect> intersects) {
-
-    }
-
-    @Override
-    public void renderBuffer(GLRenderer renderer, GLGeometry geometryBuffer, boolean updateBuffers) {
-
+    public Material getMaterial() {
+        return material;
     }
 }
