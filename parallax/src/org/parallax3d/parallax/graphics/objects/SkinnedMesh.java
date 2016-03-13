@@ -22,74 +22,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Matrix4;
-import org.parallax3d.parallax.math.Quaternion;
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
-import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 @ThreejsObject("THREE.SkinnedMesh")
 public class SkinnedMesh extends Mesh {
 
-	public Texture boneTexture;
-	public Float32Array boneMatrices = (Float32Array) Float32Array.createArray();
+	String bindMode = "attached";
+	Matrix4 bindMatrix = new Matrix4();
+	Matrix4 bindMatrixInverse = new Matrix4();
 
-	private String bindMode = "attached";
-	private Matrix4 bindMatrix = new Matrix4();
-	private Matrix4 bindMatrixInverse = new Matrix4();
-	private boolean useVertexTexture;
-	List<Bone> bones = new ArrayList<Bone>();
+	boolean useVertexTexture;
 
 	public SkinnedMesh(AbstractGeometry geometry, Material material, boolean useVertexTexture) {
 		super(geometry, material);
 
-		// init bones
+		this.useVertexTexture = useVertexTexture;
 
 		// TODO: remove bone creation as there is no reason (other than
 		// convenience) for THREE.SkinnedMesh to do this.
 
-		if ( getGeometry() != null && ((Geometry)getGeometry()).getBones() != null ) {
+		List<Bone> bones = new ArrayList<>();
 
-			for ( int b = 0, bl = ((Geometry)getGeometry()).getBones().size(); b < bl; ++b ) {
+		if ( this.geometry != null && ((Geometry)this.geometry).getBones() != null )
+		{
 
-				Bone gbone = ((Geometry)getGeometry()).getBones().get( b );
+			for ( int b = 0, bl = ((Geometry)this.geometry).getBones().size(); b < bl; ++ b ) {
 
-				Vector3 p = gbone.getPosition();
-				Quaternion q = gbone.getQuaternion();
-				Vector3 s = gbone.getScale();
+				Geometry.GBone gbone = ((Geometry)this.geometry).getBones().get( b );
 
 				Bone bone = new Bone( this );
 				bones.add( bone );
 
-				bone.setName( gbone.getName());
-				bone.getPosition().set( p.getX(), p.getY(), p.getZ() );
-				bone.getQuaternion().set( q.getX(), q.getY(), q.getZ(), q.getW() );
-
-				if ( s != null ) {
-
-					bone.getScale().set( s.getX(), s.getY(), s.getZ() );
-
-				} else {
-
-					bone.getScale().set( 1, 1, 1 );
-
-				}
+				bone.setName( gbone.name );
+				bone.getPosition().fromArray( gbone.pos );
+				bone.getQuaternion().fromArray( gbone.rotq );
+				if ( gbone.scl != null ) bone.getScale().fromArray( gbone.scl );
 
 			}
 
-			for ( int b = 0, bl = ((Geometry)getGeometry()).getBones().size(); b < bl; ++b ) {
+			for ( int b = 0, bl = ((Geometry) this.geometry).getBones().size(); b < bl; ++ b ) {
 
-				Bone gbone = ((Geometry)getGeometry()).getBones().get( b );
+				Geometry.GBone gbone = ((Geometry) this.geometry).getBones().get( b );
 
-				if ( gbone.getParent() != null ) {
-
-					// TODO
-//					bones[ gbone.getParent() ].add( bones.get( b ) );
+				if ( gbone.parent != -1)
+				{
+					bones.get( gbone.parent ).add( bones.get( b ) );
 
 				} else {
 
@@ -104,49 +88,44 @@ public class SkinnedMesh extends Mesh {
 		this.normalizeSkinWeights();
 
 		this.updateMatrixWorld( true );
-//		this.bind( new THREE.Skeleton( bones, undefined, useVertexTexture ) );
+		this.bind( new Skeleton( bones, null, useVertexTexture ), this.getMatrixWorld() );
+
 
 	}
 
-	public List<Bone> getBones() {
-		return bones;
+	public void bind( Skeleton skeleton, Matrix4 bindMatrix ) {
+
+		this.skeleton = skeleton;
+
+		if ( bindMatrix == null )
+		{
+
+			this.updateMatrixWorld( true );
+
+			this.skeleton.calculateInverses();
+
+			bindMatrix = this.getMatrixWorld();
+
+		}
+
+		this.bindMatrix.copy( bindMatrix );
+		this.bindMatrixInverse.getInverse( bindMatrix );
+
 	}
 
-	public void setBones(List<Bone> bones) {
-		this.bones = bones;
-	}
+	public void pose() {
 
-	public boolean isUseVertexTexture() {
-		return useVertexTexture;
-	}
+		this.skeleton.pose();
 
-	public void setUseVertexTexture(boolean useVertexTexture) {
-		this.useVertexTexture = useVertexTexture;
-	}
-
-	public Texture getBoneTexture() {
-		return boneTexture;
-	}
-
-	public void setBoneTexture(Texture boneTexture) {
-		this.boneTexture = boneTexture;
-	}
-
-	public Float32Array getBoneMatrices() {
-		return boneMatrices;
-	}
-
-	public void setBoneMatrices(Float32Array boneMatrices) {
-		this.boneMatrices = boneMatrices;
 	}
 
 	public void normalizeSkinWeights () {
 
-		if ( getGeometry() instanceof Geometry ) {
+		if ( this.geometry instanceof Geometry ) {
 
-			for ( int i = 0; i < ((Geometry)getGeometry()).getSkinIndices().size(); i ++ ) {
+			for ( int i = 0; i < ((Geometry) this.geometry).getSkinWeights().size(); i ++ ) {
 
-				Vector4 sw = ((Geometry)getGeometry()).getSkinWeights().get( i );
+				Vector4 sw = ((Geometry) this.geometry).getSkinWeights().get( i );
 
 				double scale = 1.0 / sw.lengthManhattan();
 
@@ -156,15 +135,40 @@ public class SkinnedMesh extends Mesh {
 
 				} else {
 
-					sw.set( 1 ); // this will be normalized by the shader anyway
+					sw.set( 1, 0, 0, 0 ); // do something reasonable
 
 				}
 
 			}
 
-		} else {
+		} else if ( this.geometry instanceof BufferGeometry) {
 
-			// skinning weights assumed to be normalized for THREE.BufferGeometry
+			Vector4 vec = new Vector4();
+
+			BufferAttribute skinWeight = ((BufferGeometry) this.geometry).getAttribute("skinWeight");
+
+			for ( int i = 0; i < skinWeight.getCount(); i ++ ) {
+
+				vec.setX( skinWeight.getX( i ) );
+				vec.setY( skinWeight.getY( i ) );
+				vec.setZ( skinWeight.getZ( i ) );
+				vec.setW( skinWeight.getW( i ) );
+
+				double scale = 1.0 / vec.lengthManhattan();
+
+				if ( scale != Double.POSITIVE_INFINITY ) {
+
+					vec.multiply( scale );
+
+				} else {
+
+					vec.set( 1, 0, 0, 0 ); // do something reasonable
+
+				}
+
+				skinWeight.setXYZW( i, vec.getX(), vec.getY(), vec.getZ(), vec.getW() );
+
+			}
 
 		}
 
@@ -174,18 +178,22 @@ public class SkinnedMesh extends Mesh {
 
 		super.updateMatrixWorld( true );
 
-		if ( this.bindMode == "attached" ) {
+		switch (this.bindMode) {
+			case "attached":
 
-			this.bindMatrixInverse.getInverse( this.getMatrixWorld() );
+				this.bindMatrixInverse.getInverse(this.getMatrixWorld());
 
-		} else if ( this.bindMode == "detached" ) {
+				break;
+			case "detached":
 
-			this.bindMatrixInverse.getInverse( this.bindMatrix );
+				this.bindMatrixInverse.getInverse(this.bindMatrix);
 
-		} else {
+				break;
+			default:
 
-			Log.warn("SkinnedMesh unreckognized bindMode: " + this.bindMode);
+				Log.warn("SkinnedMesh unreckognized bindMode: " + this.bindMode);
 
+				break;
 		}
 
 	}
@@ -201,6 +209,4 @@ public class SkinnedMesh extends Mesh {
 		return object;
 
 	}
-
-
 }

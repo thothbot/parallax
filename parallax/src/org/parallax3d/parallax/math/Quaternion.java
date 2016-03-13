@@ -597,6 +597,39 @@ public class Quaternion
 		return ( quaternion.x == this.x ) && ( quaternion.y == this.y ) && ( quaternion.z == this.z ) && ( quaternion.w == this.w );
 	}
 
+	public Quaternion fromArray ( Float32Array array )
+	{
+		return fromArray(array, 0);
+	}
+
+	public Quaternion fromArray ( Float32Array array, int offset )
+	{
+
+		this.x = array.get( offset );
+		this.y = array.get( offset + 1 );
+		this.z = array.get( offset + 2 );
+		this.w = array.get( offset + 3 );
+
+		return this;
+
+	}
+
+	public Float32Array toArray()
+	{
+		return toArray(Float32Array.create(3), 0);
+	}
+
+	public Float32Array toArray( Float32Array array, int offset )
+	{
+
+		array.set(offset, this.x);
+		array.set(offset + 1, this.y);
+		array.set(offset + 2, this.z);
+		array.set(offset + 3, this.w);
+
+		return array;
+	}
+
 	/**
 	 * Clone the current Quaternion
 	 * quaternion.clone() != quaternion;

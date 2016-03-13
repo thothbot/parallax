@@ -117,7 +117,7 @@ public class Geometry extends AbstractGeometry
 	 */
 	private boolean dynamic = true;
 
-	private List<Bone> bones;
+	private List<GBone> bones;
 
 	public Geometry()
 	{
@@ -252,11 +252,19 @@ public class Geometry extends AbstractGeometry
 		this.faceVertexUvs = faceVertexUvs;
 	}
 
-	public List<Bone> getBones() {
+	public static class GBone {
+		public Float32Array pos;
+		public Float32Array rotq;
+		public Float32Array scl;
+		public int parent = -1;
+		public String name;
+	}
+
+	public List<GBone> getBones() {
 		return bones;
 	}
 
-	public void setBones(List<Bone> bones) {
+	public void setBones(List<GBone> bones) {
 		this.bones = bones;
 	}
 

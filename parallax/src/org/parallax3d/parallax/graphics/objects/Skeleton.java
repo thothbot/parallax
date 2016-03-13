@@ -214,4 +214,9 @@ public class Skeleton {
         }
 
     }
+
+    public Skeleton clone()
+    {
+        return new Skeleton( this.bones, this.boneInverses, this.useVertexTexture );
+    }
 }

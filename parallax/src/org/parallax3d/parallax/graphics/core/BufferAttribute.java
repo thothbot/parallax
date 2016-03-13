@@ -58,11 +58,23 @@ public class BufferAttribute extends AttributeData {
 
 	}
 
+	public double getX( int index ) {
+
+		return ((Float32Array)this.array).get( index * this.itemSize );
+
+	}
+
 	public BufferAttribute setX( int index, double x ) {
 
 		((Float32Array)this.array).set(index * this.itemSize, x);
 
 		return this;
+
+	}
+
+	public double getY( int index ) {
+
+		return ((Float32Array)this.array).get( index * this.itemSize + 1 );
 
 	}
 
@@ -74,9 +86,29 @@ public class BufferAttribute extends AttributeData {
 
 	}
 
+	public double getZ( int index ) {
+
+		return ((Float32Array)this.array).get( index * this.itemSize + 2 );
+
+	}
+
 	public BufferAttribute setZ( int index, double z ) {
 
 		((Float32Array)this.array).set(index * this.itemSize + 2, z);
+
+		return this;
+
+	}
+
+	public double getW( int index ) {
+
+		return ((Float32Array)this.array).get( index * this.itemSize + 3 );
+
+	}
+
+	public BufferAttribute setW( int index, double w ) {
+
+		((Float32Array)this.array).set(index * this.itemSize + 3, 2);
 
 		return this;
 

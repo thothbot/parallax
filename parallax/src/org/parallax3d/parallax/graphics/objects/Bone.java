@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.objects;
 
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Object3D;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * A bone which is part of a SkinnedMesh.
@@ -29,7 +30,7 @@ import org.parallax3d.parallax.graphics.core.Object3D;
 public class Bone extends Object3D
 {
 
-	private SkinnedMesh skin;
+	SkinnedMesh skin;
 
 	/**
 	 *
