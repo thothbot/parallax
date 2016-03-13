@@ -841,7 +841,7 @@ public class GLRenderer extends Renderer
 
 		FastMap<Integer> programAttributes = program.getAttributesLocations();
 
-		var materialDefaultAttributeValues = material.defaultAttributeValues;
+		FastMap<Float32Array> materialDefaultAttributeValues = material.DEFAULT_ATTRIBUTE_VALUES;
 
 		for ( String name: programAttributes.keySet()) {
 
@@ -866,9 +866,9 @@ public class GLRenderer extends Renderer
 
 							state.enableAttributeAndDivisor( programAttribute, ((InstancedInterleavedBuffer) data).getMeshPerAttribute(), extension );
 
-							if ( geometry.maxInstancedCount == undefined ) {
+							if ( ((InstancedBufferGeometry)geometry).getMaxInstancedCount() == null ) {
 
-								geometry.maxInstancedCount = ((InstancedInterleavedBuffer) data).getMeshPerAttribute() * data.count;
+								((InstancedBufferGeometry)geometry).setMaxInstancedCount( ((InstancedInterleavedBuffer) data).getMeshPerAttribute() * data.getCount() );
 
 							}
 
@@ -885,6 +885,58 @@ public class GLRenderer extends Renderer
 							( startIndex * stride + offset ) * data.getArray().getBytesPerElement()); // 4 bytes per Float32
 
 					}
+					else
+					{
+						if ( geometryAttribute instanceof InstancedBufferAttribute ) {
+
+							state.enableAttributeAndDivisor( programAttribute, ((InstancedBufferAttribute) geometryAttribute).getMeshPerAttribute(), extension );
+
+							if ( ((InstancedBufferGeometry)geometry).getMaxInstancedCount() == null ) {
+
+								((InstancedBufferGeometry)geometry).setMaxInstancedCount(
+										((InstancedBufferAttribute) geometryAttribute).getMeshPerAttribute() * geometryAttribute.getCount() );
+
+							}
+
+						} else {
+
+							state.enableAttribute( programAttribute );
+
+						}
+
+						this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(),buffer);
+						this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false,
+								0, startIndex * size * 4 ); // 4 bytes per Float32
+
+					}
+
+				}
+				else
+				{
+					Float32Array value = materialDefaultAttributeValues.get( name );
+
+					if ( value != null ) {
+
+						switch ( value.getLength() ) {
+
+							case 2:
+								gl.glVertexAttrib2fv( programAttribute, value.getTypedBuffer() );
+								break;
+
+							case 3:
+								gl.glVertexAttrib3fv( programAttribute, value.getTypedBuffer() );
+								break;
+
+							case 4:
+								gl.glVertexAttrib4fv( programAttribute, value.getTypedBuffer() );
+								break;
+
+							default:
+								gl.glVertexAttrib1fv( programAttribute, value.getTypedBuffer() );
+
+						}
+
+					}
 
 				}
 
@@ -893,6 +945,163 @@ public class GLRenderer extends Renderer
 		}
 
 		state.disableUnusedAttributes();
+	}
+
+	// Rendering
+
+	@Override
+	public void render( Scene scene, Camera camera )
+	{
+		render(scene, camera, null);
+	}
+
+	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget )
+	{
+		render(scene, camera, renderTarget, false);
+	}
+
+	/**
+	 * Rendering.
+	 *
+	 * @param scene        the {@link Scene} object.
+	 * @param renderTarget optional
+	 * @param forceClear   optional
+	 */
+	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear )
+	{
+		// Render basic org.parallax3d.plugins
+		if(renderPlugins( this.plugins, scene, camera, Plugin.TYPE.BASIC_RENDER ))
+			return;
+
+		AbstractFog fog = scene.getFog();
+
+		// reset caching for this frame
+		_currentGeometryProgram = "";
+		_currentMaterialId = -1;
+		_currentCamera = null;
+
+		// update scene graph
+
+		if ( scene.isAutoUpdate() )
+			scene.updateMatrixWorld();
+
+		// update camera matrices and frustum
+
+		if ( camera.getParent() == null )
+			camera.updateMatrixWorld();
+
+		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
+
+		_projScreenMatrix.multiply( camera.getProjectionMatrix(),
+				camera.getMatrixWorldInverse() );
+		_frustum.setFromMatrix( _projScreenMatrix );
+
+		lights = new ArrayList<>();
+		opaqueObjectsLastIndex = - 1;
+		transparentObjectsLastIndex = - 1;
+
+		projectObject( scene, camera );
+
+		opaqueObjects = new ArrayList<>();
+		transparentObjects = new ArrayList<>();
+
+		if ( this.isSortObjects() ) {
+
+			Collections.sort(opaqueObjects, new GLObject.PainterSortStable());
+
+			Collections.sort(transparentObjects, new GLObject.ReversePainterSortStable());
+
+		}
+
+		setupLights( lights, camera );
+
+		// custom render org.parallax3d.plugins (pre pass)
+		renderPlugins( this.plugins, scene, camera, Plugin.TYPE.PRE_RENDER );
+
+		info.getRender().calls = 0;
+		info.getRender().vertices = 0;
+		info.getRender().faces = 0;
+		info.getRender().points = 0;
+
+		setRenderTarget( renderTarget );
+
+		if ( isAutoClear() || forceClear )
+		{
+			clear( this.isAutoClearColor(), this.isAutoClearDepth(), this.isAutoClearStencil() );
+		}
+
+		// set matrices for immediate objects
+
+		for ( int i = 0, il = this._webglObjectsImmediate.size(); i < il; i ++ )
+		{
+			GLObject webglObject = this._webglObjectsImmediate.get( i );
+			Object3D object = webglObject.object;
+
+			if ( object.isVisible() ) {
+
+				setupMatrices( object, camera );
+
+				webglObject.unrollImmediateBufferMaterial();
+
+			}
+
+		}
+
+		/*
+		Log.debug("  -- render() overrideMaterial : " + (scene.getOverrideMaterial() != null)
+				+ ", lights: " + lights.size()
+				+ ", opaqueObjects: " + opaqueObjects.size()
+				+ ", transparentObjects: " + transparentObjects.size());
+		*/
+
+		if ( scene.getOverrideMaterial() != null )
+		{
+			Material material = scene.getOverrideMaterial();
+
+			setBlending( material.getBlending(), material.getBlendEquation(),
+					material.getBlendSrc(), material.getBlendDst() );
+			setDepthTest( material.isDepthTest() );
+			setDepthWrite( material.isDepthWrite() );
+
+			setPolygonOffset( material.isPolygonOffset(),
+					material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits() );
+
+			renderObjects( opaqueObjects, camera, lights, fog, true, material );
+			renderObjects( transparentObjects, camera, lights, fog, true, material );
+			renderObjectsImmediate( _webglObjectsImmediate, null, camera, lights, fog, false, material );
+		}
+		else
+		{
+			Material material = null;
+
+			// opaque pass (front-to-back order)
+			setBlending( Material.BLENDING.NO );
+
+			renderObjects( opaqueObjects, camera, lights, fog, false, material );
+			renderObjectsImmediate( _webglObjectsImmediate, false, camera, lights, fog, false, material );
+
+			// transparent pass (back-to-front order)
+			renderObjects( transparentObjects, camera, lights, fog, true, material );
+			renderObjectsImmediate( _webglObjectsImmediate, true, camera, lights, fog, true, material );
+		}
+
+		// custom render org.parallax3d.plugins (post pass)
+		renderPlugins( this.plugins, scene, camera, Plugin.TYPE.POST_RENDER );
+
+		// Generate mipmap if we're using any kind of mipmap filtering
+		if ( renderTarget != null && renderTarget.isGenerateMipmaps()
+				&& renderTarget.getMinFilter() != TextureMinFilter.NEAREST
+				&& renderTarget.getMinFilter() != TextureMinFilter.LINEAR)
+		{
+			renderTarget.updateRenderTargetMipmap(this.gl);
+		}
+
+		// Ensure depth buffer writing is enabled so it can be cleared on next render
+
+		this.setDepthTest( true );
+		this.setDepthWrite( true );
+
+//		 GLES20.glFinish();
 	}
 
 	/**
@@ -1487,195 +1696,6 @@ public class GLRenderer extends Renderer
 
 		}
 
-	}
-
-	@Override
-	public void render( Scene scene, Camera camera )
-	{
-		render(scene, camera, null);
-	}
-
-	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget )
-	{
-		render(scene, camera, renderTarget, false);
-	}
-
-	/**
-	 * Rendering.
-	 *
-	 * @param scene        the {@link Scene} object.
-	 * @param renderTarget optional
-	 * @param forceClear   optional
-	 */
-	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget,
-						boolean forceClear )
-	{
-		// Render basic org.parallax3d.plugins
-		if(renderPlugins( this.plugins, scene, camera, Plugin.TYPE.BASIC_RENDER ))
-			return;
-
-		//Log.debug("Called render()");
-
-		AbstractFog fog = scene.getFog();
-
-		// reset caching for this frame
-		this._currentGeometryGroupHash = - 1;
-		this._currentCamera = null;
-		this._currentMaterialId = -1;
-		this._lightsNeedUpdate = true;
-
-		if ( this.isAutoUpdateScene() )
-		{
-			scene.updateMatrixWorld(false);
-		}
-
-		// update camera matrices and frustum
-		if ( camera.getParent() == null )
-		{
-			camera.updateMatrixWorld(false);
-		}
-
-		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
-
-		_projScreenMatrix.multiply( camera.getProjectionMatrix(),
-				camera.getMatrixWorldInverse() );
-		_frustum.setFromMatrix( _projScreenMatrix );
-
-		this.lights = new ArrayList<Light>();
-		this.opaqueObjects = new ArrayList<GLObject>();
-		this.transparentObjects = new ArrayList<GLObject>();
-
-		projectObject( scene, scene );
-
-		if ( this.isSortObjects() ) {
-
-			Collections.sort(opaqueObjects, new Comparator<GLObject>() {
-
-				@Override
-				public int compare(GLObject a, GLObject b) {
-					if ( a.z != b.z ) {
-
-						return (int)(b.z - a.z);
-
-					} else {
-
-						return a.id - b.id;
-
-					}
-
-				}
-			});
-
-			Collections.sort(transparentObjects, new Comparator<GLObject>() {
-
-				@Override
-				public int compare(GLObject a, GLObject b) {
-					if ( a.material.getId() != b.material.getId() ) {
-
-						return a.material.getId() - b.material.getId();
-
-					} else if ( a.z != b.z ) {
-
-						return (int)(a.z - b.z);
-
-					} else {
-
-						return a.id - b.id;
-
-					}
-
-				}
-			});
-
-		}
-
-		// custom render org.parallax3d.plugins (pre pass)
-		renderPlugins( this.plugins, scene, camera, Plugin.TYPE.PRE_RENDER );
-
-		this.getInfo().getRender().calls = 0;
-		this.getInfo().getRender().vertices = 0;
-		this.getInfo().getRender().faces = 0;
-		this.getInfo().getRender().points = 0;
-
-		setRenderTarget( renderTarget );
-
-		if ( this.isAutoClear() || forceClear )
-		{
-			clear( this.isAutoClearColor(), this.isAutoClearDepth(), this.isAutoClearStencil() );
-		}
-
-		// set matrices for immediate objects
-
-		for ( int i = 0, il = this._webglObjectsImmediate.size(); i < il; i ++ )
-		{
-			GLObject webglObject = this._webglObjectsImmediate.get( i );
-			Object3D object = webglObject.object;
-
-			if ( object.isVisible() ) {
-
-				setupMatrices( object, camera );
-
-				webglObject.unrollImmediateBufferMaterial();
-
-			}
-
-		}
-
-		/*
-		Log.debug("  -- render() overrideMaterial : " + (scene.getOverrideMaterial() != null)
-				+ ", lights: " + lights.size()
-				+ ", opaqueObjects: " + opaqueObjects.size()
-				+ ", transparentObjects: " + transparentObjects.size());
-		*/
-
-		if ( scene.getOverrideMaterial() != null )
-		{
-			Material material = scene.getOverrideMaterial();
-
-			setBlending( material.getBlending(), material.getBlendEquation(),
-					material.getBlendSrc(), material.getBlendDst() );
-			setDepthTest( material.isDepthTest() );
-			setDepthWrite( material.isDepthWrite() );
-
-			setPolygonOffset( material.isPolygonOffset(),
-					material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits() );
-
-			renderObjects( opaqueObjects, camera, lights, fog, true, material );
-			renderObjects( transparentObjects, camera, lights, fog, true, material );
-			renderObjectsImmediate( _webglObjectsImmediate, null, camera, lights, fog, false, material );
-		}
-		else
-		{
-			Material material = null;
-
-			// opaque pass (front-to-back order)
-			setBlending( Material.BLENDING.NO );
-
-			renderObjects( opaqueObjects, camera, lights, fog, false, material );
-			renderObjectsImmediate( _webglObjectsImmediate, false, camera, lights, fog, false, material );
-
-			// transparent pass (back-to-front order)
-			renderObjects( transparentObjects, camera, lights, fog, true, material );
-			renderObjectsImmediate( _webglObjectsImmediate, true, camera, lights, fog, true, material );
-		}
-
-		// custom render org.parallax3d.plugins (post pass)
-		renderPlugins( this.plugins, scene, camera, Plugin.TYPE.POST_RENDER );
-
-		// Generate mipmap if we're using any kind of mipmap filtering
-		if ( renderTarget != null && renderTarget.isGenerateMipmaps()
-				&& renderTarget.getMinFilter() != TextureMinFilter.NEAREST
-				&& renderTarget.getMinFilter() != TextureMinFilter.LINEAR)
-		{
-			renderTarget.updateRenderTargetMipmap(this.gl);
-		}
-
-		// Ensure depth buffer writing is enabled so it can be cleared on next render
-
-		this.setDepthTest( true );
-		this.setDepthWrite( true );
-
-//		 GLES20.glFinish();
 	}
 
 	public void renderObjectsImmediate ( List<GLObject> renderList,

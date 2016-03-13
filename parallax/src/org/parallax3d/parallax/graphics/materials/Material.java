@@ -37,6 +37,7 @@ import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
@@ -50,6 +51,13 @@ import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
 @ThreejsObject("THREE.Material")
 public abstract class Material
 {
+	// When rendered geometry doesn't include these attributes but the material does,
+	// use these default values in WebGL. This avoids errors when buffer data is missing.
+	public static final FastMap<Float32Array> DEFAULT_ATTRIBUTE_VALUES = new FastMap<Float32Array>(){{
+		put("color", Float32Array.create(new double[]{ 1., 1., 1. }));
+		put("uv", Float32Array.create(new double[]{ 0, 0 }));
+		put("uv2", Float32Array.create(new double[]{ 0, 0 }));
+	}};
 
 	private static int MaterialCount;
 
@@ -138,40 +146,40 @@ public abstract class Material
 		}
 	}
 
-	private int id;
+	int id;
 
-	private String name;
+	String name;
 
 	// Store shader associated to the material
-	private Shader shader;
+	Shader shader;
 
-	private SIDE side = SIDE.FRONT;
+	SIDE side = SIDE.FRONT;
 
-	private double opacity;
-	private boolean isTransparent;
+	double opacity;
+	boolean isTransparent;
 
-	private BLENDING blending;
-	private BlendingFactorSrc blendSrc;
-	private BlendingFactorDest blendDst;
-	private BlendEquationMode blendEquation;
+	BLENDING blending;
+	BlendingFactorSrc blendSrc;
+	BlendingFactorDest blendDst;
+	BlendEquationMode blendEquation;
 
-	private boolean isDepthTest;
-	private boolean isDepthWrite;
+	boolean isDepthTest;
+	boolean isDepthWrite;
 
-	private boolean isPolygonOffset;
-	private double polygonOffsetFactor;
-	private double polygonOffsetUnits;
+	boolean isPolygonOffset;
+	double polygonOffsetFactor;
+	double polygonOffsetUnits;
 
-	private double alphaTest;
+	double alphaTest;
 
-	private double overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
+	double overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
 
-	private boolean isVisible = true;
-	private boolean isNeedsUpdate = true;
+	boolean isVisible = true;
+	boolean isNeedsUpdate = true;
 
 	//
 
-	private boolean isShadowPass;
+	boolean isShadowPass;
 
 	public Material()
 	{

@@ -96,6 +96,8 @@ public class Object3D extends UuidObject
 
 	boolean isFrustumCulled = true;
 
+	int renderOrder = 0;
+
 	ObjectHandler handler;
 
 
@@ -167,6 +169,11 @@ public class Object3D extends UuidObject
 		if(this.handler != null)
 			this.handler.onRemove(Object3D.this);
 	}
+
+	public int getRenderOrder() {
+		return renderOrder;
+	}
+
 
 	/**
 	 * Unique number for this object instance.
@@ -833,6 +840,11 @@ public class Object3D extends UuidObject
 
 		this.matrixWorldNeedsUpdate = true;
 
+	}
+
+	public void updateMatrixWorld()
+	{
+		updateMatrixWorld(false);
 	}
 
 	/**

@@ -26,9 +26,55 @@ import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 
+import java.util.Comparator;
+
 @ThreejsObject("THREE.WebGLObjects")
 public class GLObject implements Comparable<GLObject>
 {
+	public static class PainterSortStable implements Comparator<GLObject> {
+
+		@Override
+		public int compare(GLObject a, GLObject b) {
+			if ( a.object.getRenderOrder() != b.object.getRenderOrder() ) {
+
+				return a.object.getRenderOrder() - b.object.getRenderOrder();
+
+			} else if ( a.material.getId() != b.material.getId() ) {
+
+				return a.material.getId() - b.material.getId();
+
+			} else if ( a.z != b.z ) {
+
+				return (int) (a.z - b.z);
+
+			} else {
+
+				return a.id - b.id;
+
+			}
+		}
+	}
+
+	public static class ReversePainterSortStable implements Comparator<GLObject> {
+
+		@Override
+		public int compare(GLObject a, GLObject b) {
+			if ( a.object.getRenderOrder() != b.object.getRenderOrder() ) {
+
+				return a.object.getRenderOrder() - b.object.getRenderOrder();
+
+			} if ( a.z != b.z ) {
+
+				return (int) (b.z - a.z);
+
+			} else {
+
+				return a.id - b.id;
+
+			}
+		}
+	}
+
 	public int id;
 	public GeometryObject object;
 	public GLGeometry buffer;
