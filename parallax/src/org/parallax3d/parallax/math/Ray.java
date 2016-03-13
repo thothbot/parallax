@@ -129,19 +129,27 @@ public class Ray
 
 	public double distanceToPoint( Vector3 point )
 	{
+		return Math.sqrt( this.distanceSqToPoint( point ) );
+
+	}
+
+	public double distanceSqToPoint( Vector3 point )
+	{
+
 		double directionDistance = _v1.sub( point, this.origin ).dot( this.direction );
+
 
 		// point behind the ray
 
 		if ( directionDistance < 0 ) {
 
-			return this.origin.distanceTo( point );
+			return this.origin.distanceToSquared( point );
 
 		}
 
 		_v1.copy( this.direction ).multiply( directionDistance ).add( this.origin );
 
-		return _v1.distanceTo( point );
+		return _v1.distanceToSquared( point );
 
 	}
 
