@@ -18,23 +18,20 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
+import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.core.AbstractGeometry;
-import org.parallax3d.parallax.graphics.core.GeometryGroup;
-import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
-import org.parallax3d.parallax.graphics.core.BufferGeometry;
 
 import java.util.Comparator;
 
 @ThreejsObject("THREE.WebGLObjects")
-public class GLObject implements Comparable<GLObject>
+public class RenderItem implements Comparable<RenderItem>
 {
-	public static class PainterSortStable implements Comparator<GLObject> {
+	public static class PainterSortStable implements Comparator<RenderItem> {
 
 		@Override
-		public int compare(GLObject a, GLObject b) {
+		public int compare(RenderItem a, RenderItem b) {
 			if ( a.object.getRenderOrder() != b.object.getRenderOrder() ) {
 
 				return a.object.getRenderOrder() - b.object.getRenderOrder();
@@ -55,10 +52,10 @@ public class GLObject implements Comparable<GLObject>
 		}
 	}
 
-	public static class ReversePainterSortStable implements Comparator<GLObject> {
+	public static class ReversePainterSortStable implements Comparator<RenderItem> {
 
 		@Override
-		public int compare(GLObject a, GLObject b) {
+		public int compare(RenderItem a, RenderItem b) {
 			if ( a.object.getRenderOrder() != b.object.getRenderOrder() ) {
 
 				return a.object.getRenderOrder() - b.object.getRenderOrder();
@@ -76,95 +73,94 @@ public class GLObject implements Comparable<GLObject>
 	}
 
 	public int id;
-	public GeometryObject object;
-	public GLGeometry buffer;
-	public boolean render;
+	public Object3D object;
+	public AbstractGeometry geometry;
+	public Object group;
+//	public GLGeometry buffer;
+//	public boolean render;
 
 	public Material material;
 
-	public Material opaque;
-	public Material transparent;
+//	public Material opaque;
+//	public Material transparent;
 	// render depth
 	public double z;
 
-	public GLObject(GLGeometry buffer, GeometryObject object)
+	public RenderItem(int id, Object3D object, AbstractGeometry geometry, Material material, double z, Object group)
 	{
-		this(buffer, object, null, null);
-	}
-
-	public GLObject(GLGeometry buffer, GeometryObject object, Material opaque, Material transparent)
-	{
-		this.buffer = buffer;
+		this.id = id;
 		this.object = object;
-		this.opaque = opaque;
-		this.transparent = transparent;
+		this.geometry = geometry;
+		this.material = material;
+		this.z = z;
+		this.group = group;
 	}
 
-	public void unrollImmediateBufferMaterial() {
-		Material material = object.getMaterial();
-
-		if ( material.isTransparent() ) {
-
-			this.transparent = material;
-			this.opaque = null;
-
-		} else {
-
-			this.opaque = material;
-			this.transparent = null;
-
-		}
-	}
-
-	public void unrollBufferMaterial(GLRenderer renderer)
-	{
-		GeometryObject object = this.object;
-		GLGeometry buffer = this.buffer;
-
-		AbstractGeometry geometry = object.getGeometry();
-		Material material = object.getMaterial();
-
-		if ( material instanceof MeshFaceMaterial )
-		{
-			int materialIndex = geometry instanceof BufferGeometry ? 0 : ((GeometryGroup)buffer).getMaterialIndex();
-
-			material = ((MeshFaceMaterial)material).getMaterials().get( materialIndex );
-
-			this.material = material;
-
-			if ( material.isTransparent() ) {
-
-				renderer.transparentObjects.add( this );
-
-			} else {
-
-				renderer.opaqueObjects.add( this );
-
-			}
-		}
-		else
-		{
-
-			this.material = material;
-
-			if ( material != null)
-			{
-				if ( material.isTransparent() ) {
-
-					renderer.transparentObjects.add( this );
-
-				} else {
-
-					renderer.opaqueObjects.add( this );
-
-				}
-
-			}
-		}
-	}
+//	public void unrollImmediateBufferMaterial() {
+//		Material material = object.getMaterial();
+//
+//		if ( material.isTransparent() ) {
+//
+//			this.transparent = material;
+//			this.opaque = null;
+//
+//		} else {
+//
+//			this.opaque = material;
+//			this.transparent = null;
+//
+//		}
+//	}
+//
+//	public void unrollBufferMaterial(GLRenderer renderer)
+//	{
+//		GeometryObject object = this.object;
+//		GLGeometry buffer = this.buffer;
+//
+//		AbstractGeometry geometry = object.getGeometry();
+//		Material material = object.getMaterial();
+//
+//		if ( material instanceof MeshFaceMaterial )
+//		{
+//			int materialIndex = geometry instanceof BufferGeometry ? 0 : ((GeometryGroup)buffer).getMaterialIndex();
+//
+//			material = ((MeshFaceMaterial)material).getMaterials().get( materialIndex );
+//
+//			this.material = material;
+//
+//			if ( material.isTransparent() ) {
+//
+//				renderer.transparentObjects.add( this );
+//
+//			} else {
+//
+//				renderer.opaqueObjects.add( this );
+//
+//			}
+//		}
+//		else
+//		{
+//
+//			this.material = material;
+//
+//			if ( material != null)
+//			{
+//				if ( material.isTransparent() ) {
+//
+//					renderer.transparentObjects.add( this );
+//
+//				} else {
+//
+//					renderer.opaqueObjects.add( this );
+//
+//				}
+//
+//			}
+//		}
+//	}
 
 	@Override
-	public int compareTo(GLObject o)
+	public int compareTo(RenderItem o)
 	{
 		double result = o.z - this.z;
 		return (result == 0) ? 0

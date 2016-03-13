@@ -72,7 +72,7 @@ public final class ShadowMap extends Plugin
 	private Vector3 min;
 	private Vector3 max;
 
-	List<GLObject> _renderList = new ArrayList<GLObject>();
+	List<RenderItem> _renderList = new ArrayList<RenderItem>();
 
 	public ShadowMap(GLRenderer renderer, Scene scene)
 	{
@@ -333,7 +333,7 @@ public final class ShadowMap extends Plugin
 
 			// set object matrices & frustum culling
 
-			this._renderList = new ArrayList<GLObject>();
+			this._renderList = new ArrayList<RenderItem>();
 
 			projectObject( getScene(), getScene(), shadowCamera );
 
@@ -342,7 +342,7 @@ public final class ShadowMap extends Plugin
 
 			for ( int j = 0, jl = _renderList.size(); j < jl; j ++ ) {
 
-				GLObject webglObject = _renderList.get( j );
+				RenderItem webglObject = _renderList.get( j );
 
 				GeometryObject object = webglObject.object;
 				GLGeometry buffer = webglObject.buffer;
@@ -408,7 +408,7 @@ public final class ShadowMap extends Plugin
 			for ( int j = 0, jl = getRenderer()._webglObjectsImmediate.size();
 				  j < jl; j ++ ) {
 
-				GLObject webglObject = getRenderer()._webglObjectsImmediate.get( j );
+				RenderItem webglObject = getRenderer()._webglObjectsImmediate.get( j );
 				GeometryObject object = webglObject.object;
 
 				if ( object.isVisible() && object.isCastShadow() ) {
@@ -446,7 +446,7 @@ public final class ShadowMap extends Plugin
 
 		if ( object.isVisible() ) {
 
-			List<GLObject> webglObjects = getRenderer()._webglObjects.get( object.getId() + "" );
+			List<RenderItem> webglObjects = getRenderer()._webglObjects.get( object.getId() + "" );
 
 			if ( webglObjects != null && object.isCastShadow() &&
 					(object.isFrustumCulled() == false ||
@@ -455,7 +455,7 @@ public final class ShadowMap extends Plugin
 
 				for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
 
-					GLObject webglObject = webglObjects.get( i );
+					RenderItem webglObject = webglObjects.get( i );
 
 					object._modelViewMatrix.multiply( shadowCamera.getMatrixWorldInverse(),
 							object.getMatrixWorld() );

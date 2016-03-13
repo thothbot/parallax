@@ -24,6 +24,8 @@ import java.util.*;
 import com.sun.prism.RenderTarget;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.extras.objects.ImmediateRenderObject;
+import org.parallax3d.parallax.graphics.materials.*;
 import org.parallax3d.parallax.graphics.objects.*;
 import org.parallax3d.parallax.graphics.renderers.gl.*;
 import org.parallax3d.parallax.system.*;
@@ -45,17 +47,6 @@ import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.lights.PointLight;
 import org.parallax3d.parallax.graphics.lights.ShadowLight;
-import org.parallax3d.parallax.graphics.materials.HasEnvMap;
-import org.parallax3d.parallax.graphics.materials.HasFog;
-import org.parallax3d.parallax.graphics.materials.HasSkinning;
-import org.parallax3d.parallax.graphics.materials.HasWireframe;
-import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
-import org.parallax3d.parallax.graphics.materials.Material;
-import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
-import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
-import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
-import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
-import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix3;
 import org.parallax3d.parallax.math.Matrix4;
@@ -98,10 +89,10 @@ public class GLRenderer extends Renderer
 
 	List<Light> lights = new ArrayList<Light>();
 
-	List<GLObject> opaqueObjects = new ArrayList<GLObject>();
+	List<RenderItem> opaqueObjects = new ArrayList<RenderItem>();
 	int opaqueObjectsLastIndex = - 1;
 
-	List<GLObject> transparentObjects = new ArrayList<GLObject>();
+	List<RenderItem> transparentObjects = new ArrayList<RenderItem>();
 	int transparentObjectsLastIndex = - 1;
 
 	Float32Array morphInfluences = Float32Array.create(8);
@@ -1007,9 +998,9 @@ public class GLRenderer extends Renderer
 
 		if ( this.isSortObjects() ) {
 
-			Collections.sort(opaqueObjects, new GLObject.PainterSortStable());
+			Collections.sort(opaqueObjects, new RenderItem.PainterSortStable());
 
-			Collections.sort(transparentObjects, new GLObject.ReversePainterSortStable());
+			Collections.sort(transparentObjects, new RenderItem.ReversePainterSortStable());
 
 		}
 
@@ -1030,59 +1021,21 @@ public class GLRenderer extends Renderer
 			clear( this.isAutoClearColor(), this.isAutoClearDepth(), this.isAutoClearStencil() );
 		}
 
-		// set matrices for immediate objects
-
-		for ( int i = 0, il = this._webglObjectsImmediate.size(); i < il; i ++ )
-		{
-			GLObject webglObject = this._webglObjectsImmediate.get( i );
-			Object3D object = webglObject.object;
-
-			if ( object.isVisible() ) {
-
-				setupMatrices( object, camera );
-
-				webglObject.unrollImmediateBufferMaterial();
-
-			}
-
-		}
-
-		/*
-		Log.debug("  -- render() overrideMaterial : " + (scene.getOverrideMaterial() != null)
-				+ ", lights: " + lights.size()
-				+ ", opaqueObjects: " + opaqueObjects.size()
-				+ ", transparentObjects: " + transparentObjects.size());
-		*/
-
 		if ( scene.getOverrideMaterial() != null )
 		{
-			Material material = scene.getOverrideMaterial();
+			Material overrideMaterial = scene.getOverrideMaterial();
 
-			setBlending( material.getBlending(), material.getBlendEquation(),
-					material.getBlendSrc(), material.getBlendDst() );
-			setDepthTest( material.isDepthTest() );
-			setDepthWrite( material.isDepthWrite() );
-
-			setPolygonOffset( material.isPolygonOffset(),
-					material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits() );
-
-			renderObjects( opaqueObjects, camera, lights, fog, true, material );
-			renderObjects( transparentObjects, camera, lights, fog, true, material );
-			renderObjectsImmediate( _webglObjectsImmediate, null, camera, lights, fog, false, material );
+			renderObjects( opaqueObjects, camera, fog, overrideMaterial );
+			renderObjects( transparentObjects, camera, fog, overrideMaterial );
 		}
 		else
 		{
-			Material material = null;
-
 			// opaque pass (front-to-back order)
-			setBlending( Material.BLENDING.NO );
-
-			renderObjects( opaqueObjects, camera, lights, fog, false, material );
-			renderObjectsImmediate( _webglObjectsImmediate, false, camera, lights, fog, false, material );
+			state.setBlending(Material.BLENDING.NO);
+			renderObjects( opaqueObjects, camera, fog );
 
 			// transparent pass (back-to-front order)
-			renderObjects( transparentObjects, camera, lights, fog, true, material );
-			renderObjectsImmediate( _webglObjectsImmediate, true, camera, lights, fog, true, material );
+			renderObjects( transparentObjects, camera, fog );
 		}
 
 		// custom render org.parallax3d.plugins (post pass)
@@ -1093,15 +1046,152 @@ public class GLRenderer extends Renderer
 				&& renderTarget.getMinFilter() != TextureMinFilter.NEAREST
 				&& renderTarget.getMinFilter() != TextureMinFilter.LINEAR)
 		{
-			renderTarget.updateRenderTargetMipmap(this.gl);
+			updateRenderTargetMipmap( renderTarget );
 		}
 
 		// Ensure depth buffer writing is enabled so it can be cleared on next render
 
-		this.setDepthTest( true );
-		this.setDepthWrite( true );
+		state.setDepthTest( true );
+		state.setDepthWrite( true );
+		state.setColorWrite( true );
 
-//		 GLES20.glFinish();
+	}
+
+	private void pushRenderItem( Object3D object, AbstractGeometry geometry, Material material, double z, Object group ) {
+
+		List<RenderItem> array;
+		int index = 0;
+
+		// allocate the next position in the appropriate array
+
+		if ( material.isTransparent() ) {
+
+			array = transparentObjects;
+			index = ++ transparentObjectsLastIndex;
+
+		} else {
+
+			array = opaqueObjects;
+			index = ++ opaqueObjectsLastIndex;
+
+		}
+
+		// recycle existing render item or grow the array
+
+		RenderItem renderItem = array.get( index );
+
+		if ( renderItem != null )
+		{
+			renderItem.id = object.getId();
+			renderItem.object = object;
+			renderItem.geometry = geometry;
+			renderItem.material = material;
+			renderItem.z = _vector3.getZ();
+			renderItem.group = group;
+		}
+		else
+		{
+			array.add( new RenderItem(object.getId(), object, geometry, material,_vector3.getZ(), group) );
+		}
+
+	}
+
+	private void projectObject( Object3D object, Camera camera ) {
+
+		if ( !object.isVisible() ) return;
+
+		if ( object.getLayers().test( camera.getLayers() ) )
+		{
+
+			if ( object instanceof Light ) {
+
+				lights.add((Light) object);
+
+			} else if ( object instanceof Sprite ) {
+
+				if ( !object.isFrustumCulled() || _frustum.isIntersectsObject((GeometryObject) object) ) {
+
+					sprites.push( object );
+
+				}
+
+//			} else if ( object instanceof LensFlare ) {
+//
+//				lensFlares.push( object );
+
+			} else if ( object instanceof ImmediateRenderObject) {
+
+				if ( sortObjects ) {
+
+					_vector3.setFromMatrixPosition( object.getMatrixWorld() );
+					_vector3.applyProjection( _projScreenMatrix );
+
+				}
+
+				pushRenderItem( object, null, ((ImmediateRenderObject) object).getMaterial(), _vector3.getZ(), null );
+
+			} else if ( object instanceof Mesh || object instanceof Line || object instanceof Points ) {
+
+				if ( object instanceof SkinnedMesh ) {
+
+					((SkinnedMesh) object).getSkeleton().update();
+
+				}
+
+				if ( object.frustumCulled == false || _frustum.isIntersectsObject((GeometryObject) object) ) {
+
+					Material material = object.material;
+
+					if ( material.isVisible() ) {
+
+						if ( sortObjects ) {
+
+							_vector3.setFromMatrixPosition( object.getMatrixWorld() );
+							_vector3.applyProjection( _projScreenMatrix );
+
+						}
+
+						AbstractGeometry geometry = objects.update( object );
+
+						if ( material instanceof MultiMaterial) {
+
+							var groups = geometry.groups;
+							var materials = material.materials;
+
+							for ( var i = 0, l = groups.length; i < l; i ++ ) {
+
+								var group = groups[ i ];
+								Material groupMaterial = materials[ group.materialIndex ];
+
+								if ( groupMaterial.isVisible() ) {
+
+									pushRenderItem( object, geometry, groupMaterial, _vector3.z, group );
+
+								}
+
+							}
+
+						} else {
+
+							pushRenderItem( object, geometry, material, _vector3.getZ(), null );
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		List<Object3D> children = object.getChildren();
+
+		for ( int i = 0, l = children.size(); i < l; i ++ ) {
+
+			projectObject( children.get( i ), camera );
+
+		}
 	}
 
 	/**
@@ -1336,7 +1426,7 @@ public class GLRenderer extends Renderer
 		if ( GeometryGroup.geometryGroups.get( geometry.getId() + "" ) == null ||
 				geometry.isGroupsNeedUpdate() ) {
 
-			this._webglObjects.put(object.getId() + "", new ArrayList<GLObject>());
+			this._webglObjects.put(object.getId() + "", new ArrayList<RenderItem>());
 
 			GeometryGroup.geometryGroups.put( geometry.getId() + "",
 					makeGroups( geometry, material instanceof MeshFaceMaterial ));
@@ -1486,90 +1576,15 @@ public class GLRenderer extends Renderer
 	private void addBuffer( GLGeometry buffer, GeometryObject object ) {
 
 		int id = object.getId();
-		List<GLObject> list = _webglObjects.get(id + "");
+		List<RenderItem> list = _webglObjects.get(id + "");
 		if(list == null) {
-			list = new ArrayList<GLObject>();
+			list = new ArrayList<RenderItem>();
 			_webglObjects.put(id + "", list);
 		}
 
-		GLObject webGLObject = new GLObject(buffer, object);
+		RenderItem webGLObject = new RenderItem(buffer, object);
 		webGLObject.id = id;
 		list.add(webGLObject);
-	}
-
-	private void projectObject( Object3D scene, Object3D object ) {
-
-		if ( object.isVisible() == false ) return;
-
-		if ( object instanceof Scene /*|| object instanceof Group */) {
-
-			// skip
-
-		} else {
-
-			if(!(object instanceof Light))
-				initObject( object, scene );
-
-			if ( object instanceof Light ) {
-
-				lights.add( (Light) object );
-
-			} /*else if ( object instanceof Sprite ) {
-
-				sprites.push( object );
-
-			} else if ( object instanceof LensFlare ) {
-
-				lensFlares.push( object );
-
-			} */else {
-
-				List<GLObject> webglObjects = this._webglObjects.get( object.getId() + "" );
-
-				if ( webglObjects != null && ( object.isFrustumCulled() == false ||
-						_frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
-
-					updateObject( (GeometryObject) object, scene );
-
-					for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
-
-						GLObject webglObject = webglObjects.get(i);
-
-						webglObject.unrollBufferMaterial(this);
-
-						webglObject.render = true;
-
-						if ( this.sortObjects == true ) {
-
-							if ( object.getRenderDepth() > 0 ) {
-
-								webglObject.z = object.getRenderDepth();
-
-							} else {
-
-								_vector3.setFromMatrixPosition( object.getMatrixWorld() );
-								_vector3.applyProjection( _projScreenMatrix );
-
-								webglObject.z = _vector3.getZ();
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-		}
-
-		for ( int i = 0, l = object.getChildren().size(); i < l; i ++ ) {
-
-			projectObject( scene, object.getChildren().get( i ) );
-
-		}
-
 	}
 
 	public Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup )
@@ -1698,7 +1713,7 @@ public class GLRenderer extends Renderer
 
 	}
 
-	public void renderObjectsImmediate ( List<GLObject> renderList,
+	public void renderObjectsImmediate ( List<RenderItem> renderList,
 										 Boolean isTransparentMaterial, Camera camera,
 										 List<Light> lights, AbstractFog fog,
 										 boolean useBlending, Material overrideMaterial ) {
@@ -1707,7 +1722,7 @@ public class GLRenderer extends Renderer
 
 		for ( int i = 0, il = renderList.size(); i < il; i ++ ) {
 
-			GLObject webglObject = renderList.get( i );
+			RenderItem webglObject = renderList.get( i );
 			GeometryObject object = webglObject.object;
 
 			if ( object.isVisible() ) {
@@ -1824,14 +1839,14 @@ public class GLRenderer extends Renderer
 		return retval;
 	}
 
-	private void renderObjects (List<GLObject> renderList, Camera camera,
+	private void renderObjects (List<RenderItem> renderList, Camera camera,
 								List<Light> lights, AbstractFog fog, boolean useBlending )
 	{
 		renderObjects ( renderList, camera, lights, fog, useBlending, null);
 	}
 
 	//renderList, camera, lights, fog, useBlending, overrideMaterial
-	private void renderObjects (List<GLObject> renderList, Camera camera,
+	private void renderObjects (List<RenderItem> renderList, Camera camera,
 								List<Light> lights, AbstractFog fog, boolean useBlending,
 								Material overrideMaterial )
 	{
@@ -1839,7 +1854,7 @@ public class GLRenderer extends Renderer
 
 		for ( int i = renderList.size() - 1; i != - 1; i -- ) {
 
-			GLObject webglObject = renderList.get( i );
+			RenderItem webglObject = renderList.get( i );
 
 			GeometryObject object = webglObject.object;
 			GLGeometry buffer = webglObject.buffer;
