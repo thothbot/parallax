@@ -38,12 +38,10 @@ public class SkinnedMesh extends Mesh {
 	Matrix4 bindMatrix = new Matrix4();
 	Matrix4 bindMatrixInverse = new Matrix4();
 
-	boolean useVertexTexture;
+    Skeleton skeleton;
 
 	public SkinnedMesh(AbstractGeometry geometry, Material material, boolean useVertexTexture) {
 		super(geometry, material);
-
-		this.useVertexTexture = useVertexTexture;
 
 		// TODO: remove bone creation as there is no reason (other than
 		// convenience) for THREE.SkinnedMesh to do this.
@@ -113,7 +111,11 @@ public class SkinnedMesh extends Mesh {
 
 	}
 
-	public void pose() {
+    public Skeleton getSkeleton() {
+        return skeleton;
+    }
+
+    public void pose() {
 
 		this.skeleton.pose();
 
@@ -199,7 +201,7 @@ public class SkinnedMesh extends Mesh {
 	}
 
 	public SkinnedMesh clone() {
-		return clone(new SkinnedMesh( getGeometry(), getMaterial(), this.useVertexTexture ));
+		return clone(new SkinnedMesh( getGeometry(), getMaterial(), this.skeleton.useVertexTexture ));
 	}
 
 	public SkinnedMesh clone( SkinnedMesh object ) {
