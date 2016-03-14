@@ -1158,14 +1158,14 @@ public class GLRenderer extends Renderer
 							var groups = geometry.groups;
 							var materials = material.materials;
 
-							for ( var i = 0, l = groups.length; i < l; i ++ ) {
+							for ( int i = 0, l = groups.length; i < l; i ++ ) {
 
 								var group = groups[ i ];
 								Material groupMaterial = materials[ group.materialIndex ];
 
 								if ( groupMaterial.isVisible() ) {
 
-									pushRenderItem( object, geometry, groupMaterial, _vector3.z, group );
+									pushRenderItem( object, geometry, groupMaterial, _vector3.getZ(), group );
 
 								}
 
@@ -1192,6 +1192,231 @@ public class GLRenderer extends Renderer
 			projectObject( children.get( i ), camera );
 
 		}
+	}
+
+	private void renderObjects (List<RenderItem> renderList, Camera camera, AbstractFog fog )
+	{
+		renderObjects ( renderList, camera, fog, null);
+	}
+
+	//renderList, camera, lights, fog, useBlending, overrideMaterial
+	private void renderObjects (List<RenderItem> renderList, Camera camera, AbstractFog fog, Material overrideMaterial )
+	{
+		for ( int i = 0, l = renderList.size(); i < l; i ++ ) {
+
+			RenderItem renderItem = renderList.get( i );
+
+			Object3D object = renderItem.object;
+			AbstractGeometry geometry = renderItem.geometry;
+			Material material = overrideMaterial == null ? renderItem.material : overrideMaterial;
+			Object group = renderItem.group;
+
+			object.getModelViewMatrix().multiply( camera.getMatrixWorldInverse(), object.getMatrixWorld() );
+			object.getNormalMatrix().getNormalMatrix( object.getModelViewMatrix() );
+
+			if ( object instanceof ImmediateRenderObject ) {
+
+				setMaterial( material );
+
+				Shader program = setProgram( camera, fog, material, object );
+
+				_currentGeometryProgram = "";
+
+				object.render( function ( object ) {
+
+					renderBufferImmediate( object, program, material );
+
+				} );
+
+			} else {
+
+				renderBufferDirect( camera, fog, geometry, material, object, group );
+
+			}
+
+		}
+	}
+
+	private void initMaterial ( Material material, AbstractFog fog, GeometryObject object )
+	{
+		Log.debug("WebGlRender: Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
+
+		FastMap<Object> materialProperties = properties.get( material );
+
+		var parameters = programCache.getParameters( material, _lights, fog, object );
+		var code = programCache.getProgramCode( material, parameters );
+
+		var program = materialProperties.get("program");
+		boolean programChange = true;
+
+		if ( program == null ) {
+
+			// new material
+			material.deallocate(this);
+
+		} else if ( program.code != code ) {
+
+			// changed glsl or parameters
+			releaseMaterialProgramReference( material );
+
+		} else if ( parameters.shaderID != undefined ) {
+
+			// same glsl and uniform list
+			return;
+
+		} else {
+
+			// only rebuild uniform list
+			programChange = false;
+
+		}
+
+		if ( programChange ) {
+
+			if ( parameters.get("shaderID") ) {
+
+				var shader = THREE.ShaderLib[ parameters.shaderID ];
+
+				materialProperties.__webglShader = {
+						name: material.type,
+						uniforms: THREE.UniformsUtils.clone( shader.uniforms ),
+						vertexShader: shader.vertexShader,
+						fragmentShader: shader.fragmentShader
+				};
+
+			} else {
+
+				materialProperties.__webglShader = {
+						name: material.type,
+						uniforms: material.uniforms,
+						vertexShader: material.vertexShader,
+						fragmentShader: material.fragmentShader
+				};
+
+			}
+
+			material.__webglShader = materialProperties.__webglShader;
+
+			program = programCache.acquireProgram( material, parameters, code );
+
+			materialProperties.program = program;
+			material.program = program;
+
+		}
+
+		FastMap<Integer> attributes = program.getAttributes();
+//		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
+
+		if(material instanceof HasSkinning)
+		{
+			if ( ((HasSkinning)material).isMorphTargets())
+			{
+				int numSupportedMorphTargets = 0;
+				for ( int i = 0; i < this.maxMorphTargets; i ++ )
+				{
+					String id = "morphTarget" + i;
+
+					if ( attributes.get( id ) >= 0 )
+					{
+						numSupportedMorphTargets ++;
+					}
+				}
+
+				((HasSkinning)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
+			}
+
+			if ( ((HasSkinning)material).isMorphNormals() )
+			{
+				int numSupportedMorphNormals = 0;
+				for ( int i = 0; i < this.maxMorphNormals; i ++ )
+				{
+					String id = "morphNormal" + i;
+
+					if ( attributes.get( id ) >= 0 )
+					{
+						numSupportedMorphNormals ++;
+					}
+				}
+
+				((HasSkinning)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
+			}
+		}
+
+		materialProperties.uniformsList = [];
+
+		var uniforms = materialProperties.__webglShader.uniforms,
+				uniformLocations = materialProperties.program.getUniforms();
+
+		for ( var u in uniforms ) {
+
+			var location = uniformLocations[ u ];
+
+			if ( location ) {
+
+				materialProperties.uniformsList.push( [ materialProperties.__webglShader.uniforms[ u ], location ] );
+
+			}
+
+		}
+
+		if ( material instanceof THREE.MeshPhongMaterial ||
+				material instanceof THREE.MeshLambertMaterial ||
+				material instanceof THREE.MeshStandardMaterial ||
+				material.lights ) {
+
+			// store the light setup it was created for
+
+			materialProperties.lightsHash = _lights.hash;
+
+			// wire up the material to this renderer's lighting state
+
+			uniforms.ambientLightColor.value = _lights.ambient;
+			uniforms.directionalLights.value = _lights.directional;
+			uniforms.spotLights.value = _lights.spot;
+			uniforms.pointLights.value = _lights.point;
+			uniforms.hemisphereLights.value = _lights.hemi;
+
+			uniforms.directionalShadowMap.value = _lights.directionalShadowMap;
+			uniforms.directionalShadowMatrix.value = _lights.directionalShadowMatrix;
+			uniforms.spotShadowMap.value = _lights.spotShadowMap;
+			uniforms.spotShadowMatrix.value = _lights.spotShadowMatrix;
+			uniforms.pointShadowMap.value = _lights.pointShadowMap;
+			uniforms.pointShadowMatrix.value = _lights.pointShadowMatrix;
+
+		}
+
+	}
+
+	private void setMaterial( Material material )
+	{
+		setMaterialFaces( material );
+
+		if ( material.isTransparent())
+		{
+			state.setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst(),
+					material.getBlendEquationAlpha(), material.getBlendSrcAlpha(), material.getBlendDstAlpha() );
+		}
+		else
+		{
+			state.setBlending( Material.BLENDING.NO );
+		}
+
+		state.setDepthFunc( material.getDepthFunc() );
+		state.setDepthTest( material.isDepthTest() );
+		state.setDepthWrite( material.isDepthWrite() );
+		state.setColorWrite( material.isColorWrite() );
+		state.setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(), material.getPolygonOffsetUnits() );
+
+	}
+
+	private void setMaterialFaces( Material material )
+	{
+		if(material.getSides() != Material.SIDE.DOUBLE)
+			state.enable( EnableCap.CULL_FACE );
+		else
+			state.disable( EnableCap.CULL_FACE );
+
+		state.setFlipSided( material.getSides() == Material.SIDE.BACK );
 	}
 
 	/**
@@ -1839,66 +2064,6 @@ public class GLRenderer extends Renderer
 		return retval;
 	}
 
-	private void renderObjects (List<RenderItem> renderList, Camera camera,
-								List<Light> lights, AbstractFog fog, boolean useBlending )
-	{
-		renderObjects ( renderList, camera, lights, fog, useBlending, null);
-	}
-
-	//renderList, camera, lights, fog, useBlending, overrideMaterial
-	private void renderObjects (List<RenderItem> renderList, Camera camera,
-								List<Light> lights, AbstractFog fog, boolean useBlending,
-								Material overrideMaterial )
-	{
-		Material material = null;
-
-		for ( int i = renderList.size() - 1; i != - 1; i -- ) {
-
-			RenderItem webglObject = renderList.get( i );
-
-			GeometryObject object = webglObject.object;
-			GLGeometry buffer = webglObject.buffer;
-
-			setupMatrices( object, camera );
-
-			if ( overrideMaterial != null) {
-
-				material = overrideMaterial;
-
-			} else {
-
-				material = webglObject.material;
-				//TODO: material = (isMaterialTransparent) ?
-				// webglObject.transparent : webglObject.opaque;
-
-				if ( material == null ) continue;
-
-				if ( useBlending )
-					setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
-
-				setDepthTest( material.isDepthTest() );
-				setDepthWrite( material.isDepthWrite() );
-				setPolygonOffset( material.isPolygonOffset(), material.getPolygonOffsetFactor(),
-						material.getPolygonOffsetUnits() );
-
-			}
-
-			setMaterialFaces( material );
-
-			if ( buffer instanceof BufferGeometry ) {
-
-				renderBufferDirect( camera, lights, fog, material, (BufferGeometry)buffer, object );
-
-			} else {
-
-				renderBuffer( camera, lights, fog, material, buffer, object );
-
-			}
-
-		}
-
-	}
-
 	/**
 	 * Buffer rendering.
 	 * Render GeometryObject with material.
@@ -2073,120 +2238,6 @@ public class GLRenderer extends Renderer
 
 		// Render object's buffers
 		object.renderBuffer(this, geometry, updateBuffers);
-	}
-
-	private void initMaterial ( Material material, List<Light> lights,
-								AbstractFog fog, GeometryObject object )
-	{
-		Log.debug("WebGlRender: Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
-
-		// heuristics to create shader parameters according to lights in the scene
-		// (not to blow over maxLights budget)
-		FastMap<Integer> maxLightCount = allocateLights( lights );
-		int maxShadows = allocateShadows( lights );
-
-		ProgramParameters parameters = new ProgramParameters();
-
-		parameters.gammaInput = this.isGammaInput();
-		parameters.gammaOutput = this.isGammaOutput();
-
-		parameters.precision = this._precision;
-
-		parameters.supportsVertexTextures = this._supportsVertexTextures;
-
-		if(fog != null)
-		{
-			parameters.useFog  = true;
-			parameters.useFog2 = (fog instanceof FogExp2);
-		}
-
-		parameters.logarithmicDepthBuffer = this._logarithmicDepthBuffer;
-
-		parameters.maxBones = allocateBones( object );
-
-		if(object instanceof SkinnedMesh)
-		{
-			parameters.useVertexTexture = this._supportsBoneTextures;
-			// && ((SkinnedMesh)object).useVertexTexture;
-		}
-
-		parameters.maxMorphTargets = this.maxMorphTargets;
-		parameters.maxMorphNormals = this.maxMorphNormals;
-
-		parameters.maxDirLights   = maxLightCount.get("directional");
-		parameters.maxPointLights = maxLightCount.get("point");
-		parameters.maxSpotLights  = maxLightCount.get("spot");
-		parameters.maxHemiLights  = maxLightCount.get("hemi");
-
-		parameters.maxShadows = maxShadows;
-
-		for(Plugin plugin: this.plugins) {
-			if (plugin instanceof ShadowMap && plugin.isEnabled() &&
-					object.isReceiveShadow()) {
-				parameters.shadowMapEnabled = object.isReceiveShadow() && maxShadows > 0;
-				parameters.shadowMapSoft = ((ShadowMap) plugin).isSoft();
-				parameters.shadowMapDebug = ((ShadowMap) plugin).isDebugEnabled();
-				parameters.shadowMapCascade = ((ShadowMap) plugin).isCascade();
-				break;
-			}
-		}
-
-		material.updateProgramParameters(parameters);
-		Log.debug("WebGlRender: initMaterial() called new Program");
-
-		String cashKey = material.getShader().getFragmentSource()
-				+ material.getShader().getVertexSource()
-				+ parameters.toString();
-
-		if(this._programs.containsKey(cashKey))
-		{
-			material.setShader( this._programs.get(cashKey) );
-		}
-		else
-		{
-			Shader shader = material.buildShader(this.gl, parameters);
-
-			this._programs.put(cashKey, shader);
-
-			this.getInfo().getMemory().programs = _programs.size();
-		}
-
-		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
-
-		if(material instanceof HasSkinning)
-		{
-			if ( ((HasSkinning)material).isMorphTargets())
-			{
-				int numSupportedMorphTargets = 0;
-				for ( int i = 0; i < this.maxMorphTargets; i ++ )
-				{
-					String id = "morphTarget" + i;
-
-					if ( attributes.get( id ) >= 0 )
-					{
-						numSupportedMorphTargets ++;
-					}
-				}
-
-				((HasSkinning)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
-			}
-
-			if ( ((HasSkinning)material).isMorphNormals() )
-			{
-				int numSupportedMorphNormals = 0;
-				for ( int i = 0; i < this.maxMorphNormals; i ++ )
-				{
-					String id = "morphNormal" + i;
-
-					if ( attributes.get( id ) >= 0 )
-					{
-						numSupportedMorphNormals ++;
-					}
-				}
-
-				((HasSkinning)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
-			}
-		}
 	}
 
 	private Shader setProgram( Camera camera, List<Light> lights, AbstractFog fog,
@@ -2581,24 +2632,6 @@ public class GLRenderer extends Renderer
 	{
 		object._modelViewMatrix.multiply( camera.getMatrixWorldInverse(), object.getMatrixWorld() );
 		object._normalMatrix.getNormalMatrix( object._modelViewMatrix );
-	}
-
-	public void setMaterialFaces( Material material )
-	{
-		if ( this.cache_oldMaterialSided == null || this.cache_oldMaterialSided != material.getSides() )
-		{
-			if(material.getSides() == Material.SIDE.DOUBLE)
-				this.gl.glDisable(EnableCap.CULL_FACE.getValue());
-			else
-				this.gl.glEnable(EnableCap.CULL_FACE.getValue());
-
-			if ( material.getSides() == Material.SIDE.BACK )
-				this.gl.glFrontFace(FrontFaceDirection.CW.getValue());
-			else
-				this.gl.glFrontFace(FrontFaceDirection.CCW.getValue());
-
-			this.cache_oldMaterialSided = material.getSides();
-		}
 	}
 
 	public void setDepthTest( boolean depthTest )

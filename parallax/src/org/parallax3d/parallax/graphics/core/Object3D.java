@@ -74,6 +74,10 @@ public class Object3D extends UuidObject
 
 	Vector3 scale;
 
+	Matrix4 modelViewMatrix = new Matrix4();
+
+	Matrix3 normalMatrix = new Matrix3();
+
 	private double renderDepth;
 
 	boolean rotationAutoUpdate;
@@ -100,13 +104,8 @@ public class Object3D extends UuidObject
 
 	ObjectHandler handler;
 
-
-	public Matrix3 _normalMatrix;
-	public Matrix4 _modelViewMatrix;
-
 	public boolean __webglActive;
 	public boolean __webglInit;
-
 
 	public Object3D()
 	{
@@ -253,6 +252,14 @@ public class Object3D extends UuidObject
 
 	public void setRotation(Euler rotation) {
 		this.rotation = rotation;
+	}
+
+	public Matrix3 getNormalMatrix() {
+		return normalMatrix;
+	}
+
+	public Matrix4 getModelViewMatrix() {
+		return modelViewMatrix;
 	}
 
 	/**

@@ -36,11 +36,13 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.UuidObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
+import org.parallax3d.parallax.system.gl.enums.DepthFunction;
 
 /**
  * Materials describe the appearance of objects. 
@@ -49,7 +51,7 @@ import org.parallax3d.parallax.system.gl.enums.BlendingFactorSrc;
  *
  */
 @ThreejsObject("THREE.Material")
-public abstract class Material
+public abstract class Material extends UuidObject
 {
 	// When rendered geometry doesn't include these attributes but the material does,
 	// use these default values in WebGL. This avoids errors when buffer data is missing.
@@ -64,7 +66,7 @@ public abstract class Material
 	/**
 	 * Material sides
 	 */
-	public static enum SIDE
+	public enum SIDE
 	{
 		FRONT,
 		BACK,
@@ -74,7 +76,7 @@ public abstract class Material
 	/**
 	 * Shading
 	 */
-	public static enum SHADING
+	public enum SHADING
 	{
 		NO, // NoShading = 0;
 		FLAT, // FlatShading = 1;
@@ -84,7 +86,7 @@ public abstract class Material
 	/**
 	 * Colors
 	 */
-	public static enum COLORS
+	public enum COLORS
 	{
 		NO, // NoColors = 0;
 		FACE, // FaceColors = 1;
@@ -94,7 +96,7 @@ public abstract class Material
 	/**
 	 * Blending modes
 	 */
-	public static enum BLENDING
+	public enum BLENDING
 	{
 		NO, // NoBlending = 0;
 		NORMAL, // NormalBlending = 1;
@@ -105,7 +107,8 @@ public abstract class Material
 		CUSTOM // CustomBlending = 6;
 	}
 
-	private static enum SHADER_DEFINE {
+	private enum SHADER_DEFINE
+	{
 		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT,
 
 		MAX_DIR_LIGHTS, // param
@@ -155,24 +158,40 @@ public abstract class Material
 
 	SIDE side = SIDE.FRONT;
 
-	double opacity;
-	boolean isTransparent;
+	double opacity = 1.0;
+	boolean isTransparent = false;
 
-	BLENDING blending;
-	BlendingFactorSrc blendSrc;
-	BlendingFactorDest blendDst;
-	BlendEquationMode blendEquation;
+	BLENDING blending = BLENDING.NORMAL;
 
-	boolean isDepthTest;
-	boolean isDepthWrite;
+	BlendingFactorSrc blendSrc = BlendingFactorSrc.SRC_ALPHA;
+	BlendingFactorDest blendDst = BlendingFactorDest.ONE_MINUS_SRC_ALPHA;
+	BlendEquationMode blendEquation = BlendEquationMode.FUNC_ADD;
 
-	boolean isPolygonOffset;
-	double polygonOffsetFactor;
-	double polygonOffsetUnits;
+	BlendingFactorSrc blendSrcAlpha = null;
+	BlendingFactorDest blendDstAlpha = null;
+	BlendEquationMode blendEquationAlpha = null;
 
-	double alphaTest;
+	DepthFunction depthFunc = DepthFunction.LEQUAL;
+	boolean isDepthTest = true;
+	boolean isDepthWrite = true;
 
-	double overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
+	boolean isColorWrite = true;
+
+	/**
+	 * override the renderer's default precision for this material
+	 */
+	Shader.PRECISION precision = null;
+
+	boolean isPolygonOffset = false;
+	double polygonOffsetFactor = 0.;
+	double polygonOffsetUnits = 0.;
+
+	double alphaTest = 0.;
+
+	/**
+	 * Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
+	 */
+	double overdraw = 0;
 
 	boolean isVisible = true;
 	boolean isNeedsUpdate = true;
@@ -184,23 +203,6 @@ public abstract class Material
 	public Material()
 	{
 		this.id = Material.MaterialCount++;
-
-		setOpacity(1.0);
-		setTransparent(false);
-
-		setBlending( BLENDING.NORMAL );
-		setBlendSrc( BlendingFactorSrc.SRC_ALPHA );
-		setBlendDst( BlendingFactorDest.ONE_MINUS_SRC_ALPHA );
-		setBlendEquation( BlendEquationMode.FUNC_ADD );
-
-		setDepthTest(true);
-		setDepthWrite(true);
-
-		setPolygonOffset(false);
-		setPolygonOffsetFactor(0.0);
-		setPolygonOffsetUnits(0.0);
-
-		setAlphaTest(0);
 	}
 
 	/**
@@ -313,6 +315,26 @@ public abstract class Material
 
 	public BlendingFactorSrc getBlendSrc() {
 		return blendSrc;
+	}
+
+	public BlendingFactorSrc getBlendSrcAlpha() {
+		return blendSrcAlpha;
+	}
+
+	public BlendingFactorDest getBlendDstAlpha() {
+		return blendDstAlpha;
+	}
+
+	public BlendEquationMode getBlendEquationAlpha() {
+		return blendEquationAlpha;
+	}
+
+	public DepthFunction getDepthFunc() {
+		return depthFunc;
+	}
+
+	public boolean isColorWrite() {
+		return isColorWrite;
 	}
 
 	/**

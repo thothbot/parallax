@@ -186,8 +186,9 @@ public class GLState
 
     }
 
-    public void enable( int id ) {
-
+    public void enable( EnableCap cap )
+    {
+        int id = cap.getValue();
         if ( !capabilities.containsKey(id) || !capabilities.get( id )) {
 
             this.gl.glEnable( id );
@@ -197,8 +198,9 @@ public class GLState
 
     }
 
-    public void disable( int id ) {
-
+    public void disable( EnableCap cap )
+    {
+        int id = cap.getValue();
         if ( capabilities.containsKey(id) && capabilities.get( id )) {
 
             this.gl.glDisable( id );
@@ -230,6 +232,11 @@ public class GLState
 
         return compressedTextureFormats;
 
+    }
+
+    public void setBlending( Material.BLENDING blending)
+    {
+        setBlending(blending, null, null, null, null, null, null);
     }
 
     public void setBlending( Material.BLENDING blending, BlendEquationMode blendEquation, BlendingFactorSrc blendSrc,
@@ -346,11 +353,11 @@ public class GLState
 
         if ( depthTest )
 
-            this.enable(EnableCap.DEPTH_TEST.getValue());
+            this.enable(EnableCap.DEPTH_TEST);
 
         else
 
-            this.disable(EnableCap.DEPTH_TEST.getValue());
+            this.disable(EnableCap.DEPTH_TEST);
 
     }
 
@@ -416,11 +423,11 @@ public class GLState
 
         if ( stencilTest )
 
-            this.enable(EnableCap.STENCIL_TEST.getValue());
+            this.enable(EnableCap.STENCIL_TEST);
 
         else
 
-            this.disable(EnableCap.STENCIL_TEST.getValue());
+            this.disable(EnableCap.STENCIL_TEST);
 
     }
 
@@ -467,9 +474,9 @@ public class GLState
     public void setPolygonOffset( boolean polygonOffset, double factor, double units ) {
 
         if ( polygonOffset )
-            this.enable(EnableCap.POLYGON_OFFSET_FILL.getValue());
+            this.enable(EnableCap.POLYGON_OFFSET_FILL);
         else
-            this.disable(EnableCap.POLYGON_OFFSET_FILL.getValue());
+            this.disable(EnableCap.POLYGON_OFFSET_FILL);
 
         if ( polygonOffset && ( currentPolygonOffsetFactor != factor || currentPolygonOffsetUnits != units ) ) {
 
@@ -494,11 +501,11 @@ public class GLState
 
         if ( scissorTest ) {
 
-            this.enable( EnableCap.SCISSOR_TEST.getValue() );
+            this.enable( EnableCap.SCISSOR_TEST );
 
         } else {
 
-            this.disable( EnableCap.SCISSOR_TEST.getValue() );
+            this.disable( EnableCap.SCISSOR_TEST );
 
         }
 
