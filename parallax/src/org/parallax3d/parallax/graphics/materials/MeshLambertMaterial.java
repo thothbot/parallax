@@ -412,27 +412,4 @@ public final class MeshLambertMaterial extends Material
 		return material;
 
 	}
-
-	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput)
-	{
-		super.refreshUniforms(camera, isGammaInput);
-		FastMap<Uniform> uniforms = getShader().getUniforms();
-
-		if ( isGammaInput )
-		{
-			((Color) uniforms.get("ambient").getValue()).copyGammaToLinear( getAmbient() );
-			((Color) uniforms.get("emissive").getValue()).copyGammaToLinear( getEmissive() );
-		}
-		else
-		{
-			uniforms.get("ambient").setValue( getAmbient() );
-			uniforms.get("emissive").setValue( getEmissive() );
-		}
-
-		if ( isWrapAround() )
-		{
-			((Vector3) uniforms.get("wrapRGB").getValue()).copy( getWrapRGB() );
-		}
-	}
 }

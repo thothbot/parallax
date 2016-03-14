@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.system.ViewportResizeListener;
 import org.parallax3d.parallax.graphics.renderers.shaders.ParticleBasicShader;
@@ -29,6 +30,7 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.FastMap;
 
+@ThreejsObject("THREE.PointsMaterial")
 public final class PointsMaterial extends Material implements HasFog,
 		HasColor, HasMap, HasVertexColors, ViewportResizeListener {
 	private boolean isFog;
@@ -150,21 +152,6 @@ public final class PointsMaterial extends Material implements HasFog,
 
 		return material;
 
-	}
-
-	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput) {
-		super.refreshUniforms(camera, isGammaInput);
-		final FastMap<Uniform> uniforms = getShader().getUniforms();
-
-		uniforms.get("psColor").setValue(getColor());
-		uniforms.get("opacity").setValue(getOpacity());
-		uniforms.get("size").setValue(getSize());
-
-		// Default
-		uniforms.get("scale").setValue(500 / 2.0);
-
-		uniforms.get("map").setValue(getMap());
 	}
 
 	@Override

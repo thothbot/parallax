@@ -90,19 +90,4 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 		return material;
 
 	}
-
-	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput)
-	{
-		super.refreshUniforms(camera, isGammaInput);
-		FastMap<Uniform> uniforms = getShader().getUniforms();
-
-		if(camera instanceof HasNearFar)
-		{
-			uniforms.get("mNear").setValue( ((HasNearFar) camera).getNear() );
-			uniforms.get("mFar").setValue( ((HasNearFar) camera).getFar() );
-		}
-
-		uniforms.get("opacity").setValue( getOpacity() );
-	}
 }

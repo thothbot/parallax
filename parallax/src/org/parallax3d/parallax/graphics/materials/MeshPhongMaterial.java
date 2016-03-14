@@ -36,8 +36,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.MeshPhongMaterial")
 public class MeshPhongMaterial extends Material
 	implements HasMaterialMap, HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
-	HasSkinning, HasAmbientEmissiveColor, HasShading
-{
+	HasSkinning, HasAmbientEmissiveColor, HasShading {
 
 	private Color color;
 	private Color ambient;
@@ -84,9 +83,8 @@ public class MeshPhongMaterial extends Material
 	private int numSupportedMorphTargets;
 	private int numSupportedMorphNormals;
 
-	public MeshPhongMaterial()
-	{
-		setWrapRGB(new Vector3( 1, 1, 1 ));
+	public MeshPhongMaterial() {
+		setWrapRGB(new Vector3(1, 1, 1));
 		setWrapAround(false);
 
 		setWireframe(false);
@@ -115,8 +113,7 @@ public class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public Shader getAssociatedShader()
-	{
+	public Shader getAssociatedShader() {
 		return new PhongShader();
 	}
 
@@ -130,7 +127,7 @@ public class MeshPhongMaterial extends Material
 	}
 
 	public MeshPhongMaterial setSpecular(int specular) {
-		this.specular = new Color( specular );
+		this.specular = new Color(specular);
 		return this;
 	}
 
@@ -275,7 +272,7 @@ public class MeshPhongMaterial extends Material
 
 	@Override
 	public MeshPhongMaterial setColor(int color) {
-		this.color = new Color( color );
+		this.color = new Color(color);
 		return this;
 	}
 
@@ -381,7 +378,7 @@ public class MeshPhongMaterial extends Material
 
 	@Override
 	public MeshPhongMaterial setAmbient(int ambient) {
-		this.ambient = new Color( ambient );
+		this.ambient = new Color(ambient);
 		return this;
 	}
 
@@ -398,7 +395,7 @@ public class MeshPhongMaterial extends Material
 
 	@Override
 	public MeshPhongMaterial setEmissive(int emissive) {
-		this.emissive = new Color( emissive );
+		this.emissive = new Color(emissive);
 		return this;
 	}
 
@@ -473,16 +470,16 @@ public class MeshPhongMaterial extends Material
 
 		super.clone(material);
 
-		material.color.copy( this.color );
-		material.ambient.copy( this.ambient );
-		material.emissive.copy( this.emissive );
-		material.specular.copy( this.specular );
+		material.color.copy(this.color);
+		material.ambient.copy(this.ambient);
+		material.emissive.copy(this.emissive);
+		material.specular.copy(this.specular);
 		material.shininess = this.shininess;
 
 		material.isMetal = this.isMetal;
 
 		material.isWrapAround = this.isWrapAround;
-		material.wrapRGB.copy( this.wrapRGB );
+		material.wrapRGB.copy(this.wrapRGB);
 
 		material.map = this.map;
 
@@ -492,7 +489,7 @@ public class MeshPhongMaterial extends Material
 		material.bumpScale = this.bumpScale;
 
 		material.normalMap = this.normalMap;
-		material.normalScale.copy( this.normalScale );
+		material.normalScale.copy(this.normalScale);
 
 		material.specularMap = this.specularMap;
 
@@ -519,30 +516,4 @@ public class MeshPhongMaterial extends Material
 		return material;
 
 	}
-
-	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput)
-	{
-		super.refreshUniforms(camera, isGammaInput);
-
-		FastMap<Uniform> uniforms = getShader().getUniforms();
-		uniforms.get("shininess").setValue( getShininess() );
-
-		if ( isGammaInput )
-		{
-			((Color) uniforms.get("ambient").getValue()).copyGammaToLinear( getAmbient() );
-			((Color) uniforms.get("emissive").getValue()).copyGammaToLinear( getEmissive() );
-			((Color) uniforms.get("specular").getValue()).copyGammaToLinear( getSpecular() );
-		}
-		else
-		{
-			uniforms.get("ambient").setValue( getAmbient() );
-			uniforms.get("emissive").setValue( getEmissive() );
-			uniforms.get("specular").setValue( getSpecular() );
-		}
-
-		if ( isWrapAround() )
-			((Vector3) uniforms.get("wrapRGB").getValue()).copy( getWrapRGB() );
-	}
-	
 }
