@@ -30,7 +30,8 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.Math")
 public class Mathematics
 {
-	public static double EPSILON =  Math.pow( 2.0, -52.0 );
+	public static final double EPSILON =  Math.pow( 2.0, -52.0 );
+	public static final double LN2 = 0.6931471805599453;
 
 	public static String generateUUID() {
 

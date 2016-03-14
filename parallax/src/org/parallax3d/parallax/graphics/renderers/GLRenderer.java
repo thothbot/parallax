@@ -28,6 +28,7 @@ import org.parallax3d.parallax.graphics.extras.objects.ImmediateRenderObject;
 import org.parallax3d.parallax.graphics.materials.*;
 import org.parallax3d.parallax.graphics.objects.*;
 import org.parallax3d.parallax.graphics.renderers.gl.*;
+import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.*;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
@@ -37,8 +38,6 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.lights.SpotLight;
 import org.parallax3d.parallax.graphics.textures.CompressedTexture;
 import org.parallax3d.parallax.graphics.textures.CubeTexture;
-import org.parallax3d.parallax.math.Frustum;
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.textures.DataTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.cameras.HasNearFar;
@@ -47,11 +46,6 @@ import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.lights.PointLight;
 import org.parallax3d.parallax.graphics.lights.ShadowLight;
-import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Matrix3;
-import org.parallax3d.parallax.math.Matrix4;
-import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.graphics.scenes.AbstractFog;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -518,26 +512,26 @@ public class GLRenderer extends Renderer
 
 		var buffers = properties.get( object );
 
-		if ( object.hasPositions && ! buffers.position ) buffers.position = _gl.createBuffer();
-		if ( object.hasNormals && ! buffers.normal ) buffers.normal = _gl.createBuffer();
-		if ( object.hasUvs && ! buffers.uv ) buffers.uv = _gl.createBuffer();
-		if ( object.hasColors && ! buffers.color ) buffers.color = _gl.createBuffer();
+		if ( object.hasPositions && ! buffers.position ) buffers.position = gl.createBuffer();
+		if ( object.hasNormals && ! buffers.normal ) buffers.normal = gl.createBuffer();
+		if ( object.hasUvs && ! buffers.uv ) buffers.uv = gl.createBuffer();
+		if ( object.hasColors && ! buffers.color ) buffers.color = gl.createBuffer();
 
 		var attributes = program.getAttributes();
 
 		if ( object.hasPositions ) {
 
-			_gl.bindBuffer( _gl.ARRAY_BUFFER, buffers.position );
-			_gl.bufferData( _gl.ARRAY_BUFFER, object.positionArray, _gl.DYNAMIC_DRAW );
+			gl.bindBuffer( gl.ARRAY_BUFFER, buffers.position );
+			gl.bufferData( gl.ARRAY_BUFFER, object.positionArray, gl.DYNAMIC_DRAW );
 
 			state.enableAttribute( attributes.position );
-			_gl.vertexAttribPointer( attributes.position, 3, _gl.FLOAT, false, 0, 0 );
+			gl.vertexAttribPointer( attributes.position, 3, gl.FLOAT, false, 0, 0 );
 
 		}
 
 		if ( object.hasNormals ) {
 
-			_gl.bindBuffer( _gl.ARRAY_BUFFER, buffers.normal );
+			gl.bindBuffer( gl.ARRAY_BUFFER, buffers.normal );
 
 			if ( material.type !== 'MeshPhongMaterial' && material.type !== 'MeshStandardMaterial' && material.shading === THREE.FlatShading ) {
 
@@ -565,39 +559,39 @@ public class GLRenderer extends Renderer
 
 			}
 
-			_gl.bufferData( _gl.ARRAY_BUFFER, object.normalArray, _gl.DYNAMIC_DRAW );
+			gl.bufferData( gl.ARRAY_BUFFER, object.normalArray, gl.DYNAMIC_DRAW );
 
 			state.enableAttribute( attributes.normal );
 
-			_gl.vertexAttribPointer( attributes.normal, 3, _gl.FLOAT, false, 0, 0 );
+			gl.vertexAttribPointer( attributes.normal, 3, gl.FLOAT, false, 0, 0 );
 
 		}
 
 		if ( object.hasUvs && material.map ) {
 
-			_gl.bindBuffer( _gl.ARRAY_BUFFER, buffers.uv );
-			_gl.bufferData( _gl.ARRAY_BUFFER, object.uvArray, _gl.DYNAMIC_DRAW );
+			gl.bindBuffer( gl.ARRAY_BUFFER, buffers.uv );
+			gl.bufferData( gl.ARRAY_BUFFER, object.uvArray, gl.DYNAMIC_DRAW );
 
 			state.enableAttribute( attributes.uv );
 
-			_gl.vertexAttribPointer( attributes.uv, 2, _gl.FLOAT, false, 0, 0 );
+			gl.vertexAttribPointer( attributes.uv, 2, gl.FLOAT, false, 0, 0 );
 
 		}
 
 		if ( object.hasColors && material.vertexColors !== THREE.NoColors ) {
 
-			_gl.bindBuffer( _gl.ARRAY_BUFFER, buffers.color );
-			_gl.bufferData( _gl.ARRAY_BUFFER, object.colorArray, _gl.DYNAMIC_DRAW );
+			gl.bindBuffer( gl.ARRAY_BUFFER, buffers.color );
+			gl.bufferData( gl.ARRAY_BUFFER, object.colorArray, gl.DYNAMIC_DRAW );
 
 			state.enableAttribute( attributes.color );
 
-			_gl.vertexAttribPointer( attributes.color, 3, _gl.FLOAT, false, 0, 0 );
+			gl.vertexAttribPointer( attributes.color, 3, gl.FLOAT, false, 0, 0 );
 
 		}
 
 		state.disableUnusedAttributes();
 
-		_gl.drawArrays( _gl.TRIANGLES, 0, object.count );
+		gl.drawArrays( gl.TRIANGLES, 0, object.count );
 
 		object.count = 0;
 
@@ -1419,6 +1413,389 @@ public class GLRenderer extends Renderer
 		state.setFlipSided( material.getSides() == Material.SIDE.BACK );
 	}
 
+	private Shader setProgram( Camera camera, AbstractFog fog, Material material, GeometryObject object )
+	{
+		// Use new material units for new shader
+		this._usedTextureUnits = 0;
+
+		FastMap<Object> materialProperties = properties.get( material );
+
+		if ( materialProperties.get("program") == null ) {
+
+			material.setNeedsUpdate( true );
+
+		}
+
+		if ( materialProperties.get("lightsHash") != null &&
+				materialProperties.get("lightsHash") != _lights.hash ) {
+
+			material.setNeedsUpdate( true );
+
+		}
+
+		if ( material.isNeedsUpdate() ) {
+
+			initMaterial( material, fog, object );
+			material.setNeedsUpdate( false );
+
+		}
+
+		boolean refreshProgram = false;
+		boolean refreshMaterial = false;
+		boolean refreshLights = false;
+
+		program = materialProperties.program;
+		FastMap<Uniform> p_uniforms = program.getUniforms();
+		FastMap<Uniform> m_uniforms = materialProperties.get("__webglShader").uniforms;
+
+		if ( program.id != _currentProgram ) {
+
+			gl.glUseProgram( program.program );
+			_currentProgram = program.id;
+
+			refreshProgram = true;
+			refreshMaterial = true;
+			refreshLights = true;
+
+		}
+
+		if ( material.getId() != _currentMaterialId ) {
+
+			_currentMaterialId = material.getId();
+
+			refreshMaterial = true;
+
+		}
+
+		if ( refreshProgram || !camera.equals( this._currentCamera) )
+		{
+			this.gl.glUniformMatrix4fv(p_uniforms.get("projectionMatrix"), 1, false, camera.getProjectionMatrix().getArray().getTypedBuffer());
+
+			if ( capabilities.isLogarithmicDepthBuffer() ) {
+
+				this.gl.glUniform1f(p_uniforms.get("logDepthBufFC"), (float) (2.0 / (Math.log(((HasNearFar) camera).getFar() + 1.0) / Mathematics.LN2)));
+
+			}
+
+			if ( !camera.equals( this._currentCamera) )
+			{
+				_currentCamera = camera;
+
+				// lighting uniforms depend on the camera so enforce an update
+				// now, in case this material supports lights - or later, when
+				// the next material that does gets activated:
+
+				refreshMaterial = true;		// set to true on material change
+				refreshLights = true;		// remains set until update done
+			}
+
+			// load material specific uniforms
+			// (shader material also gets them for the sake of genericity)
+			if ( material instanceof ShaderMaterial ||
+					material instanceof MeshPhongMaterial ||
+					material instanceof MeshStandardMaterial ||
+					material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null
+					) {
+
+				if ( p_uniforms.get("cameraPosition") != -1 )
+				{
+					_vector3.setFromMatrixPosition( camera.getMatrixWorld() );
+					this.gl.glUniform3f(p_uniforms.get("cameraPosition"), (float)_vector3.getX(), (float)_vector3.getY(), (float)_vector3.getZ());
+				}
+			}
+
+			if ( material instanceof MeshPhongMaterial ||
+					material instanceof MeshLambertMaterial ||
+					material instanceof MeshBasicMaterial ||
+					material instanceof MeshStandardMaterial ||
+					material instanceof ShaderMaterial ||
+					material instanceof HasSkinning && ((HasSkinning)material).isSkinning()
+					) {
+
+				if ( p_uniforms.get("viewMatrix") != -1 )
+				{
+					this.gl.glUniformMatrix4fv(p_uniforms.get("viewMatrix"), 1, false, camera.getMatrixWorldInverse().getArray().getTypedBuffer());
+				}
+			}
+		}
+
+		// skinning uniforms must be set even if material didn't change
+		// auto-setting of texture unit for bone texture must go before other textures
+		// not sure why, but otherwise weird things happen
+		if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() )
+		{
+			if ( object.bindMatrix && p_uniforms.bindMatrix !== undefined ) {
+
+				gl.uniformMatrix4fv( p_uniforms.bindMatrix, false, object.bindMatrix.elements );
+
+			}
+
+			if ( object.bindMatrixInverse && p_uniforms.bindMatrixInverse !== undefined ) {
+
+				gl.uniformMatrix4fv( p_uniforms.bindMatrixInverse, false, object.bindMatrixInverse.elements );
+
+			}
+
+			if ( capabilities.floatVertexTextures && object.skeleton && object.skeleton.useVertexTexture ) {
+
+				if ( p_uniforms.boneTexture !== undefined ) {
+
+					var textureUnit = getTextureUnit();
+
+					gl.uniform1i( p_uniforms.boneTexture, textureUnit );
+					_this.setTexture( object.skeleton.boneTexture, textureUnit );
+
+				}
+
+				if ( p_uniforms.boneTextureWidth !== undefined ) {
+
+					gl.uniform1i( p_uniforms.boneTextureWidth, object.skeleton.boneTextureWidth );
+
+				}
+
+				if ( p_uniforms.boneTextureHeight !== undefined ) {
+
+					gl.uniform1i( p_uniforms.boneTextureHeight, object.skeleton.boneTextureHeight );
+
+				}
+
+			} else if ( object.skeleton && object.skeleton.boneMatrices ) {
+
+				if ( p_uniforms.boneGlobalMatrices !== undefined ) {
+
+					gl.uniformMatrix4fv( p_uniforms.boneGlobalMatrices, false, object.skeleton.boneMatrices );
+
+				}
+
+			}
+		}
+
+		if ( refreshMaterial )
+		{
+			if ( material instanceof MeshPhongMaterial ||
+					material instanceof MeshLambertMaterial ||
+					material instanceof MeshStandardMaterial ||
+					material.lights ) {
+
+				// the current material requires lighting info
+
+				// note: all lighting uniforms are always set correctly
+				// they simply reference the renderer's state for their
+				// values
+				//
+				// use the current material's .needsUpdate flags to set
+				// the GL state when required
+
+				markUniformsLightsNeedsUpdate( m_uniforms, refreshLights );
+
+			}
+
+			// refresh uniforms common to several materials
+
+			if ( fog && material.fog ) {
+
+				refreshUniformsFog( m_uniforms, fog );
+
+			}
+
+			if ( material instanceof MeshBasicMaterial ||
+					material instanceof MeshLambertMaterial ||
+					material instanceof MeshPhongMaterial ||
+					material instanceof MeshStandardMaterial ) {
+
+				refreshUniformsCommon( m_uniforms, material );
+
+			}
+
+			// refresh single material specific uniforms
+
+			if ( material instanceof LineBasicMaterial ) {
+
+				refreshUniformsLine( m_uniforms, material );
+
+			} else if ( material instanceof LineDashedMaterial ) {
+
+				refreshUniformsLine( m_uniforms, material );
+				refreshUniformsDash( m_uniforms, material );
+
+			} else if ( material instanceof PointsMaterial ) {
+
+				refreshUniformsPoints( m_uniforms, material );
+
+			} else if ( material instanceof MeshLambertMaterial ) {
+
+				refreshUniformsLambert( m_uniforms, material );
+
+			} else if ( material instanceof MeshPhongMaterial ) {
+
+				refreshUniformsPhong( m_uniforms, material );
+
+			} else if ( material instanceof MeshStandardMaterial ) {
+
+				refreshUniformsStandard( m_uniforms, material );
+
+			} else if ( material instanceof MeshDepthMaterial ) {
+
+				m_uniforms.mNear.value = camera.near;
+				m_uniforms.mFar.value = camera.far;
+				m_uniforms.opacity.value = material.opacity;
+
+			} else if ( material instanceof MeshNormalMaterial ) {
+
+				m_uniforms.opacity.value = material.opacity;
+
+			}
+
+			// load common uniforms
+
+			loadUniformsGeneric( materialProperties.uniformsList );
+
+		}
+
+		loadUniformsMatrices( p_uniforms, object );
+
+		if ( p_uniforms.modelMatrix != null ) {
+
+			gl.uniformMatrix4fv( p_uniforms.modelMatrix, false, object.matrixWorld.elements );
+
+		}
+
+		if ( materialProperties.hasDynamicUniforms == true ) {
+
+			updateDynamicUniforms( materialProperties.uniformsList, object, camera );
+
+		}
+
+		return program;
+	}
+
+	private void updateDynamicUniforms ( uniforms, GeometryObject object, Camera camera )
+	{
+		var dynamicUniforms = [];
+
+		for ( int j = 0, jl = uniforms.length; j < jl; j ++ ) {
+
+			var uniform = uniforms[ j ][ 0 ];
+			var onUpdateCallback = uniform.onUpdateCallback;
+
+			if ( onUpdateCallback !== undefined ) {
+
+				onUpdateCallback.bind( uniform )( object, camera );
+				dynamicUniforms.push( uniforms[ j ] );
+
+			}
+
+		}
+
+		loadUniformsGeneric( dynamicUniforms );
+
+	}
+
+	// Uniforms (refresh uniforms objects)
+
+	private void refreshUniformsCommon ( FastMap<Uniform> uniforms, Material material )
+	{
+		uniforms.get("opacity").setValue( material.getOpacity() );
+
+		if(material instanceof HasColor)
+		{
+			uniforms.get("diffuse").setValue(((HasColor) material).getColor());
+		}
+
+		if ( material instanceof HasAmbientEmissiveColor)
+		{
+			((Color)uniforms.get("emissive").getValue()).copy( ((HasAmbientEmissiveColor) material).getEmissive() ).multiply( material.emissiveIntensity );
+		}
+
+		if(this instanceof HasMap)
+		{
+			uniforms.get("map").setValue( ((HasMap) material).getMap() );
+		}
+
+		if(this instanceof HasSpecularMap)
+		{
+			uniforms.get("specularMap").setValue( ((HasSpecularMap)material).getSpecularMap() );
+		}
+
+		if(this instanceof HasAlphaMap)
+		{
+			uniforms.get("alphaMap").setValue( ((HasAlphaMap)material).getAlphaMap() );
+		}
+
+
+		if ( material instanceof  HasAoMap)
+		{
+			uniforms.get("aoMap").setValue( ((HasAoMap)material).getAoMap() );
+			uniforms.get("aoMapIntensity").setValue( ((HasAoMap)material).getAoMapIntensity() );
+		}
+
+		// uv repeat and offset setting priorities
+		// 1. color map
+		// 2. specular map
+		// 3. normal map
+		// 4. bump map
+		// 5. alpha map
+		// 6. emissive map
+
+		Texture uvScaleMap = null;
+
+		if(this instanceof HasMap)
+			uvScaleMap = ((HasMap) this).getMap();
+
+		if(uvScaleMap == null && this instanceof HasSpecularMap)
+			uvScaleMap = ((HasSpecularMap)this).getSpecularMap();
+
+		if(uvScaleMap == null && this instanceof HasDisplacementMap)
+			uvScaleMap = ((HasDisplacementMap)this).getDisplacementMap();
+
+		if(uvScaleMap == null && this instanceof HasNormalMap)
+			uvScaleMap = ((HasNormalMap)this).getNormalMap();
+
+		if(uvScaleMap == null && this instanceof HasBumpMap)
+			uvScaleMap = ((HasBumpMap)this).getBumpMap();
+
+		if(uvScaleMap == null && this instanceof HasRoughnessMap)
+			uvScaleMap = ((HasRoughnessMap)this).getRoughnessMap();
+
+		if(uvScaleMap == null && this instanceof HasMetalnessMap)
+			uvScaleMap = ((HasMetalnessMap)this).getMetalnessMap();
+
+		if(uvScaleMap == null && this instanceof HasAlphaMap)
+			uvScaleMap = ((HasAlphaMap)this).getAlphaMap();
+
+		if(uvScaleMap == null && this instanceof HasEmissiveMap)
+			uvScaleMap = ((HasEmissiveMap)this).getEmissiveMap();
+
+		if ( uvScaleMap != null ) {
+
+			if ( uvScaleMap instanceof GLRenderTarget ) {
+
+				uvScaleMap = uvScaleMap.texture;
+
+			}
+
+			((Vector4)uniforms.get("offsetRepeat").getValue()).set(
+					uvScaleMap.getOffset().getX(),
+					uvScaleMap.getOffset().getY(),
+					uvScaleMap.getRepeat().getX(),
+					uvScaleMap.getRepeat().getY() );
+
+		}
+
+		if(this instanceof HasEnvMap)
+		{
+			HasEnvMap envMapMaterial = (HasEnvMap)this;
+
+			uniforms.get("envMap").setValue( envMapMaterial.getEnvMap() );
+			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null
+					&& envMapMaterial.getEnvMap() instanceof RenderTargetCubeTexture ) ? 1.0 : -1.0 );
+
+			uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
+			uniforms.get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
+		}
+
+	}
+
 	/**
 	 * Morph Targets Buffer initialization
 	 */
@@ -1553,13 +1930,13 @@ public class GLRenderer extends Renderer
 				} else {
 
 					/*
-					_gl.vertexAttribPointer( attributes[ "morphTarget" + m ], 3,
-					_gl.FLOAT, false, 0, 0 );
+					gl.vertexAttribPointer( attributes[ "morphTarget" + m ], 3,
+					gl.FLOAT, false, 0, 0 );
 
 					if ( material.morphNormals ) {
 
-						_gl.vertexAttribPointer( attributes[ "morphNormal" + m ], 3,
-						_gl.FLOAT, false, 0, 0 );
+						gl.vertexAttribPointer( attributes[ "morphNormal" + m ], 3,
+						gl.FLOAT, false, 0, 0 );
 
 					}
 					*/
@@ -2238,165 +2615,6 @@ public class GLRenderer extends Renderer
 
 		// Render object's buffers
 		object.renderBuffer(this, geometry, updateBuffers);
-	}
-
-	private Shader setProgram( Camera camera, List<Light> lights, AbstractFog fog,
-							   Material material, GeometryObject object )
-	{
-		// Use new material units for new shader
-		this._usedTextureUnits = 0;
-
-		if(material.isNeedsUpdate())
-		{
-			if(material.getShader() == null || material.getShader().getProgram() == 0)
-				material.deallocate(this);
-
-			initMaterial( material, lights, fog, object );
-			material.setNeedsUpdate(false);
-		}
-
-		if ( material instanceof HasSkinning && ((HasSkinning)material).isMorphTargets() )
-		{
-			if ( object instanceof Mesh && ((Mesh)object).__webglMorphTargetInfluences == null )
-			{
-				((Mesh)object).__webglMorphTargetInfluences = Float32Array.create( this.maxMorphTargets );
-			}
-		}
-
-		boolean refreshProgram = false;
-		boolean refreshMaterial = false;
-		boolean refreshLights = false;
-
-		Shader shader = material.getShader();
-		int program = shader.getProgram();
-		FastMap<Uniform> m_uniforms = shader.getUniforms();
-
-		if ( program != _currentProgram )
-		{
-			this.gl.glUseProgram(program);
-			this._currentProgram = program;
-
-			refreshProgram = true;
-			refreshMaterial = true;
-			refreshLights = true;
-		}
-
-		if ( material.getId() != this._currentMaterialId )
-		{
-			if(_currentMaterialId == -1) refreshLights = true;
-
-			this._currentMaterialId = material.getId();
-			refreshMaterial = true;
-		}
-
-		if ( refreshProgram || !camera.equals( this._currentCamera) )
-		{
-			this.gl.glUniformMatrix4fv(m_uniforms.get("projectionMatrix").getLocation(), 1, false, camera.getProjectionMatrix().getArray().getTypedBuffer());
-
-			if ( _logarithmicDepthBuffer ) {
-
-				this.gl.glUniform1f(m_uniforms.get("logDepthBufFC").getLocation(), (float) (2.0 / (Math.log(((HasNearFar) camera).getFar() + 1.0) / 0.6931471805599453 /*Math.LN2*/)));
-
-			}
-
-			if ( !camera.equals( this._currentCamera) )
-				this._currentCamera = camera;
-
-			// load material specific uniforms
-			// (shader material also gets them for the sake of genericity)
-			if ( material.getClass() == ShaderMaterial.class ||
-					material.getClass() == MeshPhongMaterial.class ||
-					material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null
-					) {
-
-				if ( m_uniforms.get("cameraPosition").getLocation() != -1 )
-				{
-					_vector3.setFromMatrixPosition( camera.getMatrixWorld() );
-					this.gl.glUniform3f(m_uniforms.get("cameraPosition").getLocation(), (float)_vector3.getX(), (float)_vector3.getY(), (float)_vector3.getZ());
-				}
-			}
-
-			if ( material.getClass() == MeshPhongMaterial.class ||
-					material.getClass() == MeshLambertMaterial.class ||
-					material.getClass() == MeshBasicMaterial.class ||
-					material.getClass() == ShaderMaterial.class ||
-					material instanceof HasSkinning && ((HasSkinning)material).isSkinning()
-					) {
-
-				if ( m_uniforms.get("viewMatrix").getLocation() != -1 )
-				{
-					this.gl.glUniformMatrix4fv(m_uniforms.get("viewMatrix").getLocation(), 1, false, camera.getMatrixWorldInverse().getArray().getTypedBuffer());
-				}
-			}
-		}
-
-		// skinning uniforms must be set even if material didn't change
-		// auto-setting of texture unit for bone texture must go before other textures
-		// not sure why, but otherwise weird things happen
-		if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() )
-		{
-			if ( object instanceof SkinnedMesh && ((SkinnedMesh)object).isUseVertexTexture() &&
-					this._supportsBoneTextures)
-			{
-				if ( m_uniforms.get("boneTexture").getLocation() != -1 )
-				{
-					int textureUnit = getTextureUnit();
-
-					this.gl.glUniform1i(m_uniforms.get("boneTexture").getLocation(), textureUnit);
-					setTexture( ((SkinnedMesh)object).boneTexture, textureUnit );
-				}
-			}
-			else
-			{
-				if ( m_uniforms.get("boneGlobalMatrices").getLocation() != -1 )
-				{
-					this.gl.glUniformMatrix4fv(m_uniforms.get("boneGlobalMatrices").getLocation(), 1, false, ((SkinnedMesh) object).boneMatrices.getTypedBuffer());
-				}
-			}
-		}
-
-		if ( refreshMaterial )
-		{
-			// refresh uniforms common to several materials
-			if ( fog != null && material instanceof HasFog && ((HasFog)material).isFog())
-				fog.refreshUniforms( m_uniforms );
-
-			if ( material.getClass() == MeshPhongMaterial.class ||
-					material.getClass() == MeshLambertMaterial.class ||
-					(material.getClass() == ShaderMaterial.class && ((ShaderMaterial)material).isLights()))
-			{
-
-				if (this._lightsNeedUpdate )
-				{
-					refreshLights = true;
-					this._lights.setupLights( lights, this.gammaInput );
-					this._lightsNeedUpdate = false;
-				}
-
-				if ( refreshLights ) {
-					this._lights.refreshUniformsLights( m_uniforms );
-//					markUniformsLightsNeedsUpdate( m_uniforms, true );
-				} else {
-//					markUniformsLightsNeedsUpdate( m_uniforms, false );
-				}
-			}
-
-			material.refreshUniforms(camera, this.gammaInput);
-
-			if ( object.isReceiveShadow() && ! material.isShadowPass() )
-				refreshUniformsShadow( m_uniforms, lights );
-
-			// load common uniforms
-			loadUniformsGeneric( m_uniforms );
-
-		}
-
-		loadUniformsMatrices( m_uniforms, object );
-
-		if ( m_uniforms.get("modelMatrix").getLocation() != 0 )
-			this.gl.glUniformMatrix4fv(m_uniforms.get("modelMatrix").getLocation(), 1, false, object.getMatrixWorld().getArray().getTypedBuffer());
-
-		return shader;
 	}
 
 	private void refreshUniformsShadow( FastMap<Uniform> uniforms, List<Light> lights )
