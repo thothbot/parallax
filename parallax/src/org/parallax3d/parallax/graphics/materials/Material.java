@@ -541,7 +541,7 @@ public abstract class Material extends UuidObject
 
 		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
 
-		parameters.sizeAttenuation = this instanceof PointCloudMaterial && ((PointCloudMaterial)this).isSizeAttenuation();
+		parameters.sizeAttenuation = this instanceof PointsMaterial && ((PointsMaterial)this).isSizeAttenuation();
 
 		if(this instanceof HasSkinning)
 		{

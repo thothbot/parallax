@@ -28,6 +28,7 @@ import org.parallax3d.parallax.graphics.extras.objects.ImmediateRenderObject;
 import org.parallax3d.parallax.graphics.materials.*;
 import org.parallax3d.parallax.graphics.objects.*;
 import org.parallax3d.parallax.graphics.renderers.gl.*;
+import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.*;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
@@ -1792,6 +1793,179 @@ public class GLRenderer extends Renderer
 
 			uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
 			uniforms.get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
+		}
+
+	}
+
+	private void refreshUniformsLine ( FastMap<Uniform> uniforms, LineBasicMaterial material ) {
+
+		uniforms.get("diffuse").setValue(((HasColor) material).getColor());
+		uniforms.get("opacity").setValue( material.getOpacity() );
+
+	}
+
+	private void refreshUniformsDash ( FastMap<Uniform> uniforms, LineDashedMaterial material ) {
+
+		uniforms.get("dashSize").setValue(material.getDashSize());
+		uniforms.get("totalSize").setValue(material.getDashSize() + material.getGapSize());
+		uniforms.get("scale").setValue(material.getScale());
+
+	}
+
+	private void refreshUniformsPoints ( FastMap<Uniform> uniforms, PointsMaterial material )
+	{
+		uniforms.get("diffuse").setValue(material.getColor());
+		uniforms.get("opacity").setValue(material.getOpacity());
+		uniforms.get("size").setValue(material.getSize() * _pixelRatio);
+		uniforms.get("scale").setValue( _height / 2.0); // TODO: Cache this.
+
+		uniforms.get("map").setValue(material.getMap());
+
+		if ( material.getMap() != null )
+		{
+			((Vector4)uniforms.get("offsetRepeat").getValue()).set(
+					material.getMap().getOffset().getX(),
+					material.getMap().getOffset().getY(),
+					material.getMap().getRepeat().getX(),
+					material.getMap().getRepeat().getY() );
+
+		}
+
+	}
+
+	private void refreshUniformsFog ( FastMap<Uniform> uniforms, AbstractFog fog ) {
+
+		uniforms.get("fogColor").setValue( fog.getColor() );
+
+		if ( fog instanceof Fog) {
+
+			uniforms.get("fogNear").setValue( ((Fog)fog).getNear() );
+			uniforms.get("fogFar").setValue( ((Fog)fog).getFar() );
+
+		} else if ( fog instanceof FogExp2 ) {
+
+			uniforms.get("fogDensity").setValue( ((FogExp2)fog).getDensity() );
+
+		}
+
+	}
+
+	private void refreshUniformsLambert ( FastMap<Uniform> uniforms, MeshLambertMaterial material ) {
+
+		if ( material instanceof HasLightMap && ((HasLightMap)material).getLightMap() != null ) {
+
+			uniforms.get("lightMap").setValue(((HasLightMap)material).getLightMap());
+			uniforms.get("lightMapIntensity").setValue(((HasLightMap)material).getLightMapIntensity());
+
+		}
+
+		if ( material instanceof HasEmissiveMap && ((HasEmissiveMap)material).getEmissiveMap() != null  ) {
+
+			uniforms.get("emissiveMap").setValue( ((HasEmissiveMap)material).getEmissiveMap() );
+
+		}
+
+	}
+
+	private void refreshUniformsPhong ( FastMap<Uniform> uniforms, MeshPhongMaterial material ) {
+
+		uniforms.specular.value = material.specular;
+		uniforms.shininess.value = Math.max( material.shininess, 1e-4 ); // to prevent pow( 0.0, 0.0 )
+
+		if ( material.lightMap ) {
+
+			uniforms.lightMap.value = material.lightMap;
+			uniforms.lightMapIntensity.value = material.lightMapIntensity;
+
+		}
+
+		if ( material.emissiveMap ) {
+
+			uniforms.emissiveMap.value = material.emissiveMap;
+
+		}
+
+		if ( material.bumpMap ) {
+
+			uniforms.bumpMap.value = material.bumpMap;
+			uniforms.bumpScale.value = material.bumpScale;
+
+		}
+
+		if ( material.normalMap ) {
+
+			uniforms.normalMap.value = material.normalMap;
+			uniforms.normalScale.value.copy( material.normalScale );
+
+		}
+
+		if ( material.displacementMap ) {
+
+			uniforms.displacementMap.value = material.displacementMap;
+			uniforms.displacementScale.value = material.displacementScale;
+			uniforms.displacementBias.value = material.displacementBias;
+
+		}
+
+	}
+
+	private void refreshUniformsStandard ( FastMap<Uniform> uniforms, Material material ) {
+
+		uniforms.roughness.value = material.roughness;
+		uniforms.metalness.value = material.metalness;
+
+		if ( material.roughnessMap ) {
+
+			uniforms.roughnessMap.value = material.roughnessMap;
+
+		}
+
+		if ( material.metalnessMap ) {
+
+			uniforms.metalnessMap.value = material.metalnessMap;
+
+		}
+
+		if ( material.lightMap ) {
+
+			uniforms.lightMap.value = material.lightMap;
+			uniforms.lightMapIntensity.value = material.lightMapIntensity;
+
+		}
+
+		if ( material.emissiveMap ) {
+
+			uniforms.emissiveMap.value = material.emissiveMap;
+
+		}
+
+		if ( material.bumpMap ) {
+
+			uniforms.bumpMap.value = material.bumpMap;
+			uniforms.bumpScale.value = material.bumpScale;
+
+		}
+
+		if ( material.normalMap ) {
+
+			uniforms.normalMap.value = material.normalMap;
+			uniforms.normalScale.value.copy( material.normalScale );
+
+		}
+
+		if ( material.displacementMap ) {
+
+			uniforms.displacementMap.value = material.displacementMap;
+			uniforms.displacementScale.value = material.displacementScale;
+			uniforms.displacementBias.value = material.displacementBias;
+
+		}
+
+		if ( material.envMap ) {
+
+			//uniforms.envMap.value = material.envMap; // part of uniforms common
+			uniforms.envMapIntensity.value = material.envMapIntensity;
+
 		}
 
 	}

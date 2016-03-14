@@ -27,7 +27,7 @@ import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
-import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
+import org.parallax3d.parallax.graphics.materials.PointsMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.Points;
@@ -178,35 +178,35 @@ public final class TrackballEarth extends ParallaxTest
 
 		}
 
-		PointCloudMaterial pbOpt = new PointCloudMaterial();
+		PointsMaterial pbOpt = new PointsMaterial();
 		pbOpt.setColor( new Color(0x555555) );
 		pbOpt.setSize( 2 );
 		pbOpt.setSizeAttenuation(false);
 		
-		List<PointCloudMaterial> starsMaterials = new ArrayList<PointCloudMaterial>();
+		List<PointsMaterial> starsMaterials = new ArrayList<PointsMaterial>();
 		starsMaterials.add(pbOpt);
 
-		starsMaterials.add(new PointCloudMaterial()
+		starsMaterials.add(new PointsMaterial()
 				.setColor( 0x555555 )
 				.setSize( 1 )
 				.setSizeAttenuation(false));
 
-		starsMaterials.add(new PointCloudMaterial()
+		starsMaterials.add(new PointsMaterial()
 				.setColor( 0x333333 )
 				.setSize( 2 )
 				.setSizeAttenuation(false));
 
-		starsMaterials.add(new PointCloudMaterial()
+		starsMaterials.add(new PointsMaterial()
 				.setColor( 0x3a3a3a )
 				.setSize( 1 )
 				.setSizeAttenuation(false));
 
-		starsMaterials.add(new PointCloudMaterial()
+		starsMaterials.add(new PointsMaterial()
 				.setColor( 0x1a1a1a )
 				.setSize( 2 )
 				.setSizeAttenuation(false));
 
-		starsMaterials.add( new PointCloudMaterial()
+		starsMaterials.add( new PointsMaterial()
 				.setColor( 0x1a1a1a )
 				.setSize( 1 )
 				.setSizeAttenuation(false));

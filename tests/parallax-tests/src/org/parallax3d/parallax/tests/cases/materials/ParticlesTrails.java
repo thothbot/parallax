@@ -22,7 +22,7 @@ import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.materials.Material;
-import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
+import org.parallax3d.parallax.graphics.materials.PointsMaterial;
 import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.input.TouchMoveHandler;
@@ -75,7 +75,7 @@ public final class ParticlesTrails extends ParallaxTest implements TouchMoveHand
 
 		}
 
-		PointCloudMaterial material = new PointCloudMaterial()
+		PointsMaterial material = new PointsMaterial()
 				.setSize( 1.0 )
 				.setVertexColors( Material.COLORS.VERTEX )
 				.setSizeAttenuation(false)

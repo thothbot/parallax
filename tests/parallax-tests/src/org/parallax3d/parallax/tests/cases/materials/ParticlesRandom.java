@@ -22,7 +22,7 @@ import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
-import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
+import org.parallax3d.parallax.graphics.materials.PointsMaterial;
 import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -42,7 +42,7 @@ public final class ParticlesRandom extends ParallaxTest implements TouchMoveHand
 	Scene scene;
 	PerspectiveCamera camera;
 	
-	List<PointCloudMaterial> materials;
+	List<PointsMaterial> materials;
 
 	int width = 0, height = 0;
 	int mouseX = 0;
@@ -82,12 +82,12 @@ public final class ParticlesRandom extends ParallaxTest implements TouchMoveHand
 
 		}
 
-		materials = new ArrayList<PointCloudMaterial>();
+		materials = new ArrayList<PointsMaterial>();
 		int max = 5;
 
 		for ( int i = 0; i < max; i ++ ) 
 		{
-			PointCloudMaterial material = new PointCloudMaterial();
+			PointsMaterial material = new PointsMaterial();
 			material.setSize( 5 - i );
 			material.getColor().setHSL( 1.0 - i * 0.05, 1.0, 0.5 );
 			materials.add(material);
@@ -124,7 +124,7 @@ public final class ParticlesRandom extends ParallaxTest implements TouchMoveHand
 
 		for ( int i = 0; i < materials.size(); i ++ ) 
 		{
-			PointCloudMaterial material = materials.get(i);
+			PointsMaterial material = materials.get(i);
 			Color.HSL hsv = material.getColor().getHSL();
 			material.getColor().setHSL( Math.abs(Math.sin( hsv.hue + time )), hsv.saturation, hsv.lightness );
 		}

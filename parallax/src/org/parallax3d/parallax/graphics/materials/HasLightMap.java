@@ -30,4 +30,8 @@ public interface HasLightMap
 {
 	Texture getLightMap();
 	<T extends Material> T setLightMap(Texture lightMap);
+
+	double getLightMapIntensity();
+
+	<T extends Material> T  setLightMapIntensity( double intensity);
 }

@@ -29,7 +29,7 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.FastMap;
 
-public final class PointCloudMaterial extends Material implements HasFog,
+public final class PointsMaterial extends Material implements HasFog,
 		HasColor, HasMap, HasVertexColors, ViewportResizeListener {
 	private boolean isFog;
 
@@ -43,7 +43,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 
 	private boolean sizeAttenuation;
 
-	public PointCloudMaterial() {
+	public PointsMaterial() {
 
 		setFog(true);
 
@@ -62,7 +62,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 		return this.size;
 	}
 
-	public PointCloudMaterial setSize(double size) {
+	public PointsMaterial setSize(double size) {
 		this.size = size;
 		return this;
 	}
@@ -71,7 +71,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 		return sizeAttenuation;
 	}
 
-	public PointCloudMaterial setSizeAttenuation(boolean sizeAttenuation) {
+	public PointsMaterial setSizeAttenuation(boolean sizeAttenuation) {
 		this.sizeAttenuation = sizeAttenuation;
 		return this;
 	}
@@ -86,7 +86,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public PointCloudMaterial setFog(boolean fog) {
+	public PointsMaterial setFog(boolean fog) {
 		this.isFog = fog;
 		return this;
 	}
@@ -97,13 +97,13 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public PointCloudMaterial setColor(Color color) {
+	public PointsMaterial setColor(Color color) {
 		this.color = color;
 		return this;
 	}
 
 	@Override
-	public PointCloudMaterial setColor(int color) {
+	public PointsMaterial setColor(int color) {
 		this.color = new Color( color );
 		return this;
 	}
@@ -114,7 +114,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public PointCloudMaterial setMap(Texture map) {
+	public PointsMaterial setMap(Texture map) {
 		this.map = map;
 		return this;
 	}
@@ -125,15 +125,15 @@ public final class PointCloudMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public PointCloudMaterial setVertexColors(Material.COLORS vertexColors) {
+	public PointsMaterial setVertexColors(Material.COLORS vertexColors) {
 		this.vertexColors = vertexColors;
 		return this;
 	}
 
 	@Override
-	public PointCloudMaterial clone () {
+	public PointsMaterial clone () {
 
-		PointCloudMaterial material = new PointCloudMaterial();
+		PointsMaterial material = new PointsMaterial();
 
 		super.clone(material);
 
@@ -181,7 +181,7 @@ public final class PointCloudMaterial extends Material implements HasFog,
 		try {
 			super.finalize();
 		} catch (Throwable throwable) {
-			Log.error("Exception in PointCloudMaterial.finalize:", throwable);
+			Log.error("Exception in PointsMaterial.finalize:", throwable);
 		}
 	}
 }

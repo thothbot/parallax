@@ -21,7 +21,7 @@ package org.parallax3d.parallax.graphics.objects;
 import java.util.List;
 
 import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
+import org.parallax3d.parallax.graphics.materials.PointsMaterial;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.math.Ray;
@@ -47,7 +47,7 @@ public class Points extends GeometryObject
 
 	private boolean sortParticles = false;
 
-	private static PointCloudMaterial defaultMaterial = new PointCloudMaterial();
+	private static PointsMaterial defaultMaterial = new PointsMaterial();
 	static {
 		defaultMaterial.setColor( new Color((int)(Math.random() * 0xffffff)) );
 	};

@@ -31,7 +31,7 @@ import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
-import org.parallax3d.parallax.graphics.materials.PointCloudMaterial;
+import org.parallax3d.parallax.graphics.materials.PointsMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -386,7 +386,7 @@ public final class GeometryShapes extends ParallaxTest implements TouchMoveHandl
 
 		// vertices from real points
 
-		PointCloudMaterial particleMat = new PointCloudMaterial()
+		PointsMaterial particleMat = new PointsMaterial()
 				.setColor(color)
 				.setSize(2)
 				.setOpacity(0.75);
@@ -412,7 +412,7 @@ public final class GeometryShapes extends ParallaxTest implements TouchMoveHandl
 
 		// equidistance sampled points
 
-		PointCloudMaterial particles2Mat = new PointCloudMaterial()
+		PointsMaterial particles2Mat = new PointsMaterial()
 				.setColor(color)
 				.setSize(2)
 				.setOpacity(0.5);
