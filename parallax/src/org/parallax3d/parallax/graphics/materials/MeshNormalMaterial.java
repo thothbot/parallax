@@ -28,20 +28,12 @@ import org.parallax3d.parallax.system.ThreejsObject;
  *
  */
 @ThreejsObject("THREE.MeshNormalMaterial")
-public final class MeshNormalMaterial extends Material implements HasWireframe, HasShading
+public final class MeshNormalMaterial extends Material implements HasWireframe
 {
-	private boolean isWireframe;
-	private int wireframeLineWidth;
+	boolean wireframe = false;
+	double wireframeLineWidth = 1.0;
 
-	private Material.SHADING shading;
-
-	public MeshNormalMaterial()
-	{
-		setWireframe(false);
-		setWireframeLineWidth(1);
-
-		setShading(Material.SHADING.FLAT);
-	}
+	boolean morphTargets = false;
 
 	public Shader getAssociatedShader()
 	{
@@ -50,48 +42,39 @@ public final class MeshNormalMaterial extends Material implements HasWireframe, 
 
 	@Override
 	public boolean isWireframe() {
-		return this.isWireframe;
+		return this.wireframe;
 	}
 
 	@Override
 	public MeshNormalMaterial setWireframe(boolean wireframe) {
-		this.isWireframe = wireframe;
+		this.wireframe = wireframe;
 		return this;
 	}
 
 	@Override
-	public int getWireframeLineWidth() {
+	public double getWireframeLineWidth() {
 		return this.wireframeLineWidth;
 	}
 
 	@Override
-	public MeshNormalMaterial setWireframeLineWidth(int wireframeLineWidth) {
+	public MeshNormalMaterial setWireframeLineWidth(double wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
-		return this;
-	}
-
-	public Material.SHADING getShading() {
-		return this.shading;
-	}
-
-	public MeshNormalMaterial setShading(Material.SHADING shading) {
-		this.shading = shading;
 		return this;
 	}
 
 	@Override
 	public MeshNormalMaterial clone() {
+		return new MeshNormalMaterial().copy(this);
+	}
 
-		MeshNormalMaterial material = new MeshNormalMaterial();
+	public MeshNormalMaterial copy(MeshNormalMaterial source )
+	{
+		super.copy( source );
 
-		super.clone(material);
+		this.wireframe = source.wireframe;
+		this.wireframeLineWidth = source.wireframeLineWidth;
 
-		material.shading = this.shading;
-
-		material.isWireframe = this.isWireframe;
-		material.wireframeLineWidth = this.wireframeLineWidth;
-
-		return material;
+		return this;
 
 	}
 }

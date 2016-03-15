@@ -73,10 +73,6 @@ public final class MeshLambertMaterial extends Material
 	boolean morphTargets = false;
 	boolean morphNormals = false;
 
-	public MeshLambertMaterial()
-	{
-	}
-
 	@Override
 	public Shader getAssociatedShader()
 	{

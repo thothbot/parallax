@@ -37,10 +37,6 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 	boolean wireframe = false;
 	double wireframeLineWidth = 1.0;
 
-	public MeshDepthMaterial()
-	{
-	}
-
 	@Override
 	public Shader getAssociatedShader()
 	{

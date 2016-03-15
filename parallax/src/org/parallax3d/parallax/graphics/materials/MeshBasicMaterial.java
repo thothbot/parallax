@@ -67,10 +67,6 @@ public class MeshBasicMaterial extends Material
 	boolean skinning;
 	boolean morphTargets;
 
-	public MeshBasicMaterial()
-	{
-	}
-
 	@Override
 	public Shader getAssociatedShader()
 	{
