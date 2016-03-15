@@ -127,7 +127,7 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
             renderer.setDefaultGLState();
 
             if(listener instanceof InputHandler)
-                input.setInputHandler((InputHandler) listener);
+                input.addInputHandler((InputHandler) listener);
             listener.onStart(this);
             listener.onResize(this);
 

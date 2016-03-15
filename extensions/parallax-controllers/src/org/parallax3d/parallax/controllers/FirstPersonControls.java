@@ -99,7 +99,7 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 
 		this.target = new Vector3();
 
-		context.getInput().setInputHandler(this);
+		context.getInput().addInputHandler( this );
 	}
 
 	/**

@@ -144,7 +144,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 		mouseUpEvent = new LocalEvent("mouseUp",_mode);
 		objectChangeEvent = new LocalEvent("objectChange",null);
 
-		context.getInput().setInputHandler(this);
+		context.getInput().addInputHandler( this );
 	}
 
 	public GeometryObject getGeometry() {
