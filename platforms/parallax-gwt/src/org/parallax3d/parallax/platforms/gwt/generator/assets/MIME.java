@@ -31,6 +31,7 @@ public class MIME {
 		put("json", "application/json");
 		put("dae", "model/vnd.collada+xml");
 		put("stl", "application/sla");
+		put("xml", "application/xml");
     }};
 
 	public static String get(FileWrapper file) {
