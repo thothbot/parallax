@@ -28,13 +28,16 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.SpriteMaterial")
 public class SpriteMaterial extends Material implements HasMap, HasColor, HasFog {
 
-    boolean isFog;
+    Color color = new Color( 0xffffff );
+
     Texture map;
-    Color color;
-    double rotation;
+
+    double rotation = 0.;
+
+    boolean fog = true;
 
     @Override
-    protected Shader getAssociatedShader() {
+    public Shader getAssociatedShader() {
         return null;
     }
 
@@ -82,28 +85,31 @@ public class SpriteMaterial extends Material implements HasMap, HasColor, HasFog
 
     @Override
     public boolean isFog() {
-        return this.isFog;
+        return this.fog;
     }
 
     @Override
     public SpriteMaterial setFog(boolean fog) {
-        this.isFog = fog;
+        this.fog = fog;
         return this;
     }
 
     @Override
     public SpriteMaterial clone() {
-        SpriteMaterial material = new SpriteMaterial();
-        super.clone(material);
+        return new SpriteMaterial().copy(this);
+    }
 
-        material.color.copy( this.color );
+    public SpriteMaterial copy(SpriteMaterial source) {
+        super.copy(source);
 
-        material.map = this.map;
+        this.color.copy( source.color );
+        this.map = source.map;
 
-        material.rotation = this.rotation;
+        this.rotation = source.rotation;
 
-        material.isFog = this.isFog;
+        this.fog = source.fog;
 
-        return material;
+        return this;
+
     }
 }
