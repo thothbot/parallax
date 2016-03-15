@@ -33,31 +33,21 @@ import org.parallax3d.parallax.system.FastMap;
 @ThreejsObject("THREE.PointsMaterial")
 public final class PointsMaterial extends Material implements HasFog,
 		HasColor, HasMap, HasVertexColors, ViewportResizeListener {
-	private boolean isFog;
 
-	private Color color;
+	Color color = new Color(0xffffff);
 
-	private Texture map;
+	Texture map;
 
-	private Material.COLORS vertexColors;
+	double size = 1.0;
+	boolean sizeAttenuation = true;
 
-	private double size;
+	Material.COLORS vertexColors= COLORS.NO;
 
-	private boolean sizeAttenuation;
+	boolean fog = true;
 
-	public PointsMaterial() {
-
-		setFog(true);
-
-		setColor( 0xffffff );
-
-		setSize(1.0);
-		setSizeAttenuation(true);
-
-		setVertexColors(Material.COLORS.NO);
-
+	public PointsMaterial()
+	{
 		ViewportResizeBus.addViewportResizeListener(this);
-
 	}
 
 	public double getSize() {
@@ -84,12 +74,12 @@ public final class PointsMaterial extends Material implements HasFog,
 
 	@Override
 	public boolean isFog() {
-		return this.isFog;
+		return this.fog;
 	}
 
 	@Override
 	public PointsMaterial setFog(boolean fog) {
-		this.isFog = fog;
+		this.fog = fog;
 		return this;
 	}
 
@@ -133,25 +123,26 @@ public final class PointsMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public PointsMaterial clone () {
+	public PointsMaterial clone() {
+		return new PointsMaterial().copy(this);
+	}
 
-		PointsMaterial material = new PointsMaterial();
+	public PointsMaterial copy (PointsMaterial source) {
 
-		super.clone(material);
+		super.copy( source );
 
-		material.color.copy( this.color );
+		this.color.copy( source.color );
 
-		material.map = this.map;
+		this.map = source.map;
 
-		material.size = this.size;
-		material.sizeAttenuation = this.sizeAttenuation;
+		this.size = source.size;
+		this.sizeAttenuation = source.sizeAttenuation;
 
-		material.vertexColors = this.vertexColors;
+		this.vertexColors = source.vertexColors;
 
-		material.isFog = this.isFog;
+		this.fog = source.fog;
 
-		return material;
-
+		return this;
 	}
 
 	@Override

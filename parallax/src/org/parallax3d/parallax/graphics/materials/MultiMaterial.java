@@ -17,6 +17,7 @@
  */
 package org.parallax3d.parallax.graphics.materials;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 import java.util.ArrayList;
@@ -26,15 +27,30 @@ import java.util.List;
  * @author mrdoob / http://mrdoob.com/
  */
 @ThreejsObject("THREE.MultiMaterial")
-public class MultiMaterial {
-    boolean isVisible;
+public class MultiMaterial extends Material {
+
     List<Material> materials = new ArrayList<>();
 
     public List<Material> getMaterials() {
         return materials;
     }
 
-    public boolean isVisible() {
-        return isVisible;
+    @Override
+    public Shader getAssociatedShader() {
+        return null;
+    }
+
+    @Override
+    public MultiMaterial clone() {
+        return new MultiMaterial().copy( this );
+    }
+
+    public MultiMaterial copy(MultiMaterial source) {
+
+        super.copy( source );
+
+        this.materials = source.materials;
+
+        return this;
     }
 }
