@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
+import org.parallax3d.parallax.graphics.extras.UniformsUtils;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.math.Color;
@@ -25,8 +26,27 @@ import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.ShaderMaterial")
 public class ShaderMaterial extends Material 
-	implements HasWireframe, HasFog, HasColor, HasVertexColors, HasSkinning, HasShading
+	implements HasWireframe, HasFog, HasVertexColors, HasSkinning, HasShading
 {
+	public static class Extensions {
+		/**
+		 * set to use derivatives
+		 */
+		boolean derivatives = false;
+		/**
+		 * set to use fragment depth values
+		 */
+		boolean fragDepth = false;
+		/**
+		 * set to use draw buffers
+		 */
+		boolean drawBuffers = false;
+		/**
+		 * set to use shader texture LOD
+		 */
+		boolean shaderTextureLOD = false;
+	}
+
 	class ShaderMaterialShader extends Shader
 	{
 
@@ -39,56 +59,41 @@ public class ShaderMaterial extends Material
 		protected void initUniforms() {
 
 		}
-
 	}
 
-	private boolean isWireframe;
-	private int wireframeLineWidth;
+	Object defines;
+	Shader shader;
+
+	Material.SHADING shading;
+
+	double linewidth = 1.0;
+
+	boolean wireframe = false;
+	double wireframeLineWidth = 1.0;
 
 	// set to use scene fog
-	private boolean isFog;
-
-	private Material.SHADING shading;
-
-	private Color color;
-
-	private Material.COLORS vertexColors;
-
-	// set to use skinning attribute streams
-	private boolean isSkinning;
-	// set to use morph targets
-	private boolean isMorphTargets;
-	// set to use morph normals
-	private boolean isMorphNormals;
-
-	private int numSupportedMorphTargets;
-	private int numSupportedMorphNormals;
+	boolean fog = false;
 
 	// set to use scene lights
-	private boolean isLights;
+	boolean lights = false;
 
-	private Shader shader;
+	Material.COLORS vertexColors = COLORS.NO;
 
-	private String vertexExtensions;
-	private String fragmentExtensions;
+	// set to use skinning attribute streams
+	boolean skinning;
+	// set to use morph targets
+	boolean morphTargets;
+	// set to use morph normals
+	boolean morphNormals;
 
-	public ShaderMaterial(Shader.DefaultResources resource)
+	Extensions extensions = new Extensions();
+
+	public ShaderMaterial()
 	{
-		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
-	}
-
-	public ShaderMaterial(String vertexShader, String fragmentShader)
-	{
-		this(vertexShader, fragmentShader, null, null);
-	}
-
-	public ShaderMaterial(String vertexShader, String fragmentShader,
-						  String vertexExtensions, String fragmentExtensions)
-	{
-		this();
-		this.shader = new ShaderMaterialShader(vertexShader, fragmentShader);
-		this.vertexExtensions = vertexExtensions;
-		this.fragmentExtensions = fragmentExtensions;
+		this.shader = new ShaderMaterialShader(
+			"void main() {\\n\\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\\n}",
+			"void main() {\\n\\tgl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );\\n}"
+		);
 	}
 
 	/**
@@ -99,31 +104,17 @@ public class ShaderMaterial extends Material
 	 */
 	public ShaderMaterial(Shader shader)
 	{
-		this();
 		this.shader = shader;
-		if (shader.getVertexExtensions() != null)
-			this.vertexExtensions = shader.getVertexExtensions();
-		if (shader.getFragmentExtensions() != null)
-			this.fragmentExtensions = shader.getFragmentExtensions();
 	}
 
-	private ShaderMaterial()
+	public ShaderMaterial(Shader.DefaultResources resource)
 	{
-		setWireframe(false);
-		setWireframeLineWidth(1);
-
-		setFog(false);
-
-		setShading(Material.SHADING.SMOOTH);
-
-		setColor( 0xffffff );
-
-		setVertexColors(Material.COLORS.NO);
+		this(resource.getVertexShader().getText(), resource.getFragmentShader().getText());
 	}
 
-	public boolean bufferGuessUVType ()
+	public ShaderMaterial(String vertexShader, String fragmentShader)
 	{
-		return true;
+		this.shader = new ShaderMaterialShader(vertexShader, fragmentShader);
 	}
 
 	@Override
@@ -132,64 +123,47 @@ public class ShaderMaterial extends Material
 	}
 
 	public boolean isLights() {
-		return this.isLights;
+		return this.lights;
 	}
 
 	/**
 	 * Enable/Disable scene lights
 	 */
 	public ShaderMaterial setLights(boolean isLights) {
-		this.isLights = isLights;
+		this.lights = isLights;
 		return this;
 	}
 
 	@Override
 	public boolean isWireframe() {
-		return this.isWireframe;
+		return this.wireframe;
 	}
 
 	@Override
 	public ShaderMaterial setWireframe(boolean wireframe) {
-		this.isWireframe = wireframe;
+		this.wireframe = wireframe;
 		return this;
 	}
 
 	@Override
-	public int getWireframeLineWidth() {
+	public double getWireframeLineWidth() {
 		return this.wireframeLineWidth;
 	}
 
 	@Override
-	public ShaderMaterial setWireframeLineWidth(int wireframeLineWidth) {
+	public ShaderMaterial setWireframeLineWidth(double wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
 		return this;
 	}
 
 	@Override
 	public boolean isFog() {
-		return this.isFog;
+		return this.fog;
 	}
 
 	@Override
 	public ShaderMaterial setFog(boolean fog) {
-		this.isFog = fog;
-		return this;
-	}
-
-	@Override
-	public Color getColor() {
-		return color;
-	}
-
-	@Override
-	public ShaderMaterial setColor(Color color) {
-		this.color = color;
-		return this;
-	}
-
-	@Override
-	public ShaderMaterial setColor(int color) {
-		this.color = new Color( color );
+		this.fog = fog;
 		return this;
 	}
 
@@ -206,52 +180,34 @@ public class ShaderMaterial extends Material
 
 	@Override
 	public boolean isSkinning() {
-		return this.isSkinning;
+		return this.skinning;
 	}
 
 	@Override
 	public ShaderMaterial setSkinning(boolean isSkinning) {
-		this.isSkinning = isSkinning;
+		this.skinning = isSkinning;
 		return this;
 	}
 
 	@Override
 	public boolean isMorphTargets() {
-		return this.isMorphTargets;
+		return this.morphTargets;
 	}
 
 	@Override
-	public ShaderMaterial setMorphTargets(boolean isMorphTargets) {
-		this.isMorphTargets = isMorphTargets;
+	public ShaderMaterial setMorphTargets(boolean morphTargets) {
+		this.morphTargets = morphTargets;
 		return this;
 	}
 
 	@Override
 	public boolean isMorphNormals() {
-		return this.isMorphNormals;
+		return this.morphNormals;
 	}
 
 	@Override
-	public ShaderMaterial setMorphNormals(boolean isMorphNormals) {
-		this.isMorphNormals = isMorphNormals;
-		return this;
-	}
-
-	public int getNumSupportedMorphTargets() {
-		return this.numSupportedMorphTargets;
-	}
-
-	public ShaderMaterial setNumSupportedMorphTargets(int num) {
-		this.numSupportedMorphTargets = num;
-		return this;
-	}
-
-	public int getNumSupportedMorphNormals() {
-		return this.numSupportedMorphNormals;
-	}
-
-	public ShaderMaterial setNumSupportedMorphNormals(int num) {
-		this.numSupportedMorphNormals = num;
+	public ShaderMaterial setMorphNormals(boolean morphNormals) {
+		this.morphNormals = morphNormals;
 		return this;
 	}
 
@@ -265,50 +221,37 @@ public class ShaderMaterial extends Material
 	}
 
 	@Override
-	protected String getExtensionsVertex(ProgramParameters params)
-	{
-		return vertexExtensions == null ?
-				super.getExtensionsVertex(params) : vertexExtensions;
-	}
-
-	@Override
-	protected String getExtensionsFragment(ProgramParameters params)
-	{
-		return fragmentExtensions == null ?
-				super.getExtensionsFragment(params) : fragmentExtensions;
-	}
-
-	@Override
 	public ShaderMaterial clone() {
+		return new ShaderMaterial().copy(this);
+	}
 
-		ShaderMaterial material = new ShaderMaterial();
+	public ShaderMaterial copy(ShaderMaterial source) {
 
-		super.clone(material);
+		super.copy( source );
 
-		material.shader = this.shader;
+		this.shader.setUniforms( UniformsUtils.clone( source.shader.getUniforms() ) );
 
-//		material.uniforms = THREE.UniformsUtils.clone( this.uniforms );
+		this.defines = source.defines;
 
-//		material.attributes = this.attributes;
-//		material.defines = this.defines;
+		this.shading = source.shading;
 
-		material.shading = this.shading;
+		this.wireframe = source.wireframe;
+		this.wireframeLineWidth = source.wireframeLineWidth;
 
-		material.isWireframe = this.isWireframe;
-		material.wireframeLineWidth = this.wireframeLineWidth;
+		this.fog = source.fog;
 
-		material.isFog = this.isFog;
+		this.lights = source.lights;
 
-		material.isLights = this.isLights;
+		this.vertexColors = source.vertexColors;
 
-		material.vertexColors = this.vertexColors;
+		this.skinning = source.skinning;
 
-		material.isSkinning = this.isSkinning;
+		this.morphTargets = source.morphTargets;
+		this.morphNormals = source.morphNormals;
 
-		material.isMorphTargets = this.isMorphTargets;
-		material.isMorphNormals = this.isSkinning;
+		this.extensions = source.extensions;
 
-		return material;
+		return this;
 
 	}
 }
