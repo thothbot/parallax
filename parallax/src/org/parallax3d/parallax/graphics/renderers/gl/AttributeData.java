@@ -17,10 +17,10 @@
  */
 package org.parallax3d.parallax.graphics.renderers.gl;
 
-import org.parallax3d.parallax.system.UuidObject;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 
-public abstract class AttributeData extends UuidObject {
+public abstract class AttributeData extends AbstractPropertyObject {
 
     public static class UpdateRange {
         public int offset = 0;

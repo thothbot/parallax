@@ -24,19 +24,13 @@ import java.util.List;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
 import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.GeometryGroup;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.UuidObject;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
@@ -51,7 +45,7 @@ import org.parallax3d.parallax.system.gl.enums.DepthFunction;
  *
  */
 @ThreejsObject("THREE.Material")
-public abstract class Material extends UuidObject
+public abstract class Material extends AbstractPropertyObject
 {
 	// When rendered geometry doesn't include these attributes but the material does,
 	// use these default values in WebGL. This avoids errors when buffer data is missing.
@@ -480,6 +474,10 @@ public abstract class Material extends UuidObject
 		return (T)this;
 	}
 
+	public void setShader(Shader shader) {
+		this.shader = shader;
+	}
+
 	public Shader getShader()
 	{
 		if(shader == null)
@@ -492,415 +490,47 @@ public abstract class Material extends UuidObject
 		return this.shader;
 	}
 
-	// Must be overwriten
-	protected abstract Shader getAssociatedShader();
+	public abstract Shader getAssociatedShader();
 
 	public abstract Material clone();
 
-	public Material clone( Material material ) {
-
-		material.name = this.name;
-
-		material.side = this.side;
-
-		material.opacity = this.opacity;
-		material.isTransparent = this.isTransparent;
-
-		material.blending = this.blending;
-
-		material.blendSrc = this.blendSrc;
-		material.blendDst = this.blendDst;
-		material.blendEquation = this.blendEquation;
-
-		material.isDepthTest = this.isDepthTest;
-		material.isDepthWrite = this.isDepthWrite;
-
-		material.isPolygonOffset = this.isPolygonOffset;
-		material.polygonOffsetFactor = this.polygonOffsetFactor;
-		material.polygonOffsetUnits = this.polygonOffsetUnits;
-
-		material.alphaTest = this.alphaTest;
-
-		material.overdraw = this.overdraw;
-
-		material.isVisible = this.isVisible;
-
-		return material;
-
-	}
-
-	public void updateProgramParameters(ProgramParameters parameters)
+	public Material copy( Material source )
 	{
-		parameters.map          = (this instanceof HasMap         && ((HasMap)this).getMap() != null);
-		parameters.envMap       = (this instanceof HasEnvMap      && ((HasEnvMap)this).getEnvMap() != null);
-		parameters.lightMap     = (this instanceof HasLightMap    &&  ((HasLightMap)this).getLightMap() != null);
-		parameters.bumpMap      = (this instanceof HasBumpMap     &&  ((HasBumpMap)this).getBumpMap() != null);
-		parameters.normalMap    = (this instanceof HasNormalMap   &&  ((HasNormalMap)this).getNormalMap() != null);
-		parameters.specularMap  = (this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null);
-		parameters.alphaMap     = (this instanceof HasAlphaMap    &&  ((HasAlphaMap)this).getAlphaMap() != null);
+		this.name = source.name;
 
-		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
+		this.side = source.side;
 
-		parameters.sizeAttenuation = this instanceof PointsMaterial && ((PointsMaterial)this).isSizeAttenuation();
+		this.opacity = source.opacity;
+		this.isTransparent = source.isTransparent;
 
-		if(this instanceof HasSkinning)
-		{
-			parameters.skinning     = ((HasSkinning)this).isSkinning();
-			parameters.morphTargets = ((HasSkinning)this).isMorphTargets();
-			parameters.morphNormals = ((HasSkinning)this).isMorphNormals();
-		}
+		this.blending = source.blending;
 
-		parameters.alphaTest = getAlphaTest();
-		if(this instanceof MeshPhongMaterial)
-		{
-			parameters.metal = ((MeshPhongMaterial)this).isMetal();
-		}
+		this.blendSrc = source.blendSrc;
+		this.blendDst = source.blendDst;
+		this.blendEquation = source.blendEquation;
+		this.blendSrcAlpha = source.blendSrcAlpha;
+		this.blendDstAlpha = source.blendDstAlpha;
+		this.blendEquationAlpha = source.blendEquationAlpha;
 
-		parameters.wrapAround = this instanceof HasWrap && ((HasWrap)this).isWrapAround();
-		parameters.doubleSided = this.getSides() == Material.SIDE.DOUBLE;
-		parameters.flipSided = this.getSides() == Material.SIDE.BACK;
-	}
+		this.depthFunc = source.depthFunc;
+		this.isDepthTest = source.isDepthTest;
+		this.isDepthWrite = source.isDepthWrite;
 
-	public Shader buildShader(GL20 gl, ProgramParameters parameters)
-	{
-		Shader shader = getShader();
+		this.isColorWrite = source.isColorWrite;
 
-		shader.setPrecision(parameters.precision);
+		this.precision = source.precision;
 
-		shader.setVertexExtensions(getExtensionsVertex(parameters));
-		shader.setFragmentExtensions(getExtensionsFragment(parameters));
+		this.isPolygonOffset = source.isPolygonOffset;
+		this.polygonOffsetFactor = source.polygonOffsetFactor;
+		this.polygonOffsetUnits = source.polygonOffsetUnits;
 
-		shader.setVertexSource(getPrefixVertex(parameters) + "\n" + shader.getVertexSource());
-		shader.setFragmentSource(getPrefixFragment(parameters) + "\n" + shader.getFragmentSource());
+		this.alphaTest = source.alphaTest;
 
-		this.shader = shader.buildProgram(gl, parameters.useVertexTexture, parameters.maxMorphTargets, parameters.maxMorphNormals);
+		this.overdraw = source.overdraw;
 
-		return this.shader;
-	}
+		this.isVisible = source.isVisible;
 
-	protected String getExtensionsVertex(ProgramParameters parameters)
-	{
-		return "";
-	}
-
-	private String getPrefixVertex(ProgramParameters parameters)
-	{
-		Log.debug("Shader.getPrefixVertex() Called");
-		List<String> options = new ArrayList<String>();
-
-		options.add("");
-
-		if (parameters.supportsVertexTextures)
-			options.add(SHADER_DEFINE.VERTEX_TEXTURES.getValue());
-
-		if (parameters.gammaInput)
-			options.add(SHADER_DEFINE.GAMMA_INPUT.getValue());
-
-		if (parameters.gammaOutput)
-			options.add(SHADER_DEFINE.GAMMA_OUTPUT.getValue());
-
-		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
-		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
-		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
-		options.add(SHADER_DEFINE.MAX_HEMI_LIGHTS.getValue(parameters.maxHemiLights));
-
-		options.add(SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
-
-		options.add(SHADER_DEFINE.MAX_BONES.getValue(parameters.maxBones));
-
-		if (parameters.map)
-			options.add(SHADER_DEFINE.USE_MAP.getValue());
-		if (parameters.envMap)
-			options.add(SHADER_DEFINE.USE_ENVMAP.getValue());
-		if (parameters.lightMap)
-			options.add(SHADER_DEFINE.USE_LIGHTMAP.getValue());
-		if (parameters.bumpMap)
-			options.add(SHADER_DEFINE.USE_BUMPMAP.getValue());
-		if (parameters.normalMap)
-			options.add(SHADER_DEFINE.USE_NORMALMAP.getValue());
-		if (parameters.specularMap)
-			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
-		if (parameters.alphaMap)
-			options.add(SHADER_DEFINE.USE_ALPHAMAP.getValue());
-		if (parameters.vertexColors)
-			options.add(SHADER_DEFINE.USE_COLOR.getValue());
-
-		if (parameters.skinning)
-			options.add(SHADER_DEFINE.USE_SKINNING.getValue());
-		if (parameters.useVertexTexture)
-			options.add(SHADER_DEFINE.BONE_TEXTURE.getValue());
-
-		if (parameters.morphTargets)
-			options.add(SHADER_DEFINE.USE_MORPHTARGETS.getValue());
-		if (parameters.morphNormals)
-			options.add(SHADER_DEFINE.USE_MORPHNORMALS.getValue());
-		if (parameters.wrapAround)
-			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
-		if (parameters.doubleSided)
-			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
-		if (parameters.flipSided)
-			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
-
-		if (parameters.shadowMapEnabled) {
-			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
-			if (parameters.shadowMapSoft)
-				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_PCF.getValue());
-			else
-				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_BASIC.getValue());
-		}
-
-		if (parameters.shadowMapDebug)
-			options.add(SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
-		if (parameters.shadowMapCascade)
-			options.add(SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
-
-		if (parameters.sizeAttenuation)
-			options.add(SHADER_DEFINE.USE_SIZEATTENUATION.getValue());
-
-		if (parameters.logarithmicDepthBuffer)
-			options.add(SHADER_DEFINE.USE_LOGDEPTHBUF.getValue());
-
-		options.add("");
-
-		String retval = "";
-		for(String opt: options)
-			retval += opt + "\n";
-
-		List<String> extra = Arrays.asList("uniform mat4 modelMatrix;",
-				"uniform mat4 modelViewMatrix;",
-				"uniform mat4 projectionMatrix;",
-				"uniform mat4 viewMatrix;",
-				"uniform mat3 normalMatrix;",
-				"uniform vec3 cameraPosition;",
-
-				"attribute vec3 position;",
-				"attribute vec3 normal;",
-				"attribute vec2 uv;",
-				"attribute vec2 uv2;",
-
-				"#ifdef USE_COLOR",
-
-				"	attribute vec3 color;",
-
-				"#endif",
-
-				"#ifdef USE_MORPHTARGETS",
-
-				"	attribute vec3 morphTarget0;",
-				"	attribute vec3 morphTarget1;",
-				"	attribute vec3 morphTarget2;",
-				"	attribute vec3 morphTarget3;",
-
-				"	#ifdef USE_MORPHNORMALS",
-
-				"		attribute vec3 morphNormal0;",
-				"		attribute vec3 morphNormal1;",
-				"		attribute vec3 morphNormal2;",
-				"		attribute vec3 morphNormal3;",
-
-				"	#else",
-
-				"		attribute vec3 morphTarget4;",
-				"		attribute vec3 morphTarget5;",
-				"		attribute vec3 morphTarget6;",
-				"		attribute vec3 morphTarget7;",
-
-				"	#endif",
-
-				"#endif",
-
-				"#ifdef USE_SKINNING",
-
-				"	attribute vec4 skinIndex;",
-				"	attribute vec4 skinWeight;",
-
-				"#endif");
-
-		for(String opt: extra)
-			retval += opt + "\n";
-
-		return retval;
-	}
-
-	protected String getExtensionsFragment(ProgramParameters parameters)
-	{
-		String s = "";
-		if (parameters.logarithmicDepthBuffer)
-			s += "#extension GL_EXT_frag_depth : enable\n\n";
-		if (parameters.bumpMap || parameters.normalMap)
-			s += "#extension GL_OES_standard_derivatives : enable\n\n";
-		return s;
-	}
-
-	private String getPrefixFragment(ProgramParameters parameters)
-	{
-		List<String> options = new ArrayList<String>();
-
-		options.add("");
-
-		options.add(SHADER_DEFINE.MAX_DIR_LIGHTS.getValue(parameters.maxDirLights));
-		options.add(SHADER_DEFINE.MAX_POINT_LIGHTS.getValue(parameters.maxPointLights));
-		options.add(SHADER_DEFINE.MAX_SPOT_LIGHTS.getValue(parameters.maxSpotLights));
-		options.add(SHADER_DEFINE.MAX_HEMI_LIGHTS.getValue(parameters.maxHemiLights));
-
-		options.add(SHADER_DEFINE.MAX_SHADOWS.getValue(parameters.maxShadows));
-
-		if (parameters.alphaTest > 0)
-			options.add(SHADER_DEFINE.ALPHATEST.getValue(parameters.alphaTest));
-
-		if (parameters.gammaInput)
-			options.add(SHADER_DEFINE.GAMMA_INPUT.getValue());
-		if (parameters.gammaOutput)
-			options.add(SHADER_DEFINE.GAMMA_OUTPUT.getValue());
-
-		if (parameters.useFog)
-			options.add(SHADER_DEFINE.USE_FOG.getValue());
-		if (parameters.useFog2)
-			options.add(SHADER_DEFINE.FOG_EXP2.getValue());
-
-		if (parameters.map)
-			options.add(SHADER_DEFINE.USE_MAP.getValue());
-		if (parameters.envMap)
-			options.add(SHADER_DEFINE.USE_ENVMAP.getValue());
-		if (parameters.lightMap)
-			options.add(SHADER_DEFINE.USE_LIGHTMAP.getValue());
-		if (parameters.bumpMap)
-			options.add(SHADER_DEFINE.USE_BUMPMAP.getValue());
-		if (parameters.normalMap)
-			options.add(SHADER_DEFINE.USE_NORMALMAP.getValue());
-		if (parameters.specularMap)
-			options.add(SHADER_DEFINE.USE_SPECULARMAP.getValue());
-		if (parameters.alphaMap)
-			options.add(SHADER_DEFINE.USE_ALPHAMAP.getValue());
-		if (parameters.vertexColors)
-			options.add(SHADER_DEFINE.USE_COLOR.getValue());
-
-		if (parameters.metal)
-			options.add(SHADER_DEFINE.METAL.getValue());
-		if (parameters.wrapAround)
-			options.add(SHADER_DEFINE.WRAP_AROUND.getValue());
-		if (parameters.doubleSided)
-			options.add(SHADER_DEFINE.DOUBLE_SIDED.getValue());
-		if (parameters.flipSided)
-			options.add(SHADER_DEFINE.FLIP_SIDED.getValue());
-
-		if (parameters.shadowMapEnabled) {
-			options.add(SHADER_DEFINE.USE_SHADOWMAP.getValue());
-			if (parameters.shadowMapSoft)
-				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_PCF.getValue());
-			else
-				options.add(SHADER_DEFINE.SHADOWMAP_TYPE_BASIC.getValue());
-		}
-
-		if (parameters.shadowMapDebug)
-			options.add(SHADER_DEFINE.SHADOWMAP_DEBUG.getValue());
-		if (parameters.shadowMapCascade)
-			options.add(SHADER_DEFINE.SHADOWMAP_CASCADE.getValue());
-
-		if (parameters.logarithmicDepthBuffer)
-			options.add(SHADER_DEFINE.USE_LOGDEPTHBUF.getValue());
-
-		options.add("");
-		String retval = "";
-		for(String opt: options)
-			retval += opt + "\n";
-
-		List<String> extra = Arrays.asList(
-				"uniform mat4 viewMatrix;",
-				"uniform vec3 cameraPosition;");
-
-		for(String opt: extra)
-			retval += opt + "\n";
-
-		return retval;
-	}
-
-	public void setShader(Shader shader) {
-		this.shader = shader;
-	}
-
-	public boolean materialNeedsSmoothNormals()
-	{
-		return this instanceof HasShading && ((HasShading)this).getShading() != null && ((HasShading)this).getShading() == Material.SHADING.SMOOTH;
-	}
-
-	public Material.COLORS bufferGuessVertexColorType()
-	{
-		if(this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO)
-			return ((HasVertexColors)this).isVertexColors();
-
-		return null;
-	}
-
-	public boolean bufferGuessUVType()
-	{
-		if(this instanceof HasMap && ((HasMap)this).getMap() != null)
-			return true;
-
-		if(this instanceof HasLightMap && ((HasLightMap)this).getLightMap() != null)
-			return true;
-
-		if(this instanceof HasBumpMap && ((HasBumpMap)this).getBumpMap() != null)
-			return true;
-
-		if(this instanceof HasNormalMap && ((HasNormalMap)this).getNormalMap() != null)
-			return true;
-
-		if(this instanceof HasSpecularMap && ((HasSpecularMap)this).getSpecularMap() != null)
-			return true;
-
-		return false;
-	}
-
-	public static Material getBufferMaterial( GeometryObject object, GeometryGroup geometryGroup )
-	{
-		Material material = null;
-		if ( object.getMaterial() instanceof MeshFaceMaterial )
-		{
-			material = ((MeshFaceMaterial)object.getMaterial()).getMaterials().get( geometryGroup.getMaterialIndex() );
-		}
-		else if ( geometryGroup.getMaterialIndex() >= 0 )
-		{
-			material = object.getMaterial();
-		}
-
-		return material;
-	}
-
-
-	public void deallocate( GLRenderer renderer )
-	{
-		int program = getShader().getProgram();
-		if ( program == 0 ) return;
-
-//		getShader().setPrecision(null);
-
-		// only deallocate GL program if this was the last use of shared program
-		// assumed there is only single copy of any program in the _programs list
-		// (that's how it's constructed)
-
-		boolean deleteProgram = false;
-
-		for ( String key: renderer._programs.keySet())
-		{
-			Shader shader = renderer._programs.get(key);
-
-			if ( shader == getShader() )
-			{
-				renderer._programs.remove(key);
-				deleteProgram = true;
-				break;
-			}
-		}
-
-		if ( deleteProgram == true )
-		{
-
-			renderer.gl.glDeleteProgram(program);
-
-			renderer.getInfo().getMemory().programs --;
-		}
-
+		return this;
 	}
 
 	public String toString()

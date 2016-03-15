@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.system.UuidObject;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
@@ -26,7 +26,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author benaadams / https://twitter.com/ben_a_adams
  */
 @ThreejsObject("THREE.InterleavedBufferAttribute")
-public class InterleavedBufferAttribute extends UuidObject {
+public class InterleavedBufferAttribute extends AbstractPropertyObject {
 
     InterleavedBuffer data;
     int itemSize;

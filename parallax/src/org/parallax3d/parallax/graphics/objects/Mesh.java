@@ -44,7 +44,6 @@ import org.parallax3d.parallax.math.Vector4;
 
 import org.parallax3d.parallax.graphics.materials.HasSkinning;
 import org.parallax3d.parallax.graphics.materials.HasWireframe;
-import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.gl.GL20;

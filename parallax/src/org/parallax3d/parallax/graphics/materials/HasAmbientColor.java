@@ -18,13 +18,28 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
+import org.parallax3d.parallax.math.Color;
+
 /**
- * Material has different textures.
+ * The Material has Ambient colors.
  * 
  * @author thothbot
+ *
  */
-public interface HasMaterialMap extends HasColor, HasMap, HasLightMap,
-		HasEnvMap, HasSpecularMap, HasAlphaMap
+public interface HasAmbientColor
 {
-
+	/**
+	 * Gets Ambient color
+	 * 
+	 * @return the color
+	 */
+	Color getAmbient();
+	
+	/**
+	 * Sets Ambient color
+	 * 
+	 * @param ambient the color.
+	 */
+	<T extends Material> T setAmbient(Color ambient);
+	<T extends Material> T setAmbient(int ambient);
 }

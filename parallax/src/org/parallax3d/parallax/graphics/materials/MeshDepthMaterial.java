@@ -33,20 +33,12 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.MeshDepthMaterial")
 public class MeshDepthMaterial extends Material implements HasWireframe
 {
-	//	private boolean isMorphTargets = false;
-	private boolean isWireframe;
-	private int wireframeLineWidth;
+	boolean morphTargets = false;
+	boolean wireframe = false;
+	double wireframeLineWidth = 1.0;
 
 	public MeshDepthMaterial()
 	{
-		setWireframe(false);
-		setWireframeLineWidth(1);
-	}
-
-	public Material.SHADING bufferGuessNormalType ()
-	{
-		// only MeshBasicMaterial and MeshDepthMaterial don't need normals
-		return null;
 	}
 
 	@Override
@@ -57,37 +49,38 @@ public class MeshDepthMaterial extends Material implements HasWireframe
 
 	@Override
 	public boolean isWireframe() {
-		return this.isWireframe;
+		return this.wireframe;
 	}
 
 	@Override
 	public MeshDepthMaterial setWireframe(boolean wireframe) {
-		this.isWireframe = wireframe;
+		this.wireframe = wireframe;
 		return this;
 	}
 
 	@Override
-	public int getWireframeLineWidth() {
+	public double getWireframeLineWidth() {
 		return this.wireframeLineWidth;
 	}
 
 	@Override
-	public MeshDepthMaterial setWireframeLineWidth(int wireframeLineWidth) {
+	public MeshDepthMaterial setWireframeLineWidth(double wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
 		return this;
 	}
 
 	@Override
-	public MeshDepthMaterial clone () {
+	public MeshDepthMaterial clone() {
+		return new MeshDepthMaterial().copy(this);
+	}
 
-		MeshDepthMaterial material = new MeshDepthMaterial();
+	public MeshDepthMaterial copy (MeshDepthMaterial source)
+	{
+		super.copy( source );
 
-		super.clone(material);
+		this.wireframe = source.wireframe;
+		this.wireframeLineWidth = source.wireframeLineWidth;
 
-		material.isWireframe = this.isWireframe;
-		material.wireframeLineWidth = this.wireframeLineWidth;
-
-		return material;
-
+		return this;
 	}
 }

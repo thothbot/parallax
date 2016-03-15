@@ -26,7 +26,6 @@ import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.materials.Material;
-import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;

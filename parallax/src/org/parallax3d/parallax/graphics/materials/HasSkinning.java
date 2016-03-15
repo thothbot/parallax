@@ -28,10 +28,4 @@ public interface HasSkinning
 	
 	boolean isMorphNormals();
 	<T extends Material> T setMorphNormals(boolean isMorphNormals);
-
-	int getNumSupportedMorphTargets();
-	<T extends Material> T setNumSupportedMorphTargets(int num);
-	
-	int getNumSupportedMorphNormals();
-	<T extends Material> T setNumSupportedMorphNormals(int num);
 }

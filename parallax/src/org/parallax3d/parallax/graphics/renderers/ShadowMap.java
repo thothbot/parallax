@@ -43,7 +43,6 @@ import org.parallax3d.parallax.graphics.lights.ShadowLight;
 import org.parallax3d.parallax.graphics.lights.VirtualLight;
 import org.parallax3d.parallax.graphics.materials.HasSkinning;
 import org.parallax3d.parallax.graphics.materials.Material;
-import org.parallax3d.parallax.graphics.materials.MeshFaceMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Frustum;
 import org.parallax3d.parallax.math.Matrix4;

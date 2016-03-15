@@ -20,13 +20,10 @@ package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.PhongShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
@@ -35,8 +32,8 @@ import org.parallax3d.parallax.system.ThreejsObject;
  */
 @ThreejsObject("THREE.MeshPhongMaterial")
 public class MeshPhongMaterial extends Material
-	implements HasMaterialMap, HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
-	HasSkinning, HasAmbientEmissiveColor, HasShading {
+	implements HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
+	HasSkinning, HasAmbientEmissiveColor, HasShading, HasColor, HasMap, HasLightMap, HasEnvMap, HasSpecularMap, HasAlphaMap {
 
 	private Color color;
 	private Color ambient;

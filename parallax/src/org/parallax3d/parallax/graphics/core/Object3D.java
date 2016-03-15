@@ -29,7 +29,7 @@ import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Quaternion;
 import org.parallax3d.parallax.math.Quaternion.QuaternionChangeHandler;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.UuidObject;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
@@ -39,7 +39,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  *
  */
 @ThreejsObject("THREE.Object3D")
-public class Object3D extends UuidObject
+public class Object3D extends AbstractPropertyObject
 {
 	public static final Vector3 DefaultUp = new Vector3( 0, 1, 0 );
 

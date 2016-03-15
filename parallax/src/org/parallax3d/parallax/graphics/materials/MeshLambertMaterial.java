@@ -20,13 +20,10 @@ package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.LambertShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.textures.Texture.OPERATIONS;
-import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
 
 /**
@@ -35,63 +32,49 @@ import org.parallax3d.parallax.math.Color;
  */
 @ThreejsObject("THREE.MeshLambertMaterial")
 public final class MeshLambertMaterial extends Material 
-	implements HasMaterialMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
-	HasSkinning, HasAmbientEmissiveColor, HasShading
+	implements HasWireframe, HasFog, HasVertexColors,
+	HasSkinning, HasEmissiveColor, HasColor, HasMap, HasAoMap, HasLightMap, HasEnvMap, HasEmissiveMap, HasSpecularMap, HasAlphaMap
 {
-	private Color color;
-	private Color ambient;
-	private Color emissive;
 
-	private boolean isWrapAround;
-	private Vector3 wrapRGB;
+	Color color = new Color(0xffffff);
 
-	private Texture map;
-	private Texture lightMap;
-	private Texture specularMap;
-	private Texture alphaMap;
+	Texture map;
 
-	private Texture envMap;
-	private Texture.OPERATIONS combine;
-	private double reflectivity;
-	private double refractionRatio;
+	Texture lightMap;
+	double lightMapIntensity = 1.0;
 
-	private boolean isFog;
+	Texture aoMap;
+	double aoMapIntensity = 1.0;
 
-	private Material.SHADING shading;
+	Color emissive = new Color(0x000000);
 
-	private boolean isWireframe;
-	private int wireframeLineWidth;
+	Texture emissiveMap;
+	double emissiveIntensity = 1.0;
 
-	private Material.COLORS vertexColors;
+	Texture specularMap;
 
-	private boolean isSkinning;
-	private boolean isMorphTargets;
-	private boolean isMorphNormals;
+	Texture alphaMap;
 
-	private int numSupportedMorphTargets;
-	private int numSupportedMorphNormals;
+	Texture envMap;
+	Texture.OPERATIONS combine = OPERATIONS.MULTIPLY;
+	double reflectivity = 1.0;
+	double refractionRatio = 0.98;
+
+	boolean fog = true;
+
+	boolean wireframe = false;
+	double wireframeLineWidth = 1.0;
+	String wireframeLineCap = "round";
+	String wireframeLineJoin = "round";
+
+	Material.COLORS vertexColors = COLORS.NO;
+
+	boolean skinning = false;
+	boolean morphTargets = false;
+	boolean morphNormals = false;
 
 	public MeshLambertMaterial()
 	{
-		setWrapRGB(new Vector3( 1, 1, 1 ));
-		setWrapAround(false);
-
-		setWireframe(false);
-		setWireframeLineWidth(1);
-
-		setCombine(OPERATIONS.MULTIPLY);
-		setReflectivity(1.0);
-		setRefractionRatio(0.98);
-
-		setFog(true);
-
-		setShading(Material.SHADING.SMOOTH);
-
-		setColor(0xffffff); // diffuse
-		setAmbient(0xffffff);
-		setEmissive(0x000000);
-
-		setVertexColors(Material.COLORS.NO);
 	}
 
 	@Override
@@ -101,45 +84,27 @@ public final class MeshLambertMaterial extends Material
 	}
 
 	@Override
-	public boolean isWrapAround() {
-		return this.isWrapAround;
-	}
-
-	@Override
-	public MeshLambertMaterial setWrapAround(boolean wrapAround) {
-		this.isWrapAround = wrapAround;
-		return this;
-	}
-
-	@Override
-	public Vector3 getWrapRGB() {
-		return this.wrapRGB;
-	}
-
-	@Override
-	public MeshLambertMaterial setWrapRGB(Vector3 wrapRGB) {
-		this.wrapRGB = wrapRGB;
-		return this;
+	public Material clone() {
+		return null;
 	}
 
 	@Override
 	public boolean isWireframe() {
-		return this.isWireframe;
+		return false;
 	}
 
 	@Override
-	public MeshLambertMaterial setWireframe(boolean wireframe) {
-		this.isWireframe = wireframe;
-		return this;
+	public <T extends Material> T setWireframe(boolean wireframe) {
+		return null;
 	}
 
 	@Override
-	public int getWireframeLineWidth() {
+	public double getWireframeLineWidth() {
 		return this.wireframeLineWidth;
 	}
 
 	@Override
-	public MeshLambertMaterial setWireframeLineWidth(int wireframeLineWidth) {
+	public MeshLambertMaterial setWireframeLineWidth(double wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
 		return this;
 	}
@@ -205,6 +170,17 @@ public final class MeshLambertMaterial extends Material
 	}
 
 	@Override
+	public double getLightMapIntensity() {
+		return lightMapIntensity;
+	}
+
+	@Override
+	public MeshLambertMaterial setLightMapIntensity(double intensity) {
+		this.lightMapIntensity = lightMapIntensity;
+		return this;
+	}
+
+	@Override
 	public MeshLambertMaterial setLightMap(Texture lightMap) {
 		this.lightMap = lightMap;
 		return this;
@@ -212,12 +188,12 @@ public final class MeshLambertMaterial extends Material
 
 	@Override
 	public boolean isFog() {
-		return this.isFog;
+		return this.fog;
 	}
 
 	@Override
 	public MeshLambertMaterial setFog(boolean fog) {
-		this.isFog = fog;
+		this.fog = fog;
 		return this;
 	}
 
@@ -261,56 +237,6 @@ public final class MeshLambertMaterial extends Material
 	}
 
 	@Override
-	public boolean isSkinning() {
-		return this.isSkinning;
-	}
-
-	@Override
-	public MeshLambertMaterial setSkinning(boolean isSkinning) {
-		this.isSkinning = isSkinning;
-		return this;
-	}
-
-	@Override
-	public boolean isMorphTargets() {
-		return this.isMorphTargets;
-	}
-
-	@Override
-	public MeshLambertMaterial setMorphTargets(boolean isMorphTargets) {
-		this.isMorphTargets = isMorphTargets;
-		return this;
-	}
-
-	@Override
-	public boolean isMorphNormals() {
-		return this.isMorphNormals;
-	}
-
-	@Override
-	public MeshLambertMaterial setMorphNormals(boolean isMorphNormals) {
-		this.isMorphNormals = isMorphNormals;
-		return this;
-	}
-
-	@Override
-	public Color getAmbient() {
-		return this.ambient;
-	}
-
-	@Override
-	public MeshLambertMaterial setAmbient(Color ambient) {
-		this.ambient = ambient;
-		return this;
-	}
-
-	@Override
-	public MeshLambertMaterial setAmbient(int ambient) {
-		this.ambient = new Color( ambient );
-		return this;
-	}
-
-	@Override
 	public Color getEmissive() {
 		return this.emissive;
 	}
@@ -328,28 +254,6 @@ public final class MeshLambertMaterial extends Material
 	}
 
 	@Override
-	public int getNumSupportedMorphTargets() {
-		return this.numSupportedMorphTargets;
-	}
-
-	@Override
-	public MeshLambertMaterial setNumSupportedMorphTargets(int num) {
-		this.numSupportedMorphTargets = num;
-		return this;
-	}
-
-	@Override
-	public int getNumSupportedMorphNormals() {
-		return this.numSupportedMorphNormals;
-	}
-
-	@Override
-	public MeshLambertMaterial setNumSupportedMorphNormals(int num) {
-		this.numSupportedMorphNormals = num;
-		return this;
-	}
-
-	@Override
 	public Texture getSpecularMap() {
 		return this.specularMap;
 	}
@@ -360,56 +264,113 @@ public final class MeshLambertMaterial extends Material
 		return this;
 	}
 
-	public Material.SHADING getShading() {
-		return this.shading;
+
+	@Override
+	public Texture getAoMap() {
+		return aoMap;
 	}
 
-	public MeshLambertMaterial setShading(Material.SHADING shading) {
-		this.shading = shading;
+	@Override
+	public MeshLambertMaterial setAoMap(Texture aoMap) {
+		this.aoMap = aoMap;
 		return this;
 	}
 
 	@Override
-	public MeshLambertMaterial clone() {
+	public double getAoMapIntensity() {
+		return aoMapIntensity;
+	}
 
-		MeshLambertMaterial material = new MeshLambertMaterial();
+	@Override
+	public MeshLambertMaterial setAoMapIntensity(double aoMapIntensity) {
+		this.aoMapIntensity = aoMapIntensity;
+		return this;
+	}
 
-		super.clone(material);
+	@Override
+	public Texture getEmissiveMap() {
+		return emissiveMap;
+	}
 
-		material.color.copy( this.color );
-		material.ambient.copy( this.ambient );
-		material.emissive.copy( this.emissive );
+	@Override
+	public MeshLambertMaterial setEmissiveMap(Texture emissiveMap) {
+		this.emissiveMap = emissiveMap;
+		return this;
+	}
 
-		material.isWrapAround = this.isWrapAround;
-		material.wrapRGB.copy( this.wrapRGB );
+	@Override
+	public boolean isSkinning() {
+		return skinning;
+	}
 
-		material.map = this.map;
+	@Override
+	public MeshLambertMaterial setSkinning(boolean skinning) {
+		this.skinning = skinning;
+		return this;
+	}
 
-		material.lightMap = this.lightMap;
+	@Override
+	public boolean isMorphTargets() {
+		return morphTargets;
+	}
 
-		material.specularMap = this.specularMap;
+	@Override
+	public MeshLambertMaterial setMorphTargets(boolean morphTargets) {
+		this.morphTargets = morphTargets;
+		return this;
+	}
 
-		material.alphaMap = this.alphaMap;
+	@Override
+	public boolean isMorphNormals() {
+		return morphNormals;
+	}
 
-		material.envMap = this.envMap;
-		material.combine = this.combine;
-		material.reflectivity = this.reflectivity;
-		material.refractionRatio = this.refractionRatio;
+	@Override
+	public MeshLambertMaterial setMorphNormals(boolean morphNormals) {
+		this.morphNormals = morphNormals;
+		return this;
+	}
 
-		material.isFog = this.isFog;
+	public MeshLambertMaterial copy(MeshLambertMaterial source) {
 
-		material.shading = this.shading;
+		super.copy( source );
 
-		material.isWireframe = this.isWireframe;
-		material.wireframeLineWidth = this.wireframeLineWidth;
+		this.color.copy( source.color );
 
-		material.vertexColors = this.vertexColors;
+		this.map = source.map;
 
-		material.isSkinning = this.isSkinning;
-		material.isMorphTargets = this.isMorphTargets;
-		material.isMorphNormals = this.isMorphNormals;
+		this.lightMap = source.lightMap;
+		this.lightMapIntensity = source.lightMapIntensity;
 
-		return material;
+		this.aoMap = source.aoMap;
+		this.aoMapIntensity = source.aoMapIntensity;
 
+		this.emissive.copy( source.emissive );
+		this.emissiveMap = source.emissiveMap;
+		this.emissiveIntensity = source.emissiveIntensity;
+
+		this.specularMap = source.specularMap;
+
+		this.alphaMap = source.alphaMap;
+
+		this.envMap = source.envMap;
+		this.combine = source.combine;
+		this.reflectivity = source.reflectivity;
+		this.refractionRatio = source.refractionRatio;
+
+		this.fog = source.fog;
+
+		this.wireframe = source.wireframe;
+		this.wireframeLineWidth = source.wireframeLineWidth;
+		this.wireframeLineCap = source.wireframeLineCap;
+		this.wireframeLineJoin = source.wireframeLineJoin;
+
+		this.vertexColors = source.vertexColors;
+
+		this.skinning = source.skinning;
+		this.morphTargets = source.morphTargets;
+		this.morphNormals = source.morphNormals;
+
+		return this;
 	}
 }

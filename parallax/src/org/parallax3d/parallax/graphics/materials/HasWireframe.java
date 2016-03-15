@@ -29,6 +29,6 @@ public interface HasWireframe
 	boolean isWireframe();
 	<T extends Material> T setWireframe(boolean wireframe);
 	
-	int getWireframeLineWidth();
-	<T extends Material> T setWireframeLineWidth(int wireframeLineWidth);
+	double getWireframeLineWidth();
+	<T extends Material> T setWireframeLineWidth(double wireframeLineWidth);
 }

@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.gl;
 
-import org.parallax3d.parallax.system.UuidObject;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 
@@ -33,7 +33,7 @@ public class GLProperties {
 
     }
 
-    public FastMap<Object> get( UuidObject object ) {
+    public FastMap<Object> get( AbstractPropertyObject object ) {
 
         String uuid = object.getUUID();
 
@@ -44,7 +44,7 @@ public class GLProperties {
 
     }
 
-    public void delete( UuidObject object ) {
+    public void delete( AbstractPropertyObject object ) {
 
         String uuid = object.getUUID();
 

@@ -20,7 +20,7 @@ package org.parallax3d.parallax.system;
 
 import org.parallax3d.parallax.math.Mathematics;
 
-public abstract class UuidObject {
+public abstract class AbstractPropertyObject {
 
     String uuid = Mathematics.generateUUID();
 
