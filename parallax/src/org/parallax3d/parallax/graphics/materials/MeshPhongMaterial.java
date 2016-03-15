@@ -32,82 +32,59 @@ import org.parallax3d.parallax.system.ThreejsObject;
  */
 @ThreejsObject("THREE.MeshPhongMaterial")
 public class MeshPhongMaterial extends Material
-	implements HasBumpMap, HasNormalMap, HasWrap, HasWireframe, HasFog, HasVertexColors,
-	HasSkinning, HasAmbientEmissiveColor, HasShading, HasColor, HasMap, HasLightMap, HasEnvMap, HasSpecularMap, HasAlphaMap {
+	implements HasBumpMap, HasNormalMap, HasWireframe, HasFog, HasVertexColors,
+		HasSkinning, HasEmissiveColor, HasShading, HasColor, HasMap, HasAoMap,
+		HasEmissiveMap, HasDisplacementMap, HasLightMap, HasEnvMap, HasSpecularMap, HasAlphaMap
+{
+	Color color = new Color(0xffffff);
+	Color specular = new Color(0x111111);
+	double shininess = 30.;
 
-	private Color color;
-	private Color ambient;
-	private Color emissive;
-	private Color specular;
-	private double shininess;
+	Texture map;
 
-	private boolean isMetal;
+	Texture lightMap;
+	double lightMapIntensity = 1.0;
 
-	private boolean isWrapAround;
-	private Vector3 wrapRGB;
+	Texture aoMap;
+	double aoMapIntensity = 1.0;
 
-	private Texture map;
-	private Texture lightMap;
+	Color emissive = new Color( 0x000000 );
+	Texture emissiveMap;
+	double emissiveIntensity = 1.0;
 
-	private Texture bumpMap;
-	private double bumpScale;
+	Texture bumpMap;
+	double bumpScale = 1.0;
 
-	private Texture normalMap;
-	private Vector2 normalScale;
+	Texture normalMap;
+	Vector2 normalScale = new Vector2( 1., 1. );
 
-	private Texture specularMap;
+	Texture displacementMap;
+	double displacementScale = 1.0;
+	double displacementBias = 0.0;
 
-	private Texture alphaMap;
+	Texture specularMap;
 
-	private Texture envMap;
-	private Texture.OPERATIONS combine;
-	private double reflectivity;
-	private double refractionRatio;
+	Texture alphaMap;
 
-	private boolean isFog;
+	Texture envMap;
+	Texture.OPERATIONS combine = Texture.OPERATIONS.MULTIPLY;
+	double reflectivity = 1.0;
+	double refractionRatio = 0.98;
 
-	private Material.SHADING shading;
+	boolean fog = true;
 
-	private boolean isWireframe;
-	private int wireframeLineWidth;
+	Material.SHADING shading = SHADING.SMOOTH;
 
-	private Material.COLORS vertexColors;
+	boolean wireframe = false;
+	double wireframeLineWidth = 1.0;
+	String wireframeLineCap = "round";
+	String wireframeLineJoin = "round";
 
-	private boolean isSkinning;
-	private boolean isMorphTargets;
-	private boolean isMorphNormals;
+	Material.COLORS vertexColors = COLORS.NO;
 
-	private int numSupportedMorphTargets;
-	private int numSupportedMorphNormals;
-
-	public MeshPhongMaterial() {
-		setWrapRGB(new Vector3(1, 1, 1));
-		setWrapAround(false);
-
-		setWireframe(false);
-		setWireframeLineWidth(1);
-
-		setCombine(Texture.OPERATIONS.MULTIPLY);
-		setReflectivity(1.0);
-		setRefractionRatio(0.98);
-
-		setNormalScale(new Vector2(1, 1));
-
-		setFog(true);
-
-		setShading(Material.SHADING.SMOOTH);
-
-		setColor(0xffffff);
-		setAmbient(0xffffff);
-		setEmissive(0x000000);
-		setSpecular(0x111111);
-
-		setVertexColors(Material.COLORS.NO);
-
-		setShininess(30);
-
-		setBumpScale(1.0);
-	}
+	boolean skinning;
+	boolean morphTargets;
+	boolean morphNormals;
 
 	@Override
 	public Shader getAssociatedShader() {
@@ -137,55 +114,23 @@ public class MeshPhongMaterial extends Material
 		return this;
 	}
 
-	public boolean isMetal() {
-		return this.isMetal;
-	}
-
-	public MeshPhongMaterial setMetal(boolean isMetal) {
-		this.isMetal = isMetal;
-		return this;
-	}
-
-	@Override
-	public boolean isWrapAround() {
-		return this.isWrapAround;
-	}
-
-	@Override
-	public MeshPhongMaterial setWrapAround(boolean wrapAround) {
-		this.isWrapAround = wrapAround;
-		return this;
-	}
-
-	@Override
-	public Vector3 getWrapRGB() {
-		return this.wrapRGB;
-	}
-
-	@Override
-	public MeshPhongMaterial setWrapRGB(Vector3 wrapRGB) {
-		this.wrapRGB = wrapRGB;
-		return this;
-	}
-
 	@Override
 	public boolean isWireframe() {
-		return this.isWireframe;
+		return false;
 	}
 
 	@Override
-	public MeshPhongMaterial setWireframe(boolean wireframe) {
-		this.isWireframe = wireframe;
-		return this;
+	public <T extends Material> T setWireframe(boolean wireframe) {
+		return null;
 	}
 
 	@Override
-	public int getWireframeLineWidth() {
+	public double getWireframeLineWidth() {
 		return this.wireframeLineWidth;
 	}
 
 	@Override
-	public MeshPhongMaterial setWireframeLineWidth(int wireframeLineWidth) {
+	public MeshPhongMaterial setWireframeLineWidth(double wireframeLineWidth) {
 		this.wireframeLineWidth = wireframeLineWidth;
 		return this;
 	}
@@ -240,6 +185,16 @@ public class MeshPhongMaterial extends Material
 	}
 
 	@Override
+	public double getLightMapIntensity() {
+		return 0;
+	}
+
+	@Override
+	public <T extends Material> T setLightMapIntensity(double intensity) {
+		return null;
+	}
+
+	@Override
 	public MeshPhongMaterial setLightMap(Texture lightMap) {
 		this.lightMap = lightMap;
 		return this;
@@ -247,12 +202,12 @@ public class MeshPhongMaterial extends Material
 
 	@Override
 	public boolean isFog() {
-		return this.isFog;
+		return this.fog;
 	}
 
 	@Override
 	public MeshPhongMaterial setFog(boolean fog) {
-		this.isFog = fog;
+		this.fog = fog;
 		return this;
 	}
 
@@ -309,73 +264,34 @@ public class MeshPhongMaterial extends Material
 
 	@Override
 	public boolean isSkinning() {
-		return this.isSkinning;
+		return this.skinning;
 	}
 
 	@Override
-	public MeshPhongMaterial setSkinning(boolean isSkinning) {
-		this.isSkinning = isSkinning;
+	public MeshPhongMaterial setSkinning(boolean skinning) {
+		this.skinning = skinning;
 		return this;
 	}
 
 	@Override
 	public boolean isMorphTargets() {
-		return this.isMorphTargets;
+		return this.morphTargets;
 	}
 
 	@Override
-	public MeshPhongMaterial setMorphTargets(boolean isMorphTargets) {
-		this.isMorphTargets = isMorphTargets;
+	public MeshPhongMaterial setMorphTargets(boolean morphTargets) {
+		this.morphTargets = morphTargets;
 		return this;
 	}
 
 	@Override
 	public boolean isMorphNormals() {
-		return this.isMorphNormals;
+		return this.morphNormals;
 	}
 
 	@Override
-	public MeshPhongMaterial setMorphNormals(boolean isMorphNormals) {
-		this.isMorphNormals = isMorphNormals;
-		return this;
-	}
-
-	@Override
-	public int getNumSupportedMorphTargets() {
-		return this.numSupportedMorphTargets;
-	}
-
-	@Override
-	public MeshPhongMaterial setNumSupportedMorphTargets(int num) {
-		this.numSupportedMorphTargets = num;
-		return this;
-	}
-
-	@Override
-	public int getNumSupportedMorphNormals() {
-		return this.numSupportedMorphNormals;
-	}
-
-	@Override
-	public MeshPhongMaterial setNumSupportedMorphNormals(int num) {
-		this.numSupportedMorphNormals = num;
-		return this;
-	}
-
-	@Override
-	public Color getAmbient() {
-		return this.ambient;
-	}
-
-	@Override
-	public MeshPhongMaterial setAmbient(Color ambient) {
-		this.ambient = ambient;
-		return this;
-	}
-
-	@Override
-	public MeshPhongMaterial setAmbient(int ambient) {
-		this.ambient = new Color(ambient);
+	public MeshPhongMaterial setMorphNormals(boolean morphNormals) {
+		this.morphNormals = morphNormals;
 		return this;
 	}
 
@@ -461,56 +377,108 @@ public class MeshPhongMaterial extends Material
 	}
 
 	@Override
+	public Texture getAoMap() {
+		return aoMap;
+	}
+
+	@Override
+	public MeshPhongMaterial setAoMap(Texture aoMap) {
+		this.aoMap = aoMap;
+		return this;
+	}
+
+	@Override
+	public double getAoMapIntensity() {
+		return aoMapIntensity;
+	}
+
+	@Override
+	public MeshPhongMaterial setAoMapIntensity(double aoMapIntensity) {
+		this.aoMapIntensity = aoMapIntensity;
+		return this;
+	}
+
+	@Override
+	public Texture getDisplacementMap() {
+		return displacementMap;
+	}
+
+	@Override
+	public MeshPhongMaterial setDisplacementMap(Texture displacementMap) {
+		this.displacementMap = displacementMap;
+		return this;
+	}
+
+	@Override
+	public Texture getEmissiveMap() {
+		return emissiveMap;
+	}
+
+	@Override
+	public MeshPhongMaterial setEmissiveMap(Texture emissiveMap) {
+		this.emissiveMap = emissiveMap;
+		return this;
+	}
+
+	@Override
 	public MeshPhongMaterial clone() {
+		return new MeshPhongMaterial().copy(this);
+	}
 
-		MeshPhongMaterial material = new MeshPhongMaterial();
+	public MeshPhongMaterial copy(MeshPhongMaterial source) {
 
-		super.clone(material);
+		super.copy( source );
 
-		material.color.copy(this.color);
-		material.ambient.copy(this.ambient);
-		material.emissive.copy(this.emissive);
-		material.specular.copy(this.specular);
-		material.shininess = this.shininess;
+		this.color.copy( source.color );
+		this.specular.copy( source.specular );
+		this.shininess = source.shininess;
 
-		material.isMetal = this.isMetal;
+		this.map = source.map;
 
-		material.isWrapAround = this.isWrapAround;
-		material.wrapRGB.copy(this.wrapRGB);
+		this.lightMap = source.lightMap;
+		this.lightMapIntensity = source.lightMapIntensity;
 
-		material.map = this.map;
+		this.aoMap = source.aoMap;
+		this.aoMapIntensity = source.aoMapIntensity;
 
-		material.lightMap = this.lightMap;
+		this.emissive.copy( source.emissive );
+		this.emissiveMap = source.emissiveMap;
+		this.emissiveIntensity = source.emissiveIntensity;
 
-		material.bumpMap = this.bumpMap;
-		material.bumpScale = this.bumpScale;
+		this.bumpMap = source.bumpMap;
+		this.bumpScale = source.bumpScale;
 
-		material.normalMap = this.normalMap;
-		material.normalScale.copy(this.normalScale);
+		this.normalMap = source.normalMap;
+		this.normalScale.copy( source.normalScale );
 
-		material.specularMap = this.specularMap;
+		this.displacementMap = source.displacementMap;
+		this.displacementScale = source.displacementScale;
+		this.displacementBias = source.displacementBias;
 
-		material.alphaMap = this.alphaMap;
+		this.specularMap = source.specularMap;
 
-		material.envMap = this.envMap;
-		material.combine = this.combine;
-		material.reflectivity = this.reflectivity;
-		material.refractionRatio = this.refractionRatio;
+		this.alphaMap = source.alphaMap;
 
-		material.isFog = this.isFog;
+		this.envMap = source.envMap;
+		this.combine = source.combine;
+		this.reflectivity = source.reflectivity;
+		this.refractionRatio = source.refractionRatio;
 
-		material.shading = this.shading;
+		this.fog = source.fog;
 
-		material.isWireframe = this.isWireframe;
-		material.wireframeLineWidth = this.wireframeLineWidth;
+		this.shading = source.shading;
 
-		material.vertexColors = this.vertexColors;
+		this.wireframe = source.wireframe;
+		this.wireframeLineWidth = source.wireframeLineWidth;
+		this.wireframeLineCap = source.wireframeLineCap;
+		this.wireframeLineJoin = source.wireframeLineJoin;
 
-		material.isSkinning = this.isSkinning;
-		material.isMorphTargets = this.isMorphTargets;
-		material.isMorphNormals = this.isMorphNormals;
+		this.vertexColors = source.vertexColors;
 
-		return material;
+		this.skinning = source.skinning;
+		this.morphTargets = source.morphTargets;
+		this.morphNormals = source.morphNormals;
 
+		return this;
 	}
 }
