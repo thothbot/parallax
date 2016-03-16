@@ -93,19 +93,6 @@ public class Mathematics
 	}
 
 	/**
-	 * The method clamps the scalar x to range &#60;a, inf).
-	 *
-	 * @param x the scalar value for clamping
-	 * @param a the start value of the range
-	 *
-	 * @return a clamped scalar by range &#60;a, inf).
-	 */
-	public static double clampBottom(double x, double a)
-	{
-		return x < a ? a : x;
-	}
-
-	/**
 	 * Linear mapping the scalar x from range &#60;a1, a2&#62; to range &#60;b1, b&#62;
 	 *
 	 * @param x  the scalar value for linear mapping
@@ -147,19 +134,6 @@ public class Mathematics
 		x = ( x - min ) / ( max - min );
 
 		return x * x * x * ( x * ( x * 6.0 - 15.0 ) + 10.0 );
-	}
-
-	/**
-	 * The method generates random double value in the range &#60;0, 1&#62; with
-	 * 16 bits of randomness (standard Math.random() creates repetitive
-	 * patterns when applied over larger space).
-	 *
-	 * @return a random Float value.
-	 */
-	public static double random16()
-	{
-
-		return (65280.0 * Math.random() + 255.0 * Math.random()) / 65535.0;
 	}
 
 	/**
@@ -261,9 +235,9 @@ public class Mathematics
 	 *
 	 * @return 1 or -1
 	 */
-	public static double sign(double x)
+	public static int sign(double x)
 	{
-		return (x < 0) ? -1.0 : ((x > 0) ? 1.0 : 0);
+		return (x < 0) ? -1 : ((x > 0) ? 1 : 0);
 	}
 
 	/**
