@@ -16,8 +16,10 @@ package org.parallax3d.parallax.platforms.gwt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.parallax3d.parallax.Input;
 import org.parallax3d.parallax.input.InputHandler;
@@ -43,7 +45,7 @@ public class GwtInput implements Input
 
 	static final int						MAX_TOUCHES		= 20;
 
-	List< Integer >							pressedButtons	= new ArrayList<>();
+	Set< Integer >							pressedButtons	= new HashSet<>();
 
 	private final Map< Integer, Integer >	touchMap		= new HashMap<>();
 
