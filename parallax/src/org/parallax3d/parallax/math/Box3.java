@@ -73,6 +73,40 @@ public class Box3
 		return this;
 	}
 
+	public Box3 setFromArray( Float32Array array )
+	{
+		this.makeEmpty();
+
+		double minX = Double.POSITIVE_INFINITY;
+		double minY = Double.POSITIVE_INFINITY;
+		double minZ = Double.POSITIVE_INFINITY;
+
+		double maxX = Double.NEGATIVE_INFINITY;
+		double maxY = Double.NEGATIVE_INFINITY;
+		double maxZ = Double.NEGATIVE_INFINITY;
+
+		for ( int i = 0, il = array.getLength(); i < il; i += 3 ) {
+
+			double x = array.get( i );
+			double y = array.get( i + 1 );
+			double z = array.get( i + 2 );
+
+			if ( x < minX ) minX = x;
+			if ( y < minY ) minY = y;
+			if ( z < minZ ) minZ = z;
+
+			if ( x > maxX ) maxX = x;
+			if ( y > maxY ) maxY = y;
+			if ( z > maxZ ) maxZ = z;
+
+		}
+
+		this.min.set( minX, minY, minZ );
+		this.max.set( maxX, maxY, maxZ );
+
+		return this;
+	}
+
 	public Box3 setFromPoints( List<Vector3> points )
 	{
 		return setFromPoints(points.toArray(new Vector3[points.size()]));
@@ -101,15 +135,21 @@ public class Box3
 
 	}
 
+	/**
+	 * Computes the world-axis-aligned bounding box of an object (including its children),
+	 * accounting for both the object's, and childrens', world transforms
+	 *
+	 * @param object
+	 * @return
+     */
 	public Box3 setFromObject(Object3D object)
 	{
 
-		// Computes the world-axis-aligned bounding box of an object (including its children),
-		// accounting for both the object's, and childrens', world transforms
+		this.makeEmpty();
 
 		object.updateMatrixWorld( true );
 
-		this.makeEmpty();
+		final Box3 box = new Box3();
 
 		object.traverse(new Object3D.Traverse() {
 
@@ -120,43 +160,21 @@ public class Box3
 
 				Vector3 v1 = new Vector3();
 
-
 				if ( geometry != null ) {
 
-					if ( geometry instanceof Geometry ) {
-
-						List<Vector3> vertices = ((Geometry)geometry).getVertices();
-
-						for ( int i = 0, il = vertices.size(); i < il; i ++ ) {
-
-							v1.copy( vertices.get( i ) );
-
-							v1.apply( node.getMatrixWorld() );
-
-							expandByPoint( v1 );
-
-						}
-
-					} else if ( geometry instanceof BufferGeometry && ((BufferGeometry)geometry).getAttribute("position") != null ) {
-
-						Float32Array positions = (Float32Array)((BufferGeometry)geometry).getAttribute("position").getArray();
-
-						for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {
-
-							v1.set( positions.get( i ), positions.get( i + 1 ), positions.get( i + 2 ) );
-
-							v1.apply( node.getMatrixWorld() );
-
-							expandByPoint( v1 );
-
-						}
+					if ( geometry.getBoundingBox() == null )
+					{
+						geometry.computeBoundingBox();
 					}
+
+					box.copy( geometry.getBoundingBox() );
+					box.apply( node.getMatrixWorld() );
+					Box3.this.union( box );
 				}
 			}
 		});
 
 		return this;
-
 	}
 
 	public Box3 copy( Box3 box )
@@ -227,30 +245,20 @@ public class Box3
 		return this;
 	}
 
-	public boolean isContainsPoint( Vector3 point )
+	public boolean containsPoint( Vector3 point )
 	{
-		if ( point.x < this.min.x || point.x > this.max.x ||
+		return !(point.x < this.min.x || point.x > this.max.x ||
 				point.y < this.min.y || point.y > this.max.y ||
-				point.z < this.min.z || point.z > this.max.z ) {
+				point.z < this.min.z || point.z > this.max.z);
 
-			return false;
-
-		}
-
-		return true;
 	}
 
-	public boolean isContainsBox( Box3 box )
+	public boolean containsBox( Box3 box )
 	{
-		if ( ( this.min.x <= box.min.x ) && ( box.max.x <= this.max.x ) &&
-				( this.min.y <= box.min.y ) && ( box.max.y <= this.max.y ) &&
-				( this.min.z <= box.min.z ) && ( box.max.z <= this.max.z ) ) {
+		return (this.min.x <= box.min.x) && (box.max.x <= this.max.x) &&
+				(this.min.y <= box.min.y) && (box.max.y <= this.max.y) &&
+				(this.min.z <= box.min.z) && (box.max.z <= this.max.z);
 
-			return true;
-
-		}
-
-		return false;
 	}
 
 	public Vector3 getParameter( Vector3 point )
@@ -265,19 +273,78 @@ public class Box3
 		);
 	}
 
-	public boolean isIntersectionBox( Box3 box )
+	public boolean intersectsBox(Box3 box )
 	{
 		// using 6 splitting planes to rule out intersections.
 
-		if ( box.max.x < this.min.x || box.min.x > this.max.x ||
+		return !(box.max.x < this.min.x || box.min.x > this.max.x ||
 				box.max.y < this.min.y || box.min.y > this.max.y ||
-				box.max.z < this.min.z || box.min.z > this.max.z ) {
+				box.max.z < this.min.z || box.min.z > this.max.z);
 
-			return false;
+	}
+
+	public boolean intersectsSphere(Sphere sphere)
+	{
+
+		_v1.set(0,0,0);
+
+		// Find the point on the AABB closest to the sphere center.
+		this.clampPoint( sphere.getCenter(), _v1 );
+
+		// If that point is inside the sphere, the AABB and sphere intersect.
+		return _v1.distanceToSquared( sphere.getCenter() ) <= ( sphere.getRadius() * sphere.getRadius() );
+	}
+
+	/**
+	 * We compute the minimum and maximum dot product values. If those values
+	 * are on the same side (back or front) of the plane, then there is no intersection.
+	 *
+	 * @param plane
+	 * @return
+     */
+	public boolean intersectsPlane( Plane plane )
+	{
+
+		double min, max;
+
+		if ( plane.getNormal().getX() > 0 ) {
+
+			min = plane.getNormal().getX() * this.min.x;
+			max = plane.getNormal().getX() * this.max.x;
+
+		} else {
+
+			min = plane.getNormal().getX() * this.max.x;
+			max = plane.getNormal().getX() * this.min.x;
 
 		}
 
-		return true;
+		if ( plane.getNormal().getY() > 0 ) {
+
+			min += plane.getNormal().getY() * this.min.y;
+			max += plane.getNormal().getY() * this.max.y;
+
+		} else {
+
+			min += plane.getNormal().getY() * this.max.y;
+			max += plane.getNormal().getY() * this.min.y;
+
+		}
+
+		if ( plane.getNormal().getZ() > 0 ) {
+
+			min += plane.getNormal().getZ() * this.min.z;
+			max += plane.getNormal().getZ() * this.max.z;
+
+		} else {
+
+			min += plane.getNormal().getZ() * this.max.z;
+			max += plane.getNormal().getZ() * this.min.z;
+
+		}
+
+		return ( min <= plane.getConstant() && max >= plane.getConstant() );
+
 	}
 
 	public Vector3 clampPoint( Vector3 point)
@@ -346,7 +413,7 @@ public class Box3
 		points[ 4 ].set( this.max.x, this.min.y, this.min.z ).apply( matrix ); // 100
 		points[ 5 ].set( this.max.x, this.min.y, this.max.z ).apply( matrix ); // 101
 		points[ 6 ].set( this.max.x, this.max.y, this.min.z ).apply( matrix ); // 110
-		points[ 7 ].set( this.max.x, this.max.y, this.max.z ).apply( matrix );  // 111
+		points[ 7 ].set( this.max.x, this.max.y, this.max.z ).apply( matrix ); // 111
 
 		this.makeEmpty();
 		this.setFromPoints( points );

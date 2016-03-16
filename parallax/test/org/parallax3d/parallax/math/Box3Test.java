@@ -203,18 +203,18 @@ public class Box3Test
 		Box3 b = new Box3( zero3.clone(), one3.clone() );
 		Box3 c = new Box3( one3.clone().negate(), one3.clone() );
 
-		assertTrue( a.isIntersectionBox( a ));
-		assertTrue( a.isIntersectionBox( b ));
-		assertTrue( a.isIntersectionBox( c ));
+		assertTrue( a.intersectsBox( a ));
+		assertTrue( a.intersectsBox( b ));
+		assertTrue( a.intersectsBox( c ));
 
-		assertTrue( b.isIntersectionBox( a ));
-		assertTrue( c.isIntersectionBox( a ));
-		assertTrue( b.isIntersectionBox(c));
+		assertTrue( b.intersectsBox( a ));
+		assertTrue( c.intersectsBox( a ));
+		assertTrue( b.intersectsBox(c));
 
 		b.translate(new Vector3(2, 2, 2));
-		assertTrue( ! a.isIntersectionBox( b ));
-		assertTrue( ! b.isIntersectionBox( a ));
-		assertTrue( ! b.isIntersectionBox( c ));
+		assertTrue( ! a.intersectsBox( b ));
+		assertTrue( ! b.intersectsBox( a ));
+		assertTrue( ! b.intersectsBox( c ));
 	}
 
 	@Test

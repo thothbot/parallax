@@ -80,6 +80,19 @@ public class Mathematics
 	}
 
 	/**
+	 * compute euclidian modulo of m % n
+	 * https://en.wikipedia.org/wiki/Modulo_operation
+	 *
+	 * @param n
+	 * @param m
+     * @return
+     */
+	public static double euclideanModulo( double n, double m )
+	{
+		return ( ( n % m ) + m ) % m;
+	}
+
+	/**
 	 * The method clamps the scalar x to range &#60;a, inf).
 	 *
 	 * @param x the scalar value for clamping

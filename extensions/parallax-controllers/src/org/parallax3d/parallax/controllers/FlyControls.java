@@ -80,7 +80,7 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 		this.moveVector = new Vector3( 0, 0, 0 );
 		this.rotationVector = new Vector3( 0, 0, 0 );
 
-		context.getInput().setInputHandler(this);
+		context.getInput().addInputHandler( this );
 	}
 	
 	public void setMovementSpeed(double speed) {

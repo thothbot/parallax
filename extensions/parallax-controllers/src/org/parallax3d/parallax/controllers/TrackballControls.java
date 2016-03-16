@@ -100,7 +100,7 @@ public final class TrackballControls extends Controls implements TouchMoveHandle
 		this.panStart     = new Vector2();
 		this.panEnd       = new Vector2();
 
-		context.getInput().setInputHandler(this);
+		context.getInput().addInputHandler( this );
 	}
 	
 	public boolean isEnabled() {
