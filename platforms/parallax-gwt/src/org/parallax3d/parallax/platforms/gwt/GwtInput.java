@@ -14,10 +14,8 @@
 
 package org.parallax3d.parallax.platforms.gwt;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,28 +66,19 @@ public class GwtInput implements Input
 	boolean									hasFocus		= true;
 
 	// Handlers
-	List< KeyDownHandler >					keyDownHandler;
-	List< KeyTypedHandler >					keyTypedHandler;
-	List< KeyUpHandler >					keyUpHandler;
-	List< ScrolledHandler >					scrolledHandler;
-	List< TouchDownHandler >				touchDownHandler;
-	List< TouchDraggedHandler >				touchDraggedHandler;
-	List< TouchUpHandler >					touchUpHandler;
-	List< TouchMoveHandler >				touchMoveHandler;
+	Set< KeyDownHandler >					keyDownHandler      = new HashSet<>();
+	Set< KeyTypedHandler >					keyTypedHandler     = new HashSet<>();
+	Set< KeyUpHandler >					    keyUpHandler        = new HashSet<>();
+	Set< ScrolledHandler >					scrolledHandler     = new HashSet<>();
+	Set< TouchDownHandler >				    touchDownHandler    = new HashSet<>();
+	Set< TouchDraggedHandler >				touchDraggedHandler = new HashSet<>();
+	Set< TouchUpHandler >					touchUpHandler      = new HashSet<>();
+	Set< TouchMoveHandler >				    touchMoveHandler    = new HashSet<>();
 
 	public GwtInput ( final CanvasElement canvas )
 	{
 		this.canvas = canvas;
 		this.hookEvents();
-
-		this.keyDownHandler = new ArrayList<>();
-		this.keyTypedHandler = new ArrayList<>();
-		this.keyUpHandler = new ArrayList<>();
-		this.scrolledHandler = new ArrayList<>();
-		this.touchDownHandler = new ArrayList<>();
-		this.touchDraggedHandler = new ArrayList<>();
-		this.touchUpHandler = new ArrayList<>();
-		this.touchMoveHandler = new ArrayList<>();
 	}
 
 	void reset ()
