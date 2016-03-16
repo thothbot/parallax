@@ -154,13 +154,13 @@ public class Box2Test
 	{
 		Box2 a = new Box2( zero2.clone(), zero2.clone() );
 
-		assertTrue( a.isContainsPoint( zero2 ));
-		assertTrue( ! a.isContainsPoint( one2 ));
+		assertTrue( a.containsPoint( zero2 ));
+		assertTrue( ! a.containsPoint( one2 ));
 
 		a.expandByScalar( 1 );
-		assertTrue( a.isContainsPoint( zero2 ));
-		assertTrue( a.isContainsPoint( one2 ));
-		assertTrue( a.isContainsPoint( one2.clone().negate() ));
+		assertTrue( a.containsPoint( zero2 ));
+		assertTrue( a.containsPoint( one2 ));
+		assertTrue( a.containsPoint( one2.clone().negate() ));
 	}
 
 	@Test
@@ -170,13 +170,13 @@ public class Box2Test
 		Box2 b = new Box2( zero2.clone(), one2.clone() );
 		Box2 c = new Box2( one2.clone().negate(), one2.clone() );
 
-		assertTrue( a.isContainsBox( a ));
-		assertTrue( ! a.isContainsBox( b ));
-		assertTrue( ! a.isContainsBox( c ));
+		assertTrue( a.containsBox( a ));
+		assertTrue( ! a.containsBox( b ));
+		assertTrue( ! a.containsBox( c ));
 
-		assertTrue( b.isContainsBox( a ));
-		assertTrue( c.isContainsBox( a ));
-		assertTrue( ! b.isContainsBox( c ));
+		assertTrue( b.containsBox( a ));
+		assertTrue( c.containsBox( a ));
+		assertTrue( ! b.containsBox( c ));
 
 	}
 

@@ -36,6 +36,7 @@ public class Box2
 		this(new Vector2(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
 				new Vector2(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
 	}
+
 	public Box2( Vector2 min, Vector2 max )
 	{
 		this.min = min;
@@ -157,27 +158,18 @@ public class Box2
 		return this;
 	}
 
-	public boolean isContainsPoint( Vector2 point )
+	public boolean containsPoint(Vector2 point )
 	{
-		if ( point.x < this.min.x || point.x > this.max.x ||
-				point.y < this.min.y || point.y > this.max.y ) {
+		return !(point.x < this.min.x || point.x > this.max.x ||
+				point.y < this.min.y || point.y > this.max.y);
 
-			return false;
-
-		}
-
-		return true;
 	}
 
-	public boolean isContainsBox( Box2 box )
+	public boolean containsBox(Box2 box )
 	{
-		if ( ( this.min.x <= box.min.x ) && ( box.max.x <= this.max.x ) &&
-				( this.min.y <= box.min.y ) && ( box.max.y <= this.max.y ) ) {
+		return (this.min.x <= box.min.x) && (box.max.x <= this.max.x) &&
+				(this.min.y <= box.min.y) && (box.max.y <= this.max.y);
 
-			return true;
-		}
-
-		return false;
 	}
 
 	public Vector2 getParameter( Vector2 point )
@@ -200,13 +192,9 @@ public class Box2
 	{
 		// using 6 splitting planes to rule out intersections.
 
-		if ( box.max.x < this.min.x || box.min.x > this.max.x ||
-				box.max.y < this.min.y || box.min.y > this.max.y )
-		{
-			return false;
-		}
+		return !(box.max.x < this.min.x || box.min.x > this.max.x ||
+				box.max.y < this.min.y || box.min.y > this.max.y);
 
-		return true;
 	}
 
 	public Vector2 clampPoint( Vector2 point)
