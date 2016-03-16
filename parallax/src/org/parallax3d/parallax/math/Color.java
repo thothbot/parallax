@@ -20,6 +20,7 @@ package org.parallax3d.parallax.math;
 
 
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * The Color class is used encapsulate colors in the default RGB color space.
@@ -146,6 +147,30 @@ public final class Color
 		this.b = b;
 	}
 
+	public Color set(Color color)
+	{
+		return this.copy(color);
+	}
+
+	public Color set(Colors color)
+	{
+		return this.copy(color.getColor());
+	}
+
+	public Color set(int hex)
+	{
+		return this.setHex(hex);
+	}
+
+	public Color setScalar( double val )
+	{
+		this.r = val;
+		this.g = val;
+		this.b = val;
+
+		return this;
+	}
+
 	/**
 	 * Setting color in HEX format. For example 0xFFFFFF will create
 	 * a color in RGB(255, 255, 255), which means completely white.
@@ -183,23 +208,6 @@ public final class Color
 	}
 
 	/**
-	 * Setting color based on HSV color model. Each input values H, S, V
-	 * should be in range <0.0, 1.0>.
-	 *
-	 * This method based on MochiKit implementation by Bob Ippolito
-	 *
-	 * @param h the hue
-	 * @param s the saturation
-	 * @param v the value
-	 *
-	 * @return a current color
-	 */
-//	public Color setHSV( double h, double s, double v )
-//	{
-//		return this.setHSL(h,s*v/((h=(2-s)*v)<1?h:2-h),h/2); // https://gist.github.com/xpansive/1337890
-//	}
-
-	/**
 	 * h,s,l ranges are in <0.0 - 1.0>
 	 *
 	 * @param h Hue
@@ -210,6 +218,10 @@ public final class Color
 	public Color setHSL( double h, double s, double l )
 	{
 		// h,s,l ranges are in 0.0 - 1.0
+
+		h = Mathematics.euclideanModulo( h, 1. );
+		s = Mathematics.clamp( s, 0., 1. );
+		l = Mathematics.clamp( l, 0., 1. );
 
 		if ( s == 0 ) {
 
@@ -244,6 +256,11 @@ public final class Color
 		return this;
 	}
 
+	public Color copyGammaToLinear ( Color color )
+	{
+		return copyGammaToLinear(color, 2.);
+	}
+
 	/**
 	 * Set value of color from gamma.
 	 *
@@ -251,13 +268,18 @@ public final class Color
 	 *
 	 * @return the current color
 	 */
-	public Color copyGammaToLinear ( Color color )
+	public Color copyGammaToLinear ( Color color, double gammaFactor )
 	{
-		this.r = color.r * color.r;
-		this.g = color.g * color.g;
-		this.b = color.b * color.b;
+		this.r = Math.pow( color.r, gammaFactor );
+		this.g = Math.pow( color.g, gammaFactor );
+		this.b = Math.pow( color.b, gammaFactor );
 
 		return this;
+	}
+
+	public Color copyLinearToGamma ( Color color )
+	{
+		return copyLinearToGamma(color, 2.0);
 	}
 
 	/**
@@ -267,11 +289,13 @@ public final class Color
 	 *
 	 * @return a gamma
 	 */
-	public Color copyLinearToGamma ( Color color )
+	public Color copyLinearToGamma ( Color color, double gammaFactor )
 	{
-		this.r = Math.sqrt( color.r );
-		this.g = Math.sqrt( color.g );
-		this.b = Math.sqrt( color.b );
+		double safeInverse = ( gammaFactor > 0 ) ? ( 1.0 / gammaFactor ) : 1.0;
+
+		this.r = Math.pow( color.r, safeInverse );
+		this.g = Math.pow( color.g, safeInverse );
+		this.b = Math.pow( color.b, safeInverse );
 
 		return this;
 	}
@@ -402,7 +426,7 @@ public final class Color
 		return this;
 	}
 
-	public Color add( int s )
+	public Color add( double s )
 	{
 		this.r += s;
 		this.g += s;
@@ -448,6 +472,35 @@ public final class Color
 	public boolean equals( Color c ) {
 
 		return ( c.r == this.r ) && ( c.g == this.g ) && ( c.b == this.b );
+
+	}
+
+	public Color fromArray(Float32Array array)
+	{
+		return fromArray(array, 0);
+	}
+	public Color fromArray(Float32Array array, int offset)
+	{
+
+		this.r = array.get( offset );
+		this.g = array.get( offset + 1 );
+		this.b = array.get( offset + 2 );
+
+		return this;
+
+	}
+
+	public Float32Array toArray(Float32Array array) {
+		return toArray(array, 0);
+	}
+
+	public Float32Array toArray( Float32Array array, int offset ) {
+
+		array.set( offset , this.r );
+		array.set( offset + 1 , this.g );
+		array.set( offset + 2 , this.b );
+
+		return array;
 
 	}
 
