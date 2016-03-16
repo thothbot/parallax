@@ -19,8 +19,11 @@
 package org.parallax3d.parallax.math;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
+import java.nio.Buffer;
 
 /**
  * This class implements three-dimensional matrix. NxN, where N=4.
@@ -207,6 +210,31 @@ public class Matrix4
 		return this;
 	}
 
+	public Matrix4 extractBasis( Vector3 xAxis, Vector3 yAxis, Vector3 zAxis ) 
+	{
+
+		Float32Array te = this.elements;
+	
+		xAxis.set( te.get( 0 ), te.get( 1 ), te.get( 2 ) );
+		yAxis.set( te.get( 4 ), te.get( 5 ), te.get( 6 ) );
+		zAxis.set( te.get( 8 ), te.get( 9 ), te.get( 10 ) );
+	
+		return this;
+	
+	}
+
+	public Matrix4 makeBasis( Vector3 xAxis, Vector3 yAxis, Vector3 zAxis ) {
+
+		this.set(
+				xAxis.x, yAxis.x, zAxis.x, 0,
+				xAxis.y, yAxis.y, zAxis.y, 0,
+				xAxis.z, yAxis.z, zAxis.z, 0,
+				0,       0,       0,       1
+		);
+	
+		return this;
+	
+	}
 
 	/**
 	 * Setting rotation values to the rotation values of the input matrix.
@@ -247,102 +275,115 @@ public class Matrix4
 		double c = Math.cos( y ), d = Math.sin( y );
 		double e = Math.cos( z ), f = Math.sin( z );
 
-		if ( euler.getOrder().equals("XYZ") ) {
+		switch (euler.getOrder()) {
+			case "XYZ": {
 
-			double ae = a * e, af = a * f, be = b * e, bf = b * f;
+				double ae = a * e, af = a * f, be = b * e, bf = b * f;
 
-			te.set(0, c * e);
-			te.set(4, - c * f);
-			te.set(8, d);
+				te.set(0, c * e);
+				te.set(4, -c * f);
+				te.set(8, d);
 
-			te.set(1, af + be * d);
-			te.set(5, ae - bf * d);
-			te.set(9, - b * c);
+				te.set(1, af + be * d);
+				te.set(5, ae - bf * d);
+				te.set(9, -b * c);
 
-			te.set(2, bf - ae * d);
-			te.set(6, be + af * d);
-			te.set(10, a * c);
+				te.set(2, bf - ae * d);
+				te.set(6, be + af * d);
+				te.set(10, a * c);
 
-		} else if ( euler.getOrder().equals("YXZ") ) {
+				break;
+			}
+			case "YXZ": {
 
-			double ce = c * e, cf = c * f, de = d * e, df = d * f;
+				double ce = c * e, cf = c * f, de = d * e, df = d * f;
 
-			te.set(0, ce + df * b);
-			te.set(4, de * b - cf);
-			te.set(8, a * d);
+				te.set(0, ce + df * b);
+				te.set(4, de * b - cf);
+				te.set(8, a * d);
 
-			te.set(1, a * f);
-			te.set(5, a * e);
-			te.set(9, - b);
+				te.set(1, a * f);
+				te.set(5, a * e);
+				te.set(9, -b);
 
-			te.set(2, cf * b - de);
-			te.set(6, df + ce * b);
-			te.set(10, a * c);
+				te.set(2, cf * b - de);
+				te.set(6, df + ce * b);
+				te.set(10, a * c);
 
-		} else if ( euler.getOrder().equals("ZXY") ) {
+				break;
+			}
+			case "ZXY": {
 
-			double ce = c * e, cf = c * f, de = d * e, df = d * f;
+				double ce = c * e, cf = c * f, de = d * e, df = d * f;
 
-			te.set(0, ce - df * b);
-			te.set(4, - a * f);
-			te.set(8, de + cf * b);
+				te.set(0, ce - df * b);
+				te.set(4, -a * f);
+				te.set(8, de + cf * b);
 
-			te.set(1, cf + de * b);
-			te.set(5, a * e);
-			te.set(9, df - ce * b);
+				te.set(1, cf + de * b);
+				te.set(5, a * e);
+				te.set(9, df - ce * b);
 
-			te.set(2, - a * d);
-			te.set(6, b);
-			te.set(10, a * c);
+				te.set(2, -a * d);
+				te.set(6, b);
+				te.set(10, a * c);
 
-		} else if ( euler.getOrder().equals("ZYX") ) {
+				break;
+			}
+			case "ZYX": {
 
-			double ae = a * e, af = a * f, be = b * e, bf = b * f;
+				double ae = a * e, af = a * f, be = b * e, bf = b * f;
 
-			te.set(0, c * e);
-			te.set(4, be * d - af);
-			te.set(8, ae * d + bf);
+				te.set(0, c * e);
+				te.set(4, be * d - af);
+				te.set(8, ae * d + bf);
 
-			te.set(1, c * f);
-			te.set(5, bf * d + ae);
-			te.set(9, af * d - be);
+				te.set(1, c * f);
+				te.set(5, bf * d + ae);
+				te.set(9, af * d - be);
 
-			te.set(2, - d);
-			te.set(6, b * c);
-			te.set(10, a * c);
+				te.set(2, -d);
+				te.set(6, b * c);
+				te.set(10, a * c);
 
-		} else if ( euler.getOrder().equals("YZX") ) {
+				break;
+			}
+			case "YZX": {
 
-			double ac = a * c, ad = a * d, bc = b * c, bd = b * d;
+				double ac = a * c, ad = a * d, bc = b * c, bd = b * d;
 
-			te.set(0, c * e);
-			te.set(4, bd - ac * f);
-			te.set(8, bc * f + ad);
+				te.set(0, c * e);
+				te.set(4, bd - ac * f);
+				te.set(8, bc * f + ad);
 
-			te.set(1, f);
-			te.set(5, a * e);
-			te.set(9, - b * e);
+				te.set(1, f);
+				te.set(5, a * e);
+				te.set(9, -b * e);
 
-			te.set(2, - d * e);
-			te.set(6, ad * f + bc);
-			te.set(10, ac - bd * f);
+				te.set(2, -d * e);
+				te.set(6, ad * f + bc);
+				te.set(10, ac - bd * f);
 
-		} else if ( euler.getOrder().equals("XZY") ) {
+				break;
+			}
+			case "XZY": {
 
-			double ac = a * c, ad = a * d, bc = b * c, bd = b * d;
+				double ac = a * c, ad = a * d, bc = b * c, bd = b * d;
 
-			te.set(0, c * e);
-			te.set(4, - f);
-			te.set(8, d * e);
+				te.set(0, c * e);
+				te.set(4, -f);
+				te.set(8, d * e);
 
-			te.set(1, ac * f + bd);
-			te.set(5, a * e);
-			te.set(9, ad * f - bc);
+				te.set(1, ac * f + bd);
+				te.set(5, a * e);
+				te.set(9, ad * f - bc);
 
-			te.set(2, bc * f - ad);
-			te.set(6, b * e);
-			te.set(10, bd * f + ac);
+				te.set(2, bc * f - ad);
+				te.set(6, b * e);
+				te.set(10, bd * f + ac);
 
+				break;
+			}
 		}
 
 		// last column
@@ -528,6 +569,22 @@ public class Matrix4
 		return this;
 	}
 
+	public Matrix4 multiplyToArray( Matrix4 a, Matrix4 b, Float32Array r ) 
+	{
+
+		Float32Array te = this.elements;
+
+		this.multiply( a, b );
+
+		r.set( 0 , te.get( 0 ));   r.set( 1 , te.get( 1 ));   r.set( 2 , te.get( 2 ));   r.set( 3 , te.get( 3 ));
+		r.set( 4 , te.get( 4 ));   r.set( 5 , te.get( 5 ));   r.set( 6 , te.get( 6 ));   r.set( 7 , te.get( 7 ));
+		r.set( 8 , te.get( 8 ));   r.set( 9 , te.get( 9 ));   r.set( 10 , te.get( 10 )); r.set( 11 , te.get( 11 ));
+		r.set( 12 , te.get( 12 )); r.set( 13 , te.get( 13 )); r.set( 14 , te.get( 14 )); r.set( 15 , te.get( 15 ));
+	
+		return this;
+	
+	}
+
 	public Float32Array applyToVector3Array (Float32Array array)
 	{
 		return applyToVector3Array(array, 0, array.getLength());
@@ -550,6 +607,28 @@ public class Matrix4
 		}
 
 		return array;
+	}
+
+	public BufferAttribute applyToBuffer( BufferAttribute buffer) 
+	{
+		return applyToBuffer(buffer, 0, buffer.getCount());
+	}
+	
+	public BufferAttribute applyToBuffer( BufferAttribute buffer, int offset, int length) 
+	{
+		for ( int i = 0, j = offset; i < length; i ++, j ++ ) {
+
+			_v1.x = buffer.getX( j );
+			_v1.y = buffer.getY( j );
+			_v1.z = buffer.getZ( j );
+
+			_v1.apply( this );
+
+			buffer.setXYZ( i, _v1.x, _v1.y, _v1.z );
+
+		}
+
+		return buffer;
 	}
 
 	/**
@@ -576,30 +655,30 @@ public class Matrix4
 								+ n13 * n22 * n34
 								- n12 * n23 * n34
 				) +
-						n42 * (
-								+ n11 * n23 * n34
-										- n11 * n24 * n33
-										+ n14 * n21 * n33
-										- n13 * n21 * n34
-										+ n13 * n24 * n31
-										- n14 * n23 * n31
-						) +
-						n43 * (
-								+ n11 * n24 * n32
-										- n11 * n22 * n34
-										- n14 * n21 * n32
-										+ n12 * n21 * n34
-										+ n14 * n22 * n31
-										- n12 * n24 * n31
-						) +
-						n44 * (
-								- n13 * n22 * n31
-										- n11 * n23 * n32
-										+ n11 * n22 * n33
-										+ n13 * n21 * n32
-										- n12 * n21 * n33
-										+ n12 * n23 * n31
-						)
+				n42 * (
+						+ n11 * n23 * n34
+								- n11 * n24 * n33
+								+ n14 * n21 * n33
+								- n13 * n21 * n34
+								+ n13 * n24 * n31
+								- n14 * n23 * n31
+				) +
+				n43 * (
+						+ n11 * n24 * n32
+								- n11 * n22 * n34
+								- n14 * n21 * n32
+								+ n12 * n21 * n34
+								+ n14 * n22 * n31
+								- n12 * n24 * n31
+				) +
+				n44 * (
+						- n13 * n22 * n31
+								- n11 * n23 * n32
+								+ n11 * n22 * n33
+								+ n13 * n21 * n32
+								- n12 * n21 * n33
+								+ n12 * n23 * n31
+				)
 
 		);
 	}
@@ -1042,24 +1121,39 @@ public class Matrix4
 
 		return this;
 	}
+	
+	public Matrix4 fromArray(Float32Array array )
+	{
 
+		this.elements.set( array );
+
+		return this;
+
+	}
+
+	public Float32Array toArray()
+	{
+
+		Float32Array te = this.elements;
+
+		return Float32Array.create(new double[]{
+			te.get( 0 ),  te.get( 1 ),  te.get( 2 ),  te.get( 3 ),
+			te.get( 4 ),  te.get( 5 ),  te.get( 6 ),  te.get( 7 ),
+			te.get( 8 ),  te.get( 9 ),  te.get( 10 ), te.get( 11 ),
+			te.get( 12 ), te.get( 13 ), te.get( 14 ), te.get( 15 )
+		});
+	}
+	
 	/**
 	 * Clone the current matrix.
 	 * {@code matrix.clone() != matrix}
 	 *
 	 * @return the new instance of matrix
 	 */
+	@Override
 	public Matrix4 clone()
 	{
-		Float32Array te = this.getArray();
-
-		return new Matrix4(
-				te.get(0), te.get(4), te.get(8), te.get(12),
-				te.get(1), te.get(5), te.get(9), te.get(13),
-				te.get(2), te.get(6), te.get(10), te.get(14),
-				te.get(3), te.get(7), te.get(11), te.get(15)
-		);
-
+		return new Matrix4().copy(this);
 	}
 
 	/**

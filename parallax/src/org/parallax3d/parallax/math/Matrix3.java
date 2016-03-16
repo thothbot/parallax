@@ -19,8 +19,11 @@
 package org.parallax3d.parallax.math;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
+import java.nio.Buffer;
 
 /**
  * This class implements three-dimensional matrix. MxM, where M=3.
@@ -120,21 +123,35 @@ public class Matrix3
 	public Float32Array applyToVector3Array (Float32Array array, int offset, int length)
 	{
 
-		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
-
-			_v1.x = array.get( j );
-			_v1.y = array.get( j + 1 );
-			_v1.z = array.get( j + 2 );
-
+		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 )
+		{
+			_v1.fromArray( array, j );
 			_v1.apply( this );
-
-			array.set( j , _v1.x );
-			array.set( j + 1 , _v1.y );
-			array.set( j + 2 , _v1.z );
-
+			_v1.toArray( array, j );
 		}
 
 		return array;
+	}
+
+	public BufferAttribute applyToBuffer(BufferAttribute buffer)
+	{
+		return applyToBuffer(buffer, 0, buffer.getCount());
+	}
+
+	public BufferAttribute applyToBuffer(BufferAttribute buffer, int offset, int length)
+	{
+		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 )
+		{
+			_v1.x = buffer.getX( j );
+			_v1.y = buffer.getY( j );
+			_v1.z = buffer.getZ( j );
+
+			_v1.apply( this );
+
+			buffer.setXYZ( i, _v1.x, _v1.y, _v1.z );
+		}
+
+		return buffer;
 	}
 
 	public Matrix3 multiply( double s )
@@ -223,6 +240,25 @@ public class Matrix3
 		return this;
 	}
 
+	public Float32Array flattenToArrayOffset( Float32Array array, int offset ) 
+	{
+		Float32Array te = this.elements;
+		
+		array.set( offset , te.get( 0 ));
+		array.set( offset + 1 , te.get( 1 ));
+		array.set( offset + 2 , te.get( 2 ));
+		
+		array.set( offset + 3 , te.get( 3 ));
+		array.set( offset + 4 , te.get( 4 ));
+		array.set( offset + 5 , te.get( 5 ));
+		
+		array.set( offset + 6 , te.get( 6 ));
+		array.set( offset + 7 , te.get( 7 ));
+		array.set( offset + 8 , te.get( 8 ));
+		
+		return array;
+	}
+
 	/**
 	 *
 	 * @param m Matrix4
@@ -259,6 +295,27 @@ public class Matrix3
 		return r;
 	}
 
+	public Matrix3 fromArray(Float32Array array ) 
+	{
+
+		this.elements.set( array );
+
+		return this;
+
+	}
+
+	public Float32Array toArray() 
+	{
+
+		Float32Array te = this.elements;
+
+		return Float32Array.create(new double[]{
+			te.get(0), te.get(1), te.get(2),
+			te.get(3), te.get(4), te.get(5),
+			te.get(6), te.get(7), te.get(8)
+		});
+	}
+	
 	/**
 	 * get information of the current Matrix
 	 * which is represented as list of it values.
@@ -275,13 +332,6 @@ public class Matrix3
 
 	public Matrix3 clone()
 	{
-		Float32Array te = this.getArray();
-
-		return new Matrix3(
-
-				te.get(0), te.get(3), te.get(6),
-				te.get(1), te.get(4), te.get(7),
-				te.get(2), te.get(5), te.get(8)
-		);
+		return new Matrix3().copy( this );
 	}
 }
