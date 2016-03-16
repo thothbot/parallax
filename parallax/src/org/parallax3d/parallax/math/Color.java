@@ -54,17 +54,17 @@ public final class Color
 	/**
 	 * The R-component of the color. &#60;0.0-1.0&#62;
 	 */
-	private double r;
+	double r;
 
 	/**
 	 * The G-component of the color. &#60;0.0-1.0&#62;
 	 */
-	private double g;
+	double g;
 
 	/**
 	 * The B-component of the color. &#60;0.0-1.0&#62;
 	 */
-	private double b;
+	double b;
 
 	/**
 	 * This default constructor will create color where R=1.0, G=1.0, B=1.0
@@ -115,14 +115,6 @@ public final class Color
 	public double getB()
 	{
 		return b;
-	}
-
-	public void set(Color color) {
-		this.copy(color);
-	}
-
-	public void set(int hex) {
-		this.setHex(hex);
 	}
 
 	/**

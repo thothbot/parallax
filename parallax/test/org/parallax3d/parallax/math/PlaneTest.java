@@ -195,23 +195,23 @@ public class PlaneTest
 	{
 		Plane a = new Plane( new Vector3( 1, 0, 0 ), 0 );
 
-		assertTrue( a.isIntersectionLine( new Line3(new Vector3(-10, 0, 0), new Vector3(10, 0, 0))) );
+		assertTrue( a.intersectsLine( new Line3(new Vector3(-10, 0, 0), new Vector3(10, 0, 0))) );
 		assertTrue(a.intersectLine(new Line3(new Vector3(-10, 0, 0), new Vector3(10, 0, 0))).equals(new Vector3(0, 0, 0)));
 
 		Plane b = new Plane( new Vector3( 1, 0, 0 ), -3 );
 
-		assertTrue( b.isIntersectionLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) ) ) );
+		assertTrue( b.intersectsLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) ) ) );
 		assertTrue( b.intersectLine(new Line3(new Vector3(-10, 0, 0), new Vector3(10, 0, 0))).equals(new Vector3(3, 0, 0)));
 
 
 		Plane c = new Plane( new Vector3( 1, 0, 0 ), -11 );
 
-		assertTrue( ! c.isIntersectionLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) )));
+		assertTrue( ! c.intersectsLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) )));
 		assertNull( c.intersectLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) ) ));
 		
 		Plane d = new Plane( new Vector3( 1, 0, 0 ), 11 );
 
-		assertTrue( ! d.isIntersectionLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) )));
+		assertTrue( ! d.intersectsLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) )));
 		assertNull( d.intersectLine( new Line3(new Vector3( -10, 0, 0 ), new Vector3( 10, 0, 0 ) )));
 	}
 

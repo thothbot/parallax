@@ -139,7 +139,7 @@ public class Line extends GeometryObject
 		sphere.copy( geometry.getBoundingSphere() );
 		sphere.apply( this.matrixWorld );
 
-		if ( raycaster.getRay().isIntersectionSphere( sphere ) == false ) {
+		if ( raycaster.getRay().intersectsSphere( sphere ) == false ) {
 
 			return;
 

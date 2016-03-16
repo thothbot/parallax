@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
@@ -143,6 +144,14 @@ public class Vector2
 		return this;
 	}
 
+	public Vector2 set(double scalar)
+	{
+		this.x = scalar;
+		this.y = scalar;
+
+		return this;
+	}
+
 	public void setComponent( int index, double value ) {
 
 		switch ( index ) {
@@ -190,6 +199,14 @@ public class Vector2
 	{
 		this.x = v1.x + v2.x;
 		this.y = v1.y + v2.y;
+
+		return this;
+	}
+
+	public Vector2 add(Vector2 v1, double s)
+	{
+		this.x += v1.x * s;
+		this.y += v1.y * s;
 
 		return this;
 	}
@@ -266,32 +283,19 @@ public class Vector2
 
 	public Vector2 min( Vector2 v )
 	{
-		if ( this.x > v.x )
-		{
-			this.x = v.x;
-		}
-
-		if ( this.y > v.y )
-		{
-			this.y = v.y;
-		}
+		this.x = Math.min( this.x, v.x );
+		this.y = Math.min( this.y, v.y );
 
 		return this;
 	}
 
 	public Vector2 max( Vector2 v )
 	{
-		if ( this.x < v.x )
-		{
-			this.x = v.x;
-		}
-
-		if ( this.y < v.y )
-		{
-			this.y = v.y;
-		}
+		this.x = Math.max( this.x, v.x );
+		this.y = Math.max( this.y, v.y );
 
 		return this;
+
 	}
 
 	/**
@@ -300,23 +304,8 @@ public class Vector2
 	 */
 	public Vector2 clamp( Vector2 min, Vector2 max )
 	{
-		if ( this.x < min.x )
-		{
-			this.x = min.x;
-		}
-		else if ( this.x > max.x )
-		{
-			this.x = max.x;
-		}
-
-		if ( this.y < min.y )
-		{
-			this.y = min.y;
-		}
-		else if ( this.y > max.y )
-		{
-			this.y = max.y;
-		}
+		this.x = Math.max( min.x, Math.min( max.x, this.x ) );
+		this.y = Math.max( min.y, Math.min( max.y, this.y ) );
 
 		return this;
 	}
@@ -327,6 +316,15 @@ public class Vector2
 		_max.set( maxVal, maxVal );
 
 		return this.clamp( _min, _max );
+	}
+
+	public Vector2 clampLength( double min, double max )
+	{
+		double length = this.length();
+
+		this.multiply( Math.max( min, Math.min( max, length ) ) / length );
+
+		return this;
 	}
 
 	public Vector2 floor() {
@@ -407,6 +405,11 @@ public class Vector2
 		return Math.sqrt(lengthSq());
 	}
 
+	public double lengthManhattan()
+	{
+		return Math.abs( this.x ) + Math.abs( this.y );
+	}
+
 	/**
 	 * Normalizes this vector in place.
 	 */
@@ -414,6 +417,20 @@ public class Vector2
 	{
 		this.divide(length());
 		return this;
+	}
+
+	/**
+	 * computes the angle in radians with respect to the positive x-axis
+	 * @return
+     */
+	public double angle()
+	{
+		double angle = Math.atan2( this.y, this.x );
+
+		if ( angle < 0 ) angle += 2 * Math.PI;
+
+		return angle;
+
 	}
 
 	/*
@@ -436,22 +453,22 @@ public class Vector2
 		return Math.sqrt(distanceToSquared(v1));
 	}
 
-	public Vector2 setLength(double l)
+	public Vector2 setLength(double length)
 	{
-		double oldLength = this.length();
-
-		if ( oldLength != 0 && l != oldLength )
-		{
-			this.multiply( l / oldLength );
-		}
-
-		return this;
+		return this.multiply( length / this.length() );
 	}
 
 	public Vector2 lerp(Vector2 v1, double alpha)
 	{
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
+
+		return this;
+	}
+
+	public Vector2 lerpVectors(Vector2 v1, Vector2 v2, double alpha)
+	{
+		this.sub( v2, v1 ).multiply( alpha ).add( v1 );
 
 		return this;
 	}
@@ -486,6 +503,37 @@ public class Vector2
 		array.set(offset + 1, this.y);
 
 		return array;
+	}
+
+	public Vector2 fromAttribute(BufferAttribute attribute, int index)
+	{
+		return fromAttribute(attribute, index, 0);
+	}
+
+	public Vector2 fromAttribute(BufferAttribute attribute, int index, int offset)
+	{
+
+		index = index * attribute.getItemSize() + offset;
+
+		this.x = ((Float32Array)attribute.getArray()).get( index );
+		this.y = ((Float32Array)attribute.getArray()).get( index + 1 );
+
+		return this;
+	}
+
+	public Vector2 rotateAround( Vector2 center, double angle )
+	{
+
+		double c = Math.cos( angle ), s = Math.sin( angle );
+
+		double x = this.x - center.x;
+		double y = this.y - center.y;
+
+		this.x = x * c - y * s + center.x;
+		this.y = x * s + y * c + center.y;
+
+		return this;
+
 	}
 
 	public Vector2 clone()

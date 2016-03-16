@@ -43,7 +43,7 @@ import java.nio.Buffer;
 @ThreejsObject("THREE.Matrix3")
 public class Matrix3
 {
-	private Float32Array elements;
+	Float32Array elements;
 
 	// Temporary variables
 	static Vector3 _v1 = new Vector3();

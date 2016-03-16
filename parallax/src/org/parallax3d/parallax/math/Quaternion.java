@@ -50,24 +50,24 @@ public class Quaternion
 	/**
 	 * The X coordinate.
 	 */
-	public double x;
+	double x;
 
 	/**
 	 * The Y coordinate.
 	 */
-	public double y;
+	double y;
 
 	/**
 	 * The Z coordinate.
 	 */
-	public double z;
+	double z;
 
 	/**
 	 * The W coordinate.
 	 */
-	public double w;
+	double w;
 
-	private QuaternionChangeHandler handler;
+	QuaternionChangeHandler handler;
 
 	// Temporary variables
 	static Vector3 _v1  = new Vector3();
@@ -217,48 +217,55 @@ public class Quaternion
 		double s2 = Math.sin( euler.getY() / 2.0 );
 		double s3 = Math.sin( euler.getZ() / 2.0 );
 
-		if ( euler.getOrder().equals("XYZ") ) {
+		switch (euler.getOrder()) {
+			case "XYZ":
 
-			this.x = s1 * c2 * c3 + c1 * s2 * s3;
-			this.y = c1 * s2 * c3 - s1 * c2 * s3;
-			this.z = c1 * c2 * s3 + s1 * s2 * c3;
-			this.w = c1 * c2 * c3 - s1 * s2 * s3;
+				this.x = s1 * c2 * c3 + c1 * s2 * s3;
+				this.y = c1 * s2 * c3 - s1 * c2 * s3;
+				this.z = c1 * c2 * s3 + s1 * s2 * c3;
+				this.w = c1 * c2 * c3 - s1 * s2 * s3;
 
-		} else if ( euler.getOrder().equals("YXZ") ) {
+				break;
+			case "YXZ":
 
-			this.x = s1 * c2 * c3 + c1 * s2 * s3;
-			this.y = c1 * s2 * c3 - s1 * c2 * s3;
-			this.z = c1 * c2 * s3 - s1 * s2 * c3;
-			this.w = c1 * c2 * c3 + s1 * s2 * s3;
+				this.x = s1 * c2 * c3 + c1 * s2 * s3;
+				this.y = c1 * s2 * c3 - s1 * c2 * s3;
+				this.z = c1 * c2 * s3 - s1 * s2 * c3;
+				this.w = c1 * c2 * c3 + s1 * s2 * s3;
 
-		} else if ( euler.getOrder().equals("ZXY") ) {
+				break;
+			case "ZXY":
 
-			this.x = s1 * c2 * c3 - c1 * s2 * s3;
-			this.y = c1 * s2 * c3 + s1 * c2 * s3;
-			this.z = c1 * c2 * s3 + s1 * s2 * c3;
-			this.w = c1 * c2 * c3 - s1 * s2 * s3;
+				this.x = s1 * c2 * c3 - c1 * s2 * s3;
+				this.y = c1 * s2 * c3 + s1 * c2 * s3;
+				this.z = c1 * c2 * s3 + s1 * s2 * c3;
+				this.w = c1 * c2 * c3 - s1 * s2 * s3;
 
-		} else if ( euler.getOrder().equals("ZYX") ) {
+				break;
+			case "ZYX":
 
-			this.x = s1 * c2 * c3 - c1 * s2 * s3;
-			this.y = c1 * s2 * c3 + s1 * c2 * s3;
-			this.z = c1 * c2 * s3 - s1 * s2 * c3;
-			this.w = c1 * c2 * c3 + s1 * s2 * s3;
+				this.x = s1 * c2 * c3 - c1 * s2 * s3;
+				this.y = c1 * s2 * c3 + s1 * c2 * s3;
+				this.z = c1 * c2 * s3 - s1 * s2 * c3;
+				this.w = c1 * c2 * c3 + s1 * s2 * s3;
 
-		} else if ( euler.getOrder().equals("YZX") ) {
+				break;
+			case "YZX":
 
-			this.x = s1 * c2 * c3 + c1 * s2 * s3;
-			this.y = c1 * s2 * c3 + s1 * c2 * s3;
-			this.z = c1 * c2 * s3 - s1 * s2 * c3;
-			this.w = c1 * c2 * c3 - s1 * s2 * s3;
+				this.x = s1 * c2 * c3 + c1 * s2 * s3;
+				this.y = c1 * s2 * c3 + s1 * c2 * s3;
+				this.z = c1 * c2 * s3 - s1 * s2 * c3;
+				this.w = c1 * c2 * c3 - s1 * s2 * s3;
 
-		} else if ( euler.getOrder().equals("XZY") ) {
+				break;
+			case "XZY":
 
-			this.x = s1 * c2 * c3 - c1 * s2 * s3;
-			this.y = c1 * s2 * c3 - s1 * c2 * s3;
-			this.z = c1 * c2 * s3 + s1 * s2 * c3;
-			this.w = c1 * c2 * c3 + s1 * s2 * s3;
+				this.x = s1 * c2 * c3 - c1 * s2 * s3;
+				this.y = c1 * s2 * c3 - s1 * c2 * s3;
+				this.z = c1 * c2 * s3 + s1 * s2 * c3;
+				this.w = c1 * c2 * c3 + s1 * s2 * s3;
 
+				break;
 		}
 
 		if(update) this.onChange();
@@ -408,9 +415,9 @@ public class Quaternion
 
 	public Quaternion conjugate()
 	{
-		this.x *= -1;
-		this.y *= -1;
-		this.z *= -1;
+		this.x *= -1.;
+		this.y *= -1.;
+		this.z *= -1.;
 
 		this.onChange();
 
@@ -448,7 +455,7 @@ public class Quaternion
 
 		} else {
 
-			l = 1 / l;
+			l = 1. / l;
 
 			this.x = this.x * l;
 			this.y = this.y * l;
@@ -508,6 +515,7 @@ public class Quaternion
 	 *
 	 * @return the modified input vector
 	 */
+	@Deprecated
 	public Vector3 multiplyVector3(Vector3 vector)
 	{
 		return vector.apply( this );
@@ -587,11 +595,6 @@ public class Quaternion
 		return this;
 	}
 
-	public static Quaternion slerp(Quaternion qa, Quaternion qb, Quaternion qm, double t )
-	{
-		return qm.copy( qa ).slerp( qb, t );
-	}
-
 	public boolean equals( Quaternion quaternion )
 	{
 		return ( quaternion.x == this.x ) && ( quaternion.y == this.y ) && ( quaternion.z == this.z ) && ( quaternion.w == this.w );
@@ -616,7 +619,7 @@ public class Quaternion
 
 	public Float32Array toArray()
 	{
-		return toArray(Float32Array.create(3), 0);
+		return toArray(Float32Array.create(4), 0);
 	}
 
 	public Float32Array toArray( Float32Array array, int offset )
@@ -645,5 +648,73 @@ public class Quaternion
 	public String toString()
 	{
 		return "(" + this.x + ", " + this.y + ", " + this.z +  ", " + this.w + ")";
+	}
+
+	public static Quaternion slerp(Quaternion qa, Quaternion qb, Quaternion qm, double t )
+	{
+		return qm.copy( qa ).slerp( qb, t );
+	}
+
+	public static void slerpFlat(Float32Array dst, int dstOffset, Float32Array src0, int srcOffset0, Float32Array src1, int srcOffset1, double t )
+	{
+
+		// fuzz-free, array-based Quaternion SLERP operation
+
+		double x0 = src0.get( srcOffset0 + 0 ),
+				y0 = src0.get( srcOffset0 + 1 ),
+				z0 = src0.get( srcOffset0 + 2 ),
+				w0 = src0.get( srcOffset0 + 3 ),
+
+				x1 = src1.get( srcOffset1 + 0 ),
+				y1 = src1.get( srcOffset1 + 1 ),
+				z1 = src1.get( srcOffset1 + 2 ),
+				w1 = src1.get( srcOffset1 + 3 );
+
+		if ( w0 != w1 || x0 != x1 || y0 != y1 || z0 != z1 ) {
+
+			double s = 1. - t,
+
+					cos = x0 * x1 + y0 * y1 + z0 * z1 + w0 * w1,
+
+					dir = ( cos >= 0 ? 1 : - 1 ),
+					sqrSin = 1 - cos * cos;
+
+			// Skip the Slerp for tiny steps to avoid numeric problems:
+			if ( sqrSin > Mathematics.EPSILON ) {
+
+				double sin = Math.sqrt( sqrSin ),
+						len = Math.atan2( sin, cos * dir );
+
+				s = Math.sin( s * len ) / sin;
+				t = Math.sin( t * len ) / sin;
+
+			}
+
+			double tDir = t * dir;
+
+			x0 = x0 * s + x1 * tDir;
+			y0 = y0 * s + y1 * tDir;
+			z0 = z0 * s + z1 * tDir;
+			w0 = w0 * s + w1 * tDir;
+
+			// Normalize in case we just did a lerp:
+			if ( s == 1 - t ) {
+
+				double f = 1. / Math.sqrt( x0 * x0 + y0 * y0 + z0 * z0 + w0 * w0 );
+
+				x0 *= f;
+				y0 *= f;
+				z0 *= f;
+				w0 *= f;
+
+			}
+
+		}
+
+		dst.set( dstOffset , x0);
+		dst.set( dstOffset + 1 , y0);
+		dst.set( dstOffset + 2 , z0);
+		dst.set( dstOffset + 3 , w0);
+
 	}
 }

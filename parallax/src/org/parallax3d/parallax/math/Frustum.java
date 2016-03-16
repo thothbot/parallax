@@ -39,7 +39,7 @@ public class Frustum
 	/**
 	 * Panes of the Frustum of a rectangular pyramid
 	 */
-	private List<Plane> planes;
+	List<Plane> planes;
 
 	// Temporary variables
 	static Sphere _sphere = new Sphere();

@@ -143,7 +143,7 @@ public class Mesh extends GeometryObject
 		_sphere.copy( geometry.getBoundingSphere() );
 		_sphere.apply( this.matrixWorld );
 
-		if ( raycaster.getRay().isIntersectionSphere( _sphere ) == false )
+		if ( raycaster.getRay().intersectsSphere( _sphere ) == false )
 		{
 			return;
 		}
@@ -155,7 +155,7 @@ public class Mesh extends GeometryObject
 
 		if ( geometry.getBoundingBox() != null )
 		{
-			if ( _ray.isIntersectionBox( geometry.getBoundingBox() ) == false )
+			if ( _ray.intersectsBox( geometry.getBoundingBox() ) == false )
 			{
 				return;
 			}

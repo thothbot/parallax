@@ -23,7 +23,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.Spline")
 public class Spline {
 
-	private Vector3[] points;
+	Vector3[] points;
 
 	public static Spline initFromArray( double[][] a ) {
 

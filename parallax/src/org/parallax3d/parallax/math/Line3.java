@@ -23,8 +23,8 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.Line3")
 public class Line3 
 {
-	private Vector3 start;
-	private Vector3 end;
+	Vector3 start;
+	Vector3 end;
 
 	//Temporary variables
 	static Vector3 _startP = new Vector3();

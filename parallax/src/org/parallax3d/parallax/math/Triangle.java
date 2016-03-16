@@ -25,9 +25,9 @@ import java.util.List;
 @ThreejsObject("THREE.Triangle")
 public class Triangle 
 {
-	private Vector3 a;
-	private Vector3 b;
-	private Vector3 c;
+	Vector3 a;
+	Vector3 b;
+	Vector3 c;
 
 	// Temporary variables
 	static Vector3 _v0 = new Vector3();

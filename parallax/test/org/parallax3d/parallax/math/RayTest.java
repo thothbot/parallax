@@ -135,11 +135,11 @@ public class RayTest
 		Sphere e = new Sphere( two3, 0.1 );
 		Sphere f = new Sphere( two3, 1 );
 
-		assertTrue( ! a.isIntersectionSphere( b ));
-//		assertTrue( a.isIntersectionSphere( c ));
-		assertTrue( a.isIntersectionSphere( d ));
-		assertTrue( ! a.isIntersectionSphere( e ));
-		assertTrue( ! a.isIntersectionSphere( f ));
+		assertTrue( ! a.intersectsSphere( b ));
+//		assertTrue( a.intersectsSphere( c ));
+		assertTrue( a.intersectsSphere( d ));
+		assertTrue( ! a.intersectsSphere( e ));
+		assertTrue( ! a.intersectsSphere( f ));
 	}
 
 	@Test
@@ -149,23 +149,23 @@ public class RayTest
 
 		// parallel plane behind
 		Plane b = new Plane().setFromNormalAndCoplanarPoint( new Vector3( 0, 0, 1 ), one3.clone().sub( new Vector3( 0, 0, -1 ) ) );
-		assertTrue( a.isIntersectionPlane( b ));
+		assertTrue( a.intersectsPlane( b ));
 
 		// parallel plane coincident with origin
 		Plane c = new Plane().setFromNormalAndCoplanarPoint( new Vector3( 0, 0, 1 ), one3.clone().sub( new Vector3( 0, 0, 0 ) ) );
-		assertTrue( a.isIntersectionPlane( c ));
+		assertTrue( a.intersectsPlane( c ));
 
 		// parallel plane infront
 //		Plane d = new Plane().setFromNormalAndCoplanarPoint( new Vector3( 0, 0, 1 ), one3.clone().sub( new Vector3( 0, 0, 1 ) ) );
-//		assertTrue( a.isIntersectionPlane( d ));
+//		assertTrue( a.intersectsPlane( d ));
 
 		// perpendical ray that overlaps exactly
 		Plane e = new Plane().setFromNormalAndCoplanarPoint( new Vector3( 1, 0, 0 ), one3 );
-		assertTrue( a.isIntersectionPlane( e ));
+		assertTrue( a.intersectsPlane( e ));
 
 		// perpendical ray that doesn't overlap
 		Plane f = new Plane().setFromNormalAndCoplanarPoint( new Vector3( 1, 0, 0 ), zero3 );
-		assertTrue( ! a.isIntersectionPlane( f ));
+		assertTrue( ! a.intersectsPlane( f ));
 	}
 
 	@Test

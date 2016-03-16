@@ -23,8 +23,8 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.Plane")
 public class Plane 
 {
-	private Vector3 normal;
-	private double constant;
+	Vector3 normal;
+	double constant;
 
 	// Temporary variables
 	static Vector3 _v1 = new Vector3();
@@ -114,7 +114,7 @@ public class Plane
 
 	public Plane negate()
 	{
-		this.constant *= - 1;
+		this.constant *= - 1.;
 		this.normal.negate();
 
 		return this;
@@ -152,19 +152,6 @@ public class Plane
 		return optionalTarget.copy( this.normal ).multiply( perpendicularMagnitude );
 	}
 
-	/**
-	 * Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
-	 */
-	public boolean isIntersectionLine( Line3 line )
-	{
-		// Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
-
-		double startSign = this.distanceToPoint( line.getStart() );
-		double endSign = this.distanceToPoint( line.getEnd() );
-
-		return ( startSign < 0 && endSign > 0 ) || ( endSign < 0 && startSign > 0 );
-	}
-
 	public Vector3 intersectLine( Line3 line )
 	{
 		return intersectLine(line, new Vector3());
@@ -200,6 +187,30 @@ public class Plane
 
 		return optionalTarget.copy( direction ).multiply( t ).add( line.getStart() );
 
+	}
+
+	/**\
+	 * Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
+	 */
+	public boolean intersectsLine(Line3 line )
+	{
+		// Note: this tests if a line intersects the plane, not whether it (or its end-points) are coplanar with it.
+
+		double startSign = this.distanceToPoint( line.getStart() );
+		double endSign = this.distanceToPoint( line.getEnd() );
+
+		return ( startSign < 0 && endSign > 0 ) || ( endSign < 0 && startSign > 0 );
+	}
+
+	public boolean intersectsBox( Box3 box ) {
+
+		return box.intersectsPlane( this );
+
+	}
+
+	public boolean intersectsSphere( Sphere sphere )
+	{
+		return sphere.intersectsPlane( this );
 	}
 
 	public Vector3 coplanarPoint()

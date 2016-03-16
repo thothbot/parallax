@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.math;
 
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
@@ -222,6 +223,15 @@ public class Vector4 extends Vector3
 		return this;
 	}
 
+	public Vector4 add(Vector4 v, double s)
+	{
+		this.x += v.x * s;
+		this.y += v.y * s;
+		this.z += v.z * s;
+		this.w += v.w * s;
+		return this;
+	}
+
 	/**
 	 * Sets the value of this vector to the difference of vectors v1 and v2
 	 * (this = v1 - v2).
@@ -349,7 +359,7 @@ public class Vector4 extends Vector3
 	{
 		this.w = 2.0 * Math.acos( q.w );
 
-		double s = Math.sqrt( 1 - q.w * q.w );
+		double s = Math.sqrt( 1. - q.w * q.w );
 
 		if ( s < 0.0001 )
 		{
@@ -496,50 +506,20 @@ public class Vector4 extends Vector3
 
 	public Vector4 min( Vector4 v )
 	{
-		if ( this.x > v.x )
-		{
-			this.x = v.x;
-		}
-
-		if ( this.y > v.y )
-		{
-			this.y = v.y;
-		}
-
-		if ( this.z > v.z )
-		{
-			this.z = v.z;
-		}
-
-		if ( this.w > v.w )
-		{
-			this.w = v.w;
-		}
+		this.x = Math.min( this.x, v.x );
+		this.y = Math.min( this.y, v.y );
+		this.z = Math.min( this.z, v.z );
+		this.w = Math.min( this.w, v.w );
 
 		return this;
 	}
 
 	public Vector4 max( Vector4 v )
 	{
-		if ( this.x < v.x )
-		{
-			this.x = v.x;
-		}
-
-		if ( this.y < v.y )
-		{
-			this.y = v.y;
-		}
-
-		if ( this.z < v.z )
-		{
-			this.z = v.z;
-		}
-
-		if ( this.w < v.w )
-		{
-			this.w = v.w;
-		}
+		this.x = Math.max( this.x, v.x );
+		this.y = Math.max( this.y, v.y );
+		this.z = Math.max( this.z, v.z );
+		this.w = Math.max( this.w, v.w );
 
 		return this;
 	}
@@ -549,41 +529,10 @@ public class Vector4 extends Vector3
 	 */
 	public Vector4 clamp( Vector4 min, Vector4 max )
 	{
-		if ( this.x < min.x )
-		{
-			this.x = min.x;
-		}
-		else if ( this.x > max.x )
-		{
-			this.x = max.x;
-		}
-
-		if ( this.y < min.y )
-		{
-			this.y = min.y;
-		}
-		else if ( this.y > max.y )
-		{
-			this.y = max.y;
-		}
-
-		if ( this.z < min.z )
-		{
-			this.z = min.z;
-		}
-		else if ( this.z > max.z )
-		{
-			this.z = max.z;
-		}
-
-		if ( this.w < min.w )
-		{
-			this.w = min.w;
-		}
-		else if ( this.w > max.w )
-		{
-			this.w = max.w;
-		}
+		this.x = Math.max( min.x, Math.min( max.x, this.x ) );
+		this.y = Math.max( min.y, Math.min( max.y, this.y ) );
+		this.z = Math.max( min.z, Math.min( max.z, this.z ) );
+		this.w = Math.max( min.w, Math.min( max.w, this.w ) );
 
 		return this;
 	}
@@ -705,17 +654,9 @@ public class Vector4 extends Vector3
 	}
 
 
-	public Vector4 setLength(double l)
+	public Vector4 setLength(double length)
 	{
-		double oldLength = this.length();
-
-		if ( oldLength != 0 && l != oldLength ) {
-
-			this.multiply( l / oldLength );
-
-		}
-
-		return this;
+		return this.multiply( length / this.length() );
 
 	}
 
@@ -729,9 +670,68 @@ public class Vector4 extends Vector3
 		return this;
 	}
 
+	public Vector4 lerpVectors ( Vector4 v1, Vector4 v2, double alpha )
+	{
+		this.sub( v2, v1 ).multiply( alpha ).add( v1 );
+
+		return this;
+	}
+
 	public boolean equals( Vector4 v )
 	{
 		return ( ( v.x == this.x ) && ( v.y == this.y ) && ( v.z == this.z ) && ( v.w == this.w ) );
+	}
+
+	public Vector3 fromArray ( Float32Array array )
+	{
+		return fromArray(array, 0);
+	}
+
+	public Vector3 fromArray ( Float32Array array, int offset )
+	{
+
+		this.x = array.get( offset );
+		this.y = array.get( offset + 1 );
+		this.z = array.get( offset + 2 );
+		this.w = array.get( offset + 3 );
+
+		return this;
+
+	}
+
+	public Float32Array toArray()
+	{
+		return toArray(Float32Array.create(3), 0);
+	}
+
+	public Float32Array toArray( Float32Array array, int offset )
+	{
+
+		array.set(offset, this.x);
+		array.set(offset + 1, this.y);
+		array.set(offset + 2, this.z);
+		array.set(offset + 3, this.w);
+
+		return array;
+	}
+
+	public Vector2 fromAttribute(BufferAttribute attribute, int index)
+	{
+		return fromAttribute(attribute, index, 0);
+	}
+
+	public Vector2 fromAttribute(BufferAttribute attribute, int index, int offset)
+	{
+
+		index = index * attribute.getItemSize() + offset;
+
+		this.x = ((Float32Array)attribute.getArray()).get( index );
+		this.y = ((Float32Array)attribute.getArray()).get( index + 1 );
+		this.z = ((Float32Array)attribute.getArray()).get( index + 2 );
+		this.w = ((Float32Array)attribute.getArray()).get( index + 3 );
+
+		return this;
+
 	}
 
 	public Vector4 clone()

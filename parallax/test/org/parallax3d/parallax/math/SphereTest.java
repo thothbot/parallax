@@ -84,8 +84,8 @@ public class SphereTest
 	{
 		Sphere a = new Sphere( one3, 1 );
 
-		assertTrue( ! a.isContainsPoint( zero3 ));
-		assertTrue( a.isContainsPoint( one3 ));
+		assertTrue( ! a.containsPoint( zero3 ));
+		assertTrue( a.containsPoint( one3 ));
 	}
 
 	@Test
@@ -104,7 +104,7 @@ public class SphereTest
 		Sphere b = new Sphere( zero3, 1 );
 		Sphere c = new Sphere( zero3, 0.25 );
 
-		assertTrue( a.isIntersectsSphere( b ) );
+		assertTrue( a.intersectsSphere( b ) );
 //		assertTrue( ! a.intersectsSphere( c ) );
 	}
 

@@ -35,10 +35,10 @@ import org.parallax3d.parallax.system.ThreejsObject;
 public class Ray 
 {
 	// Where does the ray start. Default is 0, 0, 0.
-	private Vector3 origin;
+	Vector3 origin;
 
 	// A vector pointing in the direction the ray goes. Default is 0, 0, 0.
-	private Vector3 direction;
+	Vector3 direction;
 
 	//Temporary variables
 	static Vector3 _v1 = new Vector3();
@@ -137,7 +137,6 @@ public class Ray
 	{
 
 		double directionDistance = _v1.sub( point, this.origin ).dot( this.direction );
-
 
 		// point behind the ray
 
@@ -271,11 +270,6 @@ public class Ray
 
 	}
 
-	public boolean isIntersectionSphere( Sphere sphere )
-	{
-		return ( this.distanceToPoint( sphere.getCenter() ) <= sphere.getRadius() );
-	}
-
 	public Vector3 intersectSphere( Sphere sphere )
 	{
 		return intersectSphere(sphere, null);
@@ -319,30 +313,9 @@ public class Ray
 		return this.at( t0, optionalTarget );
 	}
 
-	public boolean isIntersectionPlane( Plane plane )
+	public boolean intersectsSphere(Sphere sphere )
 	{
-		// check if the ray lies on the plane first
-
-		double distToPoint = plane.distanceToPoint( this.origin );
-
-		if ( distToPoint == 0 ) {
-
-			return true;
-
-		}
-
-		double denominator = plane.getNormal().dot( this.direction );
-
-		if ( denominator * distToPoint < 0 ) {
-
-			return true;
-
-		}
-
-		// ray origin is behind the plane (and is pointing behind it)
-
-		return false;
-
+		return ( this.distanceToPoint( sphere.getCenter() ) <= sphere.getRadius() );
 	}
 
 	public Double distanceToPlane( Plane plane )
@@ -388,10 +361,32 @@ public class Ray
 		return this.at( t, optionalTarget );
 	}
 
-	public boolean isIntersectionBox(Box3 box)
+	public boolean intersectsPlane(Plane plane )
 	{
-		return this.intersectBox( box, _v2 ) != null;
+		// check if the ray lies on the plane first
+
+		double distToPoint = plane.distanceToPoint( this.origin );
+
+		if ( distToPoint == 0 ) {
+
+			return true;
+
+		}
+
+		double denominator = plane.getNormal().dot( this.direction );
+
+		if ( denominator * distToPoint < 0 ) {
+
+			return true;
+
+		}
+
+		// ray origin is behind the plane (and is pointing behind it)
+
+		return false;
+
 	}
+
 
 	/**
 	 * http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-box-intersection/
@@ -460,6 +455,11 @@ public class Ray
 		if ( tmax < 0 ) return null;
 
 		return this.at( tmin >= 0 ? tmin : tmax, optionalTarget );
+	}
+
+	public boolean intersectsBox(Box3 box)
+	{
+		return this.intersectBox( box, _v2 ) != null;
 	}
 
 	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling)

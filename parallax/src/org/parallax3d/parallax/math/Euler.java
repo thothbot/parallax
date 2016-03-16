@@ -36,21 +36,21 @@ public class Euler {
 	/**
 	 * The X coordinate.
 	 */
-	private double x;
+	double x;
 
 	/**
 	 * The Y coordinate.
 	 */
-	private double y;
+	double y;
 
 	/**
 	 * The Z coordinate.
 	 */
-	private double z;
+	double z;
 
-	private String order;
+	String order;
 
-	private EulerChangeHandler handler;
+	EulerChangeHandler handler;
 
 	// Temporary variables
 	static Quaternion _q = new Quaternion();

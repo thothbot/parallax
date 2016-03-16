@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.math;
 
 import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
@@ -192,6 +193,15 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
+	public Vector3 add(Vector3 v, double s)
+	{
+		this.x += v.x * s;
+		this.y += v.y * s;
+		this.z += v.z * s;
+
+		return this;
+	}
+
 	public Vector3 sub(Vector3 v)
 	{
 		return this.sub(this, v);
@@ -285,7 +295,7 @@ public class Vector3 extends Vector2
 		double x = this.x, y = this.y, z = this.z;
 
 		Float32Array e = m.getArray();
-		double d = 1.0f / ( e.get(3) * x + e.get(7) * y + e.get(11) * z + e.get(15) ); // perspective divide
+		double d = 1. / ( e.get(3) * x + e.get(7) * y + e.get(11) * z + e.get(15) ); // perspective divide
 
 		this.x = ( e.get(0) * x + e.get(4) * y + e.get(8)  * z + e.get(12) ) * d;
 		this.y = ( e.get(1) * x + e.get(5) * y + e.get(9)  * z + e.get(13) ) * d;
@@ -394,40 +404,18 @@ public class Vector3 extends Vector2
 
 	public Vector3 min( Vector3 v )
 	{
-		if ( this.x > v.x )
-		{
-			this.x = v.x;
-		}
-
-		if ( this.y > v.y )
-		{
-			this.y = v.y;
-		}
-
-		if ( this.z > v.z )
-		{
-			this.z = v.z;
-		}
+		this.x = Math.min( this.x, v.x );
+		this.y = Math.min( this.y, v.y );
+		this.z = Math.min( this.z, v.z );
 
 		return this;
 	}
 
 	public Vector3 max( Vector3 v )
 	{
-		if ( this.x < v.x )
-		{
-			this.x = v.x;
-		}
-
-		if ( this.y < v.y )
-		{
-			this.y = v.y;
-		}
-
-		if ( this.z < v.z )
-		{
-			this.z = v.z;
-		}
+		this.x = Math.max( this.x, v.x );
+		this.y = Math.max( this.y, v.y );
+		this.z = Math.max( this.z, v.z );
 
 		return this;
 	}
@@ -439,35 +427,9 @@ public class Vector3 extends Vector2
 	{
 		// This function assumes min < max, if this assumption isn't true it will not operate correctly
 
-		if ( this.x < min.x ) {
-
-			this.x = min.x;
-
-		} else if ( this.x > max.x ) {
-
-			this.x = max.x;
-
-		}
-
-		if ( this.y < min.y ) {
-
-			this.y = min.y;
-
-		} else if ( this.y > max.y ) {
-
-			this.y = max.y;
-
-		}
-
-		if ( this.z < min.z ) {
-
-			this.z = min.z;
-
-		} else if ( this.z > max.z ) {
-
-			this.z = max.z;
-
-		}
+		this.x = Math.max( min.x, Math.min( max.x, this.x ) );
+		this.y = Math.max( min.y, Math.min( max.y, this.y ) );
+		this.z = Math.max( min.z, Math.min( max.z, this.z ) );
 
 		return this;
 	}
@@ -478,6 +440,17 @@ public class Vector3 extends Vector2
 		_max.set( maxVal, maxVal, maxVal );
 
 		return this.clamp( _min, _max );
+	}
+
+	public Vector3 clampLength( double min, double max )
+	{
+
+		double length = this.length();
+
+		this.multiply( Math.max( min, Math.min( max, length ) ) / length );
+
+		return this;
+
 	}
 
 	public Vector3 floor()
@@ -580,16 +553,9 @@ public class Vector3 extends Vector2
 		return this.divide( this.length() );
 	}
 
-	public Vector3 setLength(double l)
+	public Vector3 setLength(double length)
 	{
-		double oldLength = this.length();
-
-		if ( oldLength != 0 && l != oldLength  ) {
-
-			this.multiply( l / oldLength );
-		}
-
-		return this;
+		return this.multiply( length / this.length() );
 	}
 
 	public Vector3 lerp(Vector3 v1, double alpha)
@@ -597,6 +563,13 @@ public class Vector3 extends Vector2
 		this.x += (v1.x - this.x) * alpha;
 		this.y += (v1.y - this.y) * alpha;
 		this.z += (v1.z - this.z) * alpha;
+
+		return this;
+	}
+
+	public Vector3 lerpVectors ( Vector3 v1, Vector3 v2, double alpha )
+	{
+		this.sub( v2, v1 ).multiply( alpha ).add( v1 );
 
 		return this;
 	}
@@ -651,16 +624,16 @@ public class Vector3 extends Vector2
 	 */
 	public Vector3 reflect(Vector3 normal)
 	{
-		return this.sub( _v1.copy( normal ).multiply( 2 * this.dot( normal ) ) );
+		return this.sub( _v1.copy( normal ).multiply( 2. * this.dot( normal ) ) );
 	}
 
 	public double angleTo( Vector3 v )
 	{
-		double theta = this.dot( v ) / ( this.length() * v.length() );
+		double theta = this.dot( v ) / ( Math.sqrt( this.lengthSq() * v.lengthSq() ) );
 
 		// clamp, to handle numerical problems
 
-		return Math.acos( Mathematics.clamp( theta, - 1, 1 ) );
+		return Math.acos( Mathematics.clamp( theta, - 1., 1. ) );
 	}
 
 	public double distanceTo(Vector3 v1)
@@ -759,6 +732,24 @@ public class Vector3 extends Vector2
 		array.set(offset + 2, this.z);
 
 		return array;
+	}
+
+	public Vector2 fromAttribute(BufferAttribute attribute, int index)
+	{
+		return fromAttribute(attribute, index, 0);
+	}
+
+	public Vector2 fromAttribute(BufferAttribute attribute, int index, int offset)
+	{
+
+		index = index * attribute.getItemSize() + offset;
+
+		this.x = ((Float32Array)attribute.getArray()).get( index );
+		this.y = ((Float32Array)attribute.getArray()).get( index + 1 );
+		this.z = ((Float32Array)attribute.getArray()).get( index + 2 );
+
+		return this;
+
 	}
 
 	public Vector3 clone()

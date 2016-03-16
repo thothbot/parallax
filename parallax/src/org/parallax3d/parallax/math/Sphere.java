@@ -25,8 +25,8 @@ import java.util.List;
 @ThreejsObject("THREE.Sphere")
 public class Sphere 
 {
-	private Vector3 center;
-	private double radius;
+	Vector3 center;
+	double radius;
 
 	// Temporary variables
 	static Box3 _box = new Box3();
@@ -113,7 +113,7 @@ public class Sphere
 		return ( this.radius <= 0 );
 	}
 
-	public boolean isContainsPoint( Vector3 point )
+	public boolean containsPoint(Vector3 point )
 	{
 		return ( point.distanceToSquared( this.center ) <= ( this.radius * this.radius ) );
 	}
@@ -124,11 +124,31 @@ public class Sphere
 
 	}
 
-	public boolean isIntersectsSphere( Sphere sphere )
+	public boolean intersectsSphere(Sphere sphere )
 	{
 		double radiusSum = this.radius + sphere.radius;
 
 		return sphere.center.distanceToSquared( this.center ) <= ( radiusSum * radiusSum );
+	}
+
+	public boolean intersectsBox( Box3 box ) {
+
+		return box.intersectsSphere( this );
+
+	}
+
+
+	// We use the following equation to compute the signed distance from
+	// the center of the sphere to the plane.
+	//
+	// distance = q * n - d
+	//
+	// If this distance is greater than the radius of the sphere,
+	// then there is no intersection.
+	public boolean intersectsPlane( Plane plane ) {
+
+		return Math.abs( this.center.dot( plane.getNormal() ) - plane.getConstant() ) <= this.radius;
+
 	}
 
 	public Vector3 clampPoint( Vector3 point)

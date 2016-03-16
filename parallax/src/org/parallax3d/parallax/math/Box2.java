@@ -25,8 +25,8 @@ import java.util.List;
 @ThreejsObject("THREE.Box2")
 public class Box2 
 {
-	private Vector2 min;
-	private Vector2 max;
+	Vector2 min;
+	Vector2 max;
 
 	// Temporary variables
 	static Vector2 _v1 = new Vector2();

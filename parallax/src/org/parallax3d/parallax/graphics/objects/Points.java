@@ -86,7 +86,7 @@ public class Points extends GeometryObject
 
 		if ( geometry.getBoundingBox() != null ) {
 
-			if ( ray.isIntersectionBox( geometry.getBoundingBox() ) == false ) {
+			if ( ray.intersectsBox( geometry.getBoundingBox() ) == false ) {
 
 				return;
 

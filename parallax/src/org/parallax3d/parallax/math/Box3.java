@@ -31,8 +31,8 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 @ThreejsObject("THREE.Box3")
 public class Box3
 {
-	private Vector3 min;
-	private Vector3 max;
+	Vector3 min;
+	Vector3 max;
 
 	// Temporary variables
 	static Vector3 _v1 = new Vector3();
