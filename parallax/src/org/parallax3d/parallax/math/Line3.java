@@ -130,7 +130,7 @@ public class Line3
 
 		if ( clampToLine ) {
 
-			t = Mathematics.clamp( t, 0, 1 );
+			t = Mathematics.clamp( t, 0., 1. );
 
 		}
 

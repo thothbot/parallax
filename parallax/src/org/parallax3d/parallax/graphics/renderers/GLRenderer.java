@@ -1507,7 +1507,7 @@ public class GLRenderer extends Renderer
 				List<GLObject> webglObjects = this._webglObjects.get( object.getId() + "" );
 
 				if ( webglObjects != null && ( object.isFrustumCulled() == false ||
-						_frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
+						_frustum.intersectsObject( (GeometryObject) object ) == true ) ) {
 
 					updateObject( (GeometryObject) object, scene );
 

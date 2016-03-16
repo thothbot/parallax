@@ -450,7 +450,7 @@ public final class ShadowMap extends Plugin
 
 			if ( webglObjects != null && object.isCastShadow() &&
 					(object.isFrustumCulled() == false ||
-							getRenderer()._frustum.isIntersectsObject(
+							getRenderer()._frustum.intersectsObject(
 									(GeometryObject) object ) == true) ) {
 
 				for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {

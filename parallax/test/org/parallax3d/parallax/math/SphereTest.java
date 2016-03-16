@@ -105,7 +105,7 @@ public class SphereTest
 		Sphere c = new Sphere( zero3, 0.25 );
 
 		assertTrue( a.isIntersectsSphere( b ) );
-//		assertTrue( ! a.isIntersectsSphere( c ) );
+//		assertTrue( ! a.intersectsSphere( c ) );
 	}
 
 	@Test

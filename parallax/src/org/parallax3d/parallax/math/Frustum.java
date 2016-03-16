@@ -110,7 +110,7 @@ public class Frustum
 		return this;
 	}
 
-	public boolean isIntersectsObject( GeometryObject object )
+	public boolean intersectsObject(GeometryObject object )
 	{
 		AbstractGeometry geometry = object.getGeometry();
 
@@ -120,10 +120,10 @@ public class Frustum
 		_sphere.copy( geometry.getBoundingSphere() );
 		_sphere.apply( object.getMatrixWorld() );
 
-		return this.isIntersectsSphere( _sphere );
+		return this.intersectsSphere( _sphere );
 	}
 
-	public boolean isIntersectsSphere( Sphere sphere )
+	public boolean intersectsSphere(Sphere sphere )
 	{
 		Vector3 center = sphere.getCenter();
 		double negRadius = -sphere.getRadius();
@@ -141,7 +141,7 @@ public class Frustum
 		return true;
 	}
 
-	public boolean isIntersectsBox(Box3 box)
+	public boolean intersectsBox(Box3 box)
 	{
 
 		for ( int i = 0; i < 6 ; i ++ ) {
@@ -171,7 +171,7 @@ public class Frustum
 	}
 
 
-	public boolean isContainsPoint( Vector3 point )
+	public boolean containsPoint(Vector3 point )
 	{
 		for ( int i = 0; i < 6; i ++ )
 		{
