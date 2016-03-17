@@ -20,6 +20,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * The typed array that holds float (32-bit IEEE floating point) as its element.
@@ -100,7 +101,13 @@ public final class Float32Array extends TypeArray {
 		result.set(array);
 		return result;
 	}
-	
+
+	public static Float32Array create(List<Double> array) {
+		float[] floats = new float[array.size()];
+		for (int i = 0; i < array.size(); ++i) floats[i] = array.get(i).floatValue();
+		return create(floats);
+	}
+
 	/**
 	 * Create an array .
 	 *
