@@ -16,7 +16,7 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.extras;
+package org.parallax3d.parallax.graphics.renderers.shaders;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;

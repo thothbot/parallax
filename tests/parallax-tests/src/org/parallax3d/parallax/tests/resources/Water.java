@@ -20,7 +20,7 @@ package org.parallax3d.parallax.tests.resources;
 
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.graphics.extras.UniformsUtils;
+import org.parallax3d.parallax.graphics.renderers.shaders.UniformsUtils;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;

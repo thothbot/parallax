@@ -18,10 +18,8 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
-import org.parallax3d.parallax.graphics.extras.UniformsUtils;
-import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
+import org.parallax3d.parallax.graphics.renderers.shaders.UniformsUtils;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.ShaderMaterial")

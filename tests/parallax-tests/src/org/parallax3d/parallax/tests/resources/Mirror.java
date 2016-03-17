@@ -22,7 +22,7 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
-import org.parallax3d.parallax.graphics.extras.UniformsUtils;
+import org.parallax3d.parallax.graphics.renderers.shaders.UniformsUtils;
 import org.parallax3d.parallax.graphics.extras.helpers.ArrowHelper;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
