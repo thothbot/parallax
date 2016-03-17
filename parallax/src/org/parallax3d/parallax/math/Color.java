@@ -75,6 +75,12 @@ public final class Color
 		setHex(0xFFFFFF);
 	}
 
+	public Color(double r, double g, double b) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+	}
+
 	/**
 	 * This constructor will create Color instance by defined HEX value.
 	 * For example 0xFFFFFF will create a color in RGB(255, 255, 255), which

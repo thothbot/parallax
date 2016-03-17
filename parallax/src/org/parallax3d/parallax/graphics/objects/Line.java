@@ -105,12 +105,12 @@ public class Line extends GeometryObject
 		{
 			org.parallax3d.parallax.graphics.renderers.gl.AttributeData index = ((BufferGeometry) geometry).getIndex();
 			FastMap<BufferAttribute> attributes = ((BufferGeometry) geometry).getAttributes();
-			Float32Array positions = attributes.get("position").getArray();
+			Float32Array positions = (Float32Array) attributes.get("position").getArray();
 
 			if ( index != null )
 			{
 
-				Int32Array indices = index.array;
+				Int32Array indices = (Int32Array) index.getArray();
 
 				for ( int i = 0, l = indices.getLength() - 1; i < l; i += step ) {
 

@@ -31,21 +31,23 @@ public class PointLightHelper extends Mesh {
 
 	public PointLightHelper(PointLight light, double sphereSize)
 	{
-		super(new SphereGeometry( sphereSize, 4, 2 ),  new MeshBasicMaterial());
+		super( new SphereGeometry( sphereSize, 4, 2 ), new MeshBasicMaterial().setFog(false).setWireframe(true) );
 
 		this.light = light;
-		this.light.updateMatrixWorld(false);
+		this.light.updateMatrixWorld();
 
-		MeshBasicMaterial material = (MeshBasicMaterial) getMaterial();
-		material.setWireframe(true);
-		material.setFog(false);
-		material.getColor().copy( this.light.getColor() ).multiply( this.light.getIntensity() );
+		this.setMatrix(this.light.getMatrixWorld());
+		this.setMatrixAutoUpdate(false);
 
-		setMatrix( this.light.getMatrixWorld() );
-		setMatrixAutoUpdate(false);
-
-
+        update();
 	}
+
+    public void dispose() {
+
+        this.geometry.dispose();
+        this.material.dispose();
+
+    }
 
 	public void update () {
 
