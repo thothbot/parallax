@@ -649,24 +649,31 @@ public class Vector3 extends Vector2
 		return (dx * dx + dy * dy + dz * dz);
 	}
 
+	public Vector3 setFromSpherical( Spherical s )
+	{
+
+		double sinPhiRadius = Math.sin( s.phi ) * s.radius;
+
+		this.x = sinPhiRadius * Math.sin( s.theta );
+		this.y = Math.cos( s.phi ) * s.radius;
+		this.z = sinPhiRadius * Math.cos( s.theta );
+
+		return this;
+
+	}
+
 	public Vector3 setFromMatrixPosition( Matrix4 m )
 	{
 
-		this.x = m.getArray().get( 12 );
-		this.y = m.getArray().get( 13 );
-		this.z = m.getArray().get( 14 );
-
-		return this;
+		return this.setFromMatrixColumn( m, 3 );
 	}
 
 	public Vector3 setFromMatrixScale( Matrix4 m )
 	{
 
-		Float32Array el = m.getArray();
-
-		double sx = this.set( el.get(0), el.get(1), el.get(2) ).length();
-		double sy = this.set( el.get(4), el.get(5), el.get(6) ).length();
-		double sz = this.set( el.get(8), el.get(9), el.get(10) ).length();
+		double sx = this.setFromMatrixColumn( m, 0 ).length();
+		double sy = this.setFromMatrixColumn( m, 1 ).length();
+		double sz = this.setFromMatrixColumn( m, 2 ).length();
 
 		this.x = sx;
 		this.y = sy;
@@ -675,19 +682,9 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
-	public Vector3 setFromMatrixColumn( int index, Matrix4 matrix )
+	public Vector3 setFromMatrixColumn( Matrix4 m, int index)
 	{
-
-		int offset = index * 4;
-
-		Float32Array me = matrix.getArray();
-
-		this.x = me.get( offset );
-		this.y = me.get( offset + 1 );
-		this.z = me.get( offset + 2 );
-
-		return this;
-
+		return this.fromArray( m.elements, index * 4 );
 	}
 
 	/**

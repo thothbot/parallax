@@ -67,10 +67,25 @@ public class Matrix3
 	{
 		Float32Array te = this.getArray();
 
-		te.set(0, n11); te.set(3, n12); te.set(6, n13);
-		te.set(1, n21); te.set(4, n22); te.set(7, n23);
-		te.set(2, n31); te.set(5, n32); te.set(8, n33);
+		te.set(0, n11); te.set(1, n21); te.set(2, n31);
+		te.set(3, n12); te.set(4, n22); te.set(5, n32);
+		te.set(6, n13); te.set(7, n23); te.set(8, n33);
 
+		return this;
+	}
+
+	public Matrix3 setFromMatrix4( Matrix4 m ) 
+	{
+		Float32Array me = m.elements;
+	
+		this.set(
+	
+			me.get( 0 ), me.get( 4 ), me.get( 8 ),
+			me.get( 1 ), me.get( 5 ), me.get( 9 ),
+			me.get( 2 ), me.get( 6 ), me.get( 10 )
+	
+		);
+	
 		return this;
 	}
 
@@ -182,38 +197,43 @@ public class Matrix3
 	 *
 	 * @param m the matrix to be inverted
 	 */
-	public Matrix3 getInverse(Matrix4 m)
+	public Matrix3 getInverse(Matrix3 m)
 	{
 		// input: THREE.Matrix4
 		// ( based on http://code.google.com/p/webgl-mjs/ )
 		Float32Array me = m.getArray();
 		Float32Array te = this.getArray();
 
-		te.set(0, me.get(10) * me.get(5) - me.get(6) * me.get(9));
-		te.set(1, -me.get(10) * me.get(1) + me.get(2) * me.get(9));
-		te.set(2,  me.get(6) * me.get(1) - me.get(2) * me.get(5));
-		te.set(3, -me.get(10) * me.get(4) + me.get(6) * me.get(8));
-		te.set(4, me.get(10) * me.get(0) - me.get(2) * me.get(8));
-		te.set(5, -me.get(6) * me.get(0) + me.get(2) * me.get(4));
-		te.set(6, me.get(9) * me.get(4) - me.get(5) * me.get(8));
-		te.set(7, -me.get(9) * me.get(0) + me.get(1) * me.get(8));
-		te.set(8, me.get(5) * me.get(0) - me.get(1) * me.get(4));
+		double n11 = me.get( 0 ), n21 = me.get( 1 ), n31 = me.get( 2 ),
+				n12 = me.get( 3 ), n22 = me.get( 4 ), n32 = me.get( 5 ),
+				n13 = me.get( 6 ), n23 = me.get( 7 ), n33 = me.get( 8 ),
 
-		double det = me.get(0) * te.get(0) + me.get(1) * te.get(3) + me.get(2) * te.get(6);
+				t11 = n33 * n22 - n32 * n23,
+				t12 = n32 * n13 - n33 * n12,
+				t13 = n23 * n12 - n22 * n13,
 
+				det = n11 * t11 + n21 * t12 + n31 * t13;
 		// no inverse
 
 		if (det == 0)
 		{
 			Log.error("Matrix3.invert(): determinant == 0");
-			this.identity();
-		}
-		else
-		{
-			this.multiply( 1.0 / det );
+			return this.identity();
 		}
 
-		return this;
+		te.set( 0,  t11);
+		te.set( 1,  n31 * n23 - n33 * n21);
+		te.set( 2,  n32 * n21 - n31 * n22);
+
+		te.set( 3,  t12);
+		te.set( 4,  n33 * n11 - n31 * n13);
+		te.set( 5,  n31 * n12 - n32 * n11);
+
+		te.set( 6,  t13);
+		te.set( 7,  n21 * n13 - n23 * n11);
+		te.set( 8,  n22 * n11 - n21 * n12);
+
+		return this.multiply( 1. / det );
 	}
 
 	/**
@@ -261,14 +281,12 @@ public class Matrix3
 
 	/**
 	 *
-	 * @param m Matrix4
+	 * @param matrix4 Matrix4
 	 * @return
 	 */
-	public Matrix3 getNormalMatrix( Matrix4 m )
+	public Matrix3 getNormalMatrix( Matrix4 matrix4 )
 	{
-		this.getInverse( m ).transpose();
-
-		return this;
+		return this.setFromMatrix4( matrix4 ).getInverse( this ).transpose();
 	}
 
 	/**

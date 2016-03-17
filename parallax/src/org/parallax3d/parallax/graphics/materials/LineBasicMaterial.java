@@ -37,23 +37,15 @@ public class LineBasicMaterial extends Material
 	implements HasFog, HasColor, HasVertexColors
 {
 
-	private boolean isFog = true;
+	Color color = new Color(0xffffff);
 
-	private Color color;
+	double linewidth = 1.;
+	String linecap = "round";
+	String linejoin = "round";
 
-	private Material.COLORS vertexColors;
+	boolean fog = true;
 
-	private double linewidth;
-
-	public LineBasicMaterial()
-	{
-		this.isFog = true;
-
-		setColor(0xffffff);
-		setLinewidth(1.0f);
-
-		setVertexColors(Material.COLORS.NO);
-	}
+	Material.COLORS vertexColors = COLORS.NO;
 
 	@Override
 	public Shader getAssociatedShader()
@@ -82,12 +74,12 @@ public class LineBasicMaterial extends Material
 
 	@Override
 	public boolean isFog() {
-		return this.isFog;
+		return this.fog;
 	}
 
 	@Override
 	public LineBasicMaterial setFog(boolean fog) {
-		this.isFog = fog;
+		this.fog = fog;
 		return this;
 	}
 
@@ -122,32 +114,26 @@ public class LineBasicMaterial extends Material
 		return this;
 	}
 
-	@Override
-	public LineBasicMaterial clone() {
+	public LineBasicMaterial copy(LineBasicMaterial source)
+	{
+		super.copy( source );
 
-		LineBasicMaterial material = new LineBasicMaterial();
-		super.clone(material);
+		this.color.copy( source.color );
 
+		this.linewidth = source.linewidth;
+		this.linecap = source.linecap;
+		this.linejoin = source.linejoin;
 
-		material.color.copy( this.color );
+		this.vertexColors = source.vertexColors;
 
-		material.linewidth = this.linewidth;
+		this.fog = source.fog;
 
-		material.vertexColors = this.vertexColors;
-
-		material.isFog = this.isFog;
-
-		return material;
-
+		return this;
 	}
 
 	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput)
+	public LineBasicMaterial clone()
 	{
-		super.refreshUniforms(camera, isGammaInput);
-		FastMap<Uniform> uniforms = getShader().getUniforms();
-
-		uniforms.get("diffuse").setValue( getColor() );
-		uniforms.get("opacity").setValue( getOpacity() );
+		return new LineBasicMaterial().copy(this);
 	}
 }

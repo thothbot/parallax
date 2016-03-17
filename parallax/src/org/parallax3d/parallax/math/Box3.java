@@ -135,6 +135,7 @@ public class Box3
 
 	}
 
+	static final Box3 box = new Box3();
 	/**
 	 * Computes the world-axis-aligned bounding box of an object (including its children),
 	 * accounting for both the object's, and childrens', world transforms
@@ -148,8 +149,6 @@ public class Box3
 		this.makeEmpty();
 
 		object.updateMatrixWorld( true );
-
-		final Box3 box = new Box3();
 
 		object.traverse(new Object3D.Traverse() {
 
@@ -167,9 +166,12 @@ public class Box3
 						geometry.computeBoundingBox();
 					}
 
-					box.copy( geometry.getBoundingBox() );
-					box.apply( node.getMatrixWorld() );
-					Box3.this.union( box );
+					if (!geometry.getBoundingBox().isEmpty())
+					{
+						box.copy(geometry.getBoundingBox());
+						box.apply(node.getMatrixWorld());
+						Box3.this.union(box);
+					}
 				}
 			}
 		});

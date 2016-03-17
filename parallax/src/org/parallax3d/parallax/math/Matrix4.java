@@ -212,11 +212,9 @@ public class Matrix4
 	public Matrix4 extractBasis( Vector3 xAxis, Vector3 yAxis, Vector3 zAxis ) 
 	{
 
-		Float32Array te = this.elements;
-	
-		xAxis.set( te.get( 0 ), te.get( 1 ), te.get( 2 ) );
-		yAxis.set( te.get( 4 ), te.get( 5 ), te.get( 6 ) );
-		zAxis.set( te.get( 8 ), te.get( 9 ), te.get( 10 ) );
+		xAxis.setFromMatrixColumn( this, 0 );
+		yAxis.setFromMatrixColumn( this, 1 );
+		zAxis.setFromMatrixColumn( this, 2 );
 	
 		return this;
 	
@@ -242,25 +240,24 @@ public class Matrix4
 	 */
 	public Matrix4 extractRotation(Matrix4 m)
 	{
+		Float32Array te = this.elements;
 		Float32Array me = m.getArray();
 
-		Vector3 v1 = new Vector3();
+		double scaleX = 1. / _v1.setFromMatrixColumn( m, 0 ).length();
+		double scaleY = 1. / _v1.setFromMatrixColumn( m, 1 ).length();
+		double scaleZ = 1. / _v1.setFromMatrixColumn( m, 2 ).length();
 
-		double scaleX = 1.0 / v1.set(me.get(0), me.get(1), me.get(2)).length();
-		double scaleY = 1.0 / v1.set(me.get(4), me.get(5), me.get(6)).length();
-		double scaleZ = 1.0 / v1.set(me.get(8), me.get(9), me.get(10)).length();
+		te.set(0, me.get(0) * scaleX);
+		te.set(1, me.get(1) * scaleX);
+		te.set(2, me.get(2) * scaleX);
 
-		this.getArray().set(0, me.get(0) * scaleX);
-		this.getArray().set(1, me.get(1) * scaleX);
-		this.getArray().set(2, me.get(2) * scaleX);
+		te.set(4, me.get(4) * scaleY);
+		te.set(5, me.get(5) * scaleY);
+		te.set(6, me.get(6) * scaleY);
 
-		this.getArray().set(4, me.get(4) * scaleY);
-		this.getArray().set(5, me.get(5) * scaleY);
-		this.getArray().set(6, me.get(6) * scaleY);
-
-		this.getArray().set(8, me.get(8) * scaleZ);
-		this.getArray().set(9, me.get(9) * scaleZ);
-		this.getArray().set(10, me.get(10) * scaleZ);
+		te.set(8, me.get(8) * scaleZ);
+		te.set(9, me.get(9) * scaleZ);
+		te.set(10, me.get(10) * scaleZ);
 
 		return this;
 	}
@@ -795,43 +792,47 @@ public class Matrix4
 		Float32Array te = this.getArray();
 		Float32Array me = m.getArray();
 
-		double n11 = me.get(0), n12 = me.get(4), n13 = me.get(8),  n14 = me.get(12);
-		double n21 = me.get(1), n22 = me.get(5), n23 = me.get(9),  n24 = me.get(13);
-		double n31 = me.get(2), n32 = me.get(6), n33 = me.get(10), n34 = me.get(14);
-		double n41 = me.get(3), n42 = me.get(7), n43 = me.get(11), n44 = me.get(15);
+		double n11 = me.get( 0 ), n21 = me.get( 1 ), n31 = me.get( 2 ), n41 = me.get( 3 ),
+				n12 = me.get( 4 ), n22 = me.get( 5 ), n32 = me.get( 6 ), n42 = me.get( 7 ),
+				n13 = me.get( 8 ), n23 = me.get( 9 ), n33 = me.get( 10 ), n43 = me.get( 11 ),
+				n14 = me.get( 12 ), n24 = me.get( 13 ), n34 = me.get( 14 ), n44 = me.get( 15 ),
 
-		te.set(0,  n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44);
-		te.set(4,  n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44);
-		te.set(8,  n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44);
-		te.set(12, n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34);
-		te.set(1,  n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 + n23 * n31 * n44 - n21 * n33 * n44);
-		te.set(5,  n13 * n34 * n41 - n14 * n33 * n41 + n14 * n31 * n43 - n11 * n34 * n43 - n13 * n31 * n44 + n11 * n33 * n44);
-		te.set(9,  n14 * n23 * n41 - n13 * n24 * n41 - n14 * n21 * n43 + n11 * n24 * n43 + n13 * n21 * n44 - n11 * n23 * n44);
-		te.set(13, n13 * n24 * n31 - n14 * n23 * n31 + n14 * n21 * n33 - n11 * n24 * n33 - n13 * n21 * n34 + n11 * n23 * n34);
-		te.set(2,  n22 * n34 * n41 - n24 * n32 * n41 + n24 * n31 * n42 - n21 * n34 * n42 - n22 * n31 * n44 + n21 * n32 * n44);
-		te.set(6,  n14 * n32 * n41 - n12 * n34 * n41 - n14 * n31 * n42 + n11 * n34 * n42 + n12 * n31 * n44 - n11 * n32 * n44);
-		te.set(10, n12 * n24 * n41 - n14 * n22 * n41 + n14 * n21 * n42 - n11 * n24 * n42 - n12 * n21 * n44 + n11 * n22 * n44);
-		te.set(14, n14 * n22 * n31 - n12 * n24 * n31 - n14 * n21 * n32 + n11 * n24 * n32 + n12 * n21 * n34 - n11 * n22 * n34);
-		te.set(3,  n23 * n32 * n41 - n22 * n33 * n41 - n23 * n31 * n42 + n21 * n33 * n42 + n22 * n31 * n43 - n21 * n32 * n43);
-		te.set(7,  n12 * n33 * n41 - n13 * n32 * n41 + n13 * n31 * n42 - n11 * n33 * n42 - n12 * n31 * n43 + n11 * n32 * n43);
-		te.set(11, n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 + n12 * n21 * n43 - n11 * n22 * n43);
-		te.set(15, n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 - n12 * n21 * n33 + n11 * n22 * n33);
+				t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44,
+				t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44,
+				t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44,
+				t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
 
-		double det = n11 * te.get( 0 ) + n21 * te.get( 4 ) + n31 * te.get( 8 ) + n41 * te.get( 12 );
-
+		double det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
+		
 		if ( det == 0 ) {
 
 			Log.error("Matrix4.getInverse(): can't invert matrix, determinant is 0");
 
-			this.identity();
-			return this;
+			return this.identity();
 
 		}
 
-		this.multiply( 1.0 / det );
+		te.set( 0,  t11 );
+		te.set( 1,  n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 + n23 * n31 * n44 - n21 * n33 * n44 );
+		te.set( 2,  n22 * n34 * n41 - n24 * n32 * n41 + n24 * n31 * n42 - n21 * n34 * n42 - n22 * n31 * n44 + n21 * n32 * n44 );
+		te.set( 3,  n23 * n32 * n41 - n22 * n33 * n41 - n23 * n31 * n42 + n21 * n33 * n42 + n22 * n31 * n43 - n21 * n32 * n43 );
 
-		return this;
+		te.set( 4,  t12 );
+		te.set( 5,  n13 * n34 * n41 - n14 * n33 * n41 + n14 * n31 * n43 - n11 * n34 * n43 - n13 * n31 * n44 + n11 * n33 * n44 );
+		te.set( 6,  n14 * n32 * n41 - n12 * n34 * n41 - n14 * n31 * n42 + n11 * n34 * n42 + n12 * n31 * n44 - n11 * n32 * n44 );
+		te.set( 7,  n12 * n33 * n41 - n13 * n32 * n41 + n13 * n31 * n42 - n11 * n33 * n42 - n12 * n31 * n43 + n11 * n32 * n43 );
 
+		te.set( 8,  t13 );
+		te.set( 9,  n14 * n23 * n41 - n13 * n24 * n41 - n14 * n21 * n43 + n11 * n24 * n43 + n13 * n21 * n44 - n11 * n23 * n44 );
+		te.set( 10,  n12 * n24 * n41 - n14 * n22 * n41 + n14 * n21 * n42 - n11 * n24 * n42 - n12 * n21 * n44 + n11 * n22 * n44 );
+		te.set( 11,  n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 + n12 * n21 * n43 - n11 * n22 * n43 );
+
+		te.set( 12,  t14 );
+		te.set( 13,  n13 * n24 * n31 - n14 * n23 * n31 + n14 * n21 * n33 - n11 * n24 * n33 - n13 * n21 * n34 + n11 * n23 * n34 );
+		te.set( 14,  n14 * n22 * n31 - n12 * n24 * n31 - n14 * n21 * n32 + n11 * n24 * n32 + n12 * n21 * n34 - n11 * n22 * n34 );
+		te.set( 15,  n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 - n12 * n21 * n33 + n11 * n22 * n33 );
+
+		return this.multiply( 1. / det );
 	}
 
 	/**
@@ -1105,18 +1106,18 @@ public class Matrix4
 	public Matrix4 makeOrthographic(double left, double right, double top, double bottom, double near, double far)
 	{
 		Float32Array te = this.elements;
-		double w = right - left;
-		double h = top - bottom;
-		double p = far - near;
+		double w = 1.0 / ( right - left );
+		double h = 1.0 / ( top - bottom );
+		double p = 1.0 / ( far - near );
 
-		double x = ( right + left ) / w;
-		double y = ( top + bottom ) / h;
-		double z = ( far + near )   / p;
+		double x = ( right + left ) * w;
+		double y = ( top + bottom ) * h;
+		double z = ( far + near ) * p;
 
-		te.set(0, 2.0 / w); te.set(4, 0.0);     te.set(8, 0.0);       te.set(12, -x);
-		te.set(1, 0.0);     te.set(5, 2.0 / h); te.set(9, 0.0);       te.set(13, -y);
-		te.set(2, 0.0);     te.set(6, 0.0);     te.set(10, -2.0 / p); te.set(14, -z);
-		te.set(3, 0.0);     te.set(7, 0.0);     te.set(11, 0.0);      te.set(15, 1.0);
+		te.set( 0,  2 * w);	te.set( 4,  0);	    te.set( 8,  0);	        te.set( 12,  - x);
+		te.set( 1,  0);	    te.set( 5,  2 * h);	te.set( 9,  0);         te.set( 13,  - y);
+		te.set( 2,  0);	    te.set( 6,  0);     te.set( 10,  - 2 * p);	te.set( 14,  - z);
+		te.set( 3,  0);	    te.set( 7,  0);	    te.set( 11,  0);	    te.set( 15,  1);
 
 		return this;
 	}

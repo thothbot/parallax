@@ -32,18 +32,9 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 @ThreejsObject("THREE.LineDashedMaterial")
 public class LineDashedMaterial extends LineBasicMaterial
 {
-	private double scale;
-	private double dashSize;
-	private double gapSize;
-
-	public LineDashedMaterial()
-	{
-		super();
-
-		setScale(1.0);
-		setDashSize(3.0);
-		setGapSize(1.0);
-	}
+	double scale = 1.;
+	double dashSize = 1.;
+	double gapSize = 2.;
 
 	@Override
 	public Shader getAssociatedShader()
@@ -86,31 +77,21 @@ public class LineDashedMaterial extends LineBasicMaterial
 		return this;
 	}
 
-	@Override
-	public LineDashedMaterial clone() {
-
-		LineDashedMaterial material = new LineDashedMaterial();
-
-		super.clone(material);
-
-		material.scale = this.scale;
-		material.dashSize = this.dashSize;
-		material.gapSize = this.gapSize;
-
-		return material;
-
-	}
-
-	@Override
-	public void refreshUniforms(Camera camera, boolean isGammaInput)
+	public LineDashedMaterial copy(LineDashedMaterial source)
 	{
-		super.refreshUniforms(camera, isGammaInput);
-		FastMap<Uniform> uniforms = getShader().getUniforms();
+		super.copy( source );
 
-		uniforms.get("dashSize").setValue( getDashSize() );
-		uniforms.get("totalSize").setValue( getDashSize() + getGapSize() );
-		uniforms.get("scale").setValue( getScale() );
+		this.scale = source.scale;
+		this.dashSize = source.dashSize;
+		this.gapSize = source.gapSize;
+
+		return this;
 	}
 
+	@Override
+	public LineDashedMaterial clone()
+	{
+		return new LineDashedMaterial().copy( this );
+	}
 }
 

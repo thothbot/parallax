@@ -181,6 +181,7 @@ public abstract class Material extends AbstractPropertyObject
 	double polygonOffsetUnits = 0.;
 
 	double alphaTest = 0.;
+	boolean premultipliedAlpha = false;
 
 	/**
 	 * Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
@@ -525,6 +526,7 @@ public abstract class Material extends AbstractPropertyObject
 		this.polygonOffsetUnits = source.polygonOffsetUnits;
 
 		this.alphaTest = source.alphaTest;
+		this.premultipliedAlpha = source.premultipliedAlpha;
 
 		this.overdraw = source.overdraw;
 
