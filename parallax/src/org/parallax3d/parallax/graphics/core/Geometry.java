@@ -345,6 +345,16 @@ public class Geometry extends AbstractGeometry
 
 	}
 
+	public Geometry translate( double x, double y, double z )
+	{
+		m1.makeTranslation( x, y, z );
+
+		this.applyMatrix( m1 );
+
+		return this;
+
+	}
+
 	public Geometry fromBufferGeometry( BufferGeometry geometry )
 	{
 
