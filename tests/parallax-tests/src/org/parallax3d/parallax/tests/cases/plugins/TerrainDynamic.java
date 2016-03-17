@@ -33,7 +33,7 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.objects.MorphAnimMesh;
+import org.parallax3d.parallax.graphics.extras.objects.MorphAnimMesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.BloomPass;

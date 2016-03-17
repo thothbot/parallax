@@ -194,6 +194,10 @@ public class GLRenderer extends Renderer
 		setDefaultGLState();
 	}
 
+	public GL20 gl() {
+		return gl;
+	}
+
 	public double getTargetPixelRatio() {
 
 		return _currentRenderTarget == null ? _pixelRatio : 1.;

@@ -16,13 +16,14 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.objects;
+package org.parallax3d.parallax.graphics.extras.objects;
 
 import java.util.List;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.FastMap;
 

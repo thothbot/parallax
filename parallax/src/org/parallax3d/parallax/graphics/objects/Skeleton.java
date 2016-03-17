@@ -37,7 +37,7 @@ import java.util.List;
 public class Skeleton {
 
     boolean useVertexTexture;
-    Matrix4 identityMatrix;
+    Matrix4 identityMatrix = new Matrix4();
 
     List<Bone> bones;
     List<Matrix4> boneInverses;
@@ -57,8 +57,6 @@ public class Skeleton {
     public Skeleton(List<Bone> bones, List<Matrix4> boneInverses, boolean useVertexTexture)
     {
         this.useVertexTexture = useVertexTexture;
-
-        this.identityMatrix = new Matrix4();
 
         // copy the bone array
 

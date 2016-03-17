@@ -200,15 +200,8 @@ public class SkinnedMesh extends Mesh {
 
 	}
 
-	public SkinnedMesh clone() {
-		return clone(new SkinnedMesh( getGeometry(), getMaterial(), this.skeleton.useVertexTexture ));
-	}
-
-	public SkinnedMesh clone( SkinnedMesh object ) {
-
-		super.clone(object);
-
-		return object;
-
+	public SkinnedMesh clone()
+	{
+		return (SkinnedMesh) new SkinnedMesh( getGeometry(), getMaterial(), this.skeleton.useVertexTexture ).copy(this);
 	}
 }

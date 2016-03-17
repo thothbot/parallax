@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Vector3;
@@ -63,6 +64,10 @@ public class Raycaster
 		 * index of the intersected face
 		 */
 		public int faceIndex;
+
+		public Vector2 uv;
+
+		public int index;
 		/**
 		 * the intersected object
 		 */

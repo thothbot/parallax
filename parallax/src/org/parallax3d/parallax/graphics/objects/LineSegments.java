@@ -17,5 +17,8 @@
  */
 package org.parallax3d.parallax.graphics.objects;
 
+import org.parallax3d.parallax.system.ThreejsObject;
+
+@ThreejsObject("THREE.LineSegments")
 public class LineSegments extends Line {
 }

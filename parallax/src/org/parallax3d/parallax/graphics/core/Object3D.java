@@ -890,56 +890,60 @@ public class Object3D extends AbstractPropertyObject
 
 	}
 
-	/**
-	 * Creates a new clone of this object and all descendants.
-	 */
-	public Object3D clone() {
-		return clone(new Object3D());
+	public Object3D copy( Object3D source ) {
+		return copy(source, true);
 	}
 
-	public Object3D clone( Object3D object) {
-		return clone(object, true);
-	}
+	public Object3D copy( Object3D source, boolean recursive ) {
 
-	public Object3D clone( Object3D object, boolean recursive ) {
+		this.name = source.name;
 
-		object.name = this.name;
+		this.up.copy( source.up );
 
-		object.up.copy( this.up );
+		this.position.copy( source.position );
+		this.quaternion.copy( source.quaternion );
+		this.scale.copy( source.scale );
 
-		object.position.copy( this.position );
-		object.quaternion.copy( this.quaternion );
-		object.scale.copy( this.scale );
+		this.rotationAutoUpdate = source.rotationAutoUpdate;
 
-		object.setRenderDepth(this.getRenderDepth());
+		this.matrix.copy( source.matrix );
+		this.matrixWorld.copy( source.matrixWorld );
 
-		object.rotationAutoUpdate = this.rotationAutoUpdate;
+		this.matrixAutoUpdate = source.matrixAutoUpdate;
+		this.matrixWorldNeedsUpdate = source.matrixWorldNeedsUpdate;
 
-		object.matrix.copy( this.matrix );
-		object.matrixWorld.copy( this.matrixWorld );
+		this.visible = source.visible;
 
-		object.matrixAutoUpdate = this.matrixAutoUpdate;
-		object.matrixWorldNeedsUpdate = this.matrixWorldNeedsUpdate;
+		this.castShadow = source.castShadow;
+		this.receiveShadow = source.receiveShadow;
 
-		object.visible = this.visible;
+		this.frustumCulled = source.frustumCulled;
+		this.renderOrder = source.renderOrder;
 
-		object.isCastShadow = this.isCastShadow;
-		object.isReceiveShadow = this.isReceiveShadow;
+		if ( recursive) {
 
-		object.isFrustumCulled = this.isFrustumCulled;
+			for ( int i = 0; i < source.children.size(); i ++ ) {
 
-		if ( recursive == true ) {
-
-			for ( int i = 0; i < this.children.size(); i ++ ) {
-
-				Object3D child = this.children.get( i );
-				object.add( child.clone() );
+				Object3D child = source.getChildren().get( i );
+				this.add( child.clone() );
 
 			}
 
 		}
 
-		return object;
+		return this;
+	}
+
+	/**
+	 * Creates a new clone of this object and all descendants.
+	 */
+	public Object3D clone() {
+		return clone(true);
+	}
+
+	public Object3D clone( boolean recursive ) {
+
+		return new Object3D().copy(this, recursive);
 
 	}
 

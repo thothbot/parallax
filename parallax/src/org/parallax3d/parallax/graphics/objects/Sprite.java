@@ -52,11 +52,10 @@ public class Sprite extends GeometryObject {
         super(defaultGeometry, material);
     }
 
+    static Vector3 matrixPosition = new Vector3();
     @Override
     public void raycast(Raycaster raycaster, List<Raycaster.Intersect> intersects)
     {
-        Vector3 matrixPosition = new Vector3();
-
         matrixPosition.setFromMatrixPosition( this.getMatrixWorld() );
 
         double distanceSq = raycaster.getRay().distanceSqToPoint( matrixPosition );
@@ -77,14 +76,9 @@ public class Sprite extends GeometryObject {
     }
 
     @Override
-    public void renderBuffer(GLRenderer renderer, GLGeometry geometryBuffer, boolean updateBuffers) {
-
-    }
-
-    @Override
     public Sprite clone() {
 
-        return (Sprite) super.clone(new Sprite( (SpriteMaterial) this.getMaterial()) );
+        return (Sprite) new Sprite((SpriteMaterial) this.material).copy( this );
 
     }
 }
