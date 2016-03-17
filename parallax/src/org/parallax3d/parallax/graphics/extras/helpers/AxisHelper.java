@@ -18,6 +18,10 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.objects.LineSegments;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
@@ -28,65 +32,37 @@ import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 @ThreejsObject("THREE.AxisHelper")
-public class AxisHelper extends Object3D
-{
+public class AxisHelper extends LineSegments {
 
-	public AxisHelper()
-	{
-		super();
+	public AxisHelper() {
+		this(1.);
+	}
 
-		Geometry lineGeometry = new Geometry();
-		lineGeometry.getVertices().add( new Vector3() );
-		lineGeometry.getVertices().add( new Vector3( 0, 100, 0 ) );
+	public AxisHelper(double size) {
+		super(intDefaultGeometry(size), new LineBasicMaterial().setVertexColors(Material.COLORS.VERTEX));
+	}
 
-		CylinderGeometry coneGeometry = new CylinderGeometry( 0, 5, 25, 5, 1 );
+	private static BufferGeometry intDefaultGeometry(double size) {
 
-		// x
-		LineBasicMaterial lbmX = new LineBasicMaterial();
-		lbmX.setColor(new Color(0xff0000));
+		Float32Array vertices = Float32Array.create(new double[]{
+				0, 0, 0, size, 0, 0,
+				0, 0, 0, 0, size, 0,
+				0, 0, 0, 0, 0, size
+		});
 
-		MeshBasicMaterial mbmX = new MeshBasicMaterial();
-		mbmX.setColor( new Color(0xff0000) );
+		Float32Array colors = Float32Array.create(new double[]{
+				1, 0, 0, 1, 0.6, 0,
+				0, 1, 0, 0.6, 1, 0,
+				0, 0, 1, 0, 0.6, 1
+		});
 
-		Line line1 = new Line( lineGeometry, lbmX );
-		line1.getRotation().setZ( - Math.PI / 2.0 );
-		this.add(line1 );
+		BufferGeometry geometry = new BufferGeometry();
+		geometry.addAttribute( "position", new BufferAttribute( vertices, 3 ) );
+		geometry.addAttribute( "color", new BufferAttribute( colors, 3 ) );
 
-		Mesh cone1 = new Mesh( coneGeometry, mbmX );
-		cone1.getPosition().setX(100);
-		cone1.getRotation().setZ(- Math.PI / 2.0 );
-		this.add( cone1 );
-
-		// y
-		LineBasicMaterial lbmY = new LineBasicMaterial();
-		lbmY.setColor(new Color(0x00ff00));
-
-		MeshBasicMaterial mbmY = new MeshBasicMaterial();
-		mbmY.setColor( new Color(0x00ff00) );
-
-		Line line2 = new Line( lineGeometry, lbmY );
-		this.add( line2 );
-
-		Mesh cone2 = new Mesh( coneGeometry, mbmY );
-		cone2.getPosition().setY(100);
-		this.add( cone2 );
-
-		// z
-		LineBasicMaterial lbmZ = new LineBasicMaterial();
-		lbmZ.setColor(new Color(0x0000ff));
-
-		MeshBasicMaterial mbmZ = new MeshBasicMaterial();
-		mbmZ.setColor( new Color(0x0000ff) );
-
-		Line line3 = new Line( lineGeometry, lbmZ );
-		line3.getRotation().setX( Math.PI / 2.0 );
-		this.add( line3 );
-
-		Mesh cone3 = new Mesh( coneGeometry, mbmZ );
-		cone3.getPosition().setZ(100);
-		cone3.getRotation().setX( Math.PI / 2.0 );
-		this.add( cone3 );
+		return geometry;
 	}
 }

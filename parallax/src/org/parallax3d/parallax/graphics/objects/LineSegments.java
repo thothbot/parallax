@@ -17,8 +17,14 @@
  */
 package org.parallax3d.parallax.graphics.objects;
 
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.LineSegments")
 public class LineSegments extends Line {
+
+    public LineSegments(AbstractGeometry geometry, LineBasicMaterial material) {
+        super(geometry, material);
+    }
 }

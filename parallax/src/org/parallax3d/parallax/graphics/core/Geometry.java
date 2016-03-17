@@ -314,6 +314,37 @@ public class Geometry extends AbstractGeometry
 		this.computeBoundingSphere();
 	}
 
+	static final  Matrix4 m1 = new Matrix4();
+	public Geometry rotateX( double angle ) {
+
+		m1.makeRotationX( angle );
+
+		this.applyMatrix( m1 );
+
+		return this;
+
+	}
+
+	public Geometry rotateY( double angle ) {
+
+		m1.makeRotationY( angle );
+
+		this.applyMatrix( m1 );
+
+		return this;
+
+	}
+
+	public Geometry rotateZ( double angle ) {
+
+		m1.makeRotationZ( angle );
+
+		this.applyMatrix( m1 );
+
+		return this;
+
+	}
+
 	public Geometry fromBufferGeometry( BufferGeometry geometry )
 	{
 

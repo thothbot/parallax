@@ -21,6 +21,9 @@ package org.parallax3d.parallax.graphics.extras.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.objects.LineSegments;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -30,6 +33,8 @@ import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.graphics.objects.Line;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 
 /**
  * 
@@ -44,30 +49,24 @@ import org.parallax3d.parallax.graphics.objects.Line;
  *
  */
 @ThreejsObject("THREE.CameraHelper")
-public class CameraHelper extends Line
+public class CameraHelper extends LineSegments
 {
 	private Camera camera;
-
-	private FastMap<List<Integer>> pointMap;
-
+	
 	public CameraHelper(Camera camera)
 	{
-		super(new Geometry());
-
+		super(intDefaultGeometry(), initDefaultMaterial());
 		this.camera = camera;
+		this.camera.updateProjectionMatrix();
 
-		LineBasicMaterial lbm = new LineBasicMaterial();
-		lbm.setColor( new Color(0xffffff) );
-		lbm.setVertexColors( Material.COLORS.FACE );
-		setMaterial(lbm);
-		setMode(Line.MODE.PIECES);
+		this.setMatrix( camera.getMatrixWorld() );
+		this.setMatrixAutoUpdate(false);
 
-		setMatrix(camera.getMatrixWorld());
-		setMatrixAutoUpdate(false);
+		this.update();
+	}
 
-		this.pointMap = new FastMap<List<Integer>>();
-
-		// colors
+	private static Geometry intDefaultGeometry() {
+		Geometry geometry = new Geometry();
 
 		int hexFrustum = 0xffaa00;
 		int hexCone	   = 0xff0000;
@@ -77,138 +76,140 @@ public class CameraHelper extends Line
 
 		// near
 
-		addLine( "n1", "n2", hexFrustum );
-		addLine( "n2", "n4", hexFrustum );
-		addLine( "n4", "n3", hexFrustum );
-		addLine( "n3", "n1", hexFrustum );
+		addLine( geometry, "n1", "n2", hexFrustum );
+		addLine( geometry, "n2", "n4", hexFrustum );
+		addLine( geometry, "n4", "n3", hexFrustum );
+		addLine( geometry, "n3", "n1", hexFrustum );
 
 		// far
 
-		addLine( "f1", "f2", hexFrustum );
-		addLine( "f2", "f4", hexFrustum );
-		addLine( "f4", "f3", hexFrustum );
-		addLine( "f3", "f1", hexFrustum );
+		addLine( geometry, "f1", "f2", hexFrustum );
+		addLine( geometry, "f2", "f4", hexFrustum );
+		addLine( geometry, "f4", "f3", hexFrustum );
+		addLine( geometry, "f3", "f1", hexFrustum );
 
 		// sides
 
-		addLine( "n1", "f1", hexFrustum );
-		addLine( "n2", "f2", hexFrustum );
-		addLine( "n3", "f3", hexFrustum );
-		addLine( "n4", "f4", hexFrustum );
+		addLine( geometry, "n1", "f1", hexFrustum );
+		addLine( geometry, "n2", "f2", hexFrustum );
+		addLine( geometry, "n3", "f3", hexFrustum );
+		addLine( geometry, "n4", "f4", hexFrustum );
 
 		// cone
 
-		addLine( "p", "n1", hexCone );
-		addLine( "p", "n2", hexCone );
-		addLine( "p", "n3", hexCone );
-		addLine( "p", "n4", hexCone );
+		addLine( geometry, "p", "n1", hexCone );
+		addLine( geometry, "p", "n2", hexCone );
+		addLine( geometry, "p", "n3", hexCone );
+		addLine( geometry, "p", "n4", hexCone );
 
 		// up
 
-		addLine( "u1", "u2", hexUp );
-		addLine( "u2", "u3", hexUp );
-		addLine( "u3", "u1", hexUp );
+		addLine( geometry, "u1", "u2", hexUp );
+		addLine( geometry, "u2", "u3", hexUp );
+		addLine( geometry, "u3", "u1", hexUp );
 
 		// target
 
-		addLine( "c", "t", hexTarget );
-		addLine( "p", "c", hexCross );
+		addLine( geometry, "c", "t", hexTarget );
+		addLine( geometry, "p", "c", hexCross );
 
 		// cross
 
-		addLine( "cn1", "cn2", hexCross );
-		addLine( "cn3", "cn4", hexCross );
+		addLine( geometry, "cn1", "cn2", hexCross );
+		addLine( geometry, "cn3", "cn4", hexCross );
 
-		addLine( "cf1", "cf2", hexCross );
-		addLine( "cf3", "cf4", hexCross );
-
-		update();
+		addLine( geometry, "cf1", "cf2", hexCross );
+		addLine( geometry, "cf3", "cf4", hexCross );
+		
+		return geometry;
 	}
 
-	private void addLine( String a, String b, int hex )
+	private static LineBasicMaterial initDefaultMaterial() {
+		return new LineBasicMaterial().setColor(0xffffff).setVertexColors(Material.COLORS.FACE);
+	}
+	
+	private static void addLine( Geometry geometry, String a, String b, int hex )
 	{
-		addPoint( a, hex );
-		addPoint( b, hex );
-
+		addPoint(geometry, a, hex );
+		addPoint(geometry, b, hex );
 	}
 
-	private void addPoint( String id, int hex )
+	static final FastMap<List<Integer>> pointMap = new FastMap<>();
+	private static void addPoint( Geometry geometry, String id, int hex )
 	{
-		((Geometry)getGeometry()).getVertices().add( new Vector3() );
-		((Geometry)getGeometry()).getColors().add( new Color( hex ) );
+		geometry.getVertices().add( new Vector3() );
+		geometry.getColors().add( new Color( hex ) );
 
-		if ( !this.pointMap.containsKey(id) )
-			this.pointMap.put( id, new ArrayList<Integer>() );
+		if ( !pointMap.containsKey(id) )
+			pointMap.put( id, new ArrayList<Integer>() );
 
-		this.pointMap.get( id ).add(((Geometry)getGeometry()).getVertices().size() - 1 );
+		pointMap.get( id ).add(geometry.getVertices().size() - 1 );
 	}
 
-	Vector3 _vector = new Vector3();
-	Camera _camera = new Camera();
-
+	static final Vector3 _vector = new Vector3();
+	static final Camera _camera = new Camera();
 	public void update()
 	{
-		double w = 1.0;
-		double h = 1.0;
+		double w = 1., h = 1.;
 
 		// we need just camera projection matrix
 		// world matrix must be identity
 
-		_camera.getProjectionMatrix().copy( this.camera.getProjectionMatrix() );
+		_camera.getProjectionMatrix().copy(this.camera.getProjectionMatrix());
 
 		// center / target
 
-		setPoint( "c", 0, 0, -1 );
+		setPoint( "c", 0, 0, - 1 );
 		setPoint( "t", 0, 0,  1 );
 
 		// near
 
-		setPoint( "n1", -w, -h, -1 );
-		setPoint( "n2",  w, -h, -1 );
-		setPoint( "n3", -w,  h, -1 );
-		setPoint( "n4",  w,  h, -1 );
+		setPoint( "n1", - w, - h, - 1 );
+		setPoint( "n2",   w, - h, - 1 );
+		setPoint( "n3", - w,   h, - 1 );
+		setPoint( "n4",   w,   h, - 1 );
 
 		// far
 
-		setPoint( "f1", -w, -h, 1 );
-		setPoint( "f2",  w, -h, 1 );
-		setPoint( "f3", -w,  h, 1 );
-		setPoint( "f4",  w,  h, 1 );
+		setPoint( "f1", - w, - h, 1 );
+		setPoint( "f2",   w, - h, 1 );
+		setPoint( "f3", - w,   h, 1 );
+		setPoint( "f4",   w,   h, 1 );
 
 		// up
 
-		setPoint( "u1",  w * 0.7, h * 1.1, -1 );
-		setPoint( "u2", -w * 0.7, h * 1.1, -1 );
-		setPoint( "u3",        0, h * 2,   -1 );
+		setPoint( "u1",   w * 0.7, h * 1.1, - 1 );
+		setPoint( "u2", - w * 0.7, h * 1.1, - 1 );
+		setPoint( "u3",         0, h * 2,   - 1 );
 
 		// cross
 
-		setPoint( "cf1", -w,  0, 1 );
-		setPoint( "cf2",  w,  0, 1 );
-		setPoint( "cf3",  0, -h, 1 );
-		setPoint( "cf4",  0,  h, 1 );
+		setPoint( "cf1", - w,   0, 1 );
+		setPoint( "cf2",   w,   0, 1 );
+		setPoint( "cf3",   0, - h, 1 );
+		setPoint( "cf4",   0,   h, 1 );
 
-		setPoint( "cn1", -w,  0, -1 );
-		setPoint( "cn2",  w,  0, -1 );
-		setPoint( "cn3",  0, -h, -1 );
-		setPoint( "cn4",  0,  h, -1 );
+		setPoint( "cn1", - w,   0, - 1 );
+		setPoint( "cn2",   w,   0, - 1 );
+		setPoint( "cn3",   0, - h, - 1 );
+		setPoint( "cn4",   0,   h, - 1 );
 
-		((Geometry)getGeometry()).setVerticesNeedUpdate( true );
+		geometry.setVerticesNeedUpdate(true);
 	}
 
 	private void setPoint( String point, double x, double y, double z )
 	{
 		_vector.set( x, y, z ).unproject( _camera );
 
-		List<Integer> points = this.pointMap.get( point );
+		if ( pointMap.containsKey( point) ) {
+			List<Integer> points = pointMap.get( point );
 
-		if ( points != null )
-		{
-			for ( int i = 0, il = points.size(); i < il; i ++ )
-			{
-				int j = points.get( i );
-				((Geometry)getGeometry()).getVertices().get( j ).copy( _vector );
+			for ( int i = 0, il = points.size(); i < il; i ++ ) {
+
+				((Geometry) geometry).getVertices().get(points.get(i)).copy( _vector );
+
 			}
+
 		}
 	}
 }

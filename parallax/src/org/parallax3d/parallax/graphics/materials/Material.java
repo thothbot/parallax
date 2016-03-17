@@ -535,6 +535,10 @@ public abstract class Material extends AbstractPropertyObject
 		return this;
 	}
 
+	public void dispose() {
+
+	}
+
 	public String toString()
 	{
 		return this.getClass().getSimpleName() + " { id=" + this.getId() + " }";

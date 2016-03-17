@@ -38,7 +38,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  *
  */
 @ThreejsObject("THREE.OrthographicCamera")
-public class OrthographicCamera extends Camera implements HasNearFar
+public class OrthographicCamera extends Camera implements HasNearFar, HasProjectionMatrix
 {
 
 	protected double zoom = 1.0;

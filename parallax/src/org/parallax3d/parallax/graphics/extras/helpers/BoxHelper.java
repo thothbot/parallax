@@ -21,45 +21,49 @@ package org.parallax3d.parallax.graphics.extras.helpers;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
+import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.objects.LineSegments;
+import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 
 @ThreejsObject("THREE.BoxHelper")
-public class BoxHelper extends Line 
+public class BoxHelper extends LineSegments 
 {
-	public BoxHelper(Mesh object)
+	public BoxHelper(Object3D object)
 	{
-		super(new BufferGeometry(), new LineBasicMaterial(), Line.MODE.PIECES);
-
-		BufferGeometry geometry = (BufferGeometry) getGeometry();
-		LineBasicMaterial material = (LineBasicMaterial) getMaterial();
-		material.setColor(new Color(0xffff00));
-
-
-		geometry.addAttribute( "position", new BufferAttribute( Float32Array.create(72), 3 ) );
-
-		update( object );
-
+		super( intDefaultGeometry(), new LineBasicMaterial().setColor(0xffff00) );
+		this.update( object );
 	}
 
-	public void update( Mesh object )
+	private static BufferGeometry intDefaultGeometry() {
+		Uint16Array indices = Uint16Array.create( new int[] { 0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7 } );
+		Float32Array positions = Float32Array.create( 8 * 3 );
+
+		BufferGeometry geometry = new BufferGeometry();
+		geometry.setIndex( new BufferAttribute( indices, 1 ) );
+		geometry.addAttribute( "position", new BufferAttribute( positions, 3 ) );
+		
+		return geometry;
+	}
+
+	static final Box3 box = new Box3();
+	public void update( Object3D object )
 	{
 
-		AbstractGeometry geometry = object.getGeometry();
+		box.setFromObject( object );
 
-		if ( geometry.getBoundingBox() == null ) {
+		if ( box.isEmpty() ) return;
 
-			geometry.computeBoundingBox();
-
-		}
-
-		Vector3 min = geometry.getBoundingBox().getMin();
-		Vector3 max = geometry.getBoundingBox().getMax();
+		Vector3 min = box.getMin();
+		Vector3 max = box.getMax();
 
 		/*
 		  5____4
@@ -77,54 +81,21 @@ public class BoxHelper extends Line
 		7: max.x, min.y, min.z
 		*/
 
-		Float32Array vertices = (Float32Array) ((BufferGeometry)this.geometry).getAttribute("position").getArray();
+		BufferAttribute position = ((BufferGeometry) this.geometry).getAttributes().get("position");
+		Float32Array array = (Float32Array) position.getArray();
 
-		vertices.set(0, max.getX()); vertices.set(1, max.getY()); vertices.set(2, max.getZ());
-		vertices.set(3, min.getX()); vertices.set(4, max.getY()); vertices.set(5, max.getZ());
+		array.set( 0, max.getX()); array.set( 1, max.getY()); array.set( 2, max.getZ());
+		array.set( 3, min.getX()); array.set( 4, max.getY()); array.set( 5, max.getZ());
+		array.set( 6, min.getX()); array.set( 7, min.getY()); array.set( 8, max.getZ());
+		array.set( 9, max.getX()); array.set( 10, min.getY()); array.set( 11, max.getZ());
+		array.set( 12, max.getX()); array.set( 13, max.getY()); array.set( 14, min.getZ());
+		array.set( 15, min.getX()); array.set( 16, max.getY()); array.set( 17, min.getZ());
+		array.set( 18, min.getX()); array.set( 19, min.getY()); array.set( 20, min.getZ());
+		array.set( 21, max.getX()); array.set( 22, min.getY()); array.set( 23, min.getZ());
 
-		vertices.set(6, min.getX()); vertices.set(7, max.getY()); vertices.set(8, max.getZ());
-		vertices.set(9, min.getX()); vertices.set(10, min.getY()); vertices.set(11, max.getZ());
-
-		vertices.set(12, min.getX()); vertices.set(13, min.getY()); vertices.set(14, max.getZ());
-		vertices.set(15, max.getX()); vertices.set(16, min.getY()); vertices.set(17, max.getZ());
-
-		vertices.set(18, max.getX()); vertices.set(19, min.getY()); vertices.set(20, max.getZ());
-		vertices.set(21, max.getX()); vertices.set(22, max.getY()); vertices.set(23, max.getZ());
-
-		//
-
-		vertices.set(24, max.getX()); vertices.set(25, max.getY()); vertices.set(26, min.getZ());
-		vertices.set(27, min.getX()); vertices.set(28, max.getY()); vertices.set(29, min.getZ());
-
-		vertices.set(30, min.getX()); vertices.set(31, max.getY()); vertices.set(32, min.getZ());
-		vertices.set(33, min.getX()); vertices.set(34, min.getY()); vertices.set(35, min.getZ());
-
-		vertices.set(36, min.getX()); vertices.set(37, min.getY()); vertices.set(38, min.getZ());
-		vertices.set(39, max.getX()); vertices.set(40, min.getY()); vertices.set(41, min.getZ());
-
-		vertices.set(42, max.getX()); vertices.set(43, min.getY()); vertices.set(44, min.getZ());
-		vertices.set(45, max.getX()); vertices.set(46, max.getY()); vertices.set(47, min.getZ());
-
-		//
-
-		vertices.set(48, max.getX()); vertices.set(49, max.getY()); vertices.set(50, max.getZ());
-		vertices.set(51, max.getX()); vertices.set(52, max.getY()); vertices.set(53, min.getZ());
-
-		vertices.set(54, min.getX()); vertices.set(55, max.getY()); vertices.set(56, max.getZ());
-		vertices.set(57, min.getX()); vertices.set(58, max.getY()); vertices.set(59, min.getZ());
-
-		vertices.set(60, min.getX()); vertices.set(61, min.getY()); vertices.set(62, max.getZ());
-		vertices.set(63, min.getX()); vertices.set(64, min.getY()); vertices.set(65, min.getZ());
-
-		vertices.set(66, max.getX()); vertices.set(67, min.getY()); vertices.set(68, max.getZ());
-		vertices.set(69, max.getX()); vertices.set(70, min.getY()); vertices.set(71, min.getZ());
-
-		((BufferGeometry)this.geometry).getAttribute("position").setNeedsUpdate(true);
+		position.setNeedsUpdate(true);
 
 		this.geometry.computeBoundingSphere();
-
-		setMatrix( object.getMatrixWorld() );
-		this.setMatrixAutoUpdate(false);
 
 	}
 

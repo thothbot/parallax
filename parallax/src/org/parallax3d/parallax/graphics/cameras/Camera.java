@@ -80,6 +80,10 @@ public class Camera extends Object3D implements ViewportResizeListener
 		this.projectionMatrix = projectionMatrix;
 	}
 
+	public void updateProjectionMatrix() {
+
+	}
+
 	@Override
 	public Vector3 getWorldDirection() {
 		return getWorldDirection(new Vector3());
@@ -107,9 +111,9 @@ public class Camera extends Object3D implements ViewportResizeListener
 
 		Matrix4 m1 = new Matrix4();
 
-		m1.lookAt( this.position, vector, this.up );
+		m1.lookAt(this.getPosition(), vector, this.getUp());
 
-		this.quaternion.setFromRotationMatrix(m1);
+		this.getQuaternion().setFromRotationMatrix(m1);
 	}
 
 	public Camera clone() {

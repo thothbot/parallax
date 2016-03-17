@@ -18,6 +18,11 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.objects.LineSegments;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
@@ -25,6 +30,9 @@ import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
+import java.util.Arrays;
 
 // port from three.js r70 GridHelper.js
 /**
@@ -33,51 +41,33 @@ import org.parallax3d.parallax.math.Color;
  *
  */
 @ThreejsObject("THREE.GridHelper")
-public class GridHelper extends Line {
+public class GridHelper extends LineSegments {
 
-    private Color color1;
-    private Color color2;
+    static Color color1 = new Color( 0x444444 ); // colorCenterLine
+    static Color color2 = new Color( 0x888888 ); // colorGrid
 
-    public GridHelper(double size, double step) {
-        super(new Geometry(), new LineBasicMaterial(), Line.MODE.PIECES);
-        Geometry geometry = (Geometry) getGeometry();
+    public GridHelper(double size, int step)
+    {
+        super(intDefaultGeometry(size, step), new LineBasicMaterial().setVertexColors(Material.COLORS.VERTEX));
+    }
 
-        LineBasicMaterial material = (LineBasicMaterial) getMaterial();
-        material.setVertexColors(Material.COLORS.VERTEX);
+    private static Geometry intDefaultGeometry(double size, int step) {
 
-        color1 = new Color(0x444444);
-        color2 = new Color(0x888888);
+        Geometry geometry = new Geometry();
 
-        for (double i = -size; i <= size; i += step) {
+        for (int i = (int) - size; i <= size; i += step ) {
 
-            geometry.getVertices().add(new Vector3(-size, 0, i));
-            geometry.getVertices().add(new Vector3(size, 0, i));
-            geometry.getVertices().add(new Vector3(i, 0, -size));
-            geometry.getVertices().add(new Vector3(i, 0, size));
+            geometry.getVertices().addAll(Arrays.asList(
+                    new Vector3( - size, 0, i ), new Vector3( size, 0, i ),
+                    new Vector3( i, 0, - size ), new Vector3( i, 0, size )
+            ));
 
-            Color color = i == 0 ? this.color1 : this.color2;
+            Color color = i == 0 ? color1 : color2;
 
-            geometry.getColors().add(color);
-            geometry.getColors().add(color);
-            geometry.getColors().add(color);
-            geometry.getColors().add(color);
+            geometry.getColors().addAll(Arrays.asList( color, color, color, color ));
 
         }
+
+        return geometry;
     }
-
-    public void setColors(int colorCenterLine, int colorGrid)
-    {
-        setColors(new Color(colorCenterLine), new Color(colorGrid));
-    }
-
-    public void setColors(Color colorCenterLine, Color colorGrid)
-    {
-
-        color1.copy( colorCenterLine );
-        color2.copy( colorGrid );
-
-        geometry.setColorsNeedUpdate(true);
-
-    }
-
 }

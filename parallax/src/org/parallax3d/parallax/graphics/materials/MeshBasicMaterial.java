@@ -34,7 +34,7 @@ import org.parallax3d.parallax.math.Color;
  */
 @ThreejsObject("THREE.MeshBasicMaterial")
 public class MeshBasicMaterial extends Material
-	implements HasColor, HasWireframe, HasFog, HasMap, HasAoMap, HasSpecularMap, HasAlphaMap, HasEnvMap
+	implements HasColor, HasWireframe, HasFog, HasMap, HasAoMap, HasSpecularMap, HasAlphaMap, HasEnvMap, HasVertexColors
 {
 
 	Color color = new Color(0xffffff);
@@ -246,6 +246,17 @@ public class MeshBasicMaterial extends Material
 	@Override
 	public MeshBasicMaterial setAoMapIntensity(double aoMapIntensity) {
 		this.aoMapIntensity = aoMapIntensity;
+		return this;
+	}
+
+	@Override
+	public COLORS isVertexColors() {
+		return vertexColors;
+	}
+
+	@Override
+	public MeshBasicMaterial setVertexColors(COLORS vertexColors) {
+		this.vertexColors = vertexColors;
 		return this;
 	}
 

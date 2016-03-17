@@ -33,10 +33,10 @@ import org.parallax3d.parallax.system.ThreejsObject;
 public class EdgesHelper extends LineSegments {
 
     public EdgesHelper(GeometryObject object) {
-        this(object, 0xffffff, false);
+        this(object, 0xffffff, 1.);
     }
 
-    public EdgesHelper(GeometryObject object, int hex, boolean thresholdAngle)
+    public EdgesHelper(GeometryObject object, int hex, double thresholdAngle)
     {
         super(new EdgesGeometry(object.getGeometry(), thresholdAngle ), new LineBasicMaterial().setColor(hex));
 

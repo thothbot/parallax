@@ -38,7 +38,7 @@ public class ArrowHelper extends Object3D
 
 	public ArrowHelper ( Vector3 dir, Vector3 origin)
 	{
-		this(dir, origin, 1);
+		this(dir, origin, 1.);
 	}
 
 	public ArrowHelper ( Vector3 dir, Vector3 origin, double length)
@@ -89,11 +89,11 @@ public class ArrowHelper extends Object3D
 
 		if ( dir.getY() > 0.99999 ) {
 
-			this.quaternion.set( 0, 0, 0, 1 );
+			this.getQuaternion().set( 0, 0, 0, 1 );
 
 		} else if ( dir.getY() < - 0.99999 ) {
 
-			this.quaternion.set( 1, 0, 0, 0 );
+			this.getQuaternion().set( 1, 0, 0, 0 );
 
 		} else {
 
@@ -101,7 +101,7 @@ public class ArrowHelper extends Object3D
 
 			radians = Math.acos( dir.getY() );
 
-			this.quaternion.setFromAxisAngle( axis, radians );
+			this.getQuaternion().setFromAxisAngle( axis, radians );
 
 		}
 
@@ -117,7 +117,7 @@ public class ArrowHelper extends Object3D
 
 	public void setLength ( double length, double headLength, double headWidth ) {
 
-		this.line.getScale().set( 1, length, 1 );
+		this.line.getScale().set( 1, Math.max( 0, length - headLength ), 1 );
 		this.line.updateMatrix();
 
 		this.cone.getScale().set( headWidth, headLength, headWidth );
@@ -128,10 +128,7 @@ public class ArrowHelper extends Object3D
 
 	public void setColor( int hex )
 	{
-		LineBasicMaterial lMaterial = (LineBasicMaterial) this.line.getMaterial();
-		lMaterial.getColor().setHex( hex );
-
-		MeshBasicMaterial mMaterial = (MeshBasicMaterial) this.cone.getMaterial();
-		mMaterial.getColor().setHex( hex );
+		((LineBasicMaterial) this.line.getMaterial()).getColor().set( hex );
+		((LineBasicMaterial) this.cone.getMaterial()).getColor().set( hex );
 	}
 }
