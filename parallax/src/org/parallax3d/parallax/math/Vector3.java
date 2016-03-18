@@ -86,9 +86,10 @@ public class Vector3 extends Vector2
 	 *
 	 * @param z the Y coordinate
 	 */
-	public void addZ(double z)
+	public Vector3 addZ(double z)
 	{
 		this.z += z;
+		return this;
 	}
 
 	/**
@@ -96,9 +97,10 @@ public class Vector3 extends Vector2
 	 *
 	 * @param z the Z coordinate
 	 */
-	public void setZ(double z)
+	public Vector3 setZ(double z)
 	{
 		this.z = z;
+		return this;
 	}
 
 	/**
@@ -129,7 +131,7 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
-	public void setComponent ( int index, double value ) {
+	public Vector3 setComponent ( int index, double value ) {
 
 		switch ( index ) {
 
@@ -140,6 +142,7 @@ public class Vector3 extends Vector2
 
 		}
 
+		return this;
 	}
 
 	public double getComponent( int index ) {

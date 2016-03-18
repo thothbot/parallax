@@ -94,9 +94,10 @@ public class Vector2
 	 *
 	 * @param x the X coordinate
 	 */
-	public void addX(double x)
+	public Vector2 addX(double x)
 	{
 		this.x += x;
+		return this;
 	}
 
 	/**
@@ -105,9 +106,10 @@ public class Vector2
 	 *
 	 * @param y the Y coordinate
 	 */
-	public void addY(double y)
+	public Vector2 addY(double y)
 	{
 		this.y += y;
+		return this;
 	}
 
 	/**
@@ -115,9 +117,10 @@ public class Vector2
 	 *
 	 * @param x the X coordinate
 	 */
-	public void setX(double x)
+	public Vector2 setX(double x)
 	{
 		this.x = x;
+		return this;
 	}
 
 	/**
@@ -125,9 +128,10 @@ public class Vector2
 	 *
 	 * @param y the Y coordinate
 	 */
-	public void setY(double y)
+	public Vector2 setY(double y)
 	{
 		this.y = y;
+		return this;
 	}
 
 	/**
@@ -152,7 +156,7 @@ public class Vector2
 		return this;
 	}
 
-	public void setComponent( int index, double value ) {
+	public Vector2 setComponent( int index, double value ) {
 
 		switch ( index ) {
 
@@ -162,6 +166,7 @@ public class Vector2
 
 		}
 
+		return this;
 	}
 
 	public double getComponent ( int index ) {

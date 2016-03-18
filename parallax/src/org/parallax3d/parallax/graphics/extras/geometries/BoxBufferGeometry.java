@@ -106,7 +106,6 @@ public class BoxBufferGeometry extends BufferGeometry {
 
         Vector3 vector = new Vector3();
 
-        Float32Array tmp = Float32Array.create(3);
         // generate vertices, normals and uvs
 
         for ( int iy = 0; iy < gridY1; iy ++ ) {
@@ -118,10 +117,9 @@ public class BoxBufferGeometry extends BufferGeometry {
                 double x = ix * segmentWidth - widthHalf;
 
                 // set values to correct vector component
-                tmp.set( u , x * udir );
-                tmp.set( v , y * vdir );
-                tmp.set( w , depthHalf );
-                vector.fromArray(tmp);
+                vector.setComponent(u , x * udir)
+                        .set( v , y * vdir )
+                        .set( w , depthHalf );
 
                 // now apply vector to vertex buffer
                 vertices.set( vertexBufferOffset , vector.getX());
@@ -129,10 +127,9 @@ public class BoxBufferGeometry extends BufferGeometry {
                 vertices.set( vertexBufferOffset + 2 , vector.getZ());
 
                 // set values to correct vector component
-                vector.set( u , 0. );
-                vector.set( v , 0. );
-                vector.set( w , depth > 0 ? 1. : - 1. );
-                vector.fromArray(tmp);
+                vector.setComponent( u , 0. )
+                        .setComponent( v , 0. )
+                        .setComponent( w , depth > 0 ? 1. : - 1. );
 
                 // now apply vector to normal buffer
                 normals.set( vertexBufferOffset , vector.getX());

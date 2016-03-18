@@ -21,9 +21,11 @@ import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 
+@ThreejsObject("THREE.CircleBufferGeometry")
 public class CircleBufferGeometry extends BufferGeometry {
 
     public CircleBufferGeometry()
