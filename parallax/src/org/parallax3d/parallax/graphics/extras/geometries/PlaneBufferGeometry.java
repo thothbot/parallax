@@ -23,7 +23,12 @@ import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 
+/**
+ * @author mrdoob / http://mrdoob.com/
+ * based on http://papervision3d.googlecode.com/svn/trunk/as3/trunk/src/org/papervision3d/objects/primitives/Plane.as
+ */
 @ThreejsObject("THREE.PlaneBufferGeometry")
 public class PlaneBufferGeometry extends BufferGeometry {
 
@@ -77,7 +82,7 @@ public class PlaneBufferGeometry extends BufferGeometry {
 
 		offset = 0;
 
-		Uint16Array indices = Uint16Array.create(gridX * gridY * 6);
+		Uint32Array indices = Uint32Array.create(gridX * gridY * 6);
 
 		for ( int iy = 0; iy < gridY; iy ++ ) {
 
@@ -102,10 +107,10 @@ public class PlaneBufferGeometry extends BufferGeometry {
 
 		}
 
-		this.addAttribute( "index", new BufferAttribute( indices, 1 ) );
-		this.addAttribute( "position", new BufferAttribute( vertices, 3 ) );
-		this.addAttribute( "normal", new BufferAttribute( normals, 3 ) );
-		this.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
+        this.setIndex( new BufferAttribute( indices, 1 ) );
+        this.addAttribute( "position", new BufferAttribute( vertices, 3 ) );
+        this.addAttribute( "normal", new BufferAttribute( normals, 3 ) );
+        this.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
 
-	}
+    }
 }
