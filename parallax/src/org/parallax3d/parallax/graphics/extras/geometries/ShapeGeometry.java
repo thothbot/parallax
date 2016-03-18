@@ -16,14 +16,16 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.extras.core;
+package org.parallax3d.parallax.graphics.extras.geometries;
 
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
+import org.parallax3d.parallax.graphics.extras.core.Shape;
 import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,10 +33,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Creates shape geometry from a path shape.
+ * Creates a one-sided polygonal geometry from a path shape. Similar to
+ * ExtrudeGeometry.
  * <p>
  * Based on the three.js code.
  */
+@ThreejsObject("THREE.ShapeGeometry")
 public class ShapeGeometry extends Geometry {
     public static class ShapeGeometryParameters
     {
@@ -46,7 +50,7 @@ public class ShapeGeometry extends Geometry {
 
     public ShapeGeometry ( final ShapeGeometryParameters p_option )
     {
-        this( new ArrayList< Shape >(), p_option );
+        this( new ArrayList<Shape>(), p_option );
     }
 
     public ShapeGeometry ( final Shape shape, final ShapeGeometryParameters p_option )

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
+import org.parallax3d.parallax.graphics.extras.geometries.ShapeGeometry;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Vector2;
 
@@ -66,7 +67,7 @@ public class Shape extends Path
 	/*
 	 * Convenience method to return ShapeGeometry
 	 */
-	public ShapeGeometry makeGeometry ( final ShapeGeometry.ShapeGeometryParameters options )
+	public ShapeGeometry makeGeometry (final ShapeGeometry.ShapeGeometryParameters options )
 	{
 		return new ShapeGeometry( this, options );
 	}

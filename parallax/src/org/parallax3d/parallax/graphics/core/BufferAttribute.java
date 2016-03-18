@@ -20,10 +20,9 @@ package org.parallax3d.parallax.graphics.core;
 
 import org.parallax3d.parallax.graphics.renderers.gl.AttributeData;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-import org.parallax3d.parallax.system.gl.arrays.TypeArray;
+import org.parallax3d.parallax.system.gl.arrays.*;
 
-@ThreejsObject("THREE.BufferAttribute")
+@ThreejsObject("BufferAttribute")
 public class BufferAttribute extends AttributeData {
 
 	int itemSize;
@@ -158,6 +157,53 @@ public class BufferAttribute extends AttributeData {
 
 	public String toString() {
 		return "{array: " + this.array.getLength()
-				+ ", itemSize: " + this.itemSize + "}";
+				+ ", int itemSize: " + this.itemSize + "}";
 	}
+
+	public static BufferAttribute Int8Attribute( byte[] array, int itemSize )
+	{
+		return new BufferAttribute(Int8Array.create(array), itemSize );
+	};
+
+	public static BufferAttribute Uint8Attribute( byte[] array, int itemSize ) {
+
+		return new BufferAttribute(Uint8Array.create(array), itemSize );
+
+	};
+
+	public static BufferAttribute Int16Attribute( short[] array, int itemSize ) {
+
+		return new BufferAttribute(Int16Array.create(array), itemSize );
+
+	};
+
+	public static BufferAttribute Uint16Attribute( short[] array, int itemSize ) {
+
+		return new BufferAttribute( Uint16Array.create( array ), itemSize );
+
+	};
+
+	public static BufferAttribute Int32Attribute( int[] array, int itemSize ) {
+
+		return new BufferAttribute( Int32Array.create( array ), itemSize );
+
+	};
+
+	public static BufferAttribute Uint32Attribute(Object[] array, int itemSize ) {
+
+		return new BufferAttribute( Uint32Array.create( array ), itemSize );
+
+	};
+
+	public static BufferAttribute Float32Attribute( double[] array, int itemSize ) {
+
+		return new BufferAttribute( Float32Array.create( array ), itemSize );
+
+	};
+
+	public static BufferAttribute Float64Attribute( double[] array, int itemSize ) {
+
+		return new BufferAttribute( Float64Array.create( array ), itemSize );
+
+	};
 }
