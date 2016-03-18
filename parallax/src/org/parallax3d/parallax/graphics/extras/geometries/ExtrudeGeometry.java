@@ -16,17 +16,20 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.extras.core;
+package org.parallax3d.parallax.graphics.extras.geometries;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
-import org.parallax3d.parallax.graphics.extras.geometries.FrenetFrames;
+import org.parallax3d.parallax.graphics.extras.core.Curve;
+import org.parallax3d.parallax.graphics.extras.core.CurvePath;
+import org.parallax3d.parallax.graphics.extras.core.Shape;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +41,7 @@ import java.util.List;
  * <p>
  * Based on the three.js code.
  */
+@ThreejsObject("THREE.ExtrudeGeometry")
 public class ExtrudeGeometry extends Geometry
 {
 	public static class ExtrudeGeometryParameters

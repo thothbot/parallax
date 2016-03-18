@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.extras.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Vector2;
 
@@ -57,7 +58,7 @@ public class Shape extends Path
 	/*
 	 * Convenience method to return ExtrudeGeometry
 	 */
-	public ExtrudeGeometry extrude( ExtrudeGeometry.ExtrudeGeometryParameters options )
+	public ExtrudeGeometry extrude(ExtrudeGeometry.ExtrudeGeometryParameters options )
 	{
 		return new ExtrudeGeometry( this, options );
 	}

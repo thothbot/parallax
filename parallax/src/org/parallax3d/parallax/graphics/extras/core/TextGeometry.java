@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.extras.core;
 
+import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.TextGeometry")

@@ -23,7 +23,7 @@ import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.SceneUtils;
-import org.parallax3d.parallax.graphics.extras.core.ExtrudeGeometry;
+import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
 import org.parallax3d.parallax.graphics.extras.core.Path;
 import org.parallax3d.parallax.graphics.extras.core.Shape;
 import org.parallax3d.parallax.graphics.extras.curves.SplineCurve3;
