@@ -21,6 +21,7 @@ package org.parallax3d.parallax.graphics.extras.helpers;
 import java.util.Arrays;
 import java.util.List;
 
+import org.parallax3d.parallax.graphics.extras.geometries.WireframeGeometry;
 import org.parallax3d.parallax.graphics.objects.LineSegments;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
