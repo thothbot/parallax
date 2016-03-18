@@ -52,15 +52,14 @@ public class GwtFileHandle extends FileHandle {
 
     public GwtFileHandle load(final FileListener<GwtFileHandle> callback) {
         if (asset == null || !(asset instanceof AssetFile)) {
-            if(callback != null)
-                callback.onFailure();
+            if(callback != null) callback.onFailure();
             return this;
         }
 
         final AssetFile assetFile = (AssetFile)asset;
 
-        if (assetFile.isLoaded && assetFile.data != null && callback != null) {
-            callback.onSuccess(this);
+        if (assetFile.isLoaded && assetFile.data != null) {
+            if(callback != null) callback.onSuccess(this);
             return this;
         }
 
@@ -68,21 +67,18 @@ public class GwtFileHandle extends FileHandle {
 
             public void onProgress(double amount) {
                 assetFile.loaded = (long) amount;
-                if(callback != null)
-                    callback.onProgress(amount);
+                if(callback != null) callback.onProgress(amount);
             }
 
             public void onFailure() {
                 assetFile.isFailed = true;
-                if(callback != null)
-                    callback.onFailure();
+                if(callback != null) callback.onFailure();
             }
 
             public void onSuccess(Object result) {
                 assetFile.data = result;
                 assetFile.isLoaded = true;
-                if(callback != null)
-                    callback.onSuccess(GwtFileHandle.this);
+                if(callback != null) callback.onSuccess(GwtFileHandle.this);
             }
         });
 

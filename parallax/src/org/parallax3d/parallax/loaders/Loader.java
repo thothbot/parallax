@@ -28,9 +28,9 @@ public abstract class Loader
 {
 	FileHandle file;
 
-	protected Loader(String url)
+	protected Loader(final String url)
 	{
-		this.file = Parallax.asset(url, new FileListener<FileHandle>() {
+		Parallax.asset(url, new FileListener<FileHandle>() {
 			@Override
 			public void onProgress(double amount) {
 
@@ -38,12 +38,13 @@ public abstract class Loader
 
 			@Override
 			public void onFailure() {
-				Log.error("An error occurred while loading file: " + file.path());
+				Log.error("An error occurred while loading file: " + url);
 			}
 
 			@Override
 			public void onSuccess(FileHandle result) {
-				Log.info("Loaded file: " + file.path());
+				Log.info("Loaded file: " + url);
+				Loader.this.file = result;
 
 				parse(result);
 				onReady();
