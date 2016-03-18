@@ -21,9 +21,9 @@ package org.parallax3d.parallax.graphics.extras.helpers;
 import java.util.Arrays;
 import java.util.List;
 
+import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.objects.LineSegments;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.core.Face3;
-import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
@@ -31,111 +31,149 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix3;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 @ThreejsObject("THREE.VertexNormalsHelper")
-public class VertexNormalsHelper extends Line
+public class VertexNormalsHelper extends LineSegments
 {
 	Mesh object;
 	double size;
-	Matrix3 normalMatrix;
 
-	public VertexNormalsHelper(Mesh object)
+	public VertexNormalsHelper(GeometryObject object)
 	{
 		this(object, 1.0);
 	}
 
-	public VertexNormalsHelper(Mesh object, double size )
+	public VertexNormalsHelper(GeometryObject object, double size )
 	{
 		this(object, size, 0xff0000);
 	}
 
-	public VertexNormalsHelper(Mesh object, double size, int hex )
+	public VertexNormalsHelper(GeometryObject object, double size, int hex )
 	{
 		this(object, size, hex, 1);
 	}
 
-	public VertexNormalsHelper(Mesh object, double size, int hex, int linewidth )
+	public VertexNormalsHelper(GeometryObject object, double size, int hex, int linewidth )
 	{
-		super(new Geometry(), new LineBasicMaterial(), Line.MODE.PIECES);
+		super(intDefaultGeometry(object), new LineBasicMaterial().setColor(hex).setLinewidth(linewidth));
 
-		this.object = object;
-		this.size = size;
-
-		LineBasicMaterial material = (LineBasicMaterial) getMaterial();
-		material.setColor(new Color(hex));
-		material.setLinewidth(linewidth);
-
-		Geometry geometry = (Geometry) getGeometry();
-
-		List<Face3> faces = ((Geometry)this.object.getGeometry()).getFaces();
-
-		for ( int i = 0, l = faces.size(); i < l; i ++ ) {
-
-			Face3 face = faces.get( i );
-
-			for ( int j = 0, jl = face.getVertexNormals().size(); j < jl; j ++ )
-			{
-
-				geometry.getVertices().addAll( Arrays.asList( new Vector3(), new Vector3() ) );
-
-			}
-
-		}
-
-		setMatrixAutoUpdate(false);
-
-		this.normalMatrix = new Matrix3();
+		this.setMatrixAutoUpdate(false);
 
 		this.update();
 
 	}
 
-	Vector3 v1 = new Vector3();
-	public void update()
+	private static BufferGeometry intDefaultGeometry(GeometryObject object) {
+
+		int nNormals = 0;
+
+		AbstractGeometry objGeometry = object.getGeometry();
+
+		if ( objGeometry instanceof Geometry ) {
+
+			nNormals = ((Geometry) objGeometry).getFaces().size() * 3;
+
+		} else if ( objGeometry instanceof BufferGeometry ) {
+
+			nNormals = ((BufferGeometry) objGeometry).getAttributes().get("normal").getCount();
+
+		}
+
+		BufferGeometry geometry = new BufferGeometry();
+
+		geometry.addAttribute( "position", new BufferAttribute(Float32Array.create(nNormals * 2 * 3), 3));
+
+		return geometry;
+	}
+
+	static final Vector3 v1 = new Vector3();
+	static final Vector3 v2 = new Vector3();
+	static final Matrix3 normalMatrix = new Matrix3();
+	public VertexNormalsHelper update()
 	{
+
+//		var keys = [ 'a', 'b', 'c' ];
 
 		this.object.updateMatrixWorld( true );
 
-		this.normalMatrix.getNormalMatrix( this.object.getMatrixWorld() );
+		normalMatrix.getNormalMatrix(this.object.getMatrixWorld());
 
-		List<Vector3> vertices = ((Geometry)this.getGeometry()).getVertices();
+		Matrix4 matrixWorld = this.object.getMatrixWorld();
 
-		List<Vector3> verts = ((Geometry)object.getGeometry()).getVertices();
-		List<Face3> faces = ((Geometry)object.getGeometry()).getFaces();
-		Matrix4 worldMatrix = object.getMatrixWorld();
+		BufferAttribute position = ((BufferGeometry) this.geometry).getAttributes().get("position");
 
-		int idx = 0;
-		int vsize = vertices.size();
+		//
 
-		for ( int i = 0, l = faces.size(); i < l; i ++ ) {
+		AbstractGeometry objGeometry = this.object.getGeometry();
 
-			Face3 face = faces.get( i );
+		if ( objGeometry instanceof Geometry ) {
 
-			for ( int j = 0, jl = face.getVertexNormals().size(); j < jl; j ++ ) {
+			List<Vector3> vertices = ((Geometry) objGeometry).getVertices();
 
-				int vertexId = face.getFlat()[ j ];
-				Vector3 vertex = verts.get( vertexId );
+			List<Face3> faces = ((Geometry) objGeometry).getFaces();
 
-				Vector3 normal = face.getVertexNormals().get( j );
+			int idx = 0;
 
-				if(vsize > idx)
-				{
-					vertices.get( idx ).copy( vertex ).apply( worldMatrix );
+			for ( int i = 0, l = faces.size(); i < l; i ++ ) {
 
-					v1.copy( normal ).apply( this.normalMatrix ).normalize().multiply( this.size );
+				Face3 face = faces.get(i);
 
-					v1.add( vertices.get( idx ) );
+				for (int j = 0, jl = face.getVertexNormals().size(); j < jl; j ++ ) {
+
+					Vector3 vertex = vertices.get(face.getFlat()[j]);
+
+					Vector3 normal = face.getVertexNormals().get(j);
+
+					v1.copy( vertex ).apply( matrixWorld );
+
+					v2.copy( normal ).apply( normalMatrix ).normalize().multiply( this.size ).add( v1 );
+
+					position.setXYZ( idx, v1.getX(), v1.getY(), v1.getZ());
+
 					idx = idx + 1;
 
-					vertices.get( idx ).copy( v1 );
+					position.setXYZ( idx, v2.getX(), v2.getY(), v2.getZ());
+
 					idx = idx + 1;
+
 				}
+
+			}
+
+		} else if ( objGeometry instanceof BufferGeometry ) {
+
+			BufferAttribute objPos = ((BufferGeometry) objGeometry).getAttributes().get("position");
+
+			BufferAttribute objNorm = ((BufferGeometry) objGeometry).getAttributes().get("normal");
+
+			int idx = 0;
+
+			// for simplicity, ignore index and drawcalls, and render every normal
+
+			for ( int j = 0, jl = objPos.getCount(); j < jl; j ++ ) {
+
+				v1.set( objPos.getX( j ), objPos.getY( j ), objPos.getZ( j ) ).apply( matrixWorld );
+
+				v2.set( objNorm.getX( j ), objNorm.getY( j ), objNorm.getZ( j ) );
+
+				v2.apply( normalMatrix ).normalize().multiply( this.size ).add( v1 );
+
+				position.setXYZ( idx, v1.getX(), v1.getY(), v1.getZ());
+
+				idx = idx + 1;
+
+				position.setXYZ( idx, v2.getX(), v2.getY(), v2.getZ());
+
+				idx = idx + 1;
 
 			}
 
 		}
 
-		this.geometry.setVerticesNeedUpdate(true);
+		position.setNeedsUpdate(true);
+
+		return this;
 
 	}
 }

@@ -33,10 +33,7 @@ import org.parallax3d.parallax.system.gl.enums.BufferTarget;
 import org.parallax3d.parallax.system.gl.enums.BufferUsage;
 
 import java.nio.Buffer;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is an efficient alternative to {@link Geometry}, because it stores all data, including vertex positions, 
@@ -70,6 +67,19 @@ public class BufferGeometry extends AbstractGeometry
 {
 	public static long MaxIndex = 65535;
 
+	public static class Group
+	{
+		public int start;
+		public int count;
+		public int materialIndex;
+
+		public Group(int start, int count, int materialIndex) {
+			this.start = start;
+			this.count = count;
+			this.materialIndex = materialIndex;
+		}
+	}
+
 	public static class DrawRange
 	{
 		public int start;
@@ -81,11 +91,13 @@ public class BufferGeometry extends AbstractGeometry
 		}
 	}
 
-	private AttributeData index;
-	private FastMap<BufferAttribute> attributes = new FastMap<>();
-	private FastMap<List<BufferAttribute>> morphAttributes = new FastMap<>();
+	AttributeData index;
+	FastMap<BufferAttribute> attributes = new FastMap<>();
+	FastMap<List<BufferAttribute>> morphAttributes = new FastMap<>();
 
-	private DrawRange drawRange = new DrawRange(0, Integer.MAX_VALUE);
+	List<Group> groups = new ArrayList<>();
+
+	DrawRange drawRange = new DrawRange(0, Integer.MAX_VALUE);
 
 	public BufferGeometry()
 	{
@@ -152,6 +164,26 @@ public class BufferGeometry extends AbstractGeometry
 
 		return this.attributes.get( name );
 
+	}
+
+	public List<Group> getGroups() {
+		return groups;
+	}
+
+	public BufferGeometry addGroup( int start, int count ) {
+		return addGroup( start, count, 0);
+	}
+
+	public BufferGeometry addGroup( int start, int count, int materialIndex )
+	{
+		this.groups.add( new Group(start, count, materialIndex));
+		return this;
+	}
+
+	public BufferGeometry clearGroups()
+	{
+		this.groups = new ArrayList<>();
+		return this;
 	}
 
 	/**
