@@ -39,8 +39,6 @@ public final class PlaneGeometry extends Geometry
 
 	public PlaneGeometry(double width, double height, int widthSegments, int heightSegments)
 	{
-		super();
-
 		this.fromBufferGeometry( new PlaneBufferGeometry( width, height, widthSegments, heightSegments ) );
 	}
 }
