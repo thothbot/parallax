@@ -37,7 +37,7 @@ public final class IcosahedronGeometry extends PolyhedronGeometry
 	}
 
 	@Override
-	protected double[][] getGeometryVertices()
+	protected double[][] vertexSet()
 	{
 		double t = ( 1.0 + Math.sqrt( 5 ) ) / 2.0;
 
@@ -51,7 +51,7 @@ public final class IcosahedronGeometry extends PolyhedronGeometry
 	}
 
 	@Override
-	protected int[][] getGeometryFaces()
+	protected int[][] indexSet()
 	{
 		int[][] faces = {
 				{ 0, 11,  5 }, { 0,  5,  1 }, {  0,  1,  7 }, {  0,  7, 10 }, {  0, 10, 11 },

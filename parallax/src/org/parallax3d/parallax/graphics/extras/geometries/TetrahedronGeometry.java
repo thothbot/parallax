@@ -37,7 +37,7 @@ public class TetrahedronGeometry extends PolyhedronGeometry
 	}
 
 	@Override
-	protected double[][] getGeometryVertices()
+	protected double[][] vertexSet()
 	{
 		double[][] vertices = {
 				{ 1.0,  1.0,  1.0 }, { -1.0, -1.0, 1.0 }, { -1.0, 1.0, -1.0 }, { 1.0, -1.0, -1.0 }
@@ -47,7 +47,7 @@ public class TetrahedronGeometry extends PolyhedronGeometry
 	}
 
 	@Override
-	protected int[][] getGeometryFaces()
+	protected int[][] indexSet()
 	{
 		int[][] faces = {
 				{ 2, 1, 0 }, { 0, 3, 2 }, { 1, 3, 0 }, { 2, 3, 1 }

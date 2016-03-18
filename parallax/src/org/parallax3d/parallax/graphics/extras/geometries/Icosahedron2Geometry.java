@@ -26,7 +26,7 @@ public final class Icosahedron2Geometry extends PolyhedronGeometry
 	}
 
 	@Override
-	protected double[][] getGeometryVertices()
+	protected double[][] vertexSet()
 	{
 		double a = 4 / Math.sqrt( 2 * (5 + Math.sqrt(5)) ) / 2;
 		double b = Math.sqrt(1 - a*a);
@@ -41,7 +41,7 @@ public final class Icosahedron2Geometry extends PolyhedronGeometry
 	}
 
 	@Override
-	protected int[][] getGeometryFaces()
+	protected int[][] indexSet()
 	{
 		int[][] faces = {
 				{0,4,1}, {0,9,4}, {9,5,4},{4,5,8}, {4,8,1},

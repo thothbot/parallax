@@ -20,9 +20,7 @@ package org.parallax3d.parallax.graphics.extras.geometries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -34,7 +32,6 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.PolyhedronGeometry")
 public abstract class PolyhedronGeometry extends Geometry
 {
-	private Map<Integer, Map<Integer, ContainerOfVector>> midpoints;
 	private List<ContainerOfVector> containers;
 
 	public class ContainerOfVector
@@ -42,6 +39,11 @@ public abstract class PolyhedronGeometry extends Geometry
 		public Vector3 vector;
 		public int index;
 		public Vector2 uv;
+
+		public ContainerOfVector(Vector3 v)
+		{
+			this.vector = v;
+		}
 
 		public ContainerOfVector(double x, double y, double z)
 		{
@@ -57,20 +59,56 @@ public abstract class PolyhedronGeometry extends Geometry
 	public PolyhedronGeometry(double radius, int detail)
 	{
 		super();
-		this.containers = new ArrayList<ContainerOfVector>();
-		this.midpoints = new HashMap<Integer, Map<Integer,ContainerOfVector>>();
+		this.containers = new ArrayList<>();
 
-		double[][] vertices = getGeometryVertices();
-		for ( int i = 0, l = vertices.length; i < l; i ++ )
-			prepare( new ContainerOfVector( vertices[ i ][ 0 ], vertices[ i ][ 1 ], vertices[ i ][2 ] ) );
+		double[] vertices = vertexSet();
+		for ( int i = 0, l = vertices.length; i < l; i += 3 )
+			prepare( new ContainerOfVector( vertices[ i ], vertices[ i + 1 ], vertices[ i + 2 ] ) );
 
-		int[][] faces = getGeometryFaces();
-		for ( int i = 0, l = faces.length; i < l; i ++ )
-			make( this.containers.get( faces[ i ][ 0 ] ),
-					this.containers.get( faces[ i ][ 1 ] ),
-					this.containers.get( faces[ i ][ 2 ] ), detail );
+		int[] indices = indexSet();
 
-		this.mergeVertices();
+		Face3[] faces = new Face3[indices.length];
+		for ( int i = 0, j = 0, l = indices.length; i < l; i += 3, j ++ ) {
+
+			ContainerOfVector v1 = containers.get(indices[i]);
+			ContainerOfVector v2 = containers.get(indices[i + 1]);
+			ContainerOfVector v3 = containers.get(indices[i + 2]);
+
+			faces[j] = new Face3(v1.index, v2.index, v3.index, Arrays.asList( v1.vector.clone(), v2.vector.clone(), v3.vector.clone()));
+			faces[j].setMaterialIndex(j);
+
+		}
+
+		for ( int i = 0, l = faces.length; i < l; i ++ ) {
+
+			subdivide( faces[ i ], detail );
+
+		}
+
+		// Handle case when face straddles the seam
+
+		for (int i = 0, l = this.getFaceVertexUvs().get(0).size(); i < l; i ++ ) {
+
+			List<Vector2> uvs = this.getFaceVertexUvs().get(0).get(i);
+
+			double x0 = uvs.get(0).getX();
+			double x1 = uvs.get(1).getX();
+			double x2 = uvs.get(2).getX();
+
+			double max = Math.max( x0, Math.max( x1, x2 ));
+			double min = Math.min( x0, Math.min( x1, x2 ));
+
+			if ( max > 0.9 && min < 0.1 ) {
+
+				// 0.9 is somewhat arbitrary
+
+				if ( x0 < 0.2 ) uvs.get(0).setX(uvs.get(0).getX() + 1);
+				if ( x1 < 0.2 ) uvs.get(1).setX(uvs.get(1).getX() + 1);
+				if ( x2 < 0.2 ) uvs.get(2).setX(uvs.get(2).getX() + 1);
+
+			}
+
+		}
 
 		// Apply radius
 
@@ -83,18 +121,18 @@ public abstract class PolyhedronGeometry extends Geometry
 
 		this.computeFaceNormals();
 
-		setBoundingSphere(new Sphere(new Vector3(), radius));
+		this.boundingSphere = new Sphere( new Vector3(), radius );
 	}
 
 	/**
 	 * Gets geometry vertices.
 	 */
-	protected abstract double[][] getGeometryVertices();
+	protected abstract double[] vertexSet();
 
 	/**
 	 * Gets geometry faces.
 	 */
-	protected abstract int[][] getGeometryFaces();
+	protected abstract int[] indexSet();
 
 	/**
 	 * Project vector onto sphere's surface
@@ -117,61 +155,21 @@ public abstract class PolyhedronGeometry extends Geometry
 	/**
 	 * Approximate a curved face with recursively sub-divided triangles.
 	 */
-	protected void make( ContainerOfVector c1, ContainerOfVector c2, ContainerOfVector c3, int detail )
+	protected void make( ContainerOfVector c1, ContainerOfVector c2, ContainerOfVector c3, int materialIndex )
 	{
-		if ( detail < 1 )
-		{
-			Face3 face = new Face3( c1.index, c2.index, c3.index, Arrays.asList(c1.vector.clone(), c2.vector.clone(), c3.vector.clone()) );
+		Face3 face = new Face3( c1.index, c2.index, c3.index, Arrays.asList(c1.vector.clone(), c2.vector.clone(), c3.vector.clone()) );
+		face.setMaterialIndex(materialIndex);
+		getFaces().add( face );
 
-			Vector3 centroid = new Vector3();
-			centroid.copy( c1.vector ).add( c2.vector ).add( c3.vector ).divide( 3.0 );
+		Vector3 centroid = new Vector3();
+		centroid.copy( c1.vector ).add( c2.vector ).add( c3.vector ).divide( 3.0 );
+		double azi = azimuth( centroid );
 
-			getFaces().add( face );
-
-			double azi = azimuth( centroid );
-			getFaceVertexUvs().get( 0 ).add( Arrays.asList(
-					correctUV( c1.uv, c1.vector, azi ),
-					correctUV( c2.uv, c2.vector, azi ),
-					correctUV( c3.uv, c3.vector, azi )
-			) );
-		}
-		else
-		{
-			detail -= 1;
-			// split triangle into 4 smaller triangles
-			make( c1, midpoint( c1, c2 ), midpoint( c1, c3 ), detail ); // top quadrant
-			make( midpoint( c1, c2 ), c2, midpoint( c2, c3 ), detail ); // left quadrant
-			make( midpoint( c1, c3 ), midpoint( c2, c3 ), c3, detail ); // right quadrant
-			make( midpoint( c1, c2 ), midpoint( c2, c3 ), midpoint( c1, c3 ), detail ); // center quadrant
-
-		}
-
-	}
-
-	protected ContainerOfVector midpoint( ContainerOfVector c1, ContainerOfVector c2 )
-	{
-		if ( !midpoints.containsKey(c1.index ))
-		{
-			midpoints.put( c1.index, new HashMap<Integer, ContainerOfVector>());
-		}
-
-		if ( !midpoints.containsKey(c2.index ))
-		{
-			midpoints.put( c2.index, new HashMap<Integer, ContainerOfVector>());
-		}
-
-		ContainerOfVector mid = midpoints.get( c1.index ).get( c2.index );
-		if ( mid == null )
-		{
-			// generate mean point and project to surface with prepare()
-			ContainerOfVector con = new ContainerOfVector(0, 0, 0);
-			con.vector.add( c1.vector, c2.vector ).divide( 2 );
-
-			mid = prepare(con);
-			midpoints.get( c1.index ).put( c2.index, mid);
-			midpoints.get( c2.index ).put( c1.index,  mid);
-		}
-		return mid;
+		getFaceVertexUvs().get( 0 ).add( Arrays.asList(
+				correctUV( c1.uv, c1.vector, azi ),
+				correctUV( c2.uv, c2.vector, azi ),
+				correctUV( c3.uv, c3.vector, azi )
+		) );
 	}
 
 	/**
@@ -202,5 +200,77 @@ public abstract class PolyhedronGeometry extends Geometry
 			uv = new Vector2( azimuth / 2.0 / Math.PI + 0.5, uv.getY() );
 
 		return uv.clone();
+	}
+
+	protected void subdivide( Face3 face, double detail )
+	{
+
+		int cols = (int) Math.pow( 2, detail );
+		ContainerOfVector a = prepare( new ContainerOfVector( getVertices().get(face.getA()) ));
+		ContainerOfVector b = prepare( new ContainerOfVector( getVertices().get(face.getB()) ));
+		ContainerOfVector c = prepare( new ContainerOfVector( getVertices().get(face.getC()) ));
+
+		ContainerOfVector[][] v = new ContainerOfVector[cols + 1][];
+
+		int materialIndex = face.getMaterialIndex();
+
+		// Construct all of the vertices for this subdivision.
+
+		for ( int i = 0 ; i <= cols; i ++ ) {
+
+			ContainerOfVector aj = prepare( new ContainerOfVector(a.vector.clone().lerp( c.vector, i / cols ) ));
+			ContainerOfVector bj = prepare( new ContainerOfVector(b.vector.clone().lerp( c.vector, i / cols ) ));
+			int rows = cols - i;
+
+			v[ i ] = new ContainerOfVector[rows + 1];
+
+			for ( int j = 0; j <= rows; j ++ ) {
+
+				if ( j == 0 && i == cols ) {
+
+					v[ i ][ j ] = aj;
+
+				} else {
+
+					v[ i ][ j ] = prepare( new ContainerOfVector(aj.vector.clone().lerp( bj.vector, j / rows ) ));
+
+				}
+
+			}
+
+		}
+
+		// Construct all of the faces.
+
+		for ( int i = 0; i < cols ; i ++ ) {
+
+			for ( int j = 0; j < 2 * ( cols - i ) - 1; j ++ ) {
+
+				int k = (int) Math.floor( j / 2 );
+
+				if ( j % 2 == 0 ) {
+
+					make(
+							v[ i ][ k + 1 ],
+							v[ i + 1 ][ k ],
+							v[ i ][ k ],
+							materialIndex
+					);
+
+				} else {
+
+					make(
+							v[ i ][ k + 1 ],
+							v[ i + 1 ][ k + 1 ],
+							v[ i + 1 ][ k ],
+							materialIndex
+					);
+
+				}
+
+			}
+
+		}
+
 	}
 }
