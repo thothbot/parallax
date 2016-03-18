@@ -18,16 +18,38 @@
 
 package org.parallax3d.parallax.loaders;
 
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.graphics.extras.core.FontData;
 
 public abstract class FontLoader extends Loader {
 
     FontLoadHandler handler;
 
-    public FontLoader(String url, final FontLoadHandler handler) {
-        super(url);
-
+    public FontLoader(final String url, final FontLoadHandler handler) {
         this.handler = handler;
+
+        Parallax.asset(url, new FileListener<FileHandle>() {
+            @Override
+            public void onProgress(double amount) {
+
+            }
+
+            @Override
+            public void onFailure() {
+                Log.error("An error occurred while loading font: " + url);
+            }
+
+            @Override
+            public void onSuccess(FileHandle result) {
+                Log.info("Loaded font: " + url);
+
+                parse(result);
+                onReady();
+            }
+        });
     }
 
     @Override

@@ -18,40 +18,10 @@
 
 package org.parallax3d.parallax.loaders;
 
-import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 
 public abstract class Loader
 {
-	FileHandle file;
-
-	protected Loader(final String url)
-	{
-		Parallax.asset(url, new FileListener<FileHandle>() {
-			@Override
-			public void onProgress(double amount) {
-
-			}
-
-			@Override
-			public void onFailure() {
-				Log.error("An error occurred while loading file: " + url);
-			}
-
-			@Override
-			public void onSuccess(FileHandle result) {
-				Log.info("Loaded file: " + url);
-				Loader.this.file = result;
-
-				parse(result);
-				onReady();
-			}
-		});
-
-	}
 
 	protected abstract void parse(FileHandle result);
 	protected abstract void onReady();

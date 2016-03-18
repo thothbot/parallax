@@ -18,6 +18,10 @@
 
 package org.parallax3d.parallax.loaders;
 
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.files.FileListener;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 
 public abstract class ModelLoader extends Loader {
@@ -26,15 +30,33 @@ public abstract class ModelLoader extends Loader {
 
     String texturePath;
 
-    public ModelLoader(String url, final ModelLoadHandler handler) {
-        super(url);
+    public ModelLoader(final String url, final ModelLoadHandler handler) {
 
         this.handler = handler;
-
         this.texturePath = extractUrlBase(url);
+
+        Parallax.asset(url, new FileListener<FileHandle>() {
+            @Override
+            public void onProgress(double amount) {
+
+            }
+
+            @Override
+            public void onFailure() {
+                Log.error("An error occurred while loading model: " + url);
+            }
+
+            @Override
+            public void onSuccess(FileHandle result) {
+                Log.info("Loaded model: " + url);
+
+                parse(result);
+                onReady();
+            }
+        });
+
     }
 
-    @Override
     protected void onReady() {
         if(handler != null)
             handler.onModelLoaded(ModelLoader.this, getGeometry());
