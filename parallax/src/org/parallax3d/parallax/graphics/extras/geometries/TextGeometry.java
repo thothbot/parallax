@@ -122,7 +122,7 @@ public class TextGeometry extends ExtrudeGeometry {
                 }
             }
 
-            addShape(path.toShapes(), this.options);
+            addShapeList(path.toShapes(), this.options);
             offset += glyph.ha * scale;
 
         }

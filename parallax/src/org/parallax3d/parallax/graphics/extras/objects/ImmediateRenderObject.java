@@ -17,15 +17,9 @@
  */
 package org.parallax3d.parallax.graphics.extras.objects;
 
-import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.Object3D;
-import org.parallax3d.parallax.graphics.core.Raycaster;
 import org.parallax3d.parallax.graphics.materials.Material;
-import org.parallax3d.parallax.graphics.renderers.GLGeometry;
-import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.ThreejsObject;
-
-import java.util.List;
 
 /**
  * @author alteredq / http://alteredqualia.com/

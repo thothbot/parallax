@@ -18,26 +18,12 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.parallax3d.parallax.graphics.extras.geometries.WireframeGeometry;
-import org.parallax3d.parallax.graphics.objects.LineSegments;
-import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.graphics.core.BufferGeometry;
-import org.parallax3d.parallax.graphics.core.BufferGeometry.DrawRange;
-import org.parallax3d.parallax.graphics.core.Face3;
-import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.graphics.extras.geometries.WireframeGeometry;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
+import org.parallax3d.parallax.graphics.objects.LineSegments;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.objects.Line;
-import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
-import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.WireframeHelper")
 public class WireframeHelper extends LineSegments

@@ -18,20 +18,17 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.graphics.objects.LineSegments;
-import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
-import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.graphics.objects.LineSegments;
+import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.math.Matrix3;
 import org.parallax3d.parallax.math.Matrix4;
-import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
+import java.util.List;
 
 @ThreejsObject("THREE.VertexNormalsHelper")
 public class VertexNormalsHelper extends LineSegments

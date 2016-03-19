@@ -17,7 +17,6 @@
  */
 package org.parallax3d.parallax.graphics.extras.helpers;
 
-import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;

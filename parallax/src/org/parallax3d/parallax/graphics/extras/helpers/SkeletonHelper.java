@@ -17,7 +17,8 @@
  */
 package org.parallax3d.parallax.graphics.extras.helpers;
 
-import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.objects.Bone;

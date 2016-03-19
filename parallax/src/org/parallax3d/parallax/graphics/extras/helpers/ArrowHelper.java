@@ -18,17 +18,17 @@
 
 package org.parallax3d.parallax.graphics.extras.helpers;
 
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.geometries.CylinderGeometry;
-import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
-import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
-import org.parallax3d.parallax.math.Matrix4;
+import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
+import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.math.Matrix4;
+import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.ArrowHelper")
 public class ArrowHelper extends Object3D

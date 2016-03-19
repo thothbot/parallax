@@ -18,15 +18,15 @@
 
 package org.parallax3d.parallax.graphics.extras;
 
-import java.util.List;
-
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.materials.Material;
-import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
+import org.parallax3d.parallax.math.Matrix4;
+import org.parallax3d.parallax.system.ThreejsObject;
+
+import java.util.List;
 
 /**
  * The class implements some 3D Scene related helper methods

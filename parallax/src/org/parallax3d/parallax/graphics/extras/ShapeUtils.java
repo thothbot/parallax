@@ -18,18 +18,15 @@
 
 package org.parallax3d.parallax.graphics.extras;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import com.sun.deploy.util.ArrayUtil;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.math.Mathematics;
-import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.math.Vector2;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * The class implements some 3D Shape related helper methods
