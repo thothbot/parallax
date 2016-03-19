@@ -23,10 +23,8 @@ import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
-import org.parallax3d.parallax.graphics.extras.core.CurvePath;
 import org.parallax3d.parallax.graphics.extras.core.FrenetFrames;
 import org.parallax3d.parallax.graphics.extras.core.Shape;
-import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
@@ -47,53 +45,64 @@ public class ExtrudeGeometry extends Geometry
 {
 	public static class ExtrudeGeometryParameters
 	{
-		// size of the text
-		public double size;
-		// thickness to extrude text
-		public double height;
-		// number of points on the curves
+		/**
+		 * number of points on the curves
+		 */
 		public int curveSegments = 12;
-		// number of points for z-side extrusions / used for subdividing segements of extrude spline too
+
+		/**
+		 * number of points for z-side extrusions / used for subdividing segements of extrude spline too
+		 */
 		public int steps = 1;
-		// Amount
+
+		/**
+		 * Depth to extrude the shape
+		 */
 		public int amount = 100;
 
-		// turn on bevel
+		/**
+		 * turn on bevel
+		 */
 		public boolean bevelEnabled = true;
-		// how deep into text bevel goes
+
+		/**
+		 * how deep into the original shape bevel goes
+		 */
 		public double bevelThickness = 6;
-		// how far from text outline is bevel
+
+		/**
+		 * how far from shape outline is bevel
+		 */
 		public double bevelSize = bevelThickness - 2;
-		// number of bevel layers
+
+		/**
+		 * number of bevel layers
+		 */
 		public int bevelSegments = 3;
 
-		// 2d/3d spline path to extrude shape orthogonality to
+		/**
+		 * 3d spline path to extrude shape along. (creates Frames if .frames aren't defined)
+		 */
 		public Curve extrudePath;
-		// 2d path for bend the shape around x/y plane
-		public CurvePath bendPath;
 
-		// material index for front and back faces
-		public int material;
-		// material index for extrusion and beveled faces
-		public int extrudeMaterial;
+		/**
+		 * object that provides UV generator functions
+		 */
+		public UVGenerator UVGenerator = new WorldUVGenerator();
 	}
 
-	private static final double RAD_TO_DEGREES = 180.0 / Math.PI;
 
-	private static Vector2 __v1 = new Vector2();
-	private static Vector2 __v2 = new Vector2();
-	private static Vector2 __v3 = new Vector2();
-	private static Vector2 __v4 = new Vector2();
-	private static Vector2 __v5 = new Vector2();
-	private static Vector2 __v6 = new Vector2();
-
-	Box3 shapebb;
-	List<List<Vector2>> holes;
-	List<List<Integer>> localFaces;
 	ExtrudeGeometryParameters options;
 
 	int shapesOffset;
 	int verticesCount;
+
+	static final Vector2 __v1 = new Vector2();
+	static final Vector2 __v2 = new Vector2();
+	static final Vector2 __v3 = new Vector2();
+	static final Vector2 __v4 = new Vector2();
+	static final Vector2 __v5 = new Vector2();
+	static final Vector2 __v6 = new Vector2();
 
 	public ExtrudeGeometry(ExtrudeGeometryParameters options)
 	{
@@ -109,17 +118,14 @@ public class ExtrudeGeometry extends Geometry
 	{
 		super();
 
-		if(shapes.size() > 0)
-			this.shapebb = shapes.get( shapes.size() - 1 ).getBoundingBox();
-
 		this.options = options;
 
-		this.addShape( shapes, options );
+		this.addShapeList( shapes, options );
 
 		this.computeFaceNormals();
 	}
 
-	public void addShape(List<Shape> shapes, ExtrudeGeometryParameters options)
+	public void addShapeList(List<Shape> shapes, ExtrudeGeometryParameters options)
 	{
 		int sl = shapes.size();
 
@@ -130,13 +136,14 @@ public class ExtrudeGeometry extends Geometry
 	public void addShape( Shape shape, ExtrudeGeometryParameters options )
 	{
 		List<Vector2> extrudePts = null;
-		boolean extrudeByPath = false;
 
 		Vector3 binormal  = new Vector3();
 		Vector3 normal    = new Vector3();
 		Vector3 position2 = new Vector3();
 
 		FrenetFrames splineTube = null;
+
+		boolean extrudeByPath = false;
 
 		if ( options.extrudePath != null)
 		{
@@ -164,23 +171,19 @@ public class ExtrudeGeometry extends Geometry
 
 		this.shapesOffset = getVertices().size();
 
-		if ( options.bendPath != null )
-			shape.addWrapPath( options.bendPath );
+		List<Vector2> vertices = shape.getPoints( options.curveSegments );
+		List<List<Vector2>> holes = shape.getPointsHoles( options.curveSegments );
 
-		List<Vector2> vertices = shape.getTransformedPoints();
-
-		this.holes = shape.getPointsHoles();
-
-		boolean reverse = ! ShapeUtils.isClockWise( vertices ) ;
+		boolean reverse = ! ShapeUtils.isClockWise( vertices );
 
 		if ( reverse )
 		{
 			Collections.reverse(vertices);
 
 			// Maybe we should also check if holes are in the opposite direction, just to be safe ...
-			for ( int h = 0, hl = this.holes.size(); h < hl; h ++ )
+			for ( int h = 0, hl = holes.size(); h < hl; h ++ )
 			{
-				List<Vector2> ahole = this.holes.get( h );
+				List<Vector2> ahole = holes.get( h );
 
 				if ( ShapeUtils.isClockWise( ahole ) )
 					Collections.reverse(ahole);
@@ -190,26 +193,21 @@ public class ExtrudeGeometry extends Geometry
 			reverse = false;
 		}
 
-		localFaces = ShapeUtils.triangulateShape ( vertices, holes );
-
-		// Would it be better to move points after triangulation?
-		// shapePoints = shape.extractAllPointsWithBend( curveSegments, bendPath );
-		// 	vertices = shapePoints.shape;
-		// 	holes = shapePoints.holes;
-		////
-		///   Handle Vertices
-		////
+		List<List<Integer>> faces = new ArrayList<>();
+		ShapeUtils.triangulateShape ( vertices, holes, faces );
 
 		// vertices has all points but contour has only points of circumference
-		List<Vector2> contour = new ArrayList<Vector2>(vertices);
+		List<Vector2> contour = new ArrayList<>(vertices);
 
-		for ( int h = 0, hl = this.holes.size();  h < hl; h ++ )
-			vertices.addAll( this.holes.get( h ) );
+		for ( int h = 0, hl = holes.size();  h < hl; h ++ )
+			vertices.addAll( holes.get( h ) );
+
 		verticesCount = vertices.size();
+
 		//
 		// Find directions for point movement
 		//
-		List<Vector2> contourMovements = new ArrayList<Vector2>();
+		List<Vector2> contourMovements = new ArrayList<>();
 		for ( int i = 0, il = contour.size(), j = il - 1, k = i + 1; i < il; i ++, j ++, k ++ )
 		{
 			if ( j == il ) j = 0;
@@ -346,9 +344,9 @@ public class ExtrudeGeometry extends Geometry
 			}
 
 			// expand holes
-			for ( int h = 0, hl = this.holes.size(); h < hl; h ++ )
+			for ( int h = 0, hl = holes.size(); h < hl; h ++ )
 			{
-				List<Vector2> ahole = this.holes.get( h );
+				List<Vector2> ahole = holes.get( h );
 				List<Vector2> oneHoleMovements = holesMovements.get( h );
 
 				for ( int i = 0, il = ahole.size(); i < il; i++ )
@@ -371,10 +369,10 @@ public class ExtrudeGeometry extends Geometry
 		//
 
 		// Top and bottom faces
-		buildLidFaces();
+		buildLidFaces( faces );
 
 		// Sides faces
-		buildSideFaces(contour);
+		buildSideFaces(contour, holes);
 	}
 
 	private Vector2 getBevelVec( Vector2 pt_i, Vector2 pt_j, Vector2 pt_k )
@@ -469,9 +467,9 @@ public class ExtrudeGeometry extends Geometry
 		return intersection.sub( pt_i ).clone();
 	}
 
-	private void buildLidFaces()
+	private void buildLidFaces( List<List<Integer>> faces)
 	{
-		int flen = this.localFaces.size();
+		int flen = faces.size();
 		Log.debug( "ExtrudeGeometry.buildLidFaces() faces=" + flen);
 
 		if ( this.options.bevelEnabled )
@@ -483,7 +481,7 @@ public class ExtrudeGeometry extends Geometry
 
 			for ( int i = 0; i < flen; i ++ )
 			{
-				List<Integer> face = this.localFaces.get( i );
+				List<Integer> face = faces.get( i );
 				f3( face.get(2) + offset, face.get(1) + offset, face.get(0) + offset, true );
 			}
 
@@ -494,7 +492,7 @@ public class ExtrudeGeometry extends Geometry
 
 			for ( int i = 0; i < flen; i ++ )
 			{
-				List<Integer> face = this.localFaces.get( i );
+				List<Integer> face = faces.get( i );
 				f3( face.get(0) + offset, face.get(1) + offset, face.get(2) + offset, false );
 			}
 		}
@@ -504,7 +502,7 @@ public class ExtrudeGeometry extends Geometry
 
 			for ( int i = 0; i < flen; i++ )
 			{
-				List<Integer> face = localFaces.get( i );
+				List<Integer> face = faces.get( i );
 				f3( face.get(2), face.get(1), face.get(0), true );
 			}
 
@@ -512,7 +510,7 @@ public class ExtrudeGeometry extends Geometry
 
 			for ( int i = 0; i < flen; i ++ )
 			{
-				List<Integer> face = localFaces.get( i );
+				List<Integer> face = faces.get( i );
 				f3( face.get(0) + verticesCount * this.options.steps,
 						face.get(1) + verticesCount * this.options.steps,
 						face.get(2) + verticesCount * this.options.steps, false );
@@ -522,15 +520,15 @@ public class ExtrudeGeometry extends Geometry
 
 	// Create faces for the z-sides of the shape
 
-	private void buildSideFaces(List<Vector2> contour)
+	private void buildSideFaces(List<Vector2> contour, List<List<Vector2>> holes)
 	{
 		int layeroffset = 0;
 		sidewalls( contour, layeroffset );
 		layeroffset += contour.size();
 
-		for ( int h = 0, hl = this.holes.size();  h < hl; h ++ )
+		for ( int h = 0, hl = holes.size();  h < hl; h ++ )
 		{
-			List<Vector2> ahole = this.holes.get( h );
+			List<Vector2> ahole = holes.get( h );
 			sidewalls( ahole, layeroffset );
 
 			//, true
@@ -578,11 +576,9 @@ public class ExtrudeGeometry extends Geometry
 		c += this.shapesOffset;
 
 		// normal, color, material
-		getFaces().add( new Face3( a, b, c, this.options.material ) );
+		getFaces().add( new Face3( a, b, c ).setMaterialIndex( 0 ) );
 
-		List<Vector2> uvs = isBottom
-				? WorldUVGenerator.generateBottomUV( this, a, b, c)
-				: WorldUVGenerator.generateTopUV( this, a, b, c);
+		List<Vector2> uvs = options.UVGenerator.generateTopUV( this, a, b, c);
 
 		getFaceVertexUvs().get( 0 ).add(uvs);
 	}
@@ -596,77 +592,69 @@ public class ExtrudeGeometry extends Geometry
 
 		List<Color> colors = new ArrayList<Color>();
 		List<Vector3> normals = new ArrayList<Vector3>();
-		getFaces().add( new Face3( a, b, d, normals, colors, this.options.extrudeMaterial ) );
+		getFaces().add( new Face3( a, b, d, normals, colors, 1 ) );
 		List<Color> colors2 = new ArrayList<Color>();
 		List<Vector3> normals2 = new ArrayList<Vector3>();
-		getFaces().add( new Face3( b, c, d, normals2, colors2, this.options.extrudeMaterial ) );
+		getFaces().add( new Face3( b, c, d, normals2, colors2, 1 ) );
 
-		List<Vector2> uvs = WorldUVGenerator.generateSideWallUV(this, a, b, c, d);
+		List<Vector2> uvs = options.UVGenerator.generateSideWallUV(this, a, b, c, d);
 		getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( 0 ), uvs.get( 1 ), uvs.get( 3 ) ) );
 		getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( 1 ), uvs.get( 2 ), uvs.get( 3 ) ) );
 
 	}
 
-	public static class WorldUVGenerator
+	public interface UVGenerator
 	{
-		public static List<Vector2> generateTopUV( Geometry geometry, int indexA, int indexB, int indexC )
+		List<Vector2> generateTopUV( Geometry geometry, int indexA, int indexB, int indexC );
+		List<Vector2> generateSideWallUV( Geometry geometry, int indexA, int indexB, int indexC, int indexD);
+	}
+
+	public static class WorldUVGenerator implements UVGenerator
+	{
+		@Override
+		public List<Vector2> generateTopUV( Geometry geometry, int indexA, int indexB, int indexC )
 		{
-			double ax = geometry.getVertices().get( indexA ).getX();
-			double ay = geometry.getVertices().get( indexA ).getY();
+			List<Vector3> vertices = geometry.getVertices();
 
-			double bx = geometry.getVertices().get( indexB ).getX();
-			double by = geometry.getVertices().get( indexB ).getY();
-
-			double cx = geometry.getVertices().get( indexC ).getX();
-			double cy = geometry.getVertices().get( indexC ).getY();
+			Vector3 a = vertices.get(indexA);
+			Vector3 b = vertices.get(indexB);
+			Vector3 c = vertices.get(indexC);
 
 			return Arrays.asList(
-					new Vector2( ax, 1 - ay ),
-					new Vector2( bx, 1 - by ),
-					new Vector2( cx, 1 - cy )
+				new Vector2(a.getX(), a.getY()),
+				new Vector2(b.getX(), b.getY()),
+				new Vector2(c.getX(), c.getY())
 			);
 		}
 
-		public static List<Vector2> generateBottomUV( ExtrudeGeometry geometry, int indexA, int indexB, int indexC)
+		@Override
+		public List<Vector2> generateSideWallUV( Geometry geometry, int indexA, int indexB, int indexC, int indexD)
 		{
-			return generateTopUV( geometry, indexA, indexB, indexC );
-		}
+			List<Vector3> vertices = geometry.getVertices();
 
-		public static List<Vector2> generateSideWallUV( Geometry geometry, int indexA, int indexB, int indexC, int indexD)
-		{
-			double ax = geometry.getVertices().get( indexA ).getX();
-			double ay = geometry.getVertices().get( indexA ).getY();
-			double az = geometry.getVertices().get( indexA ).getZ();
+			Vector3 a = vertices.get(indexA);
+			Vector3 b = vertices.get(indexB);
+			Vector3 c = vertices.get(indexC);
+			Vector3 d = vertices.get(indexD);
 
-			double bx = geometry.getVertices().get( indexB ).getX();
-			double by = geometry.getVertices().get( indexB ).getY();
-			double bz = geometry.getVertices().get( indexB ).getZ();
+			if ( Math.abs( a.getY() - b.getY()) < 0.01 ) {
 
-			double cx = geometry.getVertices().get( indexC ).getX();
-			double cy = geometry.getVertices().get( indexC ).getY();
-			double cz = geometry.getVertices().get( indexC ).getZ();
-
-			double dx = geometry.getVertices().get( indexD ).getX();
-			double dy = geometry.getVertices().get( indexD ).getY();
-			double dz = geometry.getVertices().get( indexD ).getZ();
-
-			if ( Math.abs( ay - by ) < 0.01 )
-			{
 				return Arrays.asList(
-						new Vector2( ax, az ),
-						new Vector2( bx, bz ),
-						new Vector2( cx, cz ),
-						new Vector2( dx, dz )
+					new Vector2(a.getX(), 1 - a.getZ()),
+					new Vector2(b.getX(), 1 - b.getZ()),
+					new Vector2(c.getX(), 1 - c.getZ()),
+					new Vector2(d.getX(), 1 - d.getZ())
 				);
-			}
-			else
-			{
+
+			} else {
+
 				return Arrays.asList(
-						new Vector2( ay, az ),
-						new Vector2( by, bz ),
-						new Vector2( cy, cz ),
-						new Vector2( dy, dz )
+					new Vector2(a.getY(), 1 - a.getZ()),
+					new Vector2(b.getY(), 1 - b.getZ()),
+					new Vector2(c.getY(), 1 - c.getZ()),
+					new Vector2(d.getY(), 1 - d.getZ())
 				);
+
 			}
 		}
 	}

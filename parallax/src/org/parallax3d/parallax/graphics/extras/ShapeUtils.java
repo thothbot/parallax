@@ -160,16 +160,19 @@ public class ShapeUtils {
 		return result;
 	}
 
-	public static List<Vector2> triangulateShape(List<List<Vector2>> contour, List<List<Vector2>> holes )
+	public static List<Vector2> triangulateShape(List<Vector2> contour, List<List<Vector2>> holes )
+	{
+		List<List<Integer>> vertIndices = new ArrayList<>();
+		return triangulateShape(contour, holes, vertIndices);
+	}
+
+	public static List<Vector2> triangulateShape(List<Vector2> contour, List<List<Vector2>> holes, List<List<Integer>> vertIndices  )
 	{
 		FastMap<Integer> allPointsMap = new FastMap();
 
 		// To maintain reference to old shape, one must match coordinates, or offset the indices from original arrays. It's probably easier to do the first.
 
-		List<Vector2> allpoints = new ArrayList<>();
-		for(int i = 0, l = contour.size(); i < l; i++)
-			allpoints.addAll(contour.get(i));
-
+		List<Vector2> allpoints = new ArrayList<>(contour);
 		for(int i = 0, l = holes.size(); i < l; i++)
 			allpoints.addAll(holes.get(i));
 
@@ -192,31 +195,7 @@ public class ShapeUtils {
 		// remove holes by cutting paths to holes and adding them to the shape
 		List<Vector2> shapeWithoutHoles = removeHoles( contour, holes );
 
-		List<List<Integer>> vertIndices = new ArrayList<>();
 		List<List<Vector2>> triangles = ShapeUtils.triangulate( shapeWithoutHoles, vertIndices ); // True returns indices for points of spooled shape
-		//console.log( "triangles",triangles, triangles.length );
-
-		// check all face vertices against all points map
-
-//		for ( int i = 0, il = triangles.size(); i < il; i ++ ) {
-//
-//			List<Vector2> face = triangles.get(i);
-//
-//			for ( int f = 0; f < 3; f ++ ) {
-//
-//				key = face.get(f).getX() + ":" + face.get(f).getY();
-//
-//				if ( allPointsMap.containsKey(key) ) {
-//
-//					Integer index = allPointsMap.get( key );
-//
-//					face.set(f, index);
-//
-//				}
-//
-//			}
-//
-//		}
 
 		List<Vector2> retval = new ArrayList<>();
 		for(int i = 0, l = triangles.size(); i < l; i++)
@@ -225,11 +204,9 @@ public class ShapeUtils {
 		return retval;
 	}
 
-	private static List<Vector2> removeHoles( List<List<Vector2>> contour, List<List<Vector2>> holes )
+	private static List<Vector2> removeHoles( List<Vector2> contour, List<List<Vector2>> holes )
 	{
-		List<Vector2> shape = new ArrayList<>();
-		for(int i = 0, l = contour.size(); i < l; i++)
-			shape.addAll(contour.get(i));
+		List<Vector2> shape = new ArrayList<>(contour);
 
 		List<Integer> indepHoles = new ArrayList<>();
 

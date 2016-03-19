@@ -182,8 +182,9 @@ public class Face3 {
 	/**
 	 * Sets Vertex A index.
 	 */
-	public void setA(int a) {
+	public Face3 setA(int a) {
 		this.a = a;
+		return this;
 	}
 
 	/**
@@ -196,8 +197,9 @@ public class Face3 {
 	/**
 	 * Sets Vertex B index.
 	 */
-	public void setB(int b) {
+	public Face3 setB(int b) {
 		this.b = b;
+		return this;
 	}
 
 	/**
@@ -210,8 +212,9 @@ public class Face3 {
 	/**
 	 * Sets Vertex C index
 	 */
-	public void setC(int c) {
+	public Face3 setC(int c) {
 		this.c = c;
+		return this;
 	}
 
 	/**
@@ -232,8 +235,9 @@ public class Face3 {
 	/**
 	 * Sets the Face normal.
 	 */
-	public void setNormal(Vector3 normal) {
+	public Face3 setNormal(Vector3 normal) {
 		this.normal = normal;
+		return this;
 	}
 
 	/**
@@ -246,8 +250,9 @@ public class Face3 {
 	/**
 	 * Sets List of 3 vertex normals.
 	 */
-	public void setVertexNormals(List<Vector3> vertexNormals) {
+	public Face3 setVertexNormals(List<Vector3> vertexNormals) {
 		this.vertexNormals = vertexNormals;
+		return this;
 	}
 
 	/**
@@ -260,8 +265,9 @@ public class Face3 {
 	/**
 	 * Sets the Face color.
 	 */
-	public void setColor(Color color) {
+	public Face3 setColor(Color color) {
 		this.color = color;
+		return this;
 	}
 
 	/**
@@ -274,8 +280,9 @@ public class Face3 {
 	/**
 	 * Sets List of 3 vertex colors.
 	 */
-	public void setVertexColors(List<Color> vertexColors) {
+	public Face3 setVertexColors(List<Color> vertexColors) {
 		this.vertexColors = vertexColors;
+		return this;
 	}
 
 	/**
@@ -288,8 +295,9 @@ public class Face3 {
 	/**
 	 * Sets List of 3 vertex tangets.
 	 */
-	public void setVertexTangents(List<Vector4> vertexTangents) {
+	public Face3 setVertexTangents(List<Vector4> vertexTangents) {
 		this.vertexTangents = vertexTangents;
+		return this;
 	}
 
 	/**
@@ -327,8 +335,9 @@ public class Face3 {
 	/**
 	 * Sets Material index.
 	 */
-	public void setMaterialIndex(int index) {
+	public Face3 setMaterialIndex(int index) {
 		this.materialIndex = index;
+		return this;
 	}
 
 	public Face3 clone() {
