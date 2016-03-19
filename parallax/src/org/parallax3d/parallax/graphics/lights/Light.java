@@ -18,14 +18,9 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
-
-import org.parallax3d.parallax.graphics.renderers.RendererLights;
 import org.parallax3d.parallax.graphics.core.Object3D;
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * Abstract base class for lights.
@@ -36,18 +31,23 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 @ThreejsObject("THREE.Light")
 public abstract class Light extends Object3D
 {
-	public interface UniformLight
-	{
-		void reset();
-		void refreshUniform(FastMap<Uniform> uniforms);
-	}
+	Color color;
+	double intensity;
 
-	private Color color;
+	public Light()
+	{
+		this(0xffffff, 1.);
+	}
 
 	public Light(int hex)
 	{
-		super();
+		this(hex, 1.);
+	}
+
+	public Light(int hex, double intensity)
+	{
 		this.color = new Color(hex);
+		this.intensity = intensity;
 	}
 
 	public Light setColor(Color color) {
@@ -59,28 +59,22 @@ public abstract class Light extends Object3D
 		return color;
 	}
 
-	public Light clone( Light light ) {
-
-		super.clone(light);
-
-		light.color.copy( this.color );
-
-		return light;
+	public double getIntensity() {
+		return intensity;
 	}
 
-	public abstract void setupRendererLights(RendererLights zlights, boolean isGammaInput);
-
-	protected void setColorGamma( Float32Array array, int offset, Color color, double intensity )
-	{
-		array.set(offset, color.getR() * color.getR() * intensity * intensity);
-		array.set(offset + 1, color.getG() * color.getG() * intensity * intensity);
-		array.set(offset + 2, color.getB() * color.getB() * intensity * intensity);
+	public Light setIntensity(double intensity) {
+		this.intensity = intensity;
+		return this;
 	}
 
-	protected void setColorLinear( Float32Array array, int offset, Color color, double intensity )
-	{
-		array.set(offset, color.getR() * intensity);
-		array.set(offset + 1, color.getG() * intensity);
-		array.set(offset + 2, color.getB() * intensity);
+	public Light copy(Light source) {
+
+		this.color.copy( source.color );
+		this.intensity = source.intensity;
+
+		return this;
 	}
+
+	public abstract Light clone();
 }

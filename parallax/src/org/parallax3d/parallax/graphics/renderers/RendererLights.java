@@ -27,7 +27,6 @@ import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.lights.SpotLight;
 import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.lights.PointLight;
-import org.parallax3d.parallax.graphics.lights.ShadowLight;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.system.FastMap;
 

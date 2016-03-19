@@ -39,8 +39,6 @@ import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.lights.Light;
-import org.parallax3d.parallax.graphics.lights.ShadowLight;
-import org.parallax3d.parallax.graphics.lights.VirtualLight;
 import org.parallax3d.parallax.graphics.materials.HasSkinning;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Color;

@@ -18,131 +18,120 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
-import org.parallax3d.parallax.graphics.renderers.RendererLights;
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
-import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
- * 
+ * <p/>
  * <pre>
  * {@code
- * PointLight light = new PointLight( 0xff0000, 1, 100 ); 
- * light.getPosition().set( 50, 50, 50 ); 
+ * PointLight light = new PointLight( 0xff0000, 1, 100 );
+ * light.getPosition().set( 50, 50, 50 );
  * getScene().add( light );
  * }
  * </pre>
- * 
- * @author thothbot
  *
+ * @author thothbot
  */
 @ThreejsObject("THREE.PointLight")
-public class PointLight extends Light implements HasIntensity
-{
-	public static class UniformPoint implements Light.UniformLight
-	{
-		public Float32Array distances;
-		public Float32Array colors;
-		public Float32Array positions;
+public class PointLight extends Light implements HasShadow {
+    double distance;
+    int decay;
 
-		@Override
-		public void reset()
-		{
-			this.distances = Float32Array.createArray(); // 1N
-			this.colors    = Float32Array.createArray(); // 3N
-			this.positions = Float32Array.createArray(); // 3N
+    LightShadow shadow;
 
-		}
+    public PointLight(int hex) {
+        this(hex, 1.0);
+    }
 
-		@Override
-		public void refreshUniform(FastMap<Uniform> uniforms)
-		{
-			uniforms.get("pointLightColor").setValue( colors );
-			uniforms.get("pointLightPosition").setValue( positions );
-			uniforms.get("pointLightDistance").setValue( distances );
+    public PointLight(int hex, double intensity) {
+        this(hex, intensity, 0.0, 1);
+    }
 
-		}
-	}
+    /**
+     * @param hex
+     * @param intensity
+     * @param distance
+     * @param decay     for physically correct lights, should be 2.
+     */
+    public PointLight(int hex, double intensity, double distance, int decay) {
+        super(hex, intensity);
+        this.intensity = intensity;
+        this.distance = distance;
+        this.decay = decay;
 
-	private double intensity;
-	private double distance;
+        this.shadow = new LightShadow(new PerspectiveCamera(90, 1, 0.5, 500));
+    }
 
-	public PointLight(int hex)
-	{
-		this(hex, 1.0, 0.0);
-	}
+    public PointLight setDistance(double distance) {
+        this.distance = distance;
+        return this;
+    }
 
-	public PointLight(int hex, double intensity)
-	{
-		this(hex, intensity, 0.0);
-	}
+    public double getDistance() {
+        return distance;
+    }
 
-	public PointLight(int hex, double intensity, double distance )
-	{
-		super(hex);
-		this.intensity = intensity;
-		this.distance = distance;
-	}
+    public int getDecay() {
+        return decay;
+    }
 
-	public double getIntensity() {
-		return this.intensity;
-	}
+    public void setDecay(int decay) {
+        this.decay = decay;
+    }
 
-	public PointLight setIntensity(double intensity) {
-		this.intensity = intensity;
-		return this;
-	}
+    @Override
+    public LightShadow getShadow() {
+        return shadow;
+    }
 
-	public PointLight setDistance(double distance) {
-		this.distance = distance;
-		return this;
-	}
+    @Override
+    public void setShadow(LightShadow shadow) {
+        this.shadow = shadow;
+    }
 
-	public double getDistance() {
-		return distance;
-	}
+    /**
+     * intensity = power per solid angle.
+     * ref: equation (17) from http://www.frostbite.com/wp-content/uploads/2014/11/course_notes_moving_frostbite_to_pbr.pdf
+     *
+     * @return
+     */
+    public double getPower() {
 
-	public PointLight clone() {
+        return this.intensity * Math.PI;
 
-		PointLight light = new PointLight(0x000000);
+    }
 
-		super.clone(light);
+    /**
+     * intensity = power per solid angle.
+     * ref: equation (17) from http://www.frostbite.com/wp-content/uploads/2014/11/course_notes_moving_frostbite_to_pbr.pdf
+     *
+     * @return
+     */
+    public PointLight setPower(double power) {
+        this.intensity = power / Math.PI;
 
-		light.intensity = this.intensity;
-		light.distance = this.distance;
+        return this;
+    }
 
-		return light;
+    public PointLight copy(PointLight source) {
 
-	}
+        super.copy(source);
 
-	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput)
-	{
-		Float32Array pointColors     = zlights.point.colors;
-		Float32Array pointPositions  = zlights.point.positions;
-		Float32Array pointDistances  = zlights.point.distances;
+        this.distance = source.distance;
+        this.decay = source.decay;
 
-		double intensity = getIntensity();
-		double distance = getDistance();
-		int pointOffset = pointColors.getLength();
+        this.shadow = source.shadow.clone();
 
-		if ( isGammaInput )
-			setColorGamma( pointColors, pointOffset, getColor(), intensity );
-		else
-			setColorLinear( pointColors, pointOffset, getColor(), intensity );
+        return this;
 
-		Vector3 position = new Vector3();
-		position.setFromMatrixPosition( getMatrixWorld() );
+    }
 
-		pointPositions.set(pointOffset, position.getX());
-		pointPositions.set(pointOffset + 1, position.getY());
-		pointPositions.set(pointOffset + 2, position.getZ());
-
-		pointDistances.set(pointOffset / 3, distance);
-	}
+    @Override
+    public PointLight clone() {
+        return new PointLight(0x000000).copy(this);
+    }
 }

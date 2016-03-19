@@ -28,7 +28,6 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.lights.HasRaytracingPhysicalAttenuation;
-import org.parallax3d.parallax.graphics.lights.HasIntensity;
 import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.materials.*;
 import org.parallax3d.parallax.graphics.scenes.Scene;

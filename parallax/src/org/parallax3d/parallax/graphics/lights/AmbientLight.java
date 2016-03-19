@@ -18,12 +18,7 @@
 
 package org.parallax3d.parallax.graphics.lights;
 
-import org.parallax3d.parallax.graphics.renderers.RendererLights;
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
  * This light's color gets applied to all the objects in the scene globally.
@@ -41,70 +36,21 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 @ThreejsObject("THREE.AmbientLight")
 public final class AmbientLight extends Light
 {
-	public static class UniformAmbient implements Light.UniformLight
-	{
-		public Float32Array colors;
+	public AmbientLight() {
 
-		@Override
-		public void reset()
-		{
-			this.colors = (Float32Array) Float32Array.createArray();
-			for(int i = 0; i < 3; i++)
-				this.colors.set(i, 0.0);
-
-		}
-
-		@Override
-		public void refreshUniform(FastMap<Uniform> uniforms)
-		{
-			uniforms.get("ambientLightColor").setValue( colors );
-		}
 	}
 
 	public AmbientLight(int hex) {
 		super(hex);
 	}
 
+	public AmbientLight(int hex, double intensity) {
+		super(hex, intensity);
+	}
+
 	public AmbientLight clone() {
 
-		AmbientLight light = new AmbientLight(0x000000);
-
-		super.clone(light);
-
-		return light;
+		return (AmbientLight) new AmbientLight().copy(this);
 
 	}
-
-	@Override
-	public void setupRendererLights(RendererLights zlights, boolean isGammaInput)
-	{
-		Float32Array colors = zlights.ambient.colors;
-
-		Color color = getColor();
-		double r = 0, g = 0, b = 0;
-		if(colors.getLength() == 3)
-		{
-			r = colors.get(0);
-			g = colors.get(1);
-			b = colors.get(2);
-		}
-
-		if ( isGammaInput )
-		{
-			r += color.getR() * color.getR();
-			g += color.getG() * color.getG();
-			b += color.getB() * color.getB();
-		}
-		else
-		{
-			r += color.getR();
-			g += color.getG();
-			b += color.getB();
-		}
-
-		colors.set(0, r);
-		colors.set(1, g);
-		colors.set(2, b);
-	}
-
 }
