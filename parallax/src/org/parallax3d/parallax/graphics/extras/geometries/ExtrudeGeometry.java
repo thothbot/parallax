@@ -88,7 +88,7 @@ public class ExtrudeGeometry extends Geometry
 		/**
 		 * object that provides UV generator functions
 		 */
-		public UVGenerator UVGenerator = new WorldUVGenerator();
+		public UVGenerator uvGenerator = new WorldUVGenerator();
 	}
 
 
@@ -578,7 +578,7 @@ public class ExtrudeGeometry extends Geometry
 		// normal, color, material
 		getFaces().add( new Face3( a, b, c ).setMaterialIndex( 0 ) );
 
-		List<Vector2> uvs = options.UVGenerator.generateTopUV( this, a, b, c);
+		List<Vector2> uvs = options.uvGenerator.generateTopUV( this, a, b, c);
 
 		getFaceVertexUvs().get( 0 ).add(uvs);
 	}
@@ -597,7 +597,7 @@ public class ExtrudeGeometry extends Geometry
 		List<Vector3> normals2 = new ArrayList<Vector3>();
 		getFaces().add( new Face3( b, c, d, normals2, colors2, 1 ) );
 
-		List<Vector2> uvs = options.UVGenerator.generateSideWallUV(this, a, b, c, d);
+		List<Vector2> uvs = options.uvGenerator.generateSideWallUV(this, a, b, c, d);
 		getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( 0 ), uvs.get( 1 ), uvs.get( 3 ) ) );
 		getFaceVertexUvs().get( 0 ).add( Arrays.asList( uvs.get( 1 ), uvs.get( 2 ), uvs.get( 3 ) ) );
 

@@ -39,12 +39,18 @@ import java.util.List;
  */
 @ThreejsObject("THREE.ShapeGeometry")
 public class ShapeGeometry extends Geometry {
+
     public static class ShapeGeometryParameters
     {
         // number of points on the curves
         public int	curveSegments	= 12;
         // material index for front and back faces
         public int	material;
+
+        /**
+         * object that provides UV generator functions
+         */
+        public ExtrudeGeometry.UVGenerator uvGenerator = new ExtrudeGeometry.WorldUVGenerator();
     }
 
     public ShapeGeometry ( final ShapeGeometryParameters p_option )
@@ -57,11 +63,11 @@ public class ShapeGeometry extends Geometry {
         this( Arrays.asList(shape), p_option );
     }
 
-    public ShapeGeometry ( final List< Shape > p_arrShape, final ShapeGeometryParameters p_option )
+    public ShapeGeometry ( final List< Shape > shapes, final ShapeGeometryParameters options )
     {
         super();
 
-        this.addShapeList( p_arrShape, p_option );
+        this.addShapeList( shapes, options );
 
         this.computeFaceNormals();
     }
@@ -84,21 +90,22 @@ public class ShapeGeometry extends Geometry {
     {
         final int curveSegments = options.curveSegments;
         final int material = options.material;
-        final int shapesOffset = this.getVertices().size();
-        final List<Vector2> arrVertice = shape.getTransformedPoints();
-        final List< List< Vector2 > > arrHole = shape.getPointsHoles();
+        final ExtrudeGeometry.UVGenerator uvgen = options.uvGenerator;
 
-        boolean reverse;
+        final int shapesOffset = this.getVertices().size();
+        final List<Vector2> vertices = shape.getPoints( curveSegments );
+        final List< List< Vector2 > > holes = shape.getPointsHoles( curveSegments );
+
         // ------------ DECLARE ------------//
 
-        reverse = ShapeUtils.isClockWise(arrVertice);
+        boolean reverse = ! ShapeUtils.isClockWise( vertices );
 
         if ( reverse )
         {
-            Collections.reverse(arrVertice);
+            Collections.reverse(vertices);
 
             // Maybe we should also check if holes are in the opposite direction, just to be safe ...
-            for ( final List< Vector2 > hole : arrHole )
+            for ( final List< Vector2 > hole : holes )
             {
                 if ( ShapeUtils.isClockWise( hole ) )
                 {
@@ -106,25 +113,23 @@ public class ShapeGeometry extends Geometry {
                 }
             }
 
-            // If vertices are in order now, we shouldn't need to worry about them again (hopefully)!
-            reverse = false;
-
         }
 
-        final List< List< Integer > > arrFace = ShapeUtils.triangulateShape( arrVertice, arrHole );
+        final List< List< Integer > > faces = new ArrayList<>();
+        ShapeUtils.triangulateShape( vertices, holes, faces );
 
         // Vertices
-        for ( final List< Vector2 > hole : arrHole )
+        for ( final List< Vector2 > hole : holes )
         {
-            arrVertice.addAll( hole );
+            vertices.addAll( hole );
         }
 
-        for ( final Vector2 vert : arrVertice )
+        for ( final Vector2 vert : vertices )
         {
             this.getVertices().add( new Vector3( vert.getX(), vert.getY(), 0.d ) );
         }
 
-        for ( final List< Integer > face : arrFace )
+        for ( final List< Integer > face : faces )
         {
 
             final int a = face.get( 0 ) + shapesOffset;
@@ -132,7 +137,7 @@ public class ShapeGeometry extends Geometry {
             final int c = face.get( 2 ) + shapesOffset;
 
             this.getFaces().add( new Face3( a, b, c, material ) );
-            this.getFaceVertexUvs().get( 0 ).add( ExtrudeGeometry.WorldUVGenerator.generateTopUV(this, a, b, c) );
+            this.getFaceVertexUvs().get( 0 ).add( uvgen.generateTopUV(this, a, b, c) );
         }
     }
 }
