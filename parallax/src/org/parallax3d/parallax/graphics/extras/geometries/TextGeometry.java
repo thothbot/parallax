@@ -16,9 +16,10 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.extras.core;
+package org.parallax3d.parallax.graphics.extras.geometries;
 
-import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
+import org.parallax3d.parallax.graphics.extras.core.FontData;
+import org.parallax3d.parallax.graphics.extras.core.Path;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.TextGeometry")

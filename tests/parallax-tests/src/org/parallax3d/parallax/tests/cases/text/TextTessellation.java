@@ -25,7 +25,7 @@ import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
 import org.parallax3d.parallax.graphics.extras.core.FontData;
-import org.parallax3d.parallax.graphics.extras.core.TextGeometry;
+import org.parallax3d.parallax.graphics.extras.geometries.TextGeometry;
 import org.parallax3d.parallax.graphics.extras.modifiers.TessellateModifier;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
