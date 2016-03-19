@@ -18,29 +18,33 @@
 
 package org.parallax3d.parallax.graphics.extras.core;
 
-import java.util.*;
-
-import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.graphics.extras.ShapeUtils;
 import org.parallax3d.parallax.graphics.extras.curves.*;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.extras.ShapeUtils;
 import org.parallax3d.parallax.system.ThreejsObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author zz85 / http://www.lab4games.net/zz85/blog
+ * Creates free form 2d path using series of points, lines or curves.
+ *
+ **/
 @ThreejsObject("THREE.Path")
 public class Path extends CurvePath {
-	public static enum PATH_ACTIONS {
+	public enum PATH_ACTIONS {
 		MOVE_TO,
 		LINE_TO,
 		QUADRATIC_CURVE_TO, // Bezier quadratic curve
 		BEZIER_CURVE_TO,    // Bezier cubic curve
-		CSPLINE_THRU,        // Catmull-rom spline
+        SPLINE_THRU,        // Catmull-rom spline
 		ARC,                // Circle
 		ELLIPSE
-	}
-
-	;
+	};
 
 	public class Action {
 		public PATH_ACTIONS action;
@@ -77,10 +81,12 @@ public class Path extends CurvePath {
 		this.actions = actions;
 	}
 
-	// Create path using straight lines to connect all points
-	// - vectors: array of Vector2
-
-	public void fromPoints(List<Vector2> vectors) {
+    /**
+     * Create path using straight lines to connect all points
+     * @param vectors   array of Vector2
+     */
+	public void fromPoints(List<Vector2> vectors)
+    {
 		moveTo(vectors.get(0).getX(), vectors.get(0).getY());
 
 		for (int v = 1, vlen = vectors.size(); v < vlen; v++)
@@ -152,7 +158,7 @@ public class Path extends CurvePath {
 		SplineCurve curve = new SplineCurve(npts);
 		add(curve);
 
-		this.actions.add(new Action(PATH_ACTIONS.CSPLINE_THRU, pts));
+		this.actions.add(new Action(PATH_ACTIONS.SPLINE_THRU, pts));
 	}
 
 	/*
@@ -207,8 +213,9 @@ public class Path extends CurvePath {
 		for (int i = 0; i < divisions; i++)
 			points.add(this.getPoint(i / (double) divisions));
 
-//		if ( closedPath )
-//			points.add( points.get(0) );
+        if(autoClose)
+            points.add(points.get(0));
+
 
 		return points;
 	}
@@ -216,13 +223,11 @@ public class Path extends CurvePath {
 	/*
 	 * @return an List of {@link Vector2} based on contour of the path
 	 */
-	public List<Vector2> getPoints(boolean closedPath) {
-		return getPoints(12, closedPath);
+	public List<Vector2> getPoints() {
+		return getPoints(12);
 	}
 
-	public List<Vector2> getPoints(int divisions, boolean closedPath) {
-		if (this.useSpacedPoints)
-			return this.getSpacedPoints(divisions, closedPath);
+	public List<Vector2> getPoints(int divisions) {
 
 		List<Vector2> points = new ArrayList<Vector2>();
 
@@ -312,7 +317,7 @@ public class Path extends CurvePath {
 
 					break;
 
-				case CSPLINE_THRU:
+				case SPLINE_THRU:
 
 					List<Object> laste = this.actions.get(i - 1).args;
 
@@ -328,7 +333,7 @@ public class Path extends CurvePath {
 					SplineCurve spline = new SplineCurve(spts);
 
 					for (int j = 1; j <= n; j++)
-						points.add((Vector2) spline.getPointAt(j / n));
+						points.add(spline.getPointAt(j / n));
 
 					break;
 
@@ -348,7 +353,7 @@ public class Path extends CurvePath {
 						double t = j / (double) tdivisions;
 
 						if (!aClockwise) {
-							t = 1.0 - t;
+							t = 1. - t;
 						}
 
 						double angle = aStartAngle + t * deltaAngle;
@@ -366,28 +371,47 @@ public class Path extends CurvePath {
 
 				case ELLIPSE:
 
-					double aXE = (Double) args.get(0);
-					double aYE = (Double) args.get(1);
-					double xRadiusE = (Double) args.get(2);
-					double yRadiusE = (Double) args.get(3);
-					double aStartAngleE = (Double) args.get(4);
-					double aEndAngleE = (Double) args.get(5);
-					boolean aClockwiseE = !!(Boolean) args.get(6);
+					double EaX = (Double) args.get(0);
+					double EaY = (Double) args.get(1);
+					double xRadius = (Double) args.get(2);
+					double yRadius = (Double) args.get(3);
+					double EaStartAngle = (Double) args.get(4);
+					double EaEndAngle = (Double) args.get(5);
+					boolean EaClockwise = !!(Boolean) args.get(6);
+                    double aRotation = (Double) args.get(7);
 
-					double deltaAngleE = aEndAngleE - aStartAngleE;
-					double tdivisionsE = divisions * 2;
+					double EdeltaAngle = EaEndAngle - EaStartAngle;
+					double Etdivisions = divisions * 2;
 
-					for (int j = 1; j <= tdivisionsE; j++) {
-						double t = j / (double) tdivisionsE;
+                    double cos = 0, sin = 0;
+                    if ( aRotation != 0 ) {
 
-						if (!aClockwiseE) {
-							t = 1 - t;
+                        cos = Math.cos( aRotation );
+                        sin = Math.sin( aRotation );
+
+                    }
+
+					for (int j = 1; j <= Etdivisions; j++) {
+						double t = j / Etdivisions;
+
+						if (!EaClockwise) {
+							t = 1. - t;
 						}
 
-						double angle = aStartAngleE + t * deltaAngleE;
+						double angle = EaStartAngle + t * EdeltaAngle;;
 
-						double tx = aXE + xRadiusE * Math.cos(angle);
-						double ty = aYE + yRadiusE * Math.sin(angle);
+						double tx = EaX + xRadius * Math.cos( angle );
+						double ty = EaY + yRadius * Math.sin( angle );
+
+                        if ( aRotation != 0 ) {
+
+                            double x = tx, y = ty;
+
+                            // Rotate the point about the center of the ellipse.
+                            tx = ( x - EaX ) * cos - ( y - EaY ) * sin + EaX;
+                            ty = ( x - EaX ) * sin + ( y - EaY ) * cos + EaY;
+
+                        }
 
 						points.add(new Vector2(tx, ty));
 
@@ -403,12 +427,11 @@ public class Path extends CurvePath {
 
 		// Normalize to remove the closing point by default.
 		Vector2 lastPoint = (Vector2) points.get(points.size() - 1);
-		double EPSILON = 0.0000000001;
-		if (Math.abs(lastPoint.getX() - ((Vector2) points.get(0)).getX()) < EPSILON &&
-				Math.abs(lastPoint.getY() - ((Vector2) points.get(0)).getY()) < EPSILON)
+		if (Math.abs(lastPoint.getX() - ((Vector2) points.get(0)).getX()) < Mathematics.EPSILON &&
+				Math.abs(lastPoint.getY() - ((Vector2) points.get(0)).getY()) < Mathematics.EPSILON)
 			points.remove(points.size() - 1);
 
-		if (closedPath)
+		if (this.autoClose)
 			points.add(points.get(0));
 
 		return points;
@@ -419,22 +442,22 @@ public class Path extends CurvePath {
 		return toShapes(false, false);
 	}
 
-	/**
-	 * Breaks path into shapes
-	 * Assumptions (if parameter isCCW==true the opposite holds):
-	 * - solid shapes are defined clockwise (CW)
-	 * - holes are defined counterclockwise (CCW)
-	 *
-	 * If parameter noHoles==true:
-	 * - all subPaths are regarded as solid shapes
-	 * - definition order CW/CCW has no relevance
-	*/
+    /**
+     * Breaks path into shapes
+     * Assumptions (if parameter isCCW==true the opposite holds):
+     * - solid shapes are defined clockwise (CW)
+     * - holes are defined counterclockwise (CCW)
+     *
+     * @param isCCW
+     * @param noHoles   If parameter noHoles==true:
+     *                  - all subPaths are regarded as solid shapes
+     *                  - definition order CW/CCW has no relevance
+     * @return
+     */
 	public List<Shape> toShapes(boolean isCCW, boolean noHoles)
 	{
-
-		List<Shape> shapes = new ArrayList<>();
-
-		List<Path> subPaths = extractSubpaths(this.actions);
+        List<Shape> shapes = new ArrayList<>();
+        List<Path> subPaths = extractSubpaths(this.actions);
 
 		if(subPaths.size() ==0 )
 			return shapes;
@@ -715,80 +738,5 @@ public class Path extends CurvePath {
 
 		return	inside;
 
-	}
-
-	public List<Vector2> getTransformedSpacedPoints( boolean closedPath )
-	{
-		return getTransformedSpacedPoints(closedPath, getBends());
-	}
-
-	public List<Vector2>  getTransformedSpacedPoints( boolean closedPath, List<CurvePath> bends )
-	{
-		List<Vector2> oldPts = (List<Vector2>)(List<?>)this.getSpacedPoints( closedPath );
-
-		for ( int i = 0; i < bends.size(); i ++ )
-			oldPts = getWrapPoints( oldPts, bends.get( i ) );
-
-		return oldPts;
-	}
-
-	/*
-	 * Generate geometry from path points (for Line or ParticleSystem objects)
-	 */
-	public Geometry createPointsGeometry()
-	{
-		return createGeometry( getPoints(true) );
-	}
-
-	public Geometry createPointsGeometry( int divisions )
-	{
-		return createGeometry( getPoints( divisions, true ) );
-	}
-
-	/*
-	 * Generate geometry from equidistance sampling along the path
-	 */
-	public Geometry createSpacedPointsGeometry()
-	{
-		return createGeometry( getSpacedPoints(true) );
-	}
-
-	public Geometry createSpacedPointsGeometry( int divisions )
-	{
-		return createGeometry( getSpacedPoints( divisions, true ) );
-	}
-
-	private Geometry createGeometry(List<Vector2> points)
-	{
-		Geometry geometry = new Geometry();
-
-		for ( int i = 0; i < points.size(); i ++ )
-		{
-			geometry.getVertices().add( new Vector3(
-					((Vector2)points.get( i )).getX(),
-					((Vector2)points.get( i )).getY(), 0 ) );
-		}
-
-		return geometry;
-	}
-
-	public List<Vector2> getTransformedPoints()
-	{
-		return getTransformedPoints(false, getBends());
-	}
-
-	public List<Vector2> getTransformedPoints( boolean closedPath )
-	{
-		return getTransformedPoints(closedPath, getBends());
-	}
-
-	public List<Vector2> getTransformedPoints( boolean closedPath, List<CurvePath> bends )
-	{
-		List<Vector2> oldPts = (List<Vector2>)(List<?>)this.getPoints( closedPath ); // getPoints getSpacedPoints
-
-		for ( int i = 0; i < bends.size(); i ++ )
-			oldPts = this.getWrapPoints( oldPts, bends.get( i ) );
-
-		return oldPts;
 	}
 }

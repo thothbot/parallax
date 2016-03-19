@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.graphics.extras.curves;
 
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.LineCurve3")
 public class LineCurve3 extends Curve
@@ -38,12 +38,7 @@ public class LineCurve3 extends Curve
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		Vector3 point = this.v2.clone();
-		point.sub(this.v1);
-		point.multiply(t);
-		point.add(this.v1);
-
-		return point;
+		return this.v2.clone().sub(this.v1).multiply(t).add(this.v1);
 	}
 
 }

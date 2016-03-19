@@ -19,48 +19,13 @@
 package org.parallax3d.parallax.graphics.extras.curves;
 
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.extras.core.Curve;
-import org.parallax3d.parallax.math.Vector2;
 
 @ThreejsObject("THREE.ArcCurve")
-public class ArcCurve extends Curve
+public class ArcCurve extends EllipseCurve
 {
-
-	public double aX;
-	public double aY;
-
-	public double aRadius;
-
-	public double aStartAngle;
-	public double aEndAngle;
-
-	public boolean aClockwise;
-
 	public ArcCurve(double aX, double aY, double aRadius, double aStartAngle, double aEndAngle,
 					boolean aClockwise)
 	{
-		this.aX = aX;
-		this.aY = aY;
-		this.aRadius = aRadius;
-		this.aStartAngle = aStartAngle;
-		this.aEndAngle = aEndAngle;
-		this.aClockwise = aClockwise;
+		super(aX, aY, aRadius, aRadius, aStartAngle, aEndAngle, aClockwise);
 	}
-
-	@Override
-	public Vector2 getPoint(double t)
-	{
-		double deltaAngle = this.aEndAngle - this.aStartAngle;
-
-		if ( !this.aClockwise )
-			t = 1 - t;
-
-		double angle = this.aStartAngle + t * deltaAngle;
-
-		double tx = this.aX + this.aRadius * Math.cos( angle );
-		double ty = this.aY + this.aRadius * Math.sin( angle );
-
-		return new Vector2( tx, ty );
-	}
-
 }

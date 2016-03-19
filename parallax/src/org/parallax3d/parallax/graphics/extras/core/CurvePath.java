@@ -18,14 +18,14 @@
 
 package org.parallax3d.parallax.graphics.extras.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.curves.LineCurve;
-import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.ThreejsObject;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  *	Curved Path - a curve path is simply a array of connected
@@ -35,23 +35,14 @@ import org.parallax3d.parallax.system.ThreejsObject;
 public class CurvePath extends Curve
 {
 
-	private List<Curve> curves;
-	private List<CurvePath> bends;
+	List<Curve> curves = new ArrayList<>();
 
-	private List<Double> cacheLengths;
+	List<Double> cacheLengths;
 
 	// Automatically closes the path
-	public boolean autoClose = false;
+	boolean autoClose = false;
 
-	public CurvePath()
-	{
-		this.curves = new ArrayList<>();
-		this.bends = new ArrayList<>();
-	}
-
-	public List<CurvePath> getBends()
-	{
-		return this.bends;
+	public CurvePath() {
 	}
 
 	public List<Curve> getCurves()
@@ -68,28 +59,19 @@ public class CurvePath extends Curve
 		this.curves.add( curve );
 	}
 
-	/*
-	 * TODO:
-	 * If the ending of curve is not connected to the starting
-	 * or the next curve, then, this is not a real path
-	 */
-	public void checkConnection()
-	{
-	}
-
 	public void closePath()
 	{
 		// TODO Test
 		// and verify for vector3 (needs to implement equals)
 		// Add a line curve if start and end of lines are not connected
-		Vector2 startPoint = (Vector2) getCurves().get(0).getPoint(0);
-		Vector2 endPoint = (Vector2) getCurves().get(this.curves.size() - 1 ).getPoint(1);
+		Vector2 startPoint = getCurves().get(0).getPoint(0);
+		Vector2 endPoint = getCurves().get(this.curves.size() - 1 ).getPoint( 1 );
 
 		if (!startPoint.equals(endPoint))
 			this.curves.add( new LineCurve(endPoint, startPoint) );
 	}
 
-	/*
+	/**
 	 * To get accurate point with reference to
 	 * entire path distance at time t,
 	 * To get accurate point with reference to
@@ -117,7 +99,7 @@ public class CurvePath extends Curve
 
 				double u = 1.0 - diff / curve.getLength();
 
-				return (Vector2) curve.getPointAt( u );
+				return curve.getPointAt( u );
 			}
 
 			i ++;
@@ -128,8 +110,8 @@ public class CurvePath extends Curve
 		// loop where sum != 0, sum > d , sum+1 <d
 	}
 
-	/*
-	 * We cannot use the default THREE.Curve getPoint() with getLength() because in
+	/**
+	 * We cannot use the default Curve getPoint() with getLength() because in
 	 * Curve, getLength() depends on getPoint() but in THREE.CurvePath
 	 * getPoint() depends on getLength
 	 */
@@ -162,89 +144,42 @@ public class CurvePath extends Curve
 		return this.cacheLengths;
 	}
 
-	/*
-	 * Returns min and max coordinates, as well as centroid
-	 */
-	public Box3 getBoundingBox()
-	{
-		List<Vector2> points = (ArrayList)this.getPoints();
+	/**
+	 * Generate geometry from path points (for Line or Points objects)
+	 * @param divisions
+     */
+	public Geometry createPointsGeometry( int divisions ) {
 
-		double maxX, maxY;
-		double minX, minY;
+		List<Vector2> pts = this.getPoints( divisions );
+		return this.createGeometry( pts );
 
-		maxX = maxY = Double.NEGATIVE_INFINITY;
-		minX = minY = Double.POSITIVE_INFINITY;
+	}
 
-		Vector2 sum = new Vector2();
-		int il = points.size();
+	/**
+	 * Generate geometry from equidistant sampling along the path
+	 * @param divisions
+     */
+	public Geometry createSpacedPointsGeometry( int divisions ) {
 
-		for ( int i = 0; i < il; i ++ )
-		{
-			Vector2 p = points.get( i );
+		List<Vector2> pts = this.getSpacedPoints( divisions );
+		return this.createGeometry( pts );
 
-			if ( p.getX() > maxX )
-				maxX = p.getX();
-			else if ( p.getX() < minX )
-				minX = p.getX();
+	}
 
-			if ( p.getY() > maxY )
-				maxY = p.getY();
-			else if ( p.getY() < maxY )
-				minY = p.getY();
+	public Geometry createGeometry(List<Vector2> points ) {
 
-			sum.add( p );
+		Geometry geometry = new Geometry();
+
+		for ( int i = 0, l = points.size(); i < l; i ++ ) {
+
+			Vector2 point = points.get(i);
+			double z = point instanceof Vector3 ? ((Vector3) point).getZ() : 0;
+			geometry.getVertices().add( new Vector3(point.getX(), point.getY(), z ) );
+
 		}
 
-		Box3 boundingBox = new Box3();
-		boundingBox.getMin().set(minX, minY, 0);
-		boundingBox.getMax().set(maxX, maxY, 0);
+		return geometry;
 
-		return boundingBox;
 	}
 
-	/**************************************************************
-	 *	Bend / Wrap Helper Methods
-	 **************************************************************/
-
-	/*
-	 * Wrap path / Bend modifiers?
-	 */
-	public void addWrapPath( CurvePath bendpath )
-	{
-		this.bends.add( bendpath );
-	}
-
-	/*
-	 * This returns getPoints() bend/wrapped around the contour of a path.
-	 * Read http://www.planetclegg.com/projects/WarpingTextToSplines.html
-	 */
-	protected List<Vector2> getWrapPoints(  List<Vector2> oldPts, CurvePath path )
-	{
-		Box3 bounds = this.getBoundingBox();
-
-		for ( int i = 0, il = oldPts.size(); i < il; i ++ )
-		{
-			Vector2 p = oldPts.get( i );
-
-			double oldX = p.getX();
-			double oldY = p.getY();
-
-			double xNorm = oldX / bounds.getMax().getX();
-
-			// If using actual distance, for length > path, requires line extrusions
-			//xNorm = path.getUtoTmapping(xNorm, oldX); // 3 styles. 1) wrap stretched. 2) wrap stretch by arc length 3) warp by actual distance
-
-			xNorm = path.getUtoTmapping( xNorm, oldX );
-
-			// check for out of bounds?
-
-			Vector2 pathPt = path.getPoint( xNorm );
-			Vector2 normal = path.getNormalVector( xNorm ).multiply( oldY );
-
-			p.setX(pathPt.getX() + normal.getY());
-			p.setY(pathPt.getX() + normal.getY());
-		}
-
-		return oldPts;
-	}
 }

@@ -24,6 +24,7 @@ import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.graphics.extras.core.CurvePath;
+import org.parallax3d.parallax.graphics.extras.core.FrenetFrames;
 import org.parallax3d.parallax.graphics.extras.core.Shape;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Color;

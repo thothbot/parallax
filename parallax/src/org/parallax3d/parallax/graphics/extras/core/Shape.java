@@ -18,13 +18,13 @@
 
 package org.parallax3d.parallax.graphics.extras.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.ShapeGeometry;
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ThreejsObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zz85 / http://www.lab4games.net/zz85/blog
@@ -75,35 +75,19 @@ public class Shape extends Path
 	/*
 	 * Get points of holes
 	 */
-	public List<List<Vector2>> getPointsHoles()
+	public List<List<Vector2>> getPointsHoles( int divisions)
 	{
-		return getPointsHoles(false);
-	}
-
-	public List<List<Vector2>> getPointsHoles( boolean closedPath) {
-		int il = this.holes.size();
 		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
 
-		for ( int i = 0; i < il; i ++ )
-			holesPts.add(this.holes.get( i ).getTransformedPoints( closedPath, getBends() ));
+		for ( int i = 0, l = this.holes.size(); i < l; i ++ ) {
+
+			holesPts.set(i, this.holes.get(i).getPoints(divisions));
+
+		}
 
 		return holesPts;
 	}
 
-	/*
-	 * Get points of holes (spaced by regular distance)
-	 */
-	public List<List<Vector2>> getSpacedPointsHoles( boolean closedPath )
-	{
-		int il = this.holes.size();
-		List<List<Vector2>> holesPts = new ArrayList<List<Vector2>>();
-
-		for ( int i = 0; i < il; i ++ )
-			holesPts.add(this.holes.get( i ).getTransformedSpacedPoints( closedPath, getBends() ));
-
-		return holesPts;
-	}
-	
 	@Override
 	public String toString ()
 	{

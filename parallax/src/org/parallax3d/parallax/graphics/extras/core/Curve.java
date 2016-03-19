@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.graphics.extras.core;
 
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ThreejsObject;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.math.Vector2;
 
 // Abstract Curve base class
 @ThreejsObject("THREE.Curve")

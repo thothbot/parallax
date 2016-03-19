@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
+import org.parallax3d.parallax.math.Vector3;
 
 public final class CurveViviani extends Curve
 {

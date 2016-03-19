@@ -16,9 +16,8 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.extras.geometries;
+package org.parallax3d.parallax.graphics.extras.core;
 
-import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector3;
 

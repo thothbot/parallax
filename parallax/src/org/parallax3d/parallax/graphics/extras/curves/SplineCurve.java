@@ -18,13 +18,13 @@
 
 package org.parallax3d.parallax.graphics.extras.curves;
 
+import org.parallax3d.parallax.graphics.extras.CurveUtils;
+import org.parallax3d.parallax.graphics.extras.core.Curve;
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ThreejsObject;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.extras.core.Curve;
-import org.parallax3d.parallax.graphics.extras.CurveUtils;
-import org.parallax3d.parallax.math.Vector2;
 
 @ThreejsObject("THREE.SplineCurve")
 public class SplineCurve extends Curve
@@ -34,7 +34,7 @@ public class SplineCurve extends Curve
 
 	public SplineCurve()
 	{
-		this.points = new ArrayList<Vector2>();
+		this.points = new ArrayList<>();
 	}
 
 	public SplineCurve(List<Vector2> points)

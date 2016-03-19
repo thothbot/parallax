@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.graphics.extras.curves;
 
-import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.graphics.extras.CurveUtils;
-import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
+import org.parallax3d.parallax.graphics.extras.core.Curve;
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.QuadraticBezierCurve")
 public class QuadraticBezierCurve extends Curve
@@ -54,9 +54,6 @@ public class QuadraticBezierCurve extends Curve
 		double ty = CurveUtils.tangentQuadraticBezier( t, this.v0.getY(), this.v1.getY(), this.v2.getY() );
 
 		// returns unit vector
-		Vector2 tangent = new Vector2( tx, ty );
-		tangent.normalize();
-
-		return tangent;
+		return new Vector2( tx, ty ).normalize();
 	}
 }

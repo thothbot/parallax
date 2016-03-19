@@ -18,27 +18,35 @@
 
 package org.parallax3d.parallax.graphics.extras.curves;
 
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.EllipseCurve")
-public final class EllipseCurve extends Curve
+public class EllipseCurve extends Curve
 {
 
-	private double aX;
-	private double aY;
+	double aX;
+	double aY;
 
-	private double xRadius;
-	private double yRadius;
+	double xRadius;
+	double yRadius;
 
-	private double aStartAngle;
-	private double aEndAngle;
+	double aStartAngle;
+	double aEndAngle;
 
-	private boolean aClockwise;
+	boolean aClockwise;
+
+	double aRotation;
 
 	public EllipseCurve( double aX, double aY, double xRadius, double yRadius,
-						 double aStartAngle, double aEndAngle, boolean aClockwise )
+						 double aStartAngle, double aEndAngle, boolean aClockwise)
+	{
+		this(aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, 0.);
+	}
+
+	public EllipseCurve( double aX, double aY, double xRadius, double yRadius,
+						 double aStartAngle, double aEndAngle, boolean aClockwise, double aRotation )
 	{
 		this.aX = aX;
 		this.aY = aY;
@@ -50,6 +58,8 @@ public final class EllipseCurve extends Curve
 		this.aEndAngle = aEndAngle;
 
 		this.aClockwise = aClockwise;
+
+		this.aRotation = aRotation;
 	}
 
 	@Override
@@ -57,16 +67,37 @@ public final class EllipseCurve extends Curve
 	{
 		double deltaAngle = this.aEndAngle - this.aStartAngle;
 
-		if ( !this.aClockwise )
-		{
-			t = 1 - t;
+		if ( deltaAngle < 0 ) deltaAngle += Math.PI * 2;
+		if ( deltaAngle > Math.PI * 2 ) deltaAngle -= Math.PI * 2;
+
+		double angle;
+
+		if (this.aClockwise) {
+
+			angle = this.aEndAngle + ( 1 - t ) * ( Math.PI * 2 - deltaAngle );
+
+		} else {
+
+			angle = this.aStartAngle + t * deltaAngle;
+
 		}
 
-		double angle = this.aStartAngle + t * deltaAngle;
+		double x = this.aX + this.xRadius * Math.cos( angle );
+		double y = this.aY + this.yRadius * Math.sin( angle );
 
-		double tx = this.aX + this.xRadius * Math.cos( angle );
-		double ty = this.aY + this.yRadius * Math.sin( angle );
+		if ( this.aRotation != 0 ) {
 
-		return new Vector2( tx, ty );
+			double cos = Math.cos( this.aRotation );
+			double sin = Math.sin( this.aRotation );
+
+			double tx = x, ty = y;
+
+			// Rotate the point about the center of the ellipse.
+			x = ( tx - this.aX ) * cos - ( ty - this.aY ) * sin + this.aX;
+			y = ( tx - this.aX ) * sin + ( ty - this.aY ) * cos + this.aY;
+
+		}
+
+		return new Vector2( x, y );
 	}
 }

@@ -26,7 +26,6 @@ import org.parallax3d.parallax.graphics.extras.SceneUtils;
 import org.parallax3d.parallax.graphics.extras.core.Path;
 import org.parallax3d.parallax.graphics.extras.core.Shape;
 import org.parallax3d.parallax.graphics.extras.curves.SplineCurve3;
-import org.parallax3d.parallax.graphics.extras.curves.SplineCurve3Closed;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;

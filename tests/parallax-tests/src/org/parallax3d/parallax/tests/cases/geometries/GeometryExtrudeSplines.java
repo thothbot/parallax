@@ -27,7 +27,6 @@ import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.SceneUtils;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.graphics.extras.curves.SplineCurve3;
-import org.parallax3d.parallax.graphics.extras.curves.SplineCurve3Closed;
 import org.parallax3d.parallax.graphics.extras.curves.parametric.*;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.TubeGeometry;

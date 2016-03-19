@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.graphics.extras.curves;
 
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.LineCurve")
 public class LineCurve extends Curve
@@ -38,12 +38,7 @@ public class LineCurve extends Curve
 	@Override
 	public Vector2 getPoint(double t)
 	{
-		Vector2 point = this.v2.clone();
-		point.sub(this.v1);
-		point.multiply(t);
-		point.add(this.v1);
-
-		return point;
+		return this.v2.clone().multiply(t).add(this.v1);
 	}
 
 	/*
@@ -58,9 +53,6 @@ public class LineCurve extends Curve
 	@Override
 	public Vector2 getTangent(double t)
 	{
-		Vector2 tangent = this.v2.clone();
-		tangent.sub(this.v1);
-		tangent.normalize();
-		return tangent;
+		return this.v2.clone().sub(this.v1).normalize();
 	}
 }

@@ -684,7 +684,7 @@ public class ShapeUtils {
 
 	// Quad Bezier Functions
 
-	private static double b2( double t, double p0, double p1, double p2 )
+	public static double b2( double t, double p0, double p1, double p2 )
 	{
 		return b2p0( t, p0 ) + b2p1( t, p1 ) + b2p2( t, p2 );
 	}
@@ -709,7 +709,7 @@ public class ShapeUtils {
 	}
 
 	// Cubic Bezier Functions
-	private static double b3( double t, double p0, double p1, double p2, double p3  )
+	public static double b3( double t, double p0, double p1, double p2, double p3  )
 	{
 		return b3p0( t, p0 ) + b3p1( t, p1 ) + b3p2( t, p2 ) + b3p3( t, p3 );
 	}
