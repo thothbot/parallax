@@ -18,16 +18,16 @@
 
 package org.parallax3d.parallax.graphics.extras.geometries;
 
+import org.parallax3d.parallax.graphics.core.Face3;
+import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.graphics.extras.core.Curve;
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.core.Face3;
-import org.parallax3d.parallax.graphics.core.Geometry;
-import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.extras.core.Curve;
-import org.parallax3d.parallax.math.Vector2;
 
 /**
  * Creates a tube which extrudes along a 3d spline.

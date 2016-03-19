@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.graphics.extras.geometries.parametric;
 
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.extras.geometries.ParametricGeometry;
+import org.parallax3d.parallax.math.Vector3;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/klein_bottle.gif" />

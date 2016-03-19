@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.graphics.extras.geometries;
 
-import java.util.List;
-
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.system.ThreejsObject;
+
+import java.util.List;
 
 @ThreejsObject("THREE.LatheGeometry")
 public final class LatheGeometry extends Geometry

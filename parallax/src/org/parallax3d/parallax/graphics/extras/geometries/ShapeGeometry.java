@@ -22,7 +22,6 @@ import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.ShapeUtils;
 import org.parallax3d.parallax.graphics.extras.core.Shape;
-import org.parallax3d.parallax.graphics.extras.geometries.ExtrudeGeometry;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.ThreejsObject;

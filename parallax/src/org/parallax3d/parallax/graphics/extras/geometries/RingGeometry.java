@@ -18,8 +18,8 @@
 
 package org.parallax3d.parallax.graphics.extras.geometries;
 
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.RingGeometry")
 public class RingGeometry extends Geometry {

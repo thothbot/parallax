@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.graphics.extras.geometries;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Matrix4;
+import org.parallax3d.parallax.math.Vector3;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * For computing of Frenet frames, exposing the tangents, normals and binormals the spline
