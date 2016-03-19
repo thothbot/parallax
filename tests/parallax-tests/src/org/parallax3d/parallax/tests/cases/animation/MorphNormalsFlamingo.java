@@ -29,7 +29,7 @@ import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
-import org.parallax3d.parallax.graphics.extras.objects.MorphAnimMesh;
+import org.parallax3d.parallax.graphics.extras.objects.MorphBlendMesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
@@ -49,7 +49,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 	PerspectiveCamera camera;
 	Scene scene, scene2;
 	
-	List<MorphAnimMesh> morphs;
+	List<MorphBlendMesh> morphs;
 	
 	private double oldTime;
 	Vector3 target = new Vector3( 0, 150, 0 );
@@ -95,7 +95,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 		light22.getPosition().set( 0.25, -1, 0 );
 		scene2.add( light22 );
 
-		morphs = new ArrayList<MorphAnimMesh>();
+		morphs = new ArrayList<MorphBlendMesh>();
 		new JsonLoader(model, new ModelLoadHandler() {
 
 				@Override
@@ -111,7 +111,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 					material.setVertexColors(Material.COLORS.FACE);
 					material.setShading(Material.SHADING.FLAT);
 
-					MorphAnimMesh meshAnim = new MorphAnimMesh( (Geometry) geometry, material );
+					MorphBlendMesh meshAnim = new MorphBlendMesh( (Geometry) geometry, material );
 
 					meshAnim.setDuration(5000);
 
@@ -141,7 +141,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 					material.setVertexColors(Material.COLORS.FACE);
 					material.setShading(Material.SHADING.SMOOTH);
 
-					MorphAnimMesh meshAnim = new MorphAnimMesh( (Geometry) geometry, material );
+					MorphBlendMesh meshAnim = new MorphBlendMesh( (Geometry) geometry, material );
 
 					meshAnim.setDuration(5000);
 
@@ -175,7 +175,7 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 
 		for ( int i = 0; i < morphs.size(); i ++ ) 
 		{
-			MorphAnimMesh morph = morphs.get( i );
+			MorphBlendMesh morph = morphs.get( i );
 			morph.updateAnimation( Duration.currentTimeMillis() - this.oldTime );
 		}
 

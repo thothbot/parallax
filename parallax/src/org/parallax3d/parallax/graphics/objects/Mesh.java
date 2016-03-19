@@ -89,6 +89,18 @@ public class Mesh extends GeometryObject
 		this.updateMorphTargets();
 	}
 
+	public Integer getMorphTargetBase() {
+		return morphTargetBase;
+	}
+
+	public List<Double> getMorphTargetInfluences() {
+		return morphTargetInfluences;
+	}
+
+	public FastMap<Integer> getMorphTargetDictionary() {
+		return morphTargetDictionary;
+	}
+
 	public void setDrawMode(BeginMode drawMode) {
 		this.drawMode = drawMode;
 	}

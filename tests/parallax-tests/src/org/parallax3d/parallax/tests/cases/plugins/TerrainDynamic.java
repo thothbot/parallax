@@ -33,7 +33,7 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.extras.objects.MorphAnimMesh;
+import org.parallax3d.parallax.graphics.extras.objects.MorphBlendMesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.BloomPass;
@@ -99,7 +99,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 	Scene sceneRenderTarget;
 	
 	FastMap<ShaderMaterial> mlib;
-	List<MorphAnimMesh> morphs;
+	List<MorphBlendMesh> morphs;
 	
 	FastMap<Uniform> uniformsTerrain;
 	FastMap<Uniform> uniformsNoise;
@@ -359,7 +359,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 		composer.addPass( vblur );
 		
 		final double startX = -3000;
-		morphs = new ArrayList<MorphAnimMesh>();
+		morphs = new ArrayList<MorphBlendMesh>();
 
 		new JsonLoader(parrotModel, new ModelLoadHandler() {
 
@@ -404,7 +404,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 				.setMorphTargets(true)
 				.setVertexColors(Material.COLORS.FACE);
 
-		MorphAnimMesh meshAnim = new MorphAnimMesh( geometry, material );
+		MorphBlendMesh meshAnim = new MorphBlendMesh( geometry, material );
 
 		meshAnim.setDuration(duration);
 		meshAnim.setTime( (int)(600 * Math.random()) );
@@ -490,7 +490,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 
 			for ( int i = 0; i < morphs.size(); i ++ ) 
 			{
-				MorphAnimMesh morph = morphs.get( i );
+				MorphBlendMesh morph = morphs.get( i );
 
 				morph.updateAnimation( (int)(1000 * delta) );
 
