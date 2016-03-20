@@ -33,158 +33,236 @@ public interface Chunks extends SourceBundle
 	Chunks INSTANCE = SourceBundleProxy.create( Chunks.class );
 
     @Source("chunk/alphamap_fragment.glsl")
-    SourceTextResource getAlphamapFragment();
+	SourceTextResource alphamap_fragment();
 
     @Source("chunk/alphamap_pars_fragment.glsl")
-    SourceTextResource getAlphamapParsFragment();
+	SourceTextResource alphamap_pars_fragment();
 
     @Source("chunk/alphatest_fragment.glsl")
-    SourceTextResource getAlphatestFragment();
+	SourceTextResource alphatest_fragment();
+
+    @Source("chunk/ambient_pars.glsl")
+	SourceTextResource ambient_pars();
+
+    @Source("chunk/aomap_fragment.glsl")
+	SourceTextResource aomap_fragment();
+
+    @Source("chunk/aomap_pars_fragment.glsl")
+	SourceTextResource aomap_pars_fragment();
+
+    @Source("chunk/begin_vertex.glsl")
+	SourceTextResource begin_vertex();
+
+    @Source("chunk/beginnormal_vertex.glsl")
+	SourceTextResource beginnormal_vertex();
+
+    @Source("chunk/bsdfs.glsl")
+	SourceTextResource bsdfs();
 
     @Source("chunk/bumpmap_pars_fragment.glsl")
-    SourceTextResource getBumpmapParsFragment();
+	SourceTextResource bumpmap_pars_fragment();
 
     @Source("chunk/color_fragment.glsl")
-    SourceTextResource getColorFragment();
+	SourceTextResource color_fragment();
 
     @Source("chunk/color_pars_fragment.glsl")
-    SourceTextResource getColorParsFragment();
+	SourceTextResource color_pars_fragment();
 
     @Source("chunk/color_pars_vertex.glsl")
-    SourceTextResource getColorParsVertex();
+	SourceTextResource color_pars_vertex();
 
     @Source("chunk/color_vertex.glsl")
-    SourceTextResource getColorVertex();
+	SourceTextResource color_vertex();
+
+    @Source("chunk/common.glsl")
+	SourceTextResource common();
+
+    @Source("chunk/cube_uv_reflection_fragment.glsl")
+	SourceTextResource cube_uv_reflection_fragment();
 
     @Source("chunk/defaultnormal_vertex.glsl")
-    SourceTextResource getDefaultNormalVertex();
+	SourceTextResource defaultnormal_vertex();
 
-    @Source("chunk/default_vertex.glsl")
-    SourceTextResource getDefaultVertex();
+    @Source("chunk/displacementmap_pars_vertex.glsl")
+	SourceTextResource displacementmap_pars_vertex();
+
+    @Source("chunk/displacementmap_vertex.glsl")
+	SourceTextResource displacementmap_vertex();
+
+    @Source("chunk/emissivemap_fragment.glsl")
+	SourceTextResource emissivemap_fragment();
+
+    @Source("chunk/emissivemap_pars_fragment.glsl")
+	SourceTextResource emissivemap_pars_fragment();
+
+    @Source("chunk/encodings_fragment.glsl")
+	SourceTextResource encodings_fragment();
+
+    @Source("chunk/encodings_pars_fragment.glsl")
+	SourceTextResource encodings_pars_fragment();
 
     @Source("chunk/envmap_fragment.glsl")
-    SourceTextResource getEnvmapFragment();
+	SourceTextResource envmap_fragment();
 
     @Source("chunk/envmap_pars_fragment.glsl")
-    SourceTextResource getEnvmapParsFragment();
+	SourceTextResource envmap_pars_fragment();
 
     @Source("chunk/envmap_pars_vertex.glsl")
-    SourceTextResource getEnvmapParsVertex();
+	SourceTextResource envmap_pars_vertex();
 
     @Source("chunk/envmap_vertex.glsl")
-    SourceTextResource getEnvmapVertex();
+	SourceTextResource envmap_vertex();
 
     @Source("chunk/fog_fragment.glsl")
-    SourceTextResource getFogFragment();
+	SourceTextResource fog_fragment();
 
     @Source("chunk/fog_pars_fragment.glsl")
-    SourceTextResource getFogParsFragment();
+	SourceTextResource fog_pars_fragment();
 
     @Source("chunk/lightmap_fragment.glsl")
-    SourceTextResource getLightmapFragment();
+	SourceTextResource lightmap_fragment();
 
     @Source("chunk/lightmap_pars_fragment.glsl")
-    SourceTextResource getLightmapParsFragment();
-
-    @Source("chunk/lightmap_pars_vertex.glsl")
-    SourceTextResource getLightmapParsVertex();
-
-    @Source("chunk/lightmap_vertex.glsl")
-    SourceTextResource getLightmapVertex();
-
-    @Source("chunk/lights_lambert_pars_vertex.glsl")
-    SourceTextResource getLightsLambertParsVertex();
+	SourceTextResource lightmap_pars_fragment();
 
     @Source("chunk/lights_lambert_vertex.glsl")
-    SourceTextResource getLightsLambertVertex();
+	SourceTextResource lights_lambert_vertex();
+
+    @Source("chunk/lights_pars.glsl")
+	SourceTextResource lights_pars();
 
     @Source("chunk/lights_phong_fragment.glsl")
-    SourceTextResource getLightsPhongFragment();
+	SourceTextResource lights_phong_fragment();
 
     @Source("chunk/lights_phong_pars_fragment.glsl")
-    SourceTextResource getLightsPhongParsFragment();
+	SourceTextResource lights_phong_pars_fragment();
 
     @Source("chunk/lights_phong_pars_vertex.glsl")
-    SourceTextResource getLightsPhongParsVertex();
+	SourceTextResource lights_phong_pars_vertex();
 
     @Source("chunk/lights_phong_vertex.glsl")
-    SourceTextResource getLightsPhongVertex();
+	SourceTextResource lights_phong_vertex();
 
-    @Source("chunk/linear_to_gamma_fragment.glsl")
-    SourceTextResource getLinearToGammaFragment();
+    @Source("chunk/lights_standard_fragment.glsl")
+	SourceTextResource lights_standard_fragment();
+
+    @Source("chunk/lights_standard_pars_fragment.glsl")
+	SourceTextResource lights_standard_pars_fragment();
+
+    @Source("chunk/lights_template.glsl")
+	SourceTextResource lights_template();
 
     @Source("chunk/logdepthbuf_fragment.glsl")
-    SourceTextResource getLogdepthbufFragment();
+	SourceTextResource logdepthbuf_fragment();
 
-    @Source("chunk/logdepthbuf_par_fragment.glsl")
-    SourceTextResource getLogdepthbufParFragment();
+    @Source("chunk/logdepthbuf_pars_fragment.glsl")
+	SourceTextResource logdepthbuf_pars_fragment();
 
-    @Source("chunk/logdepthbuf_par_vertex.glsl")
-    SourceTextResource getLogdepthbufParVertex();
+    @Source("chunk/logdepthbuf_pars_vertex.glsl")
+	SourceTextResource logdepthbuf_pars_vertex();
 
     @Source("chunk/logdepthbuf_vertex.glsl")
-    SourceTextResource getLogdepthbufVertex();
+	SourceTextResource logdepthbuf_vertex();
 
     @Source("chunk/map_fragment.glsl")
-    SourceTextResource getMapFragment();
+	SourceTextResource map_fragment();
 
     @Source("chunk/map_pars_fragment.glsl")
-    SourceTextResource getMapParsFragment();
-
-    @Source("chunk/map_pars_vertex.glsl")
-    SourceTextResource getMapParsVertex();
+	SourceTextResource map_pars_fragment();
 
     @Source("chunk/map_particle_fragment.glsl")
-    SourceTextResource getMapParticleFragment();
+	SourceTextResource map_particle_fragment();
 
     @Source("chunk/map_particle_pars_fragment.glsl")
-    SourceTextResource getMapParticleParsFragment();
+	SourceTextResource map_particle_pars_fragment();
 
-    @Source("chunk/map_vertex.glsl")
-    SourceTextResource getMapVertex();
+    @Source("chunk/metalnessmap_fragment.glsl")
+	SourceTextResource metalnessmap_fragment();
+
+    @Source("chunk/metalnessmap_pars_fragment.glsl")
+	SourceTextResource metalnessmap_pars_fragment();
 
     @Source("chunk/morphnormal_vertex.glsl")
-    SourceTextResource getMorphnormalVertex();
+	SourceTextResource morphnormal_vertex();
 
     @Source("chunk/morphtarget_pars_vertex.glsl")
-    SourceTextResource getMorphtargetParsVertex();
+	SourceTextResource morphtarget_pars_vertex();
 
     @Source("chunk/morphtarget_vertex.glsl")
-    SourceTextResource getMorphtargetVertex();
+	SourceTextResource morphtarget_vertex();
+
+    @Source("chunk/normal_fragment.glsl")
+	SourceTextResource normal_fragment();
 
     @Source("chunk/normalmap_pars_fragment.glsl")
-    SourceTextResource getNormalmapParsFragment();
+	SourceTextResource normalmap_pars_fragment();
 
-    @Source("chunk/shadowmap_fragment.glsl")
-    SourceTextResource getShadowmapFragment();
+    @Source("chunk/premultiplied_alpha_fragment.glsl")
+	SourceTextResource premultiplied_alpha_fragment();
+
+    @Source("chunk/project_vertex.glsl")
+	SourceTextResource project_vertex();
+
+    @Source("chunk/roughnessmap_fragment.glsl")
+	SourceTextResource roughnessmap_fragment();
+
+    @Source("chunk/roughnessmap_pars_fragment.glsl")
+	SourceTextResource roughnessmap_pars_fragment();
 
     @Source("chunk/shadowmap_pars_fragment.glsl")
-    SourceTextResource getShadowmapParsFragment();
+	SourceTextResource shadowmap_pars_fragment();
 
     @Source("chunk/shadowmap_pars_vertex.glsl")
-    SourceTextResource getShadowmapParsVertex();
+	SourceTextResource shadowmap_pars_vertex();
 
     @Source("chunk/shadowmap_vertex.glsl")
-    SourceTextResource getShadowmapVertex();
+	SourceTextResource shadowmap_vertex();
 
-    @Source("chunk/skinning_pars_vertex.glsl")
-    SourceTextResource getSkinningParsVertex();
-
-    @Source("chunk/skinning_vertex.glsl")
-    SourceTextResource getSkinningVertex();
+    @Source("chunk/shadowmask_pars_fragment.glsl")
+	SourceTextResource shadowmask_pars_fragment();
 
     @Source("chunk/skinbase_vertex.glsl")
-    SourceTextResource getSkinBaseVertex();
+	SourceTextResource skinbase_vertex();
+
+    @Source("chunk/skinning_pars_vertex.glsl")
+	SourceTextResource skinning_pars_vertex();
+
+    @Source("chunk/skinning_vertex.glsl")
+	SourceTextResource skinning_vertex();
 
     @Source("chunk/skinnormal_vertex.glsl")
-    SourceTextResource getSkinNormalVertex();
+	SourceTextResource skinnormal_vertex();
 
     @Source("chunk/specularmap_fragment.glsl")
-    SourceTextResource getSpecularmapFragment();
+	SourceTextResource specularmap_fragment();
 
     @Source("chunk/specularmap_pars_fragment.glsl")
-    SourceTextResource getSpecularmapParsFragment();
+	SourceTextResource specularmap_pars_fragment();
+
+    @Source("chunk/tonemapping_fragment.glsl")
+	SourceTextResource tonemapping_fragment();
+
+    @Source("chunk/tonemapping_pars_fragment.glsl")
+	SourceTextResource tonemapping_pars_fragment();
+
+    @Source("chunk/uv2_pars_fragment.glsl")
+	SourceTextResource uv2_pars_fragment();
+
+    @Source("chunk/uv2_pars_vertex.glsl")
+	SourceTextResource uv2_pars_vertex();
+
+    @Source("chunk/uv2_vertex.glsl")
+	SourceTextResource uv2_vertex();
+
+    @Source("chunk/uv_pars_fragment.glsl")
+	SourceTextResource uv_pars_fragment();
+
+    @Source("chunk/uv_pars_vertex.glsl")
+	SourceTextResource uv_pars_vertex();
+
+    @Source("chunk/uv_vertex.glsl")
+	SourceTextResource uv_vertex();
 
     @Source("chunk/worldpos_vertex.glsl")
-    SourceTextResource getWorldposVertex();
+	SourceTextResource worldpos_vertex();
 }
