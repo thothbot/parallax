@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class DashedShader extends Shader 
 {
@@ -46,7 +46,7 @@ public class DashedShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.setUniforms(UniformsLib.getCommon());
+		this.setUniforms(UniformsLib.common());
 		this.setUniforms(UniformsLib.getFog());
 		this.addUniform("scale",     new Uniform(Uniform.TYPE.F, 1.0 ));
 		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F, 1.0 ));

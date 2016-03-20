@@ -18,14 +18,14 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Normal map shader<br>

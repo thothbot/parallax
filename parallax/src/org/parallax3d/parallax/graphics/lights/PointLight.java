@@ -39,7 +39,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.PointLight")
 public class PointLight extends Light implements HasShadow {
     double distance;
-    int decay;
+    double decay;
 
     LightShadow shadow;
 
@@ -57,7 +57,7 @@ public class PointLight extends Light implements HasShadow {
      * @param distance
      * @param decay     for physically correct lights, should be 2.
      */
-    public PointLight(int hex, double intensity, double distance, int decay) {
+    public PointLight(int hex, double intensity, double distance, double decay) {
         super(hex, intensity);
         this.intensity = intensity;
         this.distance = distance;
@@ -75,11 +75,11 @@ public class PointLight extends Light implements HasShadow {
         return distance;
     }
 
-    public int getDecay() {
+    public double getDecay() {
         return decay;
     }
 
-    public void setDecay(int decay) {
+    public void setDecay(double decay) {
         this.decay = decay;
     }
 

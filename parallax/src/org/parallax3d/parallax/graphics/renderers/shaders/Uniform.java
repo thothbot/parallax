@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
+import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
@@ -43,13 +44,18 @@ public class Uniform
 		M4, // single Matrix4
 		M4V,// array of Matrix4
 		T,  // single Texture (2d or cube)
-		TV // array of Texture (2d)
+		TV, // array of Texture (2d)
+		S,
+		SA
 	};
 
-	private Uniform.TYPE type;
-	private Object value;
-	private Float32Array cache_array;
-	private int location = -1;
+	Uniform.TYPE type;
+	Object value;
+	FastMap<Uniform> properties;
+	Float32Array cache_array;
+	int location = -1;
+
+
 
 	public Uniform(Uniform.TYPE type)
 	{
@@ -58,8 +64,14 @@ public class Uniform
 
 	public Uniform(Uniform.TYPE type, Object value)
 	{
+		this(type, value, null);
+	}
+
+	public Uniform(Uniform.TYPE type, Object value, FastMap<Uniform> properties)
+	{
 		this.type = type;
 		this.value = value;
+		this.properties = properties;
 	}
 
 	public Uniform.TYPE getType() {

@@ -18,10 +18,6 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.FastMap;
@@ -29,6 +25,10 @@ import org.parallax3d.parallax.system.SourceBundle;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Basic abstract shader.

@@ -18,13 +18,13 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Phong shading - lighting model three-dimensional objects, 
@@ -56,7 +56,7 @@ public final class PhongShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.setUniforms(UniformsLib.getCommon());
+		this.setUniforms(UniformsLib.common());
 		this.setUniforms(UniformsLib.getBump());
 		this.setUniforms(UniformsLib.getNormalMap());
 		this.setUniforms(UniformsLib.getFog());

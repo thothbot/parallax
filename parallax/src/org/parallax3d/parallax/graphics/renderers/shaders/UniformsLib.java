@@ -18,17 +18,15 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.util.ArrayList;
-
-import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Matrix4;
-import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-import org.parallax3d.parallax.system.gl.enums.BufferUsage;
+
+import java.util.ArrayList;
 
 /**
  * Some common uniforms used by shaders.
@@ -38,121 +36,208 @@ import org.parallax3d.parallax.system.gl.enums.BufferUsage;
  */
 public class UniformsLib
 {
-	public static FastMap<Uniform> getCommon ()
+	public static FastMap<Uniform> common()
 	{
-		FastMap<Uniform> retval = new FastMap<Uniform>();
+		return new FastMap<Uniform>() {{
 
-		retval.put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
-		retval.put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
+			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
-		retval.put("map", new Uniform(Uniform.TYPE.T ));
-		retval.put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4( 0, 0, 1, 1 ) ));
+			put("map", new Uniform(Uniform.TYPE.T ));
+			put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4( 0, 0, 1, 1 ) ));
 
-		retval.put("lightMap", new Uniform(Uniform.TYPE.T ));
-		retval.put("specularMap", new Uniform(Uniform.TYPE.T ));
-		retval.put("alphaMap", new Uniform(Uniform.TYPE.T ));
+			put("specularMap", new Uniform(Uniform.TYPE.T ));
+			put("alphaMap", new Uniform(Uniform.TYPE.T ));
 
-		retval.put("envMap", new Uniform(Uniform.TYPE.T ));
-		retval.put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
-		retval.put("useRefract", new Uniform(Uniform.TYPE.I,  0 ));
-		retval.put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
-		retval.put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98 ));
-		retval.put("combine", new Uniform(Uniform.TYPE.I,  0 ));
+			put("envMap", new Uniform(Uniform.TYPE.T ));
+			put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
+			put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98 ));
+		}};
 
-		retval.put("morphTargetInfluences", new Uniform(Uniform.TYPE.F,  0.0 ));
-
-		return retval;
 	}
 
-	public static FastMap<Uniform> getBump ()
+	public static FastMap<Uniform> aomap()
 	{
-		FastMap<Uniform> retval = new FastMap<Uniform>();
+		return new FastMap<Uniform>() {{
 
-		retval.put("bumpMap", new Uniform(Uniform.TYPE.T ));
-		retval.put("bumpScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+			put("aoMap", new Uniform(Uniform.TYPE.T ));
+			put("aoMapIntensity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
-		return retval;
+		}};
+
 	}
 
-	public static FastMap<Uniform> getNormalMap ()
+	public static FastMap<Uniform> lightmap()
 	{
-		FastMap<Uniform> retval = new FastMap<Uniform>();
+		return new FastMap<Uniform>() {{
 
-		retval.put("normalMap", new Uniform(Uniform.TYPE.T ));
-		retval.put("normalScale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 ) ));
+			put("lightMap", new Uniform(Uniform.TYPE.T ));
+			put("lightMapIntensity", new Uniform(Uniform.TYPE.F,  1.0 ));
 
-		return retval;
+		}};
+
 	}
 
-	public static FastMap<Uniform> getFog()
+	public static FastMap<Uniform> emissivemap()
 	{
-		FastMap<Uniform> retval = new FastMap<Uniform>();
+		return new FastMap<Uniform>() {{
 
-		retval.put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
-		retval.put("fogNear", new Uniform(Uniform.TYPE.F,  1.0 ));
-		retval.put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0 ));
-		retval.put("fogColor", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
+			put("emissiveMap", new Uniform(Uniform.TYPE.T ));
 
-		return retval;
+		}};
+
 	}
 
-	public static FastMap<Uniform> getLights()
+	public static FastMap<Uniform> bumpmap ()
 	{
-		FastMap<Uniform> retval = new FastMap<Uniform>();
+		return new FastMap<Uniform>() {{
 
-		retval.put("ambientLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+			put("bumpMap", new Uniform(Uniform.TYPE.T ));
+			put("bumpScale", new Uniform(Uniform.TYPE.F, 1.0 ));
 
-		retval.put("directionalLightDirection", new Uniform(Uniform.TYPE.FV, Float32Array.createArray() ));
-		retval.put("directionalLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+		}};
 
-		retval.put("hemisphereLightPosition",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("hemisphereLightSkyColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("hemisphereLightGroundColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-
-		retval.put("pointLightColor",    new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("pointLightPosition", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("pointLightDistance", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-
-		retval.put("spotLightColor",     new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("spotLightPosition",  new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("spotLightDirection", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
-		retval.put("spotLightDistance",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-		retval.put("spotLightAngleCos",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-		retval.put("spotLightExponent",  new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-
-		return retval;
 	}
 
-	public static FastMap<Uniform> getParticle()
+	public static FastMap<Uniform> normalmap ()
 	{
-		FastMap<Uniform> retval = new FastMap<Uniform>();
+		return new FastMap<Uniform>() {{
 
-		retval.put("psColor", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
-		retval.put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
-		retval.put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
-		retval.put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
-		retval.put("map",     new Uniform(Uniform.TYPE.T ));
+			put("normalMap", new Uniform(Uniform.TYPE.T ));
+			put("normalScale", new Uniform(Uniform.TYPE.V2, new Vector2( 1, 1 ) ));
 
-		retval.put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
-		retval.put("fogNear",    new Uniform(Uniform.TYPE.F,  1.0 ));
-		retval.put("fogFar",     new Uniform(Uniform.TYPE.F,  2000.0 ));
-		retval.put("fogColor",   new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
+		}};
 
-		return retval;
 	}
 
-	public static FastMap<Uniform> getShadowmap()
+	public static FastMap<Uniform> displacementmap ()
 	{
+		return new FastMap<Uniform>() {{
 
-		FastMap<Uniform> retval = new FastMap<Uniform>();
+			put("displacementMap", new Uniform(Uniform.TYPE.T ));
+			put("displacementScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+			put("displacementBias", new Uniform(Uniform.TYPE.F, 0.0 ));
 
-		retval.put("shadowMap",      new Uniform(Uniform.TYPE.TV, new ArrayList<Texture>() ));
-		retval.put("shadowMapSize",  new Uniform(Uniform.TYPE.V2V, new ArrayList<Vector2>() ));
-		retval.put("shadowBias",     new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
-		retval.put("shadowDarkness", new Uniform(Uniform.TYPE.FV1,  Float32Array.createArray() ));
+		}};
 
-		retval.put("shadowMatrix", new Uniform(Uniform.TYPE.M4V,  new ArrayList<Matrix4>() ));
+	}
 
-		return retval;
+	public static FastMap<Uniform> roughnessmap ()
+	{
+		return new FastMap<Uniform>() {{
+
+			put("roughnessMap", new Uniform(Uniform.TYPE.T ));
+
+		}};
+
+	}
+
+	public static FastMap<Uniform> metalnessmap ()
+	{
+		return new FastMap<Uniform>() {{
+
+			put("metalnessMap", new Uniform(Uniform.TYPE.T ));
+
+		}};
+
+	}
+
+	public static FastMap<Uniform> fog()
+	{
+		return new FastMap<Uniform>() {{
+
+			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
+			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0 ));
+			put("fogColor", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
+
+		}};
+
+	}
+
+	public static FastMap<Uniform> lights()
+	{
+		return new FastMap<Uniform>() {{
+
+			put("ambientLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+
+			put("directionalLights", new Uniform(Uniform.TYPE.SA,  new ArrayList<>(), new FastMap<Uniform>(){{
+
+				put("direction", new Uniform(Uniform.TYPE.V3 ));
+				put("color", new Uniform(Uniform.TYPE.C ));
+
+				put("shadow", new Uniform(Uniform.TYPE.I ));
+				put("shadowBias", new Uniform(Uniform.TYPE.F ));
+				put("shadowRadius", new Uniform(Uniform.TYPE.F ));
+				put("shadowMapSize", new Uniform(Uniform.TYPE.V2 ));
+
+			}} ));
+
+			put("directionalShadowMap", new Uniform(Uniform.TYPE.TV,   new ArrayList<Texture>() ));
+			put("directionalShadowMatrix", new Uniform(Uniform.TYPE.M4V, new ArrayList<Matrix4>() ));
+
+			put("spotLights", new Uniform(Uniform.TYPE.SA,  new ArrayList<>(), new FastMap<Uniform>(){{
+
+				put("color", new Uniform(Uniform.TYPE.C ));
+				put("position", new Uniform(Uniform.TYPE.V3 ));
+				put("direction", new Uniform(Uniform.TYPE.V3 ));
+				put("distance", new Uniform(Uniform.TYPE.F ));
+				put("coneCos", new Uniform(Uniform.TYPE.F ));
+				put("penumbraCos", new Uniform(Uniform.TYPE.F ));
+				put("decay", new Uniform(Uniform.TYPE.F ));
+
+				put("shadow", new Uniform(Uniform.TYPE.I ));
+				put("shadowBias", new Uniform(Uniform.TYPE.F ));
+				put("shadowRadius", new Uniform(Uniform.TYPE.F ));
+				put("shadowMapSize", new Uniform(Uniform.TYPE.V2 ));
+
+			}} ));
+
+			put("spotShadowMap", new Uniform(Uniform.TYPE.TV,   new ArrayList<Texture>() ));
+			put("spotShadowMatrix", new Uniform(Uniform.TYPE.M4V, new ArrayList<Matrix4>() ));
+
+			put("pointLights", new Uniform(Uniform.TYPE.SA,  new ArrayList<>(), new FastMap<Uniform>(){{
+
+				put("color", new Uniform(Uniform.TYPE.C ));
+				put("position", new Uniform(Uniform.TYPE.V3 ));
+				put("decay", new Uniform(Uniform.TYPE.F ));
+				put("distance", new Uniform(Uniform.TYPE.F ));
+
+				put("shadow", new Uniform(Uniform.TYPE.I ));
+				put("shadowBias", new Uniform(Uniform.TYPE.F ));
+				put("shadowRadius", new Uniform(Uniform.TYPE.F ));
+				put("shadowMapSize", new Uniform(Uniform.TYPE.V2 ));
+
+			}} ));
+
+			put("pointShadowMap", new Uniform(Uniform.TYPE.TV,   new ArrayList<Texture>() ));
+			put("pointShadowMatrix", new Uniform(Uniform.TYPE.M4V, new ArrayList<Matrix4>() ));
+
+			put("hemisphereLights", new Uniform(Uniform.TYPE.SA,  new ArrayList<>(), new FastMap<Uniform>(){{
+
+				put("direction", new Uniform(Uniform.TYPE.V3 ));
+				put("skyColor", new Uniform(Uniform.TYPE.C ));
+				put("groundColor", new Uniform(Uniform.TYPE.C ));
+
+			}} ));
+
+		}};
+
+	}
+
+	public static FastMap<Uniform> points()
+	{
+		return new FastMap<Uniform>() {{
+
+			put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
+			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("map",     new Uniform(Uniform.TYPE.T ));
+			put("offsetRepeat", new Uniform(Uniform.TYPE.V4, new Vector4( 0, 0, 1, 1 ) ));
+
+		}};
+
 	}
 }

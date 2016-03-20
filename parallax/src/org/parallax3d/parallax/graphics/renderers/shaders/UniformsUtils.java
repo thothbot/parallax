@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 

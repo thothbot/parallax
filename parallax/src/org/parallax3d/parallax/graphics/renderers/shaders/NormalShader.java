@@ -18,11 +18,11 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Normal shader.

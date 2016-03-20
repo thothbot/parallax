@@ -41,7 +41,7 @@ public class SpotLight extends Light implements HasShadow
 	double distance;
 	double angle;
 	double penumbra;
-	int decay;
+	double decay;
 
 	LightShadow shadow;
 
@@ -55,7 +55,7 @@ public class SpotLight extends Light implements HasShadow
 		this(hex, intensity, 0, Math.PI / 3., 0, 1);
 	}
 
-	public SpotLight(int hex, double intensity, double distance, double angle, double penumbra, int decay)
+	public SpotLight(int hex, double intensity, double distance, double angle, double penumbra, double decay)
 	{
 		super(hex, intensity);
 
@@ -102,11 +102,11 @@ public class SpotLight extends Light implements HasShadow
 		this.penumbra = penumbra;
 	}
 
-	public int getDecay() {
+	public double getDecay() {
 		return decay;
 	}
 
-	public void setDecay(int decay) {
+	public void setDecay(double decay) {
 		this.decay = decay;
 	}
 
