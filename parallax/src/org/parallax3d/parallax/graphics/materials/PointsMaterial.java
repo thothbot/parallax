@@ -22,11 +22,10 @@ import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.system.ViewportResizeListener;
-import org.parallax3d.parallax.graphics.renderers.shaders.ParticleBasicShader;
+import org.parallax3d.parallax.graphics.renderers.shaders.PointsShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.FastMap;
 
@@ -69,7 +68,7 @@ public final class PointsMaterial extends Material implements HasFog,
 	}
 
 	public Shader getAssociatedShader() {
-		return new ParticleBasicShader();
+		return new PointsShader();
 	}
 
 	@Override

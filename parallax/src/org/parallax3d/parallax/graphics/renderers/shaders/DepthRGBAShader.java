@@ -40,10 +40,10 @@ public final class DepthRGBAShader extends Shader
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/depthRGBA.vs.glsl")
+		@Source("source/depthRGBA_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/depthRGBA.fs.glsl")
+		@Source("source/depthRGBA_frag.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
@@ -57,38 +57,4 @@ public final class DepthRGBAShader extends Shader
 	{
 	}
 	
-	@Override
-	protected void updateVertexSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksVertexShader.MORPHTARGET_PARS,
-			ChunksVertexShader.SKINNING_PARS,
-			ChunksVertexShader.LOGDEPTHBUF_PAR
-		);
-		
-		List<String> main = Arrays.asList(
-			ChunksVertexShader.SKINBASE,
-			ChunksVertexShader.MORPHTARGET,
-			ChunksVertexShader.SKINNING,
-			ChunksVertexShader.DEFAULT,
-			ChunksVertexShader.LOGDEPTHBUF
-		);
-
-		super.updateVertexSource(updateShaderSource(src, vars, main));
-	}
-	
-	@Override
-	protected void updateFragmentSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF_PAR
-		);
-			
-		List<String> main = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF
-		);
-			
-		super.updateFragmentSource(updateShaderSource(src, vars, main));
-	}
-
 }

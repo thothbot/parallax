@@ -29,7 +29,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  */
 public class Uniform
 {
-	public static enum TYPE {
+	public enum TYPE {
 		I,  // single integer
 		F,  // single double
 		V2, // single Vector2
@@ -52,10 +52,9 @@ public class Uniform
 	Uniform.TYPE type;
 	Object value;
 	FastMap<Uniform> properties;
+
 	Float32Array cache_array;
 	int location = -1;
-
-
 
 	public Uniform(Uniform.TYPE type)
 	{

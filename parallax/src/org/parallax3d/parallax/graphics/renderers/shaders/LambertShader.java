@@ -43,10 +43,10 @@ public final class LambertShader extends Shader
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/lambert.vs.glsl")
+		@Source("source/meshlambert_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/lambert.fs.glsl")
+		@Source("source/meshlambert_frag.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
@@ -59,86 +59,12 @@ public final class LambertShader extends Shader
 	protected void initUniforms()
 	{
 		this.setUniforms(UniformsLib.common());
-		this.setUniforms(UniformsLib.getFog());
-		this.setUniforms(UniformsLib.getLights());
-		this.setUniforms(UniformsLib.getShadowmap());
-		this.addUniform("ambient", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
+		this.setUniforms(UniformsLib.aomap());
+		this.setUniforms(UniformsLib.lightmap());
+		this.setUniforms(UniformsLib.emissivemap());
+		this.setUniforms(UniformsLib.fog());
+		this.setUniforms(UniformsLib.lights());
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
-		this.addUniform("wrapRGB", new Uniform(Uniform.TYPE.V3, new Vector3( 1.0f, 1.0f, 1.0f ) ));
-	}
-	
-	@Override
-	protected void updateVertexSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksVertexShader.MAP_PARS,
-			ChunksVertexShader.LIGHTMAP_PARS,
-			ChunksVertexShader.ENVMAP_PARS,
-			ChunksVertexShader.LIGHTS_LAMBERT_PARS,
-			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.MORPHTARGET_PARS,
-			ChunksVertexShader.SKINNING_PARS,
-			ChunksVertexShader.SHADOWMAP_PARS,
-			ChunksVertexShader.LOGDEPTHBUF_PAR
-		);
-		
-		List<String> main = Arrays.asList(
-			ChunksVertexShader.MAP,
-			ChunksVertexShader.LIGHTMAP,
-			ChunksVertexShader.COLOR,
-			ChunksVertexShader.MORPHNORMAL,
-			ChunksVertexShader.SKINBASE,
-			ChunksVertexShader.SKINNORMAL,
-			ChunksVertexShader.DEFAULTNORMAL,
-			ChunksVertexShader.MORPHTARGET,
-			ChunksVertexShader.SKINNING,
-			ChunksVertexShader.DEFAULT,
-			ChunksVertexShader.LOGDEPTHBUF,
-			
-			ChunksVertexShader.WORLDPOS,
-			ChunksVertexShader.ENVMAP,
-			ChunksVertexShader.LIGHTS_LAMBERT,
-			ChunksVertexShader.SHADOWMAP
-		);
-
-		super.updateVertexSource(updateShaderSource(src, vars, main));
-	}
-	
-	@Override
-	protected void updateFragmentSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksFragmentShader.COLOR_PARS,
-			ChunksFragmentShader.MAP_PARS,
-			ChunksFragmentShader.ALPHAMAP_PARS,
-			ChunksFragmentShader.LIGHTMAP_PARS,
-			ChunksFragmentShader.ENVMAP_PARS,
-			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.SHADOWMAP_PARS,
-			ChunksFragmentShader.SPECULARMAP_PARS,
-			ChunksFragmentShader.LOGDEPTHBUF_PAR
-		);
-		
-		List<String> main = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF,
-			ChunksFragmentShader.MAP,
-			ChunksFragmentShader.ALPHAMAP,
-			ChunksFragmentShader.ALPHA_TEST,
-			ChunksFragmentShader.SPECULARMAP
-		);
-		
-		List<String> main2 = Arrays.asList(
-			ChunksFragmentShader.LIGHTMAP,
-			ChunksFragmentShader.COLOR,
-			ChunksFragmentShader.ENVMAP,
-			ChunksFragmentShader.SHADOWMAP,
-			
-			ChunksFragmentShader.LINEAR_TO_GAMMA,
-			
-			ChunksFragmentShader.FOG
-		);
-		
-		super.updateFragmentSource(updateShaderSource(src, vars, main, main2));
 	}
 
 }

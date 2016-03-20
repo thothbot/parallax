@@ -16,8 +16,11 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.renderers.shaders;
+package org.parallax3d.parallax.graphics.extras.shaders;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.graphics.renderers.shaders.UniformsLib;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
@@ -38,7 +41,7 @@ import java.util.List;
  * @author thothbot
  *
  */
-public final class NormalMapShader extends Shader 
+public final class NormalMapShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{

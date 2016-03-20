@@ -38,10 +38,10 @@ public final class BasicShader extends Shader
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/basic.vs.glsl")
+		@Source("source/meshbasic_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/basic.fs.glsl")
+		@Source("source/meshbasic_frag.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
@@ -54,80 +54,7 @@ public final class BasicShader extends Shader
 	protected void initUniforms()
 	{
 		this.setUniforms(UniformsLib.common());
-		this.setUniforms(UniformsLib.getFog());
-		this.setUniforms(UniformsLib.getShadowmap());
-	}
-	
-	@Override
-	protected void updateVertexSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksVertexShader.MAP_PARS,
-			ChunksVertexShader.LIGHTMAP_PARS,
-			ChunksVertexShader.ENVMAP_PARS,
-			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.MORPHTARGET_PARS,
-			ChunksVertexShader.SKINNING_PARS,
-			ChunksVertexShader.SHADOWMAP_PARS,
-			ChunksVertexShader.LOGDEPTHBUF_PAR
-		);
-		
-		List<String> main1 = Arrays.asList(
-			ChunksVertexShader.MAP,
-			ChunksVertexShader.LIGHTMAP,
-			ChunksVertexShader.COLOR,
-			ChunksVertexShader.SKINBASE
-		);
-		
-		List<String> mainEnv = Arrays.asList(
-			ChunksVertexShader.MORPHNORMAL,
-			ChunksVertexShader.SKINNORMAL,
-			ChunksVertexShader.DEFAULTNORMAL
-		);
-
-		List<String> main2 = Arrays.asList(
-			ChunksVertexShader.MORPHTARGET,
-			ChunksVertexShader.SKINNING,
-			ChunksVertexShader.DEFAULT,
-			ChunksVertexShader.LOGDEPTHBUF,
-			
-			ChunksVertexShader.WORLDPOS,
-			ChunksVertexShader.ENVMAP,
-			ChunksVertexShader.SHADOWMAP
-		);
-
-		super.updateVertexSource(updateShaderSource(src, vars, main1, mainEnv, main2));
-	}
-	
-	@Override
-	protected void updateFragmentSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksFragmentShader.COLOR_PARS,
-			ChunksFragmentShader.MAP_PARS,
-			ChunksFragmentShader.ALPHAMAP_PARS,
-			ChunksFragmentShader.LIGHTMAP_PARS,
-			ChunksFragmentShader.ENVMAP_PARS,
-			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.SHADOWMAP_PARS,
-			ChunksFragmentShader.SPECULARMAP_PARS,
-			ChunksFragmentShader.LOGDEPTHBUF_PAR
-		);
-		
-		List<String> main = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF,
-			ChunksFragmentShader.MAP,
-			ChunksFragmentShader.ALPHAMAP,
-			ChunksFragmentShader.ALPHA_TEST,
-			ChunksFragmentShader.SPECULARMAP,
-			ChunksFragmentShader.LIGHTMAP,
-			ChunksFragmentShader.COLOR,
-			ChunksFragmentShader.ENVMAP,
-			ChunksFragmentShader.SHADOWMAP,
-			ChunksFragmentShader.LINEAR_TO_GAMMA,
-			ChunksFragmentShader.FOG
-		);
-		
-		super.updateFragmentSource(updateShaderSource(src, vars, main));
+		this.setUniforms(UniformsLib.aomap());
+		this.setUniforms(UniformsLib.fog());
 	}
 }

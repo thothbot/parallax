@@ -18,11 +18,9 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
+import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * CubeGeometry map shader.
@@ -32,20 +30,20 @@ import java.util.List;
  * @author thothbot
  *
  */
-public final class CubeShader extends Shader 
+public final class DistanceRGBAShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/cube_vert.glsl")
+		@Source("source/distanceRGBA_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/cube_frag.glsl")
+		@Source("source/distanceRGBA_frag.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
-	public CubeShader()
+	public DistanceRGBAShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -53,7 +51,6 @@ public final class CubeShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tCube", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0 ));
+		this.addUniform("lightPos", new Uniform(Uniform.TYPE.V3, new Vector3( 0, 0, 0 ) ));
 	}
 }

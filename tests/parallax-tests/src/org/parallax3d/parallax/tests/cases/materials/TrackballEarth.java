@@ -31,7 +31,7 @@ import org.parallax3d.parallax.graphics.materials.PointsMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.Points;
-import org.parallax3d.parallax.graphics.renderers.shaders.NormalMapShader;
+import org.parallax3d.parallax.graphics.extras.shaders.NormalMapShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;

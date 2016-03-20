@@ -20,11 +20,10 @@ package org.parallax3d.parallax.loaders;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.materials.*;
-import org.parallax3d.parallax.graphics.renderers.shaders.NormalMapShader;
+import org.parallax3d.parallax.graphics.extras.shaders.NormalMapShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.CompressedTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;

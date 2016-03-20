@@ -39,10 +39,10 @@ public final class NormalShader extends Shader
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/normal.vs.glsl")
+		@Source("source/normal_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/normal.fs.glsl")
+		@Source("source/normal_frag.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
@@ -57,34 +57,4 @@ public final class NormalShader extends Shader
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
 	}
 	
-	@Override
-	protected void updateVertexSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksVertexShader.MORPHTARGET_PARS,
-			ChunksVertexShader.LOGDEPTHBUF_PAR
-		);
-		
-		List<String> main1 = Arrays.asList(
-			ChunksVertexShader.MORPHTARGET,
-			ChunksVertexShader.DEFAULT,
-			ChunksVertexShader.LOGDEPTHBUF
-		);
-		
-		super.updateVertexSource(updateShaderSource(src, vars, main1));
-	}
-	
-	@Override
-	protected void updateFragmentSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF_PAR
-		);
-			
-		List<String> main = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF
-		);
-
-		super.updateFragmentSource(updateShaderSource(src, vars, main));
-	}
 }

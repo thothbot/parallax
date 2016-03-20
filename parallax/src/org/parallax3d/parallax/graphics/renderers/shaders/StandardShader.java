@@ -18,34 +18,24 @@
 
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
+import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-import java.util.Arrays;
-import java.util.List;
-
-/**
- * CubeGeometry map shader.
- * <p>
- * Based on three.js code.
- *  
- * @author thothbot
- *
- */
-public final class CubeShader extends Shader 
+public final class StandardShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/cube_vert.glsl")
+		@Source("source/meshstandard_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/cube_frag.glsl")
+		@Source("source/meshstandard_frag.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
-	public CubeShader()
+	public StandardShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -53,7 +43,21 @@ public final class CubeShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tCube", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("tFlip", new Uniform(Uniform.TYPE.F, -1.0 ));
+		this.setUniforms(UniformsLib.common());
+		this.setUniforms(UniformsLib.aomap());
+		this.setUniforms(UniformsLib.lightmap());
+		this.setUniforms(UniformsLib.emissivemap());
+		this.setUniforms(UniformsLib.bumpmap());
+		this.setUniforms(UniformsLib.normalmap());
+		this.setUniforms(UniformsLib.displacementmap());
+		this.setUniforms(UniformsLib.roughnessmap());
+		this.setUniforms(UniformsLib.metalnessmap());
+		this.setUniforms(UniformsLib.fog());
+		this.setUniforms(UniformsLib.lights());
+		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
+		this.addUniform("roughness", new Uniform(Uniform.TYPE.F, 0.5 ));
+		this.addUniform("metalness", new Uniform(Uniform.TYPE.F, 0. ));
+		this.addUniform("envMapIntensity", new Uniform(Uniform.TYPE.F, 1.0 ));
+
 	}
 }

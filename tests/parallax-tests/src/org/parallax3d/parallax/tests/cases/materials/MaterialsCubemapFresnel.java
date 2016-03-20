@@ -26,7 +26,7 @@ import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.shaders.CubeShader;
-import org.parallax3d.parallax.graphics.renderers.shaders.FresnelShader;
+import org.parallax3d.parallax.graphics.extras.shaders.FresnelShader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.input.TouchMoveHandler;

@@ -16,8 +16,10 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.renderers.shaders;
+package org.parallax3d.parallax.graphics.extras.shaders;
 
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
@@ -29,7 +31,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  *
  */
-public final class FresnelShader extends Shader 
+public final class FresnelShader extends Shader
 {
 
 	interface Resources extends DefaultResources

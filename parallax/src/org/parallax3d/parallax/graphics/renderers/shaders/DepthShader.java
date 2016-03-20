@@ -39,10 +39,10 @@ public final class DepthShader extends Shader
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/depth.vs.glsl")
+		@Source("source/depth_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/depth.fs.glsl")
+		@Source("source/depth_frag.glsl")
 		SourceTextResource getFragmentShader();
 
 	}
@@ -58,36 +58,5 @@ public final class DepthShader extends Shader
 		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0 ));
 		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0 ));
 		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
-	}
-	
-	@Override
-	protected void updateVertexSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksVertexShader.MORPHTARGET_PARS,
-			ChunksVertexShader.LOGDEPTHBUF_PAR
-		);
-		
-		List<String> main1 = Arrays.asList(
-			ChunksVertexShader.MORPHTARGET,
-			ChunksVertexShader.DEFAULT,
-			ChunksVertexShader.LOGDEPTHBUF
-		);
-
-		super.updateVertexSource(updateShaderSource(src, vars, main1));
-	}
-	
-	@Override
-	protected void updateFragmentSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF_PAR
-		);
-			
-		List<String> main = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF
-		);
-			
-		super.updateFragmentSource(updateShaderSource(src, vars, main));
 	}
 }

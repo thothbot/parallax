@@ -31,10 +31,10 @@ public class DashedShader extends Shader
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/dashed.vs.glsl")
+		@Source("source/linedashed_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/dashed.fs.glsl")
+		@Source("source/linedashed_frag.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
@@ -47,46 +47,9 @@ public class DashedShader extends Shader
 	protected void initUniforms()
 	{
 		this.setUniforms(UniformsLib.common());
-		this.setUniforms(UniformsLib.getFog());
+		this.setUniforms(UniformsLib.fog());
 		this.addUniform("scale",     new Uniform(Uniform.TYPE.F, 1.0 ));
 		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F, 1.0 ));
 		this.addUniform("totalSize", new Uniform(Uniform.TYPE.F, 2.0 ));
-	}
-	
-	@Override
-	protected void updateVertexSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksVertexShader.COLOR_PARS,
-			ChunksVertexShader.LOGDEPTHBUF_PAR
-		);
-		
-		List<String> main1 = Arrays.asList(
-			ChunksVertexShader.COLOR
-		);
-		
-		List<String> main2 = Arrays.asList(
-			ChunksVertexShader.LOGDEPTHBUF
-		);
-		
-		super.updateVertexSource(Shader.updateShaderSource(src, vars, main1, main2));	
-	}
-	
-	@Override
-	protected void updateFragmentSource(String src)
-	{
-		List<String> vars = Arrays.asList(
-			ChunksFragmentShader.COLOR_PARS,
-			ChunksFragmentShader.FOG_PARS,
-			ChunksFragmentShader.LOGDEPTHBUF_PAR
-		);
-			
-		List<String> main = Arrays.asList(
-			ChunksFragmentShader.LOGDEPTHBUF,
-			ChunksFragmentShader.COLOR,
-			ChunksFragmentShader.FOG
-		);
-			
-		super.updateFragmentSource(Shader.updateShaderSource(src, vars, main));	
 	}
 }
