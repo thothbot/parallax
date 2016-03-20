@@ -20,36 +20,37 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shader
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
- * Vignette shader
- * <p>
- * Based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
- * <p>
- * Based on three.js code
- * 
- * @author thothbot
+ * @author felixturner / http://airtight.cc/
  *
+ * RGB Shift Shader
+ * Shifts red and blue channels from center in opposite directions
+ * Ported from http://kriss.cx/tom/2009/05/rgb-shift/
+ * by Tom Butterworth / http://kriss.cx/tom/
+ *
+ * amount: shift distance (1 is width of input)
+ * angle: shift angle in radians
  */
-@ThreejsObject("THREE.VignetteShader")
-public final class VignetteShader extends Shader
+@ThreejsObject("THREE.RGBShiftShader")
+public final class RGBShiftShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
-		
+
 		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/vignette.fs.glsl")
+		@Source("source/rgbShift.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
-	
-	public VignetteShader()
+
+	public RGBShiftShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,9 +59,7 @@ public final class VignetteShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("darkness", new Uniform(Uniform.TYPE.F, 1.0));
-
+		this.addUniform("amount", new Uniform(Uniform.TYPE.F, 0.005));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 0.0));
 	}
-
 }

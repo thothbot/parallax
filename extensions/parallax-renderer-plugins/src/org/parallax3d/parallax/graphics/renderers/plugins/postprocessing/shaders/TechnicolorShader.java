@@ -20,36 +20,34 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shader
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
- * Vignette shader
- * <p>
- * Based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
- * <p>
- * Based on three.js code
- * 
- * @author thothbot
+ * @author flimshaw / http://charliehoey.com
  *
+ * Technicolor Shader
+ * Simulates the look of the two-strip technicolor process popular in early 20th century films.
+ * More historical info here: http://www.widescreenmuseum.com/oldcolor/technicolor1.htm
+ * Demo here: http://charliehoey.com/technicolor_shader/shader_test.html
  */
-@ThreejsObject("THREE.VignetteShader")
-public final class VignetteShader extends Shader
+@ThreejsObject("THREE.TechnicolorShader")
+public final class TechnicolorShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
-		
+
 		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/vignette.fs.glsl")
+		@Source("source/technicolor.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
-	
-	public VignetteShader()
+
+	public TechnicolorShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -58,9 +56,5 @@ public final class VignetteShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("darkness", new Uniform(Uniform.TYPE.F, 1.0));
-
 	}
-
 }

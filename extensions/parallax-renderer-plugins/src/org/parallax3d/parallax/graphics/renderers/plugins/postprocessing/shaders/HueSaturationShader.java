@@ -23,6 +23,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Hue and saturation adjustment
@@ -38,6 +39,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  * 
  */
+@ThreejsObject("THREE.HueSaturationShader")
 public final class HueSaturationShader extends Shader 
 {
 

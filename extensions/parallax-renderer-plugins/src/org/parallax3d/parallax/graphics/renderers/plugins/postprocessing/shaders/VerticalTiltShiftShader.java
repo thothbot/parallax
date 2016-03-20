@@ -23,6 +23,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Simple fake tilt-shift effect, modulating two pass Gaussian blur (see above) by vertical position.
@@ -39,6 +40,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  * 
  */
+@ThreejsObject("THREE.VerticalTiltShiftShader")
 public final class VerticalTiltShiftShader extends Shader
 {
 	interface Resources extends DefaultResources

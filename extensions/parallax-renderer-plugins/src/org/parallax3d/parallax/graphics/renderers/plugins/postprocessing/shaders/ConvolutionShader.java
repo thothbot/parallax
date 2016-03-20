@@ -24,6 +24,7 @@ import org.parallax3d.parallax.math.Vector2;
 
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 /**
@@ -35,6 +36,7 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
  * @author thothbot
  *
  */
+@ThreejsObject("THREE.ConvolutionShader")
 public final class ConvolutionShader extends Shader
 {
 	interface Resources extends DefaultResources

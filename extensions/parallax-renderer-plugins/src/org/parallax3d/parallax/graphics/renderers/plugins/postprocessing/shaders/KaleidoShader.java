@@ -20,36 +20,37 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shader
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
- * Vignette shader
- * <p>
- * Based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
- * <p>
- * Based on three.js code
- * 
- * @author thothbot
+ * @author felixturner / http://airtight.cc/
  *
+ * Kaleidoscope Shader
+ * Radial reflection around center point
+ * Ported from: http://pixelshaders.com/editor/
+ * by Toby Schachman / http://tobyschachman.com/
+ *
+ * sides: number of reflections
+ * angle: initial angle in radians
  */
-@ThreejsObject("THREE.VignetteShader")
-public final class VignetteShader extends Shader
+@ThreejsObject("THREE.KaleidoShader")
+public final class KaleidoShader extends Shader
 {
+
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
-		
+
 		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/vignette.fs.glsl")
+		@Source("source/kaleido.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
-	
-	public VignetteShader()
+
+	public KaleidoShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -57,10 +58,9 @@ public final class VignetteShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("darkness", new Uniform(Uniform.TYPE.F, 1.0));
-
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("sides", new Uniform(Uniform.TYPE.F, 6.0));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 0.0));
 	}
 
 }

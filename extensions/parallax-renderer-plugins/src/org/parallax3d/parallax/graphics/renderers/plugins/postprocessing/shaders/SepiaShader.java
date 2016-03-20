@@ -23,6 +23,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Sepia tone shader 
@@ -34,6 +35,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  *
  */
+@ThreejsObject("THREE.SepiaShader")
 public final class SepiaShader extends Shader
 {
 	interface Resources extends DefaultResources

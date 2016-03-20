@@ -23,6 +23,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Depth-of-field shader with bokeh
@@ -33,6 +34,8 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  *
  */
+@ThreejsObject("THREE.BokehShader")
+// TODO
 public final class BokehShader extends Shader
 {
 	interface Resources extends DefaultResources

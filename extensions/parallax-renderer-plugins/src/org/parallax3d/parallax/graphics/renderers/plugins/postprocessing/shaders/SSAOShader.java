@@ -24,6 +24,7 @@ import org.parallax3d.parallax.math.Vector2;
 
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Screen-space ambient occlusion shader
@@ -40,6 +41,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  * 
  */
+@ThreejsObject("THREE.SSAOShader")
 public final class SSAOShader extends Shader
 {
 	interface Resources extends DefaultResources

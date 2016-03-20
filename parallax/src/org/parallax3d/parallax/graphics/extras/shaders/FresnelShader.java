@@ -22,6 +22,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Fresnel shader.
@@ -31,6 +32,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  *
  */
+@ThreejsObject("THREE.FresnelShader")
 public final class FresnelShader extends Shader
 {
 
@@ -38,10 +40,10 @@ public final class FresnelShader extends Shader
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
 
-		@Source("source/fresnel.vs.glsl")
+		@Source("source/fresnel_vert.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/fresnel.fs.glsl")
+		@Source("source/fresnel_frag.glsl")
 		SourceTextResource getFragmentShader();
 	}
 
@@ -51,7 +53,7 @@ public final class FresnelShader extends Shader
 	}
 
 	@Override
-	protected void initUniforms() 
+	protected void initUniforms()
 	{
 		this.addUniform("mRefractionRatio", new Uniform(Uniform.TYPE.F, 1.02 ));
 		this.addUniform("mFresnelBias", new Uniform(Uniform.TYPE.F, .1 ));

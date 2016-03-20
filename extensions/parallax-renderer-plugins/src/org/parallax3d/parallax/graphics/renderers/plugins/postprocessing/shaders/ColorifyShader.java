@@ -24,6 +24,7 @@ import org.parallax3d.parallax.math.Color;
 
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Colorify shader
@@ -33,6 +34,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  *
  */
+@ThreejsObject("THREE.ColorifyShader")
 public final class ColorifyShader extends Shader
 {
 	interface Resources extends DefaultResources

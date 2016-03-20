@@ -23,6 +23,7 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Focus shader
@@ -33,6 +34,7 @@ import org.parallax3d.parallax.system.SourceTextResource;
  * @author thothbot
  *
  */
+@ThreejsObject("THREE.FocusShader")
 public final class FocusShader extends Shader
 {
 	interface Resources extends DefaultResources

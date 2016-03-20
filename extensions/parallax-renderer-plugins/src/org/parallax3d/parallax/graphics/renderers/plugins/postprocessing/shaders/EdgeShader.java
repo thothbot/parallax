@@ -20,36 +20,34 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shader
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
- * Vignette shader
- * <p>
- * Based on PaintEffect postprocess from ro.me <a href="http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js">code.google.com/p/3-dreams-of-black</a>
- * <p>
- * Based on three.js code
- * 
- * @author thothbot
+ * @author zz85 / https://github.com/zz85 | https://www.lab4games.net/zz85/blog
  *
+ * Edge Detection Shader using Frei-Chen filter
+ * Based on http://rastergrid.com/blog/2011/01/frei-chen-edge-detector
+ *
+ * aspect: vec2 of (1/width, 1/height)
  */
-@ThreejsObject("THREE.VignetteShader")
-public final class VignetteShader extends Shader
+@ThreejsObject("THREE.EdgeShader")
+public final class EdgeShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
 		Resources INSTANCE = SourceBundleProxy.create(Resources.class);
-		
+
 		@Source("source/defaultUv.vs.glsl")
 		SourceTextResource getVertexShader();
 
-		@Source("source/vignette.fs.glsl")
+		@Source("source/edge.fs.glsl")
 		SourceTextResource getFragmentShader();
 	}
-	
-	public VignetteShader()
+
+	public EdgeShader()
 	{
 		super(Resources.INSTANCE);
 	}
@@ -57,9 +55,8 @@ public final class VignetteShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("offset", new Uniform(Uniform.TYPE.F, 1.0));
-		this.addUniform("darkness", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
+		this.addUniform("aspect", new Uniform(Uniform.TYPE.V2, new Vector2( 512, 512 )));
 
 	}
 
