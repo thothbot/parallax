@@ -1,61 +1,66 @@
 #ifdef USE_ENVMAP
 
-	vec3 reflectVec;
-
 	#if defined( USE_BUMPMAP ) || defined( USE_NORMALMAP ) || defined( PHONG )
 
 		vec3 cameraToVertex = normalize( vWorldPosition - cameraPosition );
 
-		// http://en.wikibooks.org/wiki/GLSL_Programming/Applying_Matrix_Transformations
 		// Transforming Normal Vectors with the Inverse Transformation
+		vec3 worldNormal = inverseTransformDirection( normal, viewMatrix );
 
-		vec3 worldNormal = normalize( vec3( vec4( normal, 0.0 ) * viewMatrix ) );
+		#ifdef ENVMAP_MODE_REFLECTION
 
-		if ( useRefract ) {
+			vec3 reflectVec = reflect( cameraToVertex, worldNormal );
 
-			reflectVec = refract( cameraToVertex, worldNormal, refractionRatio );
+		#else
 
-		} else { 
+			vec3 reflectVec = refract( cameraToVertex, worldNormal, refractionRatio );
 
-			reflectVec = reflect( cameraToVertex, worldNormal );
-
-		}
+		#endif
 
 	#else
 
-		reflectVec = vReflect;
+		vec3 reflectVec = vReflect;
 
 	#endif
 
 	#ifdef DOUBLE_SIDED
-
-		float flipNormal = ( -1.0 + 2.0 * float( gl_FrontFacing ) );
-		vec4 cubeColor = textureCube( envMap, flipNormal * vec3( flipEnvMap * reflectVec.x, reflectVec.yz ) );
-
+		float flipNormal = ( float( gl_FrontFacing ) * 2.0 - 1.0 );
 	#else
+		float flipNormal = 1.0;
+	#endif
 
-		vec4 cubeColor = textureCube( envMap, vec3( flipEnvMap * reflectVec.x, reflectVec.yz ) );
+	#ifdef ENVMAP_TYPE_CUBE
+
+		vec4 envColor = textureCube( envMap, flipNormal * vec3( flipEnvMap * reflectVec.x, reflectVec.yz ) );
+
+	#elif defined( ENVMAP_TYPE_EQUIREC )
+
+		vec2 sampleUV;
+		sampleUV.y = saturate( flipNormal * reflectVec.y * 0.5 + 0.5 );
+		sampleUV.x = atan( flipNormal * reflectVec.z, flipNormal * reflectVec.x ) * RECIPROCAL_PI2 + 0.5;
+		vec4 envColor = texture2D( envMap, sampleUV );
+
+	#elif defined( ENVMAP_TYPE_SPHERE )
+
+		vec3 reflectView = flipNormal * normalize((viewMatrix * vec4( reflectVec, 0.0 )).xyz + vec3(0.0,0.0,1.0));
+		vec4 envColor = texture2D( envMap, reflectView.xy * 0.5 + 0.5 );
 
 	#endif
 
-	#ifdef GAMMA_INPUT
+	envColor = envMapTexelToLinear( envColor );
 
-		cubeColor.xyz *= cubeColor.xyz;
+	#ifdef ENVMAP_BLENDING_MULTIPLY
+
+		outgoingLight = mix( outgoingLight, outgoingLight * envColor.xyz, specularStrength * reflectivity );
+
+	#elif defined( ENVMAP_BLENDING_MIX )
+
+		outgoingLight = mix( outgoingLight, envColor.xyz, specularStrength * reflectivity );
+
+	#elif defined( ENVMAP_BLENDING_ADD )
+
+		outgoingLight += envColor.xyz * specularStrength * reflectivity;
 
 	#endif
-
-	if ( combine == 1 ) {
-
-		gl_FragColor.xyz = mix( gl_FragColor.xyz, cubeColor.xyz, specularStrength * reflectivity );
-
-	} else if ( combine == 2 ) {
-
-		gl_FragColor.xyz += cubeColor.xyz * specularStrength * reflectivity;
-
-	} else {
-
-		gl_FragColor.xyz = mix( gl_FragColor.xyz, gl_FragColor.xyz * cubeColor.xyz, specularStrength * reflectivity );
-
-	}
 
 #endif
