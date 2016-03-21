@@ -43,6 +43,7 @@ import org.parallax3d.parallax.math.Vector4;
  */
 @ThreejsObject("THREE.Face3")
 public class Face3 {
+
 	protected int a;
 	protected int b;
 	protected int c;
@@ -53,7 +54,6 @@ public class Face3 {
 	protected List<Color> vertexColors;
 	// protected List<Material> materials;
 	protected int materialIndex = 0;
-	protected List<Vector4> vertexTangents;
 
 	// Special case used in Geometry.computeMorphNormals()
 	public Vector3 __originalFaceNormal;
@@ -117,11 +117,10 @@ public class Face3 {
 		this.setB(b);
 		this.setC(c);
 		this.setNormal(new Vector3());
-		this.vertexTangents = new ArrayList<Vector4>();
-		this.vertexNormals = new ArrayList<Vector3>();
-		this.color = new Color(0x000000);
+		this.vertexNormals = new ArrayList<>();
+		this.color = new Color();
 
-		this.vertexColors = new ArrayList<Color>();
+		this.vertexColors = new ArrayList<>();
 	}
 
 	/**
@@ -293,39 +292,6 @@ public class Face3 {
 	}
 
 	/**
-	 * Sets List of 3 vertex tangets.
-	 */
-	public Face3 setVertexTangents(List<Vector4> vertexTangents) {
-		this.vertexTangents = vertexTangents;
-		return this;
-	}
-
-	/**
-	 * Gets List of 3 vertex tangets.
-	 */
-	public List<Vector4> getVertexTangents() {
-		return vertexTangents;
-	}
-//
-//	/**
-//	 * Sets the Face centroid.
-//	 */
-//	public void setCentroid(Vector3 centroid) {
-//		this.centroid = centroid;
-//	}
-//
-//	/**
-//	 * Gets the Face centroid.
-//	 */
-//	public Vector3 getCentroid() {
-//		return centroid;
-//	}
-
-	// public List<Material> getMaterials(){
-	// return this.materials;
-	// }
-
-	/**
 	 * Gets Material index.
 	 */
 	public int getMaterialIndex() {
@@ -340,23 +306,33 @@ public class Face3 {
 		return this;
 	}
 
+	public Face3 copy(Face3 source) {
+		this.a = source.a;
+		this.b = source.b;
+		this.c = source.c;
+
+		this.normal.copy( source.normal );
+		this.color.copy( source.color );
+
+		this.materialIndex = source.materialIndex;
+
+		for ( int i = 0, il = source.vertexNormals.size(); i < il; i ++ ) {
+
+			this.vertexNormals.add(i, source.vertexNormals.get(i).clone());
+
+		}
+
+		for ( int i = 0, il = source.vertexColors.size(); i < il; i ++ ) {
+
+			this.vertexColors.add(i, source.vertexColors.get(i).clone());
+
+		}
+
+		return this;
+	}
+
 	public Face3 clone() {
-		Face3 face = new Face3(this.a, this.b, this.c);
-
-		face.normal.copy(this.normal);
-		face.color.copy(this.color);
-		face.materialIndex = this.materialIndex;
-
-		for (int i = 0, il = this.vertexNormals.size(); i < il; i++)
-			face.vertexNormals.add(this.vertexNormals.get(i).clone());
-
-		for (int i = 0, il = this.vertexColors.size(); i < il; i++)
-			face.vertexColors.add(this.vertexColors.get(i).clone());
-
-		for (int i = 0, il = this.vertexTangents.size(); i < il; i++)
-			face.vertexTangents.add(this.vertexTangents.get(i).clone());
-
-		return face;
+		return new Face3(1, 2, 3).copy( this );
 	}
 
 	public String toString() {
