@@ -197,7 +197,7 @@ public class Mesh extends GeometryObject
 
 		}
 
-		List<List<Vector2>> uvs;
+		Float32Array uvs = null;
 		Raycaster.Intersect intersection;
 
 		if ( geometry instanceof BufferGeometry )
@@ -209,7 +209,7 @@ public class Mesh extends GeometryObject
 
 			if ( attributes.get("uv") != null ) {
 
-				uvs = attributes.get("uv").getArray();
+				uvs = (Float32Array) attributes.get("uv").getArray();
 
 			}
 
@@ -263,8 +263,9 @@ public class Mesh extends GeometryObject
 			List<Vector3> vertices = ((Geometry) geometry).getVertices();
 			List<Face3> faces =  ((Geometry) geometry).getFaces();
 			List<List<Vector2>> faceVertexUvs = ((Geometry) geometry).getFaceVertexUvs().get(0);
+			List<List<Vector2>> uvs2 = null;
 			if ( faceVertexUvs.size() > 0 )
-				uvs = faceVertexUvs;
+				uvs2 = faceVertexUvs;
 
 			for ( int f = 0, fl = faces.size(); f < fl; f ++ )
 			{
@@ -315,9 +316,9 @@ public class Mesh extends GeometryObject
 
 				if ( intersection!= null ) {
 
-					if ( uvs != null ) {
+					if ( uvs2 != null ) {
 
-						List<Vector2> uvs_f = uvs.get(f);
+						List<Vector2> uvs_f = uvs2.get(f);
 						uvA.copy(uvs_f.get(0));
 						uvB.copy(uvs_f.get(1));
 						uvC.copy(uvs_f.get(2));
@@ -345,7 +346,7 @@ public class Mesh extends GeometryObject
 	}
 
 	private Raycaster.Intersect checkBufferGeometryIntersection( Mesh object, Raycaster raycaster, Ray ray,
-																 Float32Array positions, List<List<Vector2>> uvs, int a, int b, int c)
+																 Float32Array positions, Float32Array uvs, int a, int b, int c)
 	{
 
 		vA.fromArray( positions, a * 3 );

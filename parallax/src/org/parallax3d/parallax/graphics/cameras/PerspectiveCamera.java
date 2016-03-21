@@ -33,7 +33,7 @@ import org.parallax3d.parallax.math.Mathematics;
  *
  */
 @ThreejsObject("THREE.PerspectiveCamera")
-public class PerspectiveCamera extends Camera implements HasNearFar, HasProjectionMatrix
+public class PerspectiveCamera extends Camera implements HasNearFar
 {
 	public double focalLength = 10;
 	public double zoom = 1.0;

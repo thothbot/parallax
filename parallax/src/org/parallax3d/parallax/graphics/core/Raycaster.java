@@ -18,16 +18,19 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
+import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.objects.Line;
+import org.parallax3d.parallax.math.Ray;
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.math.Ray;
-import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.graphics.objects.Line;
-import org.parallax3d.parallax.graphics.objects.Mesh;
 
 /**
  * This class makes raycasting easier. Raycasting is used for picking and more.
@@ -36,10 +39,6 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 @ThreejsObject("THREE.Raycaster")
 public class Raycaster 
 {
-	/**
-	 * The precision factor of the raycaster when intersecting {@link Mesh} objects.
-	 */
-	public static final double PRECISION = 0.0001;
 	/**
 	 * The precision factor of the raycaster when intersecting {@link Line} objects.
 	 */
@@ -82,9 +81,9 @@ public class Raycaster
 		}
 	}
 
-	private Ray ray;
-	private double near;
-	private double far;
+	Ray ray;
+	double near;
+	double far;
 
 	public Raycaster()
 	{
@@ -151,11 +150,33 @@ public class Raycaster
 		this.far = far;
 	}
 
-	public void set( Vector3 origin, Vector3 direction ) {
+	public Raycaster set( Vector3 origin, Vector3 direction ) {
 
 		this.ray.set( origin, direction );
 		// direction is assumed to be normalized (for accurate distance calculations)
 
+		return this;
+	}
+
+	public Raycaster setFromCamera(Vector2 coords, Camera camera) {
+
+		if (camera instanceof PerspectiveCamera) {
+
+			this.ray.getOrigin().setFromMatrixPosition(camera.getMatrixWorld());
+			this.ray.getDirection().set(coords.getX(), coords.getY(), 0.5).unproject(camera).sub(this.ray.getOrigin()).normalize();
+
+		} else if (camera instanceof OrthographicCamera) {
+
+			this.ray.getOrigin().set(coords.getX(), coords.getY(), -1).unproject(camera);
+			this.ray.getDirection().set(0, 0, -1).transformDirection(camera.getMatrixWorld());
+
+		} else {
+
+			Log.error("Raycaster.setFromCamera: Unsupported camera type: " + camera.getClass().getSimpleName());
+
+		}
+
+		return this;
 	}
 
 	/**
