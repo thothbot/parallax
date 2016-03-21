@@ -26,7 +26,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.shaders.DepthRGBAShader;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.graphics.core.Gyroscope;
+import org.parallax3d.parallax.graphics.extras.core.Gyroscope;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.helpers.CameraHelper;
 import org.parallax3d.parallax.graphics.lights.SpotLight;

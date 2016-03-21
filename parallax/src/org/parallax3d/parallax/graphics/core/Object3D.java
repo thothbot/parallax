@@ -42,15 +42,15 @@ import org.parallax3d.parallax.system.ThreejsObject;
 public class Object3D extends AbstractPropertyObject
 {
 	public static final Vector3 DefaultUp = new Vector3( 0, 1, 0 );
+	public static final boolean DefaultMatrixAutoUpdate = true;
 
-
-	public static interface ObjectHandler
+	public interface ObjectHandler
 	{
 		void onAdd(Object3D object);
 		void onRemove(Object3D object);
 	}
 
-	public static interface Traverse {
+	public interface Traverse {
 		void callback(Object3D object);
 	}
 
@@ -58,21 +58,21 @@ public class Object3D extends AbstractPropertyObject
 
 	int id = 0;
 
-	String name;
+	String name = "";
 
 	Object3D parent;
 
-	ArrayList<Object3D> children;
+	ArrayList<Object3D> children = new ArrayList<>();
 
 	Vector3 up = Object3D.DefaultUp.clone();
 
-	Vector3 position;
+	Vector3 position = new Vector3();
 
-	Euler rotation;
+	Euler rotation = new Euler();
 
-	Quaternion quaternion;
+	Quaternion quaternion = new Quaternion();
 
-	Vector3 scale;
+	Vector3 scale = new Vector3(1, 1, 1);
 
 	Matrix4 modelViewMatrix = new Matrix4();
 
@@ -80,25 +80,25 @@ public class Object3D extends AbstractPropertyObject
 
 	private double renderDepth;
 
-	boolean rotationAutoUpdate;
+	boolean rotationAutoUpdate = true;
 
-	Matrix4 matrix;
+	Matrix4 matrix = new Matrix4();
 
-	Matrix4 matrixWorld;
+	Matrix4 matrixWorld = new Matrix4();
 
-	boolean matrixAutoUpdate;
+	boolean matrixAutoUpdate = Object3D.DefaultMatrixAutoUpdate;
 
-	boolean matrixWorldNeedsUpdate;
+	boolean matrixWorldNeedsUpdate = false;
 
 	Layers layers = new Layers();
 
-	boolean visible;
+	boolean visible = true;
 
-	boolean isCastShadow = false;
+	boolean castShadow = false;
 
-	boolean isReceiveShadow = false;
+	boolean receiveShadow = false;
 
-	boolean isFrustumCulled = true;
+	boolean frustumCulled = true;
 
 	int renderOrder = 0;
 
@@ -111,18 +111,6 @@ public class Object3D extends AbstractPropertyObject
 	{
 		this.id = Object3D.Object3DCount++;
 
-		this.name = "";
-
-		this.parent = null;
-
-		this.children = new ArrayList<Object3D>();
-
-		this.up = Object3D.DefaultUp.clone();
-
-		this.position = new Vector3();
-		this.scale = new Vector3(1, 1, 1);
-
-		this.quaternion = new Quaternion();
 		this.quaternion.setHandler(new QuaternionChangeHandler() {
 
 			@Override
@@ -130,8 +118,6 @@ public class Object3D extends AbstractPropertyObject
 				rotation.setFromQuaternion( quaternion );
 			}
 		});
-
-		this.rotation = new Euler();
 		this.rotation.setHandler(new Euler.EulerChangeHandler() {
 
 			@Override
@@ -139,20 +125,6 @@ public class Object3D extends AbstractPropertyObject
 				quaternion.setFromEuler( rotation );
 			}
 		});
-
-		this.rotationAutoUpdate = true;
-
-		this.matrix = new Matrix4();
-
-		this.matrixWorld = new Matrix4();
-
-		this.matrixAutoUpdate = true;
-
-		this.matrixWorldNeedsUpdate = false;
-
-		this.visible = true;
-
-		this.isFrustumCulled = true;
 	}
 
 	public void setHandler(ObjectHandler handler) {
@@ -268,11 +240,11 @@ public class Object3D extends AbstractPropertyObject
 	 * Default � false.
 	 */
 	public boolean isCastShadow() {
-		return isCastShadow;
+		return castShadow;
 	}
 
 	public void setCastShadow(boolean isCastShadow) {
-		this.isCastShadow = isCastShadow;
+		this.castShadow = isCastShadow;
 	}
 
 	/**
@@ -280,11 +252,11 @@ public class Object3D extends AbstractPropertyObject
 	 * @return
 	 */
 	public boolean isReceiveShadow() {
-		return isReceiveShadow;
+		return receiveShadow;
 	}
 
 	public void setReceiveShadow(boolean isReceiveShadow) {
-		this.isReceiveShadow = isReceiveShadow;
+		this.receiveShadow = isReceiveShadow;
 	}
 
 	/**
@@ -293,11 +265,11 @@ public class Object3D extends AbstractPropertyObject
 	 * @return
 	 */
 	public boolean isFrustumCulled() {
-		return isFrustumCulled;
+		return frustumCulled;
 	}
 
 	public void setFrustumCulled(boolean isFrustumCulled) {
-		this.isFrustumCulled = isFrustumCulled;
+		this.frustumCulled = isFrustumCulled;
 	}
 
 	public void setRotationAutoUpdate(boolean rotationAutoUpdate) {
@@ -456,6 +428,7 @@ public class Object3D extends AbstractPropertyObject
 		this.matrix.decompose( this.position, this.quaternion, this.scale );
 	}
 
+
 	public void setRotationFromAxisAngle ( Vector3 axis, double angle ) {
 
 		// assumes axis is normalized
@@ -492,9 +465,8 @@ public class Object3D extends AbstractPropertyObject
 	 * @param angle The angle in radians.
 	 * @return
 	 */
+	static final Quaternion q1 = new Quaternion();
 	public Object3D rotateOnAxis(Vector3 axis, double angle) {
-
-		Quaternion q1 = new Quaternion();
 
 		q1.setFromAxisAngle( axis, angle );
 
@@ -504,9 +476,10 @@ public class Object3D extends AbstractPropertyObject
 
 	}
 
+	static final Vector3 v1 = new Vector3();
 	public Object3D rotateX(double angle) {
 
-		Vector3 v1 = new Vector3( 1.0, 0, 0 );
+		v1.set( 1.0, 0, 0 );
 
 		return this.rotateOnAxis( v1, angle );
 
@@ -514,7 +487,7 @@ public class Object3D extends AbstractPropertyObject
 
 	public Object3D rotateY(double angle) {
 
-		Vector3 v1 = new Vector3( 0, 1.0, 0 );
+		v1.set( 0, 1.0, 0 );
 
 		return this.rotateOnAxis( v1, angle );
 
@@ -522,7 +495,7 @@ public class Object3D extends AbstractPropertyObject
 
 	public Object3D rotateZ(double angle) {
 
-		Vector3 v1 = new Vector3( 0, 0, 1.0 );
+		v1.set( 0, 0, 1.0 );
 
 		return this.rotateOnAxis( v1, angle );
 
@@ -535,9 +508,6 @@ public class Object3D extends AbstractPropertyObject
 	 * @return
 	 */
 	public Object3D translateOnAxis ( Vector3 axis, double distance ) {
-
-		Vector3 v1 = new Vector3();
-
 
 		v1.copy( axis ).apply( this.quaternion );
 
@@ -553,7 +523,7 @@ public class Object3D extends AbstractPropertyObject
 	 */
 	public Object3D translateX(double distance) {
 
-		Vector3 v1 = new Vector3( 1.0, 0, 0 );
+		v1.set( 1.0, 0, 0 );
 
 		return this.translateOnAxis( v1, distance );
 
@@ -566,7 +536,7 @@ public class Object3D extends AbstractPropertyObject
 	 */
 	public Object3D translateY(double distance) {
 
-		Vector3 v1 = new Vector3( 0, 1.0, 0 );
+		v1.set( 0, 1.0, 0 );
 
 		return this.translateOnAxis( v1, distance );
 
@@ -579,7 +549,7 @@ public class Object3D extends AbstractPropertyObject
 	 */
 	public Object3D translateZ(double distance) {
 
-		Vector3 v1 = new Vector3( 0, 0, 1.0 );
+		v1.set( 0, 0, 1.0 );
 
 		return this.translateOnAxis( v1, distance );
 
@@ -595,10 +565,9 @@ public class Object3D extends AbstractPropertyObject
 	 * @param vector A world vector.
 	 * @return
 	 */
+	static final Matrix4 m1 = new Matrix4();
 	public Vector3 worldToLocal( Vector3 vector )
 	{
-		Matrix4 m1 = new Matrix4();
-
 		return vector.apply( m1.getInverse( this.matrixWorld ) );
 	}
 
@@ -609,9 +578,6 @@ public class Object3D extends AbstractPropertyObject
 	public void lookAt(Vector3 vector)
 	{
 		// This routine does not support objects with rotated and/or translated parent(s)
-
-		Matrix4 m1 = new Matrix4();
-
 
 		m1.lookAt( vector, this.position, this.up );
 
@@ -747,15 +713,12 @@ public class Object3D extends AbstractPropertyObject
 		return getWorldQuaternion(new Quaternion());
 	}
 
+	static final Vector3 v2 = new Vector3();
 	public Quaternion getWorldQuaternion(Quaternion optionalTarget) {
-
-		Vector3 position = new Vector3();
-		Vector3 scale = new Vector3();
-
 
 		this.updateMatrixWorld( true );
 
-		this.matrixWorld.decompose( position, optionalTarget, scale );
+		this.matrixWorld.decompose( v1, optionalTarget, v2 );
 
 		return optionalTarget;
 	}
@@ -766,11 +729,9 @@ public class Object3D extends AbstractPropertyObject
 
 	public Euler getWorldRotation(Euler optionalTarget) {
 
-		Quaternion quaternion = new Quaternion();
+		this.getWorldQuaternion( q1 );
 
-		this.getWorldQuaternion( quaternion );
-
-		return optionalTarget.setFromQuaternion( quaternion, this.rotation.getOrder() );
+		return optionalTarget.setFromQuaternion( q1, this.rotation.getOrder() );
 
 	}
 
@@ -780,12 +741,9 @@ public class Object3D extends AbstractPropertyObject
 
 	public Vector3 getWorldScale(Vector3 optionalTarget) {
 
-		Vector3 position = new Vector3();
-		Quaternion quaternion = new Quaternion();
-
 		this.updateMatrixWorld( true );
 
-		this.matrixWorld.decompose( position, quaternion, optionalTarget );
+		this.matrixWorld.decompose( v1, quaternion, optionalTarget );
 
 		return optionalTarget;
 	}
@@ -796,11 +754,9 @@ public class Object3D extends AbstractPropertyObject
 
 	public Vector3 getWorldDirection(Vector3 optionalTarget) {
 
-		Quaternion quaternion = new Quaternion();
+		this.getWorldQuaternion( q1 );
 
-		this.getWorldQuaternion( quaternion );
-
-		return optionalTarget.set( 0, 0, 1.0 ).apply( quaternion );
+		return optionalTarget.set( 0, 0, 1.0 ).apply( q1 );
 
 	}
 
@@ -837,6 +793,20 @@ public class Object3D extends AbstractPropertyObject
 
 	}
 
+	public void traverseAncestors( Traverse traverse ) {
+
+		Object3D parent = this.parent;
+
+		if ( parent != null ) {
+
+			traverse.callback(this);
+
+			parent.traverseAncestors( traverse );
+
+		}
+
+	}
+
 	/**
 	 * Updates local transform.
 	 */
@@ -860,9 +830,9 @@ public class Object3D extends AbstractPropertyObject
 	 */
 	public void updateMatrixWorld(boolean force)
 	{
-		if ( this.matrixAutoUpdate == true ) this.updateMatrix();
+		if (this.matrixAutoUpdate) this.updateMatrix();
 
-		if ( this.matrixWorldNeedsUpdate == true || force == true ) {
+		if (this.matrixWorldNeedsUpdate || force) {
 
 			if ( this.parent == null ) {
 

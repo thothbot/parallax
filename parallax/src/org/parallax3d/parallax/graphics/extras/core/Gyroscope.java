@@ -16,12 +16,13 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.core;
+package org.parallax3d.parallax.graphics.extras.core;
 
+import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Quaternion;
 
-public class Gyroscope extends Object3D 
+public class Gyroscope extends Object3D
 {
 	private Vector3 translationWorld;
 	private Vector3 translationObject;
@@ -43,37 +44,37 @@ public class Gyroscope extends Object3D
 	@Override
 	public void updateMatrixWorld( boolean force )
 	{
-		if(this.matrixAutoUpdate)
+		if(this.isMatrixAutoUpdate())
 			this.updateMatrix();
 
 		// update matrixWorld
 
-		if ( this.matrixWorldNeedsUpdate || force )
+		if ( this.isMatrixWorldNeedsUpdate() || force )
 		{
-			if ( this.parent != null )
+			if ( this.getParent() != null )
 			{
-				this.matrixWorld.multiply( this.parent.getMatrixWorld(), this.matrix );
+				this.getMatrixWorld().multiply( this.getParent().getMatrixWorld(), this.getMatrix());
 
-				this.matrixWorld.decompose( this.translationWorld, this.rotationWorld, this.scaleWorld );
-				this.matrix.decompose( this.translationObject, this.rotationObject, this.scaleObject );
+				this.getMatrixWorld().decompose( this.translationWorld, this.rotationWorld, this.scaleWorld );
+				this.getMatrix().decompose( this.translationObject, this.rotationObject, this.scaleObject );
 
-				this.matrixWorld.compose( this.translationWorld, this.rotationObject, this.scaleWorld );
+				this.getMatrixWorld().compose( this.translationWorld, this.rotationObject, this.scaleWorld );
 			}
 			else
 			{
-				this.matrixWorld.copy( this.matrix );
+				this.getMatrixWorld().copy(this.getMatrix());
 			}
 
-			this.matrixWorldNeedsUpdate = false;
+			this.setMatrixWorldNeedsUpdate(false);
 
 			force = true;
 		}
 
 		// update children
 
-		for ( int i = 0, l = this.children.size(); i < l; i ++ )
+		for (int i = 0, l = this.getChildren().size(); i < l; i ++ )
 		{
-			this.children.get( i ).updateMatrixWorld( force );
+			this.getChildren().get( i ).updateMatrixWorld( force );
 		}
 	}
 }

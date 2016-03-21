@@ -18,7 +18,6 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.graphics.renderers.gl.AttributeData;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.*;
 
@@ -189,7 +188,7 @@ public class BufferAttribute extends AttributeData {
 
 	};
 
-	public static BufferAttribute Uint32Attribute(Object[] array, int itemSize ) {
+	public static BufferAttribute Uint32Attribute(int[] array, int itemSize ) {
 
 		return new BufferAttribute( Uint32Array.create( array ), itemSize );
 

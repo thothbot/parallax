@@ -18,16 +18,16 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Sphere;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
 
-public abstract class AbstractGeometry extends GLGeometry {
+public abstract class AbstractGeometry extends AbstractPropertyObject {
 	private static int Counter = 0;
 
 	private int id = 0;
 
-	private String name;
+	private String name = "";
 
 	// Bounding box.		
 	protected Box3 boundingBox = null;
@@ -38,19 +38,15 @@ public abstract class AbstractGeometry extends GLGeometry {
 	// update flags
 	protected boolean verticesNeedUpdate = false;
 	protected boolean elementsNeedUpdate = false;
+	protected boolean uvsNeedUpdate = false;
 	protected boolean normalsNeedUpdate = false;
 	protected boolean colorsNeedUpdate = false;
-	protected boolean uvsNeedUpdate = false;
-	protected boolean tangentsNeedUpdate = false;
-	protected boolean morphTargetsNeedUpdate = false;
 	protected boolean lineDistancesNeedUpdate = false;
-
 	protected boolean groupsNeedUpdate = false;
 
-	public AbstractGeometry() {
+	public AbstractGeometry()
+	{
 		this.id = Counter++;
-
-		this.name = "";
 	}
 
 	/**
@@ -65,7 +61,7 @@ public abstract class AbstractGeometry extends GLGeometry {
 	/**
 	 * Set name for this geometry.
 	 *
-	 * @param name
+	 * @param name	Name of the geometry
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -123,22 +119,6 @@ public abstract class AbstractGeometry extends GLGeometry {
 		this.uvsNeedUpdate = uvsNeedUpdate;
 	}
 
-	public boolean isTangentsNeedUpdate() {
-		return tangentsNeedUpdate;
-	}
-
-	public void setTangentsNeedUpdate(boolean tangentsNeedUpdate) {
-		this.tangentsNeedUpdate = tangentsNeedUpdate;
-	}
-
-	public boolean isMorphTargetsNeedUpdate() {
-		return morphTargetsNeedUpdate;
-	}
-
-	public void setMorphTargetsNeedUpdate(boolean morphTargetsNeedUpdate) {
-		this.morphTargetsNeedUpdate = morphTargetsNeedUpdate;
-	}
-
 	public boolean isLineDistancesNeedUpdate() {
 		return lineDistancesNeedUpdate;
 	}
@@ -177,10 +157,13 @@ public abstract class AbstractGeometry extends GLGeometry {
 
 	public abstract void computeVertexNormals();
 
-	public abstract void computeTangents();
-
 	public String toString() {
 		return getClass().getSimpleName();
+	}
+
+	public void dispose()
+	{
+
 	}
 }
 

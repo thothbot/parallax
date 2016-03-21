@@ -15,7 +15,7 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package org.parallax3d.parallax.graphics.renderers.gl;
+package org.parallax3d.parallax.graphics.core;
 
 import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
@@ -77,4 +77,6 @@ public abstract class AttributeData extends AbstractPropertyObject {
     public UpdateRange getUpdateRange() {
         return updateRange;
     }
+
+    public abstract AttributeData clone();
 }

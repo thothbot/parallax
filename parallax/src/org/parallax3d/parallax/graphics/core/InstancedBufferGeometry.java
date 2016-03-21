@@ -63,7 +63,14 @@ public class InstancedBufferGeometry extends BufferGeometry {
     }
 
     public InstancedBufferGeometry copy(InstancedBufferGeometry source) {
-//        int index = source.index;
+
+        AttributeData index = source.index;
+
+        if ( index != null ) {
+
+            this.setIndex( index.clone() );
+
+        }
 
         FastMap<BufferAttribute> attributes = source.getAttributes();
 

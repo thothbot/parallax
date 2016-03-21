@@ -23,12 +23,8 @@ import java.util.List;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.materials.*;
-import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
-import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.renderers.GLGeometry;
-import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Face3;
@@ -39,18 +35,12 @@ import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.math.Ray;
 import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.math.Vector4;
 
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
-import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
-import org.parallax3d.parallax.system.gl.enums.BufferTarget;
-import org.parallax3d.parallax.system.gl.enums.BufferUsage;
-import org.parallax3d.parallax.system.gl.enums.DrawElementsType;
 
 /**
  * Base class for Mesh objects.
@@ -203,7 +193,7 @@ public class Mesh extends GeometryObject
 		if ( geometry instanceof BufferGeometry )
 		{
 
-			org.parallax3d.parallax.graphics.renderers.gl.AttributeData index = ((BufferGeometry) geometry).getIndex();
+			AttributeData index = ((BufferGeometry) geometry).getIndex();
 			FastMap<BufferAttribute> attributes = ((BufferGeometry) geometry).getAttributes();
 			Float32Array positions = (Float32Array) attributes.get("position").getArray();
 

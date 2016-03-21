@@ -17,6 +17,7 @@
  */
 package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.graphics.core.AttributeData;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;

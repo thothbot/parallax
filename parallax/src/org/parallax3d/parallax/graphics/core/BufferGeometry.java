@@ -21,7 +21,6 @@ package org.parallax3d.parallax.graphics.core;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.*;
-import org.parallax3d.parallax.graphics.renderers.gl.AttributeData;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;

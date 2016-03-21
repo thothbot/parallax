@@ -18,20 +18,11 @@
 
 package org.parallax3d.parallax.graphics.materials;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.graphics.renderers.GLRenderer;
-import org.parallax3d.parallax.graphics.renderers.shaders.ProgramParameters;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.graphics.core.GeometryGroup;
-import org.parallax3d.parallax.graphics.core.GeometryObject;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.AbstractPropertyObject;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
