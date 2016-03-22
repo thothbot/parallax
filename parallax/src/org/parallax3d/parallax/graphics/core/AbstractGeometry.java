@@ -20,14 +20,16 @@ package org.parallax3d.parallax.graphics.core;
 
 import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Sphere;
+import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.AbstractPropertyObject;
 
-public abstract class AbstractGeometry extends AbstractPropertyObject {
-	private static int Counter = 0;
+public abstract class AbstractGeometry extends AbstractPropertyObject
+{
+	static int Counter = 0;
 
-	private int id = 0;
+	int id = 0;
 
-	private String name = "";
+	String name = "";
 
 	// Bounding box.		
 	protected Box3 boundingBox = null;
@@ -156,6 +158,20 @@ public abstract class AbstractGeometry extends AbstractPropertyObject {
 	public abstract void computeBoundingSphere();
 
 	public abstract void computeVertexNormals();
+
+	public abstract AbstractGeometry rotateX( double angle );
+
+	public abstract AbstractGeometry rotateY( double angle );
+
+	public abstract AbstractGeometry rotateZ( double angle );
+
+	public abstract AbstractGeometry translate( double x, double y, double z );
+
+	public abstract AbstractGeometry scale( double x, double y, double z );
+
+	public abstract AbstractGeometry lookAt( Vector3 vector );
+
+	public abstract Vector3 center();
 
 	public String toString() {
 		return getClass().getSimpleName();

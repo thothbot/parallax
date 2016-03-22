@@ -19,20 +19,20 @@
 package org.parallax3d.parallax.graphics.core;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.core.geometry.DrawRange;
+import org.parallax3d.parallax.graphics.core.geometry.Group;
+import org.parallax3d.parallax.graphics.objects.Line;
+import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-import org.parallax3d.parallax.system.gl.arrays.IndexTypeArray;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
-import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
-import org.parallax3d.parallax.system.gl.enums.BufferTarget;
-import org.parallax3d.parallax.system.gl.enums.BufferUsage;
+import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 
-import java.nio.Buffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is an efficient alternative to {@link Geometry}, because it stores all data, including vertex positions, 
@@ -61,34 +61,10 @@ import java.util.*;
  * geometry.addAttribute( "position", new BufferAttribute( positions, 3 ) );
  *</pre>
  */
-@ThreejsObject("THREE.BufferGeometry")
+@ThreejsObject("BufferGeometry")
 public class BufferGeometry extends AbstractGeometry
 {
 	public static long MaxIndex = 65535;
-
-	public static class Group
-	{
-		public int start;
-		public int count;
-		public int materialIndex;
-
-		public Group(int start, int count, int materialIndex) {
-			this.start = start;
-			this.count = count;
-			this.materialIndex = materialIndex;
-		}
-	}
-
-	public static class DrawRange
-	{
-		public int start;
-		public int count;
-
-		public DrawRange(int start, int count) {
-			this.start = start;
-			this.count = count;
-		}
-	}
 
 	AttributeData index;
 	FastMap<BufferAttribute> attributes = new FastMap<>();
@@ -98,10 +74,7 @@ public class BufferGeometry extends AbstractGeometry
 
 	DrawRange drawRange = new DrawRange(0, Integer.MAX_VALUE);
 
-	public BufferGeometry()
-	{
-		this.boundingBox = null;
-		this.boundingSphere = null;
+	public BufferGeometry() {
 	}
 
 	public AttributeData getIndex() {
@@ -139,10 +112,6 @@ public class BufferGeometry extends AbstractGeometry
 	 *  	<li>normal - Stores the x, y, and z components of the face or vertex normal vector of each vertex in this geometry. Set by .fromGeometry().</li>
 	 *  	<li>color - Stores the red, green, and blue channels of vertex color of each vertex in this geometry. Set by .fromGeometry().</li>
 	 *      <li>tangent - Stores the x, y, and z components of the tangent vector of each vertex in this geometry. Set by .computeTangents().</li>
-	 *      <li>index - Allows for vertices to be re-used across multiple triangles; this is called using "indexed triangles,"
-	 *      	and works much the same as it does in Geometry: each triangle is associated with the index of three vertices.
-	 *      	This attribute therefore stores the index of each vertex for each triangular face. If this attribute is not set, the renderer
-	 *      	assumes that each three contiguous positions represent a single triangle.</li>
 	 *  </ul>
 	 * @param name Attribute name
 	 * @param attribute
@@ -195,6 +164,9 @@ public class BufferGeometry extends AbstractGeometry
 		return drawRange;
 	}
 
+	public void setDrawRange( int start, int count ) {
+		this.drawRange = new DrawRange(start, count);
+	}
 	/**
 	 * @param drawRange the drawcalls to set
 	 */
@@ -202,15 +174,11 @@ public class BufferGeometry extends AbstractGeometry
 		this.drawRange = drawRange;
 	}
 
-	public void addDrawCall( int start, int count ) {
-		drawRange = new DrawRange(start, count);
-	}
-
 	/**
 	 * Bakes matrix transform directly into vertex coordinates.
 	 * @param matrix
 	 */
-	public void applyMatrix( Matrix4 matrix ) {
+	public BufferGeometry applyMatrix( Matrix4 matrix ) {
 
 		BufferAttribute position = getAttribute("position");
 
@@ -232,6 +200,275 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
+		if ( this.boundingBox != null ) {
+
+			this.computeBoundingBox();
+
+		}
+
+		if ( this.boundingSphere != null ) {
+
+			this.computeBoundingSphere();
+
+		}
+
+		return this;
+	}
+
+	static final Matrix4 m1 = new Matrix4();
+
+	/**
+	 * rotate geometry around world x-axis
+	 * @param angle
+	 * @return
+     */
+	public BufferGeometry rotateX( double angle ) {
+
+		m1.makeRotationX( angle );
+
+		this.applyMatrix( m1 );
+
+		return this;
+
+	}
+
+	/**
+	 * rotate geometry around world y-axis
+	 * @param angle
+	 * @return
+     */
+	public BufferGeometry rotateY( double angle ) {
+
+		m1.makeRotationY( angle );
+
+		this.applyMatrix( m1 );
+
+		return this;
+
+	}
+
+	/**
+	 * rotate geometry around world z-axis
+	 * @param angle
+	 * @return
+     */
+	public BufferGeometry rotateZ( double angle ) {
+
+		m1.makeRotationZ( angle );
+
+		this.applyMatrix( m1 );
+
+		return this;
+
+	}
+
+	public BufferGeometry translate( double x, double y, double z ) {
+
+		m1.makeTranslation( x, y, z );
+
+		this.applyMatrix( m1 );
+
+		return this;
+
+	}
+	
+	public BufferGeometry scale( double x, double y, double z ) {
+
+		m1.makeScale( x, y, z );
+	
+		this.applyMatrix( m1 );
+	
+		return this;
+	
+	}
+	
+	static final Object3D obj = new Object3D();
+	public BufferGeometry lookAt( Vector3 vector ) {
+		
+		obj.lookAt( vector );
+
+		obj.updateMatrix();
+
+		this.applyMatrix( obj.matrix );
+
+		return this;
+	}
+
+	public Vector3 center() {
+
+		this.computeBoundingBox();
+	
+		Vector3 offset = this.boundingBox.center().negate();
+	
+		this.translate( offset.getX(), offset.getY(), offset.getZ());
+	
+		return offset;
+	
+	}
+
+	public BufferGeometry setFromObject( GeometryObject object ) {
+		
+		Geometry geometry = (Geometry) object.geometry;
+	
+		if ( geometry instanceof Geometry && (object instanceof Points || object instanceof Line)) {
+
+			BufferAttribute positions = BufferAttribute.Float32Attribute( geometry.vertices.size() * 3, 3 );
+			BufferAttribute colors = BufferAttribute.Float32Attribute( geometry.colors.size() * 3, 3 );
+	
+			this.addAttribute( "position", positions.copyVector3sArray( geometry.vertices ) );
+			this.addAttribute( "color", colors.copyColorsArray( geometry.colors ) );
+	
+			if ( ((Geometry) geometry).getLineDistances() != null
+					&& ((Geometry) geometry).getLineDistances().size() == geometry.vertices.size()  ) {
+
+				BufferAttribute lineDistances = BufferAttribute.Float32Attribute( geometry.getLineDistances().size(), 1 );
+	
+				this.addAttribute( "lineDistance", lineDistances.copyArray( ((Geometry) geometry).getLineDistances() ) );
+	
+			}
+	
+			if ( geometry.boundingSphere != null ) {
+	
+				this.boundingSphere = geometry.boundingSphere.clone();
+	
+			}
+	
+			if ( geometry.boundingBox != null ) {
+	
+				this.boundingBox = geometry.boundingBox.clone();
+	
+			}
+	
+		} else if ( object instanceof Mesh) {
+	
+			if ( geometry instanceof Geometry ) {
+	
+				this.fromGeometry( geometry );
+	
+			}
+	
+		}
+	
+		return this;
+	
+	}
+
+	public BufferGeometry updateFromObject( GeometryObject object ) {
+
+		DirectGeometry geometry = null;
+
+		if ( object instanceof Mesh ) {
+
+			DirectGeometry direct = ((Geometry)object.geometry).__directGeometry;
+
+			if ( direct == null ) {
+
+				return this.fromGeometry( ((Geometry)object.geometry) );
+
+			}
+
+			direct.verticesNeedUpdate = object.geometry.verticesNeedUpdate;
+			direct.normalsNeedUpdate = object.geometry.normalsNeedUpdate;
+			direct.colorsNeedUpdate = object.geometry.colorsNeedUpdate;
+			direct.uvsNeedUpdate = object.geometry.uvsNeedUpdate;
+			direct.groupsNeedUpdate = object.geometry.groupsNeedUpdate;
+
+			object.geometry.verticesNeedUpdate = false;
+			object.geometry.normalsNeedUpdate = false;
+			object.geometry.colorsNeedUpdate = false;
+			object.geometry.uvsNeedUpdate = false;
+			object.geometry.groupsNeedUpdate = false;
+
+			geometry = direct;
+
+		}
+
+		if (geometry.verticesNeedUpdate) {
+
+			BufferAttribute attribute = this.attributes.get("position");
+
+			if ( attribute != null ) {
+
+				attribute.copyVector3sArray( geometry.vertices );
+				attribute.setNeedsUpdate(true);
+
+			}
+
+			geometry.verticesNeedUpdate = false;
+
+		}
+
+		if (geometry.normalsNeedUpdate) {
+
+			BufferAttribute attribute = this.attributes.get("normal");
+
+			if ( attribute != null ) {
+
+				attribute.copyVector3sArray( geometry.normals );
+				attribute.setNeedsUpdate(true);
+
+			}
+
+			geometry.normalsNeedUpdate = false;
+
+		}
+
+		if (geometry.colorsNeedUpdate) {
+
+			BufferAttribute attribute = this.attributes.get("color");
+
+			if ( attribute != null ) {
+
+				attribute.copyColorsArray( geometry.colors );
+				attribute.setNeedsUpdate(true);
+
+			}
+
+			geometry.colorsNeedUpdate = false;
+
+		}
+
+		if ( geometry.uvsNeedUpdate ) {
+
+			BufferAttribute attribute = this.attributes.get("uv");
+
+			if ( attribute != null ) {
+
+				attribute.copyVector2sArray( geometry.uvs );
+				attribute.setNeedsUpdate(true);
+
+			}
+
+			geometry.uvsNeedUpdate = false;
+
+		}
+
+//		if ( geometry.lineDistancesNeedUpdate ) {
+//
+//			BufferAttribute attribute = this.attributes.get("lineDistance");
+//
+//			if ( attribute != null ) {
+//
+//				attribute.copyArray(geometry.getLineDistances());
+//				attribute.setNeedsUpdate(true);
+//
+//			}
+//
+//			geometry.lineDistancesNeedUpdate = false;
+//
+//		}
+
+		if ( geometry.groupsNeedUpdate ) {
+
+			geometry.computeGroups((Geometry) object.geometry);
+			this.groups = geometry.groups;
+
+			geometry.groupsNeedUpdate = false;
+
+		}
+
+		return this;
+
 	}
 
 	/**
@@ -239,164 +476,118 @@ public class BufferGeometry extends AbstractGeometry
 	 * @param geometry
 	 * @return
 	 */
-	public BufferGeometry fromGeometry( Geometry geometry) {
+	public BufferGeometry fromGeometry( Geometry geometry ) {
 
-		return fromGeometry(geometry, Material.COLORS.NO);
+		geometry.__directGeometry = new DirectGeometry().fromGeometry( geometry );
+
+		return this.fromDirectGeometry( geometry.__directGeometry );
 	}
 
-	public BufferGeometry fromGeometry( Geometry geometry, Material.COLORS vertexColors) {
+	public BufferGeometry fromDirectGeometry ( DirectGeometry geometry ) {
 
-		List<Vector3> vertices = geometry.getVertices();
-		List<Face3> faces = geometry.getFaces();
-		List<List<List<Vector2>>> faceVertexUvs = geometry.getFaceVertexUvs();
-		boolean hasFaceVertexUv = faceVertexUvs.get( 0 ).size() > 0;
-		boolean hasFaceVertexNormals = faces.get( 0 ).getVertexNormals().size() == 3;
+		Float32Array positions = Float32Array.create( geometry.vertices.size() * 3 );
+		this.addAttribute( "position", new BufferAttribute( positions, 3 ).copyVector3sArray( geometry.vertices ) );
+	
+		if ( geometry.normals.size() > 0 ) {
 
-		Float32Array positions = Float32Array.create( faces.size() * 3 * 3 );
-		this.addAttribute( "position", new BufferAttribute( positions, 3 ) );
-
-		Float32Array normals = Float32Array.create( faces.size() * 3 * 3 );
-		this.addAttribute( "normal", new BufferAttribute( normals, 3 ) );
-
-		Float32Array colors = Float32Array.create( faces.size() * 3 * 3 );
-		if ( vertexColors != Material.COLORS.NO ) {
-
-			this.addAttribute("color", new BufferAttribute( colors, 3 ) );
-
+			Float32Array normals = Float32Array.create( geometry.normals.size() * 3 );
+			this.addAttribute( "normal", new BufferAttribute( normals, 3 ).copyVector3sArray( geometry.normals ) );
+	
 		}
+	
+		if ( geometry.colors.size() > 0 ) {
 
-		Float32Array uvs = Float32Array.create( faces.size() * 3 * 2 );
-		if ( hasFaceVertexUv == true ) {
-
-			this.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
-
+			Float32Array colors = Float32Array.create( geometry.colors.size() * 3 );
+			this.addAttribute( "color", new BufferAttribute( colors, 3 ).copyColorsArray( geometry.colors ) );
+	
 		}
+	
+		if ( geometry.uvs.size() > 0 ) {
 
-		for ( int i = 0, i2 = 0, i3 = 0; i < faces.size(); i ++, i2 += 6, i3 += 9 ) {
-
-			Face3 face = faces.get( i );
-
-			Vector3 a = vertices.get( face.getA() );
-			Vector3 b = vertices.get( face.getB() );
-			Vector3 c = vertices.get( face.getC() );
-
-			positions.set( i3     , a.getX());
-			positions.set( i3 + 1 , a.getY());
-			positions.set( i3 + 2 , a.getZ());
-
-			positions.set( i3 + 3 , b.getX());
-			positions.set( i3 + 4 , b.getY());
-			positions.set( i3 + 5 , b.getZ());
-
-			positions.set( i3 + 6 , c.getX());
-			positions.set( i3 + 7 , c.getY());
-			positions.set( i3 + 8 , c.getZ());
-
-			if ( hasFaceVertexNormals == true ) {
-
-				Vector3 na = face.getVertexNormals().get( 0 );
-				Vector3 nb = face.getVertexNormals().get( 1 );
-				Vector3 nc = face.getVertexNormals().get( 2 );
-
-				normals.set( i3     , na.getX());
-				normals.set( i3 + 1 , na.getY());
-				normals.set( i3 + 2 , na.getZ());
-
-				normals.set( i3 + 3 , nb.getX());
-				normals.set( i3 + 4 , nb.getY());
-				normals.set( i3 + 5 , nb.getZ());
-
-				normals.set( i3 + 6 , nc.getX());
-				normals.set( i3 + 7 , nc.getY());
-				normals.set( i3 + 8 , nc.getZ());
-
-			} else {
-
-				Vector3 n = face.getNormal();
-
-				normals.set( i3     , n.getX());
-				normals.set( i3 + 1 , n.getY());
-				normals.set( i3 + 2 , n.getZ());
-
-				normals.set( i3 + 3 , n.getX());
-				normals.set( i3 + 4 , n.getY());
-				normals.set( i3 + 5 , n.getZ());
-
-				normals.set( i3 + 6 , n.getX());
-				normals.set( i3 + 7 , n.getY());
-				normals.set( i3 + 8 , n.getZ());
-
-			}
-
-			if ( vertexColors == Material.COLORS.FACE ) {
-
-				Color fc = face.getColor();
-
-				colors.set( i3     , fc.getR());
-				colors.set( i3 + 1 , fc.getG());
-				colors.set( i3 + 2 , fc.getB());
-
-				colors.set( i3 + 3 , fc.getR());
-				colors.set( i3 + 4 , fc.getG());
-				colors.set( i3 + 5 , fc.getB());
-
-				colors.set( i3 + 6 , fc.getR());
-				colors.set( i3 + 7 , fc.getG());
-				colors.set( i3 + 8 , fc.getB());
-
-			} else if ( vertexColors ==  Material.COLORS.VERTEX ) {
-
-				Color vca = face.getVertexColors().get( 0 );
-				Color vcb = face.getVertexColors().get( 1 );
-				Color vcc = face.getVertexColors().get( 2 );
-
-				colors.set( i3     , vca.getR());
-				colors.set( i3 + 1 , vca.getG());
-				colors.set( i3 + 2 , vca.getB());
-
-				colors.set( i3 + 3 , vcb.getR());
-				colors.set( i3 + 4 , vcb.getG());
-				colors.set( i3 + 5 , vcb.getB());
-
-				colors.set( i3 + 6 , vcc.getR());
-				colors.set( i3 + 7 , vcc.getG());
-				colors.set( i3 + 8 , vcc.getB());
-
-			}
-
-			if ( hasFaceVertexUv == true ) {
-
-				Vector2 uva = faceVertexUvs.get( 0 ).get( i ).get( 0 );
-				Vector2 uvb = faceVertexUvs.get( 0 ).get( i ).get( 1 );
-				Vector2 uvc = faceVertexUvs.get( 0 ).get( i ).get( 2 );
-
-				uvs.set( i2     , uva.getX());
-				uvs.set( i2 + 1 , uva.getY());
-
-				uvs.set( i2 + 2 , uvb.getX());
-				uvs.set( i2 + 3 , uvb.getY());
-
-				uvs.set( i2 + 4 , uvc.getX());
-				uvs.set( i2 + 5 , uvc.getY());
-
-			}
-
+			Float32Array uvs = Float32Array.create( geometry.uvs.size() * 2 );
+			this.addAttribute( "uv", new BufferAttribute( uvs, 2 ).copyVector2sArray( geometry.uvs ) );
+	
 		}
+	
+		if ( geometry.uvs2.size() > 0 ) {
 
-		this.computeBoundingSphere();
+			Float32Array uvs2 = Float32Array.create( geometry.uvs2.size() * 2 );
+			this.addAttribute( "uv2", new BufferAttribute( uvs2, 2 ).copyVector2sArray( geometry.uvs2 ) );
+	
+		}
+	
+		if ( geometry.indices.size() > 0 ) {
 
+			Uint32Array indices = Uint32Array.create(geometry.indices.size() * 3);
+			this.setIndex( new BufferAttribute( indices, 1 ).copyIndicesArray( geometry.indices ) );
+	
+		}
+	
+		// groups
+	
+		this.groups = geometry.groups;
+	
+		// morphs
+	
+		for ( String name : geometry.morphTargets.keySet() ) {
+	
+			List<BufferAttribute> array = new ArrayList<>();
+			List<List<Vector3>> morphTargets = geometry.morphTargets.get( name );
+	
+			for ( int i = 0, l = morphTargets.size(); i < l; i ++ ) {
+	
+				List<Vector3> morphTarget = morphTargets.get( i );
+
+				BufferAttribute attribute = BufferAttribute.Float32Attribute( morphTarget.size() * 3, 3 );
+	
+				array.add( attribute.copyVector3sArray( morphTarget ) );
+	
+			}
+	
+			this.morphAttributes.put( name , array);
+	
+		}
+	
+		// skinning
+	
+		if ( geometry.skinIndices.size() > 0 ) {
+
+			BufferAttribute skinIndices = BufferAttribute.Float32Attribute( geometry.skinIndices.size() * 4, 4 );
+			this.addAttribute( "skinIndex", skinIndices.copyVector4sArray( geometry.skinIndices ) );
+	
+		}
+	
+		if ( geometry.skinWeights.size() > 0 ) {
+
+			BufferAttribute skinWeights = BufferAttribute.Float32Attribute( geometry.skinWeights.size() * 4, 4 );
+			this.addAttribute( "skinWeight", skinWeights.copyVector4sArray( geometry.skinWeights ) );
+	
+		}
+	
+		//
+	
+		if ( geometry.boundingSphere != null ) {
+	
+			this.boundingSphere = geometry.boundingSphere.clone();
+	
+		}
+	
+		if ( geometry.boundingBox != null ) {
+	
+			this.boundingBox = geometry.boundingBox.clone();
+	
+		}
+	
 		return this;
-
+	
 	}
 
 	/**
 	 * Computes bounding box of the geometry, updating Geometry.boundingBox attribute.
-	 * Bounding boxes aren't computed by default. They need to be explicitly computed, otherwise they are null.
+	 * Bounding boxes aren"t computed by default. They need to be explicitly computed, otherwise they are null.
 	 */
 	@Override
 	public void computeBoundingBox() {
-
-		Vector3 vector = new Vector3();
 
 		if ( this.boundingBox == null ) {
 
@@ -406,24 +597,16 @@ public class BufferGeometry extends AbstractGeometry
 
 		Float32Array positions = (Float32Array) getAttribute("position").getArray();
 
-		if ( positions != null) {
+		if ( positions != null ) {
 
-			Box3 bb = this.boundingBox;
-			bb.makeEmpty();
-
-			for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {
-
-				vector.set( positions.get( i ), positions.get( i + 1 ), positions.get( i + 2 ) );
-				bb.expandByPoint( vector );
-
-			}
+			this.boundingBox.setFromArray( positions );
 
 		}
 
 		if ( positions == null || positions.getLength() == 0 ) {
 
-			this.boundingBox.getMin().set(0, 0, 0);
-			this.boundingBox.getMax().set(0, 0, 0);
+			this.boundingBox.getMin().set( 0, 0, 0 );
+			this.boundingBox.getMax().set( 0, 0, 0 );
 
 		}
 
@@ -431,12 +614,11 @@ public class BufferGeometry extends AbstractGeometry
 
 	/**
 	 * Computes bounding sphere of the geometry, updating Geometry.boundingSphere attribute.
-	 * Bounding spheres aren't computed by default. They need to be explicitly computed, otherwise they are null.
+	 * Bounding spheres aren"t computed by default. They need to be explicitly computed, otherwise they are null.
 	 */
+	static final Box3 box = new Box3();
+	static final Vector3 vector = new Vector3();
 	public void computeBoundingSphere() {
-
-		Box3 box = new Box3();
-		Vector3 vector = new Vector3();
 
 		if ( this.boundingSphere == null ) {
 
@@ -448,27 +630,19 @@ public class BufferGeometry extends AbstractGeometry
 
 		if ( positions != null ) {
 
-			box.makeEmpty();
-
 			Vector3 center = this.boundingSphere.getCenter();
 
-			for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {
-
-				vector.set( positions.get( i ), positions.get( i + 1 ), positions.get( i + 2 ) );
-				box.expandByPoint( vector );
-
-			}
-
+			box.setFromArray( positions );
 			box.center( center );
 
 			// hoping to find a boundingSphere with a radius smaller than the
-			// boundingSphere of the boundingBox:  sqrt(3) smaller in the best case
+			// boundingSphere of the boundingBox: sqrt(3) smaller in the best case
 
-			double maxRadiusSq = 0.0;
+			double maxRadiusSq = 0;
 
 			for ( int i = 0, il = positions.getLength(); i < il; i += 3 ) {
 
-				vector.set( positions.get( i ), positions.get( i + 1 ), positions.get( i + 2 ) );
+				vector.fromArray( positions, i );
 				maxRadiusSq = Math.max( maxRadiusSq, center.distanceToSquared( vector ) );
 
 			}
@@ -484,15 +658,15 @@ public class BufferGeometry extends AbstractGeometry
 	 */
 	public void computeVertexNormals() {
 
-		BufferAttribute positionAttribute = getAttribute("position");
+		AttributeData index = this.index;
+		FastMap<BufferAttribute> attributes = this.attributes;
+		List<Group> groups = this.groups;
 
-		if ( positionAttribute != null ) {
+		if ( attributes.containsKey("position") ) {
 
-			Float32Array positions =  (Float32Array) positionAttribute.getArray();
+			Float32Array positions = (Float32Array) attributes.get("position").getArray();
 
-			BufferAttribute normalAttribute = getAttribute("normal");
-
-			if ( normalAttribute == null ) {
+			if ( !attributes.containsKey("normal")) {
 
 				this.addAttribute( "normal", new BufferAttribute( Float32Array.create( positions.getLength() ), 3 ) );
 
@@ -500,19 +674,17 @@ public class BufferGeometry extends AbstractGeometry
 
 				// reset existing normals to zero
 
-				Float32Array normals = (Float32Array) normalAttribute.getArray();
+				Float32Array array = (Float32Array) attributes.get("normal").getArray();
 
-				for ( int i = 0, il = normals.getLength(); i < il; i ++ ) {
+				for ( int i = 0, il = array.getLength(); i < il; i ++ ) {
 
-					normals.set( i , 0.0 );
+					array.set( i , 0);
 
 				}
 
 			}
 
-			Float32Array normals = (Float32Array) normalAttribute.getArray();
-
-			int vA, vB, vC;
+			Float32Array normals = (Float32Array)attributes.get("normal").getArray();
 
 			Vector3 pA = new Vector3(),
 					pB = new Vector3(),
@@ -523,25 +695,28 @@ public class BufferGeometry extends AbstractGeometry
 
 			// indexed elements
 
-			if ( getAttribute("index") != null ) {
+			if ( index != null ) {
 
-				Uint16Array indices = (Uint16Array) getAttribute("index").getArray();
+				Int32Array indices = (Int32Array) index.array;
 
-				List<DrawRange> offsets = this.drawRange.size() > 0
-						? this.drawRange
-						: Arrays.asList( new DrawRange(0, indices.getLength(), 0 ) ) ;
+				if ( groups.size() == 0 ) {
 
-				for ( int j = 0, jl = offsets.size(); j < jl; ++ j ) {
+					this.addGroup( 0, indices.getLength() );
 
-					int start = offsets.get( j ).start;
-					int count = offsets.get( j ).count;
-					int index = offsets.get( j ).index;
+				}
+
+				for ( int j = 0, jl = groups.size(); j < jl; ++ j ) {
+
+					Group group = groups.get(j);
+
+					int start = group.getStart();
+					int count = group.getCount();
 
 					for ( int i = start, il = start + count; i < il; i += 3 ) {
 
-						vA = ( index + (int)indices.get( i     ) ) * 3;
-						vB = ( index + (int)indices.get( i + 1 ) ) * 3;
-						vC = ( index + (int)indices.get( i + 2 ) ) * 3;
+						int vA = indices.get( i + 0 ) * 3;
+						int vB = indices.get( i + 1 ) * 3;
+						int vC = indices.get( i + 2 ) * 3;
 
 						pA.fromArray( positions, vA );
 						pB.fromArray( positions, vB );
@@ -551,17 +726,17 @@ public class BufferGeometry extends AbstractGeometry
 						ab.sub( pA, pB );
 						cb.cross( ab );
 
-						normals.set( vA     , normals.get( vA     ) + cb.getX());
-						normals.set( vA + 1 , normals.get( vA + 1 ) + cb.getY());
-						normals.set( vA + 2 , normals.get( vA + 2 ) + cb.getZ());
+						normals.set( vA , normals.get( vA ) + cb.getX() );
+						normals.set( vA + 1 , normals.get( vA + 1 ) + cb.getY() );
+						normals.set( vA + 2 , normals.get( vA + 2 ) + cb.getZ() );
 
-						normals.set( vB     , normals.get( vB     ) + cb.getX());
-						normals.set( vB + 1 , normals.get( vB + 1 ) + cb.getY());
-						normals.set( vB + 2 , normals.get( vB + 2 ) + cb.getZ());
+						normals.set( vB , normals.get( vB ) + cb.getX() );
+						normals.set( vB + 1 , normals.get( vB + 1 ) + cb.getY() );
+						normals.set( vB + 2 , normals.get( vB + 2 ) + cb.getZ() );
 
-						normals.set( vC     , normals.get( vC     ) + cb.getX());
-						normals.set( vC + 1 , normals.get( vC + 1 ) + cb.getY());
-						normals.set( vC + 2 , normals.get( vC + 2 ) + cb.getZ());
+						normals.set( vC , normals.get( vC ) + cb.getX() );
+						normals.set( vC + 1 , normals.get( vC + 1 ) + cb.getY() );
+						normals.set( vC + 2 , normals.get( vC + 2 ) + cb.getZ() );
 
 					}
 
@@ -581,17 +756,17 @@ public class BufferGeometry extends AbstractGeometry
 					ab.sub( pA, pB );
 					cb.cross( ab );
 
-					normals.set( i     , cb.getX());
-					normals.set( i + 1 , cb.getY());
-					normals.set( i + 2 , cb.getZ());
+					normals.set( i , cb.getX() );
+					normals.set( i + 1 , cb.getY() );
+					normals.set( i + 2 , cb.getZ() );
 
-					normals.set( i + 3 , cb.getX());
-					normals.set( i + 4 , cb.getY());
-					normals.set( i + 5 , cb.getZ());
+					normals.set( i + 3 , cb.getX() );
+					normals.set( i + 4 , cb.getY() );
+					normals.set( i + 5 , cb.getZ() );
 
-					normals.set( i + 6 , cb.getX());
-					normals.set( i + 7 , cb.getY());
-					normals.set( i + 8 , cb.getZ());
+					normals.set( i + 6 , cb.getX() );
+					normals.set( i + 7 , cb.getY() );
+					normals.set( i + 8 , cb.getZ() );
 
 				}
 
@@ -599,211 +774,43 @@ public class BufferGeometry extends AbstractGeometry
 
 			this.normalizeNormals();
 
-			getAttribute("normal").setNeedsUpdate( true );
+			attributes.get("normal").setNeedsUpdate(true);
 
 		}
 
 	}
 
-	/**
-	 * Computes vertex tangents.
-	 * Based on http://www.terathon.com/code/tangent.html
-	 * Geometry must have vertex UVs (layer 0 will be used).
-	 */
-	public void computeTangents() {
-
-		// based on http://www.terathon.com/code/tangent.html
-		// (per vertex tangents)
-
-		if ( getAttribute("index") == null ||
-				getAttribute("position") == null ||
-				getAttribute("normal") == null ||
-				getAttribute("uv") == null ) {
-
-			Log.error("Missing required attributes (index, position, normal or uv) in BufferGeometry.computeTangents()");
-			return;
-
-		}
-
-		IndexTypeArray indices = (IndexTypeArray) getAttribute("index").getArray();
-		Float32Array positions = (Float32Array)getAttribute("position").getArray();
-		Float32Array normals = (Float32Array)getAttribute("normal").getArray();
-		Float32Array uvs = (Float32Array)getAttribute("uv").getArray();
-
-		int nVertices = positions.getLength() / 3;
-
-		if ( getAttribute("tangent") == null ) {
-
-			this.addAttribute( "tangent", new BufferAttribute( Float32Array.create( 4 * nVertices ), 4 ) );
-
-		}
-
-		Vector3[] tan1 = new Vector3[nVertices], tan2 = new Vector3[nVertices];
-
-		for ( int k = 0; k < nVertices; k ++ ) {
-
-			tan1[ k ] = new Vector3();
-			tan2[ k ] = new Vector3();
-
-		}
-
-		Float32Array tangents = (Float32Array)getAttribute("tangent").getArray();
-
-		if ( this.getDrawRange().size() == 0 ) {
-
-			this.addDrawCall( 0, indices.getLength(), 0 );
-
-		}
-
-		List<DrawRange> drawcalls = this.getDrawRange();
-
-		for ( int j = 0, jl = drawcalls.size(); j < jl; ++ j ) {
-
-			int start = drawcalls.get( j ).start;
-			int count = drawcalls.get( j ).count;
-			int index = drawcalls.get( j ).index;
-
-			for ( int i = start, il = start + count; i < il; i += 3 ) {
-
-				int iA = index + indices.getUnsigned(i);
-				int iB = index + indices.getUnsigned(i + 1);
-				int iC = index + indices.getUnsigned(i + 2);
-
-				handleTriangle( tan1, tan2, positions, uvs, iA, iB, iC );
-
-			}
-
-		}
-
-		for ( int j = 0, jl = drawcalls.size(); j < jl; ++ j ) {
-
-			int start = drawcalls.get( j ).start;
-			int count = drawcalls.get( j ).count;
-			int index = drawcalls.get( j ).index;
-
-			for ( int i = start, il = start + count; i < il; i += 3 ) {
-
-				int iA = index + indices.getUnsigned(i);
-				int iB = index + indices.getUnsigned(i + 1);
-				int iC = index + indices.getUnsigned(i + 2);
-
-				handleVertex( tan1, tan2, normals, tangents, iA );
-				handleVertex( tan1, tan2, normals, tangents, iB );
-				handleVertex( tan1, tan2, normals, tangents, iC );
-
-			}
-
-		}
-
+	public BufferGeometry merge( BufferGeometry geometry )
+	{
+		return merge(geometry, 0);
 	}
 
-	public List<DrawRange> computeOffsets() {
-		//WebGL limits type of index buffer values to 16-bit.
-		return computeOffsets(65535);
-	}
+	public BufferGeometry merge( BufferGeometry geometry, int offset ) {
 
-	/**
-	 * Compute the draw offset for large models by chunking the index buffer into chunks of 65k addressable vertices.
-	 * This method will effectively rewrite the index buffer and remap all attributes to match the new indices.
-	 * WARNING: This method will also expand the vertex count to prevent sprawled triangles across draw offsets
-	 * @param size Defaults to 65535, but allows for larger or smaller chunks.
-	 * @return
-	 */
-	public List<DrawRange> computeOffsets(int size /* indexBufferSize */ ) {
+		FastMap<BufferAttribute> attributes = this.attributes;
 
-//		var s = Date.now();
+		for ( String key : attributes.keySet() ) {
 
-		Uint16Array indices = (Uint16Array)getAttribute("index").getArray();
-		Float32Array vertices = (Float32Array)getAttribute("position").getArray();
+			if (!geometry.attributes.containsKey( key ) ) continue;
 
-		int verticesCount = ( vertices.getLength() / 3 );
-		int facesCount = ( indices.getLength() / 3 );
+			BufferAttribute attribute1 = attributes.get( key );
+			Float32Array attributeArray1 = (Float32Array) attribute1.array;
 
-		Float32Array sortedIndices = Float32Array.create( indices.getLength() ); //16-bit buffers
-		int indexPtr = 0;
-		int vertexPtr = 0;
+			BufferAttribute attribute2 = geometry.attributes.get( key );
+			Float32Array attributeArray2 = (Float32Array) attribute2.array;
 
-		List<DrawRange> offsets = Arrays.asList(new DrawRange(0, 0, 0));
-		DrawRange offset = offsets.get( 0 );
+			int attributeSize = attribute2.itemSize;
 
-		int duplicatedVertices = 0;
-		int newVerticeMaps = 0;
-		Int32Array faceVertices = Int32Array.create(6);
-		Int32Array vertexMap = Int32Array.create( vertices.getLength() );
-		Int32Array revVertexMap = Int32Array.create( vertices.getLength() );
-		for ( int j = 0; j < vertices.getLength(); j ++ ) {
-			vertexMap.set( j , - 1 );
-			revVertexMap.set( j , - 1);
+			for ( int i = 0, j = attributeSize * offset; i < attributeArray2.getLength(); i ++, j ++ ) {
+
+				attributeArray1.set( j , attributeArray2.get( i ));
+
+			}
+
 		}
 
-		/*
-			Traverse every face and reorder vertices in the proper offsets of 65k.
-			We can have more than 65k entries in the index buffer per offset, but only reference 65k values.
-		*/
-		for ( int findex = 0; findex < facesCount; findex ++ ) {
-			newVerticeMaps = 0;
+		return this;
 
-			for ( int vo = 0; vo < 3; vo ++ ) {
-				int vid = (int)indices.get( findex * 3 + vo );
-				if ( vertexMap.get( vid ) == - 1 ) {
-					//Unmapped vertice
-					faceVertices.set( vo * 2 , vid);
-					faceVertices.set( vo * 2 + 1 , - 1);
-					newVerticeMaps ++;
-				} else if ( vertexMap.get( vid ) < offset.index ) {
-					//Reused vertices from previous block (duplicate)
-					faceVertices.set( vo * 2 , vid);
-					faceVertices.set( vo * 2 + 1 , - 1);
-					duplicatedVertices ++;
-				} else {
-					//Reused vertice in the current block
-					faceVertices.set( vo * 2 , vid);
-					faceVertices.set( vo * 2 + 1 , vertexMap.get( vid ));
-				}
-			}
-
-			int faceMax = vertexPtr + newVerticeMaps;
-			if ( faceMax > ( offset.index + size ) ) {
-				DrawRange new_offset = new DrawRange(indexPtr, 0, vertexPtr );
-				offsets.add( new_offset );
-				offset = new_offset;
-
-				//Re-evaluate reused vertices in light of new offset.
-				for ( int v = 0; v < 6; v += 2 ) {
-					int new_vid = faceVertices.get( v + 1 );
-					if ( new_vid > - 1 && new_vid < offset.index )
-						faceVertices.set( v + 1 , - 1);
-				}
-			}
-
-			//Reindex the face.
-			for ( int v = 0; v < 6; v += 2 ) {
-				int vid = faceVertices.get( v );
-				int new_vid = faceVertices.get( v + 1 );
-
-				if ( new_vid == - 1 )
-					new_vid = vertexPtr ++;
-
-				vertexMap.set( vid , new_vid);
-				revVertexMap.set( new_vid , vid);
-				sortedIndices.set( indexPtr ++ , new_vid - offset.index); //XXX overflows at 16bit
-				offset.count ++;
-			}
-		}
-
-		/* Move all attribute values to map to the new computed indices , also expand the vertice stack to match our new vertexPtr. */
-		this.reorderBuffers( sortedIndices, revVertexMap, vertexPtr );
-		this.drawRange = offsets;
-
-		/*
-		var orderTime = Date.now();
-		console.log("Reorder time: "+(orderTime-s)+"ms");
-		console.log("Duplicated "+duplicatedVertices+" vertices.");
-		console.log("Compute Buffers time: "+(Date.now()-s)+"ms");
-		console.log("Draw offsets: "+offsets.length);
-		*/
-
-		return offsets;
 	}
 
 	/**
@@ -831,207 +838,91 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 
-	/*
-		reoderBuffers:
-		Reorder attributes based on a new indexBuffer and indexMap.
-		indexBuffer - Uint16Array of the new ordered indices.
-		indexMap - Int32Array where the position is the new vertex ID and the value the old vertex ID for each vertex.
-		vertexCount - Amount of total vertices considered in this reordering (in case you want to grow the vertice stack).
-	*/
-	public void reorderBuffers( Float32Array indexBuffer, Int32Array indexMap, int vertexCount ) {
+	BufferGeometry toNonIndexed() {
 
-		/* Create a copy of all attributes for reordering. */
-		Map <String, Float32Array> sortedAttributes  =
-				new HashMap<String, Float32Array>();
+		if (this.index == null) {
 
-		for(String attr : this.attributes.keySet()) {
-			if ( attr.equals("index" ) )
-				continue;
+			Log.warn("BufferGeometry.toNonIndexed(): Geometry is already non-indexed.");
 
-			BufferAttribute attribute = getAttribute(attr);
-			Float32Array sourceArray = (Float32Array)attribute.getArray();
-			sortedAttributes.put( attr,Float32Array.create(  attribute.getItemSize() * vertexCount ));
+			return this;
 		}
 
-		/* Move attribute positions based on the new index map */
-		for ( int new_vid = 0; new_vid < vertexCount; new_vid ++ ) {
-			int vid = indexMap.get( new_vid );
-			for(String attr : this.attributes.keySet()) {
-				if ( attr.equals("index" ) )
-					continue;
+		BufferGeometry geometry2 = new BufferGeometry();
 
-				BufferAttribute attribute = getAttribute(attr);
-				Float32Array attrArray = (Float32Array)attribute.getArray();
-				int attrSize = attribute.getItemSize();
+		Int32Array indices = (Int32Array) this.index.array;
+		FastMap<BufferAttribute> attributes = this.attributes;
 
-				Float32Array sortedAttr = sortedAttributes.get( attr );
-				for ( int k = 0; k < attrSize; k ++ )
-					sortedAttr.set( new_vid * attrSize + k , attrArray.get( vid * attrSize + k ) );
+		for (String name : attributes.keySet()) {
+
+			BufferAttribute attribute = attributes.get(name);
+
+			Float32Array array = (Float32Array) attribute.array;
+			int itemSize = attribute.itemSize;
+
+			Float32Array array2 = Float32Array.create(indices.getLength() * itemSize);
+
+			int index = 0, index2 = 0;
+
+			for (int i = 0, l = indices.getLength(); i < l; i++) {
+
+				index = indices.get(i) * itemSize;
+
+				for (int j = 0; j < itemSize; j++) {
+
+					array2.set(index2++, array.get(index++));
+
+				}
+
 			}
+
+			geometry2.addAttribute(name, new BufferAttribute(array2, itemSize));
+
 		}
 
-		/* Carry the new sorted buffers locally */
-		getAttribute("index").setArray(indexBuffer);
+		return geometry2;
 
-		for(String attr : this.attributes.keySet()) {
-			if ( attr.equals("index" ) )
-				continue;
+	}
 
-			this.attributes.get( attr ).setArray( sortedAttributes.get( attr ) );
-			this.attributes.get( attr ).setNumItems(this.attributes.get( attr ).getItemSize() * vertexCount);
+	public BufferGeometry copy( BufferGeometry source ) {
+
+		AttributeData index = source.index;
+
+		if ( index != null ) {
+
+			this.setIndex( index.clone() );
+
 		}
+
+		FastMap<BufferAttribute> attributes = source.attributes;
+
+		for ( String name : attributes.keySet() ) {
+
+			BufferAttribute attribute = attributes.get( name );
+			this.addAttribute( name, attribute.clone() );
+
+		}
+
+		List<Group> groups = source.groups;
+
+		for ( int i = 0, l = groups.size(); i < l; i ++ ) {
+
+			Group group = groups.get(i);
+			this.addGroup(group.getStart(), group.getCount());
+
+		}
+
+		return this;
+
 	}
 
 	public BufferGeometry clone() {
 
-		BufferGeometry geometry = new BufferGeometry();
-
-		for(String attr : this.attributes.keySet()) {
-			BufferAttribute sourceAttr = getAttribute( attr );
-			geometry.addAttribute( attr, sourceAttr.clone() );
-		}
-
-		for ( int i = 0, il = this.drawRange.size(); i < il; i ++ ) {
-
-			DrawRange offset = this.drawRange.get( i );
-
-			geometry.drawRange.add( new DrawRange(
-
-					offset.start,
-					offset.index,
-					offset.count
-
-			) );
-
-		}
-
-		return geometry;
-
-	}
-
-
-	private void handleVertex( Vector3[] tan1, Vector3[] tan2, Float32Array normals, Float32Array tangents, int v ) {
-
-		Vector3 tmp = new Vector3(), tmp2 = new Vector3();
-		Vector3 n = new Vector3(), n2 = new Vector3();
-
-		n.fromArray( normals, v * 3 );
-		n2.copy( n );
-
-		Vector3 t = tan1[ v ];
-
-		// Gram-Schmidt orthogonalize
-
-		tmp.copy( t );
-		tmp.sub( n.multiply( n.dot( t ) ) ).normalize();
-
-		// Calculate handedness
-
-		tmp2.cross( n2, t );
-		double test = tmp2.dot( tan2[ v ] );
-		double w = ( test < 0.0 ) ? - 1.0 : 1.0;
-
-		tangents.set( v * 4     , tmp.getX());
-		tangents.set( v * 4 + 1 , tmp.getY());
-		tangents.set( v * 4 + 2 , tmp.getZ());
-		tangents.set( v * 4 + 3 , w);
-
-	}
-
-	private void handleTriangle(Vector3[] tan1, Vector3[] tan2, Float32Array positions, Float32Array uvs, int a, int b, int c ) {
-
-		Vector3 vA = new Vector3(),
-				vB = new Vector3(),
-				vC = new Vector3();
-
-		vA.fromArray( positions, a * 3 );
-		vB.fromArray( positions, b * 3 );
-		vC.fromArray( positions, c * 3 );
-
-		Vector2 uvA = new Vector2(),
-				uvB = new Vector2(),
-				uvC = new Vector2();
-
-		uvA.fromArray( uvs, a * 2 );
-		uvB.fromArray( uvs, b * 2 );
-		uvC.fromArray( uvs, c * 2 );
-
-		double x1 = vB.getX() - vA.getX();
-		double x2 = vC.getX() - vA.getX();
-
-		double y1 = vB.getY() - vA.getY();
-		double y2 = vC.getY() - vA.getY();
-
-		double z1 = vB.getZ() - vA.getZ();
-		double z2 = vC.getZ() - vA.getZ();
-
-		double s1 = uvB.getX() - uvA.getX();
-		double s2 = uvC.getX() - uvA.getX();
-
-		double t1 = uvB.getY() - uvA.getY();
-		double t2 = uvC.getY() - uvA.getY();
-
-		double r = 1.0 / ( s1 * t2 - s2 * t1 );
-
-		Vector3 sdir = new Vector3(), tdir = new Vector3();
-
-		sdir.set(
-				( t2 * x1 - t1 * x2 ) * r,
-				( t2 * y1 - t1 * y2 ) * r,
-				( t2 * z1 - t1 * z2 ) * r
-		);
-
-		tdir.set(
-				( s1 * x2 - s2 * x1 ) * r,
-				( s1 * y2 - s2 * y1 ) * r,
-				( s1 * z2 - s2 * z1 ) * r
-		);
-
-		tan1[ a ].add( sdir );
-		tan1[ b ].add( sdir );
-		tan1[ c ].add( sdir );
-
-		tan2[ a ].add( tdir );
-		tan2[ b ].add( tdir );
-		tan2[ c ].add( tdir );
-
-	}
-
-	public void setDirectBuffers(GL20 gl)
-	{
-
-		for ( int i = 0, l = this.attributesKeys.size(); i < l; i ++ ) {
-
-			String key = (String) this.attributesKeys.toArray()[ i ];
-			BufferAttribute attribute = this.attributes.get( key );
-
-			if ( attribute.getBuffer() == 0 ) {
-
-				attribute.setBuffer(gl.glGenBuffer());
-				attribute.setNeedsUpdate(true);
-
-			}
-
-			if ( attribute.isNeedsUpdate() ) {
-
-				BufferTarget bufferType = ( key.equals( "index" ) ) ? BufferTarget.ELEMENT_ARRAY_BUFFER : BufferTarget.ARRAY_BUFFER;
-				Buffer buf = attribute.getArray().getTypedBuffer();
-				buf.rewind();
-
-				gl.glBindBuffer(bufferType.getValue(), attribute.getBuffer());
-				gl.glBufferData(bufferType.getValue(), buf.limit(), buf, BufferUsage.STATIC_DRAW.getValue() );
-
-				attribute.setNeedsUpdate(false);
-
-			}
-
-		}
+		return new BufferGeometry().copy( this );
 
 	}
 
 	public String toString() {
 		return getClass().getSimpleName()
-				+ "{id: " + getId()
-				+ ", drawcalls: " + this.drawRange.size() + "}";
+				+ "{id: " + getId() + "}";
 	}
 }

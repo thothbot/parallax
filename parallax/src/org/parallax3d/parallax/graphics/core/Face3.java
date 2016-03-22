@@ -18,13 +18,12 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.math.Vector4;
+import org.parallax3d.parallax.system.ThreejsObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Face3 represent the triangular sides (A, B, C) of the geometric object.

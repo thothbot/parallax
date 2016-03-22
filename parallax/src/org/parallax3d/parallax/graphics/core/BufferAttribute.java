@@ -18,8 +18,15 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.math.Vector2;
+import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.*;
+
+import java.util.List;
 
 @ThreejsObject("BufferAttribute")
 public class BufferAttribute extends AttributeData {
@@ -53,6 +60,141 @@ public class BufferAttribute extends AttributeData {
 			((Float32Array)this.array).set(index1 + i, ((Float32Array) attribute.array).get(index2 + i));
 
 		}
+
+	}
+
+	public BufferAttribute copyArray( List<Double> array ) {
+
+		int offset = 0;
+
+		for ( int i = 0, l = array.size(); i < l; i ++ ) {
+			((Float32Array)this.array).set( offset ++ , array.get(i));
+		}
+
+		return this;
+
+	}
+
+	public BufferAttribute copyColorsArray( List<Color> colors ) {
+
+		Float32Array array = (Float32Array) this.array;
+		int offset = 0;
+
+		for ( int i = 0, l = colors.size(); i < l; i ++ ) {
+
+			Color color = colors.get(i);
+
+			if ( color == null ) {
+
+				Log.warn( "BufferAttribute.copyColorsArray(): color is undefined: " + i );
+				color = new Color();
+
+			}
+
+			array.set( offset ++ , color.getR());
+			array.set( offset ++ , color.getG());
+			array.set( offset ++ , color.getB());
+
+		}
+
+		return this;
+
+	}
+
+	public BufferAttribute  copyIndicesArray( List<Face3> indices ) {
+
+		Float32Array array = (Float32Array) this.array;
+		int offset = 0;
+
+		for ( int i = 0, l = indices.size(); i < l; i ++ ) {
+
+			Face3 index = indices.get(i);
+
+			array.set( offset ++ , index.a);
+			array.set( offset ++ , index.b);
+			array.set( offset ++ , index.c);
+
+		}
+
+		return this;
+
+	}
+
+	public BufferAttribute copyVector2sArray( List<Vector2> vectors ) {
+
+		Float32Array array = (Float32Array) this.array;
+		int offset = 0;
+
+		for ( int i = 0, l = vectors.size(); i < l; i ++ ) {
+
+			Vector2 vector = vectors.get(i);
+
+			if ( vector == null ) {
+
+				Log.warn( "BufferAttribute.copyVector2sArray(): vector is undefined " + i );
+				vector = new Vector2();
+
+			}
+
+			array.set( offset ++ , vector.getX());
+			array.set( offset ++ , vector.getY());
+
+		}
+
+		return this;
+
+	}
+
+	public BufferAttribute copyVector3sArray( List<Vector3> vectors ) {
+
+		Float32Array array = (Float32Array) this.array;
+		int offset = 0;
+
+		for ( int i = 0, l = vectors.size(); i < l; i ++ ) {
+
+			Vector3 vector = vectors.get(i);
+
+			if ( vector == null ) {
+
+				Log.warn( "BufferAttribute.copyVector3sArray(): vector is undefined " + i );
+				vector = new Vector3();
+
+			}
+
+			array.set( offset ++ , vector.getX());
+			array.set( offset ++ , vector.getY());
+			array.set( offset ++ , vector.getZ());
+
+		}
+
+		return this;
+
+	}
+
+	public BufferAttribute copyVector4sArray ( List<Vector4> vectors ) {
+
+		Float32Array array = (Float32Array) this.array;
+		int offset = 0;
+
+		for ( int i = 0, l = vectors.size(); i < l; i ++ ) {
+
+			Vector4 vector = vectors.get(i);
+
+			if ( vector == null ) {
+
+				Log.warn( "BufferAttribute.copyVector4sArray(): vector is undefined " + i );
+				vector = new Vector4();
+
+			}
+
+			array.set( offset ++ , vector.getX());
+			array.set( offset ++ , vector.getY());
+			array.set( offset ++ , vector.getZ());
+			array.set( offset ++ , vector.getW());
+
+		}
+
+		return this;
 
 	}
 
@@ -164,9 +306,20 @@ public class BufferAttribute extends AttributeData {
 		return new BufferAttribute(Int8Array.create(array), itemSize );
 	};
 
+	public static BufferAttribute Int8Attribute( int len, int itemSize )
+	{
+		return new BufferAttribute(Int8Array.create(len), itemSize );
+	};
+
 	public static BufferAttribute Uint8Attribute( byte[] array, int itemSize ) {
 
 		return new BufferAttribute(Uint8Array.create(array), itemSize );
+
+	};
+
+	public static BufferAttribute Uint8Attribute( int len, int itemSize ) {
+
+		return new BufferAttribute(Uint8Array.create(len), itemSize );
 
 	};
 
@@ -176,9 +329,22 @@ public class BufferAttribute extends AttributeData {
 
 	};
 
+	public static BufferAttribute Int16Attribute( int len, int itemSize ) {
+
+		return new BufferAttribute(Int16Array.create(len), itemSize );
+
+	};
+
+
 	public static BufferAttribute Uint16Attribute( short[] array, int itemSize ) {
 
 		return new BufferAttribute( Uint16Array.create( array ), itemSize );
+
+	};
+
+	public static BufferAttribute Uint16Attribute( int len, int itemSize ) {
+
+		return new BufferAttribute( Uint16Array.create( len ), itemSize );
 
 	};
 
@@ -188,9 +354,21 @@ public class BufferAttribute extends AttributeData {
 
 	};
 
+	public static BufferAttribute Int32Attribute( int len, int itemSize ) {
+
+		return new BufferAttribute( Int32Array.create( len ), itemSize );
+
+	};
+
 	public static BufferAttribute Uint32Attribute(int[] array, int itemSize ) {
 
 		return new BufferAttribute( Uint32Array.create( array ), itemSize );
+
+	};
+
+	public static BufferAttribute Uint32Attribute(int len, int itemSize ) {
+
+		return new BufferAttribute( Uint32Array.create( len ), itemSize );
 
 	};
 
@@ -200,9 +378,21 @@ public class BufferAttribute extends AttributeData {
 
 	};
 
+	public static BufferAttribute Float32Attribute( int len, int itemSize ) {
+
+		return new BufferAttribute( Float32Array.create( len ), itemSize );
+
+	};
+
 	public static BufferAttribute Float64Attribute( double[] array, int itemSize ) {
 
 		return new BufferAttribute( Float64Array.create( array ), itemSize );
+
+	};
+
+	public static BufferAttribute Float64Attribute( int len, int itemSize ) {
+
+		return new BufferAttribute( Float64Array.create( len ), itemSize );
 
 	};
 }

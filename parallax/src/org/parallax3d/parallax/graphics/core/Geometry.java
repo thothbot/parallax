@@ -18,6 +18,10 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.graphics.core.geometry.Group;
+import org.parallax3d.parallax.graphics.core.geometry.MorphNormal;
+import org.parallax3d.parallax.graphics.core.geometry.MorphTarget;
+import org.parallax3d.parallax.graphics.core.geometry.VertextNormal;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.Points;
@@ -51,54 +55,31 @@ import java.util.*;
 @ThreejsObject("THREE.Geometry")
 public class Geometry extends AbstractGeometry
 {
-	public class MorphColor
-	{
-		public String name;
-		public List<Color> colors;
-	}
-
-	public class MorphNormal
-	{
-		public List<Vector3> faceNormals;
-		public List<VertextNormal> vertexNormals;
-	}
-
-	public class VertextNormal
-	{
-		public Vector3 a;
-		public Vector3 b;
-		public Vector3 c;
-	}
-
-	public class MorphTarget
-	{
-		public String name;
-		public List<Vector3> vertices;
-	}
-
 	// Array of vertices.
 	List<Vector3> vertices = new ArrayList<>();
 	// one-to-one vertex colors, used in ParticleSystem, Line and Ribbon
 	List<Color> colors = new ArrayList<>();
 
-	private List<Face3> faces = new ArrayList<>();
+	List<Face3> faces = new ArrayList<>();
 
-	private List<List<List<Vector2>>> faceVertexUvs = new ArrayList<>();
+	List<List<List<Vector2>>> faceVertexUvs = new ArrayList<>();
 
-	private List<MorphTarget> morphTargets = new ArrayList<>();
-	private List<MorphNormal> morphNormals = new ArrayList<>();
+	List<MorphTarget> morphTargets = new ArrayList<>();
+	List<MorphNormal> morphNormals = new ArrayList<>();
 
-	private List<Vector4> skinWeights = new ArrayList<>();
-	private List<Vector4> skinIndices = new ArrayList<>();
+	List<Vector4> skinWeights = new ArrayList<>();
+	List<Vector4> skinIndices = new ArrayList<>();
 
 	/*
 	 * An array containing distances between vertices for Line geometries. 
 	 * This is required for LinePieces/LineDashedMaterial to render correctly.
 	 * Line distances can also be generated with computeLineDistances.
 	 */
-	private List<Double> lineDistances = new ArrayList<>();
+	List<Double> lineDistances = new ArrayList<>();
 
-	private List<GBone> bones;
+	List<GBone> bones;
+
+	public DirectGeometry __directGeometry;
 
 	public Geometry() {
 	}
@@ -163,7 +144,7 @@ public class Geometry extends AbstractGeometry
 	}
 
 	/**
-	 * Gets the List of {@link Geometry.MorphTarget}.
+	 * Gets the List of {@link MorphTarget}.
 	 * Morph vertices match number and order of primary vertices.
 	 */
 	public List<MorphTarget> getMorphTargets() {
@@ -171,7 +152,7 @@ public class Geometry extends AbstractGeometry
 	}
 
 	/**
-	 * Get the List of {@link Geometry.MorphNormal}.
+	 * Get the List of {@link MorphNormal}.
 	 * Morph normals have similar structure as morph targets
 	 * @return
 	 */
@@ -359,21 +340,21 @@ public class Geometry extends AbstractGeometry
 
 		if ( indices != null ) {
 
-			List<BufferGeometry.Group> groups = geometry.getGroups();
+			List<Group> groups = geometry.getGroups();
 
 			if(groups.size() > 0)
 			{
 				for ( int i = 0; i < groups.size(); i ++ ) {
 
-					BufferGeometry.Group group = groups.get(i);
+					Group group = groups.get(i);
 
-					int start = group.start;
-					int count = group.count;
+					int start = group.getStart();
+					int count = group.getCount();
 
 					for ( int j = start, jl = start + count; j < jl; j += 3 ) {
 
 						addFace( normals, colors, uvs, uvs2, tempNormals, tempUVs,tempUVs2,
-								indices.get( j ), indices.get( j + 1 ), indices.get( j + 2 ), group.materialIndex  );
+								indices.get( j ), indices.get( j + 1 ), indices.get( j + 2 ), group.getMaterialIndex());
 
 					}
 
@@ -649,19 +630,14 @@ public class Geometry extends AbstractGeometry
 
 			if ( this.morphNormals.size() <= i || this.morphNormals.get( i ) == null ) {
 
-				Geometry.MorphNormal morphNormal = new MorphNormal();
-				morphNormal.faceNormals = new ArrayList<Vector3>();
-				morphNormal.vertexNormals = new ArrayList<Geometry.VertextNormal>();
+				MorphNormal morphNormal = new MorphNormal();
 
-				List<Vector3> dstNormalsFace = morphNormal.faceNormals;
-				List<VertextNormal> dstNormalsVertex = morphNormal.vertexNormals;
+				List<Vector3> dstNormalsFace = morphNormal.getFaceNormals();
+				List<VertextNormal> dstNormalsVertex = morphNormal.getVertexNormals();
 
 				for ( int f = 0, fl = this.faces.size(); f < fl; f ++ ) {
 
 					VertextNormal vertexNormals = new VertextNormal();
-					vertexNormals.a  = new Vector3();
-					vertexNormals.b  = new Vector3();
-					vertexNormals.c  = new Vector3();
 
 					dstNormalsFace.add( new Vector3() );
 					dstNormalsVertex.add( vertexNormals );
@@ -675,7 +651,7 @@ public class Geometry extends AbstractGeometry
 
 			// set vertices to morph target
 
-			tmpGeo.vertices = this.morphTargets.get( i ).vertices;
+			tmpGeo.vertices = this.morphTargets.get(i).getVertices();
 
 			// compute morph normals
 
@@ -688,14 +664,14 @@ public class Geometry extends AbstractGeometry
 
 				face = this.faces.get( f );
 
-				Vector3 faceNormal = morphNormals.faceNormals.get( f );
-				VertextNormal vertexNormals = morphNormals.vertexNormals.get( f );
+				Vector3 faceNormal = morphNormals.getFaceNormals().get( f );
+				VertextNormal vertexNormals = morphNormals.getVertexNormals().get( f );
 
 				faceNormal.copy( face.normal );
 
-				vertexNormals.a.copy( face.vertexNormals.get( 0 ) );
-				vertexNormals.b.copy( face.vertexNormals.get( 1 ) );
-				vertexNormals.c.copy( face.vertexNormals.get( 2 ) );
+				vertexNormals.getA().copy( face.vertexNormals.get( 0 ) );
+				vertexNormals.getB().copy( face.vertexNormals.get( 1 ) );
+				vertexNormals.getC().copy( face.vertexNormals.get( 2 ) );
 
 			}
 

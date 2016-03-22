@@ -18,12 +18,12 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import java.util.List;
-
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.Points;
+
+import java.util.List;
 
 public abstract class GeometryObject extends Object3D
 {

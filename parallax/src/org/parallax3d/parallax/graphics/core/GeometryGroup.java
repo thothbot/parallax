@@ -18,13 +18,13 @@
 
 package org.parallax3d.parallax.graphics.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.parallax3d.parallax.graphics.renderers.GLGeometry;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GeometryGroup extends GLGeometry
 {

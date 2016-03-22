@@ -18,19 +18,15 @@
 
 package org.parallax3d.parallax.graphics.core;
 
+import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.math.*;
+import org.parallax3d.parallax.math.Quaternion.QuaternionChangeHandler;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
+import org.parallax3d.parallax.system.ThreejsObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.math.Euler;
-import org.parallax3d.parallax.math.Matrix3;
-import org.parallax3d.parallax.math.Matrix4;
-import org.parallax3d.parallax.math.Quaternion;
-import org.parallax3d.parallax.math.Quaternion.QuaternionChangeHandler;
-import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.AbstractPropertyObject;
-import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * Base class for scene objects.
