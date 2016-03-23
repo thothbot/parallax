@@ -41,7 +41,7 @@ import java.util.List;
 public class ShapeGeometry extends Geometry {
 
     public static class ShapeGeometryParameters
-    {
+        {
         // number of points on the curves
         public int	curveSegments	= 12;
         // material index for front and back faces
@@ -53,9 +53,9 @@ public class ShapeGeometry extends Geometry {
         public ExtrudeGeometry.UVGenerator uvGenerator = new ExtrudeGeometry.WorldUVGenerator();
     }
 
-    public ShapeGeometry ( final ShapeGeometryParameters p_option )
+    public ShapeGeometry ( Shape shape )
     {
-        this( new ArrayList<Shape>(), p_option );
+        this( shape, new ShapeGeometryParameters() );
     }
 
     public ShapeGeometry ( final Shape shape, final ShapeGeometryParameters p_option )

@@ -108,7 +108,7 @@ public final class BufferGeometryParticles extends ParallaxTest
 
 		//
 
-		context.getRenderer().setClearColor( scene.getFog().getColor(), 1 );
+		context.getRenderer().setClearColor( scene.getFog().getColor() );
 	}
 	
 	@Override

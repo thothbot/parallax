@@ -77,20 +77,6 @@ public final class BufferGeometryDemo extends ParallaxTest
 
 		BufferGeometry geometry = new BufferGeometry();
 
-		// break geometry into
-		// chunks of 21,845 triangles (3 unique vertices per triangle)
-		// for indices to fit into 16 bit integer number
-		// floor(2^16 / 3) = 21845
-
-		int chunkSize = 20000;
-
-		Uint16Array indices = Uint16Array.create( triangles * 3 );
-
-		for ( int i = 0; i < indices.getLength(); i ++ )
-		{
-			indices.set( i, i % ( 3 * chunkSize ));
-		}
-
 		Float32Array positions = Float32Array.create( triangles * 3 * 3 );
 		Float32Array normals = Float32Array.create( triangles * 3 * 3 );
 		Float32Array colors = Float32Array.create( triangles * 3 * 3 );
@@ -173,7 +159,6 @@ public final class BufferGeometryDemo extends ParallaxTest
 			double vy = ( y / n ) + 0.5;
 			double vz = ( z / n ) + 0.5;
 
-			//color.setHSV( 0.5 + 0.5 * vx, 0.25 + 0.75 * vy, 0.25 + 0.75 * vz );
 			color.setRGB( vx, vy, vz );
 
 			colors.set( i, color.getR() );
@@ -190,30 +175,14 @@ public final class BufferGeometryDemo extends ParallaxTest
 
 		}
 
-		geometry.addAttribute( "index", new BufferAttribute( indices, 1 ) );
 		geometry.addAttribute( "position", new BufferAttribute( positions, 3 ) );
 		geometry.addAttribute( "normal", new BufferAttribute( normals, 3 ) );
 		geometry.addAttribute( "color", new BufferAttribute( colors, 3 ) );
-
-		int offsets = triangles / chunkSize;
-
-		for ( int i = 0; i < offsets; i ++ ) {
-
-			BufferGeometry.DrawRange drawcall = new BufferGeometry.DrawRange(
-					i * chunkSize * 3, // start
-					Math.min( triangles - ( i * chunkSize ), chunkSize ) * 3, // count
-					i * chunkSize * 3 //index
-			);
-
-			geometry.getDrawcalls().add( drawcall );
-
-		}
 
 		geometry.computeBoundingSphere();
 
 		MeshPhongMaterial material = new MeshPhongMaterial()
 				.setColor(0xaaaaaa)
-				.setAmbient(0xaaaaaa)
 				.setSpecular(0xffffff)
 				.setShininess(250)
 				.setVertexColors(Material.COLORS.VERTEX)
@@ -224,7 +193,7 @@ public final class BufferGeometryDemo extends ParallaxTest
 
 		//
 
-		context.getRenderer().setClearColor( scene.getFog().getColor(), 1 );
+		context.getRenderer().setClearColor( scene.getFog().getColor() );
 		context.getRenderer().setGammaInput(true);
 		context.getRenderer().setGammaOutput(true);
 	}

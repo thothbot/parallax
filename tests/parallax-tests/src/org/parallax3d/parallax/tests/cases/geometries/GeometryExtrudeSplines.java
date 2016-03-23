@@ -18,15 +18,13 @@
 
 package org.parallax3d.parallax.tests.cases.geometries;
 
-import java.util.Arrays;
-
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.SceneUtils;
 import org.parallax3d.parallax.graphics.extras.core.Curve;
-import org.parallax3d.parallax.graphics.extras.curves.SplineCurve3;
+import org.parallax3d.parallax.graphics.extras.curves.CatmullRomCurve3;
 import org.parallax3d.parallax.graphics.extras.curves.parametric.*;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.TubeGeometry;
@@ -41,6 +39,8 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
+
+import java.util.Arrays;
 
 @ThreejsExample("webgl_geometry_extrude_splines")
 public final class GeometryExtrudeSplines extends ParallaxTest
@@ -79,34 +79,26 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 	public FastMap<Curve> splines()
 	{
 		FastMap<Curve> retval = new FastMap<>();
-		retval.put("GrannyKnot", new CurveGrannyKnot());
-		retval.put("HeartCurve", new CurveHeart(3.5)); // ?
-		retval.put("VivianiCurve", new CurveViviani(70));
-		retval.put("KnotCurve", new CurveKnot());
-		retval.put("HelixCurve", new CurveHelix());
-		retval.put("TrefoilKnot", new CurveTrefoilKnot());
-		retval.put("TorusKnotGeometry", new CurveTorusKnot(20));
-		retval.put("CinquefoilKnot", new CurveCinquefoilKnot(20));
-		retval.put("TrefoilPolynomialKnot", new CurveTrefoilPolynomialKnot(14));
-		retval.put("FigureEightPolynomialKnot", new CurveFigureEightPolynomialKnot());
-		retval.put("DecoratedTorusKnot4a", new CurveDecoratedTorusKnot4a());
-		retval.put("DecoratedTorusKnot4b", new CurveDecoratedTorusKnot4b());
-		retval.put("DecoratedTorusKnot5a", new CurveDecoratedTorusKnot5a());
-		retval.put("DecoratedTorusKnot5c", new CurveDecoratedTorusKnot5c());
-		retval.put("PipeSpline", new SplineCurve3(Arrays.asList(
-				 new Vector3(0, 10, -10),  new Vector3(10, 0, -10),  new Vector3(20, 0, 0),
-				 new Vector3(30, 0, 10),   new Vector3(30, 0, 20),   new Vector3(20, 0, 30),
-				 new Vector3(10, 0, 30),   new Vector3(0, 0, 30),    new Vector3(-10, 10, 30),
-				 new Vector3(-10, 20, 30), new Vector3(0, 30, 30),   new Vector3(10, 30, 30),
-				 new Vector3(20, 30, 15),  new Vector3(10, 30, 10),  new Vector3(0, 30, 10),
-				 new Vector3(-10, 20, 10), new Vector3(-10, 10, 10), new Vector3(0, 0, 10),
-				 new Vector3(10, -10, 10), new Vector3(20, -15, 10), new Vector3(30, -15, 10),
-				 new Vector3(40, -15, 10), new Vector3(50, -15, 10), new Vector3(60, 0, 10),
-				 new Vector3(70, 0, 0),    new Vector3(80, 0, 0),    new Vector3(90, 0, 0),
-				 new Vector3(100, 0, 0))));
-		retval.put("SampleClosedSpline",  new SplineCurve3Closed(Arrays.asList( //?
+		retval.put("GrannyKnot", new GrannyKnot());
+		retval.put("HeartCurve", new HeartCurve(3.5)); // ?
+		retval.put("VivianiCurve", new VivianiCurve(70));
+		retval.put("KnotCurve", new KnotCurve());
+		retval.put("HelixCurve", new HelixCurve());
+		retval.put("TrefoilKnot", new TrefoilKnot());
+		retval.put("TorusKnotGeometry", new TorusKnot(20));
+		retval.put("CinquefoilKnot", new CinquefoilKnot(20));
+		retval.put("TrefoilPolynomialKnot", new TrefoilPolynomialKnot(14));
+		retval.put("FigureEightPolynomialKnot", new FigureEightPolynomialKnot());
+		retval.put("DecoratedTorusKnot4a", new DecoratedTorusKnot4a());
+		retval.put("DecoratedTorusKnot4b", new DecoratedTorusKnot4b());
+		retval.put("DecoratedTorusKnot5a", new DecoratedTorusKnot5a());
+		retval.put("DecoratedTorusKnot5c", new DecoratedTorusKnot5c());
+		retval.put("PipeSpline", new CatmullRomCurve3(Arrays.asList(
+				new Vector3(0, 10, -10), new Vector3(10, 0, -10), new Vector3(20, 0, 0), new Vector3(30, 0, 10), new Vector3(30, 0, 20), new Vector3(20, 0, 30), new Vector3(10, 0, 30), new Vector3(0, 0, 30), new Vector3(-10, 10, 30), new Vector3(-10, 20, 30), new Vector3(0, 30, 30), new Vector3(10, 30, 30), new Vector3(20, 30, 15), new Vector3(10, 30, 10), new Vector3(0, 30, 10), new Vector3(-10, 20, 10), new Vector3(-10, 10, 10), new Vector3(0, 0, 10), new Vector3(10, -10, 10), new Vector3(20, -15, 10), new Vector3(30, -15, 10), new Vector3(40, -15, 10), new Vector3(50, -15, 10), new Vector3(60, 0, 10), new Vector3(70, 0, 0), new Vector3(80, 0, 0), new Vector3(90, 0, 0), new Vector3(100, 0, 0)
+		)));
+		retval.put("SampleClosedSpline",  new CatmullRomCurve3(Arrays.asList( //?
 				 new Vector3(0, -40, -40), new Vector3(0, 40, -40), new Vector3(0, 140, -40),
-				 new Vector3(0, 40, 40),   new Vector3(0, -40, 40) )));
+				 new Vector3(0, 40, 40),   new Vector3(0, -40, 40) )).setClosed(true));
 
 		return retval;
 	}
@@ -147,8 +139,7 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 		addTube();
 
 		// Debug point
-		MeshBasicMaterial pMaterial = new MeshBasicMaterial().setColor(0xdddddd);
-		cameraEye = new Mesh(new SphereGeometry(5), pMaterial);
+		cameraEye = new Mesh(new SphereGeometry(5), new MeshBasicMaterial().setColor(0xdddddd));
 		parent.add(cameraEye);
 
 		animateCamera();
@@ -172,7 +163,7 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 		if (tubeMesh != null)
 			parent.remove(tubeMesh);
 
-		tubeGeometry = new TubeGeometry(this.extrudePath, this.extrusionSegments, 2.0, this.radiusSegments, this.isClosed, this.isDebug);
+		tubeGeometry = new TubeGeometry(this.extrudePath, this.extrusionSegments, 2.0, this.radiusSegments, this.isClosed);
 
 		addGeometry(tubeGeometry, new Color(0xff00ff));
 		setScale();
@@ -181,17 +172,16 @@ public final class GeometryExtrudeSplines extends ParallaxTest
 	private void addGeometry(Geometry geometry, Color color)
 	{
 		MeshLambertMaterial material1 = new MeshLambertMaterial()
-				.setColor(color)
-				.setOpacity(this.isDebug ? 0.2 : 0.8)
-				.setTransparent(true);
+				.setColor(color);
 
 		MeshBasicMaterial material2 = new MeshBasicMaterial()
 				.setColor( 0x000000)
 				.setWireframe(true)
+				.setTransparent(true)
 				.setOpacity(0.5);
 
 		// 3d shape
-		this.tubeMesh = (Object3D) SceneUtils.createMultiMaterialObject(geometry, Arrays.asList(material1, material2));
+		this.tubeMesh = SceneUtils.createMultiMaterialObject(geometry, Arrays.asList(material1, material2));
 
 //    		this.tubeMesh.add(geometry.getDebug());
 

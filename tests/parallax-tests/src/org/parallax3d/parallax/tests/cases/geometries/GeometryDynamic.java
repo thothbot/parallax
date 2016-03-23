@@ -64,31 +64,30 @@ public class GeometryDynamic extends ParallaxTest
 
 		camera.getPosition().setY(200);
 
-		scene.setFog(new FogExp2( 0xAACCFF, 0.0007 ));
+		scene.setFog(new FogExp2( 0xaaccff, 0.0007 ));
 
 		this.controls = new FirstPersonControls( camera, context );
 		controls.setMovementSpeed(500);
 		controls.setLookSpeed(0.1);
 
-		this.geometry = new PlaneGeometry( 20000, 20000, worldWidth - 1, worldDepth - 1 );
-		this.geometry.applyMatrix(new Matrix4().makeRotationX( - Math.PI / 2.0 ));
+		geometry = new PlaneGeometry( 20000, 20000, worldWidth - 1, worldDepth - 1 );
+		geometry.rotateX( - Math.PI / 2 );
 
 		for ( int i = 0, il = this.geometry.getVertices().size(); i < il; i ++ )
-			this.geometry.getVertices().get( i ).setY(35.0 * Math.sin( i/2.0 ));
+		{
+			this.geometry.getVertices().get(i).setY(35.0 * Math.sin(i / 2.0));
+		}
 
-		this.geometry.computeFaceNormals();
-		this.geometry.computeVertexNormals();
-
-		Texture texture = new Texture(img);
-		texture.setWrapS(TextureWrapMode.REPEAT);
-		texture.setWrapT(TextureWrapMode.REPEAT);
+		Texture texture = new Texture(img)
+				.setWrapS(TextureWrapMode.REPEAT)
+				.setWrapT(TextureWrapMode.REPEAT);
 		texture.getRepeat().set( 5.0, 5.0 );
 
 		MeshBasicMaterial material = new MeshBasicMaterial()
 				.setColor( 0x0044ff )
 				.setMap( texture );
 
-		this.mesh = new Mesh( this.geometry, material );
+		this.mesh = new Mesh( geometry, material );
 		scene.add( this.mesh );
 
 		context.getRenderer().setClearColor(0xaaccff);

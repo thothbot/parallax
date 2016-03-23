@@ -54,7 +54,15 @@ public class CurvePath extends Curve
 		this.curves = curves;
 	}
 
-	public void add( Curve curve )
+	public boolean isAutoClose() {
+		return autoClose;
+	}
+
+	public void setAutoClose(boolean autoClose) {
+		this.autoClose = autoClose;
+	}
+
+	public void add(Curve curve )
 	{
 		this.curves.add( curve );
 	}
@@ -142,6 +150,13 @@ public class CurvePath extends Curve
 		}
 
 		return this.cacheLengths;
+	}
+
+	public Geometry createPointsGeometry( ) {
+
+		List<Vector2> pts = this.getPoints();
+		return this.createGeometry( pts );
+
 	}
 
 	/**

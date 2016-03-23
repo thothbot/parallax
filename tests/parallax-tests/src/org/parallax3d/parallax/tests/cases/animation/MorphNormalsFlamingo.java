@@ -22,19 +22,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.graphics.animation.AnimationMixer;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
+import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.extras.objects.MorphBlendMesh;
+import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -47,79 +51,61 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 	
 	static final int radius = 600;
 	PerspectiveCamera camera;
-	Scene scene, scene2;
-	
-	List<MorphBlendMesh> morphs;
+	Scene scene;
+
+	List<AnimationMixer> mixers = new ArrayList<>();
 	
 	private double oldTime;
 	Vector3 target = new Vector3( 0, 150, 0 );
+
+	double theta = 0;
 
 	@Override
 	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
-		scene2 = new Scene();
 		
 		camera = new PerspectiveCamera(
 				40, // fov
-				0.5 * context.getAspectRation(), // aspect
+				context.getAspectRation(), // aspect
 				1, // near
 				10000 // far 
 		);
 		
 		camera.getPosition().setY(300);
-//		camera.addViewportResizeHandler(new ViewportResizeHandler() {
-//			
-//			@Override
-//			public void onResize(ViewportResizeEvent event) {
-//				camera.setAspect(0.5 * event.context.getAspectRation());
-//				
-//			}
-//		});
-		
-		DirectionalLight light = new DirectionalLight( 0xffffff, 1.3 );
+
+
+		scene.add( new HemisphereLight( 0x443333, 0x222233 ) );
+
+		DirectionalLight light = new DirectionalLight( 0xffffff, 1 );
 		light.getPosition().set( 1, 1, 1 );
 		scene.add( light );
 
-		
-		DirectionalLight light2 = new DirectionalLight( 0xffffff, 0.1 );
-		light2.getPosition().set( 0.25, -1, 0 );
-		scene.add( light2 );
-		
-		DirectionalLight light12 = new DirectionalLight( 0xffffff, 1.3 );
-		light12.getPosition().set( 1, 1, 1 );
-		scene2.add( light12 );
+//		morphs = new ArrayList<MorphBlendMesh>();
 
-		
-		DirectionalLight light22 = new DirectionalLight( 0xffffff, 0.1 );
-		light22.getPosition().set( 0.25, -1, 0 );
-		scene2.add( light22 );
-
-		morphs = new ArrayList<MorphBlendMesh>();
 		new JsonLoader(model, new ModelLoadHandler() {
 
 				@Override
 				public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
 
-					((JsonLoader)loader).morphColorsToFaceColors( (Geometry) geometry );
-					((Geometry)geometry).computeMorphNormals();
+					MeshLambertMaterial material = new MeshLambertMaterial()
+							.setColor(new Color(0xffffff))
+							.setMorphTargets(true)
+							.setVertexColors(Material.COLORS.FACE)
+							.setShading(Material.SHADING.FLAT);
 
-					MeshLambertMaterial material = new MeshLambertMaterial();
-					material.setColor(new Color(0xffffff));
-					material.setMorphTargets(true);
-					material.setMorphNormals(true);
-					material.setVertexColors(Material.COLORS.FACE);
-					material.setShading(Material.SHADING.FLAT);
+					Mesh mesh = new Mesh( geometry, material );
 
-					MorphBlendMesh meshAnim = new MorphBlendMesh( (Geometry) geometry, material );
+					mesh.getPosition().setX(-150);
+					mesh.getPosition().setY(150);
+					mesh.getScale().set( 1.5, 1.5, 1.5 );
 
-					meshAnim.setDuration(5000);
+					scene.add( mesh );
 
-					meshAnim.getScale().set( 1.5 );
-					meshAnim.getPosition().setY( 150 );
+					AnimationMixer mixer = new AnimationMixer( mesh );
+					mixer.clipAction( geometry.animations[ 0 ] ).setDuration( 1 ).play();
 
-					scene.add( meshAnim );
-					morphs.add( meshAnim );
+					mixers.add( mixer );
 				}
 
 		});
@@ -129,65 +115,53 @@ public final class MorphNormalsFlamingo extends ParallaxTest
 				@Override
 				public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
 
-					((JsonLoader)loader).morphColorsToFaceColors( (Geometry) geometry );
+					geometry.computeVertexNormals();
 					((Geometry)geometry).computeMorphNormals();
 
-					MeshPhongMaterial material = new MeshPhongMaterial();
-					material.setColor(new Color(0xffffff));
-					material.setSpecular(new Color(0xffffff));
-					material.setShininess(20);
-					material.setMorphTargets(true);
-					material.setMorphNormals(true);
-					material.setVertexColors(Material.COLORS.FACE);
-					material.setShading(Material.SHADING.SMOOTH);
+					MeshPhongMaterial material = new MeshPhongMaterial()
+							.setColor(new Color(0xffffff))
+							.setMorphTargets(true)
+							.setMorphNormals(true)
+							.setVertexColors(Material.COLORS.FACE)
+							.setShading(Material.SHADING.SMOOTH);
 
-					MorphBlendMesh meshAnim = new MorphBlendMesh( (Geometry) geometry, material );
+					Mesh mesh = new Mesh( geometry, material );
 
-					meshAnim.setDuration(5000);
+					mesh.getPosition().setX(150);
+					mesh.getPosition().setY(150);
+					mesh.getScale().set( 1.5, 1.5, 1.5 );
 
-					meshAnim.getScale().set( 1.5 );
-					meshAnim.getPosition().setY( 150 );
+					scene.add( mesh );
 
-					scene2.add( meshAnim );
-					morphs.add( meshAnim );
+					AnimationMixer mixer = new AnimationMixer( mesh );
+					mixer.clipAction( geometry.animations[ 0 ] ).setDuration( 1 ).play();
+
+					mixers.add( mixer );
 				}
 		});
-		
-		context.getRenderer().setGammaInput(true);
-		context.getRenderer().setGammaOutput(true);
-		context.getRenderer().setSortObjects(false);
-		context.getRenderer().setAutoClear(false);
-		
-		this.oldTime = Duration.currentTimeMillis();
 
-		context.getRenderer().setClearColor(0x222222);
 	}
 	
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		double theta = context.getDeltaTime() * 0.01;
+		theta += 0.1;
 
-		camera.getPosition().setX( radius * Math.sin( theta * Math.PI / 360.0 ) );
-		camera.getPosition().setZ( radius * Math.cos( theta * Math.PI / 360.0 ) );
+		camera.getPosition().setX(radius * Math.sin(Mathematics.degToRad(theta)));
+		camera.getPosition().setZ(radius * Math.cos(Mathematics.degToRad(theta)));
 
 		camera.lookAt( target );
 
-		for ( int i = 0; i < morphs.size(); i ++ ) 
-		{
-			MorphBlendMesh morph = morphs.get( i );
-			morph.updateAnimation( Duration.currentTimeMillis() - this.oldTime );
+		double delta = context.getDeltaTime();
+
+		for ( int i = 0; i < mixers.size(); i ++ ) {
+
+			mixers.get(i).update( delta );
+
 		}
 
 		context.getRenderer().clear();
-
-		context.getRenderer().setViewport( 0, 0, context.getRenderer().getAbsoluteWidth()/2, context.getRenderer().getAbsoluteHeight() );
 		context.getRenderer().render( scene, camera );
-
-		context.getRenderer().setViewport( context.getRenderer().getAbsoluteWidth()/2, 0, context.getRenderer().getAbsoluteWidth()/2, context.getRenderer().getAbsoluteHeight() );
-		context.getRenderer().render( scene2, camera );
-
-		this.oldTime = Duration.currentTimeMillis();
 	}
 
 	@Override

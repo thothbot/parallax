@@ -35,6 +35,7 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Color;
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -65,14 +66,13 @@ public class Geometries extends ParallaxTest
 		light.getPosition().set( 0, 1, 0 );
 		scene.add( light );
 
-		Texture texture = new Texture(image);
-		texture.setWrapS(TextureWrapMode.REPEAT);
-		texture.setWrapT(TextureWrapMode.REPEAT);
-		texture.setAnisotropy(16);
+		Texture texture = new Texture(image)
+				.setWrapS(TextureWrapMode.REPEAT)
+				.setWrapT(TextureWrapMode.REPEAT)
+				.setAnisotropy(16);
 
 		MeshLambertMaterial material = new MeshLambertMaterial()
 				.setMap( texture )
-				.setAmbient( 0xbbbbbb )
 				.setSide(Material.SIDE.DOUBLE);
 
 		Object3D object1 = new Mesh( new SphereGeometry( 75, 20, 10 ), material );
@@ -113,11 +113,11 @@ public class Geometries extends ParallaxTest
 		object9.getPosition().set( 400, 0, 0 );
 		scene.add( object9 );
 
-		List<Vector3> points = new ArrayList<Vector3>();
+		List<Vector2> points = new ArrayList<>();
 
 		for ( int i = 0; i < 50; i ++ )
 		{
-			points.add( new Vector3( Math.sin( i * 0.2 ) * Math.sin( i * 0.1 ) * 15.0 + 50.0, 0.0, ( i - 5.0 ) * 2.0 )  );
+			points.add( new Vector2(  Math.sin( i * 0.2 ) * Math.sin( i * 0.1 ) * 15. + 50, ( i - 5 ) * 2. ) );
 		}
 
 		Object3D object10 = new Mesh( new LatheGeometry( points, 20 ), material );

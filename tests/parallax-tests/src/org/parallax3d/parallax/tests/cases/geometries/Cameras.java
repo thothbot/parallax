@@ -24,10 +24,12 @@ import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.core.Object3D;
+import org.parallax3d.parallax.graphics.extras.geometries.SphereBufferGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.extras.helpers.CameraHelper;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.PointsMaterial;
+import org.parallax3d.parallax.graphics.objects.Group;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -58,11 +60,18 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 
 	Mesh mesh;
 
+	double frustumSize = 600;
+
 	@Override
 	public void onResize(RenderingContext context) {
 		camera.setAspect(0.5 * context.getAspectRation());
 		cameraPerspective.setAspect(0.5 * context.getAspectRation());
-		cameraOrtho.setSize(0.5 * context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() );
+
+		cameraOrtho.setLeft(-0.5 * frustumSize * context.getAspectRation() / 2);
+		cameraOrtho.setRight(0.5 * frustumSize * context.getAspectRation() / 2);
+		cameraOrtho.setTop(frustumSize / 2);
+		cameraOrtho.setBottom(-frustumSize / 2);
+		cameraOrtho.updateProjectionMatrix();
 	}
 
 	@Override
@@ -83,49 +92,55 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 				150,
 				1000 );
 
-		cameraOrtho = new OrthographicCamera( 0.5 * context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight(), 150, 1000 );
+		cameraPerspectiveHelper = new CameraHelper( this.cameraPerspective );
+		scene.add( cameraPerspectiveHelper );
 
-		this.cameraPerspectiveHelper = new CameraHelper( this.cameraPerspective );
-		scene.add( this.cameraPerspectiveHelper );
+		cameraOrtho = new OrthographicCamera(
+				0.5 * frustumSize * context.getAspectRation() / - 2,
+				0.5 * frustumSize * context.getAspectRation() / 2,
+				frustumSize / 2,
+				frustumSize / - 2,
+				150, 1000 );
 
 		this.cameraOrthoHelper = new CameraHelper( this.cameraOrtho );
 		scene.add( this.cameraOrthoHelper );
 
 		//
 
-		this.activeCamera = this.cameraPerspective;
-		this.activeHelper = this.cameraPerspectiveHelper;
+		activeCamera = cameraPerspective;
+		activeHelper = cameraPerspectiveHelper;
 
 		// counteract different front orientation of cameras vs rig
 
-		this.cameraOrtho.getRotation().setY(Math.PI);
-		this.cameraPerspective.getRotation().setY(Math.PI);
+		cameraOrtho.getRotation().setY(Math.PI);
+		cameraPerspective.getRotation().setY(Math.PI);
 
-		this.cameraRig = new Object3D();
+		cameraRig = new Group();
 
-		this.cameraRig.add( this.cameraPerspective );
-		this.cameraRig.add( this.cameraOrtho );
+		cameraRig.add( this.cameraPerspective );
+		cameraRig.add( this.cameraOrtho );
 
 		scene.add( this.cameraRig );
 
 		//
 
-		MeshBasicMaterial bopt0 = new MeshBasicMaterial()
+		this.mesh = new Mesh( new SphereBufferGeometry( 100, 16, 8 ), new MeshBasicMaterial()
 				.setColor( 0xffffff )
-				.setWireframe(true);
+				.setWireframe(true) );
 
-		this.mesh = new Mesh( new SphereGeometry( 100, 16, 8 ), bopt0);
 		scene.add( mesh );
 
-		MeshBasicMaterial  bopt1 = new MeshBasicMaterial()
+		Mesh mesh2 = new Mesh( new SphereBufferGeometry( 50, 16, 8 ), new MeshBasicMaterial()
 				.setColor( new Color(0x00ff00) )
-				.setWireframe(true);
+				.setWireframe(true));
 
-		Mesh mesh2 = new Mesh( new SphereGeometry( 50, 16, 8 ), bopt1);
 		mesh2.getPosition().setY(150);
 		mesh.add( mesh2 );
 
-		Mesh mesh3 = new Mesh( new SphereGeometry( 5, 16, 8 ), new MeshBasicMaterial().setColor( 0x0000ff ) );
+		Mesh mesh3 = new Mesh( new SphereBufferGeometry( 5, 16, 8 ), new MeshBasicMaterial()
+				.setColor( 0x0000ff )
+				.setWireframe(true) );
+
 		mesh3.getPosition().setZ(150);
 		cameraRig.add( mesh3 );
 
@@ -190,13 +205,13 @@ public class Cameras extends ParallaxTest implements KeyDownHandler
 
 		activeHelper.setVisible(false);
 
-		context.getRenderer().setViewport( 0, 0, context.getRenderer().getAbsoluteWidth() / 2, context.getRenderer().getAbsoluteHeight() );
+		context.getRenderer().setViewport( 0, 0, context.getWidth() / 2, context.getHeight() );
 
 		context.getRenderer().render( scene, activeCamera );
 
 		activeHelper.setVisible(true);
 
-		context.getRenderer().setViewport( context.getRenderer().getAbsoluteWidth() / 2, 0, context.getRenderer().getAbsoluteWidth() / 2, context.getRenderer().getAbsoluteHeight() );
+		context.getRenderer().setViewport( context.getWidth() / 2, 0, context.getWidth() / 2, context.getHeight() );
 		context.getRenderer().render(scene, camera);
 	}
 

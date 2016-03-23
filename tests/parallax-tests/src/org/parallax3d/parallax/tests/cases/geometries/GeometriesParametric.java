@@ -68,18 +68,16 @@ public class GeometriesParametric extends ParallaxTest
 		light.getPosition().set( 0, 0, 1 );
 		scene.add( light );
 
-		Texture texture = new Texture(image);
-		texture.setWrapS(TextureWrapMode.REPEAT);
-		texture.setWrapT(TextureWrapMode.REPEAT);
-		texture.setAnisotropy(16);
+		Texture texture = new Texture(image)
+				.setWrapS(TextureWrapMode.REPEAT)
+				.setWrapT(TextureWrapMode.REPEAT)
+				.setAnisotropy(16);
 
-		List<Material> materials = new ArrayList<Material>();
+		List<Material> materials = new ArrayList<>();
 		MeshLambertMaterial lmaterial = new MeshLambertMaterial()
 				.setMap( texture )
-				.setAmbient( 0xbbbbbb )
 				.setSide(Material.SIDE.DOUBLE);
 		materials.add(lmaterial);
-
 
 		MeshBasicMaterial bmaterial = new MeshBasicMaterial()
 				.setColor( 0xffffff )
@@ -92,7 +90,7 @@ public class GeometriesParametric extends ParallaxTest
 		// KleinParametricGeometry Bottle
 		Object3D object1 = SceneUtils.createMultiMaterialObject(new KleinParametricGeometry(20, 20), materials );
 		object1.getPosition().set( 0, 0, 0 );
-		object1.getScale().multiply(20);
+		object1.getScale().multiply(10);
 		scene.add( object1 );
 
 		// MobiusParametricGeometry Strip

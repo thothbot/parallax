@@ -33,6 +33,7 @@ import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
+import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
@@ -99,40 +100,40 @@ public class GeometryColors extends ParallaxTest implements TouchMoveHandler
 		
 		for ( int i = 0; i < geometry.getFaces().size(); i ++ ) 
 		{
-			Face3 f  = geometry.getFaces().get( i );
+			Face3 f  = geometry.getFaces().get(i);
+			Face3 f2 = geometry2.getFaces().get(i);
+			Face3 f3 = geometry3.getFaces().get(i);
 
-			int n = 3;
+			for( int j = 0; j < 3; j++ ) {
 
-			for( int j = 0; j < n; j++ ) 
-			{
-				int vertexIndex = (j == 0 ) ? f.getA()
-						: (j == 1 ) ? f.getB()
-						: (j == 2 ) ? f.getC() : 0;
+				int vertexIndex = f.getFlat()[ j ];
 
-				Vector3 p = geometry.getVertices().get( vertexIndex );
+				Vector3 p = geometry.getVertices().get(vertexIndex);
 
 				Color color = new Color( 0xffffff );
-				color.setHSL( ( p.getY() / (double)radius + 1.0 ) / 2.0, 1.0, 0.5 );
+				color.setHSL( ( p.getY() / radius + 1 ) / 2, 1.0, 0.5 );
 
-				geometry.getFaces().get( i ).getVertexColors().add(color);
+				f.getVertexColors().set(j, color);
 
-				Color color2 = new Color( 0xffffff );
-				color2.setHSL( 0.0, ( p.getY() / (double)radius + 1.0 ) / 2.0, 0.5 );
+				color = new Color( 0xffffff );
+				color.setHSL( 0.0, ( p.getY() / radius + 1 ) / 2, 0.5 );
 
-				geometry2.getFaces().get( i ).getVertexColors().add(color2);
+				f2.getVertexColors().set(j, color);
 
-				Color color3 = new Color( 0xffffff );
-				color3.setHSL( (0.125 * vertexIndex / (double)geometry.getVertices().size()), 1.0, 0.5 );
+				color = new Color( 0xffffff );
+				color.setHSL( 0.125 * vertexIndex/ geometry.getVertices().size(), 1.0, 0.5 );
 
-				geometry3.getFaces().get( i ).getVertexColors().add(color3);
+				f3.getVertexColors().set(j, color);
+
 			}
 		}
 
 		List<Material> materials = new ArrayList<Material>();
-		materials.add(new MeshLambertMaterial()
+		materials.add(new MeshPhongMaterial()
 				.setColor( 0xffffff )
 				.setShading( Material.SHADING.FLAT )
-				.setVertexColors( Material.COLORS.VERTEX ));
+				.setVertexColors( Material.COLORS.VERTEX )
+				.setShininess(0));
 
 		materials.add(new MeshBasicMaterial()
 				.setColor( 0x000000 )
@@ -155,7 +156,7 @@ public class GeometryColors extends ParallaxTest implements TouchMoveHandler
 		group3.getRotation().setX(0);
 		scene.add( group3 );
 
-		context.getRenderer().setClearColor(0xDDDDDD);
+		context.getRenderer().setClearColor(0xffffff);
 	}
 	
 	@Override

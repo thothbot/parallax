@@ -19,133 +19,112 @@
 package org.parallax3d.parallax.tests.cases.animation;
 
 import org.parallax3d.parallax.RenderingContext;
+import org.parallax3d.parallax.graphics.animation.AnimationClip;
+import org.parallax3d.parallax.graphics.animation.AnimationMixer;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
+import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.loaders.ModelLoadHandler;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 @ThreejsExample("webgl_morphtargets_horse")
-public final class MorphTargetsHorse extends ParallaxTest
-{
+public final class MorphTargetsHorse extends ParallaxTest {
 
-	private static final String model = "models/animated/horse.js";
+    private static final String model = "models/animated/horse.js";
 
-	static final int radius = 600;
+    Scene scene;
+    PerspectiveCamera camera;
+    Mesh mesh;
+    Vector3 target = new Vector3(0, 150, 0);
 
-	double theta = 0;
+    AnimationMixer mixer;
 
-	Scene scene;
-	PerspectiveCamera camera;
-	Mesh mesh;
-	Vector3 target = new Vector3(0, 150, 0);
+    int radius = 600;
+    double theta = 0;
 
-	static final int aminationDuration = 1000;
-	static final int keyframes = 15;
-	static final double interpolation = (double)aminationDuration / keyframes;
+    @Override
+    public void onStart(RenderingContext context) {
+        scene = new Scene();
+        camera = new PerspectiveCamera(
+                50, // fov
+                context.getAspectRation(), // aspect
+                1, // near
+                10000 // far
+        );
 
-	int lastKeyframe = 0;
-	int currentKeyframe = 0;
+        camera.getPosition().setY(300);
 
-	@Override
-	public void onStart(RenderingContext context)
-	{
-		scene = new Scene();
-		camera = new PerspectiveCamera(
-				50, // fov
-				context.getAspectRation(), // aspect
-				1, // near
-				10000 // far
-		);
+        DirectionalLight light = new DirectionalLight(0xefefff, 1.5);
+        light.getPosition().set(1, 1, 1).normalize();
+        scene.add(light);
 
-		camera.getPosition().setY(300);
+        DirectionalLight light1 = new DirectionalLight(0xffefef, 1.5);
+        light1.getPosition().set(-1, -1, -1).normalize();
+        scene.add(light1);
 
-		DirectionalLight light = new DirectionalLight( 0xefefff, 2 );
-		light.getPosition().set( 1, 1, 1 ).normalize();
-		scene.add( light );
+        new JsonLoader(model, new ModelLoadHandler() {
 
-		DirectionalLight light1 = new DirectionalLight( 0xffefef, 2 );
-		light1.getPosition().set( -1, -1, -1 ).normalize();
-		scene.add( light1 );
+            @Override
+            public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
 
-		new JsonLoader(model, new ModelLoadHandler() {
+                mesh = new Mesh(geometry, new MeshLambertMaterial()
+                        .setVertexColors(Material.COLORS.FACE)
+                        .setMorphTargets(true));
 
-			@Override
-			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
+                mesh.getScale().set(1.5, 1.5, 1.5);
+                scene.add(mesh);
 
-				MeshLambertMaterial material = new MeshLambertMaterial();
-				material.setColor(new Color(0x606060));
-				material.setMorphTargets(true);
-				mesh = new Mesh(geometry, material);
-				mesh.getScale().set(1.5);
+                mixer = new AnimationMixer(mesh);
 
-				scene.add(mesh);
+                AnimationClip clip = AnimationClip.CreateFromMorphTargetSequence("gallop", geometry.morphTargets, 30);
 
-			}
-		});
+                mixer.clipAction(clip).setDuration(1).play();
+            }
+        });
 
-		context.getRenderer().setClearColor(0xf0f0f0);
-	}
+        context.getRenderer().setClearColor(0xf0f0f0);
+    }
 
-	@Override
-	public void onUpdate(RenderingContext context)
-	{
-		theta += 0.1;
+    @Override
+    public void onUpdate(RenderingContext context) {
+        theta += 0.1;
 
-		camera.getPosition().setX( radius * Math.sin( Mathematics.degToRad( theta ) ) );
-		camera.getPosition().setZ( radius * Math.cos( Mathematics.degToRad( theta ) ) );
+        camera.getPosition().setX(radius * Math.sin(Mathematics.degToRad(theta)));
+        camera.getPosition().setZ(radius * Math.cos(Mathematics.degToRad(theta)));
 
-		camera.lookAt( target );
+        camera.lookAt(target);
 
-		if ( mesh != null )
-		{
-			// Alternate morph targets
-			double time = Duration.currentTimeMillis() % aminationDuration;
+        if (mixer != null) {
 
-			int keyframe = (int)Math.floor( time / interpolation );
+            mixer.update(context.getDeltaTime() * 0.001);
 
-			if ( keyframe != currentKeyframe )
-			{
-				mesh.morphTargetInfluences.set( lastKeyframe, 0.0 );
-				mesh.morphTargetInfluences.set( currentKeyframe, 1.0 );
-				mesh.morphTargetInfluences.set( keyframe, 0.0 );
+        }
 
-				lastKeyframe = currentKeyframe;
-				currentKeyframe = keyframe;
-			}
+        context.getRenderer().render(scene, camera);
+    }
 
-			mesh.morphTargetInfluences.set( keyframe,
-					(double)( time % interpolation ) / interpolation);
-			mesh.morphTargetInfluences.set( lastKeyframe,
-					1.0 - mesh.morphTargetInfluences.get( keyframe ));
-		}
+    @Override
+    public String getName() {
+        return "Morph targets: horse";
+    }
 
-		context.getRenderer().render(scene, camera);
-	}
+    @Override
+    public String getDescription() {
+        return "";
+    }
 
-	@Override
-	public String getName() {
-		return "Morph targets: horse";
-	}
-
-	@Override
-	public String getDescription() {
-		return "";
-	}
-
-	@Override
-	public String getAuthor() {
-		return "<a href=\"http://threejs.org\">threejs</a>";
-	}
+    @Override
+    public String getAuthor() {
+        return "<a href=\"http://threejs.org\">threejs</a>";
+    }
 
 }

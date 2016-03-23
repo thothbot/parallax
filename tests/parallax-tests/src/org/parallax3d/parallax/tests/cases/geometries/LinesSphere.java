@@ -114,7 +114,7 @@ public final class LinesSphere extends ParallaxTest implements TouchMoveHandler
 			geometry.getVertices().add( vertex2 );
 		}
 
-		this.originalScale = new HashMap<Line, Double>();
+		this.originalScale = new HashMap<>();
 		
 		for( int i = 0; i < parameters.size(); ++i ) 
 		{
@@ -125,7 +125,7 @@ public final class LinesSphere extends ParallaxTest implements TouchMoveHandler
 					.setLinewidth(p.lineWidth)
 					.setOpacity(p.opasity);
 
-			Line line = new Line( geometry, material, Line.MODE.PIECES );
+			Line line = new Line( geometry, material );
 			line.getScale().set( p.scale );
 			this.originalScale.put(line, p.scale);
 

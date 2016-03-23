@@ -61,7 +61,7 @@ public class GeometryNormals extends ParallaxTest
 		this.control.setPanSpeed(0.2);
 		this.control.setDynamicDampingFactor(0.3);
 		
-		PointLight light = new PointLight( 0xffffff, 1.5, 0.0 );
+		PointLight light = new PointLight( 0xffffff, 1.5 );
 		light.getPosition().set( 1000, 1000, 2000 );
 		scene.add( light );
 
