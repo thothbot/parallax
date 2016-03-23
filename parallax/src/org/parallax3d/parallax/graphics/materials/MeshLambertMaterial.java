@@ -32,7 +32,7 @@ import org.parallax3d.parallax.math.Color;
  */
 @ThreejsObject("THREE.MeshLambertMaterial")
 public final class MeshLambertMaterial extends Material 
-	implements HasWireframe, HasFog, HasVertexColors,
+	implements HasWireframe, HasFog, HasVertexColors, HasShading,
 	HasSkinning, HasEmissiveColor, HasColor, HasMap, HasAoMap, HasLightMap, HasEnvMap, HasEmissiveMap, HasSpecularMap, HasAlphaMap
 {
 
@@ -72,6 +72,8 @@ public final class MeshLambertMaterial extends Material
 	boolean skinning = false;
 	boolean morphTargets = false;
 	boolean morphNormals = false;
+
+	Material.SHADING shading = SHADING.SMOOTH;
 
 	@Override
 	public Shader getAssociatedShader()
@@ -324,6 +326,15 @@ public final class MeshLambertMaterial extends Material
 	@Override
 	public MeshLambertMaterial setMorphNormals(boolean morphNormals) {
 		this.morphNormals = morphNormals;
+		return this;
+	}
+
+	public Material.SHADING getShading() {
+		return this.shading;
+	}
+
+	public MeshLambertMaterial setShading(Material.SHADING shading) {
+		this.shading = shading;
 		return this;
 	}
 

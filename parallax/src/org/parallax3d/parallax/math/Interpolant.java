@@ -40,7 +40,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  *
  * @author tschw
  */
-@ThreejsObject("THREE.Interpolant")
+@ThreejsObject("Interpolant")
 public abstract class Interpolant {
 
     public enum EndingModes {
@@ -49,9 +49,25 @@ public abstract class Interpolant {
         WrapAroundEnding;
     };
 
-    public static class Settings {
+    // Interpolation
+
+    public enum Interpolation {
+        InterpolateDiscrete,
+        InterpolateLinear,
+        InterpolateSmooth;
+    }
+
+    public static class Settings
+    {
         public EndingModes endingStart;
         public EndingModes endingEnd;
+
+        public Settings() {}
+
+        public Settings(EndingModes endingStart, EndingModes endingEnd) {
+            this.endingStart = endingStart;
+            this.endingEnd = endingEnd;
+        }
     }
 
     protected Settings settings = new Settings();
@@ -74,7 +90,47 @@ public abstract class Interpolant {
         this.valueSize = sampleSize;
     }
 
-    public double[] valuate(double t )
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
+
+    public double[] getParameterPositions() {
+        return parameterPositions;
+    }
+
+    public void setParameterPositions(double[] parameterPositions) {
+        this.parameterPositions = parameterPositions;
+    }
+
+    public double[] getSampleValues() {
+        return sampleValues;
+    }
+
+    public void setSampleValues(double[] sampleValues) {
+        this.sampleValues = sampleValues;
+    }
+
+    public int getValueSize() {
+        return valueSize;
+    }
+
+    public void setValueSize(int valueSize) {
+        this.valueSize = valueSize;
+    }
+
+    public double[] getResultBuffer() {
+        return resultBuffer;
+    }
+
+    public void setResultBuffer(double[] resultBuffer) {
+        this.resultBuffer = resultBuffer;
+    }
+
+    public double[] evaluate(double t )
     {
 
         double[] pp = this.parameterPositions;
