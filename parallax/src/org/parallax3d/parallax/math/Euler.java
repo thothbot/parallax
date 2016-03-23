@@ -197,7 +197,12 @@ public class Euler {
 
 	public Euler setFromRotationMatrix( Matrix4 m )
 	{
-		return setFromRotationMatrix(m, this.order, false);
+		return setFromRotationMatrix(m, this.order );
+	}
+
+	public Euler setFromRotationMatrix( Matrix4 m, String order )
+	{
+		return setFromRotationMatrix(m, order, false);
 	}
 
 	public Euler setFromRotationMatrix( Matrix4 m, String order, boolean update )

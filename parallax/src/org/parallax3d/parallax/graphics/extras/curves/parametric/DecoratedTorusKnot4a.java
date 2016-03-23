@@ -20,18 +20,20 @@ package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveTrefoilKnot extends Curve
+@ThreejsObject("THREE.Curves.DecoratedTorusKnot4a")
+public class DecoratedTorusKnot4a extends Curve
 {
 
-	private double scale;
+	protected double scale;
 	
-	public CurveTrefoilKnot()
+	public DecoratedTorusKnot4a()
 	{
-		this(10);
+		this(40);
 	}
 	
-	public CurveTrefoilKnot(double scale)
+	public DecoratedTorusKnot4a(double scale)
 	{
 		this.scale = scale;
 	}
@@ -40,10 +42,11 @@ public final class CurveTrefoilKnot extends Curve
 	public Vector3 getPoint(double t)
 	{
 		t *= Math.PI * 2.0;
-		double tx = (2.0 + Math.cos(3.0 * t)) * Math.cos(2.0 * t);
-		double ty = (2.0 + Math.cos(3.0 * t)) * Math.sin(2.0 * t);
-		double tz = Math.sin(3.0 * t);
+		
+		double x = Math.cos(2.0 * t) * (1 + 0.6 * (Math.cos(5.0 * t) + 0.75 * Math.cos(10.0 * t)));
+		double y = Math.sin(2.0 * t) * (1 + 0.6 * (Math.cos(5.0 * t) + 0.75 * Math.cos(10.0 * t)));
+		double z = 0.35 * Math.sin(5.0 * t);
 
-		return new Vector3(tx, ty, tz).multiply(this.scale);
+		return new Vector3(x, y, z).multiply(this.scale);
 	}
 }

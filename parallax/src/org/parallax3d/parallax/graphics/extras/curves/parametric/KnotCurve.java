@@ -20,32 +20,24 @@ package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveCinquefoilKnot extends Curve
+@ThreejsObject("THREE.Curves.KnotCurve")
+public final class KnotCurve extends Curve
 {
 
-	private double scale;
-	
-	public CurveCinquefoilKnot()
-	{
-		this(10);
-	}
-
-	public CurveCinquefoilKnot(double scale)
-	{
-		this.scale = scale;
-	}
-	
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		double p = 2, q = 5;
-		t *= Math.PI * 2.0;
-		double tx = (2.0 + Math.cos(q * t)) * Math.cos(p * t);
-		double ty = (2.0 + Math.cos(q * t)) * Math.sin(p * t);
-		double tz = Math.sin(q * t);
+		t *= 2.0 * Math.PI;
 
-		return new Vector3(tx, ty, tz).multiply(this.scale);
+		double R = 10;
+		double s = 50;
+		double tx = s * Math.sin(t);
+		double ty = Math.cos(t) * (R + s * Math.cos(t));
+		double tz = Math.sin(t) * (R + s * Math.cos(t));
+
+		return new Vector3(tx, ty, tz);
 	}
 
 }

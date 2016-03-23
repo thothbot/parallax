@@ -18,39 +18,20 @@
 
 package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
-import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveFigureEightPolynomialKnot extends Curve
+@ThreejsObject("THREE.Curves.DecoratedTorusKnot5a")
+public final class DecoratedTorusKnot5a extends DecoratedTorusKnot4a
 {
-
-	private double scale;
-	
-	public CurveFigureEightPolynomialKnot()
-	{
-		this(1);
-	}
-	
-	public CurveFigureEightPolynomialKnot(double scale)
-	{
-		this.scale = scale;
-	}
-	
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		t = scaleTo(-4, 4, t);
-		double tx = 2 / 5.0 * t * (t * t - 7.0) * (t * t - 10.0);
-		double ty = Math.pow(t, 4.0) - 13.0 * t * t;
-		double tz = 1 / 10.0 * t * (t * t - 4.0) * (t * t - 9.0) * (t * t - 12.0);
+		double fi = t * Math.PI * 2.0;
+		double x = Math.cos(3.0 * fi) * (1.0 + 0.3 * Math.cos(5.0 * fi) + 0.5 * Math.cos(10.0 * fi));
+		double y = Math.sin(3.0 * fi) * (1.0 + 0.3 * Math.cos(5.0 * fi) + 0.5 * Math.cos(10.0 * fi));
+		double z = 0.2 * Math.sin(20.0 * fi);
 
-		return new Vector3(tx, ty, tz).multiply(this.scale);
+		return new Vector3(x, y, z).multiply(this.scale);
 	}
-	
-	private double scaleTo(double x, double y, double t) 
-	{
-		double r = y - x;
-		return t * r + x;
-	}
-
 }

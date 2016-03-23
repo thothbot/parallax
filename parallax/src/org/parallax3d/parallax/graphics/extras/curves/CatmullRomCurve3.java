@@ -66,16 +66,19 @@ public class CatmullRomCurve3 extends Curve {
         this.points = points;
     }
 
-    public void setClosed(boolean closed) {
+    public CatmullRomCurve3 setClosed(boolean closed) {
         this.closed = closed;
+        return this;
     }
 
-    public void setType(Type type) {
+    public CatmullRomCurve3 setType(Type type) {
         this.type = type;
+        return this;
     }
 
-    public void setTension(double tension) {
+    public CatmullRomCurve3 setTension(double tension) {
         this.tension = tension;
+        return this;
     }
 
     @Override

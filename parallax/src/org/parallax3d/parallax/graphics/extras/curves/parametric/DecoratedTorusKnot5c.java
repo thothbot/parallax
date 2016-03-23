@@ -19,8 +19,10 @@
 package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveDecoratedTorusKnot5c extends CurveDecoratedTorusKnot4a 
+@ThreejsObject("THREE.Curves.DecoratedTorusKnot5c")
+public final class DecoratedTorusKnot5c extends DecoratedTorusKnot4a
 {
 	@Override
 	public Vector3 getPoint(double t)

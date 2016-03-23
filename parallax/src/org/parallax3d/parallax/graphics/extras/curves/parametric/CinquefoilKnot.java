@@ -18,18 +18,36 @@
 
 package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
+import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveDecoratedTorusKnot4b extends CurveDecoratedTorusKnot4a 
+@ThreejsObject("THREE.Curves.CinquefoilKnot")
+public final class CinquefoilKnot extends Curve
 {
+
+	private double scale;
+	
+	public CinquefoilKnot()
+	{
+		this(10);
+	}
+
+	public CinquefoilKnot(double scale)
+	{
+		this.scale = scale;
+	}
+	
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		double fi = t * Math.PI * 2;
-		double x = Math.cos(2.0 * fi) * (1.0 + 0.45 * Math.cos(3.0 * fi) + 0.4 * Math.cos(9.0 * fi));
-		double y = Math.sin(2.0 * fi) * (1.0 + 0.45 * Math.cos(3.0 * fi) + 0.4 * Math.cos(9.0 * fi));
-		double z = 0.2 * Math.sin(9.0 * fi);
+		double p = 2, q = 5;
+		t *= Math.PI * 2.0;
+		double tx = (2.0 + Math.cos(q * t)) * Math.cos(p * t);
+		double ty = (2.0 + Math.cos(q * t)) * Math.sin(p * t);
+		double tz = Math.sin(q * t);
 
-		return new Vector3(x, y, z).multiply(this.scale);
+		return new Vector3(tx, ty, tz).multiply(this.scale);
 	}
+
 }

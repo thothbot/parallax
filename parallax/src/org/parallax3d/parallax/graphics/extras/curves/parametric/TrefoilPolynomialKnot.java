@@ -20,21 +20,33 @@ package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveHelix extends Curve
+@ThreejsObject("THREE.Curves.TrefoilPolynomialKnot")
+public final class TrefoilPolynomialKnot extends Curve
 {
 
+	private double scale;
+	
+	public TrefoilPolynomialKnot()
+	{
+		this(10);
+	}
+	
+	public TrefoilPolynomialKnot(double scale)
+	{
+		this.scale = scale;
+	}
+	
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		double a = 30; // radius
-		double b = 150; //height
-		double t2 = 2.0 * Math.PI * t * b / 30.0;
-		double tx = Math.cos(t2) * a;
-		double ty = Math.sin(t2) * a;
-		double tz = b * t;
+		t = t * 4.0 - 2.0;
+		double tx = Math.pow(t, 3.0) - 3.0 * t;
+		double ty = Math.pow(t, 4.0) - 4.0 * t * t;
+		double tz = 1 / 5.0 * Math.pow(t, 5.0) - 2.0 * t;
 
-		return new Vector3(tx, ty, tz);
+		return new Vector3(tx, ty, tz).multiply(this.scale);
 	}
 
 }

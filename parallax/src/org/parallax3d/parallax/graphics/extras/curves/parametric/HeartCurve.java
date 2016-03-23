@@ -20,26 +20,33 @@ package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveViviani extends Curve
+@ThreejsObject("THREE.Curves.HeartCurve")
+public final class HeartCurve extends Curve
 {
 
-	private double radius;
+	private double scale;
 	
-	public CurveViviani(double radius)
+	public HeartCurve()
 	{
-		this.radius = radius;
+		this(5.0);
+	}
+
+	public HeartCurve(double scale)
+	{
+		this.scale = scale;
 	}
 
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		t = t * 4.0 * Math.PI; // Normalized to 0..1
-		double a = this.radius / 2.0f;
-		double tx = a * (1.0 + Math.cos(t));
-		double ty = a * Math.sin(t);
-		double tz = 2.0 * a * Math.sin(t / 2.0);
+		t = 2.0 * Math.PI * t;
 
-		return new Vector3(tx, ty, tz);
+		double tx = 16.0 * Math.pow(Math.sin(t), 3.0);
+		double ty = 13.0 * Math.cos(t) - 5.0 * Math.cos(2.0 * t) - 2.0 * Math.cos(3.0 * t) - Math.cos(4.0 * t);
+
+		return new Vector3(tx, ty, 0).multiply(this.scale);
 	}
+
 }

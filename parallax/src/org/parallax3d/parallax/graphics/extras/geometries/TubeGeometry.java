@@ -39,7 +39,7 @@ import java.util.List;
  * 
  * @author thothbot
  */
-@ThreejsObject("TubeGeometry")
+@ThreejsObject("THREE.TubeGeometry")
 public final class TubeGeometry extends Geometry
 {
 	public interface Taper {
@@ -71,7 +71,12 @@ public final class TubeGeometry extends Geometry
 
 	public TubeGeometry( Curve path )
 	{
-		this(path, 64, 1.0, 8, false, new NoTaper());
+		this(path, 64, 1.0, 8, false);
+	}
+
+	public TubeGeometry( Curve path, int segments, double radius, int radialSegments, boolean closed )
+	{
+		this(path, segments, radius, radialSegments, closed, new NoTaper());
 	}
 
 	public TubeGeometry( Curve path, int segments, double radius, int radialSegments, boolean closed, Taper taper )

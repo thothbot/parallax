@@ -20,32 +20,28 @@ package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveTorusKnot extends Curve
+@ThreejsObject("THREE.Curves.VivianiCurve")
+public final class VivianiCurve extends Curve
 {
 
-	private double scale;
+	private double radius;
 	
-	public CurveTorusKnot()
+	public VivianiCurve(double radius)
 	{
-		this(10);
-	}
-	
-	public CurveTorusKnot(double scale)
-	{
-		this.scale = scale;
+		this.radius = radius;
 	}
 
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		double p = 3, q = 4;
-		t *= Math.PI * 2.0;
-		double tx = (2.0 + Math.cos(q * t)) * Math.cos(p * t);
-		double ty = (2.0 + Math.cos(q * t)) * Math.sin(p * t);
-		double tz = Math.sin(q * t);
+		t = t * 4.0 * Math.PI; // Normalized to 0..1
+		double a = this.radius / 2.0f;
+		double tx = a * (1.0 + Math.cos(t));
+		double ty = a * Math.sin(t);
+		double tz = 2.0 * a * Math.sin(t / 2.0);
 
-		return new Vector3(tx, ty, tz).multiply(this.scale);
+		return new Vector3(tx, ty, tz);
 	}
-
 }

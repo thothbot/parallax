@@ -20,19 +20,39 @@ package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveGrannyKnot extends Curve
+@ThreejsObject("THREE.Curves.FigureEightPolynomialKnot")
+public final class FigureEightPolynomialKnot extends Curve
 {
 
+	private double scale;
+	
+	public FigureEightPolynomialKnot()
+	{
+		this(1);
+	}
+	
+	public FigureEightPolynomialKnot(double scale)
+	{
+		this.scale = scale;
+	}
+	
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		t = 2.0 * Math.PI * t;
+		t = scaleTo(-4, 4, t);
+		double tx = 2 / 5.0 * t * (t * t - 7.0) * (t * t - 10.0);
+		double ty = Math.pow(t, 4.0) - 13.0 * t * t;
+		double tz = 1 / 10.0 * t * (t * t - 4.0) * (t * t - 9.0) * (t * t - 12.0);
 
-		double x = -0.22 * Math.cos(t) - 1.28 * Math.sin(t) - 0.44 * Math.cos(3.0 * t) - 0.78 * Math.sin(3.0 * t);
-		double y = -0.1 * Math.cos(2.0 * t) - 0.27 * Math.sin(2.0 * t) + 0.38 * Math.cos(4.0 * t) + 0.46 * Math.sin(4.0 * t);
-		double z = 0.7 * Math.cos(3.0 * t) - 0.4 * Math.sin(3.0 * t);
-		return new Vector3(x, y, z).multiply(20);
+		return new Vector3(tx, ty, tz).multiply(this.scale);
+	}
+	
+	private double scaleTo(double x, double y, double t) 
+	{
+		double r = y - x;
+		return t * r + x;
 	}
 
 }

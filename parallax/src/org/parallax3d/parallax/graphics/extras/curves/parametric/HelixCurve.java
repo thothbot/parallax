@@ -20,20 +20,21 @@ package org.parallax3d.parallax.graphics.extras.curves.parametric;
 
 import org.parallax3d.parallax.graphics.extras.core.Curve;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public final class CurveKnot extends Curve
+@ThreejsObject("THREE.Curves.HelixCurve")
+public final class HelixCurve extends Curve
 {
 
 	@Override
 	public Vector3 getPoint(double t)
 	{
-		t *= 2.0 * Math.PI;
-
-		double R = 10;
-		double s = 50;
-		double tx = s * Math.sin(t);
-		double ty = Math.cos(t) * (R + s * Math.cos(t));
-		double tz = Math.sin(t) * (R + s * Math.cos(t));
+		double a = 30; // radius
+		double b = 150; //height
+		double t2 = 2.0 * Math.PI * t * b / 30.0;
+		double tx = Math.cos(t2) * a;
+		double ty = Math.sin(t2) * a;
+		double tz = b * t;
 
 		return new Vector3(tx, ty, tz);
 	}
