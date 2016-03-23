@@ -20,20 +20,22 @@ package org.parallax3d.parallax.graphics.extras.geometries.parametric;
 
 import org.parallax3d.parallax.graphics.extras.geometries.ParametricGeometry;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
+@ThreejsObject("THREE.ParametricGeometries.PlaneGeometry")
 public class PlaneParametricGeometry extends ParametricGeometry
 {
 
-	public PlaneParametricGeometry(final int width, final int height, int slices, int stacks)
+	public PlaneParametricGeometry(final double width, final double height, int slices, int stacks)
 	{
 		super(new ParametricFunction() {
 
 			@Override
 			public Vector3 run(double u, double v)
 			{
-				double x = u * (double)width;
+				double x = u * width;
 				double y = 0.0;
-				double z = v * (double)height;
+				double z = v * height;
 
 				return new Vector3(x, y, z);
 			}

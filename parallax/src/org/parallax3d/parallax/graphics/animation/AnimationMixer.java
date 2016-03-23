@@ -73,7 +73,7 @@ public class AnimationMixer {
         this._initMemoryManager();
     }
 
-    public void clipAction( AnimationClip clip ) {
+    public Action clipAction( AnimationClip clip ) {
         clipAction(clip, this._root );
     }
 

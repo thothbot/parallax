@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.extras.geometries.parametric;
 
 import org.parallax3d.parallax.graphics.extras.geometries.ParametricGeometry;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/mobius_3d.gif" />
@@ -29,6 +30,7 @@ import org.parallax3d.parallax.math.Vector3;
  * @author thothbot
  *
  */
+@ThreejsObject("THREE.ParametricGeometries.mobius3d")
 public class Mobius3dParametricGeometry extends ParametricGeometry
 {
 
@@ -53,7 +55,6 @@ public class Mobius3dParametricGeometry extends ParametricGeometry
 				return new Vector3(x, y, z);
 			}
 		}, slices, stacks);
-		// TODO Auto-generated constructor stub
 	}
 
 }

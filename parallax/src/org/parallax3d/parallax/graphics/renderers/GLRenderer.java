@@ -303,6 +303,10 @@ public class GLRenderer extends Renderer
 		return this._clearColor;
 	}
 
+	public void setClearColor( int color )
+	{
+		setClearColor( new Color(color), 1.0 );
+	}
 
 	public void setClearColor( Color color )
 	{

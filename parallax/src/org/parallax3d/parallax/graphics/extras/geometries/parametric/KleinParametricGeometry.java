@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.extras.geometries.parametric;
 
 import org.parallax3d.parallax.graphics.extras.geometries.ParametricGeometry;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  * <img src="http://thothbot.github.com/parallax/static/docs/klein_bottle.gif" />
@@ -29,6 +30,7 @@ import org.parallax3d.parallax.math.Vector3;
  * @author thothbot
  *
  */
+@ThreejsObject("THREE.ParametricGeometries.klein")
 public class KleinParametricGeometry extends ParametricGeometry
 {
 	public KleinParametricGeometry(int slices, int stacks)
@@ -58,6 +60,7 @@ public class KleinParametricGeometry extends ParametricGeometry
 				y = -2.0 * (1.0 - Math.cos(u) / 2.0) * Math.sin(v);
 
 				return new Vector3(x, y, z);
+
 			}
 		}, slices, stacks);
 	}

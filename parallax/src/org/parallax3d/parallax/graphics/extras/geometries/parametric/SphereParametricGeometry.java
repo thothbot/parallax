@@ -22,36 +22,29 @@ import org.parallax3d.parallax.graphics.extras.geometries.ParametricGeometry;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.ThreejsObject;
 
-/**
- * <img src="http://thothbot.github.com/parallax/static/docs/mobius_strip.gif" />
- * <p>
- * Flat Mobius strip geometry
- * 
- * @author thothbot
- *
- */
-@ThreejsObject("THREE.ParametricGeometries.mobius")
-public class MobiusParametricGeometry extends ParametricGeometry
+@ThreejsObject("THREE.ParametricGeometries.SphereGeometry")
+public class SphereParametricGeometry extends ParametricGeometry
 {
 
-	public MobiusParametricGeometry(int slices, int stacks)
+	public SphereParametricGeometry(final double size, int slices, int stacks )
 	{
-		super(new ParametricGeometry.ParametricFunction() {
+		super(new ParametricFunction() {
 
-				  @Override
-				  public Vector3 run(double u, double t)
-				  {
-					  u = u - 0.5;
-					  double v = 2.0 * Math.PI * t;
+			@Override
+			public Vector3 run(double u, double v)
+			{
+				u *= Math.PI;
+				v *= 2 * Math.PI;
 
-					  double a = 2.0;
+				double x = size * Math.sin( u ) * Math.cos( v );
+				double y = size * Math.sin( u ) * Math.sin( v );
+				double z = size * Math.cos( u );
 
-					  double x = Math.cos(v) * (a + u * Math.cos(v/2.0));
-					  double y = Math.sin(v) * (a + u * Math.cos(v/2.0));
-					  double z = u * Math.sin(v/2.0);
-					  return new Vector3(x, y, z);
-				  }
-			  },
-		slices, stacks);
+
+				return new Vector3( x, y, z );
+
+			}
+		}, slices, stacks);
 	}
+
 }
