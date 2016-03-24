@@ -32,6 +32,7 @@ import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
+import org.parallax3d.parallax.graphics.objects.LineSegments;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -107,10 +108,7 @@ public final class InteractiveVoxelPainter extends ParallaxTest implements Touch
 		cubeGeo = new BoxGeometry( 50, 50, 50 );
 		cubeMaterial = new MeshLambertMaterial()
 				.setColor( 0xfeb74c )
-				.setAmbient( 0x00ff80 )
-				.setShading(Material.SHADING.FLAT)
-				.setMap(new Texture( texture ))
-				.setAmbient( 0xfeb74c );
+				.setMap(new Texture( texture ));
 
 		// grid
 
@@ -132,9 +130,8 @@ public final class InteractiveVoxelPainter extends ParallaxTest implements Touch
 				.setColor( 0x000000 )
 				.setTransparent(true)
 				.setOpacity(0.2);
-		
-		Line line = new Line( geometry, material, Line.MODE.PIECES );
-		scene.add( line );
+
+		scene.add( new LineSegments( geometry, material ) );
 		
 		//
 

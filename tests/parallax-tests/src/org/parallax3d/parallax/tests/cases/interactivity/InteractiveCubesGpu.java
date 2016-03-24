@@ -29,6 +29,7 @@ import org.parallax3d.parallax.graphics.lights.SpotLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
+import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -97,7 +98,7 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 
 		pickingScene = new Scene();
 
-		pickingTexture = new RenderTargetTexture(context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight());
+		pickingTexture = new RenderTargetTexture(context.getWidth(), context.getHeight());
 		pickingTexture.setGenerateMipmaps(false);
 
 		scene.add( new AmbientLight( 0x555555 ) );
@@ -110,12 +111,13 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 		Geometry pickingGeometry = new Geometry();
 		MeshBasicMaterial pickingMaterial = new MeshBasicMaterial().setVertexColors(Material.COLORS.VERTEX);
 
-		MeshLambertMaterial defaultMaterial = new MeshLambertMaterial()
+		MeshPhongMaterial defaultMaterial = new MeshPhongMaterial()
 				.setColor( 0xffffff )
 				.setShading(Material.SHADING.FLAT)
-				.setVertexColors(Material.COLORS.VERTEX);
+				.setVertexColors(Material.COLORS.VERTEX)
+				.setShininess(0);
 
-		pickingData = new ArrayList<Picking>();
+		pickingData = new ArrayList<>();
 		
 		BoxGeometry geom = new BoxGeometry( 1, 1, 1 );
 		Color color = new Color();
@@ -200,12 +202,11 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 	private void pick(RenderingContext context)
 	{
 		//render the picking scene off-screen
-		GL20 gl = context.getRenderer().gl;
 		context.getRenderer().render(pickingScene, camera, pickingTexture);
 		Uint8Array pixelBuffer = Uint8Array.create(4);
 
 		//read the pixel under the mouse from the texture
-		gl.glReadPixels(mouseX, pickingTexture.getHeight() - mouseY, 1, 1, PixelFormat.RGBA.getValue(), PixelType.UNSIGNED_BYTE.getValue(), pixelBuffer.getBuffer());
+		context.getRenderer().readRenderTargetPixels(pickingTexture, mouseX, pickingTexture.getHeight() - mouseY, 1, 1, pixelBuffer);
 
 		//interpret the pixel as an ID
 

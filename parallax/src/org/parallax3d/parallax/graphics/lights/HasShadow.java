@@ -17,10 +17,12 @@
  */
 package org.parallax3d.parallax.graphics.lights;
 
-public interface HasShadow {
+import org.parallax3d.parallax.graphics.cameras.Camera;
 
-    LightShadow getShadow();
+public interface HasShadow<T extends Camera> {
 
-    void setShadow(LightShadow shadow);
+    LightShadow<T> getShadow();
+
+    void setShadow(LightShadow<T> shadow);
 
 }

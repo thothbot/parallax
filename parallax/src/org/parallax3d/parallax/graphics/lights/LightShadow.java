@@ -24,9 +24,9 @@ import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.LightShadow")
-public class LightShadow {
+public class LightShadow<T extends Camera> {
 
-    Camera camera;
+    T camera;
 
     double bias = 0.;
     double radius = 1.;
@@ -36,13 +36,61 @@ public class LightShadow {
     RenderTargetTexture map;
     Matrix4 matrix = new Matrix4();
 
-    public LightShadow(Camera camera) {
+    public LightShadow(T camera) {
         this.camera = camera;
     }
 
-    public LightShadow copy( LightShadow source ) {
+    public T getCamera() {
+        return camera;
+    }
 
-        this.camera = source.camera.clone();
+    public void setCamera(T camera) {
+        this.camera = camera;
+    }
+
+    public double getBias() {
+        return bias;
+    }
+
+    public void setBias(double bias) {
+        this.bias = bias;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public Vector2 getMapSize() {
+        return mapSize;
+    }
+
+    public void setMapSize(Vector2 mapSize) {
+        this.mapSize = mapSize;
+    }
+
+    public RenderTargetTexture getMap() {
+        return map;
+    }
+
+    public void setMap(RenderTargetTexture map) {
+        this.map = map;
+    }
+
+    public Matrix4 getMatrix() {
+        return matrix;
+    }
+
+    public void setMatrix(Matrix4 matrix) {
+        this.matrix = matrix;
+    }
+
+    public LightShadow copy(LightShadow source ) {
+
+        this.camera = (T) source.camera.clone();
 
         this.bias = source.bias;
         this.radius = source.radius;

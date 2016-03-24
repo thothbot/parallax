@@ -33,7 +33,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  *
  */
 @ThreejsObject("THREE.SpotLight")
-public class SpotLight extends Light implements HasShadow
+public class SpotLight extends Light implements HasShadow<PerspectiveCamera>
 {
 
 	Object3D target = new Object3D();
@@ -43,7 +43,7 @@ public class SpotLight extends Light implements HasShadow
 	double penumbra;
 	double decay;
 
-	LightShadow shadow;
+	LightShadow<PerspectiveCamera> shadow;
 
 	public SpotLight(int hex)
 	{
@@ -111,12 +111,12 @@ public class SpotLight extends Light implements HasShadow
 	}
 
 	@Override
-	public LightShadow getShadow() {
+	public LightShadow<PerspectiveCamera> getShadow() {
 		return shadow;
 	}
 
 	@Override
-	public void setShadow(LightShadow shadow) {
+	public void setShadow(LightShadow<PerspectiveCamera> shadow) {
 		this.shadow = shadow;
 	}
 

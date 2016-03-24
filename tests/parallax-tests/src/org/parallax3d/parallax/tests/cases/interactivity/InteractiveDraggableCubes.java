@@ -100,15 +100,14 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 		light.getPosition().set( 0, 500, 2000 );
 		light.setCastShadow(true);
 
-		light.setShadowCameraNear(200);
-		light.setShadowCameraFar(camera.getFar());
-		light.setShadowCameraFar(50);
+		light.getShadow().getCamera().setNear(200);
+		light.getShadow().getCamera().setFar(camera.getFar());
+		light.getShadow().getCamera().setFov(50);
 
-		light.setShadowBias(-0.00022);
-		light.setShadowDarkness(0.5);
+		light.getShadow().setBias(-0.00022);
 
-		light.setShadowMapWidth(2048);
-		light.setShadowMapHeight(2048);
+		light.getShadow().getMap().setWidth(2048);
+		light.getShadow().getMap().setHeight(2048);
 
 		scene.add( light );
 
@@ -117,8 +116,7 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 		objects = new ArrayList<>();
 		for ( int i = 0; i < 200; i ++ ) 
 		{
-			int color = (int)(Math.random() * 0xffffff);
-			Mesh object = new Mesh( geometry, new MeshLambertMaterial().setColor( color ).setAmbient( color ) );
+			Mesh object = new Mesh( geometry, new MeshLambertMaterial().setColor( (int)(Math.random() * 0xffffff) ) );
 
 			object.getPosition().setX( Math.random() * 1000 - 500 );
 			object.getPosition().setY( Math.random() * 600 - 300 );
@@ -143,11 +141,11 @@ public final class InteractiveDraggableCubes extends ParallaxTest implements Tou
 				.setColor( 0x000000 )
 				.setOpacity(0.25)
 				.setTransparent(true);
-		plane = new Mesh( new PlaneBufferGeometry( 2000, 2000, 8, 8 ), material2 );
-		plane.setVisible(false);
+		plane = new Mesh( new PlaneBufferGeometry( 2000, 2000, 8, 8 ), new MeshBasicMaterial()
+				.setVisible(false));
 		scene.add( plane );
 
-		context.getRenderer().setClearColor(0xeeeeee);
+		context.getRenderer().setClearColor(0xf0f0f0);
 		context.getRenderer().setSortObjects(false);
 
 		// Init shadow

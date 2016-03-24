@@ -22,6 +22,7 @@ import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.core.Raycaster;
+import org.parallax3d.parallax.graphics.extras.geometries.BoxBufferGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
@@ -29,6 +30,7 @@ import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
@@ -64,19 +66,16 @@ public final class InteractiveCubes extends ParallaxTest
 				1, // near
 				10000 // far 
 		);
-		
-		camera.getPosition().set( 0, 300, 500 );
-		
+
 		DirectionalLight light = new DirectionalLight( 0xffffff, 1.0 );
 		light.getPosition().set( 1.0 ).normalize();
 		scene.add( light );
 
-		BoxGeometry geometry = new BoxGeometry( 20, 20, 20 );
+		BoxBufferGeometry geometry = new BoxBufferGeometry( 20, 20, 20 );
 
 		for ( int i = 0; i < 2000; i ++ ) 
 		{
-			MeshLambertMaterial material = new MeshLambertMaterial().setColor( (int)(Math.random() * 0xffffff) );
-			Mesh object = new Mesh( geometry, material );
+			Mesh object = new Mesh( geometry, new MeshLambertMaterial().setColor( (int)(Math.random() * 0xffffff) ) );
 
 			object.getPosition().setX( Math.random() * 800 - 400 );
 			object.getPosition().setY( Math.random() * 800 - 400 );
@@ -98,7 +97,8 @@ public final class InteractiveCubes extends ParallaxTest
 		context.getRenderer().setClearColor(0xf0f0f0);
 		context.getRenderer().setSortObjects(false);
 	}
-	
+
+	static final Vector2 v2 = new Vector2();
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
@@ -109,12 +109,13 @@ public final class InteractiveCubes extends ParallaxTest
 
 		camera.lookAt( scene.getPosition() );
 
+		camera.updateMatrixWorld();
+
 		// find intersections
 
-		Vector3 vector = new Vector3( mouseDeltaX, mouseDeltaY, 1 );
-		raycaster.set( camera.getPosition(), vector.sub( camera.getPosition() ).normalize() );
-		
-		List<Raycaster.Intersect> intersects = raycaster.intersectObjects( scene.getChildren(), false );
+		raycaster.setFromCamera( v2.set( mouseDeltaX, mouseDeltaY ), camera );
+
+		List<Raycaster.Intersect> intersects = raycaster.intersectObjects( scene.getChildren() );
 
 		if ( intersects.size() > 0 ) 
 		{
@@ -122,19 +123,19 @@ public final class InteractiveCubes extends ParallaxTest
 			{
 				if(intersected != null)
 				{
-					((MeshLambertMaterial)intersected.object.getMaterial()).getColor().setHex( intersected.currentHex );
+					((MeshLambertMaterial)intersected.object.getMaterial()).getEmissive().setHex( intersected.currentHex );
 				}
 				
 				intersected = new Intersect();
-				intersected.object = (GeometryObject) intersects.get( 0 ).object;
+				intersected.object = intersects.get( 0 ).object;
 				intersected.currentHex = ((MeshLambertMaterial)intersected.object.getMaterial()).getColor().getHex();
-				((MeshLambertMaterial)intersected.object.getMaterial()).getColor().setHex( 0xff0000 );
+				((MeshLambertMaterial)intersected.object.getMaterial()).getEmissive().setHex( 0xff0000 );
 			}
 		}
 		else 
 		{
 			if ( intersected != null ) 
-				((MeshLambertMaterial)intersected.object.getMaterial()).getColor().setHex( intersected.currentHex );
+				((MeshLambertMaterial)intersected.object.getMaterial()).getEmissive().setHex( intersected.currentHex );
 
 			intersected = null;
 		}

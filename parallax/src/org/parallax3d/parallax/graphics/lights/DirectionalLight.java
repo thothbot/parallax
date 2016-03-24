@@ -19,6 +19,7 @@
 package org.parallax3d.parallax.graphics.lights;
 
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
+import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
@@ -40,12 +41,12 @@ import org.parallax3d.parallax.system.ThreejsObject;
  *
  */
 @ThreejsObject("THREE.DirectionalLight")
-public class DirectionalLight extends Light implements HasShadow
+public class DirectionalLight extends Light implements HasShadow<OrthographicCamera>
 {
 
 	Object3D target;
 
-	LightShadow shadow;
+	LightShadow<OrthographicCamera> shadow;
 
 	public DirectionalLight() {
 		this(0xffffff);
@@ -76,12 +77,12 @@ public class DirectionalLight extends Light implements HasShadow
 	}
 
 	@Override
-	public LightShadow getShadow() {
+	public LightShadow<OrthographicCamera> getShadow() {
 		return shadow;
 	}
 
 	@Override
-	public void setShadow(LightShadow shadow) {
+	public void setShadow(LightShadow<OrthographicCamera> shadow) {
 		this.shadow = shadow;
 	}
 

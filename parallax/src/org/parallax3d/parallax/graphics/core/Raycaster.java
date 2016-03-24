@@ -179,6 +179,11 @@ public class Raycaster
 		return this;
 	}
 
+	public List<Raycaster.Intersect> intersectObjects ( List<? extends Object3D> objects )
+	{
+		return intersectObjects(objects);
+	}
+
 	/**
 	 * Checks all intersection between the ray and the objects with or without the descendants.
 	 * Intersections are returned sorted by distance, closest first. Intersections are of the same form as
