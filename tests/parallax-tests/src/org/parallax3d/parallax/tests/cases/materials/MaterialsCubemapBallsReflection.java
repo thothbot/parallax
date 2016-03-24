@@ -33,7 +33,6 @@ import org.parallax3d.parallax.graphics.renderers.shaders.CubeShader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.input.TouchMoveHandler;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
@@ -49,7 +48,7 @@ public final class MaterialsCubemapBallsReflection extends ParallaxTest implemen
 	int mouseX = 0;
 	int mouseY = 0;
 	
-	private List<Mesh> sphere;
+	private List<Mesh> spheres;
 	
 	private Scene sceneCube;
 	private PerspectiveCamera cameraCube;
@@ -89,7 +88,7 @@ public final class MaterialsCubemapBallsReflection extends ParallaxTest implemen
 				.setColor( 0xffffff )
 				.setEnvMap( textureCube );
 		
-		this.sphere = new ArrayList<Mesh>();
+		this.spheres = new ArrayList<>();
 		
 		for ( int i = 0; i < 500; i ++ ) 
 		{
@@ -104,7 +103,7 @@ public final class MaterialsCubemapBallsReflection extends ParallaxTest implemen
 
 			scene.add( mesh );
 
-			this.sphere.add( mesh );
+			this.spheres.add( mesh );
 		}
 
 		// Skybox
@@ -125,10 +124,10 @@ public final class MaterialsCubemapBallsReflection extends ParallaxTest implemen
 	{
 		double timer = 0.0001 * context.getDeltaTime();
 
-		for ( int i = 0, il = this.sphere.size(); i < il; i ++ ) 
+		for (int i = 0, il = this.spheres.size(); i < il; i ++ )
 		{
-			this.sphere.get(i).getPosition().setX( 5000.0 * Math.cos( timer + i ) );
-			this.sphere.get(i).getPosition().setY( 5000.0 * Math.sin( timer + i * 1.1 ) );
+			this.spheres.get(i).getPosition().setX( 5000.0 * Math.cos( timer + i ) );
+			this.spheres.get(i).getPosition().setY( 5000.0 * Math.sin( timer + i * 1.1 ) );
 		}
 
 		camera.getPosition().addX(( mouseX - camera.getPosition().getX() ) * 0.05 );

@@ -65,17 +65,15 @@ public final class MaterialsCubemapDynamicReflection extends ParallaxTest
 	{
 		scene = new Scene();
 		camera = new PerspectiveCamera(
-				this.fov, // fov
+				fov, // fov
 				context.getAspectRation(), // aspect
 				1, // near
 				1000 // far 
 		); 
 		
 		Texture texture = new Texture(img);
-		MeshBasicMaterial mbOpt = new MeshBasicMaterial();
-		mbOpt.setMap( texture );
-		
-		Mesh mesh = new Mesh( new SphereGeometry( 500, 60, 40 ), mbOpt );
+
+		Mesh mesh = new Mesh( new SphereGeometry( 500, 60, 40 ), new MeshBasicMaterial().setMap( texture ) );
 		mesh.getScale().setX( -1 );
 		scene.add( mesh );
 

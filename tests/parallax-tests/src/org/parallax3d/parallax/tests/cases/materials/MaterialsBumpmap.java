@@ -22,10 +22,7 @@ import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
-import org.parallax3d.parallax.graphics.lights.AmbientLight;
-import org.parallax3d.parallax.graphics.lights.DirectionalLight;
-import org.parallax3d.parallax.graphics.lights.PointLight;
-import org.parallax3d.parallax.graphics.lights.SpotLight;
+import org.parallax3d.parallax.graphics.lights.*;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
@@ -78,90 +75,41 @@ public final class MaterialsBumpmap extends ParallaxTest implements TouchMoveHan
 
 		// LIGHTS
 
-		scene.add( new AmbientLight( 0x444444 ) );
-
-		//
-
-		PointLight pointLight = new PointLight( 0xffffff, 1.5, 1000 );
-		pointLight.getColor().setHSL( 0.05, 1.0, 0.95 );
-		pointLight.getPosition().set( 0, 0, 600 );
-
-		scene.add( pointLight );
+		scene.add( new HemisphereLight( 0x443333, 0x111122 ) );
 
 		// shadow for PointLight
 
-		SpotLight spotLight = new SpotLight( 0xffffff, 1.5 );
-		spotLight.getPosition().set( 0.05, 0.05, 1 );
-		spotLight.getColor().setHSL( 0.6, 1.0, 0.95 );
+		SpotLight spotLight = new SpotLight( 0xffffbb, 2 );
+		spotLight.getPosition().set( 0.5, 0, 1 ).multiply( 700 );
 		scene.add( spotLight );
 
-		spotLight.getPosition().multiply( 700 );
-
 		spotLight.setCastShadow(true);
-		spotLight.setOnlyShadow(true);
-//			spotLight.setShadowCameraVisible(true);
 
-		spotLight.setShadowMapWidth( 2048 );
-		spotLight.setShadowMapHeight( 2048 );
+		spotLight.getShadow().getMap().setWidth( 2048 );
+		spotLight.getShadow().getMap().setHeight( 2048 );
 
-		spotLight.setShadowCameraNear( 200 );
-		spotLight.setShadowCameraFar( 1500 );
+		spotLight.getShadow().getCamera().setNear( 200 );
+		spotLight.getShadow().getCamera().setFar( 1500 );
 
-		spotLight.setShadowCameraFov( 40 );
+		spotLight.getShadow().getCamera().setFov( 40 );
 
-		spotLight.setShadowBias( -0.005 );
-		spotLight.setShadowDarkness( 0.35 );
+		spotLight.getShadow().setBias( -0.005 );
 
-		//
+		Texture mapHeight = new Texture( texture )
+				.setAnisotropy(4)
+				.setWrapS(TextureWrapMode.REPEAT)
+				.setWrapT(TextureWrapMode.REPEAT)
+				.setFormat(PixelFormat.RGB);
 
-		DirectionalLight directionalLight = new DirectionalLight( 0xffffff, 1.5 );
-		directionalLight.getPosition().set( 1, -0.5, 1 );
-		directionalLight.getColor().setHSL( 0.6, 1, 0.95 );
-		scene.add( directionalLight );
-
-		directionalLight.getPosition().multiply( 500 );
-
-		directionalLight.setCastShadow( true );
-//			directionalLight.setShadowCameraVisible(true);
-
-		directionalLight.setShadowMapWidth( 2048 );
-		directionalLight.setShadowMapHeight( 2048 );
-
-		directionalLight.setShadowCameraNear( 200 );
-		directionalLight.setShadowCameraFar( 1500 );
-
-		directionalLight.setShadowCameraLeft( -500 );
-		directionalLight.setShadowCameraRight( 500 );
-		directionalLight.setShadowCameraTop( 500 );
-		directionalLight.setShadowCameraBottom( -500 );
-
-		directionalLight.setShadowBias( -0.005 );
-		directionalLight.setShadowDarkness( 0.35 );
-
-		//
-
-		DirectionalLight directionalLight2 = new DirectionalLight( 0xffffff, 1.2 );
-		directionalLight2.getPosition().set( 1, -0.5, -1 );
-		directionalLight2.getColor().setHSL( 0.08, 1.0, 0.825 );
-		scene.add( directionalLight2 );
-
-		Texture mapHeight = new Texture( texture );
-
-		mapHeight.setAnisotropy(4);
 		mapHeight.getRepeat().set( 0.998, 0.998 );
 		mapHeight.getOffset().set( 0.001, 0.001 );
-		mapHeight.setWrapS(TextureWrapMode.REPEAT);
-		mapHeight.setWrapT(TextureWrapMode.REPEAT);
-		mapHeight.setFormat(PixelFormat.RGB);
 
 		final MeshPhongMaterial material = new MeshPhongMaterial()
-			.setAmbient(0x552811)
 			.setColor(0x552811)
-			.setSpecular(0x333333)
+			.setSpecular(0x222222)
 			.setShininess(25)
 			.setBumpMap(mapHeight)
-			.setBumpScale(19)
-			.setMetal(false);
+			.setBumpScale(12);
 
 		new JsonLoader(model, new ModelLoadHandler() {
 

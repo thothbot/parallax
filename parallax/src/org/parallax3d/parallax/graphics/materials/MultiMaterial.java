@@ -31,6 +31,10 @@ public class MultiMaterial extends Material {
 
     List<Material> materials = new ArrayList<>();
 
+    public MultiMaterial(List<Material> materials) {
+        this.materials = materials;
+    }
+
     public List<Material> getMaterials() {
         return materials;
     }
@@ -42,7 +46,7 @@ public class MultiMaterial extends Material {
 
     @Override
     public MultiMaterial clone() {
-        return new MultiMaterial().copy( this );
+        return new MultiMaterial( null ).copy( this );
     }
 
     public MultiMaterial copy(MultiMaterial source) {

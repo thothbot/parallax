@@ -98,66 +98,26 @@ public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMov
 
 		scene.add( new AmbientLight( 0x555555 ) );
 
-		PointLight pointLight = new PointLight( 0xffffff, 1.5, 1000 );
-		pointLight.getPosition().set( 0, 0, 600 );
+		DirectionalLight directionalLight = new DirectionalLight( 0xffffff, 1 );
+		directionalLight.getPosition().set( 500, 0, 500 );
 
-		scene.add( pointLight );
+		directionalLight.setCastShadow(true);
 
-		// shadow for PointLight
+		directionalLight.getShadow().getMap().setWidth( 2048 );
+		directionalLight.getShadow().getMap().setHeight( 2048 );
 
-		SpotLight spotLight = new SpotLight( 0xffffff, 1 );
-		spotLight.getPosition().set( 0.05, 0.05, 1 );
-		scene.add( spotLight );
-		
-		spotLight.getPosition().multiply( 700 );
+		directionalLight.getShadow().getCamera().setNear( 200 );
+		directionalLight.getShadow().getCamera().setFar( 1500 );
 
-		spotLight.setCastShadow(true);
-		spotLight.setOnlyShadow(true);
-		//spotLight.shadowCameraVisible = true;
+		directionalLight.getShadow().getCamera().setLeft( -500 );
+		directionalLight.getShadow().getCamera().setRight( 500 );
+		directionalLight.getShadow().getCamera().setTop( 500 );
+		directionalLight.getShadow().getCamera().setBottom( -500 );
 
-		spotLight.setShadowMapWidth( 2048 );
-		spotLight.setShadowMapHeight( 2048 );
+		directionalLight.getShadow().setBias( -0.005 );
 
-		spotLight.setShadowCameraNear( 200 );
-		spotLight.setShadowCameraFar( 1500 );
-
-		spotLight.setShadowCameraFov( 40 );
-
-		spotLight.setShadowBias( -0.005 );
-		spotLight.setShadowDarkness( 0.15 );
-
-		//
-
-		DirectionalLight directionalLight = new DirectionalLight( 0xffffff, 0.85 );
-		directionalLight.getPosition().set( 1, -0.5, 1 );
-		directionalLight.getColor().setHSL( 0.6, 1.0, 0.85 );
 		scene.add( directionalLight );
 
-		directionalLight.getPosition().multiply( 500 );
-		
-		directionalLight.setCastShadow(true);
-		//directionalLight.shadowCameraVisible = true;
-
-		directionalLight.setShadowMapWidth( 2048 );
-		directionalLight.setShadowMapHeight( 2048 );
-
-		directionalLight.setShadowCameraNear( 200 );
-		directionalLight.setShadowCameraFar( 1500 );
-
-		directionalLight.setShadowCameraLeft( -500 );
-		directionalLight.setShadowCameraRight( 500 );
-		directionalLight.setShadowCameraTop( 500 );
-		directionalLight.setShadowCameraBottom( -500 );
-
-		directionalLight.setShadowBias( -0.005 );
-		directionalLight.setShadowDarkness( 0.15 );
-
-		//
-
-		DirectionalLight directionalLight2 = new DirectionalLight( 0xffffff, 0.85 );
-		directionalLight2.getPosition().set( 1, -0.5, -1 );
-		scene.add( directionalLight2 );
-		
 		// COMPOSER BECKMANN
 
 		ShaderPass effectBeckmann = new ShaderPass( new BeckmannShader() );
@@ -172,7 +132,7 @@ public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMov
 		target.setStencilBuffer(false);
 		composerBeckmann = new Postprocessing( context.getRenderer(), scene, target );
 		composerBeckmann.addPass( effectBeckmann );
-//			composerBeckmann.addPass( effectScreen );
+		composerBeckmann.addPass( effectCopy );
 
 		//
 		
@@ -186,7 +146,7 @@ public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMov
 
 		//
 
-		context.getRenderer().setClearColor(0x4c5159);
+		context.getRenderer().setClearColor(0x242a34);
 
 		ShadowMap shadowMap = new ShadowMap(context.getRenderer(), scene);
 		shadowMap.setCullFrontFaces(false);
@@ -198,28 +158,23 @@ public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMov
 	
 	private void createScene(Geometry geometry, double scale )
 	{
-		Texture mapHeight = new Texture( texture );
+		Texture mapHeight = new Texture( texture )
+				.setAnisotropy(4)
+				.setWrapS(TextureWrapMode.REPEAT)
+				.setWrapT(TextureWrapMode.REPEAT)
+				.setFormat(PixelFormat.RGB);
 
-		mapHeight.setAnisotropy(4);
-		mapHeight.getRepeat().set( 0.998, 0.998 );
-		mapHeight.getOffset().set( 0.001, 0.001 );
-		mapHeight.setWrapS(TextureWrapMode.REPEAT);
-		mapHeight.setWrapT(TextureWrapMode.REPEAT);
-		mapHeight.setFormat(PixelFormat.RGB);
+		Texture mapSpecular = new Texture( textureSpec )
+				.setAnisotropy(4)
+				.setWrapS(TextureWrapMode.REPEAT)
+				.setWrapT(TextureWrapMode.REPEAT)
+				.setFormat(PixelFormat.RGB);
 
-		Texture mapSpecular = new Texture( textureSpec );
-		mapSpecular.getRepeat().set( 0.998, 0.998 );
-		mapSpecular.getOffset().set( 0.001, 0.001 );
-		mapSpecular.setWrapS(TextureWrapMode.REPEAT);
-		mapSpecular.setWrapT(TextureWrapMode.REPEAT);
-		mapSpecular.setFormat(PixelFormat.RGB);
-
-		Texture mapColor = new Texture( textureCol );
-		mapColor.getRepeat().set( 0.998, 0.998 );
-		mapColor.getOffset().set( 0.001, 0.001 );
-		mapColor.setWrapS(TextureWrapMode.REPEAT);
-		mapColor.setWrapT(TextureWrapMode.REPEAT);
-		mapColor.setFormat(PixelFormat.RGB);
+		Texture mapColor = new Texture( textureCol )
+				.setAnisotropy(4)
+				.setWrapS(TextureWrapMode.REPEAT)
+				.setWrapT(TextureWrapMode.REPEAT)
+				.setFormat(PixelFormat.RGB);
 
 		SkinSimpleShader shader = new SkinSimpleShader();
 
@@ -234,16 +189,13 @@ public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMov
 		uniforms.get( "bumpMap" ).setValue( mapHeight );
 		uniforms.get( "specularMap" ).setValue( mapSpecular );
 
-		((Color)uniforms.get( "ambient" ).getValue()).setHex( 0xa0a0a0 );
 		((Color)uniforms.get( "diffuse" ).getValue()).setHex( 0xa0a0a0 );
 		((Color)uniforms.get( "specular" ).getValue()).setHex( 0xa0a0a0 );
 
-		uniforms.get( "uRoughness" ).setValue( 0.145 );
-		uniforms.get( "uSpecularBrightness" ).setValue( 0.75 );
+		uniforms.get( "uRoughness" ).setValue( 0.2 );
+		uniforms.get( "uSpecularBrightness" ).setValue( 0.5 );
 
-		uniforms.get( "bumpScale" ).setValue( 16.0 );
-
-		((Vector4)uniforms.get( "offsetRepeat" ).getValue()).set( 0.001, 0.001, 0.998, 0.998 );
+		uniforms.get( "bumpScale" ).setValue( 8.0 );
 
 		ShaderMaterial material = new ShaderMaterial( shader )
 				.setLights(true);

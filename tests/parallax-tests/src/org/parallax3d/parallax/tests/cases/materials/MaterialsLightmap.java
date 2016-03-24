@@ -26,6 +26,7 @@ import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.materials.MultiMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
@@ -40,6 +41,8 @@ import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
+
+import java.util.List;
 
 @ThreejsExample("webgl_materials_lightmap")
 public final class MaterialsLightmap extends ParallaxTest 
@@ -76,8 +79,6 @@ public final class MaterialsLightmap extends ParallaxTest
 		
 		camera.getPosition().set( 700, 180, -500 );
 
-		scene.setFog( new Fog( 0xfafafa, 1000, 10000 ) );
-
 		// CONTROLS
 
 		controls = new TrackballControls( camera, context );
@@ -85,29 +86,19 @@ public final class MaterialsLightmap extends ParallaxTest
 
 		// LIGHTS
 
-		DirectionalLight directionalLight = new DirectionalLight( 0xffffff, 1.475 );
-		directionalLight.getPosition().set( 100, 100, -100 );
-		scene.add( directionalLight );
-
-
-		HemisphereLight hemiLight = new HemisphereLight( 0xffffff, 0xffffff, 1.25 );
-		hemiLight.getColor().setHSL( 0.6, 1.0, 0.75 );
-		hemiLight.getGroundColor().setHSL( 0.1, 0.8, 0.7 );
-		hemiLight.getPosition().setY( 500 );
-		scene.add( hemiLight );
+		DirectionalLight light = new DirectionalLight( 0xaabbff, 0.3 );
+		light.getPosition().set( 300, 250, -500 );
+		scene.add( light );
 
 		// SKYDOME
 
 		ShaderMaterial skyMat = new ShaderMaterial(Resources.INSTANCE)
 			.setSide(Material.SIDE.BACK);
 
-		skyMat.getShader().addUniform("topColor", new Uniform(Uniform.TYPE.C, new Color(0x0077ff)));
+		skyMat.getShader().addUniform("topColor", new Uniform(Uniform.TYPE.C, new Color().copy(light.getColor())));
 		skyMat.getShader().addUniform("bottomColor", new Uniform(Uniform.TYPE.C, new Color(0xffffff)));
-		skyMat.getShader().addUniform("topColor", new Uniform(Uniform.TYPE.C, hemiLight.getColor().clone()));
 		skyMat.getShader().addUniform("offset", new Uniform(Uniform.TYPE.F, 400.0 ));
 		skyMat.getShader().addUniform("exponent", new Uniform(Uniform.TYPE.F, 0.6 ));
-
-		scene.getFog().setColor( ((Color)skyMat.getShader().getUniforms().get("bottomColor").getValue()).clone() );
 
 		SphereGeometry skyGeo = new SphereGeometry( 4000, 32, 15 );
 		Mesh sky = new Mesh( skyGeo, skyMat );
@@ -124,10 +115,18 @@ public final class MaterialsLightmap extends ParallaxTest
 		new JsonLoader(model, new ModelLoadHandler() {
 
 			@Override
-			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
-				Mesh mesh = new Mesh( geometry, new MeshFaceMaterial(((JsonLoader)loader).getMaterials()) );
-				mesh.getPosition().set( 0 );
-				mesh.getScale().set( 100 );
+			public void onModelLoaded(Loader loader, AbstractGeometry geometry)
+			{
+				List<Material> materials = ((JsonLoader)loader).getMaterials();
+				for ( int i = 0; i < materials.size(); i ++ ) {
+
+					materials.get(i).lightMapIntensity = 0.75;
+
+				}
+
+				Mesh mesh = new Mesh( geometry, new MultiMaterial( materials ) );
+
+				mesh.getScale().multiply( 100 );
 				scene.add( mesh );
 			}
 		});

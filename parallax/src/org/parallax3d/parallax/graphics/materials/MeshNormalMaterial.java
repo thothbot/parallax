@@ -28,10 +28,12 @@ import org.parallax3d.parallax.system.ThreejsObject;
  *
  */
 @ThreejsObject("THREE.MeshNormalMaterial")
-public final class MeshNormalMaterial extends Material implements HasWireframe
+public final class MeshNormalMaterial extends Material implements HasWireframe, HasShading
 {
 	boolean wireframe = false;
 	double wireframeLineWidth = 1.0;
+
+	Material.SHADING shading = SHADING.SMOOTH;
 
 	boolean morphTargets = false;
 
@@ -62,6 +64,16 @@ public final class MeshNormalMaterial extends Material implements HasWireframe
 		return this;
 	}
 
+
+	public Material.SHADING getShading() {
+		return this.shading;
+	}
+
+	public MeshNormalMaterial setShading(Material.SHADING shading) {
+		this.shading = shading;
+		return this;
+	}
+
 	@Override
 	public MeshNormalMaterial clone() {
 		return new MeshNormalMaterial().copy(this);
@@ -73,6 +85,7 @@ public final class MeshNormalMaterial extends Material implements HasWireframe
 
 		this.wireframe = source.wireframe;
 		this.wireframeLineWidth = source.wireframeLineWidth;
+		this.shading = source.shading;
 
 		return this;
 

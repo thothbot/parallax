@@ -21,9 +21,6 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * CubeGeometry map shader.
  * <p>
@@ -32,7 +29,7 @@ import java.util.List;
  * @author thothbot
  *
  */
-public final class CubeShader extends Shader 
+public final class CubeShader extends Shader
 {
 	interface Resources extends DefaultResources
 	{
