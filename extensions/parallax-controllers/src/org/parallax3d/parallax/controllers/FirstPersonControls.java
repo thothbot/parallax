@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.controllers;
 
+import org.parallax3d.parallax.Film;
 import org.parallax3d.parallax.Input;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.core.Object3D;
@@ -123,7 +124,7 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 	}
 		
 	/**
-	 * The method must be called in the {@link org.parallax3d.parallax.Animation}} onUpdate method.
+	 * The method must be called in the {@link Film}} onUpdate method.
 	 * 
 	 * @param delta the time in milliseconds needed to render one frame. 
 	 */

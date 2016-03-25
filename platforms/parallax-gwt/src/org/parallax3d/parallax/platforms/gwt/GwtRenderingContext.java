@@ -55,7 +55,7 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
 
     GwtInput input;
 
-    Animation listener;
+    Film listener;
 
     List<AnimationReadyListener> animationReadyListener = new ArrayList<>();
 
@@ -120,7 +120,7 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
     }
 
     @Override
-    public void setAnimation(Animation animation) {
+    public void setAnimation(Film animation) {
         this.listener = animation;
         // tell listener about app creation
         try {

@@ -26,11 +26,9 @@ import com.google.gwt.user.client.ui.*;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import org.parallax3d.parallax.Animation;
-import org.parallax3d.parallax.Parallax;
+import org.parallax3d.parallax.Film;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.AnimationReadyListener;
-import org.parallax3d.parallax.platforms.gwt.GwtParallax;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -141,7 +139,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	}
 
 	@Override
-	public void onAnimationReady(Animation animation)
+	public void onAnimationReady(Film animation)
 	{
 		final Button switchAnimation = new Button("Pause");
 		final Button switchFullScreen = new Button("Fullscreen");

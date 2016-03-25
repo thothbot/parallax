@@ -18,9 +18,9 @@
 
 package org.parallax3d.parallax.tests;
 
-import org.parallax3d.parallax.AnimationAdapter;
+import org.parallax3d.parallax.FilmAdapter;
 
-public abstract class ParallaxTest extends AnimationAdapter {
+public abstract class ParallaxTest extends FilmAdapter {
 
     /**
      * The name of the example.

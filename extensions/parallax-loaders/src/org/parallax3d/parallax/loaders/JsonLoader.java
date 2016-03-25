@@ -33,6 +33,7 @@ import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.jsonbind.AutoBean;
 import org.parallax3d.parallax.system.jsonbind.AutoBeanCodex;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@ThreejsObject("THREE.JSONLoader")
 public class JsonLoader extends ModelLoader
 {
 	JsoObject object;

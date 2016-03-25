@@ -51,7 +51,7 @@ public interface RenderingContext {
 
     int getFramesPerSecond();
 
-    void setAnimation(Animation animation);
+    void setAnimation(Film animation);
 
     /** @return the pixels per inch on the x-axis */
     float getPpiX();

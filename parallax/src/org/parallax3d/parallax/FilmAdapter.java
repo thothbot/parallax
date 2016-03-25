@@ -18,18 +18,26 @@
 
 package org.parallax3d.parallax;
 
-public interface Animation {
+public abstract class FilmAdapter implements Film {
 
-    void onStart(RenderingContext context);
+    public abstract void onStart(RenderingContext context);
 
-    void onUpdate(RenderingContext context);
+    public abstract void onUpdate(RenderingContext context);
 
-    void onResize(RenderingContext context);
+    public void onResize(RenderingContext context) {
 
-    void onPause(RenderingContext context);
+    }
 
-    void onResume(RenderingContext context);
+    public void onPause(RenderingContext context) {
 
-    void onDispose(RenderingContext context);
+    }
+
+    public void onResume(RenderingContext context) {
+
+    }
+
+    public void onDispose(RenderingContext context) {
+
+    }
 
 }
