@@ -20,7 +20,7 @@ package org.parallax3d.parallax.loaders.json;
 
 import java.util.List;
 
-public interface JsoObject 
+public interface JsoFile
 {
 	JsoMetadata getMetadata();
 	

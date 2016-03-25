@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Copyright 2016 Alex Usachev, thothbot@gmail.com
  * 
  * This file is part of Parallax project.
  * 
@@ -16,20 +16,13 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.loaders.json;
+package org.parallax3d.parallax.loaders.object;
 
-import org.parallax3d.parallax.system.jsonbind.AutoBean;
-import org.parallax3d.parallax.system.jsonbind.AutoBeanFactory;
-
-public interface JsoObjectFactory extends AutoBeanFactory
+public interface JsoMetadata 
 {
-	AutoBean<JsoObject> file();
+	String getVersion();
+	String getType();
+	String getGenerator();
+	String getSourceFile();
 
-	AutoBean<JsoMaterial> material();
-
-	AutoBean<JsoMetadata> metadata();
-
-	AutoBean<JsoMorphColors> morphColors();
-
-	AutoBean<JsoMorphTargets> morphTargets();
 }
