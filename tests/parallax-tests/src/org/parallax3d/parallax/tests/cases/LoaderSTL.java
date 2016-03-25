@@ -24,6 +24,7 @@ import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.PlaneBufferGeometry;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
+import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
@@ -69,12 +70,7 @@ public class LoaderSTL extends ParallaxTest
 
 		// Ground
 
-		MeshPhongMaterial planeMaterial = new MeshPhongMaterial()
-				.setColor( 0x999999 )
-				.setAmbient( 0x999999 )
-				.setSpecular( 0x101010 );
-
-		Mesh plane = new Mesh( new PlaneBufferGeometry( 40, 40 ), planeMaterial );
+		Mesh plane = new Mesh( new PlaneBufferGeometry( 40, 40 ),  new MeshPhongMaterial().setColor( 0x999999 ).setSpecular( 0x101010 ) );
 		plane.getRotation().setX( -Math.PI/2 );
 		plane.getPosition().setY( -0.5 );
 		scene.add( plane );
@@ -87,11 +83,10 @@ public class LoaderSTL extends ParallaxTest
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
 
-				MeshPhongMaterial material = new MeshPhongMaterial();
-				material.setAmbient( new Color(0xff5533) );
-				material.setColor( new Color(0xff5533) );
-				material.setSpecular( new Color(0x111111) );
-				material.setShininess(200.0);
+				MeshPhongMaterial material = new MeshPhongMaterial()
+						.setColor( new Color(0xff5533) )
+						.setSpecular( new Color(0x111111) )
+						.setShininess(200.0);
 
 				Mesh mesh = new Mesh( geometry, material );
 
@@ -108,7 +103,6 @@ public class LoaderSTL extends ParallaxTest
 		});
 
 		final MeshPhongMaterial material = new MeshPhongMaterial()
-				.setAmbient( 0x555555 )
 				.setColor( 0xAAAAAA )
 				.setSpecular( 0x111111 )
 				.setShininess(200.0);
@@ -156,11 +150,15 @@ public class LoaderSTL extends ParallaxTest
 			@Override
 			public void onModelLoaded(Loader loader, AbstractGeometry geometry) {
 
-				final MeshPhongMaterial material = new MeshPhongMaterial();
-				material.setOpacity(((STLLoader)loader).getAlpha());
-				material.setVertexColors( Material.COLORS.VERTEX );
 
-				Mesh mesh = new Mesh( geometry, material );
+				MeshPhongMaterial meshMaterial = material;
+
+				if(((STLLoader)loader).isHasColors())
+					meshMaterial = new MeshPhongMaterial()
+						.setVertexColors( Material.COLORS.VERTEX )
+						.setOpacity(((STLLoader)loader).getAlpha());
+
+				Mesh mesh = new Mesh( geometry, meshMaterial );
 
 				mesh.getPosition().set( 0.5, 0.2, 0 );
 				mesh.getRotation().set( - Math.PI / 2, Math.PI / 2, 0 );
@@ -174,8 +172,7 @@ public class LoaderSTL extends ParallaxTest
 			}
 		});
 
-		
-		scene.add( new AmbientLight( 0x777777 ) );
+		scene.add( new HemisphereLight( 0x443333, 0x111122 ) );
 		
 		addShadowedLight( 1, 1, 1, 0xffffff, 1.35 );
 		addShadowedLight( 0.5, 1, -1, 0xffaa00, 1 );
@@ -196,21 +193,19 @@ public class LoaderSTL extends ParallaxTest
 
 		int d = 1;
 		directionalLight.setCastShadow(true);
-		// directionalLight.shadowCameraVisible = true;
 
-		directionalLight.setShadowCameraLeft( -d );
-		directionalLight.setShadowCameraRight( d );
-		directionalLight.setShadowCameraTop( d );
-		directionalLight.setShadowCameraBottom( -d );
+		directionalLight.getShadow().getCamera().setLeft( -d );
+		directionalLight.getShadow().getCamera().setRight( d );
+		directionalLight.getShadow().getCamera().setTop( d );
+		directionalLight.getShadow().getCamera().setBottom( -d );
 
-		directionalLight.setShadowCameraNear( 1 );
-		directionalLight.setShadowCameraFar( 4 );
+		directionalLight.getShadow().getCamera().setNear( 1 );
+		directionalLight.getShadow().getCamera().setFar( 4 );
 
-		directionalLight.setShadowMapWidth( 1024 );
-		directionalLight.setShadowMapHeight( 1024 );
+		directionalLight.getShadow().getMap().setWidth( 1024 );
+		directionalLight.getShadow().getMap().setHeight( 1024 );
 
-		directionalLight.setShadowBias( -0.005 );
-		directionalLight.setShadowDarkness( 0.15 );
+		directionalLight.getShadow().setBias( -0.005 );
 	}
 	
 	@Override

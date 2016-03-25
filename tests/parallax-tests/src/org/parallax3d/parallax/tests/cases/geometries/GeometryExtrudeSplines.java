@@ -37,11 +37,13 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.tests.NeedImprovement;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.Arrays;
 
+@NeedImprovement
 @ThreejsExample("webgl_geometry_extrude_splines")
 public final class GeometryExtrudeSplines extends ParallaxTest
 {

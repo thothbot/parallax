@@ -19,33 +19,30 @@
 package org.parallax3d.parallax.tests.cases.materials;
 
 import org.parallax3d.parallax.RenderingContext;
-import org.parallax3d.parallax.controllers.TrackballControls;
+import org.parallax3d.parallax.controllers.FlyControls;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
-import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.materials.PointsMaterial;
-import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.objects.Points;
-import org.parallax3d.parallax.graphics.extras.shaders.NormalMapShader;
-import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
+import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.Duration;
-import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.tests.NeedImprovement;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+@NeedImprovement("Postprocessing, FlyControls")
 @ThreejsExample("misc_controls_fly")
 public final class TrackballEarth extends ParallaxTest 
 {
@@ -58,7 +55,6 @@ public final class TrackballEarth extends ParallaxTest
 	
 	static final int radius = 6371;
 	static final double tilt = 0.41;
-	static final double rotationSpeed = 0.1;
 
 	static final double cloudsScale = 1.005;
 	static final double moonScale = 0.23;
@@ -70,8 +66,8 @@ public final class TrackballEarth extends ParallaxTest
 	Mesh meshClouds;
 	Mesh meshMoon;
 	
-	private TrackballControls control;
-	private double oldTime;
+	FlyControls controls;
+	double oldTime;
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -85,51 +81,33 @@ public final class TrackballEarth extends ParallaxTest
 		); 
 		
 		camera.getPosition().setZ(radius * 5);
-		
-		this.control = new TrackballControls( camera, context );
-		this.control.setPanSpeed(0.2);
-		this.control.setDynamicDampingFactor(0.3);
-		this.control.setMinDistance(radius * 1.1);
-		this.control.setMaxDistance(radius * 100);
+
+		scene.setFog( new FogExp2( 0x000000, 0.00000025 ) );
+
+		controls = new FlyControls( camera, context );
+		controls.setMovementSpeed(1000);
+		controls.setRollSpeed(Math.PI / 24);
+//		controls.autoForward = false;
+//		controls.dragToLook = false;
 
 		DirectionalLight dirLight = new DirectionalLight( 0xFFFFFF );
 		dirLight.getPosition().set( -1, 0, 1 ).normalize();
 		scene.add( dirLight );
-		
-		AmbientLight ambientLight = new AmbientLight( 0x000000 );
-		scene.add( ambientLight );
 
-		Texture planetTexture   = new Texture( earthAtmos );
 		Texture cloudsTexture   = new Texture( earthClouds );
-		Texture normalTexture   = new Texture( earthNormal );
-		Texture specularTexture = new Texture( earthSpecular );
 		Texture moonTexture     = new Texture( moon );
 
-		ShaderMaterial materialNormalMap = new ShaderMaterial( new NormalMapShader() )
-			.setLights( true );
-		
-		FastMap<Uniform> uniforms = materialNormalMap.getShader().getUniforms();
-
-		uniforms.get("tNormal").setValue( normalTexture );
-		((Vector2)uniforms.get("uNormalScale").getValue()).set( 0.85, 0.85 );
-
-		uniforms.get("tDiffuse").setValue( planetTexture );
-		uniforms.get("tSpecular").setValue( specularTexture );
-
-		uniforms.get("enableAO").setValue( false );
-		uniforms.get("enableDiffuse").setValue( true );
-		uniforms.get("enableSpecular").setValue( true );
-
-		((Color)uniforms.get("diffuse").getValue()).setHex( 0xffffff );
-		((Color)uniforms.get("specular").getValue()).setHex( 0x666666 );
-		((Color)uniforms.get("ambient").getValue()).setHex( 0x000000 );
-
-		uniforms.get("shininess").setValue( 15.0 );
+		MeshPhongMaterial materialNormalMap = new MeshPhongMaterial()
+				.setSpecular(0x333333)
+				.setShininess(15)
+				.setMap(new Texture( earthAtmos ))
+				.setSpecularMap(new Texture( earthSpecular ))
+				.setNormalMap(new Texture( earthNormal ))
+				.setNormalScale(new Vector2( 0.85, 0.85 ));
 
 		// planet
 
 		SphereGeometry geometry = new SphereGeometry( radius, 100, 50 );
-		geometry.computeTangents();
 
 		this.meshPlanet = new Mesh( geometry, materialNormalMap );
 		meshPlanet.getRotation().setY( 0 );
@@ -139,7 +117,6 @@ public final class TrackballEarth extends ParallaxTest
 		// clouds
 
 		MeshLambertMaterial materialClouds = new MeshLambertMaterial()
-				.setColor( 0xffffff )
 				.setMap( cloudsTexture )
 				.setTransparent(true);
 
@@ -151,9 +128,7 @@ public final class TrackballEarth extends ParallaxTest
 
 		// moon
 		MeshPhongMaterial materialMoon = new MeshPhongMaterial()
-				.setColor( 0xffffff )
 				.setMap( moonTexture );
-		
 
 		this.meshMoon = new Mesh( geometry, materialMoon );
 		meshMoon.getPosition().set( radius * 5.0, 0, 0 );
@@ -163,57 +138,45 @@ public final class TrackballEarth extends ParallaxTest
 
 		// stars
 
-		Geometry starsGeometry = new Geometry();
+		Geometry starsGeometry1 = new Geometry(),
+				starsGeometry2 = new Geometry();
 
-		for ( int i = 0; i < 1500; i ++ ) 
-		{
+		for ( int i = 0; i < 250; i ++ ) {
 
 			Vector3 vertex = new Vector3();
-			vertex.setX( Math.random() * 2.0 - 1.0 );
-			vertex.setY( Math.random() * 2.0 - 1.0 );
-			vertex.setZ( Math.random() * 2.0 - 1.0 );
-			vertex.multiply( radius );
+			vertex.setX(Math.random() * 2 - 1);
+			vertex.setY(Math.random() * 2 - 1);
+			vertex.setZ(Math.random() * 2 - 1);
+			vertex.multiplyScalar( radius );
 
-			starsGeometry.getVertices().add( vertex );
+			starsGeometry1.getVertices().add( vertex );
 
 		}
 
-		PointsMaterial pbOpt = new PointsMaterial();
-		pbOpt.setColor( new Color(0x555555) );
-		pbOpt.setSize( 2 );
-		pbOpt.setSizeAttenuation(false);
-		
-		List<PointsMaterial> starsMaterials = new ArrayList<PointsMaterial>();
-		starsMaterials.add(pbOpt);
+		for ( int i = 0; i < 1500; i ++ ) {
 
-		starsMaterials.add(new PointsMaterial()
-				.setColor( 0x555555 )
-				.setSize( 1 )
-				.setSizeAttenuation(false));
+			Vector3 vertex = new Vector3();
+			vertex.setX(Math.random() * 2 - 1);
+			vertex.setY(Math.random() * 2 - 1);
+			vertex.setZ(Math.random() * 2 - 1);
+			vertex.multiplyScalar( radius );
 
-		starsMaterials.add(new PointsMaterial()
-				.setColor( 0x333333 )
-				.setSize( 2 )
-				.setSizeAttenuation(false));
+			starsGeometry2.getVertices().add( vertex );
 
-		starsMaterials.add(new PointsMaterial()
-				.setColor( 0x3a3a3a )
-				.setSize( 1 )
-				.setSizeAttenuation(false));
+		}
 
-		starsMaterials.add(new PointsMaterial()
-				.setColor( 0x1a1a1a )
-				.setSize( 2 )
-				.setSizeAttenuation(false));
-
-		starsMaterials.add( new PointsMaterial()
-				.setColor( 0x1a1a1a )
-				.setSize( 1 )
-				.setSizeAttenuation(false));
+		List<PointsMaterial> starsMaterials = Arrays.asList(
+			new PointsMaterial().setColor(0x555555).setSize(2).setSizeAttenuation(false),
+			new PointsMaterial().setColor(0x555555).setSize(1).setSizeAttenuation(false),
+			new PointsMaterial().setColor(0x333333).setSize(2).setSizeAttenuation(false),
+			new PointsMaterial().setColor(0x3a3a3a).setSize(1).setSizeAttenuation(false),
+			new PointsMaterial().setColor(0x1a1a1a).setSize(2).setSizeAttenuation(false),
+			new PointsMaterial().setColor(0x1a1a1a).setSize(1).setSizeAttenuation(false)
+		);
 
 		for ( int i = 10; i < 30; i ++ ) 
 		{
-			Points stars = new Points( starsGeometry, starsMaterials.get( i % 6 ) );
+			Points stars = new Points( i % 2 == 0 ? starsGeometry1 : starsGeometry2, starsMaterials.get( i % 6 ) );
 
 			stars.getRotation().setX( Math.random() * 6.0 );
 			stars.getRotation().setY( Math.random() * 6.0 );
@@ -235,31 +198,25 @@ public final class TrackballEarth extends ParallaxTest
 		
 		this.oldTime = Duration.currentTimeMillis();
 	}
-	
+
+	static final Vector3 dMoonVec = new Vector3();
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		double delta = (Duration.currentTimeMillis() - this.oldTime) * 0.001;
+		// slow down as we approach the surface
 
-		meshPlanet.getRotation().addY( rotationSpeed * delta );
-		meshClouds.getRotation().addY( 1.25 * rotationSpeed * delta );
+		double dPlanet = camera.getPosition().length();
 
-		double angle = delta * rotationSpeed;
+		dMoonVec.subVectors(camera.getPosition(), meshMoon.getPosition());
+		double dMoon = dMoonVec.length();
 
-		meshMoon.setPosition( new Vector3(
-			Math.cos( angle ) * meshMoon.getPosition().getX() - Math.sin( angle ) * meshMoon.getPosition().getZ(),
-			0,
-			Math.sin( angle ) * meshMoon.getPosition().getX() + Math.cos( angle ) * meshMoon.getPosition().getZ()
-		));
-		meshMoon.getRotation().addY( - angle );
+		double d = ( dMoon < dPlanet ) ? ( dMoon - radius * moonScale * 1.01 ) : ( dPlanet - radius * 1.01 );
 
-		this.control.update();
+		controls.setMovementSpeed(0.33 * d);
+		controls.update( context.getDeltaTime() );
 
 		context.getRenderer().clear();
-		
-		this.oldTime = Duration.currentTimeMillis();
-		
-		context.getRenderer().render(scene, camera);
+//		composer.render( delta );
 	}
 
 	@Override

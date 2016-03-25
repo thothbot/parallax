@@ -34,12 +34,14 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.tests.NotReady;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NotReady
 @ThreejsExample("webgl_custom_attributes_points")
 public class CustomAttributesParticles extends ParallaxTest
 {

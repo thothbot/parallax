@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.tests.cases;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -30,11 +31,12 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.tests.NotReady;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
+@NotReady
 @ThreejsExample("webgl_loader_collada")
 public final class LoaderCollada extends ParallaxTest 
 {
@@ -86,7 +88,7 @@ public final class LoaderCollada extends ParallaxTest
 
 		}
 
-		Line line = new Line( geometry, line_material, Line.MODE.PIECES);
+		Line line = new Line( geometry, line_material);
 		scene.add( line );
 
 		MeshBasicMaterial sMaterial = new MeshBasicMaterial()
@@ -104,7 +106,7 @@ public final class LoaderCollada extends ParallaxTest
 		directionalLight.getPosition().setY( Math.random() - 0.5 );
 		directionalLight.getPosition().setZ( Math.random() - 0.5 );
 
-		PointLight pointLight = new PointLight( 0xffffff, 4, 0 );
+		PointLight pointLight = new PointLight( 0xffffff, 4 );
 		pointLight.setPosition( this.particleLight.getPosition() );
 		scene.add( pointLight );
 	}

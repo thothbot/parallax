@@ -25,7 +25,7 @@ import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.SceneUtils;
 import org.parallax3d.parallax.graphics.extras.core.Path;
 import org.parallax3d.parallax.graphics.extras.core.Shape;
-import org.parallax3d.parallax.graphics.extras.curves.SplineCurve3;
+import org.parallax3d.parallax.graphics.extras.curves.CatmullRomCurve3;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
@@ -36,6 +36,8 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.tests.NeedImprovement;
+import org.parallax3d.parallax.tests.NotReady;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
@@ -43,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@NeedImprovement
+@NotReady
 @ThreejsExample("webgl_geometry_extrude_shapes")
 public class GeometryExtrudeShapes extends ParallaxTest
 {
@@ -70,14 +74,14 @@ public class GeometryExtrudeShapes extends ParallaxTest
 		scene.add( this.parentObject );
 		
 		//Closed
-		SplineCurve3 extrudeBend = new SplineCurve3(Arrays.asList(
+		CatmullRomCurve3 extrudeBend = new CatmullRomCurve3(Arrays.asList(
 				new Vector3( 30, 12, 83),
 				new Vector3( 40, 20, 67),
 				new Vector3( 60, 40, 99),
 				new Vector3( 10, 60, 49),
 				new Vector3( 25, 80, 40)));
 
-		SplineCurve3 pipeSpline = new SplineCurve3(Arrays.asList(
+		CatmullRomCurve3 pipeSpline = new CatmullRomCurve3(Arrays.asList(
 				new Vector3(0, 10, -10), 
 				new Vector3(10, 0, -10), 
 				new Vector3(20, 0, 0), 
@@ -107,12 +111,12 @@ public class GeometryExtrudeShapes extends ParallaxTest
 				new Vector3(90, 0, 0),
 				new Vector3(100, 0, 0)));
 
-		SplineCurve3Closed sampleClosedSpline = new SplineCurve3Closed(Arrays.asList(
+		CatmullRomCurve3 sampleClosedSpline = new CatmullRomCurve3(Arrays.asList(
 				new Vector3(0, -40, -40),
 				new Vector3(0, 40, -40),
 				new Vector3(0, 140, -40),
 				new Vector3(0, 40, 40),
-				new Vector3(0, -40, 40)));
+				new Vector3(0, -40, 40))).setClosed(true);
 
 //			List<Vector3> randomPoints = new ArrayList<Vector3>();
 //
@@ -120,8 +124,8 @@ public class GeometryExtrudeShapes extends ParallaxTest
 //				randomPoints.add(new Vector3((double)Math.random() * 200.0f, (double)Math.random() * 200.0f, (double)Math.random() * 200.0f ));
 //
 //			SplineCurve3 randomSpline =  new SplineCurve3(randomPoints);
-		
-		SplineCurve3 randomSpline = new SplineCurve3(Arrays.asList( 
+
+		CatmullRomCurve3 randomSpline = new CatmullRomCurve3(Arrays.asList(
 				new Vector3(-40, -40, 0),
 				new Vector3(40, -40, 0),
 				new Vector3( 140, -40, 0),

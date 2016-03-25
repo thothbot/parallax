@@ -210,6 +210,12 @@ public class Vector3 extends Vector2
 		return this.sub(this, v);
 	}
 
+	@Deprecated
+	public Vector3 subVectors(Vector3 v1, Vector3 v2)
+	{
+		return sub(v1, v2);
+	}
+
 	public Vector3 sub(Vector3 v1, Vector3 v2)
 	{
 		this.x = v1.x - v2.x;
@@ -231,6 +237,12 @@ public class Vector3 extends Vector2
 		this.z = v1.z * v2.z;
 
 		return this;
+	}
+
+	@Deprecated
+	public Vector3 multiplyScalar(double s)
+	{
+		return multiply(s);
 	}
 
 	public Vector3 multiply(double s)

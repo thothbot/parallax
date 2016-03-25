@@ -24,7 +24,8 @@ import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.IcosahedronGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.PlaneBufferGeometry;
-import org.parallax3d.parallax.graphics.lights.HemisphereLight;
+import org.parallax3d.parallax.graphics.lights.AmbientLight;
+import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
@@ -38,10 +39,12 @@ import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
+import org.parallax3d.parallax.tests.NeedImprovement;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 import org.parallax3d.parallax.tests.resources.Water;
 
+@NeedImprovement("Water")
 @ThreejsExample("webgl_shaders_ocean")
 public final class ShaderOcean extends ParallaxTest {
 
@@ -75,24 +78,26 @@ public final class ShaderOcean extends ParallaxTest {
 	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
-		
+
 		camera = new PerspectiveCamera(
 				55, // fov
 				context.getAspectRation(), // aspect
 				0.5, // near
-				3000000 // far 
-		); 
-		
+				3000000 // far
+		);
+
 		camera.getPosition().set( 2000, 750, 2000 );
-		
+
 		this.controls = new FirstPersonControls( camera, context );
 		controls.setMovementSpeed(500);
 		controls.setLookSpeed(0.1);
-		
-		HemisphereLight light = new HemisphereLight( 0xffffbb, 0x080820, 1 );
+
+		scene.add( new AmbientLight( 0x444444 ) );
+
+		DirectionalLight light = new DirectionalLight( 0xffffbb, 1 );
 		light.getPosition().set( - 1, 1, - 1 );
 		scene.add( light );
-		
+
 		water = new Water( context.getRenderer(), camera, scene);
 		water.width = 512;
 		water.height = 512;
@@ -109,7 +114,7 @@ public final class ShaderOcean extends ParallaxTest {
 				water.updateUniforms();
 			}
 		});
-		
+
 		waterNormals.setWrapS(TextureWrapMode.REPEAT);
 		waterNormals.setWrapT(TextureWrapMode.REPEAT);
 
@@ -117,23 +122,23 @@ public final class ShaderOcean extends ParallaxTest {
 				new PlaneBufferGeometry( this.width * 500, this.height * 500 ),
 				water.material
 		);
-					
+
 		mirrorMesh.add( water );
 		mirrorMesh.getRotation().setX( - Math.PI * 0.5 );
 		scene.add( mirrorMesh );
-		
+
 		CubeTexture textureCube = new CubeTexture( textures );
-		
+
 		MeshBasicMaterial material = new MeshBasicMaterial()
 				.setColor( 0xffffff )
 				.setEnvMap( textureCube );
-		
+
 		// Skybox
 
 		ShaderMaterial sMaterial = new ShaderMaterial( new CubeShader() )
 				.setDepthWrite( false )
 				.setSide(Material.SIDE.BACK);
-		sMaterial.getShader().getUniforms().get("tCube").setValue( textureCube ); 
+		sMaterial.getShader().getUniforms().get("tCube").setValue( textureCube );
 
 		Mesh mesh = new Mesh( new BoxGeometry( 1000000, 1000000, 1000000 ), sMaterial );
 		scene.add( mesh );
@@ -151,7 +156,7 @@ public final class ShaderOcean extends ParallaxTest {
 				.setVertexColors(Material.COLORS.FACE)
 				.setEnvMap(textureCube)
 				.setShininess(100.0);
-		
+
 		sphere = new Mesh( geometry, sphereMaterial );
 		scene.add( sphere );
 	}

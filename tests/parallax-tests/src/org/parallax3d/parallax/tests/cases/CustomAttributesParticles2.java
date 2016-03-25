@@ -20,6 +20,8 @@ package org.parallax3d.parallax.tests.cases;
 
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
@@ -35,13 +37,16 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
+import org.parallax3d.parallax.tests.NotReady;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NotReady
 @ThreejsExample("webgl_custom_attributes_points2")
 public class CustomAttributesParticles2 extends ParallaxTest
 {
@@ -62,7 +67,7 @@ public class CustomAttributesParticles2 extends ParallaxTest
 	PerspectiveCamera camera;
 	FastMap<Attribute> attributes;
 	Points sphere;
-	int vc1;
+	int vertices1;
 
 	@Override
 	public void onStart(RenderingContext context)
@@ -75,58 +80,65 @@ public class CustomAttributesParticles2 extends ParallaxTest
 			);
 		camera.getPosition().setZ(300);
 
-		this.attributes = new FastMap<>();
-		attributes.put("size", new Attribute(Attribute.TYPE.F, new ArrayList<Integer>()));
-		attributes.put("ca", new Attribute(Attribute.TYPE.C, new ArrayList<Color>()));
-
-		FastMap<Uniform> uniforms = new FastMap<>();
-		uniforms.put("amplitude", new Uniform(Uniform.TYPE.F, 1.0));
-		uniforms.put("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
-		
-		Texture texture = new Texture(image);
-		texture.setWrapS(TextureWrapMode.REPEAT);
-		texture.setWrapT(TextureWrapMode.REPEAT);
-
-		uniforms.put("texture", new Uniform(Uniform.TYPE.T, texture));
-	
-		ShaderMaterial shaderMaterial = new ShaderMaterial(	Resources.INSTANCE )
-				.setTransparent(true);
-		shaderMaterial.getShader().setAttributes(attributes);
-		shaderMaterial.getShader().setUniforms(uniforms);
-		
 		int radius = 100, segments = 68, rings = 38;
-		
-		SphereGeometry geometry = new SphereGeometry( radius, segments, rings );
 
-		this.vc1 = geometry.getVertices().size();
-
+		SphereGeometry geometry1 = new SphereGeometry( radius, segments, rings );
 		BoxGeometry geometry2 = new BoxGeometry( 0.8 * radius, 0.8 * radius, 0.8 * radius, 10, 10, 10 );
-		geometry.merge( geometry2, null );
-	
-		this.sphere = new Points( geometry, shaderMaterial );
-		this.sphere.setSortParticles(true);
-	
-		List<Vector3> vertices = ((Geometry)sphere.getGeometry()).getVertices();
-		List<Double> values_size = (List<Double>) attributes.get("size").getValue();
-		List<Color> values_color = (List<Color>) attributes.get("ca").getValue();
-	
-		for( int v = 0; v < vertices.size(); v++ ) 
-		{
-			values_color.add( v, new Color( 0xffffff ));
 
-			if ( v < vc1 ) 
-			{	
-				values_size.add( v, 10.0);
-				values_color.get( v ).setHSL( 0.01 + 0.1 * ( v / (double)vc1 ), 0.99, ( vertices.get( v ).getY() + radius ) / ( 4.0 *radius ) );
-			} 
-			else 
-			{
-				values_size.add( v, 40.0);
-				values_color.get( v ).setHSL( 0.6, 0.75, 0.25 + vertices.get( v ).getY() / ( 2.0 * radius ) );
+		this.vertices1 = geometry1.getVertices().size();
+		List<Vector3> vertices = new ArrayList<>( geometry1.getVertices() );
+		vertices.addAll(geometry2.getVertices());
+
+		Float32Array positions = Float32Array.create(vertices.size() * 3);
+		Float32Array colors = Float32Array.create( vertices.size() * 3 );
+		Float32Array sizes = Float32Array.create( vertices.size() );
+
+		Color color = new Color();
+
+		for ( int i = 0, l = vertices.size(); i < l; i ++ ) {
+
+			Vector3 vertex = vertices.get(i);
+			vertex.toArray( positions, i * 3 );
+
+			if ( i < vertices1 ) {
+
+				color.setHSL( 0.01 + 0.1 * ( i / vertices1 ), 0.99, ( vertex.getY() + radius ) / ( 4. * radius ) );
+
+			} else {
+
+				color.setHSL( 0.6, 0.75, 0.25 + vertex.getY() / ( 2. * radius ) );
+
 			}
+
+			color.toArray( colors, i * 3 );
+
+			sizes.set( i , i < vertices1 ? 10 : 40 );
 
 		}
 
+		BufferGeometry geometry = new BufferGeometry();
+		geometry.addAttribute( "position", new BufferAttribute( positions, 3 ) );
+		geometry.addAttribute( "size", new BufferAttribute( sizes, 1 ) );
+		geometry.addAttribute( "ca", new BufferAttribute( colors, 3 ) );
+
+		//
+
+		final Texture texture = new Texture(image)
+				.setWrapS(TextureWrapMode.REPEAT)
+				.setWrapT(TextureWrapMode.REPEAT);
+
+		FastMap<Uniform> uniforms = new FastMap<Uniform>() {{
+			put("amplitude", new Uniform(Uniform.TYPE.F, 1.0));
+			put("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
+			put("texture", new Uniform(Uniform.TYPE.T, texture));
+		}};
+
+		ShaderMaterial shaderMaterial = new ShaderMaterial(	Resources.INSTANCE )
+				.setTransparent(true);
+		shaderMaterial.getShader().setUniforms(uniforms);
+
+
+		this.sphere = new Points( geometry, shaderMaterial );
 		scene.add( sphere );
 
 	}
@@ -138,15 +150,18 @@ public class CustomAttributesParticles2 extends ParallaxTest
 
 		sphere.getRotation().setY(0.02 * time);
 		sphere.getRotation().setZ(0.02 * time);
-		
-		for( int i = 0; i < attributes.get("size").getValue().size(); i++ ) 
-		{
-			List<Double> value = (List<Double>) attributes.get("size").getValue(); 
-			if(i < vc1 )
-				value.set( i, 16.0 + 12.0 * Math.sin( 0.1 * i + time ));
-		}
-		
-		attributes.get("size").needsUpdate = true;
+
+		Geometry geometry = (Geometry) sphere.getGeometry();
+//		var attributes = geometry.attributes;
+//
+//		for( int i = 0; i < attributes.get("size").getValue().size(); i++ )
+//		{
+//			List<Double> value = (List<Double>) attributes.get("size").getValue();
+//			if(i < vertices1)
+//				value.set( i, 16.0 + 12.0 * Math.sin( 0.1 * i + time ));
+//		}
+//
+//		attributes.get("size").needsUpdate = true;
 		
 		context.getRenderer().render(scene, camera);
 	}
