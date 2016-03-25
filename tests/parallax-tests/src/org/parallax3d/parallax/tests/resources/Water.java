@@ -113,10 +113,10 @@ public class Water extends Mirror {
 		this.updateMatrixWorld(false);
 		this.camera.updateMatrixWorld(false);
 
-		this.mirrorWorldPosition.setFromMatrixPosition( this.matrixWorld );
+		this.mirrorWorldPosition.setFromMatrixPosition(this.getMatrixWorld());
 		this.cameraWorldPosition.setFromMatrixPosition( this.camera.getMatrixWorld() );
 
-		this.rotationMatrix.extractRotation( this.matrixWorld );
+		this.rotationMatrix.extractRotation(this.getMatrixWorld());
 
 		this.normal.set( 0, 0, 1.0 );
 		this.normal.apply( this.rotationMatrix );
@@ -135,12 +135,12 @@ public class Water extends Mirror {
 		target.reflect( this.normal ).negate();
 		target.add( this.mirrorWorldPosition );
 
-		this.up.set(0, -1.0, 0);
-		this.up.apply( this.rotationMatrix );
-		this.up.reflect( this.normal ).negate();
+		this.getUp().set(0, -1.0, 0);
+		this.getUp().apply( this.rotationMatrix );
+		this.getUp().reflect( this.normal ).negate();
 
 		this.mirrorCamera.getPosition().copy( view );
-		this.mirrorCamera.setUp(this.up);
+		this.mirrorCamera.setUp(this.getUp());
 		this.mirrorCamera.lookAt( target );
 		this.mirrorCamera.setAspect( this.camera.getAspect() );
 
