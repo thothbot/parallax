@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Copyright 2016 Alex Usachev, thothbot@gmail.com
  *
  * This file is part of Parallax project.
  *
@@ -15,33 +15,17 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-
-package org.parallax3d.parallax.loaders.typefacejs;
-
-import org.parallax3d.parallax.system.jsonbind.AutoBean;
+package org.parallax3d.parallax.loaders.buffergeometry;
 
 import java.util.Map;
 
-public interface JsoFont {
+public interface JsoFile {
 
-    @AutoBean.PropertyName("original_font_information")
-    JsoOriginalFontInformation getOriginalFontInformation();
+    String getUuid();
 
-    JsoBoundingBox getBoundingBox();
+    String getType();
 
-    Map<String, JsoGlyph> getGlyphs();
+    JsoMetadata getMetadata();
 
-    String getFamilyName();
-
-    double getResolution();
-
-    int getDescender();
-    int getAscender();
-
-    int getLineHeight();
-    int getUnderlineThickness();
-    int getUnderlinePosition();
-
-    String getCssFontStyle();
-    String getCssFontWeight();
+    Map<String, JsoAttribute> getAttributes();
 }

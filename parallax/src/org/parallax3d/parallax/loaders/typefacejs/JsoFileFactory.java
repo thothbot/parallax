@@ -21,7 +21,7 @@ package org.parallax3d.parallax.loaders.typefacejs;
 import org.parallax3d.parallax.system.jsonbind.AutoBean;
 import org.parallax3d.parallax.system.jsonbind.AutoBeanFactory;
 
-public interface JsoFontFactory extends AutoBeanFactory
+public interface JsoFileFactory extends AutoBeanFactory
 {
     AutoBean<JsoFont> font();
 
