@@ -88,7 +88,6 @@ public class TextTessellation extends ParallaxTest
 
 				ExtrudeGeometry.ExtrudeGeometryParameters params = new ExtrudeGeometry.ExtrudeGeometryParameters();
 				params.curveSegments = 3;
-				params.height = 5;
 				params.bevelThickness = 2;
 				params.bevelSize = 1;
 				params.bevelEnabled = true;
@@ -147,7 +146,6 @@ public class TextTessellation extends ParallaxTest
 					put("amplitude", new Uniform(Uniform.TYPE.F, 0.0) );
 				}};
 				shaderMaterial.setWireframe(true);
-				shaderMaterial.setColor(0xffffff);
 
 				shaderMaterial.getShader().setUniforms(uniforms);
 

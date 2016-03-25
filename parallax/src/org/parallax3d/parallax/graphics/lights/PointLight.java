@@ -48,7 +48,11 @@ public class PointLight extends Light implements HasShadow<PerspectiveCamera> {
     }
 
     public PointLight(int hex, double intensity) {
-        this(hex, intensity, 0.0, 1);
+        this(hex, intensity, 0.0);
+    }
+
+    public PointLight(int hex, double intensity, double distance) {
+        this(hex, intensity, distance, 1);
     }
 
     /**

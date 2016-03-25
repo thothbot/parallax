@@ -107,12 +107,10 @@ public class Saturn extends ParallaxTest
 		Group saturn = new Group();
 
 		// Saturn
-		MeshPhongMaterial materialSaturn = new MeshPhongMaterial();
-		Texture saturnTexture = new Texture(saturnTextures);
-		materialSaturn.setMap(saturnTexture);
-		materialSaturn.setShininess(15.0);
-		materialSaturn.setAmbient( 0x000000 );
-		materialSaturn.setSpecular( 0x333333 );
+		MeshPhongMaterial materialSaturn = new MeshPhongMaterial()
+				.setMap( new Texture(saturnTextures))
+				.setShininess(15.0)
+				.setSpecular( 0x333333 );
 		
 		SphereGeometry saturnGeometry = new SphereGeometry( saturnRadius, 100, 50 );
 		meshSaturn = new Mesh( saturnGeometry, materialSaturn );
@@ -191,13 +189,12 @@ public class Saturn extends ParallaxTest
 		DirectionalLight dirLight = new DirectionalLight( 0xffffff );
 		dirLight.getPosition().set(x, y, z );
 		dirLight.setCastShadow(true);
-		dirLight.setShadowMapWidth( 2048 );
-		dirLight.setShadowMapHeight( 2048 );
-		dirLight.setShadowCameraNear( 1 );
-		dirLight.setShadowCameraFar( 1500 );
-		dirLight.setShadowBias( -0.005 ); 
-		dirLight.setShadowDarkness( 0.85 );		
-//			dirLight.shadowCameraVisible = true;
+
+		dirLight.getShadow().getMap().setWidth( 2048 );
+		dirLight.getShadow().getMap().setHeight( 2048 );
+		dirLight.getShadow().getCamera().setNear( 1 );
+		dirLight.getShadow().getCamera().setFar( 1500 );
+		dirLight.getShadow().setBias( -0.005 );
 
 		scene.add( dirLight );
 		

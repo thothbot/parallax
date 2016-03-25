@@ -27,12 +27,14 @@ import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.tests.NeedImprovement;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NeedImprovement("Material.dispose()")
 @ThreejsExample("webgl_test_memory2")
 public final class MiscMemoryTestShaders extends ParallaxTest
 {
@@ -100,7 +102,7 @@ public final class MiscMemoryTestShaders extends ParallaxTest
 		for ( int i = 0; i < N; i ++ ) 
 		{
 			Mesh mesh = meshes.get( i );
-			 mesh.getMaterial().deallocate( context.getRenderer() );
+			 mesh.getMaterial().dispose( );
 		}
 		
 		for ( int i = 0; i < N; i ++ ) 

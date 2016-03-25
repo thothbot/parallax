@@ -62,12 +62,14 @@ import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
+import org.parallax3d.parallax.tests.NeedImprovement;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.resources.TerrainShader;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NeedImprovement("Animation")
 public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler, Texture.ImageLoadHandler
 {
 
@@ -132,8 +134,8 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 	@Override
 	public void onResize(RenderingContext context) 
 	{
-		screenWidth = context.getRenderer().getAbsoluteWidth();
-		screenHeight = context.getRenderer().getAbsoluteHeight();
+		screenWidth = context.getWidth();
+		screenHeight = context.getHeight();
 		
 		hblur.getUniforms().get( "h" ).setValue( bluriness / (double)screenWidth );
 		vblur.getUniforms().get( "v" ).setValue( bluriness / (double)screenHeight );
@@ -150,8 +152,8 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 				4000 // far 
 		); 
 					
-		screenWidth = context.getRenderer().getAbsoluteWidth();
-		screenHeight = context.getRenderer().getAbsoluteHeight();
+		screenWidth = context.getWidth();
+		screenHeight = context.getHeight();
 		cameraOrtho = new OrthographicCamera( screenWidth, screenHeight, -10000, 10000 );
 		
 		camera.getPosition().set( -1200, 800, 1200 );
@@ -311,7 +313,6 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 		// TERRAIN MESH
 
 		PlaneGeometry geometryTerrain = new PlaneGeometry( 6000, 6000, 64, 64 );
-		geometryTerrain.computeTangents();
 
 		terrain = new Mesh( geometryTerrain, materialTerrain );
 		terrain.getPosition().set( 0, -125, 0 );
@@ -406,8 +407,8 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 
 		MorphBlendMesh meshAnim = new MorphBlendMesh( geometry, material );
 
-		meshAnim.setDuration(duration);
-		meshAnim.setTime( (int)(600 * Math.random()) );
+//		meshAnim.setDuration(duration);
+//		meshAnim.setTime( (int)(600 * Math.random()) );
 
 		meshAnim.getPosition().set( x, y, z );
 		meshAnim.getRotation().setY( Math.PI/2 );
@@ -492,9 +493,9 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 			{
 				MorphBlendMesh morph = morphs.get( i );
 
-				morph.updateAnimation( (int)(1000 * delta) );
+//				morph.updateAnimation( (int)(1000 * delta) );
 
-				morph.getPosition().addX( morph.getDuration() * delta );
+//				morph.getPosition().addX( morph.getDuration() * delta );
 
 				if ( morph.getPosition().getX()  > 2000 )  
 				{

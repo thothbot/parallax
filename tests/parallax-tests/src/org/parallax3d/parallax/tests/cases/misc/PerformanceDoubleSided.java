@@ -29,7 +29,6 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.CubeTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.input.TouchMoveHandler;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
@@ -87,10 +86,7 @@ public final class PerformanceDoubleSided extends ParallaxTest implements TouchM
 				.setEnvMap( reflectionCube )
 				.setCombine( Texture.OPERATIONS.MIX )
 				.setReflectivity( 0.1 )
-				.setWrapAround(true)
 				.setSide(Material.SIDE.DOUBLE);
-		material.getWrapRGB().set( 0.5, 0.5, 0.5 );
-
 
 		SphereGeometry geometry = new SphereGeometry( 1, 32, 16, 0, (double)Math.PI );
 

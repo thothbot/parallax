@@ -101,8 +101,8 @@ public final class PostprocessingMulti extends ParallaxTest
 		scene = new Scene();
 //		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, this);
 
-		int width = context.getRenderer().getAbsoluteWidth();
-		int height = context.getRenderer().getAbsoluteHeight();
+		int width = context.getWidth();
+		int height = context.getHeight();
 		
 		cameraOrtho = new OrthographicCamera( width, height, -10000, 10000 );
 		cameraOrtho.getPosition().setZ( 100 );
@@ -152,7 +152,7 @@ public final class PostprocessingMulti extends ParallaxTest
 
 		//
 
-		context.getRenderer().setClearColor( 0x000000, 1 );
+		context.getRenderer().setClearColor( 0x000000 );
 		context.getRenderer().setAutoClear(false);
 		context.getRenderer().setGammaInput(true);
 		context.getRenderer().setGammaOutput(true);
@@ -283,11 +283,8 @@ public final class PostprocessingMulti extends ParallaxTest
 	
 	private void createMesh(Geometry geometry, double scale )
 	{
-		geometry.computeTangents();
-
 		MeshLambertMaterial mat2 = new MeshLambertMaterial()
 				.setColor( 0x999999 )
-				.setAmbient( 0x444444 )
 				.setMap(new Texture( textureCol ));
 
 		mesh = new Mesh( geometry, mat2 );
@@ -303,8 +300,8 @@ public final class PostprocessingMulti extends ParallaxTest
 		if ( mesh != null )
 			mesh.getRotation().addY( -0.04 );
 
-		int halfWidth = context.getRenderer().getAbsoluteWidth() / 2;
-		int halfHeight = context.getRenderer().getAbsoluteHeight() / 2;
+		int halfWidth = context.getWidth() / 2;
+		int halfHeight = context.getHeight() / 2;
 		
 		context.getRenderer().setViewport( 0, 0, 2 * halfWidth, 2 * halfHeight );
 

@@ -45,6 +45,13 @@ public class GridHelper extends LineSegments {
         super(intDefaultGeometry(size, step), new LineBasicMaterial().setVertexColors(Material.COLORS.VERTEX));
     }
 
+    public GridHelper setColors( int colorCenterLine, int colorGrid) {
+        color1.set(colorCenterLine);
+        color2.set(colorGrid);
+
+        return this;
+    }
+
     private static Geometry intDefaultGeometry(double size, int step) {
 
         Geometry geometry = new Geometry();

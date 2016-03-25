@@ -86,7 +86,6 @@ public final class EffectsLensFlares extends ParallaxTest
 		BoxGeometry cubeGeometry = new BoxGeometry( s, s, s );
 		MeshPhongMaterial material = new MeshPhongMaterial()
 				.setColor(0xffffff)
-				.setAmbient(0x333333)
 				.setSpecular(0xffffff)
 				.setShininess(50);
 		

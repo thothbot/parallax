@@ -59,8 +59,7 @@ public final class Helpers extends ParallaxTest {
 
         scene.add(new PointLightHelper(light, 5.0));
 
-        GridHelper helper = new GridHelper(200, 10);
-        helper.setColors(0x0000ff, 0x808080);
+        GridHelper helper = new GridHelper(200, 10).setColors(0x0000ff, 0x808080);
         helper.getPosition().setY(-150);
         scene.add(helper);
 

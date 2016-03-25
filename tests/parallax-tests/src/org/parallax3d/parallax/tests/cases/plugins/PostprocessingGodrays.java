@@ -130,18 +130,18 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 				
 		context.getRenderer().setSortObjects(false);
 		context.getRenderer().setAutoClear(false);
-		context.getRenderer().setClearColor( bgColor, 1 );
+		context.getRenderer().setClearColor( bgColor );
 		
 		//  Postprocessing
 		
 		postprocessingScene = new Scene();
 
-		postprocessingCamera = new OrthographicCamera(context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight(), -10000, 10000 );
+		postprocessingCamera = new OrthographicCamera(context.getWidth(), context.getHeight(), -10000, 10000 );
 		postprocessingCamera.getPosition().setZ( 100 );
 
 		postprocessingScene.add( postprocessingCamera );
 
-		rtTextureColors = new RenderTargetTexture( context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() );
+		rtTextureColors = new RenderTargetTexture( context.getWidth(), context.getHeight() );
 		rtTextureColors.setMinFilter(TextureMinFilter.LINEAR);
 		rtTextureColors.setMagFilter(TextureMagFilter.LINEAR);
 		rtTextureColors.setFormat(PixelFormat.RGBA);
@@ -153,15 +153,15 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 		// I would have this quarter size and use it as one of the ping-pong render
 		// targets but the aliasing causes some temporal flickering
 
-		rtTextureDepth = new RenderTargetTexture(  context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight()  );
+		rtTextureDepth = new RenderTargetTexture(  context.getWidth(), context.getHeight() );
 		rtTextureDepth.setMinFilter(TextureMinFilter.LINEAR);
 		rtTextureDepth.setMagFilter(TextureMagFilter.LINEAR);
 		rtTextureDepth.setFormat(PixelFormat.RGBA);
 		
 		// Aggressive downsize god-ray ping-pong render targets to minimize cost
 
-		int w = context.getRenderer().getAbsoluteWidth() / 4;
-		int h = context.getRenderer().getAbsoluteHeight() / 4;
+		int w = context.getWidth() / 4;
+		int h = context.getHeight() / 4;
 		rtTextureGodRays1 = new RenderTargetTexture( w, h );
 		rtTextureGodRays1.setMinFilter(TextureMinFilter.LINEAR);
 		rtTextureGodRays1.setMagFilter(TextureMagFilter.LINEAR);
@@ -184,7 +184,7 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 		((Color)materialGodraysFakeSun.getShader().getUniforms().get("sunColor").getValue()).setHex( sunColor );
 
 		quad = new Mesh(
-				new PlaneBufferGeometry( context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() ),
+				new PlaneBufferGeometry( context.getWidth(), context.getHeight() ),
 				materialGodraysGenerate
 		);
 		quad.getPosition().setZ( -9900 );
@@ -228,8 +228,8 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 		// space distance to the sun. Not very efficient, so i make a scissor
 		// rectangle around the suns position to avoid rendering surrounding pixels.
 		
-		int width = context.getRenderer().getAbsoluteWidth(); 
-		int height = context.getRenderer().getAbsoluteHeight();
+		int width = context.getWidth();
+		int height = context.getHeight();
 
 		double sunsqH = 0.74 * height; // 0.74 depends on extent of sun from shader
 		double sunsqW = 0.74 * height; // both depend on height because sun is aspect-corrected
@@ -238,14 +238,14 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 		screenSpacePosition.setY( screenSpacePosition.getY() * height );
 
 		context.getRenderer().setScissor( (int)(screenSpacePosition.getX() - sunsqW / 2.0), (int)(screenSpacePosition.getY() - sunsqH / 2.0), (int)sunsqW, (int)sunsqH );
-		context.getRenderer().enableScissorTest( true );
+		context.getRenderer().setScissorTest( true );
 
 		materialGodraysFakeSun.getShader().getUniforms().get("fAspect").setValue( (double)width / (double)height );
 
 		postprocessingScene.setOverrideMaterial( materialGodraysFakeSun );
 		context.getRenderer().render( postprocessingScene, postprocessingCamera, rtTextureColors );
 
-		context.getRenderer().enableScissorTest( false );
+		context.getRenderer().setScissorTest( false );
 		
 		// Colors
 

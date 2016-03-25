@@ -68,7 +68,7 @@ public final class EffectsSprites extends ParallaxTest
 		
 		camera.getPosition().setZ(1500);
 		
-		cameraOrtho = new OrthographicCamera( context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight(), 1, 10 );
+		cameraOrtho = new OrthographicCamera( context.getWidth(), context.getHeight(), 1, 10 );
 		cameraOrtho.getPosition().setZ( 10 );
 
 		scene.setFog( new Fog( 0x000000, 1500, 2100 ) );
@@ -166,8 +166,8 @@ public final class EffectsSprites extends ParallaxTest
 	
 	private void updateHUDSprites (RenderingContext context) {
 
-		int width = context.getRenderer().getAbsoluteWidth() / 2;
-		int height = context.getRenderer().getAbsoluteHeight() / 2;
+		int width = context.getWidth() / 2;
+		int height = context.getHeight() / 2;
 
 		if(spriteTL == null)
 			return;
