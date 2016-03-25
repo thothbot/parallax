@@ -25,6 +25,7 @@ import org.parallax3d.parallax.loaders.typefacejs.JsoFont;
 import org.parallax3d.parallax.loaders.typefacejs.JsoFontFactory;
 import org.parallax3d.parallax.loaders.typefacejs.JsoGlyph;
 import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.jsonbind.AutoBean;
 import org.parallax3d.parallax.system.jsonbind.AutoBeanCodex;
 import org.parallax3d.parallax.system.jsonbind.JsonBindProxy;
@@ -32,6 +33,7 @@ import org.parallax3d.parallax.system.jsonbind.JsonBindProxy;
 import java.util.ArrayList;
 import java.util.Map;
 
+@ThreejsObject("THREE.FontLoader")
 public class TypefacejsLoader extends FontLoader {
 
     JsoFont font;
