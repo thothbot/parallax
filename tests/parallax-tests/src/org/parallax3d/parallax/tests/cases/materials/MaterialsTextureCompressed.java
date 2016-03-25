@@ -29,21 +29,17 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.CompressedTexture;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
+import org.parallax3d.parallax.tests.NeedImprovement;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NeedImprovement("DDS Textures")
 @ThreejsExample("webgl_materials_texture_compressed")
 public final class MaterialsTextureCompressed extends ParallaxTest 
 {
-
-	private static final String dxt1_nomip = "textures/compressed/disturb_dxt1_nomip.dds";
-	private static final String dxt1_mip = "textures/compressed/disturb_dxt1_mip.dds";
-	private static final String dxt3_mip = "textures/compressed/hepatica_dxt3_mip.dds";
-	private static final String dxt5_mip = "textures/compressed/explosion_dxt5_mip.dds";
-
 	Scene scene;
 	PerspectiveCamera camera;
 	List<Mesh> meshes;
@@ -71,19 +67,27 @@ public final class MaterialsTextureCompressed extends ParallaxTest
 		DXT5 - RGBA - transparent textures with full alpha range
 		*/
 
-		CompressedTexture map1 = new CompressedTexture( dxt1_nomip );
+		CompressedTexture map1 = new CompressedTexture( "textures/compressed/disturb_dxt1_nomip.dds" );
 		map1.setMinFilter(TextureMinFilter.LINEAR);
 		map1.setMagFilter(TextureMagFilter.LINEAR);
 		map1.setAnisotropy(4);
 
-		CompressedTexture map2 = new CompressedTexture( dxt1_mip );
+		CompressedTexture map2 = new CompressedTexture( "textures/compressed/disturb_dxt1_mip.dds" );
 		map2.setAnisotropy(4);
 
-		CompressedTexture map3 = new CompressedTexture( dxt3_mip );
+		CompressedTexture map3 = new CompressedTexture( "textures/compressed/hepatica_dxt3_mip.dds" );
 		map3.setAnisotropy(4);
 
-		CompressedTexture map4 = new CompressedTexture( dxt5_mip );
+		CompressedTexture map4 = new CompressedTexture( "textures/compressed/explosion_dxt5_mip.dds" );
 		map4.setAnisotropy(4);
+
+		CompressedTexture map5 = new CompressedTexture( "textures/compressed/disturb_argb_nomip.dds" );
+		map4.setMinFilter(TextureMinFilter.LINEAR);
+		map4.setMagFilter(TextureMagFilter.LINEAR);
+		map4.setAnisotropy(4);
+
+		CompressedTexture map6 = new CompressedTexture( "textures/compressed/disturb_argb_mip.dds" );
+		map6.setAnisotropy(4);
 
 		MeshBasicMaterial material1 = new MeshBasicMaterial()
 				.setMap(map1);

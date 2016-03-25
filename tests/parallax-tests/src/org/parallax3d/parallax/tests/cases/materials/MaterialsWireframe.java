@@ -20,23 +20,22 @@ package org.parallax3d.parallax.tests.cases.materials;
 
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
-import org.parallax3d.parallax.graphics.core.Face3;
-import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.extras.geometries.BoxGeometry;
-import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,6 +64,8 @@ public final class MaterialsWireframe extends ParallaxTest
 	@Override
 	public void onStart(RenderingContext context)
 	{
+		double size = 150;
+
 		scene = new Scene();
 		camera = new PerspectiveCamera(
 				40, // fov
@@ -74,81 +75,61 @@ public final class MaterialsWireframe extends ParallaxTest
 		);
 		
 		camera.getPosition().setZ(800);
-		
-		double size = 150;
 
-		BoxGeometry geometryLines = new BoxGeometry( size, size, size );
-		BoxGeometry geometryTris = new BoxGeometry( size, size, size );
+		MeshBasicMaterial material = new MeshBasicMaterial().setWireframe(true);
 
-		// wireframe using gl.LINES
+		Mesh mesh = new Mesh( new BufferGeometry().fromGeometry( new BoxGeometry( size, size, size ) ), material );
+		mesh.getPosition().setX(-150);
+		scene.add( mesh );
 
-		MeshBasicMaterial materialLines = new MeshBasicMaterial()
-			.setWireframe(true);
+		//
 
-		meshLines = new Mesh( geometryLines, materialLines );
-		meshLines.getPosition().setX(-150);
-		scene.add( meshLines );
+		BufferGeometry geometry = new BufferGeometry().fromGeometry( new BoxGeometry( size, size, size ) );
+
+		setupAttributes( geometry );
 
 		// wireframe using gl.TRIANGLES (interpreted as triangles)
 
-		Attribute attributesTris = new Attribute(Attribute.TYPE.V3, setupAttributes( geometryTris ));
-		attributesTris.setBoundTo( Attribute.BOUND_TO.FACE_VERTICES );
-		
-		ShaderMaterial materialTris = new ShaderMaterial( Resources.INSTANCE );
-		materialTris.getShader().addAttributes("center", attributesTris);
-
-		meshTris = new Mesh( geometryTris, materialTris );
-		meshTris.getPosition().setX(150);
-		scene.add( meshTris );
-
-		// wireframe using gl.TRIANGLES (mixed triangles and quads)
-
-		SphereGeometry mixedGeometry = new SphereGeometry( size / 2.0, 32, 16 );
-
-		Attribute attributesMixed = new Attribute(Attribute.TYPE.V3, setupAttributes( mixedGeometry ));
-		attributesMixed.setBoundTo( Attribute.BOUND_TO.FACE_VERTICES );
-
 		ShaderMaterial materialMixed = new ShaderMaterial( Resources.INSTANCE );
-		materialMixed.getShader().addAttributes("center", attributesMixed);
 
-		meshMixed = new Mesh( mixedGeometry, materialMixed );
+		meshMixed = new Mesh( geometry, materialMixed );
 		meshMixed.getPosition().setX(-150);
 		scene.add( meshMixed );
 
 	}
-	
-	private List<List<Vector3>> setupAttributes(Geometry geometry)
+
+	private void setupAttributes(BufferGeometry geometry)
 	{
-		List<List<Vector3>> values = new ArrayList<List<Vector3>>();
-		
-		for( int f = 0; f < geometry.getFaces().size(); f ++ ) 
-		{
-			Face3 face = geometry.getFaces().get( f );
-			values.add(f, Arrays.asList(
-					new Vector3( 1, 0, 0 ), 
-					new Vector3( 0, 1, 0 ), 
-					new Vector3( 0, 0, 1 ) ));
+		List<Vector3> vectors = Arrays.asList(
+			new Vector3( 1, 0, 0 ),
+			new Vector3( 0, 1, 0 ),
+			new Vector3( 0, 0, 1 )
+		);
+
+		BufferAttribute position = geometry.getAttributes().get("position");
+		Float32Array centers = Float32Array.create( position.getCount() * 3 );
+
+		for ( int i = 0, l = position.getCount(); i < l; i ++ ) {
+
+			vectors.get(i % 3).toArray( centers, i * 3 );
+
 		}
 
-		return values;
+		geometry.addAttribute( "center", new BufferAttribute( centers, 3 ) );
 	}
-	
+
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		meshLines.getRotation().addX(0.005);
-		meshLines.getRotation().addY(0.01);
+		for (int i = 0; i < scene.getChildren().size(); i ++ ) {
 
-		meshTris.getRotation().addX(0.005);
-		meshTris.getRotation().addY(0.01);
+			Object3D object = scene.getChildren().get(i);
+			object.getRotation().addX( 0.005 );
+			object.getRotation().addY( 0.01 );
 
-		if ( meshMixed != null) 
-		{
-			meshMixed.getRotation().addX(0.005);
-			meshMixed.getRotation().addY(0.01);
 		}
-		
-		context.getRenderer().render(scene, camera);
+
+		context.getRenderer().render( scene, camera );
 	}
 	
 	@Override

@@ -29,26 +29,25 @@ import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.input.TouchMoveHandler;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.gl.enums.TextureWrapMode;
+import org.parallax3d.parallax.tests.NeedImprovement;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
+@NeedImprovement("Custom GWT styling")
 @ThreejsExample("webgl_materials_texture_anisotropy")
 public final class MaterialsTextureAnisotropy extends ParallaxTest implements TouchMoveHandler
 {
 
 	private static final String texture = "textures/crate.gif";
 
-	Scene scene;
+	Scene scene1, scene2;
 	PerspectiveCamera camera;
 
 	int width = 0, height = 0;
 	int mouseX = 0;
 	int mouseY = 0;
-	
-	Scene sceneMaxAnisotropy;
 
 	@Override
 	public void onResize(RenderingContext context) {
@@ -59,32 +58,32 @@ public final class MaterialsTextureAnisotropy extends ParallaxTest implements To
 	@Override
 	public void onStart(RenderingContext context)
 	{
-		scene = new Scene();
 		camera = new PerspectiveCamera(
 				35, // fov
 				context.getAspectRation(), // aspect
 				1, // near
 				25000 // far 
 		);
-			
-		camera.getPosition().setZ(1500);
-		
-		sceneMaxAnisotropy = new Scene();
-		
-		sceneMaxAnisotropy.setFog( new Fog( 0xffffff, 1, 25000 ) );
-		sceneMaxAnisotropy.getFog().getColor().setHSL( 0.6, 0.05, 1 );
-		scene.setFog(sceneMaxAnisotropy.getFog());
 
-		sceneMaxAnisotropy.add( new AmbientLight( 0xeef0ff ) );
-		scene.add( new AmbientLight( 0xeef0ff ) );
+		camera.getPosition().setZ(1500);
+
+		scene1 = new Scene();
+		scene1 = new Scene();
+
+		scene1.setFog(new Fog(0xf2f7ff, 1, 25000));
+		scene2.setFog(scene1.getFog());
+
+		scene1.add( new AmbientLight( 0xeef0ff ) );
+		scene2.add( new AmbientLight( 0xeef0ff ) );
 
 		DirectionalLight light1 = new DirectionalLight( 0xffffff, 2 );
-		light1.getPosition().set( 1 );
-		sceneMaxAnisotropy.add( light1 );
+		light1.getPosition().set( 1, 1, 1 );
+		scene1.add( light1 );
 
 		DirectionalLight light2 = new DirectionalLight( 0xffffff, 2 );
-		light2.setPosition( light1.getPosition() );
-		scene.add( light2 );
+		light2.getPosition().set( 1, 1, 1 );
+		scene2.add( light2 );
+
 
 		// GROUND
 
@@ -120,33 +119,33 @@ public final class MaterialsTextureAnisotropy extends ParallaxTest implements To
 		mesh2.getRotation().setX( - Math.PI / 2 );
 		mesh2.getScale().set( 1000 );
 
-		sceneMaxAnisotropy.add( mesh1 );
-		scene.add( mesh2 );
+		scene1.add( mesh1 );
+		scene2.add( mesh2 );
 
 		// RENDERER
 
-		context.getRenderer().setClearColor( sceneMaxAnisotropy.getFog().getColor(), 1 );
+		context.getRenderer().setClearColor( scene1.getFog().getColor() );
 		context.getRenderer().setAutoClear(false);
 	}
 	
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		camera.getPosition().addX( ( mouseX - camera.getPosition().getX() ) * .05 );
-		camera.getPosition().setY( Mathematics.clamp(
-				camera.getPosition().getY() + ( - ( mouseY - 200 ) - camera.getPosition().getY() ) * .05, 50, 1000 ));
+		camera.getPosition().addX( ( mouseX - camera.getPosition().getX()) * .05 );
+		camera.getPosition().addY( Mathematics.clamp( camera.getPosition().getY() + ( - ( mouseY - 200 ) - camera.getPosition().getY()) * .05, 50, 1000 ) );
 
-		camera.lookAt( sceneMaxAnisotropy.getPosition() );
+		camera.lookAt(scene1.getPosition());
 
-		context.getRenderer().enableScissorTest( false );
 		context.getRenderer().clear();
-		context.getRenderer().enableScissorTest( true );
+		context.getRenderer().setScissorTest( true );
 
-		context.getRenderer().setScissor( 0, 0, context.getRenderer().getAbsoluteWidth()/2 - 2, context.getRenderer().getAbsoluteHeight() );
-		context.getRenderer().render( sceneMaxAnisotropy, camera );
+		context.getRenderer().setScissor( 0, 0, context.getWidth()/2 - 2, context.getHeight() );
+		context.getRenderer().render( scene1, camera );
 
-		context.getRenderer().setScissor( context.getRenderer().getAbsoluteWidth()/2, 0, context.getRenderer().getAbsoluteWidth()/2 - 2, context.getRenderer().getAbsoluteHeight()  );
-		context.getRenderer().render(scene, camera);
+		context.getRenderer().setScissor( context.getWidth()/2, 0, context.getWidth()/2 - 2, context.getHeight()  );
+		context.getRenderer().render( scene2, camera );
+
+		context.getRenderer().setScissorTest( false );
 	}
 
 	@Override

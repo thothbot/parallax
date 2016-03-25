@@ -28,12 +28,13 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.graphics.textures.EmptyTextureData;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
+import org.parallax3d.parallax.tests.NotReady;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
+@NotReady
 @ThreejsExample("webgl_materials_texture_filters")
 public final class MaterialsTextureFilter extends ParallaxTest 
 {
@@ -204,20 +205,21 @@ public final class MaterialsTextureFilter extends ParallaxTest
 	@Override
 	public void onUpdate(RenderingContext context)
 	{
-		camera.getPosition().addX( ( mouseX - camera.getPosition().getX() ) * .05 );
-		camera.getPosition().addY( ( - ( mouseY - 200) - camera.getPosition().getY() ) * .05 );
+		camera.getPosition().addX( ( mouseX - camera.getPosition().getX()) * .05 );
+		camera.getPosition().addY( ( - ( mouseY - 200) - camera.getPosition().getY()) * .05 );
 
-		camera.lookAt( scene.getPosition() );
+		camera.lookAt(scene.getPosition());
 
-		context.getRenderer().enableScissorTest( false );
 		context.getRenderer().clear();
-		context.getRenderer().enableScissorTest( true );
+		context.getRenderer().setScissorTest( true );
 
-		context.getRenderer().setScissor( context.getRenderer().getAbsoluteWidth()/2, 0, context.getRenderer().getAbsoluteWidth()/2 - 2, context.getRenderer().getAbsoluteHeight()  );
-		context.getRenderer().render( this.scene2, camera );
+		context.getRenderer().setScissor( 0, 0, context.getWidth()/2 - 2, context.getHeight() );
+		context.getRenderer().render( scene, camera );
 
-		context.getRenderer().setScissor( 0, 0, context.getRenderer().getAbsoluteWidth()/2 - 2, context.getRenderer().getAbsoluteHeight() );
-		context.getRenderer().render(scene, camera);
+		context.getRenderer().setScissor( context.getWidth()/2, 0, context.getWidth()/2 - 2, context.getHeight()  );
+		context.getRenderer().render( scene2, camera );
+
+		context.getRenderer().setScissorTest( false );
 	}
 
 	@Override

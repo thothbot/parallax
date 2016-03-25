@@ -27,7 +27,6 @@ import org.parallax3d.parallax.graphics.objects.Points;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.input.TouchMoveHandler;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
@@ -47,6 +46,14 @@ public final class ParticlesRandom extends ParallaxTest implements TouchMoveHand
 	int width = 0, height = 0;
 	int mouseX = 0;
 	int mouseY = 0;
+
+	double[][] parameters = new double[][]{
+			{1, 1, 0.5, 5},
+			{0.95, 1, 0.5, 4},
+			{0.90, 1, 0.5, 3},
+			{0.85, 1, 0.5, 2},
+			{0.80, 1, 0.5, 1}
+	};
 
 	@Override
 	public void onResize(RenderingContext context) {
@@ -82,14 +89,11 @@ public final class ParticlesRandom extends ParallaxTest implements TouchMoveHand
 
 		}
 
-		materials = new ArrayList<PointsMaterial>();
-		int max = 5;
+		materials = new ArrayList<>();
 
-		for ( int i = 0; i < max; i ++ ) 
+		for ( int i = 0; i < parameters.length; i ++ )
 		{
-			PointsMaterial material = new PointsMaterial();
-			material.setSize( 5 - i );
-			material.getColor().setHSL( 1.0 - i * 0.05, 1.0, 0.5 );
+			PointsMaterial material = new PointsMaterial().setSize( parameters[i][3] );
 			materials.add(material);
 
 			Points particles = new Points( geometry, material );
@@ -122,11 +126,13 @@ public final class ParticlesRandom extends ParallaxTest implements TouchMoveHand
 			}
 		}
 
-		for ( int i = 0; i < materials.size(); i ++ ) 
+		for( int i = 0; i < materials.size(); i ++ )
 		{
 			PointsMaterial material = materials.get(i);
-			Color.HSL hsv = material.getColor().getHSL();
-			material.getColor().setHSL( Math.abs(Math.sin( hsv.hue + time )), hsv.saturation, hsv.lightness );
+
+			double[] color = parameters[i];
+			double h = ( 360 * ( color[0] + time ) % 360 ) / 360.;
+			material.getColor().setHSL(  h, color[1], color[2]  );
 		}
 		
 		context.getRenderer().render(scene, camera);

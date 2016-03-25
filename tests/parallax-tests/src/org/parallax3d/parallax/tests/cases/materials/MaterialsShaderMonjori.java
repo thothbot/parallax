@@ -49,20 +49,20 @@ public final class MaterialsShaderMonjori extends ParallaxTest
 	@Override
 	public void onStart(RenderingContext context)
 	{
-		scene = new Scene();
-//		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, this);
-		camera = new Camera(); 
-		
+		camera = new Camera();
 		camera.getPosition().setZ(1);
+
+		scene = new Scene();
 
 		ShaderMaterial material = new ShaderMaterial(new MonjoriShader());
 		uniforms = material.getShader().getUniforms();
 		
 		Mesh mesh = new Mesh( new PlaneBufferGeometry( 2, 2 ), material );
 		scene.add( mesh );
-		
-		((Vector2)uniforms.get("resolution").getValue()).setX( context.getRenderer().getAbsoluteWidth() );
-		((Vector2)uniforms.get("resolution").getValue()).setY( context.getRenderer().getAbsoluteHeight() );
+
+		uniforms.get("time").setValue(1.0);
+		((Vector2)uniforms.get("resolution").getValue()).setX( context.getWidth() );
+		((Vector2)uniforms.get("resolution").getValue()).setY( context.getHeight() );
 	}
 
 	@Override

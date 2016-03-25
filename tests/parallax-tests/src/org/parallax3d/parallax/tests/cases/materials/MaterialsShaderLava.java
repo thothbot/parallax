@@ -58,7 +58,6 @@ public final class MaterialsShaderLava extends ParallaxTest
 	public void onStart(RenderingContext context)
 	{
 		scene = new Scene();
-//		EVENT_BUS.addHandler(ViewportResizeEvent.TYPE, this);
 
 		camera = new PerspectiveCamera(
 				35, // fov

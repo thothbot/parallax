@@ -104,7 +104,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 		);
 		camera.getPosition().setZ(100);
 		
-		cameraRTT = new OrthographicCamera( context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() , -10000, 10000 );
+		cameraRTT = new OrthographicCamera( context.getWidth(), context.getHeight() , -10000, 10000 );
 		cameraRTT.getPosition().setZ(100);
 
 		sceneRTT = new Scene();
@@ -118,7 +118,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 		light2.getPosition().set( 0, 0, -1 ).normalize();
 		sceneRTT.add( light2 );
 
-		rtTexture = new RenderTargetTexture( context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() );
+		rtTexture = new RenderTargetTexture( context.getWidth(), context.getHeight() );
 		rtTexture.setMinFilter(TextureMinFilter.LINEAR);
 		rtTexture.setMagFilter(TextureMagFilter.NEAREST);
 		rtTexture.setFormat(PixelFormat.RGBA);
@@ -130,7 +130,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 				.setDepthWrite(false);
 		materialScreen.getShader().addUniform("tDiffuse", new Uniform(Uniform.TYPE.T, rtTexture ));
 
-		PlaneBufferGeometry plane = new PlaneBufferGeometry(context.getRenderer().getAbsoluteWidth(), context.getRenderer().getAbsoluteHeight() );
+		PlaneBufferGeometry plane = new PlaneBufferGeometry(context.getWidth(), context.getHeight() );
 		quad1 = new Mesh( plane, material );
 		quad1.getPosition().setZ( -100 );
 		sceneRTT.add( quad1 );
