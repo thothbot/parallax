@@ -15,7 +15,7 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package org.parallax3d.parallax.graphics.animation;
+package org.parallax3d.parallax.animation;
 
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.math.Interpolant;

@@ -15,20 +15,20 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package org.parallax3d.parallax.graphics.animation.tracks;
+package org.parallax3d.parallax.animation.tracks;
 
-import org.parallax3d.parallax.graphics.animation.KeyframeTrack;
+import org.parallax3d.parallax.animation.KeyframeTrack;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
  *
- * A Track of Boolean keyframe values.
+ * A Track of vectored keyframe values.
  *
  *
  * @author Ben Houston / http://clara.io/
  * @author David Sarno / http://lighthaus.us/
  * @author tschw
  */
-@ThreejsObject("THREE.BooleanKeyframeTrack")
-public class BooleanKeyframeTrack extends KeyframeTrack {
+@ThreejsObject("THREE.VectorKeyframeTrack")
+public class VectorKeyframeTrack extends KeyframeTrack {
 }

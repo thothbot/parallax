@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.RenderingContext;
-import org.parallax3d.parallax.graphics.animation.AnimationMixer;
+import org.parallax3d.parallax.animation.AnimationMixer;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
@@ -31,7 +31,6 @@ import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
-import org.parallax3d.parallax.graphics.extras.objects.MorphBlendMesh;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
@@ -40,7 +39,6 @@ import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.math.Vector3;
-import org.parallax3d.parallax.system.Duration;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
