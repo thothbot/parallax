@@ -92,48 +92,6 @@ public abstract class Material extends AbstractPropertyObject
 		CUSTOM // CustomBlending = 6;
 	}
 
-	private enum SHADER_DEFINE
-	{
-		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT,
-
-		MAX_DIR_LIGHTS, // param
-		MAX_POINT_LIGHTS, // param
-		MAX_SPOT_LIGHTS, // param
-		MAX_HEMI_LIGHTS, // param
-		MAX_SHADOWS, // param
-		MAX_BONES, // param
-
-		USE_MAP, USE_ENVMAP, USE_LIGHTMAP, USE_BUMPMAP, USE_NORMALMAP, USE_SPECULARMAP, USE_ALPHAMAP, USE_COLOR, USE_SKINNING, USE_MORPHTARGETS, USE_MORPHNORMALS,
-
-		BONE_TEXTURE,
-		WRAP_AROUND, DOUBLE_SIDED, FLIP_SIDED,
-
-		USE_SHADOWMAP, SHADOWMAP_TYPE_BASIC, SHADOWMAP_TYPE_PCF, SHADOWMAP_TYPE_PCF_SOFT, SHADOWMAP_DEBUG, SHADOWMAP_CASCADE,
-
-		USE_SIZEATTENUATION,
-
-		USE_LOGDEPTHBUF,
-
-		ALPHATEST,
-
-		USE_FOG, FOG_EXP2, METAL;
-
-		public String getValue()
-		{
-			return "#define " + this.name();
-		}
-
-		public String getValue(int param)
-		{
-			return "#define " + this.name() + " " + param;
-		}
-
-		public String getValue(double param)
-		{
-			return "#define " + this.name() + " " + param;
-		}
-	}
-
 	int id;
 
 	String name;
@@ -205,8 +163,26 @@ public abstract class Material extends AbstractPropertyObject
 		return this.name;
 	}
 
+	public boolean isPremultipliedAlpha() {
+		return premultipliedAlpha;
+	}
+
+	public <T extends Material> T setPremultipliedAlpha(boolean premultipliedAlpha) {
+		this.premultipliedAlpha = premultipliedAlpha;
+		return (T)this;
+	}
+
 	public <T extends Material> T setName(String name) {
 		this.name = name;
+		return (T)this;
+	}
+
+	public Shader.PRECISION getPrecision() {
+		return precision;
+	}
+
+	public <T extends Material> T setPrecision(Shader.PRECISION precision) {
+		this.precision = precision;
 		return (T)this;
 	}
 

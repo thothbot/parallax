@@ -111,7 +111,7 @@ public final class PointsMaterial extends Material implements HasFog,
 	}
 
 	@Override
-	public Material.COLORS isVertexColors() {
+	public Material.COLORS getVertexColors() {
 		return this.vertexColors;
 	}
 

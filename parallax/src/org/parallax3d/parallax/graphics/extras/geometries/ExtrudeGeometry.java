@@ -86,7 +86,7 @@ public class ExtrudeGeometry extends Geometry
 		public Curve extrudePath;
 
 		/**
-		 * object that provides UV generator functions
+		 * object that provides UVMapping generator functions
 		 */
 		public UVGenerator uvGenerator = new WorldUVGenerator();
 	}

@@ -20,8 +20,8 @@ package org.parallax3d.parallax.system;
 
 import org.parallax3d.parallax.Film;
 
-public interface AnimationReadyListener {
+public interface FilmReadyListener {
 
-	public void onAnimationReady(Film animation );
+	void onFilmReady(Film animation );
 
 }

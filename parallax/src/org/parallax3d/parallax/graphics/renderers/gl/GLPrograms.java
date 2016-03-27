@@ -20,11 +20,16 @@ package org.parallax3d.parallax.graphics.renderers.gl;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.materials.*;
 import org.parallax3d.parallax.graphics.objects.SkinnedMesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
+import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.scenes.AbstractFog;
+import org.parallax3d.parallax.graphics.scenes.FogExp2;
+import org.parallax3d.parallax.graphics.textures.AbstractTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.system.FastMap;
 
 public class GLPrograms {
 
@@ -95,7 +100,7 @@ public class GLPrograms {
 
     }
 
-    private Texture.ENCODINGS getTextureEncodingFromMap(Texture map, boolean gammaOverrideLinear) {
+    private Texture.ENCODINGS getTextureEncodingFromMap(AbstractTexture map, boolean gammaOverrideLinear) {
 
         Texture.ENCODINGS encoding = null;
 
@@ -105,11 +110,11 @@ public class GLPrograms {
 
         } else if ( map instanceof Texture ) {
 
-            encoding = map.getEncoding();
+            encoding = ((Texture)map).getEncoding();
 
         } else if ( map instanceof GLRenderTarget) {
 
-            encoding = map.texture.encoding;
+            encoding = ((GLRenderTarget) map).getTexture().getEncoding();
 
         }
 
@@ -124,101 +129,101 @@ public class GLPrograms {
 
     }
 
-    public void getParameters(Material material, lights, fog, object) {
+    public FastMap<Object> getParameters(final Material material, lights, final AbstractFog fog, final GeometryObject object) {
 
-        var shaderID = shaderIDs[ material.type ];
+        final Shader shaderID = material.getAssociatedShader();
 
         // heuristics to create shader parameters according to lights in the scene
         // (not to blow over maxLights budget)
 
-        var maxBones = allocateBones( object );
-        var precision = renderer.getPrecision();
+        final int maxBones = allocateBones( object );
+        final Shader.PRECISION precision = renderer.getPrecision();
 
-        if ( material.precision != null ) {
+        if ( material.getPrecision() != null )
+        {
+            precision = capabilities.getPrecision();
 
-            precision = capabilities.getMaxPrecision( material.precision );
+            if ( precision != material.getPrecision()) {
 
-            if ( precision != material.precision ) {
-
-                Log.warn( "WebGLProgram.getParameters: " + material.precision + " not supported, using " + precision + " instead." );
+                Log.warn( "WebGLProgram.getParameters: " + material.getPrecision() + " not supported, using " + precision + " instead." );
 
             }
 
         }
 
-        var parameters = {
+        FastMap<Object> parameters = new FastMap<Object>(){{
 
-                shaderID: shaderID,
+			put("shaderID",  shaderID );
 
-                precision: precision,
-                supportsVertexTextures: capabilities.vertexTextures,
-                outputEncoding: getTextureEncodingFromMap( renderer.getCurrentRenderTarget(), renderer.gammaOutput ),
-                map: !! material.map,
-                mapEncoding: getTextureEncodingFromMap( material.map, renderer.gammaInput ),
-                envMap: !! material.envMap,
-                envMapMode: material.envMap && material.envMap.mapping,
-                envMapEncoding: getTextureEncodingFromMap( material.envMap, renderer.gammaInput ),
-                envMapCubeUV: ( !! material.envMap ) && ( ( material.envMap.mapping === THREE.CubeUVReflectionMapping ) || ( material.envMap.mapping === THREE.CubeUVRefractionMapping ) ),
-                lightMap: !! material.lightMap,
-                aoMap: !! material.aoMap,
-                emissiveMap: !! material.emissiveMap,
-                emissiveMapEncoding: getTextureEncodingFromMap( material.emissiveMap, renderer.gammaInput ),
-                bumpMap: !! material.bumpMap,
-                normalMap: !! material.normalMap,
-                displacementMap: !! material.displacementMap,
-                roughnessMap: !! material.roughnessMap,
-                metalnessMap: !! material.metalnessMap,
-                specularMap: !! material.specularMap,
-                alphaMap: !! material.alphaMap,
+			put("precision",  precision );
+			put("supportsVertexTextures",  capabilities.vertexTextures );
+			put("outputEncoding",  getTextureEncodingFromMap( renderer.getCurrentRenderTarget(), renderer.isGammaOutput()) );
+			put("map",  material instanceof HasMap && ((HasMap)material).getMap() != null );
+			put("mapEncoding",  getTextureEncodingFromMap( material.map, renderer.isGammaInput()) );
+			put("envMap",  material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null );
+			put("envMapMode", material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null && ((HasEnvMap) material).getEnvMap().getMapping() != null );
+			put("envMapEncoding",  getTextureEncodingFromMap( material.envMap, renderer.isGammaInput()) );
+			put("envMapCubeUV",  material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null && ( ( ((HasEnvMap) material).getEnvMap().getMapping() == Texture.MAPPING_MODE.CubeUVReflectionMapping ) || ( ((HasEnvMap) material).getEnvMap().getMapping() == Texture.MAPPING_MODE.CubeUVRefractionMapping ) ) );
+			put("lightMap",  material instanceof HasLightMap && ((HasLightMap) material).getLightMap() != null );
+			put("aoMap",  material instanceof HasAoMap && ((HasAoMap) material).getAoMap() != null );
+			put("emissiveMap",  material instanceof HasEmissiveMap && ((HasEmissiveMap) material).getEmissiveMap() != null );
+			put("emissiveMapEncoding",  getTextureEncodingFromMap( material.emissiveMap, renderer.isGammaInput()) );
+			put("bumpMap",  material instanceof HasBumpMap && ((HasBumpMap) material).getBumpMap()  != null );
+			put("normalMap",  material instanceof HasNormalMap && ((HasNormalMap) material).getNormalMap() != null);
+			put("displacementMap", material instanceof HasDisplacementMap && ((HasDisplacementMap) material).getDisplacementMap() != null );
+			put("roughnessMap",  material instanceof  HasRoughnessMap && ((HasRoughnessMap) material).getRoughnessMap() != null );
+			put("metalnessMap",  material instanceof HasMetalnessMap && ((HasMetalnessMap) material).getMetalnessMap() != null);
+			put("specularMap",  material instanceof HasSpecularMap && ((HasSpecularMap) material).getSpecularMap() != null );
+			put("alphaMap",  material instanceof HasAlphaMap && ((HasAlphaMap) material).getAlphaMap() != null );
 
-                combine: material.combine,
+			put("combine", material instanceof HasEnvMap ? ((HasEnvMap) material).getCombine() : null );
 
-                vertexColors: material.vertexColors,
+			put("vertexColors", material instanceof HasVertexColors ? ((HasVertexColors)material).getVertexColors() : false );
 
-                fog: fog,
-                useFog: material.fog,
-                fogExp: fog instanceof THREE.FogExp2,
+			put("fog",  fog );
+			put("useFog", material instanceof HasFog && ((HasFog) material).isFog());
+			put("fogExp",  fog instanceof FogExp2);
 
-                flatShading: material.shading === THREE.FlatShading,
+			put("flatShading", material instanceof HasShading && ((HasShading) material).getShading() == Material.SHADING.FLAT );
 
-                sizeAttenuation: material.sizeAttenuation,
-                logarithmicDepthBuffer: capabilities.logarithmicDepthBuffer,
+			put("sizeAttenuation",  material instanceof PointsMaterial && ((PointsMaterial)material).isSizeAttenuation() );
+			put("logarithmicDepthBuffer",  capabilities.logarithmicDepthBuffer );
 
-                skinning: material.skinning,
-                maxBones: maxBones,
-                useVertexTexture: capabilities.floatVertexTextures && object && object.skeleton && object.skeleton.useVertexTexture,
+			put("skinning", material instanceof HasSkinning && ((HasSkinning) material).isSkinning() );
+			put("maxBones",  maxBones );
+			put("useVertexTexture",  capabilities.floatVertexTextures && object && object.skeleton && object.skeleton.useVertexTexture );
 
-                morphTargets: material.morphTargets,
-                morphNormals: material.morphNormals,
-                maxMorphTargets: renderer.maxMorphTargets,
-                maxMorphNormals: renderer.maxMorphNormals,
+			put("morphTargets",  material.morphTargets );
+			put("morphNormals",  material.morphNormals );
+			put("maxMorphTargets",  renderer.maxMorphTargets );
+			put("maxMorphNormals",  renderer.maxMorphNormals );
 
-                numDirLights: lights.directional.length,
-                numPointLights: lights.point.length,
-                numSpotLights: lights.spot.length,
-                numHemiLights: lights.hemi.length,
+			put("numDirLights",  lights.directional.length );
+			put("numPointLights",  lights.point.length );
+			put("numSpotLights",  lights.spot.length );
+			put("numHemiLights",  lights.hemi.length );
 
-                pointLightShadows: lights.shadowsPointLight,
+			put("pointLightShadows",  lights.shadowsPointLight );
 
-                shadowMapEnabled: renderer.shadowMap.enabled && object.receiveShadow && lights.shadows.length > 0,
-                shadowMapType: renderer.shadowMap.type,
+			put("shadowMapEnabled",  renderer.shadowMap.enabled && object.receiveShadow && lights.shadows.length > 0 );
+			put("shadowMapType",  renderer.shadowMap.type );
 
-                toneMapping: renderer.toneMapping,
-                physicallyCorrectLights: renderer.physicallyCorrectLights,
+			put("toneMapping",  renderer.toneMapping );
+			put("physicallyCorrectLights",  renderer.physicallyCorrectLights );
 
-                premultipliedAlpha: material.premultipliedAlpha,
+			put("premultipliedAlpha", material.isPremultipliedAlpha());
 
-                alphaTest: material.alphaTest,
-                doubleSided: material.side === THREE.DoubleSide,
-                flipSided: material.side === THREE.BackSide
+			put("alphaTest", material.getAlphaTest());
+			put("doubleSided",  material.getSides() == Material.SIDE.DOUBLE );
+			put("flipSided",  material.getSides() == Material.SIDE.BACK );
 
-        };
+        }};
 
         return parameters;
 
     };
 
-    public void getProgramCode( material, parameters ) {
+    public void getProgramCode( Material material, FastMap<Object> parameters ) {
 
         var chunks = [];
 

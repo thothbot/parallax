@@ -337,7 +337,7 @@ public class RaytracingRenderer extends Renderer
 		}
 
 		if ( material instanceof HasVertexColors 
-				&& ((HasVertexColors)material).isVertexColors() == Material.COLORS.FACE ) 
+				&& ((HasVertexColors)material).getVertexColors() == Material.COLORS.FACE )
 		{
 			diffuseColor.multiply( face.getColor() );
 		}

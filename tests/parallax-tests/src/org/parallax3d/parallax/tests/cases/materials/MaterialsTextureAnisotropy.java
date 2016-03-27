@@ -170,9 +170,9 @@ public final class MaterialsTextureAnisotropy extends ParallaxTest implements To
 	}
 
 //	@Override
-//	public void onAnimationReady(AnimationReadyEvent event)
+//	public void onFilmReady(AnimationReadyEvent event)
 //	{
-//		super.onAnimationReady(event);
+//		super.onFilmReady(event);
 //				
 //		FlowPanel panelLeft = new FlowPanel();
 //		panelLeft.setStyleName("common-panel", true);

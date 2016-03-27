@@ -161,8 +161,8 @@ public class Geometry extends AbstractGeometry
 	}
 
 	/**
-	 * Gets the List of face UV layers.
-	 * Each UV layer is an array of UVs matching the order and number of vertices in faces.
+	 * Gets the List of face UVMapping layers.
+	 * Each UVMapping layer is an array of UVs matching the order and number of vertices in faces.
 	 * To signal an update in this array, Geometry.uvsNeedUpdate needs to be set to true.
 	 */
 	public List<List<List<Vector2>>> getFaceVertexUvs(){

@@ -35,7 +35,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
  *
  */
 @ThreejsObject("Texture")
-public class Texture
+public class Texture implements AbstractTexture
 {
 	static int TextureCount = 0;
 
@@ -62,13 +62,18 @@ public class Texture
 	 */
 	public enum MAPPING_MODE
 	{
-		UV,
+		UVMapping,
 
-		CUBE_REFLECTION,
-		CUBE_REFRACTION,
+		CubeReflectionMapping,
+		CubeRefractionMapping,
 
-		SPHERICAL_REFLECTION,
-		SPHERICAL_REFRACTION
+		EquirectangularReflectionMapping,
+		EquirectangularRefractionMapping,
+
+		SphericalReflectionMapping,
+
+		CubeUVReflectionMapping,
+		CubeUVRefractionMapping
 	};
 
 	/**
@@ -156,7 +161,7 @@ public class Texture
 	public Texture(TextureData image)
 	{
 		this(image,
-				MAPPING_MODE.UV,
+				MAPPING_MODE.UVMapping,
 				TextureWrapMode.CLAMP_TO_EDGE,
 				TextureWrapMode.CLAMP_TO_EDGE,
 				TextureMagFilter.LINEAR,
@@ -534,7 +539,7 @@ public class Texture
 	{
 		if ( getWebGlTexture() == 0 ) return;
 
-		renderer.gl.glDeleteTexture(getWebGlTexture());
+		renderer.gl().glDeleteTexture(getWebGlTexture());
 
 		renderer.getInfo().getMemory().textures--;
 	}

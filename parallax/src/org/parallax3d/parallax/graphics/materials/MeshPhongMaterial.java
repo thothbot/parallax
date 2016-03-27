@@ -21,9 +21,8 @@ package org.parallax3d.parallax.graphics.materials;
 import org.parallax3d.parallax.graphics.renderers.shaders.PhongShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
@@ -252,7 +251,7 @@ public class MeshPhongMaterial extends Material
 	}
 
 	@Override
-	public Material.COLORS isVertexColors() {
+	public Material.COLORS getVertexColors() {
 		return this.vertexColors;
 	}
 

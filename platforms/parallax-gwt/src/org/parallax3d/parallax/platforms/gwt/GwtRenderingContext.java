@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.webgl.client.WebGLContextAttributes;
 import com.google.gwt.webgl.client.WebGLRenderingContext;
 import org.parallax3d.parallax.*;
-import org.parallax3d.parallax.system.AnimationReadyListener;
+import org.parallax3d.parallax.system.FilmReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.input.InputHandler;
 import org.parallax3d.parallax.system.ParallaxRuntimeException;
@@ -57,7 +57,7 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
 
     Film listener;
 
-    List<AnimationReadyListener> animationReadyListener = new ArrayList<>();
+    List<FilmReadyListener> animationReadyListener = new ArrayList<>();
 
     int lastWidth;
     int lastHeight;
@@ -120,8 +120,8 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
     }
 
     @Override
-    public void setAnimation(Film animation) {
-        this.listener = animation;
+    public void setFilm(Film film) {
+        this.listener = film;
         // tell listener about app creation
         try {
             renderer.setDefaultGLState();
@@ -131,8 +131,8 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
             listener.onStart(this);
             listener.onResize(this);
 
-            for (AnimationReadyListener ready : animationReadyListener)
-                ready.onAnimationReady(listener);
+            for (FilmReadyListener ready : animationReadyListener)
+                ready.onFilmReady(listener);
 
         } catch (Throwable t) {
             Log.error("GwtRendering: exception: " + t.getMessage(), t);
@@ -245,8 +245,8 @@ public class GwtRenderingContext implements ResizeHandler, RenderingContext, Ani
     }
 
     @Override
-    public void addAnimationReadyListener(AnimationReadyListener animationReadyListener) {
-        this.animationReadyListener.add(animationReadyListener);
+    public void addFilmReadyListener(FilmReadyListener filmReadyListener) {
+        this.animationReadyListener.add(filmReadyListener);
     }
 
     public WebGLRenderingContext getContext() {

@@ -224,7 +224,7 @@ public final class MeshLambertMaterial extends Material
 	}
 
 	@Override
-	public Material.COLORS isVertexColors() {
+	public Material.COLORS getVertexColors() {
 		return this.vertexColors;
 	}
 

@@ -86,7 +86,7 @@ public final class MaterialsCubemapBallsRefraction extends ParallaxTest implemen
 		SphereGeometry geometry = new SphereGeometry( 100, 32, 16 );
 
 		CubeTexture textureCube = new CubeTexture( textures );
-		textureCube.setMapping(Texture.MAPPING_MODE.CUBE_REFRACTION);
+		textureCube.setMapping(Texture.MAPPING_MODE.CubeRefractionMapping);
 //			
 		MeshBasicMaterial material = new MeshBasicMaterial()
 				.setColor( 0xffffff )

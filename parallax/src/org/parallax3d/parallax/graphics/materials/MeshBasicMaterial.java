@@ -250,7 +250,7 @@ public class MeshBasicMaterial extends Material
 	}
 
 	@Override
-	public COLORS isVertexColors() {
+	public COLORS getVertexColors() {
 		return vertexColors;
 	}
 

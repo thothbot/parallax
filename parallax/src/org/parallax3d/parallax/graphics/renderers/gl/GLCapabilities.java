@@ -75,6 +75,10 @@ public class GLCapabilities {
         return this.precision;
     }
 
+    public void setPrecision(Shader.PRECISION precision) {
+        this.precision = precision;
+    }
+
     public boolean isLogarithmicDepthBuffer() {
         return logarithmicDepthBuffer;
     }

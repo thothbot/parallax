@@ -28,7 +28,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import org.parallax3d.parallax.Film;
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.system.AnimationReadyListener;
+import org.parallax3d.parallax.system.FilmReadyListener;
 import org.parallax3d.parallax.platforms.gwt.GwtRenderingContext;
 import org.parallax3d.parallax.platforms.gwt.widgets.debugger.Debugger;
 import org.parallax3d.parallax.tests.ParallaxTest;
@@ -45,7 +45,7 @@ import java.util.Map;
 /**
  * Main view of the application
  */
-public class PageExample extends ResizeComposite implements AnimationReadyListener
+public class PageExample extends ResizeComposite implements FilmReadyListener
 {
 	private static PanelUiBinder uiBinder = GWT.create(PanelUiBinder.class);
 
@@ -109,7 +109,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 
 						debugger = new Debugger(rendering.getRenderer().getInfo());
 						debuggerPanel.add(debugger);
-						rendering.addAnimationReadyListener(PageExample.this);
+						rendering.addFilmReadyListener(PageExample.this);
 
 						if(renderingReady != null)
 							renderingReady.onRenderingReady(rendering);
@@ -139,7 +139,7 @@ public class PageExample extends ResizeComposite implements AnimationReadyListen
 	}
 
 	@Override
-	public void onAnimationReady(Film animation)
+	public void onFilmReady(Film animation)
 	{
 		final Button switchAnimation = new Button("Pause");
 		final Button switchFullScreen = new Button("Fullscreen");

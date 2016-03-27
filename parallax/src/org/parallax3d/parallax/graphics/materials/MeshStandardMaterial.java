@@ -343,7 +343,7 @@ public class MeshStandardMaterial extends Material implements HasColor, HasMap, 
     }
 
     @Override
-    public COLORS isVertexColors() {
+    public COLORS getVertexColors() {
         return vertexColors;
     }
 

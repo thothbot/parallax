@@ -48,7 +48,7 @@ public class ShapeGeometry extends Geometry {
         public int	material;
 
         /**
-         * object that provides UV generator functions
+         * object that provides UVMapping generator functions
          */
         public ExtrudeGeometry.UVGenerator uvGenerator = new ExtrudeGeometry.WorldUVGenerator();
     }
