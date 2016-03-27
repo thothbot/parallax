@@ -27,22 +27,11 @@ import org.parallax3d.parallax.system.gl.enums.BeginMode;
 
 public class GLBufferRenderer extends BufferRenderer {
 
-    GL20 _gl;
-    GLRendererInfo.WebGLRenderInfoRender _infoRender;
-
-    BeginMode mode;
-
     public GLBufferRenderer(GL20 gl, GLRendererInfo info) {
-        _gl = gl;
-        _infoRender = info.getRender();
+        super(gl, info);
     }
 
-    public void setMode( BeginMode value ) {
-
-        mode = value;
-
-    }
-
+    @Override
     public void render( int start, int count ) {
 
         _gl.glDrawArrays( mode.getValue(), start, count );

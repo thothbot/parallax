@@ -17,12 +17,21 @@
  */
 package org.parallax3d.parallax.graphics.renderers.gl;
 
-import org.parallax3d.parallax.graphics.core.InstancedBufferGeometry;
+import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
+import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
 
 public abstract class BufferRenderer {
 
     BeginMode mode;
+
+    GL20 _gl;
+    GLRendererInfo.WebGLRenderInfoRender _infoRender;
+
+    public BufferRenderer(GL20 gl, GLRendererInfo info) {
+        _gl = gl;
+        _infoRender = info.getRender();
+    }
 
     public void setMode( BeginMode value ) {
 
@@ -30,6 +39,5 @@ public abstract class BufferRenderer {
 
     }
 
-    public abstract void renderInstances(InstancedBufferGeometry geometry, int drawStart, int drawCount);
     public abstract void render(int drawStart, int drawCount);
 }

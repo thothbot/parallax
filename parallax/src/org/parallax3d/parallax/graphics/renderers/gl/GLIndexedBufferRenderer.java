@@ -17,24 +17,24 @@
  */
 package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.AttributeData;
+import org.parallax3d.parallax.graphics.core.InstancedBufferGeometry;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
+import org.parallax3d.parallax.system.gl.enums.BeginMode;
 import org.parallax3d.parallax.system.gl.enums.DataType;
 
 public class GLIndexedBufferRenderer extends BufferRenderer {
 
-    GL20 gl;
-    GLRendererInfo info;
-
     DataType type;
     int size;
 
-    public GLIndexedBufferRenderer(GL20 gl, GLRendererInfo info) {
-        this.gl = gl;
-        this.info = info;
+    public GLIndexedBufferRenderer(GL20 gl, GLRendererInfo info)
+    {
+        super(gl, info);
     }
 
     public void setIndex( AttributeData index ) {
@@ -51,5 +51,33 @@ public class GLIndexedBufferRenderer extends BufferRenderer {
 
         }
 
+    }
+
+    public void render( int start, int count ) {
+
+        _gl.glDrawElements( mode.getValue(), count, type.getValue(), start * size );
+
+        _infoRender.calls ++;
+        _infoRender.vertices += count;
+        if ( mode == BeginMode.TRIANGLES ) _infoRender.faces += count / 3;
+
+    }
+
+    public void renderInstances( InstancedBufferGeometry geometry, int start, int count)
+    {
+        var extension = extensions.get( 'ANGLE_instanced_arrays' );
+
+        if ( extension == null ) {
+
+            Log.error( "GLBufferRenderer: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays." );
+            return;
+
+        }
+
+        extension.drawElementsInstancedANGLE( mode, count, type, start * size, geometry.getMaxInstancedCount());
+
+        _infoRender.calls ++;
+        _infoRender.vertices += count * geometry.getMaxInstancedCount();
+        if ( mode == BeginMode.TRIANGLES ) _infoRender.faces += geometry.getMaxInstancedCount() * count / 3;
     }
 }
