@@ -32,9 +32,9 @@ public class GLLights {
     public FastMap<Uniform> get(Light light)
     {
 
-        if ( lights.containsKey( light.getId() )) {
+        if ( lights.containsKey( String.valueOf(light.getId()) )) {
 
-            return lights.get( light.getId() );
+            return lights.get( String.valueOf(light.getId()) );
 
         }
 

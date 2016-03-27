@@ -58,6 +58,19 @@ public class Texture implements AbstractTexture
 	};
 
 	/**
+	 * Tone Mapping modes
+	 */
+	public enum TONE_MAPPING_MODE
+	{
+		NoToneMapping, // do not do any tone mapping, not even exposure (required for special purpose passes.)
+		LinearToneMapping, // only apply exposure.
+		ReinhardToneMapping,
+		Uncharted2ToneMapping, // John Hable
+		CineonToneMapping;  // optimized filmic operator by Jim Hejl and Richard Burgess-Dawson
+		
+	}
+	
+	/**
 	 * Mapping modes
 	 */
 	public enum MAPPING_MODE

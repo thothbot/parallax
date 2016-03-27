@@ -16,12 +16,16 @@
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
 
-package org.parallax3d.parallax.graphics.renderers;
+package org.parallax3d.parallax.graphics.renderers.gl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
+import org.parallax3d.parallax.graphics.renderers.GLRenderer;
+import org.parallax3d.parallax.graphics.renderers.Plugin;
+import org.parallax3d.parallax.graphics.renderers.RenderItem;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.shaders.DepthRGBAShader;
 import org.parallax3d.parallax.graphics.cameras.Camera;
@@ -49,8 +53,8 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
 
-@ThreejsObject("THREE.WebGLExtensions")
-public final class ShadowMap extends Plugin 
+@ThreejsObject("THREE.WebGLShadowMap")
+public final class ShadowMap extends Plugin
 {
 
 	private boolean isAutoUpdate = true;

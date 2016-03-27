@@ -30,7 +30,7 @@ import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.Group;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.renderers.ShadowMap;
+import org.parallax3d.parallax.graphics.renderers.gl.ShadowMap;
 import org.parallax3d.parallax.graphics.renderers.plugins.lensflare.LensFlare;
 import org.parallax3d.parallax.graphics.renderers.plugins.lensflare.LensFlarePlugin;
 import org.parallax3d.parallax.graphics.scenes.Scene;

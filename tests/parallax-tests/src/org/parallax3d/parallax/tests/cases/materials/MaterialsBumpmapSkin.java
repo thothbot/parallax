@@ -29,7 +29,7 @@ import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
-import org.parallax3d.parallax.graphics.renderers.ShadowMap;
+import org.parallax3d.parallax.graphics.renderers.gl.ShadowMap;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.Postprocessing;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.ShaderPass;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;

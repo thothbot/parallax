@@ -18,13 +18,12 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.graphics.materials.Material;
 
 import java.util.Comparator;
 
-@ThreejsObject("THREE.WebGLObjects")
 public class RenderItem implements Comparable<RenderItem>
 {
 	public static class PainterSortStable implements Comparator<RenderItem> {
@@ -75,14 +74,8 @@ public class RenderItem implements Comparable<RenderItem>
 	public Object3D object;
 	public AbstractGeometry geometry;
 	public Object group;
-//	public GLGeometry buffer;
-//	public boolean render;
-
 	public Material material;
 
-//	public Material opaque;
-//	public Material transparent;
-	// render depth
 	public double z;
 
 	public RenderItem(int id, Object3D object, AbstractGeometry geometry, Material material, double z, Object group)
@@ -95,69 +88,6 @@ public class RenderItem implements Comparable<RenderItem>
 		this.group = group;
 	}
 
-//	public void unrollImmediateBufferMaterial() {
-//		Material material = object.getMaterial();
-//
-//		if ( material.isTransparent() ) {
-//
-//			this.transparent = material;
-//			this.opaque = null;
-//
-//		} else {
-//
-//			this.opaque = material;
-//			this.transparent = null;
-//
-//		}
-//	}
-//
-//	public void unrollBufferMaterial(GLRenderer renderer)
-//	{
-//		GeometryObject object = this.object;
-//		GLGeometry buffer = this.buffer;
-//
-//		AbstractGeometry geometry = object.getGeometry();
-//		Material material = object.getMaterial();
-//
-//		if ( material instanceof MeshFaceMaterial )
-//		{
-//			int materialIndex = geometry instanceof BufferGeometry ? 0 : ((GeometryGroup)buffer).getMaterialIndex();
-//
-//			material = ((MeshFaceMaterial)material).getMaterials().get( materialIndex );
-//
-//			this.material = material;
-//
-//			if ( material.isTransparent() ) {
-//
-//				renderer.transparentObjects.add( this );
-//
-//			} else {
-//
-//				renderer.opaqueObjects.add( this );
-//
-//			}
-//		}
-//		else
-//		{
-//
-//			this.material = material;
-//
-//			if ( material != null)
-//			{
-//				if ( material.isTransparent() ) {
-//
-//					renderer.transparentObjects.add( this );
-//
-//				} else {
-//
-//					renderer.opaqueObjects.add( this );
-//
-//				}
-//
-//			}
-//		}
-//	}
-
 	@Override
 	public int compareTo(RenderItem o)
 	{
@@ -165,11 +95,4 @@ public class RenderItem implements Comparable<RenderItem>
 		return (result == 0) ? 0
 				: (result > 0) ? 1 : -1;
 	}
-
-	public String toString() {
-		return "{id: " + this.id
-				+ ", material: " + (this.material != null ? this.material.getClass().getSimpleName() : "null")
-				+ ", object: " + (this.object != null ? this.object.getClass().getSimpleName() : "null")
-				+ ", render: " + this.render
-				+ ", z: " + this.z + "}";
-	}}
+}

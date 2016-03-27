@@ -26,7 +26,7 @@ import org.parallax3d.parallax.graphics.lights.*;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.renderers.ShadowMap;
+import org.parallax3d.parallax.graphics.renderers.gl.ShadowMap;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.input.TouchMoveHandler;

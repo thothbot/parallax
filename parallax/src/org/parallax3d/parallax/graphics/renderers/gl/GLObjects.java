@@ -19,7 +19,11 @@
 package org.parallax3d.parallax.graphics.renderers.gl;
 
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.core.AttributeData;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.core.InterleavedBufferAttribute;
+import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
@@ -39,12 +43,84 @@ public class GLObjects {
     GL20 gl;
     GLProperties properties;
 
-    public GLObjects(GL20 gl, GLProperties properties) {
+    public GLObjects(GL20 gl, GLProperties properties, GLRendererInfo info) {
 
         this.gl = gl;
         this.properties = properties;
-        this.geometries = new GLGeometries(gl, properties);
+        this.geometries = new GLGeometries(gl, properties, info);
 
+    }
+
+    public void updateAttribute(InterleavedBufferAttribute attribute, BufferTarget bufferType )
+    {
+        updateAttribute(attribute.getData(), bufferType );
+    }
+
+    public void updateAttribute(AttributeData data, BufferTarget bufferType ) {
+
+        FastMap<Object> attributeProperties = properties.get( data );
+
+        if ( !attributeProperties.containsKey("__webglBuffer")) {
+
+            createBuffer( attributeProperties, data, bufferType );
+
+        } else if ( attributeProperties.get("version") != data.getVersion() ) {
+
+            updateBuffer( attributeProperties, data, bufferType );
+
+        }
+
+    }
+
+    private void createBuffer( FastMap<Object> attributeProperties, AttributeData data, BufferTarget bufferType )
+    {
+        attributeProperties.put("__webglBuffer", gl.glGenBuffer());
+        gl.glBindBuffer( bufferType.getValue(), (Integer) attributeProperties.get("__webglBuffer"));
+
+        BufferUsage usage = data.isDynamic() ? BufferUsage.DYNAMIC_DRAW : BufferUsage.STATIC_DRAW;
+
+        gl.glBufferData( bufferType.getValue(), data.getArray().getByteLength(), data.getArray().getTypedBuffer(), usage.getValue() );
+
+        attributeProperties.put("version", data.getVersion());
+
+    }
+
+    private void updateBuffer( FastMap<Object> attributeProperties, AttributeData data, BufferTarget bufferType )
+    {
+
+        gl.glBindBuffer( bufferType.getValue(), (Integer) attributeProperties.get("__webglBuffer"));
+
+        if ( !data.isDynamic() || data.getUpdateRange().count == - 1 ) {
+
+            // Not using update ranges
+
+            gl.glBufferSubData( bufferType.getValue(), 0, data.getArray().getByteLength(), data.getArray().getTypedBuffer() );
+
+        } else if ( data.getUpdateRange().count == 0 ) {
+
+            Log.error("GLObjects.updateBuffer: dynamic BufferAttribute marked as needsUpdate but updateRange.count is 0, ensure you are using set methods or updating manually.");
+
+        } else {
+
+            TypeArray array = data.getArray().getSubarray( data.getUpdateRange().offset, data.getUpdateRange().offset + data.getUpdateRange().count );
+            gl.glBufferSubData( bufferType.getValue(), data.getUpdateRange().offset * data.getArray().getBytesPerElement(), array.getByteLength(), array.getTypedBuffer());
+
+            data.getUpdateRange().count = 0; // reset range
+
+        }
+
+        attributeProperties.put("version", data.getVersion());
+
+    }
+
+    public int getAttributeBuffer( InterleavedBufferAttribute attribute )
+    {
+        return (int) properties.get( attribute.getData() ).get("__webglBuffer");
+    }
+
+    public int getAttributeBuffer( AttributeData attribute )
+    {
+        return (int) properties.get( attribute ).get("__webglBuffer");
     }
 
     public BufferAttribute getWireframeAttribute( BufferGeometry geometry )
@@ -134,78 +210,6 @@ public class GLObjects {
 
         return false;
 
-    }
-
-    public void updateAttribute(InterleavedBufferAttribute attribute, BufferTarget bufferType )
-    {
-        updateAttribute(attribute.getData(), bufferType );
-    }
-
-    public void updateAttribute(AttributeData data, BufferTarget bufferType ) {
-
-        FastMap<Object> attributeProperties = properties.get( data );
-
-        if ( !attributeProperties.containsKey("__webglBuffer")) {
-
-            createBuffer( attributeProperties, data, bufferType );
-
-        } else if ( attributeProperties.get("version") != data.getVersion() ) {
-
-            updateBuffer( attributeProperties, data, bufferType );
-
-        }
-
-    }
-
-    private void createBuffer( FastMap<Object> attributeProperties, AttributeData data, BufferTarget bufferType )
-    {
-        attributeProperties.put("__webglBuffer", gl.glGenBuffer());
-        gl.glBindBuffer( bufferType.getValue(), (Integer) attributeProperties.get("__webglBuffer"));
-
-        BufferUsage usage = data.isDynamic() ? BufferUsage.DYNAMIC_DRAW : BufferUsage.STATIC_DRAW;
-
-        gl.glBufferData( bufferType.getValue(), data.getArray().getByteLength(), data.getArray().getTypedBuffer(), usage.getValue() );
-
-        attributeProperties.put("version", data.getVersion());
-
-    }
-
-    private void updateBuffer( FastMap<Object> attributeProperties, AttributeData data, BufferTarget bufferType )
-    {
-
-        gl.glBindBuffer( bufferType.getValue(), (Integer) attributeProperties.get("__webglBuffer"));
-
-        if ( !data.isDynamic() || data.getUpdateRange().count == - 1 ) {
-
-            // Not using update ranges
-
-            gl.glBufferSubData( bufferType.getValue(), 0, data.getArray().getByteLength(), data.getArray().getTypedBuffer() );
-
-        } else if ( data.getUpdateRange().count == 0 ) {
-
-            Log.error("GLObjects.updateBuffer: dynamic BufferAttribute marked as needsUpdate but updateRange.count is 0, ensure you are using set methods or updating manually.");
-
-        } else {
-
-            TypeArray array = data.getArray().getSubarray( data.getUpdateRange().offset, data.getUpdateRange().offset + data.getUpdateRange().count );
-            gl.glBufferSubData( bufferType.getValue(), data.getUpdateRange().offset * data.getArray().getBytesPerElement(), array.getByteLength(), array.getTypedBuffer());
-
-            data.getUpdateRange().count = 0; // reset range
-
-        }
-
-        attributeProperties.put("version", data.getVersion());
-
-    }
-
-    public int getAttributeBuffer( InterleavedBufferAttribute attribute )
-    {
-        return (int) properties.get( attribute.getData() ).get("__webglBuffer");
-    }
-
-    public int getAttributeBuffer( AttributeData attribute )
-    {
-        return (int) properties.get( attribute ).get("__webglBuffer");
     }
 
 }
