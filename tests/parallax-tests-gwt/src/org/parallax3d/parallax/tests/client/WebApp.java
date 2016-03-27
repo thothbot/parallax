@@ -93,7 +93,7 @@ public class WebApp implements EntryPoint, ParallaxListener {
                     pageExample.addGwtReadyListener(new PageExample.PanelReady() {
                         @Override
                         public void onRenderingReady(GwtRenderingContext rendering) {
-                            rendering.setFilm(test);
+                            rendering.setAction(test);
                         }
                     });
                     RootLayoutPanel.get().add(pageExample);

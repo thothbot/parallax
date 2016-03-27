@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax;
 
-import org.parallax3d.parallax.system.FilmReadyListener;
+import org.parallax3d.parallax.system.ActionReadyListener;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.system.gl.GL20;
 
@@ -51,7 +51,7 @@ public interface RenderingContext {
 
     int getFramesPerSecond();
 
-    void setFilm(Film film);
+    void setAction(Action action);
 
     /** @return the pixels per inch on the x-axis */
     float getPpiX();
@@ -66,7 +66,7 @@ public interface RenderingContext {
 
     public void setFullscreen();
 
-    void addFilmReadyListener(FilmReadyListener filmReadyListener);
+    void addActionReadyListener(ActionReadyListener actionReadyListener);
 
     void stop();
 

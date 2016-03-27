@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Copyright 2016 Alex Usachev, thothbot@gmail.com
  *
  * This file is part of Parallax project.
  *
@@ -15,21 +15,10 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
+package org.parallax3d.parallax.graphics.renderers.gl;
 
-package org.parallax3d.parallax;
+import org.parallax3d.parallax.system.ThreejsObject;
 
-public interface Film {
-
-    void onStart(RenderingContext context);
-
-    void onUpdate(RenderingContext context);
-
-    void onResize(RenderingContext context);
-
-    void onPause(RenderingContext context);
-
-    void onResume(RenderingContext context);
-
-    void onDispose(RenderingContext context);
-
+@ThreejsObject("THREE.WebGLProgram")
+public class GLProgram {
 }

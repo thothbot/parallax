@@ -261,7 +261,7 @@ public class GLPrograms {
 
     };
 
-    public void acquireProgram( material, parameters, code ) {
+    public void acquireProgram( Material material, FastMap<Object> parameters, String code ) {
 
         var program;
 
@@ -270,7 +270,7 @@ public class GLPrograms {
 
             var programInfo = programs[ p ];
 
-            if ( programInfo.code === code ) {
+            if ( programInfo.code == code ) {
 
                 program = programInfo;
                 ++ program.usedTimes;
@@ -281,9 +281,9 @@ public class GLPrograms {
 
         }
 
-        if ( program === undefined ) {
+        if ( program == null ) {
 
-            program = new THREE.WebGLProgram( renderer, code, material, parameters );
+            program = new GLProgram( renderer, code, material, parameters );
             programs.push( program );
 
         }

@@ -313,9 +313,9 @@ public class Saturn extends ParallaxTest
 	}
 	
 //	@Override
-//	public void onFilmReady(AnimationReadyEvent event)
+//	public void onActionReady(AnimationReadyEvent event)
 //	{
-//		super.onFilmReady(event);
+//		super.onActionReady(event);
 //		
 //		final DemoScene rs = (DemoScene) this.renderingPanel.getAnimatedScene();
 //		

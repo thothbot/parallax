@@ -238,9 +238,9 @@ public final class MaterialsTextureFilter extends ParallaxTest
 	}
 
 //	@Override
-//	public void onFilmReady(AnimationReadyEvent event)
+//	public void onActionReady(AnimationReadyEvent event)
 //	{
-//		super.onFilmReady(event);
+//		super.onActionReady(event);
 //
 //		this.renderingPanel.getCanvas().addMouseMoveHandler(new MouseMoveHandler() {
 //		      @Override

@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax;
 
-public abstract class FilmAdapter implements Film {
+public abstract class ActionAdapter implements Action {
 
     public abstract void onStart(RenderingContext context);
 

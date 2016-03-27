@@ -18,10 +18,10 @@
 
 package org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.Film;
+import org.parallax3d.parallax.Action;
 
-public interface FilmReadyListener {
+public interface ActionReadyListener {
 
-	void onFilmReady(Film animation );
+	void onActionReady( Action action );
 
 }

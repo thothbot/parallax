@@ -159,9 +159,9 @@ public final class MaterialsCubemapDynamicReflection extends ParallaxTest
 	}
 	
 //	@Override
-//	public void onFilmReady(AnimationReadyEvent event)
+//	public void onActionReady(AnimationReadyEvent event)
 //	{
-//		super.onFilmReady(event);
+//		super.onActionReady(event);
 //
 //		this.renderingPanel.getCanvas().addMouseWheelHandler(new MouseWheelHandler() {
 //			

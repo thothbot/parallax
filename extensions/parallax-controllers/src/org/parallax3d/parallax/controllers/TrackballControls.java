@@ -18,7 +18,7 @@
 
 package org.parallax3d.parallax.controllers;
 
-import org.parallax3d.parallax.Film;
+import org.parallax3d.parallax.Action;
 import org.parallax3d.parallax.Input;
 import org.parallax3d.parallax.RenderingContext;
 import org.parallax3d.parallax.graphics.core.Object3D;
@@ -217,7 +217,7 @@ public final class TrackballControls extends Controls implements TouchMoveHandle
 	}
 	
 	/**
-	 * The method must be called in the {@link Film#onUpdate(RenderingContext)}} onUpdate method.
+	 * The method must be called in the {@link Action#onUpdate(RenderingContext)}} onUpdate method.
 	 */
 	public void update() 
 	{
