@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.ConvolutionShader;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
@@ -35,8 +35,8 @@ public class BloomPass extends Pass
 	private static Vector2 blurX = new Vector2( 0.001953125, 0.0 );
 	private static Vector2 blurY = new Vector2( 0.0, 0.001953125 );
 	
-	private RenderTargetTexture renderTargetX;
-	private RenderTargetTexture renderTargetY;
+	private GLRenderTarget renderTargetX;
+	private GLRenderTarget renderTargetY;
 	
 	private ShaderMaterial materialScreen;
 	private ShaderMaterial materialConvolution;
@@ -58,12 +58,12 @@ public class BloomPass extends Pass
 		super();
 
 		// render targets
-		this.renderTargetX = new RenderTargetTexture( resolution, resolution );
+		this.renderTargetX = new GLRenderTarget( resolution, resolution );
 		this.renderTargetX.setMinFilter(TextureMinFilter.LINEAR);
 		this.renderTargetX.setMagFilter(TextureMagFilter.LINEAR);
 		this.renderTargetX.setFormat(PixelFormat.RGB);
 		
-		this.renderTargetY = new RenderTargetTexture( resolution, resolution );
+		this.renderTargetY = new GLRenderTarget( resolution, resolution );
 		this.renderTargetY.setMinFilter(TextureMinFilter.LINEAR);
 		this.renderTargetY.setMagFilter(TextureMagFilter.LINEAR);
 		this.renderTargetY.setFormat(PixelFormat.RGB);

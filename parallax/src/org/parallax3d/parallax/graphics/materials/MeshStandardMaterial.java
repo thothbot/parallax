@@ -18,6 +18,7 @@
 package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
+import org.parallax3d.parallax.graphics.renderers.shaders.StandardShader;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector2;
@@ -376,7 +377,7 @@ public class MeshStandardMaterial extends Material implements HasColor, HasMap, 
 
     @Override
     public Shader getAssociatedShader() {
-        return null;
+        return new StandardShader();
     }
 
     @Override

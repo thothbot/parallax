@@ -18,7 +18,7 @@
 package org.parallax3d.parallax.graphics.lights;
 
 import org.parallax3d.parallax.graphics.cameras.Camera;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.math.Matrix4;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.ThreejsObject;
@@ -33,7 +33,7 @@ public class LightShadow<T extends Camera> {
 
     Vector2 mapSize = new Vector2( 512, 512 );
 
-    RenderTargetTexture map;
+    GLRenderTarget map;
     Matrix4 matrix = new Matrix4();
 
     public LightShadow(T camera) {
@@ -72,11 +72,11 @@ public class LightShadow<T extends Camera> {
         this.mapSize = mapSize;
     }
 
-    public RenderTargetTexture getMap() {
+    public GLRenderTarget getMap() {
         return map;
     }
 
-    public void setMap(RenderTargetTexture map) {
+    public void setMap(GLRenderTarget map) {
         this.map = map;
     }
 

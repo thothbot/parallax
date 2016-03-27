@@ -22,7 +22,6 @@ import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.files.FileListener;
-import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 
 public abstract class Loader
 {

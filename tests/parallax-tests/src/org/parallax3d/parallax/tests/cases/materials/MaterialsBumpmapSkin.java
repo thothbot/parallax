@@ -26,11 +26,9 @@ import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.core.Geometry;
 import org.parallax3d.parallax.graphics.lights.AmbientLight;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
-import org.parallax3d.parallax.graphics.lights.PointLight;
-import org.parallax3d.parallax.graphics.lights.SpotLight;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.ShadowMap;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.Postprocessing;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.ShaderPass;
@@ -43,7 +41,6 @@ import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
 import org.parallax3d.parallax.loaders.ModelLoadHandler;
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
 import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
@@ -125,7 +122,7 @@ public final class MaterialsBumpmapSkin extends ParallaxTest implements TouchMov
 
 		effectCopy.setRenderToScreen(true);
 
-		RenderTargetTexture target = new RenderTargetTexture( 512, 512 );
+		GLRenderTarget target = new GLRenderTarget( 512, 512 );
 		target.setMinFilter(TextureMinFilter.LINEAR);
 		target.setMagFilter(TextureMagFilter.LINEAR);
 		target.setFormat(PixelFormat.RGB);

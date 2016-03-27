@@ -29,7 +29,7 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -71,7 +71,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 	OrthographicCamera cameraRTT;
 	Scene scene, sceneRTT, sceneScreen;
 	
-	RenderTargetTexture rtTexture;
+	GLRenderTarget rtTexture;
 	
 	ShaderMaterial material;
 	
@@ -118,7 +118,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 		light2.getPosition().set( 0, 0, -1 ).normalize();
 		sceneRTT.add( light2 );
 
-		rtTexture = new RenderTargetTexture( context.getWidth(), context.getHeight() );
+		rtTexture = new GLRenderTarget( context.getWidth(), context.getHeight() );
 		rtTexture.setMinFilter(TextureMinFilter.LINEAR);
 		rtTexture.setMagFilter(TextureMagFilter.NEAREST);
 		rtTexture.setFormat(PixelFormat.RGBA);

@@ -31,14 +31,11 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshPhongMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.math.*;
-import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
-import org.parallax3d.parallax.system.gl.enums.PixelFormat;
-import org.parallax3d.parallax.system.gl.enums.PixelType;
 import org.parallax3d.parallax.tests.ParallaxTest;
 import org.parallax3d.parallax.tests.ThreejsExample;
 
@@ -63,7 +60,7 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 
 	Scene pickingScene;
 	TrackballControls controls;
-	RenderTargetTexture pickingTexture;
+	GLRenderTarget pickingTexture;
 	
 	Mesh highlightBox;
 	List<Picking> pickingData;
@@ -98,7 +95,7 @@ public final class InteractiveCubesGpu extends ParallaxTest implements TouchMove
 
 		pickingScene = new Scene();
 
-		pickingTexture = new RenderTargetTexture(context.getWidth(), context.getHeight());
+		pickingTexture = new GLRenderTarget(context.getWidth(), context.getHeight());
 		pickingTexture.setGenerateMipmaps(false);
 
 		scene.add( new AmbientLight( 0x555555 ) );

@@ -19,7 +19,7 @@
 package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;
 import org.parallax3d.parallax.system.gl.enums.PixelFormat;
 import org.parallax3d.parallax.system.gl.enums.TextureMagFilter;
@@ -27,7 +27,7 @@ import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 
 public class SavePass extends Pass
 {
-	private RenderTargetTexture renderTarget;
+	private GLRenderTarget renderTarget;
 	private String textureID = "tDiffuse";
 	private ShaderMaterial material;
 	
@@ -35,7 +35,7 @@ public class SavePass extends Pass
 
 	public SavePass(int width, int height)
 	{
-		this(new RenderTargetTexture( width, height ));
+		this(new GLRenderTarget( width, height ));
 		
 		renderTarget.setMinFilter(TextureMinFilter.LINEAR);
 		renderTarget.setMagFilter(TextureMagFilter.LINEAR);
@@ -43,7 +43,7 @@ public class SavePass extends Pass
 		renderTarget.setStencilBuffer(true);
 	}
 
-	public SavePass( RenderTargetTexture renderTarget ) 
+	public SavePass( GLRenderTarget renderTarget )
 	{
 		this.renderTarget = renderTarget;	
 		

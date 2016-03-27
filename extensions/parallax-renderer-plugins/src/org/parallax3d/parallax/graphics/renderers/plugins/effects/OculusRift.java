@@ -26,7 +26,7 @@ import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.plugins.effects.shaders.OculusRiftShader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.*;
@@ -85,7 +85,7 @@ public class OculusRift extends Effect {
 	Color emptyColor = new Color(0x000000);
 
 	// Render target
-	RenderTargetTexture renderTarget;
+	GLRenderTarget renderTarget;
 	ShaderMaterial RTMaterial;
 
 	// Final scene
@@ -143,7 +143,7 @@ public class OculusRift extends Effect {
 		if ( renderTarget != null ) 
 			renderTarget.deallocate(this.renderer.gl);
 
-		renderTarget = new RenderTargetTexture( width, height );
+		renderTarget = new GLRenderTarget( width, height );
 		renderTarget.setMinFilter(TextureMinFilter.LINEAR);
 		renderTarget.setMagFilter(TextureMagFilter.NEAREST);
 		renderTarget.setFormat(PixelFormat.RGBA);

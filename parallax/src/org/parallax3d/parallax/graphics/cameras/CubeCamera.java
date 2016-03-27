@@ -20,7 +20,7 @@ package org.parallax3d.parallax.graphics.cameras;
 
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetCubeTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTargetCube;
 import org.parallax3d.parallax.graphics.core.Object3D;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -52,10 +52,10 @@ public final class CubeCamera extends Object3D
 	private PerspectiveCamera cameraPZ;
 	private PerspectiveCamera cameraNZ;
 
-	private RenderTargetCubeTexture renderTarget;
+	private GLRenderTargetCube renderTarget;
 
 	/**
-	 * Constructs a CubeCamera that contains 6 {@link PerspectiveCamera}s that then render to a {@link RenderTargetCubeTexture}
+	 * Constructs a CubeCamera that contains 6 {@link PerspectiveCamera}s that then render to a {@link GLRenderTargetCube}
 	 * @param near The near clipping distance.
 	 * @param far The far clipping distance
 	 * @param cubeResolution  Sets the width of the cube.
@@ -92,7 +92,7 @@ public final class CubeCamera extends Object3D
 		cameraNZ.lookAt( new Vector3( 0.0, 0.0, -1.0 ) );
 		this.add( cameraNZ );
 
-		this.renderTarget = new RenderTargetCubeTexture( cubeResolution, cubeResolution );
+		this.renderTarget = new GLRenderTargetCube( cubeResolution, cubeResolution );
 		this.renderTarget.setFormat(PixelFormat.RGB);
 		this.renderTarget.setMagFilter(TextureMagFilter.LINEAR);
 		this.renderTarget.setMinFilter(TextureMinFilter.LINEAR);
@@ -102,7 +102,7 @@ public final class CubeCamera extends Object3D
 	 * The cube texture that gets generated.
 	 * @return
 	 */
-	public RenderTargetCubeTexture getRenderTarget()
+	public GLRenderTargetCube getRenderTarget()
 	{
 		return this.renderTarget;
 	}
@@ -114,7 +114,7 @@ public final class CubeCamera extends Object3D
 	 */
 	public void updateCubeMap( GLRenderer renderer, Scene scene )
 	{
-		RenderTargetCubeTexture renderTarget = this.renderTarget;
+		GLRenderTargetCube renderTarget = this.renderTarget;
 		boolean generateMipmaps = renderTarget.isGenerateMipmaps();
 
 		renderTarget.setGenerateMipmaps( false );

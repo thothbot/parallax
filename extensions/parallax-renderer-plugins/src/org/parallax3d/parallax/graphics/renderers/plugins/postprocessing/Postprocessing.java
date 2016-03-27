@@ -21,7 +21,6 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.OrthographicCamera;
 import org.parallax3d.parallax.graphics.extras.geometries.PlaneGeometry;
@@ -29,7 +28,7 @@ import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.Plugin;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.CopyShader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.system.gl.GL20;
@@ -41,14 +40,14 @@ import org.parallax3d.parallax.system.gl.enums.TextureMinFilter;
 public class Postprocessing extends Plugin
 {
 	
-	private RenderTargetTexture renderTarget1;
-	private RenderTargetTexture renderTarget2;
+	private GLRenderTarget renderTarget1;
+	private GLRenderTarget renderTarget2;
 	
 	private List<Pass> passes;
 	private ShaderPass copyPass;
 	
-	private RenderTargetTexture writeBuffer;
-	private RenderTargetTexture readBuffer;
+	private GLRenderTarget writeBuffer;
+	private GLRenderTarget readBuffer;
 
 	// shared ortho camera
 	private OrthographicCamera camera;
@@ -56,7 +55,7 @@ public class Postprocessing extends Plugin
 
 	public Postprocessing(GLRenderer renderer, Scene scene)
 	{
-		this(renderer, scene, new RenderTargetTexture( renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight() ));
+		this(renderer, scene, new GLRenderTarget( renderer.getAbsoluteWidth(), renderer.getAbsoluteHeight() ));
 
 		this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 		this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
@@ -66,7 +65,7 @@ public class Postprocessing extends Plugin
 		this.renderTarget2 = this.renderTarget1.clone();
 	}
 		
-	public Postprocessing( GLRenderer renderer, Scene scene, RenderTargetTexture renderTarget )
+	public Postprocessing( GLRenderer renderer, Scene scene, GLRenderTarget renderTarget )
 	{
 		super(renderer, new Scene());
 
@@ -104,11 +103,11 @@ public class Postprocessing extends Plugin
 		return Plugin.TYPE.POST_RENDER;
 	}
 	
-	public RenderTargetTexture getRenderTarget1() {
+	public GLRenderTarget getRenderTarget1() {
 		return renderTarget1;
 	}
 
-	public RenderTargetTexture getRenderTarget2() {
+	public GLRenderTarget getRenderTarget2() {
 		return renderTarget2;
 	}
 	
@@ -120,11 +119,11 @@ public class Postprocessing extends Plugin
 		return this.quad;
 	}
 
-	public RenderTargetTexture getWriteBuffer() {
+	public GLRenderTarget getWriteBuffer() {
 		return this.writeBuffer;
 	}
 	
-	public RenderTargetTexture getReadBuffer() {
+	public GLRenderTarget getReadBuffer() {
 		return this.readBuffer;
 	}
 	
@@ -171,13 +170,13 @@ public class Postprocessing extends Plugin
 		}
 	}
 
-	public void reset( RenderTargetTexture renderTarget ) 
+	public void reset( GLRenderTarget renderTarget )
 	{
 		this.renderTarget1 = renderTarget;
 
 		if ( this.renderTarget1 == null )
 		{
-			this.renderTarget1 = new RenderTargetTexture(getRenderer().getAbsoluteWidth(), getRenderer().getAbsoluteHeight());
+			this.renderTarget1 = new GLRenderTarget(getRenderer().getAbsoluteWidth(), getRenderer().getAbsoluteHeight());
 			
 			this.renderTarget1.setMinFilter(TextureMinFilter.LINEAR);
 			this.renderTarget1.setMagFilter(TextureMagFilter.LINEAR);
@@ -193,7 +192,7 @@ public class Postprocessing extends Plugin
 	
 	private void swapBuffers() 
 	{
-		RenderTargetTexture tmp = this.readBuffer;
+		GLRenderTarget tmp = this.readBuffer;
 		this.readBuffer = this.writeBuffer;
 		this.writeBuffer = tmp;
 	}

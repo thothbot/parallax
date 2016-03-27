@@ -29,7 +29,7 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshDepthMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.input.TouchMoveHandler;
 import org.parallax3d.parallax.loaders.JsonLoader;
@@ -71,7 +71,7 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 		
 	Scene postprocessingScene;
 	OrthographicCamera postprocessingCamera;
-	RenderTargetTexture rtTextureColors, rtTextureDepth, rtTextureGodRays1, rtTextureGodRays2;
+	GLRenderTarget rtTextureColors, rtTextureDepth, rtTextureGodRays1, rtTextureGodRays2;
 	
 	ShaderMaterial materialGodraysGenerate, materialGodraysCombine, materialGodraysFakeSun;
 	
@@ -141,7 +141,7 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 
 		postprocessingScene.add( postprocessingCamera );
 
-		rtTextureColors = new RenderTargetTexture( context.getWidth(), context.getHeight() );
+		rtTextureColors = new GLRenderTarget( context.getWidth(), context.getHeight() );
 		rtTextureColors.setMinFilter(TextureMinFilter.LINEAR);
 		rtTextureColors.setMagFilter(TextureMagFilter.LINEAR);
 		rtTextureColors.setFormat(PixelFormat.RGBA);
@@ -153,7 +153,7 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 		// I would have this quarter size and use it as one of the ping-pong render
 		// targets but the aliasing causes some temporal flickering
 
-		rtTextureDepth = new RenderTargetTexture(  context.getWidth(), context.getHeight() );
+		rtTextureDepth = new GLRenderTarget(  context.getWidth(), context.getHeight() );
 		rtTextureDepth.setMinFilter(TextureMinFilter.LINEAR);
 		rtTextureDepth.setMagFilter(TextureMagFilter.LINEAR);
 		rtTextureDepth.setFormat(PixelFormat.RGBA);
@@ -162,12 +162,12 @@ public final class PostprocessingGodrays extends ParallaxTest implements TouchMo
 
 		int w = context.getWidth() / 4;
 		int h = context.getHeight() / 4;
-		rtTextureGodRays1 = new RenderTargetTexture( w, h );
+		rtTextureGodRays1 = new GLRenderTarget( w, h );
 		rtTextureGodRays1.setMinFilter(TextureMinFilter.LINEAR);
 		rtTextureGodRays1.setMagFilter(TextureMagFilter.LINEAR);
 		rtTextureGodRays1.setFormat(PixelFormat.RGBA);
 		
-		rtTextureGodRays2 = new RenderTargetTexture( w, h );
+		rtTextureGodRays2 = new GLRenderTarget( w, h );
 		rtTextureGodRays2.setMinFilter(TextureMinFilter.LINEAR);
 		rtTextureGodRays2.setMagFilter(TextureMagFilter.LINEAR);
 		rtTextureGodRays2.setFormat(PixelFormat.RGBA);

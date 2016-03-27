@@ -35,7 +35,7 @@ import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.extras.objects.MorphBlendMesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.BloomPass;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.Postprocessing;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.RenderPass;
@@ -106,8 +106,8 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 	FastMap<Uniform> uniformsTerrain;
 	FastMap<Uniform> uniformsNoise;
 	
-	RenderTargetTexture heightMap;
-	RenderTargetTexture normalMap;
+	GLRenderTarget heightMap;
+	GLRenderTarget normalMap;
 	
 	DirectionalLight directionalLight;
 	PointLight pointLight;
@@ -199,13 +199,13 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 
 		int rx = 256, ry = 256;
 
-		heightMap  = new RenderTargetTexture( rx, ry );
+		heightMap  = new GLRenderTarget( rx, ry );
 		heightMap.setMinFilter(TextureMinFilter.LINEAR_MIPMAP_LINEAR);
 		heightMap.setMagFilter(TextureMagFilter.LINEAR);
 		heightMap.setFormat(PixelFormat.RGB);
 		heightMap.setGenerateMipmaps(false);
 		
-		normalMap = new RenderTargetTexture( rx, ry );
+		normalMap = new GLRenderTarget( rx, ry );
 		normalMap.setMinFilter(TextureMinFilter.LINEAR_MIPMAP_LINEAR);
 		normalMap.setMagFilter(TextureMagFilter.LINEAR);
 		normalMap.setFormat(PixelFormat.RGB);
@@ -221,7 +221,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 
 		// TEXTURES
 
-		final RenderTargetTexture specularMap = new RenderTargetTexture( 2048, 2048 );
+		final GLRenderTarget specularMap = new GLRenderTarget( 2048, 2048 );
 		specularMap.setMinFilter(TextureMinFilter.LINEAR_MIPMAP_LINEAR);
 		specularMap.setMagFilter(TextureMagFilter.LINEAR);
 		specularMap.setFormat(PixelFormat.RGB);
@@ -344,7 +344,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 		vblur.getUniforms().get( "r" ).setValue( 0.5 );
 		vblur.setRenderToScreen(true);
 
-		RenderTargetTexture renderTarget = new RenderTargetTexture( screenWidth, screenHeight );
+		GLRenderTarget renderTarget = new GLRenderTarget( screenWidth, screenHeight );
 		specularMap.setMinFilter(TextureMinFilter.LINEAR);
 		specularMap.setMagFilter(TextureMagFilter.LINEAR);
 		specularMap.setFormat(PixelFormat.RGB);
@@ -422,7 +422,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 
 	}
 	
-	private void applyShader(GLRenderer renderer,  Shader shader, Texture texture, RenderTargetTexture target )
+	private void applyShader(GLRenderer renderer,  Shader shader, Texture texture, GLRenderTarget target )
 	{
 		ShaderMaterial shaderMaterial = new ShaderMaterial(shader);
 

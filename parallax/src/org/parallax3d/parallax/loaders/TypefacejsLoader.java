@@ -21,8 +21,8 @@ package org.parallax3d.parallax.loaders;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.graphics.extras.core.FontData;
-import org.parallax3d.parallax.loaders.typefacejs.JsoFont;
-import org.parallax3d.parallax.loaders.typefacejs.JsoFontFactory;
+import org.parallax3d.parallax.loaders.typefacejs.JsoFile;
+import org.parallax3d.parallax.loaders.typefacejs.JsoFileFactory;
 import org.parallax3d.parallax.loaders.typefacejs.JsoGlyph;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
@@ -36,7 +36,7 @@ import java.util.Map;
 @ThreejsObject("THREE.FontLoader")
 public class TypefacejsLoader extends FontLoader {
 
-    JsoFont font;
+    JsoFile font;
     FontData fontData;
 
     public TypefacejsLoader(String url, FontLoadHandler modelLoadHandler)
@@ -133,11 +133,11 @@ public class TypefacejsLoader extends FontLoader {
     {
         string = string.replaceAll("(\\s*if.+loadFace\\()", "").replaceAll("(\\)\\s*\\;)", "");
 
-        JsoFontFactory factory = JsonBindProxy.create(JsoFontFactory.class);
+        JsoFileFactory factory = JsonBindProxy.create(JsoFileFactory.class);
 
         try
         {
-            AutoBean<JsoFont> bean = AutoBeanCodex.decode(factory, JsoFont.class, string);
+            AutoBean<JsoFile> bean = AutoBeanCodex.decode(factory, JsoFile.class, string);
             font = bean.as();
         }
         catch ( Exception e)

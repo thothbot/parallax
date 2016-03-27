@@ -27,7 +27,7 @@ import org.parallax3d.parallax.graphics.extras.helpers.ArrowHelper;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -62,8 +62,8 @@ public class Mirror extends Object3D {
 	
 	protected Matrix4 textureMatrix = new Matrix4();
 	
-	protected RenderTargetTexture texture;
-	protected RenderTargetTexture tempTexture;
+	protected GLRenderTarget texture;
+	protected GLRenderTarget tempTexture;
 	
 	public ShaderMaterial material;
 	
@@ -110,8 +110,8 @@ public class Mirror extends Object3D {
 
 		this.mirrorCamera = this.camera.clone();
 
-		this.texture = new RenderTargetTexture( width, height );
-		this.tempTexture = new RenderTargetTexture( width, height );
+		this.texture = new GLRenderTarget( width, height );
+		this.tempTexture = new GLRenderTarget( width, height );
 
 		MirrorShader mirrorShader = new MirrorShader();
 		Map<String, Uniform> mirrorUniforms = UniformsUtils.clone(mirrorShader.getUniforms());

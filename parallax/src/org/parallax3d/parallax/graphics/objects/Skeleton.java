@@ -120,6 +120,70 @@ public class Skeleton {
         }
     }
 
+    public boolean isUseVertexTexture() {
+        return useVertexTexture;
+    }
+
+    public void setUseVertexTexture(boolean useVertexTexture) {
+        this.useVertexTexture = useVertexTexture;
+    }
+
+    public List<Bone> getBones() {
+        return bones;
+    }
+
+    public void setBones(List<Bone> bones) {
+        this.bones = bones;
+    }
+
+    public List<Matrix4> getBoneInverses() {
+        return boneInverses;
+    }
+
+    public void setBoneInverses(List<Matrix4> boneInverses) {
+        this.boneInverses = boneInverses;
+    }
+
+    public int getBoneTextureWidth() {
+        return boneTextureWidth;
+    }
+
+    public void setBoneTextureWidth(int boneTextureWidth) {
+        this.boneTextureWidth = boneTextureWidth;
+    }
+
+    public int getBoneTextureHeight() {
+        return boneTextureHeight;
+    }
+
+    public void setBoneTextureHeight(int boneTextureHeight) {
+        this.boneTextureHeight = boneTextureHeight;
+    }
+
+    public Float32Array getBoneMatrices() {
+        return boneMatrices;
+    }
+
+    public void setBoneMatrices(Float32Array boneMatrices) {
+        this.boneMatrices = boneMatrices;
+    }
+
+    public DataTexture getBoneTexture() {
+        return boneTexture;
+    }
+
+    public void setBoneTexture(DataTexture boneTexture) {
+        this.boneTexture = boneTexture;
+    }
+
+    public Matrix4 getIdentityMatrix() {
+        return identityMatrix;
+    }
+
+    public void setIdentityMatrix(Matrix4 identityMatrix) {
+        this.identityMatrix = identityMatrix;
+    }
+
     public void calculateInverses()
     {
 

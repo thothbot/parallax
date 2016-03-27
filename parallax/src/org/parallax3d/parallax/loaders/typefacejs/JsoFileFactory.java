@@ -23,7 +23,6 @@ import org.parallax3d.parallax.system.jsonbind.AutoBeanFactory;
 
 public interface JsoFileFactory extends AutoBeanFactory
 {
-    AutoBean<JsoFont> font();
 
     AutoBean<JsoOriginalFontInformation> original_font_information();
 

@@ -25,7 +25,7 @@ import org.parallax3d.parallax.graphics.lights.Light;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.plugins.effects.shaders.ParallaxBarrierShader;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.math.Mathematics;
@@ -51,8 +51,8 @@ public class ParallaxBarrier extends Effect {
 
 	PerspectiveCamera _camera = new PerspectiveCamera( 53, 1, 1, 10000 );
 
-	RenderTargetTexture _renderTargetL;
-	RenderTargetTexture _renderTargetR;
+	GLRenderTarget _renderTargetL;
+	GLRenderTarget _renderTargetR;
 	
 	private ShaderMaterial _material;
 
@@ -89,12 +89,12 @@ public class ParallaxBarrier extends Effect {
 		if ( _renderTargetR != null ) 
 			_renderTargetR.deallocate(this.renderer.gl);
 
-		_renderTargetL = new RenderTargetTexture( width, height );
+		_renderTargetL = new GLRenderTarget( width, height );
 		_renderTargetL.setMinFilter(TextureMinFilter.LINEAR);
 		_renderTargetL.setMagFilter(TextureMagFilter.NEAREST);
 		_renderTargetL.setFormat(PixelFormat.RGBA);
 		
-		_renderTargetR = new RenderTargetTexture( width, height );
+		_renderTargetR = new GLRenderTarget( width, height );
 		_renderTargetR.setMinFilter(TextureMinFilter.LINEAR);
 		_renderTargetR.setMagFilter(TextureMagFilter.NEAREST);
 		_renderTargetR.setFormat(PixelFormat.RGBA);

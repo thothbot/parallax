@@ -29,14 +29,16 @@ import org.parallax3d.parallax.system.gl.enums.*;
 /**
  * Basic implementation of texture.
  * <p>
- * This code based on three.js code.
+ * This code based on js code.
  * 
  * @author thothbot
  *
  */
-@ThreejsObject("THREE.Texture")
+@ThreejsObject("Texture")
 public class Texture
 {
+	static int TextureCount = 0;
+
 	/**
 	 * This callback will be called when the image has been loaded.
 	 */
@@ -50,7 +52,7 @@ public class Texture
 		MULTIPLY(0), // MultiplyOperation
 		MIX(1); // MixOperation
 
-		private final int value;
+		final int value;
 		OPERATIONS(int value) { this.value = value; }
 		public int getValue() { return value; }
 	};
@@ -69,38 +71,55 @@ public class Texture
 		SPHERICAL_REFRACTION
 	};
 
-	private static int TextureCount = 0;
+	/**
+	 * Texture Encodings
+	 */
+	public enum ENCODINGS {
+		LinearEncoding, // No encoding at all.
+		sRGBEncoding,
+		GammaEncoding, // uses GAMMA_FACTOR, for backwards compatibility with WebGLRenderer.gammaInput/gammaOutput
 
-	private TextureData image;
+		// The following Texture Encodings are for RGB-only (no alpha) HDR light emission sources.
+		// These encodings should not specified as output encodings except in rare situations.
+		RGBEEncoding, // AKA Radiance.
+		LogLuvEncoding,
+		RGBM7Encoding,
+		RGBM16Encoding,
+		RGBDEncoding; // MaxRange is 256.
+	}
+	
+	TextureData image;
 
-	private int id;
+	int id;
 
-	private Vector2 offset;
-	private Vector2 repeat;
+	Vector2 offset;
+	Vector2 repeat;
 
-	private MAPPING_MODE mapping;
+	MAPPING_MODE mapping;
 
-	private TextureWrapMode wrapS;
-	private TextureWrapMode wrapT;
+	TextureWrapMode wrapS;
+	TextureWrapMode wrapT;
 
-	private TextureMagFilter magFilter;
-	private TextureMinFilter minFilter;
+	TextureMagFilter magFilter;
+	TextureMinFilter minFilter;
 
-	private PixelFormat format;
-	private PixelType type;
+	PixelFormat format;
+	PixelType type;
 
-	private boolean isGenerateMipmaps = true;
-	private boolean isPremultiplyAlpha = false;
-	private boolean isFlipY = true;
-	private int unpackAlignment = 4; // valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
+	ENCODINGS encoding;
 
-	private boolean isNeedsUpdate = false;
+	boolean isGenerateMipmaps = true;
+	boolean isPremultiplyAlpha = false;
+	boolean isFlipY = true;
+	int unpackAlignment = 4; // valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
+
+	boolean isNeedsUpdate = false;
 
 	protected int webglTexture = 0; //WebGLTexture
 
-	private int anisotropy;
+	int anisotropy;
 
-	private int cache_oldAnisotropy;
+	int cache_oldAnisotropy;
 
 	public Texture(){
 		this(new EmptyTextureData());
@@ -188,6 +207,14 @@ public class Texture
 	 */
 	public int getId() {
 		return id;
+	}
+
+	public ENCODINGS getEncoding() {
+		return encoding;
+	}
+
+	public void setEncoding(ENCODINGS encoding) {
+		this.encoding = encoding;
 	}
 
 	/**
@@ -492,7 +519,7 @@ public class Texture
 	/**
 	 * Fallback filters for non-power-of-2 textures.
 	 */
-	private int filterFallback ( int f )
+	int filterFallback ( int f )
 	{
 		if(f == GL20.GL_NEAREST || f == GL20.GL_NEAREST_MIPMAP_NEAREST || f == GL20.GL_NEAREST_MIPMAP_LINEAR)
 			return GL20.GL_NEAREST;

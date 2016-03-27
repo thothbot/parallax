@@ -18,24 +18,24 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.math.Mathematics;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.FramebufferSlot;
 import org.parallax3d.parallax.system.gl.enums.TextureTarget;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ThreejsObject("THREE.WebGLRenderTargetCube")
-public class RenderTargetCubeTexture extends RenderTargetTexture
+public class GLRenderTargetCube extends GLRenderTarget
 {
 	private int activeCubeFace = 0;
 
 	private List<Integer> webglFramebuffer; //WebGLFramebuffer
 	private List<Integer> webglRenderbuffer; //WebGLRenderbuffer
 
-	public RenderTargetCubeTexture(int width, int height )
+	public GLRenderTargetCube(int width, int height )
 	{
 		super(width, height);
 	}

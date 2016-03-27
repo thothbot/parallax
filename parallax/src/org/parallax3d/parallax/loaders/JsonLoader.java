@@ -22,7 +22,7 @@ import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.graphics.core.Face3;
 import org.parallax3d.parallax.graphics.core.Geometry;
-import org.parallax3d.parallax.graphics.extras.shaders.NormalMapShader;
+import org.parallax3d.parallax.graphics.core.geometry.MorphTarget;
 import org.parallax3d.parallax.graphics.materials.*;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.textures.CompressedTexture;
@@ -46,7 +46,7 @@ import java.util.Map;
 @ThreejsObject("THREE.JSONLoader")
 public class JsonLoader extends ModelLoader
 {
-	JsoObject object;
+	JsoFile object;
 	Geometry geometry;
 
 	List<Material> materials;
@@ -74,11 +74,6 @@ public class JsonLoader extends ModelLoader
 
 		geometry.computeFaceNormals();
 		geometry.computeBoundingSphere();
-
-		if ( hasNormals() ) 
-			geometry.computeTangents();
-		
-		geometry.computeMorphNormals();
 	}
 
 	public List<Material> getMaterials() {
@@ -90,27 +85,13 @@ public class JsonLoader extends ModelLoader
 		return geometry;
 	}
 
-	public void morphColorsToFaceColors(Geometry geometry)
-	{
-		if ( geometry.getMorphColors() != null && geometry.getMorphColors().size() > 0 ) 
-		{
-			Geometry.MorphColor colorMap = geometry.getMorphColors().get( 0 );
-
-			for ( int i = 0; i < colorMap.colors.size(); i ++ ) 
-			{
-				geometry.getFaces().get(i).setColor( colorMap.colors.get(i) );
-				geometry.getFaces().get(i).getColor().offsetHSL( 0, 0.3, 0 );
-			}
-		}
-	}
-	
 	private boolean isThisJsonStringValid(String iJSonString) 
 	{ 
-		JsoObjectFactory factory = JsonBindProxy.create(JsoObjectFactory.class);
+		JsoFileFactory factory = JsonBindProxy.create(JsoFileFactory.class);
 
 		try
 		{
-			AutoBean<JsoObject> bean = AutoBeanCodex.decode(factory, JsoObject.class, iJSonString);
+			AutoBean<JsoFile> bean = AutoBeanCodex.decode(factory, JsoFile.class, iJSonString);
 			object = bean.as();
 		}
 		catch ( Exception e)
@@ -156,14 +137,7 @@ public class JsonLoader extends ModelLoader
 			}
 		}
 
-		// Special case for normal map
-		if(jsonMaterial.getMapNormal() != null)
-		{
-			material = new ShaderMaterial( new NormalMapShader() );
-			((ShaderMaterial)material).setLights(true);
-			((ShaderMaterial)material).setFog(true);
-		}
-		
+
 		// parameters from model file
 
 		if ( jsonMaterial.getBlending() != null ) 
@@ -220,10 +194,6 @@ public class JsonLoader extends ModelLoader
 				Map<String, Uniform> uniforms = material.getShader().getUniforms();
 				uniforms.get( "ambient" ).setValue(color);
 			}
-			else if( material instanceof HasAmbientEmissiveColor)
-			{
-				((HasAmbientEmissiveColor)material).setAmbient(color);	
-			}
 		}
 		
 		if(jsonMaterial.getColorEmissive() != null )
@@ -233,10 +203,6 @@ public class JsonLoader extends ModelLoader
 			{
 				Map<String, Uniform> uniforms = material.getShader().getUniforms();
 				uniforms.get( "emissive" ).setValue(color);
-			}
-			else if( material instanceof HasAmbientEmissiveColor)
-			{
-				((HasAmbientEmissiveColor)material).setEmissive(color);	
 			}
 		}
 		
@@ -705,14 +671,14 @@ public class JsonLoader extends ModelLoader
 			
 			for ( int i = 0, l = morphTargets.size(); i < l; i ++ ) 
 			{
-				Geometry.MorphTarget morphTarget = geometry.new MorphTarget();
-				morphTarget.name = morphTargets.get(i).getName();
-				morphTarget.vertices = new ArrayList<Vector3>();
+				MorphTarget morphTarget = new MorphTarget();
+				morphTarget.setName(morphTargets.get(i).getName());
+				morphTarget.setVertices(new ArrayList<Vector3>());
 				
 				List<Double> srcVertices = morphTargets.get(i).getVertices();
 				for( int v = 0, vl = srcVertices.size(); v < vl; v += 3 ) 
 				{
-					morphTarget.vertices.add( 
+					morphTarget.getVertices().add(
 							new Vector3(
 									srcVertices.get(v) * scale, 
 									srcVertices.get(v + 1) * scale,
@@ -720,28 +686,6 @@ public class JsonLoader extends ModelLoader
 				}
 
 				geometry.getMorphTargets().add(morphTarget);
-			}
-		}
-
-		if ( object.getMorphColors() != null ) 
-		{
-			List<JsoMorphColors> morphColors = object.getMorphColors();
-			
-			for ( int i = 0, l = morphColors.size(); i < l; i++ ) 
-			{
-				Geometry.MorphColor morphColor = geometry.new MorphColor();
-				morphColor.name = morphColors.get(i).getName();
-				morphColor.colors = new ArrayList<Color>();
-								
-				List<Double> srcColors = morphColors.get(i).getColors();
-				for ( int c = 0, cl = srcColors.size(); c < cl; c += 3 ) 
-				{
-					Color color = new Color( 0xffaa00 );
-					color.setRGB(srcColors.get(c), srcColors.get(c + 1), srcColors.get(c + 2));
-					morphColor.colors.add(color);
-				}
-				
-				geometry.getMorphColors().add(morphColor);
 			}
 		}
 	}

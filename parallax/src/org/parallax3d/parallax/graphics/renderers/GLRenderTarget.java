@@ -26,7 +26,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.enums.*;
 
 @ThreejsObject("THREE.WebGLRenderTarget")
-public class RenderTargetTexture extends Texture
+public class GLRenderTarget extends Texture
 {
 	private int width;
 	private int height;
@@ -37,9 +37,9 @@ public class RenderTargetTexture extends Texture
 	private int webglFramebuffer; // WebGLFramebuffer
 	private int webglRenderbuffer; //WebGLRenderbuffer
 
-	public RenderTargetTexture shareDepthFrom;
+	public GLRenderTarget shareDepthFrom;
 
-	public RenderTargetTexture(int width, int height)
+	public GLRenderTarget(int width, int height)
 	{
 		this(width, height,
 				TextureWrapMode.CLAMP_TO_EDGE, TextureWrapMode.CLAMP_TO_EDGE,
@@ -47,10 +47,10 @@ public class RenderTargetTexture extends Texture
 				PixelFormat.RGBA,              PixelType.UNSIGNED_BYTE);
 	}
 
-	public RenderTargetTexture(int width, int height,
-			TextureWrapMode wrapS,      TextureWrapMode wrapT,
-			TextureMagFilter magFilter, TextureMinFilter minFilter,
-			PixelFormat format,         PixelType type)
+	public GLRenderTarget(int width, int height,
+						  TextureWrapMode wrapS, TextureWrapMode wrapT,
+						  TextureMagFilter magFilter, TextureMinFilter minFilter,
+						  PixelFormat format, PixelType type)
 	{
 		// Create a dummy Image so that WebGLRenderer can get size
 		super();
@@ -126,9 +126,9 @@ public class RenderTargetTexture extends Texture
 		this.webglRenderbuffer = 0;
 	}
 
-	public RenderTargetTexture clone()
+	public GLRenderTarget clone()
 	{
-		RenderTargetTexture tmp = new RenderTargetTexture(this.width, this.height);
+		GLRenderTarget tmp = new GLRenderTarget(this.width, this.height);
 
 		super.clone(tmp);
 

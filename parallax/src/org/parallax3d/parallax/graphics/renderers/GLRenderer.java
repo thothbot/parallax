@@ -21,7 +21,6 @@ package org.parallax3d.parallax.graphics.renderers;
 
 import java.util.*;
 
-import com.sun.prism.RenderTarget;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.extras.objects.ImmediateRenderObject;
@@ -116,7 +115,7 @@ public class GLRenderer extends Renderer
 	// ---- Internal properties ----------------------------
 
 	int _currentProgram = 0; //WebGLProgram
-	RenderTarget _currentRenderTarget = null;
+	com.sun.prism.RenderTarget _currentRenderTarget = null;
 	int _currentFramebuffer = 0; //WebGLFramebuffer
 	int _currentMaterialId = -1;
 	String _currentGeometryProgram = "";
@@ -377,9 +376,9 @@ public class GLRenderer extends Renderer
 	}
 
 	/**
-	 * Clear {@link RenderTargetTexture} and GL buffers.
+	 * Clear {@link GLRenderTarget} and GL buffers.
 	 */
-	public void clearTarget( RenderTargetTexture renderTarget,
+	public void clearTarget( GLRenderTarget renderTarget,
 							 boolean color, boolean depth, boolean stencil )
 	{
 		setRenderTarget( renderTarget );
@@ -947,7 +946,7 @@ public class GLRenderer extends Renderer
 		render(scene, camera, null);
 	}
 
-	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget )
+	public void render( Scene scene, Camera camera, GLRenderTarget renderTarget )
 	{
 		render(scene, camera, renderTarget, false);
 	}
@@ -959,7 +958,7 @@ public class GLRenderer extends Renderer
 	 * @param renderTarget optional
 	 * @param forceClear   optional
 	 */
-	public void render( Scene scene, Camera camera, RenderTargetTexture renderTarget, boolean forceClear )
+	public void render(Scene scene, Camera camera, GLRenderTarget renderTarget, boolean forceClear )
 	{
 		// Render basic org.parallax3d.plugins
 		if(renderPlugins( this.plugins, scene, camera, Plugin.TYPE.BASIC_RENDER ))
@@ -1795,7 +1794,7 @@ public class GLRenderer extends Renderer
 
 			uniforms.get("envMap").setValue( envMapMaterial.getEnvMap() );
 			uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null
-					&& envMapMaterial.getEnvMap() instanceof RenderTargetCubeTexture ) ? 1.0 : -1.0 );
+					&& envMapMaterial.getEnvMap() instanceof GLRenderTargetCube) ? 1.0 : -1.0 );
 
 			uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
 			uniforms.get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
@@ -2982,8 +2981,8 @@ public class GLRenderer extends Renderer
 					if ( texture.getClass() == CubeTexture.class )
 						setCubeTexture( (CubeTexture) texture, textureUnit );
 
-					else if ( texture.getClass() == RenderTargetCubeTexture.class )
-						setCubeTextureDynamic( (RenderTargetCubeTexture)texture, textureUnit );
+					else if ( texture.getClass() == GLRenderTargetCube.class )
+						setCubeTextureDynamic( (GLRenderTargetCube)texture, textureUnit );
 
 					else
 						setTexture( texture, textureUnit );
@@ -3161,7 +3160,7 @@ public class GLRenderer extends Renderer
 
 	// Textures
 
-	private void setCubeTextureDynamic(RenderTargetCubeTexture texture, int slot)
+	private void setCubeTextureDynamic(GLRenderTargetCube texture, int slot)
 	{
 		this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
 		this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
@@ -3219,7 +3218,7 @@ public class GLRenderer extends Renderer
 						texData.getBuffer());
 			}
 			// glTexImage2D does not apply to render target textures
-			else if (!(texture instanceof RenderTargetTexture))
+			else if (!(texture instanceof GLRenderTarget))
 			{
 				image.glTexImage2D(this.gl, TextureTarget.TEXTURE_2D.getValue(), texture.getFormat(), texture.getType());
 			}
@@ -3290,7 +3289,7 @@ public class GLRenderer extends Renderer
 	 *
 	 * @param renderTarget the render target
 	 */
-	public void setRenderTarget( RenderTargetTexture renderTarget) {
+	public void setRenderTarget( GLRenderTarget renderTarget) {
 //		App.app.debug("WebGlRenderer", "  ----> Called setRenderTarget(params)");
 		int framebuffer = 0;
 

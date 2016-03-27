@@ -22,7 +22,7 @@ import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.renderers.shaders.UniformsUtils;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -72,8 +72,8 @@ public class Water extends Mirror {
 		this.textureMatrix = new Matrix4();
 
 		this.mirrorCamera = this.camera.clone();
-		this.texture = new RenderTargetTexture( width, height );
-		this.tempTexture = new RenderTargetTexture( width, height );
+		this.texture = new GLRenderTarget( width, height );
+		this.tempTexture = new GLRenderTarget( width, height );
 		
 		WaterShader mirrorShader = new WaterShader();
 		Map<String, Uniform> mirrorUniforms = UniformsUtils.clone(mirrorShader.getUniforms());

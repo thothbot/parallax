@@ -25,6 +25,8 @@ import java.util.List;
 public class MorphTarget {
     
     List<Vector3> vertices = new ArrayList<>();
+
+    String name;
     
     public List<Vector3> getVertices() {
         return vertices;
@@ -32,5 +34,13 @@ public class MorphTarget {
 
     public void setVertices(List<Vector3> vertices) {
         this.vertices = vertices;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

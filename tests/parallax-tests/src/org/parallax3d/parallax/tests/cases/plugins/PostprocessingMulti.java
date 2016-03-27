@@ -28,7 +28,7 @@ import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.materials.MeshLambertMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
-import org.parallax3d.parallax.graphics.renderers.RenderTargetTexture;
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.*;
 import org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shaders.*;
 import org.parallax3d.parallax.graphics.scenes.Scene;
@@ -204,7 +204,7 @@ public final class PostprocessingMulti extends ParallaxTest
 		int rtWidth  = width / 2;
 		int rtHeight = height / 2;
 
-		RenderTargetTexture rt = new RenderTargetTexture(rtWidth, rtHeight);
+		GLRenderTarget rt = new GLRenderTarget(rtWidth, rtHeight);
 		rt.setMinFilter(TextureMinFilter.LINEAR);
 		rt.setMagFilter(TextureMagFilter.LINEAR);
 		rt.setFormat(PixelFormat.RGB);
