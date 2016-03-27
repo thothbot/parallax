@@ -450,6 +450,12 @@ public final class Color
 		return this;
 	}
 
+	@Deprecated
+	public Color multiplyScalar( double s )
+	{
+		return multiply(s);
+	}
+
 	public Color multiply( double s )
 	{
 

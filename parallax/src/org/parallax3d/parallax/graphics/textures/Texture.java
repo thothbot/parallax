@@ -20,6 +20,7 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
@@ -35,7 +36,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
  *
  */
 @ThreejsObject("Texture")
-public class Texture implements AbstractTexture
+public class Texture extends AbstractPropertyObject implements AbstractTexture
 {
 	static int TextureCount = 0;
 
@@ -532,17 +533,6 @@ public class Texture implements AbstractTexture
 		}
 
 		return this;
-	}
-
-	/**
-	 * Fallback filters for non-power-of-2 textures.
-	 */
-	int filterFallback ( int f )
-	{
-		if(f == GL20.GL_NEAREST || f == GL20.GL_NEAREST_MIPMAP_NEAREST || f == GL20.GL_NEAREST_MIPMAP_LINEAR)
-			return GL20.GL_NEAREST;
-
-		return GL20.GL_LINEAR;
 	}
 
 	/**

@@ -98,4 +98,8 @@ public class CubeTexture extends Texture
 	{
 		return this.images.get(index);
 	}
+
+	public List<TextureData> getImages() {
+		return images;
+	}
 }

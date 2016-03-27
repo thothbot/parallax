@@ -19,42 +19,39 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import java.util.*;
-
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.graphics.cameras.Camera;
+import org.parallax3d.parallax.graphics.cameras.HasNearFar;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.extras.objects.ImmediateRenderObject;
+import org.parallax3d.parallax.graphics.lights.*;
 import org.parallax3d.parallax.graphics.materials.*;
 import org.parallax3d.parallax.graphics.objects.*;
 import org.parallax3d.parallax.graphics.renderers.gl.*;
-import org.parallax3d.parallax.graphics.scenes.Fog;
-import org.parallax3d.parallax.math.*;
-import org.parallax3d.parallax.system.*;
 import org.parallax3d.parallax.graphics.renderers.shaders.Attribute;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.graphics.cameras.Camera;
-import org.parallax3d.parallax.graphics.lights.SpotLight;
-import org.parallax3d.parallax.graphics.textures.CompressedTexture;
-import org.parallax3d.parallax.graphics.textures.CubeTexture;
-import org.parallax3d.parallax.graphics.textures.DataTexture;
-import org.parallax3d.parallax.graphics.textures.Texture;
-import org.parallax3d.parallax.graphics.cameras.HasNearFar;
-import org.parallax3d.parallax.graphics.lights.DirectionalLight;
-import org.parallax3d.parallax.graphics.lights.HemisphereLight;
-import org.parallax3d.parallax.graphics.lights.Light;
-import org.parallax3d.parallax.graphics.lights.PointLight;
 import org.parallax3d.parallax.graphics.scenes.AbstractFog;
+import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
-
-import org.parallax3d.parallax.graphics.textures.TextureData;
+import org.parallax3d.parallax.graphics.textures.*;
+import org.parallax3d.parallax.math.*;
+import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.GLHelpers;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 import org.parallax3d.parallax.system.gl.enums.*;
+
+import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
@@ -115,7 +112,7 @@ public class GLRenderer extends Renderer
 	// ---- Internal properties ----------------------------
 
 	int _currentProgram = 0; //WebGLProgram
-	com.sun.prism.RenderTarget _currentRenderTarget = null;
+	GLRenderTarget _currentRenderTarget = null;
 	int _currentFramebuffer = 0; //WebGLFramebuffer
 	int _currentMaterialId = -1;
 	String _currentGeometryProgram = "";
@@ -3285,51 +3282,6 @@ public class GLRenderer extends Renderer
 	}
 
 	/**
-	 * Setup render target
-	 *
-	 * @param renderTarget the render target
-	 */
-	public void setRenderTarget( GLRenderTarget renderTarget) {
-//		App.app.debug("WebGlRenderer", "  ----> Called setRenderTarget(params)");
-		int framebuffer = 0;
-
-		int width, height, vx, vy;
-
-		if(renderTarget != null)
-		{
-			renderTarget.setRenderTarget(this.gl);
-		    framebuffer = renderTarget.getWebGLFramebuffer();
-
-			width = renderTarget.getWidth();
-			height = renderTarget.getHeight();
-
-			vx = 0;
-			vy = 0;
-
-		}
-		else
-		{
-			width = this._viewportWidth;
-			height = this._viewportHeight;
-
-			vx = _viewportX;
-			vy = _viewportY;
-
-		}
-
-		if ( framebuffer != this._currentFramebuffer )
-		{
-			this.gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
-			this.gl.glViewport(vx, vy, width, height);
-
-			this._currentFramebuffer = framebuffer;
-		}
-
-		_currentWidth = width;
-		_currentHeight = height;
-	}
-
-	/**
 	 * Default for when object is not specified
 	 * ( for example when prebuilding shader to be used with multiple objects )
 	 *
@@ -3433,5 +3385,862 @@ public class GLRenderer extends Renderer
 	private void fireViewportResizeEvent(int width, int height)
 	{
 		ViewportResizeBus.onViewportResize(width, height);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+
+    // GL state setting
+    private void setupLights ( List<Light> lights, Camera camera ) {
+
+        double r = 0, g = 0, b = 0;
+
+        Matrix4 viewMatrix = camera.getMatrixWorldInverse();
+
+        double directionalLength = 0,
+            pointLength = 0,
+            spotLength = 0,
+            hemiLength = 0,
+
+            shadowsLength = 0;
+
+        _lights.shadowsPointLight = 0;
+
+        for ( int l = 0, ll = lights.size(); l < ll; l ++ ) {
+
+            Light light = lights.get(l);
+
+            Color color = light.getColor();
+            double intensity = light.getIntensity();
+            distance = light.distance;
+
+            if ( light instanceof AmbientLight) {
+
+                r += color.getR() * intensity;
+                g += color.getG() * intensity;
+                b += color.getB() * intensity;
+
+            } else if ( light instanceof DirectionalLight ) {
+
+                FastMap<Uniform> uniforms = lightCache.get( light );
+
+                ((Color)uniforms.get("color").getValue()).copy(light.getColor()).multiplyScalar(light.getIntensity());
+                uniforms.direction.setFromMatrixPosition(light.getMatrixWorld());
+                _vector3.setFromMatrixPosition(((DirectionalLight) light).getTarget().getMatrixWorld());
+                uniforms.direction.sub( _vector3 );
+                uniforms.direction.transformDirection( viewMatrix );
+
+                uniforms.shadow = light.isCastShadow();
+
+                if ( light.castShadow ) {
+
+                    uniforms.shadowBias = light.shadow.bias;
+                    uniforms.shadowRadius = light.shadow.radius;
+                    uniforms.shadowMapSize = light.shadow.mapSize;
+
+                    _lights.shadows[ shadowsLength ++ ] = light;
+
+                }
+
+                _lights.directionalShadowMap[ directionalLength ] = light.shadow.map;
+                _lights.directionalShadowMatrix[ directionalLength ] = light.shadow.matrix;
+                _lights.directional[ directionalLength ++ ] = uniforms;
+
+            } else if ( light instanceof SpotLight ) {
+
+                var uniforms = lightCache.get( light );
+
+                uniforms.position.setFromMatrixPosition(light.getMatrixWorld());
+                uniforms.position.applyMatrix4( viewMatrix );
+
+                uniforms.color.copy( color ).multiplyScalar( intensity );
+                uniforms.distance = distance;
+
+                uniforms.direction.setFromMatrixPosition(light.getMatrixWorld());
+                _vector3.setFromMatrixPosition( light.target.matrixWorld );
+                uniforms.direction.sub( _vector3 );
+                uniforms.direction.transformDirection( viewMatrix );
+
+                uniforms.coneCos = Math.cos( light.angle );
+                uniforms.penumbraCos = Math.cos( light.angle * ( 1 - light.penumbra ) );
+                uniforms.decay = ( light.distance === 0 ) ? 0.0 : light.decay;
+
+                uniforms.shadow = light.castShadow;
+
+                if ( light.castShadow ) {
+
+                    uniforms.shadowBias = light.shadow.bias;
+                    uniforms.shadowRadius = light.shadow.radius;
+                    uniforms.shadowMapSize = light.shadow.mapSize;
+
+                    _lights.shadows[ shadowsLength ++ ] = light;
+
+                }
+
+                _lights.spotShadowMap[ spotLength ] = light.shadow.map;
+                _lights.spotShadowMatrix[ spotLength ] = light.shadow.matrix;
+                _lights.spot[ spotLength ++ ] = uniforms;
+
+            } else if ( light instanceof PointLight ) {
+
+                var uniforms = lightCache.get( light );
+
+                uniforms.position.setFromMatrixPosition( light.matrixWorld );
+                uniforms.position.applyMatrix4( viewMatrix );
+
+                uniforms.color.copy( light.color ).multiplyScalar( light.intensity );
+                uniforms.distance = light.distance;
+                uniforms.decay = ( light.distance === 0 ) ? 0.0 : light.decay;
+
+                uniforms.shadow = light.castShadow;
+
+                if ( light.castShadow ) {
+
+                    uniforms.shadowBias = light.shadow.bias;
+                    uniforms.shadowRadius = light.shadow.radius;
+                    uniforms.shadowMapSize = light.shadow.mapSize;
+
+                    _lights.shadows[ shadowsLength ++ ] = light;
+
+                }
+
+                _lights.pointShadowMap[ pointLength ] = light.shadow.map;
+
+                if ( _lights.pointShadowMatrix[ pointLength ] === undefined ) {
+
+                    _lights.pointShadowMatrix[ pointLength ] = new THREE.Matrix4();
+
+                }
+
+                // for point lights we set the shadow matrix to be a translation-only matrix
+                // equal to inverse of the light's position
+                _vector3.setFromMatrixPosition( light.matrixWorld ).negate();
+                _lights.pointShadowMatrix[ pointLength ].identity().setPosition( _vector3 );
+
+                _lights.point[ pointLength ++ ] = uniforms;
+
+            } else if ( light instanceof HemisphereLight ) {
+
+                var uniforms = lightCache.get( light );
+
+                uniforms.direction.setFromMatrixPosition( light.matrixWorld );
+                uniforms.direction.transformDirection( viewMatrix );
+                uniforms.direction.normalize();
+
+                uniforms.skyColor.copy( light.color ).multiplyScalar( intensity );
+                uniforms.groundColor.copy( light.groundColor ).multiplyScalar( intensity );
+
+                _lights.hemi[ hemiLength ++ ] = uniforms;
+
+            }
+
+        }
+
+        _lights.ambient[ 0 ] = r;
+        _lights.ambient[ 1 ] = g;
+        _lights.ambient[ 2 ] = b;
+
+        _lights.directional.length = directionalLength;
+        _lights.spot.length = spotLength;
+        _lights.point.length = pointLength;
+        _lights.hemi.length = hemiLength;
+
+        _lights.shadows.length = shadowsLength;
+
+        _lights.hash = directionalLength + ',' + pointLength + ',' + spotLength + ',' + hemiLength + ',' + shadowsLength;
+
+    }
+
+    public void setFaceCulling( CullFaceMode cullFace, FrontFaceDirection frontFaceDirection ) {
+
+        if (cullFace == null) {
+
+            state.disable(EnableCap.CULL_FACE);
+
+        } else {
+
+            if (frontFaceDirection == FrontFaceDirection.CW) {
+
+                gl.glFrontFace(FrontFaceDirection.CW.getValue());
+
+            } else {
+
+                gl.glFrontFace(FrontFaceDirection.CCW.getValue());
+
+            }
+
+            if (cullFace == CullFaceMode.BACK) {
+
+                gl.glCullFace(CullFaceMode.BACK.getValue());
+
+            } else if (cullFace == CullFaceMode.FRONT) {
+
+                gl.glCullFace(CullFaceMode.FRONT.getValue());
+
+            } else {
+
+                gl.glCullFace(CullFaceMode.FRONT_AND_BACK.getValue());
+
+            }
+
+            state.enable(EnableCap.CULL_FACE);
+
+        }
+
+    }
+    
+    private void setTextureParameters ( TextureTarget textureType, Texture texture, boolean isPowerOfTwoImage ) {
+
+        if ( isPowerOfTwoImage ) {
+
+            gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_S.getValue(), texture.getWrapS().getValue());
+            gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_T.getValue(), texture.getWrapT().getValue());
+            
+            gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MAG_FILTER.getValue(), texture.getMagFilter().getValue() );
+            gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MIN_FILTER.getValue(), texture.getMinFilter().getValue());
+
+        } else {
+
+            gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_S.getValue(), GL20.GL_CLAMP_TO_EDGE);
+            gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_T.getValue(), GL20.GL_CLAMP_TO_EDGE);
+            
+            if ( texture.getWrapS() != TextureWrapMode.CLAMP_TO_EDGE || texture.getWrapT() != TextureWrapMode.CLAMP_TO_EDGE ) {
+
+                Log.warn( "GLRenderer: Texture is not power of two. Texture.wrapS and Texture.wrapT should be set to THREE.ClampToEdgeWrapping: " + texture );
+
+            }
+
+            gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MAG_FILTER.getValue(), filterFallback(texture.getMagFilter().getValue()));
+            gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MIN_FILTER.getValue(), filterFallback(texture.getMinFilter().getValue()));
+            
+
+            if ( texture.getMinFilter() != TextureMinFilter.NEAREST && texture.getMinFilter() != TextureMinFilter.LINEAR ) {
+
+                Log.warn( "GLRenderer: Texture is not power of two. Texture.minFilter should be set to TextureMinFilter.NEAREST or TextureMinFilter.LINEAR: " + texture );
+
+            }
+
+        }
+
+        boolean extension = GLExtensions.check(gl, GLES20Ext.List.EXT_texture_filter_anisotropic );
+
+        // TODO: Fix extensions
+        if ( extension ) {
+
+//            if ( texture.type == THREE.FloatType && extensions.get( 'OES_texture_float_linear' ) == null ) return;
+//            if ( texture.type == THREE.HalfFloatType && extensions.get( 'OES_texture_half_float_linear' ) == null ) return;
+//
+//            if ( texture.getAnisotropy() > 1 || properties.get( texture ).__currentAnisotropy ) {
+//
+//                _gl.texParameterf( textureType, extension.TEXTURE_MAX_ANISOTROPY_EXT, Math.min( texture.anisotropy, _this.getMaxAnisotropy() ) );
+//                properties.get( texture ).__currentAnisotropy = texture.anisotropy;
+//
+//            }
+
+        }
+
+    }
+    
+    private void uploadTexture( FastMap<Object> textureProperties, Texture texture, int slot ) {
+
+        if ( textureProperties.__webglInit === undefined ) {
+
+            textureProperties.__webglInit = true;
+
+            texture.addEventListener( 'dispose', onTextureDispose );
+
+            textureProperties.__webglTexture = _gl.createTexture();
+
+            _infoMemory.textures ++;
+
+        }
+
+        state.activeTexture( _gl.TEXTURE0 + slot );
+        state.bindTexture( _gl.TEXTURE_2D, textureProperties.__webglTexture );
+
+        _gl.pixelStorei( _gl.UNPACK_FLIP_Y_WEBGL, texture.flipY );
+        _gl.pixelStorei( _gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha );
+        _gl.pixelStorei( _gl.UNPACK_ALIGNMENT, texture.unpackAlignment );
+
+        var image = clampToMaxSize( texture.image, capabilities.maxTextureSize );
+
+        if ( textureNeedsPowerOfTwo( texture ) && isPowerOfTwo( image ) === false ) {
+
+            image = makePowerOfTwo( image );
+
+        }
+
+        var isPowerOfTwoImage = isPowerOfTwo( image ),
+                glFormat = paramThreeToGL( texture.format ),
+                glType = paramThreeToGL( texture.type );
+
+        setTextureParameters( _gl.TEXTURE_2D, texture, isPowerOfTwoImage );
+
+        var mipmap, mipmaps = texture.mipmaps;
+
+        if ( texture instanceof THREE.DataTexture ) {
+
+            // use manually created mipmaps if available
+            // if there are no manual mipmaps
+            // set 0 level mipmap and then use GL to generate other mipmap levels
+
+            if ( mipmaps.length > 0 && isPowerOfTwoImage ) {
+
+                for ( var i = 0, il = mipmaps.length; i < il; i ++ ) {
+
+                    mipmap = mipmaps[ i ];
+                    state.texImage2D( _gl.TEXTURE_2D, i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
+
+                }
+
+                texture.generateMipmaps = false;
+
+            } else {
+
+                state.texImage2D( _gl.TEXTURE_2D, 0, glFormat, image.width, image.height, 0, glFormat, glType, image.data );
+
+            }
+
+        } else if ( texture instanceof THREE.CompressedTexture ) {
+
+            for ( var i = 0, il = mipmaps.length; i < il; i ++ ) {
+
+                mipmap = mipmaps[ i ];
+
+                if ( texture.format !== THREE.RGBAFormat && texture.format !== THREE.RGBFormat ) {
+
+                    if ( state.getCompressedTextureFormats().indexOf( glFormat ) > - 1 ) {
+
+                        state.compressedTexImage2D( _gl.TEXTURE_2D, i, glFormat, mipmap.width, mipmap.height, 0, mipmap.data );
+
+                    } else {
+
+                        console.warn( "THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()" );
+
+                    }
+
+                } else {
+
+                    state.texImage2D( _gl.TEXTURE_2D, i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
+
+                }
+
+            }
+
+        } else {
+
+            // regular Texture (image, video, canvas)
+
+            // use manually created mipmaps if available
+            // if there are no manual mipmaps
+            // set 0 level mipmap and then use GL to generate other mipmap levels
+
+            if ( mipmaps.length > 0 && isPowerOfTwoImage ) {
+
+                for ( var i = 0, il = mipmaps.length; i < il; i ++ ) {
+
+                    mipmap = mipmaps[ i ];
+                    state.texImage2D( _gl.TEXTURE_2D, i, glFormat, glFormat, glType, mipmap );
+
+                }
+
+                texture.generateMipmaps = false;
+
+            } else {
+
+                state.texImage2D( _gl.TEXTURE_2D, 0, glFormat, glFormat, glType, image );
+
+            }
+
+        }
+
+        if ( texture.generateMipmaps && isPowerOfTwoImage ) _gl.generateMipmap( _gl.TEXTURE_2D );
+
+        textureProperties.__version = texture.version;
+
+        if ( texture.onUpdate ) texture.onUpdate( texture );
+
+    }
+
+    public void setTexture( Texture texture, int slot ) {
+
+        var textureProperties = properties.get(texture);
+
+        if (texture.version > 0 && textureProperties.__version != = texture.version) {
+
+            var image = texture.image;
+
+            if (image == = undefined) {
+
+                Log.warn( "GLRenderer: Texture marked for update but image is undefined: " + texture);
+
+                return;
+
+            }
+
+            if (image.complete == = false) {
+
+                Log.warn( "GLRenderer: Texture marked for update but image is incomplete: " + texture);
+                return;
+
+            }
+
+            uploadTexture(textureProperties, texture, slot);
+
+            return;
+
+        }
+
+        state.activeTexture(_gl.TEXTURE0 + slot);
+        state.bindTexture(_gl.TEXTURE_2D, textureProperties.__webglTexture);
+
+    }
+
+    private void setCubeTexture ( CubeTexture texture, int slot ) {
+
+        FastMap<Object> textureProperties = properties.get( texture );
+
+        if ( texture.getImages().size() == 6 ) {
+
+            if ( texture.version > 0 && textureProperties.__version != texture.version ) {
+
+                if ( ! textureProperties.__image__webglTextureCube ) {
+
+                    texture.addEventListener( 'dispose', onTextureDispose );
+
+                    textureProperties.__image__webglTextureCube = _gl.createTexture();
+
+                    info.getMemory().textures ++;
+
+                }
+
+                state.activeTexture( TextureUnit.TEXTURE0.getValue() + slot );
+                state.bindTexture( _gl.TEXTURE_CUBE_MAP, textureProperties.__image__webglTextureCube );
+
+                _gl.pixelStorei( _gl.UNPACK_FLIP_Y_WEBGL, texture.flipY );
+
+                boolean isCompressed = texture instanceof CompressedTexture;
+                boolean isDataTexture = texture.getImages().get( 0 ) instanceof DataTexture;
+
+                var cubeImage = [];
+
+                for ( int i = 0; i < 6; i ++ ) {
+
+                    if ( _this.autoScaleCubemaps && ! isCompressed && ! isDataTexture ) {
+
+                        cubeImage[ i ] = clampToMaxSize( texture.image[ i ], capabilities.maxCubemapSize );
+
+                    } else {
+
+                        cubeImage[ i ] = isDataTexture ? texture.image[ i ].image : texture.image[ i ];
+
+                    }
+
+                }
+
+                var image = cubeImage[ 0 ];
+                boolean isPowerOfTwoImage = isPowerOfTwo( image );
+                PixelFormat glFormat = texture.getFormat();
+                PixelType glType = texture.getType();
+
+                setTextureParameters( TextureTarget.TEXTURE_CUBE_MAP, texture, isPowerOfTwoImage );
+
+                for ( int i = 0; i < 6; i ++ ) {
+
+                    if ( ! isCompressed ) {
+
+                        if ( isDataTexture ) {
+
+                            state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, glFormat, cubeImage[ i ].width, cubeImage[ i ].height, 0, glFormat, glType, cubeImage[ i ].data );
+
+                        } else {
+
+                            state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, glFormat, glFormat, glType, cubeImage[ i ] );
+
+                        }
+
+                    } else {
+
+                        var mipmap, mipmaps = cubeImage[ i ].mipmaps;
+
+                        for ( int j = 0, jl = mipmaps.length; j < jl; j ++ ) {
+
+                            mipmap = mipmaps[ j ];
+
+                            if ( texture.getFormat() != PixelFormat.RGBA && texture.getFormat() != PixelFormat.RGB ) {
+
+                                if ( state.getCompressedTextureFormats().indexOf( glFormat ) > - 1 ) {
+
+                                    state.compressedTexImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, j, glFormat, mipmap.width, mipmap.height, 0, mipmap.data );
+
+                                } else {
+
+                                    Log.warn( "GLRenderer: Attempt to load unsupported compressed texture format in .setCubeTexture()" );
+
+                                }
+
+                            } else {
+
+                                state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, j,
+                                        glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                if ( texture.isGenerateMipmaps() && isPowerOfTwoImage ) {
+
+                    gl.glGenerateMipmap( TextureTarget.TEXTURE_CUBE_MAP.getValue() );
+
+                }
+
+                textureProperties.__version = texture.version;
+
+                if ( texture.onUpdate ) texture.onUpdate( texture );
+
+            } else {
+
+                state.activeTexture( TextureUnit.TEXTURE0.getValue() + slot );
+                state.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, (int)textureProperties.get("__image__webglTextureCube"));
+
+            }
+
+        }
+
+    }
+
+    private void setCubeTextureDynamic ( Texture texture, int slot ) {
+
+        state.activeTexture( TextureUnit.TEXTURE0.getValue() + slot );
+        state.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, (int)properties.get( texture ).get("__webglTexture"));
+
+    }
+
+    // Render targets
+
+    /**
+     * Setup storage for target texture and bind it to correct framebuffer
+     */
+    private  void setupFrameBufferTexture ( int framebuffer, GLRenderTarget renderTarget, int attachment, int textureTarget ) {
+
+        PixelFormat glFormat = renderTarget.texture.getFormat();
+        PixelType glType = renderTarget.texture.getType();
+        state.texImage2D( textureTarget, 0, glFormat, renderTarget.width, renderTarget.height, 0, glFormat, glType, null );
+        gl.glBindFramebuffer( GL20.GL_FRAMEBUFFER, framebuffer );
+        gl.glFramebufferTexture2D( GL20.GL_FRAMEBUFFER, attachment, textureTarget, (int)properties.get( renderTarget.texture ).get("__webglTexture"), 0 );
+        gl.glBindFramebuffer( GL20.GL_FRAMEBUFFER, 0 /*null*/ );
+
+    }
+
+    /**
+     * Setup storage for internal depth/stencil buffers and bind to correct framebuffer
+     */
+    private void setupRenderBufferStorage ( int renderbuffer, GLRenderTarget renderTarget ) {
+
+        gl.glBindRenderbuffer( GL20.GL_RENDERBUFFER, renderbuffer );
+
+        if ( renderTarget.depthBuffer && ! renderTarget.stencilBuffer ) {
+
+            gl.glRenderbufferStorage( GL20.GL_RENDERBUFFER, RenderbufferInternalFormat.DEPTH_COMPONENT16.getValue(), renderTarget.width, renderTarget.height );
+            gl.glFramebufferRenderbuffer( GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_ATTACHMENT.getValue(), GL20.GL_RENDERBUFFER, renderbuffer );
+
+        } else if ( renderTarget.depthBuffer && renderTarget.stencilBuffer ) {
+
+            gl.glRenderbufferStorage( GL20.GL_RENDERBUFFER, RenderbufferInternalFormat.DEPTH_STENCIL.getValue(), renderTarget.width, renderTarget.height );
+            gl.glFramebufferRenderbuffer( GL20.GL_FRAMEBUFFER, FramebufferSlot.DEPTH_STENCIL_ATTACHMENT.getValue(), GL20.GL_RENDERBUFFER, renderbuffer );
+
+        } else {
+
+            // FIXME: We don't support !depth !stencil
+            gl.glRenderbufferStorage( GL20.GL_RENDERBUFFER, RenderbufferInternalFormat.RGBA4.getValue(), renderTarget.width, renderTarget.height );
+
+        }
+
+        gl.glBindRenderbuffer( GL20.GL_RENDERBUFFER, 0 /*null*/ );
+
+    }
+    
+    /**
+     * Setup GL resources for a non-texture depth buffer
+     * @param renderTarget
+     */
+    private void setupDepthRenderbuffer( GLRenderTarget renderTarget ) {
+
+        FastMap<Object> renderTargetProperties = properties.get( renderTarget );
+
+        boolean isCube = ( renderTarget instanceof GLRenderTargetCube );
+
+        if ( isCube ) {
+
+            renderTargetProperties.put("__webglDepthbuffer" , new int[6]);
+
+            for ( int i = 0; i < 6; i ++ ) {
+
+                gl.glBindFramebuffer( GL20.GL_FRAMEBUFFER, ((int[])renderTargetProperties.get("__webglFramebuffer"))[ i ] );
+                ((int[])renderTargetProperties.get("__webglDepthbuffer"))[ i ] = gl.glGenRenderbuffer();
+                setupRenderBufferStorage( ((int[])renderTargetProperties.get("__webglDepthbuffer"))[ i ], renderTarget );
+
+            }
+
+        } else {
+
+            gl.glBindFramebuffer( GL20.GL_FRAMEBUFFER, (int)renderTargetProperties.get("__webglFramebuffer") );
+            renderTargetProperties.put("__webglDepthbuffer", gl.glGenRenderbuffer());
+            setupRenderBufferStorage( (int)renderTargetProperties.get("__webglDepthbuffer"), renderTarget );
+
+        }
+
+        gl.glBindFramebuffer( GL20.GL_FRAMEBUFFER, 0 /*null*/ );
+
+    }
+    
+    /**
+     * Set up GL resources for the render target
+     * @param renderTarget
+     */
+    private void setupRenderTarget( GLRenderTarget renderTarget )
+    {
+        FastMap<Object> renderTargetProperties = properties.get( renderTarget );
+        FastMap<Object> textureProperties = properties.get( renderTarget.texture );
+
+        // TODO: Fix dispose
+//        renderTarget.addEventListener( 'dispose', onRenderTargetDispose );
+
+        textureProperties.put("__webglTexture", gl.glGenTexture());
+
+        info.getMemory().textures ++;
+
+        boolean isCube = ( renderTarget instanceof GLRenderTargetCube );
+        boolean isTargetPowerOfTwo = Mathematics.isPowerOfTwo( renderTarget.width ) && Mathematics.isPowerOfTwo( renderTarget.height );
+
+        // Setup framebuffer
+
+        if ( isCube ) {
+
+            renderTargetProperties.put("__webglFramebuffer", new int[6]);
+
+            for ( int i = 0; i < 6; i ++ ) {
+
+                ((int[])renderTargetProperties.get("__webglFramebuffer"))[ i ] = gl.glGenFramebuffer();
+
+            }
+
+        } else {
+
+            renderTargetProperties.put("__webglFramebuffer", gl.glGenFramebuffer());
+
+        }
+
+        // Setup color buffer
+
+        if ( isCube ) {
+
+            state.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, (Integer) textureProperties.get("__webglTexture"));
+            setTextureParameters( TextureTarget.TEXTURE_CUBE_MAP, renderTarget.texture, isTargetPowerOfTwo );
+
+            for ( int i = 0; i < 6; i ++ ) {
+
+                setupFrameBufferTexture( ((int[])renderTargetProperties.get("__webglFramebuffer"))[ i ], 
+                        renderTarget, GL20.GL_COLOR_ATTACHMENT0, TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i );
+
+            }
+
+            if ( renderTarget.texture.isGenerateMipmaps() && isTargetPowerOfTwo )
+                gl.glGenerateMipmap( TextureTarget.TEXTURE_CUBE_MAP.getValue() );
+
+            state.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, 0 /*null*/ );
+
+        } else {
+
+            state.bindTexture( TextureTarget.TEXTURE_2D, (int)textureProperties.get("__webglTexture"));
+            setTextureParameters( TextureTarget.TEXTURE_2D, renderTarget.texture, isTargetPowerOfTwo );
+            setupFrameBufferTexture( (int)renderTargetProperties.get("__webglFramebuffer"), 
+                    renderTarget, GL20.GL_COLOR_ATTACHMENT0, TextureTarget.TEXTURE_2D.getValue() );
+
+            if ( renderTarget.texture.isGenerateMipmaps() && isTargetPowerOfTwo )
+                gl.glGenerateMipmap( TextureTarget.TEXTURE_2D.getValue() );
+
+            state.bindTexture( TextureTarget.TEXTURE_2D, 0 /*null*/ );
+
+        }
+
+        // Setup depth and stencil buffers
+
+        if ( renderTarget.depthBuffer ) {
+
+            setupDepthRenderbuffer( renderTarget );
+
+        }
+
+    }
+
+    public GLRenderTarget getCurrentRenderTarget() {
+
+        return _currentRenderTarget;
+
+    }
+
+    /**
+     * Setup render target
+     * @param renderTarget
+     */
+	public void setRenderTarget(GLRenderTarget renderTarget) {
+
+		_currentRenderTarget = renderTarget;
+
+		if (renderTarget != null && !properties.get(renderTarget).containsKey("__webglFramebuffer")) {
+
+			setupRenderTarget(renderTarget);
+
+		}
+
+		boolean isCube = (renderTarget instanceof GLRenderTargetCube);
+		int framebuffer;
+
+		if (renderTarget != null ) {
+
+			FastMap<Object> renderTargetProperties = properties.get(renderTarget);
+
+			if (isCube) {
+
+				framebuffer = ((Integer[]) renderTargetProperties.get("__webglFramebuffer"))[((GLRenderTargetCube)renderTarget).activeCubeFace];
+
+			} else {
+
+				framebuffer = (int) renderTargetProperties.get("__webglFramebuffer");
+
+			}
+
+			_currentScissor.copy(renderTarget.scissor);
+			_currentScissorTest = renderTarget.scissorTest;
+
+			_currentViewport.copy(renderTarget.viewport);
+
+		} else {
+
+			framebuffer = 0;
+
+			_currentScissor.copy(_scissor).multiplyScalar(_pixelRatio);
+			_currentScissorTest = _scissorTest;
+
+			_currentViewport.copy(_viewport).multiplyScalar(_pixelRatio);
+
+		}
+
+		if (_currentFramebuffer != framebuffer) {
+
+			gl.glBindFramebuffer( GL20.GL_FRAMEBUFFER, framebuffer);
+			_currentFramebuffer = framebuffer;
+
+		}
+
+		state.scissor(_currentScissor);
+		state.setScissorTest(_currentScissorTest);
+
+		state.viewport(_currentViewport);
+
+		if (isCube) {
+
+			FastMap<Object> textureProperties = properties.get(renderTarget.texture);
+			gl.glFramebufferTexture2D(GL20.GL_FRAMEBUFFER,
+                    GL20.GL_COLOR_ATTACHMENT0,
+                    GL20.GL_TEXTURE_CUBE_MAP_POSITIVE_X + ((GLRenderTargetCube)renderTarget).activeCubeFace,
+                    (Integer) textureProperties.get("__webglTexture"),
+                    ((GLRenderTargetCube)renderTarget).activeMipMapLevel);
+
+		}
+
+	}
+
+	public void readRenderTargetPixels(GLRenderTarget renderTarget, int x, int y, int width, int height, Buffer buffer)
+    {
+
+		if (properties.get(renderTarget).containsKey("__webglFramebuffer")) {
+
+			int framebuffer = (int) properties.get(renderTarget).get("__webglFramebuffer");
+
+			boolean restore = false;
+
+			if (framebuffer != _currentFramebuffer) {
+
+				gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebuffer);
+
+				restore = true;
+
+			}
+
+			try {
+
+				Texture texture = renderTarget.texture;
+
+				if (texture.getFormat() != PixelFormat.RGBA
+						&& texture.getFormat().getValue() != GLHelpers.getParameter(gl, GL20.GL_IMPLEMENTATION_COLOR_READ_FORMAT)) {
+
+					Log.error("GLRenderer.readRenderTargetPixels: renderTarget is not in RGBA or implementation defined format.");
+					return;
+
+				}
+
+				// TODO: Fix Extensions
+				if (texture.getType() != PixelType.UNSIGNED_BYTE
+						&& PixelType.UNSIGNED_BYTE.getValue() != GLHelpers.getParameter(gl, GL20.GL_IMPLEMENTATION_COLOR_READ_TYPE))
+//					&& ! ( texture.getType() == PixelType.FLOAT && extensions.get( 'WEBGL_color_buffer_float' ) )
+//					&& ! ( texture.getType() == THREE.HalfFloatType && extensions.get( 'EXT_color_buffer_half_float' ) ) )
+				{
+
+					Log.error("GLRenderer.readRenderTargetPixels: renderTarget is not in UnsignedByteType or implementation defined type.");
+					return;
+
+				}
+
+				if (gl.glCheckFramebufferStatus(GL20.GL_FRAMEBUFFER) == GL20.GL_FRAMEBUFFER_COMPLETE) {
+
+					gl.glReadPixels(x, y, width, height, texture.getFormat().getValue(), texture.getType().getValue(), buffer);
+
+				} else {
+
+					Log.error("GLRenderer.readRenderTargetPixels: readPixels from renderTarget failed. Framebuffer not complete.");
+
+				}
+
+			} finally {
+
+				if (restore) {
+
+					gl.glBindFramebuffer(GL20.GL_FRAMEBUFFER, _currentFramebuffer);
+
+				}
+
+			}
+
+		}
+
+	}
+
+	private void updateRenderTargetMipmap( GLRenderTarget renderTarget ) {
+
+		TextureTarget target = renderTarget instanceof GLRenderTargetCube ? TextureTarget.TEXTURE_CUBE_MAP : TextureTarget.TEXTURE_2D;
+		int texture = (int) properties.get( renderTarget.texture ).get("__webglTexture");
+
+		state.bindTexture( target, texture );
+		gl.glGenerateMipmap( target.getValue() );
+		state.bindTexture( target, 0 );
+
+	}
+
+	/**
+	 * Fallback filters for non-power-of-2 textures
+	 * @param f
+	 * @return
+     */
+	int filterFallback ( int f )
+	{
+		if(f == GL20.GL_NEAREST || f == GL20.GL_NEAREST_MIPMAP_NEAREST || f == GL20.GL_NEAREST_MIPMAP_LINEAR)
+			return GL20.GL_NEAREST;
+
+		return GL20.GL_LINEAR;
 	}
 }

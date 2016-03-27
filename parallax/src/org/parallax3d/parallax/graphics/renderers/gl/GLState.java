@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.ThreejsObject;
@@ -28,6 +29,7 @@ import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint8Array;
 import org.parallax3d.parallax.system.gl.enums.*;
 
+import java.nio.Buffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -552,6 +554,22 @@ public class GLState
 
             boundTexture.type = webglType;
             boundTexture.texture = webglTexture;
+
+        }
+
+    }
+
+    public void texImage2D(int target, int level, PixelFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type,
+                           Buffer pixels) {
+
+        try {
+
+            gl.glTexImage2D(target, level, internalformat.getValue(),
+                    width, height, border, format.getValue(), type.getValue(), pixels);
+
+        } catch ( Exception error ) {
+
+            Log.error( "GLState.texImage2D()", error );
 
         }
 
