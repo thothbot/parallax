@@ -26,7 +26,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.MeshStandardMaterial")
 public class MeshStandardMaterial extends Material implements HasColor, HasMap, HasLightMap, HasAoMap,
-        HasEmissiveMap, HasBumpMap, HasNormalMap, HasDisplacementMap, HasRoughnessMap, HasAlphaMap, HasEnvMap, HasFog,
+        HasEmissiveMap, HasBumpMap, HasNormalMap, HasDisplacementMap, HasRoughnessMap, HasAlphaMap, HasEnvMap, HasFog, HasMetalnessMap,
         HasShading, HasWireframe, HasVertexColors, HasSkinning
 {
     Color color = new Color( 0xffffff ); // diffuse
@@ -378,6 +378,68 @@ public class MeshStandardMaterial extends Material implements HasColor, HasMap, 
     @Override
     public Shader getAssociatedShader() {
         return new StandardShader();
+    }
+
+    public double getRoughness() {
+        return roughness;
+    }
+
+    public MeshStandardMaterial setRoughness(double roughness) {
+        this.roughness = roughness;
+        return this;
+    }
+
+    public double getMetalness() {
+        return metalness;
+    }
+
+    public MeshStandardMaterial setMetalness(double metalness) {
+        this.metalness = metalness;
+        return this;
+    }
+
+    @Override
+    public Texture getMetalnessMap() {
+        return metalnessMap;
+    }
+
+    @Override
+    public MeshStandardMaterial setMetalnessMap(Texture metalnessMap) {
+        this.metalnessMap = metalnessMap;
+        return this;
+    }
+
+    @Override
+    public double getDisplacementScale() {
+        return displacementScale;
+    }
+
+    @Override
+    public MeshStandardMaterial setDisplacementScale(double displacementScale) {
+        this.displacementScale = displacementScale;
+
+        return this;
+    }
+
+    @Override
+    public double getDisplacementBias() {
+        return displacementBias;
+    }
+
+    public MeshStandardMaterial setDisplacementBias(double displacementBias) {
+        this.displacementBias = displacementBias;
+
+        return this;
+    }
+
+    public double getEnvMapIntensity() {
+        return envMapIntensity;
+    }
+
+    public MeshStandardMaterial setEnvMapIntensity(double envMapIntensity) {
+        this.envMapIntensity = envMapIntensity;
+
+        return this;
     }
 
     @Override

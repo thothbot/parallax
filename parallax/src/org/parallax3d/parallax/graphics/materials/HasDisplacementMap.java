@@ -24,4 +24,12 @@ public interface HasDisplacementMap {
     Texture getDisplacementMap();
 
     <T extends Material> T setDisplacementMap(Texture displacementMap);
+
+    double getDisplacementScale();
+
+    <T extends Material> T setDisplacementScale(double displacementMapScale);
+
+    double getDisplacementBias();
+
+    <T extends Material> T setDisplacementBias(double displacementMapBias);
 }

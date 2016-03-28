@@ -78,6 +78,8 @@ public class Uniform
 	Float32Array cache_array;
 	int location = -1;
 
+	boolean needsUpdate = false;
+
 	public Uniform(Uniform.TYPE type)
 	{
 		this(type, null);
@@ -130,6 +132,16 @@ public class Uniform
 
 	public void setProperties(FastMap<Uniform> properties) {
 		this.properties = properties;
+	}
+
+	public boolean isNeedsUpdate() {
+		return needsUpdate;
+	}
+
+	public Uniform setNeedsUpdate(boolean needsUpdate) {
+		this.needsUpdate = needsUpdate;
+
+		return this;
 	}
 
 	public String toString()
