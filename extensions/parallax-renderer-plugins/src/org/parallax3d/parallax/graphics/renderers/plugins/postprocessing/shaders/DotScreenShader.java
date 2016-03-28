@@ -60,8 +60,8 @@ public final class DotScreenShader extends Shader
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("tSize", new Uniform(Uniform.TYPE.V2, new Vector2( 256, 256 )));
 		this.addUniform("center", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
-		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 1.57));
-		this.addUniform("scale", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F1, 1.57));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.F1, 1.0));
 
 	}
 

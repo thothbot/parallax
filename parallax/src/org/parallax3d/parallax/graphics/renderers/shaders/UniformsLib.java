@@ -41,7 +41,7 @@ public class UniformsLib
 		return new FastMap<Uniform>() {{
 
 			put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
-			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("opacity", new Uniform(Uniform.TYPE.F1,  1.0 ));
 
 			put("map", new Uniform(Uniform.TYPE.T ));
 			put("offsetRepeat", new Uniform(Uniform.TYPE.V4,  new Vector4( 0, 0, 1, 1 ) ));
@@ -50,9 +50,9 @@ public class UniformsLib
 			put("alphaMap", new Uniform(Uniform.TYPE.T ));
 
 			put("envMap", new Uniform(Uniform.TYPE.T ));
-			put("flipEnvMap", new Uniform(Uniform.TYPE.F,  -1.0 ));
-			put("reflectivity", new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("refractionRatio", new Uniform(Uniform.TYPE.F,  0.98 ));
+			put("flipEnvMap", new Uniform(Uniform.TYPE.F1,  -1.0 ));
+			put("reflectivity", new Uniform(Uniform.TYPE.F1,  1.0 ));
+			put("refractionRatio", new Uniform(Uniform.TYPE.F1,  0.98 ));
 		}};
 
 	}
@@ -62,7 +62,7 @@ public class UniformsLib
 		return new FastMap<Uniform>() {{
 
 			put("aoMap", new Uniform(Uniform.TYPE.T ));
-			put("aoMapIntensity", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("aoMapIntensity", new Uniform(Uniform.TYPE.F1,  1.0 ));
 
 		}};
 
@@ -73,7 +73,7 @@ public class UniformsLib
 		return new FastMap<Uniform>() {{
 
 			put("lightMap", new Uniform(Uniform.TYPE.T ));
-			put("lightMapIntensity", new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("lightMapIntensity", new Uniform(Uniform.TYPE.F1,  1.0 ));
 
 		}};
 
@@ -94,7 +94,7 @@ public class UniformsLib
 		return new FastMap<Uniform>() {{
 
 			put("bumpMap", new Uniform(Uniform.TYPE.T ));
-			put("bumpScale", new Uniform(Uniform.TYPE.F, 1.0 ));
+			put("bumpScale", new Uniform(Uniform.TYPE.F1, 1.0 ));
 
 		}};
 
@@ -116,8 +116,8 @@ public class UniformsLib
 		return new FastMap<Uniform>() {{
 
 			put("displacementMap", new Uniform(Uniform.TYPE.T ));
-			put("displacementScale", new Uniform(Uniform.TYPE.F, 1.0 ));
-			put("displacementBias", new Uniform(Uniform.TYPE.F, 0.0 ));
+			put("displacementScale", new Uniform(Uniform.TYPE.F1, 1.0 ));
+			put("displacementBias", new Uniform(Uniform.TYPE.F1, 0.0 ));
 
 		}};
 
@@ -147,9 +147,9 @@ public class UniformsLib
 	{
 		return new FastMap<Uniform>() {{
 
-			put("fogDensity", new Uniform(Uniform.TYPE.F,  0.00025 ));
-			put("fogNear", new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("fogFar", new Uniform(Uniform.TYPE.F,  2000.0 ));
+			put("fogDensity", new Uniform(Uniform.TYPE.F1,  0.00025 ));
+			put("fogNear", new Uniform(Uniform.TYPE.F1,  1.0 ));
+			put("fogFar", new Uniform(Uniform.TYPE.F1,  2000.0 ));
 			put("fogColor", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 
 		}};
@@ -160,16 +160,16 @@ public class UniformsLib
 	{
 		return new FastMap<Uniform>() {{
 
-			put("ambientLightColor", new Uniform(Uniform.TYPE.FV,  Float32Array.createArray() ));
+			put("ambientLightColor", new Uniform(Uniform.TYPE.FV3,  Float32Array.createArray() ));
 
 			put("directionalLights", new Uniform(Uniform.TYPE.SA,  new ArrayList<>(), new FastMap<Uniform>(){{
 
 				put("direction", new Uniform(Uniform.TYPE.V3 ));
 				put("color", new Uniform(Uniform.TYPE.C ));
 
-				put("shadow", new Uniform(Uniform.TYPE.I ));
-				put("shadowBias", new Uniform(Uniform.TYPE.F ));
-				put("shadowRadius", new Uniform(Uniform.TYPE.F ));
+				put("shadow", new Uniform(Uniform.TYPE.I1));
+				put("shadowBias", new Uniform(Uniform.TYPE.F1));
+				put("shadowRadius", new Uniform(Uniform.TYPE.F1));
 				put("shadowMapSize", new Uniform(Uniform.TYPE.V2 ));
 
 			}} ));
@@ -182,14 +182,14 @@ public class UniformsLib
 				put("color", new Uniform(Uniform.TYPE.C ));
 				put("position", new Uniform(Uniform.TYPE.V3 ));
 				put("direction", new Uniform(Uniform.TYPE.V3 ));
-				put("distance", new Uniform(Uniform.TYPE.F ));
-				put("coneCos", new Uniform(Uniform.TYPE.F ));
-				put("penumbraCos", new Uniform(Uniform.TYPE.F ));
-				put("decay", new Uniform(Uniform.TYPE.F ));
+				put("distance", new Uniform(Uniform.TYPE.F1));
+				put("coneCos", new Uniform(Uniform.TYPE.F1));
+				put("penumbraCos", new Uniform(Uniform.TYPE.F1));
+				put("decay", new Uniform(Uniform.TYPE.F1));
 
-				put("shadow", new Uniform(Uniform.TYPE.I ));
-				put("shadowBias", new Uniform(Uniform.TYPE.F ));
-				put("shadowRadius", new Uniform(Uniform.TYPE.F ));
+				put("shadow", new Uniform(Uniform.TYPE.I1));
+				put("shadowBias", new Uniform(Uniform.TYPE.F1));
+				put("shadowRadius", new Uniform(Uniform.TYPE.F1));
 				put("shadowMapSize", new Uniform(Uniform.TYPE.V2 ));
 
 			}} ));
@@ -201,12 +201,12 @@ public class UniformsLib
 
 				put("color", new Uniform(Uniform.TYPE.C ));
 				put("position", new Uniform(Uniform.TYPE.V3 ));
-				put("decay", new Uniform(Uniform.TYPE.F ));
-				put("distance", new Uniform(Uniform.TYPE.F ));
+				put("decay", new Uniform(Uniform.TYPE.F1));
+				put("distance", new Uniform(Uniform.TYPE.F1));
 
-				put("shadow", new Uniform(Uniform.TYPE.I ));
-				put("shadowBias", new Uniform(Uniform.TYPE.F ));
-				put("shadowRadius", new Uniform(Uniform.TYPE.F ));
+				put("shadow", new Uniform(Uniform.TYPE.I1));
+				put("shadowBias", new Uniform(Uniform.TYPE.F1));
+				put("shadowRadius", new Uniform(Uniform.TYPE.F1));
 				put("shadowMapSize", new Uniform(Uniform.TYPE.V2 ));
 
 			}} ));
@@ -231,9 +231,9 @@ public class UniformsLib
 		return new FastMap<Uniform>() {{
 
 			put("diffuse", new Uniform(Uniform.TYPE.C, new Color( 0xeeeeee )));
-			put("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("size",    new Uniform(Uniform.TYPE.F,  1.0 ));
-			put("scale",   new Uniform(Uniform.TYPE.F,  1.0 ));
+			put("opacity", new Uniform(Uniform.TYPE.F1,  1.0 ));
+			put("size",    new Uniform(Uniform.TYPE.F1,  1.0 ));
+			put("scale",   new Uniform(Uniform.TYPE.F1,  1.0 ));
 			put("map",     new Uniform(Uniform.TYPE.T ));
 			put("offsetRepeat", new Uniform(Uniform.TYPE.V4, new Vector4( 0, 0, 1, 1 ) ));
 

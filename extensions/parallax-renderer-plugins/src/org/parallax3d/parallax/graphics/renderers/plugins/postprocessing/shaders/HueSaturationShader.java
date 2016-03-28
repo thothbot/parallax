@@ -63,8 +63,8 @@ public final class HueSaturationShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("hue", new Uniform(Uniform.TYPE.F, 0.0));
-		this.addUniform("saturation", new Uniform(Uniform.TYPE.F, 0.0));
+		this.addUniform("hue", new Uniform(Uniform.TYPE.F1, 0.0));
+		this.addUniform("saturation", new Uniform(Uniform.TYPE.F1, 0.0));
 	}
 
 }

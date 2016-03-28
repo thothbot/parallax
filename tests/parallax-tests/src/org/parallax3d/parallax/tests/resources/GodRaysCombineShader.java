@@ -54,7 +54,7 @@ public final class GodRaysCombineShader extends Shader
 	{
 		this.addUniform("tColors", new Uniform(Uniform.TYPE.T));
 		this.addUniform("tGodRays", new Uniform(Uniform.TYPE.T));
-		this.addUniform("fGodRayIntensity", new Uniform(Uniform.TYPE.F, 0.69));
+		this.addUniform("fGodRayIntensity", new Uniform(Uniform.TYPE.F1, 0.69));
 		this.addUniform("vSunPositionScreenSpace", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
 	}
 }

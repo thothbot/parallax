@@ -65,7 +65,7 @@ public final class VerticalBlurShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("v", new Uniform(Uniform.TYPE.F, 1.0/512.0));
+		this.addUniform("v", new Uniform(Uniform.TYPE.F1, 1.0/512.0));
 	}
 
 }

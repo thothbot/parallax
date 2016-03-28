@@ -24,14 +24,12 @@ import org.parallax3d.parallax.graphics.cameras.PerspectiveCamera;
 import org.parallax3d.parallax.graphics.core.AbstractGeometry;
 import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.lights.DirectionalLight;
-import org.parallax3d.parallax.graphics.lights.HemisphereLight;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.MultiMaterial;
 import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.Scene;
 import org.parallax3d.parallax.loaders.JsonLoader;
 import org.parallax3d.parallax.loaders.Loader;
@@ -97,8 +95,8 @@ public final class MaterialsLightmap extends ParallaxTest
 
 		skyMat.getShader().addUniform("topColor", new Uniform(Uniform.TYPE.C, new Color().copy(light.getColor())));
 		skyMat.getShader().addUniform("bottomColor", new Uniform(Uniform.TYPE.C, new Color(0xffffff)));
-		skyMat.getShader().addUniform("offset", new Uniform(Uniform.TYPE.F, 400.0 ));
-		skyMat.getShader().addUniform("exponent", new Uniform(Uniform.TYPE.F, 0.6 ));
+		skyMat.getShader().addUniform("offset", new Uniform(Uniform.TYPE.F1, 400.0 ));
+		skyMat.getShader().addUniform("exponent", new Uniform(Uniform.TYPE.F1, 0.6 ));
 
 		SphereGeometry skyGeo = new SphereGeometry( 4000, 32, 15 );
 		Mesh sky = new Mesh( skyGeo, skyMat );

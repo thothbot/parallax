@@ -19,12 +19,8 @@
 package org.parallax3d.parallax.graphics.renderers.shaders;
 
 import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Phong shading - lighting model three-dimensional objects, 
@@ -67,7 +63,7 @@ public final class PhongShader extends Shader
 		this.setUniforms(UniformsLib.lights());
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
 		this.addUniform("specular", new Uniform(Uniform.TYPE.C, new Color( 0x111111 ) ));
-		this.addUniform("shininess", new Uniform(Uniform.TYPE.F, 30.0 ));
+		this.addUniform("shininess", new Uniform(Uniform.TYPE.F1, 30.0 ));
 	}
 	
 }

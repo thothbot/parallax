@@ -56,36 +56,36 @@ public final class BokehShader2 extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("textureWidth", new Uniform(Uniform.TYPE.F, 1. ));
-		this.addUniform("textureHeight", new Uniform(Uniform.TYPE.F, 1. ));
+		this.addUniform("textureWidth", new Uniform(Uniform.TYPE.F1, 1. ));
+		this.addUniform("textureHeight", new Uniform(Uniform.TYPE.F1, 1. ));
 
-		this.addUniform("focalDepth", new Uniform(Uniform.TYPE.F, 1. ));
-		this.addUniform("focalLength", new Uniform(Uniform.TYPE.F, 24. ));
-		this.addUniform("fstop", new Uniform(Uniform.TYPE.F, .9 ));
+		this.addUniform("focalDepth", new Uniform(Uniform.TYPE.F1, 1. ));
+		this.addUniform("focalLength", new Uniform(Uniform.TYPE.F1, 24. ));
+		this.addUniform("fstop", new Uniform(Uniform.TYPE.F1, .9 ));
 
 		this.addUniform("tColor", new Uniform(Uniform.TYPE.T ));
 		this.addUniform("tDepth", new Uniform(Uniform.TYPE.T ));
 
-		this.addUniform("maxblur", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("maxblur", new Uniform(Uniform.TYPE.F1, 1.0));
 
-		this.addUniform("showFocus", new Uniform(Uniform.TYPE.I, 0));
-		this.addUniform("manualdof", new Uniform(Uniform.TYPE.I, 0));
-		this.addUniform("vignetting", new Uniform(Uniform.TYPE.I, 0));
-		this.addUniform("depthblur", new Uniform(Uniform.TYPE.I, 0));
+		this.addUniform("showFocus", new Uniform(Uniform.TYPE.I1, 0));
+		this.addUniform("manualdof", new Uniform(Uniform.TYPE.I1, 0));
+		this.addUniform("vignetting", new Uniform(Uniform.TYPE.I1, 0));
+		this.addUniform("depthblur", new Uniform(Uniform.TYPE.I1, 0));
 
-		this.addUniform("threshold", new Uniform(Uniform.TYPE.F, .5));
-		this.addUniform("gain", new Uniform(Uniform.TYPE.F, 2.));
-		this.addUniform("bias", new Uniform(Uniform.TYPE.F, .5));
-		this.addUniform("fringe", new Uniform(Uniform.TYPE.F, .7));
+		this.addUniform("threshold", new Uniform(Uniform.TYPE.F1, .5));
+		this.addUniform("gain", new Uniform(Uniform.TYPE.F1, 2.));
+		this.addUniform("bias", new Uniform(Uniform.TYPE.F1, .5));
+		this.addUniform("fringe", new Uniform(Uniform.TYPE.F1, .7));
 
-		this.addUniform("znear", new Uniform(Uniform.TYPE.F, .1));
-		this.addUniform("zfar", new Uniform(Uniform.TYPE.F, 100.));
+		this.addUniform("znear", new Uniform(Uniform.TYPE.F1, .1));
+		this.addUniform("zfar", new Uniform(Uniform.TYPE.F1, 100.));
 
-		this.addUniform("noise", new Uniform(Uniform.TYPE.I, 1));
-		this.addUniform("dithering", new Uniform(Uniform.TYPE.F, 0.0001));
-		this.addUniform("pentagon", new Uniform(Uniform.TYPE.I, 0));
+		this.addUniform("noise", new Uniform(Uniform.TYPE.I1, 1));
+		this.addUniform("dithering", new Uniform(Uniform.TYPE.F1, 0.0001));
+		this.addUniform("pentagon", new Uniform(Uniform.TYPE.I1, 0));
 
-		this.addUniform("shaderFocus", new Uniform(Uniform.TYPE.I, 1));
+		this.addUniform("shaderFocus", new Uniform(Uniform.TYPE.I1, 1));
 		this.addUniform("focusCoords", new Uniform(Uniform.TYPE.V2, new Vector2()));
 	}
 

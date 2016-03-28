@@ -124,7 +124,7 @@ public class MaterialsRenderTarget extends ParallaxTest implements TouchMoveHand
 		rtTexture.setFormat(PixelFormat.RGBA);
 
 		material = new ShaderMaterial(ResourcesPass1.INSTANCE);
-		material.getShader().addUniform("time", new Uniform(Uniform.TYPE.F, 0.0 ));
+		material.getShader().addUniform("time", new Uniform(Uniform.TYPE.F1, 0.0 ));
 
 		materialScreen = new ShaderMaterial(ResourcesScreen.INSTANCE)
 				.setDepthWrite(false);

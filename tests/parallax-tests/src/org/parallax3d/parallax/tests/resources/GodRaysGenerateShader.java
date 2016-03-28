@@ -66,7 +66,7 @@ public final class GodRaysGenerateShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tInput", new Uniform(Uniform.TYPE.T));
-		this.addUniform("fStepSize", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("fStepSize", new Uniform(Uniform.TYPE.F1, 1.0));
 		this.addUniform("vSunPositionScreenSpace", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
 	}
 }

@@ -151,8 +151,8 @@ public abstract class Shader
 		if ( useVertexTexture )
 		{
 			addUniform("boneTexture", new Uniform(Uniform.TYPE.FV1, null));
-			addUniform("boneTextureWidth", new Uniform(Uniform.TYPE.F, null));
-			addUniform("boneTextureHeight", new Uniform(Uniform.TYPE.F, null));
+			addUniform("boneTextureWidth", new Uniform(Uniform.TYPE.F1, null));
+			addUniform("boneTextureHeight", new Uniform(Uniform.TYPE.F1, null));
 		}
 		else
 		{

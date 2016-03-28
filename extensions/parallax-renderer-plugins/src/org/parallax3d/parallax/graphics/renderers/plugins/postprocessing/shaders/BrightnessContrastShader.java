@@ -63,8 +63,8 @@ public final class BrightnessContrastShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("brightness", new Uniform(Uniform.TYPE.F, 0.0));
-		this.addUniform("contrast", new Uniform(Uniform.TYPE.F, 0.0));
+		this.addUniform("brightness", new Uniform(Uniform.TYPE.F1, 0.0));
+		this.addUniform("contrast", new Uniform(Uniform.TYPE.F1, 0.0));
 	}
 
 }

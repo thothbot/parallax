@@ -56,6 +56,6 @@ public final class CopyShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F1, 1.0));
 	}
 }

@@ -143,7 +143,7 @@ public class TextTessellation extends ParallaxTest
 				m.setTransparent(true);
 				ShaderMaterial shaderMaterial = new ShaderMaterial( Resources.INSTANCE );
 				uniforms = new FastMap<Uniform>() {{
-					put("amplitude", new Uniform(Uniform.TYPE.F, 0.0) );
+					put("amplitude", new Uniform(Uniform.TYPE.F1, 0.0) );
 				}};
 				shaderMaterial.setWireframe(true);
 

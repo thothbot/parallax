@@ -50,9 +50,9 @@ public class WaterShader extends Shader
 	{
 		this.addUniform("normalSampler", new Uniform(Uniform.TYPE.T, null ));
 		this.addUniform("mirrorSampler",  new Uniform(Uniform.TYPE.T, null ));
-		this.addUniform("alpha", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("time", new Uniform(Uniform.TYPE.F, 0.0 ));
-		this.addUniform("distortionScale", new Uniform(Uniform.TYPE.F, 20.0 ));
+		this.addUniform("alpha", new Uniform(Uniform.TYPE.F1, 1.0 ));
+		this.addUniform("time", new Uniform(Uniform.TYPE.F1, 0.0 ));
+		this.addUniform("distortionScale", new Uniform(Uniform.TYPE.F1, 20.0 ));
 		this.addUniform("textureMatrix", new Uniform(Uniform.TYPE.M4, new Matrix4() ));
 		this.addUniform("sunColor", new Uniform(Uniform.TYPE.C, new Color( 0x7F7F7F ) ));
 		this.addUniform("sunDirection", new Uniform(Uniform.TYPE.V3, new Vector3( 0.70707, 0.70707, 0 ) ));

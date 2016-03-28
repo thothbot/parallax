@@ -62,14 +62,14 @@ public final class DigitalGlitch extends Shader
 		//displacement texture for digital glitch squares
 		this.addUniform("tDisp", new Uniform(Uniform.TYPE.T ));
 		//apply the glitch ?
-		this.addUniform("byp", new Uniform(Uniform.TYPE.I, 0 ));
-		this.addUniform("amount", new Uniform(Uniform.TYPE.F, .08));
-		this.addUniform("angle", new Uniform(Uniform.TYPE.F, .02));
-		this.addUniform("seed", new Uniform(Uniform.TYPE.F, .02));
-		this.addUniform("seed_x", new Uniform(Uniform.TYPE.F, .02));
-		this.addUniform("seed_y", new Uniform(Uniform.TYPE.F, .02));
-		this.addUniform("distortion_x", new Uniform(Uniform.TYPE.F, .5));
-		this.addUniform("distortion_y", new Uniform(Uniform.TYPE.F, .6));
-		this.addUniform("col_s", new Uniform(Uniform.TYPE.F, .05));
+		this.addUniform("byp", new Uniform(Uniform.TYPE.I1, 0 ));
+		this.addUniform("amount", new Uniform(Uniform.TYPE.F1, .08));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F1, .02));
+		this.addUniform("seed", new Uniform(Uniform.TYPE.F1, .02));
+		this.addUniform("seed_x", new Uniform(Uniform.TYPE.F1, .02));
+		this.addUniform("seed_y", new Uniform(Uniform.TYPE.F1, .02));
+		this.addUniform("distortion_x", new Uniform(Uniform.TYPE.F1, .5));
+		this.addUniform("distortion_y", new Uniform(Uniform.TYPE.F1, .6));
+		this.addUniform("col_s", new Uniform(Uniform.TYPE.F1, .05));
 	}
 }

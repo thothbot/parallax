@@ -21,9 +21,6 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class DashedShader extends Shader 
 {
 
@@ -48,8 +45,8 @@ public class DashedShader extends Shader
 	{
 		this.setUniforms(UniformsLib.common());
 		this.setUniforms(UniformsLib.fog());
-		this.addUniform("scale",     new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("totalSize", new Uniform(Uniform.TYPE.F, 2.0 ));
+		this.addUniform("scale",     new Uniform(Uniform.TYPE.F1, 1.0 ));
+		this.addUniform("dashSize",  new Uniform(Uniform.TYPE.F1, 1.0 ));
+		this.addUniform("totalSize", new Uniform(Uniform.TYPE.F1, 2.0 ));
 	}
 }

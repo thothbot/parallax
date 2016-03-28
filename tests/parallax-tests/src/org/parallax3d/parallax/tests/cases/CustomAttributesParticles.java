@@ -80,7 +80,7 @@ public class CustomAttributesParticles extends ParallaxTest
 		this.attributes.put("ca", new Attribute(Attribute.TYPE.C, new ArrayList<Color>()));
 
 		FastMap<Uniform> uniforms = new FastMap<>();
-		uniforms.put("amplitude", new Uniform(Uniform.TYPE.F, 1.0));
+		uniforms.put("amplitude", new Uniform(Uniform.TYPE.F1, 1.0));
 		uniforms.put("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 		uniforms.put("texture", new Uniform(Uniform.TYPE.T, new Texture(texture)));
 

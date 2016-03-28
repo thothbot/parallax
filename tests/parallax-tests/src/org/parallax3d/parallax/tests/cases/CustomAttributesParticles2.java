@@ -128,7 +128,7 @@ public class CustomAttributesParticles2 extends ParallaxTest
 				.setWrapT(TextureWrapMode.REPEAT);
 
 		FastMap<Uniform> uniforms = new FastMap<Uniform>() {{
-			put("amplitude", new Uniform(Uniform.TYPE.F, 1.0));
+			put("amplitude", new Uniform(Uniform.TYPE.F1, 1.0));
 			put("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff )));
 			put("texture", new Uniform(Uniform.TYPE.T, texture));
 		}};

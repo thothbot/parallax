@@ -59,8 +59,8 @@ public final class KaleidoShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("sides", new Uniform(Uniform.TYPE.F, 6.0));
-		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 0.0));
+		this.addUniform("sides", new Uniform(Uniform.TYPE.F1, 6.0));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F1, 0.0));
 	}
 
 }

@@ -21,9 +21,6 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Simple depth shader.
  * <p>
@@ -55,8 +52,8 @@ public final class DepthShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("mNear", new Uniform(Uniform.TYPE.F, 1.0 ));
-		this.addUniform("mFar", new Uniform(Uniform.TYPE.F, 2000.0 ));
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("mNear", new Uniform(Uniform.TYPE.F1, 1.0 ));
+		this.addUniform("mFar", new Uniform(Uniform.TYPE.F1, 2000.0 ));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F1, 1.0 ));
 	}
 }

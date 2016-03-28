@@ -19,6 +19,7 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
+import com.sun.deploy.util.ArrayUtil;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.HasNearFar;
@@ -44,6 +45,7 @@ import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.GLHelpers;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.arrays.TypeArray;
 import org.parallax3d.parallax.system.gl.enums.*;
 
@@ -536,7 +538,7 @@ public class GLRenderer extends Renderer
 
 			gl.bindBuffer( gl.ARRAY_BUFFER, buffers.normal );
 
-			if ( material.type !== 'MeshPhongMaterial' && material.type !== 'MeshStandardMaterial' && material.shading === THREE.FlatShading ) {
+			if ( material.type !== 'MeshPhongMaterial' && material.type !== 'MeshStandardMaterial' && material.shading == THREE.FlatShading ) {
 
 				for ( var i = 0, l = object.count * 3; i < l; i += 9 ) {
 
@@ -2853,11 +2855,11 @@ public class GLRenderer extends Renderer
 			// Up textures also for undefined values
 			if ( type != Uniform.TYPE.T && value == null ) continue;
 
-			if(type == Uniform.TYPE.I) // single integer
+			if(type == Uniform.TYPE.I1) // single integer
 			{
 				this.gl.glUniform1i(location, (value instanceof Boolean) ? ((Boolean) value) ? 1 : 0 : (Integer) value);
 			}
-			else if(type == Uniform.TYPE.F) // single float
+			else if(type == Uniform.TYPE.F1) // single float
 			{
 				this.gl.glUniform1f(location, value instanceof Float ? (Float) value : ((Double)value).floatValue());
 			}
@@ -2881,7 +2883,7 @@ public class GLRenderer extends Renderer
 			{
 				this.gl.glUniform1fv(location, ((Float32Array) value).getLength(), ((Float32Array) value).getTypedBuffer());
 			}
-			else if(type == Uniform.TYPE.FV) // flat array of floats with 3 x N size (JS or typed array)
+			else if(type == Uniform.TYPE.FV3) // flat array of floats with 3 x N size (JS or typed array)
 			{
 				this.gl.glUniform3fv(location, ((Float32Array) value).getLength() / 3, ((Float32Array) value).getTypedBuffer());
 			}
@@ -3388,6 +3390,415 @@ public class GLRenderer extends Renderer
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
+    // NEW code
+
+	private void loadUniform( Uniform uniform ) 
+	{
+		int location = uniform.getLocation();
+
+		if ( location == -1 ) return;
+
+		Uniform.TYPE type = uniform.getType();
+
+		// Up textures also for undefined values
+		if ( type != Uniform.TYPE.T && uniform.getValue() == null ) return;
+
+		if ( type == Uniform.TYPE.I1 ) {
+
+            int value = (uniform.getValue() instanceof Boolean)
+                    ? ((Boolean) uniform.getValue()) ? 1 : 0 : (Integer) uniform.getValue();
+
+            this.gl.glUniform1i(location, value);
+
+		} else if ( type == Uniform.TYPE.F1 ) {
+
+            float value = uniform.getValue() instanceof Float
+                    ? (Float) uniform.getValue() : ((Double)uniform.getValue()).floatValue();
+
+            this.gl.glUniform1f(location, value);
+
+		} else if ( type == Uniform.TYPE.F2 ) {
+
+            Double[] value = (Double[])uniform.getValue();
+
+            this.gl.glUniform2f(location, value[ 0 ].floatValue(), value[ 1 ].floatValue());
+
+		} else if ( type == Uniform.TYPE.F3 ) {
+
+            Double[] value = (Double[])uniform.getValue();
+
+            this.gl.glUniform3f(location, value[ 0 ].floatValue(), value[ 1 ].floatValue(), value[ 2 ].floatValue());
+
+		} else if ( type == Uniform.TYPE.F4 ) {
+
+            Double[] value = (Double[])uniform.getValue();
+
+            this.gl.glUniform4f(location, value[ 0 ].floatValue(), value[ 1 ].floatValue(), value[ 2 ].floatValue(), value[ 3 ].floatValue());
+
+		} else if ( type == Uniform.TYPE.IV1 ) {
+
+            Int32Array value = (Int32Array )uniform.getValue();
+
+            this.gl.glUniform1iv(location, value.getLength(), value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.IV3 ) {
+
+            Int32Array value = (Int32Array )uniform.getValue();
+
+            this.gl.glUniform3iv(location, value.getLength() / 3, value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.FV1 ) {
+
+            Float32Array value = (Float32Array )uniform.getValue();
+
+            this.gl.glUniform1fv(location, value.getLength(), value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.FV2 ) {
+
+            Float32Array value = (Float32Array )uniform.getValue();
+
+            this.gl.glUniform2fv(location, value.getLength() / 2, value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.FV3 ) {
+
+            Float32Array value = (Float32Array )uniform.getValue();
+
+            this.gl.glUniform3fv(location, value.getLength() / 3, value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.FV4 ) {
+
+            Float32Array value = (Float32Array )uniform.getValue();
+
+            this.gl.glUniform4fv(location, value.getLength() / 4, value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.Matrix2fv ) {
+
+            Float32Array value = (Float32Array )uniform.getValue();
+
+            this.gl.glUniformMatrix2fv(location, 1, false, value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.Matrix3fv ) {
+
+            Float32Array value = (Float32Array )uniform.getValue();
+
+            this.gl.glUniformMatrix3fv(location, 1, false, value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.Matrix4fv ) {
+
+            Float32Array value = (Float32Array )uniform.getValue();
+
+            this.gl.glUniformMatrix4fv(location, 1, false, value.getTypedBuffer());
+
+			//
+
+		} else if ( type == Uniform.TYPE.I ) {
+
+			// single integer
+            int value = (uniform.getValue() instanceof Boolean)
+                    ? ((Boolean) uniform.getValue()) ? 1 : 0 : (Integer) uniform.getValue();
+
+            this.gl.glUniform1i(location, value);
+
+		} else if ( type == Uniform.TYPE.F ) {
+
+			// single float
+            float value = uniform.getValue() instanceof Float
+                    ? (Float) uniform.getValue() : ((Double)uniform.getValue()).floatValue();
+
+            this.gl.glUniform1f(location, value);
+
+		} else if ( type == Uniform.TYPE.V2 ) {
+
+			// single Vector2
+            Vector2 value = (Vector2) uniform.getValue();
+
+            this.gl.glUniform2f(location, (float)value.getX(), (float)value.getX());
+
+		} else if ( type == Uniform.TYPE.V3 ) {
+
+			// single Vector3
+            Vector3 value = (Vector3) uniform.getValue();
+
+            this.gl.glUniform3f(location, (float)value.getX(), (float)value.getY(), (float)value.getZ());
+
+		} else if ( type == Uniform.TYPE.V4 ) {
+
+			// single Vector4
+            Vector4 value = (Vector4) uniform.getValue();
+
+            this.gl.glUniform4f(location, (float)value.getX(), (float)value.getY(), (float)value.getZ(), (float)value.getW());
+
+		} else if ( type == Uniform.TYPE.C ) {
+
+			// single Color
+            Color value = (Color) uniform.getValue();
+
+            this.gl.glUniform3f(location, (float)value.getR(), (float)value.getG(), (float)value.getB());
+
+		} else if ( type == Uniform.TYPE.S ) {
+
+			// TODO: Optimize this
+
+			FastMap<Uniform> properties = uniform.getProperties();
+
+			for ( String name : properties.keySet() ) {
+
+				Uniform property = properties.get( name );
+
+				loadUniform( property );
+
+			}
+
+		} else if ( type == Uniform.TYPE.SA ) {
+
+			// TODO: Optimize this
+
+            FastMap<Uniform> properties = uniform.getProperties();
+
+            for ( String name : properties.keySet() ) {
+
+                Uniform property = properties.get( name );
+                ArrayList<Object> value = (ArrayList<Object>) uniform.getValue();
+
+                for ( int i = 0, l = value.size(); i < l; i ++ ) {
+
+                    property.setValue(value.get(i));
+                    loadUniform( property );
+                }
+
+            }
+
+		} else if ( type == Uniform.TYPE.IV ) {
+
+			// flat array of integers with 3 x N size (JS or typed array)
+            Int32Array value = (Int32Array )uniform.getValue();
+
+            this.gl.glUniform3iv(location, value.getLength() / 3, value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.FV ) {
+
+			// flat array of floats with 3 x N size (JS or typed array)
+            Float32Array value = (Float32Array )uniform.getValue();
+
+            this.gl.glUniform3fv(location, value.getLength() / 3, value.getTypedBuffer());
+
+		} else if ( type == Uniform.TYPE.V2V ) {
+
+			// array of Vector2
+
+			if ( uniform._array == undefined ) {
+
+				uniform._array = new Float32Array( 2 * value.length );
+
+			}
+
+			for ( var i = 0, i2 = 0, il = value.length; i < il; i ++, i2 += 2 ) {
+
+				uniform._array[ i2 + 0 ] = value[ i ].x;
+				uniform._array[ i2 + 1 ] = value[ i ].y;
+
+			}
+
+			_gl.uniform2fv( location, uniform._array );
+
+		} else if ( type == Uniform.TYPE.V3V ) {
+
+			// array of THREE.Vector3
+
+			if ( uniform._array == undefined ) {
+
+				uniform._array = new Float32Array( 3 * value.length );
+
+			}
+
+			for ( var i = 0, i3 = 0, il = value.length; i < il; i ++, i3 += 3 ) {
+
+				uniform._array[ i3 + 0 ] = value[ i ].x;
+				uniform._array[ i3 + 1 ] = value[ i ].y;
+				uniform._array[ i3 + 2 ] = value[ i ].z;
+
+			}
+
+			_gl.uniform3fv( location, uniform._array );
+
+		} else if ( type == Uniform.TYPE.V4V ) {
+
+			// array of THREE.Vector4
+
+			if ( uniform._array == undefined ) {
+
+				uniform._array = new Float32Array( 4 * value.length );
+
+			}
+
+			for ( var i = 0, i4 = 0, il = value.length; i < il; i ++, i4 += 4 ) {
+
+				uniform._array[ i4 + 0 ] = value[ i ].x;
+				uniform._array[ i4 + 1 ] = value[ i ].y;
+				uniform._array[ i4 + 2 ] = value[ i ].z;
+				uniform._array[ i4 + 3 ] = value[ i ].w;
+
+			}
+
+			_gl.uniform4fv( location, uniform._array );
+
+		} else if ( type == 'm2' ) {
+
+			// single THREE.Matrix2
+			_gl.uniformMatrix2fv( location, false, value.elements );
+
+		} else if ( type == 'm3' ) {
+
+			// single THREE.Matrix3
+			_gl.uniformMatrix3fv( location, false, value.elements );
+
+		} else if ( type == 'm3v' ) {
+
+			// array of THREE.Matrix3
+
+			if ( uniform._array == undefined ) {
+
+				uniform._array = new Float32Array( 9 * value.length );
+
+			}
+
+			for ( var i = 0, il = value.length; i < il; i ++ ) {
+
+				value[ i ].flattenToArrayOffset( uniform._array, i * 9 );
+
+			}
+
+			_gl.uniformMatrix3fv( location, false, uniform._array );
+
+		} else if ( type == 'm4' ) {
+
+			// single THREE.Matrix4
+			_gl.uniformMatrix4fv( location, false, value.elements );
+
+		} else if ( type == 'm4v' ) {
+
+			// array of THREE.Matrix4
+
+			if ( uniform._array == undefined ) {
+
+				uniform._array = new Float32Array( 16 * value.length );
+
+			}
+
+			for ( var i = 0, il = value.length; i < il; i ++ ) {
+
+				value[ i ].flattenToArrayOffset( uniform._array, i * 16 );
+
+			}
+
+			_gl.uniformMatrix4fv( location, false, uniform._array );
+
+		} else if ( type == 't' ) {
+
+			// single THREE.Texture (2d or cube)
+
+			texture = value;
+			textureUnit = getTextureUnit();
+
+			_gl.uniform1i( location, textureUnit );
+
+			if ( ! texture ) return;
+
+			if ( texture instanceof THREE.CubeTexture ||
+					( Array.isArray( texture.image ) && texture.image.length == 6 ) ) {
+
+				// CompressedTexture can have Array in image :/
+
+				setCubeTexture( texture, textureUnit );
+
+			} else if ( texture instanceof THREE.WebGLRenderTargetCube ) {
+
+				setCubeTextureDynamic( texture.texture, textureUnit );
+
+			} else if ( texture instanceof THREE.WebGLRenderTarget ) {
+
+				_this.setTexture( texture.texture, textureUnit );
+
+			} else {
+
+				_this.setTexture( texture, textureUnit );
+
+			}
+
+		} else if ( type == 'tv' ) {
+
+			// array of THREE.Texture (2d or cube)
+
+			if ( uniform._array == undefined ) {
+
+				uniform._array = [];
+
+			}
+
+			for ( var i = 0, il = uniform.value.length; i < il; i ++ ) {
+
+				uniform._array[ i ] = getTextureUnit();
+
+			}
+
+			_gl.uniform1iv( location, uniform._array );
+
+			for ( var i = 0, il = uniform.value.length; i < il; i ++ ) {
+
+				texture = uniform.value[ i ];
+				textureUnit = uniform._array[ i ];
+
+				if ( ! texture ) continue;
+
+				if ( texture instanceof THREE.CubeTexture ||
+						( texture.image instanceof Array && texture.image.length == 6 ) ) {
+
+					// CompressedTexture can have Array in image :/
+
+					setCubeTexture( texture, textureUnit );
+
+				} else if ( texture instanceof THREE.WebGLRenderTarget ) {
+
+					_this.setTexture( texture.texture, textureUnit );
+
+				} else if ( texture instanceof THREE.WebGLRenderTargetCube ) {
+
+					setCubeTextureDynamic( texture.texture, textureUnit );
+
+				} else {
+
+					_this.setTexture( texture, textureUnit );
+
+				}
+
+			}
+
+		} else {
+
+			Log.warn( "GLRenderer: Unknown uniform type: " + type );
+
+		}
+
+	}
+	
+    private void loadUniformsGeneric( FastMap<Uniform> uniforms ) {
+
+        for ( var i = 0, l = uniforms.length; i < l; i ++ ) {
+
+            var uniform = uniforms[ i ][ 0 ];
+
+            // needsUpdate property is not added to all uniforms.
+            if ( uniform.needsUpdate == false ) continue;
+
+            var type = uniform.type;
+            var location = uniforms[ i ][ 1 ];
+            var value = uniform.value;
+
+            loadUniform( uniform, type, location, value );
+
+        }
+
+    }
 
     // GL state setting
     private void setupLights ( List<Light> lights, Camera camera ) {
@@ -3411,7 +3822,6 @@ public class GLRenderer extends Renderer
 
             Color color = light.getColor();
             double intensity = light.getIntensity();
-            distance = light.distance;
 
             if ( light instanceof AmbientLight) {
 
@@ -3424,28 +3834,30 @@ public class GLRenderer extends Renderer
                 FastMap<Uniform> uniforms = lightCache.get( light );
 
                 ((Color)uniforms.get("color").getValue()).copy(light.getColor()).multiplyScalar(light.getIntensity());
-                uniforms.direction.setFromMatrixPosition(light.getMatrixWorld());
+                ((Vector3)uniforms.get("direction").getValue()).setFromMatrixPosition(light.getMatrixWorld());
                 _vector3.setFromMatrixPosition(((DirectionalLight) light).getTarget().getMatrixWorld());
-                uniforms.direction.sub( _vector3 );
-                uniforms.direction.transformDirection( viewMatrix );
+                ((Vector3)uniforms.get("direction").getValue()).sub( _vector3 );
+                ((Vector3)uniforms.get("direction").getValue()).transformDirection( viewMatrix );
 
-                uniforms.shadow = light.isCastShadow();
+                uniforms.get("shadow").setValue( light.isCastShadow() );
 
-                if ( light.castShadow ) {
+                if (light.isCastShadow()) {
 
-                    uniforms.shadowBias = light.shadow.bias;
-                    uniforms.shadowRadius = light.shadow.radius;
-                    uniforms.shadowMapSize = light.shadow.mapSize;
+                    uniforms.get("shadowBias").setValue( ((DirectionalLight) light).getShadow().getBias() );
+                    uniforms.get("shadowRadius").setValue( ((DirectionalLight) light).getShadow().getRadius() );
+                    uniforms.get("shadowMapSize").setValue( ((DirectionalLight) light).getShadow().getMapSize() );
 
                     _lights.shadows[ shadowsLength ++ ] = light;
 
                 }
 
-                _lights.directionalShadowMap[ directionalLength ] = light.shadow.map;
-                _lights.directionalShadowMatrix[ directionalLength ] = light.shadow.matrix;
+                _lights.directionalShadowMap[ directionalLength ] = ((DirectionalLight) light).getShadow().getMap();
+                _lights.directionalShadowMatrix[ directionalLength ] = ((DirectionalLight) light).getShadow().getMatrix();
                 _lights.directional[ directionalLength ++ ] = uniforms;
 
             } else if ( light instanceof SpotLight ) {
+
+                double distance = ((SpotLight) light).getDistance();
 
                 var uniforms = lightCache.get( light );
 
@@ -3462,7 +3874,7 @@ public class GLRenderer extends Renderer
 
                 uniforms.coneCos = Math.cos( light.angle );
                 uniforms.penumbraCos = Math.cos( light.angle * ( 1 - light.penumbra ) );
-                uniforms.decay = ( light.distance === 0 ) ? 0.0 : light.decay;
+                uniforms.decay = ( light.distance == 0 ) ? 0.0 : light.decay;
 
                 uniforms.shadow = light.castShadow;
 
@@ -3482,6 +3894,8 @@ public class GLRenderer extends Renderer
 
             } else if ( light instanceof PointLight ) {
 
+                double distance = ((PointLight) light).getDistance();
+
                 var uniforms = lightCache.get( light );
 
                 uniforms.position.setFromMatrixPosition( light.matrixWorld );
@@ -3489,7 +3903,7 @@ public class GLRenderer extends Renderer
 
                 uniforms.color.copy( light.color ).multiplyScalar( light.intensity );
                 uniforms.distance = light.distance;
-                uniforms.decay = ( light.distance === 0 ) ? 0.0 : light.decay;
+                uniforms.decay = ( light.distance == 0 ) ? 0.0 : light.decay;
 
                 uniforms.shadow = light.castShadow;
 
@@ -3505,7 +3919,7 @@ public class GLRenderer extends Renderer
 
                 _lights.pointShadowMap[ pointLength ] = light.shadow.map;
 
-                if ( _lights.pointShadowMatrix[ pointLength ] === undefined ) {
+                if ( _lights.pointShadowMatrix[ pointLength ] == undefined ) {
 
                     _lights.pointShadowMatrix[ pointLength ] = new THREE.Matrix4();
 
@@ -3642,7 +4056,7 @@ public class GLRenderer extends Renderer
     
     private void uploadTexture( FastMap<Object> textureProperties, Texture texture, int slot ) {
 
-        if ( textureProperties.__webglInit === undefined ) {
+        if ( textureProperties.__webglInit == undefined ) {
 
             textureProperties.__webglInit = true;
 
@@ -3663,7 +4077,7 @@ public class GLRenderer extends Renderer
 
         var image = clampToMaxSize( texture.image, capabilities.maxTextureSize );
 
-        if ( textureNeedsPowerOfTwo( texture ) && isPowerOfTwo( image ) === false ) {
+        if ( textureNeedsPowerOfTwo( texture ) && isPowerOfTwo( image ) == false ) {
 
             image = makePowerOfTwo( image );
 

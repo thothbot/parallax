@@ -20,7 +20,6 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shader
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.ThreejsObject;
@@ -59,7 +58,7 @@ public final class RGBShiftShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("amount", new Uniform(Uniform.TYPE.F, 0.005));
-		this.addUniform("angle", new Uniform(Uniform.TYPE.F, 0.0));
+		this.addUniform("amount", new Uniform(Uniform.TYPE.F1, 0.005));
+		this.addUniform("angle", new Uniform(Uniform.TYPE.F1, 0.0));
 	}
 }

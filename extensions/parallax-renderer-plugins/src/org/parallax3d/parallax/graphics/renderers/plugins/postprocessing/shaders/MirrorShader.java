@@ -55,7 +55,7 @@ public final class MirrorShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("side", new Uniform(Uniform.TYPE.I, 1));
+		this.addUniform("side", new Uniform(Uniform.TYPE.I1, 1));
 	}
 
 }

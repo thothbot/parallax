@@ -30,23 +30,44 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 public class Uniform
 {
 	public enum TYPE {
+		I1,  // single integer
+		F1,  // single double
+		F2,
+		F3,
+		F4,
+		IV1,
+		IV3,
+		FV1, // flat array of floats (JS or typed array)
+		FV2,
+		FV3, // flat array of floats with 3 x N size (JS or typed array)
+		FV4,
+		Matrix2fv,
+		Matrix3fv,
+		Matrix4fv,
+
 		I,  // single integer
-		F,  // single double
+		F,  // single float
 		V2, // single Vector2
 		V3, // single Vector3
 		V4, // single Vector4
 		C,  // single Color
-		FV1,// flat array of floats (JS or typed array)
+		S,
+		SA,
+
+		IV, // flat array of integers with 3 x N size (JS or typed array)
 		FV, // flat array of floats with 3 x N size (JS or typed array)
+
 		V2V,// array of Vector2
 		V3V,// array of Vector3
 		V4V,// array of Vector4
+
+		M2, // single Matrix2
+		M3, // single Matrix3
+		m3V,//array of Matrix3
 		M4, // single Matrix4
 		M4V,// array of Matrix4
 		T,  // single Texture (2d or cube)
-		TV, // array of Texture (2d)
-		S,
-		SA
+		TV  // array of Texture (2d)
 	};
 
 	Uniform.TYPE type;
@@ -100,6 +121,14 @@ public class Uniform
 
 	public void setLocation(int location) {
 		this.location = location;
+	}
+
+	public FastMap<Uniform> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(FastMap<Uniform> properties) {
+		this.properties = properties;
 	}
 
 	public String toString()

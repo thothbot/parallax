@@ -20,7 +20,6 @@ package org.parallax3d.parallax.graphics.renderers.plugins.postprocessing.shader
 
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Uniform;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 import org.parallax3d.parallax.system.ThreejsObject;
@@ -56,6 +55,6 @@ public final class CompositeShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tForeground", new Uniform(Uniform.TYPE.T ));
-		this.addUniform("scale", new Uniform(Uniform.TYPE.F, 1.));
+		this.addUniform("scale", new Uniform(Uniform.TYPE.F1, 1.));
 	}
 }

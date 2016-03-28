@@ -52,10 +52,10 @@ public final class ToneMapShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("tDiffuse", new Uniform(Uniform.TYPE.T));
-		this.addUniform("averageLuminance", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("averageLuminance", new Uniform(Uniform.TYPE.F1, 1.0));
 		this.addUniform("luminanceMap", new Uniform(Uniform.TYPE.T));
-		this.addUniform("maxLuminance", new Uniform(Uniform.TYPE.F, 16.0));
-		this.addUniform("middleGrey", new Uniform(Uniform.TYPE.F, 0.6));
+		this.addUniform("maxLuminance", new Uniform(Uniform.TYPE.F1, 16.0));
+		this.addUniform("middleGrey", new Uniform(Uniform.TYPE.F1, 0.6));
 
 	}
 }

@@ -280,7 +280,7 @@ public final class TerrainDynamic extends ParallaxTest implements KeyDownHandler
 		((Vector2)uniformsTerrain.get( "uRepeatOverlay" ).getValue()).set( 6.0, 6.0 );
 
 		uniformsNoise = new FastMap<>();
-		uniformsNoise.put("time", new Uniform(Uniform.TYPE.F, 1.0));
+		uniformsNoise.put("time", new Uniform(Uniform.TYPE.F1, 1.0));
 		uniformsNoise.put("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1.5, 1.5 )));
 		uniformsNoise.put("offset", new Uniform(Uniform.TYPE.V2, new Vector2( 0.0, 0.0 )));
 		

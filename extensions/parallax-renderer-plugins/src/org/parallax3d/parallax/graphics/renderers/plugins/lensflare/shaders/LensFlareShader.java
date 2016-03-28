@@ -52,14 +52,14 @@ public class LensFlareShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("renderType", new Uniform(Uniform.TYPE.I,  1 ));
+		this.addUniform("renderType", new Uniform(Uniform.TYPE.I1,  1 ));
 		this.addUniform("map", new Uniform(Uniform.TYPE.T ) );
 		this.addUniform("occlusionMap", new Uniform(Uniform.TYPE.T ) );
 		
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F,  1.0 ));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F1,  1.0 ));
 		this.addUniform("color", new Uniform(Uniform.TYPE.C, new Color( 0xffffff ) ));
 		this.addUniform("scale", new Uniform(Uniform.TYPE.V2, new Vector2( 1.0, 1.0 ) ));
-		this.addUniform("rotation", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("rotation", new Uniform(Uniform.TYPE.F1, 1.0 ));
 		this.addUniform("screenPosition", new Uniform(Uniform.TYPE.V3,  new Vector3( 0.0, 0.0, 0.0 ) ));
 	}
 }

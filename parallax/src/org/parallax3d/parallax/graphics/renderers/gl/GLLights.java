@@ -45,9 +45,9 @@ public class GLLights {
                 put("direction", new Uniform(Uniform.TYPE.V3, new Vector3()));
                 put("color", new Uniform(Uniform.TYPE.C, new Color()));
 
-                put("shadow", new Uniform(Uniform.TYPE.I, false));
-                put("shadowBias", new Uniform(Uniform.TYPE.F, .0));
-                put("shadowRadius", new Uniform(Uniform.TYPE.F, 1.));
+                put("shadow", new Uniform(Uniform.TYPE.I1, false));
+                put("shadowBias", new Uniform(Uniform.TYPE.F1, .0));
+                put("shadowRadius", new Uniform(Uniform.TYPE.F1, 1.));
                 put("shadowMapSize", new Uniform(Uniform.TYPE.V2, new Vector2()));
             }};
 
@@ -56,14 +56,14 @@ public class GLLights {
                 put("position", new Uniform(Uniform.TYPE.V3, new Vector3()));
                 put("direction", new Uniform(Uniform.TYPE.V3, new Vector3()));
                 put("color", new Uniform(Uniform.TYPE.C, new Color()));
-                put("distance", new Uniform(Uniform.TYPE.F, 0.));
-                put("coneCos", new Uniform(Uniform.TYPE.F, 0.));
-                put("penumbraCos", new Uniform(Uniform.TYPE.F, 0.));
-                put("decay", new Uniform(Uniform.TYPE.F, 0.));
+                put("distance", new Uniform(Uniform.TYPE.F1, 0.));
+                put("coneCos", new Uniform(Uniform.TYPE.F1, 0.));
+                put("penumbraCos", new Uniform(Uniform.TYPE.F1, 0.));
+                put("decay", new Uniform(Uniform.TYPE.F1, 0.));
 
-                put("shadow", new Uniform(Uniform.TYPE.I, false));
-                put("shadowBias", new Uniform(Uniform.TYPE.F, .0));
-                put("shadowRadius", new Uniform(Uniform.TYPE.F, 1.));
+                put("shadow", new Uniform(Uniform.TYPE.I1, false));
+                put("shadowBias", new Uniform(Uniform.TYPE.F1, .0));
+                put("shadowRadius", new Uniform(Uniform.TYPE.F1, 1.));
                 put("shadowMapSize", new Uniform(Uniform.TYPE.V2, new Vector2()));
             }};
 
@@ -71,18 +71,18 @@ public class GLLights {
             uniforms = new FastMap<Uniform>(){{
                 put("position", new Uniform(Uniform.TYPE.V3, new Vector3()));
                 put("color", new Uniform(Uniform.TYPE.C, new Color()));
-                put("distance", new Uniform(Uniform.TYPE.F, 0.));
-                put("decay", new Uniform(Uniform.TYPE.F, 0.));
+                put("distance", new Uniform(Uniform.TYPE.F1, 0.));
+                put("decay", new Uniform(Uniform.TYPE.F1, 0.));
 
-                put("shadow", new Uniform(Uniform.TYPE.I, false));
-                put("shadowBias", new Uniform(Uniform.TYPE.F, .0));
-                put("shadowRadius", new Uniform(Uniform.TYPE.F, 1.));
+                put("shadow", new Uniform(Uniform.TYPE.I1, false));
+                put("shadowBias", new Uniform(Uniform.TYPE.F1, .0));
+                put("shadowRadius", new Uniform(Uniform.TYPE.F1, 1.));
                 put("shadowMapSize", new Uniform(Uniform.TYPE.V2, new Vector2()));
             }};
 
         else if(light instanceof HemisphereLight)
             uniforms = new FastMap<Uniform>(){{
-                put("distance", new Uniform(Uniform.TYPE.F, 0.));
+                put("distance", new Uniform(Uniform.TYPE.F1, 0.));
                 put("skyColor", new Uniform(Uniform.TYPE.C, new Color()));
                 put("groundColor", new Uniform(Uniform.TYPE.C, new Color()));
             }};

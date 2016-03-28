@@ -54,7 +54,7 @@ public final class GodraysFakeSunShader extends Shader
 	protected void initUniforms()
 	{
 		this.addUniform("vSunPositionScreenSpace", new Uniform(Uniform.TYPE.V2, new Vector2( 0.5, 0.5 )));
-		this.addUniform("fAspect", new Uniform(Uniform.TYPE.F, 1.0));
+		this.addUniform("fAspect", new Uniform(Uniform.TYPE.F1, 1.0));
 		this.addUniform("sunColor", new Uniform(Uniform.TYPE.C, new Color(0xffee00)));
 		this.addUniform("bgColor", new Uniform(Uniform.TYPE.C, new Color(0x000000)));
 	}

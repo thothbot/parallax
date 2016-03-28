@@ -21,9 +21,6 @@ package org.parallax3d.parallax.graphics.renderers.shaders;
 import org.parallax3d.parallax.system.SourceBundleProxy;
 import org.parallax3d.parallax.system.SourceTextResource;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Normal shader.
  * <p>
@@ -54,7 +51,7 @@ public final class NormalShader extends Shader
 	@Override
 	protected void initUniforms()
 	{
-		this.addUniform("opacity", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("opacity", new Uniform(Uniform.TYPE.F1, 1.0 ));
 	}
 	
 }

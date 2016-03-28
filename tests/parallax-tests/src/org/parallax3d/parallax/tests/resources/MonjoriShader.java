@@ -47,7 +47,7 @@ public final class MonjoriShader extends Shader
 	protected void initUniforms() 
 	{
 
-		this.addUniform("time", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("time", new Uniform(Uniform.TYPE.F1, 1.0 ));
 		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2() ));
 	}
 }

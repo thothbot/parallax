@@ -55,9 +55,9 @@ public final class StandardShader extends Shader
 		this.setUniforms(UniformsLib.fog());
 		this.setUniforms(UniformsLib.lights());
 		this.addUniform("emissive", new Uniform(Uniform.TYPE.C, new Color( 0x000000 ) ));
-		this.addUniform("roughness", new Uniform(Uniform.TYPE.F, 0.5 ));
-		this.addUniform("metalness", new Uniform(Uniform.TYPE.F, 0. ));
-		this.addUniform("envMapIntensity", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("roughness", new Uniform(Uniform.TYPE.F1, 0.5 ));
+		this.addUniform("metalness", new Uniform(Uniform.TYPE.F1, 0. ));
+		this.addUniform("envMapIntensity", new Uniform(Uniform.TYPE.F1, 1.0 ));
 
 	}
 }

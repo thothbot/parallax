@@ -48,10 +48,10 @@ public final class LavaShader extends Shader
 	protected void initUniforms() 
 	{
 
-		this.addUniform("fogDensity", new Uniform(Uniform.TYPE.F, 0.45 ));
+		this.addUniform("fogDensity", new Uniform(Uniform.TYPE.F1, 0.45 ));
 		this.addUniform("fogColor", new Uniform(Uniform.TYPE.V3, new Vector3( 0, 0, 0 ) ));
 		
-		this.addUniform("time", new Uniform(Uniform.TYPE.F, 1.0 ));
+		this.addUniform("time", new Uniform(Uniform.TYPE.F1, 1.0 ));
 		this.addUniform("resolution", new Uniform(Uniform.TYPE.V2, new Vector2() ));
 
 		this.addUniform("uvScale", new Uniform(Uniform.TYPE.V2, new Vector2( 3.0, 1.0 ) ));
