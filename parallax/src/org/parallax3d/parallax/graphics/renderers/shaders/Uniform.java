@@ -51,6 +51,7 @@ public class Uniform
 		V3, // single Vector3
 		V4, // single Vector4
 		C,  // single Color
+		// TODO: replace usage
 		S,
 		SA,
 
@@ -63,7 +64,7 @@ public class Uniform
 
 		M2, // single Matrix2
 		M3, // single Matrix3
-		m3V,//array of Matrix3
+		M3V,//array of Matrix3
 		M4, // single Matrix4
 		M4V,// array of Matrix4
 		T,  // single Texture (2d or cube)

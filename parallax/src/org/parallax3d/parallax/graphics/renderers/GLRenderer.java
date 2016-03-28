@@ -19,7 +19,6 @@
 
 package org.parallax3d.parallax.graphics.renderers;
 
-import com.sun.deploy.util.ArrayUtil;
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.HasNearFar;
@@ -2841,177 +2840,6 @@ public class GLRenderer extends Renderer
 			this.gl.glUniformMatrix3fv(uniforms.get("normalMatrix").getLocation(), 1, false, objectImpl._normalMatrix.getArray().getTypedBuffer());
 	}
 
-	private void loadUniformsGeneric( FastMap<Uniform> materialUniforms )
-	{
-		for ( String key: materialUniforms.keySet() )
-		{
-			Uniform uniform = materialUniforms.get(key);
-			int location = uniform.getLocation();
-
-			if ( location == -1 ) continue;
-
-			Object value = uniform.getValue();
-			Uniform.TYPE type = uniform.getType();
-			// Up textures also for undefined values
-			if ( type != Uniform.TYPE.T && value == null ) continue;
-
-			if(type == Uniform.TYPE.I1) // single integer
-			{
-				this.gl.glUniform1i(location, (value instanceof Boolean) ? ((Boolean) value) ? 1 : 0 : (Integer) value);
-			}
-			else if(type == Uniform.TYPE.F1) // single float
-			{
-				this.gl.glUniform1f(location, value instanceof Float ? (Float) value : ((Double)value).floatValue());
-			}
-			else if(type == Uniform.TYPE.V2) // single Vector2
-			{
-				this.gl.glUniform2f(location, (float)((Vector2) value).getX(), (float)((Vector2) value).getX());
-			}
-			else if(type == Uniform.TYPE.V3) // single Vector3
-			{
-				this.gl.glUniform3f(location, (float)((Vector3) value).getX(), (float)((Vector3) value).getY(), (float)((Vector3) value).getZ());
-			}
-			else if(type == Uniform.TYPE.V4) // single Vector4
-			{
-				this.gl.glUniform4f(location, (float)((Vector4) value).getX(), (float)((Vector4) value).getY(), (float)((Vector4) value).getZ(), (float)((Vector4) value).getW());
-			}
-			else if(type == Uniform.TYPE.C) // single Color
-			{
-				this.gl.glUniform3f(location, (float)((Color) value).getR(), (float)((Color) value).getG(), (float)((Color) value).getB());
-			}
-			else if(type == Uniform.TYPE.FV1) // flat array of floats (JS or typed array)
-			{
-				this.gl.glUniform1fv(location, ((Float32Array) value).getLength(), ((Float32Array) value).getTypedBuffer());
-			}
-			else if(type == Uniform.TYPE.FV3) // flat array of floats with 3 x N size (JS or typed array)
-			{
-				this.gl.glUniform3fv(location, ((Float32Array) value).getLength() / 3, ((Float32Array) value).getTypedBuffer());
-			}
-			else if(type == Uniform.TYPE.V2V) // List of Vector2
-			{
-				List<Vector2> listVector2f = (List<Vector2>) value;
-				Float32Array cacheArray = uniform.getCacheArray();
-				if (cacheArray  == null )
-					uniform.setCacheArray(cacheArray = Float32Array.create( 2 * listVector2f.size() ) );
-
-				for ( int i = 0, il = listVector2f.size(); i < il; i ++ )
-				{
-					int offset = i * 2;
-
-					cacheArray.set(offset, listVector2f.get(i).getX());
-					cacheArray.set(offset + 1, listVector2f.get(i).getY());
-				}
-
-				this.gl.glUniform2fv(location, uniform.getCacheArray().getLength() / 2,
-						cacheArray.getTypedBuffer());
-			}
-			else if(type == Uniform.TYPE.V3V) // List of Vector3
-			{
-				List<Vector3> listVector3f = (List<Vector3>) value;
-				Float32Array cacheArray = uniform.getCacheArray();
-				if ( cacheArray == null )
-					uniform.setCacheArray(cacheArray = Float32Array.create( 3 * listVector3f.size() ) );
-
-				for ( int i = 0, il = listVector3f.size(); i < il; i ++ )
-				{
-					int offset = i * 3;
-
-					uniform.getCacheArray().set(offset, listVector3f.get( i ).getX());
-					uniform.getCacheArray().set(offset + 1, listVector3f.get( i ).getY());
-					uniform.getCacheArray().set(offset + 2 , listVector3f.get( i ).getZ());
-				}
-
-				this.gl.glUniform3fv(location, cacheArray.getLength() / 3,
-						cacheArray.getTypedBuffer());
-			}
-			else if(type == Uniform.TYPE.V4V) // List of Vector4
-			{
-				List<Vector4> listVector4f = (List<Vector4>) value;
-				Float32Array cacheArray = uniform.getCacheArray();
-				if ( cacheArray == null)
-					uniform.setCacheArray(cacheArray = Float32Array.create( 4 * listVector4f.size() ) );
-
-
-				for ( int i = 0, il = listVector4f.size(); i < il; i ++ )
-				{
-					int offset = i * 4;
-
-					uniform.getCacheArray().set(offset, listVector4f.get( i ).getX());
-					uniform.getCacheArray().set(offset + 1, listVector4f.get( i ).getY());
-					uniform.getCacheArray().set(offset + 2, listVector4f.get( i ).getZ());
-					uniform.getCacheArray().set(offset + 3, listVector4f.get( i ).getW());
-				}
-
-				this.gl.glUniform4fv(location, cacheArray.getLength() / 4,
-						cacheArray.getTypedBuffer() );
-			}
-			else if(type == Uniform.TYPE.M4) // single Matrix4
-			{
-				Matrix4 matrix4 = (Matrix4) value;
-				Float32Array cacheArray = uniform.getCacheArray();
-				if ( cacheArray == null )
-					uniform.setCacheArray(cacheArray = Float32Array.create( 16 ) );
-
-				matrix4.flattenToArrayOffset( cacheArray );
-				this.gl.glUniformMatrix4fv(location, 1, false, cacheArray.getTypedBuffer());
-			}
-			else if(type == Uniform.TYPE.M4V) // List of Matrix4
-			{
-				List<Matrix4> listMatrix4f = (List<Matrix4>) value;
-				Float32Array cacheArray = uniform.getCacheArray();
-				if ( cacheArray == null )
-					uniform.setCacheArray(cacheArray = Float32Array.create( 16 * listMatrix4f.size() ) );
-
-				for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
-					listMatrix4f.get( i ).flattenToArrayOffset( cacheArray, i * 16 );
-
-				this.gl.glUniformMatrix4fv(location, cacheArray.getLength() / 16,
-						false, cacheArray.getTypedBuffer());
-			}
-			else if(type == Uniform.TYPE.T) // single Texture (2d or cube)
-			{
-				Texture texture = (Texture)value;
-				int textureUnit = getTextureUnit();
-
-				this.gl.glUniform1i(location, textureUnit);
-
-				if ( texture != null )
-				{
-					if ( texture.getClass() == CubeTexture.class )
-						setCubeTexture( (CubeTexture) texture, textureUnit );
-
-					else if ( texture.getClass() == GLRenderTargetCube.class )
-						setCubeTextureDynamic( (GLRenderTargetCube)texture, textureUnit );
-
-					else
-						setTexture( texture, textureUnit );
-				}
-			}
-			else if(type == Uniform.TYPE.TV) //List of Texture (2d)
-			{
-				List<Texture> textureList = (List<Texture>)value;
-				int[] units = new int[textureList.size()];
-
-				for( int i = 0, il = textureList.size(); i < il; i ++ )
-				{
-					units[ i ] = getTextureUnit();
-				}
-
-				this.gl.glUniform1iv(location, 1, units, 0);
-
-				for( int i = 0, il = textureList.size(); i < il; i ++ )
-				{
-					Texture texture = textureList.get( i );
-					int textureUnit = units[ i ];
-
-					if ( texture == null ) continue;
-
-					setTexture( texture, textureUnit );
-				}
-			}
-		}
-	}
-
 	public int getTextureUnit()
 	{
 		int textureUnit = this._usedTextureUnits ++;
@@ -3163,124 +2991,6 @@ public class GLRenderer extends Renderer
 	{
 		this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
 		this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
-	}
-
-	public void setTexture( Texture texture, int slot )
-	{
-		if ( texture.isNeedsUpdate())
-		{
-			if ( texture.getWebGlTexture() == 0 )
-			{
-				texture.setWebGlTexture( this.gl.glGenTexture() );
-
-				this.getInfo().getMemory().textures ++;
-			}
-
-			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
-			this.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
-
-            /*
-			GLES20.glPixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL, texture.isFlipY() ? 1 : 0 );
-			GLES20.glPixelStorei( PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL,
-                    texture.isPremultiplyAlpha() ? 1 : 0 );
-            */
-			this.gl.glPixelStorei( PixelStoreParameter.UNPACK_ALIGNMENT.getValue(), texture.getUnpackAlignment() );
-
-			TextureData image = texture.getImage();
-
-			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_2D, image.isPowerOfTwo() );
-
-			if ( texture instanceof CompressedTexture )
-			{
-				List<DataTexture> mipmaps = ((CompressedTexture) texture).getMipmaps();
-
-				for( int i = 0, il = mipmaps.size(); i < il; i ++ )
-				{
-					DataTexture mipmap = mipmaps.get( i );
-					this.gl.glCompressedTexImage2D(TextureTarget.TEXTURE_2D.getValue(), i,
-							((CompressedTexture) texture).getCompressedFormat(),
-							mipmap.getWidth(), mipmap.getHeight(), 0,
-							mipmap.getData().getByteLength(),
-							mipmap.getData().getBuffer());
-				}
-			}
-			else if ( texture instanceof DataTexture )
-			{
-				TypeArray texData = ((DataTexture) texture).getData();
-				this.gl.glTexImage2D(TextureTarget.TEXTURE_2D.getValue(), 0,
-						((DataTexture) texture).getWidth(),
-						((DataTexture) texture).getHeight(),
-						0,
-						texture.getFormat().getValue(),
-						texture.getType().getValue(),
-						texData.getByteLength(),
-						texData.getBuffer());
-			}
-			// glTexImage2D does not apply to render target textures
-			else if (!(texture instanceof GLRenderTarget))
-			{
-				image.glTexImage2D(this.gl, TextureTarget.TEXTURE_2D.getValue(), texture.getFormat(), texture.getType());
-			}
-
-			if ( texture.isGenerateMipmaps() && image.isPowerOfTwo() )
-				this.gl.glGenerateMipmap(TextureTarget.TEXTURE_2D.getValue());
-
-			texture.setNeedsUpdate(false);
-		}
-		// Needed to check webgl texture in case deferred loading
-		else if (texture.getWebGlTexture() != 0)
-		{
-			this.gl.glActiveTexture(TextureUnit.TEXTURE0.getValue() + slot);
-			this.gl.glBindTexture(TextureTarget.TEXTURE_2D.getValue(), texture.getWebGlTexture());
-		}
-	}
-
-	private void setCubeTexture ( CubeTexture texture, int slot )
-	{
-		if ( !texture.isValid() )
-			return;
-
-		if ( texture.isNeedsUpdate() )
-		{
-			if ( texture.getWebGlTexture() == 0 )
-			{
-				texture.setWebGlTexture(this.gl.glGenTexture());
-				this.getInfo().getMemory().textures += 6;
-			}
-
-			this.gl.glActiveTexture( TextureUnit.TEXTURE0.getValue() + slot );
-			this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
-			//GLES20.glPixelStorei( PixelStoreParameter.UNPACK_FLIP_Y_WEBGL,
-			// texture.isFlipY() ? 1 : 0 );
-
-			List<TextureData> cubeImage = new ArrayList<TextureData>();
-
-			for ( int i = 0; i < 6; i ++ ) {
-				cubeImage.add(this.autoScaleCubemaps
-						? texture.getImage(i).clampToMaxSize(this._maxCubemapSize)
-						: texture.getImage(i));
-			}
-
-			texture.setTextureParameters( this.gl, getMaxAnisotropy(), TextureTarget.TEXTURE_CUBE_MAP, true /*power of two*/ );
-
-			for ( int i = 0; i < 6; i ++ )
-			{
-				TextureData img = cubeImage.get(i);
-				img.toPowerOfTwo();
-				img.glTexImage2D(this.gl, TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, texture.getFormat(), texture.getType());
-			}
-
-			if ( texture.isGenerateMipmaps() )
-				this.gl.glGenerateMipmap( TextureTarget.TEXTURE_CUBE_MAP.getValue() );
-
-			texture.setNeedsUpdate(false);
-		}
-		else
-		{
-			this.gl.glActiveTexture( TextureUnit.TEXTURE0.getValue() + slot );
-			this.gl.glBindTexture(TextureTarget.TEXTURE_CUBE_MAP.getValue(), texture.getWebGlTexture());
-		}
-
 	}
 
 	/**
@@ -3586,192 +3296,179 @@ public class GLRenderer extends Renderer
 
 			// array of Vector2
 
-			if ( uniform._array == undefined ) {
+            List<Vector2> listVector2f = (List<Vector2>) uniform.getValue();
+            Float32Array cacheArray = uniform.getCacheArray();
+            if (cacheArray  == null )
+                uniform.setCacheArray(cacheArray = Float32Array.create( 2 * listVector2f.size() ) );
 
-				uniform._array = new Float32Array( 2 * value.length );
+            for ( int i = 0, il = listVector2f.size(); i < il; i ++ )
+            {
+                int offset = i * 2;
 
-			}
+                cacheArray.set(offset, listVector2f.get(i).getX());
+                cacheArray.set(offset + 1, listVector2f.get(i).getY());
+            }
 
-			for ( var i = 0, i2 = 0, il = value.length; i < il; i ++, i2 += 2 ) {
-
-				uniform._array[ i2 + 0 ] = value[ i ].x;
-				uniform._array[ i2 + 1 ] = value[ i ].y;
-
-			}
-
-			_gl.uniform2fv( location, uniform._array );
+            this.gl.glUniform2fv(location, uniform.getCacheArray().getLength() / 2,
+                    cacheArray.getTypedBuffer());
 
 		} else if ( type == Uniform.TYPE.V3V ) {
 
-			// array of THREE.Vector3
+			// array of Vector3
 
-			if ( uniform._array == undefined ) {
+            List<Vector3> listVector3f = (List<Vector3>) uniform.getValue();
+            Float32Array cacheArray = uniform.getCacheArray();
+            if ( cacheArray == null )
+                uniform.setCacheArray(cacheArray = Float32Array.create( 3 * listVector3f.size() ) );
 
-				uniform._array = new Float32Array( 3 * value.length );
+            for ( int i = 0, il = listVector3f.size(); i < il; i ++ )
+            {
+                int offset = i * 3;
 
-			}
+                uniform.getCacheArray().set(offset, listVector3f.get( i ).getX());
+                uniform.getCacheArray().set(offset + 1, listVector3f.get( i ).getY());
+                uniform.getCacheArray().set(offset + 2 , listVector3f.get( i ).getZ());
+            }
 
-			for ( var i = 0, i3 = 0, il = value.length; i < il; i ++, i3 += 3 ) {
-
-				uniform._array[ i3 + 0 ] = value[ i ].x;
-				uniform._array[ i3 + 1 ] = value[ i ].y;
-				uniform._array[ i3 + 2 ] = value[ i ].z;
-
-			}
-
-			_gl.uniform3fv( location, uniform._array );
+            this.gl.glUniform3fv(location, cacheArray.getLength() / 3,
+                    cacheArray.getTypedBuffer());
 
 		} else if ( type == Uniform.TYPE.V4V ) {
 
-			// array of THREE.Vector4
+			// array of Vector4
 
-			if ( uniform._array == undefined ) {
+            List<Vector4> listVector4f = (List<Vector4>) uniform.getValue();
+            Float32Array cacheArray = uniform.getCacheArray();
+            if ( cacheArray == null)
+                uniform.setCacheArray(cacheArray = Float32Array.create( 4 * listVector4f.size() ) );
 
-				uniform._array = new Float32Array( 4 * value.length );
 
-			}
+            for ( int i = 0, il = listVector4f.size(); i < il; i ++ )
+            {
+                int offset = i * 4;
 
-			for ( var i = 0, i4 = 0, il = value.length; i < il; i ++, i4 += 4 ) {
+                uniform.getCacheArray().set(offset, listVector4f.get( i ).getX());
+                uniform.getCacheArray().set(offset + 1, listVector4f.get( i ).getY());
+                uniform.getCacheArray().set(offset + 2, listVector4f.get( i ).getZ());
+                uniform.getCacheArray().set(offset + 3, listVector4f.get( i ).getW());
+            }
 
-				uniform._array[ i4 + 0 ] = value[ i ].x;
-				uniform._array[ i4 + 1 ] = value[ i ].y;
-				uniform._array[ i4 + 2 ] = value[ i ].z;
-				uniform._array[ i4 + 3 ] = value[ i ].w;
+            this.gl.glUniform4fv(location, cacheArray.getLength() / 4,
+                    cacheArray.getTypedBuffer() );
 
-			}
+		} else if ( type == Uniform.TYPE.M3 ) {
 
-			_gl.uniform4fv( location, uniform._array );
+			// single Matrix3
+            Matrix3 value = (Matrix3) uniform.getValue();
 
-		} else if ( type == 'm2' ) {
+            this.gl.glUniformMatrix4fv(location, 1, false, value.getArray().getTypedBuffer());
 
-			// single THREE.Matrix2
-			_gl.uniformMatrix2fv( location, false, value.elements );
+		} else if ( type == Uniform.TYPE.M3V) {
 
-		} else if ( type == 'm3' ) {
+			// array of Matrix3
+            List<Matrix3> listMatrix3f = (List<Matrix3>) uniform.getValue();
+            Float32Array cacheArray = uniform.getCacheArray();
+            if ( cacheArray == null )
+                uniform.setCacheArray(cacheArray = Float32Array.create( 9 * listMatrix3f.size() ) );
 
-			// single THREE.Matrix3
-			_gl.uniformMatrix3fv( location, false, value.elements );
+            for ( int i = 0, il = listMatrix3f.size(); i < il; i ++ )
+                listMatrix3f.get( i ).flattenToArrayOffset( cacheArray, i * 9 );
 
-		} else if ( type == 'm3v' ) {
+            this.gl.glUniformMatrix3fv(location, cacheArray.getLength() / 9,
+                    false, cacheArray.getTypedBuffer());
 
-			// array of THREE.Matrix3
+		} else if ( type == Uniform.TYPE.M4 ) {
 
-			if ( uniform._array == undefined ) {
+			// single Matrix4
+            Matrix4 matrix4 = (Matrix4) uniform.getValue();
 
-				uniform._array = new Float32Array( 9 * value.length );
+            this.gl.glUniformMatrix4fv(location, 1, false, matrix4.getArray().getTypedBuffer());
 
-			}
+		} else if ( type == Uniform.TYPE.M4V ) {
 
-			for ( var i = 0, il = value.length; i < il; i ++ ) {
+			// array of Matrix4
 
-				value[ i ].flattenToArrayOffset( uniform._array, i * 9 );
+            List<Matrix4> listMatrix4f = (List<Matrix4>) uniform.getValue();
+            Float32Array cacheArray = uniform.getCacheArray();
+            if ( cacheArray == null )
+                uniform.setCacheArray(cacheArray = Float32Array.create( 16 * listMatrix4f.size() ) );
 
-			}
+            for ( int i = 0, il = listMatrix4f.size(); i < il; i ++ )
+                listMatrix4f.get( i ).flattenToArrayOffset( cacheArray, i * 16 );
 
-			_gl.uniformMatrix3fv( location, false, uniform._array );
+            this.gl.glUniformMatrix4fv(location, cacheArray.getLength() / 16,
+                    false, cacheArray.getTypedBuffer());
 
-		} else if ( type == 'm4' ) {
+		} else if ( type == Uniform.TYPE.T ) {
 
-			// single THREE.Matrix4
-			_gl.uniformMatrix4fv( location, false, value.elements );
+			// single Texture (2d or cube)
+            AbstractTexture texture = (AbstractTexture)uniform.getValue();
+            int textureUnit = getTextureUnit();
 
-		} else if ( type == 'm4v' ) {
+            this.gl.glUniform1i(location, textureUnit);
 
-			// array of THREE.Matrix4
+            if ( texture == null ) return;
 
-			if ( uniform._array == undefined ) {
+            if ( texture instanceof CubeTexture ) {
 
-				uniform._array = new Float32Array( 16 * value.length );
+                // CompressedTexture can have Array in image :/
 
-			}
+                setCubeTexture( (CubeTexture)texture, textureUnit );
 
-			for ( var i = 0, il = value.length; i < il; i ++ ) {
+            } else if ( texture instanceof GLRenderTargetCube ) {
 
-				value[ i ].flattenToArrayOffset( uniform._array, i * 16 );
+                setCubeTextureDynamic( ((GLRenderTargetCube) texture).getTexture(), textureUnit );
 
-			}
+            } else if ( texture instanceof GLRenderTarget ) {
 
-			_gl.uniformMatrix4fv( location, false, uniform._array );
+                this.setTexture( ((GLRenderTarget) texture).getTexture(), textureUnit );
 
-		} else if ( type == 't' ) {
+            } else {
 
-			// single THREE.Texture (2d or cube)
+                this.setTexture( (Texture) texture, textureUnit );
 
-			texture = value;
-			textureUnit = getTextureUnit();
+            }
 
-			_gl.uniform1i( location, textureUnit );
+		} else if ( type == Uniform.TYPE.TV ) {
 
-			if ( ! texture ) return;
+			// array of Texture (2d or cube)
+            List<AbstractTexture> textureList = (List<AbstractTexture>)uniform.getValue();
+            int[] units = new int[textureList.size()];
 
-			if ( texture instanceof THREE.CubeTexture ||
-					( Array.isArray( texture.image ) && texture.image.length == 6 ) ) {
+            for( int i = 0, il = textureList.size(); i < il; i ++ )
+            {
+                units[ i ] = getTextureUnit();
+            }
 
-				// CompressedTexture can have Array in image :/
+            this.gl.glUniform1iv(location, 1, units, 0);
 
-				setCubeTexture( texture, textureUnit );
+            for( int i = 0, il = textureList.size(); i < il; i ++ )
+            {
+                AbstractTexture texture = textureList.get( i );
+                int textureUnit = units[ i ];
 
-			} else if ( texture instanceof THREE.WebGLRenderTargetCube ) {
+                if ( texture == null ) continue;
 
-				setCubeTextureDynamic( texture.texture, textureUnit );
+                if ( texture instanceof CubeTexture ) {
 
-			} else if ( texture instanceof THREE.WebGLRenderTarget ) {
+                    // CompressedTexture can have Array in image :/
 
-				_this.setTexture( texture.texture, textureUnit );
+                    setCubeTexture( (CubeTexture) texture, textureUnit );
 
-			} else {
+                } else if ( texture instanceof GLRenderTarget ) {
 
-				_this.setTexture( texture, textureUnit );
+                    this.setTexture( ((GLRenderTarget) texture).getTexture(), textureUnit );
 
-			}
+                } else if ( texture instanceof GLRenderTargetCube ) {
 
-		} else if ( type == 'tv' ) {
+                    setCubeTextureDynamic( ((GLRenderTargetCube) texture).getTexture(), textureUnit );
 
-			// array of THREE.Texture (2d or cube)
+                } else {
 
-			if ( uniform._array == undefined ) {
+                    this.setTexture( (Texture) texture, textureUnit );
 
-				uniform._array = [];
-
-			}
-
-			for ( var i = 0, il = uniform.value.length; i < il; i ++ ) {
-
-				uniform._array[ i ] = getTextureUnit();
-
-			}
-
-			_gl.uniform1iv( location, uniform._array );
-
-			for ( var i = 0, il = uniform.value.length; i < il; i ++ ) {
-
-				texture = uniform.value[ i ];
-				textureUnit = uniform._array[ i ];
-
-				if ( ! texture ) continue;
-
-				if ( texture instanceof THREE.CubeTexture ||
-						( texture.image instanceof Array && texture.image.length == 6 ) ) {
-
-					// CompressedTexture can have Array in image :/
-
-					setCubeTexture( texture, textureUnit );
-
-				} else if ( texture instanceof THREE.WebGLRenderTarget ) {
-
-					_this.setTexture( texture.texture, textureUnit );
-
-				} else if ( texture instanceof THREE.WebGLRenderTargetCube ) {
-
-					setCubeTextureDynamic( texture.texture, textureUnit );
-
-				} else {
-
-					_this.setTexture( texture, textureUnit );
-
-				}
-
-			}
+                }
+            }
 
 		} else {
 
