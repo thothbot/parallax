@@ -282,6 +282,12 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
+	@Deprecated
+	public Vector3 applyMatrix4(Matrix4 m )
+	{
+		return apply( m );
+	}
+
 	/**
 	 *
 	 * @param m Matrix4 affine matrix

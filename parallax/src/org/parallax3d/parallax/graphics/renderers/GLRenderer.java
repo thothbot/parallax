@@ -145,6 +145,29 @@ public class GLRenderer extends Renderer
 
 	public Vector3 _vector3 = new Vector3();
 
+	class LightCache {
+		public String hash = "";
+
+		public double[] ambient = new double[]{0, 0, 0};
+		public List<FastMap<Uniform>> directional = new ArrayList<>();
+		public List<GLRenderTarget> directionalShadowMap = new ArrayList<>();
+		public List<Matrix4> directionalShadowMatrix = new ArrayList<>();
+
+		public List<FastMap<Uniform>> spot = new ArrayList<>();
+		public List<GLRenderTarget> spotShadowMap = new ArrayList<>();
+		public List<Matrix4> spotShadowMatrix = new ArrayList<>();
+
+		public List<FastMap<Uniform>> point = new ArrayList<>();
+		public List<GLRenderTarget> pointShadowMap = new ArrayList<>();
+		public List<Matrix4> pointShadowMatrix = new ArrayList<>();
+
+		public List<FastMap<Uniform>> hemi = new ArrayList<>();
+
+		public List<Light> shadows = new ArrayList<>();
+		public int shadowsPointLight = 0;
+	}
+
+	LightCache _lights = new LightCache();
 	/**
 	 * The constructor will create renderer for the current EGL context.
 	 *
@@ -2556,7 +2579,7 @@ public class GLRenderer extends Renderer
 
         Matrix4 viewMatrix = camera.getMatrixWorldInverse();
 
-        double directionalLength = 0,
+        int directionalLength = 0,
             pointLength = 0,
             spotLength = 0,
             hemiLength = 0,
@@ -2596,103 +2619,104 @@ public class GLRenderer extends Renderer
                     uniforms.get("shadowRadius").setValue( ((DirectionalLight) light).getShadow().getRadius() );
                     uniforms.get("shadowMapSize").setValue( ((DirectionalLight) light).getShadow().getMapSize() );
 
-                    _lights.shadows[ shadowsLength ++ ] = light;
+                    _lights.shadows.add( shadowsLength ++ , light );
 
                 }
 
-                _lights.directionalShadowMap[ directionalLength ] = ((DirectionalLight) light).getShadow().getMap();
-                _lights.directionalShadowMatrix[ directionalLength ] = ((DirectionalLight) light).getShadow().getMatrix();
-                _lights.directional[ directionalLength ++ ] = uniforms;
+                _lights.directionalShadowMap.add( directionalLength , ((DirectionalLight) light).getShadow().getMap() );
+                _lights.directionalShadowMatrix.add( directionalLength , ((DirectionalLight) light).getShadow().getMatrix() );
+                _lights.directional.add( directionalLength ++ , uniforms );
 
             } else if ( light instanceof SpotLight ) {
 
                 double distance = ((SpotLight) light).getDistance();
 
-                var uniforms = lightCache.get( light );
+                FastMap<Uniform> uniforms = lightCache.get( light );
 
-                uniforms.position.setFromMatrixPosition(light.getMatrixWorld());
-                uniforms.position.applyMatrix4( viewMatrix );
+				((Vector3)uniforms.get("position").getValue()).setFromMatrixPosition(light.getMatrixWorld());
+				((Vector3)uniforms.get("position").getValue()).applyMatrix4( viewMatrix );
 
-                uniforms.color.copy( color ).multiplyScalar( intensity );
-                uniforms.distance = distance;
+				((Color)uniforms.get("color").getValue()).copy( color ).multiplyScalar( intensity );
+                uniforms.get("distance").setValue( distance );
 
-                uniforms.direction.setFromMatrixPosition(light.getMatrixWorld());
-                _vector3.setFromMatrixPosition( light.target.matrixWorld );
-                uniforms.direction.sub( _vector3 );
-                uniforms.direction.transformDirection( viewMatrix );
+				((Vector3)uniforms.get("direction").getValue()).setFromMatrixPosition(light.getMatrixWorld());
+                _vector3.setFromMatrixPosition( ((SpotLight) light).getTarget().getMatrixWorld() );
+				((Vector3)uniforms.get("direction").getValue()).sub( _vector3 );
+				((Vector3)uniforms.get("direction").getValue()).transformDirection( viewMatrix );
 
-                uniforms.coneCos = Math.cos( light.angle );
-                uniforms.penumbraCos = Math.cos( light.angle * ( 1 - light.penumbra ) );
-                uniforms.decay = ( light.distance == 0 ) ? 0.0 : light.decay;
+                uniforms.get("coneCos").setValue(  Math.cos( ((SpotLight) light).getAngle() ) );
+                uniforms.get("penumbraCos").setValue( Math.cos( ((SpotLight) light).getAngle() * ( 1 - ((SpotLight) light).getPenumbra() ) ) );
+                uniforms.get("decay").setValue( ( ((SpotLight) light).getDistance() == 0 ) ? 0.0 : ((SpotLight) light).getDecay() );
 
-                uniforms.shadow = light.castShadow;
+                uniforms.get("shadow").setValue(light.isCastShadow());
 
-                if ( light.castShadow ) {
+                if (light.isCastShadow()) {
 
-                    uniforms.shadowBias = light.shadow.bias;
-                    uniforms.shadowRadius = light.shadow.radius;
-                    uniforms.shadowMapSize = light.shadow.mapSize;
+                    uniforms.get("shadowBias").setValue(((SpotLight) light).getShadow().getBias());
+                    uniforms.get("shadowRadius").setValue(((SpotLight) light).getShadow().getRadius());
+                    uniforms.get("shadowMapSize").setValue(((SpotLight) light).getShadow().getMapSize());
 
-                    _lights.shadows[ shadowsLength ++ ] = light;
+                    _lights.shadows.add( shadowsLength ++ , light );
 
                 }
 
-                _lights.spotShadowMap[ spotLength ] = light.shadow.map;
-                _lights.spotShadowMatrix[ spotLength ] = light.shadow.matrix;
-                _lights.spot[ spotLength ++ ] = uniforms;
+                _lights.spotShadowMap.add( spotLength, ((SpotLight) light).getShadow().getMap() );
+                _lights.spotShadowMatrix.add( spotLength , ((SpotLight) light).getShadow().getMatrix());
+                _lights.spot.add( spotLength ++ , uniforms);
 
             } else if ( light instanceof PointLight ) {
 
                 double distance = ((PointLight) light).getDistance();
 
-                var uniforms = lightCache.get( light );
+				FastMap<Uniform> uniforms = lightCache.get( light );
 
-                uniforms.position.setFromMatrixPosition( light.matrixWorld );
-                uniforms.position.applyMatrix4( viewMatrix );
+				((Vector3)uniforms.get("position").getValue()).setFromMatrixPosition(light.getMatrixWorld());
+				((Vector3)uniforms.get("position").getValue()).applyMatrix4( viewMatrix );
 
-                uniforms.color.copy( light.color ).multiplyScalar( light.intensity );
-                uniforms.distance = light.distance;
-                uniforms.decay = ( light.distance == 0 ) ? 0.0 : light.decay;
+				((Color)uniforms.get("color").getValue()).copy( light.getColor() ).multiplyScalar(light.getIntensity());
+				uniforms.get("distance").setValue( distance );
+				uniforms.get("decay").setValue( ( ((PointLight) light).getDistance() == 0 ) ? 0.0 : ((SpotLight) light).getDecay() );
 
-                uniforms.shadow = light.castShadow;
+				uniforms.get("shadow").setValue(light.isCastShadow());
 
-                if ( light.castShadow ) {
+                if (light.isCastShadow()) {
 
-                    uniforms.shadowBias = light.shadow.bias;
-                    uniforms.shadowRadius = light.shadow.radius;
-                    uniforms.shadowMapSize = light.shadow.mapSize;
+					uniforms.get("shadowBias").setValue(((PointLight) light).getShadow().getBias());
+					uniforms.get("shadowRadius").setValue(((PointLight) light).getShadow().getRadius());
+					uniforms.get("shadowMapSize").setValue(((PointLight) light).getShadow().getMapSize());
 
-                    _lights.shadows[ shadowsLength ++ ] = light;
+					_lights.shadows.add( shadowsLength ++ , light );
 
-                }
+				}
 
-                _lights.pointShadowMap[ pointLength ] = light.shadow.map;
+                _lights.pointShadowMap.add( pointLength , ((PointLight) light).getShadow().getMap() );
 
-                if ( _lights.pointShadowMatrix[ pointLength ] == undefined ) {
+                if ( pointLength > _lights.pointShadowMatrix.size() ||
+						_lights.pointShadowMatrix.get( pointLength ) == null ) {
 
-                    _lights.pointShadowMatrix[ pointLength ] = new THREE.Matrix4();
+                    _lights.pointShadowMatrix.add( pointLength , new Matrix4() );
 
                 }
 
                 // for point lights we set the shadow matrix to be a translation-only matrix
                 // equal to inverse of the light's position
-                _vector3.setFromMatrixPosition( light.matrixWorld ).negate();
-                _lights.pointShadowMatrix[ pointLength ].identity().setPosition( _vector3 );
+                _vector3.setFromMatrixPosition(light.getMatrixWorld()).negate();
+                _lights.pointShadowMatrix.get( pointLength ).identity().setPosition( _vector3 );
 
-                _lights.point[ pointLength ++ ] = uniforms;
+                _lights.point.add( pointLength ++ , uniforms );
 
             } else if ( light instanceof HemisphereLight ) {
 
-                var uniforms = lightCache.get( light );
+				FastMap<Uniform> uniforms = lightCache.get( light );
 
-                uniforms.direction.setFromMatrixPosition( light.matrixWorld );
-                uniforms.direction.transformDirection( viewMatrix );
-                uniforms.direction.normalize();
+				((Vector3)uniforms.get("direction").getValue()).setFromMatrixPosition(light.getMatrixWorld());
+				((Vector3)uniforms.get("direction").getValue()).transformDirection( viewMatrix );
+				((Vector3)uniforms.get("direction").getValue()).normalize();
 
-                uniforms.skyColor.copy( light.color ).multiplyScalar( intensity );
-                uniforms.groundColor.copy( light.groundColor ).multiplyScalar( intensity );
+				((Color)uniforms.get("skyColor").getValue()).copy(light.getColor()).multiplyScalar( intensity );
+				((Color)uniforms.get("groundColor").getValue()).copy( ((HemisphereLight) light).getGroundColor() ).multiplyScalar( intensity );
 
-                _lights.hemi[ hemiLength ++ ] = uniforms;
+                _lights.hemi.add( hemiLength ++ , uniforms );
 
             }
 
@@ -2702,14 +2726,14 @@ public class GLRenderer extends Renderer
         _lights.ambient[ 1 ] = g;
         _lights.ambient[ 2 ] = b;
 
-        _lights.directional.length = directionalLength;
-        _lights.spot.length = spotLength;
-        _lights.point.length = pointLength;
-        _lights.hemi.length = hemiLength;
+        _lights.directional = _lights.directional.subList(0, directionalLength );
+        _lights.spot = _lights.spot.subList(0, spotLength );
+        _lights.point = _lights.point.subList(0, pointLength );
+        _lights.hemi = _lights.hemi.subList(0, hemiLength );
 
-        _lights.shadows.length = shadowsLength;
+        _lights.shadows = _lights.shadows.subList(0, shadowsLength);
 
-        _lights.hash = directionalLength + ',' + pointLength + ',' + spotLength + ',' + hemiLength + ',' + shadowsLength;
+        _lights.hash = directionalLength + "," + pointLength + "," + spotLength + "," + hemiLength + "," + shadowsLength;
 
     }
 
