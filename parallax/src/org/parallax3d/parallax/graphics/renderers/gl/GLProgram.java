@@ -17,18 +17,22 @@
  */
 package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.materials.HasEnvMap;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.RawShaderMaterial;
+import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.gl.GLHelpers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @ThreejsObject("WebGLProgram")
@@ -78,11 +82,11 @@ public class GLProgram {
 
         String shadowMapTypeDefine = "SHADOWMAP_TYPE_BASIC";
 
-        if ( parameters.get( "get("shadowMapType")" ) == ShadowMap.TYPE.PCFShadowMap ) {
+        if ( parameters.get( "shadowMapType" ) == ShadowMap.TYPE.PCFShadowMap ) {
 
             shadowMapTypeDefine = "SHADOWMAP_TYPE_PCF";
 
-        } else if ( parameters.get( "get("shadowMapType")" ) == ShadowMap.TYPE.PCFSoftShadowMap ) {
+        } else if ( parameters.get( "shadowMapType" ) == ShadowMap.TYPE.PCFSoftShadowMap ) {
 
             shadowMapTypeDefine = "SHADOWMAP_TYPE_PCF_SOFT";
 
@@ -92,7 +96,7 @@ public class GLProgram {
         String envMapModeDefine = "ENVMAP_MODE_REFLECTION";
         String envMapBlendingDefine = "ENVMAP_BLENDING_MULTIPLY";
 
-        if ( (Boolean) parameters.get( "get("envMap")" ) ) {
+        if ( (Boolean) parameters.get( "envMap" ) ) {
 
             switch (((HasEnvMap) material).getEnvMap().getMapping()) {
 
@@ -345,67 +349,64 @@ public class GLProgram {
 
         }
 
-        vertexShader = parseIncludes( vertexShader, parameters.get( ");
-" )        vertexShader = replaceLightNums( vertexShader, parameters.get( ");
+        vertexShader = parseIncludes( vertexShader, parameters );
+        vertexShader = replaceLightNums( vertexShader, parameters );
 
-" )        fragmentShader = parseIncludes( fragmentShader, parameters.get( ");
-" )        fragmentShader = replaceLightNums( fragmentShader, parameters.get( ");
+        fragmentShader = parseIncludes( fragmentShader, parameters );
+        fragmentShader = replaceLightNums( fragmentShader, parameters );
 
-" )        if (!(material instanceof ShaderMaterial)) {
+        if ( !(material instanceof ShaderMaterial)) {
 
             vertexShader = unrollLoops( vertexShader );
             fragmentShader = unrollLoops( fragmentShader );
 
         }
 
-        var vertexGlsl = prefixVertex + vertexShader;
-        var fragmentGlsl = prefixFragment + fragmentShader;
+        String vertexGlsl = prefixVertex + vertexShader;
+        String fragmentGlsl = prefixFragment + fragmentShader;
 
         // console.log( "*VERTEX*", vertexGlsl );
         // console.log( "*FRAGMENT*", fragmentGlsl );
 
-        var glVertexShader = GLShader( gl, gl.VERTEX_SHADER, vertexGlsl );
-        var glFragmentShader = GLShader( gl, gl.FRAGMENT_SHADER, fragmentGlsl );
+        int glVertexShader = GLShader.getShader( gl, GL20.GL_VERTEX_SHADER, vertexGlsl );
+        int glFragmentShader = GLShader.getShader( gl, GL20.GL_FRAGMENT_SHADER, fragmentGlsl );
 
-        gl.attachShader( program, glVertexShader );
-        gl.attachShader( program, glFragmentShader );
+        gl.glAttachShader( program, glVertexShader );
+        gl.glAttachShader( program, glFragmentShader );
 
         // Force a particular attribute to index 0.
 
         if ( material.index0AttributeName != undefined ) {
 
-            gl.bindAttribLocation( program, 0, material.index0AttributeName );
+            gl.glBindAttribLocation( program, 0, material.index0AttributeName );
 
         } else if ( parameters.get( "morphTargets" ) == true ) {
 
             // programs with morphTargets displace position out of attribute 0
-            gl.bindAttribLocation( program, 0, "position" );
+            gl.glBindAttribLocation( program, 0, "position" );
 
         }
 
-        gl.linkProgram( program );
+        gl.glLinkProgram( program );
 
-        var programLog = gl.getProgramInfoLog( program );
-        var vertexLog = gl.getShaderInfoLog( glVertexShader );
-        var fragmentLog = gl.getShaderInfoLog( glFragmentShader );
+        String programLog = gl.glGetProgramInfoLog( program );
+        String vertexLog = gl.glGetShaderInfoLog( glVertexShader );
+        String fragmentLog = gl.glGetShaderInfoLog( glFragmentShader );
 
-        var runnable = true;
-        var haveDiagnostics = true;
+        boolean runnable = true;
+        boolean haveDiagnostics = true;
 
-        // console.log( "**VERTEX**", gl.getExtension( "WEBGL_debug_shaders" ).getTranslatedShaderSource( glVertexShader ) );
-        // console.log( "**FRAGMENT**", gl.getExtension( "WEBGL_debug_shaders" ).getTranslatedShaderSource( glFragmentShader ) );
-
-        if ( gl.getProgramParameter( program, gl.LINK_STATUS ) == false ) {
+        if (!GLHelpers.isProgramLinked( gl, program ) ) {
 
             runnable = false;
 
-            console.error( "WebGLProgram: shader error: ", gl.getError(), "gl.VALIDATE_STATUS", gl.getProgramParameter( program, gl.VALIDATE_STATUS ), "gl.getProgramInfoLog", programLog, vertexLog, fragmentLog );
+            Log.error( "GLProgram: shader error: ", gl.glGetError(), "gl.VALIDATE_STATUS", GLHelpers.getProgramValidStatus( gl, program), "gl.getProgramInfoLog", programLog, vertexLog, fragmentLog );
 
-        } else if ( programLog != "" ) {
+        } else if (!Objects.equals(programLog, "")) {
 
-            console.warn( "WebGLProgram: gl.getProgramInfoLog()", programLog );
+            Log.warn( "GLProgram: gl.getProgramInfoLog(): " + programLog );
 
-        } else if ( vertexLog == "" || fragmentLog == "" ) {
+        } else if (Objects.equals(vertexLog, "") || Objects.equals(fragmentLog, "")) {
 
             haveDiagnostics = false;
 
@@ -440,8 +441,8 @@ public class GLProgram {
 
         // clean up
 
-        gl.deleteShader( glVertexShader );
-        gl.deleteShader( glFragmentShader );
+        gl.glDeleteShader( glVertexShader );
+        gl.glDeleteShader( glFragmentShader );
 
         // set up caching for uniform locations
 
@@ -484,31 +485,6 @@ public class GLProgram {
 
         };
 
-        // DEPRECATED
-
-        Object.defineProperties( this, {
-
-                uniforms: {
-            get: function() {
-
-                console.warn( "WebGLProgram: .uniforms is now .getUniforms()." );
-                return this.getUniforms();
-
-            }
-        },
-
-        attributes: {
-            get: function() {
-
-                console.warn( "WebGLProgram: .attributes is now .getAttributes()." );
-                return this.getAttributes();
-
-            }
-        }
-
-        } );
-
-
         //
 
         this.id = programIdCount ++;
@@ -517,8 +493,6 @@ public class GLProgram {
         this.program = program;
         this.vertexShader = glVertexShader;
         this.fragmentShader = glFragmentShader;
-
-        return this;
 
     }
 

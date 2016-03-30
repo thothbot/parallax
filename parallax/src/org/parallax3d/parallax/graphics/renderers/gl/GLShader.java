@@ -18,12 +18,14 @@
 package org.parallax3d.parallax.graphics.renderers.gl;
 
 import org.parallax3d.parallax.Log;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLHelpers;
 
+@ThreejsObject("THREE.WebGLShader")
 public class GLShader {
 
-    public GLShader(GL20 gl, int type, String string) {
+    public static int getShader(GL20 gl, int type, String string) {
 
         int shader = gl.glCreateShader( type );
 
@@ -43,9 +45,10 @@ public class GLShader {
 
         }
 
+        return shader;
     }
 
-    private String addLineNumbers( String string ) {
+    private static String addLineNumbers( String string ) {
 
         String[] lines = string.split( "\n" );
 

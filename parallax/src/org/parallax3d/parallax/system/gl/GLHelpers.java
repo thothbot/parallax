@@ -37,4 +37,17 @@ public class GLHelpers {
         return buffer.get(0) > 0;
     }
 
+    public static boolean isProgramLinked(GL20 gl, int program)
+    {
+        IntBuffer buffer = Int32Array.create(3).getTypedBuffer();
+        gl.glGetProgramiv( program, GL20.GL_LINK_STATUS, buffer );
+        return buffer.get(0) > 0;
+    }
+
+    public static int getProgramValidStatus(GL20 gl, int program)
+    {
+        IntBuffer buffer = Int32Array.create(3).getTypedBuffer();
+        gl.glGetProgramiv( program, GL20.GL_VALIDATE_STATUS, buffer );
+        return buffer.get(0);
+    }
 }
