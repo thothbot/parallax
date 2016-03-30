@@ -2805,42 +2805,45 @@ public class GLRenderer extends Renderer
     
     private void uploadTexture( FastMap<Object> textureProperties, Texture texture, int slot ) {
 
-        if ( textureProperties.__webglInit == undefined ) {
+        if ( !textureProperties.containsKey("__webglInit")) {
 
-            textureProperties.__webglInit = true;
+            textureProperties.put("__webglInit", true);
 
-            texture.addEventListener( 'dispose', onTextureDispose );
+			// TODO: fix event
+//            texture.addEventListener( 'dispose', onTextureDispose );
 
-            textureProperties.__webglTexture = _gl.createTexture();
+            textureProperties.put("__webglTexture", gl.glGenTexture());
 
-            _infoMemory.textures ++;
-
-        }
-
-        state.activeTexture( _gl.TEXTURE0 + slot );
-        state.bindTexture( _gl.TEXTURE_2D, textureProperties.__webglTexture );
-
-        _gl.pixelStorei( _gl.UNPACK_FLIP_Y_WEBGL, texture.flipY );
-        _gl.pixelStorei( _gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha );
-        _gl.pixelStorei( _gl.UNPACK_ALIGNMENT, texture.unpackAlignment );
-
-        var image = clampToMaxSize( texture.image, capabilities.maxTextureSize );
-
-        if ( textureNeedsPowerOfTwo( texture ) && isPowerOfTwo( image ) == false ) {
-
-            image = makePowerOfTwo( image );
+			info.getMemory().textures ++;
 
         }
 
-        var isPowerOfTwoImage = isPowerOfTwo( image ),
-                glFormat = paramThreeToGL( texture.format ),
-                glType = paramThreeToGL( texture.type );
+        state.activeTexture( TextureUnit.TEXTURE0.getValue() + slot );
+        state.bindTexture( TextureTarget.TEXTURE_2D, (Integer) textureProperties.get("__webglTexture"));
 
-        setTextureParameters( _gl.TEXTURE_2D, texture, isPowerOfTwoImage );
+		// TODO: fix params
+//        gl.glPixelStorei( UNPACK_FLIP_Y_WEBGL, texture.flipY );
+//        gl.glPixelStorei( _gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, texture.premultiplyAlpha );
+        gl.glPixelStorei( PixelStoreParameter.UNPACK_ALIGNMENT.getValue(), texture.getUnpackAlignment());
+
+		texture.getImage().clampToMaxSize(capabilities.getMaxTextureSize());
+		TextureData image = texture.getImage();
+
+        if ( textureNeedsPowerOfTwo( texture ) && !image.isPowerOfTwo()) {
+
+            image = image.makePowerOfTwo();
+
+        }
+
+        boolean isPowerOfTwoImage = image.isPowerOfTwo();
+		PixelFormat glFormat = texture.getFormat();
+		PixelType glType = texture.getType();
+
+        setTextureParameters( TextureTarget.TEXTURE_2D, texture, isPowerOfTwoImage );
 
         var mipmap, mipmaps = texture.mipmaps;
 
-        if ( texture instanceof THREE.DataTexture ) {
+        if ( texture instanceof DataTexture ) {
 
             // use manually created mipmaps if available
             // if there are no manual mipmaps
@@ -2848,10 +2851,10 @@ public class GLRenderer extends Renderer
 
             if ( mipmaps.length > 0 && isPowerOfTwoImage ) {
 
-                for ( var i = 0, il = mipmaps.length; i < il; i ++ ) {
+                for ( int i = 0, il = mipmaps.length; i < il; i ++ ) {
 
                     mipmap = mipmaps[ i ];
-                    state.texImage2D( _gl.TEXTURE_2D, i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
+                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
 
                 }
 
@@ -2859,31 +2862,31 @@ public class GLRenderer extends Renderer
 
             } else {
 
-                state.texImage2D( _gl.TEXTURE_2D, 0, glFormat, image.width, image.height, 0, glFormat, glType, image.data );
+                state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, glFormat, image.width, image.height, 0, glFormat, glType, image.data );
 
             }
 
-        } else if ( texture instanceof THREE.CompressedTexture ) {
+        } else if ( texture instanceof CompressedTexture ) {
 
-            for ( var i = 0, il = mipmaps.length; i < il; i ++ ) {
+            for ( int i = 0, il = mipmaps.length; i < il; i ++ ) {
 
                 mipmap = mipmaps[ i ];
 
-                if ( texture.format !== THREE.RGBAFormat && texture.format !== THREE.RGBFormat ) {
+                if ( texture.getFormat() != PixelFormat.RGBA && texture.getFormat() != PixelFormat.RGB ) {
 
                     if ( state.getCompressedTextureFormats().indexOf( glFormat ) > - 1 ) {
 
-                        state.compressedTexImage2D( _gl.TEXTURE_2D, i, glFormat, mipmap.width, mipmap.height, 0, mipmap.data );
+                        state.compressedTexImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, mipmap.data );
 
                     } else {
 
-                        console.warn( "THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()" );
+                        Log.warn( "GLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()" );
 
                     }
 
                 } else {
 
-                    state.texImage2D( _gl.TEXTURE_2D, i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
+                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
 
                 }
 
@@ -2902,7 +2905,7 @@ public class GLRenderer extends Renderer
                 for ( var i = 0, il = mipmaps.length; i < il; i ++ ) {
 
                     mipmap = mipmaps[ i ];
-                    state.texImage2D( _gl.TEXTURE_2D, i, glFormat, glFormat, glType, mipmap );
+                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, glFormat, glType, mipmap );
 
                 }
 
@@ -2910,15 +2913,16 @@ public class GLRenderer extends Renderer
 
             } else {
 
-                state.texImage2D( _gl.TEXTURE_2D, 0, glFormat, glFormat, glType, image );
+                state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, glFormat, glFormat, glType, image );
 
             }
 
         }
 
-        if ( texture.generateMipmaps && isPowerOfTwoImage ) _gl.generateMipmap( _gl.TEXTURE_2D );
+        if ( texture.generateMipmaps && isPowerOfTwoImage )
+			gl.glGenerateMipmap( TextureTarget.TEXTURE_2D.getValue() );
 
-        textureProperties.__version = texture.version;
+        textureProperties.put("__version", texture.getVersion());
 
         if ( texture.onUpdate ) texture.onUpdate( texture );
 
@@ -2926,13 +2930,13 @@ public class GLRenderer extends Renderer
 
     public void setTexture( Texture texture, int slot ) {
 
-        var textureProperties = properties.get(texture);
+        FastMap<Object> textureProperties = properties.get(texture);
 
-        if (texture.version > 0 && textureProperties.__version != = texture.version) {
+        if (texture.getVersion() > 0 && (int)textureProperties.get("__version") != texture.getVersion()) {
 
-            var image = texture.image;
+            TextureData image = texture.getImage();
 
-            if (image == = undefined) {
+            if (image == null) {
 
                 Log.warn( "GLRenderer: Texture marked for update but image is undefined: " + texture);
 
@@ -2940,7 +2944,7 @@ public class GLRenderer extends Renderer
 
             }
 
-            if (image.complete == = false) {
+            if (image.complete == false) {
 
                 Log.warn( "GLRenderer: Texture marked for update but image is incomplete: " + texture);
                 return;
@@ -2953,10 +2957,19 @@ public class GLRenderer extends Renderer
 
         }
 
-        state.activeTexture(_gl.TEXTURE0 + slot);
-        state.bindTexture(_gl.TEXTURE_2D, textureProperties.__webglTexture);
+        state.activeTexture(TextureUnit.TEXTURE0.getValue() + slot);
+        state.bindTexture(TextureTarget.TEXTURE_2D, (int)textureProperties.get("__webglTexture"));
 
     }
+
+	private boolean textureNeedsPowerOfTwo( Texture texture ) {
+
+		if ( texture.getWrapS() != TextureWrapMode.CLAMP_TO_EDGE || texture.getWrapT() != TextureWrapMode.CLAMP_TO_EDGE ) return true;
+		if ( texture.getMinFilter() != TextureMinFilter.NEAREST && texture.getMinFilter() != TextureMinFilter.LINEAR ) return true;
+
+		return false;
+
+	}
 
     private void setCubeTexture ( CubeTexture texture, int slot ) {
 

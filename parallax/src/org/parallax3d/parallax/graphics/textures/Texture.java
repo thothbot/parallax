@@ -20,11 +20,10 @@ package org.parallax3d.parallax.graphics.textures;
 
 import org.parallax3d.parallax.Parallax;
 import org.parallax3d.parallax.files.FileHandle;
-import org.parallax3d.parallax.system.AbstractPropertyObject;
-import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
-import org.parallax3d.parallax.system.gl.GL20;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.enums.*;
 
 /**
@@ -125,18 +124,24 @@ public class Texture extends AbstractPropertyObject implements AbstractTexture
 	PixelFormat format;
 	PixelType type;
 
-	ENCODINGS encoding;
-
 	boolean isGenerateMipmaps = true;
 	boolean isPremultiplyAlpha = false;
 	boolean isFlipY = true;
 	int unpackAlignment = 4; // valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
 
-	boolean isNeedsUpdate = false;
-
 	protected int webglTexture = 0; //WebGLTexture
 
 	int anisotropy;
+
+	/**
+	 * 	Values of encoding !== THREE.LinearEncoding only supported on map, envMap and emissiveMap.
+	 *
+	 *  Also changing the encoding after already used by a Material will not automatically make the Material
+	 *  update.  You need to explicitly call Material.needsUpdate to trigger it to recompile.
+	 */
+	ENCODINGS encoding;
+
+	int version = 0;
 
 	int cache_oldAnisotropy;
 
@@ -324,17 +329,10 @@ public class Texture extends AbstractPropertyObject implements AbstractTexture
 	}
 
 	/**
-	 * Checks if the texture needs to be updated.
-	 */
-	public Boolean isNeedsUpdate()	{
-		return this.isNeedsUpdate;
-	}
-
-	/**
 	 * Sets flag to updated the texture.
 	 */
 	public Texture setNeedsUpdate(Boolean needsUpdate) {
-		this.isNeedsUpdate = needsUpdate;
+		if ( needsUpdate ) this.version ++;
 		return this;
 	}
 
@@ -492,46 +490,20 @@ public class Texture extends AbstractPropertyObject implements AbstractTexture
 		return this;
 	}
 
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
 	public int getWebGlTexture() {
 		return webglTexture;
 	}
 
 	public Texture setWebGlTexture(int webglTexture) {
 		this.webglTexture = webglTexture;
-		return this;
-	}
-
-	public Texture setTextureParameters ( GL20 gl, TextureTarget textureType, boolean isImagePowerOfTwo )
-	{
-		return setTextureParameters( gl, 0, textureType, isImagePowerOfTwo);
-	}
-
-	public Texture setTextureParameters ( GL20 gl, int maxAnisotropy, TextureTarget textureType, boolean isImagePowerOfTwo )
-	{
-		if ( isImagePowerOfTwo )
-		{
-			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_S.getValue(), this.wrapS.getValue());
-			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_T.getValue(), this.wrapT.getValue());
-			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MAG_FILTER.getValue(), this.magFilter.getValue() );
-			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MIN_FILTER.getValue(), this.minFilter.getValue());
-		}
-		else
-		{
-			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_S.getValue(), GL20.GL_CLAMP_TO_EDGE);
-			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_WRAP_T.getValue(), GL20.GL_CLAMP_TO_EDGE);
-			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MAG_FILTER.getValue(), filterFallback(this.magFilter.getValue()));
-			gl.glTexParameteri(textureType.getValue(), TextureParameterName.TEXTURE_MIN_FILTER.getValue(), filterFallback(this.minFilter.getValue()));
-		}
-
-		if ( maxAnisotropy > 0 )
-		{
-			if ( this.anisotropy > 1 || this.cache_oldAnisotropy > 1 )
-			{
-				gl.glTexParameterf(textureType.getValue(), TextureParameterName.TEXTURE_MAX_ANISOTROPY_EXT.getValue(), Math.min(this.anisotropy, maxAnisotropy));
-				this.cache_oldAnisotropy = this.anisotropy;
-			}
-		}
-
 		return this;
 	}
 
