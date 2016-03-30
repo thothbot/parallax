@@ -30,4 +30,11 @@ public class GLHelpers {
         return buffer.get(0);
     }
 
+    public static boolean isShaderCompiled(GL20 gl, int shader)
+    {
+        IntBuffer buffer = Int32Array.create(3).getTypedBuffer();
+        gl.glGetShaderiv( shader, GL20.GL_COMPILE_STATUS, buffer );
+        return buffer.get(0) > 0;
+    }
+
 }
