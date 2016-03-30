@@ -49,12 +49,9 @@ public class Texture extends AbstractPropertyObject implements AbstractTexture
 
 	public enum OPERATIONS
 	{
-		MULTIPLY(0), // MultiplyOperation
-		MIX(1); // MixOperation
-
-		final int value;
-		OPERATIONS(int value) { this.value = value; }
-		public int getValue() { return value; }
+		MultiplyOperation, // MultiplyOperation
+		MixOperation, // MixOperation
+		AddOperation;
 	};
 
 	/**

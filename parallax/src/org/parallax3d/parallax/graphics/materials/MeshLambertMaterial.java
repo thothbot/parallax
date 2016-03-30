@@ -21,7 +21,6 @@ package org.parallax3d.parallax.graphics.materials;
 import org.parallax3d.parallax.graphics.renderers.shaders.LambertShader;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.graphics.textures.Texture.OPERATIONS;
 import org.parallax3d.parallax.math.Color;
@@ -56,7 +55,7 @@ public final class MeshLambertMaterial extends Material
 	Texture alphaMap;
 
 	Texture envMap;
-	Texture.OPERATIONS combine = OPERATIONS.MULTIPLY;
+	Texture.OPERATIONS combine = OPERATIONS.MultiplyOperation;
 	double reflectivity = 1.0;
 	double refractionRatio = 0.98;
 

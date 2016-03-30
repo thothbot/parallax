@@ -63,7 +63,7 @@ public class MeshStandardMaterial extends Material implements HasColor, HasMap, 
 
     Texture envMap;
     double envMapIntensity = 1.0;
-    Texture.OPERATIONS combine = Texture.OPERATIONS.MULTIPLY;
+    Texture.OPERATIONS combine = Texture.OPERATIONS.MultiplyOperation;
     double reflectivity = 1.0;
     double refractionRatio = 0.98;
 

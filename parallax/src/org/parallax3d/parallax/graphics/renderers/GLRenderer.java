@@ -23,7 +23,6 @@ import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.cameras.Camera;
 import org.parallax3d.parallax.graphics.cameras.HasNearFar;
 import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.graphics.core.geometry.GeometryGroup;
 import org.parallax3d.parallax.graphics.extras.objects.ImmediateRenderObject;
 import org.parallax3d.parallax.graphics.lights.*;
 import org.parallax3d.parallax.graphics.materials.*;
@@ -50,8 +49,8 @@ import org.parallax3d.parallax.system.gl.enums.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The WebGL renderer displays your beautifully crafted {@link Scene}s using WebGL, if your device supports it.
@@ -530,7 +529,15 @@ public class GLRenderer extends Renderer
 		return info;
 	}
 
-    /**
+	public double getGammaFactor() {
+		return gammaFactor;
+	}
+
+	public void setGammaFactor(double gammaFactor) {
+		this.gammaFactor = gammaFactor;
+	}
+
+	/**
 	 * This should be called from Android's onSurfaceChanged() or equivalent
 	 * unless you call one of the @link{#setViewport} methods.
 	 * @param newWidth
@@ -1405,7 +1412,7 @@ public class GLRenderer extends Renderer
 
         FastMap<Object> materialProperties = properties.get( material );
 
-        var parameters = programCache.getParameters( material, _lights, fog, object );
+        FastMap<Object> parameters = programCache.getParameters( material, _lights, fog, object );
         var code = programCache.getProgramCode( material, parameters );
 
         var program = materialProperties.get("program");
@@ -1532,8 +1539,8 @@ public class GLRenderer extends Renderer
 
             // wire up the material to this renderer's lighting state
 
-            uniforms.get( "ambientLightColor" ).setValue( _lights.ambient;
-            uniforms.get( "directionalLights" ).setValue( _lights.directional;
+            uniforms.get( "ambientLightColor" ).setValue( _lights.ambient );
+            uniforms.get( "directionalLights" ).setValue( _lights.directional );
             uniforms.get( "spotLights" ).setValue( _lights.spot;
             uniforms.get( "pointLights" ).setValue( _lights.point;
             uniforms.get( "hemisphereLights" ).setValue( _lights.hemi;
@@ -1777,30 +1784,30 @@ public class GLRenderer extends Renderer
 
             // refresh single material specific uniforms
 
-            if ( material instanceof LineBasicMaterial ) {
+			if ( material instanceof LineDashedMaterial ) {
 
-                refreshUniformsLine( m_uniforms, material );
+				refreshUniformsLine(m_uniforms, (LineBasicMaterial) material);
+				refreshUniformsDash(m_uniforms, (LineDashedMaterial) material);
 
-            } else if ( material instanceof LineDashedMaterial ) {
+			} else if ( material instanceof LineBasicMaterial ) {
 
-                refreshUniformsLine( m_uniforms, material );
-                refreshUniformsDash( m_uniforms, material );
+				refreshUniformsLine( m_uniforms, (LineBasicMaterial) material);
 
-            } else if ( material instanceof PointsMaterial ) {
+			} else if ( material instanceof PointsMaterial ) {
 
-                refreshUniformsPoints( m_uniforms, material );
+                refreshUniformsPoints( m_uniforms, (PointsMaterial) material);
 
             } else if ( material instanceof MeshLambertMaterial ) {
 
-                refreshUniformsLambert( m_uniforms, material );
+                refreshUniformsLambert( m_uniforms, (MeshLambertMaterial) material);
 
             } else if ( material instanceof MeshPhongMaterial ) {
 
-                refreshUniformsPhong( m_uniforms, material );
+                refreshUniformsPhong( m_uniforms, (MeshPhongMaterial) material);
 
             } else if ( material instanceof MeshStandardMaterial ) {
 
-                refreshUniformsStandard( m_uniforms, material );
+                refreshUniformsStandard( m_uniforms, (MeshStandardMaterial) material);
 
             } else if ( material instanceof MeshDepthMaterial ) {
 
@@ -2555,18 +2562,12 @@ public class GLRenderer extends Renderer
 	
     private void loadUniformsGeneric( FastMap<Uniform> uniforms ) {
 
-        for ( var i = 0, l = uniforms.length; i < l; i ++ ) {
-
-            var uniform = uniforms[ i ][ 0 ];
+		for(Map.Entry<String, Uniform> entry: uniforms.entrySet()) {
 
             // needsUpdate property is not added to all uniforms.
-            if ( uniform.needsUpdate == false ) continue;
+            if ( !entry.getValue().isNeedsUpdate()) continue;
 
-            var type = uniform.type;
-            var location = uniforms.get( " i ][ 1 ];
-            var" ).setValue( uniform.value;
-
-            loadUniform( uniform, type, location, value );
+            loadUniform( entry.getValue() );
 
         }
 

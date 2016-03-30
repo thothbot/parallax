@@ -31,7 +31,12 @@ import org.parallax3d.parallax.graphics.textures.AbstractTexture;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.system.FastMap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GLPrograms {
+
+    List<GLProgram> programs = new ArrayList<>();
 
     GLRenderer renderer;
     GLCapabilities capabilities;
@@ -223,7 +228,7 @@ public class GLPrograms {
 
     };
 
-    public void getProgramCode( Material material, FastMap<Object> parameters ) {
+    public String getProgramCode( Material material, FastMap<Object> parameters ) {
 
         var chunks = [];
 
@@ -261,16 +266,16 @@ public class GLPrograms {
 
     };
 
-    public void acquireProgram( Material material, FastMap<Object> parameters, String code ) {
+    public GLProgram acquireProgram( Material material, FastMap<Object> parameters, String code ) {
 
-        var program;
+        GLProgram program = null;
 
         // Check if code has been already compiled
-        for ( var p = 0, pl = programs.length; p < pl; p ++ ) {
+        for ( int p = 0, pl = programs.size(); p < pl; p ++ ) {
 
-            var programInfo = programs[ p ];
+            GLProgram programInfo = programs.get(p);
 
-            if ( programInfo.code == code ) {
+            if ( programInfo.getCode() == code ) {
 
                 program = programInfo;
                 ++ program.usedTimes;
@@ -284,7 +289,7 @@ public class GLPrograms {
         if ( program == null ) {
 
             program = new GLProgram( renderer, code, material, parameters );
-            programs.push( program );
+            programs.add( program );
 
         }
 
@@ -292,13 +297,13 @@ public class GLPrograms {
 
     };
 
-    public void releaseProgram( program ) {
+    public void releaseProgram( GLProgram program ) {
 
         if ( -- program.usedTimes == 0 ) {
 
             // Remove from unordered set
-            var i = programs.indexOf( program );
-            programs[ i ] = programs[ programs.length - 1 ];
+            int i = programs.indexOf( program );
+            programs.set(i, programs.get(programs.size() - 1));
             programs.pop();
 
             // Free WebGL resources

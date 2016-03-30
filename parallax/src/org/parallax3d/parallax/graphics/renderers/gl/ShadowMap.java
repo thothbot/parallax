@@ -57,6 +57,13 @@ import org.parallax3d.parallax.system.gl.enums.*;
 public final class ShadowMap extends Plugin
 {
 
+	// SHADOWING TYPES
+	public enum TYPE {
+		BasicShadowMap,
+		PCFShadowMap,
+		PCFSoftShadowMap
+	};
+
 	private boolean isAutoUpdate = true;
 	private boolean isSoft = true;
 	private boolean isCullFrontFaces = true;

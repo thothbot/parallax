@@ -66,7 +66,7 @@ public class MeshPhongMaterial extends Material
 	Texture alphaMap;
 
 	Texture envMap;
-	Texture.OPERATIONS combine = Texture.OPERATIONS.MULTIPLY;
+	Texture.OPERATIONS combine = Texture.OPERATIONS.MultiplyOperation;
 	double reflectivity = 1.0;
 	double refractionRatio = 0.98;
 

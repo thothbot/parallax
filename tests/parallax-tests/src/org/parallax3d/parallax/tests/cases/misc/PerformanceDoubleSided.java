@@ -84,7 +84,7 @@ public final class PerformanceDoubleSided extends ParallaxTest implements TouchM
 				.setSpecular( 0xffffff )
 				.setShininess( 100 )
 				.setEnvMap( reflectionCube )
-				.setCombine( Texture.OPERATIONS.MIX )
+				.setCombine( Texture.OPERATIONS.MixOperation)
 				.setReflectivity( 0.1 )
 				.setSide(Material.SIDE.DOUBLE);
 

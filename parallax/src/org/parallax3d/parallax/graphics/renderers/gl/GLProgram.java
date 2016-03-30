@@ -17,9 +17,9 @@
  */
 package org.parallax3d.parallax.graphics.renderers.gl;
 
+import org.parallax3d.parallax.graphics.materials.HasEnvMap;
 import org.parallax3d.parallax.graphics.materials.Material;
 import org.parallax3d.parallax.graphics.materials.RawShaderMaterial;
-import org.parallax3d.parallax.graphics.materials.ShaderMaterial;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.system.FastMap;
@@ -66,23 +66,23 @@ public class GLProgram {
 
     }
 
-    public GLProgram(GLRenderer renderer, code, Material material, FastMap<Object> parameters) {
+    public GLProgram(GLRenderer renderer, String code, Material material, FastMap<Object> parameters) {
 
-        var gl = renderer.context;
+        GL20 gl = renderer.gl();
 
         var extensions = material.extensions;
-        var defines = material.defines;
+        FastMap<Boolean> defines = material.defines;
 
-        String vertexShader = material.__webglShader.vertexShader;
-        String fragmentShader = material.__webglShader.fragmentShader;
+        String vertexShader = material.getShader().getVertexSource();
+        String fragmentShader = material.getShader().getFragmentSource();
 
         String shadowMapTypeDefine = "SHADOWMAP_TYPE_BASIC";
 
-        if ( parameters.shadowMapType == PCFShadowMap ) {
+        if ( parameters.get( "get("shadowMapType")" ) == ShadowMap.TYPE.PCFShadowMap ) {
 
             shadowMapTypeDefine = "SHADOWMAP_TYPE_PCF";
 
-        } else if ( parameters.shadowMapType == PCFSoftShadowMap ) {
+        } else if ( parameters.get( "get("shadowMapType")" ) == ShadowMap.TYPE.PCFSoftShadowMap ) {
 
             shadowMapTypeDefine = "SHADOWMAP_TYPE_PCF_SOFT";
 
@@ -92,9 +92,9 @@ public class GLProgram {
         String envMapModeDefine = "ENVMAP_MODE_REFLECTION";
         String envMapBlendingDefine = "ENVMAP_BLENDING_MULTIPLY";
 
-        if ( (Boolean) parameters.get("envMap") ) {
+        if ( (Boolean) parameters.get( "get("envMap")" ) ) {
 
-            switch ( material.envMap.mapping ) {
+            switch (((HasEnvMap) material).getEnvMap().getMapping()) {
 
                 case CubeReflectionMapping:
                 case CubeRefractionMapping:
@@ -117,7 +117,7 @@ public class GLProgram {
 
             }
 
-            switch ( material.envMap.mapping ) {
+            switch ( ((HasEnvMap) material).getEnvMap().getMapping() ) {
 
                 case CubeRefractionMapping:
                 case EquirectangularRefractionMapping:
@@ -126,7 +126,7 @@ public class GLProgram {
 
             }
 
-            switch ( material.combine ) {
+            switch ( ((HasEnvMap) material).getCombine() ) {
 
                 case MultiplyOperation:
                     envMapBlendingDefine = "ENVMAP_BLENDING_MULTIPLY";
@@ -144,9 +144,7 @@ public class GLProgram {
 
         }
 
-        var gammaFactorDefine = ( renderer.gammaFactor > 0 ) ? renderer.gammaFactor : 1.0;
-
-        // console.log( "building new program " );
+        double gammaFactorDefine = ( renderer.getGammaFactor() > 0 ) ? renderer.getGammaFactor() : 1.0;
 
         //
 
@@ -156,7 +154,7 @@ public class GLProgram {
 
         //
 
-        var program = gl.createProgram();
+        int program = gl.glCreateProgram();
 
         String prefixVertex, prefixFragment;
 
@@ -169,52 +167,52 @@ public class GLProgram {
 
             List<String> prefixVertexArray = Arrays.asList(
 
-                "precision " + parameters.precision + " float;",
-                "precision " + parameters.precision + " int;",
+                "precision " + parameters.get( "precision" ) + " float;",
+                "precision " + parameters.get( "precision" ) + " int;",
                 
                 "#define SHADER_NAME " + material.__webglShader.name,
                 
                 customDefines,
                 
-                parameters.supportsVertexTextures ? "#define VERTEX_TEXTURES" : "",
+                (Boolean)parameters.get( "supportsVertexTextures" ) ? "#define VERTEX_TEXTURES" : "",
                 
                 "#define GAMMA_FACTOR " + gammaFactorDefine,
                 
-                "#define MAX_BONES " + parameters.maxBones,
-                
-                parameters.map ? "#define USE_MAP" : "",
-                parameters.envMap ? "#define USE_ENVMAP" : "",
-                parameters.envMap ? "#define " + envMapModeDefine : "",
-                parameters.lightMap ? "#define USE_LIGHTMAP" : "",
-                parameters.aoMap ? "#define USE_AOMAP" : "",
-                parameters.emissiveMap ? "#define USE_EMISSIVEMAP" : "",
-                parameters.bumpMap ? "#define USE_BUMPMAP" : "",
-                parameters.normalMap ? "#define USE_NORMALMAP" : "",
-                parameters.displacementMap && parameters.supportsVertexTextures ? "#define USE_DISPLACEMENTMAP" : "",
-                parameters.specularMap ? "#define USE_SPECULARMAP" : "",
-                parameters.roughnessMap ? "#define USE_ROUGHNESSMAP" : "",
-                parameters.metalnessMap ? "#define USE_METALNESSMAP" : "",
-                parameters.alphaMap ? "#define USE_ALPHAMAP" : "",
-                parameters.vertexColors ? "#define USE_COLOR" : "",
-                
-                parameters.flatShading ? "#define FLAT_SHADED" : "",
-                
-                parameters.skinning ? "#define USE_SKINNING" : "",
-                parameters.useVertexTexture ? "#define BONE_TEXTURE" : "",
-                
-                parameters.morphTargets ? "#define USE_MORPHTARGETS" : "",
-                parameters.morphNormals && parameters.flatShading == false ? "#define USE_MORPHNORMALS" : "",
-                parameters.doubleSided ? "#define DOUBLE_SIDED" : "",
-                parameters.flipSided ? "#define FLIP_SIDED" : "",
-                
-                parameters.shadowMapEnabled ? "#define USE_SHADOWMAP" : "",
-                parameters.shadowMapEnabled ? "#define " + shadowMapTypeDefine : "",
-                parameters.pointLightShadows > 0 ? "#define POINT_LIGHT_SHADOWS" : "",
-                
-                parameters.sizeAttenuation ? "#define USE_SIZEATTENUATION" : "",
-                
-                parameters.logarithmicDepthBuffer ? "#define USE_LOGDEPTHBUF" : "",
-                parameters.logarithmicDepthBuffer && renderer.extensions.get( "EXT_frag_depth" ) ? "#define USE_LOGDEPTHBUF_EXT" : "",
+                "#define MAX_BONES " + parameters.get( "maxBones" ),
+
+                (Boolean)parameters.get( "map" ) ? "#define USE_MAP" : "",
+                (Boolean)parameters.get( "envMap" ) ? "#define USE_ENVMAP" : "",
+                (Boolean)parameters.get( "envMap" ) ? "#define " + envMapModeDefine : "",
+                (Boolean)parameters.get( "lightMap" ) ? "#define USE_LIGHTMAP" : "",
+                (Boolean)parameters.get( "aoMap" ) ? "#define USE_AOMAP" : "",
+                (Boolean)parameters.get( "emissiveMap" ) ? "#define USE_EMISSIVEMAP" : "",
+                (Boolean)parameters.get( "bumpMap" ) ? "#define USE_BUMPMAP" : "",
+                (Boolean)parameters.get( "normalMap" ) ? "#define USE_NORMALMAP" : "",
+                (Boolean)parameters.get( "displacementMap" ) && (Boolean)parameters.get( "supportsVertexTextures" ) ? "#define USE_DISPLACEMENTMAP" : "",
+                (Boolean)parameters.get( "specularMap" ) ? "#define USE_SPECULARMAP" : "",
+                (Boolean)parameters.get( "roughnessMap" ) ? "#define USE_ROUGHNESSMAP" : "",
+                (Boolean)parameters.get( "metalnessMap" ) ? "#define USE_METALNESSMAP" : "",
+                (Boolean)parameters.get( "alphaMap" ) ? "#define USE_ALPHAMAP" : "",
+                (Boolean)parameters.get( "vertexColors" ) ? "#define USE_COLOR" : "",
+
+                (Boolean)parameters.get( "flatShading" ) ? "#define FLAT_SHADED" : "",
+
+                (Boolean)parameters.get( "skinning" ) ? "#define USE_SKINNING" : "",
+                (Boolean)parameters.get( "useVertexTexture" ) ? "#define BONE_TEXTURE" : "",
+
+                (Boolean)parameters.get( "morphTargets" ) ? "#define USE_MORPHTARGETS" : "",
+                (Boolean)parameters.get( "morphNormals" ) && parameters.get( "flatShading" ) == false ? "#define USE_MORPHNORMALS" : "",
+                (Boolean)parameters.get( "doubleSided" ) ? "#define DOUBLE_SIDED" : "",
+                (Boolean)parameters.get( "flipSided" ) ? "#define FLIP_SIDED" : "",
+
+                (Boolean)parameters.get( "shadowMapEnabled" ) ? "#define USE_SHADOWMAP" : "",
+                (Boolean)parameters.get( "shadowMapEnabled" ) ? "#define " + shadowMapTypeDefine : "",
+                (Integer)parameters.get( "pointLightShadows" ) > 0 ? "#define POINT_LIGHT_SHADOWS" : "",
+
+                (Boolean)parameters.get( "sizeAttenuation" ) ? "#define USE_SIZEATTENUATION" : "",
+
+                (Boolean)parameters.get( "logarithmicDepthBuffer" ) ? "#define USE_LOGDEPTHBUF" : "",
+                (Boolean)parameters.get( "logarithmicDepthBuffer" ) && renderer.extensions.get( "EXT_frag_depth" ) ? "#define USE_LOGDEPTHBUF_EXT" : "",
                 
                 
                 "uniform mat4 modelMatrix;",
@@ -277,66 +275,66 @@ public class GLProgram {
 
                 customExtensions,
 
-                "precision " + parameters.precision + " float;",
-                "precision " + parameters.precision + " int;",
+                "precision " + parameters.get( "precision" ) + " float;",
+                "precision " + parameters.get( "precision" ) + " int;",
                 
                 "#define SHADER_NAME " + material.__webglShader.name,
                 
                 customDefines,
-                
-                parameters.alphaTest ? "#define ALPHATEST " + parameters.alphaTest : "",
+
+                (Boolean)parameters.get( "alphaTest" ) ? "#define ALPHATEST " + parameters.get( "alphaTest" ) : "",
                 
                 "#define GAMMA_FACTOR " + gammaFactorDefine,
                 
-                ( parameters.useFog && parameters.fog ) ? "#define USE_FOG" : "",
-                ( parameters.useFog && parameters.fogExp ) ? "#define FOG_EXP2" : "",
+                ( (Boolean)parameters.get( "useFog" ) && (Boolean)parameters.get( "fog" ) ) ? "#define USE_FOG" : "",
+                ( (Boolean)parameters.get( "useFog" ) && (Boolean)parameters.get( "fogExp" ) ) ? "#define FOG_EXP2" : "",
+
+                (Boolean)parameters.get( "map" ) ? "#define USE_MAP" : "",
+                (Boolean)parameters.get( "envMap" ) ? "#define USE_ENVMAP" : "",
+                (Boolean)parameters.get( "envMap" ) ? "#define " + envMapTypeDefine : "",
+                (Boolean)parameters.get( "envMap" ) ? "#define " + envMapModeDefine : "",
+                (Boolean)parameters.get( "envMap" ) ? "#define " + envMapBlendingDefine : "",
+                (Boolean)parameters.get( "lightMap" ) ? "#define USE_LIGHTMAP" : "",
+                (Boolean)parameters.get( "aoMap" ) ? "#define USE_AOMAP" : "",
+                (Boolean)parameters.get( "emissiveMap" ) ? "#define USE_EMISSIVEMAP" : "",
+                (Boolean)parameters.get( "bumpMap" ) ? "#define USE_BUMPMAP" : "",
+                (Boolean)parameters.get( "normalMap" ) ? "#define USE_NORMALMAP" : "",
+                (Boolean)parameters.get( "specularMap" ) ? "#define USE_SPECULARMAP" : "",
+                (Boolean)parameters.get( "roughnessMap" ) ? "#define USE_ROUGHNESSMAP" : "",
+                (Boolean)parameters.get( "metalnessMap" ) ? "#define USE_METALNESSMAP" : "",
+                (Boolean)parameters.get( "alphaMap" ) ? "#define USE_ALPHAMAP" : "",
+                (Boolean)parameters.get( "vertexColors" ) ? "#define USE_COLOR" : "",
+
+                (Boolean)parameters.get( "flatShading" ) ? "#define FLAT_SHADED" : "",
+
+                (Boolean)parameters.get( "doubleSided" ) ? "#define DOUBLE_SIDED" : "",
+                (Boolean)parameters.get( "flipSided" ) ? "#define FLIP_SIDED" : "",
+
+                (Boolean)parameters.get( "shadowMapEnabled" ) ? "#define USE_SHADOWMAP" : "",
+                (Boolean)parameters.get( "shadowMapEnabled" ) ? "#define " + shadowMapTypeDefine : "",
+                (Integer)parameters.get( "pointLightShadows" ) > 0 ? "#define POINT_LIGHT_SHADOWS" : "",
+
+                (Boolean)parameters.get( "premultipliedAlpha" ) ? "#define PREMULTIPLIED_ALPHA" : "",
+
+                (Boolean)parameters.get( "physicallyCorrectLights" ) ? "#define PHYSICALLY_CORRECT_LIGHTS" : "",
+
+                (Boolean)parameters.get( "logarithmicDepthBuffer" ) ? "#define USE_LOGDEPTHBUF" : "",
+                parameters.get( "logarithmicDepthBuffer" ) && renderer.extensions.get( "EXT_frag_depth" ) ? "#define USE_LOGDEPTHBUF_EXT" : "",
                 
-                parameters.map ? "#define USE_MAP" : "",
-                parameters.envMap ? "#define USE_ENVMAP" : "",
-                parameters.envMap ? "#define " + envMapTypeDefine : "",
-                parameters.envMap ? "#define " + envMapModeDefine : "",
-                parameters.envMap ? "#define " + envMapBlendingDefine : "",
-                parameters.lightMap ? "#define USE_LIGHTMAP" : "",
-                parameters.aoMap ? "#define USE_AOMAP" : "",
-                parameters.emissiveMap ? "#define USE_EMISSIVEMAP" : "",
-                parameters.bumpMap ? "#define USE_BUMPMAP" : "",
-                parameters.normalMap ? "#define USE_NORMALMAP" : "",
-                parameters.specularMap ? "#define USE_SPECULARMAP" : "",
-                parameters.roughnessMap ? "#define USE_ROUGHNESSMAP" : "",
-                parameters.metalnessMap ? "#define USE_METALNESSMAP" : "",
-                parameters.alphaMap ? "#define USE_ALPHAMAP" : "",
-                parameters.vertexColors ? "#define USE_COLOR" : "",
-                
-                parameters.flatShading ? "#define FLAT_SHADED" : "",
-                
-                parameters.doubleSided ? "#define DOUBLE_SIDED" : "",
-                parameters.flipSided ? "#define FLIP_SIDED" : "",
-                
-                parameters.shadowMapEnabled ? "#define USE_SHADOWMAP" : "",
-                parameters.shadowMapEnabled ? "#define " + shadowMapTypeDefine : "",
-                parameters.pointLightShadows > 0 ? "#define POINT_LIGHT_SHADOWS" : "",
-                
-                parameters.premultipliedAlpha ? "#define PREMULTIPLIED_ALPHA" : "",
-                
-                parameters.physicallyCorrectLights ? "#define PHYSICALLY_CORRECT_LIGHTS" : "",
-                
-                parameters.logarithmicDepthBuffer ? "#define USE_LOGDEPTHBUF" : "",
-                parameters.logarithmicDepthBuffer && renderer.extensions.get( "EXT_frag_depth" ) ? "#define USE_LOGDEPTHBUF_EXT" : "",
-                
-                parameters.envMap && renderer.extensions.get( "EXT_shader_texture_lod" ) ? "#define TEXTURE_LOD_EXT" : "",
+                parameters.get( "envMap" ) && renderer.extensions.get( "EXT_shader_texture_lod" ) ? "#define TEXTURE_LOD_EXT" : "",
                 
                 "uniform mat4 viewMatrix;",
                 "uniform vec3 cameraPosition;",
                 
-                ( parameters.toneMapping != NoToneMapping ) ? "#define TONE_MAPPING" : "",
-                ( parameters.toneMapping != NoToneMapping ) ? ShaderChunk[ "tonemapping_pars_fragment" ] : "",  // this code is required here because it is used by the toneMapping() function defined below
-                ( parameters.toneMapping != NoToneMapping ) ? getToneMappingFunction( "toneMapping", parameters.toneMapping ) : "",
+                ( parameters.get( "toneMapping" ) != Texture.TONE_MAPPING_MODE.NoToneMapping ) ? "#define TONE_MAPPING" : "",
+                ( parameters.get( "toneMapping" ) != Texture.TONE_MAPPING_MODE.NoToneMapping ) ? ShaderChunk[ "tonemapping_pars_fragment" ] : "",  // this code is required here because it is used by the toneMapping() function defined below
+                ( parameters.get( "toneMapping" ) != Texture.TONE_MAPPING_MODE.NoToneMapping ) ? getToneMappingFunction( "toneMapping", (Texture.TONE_MAPPING_MODE) parameters.get( "toneMapping" ) ) : "",
                 
-                ( parameters.outputEncoding || parameters.mapEncoding || parameters.envMapEncoding || parameters.emissiveMapEncoding ) ? ShaderChunk[ "encodings_pars_fragment" ] : "", // this code is required here because it is used by the various encoding/decoding function defined below
-                parameters.mapEncoding ? getTexelDecodingFunction( "mapTexelToLinear", parameters.mapEncoding ) : "",
-                parameters.envMapEncoding ? getTexelDecodingFunction( "envMapTexelToLinear", parameters.envMapEncoding ) : "",
-                parameters.emissiveMapEncoding ? getTexelDecodingFunction( "emissiveMapTexelToLinear", parameters.emissiveMapEncoding ) : "",
-                parameters.outputEncoding ? getTexelEncodingFunction( "linearToOutputTexel", parameters.outputEncoding ) : "",
+                ( parameters.get( "outputEncoding" ) != null || parameters.get( "mapEncoding" ) != null || parameters.get( "envMapEncoding" )  != null || parameters.get( "emissiveMapEncoding" ) != null )  ? ShaderChunk[ "encodings_pars_fragment" ] : "", // this code is required here because it is used by the various encoding/decoding function defined below
+                parameters.get( "mapEncoding" ) != null ? getTexelDecodingFunction( "mapTexelToLinear", (Texture.ENCODINGS) parameters.get( "mapEncoding" ) ) : "",
+                parameters.get( "envMapEncoding" ) != null ? getTexelDecodingFunction( "envMapTexelToLinear", (Texture.ENCODINGS)parameters.get( "envMapEncoding" ) ) : "",
+                parameters.get( "emissiveMapEncoding" ) != null ? getTexelDecodingFunction( "emissiveMapTexelToLinear", (Texture.ENCODINGS)parameters.get( "emissiveMapEncoding" ) ) : "",
+                parameters.get( "outputEncoding" ) != null ? getTexelEncodingFunction( "linearToOutputTexel", (Texture.ENCODINGS)parameters.get( "outputEncoding" ) ) : "",
                 
                 "\n"
 
@@ -347,13 +345,13 @@ public class GLProgram {
 
         }
 
-        vertexShader = parseIncludes( vertexShader, parameters );
-        vertexShader = replaceLightNums( vertexShader, parameters );
+        vertexShader = parseIncludes( vertexShader, parameters.get( ");
+" )        vertexShader = replaceLightNums( vertexShader, parameters.get( ");
 
-        fragmentShader = parseIncludes( fragmentShader, parameters );
-        fragmentShader = replaceLightNums( fragmentShader, parameters );
+" )        fragmentShader = parseIncludes( fragmentShader, parameters.get( ");
+" )        fragmentShader = replaceLightNums( fragmentShader, parameters.get( ");
 
-        if (!(material instanceof ShaderMaterial)) {
+" )        if (!(material instanceof ShaderMaterial)) {
 
             vertexShader = unrollLoops( vertexShader );
             fragmentShader = unrollLoops( fragmentShader );
@@ -366,8 +364,8 @@ public class GLProgram {
         // console.log( "*VERTEX*", vertexGlsl );
         // console.log( "*FRAGMENT*", fragmentGlsl );
 
-        var glVertexShader = WebGLShader( gl, gl.VERTEX_SHADER, vertexGlsl );
-        var glFragmentShader = WebGLShader( gl, gl.FRAGMENT_SHADER, fragmentGlsl );
+        var glVertexShader = GLShader( gl, gl.VERTEX_SHADER, vertexGlsl );
+        var glFragmentShader = GLShader( gl, gl.FRAGMENT_SHADER, fragmentGlsl );
 
         gl.attachShader( program, glVertexShader );
         gl.attachShader( program, glFragmentShader );
@@ -378,7 +376,7 @@ public class GLProgram {
 
             gl.bindAttribLocation( program, 0, material.index0AttributeName );
 
-        } else if ( parameters.morphTargets == true ) {
+        } else if ( parameters.get( "morphTargets" ) == true ) {
 
             // programs with morphTargets displace position out of attribute 0
             gl.bindAttribLocation( program, 0, "position" );
@@ -574,10 +572,10 @@ public class GLProgram {
 //        extensions = extensions || {};
 //
 //        var chunks = [
-//            ( extensions.derivatives || parameters.envMapCubeUV || parameters.bumpMap || parameters.normalMap || parameters.flatShading ) ? "#extension GL_OES_standard_derivatives : enable" : "",
-//            ( extensions.fragDepth || parameters.logarithmicDepthBuffer ) && rendererExtensions.get( "EXT_frag_depth" ) ? "#extension GL_EXT_frag_depth : enable" : "",
+//            ( extensions.derivatives || parameters.get( "envMapCubeUV" ) || parameters.get( "bumpMap" ) || parameters.get( "normalMap" ) || parameters.get( "flatShading" ) ) ? "#extension GL_OES_standard_derivatives : enable" : "",
+//            ( extensions.fragDepth || parameters.get( "logarithmicDepthBuffer" ) ) && rendererExtensions.get( "EXT_frag_depth" ) ? "#extension GL_EXT_frag_depth : enable" : "",
 //            ( extensions.drawBuffers ) && rendererExtensions.get( "WEBGL_draw_buffers" ) ? "#extension GL_EXT_draw_buffers : require" : "",
-//            ( extensions.shaderTextureLOD || parameters.envMap ) && rendererExtensions.get( "EXT_shader_texture_lod" ) ? "#extension GL_EXT_shader_texture_lod : enable" : "",
+//            ( extensions.shaderTextureLOD || parameters.get( "envMap" ) ) && rendererExtensions.get( "EXT_shader_texture_lod" ) ? "#extension GL_EXT_shader_texture_lod : enable" : "",
 //        ];
 //
 //        return chunks.filter( filterEmptyLine ).join( "\n" );
@@ -713,13 +711,13 @@ public class GLProgram {
 
     }
 
-    public String replaceLightNums( String string, FastMap<Object> parameters ) {
+    public String replaceLightNums( String string, FastMap<Object> parameters.get( ")" ) {
 
         return string
-                .replace( /NUM_DIR_LIGHTS/g, parameters.numDirLights )
-        .replace( /NUM_SPOT_LIGHTS/g, parameters.numSpotLights )
-        .replace( /NUM_POINT_LIGHTS/g, parameters.numPointLights )
-        .replace( /NUM_HEMI_LIGHTS/g, parameters.numHemiLights );
+                .replace( /NUM_DIR_LIGHTS/g, parameters.get( "numDirLights" ) )
+        .replace( /NUM_SPOT_LIGHTS/g, parameters.get( "numSpotLights" ) )
+        .replace( /NUM_POINT_LIGHTS/g, parameters.get( "numPointLights" ) )
+        .replace( /NUM_HEMI_LIGHTS/g, parameters.get( "numHemiLights" ) );
 
     }
 
