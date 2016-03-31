@@ -20,6 +20,8 @@ package org.parallax3d.parallax.animation;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.math.Interpolant;
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.events.AnimationActionFinishedEvent;
+import org.parallax3d.parallax.system.events.AnimationActionLoopEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,7 +133,7 @@ public class Action {
 
         this.time = 0;			// restart clip
         this._loopCount = -1;	// forget previous loops
-        this._startTime = null;	// forget scheduling
+        this._startTime = -1;	// forget scheduling
 
         return this.stopFading().stopWarping();
 
@@ -306,8 +308,8 @@ public class Action {
 
         if ( interpolant == null ) {
 
-            interpolant = mixer._lendControlInterpolant(),
-                    this._timeScaleInterpolant = interpolant;
+            interpolant = mixer._lendControlInterpolant();
+            this._timeScaleInterpolant = interpolant;
 
         }
 
@@ -432,7 +434,7 @@ public class Action {
 
                     this.stopFading();
 
-                    if ( interpolantValue === 0 ) {
+                    if ( interpolantValue == 0 ) {
 
                         // faded out, disable
                         this.enabled = false;
@@ -533,10 +535,7 @@ public class Action {
                 if ( this.clampWhenFinished ) this.paused = true;
                 else this.enabled = false;
 
-                this._mixer.dispatchEvent( {
-                        type: 'finished', action: this,
-                    direction: deltaTime < 0 ? -1 : 1
-                } );
+                this._mixer.dispatchEvent( new AnimationActionFinishedEvent( this, deltaTime < 0 ? -1 : 1) );
 
                 break;
 
@@ -555,7 +554,7 @@ public class Action {
                         loopCount = 0;
 
                         this._setEndings(
-                                true, this.repetitions === 0, pingPong );
+                                true, this.repetitions == 0, pingPong );
 
                     } else {
 
@@ -563,8 +562,7 @@ public class Action {
                         // transition through zero counts as a repetition,
                         // so leave loopCount at -1
 
-                        this._setEndings(
-                                this.repetitions === 0, true, pingPong );
+                        this._setEndings( this.repetitions == 0, true, pingPong );
 
                     }
 
@@ -590,10 +588,7 @@ public class Action {
 
                         time = deltaTime > 0 ? duration : 0;
 
-                        this._mixer.dispatchEvent( {
-                                type: 'finished', action: this,
-                                direction: deltaTime > 0 ? 1 : -1
-                        } );
+                        this._mixer.dispatchEvent( new AnimationActionFinishedEvent( this, deltaTime > 0 ? 1 : -1) );
 
                         break;
 
@@ -612,9 +607,7 @@ public class Action {
 
                     this._loopCount = loopCount;
 
-                    this._mixer.dispatchEvent( {
-                            type: 'loop', action: this, loopDelta: loopDelta
-                    } );
+                    this._mixer.dispatchEvent( new AnimationActionLoopEvent(this, loopDelta));
 
                 }
 
@@ -685,8 +678,8 @@ public class Action {
 
         if ( interpolant == null ) {
 
-            interpolant = mixer._lendControlInterpolant(),
-                    this._weightInterpolant = interpolant;
+            interpolant = mixer._lendControlInterpolant();
+            this._weightInterpolant = interpolant;
 
         }
 

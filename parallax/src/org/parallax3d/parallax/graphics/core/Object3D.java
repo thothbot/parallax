@@ -23,6 +23,8 @@ import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.math.Quaternion.QuaternionChangeHandler;
 import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.events.ObjectAddEvent;
+import org.parallax3d.parallax.system.events.ObjectRemoveEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -613,6 +615,7 @@ public class Object3D extends AbstractPropertyObject
 		object.parent = this;
 
 		object.onAdd();
+		object.dispatchEvent( new ObjectAddEvent( object ) );
 
 		this.children.add( object );
 
@@ -637,6 +640,7 @@ public class Object3D extends AbstractPropertyObject
 			object.parent = null;
 
 			object.onRemove();
+			object.dispatchEvent( new ObjectRemoveEvent( object ) );
 
 			this.children.remove( index );
 		}

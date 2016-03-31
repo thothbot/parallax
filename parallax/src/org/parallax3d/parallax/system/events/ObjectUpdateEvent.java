@@ -17,24 +17,22 @@
  */
 package org.parallax3d.parallax.system.events;
 
-import org.parallax3d.parallax.system.Disposable;
+public class ObjectUpdateEvent extends Event<ObjectUpdateListener> {
 
-public class DisposeEvent extends Event<DisposeListener> {
+    Object object;
 
-    Disposable target;
-
-    public DisposeEvent(Disposable target) {
-        this.target = target;
+    public ObjectUpdateEvent(Object object) {
+        this.object = object;
     }
 
     @Override
-    public Class<DisposeListener> getListener() {
-        return DisposeListener.class;
+    public Class<ObjectUpdateListener> getListener() {
+        return ObjectUpdateListener.class;
     }
 
     @Override
-    public void dispatch(DisposeListener listener) {
-        listener.onDispose( target );
+    public void dispatch(ObjectUpdateListener listener) {
+        listener.onObjectUpdated( object );
     }
 
 }

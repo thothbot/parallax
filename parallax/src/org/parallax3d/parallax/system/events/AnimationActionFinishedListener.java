@@ -17,24 +17,10 @@
  */
 package org.parallax3d.parallax.system.events;
 
-import org.parallax3d.parallax.system.Disposable;
+import org.parallax3d.parallax.animation.Action;
 
-public class UpdateEvent extends Event<UpdateEventListener> {
+public interface AnimationActionFinishedListener extends EventListener {
 
-    Object target;
-
-    public UpdateEvent(Disposable target) {
-        this.target = target;
-    }
-
-    @Override
-    public Class<UpdateEventListener> getListener() {
-        return UpdateEventListener.class;
-    }
-
-    @Override
-    public void dispatch(UpdateEventListener listener) {
-        listener.onUpdate( target );
-    }
+    void onAnimationActionFinished(Action action, int direction);
 
 }

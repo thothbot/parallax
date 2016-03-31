@@ -20,12 +20,16 @@ package org.parallax3d.parallax.animation;
 import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.math.Interpolant;
 import org.parallax3d.parallax.math.Mathematics;
+import org.parallax3d.parallax.system.EventDispatcher;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static jdk.nashorn.internal.objects.Global.undefined;
 
 /**
  *
@@ -38,7 +42,7 @@ import java.util.List;
  * @author thothbot
  */
 @ThreejsObject("THREE.AnimationMixer")
-public class AnimationMixer {
+public class AnimationMixer extends EventDispatcher {
 
     public class ClipActions {
 
@@ -703,7 +707,7 @@ public class AnimationMixer {
 
     // Memory management of Interpolants for weight and time scale
 
-    private void _lendControlInterpolant() {
+    public Interpolant _lendControlInterpolant() {
 
         var interpolants = this._controlInterpolants,
                 lastActiveIndex = this._nActiveControlInterpolants ++,
@@ -724,7 +728,7 @@ public class AnimationMixer {
 
     }
 
-    private void _takeBackControlInterpolant( interpolant ) {
+    public void _takeBackControlInterpolant( Interpolant interpolant ) {
 
         var interpolants = this._controlInterpolants,
                 prevIndex = interpolant.__cacheIndex,

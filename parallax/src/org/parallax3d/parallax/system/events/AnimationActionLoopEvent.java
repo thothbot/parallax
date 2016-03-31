@@ -17,24 +17,26 @@
  */
 package org.parallax3d.parallax.system.events;
 
-import org.parallax3d.parallax.system.Disposable;
+import org.parallax3d.parallax.animation.Action;
 
-public class DisposeEvent extends Event<DisposeListener> {
+public class AnimationActionLoopEvent extends Event<AnimationActionLoopListener> {
 
-    Disposable target;
+    Action action;
+    double loopDelta;
 
-    public DisposeEvent(Disposable target) {
-        this.target = target;
+    public AnimationActionLoopEvent(Action action, double loopDelta) {
+        this.action = action;
+        this.loopDelta = loopDelta;
     }
 
     @Override
-    public Class<DisposeListener> getListener() {
-        return DisposeListener.class;
+    public Class<AnimationActionLoopListener> getListener() {
+        return AnimationActionLoopListener.class;
     }
 
     @Override
-    public void dispatch(DisposeListener listener) {
-        listener.onDispose( target );
+    public void dispatch(AnimationActionLoopListener listener) {
+        listener.onAnimationActionLoop( action, loopDelta );
     }
 
 }

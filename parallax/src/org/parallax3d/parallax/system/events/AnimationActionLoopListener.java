@@ -17,8 +17,10 @@
  */
 package org.parallax3d.parallax.system.events;
 
-public interface UpdateEventListener extends EventListener {
+import org.parallax3d.parallax.animation.Action;
 
-    void onUpdate(Object target);
+public interface AnimationActionLoopListener extends EventListener {
+
+    void onAnimationActionLoop(Action action, double loopDelta);
 
 }

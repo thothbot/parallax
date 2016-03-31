@@ -20,9 +20,12 @@ package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.system.*;
+import org.parallax3d.parallax.system.AbstractPropertyObject;
+import org.parallax3d.parallax.system.Disposable;
+import org.parallax3d.parallax.system.FastMap;
+import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.events.DisposeEvent;
-import org.parallax3d.parallax.system.events.UpdateEvent;
+import org.parallax3d.parallax.system.events.ObjectUpdateEvent;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
@@ -504,7 +507,7 @@ public abstract class Material extends AbstractPropertyObject implements Disposa
 
 	public void update() {
 
-		dispatchEvent( new UpdateEvent( this ) );
+		dispatchEvent( new ObjectUpdateEvent( this ) );
 
 	}
 
