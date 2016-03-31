@@ -23,7 +23,10 @@ import org.parallax3d.parallax.files.FileHandle;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.AbstractPropertyObject;
+import org.parallax3d.parallax.system.Disposable;
+import org.parallax3d.parallax.system.EventBus;
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.events.DisposeEvent;
 import org.parallax3d.parallax.system.gl.enums.*;
 
 /**
@@ -35,7 +38,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
  *
  */
 @ThreejsObject("Texture")
-public class Texture extends AbstractPropertyObject implements AbstractTexture
+public class Texture extends AbstractPropertyObject implements AbstractTexture, Disposable
 {
 	static int TextureCount = 0;
 
@@ -538,4 +541,10 @@ public class Texture extends AbstractPropertyObject implements AbstractTexture
 				this.magFilter, this.minFilter, this.format, this.type, this.anisotropy));
 	}
 
+	@Override
+	public void dispose() {
+
+		EventBus.dispatchEvent( new DisposeEvent( this ) );
+
+	}
 }

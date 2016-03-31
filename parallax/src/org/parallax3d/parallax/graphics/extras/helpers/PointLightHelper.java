@@ -22,10 +22,11 @@ import org.parallax3d.parallax.graphics.extras.geometries.SphereGeometry;
 import org.parallax3d.parallax.graphics.lights.PointLight;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
+import org.parallax3d.parallax.system.Disposable;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.PointLightHelper")
-public class PointLightHelper extends Mesh {
+public class PointLightHelper extends Mesh implements Disposable {
 
 	PointLight light;
 
@@ -42,6 +43,7 @@ public class PointLightHelper extends Mesh {
         update();
 	}
 
+	@Override
     public void dispose() {
 
         this.geometry.dispose();

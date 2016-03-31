@@ -23,12 +23,13 @@ import org.parallax3d.parallax.graphics.lights.DirectionalLight;
 import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
 import org.parallax3d.parallax.graphics.objects.Line;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.Disposable;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 import java.util.Arrays;
 
 @ThreejsObject("THREE.DirectionalLightHelper")
-public class DirectionalLightHelper extends Object3D {
+public class DirectionalLightHelper extends Object3D implements Disposable {
 
     DirectionalLight light;
     Line lightPlane;
@@ -75,15 +76,6 @@ public class DirectionalLightHelper extends Object3D {
         this.update();
     }
 
-    public void dispose() {
-
-        this.lightPlane.getGeometry().dispose();
-        this.lightPlane.getMaterial().dispose();
-        this.targetLine.getGeometry().dispose();
-        this.targetLine.getMaterial().dispose();
-
-    }
-
     static final Vector3 v1 = new Vector3(),
         v2 = new Vector3(),
         v3 = new Vector3();
@@ -100,6 +92,16 @@ public class DirectionalLightHelper extends Object3D {
         ((Geometry) this.targetLine.getGeometry()).getVertices().get(1).copy( v3 );
         this.targetLine.getGeometry().setVerticesNeedUpdate(true);
         ((LineBasicMaterial) this.targetLine.getMaterial()).getColor().copy(((LineBasicMaterial) this.lightPlane.getMaterial()).getColor());
+
+    }
+
+    @Override
+    public void dispose() {
+
+        this.lightPlane.getGeometry().dispose();
+        this.lightPlane.getMaterial().dispose();
+        this.targetLine.getGeometry().dispose();
+        this.targetLine.getMaterial().dispose();
 
     }
 }

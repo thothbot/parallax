@@ -23,8 +23,9 @@ import org.parallax3d.parallax.graphics.lights.SpotLight;
 import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.Disposable;
 
-public class SpotLightHelper extends Object3D {
+public class SpotLightHelper extends Object3D implements Disposable {
 
     SpotLight light;
     Mesh cone;
@@ -50,6 +51,7 @@ public class SpotLightHelper extends Object3D {
         this.update();
     }
 
+    @Override
     public void dispose() {
 
         this.cone.getGeometry().dispose();

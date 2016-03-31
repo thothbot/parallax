@@ -25,10 +25,11 @@ import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
 import org.parallax3d.parallax.graphics.objects.Mesh;
 import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.math.Vector3;
+import org.parallax3d.parallax.system.Disposable;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.HemisphereLightHelper")
-public class HemisphereLightHelper extends Object3D {
+public class HemisphereLightHelper extends Object3D implements Disposable {
 
     Mesh lightSphere;
     HemisphereLight light;
@@ -60,6 +61,7 @@ public class HemisphereLightHelper extends Object3D {
         this.update();
     }
 
+    @Override
     public void dispose() {
 
         this.lightSphere.getGeometry().dispose();

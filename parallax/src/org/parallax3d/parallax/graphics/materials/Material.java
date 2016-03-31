@@ -20,9 +20,9 @@ package org.parallax3d.parallax.graphics.materials;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.renderers.shaders.Shader;
-import org.parallax3d.parallax.system.AbstractPropertyObject;
-import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.*;
+import org.parallax3d.parallax.system.events.DisposeEvent;
+import org.parallax3d.parallax.system.events.UpdateEvent;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.enums.BlendEquationMode;
 import org.parallax3d.parallax.system.gl.enums.BlendingFactorDest;
@@ -36,7 +36,7 @@ import org.parallax3d.parallax.system.gl.enums.DepthFunction;
  *
  */
 @ThreejsObject("THREE.Material")
-public abstract class Material extends AbstractPropertyObject
+public abstract class Material extends AbstractPropertyObject implements Disposable
 {
 	// When rendered geometry doesn't include these attributes but the material does,
 	// use these default values in WebGL. This avoids errors when buffer data is missing.
@@ -502,7 +502,16 @@ public abstract class Material extends AbstractPropertyObject
 		return this;
 	}
 
+	public void update() {
+
+		EventBus.dispatchEvent( new UpdateEvent( this ) );
+
+	}
+
+	@Override
 	public void dispose() {
+
+		EventBus.dispatchEvent( new DisposeEvent( this ) );
 
 	}
 

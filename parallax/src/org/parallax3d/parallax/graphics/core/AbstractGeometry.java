@@ -22,8 +22,11 @@ import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Sphere;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.AbstractPropertyObject;
+import org.parallax3d.parallax.system.Disposable;
+import org.parallax3d.parallax.system.EventBus;
+import org.parallax3d.parallax.system.events.DisposeEvent;
 
-public abstract class AbstractGeometry extends AbstractPropertyObject
+public abstract class AbstractGeometry extends AbstractPropertyObject  implements Disposable
 {
 	static int Counter = 0;
 
@@ -177,8 +180,10 @@ public abstract class AbstractGeometry extends AbstractPropertyObject
 		return getClass().getSimpleName();
 	}
 
-	public void dispose()
-	{
+	@Override
+	public void dispose() {
+
+		EventBus.dispatchEvent( new DisposeEvent( this) );
 
 	}
 }
