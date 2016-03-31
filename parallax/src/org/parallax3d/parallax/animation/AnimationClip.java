@@ -17,7 +17,7 @@
  */
 package org.parallax3d.parallax.animation;
 
-import org.parallax3d.parallax.animation.core.Track;
+import org.parallax3d.parallax.animation.tracks.NumberKeyframeTrack;
 import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.ThreejsObject;
 
@@ -40,7 +40,7 @@ public class AnimationClip {
 
     double duration = -1; //ok
 
-    public AnimationClip( List<Track> tracks ) {
+    public AnimationClip( List<KeyframeTrack> tracks ) {
 
         this(Mathematics.generateUUID(), tracks, -1);
 
@@ -131,7 +131,7 @@ public class AnimationClip {
 
     }
 
-    public static void CreateFromMorphTargetSequence( name, morphTargetSequence, fps ) {
+    public static AnimationClip CreateFromMorphTargetSequence( String name, morphTargetSequence, fps ) {
 
         var numMorphTargets = morphTargetSequence.length;
         var tracks = [];
@@ -154,7 +154,7 @@ public class AnimationClip {
 
             // if there is a key at the first frame, duplicate it as the
             // last frame as well for perfect loop.
-            if ( times[ 0 ] === 0 ) {
+            if ( times[ 0 ] == 0 ) {
 
                 times.push( numMorphTargets );
                 values.push( values[ 0 ] );
@@ -176,7 +176,7 @@ public class AnimationClip {
 
         for ( int i = 0; i < clipArray.size(); i ++ ) {
 
-            if ( clipArray.get(i).name == name ) {
+            if ( clipArray.get(i).name.equals( name ) ) {
 
                 return clipArray.get(i);
 

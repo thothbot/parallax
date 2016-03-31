@@ -95,7 +95,7 @@ public class AnimationMixer extends EventDispatcher {
 
 //        ClipActions actionsForClip = this._actionsByClip.get( clipName );
 
-        Action prototypeAction;
+        Action prototypeAction = null;
 
         if ( this._actionsByClip.containsKey( clipName) )
         {

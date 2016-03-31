@@ -537,33 +537,10 @@ public class GLRenderer extends Renderer
 		this.gammaFactor = gammaFactor;
 	}
 
-	/**
-	 * This should be called from Android's onSurfaceChanged() or equivalent
-	 * unless you call one of the @link{#setViewport} methods.
-	 * @param newWidth
-	 * @param newHeight
-	 */
-	public void onViewportResize(int newWidth, int newHeight) {
-		_viewportWidth = newWidth;
-		_viewportHeight = newHeight;
-		fireViewportResizeEvent(newWidth, newHeight);
-	}
-
-	private void fireViewportResizeEvent(int width, int height)
-	{
-		ViewportResizeBus.onViewportResize(width, height);
-	}
-
 	// -----------------------------------------------------------------------------------------------------------------
     // NEW code
 
     // Events
-
-    public void dispose() {
-
-        _canvas.removeEventListener( 'webglcontextlost', onContextLost, false );
-
-    };
 
     private void onContextLost() {
 
@@ -576,6 +553,7 @@ public class GLRenderer extends Renderer
 
     private void onTextureDispose( Texture texture ) {
 
+		texture.removeEventListener( );
         texture.removeEventListener( 'dispose', onTextureDispose );
 
         deallocateTexture( texture );

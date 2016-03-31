@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import static jdk.nashorn.internal.objects.Global.undefined;
+
 @ThreejsObject("WebGLProgram")
 public class GLProgram {
 
@@ -42,8 +44,8 @@ public class GLProgram {
 
     // TODO: Combine the regex
     static Pattern structRe = Pattern.compile("^([\\w\\d_]+)\\.([\\w\\d_]+)$");
-    static Pattern  arrayStructRe = Pattern.compile("^([\\w\\d_]+)\\[(\\d+)\\]\\.([\\w\\d_]+)$");
-    static Pattern  arrayRe = Pattern.compile("^([\\w\\d_]+)\\[0\\]$");
+    static Pattern arrayStructRe = Pattern.compile("^([\\w\\d_]+)\\[(\\d+)\\]\\.([\\w\\d_]+)$");
+    static Pattern arrayRe = Pattern.compile("^([\\w\\d_]+)\\[0\\]$");
 
     private String[] getEncodingComponents( Texture.ENCODINGS encoding ) {
 
@@ -414,28 +416,28 @@ public class GLProgram {
 
         if ( haveDiagnostics ) {
 
-            this.diagnostics = {
-
-                    runnable: runnable,
-                    material: material,
-
-                    programLog: programLog,
-
-                    vertexShader: {
-
-                log: vertexLog,
-                        prefix: prefixVertex
-
-            },
-
-            fragmentShader: {
-
-                log: fragmentLog,
-                        prefix: prefixFragment
-
-            }
-
-            };
+//            this.diagnostics = {
+//
+//                    runnable: runnable,
+//                    material: material,
+//
+//                    programLog: programLog,
+//
+//                    vertexShader: {
+//
+//                log: vertexLog,
+//                        prefix: prefixVertex
+//
+//            },
+//
+//            fragmentShader: {
+//
+//                log: fragmentLog,
+//                        prefix: prefixFragment
+//
+//            }
+//
+//            };
 
         }
 
@@ -574,17 +576,17 @@ public class GLProgram {
 
     }
 
-    public void fetchUniformLocations(GL20 gl, program, identifiers) {
+    public FastMap<Integer> fetchUniformLocations(GL20 gl, int program) {
 
-        var uniforms = {};
+        FastMap<Integer> uniforms = new FastMap<>();
 
-        int n = gl.getProgramParameter( program, gl.ACTIVE_UNIFORMS );
+        int n = GLHelpers.getProgramParameter( gl, program, GL20.GL_ACTIVE_UNIFORMS );
 
         for ( int i = 0; i < n; i ++ ) {
 
-            var info = gl.getActiveUniform( program, i );
-            var name = info.name;
-            var location = gl.getUniformLocation( program, name );
+            String info = gl.glGetActiveUniform( program, i );
+            String name = info.name;
+            int location = gl.glGetUniformLocation( program, name );
 
             //console.log("WebGLProgram: ACTIVE UNIFORM:", name);
 
@@ -658,20 +660,20 @@ public class GLProgram {
 
     }
 
-    public void fetchAttributeLocations( GL20 gl, program, identifiers ) {
+    public FastMap<Integer> fetchAttributeLocations( GL20 gl, int program ) {
 
-        var attributes = {};
+        FastMap<Integer> attributes = new FastMap<>();
 
-        var n = gl.getProgramParameter( program, gl.ACTIVE_ATTRIBUTES );
+        int n = GLHelpers.getProgramParameter( gl, program, GL20.GL_ACTIVE_ATTRIBUTES );
 
-        for ( var i = 0; i < n; i ++ ) {
+        for ( int i = 0; i < n; i ++ ) {
 
-            var info = gl.getActiveAttrib( program, i );
-            var name = info.name;
+            String info = gl.glGetActiveAttrib( program, i );
+            String name = info.name;
 
             // console.log("WebGLProgram: ACTIVE VERTEX ATTRIBUTE:", name, i );
 
-            attributes[ name ] = gl.getAttribLocation( program, name );
+            attributes.put(  name , gl.glGetAttribLocation( program, name ) );
 
         }
 
@@ -679,19 +681,13 @@ public class GLProgram {
 
     }
 
-    public boolean filterEmptyLine( String string ) {
-
-        return string != "";
-
-    }
-
-    public String replaceLightNums( String string, FastMap<Object> parameters.get( ")" ) {
+    public String replaceLightNums( String string, FastMap<Object> parameters ) {
 
         return string
-                .replace( /NUM_DIR_LIGHTS/g, parameters.get( "numDirLights" ) )
-        .replace( /NUM_SPOT_LIGHTS/g, parameters.get( "numSpotLights" ) )
-        .replace( /NUM_POINT_LIGHTS/g, parameters.get( "numPointLights" ) )
-        .replace( /NUM_HEMI_LIGHTS/g, parameters.get( "numHemiLights" ) );
+            .replaceAll( "NUM_DIR_LIGHTS",   String.valueOf( parameters.get( "numDirLights" ) ) )
+            .replaceAll( "NUM_SPOT_LIGHTS",  String.valueOf( parameters.get( "numSpotLights" ) ) )
+            .replaceAll( "NUM_POINT_LIGHTS", String.valueOf( parameters.get( "numPointLights" ) ) )
+            .replaceAll( "NUM_HEMI_LIGHTS",  String.valueOf( parameters.get( "numHemiLights" ) ) );
 
     }
 
