@@ -504,14 +504,14 @@ public abstract class Material extends AbstractPropertyObject implements Disposa
 
 	public void update() {
 
-		EventBus.dispatchEvent( new UpdateEvent( this ) );
+		dispatchEvent( new UpdateEvent( this ) );
 
 	}
 
 	@Override
 	public void dispose() {
 
-		EventBus.dispatchEvent( new DisposeEvent( this ) );
+		dispatchEvent( new DisposeEvent( this ) );
 
 	}
 

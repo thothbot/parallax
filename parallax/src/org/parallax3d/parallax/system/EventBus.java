@@ -17,79 +17,37 @@
  */
 package org.parallax3d.parallax.system;
 
-import org.parallax3d.parallax.system.events.*;
+import org.parallax3d.parallax.system.events.Event;
+import org.parallax3d.parallax.system.events.EventListener;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-@ThreejsObject("THREE.EventBus")
 public class EventBus {
+
+    private static final EventDispatcher eventDispatcher = new EventDispatcher();
 
     private static Map<Class<? extends EventListener>, LinkedList<WeakReference<EventListener>>> listeners = new HashMap<>();
 
     public static void addEventListener(EventListener listener)
     {
-        Class<? extends EventListener> key = listener.getClass();
-
-        if(!listeners.containsKey(key))
-            listeners.put(key, new LinkedList<WeakReference<EventListener>>());
-
-        if (!hasEventListener(listener))
-            listeners.get(key).add(new WeakReference<>(listener));
+        eventDispatcher.addEventListener( listener );
     }
 
     public static boolean hasEventListener(EventListener listener)
     {
-        Class<? extends EventListener> key = listener.getClass();
-
-        if(!listeners.containsKey(key))
-            return false;
-
-        for(WeakReference<EventListener> l: listeners.get(key))
-        {
-            if (l.get() == listener)
-                return true;
-        }
-
-        return false;
+        return eventDispatcher.hasEventListener( listener );
     }
 
     public static void removeEventListener(EventListener listener)
     {
-        if(!hasEventListener(listener))
-            return;
-
-        Class<? extends EventListener> key = listener.getClass();
-
-        Iterator<WeakReference<EventListener>> it = listeners.get(key).iterator();
-        while (it.hasNext())
-        {
-            WeakReference<EventListener> element = it.next();
-            if (element.get() == null || element.get() == listener)
-            {
-                it.remove();
-            }
-        }
+        eventDispatcher.removeEventListener( listener );
     }
 
     public static void dispatchEvent(Event event)
     {
-        Class<? extends EventListener> key = event.getListener();
-
-        if(!listeners.containsKey(key))
-            return;
-
-        Iterator<WeakReference<EventListener>> it = listeners.get(key).iterator();
-        while (it.hasNext())
-        {
-            WeakReference<EventListener> element = it.next();
-            if (element.get() == null)
-                it.remove();
-            else
-                event.dispatch(element.get());
-        }
+        eventDispatcher.dispatchEvent( event );
     }
 }

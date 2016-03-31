@@ -24,7 +24,6 @@ import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector2;
 import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.Disposable;
-import org.parallax3d.parallax.system.EventBus;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.events.DisposeEvent;
 import org.parallax3d.parallax.system.gl.enums.*;
@@ -544,7 +543,7 @@ public class Texture extends AbstractPropertyObject implements AbstractTexture, 
 	@Override
 	public void dispose() {
 
-		EventBus.dispatchEvent( new DisposeEvent( this ) );
+		dispatchEvent( new DisposeEvent( this ) );
 
 	}
 }

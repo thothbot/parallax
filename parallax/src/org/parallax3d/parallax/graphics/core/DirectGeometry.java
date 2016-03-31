@@ -23,17 +23,14 @@ import org.parallax3d.parallax.graphics.core.geometry.MorphNormal;
 import org.parallax3d.parallax.graphics.core.geometry.MorphTarget;
 import org.parallax3d.parallax.graphics.core.geometry.VertextNormal;
 import org.parallax3d.parallax.math.*;
-import org.parallax3d.parallax.system.Disposable;
-import org.parallax3d.parallax.system.EventBus;
-import org.parallax3d.parallax.system.FastMap;
-import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.*;
 import org.parallax3d.parallax.system.events.DisposeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ThreejsObject("THREE.DirectGeometry")
-public class DirectGeometry implements Disposable {
+public class DirectGeometry extends EventDispatcher implements Disposable {
 
     static int Counter = 0;
 
@@ -358,7 +355,7 @@ public class DirectGeometry implements Disposable {
     @Override
     public void dispose() {
 
-        EventBus.dispatchEvent( new DisposeEvent( this) );
+        dispatchEvent( new DisposeEvent( this) );
 
     }
 
