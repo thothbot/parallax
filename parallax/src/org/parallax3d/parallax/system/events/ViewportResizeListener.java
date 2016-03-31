@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Copyright 2016 Alex Usachev, thothbot@gmail.com
  *
  * This file is part of Parallax project.
  *
@@ -15,14 +15,10 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
+package org.parallax3d.parallax.system.events;
 
-package org.parallax3d.parallax.system;
+public interface ViewportResizeListener extends EventListener  {
 
-public interface Disposable {
-
-    /**
-     * Releases all resources of this object.
-     */
-    void dispose ();
+    void onViewportResize(int width, int height);
 
 }

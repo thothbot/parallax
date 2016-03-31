@@ -23,13 +23,17 @@ import org.parallax3d.parallax.graphics.textures.EmptyTextureData;
 import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.AbstractPropertyObject;
+import org.parallax3d.parallax.system.Disposable;
+import org.parallax3d.parallax.system.EventDispatcher;
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.events.DisposeEvent;
 import org.parallax3d.parallax.system.gl.enums.*;
 
 @ThreejsObject("THREE.WebGLRenderTarget")
-public class GLRenderTarget extends AbstractPropertyObject implements AbstractTexture {
+public class GLRenderTarget extends AbstractPropertyObject implements AbstractTexture, Disposable {
 
-    public static class GLRenderTargetOptions {
+    public static class GLRenderTargetOptions
+    {
         public boolean depthBuffer = true;
         public boolean stencilBuffer = true;
 
@@ -155,6 +159,7 @@ public class GLRenderTarget extends AbstractPropertyObject implements AbstractTe
 
     }
 
+    @Override
     public GLRenderTarget clone() {
 
         return new GLRenderTarget(0, 0).copy(this);
@@ -177,7 +182,10 @@ public class GLRenderTarget extends AbstractPropertyObject implements AbstractTe
 
     }
 
+    @Override
     public void dispose() {
+
+        EventDispatcher.dispatchEvent( new DisposeEvent( this ) );
 
     }
 }

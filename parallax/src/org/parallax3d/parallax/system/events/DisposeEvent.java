@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Copyright 2016 Alex Usachev, thothbot@gmail.com
  *
  * This file is part of Parallax project.
  *
@@ -15,14 +15,30 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
+package org.parallax3d.parallax.system.events;
 
-package org.parallax3d.parallax.system;
+import org.parallax3d.parallax.system.Disposable;
 
-public interface Disposable {
+public class DisposeEvent extends Event<DisposeEventListener> {
 
-    /**
-     * Releases all resources of this object.
-     */
-    void dispose ();
+    Disposable target;
+
+    public DisposeEvent(Disposable target) {
+        this.target = target;
+    }
+
+    public Disposable getTarget() {
+        return target;
+    }
+
+    @Override
+    public Class<DisposeEventListener> getListener() {
+        return DisposeEventListener.class;
+    }
+
+    @Override
+    protected void dispatch(DisposeEventListener listener) {
+        listener.onDispose( this );
+    }
 
 }

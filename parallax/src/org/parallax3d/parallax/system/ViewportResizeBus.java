@@ -22,14 +22,14 @@ import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class ViewportResizeBus {
-    private static LinkedList<WeakReference<ViewportResizeListener>> listeners =
-            new LinkedList<WeakReference<ViewportResizeListener>>();
+public class ViewportResizeBus
+{
+    private static LinkedList<WeakReference<ViewportResizeListener>> listeners = new LinkedList<>();
 
     public static void addViewportResizeListener(ViewportResizeListener listener)
     {
         if (!contains(listener))
-            listeners.add(new WeakReference<ViewportResizeListener>(listener));
+            listeners.add(new WeakReference<>(listener));
     }
 
     public static void removeViewportResizeListener(ViewportResizeListener listener)
