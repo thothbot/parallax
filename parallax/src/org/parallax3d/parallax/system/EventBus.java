@@ -25,8 +25,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-@ThreejsObject("THREE.EventDispatcher")
-public class EventDispatcher {
+@ThreejsObject("THREE.EventBus")
+public class EventBus {
 
     private static Map<Class<? extends EventListener>, LinkedList<WeakReference<EventListener>>> listeners = new HashMap<>();
 

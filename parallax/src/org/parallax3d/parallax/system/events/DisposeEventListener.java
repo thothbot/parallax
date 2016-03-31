@@ -17,8 +17,10 @@
  */
 package org.parallax3d.parallax.system.events;
 
+import org.parallax3d.parallax.system.Disposable;
+
 public interface DisposeEventListener extends EventListener {
 
-    void onDispose(DisposeEvent event);
+    void onDispose(Disposable target);
 
 }

@@ -24,7 +24,7 @@ import org.parallax3d.parallax.graphics.textures.Texture;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.AbstractPropertyObject;
 import org.parallax3d.parallax.system.Disposable;
-import org.parallax3d.parallax.system.EventDispatcher;
+import org.parallax3d.parallax.system.EventBus;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.events.DisposeEvent;
 import org.parallax3d.parallax.system.gl.enums.*;
@@ -185,7 +185,7 @@ public class GLRenderTarget extends AbstractPropertyObject implements AbstractTe
     @Override
     public void dispose() {
 
-        EventDispatcher.dispatchEvent( new DisposeEvent( this ) );
+        EventBus.dispatchEvent( new DisposeEvent( this ) );
 
     }
 }

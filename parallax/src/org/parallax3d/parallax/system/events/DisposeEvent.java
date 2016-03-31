@@ -27,18 +27,14 @@ public class DisposeEvent extends Event<DisposeEventListener> {
         this.target = target;
     }
 
-    public Disposable getTarget() {
-        return target;
-    }
-
     @Override
     public Class<DisposeEventListener> getListener() {
         return DisposeEventListener.class;
     }
 
     @Override
-    protected void dispatch(DisposeEventListener listener) {
-        listener.onDispose( this );
+    public void dispatch(DisposeEventListener listener) {
+        listener.onDispose( target );
     }
 
 }

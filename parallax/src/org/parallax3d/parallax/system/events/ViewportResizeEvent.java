@@ -27,14 +27,6 @@ public class ViewportResizeEvent extends Event<ViewportResizeListener> {
         this.height = height;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
     @Override
     public Class<ViewportResizeListener> getListener() {
         return ViewportResizeListener.class;
