@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ThreejsObject("THREE.AnimationMixer._Action")
-public class Action {
+public class AnimationAction {
 
     // Loop styles for AnimationAction
     public enum Loop {
@@ -83,11 +83,11 @@ public class Action {
     boolean zeroSlopeAtEnd		= true;		// clips for start, loop and end
 
 
-    public Action(AnimationMixer mixer, AnimationClip clip) {
+    public AnimationAction(AnimationMixer mixer, AnimationClip clip) {
         this(mixer, clip, null);
     }
 
-    public Action(AnimationMixer mixer, AnimationClip clip, GeometryObject localRoot) {
+    public AnimationAction(AnimationMixer mixer, AnimationClip clip, GeometryObject localRoot) {
 
         this._mixer = mixer;
         this._clip = clip;
@@ -110,7 +110,7 @@ public class Action {
         _propertyBindings = new ArrayList<>( nTracks );
     }
 
-    public Action play() {
+    public AnimationAction play() {
 
         this._mixer._activateAction( this );
 
@@ -118,7 +118,7 @@ public class Action {
 
     }
 
-    public Action stop() {
+    public AnimationAction stop() {
 
         this._mixer._deactivateAction( this );
 
@@ -126,7 +126,7 @@ public class Action {
 
     }
 
-    public Action reset() {
+    public AnimationAction reset() {
 
         this.paused = false;
         this.enabled = true;
@@ -155,7 +155,7 @@ public class Action {
 
     }
 
-    public Action startAt( double time ) {
+    public AnimationAction startAt(double time ) {
 
         this._startTime = time;
 
@@ -163,7 +163,7 @@ public class Action {
 
     }
 
-    public Action setLoop( Loop mode, long repetitions ) {
+    public AnimationAction setLoop(Loop mode, long repetitions ) {
 
         this.loop = mode;
         this.repetitions = repetitions;
@@ -179,7 +179,7 @@ public class Action {
      * although .enabled = false yields an effective weight of zero, this
      * method does *not* change .enabled, because it would be confusing
      */
-    public Action setEffectiveWeight( double weight ) {
+    public AnimationAction setEffectiveWeight(double weight ) {
 
         this.weight = weight;
 
@@ -199,19 +199,19 @@ public class Action {
 
     }
 
-    public Action fadeIn( double duration ) {
+    public AnimationAction fadeIn(double duration ) {
 
         return this._scheduleFading( duration, 0, 1 );
 
     }
 
-    public Action fadeOut( double duration ) {
+    public AnimationAction fadeOut(double duration ) {
 
         return this._scheduleFading( duration, 1, 0 );
 
     }
 
-    public Action crossFadeFrom( Action fadeOutAction, double duration, boolean warp ) {
+    public AnimationAction crossFadeFrom(AnimationAction fadeOutAction, double duration, boolean warp ) {
 
 //        var mixer = this._mixer;
 
@@ -235,13 +235,13 @@ public class Action {
 
     }
 
-    public Action crossFadeTo( Action fadeInAction, double duration, boolean warp ) {
+    public AnimationAction crossFadeTo(AnimationAction fadeInAction, double duration, boolean warp ) {
 
         return fadeInAction.crossFadeFrom( this, duration, warp );
 
     }
 
-    public Action stopFading() {
+    public AnimationAction stopFading() {
 
         Interpolant weightInterpolant = this._weightInterpolant;
 
@@ -261,7 +261,7 @@ public class Action {
     // set the weight stopping any scheduled warping
     // although .paused = true yields an effective time scale of zero, this
     // method does *not* change .paused, because it would be confusing
-    public Action setEffectiveTimeScale( double timeScale ) {
+    public AnimationAction setEffectiveTimeScale(double timeScale ) {
 
         this.timeScale = timeScale;
         this._effectiveTimeScale = this.paused ? 0 :timeScale;
@@ -277,7 +277,7 @@ public class Action {
 
     }
 
-    public Action setDuration( double duration ) {
+    public AnimationAction setDuration(double duration ) {
 
         this.timeScale = this._clip.duration / duration;
 
@@ -285,7 +285,7 @@ public class Action {
 
     }
 
-    public Action syncWith( Action action ) {
+    public AnimationAction syncWith(AnimationAction action ) {
 
         this.time = action.time;
         this.timeScale = action.timeScale;
@@ -294,13 +294,13 @@ public class Action {
 
     }
 
-    public Action halt( double duration ) {
+    public AnimationAction halt(double duration ) {
 
         return this.warp( this._currentTimeScale, 0, duration );
 
     }
 
-    public Action warp( double startTimeScale, double endTimeScale, double duration ) {
+    public AnimationAction warp(double startTimeScale, double endTimeScale, double duration ) {
 
         AnimationMixer mixer = this._mixer;
         double now = mixer.time;
@@ -326,7 +326,7 @@ public class Action {
 
     }
 
-    public Action stopWarping() {
+    public AnimationAction stopWarping() {
 
         Interpolant timeScaleInterpolant = this._timeScaleInterpolant;
 
@@ -670,7 +670,7 @@ public class Action {
 
     }
 
-    private Action _scheduleFading( double duration, double weightNow, double weightThen ) {
+    private AnimationAction _scheduleFading(double duration, double weightNow, double weightThen ) {
 
         AnimationMixer mixer = this._mixer;
         double now = mixer.time;

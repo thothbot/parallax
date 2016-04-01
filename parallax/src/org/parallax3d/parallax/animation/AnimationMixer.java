@@ -46,8 +46,8 @@ public class AnimationMixer extends EventDispatcher {
 
     public class ClipActions {
 
-        List<Action> knownActions = new ArrayList<>();
-        FastMap<Action> actionByRoot = new FastMap<>();
+        List<AnimationAction> knownActions = new ArrayList<>();
+        FastMap<AnimationAction> actionByRoot = new FastMap<>();
 
     }
 
@@ -60,7 +60,7 @@ public class AnimationMixer extends EventDispatcher {
     double timeScale = 1.0;
 
     // private
-    List<Action> _actions;
+    List<AnimationAction> _actions;
     int _nActiveActions;
     FastMap<ClipActions> _actionsByClip;
 
@@ -77,7 +77,7 @@ public class AnimationMixer extends EventDispatcher {
         this._initMemoryManager();
     }
 
-    public Action clipAction( AnimationClip clip ) {
+    public AnimationAction clipAction(AnimationClip clip ) {
         clipAction(clip, this._root );
     }
 
@@ -86,7 +86,7 @@ public class AnimationMixer extends EventDispatcher {
      * object (this method allocates a lot of dynamic memory in case a
      * previously unknown clip/root combination is specified)
      */
-    public Action clipAction( AnimationClip clip, GeometryObject optionalRoot ) {
+    public AnimationAction clipAction(AnimationClip clip, GeometryObject optionalRoot ) {
 
         GeometryObject root = optionalRoot;
         String rootUuid = root.getUUID();
@@ -95,7 +95,7 @@ public class AnimationMixer extends EventDispatcher {
 
 //        ClipActions actionsForClip = this._actionsByClip.get( clipName );
 
-        Action prototypeAction = null;
+        AnimationAction prototypeAction = null;
 
         if ( this._actionsByClip.containsKey( clipName) )
         {
@@ -126,7 +126,7 @@ public class AnimationMixer extends EventDispatcher {
         if ( clipObject == null ) return null;
 
         // allocate all resources required to run it
-        Action newAction = new Action( this, clipObject, optionalRoot );
+        AnimationAction newAction = new AnimationAction( this, clipObject, optionalRoot );
 
         this._bindAction( newAction, prototypeAction );
 
@@ -145,7 +145,7 @@ public class AnimationMixer extends EventDispatcher {
      * get an existing action
      * @param clip
      */
-    public Action existingAction(AnimationClip clip, GeometryObject optionalRoot ) {
+    public AnimationAction existingAction(AnimationClip clip, GeometryObject optionalRoot ) {
 
         GeometryObject root = optionalRoot;
         String rootUuid = root.getUUID();
@@ -201,7 +201,7 @@ public class AnimationMixer extends EventDispatcher {
 
         for ( int i = 0; i != this._nActiveActions; ++ i ) {
 
-            Action action = this._actions.get(i);
+            AnimationAction action = this._actions.get(i);
 
             if ( action.enabled ) {
 
@@ -239,7 +239,7 @@ public class AnimationMixer extends EventDispatcher {
      */
     public void uncacheClip( AnimationClip clip ) {
 
-        List<Action> actions = this._actions;
+        List<AnimationAction> actions = this._actions;
         String clipName = clip.getName();
 
         if ( this._actionsByClip.containsKey(clipName))
@@ -250,16 +250,16 @@ public class AnimationMixer extends EventDispatcher {
             // iteration state and also require updating the state we can
             // just throw away
 
-            List<Action> actionsToRemove = actionsForClip.knownActions;
+            List<AnimationAction> actionsToRemove = actionsForClip.knownActions;
 
             for ( int i = 0, n = actionsToRemove.size(); i != n; ++ i ) {
 
-                Action action = actionsToRemove.get(i);
+                AnimationAction action = actionsToRemove.get(i);
 
                 this._deactivateAction( action );
 
                 int cacheIndex = action._cacheIndex;
-                Action lastInactiveAction = actions.get(actions.size() - 1);
+                AnimationAction lastInactiveAction = actions.get(actions.size() - 1);
 
                 action._cacheIndex = -1;
                 action._byClipCacheIndex = null;
@@ -287,7 +287,7 @@ public class AnimationMixer extends EventDispatcher {
 
         for ( String clipName : _actionsByClip.keySet() ) {
 
-            FastMap<Action> actionByRoot = _actionsByClip.get( clipName ).actionByRoot,
+            FastMap<AnimationAction> actionByRoot = _actionsByClip.get( clipName ).actionByRoot,
 
             if ( actionByRoot.containsKey( rootUuid ) ) {
 
@@ -323,7 +323,7 @@ public class AnimationMixer extends EventDispatcher {
      */
     public void uncacheAction( AnimationClip clip, GeometryObject optionalRoot ) {
 
-        Action action = this.existingAction( clip, optionalRoot );
+        AnimationAction action = this.existingAction( clip, optionalRoot );
 
         if ( action != null ) {
 
@@ -334,11 +334,11 @@ public class AnimationMixer extends EventDispatcher {
 
     }
 
-    private void _bindAction( Action action ) {
+    private void _bindAction( AnimationAction action ) {
         _bindAction(action, null);
     }
 
-    private void _bindAction( Action action, Action prototypeAction ) {
+    private void _bindAction(AnimationAction action, AnimationAction prototypeAction ) {
 
         GeometryObject root = action._localRoot;
         if(root == null) root = this._root;
@@ -387,7 +387,7 @@ public class AnimationMixer extends EventDispatcher {
 
                 }
 
-                Action path = prototypeAction != null ?
+                AnimationAction path = prototypeAction != null ?
                     prototypeAction._propertyBindings.get(i).binding.parsedPath : null;
 
                 binding = new PropertyMixer(
@@ -407,7 +407,7 @@ public class AnimationMixer extends EventDispatcher {
 
     }
 
-    public void _activateAction( Action action ) {
+    public void _activateAction( AnimationAction action ) {
 
         if ( ! this._isActiveAction( action ) ) {
 
@@ -477,14 +477,14 @@ public class AnimationMixer extends EventDispatcher {
 
     }
 
-    public boolean _isActiveAction( Action action ) {
+    public boolean _isActiveAction( AnimationAction action ) {
 
         int index = action._cacheIndex;
         return index != -1 && index < this._nActiveActions;
 
     }
 
-    private void _addInactiveAction( Action action, String clipName, String rootUuid ) {
+    private void _addInactiveAction(AnimationAction action, String clipName, String rootUuid ) {
 
         ClipActions actionsForClip;
 
@@ -501,7 +501,7 @@ public class AnimationMixer extends EventDispatcher {
 
             actionsForClip =  this._actionsByClip.get( clipName );
 
-            List<Action> knownActions = actionsForClip.knownActions;
+            List<AnimationAction> knownActions = actionsForClip.knownActions;
 
             action._byClipCacheIndex = knownActions.size();
             knownActions.add( action );
@@ -515,10 +515,10 @@ public class AnimationMixer extends EventDispatcher {
 
     }
 
-    private void _removeInactiveAction( Action action ) {
+    private void _removeInactiveAction( AnimationAction action ) {
 
 //        var actions = this._actions,
-        Action lastInactiveAction = _actions.get(_actions.size() - 1);
+        AnimationAction lastInactiveAction = _actions.get(_actions.size() - 1);
         int cacheIndex = action._cacheIndex;
 
         lastInactiveAction._cacheIndex = cacheIndex;
@@ -532,9 +532,9 @@ public class AnimationMixer extends EventDispatcher {
         FastMap<ClipActions> actionsByClip = this._actionsByClip;
 
         ClipActions actionsForClip = actionsByClip.get( clipName );
-        List<Action> knownActionsForClip = actionsForClip.knownActions;
+        List<AnimationAction> knownActionsForClip = actionsForClip.knownActions;
 
-        Action lastKnownAction = knownActionsForClip.get(knownActionsForClip.size() - 1);
+        AnimationAction lastKnownAction = knownActionsForClip.get(knownActionsForClip.size() - 1);
 
         int byClipCacheIndex = action._byClipCacheIndex;
 
@@ -545,7 +545,7 @@ public class AnimationMixer extends EventDispatcher {
         action._byClipCacheIndex = -1;
 
 
-        FastMap<Action> actionByRoot = actionsForClip.actionByRoot;
+        FastMap<AnimationAction> actionByRoot = actionsForClip.actionByRoot;
         String rootUuid = ( actions._localRoot || this._root ).uuid;
 
         actionByRoot.remove( rootUuid );
@@ -560,7 +560,7 @@ public class AnimationMixer extends EventDispatcher {
 
     }
 
-    private void _removeInactiveBindingsForAction( Action action ) {
+    private void _removeInactiveBindingsForAction( AnimationAction action ) {
 
         List<PropertyMixer> bindings = action._propertyBindings;
         for ( int i = 0, n = bindings.size(); i !== n; ++ i ) {
@@ -577,7 +577,7 @@ public class AnimationMixer extends EventDispatcher {
 
     }
 
-    private void _lendAction( Action action ) {
+    private void _lendAction( AnimationAction action ) {
 
         // [ active actions |  inactive actions  ]
         // [  active actions >| inactive actions ]
@@ -589,7 +589,7 @@ public class AnimationMixer extends EventDispatcher {
         int prevIndex = action._cacheIndex,
             lastActiveIndex = this._nActiveActions ++;
 
-        Action firstInactiveAction = _actions.get(lastActiveIndex);
+        AnimationAction firstInactiveAction = _actions.get(lastActiveIndex);
 
         action._cacheIndex = lastActiveIndex;
         _actions.set(lastActiveIndex, action);
@@ -599,7 +599,7 @@ public class AnimationMixer extends EventDispatcher {
 
     }
 
-    private void _takeBackAction( Action action ) {
+    private void _takeBackAction( AnimationAction action ) {
 
         // [  active actions  | inactive actions ]
         // [ active actions |< inactive actions  ]
@@ -611,7 +611,7 @@ public class AnimationMixer extends EventDispatcher {
         int prevIndex = action._cacheIndex,
             firstInactiveIndex = -- this._nActiveActions;
 
-        Action lastActiveAction = _actions.get(firstInactiveIndex);
+        AnimationAction lastActiveAction = _actions.get(firstInactiveIndex);
 
         action._cacheIndex = firstInactiveIndex;
         _actions.set(firstInactiveIndex, action);

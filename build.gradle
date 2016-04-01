@@ -49,6 +49,10 @@ configure(allprojects - project(':tests:parallax-tests-android')) {
     }
 }
 
+project(":utils:parallax-threejs") {
+
+}
+
 project(":parallax") {
 
     sourceSets.test.java.srcDirs = ["test"]
@@ -122,7 +126,7 @@ project(":tests:parallax-tests-android") {
     dependencies {
         compile project(":tests:parallax-tests")
         compile project(":platforms:parallax-android")
-        compile "com.android.support:support-v4:+"
+//        compile "com.android.support:support-v4:+"
     }
 }
 

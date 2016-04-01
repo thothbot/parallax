@@ -1,3 +1,4 @@
+include ":utils:parallax-threejs"
 include ":parallax"
 include ":platforms:parallax-gwt"
 include ":platforms:parallax-android"

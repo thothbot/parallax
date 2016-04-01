@@ -15,28 +15,37 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package org.parallax3d.parallax.system.events;
+package org.parallax3d.parallax.utils;
 
-import org.parallax3d.parallax.animation.AnimationAction;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 
-public class AnimationActionLoopEvent extends Event<AnimationActionLoopListener> {
+class JsFileVisitor extends SimpleFileVisitor<Path> {
 
-    AnimationAction action;
-    double loopDelta;
+    private PathMatcher matcher;
 
-    public AnimationActionLoopEvent(AnimationAction action, double loopDelta) {
-        this.action = action;
-        this.loopDelta = loopDelta;
+    JsFileVisitor(){
+
+        matcher = FileSystems.getDefault().getPathMatcher("glob:*.js");
+
     }
 
     @Override
-    public Class<AnimationActionLoopListener> getListener() {
-        return AnimationActionLoopListener.class;
-    }
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+            throws IOException {
 
-    @Override
-    public void dispatch(AnimationActionLoopListener listener) {
-        listener.onAnimationActionLoop( action, loopDelta );
+        Path fileName = file.getFileName();
+
+        if ( matcher.matches(fileName))
+        {
+            System.out.println("Found: "+ file);
+
+            new JsFile( file );
+        }
+
+        //Continue to search for other txt files
+        return FileVisitResult.CONTINUE;
     }
 
 }

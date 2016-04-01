@@ -15,12 +15,26 @@
  * 3.0 Unported License along with Parallax.
  * If not, see http://creativecommons.org/licenses/by/3.0/.
  */
-package org.parallax3d.parallax.system.events;
+package org.parallax3d.parallax.utils;
 
-import org.parallax3d.parallax.animation.AnimationAction;
+import java.io.File;
+import java.nio.file.Files;
 
-public interface AnimationActionFinishedListener extends EventListener {
+public class TaskCompareClasses {
 
-    void onAnimationActionFinished(AnimationAction action, int direction);
+    private static final String THREE_SOURCE_DIR = "src";
 
+    public static void main(String[] args) throws Exception
+    {
+        File main = new File(System.getProperty("threejs.dir"));
+        if(!main.exists())
+            throw new Exception("Main threejs path is not found: " + main.getPath());
+
+        File src = new File(main, THREE_SOURCE_DIR);
+        if(!src.exists())
+            throw new Exception("SRC threejs path is not found: " + src.getPath());
+
+        Files.walkFileTree(src.toPath(), new JsFileVisitor());
+
+    }
 }

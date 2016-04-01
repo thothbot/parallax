@@ -17,14 +17,14 @@
  */
 package org.parallax3d.parallax.system.events;
 
-import org.parallax3d.parallax.animation.Action;
+import org.parallax3d.parallax.animation.AnimationAction;
 
 public class AnimationActionFinishedEvent extends Event<AnimationActionFinishedListener> {
 
-    Action action;
+    AnimationAction action;
     int direction;
 
-    public AnimationActionFinishedEvent(Action action, int direction) {
+    public AnimationActionFinishedEvent(AnimationAction action, int direction) {
         this.action = action;
         this.direction = direction;
     }

@@ -17,10 +17,10 @@
  */
 package org.parallax3d.parallax.system.events;
 
-import org.parallax3d.parallax.animation.Action;
+import org.parallax3d.parallax.animation.AnimationAction;
 
 public interface AnimationActionLoopListener extends EventListener {
 
-    void onAnimationActionLoop(Action action, double loopDelta);
+    void onAnimationActionLoop(AnimationAction action, double loopDelta);
 
 }

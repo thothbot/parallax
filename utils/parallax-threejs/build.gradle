@@ -1,0 +1,12 @@
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply plugin: 'java'
+
+task(compareClasses, dependsOn: 'classes', type: JavaExec) {
+    main = 'org.parallax3d.parallax.utils.TaskCompareClasses'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperty 'threejs.dir', new File("$rootProject.projectDir/../../libs/three.js")
+}
+
+defaultTasks 'compareClasses'
