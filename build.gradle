@@ -49,10 +49,6 @@ configure(allprojects - project(':tests:parallax-tests-android')) {
     }
 }
 
-project(":utils:parallax-threejs") {
-
-}
-
 project(":parallax") {
 
     sourceSets.test.java.srcDirs = ["test"]
@@ -138,6 +134,14 @@ project(":tests:parallax-tests-gwt") {
         compile project(":tests:parallax-tests")
         compile project(":platforms:parallax-gwt")
     }
+}
+
+project(":utils:parallax-threejs") {
+
+    dependencies {
+        optional project(":parallax")
+    }
+
 }
 
 if (JavaVersion.current().isJava8Compatible()) {

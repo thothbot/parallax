@@ -36,5 +36,9 @@ public class TaskCompareClasses {
 
         Files.walkFileTree(src.toPath(), new JsFileVisitor());
 
+        for (Class c : JavaReflections.getClasses("org.parallax3d.parallax")) {
+            System.out.println(c.toString());
+        }
+
     }
 }
