@@ -29,13 +29,12 @@ import java.nio.file.Path;
 
 class JsFile {
 
-    private Path path;
-    private Context context;
+    protected Path path;
+    protected Context context;
 
-    private FunctionNode mainNode;
+    protected FunctionNode mainNode;
 
-    JsFile(Path path)
-    {
+    JsFile(Path path) throws Exception {
         this.path = path;
 
         Options options = new Options("nashorn");
@@ -50,19 +49,13 @@ class JsFile {
         parse();
     }
 
-    private void parse() {
+    private void parse() throws Exception {
 
-        try
-        {
             String code = getCode();
             String name = "<unknown>";
 
             Parser parser = new Parser(context.getEnv(), Source.sourceFor(name, code), new Context.ThrowErrorManager(), context.getEnv()._strict, context.getLogger(Parser.class));
             mainNode = parser.parse();
-        }
-        catch (IOException | ParserException | ECMAException e) {
-            System.out.println(e);
-        }
     }
 
     private String getCode() throws IOException

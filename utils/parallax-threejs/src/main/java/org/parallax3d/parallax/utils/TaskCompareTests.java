@@ -17,10 +17,19 @@
  */
 package org.parallax3d.parallax.utils;
 
+import org.parallax3d.parallax.system.ThreejsTest;
+
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaskCompareTests {
+
+    static List<JavaTestClass> javaTests = new ArrayList<>();
+
+    static List<JsTestFile> jsTests = new ArrayList<>();
+    static List<JsTestFile> jsTestsFound = new ArrayList<>();
 
     public static void main(String[] args) throws Exception
     {
@@ -28,8 +37,17 @@ public class TaskCompareTests {
         if(!threeTestDir.exists() || !threeTestDir.isDirectory())
             throw new Exception("Threejs TESTS are not found in Path: " + threeTestDir.getPath());
 
-        for (Path p : FileLoader.getJSFiles(threeTestDir.toPath())) {
-            System.out.println(p.toString());
+        for (Path p : FileLoader.getJSFiles(threeTestDir.toPath()))
+        {
+            try
+            {
+                JsTestFile test = new JsTestFile(p);
+                if(test.isTest())
+                    jsTests.add( test );
+            }
+            catch (Exception e) {
+                // just ignore
+            }
         }
 
         File parallaxTestDir = new File(System.getProperty("parallax.test.dir"));
@@ -37,8 +55,37 @@ public class TaskCompareTests {
             throw new Exception("Parallax TESTS are not found in Path: " + parallaxTestDir.getPath());
 
         for (Class c : JavaReflections.processDirectory( parallaxTestDir )) {
-            System.out.println(c.getName());
+
+            if(c.getAnnotation(ThreejsTest.class) != null)
+                javaTests.add( new JavaTestClass(c) );
+
         }
 
+        log("TESTS Loaded:");
+        log("\tThreejs tests:\t" + jsTests.size());
+        log("\tParallax tests:\t" + javaTests.size());
+
+        compareParallax2Three();
+    }
+
+    static void compareParallax2Three()
+    {
+        log("-- Compare Parallax to Threejs tests:");
+
+        for(JavaTestClass java: javaTests)
+        {
+            for(JsTestFile js: jsTests)
+            {
+                if(js.getTestId().equals(java.getThreeTestId()))
+                {
+                    jsTestsFound.add(js);
+                    log("\tFound test for Parallax " + java.getName());
+                }
+            }
+        }
+    }
+
+    static void log(String msg) {
+        System.out.println( msg );
     }
 }

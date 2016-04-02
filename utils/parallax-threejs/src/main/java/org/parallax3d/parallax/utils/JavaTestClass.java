@@ -17,15 +17,16 @@
  */
 package org.parallax3d.parallax.utils;
 
-public class JavaFile {
+import org.parallax3d.parallax.system.ThreejsTest;
 
-    protected Class cls;
+public class JavaTestClass extends JavaFile {
 
-    public JavaFile(Class cls) {
-        this.cls = cls;
+    public JavaTestClass(Class cls) {
+        super(cls);
     }
 
-    public String getName() {
-        return cls.getName();
+    public String getThreeTestId()
+    {
+        return ((ThreejsTest)cls.getAnnotation(ThreejsTest.class)).value();
     }
 }

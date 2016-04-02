@@ -23,7 +23,7 @@ import org.parallax3d.parallax.system.ThreejsTest;
 
 import static org.junit.Assert.*;
 
-@ThreejsTest("Ray")
+@ThreejsTest("Sphere")
 public class SphereTest
 {
 	private static double DELTA = 0.0;
