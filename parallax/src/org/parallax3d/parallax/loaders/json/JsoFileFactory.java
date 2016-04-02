@@ -23,7 +23,7 @@ import org.parallax3d.parallax.system.jsonbind.AutoBeanFactory;
 
 public interface JsoFileFactory extends AutoBeanFactory
 {
-	AutoBean<JsoObject> file();
+	AutoBean<JsoFile> file();
 
 	AutoBean<JsoMaterial> material();
 

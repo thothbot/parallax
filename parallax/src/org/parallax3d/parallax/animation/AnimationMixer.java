@@ -23,13 +23,10 @@ import org.parallax3d.parallax.math.Mathematics;
 import org.parallax3d.parallax.system.EventDispatcher;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static jdk.nashorn.internal.objects.Global.undefined;
 
 /**
  *
@@ -49,6 +46,9 @@ public class AnimationMixer extends EventDispatcher {
         List<AnimationAction> knownActions = new ArrayList<>();
         FastMap<AnimationAction> actionByRoot = new FastMap<>();
 
+        public FastMap<AnimationAction> getActionByRoot() {
+            return actionByRoot;
+        }
     }
 
     GeometryObject _root;
@@ -78,7 +78,7 @@ public class AnimationMixer extends EventDispatcher {
     }
 
     public AnimationAction clipAction(AnimationClip clip ) {
-        clipAction(clip, this._root );
+        return clipAction(clip, this._root );
     }
 
     /**
@@ -143,18 +143,19 @@ public class AnimationMixer extends EventDispatcher {
 
     /**
      * get an existing action
+     *
      * @param clip
      */
-    public AnimationAction existingAction(AnimationClip clip, GeometryObject optionalRoot ) {
+    public AnimationAction existingAction(AnimationClip clip, GeometryObject optionalRoot) {
 
         GeometryObject root = optionalRoot;
         String rootUuid = root.getUUID();
 
         String clipName = clip.getName();
 
-        if ( this._actionsByClip.containsKey(clipName) ) {
+        if (this._actionsByClip.containsKey(clipName)) {
 
-            return this._actionsByClip.get(clipName).getActionByRoot()[ rootUuid ] || null;
+            return this._actionsByClip.get(clipName).getActionByRoot().get(rootUuid);
 
         }
 
@@ -262,7 +263,7 @@ public class AnimationMixer extends EventDispatcher {
                 AnimationAction lastInactiveAction = actions.get(actions.size() - 1);
 
                 action._cacheIndex = -1;
-                action._byClipCacheIndex = null;
+                action._byClipCacheIndex = -1;
 
                 lastInactiveAction._cacheIndex = cacheIndex;
                 actions.set(cacheIndex, lastInactiveAction);
@@ -277,6 +278,9 @@ public class AnimationMixer extends EventDispatcher {
 
     }
 
+    public void _deactivateAction(AnimationAction action) {
+    }
+
     /**
      * free all resources specific to a particular root target object
      */
@@ -287,12 +291,12 @@ public class AnimationMixer extends EventDispatcher {
 
         for ( String clipName : _actionsByClip.keySet() ) {
 
-            FastMap<AnimationAction> actionByRoot = _actionsByClip.get( clipName ).actionByRoot,
+            FastMap<AnimationAction> actionByRoot = _actionsByClip.get( clipName ).actionByRoot;
 
             if ( actionByRoot.containsKey( rootUuid ) ) {
 
-                this._deactivateAction( action );
-                this._removeInactiveAction( action );
+//                this._deactivateAction( action );
+//                this._removeInactiveAction( action );
 
             }
 
@@ -359,51 +363,51 @@ public class AnimationMixer extends EventDispatcher {
 
         FastMap<PropertyMixer> bindingsByName = bindingsByRoot.get( rootUuid );
 
-        for ( int i = 0; i != nTracks; ++ i ) {
-
-            KeyframeTrack track = tracks.get(i);
-            String trackName = track.name;
-
-            if ( bindingsByName.containsKey( trackName ) ) {
-
-                bindings.set(i, bindingsByName.get( trackName ));
-
-            } else {
-
-                PropertyMixer binding = bindings.get(i);
-
-                if ( binding != null ) {
-
-                    // existing binding, make sure the cache knows
-
-                    if ( binding._cacheIndex == null ) {
-
-                        ++ binding.referenceCount;
-                        this._addInactiveBinding( binding, rootUuid, trackName );
-
-                    }
-
-                    continue;
-
-                }
-
-                AnimationAction path = prototypeAction != null ?
-                    prototypeAction._propertyBindings.get(i).binding.parsedPath : null;
-
-                binding = new PropertyMixer(
-                        PropertyBinding.create( root, trackName, path ),
-                        track.ValueTypeName, track.getValueSize() );
-
-                ++ binding.referenceCount;
-                this._addInactiveBinding( binding, rootUuid, trackName );
-
-                bindings.set(i, binding);
-
-            }
-
-            interpolants.get(i).setResultBuffer(binding.buffer);
-
-        }
+//        for ( int i = 0; i != nTracks; ++ i ) {
+//
+//            KeyframeTrack track = tracks.get(i);
+//            String trackName = track.name;
+//
+//            if ( bindingsByName.containsKey( trackName ) ) {
+//
+//                bindings.set(i, bindingsByName.get( trackName ));
+//
+//            } else {
+//
+//                PropertyMixer binding = bindings.get(i);
+//
+//                if ( binding != null ) {
+//
+//                    // existing binding, make sure the cache knows
+//
+//                    if ( binding._cacheIndex == null ) {
+//
+//                        ++ binding.referenceCount;
+//                        this._addInactiveBinding( binding, rootUuid, trackName );
+//
+//                    }
+//
+//                    continue;
+//
+//                }
+//
+//                AnimationAction path = prototypeAction != null ?
+//                    prototypeAction._propertyBindings.get(i).binding.parsedPath : null;
+//
+//                binding = new PropertyMixer(
+//                        PropertyBinding.create( root, trackName, path ),
+//                        track.ValueTypeName, track.getValueSize() );
+//
+//                ++ binding.referenceCount;
+//                this._addInactiveBinding( binding, rootUuid, trackName );
+//
+//                bindings.set(i, binding);
+//
+//            }
+//
+//            interpolants.get(i).setResultBuffer(binding.buffer);
+//
+//        }
 
     }
 
@@ -546,24 +550,24 @@ public class AnimationMixer extends EventDispatcher {
 
 
         FastMap<AnimationAction> actionByRoot = actionsForClip.actionByRoot;
-        String rootUuid = ( actions._localRoot || this._root ).uuid;
-
-        actionByRoot.remove( rootUuid );
-
-        if ( knownActionsForClip.size() == 0 ) {
-
-            actionsByClip.remove( clipName );
-
-        }
-
-        this._removeInactiveBindingsForAction( action );
+//        String rootUuid = ( actions._localRoot || this._root ).uuid;
+//
+//        actionByRoot.remove( rootUuid );
+//
+//        if ( knownActionsForClip.size() == 0 ) {
+//
+//            actionsByClip.remove( clipName );
+//
+//        }
+//
+//        this._removeInactiveBindingsForAction( action );
 
     }
 
     private void _removeInactiveBindingsForAction( AnimationAction action ) {
 
         List<PropertyMixer> bindings = action._propertyBindings;
-        for ( int i = 0, n = bindings.size(); i !== n; ++ i ) {
+        for ( int i = 0, n = bindings.size(); i != n; ++ i ) {
 
             PropertyMixer binding = bindings.get(i);
 
@@ -638,69 +642,69 @@ public class AnimationMixer extends EventDispatcher {
         bindingByName.put( trackName , binding );
 
         binding._cacheIndex = _bindings.size();
-        _bindings.add( binding );
+//        _bindings.add( binding );
 
     }
 
-    private void _removeInactiveBinding( binding ) {
+    private void _removeInactiveBinding( PropertyMixer binding ) {
 
-        var bindings = this._bindings,
-                propBinding = binding.binding,
-                rootUuid = propBinding.rootNode.uuid,
-                trackName = propBinding.path,
-                bindingsByRoot = this._bindingsByRootAndName,
-                bindingByName = bindingsByRoot[ rootUuid ],
-
-                lastInactiveBinding = bindings[ bindings.length - 1 ],
-                cacheIndex = binding._cacheIndex;
-
-        lastInactiveBinding._cacheIndex = cacheIndex;
-        bindings[ cacheIndex ] = lastInactiveBinding;
-        bindings.pop();
-
-        delete bindingByName[ trackName ];
-
-        remove_empty_map: {
-
-            for ( var _ in bindingByName ) break remove_empty_map;
-
-            delete bindingsByRoot[ rootUuid ];
-
-        }
-
-    }
-
-    private void _lendBinding( binding ) {
-
-        var bindings = this._bindings,
-                prevIndex = binding._cacheIndex,
-
-                lastActiveIndex = this._nActiveBindings ++,
-
-                firstInactiveBinding = bindings[ lastActiveIndex ];
-
-        binding._cacheIndex = lastActiveIndex;
-        bindings[ lastActiveIndex ] = binding;
-
-        firstInactiveBinding._cacheIndex = prevIndex;
-        bindings[ prevIndex ] = firstInactiveBinding;
+//        var bindings = this._bindings,
+//                propBinding = binding.binding,
+//                rootUuid = propBinding.rootNode.uuid,
+//                trackName = propBinding.path,
+//                bindingsByRoot = this._bindingsByRootAndName,
+//                bindingByName = bindingsByRoot[ rootUuid ],
+//
+//                lastInactiveBinding = bindings[ bindings.length - 1 ],
+//                cacheIndex = binding._cacheIndex;
+//
+//        lastInactiveBinding._cacheIndex = cacheIndex;
+//        bindings[ cacheIndex ] = lastInactiveBinding;
+//        bindings.pop();
+//
+//        delete bindingByName[ trackName ];
+//
+//        remove_empty_map: {
+//
+//            for ( var _ in bindingByName ) break remove_empty_map;
+//
+//            delete bindingsByRoot[ rootUuid ];
+//
+//        }
 
     }
 
-    private void _takeBackBinding( binding ) {
+    private void _lendBinding( PropertyMixer binding ) {
 
-        var bindings = this._bindings,
-                prevIndex = binding._cacheIndex,
+//        var bindings = this._bindings,
+//                prevIndex = binding._cacheIndex,
+//
+//                lastActiveIndex = this._nActiveBindings ++,
+//
+//                firstInactiveBinding = bindings[ lastActiveIndex ];
+//
+//        binding._cacheIndex = lastActiveIndex;
+//        bindings[ lastActiveIndex ] = binding;
+//
+//        firstInactiveBinding._cacheIndex = prevIndex;
+//        bindings[ prevIndex ] = firstInactiveBinding;
 
-                firstInactiveIndex = -- this._nActiveBindings,
+    }
 
-                lastActiveBinding = bindings[ firstInactiveIndex ];
+    private void _takeBackBinding( PropertyMixer binding ) {
 
-        binding._cacheIndex = firstInactiveIndex;
-        bindings[ firstInactiveIndex ] = binding;
-
-        lastActiveBinding._cacheIndex = prevIndex;
-        bindings[ prevIndex ] = lastActiveBinding;
+//        var bindings = this._bindings,
+//                prevIndex = binding._cacheIndex,
+//
+//                firstInactiveIndex = -- this._nActiveBindings,
+//
+//                lastActiveBinding = bindings[ firstInactiveIndex ];
+//
+//        binding._cacheIndex = firstInactiveIndex;
+//        bindings[ firstInactiveIndex ] = binding;
+//
+//        lastActiveBinding._cacheIndex = prevIndex;
+//        bindings[ prevIndex ] = lastActiveBinding;
 
     }
 
@@ -709,39 +713,40 @@ public class AnimationMixer extends EventDispatcher {
 
     public Interpolant _lendControlInterpolant() {
 
-        var interpolants = this._controlInterpolants,
-                lastActiveIndex = this._nActiveControlInterpolants ++,
-                interpolant = interpolants[ lastActiveIndex ];
+//        var interpolants = this._controlInterpolants,
+//                lastActiveIndex = this._nActiveControlInterpolants ++,
+//                interpolant = interpolants[ lastActiveIndex ];
+//
+//        if ( interpolant === undefined ) {
+//
+//            interpolant = new THREE.LinearInterpolant(
+//                    new Float32Array( 2 ), new Float32Array( 2 ),
+//                    1, this._controlInterpolantsResultBuffer );
+//
+//            interpolant.__cacheIndex = lastActiveIndex;
+//            interpolants[ lastActiveIndex ] = interpolant;
+//
+//        }
+//
+//        return interpolant;
 
-        if ( interpolant === undefined ) {
-
-            interpolant = new THREE.LinearInterpolant(
-                    new Float32Array( 2 ), new Float32Array( 2 ),
-                    1, this._controlInterpolantsResultBuffer );
-
-            interpolant.__cacheIndex = lastActiveIndex;
-            interpolants[ lastActiveIndex ] = interpolant;
-
-        }
-
-        return interpolant;
-
+        return null;
     }
 
     public void _takeBackControlInterpolant( Interpolant interpolant ) {
 
-        var interpolants = this._controlInterpolants,
-                prevIndex = interpolant.__cacheIndex,
-
-                firstInactiveIndex = -- this._nActiveControlInterpolants,
-
-                lastActiveInterpolant = interpolants[ firstInactiveIndex ];
-
-        interpolant.__cacheIndex = firstInactiveIndex;
-        interpolants[ firstInactiveIndex ] = interpolant;
-
-        lastActiveInterpolant.__cacheIndex = prevIndex;
-        interpolants[ prevIndex ] = lastActiveInterpolant;
+//        var interpolants = this._controlInterpolants,
+//                prevIndex = interpolant.__cacheIndex,
+//
+//                firstInactiveIndex = -- this._nActiveControlInterpolants,
+//
+//                lastActiveInterpolant = interpolants[ firstInactiveIndex ];
+//
+//        interpolant.__cacheIndex = firstInactiveIndex;
+//        interpolants[ firstInactiveIndex ] = interpolant;
+//
+//        lastActiveInterpolant.__cacheIndex = prevIndex;
+//        interpolants[ prevIndex ] = lastActiveInterpolant;
 
     }
 }

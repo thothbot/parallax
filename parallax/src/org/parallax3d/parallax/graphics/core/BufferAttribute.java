@@ -360,11 +360,17 @@ public class BufferAttribute extends AttributeData {
 
 	};
 
+	public static BufferAttribute Uint32Attribute(List<Integer> array, int itemSize ) {
+
+		return new BufferAttribute( Uint32Array.create( array ), itemSize );
+
+	}
+
 	public static BufferAttribute Uint32Attribute(int[] array, int itemSize ) {
 
 		return new BufferAttribute( Uint32Array.create( array ), itemSize );
 
-	};
+	}
 
 	public static BufferAttribute Uint32Attribute(int len, int itemSize ) {
 

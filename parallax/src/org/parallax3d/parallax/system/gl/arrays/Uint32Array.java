@@ -16,8 +16,8 @@ package org.parallax3d.parallax.system.gl.arrays;
 import org.parallax3d.parallax.system.gl.GL20;
 
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * The typed array that holds unsigned int (32-bit unsigned integer) as its element.
@@ -100,6 +100,14 @@ public final class Uint32Array extends TypeArray {
 		int[] ints = new int[array.length];
 		for (int i = 0; i < array.length; ++i) {
             ints[i] = coerce(array[i]);
+		}
+		return create(ints);
+	}
+
+	public static Uint32Array create(List<Integer> array) {
+		int[] ints = new int[array.size()];
+		for (int i = 0; i < array.size(); ++i) {
+			ints[i] = coerce(array.get(i));
 		}
 		return create(ints);
 	}

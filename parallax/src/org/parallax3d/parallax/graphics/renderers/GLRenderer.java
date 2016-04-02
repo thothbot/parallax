@@ -21,7 +21,6 @@ package org.parallax3d.parallax.graphics.renderers;
 
 import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.cameras.Camera;
-import org.parallax3d.parallax.graphics.cameras.HasNearFar;
 import org.parallax3d.parallax.graphics.core.*;
 import org.parallax3d.parallax.graphics.extras.objects.ImmediateRenderObject;
 import org.parallax3d.parallax.graphics.lights.*;
@@ -34,11 +33,13 @@ import org.parallax3d.parallax.graphics.scenes.AbstractFog;
 import org.parallax3d.parallax.graphics.scenes.Fog;
 import org.parallax3d.parallax.graphics.scenes.FogExp2;
 import org.parallax3d.parallax.graphics.scenes.Scene;
-import org.parallax3d.parallax.graphics.textures.*;
+import org.parallax3d.parallax.graphics.textures.AbstractTexture;
+import org.parallax3d.parallax.graphics.textures.CubeTexture;
+import org.parallax3d.parallax.graphics.textures.Texture;
+import org.parallax3d.parallax.graphics.textures.TextureData;
 import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.system.ViewportResizeBus;
 import org.parallax3d.parallax.system.gl.GL20;
 import org.parallax3d.parallax.system.gl.GLES20Ext;
 import org.parallax3d.parallax.system.gl.GLHelpers;
@@ -200,7 +201,7 @@ public class GLRenderer extends Renderer
 		this.capabilities = new GLCapabilities(gl);
 		this.state = new GLState(gl);
 		this.properties = new GLProperties();
-		this.objects = new GLObjects(gl, this.properties);
+		this.objects = new GLObjects(gl, this.properties, info);
 		this.programCache = new GLPrograms(this, this.capabilities);
 		this.lightCache = new GLLights();
 
@@ -553,31 +554,31 @@ public class GLRenderer extends Renderer
 
     private void onTextureDispose( Texture texture ) {
 
-		texture.removeEventListener( );
-        texture.removeEventListener( 'dispose', onTextureDispose );
-
-        deallocateTexture( texture );
-
-        _infoMemory.textures --;
+//		texture.removeEventListener( );
+//        texture.removeEventListener( 'dispose', onTextureDispose );
+//
+//        deallocateTexture( texture );
+//
+//        _infoMemory.textures --;
 
 
     }
 
     private void onRenderTargetDispose( GLRenderTarget renderTarget ) {
 
-        renderTarget.removeEventListener( 'dispose', onRenderTargetDispose );
-
-        deallocateRenderTarget( renderTarget );
-
-        _infoMemory.textures --;
+//        renderTarget.removeEventListener( 'dispose', onRenderTargetDispose );
+//
+//        deallocateRenderTarget( renderTarget );
+//
+//        _infoMemory.textures --;
 
     }
 
     private void onMaterialDispose( Material material ) {
 
-        material.removeEventListener( 'dispose', onMaterialDispose );
-
-        deallocateMaterial( material );
+//        material.removeEventListener( 'dispose', onMaterialDispose );
+//
+//        deallocateMaterial( material );
 
     }
 
@@ -585,56 +586,56 @@ public class GLRenderer extends Renderer
 
     private void deallocateTexture( Texture texture ) {
 
-        var textureProperties = properties.get( texture );
-
-        if ( texture.image && textureProperties.__image__webglTextureCube ) {
-
-            // cube texture
-
-            _gl.deleteTexture( textureProperties.__image__webglTextureCube );
-
-        } else {
-
-            // 2D texture
-
-            if ( textureProperties.__webglInit === undefined ) return;
-
-            _gl.deleteTexture( textureProperties.__webglTexture );
-
-        }
-
-        // remove all webgl properties
-        properties.delete( texture );
+//        var textureProperties = properties.get( texture );
+//
+//        if ( texture.image && textureProperties.__image__webglTextureCube ) {
+//
+//            // cube texture
+//
+//            _gl.deleteTexture( textureProperties.__image__webglTextureCube );
+//
+//        } else {
+//
+//            // 2D texture
+//
+//            if ( textureProperties.__webglInit === undefined ) return;
+//
+//            _gl.deleteTexture( textureProperties.__webglTexture );
+//
+//        }
+//
+//        // remove all webgl properties
+//        properties.delete( texture );
 
     }
 
     private void deallocateRenderTarget( GLRenderTarget renderTarget ) {
 
-        var renderTargetProperties = properties.get( renderTarget );
-        var textureProperties = properties.get( renderTarget.texture );
-
-        if ( ! renderTarget || textureProperties.__webglTexture === undefined ) return;
-
-        _gl.deleteTexture( textureProperties.__webglTexture );
-
-        if ( renderTarget instanceof THREE.WebGLRenderTargetCube ) {
-
-            for ( var i = 0; i < 6; i ++ ) {
-
-                _gl.deleteFramebuffer( renderTargetProperties.__webglFramebuffer[ i ] );
-                _gl.deleteRenderbuffer( renderTargetProperties.__webglDepthbuffer[ i ] );
-
-            }
-
-        } else {
-
-            _gl.deleteFramebuffer( renderTargetProperties.__webglFramebuffer );
-            _gl.deleteRenderbuffer( renderTargetProperties.__webglDepthbuffer );
-
-        }
-
-        properties.delete( renderTarget.texture );
-        properties.delete( renderTarget );
+//        var renderTargetProperties = properties.get( renderTarget );
+//        var textureProperties = properties.get( renderTarget.texture );
+//
+//        if ( ! renderTarget || textureProperties.__webglTexture === undefined ) return;
+//
+//        _gl.deleteTexture( textureProperties.__webglTexture );
+//
+//        if ( renderTarget instanceof THREE.WebGLRenderTargetCube ) {
+//
+//            for ( var i = 0; i < 6; i ++ ) {
+//
+//                _gl.deleteFramebuffer( renderTargetProperties.__webglFramebuffer[ i ] );
+//                _gl.deleteRenderbuffer( renderTargetProperties.__webglDepthbuffer[ i ] );
+//
+//            }
+//
+//        } else {
+//
+//            _gl.deleteFramebuffer( renderTargetProperties.__webglFramebuffer );
+//            _gl.deleteRenderbuffer( renderTargetProperties.__webglDepthbuffer );
+//
+//        }
+//
+//        properties.delete( renderTarget.texture );
+//        properties.delete( renderTarget );
 
     }
 
@@ -649,106 +650,106 @@ public class GLRenderer extends Renderer
 
     private void releaseMaterialProgramReference( Material material ) {
 
-        var programInfo = properties.get( material ).program;
-
-        material.program = undefined;
-
-        if ( programInfo !== undefined ) {
-
-            programCache.releaseProgram( programInfo );
-
-        }
+//        var programInfo = properties.get( material ).program;
+//
+//        material.program = undefined;
+//
+//        if ( programInfo !== undefined ) {
+//
+//            programCache.releaseProgram( programInfo );
+//
+//        }
 
     }
 
     public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
 
-        state.initAttributes();
-
-        var buffers = properties.get( object );
-
-        if ( object.hasPositions && ! buffers.position ) buffers.position = gl.createBuffer();
-        if ( object.hasNormals && ! buffers.normal ) buffers.normal = gl.createBuffer();
-        if ( object.hasUvs && ! buffers.uv ) buffers.uv = gl.createBuffer();
-        if ( object.hasColors && ! buffers.color ) buffers.color = gl.createBuffer();
-
-        var attributes = program.getAttributes();
-
-        if ( object.hasPositions ) {
-
-            gl.bindBuffer( gl.ARRAY_BUFFER, buffers.position );
-            gl.bufferData( gl.ARRAY_BUFFER, object.positionArray, gl.DYNAMIC_DRAW );
-
-            state.enableAttribute( attributes.position );
-            gl.vertexAttribPointer( attributes.position, 3, gl.FLOAT, false, 0, 0 );
-
-        }
-
-        if ( object.hasNormals ) {
-
-            gl.bindBuffer( gl.ARRAY_BUFFER, buffers.normal );
-
-            if ( material.type !== 'MeshPhongMaterial' && material.type !== 'MeshStandardMaterial' && material.shading == THREE.FlatShading ) {
-
-                for ( var i = 0, l = object.count * 3; i < l; i += 9 ) {
-
-                    var array = object.normalArray;
-
-                    var nx = ( array[ i + 0 ] + array[ i + 3 ] + array[ i + 6 ] ) / 3;
-                    var ny = ( array[ i + 1 ] + array[ i + 4 ] + array[ i + 7 ] ) / 3;
-                    var nz = ( array[ i + 2 ] + array[ i + 5 ] + array[ i + 8 ] ) / 3;
-
-                    array[ i + 0 ] = nx;
-                    array[ i + 1 ] = ny;
-                    array[ i + 2 ] = nz;
-
-                    array[ i + 3 ] = nx;
-                    array[ i + 4 ] = ny;
-                    array[ i + 5 ] = nz;
-
-                    array[ i + 6 ] = nx;
-                    array[ i + 7 ] = ny;
-                    array[ i + 8 ] = nz;
-
-                }
-
-            }
-
-            gl.bufferData( gl.ARRAY_BUFFER, object.normalArray, gl.DYNAMIC_DRAW );
-
-            state.enableAttribute( attributes.normal );
-
-            gl.vertexAttribPointer( attributes.normal, 3, gl.FLOAT, false, 0, 0 );
-
-        }
-
-        if ( object.hasUvs && material.map ) {
-
-            gl.bindBuffer( gl.ARRAY_BUFFER, buffers.uv );
-            gl.bufferData( gl.ARRAY_BUFFER, object.uvArray, gl.DYNAMIC_DRAW );
-
-            state.enableAttribute( attributes.uv );
-
-            gl.vertexAttribPointer( attributes.uv, 2, gl.FLOAT, false, 0, 0 );
-
-        }
-
-        if ( object.hasColors && material.vertexColors !== THREE.NoColors ) {
-
-            gl.bindBuffer( gl.ARRAY_BUFFER, buffers.color );
-            gl.bufferData( gl.ARRAY_BUFFER, object.colorArray, gl.DYNAMIC_DRAW );
-
-            state.enableAttribute( attributes.color );
-
-            gl.vertexAttribPointer( attributes.color, 3, gl.FLOAT, false, 0, 0 );
-
-        }
-
-        state.disableUnusedAttributes();
-
-        gl.drawArrays( gl.TRIANGLES, 0, object.count );
-
-        object.count = 0;
+//        state.initAttributes();
+//
+//        var buffers = properties.get( object );
+//
+//        if ( object.hasPositions && ! buffers.position ) buffers.position = gl.createBuffer();
+//        if ( object.hasNormals && ! buffers.normal ) buffers.normal = gl.createBuffer();
+//        if ( object.hasUvs && ! buffers.uv ) buffers.uv = gl.createBuffer();
+//        if ( object.hasColors && ! buffers.color ) buffers.color = gl.createBuffer();
+//
+//        var attributes = program.getAttributes();
+//
+//        if ( object.hasPositions ) {
+//
+//            gl.bindBuffer( gl.ARRAY_BUFFER, buffers.position );
+//            gl.bufferData( gl.ARRAY_BUFFER, object.positionArray, gl.DYNAMIC_DRAW );
+//
+//            state.enableAttribute( attributes.position );
+//            gl.vertexAttribPointer( attributes.position, 3, gl.FLOAT, false, 0, 0 );
+//
+//        }
+//
+//        if ( object.hasNormals ) {
+//
+//            gl.bindBuffer( gl.ARRAY_BUFFER, buffers.normal );
+//
+//            if ( material.type !== 'MeshPhongMaterial' && material.type !== 'MeshStandardMaterial' && material.shading == THREE.FlatShading ) {
+//
+//                for ( var i = 0, l = object.count * 3; i < l; i += 9 ) {
+//
+//                    var array = object.normalArray;
+//
+//                    var nx = ( array[ i + 0 ] + array[ i + 3 ] + array[ i + 6 ] ) / 3;
+//                    var ny = ( array[ i + 1 ] + array[ i + 4 ] + array[ i + 7 ] ) / 3;
+//                    var nz = ( array[ i + 2 ] + array[ i + 5 ] + array[ i + 8 ] ) / 3;
+//
+//                    array[ i + 0 ] = nx;
+//                    array[ i + 1 ] = ny;
+//                    array[ i + 2 ] = nz;
+//
+//                    array[ i + 3 ] = nx;
+//                    array[ i + 4 ] = ny;
+//                    array[ i + 5 ] = nz;
+//
+//                    array[ i + 6 ] = nx;
+//                    array[ i + 7 ] = ny;
+//                    array[ i + 8 ] = nz;
+//
+//                }
+//
+//            }
+//
+//            gl.bufferData( gl.ARRAY_BUFFER, object.normalArray, gl.DYNAMIC_DRAW );
+//
+//            state.enableAttribute( attributes.normal );
+//
+//            gl.vertexAttribPointer( attributes.normal, 3, gl.FLOAT, false, 0, 0 );
+//
+//        }
+//
+//        if ( object.hasUvs && material.map ) {
+//
+//            gl.bindBuffer( gl.ARRAY_BUFFER, buffers.uv );
+//            gl.bufferData( gl.ARRAY_BUFFER, object.uvArray, gl.DYNAMIC_DRAW );
+//
+//            state.enableAttribute( attributes.uv );
+//
+//            gl.vertexAttribPointer( attributes.uv, 2, gl.FLOAT, false, 0, 0 );
+//
+//        }
+//
+//        if ( object.hasColors && material.vertexColors !== THREE.NoColors ) {
+//
+//            gl.bindBuffer( gl.ARRAY_BUFFER, buffers.color );
+//            gl.bufferData( gl.ARRAY_BUFFER, object.colorArray, gl.DYNAMIC_DRAW );
+//
+//            state.enableAttribute( attributes.color );
+//
+//            gl.vertexAttribPointer( attributes.color, 3, gl.FLOAT, false, 0, 0 );
+//
+//        }
+//
+//        state.disableUnusedAttributes();
+//
+//        gl.drawArrays( gl.TRIANGLES, 0, object.count );
+//
+//        object.count = 0;
 
     }
 
@@ -766,7 +767,7 @@ public class GLRenderer extends Renderer
         int wireframeBit = material instanceof HasWireframe &&
                 ((HasWireframe)material).isWireframe() ? 1 : 0;
 
-        String geometryProgram = geometry.getId() + "_" + program.getId() + "_" + wireframeBit;
+        String geometryProgram = geometry.getId() + "_" + program.toString() + "_" + wireframeBit;
 
         if (!geometryProgram.equals(_currentGeometryProgram)) {
 
@@ -776,7 +777,7 @@ public class GLRenderer extends Renderer
         }
 
         // morph targets
-        List<Double> morphTargetInfluences = object instanceof Mesh ? ((Mesh)object).morphTargetInfluences : null;
+        List<Double> morphTargetInfluences = object instanceof Mesh ? ((Mesh) object).getMorphTargetInfluences() : null;
 
         class ActiveInfluences implements Comparable<ActiveInfluences> {
             public double influence;
@@ -886,26 +887,26 @@ public class GLRenderer extends Renderer
         int dataStart = 0;
         int dataCount = Integer.MAX_VALUE;
 
-        if ( index != null ) {
+//        if ( index != null ) {
+//
+//            dataCount = index.count;
+//
+//        } else if ( position != null ) {
+//
+//            dataCount = position.count;
+//
+//        }
+//
+//        int rangeStart = geometry.getDrawRange().start;
+//        int rangeCount = geometry.getDrawRange().count;
+//
+//        int groupStart = group != null ? group.start : 0;
+//        int groupCount = group != null ? group.count : Integer.MAX_VALUE;
 
-            dataCount = index.count;
+//        int drawStart = Math.max( Math.max( dataStart, rangeStart), groupStart );
+//        int drawEnd = Math.min( Math.min( dataStart + dataCount, rangeStart + rangeCount), groupStart + groupCount ) - 1;
 
-        } else if ( position != null ) {
-
-            dataCount = position.count;
-
-        }
-
-        int rangeStart = geometry.getDrawRange().start;
-        int rangeCount = geometry.getDrawRange().count;
-
-        int groupStart = group != null ? group.start : 0;
-        int groupCount = group != null ? group.count : Integer.MAX_VALUE;
-
-        int drawStart = Math.max( Math.max( dataStart, rangeStart), groupStart );
-        int drawEnd = Math.min( Math.min( dataStart + dataCount, rangeStart + rangeCount), groupStart + groupCount ) - 1;
-
-        int drawCount = Math.max( 0, drawEnd - drawStart + 1 );
+//        int drawCount = Math.max( 0, drawEnd - drawStart + 1 );
 
         if ( object instanceof Mesh )
         {
@@ -947,11 +948,11 @@ public class GLRenderer extends Renderer
 
         if ( geometry instanceof InstancedBufferGeometry && ((InstancedBufferGeometry)geometry).getMaxInstancedCount() > 0 ) {
 
-            renderer.renderInstances((InstancedBufferGeometry) geometry, drawStart, drawCount );
+//            renderer.renderInstances((InstancedBufferGeometry) geometry, drawStart, drawCount );
 
         } else {
 
-            renderer.render( drawStart, drawCount );
+//            renderer.render( drawStart, drawCount );
 
         }
     }
@@ -996,59 +997,59 @@ public class GLRenderer extends Renderer
                     int size = geometryAttribute.getItemSize();
                     int buffer = objects.getAttributeBuffer( geometryAttribute );
 
-                    if ( geometryAttribute instanceof InterleavedBufferAttribute ) {
-
-                        InterleavedBuffer data = ((InterleavedBufferAttribute) geometryAttribute).getData();
-                        int stride = data.getStride();
-                        int offset = ((InterleavedBufferAttribute)geometryAttribute).getOffset();
-
-                        if ( data instanceof InstancedInterleavedBuffer ) {
-
-                            state.enableAttributeAndDivisor( programAttribute, ((InstancedInterleavedBuffer) data).getMeshPerAttribute(), extension );
-
-                            if ( ((InstancedBufferGeometry)geometry).getMaxInstancedCount() == null ) {
-
-                                ((InstancedBufferGeometry)geometry).setMaxInstancedCount( ((InstancedInterleavedBuffer) data).getMeshPerAttribute() * data.getCount() );
-
-                            }
-
-                        } else {
-
-                            state.enableAttribute( programAttribute );
-
-                        }
-
-                        this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(),buffer);
-
-                        this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false,
-                                stride * data.getArray().getBytesPerElement(),
-                                ( startIndex * stride + offset ) * data.getArray().getBytesPerElement()); // 4 bytes per Float32
-
-                    }
-                    else
-                    {
-                        if ( geometryAttribute instanceof InstancedBufferAttribute ) {
-
-                            state.enableAttributeAndDivisor( programAttribute, ((InstancedBufferAttribute) geometryAttribute).getMeshPerAttribute(), extension );
-
-                            if ( ((InstancedBufferGeometry)geometry).getMaxInstancedCount() == null ) {
-
-                                ((InstancedBufferGeometry)geometry).setMaxInstancedCount(
-                                        ((InstancedBufferAttribute) geometryAttribute).getMeshPerAttribute() * geometryAttribute.getCount() );
-
-                            }
-
-                        } else {
-
-                            state.enableAttribute( programAttribute );
-
-                        }
-
-                        this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(),buffer);
-                        this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false,
-                                0, startIndex * size * 4 ); // 4 bytes per Float32
-
-                    }
+//                    if ( geometryAttribute instanceof InterleavedBufferAttribute ) {
+//
+//                        InterleavedBuffer data = ((InterleavedBufferAttribute) geometryAttribute).getData();
+//                        int stride = data.getStride();
+//                        int offset = ((InterleavedBufferAttribute)geometryAttribute).getOffset();
+//
+//                        if ( data instanceof InstancedInterleavedBuffer ) {
+//
+//                            state.enableAttributeAndDivisor( programAttribute, ((InstancedInterleavedBuffer) data).getMeshPerAttribute(), extension );
+//
+//                            if ( ((InstancedBufferGeometry)geometry).getMaxInstancedCount() == null ) {
+//
+//                                ((InstancedBufferGeometry)geometry).setMaxInstancedCount( ((InstancedInterleavedBuffer) data).getMeshPerAttribute() * data.getCount() );
+//
+//                            }
+//
+//                        } else {
+//
+//                            state.enableAttribute( programAttribute );
+//
+//                        }
+//
+//                        this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(),buffer);
+//
+//                        this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false,
+//                                stride * data.getArray().getBytesPerElement(),
+//                                ( startIndex * stride + offset ) * data.getArray().getBytesPerElement()); // 4 bytes per Float32
+//
+//                    }
+//                    else
+//                    {
+//                        if ( geometryAttribute instanceof InstancedBufferAttribute ) {
+//
+//                            state.enableAttributeAndDivisor( programAttribute, ((InstancedBufferAttribute) geometryAttribute).getMeshPerAttribute(), extension );
+//
+//                            if ( ((InstancedBufferGeometry)geometry).getMaxInstancedCount() == null ) {
+//
+//                                ((InstancedBufferGeometry)geometry).setMaxInstancedCount(
+//                                        ((InstancedBufferAttribute) geometryAttribute).getMeshPerAttribute() * geometryAttribute.getCount() );
+//
+//                            }
+//
+//                        } else {
+//
+//                            state.enableAttribute( programAttribute );
+//
+//                        }
+//
+//                        this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(),buffer);
+//                        this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false,
+//                                0, startIndex * size * 4 ); // 4 bytes per Float32
+//
+//                    }
 
                 }
                 else
@@ -1108,8 +1109,8 @@ public class GLRenderer extends Renderer
     public void render(Scene scene, Camera camera, GLRenderTarget renderTarget, boolean forceClear )
     {
         // Render basic org.parallax3d.plugins
-        if(renderPlugins( this.plugins, scene, camera, Plugin.TYPE.BASIC_RENDER ))
-            return;
+//        if(renderPlugins( this.plugins, scene, camera, Plugin.TYPE.BASIC_RENDER ))
+//            return;
 
         AbstractFog fog = scene.getFog();
 
@@ -1154,7 +1155,7 @@ public class GLRenderer extends Renderer
         setupLights( lights, camera );
 
         // custom render org.parallax3d.plugins (pre pass)
-        renderPlugins( this.plugins, scene, camera, Plugin.TYPE.PRE_RENDER );
+//        renderPlugins( this.plugins, scene, camera, Plugin.TYPE.PRE_RENDER );
 
         info.getRender().calls = 0;
         info.getRender().vertices = 0;
@@ -1186,15 +1187,15 @@ public class GLRenderer extends Renderer
         }
 
         // custom render org.parallax3d.plugins (post pass)
-        renderPlugins( this.plugins, scene, camera, Plugin.TYPE.POST_RENDER );
+//        renderPlugins( this.plugins, scene, camera, Plugin.TYPE.POST_RENDER );
 
         // Generate mipmap if we're using any kind of mipmap filtering
-        if ( renderTarget != null && renderTarget.isGenerateMipmaps()
-                && renderTarget.getMinFilter() != TextureMinFilter.NEAREST
-                && renderTarget.getMinFilter() != TextureMinFilter.LINEAR)
-        {
-            updateRenderTargetMipmap( renderTarget );
-        }
+//        if ( renderTarget != null && renderTarget.isGenerateMipmaps()
+//                && renderTarget.getMinFilter() != TextureMinFilter.NEAREST
+//                && renderTarget.getMinFilter() != TextureMinFilter.LINEAR)
+//        {
+//            updateRenderTargetMipmap( renderTarget );
+//        }
 
         // Ensure depth buffer writing is enabled so it can be cleared on next render
 
@@ -1256,11 +1257,11 @@ public class GLRenderer extends Renderer
 
             } else if ( object instanceof Sprite ) {
 
-                if ( !object.isFrustumCulled() || _frustum.isIntersectsObject((GeometryObject) object) ) {
-
-                    sprites.push( object );
-
-                }
+//                if ( !object.isFrustumCulled() || _frustum.isIntersectsObject((GeometryObject) object) ) {
+//
+//                    sprites.push( object );
+//
+//                }
 
 //			} else if ( object instanceof LensFlare ) {
 //
@@ -1285,48 +1286,48 @@ public class GLRenderer extends Renderer
 
                 }
 
-                if ( object.frustumCulled == false || _frustum.isIntersectsObject((GeometryObject) object) ) {
-
-                    Material material = object.material;
-
-                    if ( material.isVisible() ) {
-
-                        if ( sortObjects ) {
-
-                            _vector3.setFromMatrixPosition( object.getMatrixWorld() );
-                            _vector3.applyProjection( _projScreenMatrix );
-
-                        }
-
-                        AbstractGeometry geometry = objects.update( object );
-
-                        if ( material instanceof MultiMaterial) {
-
-                            var groups = geometry.groups;
-                            var materials = material.materials;
-
-                            for ( int i = 0, l = groups.length; i < l; i ++ ) {
-
-                                var group = groups[ i ];
-                                Material groupMaterial = materials[ group.materialIndex ];
-
-                                if ( groupMaterial.isVisible() ) {
-
-                                    pushRenderItem( object, geometry, groupMaterial, _vector3.getZ(), group );
-
-                                }
-
-                            }
-
-                        } else {
-
-                            pushRenderItem( object, geometry, material, _vector3.getZ(), null );
-
-                        }
-
-                    }
-
-                }
+//                if ( object.frustumCulled == false || _frustum.isIntersectsObject((GeometryObject) object) ) {
+//
+//                    Material material = object.material;
+//
+//                    if ( material.isVisible() ) {
+//
+//                        if ( sortObjects ) {
+//
+//                            _vector3.setFromMatrixPosition( object.getMatrixWorld() );
+//                            _vector3.applyProjection( _projScreenMatrix );
+//
+//                        }
+//
+//                        AbstractGeometry geometry = objects.update( object );
+//
+//                        if ( material instanceof MultiMaterial) {
+//
+//                            var groups = geometry.groups;
+//                            var materials = material.materials;
+//
+//                            for ( int i = 0, l = groups.length; i < l; i ++ ) {
+//
+//                                var group = groups[ i ];
+//                                Material groupMaterial = materials[ group.materialIndex ];
+//
+//                                if ( groupMaterial.isVisible() ) {
+//
+//                                    pushRenderItem( object, geometry, groupMaterial, _vector3.getZ(), group );
+//
+//                                }
+//
+//                            }
+//
+//                        } else {
+//
+//                            pushRenderItem( object, geometry, material, _vector3.getZ(), null );
+//
+//                        }
+//
+//                    }
+//
+//                }
 
             }
 
@@ -1365,19 +1366,19 @@ public class GLRenderer extends Renderer
 
                 setMaterial( material );
 
-                Shader program = setProgram( camera, fog, material, object );
+//                Shader program = setProgram( camera, fog, material, object );
+//
+//                _currentGeometryProgram = "";
 
-                _currentGeometryProgram = "";
-
-                object.render( function ( object ) {
-
-                    renderBufferImmediate( object, program, material );
-
-                } );
+//                object.render( function ( object ) {
+//
+//                    renderBufferImmediate( object, program, material );
+//
+//                } );
 
             } else {
 
-                renderBufferDirect( camera, fog, geometry, material, object, group );
+//                renderBufferDirect( camera, fog, geometry, material, object, group );
 
             }
 
@@ -1386,151 +1387,151 @@ public class GLRenderer extends Renderer
 
     private void initMaterial ( Material material, AbstractFog fog, GeometryObject object )
     {
-        Log.debug("WebGlRender: Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
-
-        FastMap<Object> materialProperties = properties.get( material );
-
-        FastMap<Object> parameters = programCache.getParameters( material, _lights, fog, object );
-        var code = programCache.getProgramCode( material, parameters );
-
-        var program = materialProperties.get("program");
-        boolean programChange = true;
-
-        if ( program == null ) {
-
-            // new material
-            material.deallocate(this);
-
-        } else if ( program.code != code ) {
-
-            // changed glsl or parameters
-            releaseMaterialProgramReference( material );
-
-        } else if ( parameters.shaderID != undefined ) {
-
-            // same glsl and uniform list
-            return;
-
-        } else {
-
-            // only rebuild uniform list
-            programChange = false;
-
-        }
-
-        if ( programChange ) {
-
-            if ( parameters.get("shaderID") ) {
-
-                var shader = THREE.ShaderLib[ parameters.shaderID ];
-
-                materialProperties.__webglShader = {
-                        name: material.type,
-                        uniforms: THREE.UniformsUtils.clone( shader.uniforms ),
-                        vertexShader: shader.vertexShader,
-                        fragmentShader: shader.fragmentShader
-                };
-
-            } else {
-
-                materialProperties.__webglShader = {
-                        name: material.type,
-                        uniforms: material.uniforms,
-                        vertexShader: material.vertexShader,
-                        fragmentShader: material.fragmentShader
-                };
-
-            }
-
-            material.__webglShader = materialProperties.__webglShader;
-
-            program = programCache.acquireProgram( material, parameters, code );
-
-            materialProperties.program = program;
-            material.program = program;
-
-        }
-
-        FastMap<Integer> attributes = program.getAttributes();
-//		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
-
-        if(material instanceof HasSkinning)
-        {
-            if ( ((HasSkinning)material).isMorphTargets())
-            {
-                int numSupportedMorphTargets = 0;
-                for ( int i = 0; i < this.maxMorphTargets; i ++ )
-                {
-                    String id = "morphTarget" + i;
-
-                    if ( attributes.get( id ) >= 0 )
-                    {
-                        numSupportedMorphTargets ++;
-                    }
-                }
-
-                ((HasSkinning)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
-            }
-
-            if ( ((HasSkinning)material).isMorphNormals() )
-            {
-                int numSupportedMorphNormals = 0;
-                for ( int i = 0; i < this.maxMorphNormals; i ++ )
-                {
-                    String id = "morphNormal" + i;
-
-                    if ( attributes.get( id ) >= 0 )
-                    {
-                        numSupportedMorphNormals ++;
-                    }
-                }
-
-                ((HasSkinning)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
-            }
-        }
-
-        materialProperties.uniformsList = [];
-
-        var uniforms = materialProperties.__webglShader.uniforms,
-                uniformLocations = materialProperties.program.getUniforms();
-
-        for ( var u in uniforms ) {
-
-        var location = uniformLocations[ u ];
-
-        if ( location ) {
-
-            materialProperties.uniformsList.push( [ materialProperties.__webglShader.uniforms[ u ], location ] );
-
-        }
-
-    }
-
-        if ( material instanceof THREE.MeshPhongMaterial ||
-                material instanceof THREE.MeshLambertMaterial ||
-                material instanceof THREE.MeshStandardMaterial ||
-                material.lights ) {
-
-            // store the light setup it was created for
-
-            materialProperties.lightsHash = _lights.hash;
-
-            // wire up the material to this renderer's lighting state
-
-            uniforms.get( "ambientLightColor" ).setValue( _lights.ambient );
-            uniforms.get( "directionalLights" ).setValue( _lights.directional );
-            uniforms.get( "spotLights" ).setValue( _lights.spot;
-            uniforms.get( "pointLights" ).setValue( _lights.point;
-            uniforms.get( "hemisphereLights" ).setValue( _lights.hemi;
-
-            uniforms.get( "directionalShadowMap" ).setValue( _lights.directionalShadowMap;
-            uniforms.get( "directionalShadowMatrix" ).setValue( _lights.directionalShadowMatrix;
-            uniforms.get( "spotShadowMap" ).setValue( _lights.spotShadowMap;
-            uniforms.get( "spotShadowMatrix" ).setValue( _lights.spotShadowMatrix;
-            uniforms.get( "pointShadowMap" ).setValue( _lights.pointShadowMap;
-            uniforms.get( "pointShadowMatrix" ).setValue( _lights.pointShadowMatrix;
-
-        }
+//        Log.debug("WebGlRender: Called initMaterial for material: " + material.getClass().getName() + " and object " + object.getClass().getName());
+//
+//        FastMap<Object> materialProperties = properties.get( material );
+//
+//        FastMap<Object> parameters = programCache.getParameters( material, _lights, fog, object );
+//        var code = programCache.getProgramCode( material, parameters );
+//
+//        var program = materialProperties.get("program");
+//        boolean programChange = true;
+//
+//        if ( program == null ) {
+//
+//            // new material
+//            material.deallocate(this);
+//
+//        } else if ( program.code != code ) {
+//
+//            // changed glsl or parameters
+//            releaseMaterialProgramReference( material );
+//
+//        } else if ( parameters.shaderID != undefined ) {
+//
+//            // same glsl and uniform list
+//            return;
+//
+//        } else {
+//
+//            // only rebuild uniform list
+//            programChange = false;
+//
+//        }
+//
+//        if ( programChange ) {
+//
+//            if ( parameters.get("shaderID") ) {
+//
+//                var shader = THREE.ShaderLib[ parameters.shaderID ];
+//
+//                materialProperties.__webglShader = {
+//                        name: material.type,
+//                        uniforms: THREE.UniformsUtils.clone( shader.uniforms ),
+//                        vertexShader: shader.vertexShader,
+//                        fragmentShader: shader.fragmentShader
+//                };
+//
+//            } else {
+//
+//                materialProperties.__webglShader = {
+//                        name: material.type,
+//                        uniforms: material.uniforms,
+//                        vertexShader: material.vertexShader,
+//                        fragmentShader: material.fragmentShader
+//                };
+//
+//            }
+//
+//            material.__webglShader = materialProperties.__webglShader;
+//
+//            program = programCache.acquireProgram( material, parameters, code );
+//
+//            materialProperties.program = program;
+//            material.program = program;
+//
+//        }
+//
+//        FastMap<Integer> attributes = program.getAttributes();
+////		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
+//
+//        if(material instanceof HasSkinning)
+//        {
+//            if ( ((HasSkinning)material).isMorphTargets())
+//            {
+//                int numSupportedMorphTargets = 0;
+//                for ( int i = 0; i < this.maxMorphTargets; i ++ )
+//                {
+//                    String id = "morphTarget" + i;
+//
+//                    if ( attributes.get( id ) >= 0 )
+//                    {
+//                        numSupportedMorphTargets ++;
+//                    }
+//                }
+//
+//                ((HasSkinning)material).setNumSupportedMorphTargets(numSupportedMorphTargets);
+//            }
+//
+//            if ( ((HasSkinning)material).isMorphNormals() )
+//            {
+//                int numSupportedMorphNormals = 0;
+//                for ( int i = 0; i < this.maxMorphNormals; i ++ )
+//                {
+//                    String id = "morphNormal" + i;
+//
+//                    if ( attributes.get( id ) >= 0 )
+//                    {
+//                        numSupportedMorphNormals ++;
+//                    }
+//                }
+//
+//                ((HasSkinning)material).setNumSupportedMorphNormals(numSupportedMorphNormals);
+//            }
+//        }
+//
+//        materialProperties.uniformsList = [];
+//
+//        var uniforms = materialProperties.__webglShader.uniforms,
+//                uniformLocations = materialProperties.program.getUniforms();
+//
+//        for ( var u in uniforms ) {
+//
+//        var location = uniformLocations[ u ];
+//
+//        if ( location ) {
+//
+//            materialProperties.uniformsList.push( [ materialProperties.__webglShader.uniforms[ u ], location ] );
+//
+//        }
+//
+//    }
+//
+//        if ( material instanceof THREE.MeshPhongMaterial ||
+//                material instanceof THREE.MeshLambertMaterial ||
+//                material instanceof THREE.MeshStandardMaterial ||
+//                material.lights ) {
+//
+//            // store the light setup it was created for
+//
+//            materialProperties.lightsHash = _lights.hash;
+//
+//            // wire up the material to this renderer's lighting state
+//
+//            uniforms.get( "ambientLightColor" ).setValue( _lights.ambient );
+//            uniforms.get( "directionalLights" ).setValue( _lights.directional );
+//            uniforms.get( "spotLights" ).setValue( _lights.spot;
+//            uniforms.get( "pointLights" ).setValue( _lights.point;
+//            uniforms.get( "hemisphereLights" ).setValue( _lights.hemi;
+//
+//            uniforms.get( "directionalShadowMap" ).setValue( _lights.directionalShadowMap;
+//            uniforms.get( "directionalShadowMatrix" ).setValue( _lights.directionalShadowMatrix;
+//            uniforms.get( "spotShadowMap" ).setValue( _lights.spotShadowMap;
+//            uniforms.get( "spotShadowMatrix" ).setValue( _lights.spotShadowMatrix;
+//            uniforms.get( "pointShadowMap" ).setValue( _lights.pointShadowMap;
+//            uniforms.get( "pointShadowMatrix" ).setValue( _lights.pointShadowMatrix;
+//
+//        }
 
     }
 
@@ -1599,18 +1600,18 @@ public class GLRenderer extends Renderer
 
         Shader program = (Shader) materialProperties.get("program");
         FastMap<Uniform> p_uniforms = program.getUniforms();
-        FastMap<Uniform> m_uniforms = materialProperties.get("__webglShader").uniforms;
+        FastMap<Uniform> m_uniforms = ((Shader)materialProperties.get("__webglShader")).getUniforms();
 
-        if ( program.getId() != _currentProgram ) {
-
-            gl.glUseProgram(program.getProgram());
-            _currentProgram = program.getId();
-
-            refreshProgram = true;
-            refreshMaterial = true;
-            refreshLights = true;
-
-        }
+//        if ( program.getId() != _currentProgram ) {
+//
+//            gl.glUseProgram(program.getProgram());
+//            _currentProgram = program.getId();
+//
+//            refreshProgram = true;
+//            refreshMaterial = true;
+//            refreshLights = true;
+//
+//        }
 
         if ( material.getId() != _currentMaterialId ) {
 
@@ -1622,13 +1623,13 @@ public class GLRenderer extends Renderer
 
         if ( refreshProgram || !camera.equals( this._currentCamera) )
         {
-            this.gl.glUniformMatrix4fv(p_uniforms.get("projectionMatrix"), 1, false, camera.getProjectionMatrix().getArray().getTypedBuffer());
-
-            if ( capabilities.isLogarithmicDepthBuffer() ) {
-
-                this.gl.glUniform1f(p_uniforms.get("logDepthBufFC"), (float) (2.0 / (Math.log(((HasNearFar) camera).getFar() + 1.0) / Mathematics.LN2)));
-
-            }
+//            this.gl.glUniformMatrix4fv(p_uniforms.get("projectionMatrix"), 1, false, camera.getProjectionMatrix().getArray().getTypedBuffer());
+//
+//            if ( capabilities.isLogarithmicDepthBuffer() ) {
+//
+//                this.gl.glUniform1f(p_uniforms.get("logDepthBufFC"), (float) (2.0 / (Math.log(((HasNearFar) camera).getFar() + 1.0) / Mathematics.LN2)));
+//
+//            }
 
             if ( !camera.equals( this._currentCamera) )
             {
@@ -1650,11 +1651,11 @@ public class GLRenderer extends Renderer
                     material instanceof HasEnvMap && ((HasEnvMap)material).getEnvMap() != null
                     ) {
 
-                if ( p_uniforms.get("cameraPosition") != -1 )
-                {
-                    _vector3.setFromMatrixPosition( camera.getMatrixWorld() );
-                    this.gl.glUniform3f(p_uniforms.get("cameraPosition"), (float)_vector3.getX(), (float)_vector3.getY(), (float)_vector3.getZ());
-                }
+//                if ( p_uniforms.get("cameraPosition") != -1 )
+//                {
+//                    _vector3.setFromMatrixPosition( camera.getMatrixWorld() );
+//                    this.gl.glUniform3f(p_uniforms.get("cameraPosition"), (float)_vector3.getX(), (float)_vector3.getY(), (float)_vector3.getZ());
+//                }
             }
 
             if ( material instanceof MeshPhongMaterial ||
@@ -1665,10 +1666,10 @@ public class GLRenderer extends Renderer
                     material instanceof HasSkinning && ((HasSkinning)material).isSkinning()
                     ) {
 
-                if ( p_uniforms.get("viewMatrix") != -1 )
-                {
-                    this.gl.glUniformMatrix4fv(p_uniforms.get("viewMatrix"), 1, false, camera.getMatrixWorldInverse().getArray().getTypedBuffer());
-                }
+//                if ( p_uniforms.get("viewMatrix") != -1 )
+//                {
+//                    this.gl.glUniformMatrix4fv(p_uniforms.get("viewMatrix"), 1, false, camera.getMatrixWorldInverse().getArray().getTypedBuffer());
+//                }
             }
         }
 
@@ -1677,79 +1678,79 @@ public class GLRenderer extends Renderer
         // not sure why, but otherwise weird things happen
         if ( material instanceof HasSkinning && ((HasSkinning)material).isSkinning() )
         {
-            if ( object.bindMatrix && p_uniforms.bindMatrix !== undefined ) {
-
-                gl.uniformMatrix4fv( p_uniforms.bindMatrix, false, object.bindMatrix.elements );
-
-            }
-
-            if ( object.bindMatrixInverse && p_uniforms.bindMatrixInverse !== undefined ) {
-
-                gl.uniformMatrix4fv( p_uniforms.bindMatrixInverse, false, object.bindMatrixInverse.elements );
-
-            }
-
-            if ( capabilities.floatVertexTextures && object.skeleton && object.skeleton.useVertexTexture ) {
-
-                if ( p_uniforms.boneTexture !== undefined ) {
-
-                    var textureUnit = getTextureUnit();
-
-                    gl.uniform1i( p_uniforms.boneTexture, textureUnit );
-                    _this.setTexture( object.skeleton.boneTexture, textureUnit );
-
-                }
-
-                if ( p_uniforms.boneTextureWidth !== undefined ) {
-
-                    gl.uniform1i( p_uniforms.boneTextureWidth, object.skeleton.boneTextureWidth );
-
-                }
-
-                if ( p_uniforms.boneTextureHeight !== undefined ) {
-
-                    gl.uniform1i( p_uniforms.boneTextureHeight, object.skeleton.boneTextureHeight );
-
-                }
-
-            } else if ( object.skeleton && object.skeleton.boneMatrices ) {
-
-                if ( p_uniforms.boneGlobalMatrices !== undefined ) {
-
-                    gl.uniformMatrix4fv( p_uniforms.boneGlobalMatrices, false, object.skeleton.boneMatrices );
-
-                }
-
-            }
+//            if ( object.bindMatrix && p_uniforms.bindMatrix !== undefined ) {
+//
+//                gl.uniformMatrix4fv( p_uniforms.bindMatrix, false, object.bindMatrix.elements );
+//
+//            }
+//
+//            if ( object.bindMatrixInverse && p_uniforms.bindMatrixInverse !== undefined ) {
+//
+//                gl.uniformMatrix4fv( p_uniforms.bindMatrixInverse, false, object.bindMatrixInverse.elements );
+//
+//            }
+//
+//            if ( capabilities.floatVertexTextures && object.skeleton && object.skeleton.useVertexTexture ) {
+//
+//                if ( p_uniforms.boneTexture !== undefined ) {
+//
+//                    var textureUnit = getTextureUnit();
+//
+//                    gl.uniform1i( p_uniforms.boneTexture, textureUnit );
+//                    _this.setTexture( object.skeleton.boneTexture, textureUnit );
+//
+//                }
+//
+//                if ( p_uniforms.boneTextureWidth !== undefined ) {
+//
+//                    gl.uniform1i( p_uniforms.boneTextureWidth, object.skeleton.boneTextureWidth );
+//
+//                }
+//
+//                if ( p_uniforms.boneTextureHeight !== undefined ) {
+//
+//                    gl.uniform1i( p_uniforms.boneTextureHeight, object.skeleton.boneTextureHeight );
+//
+//                }
+//
+//            } else if ( object.skeleton && object.skeleton.boneMatrices ) {
+//
+//                if ( p_uniforms.boneGlobalMatrices !== undefined ) {
+//
+//                    gl.uniformMatrix4fv( p_uniforms.boneGlobalMatrices, false, object.skeleton.boneMatrices );
+//
+//                }
+//
+//            }
         }
 
         if ( refreshMaterial )
         {
-            if ( material instanceof MeshPhongMaterial ||
-                    material instanceof MeshLambertMaterial ||
-                    material instanceof MeshStandardMaterial ||
-                    material.lights ) {
-
-                // the current material requires lighting info
-
-                // note: all lighting uniforms are always set correctly
-                // they simply reference the renderer's state for their
-                // values
-                //
-                // use the current material's .needsUpdate flags to set
-                // the GL state when required
-
-                markUniformsLightsNeedsUpdate( m_uniforms, refreshLights );
-
-            }
+//            if ( material instanceof MeshPhongMaterial ||
+//                    material instanceof MeshLambertMaterial ||
+//                    material instanceof MeshStandardMaterial ||
+//                    material.lights ) {
+//
+//                // the current material requires lighting info
+//
+//                // note: all lighting uniforms are always set correctly
+//                // they simply reference the renderer's state for their
+//                // values
+//                //
+//                // use the current material's .needsUpdate flags to set
+//                // the GL state when required
+//
+//                markUniformsLightsNeedsUpdate( m_uniforms, refreshLights );
+//
+//            }
 
             // refresh uniforms common to several materials
 
-            if ( fog && material.fog ) {
-
-                refreshUniformsFog( m_uniforms, fog );
-
-            }
+//            if ( fog && material.fog ) {
+//
+//                refreshUniformsFog( m_uniforms, fog );
+//
+//            }
 
             if ( material instanceof MeshBasicMaterial ||
                     material instanceof MeshLambertMaterial ||
@@ -1789,58 +1790,58 @@ public class GLRenderer extends Renderer
 
             } else if ( material instanceof MeshDepthMaterial ) {
 
-                m_uniforms.get( "mNear" ).setValue( camera.near;
-                m_uniforms.get( "mFar" ).setValue( camera.far;
-                m_uniforms.get( "opacity" ).setValue( material.opacity;
+//                m_uniforms.get( "mNear" ).setValue( camera.near;
+//                m_uniforms.get( "mFar" ).setValue( camera.far;
+//                m_uniforms.get( "opacity" ).setValue( material.opacity;
 
             } else if ( material instanceof MeshNormalMaterial ) {
 
-                m_uniforms.get( "opacity" ).setValue( material.opacity;
+//                m_uniforms.get( "opacity" ).setValue( material.opacity;
 
             }
 
             // load common uniforms
 
-            loadUniformsGeneric( materialProperties.uniformsList );
+//            loadUniformsGeneric( materialProperties.uniformsList );
 
         }
 
         loadUniformsMatrices( p_uniforms, object );
 
-        if ( p_uniforms.modelMatrix != null ) {
+//        if ( p_uniforms.modelMatrix != null ) {
+//
+//            gl.uniformMatrix4fv( p_uniforms.modelMatrix, false, object.matrixWorld.elements );
+//
+//        }
 
-            gl.uniformMatrix4fv( p_uniforms.modelMatrix, false, object.matrixWorld.elements );
-
-        }
-
-        if ( materialProperties.hasDynamicUniforms == true ) {
-
-            updateDynamicUniforms( materialProperties.uniformsList, object, camera );
-
-        }
+//        if ( materialProperties.hasDynamicUniforms == true ) {
+//
+//            updateDynamicUniforms( materialProperties.uniformsList, object, camera );
+//
+//        }
 
         return program;
     }
 
     private void updateDynamicUniforms ( FastMap<Uniform> uniforms, GeometryObject object, Camera camera )
     {
-        var dynamicUniforms = [];
-
-        for ( int j = 0, jl = uniforms.length; j < jl; j ++ ) {
-
-            var uniform = uniforms[ j ][ 0 ];
-            var onUpdateCallback = uniform.onUpdateCallback;
-
-            if ( onUpdateCallback != null ) {
-
-                onUpdateCallback.bind( uniform )( object, camera );
-                dynamicUniforms.push( uniforms[ j ] );
-
-            }
-
-        }
-
-        loadUniformsGeneric( dynamicUniforms );
+//        var dynamicUniforms = [];
+//
+//        for ( int j = 0, jl = uniforms.length; j < jl; j ++ ) {
+//
+//            var uniform = uniforms[ j ][ 0 ];
+//            var onUpdateCallback = uniform.onUpdateCallback;
+//
+//            if ( onUpdateCallback != null ) {
+//
+//                onUpdateCallback.bind( uniform )( object, camera );
+//                dynamicUniforms.push( uniforms[ j ] );
+//
+//            }
+//
+//        }
+//
+//        loadUniformsGeneric( dynamicUniforms );
 
     }
 
@@ -1857,7 +1858,7 @@ public class GLRenderer extends Renderer
 
         if ( material instanceof HasEmissiveColor)
         {
-            ((Color)uniforms.get("emissive").getValue()).copy( ((HasEmissiveColor) material).getEmissive() ).multiply( material.emissiveIntensity );
+            ((Color)uniforms.get("emissive").getValue()).copy( ((HasEmissiveColor) material).getEmissive() ).multiply( ((HasEmissiveColor) material).getEmissiveIntensity() );
         }
 
         if(this instanceof HasMap)
@@ -1921,11 +1922,11 @@ public class GLRenderer extends Renderer
 
         if ( uvScaleMap != null ) {
 
-            if ( uvScaleMap instanceof GLRenderTarget ) {
-
-                uvScaleMap = ((GLRenderTarget) uvScaleMap).getTexture();
-
-            }
+//            if ( uvScaleMap instanceof GLRenderTarget ) {
+//
+//                uvScaleMap = ((GLRenderTarget) uvScaleMap).getTexture();
+//
+//            }
 
             ((Vector4)uniforms.get("offsetRepeat").getValue()).set(
                     uvScaleMap.getOffset().getX(),
@@ -1940,8 +1941,8 @@ public class GLRenderer extends Renderer
             HasEnvMap envMapMaterial = (HasEnvMap)this;
 
             uniforms.get("envMap").setValue( envMapMaterial.getEnvMap() );
-            uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null
-                    && envMapMaterial.getEnvMap() instanceof GLRenderTargetCube) ? 1.0 : -1.0 );
+//            uniforms.get("flipEnvMap").setValue( ( envMapMaterial.getEnvMap() != null
+//                    && envMapMaterial.getEnvMap() instanceof GLRenderTargetCube) ? 1.0 : -1.0 );
 
             uniforms.get("reflectivity").setValue( envMapMaterial.getReflectivity() );
             uniforms.get("refractionRatio").setValue( envMapMaterial.getRefractionRatio() );
@@ -2832,11 +2833,11 @@ public class GLRenderer extends Renderer
 		texture.getImage().clampToMaxSize(capabilities.getMaxTextureSize());
 		TextureData image = texture.getImage();
 
-        if ( textureNeedsPowerOfTwo( texture ) && !image.isPowerOfTwo()) {
-
-            image = image.makePowerOfTwo();
-
-        }
+//        if ( textureNeedsPowerOfTwo( texture ) && !image.isPowerOfTwo()) {
+//
+//            image = image.makePowerOfTwo();
+//
+//        }
 
         boolean isPowerOfTwoImage = image.isPowerOfTwo();
 		PixelFormat glFormat = texture.getFormat();
@@ -2844,90 +2845,90 @@ public class GLRenderer extends Renderer
 
         setTextureParameters( TextureTarget.TEXTURE_2D, texture, isPowerOfTwoImage );
 
-        var mipmap, mipmaps = texture.mipmaps;
+//        var mipmap, mipmaps = texture.mipmaps;
+//
+//        if ( texture instanceof DataTexture ) {
+//
+//            // use manually created mipmaps if available
+//            // if there are no manual mipmaps
+//            // set 0 level mipmap and then use GL to generate other mipmap levels
+//
+//            if ( mipmaps.length > 0 && isPowerOfTwoImage ) {
+//
+//                for ( int i = 0, il = mipmaps.length; i < il; i ++ ) {
+//
+//                    mipmap = mipmaps[ i ];
+//                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
+//
+//                }
+//
+//                texture.generateMipmaps = false;
+//
+//            } else {
+//
+//                state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, glFormat, image.width, image.height, 0, glFormat, glType, image.data );
+//
+//            }
+//
+//        } else if ( texture instanceof CompressedTexture ) {
+//
+//            for ( int i = 0, il = mipmaps.length; i < il; i ++ ) {
+//
+//                mipmap = mipmaps[ i ];
+//
+//                if ( texture.getFormat() != PixelFormat.RGBA && texture.getFormat() != PixelFormat.RGB ) {
+//
+//                    if ( state.getCompressedTextureFormats().indexOf( glFormat ) > - 1 ) {
+//
+//                        state.compressedTexImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, mipmap.data );
+//
+//                    } else {
+//
+//                        Log.warn( "GLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()" );
+//
+//                    }
+//
+//                } else {
+//
+//                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
+//
+//                }
+//
+//            }
 
-        if ( texture instanceof DataTexture ) {
+//        } else {
+//
+//            // regular Texture (image, video, canvas)
+//
+//            // use manually created mipmaps if available
+//            // if there are no manual mipmaps
+//            // set 0 level mipmap and then use GL to generate other mipmap levels
+//
+//            if ( mipmaps.length > 0 && isPowerOfTwoImage ) {
+//
+//                for ( var i = 0, il = mipmaps.length; i < il; i ++ ) {
+//
+//                    mipmap = mipmaps[ i ];
+//                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, glFormat, glType, mipmap );
+//
+//                }
+//
+//                texture.generateMipmaps = false;
+//
+//            } else {
+//
+//                state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, glFormat, glFormat, glType, image );
+//
+//            }
+//
+//        }
 
-            // use manually created mipmaps if available
-            // if there are no manual mipmaps
-            // set 0 level mipmap and then use GL to generate other mipmap levels
-
-            if ( mipmaps.length > 0 && isPowerOfTwoImage ) {
-
-                for ( int i = 0, il = mipmaps.length; i < il; i ++ ) {
-
-                    mipmap = mipmaps[ i ];
-                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
-
-                }
-
-                texture.generateMipmaps = false;
-
-            } else {
-
-                state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, glFormat, image.width, image.height, 0, glFormat, glType, image.data );
-
-            }
-
-        } else if ( texture instanceof CompressedTexture ) {
-
-            for ( int i = 0, il = mipmaps.length; i < il; i ++ ) {
-
-                mipmap = mipmaps[ i ];
-
-                if ( texture.getFormat() != PixelFormat.RGBA && texture.getFormat() != PixelFormat.RGB ) {
-
-                    if ( state.getCompressedTextureFormats().indexOf( glFormat ) > - 1 ) {
-
-                        state.compressedTexImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, mipmap.data );
-
-                    } else {
-
-                        Log.warn( "GLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()" );
-
-                    }
-
-                } else {
-
-                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
-
-                }
-
-            }
-
-        } else {
-
-            // regular Texture (image, video, canvas)
-
-            // use manually created mipmaps if available
-            // if there are no manual mipmaps
-            // set 0 level mipmap and then use GL to generate other mipmap levels
-
-            if ( mipmaps.length > 0 && isPowerOfTwoImage ) {
-
-                for ( var i = 0, il = mipmaps.length; i < il; i ++ ) {
-
-                    mipmap = mipmaps[ i ];
-                    state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), i, glFormat, glFormat, glType, mipmap );
-
-                }
-
-                texture.generateMipmaps = false;
-
-            } else {
-
-                state.texImage2D( TextureTarget.TEXTURE_2D.getValue(), 0, glFormat, glFormat, glType, image );
-
-            }
-
-        }
-
-        if ( texture.generateMipmaps && isPowerOfTwoImage )
-			gl.glGenerateMipmap( TextureTarget.TEXTURE_2D.getValue() );
-
-        textureProperties.put("__version", texture.getVersion());
-
-        if ( texture.onUpdate ) texture.onUpdate( texture );
+//        if ( texture.generateMipmaps && isPowerOfTwoImage )
+//			gl.glGenerateMipmap( TextureTarget.TEXTURE_2D.getValue() );
+//
+//        textureProperties.put("__version", texture.getVersion());
+//
+//        if ( texture.onUpdate ) texture.onUpdate( texture );
 
     }
 
@@ -2946,13 +2947,13 @@ public class GLRenderer extends Renderer
                 return;
 
             }
-
-            if (image.complete == false) {
-
-                Log.warn( "GLRenderer: Texture marked for update but image is incomplete: " + texture);
-                return;
-
-            }
+//
+//            if (image.complete == false) {
+//
+//                Log.warn( "GLRenderer: Texture marked for update but image is incomplete: " + texture);
+//                return;
+//
+//            }
 
             uploadTexture(textureProperties, texture, slot);
 
@@ -2976,118 +2977,118 @@ public class GLRenderer extends Renderer
 
     private void setCubeTexture ( CubeTexture texture, int slot ) {
 
-        FastMap<Object> textureProperties = properties.get( texture );
-
-        if ( texture.getImages().size() == 6 ) {
-
-            if ( texture.version > 0 && textureProperties.__version != texture.version ) {
-
-                if ( ! textureProperties.__image__webglTextureCube ) {
-
-                    texture.addEventListener( 'dispose', onTextureDispose );
-
-                    textureProperties.__image__webglTextureCube = _gl.createTexture();
-
-                    info.getMemory().textures ++;
-
-                }
-
-                state.activeTexture( TextureUnit.TEXTURE0.getValue() + slot );
-                state.bindTexture( _gl.TEXTURE_CUBE_MAP, textureProperties.__image__webglTextureCube );
-
-                _gl.pixelStorei( _gl.UNPACK_FLIP_Y_WEBGL, texture.flipY );
-
-                boolean isCompressed = texture instanceof CompressedTexture;
-                boolean isDataTexture = texture.getImages().get( 0 ) instanceof DataTexture;
-
-                var cubeImage = [];
-
-                for ( int i = 0; i < 6; i ++ ) {
-
-                    if ( _this.autoScaleCubemaps && ! isCompressed && ! isDataTexture ) {
-
-                        cubeImage[ i ] = clampToMaxSize( texture.image[ i ], capabilities.maxCubemapSize );
-
-                    } else {
-
-                        cubeImage[ i ] = isDataTexture ? texture.image[ i ].image : texture.image[ i ];
-
-                    }
-
-                }
-
-                var image = cubeImage[ 0 ];
-                boolean isPowerOfTwoImage = isPowerOfTwo( image );
-                PixelFormat glFormat = texture.getFormat();
-                PixelType glType = texture.getType();
-
-                setTextureParameters( TextureTarget.TEXTURE_CUBE_MAP, texture, isPowerOfTwoImage );
-
-                for ( int i = 0; i < 6; i ++ ) {
-
-                    if ( ! isCompressed ) {
-
-                        if ( isDataTexture ) {
-
-                            state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, glFormat, cubeImage[ i ].width, cubeImage[ i ].height, 0, glFormat, glType, cubeImage[ i ].data );
-
-                        } else {
-
-                            state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, glFormat, glFormat, glType, cubeImage[ i ] );
-
-                        }
-
-                    } else {
-
-                        var mipmap, mipmaps = cubeImage[ i ].mipmaps;
-
-                        for ( int j = 0, jl = mipmaps.length; j < jl; j ++ ) {
-
-                            mipmap = mipmaps[ j ];
-
-                            if ( texture.getFormat() != PixelFormat.RGBA && texture.getFormat() != PixelFormat.RGB ) {
-
-                                if ( state.getCompressedTextureFormats().indexOf( glFormat ) > - 1 ) {
-
-                                    state.compressedTexImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, j, glFormat, mipmap.width, mipmap.height, 0, mipmap.data );
-
-                                } else {
-
-                                    Log.warn( "GLRenderer: Attempt to load unsupported compressed texture format in .setCubeTexture()" );
-
-                                }
-
-                            } else {
-
-                                state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, j,
-                                        glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
-
-                            }
-
-                        }
-
-                    }
-
-                }
-
-                if ( texture.isGenerateMipmaps() && isPowerOfTwoImage ) {
-
-                    gl.glGenerateMipmap( TextureTarget.TEXTURE_CUBE_MAP.getValue() );
-
-                }
-
-                textureProperties.__version = texture.version;
-
-                if ( texture.onUpdate ) texture.onUpdate( texture );
-
-            } else {
-
-                state.activeTexture( TextureUnit.TEXTURE0.getValue() + slot );
-                state.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, (int)textureProperties.get("__image__webglTextureCube"));
-
-            }
-
-        }
+//        FastMap<Object> textureProperties = properties.get( texture );
+//
+//        if ( texture.getImages().size() == 6 ) {
+//
+//            if ( texture.version > 0 && textureProperties.__version != texture.version ) {
+//
+//                if ( ! textureProperties.__image__webglTextureCube ) {
+//
+//                    texture.addEventListener( 'dispose', onTextureDispose );
+//
+//                    textureProperties.__image__webglTextureCube = _gl.createTexture();
+//
+//                    info.getMemory().textures ++;
+//
+//                }
+//
+//                state.activeTexture( TextureUnit.TEXTURE0.getValue() + slot );
+//                state.bindTexture( _gl.TEXTURE_CUBE_MAP, textureProperties.__image__webglTextureCube );
+//
+//                _gl.pixelStorei( _gl.UNPACK_FLIP_Y_WEBGL, texture.flipY );
+//
+//                boolean isCompressed = texture instanceof CompressedTexture;
+//                boolean isDataTexture = texture.getImages().get( 0 ) instanceof DataTexture;
+//
+//                var cubeImage = [];
+//
+//                for ( int i = 0; i < 6; i ++ ) {
+//
+//                    if ( _this.autoScaleCubemaps && ! isCompressed && ! isDataTexture ) {
+//
+//                        cubeImage[ i ] = clampToMaxSize( texture.image[ i ], capabilities.maxCubemapSize );
+//
+//                    } else {
+//
+//                        cubeImage[ i ] = isDataTexture ? texture.image[ i ].image : texture.image[ i ];
+//
+//                    }
+//
+//                }
+//
+//                var image = cubeImage[ 0 ];
+//                boolean isPowerOfTwoImage = isPowerOfTwo( image );
+//                PixelFormat glFormat = texture.getFormat();
+//                PixelType glType = texture.getType();
+//
+//                setTextureParameters( TextureTarget.TEXTURE_CUBE_MAP, texture, isPowerOfTwoImage );
+//
+//                for ( int i = 0; i < 6; i ++ ) {
+//
+//                    if ( ! isCompressed ) {
+//
+//                        if ( isDataTexture ) {
+//
+//                            state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, glFormat, cubeImage[ i ].width, cubeImage[ i ].height, 0, glFormat, glType, cubeImage[ i ].data );
+//
+//                        } else {
+//
+//                            state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, 0, glFormat, glFormat, glType, cubeImage[ i ] );
+//
+//                        }
+//
+//                    } else {
+//
+//                        var mipmap, mipmaps = cubeImage[ i ].mipmaps;
+//
+//                        for ( int j = 0, jl = mipmaps.length; j < jl; j ++ ) {
+//
+//                            mipmap = mipmaps[ j ];
+//
+//                            if ( texture.getFormat() != PixelFormat.RGBA && texture.getFormat() != PixelFormat.RGB ) {
+//
+//                                if ( state.getCompressedTextureFormats().indexOf( glFormat ) > - 1 ) {
+//
+//                                    state.compressedTexImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, j, glFormat, mipmap.width, mipmap.height, 0, mipmap.data );
+//
+//                                } else {
+//
+//                                    Log.warn( "GLRenderer: Attempt to load unsupported compressed texture format in .setCubeTexture()" );
+//
+//                                }
+//
+//                            } else {
+//
+//                                state.texImage2D( TextureTarget.TEXTURE_CUBE_MAP_POSITIVE_X.getValue() + i, j,
+//                                        glFormat, mipmap.width, mipmap.height, 0, glFormat, glType, mipmap.data );
+//
+//                            }
+//
+//                        }
+//
+//                    }
+//
+//                }
+//
+//                if ( texture.isGenerateMipmaps() && isPowerOfTwoImage ) {
+//
+//                    gl.glGenerateMipmap( TextureTarget.TEXTURE_CUBE_MAP.getValue() );
+//
+//                }
+//
+//                textureProperties.__version = texture.version;
+//
+//                if ( texture.onUpdate ) texture.onUpdate( texture );
+//
+//            } else {
+//
+//                state.activeTexture( TextureUnit.TEXTURE0.getValue() + slot );
+//                state.bindTexture( TextureTarget.TEXTURE_CUBE_MAP, (int)textureProperties.get("__image__webglTextureCube"));
+//
+//            }
+//
+//        }
 
     }
 

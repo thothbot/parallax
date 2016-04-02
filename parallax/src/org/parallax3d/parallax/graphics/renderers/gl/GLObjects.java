@@ -64,7 +64,7 @@ public class GLObjects {
 
             createBuffer( attributeProperties, data, bufferType );
 
-        } else if ( attributeProperties.get("version") != data.getVersion() ) {
+        } else if ( (int)attributeProperties.get("version") != data.getVersion() ) {
 
             updateBuffer( attributeProperties, data, bufferType );
 

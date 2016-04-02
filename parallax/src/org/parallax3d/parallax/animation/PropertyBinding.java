@@ -18,6 +18,7 @@
 package org.parallax3d.parallax.animation;
 
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float64Array;
 
 /**
  *
@@ -31,4 +32,16 @@ import org.parallax3d.parallax.system.ThreejsObject;
  */
 @ThreejsObject("THREE.PropertyBinding")
 public class PropertyBinding {
+
+    public int useCount;
+
+    public void setValue(Float64Array buffer, int originalValueOffset) {
+    }
+
+    public void getValue(Float64Array buffer, int originalValueOffset) {
+    }
+
+    public void apply(int accuIndex) {
+
+    }
 }

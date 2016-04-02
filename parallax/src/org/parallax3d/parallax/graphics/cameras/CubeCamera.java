@@ -18,6 +18,7 @@
 
 package org.parallax3d.parallax.graphics.cameras;
 
+import org.parallax3d.parallax.graphics.renderers.GLRenderTarget;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.graphics.renderers.GLRenderTargetCube;
@@ -92,10 +93,12 @@ public final class CubeCamera extends Object3D
 		cameraNZ.lookAt( new Vector3( 0.0, 0.0, -1.0 ) );
 		this.add( cameraNZ );
 
-		this.renderTarget = new GLRenderTargetCube( cubeResolution, cubeResolution );
-		this.renderTarget.setFormat(PixelFormat.RGB);
-		this.renderTarget.setMagFilter(TextureMagFilter.LINEAR);
-		this.renderTarget.setMinFilter(TextureMinFilter.LINEAR);
+		GLRenderTarget.GLRenderTargetOptions options = new GLRenderTarget.GLRenderTargetOptions();
+		options.format = PixelFormat.RGB;
+		options.magFilter = TextureMagFilter.LINEAR;
+		options.minFilter = TextureMinFilter.LINEAR;
+
+		this.renderTarget = new GLRenderTargetCube( cubeResolution, cubeResolution, options );
 	}
 
 	/**
@@ -115,9 +118,9 @@ public final class CubeCamera extends Object3D
 	public void updateCubeMap( GLRenderer renderer, Scene scene )
 	{
 		GLRenderTargetCube renderTarget = this.renderTarget;
-		boolean generateMipmaps = renderTarget.isGenerateMipmaps();
+		boolean generateMipmaps = renderTarget.getTexture().isGenerateMipmaps();
 
-		renderTarget.setGenerateMipmaps( false );
+		renderTarget.getTexture().setGenerateMipmaps( false );
 
 		renderTarget.setActiveCubeFace(0);
 		renderer.render( scene, cameraPX, renderTarget );
@@ -134,9 +137,11 @@ public final class CubeCamera extends Object3D
 		renderTarget.setActiveCubeFace(4);
 		renderer.render( scene, cameraPZ, renderTarget );
 
-		renderTarget.setGenerateMipmaps( generateMipmaps );
+		renderTarget.getTexture().setGenerateMipmaps( true );
 
 		renderTarget.setActiveCubeFace(5);
 		renderer.render( scene, cameraNZ, renderTarget );
+
+		renderer.setRenderTarget( null );
 	}
 }

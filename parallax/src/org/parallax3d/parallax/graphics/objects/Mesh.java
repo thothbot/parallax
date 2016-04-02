@@ -18,29 +18,22 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.parallax3d.parallax.Log;
-import org.parallax3d.parallax.graphics.materials.*;
+import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.core.geometry.MorphTarget;
+import org.parallax3d.parallax.graphics.materials.HasSkinning;
+import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.materials.MeshBasicMaterial;
+import org.parallax3d.parallax.graphics.materials.MultiMaterial;
+import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
-import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.graphics.core.AbstractGeometry;
-import org.parallax3d.parallax.graphics.core.Face3;
-import org.parallax3d.parallax.graphics.core.Geometry;
-import org.parallax3d.parallax.graphics.core.GeometryObject;
-import org.parallax3d.parallax.graphics.core.Raycaster;
-import org.parallax3d.parallax.math.*;
-import org.parallax3d.parallax.math.Ray;
-import org.parallax3d.parallax.math.Sphere;
-import org.parallax3d.parallax.math.Vector2;
-
-import org.parallax3d.parallax.math.Color;
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.enums.BeginMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base class for Mesh objects.
@@ -110,11 +103,11 @@ public class Mesh extends GeometryObject
 			this.morphTargetInfluences = new ArrayList<>();
 			this.morphTargetDictionary = new FastMap<>();
 
-			List<Geometry.MorphTarget> morphTargets = ((Geometry)this.getGeometry()).getMorphTargets();
+			List<MorphTarget> morphTargets = ((Geometry)this.getGeometry()).getMorphTargets();
 			for ( int m = 0, ml = ((Geometry)this.getGeometry()).getMorphTargets().size(); m < ml; m ++ ) {
 
 				this.morphTargetInfluences.add( 0.0 );
-				this.morphTargetDictionary.put(morphTargets.get(m).name, m);
+				this.morphTargetDictionary.put(morphTargets.get(m).getName(), m);
 
 			}
 
@@ -271,7 +264,7 @@ public class Mesh extends GeometryObject
 
 				if ( faceMaterial instanceof HasSkinning && ((HasSkinning)faceMaterial).isMorphTargets() ) {
 
-					List<Geometry.MorphTarget> morphTargets = ((Geometry) geometry).getMorphTargets();
+					List<MorphTarget> morphTargets = ((Geometry) geometry).getMorphTargets();
 					List<Double> morphInfluences = this.morphTargetInfluences;
 
 					vA.set( 0, 0, 0 );
@@ -284,7 +277,7 @@ public class Mesh extends GeometryObject
 
 						if ( influence == 0 ) continue;
 
-						List<Vector3> targets = morphTargets.get(t).vertices;
+						List<Vector3> targets = morphTargets.get(t).getVertices();
 
 						vA.add( tempA.sub(targets.get(face.getA()), fvA ), influence );
 						vB.add( tempB.sub(targets.get(face.getB()), fvB ), influence );

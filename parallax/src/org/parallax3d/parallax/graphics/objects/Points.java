@@ -18,21 +18,16 @@
 
 package org.parallax3d.parallax.graphics.objects;
 
-import java.util.List;
-
 import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.graphics.materials.PointsMaterial;
-import org.parallax3d.parallax.math.Ray;
-import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.graphics.materials.Material;
+import org.parallax3d.parallax.graphics.materials.PointsMaterial;
 import org.parallax3d.parallax.math.*;
-import org.parallax3d.parallax.math.Matrix4;
-import org.parallax3d.parallax.math.Color;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Int32Array;
-import org.parallax3d.parallax.graphics.core.AttributeData;
+
+import java.util.List;
 
 @ThreejsObject("THREE.Points")
 public class Points extends GeometryObject
@@ -91,11 +86,11 @@ public class Points extends GeometryObject
 
 			AttributeData index = ((BufferGeometry)geometry).getIndex();
 			FastMap<BufferAttribute> attributes = ((BufferGeometry) geometry).getAttributes();
-			Float32Array positions = attributes.get("position").getArray();
+			Float32Array positions = (Float32Array) attributes.get("position").getArray();
 
 			if ( index != null ) {
 
-				Int32Array indices = index.getArray();
+				Int32Array indices = (Int32Array) index.getArray();
 
 				for ( int i = 0, il = indices.getLength(); i < il; i ++ ) {
 

@@ -134,7 +134,7 @@ public class GLPrograms {
 
     }
 
-    public FastMap<Object> getParameters(final Material material, lights, final AbstractFog fog, final GeometryObject object) {
+    public FastMap<Object> getParameters(final Material material, Object lights, final AbstractFog fog, final GeometryObject object) {
 
         final Shader shaderID = material.getAssociatedShader();
 
@@ -142,7 +142,7 @@ public class GLPrograms {
         // (not to blow over maxLights budget)
 
         final int maxBones = allocateBones( object );
-        final Shader.PRECISION precision = renderer.getPrecision();
+        Shader.PRECISION precision = renderer.getPrecision();
 
         if ( material.getPrecision() != null )
         {
@@ -160,19 +160,19 @@ public class GLPrograms {
 
 			put("shaderID",  shaderID );
 
-			put("precision",  precision );
+//			put("precision",  precision );
 			put("supportsVertexTextures",  capabilities.vertexTextures );
 			put("outputEncoding",  getTextureEncodingFromMap( renderer.getCurrentRenderTarget(), renderer.isGammaOutput()) );
 			put("map",  material instanceof HasMap && ((HasMap)material).getMap() != null );
-			put("mapEncoding",  getTextureEncodingFromMap( material.map, renderer.isGammaInput()) );
-			put("envMap",  material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null );
-			put("envMapMode", material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null && ((HasEnvMap) material).getEnvMap().getMapping() != null );
-			put("envMapEncoding",  getTextureEncodingFromMap( material.envMap, renderer.isGammaInput()) );
-			put("envMapCubeUV",  material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null && ( ( ((HasEnvMap) material).getEnvMap().getMapping() == Texture.MAPPING_MODE.CubeUVReflectionMapping ) || ( ((HasEnvMap) material).getEnvMap().getMapping() == Texture.MAPPING_MODE.CubeUVRefractionMapping ) ) );
-			put("lightMap",  material instanceof HasLightMap && ((HasLightMap) material).getLightMap() != null );
-			put("aoMap",  material instanceof HasAoMap && ((HasAoMap) material).getAoMap() != null );
-			put("emissiveMap",  material instanceof HasEmissiveMap && ((HasEmissiveMap) material).getEmissiveMap() != null );
-			put("emissiveMapEncoding",  getTextureEncodingFromMap( material.emissiveMap, renderer.isGammaInput()) );
+//			put("mapEncoding",  getTextureEncodingFromMap( material.map, renderer.isGammaInput()) );
+//			put("envMap",  material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null );
+//			put("envMapMode", material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null && ((HasEnvMap) material).getEnvMap().getMapping() != null );
+//			put("envMapEncoding",  getTextureEncodingFromMap( material.envMap, renderer.isGammaInput()) );
+//			put("envMapCubeUV",  material instanceof HasEnvMap && ((HasEnvMap) material).getEnvMap() != null && ( ( ((HasEnvMap) material).getEnvMap().getMapping() == Texture.MAPPING_MODE.CubeUVReflectionMapping ) || ( ((HasEnvMap) material).getEnvMap().getMapping() == Texture.MAPPING_MODE.CubeUVRefractionMapping ) ) );
+//			put("lightMap",  material instanceof HasLightMap && ((HasLightMap) material).getLightMap() != null );
+//			put("aoMap",  material instanceof HasAoMap && ((HasAoMap) material).getAoMap() != null );
+//			put("emissiveMap",  material instanceof HasEmissiveMap && ((HasEmissiveMap) material).getEmissiveMap() != null );
+//			put("emissiveMapEncoding",  getTextureEncodingFromMap( material.emissiveMap, renderer.isGammaInput()) );
 			put("bumpMap",  material instanceof HasBumpMap && ((HasBumpMap) material).getBumpMap()  != null );
 			put("normalMap",  material instanceof HasNormalMap && ((HasNormalMap) material).getNormalMap() != null);
 			put("displacementMap", material instanceof HasDisplacementMap && ((HasDisplacementMap) material).getDisplacementMap() != null );
@@ -196,25 +196,25 @@ public class GLPrograms {
 
 			put("skinning", material instanceof HasSkinning && ((HasSkinning) material).isSkinning() );
 			put("maxBones",  maxBones );
-			put("useVertexTexture",  capabilities.floatVertexTextures && object && object.skeleton && object.skeleton.useVertexTexture );
+//			put("useVertexTexture",  capabilities.floatVertexTextures && object && object.skeleton && object.skeleton.useVertexTexture );
 
-			put("morphTargets",  material.morphTargets );
-			put("morphNormals",  material.morphNormals );
-			put("maxMorphTargets",  renderer.maxMorphTargets );
-			put("maxMorphNormals",  renderer.maxMorphNormals );
-
-			put("numDirLights",  lights.directional.length );
-			put("numPointLights",  lights.point.length );
-			put("numSpotLights",  lights.spot.length );
-			put("numHemiLights",  lights.hemi.length );
-
-			put("pointLightShadows",  lights.shadowsPointLight );
-
-			put("shadowMapEnabled",  renderer.shadowMap.enabled && object.receiveShadow && lights.shadows.length > 0 );
-			put("shadowMapType",  renderer.shadowMap.type );
-
-			put("toneMapping",  renderer.toneMapping );
-			put("physicallyCorrectLights",  renderer.physicallyCorrectLights );
+//			put("morphTargets",  material.morphTargets );
+//			put("morphNormals",  material.morphNormals );
+//			put("maxMorphTargets",  renderer.maxMorphTargets );
+//			put("maxMorphNormals",  renderer.maxMorphNormals );
+//
+//			put("numDirLights",  lights.directional.length );
+//			put("numPointLights",  lights.point.length );
+//			put("numSpotLights",  lights.spot.length );
+//			put("numHemiLights",  lights.hemi.length );
+//
+//			put("pointLightShadows",  lights.shadowsPointLight );
+//
+//			put("shadowMapEnabled",  renderer.shadowMap.enabled && object.receiveShadow && lights.shadows.length > 0 );
+//			put("shadowMapType",  renderer.shadowMap.type );
+//
+//			put("toneMapping",  renderer.toneMapping );
+//			put("physicallyCorrectLights",  renderer.physicallyCorrectLights );
 
 			put("premultipliedAlpha", material.isPremultipliedAlpha());
 
@@ -230,40 +230,41 @@ public class GLPrograms {
 
     public String getProgramCode( Material material, FastMap<Object> parameters ) {
 
-        var chunks = [];
+//        var chunks = [];
+//
+//        if ( parameters.shaderID ) {
+//
+//            chunks.push( parameters.shaderID );
+//
+//        } else {
+//
+//            chunks.push( material.fragmentShader );
+//            chunks.push( material.vertexShader );
+//
+//        }
+//
+//        if ( material.defines != undefined ) {
+//
+//            for ( var name in material.defines ) {
+//
+//                chunks.push( name );
+//                chunks.push( material.defines[ name ] );
+//
+//            }
+//
+//        }
+//
+//        for ( int i = 0; i < parameterNames.length; i ++ ) {
+//
+//            var parameterName = parameterNames[ i ];
+//            chunks.push( parameterName );
+//            chunks.push( parameters[ parameterName ] );
+//
+//        }
+//
+//        return chunks.join();
 
-        if ( parameters.shaderID ) {
-
-            chunks.push( parameters.shaderID );
-
-        } else {
-
-            chunks.push( material.fragmentShader );
-            chunks.push( material.vertexShader );
-
-        }
-
-        if ( material.defines != undefined ) {
-
-            for ( var name in material.defines ) {
-
-                chunks.push( name );
-                chunks.push( material.defines[ name ] );
-
-            }
-
-        }
-
-        for ( int i = 0; i < parameterNames.length; i ++ ) {
-
-            var parameterName = parameterNames[ i ];
-            chunks.push( parameterName );
-            chunks.push( parameters[ parameterName ] );
-
-        }
-
-        return chunks.join();
-
+        return null;
     };
 
     public GLProgram acquireProgram( Material material, FastMap<Object> parameters, String code ) {
@@ -274,15 +275,15 @@ public class GLPrograms {
         for ( int p = 0, pl = programs.size(); p < pl; p ++ ) {
 
             GLProgram programInfo = programs.get(p);
-
-            if ( programInfo.getCode() == code ) {
-
-                program = programInfo;
-                ++ program.usedTimes;
-
-                break;
-
-            }
+//
+//            if ( programInfo.getCode() == code ) {
+//
+//                program = programInfo;
+//                ++ program.usedTimes;
+//
+//                break;
+//
+//            }
 
         }
 
@@ -299,17 +300,17 @@ public class GLPrograms {
 
     public void releaseProgram( GLProgram program ) {
 
-        if ( -- program.usedTimes == 0 ) {
-
-            // Remove from unordered set
-            int i = programs.indexOf( program );
-            programs.set(i, programs.get(programs.size() - 1));
-            programs.pop();
-
-            // Free WebGL resources
-            program.destroy();
-
-        }
+//        if ( -- program.usedTimes == 0 ) {
+//
+//            // Remove from unordered set
+//            int i = programs.indexOf( program );
+//            programs.set(i, programs.get(programs.size() - 1));
+//            programs.pop();
+//
+//            // Free WebGL resources
+//            program.destroy();
+//
+//        }
 
     };
 

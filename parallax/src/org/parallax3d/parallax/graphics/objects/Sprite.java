@@ -17,11 +17,11 @@
  */
 package org.parallax3d.parallax.graphics.objects;
 
-import org.parallax3d.parallax.graphics.core.*;
-import org.parallax3d.parallax.graphics.materials.LineBasicMaterial;
+import org.parallax3d.parallax.graphics.core.BufferAttribute;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.core.GeometryObject;
+import org.parallax3d.parallax.graphics.core.Raycaster;
 import org.parallax3d.parallax.graphics.materials.SpriteMaterial;
-import org.parallax3d.parallax.graphics.renderers.GLGeometry;
-import org.parallax3d.parallax.graphics.renderers.GLRenderer;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
@@ -37,48 +37,48 @@ import java.util.List;
 public class Sprite extends GeometryObject {
 
     static final BufferGeometry defaultGeometry = new BufferGeometry();
+
     static {
-        defaultGeometry.setIndex( new BufferAttribute(Uint16Array.create(new int[]{ 0, 1, 2,  0, 2, 3 } ), 1 ) );
-        defaultGeometry.addAttribute( "position", new BufferAttribute( Float32Array.create( new double[]{ - 0.5, - 0.5, 0,   0.5, - 0.5, 0,   0.5, 0.5, 0,   - 0.5, 0.5, 0 } ), 3 ) );
-        defaultGeometry.addAttribute( "uv", new BufferAttribute( Float32Array.create( new double[]{ 0, 0,   1, 0,   1, 1,   0, 1 } ), 2 ) );
+        defaultGeometry.setIndex(new BufferAttribute(Uint16Array.create(new int[]{0, 1, 2, 0, 2, 3}), 1));
+        defaultGeometry.addAttribute("position", new BufferAttribute(Float32Array.create(new double[]{-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0}), 3));
+        defaultGeometry.addAttribute("uv", new BufferAttribute(Float32Array.create(new double[]{0, 0, 1, 0, 1, 1, 0, 1}), 2));
     }
 
     public Sprite() {
         this(new SpriteMaterial());
     }
 
-    public Sprite(SpriteMaterial material)
-    {
+    public Sprite(SpriteMaterial material) {
         super(defaultGeometry, material);
     }
 
     static Vector3 matrixPosition = new Vector3();
-    @Override
-    public void raycast(Raycaster raycaster, List<Raycaster.Intersect> intersects)
-    {
-        matrixPosition.setFromMatrixPosition( this.getMatrixWorld() );
 
-        double distanceSq = raycaster.getRay().distanceSqToPoint( matrixPosition );
+    @Override
+    public void raycast(Raycaster raycaster, List<Raycaster.Intersect> intersects) {
+        matrixPosition.setFromMatrixPosition(this.getMatrixWorld());
+
+        double distanceSq = raycaster.getRay().distanceSqToPoint(matrixPosition);
         double guessSizeSq = this.getScale().getX() * this.getScale().getY();
 
-        if ( distanceSq > guessSizeSq ) {
+        if (distanceSq > guessSizeSq) {
 
             return;
 
         }
 
         Raycaster.Intersect intersect = new Raycaster.Intersect();
-        intersect.distance = Math.sqrt( distanceSq );
+        intersect.distance = Math.sqrt(distanceSq);
         intersect.point = this.getPosition();
 
-        intersects.add( intersect );
+        intersects.add(intersect);
 
     }
 
     @Override
     public Sprite clone() {
 
-        return (Sprite) new Sprite((SpriteMaterial) this.material).copy( this );
+        return (Sprite) new Sprite((SpriteMaterial) this.material).copy(this);
 
     }
 }

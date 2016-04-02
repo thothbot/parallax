@@ -116,20 +116,6 @@ public class Camera extends Object3D implements ViewportResizeListener
 		this.getQuaternion().setFromRotationMatrix(m1);
 	}
 
-	public Camera clone() {
-		return clone(new Camera());
-	}
-
-	public Camera clone ( Camera camera ) {
-
-		super.clone(camera);
-
-		camera.matrixWorldInverse.copy(this.matrixWorldInverse);
-		camera.projectionMatrix.copy(this.projectionMatrix);
-
-		return camera;
-	};
-
 	@Override
 	public void onViewportResize(int newWidth, int newHeight) {
 
@@ -146,5 +132,22 @@ public class Camera extends Object3D implements ViewportResizeListener
 		{
 			Log.error("Exception in Camera.finalize:", throwable);
 		}
+	}
+
+
+	public Camera clone()
+	{
+		return new Camera().copy( this );
+	}
+
+	public Camera copy ( Camera source ) {
+
+		super.copy( source );
+
+		this.matrixWorldInverse.copy( source.matrixWorldInverse );
+		this.projectionMatrix.copy( source.projectionMatrix );
+
+		return this;
+
 	}
 }

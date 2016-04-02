@@ -139,7 +139,7 @@ project(":tests:parallax-tests-gwt") {
 project(":utils:parallax-threejs") {
 
     dependencies {
-        optional project(":parallax")
+        compile project(":parallax")
     }
 
 }

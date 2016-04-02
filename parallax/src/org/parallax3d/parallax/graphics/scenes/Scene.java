@@ -42,7 +42,7 @@ public final class Scene extends Object3D
 
 	private Material overrideMaterial;
 
-	private boolean isAutoUpdate = true;
+	private boolean autoUpdate = true;
 
 	/**
 	 * This default constructor will create new Scene instance.
@@ -84,31 +84,29 @@ public final class Scene extends Object3D
 
 
 	public boolean isAutoUpdate() {
-		return isAutoUpdate;
+		return autoUpdate;
 	}
 
 
 	public void setAutoUpdate(boolean isAutoUpdate) {
-		this.isAutoUpdate = isAutoUpdate;
+		this.autoUpdate = isAutoUpdate;
 	}
+
+    public Scene copy( Scene source, boolean recursive) {
+        super.copy( source, recursive );
+
+        if ( source.fog != null ) this.fog = source.fog.clone();
+        if ( source.overrideMaterial != null ) this.overrideMaterial = source.overrideMaterial.clone();
+
+        this.autoUpdate = source.autoUpdate;
+        this.matrixAutoUpdate = source.matrixAutoUpdate;
+
+        return this;
+    }
 
 	public Scene clone() {
-		return clone(new Scene());
+
+        return new Scene().copy( this, true );
+
 	}
-
-	public Scene clone(Scene object ) {
-
-		super.clone(object);
-
-		if ( this.fog != null )
-			object.fog = this.fog.clone();
-		if ( this.overrideMaterial != null )
-			object.overrideMaterial = this.overrideMaterial.clone();
-
-		object.isAutoUpdate = this.isAutoUpdate;
-		object.matrixAutoUpdate = this.matrixAutoUpdate;
-
-		return object;
-
-	};
 }

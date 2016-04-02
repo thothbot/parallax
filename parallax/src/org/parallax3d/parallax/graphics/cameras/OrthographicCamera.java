@@ -215,25 +215,27 @@ public class OrthographicCamera extends Camera implements HasNearFar
 
 	}
 
+	public OrthographicCamera copy ( OrthographicCamera source ) {
+
+		super.copy( source );
+
+		this.left = source.left;
+		this.right = source.right;
+		this.top = source.top;
+		this.bottom = source.bottom;
+		this.near = source.near;
+		this.far = source.far;
+
+		this.zoom = source.zoom;
+
+		return this;
+
+	}
+
 	public OrthographicCamera clone() {
 
-		OrthographicCamera camera = new OrthographicCamera(10, 10, 10, 10);
+		return new OrthographicCamera( 0, 0, 0, 0 ).copy( this );
 
-		super.clone(camera);
-
-		camera.zoom = this.zoom;
-
-		camera.left = this.left;
-		camera.right = this.right;
-		camera.top = this.top;
-		camera.bottom = this.bottom;
-
-		camera.near = this.near;
-		camera.far = this.far;
-
-		camera.projectionMatrix.copy( this.projectionMatrix );
-
-		return camera;
 	}
 
 	public String toString()

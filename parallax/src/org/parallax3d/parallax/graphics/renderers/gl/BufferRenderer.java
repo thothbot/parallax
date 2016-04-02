@@ -25,7 +25,7 @@ public abstract class BufferRenderer {
 
     BeginMode mode;
 
-    GL20 _gl;
+    protected  GL20 _gl;
     GLRendererInfo.WebGLRenderInfoRender _infoRender;
 
     public BufferRenderer(GL20 gl, GLRendererInfo info) {

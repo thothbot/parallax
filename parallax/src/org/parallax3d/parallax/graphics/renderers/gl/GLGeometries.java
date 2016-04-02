@@ -18,7 +18,10 @@
 
 package org.parallax3d.parallax.graphics.renderers.gl;
 
-import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.core.AbstractGeometry;
+import org.parallax3d.parallax.graphics.core.BufferGeometry;
+import org.parallax3d.parallax.graphics.core.Geometry;
+import org.parallax3d.parallax.graphics.core.GeometryObject;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.gl.GL20;
@@ -73,97 +76,97 @@ public class GLGeometries {
 
     }
 
-    public void onGeometryDispose( event ) {
+//    public void onGeometryDispose( event ) {
+//
+//        var geometry = event.target;
+//        var buffergeometry = geometries[ geometry.id ];
+//
+//        if ( buffergeometry.index != null ) {
+//
+//            deleteAttribute( buffergeometry.index );
+//
+//        }
+//
+//        deleteAttributes( buffergeometry.attributes );
+//
+//        geometry.removeEventListener( "dispose", onGeometryDispose );
+//
+//        delete geometries[ geometry.id ];
+//
+//        // TODO
+//
+//        var property = properties.get( geometry );
+//
+//        if ( property.wireframe ) {
+//
+//            deleteAttribute( property.wireframe );
+//
+//        }
+//
+//        properties.delete( geometry );
+//
+//        var bufferproperty = properties.get( buffergeometry );
+//
+//        if ( bufferproperty.wireframe ) {
+//
+//            deleteAttribute( bufferproperty.wireframe );
+//
+//        }
+//
+//        properties.delete( buffergeometry );
+//
+//        //
+//
+//        info.memory.geometries --;
+//
+//    }
 
-        var geometry = event.target;
-        var buffergeometry = geometries[ geometry.id ];
-
-        if ( buffergeometry.index != null ) {
-
-            deleteAttribute( buffergeometry.index );
-
-        }
-
-        deleteAttributes( buffergeometry.attributes );
-
-        geometry.removeEventListener( "dispose", onGeometryDispose );
-
-        delete geometries[ geometry.id ];
-
-        // TODO
-
-        var property = properties.get( geometry );
-
-        if ( property.wireframe ) {
-
-            deleteAttribute( property.wireframe );
-
-        }
-
-        properties.delete( geometry );
-
-        var bufferproperty = properties.get( buffergeometry );
-
-        if ( bufferproperty.wireframe ) {
-
-            deleteAttribute( bufferproperty.wireframe );
-
-        }
-
-        properties.delete( buffergeometry );
-
-        //
-
-        info.memory.geometries --;
-
-    }
-
-    public void getAttributeBuffer( attribute ) {
-
-        if ( attribute instanceof InterleavedBufferAttribute) {
-
-            return properties.get( attribute.data ).__webglBuffer;
-
-        }
-
-        return properties.get( attribute ).__webglBuffer;
-
-    }
-
-    public void deleteAttribute( attribute ) {
-
-        var buffer = getAttributeBuffer( attribute );
-
-        if ( buffer !== undefined ) {
-
-            gl.deleteBuffer( buffer );
-            removeAttributeBuffer( attribute );
-
-        }
-
-    }
-
-    public void deleteAttributes( attributes ) {
-
-        for ( var name in attributes ) {
-
-            deleteAttribute( attributes[ name ] );
-
-        }
-
-    }
-
-    public void removeAttributeBuffer( attribute ) {
-
-        if ( attribute instanceof InterleavedBufferAttribute ) {
-
-            properties.delete( attribute.data );
-
-        } else {
-
-            properties.delete( attribute );
-
-        }
-
-    }
+//    public void getAttributeBuffer( attribute ) {
+//
+//        if ( attribute instanceof InterleavedBufferAttribute) {
+//
+//            return properties.get( attribute.data ).__webglBuffer;
+//
+//        }
+//
+//        return properties.get( attribute ).__webglBuffer;
+//
+//    }
+//
+//    public void deleteAttribute( attribute ) {
+//
+//        var buffer = getAttributeBuffer( attribute );
+//
+//        if ( buffer !== undefined ) {
+//
+//            gl.deleteBuffer( buffer );
+//            removeAttributeBuffer( attribute );
+//
+//        }
+//
+//    }
+//
+//    public void deleteAttributes( attributes ) {
+//
+//        for ( var name in attributes ) {
+//
+//            deleteAttribute( attributes[ name ] );
+//
+//        }
+//
+//    }
+//
+//    public void removeAttributeBuffer( attribute ) {
+//
+//        if ( attribute instanceof InterleavedBufferAttribute ) {
+//
+//            properties.delete( attribute.data );
+//
+//        } else {
+//
+//            properties.delete( attribute );
+//
+//        }
+//
+//    }
 }

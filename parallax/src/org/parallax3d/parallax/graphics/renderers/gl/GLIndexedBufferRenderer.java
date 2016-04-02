@@ -17,7 +17,6 @@
  */
 package org.parallax3d.parallax.graphics.renderers.gl;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.graphics.core.AttributeData;
 import org.parallax3d.parallax.graphics.core.InstancedBufferGeometry;
 import org.parallax3d.parallax.graphics.renderers.GLRendererInfo;
@@ -39,7 +38,7 @@ public class GLIndexedBufferRenderer extends BufferRenderer {
 
     public void setIndex( AttributeData index ) {
 
-        if ( index.getArray() instanceof Uint32Array && GLExtensions.check( gl, GLES20Ext.List.OES_element_index_uint ) ) {
+        if ( index.getArray() instanceof Uint32Array && GLExtensions.check( this._gl, GLES20Ext.List.OES_element_index_uint ) ) {
 
             type = DataType.UNSIGNED_INT;
             size = 4;
@@ -65,19 +64,19 @@ public class GLIndexedBufferRenderer extends BufferRenderer {
 
     public void renderInstances( InstancedBufferGeometry geometry, int start, int count)
     {
-        var extension = extensions.get( 'ANGLE_instanced_arrays' );
-
-        if ( extension == null ) {
-
-            Log.error( "GLBufferRenderer: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays." );
-            return;
-
-        }
-
-        extension.drawElementsInstancedANGLE( mode, count, type, start * size, geometry.getMaxInstancedCount());
-
-        _infoRender.calls ++;
-        _infoRender.vertices += count * geometry.getMaxInstancedCount();
-        if ( mode == BeginMode.TRIANGLES ) _infoRender.faces += geometry.getMaxInstancedCount() * count / 3;
+//        var extension = extensions.get( 'ANGLE_instanced_arrays' );
+//
+//        if ( extension == null ) {
+//
+//            Log.error( "GLBufferRenderer: using InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays." );
+//            return;
+//
+//        }
+//
+//        extension.drawElementsInstancedANGLE( mode, count, type, start * size, geometry.getMaxInstancedCount());
+//
+//        _infoRender.calls ++;
+//        _infoRender.vertices += count * geometry.getMaxInstancedCount();
+//        if ( mode == BeginMode.TRIANGLES ) _infoRender.faces += geometry.getMaxInstancedCount() * count / 3;
     }
 }

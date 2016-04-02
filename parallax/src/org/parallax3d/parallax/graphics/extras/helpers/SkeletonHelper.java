@@ -74,8 +74,6 @@ public class SkeletonHelper extends LineSegments {
 
         }
 
-        geometry.setDynamic(true);
-
         return geometry;
     }
 

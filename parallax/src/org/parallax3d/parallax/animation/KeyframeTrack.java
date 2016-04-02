@@ -27,6 +27,8 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 import java.util.List;
 
+import static org.parallax3d.parallax.math.Interpolant.Interpolation.InterpolateLinear;
+
 /**
  *
  * A timed sequence of keyframes for a specific property.
@@ -40,7 +42,7 @@ import java.util.List;
 @ThreejsObject("KeyframeTrack")
 public class KeyframeTrack {
 
-    public static final Interpolant.Interpolation DefaultInterpolation = Interpolant.Interpolation.InterpolateLinear;
+    public static final Interpolant.Interpolation DefaultInterpolation = InterpolateLinear;
     
     String name;
     Float32Array times;
@@ -69,99 +71,102 @@ public class KeyframeTrack {
 
     public DiscreteInterpolant InterpolantFactoryMethodDiscrete( double[] result ) {
 
-        return new DiscreteInterpolant(
-                this.times, this.values, this.getValueSize(), result );
+//        return new DiscreteInterpolant(
+//                this.times, this.values, this.getValueSize(), result );
+        return null;
 
     }
 
     public LinearInterpolant InterpolantFactoryMethodLinear( double[] result ) {
 
-        return new LinearInterpolant(
-                this.times, this.values, this.getValueSize(), result );
+//        return new LinearInterpolant(
+//                this.times, this.values, this.getValueSize(), result );
 
+        return null;
     }
 
     public CubicInterpolant InterpolantFactoryMethodSmooth( double[] result ) {
 
-        return new CubicInterpolant(
-                this.times, this.values, this.getValueSize(), result );
+//        return new CubicInterpolant(
+//                this.times, this.values, this.getValueSize(), result );
 
+        return null;
     }
 
-    setInterpolation( interpolation ) {
-
-        var factoryMethod = undefined;
-
-        switch ( interpolation ) {
-
-            case InterpolateDiscrete:
-
-                factoryMethod = this.InterpolantFactoryMethodDiscrete;
-
-                break;
-
-            case InterpolateLinear:
-
-                factoryMethod = this.InterpolantFactoryMethodLinear;
-
-                break;
-
-            case InterpolateSmooth:
-
-                factoryMethod = this.InterpolantFactoryMethodSmooth;
-
-                break;
-
-        }
-
-        if ( factoryMethod === undefined ) {
-
-            var message = "unsupported interpolation for " +
-                    this.ValueTypeName + " keyframe track named " + this.name;
-
-            if ( this.createInterpolant === undefined ) {
-
-                // fall back to default, unless the default itself is messed up
-                if ( interpolation !== this.DefaultInterpolation ) {
-
-                    this.setInterpolation( this.DefaultInterpolation );
-
-                } else {
-
-                    throw new Error( message ); // fatal, in this case
-
-                }
-
-            }
-
-            console.warn( message );
-            return;
-
-        }
-
-        this.createInterpolant = factoryMethod;
-
-    }
-
-    getInterpolation() {
-
-        switch ( this.createInterpolant ) {
-
-            case this.InterpolantFactoryMethodDiscrete:
-
-                return InterpolateDiscrete;
-
-            case this.InterpolantFactoryMethodLinear:
-
-                return InterpolateLinear;
-
-            case this.InterpolantFactoryMethodSmooth:
-
-                return InterpolateSmooth;
-
-        }
-
-    }
+//    setInterpolation( interpolation ) {
+//
+//        var factoryMethod = undefined;
+//
+//        switch ( interpolation ) {
+//
+//            case InterpolateDiscrete:
+//
+//                factoryMethod = this.InterpolantFactoryMethodDiscrete;
+//
+//                break;
+//
+//            case InterpolateLinear:
+//
+//                factoryMethod = this.InterpolantFactoryMethodLinear;
+//
+//                break;
+//
+//            case InterpolateSmooth:
+//
+//                factoryMethod = this.InterpolantFactoryMethodSmooth;
+//
+//                break;
+//
+//        }
+//
+//        if ( factoryMethod === undefined ) {
+//
+//            var message = "unsupported interpolation for " +
+//                    this.ValueTypeName + " keyframe track named " + this.name;
+//
+//            if ( this.createInterpolant === undefined ) {
+//
+//                // fall back to default, unless the default itself is messed up
+//                if ( interpolation !== this.DefaultInterpolation ) {
+//
+//                    this.setInterpolation( this.DefaultInterpolation );
+//
+//                } else {
+//
+//                    throw new Error( message ); // fatal, in this case
+//
+//                }
+//
+//            }
+//
+//            console.warn( message );
+//            return;
+//
+//        }
+//
+//        this.createInterpolant = factoryMethod;
+//
+//    }
+//
+//    getInterpolation() {
+//
+//        switch ( this.createInterpolant ) {
+//
+//            case this.InterpolantFactoryMethodDiscrete:
+//
+//                return InterpolateDiscrete;
+//
+//            case this.InterpolantFactoryMethodLinear:
+//
+//                return InterpolateLinear;
+//
+//            case this.InterpolantFactoryMethodSmooth:
+//
+//                return InterpolateSmooth;
+//
+//        }
+//
+//    }
 
     public int getValueSize() {
 
@@ -299,52 +304,52 @@ public class KeyframeTrack {
 
             // remove adjacent keyframes scheduled at the same time
 
-            if ( time != timeNext && ( i != 1 || time != time[ 0 ] ) ) {
-
-                // remove unnecessary keyframes same as their neighbors
-                int offset = i * stride,
-                        offsetP = offset - stride,
-                        offsetN = offset + stride;
-
-                for ( int j = 0; j != stride; ++ j ) {
-
-                    Object value = values.get( offset + j );
-
-                    if ( value != values.get(offsetP + j) ||
-                            value != values.get(offsetN + j)) {
-
-                        keep = true;
-                        break;
-
-                    }
-
-                }
-
-            }
+//            if ( time != timeNext && ( i != 1 || time != time[ 0 ] ) ) {
+//
+//                // remove unnecessary keyframes same as their neighbors
+//                int offset = i * stride,
+//                        offsetP = offset - stride,
+//                        offsetN = offset + stride;
+//
+//                for ( int j = 0; j != stride; ++ j ) {
+//
+//                    Object value = values.get( offset + j );
+//
+//                    if ( value != values.get(offsetP + j) ||
+//                            value != values.get(offsetN + j)) {
+//
+//                        keep = true;
+//                        break;
+//
+//                    }
+//
+//                }
+//
+//            }
 
             // in-place compaction
 
-            if ( keep ) {
-
-                if ( i != writeIndex ) {
-
-                    times[ writeIndex ] = times[ i ];
-
-                    int readOffset = i * stride,
-                            writeOffset = writeIndex * stride;
-
-                    for ( int j = 0; j != stride; ++ j ) {
-
-                        values[ writeOffset + j ] = values[ readOffset + j ];
-
-                    }
-
-
-                }
-
-                ++ writeIndex;
-
-            }
+//            if ( keep ) {
+//
+//                if ( i != writeIndex ) {
+//
+//                    times[ writeIndex ] = times[ i ];
+//
+//                    int readOffset = i * stride,
+//                            writeOffset = writeIndex * stride;
+//
+//                    for ( int j = 0; j != stride; ++ j ) {
+//
+//                        values[ writeOffset + j ] = values[ readOffset + j ];
+//
+//                    }
+//
+//
+//                }
+//
+//                ++ writeIndex;
+//
+//            }
 
         }
 
@@ -357,5 +362,9 @@ public class KeyframeTrack {
 
         return this;
 
+    }
+
+    public Interpolant createInterpolant(Object o) {
+        return null;
     }
 }

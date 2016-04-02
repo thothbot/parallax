@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static jdk.nashorn.internal.objects.Global.undefined;
+import static org.parallax3d.parallax.graphics.renderers.gl.GLExtensions.extensions;
 
 @ThreejsObject("WebGLProgram")
 public class GLProgram {
@@ -76,8 +77,8 @@ public class GLProgram {
 
         GL20 gl = renderer.gl();
 
-        var extensions = material.extensions;
-        FastMap<Boolean> defines = material.defines;
+//        var extensions = material.extensions;
+//        FastMap<Boolean> defines = material.defines;
 
         String vertexShader = material.getShader().getVertexSource();
         String fragmentShader = material.getShader().getFragmentSource();
@@ -153,10 +154,10 @@ public class GLProgram {
         double gammaFactorDefine = ( renderer.getGammaFactor() > 0 ) ? renderer.getGammaFactor() : 1.0;
 
         //
-
-        var customExtensions = generateExtensions( extensions, parameters, renderer.extensions );
-
-        var customDefines = generateDefines( defines );
+//
+//        var customExtensions = generateExtensions( extensions, parameters, renderer.extensions );
+//
+//        var customDefines = generateDefines( defines );
 
         //
 
@@ -176,9 +177,9 @@ public class GLProgram {
                 "precision " + parameters.get( "precision" ) + " float;",
                 "precision " + parameters.get( "precision" ) + " int;",
                 
-                "#define SHADER_NAME " + material.__webglShader.name,
-                
-                customDefines,
+//                "#define SHADER_NAME " + material.__webglShader.name,
+//
+//                customDefines,
                 
                 (Boolean)parameters.get( "supportsVertexTextures" ) ? "#define VERTEX_TEXTURES" : "",
                 
@@ -207,7 +208,7 @@ public class GLProgram {
                 (Boolean)parameters.get( "useVertexTexture" ) ? "#define BONE_TEXTURE" : "",
 
                 (Boolean)parameters.get( "morphTargets" ) ? "#define USE_MORPHTARGETS" : "",
-                (Boolean)parameters.get( "morphNormals" ) && parameters.get( "flatShading" ) == false ? "#define USE_MORPHNORMALS" : "",
+                (Boolean)parameters.get( "morphNormals" ) && !(Boolean)parameters.get( "flatShading" ) ? "#define USE_MORPHNORMALS" : "",
                 (Boolean)parameters.get( "doubleSided" ) ? "#define DOUBLE_SIDED" : "",
                 (Boolean)parameters.get( "flipSided" ) ? "#define FLIP_SIDED" : "",
 
@@ -218,7 +219,7 @@ public class GLProgram {
                 (Boolean)parameters.get( "sizeAttenuation" ) ? "#define USE_SIZEATTENUATION" : "",
 
                 (Boolean)parameters.get( "logarithmicDepthBuffer" ) ? "#define USE_LOGDEPTHBUF" : "",
-                (Boolean)parameters.get( "logarithmicDepthBuffer" ) && renderer.extensions.get( "EXT_frag_depth" ) ? "#define USE_LOGDEPTHBUF_EXT" : "",
+//                (Boolean)parameters.get( "logarithmicDepthBuffer" ) && renderer.extensions.get( "EXT_frag_depth" ) ? "#define USE_LOGDEPTHBUF_EXT" : "",
                 
                 
                 "uniform mat4 modelMatrix;",
@@ -279,14 +280,14 @@ public class GLProgram {
 
             List<String> prefixFragmentArray = Arrays.asList(
 
-                customExtensions,
+//                customExtensions,
 
                 "precision " + parameters.get( "precision" ) + " float;",
                 "precision " + parameters.get( "precision" ) + " int;",
                 
-                "#define SHADER_NAME " + material.__webglShader.name,
+//                "#define SHADER_NAME " + material.__webglShader.name,
                 
-                customDefines,
+//                customDefines,
 
                 (Boolean)parameters.get( "alphaTest" ) ? "#define ALPHATEST " + parameters.get( "alphaTest" ) : "",
                 
@@ -325,18 +326,18 @@ public class GLProgram {
                 (Boolean)parameters.get( "physicallyCorrectLights" ) ? "#define PHYSICALLY_CORRECT_LIGHTS" : "",
 
                 (Boolean)parameters.get( "logarithmicDepthBuffer" ) ? "#define USE_LOGDEPTHBUF" : "",
-                parameters.get( "logarithmicDepthBuffer" ) && renderer.extensions.get( "EXT_frag_depth" ) ? "#define USE_LOGDEPTHBUF_EXT" : "",
-                
-                parameters.get( "envMap" ) && renderer.extensions.get( "EXT_shader_texture_lod" ) ? "#define TEXTURE_LOD_EXT" : "",
+//                parameters.get( "logarithmicDepthBuffer" ) && renderer.extensions.get( "EXT_frag_depth" ) ? "#define USE_LOGDEPTHBUF_EXT" : "",
+//
+//                parameters.get( "envMap" ) && renderer.extensions.get( "EXT_shader_texture_lod" ) ? "#define TEXTURE_LOD_EXT" : "",
                 
                 "uniform mat4 viewMatrix;",
                 "uniform vec3 cameraPosition;",
                 
                 ( parameters.get( "toneMapping" ) != Texture.TONE_MAPPING_MODE.NoToneMapping ) ? "#define TONE_MAPPING" : "",
-                ( parameters.get( "toneMapping" ) != Texture.TONE_MAPPING_MODE.NoToneMapping ) ? ShaderChunk[ "tonemapping_pars_fragment" ] : "",  // this code is required here because it is used by the toneMapping() function defined below
+//                ( parameters.get( "toneMapping" ) != Texture.TONE_MAPPING_MODE.NoToneMapping ) ? ShaderChunk[ "tonemapping_pars_fragment" ] : "",  // this code is required here because it is used by the toneMapping() function defined below
                 ( parameters.get( "toneMapping" ) != Texture.TONE_MAPPING_MODE.NoToneMapping ) ? getToneMappingFunction( "toneMapping", (Texture.TONE_MAPPING_MODE) parameters.get( "toneMapping" ) ) : "",
                 
-                ( parameters.get( "outputEncoding" ) != null || parameters.get( "mapEncoding" ) != null || parameters.get( "envMapEncoding" )  != null || parameters.get( "emissiveMapEncoding" ) != null )  ? ShaderChunk[ "encodings_pars_fragment" ] : "", // this code is required here because it is used by the various encoding/decoding function defined below
+//                ( parameters.get( "outputEncoding" ) != null || parameters.get( "mapEncoding" ) != null || parameters.get( "envMapEncoding" )  != null || parameters.get( "emissiveMapEncoding" ) != null )  ? ShaderChunk[ "encodings_pars_fragment" ] : "", // this code is required here because it is used by the various encoding/decoding function defined below
                 parameters.get( "mapEncoding" ) != null ? getTexelDecodingFunction( "mapTexelToLinear", (Texture.ENCODINGS) parameters.get( "mapEncoding" ) ) : "",
                 parameters.get( "envMapEncoding" ) != null ? getTexelDecodingFunction( "envMapTexelToLinear", (Texture.ENCODINGS)parameters.get( "envMapEncoding" ) ) : "",
                 parameters.get( "emissiveMapEncoding" ) != null ? getTexelDecodingFunction( "emissiveMapTexelToLinear", (Texture.ENCODINGS)parameters.get( "emissiveMapEncoding" ) ) : "",
@@ -351,10 +352,10 @@ public class GLProgram {
 
         }
 
-        vertexShader = parseIncludes( vertexShader, parameters );
+        vertexShader = parseIncludes( vertexShader );
         vertexShader = replaceLightNums( vertexShader, parameters );
 
-        fragmentShader = parseIncludes( fragmentShader, parameters );
+        fragmentShader = parseIncludes( fragmentShader );
         fragmentShader = replaceLightNums( fragmentShader, parameters );
 
         if ( !(material instanceof ShaderMaterial)) {
@@ -378,16 +379,16 @@ public class GLProgram {
 
         // Force a particular attribute to index 0.
 
-        if ( material.index0AttributeName != undefined ) {
-
-            gl.glBindAttribLocation( program, 0, material.index0AttributeName );
-
-        } else if ( parameters.get( "morphTargets" ) == true ) {
-
-            // programs with morphTargets displace position out of attribute 0
-            gl.glBindAttribLocation( program, 0, "position" );
-
-        }
+//        if ( material.index0AttributeName != undefined ) {
+//
+//            gl.glBindAttribLocation( program, 0, material.index0AttributeName );
+//
+//        } else if ( parameters.get( "morphTargets" ) == true ) {
+//
+//            // programs with morphTargets displace position out of attribute 0
+//            gl.glBindAttribLocation( program, 0, "position" );
+//
+//        }
 
         gl.glLinkProgram( program );
 
@@ -448,53 +449,53 @@ public class GLProgram {
 
         // set up caching for uniform locations
 
-        var cachedUniforms;
-
-        this.getUniforms = function() {
-
-            if ( cachedUniforms == undefined ) {
-
-                cachedUniforms = fetchUniformLocations( gl, program );
-
-            }
-
-            return cachedUniforms;
-
-        };
-
-        // set up caching for attribute locations
-
-        var cachedAttributes;
-
-        this.getAttributes = function() {
-
-            if ( cachedAttributes == undefined ) {
-
-                cachedAttributes = fetchAttributeLocations( gl, program );
-
-            }
-
-            return cachedAttributes;
-
-        };
-
-        // free resource
-
-        this.destroy = function() {
-
-            gl.deleteProgram( program );
-            this.program = undefined;
-
-        };
-
-        //
-
-        this.id = programIdCount ++;
-        this.code = code;
-        this.usedTimes = 1;
-        this.program = program;
-        this.vertexShader = glVertexShader;
-        this.fragmentShader = glFragmentShader;
+//        var cachedUniforms;
+//
+//        this.getUniforms = function() {
+//
+//            if ( cachedUniforms == undefined ) {
+//
+//                cachedUniforms = fetchUniformLocations( gl, program );
+//
+//            }
+//
+//            return cachedUniforms;
+//
+//        };
+//
+//        // set up caching for attribute locations
+//
+//        var cachedAttributes;
+//
+//        this.getAttributes = function() {
+//
+//            if ( cachedAttributes == undefined ) {
+//
+//                cachedAttributes = fetchAttributeLocations( gl, program );
+//
+//            }
+//
+//            return cachedAttributes;
+//
+//        };
+//
+//        // free resource
+//
+//        this.destroy = function() {
+//
+//            gl.deleteProgram( program );
+//            this.program = undefined;
+//
+//        };
+//
+//        //
+//
+//        this.id = programIdCount ++;
+//        this.code = code;
+//        this.usedTimes = 1;
+//        this.program = program;
+//        this.vertexShader = glVertexShader;
+//        this.fragmentShader = glFragmentShader;
 
     }
 
@@ -584,75 +585,75 @@ public class GLProgram {
 
         for ( int i = 0; i < n; i ++ ) {
 
-            String info = gl.glGetActiveUniform( program, i );
-            String name = info.name;
-            int location = gl.glGetUniformLocation( program, name );
+//            String info = gl.glGetActiveUniform( program, i );
+//            String name = info.name;
+//            int location = gl.glGetUniformLocation( program, name );
 
             //console.log("WebGLProgram: ACTIVE UNIFORM:", name);
 
-            var matches = structRe.exec( name );
-            if ( matches ) {
-
-                var structName = matches[ 1 ];
-                var structProperty = matches[ 2 ];
-
-                var uniformsStruct = uniforms[ structName ];
-
-                if ( ! uniformsStruct ) {
-
-                    uniformsStruct = uniforms[ structName ] = {};
-
-                }
-
-                uniformsStruct[ structProperty ] = location;
-
-                continue;
-
-            }
-
-            matches = arrayStructRe.exec( name );
-
-            if ( matches ) {
-
-                var arrayName = matches[ 1 ];
-                var arrayIndex = matches[ 2 ];
-                var arrayProperty = matches[ 3 ];
-
-                var uniformsArray = uniforms[ arrayName ];
-
-                if ( ! uniformsArray ) {
-
-                    uniformsArray = uniforms[ arrayName ] = [];
-
-                }
-
-                var uniformsArrayIndex = uniformsArray[ arrayIndex ];
-
-                if ( ! uniformsArrayIndex ) {
-
-                    uniformsArrayIndex = uniformsArray[ arrayIndex ] = {};
-
-                }
-
-                uniformsArrayIndex[ arrayProperty ] = location;
-
-                continue;
-
-            }
-
-            matches = arrayRe.exec( name );
-
-            if ( matches ) {
-
-                var arrayName = matches[ 1 ];
-
-                uniforms[ arrayName ] = location;
-
-                continue;
-
-            }
-
-            uniforms[ name ] = location;
+//            var matches = structRe.exec( name );
+//            if ( matches ) {
+//
+//                var structName = matches[ 1 ];
+//                var structProperty = matches[ 2 ];
+//
+//                var uniformsStruct = uniforms[ structName ];
+//
+//                if ( ! uniformsStruct ) {
+//
+//                    uniformsStruct = uniforms[ structName ] = {};
+//
+//                }
+//
+//                uniformsStruct[ structProperty ] = location;
+//
+//                continue;
+//
+//            }
+//
+//            matches = arrayStructRe.exec( name );
+//
+//            if ( matches ) {
+//
+//                var arrayName = matches[ 1 ];
+//                var arrayIndex = matches[ 2 ];
+//                var arrayProperty = matches[ 3 ];
+//
+//                var uniformsArray = uniforms[ arrayName ];
+//
+//                if ( ! uniformsArray ) {
+//
+//                    uniformsArray = uniforms[ arrayName ] = [];
+//
+//                }
+//
+//                var uniformsArrayIndex = uniformsArray[ arrayIndex ];
+//
+//                if ( ! uniformsArrayIndex ) {
+//
+//                    uniformsArrayIndex = uniformsArray[ arrayIndex ] = {};
+//
+//                }
+//
+//                uniformsArrayIndex[ arrayProperty ] = location;
+//
+//                continue;
+//
+//            }
+//
+//            matches = arrayRe.exec( name );
+//
+//            if ( matches ) {
+//
+//                var arrayName = matches[ 1 ];
+//
+//                uniforms[ arrayName ] = location;
+//
+//                continue;
+//
+//            }
+//
+//            uniforms[ name ] = location;
 
         }
 
@@ -668,12 +669,12 @@ public class GLProgram {
 
         for ( int i = 0; i < n; i ++ ) {
 
-            String info = gl.glGetActiveAttrib( program, i );
-            String name = info.name;
-
-            // console.log("WebGLProgram: ACTIVE VERTEX ATTRIBUTE:", name, i );
-
-            attributes.put(  name , gl.glGetAttribLocation( program, name ) );
+//            String info = gl.glGetActiveAttrib( program, i );
+//            String name = info.name;
+//
+//            // console.log("WebGLProgram: ACTIVE VERTEX ATTRIBUTE:", name, i );
+//
+//            attributes.put(  name , gl.glGetAttribLocation( program, name ) );
 
         }
 
@@ -693,46 +694,48 @@ public class GLProgram {
 
     private String parseIncludes( String string ) {
 
-        var pattern = /#include +<([\w\d.]+)>/g;
+//        var pattern = /#include +<([\w\d.]+)>/g;
+//
+//        function replace( match, include ) {
+//
+//            var replace = ShaderChunk[ include ];
+//
+//            if ( replace == undefined ) {
+//
+//                throw new Error( "Can not resolve #include <" + include + ">" );
+//
+//            }
+//
+//            return parseIncludes( replace );
+//
+//        }
+//
+//        return string.replace( pattern, replace );
 
-        function replace( match, include ) {
-
-            var replace = ShaderChunk[ include ];
-
-            if ( replace == undefined ) {
-
-                throw new Error( "Can not resolve #include <" + include + ">" );
-
-            }
-
-            return parseIncludes( replace );
-
-        }
-
-        return string.replace( pattern, replace );
-
+        return null;
     }
 
     private String unrollLoops( String string ) {
 
-        var pattern = /for \( int i \= (\d+)\; i < (\d+)\; i \+\+ \) \{([\s\S]+?)(?=\})\}/g;
+//        var pattern = /for \( int i \= (\d+)\; i < (\d+)\; i \+\+ \) \{([\s\S]+?)(?=\})\}/g;
+//
+//        function replace( match, start, end, snippet ) {
+//
+//            var unroll = "";
+//
+//            for ( var i = parseInt( start ); i < parseInt( end ); i ++ ) {
+//
+//                unroll += snippet.replace( /\[ i \]/g, "[ " + i + " ]" );
+//
+//            }
+//
+//            return unroll;
+//
+//        }
+//
+//        return string.replace( pattern, replace );
 
-        function replace( match, start, end, snippet ) {
-
-            var unroll = "";
-
-            for ( var i = parseInt( start ); i < parseInt( end ); i ++ ) {
-
-                unroll += snippet.replace( /\[ i \]/g, "[ " + i + " ]" );
-
-            }
-
-            return unroll;
-
-        }
-
-        return string.replace( pattern, replace );
-
+        return null;
     }
 
 }

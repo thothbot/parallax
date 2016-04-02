@@ -29,9 +29,9 @@ public abstract class AbstractGeometry extends AbstractPropertyObject  implement
 {
 	static int Counter = 0;
 
-	int id = 0;
+	protected int id = 0;
 
-	String name = "";
+	protected String name = "";
 
 	// Bounding box.		
 	protected Box3 boundingBox = null;
@@ -47,6 +47,8 @@ public abstract class AbstractGeometry extends AbstractPropertyObject  implement
 	protected boolean colorsNeedUpdate = false;
 	protected boolean lineDistancesNeedUpdate = false;
 	protected boolean groupsNeedUpdate = false;
+
+	public BufferGeometry _bufferGeometry;
 
 	public AbstractGeometry()
 	{

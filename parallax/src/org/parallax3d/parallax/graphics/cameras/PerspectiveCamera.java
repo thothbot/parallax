@@ -337,23 +337,25 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 
 	}
 
+	public PerspectiveCamera copy( PerspectiveCamera source ) {
+
+		super.copy( source );
+
+		this.focalLength = source.focalLength;
+		this.zoom = source.zoom;
+
+		this.fov = source.fov;
+		this.aspect = source.aspect;
+		this.near = source.near;
+		this.far = source.far;
+
+		return this;
+
+	}
+
 	public PerspectiveCamera clone () {
 
-		PerspectiveCamera camera = new PerspectiveCamera();
-
-		super.clone(camera);
-
-		camera.focalLength = this.focalLength;
-		camera.zoom = this.zoom;
-
-		camera.fov = this.fov;
-		camera.aspect = this.aspect;
-		camera.near = this.near;
-		camera.far = this.far;
-
-		camera.projectionMatrix.copy( this.projectionMatrix );
-
-		return camera;
+		return new PerspectiveCamera().copy( this );
 
 	}
 }

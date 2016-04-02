@@ -18,7 +18,6 @@
 package org.parallax3d.parallax.math.interpolants;
 
 import org.parallax3d.parallax.math.Interpolant;
-import org.parallax3d.parallax.math.Quaternion;
 import org.parallax3d.parallax.system.ThreejsObject;
 
 /**
@@ -46,8 +45,8 @@ public class QuaternionLinearInterpolant extends Interpolant {
 
         for ( int end = offset + stride; offset != end; offset += 4 ) {
 
-            Quaternion.slerpFlat( result, 0,
-                    values, offset - stride, values, offset, alpha );
+//            Quaternion.slerpFlat( result, 0,
+//                    values, offset - stride, values, offset, alpha );
 
         }
 

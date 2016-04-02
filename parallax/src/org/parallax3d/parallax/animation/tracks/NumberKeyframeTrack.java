@@ -19,6 +19,9 @@ package org.parallax3d.parallax.animation.tracks;
 
 import org.parallax3d.parallax.animation.KeyframeTrack;
 import org.parallax3d.parallax.system.ThreejsObject;
+import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
+import java.util.List;
 
 /**
  *
@@ -30,4 +33,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
  */
 @ThreejsObject("THREE.NumberKeyframeTrack")
 public class NumberKeyframeTrack extends KeyframeTrack {
+    public NumberKeyframeTrack(String name, Float32Array times, List<Object> values) {
+        super(name, times, values);
+    }
 }

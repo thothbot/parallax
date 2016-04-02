@@ -42,4 +42,8 @@ public interface HasEmissiveColor
 	 */
 	<T extends Material> T setEmissive(Color emissive);
 	<T extends Material> T setEmissive(int emissive);
+
+	double getEmissiveIntensity();
+
+	<T extends Material> T setEmissiveIntensity( double emissiveIntensity );
 }

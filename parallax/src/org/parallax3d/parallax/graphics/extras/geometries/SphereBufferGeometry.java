@@ -114,7 +114,7 @@ public class SphereBufferGeometry extends BufferGeometry {
             }
         }
 
-        this.setIndex( BufferAttribute.Uint32Attribute( indices.toArray(), 1 ) );
+        this.setIndex( BufferAttribute.Uint32Attribute( indices, 1 ) );
         this.addAttribute( "position", positions );
         this.addAttribute( "normal", normals );
         this.addAttribute( "uv", uvs );

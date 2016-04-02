@@ -30,8 +30,7 @@ public class InterleavedBuffer extends AttributeData {
 
     int stride;
 
-    public InterleavedBuffer(TypeArray array, int stride)
-    {
+    public InterleavedBuffer(TypeArray array, int stride) {
         super(array);
         this.stride = stride;
     }
@@ -40,13 +39,13 @@ public class InterleavedBuffer extends AttributeData {
         return stride;
     }
 
-    public int getLength () {
+    public int getLength() {
 
         return this.array.getLength();
 
     }
 
-    public int getCount () {
+    public int getCount() {
 
         return getLength() / this.stride;
 
@@ -62,14 +61,14 @@ public class InterleavedBuffer extends AttributeData {
 //
 //    }
 
-    public InterleavedBuffer copyAt( int index1, InterleavedBuffer attribute, int index2 ) {
+    public InterleavedBuffer copyAt(int index1, InterleavedBuffer attribute, int index2) {
 
         index1 *= this.stride;
         index2 *= attribute.stride;
 
-        for ( int i = 0, l = this.stride; i < l; i ++ ) {
+        for (int i = 0, l = this.stride; i < l; i++) {
 
-            ((Float32Array)this.array).set( index1 + i, ((Float32Array)this.array).get( index2 + i ));
+            ((Float32Array) this.array).set(index1 + i, ((Float32Array) this.array).get(index2 + i));
 
         }
 
@@ -77,20 +76,20 @@ public class InterleavedBuffer extends AttributeData {
 
     }
 
-    public InterleavedBuffer set(  TypeArray value  ) {
+    public InterleavedBuffer set(TypeArray value) {
         return set(value, 0);
     }
 
-    public InterleavedBuffer set( TypeArray value, int offset ) {
+    public InterleavedBuffer set(TypeArray value, int offset) {
 
-        this.array.set( value, offset );
+        this.array.set(value, offset);
 
         return this;
 
     }
 
     @Override
-    protected InterleavedBuffer clone() {
+    public InterleavedBuffer clone() {
         InterleavedBuffer instance = new InterleavedBuffer(this.array, this.stride);
         instance.setDynamic(this.isDynamic());
 

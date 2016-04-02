@@ -54,56 +54,53 @@ public class Object3D extends AbstractPropertyObject
 
 	private static int Object3DCount = 0;
 
-	int id = 0;
+	protected int id = 0;
 
-	String name = "";
+	protected String name = "";
 
-	Object3D parent;
+	protected Object3D parent;
 
-	ArrayList<Object3D> children = new ArrayList<>();
+	protected ArrayList<Object3D> children = new ArrayList<>();
 
-	Vector3 up = Object3D.DefaultUp.clone();
+	protected Vector3 up = Object3D.DefaultUp.clone();
 
-	Vector3 position = new Vector3();
+	protected Vector3 position = new Vector3();
 
-	Euler rotation = new Euler();
+	protected Euler rotation = new Euler();
 
-	Quaternion quaternion = new Quaternion();
+	protected Quaternion quaternion = new Quaternion();
 
-	Vector3 scale = new Vector3(1, 1, 1);
+	protected Vector3 scale = new Vector3(1, 1, 1);
 
-	Matrix4 modelViewMatrix = new Matrix4();
+	protected Matrix4 modelViewMatrix = new Matrix4();
 
-	Matrix3 normalMatrix = new Matrix3();
+	protected Matrix3 normalMatrix = new Matrix3();
 
-	private double renderDepth;
+	protected  double renderDepth;
 
-	boolean rotationAutoUpdate = true;
+	protected boolean rotationAutoUpdate = true;
 
-	Matrix4 matrix = new Matrix4();
+	protected Matrix4 matrix = new Matrix4();
 
-	Matrix4 matrixWorld = new Matrix4();
+	protected Matrix4 matrixWorld = new Matrix4();
 
-	boolean matrixAutoUpdate = Object3D.DefaultMatrixAutoUpdate;
+	protected boolean matrixAutoUpdate = Object3D.DefaultMatrixAutoUpdate;
 
-	boolean matrixWorldNeedsUpdate = false;
+	protected boolean matrixWorldNeedsUpdate = false;
 
-	Layers layers = new Layers();
+	protected Layers layers = new Layers();
 
-	boolean visible = true;
+	protected boolean visible = true;
 
-	boolean castShadow = false;
+	protected boolean castShadow = false;
 
-	boolean receiveShadow = false;
+	protected boolean receiveShadow = false;
 
-	boolean frustumCulled = true;
+	protected boolean frustumCulled = true;
 
-	int renderOrder = 0;
+	protected int renderOrder = 0;
 
-	ObjectHandler handler;
-
-	public boolean __webglActive;
-	public boolean __webglInit;
+	protected ObjectHandler handler;
 
 	public Object3D()
 	{

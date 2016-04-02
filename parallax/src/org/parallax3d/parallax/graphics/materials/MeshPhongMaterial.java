@@ -300,6 +300,17 @@ public class MeshPhongMaterial extends Material
 	}
 
 	@Override
+	public double getEmissiveIntensity() {
+		return emissiveIntensity;
+	}
+
+	@Override
+	public MeshPhongMaterial setEmissiveIntensity(double emissiveIntensity) {
+		this.emissiveIntensity = emissiveIntensity;
+		return this;
+	}
+
+	@Override
 	public MeshPhongMaterial setEmissive(Color emissive) {
 		this.emissive = emissive;
 		return this;
@@ -400,6 +411,28 @@ public class MeshPhongMaterial extends Material
 	@Override
 	public Texture getDisplacementMap() {
 		return displacementMap;
+	}
+
+	@Override
+	public double getDisplacementScale() {
+		return displacementScale;
+	}
+
+	@Override
+	public MeshPhongMaterial setDisplacementScale(double displacementMapScale) {
+		this.displacementMap = displacementMap;
+		return this;
+	}
+
+	@Override
+	public double getDisplacementBias() {
+		return displacementBias;
+	}
+
+	@Override
+	public MeshPhongMaterial setDisplacementBias(double displacementMapBias) {
+		this.displacementBias = displacementMapBias;
+		return this;
 	}
 
 	@Override

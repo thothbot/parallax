@@ -132,7 +132,7 @@ public class Vector4 extends Vector3
 		return this;
 	}
 
-	public void setComponent( int index, double value )
+	public Vector4 setComponent( int index, double value )
 	{
 
 		switch ( index ) {
@@ -145,6 +145,7 @@ public class Vector4 extends Vector3
 
 		}
 
+		return this;
 	}
 
 	public double getComponent( int index )

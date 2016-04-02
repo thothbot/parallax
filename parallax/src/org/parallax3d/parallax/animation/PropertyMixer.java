@@ -32,6 +32,8 @@ import org.parallax3d.parallax.system.gl.arrays.Float64Array;
 @ThreejsObject("THREE.PropertyMixer")
 public class PropertyMixer {
 
+    public int _cacheIndex;
+
     public interface MixFunctions {
         void run(Float64Array buffer, int dstOffset, int srcOffset, double t, int stride);
     }

@@ -18,6 +18,7 @@
 package org.parallax3d.parallax.graphics.extras.geometries;
 
 import org.parallax3d.parallax.graphics.core.*;
+import org.parallax3d.parallax.graphics.core.geometry.Group;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
@@ -97,7 +98,7 @@ public class WireframeGeometry extends BufferGeometry {
 
                 Int32Array indices = (Int32Array) ((BufferGeometry) geometry).getIndex().getArray();
                 BufferAttribute vertices = ((BufferGeometry) geometry).getAttributes().get("position");
-                List<BufferGeometry.Group> groups = ((BufferGeometry) geometry).getGroups();
+                List<Group> groups = ((BufferGeometry) geometry).getGroups();
                 int numEdges = 0;
 
                 if (groups.size() == 0) {
@@ -111,10 +112,10 @@ public class WireframeGeometry extends BufferGeometry {
 
                 for (int o = 0, ol = groups.size(); o < ol; ++o) {
 
-                    BufferGeometry.Group group = groups.get(o);
+                    Group group = groups.get(o);
 
-                    int start = group.start;
-                    int count = group.count;
+                    int start = group.getStart();
+                    int count = group.getCount();
 
                     for (int i = start, il = start + count; i < il; i += 3) {
 
