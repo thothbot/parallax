@@ -44,10 +44,10 @@ public class JsTestFile extends JsFile {
 
         for(Statement st: mainNode.getBody().getStatements()) {
 
-            String arg = findFunctionFirstArgById(st, TEST_NAME_NODE_ID);
-            if(arg == null) continue;
+            List<Expression> args = findFunctionArgsById(st, TEST_NAME_NODE_ID);
+            if(args == null) continue;
 
-            return arg ;
+            return ((LiteralNode<String>)args.get(0)).getString();
         }
 
         return null;
@@ -59,8 +59,10 @@ public class JsTestFile extends JsFile {
 
         for(Statement st: mainNode.getBody().getStatements()) {
 
-            String arg = findFunctionFirstArgById(st, TEST_CASE_NODE_ID);
-            if(arg == null) continue;
+            List<Expression> args = findFunctionArgsById(st, TEST_CASE_NODE_ID);
+            if(args == null) continue;
+
+            String arg = ((LiteralNode<String>)args.get(0)).getString();
 
             names.add( normalizeTestCaseName( arg ) );
         }
@@ -87,8 +89,24 @@ public class JsTestFile extends JsFile {
         out.println();
 
         out.println("@ThreejsTest(\"" + clsName + "\")");
-        out.println("public class " + clsName);
-        out.println("{");
+        out.println("public class " + clsName + " {");
+
+        for(Statement st: mainNode.getBody().getStatements()) {
+
+            List<Expression> args = findFunctionArgsById(st, TEST_CASE_NODE_ID);
+            if(args == null) continue;
+
+            String testCaseName = normalizeTestCaseName(((LiteralNode<String>)args.get(0)).getString());
+
+            String body = normalizeBody(((FunctionNode)args.get(1)).getBody().toString(false));
+
+            out.println("    @Test");
+            out.println("    public void " + testCaseName + "() {");
+            out.println(body);
+            out.println("    }");
+            out.println();
+        }
+
         out.println("}");
 
         out.close();
@@ -101,11 +119,31 @@ public class JsTestFile extends JsFile {
         String name = "test";
         name += originalTestCaseName.substring(0, 1).toUpperCase() + originalTestCaseName.substring(1);
 
-        return name.replaceAll("/", "_");
+        return name.replaceAll("[^a-zA-Z0-9]+", "_").replaceAll("_$", "");
 
     }
 
-    private String findFunctionFirstArgById(Statement st, String id)
+    private String normalizeBody(String body) {
+        body = body.replaceAll("THREE.", "");
+
+        // === | !==
+        body = body.replaceAll("([!=])==", "$1=");
+
+        // ok()
+        body = body.replaceAll("ok\\s*\\(\\s*([^,]+)[^;]+;", "assertTrue( $1 );");
+
+        // equal()
+        body = body.replaceAll("equal\\s*\\(", "assertEquals(");
+
+        // null a = new Vector3
+        body = body.replaceAll("null\\s*(\\w+)\\s*=\\s*new\\s+([^(]+)", "$2 $1 = new $2");
+
+        body = body.replaceAll(";", ";\n");
+
+        return body;
+    }
+
+    private List<Expression> findFunctionArgsById(Statement st, String id)
     {
         if(st.getClass() != ExpressionStatement.class) return null;
 
@@ -116,8 +154,9 @@ public class JsTestFile extends JsFile {
         CallNode node = (CallNode) ((ExpressionStatement)st).getExpression();
 
         if(((IdentNode)node.getFunction()).getName().equals( id ))
-            return ((LiteralNode<String>)node.getArgs().get(0)).getString();
+            return node.getArgs();
 
         return null;
     }
+
 }

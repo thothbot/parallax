@@ -106,11 +106,11 @@ public class TaskCompareTests {
 
         testGeneratorDir.mkdirs();
 
-        for(JsTestFile js: jsTestsFound)
+        for(JsTestFile js: jsTests)
         {
             try {
                 String generated = js.generateJavaTest(testGeneratorDir);
-                log("Generate: " + generated);
+                log("Generated: " + generated);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
