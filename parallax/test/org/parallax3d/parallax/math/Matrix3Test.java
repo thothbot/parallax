@@ -22,10 +22,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.parallax3d.parallax.system.ThreejsTest;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
 import static org.junit.Assert.*;
 
+@ThreejsTest("Matrix3")
 public class Matrix3Test
 {
 	private static double DELTA = 0.0;

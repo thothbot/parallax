@@ -19,8 +19,11 @@
 package org.parallax3d.parallax.math;
 
 import org.junit.Test;
+import org.parallax3d.parallax.system.ThreejsTest;
+
 import static org.junit.Assert.*;
 
+@ThreejsTest("Vector2")
 public class Vector2Test
 {
 

@@ -32,15 +32,13 @@ class JavaReflections {
 //        System.out.println("ClassDiscovery: " + msg);
     }
 
-    private static Class<?> loadClass(String className) {
-        Class<?> cls = null;
-        try {
-            cls = Class.forName(className);
-        } catch (ClassNotFoundException | ExceptionInInitializerError e) {
-            System.out.println(e);
-        }
+    private static Class<?> loadClass(String className) throws Exception {
+        return Class.forName(className);
+    }
 
-        return cls;
+    public static List<Class<?>> processDirectory(File directory)
+    {
+        return processDirectory(directory, "");
     }
 
     /**
@@ -52,32 +50,38 @@ class JavaReflections {
      */
     public static List<Class<?>> processDirectory(File directory, String pkgname) {
 
-        ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+        ArrayList<Class<?>> classes = new ArrayList<>();
 
         log("Reading Directory '" + directory + "'");
 
+        if(pkgname.length() > 0) pkgname += '.';
+
         // Get the list of the files contained in the package
-        String[] files = directory.list();
+        File[] files = directory.listFiles();
         for (int i = 0; i < files.length; i++) {
-            String fileName = files[i];
+            String fileName = files[i].getName();
             String className = null;
 
             // we are only interested in .class files
             if (fileName.endsWith(".class")) {
                 // removes the .class extension
-                className = pkgname + '.' + fileName.substring(0, fileName.length() - 6);
+                className = pkgname + fileName.substring(0, fileName.length() - 6);
             }
 
             log("FileName '" + fileName + "'  =>  class '" + className + "'");
 
             if (className != null) {
-                classes.add(loadClass(className));
+                try {
+                    classes.add(loadClass(className));
+                } catch (Exception e) {
+                    System.out.println( e );
+                }
             }
 
             //If the file is a directory recursively class this method.
             File subdir = new File(directory, fileName);
             if (subdir.isDirectory()) {
-                classes.addAll(processDirectory(subdir, pkgname + '.' + fileName));
+                classes.addAll(processDirectory(subdir, pkgname + fileName));
             }
         }
         return classes;
@@ -124,7 +128,11 @@ class JavaReflections {
 
             //If content is a class add class to List
             if (className != null) {
-                classes.add(loadClass(className));
+                try {
+                    classes.add(loadClass(className));
+                } catch (Exception e) {
+                    System.out.println( e );
+                }
             }
         }
         return classes;
@@ -133,13 +141,12 @@ class JavaReflections {
     /**
      * Give a package this method returns all classes contained in that package
      *
-     * @param pkg
+     * @param pkgname
      */
-    public static List<Class<?>> getClassesForPackage(Package pkg) {
+    public static List<Class<?>> getClassesForPackage( String pkgname ) {
         ArrayList<Class<?>> classes = new ArrayList<>();
 
         //Get name of package and turn it to a relative path
-        String pkgname = pkg.getName();
         String relPath = pkgname.replace('.', '/');
 
         // Get a File object for the package

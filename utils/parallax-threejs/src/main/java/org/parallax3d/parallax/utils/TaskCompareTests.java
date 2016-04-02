@@ -17,33 +17,28 @@
  */
 package org.parallax3d.parallax.utils;
 
-import org.parallax3d.parallax.Parallax;
-
 import java.io.File;
 import java.nio.file.Path;
 
 public class TaskCompareTests {
 
-    private static final String THREE_TEST_DIR = "test/unit";
-
     public static void main(String[] args) throws Exception
     {
-        File main = new File(System.getProperty("threejs.dir"));
-        if(!main.exists())
-            throw new Exception("Main threejs path is not found: " + main.getPath());
+        File threeTestDir = new File(System.getProperty("threejs.test.dir"));
+        if(!threeTestDir.exists() || !threeTestDir.isDirectory())
+            throw new Exception("Threejs TESTS are not found in Path: " + threeTestDir.getPath());
 
-        File src = new File(main, THREE_TEST_DIR);
-        if(!src.exists())
-            throw new Exception("TEST threejs path is not found: " + src.getPath());
-
-        for (Path p : FileLoader.getJSFiles(src.toPath())) {
+        for (Path p : FileLoader.getJSFiles(threeTestDir.toPath())) {
             System.out.println(p.toString());
         }
 
-        for (Class c : JavaReflections.getClassesForPackage(Parallax.class.getPackage())) {
-            System.out.println(c.toString());
+        File parallaxTestDir = new File(System.getProperty("parallax.test.dir"));
+        if(!parallaxTestDir.exists() || !parallaxTestDir.isDirectory())
+            throw new Exception("Parallax TESTS are not found in Path: " + parallaxTestDir.getPath());
+
+        for (Class c : JavaReflections.processDirectory( parallaxTestDir )) {
+            System.out.println(c.getName());
         }
 
     }
-
 }

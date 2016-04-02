@@ -19,15 +19,16 @@ task compareClasses (dependsOn: classes, type: JavaExec) {
 
 task compareTests (dependsOn: classes, type: JavaExec) {
 
+    def parallaxTests = project(':parallax').sourceSets.test.output.classesDir
+
     main = 'org.parallax3d.parallax.utils.TaskCompareTests'
+
     classpath sourceSets.main.output.classesDir
     classpath configurations.compile
+    classpath parallaxTests
 
-    systemProperty 'threejs.dir', new File("$rootProject.projectDir/../../libs/three.js")
-
-    doLast {
-        classpath.each { println it }
-    }
+    systemProperty 'threejs.test.dir',  new File("$rootProject.projectDir/../../libs/three.js/test/unit")
+    systemProperty 'parallax.test.dir', parallaxTests
 
 }
 

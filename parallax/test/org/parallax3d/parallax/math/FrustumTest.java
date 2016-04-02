@@ -19,8 +19,11 @@
 package org.parallax3d.parallax.math;
 
 import org.junit.Test;
+import org.parallax3d.parallax.system.ThreejsTest;
+
 import static org.junit.Assert.*;
 
+@ThreejsTest("Frustum")
 public class FrustumTest
 {
 	private static Vector3 unit3 = new Vector3( 1, 0, 0 );

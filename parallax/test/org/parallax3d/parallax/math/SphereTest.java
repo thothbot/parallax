@@ -19,8 +19,11 @@
 package org.parallax3d.parallax.math;
 
 import org.junit.Test;
+import org.parallax3d.parallax.system.ThreejsTest;
+
 import static org.junit.Assert.*;
 
+@ThreejsTest("Ray")
 public class SphereTest
 {
 	private static double DELTA = 0.0;

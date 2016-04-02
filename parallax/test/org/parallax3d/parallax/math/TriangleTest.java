@@ -22,8 +22,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.parallax3d.parallax.system.ThreejsTest;
+
 import static org.junit.Assert.*;
 
+@ThreejsTest("Triangle")
 public class TriangleTest
 {
 

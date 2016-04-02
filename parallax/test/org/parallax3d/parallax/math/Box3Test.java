@@ -19,8 +19,11 @@
 package org.parallax3d.parallax.math;
 
 import org.junit.Test;
+import org.parallax3d.parallax.system.ThreejsTest;
+
 import static org.junit.Assert.*;
 
+@ThreejsTest("Box3")
 public class Box3Test
 {
 	private static double DELTA = 0.0001;

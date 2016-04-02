@@ -17,8 +17,6 @@
  */
 package org.parallax3d.parallax.utils;
 
-import org.parallax3d.parallax.Parallax;
-
 import java.io.File;
 import java.nio.file.Path;
 
@@ -40,7 +38,7 @@ public class TaskCompareClasses {
             System.out.println(p.toString());
         }
 
-        for (Class c : JavaReflections.getClassesForPackage(Parallax.class.getPackage())) {
+        for (Class c : JavaReflections.getClassesForPackage( "org.parallax3d.parallax" )) {
             System.out.println(c.toString());
         }
 
