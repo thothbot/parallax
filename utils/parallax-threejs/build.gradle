@@ -29,6 +29,8 @@ task compareTests (dependsOn: classes, type: JavaExec) {
 
     systemProperty 'threejs.test.dir',  new File("$rootProject.projectDir/../../libs/three.js/test/unit/math")
     systemProperty 'parallax.test.dir', parallaxTests
+    systemProperty 'generator.dir', new File("$projectDir/generated")
+    systemProperty 'copyheader.file', new File("$projectDir/../copyheader.txt")
 
 }
 

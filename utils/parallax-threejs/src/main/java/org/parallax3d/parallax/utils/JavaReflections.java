@@ -19,8 +19,11 @@ package org.parallax3d.parallax.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -30,6 +33,25 @@ class JavaReflections {
 
     private static void log(String msg) {
 //        System.out.println("ClassDiscovery: " + msg);
+    }
+
+    public static List<Method> getMethodsAnnotatedWith(final Class<?> type, final Class<? extends Annotation> annotation) {
+        final List<Method> methods = new ArrayList<Method>();
+        Class<?> klass = type;
+        while (klass != Object.class) {
+            // need to iterated thought hierarchy in order to retrieve methods from above the current instance
+            // iterate though the list of methods declared in the class represented by klass variable, and add those annotated with the specified annotation
+            final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(klass.getDeclaredMethods()));
+            for (final Method method : allMethods) {
+                if (method.isAnnotationPresent(annotation)) {
+                    Annotation annotInstance = method.getAnnotation(annotation);
+                    methods.add(method);
+                }
+            }
+            // move to the upper class in the hierarchy in search for more methods
+            klass = klass.getSuperclass();
+        }
+        return methods;
     }
 
     private static Class<?> loadClass(String className) throws Exception {

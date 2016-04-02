@@ -140,6 +140,7 @@ project(":utils:parallax-threejs") {
 
     dependencies {
         compile project(":parallax")
+        compile "junit:junit:$junitVersion"
     }
 
 }

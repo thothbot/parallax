@@ -17,32 +17,24 @@
  */
 package org.parallax3d.parallax.utils;
 
-import org.junit.Test;
-import org.parallax3d.parallax.system.ThreejsTest;
+import java.io.File;
+import java.util.Scanner;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+public class Helpers {
 
-public class JavaTestClass extends JavaFile {
+    public static String getCopyHeader() {
 
-    public JavaTestClass(Class cls) {
-        super(cls);
-    }
+        try {
+            File copyheader = new File(System.getProperty("copyheader.file"));
+            if(!copyheader.exists())
+                throw new Exception("Parallax copyright header file does not exist in " + copyheader.getPath());
 
-    public String getThreeTestId()
-    {
-        return ((ThreejsTest)cls.getAnnotation(ThreejsTest.class)).value();
-    }
-
-    public List<String> getTestCaseNames() {
-
-        List<String> names = new ArrayList<>();
-        for(Method method: JavaReflections.getMethodsAnnotatedWith(cls, Test.class))
-        {
-            names.add(method.getName());
+            return new Scanner( copyheader ).useDelimiter("\\Z").next();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        return names;
+        return "";
+
     }
 }

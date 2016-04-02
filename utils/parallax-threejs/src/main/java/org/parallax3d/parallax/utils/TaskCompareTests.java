@@ -20,9 +20,11 @@ package org.parallax3d.parallax.utils;
 import org.parallax3d.parallax.system.ThreejsTest;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskCompareTests {
 
@@ -66,6 +68,8 @@ public class TaskCompareTests {
         log("\tParallax tests:\t" + javaTests.size());
 
         compareParallax2Three();
+
+        generateTests();
     }
 
     static void compareParallax2Three()
@@ -79,13 +83,43 @@ public class TaskCompareTests {
                 if(js.getTestId().equals(java.getThreeTestId()))
                 {
                     jsTestsFound.add(js);
-                    log("\tFound test for Parallax " + java.getName());
+
+                    List<String> all = js.getTestCaseNames();
+                    List<String> unavailable = all.stream()
+                            .filter(e -> java.getTestCaseNames().contains(e))
+                            .collect(Collectors.toList());
+
+                    log(String.format("%3d%% %s" , unavailable.size() * 100 / all.size(), java.getName() ));
+                    log("\t(NO):" + String.join(", ", unavailable));
+
                 }
             }
         }
     }
 
+    static void generateTests()
+    {
+        log("-- Threejs to Parallax test generator:");
+
+        File generatorDir = new File(System.getProperty("generator.dir"));
+        File testGeneratorDir = new File(generatorDir, "tests");
+
+        testGeneratorDir.mkdirs();
+
+        for(JsTestFile js: jsTestsFound)
+        {
+            try {
+                String generated = js.generateJavaTest(testGeneratorDir);
+                log("Generate: " + generated);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
     static void log(String msg) {
         System.out.println( msg );
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Alex Usachev, thothbot@gmail.com
+ * Copyright 2016 Alex Usachev, thothbot@gmail.com
  * 
  * This file is part of Parallax project.
  * 

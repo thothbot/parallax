@@ -20,11 +20,17 @@ package org.parallax3d.parallax.utils;
 import jdk.nashorn.internal.codegen.types.Type;
 import jdk.nashorn.internal.ir.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JsTestFile extends JsFile {
 
     private static final String TEST_NAME_NODE_ID = "module";
+    private static final String TEST_CASE_NODE_ID = "test";
 
     JsTestFile(Path path) throws Exception {
         super(path);
@@ -38,18 +44,79 @@ public class JsTestFile extends JsFile {
 
         for(Statement st: mainNode.getBody().getStatements()) {
 
-            if(st.getClass() != ExpressionStatement.class) continue;
+            String arg = findFunctionFirstArgById(st, TEST_NAME_NODE_ID);
+            if(arg == null) continue;
 
-            Expression ex = ((ExpressionStatement)st).getExpression();
-
-            if(ex.getType() != Type.OBJECT || ex.getClass() != CallNode.class ) continue;
-
-            CallNode node = (CallNode) ((ExpressionStatement)st).getExpression();
-
-            if(((IdentNode)node.getFunction()).getName().equals(TEST_NAME_NODE_ID))
-                return ((LiteralNode<String>)node.getArgs().get(0)).getString();
-
+            return arg ;
         }
+
+        return null;
+    }
+
+    public List<String> getTestCaseNames() {
+
+        List<String> names = new ArrayList<>();
+
+        for(Statement st: mainNode.getBody().getStatements()) {
+
+            String arg = findFunctionFirstArgById(st, TEST_CASE_NODE_ID);
+            if(arg == null) continue;
+
+            names.add( normalizeTestCaseName( arg ) );
+        }
+
+        return names;
+    }
+
+    public String generateJavaTest(File dir) throws FileNotFoundException {
+
+        String clsName = getTestId();
+
+        File file = new File(dir, clsName + ".java");
+
+        PrintWriter out = new PrintWriter(file);
+
+        out.println(Helpers.getCopyHeader());
+        out.println();
+        out.println("package org.parallax3d.parallax.math;");
+
+        out.println();
+        out.println("import org.junit.Test;");
+        out.println("import org.parallax3d.parallax.system.ThreejsTest;");
+        out.println("import static org.junit.Assert.*;");
+        out.println();
+
+        out.println("@ThreejsTest(\"" + clsName + "\")");
+        out.println("public class " + clsName);
+        out.println("{");
+        out.println("}");
+
+        out.close();
+
+        return clsName;
+    }
+
+    private String normalizeTestCaseName(String originalTestCaseName) {
+
+        String name = "test";
+        name += originalTestCaseName.substring(0, 1).toUpperCase() + originalTestCaseName.substring(1);
+
+        return name.replaceAll("/", "_");
+
+    }
+
+    private String findFunctionFirstArgById(Statement st, String id)
+    {
+        if(st.getClass() != ExpressionStatement.class) return null;
+
+        Expression ex = ((ExpressionStatement)st).getExpression();
+
+        if(ex.getType() != Type.OBJECT || ex.getClass() != CallNode.class ) return null;
+
+        CallNode node = (CallNode) ((ExpressionStatement)st).getExpression();
+
+        if(((IdentNode)node.getFunction()).getName().equals( id ))
+            return ((LiteralNode<String>)node.getArgs().get(0)).getString();
 
         return null;
     }
