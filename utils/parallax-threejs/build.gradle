@@ -17,4 +17,18 @@ task compareClasses (dependsOn: classes, type: JavaExec) {
 
 }
 
-defaultTasks 'compareClasses'
+task compareTests (dependsOn: classes, type: JavaExec) {
+
+    main = 'org.parallax3d.parallax.utils.TaskCompareTests'
+    classpath sourceSets.main.output.classesDir
+    classpath configurations.compile
+
+    systemProperty 'threejs.dir', new File("$rootProject.projectDir/../../libs/three.js")
+
+    doLast {
+        classpath.each { println it }
+    }
+
+}
+
+defaultTasks 'compareTests'

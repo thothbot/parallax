@@ -22,9 +22,9 @@ import org.parallax3d.parallax.Parallax;
 import java.io.File;
 import java.nio.file.Path;
 
-public class TaskCompareClasses {
+public class TaskCompareTests {
 
-    private static final String THREE_SOURCE_DIR = "src";
+    private static final String THREE_TEST_DIR = "test/unit";
 
     public static void main(String[] args) throws Exception
     {
@@ -32,9 +32,9 @@ public class TaskCompareClasses {
         if(!main.exists())
             throw new Exception("Main threejs path is not found: " + main.getPath());
 
-        File src = new File(main, THREE_SOURCE_DIR);
+        File src = new File(main, THREE_TEST_DIR);
         if(!src.exists())
-            throw new Exception("SRC threejs path is not found: " + src.getPath());
+            throw new Exception("TEST threejs path is not found: " + src.getPath());
 
         for (Path p : FileLoader.getJSFiles(src.toPath())) {
             System.out.println(p.toString());

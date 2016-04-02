@@ -20,32 +20,30 @@ package org.parallax3d.parallax.utils;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
-class JsFileVisitor extends SimpleFileVisitor<Path> {
+public class FileLoader {
 
-    private PathMatcher matcher;
+    public static List<Path> getJSFiles(Path path) throws IOException {
 
-    JsFileVisitor(){
+        PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*.js");
 
-        matcher = FileSystems.getDefault().getPathMatcher("glob:*.js");
+        List<Path> files = new ArrayList<>();
 
+        Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+
+                Path fileName = file.getFileName();
+
+                if ( matcher.matches(fileName))
+                    files.add(file);
+
+                return FileVisitResult.CONTINUE;
+            }
+        });
+
+        return files;
     }
-
-    @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-            throws IOException {
-
-        Path fileName = file.getFileName();
-
-        if ( matcher.matches(fileName))
-        {
-            System.out.println("Found: "+ file);
-
-            new JsFile( file );
-        }
-
-        //Continue to search for other txt files
-        return FileVisitResult.CONTINUE;
-    }
-
 }
