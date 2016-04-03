@@ -49,6 +49,11 @@ class JsFile {
         parse();
     }
 
+    public Path getDirectory()
+    {
+        return path.getParent();
+    }
+
     private void parse() throws Exception {
 
             String code = getCode();

@@ -101,17 +101,17 @@ public class TaskCompareTests {
     {
         log("-- Threejs to Parallax test generator:");
 
-        File generatorDir = new File(System.getProperty("generator.dir"));
-        File testGeneratorDir = new File(generatorDir, "tests");
-
-        testGeneratorDir.mkdirs();
+        File testGeneratorDir = new File(new File(System.getProperty("generator.dir")), "tests");
 
         for(JsTestFile js: jsTests)
         {
-            try {
+            try
+            {
                 String generated = js.generateJavaTest(testGeneratorDir);
                 log("Generated: " + generated);
-            } catch (FileNotFoundException e) {
+            }
+            catch (FileNotFoundException e)
+            {
                 e.printStackTrace();
             }
         }

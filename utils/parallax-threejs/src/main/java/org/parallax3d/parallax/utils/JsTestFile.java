@@ -25,10 +25,14 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class JsTestFile extends JsFile {
 
+    private static final String JAVA_PKG = "org.parallax3d.parallax";
+    private static final String TEST_DIR = "unit";
     private static final String TEST_NAME_NODE_ID = "module";
     private static final String TEST_CASE_NODE_ID = "test";
 
@@ -38,6 +42,22 @@ public class JsTestFile extends JsFile {
 
     public boolean isTest() {
         return getTestId() != null;
+    }
+
+    public String getProposalJavaPackageName()
+    {
+        String path = getTestRelativePath();
+
+        return JAVA_PKG + "." + path.replaceAll("\\" + File.separator, ".");
+    }
+
+    public String getTestRelativePath() {
+
+        List<String> dirs = Arrays.asList( getDirectory().toString().split(Pattern.quote(File.separator)) );
+
+        int idx = dirs.lastIndexOf(TEST_DIR);
+
+        return String.join(File.separator, dirs.subList(idx + 1, dirs.size()));
     }
 
     public String getTestId() {
@@ -71,8 +91,10 @@ public class JsTestFile extends JsFile {
     }
 
     public String generateJavaTest(File dir) throws FileNotFoundException {
-
         String clsName = getTestId();
+
+        dir = new File(dir, getTestRelativePath());
+        dir.mkdirs();
 
         File file = new File(dir, clsName + ".java");
 
@@ -80,7 +102,7 @@ public class JsTestFile extends JsFile {
 
         out.println(Helpers.getCopyHeader());
         out.println();
-        out.println("package org.parallax3d.parallax.math;");
+        out.println("package " + getProposalJavaPackageName() + ";");
 
         out.println();
         out.println("import org.junit.Test;");
