@@ -19,8 +19,14 @@
 package org.parallax3d.parallax.math;
 
 
+import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static jdk.nashorn.internal.runtime.GlobalFunctions.parseInt;
 
 /**
  * The Color class is used encapsulate colors in the default RGB color space.
@@ -241,6 +247,117 @@ public final class Color
 			this.r = hue2rgb( q, p, h + 1.0 / 3.0 );
 			this.g = hue2rgb( q, p, h );
 			this.b = hue2rgb( q, p, h - 1.0 / 3.0 );
+
+		}
+
+		return this;
+
+	}
+
+	public Color setStyle(String style) {
+
+		Matcher m;
+		if ( ( m = Pattern.compile("^((?:rgb|hsl)a?)\\(\\s*([^\\)]*)\\)").matcher(style) ).find() ) {
+
+			// rgb / hsl
+
+			String name = m.group( 1 );
+			String components = m.group( 2 );
+
+			switch ( name ) {
+
+				case "rgb":
+				case "rgba":
+
+					Matcher color = Pattern.compile("^(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*(,\\s*([0-9]*\\.?[0-9]+)\\s*)?$").matcher(components);
+					if ( color.find() ) {
+
+					// rgb(255,0,0) rgba(255,0,0,0.5)
+					this.r = Math.min( 255, Double.parseDouble( color.group( 1 ) ) ) / 255.;
+					this.g = Math.min( 255, Double.parseDouble( color.group( 2 ) ) ) / 255.;
+					this.b = Math.min( 255, Double.parseDouble( color.group( 3 ) ) ) / 255.;
+
+					return this;
+
+				}
+
+					color = Pattern.compile("^(\\d+)\\%\\s*,\\s*(\\d+)\\%\\s*,\\s*(\\d+)\\%\\s*(,\\s*([0-9]*\\.?[0-9]+)\\s*)?$").matcher(components);
+				if ( color.find() ) {
+
+					// rgb(100%,0%,0%) rgba(100%,0%,0%,0.5)
+					this.r = Math.min( 100, Double.parseDouble( color.group( 1 ) ) ) / 100.;
+					this.g = Math.min( 100, Double.parseDouble( color.group( 2 ) ) ) / 100.;
+					this.b = Math.min( 100, Double.parseDouble( color.group( 3 ) ) ) / 100.;
+
+					return this;
+
+				}
+
+				break;
+
+				case "hsl":
+				case "hsla":
+
+					color = Pattern.compile("^([0-9]*\\.?[0-9]+)\\s*,\\s*(\\d+)\\%\\s*,\\s*(\\d+)\\%\\s*(,\\s*([0-9]*\\.?[0-9]+)\\s*)?$").matcher(components);
+					if ( color.find() ) {
+
+					// hsl(120,50%,50%) hsla(120,50%,50%,0.5)
+					double h = Double.parseDouble( color.group( 1 ) ) / 360;
+					double s = Double.parseDouble( color.group( 2 ) ) / 100;
+					double l = Double.parseDouble( color.group( 3 ) ) / 100;
+
+					return this.setHSL( h, s, l );
+
+				}
+
+				break;
+
+			}
+
+		} else if ( ( m = Pattern.compile("^\\#([A-Fa-f0-9]+)$").matcher(style) ).find() ) {
+
+			// hex color
+
+			String hex = m.group( 1 );
+			int size = hex.length();
+
+			if ( size == 3 ) {
+
+				// #ff0
+				this.r = parseInt( hex.charAt( 0 ) + hex.charAt( 0 ), 16 ) / 255;
+				this.g = parseInt( hex.charAt( 1 ) + hex.charAt( 1 ), 16 ) / 255;
+				this.b = parseInt( hex.charAt( 2 ) + hex.charAt( 2 ), 16 ) / 255;
+
+				return this;
+
+			} else if ( size == 6 ) {
+
+				// #ff0000
+				this.r = parseInt( hex.charAt( 0 ) + hex.charAt( 1 ), 16 ) / 255;
+				this.g = parseInt( hex.charAt( 2 ) + hex.charAt( 3 ), 16 ) / 255;
+				this.b = parseInt( hex.charAt( 4 ) + hex.charAt( 5 ), 16 ) / 255;
+
+				return this;
+
+			}
+
+		}
+
+		if ( style != null && style.length() > 0 ) {
+
+			// color keywords
+
+			if ( Colors.valueOf(style) != null ) {
+
+				// red
+				this.setHex( Colors.valueOf(style.toUpperCase()).getValue() );
+
+			} else {
+
+				// unknown color
+				Log.warn( "Color: Unknown color " + style );
+
+			}
 
 		}
 

@@ -91,7 +91,8 @@ public class JsTestFile extends JsFile {
     }
 
     public String generateJavaTest(File dir) throws FileNotFoundException {
-        String clsName = getTestId();
+        String threeName = getTestId();
+        String clsName = threeName + "Test";
 
         dir = new File(dir, getTestRelativePath());
         dir.mkdirs();
@@ -110,7 +111,7 @@ public class JsTestFile extends JsFile {
         out.println("import static org.junit.Assert.*;");
         out.println();
 
-        out.println("@ThreejsTest(\"" + clsName + "\")");
+        out.println("@ThreejsTest(\"" + threeName + "\")");
         out.println("public class " + clsName + " {");
 
         for(Statement st: mainNode.getBody().getStatements()) {

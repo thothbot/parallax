@@ -188,7 +188,7 @@ public class Box2
 		);
 	}
 
-	public boolean isIntersectionBox( Box2 box )
+	public boolean intersectsBox(Box2 box)
 	{
 		// using 6 splitting planes to rule out intersections.
 

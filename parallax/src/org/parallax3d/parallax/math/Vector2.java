@@ -250,6 +250,12 @@ public class Vector2
 		return this;
 	}
 
+	@Deprecated
+	public Vector2 multiplyScalar(double s)
+	{
+		return multiply( s );
+	}
+
 	public Vector2 multiply(double s)
 	{
 		this.x *= s;
