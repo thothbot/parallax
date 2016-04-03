@@ -151,8 +151,10 @@ public class JsTestFile extends JsFile {
         // === | !==
         body = body.replaceAll("([!=])==", "$1=");
 
+        body = body.replaceAll(";", ";\n");
+
         // ok()
-        body = body.replaceAll("ok\\s*\\(\\s*([^,]+)[^;]+;", "assertTrue( $1 );");
+        body = body.replaceAll("ok\\s*\\(\\s*(.+)\\s*,\\s*[^,]+\\s*\\);", "assertTrue( $1 );");
 
         // equal()
         body = body.replaceAll("equal\\s*\\(", "assertEquals(");
@@ -160,7 +162,6 @@ public class JsTestFile extends JsFile {
         // null a = new Vector3
         body = body.replaceAll("null\\s*(\\w+)\\s*=\\s*new\\s+([^(]+)", "$2 $1 = new $2");
 
-        body = body.replaceAll(";", ";\n");
 
         return body;
     }
