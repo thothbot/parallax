@@ -89,8 +89,11 @@ public class TaskCompareTests {
                             .filter(e -> java.getTestCaseNames().contains(e))
                             .collect(Collectors.toList());
 
-                    log(String.format("%3d%% %s" , unavailable.size() * 100 / all.size(), java.getName() ));
-                    log("\t(NO):" + String.join(", ", unavailable));
+                    int coverage = unavailable.size() * 100 / all.size();
+                    log(String.format("%3d%% %s", coverage, java.getName() ));
+
+                    if(coverage < 100)
+                        log("\t(NO):" + String.join(", ", unavailable));
 
                 }
             }
