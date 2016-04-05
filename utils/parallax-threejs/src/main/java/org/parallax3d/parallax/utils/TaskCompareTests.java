@@ -86,10 +86,10 @@ public class TaskCompareTests {
 
                     List<String> all = js.getTestCaseNames();
                     List<String> unavailable = all.stream()
-                            .filter(e -> java.getTestCaseNames().contains(e))
+                            .filter(e -> !java.getTestCaseNames().contains(e))
                             .collect(Collectors.toList());
 
-                    int coverage = unavailable.size() * 100 / all.size();
+                    int coverage = (all.size() - unavailable.size()) * 100 / all.size();
                     log(String.format("%3d%% %s", coverage, java.getName() ));
 
                     if(coverage < 100)
