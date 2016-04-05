@@ -470,6 +470,12 @@ public class Quaternion
 		return this;
 	}
 
+	@Deprecated
+	public Quaternion multiplyQuaternions(Quaternion a, Quaternion b)
+	{
+		return multiply(a, b);
+	}
+
 	/**
 	 * Sets the value of this Quaternion to the vector multiplication of Quaternion a and
 	 * Quaternion v2.
@@ -601,6 +607,18 @@ public class Quaternion
 		return ( quaternion.x == this.x ) && ( quaternion.y == this.y ) && ( quaternion.z == this.z ) && ( quaternion.w == this.w );
 	}
 
+	public Quaternion fromArray ( double[] array )
+	{
+		int offset = 0;
+
+		this.x = array[ offset ];
+		this.y = array[ offset + 1 ];
+		this.z = array[ offset + 2 ];
+		this.w = array[ offset + 3 ];
+
+		return this;
+	}
+
 	public Quaternion fromArray ( Float32Array array )
 	{
 		return fromArray(array, 0);
@@ -659,17 +677,27 @@ public class Quaternion
 	public static void slerpFlat(Float64Array dst, int dstOffset, Float64Array src0, int srcOffset0, Float64Array src1, int srcOffset1, double t )
 	{
 
+	}
+
+	public static void slerpFlat(Float32Array dst, int dstOffset, Float32Array src0, int srcOffset0, Float32Array src1, int srcOffset1, double t )
+	{
+
+	}
+
+	public static void slerpFlat(double[] dst, int dstOffset, double[] src0, int srcOffset0, double[] src1, int srcOffset1, double t )
+	{
+
 		// fuzz-free, array-based Quaternion SLERP operation
 
-		double x0 = src0.get( srcOffset0 + 0 ),
-				y0 = src0.get( srcOffset0 + 1 ),
-				z0 = src0.get( srcOffset0 + 2 ),
-				w0 = src0.get( srcOffset0 + 3 ),
+		double x0 = src0[ srcOffset0 + 0 ],
+				y0 = src0[ srcOffset0 + 1 ],
+				z0 = src0[ srcOffset0 + 2 ],
+				w0 = src0[ srcOffset0 + 3 ],
 
-				x1 = src1.get( srcOffset1 + 0 ),
-				y1 = src1.get( srcOffset1 + 1 ),
-				z1 = src1.get( srcOffset1 + 2 ),
-				w1 = src1.get( srcOffset1 + 3 );
+				x1 = src1[ srcOffset1 + 0 ],
+				y1 = src1[ srcOffset1 + 1 ],
+				z1 = src1[ srcOffset1 + 2 ],
+				w1 = src1[ srcOffset1 + 3 ];
 
 		if ( w0 != w1 || x0 != x1 || y0 != y1 || z0 != z1 ) {
 
@@ -712,10 +740,10 @@ public class Quaternion
 
 		}
 
-		dst.set( dstOffset , x0 );
-		dst.set( dstOffset + 1 , y0 );
-		dst.set( dstOffset + 2 , z0 );
-		dst.set( dstOffset + 3 , w0 );
+		dst[ dstOffset ] = x0 ;
+		dst[ dstOffset + 1 ] = y0 ;
+		dst[ dstOffset + 2 ] = z0 ;
+		dst[ dstOffset + 3 ] = w0 ;
 
 	}
 }

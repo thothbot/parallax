@@ -325,6 +325,12 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
+	@Deprecated
+	public Vector3 applyQuaternion( Quaternion q )
+	{
+		return apply( q );
+	}
+
 	public Vector3 apply( Quaternion q )
 	{
 		double x = this.x;

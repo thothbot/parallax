@@ -32,6 +32,7 @@ public class Mathematics
 {
 	public static final double EPSILON =  Math.pow( 2.0, -52.0 );
 	public static final double LN2 = 0.6931471805599453;
+	public static final double SQRT1_2 = 0.7071067811865476;
 
 	public static String generateUUID() {
 
