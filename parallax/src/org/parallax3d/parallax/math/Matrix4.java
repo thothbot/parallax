@@ -539,6 +539,12 @@ public class Matrix4
 		return multiply(this, m);
 	}
 
+	@Deprecated
+	public Matrix4 multiplyScalar(double s)
+	{
+		return multiply( s );
+	}
+
 	/**
 	 * Sets the value of this matrix to the scalar multiplication of the scale
 	 * factor with this.
