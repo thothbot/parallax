@@ -223,6 +223,12 @@ public class Plane
 		return optionalTarget.copy( this.normal ).multiply( - this.constant );
 	}
 
+	@Deprecated
+	public Plane applyMatrix4( Matrix4 matrix )
+	{
+		return apply( matrix );
+	}
+
 	public Plane apply( Matrix4 matrix )
 	{
 		return apply(matrix, _m1.getNormalMatrix( matrix ));
