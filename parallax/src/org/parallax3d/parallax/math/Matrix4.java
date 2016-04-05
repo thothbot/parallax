@@ -23,8 +23,6 @@ import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
-import java.nio.Buffer;
-
 /**
  * This class implements three-dimensional matrix. NxN, where N=4.
  * 
@@ -472,6 +470,12 @@ public class Matrix4
 
 		return this;
 
+	}
+
+	@Deprecated
+	public Matrix4 multiplyMatrices(Matrix4 m1, Matrix4 m2)
+	{
+		return multiply(m1, m2);
 	}
 
 	/**

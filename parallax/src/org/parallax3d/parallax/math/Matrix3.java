@@ -23,8 +23,6 @@ import org.parallax3d.parallax.graphics.core.BufferAttribute;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 
-import java.nio.Buffer;
-
 /**
  * This class implements three-dimensional matrix. MxM, where M=3.
  * 
@@ -169,6 +167,12 @@ public class Matrix3
 		return buffer;
 	}
 
+	@Deprecated
+	public Matrix3 multiplyScalar( double s )
+	{
+		return multiply( s );
+	}
+
 	public Matrix3 multiply( double s )
 	{
 		Float32Array te = this.getArray();
@@ -189,6 +193,11 @@ public class Matrix3
 				g = te.get(6), h = te.get(7), i = te.get(8);
 
 		return a*e*i - a*f*h - b*d*i + b*f*g + c*d*h - c*e*g;
+	}
+
+	public Matrix3 getInverse(Matrix4 m)
+	{
+		return getInverse( new Matrix3().setFromMatrix4( m ) );
 	}
 
 	/**
