@@ -387,6 +387,11 @@ public class Ray
 
 	}
 
+	static Vector3 v = new Vector3();
+	public Vector3 intersectBox( Box3 box)
+	{
+		return intersectBox(box, v);
+	}
 
 	/**
 	 * http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-box-intersection/
@@ -547,6 +552,12 @@ public class Ray
 		// Ray intersects triangle.
 		return this.at( QdN / DdN, optionalTarget );
 
+	}
+
+	@Deprecated
+	public Ray applyMatrix4( Matrix4 matrix4 )
+	{
+		return apply( matrix4 );
 	}
 
 	public Ray apply( Matrix4 matrix4 )
