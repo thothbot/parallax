@@ -745,7 +745,6 @@ public class BufferGeometry extends AbstractGeometry
 			} else {
 
 				// non-indexed elements (unconnected triangle soup)
-
 				for ( int i = 0, il = positions.getLength(); i < il; i += 9 ) {
 
 					pA.fromArray( positions, i );

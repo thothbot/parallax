@@ -759,9 +759,14 @@ public class Vector3 extends Vector2
 	public Vector3 fromArray ( Float32Array array, int offset )
 	{
 
-		this.x = array.get( offset );
-		this.y = array.get( offset + 1 );
-		this.z = array.get( offset + 2 );
+		if(array.getLength() > offset )
+			this.x = array.get( offset );
+
+		if(array.getLength() > offset + 1)
+			this.y = array.get( offset + 1 );
+
+		if(array.getLength() > offset + 2)
+			this.z = array.get( offset + 2 );
 
 		return this;
 

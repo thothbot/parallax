@@ -14,10 +14,8 @@
  */
 package org.parallax3d.parallax.system.gl.arrays;
 
-import org.parallax3d.parallax.Log;
 import org.parallax3d.parallax.system.gl.GL20;
 
-import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.List;
@@ -181,7 +179,9 @@ public final class Float32Array extends TypeArray {
 				floatBuffer.limit(index + 1);
 			}
 		}
-		floatBuffer.put(index, value);
+
+		if(floatBuffer.capacity() > index)
+			floatBuffer.put(index, value);
 	}
 
 	public void set(Float32Array array) {
