@@ -41,13 +41,6 @@ public class Vector3 extends Vector2
 	 */
 	protected double z;
 
-	// Temporary variables
-	static Quaternion _quaternion = new Quaternion();
-	static Matrix4 _matrix = new Matrix4();
-	static Vector3 _min = new Vector3();
-	static Vector3 _max = new Vector3();
-	static Vector3 _v1 = new Vector3();
-
 	/**
 	 * This default constructor will initialize vector (0, 0, 0);
 	 */
@@ -251,24 +244,37 @@ public class Vector3 extends Vector2
 		return multiply(s);
 	}
 
-	public Vector3 multiply(double s)
+	public Vector3 multiply(double scalar)
 	{
-		this.x *= s;
-		this.y *= s;
-		this.z *= s;
+		if ( !Double.isInfinite( scalar ) ) {
+
+			this.x *= scalar;
+			this.y *= scalar;
+			this.z *= scalar;
+
+		} else {
+
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+
+		}
+
 		return this;
 	}
 
+	Quaternion q1 = new Quaternion();
 	public Vector3 applyEuler( Euler euler)
 	{
-		this.apply( _quaternion.setFromEuler( euler ) );
+		this.apply( q1.setFromEuler( euler ) );
 
 		return this;
 	}
 
+	Quaternion q2 = new Quaternion();
 	public Vector3 applyAxisAngle(Vector3 axis, double angle)
 	{
-		this.apply( _quaternion.setFromAxisAngle( axis, angle ) );
+		this.apply( q2.setFromAxisAngle( axis, angle ) );
 
 		return this;
 	}
@@ -365,17 +371,19 @@ public class Vector3 extends Vector2
 
 	}
 
+	static final Matrix4 m1 = new Matrix4();
 	public Vector3 project(Camera camera)
 	{
-		_matrix.multiply( camera.getProjectionMatrix(), _matrix.getInverse( camera.getMatrixWorld() ) );
-		return this.applyProjection( _matrix );
+		m1.multiply( camera.getProjectionMatrix(), m1.getInverse( camera.getMatrixWorld() ) );
+		return this.applyProjection( m1 );
 
 	}
 
+	static final Matrix4 m2 = new Matrix4();
 	public Vector3 unproject(Camera camera)
 	{
-		_matrix.multiply( camera.getMatrixWorld(), _matrix.getInverse( camera.getProjectionMatrix() ) );
-		return this.applyProjection( _matrix );
+		m2.multiply( camera.getMatrixWorld(), m2.getInverse( camera.getProjectionMatrix() ) );
+		return this.applyProjection( m2 );
 	}
 
 	/**
@@ -410,6 +418,12 @@ public class Vector3 extends Vector2
 		this.z = v1.z / v2.z;
 
 		return this;
+	}
+
+	@Deprecated
+	public Vector3 divideScalar(double scalar)
+	{
+		return divide(scalar);
 	}
 
 	@Override
@@ -467,12 +481,14 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
+	static final Vector3 min = new Vector3();
+	static final Vector3 max = new Vector3();
 	public Vector3 clamp(double minVal, double maxVal)
 	{
-		_min.set( minVal, minVal, minVal );
-		_max.set( maxVal, maxVal, maxVal );
+		min.set( minVal, minVal, minVal );
+		max.set( maxVal, maxVal, maxVal );
 
-		return this.clamp( _min, _max );
+		return this.clamp( min, max );
 	}
 
 	public Vector3 clampLength( double min, double max )
@@ -632,20 +648,22 @@ public class Vector3 extends Vector2
 		return cross(this, v);
 	}
 
+	static final Vector3 v1 = new Vector3();
 	public Vector3 projectOnVector(Vector3 vector)
 	{
-		_v1.copy( vector ).normalize();
+		v1.copy( vector ).normalize();
 
-		double dot = this.dot( _v1 );
+		double dot = this.dot( v1 );
 
-		return this.copy( _v1 ).multiply( dot );
+		return this.copy( v1 ).multiply( dot );
 	}
 
+	static final Vector3 v2 = new Vector3();
 	public Vector3 projectOnPlane(Vector3 planeNormal)
 	{
-		_v1.copy( this ).projectOnVector( planeNormal );
+		v2.copy( this ).projectOnVector( planeNormal );
 
-		return this.sub( _v1 );
+		return this.sub( v2 );
 	}
 
 
@@ -657,7 +675,7 @@ public class Vector3 extends Vector2
 	 */
 	public Vector3 reflect(Vector3 normal)
 	{
-		return this.sub( _v1.copy( normal ).multiply( 2. * this.dot( normal ) ) );
+		return this.sub( v1.copy( normal ).multiply( 2. * this.dot( normal ) ) );
 	}
 
 	public double angleTo( Vector3 v )

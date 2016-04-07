@@ -43,10 +43,6 @@ public class Vector2
 	 */
 	protected double y;
 
-	// Temporary variables
-	static Vector2 _min = new Vector2();
-	static Vector2 _max = new Vector2();
-
 	/**
 	 * This default constructor will initialize vector (0, 0);
 	 */
@@ -268,10 +264,20 @@ public class Vector2
 		return multiply( s );
 	}
 
-	public Vector2 multiply(double s)
+	public Vector2 multiply(double scalar)
 	{
-		this.x *= s;
-		this.y *= s;
+		if ( !Double.isInfinite( scalar ) ) {
+
+			this.x *= scalar;
+			this.y *= scalar;
+
+		} else {
+
+			this.x = 0;
+			this.y = 0;
+
+		}
+
 
 		return this;
 	}
@@ -287,6 +293,12 @@ public class Vector2
 		this.y = v1.y / v2.y;
 
 		return this;
+	}
+
+	@Deprecated
+	public Vector2 divideScalar(double s)
+	{
+		return divide(s);
 	}
 
 	public Vector2 divide(double s)
@@ -339,6 +351,9 @@ public class Vector2
 		return clamp(minVal, maxVal);
 	}
 
+	// Temporary variables
+	static final Vector2 _min = new Vector2();
+	static final Vector2 _max = new Vector2();
 	public Vector2 clamp(double minVal, double maxVal)
 	{
 		_min.set( minVal, minVal );

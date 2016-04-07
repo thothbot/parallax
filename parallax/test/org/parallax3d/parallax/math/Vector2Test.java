@@ -67,6 +67,9 @@ public class Vector2Test {
 		Vector2 a = new Vector2();
 		assertTrue( a.x == 0 );
 		assertTrue( a.y == 0 );
+
+		a.setX( x );
+		a.setY( y );
 		assertTrue( a.x == x );
 		assertTrue( a.y == y );
 
@@ -114,13 +117,20 @@ public class Vector2Test {
 	public void testMultiply_divide() {
 		Vector2 a = new Vector2(x, y);
 		Vector2 b = new Vector2(-x, -y);
+
 		a.multiplyScalar(-2);
 		assertTrue( a.x == x * (-2) );
 		assertTrue( a.y == y * (-2) );
+
+		b.multiplyScalar( -2 );
 		assertTrue( b.x == 2 * x );
 		assertTrue( b.y == 2 * y );
+
+		a.divideScalar( -2 );
 		assertTrue( a.x == x );
 		assertTrue( a.y == y );
+
+		b.divideScalar( -2 );
 		assertTrue( b.x == -x );
 		assertTrue( b.y == -y );
 
@@ -134,12 +144,16 @@ public class Vector2Test {
 		c.copy(a).min(b);
 		assertTrue( c.x == -x );
 		assertTrue( c.y == -y );
+
+		c.copy( a ).max( b );
 		assertTrue( c.x == x );
 		assertTrue( c.y == y );
+
 		c.set((-2) * x, 2 * y);
 		c.clamp(b, a);
 		assertTrue( c.x == -x );
 		assertTrue( c.y == y );
+
 		c.set((-2) * x, 2 * x);
 		c.clampScalar(-x, x);
 		assertEquals(c.x, -x, DELTA);
@@ -183,8 +197,9 @@ public class Vector2Test {
 		Vector2 c = new Vector2();
 		double result = a.dot(b);
 		assertTrue( result == (-x) * x - y * y );
-		assertTrue( result == 0 );
 
+		result = a.dot( c );
+		assertTrue( result == 0 );
 	}
 
 	@Test
@@ -209,9 +224,12 @@ public class Vector2Test {
 		Vector2 a = new Vector2(x, 0);
 		Vector2 b = new Vector2(0, -y);
 		Vector2 c = new Vector2();
+
 		a.normalize();
 		assertTrue( a.length() == 1 );
 		assertTrue( a.x == 1 );
+
+		b.normalize();
 		assertTrue( b.length() == 1 );
 		assertTrue( b.y == -1 );
 
@@ -232,10 +250,14 @@ public class Vector2Test {
 	@Test
 	public void testSetLength() {
 		Vector2 a = new Vector2(x, 0);
+
 		assertTrue( a.length() == x );
+		a.setLength( y );
 		assertTrue( a.length() == y );
+
 		a = new Vector2(0, 0);
 		assertTrue( a.length() == 0 );
+		a.setLength( y );
 		assertTrue( a.length() == 0 );
 
 	}
@@ -257,12 +279,17 @@ public class Vector2Test {
 	public void testEquals() {
 		Vector2 a = new Vector2(x, 0);
 		Vector2 b = new Vector2(0, -y);
+
 		assertTrue( a.x != b.x );
 		assertTrue( a.y != b.y );
+
 		assertTrue( !a.equals(b) );
 		assertTrue( !b.equals(a) );
+
+		a.copy( b );
 		assertTrue( a.x == b.x );
 		assertTrue( a.y == b.y );
+
 		assertTrue( a.equals(b) );
 		assertTrue( b.equals(a) );
 

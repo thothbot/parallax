@@ -40,9 +40,6 @@ public class Vector4 extends Vector3
 	 */
 	protected double w;
 
-	// Temporary variables
-	static Vector4 _min = new Vector4();
-	static Vector4 _max = new Vector4();
 
 	/**
 	 * This default constructor will initialize vector (0, 0, 0, 1);
@@ -291,16 +288,27 @@ public class Vector4 extends Vector3
 	 * Sets the value of this vector to the scalar multiplication of the scale
 	 * factor with this.
 	 *
-	 * @param s
+	 * @param scalar
 	 *            the scalar value
 	 */
 	@Override
-	public Vector4 multiply(double s)
+	public Vector4 multiply(double scalar)
 	{
-		this.x *= s;
-		this.y *= s;
-		this.z *= s;
-		this.w *= s;
+		if ( !Double.isInfinite( scalar ) ) {
+
+			this.x *= scalar;
+			this.y *= scalar;
+			this.z *= scalar;
+			this.w *= scalar;
+
+		} else {
+
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+			this.w = 0;
+		}
+
 		return this;
 	}
 
@@ -557,6 +565,8 @@ public class Vector4 extends Vector3
 		return this;
 	}
 
+	static final Vector4 _min = new Vector4();
+	static final Vector4 _max = new Vector4();
 	public Vector4 clamp( double minVal, double maxVal )
 	{
 		_min.set( minVal, minVal, minVal, minVal );

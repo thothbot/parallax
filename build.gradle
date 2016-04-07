@@ -53,6 +53,12 @@ project(":parallax") {
 
     sourceSets.test.java.srcDirs = ["test"]
 
+    test {
+        testLogging {
+            events /*"passed", "skipped", */"failed", "standardOut", "standardError"
+        }
+    }
+
     dependencies {
         testCompile "junit:junit:$junitVersion"
     }

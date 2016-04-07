@@ -81,6 +81,12 @@ public class Vector4Test {
 		assertTrue( a.y == 0 );
 		assertTrue( a.z == 0 );
 		assertTrue( a.w == 1 );
+
+		a.setX( x );
+		a.setY( y );
+		a.setZ( z );
+		a.setW( w );
+
 		assertTrue( a.x == x );
 		assertTrue( a.y == y );
 		assertTrue( a.z == z );
@@ -144,19 +150,26 @@ public class Vector4Test {
 	public void testMultiply_divide() {
 		Vector4 a = new Vector4(x, y, z, w);
 		Vector4 b = new Vector4(-x, -y, -z, -w);
+
 		a.multiplyScalar(-2);
 		assertTrue( a.x == x * (-2) );
 		assertTrue( a.y == y * (-2) );
 		assertTrue( a.z == z * (-2) );
 		assertTrue( a.w == w * (-2) );
+
+		b.multiplyScalar( -2 );
 		assertTrue( b.x == 2 * x );
 		assertTrue( b.y == 2 * y );
 		assertTrue( b.z == 2 * z );
 		assertTrue( b.w == 2 * w );
+
+		a.divideScalar( -2 );
 		assertTrue( a.x == x );
 		assertTrue( a.y == y );
 		assertTrue( a.z == z );
 		assertTrue( a.w == w );
+
+		b.divideScalar( -2 );
 		assertTrue( b.x == -x );
 		assertTrue( b.y == -y );
 		assertTrue( b.z == -z );
@@ -169,15 +182,19 @@ public class Vector4Test {
 		Vector4 a = new Vector4(x, y, z, w);
 		Vector4 b = new Vector4(-x, -y, -z, -w);
 		Vector4 c = new Vector4();
+
 		c.copy(a).min(b);
 		assertTrue( c.x == -x );
 		assertTrue( c.y == -y );
 		assertTrue( c.z == -z );
 		assertTrue( c.w == -w );
+
+		c.copy( a ).max( b );
 		assertTrue( c.x == x );
 		assertTrue( c.y == y );
 		assertTrue( c.z == z );
 		assertTrue( c.w == w );
+
 		c.set((-2) * x, 2 * y, (-2) * z, 2 * w);
 		c.clamp(b, a);
 		assertTrue( c.x == -x );
@@ -203,8 +220,11 @@ public class Vector4Test {
 		Vector4 a = new Vector4(x, y, z, w);
 		Vector4 b = new Vector4(-x, -y, -z, -w);
 		Vector4 c = new Vector4(0, 0, 0, 0);
+
 		double result = a.dot(b);
 		assertTrue( result == (-x) * x - y * y - z * z - w * w );
+
+		result = a.dot( c );
 		assertTrue( result == 0 );
 
 	}
@@ -238,13 +258,20 @@ public class Vector4Test {
 		Vector4 b = new Vector4(0, -y, 0, 0);
 		Vector4 c = new Vector4(0, 0, z, 0);
 		Vector4 d = new Vector4(0, 0, 0, -w);
+
 		a.normalize();
 		assertTrue( a.length() == 1 );
 		assertTrue( a.x == 1 );
+
+		b.normalize();
 		assertTrue( b.length() == 1 );
 		assertTrue( b.y == -1 );
+
+		c.normalize();
 		assertTrue( c.length() == 1 );
 		assertTrue( c.z == 1 );
+
+		d.normalize();
 		assertTrue( d.length() == 1 );
 		assertTrue( d.w == -1 );
 
@@ -253,10 +280,14 @@ public class Vector4Test {
 	@Test
 	public void testSetLength() {
 		Vector4 a = new Vector4(x, 0, 0, 0);
+
 		assertTrue( a.length() == x );
+		a.setLength( y );
 		assertTrue( a.length() == y );
+
 		a = new Vector4(0, 0, 0, 0);
 		assertTrue( a.length() == 0 );
+		a.setLength( y );
 		assertTrue( a.length() == 0 );
 
 	}
@@ -280,16 +311,21 @@ public class Vector4Test {
 	public void testEquals() {
 		Vector4 a = new Vector4(x, 0, z, 0);
 		Vector4 b = new Vector4(0, -y, 0, -w);
+
 		assertTrue( a.x != b.x );
 		assertTrue( a.y != b.y );
 		assertTrue( a.z != b.z );
 		assertTrue( a.w != b.w );
+
 		assertTrue( !a.equals(b) );
 		assertTrue( !b.equals(a) );
+
+		a.copy( b );
 		assertTrue( a.x == b.x );
 		assertTrue( a.y == b.y );
 		assertTrue( a.z == b.z );
 		assertTrue( a.w == b.w );
+
 		assertTrue( a.equals(b) );
 		assertTrue( b.equals(a) );
 
