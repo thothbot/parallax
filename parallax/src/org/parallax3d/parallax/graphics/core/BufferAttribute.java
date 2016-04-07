@@ -50,6 +50,22 @@ public class BufferAttribute extends AttributeData {
 
 	}
 
+	public BufferAttribute copy( BufferAttribute source ) {
+
+		for ( int i = 0, l = source.itemSize; i < l; i ++ ) {
+
+			((Float32Array)this.array).set(i, ((Float32Array) source.array).get(i));
+
+		}
+
+		this.itemSize = source.itemSize;
+
+		this.dynamic = source.dynamic;
+
+		return this;
+
+	}
+
 	public void copyAt( int index1, BufferAttribute attribute, int index2 ) {
 
 		index1 *= this.itemSize;

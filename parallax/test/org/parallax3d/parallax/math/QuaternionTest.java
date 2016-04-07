@@ -360,12 +360,10 @@ public class QuaternionTest {
 		};
 
 		Slerp result = doSlerp.set( a, b, 0 );
-		assertTrue( result.equals(
-				a[ 0 ], a[ 1 ], a[ 2 ], a[ 3 ], 0 ));
+		assertTrue( result.equals( a[ 0 ], a[ 1 ], a[ 2 ], a[ 3 ], 0 ));
 
 		result = doSlerp.set( a, b, 1 );
-		assertTrue( result.equals(
-				b[ 0 ], b[ 1 ], b[ 2 ], b[ 3 ], 0 ));
+		assertTrue( result.equals( b[ 0 ], b[ 1 ], b[ 2 ], b[ 3 ], 0 ));
 
 		result = doSlerp.set( a, b, 0.5 );
 		assertTrue( Math.abs( result.dotA() - result.dotB() ) <= Mathematics.EPSILON);
