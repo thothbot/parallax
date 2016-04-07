@@ -350,9 +350,9 @@ public class ColorTest {
 	public void testGetHSL() {
 		Color c = new Color(8454143);
 		Color.HSL hsl = c.getHSL();
-		assertTrue( hsl.hue == 0.5 );
-		assertTrue( hsl.saturation == 1.0 );
-		assertTrue( Math.round(hsl.lightness * 100) / 100 == 0.75 );
+		assertTrue( "hue: " + hsl.hue, hsl.hue == 0.5 );
+		assertTrue( "saturation: " + hsl.saturation, hsl.saturation == 1.0 );
+		assertTrue( "lightness: " + hsl.lightness, Math.round(hsl.lightness * 100) / 100. == 0.75 );
 
 	}
 

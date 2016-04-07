@@ -70,9 +70,6 @@ public class Quaternion
 
 	QuaternionChangeHandler handler;
 
-	// Temporary variables
-	static Vector3 _v1  = new Vector3();
-
 	/**
 	 * Default constructor will make Quaternion (0.0, 0.0, 0.0, 1.0)
 	 */
@@ -366,6 +363,8 @@ public class Quaternion
 	 * @param vTo
 	 * @return
 	 */
+	// Temporary variables
+	private static final Vector3 _v1  = new Vector3();
 	public Quaternion setFromUnitVectors(Vector3 vFrom, Vector3 vTo )
 	{
 		double EPS = 0.000001;

@@ -26,8 +26,6 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static jdk.nashorn.internal.runtime.GlobalFunctions.parseInt;
-
 /**
  * The Color class is used encapsulate colors in the default RGB color space.
  * This class doesn't work with alpha value. 
@@ -302,9 +300,9 @@ public final class Color
 					if ( color.find() ) {
 
 					// hsl(120,50%,50%) hsla(120,50%,50%,0.5)
-					double h = Double.parseDouble( color.group( 1 ) ) / 360;
-					double s = Double.parseDouble( color.group( 2 ) ) / 100;
-					double l = Double.parseDouble( color.group( 3 ) ) / 100;
+					double h = Double.parseDouble( color.group( 1 ) ) / 360.;
+					double s = Double.parseDouble( color.group( 2 ) ) / 100.;
+					double l = Double.parseDouble( color.group( 3 ) ) / 100.;
 
 					return this.setHSL( h, s, l );
 
@@ -324,18 +322,18 @@ public final class Color
 			if ( size == 3 ) {
 
 				// #ff0
-				this.r = parseInt( hex.charAt( 0 ) + hex.charAt( 0 ), 16 ) / 255;
-				this.g = parseInt( hex.charAt( 1 ) + hex.charAt( 1 ), 16 ) / 255;
-				this.b = parseInt( hex.charAt( 2 ) + hex.charAt( 2 ), 16 ) / 255;
+				this.r = Integer.parseInt( "" + hex.charAt( 0 ) + hex.charAt( 0 ), 16 ) / 255.;
+				this.g = Integer.parseInt( "" + hex.charAt( 1 ) + hex.charAt( 1 ), 16 ) / 255.;
+				this.b = Integer.parseInt( "" + hex.charAt( 2 ) + hex.charAt( 2 ), 16 ) / 255.;
 
 				return this;
 
 			} else if ( size == 6 ) {
 
 				// #ff0000
-				this.r = parseInt( hex.charAt( 0 ) + hex.charAt( 1 ), 16 ) / 255;
-				this.g = parseInt( hex.charAt( 2 ) + hex.charAt( 3 ), 16 ) / 255;
-				this.b = parseInt( hex.charAt( 4 ) + hex.charAt( 5 ), 16 ) / 255;
+				this.r = Integer.parseInt( "" + hex.charAt( 0 ) + hex.charAt( 1 ), 16 ) / 255.;
+				this.g = Integer.parseInt( "" + hex.charAt( 2 ) + hex.charAt( 3 ), 16 ) / 255.;
+				this.b = Integer.parseInt( "" + hex.charAt( 4 ) + hex.charAt( 5 ), 16 ) / 255.;
 
 				return this;
 
@@ -347,7 +345,7 @@ public final class Color
 
 			// color keywords
 
-			if ( Colors.valueOf(style) != null ) {
+			if ( Colors.valueOf(style.toUpperCase()) != null ) {
 
 				// red
 				this.setHex( Colors.valueOf(style.toUpperCase()).getValue() );
@@ -467,7 +465,7 @@ public final class Color
 
 	public String getHexString()
 	{
-		String hexString = Integer.toHexString(this.getHex()).toUpperCase();
+		String hexString = Integer.toHexString(this.getHex());
 		while(hexString.length() < 6)
 			hexString = "0" + hexString;
 		return hexString;

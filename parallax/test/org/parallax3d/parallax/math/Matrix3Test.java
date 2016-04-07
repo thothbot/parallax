@@ -121,8 +121,11 @@ public class Matrix3Test {
         assertTrue(b.elements.get(6) == 2);
         assertTrue(b.elements.get(7) == 5);
         assertTrue(b.elements.get(8) == 8);
+
         Matrix3 a = new Matrix3();
         assertTrue(!matrixEquals3(a, b));
+
+        b.identity();
         assertTrue(matrixEquals3(a, b));
 
     }
@@ -206,9 +209,11 @@ public class Matrix3Test {
         Matrix3 a = new Matrix3();
         Matrix3 b = a.clone().transpose();
         assertTrue(matrixEquals3(a, b));
+
         b = new Matrix3().set(0, 1, 2, 3, 4, 5, 6, 7, 8);
         Matrix3 c = b.clone().transpose();
         assertTrue(!matrixEquals3(b, c));
+        c.transpose();
         assertTrue(matrixEquals3(b, c));
 
     }

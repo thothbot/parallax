@@ -45,6 +45,8 @@ public class EulerTest {
         assertTrue(a.equals(eulerAxyz));
         assertTrue(!a.equals(eulerZero));
         assertTrue(!a.equals(eulerAzyx));
+
+        a.copy( eulerAzyx );
         assertTrue(a.equals(eulerAzyx));
         assertTrue(!a.equals(eulerAxyz));
         assertTrue(!a.equals(eulerZero));

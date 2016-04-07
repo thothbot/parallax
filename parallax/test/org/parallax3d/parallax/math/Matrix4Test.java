@@ -106,6 +106,8 @@ public class Matrix4Test {
         assertTrue(b.elements.get(15) == 15);
         Matrix4 a = new Matrix4();
         assertTrue(!matrixEquals4(a, b));
+
+        b.identity();
         assertTrue(matrixEquals4(a, b));
 
     }
@@ -242,9 +244,11 @@ public class Matrix4Test {
         Matrix4 a = new Matrix4();
         Matrix4 b = a.clone().transpose();
         assertTrue(matrixEquals4(a, b));
+
         b = new Matrix4().set(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         Matrix4 c = b.clone().transpose();
         assertTrue(!matrixEquals4(b, c));
+        c.transpose();
         assertTrue(matrixEquals4(b, c));
 
     }

@@ -21,8 +21,7 @@ package org.parallax3d.parallax.math;
 import org.junit.Test;
 import org.parallax3d.parallax.system.ThreejsTest;
 
-import static jdk.nashorn.internal.objects.Global.undefined;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import static org.parallax3d.parallax.math.Constants.*;
 
 @ThreejsTest("Plane")
@@ -125,9 +124,12 @@ public class PlaneTest {
 	@Test
 	public void testNegate_distanceToPoint() {
 		Plane a = new Plane(new Vector3(2, 0, 0), -2);
+
 		a.normalize();
 		assertTrue( a.distanceToPoint(new Vector3(4, 0, 0)) == 3 );
 		assertTrue( a.distanceToPoint(new Vector3(1, 0, 0)) == 0 );
+
+		a.negate();
 		assertTrue( a.distanceToPoint(new Vector3(4, 0, 0)) == -3 );
 		assertTrue( a.distanceToPoint(new Vector3(1, 0, 0)) == 0 );
 
@@ -165,10 +167,10 @@ public class PlaneTest {
 		assertTrue( a.intersectLine(l1).equals(new Vector3(3, 0, 0)) );
 		a = new Plane(new Vector3(1, 0, 0), -11);
 		assertTrue( !a.intersectsLine(l1) );
-		assertTrue( a.intersectLine(l1) == undefined );
+		assertTrue( a.intersectLine(l1) == null );
 		a = new Plane(new Vector3(1, 0, 0), 11);
 		assertTrue( !a.intersectsLine(l1) );
-		assertTrue( a.intersectLine(l1) == undefined );
+		assertTrue( a.intersectLine(l1) == null );
 
 	}
 

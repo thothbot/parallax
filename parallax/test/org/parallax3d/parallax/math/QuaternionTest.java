@@ -101,10 +101,13 @@ public class QuaternionTest {
 		assertTrue( a.equals(zero) );
 		a = new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), 0);
 		assertTrue( a.equals(zero) );
+
 		Quaternion b1 = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), Math.PI);
 		assertTrue( !a.equals(b1) );
 		Quaternion b2 = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -Math.PI);
 		assertTrue( !a.equals(b2) );
+
+        b1.multiply( b2 );
 		assertTrue( a.equals(b1) );
 
 	}
@@ -139,13 +142,17 @@ public class QuaternionTest {
 	public void testNormalize_length_lengthSq() {
 		Quaternion a = new Quaternion(x, y, z, w);
 		Quaternion b = new Quaternion(-x, -y, -z, -w);
+
 		assertTrue( a.length() != 1 );
 		assertTrue( a.lengthSq() != 1 );
-		assertTrue( a.length() == 1 );
+        a.normalize();
+        assertTrue( a.length() == 1 );
 		assertTrue( a.lengthSq() == 1 );
-		a.set(0, 0, 0, 0);
+
+        a.set(0, 0, 0, 0);
 		assertTrue( a.lengthSq() == 0 );
 		assertTrue( a.length() == 0 );
+        a.normalize();
 		assertTrue( a.lengthSq() == 1 );
 		assertTrue( a.length() == 1 );
 
@@ -201,12 +208,17 @@ public class QuaternionTest {
 	public void testEquals() {
 		Quaternion a = new Quaternion(x, y, z, w);
 		Quaternion b = new Quaternion(-x, -y, -z, -w);
+
 		assertTrue( a.x != b.x );
 		assertTrue( a.y != b.y );
+
 		assertTrue( !a.equals(b) );
 		assertTrue( !b.equals(a) );
+
+        a.copy( b );
 		assertTrue( a.x == b.x );
 		assertTrue( a.y == b.y );
+
 		assertTrue( a.equals(b) );
 		assertTrue( b.equals(a) );
 
