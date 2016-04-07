@@ -48,9 +48,9 @@ public class Face3 {
 	protected int c;
 
 	protected Vector3 normal ;
-	protected List<Vector3> vertexNormals;
+	protected List<Vector3> vertexNormals = new ArrayList<>();
 	protected Color color;
-	protected List<Color> vertexColors;
+	protected List<Color> vertexColors = new ArrayList<>();
 	// protected List<Material> materials;
 	protected int materialIndex = 0;
 
@@ -116,10 +116,7 @@ public class Face3 {
 		this.setB(b);
 		this.setC(c);
 		this.setNormal(new Vector3());
-		this.vertexNormals = new ArrayList<>();
 		this.color = new Color();
-
-		this.vertexColors = new ArrayList<>();
 	}
 
 	/**
@@ -143,7 +140,7 @@ public class Face3 {
 		this(a, b, c);
 
 		this.setVertexNormals(normals);
-		this.setVertexColors(new ArrayList<Color>());
+		this.setVertexColors(colors);
 
 		this.materialIndex = materialIndex;
 	}
