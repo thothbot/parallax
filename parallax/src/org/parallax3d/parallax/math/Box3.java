@@ -32,9 +32,6 @@ public class Box3
 	Vector3 min;
 	Vector3 max;
 
-	// Temporary variables
-	static Vector3 _v1 = new Vector3();
-
 	public Box3()
 	{
 		this(new Vector3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
@@ -122,9 +119,10 @@ public class Box3
 		return this;
 	}
 
+	private static final Vector3 v1 = new Vector3();
 	public Box3 setFromCenterAndSize( Vector3 center, Vector3 size )
 	{
-		Vector3 halfSize = _v1.copy( size ).multiply( 0.5 );
+		Vector3 halfSize = v1.copy( size ).multiply( 0.5 );
 
 		this.min.copy( center ).sub( halfSize );
 		this.max.copy( center ).add( halfSize );
@@ -283,16 +281,17 @@ public class Box3
 
 	}
 
+	private static final Vector3 v2 = new Vector3();
 	public boolean intersectsSphere(Sphere sphere)
 	{
 
-		_v1.set(0,0,0);
+		v2.set(0,0,0);
 
 		// Find the point on the AABB closest to the sphere center.
-		this.clampPoint( sphere.getCenter(), _v1 );
+		this.clampPoint( sphere.getCenter(), v2 );
 
 		// If that point is inside the sphere, the AABB and sphere intersect.
-		return _v1.distanceToSquared( sphere.getCenter() ) <= ( sphere.getRadius() * sphere.getRadius() );
+		return v2.distanceToSquared( sphere.getCenter() ) <= ( sphere.getRadius() * sphere.getRadius() );
 	}
 
 	/**
@@ -357,9 +356,10 @@ public class Box3
 		return optionalTarget.copy( point ).clamp( this.min, this.max );
 	}
 
+	private static final Vector3 v3 = new Vector3();
 	public double distanceToPoint( Vector3 point )
 	{
-		Vector3 clampedPoint = _v1.copy( point ).clamp( this.min, this.max );
+		Vector3 clampedPoint = v3.copy( point ).clamp( this.min, this.max );
 		return clampedPoint.sub( point ).length();
 	}
 
@@ -368,10 +368,11 @@ public class Box3
 		return getBoundingSphere(new Sphere());
 	}
 
+	private static final Vector3 v4 = new Vector3();
 	public Sphere getBoundingSphere( Sphere optionalTarget )
 	{
 		optionalTarget.setCenter( this.center() );
-		optionalTarget.setRadius( this.size( _v1 ).length() * 0.5 );
+		optionalTarget.setRadius( this.size( v4 ).length() * 0.5 );
 
 		return optionalTarget;
 	}

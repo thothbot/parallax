@@ -28,9 +28,6 @@ public class Box2
 	Vector2 min;
 	Vector2 max;
 
-	// Temporary variables
-	static Vector2 _v1 = new Vector2();
-
 	public Box2()
 	{
 		this(new Vector2(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
@@ -83,9 +80,10 @@ public class Box2
 		return this;
 	}
 
+	private static final Vector2 v1 = new Vector2();
 	public Box2 setFromCenterAndSize( Vector2 center, Vector2 size )
 	{
-		Vector2 halfSize = _v1.copy( size ).multiply( 0.5 );
+		Vector2 halfSize = v1.copy( size ).multiply( 0.5 );
 		this.min.copy( center ).sub( halfSize );
 		this.max.copy( center ).add( halfSize );
 

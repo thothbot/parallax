@@ -21,6 +21,7 @@ package org.parallax3d.parallax.math;
 import org.junit.Test;
 import org.parallax3d.parallax.system.ThreejsTest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
@@ -67,11 +68,16 @@ public class Box3Test {
     @Test
     public void testSetFromPoints() {
         Box3 a = new Box3();
+
         a.setFromPoints(Arrays.asList(zero3, one3, two3));
         assertTrue(a.min.equals(zero3));
         assertTrue(a.max.equals(two3));
+
+        a.setFromPoints( Arrays.asList( one3 ) );
         assertTrue(a.min.equals(one3));
         assertTrue(a.max.equals(one3));
+
+        a.setFromPoints( new ArrayList<Vector3>());
         assertTrue(a.isEmpty());
     }
 
@@ -79,8 +85,11 @@ public class Box3Test {
     public void testEmpty_makeEmpty() {
         Box3 a = new Box3();
         assertTrue(a.isEmpty());
+
         a = new Box3(zero3.clone(), one3.clone());
         assertTrue(!a.isEmpty());
+
+        a.makeEmpty();
         assertTrue(a.isEmpty());
 
     }
@@ -107,9 +116,14 @@ public class Box3Test {
     @Test
     public void testExpandByPoint() {
         Box3 a = new Box3(zero3.clone(), zero3.clone());
+
         a.expandByPoint(zero3);
         assertTrue(a.size().equals(zero3));
+
+        a.expandByPoint( one3 );
         assertTrue(a.size().equals(one3));
+
+        a.expandByPoint( one3.clone().negate() );
         assertTrue(a.size().equals(one3.clone().multiplyScalar(2)));
         assertTrue(a.center().equals(zero3));
 
@@ -118,8 +132,11 @@ public class Box3Test {
     @Test
     public void testExpandByVector() {
         Box3 a = new Box3(zero3.clone(), zero3.clone());
+
         a.expandByVector(zero3);
         assertTrue(a.size().equals(zero3));
+
+        a.expandByVector( one3 );
         assertTrue(a.size().equals(one3.clone().multiplyScalar(2)));
         assertTrue(a.center().equals(zero3));
 
@@ -128,8 +145,11 @@ public class Box3Test {
     @Test
     public void testExpandByScalar() {
         Box3 a = new Box3(zero3.clone(), zero3.clone());
+
         a.expandByScalar(0);
         assertTrue(a.size().equals(zero3));
+
+        a.expandByScalar( 1 );
         assertTrue(a.size().equals(one3.clone().multiplyScalar(2)));
         assertTrue(a.center().equals(zero3));
 
@@ -140,6 +160,8 @@ public class Box3Test {
         Box3 a = new Box3(zero3.clone(), zero3.clone());
         assertTrue(a.containsPoint(zero3));
         assertTrue(!a.containsPoint(one3));
+
+        a.expandByScalar( 1 );
         assertTrue(a.containsPoint(zero3));
         assertTrue(a.containsPoint(one3));
         assertTrue(a.containsPoint(one3.clone().negate()));
