@@ -21,6 +21,7 @@ import org.parallax3d.parallax.system.ThreejsTest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class TaskCompareTests {
 
     static void compareParallax2Three()
     {
-        log("-- Compare Parallax to Threejs tests:");
+        log("\n-- Compare Parallax to Threejs tests:");
 
         for(JavaTestClass java: javaTests)
         {
@@ -102,9 +103,18 @@ public class TaskCompareTests {
 
     static void generateTests()
     {
-        log("-- Threejs to Parallax test generator:");
+
+        jsTests.removeAll(jsTestsFound);
+
+        log("\n-- Threejs to Parallax test generator for [" + jsTests.size() + "] tests:");
 
         File testGeneratorDir = new File(new File(System.getProperty("generator.dir")), "tests");
+
+        try {
+            Helpers.emptyDirecory( testGeneratorDir.toPath() );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         for(JsTestFile js: jsTests)
         {

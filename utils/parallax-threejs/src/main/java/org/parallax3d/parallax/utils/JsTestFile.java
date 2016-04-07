@@ -93,6 +93,7 @@ public class JsTestFile extends JsFile {
     public String generateJavaTest(File dir) throws FileNotFoundException {
         String threeName = getTestId();
         String clsName = threeName + "Test";
+        String pkg = getProposalJavaPackageName();
 
         dir = new File(dir, getTestRelativePath());
         dir.mkdirs();
@@ -103,7 +104,7 @@ public class JsTestFile extends JsFile {
 
         out.println(Helpers.getCopyHeader());
         out.println();
-        out.println("package " + getProposalJavaPackageName() + ";");
+        out.println("package " +  pkg + ";");
 
         out.println();
         out.println("import org.junit.Test;");
@@ -134,7 +135,7 @@ public class JsTestFile extends JsFile {
 
         out.close();
 
-        return clsName;
+        return pkg + "." + clsName;
     }
 
     private String normalizeTestCaseName(String originalTestCaseName) {
