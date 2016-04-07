@@ -19,6 +19,8 @@ package org.parallax3d.parallax.math;
 
 public class Constants {
 
+    public static double DELTA = 0.00001;
+
     public final static double x = 2;
     public final static double y = 3;
     public final static double z = 4;

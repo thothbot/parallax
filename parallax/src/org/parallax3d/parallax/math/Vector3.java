@@ -177,6 +177,12 @@ public class Vector3 extends Vector2
 		return this.add(this, v);
 	}
 
+	@Deprecated
+	public Vector3 addVectors(Vector3 v1, Vector3 v2)
+	{
+		return this.add(v1, v2);
+	}
+
 	public Vector3 add(Vector3 v1, Vector3 v2)
 	{
 		this.x = v1.x + v2.x;

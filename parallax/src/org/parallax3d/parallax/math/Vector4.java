@@ -187,6 +187,12 @@ public class Vector4 extends Vector3
 		return this.set(v.x, v.y, v.z, 1.0);
 	}
 
+	@Deprecated
+	public Vector4 addVectors(Vector4 v1, Vector4 v2)
+	{
+		return this.add(v1, v2);
+	}
+
 	/**
 	 * Sets the value of this vector to the sum of vectors v1 and v2.
 	 *
@@ -233,6 +239,13 @@ public class Vector4 extends Vector3
 		return this;
 	}
 
+
+	@Deprecated
+	public Vector4 subVectors(Vector4 v1, Vector4 v2)
+	{
+		return sub(v1, v2);
+	}
+
 	/**
 	 * Sets the value of this vector to the difference of vectors v1 and v2
 	 * (this = v1 - v2).
@@ -266,6 +279,12 @@ public class Vector4 extends Vector3
 	public Vector4 multiply(Vector4 v)
 	{
 		return this.multiply(this, v);
+	}
+
+	@Deprecated
+	public Vector4 multiplyScalar(double s)
+	{
+		return multiply(s);
 	}
 
 	/**

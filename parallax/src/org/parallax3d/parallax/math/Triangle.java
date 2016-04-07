@@ -148,6 +148,15 @@ public class Triangle
 		return this;
 	}
 
+	public Triangle setFromPointsAndIndices( Vector3[] points, int i0, int i1, int i2 )
+	{
+		this.a.copy( points[i0] );
+		this.b.copy( points[i1] );
+		this.c.copy( points[i2] );
+
+		return this;
+	}
+
 	public Triangle setFromPointsAndIndices( List<Vector3> points, int i0, int i1, int i2 )
 	{
 		this.a.copy( points.get(i0) );

@@ -184,6 +184,12 @@ public class Sphere
 		return optionalTarget;
 	}
 
+	@Deprecated
+	public Sphere applyMatrix4( Matrix4 matrix )
+	{
+		return apply( matrix );
+	}
+
 	public Sphere apply( Matrix4 matrix )
 	{
 		this.center.apply( matrix );

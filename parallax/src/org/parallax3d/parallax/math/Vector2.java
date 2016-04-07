@@ -200,6 +200,12 @@ public class Vector2
 		return this.add(this, v);
 	}
 
+	@Deprecated
+	public Vector2 addVectors(Vector2 v1, Vector2 v2)
+	{
+		return this.add(v1, v2);
+	}
+
 	public Vector2 add(Vector2 v1, Vector2 v2)
 	{
 		this.x = v1.x + v2.x;
@@ -227,6 +233,12 @@ public class Vector2
 	public Vector2 sub(Vector2 v)
 	{
 		return this.sub(this, v);
+	}
+
+	@Deprecated
+	public Vector2 subVectors(Vector2 v1, Vector2 v2)
+	{
+		return this.sub(v1, v2);
 	}
 
 	public Vector2 sub(Vector2 v1, Vector2 v2)
@@ -319,6 +331,12 @@ public class Vector2
 		this.y = Math.max( min.y, Math.min( max.y, this.y ) );
 
 		return this;
+	}
+
+	@Deprecated
+	public Vector2 clampScalar(double minVal, double maxVal)
+	{
+		return clamp(minVal, maxVal);
 	}
 
 	public Vector2 clamp(double minVal, double maxVal)
