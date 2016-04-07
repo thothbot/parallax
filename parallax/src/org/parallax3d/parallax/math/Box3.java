@@ -133,7 +133,7 @@ public class Box3
 
 	}
 
-	static final Box3 box = new Box3();
+	private static final Box3 box = new Box3();
 	/**
 	 * Computes the world-axis-aligned bounding box of an object (including its children),
 	 * accounting for both the object's, and childrens', world transforms

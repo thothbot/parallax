@@ -40,14 +40,6 @@ public class Ray
 	// A vector pointing in the direction the ray goes. Default is 0, 0, 0.
 	Vector3 direction;
 
-	//Temporary variables
-	static Vector3 _v1 = new Vector3();
-	static Vector3 _v2 = new Vector3();
-	static Vector3 _diff = new Vector3();
-	static Vector3 _edge1 = new Vector3();
-	static Vector3 _edge2 = new Vector3();
-	static Vector3 _normal = new Vector3();
-
 	public Ray()
 	{
 		this(new Vector3(), new Vector3());
@@ -101,6 +93,8 @@ public class Ray
 		return optionalTarget.copy( this.direction ).multiply( t ).add( this.origin );
 	}
 
+	//Temporary variables
+	static Vector3 _v1 = new Vector3();
 	public Ray recast( double t )
 	{
 		this.origin.copy( this.at( t, _v1 ) );
@@ -133,10 +127,11 @@ public class Ray
 
 	}
 
+	private static final Vector3 vTmp = new Vector3();
 	public double distanceSqToPoint( Vector3 point )
 	{
 
-		double directionDistance = _v1.sub( point, this.origin ).dot( this.direction );
+		double directionDistance = vTmp.sub( point, this.origin ).dot( this.direction );
 
 		// point behind the ray
 
@@ -146,9 +141,9 @@ public class Ray
 
 		}
 
-		_v1.copy( this.direction ).multiply( directionDistance ).add( this.origin );
+		vTmp.copy( this.direction ).multiply( directionDistance ).add( this.origin );
 
-		return _v1.distanceToSquared( point );
+		return vTmp.distanceToSquared( point );
 
 	}
 
@@ -272,7 +267,7 @@ public class Ray
 
 	public Vector3 intersectSphere( Sphere sphere )
 	{
-		return intersectSphere(sphere, null);
+		return intersectSphere(sphere, new Vector3());
 	}
 
 	/**
@@ -281,13 +276,14 @@ public class Ray
 	 * @param optionalTarget
 	 * @return
 	 */
+	private static final Vector3 vA = new Vector3();
 	public Vector3 intersectSphere( Sphere sphere, Vector3 optionalTarget )
 	{
-		_v1.sub( sphere.getCenter(), this.getOrigin() );
+		vA.sub( sphere.getCenter(), this.getOrigin() );
 
-		double tca = _v1.dot( this.direction );
+		double tca = vA.dot( this.direction );
 
-		double d2 = _v1.dot( _v1 ) - tca * tca;
+		double d2 = vA.dot( vA ) - tca * tca;
 
 		double radius2 = sphere.getRadius() * sphere.getRadius();
 
@@ -462,6 +458,7 @@ public class Ray
 		return this.at( tmin >= 0 ? tmin : tmax, optionalTarget );
 	}
 
+	private static Vector3 _v2 = new Vector3();
 	public boolean intersectsBox(Box3 box)
 	{
 		return this.intersectBox( box, _v2 ) != null;
@@ -481,6 +478,10 @@ public class Ray
 	 * @param optionalTarget
 	 * @return
 	 */
+	static Vector3 _diff = new Vector3();
+	static Vector3 _edge1 = new Vector3();
+	static Vector3 _edge2 = new Vector3();
+	static Vector3 _normal = new Vector3();
 	public Vector3 intersectTriangle(Vector3 a, Vector3 b, Vector3 c, boolean backfaceCulling, Vector3 optionalTarget) {
 
 		// Compute the offset origin, edges, and normal.

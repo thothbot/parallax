@@ -71,7 +71,7 @@ public class Triangle
 		return Triangle.normal(a, b, c, new Vector3());
 	}
 
-	static final Vector3 v0 = new Vector3();
+	private static final Vector3 v0 = new Vector3();
 	public static Vector3 normal( Vector3 a, Vector3 b, Vector3 c, Vector3 optionalTarget )
 	{
 		optionalTarget.sub( c, b );
@@ -99,9 +99,9 @@ public class Triangle
 	}
 
 	// Temporary variables
-	static final Vector3 _v0 = new Vector3();
-	static final Vector3 _v1 = new Vector3();
-	static final Vector3 _v2 = new Vector3();
+	private static final Vector3 _v0 = new Vector3();
+	private static final Vector3 _v1 = new Vector3();
+	private static final Vector3 _v2 = new Vector3();
 	public static Vector3 barycoordFromPoint( Vector3 point, Vector3 a, Vector3 b, Vector3 c, Vector3 optionalTarget )
 	{
 		_v0.sub( c, a );
@@ -132,7 +132,7 @@ public class Triangle
 
 	}
 
-	static final Vector3 vTmp = new Vector3();
+	private static final Vector3 vTmp = new Vector3();
 	public static boolean containsPoint( Vector3 point, Vector3 a, Vector3 b, Vector3 c )
 	{
 		Vector3 result = Triangle.barycoordFromPoint( point, a, b, c, vTmp );
@@ -176,8 +176,8 @@ public class Triangle
 		return this;
 	}
 
-	static final Vector3 vA = new Vector3();
-	static final Vector3 vB = new Vector3();
+	private static final Vector3 vA = new Vector3();
+	private static final Vector3 vB = new Vector3();
 	public double area()
 	{
 		vA.sub( this.c, this.b );

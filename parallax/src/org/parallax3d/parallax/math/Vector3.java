@@ -371,7 +371,7 @@ public class Vector3 extends Vector2
 
 	}
 
-	static final Matrix4 m1 = new Matrix4();
+	private static final Matrix4 m1 = new Matrix4();
 	public Vector3 project(Camera camera)
 	{
 		m1.multiply( camera.getProjectionMatrix(), m1.getInverse( camera.getMatrixWorld() ) );
@@ -379,7 +379,7 @@ public class Vector3 extends Vector2
 
 	}
 
-	static final Matrix4 m2 = new Matrix4();
+	private static final Matrix4 m2 = new Matrix4();
 	public Vector3 unproject(Camera camera)
 	{
 		m2.multiply( camera.getMatrixWorld(), m2.getInverse( camera.getProjectionMatrix() ) );
@@ -481,8 +481,8 @@ public class Vector3 extends Vector2
 		return this;
 	}
 
-	static final Vector3 min = new Vector3();
-	static final Vector3 max = new Vector3();
+	private static final Vector3 min = new Vector3();
+	private static final Vector3 max = new Vector3();
 	public Vector3 clamp(double minVal, double maxVal)
 	{
 		min.set( minVal, minVal, minVal );
@@ -648,7 +648,7 @@ public class Vector3 extends Vector2
 		return cross(this, v);
 	}
 
-	static final Vector3 v1 = new Vector3();
+	private static final Vector3 v1 = new Vector3();
 	public Vector3 projectOnVector(Vector3 vector)
 	{
 		v1.copy( vector ).normalize();
@@ -658,7 +658,7 @@ public class Vector3 extends Vector2
 		return this.copy( v1 ).multiply( dot );
 	}
 
-	static final Vector3 v2 = new Vector3();
+	private static final Vector3 v2 = new Vector3();
 	public Vector3 projectOnPlane(Vector3 planeNormal)
 	{
 		v2.copy( this ).projectOnVector( planeNormal );

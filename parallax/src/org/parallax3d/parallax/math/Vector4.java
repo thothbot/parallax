@@ -565,8 +565,8 @@ public class Vector4 extends Vector3
 		return this;
 	}
 
-	static final Vector4 _min = new Vector4();
-	static final Vector4 _max = new Vector4();
+	private static final Vector4 _min = new Vector4();
+	private static final Vector4 _max = new Vector4();
 	public Vector4 clamp( double minVal, double maxVal )
 	{
 		_min.set( minVal, minVal, minVal, minVal );

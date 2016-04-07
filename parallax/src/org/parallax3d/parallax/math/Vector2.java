@@ -352,8 +352,8 @@ public class Vector2
 	}
 
 	// Temporary variables
-	static final Vector2 _min = new Vector2();
-	static final Vector2 _max = new Vector2();
+	private static final Vector2 _min = new Vector2();
+	private static final Vector2 _max = new Vector2();
 	public Vector2 clamp(double minVal, double maxVal)
 	{
 		_min.set( minVal, minVal );
