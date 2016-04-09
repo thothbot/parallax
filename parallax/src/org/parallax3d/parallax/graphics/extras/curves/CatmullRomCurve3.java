@@ -39,7 +39,7 @@ import java.util.List;
 @ThreejsObject("THREE.CatmullRomCurve3")
 public class CatmullRomCurve3 extends Curve {
 
-    enum Type {
+    public enum Type {
         centripetal,
         chordal,
         catmullrom
@@ -85,15 +85,14 @@ public class CatmullRomCurve3 extends Curve {
     public Vector3 getPoint(double t) {
 
         List<Vector3> points = this.points;
-//                point, intPoint, weight, l;
 
         int l = points.size();
 
         if ( l < 2 ) Log.warn("CatmullRomCurve3.getPoint(): you need at least 2 points");
 
-        double point = ( l - ( this.closed ? 0 : 1 ) ) * t;
+        double point = ( l - ( this.closed ? 0. : 1. ) ) * t;
         int intPoint = (int) Math.floor( point );
-        double weight = point - intPoint;
+        double weight = point - (double) intPoint;
 
         if ( this.closed ) {
 
@@ -102,7 +101,7 @@ public class CatmullRomCurve3 extends Curve {
         } else if ( weight == 0 && intPoint == l - 1 ) {
 
             intPoint = l - 2;
-            weight = 1;
+            weight = 1.;
 
         }
 

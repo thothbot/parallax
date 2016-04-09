@@ -211,7 +211,7 @@ public abstract class Curve
 	 */
 	public Vector2 getNormalVector( double t )
 	{
-		Vector2 vec = (Vector2) this.getTangent( t );
+		Vector2 vec = this.getTangent( t );
 		return new Vector2( -vec.getY() , vec.getX() );
 	}
 
