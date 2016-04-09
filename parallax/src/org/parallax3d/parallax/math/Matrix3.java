@@ -361,4 +361,15 @@ public class Matrix3
 	{
 		return new Matrix3().copy( this );
 	}
+
+	public boolean equals( Matrix3 m )
+	{
+		for(int i = 0; i < this.elements.getLength(); i ++)
+		{
+			if(this.elements.get(i) != m.elements.get(i))
+				return false;
+		}
+
+		return true;
+	}
 }

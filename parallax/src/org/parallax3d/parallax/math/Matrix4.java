@@ -1178,4 +1178,15 @@ public class Matrix4
 
 		return retval + "]";
 	}
+
+	public boolean equals( Matrix4 m )
+	{
+		for(int i = 0; i < this.elements.getLength(); i ++)
+		{
+			if(this.elements.get(i) != m.elements.get(i))
+				return false;
+		}
+
+		return true;
+	}
 }
