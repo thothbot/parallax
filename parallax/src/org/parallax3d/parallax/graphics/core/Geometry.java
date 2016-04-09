@@ -82,6 +82,7 @@ public class Geometry extends AbstractGeometry
 	public DirectGeometry __directGeometry;
 
 	public Geometry() {
+		this.faceVertexUvs.add(new ArrayList<List<Vector2>>());
 	}
 
 	/**
@@ -302,7 +303,7 @@ public class Geometry extends AbstractGeometry
 		Float32Array uvs2 = geometry.getAttribute("uvs2") != null
 				? (Float32Array)geometry.getAttribute("uvs2").getArray() : null;
 
-		if ( uvs2 != null ) this.faceVertexUvs.set(1, new ArrayList<List<Vector2>>());
+		if ( uvs2 != null ) this.faceVertexUvs.add(1, new ArrayList<List<Vector2>>());
 
 		List<Vector3> tempNormals = new ArrayList<>();
 		List<Vector2> tempUVs = new ArrayList<>();

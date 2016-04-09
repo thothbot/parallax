@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 @ThreejsTest("Face3")
 public class Face3Test {
     @Test
-    public void testCopy1() {
+    public void testCopy() {
         Face3 instance = new Face3(0, 1, 2, new Vector3(0, 1, 0), new Color(0.25, 0.5, 0.75), 2);
         Face3 copiedInstance = instance.copy(instance);
         checkCopy(copiedInstance);
@@ -41,7 +41,7 @@ public class Face3Test {
     }
 
     @Test
-    public void testCopy2() {
+    public void testCopy1() {
         Face3 instance = new Face3(0, 1, 2, new ArrayList<>(Arrays.asList(new Vector3(0, 1, 0), new Vector3(1, 0, 1))),
                 new ArrayList<>(Arrays.asList(new Color(0.25, 0.5, 0.75), new Color(1, 0, 0.4))), 2);
         Face3 copiedInstance = instance.copy(instance);
