@@ -51,15 +51,20 @@ public class InterleavedBuffer extends AttributeData {
 
     }
 
-//    public InterleavedBuffer copy( InterleavedBuffer source ) {
-//
-//        this.array = new ArrayList<>(source.array);
-//        this.stride = source.stride;
-//        this.dynamic = source.dynamic;
-//
-//        return this;
-//
-//    }
+    public InterleavedBuffer copy( InterleavedBuffer source ) {
+
+        for (int i = 0, l = source.array.getLength(); i < l; i++) {
+
+            ((Float32Array) this.array).set(i, ((Float32Array) this.array).get(i));
+
+        }
+
+        this.stride = source.stride;
+        this.dynamic = source.dynamic;
+
+        return this;
+
+    }
 
     public InterleavedBuffer copyAt(int index1, InterleavedBuffer attribute, int index2) {
 

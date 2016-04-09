@@ -29,7 +29,7 @@ public class InstancedInterleavedBuffer extends InterleavedBuffer {
     int meshPerAttribute;
 
     public InstancedInterleavedBuffer(TypeArray array, int stride) {
-        this(array, stride, 0);
+        this(array, stride, 1);
     }
 
     public InstancedInterleavedBuffer(TypeArray array, int stride, int meshPerAttribute) {
@@ -40,5 +40,15 @@ public class InstancedInterleavedBuffer extends InterleavedBuffer {
 
     public int getMeshPerAttribute() {
         return meshPerAttribute;
+    }
+
+    public InstancedInterleavedBuffer copy( InstancedInterleavedBuffer source ) {
+
+        super.copy( source );
+
+        this.meshPerAttribute = source.meshPerAttribute;
+
+        return this;
+
     }
 }
