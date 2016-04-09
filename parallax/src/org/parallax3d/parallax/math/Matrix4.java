@@ -44,14 +44,6 @@ public class Matrix4
 {
 	Float32Array elements;
 
-	// Temporary variables
-	static Vector3 _x = new Vector3();
-	static Vector3 _y = new Vector3();
-	static Vector3 _z = new Vector3();
-	static Vector3 _v1 = new Vector3();
-	static Vector3 _vector = new Vector3();
-	static Matrix4 _matrix = new Matrix4();
-
 	/**
 	 * Default constructor will make identity four-dimensional matrix.
 	 *
@@ -236,14 +228,15 @@ public class Matrix4
 	 *
 	 * @param m the input matrix
 	 */
+	private static final Vector3 v1 = new Vector3();
 	public Matrix4 extractRotation(Matrix4 m)
 	{
 		Float32Array te = this.elements;
 		Float32Array me = m.getArray();
 
-		double scaleX = 1. / _v1.setFromMatrixColumn( m, 0 ).length();
-		double scaleY = 1. / _v1.setFromMatrixColumn( m, 1 ).length();
-		double scaleZ = 1. / _v1.setFromMatrixColumn( m, 2 ).length();
+		double scaleX = 1. / v1.setFromMatrixColumn( m, 0 ).length();
+		double scaleY = 1. / v1.setFromMatrixColumn( m, 1 ).length();
+		double scaleZ = 1. / v1.setFromMatrixColumn( m, 2 ).length();
 
 		te.set(0, me.get(0) * scaleX);
 		te.set(1, me.get(1) * scaleX);
@@ -440,6 +433,9 @@ public class Matrix4
 	 *
 	 * @return the current matrix
 	 */
+	private static final Vector3 _x = new Vector3();
+	private static final Vector3 _y = new Vector3();
+	private static final Vector3 _z = new Vector3();
 	public Matrix4 lookAt(Vector3 eye, Vector3 target, Vector3 up)
 	{
 		Float32Array te = this.elements;
@@ -596,19 +592,20 @@ public class Matrix4
 		return applyToVector3Array(array, 0, array.getLength());
 	}
 
+	static Vector3 v2 = new Vector3();
 	public Float32Array applyToVector3Array (Float32Array array, int offset, int length)
 	{
 		for ( int i = 0, j = offset, il; i < length; i += 3, j += 3 ) {
 
-			_v1.x = array.get( j );
-			_v1.y = array.get( j + 1 );
-			_v1.z = array.get( j + 2 );
+			v2.x = array.get( j );
+			v2.y = array.get( j + 1 );
+			v2.z = array.get( j + 2 );
 
-			_v1.apply( this );
+			v2.apply( this );
 
-			array.set( j , _v1.x);
-			array.set( j + 1 , _v1.y);
-			array.set( j + 2 , _v1.z);
+			array.set( j , v2.x);
+			array.set( j + 1 , v2.y);
+			array.set( j + 2 , v2.z);
 
 		}
 
@@ -619,18 +616,19 @@ public class Matrix4
 	{
 		return applyToBuffer(buffer, 0, buffer.getCount());
 	}
-	
+
+	static Vector3 v3 = new Vector3();
 	public BufferAttribute applyToBuffer( BufferAttribute buffer, int offset, int length) 
 	{
 		for ( int i = 0, j = offset; i < length; i ++, j ++ ) {
 
-			_v1.x = buffer.getX( j );
-			_v1.y = buffer.getY( j );
-			_v1.z = buffer.getZ( j );
+			v3.x = buffer.getX( j );
+			v3.y = buffer.getY( j );
+			v3.z = buffer.getZ( j );
 
-			_v1.apply( this );
+			v3.apply( this );
 
-			buffer.setXYZ( i, _v1.x, _v1.y, _v1.z );
+			buffer.setXYZ( i, v3.x, v3.y, v3.z );
 
 		}
 
@@ -1019,6 +1017,8 @@ public class Matrix4
 		return this;
 	}
 
+	private static final Vector3 _vector = new Vector3();
+	private static final Matrix4 _matrix = new Matrix4();
 	public Matrix4 decompose(Vector3 position, Quaternion quaternion, Vector3 scale)
 	{
 		Float32Array te = this.elements;

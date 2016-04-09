@@ -35,8 +35,8 @@ import org.parallax3d.parallax.math.Mathematics;
 @ThreejsObject("THREE.PerspectiveCamera")
 public class PerspectiveCamera extends Camera implements HasNearFar
 {
-	public double focalLength = 10;
-	public double zoom = 1.0;
+	protected double focalLength = 10;
+	protected double zoom = 1.0;
 
 	protected double fov;
 	protected double aspect;
@@ -238,6 +238,22 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 		this.updateProjectionMatrix();
 	}
 
+	public double getZoom() {
+		return zoom;
+	}
+
+	public void setZoom(double zoom) {
+		this.zoom = zoom;
+	}
+
+	public double getFocalLength() {
+		return focalLength;
+	}
+
+	public void setFocalLength(double focalLength) {
+		this.focalLength = focalLength;
+	}
+
 	/**
 	 * Sets an offset in a larger frustum. This is useful for multi-window or
 	 * multi-monitor/multi-machine setups.
@@ -308,7 +324,7 @@ public class PerspectiveCamera extends Camera implements HasNearFar
 	 */
 	public void updateProjectionMatrix()
 	{
-		double fov = Mathematics.radToDeg( 2 * Math.atan( Math.tan( Mathematics.degToRad( this.fov ) * 0.5 ) / this.zoom ) );
+		double fov = Mathematics.radToDeg( 2.0 * Math.atan( Math.tan( Mathematics.degToRad( this.fov ) * 0.5 ) / this.zoom ) );
 
 		if ( this.fullWidth > 0 ) {
 

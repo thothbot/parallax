@@ -342,11 +342,11 @@ public class Euler {
 		return setFromQuaternion(q, order, false);
 	}
 
-	static Matrix4 _matrix = new Matrix4();
+	private static Matrix4 matrix = new Matrix4();
 	public Euler setFromQuaternion ( Quaternion q, String order, boolean update )
 	{
-		_matrix.makeRotationFromQuaternion( q );
-		return this.setFromRotationMatrix( _matrix, order, update );
+		matrix.makeRotationFromQuaternion( q );
+		return this.setFromRotationMatrix( matrix, order, update );
 	}
 
 	public Euler setFromVector3( Vector3 v )
