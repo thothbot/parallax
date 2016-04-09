@@ -49,9 +49,16 @@ public class InstancedBufferAttribute extends BufferAttribute {
 
     @Override
     public InstancedBufferAttribute clone() {
-        InstancedBufferAttribute instance = (InstancedBufferAttribute) super.clone();
-        instance.setMeshPerAttribute(this.meshPerAttribute);
+        return new InstancedBufferAttribute(this.getArray(), this.getItemSize()).copy( this );
+    }
 
-        return instance;
+    public InstancedBufferAttribute copy( InstancedBufferAttribute source ) {
+
+        super.copy(source);
+
+        this.meshPerAttribute = source.meshPerAttribute;
+
+        return this;
+
     }
 }
