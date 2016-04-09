@@ -199,6 +199,14 @@ public class OrthographicCamera extends Camera implements HasNearFar
 		this.far = far;
 	}
 
+	public double getZoom() {
+		return zoom;
+	}
+
+	public void setZoom(double zoom) {
+		this.zoom = zoom;
+	}
+
 	/**
 	 * Updates the camera projection matrix.
 	 * <p>
