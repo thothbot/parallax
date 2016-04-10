@@ -653,6 +653,10 @@ public class BufferGeometry extends AbstractGeometry
 
 	}
 
+	public void computeFaceNormals() {
+
+	}
+
 	/**
 	 * Computes vertex normals by averaging face normals.
 	 */
