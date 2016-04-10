@@ -1014,7 +1014,7 @@ public class Geometry extends AbstractGeometry
 
 		for ( int i = 0, il = vertices.size(); i < il; i ++ ) {
 
-			vertices.add( vertices.get( i ).clone() );
+			this.vertices.add( vertices.get( i ).clone() );
 
 		}
 
@@ -1022,7 +1022,7 @@ public class Geometry extends AbstractGeometry
 
 		for ( int i = 0, il = faces.size(); i < il; i ++ ) {
 
-			faces.add( faces.get( i ).clone() );
+			this.faces.add( faces.get( i ).clone() );
 		}
 
 		for ( int i = 0, il = source.faceVertexUvs.size(); i < il; i ++ ) {

@@ -215,14 +215,13 @@ public class BufferGeometry extends AbstractGeometry
 		return this;
 	}
 
-	static final Matrix4 m1 = new Matrix4();
-
 	/**
 	 * rotate geometry around world x-axis
 	 * @param angle
 	 * @return
      */
-	public BufferGeometry rotateX( double angle ) {
+    private static final Matrix4 m1 = new Matrix4();
+    public BufferGeometry rotateX( double angle ) {
 
 		m1.makeRotationX( angle );
 
@@ -237,11 +236,12 @@ public class BufferGeometry extends AbstractGeometry
 	 * @param angle
 	 * @return
      */
+    private static final Matrix4 m2 = new Matrix4();
 	public BufferGeometry rotateY( double angle ) {
 
-		m1.makeRotationY( angle );
+		m2.makeRotationY( angle );
 
-		this.applyMatrix( m1 );
+		this.applyMatrix( m2 );
 
 		return this;
 
@@ -252,44 +252,47 @@ public class BufferGeometry extends AbstractGeometry
 	 * @param angle
 	 * @return
      */
+    private static final Matrix4 m3 = new Matrix4();
 	public BufferGeometry rotateZ( double angle ) {
 
-		m1.makeRotationZ( angle );
+		m3.makeRotationZ( angle );
 
-		this.applyMatrix( m1 );
+		this.applyMatrix( m3 );
 
 		return this;
 
 	}
 
+    private static final Matrix4 m4 = new Matrix4();
 	public BufferGeometry translate( double x, double y, double z ) {
 
-		m1.makeTranslation( x, y, z );
+		m4.makeTranslation( x, y, z );
 
-		this.applyMatrix( m1 );
+		this.applyMatrix( m4 );
 
 		return this;
 
 	}
-	
+
+    private static final Matrix4 m5 = new Matrix4();
 	public BufferGeometry scale( double x, double y, double z ) {
 
-		m1.makeScale( x, y, z );
+		m5.makeScale( x, y, z );
 	
-		this.applyMatrix( m1 );
+		this.applyMatrix( m5 );
 	
 		return this;
 	
 	}
 	
-	static final Object3D obj = new Object3D();
+	static final Object3D obj1 = new Object3D();
 	public BufferGeometry lookAt( Vector3 vector ) {
 		
-		obj.lookAt( vector );
+		obj1.lookAt( vector );
 
-		obj.updateMatrix();
+		obj1.updateMatrix();
 
-		this.applyMatrix( obj.matrix );
+		this.applyMatrix( obj1.matrix );
 
 		return this;
 	}

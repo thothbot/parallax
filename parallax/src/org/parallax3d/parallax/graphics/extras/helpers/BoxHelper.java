@@ -27,7 +27,7 @@ import org.parallax3d.parallax.math.Box3;
 import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-import org.parallax3d.parallax.system.gl.arrays.Uint16Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 
 @ThreejsObject("THREE.BoxHelper")
 public class BoxHelper extends LineSegments 
@@ -39,7 +39,7 @@ public class BoxHelper extends LineSegments
 	}
 
 	private static BufferGeometry intDefaultGeometry() {
-		Uint16Array indices = Uint16Array.create( new int[] { 0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7 } );
+		Uint32Array indices = Uint32Array.create( new int[] { 0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7 } );
 		Float32Array positions = Float32Array.create( 8 * 3 );
 
 		BufferGeometry geometry = new BufferGeometry();

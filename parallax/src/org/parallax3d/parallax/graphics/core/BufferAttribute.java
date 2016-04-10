@@ -54,7 +54,10 @@ public class BufferAttribute extends AttributeData {
 
 		for ( int i = 0, l = source.itemSize; i < l; i ++ ) {
 
-			((Float32Array)this.array).set(i, ((Float32Array) source.array).get(i));
+			if(source.array instanceof Float32Array)
+				((Float32Array)this.array).set(i, ((Float32Array) source.array).get(i));
+			if(source.array instanceof Uint32Array)
+				((Uint32Array)this.array).set(i, ((Uint32Array) source.array).get(i));
 
 		}
 
@@ -73,7 +76,10 @@ public class BufferAttribute extends AttributeData {
 
 		for ( int i = 0, l = this.itemSize; i < l; i ++ ) {
 
-			((Float32Array)this.array).set(index1 + i, ((Float32Array) attribute.array).get(index2 + i));
+			if(attribute.array instanceof Float32Array)
+				((Float32Array)this.array).set(index1 + i, ((Float32Array) attribute.array).get(index2 + i));
+			if(attribute.array instanceof Uint32Array)
+				((Uint32Array)this.array).set(index1 + i, ((Uint32Array) attribute.array).get(index2 + i));
 
 		}
 
@@ -117,7 +123,7 @@ public class BufferAttribute extends AttributeData {
 
 	}
 
-	public BufferAttribute  copyIndicesArray( List<Face3> indices ) {
+	public BufferAttribute copyIndicesArray( List<Face3> indices ) {
 
 		Float32Array array = (Float32Array) this.array;
 		int offset = 0;

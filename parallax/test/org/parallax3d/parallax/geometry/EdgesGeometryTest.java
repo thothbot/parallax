@@ -118,7 +118,6 @@ public class EdgesGeometryTest {
             assertEquals(countEdges(geom), numBefore);
 
             EdgesGeometry egeom = new EdgesGeometry(geom);
-
             assertEquals(countEdges(egeom), numAfter);
 
         }
@@ -184,7 +183,6 @@ public class EdgesGeometryTest {
 
         int numTris = geometry.getIndex().getArray().getLength() / 3;
 
-        int offset = 0;
         for (int i = 0; i < numTris; i++) {
 
             int start = i * 3;

@@ -70,7 +70,6 @@ public class EdgesGeometry extends BufferGeometry {
 
         List<Vector3> vertices = geometry2.getVertices();
         List<Face3> faces = geometry2.getFaces();
-
         for ( int i = 0, l = faces.size(); i < l; i ++ ) {
 
             Face3 face = faces.get(i);
@@ -81,8 +80,7 @@ public class EdgesGeometry extends BufferGeometry {
                 edge[ 1 ] = face.getFlat()[ ( j + 1 ) % 3  ];
                 Arrays.sort(edge);
 
-                String key = edge.toString();
-
+                String key = Arrays.toString(edge);
                 if ( !hash.containsKey( key )) {
 
                     hash.put(key, new Hash( edge[ 0 ],edge[ 1 ], i, -1));
@@ -102,7 +100,6 @@ public class EdgesGeometry extends BufferGeometry {
         for (String key : hash.keySet() ) {
 
             Hash h = hash.get( key );
-
             if ( h.face2 == -1 || faces.get(h.face1).getNormal().dot(faces.get(h.face2).getNormal()) <= thresholdDot ) {
 
                 Vector3 vertex = vertices.get(h.vert1);
