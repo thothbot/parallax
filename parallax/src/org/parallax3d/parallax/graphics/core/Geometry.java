@@ -419,8 +419,6 @@ public class Geometry extends AbstractGeometry
 
 		}
 
-		this.faceVertexUvs.get( 0 ).add( Arrays.asList( tempUVs.get( a ), tempUVs.get( b ), tempUVs.get( c ) ) );
-
 	}
 
 	public Vector3 center()
@@ -935,7 +933,8 @@ public class Geometry extends AbstractGeometry
 
 			for ( int j = 0, jl = this.faceVertexUvs.size(); j < jl; j ++ )
 			{
-				this.faceVertexUvs.get( j ).remove( i );
+				if( i < this.faceVertexUvs.get( j ).size() )
+					this.faceVertexUvs.get( j ).remove( i );
 			}
 		}
 
@@ -1030,7 +1029,7 @@ public class Geometry extends AbstractGeometry
 
 			List<List<Vector2>> faceVertexUvs = source.faceVertexUvs.get(i);
 
-			if ( this.faceVertexUvs.get(i) == null  ) {
+			if ( i >= this.faceVertexUvs.size() ) {
 
 				this.faceVertexUvs.add(i, new ArrayList<List<Vector2>>());
 

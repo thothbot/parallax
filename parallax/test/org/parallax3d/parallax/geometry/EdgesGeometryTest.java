@@ -29,8 +29,8 @@ import org.parallax3d.parallax.system.ThreejsTest;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -139,7 +139,7 @@ public class EdgesGeometryTest {
 
         BufferGeometry geom = new BufferGeometry();
 
-        List<Integer> indexTable = new ArrayList<>();
+        Map<Integer, Integer> indexTable = new HashMap<>();
         int numTris = idxList.length / 3;
         int numVerts = 0;
 
@@ -151,14 +151,13 @@ public class EdgesGeometryTest {
             for (int j = 0; j < 3; j++) {
 
                 int idx = idxList[3 * i + j];
-                if (idx > indexTable.size()) {
-
+                if (!indexTable.containsKey(idx)) {
                     Vector3 v = vertList[idx];
                     vertices.set(3 * numVerts, v.getX());
                     vertices.set(3 * numVerts + 1, v.getY());
                     vertices.set(3 * numVerts + 2, v.getZ());
 
-                    indexTable.add(idx, numVerts);
+                    indexTable.put(idx, numVerts);
 
                     numVerts++;
 

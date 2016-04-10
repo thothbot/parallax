@@ -157,8 +157,8 @@ public class DirectGeometry extends EventDispatcher implements Disposable {
         List<Vector3> vertices = geometry.vertices;
         List<List<List<Vector2>>> faceVertexUvs = geometry.faceVertexUvs;
 
-        boolean hasFaceVertexUv = faceVertexUvs.get(0) != null && faceVertexUvs.get(0).size() > 0;
-        boolean hasFaceVertexUv2 = faceVertexUvs.get(1) != null && faceVertexUvs.get(1).size() > 0;
+        boolean hasFaceVertexUv = faceVertexUvs.size() > 0 && faceVertexUvs.get(0) != null && faceVertexUvs.get(0).size() > 0;
+        boolean hasFaceVertexUv2 = faceVertexUvs.size() > 1 && faceVertexUvs.get(1) != null && faceVertexUvs.get(1).size() > 0;
 
         // morphs
 
