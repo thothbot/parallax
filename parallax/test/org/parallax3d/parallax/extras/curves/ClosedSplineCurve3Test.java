@@ -35,15 +35,26 @@ public class ClosedSplineCurve3Test {
 
     @Test
     public void testBasic_check() {
-        CatmullRomCurve3 closedSpline = new CatmullRomCurve3(Arrays.asList(new Vector3(-60, -100, 60),
-                new Vector3(-60, 20, 60), new Vector3(-60, 120, 60),
-                new Vector3(60, 20, -60), new Vector3(60, -100, -60)));
-        closedSpline.setClosed(true);
-        List<Vector3> closedSplinePoints = Arrays.asList(new Vector3(-60, -100, 60),
-                new Vector3(-67.5, -46.25, 67.5), new Vector3(-60, 20, 60),
-                new Vector3(-67.5, 83.75, 67.5), new Vector3(-60, 120, 60),
-                new Vector3(0, 83.75, 0), new Vector3(60, 20, -60), new Vector3(75, -46.25, -75),
-                new Vector3(60, -100, -60), new Vector3(0, -115, 0), new Vector3(-60, -100, 60));
+        CatmullRomCurve3 closedSpline = new CatmullRomCurve3(Arrays.asList(
+                new Vector3(-60, -100, 60),
+                new Vector3(-60, 20, 60),
+                new Vector3(-60, 120, 60),
+                new Vector3(60, 20, -60),
+                new Vector3(60, -100, -60)))
+            .setClosed(true);
+
+        List<Vector3> closedSplinePoints = Arrays.asList(
+                new Vector3(-60, -100, 60),
+                new Vector3(-67.5, -46.25, 67.5),
+                new Vector3(-60, 20, 60),
+                new Vector3(-67.5, 83.75, 67.5),
+                new Vector3(-60, 120, 60),
+                new Vector3(0, 83.75, 0),
+                new Vector3(60, 20, -60),
+                new Vector3(75, -46.25, -75),
+                new Vector3(60, -100, -60),
+                new Vector3(0, -115, 0),
+                new Vector3(-60, -100, 60));
 
         List<Vector2> getPoints = closedSpline.getPoints(10);
         vectorsAreEqual(getPoints, closedSplinePoints);

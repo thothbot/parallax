@@ -57,7 +57,7 @@ public abstract class Curve
 	 */
 	public List<Vector2> getPoints(int divisions)
 	{
-		List<Vector2> pts = new ArrayList<Vector2>();
+		List<Vector2> pts = new ArrayList<>();
 		for (int d = 0; d <= divisions; d++)
 			pts.add(this.getPoint(d / (double)divisions));
 

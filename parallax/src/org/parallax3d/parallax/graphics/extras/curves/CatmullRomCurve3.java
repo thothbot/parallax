@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author zz85 https://github.com/zz85
  *
  * Centripetal CatmullRom Curve - which is useful for avoiding
  * cusps and self-intersections in non-uniform catmull rom curves.
@@ -35,6 +34,9 @@ import java.util.List;
  *
  * curve.type accepts centripetal(default), chordal and catmullrom
  * curve.tension is used for catmullrom which defaults to 0.5
+ *
+ *  @author zz85 https://github.com/zz85
+ *  @author thothbot
  */
 @ThreejsObject("THREE.CatmullRomCurve3")
 public class CatmullRomCurve3 extends Curve {
@@ -45,18 +47,18 @@ public class CatmullRomCurve3 extends Curve {
         catmullrom
     }
 
-    List<Vector3> points;
+    private List<Vector3> points;
 
-    Type type;
+    private Type type;
 
-    Double tension;
+    private Double tension;
 
-    boolean closed = false;
+    private boolean closed = false;
 
-    Vector3 tmp = new Vector3();
-    CubicPoly px = new CubicPoly();
-    CubicPoly py = new CubicPoly();
-    CubicPoly pz = new CubicPoly();
+    private Vector3 tmp = new Vector3();
+    private CubicPoly px = new CubicPoly();
+    private CubicPoly py = new CubicPoly();
+    private CubicPoly pz = new CubicPoly();
 
     public CatmullRomCurve3() {
         this(new ArrayList<Vector3>());
@@ -90,7 +92,7 @@ public class CatmullRomCurve3 extends Curve {
 
         if ( l < 2 ) Log.warn("CatmullRomCurve3.getPoint(): you need at least 2 points");
 
-        double point = ( l - ( this.closed ? 0. : 1. ) ) * t;
+        double point = ( (double) l - ( this.closed ? 0. : 1. ) ) * t;
         int intPoint = (int) Math.floor( point );
         double weight = point - (double) intPoint;
 
@@ -106,7 +108,6 @@ public class CatmullRomCurve3 extends Curve {
         }
 
         Vector3 p0, p1, p2, p3; // 4 points
-
         if ( this.closed || intPoint > 0 ) {
 
             p0 = points.get((intPoint - 1) % l);

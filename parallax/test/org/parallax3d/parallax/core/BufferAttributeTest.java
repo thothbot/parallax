@@ -27,6 +27,7 @@ import org.parallax3d.parallax.math.Vector3;
 import org.parallax3d.parallax.math.Vector4;
 import org.parallax3d.parallax.system.ThreejsTest;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
+import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 
 import java.util.Arrays;
 
@@ -81,9 +82,9 @@ public class BufferAttributeTest {
 
     @Test
     public void testCopyIndicesArray() {
-        BufferAttribute attr = new BufferAttribute(Float32Array.create(6), 3);
+        BufferAttribute attr = new BufferAttribute(Uint32Array.create(6), 3);
         attr.copyIndicesArray(Arrays.asList( new Face3(1,2,3), new Face3(4,5,6)));
-        Float32Array i = (Float32Array) attr.getArray();
+        Uint32Array i = (Uint32Array) attr.getArray();
         assertTrue(i.get( 0 ) == 1 && i.get( 1 ) == 2 && i.get( 2 ) == 3);
         assertTrue(i.get( 3 ) == 4 && i.get( 4 ) == 5 && i.get( 5 ) == 6);
 

@@ -28,10 +28,10 @@ package org.parallax3d.parallax.graphics.extras.core;
  */
 public class CubicPoly {
 
-    double c0;
-    double c1;
-    double c2;
-    double c3;
+    private double c0;
+    private double c1;
+    private double c2;
+    private double c3;
 
     /**
 	 * Compute coefficients for a cubic polynomial
@@ -67,12 +67,6 @@ public class CubicPoly {
 
     /**
      * standard Catmull-Rom spline: interpolate between x1 and x2 with previous/following points x1/x4
-     *
-     * @param x0
-     * @param x1
-     * @param x2
-     * @param x3
-     * @param tension
      */
     public void initCatmullRom( double x0, double x1, double x2, double x3, double tension ) {
 
