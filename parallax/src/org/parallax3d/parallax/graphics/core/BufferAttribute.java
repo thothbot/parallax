@@ -125,7 +125,7 @@ public class BufferAttribute extends AttributeData {
 
 	public BufferAttribute copyIndicesArray( List<Face3> indices ) {
 
-		Float32Array array = (Float32Array) this.array;
+		Uint32Array array = (Uint32Array) this.array;
 		int offset = 0;
 
 		for ( int i = 0, l = indices.size(); i < l; i ++ ) {
@@ -314,8 +314,14 @@ public class BufferAttribute extends AttributeData {
 
 	public BufferAttribute clone() {
 
-		return new BufferAttribute( Float32Array.create(this.array),  this.itemSize );
+		if(this.array instanceof Float32Array)
+			return new BufferAttribute( Float32Array.create(this.array),  this.itemSize );
+		else if(this.array instanceof Uint32Array)
+			return new BufferAttribute( Uint32Array.create(this.array),  this.itemSize );
+		else
+			Log.error("Clone for array " + this.array.getClass() + " is not supported");
 
+		return null;
 	}
 
 	public String toString() {

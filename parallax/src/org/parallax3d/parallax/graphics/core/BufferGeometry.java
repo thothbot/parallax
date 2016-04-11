@@ -28,7 +28,6 @@ import org.parallax3d.parallax.math.*;
 import org.parallax3d.parallax.system.FastMap;
 import org.parallax3d.parallax.system.ThreejsObject;
 import org.parallax3d.parallax.system.gl.arrays.Float32Array;
-import org.parallax3d.parallax.system.gl.arrays.Int32Array;
 import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 
 import java.util.ArrayList;
@@ -704,7 +703,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			if ( index != null ) {
 
-				Int32Array indices = (Int32Array) index.array;
+                Uint32Array indices = (Uint32Array) index.array;
 
 				if ( groups.size() == 0 ) {
 
@@ -855,7 +854,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		BufferGeometry geometry2 = new BufferGeometry();
 
-		Int32Array indices = (Int32Array) this.index.array;
+        Uint32Array indices = (Uint32Array) this.index.array;
 		FastMap<BufferAttribute> attributes = this.attributes;
 
 		for (String name : attributes.keySet()) {
