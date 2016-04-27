@@ -40,10 +40,33 @@ import java.util.List;
 
 public class RaytracingRenderer extends Renderer
 {
-	
-	private static final int maxRecursionDepth = 3;
-	private static final int blockSize = 64;
-	
+
+	private static final int MAX_RECURSION_DEPTH = 3;
+	private static final int BLOCK_SIZE = 64;
+
+	Color diffuseColor = new Color();
+	Color specularColor = new Color();
+	Color lightColor = new Color();
+	Color schlick = new Color();
+
+	Color lightContribution = new Color();
+
+	Vector3 eyeVector = new Vector3();
+	Vector3 lightVector = new Vector3();
+	Vector3 normalVector = new Vector3();
+	Vector3 halfVector = new Vector3();
+
+	Vector3 localPoint = new Vector3();
+	Vector3 reflectionVector = new Vector3();
+
+	Vector3 tmpVec = new Vector3();
+
+	Color[] tmpColor = null;
+
+	Vector3 tmpVec1 = new Vector3();
+	Vector3 tmpVec2 = new Vector3();
+	Vector3 tmpVec3 = new Vector3();
+
 	private static class ObjectMatrixes
 	{
 		public Matrix3 normalMatrix;
@@ -55,30 +78,29 @@ public class RaytracingRenderer extends Renderer
 			this.inverseMatrix = new Matrix4();
 		}
 	}
-	
+
 	Canvas canvas;
-    Context2d context;
+	Context2d context;
 
 	Vector3 origin = new Vector3();
 	Vector3 direction = new Vector3();
-	
+
 	Vector3 cameraPosition = new Vector3();
 
 	Raycaster raycaster = new Raycaster( origin, direction );
 	Raycaster raycasterLight = new Raycaster();
-	
+
 	double perspective;
 	Matrix4 modelViewMatrix = new Matrix4();	
 	Matrix3 cameraNormalMatrix = new Matrix3();
 
 	List<Object3D> objects;
 	List<Light> lights = new ArrayList<Light>();
-	
+
 	AnimationScheduler.AnimationHandle animationHandler;
-	
+
 	FastMap<ObjectMatrixes> cache = new FastMap<ObjectMatrixes>();
-			
-			
+
 	Canvas canvasBlock;
 	ImageData imagedata = null;
 
@@ -93,15 +115,15 @@ public class RaytracingRenderer extends Renderer
 	    
 	    
 	    canvasBlock = Canvas.createIfSupported();
-		canvasBlock.setCoordinateSpaceWidth(blockSize);
-		canvasBlock.setCoordinateSpaceHeight(blockSize);
+		canvasBlock.setCoordinateSpaceWidth(BLOCK_SIZE);
+		canvasBlock.setCoordinateSpaceHeight(BLOCK_SIZE);
 
 		RootPanel.get().add(canvasBlock, -10000, 0);
 
 		Context2d contextBlock = canvasBlock.getContext2d();
-		imagedata = contextBlock.getImageData( 0, 0, blockSize, blockSize );
+		imagedata = contextBlock.getImageData( 0, 0, BLOCK_SIZE, BLOCK_SIZE );
 	}
-	
+
 	public Canvas getCanvas() {
 		return this.canvas;
 	}
@@ -125,7 +147,7 @@ public class RaytracingRenderer extends Renderer
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 	@Override
 	public void render(Scene scene, final Camera camera ) {
 
@@ -133,15 +155,17 @@ public class RaytracingRenderer extends Renderer
 			this.clear();
 		}
 
-//		cancelAnimationFrame( animationFrameId );
-
 		// update scene graph
 
-		if (scene.isAutoUpdate()) scene.updateMatrixWorld(false);
+		if (scene.isAutoUpdate()) {
+			scene.updateMatrixWorld(false);
+		}
 
 		// update camera matrices
 
-		if ( camera.getParent() == null ) camera.updateMatrixWorld(false);
+		if ( camera.getParent() == null ) {
+			camera.updateMatrixWorld(false);
+		}
 
 		camera.getMatrixWorldInverse().getInverse( camera.getMatrixWorld() );
 		cameraPosition.setFromMatrixPosition( camera.getMatrixWorld() );
@@ -169,14 +193,14 @@ public class RaytracingRenderer extends Renderer
 
 				}
 
-				if ( !cache.containsKey( object.getId() + "" ) ) 
+				if ( !cache.containsKey(Integer.toString(object.getId()))) 
 				{
-					cache.put( object.getId() + "", new ObjectMatrixes());
+					cache.put( Integer.toString(object.getId()), new ObjectMatrixes());
 				}
 
 				modelViewMatrix.multiply( camera.getMatrixWorldInverse(), object.getMatrixWorld() );
 
-				ObjectMatrixes _object = cache.get( object.getId() + "" );
+				ObjectMatrixes _object = cache.get(Integer.toString(object.getId()));
 				
 				_object.normalMatrix.getNormalMatrix( modelViewMatrix );
 				_object.inverseMatrix.getInverse( object.getMatrixWorld() );
@@ -197,15 +221,15 @@ public class RaytracingRenderer extends Renderer
 		
 		int index = 0;
 
-		for ( int y = 0; y < blockSize; y ++ ) {
+		for ( int y = 0; y < BLOCK_SIZE; y ++ ) {
 
-			for ( int x = 0; x < blockSize; x ++, index += 4 ) {
+			for ( int x = 0; x < BLOCK_SIZE; x ++, index += 4 ) {
 
 				// spawn primary ray at pixel position
 
 				origin.copy( cameraPosition );
 
-				direction.set( x + blockX - getAbsoluteWidth()/2, - ( y + blockY - getAbsoluteHeight()/2 ), - perspective );
+				direction.set( x + blockX - (double)getAbsoluteWidth()/2, - ( y + blockY - getAbsoluteHeight()/2 ), - perspective );
 				direction.apply( cameraNormalMatrix ).normalize();
 
 				spawnRay( origin, direction, pixelColor, 0 );		
@@ -223,18 +247,20 @@ public class RaytracingRenderer extends Renderer
 
 		context.putImageData( imagedata, blockX, blockY );
 
-		blockX += blockSize;
+		blockX += BLOCK_SIZE;
 
 		if ( blockX >= getAbsoluteWidth() ) {
 
 			blockX = 0;
-			blockY += blockSize;
+			blockY += BLOCK_SIZE;
 
-			if ( blockY >= getAbsoluteHeight() ) return;
+			if ( blockY >= getAbsoluteHeight() ) {
+				return;
+			}
 
 		}
 
-		context.fillRect( blockX, blockY, blockSize, blockSize );
+		context.fillRect( blockX, blockY, BLOCK_SIZE, BLOCK_SIZE );
 
 		final int _blockX = blockX;
 		final int _blockY = blockY;
@@ -251,32 +277,13 @@ public class RaytracingRenderer extends Renderer
 
 	}
 
-	Color diffuseColor = new Color();
-	Color specularColor = new Color();
-	Color lightColor = new Color();
-	Color schlick = new Color();
-
-	Color lightContribution = new Color();
-
-	Vector3 eyeVector = new Vector3();
-	Vector3 lightVector = new Vector3();
-	Vector3 normalVector = new Vector3();
-	Vector3 halfVector = new Vector3();
-
-	Vector3 localPoint = new Vector3();
-	Vector3 reflectionVector = new Vector3();
-
-	Vector3 tmpVec = new Vector3();
-
-	Color[] tmpColor = null;
-
 	private void spawnRay(Vector3 rayOrigin, Vector3 rayDirection, Color outputColor, int recursionDepth) 
 	{
 		// Init the tmp array
 		if(tmpColor == null)
 		{
-			tmpColor = new Color[maxRecursionDepth];
-			for ( int i = 0; i < maxRecursionDepth; i ++ )
+			tmpColor = new Color[MAX_RECURSION_DEPTH];
+			for ( int i = 0; i < MAX_RECURSION_DEPTH; i ++ )
 				tmpColor[ i ] = new Color();
 		}
 
@@ -300,10 +307,8 @@ public class RaytracingRenderer extends Renderer
 		// ray didn't find anything
 		// (here should come setting of background color?)
 
-		if ( intersections.size() == 0 ) {
-
+		if ( intersections.isEmpty()) {
 			return;
-
 		}
 
 		// ray hit
@@ -319,7 +324,7 @@ public class RaytracingRenderer extends Renderer
 
 		//
 
-		ObjectMatrixes _object = cache.get( object.getId() + "" );
+		ObjectMatrixes _object = cache.get(Integer.toString(object.getId()));
 
 		localPoint.copy( point ).apply( _object.inverseMatrix );
 		eyeVector.sub( raycaster.getRay().getOrigin(), point ).normalize();
@@ -360,7 +365,9 @@ public class RaytracingRenderer extends Renderer
 
 				// point in shadow
 
-				if (intersections2.size() > 0) continue;
+				if (!intersections2.isEmpty()) {
+					continue;
+				}
 
 				// point visible
 
@@ -386,7 +393,9 @@ public class RaytracingRenderer extends Renderer
 
 				// point in shadow
 
-				if (intersections3.size() > 0) continue;
+				if (!intersections3.isEmpty()) {
+					continue;
+				}
 
 				// point lit
 
@@ -464,7 +473,7 @@ public class RaytracingRenderer extends Renderer
 
 		if ( ( ((HasRaytracingMirror)material).isMirror() || ((HasRaytracingGlass)material).isGlass() ) 
 				&& reflectivity > 0 
-				&& recursionDepth < maxRecursionDepth ) 
+				&& recursionDepth < MAX_RECURSION_DEPTH ) 
 		{
 
 			if ( ((HasRaytracingMirror)material).isMirror() ) 
@@ -502,7 +511,7 @@ public class RaytracingRenderer extends Renderer
 
 			double theta = Math.max( eyeVector.dot( normalVector ), 0.0 );
 
-			double weight = reflectivity + ( 1.0 - reflectivity) * Math.pow( ( 1.0 - theta ), 5.0 );
+			double weight = reflectivity + ( 1.0 - reflectivity) * Math.pow( 1.0 - theta, 5.0 );
 
 			Color zColor = tmpColor[ recursionDepth ];
 
@@ -521,9 +530,6 @@ public class RaytracingRenderer extends Renderer
 		
 	}
 	
-	Vector3 tmpVec1 = new Vector3();
-	Vector3 tmpVec2 = new Vector3();
-	Vector3 tmpVec3 = new Vector3();
 
 	private void computePixelNormal(Vector3 outputVector, Vector3 point, Material.SHADING shading, Face3 face, List<Vector3> vertices ) 
 	{
