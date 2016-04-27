@@ -160,13 +160,13 @@ public class OculusRift extends Effect {
 		this.hdm = hdm;
 
 		// Compute aspect ratio and FOV
-		double aspect = (double)hdm.hResolution / (double)(2.0 * hdm.vResolution);
+		double aspect = (double)hdm.hResolution / (2.0 * hdm.vResolution);
 
 		// Fov is normally computed with:
 		//   THREE.Math.radToDeg( 2*Math.atan2(HMD.vScreenSize,2*HMD.eyeToScreenDistance) );
 		// But with lens distortion it is increased (see Oculus SDK Documentation)
 		double r = -1.0 - (4.0 * (hdm.hScreenSize/4.0 - hdm.lensSeparationDistance/2.0) / hdm.hScreenSize);
-		distScale = (hdm.distortionK[0] + hdm.distortionK[1] * Math.pow(r,2) + hdm.distortionK[2] * Math.pow(r,4) + hdm.distortionK[3] * Math.pow(r,6));
+		distScale = hdm.distortionK[0] + hdm.distortionK[1] * Math.pow(r,2) + hdm.distortionK[2] * Math.pow(r,4) + hdm.distortionK[3] * Math.pow(r,6);
 		double fov = Mathematics.radToDeg(2.0 * Math.atan2(hdm.vScreenSize * distScale, 2.0 * hdm.eyeToScreenDistance));
 
 		// Compute camera projection matrices

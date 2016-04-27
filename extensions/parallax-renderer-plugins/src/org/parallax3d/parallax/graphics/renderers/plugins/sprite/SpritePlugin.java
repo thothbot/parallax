@@ -43,8 +43,6 @@ import java.util.Map;
 
 public final class SpritePlugin extends Plugin
 {
-	private List<Sprite> objects;
-	
 	Float32Array vertices;
 	Uint16Array faces;
 	
@@ -58,7 +56,11 @@ public final class SpritePlugin extends Plugin
 	Vector3 spritePosition = new Vector3();
 	Quaternion spriteRotation = new Quaternion();
 	Vector3 spriteScale = new Vector3();
-		
+	
+	private List<Sprite> objects;
+
+	private static final String FOG_TYPE = "fogType";
+
 	public SpritePlugin(GLRenderer renderer, Scene scene)
 	{
 		super(renderer, scene);
@@ -97,7 +99,7 @@ public final class SpritePlugin extends Plugin
 	
 	public List<Sprite> getObjects() 
 	{
-		if(this.objects == null || this.objects.size() == 0)
+		if(this.objects == null || this.objects.isEmpty())
 		{
 			this.objects = (List<Sprite>)(ArrayList)getScene().getChildrenByClass(Sprite.class, true);
 		}
@@ -150,7 +152,7 @@ public final class SpritePlugin extends Plugin
 				gl.glUniform1f( uniforms.get("fogNear").getLocation(), (float) ((Fog)fog).getNear() );
 				gl.glUniform1f( uniforms.get("fogFar").getLocation(), (float) ((Fog)fog).getFar() );
 
-				gl.glUniform1i( uniforms.get("fogType").getLocation(), 1 );
+				gl.glUniform1i( uniforms.get(FOG_TYPE).getLocation(), 1 );
 				oldFogType = 1;
 				sceneFogType = 1;
 
@@ -158,7 +160,7 @@ public final class SpritePlugin extends Plugin
 
 				gl.glUniform1f( uniforms.get("fogDensity").getLocation(), (float)((FogExp2)fog).getDensity() );
 
-				gl.glUniform1i( uniforms.get("fogType").getLocation(), 2 );
+				gl.glUniform1i( uniforms.get(FOG_TYPE).getLocation(), 2 );
 				oldFogType = 2;
 				sceneFogType = 2;
 
@@ -166,7 +168,7 @@ public final class SpritePlugin extends Plugin
 
 		} else {
 
-			gl.glUniform1i( uniforms.get("fogType").getLocation(), 0 );
+			gl.glUniform1i( uniforms.get(FOG_TYPE).getLocation(), 0 );
 			oldFogType = 0;
 			sceneFogType = 0;
 
@@ -211,7 +213,7 @@ public final class SpritePlugin extends Plugin
 
 			if ( oldFogType != fogType ) {
 
-				gl.glUniform1i( uniforms.get("fogType").getLocation(), fogType );
+				gl.glUniform1i( uniforms.get(FOG_TYPE).getLocation(), fogType );
 				oldFogType = fogType;
 
 			}
@@ -237,7 +239,6 @@ public final class SpritePlugin extends Plugin
 			gl.glUniform1f( uniforms.get("rotation").getLocation(), (float)material.getRotation() );
 			gl.glUniform2fv( uniforms.get("scale").getLocation(), 2, new float[]{(float)spriteScale.getX(), (float)spriteScale.getY()}, 0 );
 
-			//	renderer.setBlending( sprite.blending, sprite.blendEquation, sprite.blendSrc, sprite.blendDst );
 			getRenderer().setBlending( material.getBlending() );
 			getRenderer().setDepthTest( material.isDepthTest() );
 			getRenderer().setDepthWrite( material.isDepthWrite() );
