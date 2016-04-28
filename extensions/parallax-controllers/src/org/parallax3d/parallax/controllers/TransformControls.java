@@ -45,6 +45,9 @@ import java.util.Map;
 
 public class TransformControls extends Object3D implements TouchDownHandler, TouchMoveHandler, TouchUpHandler {
 
+	private static final String WORLD = "world";
+	private static final String LOCAL = "local";
+
 	RenderingContext context;
 	TransformGizmoTranslate gizmoTranslate;
 	TransformGizmoRotate gizmoRotate;
@@ -56,7 +59,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 
 	Object3D object = null;
 	Double snap = null;
-	String space = "world";
+	String space = WORLD;
 	int size = 1;
 	String axis = null;
 
@@ -113,6 +116,8 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 		public final static String ROTATE="rotate";
 		public final static String TRANSLATE="translate";
 		public final static String SCALE="scale";
+		
+		private Mode() {}
 	}
 
 	public TransformControls(Camera camera, RenderingContext context) {
@@ -166,7 +171,10 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 	public void onPointerHover(int screenX, int screenY) {
 		//OnPointerHover
 
-		if (this.object==null || this._dragging) return;
+		if (this.object==null || this._dragging)
+		{
+			return;
+		}
 
 		Raycaster.Intersect intersect = intersectObjects(screenX, screenY, this.getTransformGizmo(_mode).pickers.getChildren());
 
@@ -215,7 +223,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 			this.point.sub(this.offset);
 			this.point.multiply(this.parentScale);
 
-			if("local".equals(this.space)) {
+			if(LOCAL.equals(this.space)) {
 				this.point.apply(this.tempMatrix.getInverse(this.worldRotationMatrix));
 
 				if(!this.axis.contains("X"))
@@ -230,7 +238,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 				this.object.getPosition().copy(this.oldPosition);
 				this.object.getPosition().add(this.point);
 			}
-			if("world".equals(this.space) || (this.axis!=null && !this.axis.contains("XYZ"))) {
+			if(WORLD.equals(this.space) || (this.axis!=null && !this.axis.contains("XYZ"))) {
 
 				if(!this.axis.contains("X"))
 					this.point.setX(0);
@@ -256,7 +264,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 			this.point.sub(this.offset);
 			this.point.multiply(this.parentScale);
 
-			if("local".equals(this.space)) {
+			if(LOCAL.equals(this.space)) {
 				if("XYZ".equals(this.axis)) {
 					this.scale = 1.+this.point.getY()*this.scaleFactor;
 
@@ -308,7 +316,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 				this.tempQuaternion.multiply(this.tempQuaternion,this.quaternionXYZ);
 
 				this.object.getQuaternion().copy(this.tempQuaternion);
-			} else if ("local".equals(this.space)) {
+			} else if (LOCAL.equals(this.space)) {
 				Matrix4 tmpMatrix4=this.tempMatrix.getInverse(this.worldRotationMatrix);
 
 				this.point.apply(tmpMatrix4);
@@ -331,7 +339,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 					this.quaternionXYZ.multiply( quaternionXYZ, quaternionZ );
 
 				this.object.getQuaternion().copy(this.quaternionXYZ);
-			} else if ( "world".equals(this.space) ) {
+			} else if ( WORLD.equals(this.space) ) {
 				this.rotation.set( Math.atan2( point.getZ(), point.getY() ), Math.atan2( point.getX(), point.getZ() ), Math.atan2( point.getY(), point.getX() ) );
 				this.offsetRotation.set( Math.atan2( tempVector.getZ(), tempVector.getY() ), Math.atan2( tempVector.getX(), tempVector.getZ() ), Math.atan2( tempVector.getY(), tempVector.getX() ) );
 
@@ -342,9 +350,18 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 				this.quaternionZ.setFromAxisAngle( unitZ, rotation.getZ() - offsetRotation.getZ() );
 				this.quaternionXYZ.setFromRotationMatrix( worldRotationMatrix );
 
-				if ( "X".equals(this.axis) ) tempQuaternion.multiply( tempQuaternion, quaternionX );
-				if ( "Y".equals(this.axis) ) tempQuaternion.multiply( tempQuaternion, quaternionY );
-				if ( "Z".equals(this.axis) ) tempQuaternion.multiply( tempQuaternion, quaternionZ );
+				if ( "X".equals(this.axis) ) 
+				{
+					tempQuaternion.multiply( tempQuaternion, quaternionX );
+				}
+				if ( "Y".equals(this.axis) ) 
+				{
+					tempQuaternion.multiply( tempQuaternion, quaternionY );
+				}
+				if ( "Z".equals(this.axis) ) 
+				{
+					tempQuaternion.multiply( tempQuaternion, quaternionZ );
+				}
 
 				tempQuaternion.multiply( tempQuaternion, quaternionXYZ );
 
@@ -400,16 +417,18 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 		this.pointerVector.unproject(this.camera);
 		this.ray.set(this.camera.getPosition(), this.pointerVector.sub(this.camera.getPosition()).normalize());
 		List<Raycaster.Intersect> intersections = this.ray.intersectObjects(objects,true);
-		if(intersections!=null) {
-			if(intersections.size()>0)
-				return intersections.get(0);
+		if(intersections!=null && !intersections.isEmpty()) {
+			return intersections.get(0);
 		}
 		return null;
 	}
 
 	public void update() {
 
-		if (this.object==null) return;
+		if (this.object==null) 
+		{
+			return;
+		}
 		this.object.updateMatrixWorld(true);
 
 		this.worldPosition.setFromMatrixPosition(this.object.getMatrixWorld());
@@ -424,9 +443,9 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 		this.eye.copy(this.camPosition).sub(this.worldPosition).normalize();
 
 		TransformGizmo transformation = this.getTransformGizmo(_mode);
-		if ("local".equals(this.space))
+		if (LOCAL.equals(this.space))
 			transformation.update(this.worldRotation, this.eye);
-		else if("world".equals(this.space))
+		else if(WORLD.equals(this.space))
 			transformation.update(new Euler(), this.eye);
 		transformation.highlight(this.axis);
 	}
@@ -436,7 +455,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 			return this.gizmoTranslate;
 		} else if(TransformControls.Mode.ROTATE.equals(mode)) {
 			return this.gizmoRotate;
-		} else /*if("scale".equals(mode))*/ {
+		} else {
 			return this.gizmoScale;
 		}
 	}
@@ -459,7 +478,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 		_mode = mode!=null ? mode : _mode;
 		Log.info("mode: "+mode+"  _mode: "+_mode);
 		if (TransformControls.Mode.SCALE.equals(_mode))
-			this.space = "local";
+			this.space = LOCAL;
 
 		this.gizmoTranslate.hide();
 		this.gizmoRotate.hide();
@@ -523,6 +542,8 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 
 	public class TransformGizmoScale extends TransformGizmo {
 
+		private static final String SIZE = "SIZE: ";
+
 		Mesh geometryScale = new Mesh();
 		
 		public TransformGizmoScale() {
@@ -574,37 +595,37 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 			{
 				//X
 				ArrayList<HandleGizmos> xList=new ArrayList<HandleGizmos>();
-				CylinderGeometry obj_xx=new CylinderGeometry(0.2,0.,1,4,1);
-				Object3D obj_x=new Mesh(obj_xx , new GizmoMaterial(new Color(0xff0000),.25));
-				xList.add(new HandleGizmos(obj_x, new Vector3(0.6,0,0), new Vector3(0,0,-Math.PI/2.)));
+				CylinderGeometry objXX=new CylinderGeometry(0.2,0.,1,4,1);
+				Object3D objX=new Mesh(objXX , new GizmoMaterial(new Color(0xff0000),.25));
+				xList.add(new HandleGizmos(objX, new Vector3(0.6,0,0), new Vector3(0,0,-Math.PI/2.)));
 				this.pickerGizmos.put("X",xList);
-				obj_x.setName("X");
-				geometryScale.add (obj_x);
-				Log.info("SIZE: "+geometryScale.getChildren().size());
+				objX.setName("X");
+				geometryScale.add (objX);
+				Log.info(SIZE+geometryScale.getChildren().size());
 				//Y
 				ArrayList<HandleGizmos> yList=new ArrayList<HandleGizmos>();
-				Object3D obj_y=new Mesh( new CylinderGeometry(0.2,0.,1,4,1), new GizmoMaterial(new Color(0x00ff00),.25));
-				yList.add(new HandleGizmos(obj_y, new Vector3(0,0.6,0), null));
+				Object3D objY=new Mesh( new CylinderGeometry(0.2,0.,1,4,1), new GizmoMaterial(new Color(0x00ff00),.25));
+				yList.add(new HandleGizmos(objY, new Vector3(0,0.6,0), null));
 				this.pickerGizmos.put("Y",yList);
-				obj_x.setName("Y");
-				geometryScale.add(obj_y);
-				Log.info("SIZE: "+geometryScale.getChildren().size());
+				objX.setName("Y");
+				geometryScale.add(objY);
+				Log.info(SIZE+geometryScale.getChildren().size());
 				//Z
 				ArrayList<HandleGizmos> zList=new ArrayList<HandleGizmos>();
-				Object3D obj_z=new Mesh( new CylinderGeometry(0.2,0.,1,4,1), new GizmoMaterial(new Color(0x0000ff),0.25));
-				zList.add(new HandleGizmos(obj_z, new Vector3(0,0,0.6), new Vector3(Math.PI/2.,0,0)));
+				Object3D objZ=new Mesh( new CylinderGeometry(0.2,0.,1,4,1), new GizmoMaterial(new Color(0x0000ff),0.25));
+				zList.add(new HandleGizmos(objZ, new Vector3(0,0,0.6), new Vector3(Math.PI/2.,0,0)));
 				this.pickerGizmos.put("Z",zList);
-				obj_x.setName("Z");
-				geometryScale.add(obj_z);
-				Log.info("SIZE: "+geometryScale.getChildren().size());
+				objX.setName("Z");
+				geometryScale.add(objZ);
+				Log.info(SIZE+geometryScale.getChildren().size());
 				//XYZ
 				ArrayList<HandleGizmos> xyzList=new ArrayList<HandleGizmos>();
-				Object3D obj_xyz=new Mesh( new BoxGeometry(0.4,0.4,0.4), new GizmoMaterial(new Color(0x000000),0.25));
-				xyzList.add(new HandleGizmos(obj_xyz, null, null));
+				Object3D objXYZ=new Mesh( new BoxGeometry(0.4,0.4,0.4), new GizmoMaterial(new Color(0x000000),0.25));
+				xyzList.add(new HandleGizmos(objXYZ, null, null));
 				this.pickerGizmos.put("XYZ",xyzList);
-				obj_x.setName("XYZ");
-				geometryScale.add(obj_xyz);
-				Log.info("SIZE: "+geometryScale.getChildren().size());
+				objX.setName("XYZ");
+				geometryScale.add(objXYZ);
+				Log.info(SIZE+geometryScale.getChildren().size());
 			}
 
 			this.init();
@@ -752,10 +773,22 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 		//Mettiamo il secondo parametro anche se non utilizzato
 		@Override
 		public void setActivePlane(String  axis, Vector3 eye) {
-			if ( "E".equals(axis) ) this.activePlane = this.planes.getObjectByName("XYZE",true);
-			if ( "X".equals(axis) ) this.activePlane = this.planes.getObjectByName("YZ",true);
-			if ( "Y".equals(axis) ) this.activePlane = this.planes.getObjectByName("XZ",true);
-			if ( "Z".equals(axis) ) this.activePlane = this.planes.getObjectByName("XY",true);
+			if ( "E".equals(axis) ) 
+			{
+				this.activePlane = this.planes.getObjectByName("XYZE",true);
+			}
+			if ( "X".equals(axis) ) 
+			{
+				this.activePlane = this.planes.getObjectByName("YZ",true);
+			}
+			if ( "Y".equals(axis) ) 
+			{
+				this.activePlane = this.planes.getObjectByName("XZ",true);
+			}
+			if ( "Z".equals(axis) ) 
+			{
+				this.activePlane = this.planes.getObjectByName("XY",true);
+			}
 			
 			this.hide();
 			this.show();
@@ -1043,14 +1076,14 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 		}
 
 		private void setupGizmos(Map<String,ArrayList<HandleGizmos>> gizmoMap, Object3D parent) {
-			for (String key : gizmoMap.keySet()) {
-				ArrayList<HandleGizmos> gizmoList=gizmoMap.get(key);
+			for(Map.Entry<String,ArrayList<HandleGizmos>> entry : gizmoMap.entrySet()) {	
+				ArrayList<HandleGizmos> gizmoList=entry.getValue();
 				for(HandleGizmos gizmo:gizmoList) {
 					Object3D object=gizmo.getGeometry();
 					Vector3 position=gizmo.getPos();
 					Vector3 rotation=gizmo.getRot();
 
-					object.setName(key);
+					object.setName(entry.getKey());
 					if(position!=null) { 
 						object.getPosition().set(position.getX(), position.getY(), position.getZ());
 					}
@@ -1064,9 +1097,7 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 	}
 
 	public class HandleGizmos {
-		//private GeometryObject geometry;
 		private Object3D geometry;
-		//private AbstractGeometry geometry;
 		private Vector3 pos=new Vector3();
 		private Vector3 rot=new Vector3();
 
@@ -1158,7 +1189,5 @@ public class TransformControls extends Object3D implements TouchDownHandler, Tou
 		}
 	}
 
-	private class LineBasicMaterial {
-	}
 }
 

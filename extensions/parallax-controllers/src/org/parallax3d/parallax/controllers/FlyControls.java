@@ -124,34 +124,46 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 		{
 
 			case KeyCodes.KEY_W: 
-				this.moveState.forward = false; break;
+				this.moveState.forward = false; 
+				break;
 			case KeyCodes.KEY_S: 
-				this.moveState.back = false; break;
+				this.moveState.back = false; 
+				break;
 
 			case KeyCodes.KEY_A: 
-				this.moveState.left = false; break;
+				this.moveState.left = false; 
+				break;
 			case KeyCodes.KEY_D: 
-				this.moveState.right = false; break;
+				this.moveState.right = false; 
+				break;
 
 			case KeyCodes.KEY_R: 
-				this.moveState.up = false; break;
+				this.moveState.up = false; 
+				break;
 			case KeyCodes.KEY_F: 
-				this.moveState.down = false; break;
+				this.moveState.down = false; 
+				break;
 
 			case KeyCodes.KEY_UP: 
-				this.moveState.pitchUp = false; break;
+				this.moveState.pitchUp = false; 
+				break;
 			case KeyCodes.KEY_DOWN: 
-				this.moveState.pitchDown = 0; break;
+				this.moveState.pitchDown = 0; 
+				break;
 
 			case KeyCodes.KEY_LEFT: 
-				this.moveState.yawLeft = 0; break;
+				this.moveState.yawLeft = 0; 
+				break;
 			case KeyCodes.KEY_RIGHT: 
-				this.moveState.yawRight = false; break;
+				this.moveState.yawRight = false; 
+				break;
 
 			case KeyCodes.KEY_Q: 
-				this.moveState.rollLeft = false; break;
+				this.moveState.rollLeft = false; 
+				break;
 			case KeyCodes.KEY_E: 
-				this.moveState.rollRight = false; break;
+				this.moveState.rollRight = false; 
+				break;
 			default:
 				break;
 
@@ -170,34 +182,46 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 		switch( keycode )
 		{
 			case KeyCodes.KEY_W: 
-				this.moveState.forward = true; break;
+				this.moveState.forward = true; 
+				break;
 			case KeyCodes.KEY_S: 
-				this.moveState.back = true; break;
+				this.moveState.back = true; 
+				break;
 
 			case KeyCodes.KEY_A: 
-				this.moveState.left = true; break;
+				this.moveState.left = true; 
+				break;
 			case KeyCodes.KEY_D: 
-				this.moveState.right = true; break;
+				this.moveState.right = true; 
+				break;
 
 			case KeyCodes.KEY_R: 
-				this.moveState.up = true; break;
+				this.moveState.up = true; 
+				break;
 			case KeyCodes.KEY_F: 
-				this.moveState.down = true; break;
+				this.moveState.down = true; 
+				break;
 
 			case KeyCodes.KEY_UP: 
-				this.moveState.pitchUp = true; break;
+				this.moveState.pitchUp = true; 
+				break;
 			case KeyCodes.KEY_DOWN: 
-				this.moveState.pitchDown = 1; break;
+				this.moveState.pitchDown = 1; 
+				break;
 
 			case KeyCodes.KEY_LEFT: 
-				this.moveState.yawLeft = 1; break;
+				this.moveState.yawLeft = 1; 
+				break;
 			case KeyCodes.KEY_RIGHT: 
-				this.moveState.yawRight = true; break;
+				this.moveState.yawRight = true; 
+				break;
 
 			case KeyCodes.KEY_Q: 
-				this.moveState.rollLeft = true; break;
+				this.moveState.rollLeft = true; 
+				break;
 			case KeyCodes.KEY_E: 
-				this.moveState.rollRight = true; break;
+				this.moveState.rollRight = true; 
+				break;
 			default:
 				break;
 		}

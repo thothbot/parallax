@@ -246,7 +246,10 @@ public final class TrackballControls extends Controls implements TouchMoveHandle
 	@Override
 	public void onKeyUp(int keycode) {
 
-		if ( ! this.isEnabled ) return;
+		if ( ! this.isEnabled ) 
+		{
+			return;
+		}
 
 		state = STATE.NONE;
 	}
@@ -254,7 +257,10 @@ public final class TrackballControls extends Controls implements TouchMoveHandle
 	@Override
 	public void onKeyDown(int keycode) {
 
-		if ( ! this.isEnabled ) return;
+		if ( ! this.isEnabled ) 
+		{
+			return;
+		}
 
 		if ( state != STATE.NONE ) 
 		{
@@ -280,7 +286,10 @@ public final class TrackballControls extends Controls implements TouchMoveHandle
 	@Override
 	public void onTouchUp(int screenX, int screenY, int pointer, int button)
 	{
-		if ( ! this.isEnabled ) return;
+		if ( ! this.isEnabled ) 
+		{
+			return;
+		}
 
 		this.state = STATE.NONE;
 	}
@@ -288,7 +297,10 @@ public final class TrackballControls extends Controls implements TouchMoveHandle
 	@Override
 	public void onTouchDown(int screenX, int screenY, int pointer, int button)
 	{
-		if ( ! this.isEnabled ) return;
+		if ( ! this.isEnabled ) 
+		{
+			return;
+		}
 
 
 		if ( state == STATE.NONE ) 
@@ -314,7 +326,10 @@ public final class TrackballControls extends Controls implements TouchMoveHandle
 	@Override
 	public void onTouchMove(int screenX, int screenY, int pointer)
 	{
-		if ( ! this.isEnabled ) return;
+		if ( ! this.isEnabled ) 
+		{
+			return;
+		}
 
 		if ( this.isKeyPressed ) 
 		{
@@ -354,8 +369,8 @@ public final class TrackballControls extends Controls implements TouchMoveHandle
 	private Vector3 getMouseProjectionOnBall ( int clientX, int clientY ) 
 	{
 		Vector3 mouseOnBall = new Vector3(
-			(double)( clientX - getContext().getWidth() * 0.5) / this.radius,
-			(double)( getContext().getHeight() * 0.5 - clientY ) / this.radius,
+			( clientX - getContext().getWidth() * 0.5) / this.radius,
+			( getContext().getHeight() * 0.5 - clientY ) / this.radius,
 			0.0
 		);
 

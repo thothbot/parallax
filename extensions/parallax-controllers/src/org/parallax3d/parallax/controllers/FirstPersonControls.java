@@ -255,27 +255,34 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 		{
 			case KeyCodes.KEY_UP:
 			case KeyCodes.KEY_W: 
-				this.moveForward = true; break;
+				this.moveForward = true; 
+				break;
 
 			case KeyCodes.KEY_LEFT:
 			case KeyCodes.KEY_A: 
-				this.moveLeft = true; break;
+				this.moveLeft = true; 
+				break;
 
 			case KeyCodes.KEY_DOWN:
 			case KeyCodes.KEY_S: 
-				this.moveBackward = true; break;
+				this.moveBackward = true; 
+				break;
 
 			case KeyCodes.KEY_RIGHT:
 			case KeyCodes.KEY_D: 
-				this.moveRight = true; break;
+				this.moveRight = true; 
+				break;
 
 			case KeyCodes.KEY_R: 
-				this.moveUp = true; break;
+				this.moveUp = true; 
+				break;
 			case KeyCodes.KEY_F: 
-				this.moveDown = true; break;
+				this.moveDown = true; 
+				break;
 
 			case KeyCodes.KEY_Q: 
-				this.freeze = !this.freeze; break;
+				this.freeze = !this.freeze; 
+				break;
 			default:
 				break;
 		}
@@ -287,24 +294,30 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 		{
 			case KeyCodes.KEY_UP:
 			case KeyCodes.KEY_W: 
-				this.moveForward = false; break;
+				this.moveForward = false; 
+				break;
 
 			case KeyCodes.KEY_LEFT:
 			case KeyCodes.KEY_A: 
-				this.moveLeft = false; break;
+				this.moveLeft = false; 
+				break;
 
 			case KeyCodes.KEY_DOWN:
 			case KeyCodes.KEY_S: 
-				this.moveBackward = false; break;
+				this.moveBackward = false; 
+				break;
 
 			case KeyCodes.KEY_RIGHT:
 			case KeyCodes.KEY_D: 
-				this.moveRight = false; break;
+				this.moveRight = false; 
+				break;
 
 			case KeyCodes.KEY_R: 
-				this.moveUp = false; break;
+				this.moveUp = false; 
+				break;
 			case KeyCodes.KEY_F: 
-				this.moveDown = false; break;
+				this.moveDown = false; 
+				break;
 			default:
 				break;
 		}
