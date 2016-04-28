@@ -129,7 +129,7 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 	 */
 	public void update( double delta ) 
 	{
-		double actualMoveSpeed = 0;
+		double actualMoveSpeed;
 		double actualLookSpeed;
 		
 		if ( this.freeze ) 
@@ -177,7 +177,7 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 
 			this.lon += this.mouseX * actualLookSpeed;
 			if( this.lookVertical ) 
-				this.lat -= this.mouseY * actualLookSpeed; // * this.invertVertical?-1:1;
+				this.lat -= this.mouseY * actualLookSpeed;
 
 			this.lat = Math.max( - 85.0, Math.min( 85.0, this.lat ) );
 			this.phi = ( 90.0 - this.lat ) * Math.PI / 180.0;
@@ -198,7 +198,10 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 			verticalLookRatio = Math.PI / ( this.verticalMax - this.verticalMin );
 
 		this.lon += this.mouseX * actualLookSpeed;
-		if( this.lookVertical ) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
+		if( this.lookVertical ) 
+		{
+			this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
+		}
 
 		this.lat = Math.max( - 85.0, Math.min( 85.0, this.lat ) );
 		this.phi = ( 90.0 - this.lat ) * Math.PI / 180.0;
@@ -226,25 +229,23 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 
 	@Override
 	public void onTouchDown(int screenX, int screenY, int pointer, int button) {
-		if ( this.activeLook )
+		if ( this.activeLook && button == Input.Buttons.LEFT)
 		{
-			switch ( button )
-			{
-				case Input.Buttons.LEFT: this.moveForward = true; break;
-				case Input.Buttons.RIGHT: this.moveBackward = true; break;
-			}
+			this.moveForward = true;
+		} else if (this.activeLook && button == Input.Buttons.RIGHT)
+		{
+			this.moveBackward = true;
 		}
 	}
 
 	@Override
 	public void onTouchUp(int screenX, int screenY, int pointer, int button) {
-		if ( this.activeLook )
+		if ( this.activeLook && button == Input.Buttons.LEFT)
 		{
-			switch ( button )
-			{
-				case Input.Buttons.LEFT: this.moveForward = false; break;
-				case Input.Buttons.RIGHT: this.moveBackward = false; break;
-			}
+			this.moveForward = false;
+		} else if(this.activeLook && button == Input.Buttons.RIGHT) 
+		{
+			this.moveBackward = false;
 		}
 	}
 
@@ -253,21 +254,30 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 		switch( keycode )
 		{
 			case KeyCodes.KEY_UP:
-			case KeyCodes.KEY_W: this.moveForward = true; break;
+			case KeyCodes.KEY_W: 
+				this.moveForward = true; break;
 
 			case KeyCodes.KEY_LEFT:
-			case KeyCodes.KEY_A: this.moveLeft = true; break;
+			case KeyCodes.KEY_A: 
+				this.moveLeft = true; break;
 
 			case KeyCodes.KEY_DOWN:
-			case KeyCodes.KEY_S: this.moveBackward = true; break;
+			case KeyCodes.KEY_S: 
+				this.moveBackward = true; break;
 
 			case KeyCodes.KEY_RIGHT:
-			case KeyCodes.KEY_D: this.moveRight = true; break;
+			case KeyCodes.KEY_D: 
+				this.moveRight = true; break;
 
-			case KeyCodes.KEY_R: this.moveUp = true; break;
-			case KeyCodes.KEY_F: this.moveDown = true; break;
+			case KeyCodes.KEY_R: 
+				this.moveUp = true; break;
+			case KeyCodes.KEY_F: 
+				this.moveDown = true; break;
 
-			case KeyCodes.KEY_Q: this.freeze = !this.freeze; break;
+			case KeyCodes.KEY_Q: 
+				this.freeze = !this.freeze; break;
+			default:
+				break;
 		}
 	}
 
@@ -276,19 +286,27 @@ public class FirstPersonControls extends Controls implements TouchMoveHandler, T
 		switch( keycode )
 		{
 			case KeyCodes.KEY_UP:
-			case KeyCodes.KEY_W: this.moveForward = false; break;
+			case KeyCodes.KEY_W: 
+				this.moveForward = false; break;
 
 			case KeyCodes.KEY_LEFT:
-			case KeyCodes.KEY_A: this.moveLeft = false; break;
+			case KeyCodes.KEY_A: 
+				this.moveLeft = false; break;
 
 			case KeyCodes.KEY_DOWN:
-			case KeyCodes.KEY_S: this.moveBackward = false; break;
+			case KeyCodes.KEY_S: 
+				this.moveBackward = false; break;
 
 			case KeyCodes.KEY_RIGHT:
-			case KeyCodes.KEY_D: this.moveRight = false; break;
+			case KeyCodes.KEY_D: 
+				this.moveRight = false; break;
 
-			case KeyCodes.KEY_R: this.moveUp = false; break;
-			case KeyCodes.KEY_F: this.moveDown = false; break;
+			case KeyCodes.KEY_R: 
+				this.moveUp = false; break;
+			case KeyCodes.KEY_F: 
+				this.moveDown = false; break;
+			default:
+				break;
 		}
 	}
 }

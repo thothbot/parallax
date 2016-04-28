@@ -64,10 +64,7 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 	public FlyControls(Object3D object, RenderingContext context)
 	{
 		super(object, context);
-			
-//		if(getWidget().getClass() != RootPanel.class)
-//			getWidget().getElement().setAttribute( "tabindex", "-1" );
-		
+
 		this.viewHalfX = context.getWidth() / 2.0;
 		this.viewHalfY = context.getHeight() / 2.0;
 
@@ -126,23 +123,37 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 		switch( keycode )
 		{
 
-			case KeyCodes.KEY_W: this.moveState.forward = false; break;
-			case KeyCodes.KEY_S: this.moveState.back = false; break;
+			case KeyCodes.KEY_W: 
+				this.moveState.forward = false; break;
+			case KeyCodes.KEY_S: 
+				this.moveState.back = false; break;
 
-			case KeyCodes.KEY_A: this.moveState.left = false; break;
-			case KeyCodes.KEY_D: this.moveState.right = false; break;
+			case KeyCodes.KEY_A: 
+				this.moveState.left = false; break;
+			case KeyCodes.KEY_D: 
+				this.moveState.right = false; break;
 
-			case KeyCodes.KEY_R: this.moveState.up = false; break;
-			case KeyCodes.KEY_F: this.moveState.down = false; break;
+			case KeyCodes.KEY_R: 
+				this.moveState.up = false; break;
+			case KeyCodes.KEY_F: 
+				this.moveState.down = false; break;
 
-			case KeyCodes.KEY_UP: this.moveState.pitchUp = false; break;
-			case KeyCodes.KEY_DOWN: this.moveState.pitchDown = 0; break;
+			case KeyCodes.KEY_UP: 
+				this.moveState.pitchUp = false; break;
+			case KeyCodes.KEY_DOWN: 
+				this.moveState.pitchDown = 0; break;
 
-			case KeyCodes.KEY_LEFT: this.moveState.yawLeft = 0; break;
-			case KeyCodes.KEY_RIGHT: this.moveState.yawRight = false; break;
+			case KeyCodes.KEY_LEFT: 
+				this.moveState.yawLeft = 0; break;
+			case KeyCodes.KEY_RIGHT: 
+				this.moveState.yawRight = false; break;
 
-			case KeyCodes.KEY_Q: this.moveState.rollLeft = false; break;
-			case KeyCodes.KEY_E: this.moveState.rollRight = false; break;
+			case KeyCodes.KEY_Q: 
+				this.moveState.rollLeft = false; break;
+			case KeyCodes.KEY_E: 
+				this.moveState.rollRight = false; break;
+			default:
+				break;
 
 		}
 
@@ -158,23 +169,37 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 
 		switch( keycode )
 		{
-			case KeyCodes.KEY_W: this.moveState.forward = true; break;
-			case KeyCodes.KEY_S: this.moveState.back = true; break;
+			case KeyCodes.KEY_W: 
+				this.moveState.forward = true; break;
+			case KeyCodes.KEY_S: 
+				this.moveState.back = true; break;
 
-			case KeyCodes.KEY_A: this.moveState.left = true; break;
-			case KeyCodes.KEY_D: this.moveState.right = true; break;
+			case KeyCodes.KEY_A: 
+				this.moveState.left = true; break;
+			case KeyCodes.KEY_D: 
+				this.moveState.right = true; break;
 
-			case KeyCodes.KEY_R: this.moveState.up = true; break;
-			case KeyCodes.KEY_F: this.moveState.down = true; break;
+			case KeyCodes.KEY_R: 
+				this.moveState.up = true; break;
+			case KeyCodes.KEY_F: 
+				this.moveState.down = true; break;
 
-			case KeyCodes.KEY_UP: this.moveState.pitchUp = true; break;
-			case KeyCodes.KEY_DOWN: this.moveState.pitchDown = 1; break;
+			case KeyCodes.KEY_UP: 
+				this.moveState.pitchUp = true; break;
+			case KeyCodes.KEY_DOWN: 
+				this.moveState.pitchDown = 1; break;
 
-			case KeyCodes.KEY_LEFT: this.moveState.yawLeft = 1; break;
-			case KeyCodes.KEY_RIGHT: this.moveState.yawRight = true; break;
+			case KeyCodes.KEY_LEFT: 
+				this.moveState.yawLeft = 1; break;
+			case KeyCodes.KEY_RIGHT: 
+				this.moveState.yawRight = true; break;
 
-			case KeyCodes.KEY_Q: this.moveState.rollLeft = true; break;
-			case KeyCodes.KEY_E: this.moveState.rollRight = true; break;
+			case KeyCodes.KEY_Q: 
+				this.moveState.rollLeft = true; break;
+			case KeyCodes.KEY_E: 
+				this.moveState.rollRight = true; break;
+			default:
+				break;
 		}
 
 		this.updateMovementVector();
@@ -193,10 +218,12 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 		} 
 		else 
 		{
-			switch ( button )
+			if ( button == Input.Buttons.LEFT )
 			{
-			case Input.Buttons.LEFT: this.moveState.forward = false; break;
-			case Input.Buttons.RIGHT: this.moveState.forward = false; break;
+				this.moveState.forward = false;
+			} else if( button == Input.Buttons.RIGHT )
+			{
+				this.moveState.forward = false;
 			}
 		}
 
@@ -212,10 +239,12 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 		} 
 		else 
 		{
-			switch ( button )
+			if( button == Input.Buttons.LEFT )
 			{
-			case Input.Buttons.LEFT: this.moveState.forward = true; break;
-			case Input.Buttons.RIGHT: this.moveState.forward = false; break;
+				this.moveState.forward = true;
+			} else if( button == Input.Buttons.RIGHT )
+			{
+				this.moveState.forward = false;
 			}
 		}
 	}
@@ -234,15 +263,15 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 	{
 		int forward = ( this.moveState.forward || ( this.isAutoForward && !this.moveState.back ) ) ? 1 : 0;
 
-		this.moveVector.setX( - ((this.moveState.left) ? 1 : 0)    + ((this.moveState.right) ? 1 : 0) );
-		this.moveVector.setY( - ((this.moveState.down) ? 1 : 0)    + ((this.moveState.up) ? 1 : 0) );
-		this.moveVector.setZ( - forward + ((this.moveState.back) ? 1 : 0) );
+		this.moveVector.setX( - (this.moveState.left ? 1 : 0)    + (this.moveState.right ? 1 : 0) );
+		this.moveVector.setY( - (this.moveState.down ? 1 : 0)    + (this.moveState.up ? 1 : 0) );
+		this.moveVector.setZ( - forward + (this.moveState.back ? 1 : 0) );
 	}
 
 	private void updateRotationVector()
 	{
-		this.rotationVector.setX( - this.moveState.pitchDown + ((this.moveState.pitchUp) ? 1 : 0) );
-		this.rotationVector.setY( - ((this.moveState.yawRight) ? 1 : 0)  + this.moveState.yawLeft );
-		this.rotationVector.setZ( - ((this.moveState.rollRight) ? 1 : 0) + ((this.moveState.rollLeft) ? 1 : 0) );
+		this.rotationVector.setX( - this.moveState.pitchDown + (this.moveState.pitchUp ? 1 : 0) );
+		this.rotationVector.setY( - (this.moveState.yawRight ? 1 : 0)  + this.moveState.yawLeft );
+		this.rotationVector.setZ( - (this.moveState.rollRight ? 1 : 0) + (this.moveState.rollLeft ? 1 : 0) );
 	}
 }
