@@ -20,6 +20,8 @@ package org.parallax3d.parallax;
 
 public class Log {
 
+    private Log() {}
+
     public static void info(String msg)
     {
         Parallax.getInstance().getLogger().info( msg);
@@ -42,7 +44,7 @@ public class Log {
 
     public static void error(Object ... all)
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for ( Object mods : all )
         {
             result.append(mods + " ");
