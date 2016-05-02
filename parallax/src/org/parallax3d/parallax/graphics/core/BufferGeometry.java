@@ -69,6 +69,11 @@ import java.util.Set;
 @ThreejsObject("THREE.BufferGeometry")
 public class BufferGeometry extends AbstractGeometry
 {
+	private static final String POSITION = "position";
+	private static final String NORMAL = "normal";
+	private static final String INDEX = "index";
+	private static final String TANGENT = "tangent";
+
 	public static class DrawCall
 	{
 		public int start;
@@ -172,7 +177,7 @@ public class BufferGeometry extends AbstractGeometry
 	 */
 	public void applyMatrix( Matrix4 matrix ) {
 
-		BufferAttribute position = getAttribute("position");
+		BufferAttribute position = getAttribute(POSITION);
 
 		if ( position != null ) {
 
@@ -181,7 +186,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		BufferAttribute normal =  getAttribute("normal");
+		BufferAttribute normal =  getAttribute(NORMAL);
 
 		if ( normal != null ) {
 
@@ -209,14 +214,14 @@ public class BufferGeometry extends AbstractGeometry
 		List<Vector3> vertices = geometry.getVertices();
 		List<Face3> faces = geometry.getFaces();
 		List<List<List<Vector2>>> faceVertexUvs = geometry.getFaceVertexUvs();
-		boolean hasFaceVertexUv = faceVertexUvs.get( 0 ).size() > 0;
+		boolean hasFaceVertexUv = !faceVertexUvs.get( 0 ).isEmpty();
 		boolean hasFaceVertexNormals = faces.get( 0 ).getVertexNormals().size() == 3;
 
 		Float32Array positions = Float32Array.create( faces.size() * 3 * 3 );
-		this.addAttribute( "position", new BufferAttribute( positions, 3 ) );
+		this.addAttribute( POSITION, new BufferAttribute( positions, 3 ) );
 
 		Float32Array normals = Float32Array.create( faces.size() * 3 * 3 );
-		this.addAttribute( "normal", new BufferAttribute( normals, 3 ) );
+		this.addAttribute( NORMAL, new BufferAttribute( normals, 3 ) );
 
 		Float32Array colors = Float32Array.create( faces.size() * 3 * 3 );
 		if ( vertexColors != Material.COLORS.NO ) {
@@ -226,7 +231,7 @@ public class BufferGeometry extends AbstractGeometry
 		}
 
 		Float32Array uvs = Float32Array.create( faces.size() * 3 * 2 );
-		if ( hasFaceVertexUv == true ) {
+		if ( hasFaceVertexUv ) {
 
 			this.addAttribute( "uv", new BufferAttribute( uvs, 2 ) );
 
@@ -252,7 +257,7 @@ public class BufferGeometry extends AbstractGeometry
 			positions.set( i3 + 7 , c.getY());
 			positions.set( i3 + 8 , c.getZ());
 
-			if ( hasFaceVertexNormals == true ) {
+			if ( hasFaceVertexNormals ) {
 
 				Vector3 na = face.getVertexNormals().get( 0 );
 				Vector3 nb = face.getVertexNormals().get( 1 );
@@ -324,7 +329,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			}
 
-			if ( hasFaceVertexUv == true ) {
+			if ( hasFaceVertexUv ) {
 
 				Vector2 uva = faceVertexUvs.get( 0 ).get( i ).get( 0 );
 				Vector2 uvb = faceVertexUvs.get( 0 ).get( i ).get( 1 );
@@ -364,7 +369,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		Float32Array positions = (Float32Array) getAttribute("position").getArray();
+		Float32Array positions = (Float32Array) getAttribute(POSITION).getArray();
 
 		if ( positions != null) {
 
@@ -404,7 +409,7 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		Float32Array positions = (Float32Array) getAttribute("position").getArray();
+		Float32Array positions = (Float32Array) getAttribute(POSITION).getArray();
 
 		if ( positions != null ) {
 
@@ -444,17 +449,17 @@ public class BufferGeometry extends AbstractGeometry
 	 */
 	public void computeVertexNormals() {
 
-		BufferAttribute positionAttribute = getAttribute("position");
+		BufferAttribute positionAttribute = getAttribute(POSITION);
 
 		if ( positionAttribute != null ) {
 
 			Float32Array positions =  (Float32Array) positionAttribute.getArray();
 
-			BufferAttribute normalAttribute = getAttribute("normal");
+			BufferAttribute normalAttribute = getAttribute(NORMAL);
 
 			if ( normalAttribute == null ) {
 
-				this.addAttribute( "normal", new BufferAttribute( Float32Array.create( positions.getLength() ), 3 ) );
+				this.addAttribute( NORMAL, new BufferAttribute( Float32Array.create( positions.getLength() ), 3 ) );
 
 			} else {
 
@@ -483,11 +488,11 @@ public class BufferGeometry extends AbstractGeometry
 
 			// indexed elements
 
-			if ( getAttribute("index") != null ) {
+			if ( getAttribute(INDEX) != null ) {
 
-				Uint16Array indices = (Uint16Array) getAttribute("index").getArray();
+				Uint16Array indices = (Uint16Array) getAttribute(INDEX).getArray();
 
-				List<BufferGeometry.DrawCall> offsets = this.drawcalls.size() > 0
+				List<BufferGeometry.DrawCall> offsets = !this.drawcalls.isEmpty()
 						? this.drawcalls
 						: Arrays.asList( new BufferGeometry.DrawCall(0, indices.getLength(), 0 ) ) ;
 
@@ -559,7 +564,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			this.normalizeNormals();
 
-			getAttribute("normal").setNeedsUpdate( true );
+			getAttribute(NORMAL).setNeedsUpdate( true );
 
 		}
 
@@ -575,9 +580,9 @@ public class BufferGeometry extends AbstractGeometry
 		// based on http://www.terathon.com/code/tangent.html
 		// (per vertex tangents)
 
-		if ( getAttribute("index") == null ||
-				getAttribute("position") == null ||
-				getAttribute("normal") == null ||
+		if ( getAttribute(INDEX) == null ||
+				getAttribute(POSITION) == null ||
+				getAttribute(NORMAL) == null ||
 				getAttribute("uv") == null ) {
 
 			Log.error("Missing required attributes (index, position, normal or uv) in BufferGeometry.computeTangents()");
@@ -585,16 +590,16 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		IndexTypeArray indices = (IndexTypeArray) getAttribute("index").getArray();
-		Float32Array positions = (Float32Array)getAttribute("position").getArray();
-		Float32Array normals = (Float32Array)getAttribute("normal").getArray();
+		IndexTypeArray indices = (IndexTypeArray) getAttribute(INDEX).getArray();
+		Float32Array positions = (Float32Array)getAttribute(POSITION).getArray();
+		Float32Array normals = (Float32Array)getAttribute(NORMAL).getArray();
 		Float32Array uvs = (Float32Array)getAttribute("uv").getArray();
 
 		int nVertices = positions.getLength() / 3;
 
-		if ( getAttribute("tangent") == null ) {
+		if ( getAttribute(TANGENT) == null ) {
 
-			this.addAttribute( "tangent", new BufferAttribute( Float32Array.create( 4 * nVertices ), 4 ) );
+			this.addAttribute( TANGENT, new BufferAttribute( Float32Array.create( 4 * nVertices ), 4 ) );
 
 		}
 
@@ -607,9 +612,9 @@ public class BufferGeometry extends AbstractGeometry
 
 		}
 
-		Float32Array tangents = (Float32Array)getAttribute("tangent").getArray();
+		Float32Array tangents = (Float32Array)getAttribute(TANGENT).getArray();
 
-		if ( this.getDrawcalls().size() == 0 ) {
+		if ( this.getDrawcalls().isEmpty() ) {
 
 			this.addDrawCall( 0, indices.getLength(), 0 );
 
@@ -671,13 +676,10 @@ public class BufferGeometry extends AbstractGeometry
 	 */
 	public List<BufferGeometry.DrawCall> computeOffsets( int size /* indexBufferSize */ ) {
 
-//		var s = Date.now();
+		Uint16Array indices = (Uint16Array)getAttribute(INDEX).getArray();
+		Float32Array vertices = (Float32Array)getAttribute(POSITION).getArray();
 
-		Uint16Array indices = (Uint16Array)getAttribute("index").getArray();
-		Float32Array vertices = (Float32Array)getAttribute("position").getArray();
-
-		int verticesCount = ( vertices.getLength() / 3 );
-		int facesCount = ( indices.getLength() / 3 );
+		int facesCount = indices.getLength() / 3;
 
 		Float32Array sortedIndices = Float32Array.create( indices.getLength() ); //16-bit buffers
 		int indexPtr = 0;
@@ -686,8 +688,7 @@ public class BufferGeometry extends AbstractGeometry
 		List<BufferGeometry.DrawCall> offsets = Arrays.asList(new BufferGeometry.DrawCall(0, 0, 0));
 		BufferGeometry.DrawCall offset = offsets.get( 0 );
 
-		int duplicatedVertices = 0;
-		int newVerticeMaps = 0;
+		int newVerticeMaps;
 		Int32Array faceVertices = Int32Array.create(6);
 		Int32Array vertexMap = Int32Array.create( vertices.getLength() );
 		Int32Array revVertexMap = Int32Array.create( vertices.getLength() );
@@ -714,7 +715,6 @@ public class BufferGeometry extends AbstractGeometry
 					//Reused vertices from previous block (duplicate)
 					faceVertices.set( vo * 2 , vid);
 					faceVertices.set( vo * 2 + 1 , - 1);
-					duplicatedVertices ++;
 				} else {
 					//Reused vertice in the current block
 					faceVertices.set( vo * 2 , vid);
@@ -754,15 +754,6 @@ public class BufferGeometry extends AbstractGeometry
 		/* Move all attribute values to map to the new computed indices , also expand the vertice stack to match our new vertexPtr. */
 		this.reorderBuffers( sortedIndices, revVertexMap, vertexPtr );
 		this.drawcalls = offsets;
-
-		/*
-		var orderTime = Date.now();
-		console.log("Reorder time: "+(orderTime-s)+"ms");
-		console.log("Duplicated "+duplicatedVertices+" vertices.");
-		console.log("Compute Buffers time: "+(Date.now()-s)+"ms");
-		console.log("Draw offsets: "+offsets.length);
-		*/
-
 		return offsets;
 	}
 
@@ -771,7 +762,7 @@ public class BufferGeometry extends AbstractGeometry
 	 */
 	public void normalizeNormals() {
 
-		Float32Array normals = (Float32Array)getAttribute("normal").getArray();
+		Float32Array normals = (Float32Array)getAttribute(NORMAL).getArray();
 
 		double x, y, z, n;
 
@@ -805,11 +796,10 @@ public class BufferGeometry extends AbstractGeometry
 				new HashMap<String, Float32Array>();
 
 		for(String attr : this.attributes.keySet()) {
-			if ( attr.equals("index" ) )
+			if ( attr.equals(INDEX ) )
 				continue;
 
 			BufferAttribute attribute = getAttribute(attr);
-			Float32Array sourceArray = (Float32Array)attribute.getArray();
 			sortedAttributes.put( attr,Float32Array.create(  attribute.getItemSize() * vertexCount ));
 		}
 
@@ -817,7 +807,7 @@ public class BufferGeometry extends AbstractGeometry
 		for ( int new_vid = 0; new_vid < vertexCount; new_vid ++ ) {
 			int vid = indexMap.get( new_vid );
 			for(String attr : this.attributes.keySet()) {
-				if ( attr.equals("index" ) )
+				if ( attr.equals(INDEX ) )
 					continue;
 
 				BufferAttribute attribute = getAttribute(attr);
@@ -831,10 +821,10 @@ public class BufferGeometry extends AbstractGeometry
 		}
 
 		/* Carry the new sorted buffers locally */
-		getAttribute("index").setArray(indexBuffer);
+		getAttribute(INDEX).setArray(indexBuffer);
 
 		for(String attr : this.attributes.keySet()) {
-			if ( attr.equals("index" ) )
+			if ( attr.equals(INDEX ) )
 				continue;
 
 			this.attributes.get( attr ).setArray( sortedAttributes.get( attr ) );
@@ -974,7 +964,7 @@ public class BufferGeometry extends AbstractGeometry
 
 			if ( attribute.isNeedsUpdate() ) {
 
-				BufferTarget bufferType = ( key.equals( "index" ) ) ? BufferTarget.ELEMENT_ARRAY_BUFFER : BufferTarget.ARRAY_BUFFER;
+				BufferTarget bufferType = key.equals( INDEX ) ? BufferTarget.ELEMENT_ARRAY_BUFFER : BufferTarget.ARRAY_BUFFER;
 				Buffer buf = attribute.getArray().getTypedBuffer();
 				buf.rewind();
 

@@ -33,6 +33,7 @@ import java.io.*;
  * @author mzechner
  * @author Nathan Sweet */
 public class FileHandle {
+	private static final String ERROR_READING_FILE = "Error reading file: ";
 	protected File file;
 
 	protected FileHandle () {
@@ -63,7 +64,9 @@ public class FileHandle {
 	public String extension () {
 		String name = file.getName();
 		int dotIndex = name.lastIndexOf('.');
-		if (dotIndex == -1) return "";
+		if (dotIndex == -1) {
+			return "";
+		}
 		return name.substring(dotIndex + 1);
 	}
 
@@ -71,7 +74,9 @@ public class FileHandle {
 	public String nameWithoutExtension () {
 		String name = file.getName();
 		int dotIndex = name.lastIndexOf('.');
-		if (dotIndex == -1) return name;
+		if (dotIndex == -1) {
+			return name;
+		}
 		return name.substring(0, dotIndex);
 	}
 
@@ -80,7 +85,9 @@ public class FileHandle {
 	public String pathWithoutExtension () {
 		String path = file.getPath().replace('\\', '/');
 		int dotIndex = path.lastIndexOf('.');
-		if (dotIndex == -1) return path;
+		if (dotIndex == -1) {
+			return path;
+		}
 		return path.substring(0, dotIndex);
 	}
 
@@ -135,9 +142,10 @@ public class FileHandle {
 		try {
 			return new FileInputStream(file());
 		} catch (Exception ex) {
-			if (file().isDirectory())
+			if (file().isDirectory()) {
 				throw new ParallaxRuntimeException("Cannot open a stream to a directory: " + file , ex);
-			throw new ParallaxRuntimeException("Error reading file: " + file, ex);
+			}	
+			throw new ParallaxRuntimeException(ERROR_READING_FILE + file, ex);
 		}
 	}
 
@@ -161,7 +169,7 @@ public class FileHandle {
 			return new InputStreamReader(stream, charset);
 		} catch (UnsupportedEncodingException ex) {
 			StreamUtils.closeQuietly(stream);
-			throw new ParallaxRuntimeException("Error reading file: " + this, ex);
+			throw new ParallaxRuntimeException(ERROR_READING_FILE + this, ex);
 		}
 	}
 
@@ -177,7 +185,7 @@ public class FileHandle {
 		try {
 			return new BufferedReader(new InputStreamReader(read(), charset), bufferSize);
 		} catch (UnsupportedEncodingException ex) {
-			throw new ParallaxRuntimeException("Error reading file: " + this, ex);
+			throw new ParallaxRuntimeException(ERROR_READING_FILE + this, ex);
 		}
 	}
 
@@ -201,7 +209,9 @@ public class FileHandle {
 			char[] buffer = new char[256];
 			while (true) {
 				int length = reader.read(buffer);
-				if (length == -1) break;
+				if (length == -1) {
+					break;
+				}
 				output.append(buffer, 0, length);
 			}
 		} catch (IOException ex) {
@@ -219,7 +229,7 @@ public class FileHandle {
 		try {
 			return StreamUtils.copyStreamToByteArray(input, estimateLength());
 		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error reading file: " + this, ex);
+			throw new ParallaxRuntimeException(ERROR_READING_FILE + this, ex);
 		} finally {
 			StreamUtils.closeQuietly(input);
 		}
@@ -241,11 +251,13 @@ public class FileHandle {
 		try {
 			while (true) {
 				int count = input.read(bytes, offset + position, size - position);
-				if (count <= 0) break;
+				if (count <= 0) {
+					break;
+				}
 				position += count;
 			}
 		} catch (IOException ex) {
-			throw new ParallaxRuntimeException("Error reading file: " + this, ex);
+			throw new ParallaxRuntimeException(ERROR_READING_FILE + this, ex);
 		} finally {
 			StreamUtils.closeQuietly(input);
 		}
@@ -254,7 +266,9 @@ public class FileHandle {
 
 	public FileHandle[] list () {
 		String[] relativePaths = file().list();
-		if (relativePaths == null) return new FileHandle[0];
+		if (relativePaths == null) {
+			return new FileHandle[0];
+		}
 		FileHandle[] handles = new FileHandle[relativePaths.length];
 		for (int i = 0, n = relativePaths.length; i < n; i++)
 			handles[i] = child(relativePaths[i]);
@@ -264,13 +278,17 @@ public class FileHandle {
 	public FileHandle[] list (FileFilter filter) {
 		File file = file();
 		String[] relativePaths = file.list();
-		if (relativePaths == null) return new FileHandle[0];
+		if (relativePaths == null) {
+			return new FileHandle[0];
+		}
 		FileHandle[] handles = new FileHandle[relativePaths.length];
 		int count = 0;
 		for (int i = 0, n = relativePaths.length; i < n; i++) {
 			String path = relativePaths[i];
 			FileHandle child = child(path);
-			if (!filter.accept(child.file())) continue;
+			if (!filter.accept(child.file())) {
+				continue;
+			}
 			handles[count] = child;
 			count++;
 		}
@@ -285,12 +303,16 @@ public class FileHandle {
 	public FileHandle[] list (FilenameFilter filter) {
 		File file = file();
 		String[] relativePaths = file.list();
-		if (relativePaths == null) return new FileHandle[0];
+		if (relativePaths == null) {
+			return new FileHandle[0];
+		}
 		FileHandle[] handles = new FileHandle[relativePaths.length];
 		int count = 0;
 		for (int i = 0, n = relativePaths.length; i < n; i++) {
 			String path = relativePaths[i];
-			if (!filter.accept(file, path)) continue;
+			if (!filter.accept(file, path)) {
+				continue;
+			}
 			handles[count] = child(path);
 			count++;
 		}
@@ -304,12 +326,16 @@ public class FileHandle {
 
 	public FileHandle[] list (String suffix) {
 		String[] relativePaths = file().list();
-		if (relativePaths == null) return new FileHandle[0];
+		if (relativePaths == null) {
+			return new FileHandle[0];
+		}
 		FileHandle[] handles = new FileHandle[relativePaths.length];
 		int count = 0;
 		for (int i = 0, n = relativePaths.length; i < n; i++) {
 			String path = relativePaths[i];
-			if (!path.endsWith(suffix)) continue;
+			if (!path.endsWith(suffix)) {
+				continue;
+			}
 			handles[count] = child(path);
 			count++;
 		}
@@ -327,14 +353,18 @@ public class FileHandle {
 
 	/** Returns a handle to the child with the specified name. */
 	public FileHandle child (String name) {
-		if (file.getPath().length() == 0) return new FileHandle(new File(name));
+		if (file.getPath().length() == 0) {
+			return new FileHandle(new File(name));
+		}
 		return new FileHandle(new File(file, name));
 	}
 
 	/** Returns a handle to the sibling with the specified name.
 	 * @throws ParallaxRuntimeException if this file is the root. */
 	public FileHandle sibling (String name) {
-		if (file.getPath().length() == 0) throw new ParallaxRuntimeException("Cannot get the sibling of the root.");
+		if (file.getPath().length() == 0) {
+			throw new ParallaxRuntimeException("Cannot get the sibling of the root.");
+		}
 		return new FileHandle(new File(file.getParent(), name));
 	}
 
@@ -372,7 +402,9 @@ public class FileHandle {
 
 	@Override
 	public boolean equals (Object obj) {
-		if (!(obj instanceof FileHandle)) return false;
+		if (!(obj instanceof FileHandle)) {
+			return false;
+		}
 		FileHandle other = (FileHandle)obj;
 		return path().equals(other.path());
 	}
