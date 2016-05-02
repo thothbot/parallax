@@ -663,7 +663,9 @@ public class Object3D
 	 */
 	public Object3D getObjectById(int id, boolean recursive ) {
 
-		if ( this.id == id ) return this;
+		if ( this.id == id ) {
+			return this;
+		}
 
 		for ( int i = 0, l = this.children.size(); i < l; i ++ ) {
 
@@ -689,7 +691,9 @@ public class Object3D
 	 */
 	public Object3D getObjectByName( String name, boolean recursive ) {
 
-		if ( this.name.equals( name ) ) return this;
+		if ( this.name.equals( name ) ) {
+			return this;
+		}
 
 		for ( int i = 0, l = this.children.size(); i < l; i ++ ) {
 
@@ -800,7 +804,9 @@ public class Object3D
 	 */
 	public void traverseVisible ( Traverse traverse ) {
 
-		if ( this.visible == false ) return;
+		if ( !this.visible ) {
+			return;
+		}
 
 		traverse.callback(this);
 
@@ -830,9 +836,11 @@ public class Object3D
 	 */
 	public void updateMatrixWorld(boolean force)
 	{
-		if ( this.matrixAutoUpdate == true ) this.updateMatrix();
+		if ( this.matrixAutoUpdate ) {
+			this.updateMatrix();
+		}
 
-		if ( this.matrixWorldNeedsUpdate == true || force == true ) {
+		if ( this.matrixWorldNeedsUpdate || force ) {
 
 			if ( this.parent == null ) {
 
@@ -898,7 +906,7 @@ public class Object3D
 
 		object.isFrustumCulled = this.isFrustumCulled;
 
-		if ( recursive == true ) {
+		if ( recursive ) {
 
 			for ( int i = 0; i < this.children.size(); i ++ ) {
 

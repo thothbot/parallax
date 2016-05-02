@@ -203,7 +203,7 @@ public class Raycaster
 
 		object.raycast( raycaster, intersects );
 
-		if ( recursive == true ) {
+		if ( recursive ) {
 
 			List<Object3D> children = object.children;
 
