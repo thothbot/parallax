@@ -30,7 +30,7 @@ import org.parallax3d.parallax.system.ThreejsObject;
 
 @ThreejsObject("THREE.Path")
 public class Path extends CurvePath {
-	public static enum PATH_ACTIONS {
+	public enum PATH_ACTIONS {
 		MOVE_TO,
 		LINE_TO,
 		QUADRATIC_CURVE_TO, // Bezier quadratic curve
@@ -185,8 +185,6 @@ public class Path extends CurvePath {
 	public void absellipse(double aX, double aY, double xRadius, double yRadius,
 						   double aStartAngle, double aEndAngle, boolean aClockwise) {
 
-		List<Object> lastargs = this.actions.get(this.actions.size() - 1).args;
-
 		EllipseCurve curve = new EllipseCurve(aX, aY, xRadius, yRadius,
 				aStartAngle, aEndAngle, aClockwise);
 		add(curve);
@@ -206,9 +204,6 @@ public class Path extends CurvePath {
 
 		for (int i = 0; i < divisions; i++)
 			points.add(this.getPoint(i / (double) divisions));
-
-//		if ( closedPath )
-//			points.add( points.get(0) );
 
 		return points;
 	}
@@ -321,7 +316,7 @@ public class Path extends CurvePath {
 					spts.add(last);
 
 					List<Vector3> v = (List<Vector3>) args.get(0);
-					double n = divisions * v.size();
+					double n = (double)divisions * v.size();
 
 					spts.addAll(v);
 
@@ -359,8 +354,6 @@ public class Path extends CurvePath {
 						points.add(new Vector2(tx, ty));
 					}
 
-					//console.log(points);
-
 					break;
 
 
@@ -375,10 +368,10 @@ public class Path extends CurvePath {
 					boolean aClockwiseE = !!(Boolean) args.get(6);
 
 					double deltaAngleE = aEndAngleE - aStartAngleE;
-					double tdivisionsE = divisions * 2;
+					double tdivisionsE = divisions * 2D;
 
 					for (int j = 1; j <= tdivisionsE; j++) {
-						double t = j / (double) tdivisionsE;
+						double t = j / tdivisionsE;
 
 						if (!aClockwiseE) {
 							t = 1 - t;
@@ -393,8 +386,8 @@ public class Path extends CurvePath {
 
 					}
 
-					//console.log(points);
-
+					break;
+				default:
 					break;
 
 			} // end switch
@@ -402,10 +395,10 @@ public class Path extends CurvePath {
 		}
 
 		// Normalize to remove the closing point by default.
-		Vector2 lastPoint = (Vector2) points.get(points.size() - 1);
-		double EPSILON = 0.0000000001;
-		if (Math.abs(lastPoint.getX() - ((Vector2) points.get(0)).getX()) < EPSILON &&
-				Math.abs(lastPoint.getY() - ((Vector2) points.get(0)).getY()) < EPSILON)
+		Vector2 lastPoint = points.get(points.size() - 1);
+		double epsilon = 0.0000000001;
+		if (Math.abs(lastPoint.getX() - points.get(0).getX()) < epsilon &&
+				Math.abs(lastPoint.getY() - points.get(0).getY()) < epsilon)
 			points.remove(points.size() - 1);
 
 		if (closedPath)
@@ -494,16 +487,16 @@ public class Path extends CurvePath {
 				if ((!holesFirst) && (mainIdx < newShapes.size() && newShapes.get(mainIdx) != null))
 					mainIdx++;
 
-					final Shape s = new Shape();
-					s.setActions( tmpPath.getActions() );
-					s.setCurves( tmpPath.getCurves() );
+				final Shape s = new Shape();
+				s.setActions( tmpPath.getActions() );
+				s.setCurves( tmpPath.getCurves() );
 
-					newShapes.add(mainIdx, new ShapeHole(s, tmpPoints));
+				newShapes.add(mainIdx, new ShapeHole(s, tmpPoints));
 
-					if (holesFirst)
-						mainIdx++;
+				if (holesFirst)
+					mainIdx++;
 
-					newShapeHoles.add(mainIdx, new ArrayList<PathHole>());
+				newShapeHoles.add(mainIdx, new ArrayList<PathHole>());
 
 			} else {
 				newShapeHoles.get(mainIdx).add( new PathHole( tmpPath, tmpPoints.get(0) ));
@@ -534,16 +527,18 @@ public class Path extends CurvePath {
 				for (int hIdx = 0; hIdx < sho.size(); hIdx++) {
 
 					PathHole ho = sho.get(hIdx);
-					boolean hole_unassigned = true;
+					boolean holeUnassigned = true;
 
 					for (int s2Idx = 0; s2Idx < newShapes.size(); s2Idx++) {
 
 						if (isPointInsidePolygon(ho.p, newShapes.get(s2Idx).p)) {
 
-							if (sIdx != s2Idx) toChange.add( hIdx );
-							if (hole_unassigned) {
+							if (sIdx != s2Idx) {
+								toChange.add( hIdx );
+							}
+							if (holeUnassigned) {
 
-								hole_unassigned = false;
+								holeUnassigned = false;
 								betterShapeHoles.get(s2Idx).add( ho );
 
 							} else {
@@ -555,7 +550,7 @@ public class Path extends CurvePath {
 						}
 
 					}
-					if (hole_unassigned) {
+					if (holeUnassigned) {
 
 						betterShapeHoles.get( sIdx ).add( ho );
 
@@ -564,12 +559,8 @@ public class Path extends CurvePath {
 				}
 
 			}
-			// console.log("ambiguous: ", ambiguous);
-			if (!toChange.isEmpty()) {
-
-				// console.log("to change: ", toChange);
-				if (!ambiguous) newShapeHoles = betterShapeHoles;
-
+			if (!toChange.isEmpty() && !ambiguous) {
+				newShapeHoles = betterShapeHoles;
 			}
 
 		}
@@ -604,13 +595,9 @@ public class Path extends CurvePath {
 			List<Object> args = item.args;
 			PATH_ACTIONS action = item.action;
 
-			if ( action == PATH_ACTIONS.MOVE_TO ) {
-
-				if ( !lastPath.actions.isEmpty() ) {
-
-					subPaths.add( lastPath );
-					lastPath = new Path();
-				}
+			if ( action == PATH_ACTIONS.MOVE_TO && !lastPath.actions.isEmpty() ) {
+				subPaths.add( lastPath );
+				lastPath = new Path();
 			}
 
 			if(action == PATH_ACTIONS.MOVE_TO)
@@ -673,8 +660,10 @@ public class Path extends CurvePath {
 				// not parallel
 				if ( edgeDy < 0 ) {
 
-					edgeLowPt  = inPolygon.get( q ); edgeDx = - edgeDx;
-					edgeHighPt = inPolygon.get( p ); edgeDy = - edgeDy;
+					edgeLowPt  = inPolygon.get( q );
+					edgeDx = - edgeDx;
+					edgeHighPt = inPolygon.get( p );
+					edgeDy = - edgeDy;
 
 				}
 				if ( ( inPt.getY() < edgeLowPt.getY() ) || ( inPt.getY() > edgeHighPt.getY() ) )
@@ -707,7 +696,6 @@ public class Path extends CurvePath {
 				if ( ( ( edgeHighPt.getX() <= inPt.getX() ) && ( inPt.getX() <= edgeLowPt.getX() ) ) ||
 						( ( edgeLowPt.getX() <= inPt.getX() ) && ( inPt.getX() <= edgeHighPt.getX() ) ) )
 					return	true;	// inPt: Point on contour !
-				// continue;
 
 			}
 
@@ -765,8 +753,8 @@ public class Path extends CurvePath {
 		for ( int i = 0; i < points.size(); i ++ )
 		{
 			geometry.getVertices().add( new Vector3(
-					((Vector2)points.get( i )).getX(),
-					((Vector2)points.get( i )).getY(), 0 ) );
+					points.get( i ).getX(),
+					points.get( i ).getY(), 0 ) );
 		}
 
 		return geometry;
