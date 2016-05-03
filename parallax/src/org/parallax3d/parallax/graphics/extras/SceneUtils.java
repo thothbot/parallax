@@ -40,6 +40,8 @@ import org.parallax3d.parallax.graphics.scenes.Scene;
 @ThreejsObject("THREE.SceneUtils")
 public class SceneUtils
 {
+	private SceneUtils() {}
+
 	/**
 	 * This method creates multi-material 3D object which contains Mesh objects
 	 * in amount of the materials list size. Here are every Mesh object will use

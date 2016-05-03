@@ -254,7 +254,7 @@ public class Path extends CurvePath {
 					cpx1 = (Double) args.get(0);
 					cpy1 = (Double) args.get(1);
 
-					if (points.size() > 0) {
+					if (!points.isEmpty()) {
 						Vector2 laste = points.get(points.size() - 1);
 
 						cpx0 = laste.getX();
@@ -288,7 +288,7 @@ public class Path extends CurvePath {
 					cpx2 = (Double) args.get(2);
 					cpy2 = (Double) args.get(3);
 
-					if (points.size() > 0) {
+					if (!points.isEmpty()) {
 						Vector2 laste = points.get(points.size() - 1);
 
 						cpx0 = laste.getX();
@@ -436,7 +436,7 @@ public class Path extends CurvePath {
 
 		List<Path> subPaths = extractSubpaths(this.actions);
 
-		if(subPaths.size() ==0 )
+		if(subPaths.isEmpty())
 			return shapes;
 
 		if(noHoles)
@@ -565,7 +565,7 @@ public class Path extends CurvePath {
 
 			}
 			// console.log("ambiguous: ", ambiguous);
-			if (toChange.size() > 0) {
+			if (!toChange.isEmpty()) {
 
 				// console.log("to change: ", toChange);
 				if (!ambiguous) newShapeHoles = betterShapeHoles;
@@ -606,7 +606,7 @@ public class Path extends CurvePath {
 
 			if ( action == PATH_ACTIONS.MOVE_TO ) {
 
-				if ( lastPath.actions.size() != 0 ) {
+				if ( !lastPath.actions.isEmpty() ) {
 
 					subPaths.add( lastPath );
 					lastPath = new Path();
@@ -623,7 +623,7 @@ public class Path extends CurvePath {
 				lastPath.bezierCurveTo((Double) args.get(0), (Double) args.get(1), (Double) args.get(2), (Double) args.get(3), (Double) args.get(4), (Double) args.get(5));
 		}
 
-		if ( lastPath.actions.size() != 0 ) {
+		if ( !lastPath.actions.isEmpty() ) {
 
 			subPaths.add( lastPath );
 
