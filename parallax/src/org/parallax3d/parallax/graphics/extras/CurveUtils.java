@@ -32,6 +32,8 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.CurveUtils")
 public class CurveUtils
 {
+	private CurveUtils() {}
+
 	/**
 	 * This method calculates tangent of Quadratic Bezier Curve.
 	 *

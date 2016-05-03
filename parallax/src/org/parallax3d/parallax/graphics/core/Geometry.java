@@ -504,7 +504,7 @@ public class Geometry extends AbstractGeometry
 
 			face = this.faces.get( f );
 
-			if(face.getVertexNormals().size() > 0) {
+			if(!face.getVertexNormals().isEmpty()) {
 				face.getVertexNormals().set(0, vertices[ face.a ].clone() );
 				face.getVertexNormals().set(1, vertices[ face.b ].clone() );
 				face.getVertexNormals().set(2, vertices[ face.c ].clone() );
@@ -794,7 +794,9 @@ public class Geometry extends AbstractGeometry
 
 			Vector3 vertexCopy = vertex.clone();
 
-			if ( matrix != null ) vertexCopy.apply( matrix );
+			if ( matrix != null ) {
+				vertexCopy.apply( matrix );
+			}
 
 			vertices1.add( vertexCopy );
 
@@ -838,7 +840,6 @@ public class Geometry extends AbstractGeometry
 
 				Color color = faceVertexColors.get( j );
 				faceCopy.vertexColors.add( color.clone() );
-//				faceCopy.vertexColors.add( color );
 
 			}
 

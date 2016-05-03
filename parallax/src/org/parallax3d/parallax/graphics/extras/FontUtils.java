@@ -29,13 +29,14 @@ public class FontUtils
 {
 	public static final double EPSILON = 0.0000000001;
 
+	private FontUtils() {}
 
 	/*
 	 * @param contour
 	 * @param result
-	 * 			There will be generated List of List of {@link Vector2}
+	 * There will be generated List of List of {@link Vector2}
 	 * @param vertIndices
-	 * 			There will be generated List of List of integer
+	 * There will be generated List of List of integer
 	 */
 	public static void triangulate( List<Vector2> contour, List<List<Vector2>> result, List<List<Integer>> vertIndices )
 	{
@@ -190,6 +191,6 @@ public class FontUtils
 		double cCROSSap = cX * apy - cY * apx;
 		double bCROSScp = bX * cpy - bY * cpx;
 
-		return ( (aCROSSbp >= 0.0) && (bCROSScp >= 0.0) && (cCROSSap >= 0.0) );
+		return (aCROSSbp >= 0.0) && (bCROSScp >= 0.0) && (cCROSSap >= 0.0);
 	}
 }

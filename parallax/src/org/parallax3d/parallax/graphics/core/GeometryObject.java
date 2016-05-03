@@ -40,8 +40,6 @@ public abstract class GeometryObject extends Object3D
 
 	private double _oldLineWidth = -1;
 
-	private int[] tmpBufArray = {0};
-
 	public GeometryObject(AbstractGeometry geometry, Material material) {
 		this.geometry = geometry;
 		this.material = material;
@@ -137,10 +135,18 @@ public abstract class GeometryObject extends Object3D
 
 					int size = 1;		// "f" and "i"
 
-					if ( attribute.type == Attribute.TYPE.V2 ) size = 2;
-					else if ( attribute.type == Attribute.TYPE.V3 ) size = 3;
-					else if ( attribute.type == Attribute.TYPE.V4 ) size = 4;
-					else if ( attribute.type == Attribute.TYPE.C  ) size = 3;
+					if ( attribute.type == Attribute.TYPE.V2 ) {
+						size = 2;
+					}
+					else if ( attribute.type == Attribute.TYPE.V3 ) {
+						size = 3;
+					}
+					else if ( attribute.type == Attribute.TYPE.V4 ) {
+						size = 4;
+					}
+					else if ( attribute.type == Attribute.TYPE.C  ) {
+						size = 3;
+					}
 
 					attribute.size = size;
 					attribute.array = Float32Array.create(nvertices * size);

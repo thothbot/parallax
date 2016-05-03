@@ -504,9 +504,9 @@ public class BufferGeometry extends AbstractGeometry
 
 					for ( int i = start, il = start + count; i < il; i += 3 ) {
 
-						vA = ( index + (int)indices.get( i     ) ) * 3;
-						vB = ( index + (int)indices.get( i + 1 ) ) * 3;
-						vC = ( index + (int)indices.get( i + 2 ) ) * 3;
+						vA = ( index + indices.get( i     ) ) * 3;
+						vB = ( index + indices.get( i + 1 ) ) * 3;
+						vC = ( index + indices.get( i + 2 ) ) * 3;
 
 						pA.fromArray( positions, vA );
 						pB.fromArray( positions, vB );
@@ -705,7 +705,7 @@ public class BufferGeometry extends AbstractGeometry
 			newVerticeMaps = 0;
 
 			for ( int vo = 0; vo < 3; vo ++ ) {
-				int vid = (int)indices.get( findex * 3 + vo );
+				int vid = indices.get( findex * 3 + vo );
 				if ( vertexMap.get( vid ) == - 1 ) {
 					//Unmapped vertice
 					faceVertices.set( vo * 2 , vid);
@@ -724,14 +724,14 @@ public class BufferGeometry extends AbstractGeometry
 
 			int faceMax = vertexPtr + newVerticeMaps;
 			if ( faceMax > ( offset.index + size ) ) {
-				BufferGeometry.DrawCall new_offset = new BufferGeometry.DrawCall(indexPtr, 0, vertexPtr );
-				offsets.add( new_offset );
-				offset = new_offset;
+				BufferGeometry.DrawCall newOffset = new BufferGeometry.DrawCall(indexPtr, 0, vertexPtr );
+				offsets.add( newOffset );
+				offset = newOffset;
 
 				//Re-evaluate reused vertices in light of new offset.
 				for ( int v = 0; v < 6; v += 2 ) {
-					int new_vid = faceVertices.get( v + 1 );
-					if ( new_vid > - 1 && new_vid < offset.index )
+					int newVid = faceVertices.get( v + 1 );
+					if ( newVid > - 1 && newVid < offset.index )
 						faceVertices.set( v + 1 , - 1);
 				}
 			}
@@ -739,14 +739,14 @@ public class BufferGeometry extends AbstractGeometry
 			//Reindex the face.
 			for ( int v = 0; v < 6; v += 2 ) {
 				int vid = faceVertices.get( v );
-				int new_vid = faceVertices.get( v + 1 );
+				int newVid = faceVertices.get( v + 1 );
 
-				if ( new_vid == - 1 )
-					new_vid = vertexPtr ++;
+				if ( newVid == - 1 )
+					newVid = vertexPtr ++;
 
-				vertexMap.set( vid , new_vid);
-				revVertexMap.set( new_vid , vid);
-				sortedIndices.set( indexPtr ++ , new_vid - offset.index); //XXX overflows at 16bit
+				vertexMap.set( vid , newVid);
+				revVertexMap.set( newVid , vid);
+				sortedIndices.set( indexPtr ++ , (float)newVid - offset.index); //XXX overflows at 16bit
 				offset.count ++;
 			}
 		}
