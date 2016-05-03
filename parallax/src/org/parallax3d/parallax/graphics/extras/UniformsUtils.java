@@ -31,6 +31,8 @@ import org.parallax3d.parallax.system.ThreejsObject;
 @ThreejsObject("THREE.UniformsUtils")
 public class UniformsUtils
 {
+	private UniformsUtils() {}
+
 	/**
 	 * Merge two uniforms into one new result uniform.
 	 *

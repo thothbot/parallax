@@ -39,6 +39,8 @@ import org.parallax3d.parallax.math.Vector2;
 public class ShapeUtils
 {
 
+	private ShapeUtils() {}
+
 	/**
 	 * Remove holes from the Shape
 	 *
@@ -202,7 +204,7 @@ public class ShapeUtils
 			verts.add(trianglea);
 			verts.add(triangleb);
 
-			shape.removeAll(shape);
+			shape.clear();
 
 			shape.addAll(tmpShape1);
 			shape.addAll(tmpHole1);
