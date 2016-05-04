@@ -198,7 +198,7 @@ public abstract class Curve
 		double segmentLength = lengthAfter - lengthBefore;
 
 		// determine where we are between the 'before' and 'after' points
-		double segmentFraction = (targetArcLength - lengthBefore) / (double)segmentLength;
+		double segmentFraction = (targetArcLength - lengthBefore) / segmentLength;
 
 		// add that fractional amount to t
 		return (high + segmentFraction) / ((double)arcLengths.size() - 1.0);
@@ -211,7 +211,7 @@ public abstract class Curve
 	 */
 	public Vector2 getNormalVector( double t )
 	{
-		Vector2 vec = (Vector2) this.getTangent( t );
+		Vector2 vec = this.getTangent( t );
 		return new Vector2( -vec.getY() , vec.getX() );
 	}
 

@@ -73,8 +73,6 @@ public class ExtrudeGeometry extends Geometry
 		public int extrudeMaterial;
 	}
 
-	private static final double RAD_TO_DEGREES = 180.0 / Math.PI;
-
 	private static Vector2 __v1 = new Vector2();
 	private static Vector2 __v2 = new Vector2();
 	private static Vector2 __v3 = new Vector2();
@@ -104,7 +102,7 @@ public class ExtrudeGeometry extends Geometry
 	{
 		super();
 
-		if(shapes.size() > 0)
+		if(!shapes.isEmpty())
 			this.shapebb = shapes.get( shapes.size() - 1 ).getBoundingBox();
 
 		this.options = options;
@@ -182,7 +180,6 @@ public class ExtrudeGeometry extends Geometry
 			}
 
 			// If vertices are in order now, we shouldn't need to worry about them again (hopefully)!
-			reverse = false;
 		}
 
 		localFaces = ShapeUtils.triangulateShape ( vertices, holes );
@@ -251,7 +248,6 @@ public class ExtrudeGeometry extends Geometry
 			for ( int i = 0, il = contour.size(); i < il; i ++ )
 			{
 				Vector2 vert = scalePt2( contour.get( i ), contourMovements.get( i ), bs );
-				//vert = scalePt( contour[ i ], contourCentroid, bs, false );
 				v( vert.getX(), vert.getY(),  - z );
 			}
 
@@ -264,13 +260,11 @@ public class ExtrudeGeometry extends Geometry
 				for ( int i = 0, il = ahole.size(); i < il; i++ )
 				{
 					Vector2 vert = scalePt2( ahole.get( i ), oneHoleMovements.get( i ), bs );
-					//vert = scalePt( ahole[ i ], holesCentroids[ h ], bs, true );
 					v( vert.getX(), vert.getY(),  -z );
 				}
 			}
 		}
 
-//		bs = bevelSize;
 
 		// Back facing vertices
 
@@ -286,7 +280,6 @@ public class ExtrudeGeometry extends Geometry
 			}
 			else
 			{
-				// v( vert.x, vert.y + extrudePts[ 0 ].y, extrudePts[ 0 ].x );
 				normal.copy(splineTube.getNormals().get(0)).multiply(vert.getX());
 				binormal.copy(splineTube.getBinormals().get(0)).multiply(vert.getY());
 				position2.copy((Vector3)extrudePts.get(0)).add(normal).add(binormal);
@@ -312,8 +305,6 @@ public class ExtrudeGeometry extends Geometry
 				}
 				else
 				{
-					// v( vert.x, vert.y + extrudePts[ s - 1 ].y, extrudePts[ s - 1 ].x );
-
 					normal.copy(splineTube.getNormals().get(s)).multiply(vert.getX());
 					binormal.copy(splineTube.getBinormals().get(s)).multiply(vert.getY());
 
@@ -391,12 +382,12 @@ public class ExtrudeGeometry extends Geometry
 		double x = - Math.cos( anglec );
 		double y = - Math.sin( anglec );
 
-		return new Vector2( x, y ); //.normalize();
+		return new Vector2( x, y );
 	}
 
 	private Vector2 scalePt2 ( Vector2 pt, Vector2 vec, double size )
 	{
-		return (Vector2) vec.clone().multiply( size ).add( pt );
+		return vec.clone().multiply( size ).add( pt );
 	}
 
 	/*
@@ -604,6 +595,8 @@ public class ExtrudeGeometry extends Geometry
 
 	public static class WorldUVGenerator
 	{
+		private WorldUVGenerator() {}
+
 		public static List<Vector2> generateTopUV( Geometry geometry, int indexA, int indexB, int indexC )
 		{
 			double ax = geometry.getVertices().get( indexA ).getX();

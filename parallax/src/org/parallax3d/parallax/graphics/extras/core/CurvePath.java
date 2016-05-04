@@ -82,8 +82,8 @@ public class CurvePath extends Curve
 		// TODO Test
 		// and verify for vector3 (needs to implement equals)
 		// Add a line curve if start and end of lines are not connected
-		Vector2 startPoint = (Vector2) getCurves().get(0).getPoint(0);
-		Vector2 endPoint = (Vector2) getCurves().get(this.curves.size() - 1 ).getPoint(1);
+		Vector2 startPoint = getCurves().get(0).getPoint(0);
+		Vector2 endPoint = getCurves().get(this.curves.size() - 1 ).getPoint(1);
 
 		if (!startPoint.equals(endPoint))
 			this.curves.add( new LineCurve(endPoint, startPoint) );
@@ -117,7 +117,7 @@ public class CurvePath extends Curve
 
 				double u = 1.0 - diff / curve.getLength();
 
-				return (Vector2) curve.getPointAt( u );
+				return curve.getPointAt( u );
 			}
 
 			i ++;
