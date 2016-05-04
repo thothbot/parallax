@@ -55,7 +55,7 @@ public class Line extends GeometryObject
 	/**
 	 * In OpenGL terms, LineStrip is the classic GL_LINE_STRIP and LinePieces is the equivalent to GL_LINES. 
 	 */
-	public static enum MODE
+	public enum MODE
 	{
 		/**
 		 * Will draw a series of segments connecting each point 
@@ -139,7 +139,7 @@ public class Line extends GeometryObject
 		sphere.copy( geometry.getBoundingSphere() );
 		sphere.apply( this.matrixWorld );
 
-		if ( raycaster.getRay().isIntersectionSphere( sphere ) == false ) {
+		if ( !raycaster.getRay().isIntersectionSphere( sphere ) ) {
 
 			return;
 
@@ -158,11 +158,15 @@ public class Line extends GeometryObject
 
 			double distSq = ray.distanceSqToSegment( vertices.get( i ), vertices.get( i + 1 ), interRay, interSegment );
 
-			if ( distSq > precisionSq ) continue;
+			if ( distSq > precisionSq ) {
+				continue;
+			}
 
 			double distance = ray.getOrigin().distanceTo( interRay );
 
-			if ( distance < raycaster.getNear() || distance > raycaster.getFar() ) continue;
+			if ( distance < raycaster.getNear() || distance > raycaster.getFar() ) {
+				continue;
+			}
 
 			Raycaster.Intersect intersect = new Raycaster.Intersect();
 			intersect.distance = distance;
@@ -276,7 +280,6 @@ public class Line extends GeometryObject
 		List<Double> lineDistances = geometry.getLineDistances();
 
 		int vl = vertices.size();
-		int cl = colors.size();
 		int dl = lineDistances.size();
 
 		Float32Array vertexArray = geometry.__vertexArray;

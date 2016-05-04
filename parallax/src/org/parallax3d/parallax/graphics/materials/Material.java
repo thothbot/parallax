@@ -56,7 +56,7 @@ public abstract class Material
 	/**
 	 * Material sides
 	 */
-	public static enum SIDE
+	public enum SIDE
 	{
 		FRONT,
 		BACK,
@@ -66,7 +66,7 @@ public abstract class Material
 	/**
 	 * Shading
 	 */
-	public static enum SHADING
+	public enum SHADING
 	{
 		NO, // NoShading = 0;
 		FLAT, // FlatShading = 1;
@@ -76,7 +76,7 @@ public abstract class Material
 	/**
 	 * Colors
 	 */
-	public static enum COLORS
+	public enum COLORS
 	{
 		NO, // NoColors = 0;
 		FACE, // FaceColors = 1;
@@ -86,7 +86,7 @@ public abstract class Material
 	/**
 	 * Blending modes
 	 */
-	public static enum BLENDING
+	public enum BLENDING
 	{
 		NO, // NoBlending = 0;
 		NORMAL, // NormalBlending = 1;
@@ -97,7 +97,7 @@ public abstract class Material
 		CUSTOM // CustomBlending = 6;
 	}
 
-	private static enum SHADER_DEFINE {
+	private enum SHADER_DEFINE {
 		VERTEX_TEXTURES, GAMMA_INPUT, GAMMA_OUTPUT,
 
 		MAX_DIR_LIGHTS, // param
@@ -122,19 +122,21 @@ public abstract class Material
 
 		USE_FOG, FOG_EXP2, METAL;
 
+		private static final String DEFINE = "#define ";
+
 		public String getValue()
 		{
-			return "#define " + this.name();
+			return DEFINE + this.name();
 		}
 
 		public String getValue(int param)
 		{
-			return "#define " + this.name() + " " + param;
+			return DEFINE + this.name() + " " + param;
 		}
 
 		public String getValue(double param)
 		{
-			return "#define " + this.name() + " " + param;
+			return DEFINE + this.name() + " " + param;
 		}
 	}
 
@@ -501,15 +503,15 @@ public abstract class Material
 
 	public void updateProgramParameters(ProgramParameters parameters)
 	{
-		parameters.map          = (this instanceof HasMap         && ((HasMap)this).getMap() != null);
-		parameters.envMap       = (this instanceof HasEnvMap      && ((HasEnvMap)this).getEnvMap() != null);
-		parameters.lightMap     = (this instanceof HasLightMap    &&  ((HasLightMap)this).getLightMap() != null);
-		parameters.bumpMap      = (this instanceof HasBumpMap     &&  ((HasBumpMap)this).getBumpMap() != null);
-		parameters.normalMap    = (this instanceof HasNormalMap   &&  ((HasNormalMap)this).getNormalMap() != null);
-		parameters.specularMap  = (this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null);
-		parameters.alphaMap     = (this instanceof HasAlphaMap    &&  ((HasAlphaMap)this).getAlphaMap() != null);
+		parameters.map          = this instanceof HasMap         && ((HasMap)this).getMap() != null;
+		parameters.envMap       = this instanceof HasEnvMap      && ((HasEnvMap)this).getEnvMap() != null;
+		parameters.lightMap     = this instanceof HasLightMap    &&  ((HasLightMap)this).getLightMap() != null;
+		parameters.bumpMap      = this instanceof HasBumpMap     &&  ((HasBumpMap)this).getBumpMap() != null;
+		parameters.normalMap    = this instanceof HasNormalMap   &&  ((HasNormalMap)this).getNormalMap() != null;
+		parameters.specularMap  = this instanceof HasSpecularMap &&  ((HasSpecularMap)this).getSpecularMap() != null;
+		parameters.alphaMap     = this instanceof HasAlphaMap    &&  ((HasAlphaMap)this).getAlphaMap() != null;
 
-		parameters.vertexColors = (this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO);
+		parameters.vertexColors = this instanceof HasVertexColors && ((HasVertexColors)this).isVertexColors() != Material.COLORS.NO;
 
 		parameters.sizeAttenuation = this instanceof PointCloudMaterial && ((PointCloudMaterial)this).isSizeAttenuation();
 
@@ -938,7 +940,9 @@ public abstract class Material
 	public void deallocate( GLRenderer renderer )
 	{
 		int program = getShader().getProgram();
-		if ( program == 0 ) return;
+		if ( program == 0 ) {
+			return;
+		}
 
 //		getShader().setPrecision(null);
 
@@ -960,7 +964,7 @@ public abstract class Material
 			}
 		}
 
-		if ( deleteProgram == true )
+		if ( deleteProgram )
 		{
 
 			renderer.gl.glDeleteProgram(program);

@@ -108,7 +108,7 @@ public class Mesh extends GeometryObject
 		if(this.getGeometry() instanceof BufferGeometry)
 			return;
 
-		if ( ((Geometry)this.getGeometry()).getMorphTargets() != null && ((Geometry)this.getGeometry()).getMorphTargets().size() > 0 ) {
+		if ( ((Geometry)this.getGeometry()).getMorphTargets() != null && !((Geometry)this.getGeometry()).getMorphTargets().isEmpty() ) {
 
 			this.morphTargetBase = -1;
 			this.morphTargetForcedOrder = new ArrayList<Integer>();
@@ -138,7 +138,7 @@ public class Mesh extends GeometryObject
 		_sphere.copy( geometry.getBoundingSphere() );
 		_sphere.apply( this.matrixWorld );
 
-		if ( raycaster.getRay().isIntersectionSphere( _sphere ) == false )
+		if ( !raycaster.getRay().isIntersectionSphere( _sphere ) )
 		{
 			return;
 		}
@@ -148,12 +148,9 @@ public class Mesh extends GeometryObject
 		_inverseMatrix.getInverse( this.matrixWorld );
 		_ray.copy( raycaster.getRay() ).apply( _inverseMatrix );
 
-		if ( geometry.getBoundingBox() != null )
+		if ( geometry.getBoundingBox() != null && !_ray.isIntersectionBox( geometry.getBoundingBox() ) )
 		{
-			if ( _ray.isIntersectionBox( geometry.getBoundingBox() ) == false )
-			{
-				return;
-			}
+			return;
 		}
 
 		double precision = Raycaster.PRECISION;
@@ -164,7 +161,7 @@ public class Mesh extends GeometryObject
 
 			if ( material == null ) return;
 
-			BufferGeometry bGeometry = ((BufferGeometry) geometry);
+			BufferGeometry bGeometry = (BufferGeometry) geometry;
 
 			if ( bGeometry.getAttribute("index") != null ) {
 
@@ -172,7 +169,7 @@ public class Mesh extends GeometryObject
 				Float32Array positions = (Float32Array)bGeometry.getAttribute("position").getArray();
 				List<BufferGeometry.DrawCall> offsets = bGeometry.getDrawcalls();
 
-				if ( offsets.size() == 0 )
+				if ( offsets.isEmpty() )
 				{
 					offsets.add(new BufferGeometry.DrawCall(0, indices.getLength(), 0));
 				}
@@ -186,9 +183,9 @@ public class Mesh extends GeometryObject
 					for ( int i = start, il = start + count; i < il; i += 3 )
 					{
 
-						int a = index + (int)indices.get( i );
-						int b = index + (int)indices.get( i + 1 );
-						int c = index + (int)indices.get( i + 2 );
+						int a = index + indices.get( i );
+						int b = index + indices.get( i + 1 );
+						int c = index + indices.get( i + 2 );
 
 						_vA.fromArray( positions, a * 3 );
 						_vB.fromArray( positions, b * 3 );
@@ -272,9 +269,9 @@ public class Mesh extends GeometryObject
 		} else if ( geometry instanceof Geometry ) {
 
 			boolean isFaceMaterial = this.getMaterial() instanceof MeshFaceMaterial;
-			List<Material> objectMaterials = isFaceMaterial == true ? ((MeshFaceMaterial)this.getMaterial()).getMaterials() : null;
+			List<Material> objectMaterials = isFaceMaterial ? ((MeshFaceMaterial)this.getMaterial()).getMaterials() : null;
 
-			Geometry aGeometry = ((Geometry) geometry);
+			Geometry aGeometry = (Geometry) geometry;
 
 			List<Vector3> vertices = aGeometry.getVertices();
 
@@ -282,7 +279,7 @@ public class Mesh extends GeometryObject
 
 				Face3 face = aGeometry.getFaces().get( f );
 
-				Material material = isFaceMaterial == true ? objectMaterials.get( face.getMaterialIndex() ) : this.getMaterial();
+				Material material = isFaceMaterial ? objectMaterials.get( face.getMaterialIndex() ) : this.getMaterial();
 
 				if ( material == null ) continue;
 
@@ -519,7 +516,7 @@ public class Mesh extends GeometryObject
 
 		}
 
-		if ( geometry.getSkinWeights().size() > 0 && geometry.getSkinIndices().size() > 0 ) {
+		if ( !geometry.getSkinWeights().isEmpty() && !geometry.getSkinIndices().isEmpty() ) {
 
 			geometryGroup.__skinIndexArray = Float32Array.create(nvertices * 4);
 			geometryGroup.__skinWeightArray = Float32Array.create(nvertices * 4);
@@ -728,9 +725,8 @@ public class Mesh extends GeometryObject
 				offset_line = 0,
 				offset_color = 0,
 				offset_skin = 0,
-				offset_morphTarget = 0,
-				offset_custom = 0,
-				offset_customSrc = 0;
+				offset_morphTarget,
+				offset_custom;
 
 		Float32Array vertexArray = geometryGroup.__vertexArray,
 				uvArray = geometryGroup.__uvArray,
@@ -769,8 +765,6 @@ public class Mesh extends GeometryObject
 		List<List<Vector2>>	obj_uvs2 = null;
 		if(geometry.getFaceVertexUvs().size() > 1)
 			obj_uvs2 = geometry.getFaceVertexUvs().get( 1 );
-
-		List<Color> obj_colors = geometry.getColors();
 
 		List<Vector4> obj_skinIndices = geometry.getSkinIndices(),
 				obj_skinWeights = geometry.getSkinWeights();
@@ -891,7 +885,7 @@ public class Mesh extends GeometryObject
 			 }
 		}
 
-		if ( obj_skinWeights.size() > 0 )
+		if ( !obj_skinWeights.isEmpty() )
 		{
 			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
 			{
@@ -1082,18 +1076,22 @@ public class Mesh extends GeometryObject
 
 		}
 
-		if ( dirtyUvs && obj_uvs != null &&  obj_uvs.size() > 0 )
+		if ( dirtyUvs && obj_uvs != null && !obj_uvs.isEmpty() )
 		{
 			for (int  f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
 			{
 
 				int fi = chunk_faces3.get(f);
 
-				if(obj_uvs.size() <= fi) continue;
+				if(obj_uvs.size() <= fi) {
+					continue;
+				}
 
 				List<Vector2> uv = obj_uvs.get(fi);
 
-				if ( uv == null ) continue;
+				if ( uv == null ) {
+					continue;
+				}
 
 				for ( int i = 0; i < 3; i ++ ) {
 
@@ -1113,7 +1111,7 @@ public class Mesh extends GeometryObject
 			 }
 		 }
 
-		if (dirtyUvs && obj_uvs2 != null && obj_uvs2.size() > 0 )
+		if (dirtyUvs && obj_uvs2 != null && !obj_uvs2.isEmpty() )
 		{
 
 			for ( int f = 0, fl = chunk_faces3.size(); f < fl; f ++ )
@@ -1122,7 +1120,9 @@ public class Mesh extends GeometryObject
 
 				List<Vector2> uv2 = obj_uvs2.get(fi);
 
-				if ( uv2 == null ) continue;
+				if ( uv2 == null ) {
+					continue;
+				}
 
 				for ( int i = 0; i < 3; i ++ )
 				{
@@ -1180,10 +1180,11 @@ public class Mesh extends GeometryObject
 			{
 				Attribute customAttribute = geometryGroup.__webglCustomAttributesList.get(i);
 
-				if ( ! customAttribute.__original.needsUpdate ) continue;
+				if ( ! customAttribute.__original.needsUpdate ) {
+					continue;
+				}
 
 				offset_custom = 0;
-				offset_customSrc = 0;
 
 				if ( customAttribute.size == 1 )
 				{
