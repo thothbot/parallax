@@ -113,7 +113,7 @@ public final class TubeGeometry extends Geometry
 		{
 			for ( int j = 0; j < segmentsRadius; j++ )
 			{
-				int ip = ( closed ) ? (i + 1) % segments : i + 1;
+				int ip = closed ? (i + 1) % segments : i + 1;
 				int jp = (j + 1) % segmentsRadius;
 
 				int a = this.grid.get( i ).get( j );		// *** NOT NECESSARILY PLANAR ! ***

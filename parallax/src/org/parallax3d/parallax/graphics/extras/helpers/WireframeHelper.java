@@ -40,6 +40,8 @@ import org.parallax3d.parallax.system.gl.arrays.Uint32Array;
 @ThreejsObject("THREE.WireframeHelper")
 public class WireframeHelper extends Line {
 
+	private static final String POSITION = "position";
+
 	public WireframeHelper(GeometryObject object)
 	{
 		this(object, new Color(0xffffff));
@@ -76,7 +78,7 @@ public class WireframeHelper extends Line {
 					edge[ 1 ] = face.getFlat()[( j + 1 ) % 3 ];
 					Arrays.sort(edge);
 
-					String key = "" + edge[0] + edge[1];
+					String key = Integer.toString(edge[0]) + Integer.toString( edge[1]);
 
 					if ( !hash.containsKey(key) )
 					{
@@ -107,7 +109,7 @@ public class WireframeHelper extends Line {
 
 			}
 
-			geometry.addAttribute( "position", new BufferAttribute( coords, 3 ) );
+			geometry.addAttribute( POSITION, new BufferAttribute( coords, 3 ) );
 
 
 
@@ -118,12 +120,12 @@ public class WireframeHelper extends Line {
 			// Indexed BufferGeometry
 			if ( ((BufferGeometry)object.getGeometry()).getAttribute("index") != null ) {
 
-				Float32Array vertices = (Float32Array) ((BufferGeometry)object.getGeometry()).getAttribute("position").getArray();
+				Float32Array vertices = (Float32Array) ((BufferGeometry)object.getGeometry()).getAttribute(POSITION).getArray();
 				Uint16Array indices = (Uint16Array) ((BufferGeometry)object.getGeometry()).getAttribute("index").getArray();
 				List<DrawCall> drawcalls = ((BufferGeometry)object.getGeometry()).getDrawcalls();
 				int numEdges = 0;
 
-				if ( drawcalls.size() == 0 )
+				if ( drawcalls.isEmpty() )
 				{
 					drawcalls = Arrays.asList( new DrawCall(0, indices.getLength(), 9) );
 				}
@@ -145,7 +147,7 @@ public class WireframeHelper extends Line {
 							edge[ 1 ] = index + indices.get( i + ( j + 1 ) % 3 );
 							Arrays.sort(edge);
 
-							String key = "" + edge[0] + edge[1];
+							String key = Integer.toString(edge[0]) + Integer.toString(edge[1]);
 
 							if (  !hash.containsKey(key) )
 							{
@@ -177,14 +179,14 @@ public class WireframeHelper extends Line {
 
 				}
 
-				geometry.addAttribute( "position", new BufferAttribute( coords, 3 ) );
+				geometry.addAttribute( POSITION, new BufferAttribute( coords, 3 ) );
 
 			}
 			// non-indexed BufferGeometry
 			else
 			{
 
-				Float32Array vertices = (Float32Array) ((BufferGeometry)object.getGeometry()).getAttribute("position").getArray();
+				Float32Array vertices = (Float32Array) ((BufferGeometry)object.getGeometry()).getAttribute(POSITION).getArray();
 				int numEdges = vertices.getLength() / 3;
 				int numTris = numEdges / 3;
 
@@ -210,7 +212,7 @@ public class WireframeHelper extends Line {
 
 				}
 
-				geometry.addAttribute( "position", new BufferAttribute( coords, 3 ) );
+				geometry.addAttribute( POSITION, new BufferAttribute( coords, 3 ) );
 
 			}
 

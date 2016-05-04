@@ -32,6 +32,8 @@ import org.parallax3d.parallax.system.gl.arrays.Float32Array;
 @ThreejsObject("THREE.BoxHelper")
 public class BoxHelper extends Line 
 {
+	private static final String POSITION = "position";
+
 	public BoxHelper(Mesh object)
 	{
 		super(new BufferGeometry(), new LineBasicMaterial(), Line.MODE.PIECES);
@@ -41,7 +43,7 @@ public class BoxHelper extends Line
 		material.setColor(new Color(0xffff00));
 
 
-		geometry.addAttribute( "position", new BufferAttribute( Float32Array.create(72), 3 ) );
+		geometry.addAttribute( POSITION, new BufferAttribute( Float32Array.create(72), 3 ) );
 
 		update( object );
 
@@ -77,7 +79,7 @@ public class BoxHelper extends Line
 		7: max.x, min.y, min.z
 		*/
 
-		Float32Array vertices = (Float32Array) ((BufferGeometry)this.geometry).getAttribute("position").getArray();
+		Float32Array vertices = (Float32Array) ((BufferGeometry)this.geometry).getAttribute(POSITION).getArray();
 
 		vertices.set(0, max.getX()); vertices.set(1, max.getY()); vertices.set(2, max.getZ());
 		vertices.set(3, min.getX()); vertices.set(4, max.getY()); vertices.set(5, max.getZ());
@@ -119,7 +121,7 @@ public class BoxHelper extends Line
 		vertices.set(66, max.getX()); vertices.set(67, min.getY()); vertices.set(68, max.getZ());
 		vertices.set(69, max.getX()); vertices.set(70, min.getY()); vertices.set(71, min.getZ());
 
-		((BufferGeometry)this.geometry).getAttribute("position").setNeedsUpdate(true);
+		((BufferGeometry)this.geometry).getAttribute(POSITION).setNeedsUpdate(true);
 
 		this.geometry.computeBoundingSphere();
 

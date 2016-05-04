@@ -46,6 +46,9 @@ import org.parallax3d.parallax.graphics.objects.Line;
 @ThreejsObject("THREE.CameraHelper")
 public class CameraHelper extends Line
 {
+	Vector3 _vector = new Vector3();
+	Camera _camera = new Camera();
+
 	private Camera camera;
 
 	private FastMap<List<Integer>> pointMap;
@@ -142,9 +145,6 @@ public class CameraHelper extends Line
 
 		this.pointMap.get( id ).add(((Geometry)getGeometry()).getVertices().size() - 1 );
 	}
-
-	Vector3 _vector = new Vector3();
-	Camera _camera = new Camera();
 
 	public void update()
 	{

@@ -44,7 +44,7 @@ public class RingGeometry extends Geometry {
 		phiSegments = Math.max( 1, phiSegments );
 
 		double radius = innerRadius;
-		double radiusStep = ( ( outerRadius - innerRadius ) / phiSegments );
+		double radiusStep = ( outerRadius - innerRadius ) / phiSegments;
 
 		List<Vector2> uvs = new ArrayList<Vector2>();
 

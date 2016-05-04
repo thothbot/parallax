@@ -38,6 +38,7 @@ public class VertexNormalsHelper extends Line
 	Mesh object;
 	double size;
 	Matrix3 normalMatrix;
+	Vector3 v1 = new Vector3();
 
 	public VertexNormalsHelper(Mesh object)
 	{
@@ -90,7 +91,6 @@ public class VertexNormalsHelper extends Line
 
 	}
 
-	Vector3 v1 = new Vector3();
 	public void update()
 	{
 
