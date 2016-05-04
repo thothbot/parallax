@@ -121,7 +121,7 @@ public final class BoxGeometry extends Geometry
 			{
 				Vector3 vector = new Vector3();
 
-				double u1 = (double)( ix * segment_width - width_half ) * udir;
+				double u1 = ( ix * segment_width - width_half ) * udir;
 				if(u.equals("x"))
 					vector.setX(u1);
 				else if(u.equals("y"))
@@ -129,7 +129,7 @@ public final class BoxGeometry extends Geometry
 				else if(u.equals("z"))
 					vector.setZ(u1);
 
-				double v1 = (double)( iy * segment_height - height_half ) * vdir;
+				double v1 = ( iy * segment_height - height_half ) * vdir;
 				if(v.equals("x"))
 					vector.setX(v1);
 				else if(v.equals("y"))

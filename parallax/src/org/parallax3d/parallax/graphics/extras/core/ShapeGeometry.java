@@ -80,7 +80,6 @@ public class ShapeGeometry extends Geometry {
      */
     public void addShape ( final Shape shape, final ShapeGeometryParameters options )
     {
-        final int curveSegments = options.curveSegments;
         final int material = options.material;
         final int shapesOffset = this.getVertices().size();
         final List<Vector2> arrVertice = shape.getTransformedPoints();
@@ -103,10 +102,7 @@ public class ShapeGeometry extends Geometry {
                     Collections.reverse( hole );
                 }
             }
-
             // If vertices are in order now, we shouldn't need to worry about them again (hopefully)!
-            reverse = false;
-
         }
 
         final List< List< Integer > > arrFace = ShapeUtils.triangulateShape( arrVertice, arrHole );

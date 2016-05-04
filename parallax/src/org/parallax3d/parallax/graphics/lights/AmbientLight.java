@@ -48,7 +48,7 @@ public final class AmbientLight extends Light
 		@Override
 		public void reset()
 		{
-			this.colors = (Float32Array) Float32Array.createArray();
+			this.colors = Float32Array.createArray();
 			for(int i = 0; i < 3; i++)
 				this.colors.set(i, 0.0);
 

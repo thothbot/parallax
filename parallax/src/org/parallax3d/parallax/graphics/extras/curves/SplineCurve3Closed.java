@@ -49,7 +49,7 @@ public class SplineCurve3Closed extends Curve
 		int intPoint = (int) Math.floor( point );
 
 		double weight = point - intPoint;
-		intPoint += intPoint > 0 ? 0 : ( Math.floor( Math.abs( intPoint ) / points.size() ) + 1 ) * points.size();
+		intPoint += intPoint > 0 ? 0 : ( Math.abs( intPoint ) / points.size() + 1 ) * points.size();
 
 		int c0 = ( intPoint - 1 ) % points.size();
 		int c1 = ( intPoint ) % points.size();
