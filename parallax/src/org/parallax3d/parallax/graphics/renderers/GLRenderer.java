@@ -96,6 +96,7 @@ import org.parallax3d.parallax.system.gl.enums.*;
 @ThreejsObject("THREE.WebGLRenderer")
 public class GLRenderer extends Renderer
 {
+	private static final String COLOR = "color";
 	private static final String NORMAL = "normal";
 	private static final String TANGENT = "tangent";
 	private static final String SKIN_WEIGHT = "skinWeight";
@@ -1501,20 +1502,12 @@ public class GLRenderer extends Renderer
 
 				lights.add( (Light) object );
 
-			} /*else if ( object instanceof Sprite ) {
+			} else {
 
-				sprites.push( object );
+				List<GLObject> webglObjects = this._webglObjects.get( Integer.toString(object.getId()) );
 
-			} else if ( object instanceof LensFlare ) {
-
-				lensFlares.push( object );
-
-			} */else {
-
-				List<GLObject> webglObjects = this._webglObjects.get( object.getId() + "" );
-
-				if ( webglObjects != null && ( object.isFrustumCulled() == false ||
-						_frustum.isIntersectsObject( (GeometryObject) object ) == true ) ) {
+				if ( webglObjects != null && ( !object.isFrustumCulled() ||
+						_frustum.isIntersectsObject( (GeometryObject) object ) ) ) {
 
 					updateObject( (GeometryObject) object, scene );
 
@@ -1526,7 +1519,7 @@ public class GLRenderer extends Renderer
 
 						webglObject.render = true;
 
-						if ( this.sortObjects == true ) {
+						if ( this.sortObjects ) {
 
 							if ( object.getRenderDepth() > 0 ) {
 
@@ -1596,7 +1589,7 @@ public class GLRenderer extends Renderer
 			}
 
 			List<GeometryGroup> geometryGroupsList =
-					GeometryGroup.geometryGroups.get( geometry.getId() + "" );
+					GeometryGroup.geometryGroups.get( Integer.toString(geometry.getId()) );
 
 			for ( int i = 0, il = geometryGroupsList.size(); i < il; i ++ ) {
 
@@ -1710,8 +1703,6 @@ public class GLRenderer extends Renderer
 		if(renderPlugins( this.plugins, scene, camera, Plugin.TYPE.BASIC_RENDER ))
 			return;
 
-		//Log.debug("Called render()");
-
 		AbstractFog fog = scene.getFog();
 
 		// reset caching for this frame
@@ -1817,13 +1808,6 @@ public class GLRenderer extends Renderer
 
 		}
 
-		/*
-		Log.debug("  -- render() overrideMaterial : " + (scene.getOverrideMaterial() != null)
-				+ ", lights: " + lights.size()
-				+ ", opaqueObjects: " + opaqueObjects.size()
-				+ ", transparentObjects: " + transparentObjects.size());
-		*/
-
 		if ( scene.getOverrideMaterial() != null )
 		{
 			Material material = scene.getOverrideMaterial();
@@ -1871,7 +1855,6 @@ public class GLRenderer extends Renderer
 		this.setDepthTest( true );
 		this.setDepthWrite( true );
 
-//		 GLES20.glFinish();
 	}
 
 	public void renderObjectsImmediate ( List<GLObject> renderList,
@@ -1929,22 +1912,12 @@ public class GLRenderer extends Renderer
 
 		setMaterialFaces( material );
 
-//		if ( object.immediateRenderCallback ) {
-//
-//			object.immediateRenderCallback( program, _gl, _frustum );
-//
-//		} else {
-
-//			object.render( function ( object ) { _this.renderBufferImmediate( object, program, material ); } );
 		renderBufferImmediate( object, program, material );
-
-//		}
-
 	}
 
 	private boolean renderPlugins( List<Plugin> plugins, Scene scene, Camera camera, Plugin.TYPE type )
 	{
-		if ( plugins.size() == 0 )
+		if ( plugins.isEmpty() )
 			return false;
 
 		boolean retval = false;
@@ -1959,7 +1932,6 @@ public class GLRenderer extends Renderer
 				continue;
 
 			plugin.setRendering(true);
-			//Log.debug("Called renderPlugins(): " + plugin.getClass().getName());
 
 			// reset state for plugin (to start from clean slate)
 			this._currentProgram = 0;
@@ -2011,7 +1983,7 @@ public class GLRenderer extends Renderer
 								List<Light> lights, AbstractFog fog, boolean useBlending,
 								Material overrideMaterial )
 	{
-		Material material = null;
+		Material material;
 
 		for ( int i = renderList.size() - 1; i != - 1; i -- ) {
 
@@ -2032,7 +2004,9 @@ public class GLRenderer extends Renderer
 				//TODO: material = (isMaterialTransparent) ?
 				// webglObject.transparent : webglObject.opaque;
 
-				if ( material == null ) continue;
+				if ( material == null ) {
+					continue;
+				}
 
 				if ( useBlending )
 					setBlending( material.getBlending(), material.getBlendEquation(), material.getBlendSrc(), material.getBlendDst() );
@@ -2071,7 +2045,7 @@ public class GLRenderer extends Renderer
 		if ( ! material.isVisible() )
 			return;
 
-		Shader program = setProgram( camera, lights, fog, material, object );
+		setProgram( camera, lights, fog, material, object );
 
 		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
 
@@ -2081,14 +2055,6 @@ public class GLRenderer extends Renderer
 
 		int geometryGroupHash = ( geometry.getId() * 0xffffff ) +
 				(material.getShader().getId() * 2 ) + wireframeBit;
-
-//		Log.e(TAG,"--- renderBuffer() geometryGroupHash=" + geometryGroupHash
-//				+ ", _currentGeometryGroupHash=" +  this._currentGeometryGroupHash
-//				+ ", program.id=" + program.getId()
-////				+ ", geometryGroup.id=" + geometryBuffer.getId()
-////				+ ", __webglLineCount=" + geometryBuffer.__webglLineCount
-//				+ ", object.id=" + object.getId()
-//				+ ", wireframeBit=" + wireframeBit);
 
 		if ( geometryGroupHash != this._currentGeometryGroupHash )
 		{
@@ -2142,18 +2108,18 @@ public class GLRenderer extends Renderer
 			}
 
 			// colors
-			if ( attributes.get("color") >= 0 )
+			if ( attributes.get(COLOR) >= 0 )
 			{
-				if ( ((Geometry)object.getGeometry()).getColors().size() > 0 ||
-						((Geometry)object.getGeometry()).getFaces().size() > 0 ) {
+				if ( !((Geometry)object.getGeometry()).getColors().isEmpty() ||
+						!((Geometry)object.getGeometry()).getFaces().isEmpty() ) {
 
 					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglColorBuffer);
-					enableAttribute( attributes.get("color") );
-					this.gl.glVertexAttribPointer(attributes.get("color"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+					enableAttribute( attributes.get(COLOR) );
+					this.gl.glVertexAttribPointer(attributes.get(COLOR), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 				} else {
 
-					this.gl.glVertexAttrib3f(attributes.get("color"), 1.0f, 1.0f, 1.0f);
+					this.gl.glVertexAttrib3f(attributes.get(COLOR), 1.0f, 1.0f, 1.0f);
 
 				}
 			}
