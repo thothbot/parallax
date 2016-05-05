@@ -1097,12 +1097,8 @@ public class GLRenderer extends Renderer
 
 						int startIndex = offsets.get( i ).index;
 
-						if ( updateBuffers ) {
-
-							setupVertexAttributes( material, program, geometry, startIndex );
-							this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
-
-						}
+						setupVertexAttributes( material, program, geometry, startIndex );
+						this.gl.glBindBuffer(BufferTarget.ELEMENT_ARRAY_BUFFER.getValue(), index.getBuffer());
 
 						this.gl.glDrawElements( mode.getValue(), offsets.get( i ).count, type.getValue(), offsets.get( i ).start * size  );
 
@@ -1168,25 +1164,12 @@ public class GLRenderer extends Renderer
 
 			if ( index != null ) {
 
-				// indexed lines
-
-//				var type, size;
-
-//				if ( index.array instanceof Uint32Array ) {
-//
-//					type = _gl.UNSIGNED_INT;
-//					size = 4;
-//
-//				} else {
-
-					DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
-					int size = 2;
-
-//				}
+				DrawElementsType type = DrawElementsType.UNSIGNED_SHORT;
+				int size = 2;
 
 				List<DrawCall> drawcalls = geometry.getDrawcalls();
 
-				if ( drawcalls.size() == 0 ) {
+				if ( drawcalls.isEmpty() ) {
 
 					if ( updateBuffers ) {
 
@@ -1207,7 +1190,9 @@ public class GLRenderer extends Renderer
 					// must set attribute pointers to use new offsets for each chunk
 					// even if geometry and materials didn't change
 
-					if ( drawcalls.size() > 1 ) updateBuffers = true;
+					if ( drawcalls.size() > 1 ) {
+						updateBuffers = true;
+					}
 
 					for ( int i = 0, il = drawcalls.size(); i < il; i ++ ) {
 
@@ -1262,7 +1247,7 @@ public class GLRenderer extends Renderer
 
 		String groupHash;
 
-		FastMap<Integer> hash_map = new FastMap<Integer>();
+		FastMap<Integer> hashMap = new FastMap<Integer>();
 
 		FastMap<GeometryGroup> groups = new FastMap<GeometryGroup>();
 
@@ -1273,13 +1258,13 @@ public class GLRenderer extends Renderer
 			Face3 face = geometry.getFaces().get(f);
 			Integer materialIndex = usesFaceMaterial ? face.getMaterialIndex() : 0;
 
-			if ( ! hash_map.containsKey(materialIndex) ) {
+			if ( ! hashMap.containsKey(materialIndex) ) {
 
-				hash_map.put(materialIndex.toString(), 0);
+				hashMap.put(materialIndex.toString(), 0);
 
 			}
 
-			groupHash = materialIndex + "_" + hash_map.get( materialIndex );
+			groupHash = materialIndex + "_" + hashMap.get( materialIndex );
 
 			if ( ! groups.containsKey(groupHash) ) {
 
@@ -1293,8 +1278,8 @@ public class GLRenderer extends Renderer
 
 			if ( groups.get( groupHash ).getVertices() + 3 > maxVerticesInGroup ) {
 
-				hash_map.put( materialIndex.toString(), hash_map.get( materialIndex ) + 1 );
-				groupHash = materialIndex + "_" + hash_map.get( materialIndex );
+				hashMap.put( materialIndex.toString(), hashMap.get( materialIndex ) + 1 );
+				groupHash = materialIndex + "_" + hashMap.get( materialIndex );
 
 				if ( ! groups.containsKey(groupHash) ) {
 
@@ -1319,14 +1304,14 @@ public class GLRenderer extends Renderer
 	public void initGeometryGroups( Object3D scene, Mesh object, Geometry geometry ) {
 
 		Material material = object.getMaterial();
-		boolean addBuffers = false;
+		boolean addBuffers;
 
-		if ( GeometryGroup.geometryGroups.get( geometry.getId() + "" ) == null ||
+		if ( GeometryGroup.geometryGroups.get( Integer.toString(geometry.getId()) ) == null ||
 				geometry.isGroupsNeedUpdate() ) {
 
-			this._webglObjects.put(object.getId() + "", new ArrayList<GLObject>());
+			this._webglObjects.put(Integer.toString(object.getId()), new ArrayList<GLObject>());
 
-			GeometryGroup.geometryGroups.put( geometry.getId() + "",
+			GeometryGroup.geometryGroups.put( Integer.toString(geometry.getId()),
 					makeGroups( geometry, material instanceof MeshFaceMaterial ));
 
 			geometry.setGroupsNeedUpdate( false );
@@ -1334,7 +1319,7 @@ public class GLRenderer extends Renderer
 		}
 
 		List<GeometryGroup> geometryGroupsList =
-				GeometryGroup.geometryGroups.get( geometry.getId() + "" );
+				GeometryGroup.geometryGroups.get( Integer.toString(geometry.getId()) );
 
 		// create separate VBOs per geometry chunk
 		for ( int i = 0, il = geometryGroupsList.size(); i < il; i ++ ) {
@@ -1344,8 +1329,8 @@ public class GLRenderer extends Renderer
 			// initialise VBO on the first access
 			if ( geometryGroup.__webglVertexBuffer == 0 )
 			{
-				((Mesh)object).createBuffers(this, geometryGroup);
-				((Mesh)object).initBuffers(this.gl, geometryGroup);
+				object.createBuffers(this, geometryGroup);
+				object.initBuffers(this.gl, geometryGroup);
 				geometry.setVerticesNeedUpdate( true );
 				geometry.setMorphTargetsNeedUpdate( true );
 				geometry.setElementsNeedUpdate( true );
@@ -1394,7 +1379,6 @@ public class GLRenderer extends Renderer
 		} else if ( ! geometry.__webglInit ) {
 
 			geometry.__webglInit = true;
-//			geometry.addEventListener( 'dispose', onGeometryDispose );
 
 			if ( geometry instanceof BufferGeometry ) {
 
@@ -1417,17 +1401,13 @@ public class GLRenderer extends Renderer
 
 				}
 
-			} else if ( object instanceof PointCloud ) {
-
-				if ( geometry.__webglVertexBuffer == 0 ) {
+			} else if ( object instanceof PointCloud && geometry.__webglVertexBuffer == 0 ) {
 
 					((PointCloud)object).createBuffers(this);
 					((PointCloud)object).initBuffers(this.gl);
 
 					geometry.setVerticesNeedUpdate( true );
 					geometry.setColorsNeedUpdate( true );
-
-				}
 
 			}
 
@@ -1446,7 +1426,7 @@ public class GLRenderer extends Renderer
 				} else if ( geometry instanceof Geometry ) {
 
 					List<GeometryGroup> geometryGroupsList =
-							GeometryGroup.geometryGroups.get( geometry.getId() + "" );
+							GeometryGroup.geometryGroups.get( Integer.toString(geometry.getId()) );
 
 					for ( int i = 0,l = geometryGroupsList.size(); i < l; i ++ ) {
 
@@ -1457,16 +1437,8 @@ public class GLRenderer extends Renderer
 				}
 
 			} else if ( object instanceof Line || object instanceof PointCloud ) {
-
 				addBuffer( geometry, (GeometryObject) object );
-
-			} /*else if ( object instanceof ImmediateRenderObject ||
-                    object.immediateRenderCallback ) {
-
-				addBufferImmediate( _webglObjectsImmediate, object );
-
-			}*/
-
+			}
 		}
 
 	}
@@ -1474,10 +1446,10 @@ public class GLRenderer extends Renderer
 	private void addBuffer( GLGeometry buffer, GeometryObject object ) {
 
 		int id = object.getId();
-		List<GLObject> list = _webglObjects.get(id + "");
+		List<GLObject> list = _webglObjects.get(Integer.toString(id));
 		if(list == null) {
 			list = new ArrayList<GLObject>();
-			_webglObjects.put(id + "", list);
+			_webglObjects.put(Integer.toString(id), list);
 		}
 
 		GLObject webGLObject = new GLObject(buffer, object);
@@ -1487,7 +1459,9 @@ public class GLRenderer extends Renderer
 
 	private void projectObject( Object3D scene, Object3D object ) {
 
-		if ( object.isVisible() == false ) return;
+		if ( !object.isVisible() ) {
+			return;
+		}
 
 		if ( object instanceof Scene /*|| object instanceof Group */) {
 
