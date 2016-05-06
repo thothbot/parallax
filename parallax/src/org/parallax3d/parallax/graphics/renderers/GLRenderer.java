@@ -880,101 +880,7 @@ public class GLRenderer extends Renderer
 	}
 
 	public void renderBufferImmediate( GeometryObject object, Shader program, Material material ) {
-
 		initAttributes();
-//
-//		if ( object.hasPositions && ! object.__webglVertexBuffer ) object.__webglVertexBuffer = GLES20.glCreateBuffer();
-//		if ( object.hasNormals && ! object.__webglNormalBuffer ) object.__webglNormalBuffer = GLES20.glCreateBuffer();
-//		if ( object.hasUvs && ! object.__webglUvBuffer ) object.__webglUvBuffer = GLES20.glCreateBuffer();
-//		if ( object.hasColors && ! object.__webglColorBuffer ) object.__webglColorBuffer = GLES20.glCreateBuffer();
-//
-//		if ( object.hasPositions )
-//		{
-//
-//			GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, object.__webglVertexBuffer );
-//			GLES20.glBufferData( GLES20.GL_ARRAY_BUFFER, object.positionArray, GLES20.GL_DYNAMIC_DRAW );
-//			enableAttribute( program.attributes.position );
-//			GLES20.glVertexAttribPointer( program.attributes.position, 3, getGL().FLOAT, false, 0, 0 );
-//
-//		}
-//
-//		if ( object.hasNormals ) {
-//
-//			GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, object.__webglNormalBuffer );
-//
-//			if (((HasShading)material).getShading() == Material.SHADING.FLAT ) {
-//
-//				var nx, ny, nz,
-//					nax, nbx, ncx, nay, nby, ncy, naz, nbz, ncz,
-//					normalArray,
-//					i, il = object.count * 3;
-//
-//				for ( int i = 0; i < il; i += 9 ) {
-//
-//					normalArray = object.normalArray;
-//
-//					nax  = normalArray[ i ];
-//					nay  = normalArray[ i + 1 ];
-//					naz  = normalArray[ i + 2 ];
-//
-//					nbx  = normalArray[ i + 3 ];
-//					nby  = normalArray[ i + 4 ];
-//					nbz  = normalArray[ i + 5 ];
-//
-//					ncx  = normalArray[ i + 6 ];
-//					ncy  = normalArray[ i + 7 ];
-//					ncz  = normalArray[ i + 8 ];
-//
-//					nx = ( nax + nbx + ncx ) / 3;
-//					ny = ( nay + nby + ncy ) / 3;
-//					nz = ( naz + nbz + ncz ) / 3;
-//
-//					normalArray[ i ]   = nx;
-//					normalArray[ i + 1 ] = ny;
-//					normalArray[ i + 2 ] = nz;
-//
-//					normalArray[ i + 3 ] = nx;
-//					normalArray[ i + 4 ] = ny;
-//					normalArray[ i + 5 ] = nz;
-//
-//					normalArray[ i + 6 ] = nx;
-//					normalArray[ i + 7 ] = ny;
-//					normalArray[ i + 8 ] = nz;
-//
-//				}
-//
-//			}
-//
-//			GLES20.glBufferData( GLES20.GL_ARRAY_BUFFER, object.normalArray, GLES20.GL_DYNAMIC_DRAW );
-//			enableAttribute( program.attributes.normal );
-//			GLES20.glVertexAttribPointer( program.attributes.normal, 3, getGL().FLOAT, false, 0, 0 );
-//
-//		}
-//
-//		if ( object.hasUvs && material.map ) {
-//
-//			GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, object.__webglUvBuffer );
-//			GLES20.glBufferData( GLES20.GL_ARRAY_BUFFER, object.uvArray, GLES20.GL_DYNAMIC_DRAW );
-//			enableAttribute( program.attributes.uv );
-//			GLES20.glVertexAttribPointer( program.attributes.uv, 2, GLES20.GL_FLOAT, false, 0, 0 );
-//
-//		}
-//
-//		if ( object.hasColors && ((HasVertexColors)material).isVertexColors != Material.COLORS.NO ) {
-//
-//			GLES20.glBindBuffer( GLES20.GL_ARRAY_BUFFER, object.__webglColorBuffer );
-//			GLES20.glBufferData( GLES20.GL_ARRAY_BUFFER, object.colorArray, GLES20.GL_DYNAMIC_DRAW );
-//			enableAttribute( program.attributes.color );
-//			GLES20.glVertexAttribPointer( program.attributes.color, 3, GLES20.GL_FLOAT, false, 0, 0 );
-//
-//		}
-//
-//		disableUnusedAttributes();
-//
-//		GLES20.glDrawArrays( GLES20.GL_TRIANGLES, 0, object.count );
-//
-//		object.count = 0;
-
 	}
 
 	private void setupVertexAttributes( Material material, Shader program, BufferGeometry geometry, int startIndex ) {
@@ -1001,20 +907,6 @@ public class GLRenderer extends Renderer
 					this.gl.glVertexAttribPointer(programAttribute, size, DataType.FLOAT.getValue(), false, 0, startIndex * size * 4); // 4 bytes per Float32
 
 				}
-//				else if ( material.defaultAttributeValues != null ) {
-//
-//					if ( material.defaultAttributeValues[ key ].length === 2 ) {
-//
-//						GLES20.glVertexAttrib2fv( programAttribute, material.defaultAttributeValues[ key ] );
-//
-//					} else if ( material.defaultAttributeValues[ key ].length === 3 ) {
-//
-//						GLES20.glVertexAttrib3fv( programAttribute, material.defaultAttributeValues[ key ] );
-//
-//					}
-//
-//				}
-
 			}
 
 		}
@@ -1032,7 +924,7 @@ public class GLRenderer extends Renderer
 
 		Shader program = setProgram(camera, lights, fog, material, object);
 
-		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
+		material.getShader().getAttributesLocations();
 
 		boolean updateBuffers = false;
 		int wireframeBit = material instanceof HasWireframe &&
@@ -1068,7 +960,7 @@ public class GLRenderer extends Renderer
 
 				List<BufferGeometry.DrawCall> offsets = geometry.getDrawcalls();
 
-				if ( offsets.size() == 0 ) {
+				if ( offsets.isEmpty() ) {
 
 					if ( updateBuffers ) {
 
@@ -1089,8 +981,6 @@ public class GLRenderer extends Renderer
 					// if there is more than 1 chunk
 					// must set attribute pointers to use new offsets for each chunk
 					// even if geometry and materials didn't change
-
-					updateBuffers = true;
 
 					for ( int i = 0, il = offsets.size(); i < il; ++ i )
 					{
