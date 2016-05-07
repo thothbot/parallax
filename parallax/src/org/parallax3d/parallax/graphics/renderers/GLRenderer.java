@@ -96,6 +96,9 @@ import org.parallax3d.parallax.system.gl.enums.*;
 @ThreejsObject("THREE.WebGLRenderer")
 public class GLRenderer extends Renderer
 {
+	private static final String POSITION = "position";
+	private static final String MORPH_TARGET = "morphTarget";
+	private static final String MORPH_NORMAL = "morphNormal";
 	private static final String COLOR = "color";
 	private static final String NORMAL = "normal";
 	private static final String TANGENT = "tangent";
@@ -135,14 +138,6 @@ public class GLRenderer extends Renderer
 	private boolean gammaInput = false;
 	private boolean gammaOutput = false;
 
-	// shadow map
-
-	//	private boolean shadowMapEnabled = false;
-//	shadowMapType = PCFShadowMap;
-	private CullFaceMode shadowMapCullFace = CullFaceMode.FRONT;
-	private boolean shadowMapDebug = false;
-	private boolean shadowMapCascade = false;
-
 	// morphs
 	private int maxMorphTargets = 8;
 	private int maxMorphNormals = 4;
@@ -164,8 +159,6 @@ public class GLRenderer extends Renderer
 
 	// GL state cache
 
-	private Material.SIDE _oldDoubleSided = null;
-	private Material.SIDE _oldFlipSided = null;
 	private Material.SIDE cache_oldMaterialSided = null;
 
 	private Material.BLENDING _oldBlending = null;
@@ -203,22 +196,15 @@ public class GLRenderer extends Renderer
 
 	public Vector3 _vector3 = new Vector3();
 
-	// light arrays cache
-	private Vector3 _direction = new Vector3();
-
 	private boolean _lightsNeedUpdate = true;
 
 	private RendererLights _lights;
 
 	private List<Plugin> plugins;
 
-//	var sprites = [];
-//	var lensFlares = [];
-
 	// GPU capabilities
 	private int _maxTextures;
 	private int _maxVertexTextures;
-	private int _maxTextureSize;
 	private int _maxCubemapSize;
 
 	private boolean _supportsVertexTextures;
@@ -226,16 +212,9 @@ public class GLRenderer extends Renderer
 
 	private WebGLShaderPrecisionFormat _vertexShaderPrecisionHighpFloat;
 	private WebGLShaderPrecisionFormat _vertexShaderPrecisionMediumpFloat;
-	private WebGLShaderPrecisionFormat _vertexShaderPrecisionLowpFloat;
 
 	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionHighpFloat;
 	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionMediumpFloat;
-	private WebGLShaderPrecisionFormat _fragmentShaderPrecisionLowpFloat;
-
-//	private OESTextureFloat GLExtensionTextureFloat;
-//	private OESStandardDerivatives GLExtensionStandardDerivatives;
-//	private ExtTextureFilterAnisotropic GLExtensionTextureFilterAnisotropic;
-//	private WebGLCompressedTextureS3tc GLExtensionCompressedTextureS3TC;
 
 	// clamp precision to maximum available
 	private boolean highpAvailable;
@@ -261,25 +240,20 @@ public class GLRenderer extends Renderer
 
 		this._maxTextures       = this.getIntGlParam(GL20.GL_MAX_TEXTURE_IMAGE_UNITS);
 		this._maxVertexTextures = this.getIntGlParam(GL20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-		this._maxTextureSize    = this.getIntGlParam(GL20.GL_MAX_TEXTURE_SIZE);
 		this._maxCubemapSize    = this.getIntGlParam(GL20.GL_MAX_CUBE_MAP_TEXTURE_SIZE);
 
-		this._supportsVertexTextures = ( this._maxVertexTextures > 0 );
+		this._supportsVertexTextures = this._maxVertexTextures > 0 ;
 		this._supportsBoneTextures = this._supportsVertexTextures && GLExtensions.isSupported(gl, GLES20Ext.List.OES_texture_float);
 
 		this._vertexShaderPrecisionHighpFloat = new
 				WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
 		this._vertexShaderPrecisionMediumpFloat =
 				new WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
-		this._vertexShaderPrecisionLowpFloat = new
-				WebGLShaderPrecisionFormat(gl, Shaders.VERTEX_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
 
 		this._fragmentShaderPrecisionHighpFloat = new
 				WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.HIGH_FLOAT);
 		this._fragmentShaderPrecisionMediumpFloat =
 				new WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.MEDIUM_FLOAT);
-		this._fragmentShaderPrecisionLowpFloat = new
-				WebGLShaderPrecisionFormat(gl, Shaders.FRAGMENT_SHADER, ShaderPrecisionSpecifiedTypes.LOW_FLOAT);
 
 		this.highpAvailable = _vertexShaderPrecisionHighpFloat.getPrecision() > 0 &&
 				_fragmentShaderPrecisionHighpFloat.getPrecision() > 0;
@@ -632,9 +606,15 @@ public class GLRenderer extends Renderer
 	{
 		int bits = 0;
 
-		if ( color ) bits |= ClearBufferMask.COLOR_BUFFER_BIT.getValue();
-		if ( depth ) bits |= ClearBufferMask.DEPTH_BUFFER_BIT.getValue();
-		if ( stencil ) bits |= ClearBufferMask.STENCIL_BUFFER_BIT.getValue();
+		if ( color ) {
+			bits |= ClearBufferMask.COLOR_BUFFER_BIT.getValue();
+		}
+		if ( depth ) {
+			bits |= ClearBufferMask.DEPTH_BUFFER_BIT.getValue();
+		}
+		if ( stencil ) {
+			bits |= ClearBufferMask.STENCIL_BUFFER_BIT.getValue();
+		}
 
 		this.gl.glClear(bits);
 	}
@@ -672,8 +652,6 @@ public class GLRenderer extends Renderer
 		_oldBlending = null;
 		_oldDepthTest = null;
 		_oldDepthWrite = null;
-		_oldDoubleSided = null;
-		_oldFlipSided = null;
 		_currentGeometryGroupHash = -1;
 		_currentMaterialId = -1;
 
@@ -729,21 +707,21 @@ public class GLRenderer extends Renderer
 		FastMap<Integer> attributes = material.getShader().getAttributesLocations();
 		FastMap<Uniform> uniforms = material.getShader().getUniforms();
 
-		if ( object.morphTargetBase != - 1 && attributes.get("position") >= 0)
+		if ( object.morphTargetBase != - 1 && attributes.get(POSITION) >= 0)
 		{
 			this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(object.morphTargetBase));
-			enableAttribute( attributes.get("position") );
-			this.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+			enableAttribute( attributes.get(POSITION) );
+			this.gl.glVertexAttribPointer(attributes.get(POSITION), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 		}
-		else if ( attributes.get("position") >= 0 )
+		else if ( attributes.get(POSITION) >= 0 )
 		{
 			this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglVertexBuffer);
-			enableAttribute( attributes.get("position") );
-			this.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+			enableAttribute( attributes.get(POSITION) );
+			this.gl.glVertexAttribPointer(attributes.get(POSITION), 3, DataType.FLOAT.getValue(), false, 0, 0);
 		}
 
-		if ( object.morphTargetForcedOrder.size() > 0 )
+		if ( !object.morphTargetForcedOrder.isEmpty() )
 		{
 			// set forced order
 
@@ -755,20 +733,20 @@ public class GLRenderer extends Renderer
 					&& m < ((HasSkinning)material).getNumSupportedMorphTargets()
 					&& m < order.size()
 					) {
-				if ( attributes.get("morphTarget" + m )  >= 0 )
+				if ( attributes.get(MORPH_TARGET + m )  >= 0 )
 				{
 					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(order.get(m)));
-					enableAttribute( attributes.get("morphTarget" + m ) );
-					this.gl.glVertexAttribPointer(attributes.get("morphTarget" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
+					enableAttribute( attributes.get(MORPH_TARGET + m ) );
+					this.gl.glVertexAttribPointer(attributes.get(MORPH_TARGET + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 				}
 
-				if (  attributes.get("morphNormal" + m )  >= 0 &&
+				if (  attributes.get(MORPH_NORMAL + m )  >= 0 &&
 						material instanceof HasSkinning && ((HasSkinning)material).isMorphNormals())
 				{
 					this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get(order.get(m)));
-					enableAttribute( attributes.get("morphNormal" + m ));
-					this.gl.glVertexAttribPointer(attributes.get("morphNormal" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
+					enableAttribute( attributes.get(MORPH_NORMAL + m ));
+					this.gl.glVertexAttribPointer(attributes.get(MORPH_NORMAL + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
 				}
 
 				object.__webglMorphTargetInfluences.set( m , influences.get( order.get( m ) ));
@@ -813,7 +791,7 @@ public class GLRenderer extends Renderer
 					}
 				});
 
-			} else if ( activeInfluenceIndices.size() == 0 ) {
+			} else if ( activeInfluenceIndices.isEmpty() ) {
 
 				activeInfluenceIndices.add(  new Double[]{0.0, 0.0} );
 
@@ -830,41 +808,27 @@ public class GLRenderer extends Renderer
 				{
 					influenceIndex = activeInfluenceIndices.get( m )[ 1 ].intValue();
 
-					if ( attributes.get( "morphTarget" + m ) >= 0 ) {
+					if ( attributes.get( MORPH_TARGET + m ) >= 0 ) {
 
 						this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphTargetsBuffers.get(influenceIndex));
-						enableAttribute( attributes.get( "morphTarget" + m ) );
-						this.gl.glVertexAttribPointer(attributes.get("morphTarget" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
+						enableAttribute( attributes.get( MORPH_TARGET + m ) );
+						this.gl.glVertexAttribPointer(attributes.get(MORPH_TARGET + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 					}
 
-					if ( attributes.get( "morphNormal" + m ) >= 0 &&
+					if ( attributes.get( MORPH_NORMAL + m ) >= 0 &&
 							((HasSkinning)material).isMorphNormals() ) {
 
 						this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometrybuffer.__webglMorphNormalsBuffers.get(influenceIndex));
-						enableAttribute( attributes.get( "morphNormal" + m ) );
-						this.gl.glVertexAttribPointer(attributes.get("morphNormal" + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
+						enableAttribute( attributes.get( MORPH_NORMAL + m ) );
+						this.gl.glVertexAttribPointer(attributes.get(MORPH_NORMAL + m), 3, DataType.FLOAT.getValue(), false, 0, 0);
 
 					}
 
 					object.__webglMorphTargetInfluences.set( m, influences.get( influenceIndex ));
 
 				} else {
-
-					/*
-					_gl.vertexAttribPointer( attributes[ "morphTarget" + m ], 3,
-					_gl.FLOAT, false, 0, 0 );
-
-					if ( material.morphNormals ) {
-
-						_gl.vertexAttribPointer( attributes[ "morphNormal" + m ], 3,
-						_gl.FLOAT, false, 0, 0 );
-
-					}
-					*/
-
 					object.__webglMorphTargetInfluences.set( m, 0);
-
 				}
 
 				m ++;
@@ -1012,7 +976,7 @@ public class GLRenderer extends Renderer
 
 				}
 
-				BufferAttribute position = geometry.getAttribute("position");
+				BufferAttribute position = geometry.getAttribute(POSITION);
 
 				// render non-indexed triangles
 
@@ -1035,7 +999,7 @@ public class GLRenderer extends Renderer
 
 			}
 
-			BufferAttribute position = geometry.getAttribute("position");
+			BufferAttribute position = geometry.getAttribute(POSITION);
 
 			// render particles
 
@@ -1117,7 +1081,7 @@ public class GLRenderer extends Renderer
 
 				}
 
-				BufferAttribute position = geometry.getAttribute("position");
+				BufferAttribute position = geometry.getAttribute(POSITION);
 
 				this.gl.glDrawArrays( mode.getValue(), 0,  position.getArray().getLength() / 3 );
 
@@ -1934,13 +1898,13 @@ public class GLRenderer extends Renderer
 
 		// vertices
 		if ( !(material instanceof HasSkinning && ((HasSkinning)material).isMorphTargets()) &&
-				attributes.get("position") >= 0 )
+				attributes.get(POSITION) >= 0 )
 		{
 			if ( updateBuffers )
 			{
 				this.gl.glBindBuffer(BufferTarget.ARRAY_BUFFER.getValue(), geometry.__webglVertexBuffer);
-				enableAttribute( attributes.get("position") );
-				this.gl.glVertexAttribPointer(attributes.get("position"), 3, DataType.FLOAT.getValue(), false, 0, 0);
+				enableAttribute( attributes.get(POSITION) );
+				this.gl.glVertexAttribPointer(attributes.get(POSITION), 3, DataType.FLOAT.getValue(), false, 0, 0);
 			}
 
 		}
@@ -2147,7 +2111,7 @@ public class GLRenderer extends Renderer
 				int numSupportedMorphTargets = 0;
 				for ( int i = 0; i < this.maxMorphTargets; i ++ )
 				{
-					String id = "morphTarget" + i;
+					String id = MORPH_TARGET + i;
 
 					if ( attributes.get( id ) >= 0 )
 					{
@@ -2163,7 +2127,7 @@ public class GLRenderer extends Renderer
 				int numSupportedMorphNormals = 0;
 				for ( int i = 0; i < this.maxMorphNormals; i ++ )
 				{
-					String id = "morphNormal" + i;
+					String id = MORPH_NORMAL + i;
 
 					if ( attributes.get( id ) >= 0 )
 					{
