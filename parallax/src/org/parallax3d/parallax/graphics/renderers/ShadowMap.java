@@ -161,7 +161,9 @@ public final class ShadowMap extends Plugin
 	public void render(GL20 gl, Camera camera, List<Light> sceneLights,
 					   int currentWidth, int currentHeight)
 	{
-		if ( ! ( isEnabled() && isAutoUpdate() ) ) return;
+		if ( ! ( isEnabled() && isAutoUpdate() ) ) {
+			return;
+		}
 
 		// set GL state for depth map
 
@@ -192,7 +194,9 @@ public final class ShadowMap extends Plugin
 		{
 			Light sceneLight = sceneLights.get( i );
 
-			if ( ! sceneLight.isCastShadow() ) continue;
+			if ( ! sceneLight.isCastShadow() ) {
+				continue;
+			}
 
 			if ( ( sceneLight instanceof DirectionalLight ) &&
 					((DirectionalLight)sceneLight).isShadowCascade() )
@@ -359,7 +363,7 @@ public final class ShadowMap extends Plugin
 				Material objectMaterial = getObjectMaterial( object );
 
 				boolean useMorphing = object.getGeometry() instanceof Geometry && ((Geometry)object.getGeometry()).getMorphTargets() != null
-						&& ((Geometry)object.getGeometry()).getMorphTargets().size() > 0
+						&& !((Geometry)object.getGeometry()).getMorphTargets().isEmpty()
 						&& objectMaterial instanceof HasSkinning &&
 						((HasSkinning)objectMaterial).isMorphTargets();
 
@@ -367,13 +371,8 @@ public final class ShadowMap extends Plugin
 						&& objectMaterial instanceof HasSkinning &&
 						((HasSkinning)objectMaterial).isSkinning();
 
-				Material material = null;
+				Material material;
 
-//				if ( object.customDepthMaterial ) {
-//
-//					material = object.customDepthMaterial;
-//
-//				} else
 				if ( useSkinning ) {
 
 					material = useMorphing ? this.depthMaterialMorphSkin : this.depthMaterialSkin;
@@ -446,12 +445,12 @@ public final class ShadowMap extends Plugin
 
 		if ( object.isVisible() ) {
 
-			List<GLObject> webglObjects = getRenderer()._webglObjects.get( object.getId() + "" );
+			List<GLObject> webglObjects = getRenderer()._webglObjects.get( Integer.toString(object.getId()) );
 
 			if ( webglObjects != null && object.isCastShadow() &&
-					(object.isFrustumCulled() == false ||
+					(!object.isFrustumCulled() ||
 							getRenderer()._frustum.isIntersectsObject(
-									(GeometryObject) object ) == true) ) {
+									(GeometryObject) object ) ) ) {
 
 				for ( int i = 0, l = webglObjects.size(); i < l; i ++ ) {
 
@@ -569,14 +568,26 @@ public final class ShadowMap extends Plugin
 
 			p.apply( shadowCamera.getMatrixWorldInverse() );
 
-			if ( p.getX() < this.min.getX() ) this.min.setX( p.getX() );
-			if ( p.getX() > this.max.getX() ) this.max.setX( p.getX() );
+			if ( p.getX() < this.min.getX() ) {
+				this.min.setX( p.getX() );
+			}
+			if ( p.getX() > this.max.getX() ) {
+				this.max.setX( p.getX() );
+			}
 
-			if ( p.getY() < this.min.getY() ) this.min.setY( p.getY() );
-			if ( p.getY() > this.max.getY() ) this.max.setY( p.getY() );
+			if ( p.getY() < this.min.getY() ) {
+				this.min.setY( p.getY() );
+			}
+			if ( p.getY() > this.max.getY() ) {
+				this.max.setY( p.getY() );
+			}
 
-			if ( p.getZ() < this.min.getZ() ) this.min.setZ( p.getZ() );
-			if ( p.getZ() > this.max.getZ() ) this.max.setZ( p.getZ() );
+			if ( p.getZ() < this.min.getZ() ) {
+				this.min.setZ( p.getZ() );
+			}
+			if ( p.getZ() > this.max.getZ() ) {
+				this.max.setZ( p.getZ() );
+			}
 
 		}
 

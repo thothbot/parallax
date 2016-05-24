@@ -167,7 +167,7 @@ public class CurvePath extends Curve
 	 */
 	public Box3 getBoundingBox()
 	{
-		List<Vector2> points = (ArrayList)this.getPoints();
+		List<Vector2> points = this.getPoints();
 
 		double maxX, maxY;
 		double minX, minY;

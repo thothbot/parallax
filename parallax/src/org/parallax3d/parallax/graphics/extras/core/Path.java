@@ -712,7 +712,7 @@ public class Path extends CurvePath {
 
 	public List<Vector2>  getTransformedSpacedPoints( boolean closedPath, List<CurvePath> bends )
 	{
-		List<Vector2> oldPts = (List<Vector2>)(List<?>)this.getSpacedPoints( closedPath );
+		List<Vector2> oldPts = this.getSpacedPoints( closedPath );
 
 		for ( int i = 0; i < bends.size(); i ++ )
 			oldPts = getWrapPoints( oldPts, bends.get( i ) );
@@ -772,7 +772,7 @@ public class Path extends CurvePath {
 
 	public List<Vector2> getTransformedPoints( boolean closedPath, List<CurvePath> bends )
 	{
-		List<Vector2> oldPts = (List<Vector2>)(List<?>)this.getPoints( closedPath ); // getPoints getSpacedPoints
+		List<Vector2> oldPts = this.getPoints( closedPath ); // getPoints getSpacedPoints
 
 		for ( int i = 0; i < bends.size(); i ++ )
 			oldPts = this.getWrapPoints( oldPts, bends.get( i ) );
