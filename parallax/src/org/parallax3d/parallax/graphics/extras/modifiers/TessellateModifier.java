@@ -63,8 +63,6 @@ public class TessellateModifier extends Modifier {
 
             Face3 face = geometry.getFaces().get( i );
 
-            if ( face instanceof Face3 ) {
-
                 int a = face.getA();
                 int b = face.getB();
                 int c = face.getC();
@@ -204,7 +202,7 @@ public class TessellateModifier extends Modifier {
 
                     for ( int j = 0, jl = geometry.getFaceVertexUvs().size(); j < jl; j ++ ) {
 
-                        if ( geometry.getFaceVertexUvs().get( j ).size() > 0) {
+                        if ( !geometry.getFaceVertexUvs().get( j ).isEmpty() ) {
 
                             List<Vector2> uvs = geometry.getFaceVertexUvs().get( j ).get( i );
 
@@ -258,8 +256,6 @@ public class TessellateModifier extends Modifier {
                     }
 
                 }
-
-            }
 
         }
 

@@ -28,9 +28,11 @@ public final class GLExtensions {
 
 	static final List<GLES20Ext.List> extensions = new ArrayList<>();
 
+	private GLExtensions() {}
+
 	public static boolean isSupported(GL20 gl, GLES20Ext.List id) {
 
-		if(extensions.size() == 0)
+		if(extensions.isEmpty())
 		{
 			String vals = gl.glGetString(GL20.GL_EXTENSIONS);
 			if(vals != null)
@@ -38,6 +40,6 @@ public final class GLExtensions {
 					extensions.add(GLES20Ext.List.valueOf(val));
 		}
 
-		return extensions.size() > 0 && extensions.contains( id );
+		return !extensions.isEmpty() && extensions.contains( id );
 	}
 }

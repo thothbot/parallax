@@ -287,15 +287,15 @@ public final class FlyControls extends Controls implements TouchMoveHandler, Tou
 	{
 		int forward = ( this.moveState.forward || ( this.isAutoForward && !this.moveState.back ) ) ? 1 : 0;
 
-		this.moveVector.setX( - (this.moveState.left ? 1 : 0)    + (this.moveState.right ? 1 : 0) );
-		this.moveVector.setY( - (this.moveState.down ? 1 : 0)    + (this.moveState.up ? 1 : 0) );
-		this.moveVector.setZ( - forward + (this.moveState.back ? 1 : 0) );
+		this.moveVector.setX( - (this.moveState.left ? 1D : 0D)    + (this.moveState.right ? 1D : 0D) );
+		this.moveVector.setY( - (this.moveState.down ? 1D : 0D)    + (this.moveState.up ? 1D : 0D) );
+		this.moveVector.setZ( - (double)forward + (this.moveState.back ? 1D : 0D) );
 	}
 
 	private void updateRotationVector()
 	{
 		this.rotationVector.setX( - this.moveState.pitchDown + (this.moveState.pitchUp ? 1 : 0) );
 		this.rotationVector.setY( - (this.moveState.yawRight ? 1 : 0)  + this.moveState.yawLeft );
-		this.rotationVector.setZ( - (this.moveState.rollRight ? 1 : 0) + (this.moveState.rollLeft ? 1 : 0) );
+		this.rotationVector.setZ( - (this.moveState.rollRight ? 1D : 0D) + (this.moveState.rollLeft ? 1D : 0D) );
 	}
 }
