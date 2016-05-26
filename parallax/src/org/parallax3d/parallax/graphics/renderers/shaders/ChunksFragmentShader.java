@@ -64,5 +64,7 @@ public class ChunksFragmentShader
 
 	public static String SPECULARMAP_PARS = Chunks.INSTANCE.getSpecularmapParsFragment().getText();
 	public static String SPECULARMAP = Chunks.INSTANCE.getSpecularmapFragment().getText();
-	
+
+	private ChunksFragmentShader() {} 
+
 }
