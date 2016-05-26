@@ -20,6 +20,8 @@ import static com.google.gwt.webgl.client.WebGLRenderingContext.*;
 
 public class WebGLUtil {
 
+	private WebGLUtil() {}
+
 	public static float[] createPerspectiveMatrix (int fieldOfViewVertical, float aspectRatio, float minimumClearance,
 		float maximumClearance) {
 		double fieldOfViewInRad = fieldOfViewVertical * Math.PI / 180.0;
