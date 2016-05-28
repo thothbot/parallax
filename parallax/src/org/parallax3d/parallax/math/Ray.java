@@ -426,9 +426,9 @@ public class Ray
 		// These lines also handle the case where tmin or tmax is NaN
 		// (result of 0 * Infinity). x !== x returns true if x is NaN
 
-		if ( tymin > tmin || tmin != tmin ) tmin = tymin;
+		if ( tymin > tmin || tymin != tmin ) tmin = tymin;
 
-		if ( tymax < tmax || tmax != tmax ) tmax = tymax;
+		if ( tymax < tmax || tymax != tmax ) tmax = tymax;
 
 		if ( invdirz >= 0 ) {
 
@@ -443,9 +443,9 @@ public class Ray
 
 		if ( ( tmin > tzmax ) || ( tzmin > tmax ) ) return null;
 
-		if ( tzmin > tmin || tmin != tmin ) tmin = tzmin;
+		if ( tzmin > tmin || tzmin != tmin ) tmin = tzmin;
 
-		if ( tzmax < tmax || tmax != tmax ) tmax = tzmax;
+		if ( tzmax < tmax || tzmax != tmax ) tmax = tzmax;
 
 		//return point closest to the ray (positive side)
 
