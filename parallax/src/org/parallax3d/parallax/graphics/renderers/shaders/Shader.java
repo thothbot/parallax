@@ -41,7 +41,7 @@ public abstract class Shader
 	/**
 	 * Sets the Shader's precision value.
 	 */
-	public static enum PRECISION
+	public enum PRECISION
 	{
 		HIGHP,
 		MEDIUMP,
@@ -75,13 +75,12 @@ public abstract class Shader
 	private String vertexExtensions = "";
 	private String fragmentExtensions = "";
 
-	private boolean cache_areCustomAttributesDirty;
+	private boolean cacheAreCustomAttributesDirty;
 
 	private int id;
 
 	private static int shaderCounter;
-
-	private int[] tmpArray = {0};
+	private static String shaderReplaceArg = "[*]";
 
 	/**
 	 * This constructor will create new Shader instance.
@@ -208,15 +207,6 @@ public abstract class Shader
 
 		gl.glLinkProgram(this.program);
 
-//		if (!gl.getProgramParameterb(this.program, ProgramParameter.LINK_STATUS))
-//			Log.error("Could not initialise shader\n"
-//					+ "GL error: " + gl.getProgramInfoLog(program)
-//					+ "Shader: " + this.getClass().getName()
-//					+ "\n-----\nVERTEX:\n" + vertex
-//					+ "\n-----\nFRAGMENT:\n" + fragment
-//			);
-//
-//		else
 			Log.debug("Shader.initProgram(): shaders has been initialised");
 
 		// clean up
@@ -248,12 +238,6 @@ public abstract class Shader
 
 		gl.glShaderSource(shader, string);
 		gl.glCompileShader(shader);
-
-//		if (!App.gl.glGetShaderParameterb(shader, GL20.GL_COMPILE_STATUS))
-//		{
-//			Log.error(App.gl.getShaderInfoLog(shader));
-//			return null;
-//		}
 
 		return shader;
 	}
@@ -358,7 +342,7 @@ public abstract class Shader
 
 	public boolean areCustomAttributesDirty()
 	{
-		if(this.cache_areCustomAttributesDirty)
+		if(this.cacheAreCustomAttributesDirty)
 			return true;
 
 		if(getAttributes() == null)
@@ -368,7 +352,7 @@ public abstract class Shader
 		{
 			if ( attribute.needsUpdate )
 			{
-				this.cache_areCustomAttributesDirty = true;
+				this.cacheAreCustomAttributesDirty = true;
 				return true;
 			}
 		}
@@ -378,7 +362,7 @@ public abstract class Shader
 
 	public void clearCustomAttributes()
 	{
-		if(!this.cache_areCustomAttributesDirty)
+		if(!this.cacheAreCustomAttributesDirty)
 			return;
 
 		if(getAttributes() == null)
@@ -387,7 +371,7 @@ public abstract class Shader
 		for ( Attribute attribute: getAttributes().values() )
 		{
 			attribute.needsUpdate = false;
-			this.cache_areCustomAttributesDirty = false;
+			this.cacheAreCustomAttributesDirty = false;
 		}
 	}
 
@@ -413,22 +397,21 @@ public abstract class Shader
 		return Shader.updateShaderSource(src, mods);
 	}
 
-	private static String SHADER_REPLACE_ARG = "[*]";
 	public static String updateShaderSource(String src, String ... allMods)
 	{
-		if(src.indexOf(SHADER_REPLACE_ARG) >= 0)
+		if(src.indexOf(shaderReplaceArg) >= 0)
 		{
-			StringBuffer result = new StringBuffer();
+			StringBuilder result = new StringBuilder();
 			int s = 0;
-			int e = 0;
+			int e;
 
 			for ( String replace : allMods )
 			{
-				if((e = src.indexOf(SHADER_REPLACE_ARG, s)) >= 0)
+				if((e = src.indexOf(shaderReplaceArg, s)) >= 0)
 				{
 					result.append(src.substring(s, e));
 			        result.append(replace);
-			        s = e + SHADER_REPLACE_ARG.length();
+			        s = e + shaderReplaceArg.length();
 				}
 			}
 
