@@ -50,8 +50,6 @@ public class MorphAnimMesh extends Mesh
 
 	private FastMap<Animation> animations;
 
-	private String firstAnimation;
-
 	public MorphAnimMesh(Geometry geometry, Material material)
 	{
 		super(geometry, material);
@@ -93,48 +91,6 @@ public class MorphAnimMesh extends Mesh
 		this.directionBackwards = true;
 	}
 
-//	public void parseAnimations()
-//	{
-//		Geometry geometry = (Geometry) this.getGeometry();
-//
-//		if ( this.animations == null) {
-//			this.animations = new FastMap<Animation>();
-//		}
-//
-//		String firstAnimation = null;
-//
-//		Pattern pattern = Pattern.compile("([a-z]+)(\\d+)");
-//
-//		for ( int i = 0, il = geometry.getMorphTargets().size(); i < il; i ++ )
-//		{
-//			MorphTarget morph = geometry.getMorphTargets().get(i);
-//			Matcher result = pattern.matcher(morph.name);
-//
-//			while (result.find())
-//			{
-//				String label = result.group(1);
-//				String num = result.group(2);
-//
-//				if ( ! this.animations.containsKey( label ) ) {
-//					Animation animation = new Animation();
-//					animation.start = Integer.MAX_VALUE;
-//					animation.end = Integer.MIN_VALUE;
-//					this.animations.put(label, animation);
-//				}
-//
-//				Animation animation = this.animations.get( label );
-//
-//				if ( i < animation.start ) animation.start = i;
-//				if ( i > animation.end ) animation.end = i;
-//
-//				if ( firstAnimation == null )
-//					firstAnimation = label;
-//
-//			}
-//		}
-//
-//		this.firstAnimation = firstAnimation;
-//	}
 
 	public void setAnimationLabel( String label, int start, int end )
 	{
@@ -205,7 +161,7 @@ public class MorphAnimMesh extends Mesh
 		}
 
 		int keyframe = this.startKeyframe + (int)Mathematics.clamp(
-				(int)Math.floor( this.time / frameTime ), 0, this.length - 1 );
+				(int)Math.floor( this.time / frameTime ), 0, this.length - 1D );
 
 		if ( keyframe != this.currentKeyframe )
 		{
@@ -237,8 +193,12 @@ public class MorphAnimMesh extends Mesh
 
 		}
 
-		if ( a > -1 ) influences.set( a, 1.0 - t);
-		if ( b > -1 ) influences.set( b, t);
+		if ( a > -1 ) {
+			influences.set( a, 1.0 - t);
+		}
+		if ( b > -1 ) {
+			influences.set( b, t);
+		}
 
 	}
 
